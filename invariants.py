@@ -3,11 +3,8 @@
 # Michael Ernst <mernst@cs.washington.edu>
 
 # For some additional documentation, see invariants.py.doc.
+import glob, operator, os, re, string, types, copy, posix, math
 
-# Built-in Python modules
-import glob, math, operator, os, posix, re, string, types
-
-# User-defined Python modules
 import util
 
 true = (1==1)
@@ -587,6 +584,10 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
         if sclidx == var_infos[seq_size_idx].canonical_var():
             return
 
+    #     if seq_size_idx == 'no_var':
+    #         print "sequence %s (size: no_var) and scalar %s (index: %s) unrelated" % (seqvar, sclvar, sclidx)
+    #     else:
+    #         print "sequence %s (size: %s, size index = %s) and scalar %s (index: %s) unrelated" % (seqvar, var_infos[seq_size_idx].name, seq_size_idx, sclvar, sclidx)
 
     # For now, do nothing if the scalar is itself derived.
     if var_infos[sclidx].is_derived:
@@ -606,7 +607,7 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
 
 
     # Add subsequences
-    if not var_infos[seqidx].is_derived and not var_infos[sclidx].invariant.can_be_None:
+    if not var_infos[seqidx].invariant.can_be_None and not var_infos[seqidx].is_derived and not var_infos[sclidx].invariant.can_be_None:
         full_var_info = var_info("%s[0..%s]" % (seqvar, sclvar), types.ListType, len(var_infos), true)
         # 'known_var' means there is a known value, but no variable
         # holds that particular value.
@@ -997,24 +998,31 @@ def read_file(filename, fn_regexp=None):
                 if len(this_value) > 0 and this_value[-1] == "":
                     # Cope with trailing spaces on the line
                     this_value = this_value[0:-1]
-                for seq_elem in range(0, len(this_value)):
-                    # dumb to copy this: fix it
-                    if integer_re.match(this_value[seq_elem]):
-                        this_value[seq_elem] = int(this_value[seq_elem])
-                    elif float_re.match(this_value[seq_elem]):
-                        this_value[seq_elem] = float(this_value[seq_elem])
-                    elif this_value[seq_elem] == "NIL":
-                        # HACK
-                        this_value[seq_elem] = 0
-                    else:
-                        raise "What value? " + `this_value[seq_elem]`
-                this_value = tuple(this_value)
+                if re.match("^uninit$", this_value[0]):
+                    this_value = None
+                else:
+                    for seq_elem in range(0, len(this_value)):
+                        # dumb to copy this: fix it
+                        if integer_re.match(this_value[seq_elem]):
+                            this_value[seq_elem] = int(this_value[seq_elem])
+                        elif float_re.match(this_value[seq_elem]):
+                            this_value[seq_elem] = float(this_value[seq_elem])
+                        elif re.match("^uninit$", this_value[seq_elem]):
+                            this_value[seq_elem] = None
+                        elif this_value[seq_elem] == "NIL":
+                            # HACK
+                            this_value[seq_elem] = 0
+                        else:
+                            raise "What value? " + `this_value[seq_elem]`
+                    this_value = tuple(this_value)
             else:
                 this_var_type = types.IntType
                 if integer_re.match(this_value):
                     this_value = int(this_value)
                 elif float_re.match(this_value):
                     this_value = float(this_value)
+                elif re.match("^uninit$", this_value):
+                    this_value = None
                 elif this_value == "NIL":
                     # HACK
                     this_value = 0
@@ -1182,7 +1190,7 @@ def all_numeric_invariants(fn_regexp=None):
 
         var_infos = fn_var_infos[fn_name]
         var_values = fn_var_values[fn_name]
-
+        
         derivation_functions = (None, pass1_functions, pass2_functions)
         derivation_passes = len(derivation_functions)-1
         # First number: invariants are computed up to this index, non-inclusive
