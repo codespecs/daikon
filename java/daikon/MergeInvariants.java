@@ -106,6 +106,7 @@ public class MergeInvariants {
     }
 
     List inv_files = new ArrayList();
+    File decl_file = null;
 
     // Get each file specified
     for (int i = g.getOptind(); i < args.length; i++) {
@@ -113,9 +114,15 @@ public class MergeInvariants {
       if (! file.exists()) {
         throw new Error("File " + file + " not found.");
       }
-      if (file.toString().indexOf (".inv") == -1)
+      if (file.toString().indexOf (".inv") != -1)
+        inv_files.add (file);
+      else if (file.toString().indexOf (".decls") != -1) {
+        if (decl_file != null)
+          throw new Error ("Only one decl file may be specified");
+        decl_file = file;
+      } else {
         throw new Error ("unexpected file: " + file);
-      inv_files.add (file);
+      }
     }
 
     // Make sure at least two files were specified
@@ -132,17 +139,34 @@ public class MergeInvariants {
       pptmaps.add (ppts);
     }
 
-    // Read in the first map again to serve as a template
-    File file = (File) inv_files.get(0);
-    debugProgress.fine ("Reading " + file + " as merge template");
-    PptMap merge_ppts = FileIO.read_serialized_pptmap (file, true);
+    // Merged ppt map (result of merging each specified inv file)
+    PptMap merge_ppts = null;
 
-    // Remove all of the slices, equality sets, and Ppt hierarchy
-    // relations to start
-    debugProgress.fine ("Cleaning ppt map in preparation for merge");
-    for (Iterator i = merge_ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
-      ppt.clean_for_merge();
+    // if no decls file was specified
+    if (decl_file == null) {
+
+      // Read in the first map again to serve as a template
+      File file = (File) inv_files.get(0);
+      debugProgress.fine ("Reading " + file + " as merge template");
+      merge_ppts = FileIO.read_serialized_pptmap (file, true);
+
+      // Remove all of the slices, equality sets, to start
+      debugProgress.fine ("Cleaning ppt map in preparation for merge");
+      for (Iterator i = merge_ppts.pptIterator(); i.hasNext(); ) {
+        PptTopLevel ppt = (PptTopLevel) i.next();
+        ppt.clean_for_merge();
+      }
+
+    } else {
+
+      // Build the result ppmap from the specific decls file
+      debugProgress.fine ("Building result ppt map from decls file");
+      List  decl_files = new ArrayList();
+      decl_files.add (decl_file);
+      merge_ppts = FileIO.read_declaration_files(decl_files);
+      Dataflow.init_partial_order (merge_ppts);
+      merge_ppts.trimToSize();
+      PptRelation.init_hierarchy (merge_ppts);
     }
 
     // Create a hierarchy between the merge exitNN points and the
@@ -160,9 +184,11 @@ public class MergeInvariants {
       for (int j = 0; j < pptmaps.size(); j++ ) {
         PptMap pmap = (PptMap) pptmaps.get (j);
         PptTopLevel child = pmap.get (ppt.ppt_name);
-        if (child == null)
+        if ((decl_file == null) && (child == null))
           throw new Error ("Can't find " + ppt.ppt_name + " in "
                            + inv_files.get(j));
+        if (child == null)
+          continue;
         PptRelation rel = PptRelation.newMergeChildRel (ppt, child);
       }
     }
