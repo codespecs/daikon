@@ -1,4 +1,5 @@
 This package, utilMDE, is intended to supplement java.util.
+It provides general funcionality, not specific to any particular client.
 For documentation, see the doc/ subdirectory.
 
 This package includes modified versions of code from the Java 2 SDK, such
