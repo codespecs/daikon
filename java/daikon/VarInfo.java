@@ -343,6 +343,10 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   public String getStringValue(ValueTuple vt) {
     return (String) getValue(vt);
   }
+  
+  public String[] getStringArrayValue(ValueTuple vt){
+    return(String[]) getValue(vt);
+  }
 
   public long[] getIntArrayValue(ValueTuple vt) {
     Object raw = getValue(vt);
