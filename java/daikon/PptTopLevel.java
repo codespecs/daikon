@@ -4028,7 +4028,7 @@ public class PptTopLevel
       currentView.processOmissions(omitTypes);
     }
     for (Iterator i = cond_iterator(); i.hasNext(); ) {
-      PptSlice currentCondView = (PptSlice) i.next();
+      PptConditional currentCondView = (PptConditional) i.next();
       currentCondView.processOmissions(omitTypes);
     }
   }
