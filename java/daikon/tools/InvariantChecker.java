@@ -1,4 +1,3 @@
-// Main module for invariant checker.
 package daikon.tools;
 
 import daikon.*;
@@ -20,7 +19,13 @@ import java.util.Date;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-// InvariantChecker.
+//
+// 1) JavaDocs
+
+// 2) Put invariant name as comment.
+// 3) Make value print.
+
+
 
 public final class InvariantChecker {
 
@@ -29,10 +34,11 @@ public final class InvariantChecker {
   // replacing every invalid character with its byte code. This HashMap
   // contains the actual variable name (e.g. "this.theArray[1...length]") as
   // the key, and the modified variable name (e.g. "var_this46theArray451464646length45")
-  // as the value. It is "protected" for convenient access within the package.
+  // as the value.
+
   protected static HashMap varNameMap;
 
-
+  protected static List unImplementedInvariants;
   // These are not functional yet. Next thing to do.
 
   // Specifies the behavior for "assertions".
@@ -58,29 +64,25 @@ public final class InvariantChecker {
       "  Each file is a .inv file or a java file; the file type",
       "  is determined by the file name (containing \".inv\" or \".java\").",
       "  List of flags : ",
-      flagList,
-      "  For a list of flags, see the Daikon manual, which appears in the ",
-      "  Daikon distribution and also at http://pag.lcs.mit.edu/daikon/."},
+      flagList},
                  Daikon.lineSep);
 
 
 
-  // Main module.
   public static void main(String[] args) {
-
     show_banner();
 
     // Read command line options
     Set[] files = readOptions(args);
-    Set inv_files = files[0];  //
-    Set java_files = files[1]; //
+    Set inv_files = files[0];
+    Set java_files = files[1];
     if ((inv_files.size() == 0) || (java_files.size()==0)) {
       System.out.println("No .inv or .java file was specified");
       System.exit(1);
     }
     else if (inv_files.size() != java_files.size())
       System.out.println("No. of .inv files must be equal to no. of java files");
-    try{
+    try {
       Iterator outputFiles = java_files.iterator();
       Iterator inputFiles = inv_files.iterator();
       while (outputFiles.hasNext()){
@@ -88,16 +90,30 @@ public final class InvariantChecker {
         File inputFile = (File) inputFiles.next();
         HashMap invariants = processInvariants(inputFile);
 
-        writeOutputFile(invariants, outputFile, inputFile);
+        createOutputFile(invariants, outputFile, inputFile);
         System.out.println("Created "  + outputFile.toString() + "...");
       }
       System.out.println("Finished creating files. Exiting...");
+
+      if (unImplementedInvariants != null) {
+        System.out.println(UtilMDE.join(new String [] {
+          "Following invariants are not included since they are not implemented",
+          "in the java output format. To include these invariants in the resulting",
+          "Java file, please go to the appropriate file and do the necessary changes."}, Daikon.lineSep));
+
+        Iterator unImpIter = unImplementedInvariants.iterator();
+        while(unImpIter.hasNext()) {
+          String inv = (String) unImpIter.next();
+          System.out.println(inv);
+        }
+      }
+
      }
-    catch(IOException e){
+    catch (IOException e){
       System.out.println(e.toString());
       e.printStackTrace();
     }
-    catch(ClassNotFoundException e) {
+    catch (ClassNotFoundException e) {
       System.out.println(e.toString());
       e.printStackTrace();
     }
@@ -171,11 +187,12 @@ public final class InvariantChecker {
     for (int i=g.getOptind(); i<args.length; i++) {
       File file = new File(args[i]);
 
-      // I am keeping the following comment, is it still true?
-      // // These aren't "endsWith()" because there might be a suffix on the end
-      // // (eg, a date).
+
+      // These aren't "endsWith()" because there might be a suffix on the end
+      // (eg, a date).
       // However, this does not apply to java files. They need to
       // have a ".java" extension. use "endsWith()"
+
       String filename = file.toString();
       if ((! file.exists()) && (filename.indexOf(".inv") != -1)) {
         throw new Error("File " + file + " not found.");
@@ -226,7 +243,6 @@ public final class InvariantChecker {
     varNameMap = new HashMap();
 
 
-
     Daikon.output_style = OutputFormat.JAVA;
 
     // Holds all the information required to build assert statements.
@@ -242,15 +258,14 @@ public final class InvariantChecker {
     while (pptIterator.hasNext()){
       PptTopLevel atoplevel = (PptTopLevel)pptIterator.next();
 
-      List [] currentLists = (List [])invariantInfo.get(atoplevel.ppt_name.getShortClassName()
-                                                        + atoplevel.ppt_name.getShortMethodName());
+      List [] currentLists = (List [])invariantInfo.get(makeValidJavaIdentifier(atoplevel.ppt_name.getFullNamePoint()
+                                                                                ));
       if (currentLists == null) {
         currentLists = new List []{
           new ArrayList(),
           new ArrayList(),
           new ArrayList(),};
-        invariantInfo.put(atoplevel.ppt_name.getShortClassName()+
-                          atoplevel.ppt_name.getShortMethodName()
+        invariantInfo.put(makeValidJavaIdentifier(atoplevel.ppt_name.getFullNamePoint())
                           , currentLists);
       }
 
@@ -265,8 +280,11 @@ public final class InvariantChecker {
 
         varNameMap.put(aVarInfoName.java_name(),makeValidJavaIdentifier(aVarInfoName.java_name()));
 
+
         ProglangType representationType = aVarInfo.file_rep_type;
         ((List) currentLists[0]).add(makeValidJavaIdentifier(aVarInfoName.java_name()));
+
+
         ((List) currentLists[1]).add(representationType.toString());
       }
 
@@ -280,7 +298,7 @@ public final class InvariantChecker {
         Invariant anInvariant = (Invariant) invariants.next();
         boolean fi_accepted = fi.shouldKeep(anInvariant);
         String stringInvariant = anInvariant.format_using(Daikon.output_style);
-        if (fi_accepted)
+        if (fi_accepted && (isImplementedYet(stringInvariant)))
           ((List) currentLists[2]).add(stringInvariant);
       }
     }
@@ -298,71 +316,65 @@ public final class InvariantChecker {
     return returnList;
   }
 
-  private static String replaceNames(String s) {
-    Iterator varNames = varNameMap.keySet().iterator();
-    String retVal = s;
-    List possibleReplacements = new ArrayList();
+  private static String replaceNames(String retVal) {
+   Iterator varNames = varNameMap.keySet().iterator();
+   List possibleReplacements = new ArrayList();
 
-    while (varNames.hasNext()) {
-      String variableName = (String) varNames.next();
-      if (retVal.indexOf(variableName) != -1)
-        possibleReplacements.add(variableName);
-      //retVal = replaceAllString(s,variableName,(String)varNameMap.get(variableName));
-    }
-
-    Iterator possibleRepl = possibleReplacements.iterator();
-    while (possibleRepl.hasNext()) {
-      String aVar = (String) possibleRepl.next();
-      Iterator poRepl = possibleReplacements.iterator();
-      while (poRepl.hasNext()) {
-        String anotherVar = (String) poRepl.next();;
-        if (!(anotherVar.equals(aVar)))
-          if (anotherVar.indexOf(aVar) != -1)
-            retVal = replaceAllString(retVal,anotherVar,(String) varNameMap.get(anotherVar));
-          else if (aVar.indexOf(anotherVar) != -1)
-            retVal = replaceAllString(retVal,aVar,(String) varNameMap.get(aVar));
-      }
-    }
-    varNames = varNameMap.keySet().iterator();
-    while(varNames.hasNext()) {
-      String variableName = (String) varNames.next();
-      if (retVal.indexOf(variableName) != -1)
-        retVal = replaceAllString(retVal,variableName,(String)varNameMap.get(variableName));
-    }
-    return retVal;
+   while (varNames.hasNext()) {
+     String variableName = (String) varNames.next();
+     if (retVal.indexOf(variableName) != -1 )
+       possibleReplacements.add(variableName);
+   }
+   Iterator possibleRepl = possibleReplacements.iterator();
+   while (possibleRepl.hasNext()) {
+     String aVar = (String) possibleRepl.next();
+     Iterator poRepl = possibleReplacements.iterator();
+     while (poRepl.hasNext()) {
+       String anotherVar = (String) poRepl.next();
+       if (!(anotherVar.equals(aVar)))
+         if (anotherVar.indexOf(aVar) != -1)
+           retVal = replaceAllString(retVal,anotherVar,(String) varNameMap.get(anotherVar));
+         else if (aVar.indexOf(anotherVar) != -1)
+           retVal = replaceAllString(retVal,aVar,(String) varNameMap.get(aVar));
+     }
+   }
+   varNames = possibleReplacements.iterator();
+   while(varNames.hasNext()) {
+     String variableName = (String) varNames.next();
+     if (retVal.indexOf(variableName) != -1)
+       retVal = replaceAllString(retVal,variableName,(String)varNameMap.get(variableName));
+   }
+   return retVal;
   }
 
-
-
-
   private static String formatAssertions(String s) {
-    return "                 Assert.assertTrue(" + s + ",\"" + s + "\");\n";
+    return "                         Assert.assertTrue(" + s + ",\"" + s + "\");\n";
   }
 
   private static String formatVariableInitialization(String type, String varName, String val) {
     // Primitive types such as double, int, boolean need to be parsed
     // from the string value.
     if (type.equals("int"))
-      return  "                    " + type + " " +
+      return  "                         " + type + " " +
         varName + " = (" + type + ") Integer.parseInt(" +
         val + ".toString());\n";
     else if (type.equals("boolean"))
-      return  "                    " + type + " " +
+      return  "                         " + type + " " +
          varName + " = (" + type + ") Boolean.valueOf(" +
         val + ".toString());\n";
     else if (type.equals("double"))
-      return  "                    " + type + " " + varName +
+      return  "                         " + type + " " + varName +
         " = (" + type + ") Double.parseDouble("+
         val + ".toString());\n";
     else if (type.equals("hashcode"))
-      return  "                    int " +
+      return  "                         int " +
         varName + " = (int) Integer.parseInt(" +
         val + ".toString());\n";
     else if (type.equals("hashcode[]"))
-      return  "                    int[] " +
+      return  "                         int[] " +
         varName + " = (int[])"+ val+";\n";
     else
-      return  "                    " + type + " " + varName +
+      return  "                         " + type + " " + varName +
         " = (" + type + ") " + val + ";\n";
  }
 
@@ -457,6 +469,8 @@ public final class InvariantChecker {
 
         Assert.assertTrue(invariantList != null);
         Iterator invariantIterator = (replaceNames(invariantList)).iterator();
+        //Iterator invariantIterator = invariantList.iterator();
+
         while (invariantIterator.hasNext()) {
           String anAssertion = formatAssertions((String) invariantIterator.next());
           assertions = assertions + "   " + anAssertion;
@@ -568,28 +582,54 @@ public final class InvariantChecker {
   // If input argument is a valid java identifier, returns the input
   // argument.
   //
-  // If input argument is not valid, appends the string "var_" to the
+  // If input argument is not valid, appends the string "v_" to the
   // input argument and replaces every invalid character with its
   // bytecode representation.
   // @throws RuntimeException if input argument is null or 0 length
   // @args String javaIdentifier.
 
-    private static String makeValidJavaIdentifier(String javaIdentifier) {
-	boolean validBody = hasValidJavaIdentifierBody(javaIdentifier);
-	boolean validStart = hasValidJavaIdentifierStart(javaIdentifier);
-	if (validBody && validStart) {
-          return javaIdentifier;
-	}
-	else if (validBody && !validStart) {
-          if (isValidJavaIdentifier("var_" + javaIdentifier))
-            return "var_" + javaIdentifier;
-          else
-            return makeValidJavaIdentifierHelper("var_"+javaIdentifier);
-	}
-	else
-          return makeValidJavaIdentifierHelper("var_"+javaIdentifier);
+  public static String makeValidJavaIdentifier(String javaIdentifier) {
+    boolean validBody = hasValidJavaIdentifierBody(javaIdentifier);
+    boolean validStart = hasValidJavaIdentifierStart(javaIdentifier);
+    boolean keyword = isJavaKeyWord(javaIdentifier);
+    if (validBody && validStart && !keyword) {
+      return javaIdentifier;
     }
+    else if (validBody && validStart && keyword)
+      return "v_" + javaIdentifier;
+    else if (validBody && !validStart) {
+      String modid = "v_" + javaIdentifier;
+      if (isValidJavaIdentifier(modid))
+        return modid;
+      else
+        return makeValidJavaIdentifierHelper(modid);
+    }
+    else
+      return makeValidJavaIdentifierHelper("v_"+javaIdentifier);
 
+  }
+  // Returns true if s is a JavaKeyWord
+  //
+
+  public static boolean isJavaKeyWord(String s) {
+    String [] keywords = new String []
+      {"abstract", "double", "int", "strictfp",
+       "boolean", "else", "interface" ,"super",
+       "break", "extends", "long", "switch",
+       "byte", "final", "native","synchronized",
+       "case", "finally", "new", "this", "catch",
+       "float", "package", "throw", "char", "for",
+       "private","throws", "class", "goto","protected",
+       "transient", "const", "if", "public", "try",
+       "continue", "implements", "return", "void",
+       "default", "import", "short", "volatile", "do",
+       "instance", "of", "static", "while"};
+    for (int i = 0; i < keywords.length; i ++) {
+      if (keywords[i].equals(s))
+        return true;
+    }
+    return false;
+  }
 
   // @throws RuntimeException if javaIdentifier null, or zero length.
   // @return a String that is identical to input argument except that
@@ -656,19 +696,163 @@ public final class InvariantChecker {
     if (actual.indexOf(target) == -1 || target.equals(replacement))
       return actual;
     else
-      return replaceAllString(replaceString(actual,target,replacement),target,replacement);
-
+      if (actual.indexOf(target) == actual.indexOf(replacement)+ replacement.indexOf(target))
+        return actual;
+      else
+        return actual.substring(0,actual.indexOf(target))+
+          replacement+ replaceAllString(actual.substring(actual.indexOf(target)+target.length()),target,replacement);
   }
 
-  // Helper function for replaceAllString.
-  private static String replaceString(String actual, String target, String replacement) {
-    if (actual == null || target == null || replacement == null)
-      throw new IllegalArgumentException();
-    if (actual.indexOf(target) == -1)
-      return actual;
-    else
-      return actual.substring(0,actual.indexOf(target))+
-        replacement+ actual.substring(actual.indexOf(target)+target.length());
+
+  // var1 > 3 || var1 > 4
+  // v_var1 > 3 || var1 > 4
+  //
+  private static boolean isImplementedYet(String invariant) {
+    if (invariant.indexOf("warning") != -1){
+      if (unImplementedInvariants == null) {
+        unImplementedInvariants = new ArrayList();
+        unImplementedInvariants.add(invariant);
+      }
+      else
+        unImplementedInvariants.add(invariant);
+      return false;
+    }
+    return true;
   }
 
+  //
+  //
+  //
+  //
+
+  private static void createOutputFile (HashMap invariantInformation, File javaFile, File invariantFile)
+    throws IOException {
+
+    String header = UtilMDE.join (new String [] {
+      "// This file is auto-generated by MakeInvariantChecker.java.\n",
+      "/**",
+      " * " + javaFile.toString() + " checks whether the invariants present in",
+      " * " + invariantFile.toString() + " hold for every program point present a new",
+      " * new dtrace file.",
+      " */"}, Daikon.lineSep);
+
+    String importStatements = UtilMDE.join( new String [] {
+      "\n//Import Statements ",
+      "import daikon.tools.*;",
+      "import daikon.*;",
+      "import daikon.inv.*;",
+      "import daikon.config.Configuration;",
+      "import daikon.temporal.TemporalInvariantManager;",
+      "import utilMDE.*;",
+      "import java.io.*;",
+      "import java.util.*;",
+      "import java.util.zip.GZIPInputStream;",
+      "import java.util.zip.GZIPOutputStream;",
+      "// Import Statements -- end \n"}, Daikon.lineSep);
+
+    String dateGenerated = (new Date()).toString();
+
+    String bannerRoutine =  UtilMDE.join (new String [] {
+      "\n     /*",
+      "      *  ShowBanner() prints the date of generation and",
+      "      *  name of the generating program to standard out.",
+      "      *",
+      "      */",
+      "     private static void showBanner() {" ,
+      "          System.out.println(\"This program is auto-generated by InvariantChecker.\");",
+      "          System.out.println(\"Last updated =" + dateGenerated +"\");",
+      "     }\n\n"}, Daikon.lineSep);
+
+
+    String mainModule = UtilMDE.join (new String [] {
+      "     public static void main(String[] args) {",
+      "          showBanner();",
+      "          String dtraceFileName = args[0];",
+      "          String invFileName =\"" + invariantFile + "\";",
+      "          try {",
+      "               PptMap pptMap = (PptMap) FileIO.read_serialized_pptmap(new File(invFileName),false);",
+      "               Set dtrace_files = new HashSet();",
+      "               dtrace_files.add(new File(dtraceFileName));",
+      "               AssertionChecker ac =  new AssertionChecker();",
+      "               FileIO.readDataTraceFile(dtrace_files,pptMap,null,ac);",
+      "               }",
+      "          catch (IOException e) {",
+      "               e.printStackTrace();",
+      "               System.exit(1);",
+      "          }}\n"}, Daikon.lineSep);
+
+    String assertionProcedures ="\n";
+
+    String assertionProcedureDispatch =
+      "          private static void checkAssertions(PptTopLevel atoplevel, List info) {\n";
+
+    String assertionChecker = UtilMDE.join (new String [] {
+      "     public static final class AssertionChecker implements daikon.tools.DtraceProcessor{\n",
+      "          public void visit(PptTopLevel atoplevel, List n) {",
+      "               checkAssertions(atoplevel,n);",
+      "          }\n"}, Daikon.lineSep);
+
+    PrintWriter javaSourceWriter = new PrintWriter (new FileWriter(javaFile));
+
+    javaSourceWriter.print(UtilMDE.join (new String [] {
+      header ,
+      importStatements ,
+      formatClassDeclaration(javaFile.toString()),
+      bannerRoutine,
+      mainModule,
+      assertionChecker,
+      assertionProcedureDispatch}, Daikon.lineSep));
+
+    Iterator pptPoints = invariantInformation.keySet().iterator();
+    while (pptPoints.hasNext()){
+      String pptPointName = (String) pptPoints.next();
+      javaSourceWriter.print(UtilMDE.join (new String [] {
+        "               if (daikon.tools.InvariantChecker.makeValidJavaIdentifier",
+        "                   (atoplevel.ppt_name.getFullNamePoint()).equals(\"" +
+        pptPointName  + "\")) ",
+        "                    assertPpt"+ pptPointName +"(info);\n"}, Daikon.lineSep));
+    }
+    javaSourceWriter.print("          }\n\n");
+
+
+    Iterator pptPoints2 = invariantInformation.keySet().iterator();
+
+    while (pptPoints2.hasNext()){
+      String initialization = "\n";
+      String pptPointName = (String) pptPoints2.next();
+      String procedureName = "          private static void assertPpt" + pptPointName;
+
+      javaSourceWriter.print(UtilMDE.join(new String [] {
+        procedureName + "(List valueList) {",
+        "               if (valueList != null) {",
+        "                    Iterator objList = valueList.iterator();",
+        "                    while (objList.hasNext()) {",
+        "                         Object[] objval = (Object[]) objList.next();\n"}, Daikon.lineSep));
+
+      List[] pptInfo = (List []) invariantInformation.get(pptPointName);
+      Assert.assertTrue(pptInfo != null);
+      Assert.assertTrue(pptInfo.length == 3);
+      List variables = (List) pptInfo[0];
+      List types = (List) pptInfo[1];
+      List invariantList = (List) pptInfo[2];
+
+      Iterator variableIterator = variables.iterator();
+      Iterator typesIterator = types.iterator();
+      int count = 0;
+
+      while (variableIterator.hasNext() && typesIterator.hasNext()){
+        String newVar = (String) variableIterator.next();
+        String newType = (String) typesIterator.next();
+        javaSourceWriter.print(formatVariableInitialization(newType, newVar,"objval["+count+"]"));
+        count = count + 1;
+      }
+
+      Assert.assertTrue(invariantList != null);
+
+      Iterator invariantIterator = (replaceNames(invariantList)).iterator();
+      while (invariantIterator.hasNext()) {
+        javaSourceWriter.print(formatAssertions((String) invariantIterator.next()));}
+      javaSourceWriter.print("                    }}\n          }}}");}
+    javaSourceWriter.close();
+  }
 }

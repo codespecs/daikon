@@ -661,6 +661,17 @@ public final class MakeInvariantChecker {
       "          System.out.println(\"Last updated =" + dateGenerated +"\");",
       "     }\n\n"}, Daikon.lineSep);
 
+    String assertProc = UtilMDE.join(new String[]{
+      "     public static void assertT(boolean invariant, String s) {",
+      "          if (!invariant)",
+      "               if (x != null)",
+      "                    x.println(s);",
+      "               else",
+      "                    System.out.println(s);",
+      "    }"},
+                                     Daikon.lineSep);
+
+
 
     String readOptions = UtilMDE.join(new String [] {
       "     private static PrintWriter x;",
@@ -752,6 +763,7 @@ public final class MakeInvariantChecker {
       formatClassDeclaration(javaFile.toString()),
       usage,
       bannerRoutine,
+      assertProc,
       readOptions,
       mainModule,
       assertionChecker,
@@ -840,17 +852,11 @@ public final class MakeInvariantChecker {
         }
       }
       assertions.add(UtilMDE.join(new String[]{
-        "\n                         try {",
-        "                         //"+ anInvariant.repr(),
-        "                         Assert.assertTrue("+ anInvariantStr+",",
+
+        "\n                         //"+ anInvariant.repr(),
+        "                         assertT("+ anInvariantStr+",",
         "                                           \"" +
-        anInvariant.format_using(Daikon.output_style) + "\""+ variables+");}",
-        "                         catch (Error e) {",
-        "                              if (x != null)",
-        "                                   x.println(\"Assertion Failure for \"+(e.getMessage()));",
-        "                              else",
-        "                                   throw new Error(e.getMessage());",
-        "                         }"},
+        anInvariant.format_using(Daikon.output_style) + "\""+ variables+");"},
                                   Daikon.lineSep));
     }
     return assertions;
