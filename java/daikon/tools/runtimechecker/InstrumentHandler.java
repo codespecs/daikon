@@ -54,7 +54,10 @@ public class InstrumentHandler extends CommandHandler {
     // to the maximum number of invariants out annotate per program point.
     protected static int maxInvariantsPP = -1;
 
-    private static final String make_all_fields_publicSWITCH = "make_all_fields_public";
+    private static final String make_all_fields_public_SWITCH = "make_all_fields_public";
+    private static final String directory_SWITCH = "directory";
+
+    private String instrumented_directory = "instrumented-classes";
 
     // Whether should print debugging information as it is executing.
     private static String debug_SWITCH = "debug";
@@ -66,22 +69,6 @@ public class InstrumentHandler extends CommandHandler {
             return false;
         }
 
-        // Create instrumented-classes dir.
-        File outputDir = new File("instrumented-classes");
-
-// I'm not sure the point of this.  It's always a generated file in any
-// event.  I've removed it for my convenience, but you can add it back if
-// you have an option to disable it.
-// -MDE
-//         // If instrumented-classes already exists, tell user to remove it, and
-//         // exit.
-//         if (outputDir.exists()) {
-//             System.err
-//                 .println("The directory \"instrumented-classes\" already exists.");
-//             System.err.println("Please remove it before instrumenting.");
-//             return false;
-//         }
-
         String[] realArgs = new String[args.length - 1];
         for (int i = 0; i < realArgs.length; i++) {
             realArgs[i] = args[i + 1];
@@ -90,6 +77,22 @@ public class InstrumentHandler extends CommandHandler {
         if (arguments == errorWhileReadingArguments) {
             return false;
         }
+
+        // Create instrumented-classes dir.
+        File outputDir = new File(instrumented_directory);
+
+// I'm not sure the point of this.  It's always a generated file in any
+// event.  I've removed it for my convenience, but you can add it back if
+// you have an option to disable it.
+// -MDE
+//         // If instrumented_directory already exists, tell user to remove it, and
+//         // exit.
+//         if (outputDir.exists()) {
+//             System.err
+//                 .println("The directory \"" + instrumented_directory + "\" already exists.");
+//             System.err.println("Please remove it before instrumenting.");
+//             return false;
+//         }
 
         System.out.println("Reading invariant file: " + arguments.invFile);
         PptMap ppts = null;
@@ -141,6 +144,8 @@ public class InstrumentHandler extends CommandHandler {
             debug.fine("instrumented file name: " + instrumentedFile.getPath());
             instrumentedFileNames.add(instrumentedFile.getPath());
 
+            System.out.println("Writing " + instrumentedFile);
+
             try {
                 Writer output = new FileWriter(instrumentedFile);
 
@@ -176,8 +181,10 @@ public class InstrumentHandler extends CommandHandler {
                         0),
                 new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT,
                         null, 0),
-                new LongOpt(make_all_fields_publicSWITCH,
+                new LongOpt(make_all_fields_public_SWITCH,
                         LongOpt.NO_ARGUMENT, null, 0),
+                new LongOpt(directory_SWITCH,
+                        LongOpt.REQUIRED_ARGUMENT, null, 0),
                 new LongOpt(debug_SWITCH, LongOpt.NO_ARGUMENT, null, 0) };
         Getopt g = new Getopt("daikon.tools.runtimechecker.InstrumentHandler", args, "hs", longopts);
         int c;
@@ -189,8 +196,10 @@ public class InstrumentHandler extends CommandHandler {
 
                 if (debug_SWITCH.equals(option_name)) {
                     debug.setLevel(Level.FINE);
-                } else if (make_all_fields_publicSWITCH.equals(option_name)) {
+                } else if (make_all_fields_public_SWITCH.equals(option_name)) {
                     InstrumentVisitor.makeAllFieldsPublic = true;
+                } else if (directory_SWITCH.equals(option_name)) {
+                    instrumented_directory = g.getOptarg();
                 } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
                     Global.debugAll = true;
                 } else if (Daikon.debug_SWITCH.equals(option_name)) {
