@@ -165,6 +165,8 @@ public final class StringComparison
       }
     } else if (format == OutputFormat.SIMPLIFY) {
       comparator = (comparator.equals("==") ? "EQ" : comparator);
+      if (comparator.equals("?cmp?"))
+        return format_too_few_samples(format, null);
       name1 = var1().name.name_using(format);
       name2 = var2().name.name_using(format);
       return "(" + comparator + " " +  name1 + " " + name2 + ")";
