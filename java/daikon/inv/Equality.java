@@ -69,6 +69,11 @@ public final class Equality
    **/
   private TreeSet/*VarInfo*/ vars;
 
+  /** returns the number of variables in the set **/
+  public int size() {
+    return vars.size();
+  }
+
   /**
    * Returns the variables in their index order.  Unmodifiable.
    **/
