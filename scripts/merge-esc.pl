@@ -267,8 +267,9 @@ END {
 		    @mods = grep(!/\~/, @mods);
 
 		    # was: @mods = grep(!/\[[^*]+\]/, @mods);
-		    # better to a[x] => a[*] than nothing at all
-		    @mods = grep(s/\[([^*]+)\]/[*]/g, @mods);
+		    # better to a[n..] => a[*] than nothing at all
+		    grep(s/\[(.*[^*a-zA-Z0-9._].*)\]/[*]/g, @mods);
+		    grep(s/\[(.*\.\..*)\]/[*]/g, @mods);
 		    # even better would be to collect the list of indicies which are modified, and create a \forall to specify that the rest aren't
 
 		    for my $field (@final_fields) {
