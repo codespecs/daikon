@@ -53,7 +53,7 @@ public class FuzzyFloat {
 
   /**
    * Test d1 and d2 for equality using the current ratio.  Two NaN floats
-   * are also considered equal (this does not happen with the == operator). <p>
+   * are not considered equal (consistent with the == operator). <p>
    *
    * Note that since a ratio is used, that no number is close enough to zero
    * to be considered equal to zero (since the difference between the two is
@@ -64,9 +64,9 @@ public class FuzzyFloat {
 
   public boolean eq (double d1, double d2) {
 
-    //these won't test as equal in a simple test or when divided
+    //NaNs are not considered equal
     if (Double.isNaN(d1) && Double.isNaN(d2))
-      return (true);
+      return (false);
 
     // if zero was specified for a ratio, don't do the divide.  You might
     // get slightly different answers.  And this should be faster.

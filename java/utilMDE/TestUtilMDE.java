@@ -1921,8 +1921,10 @@ public final class TestUtilMDE extends TestCase {
     assertTrue (ff.eq (0, 0));
     assertTrue (!ff.ne (0, 0));
 
+    //make sure that NaNs are not equal
+    assertTrue (!ff.eq (Double.NaN, Double.NaN));
+    
     //make sure that various unusual values are equal
-    assertTrue (ff.eq (Double.NaN, Double.NaN));
     assertTrue (ff.eq (Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));
     assertTrue (ff.eq (Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY));
 
