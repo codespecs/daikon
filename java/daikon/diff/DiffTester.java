@@ -24,6 +24,8 @@ public class DiffTester extends TestCase {
   private PptMap invs1;
   private PptMap invs2;
   private PptMap invs3;
+  private PptMap imps1;
+  private PptMap imps2;
   
   
   public static void main(String[] args) {
@@ -122,6 +124,45 @@ public class DiffTester extends TestCase {
       ppt.addViews(v);
       invs3.add(ppt);
     }
+
+    {
+      imps1 = new PptMap();
+      VarInfo[] vars = {
+        new VarInfo("x", "x", ProglangType.INT, ProglangType.INT, null)};
+      PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
+      PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
+      Invariant inv1 = LowerBound.instantiate(slicex);
+      Invariant inv2 = Modulus.instantiate(slicex);
+      Invariant inv3 = UpperBound.instantiate(slicex);
+      Implication imp1 = Implication.makeImplication(ppt, inv1, inv2, false);
+      Implication imp2 = Implication.makeImplication(ppt, inv1, inv3, false);
+      Implication imp3 = Implication.makeImplication(ppt, inv2, inv1, false);
+      Implication imp4 = Implication.makeImplication(ppt, inv2, inv3, false);
+      Implication imp5 = Implication.makeImplication(ppt, inv3, inv1, false);
+      Implication imp6 = Implication.makeImplication(ppt, inv3, inv2, false);
+      imps1.add(ppt);
+    }
+
+    
+    // Permutation of the nullary invariants in invs1
+    {
+      imps2 = new PptMap();
+      VarInfo[] vars = {
+        new VarInfo("x", "x", ProglangType.INT, ProglangType.INT, null)};
+      PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
+      PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
+      Invariant inv1 = LowerBound.instantiate(slicex);
+      Invariant inv2 = Modulus.instantiate(slicex);
+      Invariant inv3 = UpperBound.instantiate(slicex);
+      Implication imp3 = Implication.makeImplication(ppt, inv2, inv1, false);
+      Implication imp2 = Implication.makeImplication(ppt, inv1, inv3, false);
+      Implication imp4 = Implication.makeImplication(ppt, inv2, inv3, false);
+      Implication imp5 = Implication.makeImplication(ppt, inv3, inv1, false);
+      Implication imp6 = Implication.makeImplication(ppt, inv3, inv2, false);
+      Implication imp1 = Implication.makeImplication(ppt, inv1, inv2, false);
+      imps2.add(ppt);
+    }
+
 
 
   }
@@ -277,7 +318,7 @@ public class DiffTester extends TestCase {
     ref.add(pptNode);
 
     Assert.assertEquals(printTree(ref), printTree(diff));
-    Assert.assertEquals(3, countDifferingInvariants(diff));
+    Assert.assertEquals(3, countMissingInvariants(diff));
   }
 
   public void testInvs1Invs1() {
@@ -382,7 +423,12 @@ public class DiffTester extends TestCase {
     ref.add(pptNode);
 
     Assert.assertEquals(printTree(ref), printTree(diff));
-    Assert.assertEquals(2, countDifferingInvariants(diff));
+    Assert.assertEquals(2, countMissingInvariants(diff));
+  }
+
+  public void testNullaryInvs() {
+    RootNode root = Diff.diffPptMap(imps1, imps2);
+    Assert.assertEquals(0, countDifferingInvariants(root));
   }
 
   public void testNonModulus() {
@@ -437,30 +483,22 @@ public class DiffTester extends TestCase {
       FunctionBinary.instantiate(slicexyz, "bar", null, 0);
 
     
-    /*
-    Invariant impl1 =
-      Implication.makeImplication(ppt, invxLower, invxUpper, false);
-    Invariant impl2 =
-      Implication.makeImplication(ppt, invxLower, invxNonZero, false);
-    */
+    Invariant imp1 =
+      Implication.makeImplication(ppt, invxLower1, invxUpper1, false);
+    Invariant imp2 = 
+      Implication.makeImplication(ppt, invxLower1, invxUpper2, false);
 
 
     PptNode pptNode;
     pptNode = new PptNode(ppt, ppt);
     InvNode invNode;
 
-    /*
-    invNode = new InvNode(impl1, impl1);
+    invNode = new InvNode(imp1, imp1);
     pptNode.add(invNode);
-    invNode = new InvNode(impl2, impl2);
-    pptNode.add(invNode);
-    invNode = new InvNode(impl1, null);
+    invNode = new InvNode(imp1, null);
     pptNode.add(invNode);    
-    invNode = new InvNode(null, impl2);
+    invNode = new InvNode(imp1, imp2);
     pptNode.add(invNode);    
-    invNode = new InvNode(impl1, impl2);
-    pptNode.add(invNode);    
-    */
 
     invNode = new InvNode(invxLower1, invxLower1);
     pptNode.add(invNode);
@@ -499,10 +537,10 @@ public class DiffTester extends TestCase {
     //    System.out.println();
     //    System.out.println(v.format());
 
-    Assert.assertEquals(0, v.getIdenticalNullary());
-    Assert.assertEquals(0, v.getMissingNullary());
-    Assert.assertEquals(0, v.getDifferingNullary());
-    Assert.assertEquals(0, v.getDifferingInterestingNullary());
+    Assert.assertEquals(1, v.getIdenticalNullary());
+    Assert.assertEquals(1, v.getMissingNullary());
+    Assert.assertEquals(1, v.getDifferingNullary());
+    Assert.assertEquals(1, v.getDifferingInterestingNullary());
     Assert.assertEquals(0, v.getDifferingUninterestingNullary());
 
     Assert.assertEquals(1, v.getIdenticalUnary());
@@ -522,25 +560,34 @@ public class DiffTester extends TestCase {
     Assert.assertEquals(1, v.getDifferingTernary());
     Assert.assertEquals(1, v.getDifferingInterestingTernary());
     Assert.assertEquals(0, v.getDifferingUninterestingTernary());    
+
+    Assert.assertEquals(5, v.getMissing());
+    Assert.assertEquals(7, v.getDiffering());
   }
 
   private static String printTree(RootNode root) {
-    PrintAllVisitor v = new PrintAllVisitor(true);
+    PrintAllVisitor v = new PrintAllVisitor(false);
     root.accept(v);
     return v.getOutput();
   }
 
   private static String printDifferences(RootNode root) {
     PrintDifferingInvariantsVisitor v =
-      new PrintDifferingInvariantsVisitor(true);
+      new PrintDifferingInvariantsVisitor(false);
     root.accept(v);
     return v.getOutput();
   }
 
   private static int countDifferingInvariants(RootNode root) {
-    CountDifferingInvariantsVisitor v = new CountDifferingInvariantsVisitor();
+    StatisticsVisitor v = new StatisticsVisitor();
     root.accept(v);
-    return v.getDifferingInvariantsCount();
+    return v.getDiffering();
+  }
+
+  private static int countMissingInvariants(RootNode root) {
+    StatisticsVisitor v = new StatisticsVisitor();
+    root.accept(v);
+    return v.getMissing();
   }
 
 
