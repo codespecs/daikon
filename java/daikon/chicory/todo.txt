@@ -3,6 +3,29 @@ Todo list sorted in approximate order of importance.
 Add your name/initials to an item when you are actively working on it.
 When the task is complete, move it to the bottom of the file.
 
+  - Fix issue which occurs when classfile does not include line number
+    information.  Dtrace/decls info should be syntactically correct.
+    Currently, dtrace exit points do not have corresponding declarations
+    (different, invalid line numbers)
+    
+  - Fix bug which occurs for unnamed packages:
+    For instance, if Bug.java is the following file:
+
+	public class Bug {
+    	Bug(int n) {
+    	}
+    	public static void main(String[] args) {
+        	Bug b = new Bug(0);
+    	}
+	}
+
+     Then "java daikon.Chicory --daikon Bug" dies with:
+
+     Exception in thread "main" java.lang.Error: No dot in function name Bug(int)
+        at daikon.PptName.<init>(PptName.java:78)
+
+     Adding "package bug;" to the front of the file fixes the error.
+  
   - Fix --ppt-omit-pattern and --ppt-select-pattern to work on each
     ppt point name rather than only on class names.  I think this means
     we should consider a class instrumented if any of its methods
