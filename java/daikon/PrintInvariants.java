@@ -90,12 +90,6 @@ public class PrintInvariants {
       "Usage: java daikon.PrintInvariants [OPTION]... FILE",
       "  -h, --" + Daikon.help_SWITCH,
       "      Display this usage message",
-      "  --" + Daikon.suppress_cont_SWITCH,
-      "      Suppress display of implied invariants (by controlling ppt).",
-      "  --" + Daikon.no_suppress_cont_SWITCH,
-      "      Don't suppress display of implied invariants (by controlling ppt).",
-      "  --" + Daikon.suppress_post_SWITCH,
-      "      Suppress display of obvious postconditions on prestate.",
       "  --" + Daikon.suppress_redundant_SWITCH,
       "      Suppress display of logically redundant invariants.",
       "  --" + Daikon.esc_output_SWITCH,
@@ -113,9 +107,15 @@ public class PrintInvariants {
       "  --" + Daikon.output_num_samples_SWITCH,
       "      Output numbers of values and samples for invariants and " +
       "program points; for debugging.",
-      "  --" + Daikon.noinvariantguarding_SWITCH,
-      "      Disable invariant guarding, which is normally on for JML and ESC output formats."},
-      lineSep);
+      "  --" + Daikon.config_option_SWITCH + " config_var=val",
+      "      Sets the specified configuration variable.  ",
+      "  --" + Daikon.debugAll_SWITCH,
+      "      Turns on all debug flags (voluminous output)",
+      "  --" + Daikon.debug_SWITCH + " logger",
+      "      Turns on the specified debug logger",
+      "  --" + Daikon.track_SWITCH + " class<var1,var2,var3>@ppt",
+      "      Print debug info on the specified invariant class, vars, and ppt",
+    }, lineSep);
 
   public static void main(String[] args) throws FileNotFoundException,
   StreamCorruptedException, OptionalDataException, IOException,
@@ -123,9 +123,6 @@ public class PrintInvariants {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
 
     LongOpt[] longopts = new LongOpt[] {
-      new LongOpt(Daikon.suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(Daikon.no_suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(Daikon.suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.esc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.simplify_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -138,10 +135,6 @@ public class PrintInvariants {
       new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt(Daikon.noinvariantguarding_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(Daikon.disc_reason_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt(Daikon.show_progress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(Daikon.no_show_progress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(Daikon.track_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
     };
@@ -155,18 +148,12 @@ public class PrintInvariants {
         if (Daikon.help_SWITCH.equals(option_name)) {
           System.out.println(usage);
           System.exit(1);
-        } else if (Daikon.suppress_cont_SWITCH.equals(option_name)) {
-          Daikon.suppress_implied_controlled_invariants = true;
         } else if (Daikon.disc_reason_SWITCH.equals(option_name)) {
           try { PrintInvariants.discReasonSetup(g.getOptarg()); }
           catch (IllegalArgumentException e) {
             System.out.print(e.getMessage());
             System.exit(1);
           }
-        } else if (Daikon.no_suppress_cont_SWITCH.equals(option_name)) {
-          Daikon.suppress_implied_controlled_invariants = false;
-        } else if (Daikon.suppress_post_SWITCH.equals(option_name)) {
-          Daikon.suppress_implied_postcondition_over_prestate_invariants = true;
         } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
           Daikon.suppress_redundant_invariants_with_simplify = true;
         } else if (Daikon.esc_output_SWITCH.equals(option_name)) {
@@ -182,7 +169,7 @@ public class PrintInvariants {
           test_output = true;
         } else if (Daikon.jml_output_SWITCH.equals(option_name)) {
           Daikon.output_style = OutputFormat.JML;
-	} else if (Daikon.dbc_output_SWITCH.equals(option_name)) { //@tx
+	    } else if (Daikon.dbc_output_SWITCH.equals(option_name)) { //@tx
           Daikon.output_style = OutputFormat.DBCJAVA;
         } else if (Daikon.output_num_samples_SWITCH.equals(option_name)) {
           Daikon.output_num_samples = true;
@@ -194,14 +181,6 @@ public class PrintInvariants {
           Global.debugAll = true;
         } else if (Daikon.debug_SWITCH.equals(option_name)) {
           LogHelper.setLevel(g.getOptarg(), LogHelper.FINE);
-        } else if (Daikon.noinvariantguarding_SWITCH.equals(option_name)) {
-          Daikon.noInvariantGuarding = true;
-        } else if (Daikon.show_progress_SWITCH.equals(option_name)) {
-          // nothing to do
-        } else if (Daikon.no_show_progress_SWITCH.equals(option_name)) {
-          // nothing to do
-        } else if (Daikon.ppt_regexp_SWITCH.equals(option_name)) {
-          // nothing to do
         } else if (Daikon.track_SWITCH.equals (option_name)) {
           LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
           String error = Debug.add_track (g.getOptarg());
@@ -242,7 +221,7 @@ public class PrintInvariants {
 
     if ((Daikon.output_style == OutputFormat.ESCJAVA ||
          Daikon.output_style == OutputFormat.JML) &&
-        !Daikon.noInvariantGuarding)
+        !Daikon.dkconfig_noInvariantGuarding)
       Daikon.guardInvariants(ppts);
 
     // Debug print the hierarchy is a more readable manner
