@@ -80,8 +80,8 @@ class LOWERBOUND extends SingleScalar {
   int NUM_MIN3 = 0;
   int MAX = INTMIN;
 
-  private LOWERBOUND(PptSlice ppt_) {
-    super(ppt_);
+  private LOWERBOUND(PptSlice ppt) {
+    super(ppt);
   }
 
   public static LOWERBOUND instantiate(PptSlice ppt) {

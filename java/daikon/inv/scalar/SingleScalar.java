@@ -6,9 +6,9 @@ import utilMDE.*;
 
 public abstract class SingleScalar extends Invariant {
 
-  protected SingleScalar(PptSlice ppt_) {
-    super(ppt_);
-    // System.out.println("Created SingleScalar invariant " + this + " at " + ppt_);
+  protected SingleScalar(PptSlice ppt) {
+    super(ppt);
+    // System.out.println("Created SingleScalar invariant " + this + " at " + ppt);
   }
 
   public VarInfo var() {

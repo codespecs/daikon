@@ -66,8 +66,8 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   private INT[] elts;
   private int num_elts;
 
-  ONEOFSCALAR(PptSlice ppt_) {
-    super(ppt_);
+  ONEOFSCALAR(PptSlice ppt) {
+    super(ppt);
 #ifdef SEQUENCE
     elts = new int[LIMIT][];    // elements are interned, so can test with ==
                                 // (in the general online case, not worth interning)

@@ -7,8 +7,8 @@ import utilMDE.*;
 
 public abstract class TwoScalar extends Invariant {
 
-  protected TwoScalar(PptSlice ppt_) {
-    super(ppt_);
+  protected TwoScalar(PptSlice ppt) {
+    super(ppt);
   }
 
   public VarInfo var1() {

@@ -28,8 +28,8 @@ public final class PptSlice2  extends PptSlice {
 
   int[] tm_total = new int[4 ];  // "tm" stands for "tuplemod"
 
-  PptSlice2 (Ppt parent_, VarInfo[] var_infos_) {
-    super(parent_, var_infos_);
+  PptSlice2 (Ppt parent, VarInfo[] var_infos) {
+    super(parent, var_infos);
     Assert.assert(var_infos.length == 2 );
 
     values_cache = new HashMap();
@@ -42,8 +42,8 @@ public final class PptSlice2  extends PptSlice {
     // instantiate_invariants();
   }
 
-  PptSlice2(Ppt parent_, VarInfo var_info1_, VarInfo var_info2_) {
-    this(parent_, new VarInfo[] { var_info1_, var_info2_ });
+  PptSlice2(Ppt parent, VarInfo var_info1, VarInfo var_info2) {
+    this(parent, new VarInfo[] { var_info1, var_info2 });
   }
 
   void instantiate_invariants(int pass) {

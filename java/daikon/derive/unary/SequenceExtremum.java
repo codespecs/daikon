@@ -17,9 +17,9 @@ public class SequenceExtremum extends UnaryDerivation {
   // array length required for the subscript to be meaningful:  (ie, 1 or 2)
   int minLength;
 
-  public SequenceExtremum(VarInfo vi, int index_) {
+  public SequenceExtremum(VarInfo vi, int index) {
     super(vi);
-    index = index_;
+    this.index = index;
     if (index < 0)
       minLength = -index;
     else

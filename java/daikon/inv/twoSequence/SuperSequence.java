@@ -8,8 +8,8 @@ import utilMDE.*;
 // similar to SubSequence; if I change one, also change the other.
 class SuperSequence extends TwoSequence {
 
-  protected SuperSequence(PptSlice ppt_) {
-    super(ppt_);
+  protected SuperSequence(PptSlice ppt) {
+    super(ppt);
   }
 
   public static SuperSequence instantiate(PptSlice ppt) {

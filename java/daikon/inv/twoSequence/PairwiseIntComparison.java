@@ -13,13 +13,13 @@ class PairwiseIntComparison extends TwoSequence {
 
   IntComparisonCore core;
 
-  protected PairwiseIntComparison(PptSlice ppt_) {
-    super(ppt_);
+  protected PairwiseIntComparison(PptSlice ppt) {
+    super(ppt);
     core = new IntComparisonCore(this);
   }
 
-  protected PairwiseIntComparison(PptSlice ppt_, boolean only_eq) {
-    super(ppt_);
+  protected PairwiseIntComparison(PptSlice ppt, boolean only_eq) {
+    super(ppt);
     core = new IntComparisonCore(this, only_eq);
   }
 

@@ -26,8 +26,8 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
   private int [] elts;
   private int num_elts;
 
-  EltOneOf (PptSlice ppt_) {
-    super(ppt_);
+  EltOneOf (PptSlice ppt) {
+    super(ppt);
 
     elts = new int [LIMIT];
 

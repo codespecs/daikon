@@ -7,8 +7,8 @@ import utilMDE.*;
 
 public abstract class TwoSequence extends Invariant {
 
-  protected TwoSequence(PptSlice ppt_) {
-    super(ppt_);
+  protected TwoSequence(PptSlice ppt) {
+    super(ppt);
   }
 
   public VarInfo var1() {

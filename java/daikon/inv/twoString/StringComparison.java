@@ -17,12 +17,12 @@ public final class StringComparison extends TwoString implements Comparison {
 
   public StringComparisonCore core;
 
-  protected StringComparison(PptSlice ppt_) {
-    this(ppt_, false, false, false, false, false);
+  protected StringComparison(PptSlice ppt) {
+    this(ppt, false, false, false, false, false);
   }
 
-  protected StringComparison(PptSlice ppt_, boolean only_eq, boolean obvious_lt, boolean obvious_gt, boolean obvious_le, boolean obvious_ge) {
-    super(ppt_);
+  protected StringComparison(PptSlice ppt, boolean only_eq, boolean obvious_lt, boolean obvious_gt, boolean obvious_le, boolean obvious_ge) {
+    super(ppt);
     core = new StringComparisonCore(this, only_eq, obvious_lt, obvious_gt, obvious_le, obvious_ge);
   }
 

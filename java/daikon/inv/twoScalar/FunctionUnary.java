@@ -8,8 +8,8 @@ class FunctionUnary extends TwoScalar {
 
   FunctionUnaryCore core;
 
-  protected FunctionUnary(PptSlice ppt_, String methodname, Method function, boolean inverse) {
-    super(ppt_);
+  protected FunctionUnary(PptSlice ppt, String methodname, Method function, boolean inverse) {
+    super(ppt);
     core = new FunctionUnaryCore(this, methodname, function, inverse);
   }
 

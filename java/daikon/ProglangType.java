@@ -72,17 +72,17 @@ public final class ProglangType implements java.io.Serializable {
    * This can't be a constructor because it returns a canonical
    * representation (that can be compared with ==), not necessarily a new
    * object.
-   *  @argument rep_  the name of the type, optionally suffixed by
+   *  @argument rep  the name of the type, optionally suffixed by
    *  (possibly multiple) "[]"
    **/
-  public static ProglangType parse(String rep_) {
-    String rep = rep_;
+  public static ProglangType parse(String rep) {
+    String new_base = rep;
     int dims = 0;
-    while (rep.endsWith("[]")) {
+    while (new_base.endsWith("[]")) {
       dims++;
-      rep = rep.substring(0, rep.length() - 2);
+      new_base = new_base.substring(0, new_base.length() - 2);
     }
-    String new_base = rep.intern();
+    new_base = new_base.intern();
     return intern(new_base, dims);
   }
 
@@ -96,8 +96,7 @@ public final class ProglangType implements java.io.Serializable {
   }
 
   // t_base should be interned
-  private static ProglangType find(String t_base_, int t_dims) {
-    String t_base = t_base_;
+  private static ProglangType find(String t_base, int t_dims) {
     Assert.assert(t_base == t_base.intern());
     if (t_base == "boolean") {  // interned
       t_base = "int";
@@ -202,8 +201,8 @@ public final class ProglangType implements java.io.Serializable {
   // Given a string representation of a value (of the type represented by
   // this ProglangType), return the interpretation of that value.
   // Canonicalize where possible.
-  final Object parse_value(String value_) {
-    String value = value_;
+  final Object parse_value(String value) {
+    String value_ = value;      // for debugging, I suppose
     // This only needs to deal with representation types, not with all
     // types in the underlying programming language.
 

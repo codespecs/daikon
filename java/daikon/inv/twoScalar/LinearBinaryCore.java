@@ -20,8 +20,8 @@ public final class LinearBinaryCore implements java.io.Serializable {
   int[] x_cache = new int[MINPAIRS];
   int[] y_cache = new int[MINPAIRS];
 
-  public LinearBinaryCore(Invariant wrapper_) {
-    wrapper = wrapper_;
+  public LinearBinaryCore(Invariant wrapper) {
+    this.wrapper = wrapper;
   }
 
   public void add_modified(int x, int y, int count) {

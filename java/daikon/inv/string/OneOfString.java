@@ -26,8 +26,8 @@ public final class OneOfString  extends SingleString  implements OneOf {
   private String [] elts;
   private int num_elts;
 
-  OneOfString (PptSlice ppt_) {
-    super(ppt_);
+  OneOfString (PptSlice ppt) {
+    super(ppt);
 
     elts = new String [LIMIT];
 

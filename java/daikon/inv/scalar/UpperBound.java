@@ -19,7 +19,7 @@ import java.util.*;
 
 class UpperBound  extends SingleScalar {
 
-  // max1  >  max2  >  max3 
+  // max1  >  max2  >  max3
   int max1  = Integer.MIN_VALUE ;
   int num_max1  = 0;
   int max2  = Integer.MIN_VALUE ;
@@ -28,8 +28,8 @@ class UpperBound  extends SingleScalar {
   int num_max3  = 0;
   int min  = Integer.MAX_VALUE ;
 
-  private UpperBound (PptSlice ppt_) {
-    super(ppt_);
+  private UpperBound (PptSlice ppt) {
+    super(ppt);
   }
 
   public static UpperBound  instantiate(PptSlice ppt) {
@@ -46,12 +46,12 @@ class UpperBound  extends SingleScalar {
     // does not include result of getProbability because this
     // is called from computeProbability for debugging purposes.
     return "UpperBound"  + varNames() + ": "
-      + "max1=" + max1 
-      + ", num_max1=" + num_max1 
-      + ", max2=" + max2 
-      + ", num_max2=" + num_max2 
-      + ", max3=" + max3 
-      + ", num_max3=" + num_max3 
+      + "max1=" + max1
+      + ", num_max1=" + num_max1
+      + ", max2=" + max2
+      + ", num_max2=" + num_max2
+      + ", max3=" + max3
+      + ", num_max3=" + num_max3
       + ", min=" + min ;
   }
 

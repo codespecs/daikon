@@ -21,15 +21,15 @@ public final class FunctionBinaryCore implements java.io.Serializable {
 
   Invariant wrapper;
 
-  public FunctionBinaryCore(Invariant wrapper_, String methodname_, Method function_, int var_order_) {
-    wrapper = wrapper_;
-    methodname = methodname_;
-    function = function_;
-    var_order = var_order_;
+  public FunctionBinaryCore(Invariant wrapper, String methodname, Method function, int var_order) {
+    this.wrapper = wrapper;
+    this.methodname = methodname;
+    this.function = function;
+    this.var_order = var_order;
   }
 
-  public FunctionBinaryCore(Invariant wrapper_, String methodname_, int var_order_) throws ClassNotFoundException, NoSuchMethodException {
-    this(wrapper_, methodname_, UtilMDE.methodForName(methodname_), var_order_);
+  public FunctionBinaryCore(Invariant wrapper, String methodname, int var_order) throws ClassNotFoundException, NoSuchMethodException {
+    this(wrapper, methodname, UtilMDE.methodForName(methodname), var_order);
   }
 
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException, NoSuchMethodException {

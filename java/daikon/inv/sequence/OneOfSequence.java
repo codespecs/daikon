@@ -26,8 +26,8 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
   private int[] [] elts;
   private int num_elts;
 
-  OneOfSequence (PptSlice ppt_) {
-    super(ppt_);
+  OneOfSequence (PptSlice ppt) {
+    super(ppt);
 
     elts = new int[LIMIT][];    // elements are interned, so can test with ==
                                 // (in the general online case, not worth interning)

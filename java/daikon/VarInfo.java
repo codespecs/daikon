@@ -51,25 +51,25 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
                                 //   so slow.
 
 
-  public VarInfo(String name_, ProglangType type_, ProglangType rep_type_, VarComparability comparability_, Object static_constant_value_) {
+  public VarInfo(String name, ProglangType type, ProglangType rep_type, VarComparability comparability, Object static_constant_value) {
     // Watch out:  some Lisp and C .decls files have other (unsupported) types.
-    Assert.assert(rep_type_ != null);
-    Assert.assert((rep_type_ == ProglangType.INT)
-                  || (rep_type_ == ProglangType.DOUBLE)
-                  || (rep_type_ == ProglangType.STRING)
-                  || (rep_type_ == ProglangType.INT_ARRAY)
-                  || (rep_type_ == ProglangType.DOUBLE_ARRAY)
-                  || (rep_type_ == ProglangType.STRING_ARRAY),
-                  "Unsupported representation type " + rep_type_.format() + " for variable " + name_);
+    Assert.assert(rep_type != null);
+    Assert.assert((rep_type == ProglangType.INT)
+                  || (rep_type == ProglangType.DOUBLE)
+                  || (rep_type == ProglangType.STRING)
+                  || (rep_type == ProglangType.INT_ARRAY)
+                  || (rep_type == ProglangType.DOUBLE_ARRAY)
+                  || (rep_type == ProglangType.STRING_ARRAY),
+                  "Unsupported representation type " + rep_type.format() + " for variable " + name);
 
     // Possibly the call to intern() isn't necessary; but it's safest to
     // make the call to intern() rather than running the risk that a caller
     // didn't.
-    name = name_.intern();
-    type = type_;
-    rep_type = rep_type_;
-    comparability = comparability_;
-    static_constant_value = static_constant_value_;
+    this.name = name.intern();
+    this.type = type;
+    this.rep_type = rep_type;
+    this.comparability = comparability;
+    this.static_constant_value = static_constant_value;
 
     // Indicates that these haven't yet been set to reasonable values.
     value_index = -1;
@@ -80,8 +80,8 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     exact_nonunary_invariants = new Vector(2);
   }
 
-  public VarInfo(String name_, ProglangType type_, ProglangType rep_type_, VarComparability comparability_) {
-    this(name_, type_, rep_type_, comparability_, null);
+  public VarInfo(String name, ProglangType type, ProglangType rep_type, VarComparability comparability) {
+    this(name, type, rep_type, comparability, null);
   }
 
   public VarInfo(VarInfo vi) {
@@ -299,7 +299,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 
   static final class usesVarFilter implements Filter {
     VarInfo var;
-    public usesVarFilter(VarInfo var_) { var = var_; }
+    public usesVarFilter(VarInfo var) { this.var = var; }
     public boolean accept(Object o) { return ((Invariant) o).usesVar(var); }
   }
 

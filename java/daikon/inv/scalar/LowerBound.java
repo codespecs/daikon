@@ -23,7 +23,7 @@ import java.util.*;
 
 class LowerBound  extends SingleScalar {
 
-  // min1  <  min2  <  min3 
+  // min1  <  min2  <  min3
   int min1  = Integer.MAX_VALUE ;
   int num_min1  = 0;
   int min2  = Integer.MAX_VALUE ;
@@ -32,8 +32,8 @@ class LowerBound  extends SingleScalar {
   int num_min3  = 0;
   int max  = Integer.MIN_VALUE ;
 
-  private LowerBound (PptSlice ppt_) {
-    super(ppt_);
+  private LowerBound (PptSlice ppt) {
+    super(ppt);
   }
 
   public static LowerBound  instantiate(PptSlice ppt) {
@@ -50,12 +50,12 @@ class LowerBound  extends SingleScalar {
     // does not include result of getProbability because this
     // is called from computeProbability for debugging purposes.
     return "LowerBound"  + varNames() + ": "
-      + "min1=" + min1 
-      + ", num_min1=" + num_min1 
-      + ", min2=" + min2 
-      + ", num_min2=" + num_min2 
-      + ", min3=" + min3 
-      + ", num_min3=" + num_min3 
+      + "min1=" + min1
+      + ", num_min1=" + num_min1
+      + ", min2=" + min2
+      + ", num_min2=" + num_min2
+      + ", min3=" + min3
+      + ", num_min3=" + num_min3
       + ", max=" + max ;
   }
 

@@ -17,8 +17,8 @@ class SeqComparison extends TwoSequence implements Comparison {
   boolean can_be_lt = false;
   boolean can_be_gt = false;
 
-  protected SeqComparison(PptSlice ppt_) {
-    super(ppt_);
+  protected SeqComparison(PptSlice ppt) {
+    super(ppt);
   }
 
   public static SeqComparison instantiate(PptSlice ppt) {

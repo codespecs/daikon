@@ -6,9 +6,9 @@ import utilMDE.*;
 
 public abstract class SingleString extends Invariant {
 
-  protected SingleString(PptSlice ppt_) {
-    super(ppt_);
-    // System.out.println("Created SingleString invariant " + this + " at " + ppt_);
+  protected SingleString(PptSlice ppt) {
+    super(ppt);
+    // System.out.println("Created SingleString invariant " + this + " at " + ppt);
   }
 
   public VarInfo var() {

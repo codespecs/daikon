@@ -6,8 +6,8 @@ class LinearBinary extends TwoScalar {
 
   LinearBinaryCore core;
 
-  protected LinearBinary(PptSlice ppt_) {
-    super(ppt_);
+  protected LinearBinary(PptSlice ppt) {
+    super(ppt);
     core = new LinearBinaryCore(this);
   }
 

@@ -37,12 +37,12 @@ public class ExplicitVarComparability extends VarComparability {
 
   ExplicitVarComparability cached_element_type;
 
-  ExplicitVarComparability(String[] base_, String[][] indices_, int dimensions_,
-			   String alias_) {
-    base = base_;
-    indices = indices_;
-    dimensions = dimensions_;
-    alias = alias_;
+  ExplicitVarComparability(String[] base, String[][] indices, int dimensions,
+			   String alias) {
+    this.base = base;
+    this.indices = indices;
+    this.dimensions = dimensions;
+    this.alias = alias;
     indexTypes = new ExplicitVarComparability[dimensions];
   }
 
@@ -74,9 +74,7 @@ public class ExplicitVarComparability extends VarComparability {
     return indexTypes[dim];
   }
 
-  static VarComparability parse(String rep_, ProglangType vartype) {
-    String rep = rep_;
-
+  static VarComparability parse(String rep, ProglangType vartype) {
     PatternMatcher re_matcher = Global.regexp_matcher;
 
     if (vartype.isArray()) {

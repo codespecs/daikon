@@ -16,8 +16,8 @@ class Modulus extends SingleScalar {
   // used for initializing value1
   boolean no_values_seen = true;
 
-  private Modulus(PptSlice ppt_) {
-    super(ppt_);
+  private Modulus(PptSlice ppt) {
+    super(ppt);
   }
 
   public static Modulus instantiate(PptSlice ppt) {

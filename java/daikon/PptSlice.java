@@ -49,10 +49,10 @@ public abstract class PptSlice extends Ppt {
   public boolean already_seen_all = false;
 
 
-  PptSlice(Ppt parent_, VarInfo[] var_infos_) {
+  PptSlice(Ppt parent, VarInfo[] var_infos) {
     super();
-    parent = parent_;
-    var_infos = var_infos_;
+    this.parent = parent;
+    this.var_infos = var_infos;
     // System.out.println("in PptSlice(): this=" + this);
     // System.out.println("var_infos = " + var_infos + " = " + this.var_infos);
     // for (int i=0; i<var_infos.length; i++) {

@@ -6,9 +6,9 @@ import utilMDE.*;
 
 public abstract class SingleSequence extends Invariant {
 
-  protected SingleSequence(PptSlice ppt_) {
-    super(ppt_);
-    // System.out.println("Created SingleSequence invariant " + this + " at " + ppt_);
+  protected SingleSequence(PptSlice ppt) {
+    super(ppt);
+    // System.out.println("Created SingleSequence invariant " + this + " at " + ppt);
   }
 
   public VarInfo var() {

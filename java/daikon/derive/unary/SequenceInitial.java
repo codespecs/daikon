@@ -14,9 +14,9 @@ public final class SequenceInitial extends UnaryDerivation {
   // array length required for the subscript to be meaningful:  (ie, 1 or 2)
   final int minLength;
 
-  public SequenceInitial(VarInfo vi, int index_) {
+  public SequenceInitial(VarInfo vi, int index) {
     super(vi);
-    index = index_;
+    this.index = index;
     if (index < 0)
       minLength = -index;
     else

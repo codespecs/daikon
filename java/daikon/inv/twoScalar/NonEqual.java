@@ -20,8 +20,8 @@ public final class NonEqual extends TwoScalar {
   // Get this from the Ppt
   // int samples = 0;
 
-  protected NonEqual(PptSlice ppt_) {
-    super(ppt_);
+  protected NonEqual(PptSlice ppt) {
+    super(ppt);
   }
 
   public static NonEqual instantiate(PptSlice ppt) {

@@ -1,5 +1,5 @@
 UTILMDE_DIR := $(HOME)/java/utilMDE
-JAVA_FILES := $(shell find . \( -name '*daikon-java*' -o -name '*-cpp.java' -o -name CVS \) -prune -o -name '*.java' -print)
+JAVA_FILES := $(shell find . \( -name '*daikon-java*' -o -name '*-cpp.java' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
 TAG_FILES := $(shell find . \( -name '*daikon-java*' -o -name CVS \) -prune -o -name '*.java' -print)
 JAVAC := jikes -g +E +F
 # Should these really be targets in the below, or should I use "make
@@ -110,28 +110,28 @@ inv/scalar/LowerBound.java: inv/scalar/Bound-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=LOWER)
 
 inv/scalar/UpperBound.java: inv/scalar/Bound-cpp.java
-	$(JAVA_CPP_START) -DUPPER $(JAVA_CPP_END)
+	$(JAVA_CPP:DEFINEDVAR=UPPER)
 
 inv/scalar/OneOfScalar.java: inv/OneOf-cpp.java
-	$(JAVA_CPP_START) -DSCALAR $(JAVA_CPP_END)
+	$(JAVA_CPP:DEFINEDVAR=SCALAR)
 
 inv/string/OneOfString.java: inv/OneOf-cpp.java
-	$(JAVA_CPP_START) -DSTRING $(JAVA_CPP_END)
+	$(JAVA_CPP:DEFINEDVAR=STRING)
 
 inv/sequence/OneOfSequence.java: inv/OneOf-cpp.java
-	$(JAVA_CPP_START) -DSEQUENCE $(JAVA_CPP_END)
+	$(JAVA_CPP:DEFINEDVAR=SEQUENCE)
 
 inv/sequence/EltOneOf.java: inv/OneOf-cpp.java
-	$(JAVA_CPP_START) -DELT $(JAVA_CPP_END)
+	$(JAVA_CPP:DEFINEDVAR=ELT)
 
 PptSlice1.java: PptSlice-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=ARITY1)
 
 PptSlice2.java: PptSlice-cpp.java
-	$(JAVA_CPP_START) -DARITY2 $(JAVA_CPP_END)
+	$(JAVA_CPP:DEFINEDVAR=ARITY2)
 
 PptSlice3.java: PptSlice-cpp.java
-	$(JAVA_CPP_START) -DARITY3 $(JAVA_CPP_END)
+	$(JAVA_CPP:DEFINEDVAR=ARITY3)
 
 
 ###########################################################################

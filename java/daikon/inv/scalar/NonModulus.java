@@ -20,8 +20,8 @@ class NonModulus extends SingleScalar {
   // This indicates whether it is.
   private boolean results_accurate = false;
 
-  private NonModulus(PptSlice ppt_) {
-    super(ppt_);
+  private NonModulus(PptSlice ppt) {
+    super(ppt);
   }
 
   public static NonModulus instantiate(PptSlice ppt) {

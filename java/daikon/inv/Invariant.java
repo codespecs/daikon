@@ -91,8 +91,8 @@ public abstract class Invariant implements java.io.Serializable {
   // Implementations of this need to examine all the data values already
   // in the ppt.  Or, don't put too much work in the constructor and instead
   // have the caller do that.
-  protected Invariant(PptSlice ppt_) {
-    ppt = ppt_;
+  protected Invariant(PptSlice ppt) {
+    this.ppt = ppt;
     // probability_cache_accurate = false;
 
     // We don't want to add the invariant yet, as this constructor is

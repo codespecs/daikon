@@ -7,8 +7,8 @@ import utilMDE.*;
 
 public abstract class TwoString extends Invariant {
 
-  protected TwoString(PptSlice ppt_) {
-    super(ppt_);
+  protected TwoString(PptSlice ppt) {
+    super(ppt);
   }
 
   public VarInfo var1() {

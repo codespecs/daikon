@@ -26,8 +26,8 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
   private int [] elts;
   private int num_elts;
 
-  OneOfScalar (PptSlice ppt_) {
-    super(ppt_);
+  OneOfScalar (PptSlice ppt) {
+    super(ppt);
 
     elts = new int [LIMIT];
 

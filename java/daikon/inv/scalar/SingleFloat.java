@@ -6,9 +6,9 @@ import utilMDE.*;
 
 public abstract class SingleFloat extends Invariant {
 
-  protected SingleFloat(PptSlice ppt_) {
-    super(ppt_);
-    // System.out.println("Created SingleFloat invariant " + this + " at " + ppt_);
+  protected SingleFloat(PptSlice ppt) {
+    super(ppt);
+    // System.out.println("Created SingleFloat invariant " + this + " at " + ppt);
   }
 
   public VarInfo var() {

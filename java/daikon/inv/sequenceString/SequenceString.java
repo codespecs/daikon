@@ -12,9 +12,9 @@ public abstract class SequenceString extends Invariant {
   public final int seq_index;                // 0 or 1
   public final int scl_index;                // 0 or 1
 
-  protected SequenceString(PptSlice ppt_, boolean seq_first_) {
-    super(ppt_);
-    seq_first = seq_first_;
+  protected SequenceString(PptSlice ppt, boolean seq_first) {
+    super(ppt);
+    this.seq_first = seq_first;
     if (seq_first) {
       seq_index = 0;
       scl_index = 1;

@@ -70,8 +70,8 @@ public final class PPTSLICE1 extends PptSlice {
   int[] tm_total = new int[NUM_TM];  // "tm" stands for "tuplemod"
 
 
-  PPTSLICE1(Ppt parent_, VarInfo[] var_infos_) {
-    super(parent_, var_infos_);
+  PPTSLICE1(Ppt parent, VarInfo[] var_infos) {
+    super(parent, var_infos);
     Assert.assert(var_infos.length == ARITY);
 #if defined(ARITY1)
     var_info = var_infos[0];
@@ -87,16 +87,16 @@ public final class PPTSLICE1 extends PptSlice {
   }
 
 #if defined(ARITY1)
-  PptSlice1(Ppt parent_, VarInfo var_info_) {
-    this(parent_, new VarInfo[] { var_info_ });
+  PptSlice1(Ppt parent, VarInfo var_info) {
+    this(parent, new VarInfo[] { var_info });
   }
 #elif defined(ARITY2)
-  PptSlice2(Ppt parent_, VarInfo var_info1_, VarInfo var_info2_) {
-    this(parent_, new VarInfo[] { var_info1_, var_info2_ });
+  PptSlice2(Ppt parent, VarInfo var_info1, VarInfo var_info2) {
+    this(parent, new VarInfo[] { var_info1, var_info2 });
   }
 #elif defined(ARITY3)
-  PptSlice3(Ppt parent_, VarInfo var_info1_, VarInfo var_info2_, VarInfo var_info3_) {
-    this(parent_, new VarInfo[] { var_info1_, var_info2_, var_info3_ });
+  PptSlice3(Ppt parent, VarInfo var_info1, VarInfo var_info2, VarInfo var_info3) {
+    this(parent, new VarInfo[] { var_info1, var_info2, var_info3 });
   }
 #endif
 

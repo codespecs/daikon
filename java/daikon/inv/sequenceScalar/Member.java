@@ -12,8 +12,8 @@ public final class Member extends SequenceScalar {
   public final static boolean debugMember = false;
   // public final static boolean debugMember = true;
 
-  protected Member(PptSlice ppt_, boolean seq_first_) {
-    super(ppt_, seq_first_);
+  protected Member(PptSlice ppt, boolean seq_first) {
+    super(ppt, seq_first);
     Assert.assert(sclvar().rep_type == ProglangType.INT);
     Assert.assert(seqvar().rep_type == ProglangType.INT_ARRAY);
   }

@@ -171,19 +171,19 @@ public final class ValueTuple implements Cloneable {
 
 
   /** Default constructor that interns its argument. */
-  ValueTuple(Object[] vals_, int[] mods_) {
-    for (int i=0; i<vals_.length; i++)
-      Assert.assert(Intern.isInterned(vals_[i]));
-    vals = Intern.intern(vals_);
-    mods = Intern.intern(mods_);
+  ValueTuple(Object[] vals, int[] mods) {
+    for (int i=0; i<vals.length; i++)
+      Assert.assert(Intern.isInterned(vals[i]));
+    this.vals = Intern.intern(vals);
+    this.mods = Intern.intern(mods);
   }
 
   // Private constructor that doesn't perform interning.
-  private ValueTuple(Object[] vals_, int[] mods_, boolean check) {
-    Assert.assert((!check) || Intern.isInterned(vals_));
-    Assert.assert((!check) || Intern.isInterned(mods_));
-    vals = vals_;
-    mods = mods_;
+  private ValueTuple(Object[] vals, int[] mods, boolean check) {
+    Assert.assert((!check) || Intern.isInterned(vals));
+    Assert.assert((!check) || Intern.isInterned(mods));
+    this.vals = vals;
+    this.mods = mods;
   }
 
   /**
@@ -195,16 +195,16 @@ public final class ValueTuple implements Cloneable {
    * variables to take separate vals and mods arguments.  No one else
    * should use it!
    **/
-  public static ValueTuple makeUninterned(Object[] vals_, int[] mods_) {
-    return new ValueTuple(vals_, mods_, false);
+  public static ValueTuple makeUninterned(Object[] vals, int[] mods) {
+    return new ValueTuple(vals, mods, false);
   }
 
 
   // Do I need/want this?  Probably in some circumstances...  But in
   // general, users should use the constructor.
   /** Constructor that takes already-interned arguments. */
-  static ValueTuple makeFromInterned(Object[] vals_, int[] mods_) {
-    return new ValueTuple(vals_, mods_, true);
+  static ValueTuple makeFromInterned(Object[] vals, int[] mods) {
+    return new ValueTuple(vals, mods, true);
   }
 
 

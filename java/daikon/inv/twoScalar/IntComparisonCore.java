@@ -29,16 +29,16 @@ public final class IntComparisonCore implements java.io.Serializable {
 
   Invariant wrapper;
 
-  public IntComparisonCore(Invariant wrapper_) {
-    this(wrapper_, false, false, false, false, false);
+  public IntComparisonCore(Invariant wrapper) {
+    this(wrapper, false, false, false, false, false);
   }
 
-  public IntComparisonCore(Invariant wrapper_, boolean only_eq) {
-    this(wrapper_, only_eq, false, false, false, false);
+  public IntComparisonCore(Invariant wrapper, boolean only_eq) {
+    this(wrapper, only_eq, false, false, false, false);
   }
 
-  public IntComparisonCore(Invariant wrapper_, boolean only_eq, boolean obvious_lt, boolean obvious_gt, boolean obvious_le, boolean obvious_ge) {
-    wrapper = wrapper_;
+  public IntComparisonCore(Invariant wrapper, boolean only_eq, boolean obvious_lt, boolean obvious_gt, boolean obvious_le, boolean obvious_ge) {
+    this.wrapper = wrapper;
     only_check_eq = only_eq;
     obvious_can_be_lt = obvious_lt;
     obvious_can_be_gt = obvious_gt;

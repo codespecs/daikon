@@ -5,8 +5,8 @@ import daikon.inv.*;
 
 class Reverse extends TwoSequence {
 
-  protected Reverse(PptSlice ppt_) {
-    super(ppt_);
+  protected Reverse(PptSlice ppt) {
+    super(ppt);
   }
 
   public static Reverse instantiate(PptSlice ppt) {

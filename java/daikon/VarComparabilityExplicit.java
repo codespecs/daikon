@@ -43,12 +43,12 @@ public final class VarComparabilityExplicit extends VarComparability implements 
   private VarComparabilityExplicit[] indexTypes; // access through indexType() accessor
 
 
-  VarComparabilityExplicit(String[] base_, String[][] indices_, int dimensions_,
-			   String alias_) {
-    base = base_;
-    indices = indices_;
-    dimensions = dimensions_;
-    alias = alias_;
+  VarComparabilityExplicit(String[] base, String[][] indices, int dimensions,
+			   String alias) {
+    this.base = base;
+    this.indices = indices;
+    this.dimensions = dimensions;
+    this.alias = alias;
     indexTypes = new VarComparabilityExplicit[dimensions];
   }
 
@@ -80,9 +80,8 @@ public final class VarComparabilityExplicit extends VarComparability implements 
 
   final static PatternMatcher re_matcher = Global.regexp_matcher;
 
-  static VarComparabilityExplicit parse(String rep_, ProglangType vartype) {
-    // Retain original string for debugging purposes.
-    String rep = rep_;
+  static VarComparabilityExplicit parse(String rep, ProglangType vartype) {
+    String rep_ = rep;          // for debugging
 
     if (vartype.isArray()) {
       // The VarComparability is of the form

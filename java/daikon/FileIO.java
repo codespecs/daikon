@@ -238,11 +238,11 @@ public final class FileIO {
     Object[] vals;
     int[] mods;
 
-    Invocation(String fn_name_, Object[] vals_, int[] mods_) {
-      Assert.assert(!fn_name_.equals(""));
-      fn_name = fn_name_;
-      vals = vals_;
-      mods = mods_;
+    Invocation(String fn_name, Object[] vals, int[] mods) {
+      Assert.assert(!fn_name.equals(""));
+      this.fn_name = fn_name;
+      this.vals = vals;
+      this.mods = mods;
     }
   }
 
@@ -517,6 +517,7 @@ public final class FileIO {
 
 
     // try {
+      // "line_" is uninterned, "line" is interned
       for (String line_ = reader.readLine(); line_ != null; line_ = reader.readLine()) {
         if (line_.equals("") || (line_.startsWith(comment_prefix))) {
           continue;

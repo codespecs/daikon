@@ -32,15 +32,15 @@ public final class FunctionUnaryCore implements java.io.Serializable {
 
   Invariant wrapper;
 
-  public FunctionUnaryCore(Invariant wrapper_, String methodname_, Method function_, boolean inverse_) {
-    wrapper = wrapper_;
-    methodname = methodname_;
-    function = function_;
-    inverse = inverse_;
+  public FunctionUnaryCore(Invariant wrapper, String methodname, Method function, boolean inverse) {
+    this.wrapper = wrapper;
+    this.methodname = methodname;
+    this.function = function;
+    this.inverse = inverse;
   }
 
-  public FunctionUnaryCore(Invariant wrapper_, String methodname_, boolean inverse_) throws ClassNotFoundException, NoSuchMethodException {
-    this(wrapper_, methodname_, UtilMDE.methodForName(methodname_), inverse_);
+  public FunctionUnaryCore(Invariant wrapper, String methodname, boolean inverse) throws ClassNotFoundException, NoSuchMethodException {
+    this(wrapper, methodname, UtilMDE.methodForName(methodname), inverse);
   }
 
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException, NoSuchMethodException {

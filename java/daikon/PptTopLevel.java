@@ -67,9 +67,9 @@ public class PptTopLevel extends Ppt {
   // These are now in PptSlice objects instead.
   // Invariants invs;
 
-  PptTopLevel(String name_, VarInfo[] var_infos_) {
-    name = name_;
-    var_infos = var_infos_;
+  PptTopLevel(String name, VarInfo[] var_infos) {
+    this.name = name;
+    this.var_infos = var_infos;
     int val_idx = 0;
     num_static_constant_vars = 0;
     for (int i=0; i<var_infos.length; i++) {

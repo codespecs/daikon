@@ -7,8 +7,8 @@ class PairwiseLinearBinary extends TwoSequence {
 
   LinearBinaryCore core;
 
-  protected PairwiseLinearBinary(PptSlice ppt_) {
-    super(ppt_);
+  protected PairwiseLinearBinary(PptSlice ppt) {
+    super(ppt);
     core = new LinearBinaryCore(this);
   }
 

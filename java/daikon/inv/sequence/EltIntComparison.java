@@ -18,8 +18,8 @@ class EltIntComparison extends SingleSequence {
   boolean can_be_lt = false;
   boolean can_be_gt = false;
 
-  protected EltIntComparison(PptSlice ppt_, boolean only_eq) {
-    super(ppt_);
+  protected EltIntComparison(PptSlice ppt, boolean only_eq) {
+    super(ppt);
     only_check_eq = only_eq;
   }
 

@@ -20,11 +20,11 @@ public final class PptConditional extends PptTopLevel {
   // This does not install the variable values.  The reason is that it's
   // more efficient to do that for two PptConditional objects at once.
 
-  public PptConditional(PptTopLevel parent_, Splitter splitter_, boolean splitter_inverse_) {
-    super(parent_.name, VarInfo.arrayclone_simple(parent_.trace_and_orig_and_const_vars()));
-    parent = parent_;
-    splitter = splitter_.instantiate(this);
-    splitter_inverse = splitter_inverse_;
+  public PptConditional(PptTopLevel parent, Splitter splitter, boolean splitter_inverse) {
+    super(parent.name, VarInfo.arrayclone_simple(parent.trace_and_orig_and_const_vars()));
+    this.parent = parent;
+    this.splitter = splitter.instantiate(this);
+    this.splitter_inverse = splitter_inverse;
     String splitter_formatted = splitter.condition();
     if (splitter_inverse)
       splitter_formatted = "not(" + splitter_formatted + ")";

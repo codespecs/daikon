@@ -9,8 +9,8 @@ class PairwiseFunctionUnary extends TwoSequence {
 
   FunctionUnaryCore core;
 
-  protected PairwiseFunctionUnary(PptSlice ppt_, String methodname, Method function, boolean inverse) {
-    super(ppt_);
+  protected PairwiseFunctionUnary(PptSlice ppt, String methodname, Method function, boolean inverse) {
+    super(ppt);
     core = new FunctionUnaryCore(this, methodname, function, inverse);
   }
 

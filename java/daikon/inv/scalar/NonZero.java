@@ -19,8 +19,8 @@ class NonZero extends SingleScalar {
   int override_range = 0;
   boolean pointer_type = false;
 
-  private NonZero(PptSlice ppt_) {
-    super(ppt_);
+  private NonZero(PptSlice ppt) {
+    super(ppt);
   }
 
   public static NonZero instantiate(PptSlice ppt) {

@@ -24,7 +24,7 @@ public final class Invariants extends Vector {
 
     VarInfo vi;
 
-    public LookupIterator(VarInfo vi_) { vi = vi_; }
+    public LookupIterator(VarInfo vi) { this.vi = vi; }
 
     public boolean hasNext() {
       while ((!next_valid) && invs_enum.hasMoreElements()) {

@@ -53,8 +53,8 @@ public abstract class SplitterList {
   //   "Foo.bar"
   //   "Foo"
 
-  public static Splitter[] get(String name_) {
-    String name = name_;
+  public static Splitter[] get(String name) {
+    String name_ = name;        // debugging
     Splitter[] result;
     result = get_raw(name);
     if (Global.debugPptSplit)

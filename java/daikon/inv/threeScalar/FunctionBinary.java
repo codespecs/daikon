@@ -10,8 +10,8 @@ class FunctionBinary extends ThreeScalar {
 
   FunctionBinaryCore core;
 
-  protected FunctionBinary(PptSlice ppt_, String methodname, Method function, int var_order) {
-    super(ppt_);
+  protected FunctionBinary(PptSlice ppt, String methodname, Method function, int var_order) {
+    super(ppt);
     core = new FunctionBinaryCore(this, methodname, function, var_order);
   }
 
