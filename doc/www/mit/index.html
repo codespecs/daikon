@@ -237,7 +237,9 @@ This includes on your path:
 <h3><a name="getting-daikon"></a>Getting your copy of Daikon</h3>
 
 For work on the PAG machines, you should check out a copy of the system
-from the CVS repository.  Alternately, you can always download and install
+from the CVS repository.  (This only needs to be done once, though you must
+periodically update your copy via <tt>cvs update</tt>.)
+Alternately, you can always download and install
 Daikon from its .tar.gz distribution.
 <!--  (A third option is to add <tt>~mernst/java</tt> or some other
 installation to your Java classpath.  This is easy, but is deprecated,
@@ -278,7 +280,6 @@ The following commands create and populate the
     cd ~/research
     chmod +rx ~ ~/research
     cvs -d /g4/projects/invariants/.CVS co invariants
-    cvs update
     cd invariants
     chgrp -R invariants .
     chmod -R g+r .
