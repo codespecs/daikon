@@ -5,14 +5,16 @@
 # group samples by class they were taken from, writing new trace files
 # with grouped data.
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2002-01-29 17:35:57 mistere>
+# Time-stamp: <2002-01-29 17:53:46 mistere>
 
 # Probably not useful for C traces, as they are all in the 'std' class.
 
 use FileHandle;
+use Compress::Zlib;
 
 BEGIN {
   # Write .dtrace.gz files (instead of .dtrace)
+  $compress = 1;
 
   # Read by paragraph
   $/ = "\n\n";
@@ -27,6 +29,7 @@ BEGIN {
 # Identify class
 
 if ($tmp =~ m|^\s*$|) {
+  next;
 } elsif ($tmp =~ m|^(.+):::OBJECT\n|s) {
   $clazz = $1;
 } elsif ($tmp =~ m|^(.+):::CLASS\n|s) {
@@ -44,22 +47,39 @@ if ($tmp =~ m|^\s*$|) {
 {
   my $fh = $files{$clazz};
   if (! defined($fh)) {
-    $fh = new FileHandle;
     my $safeclazz = $clazz;
     $safeclazz =~ s|\W|_|g;
-    open $fh, ">separate_$safeclazz.dtrace" or die("Error opening output file: $!");
-    print $fh "\n";
+    my $filename = "separate_$safeclazz.dtrace";
+    if ($compress) {
+      $fh = gzopen("$filename.gz", "wb") or die("Error opening output file: $gzerrno");
+      $fh->gzwrite("\n");
+    } else {
+      $fh = new FileHandle;
+      open $fh, ">$filename" or die("Error opening output file: $!");
+      print $fh "\n";
+    }
     $files{$clazz} = $fh;
   }
-  print $fh $paragraph;
+  if ($compress) {
+    $fh->gzwrite($paragraph);
+    $fh->gzwrite("\n");
+  } else {
+    print $fh $paragraph;
+    print $fh "\n";
+  }
 }
 
 END {
   # Close all files
   for my $ppt (keys %files) {
     my $fh = $files{$ppt};
-    print $fh "// EOF\n";
-    close $fh;
+    if ($compress) {
+      $fh->gzwrite("// EOF\n");
+      $fh->gzclose;
+    } else {
+      print $fh "// EOF\n";
+      close $fh;
+    }
   }
 }
 
