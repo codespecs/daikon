@@ -195,7 +195,7 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
       }
     }
     if (length == "" && forall == "") { // interned
-      result = "format_ioa " + this.getClass() + " needs to be changed: " + format();
+      result = "warning: " + this.getClass() + "format_ioa()  needs to be implemented: " + format();
     } else if (length == "") { // interned
       result = forall;
     } else if ((forall == "")||(elts[0].length==0)) { // interned
@@ -228,7 +228,7 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
       }
     }
     if (length == "" && forall == "") { // interned
-      result = "format_esc " + this.getClass() + " needs to be changed: " + format();
+      result = "warning: method " + this.getClass() + ".format_esc() needs to be implemented: " + format();
     } else if (length == "") { // interned
       result = forall;
     } else if (forall == "") { // interned
@@ -261,7 +261,7 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
       }
     }
     if (length == "" && forall == "") { // interned
-      result = "format_simplify " + this.getClass() + " needs to be changed: " + format();
+      result = "warning: method " + this.getClass() + ".format_simplify() needs to be implemented: " + format();
     } else if (length == "") { // interned
       result = forall;
     } else if (forall == "") { // interned

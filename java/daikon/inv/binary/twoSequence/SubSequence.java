@@ -79,7 +79,7 @@ public class SubSequence extends TwoSequence {
   }
 
   public String format_esc() {
-    return "format_esc needs to be changed on SubSequence";
+    return "warning: SubSequence.format_esc() needs to be implemented";
   }
 
   public String format_simplify() {

@@ -125,7 +125,7 @@ public final class StringComparison extends TwoString implements Comparison {
   }
 
   public String format_esc() {
-    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+    return "warning: method " + this.getClass() + ".format_esc() needs to be implemented: " + format();
   }
 
   /* IOA */
@@ -137,7 +137,7 @@ public final class StringComparison extends TwoString implements Comparison {
 
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
+    return "warning: method " + this.getClass() + ".format_simplify() needs to be implemented: " + format();
   }
 
   public void add_modified(String v1, String v2, int count) {

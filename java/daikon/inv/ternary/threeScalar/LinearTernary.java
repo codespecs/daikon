@@ -212,7 +212,7 @@ public class LinearTernary extends ThreeScalar {
   // }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
+    return "warning: method " + this.getClass() + ".format_simplify() needs to be implemented: " + format();
   }
 
   public void add_modified(long x, long y, long z, int count) {

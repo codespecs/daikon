@@ -141,7 +141,7 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
     if (var().name.isApplySizeSafe())
       result = "size("+var().name.ioa_name(classname) + ") = " + value.length;
     else
-      result = "format_ioa " + this.getClass() + " needs to be changed: " + format();
+      result = "warning: " + this.getClass() + ".format_ioa() needs to be implemented: " + format();
 
     return result;
   }
@@ -150,7 +150,7 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
 
     String result;
 
-    result = "format_esc " + this.getClass() + " needs to be changed: " + format();
+    result = "warning: method " + this.getClass() + ".format_esc() needs to be implemented: " + format();
 
     return result;
   }
@@ -159,7 +159,7 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
 
     String result;
 
-    result =  "format_simplify " + this.getClass() + " needs to be changed: " + format();
+    result =  "warning: method " + this.getClass() + ".format_simplify() needs to be implemented: " + format();
 
     return result;
   }

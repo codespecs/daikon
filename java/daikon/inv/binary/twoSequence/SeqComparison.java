@@ -73,7 +73,7 @@ public class SeqComparison extends TwoSequence implements Comparison {
   }
 
   public String format_esc() {
-    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+    return "warning: method " + this.getClass() + ".format_esc() needs to be implemented: " + format();
   }
 
   /* IOA */
@@ -88,7 +88,7 @@ public class SeqComparison extends TwoSequence implements Comparison {
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
+    return "warning: method " + this.getClass() + ".format_simplify() needs to be implemented: " + format();
   }
 
   public void add_modified(long[] v1, long[] v2, int count) {

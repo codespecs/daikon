@@ -151,7 +151,7 @@ public final class FunctionBinaryCore implements java.io.Serializable {
   }
 
   public String format_esc() {
-    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+    return "warning: method " + this.getClass() + ".format_esc() needs to be implemented: " + format();
   }
 
   public boolean isSameFormula(FunctionBinaryCore other)
