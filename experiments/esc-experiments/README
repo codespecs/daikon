@@ -4,11 +4,9 @@ Manifest:
 
   DataStructures/
     Original dsaa code, someimtes annotated with ESC statments as
-    translated from daikon output
-
-    StackAr.java is intended to be a symbolic link either to
-    StackAr.java-escannotated (when running ESC) or to
-    StackAr.java-unannotated (when running dfej)
+    translated from daikon output.
+    Does NOT contain ESC-annotated code; that goes in separate
+    subdirectories, such as StackAr/
 
   daikon-java/
     Instrumented versions of the code; probably un-interesting.
