@@ -19,6 +19,10 @@ import java.util.*;
 public final class StringSequencesIntersectionFactory  extends BinaryDerivationFactory {
 
   public BinaryDerivation[] instantiate(VarInfo seq1, VarInfo seq2) {
+    if (! StringSequencesIntersection .dkconfig_enabled) {
+      return null;
+    }
+
     if ((seq1.rep_type != ProglangType.STRING_ARRAY )
         || (seq2.rep_type != ProglangType.STRING_ARRAY )) {
       return null;
