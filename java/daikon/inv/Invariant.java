@@ -386,6 +386,8 @@ public abstract class Invariant
     public static final OutputFormat IOA = new OutputFormat("IOA");
     /* Java boolean expression */
     public static final OutputFormat JAVA = new OutputFormat("Java");
+    /* Java Modeling Language */
+    public static final OutputFormat JML = new OutputFormat("JML");
 
     private final String name;
     public final String toString() { return "OutputFormat:" + name; }
