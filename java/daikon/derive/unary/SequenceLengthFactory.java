@@ -7,6 +7,10 @@ import java.util.Iterator;
 public final class SequenceLengthFactory extends UnaryDerivationFactory {
 
   public UnaryDerivation[] instantiate(VarInfo vi) {
+    if (!SequenceLength.dkconfig_enabled) {
+      return null;
+    }
+
     // if (vi.rep_type != ProglangType.INT_ARRAY)
     //   return null;
     if (! vi.rep_type.isArray())
