@@ -13,6 +13,7 @@ import daikon.derive.binary.*;
 import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.filter.*;
+import daikon.inv.ternary.threeScalar.FunctionBinary;
 
 public class PrintInvariants {
 
@@ -1368,11 +1369,12 @@ public class PrintInvariants {
         inv.log ("Considering Printing");
       Assert.assertTrue (!(inv instanceof Equality));
       for (int j = 0; j < inv.ppt.var_infos.length; j++)
-        Assert.assertTrue (!inv.ppt.var_infos[j].missingOutOfBounds());
+        Assert.assertTrue (!inv.ppt.var_infos[j].missingOutOfBounds(),
+                           "var " + inv.ppt.var_infos[j] + " out of bounds");
       InvariantFilters fi = new InvariantFilters();
       fi.setPptMap(ppt_map);
 
-      boolean fi_accepted = fi.shouldKeep(inv);
+      boolean fi_accepted = (fi.shouldKeep(inv) == null);
 
       if (inv.logOn())
         inv.log ("Filtering, accepted = " + fi_accepted);
@@ -1423,6 +1425,8 @@ public class PrintInvariants {
       }
     }
     finally_print_the_invariants(accepted_invariants, out, ppt);
+    if (false && ppt.constants != null)
+      ppt.constants.print_missing (out);
   }
 
   /**
@@ -1521,4 +1525,65 @@ public class PrintInvariants {
   //   }
   // }
 
+  public static void print_filter_stats (Logger debug, PptTopLevel ppt,
+                                         PptMap ppt_map) {
+
+    boolean print_invs = false;
+
+    List invs_vector = new LinkedList(ppt.getInvariants());
+    Invariant[] invs_array = (Invariant[]) invs_vector.toArray(
+      new Invariant[invs_vector.size()]);
+
+    int accepted_cnt = 0;
+    Map filter_map = new LinkedHashMap();
+
+    if (print_invs)
+      debug.fine (ppt.ppt_name.toString());
+
+    for (int i = 0; i < invs_array.length; i++) {
+      Invariant inv = invs_array[i];
+
+      InvariantFilters fi = new InvariantFilters();
+      fi.setPptMap(ppt_map);
+      InvariantFilter filter = fi.shouldKeep(inv);
+      Class filter_class = null;
+      if (filter != null)
+        filter_class = filter.getClass();
+      Map inv_map = (Map) filter_map.get (filter_class);
+      if (inv_map == null) {
+        inv_map = new LinkedHashMap();
+        filter_map.put (filter_class, inv_map);
+      }
+      Integer cnt = (Integer) inv_map.get (inv.getClass());
+      if (cnt == null)
+        cnt = new Integer(1);
+      else
+        cnt = new Integer (cnt.intValue() + 1);
+      inv_map.put (inv.getClass(), cnt);
+
+      if (print_invs)
+        debug.fine (" : " + filter_class + " : " + inv.format());
+    }
+
+    debug.fine (ppt.ppt_name.toString() + ": " + invs_array.length);
+
+    for (Iterator i = filter_map.keySet().iterator(); i.hasNext(); ) {
+      Class filter_class = (Class) i.next();
+      Map inv_map = (Map) filter_map.get (filter_class);
+      int total = 0;
+      for (Iterator j = inv_map.keySet().iterator(); j.hasNext(); ) {
+        Integer cnt = (Integer) inv_map.get (j.next());
+        total += cnt.intValue();
+      }
+      if (filter_class == null)
+        debug.fine (" : Accepted Invariants : " + total);
+      else
+        debug.fine (" : " + filter_class.getName() + ": " + total);
+      for (Iterator j = inv_map.keySet().iterator(); j.hasNext(); ) {
+        Class inv_class = (Class) j.next();
+        Integer cnt = (Integer) inv_map.get (inv_class);
+        debug.fine (" : : " + inv_class.getName() + ": " + cnt.intValue());
+      }
+    }
+  }
 }
