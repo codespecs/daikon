@@ -33,6 +33,10 @@ dfej
   dfej creates compressed trace files (.dtrace.gz) by default.  You can
   still explicitly specify the name of the trace file.
 
+  Dcoumented that environment variable DTRACELIMITTERMINATE causes an
+  exception to be thrown when the .dtrace file reaches the specified size;
+  it does not forcibly terminate the program.
+
 Chicory
 
   Correct a problem with classes that are not in a package; Chicory
@@ -40,6 +44,10 @@ Chicory
   such programs.
 
   Correct a problem with outputting values of type "char".
+
+  Changed behvaior of environment variable DTRACELIMITTERMINATE to cause an
+  exception to be thrown when the .dtrace file reaches the specified size,
+  rather than forcibly terminating the program.
 
 ---------------------------------
 
