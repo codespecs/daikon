@@ -113,12 +113,35 @@ public class PptSlice0
     // checkRep();
     // Assert.assertTrue(hasImplication((Implication) inv));
     initInvariantsSeen();
-    // TODO: this is a bottleneck.
     invs.remove(inv);
     invariantsSeen.remove(new ImplicationByFormatWrapper((Implication)inv));
     // checkRep();
   }
 
+  // This can be called with very long lists by the conditionals code.
+  // At least until that's fixed, it's important for it not to be
+  // quadratic. 
+  public void removeInvariants(List to_remove) {
+    if (to_remove.size() < 10) {
+      for (int i=0; i<to_remove.size(); i++) {
+        removeInvariant((Invariant) to_remove.get(i));
+      }
+    } else {
+      invs.removeMany(to_remove);
+      if (to_remove.size() > invariantsSeen.size() / 2) {
+        // Faster to throw away and recreate
+        invariantsSeen = null;
+        initInvariantsSeen();
+      } else {
+        // Faster to update
+        for (int i=0; i<to_remove.size(); i++) {
+          invariantsSeen.remove(new
+              ImplicationByFormatWrapper((Implication)to_remove.get(i)));
+        }
+      }
+    }
+  }
+  
   public boolean hasImplication(Implication imp) {
     initInvariantsSeen();
     return invariantsSeen.contains(new ImplicationByFormatWrapper(imp));

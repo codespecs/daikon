@@ -300,10 +300,24 @@ public abstract class PptSlice
     }
   }
 
-  // I could make this more efficient, but it's probably fine as it is.
+  // This can be called with very long lists by the conditionals code.
+  // At least until that's fixed, it's important for it not to be
+  // quadratic. 
   public void removeInvariants(List to_remove) {
-    for (int i=0; i<to_remove.size(); i++) {
-      removeInvariant((Invariant) to_remove.get(i));
+    if (to_remove.size() < 10) {
+      for (int i=0; i<to_remove.size(); i++) {
+        removeInvariant((Invariant) to_remove.get(i));
+      }
+    } else {
+      int removed = invs.removeMany(to_remove);
+      if (Assert.enabled && removed < to_remove.size())
+        Assert.assertTrue (false, "removed " + (to_remove.size() - removed)
+            + " invs not in ppt " + name());
+      Global.falsified_invariants += removed;
+      if (invs.size() == 0) {
+        if (Debug.logDetail())
+          log ("last invariant removed");
+      }
     }
   }
 
