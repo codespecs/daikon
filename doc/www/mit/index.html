@@ -280,6 +280,7 @@ The following commands create and populate the
     cd ~/research
     cvs -d /g4/projects/invariants/.CVS co invariants
     chgrp -R invariants invariants
+    chmod +rx ~ ~/research
     chmod -R g+r invariants
     chmod g+x `find invariants -type d -print`
     cd invariants/java/daikon
@@ -374,9 +375,9 @@ are readable, depending on how your environment and editor are set up.
 <pre>
 ## <em>Do one of the following for each directory the group should be able to read</em>
 # <em>To make a directory world-readable:</em>
-chmod -R +r <em>DIR</em>
+chmod -R +rx <em>DIR</em>
 # <em>To make a directory group-readable, run two commands:</em>
-chmod -R g+r <em>DIR</em>
+chmod -R g+rx <em>DIR</em>
 chgrp -R invariants <em>DIR</em>
 </pre>
 </blockquote>
