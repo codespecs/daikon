@@ -242,12 +242,14 @@ public final class Member
       return format_java();
     } else if (format == OutputFormat.IOA) {
       return format_ioa();
+
     } else if (format == OutputFormat.SIMPLIFY) {
       return format_simplify();
     } else if (format == OutputFormat.ESCJAVA) {
       return format_esc();
     } else if (format == OutputFormat.JML) {
       return format_jml();
+
     } else {
       return format_unimplemented(format);
     }
@@ -276,12 +278,11 @@ public final class Member
   }
 
   public String format_jml() {
-    // Considering changing for nicer output
-    // "exists x in a..b : P(x)" gets written as "!(forall x in a..b : !P(x))"
+    // Uses jml exists option
     String[] form =
       VarInfoName.QuantHelper.format_jml(new VarInfoName[]
-	{ seqvar().name, sclvar().name });
-    return "!" + form[0] + "(" + form[1] + " != " + form[2] + ")" + form[3];
+	{ seqvar().name, sclvar().name },false,false);
+    return form[0] + form[1] + " == " + form[2] + form[3];
   }
 
   public String format_simplify() {

@@ -108,8 +108,8 @@ public final class SeqIntComparison
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.ESCJAVA) return format_esc();
-    if (format == OutputFormat.JML) return format_jml();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
+    if (format == OutputFormat.JML) return format_jml();
 
     return format_unimplemented(format);
   }
@@ -136,14 +136,6 @@ public final class SeqIntComparison
     return form[0] + "(" + form[1] + " " + comparator + " " + form[2] + ")" + form[3];
   }
 
-  public String format_jml() { // Must change later
-    String comparator = core.format_comparator();
-    String[] form =
-      VarInfoName.QuantHelper.format_jml(new VarInfoName[]
-	{ seqvar().name, sclvar().name });
-    return form[0] + "(" + form[1] + " " + comparator + " " + form[2] + ")" + form[3];
-  }
-
   public String format_simplify() {
     String comparator = core.format_comparator();
     if ("==".equals(comparator)) {
@@ -153,6 +145,14 @@ public final class SeqIntComparison
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
 	{ seqvar().name, sclvar().name });
     return form[0] + "(" + comparator + " " + form[1] + " " + form[2] + ")" + form[3];
+  }
+
+  public String format_jml() {
+    String comparator = core.format_comparator();
+    String[] form =
+      VarInfoName.QuantHelper.format_jml(new VarInfoName[]
+	{ seqvar().name, sclvar().name });
+    return form[0] + form[1] + " " + comparator + " " + form[2] + form[3];
   }
 
   public void add_modified(long [] a, long x, int count) {
