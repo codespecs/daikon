@@ -2668,7 +2668,7 @@ Before compiling the instrumented program, either copy or link
 
 Compile the instrumented program in the usual way, except that the link
 step should include @file{daikon_runtime.o}, and the compiler should be
-@prog{g++}, since the instrumented files are C++ files.
+@command{g++}, since the instrumented files are C++ files.
 For instance,
 @example
   gcc -o @var{exefile} myprog.c
@@ -2709,10 +2709,10 @@ This section describes the command-line options dfec accepts.
 
 @item -I@var{path}
 Adds @var{path} to the end of the system include path.  The system
-include path that @prog{gcc} uses is automatically detected by dfec,
+include path that @command{gcc} uses is automatically detected by dfec,
 so you should not have to use this;  if there are additional include
-paths you wish to use, or if @prog{gcc} defaults to using header files
-that cannot be processed by @prog{dfec}, you should use this option.
+paths you wish to use, or if @command{gcc} defaults to using header files
+that cannot be processed by @command{dfec}, you should use this option.
 For example,
 @example
   dfec -I/usr/local/.../2.95.3/include myprog.c
@@ -2828,10 +2828,10 @@ For nested or recursive types (structs or classes that have members that
 are also structs or classes), this argument specifies how deep to instrument.
 For example, given a simple linked list structure as follows:
 @example
-struct node {
+struct node @{
   struct node *next;
   int val;
-} list;
+@} list;
 @end example
 Setting the struct instrumentation depth to 1 would cause the runtime library
 to output @var{node.val} and @var{node.next}, but setting it to 2 would cause
