@@ -73,10 +73,15 @@ public class Annotate {
 
   public static final Logger debug = Logger.getLogger("daikon.tools.jtb.Annotate");
 
+  // If the --max_invariants_pp option is given, this variable is set
+  // to the maximum number of invariants out annotate per program point.
+  protected static int maxInvariantsPP = -1;
+
   public static final String useJML_SWITCH = "jml_output";
   public static final String useJAVA_SWITCH = "java_output";
   public static final String useDBC_SWITCH = "dbc_output";
   public static final String wrapXML_SWITCH = "wrap_xml";
+  public static final String max_invariants_pp_SWITCH = "max_invariants_pp";
 
   private static String usage =
     UtilMDE.join(new String[] {
@@ -89,7 +94,11 @@ public class Annotate {
       "  --jml_output   Insert JML specifications instead of ESC specifications",
       "  --dbc_output   Insert Jtest DBC specifications instead of ESC specifications",
       "  --java_output   Insert Java format specifications instead of ESC specifications",
-      "  --wrap_xml     Wrap each annotation and auxiliary information in XML tags"
+      "  --wrap_xml     Wrap each annotation and auxiliary information in XML tags",
+      "  --max_invariants_pp N",
+      "                 Annotate the sources with at most N invariants per program point",
+      "                 (the annotated invariants will be an arbitrary subset of the",
+      "                  total number of invariants for the program point)."
     },
                  lineSep);
 
@@ -106,7 +115,8 @@ public class Annotate {
       new LongOpt(useJML_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(useJAVA_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(useDBC_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(wrapXML_SWITCH, LongOpt.NO_ARGUMENT, null, 0)
+      new LongOpt(wrapXML_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(max_invariants_pp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0)
     };
     Getopt g = new Getopt("daikon.tools.jtb.Annotate", args, "hs", longopts);
     int c;
@@ -116,7 +126,16 @@ public class Annotate {
         // got a long option
         String option_name = longopts[g.getLongind()].getName();
 
-        if (wrapXML_SWITCH.equals(option_name)) {
+        if (max_invariants_pp_SWITCH.equals(option_name)) {
+          try {
+            maxInvariantsPP = Integer.parseInt(g.getOptarg());
+          } catch (NumberFormatException e) {
+            System.err.println("Annotate: found the --max_invariants_pp option " +
+                               "followed by an invalid numeric argument. Annotate " +
+                               "will run without the option.");
+            maxInvariantsPP = -1;
+          }
+        } else if (wrapXML_SWITCH.equals(option_name)) {
           PrintInvariants.wrap_xml = true;
         } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
           Global.debugAll = true;

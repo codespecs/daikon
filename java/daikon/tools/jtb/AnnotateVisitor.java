@@ -50,6 +50,8 @@ class AnnotateVisitor extends DepthFirstVisitor {
   private HashMap elementTypeFieldNames; // list of fields in this and related classes
 
 
+
+
   public AnnotateVisitor(PptMap ppts, boolean slashslash, boolean insert_inexpressible) {
     super();
     initialize(ppts, slashslash, insert_inexpressible, false);
@@ -532,7 +534,12 @@ class AnnotateVisitor extends DepthFirstVisitor {
     boolean invariantInserted = false;
     boolean assignableInserted = false;
 
-    for (int i=invs.length-1; i>=0; i--) {
+    int maxIndex = invs.length;
+    if (Annotate.maxInvariantsPP > 0 && Annotate.maxInvariantsPP < maxIndex) {
+      maxIndex = Annotate.maxInvariantsPP;
+    }
+
+    for (int i=maxIndex-1; i>=0; i--) {
       String inv = invs[i];
       if (inv.startsWith("      Unmodified variables: ")
           || inv.startsWith("      Modified variables: ")
