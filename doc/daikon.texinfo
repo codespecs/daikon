@@ -1897,6 +1897,14 @@ amount of effort Simplify exerts for each invariant can be controlled
 using the @option{daikon.simplify.Session.simplify_max_iterations} and
 @option{daikon.simplify.Session.simplify_timeout} configuration
 options.
+
+@item --disc_reason @var{inv_class}<@var{var1,var2,...}>@@@var{ppt}
+Prints all discarded invariants of class @var{inv_class} at the ppt
+specified that involve exactly the vars given, as well as a short reason
+and discard code explaining why they were not worthy of print.  Any of 
+the three parts of the optarg may be made a wildcard by excluding it.
+e.g. @var{inv_class} and <@var{var1,var2,...}>@@@var{ppt} are valid args.
+To print all discarded invariants, use the argument "all".
                                    
 @item --prob_limit @var{val}
 Set the probability limit for justifying invariants.  @var{pct} must be
