@@ -375,8 +375,9 @@ public class ValueTracker
 
   public static ValueTracker merge (List /*ValueTracker*/ vtlist) {
 
-    // Start with the first valuetracker in the list
-    ValueTracker first = (ValueTracker) ((ValueTracker) vtlist.get (0)).clone();
+    // Start with a clone of the first valuetracker in the list
+    ValueTracker result
+                    = (ValueTracker) ((ValueTracker) vtlist.get (0)).clone();
 
     // Loop through the remaining value trackers
     for (int i = 1; i < vtlist.size(); i++) {
@@ -386,33 +387,33 @@ public class ValueTracker
 
       // Merge these values into the values_cache
       if (vt.values_cache == null) {
-        first.values_cache = null;
-        first.values_end = vt.values_end;
+        result.values_cache = null;
+        result.values_end = vt.values_end;
       } else {
         for (int j = 0; j < vt.num_values(); j++)
-          first.add (vt.values_cache[j]);
+          result.add (vt.values_cache[j]);
       }
 
       // Merge these values into the sequence index cache
       if (vt.seq_index_cache == null) {
-        first.seq_index_cache = null;
-        first.seq_index_values_end = vt.seq_index_values_end;
+        result.seq_index_cache = null;
+        result.seq_index_values_end = vt.seq_index_values_end;
       } else {
         for (int j = 0; j < vt.num_seq_index_values(); j++)
-          first.seq_index_add (vt.seq_index_cache[j]);
+          result.seq_index_add (vt.seq_index_cache[j]);
       }
 
-      // Merge these values in to the elt_values_cache
+      // Merge these values into the elt_values_cache
       if (vt.elt_values_cache == null) {
-        first.elt_values_cache = null;
-        first.elt_values_end = vt.elt_values_end;
+        result.elt_values_cache = null;
+        result.elt_values_end = vt.elt_values_end;
       } else {
         for (int j = 0; j < vt.num_elt_values(); j++)
-          first.elt_add (vt.elt_values_cache[j]);
+          result.elt_add (vt.elt_values_cache[j]);
       }
 
     }
-    return (first);
+    return (result);
   }
 
   public String toString() {
