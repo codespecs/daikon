@@ -1486,31 +1486,36 @@ public class PptTopLevel extends Ppt {
 
 
   ///////////////////////////////////////////////////////////////////////////
-  /// Hiding object invariants
+  /// Locating implied (same) invariants
   ///
 
-  public Invariant findControllingInvariant(Invariant inv)
+  public Invariant find_controlling_invariant(Invariant inv)
   {
     Assert.assert(inv.ppt.parent == this);
 
-    // Our invariants can't be implied by object invariants unless
-    // this ppt is contributing to some object invariant
-
     // Try to match inv against all controlling invariants
-    Iterator candidate_invs;
-    {
-      Vector bucket = new Vector();
-      Iterator controllers = controlling_ppts.iterator();
-      while (controllers.hasNext()) {
-	PptTopLevel controller = (PptTopLevel) controllers.next();
-	Vector object_invs = controller.invariants_vector();
-	bucket.addAll(object_invs);
-      }
-      candidate_invs = bucket.iterator();
+    Vector candidates = new Vector();
+    Iterator controllers = controlling_ppts.iterator();
+    while (controllers.hasNext()) {
+      PptTopLevel controller = (PptTopLevel) controllers.next();
+      Vector object_invs = controller.invariants_vector();
+      candidates.addAll(object_invs);
     }
-  IS_OBJ_INV_FOREACH_INV:
-    while (candidate_invs.hasNext()) {
-      Invariant cand_inv = (Invariant) candidate_invs.next();
+
+    return find_same_invariant(candidates.iterator(), inv);
+  }
+
+  // TODO: This can move into another class.  Is there a better place
+  // for it?
+
+  // Searches through the iterator for an Invariant which is the
+  // "same" as the goal (inv).  Same, in this case, means a matching
+  // type, formula, and variable names.
+  public static Invariant find_same_invariant(Iterator candidates, Invariant inv)
+  {
+  CANDIDATE_LOOP:
+    while (candidates.hasNext()) {
+      Invariant cand_inv = (Invariant) candidates.next();
 
       // Can't be the same if they aren't the same type
       if (!inv.getClass().equals(cand_inv.getClass())) {
@@ -1556,7 +1561,7 @@ public class PptTopLevel extends Ppt {
 	  name_matched = all_cand_vars_names.contains(elt.name);
 	}
 	if (!name_matched) {
-	  continue IS_OBJ_INV_FOREACH_INV;
+	  continue CANDIDATE_LOOP;
 	}
       }
 
@@ -1856,7 +1861,7 @@ public class PptTopLevel extends Ppt {
       String inv_rep = inv.format();
       if (inv_rep != null) {
 	if (Daikon.suppress_implied_controlled_invariants) {
-	  Invariant cont_inv = findControllingInvariant(inv);
+	  Invariant cont_inv = find_controlling_invariant(inv);
 	  if (cont_inv != null) { // TODO: && will_print(cont_inv)
 	    // TODO: Fix global statistics for this?
 	    continue;
