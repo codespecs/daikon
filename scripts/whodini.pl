@@ -183,13 +183,17 @@ while (1) {
     }
 
     # 7 Grep the results for "//@ ensures /*nonce-DDDD*/ ..." and extract the nonce
-    my @failures = grep { m|/\*nonce-\d{4}\*/|; } @escoutput;
-    debug("ESC reported", @failures);
-    grep { s|^\s*//\@ \w+ /\*(nonce-\d{4})\*/ .*$|$1|s; } @failures;
+    my @failure_list = grep { m|/\*nonce-\d{4}\*/|; } @escoutput;
+    debug("ESC reported", @failure_list);
+    grep { s|^\s*//\@ \w+ /\*(nonce-\d{4})\*/ .*$|$1|s; } @failure_list;
+    my %failures;  # remove duplicates
+    for my $failure (@failure_list) {
+	$failures{$failure} = 1;
+    }
 
     # 8 If any matching lines are found, remove them from the txt file in memory and go to step 2
     my $txtesc_changed = 0;
-    for my $failure (@failures) {
+    for my $failure (keys %failures) {
 	debug("Removing '$failure'");
 	my $dec_check = $#txtesc;
 	@txtesc = grep { !m/\Q$failure/ } @txtesc;
