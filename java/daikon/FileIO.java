@@ -1039,7 +1039,7 @@ public final class FileIO {
     try {
       return (PptMap) oistream.readObject();
     } catch (Exception e) {
-      throw new Error("Trouble reading from .inv file " + filename);
+      throw new Error("Trouble reading from .inv file " + filename + ": " + e.toString());
     }
   }
 
