@@ -5242,9 +5242,11 @@ stream.cpp:901: cannot convert `const char **' to `char **' for
 argument `2' to `iconv (void *, char **, size_t *, char **, size_t *)'
 @end example
 @noindent
-then undefine preprocessor macro @code{HAVE_ICONV_H} and try compiling
-again.
-(This has been reported on Red Hat Linux 7.0.)
+then
+@c undefine preprocessor macro @code{HAVE_ICONV_H}
+define preprocessor macro @code{HAVE_ERROR_CALL_ICONV_CONST}
+and try compiling again.
+(This has been reported on Red Hat Linux 7.@i{x}.)
 
 @c reported 12/19/2001 by Tao Xie
 Also reported on Red Hat Linux 7.0 is the following error:
