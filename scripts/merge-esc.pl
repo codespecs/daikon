@@ -126,7 +126,7 @@ sub approx_argmatch($$) {
 
 sub is_non_supported_invariant( $ ) {
   my ($inv) = @_;
-  return (($inv =~ /format_esc class .* needs to be changed/)
+  return (($inv =~ /format_esc/)
 	  || ($inv =~ /"null"/)
 	  || ($inv =~ /\[\] ==/)
 	  || ($inv =~ /~/)
@@ -167,6 +167,7 @@ END {
 
   for my $javafile (@javafiles) {
     @fields = ();
+    @owned_fields = ();
     @final_fields = ();
     open(GETFIELDS, "$javafile") or die "Cannot open $javafile: $!";
     while (defined($line = <GETFIELDS>)) {
@@ -177,6 +178,9 @@ END {
 	if (($line =~ /\[\s*\]/)
 	    || ($line !~ /\b(boolean|byte|char|double|float|int|long|short)\b/)) {
 	  push(@fields,$fieldname);
+	  if ($line =~ /\[\s*\]/) {
+	    push(@owned_fields, $fieldname);
+	  }
 	  if ($line =~ /\bfinal\b/) {
 	    push(@final_fields, $fieldname);
 	  }
@@ -330,17 +334,17 @@ END {
 	}
 
 	# Take special action if this is a constructor.
-	if (($methodname ne $classname) || (scalar(@fields) == 0)) {
+	if (($methodname ne $classname) || (scalar(@owned_fields) == 0)) {
 	  print OUT $postbrace;
 	} elsif ($postbrace =~ /^(.*)(\}.*\n?)$/) {
 	  print OUT "$1\n";
-	  for my $field (@fields) {
+	  for my $field (@owned_fields) {
 	    print OUT "/*@ set $field.owner = this */\n";
 	  }
 	  print OUT $2;
 	} else {
 	  print OUT $postbrace;
-	  if (scalar(@fields) > 0) {
+	  if (scalar(@owned_fields) > 0) {
 	    # Skip over as many lines as possible, until I see a control
 	    # structure or a block end or some such.
 	    my $nextline;
@@ -356,7 +360,7 @@ END {
 			      && ($nextline !~ /\bthis\s*\(/))))) {
 	      print OUT $nextline;
 	    }
-	    for my $field (@fields) {
+	    for my $field (@owned_fields) {
 	      print OUT "/*@ set $field.owner = this */\n";
 	    }
 	    print OUT $nextline;
@@ -401,9 +405,9 @@ END {
       if ($line =~ /^(\s+)(final\s+)?((static|private)[^=]*\b(\w+)\s*[;=].*)$/) {
 	my ($spaces, $mods, $body, $access, $fieldname) = ($1, $2, $3, $4, $5);
 	$mods = "" unless defined($mods); # to prevent warnings
-	my $is_object = grep(/^$fieldname$/, @fields);
+	my $is_owned = grep(/^$fieldname$/, @owned_fields);
 	print OUT "$spaces/*@ spec_public */ $mods$body\n";
-	if ($is_object) {
+	if ($is_owned) {
 	  print OUT "/*@ invariant $fieldname.owner == this */\n";
 	}
 	next;
