@@ -30,13 +30,25 @@ public class InvariantTester extends TestCase {
     PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
     PptSlice slice = new PptSlice2(ppt, vars);
 
-    Invariant inv1, inv2, inv3, inv4, inv5;
+    Invariant inv1, inv2, inv2_2, inv2_3, inv2_4, inv2_5, inv2_6, inv3, inv4, inv5;
 
     inv1 = FunctionUnary.instantiate(slice, null, null, false);
     Assert.assertTrue(c.compare(inv1, inv1) == 0);
 
-    inv2 = IntComparison.instantiate(slice);
+    // inv2 = IntComparison.instantiate(slice);
+    // Assert.assertTrue(c.compare(inv1, inv2) < 0);
+    inv2 = IntEqual.instantiate(slice);
+    inv2_2 = IntNonEqual.instantiate(slice);
+    inv2_3 = IntLessThan.instantiate(slice);
+    inv2_4 = IntLessEqual.instantiate(slice);
+    inv2_5 = IntGreaterThan.instantiate(slice);
+    inv2_6 = IntGreaterEqual.instantiate(slice);
     Assert.assertTrue(c.compare(inv1, inv2) < 0);
+    Assert.assertTrue(c.compare(inv1, inv2_2) < 0);
+    Assert.assertTrue(c.compare(inv1, inv2_3) < 0);
+    Assert.assertTrue(c.compare(inv1, inv2_4) < 0);
+    Assert.assertTrue(c.compare(inv1, inv2_5) < 0);
+    Assert.assertTrue(c.compare(inv1, inv2_6) < 0);
 
     inv3 = LinearBinary.instantiate(slice);
     Assert.assertTrue(c.compare(inv3, inv1) > 0);
