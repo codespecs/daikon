@@ -21,7 +21,7 @@
 
 This is the distribution site for the Daikon invariant
 detector.<br>
-The current release is Daikon version 3.1.5, released November 7, 2004.
+The current release is Daikon version 3.1.6, released November 11, 2004.
 <p>
 
 In addition to the below downloads, also see the
@@ -55,8 +55,22 @@ In addition to the below downloads, also see the
 	  <li><a href="binaries/dfej-solaris">SPARC Solaris</a> (8 Jul 2002, 4.7 Mbytes)
 	  <li><a href="binaries/dfej-macosx">POWER MacOSX</a> (29 Mar 2004, 2.4 Mbytes)
 	</ul>
+      <li><b>C front end, <tt>Kvasir</tt></b><br>
+        Sources for Kvasir, the front end for C binaries, are included in
+        the distribution.  You should build Kvasir yourself from the
+        sources, which is easy to do.
       <li><b>C front end, <tt>dfec</tt></b><br>
-	The distribution is a tar file containing prebuilt binary; see
+        The dfec front end (for C source code) is an alternative to Kvasir,
+        but Kvasir is preferable in most circumstances.  See the <a
+        href="doc/">Daikon manual</a> for a discussion of the merits of
+        each front end.
+	<br>
+	License restrictions prevent us from distributing source for the 
+        dfec C front end.  Send mail to <a
+	href="mailto:daikon-developers@lists.csail.mit.edu">daikon-developers@pag.csail.mit.edu</a> to
+	request a binary for another system if it is not on this list.
+        <br>
+	The dfec distribution is a tar file containing prebuilt binary; see
 	"Installing dfec" in the Daikon manual for installation instructions.
 	<ul>
 	  <li><a href="binaries/dfec-linux-x86.tar.gz">x86 Red Hat Linux</a> (11 Sep 2002, 4.3 Mbytes)
@@ -64,18 +78,7 @@ In addition to the below downloads, also see the
 	  <!-- <li><a href="binaries/dfec-windows.tgz">x86 Windows (Win32)</a> (00 Mth 0000) -->
 	  <li><a href="binaries/dfec-solaris.tar.gz">SPARC Solaris</a> (11 Sep 2002, 7.1 Mbytes)
 	</ul>
-	License restrictions prevent us from distributing source for the C
-	front end.  Send mail to <a
-	href="mailto:daikon-developers@lists.csail.mit.edu">daikon-developers@pag.csail.mit.edu</a> to
-	request a binary for another system if it is not on this list.
     </ul>
-  <li><b>Daikon version <!-- avoid auto-update --> 2.5.3</b> distribution: 
-    <a href="daikon_v2.tar.gz">daikon_v2.tar.gz</a> (19 Dec 2003, 16 Mbytes)<br>
-    This is an older version of Daikon.
-    The current version (version 3) should used whenever possible.  We will
-    not consider bug reports against version <!-- avoid auto-update --> 2.
-    Version <!-- avoid auto-update --> 2 <a href="jdoc_v2/">Javadoc</a>
-    is also available.
 
   <li><b>CVS</b>:  Daikon is also available via CVS; send email to 
 <a href="mailto:daikon-developers@lists.csail.mit.edu">daikon-developers@lists.csail.mit.edu</a>
