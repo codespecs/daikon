@@ -120,12 +120,12 @@ in these groups, you cannot access the CVS repository.<p>
 
 I recommend that you use the latest possible version of the JDK (Java
 Development Kit).  A link to this  can always be found at
-<tt>~mernst/java/jdk</tt>; you probably want to put the
+<tt>/g2/jdk</tt>; you probably want to put the
 <tt>bin</tt> subdirectory in your path and to add 
 <tt>jre/lib/rt.jar</tt> to the end of your CLASSPATH:
 <pre>
-  set path = ( /g2/users/mernst/java/jdk/bin $path )
-  setenv CLASSPATH ${CLASSPATH}:/g2/users/mernst/java/jdk/jre/lib/rt.jar
+  set path = ( /g2/jdk/bin $path )
+  setenv CLASSPATH ${CLASSPATH}:/g2/jdk/jre/lib/rt.jar
 </pre>
 <p>
 
@@ -180,7 +180,7 @@ you should change $INV to where your CVS checkout of <tt>invariants</tt> is.
 
 <pre>
 setenv INV ${HOME}/research/invariants
-setenv JAVA_HOME /g2/users/mernst/java/jdk
+setenv JAVA_HOME /g2/jdk
 setenv RTJAR ${JAVA_HOME}/jre/lib/rt.jar
 setenv DAIKON_LIBS `/usr/bin/perl -e 'print join(":", @ARGV);' ${INV}/java/lib/*.jar`
 setenv CLASSPATH .:${INV}/java:${DAIKON_LIBS}:${RTJAR}
