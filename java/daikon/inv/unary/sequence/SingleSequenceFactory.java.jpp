@@ -14,7 +14,7 @@ The correct way to build the system is to run 'make'.
 #define ELTONEOF EltOneOf
 #define ELTNONZERO EltNonZero
 #define NODUPLICATES NoDuplicates
-#define ELTWISEINTCOMPARISON EltwiseIntComparison
+//#define ELTWISEINTCOMPARISON EltwiseIntComparison
 #define ELTLOWERBOUND EltLowerBound
 #define ELTUPPERBOUND EltUpperBound
 #define SEQINDEXCOMPARISON SeqIndexComparison
@@ -22,13 +22,13 @@ The correct way to build the system is to run 'make'.
 #define ARRAY_TYPE INT_ARRAY
 #define ISTYPE elementIsIntegral()
 #define COMMONSEQUENCE CommonSequence
-#elif defined (TYPEDOUBLE)
+#elif defined(TYPEDOUBLE)
 #define CLASSNAME SingleFloatSequenceFactory
 #define ONEOFSEQUENCE OneOfFloatSequence
 #define ELTONEOF EltOneOfFloat
 #define ELTNONZERO EltNonZeroFloat
 #define NODUPLICATES NoDuplicatesFloat
-#define ELTWISEINTCOMPARISON EltwiseFloatComparison
+// #define ELTWISEINTCOMPARISON EltwiseFloatComparison
 #define ELTLOWERBOUND EltLowerBoundFloat
 #define ELTUPPERBOUND EltUpperBoundFloat
 #define SEQINDEXCOMPARISON SeqIndexComparisonFloat
@@ -74,14 +74,31 @@ public final class CLASSNAME {
         result.add(NODUPLICATES.instantiate(ppt));
         result.add(COMMONSEQUENCE.instantiate(ppt));
         if (var.type.ISTYPE) {
-          result.add(ELTWISEINTCOMPARISON.instantiate(ppt));
+          // result.add(ELTWISEINTCOMPARISON.instantiate(ppt));
+
           result.add(ELTLOWERBOUND.instantiate(ppt));
           result.add(ELTUPPERBOUND.instantiate(ppt));
           result.add(SEQINDEXCOMPARISON.instantiate(ppt));
           result.add(SEQINDEXNONEQUAL.instantiate(ppt));
-        } else {
-          result.add(ELTWISEINTCOMPARISON.instantiate(ppt));
         }
+
+        // Must now instantiate one of each type... perhaps this functionality can
+        // be moved to their superclass EltwiseIntComparison
+#if defined(TYPELONG)
+        result.add(EltwiseIntEqual.instantiate(ppt));
+        result.add(EltwiseIntNonEqual.instantiate(ppt));
+        result.add(EltwiseIntLessThan.instantiate(ppt));
+        result.add(EltwiseIntLessEqual.instantiate(ppt));
+        result.add(EltwiseIntGreaterThan.instantiate(ppt));
+        result.add(EltwiseIntGreaterEqual.instantiate(ppt));
+#elif defined(TYPEDOUBLE)
+        result.add(EltwiseFloatEqual.instantiate(ppt));
+        result.add(EltwiseFloatNonEqual.instantiate(ppt));
+        result.add(EltwiseFloatLessThan.instantiate(ppt));
+        result.add(EltwiseFloatLessEqual.instantiate(ppt));
+        result.add(EltwiseFloatGreaterThan.instantiate(ppt));
+        result.add(EltwiseFloatGreaterEqual.instantiate(ppt));
+#endif
       }
     }
     return result;
