@@ -94,6 +94,16 @@ public class EltUpperBound  extends SingleSequence  {
     return core.isSameFormula(((EltUpperBound ) other).core);
   }
 
+  public boolean isObviousImplied() {
+    if (Global.EXPERIMENTS) {
+      // if the value is not -1,0,1,2 then say that it is obvious
+      if ((core.max1  < -1) || (core.max1  > 2)) {
+	return true;
+      }
+    }
+    return super.isObviousImplied();
+  }
+
   public boolean isObviousDerived() {
     VarInfo v = var();
     if (v.isDerived() && (v.derived instanceof SequenceLength)) {

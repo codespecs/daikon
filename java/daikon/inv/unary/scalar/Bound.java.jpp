@@ -195,6 +195,16 @@ public class LOWERBOUND extends SINGLESCALAR {
   }
 #endif
 
+  public boolean isObviousImplied() {
+    if (Global.EXPERIMENTS) {
+      // if the value is not -1,0,1,2 then say that it is obvious
+      if ((MIN1 < -1) || (MIN1 > 2)) {
+	return true;
+      }
+    }
+    return super.isObviousImplied();
+  }
+
   public boolean isObviousDerived() {
     VarInfo v = var();
     if (v.isDerived() && (v.derived instanceof SequenceLength)) {
