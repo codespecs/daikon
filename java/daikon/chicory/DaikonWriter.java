@@ -2,6 +2,7 @@ package daikon.chicory;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.*;
 import java.util.regex.Pattern;
 import java.lang.reflect.*;
 
@@ -38,10 +39,18 @@ public class DaikonWriter
      * @return the decorated method entry name for Daikon
      */
     public static String methodEntryName(Member method)
-    {
+    {       
+        //System.out.printf("(NORM)  %s ----  %s\n", method.toString(), method.getName());
         return methodName(method, "ENTER");
     }
+    
+    public static String methodEntryName(String fullClassName, String[] types, String name, String short_name, boolean isConstructor)
+    {
+        //System.out.printf("(bytecodes)  %s ----  %s\n", name, short_name);
+        return methodName(fullClassName, types, name, short_name, isConstructor, "ENTER");
+    }
 
+    
     /**
      * Determines if this field warrants an [ = val ] entry in decls file
      *
@@ -66,23 +75,60 @@ public class DaikonWriter
     {
         return methodName(method, "EXIT" + lineNum);
     }
-
-    /**
-     * Prints the decorated method name and appends the point string
-     * @param method non-null method
-     * @param point The point in the method, usually EXIT or ENTRY
-     * @return the decorated method name appended the point string
-     */
-    private static String methodName(Member method, String point)
+    
+    public static String methodExitName(String fullClassName, String[] types, String name, String short_name, boolean isConstructor, int lineNum)
     {
-        String name = method.toString();
+        return methodName(fullClassName, types, name, short_name, isConstructor, "EXIT" + lineNum);
+    }
 
-        if (method instanceof Constructor)
+    
+    /**
+     * 
+     * @param name What member.toString() returns
+     * @param short_name What member.name() returns
+     * @param isConstructor Is the method a constructor
+     * @param point Usually "EXIT" or "ENTER"
+     * @param fullClassName packageName.className
+     * @return Same thing as methodName(Member, point)
+     */
+    private static String methodName(String fullClassName, String[] types, String name, String short_name, boolean isConstructor, String point)
+    {
+        /*Matcher matcher = Pattern.compile(" .*(.*)").matcher(name);
+        
+        if(!matcher.find())
+            throw new RuntimeException("Could not find parentheses expression in: " + name);
+        
+        int parenInd = matcher.start();
+        
+        System.out.println("before " + name);
+        name = name.substring(0, parenInd) + fullClassName + "." + name.substring(parenInd);
+        System.out.println("after " + name);*/
+        
+        String className = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
+        name = name.replace("<init>", className);
+        short_name = short_name.replace("<init>", className);
+        
+        //System.out.println("before " + name);
+        name = name.replace(short_name + "(", fullClassName + "." + short_name + "(");
+        //System.out.println("after " + name);
+        
+        String ppt = fullClassName + "." + short_name + "(";
+        for(int i = 0; i < types.length; i++) 
+        {
+            ppt += types[i];
+            
+            if(i != types.length - 1)
+                ppt += ", ";
+        }
+        ppt += ")" + ":::" + point;
+
+        
+        if (isConstructor)
         {
             // For some reason dfej repeats the name of the class for
             // constructors (eg, DataStructures.StackAr() becomes
             // DataStructures.StackAr.StackAr().  Mimic that behavior
-            String short_name = method.getName();
+
             int lastPeriod = short_name.lastIndexOf(".");
             // System.out.printf ("short name=%s, name=%s, lastPeriod=%s\n",
               //                 short_name, name, lastPeriod);
@@ -111,6 +157,62 @@ public class DaikonWriter
             name = parts[parts.length-1];
         }
         name = name.replaceAll (",", ", ");
+        
+        //TODO fix up this method, make it cleaner
+        return ppt;
+        //return (name + ":::" + point);
+    }
+    
+    
+    /**
+     * Prints the decorated method name and appends the point string
+     * @param method non-null method
+     * @param point The point in the method, usually EXIT or ENTRY
+     * @return the decorated method name appended the point string
+     */
+    private static String methodName(Member method, String point)
+    {
+        String name = method.toString();
+        String short_name = method.getName();
+
+        
+        if (method instanceof Constructor)
+        {          
+            // For some reason dfej repeats the name of the class for
+            // constructors (eg, DataStructures.StackAr() becomes
+            // DataStructures.StackAr.StackAr().  Mimic that behavior
+
+            int lastPeriod = short_name.lastIndexOf(".");
+            // System.out.printf ("short name=%s, name=%s, lastPeriod=%s\n",
+              //                 short_name, name, lastPeriod);
+            
+            
+            if (lastPeriod < 0)
+            {
+                name = name.replace (short_name + "(",
+                                 short_name + "." + short_name + "(");
+            }
+            else
+            {
+                short_name = short_name.substring(lastPeriod + 1);
+                name = name.replace ("." + short_name + "(",
+                                 "." + short_name + "." + short_name + "(");
+            }
+        }
+
+        // System.out.println ("method name = " + name);
+        
+        // Remove the modifiers and the type
+        if (no_modifiers_ppt)
+        {
+            name = name.replaceFirst (" throws.*", "");
+            String[] parts = name.split ("  *");
+            name = parts[parts.length-1];
+        }
+        name = name.replaceAll (",", ", ");
+        
+        //System.out.println("---> " + name + ":::" + point);
+        
         return (name + ":::" + point);
     }
 

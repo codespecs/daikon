@@ -33,19 +33,23 @@ public class MethodInfo {
   /** exit locations for this method **/
   public List <Integer> exit_locations;
 
+  /** Tells whether each exit point in method is instrumented, based on filters **/
+  public List <Boolean> is_included;
   /**
    * Creates a MethodInfo with the specified class, arg_names, and
    * exit locations
    */
   public MethodInfo (ClassInfo class_info, String method_name,
                      String[] arg_names, String[] arg_type_strings,
-                     List <Integer> exit_locations) {
+                     List <Integer> exit_locations,
+                     List <Boolean> is_included) {
 
     this.class_info = class_info;
     this.method_name = method_name;
     this.arg_names = arg_names;
     this.arg_type_strings = arg_type_strings;
     this.exit_locations = exit_locations;
+    this.is_included = is_included;
   }
 
   private static HashMap primitive_classes = new HashMap(8);

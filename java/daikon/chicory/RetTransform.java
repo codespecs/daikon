@@ -18,6 +18,8 @@ import org.apache.bcel.classfile.*;
 import org.apache.bcel.generic.InstructionFactory;
 import org.apache.bcel.generic.*;
 import org.apache.bcel.verifier.VerificationResult;
+
+import sun.nio.cs.ext.ISCII91;
 // uncomment this and uses of it below, to get bcel verify info
 // import edu.mit.csail.pag.testfactoring.verify.StackVer;
 
@@ -47,6 +49,81 @@ public class RetTransform implements ClassFileTransformer {
       return;
     System.out.printf (format, args);
   }
+  
+  //uses Runtime.Daikon_omit_regex and Runtime.daikon_include_regex
+  //to see if the given ppt should be "filtered out"
+  private boolean shouldFilter(String className, String methodName, String pptName)
+  {
+      boolean shouldExclude = false;
+
+        // Don't instrument class if it matches an excluded regular expression
+        for (String regex : Runtime.daikon_omit_regex)
+        {
+            Pattern pattern = null;
+            try
+            {
+                pattern = Pattern.compile(regex);
+            }
+            catch (Exception e)
+            {
+                System.out.println("WARNING: Error during regular expressions parsing: " + e.getMessage());
+            }
+            Matcher mPpt = pattern.matcher(pptName);
+            Matcher mClass = pattern.matcher(className);
+            Matcher mMethod = pattern.matcher(methodName);
+            if (mPpt.find() || mClass.find() || mMethod.find())
+            {
+                log("not instrumenting %s, it matches regex %s\n", pptName, regex);
+                shouldExclude = true;
+                
+                //System.out.println("filtering 1 true on --- " + pptName);
+                
+                //omit takes priority over include
+                return true;
+            }
+        }
+
+        // If any include regular expressions are specified, only instrument
+        // classes that match them
+        if (Runtime.daikon_include_regex.size() > 0)
+        {
+            for (String regex : Runtime.daikon_include_regex)
+            {
+                Pattern pattern = null;
+                try
+                {
+                    pattern = Pattern.compile(regex);
+                }
+                catch (Exception e)
+                {
+                    System.out.println("WARNING: Error during regular expressions parsing: " + e.getMessage());
+                }
+                
+                Matcher mPpt = pattern.matcher(pptName);
+                Matcher mClass = pattern.matcher(className);
+                Matcher mMethod = pattern.matcher(methodName);
+                
+                //System.out.println("--->" + regex);
+
+                if (mPpt.find() || mClass.find() || mMethod.find())
+                {
+                    //System.out.printf ("instrumenting %s, it matches regex %s\n", pptName, regex);
+                    log("instrumenting %s, it matches regex %s\n", pptName, regex);
+                    
+                    //System.out.println("filtering 2 false on --- " + pptName);
+                    return false; //don't filter out
+                }
+            }
+        }
+        
+        //if we're here, this ppt not explicitly included or excluded
+        //so keep unless there were items in the "include only" list
+        boolean ret = (Runtime.daikon_include_regex.size() > 0);
+        
+        //System.out.println("filtering 3: " + ret + " on --- " + pptName);
+        return ret;
+
+  }
 
   public byte[] transform (ClassLoader loader, String className,
                            Class<?> classBeingRedefined,
@@ -57,6 +134,9 @@ public class RetTransform implements ClassFileTransformer {
     // debug = className.equals ("DataStructures/StackAr");
     // debug = className.equals ("chicory/Test");
     // debug = className.equals ("DataStructures/BinarySearchTree");
+
+      String fullClassName = className.replace("/", ".");
+      //String fullClassName = className;
 
     if (debug)
       out.format ("In Transform: class = %s\n", className);
@@ -70,67 +150,22 @@ public class RetTransform implements ClassFileTransformer {
     if (className.startsWith ("daikon/chicory")
         && !className.equals ("daikon/chicory/Test"))
       return (null);
-
-    // Don't instrument class if it matches an excluded regular expression
-    for (String regex : Runtime.daikon_omit_regex) {
-        Pattern pattern = null;
-        try
-        {
-        pattern = Pattern.compile (regex);
-        }
-        catch(Exception e)
-        {
-            System.out.println("WARNING: Error during regular expressions parsing: " + e.getMessage());
-        }
-      Matcher m = pattern.matcher (className);
-      if (m.find()) {
-        log ("not instrumenting %s, it matches regex %s\n", className, regex);
-        return (null); //TODO does include take precedence? if so, shouldn't return
-      }
-    }
+  
     
+    if (debug)
+            out.format("transforming class %s\n", className);
 
-    // If any include regular expressions are specified, only instrument
-    // classes that match them
-    if (Runtime.daikon_include_regex.size() > 0) {
-      boolean match = false;
-      for (String regex : Runtime.daikon_include_regex) {
-        Pattern pattern = null;
+        // Parse the bytes of the classfile, die on any errors
+        JavaClass c = null;
+        ClassParser parser = new ClassParser(new ByteArrayInputStream(classfileBuffer), className);
         try
         {
-        pattern = Pattern.compile (regex);
+            c = parser.parse();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            System.out.println("WARNING: Error during regular expressions parsing: " + e.getMessage());
+            throw new RuntimeException("Unexpected error: " + e);
         }
-        Matcher m = pattern.matcher (className);
-        if (m.find()) {
-          match = true;
-          //System.out.printf ("instrumenting %s, it matches regex %s\n", className, regex);
-          log ("instrumenting %s, it matches regex %s\n", className, regex);
-          break;
-        }
-      }
-      if (!match) {
-        ////System.out.printf ("not instrumenting %s, it doesn't match any regex\n", className);
-        log ("not instrumenting %s, it doesn't match any regex\n", className);
-        return (null);
-      }
-    }
-
-    if (debug)
-      out.format ("transforming class %s\n", className);
-
-    // Parse the bytes of the classfile, die on any errors
-    JavaClass c = null;
-    ClassParser parser = new ClassParser
-      (new ByteArrayInputStream (classfileBuffer), className);
-    try {
-      c = parser.parse();
-    } catch (Exception e) {
-      throw new RuntimeException ("Unexpected error: " + e);
-    }
 
     try {
       // Get the class information
@@ -138,7 +173,7 @@ public class RetTransform implements ClassFileTransformer {
 
       // Convert reach non-void method to save its result in a local
       // before returning
-      save_ret_value (cg);
+      save_ret_value (cg, fullClassName);
 
       JavaClass njc = cg.getJavaClass();
       if (debug)
@@ -158,12 +193,15 @@ public class RetTransform implements ClassFileTransformer {
    * Changes each return statement to first place the value being returned into
    * a local and then return. This allows us to work around the JDI deficiency
    * of not being able to query return values.
+   * @param fullClassName must be packageName.className
    */
-  private void save_ret_value (ClassGen cg) {
+  private void save_ret_value (ClassGen cg, String fullClassName) {
 
     ClassInfo class_info = new ClassInfo (cg.getClassName());
     List<MethodInfo> method_infos = new ArrayList<MethodInfo>();
 
+    boolean shouldInclude = false;
+    
     try {
       InstructionFactory ifact = new InstructionFactory (cg);
       pgen = cg.getConstantPool();
@@ -173,16 +211,19 @@ public class RetTransform implements ClassFileTransformer {
       for (int i = 0; i < methods.length; i++) {
         MethodGen mg = new MethodGen (methods[i], cg.getClassName(), pgen);
         MethodContext context = new MethodContext (cg, mg);
-        if (debug) {
-          out.format ("  Method = %s\n", mg);
-          Attribute[] attributes = mg.getCodeAttributes();
-          for (Attribute a : attributes) {
-            int con_index = a.getNameIndex();
-            Constant c = pgen.getConstant (con_index);
-            String att_name = ((ConstantUtf8) c).getBytes();
-            out.format ("attribute: %s [%s]\n", a, att_name);
-          }
-        }
+        
+        if (debug)
+                {
+                    out.format("  Method = %s\n", mg);
+                    Attribute[] attributes = mg.getCodeAttributes();
+                    for (Attribute a : attributes)
+                    {
+                        int con_index = a.getNameIndex();
+                        Constant c = pgen.getConstant(con_index);
+                        String att_name = ((ConstantUtf8) c).getBytes();
+                        out.format("attribute: %s [%s]\n", a, att_name);
+                    }
+                }
 
         // skip the class init method
         if (mg.getName().equals ("<clinit>"))
@@ -200,15 +241,24 @@ public class RetTransform implements ClassFileTransformer {
         // and exit line numbers (information not available via reflection)
         // and add it to the list for this class.
         MethodInfo mi = (create_method_info (class_info, mg));
+        
+        if(mi == null) //method filtered out!
+            continue;
+        
+        shouldInclude = true; //at least one method not filtered out
+        
         method_infos.add (mi);
+        
         cur_method_info_index = Runtime.methods.size();
         Runtime.methods.add (mi);
 
         // Add nonce local to matchup enter/exits
-        add_method_startup (il, context);
+        add_method_startup (il, context, !shouldFilter(fullClassName, mg.getName(), 
+                DaikonWriter.methodEntryName(fullClassName, getArgTypes(mg), mg.toString(), mg.getName(), is_constructor(mg))));
 
         
-        Iterator <Integer> exitLocIter = mi.exit_locations.iterator();
+        Iterator <Boolean> shouldIncIter = mi.is_included.iterator();
+        Iterator <Integer> exitIter = mi.exit_locations.iterator();
         
         // Loop through each instruction
         for (InstructionHandle ih = il.getStart(); ih != null; ) {
@@ -216,7 +266,7 @@ public class RetTransform implements ClassFileTransformer {
           Instruction inst = ih.getInstruction();
 
           // Get the translation for this instruction (if any)
-          new_il = xform_inst (inst, context, exitLocIter);
+          new_il = xform_inst (fullClassName, inst, context, shouldIncIter, exitIter);
 
           // Remember the next instruction to process
           InstructionHandle next_ih = ih.getNext();
@@ -310,9 +360,13 @@ public class RetTransform implements ClassFileTransformer {
     // Add the class and method information to runtime so it is available
     // as enter/exit ppts are processed.
     class_info.set_method_infos (method_infos);
+    
+    if(shouldInclude)
+    {
     synchronized (Runtime.new_classes) {
       Runtime.new_classes.add (class_info);
       Runtime.all_classes.add (class_info);
+    }
     }
   }
 
@@ -321,7 +375,8 @@ public class RetTransform implements ClassFileTransformer {
    * variable (return__$trace2_val) and then do the return.  Also, calls
    * Runtime.exit() immediately before the return.
    */
-  private InstructionList xform_inst (Instruction inst, MethodContext c, Iterator <Integer> exitIter) 
+  private InstructionList xform_inst (String fullClassName, Instruction inst, MethodContext c, 
+          Iterator <Boolean> shouldIncIter, Iterator <Integer> exitIter) 
   {
 
     switch (inst.getOpcode()) {
@@ -338,6 +393,14 @@ public class RetTransform implements ClassFileTransformer {
       return (null);
     }
 
+    if(!shouldIncIter.hasNext())
+        throw new RuntimeException("Not enough entries in shouldIncIter");
+
+    boolean shouldInclude = shouldIncIter.next();
+    
+    if(!shouldInclude)
+        return null;
+
     Type type = c.mgen.getReturnType();
     InstructionList il = new InstructionList();
     if (type != type.VOID) {
@@ -347,7 +410,7 @@ public class RetTransform implements ClassFileTransformer {
     }
     
     if(!exitIter.hasNext())
-        throw new RuntimeException("Not enough exit locations in the List");
+        throw new RuntimeException("Not enough exit locations in the exitIter");
     
     il.append (call_enter_exit (c, "exit", exitIter.next()));
     il.append (inst);
@@ -408,7 +471,7 @@ public class RetTransform implements ClassFileTransformer {
    * that allows them to be matched up from the dtrace file.  Also calls
    * Runtime.enter()
    */
-  private void add_method_startup (InstructionList il, MethodContext c) {
+  private void add_method_startup (InstructionList il, MethodContext c, boolean shouldCallEnter) {
 
     InstructionList nl = new InstructionList();
 
@@ -440,8 +503,12 @@ public class RetTransform implements ClassFileTransformer {
     // istore <lv> (pop original value of nonce into this_invocation_nonce)
     nl.append (c.ifact.createStore (Type.INT, nonce_lv.getIndex()));
 
+    
+    if(shouldCallEnter)
+    {
     // call Runtime.enter()
     nl.append (call_enter_exit (c, "enter", -1));
+    }
 
     // Add the new instruction at the start and move any LineNumbers
     // and Local variables to point to them.  Other targeters
@@ -616,88 +683,137 @@ public class RetTransform implements ClassFileTransformer {
     } else
       return (false);
   }
-
-  private MethodInfo create_method_info (ClassInfo class_info, MethodGen mgen) {
-
-    // Get the argument names for this method
-    String[] arg_names = mgen.getArgumentNames();
-    LocalVariableGen[] lvs = mgen.getLocalVariables();
-    int param_offset = 1;
-    if (mgen.isStatic())
-      param_offset = 0;
-    if (lvs != null) {
-      for (int ii = 0; ii < arg_names.length; ii++) {
-        if ((ii+param_offset) < lvs.length)
-          arg_names[ii] = lvs[ii+param_offset].getName();
+  
+  String[] getArgTypes(MethodGen mgen)
+  {
+      Type[] arg_types = mgen.getArgumentTypes();
+      String[] arg_type_strings = new String[arg_types.length];
+      for (int ii = 0; ii < arg_types.length; ii++)
+      {
+          Type t = arg_types[ii];
+          /*if (t instanceof ObjectType)
+              arg_type_strings[ii] = ((ObjectType) t).getClassName();
+          else
+              arg_type_strings[ii] = t.getSignature().replace('/', '.');
+              */
+          arg_type_strings[ii] = t.toString();
       }
-    }
-
-    // Get the argument types for this method
-    Type[] arg_types = mgen.getArgumentTypes();
-    String[] arg_type_strings = new String[arg_types.length];
-    for (int ii = 0; ii < arg_types.length; ii++) {
-      Type t = arg_types[ii];
-      if (t instanceof ObjectType)
-        arg_type_strings[ii] = ((ObjectType) t).getClassName();
-      else
-        arg_type_strings[ii] = t.getSignature().replace ('/', '.');
-    }
-
-    // Loop through each instruction and find the line number for each
-    // return opcode
-    List <Integer> exit_locs = new ArrayList<Integer>();
-
-    // log ("Looking for exit points in %s\n", mgen.getName());
-    InstructionList il = mgen.getInstructionList();
-    int line_number = 0;
-    int last_line_number = 0;
-    boolean foundLine;
-    
-    for (Iterator ii = il.iterator(); ii.hasNext(); ) {
-        
-        foundLine = false;
-        
-      InstructionHandle ih = (InstructionHandle) ii.next();
-      if (ih.hasTargeters()) {
-        for (InstructionTargeter it : ih.getTargeters()) {
-          if (it instanceof LineNumberGen) {
-            LineNumberGen lng = (LineNumberGen) it;
-            // log ("  line number at %s: %d\n", ih, lng.getSourceLine());
-            //System.out.printf("  line number at %s: %d\n", ih, lng.getSourceLine());
-            line_number = lng.getSourceLine();
-            foundLine = true;
-          }
-        }
-      }
-
-      switch (ih.getInstruction().getOpcode()) {
-      case Constants.ARETURN:
-      case Constants.DRETURN:
-      case Constants.FRETURN:
-      case Constants.IRETURN:
-      case Constants.LRETURN:
-      case Constants.RETURN:
-        // log ("Exit at line %d\n", line_number);
-          
-          //only do incremental lines if we don't have the line generator
-        if (line_number == last_line_number && foundLine==false)
-          {
-            //System.out.printf("Could not find line... at %d\n", line_number);
-            line_number++;
-          }
-        
-        last_line_number = line_number;
-        exit_locs.add (new Integer (line_number));
-        break;
-
-      default:
-        break;
-      }
-    }
-   
-    return new MethodInfo (class_info, mgen.getName(), arg_names,
-                           arg_type_strings, exit_locs);
+      
+      return arg_type_strings;
   }
+
+  private MethodInfo create_method_info(ClassInfo class_info, MethodGen mgen)
+    {
+        // Get the argument names for this method
+        String[] arg_names = mgen.getArgumentNames();
+        LocalVariableGen[] lvs = mgen.getLocalVariables();
+        int param_offset = 1;
+        if (mgen.isStatic())
+            param_offset = 0;
+        if (lvs != null)
+        {
+            for (int ii = 0; ii < arg_names.length; ii++)
+            {
+                if ((ii + param_offset) < lvs.length)
+                    arg_names[ii] = lvs[ii + param_offset].getName();
+            }
+        }
+        
+        boolean shouldInclude = false;
+        
+        //see if we should filter the entry point
+        if(!shouldFilter(class_info.class_name, mgen.getName(),
+                DaikonWriter.methodEntryName(class_info.class_name, getArgTypes(mgen), mgen.toString(), mgen.getName(), is_constructor(mgen))))
+            shouldInclude = true;
+
+        // Get the argument types for this method
+        Type[] arg_types = mgen.getArgumentTypes();
+        String[] arg_type_strings = new String[arg_types.length];
+        for (int ii = 0; ii < arg_types.length; ii++)
+        {
+            Type t = arg_types[ii];
+            if (t instanceof ObjectType)
+                arg_type_strings[ii] = ((ObjectType) t).getClassName();
+            else
+                arg_type_strings[ii] = t.getSignature().replace('/', '.');
+        }
+
+        // Loop through each instruction and find the line number for each
+        // return opcode
+        List<Integer> exit_locs = new ArrayList<Integer>();
+        
+        //tells whether each exit loc in the method is included or not (based on filters)
+        List<Boolean> isIncluded = new ArrayList<Boolean>();
+
+        // log ("Looking for exit points in %s\n", mgen.getName());
+        InstructionList il = mgen.getInstructionList();
+        int line_number = 0;
+        int last_line_number = 0;
+        boolean foundLine;
+
+        for (Iterator ii = il.iterator(); ii.hasNext();)
+        {
+
+            foundLine = false;
+
+            InstructionHandle ih = (InstructionHandle) ii.next();
+            if (ih.hasTargeters())
+            {
+                for (InstructionTargeter it : ih.getTargeters())
+                {
+                    if (it instanceof LineNumberGen)
+                    {
+                        LineNumberGen lng = (LineNumberGen) it;
+                        // log ("  line number at %s: %d\n", ih, lng.getSourceLine());
+                        //System.out.printf("  line number at %s: %d\n", ih, lng.getSourceLine());
+                        line_number = lng.getSourceLine();
+                        foundLine = true;
+                    }
+                }
+            }
+
+            switch (ih.getInstruction().getOpcode())
+            {
+                case Constants.ARETURN :
+                case Constants.DRETURN :
+                case Constants.FRETURN :
+                case Constants.IRETURN :
+                case Constants.LRETURN :
+                case Constants.RETURN :
+                    // log ("Exit at line %d\n", line_number);
+
+                    //only do incremental lines if we don't have the line generator
+                    if (line_number == last_line_number && foundLine == false)
+                    {
+                        //System.out.printf("Could not find line... at %d\n", line_number);
+                        line_number++;
+                    }
+
+                    last_line_number = line_number;
+                    
+                    if(!shouldFilter(class_info.class_name, mgen.getName(),
+                            DaikonWriter.methodExitName(class_info.class_name, getArgTypes(mgen), mgen.toString(), mgen.getName(), is_constructor(mgen), line_number)))
+                    {
+                        shouldInclude = true;
+                        exit_locs.add(new Integer(line_number));
+                        
+                        isIncluded.add(true);
+                    }
+                    else
+                        isIncluded.add(false);
+                    
+                    break;
+
+                default :
+                    break;
+            }
+        }
+
+        if(shouldInclude)
+            return new MethodInfo(class_info, mgen.getName(), arg_names, arg_type_strings, exit_locs, isIncluded);
+        else
+            return null;
+    }
 
   public boolean is_local_variable_type_table (Attribute a) {
     return (get_attribute_name (a).equals ("LocalVariableTypeTable"));
