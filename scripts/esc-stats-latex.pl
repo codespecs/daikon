@@ -95,6 +95,7 @@ for my $file (@ARGV) {
 
   my ($verified, $unverified, $inexpressible, $redundant, $missing) = (0, 0, 0, 0, 0);
   my $line = <SOURCE>;		# header line
+  my $gotlines = 0;
   while (defined($line = <SOURCE>)) {
     # See esc-stats.pl for definitions of the abbreviations.
     # print "line: $line";
@@ -105,8 +106,12 @@ for my $file (@ARGV) {
     $inexpressible += $iu;
     $redundant += $evr + $enr + $ir;
     $missing += $a;
+    $gotlines = 1;
   }
   close(SOURCE);
+  if ($gotlines == 0) {
+    die "No lines read from file $file";
+  }
 
   my $reported = ($verified + $unverified + $inexpressible + $redundant);
 
@@ -137,7 +142,7 @@ my $total_missing = 0;
 my $total_precision = 0;
 my $total_recall = 0;
 
-print "% Class         & LOC     & NCNB    & Verif.  & Unverif & Inexpr.    & Redund. & TotRept & Missing & Prec & rec. \\\\\n";
+print "% Class         & LOC     & NCNB    & Verif.  & Unverif & Inexpr.    & Redund. & TotRept & Missing & Prec & Rec. \\\\\n";
 for my $class (sort {$ {$classdata{$a}}[1] <=> $ {$classdata{$b}}[1]} keys %classdata) {
   ## This doesn't work; not sure why.
   # my ($loc, $ncnbloc, $verified, $unverified, $inexpressible, $redundant, $reported, $missing) = $ $classdata{$class};
