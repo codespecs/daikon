@@ -98,9 +98,7 @@ It describes Daikon version 2.4.9, released June 2, 2003.
 * GUIs::                        
 * Front ends::                  
 * Enhancing Daikon output::     
-* Daikon technologies::         
 * Tools::                       
-* Extending Daikon::            
 * Troubleshooting::             
 * Details::                     
 * File formats::                
@@ -289,24 +287,9 @@ Enhancing conditional invariant detection
 * Static analysis for splitters::  
 * Cluster analysis for splitters::  
 
-Daikon technologies
-
-* Dataflow hierarchy::          
-* Equality optimization::       
-* Suppression optimization::    
-
 Tools
 
 * MergeESC::                    
-
-Extending Daikon
-
-* Compiling Daikon::            
-* New invariants::              
-* New derived variables::       
-* New formatting for invariants::  
-* New front ends::              
-* New suppressors::             
 
 Troubleshooting
 
@@ -1906,14 +1889,14 @@ between 0 and 1; the default is .01 (1%).  Smaller values yield stronger
 filtering.
 
 @item --nohierarchy
-Avoid connecting program points in a dataflow hierarchy as described
-in @ref{Dataflow hierarchy}.  For example, Daikon normally connects
-the ENTER program points of a class with the class's CLASS program
-point, so that any invariant that holds on the CLASS program point is
-considered to hold true on the ENTER program point.  With no
-hierarchy, each program point is treated independently.  This is for
-using Daikon on applications that do not have a concept of hierarchy.
-Note that this switch applies only to V3 of daikon.
+Avoid connecting program points in a dataflow hierarchy.  For example,
+Daikon normally connects the ENTER program points of a class with the
+class's CLASS program point, so that any invariant that holds on the
+CLASS program point is considered to hold true on the ENTER program
+point.  With no hierarchy, each program point is treated
+independently.  This is for using Daikon on applications that do not
+have a concept of hierarchy.  Note that this switch applies only to V3
+of daikon.
 
 @item --esc_output
 Write output in ESC-like format.
@@ -4652,7 +4635,7 @@ produces files @file{myfile.decls} and @file{myfile.dtrace}.  Run
 @command{convertcsv.pl} without any arguments in order to see a usage
 message.
 
-@node    Enhancing Daikon output, Daikon technologies, Front ends, Top
+@node    Enhancing Daikon output, Tools, Front ends, Top
 @chapter Enhancing Daikon output
 
 @menu
@@ -5151,129 +5134,7 @@ distribution. The xmeans code and executable are publicly available at
 form and mail it in).
 
 
-@node    Daikon technologies, Tools, Enhancing Daikon output, Top
-@chapter Daikon technologies
-
-@menu
-* Dataflow hierarchy::          
-* Equality optimization::       
-* Suppression optimization::    
-@end menu
-
-This chapter describes some of the techniques used in Daikon to make
-it efficient in terms of time and space needed.  These techniques can
-be enabled or disabled at the Daikon command line, as described in
-@ref{Command line options}.
-
-@c @node    Elimination of redundant invariants, Daikon technologies, Top
-@c @section Elimination of redundant invariants
-
-The major way Daikon optimizes its use of computer resources is to
-avoid performing work for redundant invariants.  For example, if
-Daikon does not check a redundant invariant for some data samples,
-some time can be saved.  If Daikon does not instantiate redundant
-invariants, then space and time can be saved.  Some invariants are
-redundant @emph{statically} --- that is, their redundancy can be known
-without any sample data.  For example, "A[i] is an element of A[]" can
-be known statically.  Other invariants are redundant
-@emph{dynamically} --- Daikon can only know they are redundant after
-some or all sample data is seen.  The next three sections show ways
-that Daikon is optimized based on saving work for dynamically
-redundant invariants.
-
-More detail can be found in Chapter 7, ``Scalability'', of
-@cite{Automatic Generation and Checking of Program Specifications}
-(Technical report MIT-LCS-TR-852, at
-@uref{http://pag.lcs.mit.edu/~mistere/pubs/thesis-abstract.html}),
-Jeremy W. Nimmer's Master's thesis, and in Chapter 5, ``Enabling
-Incremental Dynamic Invariant Detection'', of Toh Ne Win's Master's
-thesis (Technical report to be filed, at
-@uref{http://pag.lcs.mit.edu/~tohn/home/research/thesis/thesis.pdf}).
-
-
-@node    Dataflow hierarchy, Equality optimization, Daikon technologies, Daikon technologies
-@section Dataflow hierarchy
-
-Dataflow hierarchy is a means to relate variables in different program
-points in a partial ordering.  Variables in program point X are
-related to variables in another program point Y by a "flow" relation
-if every sample seen of X's variables is also meant to be seen at Y.
-Y is called a parent program point of X.  For example, all the field
-variables in the ENTRY program point of a method in class C relate to
-the field variables in the CLASS program point of C.  This is because
-the state of C, when in context at the entry ENTRY program point, is
-also in context at the CLASS program point.  Any invariant that holds
-true on a parent program point must hold on the child program point.
-The purpose of dataflow hierarchy is to reduce the presence of
-redundant invariants by only keeping invariants at the highest parent
-at which they apply.  This saves both time and space.
-
-There are many ways that program points can be connected.  Daikon
-provides for four ways.  First, CLASS program points are parents of
-all their method program points.  Second, between two classes that are
-related by inheritance, corresponding program points relate --- for
-example, java.util.Vector:::CLASS is a child of
-java.util.List:::Class.  Third, when a program point contains
-variables of a type whose CLASS program point is also available to
-Daikon, the former program point's variables relate to the latter
-program point's CLASS method.  For example, if X:::y is of type Y, and
-Y contains fields a and b, X:::y, X:::y.a and X:::y.b relate to
-Y:::this, Y:::b and Y:::a.  Fourth, variables at ENTER program
-points are related to the "orig" versions at EXIT program points.
-
-When using Daikon, the above four ways of relations in the dataflow
-hierarchy will result in some true invariants that are not reported at
-some program points.  However, the invariant will be present in some
-parent program point.  Dataflow hierarchy is enabled by default, but
-can be disabled by the --nohierarchy flag.  When dataflow is enabled,
-the only samples that are examined by Daikon are the EXIT program
-points (plus "orig" variables) since these contain a complete view of
-the data.
-
-@node    Equality optimization, Suppression optimization, Dataflow hierarchy, Daikon technologies
-@section Equality optimization
-
-When N variables are equal within a program point there will be
-N(N-1)/2 pairwise invariants to represent the equality within the
-equal variables, and N copies of every other invariant.  For example,
-if a, b, and c are equal, then "a == b", "a == c", "b == c" will be
-reported as pairwise invariants, and "odd(a)", "odd(b)" and "odd(c)"
-will be reported.  If the variables will always be equal, then
-reporting N times the invariants is wasteful.  Daikon thus treats
-equality specially.
-
-Each group of variables that are equal from the start of inferencing
-are placed in @emph{equality sets}.  An equality set can hold an
-arbitrary number of variables, and replaces the O(N^2) pairwise
-equality invariants.  Every equality set has a leader or
-@emph{canonical} representation by a variable in the set.
-Non-equality invariants are only instantiated and checked on the
-leader.  When printing invariants, Daikon reports only invariants on
-the leader.  The user can easily determine that "odd(a)" and "a == b"
-imply "odd(b)".  Equality can be turned off at the command line with
-the --noequality flag.
-
-@node    Suppression optimization,  , Equality optimization, Daikon technologies
-@section Suppression optimization
-
-Suppression optimization allows for elimination of redundancy based on
-how a set of invariants might imply an invariant.  For example, "a[]
-contains no duplicates" implies "a[i..j] contains no duplicates".  We
-say that a set of @emph{suppressors} suppress a @emph{suppressee}
-invariant.  Suppression also works across the program point hierarchy:
-suppressors can exist in parent program points.  Suppressed invariants
-are not eliminated during inferencing, but tagged as suppressed.  They
-are not checked against samples while suppressed.  The only way an
-invariant becomes unsuppressed is if one of its suppressors becomes
-falsified, in which case the implication for supression no longer
-holds.
-
-Thus when certain invariants are not found in Daikon, they may be
-hidden due to suppression.  Suppression is off by default, but it can
-be enabled by the --suppress command line flag.
-
-
-@node    Tools, Extending Daikon, Daikon technologies, Top
+@node    Tools, Troubleshooting, Enhancing Daikon output, Top
 @chapter Tools
 
 This chapter gives information about tools that are part of the Daikon
@@ -5305,411 +5166,7 @@ unmodified, but MergeESC produces new @file{-escannotated} versions that
 include the Daikon invariants as comments.
 
 
-@node    Extending Daikon, Troubleshooting, Tools, Top
-@chapter Extending Daikon
-
-@cindex extending Daikon
-@cindex changing Daikon
-@cindex customizing Daikon
-@cindex modifying Daikon
-
-This chapter describes how to customize or modify Daikon.
-
-Readers are also referred to Chapter 7, ``Implementation'', of
-@cite{Dynamically Discovering Likely Program Invariants} by Michael
-D. Ernst, PhD dissertation, University of Washington Department of
-Computer Science and Engineering, Seattle, Washington, USA, August 2000.
-This document is available online at
-@uref{http://pag.lcs.mit.edu/~mernst/pubs/invariants-thesis-abstract.html}.
-
-For Daikon version
-@c line break to avoid automatically updating the version number
-3, also see 
-Chapter 7, ``Scalability'', of @cite{Automatic Generation and Checking
-of Program Specifications}, by Jeremy W. Nimmer, Master's thesis.  
-This document is available, as 
-technical report MIT-LCS-TR-852, at
-@uref{http://pag.lcs.mit.edu/~mistere/pubs/thesis-abstract.html}.
-
-
-@menu
-* Compiling Daikon::            
-* New invariants::              
-* New derived variables::       
-* New formatting for invariants::  
-* New front ends::              
-* New suppressors::             
-@end menu
-
-@node    Compiling Daikon, New invariants, Extending Daikon, Extending Daikon
-@section Compiling Daikon
-@cindex compiling daikon
-
-To compile Daikon, type @command{make} in any directory under
-@file{daikon/java/}.  The distribution includes compiled
-@file{.class} files, so you do not need to compile them yourself unless
-you make changes.
-
-@cindex .jpp files
-@cindex jpp files
-
-In order to compile Daikon, you need the C preprocessor
-@command{cpp}, which is used to convert each @file{.jpp} file in the
-distribution into multiple @file{.java} files, which are then compiled.
-If you do not have @command{cpp} (or @command{gcc}, which can emulate
-@command{cpp} via @command{gcc -E}), you may run @command{make avoid-jpp}, in
-which case changes to @code{.jpp} files will not be reflected in the
-@file{.java} files or the compiled @file{.class} files.  (The purpose
-of the @file{.jpp} files is to avoid code duplication by placing
-common code in a single file, then generating other files that need to
-include that common code.)
-
-@cindex Jikes compiler
-@cindex javac compiler, overriding
-@cindex Java compiler, specifying
-You may wish to create a @file{Makefile.user} file in the @file{daikon/}
-directory to set your Java compiler.  For instance, it might contain
-@example
-  JAVAC ?= jikes -g +E +F
-@end example
-
-For more information about compiling Daikon, see the comments in the Makefiles.
-
-
-@node    New invariants, New derived variables, Compiling Daikon, Extending Daikon
-@section New invariants
-
-You can easily write your own invariants and have Daikon check them,
-in addition to all the other invariants that are already part of Daikon.
-Adding a new invariant to Daikon requires writing one Java class, adding
-a line to another file (a factory class) to inform Daikon of the new
-class, and recompiling Daikon.
-
-The file @file{java/daikon/inv/unary/scalar/Positive.java} in the
-Daikon distribution contains a sample invariant.  This invariant is
-true if the variable is always positive (greater than zero).  This
-invariant is subsumed by other invariants in the system; it is provided
-only as a pedagogical example.  To enable the invariant, uncomment the
-appropriate line in @file{SingleScalarFactory.java}, then recompile
-Daikon.
-
-
-A Java class defining an invariant is a concrete subclass of one of
-the following abstract classes:
-@itemize @bullet
-@item
-@samp{SingleScalar}, for invariants over a single numeric (scalar) variable,
-such as "x != 0".
-@item
-@samp{TwoScalar}, for invariants over two numeric variables, such as "y
-= abs(x)".
-@item
-@samp{ThreeScalar}, for invariants over three numeric variables, such as
-"z = ax + by + c".
-@item
-@samp{SingleSequence}, for invariants over one sequence (array)
-variable, such as "a[] contains no duplicates".
-@item
-@samp{TwoSequence}, for invariants over two sequences, such as "a[] is a
-subsequence of b[]".
-@item
-@samp{SequenceScalar}, for invariants over a scalar and a sequence, such
-as "x is a member of a[]".
-@end itemize
-@noindent
-A complete list of the types appears in classes @samp{PptSlice1},
-@samp{PptSlice2}, and @samp{PptSlice3}, in their respective
-@samp{instantiate_invariants} methods.
-
-Daikon's invariants are first instantiated, then are presented samples
-(tuples of values for all the variables of interest to the invariant;
-this might be a 1-tuple, a 2-tuple, or a 3-tuple) in turn.  If any
-sample falsifies the invariant, the invariant destroys itself.  All
-remaining invariants at the end of the program run can be reported as
-likely to be true.
-
-The key methods of the new invariant are
-@table @samp
-@item @r{constructor}
-Creates a new invariant object.  Its typical implementation is
-@example
-  super(ppt);
-@end example
-@item instantiate
-returns either a new invariant object or null.  For instance,
-@samp{instantiate} might check whether particular conditions that are
-required for the invariant to be sensible hold.  Its typical
-implementation is
-@example
-  return new @var{InvName}(ppt);
-@end example
-@item add_modified
-presents a tuple of values to the invariant.  The @samp{count} variable
-indicates how many samples have this value.  For example, three calls to
-@samp{add_modified} with a @samp{count} parameter of 1 is equivalent to
-one call to @samp{add_modified} with a @samp{count} parameter of 3.
-@item computeProbability
-returns the probability that the observed data could have happened by
-chance alone.  The result usually falls between 0 and 1, where 1 means
-the values seen so far certainly happened by chance and 0 means they
-could never have happened by chance.  The method may also return one of
-the following constants in the @samp{Invariant} class (which see for
-documentation): @samp{PROBABILITY_JUSTIFIED},
-@samp{PROBABILITY_UNJUSTIFIED}, @samp{PROBABILITY_UNKNOWN},
-@samp{PROBABILITY_NEVER}.
-
-For example, suppose your new invariant has a 50% chance of being true
-by chance for each sample.  ("x is even" is an example of such an
-invariant.)  Then a reasonable body for @samp{computeProbability} would
-be
-@example
-  return Math.pow(.5, ppt.num_values());
-@end example
-@noindent
-If 5 values had been seen, then this implementation would return 1/32,
-which is the likelihood that all 5 values seen so far were even purely
-by chance.  Invariants are only printed if their probabilities are small
-enough (by default, less than .01).
-@item format
-returns a high-level printed representation of the
-invariant, for user output.  The @samp{repr} formatting routines
-produces low-level, detailed output for debugging.  When first writing
-an invariant, you can make @samp{repr}, @samp{format_esc}, and
-@samp{format_simplify} all simply call @samp{format}, then fix up the
-implementations later as needed.
-@end table
-
-After the invariant is written, add a call to its @samp{instantiate}
-method in pass 2 of the @samp{instantiate} method of the appropriate
-factory; for instance, add a line like
-@example
-  result.add(MyInvariant.instantiate(ppt));
-@end example
-@noindent
-to @samp{SingleScalarFactory.instantiate}.
-
-
-@node    New derived variables, New formatting for invariants, New invariants, Extending Daikon
-@section New derived variables
-
-@cindex derived variable
-@cindex variable, derived
-
-A derived variable is an expression that does not appear in the source
-code as a variable, but that Daikon treats as a variable for purposes
-of invariant detection.  For instance, if there exists an array
-@samp{a} and an integer @samp{i}, then Daikon introduces the derived
-variable @samp{a[i]}.  This permits detection invariants over this
-quantity.
-
-(Describing how to create new variety of derived variable is still to
-be written.  For now, see the derived variables that appear in
-@file{$DAIKONDIR/java/daikon/derive/}.)
-
-
-@node    New formatting for invariants, New front ends, New derived variables, Extending Daikon
-@section New formatting for invariants
-
-@cindex output format, defining new
-
-Daikon can print invariants in five formats:  its native format, Java
-format, IOA format (for use with the IOA programming language), ESC
-format (which is a subset of the JML specification language), and
-Simplify format (for use by the Simplify theorem-prover).
-
-To support a new output format, you need to do three things:
-@itemize @bullet
-@item
-@c Add, to every subclass of @samp{Invariant}, a
-@c @samp{format_@var{newtype}()} method.  Each subclass of Invariant
-@c already has three such methods --- @samp{format()}, @samp{format_esc()},
-@c and @samp{format_simplify()} --- for you to crib from.
-Add a new static final field to the enumeration
-daikon.inv.Invariant.OutputFormat.
-@item
-Edit, in every subclass of @samp{Invariant}, the
-@samp{format_using} method to handle the new OutputFormat.
-@item
-Edit @samp{PrintInvariants.print_invariants()} to enable selecting your
-new output format.
-@end itemize
-
-
-@node    New front ends, New suppressors, New formatting for invariants, Extending Daikon
-@section New front ends
-
-@cindex front end, writing
-
-A front end for Daikon converts data into a form Daikon can process,
-producing files in Daikon's input format --- @file{.decls} files and
-@file{.dtrace} files.
-(Typically, Daikon front ends arrange to obtain information from
-program executions, though front ends have been also been built for
-stock data, weather forecasts, and truck weight data, among others.
-In other words, it is possible to produce Daikon input from sources
-other than program executions, but this section focuses on the latter.)
-
-A front end for Daikon takes as input a target program to be analyzed.
-The front end produces two outputs:  a @file{.decls} file and an
-instrumented program.  Executing the instrumented program produces a
-@file{.dtrace} file containing records for all the program points that
-appear in the @file{.dtrace} file.
-For more information about these files, see @ref{File formats}.
-
-Conceptually, instrumentation is very simple.
-This section gives an example of how an instrumenter for Java might
-work; other languages are analogous.
-Suppose we wish to instrument file @file{Example.java}.
-@example
-class Example @{
-  // Return either the square of x or the square of (x+1).
-  int squar(int x, boolean b) @{
-    if (b)
-      x++;
-    return x*x;
-  @}
-@}
-@end example
-
-The @file{.decls} file might look like the following.
-@example
-DECLARE
-Example.squar:::ENTER
-x
-int
-int
-1
-b
-boolean
-int
-2
-
-DECLARE
-Example.squar:::EXIT
-x
-int
-int
-1
-b
-boolean
-int
-2
-return
-int
-int
-1
-@end example
-
-The instrumented @file{.java} file might look like the following.
-@example
-class Example @{
-  static @{
-    daikon.Runtime.setDtraceMaybe("daikon-output/StackAr.dtrace");
-  @}
-
-  // Return either the square of x or the square of (x+1).
-  int squar(int x, boolean b) @{
-    synchronized (daikon.Runtime.dtrace) @{
-      daikon.Runtime.dtrace.println();
-      daikon.Runtime.dtrace.println("Example.squar:::ENTER");
-      daikon.Runtime.dtrace.println("x");
-      daikon.Runtime.dtrace.println(x);
-      daikon.Runtime.dtrace.println(1);  // modified bit
-      daikon.Runtime.dtrace.println("b");
-      daikon.Runtime.dtrace.println(b ? 1 : 0);
-      daikon.Runtime.dtrace.println(1);  // modified bit
-    @}
-
-    if (b)
-      x++;
-
-    int daikon_return_value = x*x;
-    synchronized (daikon.Runtime.dtrace) @{
-      daikon.Runtime.dtrace.println();
-      daikon.Runtime.dtrace.println("Example.squar:::EXIT");
-      daikon.Runtime.dtrace.println("x");
-      daikon.Runtime.dtrace.println(x);
-      daikon.Runtime.dtrace.println(1);  // modified bit
-      daikon.Runtime.dtrace.println("b");
-      daikon.Runtime.dtrace.println(b ? 1 : 0);
-      daikon.Runtime.dtrace.println(1);  // modified bit
-      daikon.Runtime.dtrace.println("return");
-      daikon.Runtime.dtrace.println(daikon_return_value);
-      daikon.Runtime.dtrace.println(1);  // modified bit
-    @}
-
-    return daikon_return_value;
-  @}
-@}
-@end example
-
-
-
-@node New suppressors,  , New front ends, Extending Daikon
-@section New suppressors
-
-As mentioned in @ref{Daikon technologies} one way to make Daikon more
-efficient, and to reduce clutter in output to the user, is to reduce
-the number of redundant invariants of various kinds.  This section
-describes how to add a new suppressor relation, such that if invariant
-A implies B, B is not checked as long as A holds, saving time.
-Suppression implications use some terminology.  A @emph{suppressor} is
-one of a set of invariants that imply and suppress a
-@emph{suppressee}.  A @emph{suppression factory} is the Java class
-that handles the finding of suppressors for a suppressee.  There is
-one suppression factory for each kind of suppression relation (i.e.,
-each unique tuple of suppressors and suppressees).  A
-@emph{suppression link} is what a suppression factory produces and
-serves as the data structure to track the suppression relation.  When
-writing new suppressors, the programmer only needs to write new
-suppression factories and install them properly.  The Daikon system
-manages the suppression link objects.
-
-The steps to do this are as follows:
-
-@enumerate
-@item
-In the daikon.inv package, find the invariant type that is to be
-suppressed by a set of suppressor invariants.  Suppression factories
-are connected, in code and in operation, to the invariants they
-suppress.
-
-@item
-Add an inner class to the suppressor invariant that inherits from
-daikon.suppress.SuppressionFactory.  It must support the method:
-
-  @samp{public abstract SuppressionLink generateSuppressionLink (Invariant inv)}
-
-where "inv" is the suppressee.  During inferencing, Daikon will pass
-potential suppressees to the generateSuppressionLink method and the
-method will tell Daikon whether suppression can occur.
-
-@item
-Create logic to support the searching of the desired suppressors.  The
-factory itself may not search for suppressors, but must use
-@emph{suppression templates}, which tell Daikon what kinds of
-invariants to look for.  The suppression factory should create a
-template with the right specifications filled in, and then pass the
-template to the method:
-
-  @samp{public boolean fillSuppressionTemplate (SuppressionTemplate supTemplate)}
-
-in daikon.PptTopLevel.  If a template fill is successful, the template
-will contain the suppressors, and the method will return true.  The
-generateSuppressionLink method should return @samp{null} if the
-template fill was unsuccessful.
-
-@item
-Install the suppression factory by adding a single static instance of
-it to the list of factories returned by the @samp{getSuppressionFactories}
-method of the suppressor.
-
-@end enumerate
-
-More detailed instructions can be found in the Javadoc of the
-@samp{daikon.suppress} package.
-
-@node    Troubleshooting, Details, Extending Daikon, Top
+@node    Troubleshooting, Details, Tools, Top
 @chapter Troubleshooting
 
 @cindex troubleshooting
@@ -6628,8 +6085,7 @@ algorithms but required storing all the data in memory at once, which
 was prohibitive, particularly since data trace files may be gigabytes
 in size.  Daikon 3 also introduces the idea of a @emph{dataflow
 hierarchy}, a way to relate and connect program points based on their
-variables, as explained in @ref{Daikon technologies}.
-
+variables.
 
 @node    License, Credits, History, Details
 @section License
