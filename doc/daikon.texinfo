@@ -221,6 +221,7 @@ Pointer type disambiguation
 
 Instrumentation scope
 
+* Memory tracking details::     
 * Memory tracking in libraries::  
 
 dfec requirements
@@ -3285,15 +3286,47 @@ instrumented code that produces @file{.dtrace} file output (and also
 tracks memory), partially instrumented code that only tracks memory,
 and entirely uninstrumented code.  The default level of
 instrumentation is full instrumentation.  The @option{-l} command-line
-argument to @command{dfec} specifies partial instrumentation for a
+argument to @command{dfec} (@pxref{dfec command-line arguments})
+specifies partial instrumentation for a
 file.  Uninstrumented code is only included by being linked from a
 library that was not processed with dfec --- for instance, system
 libraries.  You should not intentionally leave part of your program
 entirely uninstrumented, because dfec's memory tracking is important
 both for improved output and for correctness.
-
 If you must link your program against uninstrumented libraries, you need
-to understand a little bit about dfec's operation.  Instrumented
+to make some small changes to your program.
+
+If there are calls from instrumented code to uninstrumented code, then
+memory tracking will not occur in the uninstrumented code.  To correct
+this problem, see @ref{Memory tracking in libraries}.
+
+If there are calls from uninstrumented code to instrumented code, your
+program will not link, because the instrumented code is C++ and the
+uninstrumented code is C@.  If certain functions are called from
+instrumented code (an example is @code{usage} in @file{wc.c}), then
+you can place
+@example
+#ifdef DAIKON_RUNTIME_H
+extern "C"
+#endif
+@end example
+in front of the function definition (and declaration).
+This will not affect calls from within the file, nor will it affect
+compilation of the program, but it will enable dfec to process it.
+
+
+@menu
+* Memory tracking details::     
+* Memory tracking in libraries::  
+@end menu
+
+@node    Memory tracking details, Memory tracking in libraries, Instrumentation scope, Instrumentation scope
+@subsubsection Memory tracking details
+
+Here are some details about dfec's operation, to help you understand
+linker errors or other problems.
+
+Instrumented
 programs perform memory tracking, which checks and records the
 program's memory accesses.  This has many benefits.  It tracks whether
 pointers are valid, so Daikon does not attempt to dereference
@@ -3307,25 +3340,9 @@ Daikon errors).
 Memory tracking is implemented by converting all pointers and arrays
 in the program to ``smart pointers'' and ``smart arrays''.
 Additionally, dfec outputs C++, whereas the original user program is
-written in C@.  Thus, making uninstrumented code interact correctly
-with instrumented code takes some care.
+written in C@.
 
-If there are calls from instrumented code to uninstrumented code, then
-memory tracking will not occur in the uninstrumented code.  To correct
-this problem, see @ref{Memory tracking in libraries}.
-
-If there are calls from uninstrumented code to instrumented code, your
-program will not link, because the instrumented code is C++ and the
-uninstrumented code is C@.  If certain functions are called only from
-instrumented code (an example is @code{usage} in @file{wc.c}), then
-you can place @samp{extern "C"} in front of the function definition.
-
-
-@menu
-* Memory tracking in libraries::  
-@end menu
-
-@node    Memory tracking in libraries,  , Instrumentation scope, Instrumentation scope
+@node    Memory tracking in libraries,  , Memory tracking details, Instrumentation scope
 @subsubsection Memory tracking in libraries
 
 The C/C++ front end keeps track of the maximum read or written element
