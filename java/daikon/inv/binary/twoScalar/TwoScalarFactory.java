@@ -16,7 +16,7 @@ public final class TwoScalarFactory {
    *
    **/
   public static final Category debug = Category.getInstance("daikon.inv.binary.twoScalar.TwoScalarFactory");
-  
+
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
@@ -40,12 +40,15 @@ public final class TwoScalarFactory {
       return null;
     }
 
+    // In V3, we are more ambitious and will do inference over static
+    // constants.  In any case, this test belongs in PptTopLevel anyway.
+    // if (var1.isStaticConstant() || var2.isStaticConstant()) {
+    //   return null;
+    // }
+
     boolean integral = var1.file_rep_type.isIntegral() && var2.file_rep_type.isIntegral();
 
     Vector result = new Vector();
-    if (var1.isStaticConstant() || var2.isStaticConstant()) {
-      return null;
-    }
     result.add(IntEqual.instantiate(ppt));
     result.add(IntNonEqual.instantiate(ppt));
     result.add(IntLessThan.instantiate(ppt));

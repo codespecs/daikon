@@ -933,8 +933,9 @@ public class PptTopLevel
     Vector unary_views = new Vector(vi_index_limit-vi_index_min);
     for (int i=vi_index_min; i<vi_index_limit; i++) {
       VarInfo vi = var_infos[i];
-      if (vi.isStaticConstant())
-        continue;
+      // Eventually, add back in this test as "if constant and no
+      // comparability info exists" then continue.
+      // if (vi.isStaticConstant()) continue;
       PptSlice1 slice1 = new PptSlice1(this, vi);
       if (slice1.isControlled()) {
 	// let invariant flow from controlling slice
@@ -954,14 +955,16 @@ public class PptTopLevel
     Vector binary_views = new Vector();
     for (int i1=0; i1<vi_index_limit; i1++) {
       VarInfo var1 = var_infos[i1];
-      if (var1.isStaticConstant())
-        continue;
+      // Eventually, add back in this test as "if constant and no
+      // comparability info exists" then continue.
+      // if (var1.isStaticConstant()) continue;
       boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
       int i2_min = (target1 ? i1+1 : Math.max(i1+1, vi_index_min));
       for (int i2=i2_min; i2<vi_index_limit; i2++) {
 	VarInfo var2 = var_infos[i2];
-	if (var2.isStaticConstant())
-	  continue;
+	// Eventually, add back in this test as "if constant and no
+	// comparability info exists" then continue.
+	// if (var2.isStaticConstant()) continue;
         PptSlice2 slice2 = new PptSlice2(this, var1, var2);
 	if (slice2.isControlled()) {
 	  // let invariant flow from controlling slice
@@ -985,8 +988,9 @@ public class PptTopLevel
       Vector ternary_views = new Vector();
       for (int i1=0; i1<vi_index_limit; i1++) {
         VarInfo var1 = var_infos[i1];
-        if (var1.isStaticConstant())
-          continue;
+	// Eventually, add back in this test as "if constant and no
+	// comparability info exists" then continue.
+        // if (var1.isStaticConstant()) continue;
 	// For now, only ternary invariants not involving any arrays
 	if (var1.rep_type.isArray())
 	  continue;
@@ -994,8 +998,9 @@ public class PptTopLevel
         boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
         for (int i2=i1+1; i2<vi_index_limit; i2++) {
           VarInfo var2 = var_infos[i2];
-          if (var2.isStaticConstant())
-            continue;
+	  // Eventually, add back in this test as "if constant and no
+	  // comparability info exists" then continue.
+          // if (var2.isStaticConstant()) continue;
 	  // For now, only ternary invariants not involving any arrays
 	  if (var2.rep_type.isArray())
 	    continue;
@@ -1008,8 +1013,9 @@ public class PptTopLevel
                           || ((i3 >= vi_index_min) && (i3 < vi_index_limit)));
             Assert.assert((i1 < i2) && (i2 < i3));
             VarInfo var3 = var_infos[i3];
-            if (var3.isStaticConstant())
-              continue;
+	    // Eventually, add back in this test as "if constant and no
+	    // comparability info exists" then continue.
+            // if (var3.isStaticConstant()) continue;
             // For now, only ternary invariants not involving any arrays
             if (var3.rep_type.isArray())
               continue;
@@ -1053,15 +1059,17 @@ public class PptTopLevel
     switch (vis.length) {
     case 1: {
       VarInfo vi = vis[0];
-      Assert.assert(! vi.isStaticConstant());
+      // We may do inference over static constants
+      // Assert.assert(! vi.isStaticConstant());
       result = new PptSlice1(this, vi);
       break;
     }
     case 2: {
       VarInfo v1 = vis[0];
       VarInfo v2 = vis[1];
-      Assert.assert(! v1.isStaticConstant());
-      Assert.assert(! v2.isStaticConstant());
+      // We may do inference over static constants
+      // Assert.assert(! v1.isStaticConstant());
+      // Assert.assert(! v2.isStaticConstant());
       VarInfo tmp;
       if (v1.varinfo_index > v2.varinfo_index) { tmp = v2; v2 = v1; v1 = tmp; }
       result = new PptSlice2(this, v1, v2);
@@ -1071,9 +1079,10 @@ public class PptTopLevel
       VarInfo v1 = vis[0];
       VarInfo v2 = vis[1];
       VarInfo v3 = vis[2];
-      Assert.assert(! v1.isStaticConstant());
-      Assert.assert(! v2.isStaticConstant());
-      Assert.assert(! v3.isStaticConstant());
+      // We may do inference over static constants
+      // Assert.assert(! v1.isStaticConstant());
+      // Assert.assert(! v2.isStaticConstant());
+      // Assert.assert(! v3.isStaticConstant());
       VarInfo tmp;
       if (v1.varinfo_index > v2.varinfo_index) { tmp = v2; v2 = v1; v1 = tmp; }
       if (v2.varinfo_index > v3.varinfo_index) { tmp = v3; v3 = v2; v2 = tmp; }
