@@ -1,0 +1,163 @@
+#if 0
+// This file defines the FunctionBinary class for the specified FUNCTION
+// and PERMUTATION.  FUNCTION is the name of the inner class that defines
+// the function (eg, LogicalOr).  PERMUTATION defines the order of the
+// arguments.  It must be one of xyz, yzx, zxy, xzy, yxz, zyx).  Both
+// are #defines that must be defined before including this file.
+// This file is used by FunctionBinary.java.jpp
+#endif
+
+#if (PERMUTATION == PERM_XYZ)
+  #define PERM_NAME _xyz
+  #define result x
+  #define arg1   y
+  #define arg2   z
+#elif (PERMUTATION == PERM_YXZ)
+  #define PERM_NAME _yxz
+  #define result y
+  #define arg1   x
+  #define arg2   z
+#elif (PERMUTATION == PERM_ZXY)
+  #define PERM_NAME _zxy
+  #define result z
+  #define arg1   x
+  #define arg2   y
+#elif (PERMUTATION == PERM_XZY)
+  #define PERM_NAME _xzy
+  #define result x
+  #define arg1   z
+  #define arg2   y
+#elif (PERMUTATION == PERM_YZX)
+  #define PERM_NAME _yzx
+  #define result y
+  #define arg1   z
+  #define arg2   x
+#elif (PERMUTATION == PERM_ZYX)
+  #define PERM_NAME _zyx
+  #define result z
+  #define arg1   y
+  #define arg2   x
+#elif
+  #error "PERMUTATION not properly defined"
+#endif
+
+/**
+ * Represents a FUNCTION invariant over three PRIMITIVE scalars using
+ * permutation result = FUNCTION (arg1, arg2)
+ */
+public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
+
+  #ifdef ARG1_BOUND
+    // arg1 must be between arg1_bound[0] and arg1_bound[1] inclusive
+    static int[] arg1_bound = ARG1_BOUND;
+  #endif
+
+  #ifdef ARG2_BOUND
+    // arg2 must be between arg2_bound[0] and arg2_bound[1] inclusive
+    static int[] arg2_bound = ARG2_BOUND;
+  #endif
+
+  public CLASSNAME instantiate (PptSlice slice) {
+    if (!dkconfig_enabled)
+      return (null);
+    return (new CNAME(FUNCTION,PERM_NAME) (slice));
+  }
+
+  private CNAME(FUNCTION,PERM_NAME) (PptSlice slice) {
+    super (slice);
+  }
+
+  public CNAME(FUNCTION,PERM_NAME) () {
+    super (null);
+  }
+
+  private static String[] method_name = new String[] METHOD_NAME;
+
+  public String[] get_method_name () {
+    return (method_name);
+  }
+
+  private static int function_id = -1;
+
+  public int get_function_id() {
+    return (function_id);
+  }
+
+  public void set_function_id (int function_id) {
+    this.function_id = function_id;
+  }
+
+  private static int var_order = PERMUTATION;
+
+  public int get_var_order() {
+    return var_order;
+  }
+
+  public boolean is_symmetric() {
+    #ifdef SYMMETRIC
+      return (true);
+    #else
+      return (false);
+    #endif
+  }
+
+  public PRIMITIVE func (PRIMITIVE arg1, PRIMITIVE arg2) {
+    #ifdef ARG1_BOUND
+      if ((arg1 < arg1_bound[0]) || (arg1 > arg1_bound[1]))
+        throw new ArithmeticException ("arg1 (" + arg1 + ") out of range "
+                                       + arg1_bound[0] + ".." + arg1_bound[1]);
+    #endif
+
+    #ifdef ARG2_BOUND
+      if ((arg2 < arg2_bound[0]) || (arg2 > arg2_bound[1]))
+        throw new ArithmeticException ("arg2 (" + arg2 + ") out of range "
+                                       + arg2_bound[0] + ".." + arg2_bound[1]);
+    #endif
+
+    #ifdef BOOLEAN_ARGS
+      if ((arg1 < 0) || (arg1 > 1))
+        throw new ArithmeticException ("arg1 (" + arg1 + ") is not boolean ");
+      if ((arg2 < 0) || (arg2 > 1))
+        throw new ArithmeticException ("arg2 (" + arg2 + ") is not boolean ");
+    #endif
+
+    return (FUNC (arg1, arg2));
+  }
+
+  public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y,
+                                      PRIMITIVE z, int count) {
+    return (add_ordered (result, arg1, arg2, count));
+  }
+
+  public boolean is ## FUNCTION() {
+    return (true);
+  }
+
+  // Create a suppression factory for functionBinary
+  #if defined(EQUALITY_MIN_MAX_SUPPRESS)
+    #define FACTORY_INVCLASS  CLASSNAME
+    #define FACTORY_CNT       3
+    #define FACTORY1          equality_suppress_repeated_arg
+    #define FACTORY1_INV_CNT  1
+    #define FACTORY1_VAR_INFO {new VarInfo[2]}
+    #define FACTORY2          equality_suppress_distinct_args
+    #define FACTORY2_INV_CNT  2
+    #define FACTORY2_VAR_INFO {new VarInfo[2], new VarInfo[2]}
+    #define FACTORY3          equality_suppress_min_max
+    #define FACTORY3_INV_CNT  2
+    #define FACTORY3_VAR_INFO {new VarInfo[2], new VarInfo[2]}
+    #include "daikon/inv/suppressionFactory.java.jpp"
+  #elif defined(EQUALITY_SUPPRESS)
+    #define FACTORY_INVCLASS  CLASSNAME
+    #define FACTORY_CNT       2
+    #define FACTORY1          equality_suppress_repeated_arg
+    #define FACTORY1_INV_CNT  1
+    #define FACTORY1_VAR_INFO {new VarInfo[2]}
+    #define FACTORY2          equality_suppress_distinct_args
+    #define FACTORY2_INV_CNT  2
+    #define FACTORY2_VAR_INFO {new VarInfo[2], new VarInfo[2]}
+    #undef FACTORY3
+    #include "daikon/inv/suppressionFactory.java.jpp"
+  #endif
+
+}
