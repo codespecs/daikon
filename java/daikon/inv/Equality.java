@@ -31,6 +31,11 @@ public final class Equality extends Invariant {
     }
   }
 
+  /** @return the canonical VarInfo of this */
+  public VarInfo leader() {
+    return vars[0];
+  }
+
   public boolean hasNonCanonicalVariable() {
     // In fact, we do have non-canonical variables, but it's our
     // little secret.
@@ -86,6 +91,33 @@ public final class Equality extends Invariant {
     return result.toString();
   }
 
+  // This probably belongs in ProglangType proper (?)
+  public boolean is_reference() {
+    VarInfo foo = vars[0];
+
+    // If the program type has a higher dimension than the rep type,
+    // we are taking a hash or something.
+    if (foo.type.pseudoDimensions() > foo.rep_type.pseudoDimensions()) {
+      return true;
+    }
+
+    // The dimensions are the same.  If the rep type is integral but
+    // the program type isn't primitive, we have a hash, too.
+    if (foo.rep_type.baseIsIntegral() && (!foo.type.baseIsPrimitive())) {
+      return true;
+    }
+
+    return false;
+  }
+
+  private String format_elt(String simname) {
+    String result = simname;
+    if (is_reference()) {
+      result = "(hash " + result + ")";
+    }
+    return result;
+  }
+
   public String format_simplify() {
     StringBuffer result = new StringBuffer("(AND");
     if (vars[0].rep_type.isArray()) {
@@ -93,14 +125,18 @@ public final class Equality extends Invariant {
 	String[] form =
 	  VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
 	    { vars[0].name, vars[i].name }, true); // elementwise
-	result.append(" " + form[0] + "(EQ " + form[1] + " " + form[2] + ")" + form[3]);
+	String a = format_elt(form[1]);
+	String b = format_elt(form[2]);
+	result.append(" " + form[0] + "(EQ " + a + " " + b + ")" + form[3]);
       }
     } else {
       for (int i=1; i < vars.length; i++) {
+	String a = format_elt(vars[0].name.simplify_name());
+	String b = format_elt(vars[i].name.simplify_name());
 	result.append(" (EQ ");
-	result.append(vars[0].name.simplify_name());
+	result.append(a);
 	result.append(" ");
-	result.append(vars[i].name.simplify_name());
+	result.append(b);
 	result.append(")");
       }
     }
@@ -113,15 +149,3 @@ public final class Equality extends Invariant {
     throw new UnsupportedOperationException( "Equality.isSameFormula(): this method should not be called" );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
