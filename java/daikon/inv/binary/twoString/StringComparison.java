@@ -156,26 +156,28 @@ public final class StringComparison
     if (format == OutputFormat.JAVA
         || format == OutputFormat.JML
         || format == OutputFormat.DBCJAVA) {
-      name1 = var1().name.JMLElementCorrector().name_using(format);
-      name2 = var2().name.JMLElementCorrector().name_using(format);
+      name1 = var1().name.JMLElementCorrector().name_using(format, var1());
+      name2 = var2().name.JMLElementCorrector().name_using(format, var2());
       if (comparator.equals("==")) {
         return name1 + ".equals(" + name2 + ")";
       } else {
         return name1 + ".compareTo(" + name2 + ") " + comparator + " 0";
       }
+    } else if (format == OutputFormat.DBCJAVA) {
+	return format_unimplemented(format);
     } else if (format == OutputFormat.SIMPLIFY) {
       comparator = (comparator.equals("==") ? "EQ" : comparator);
       if (comparator.equals("?cmp?"))
         return format_too_few_samples(format, null);
-      name1 = var1().name.name_using(format);
-      name2 = var2().name.name_using(format);
+      name1 = var1().name.name_using(format, var1());
+      name2 = var2().name.name_using(format, var2());
       return "(" + comparator + " " +  name1 + " " + name2 + ")";
     } else {
-      name1 = var1().name.name_using(format);
-      name2 = var2().name.name_using(format);
+      name1 = var1().name.name_using(format, var1());
+      name2 = var2().name.name_using(format, var2());
       return name1 + " " + comparator + " " + name2;
     }
-    // return format_unimplemented(format);
+  //return format_unimplemented(format);
   }
 
   public InvariantStatus add_modified(String v1, String v2, int count) {
