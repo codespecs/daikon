@@ -5958,26 +5958,11 @@ You may also wish to take advantage of the Daikon mailing lists
 @node    Known bugs, Further reading, Reporting bugs, Troubleshooting
 @section Known bugs
 
-The following problems are already known.  (You may report them again,
-to encourage us to release the fix faster, if you like.)
+@c [The following problems are already known.  (You may report them again,]
+@c [to encourage us to release the fix faster, if you like.)]
 
-@c [There are no outstanding user-reported problems at this time.]
+There are no outstanding user-reported problems at this time.
 
-@itemize @bullet
-@c @item C/C++ front end:
-@c @item Daikon:
-@item Context GUI:
-@c 7/18/2002
-@cindex question marks, in Context GUI
-@cindex Context GUI, question marks in
-The context GUI sometimes prints invariants containing question marks,
-such as ``y == ? * x + ?''.  These invariants have not yet received
-sufficient values and should not be displayed.
-For instance, suppose we would like to report y=ax+b
-for variables x and y.  We need to see at least two (x,y) pairs before we
-know what a and b should be.  If we haven't seen two (x,y) pairs, then a
-and b are unknown and are printed as question marks.
-@end itemize
 
 @node    Further reading,  , Known bugs, Troubleshooting
 @section Further reading
