@@ -232,7 +232,8 @@ Conditional invariants and implications
 
 Splitter info file
 
-* Replacement::                 
+* Program point sections::      
+* Replacement sections::        
 
 Example splitter info file
 
@@ -242,7 +243,6 @@ Example splitter info file
 Tools
 
 * MergeESC::                    
-* CreateSpinfo::                
 
 Extending Daikon
 
@@ -3425,7 +3425,12 @@ by blank lines.  There are two types of sections:  program point
 sections and replacement sections.
 @xref{Example splitter info file}, for an example splitter info file.
 
-@node    Program point sections,  , Splitter info file, Splitter info file
+@menu
+* Program point sections::      
+* Replacement sections::        
+@end menu
+
+@node    Program point sections, Replacement sections, Splitter info file, Splitter info file
 @subsubsection Program point sections
 
 Program point sections have a line specifying a program point name
@@ -3454,7 +3459,7 @@ code fails to compile (but Daikon proceeds without it) if a variable
 name in a condition is not found at the matching program point.
 
 
-@node    Replacement sections,  , Splitter info file, Splitter info file
+@node    Replacement sections,  , Program point sections, Splitter info file
 @subsubsection Replacement sections
 
 Ordinarily, a splitting condition may not invoke user-defined methods,
@@ -3604,10 +3609,9 @@ distribution and are not described elsewhere in the manual.
 
 @menu
 * MergeESC::                    
-* CreateSpinfo::                
 @end menu
 
-@node    MergeESC, CreateSpinfo, Tools, Tools
+@node    MergeESC,  , Tools, Tools
 @section MergeESC
 
 @cindex MergeESC tool
@@ -3807,13 +3811,15 @@ to @samp{SingleScalarFactory.instantiate}.
 
 @cindex output format, defining new
 
-Daikon can print invariants in three formats:  its native format, ESC
+Daikon can print invariants in five formats:  its native format, Java
+format, IOA format (for use with the IOA programming language), ESC
 format (which is a subset of the JML specification language), and
-Simplify format.
+Simplify format (for use by the Simplify theorem-prover).
 
 To support a new output format, you need to do two things:
 @itemize @bullet
 @item
+(This description will change in Daikon version 3.)
 Add, to every subclass of @samp{Invariant}, a
 @samp{format_@var{newtype}()} method.  Each subclass of Invariant
 already has three such methods --- @samp{format()}, @samp{format_esc()},
@@ -3829,11 +3835,18 @@ method, near the calls to the other formatting methods.
 
 @cindex front end, writing
 
+A front end for Daikon produces files in Daikon's input format ---
+@file{.decls} files and @file{.dtrace} files --- enabling Daikon to
+operate on data that would otherwise be inaccessible to it.
+(Typically, Daikon front ends arrange to obtain information from
+program executions, though front ends have been also been built for
+stock data, weather forecasts, and truck weight data, among others.)
+
 A front end for Daikon takes as input a target program to be analyzed.
 The front end produces two outputs:  a @file{.decls} file and an
 instrumented program.  Executing the instrumented program produces a
 @file{.dtrace} file.
-For more information about these files, @xref{File formats}.
+For more information about these files, see @ref{File formats}.
 
 Conceptually, instrumentation is very simple.  For instance, suppose we
 wish to instrument file @file{Example.java}.
@@ -3931,11 +3944,6 @@ class Example @{
 This chapter gives solutions for certain problems you might have with
 Daikon; it also tells you how to report bugs in a useful manner.
 
-You may find the debugging flags @option{--debug} and @option{--dbg
-@var{category}} useful if you wish to track down bugs or better
-understand Daikon's operation; @xref{Command line options}.
-@xref{Configuration options}, for another way to adjust Daikon's output.
-
 
 @menu
 * Installation problems::       
@@ -4017,7 +4025,9 @@ MyProg.java:0:0:0:0: Error: Could not find package named:
 @end example
 @noindent
 then you need to add @file{rt.jar} to your
-CLASSPATH; see @ref{Installing dfej}.
+CLASSPATH.  This should be automatic, if you are using the
+@file{daikon.bashrc} or @file{daikon.cshrc} file and have set the
+JDKDIR environment variable correctly.  Also see @ref{Installing dfej}.
 
 
 If you get a warning like
@@ -4029,19 +4039,6 @@ then you have set your CLASSPATH incorrectly:  it names a nonexistent
 file or a file that is not a @file{.jar} Java archive.  You should adjust
 your CLASSPATH to remove the offending file.  This warning has no effect
 on the operation of dfej, however.
-
-
-dfej does not handle anonymous classes like that created by the expression
-@example
-  new ItemListener() @{
-      public void itemStateChanged( ItemEvent evt ) @{
-         ...
-      @}
-  @}
-@end example
-@noindent
-You may be able to work around this by running dfej on other files of
-your application, but not those with anonymous classes.
 
 
 @menu
@@ -4085,6 +4082,10 @@ to handle JDK 1.2 libraries.
 @node    Daikon problems, Other problems, dfej problems, Troubleshooting
 @section Problems running Daikon
 
+You may find the debugging flags @option{--debug} and @option{--dbg
+@var{category}} useful if you wish to track down bugs or better
+understand Daikon's operation; @xref{Command line options}.
+@xref{Configuration options}, for another way to adjust Daikon's output.
 
 
 @menu
@@ -4141,10 +4142,10 @@ file.  In addition to the solutions discussed in @ref{Large dtrace
 files}, you can try increasing the amount of memory available to Java
 with the @option{-mx} argument to @command{java}.  (This flag is
 JVM-specific; see your JVM documentation for details.)  The default is
-only 1 megabyte; to permit use of up to 128 megabytes, you would run
+only 1 megabyte; to permit use of up to 256 megabytes, you would run
 Java like so:
 @example
-        java -mx128m ...
+        java -mx256m ...
 @end example
 
 Another possible problem is the creation of too many derived variables.
@@ -4152,7 +4153,8 @@ If you supply the @option{--output_num_samples} argument to Daikon
 (@pxref{Command line options}), then it will list all
 variables at each program point.  If some of these are of no interest,
 you may wish to suppress their creation.  (This manual does not
-presently tell you how to do that.)
+presently tell you how to do that, but you can see the source code or
+ask an expert.)
 
 Any output generated before the out-of-memory error is perfectly valid.
 
@@ -4189,8 +4191,8 @@ orig(this.theArray[0..this.topOfStack])
 @end example
 @noindent
 This indicates that a particular invariant (shown on the last two lines
-above) cannot be formatted using the current formatting.  For instance,
-the subsequent invariant can be formatted using Daikon's default
+above) cannot be formatted using the current formatting.  In this example,
+the invariant can be formatted using Daikon's default
 formatting (which is how it is shown above), but (as of April 2002)
 Daikon cannot output it in ESC format, so Daikon prints the above
 message instead.  The message also shows exactly what Java method needs
@@ -4229,17 +4231,40 @@ possibly partial, record from the file:
 @end example
 @noindent
 modifies @file{myfile.dtrace} in place to remove the last record.
+@item
+You can instrument fewer files.
+@itemize
+@item With dfej, only supply it the files you wish to instrument.
+@item With dfec, use the @option{-l} command on the command line
+immediately before any file you wish not to instrument.
+@end itemize
+
 @item 
-If you wish to instrument fewer methods, you can use the 
+You can instrument fewer methods.
+@itemize
+@item With dfej, use the 
 @example
   -daikon_omit=@var{string}
 @end example
 @noindent
-argument to dfej.  (For a list of dfej's options, see @ref{dfej
+argument.  (For a list of dfej's options, see @ref{dfej
 options}.)  Dfej will not produce data trace output for classes or
 procedures that match @var{string}.  Running the instrumented program
 will result in a smaller @file{.dtrace} file that contains fewer
 records.
+@item With dfec, you would need to split the single file into two
+files, then suppress instrumentation of one of them with the
+@option{-l} flag.
+@end itemize
+
+@item
+You can reduce the number of variables that are output by reducing the
+class/structure instrumentation depth.
+@itemize
+@item With dfej, use the @option{-daikon_depth=@var{N}} option.
+@item With dfec, use the @option{--struct-depth=@var{N}} option.
+@end itemize
+
 @item 
 You can pare down an existing @file{.dtrace} file using the
 @command{invariants/scripts/trace-purge-fns.pl} and
@@ -4249,6 +4274,7 @@ their documentation (at the top of the files) for details.  Removing
 program points obviously prevents Daikon from considering them;
 removing variables can eliminate certain large uses of memory or keep
 Daikon from doing uninteresting comparisons.
+
 @item 
 To make Daikon ignore some program points, use its
 @example
@@ -4308,7 +4334,8 @@ hesitate to ask for help or report difficulties.
 Your bug report will be most helpful if you include:
 @itemize @bullet
 @item
-the version of Daikon, which appears in the file @file{daikon/README}.
+the version of Daikon, which appears in the file @file{daikon/README}
+and is also printend when you run Daikon.
 If you are not using the most recent version, download a newer version
 from @uref{http://pag.lcs.mit.edu/daikon/} to see whether your problem
 has already been corrected.
@@ -4316,8 +4343,8 @@ has already been corrected.
 a description of exactly what you did, exactly what happened, and what
 you expected to happen instead.
 For instance, a transcript of your commands and the system's output
-may provide this information.  (A transcript is much more useful than a
-vague description.)
+may provide this information.  (A transcript is @strong{much} more
+useful than a vague description.)
 @item
 input files that permit the problem to be replicated.  The
 most important thing is the original, uninstrumented source files.
@@ -4342,25 +4369,20 @@ much more likely to be corrected.
 The following problems are already known.  (You may report them again,
 to encourage us to release the fix faster, if you like.)
 @itemize @bullet
-@item Java front end:
-@itemize @bullet
-@item
-@cindex inner classes
-Inner classes:  Daikon inserts static members; this is not legal
-in inner classes.  The members should be non-static or should be
-inserted into the parent class.
-@item
-@cindex floating-point values
-Floating-point values are often ignored; the infrastructure is
-there, but I haven't gotten around to writing code to test for
-specific invariants.
-@end itemize
 @item C/C++ front end:
 @itemize @bullet
 @item
 @cindex shadowed variables in C
 Produces bad @file{.dtrace} and @file{.decls} files when a local
 variable shadows a global one.
+@end itemize
+@item Daikon:
+@itemize @bullet
+@item
+@cindex floating-point values
+Floating-point values are often ignored; the infrastructure is
+there, but I haven't gotten around to writing code to test for
+specific invariants.
 @end itemize
 @end itemize
 
@@ -4425,6 +4447,9 @@ points for object invariants as well as procedure entries and exits.
 Daikon 2 was a complete rewrite in the Java programming language and was
 the first version to contain a substantive manual.  Daikon 2 uses the
 same Java front end as did Daikon 1, though with certain enhancements.
+(Actually, there have been 5 Java front ends; the first two were
+binary rewriters; the next two were source code rewriters; and the
+last (experimental as of May 2002) one is a binary rewriter.)
 Its C/C++ front end is rewritten from scratch; it instruments only
 procedure entries and exits.  A front end also exists for the IOA
 programming language, but is not included in the Daikon distribution.
@@ -4443,8 +4468,8 @@ support, or any other guarantees regarding the software.  As a condition
 of use, you agree to promptly communicate any changes, improvements, or
 enhancements to the authors for inclusion in a future release under
 these same conditions.  If you do not agree to this license, please do
-not use or examine the software.  For other licensing terms, send mail
-to @email{daikon@@pag.lcs.mit.edu}.
+not use or examine the software.  Other licensing terms are available;
+send mail to @email{daikon@@pag.lcs.mit.edu}.
 
 If you use Daikon, please send mail to @email{daikon@@pag.lcs.mit.edu}, so that you can
 be informed of new versions, enhancements, and bug fixes.  We would also
