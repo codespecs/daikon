@@ -15,11 +15,11 @@ import java.util.*;
 // sequence, such as getting the element at that index or a subsequence up
 // to that index.
 
-public final class SequenceScalarIntersectionFactory  extends BinaryDerivationFactory {
+public final class SequenceScalarIntersectionFactory extends BinaryDerivationFactory {
 
   /** Debug tracer **/
   private static final Category debug =
-    Category.getInstance("daikon.derive.binary.SequenceScalarIntersectionFactory" );
+    Category.getInstance("daikon.derive.binary.SequenceScalarIntersectionFactory");
 
   public BinaryDerivation[] instantiate(VarInfo seq1, VarInfo seq2) {
 
@@ -27,8 +27,8 @@ public final class SequenceScalarIntersectionFactory  extends BinaryDerivationFa
       return null;
     }
 
-    if ((seq1.rep_type != ProglangType.INT_ARRAY )
-        || (seq2.rep_type != ProglangType.INT_ARRAY )) {
+    if ((seq1.rep_type != ProglangType.INT_ARRAY)
+        || (seq2.rep_type != ProglangType.INT_ARRAY)) {
       return null;
     }
 
@@ -60,6 +60,6 @@ public final class SequenceScalarIntersectionFactory  extends BinaryDerivationFa
     }
 
     return new BinaryDerivation[] {
-      new SequenceScalarIntersection (seq1, seq2) };
+      new SequenceScalarIntersection(seq1, seq2) };
   }
 }
