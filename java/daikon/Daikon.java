@@ -99,7 +99,7 @@ public final class Daikon {
   public static boolean no_text_output = false;
 
   // When true, show how much time each program point took.
-  // Has no effect unless no_text_output is "false".
+  // Has no effect unless no_text_output is true.
   public static boolean show_progress = false;
 
   /**
