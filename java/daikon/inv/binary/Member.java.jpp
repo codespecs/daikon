@@ -62,19 +62,11 @@ package daikon.inv.binary.SEQUENCESCALARPKG;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
-import daikon.inv.binary.twoScalar.*;
 import daikon.inv.binary.twoSequence.*;
-import daikon.inv.binary.twoScalar.IntLessThan;
-import daikon.inv.binary.twoScalar.IntGreaterThan;
-import daikon.inv.binary.twoScalar.IntLessEqual;
-import daikon.inv.binary.twoScalar.IntGreaterEqual;
-import daikon.derive.*;
 import daikon.derive.unary.*;
 import daikon.derive.binary.*;
 import daikon.derive.ternary.*;
 import daikon.suppress.*;
-import java.util.*;
 import utilMDE.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -757,6 +749,11 @@ public final class CLASSNAME
         debug.fine ("  Not from the same sequences");
         return null;
 
+      }
+      if (!(seqvar.derived instanceof SEQUENCESCALARSUBSEQUENCE)) {
+        // TODO: extend to handle SequenceScalarArbitrarySubsequence too
+        debug.fine ("  Unhandled subsequence derivation type");
+        return null;
       }
       SEQUENCESCALARSUBSEQUENCE ssss = (SEQUENCESCALARSUBSEQUENCE) seqvar.derived;
       VarInfo rightIndex = ssss.sclvar();
