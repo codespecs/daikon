@@ -141,8 +141,10 @@ public class PptTopLevel
    * Provided so that this Ppt can notify them when significant events
    * occur, such as receiving a new value, deriving variables, or
    * discarding data.
+   * Indexed by a Arrays.asList array list of Integers holding
+   * varinfo_index values
    **/
-  private HashMap/*[VarInfo[]->PptSlice]*/ views;
+  private Map/*[Integer[]->PptSlice]*/ views;
 
   // Temporarily have a separate collection for PptConditional views.
   // In the long run, I'm not sure whether the two collections will be
@@ -1413,18 +1415,28 @@ public class PptTopLevel
     }
   }
 
+  // Given an array of VarInfos, return a List representing that array,
+  // to be used as an index in the views hashtable.
+  private List sliceIndex(VarInfo[] vis) {
+    Integer[] a = new Integer[vis.length];
+    for (int i = 0; i < vis.length; i++) {
+      a[i] = new Integer(vis[i].varinfo_index);
+    }
+    return Arrays.asList(a);
+  }
+
   /**
    * Add a single slice to the views variable
    **/
   public void addSlice(PptSlice slice) {
-    views.put(Arrays.asList(slice.var_infos),slice);
+    views.put(sliceIndex(slice.var_infos),slice);
   }
 
   /**
    * Remove a slice from this PptTopLevel.
    **/
   public void removeSlice (PptSlice slice) {
-    Object o = views.remove(Arrays.asList(slice.var_infos));
+    Object o = views.remove(sliceIndex(slice.var_infos));
     Assert.assertTrue (o != null);
   }
 
@@ -1635,7 +1647,7 @@ public class PptTopLevel
     if (vis.length > 3) {
       throw new RuntimeException("Bad length " + vis.length);
     }
-    return (PptSlice)views.get(Arrays.asList(vis));
+    return (PptSlice)views.get(sliceIndex(vis));
   }
 
   public int indexOf(String varname) {
@@ -3930,6 +3942,24 @@ public class PptTopLevel
    * Check the rep invariants of this.  Throw an Error if not okay.
    **/
   public void repCheck() {
+    // Check that the hashing of 'views' is working correctly. This
+    // should really be beneath the abstraction layer of the hash
+    // table, but it isn't because Java can't enforce the immutability
+    // of the keys. In particular, we got into trouble in the past
+    // when the keys had pointers to VarInfos which themselves
+    // indirectly pointed back to us. If the serializer found the
+    // VarInfo before it found us, the VarInfo would be in-progress at
+    // the time the HashMap was serialized. At the point when When the
+    // PptTopLevel was unserialized, the VarInfo pointers in the keys
+    // would be null, causing them to have a different hashCode than
+    // they should. When the VarInfo was fully unserialized, the key's
+    // hashCode then changed to the correct one, messing up the
+    // indexing in a hard-to-debug way. -SMcC
+    Iterator view_keys_it = views.keySet().iterator();
+    while (view_keys_it.hasNext()) {
+      List this_key = (List)view_keys_it.next();
+      Assert.assertTrue(views.containsKey(this_key));
+    }
     // We could check a lot more than just that slices are okay.  For
     // example, we could ensure that flow graph is correct.
     for (Iterator i = viewsAsCollection().iterator(); i.hasNext(); ) {
