@@ -47,8 +47,6 @@ while ( scalar(@ARGV) > 0) {
     }
 }
 
-print "algo: $algorithm, dtrace $dtrace_file, decls $decls_file\n";
-
 #for hierarchical clustering, it doesn't really number what the number of 
 #variables is, because the difference table is used to do the clustering.
 
@@ -189,7 +187,7 @@ BEGIN {
 	}
 	
 	#find out what the Object variables are for this ppt
-	my @objarray = @{$pptname_to_objectvars{$pptname}};
+	my @objarray = $pptname_to_objectvars{$pptname};
 	
 	$varname = <DTRACE>;
 	while ($varname !~ /^$/) {
