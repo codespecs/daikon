@@ -3749,6 +3749,14 @@ and it sometimes has other problems.  If Ajax cannot be run, then a more
 primitive method of determining comparability is used instead.  Even if
 Ajax cannot be run, Daikon proceeds without error.
 
+@cindex Invalid class loading, warning
+
+Ajax may produce the warning message ``Invalid class loading ...'';
+you will notice this if environment variable DFEJ_VERBOSE is set.
+You may safely ignore this message if Ajax does not produce any
+further warnings or errors.  The message results from Ajax's inability
+to handle JDK 1.2 libraries.
+
 
 @c @node    Instrumented code problems, Daikon problems, dfej problems, Troubleshooting
 @c @section Problems running instrumented code
