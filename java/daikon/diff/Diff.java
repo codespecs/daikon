@@ -21,7 +21,9 @@ public final class Diff {
   public static final String lineSep = Global.lineSep;
 
   private static String usage =
-    "Usage: java daikon.diff.Diff [OPTION]... FILE1 FILE2" +
+    "Usage: java daikon.diff.Diff [OPTION]... FILE1 [FILE2]" +
+    lineSep +
+    "  If FILE2 is not specified, FILE1 is compared with an empty set" +
     lineSep +
     "  -h  Display this usage message" +
     lineSep +
@@ -100,15 +102,24 @@ public final class Diff {
     // The index of the first non-option argument -- the name of the
     // first file
     int firstFileIndex = g.getOptind();
-    if (args.length - firstFileIndex != 2) {
-        System.out.println(usage);
-        System.exit(1);
-    }
-    String filename1 = args[firstFileIndex];
-    String filename2 = args[firstFileIndex + 1];
+    int numFiles = args.length - firstFileIndex;
 
-    PptMap map1 = FileIO.read_invariant_file(filename1);
-    PptMap map2 = FileIO.read_invariant_file(filename2);
+    PptMap map1 = null;
+    PptMap map2 = null;
+
+    if (numFiles == 1) {
+      String filename1 = args[firstFileIndex];
+      map1 = FileIO.read_invariant_file(filename1);
+      map2 = new PptMap();
+    } else if (numFiles == 2) {
+      String filename1 = args[firstFileIndex];
+      String filename2 = args[firstFileIndex + 1];
+      map1 = FileIO.read_invariant_file(filename1);
+      map2 = FileIO.read_invariant_file(filename2);
+    } else {
+      System.out.println(usage);
+      System.exit(1);
+    }
 
     RootNode root = diffPptMap(map1, map2);
 
