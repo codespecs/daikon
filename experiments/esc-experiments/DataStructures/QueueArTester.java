@@ -100,4 +100,80 @@ public class QueueArTester
   {
     (new QueueArTester()).run();
   }
+
+  /*
+  public void testOriginal()
+  {
+    QueueAr q = new QueueAr( );
+	    
+    try
+      {
+	for( int i = 0; i < 10; i++ )
+	  q.enqueue( new MyInteger( i ) );
+
+	while( !q.isEmpty( ) )
+	  System.out.println( q.dequeue( ) );
+
+	int num = 68;
+	q.enqueue(new MyInteger(num++));
+	q.enqueue(new MyInteger(num++));
+	q.enqueue(new MyInteger(num++));
+	q.enqueue(new MyInteger(num++));
+	q.enqueue(new MyInteger(num++));
+	q.enqueue(new MyInteger(num++));
+	// 6
+	System.out.println( q.dequeue( ) );
+	System.out.println( q.dequeue( ) );
+	System.out.println( q.dequeue( ) );
+	System.out.println( q.dequeue( ) );
+	// 2
+	q.enqueue(new MyInteger(num++));
+	q.enqueue(new MyInteger(num++));
+	q.enqueue(new MyInteger(num++));
+	// 5
+	System.out.println( q.dequeue( ) );
+	System.out.println( q.dequeue( ) );
+	// 3
+	q.enqueue(new MyInteger(num++));
+	q.enqueue(new MyInteger(num++));
+	// 5
+	System.out.println( q.dequeue( ) );
+	System.out.println( q.dequeue( ) );
+	System.out.println( q.dequeue( ) );
+	// 2
+	q.enqueue(new MyInteger(num++));
+	q.enqueue(new MyInteger(num++));
+	q.enqueue(new MyInteger(num++));
+	q.enqueue(new MyInteger(num++));
+	q.enqueue(new MyInteger(num++));
+	q.enqueue(new MyInteger(num++));
+	q.enqueue(new MyInteger(num++));
+	q.enqueue(new MyInteger(num++));
+	// 10
+	System.out.println( q.dequeue( ) );
+	System.out.println( q.dequeue( ) );
+	System.out.println( q.dequeue( ) );
+	System.out.println( q.dequeue( ) );
+	System.out.println( q.dequeue( ) );
+	System.out.println( q.dequeue( ) );
+	System.out.println( q.dequeue( ) );
+	System.out.println( q.dequeue( ) );
+	System.out.println( q.dequeue( ) );
+	// 1
+	q.enqueue(new MyInteger(num++));
+	q.enqueue(new MyInteger(num++));
+	q.enqueue(new MyInteger(num++));
+	// 4
+	System.out.println( q.dequeue( ) );
+	System.out.println( q.dequeue( ) );
+	// 2
+	q.enqueue(new MyInteger(num++));
+	q.enqueue(new MyInteger(num++));
+	// 4
+	System.out.println( q.dequeue( ) );
+      }
+    catch( Overflow e ) { System.out.println( "Unexpected overflow" ); }
+  }    
+  */
+
 }
