@@ -158,12 +158,12 @@ Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength 
 
 ; Sorted ascending
 ; Prints incorrectly
-daikon.inv.unary.sequence.EltwiseIntComparison
+daikon.inv.unary.sequence.EltwiseIntLessThan
 int_array
 Goal (daikon): a[] sorted by <
-Goal (java): warning: method daikon.inv.unary.sequence.EltwiseIntComparison.format(OutputFormat:Java) needs to be implemented: a[] sorted by <
+Goal (java): warning: method daikon.inv.unary.sequence.EltwiseIntLessThan.format(OutputFormat:Java) needs to be implemented: a[] sorted by <
 Goal (esc): (\forall int i, j; (0 <= i && i <= a.length-1 && 0 <= j && j <= a.length-1) ==> ((i+1 == j) ==> (a[i] < a[j])))
-Goal (ioa): \A i : Int \A j : Int ((i \in a /\ j \in a /\ i+1 = j) => a[i] = a[j])
+Goal (ioa): \A i : Int \A j : Int ((i \in a /\ j \in a /\ Free[i]+1 = Free[j]) => a[i] = a[j])
 Goal (jml): (\forall int i, j; 0 <= i && i <= a.length-1 && 0 <= j && j <= a.length-1; ((i+1 == j) ==> (a[i] < a[j]))
 Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |a|) 1))) (IMPLIES (EQ (+ i 1) j) (< (select (select elems |a|) |i|) (select (select elems |a|) |j|)))))
 [1 2 3 5 7 8 9 100]
