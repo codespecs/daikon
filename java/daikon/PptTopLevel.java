@@ -1289,7 +1289,7 @@ public class PptTopLevel extends Ppt {
             // This is implied by the if-then sequence.
             // Assert.assert((var1.equal_to != null) && (var2.equal_to != null));
             if (!((Daikon.check_program_types
-                            && (! var1.type.comparable(var2.type)))
+                   && (! var1.type.comparable(var2.type)))
                   || (var1.equal_to == var2.equal_to))) {
               System.out.println("Variables not equal: " + var1.name + " (= " + var1.equal_to.name + "), " + var2.name + " (= " + var2.equal_to.name + ") [indices " + var1.varinfo_index + ", " + var1.equal_to.varinfo_index + ", " + var2.varinfo_index + ", " + var2.equal_to.varinfo_index + "] at " + name);
             }
