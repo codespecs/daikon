@@ -467,13 +467,14 @@ dist-dfej-linux-x86: $(DFEJ_DIR)/src/dfej
 	cp -pf $(DFEJ_DIR)/src/dfej $(NFS_BIN_DIR)
 	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@lcs.mit.edu
 
-# To create directory build_mingw_dfej, I did:
-# 	cd dfej && $(MAKE) distclean
-# 	mkdir dfej-src/build_mingw_dfej
-# 	(setenv PATH /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:$PATH; cd dfej-src/build_mingw_dfej; ~mernst/research/invariants/dfej/configure --prefix=/tmp/dfej_Xmingw --host=i386-mingw32msvc)
-#	cd dfej && ./configure
+# Creates the build_mingw_dfej directory.  This probably needs to be redone
+# when dfej is changed to include new object files or other Makefile changes.
 # Path must include /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin
-
+dfej-src/build_mingw_dfej:
+	cd dfej && $(MAKE) distclean
+	mkdir dfej-src/build_mingw_dfej
+	(setenv PATH /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:$PATH; cd dfej-src/build_mingw_dfej; ~mernst/research/invariants/dfej/configure --prefix=/tmp/dfej_Xmingw --host=i386-mingw32msvc)
+	cd dfej && ./configure
 
 # dfej-src/build_mingw_dfej/src/dfej.exe:
 # 	cd dfej-src/build_mingw_dfej; setenv PATH /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:$(PATH); $(MAKE)
@@ -490,7 +491,7 @@ dfej-src/build_mingw_dfej/src/dfej.exe: dfej-src/dfej/src/*.cpp dfej-src/dfej/sr
 	-rename .mingw-saved.o .o dfej-src/dfej/src/*.mingw-saved.o
 
 dist-dfej-windows: dfej-src/build_mingw_dfej/src/dfej.exe
-	cp -p dfej-src/build_mingw_dfej/src/dfej.exe $(DIST_BIN_DIR)/dfej.exe
+	cp -pf dfej-src/build_mingw_dfej/src/dfej.exe $(DIST_BIN_DIR)/dfej.exe
 	update-link-dates $(DIST_DIR)/index.html
 
 ## Cross-compiling DFEJ to create a Windows executable (instructions by
