@@ -58,8 +58,10 @@ public final class Runtime {
   }
 
   public static void setDtraceMaybe(String filename) {
-    if (dtrace == null)
-      setDtrace(filename);
+    if (dtrace == null) {
+      String prop = System.getProperty("daikon.dtrace.filename");
+      setDtrace((prop != null) ? prop : filename);
+    }
   }
 
   // Add a shutdown hook to close the PrintStream when the program
