@@ -356,7 +356,8 @@ public class LOWERBOUND
       return true;
     }
     ONEOF oo = ONEOF.find(ppt);
-    if ((oo != null) && oo.enoughSamples()) {
+    if ((oo != null) && oo.enoughSamples() && oo.num_elts() > 0) {
+      Assert.assertTrue (oo.var().isCanonical());
       // We could also use MIN1 == oo.MINELT(), since the LowerBound
       // will never have a MIN1 that does not appear in the OneOf.
       if (MIN1 LTE oo.MINELT()) {
