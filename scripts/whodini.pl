@@ -237,7 +237,6 @@ while (1) {
 
 sub swap_lineno ( $$ ) {
   my ($count, $reported_line) = @_;
-  print STDERR "swap_lineno($count, $reported_line)\n";
   my $result = $map[$count][$reported_line];
   if (! defined($result)) {
     die "Not defined: map[$count][$reported_line]\n";
