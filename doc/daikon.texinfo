@@ -290,7 +290,7 @@ Enhancing conditional invariant detection
 Tools
 
 * MergeESC::                    
-* InvariantChecker::            
+* MakeInvariantChecker::        
 
 Troubleshooting
 
@@ -5225,10 +5225,10 @@ distribution and are not described elsewhere in the manual.
 
 @menu
 * MergeESC::                    
-* InvariantChecker::            
+* MakeInvariantChecker::        
 @end menu
 
-@node    MergeESC, InvariantChecker, Tools, Tools
+@node    MergeESC, MakeInvariantChecker, Tools, Tools
 @section MergeESC
 
 @cindex MergeESC tool
@@ -5250,41 +5250,43 @@ unmodified, but MergeESC produces new @file{-escannotated} versions that
 include the Daikon invariants as comments.
 
 
-@node    InvariantChecker,  , MergeESC, Tools
-@section InvariantChecker
+@node    MakeInvariantChecker,  , MergeESC, Tools
+@section MakeInvariantChecker
 
-@cindex InvariantChecker tool
+@cindex MakeInvariantChecker tool
 
-The InvariantChecker program takes a set of invariants found by Daikon
+The MakeInvariantChecker program takes a set of invariants found by Daikon
 and creates a specialized checking program that checks (only) those
 invariants.  The checking program can be run on new data trace files
 to determine whether the new trace files exhibit all the behavior that
 the old ones (that Daikon originally used to create the set of
 invariants) did.
 
-Invoke InvariantChecker like this:
+Invoke MakeInvariantChecker like this:
 @example
 java daikon.Daikon myProgram.decls myProgram.dtrace -o myProgram.inv
-java daikon.tools.InvariantChecker myProgram.inv TestMyProgram.java
+java daikon.tools.MakeInvariantChecker myProgram.inv TestMyProgram.java
 javac TestMyProgram.java
 java TestMyProgram myProgram_new.dtrace
 @end example
 
-The first argument to InvariantChecker is a Daikon output file name
-(which must end with a @file{.inv} extension) and the second argument
+The first argument to MakeInvariantChecker is a Daikon output file name
+(which must contain a @file{.inv} extension) and the second argument
 is a Java file name into which Java source for the specialized checker
 will be generated.
   
-@c Command line options to InvariantChecker:
+@c Command line options to MakeInvariantChecker:
 @c - h prints the usage line
+@c - o filename writes all the invariant violations in the file called file name
 
 The specialized checker program takes one argument, a data trace file.
 (It is typically a different file than the one used for generating the
-".inv" file that was provided to InvariantChecker.)
+".inv" file that was provided to MakeInvariantChecker.)
 
 If the new trace violates any invariants in the set provided to
-InvariantChecker, then InvariantChecker raises an exception that
-indicates the invariant and the variable values that violate it.
+MakeInvariantChecker, then MakeInvariantChecker raises an exception that
+indicates the invariant and the variable values that violate it. 
+
 
 
 @node    Troubleshooting, Details, Tools, Top
