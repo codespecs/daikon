@@ -8,7 +8,7 @@ public final class LinearBinaryCore implements java.io.Serializable {
   final static boolean debugLinearBinaryCore = false;
   // final static boolean debugLinearBinaryCore = true;
 
-  // y == ax + b;
+  // y == ax + b; first argument is x, second is y
   public long a, b;
 
   Invariant wrapper;

@@ -32,11 +32,12 @@ public final class SEQUENCESCALARSUBSEQUENCE extends BinaryDerivation {
   public VarInfo sclvar() { return base2; }
 
   // Indicates whether the subscript is an index of valid data or a limit
-  // (one element beyond the data of interest).
+  // (one element beyond the data of interest).  The first (or last)
+  // element of the derived variable is seqvar()+index_shift.
   public final int index_shift;
 
-  // True if we are deriving from the start of the sequence to the scalar.
-  // False if we are deriving from the scalar to the end of the sequence.
+  // True for deriving from the start of the sequence to the scalar: B[0..I]
+  // False for deriving from the scalar to the end of the sequence: B[I..]
   public final boolean from_start;
 
   /**

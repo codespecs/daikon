@@ -11,6 +11,7 @@ import utilMDE.*;
 public final class SequenceInitial extends UnaryDerivation {
 
   public final int index;       // negative if counting from end
+                                // typically 0,1,-1, or -2
   // array length required for the subscript to be meaningful:  (ie, 1 or 2)
   final int minLength;
 

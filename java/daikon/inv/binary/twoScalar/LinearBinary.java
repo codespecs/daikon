@@ -5,9 +5,9 @@ import daikon.inv.Invariant;
 import java.util.*;
 import utilMDE.*;
 
-class LinearBinary extends TwoScalar {
+public class LinearBinary extends TwoScalar {
 
-  LinearBinaryCore core;
+  public LinearBinaryCore core;
 
   protected LinearBinary(PptSlice ppt) {
     super(ppt);

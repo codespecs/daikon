@@ -58,7 +58,7 @@ public final class SequenceStringSubscriptFactory  extends BinaryDerivationFacto
     // Since both are canonical, this is equivalent to
     // "if (sclvar.canonicalRep() == seqsize.canonicalRep()) ..."
     if (sclvar == seqsize) {
-      // a[len] a[len-1] a[0..len] a[0..len-1] a[len..len] a[len+1..len]
+      // a[len] a[len-1] a[0..len] a[0..len-1] a[len..] a[len+1..]
       Global.tautological_suppressed_derived_variables += 6;
       return null;
     }
