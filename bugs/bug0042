@@ -1,0 +1,18 @@
+Version:      $Id$
+Owner:        scruffy@lcs.mit.edu
+Cc:           mharder <mharder@lcs.mit.edu>
+Tool:         dfec
+Summary:      Add documentation for --struct-depth=N option
+Severity:     RFE
+Status:       New
+Reproducible: Yes
+Description:
+
+There is no documentation for the "--struct-depth=N" option, in the
+dfec usage message or the daikon manual.  Please add it.
+
+--
+$Log$
+Revision 1.1  2002-04-18 20:25:01  mharder
+new bug0042
+
