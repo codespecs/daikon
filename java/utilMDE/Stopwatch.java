@@ -59,6 +59,17 @@ public final class Stopwatch {
     new DecimalFormat("#.#"),
   };
 
+  /**
+   * Stops the watch, calculates the elapsed time, restarts the watch,
+   * and returns the elapsed time
+   */
+  public String stop_start() {
+    stop();
+    String result = format();
+    start();
+    return (result);
+  }
+
   public String format() {
     return format(1);
   }
