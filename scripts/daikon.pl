@@ -25,16 +25,18 @@ sub usage() {
         "  -i, --instrument FILE   Only instrument FILE.  Can be specified multiple times.\n",
 	"  -o, --output FILE       Save invariants in FILE.inv\n",
 	"  -t, --textfile          Save text of invariants in a .txt file\n",
+	"  -n, --nogui             Do not start the gui\n",
+	"      --daikonarg ARG     Supply argument to Daikon; may occur multiple times.\n",
 	"  -v, --verbose           Display progress messages\n",
 	"  -c, --cleanup           Remove files left over from an interrupted session before starting\n",
         "      --nocleanup         Do not remove temporary files (for debugging)\n",
-	"  -n, --nogui             Do not start the gui\n",
 	"  -s, --src               Make an archive of the source for later reference\n",
 #	"  -a, --ajax              Run Ajax analysis\n",
 	"  -d, --debug             Print extra debugging info\n",
 	"\n",
-	"Example:\n",
-	"  daikon --output test1 packfoo.MyTestSuite 200\n",
+	"Examples:\n",
+	" daikon.pl --output test1 packfoo.MyTestSuite 200\n",
+	" daikon.pl -i Gries.java -t -o random -c -nogui \\\n   --daikonarg \"--config_option daikon.derive.unary.SequenceSum.enabled=true\" \\\n   GriesTester\n",
 	;
 } # usage
 
@@ -59,6 +61,7 @@ my $nocleanup = 0;
 my $nogui = 0;
 my $src = 0;
 my $ajax = 0;
+my @daikonarg = ();
 my $debug = 0;
 
 GetOptions("instrument=s" => \@instrument,
@@ -71,6 +74,7 @@ GetOptions("instrument=s" => \@instrument,
 	   "n" => \$nogui,
 	   "src" => \$src,
 	   "ajax" => \$ajax,
+           "daikonarg=s" => \@daikonarg,
 	   "debug" => \$debug,
 	   ) or usagedie();
 
@@ -333,7 +337,8 @@ if (! $decls) {
 print "\nRunning invariant detector...\n" if $verbose;
 my $output_to = $textfile ? "$output.txt" : '/dev/null';
 my $daikonCmd = ("java -classpath $cp_lib daikon.Daikon -o $output.inv " .
-		 "$decls $dtrace > $output_to");
+                 (scalar(@daikonarg)>0 ? join(' ', @daikonarg) : '') .
+		 " $decls $dtrace > $output_to");
 $debug && print "$daikonCmd\n";
 my $dkerr = system($daikonCmd);
 if ($dkerr) {
@@ -376,15 +381,13 @@ unless ($nogui) {
 
 ### subroutines ###
 
-sub cleanupWorking {
-########################################################################
 # clean up the working directory
-########################################################################
-    my $working = shift;
+sub cleanupWorking {
+    my $workingDir = shift;
     if (! $nocleanup) {
-	system("rm -rf $working") && die("Could not remove working dir");
+	system("rm -rf $workingDir") && die("Could not remove working dir $workingDir");
     } else {
-	print "Leaving $working in place\n";
+	print "Leaving $workingDir in place\n";
     }
 } # cleanupWorking
 
