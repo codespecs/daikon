@@ -42,9 +42,9 @@ import java.util.*;
 
 
 /**
- * Represents invariants between elements of a PRIMITIVE sequence and
- * the indices of those elements.  Prints as "x[i] [cmp] i" where
- * [cmp] is one of < <= > >=
+ * Represents invariants asserting that an ordering holds between
+ * elements of a PRIMITIVE sequence and the indices of those elements.
+ * Prints as "x[i] [cmp] i" where [cmp] is one of < <= > >=
  **/
 public final class CLASSNAME
   extends SUPERCLASS
