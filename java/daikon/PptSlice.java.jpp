@@ -1070,7 +1070,17 @@ public final class PPTSLICE1
     for (int i = 0; i < arity - 1; i++) {
       Assert.assertTrue (newVarInfos[i].varinfo_index <= newVarInfos[i+1].varinfo_index);
     }
+    permutation = ArraysMDE.fn_inverse_permutation(permutation);
+
     Assert.assertTrue(ArraysMDE.fn_is_permutation(permutation));
+    // Assert that the permutation represents the rearrangement
+    for (int i=0; i < arity; i++) {
+      // the variable that used to be at position "i" is now found at
+      // position permutation[i].
+      VarInfo oldvi = argNewVarInfos[i];
+      VarInfo newvi = newVarInfos[permutation[i]];
+      Assert.assertTrue(oldvi == newvi);
+    }
 
     // Why not just clone?  Because then index order wouldn't be
     // preserved
