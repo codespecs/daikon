@@ -2,9 +2,10 @@
 ### Variables
 ###
 
-IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps gui-ControlPanel.png gui-ControlPanel.eps gui-InvariantsDisplay-small.png gui-InvariantsDisplay-small.eps
-IMAGE_PARTIAL_PATHS := $(addprefix images/,$(DOC_FILES))
-DOC_FILES := dtrace-format.txt Makefile daikon.html $(IMAGE_PARTIAL_PATHS)
+IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps gui-ControlPanel.jpg gui-ControlPanel.eps gui-InvariantsDisplay-small.jpg gui-InvariantsDisplay-small.eps
+IMAGE_PARTIAL_PATHS := $(addprefix images/,$(IMAGE_FILES))
+DOC_FILES_NO_IMAGES := Makefile daikon.texinfo daikon.ps daikon.pdf daikon.html
+DOC_FILES := ${DOC_FILES_NO_IMAGES} $(IMAGE_PARTIAL_PATHS)
 DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 README_FILES := README-daikon-java README-dist
 README_PATHS := $(addprefix doc/,$(README_FILES))
@@ -18,6 +19,7 @@ INV_DIR := $(MERNST_DIR)/research/invariants
 
 DFEJ_DIR := $(INV_DIR)/dfej
 DFEC_DIR := $(INV_DIR)/dfec
+C_RUNTIME_PATHS := front-end/c/daikon_runtime.h front-end/c/daikon_runtime.c
 # Old C front end
 # EDG_DIR := $(INV_DIR)/edg/dist
 # EDG_DIR := $(INV_DIR)/c-front-end
@@ -25,7 +27,10 @@ DFEC_DIR := $(INV_DIR)/dfec
 # EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/dfec $(EDG_DIR)/dfec.sh
 
 DIST_DIR := $(MERNST_DIR)/www/daikon/dist
-DIST_DIR_FILES := daikon-source.tar.gz daikon-jar.tar.gz daikon.html gui.html daikon.jar
+# Files that appear in the top level of the distribution directory
+DIST_DIR_FILES := daikon-source.tar.gz daikon-jar.tar.gz daikon-logo.gif daikon.jar
+DIST_DIR_PATHS := daikon-source.tar.gz daikon-jar.tar.gz doc/images/daikon-logo.gif daikon.jar
+
 # For really big files
 # DIST_DIR_2 := /projects/se/people/mernst/www
 DIST_DIR_2 := $(DIST_DIR)
@@ -35,7 +40,7 @@ CVS_REP := /g4/projects/invariants/.CVS/
 # for "chgrp"
 INV_GROUP := invariants
 
-RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name dfej -o -name daikon-java -o -name daikon-output -o -name core -o -name '*.bak' -o -name '.nfs*' -o -name '\#*\#' \) -print`
+RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name dfej -o -name dfej-linux -o -name daikon-java -o -name daikon-output -o -name core -o -name '*.bak' -o -name '*.rej' -o -name '*.old' -o -name '.nfs*' -o -name '\#*\#' \) -print`
 
 
 ## Examples of better ways to get the lists:
@@ -70,7 +75,7 @@ test:
 tags: TAGS
 
 TAGS:
-	cd daikon && $(MAKE) tags
+	cd java && $(MAKE) tags
 
 
 ###########################################################################
@@ -91,7 +96,6 @@ dist-test-no-update-dist:
 cvs-test:
 	-rm -rf $(HOME)/tmp/daikon.cvs
 	mkdir $(HOME)/tmp/daikon.cvs
-	# (cd $(HOME)/tmp/daikon.cvs; cvs -Q -d $(CVS_REP) co invariants; cvs -Q -d $(CVS_REP) co utilMDE)
 	(cd $(HOME)/tmp/daikon.cvs; cvs -Q -d $(CVS_REP) co invariants)
 	(cd $(HOME)/tmp/daikon.cvs/invariants/daikon; CLASSPATH=/g2/users/mernst/tmp/daikon.cvs:/g2/users/mernst/tmp/daikon.cvs/invariants:/g2/users/mernst/java/OROMatcher-1.1:/g2/users/mernst/java/getopt-1.0.8:.:/g2/users/mernst/java/jdk/jre/lib/rt.jar; make)
 
@@ -106,7 +110,7 @@ cvs-test:
 
 dist: dist-test
 
-dist-notest: $(DIST_DIR_FILES)
+dist-notest: $(DIST_DIR_PATHS)
 	$(MAKE) update-dist-dir 
 	$(MAKE) -n dist-dfej
 
@@ -116,13 +120,18 @@ dist-force:
 	$(MAKE) dist
 
 update-dist-dir:
-	html-update-toc daikon.html
+	# html-update-toc daikon.html
+	-cd $(DIST_DIR) && rm -rf $(DIST_DIR_FILES) doc daikon_manual_html
+	cp -pf $(DIST_DIR_PATHS) $(DIST_DIR)
 	# This isn't quite right:  $(DIST_DIR) should hold the
 	# daikon.html from daikon-source.tar.gz, not the current version.
-	-cd $(DIST_DIR) && rm -rf $(DIST_DIR_FILES)
-	cp -pf $(DIST_DIR_FILES) $(DIST_DIR)
-	# Don't files in the distribution directory
-	cd $(DIST_DIR) && chmod ogu-w $(DIST_DIR_FILES)
+	mkdir $(DIST_DIR)/doc
+	cd doc && cp -pf $(DOC_FILES_NO_IMAGES) $(DIST_DIR)/doc
+	cp -pR doc/images $(DIST_DIR)/doc
+	cp -pR doc/daikon_manual_html $(DIST_DIR)/doc
+	# Don't modify files in the distribution directory
+	cd $(DIST_DIR) && chmod -R ogu-w $(DIST_DIR_FILES)
+
 	update-link-dates $(DIST_DIR)/index.html
 
 daikon.jar: $(DAIKON_JAVA_FILES)
@@ -130,8 +139,8 @@ daikon.jar: $(DAIKON_JAVA_FILES)
 	mkdir /tmp/daikon-jar
 	cd daikon && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar' all
 	cd utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar' all
-	tar xzf java-getopt-1.0.8.tar.gz -C /tmp/daikon-jar
-	tar xzf OROMatcher-1.1.tar.gz -C /tmp/daikon-jar
+	tar xzf java/java-getopt-1.0.8.tar.gz -C /tmp/daikon-jar
+	tar xzf java/OROMatcher-1.1.tar.gz -C /tmp/daikon-jar
 	mv /tmp/daikon-jar/OROMatcher-1.1.0a/com /tmp/daikon-jar
 	rm -rf /tmp/daikon-jar/OROMatcher-1.1.0a
 	cd /tmp/daikon-jar && jar cf $@ *
@@ -141,29 +150,29 @@ daikon.jar: $(DAIKON_JAVA_FILES)
 # Use this ordering because daikon-jar is made before daikon-source
 
 daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar
-	html-update-toc daikon.html
+	# html-update-toc daikon.html
 
 	-rm -rf /tmp/daikon
 	mkdir /tmp/daikon
 
-	cp -p $(DOC_FILES) /tmp/daikon
-	cp -p README-dist /tmp/daikon/README
+	mkdir /tmp/daikon/doc
+	cd doc && cp -p $(DOC_FILES) /tmp/daikon/doc
+	cp -p doc/README-dist /tmp/daikon/README
 
 	# Auxiliary programs
 	mkdir /tmp/daikon/bin
 	cp -p $(SCRIPT_PATHS) /tmp/daikon/bin
 
-	# C/C++ instrumenter
-	mkdir /tmp/daikon/c-front-end
-	cp -p $(EDG_FILES) /tmp/daikon/c-front-end
-	cp -p $(EDG_DIR)/Makefile /tmp/daikon/c-front-end/Makefile-sample
-	echo "0" > /tmp/daikon/c-front-end/label.txt
-	# Fix permission problems (does this fully do the trick?)
-	chmod +rw /tmp/daikon/c-front-end/*
+	## Front ends
+	mkdir /tmp/daikon/front-end
 
-	# Example files
-	mkdir /tmp/daikon/examples
-	(cp -p examples-gries.tar.gz /tmp/daikon/examples; cd /tmp/daikon/examples; tar zxf examples-gries.tar.gz; mv examples-gries gries; rm examples-gries.tar.gz)
+	# C/C++ instrumenter
+	mkdir /tmp/daikon/front-end/c
+	cp -p $(C_RUNTIME_PATHS) /tmp/daikon/front-end/c
+
+	# # Example files
+	# mkdir /tmp/daikon/examples
+	# (cp -p examples-gries.tar.gz /tmp/daikon/examples; cd /tmp/daikon/examples; tar zxf examples-gries.tar.gz; mv examples-gries gries; rm examples-gries.tar.gz)
 
 	date > /tmp/daikon/VERSION
 	chgrp -R $(INV_GROUP) /tmp/daikon
@@ -179,27 +188,29 @@ daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DA
 	# Daikon itself
 	tar chf /tmp/daikon-java.tar --exclude daikon-java --exclude daikon-output daikon
 	(mkdir /tmp/daikon/java; cd /tmp/daikon/java; tar xf /tmp/daikon-java.tar; rm /tmp/daikon-java.tar)
-	cp -p README-daikon-java /tmp/daikon/java/README
+	cp -p doc/README-daikon-java /tmp/daikon/java/README
 	# Maybe I should do  $(MAKE) doc
 	# Don't do  $(MAKE) clean  which deletes .class files
 	(cd /tmp/daikon/java; $(RM_TEMP_FILES))
 
 	# Java support files
-	(cp -p java-getopt-1.0.7.tar.gz /tmp/daikon/java; cd /tmp/daikon/java; tar zxf java-getopt-1.0.7.tar.gz; rm java-getopt-1.0.7.tar.gz)
-	(cd utilMDE; $(MAKE) utilMDE.tar.gz; cd /tmp/daikon/java; tar zxf utilMDE/utilMDE.tar.gz)
-	(cp -p OROMatcher-1.1.tar.gz /tmp/daikon/java; cd /tmp/daikon/java; tar zxf OROMatcher-1.1.tar.gz; rm OROMatcher-1.1.tar.gz; ln -s OROMatcher-1.1.0a/com .)
+	(cd utilMDE; $(MAKE) utilMDE.tar.gz)
+	tar zxf utilMDE/utilMDE.tar.gz -C /tmp/daikon/java
+	tar zxf java/java-getopt-1.0.8.tar.gz -C /tmp/daikon/java
+	tar zxf java/OROMatcher-1.1.tar.gz -C /tmp/daikon/java
+	(cd /tmp/daikon/java; ln -s OROMatcher-1.1.0a/com .)
 
 	# Java instrumenter
 	# The -h option saves symbolic links as real files, to avoid problem 
 	# with the fact that I've made dfej into a symbolic link.
 	(cd $(DFEJ_DIR)/..; tar chf /tmp/dfej.tar --exclude '*.o' --exclude 'src/dfej' --exclude 'src.tar' dfej)
-	# (cd /tmp/daikon; tar xf /tmp/dfej.tar; mv dfej java-front-end; rm /tmp/dfej.tar)
+	# (cd /tmp/daikon; tar xf /tmp/dfej.tar; mv dfej front-end/java; rm /tmp/dfej.tar)
 	# For debugging
-	(cd /tmp/daikon; tar xf /tmp/dfej.tar; mv dfej java-front-end)
+	(cd /tmp/daikon; tar xf /tmp/dfej.tar; mv dfej front-end/java)
 	# the subsequence rm -rf shouldn't be necessary one day, 
 	# but for the time being (and just in case)...
 	# (cd /tmp/daikon/java-front-end; $(MAKE) distclean; (cd src; $(MAKE) distclean); $(RM_TEMP_FILES))
-	(cd /tmp/daikon/java-front-end; $(MAKE) distclean; $(RM_TEMP_FILES))
+	(cd /tmp/daikon/front-end/java; $(MAKE) distclean; $(RM_TEMP_FILES))
 
 	# Make the source distribution proper
 	(cd /tmp; tar cf daikon-source.tar daikon)
@@ -249,8 +260,7 @@ dist-dfec-linux:
 
 
 ## Don't distribute executables for now
-# dist-dfej: dist-dfej-solaris
-dist-dfej: dist-dfej-linux dist-dfej-windows
+dist-dfej: dist-dfej-linux-x86 dist-dfej-windows
 
 dist-dfej-solaris: $(DIST_DIR)/dfej-solaris
 
@@ -259,17 +269,17 @@ $(DIST_DIR)/dfej-solaris: $(DFEJ_DIR)/src/dfej-solaris
 	update-link-dates $(DIST_DIR)/index.html
 	cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@lcs.mit.edu
 
-dist-dfej-linux: $(DIST_DIR)/dfej-linux
+dist-dfej-linux-x86: $(DIST_DIR)/binaries/dfej-linux-x86
 	# First remake
 	-mv -f $(DFEJ_DIR)/src/dfej $(DFEJ_DIR)/src/dfej-dynamic
-	-mv -f $(DFEJ_DIR)/src/dfej-linux $(DFEJ_DIR)/src/dfej
+	-mv -f $(DFEJ_DIR)/src/dfej-linux-x86 $(DFEJ_DIR)/src/dfej
 	cd $(DFEJ_DIR)/src && $(MAKE) LDFLAGS=-static
-	mv -f $(DFEJ_DIR)/src/dfej $(DFEJ_DIR)/src/dfej-linux
+	mv -f $(DFEJ_DIR)/src/dfej $(DFEJ_DIR)/src/dfej-linux-x86
 	mv -f $(DFEJ_DIR)/src/dfej-dynamic $(DFEJ_DIR)/src/dfej
 
 	# Now copy it over
-	cp -pf $(DFEJ_DIR)/src/dfej-linux $(DIST_DIR)/dfej-linux
-	cp -pf $(DFEJ_DIR)/src/dfej $(DIST_DIR)/dfej-linux-dynamic
+	cp -pf $(DFEJ_DIR)/src/dfej-linux-x86 $(DIST_DIR)/dfej-linux-x86
+	cp -pf $(DFEJ_DIR)/src/dfej $(DIST_DIR)/dfej-linux-dynamic-x86
 	update-link-dates $(DIST_DIR)/index.html
 	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@lcs.mit.edu
 
