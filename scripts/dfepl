@@ -3,6 +3,17 @@
 # Convenient interface to the Daikon annotation front-end for Perl programs
 # $Id$
 
+# This file is part of the Daikon distribution. It may be used and
+# redistributed under the same terms as the rest of Daikon or, at your
+# option, under the same terms as Perl itself, following either the
+# GNU General Public License or the Perl Artistic License.  The Daikon
+# Perl front end, of which this file is a part, and the Daikon dynamic
+# invariant detection tool are separate programs, neither derived from
+# the other, which are merely aggregated for convenience of
+# distribution. As such, licensing the Perl front end under the terms
+# of the GPL neither requires nor entitles you to license other parts
+# of the Daikon distribution under the same terms.
+
 use strict;
 use 5.006;
 use warnings;
@@ -27,6 +38,7 @@ my $verbose = 0;
 my $perl = $EXECUTABLE_NAME;
 
 my $use_types = 0;
+my $use_accessors = 0;
 my @types_files = ();
 my $types_search = undef;
 
@@ -35,8 +47,10 @@ my $accessors_search = undef;
 my $instr_basedir = undef; # defaults to daikon-{untyped,instrumented}
                            # depending on whether we have type information.
 my $types_basedir = undef; # default to daikon-instrumented
-my $decls_basedir = "daikon-output";
-my $dtrace_basedir = "daikon-output";
+
+my $decls_basedir = undef;
+my $dtrace_basedir = undef;
+my $output_dir = undef;
 
 my $types_style = undef; # defaults to tree
 my $decls_style = undef; # now always matches types_style
@@ -112,6 +126,7 @@ my $parsed =
                          "types-basedir=s" => \$types_basedir,
                          "decls-basedir=s" => \$decls_basedir,
                          "dtrace-basedir=s" => \$dtrace_basedir,
+                         "output-dir=s", => \$output_dir,
 #                        "instr-style=s" => \$instr_style,
                          "types-style=s" => \$types_style,
                          "decls-style=s" => \$decls_style,
@@ -121,7 +136,8 @@ my $parsed =
                          "use-types|T" => \$use_types,
                          "types-file|t=s" => \@types_files,
                          "types-dir:s" => \$types_search,
-                         "accessors-dir|A:s" => \$accessors_search,
+                         "use-accessors|A" => \$use_accessors,
+                         "accessors-dir:s" => \$accessors_search,
                          "verbose|v+" => \$verbose,
                          "absolute!" => \$absolute,
                          "reference-depth=f", => \$reference_depth,
@@ -142,6 +158,12 @@ if (@types_files or defined($types_search)) {
     $types_search = "daikon-instrumented";
 }
 
+if (defined($accessors_search)) {
+    $use_accessors = 1;
+} elsif ($use_accessors) {
+    $accessors_search = ".";
+}
+
 if (not defined($instr_basedir)) {
     if ($use_types) {
         $instr_basedir = "daikon-instrumented";
@@ -154,6 +176,21 @@ if (not defined($instr_basedir)) {
 }
 
 $types_basedir = $instr_basedir if not defined($types_basedir);
+
+if (defined($output_dir)) {
+    if (defined($decls_basedir) or defined($dtrace_basedir)) {
+        die "--output-dir replaces --decls-basedir and --dtrace-basedir";
+    } else {
+        $decls_basedir = $dtrace_basedir = $output_dir;
+    }
+} else {
+    if (not defined $decls_basedir) {
+        $decls_basedir = "daikon-output";
+    }
+    if (not defined $dtrace_basedir) {
+        $dtrace_basedir = "daikon-output";
+    }
+}
 
 if (defined $absolute) {
     $instr_absolute = $absolute unless defined $instr_absolute;
@@ -224,10 +261,6 @@ if ($list_depth < 0) {
     die "list_depth should be non-negative\n";
 }
 
-if (defined($accessors_search) and $accessors_search eq "") {
-    $accessors_search = ".";
-}
-
 if ($verbose) {
     print STDERR "Verbosity level $verbose\n";
     print STDERR "Instrumented sources in $instr_basedir\n";
@@ -269,6 +302,7 @@ sub try_local_types {
 
 sub types_to_decls {
     my($types_name, $decls_name) = @_;
+    mkpath(dirname $decls_name);
     careful_system($perl, $perl_lib, "-MDaikon::Output",
                    "-e", 'Daikon::Output::types_file_to_decls_file('.
                    '$ARGV[0], $ARGV[1])', $types_name, $decls_name);
@@ -310,8 +344,8 @@ sub process_file_relative_to {
         $from = $prog;
     }
     my($bprog, $pack, $combined);
-    if ($prog =~ /\.plx?$/) {
-        my $progname = basename($prog, ".plx", ".pl");
+    if ($prog =~ /\.(plx?|t)$/) {
+        my $progname = basename($prog, ".plx", ".pl", ".t");
         $combined = "$progname-combined";
         $bprog = "";
         $pack = "$progname-main";
