@@ -515,7 +515,8 @@ public class Dataflow
   private static void create_ppt_dataflow(PptTopLevel ppt)
   {
     // Points that receive samples (currently just EXITnn)
-    boolean receives_samples = ppt.ppt_name.isCombinedExitPoint();
+    boolean receives_samples =
+      ppt.ppt_name.isCombinedExitPoint() || ppt.ppt_name.isEnterPoint();
 
     if (receives_samples) {
       PptsAndInts rec = compute_ppt_flow(ppt,
