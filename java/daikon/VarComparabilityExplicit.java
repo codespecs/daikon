@@ -115,6 +115,8 @@ public final class VarComparabilityExplicit
     protected String java_name_impl() { throw new UnsupportedOperationException(); }
     protected String java_name_impl(String classname) { throw new UnsupportedOperationException(); }
     protected String simplify_name_impl(boolean prestate) { throw new UnsupportedOperationException(); }
+    protected Class resolveType(PptTopLevel ppt) { throw new UnsupportedOperationException(); }
+    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) { throw new UnsupportedOperationException(); }
     public Object accept(VarInfoName.Visitor v) { throw new UnsupportedOperationException(); }
   }
 

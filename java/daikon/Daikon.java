@@ -551,14 +551,16 @@ public final class Daikon {
   //
   public static void print_invariants(PptMap ppts) {
     // Retrieve Ppt objects in sorted order.
+    PrintWriter pw = new PrintWriter(System.out, true);
     // PptMap iteratorator uses a custom comparator for a specific ordering
     for (Iterator itor = ppts.iterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       // if (ppt.has_samples() &&  // [[INCR]]
       if (! no_text_output) {
-        ppt.print_invariants_maybe(System.out);
+        ppt.print_invariants_maybe(pw);
       }
     }
+    pw.flush();
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -569,8 +571,7 @@ public final class Daikon {
     Vector spnames_and_splitters = new Vector();
     for (Iterator i = spinfo_files.iterator(); i.hasNext(); ) {
       File filename = (File) i.next();
-      spnames_and_splitters =
-	SplitterFactory.read_spinfofile(filename, all_ppts); 
+      spnames_and_splitters = SplitterFactory.read_spinfofile(filename, all_ppts);
       int siz = spnames_and_splitters.size();
       Assert.assert(java.lang.Math.IEEEremainder(siz, 2) == 0);
       for (int j = 0; j < siz; j+=2) {
@@ -580,8 +581,8 @@ public final class Daikon {
 	if (pptname.equals("ALL")) {
 	  SplitterList.put(".*", (Splitter[]) spnames_and_splitters.elementAt(j+1));
 	} else {
-	  SplitterList.put( pptname, 
-			    (Splitter[]) spnames_and_splitters.elementAt(j+1)); 
+	  SplitterList.put( pptname,
+			    (Splitter[]) spnames_and_splitters.elementAt(j+1));
 	}
       }
     }

@@ -10,6 +10,8 @@ import daikon.derive.binary.SequencesJoin;
 
 import utilMDE.*;
 
+import org.apache.log4j.Category;
+
 import java.util.*;
 
 
@@ -25,8 +27,7 @@ public class NoDuplicates
   // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
 
-  final static boolean debugNoDuplicates = false;
-
+  public static final Category debug = Category.getInstance(NoDuplicates.class.getName());
   int elts = 0;
 
   protected NoDuplicates(PptSlice ppt) {
@@ -44,8 +45,8 @@ public class NoDuplicates
   }
 
   public String format() {
-    if (debugNoDuplicates) {
-      System.out.println(repr());
+    if (debug.isDebugEnabled()) {
+      debug.debug(repr());
     }
     return (var().name + " contains no duplicates");
   }
@@ -144,6 +145,10 @@ public class NoDuplicates
     for (int i=1; i<a.length; i++) {
       if (ArraysMDE.indexOf(a, a[i]) < i) {
 	flowThis();
+	if (debug.isDebugEnabled()) {
+	  debug.debug ("Flowing myself with: " + var().name.repr());
+	  debug.debug (ArraysMDE.toString(a));
+	}
         destroy();
         return;
       }

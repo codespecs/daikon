@@ -44,9 +44,9 @@ public final class ProglangType
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  // Should I use a Set, possibly a HashSet, here?
-  // Or a WeakHashMapWithHasher?  It depends on how big this can get...
-  private static Vector all_known_types = new Vector();
+  // With Vector search, this func was a hotspot (38%), so use a Map:
+  // HashMap<String base, Vector<ProglangType>>
+  private static HashMap all_known_types = new HashMap();
 
   // Use == to compare, because ProglangType objects are interned.
   public final static ProglangType INT = ProglangType.intern("int", 0);
@@ -161,32 +161,26 @@ public final class ProglangType
             && (dimensions == other.dimensions));
   }
 
-  // t_base should be interned
-  private static ProglangType find(String t_base, int t_dims) {
-    Assert.assert(t_base == t_base.intern());
 
-    // System.out.println("ProglangType.find(" + t_base + ", " + t_dims + ")");
-    // System.out.println("All known types:");
-    // for (int i=0; i<all_known_types.size(); i++) {
-    //   ProglangType k = (ProglangType)all_known_types.elementAt(i);
-    //   System.out.println("  " + k.base() + ", " + k.dimensions());
-    // }
-    for (int i=0; i<all_known_types.size(); i++) {
-      ProglangType candidate = (ProglangType)all_known_types.elementAt(i);
-      Assert.assert(candidate.base() == candidate.base().intern());
-      // System.out.println("ProglangType.find checking #" + i + ": " + candidate.base() + "," + candidate.dimensions());
-      if ((t_dims == candidate.dimensions())
-	  && (t_base == candidate.base())) {
-        // System.out.println("ProglangType.find succeeded at index " + i);
+  // THIS CODE IS A HOT SPOT (~33% of runtime):
+  // t_base must be interned
+  private static ProglangType find(String t_base, int t_dims) {
+// Disabled for performance reasons! this assertion is sound though:
+//    Assert.assert(t_base == t_base.intern());
+
+    // the string maps us to a vec of all plts with that base
+    Vector v = (Vector)all_known_types.get(t_base);
+    if (v == null)
+      return null;
+
+    // now search for the right dimension
+    for (int ii=0; ii<v.size(); ++ii)
+    {   
+      ProglangType candidate = (ProglangType)v.elementAt(ii);
+      if (candidate.dimensions() == t_dims)
 	return candidate;
-      }
-      // System.out.println("Candidate (" + t_base + ", " + t_dims + ") failed: "
-      //                    + ((t_dims == candidate.dimensions()) ? "same" : "different")
-      //                    + " dimensions, "
-      //                    + ((t_base == candidate.base()) ? "same" : "different")
-      //                    + " base");
     }
-    // System.out.println("ProglangType.find(" + t_base + ", " + t_dims + ") failed: ");
+
     return null;
   }
 
@@ -205,13 +199,23 @@ public final class ProglangType
   // }
 
   private static ProglangType intern(String t_base, int t_dims) {
-    Assert.assert(t_base == t_base.intern());
+// Disabled for performance reasons! this assertion is sound though:
+//    Assert.assert(t_base == t_base.intern());
     ProglangType result = find(t_base, t_dims);
     if (result != null) {
       return result;
     }
     result = new ProglangType(t_base, t_dims);
-    all_known_types.add(result);
+    
+    Vector v = (Vector)all_known_types.get(t_base);
+    if (v == null)
+    {
+      v = new Vector();
+      all_known_types.put(t_base, v);
+    }
+
+    v.add(result);
+
     return result;
   }
 

@@ -42,7 +42,7 @@ public final class VarComparabilityImplicit
 
   private VarComparabilityImplicit cached_element_type;
 
-  private static VarComparabilityImplicit unknown = new VarComparabilityImplicit(-3, null, 0);
+  private static final VarComparabilityImplicit unknown = new VarComparabilityImplicit(-3, null, 0);
 
   private VarComparabilityImplicit(int base, VarComparabilityImplicit[] indexTypes, int dimensions) {
     this.base = base;

@@ -22,11 +22,11 @@ public class PptName
   static final long serialVersionUID = 20020122L;
 
   // cannot be "final", because they must be re-interned upon deserialization
-  private String fullname;   // interned
+  private String fullname;   // interned full program point name
   private String fn_name;    // interned, nullable; derived from fullname
-  private String cls;        // interned, nullable; derived from fullname
-  private String method;     // interned, nullable; derived from fullname
-  private String point;      // interned, nullable; derived from fullname
+  private String cls;        // interned fully-qualified class name, nullable; derived from fullname
+  private String method;     // interned method signature, including types, nullable; derived from fullname
+  private String point;      // interned post-separator (separator is ":::"), nullable; derived from fullname
 
   // Represenatation invariant:
   //
@@ -142,7 +142,7 @@ public class PptName
   }
 
   /**
-   * @return the short name of the method, not including any
+   * @return the short name of the class, not including any
    * additional context, such as the package it is in.
    * May be null.
    * e.g. "StackAr"

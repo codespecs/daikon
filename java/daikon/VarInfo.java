@@ -1048,13 +1048,14 @@ public final class VarInfo
     String result;
     int begin;
     int end = type.base().indexOf(')');
-    if (this.isIOASet())
+    if (this.isIOASet()) {
       begin = type.base().indexOf('(') + 1;
-    else if (this.isIOAArray())
+    } else if (this.isIOAArray()) {
       begin = type.base().indexOf(',') + 1;
-    else
+    } else {
       return null;
-    return type.base().substring(begin, end);
+    }
+    return type.base().substring(begin+1, end);
   }
 
   /**
@@ -1065,9 +1066,11 @@ public final class VarInfo
     if (this.isIOAArray()) {
       int begin = type.base().indexOf('(');
       int end = type.base().indexOf(',');
-      return type.base().substring(begin, end);
+      result = type.base().substring(begin+1, end);
+      daikon.inv.Invariant.debugPrint.debug ("domainTypeIOA: " + result);
+      return result;
     } else {
-      return "int";
+      return "Int";
     }
   }
 

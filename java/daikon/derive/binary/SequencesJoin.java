@@ -121,8 +121,27 @@ public final class SequencesJoin
       }
       if (e1 == null) e1 = new Long(0);
       if (e2 == null) e2 = new Long(0);
-      result[i] = e1.hashCode() ^ (e2.hashCode() + 214);
+      result[i] = (e1.hashCode() << 8) + e2.hashCode();
     }
+
+    /**
+       Use this if you don't see no duplicates where you should
+    if (debug.isDebugEnabled()) {
+      debug.debug (var1().name.toString() + " " + var2().name.toString());
+      if (val1 instanceof long[]) {
+	debug.debug (ArraysMDE.toString((long[]) val1));
+      } else {
+	debug.debug (ArraysMDE.toString((Object[]) val1));
+      }
+      if (val2 instanceof long[]) {
+	debug.debug (ArraysMDE.toString((long[]) val2));
+      } else {
+	debug.debug (ArraysMDE.toString((Object[]) val2));
+      }
+      debug.debug (ArraysMDE.toString(result));
+
+      }
+    **/
 
     int mod = ValueTuple.UNMODIFIED;
     if (var1().getModified(full_vt) == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;

@@ -1913,7 +1913,7 @@ public class PptTopLevel
 
   /**
    * Interface used by mark_implied_via_simplify to determine what
-   * invaraints should be considered during the logical redundancy
+   * invariants should be considered during the logical redundancy
    * tests.
    **/
   public static interface SimplifyInclusionTester {
@@ -1921,7 +1921,7 @@ public class PptTopLevel
   }
 
   /**
-   * Use the Simplify theorem prover to flag invaraints which are
+   * Use the Simplify theorem prover to flag invariants which are
    * logically implied by others.  Considers only invariants which
    * pass isWorthPrinting.
    **/
@@ -1934,7 +1934,7 @@ public class PptTopLevel
   }
 
   /**
-   * Use the Simplify theorem prover to flag invaraints which are
+   * Use the Simplify theorem prover to flag invariants which are
    * logically implied by others.  Uses the provided test interface to
    * determine if an invariant is within the domain of inspection.
    **/
@@ -2279,7 +2279,7 @@ public class PptTopLevel
    * Print invariants for a single program point and its conditionals.
    * Does no output if no samples or no views.
    **/
-  public void print_invariants_maybe(PrintStream out)
+  public void print_invariants_maybe(PrintWriter out)
   {
     // Be slient if we never saw any samples
     if (values_num_samples == 0) {
@@ -2354,7 +2354,7 @@ public class PptTopLevel
   final public static Comparator icfp = new Invariant.InvariantComparatorForPrinting();
 
   /** Print invariants for a single program point. */
-  public void print_invariants(PrintStream out) {
+  public void print_invariants(PrintWriter out) {
 
     // make names easier to read before printing
     simplify_variable_names();
@@ -2408,7 +2408,7 @@ public class PptTopLevel
       out.println();
     }
     Vector modified_vars = new Vector();
-    Vector modified_primitive_vars = new Vector();
+    Vector modified_primitive_args = new Vector();
     Vector unmodified_vars = new Vector();
     Vector unmodified_orig_vars = new Vector();
     for (int i=0; i<var_infos.length; i++) {
@@ -2419,7 +2419,16 @@ public class PptTopLevel
         if (vi_orig != null) {
           // Assert.assert(vi_orig.postState.name == vi.name, "vi_orig="+vi_orig.name+", vi_orig.postState="+vi_orig.postState+((vi_orig.postState!=null)?"="+vi_orig.postState.name:"")+", vi="+vi+"="+vi.name);
           // Assert.assert(vi_orig.postState == vi, "vi_orig="+vi_orig.name+", vi_orig.postState="+vi_orig.postState+((vi_orig.postState!=null)?"="+vi_orig.postState.name:"")+", vi="+vi+"="+vi.name);
-          if (false) { // vi.equal_to == vi_orig.equal_to) { // [INCR] XXX
+          boolean is_unmodified = false; // vi.equal_to == vi_orig.equal_to // [INCR] XXX
+          if (! is_unmodified) {
+            java.lang.reflect.Field f = vi.name.resolveField(this);
+            System.out.println("Field for " + name + " " + vi.name.name() + ": " + f);
+            if ((f != null)
+                && java.lang.reflect.Modifier.isFinal(f.getModifiers())) {
+              is_unmodified = true;
+            }
+          }
+          if (is_unmodified) {
             unmodified_vars.add(vi);
             unmodified_orig_vars.add(vi_orig);
           } else {
@@ -2427,9 +2436,10 @@ public class PptTopLevel
             PptSlice1 view = getView(vi);
             if (view != null) { // [INCR] && (view.num_values() > 0)
               // Using only the isPrimitive test is wrong.  We should suppress
-	      // for only parameters, not all primitive values.
+	      // for only parameters, not all primitive values.  That's why we
+              // look for the period in the name.
               if (vi.type.isPrimitive() && (vi.name.name().indexOf(".") == -1)) {
-                modified_primitive_vars.add(vi);
+                modified_primitive_args.add(vi);
               } else {
                 modified_vars.add(vi);
               }
@@ -2447,10 +2457,10 @@ public class PptTopLevel
         }
         out.println();
       }
-      if (modified_primitive_vars.size() > 0) {
-        out.print("      Modified primitive variables:");
-        for (int i=0; i<modified_primitive_vars.size(); i++) {
-          VarInfo vi = (VarInfo)modified_primitive_vars.elementAt(i);
+      if (modified_primitive_args.size() > 0) {
+        out.print("      Modified primitive arguments:");
+        for (int i=0; i<modified_primitive_args.size(); i++) {
+          VarInfo vi = (VarInfo)modified_primitive_args.elementAt(i);
           out.print(" " + vi.name);
         }
         out.println();
@@ -2459,6 +2469,59 @@ public class PptTopLevel
         out.print("      Unmodified variables:");
         for (int i=0; i<unmodified_vars.size(); i++)
           out.print(" " + ((VarInfo)unmodified_vars.elementAt(i)).name);
+        out.println();
+      }
+    }
+    // It would be nice to collect the list of indices which are modified,
+    // and create a \forall to specify that the rest aren't.
+    if (Daikon.output_style == Daikon.OUTPUT_STYLE_ESC) {
+      Vector mods = new Vector();
+      for (int i=0; i<modified_vars.size(); i++) {
+        VarInfo vi = (VarInfo)modified_vars.elementAt(i);
+        while (vi != null) {
+          Derivation derived = vi.derived;
+          VarInfoName vin = vi.name;
+          if (vin instanceof VarInfoName.TypeOf) {
+            // "VAR.class"
+            vi = null;
+          } else if (vin instanceof VarInfoName.SizeOf) {
+            // "size(VAR)"
+            vi = null;
+          } else if ((vin instanceof VarInfoName.Field)
+                     && ((VarInfoName.Field)vin).term.name().endsWith("]")) {
+            // "VAR[..].field" => VAR[..];
+            vi = findVar(((VarInfoName.Field)vin).term.name());
+            Assert.assert(vi != null);
+          } else if (derived instanceof SequenceScalarSubscript) {
+            vi = ((SequenceScalarSubscript)vi.derived).seqvar();
+          } else if (derived instanceof SequenceStringSubscript) {
+            vi = ((SequenceStringSubscript)vi.derived).seqvar();
+          } else if (derived instanceof SequenceScalarSubsequence) {
+            vi = ((SequenceScalarSubsequence)vi.derived).seqvar();
+          } else if (derived instanceof SequenceStringSubsequence) {
+            vi = ((SequenceStringSubsequence)vi.derived).seqvar();
+            Assert.assert(vi != null);
+          } else {
+            break;
+          }
+        }
+        if ((vi != null) && (! mods.contains(vi))) {
+          mods.add(vi);
+        }
+      }
+      if (mods.size() > 0) {
+        out.print("modifies ");
+        for (int i=0; i<mods.size(); i++) {
+          if (i>0) {
+            out.print(", ");
+          }
+          VarInfo vi = (VarInfo)mods.elementAt(i);
+          String name = vi.name.name();
+          if (name.endsWith("[]")) {
+            name = name.substring(0, name.length()-1) + "*]";
+          }
+          out.print(name);
+        }
         out.println();
       }
     }

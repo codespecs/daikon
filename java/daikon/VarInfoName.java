@@ -7,6 +7,7 @@ import org.apache.log4j.Category;
 import java.lang.ref.WeakReference;
 import java.io.Serializable;
 import java.util.*;
+import java.lang.reflect.*;
 
 /**
  * VarInfoName is an type which represents the "name" of a variable.
@@ -158,8 +159,8 @@ public abstract class VarInfoName
   }
   private String simplify_name_cached[] = new String[2];
   protected abstract String simplify_name_impl(boolean prestate);
-  
-  
+
+
   /**
    * Return the string representation of this name in IOA format
    * @return the string representation (interned) of this name, in the
@@ -218,8 +219,11 @@ public abstract class VarInfoName
    * debugging format
    **/
   public String repr() {
+    // AAD: Used to be interned for space reasons, but removed during
+    // profiling when it was determined that the interns are unique
+    // anyway.
     if (repr_cached == null) {
-      repr_cached = repr_impl().intern();
+      repr_cached = repr_impl();//.intern();
     }
     return repr_cached;
   }
@@ -239,6 +243,11 @@ public abstract class VarInfoName
       return this;
     }
   }
+
+  // Not sure exactly where these belong in this file.
+  protected abstract Class resolveType(PptTopLevel ppt);
+  protected abstract java.lang.reflect.Field resolveField(PptTopLevel ppt);
+
 
   // ============================================================
   // Helpful constants
@@ -344,7 +353,7 @@ public abstract class VarInfoName
    * Format this in IOA format, and remove all "this." and
    * "classname".
    * @param classname the String to remove
-   * 
+   *
    **/
   public String ioaFormatVar(String varname) {
     /*    int this_index = varname.indexOf("this.");
@@ -422,7 +431,36 @@ public abstract class VarInfoName
     protected String java_name_impl() {
       return "return".equals(name) ? "daikon_return" : name;
     }
-    
+    protected Class resolveType(PptTopLevel ppt) {
+      // System.out.println("" + repr() + " resolveType(" + ppt.name + ")");
+      // Also see Ast.getClass(String s)
+      if (name.equals("this")) {
+        try {
+          String classname = ppt.ppt_name.getFullClassName();
+          // System.out.println("classname = " + classname);
+          Class result = Class.forName(classname);
+          // System.out.println("resolveType => " + result);
+          return result;
+        } catch (Exception e) {
+        }
+      }
+      return null;
+    }
+    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
+      // System.out.println("" + repr() + " resolveField(" + ppt.name + ")");
+      try {
+        if (name.startsWith("this.")) {
+          Class c = Class.forName(ppt.ppt_name.getFullClassName());
+          if (c != null) {
+            java.lang.reflect.Field f = c.getDeclaredField(name.substring(5));
+            return f;
+          }
+        }
+      } catch (Exception e) {
+      }
+      return null;
+    }
+
     public Object accept(Visitor v) {
       return v.visitSimple(this);
     }
@@ -482,6 +520,13 @@ public abstract class VarInfoName
     }
     protected String java_name_impl() {
       return sequence.term.java_name() + ".length";
+    }
+
+    protected Class resolveType(PptTopLevel ppt) {
+      return Integer.TYPE;
+    }
+    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
+      return null;
     }
 
     public Object accept(Visitor v) {
@@ -551,6 +596,12 @@ public abstract class VarInfoName
     protected String java_name_impl() {
       return "(warning: format_java() needs to be implemented: " +
 	function + " on " + argument.repr() + ")";
+    }
+    protected Class resolveType(PptTopLevel ppt) {
+      return null;
+    }
+    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
+      return null;
     }
     public Object accept(Visitor v) {
       return v.visitFunctionOf(this);
@@ -635,6 +686,12 @@ public abstract class VarInfoName
      **/
     public VarInfoName getArg (int n) {
       return (VarInfoName) args.get(n);
+    }
+    protected Class resolveType(PptTopLevel ppt) {
+      return null;
+    }
+    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
+      return null;
     }
     public Object accept(Visitor v) {
       return v.visitFunctionOfN(this);
@@ -731,6 +788,27 @@ public abstract class VarInfoName
     protected String java_name_impl() {
       return term.java_name() + "." + field;
     }
+    protected Class resolveType(PptTopLevel ppt) {
+      // System.out.println("" + repr() + " resolveType(" + ppt.name + ")");
+      java.lang.reflect.Field f = resolveField(ppt);
+      if (f != null) {
+        // System.out.println("resolveType => " + f.getType());
+        return f.getType();
+      }
+      return null;
+    }
+    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
+      // System.out.println("" + repr() + " resolveField(" + ppt.name + ")");
+      Class c = term.resolveType(ppt);
+      if (c != null) {
+        try {
+          // System.out.println("resolveField found type " + c.getName());
+          return c.getDeclaredField(field);
+        } catch (Exception e) {
+        }
+      }
+      return null;
+    }
     public Object accept(Visitor v) {
       return v.visitField(this);
     }
@@ -771,6 +849,12 @@ public abstract class VarInfoName
     protected String java_name_impl() {
       return term.name() + ".class";
     }
+    protected Class resolveType(PptTopLevel ppt) {
+      return Class.class;
+    }
+    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
+      return null;
+    }
     public Object accept(Visitor v) {
       return v.visitTypeOf(this);
     }
@@ -781,7 +865,15 @@ public abstract class VarInfoName
    * like "orig(this)" or "\old(this)".
    **/
   public VarInfoName applyPrestate() {
-    return (new Prestate(this)).intern();
+    if (this instanceof Poststate) {
+      return ((Poststate)this).term;
+    } else if ((this instanceof Add) && ((Add)this).term instanceof Poststate) {
+      Add a = (Add)this;
+      Poststate p = (Poststate)a.term;
+      return p.term.applyAdd(a.amount);
+    } else {
+      return (new Prestate(this)).intern();
+    }
   }
 
   /**
@@ -810,6 +902,12 @@ public abstract class VarInfoName
     }
     protected String java_name_impl() {
       return "orig(" + term.name() + ")";
+    }
+    protected Class resolveType(PptTopLevel ppt) {
+      return term.resolveType(ppt);
+    }
+    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
+      return term.resolveField(ppt);
     }
     public Object accept(Visitor v) {
       return v.visitPrestate(this);
@@ -867,6 +965,12 @@ public abstract class VarInfoName
     protected String java_name_impl() {
       return "post(" + term.name() + ")";
     }
+    protected Class resolveType(PptTopLevel ppt) {
+      return term.resolveType(ppt);
+    }
+    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
+      return term.resolveField(ppt);
+    }
     public Object accept(Visitor v) {
       return v.visitPoststate(this);
     }
@@ -913,6 +1017,12 @@ public abstract class VarInfoName
     }
     protected String java_name_impl() {
       return term.java_name() + amount();
+    }
+    protected Class resolveType(PptTopLevel ppt) {
+      return term.resolveType(ppt);
+    }
+    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
+      return term.resolveField(ppt);
     }
     public Object accept(Visitor v) {
       return v.visitAdd(this);
@@ -989,6 +1099,16 @@ public abstract class VarInfoName
     }
     protected String java_name_impl(String index) {
       return term.name() + "[" + index + "]";
+    }
+    protected Class resolveType(PptTopLevel ppt) {
+      Class c = term.resolveType(ppt);
+      if (c != null) {
+        return c.getComponentType();
+      }
+      return null;
+    }
+    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
+      return term.resolveField(ppt);
     }
     public Object accept(Visitor v) {
       return v.visitElements(this);
@@ -1081,6 +1201,16 @@ public abstract class VarInfoName
     protected String java_name_impl() {
       return sequence.name_impl(index.name());
     }
+    protected Class resolveType(PptTopLevel ppt) {
+      Class c = sequence.resolveType(ppt);
+      if (c != null) {
+        return c.getComponentType();
+      }
+      return null;
+    }
+    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
+      return sequence.resolveField(ppt);
+    }
     public Object accept(Visitor v) {
       return v.visitSubscript(this);
     }
@@ -1155,7 +1285,17 @@ public abstract class VarInfoName
       //throw new UnsupportedOperationException("JAVA cannot format an unquantified slice of elements");
       //for now, return the default implementation
       return name_impl();
-    }    
+    }
+    protected Class resolveType(PptTopLevel ppt) {
+      Class c = sequence.resolveType(ppt);
+      if (c != null) {
+        return c.getComponentType();
+      }
+      return null;
+    }
+    protected java.lang.reflect.Field resolveField(PptTopLevel ppt) {
+      return sequence.resolveField(ppt);
+    }
     public Object accept(Visitor v) {
       return v.visitSlice(this);
     }
@@ -1491,7 +1631,7 @@ public abstract class VarInfoName
     public Object visitFunctionOfN(FunctionOfN o) {
       result.add (o);
       for (Iterator i = o.args.iterator(); i.hasNext();) {
-	VarInfoName vin = (VarInfoName)i.next();	
+	VarInfoName vin = (VarInfoName)i.next();
 	Object retval = vin.accept(this);
       }
       return null;
@@ -1821,17 +1961,17 @@ public abstract class VarInfoName
 
       public IOAQuantification (VarInfo[] sets) {
 	Assert.assert(sets != null);
-	
+
 	this.sets = sets;
 	numVars = sets.length;
 
 	setNames = new VarInfoName[sets.length];
 	for (int i=0; i<sets.length; i++)
 	  setNames[i] = sets[i].name;
-	
+
 	qret = quantify(setNames);
-	
-	
+
+
 	// Build the quantifier
 	StringBuffer quantifier = new StringBuffer();
 	for (int i=0; i < qret.bound_vars.size(); i++) {
@@ -1842,9 +1982,9 @@ public abstract class VarInfoName
 	  quantifier.append (" : ");
 	  quantifier.append (sets[i].domainTypeIOA());
 	  quantifier.append (" ");
-	  
+
 	}
-	quantifierExp = quantifier.toString() + "(";	
+	quantifierExp = quantifier.toString() + "(";
       }
 
       public String getQuantifierExp() {
@@ -1866,7 +2006,7 @@ public abstract class VarInfoName
       }
 
       public String getClosingExp() {
-	// This isn't very smart right now, but maybe later we can 
+	// This isn't very smart right now, but maybe later we can
 	// pretty print based on whether we need parens or not
 	return ")";
       }
@@ -1896,7 +2036,7 @@ public abstract class VarInfoName
      * varinfos representing a quantified variable and the list
      * that it is in indexed by the variable(2 * size); a closer
      * (1).
-     * @param sets A list of array-type variables over which we will quantify. 
+     * @param sets A list of array-type variables over which we will quantify.
      *
      **/
 
@@ -1904,7 +2044,7 @@ public abstract class VarInfoName
 
     public static String[] format_ioa(VarInfo[] sets) {
 
-      
+
       Assert.assert(sets != null);
 
 
@@ -1913,9 +2053,9 @@ public abstract class VarInfoName
 	setnames[i] = sets[i].name;
 
       QuantifyReturn qret = quantify(setnames);
-      
+
       String[] result = new String[2*sets.length+2];
-      
+
       // Build the quantifier
       StringBuffer quantifier = new StringBuffer();
       for (int i=0; i < qret.bound_vars.size(); i++) {
@@ -2170,7 +2310,7 @@ public abstract class VarInfoName
     public static String[] format_java(VarInfoName[] roots, boolean elementwise) {
       Assert.assert(roots != null);
       QuantifyReturn qret = quantify(roots);
-      
+
       // build the "\forall ..." predicate
       String[] result = new String[roots.length+2];
       StringBuffer int_list, conditions, closing;
@@ -2197,11 +2337,11 @@ public abstract class VarInfoName
 	  int_list.append(idx.java_name());
 	  int_list.append(" == ");
 	  int_list.append(low.java_name());
-	  
+
 	  conditions.append(idx.java_name());
 	  conditions.append(" <= ");
 	  conditions.append(high.java_name());
-	  
+
 	  if (elementwise && (i >= 1)) {
 	    VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
 	    VarInfoName _idx = _boundv[0], _low = _boundv[1];
@@ -2228,14 +2368,14 @@ public abstract class VarInfoName
 	  }
 	}
       }
-      result[0] = "(for (int " + int_list + " ; (" + conditions + "; " + closing + ")"; 
+      result[0] = "(for (int " + int_list + " ; (" + conditions + "; " + closing + ")";
       result[result.length-1] = ")";
 
       // stringify the terms
       for (int i=0; i < roots.length; i++) {
 	result[i+1] = qret.root_primes[i].java_name();
       }
-      
+
       return result;
     }
     
