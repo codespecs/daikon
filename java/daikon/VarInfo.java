@@ -806,25 +806,52 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
         index_vari_minus_seq += vari_shift - varj_shift;
       }
     }
-    // The LinearBinary gives more info than IntComparison would,
-    // so only compute the IntComparison if no LinearBinary.
-    IntComparison ic = (lb != null) ? null : IntComparison.find(indices_ppt);
-    boolean vari_can_be_lt = false;		// valid only if ic != null
-    boolean vari_can_be_eq = false;		// valid only if ic != null
-    boolean vari_can_be_gt = false;		// valid only if ic != null
-    if (ic != null) {
-      if (! ic.enoughSamples()) {
-        ic = null;
+    // // The LinearBinary gives more info than IntComparison would,
+    // // so only compute the IntComparison if no LinearBinary.
+    // IntComparison ic = (lb != null) ? null : IntComparison.find(indices_ppt);
+    // boolean vari_can_be_lt = false;              // valid only if ic != null
+    // boolean vari_can_be_eq = false;         // valid only if ic != null
+    // boolean vari_can_be_gt = false;         // valid only if ic != null
+    // if (ic != null) {
+    //   if (! ic.enoughSamples()) {
+    //     ic = null;
+    //   } else {
+    //     // System.out.println("justified IntComparison: " + ic.format());
+    //     vari_can_be_eq = ic.core.can_be_eq;
+    //     if (vari_is_var1) {
+    //       vari_can_be_lt = ic.core.can_be_lt;
+    //       vari_can_be_gt = ic.core.can_be_gt;
+    //     } else {
+    //       vari_can_be_lt = ic.core.can_be_gt;
+    //       vari_can_be_gt = ic.core.can_be_lt;
+    //     }
+    //   }
+    // }
+
+    boolean vari_lt = false;
+    boolean vari_le = false;
+    boolean vari_gt = false;
+    boolean vari_ge = false;
+    {
+      IntLessEqual ile = IntLessEqual.find(indices_ppt);
+      IntLessThan ilt = IntLessThan.find(indices_ppt);
+      IntGreaterEqual ige = IntGreaterEqual.find(indices_ppt);
+      IntGreaterThan igt = IntGreaterThan.find(indices_ppt);
+      if (ile != null && ! ile.enoughSamples()) { ile = null; }
+      if (ilt != null && ! ilt.enoughSamples()) { ilt = null; }
+      if (ige != null && ! ige.enoughSamples()) { ige = null; }
+      if (igt != null && ! igt.enoughSamples()) { igt = null; }
+
+      if (vari_is_var1) {
+        vari_lt = ilt != null;
+        vari_le = ile != null;
+        vari_gt = igt != null;
+        vari_ge = ige != null;
       } else {
-        // System.out.println("justified IntComparison: " + ic.format());
-        vari_can_be_eq = ic.core.can_be_eq;
-        if (vari_is_var1) {
-          vari_can_be_lt = ic.core.can_be_lt;
-          vari_can_be_gt = ic.core.can_be_gt;
-        } else {
-          vari_can_be_lt = ic.core.can_be_gt;
-          vari_can_be_gt = ic.core.can_be_lt;
-        }
+        vari_lt = igt != null;
+        vari_le = ige != null;
+        vari_gt = ilt != null;
+        vari_ge = ile != null;
       }
     }
 
@@ -836,24 +863,20 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     if (test_lessequal) {
       if (lb != null) {
         return (index_vari_minus_seq <= 0);
-      } else if (ic != null) {
-        return ((vari_can_be_lt && vari_can_be_eq
-                    && (vari_shift <= varj_shift))
-                || ((vari_can_be_lt && ! vari_can_be_eq)
-                    && (vari_shift - 1 <= varj_shift)));
       } else {
-        return false;
+        return ((vari_le
+                 && (vari_shift <= varj_shift))
+                || (vari_lt
+                    && (vari_shift - 1 <= varj_shift)));
       }
     } else {
       if (lb != null) {
         return (index_vari_minus_seq >= 0);
-      } else if (ic != null) {
-        return ((vari_can_be_gt && vari_can_be_eq
-                 && (vari_shift >= varj_shift))
-                || (vari_can_be_gt && (! vari_can_be_eq)
-                    && (vari_shift + 1 >= varj_shift)));
       } else {
-        return false;
+        return ((vari_ge
+                 && (vari_shift >= varj_shift))
+                || (vari_gt
+                    && (vari_shift + 1 >= varj_shift)));
       }
     }
   }

@@ -41,10 +41,16 @@ daikon.inv.unary.stringsequence.OneOfStringSequence.size = 2
 daikon.inv.unary.stringsequence.CommonStringSequence.enabled = 0
 
 daikon.inv.binary.twoScalar.LinearBinary.enabled = 1
-daikon.inv.binary.twoScalar.IntComparison.enabled = 1
-daikon.inv.binary.twoScalar.NonEqual.enabled = 1
-daikon.inv.binary.twoScalar.NonEqual.integral_only = 1
 daikon.inv.binary.twoScalar.FunctionUnary.enabled = 1
+daikon.inv.binary.twoScalar.IntEqual.enabled = 1
+daikon.inv.binary.twoScalar.IntNonEqual.enabled = 1
+daikon.inv.binary.twoScalar.IntLessThan.enabled = 1
+daikon.inv.binary.twoScalar.IntLessEqual.enabled = 1
+daikon.inv.binary.twoScalar.IntGreaterThan.enabled = 1
+daikon.inv.binary.twoScalar.IntGreaterEqual.enabled = 1
+# daikon.inv.binary.twoScalar.IntComparison.enabled = 1
+# daikon.inv.binary.twoScalar.NonEqual.enabled = 1
+# daikon.inv.binary.twoScalar.NonEqual.integral_only = 1
 
 daikon.inv.binary.twoString.StringComparison.enabled = 1
 

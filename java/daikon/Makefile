@@ -11,6 +11,7 @@ JAVAC ?= javac -g
 ### end of user customizations
 
 
+# This should actually run after the AUTO_GENERATED_FILES are generated.
 JAVA_FILES := $(shell find . \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
 DAIKON_TAG_FILES := $(shell find . \( -name '*daikon-java*' -o -name CVS -o -name 'split' \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
 UTILMDE_TAG_FILES := $(shell find ../utilMDE \( -name '*daikon-java*' -o -name CVS -o -name 'split' \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
@@ -36,6 +37,12 @@ AUTO_GENERATED_FILES = \
 	inv/unary/stringsequence/OneOfStringSequence.java \
 	inv/binary/sequenceScalar/Member.java \
 	inv/binary/sequenceString/Member.java \
+	inv/binary/twoScalar/IntEqual.java \
+	inv/binary/twoScalar/IntNonEqual.java \
+	inv/binary/twoScalar/IntLessThan.java \
+	inv/binary/twoScalar/IntLessEqual.java \
+	inv/binary/twoScalar/IntGreaterThan.java \
+	inv/binary/twoScalar/IntGreaterEqual.java \
 	derive/binary/SequenceScalarSubscript.java \
 	derive/binary/SequenceStringSubscript.java \
 	derive/binary/SequenceScalarSubsequence.java \
@@ -236,6 +243,24 @@ inv/binary/sequenceScalar/Member.java: inv/binary/Member.java.jpp
 
 inv/binary/sequenceString/Member.java: inv/binary/Member.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=STRING)
+
+inv/binary/twoScalar/IntEqual.java: inv/binary/twoScalar/IntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=EQUAL)
+
+inv/binary/twoScalar/IntNonEqual.java: inv/binary/twoScalar/IntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=NONEQUAL)
+
+inv/binary/twoScalar/IntLessThan.java: inv/binary/twoScalar/IntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=LESSTHAN)
+
+inv/binary/twoScalar/IntLessEqual.java: inv/binary/twoScalar/IntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=LESSEQUAL)
+
+inv/binary/twoScalar/IntGreaterThan.java: inv/binary/twoScalar/IntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=GREATERTHAN)
+
+inv/binary/twoScalar/IntGreaterEqual.java: inv/binary/twoScalar/IntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=GREATEREQUAL)
 
 derive/binary/SequenceScalarSubscript.java: derive/binary/SequenceSubscript.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=SCALAR)
