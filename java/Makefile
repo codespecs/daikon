@@ -73,7 +73,7 @@ all:	all_directly junit
 all_via_daikon: Daikon.class Runtime.class Diff.class
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
-all_directly: ${AUTO_GENERATED_FILES}
+all_directly: ${AUTO_GENERATED_FILES} ajax
 	@echo ${JAVAC} '*.java ...'
 	@${JAVAC} ${JAVA_FILES}
 	@chmod -w ${AUTO_GENERATED_FILES}
@@ -111,6 +111,9 @@ daikon/Diff.class: Diff.java ${AUTO_GENERATED_FILES}
 
 daikon/Runtime.class: daikon/Runtime.java
 	${JAVAC} daikon/Runtime.java
+
+ajax:
+	ln -s ajax-ship/ajax .
 
 
 ###########################################################################
