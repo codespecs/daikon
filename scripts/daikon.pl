@@ -46,7 +46,7 @@ GetOptions("output=s" => \$output,
 $runnable = shift @ARGV  or usagedie();
 $runnable_args = join(' ', @ARGV);
 
-# subroutines first
+# subroutines
 
 sub find {
     my $name = shift || die;
@@ -84,8 +84,13 @@ $mainsrc =~ s/\./\//;
 $mainsrc .= ".java";
 die ("Source file $mainsrc does not exist") unless (-f $mainsrc);
 
+# check to see that we have jikes avaiable
+$error = system("jikes");
+die ("Put jikes in your path before using this tool") if $error;
+
 # check the program make sure it starts out with no errors
-$error = system("jikes -depend -nowrite -nowarn $mainsrc");
+$cp = "$DAIKON_WRAPPER_CLASSPATH:.";
+$error = system("jikes -classpath $cp -depend -nowrite -nowarn $mainsrc");
 die ("Fix compiler errors before running daikon") if $error;
 
 # come up with a list of files which we need to care about
@@ -94,7 +99,7 @@ print "Building dependency list...\n" if $verbose;
 die (".u files already exist; try running with --cleanup option") if (find("*.u"));
 
 %interesting = (); # keys are interesting java file names
-system("jikes -depend -nowrite -nowarn +M $mainsrc") && die ("Unexpected jikes error");
+system("jikes -classpath $cp -depend -nowrite -nowarn +M $mainsrc") && die ("Unexpected jikes error");
 for $fname (find("*.u")) {
     open (U, $fname);
     while ($u = <U>) {
