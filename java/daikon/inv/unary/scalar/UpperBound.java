@@ -2,7 +2,13 @@ package daikon.inv.unary.scalar;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.unary.sequence.*;
+import daikon.inv.unary.scalar.*;
+import daikon.inv.unary.*;
+import daikon.inv.binary.sequenceScalar.*;
+import daikon.inv.binary.twoSequence.*;
 import daikon.derive.unary.*;
+import utilMDE.*;
 
 import java.util.*;
 
@@ -21,19 +27,13 @@ import java.util.*;
 // uniform distribution) requires many samples.
 // Which of these dominates?  Is the behavior what I want?
 
-public class UpperBound  extends SingleScalar {
+public class UpperBound  extends SingleScalar  {
 
-  // max1  >  max2  >  max3 
-  public long max1  = Long.MIN_VALUE ;
-  int num_max1  = 0;
-  long max2  = Long.MIN_VALUE ;
-  int num_max2  = 0;
-  long max3  = Long.MIN_VALUE ;
-  int num_max3  = 0;
-  long min  = Long.MAX_VALUE ;
+  public UpperBoundCore  core;
 
   private UpperBound (PptSlice ppt) {
     super(ppt);
+    core = new UpperBoundCore (this);
   }
 
   public static UpperBound  instantiate(PptSlice ppt) {
@@ -42,124 +42,41 @@ public class UpperBound  extends SingleScalar {
 
   public String repr() {
     return "UpperBound"  + varNames() + ": "
-      + max1 ;
-  }
-
-  public String repr_long() {
-    return "UpperBound"  + varNames() + ": "
-      + "max1=" + max1 
-      + ", num_max1=" + num_max1 
-      + ", max2=" + max2 
-      + ", num_max2=" + num_max2 
-      + ", max3=" + max3 
-      + ", num_max3=" + num_max3 
-      + ", min=" + min ;
+      + core.repr();
   }
 
   public String format() {
-    return var().name + " <= " + max1 ;
+    return var().name + " <= " + core.max1 ;
   }
 
   public String format_esc() {
     String esc_name = var().esc_name;
     if (esc_name != null) {
-      return esc_name + " <= " + max1 ;
+      return esc_name + " <= " + core.max1 ;
     } else {
       return "format_esc " + this.getClass() + " could not speak about: " + format();
     }
   }
 
-  public void add_modified(long value, int count) {
-    // probability_cache_accurate = false;
-
+  public void add_modified(long  value, int count) {
     // System.out.println("UpperBound"  + varNames() + ": "
     //                    + "add(" + value + ", " + modified + ", " + count + ")");
 
-    long v = value;
+    core.add_modified(value, count);
 
-    if (v <  min ) min  = v;
-
-    if (v == max1 ) {
-      num_max1  += count;
-    } else if (v >  max1 ) {
-      max3  = max2 ;
-      num_max3  = num_max2 ;
-      max2  = max1 ;
-      num_max2  = num_max1 ;
-      max1  = v;
-      num_max1  = count;
-    } else if (v == max2 ) {
-      num_max2  += count;
-    } else if (v >  max2 ) {
-      max3  = max2 ;
-      num_max3  = num_max2 ;
-      max2  = v;
-      num_max2  = count;
-    } else if (v == max3 ) {
-      num_max3  += count;
-    } else if (v >  max3 ) {
-      max3  = v;
-      num_max3  = count;
-    }
   }
 
   protected double computeProbability() {
-    int values = ppt.num_values();
-    if (values < 3)
-      return Invariant.PROBABILITY_UNKNOWN;
-    if (num_max1  < 3)
-      return Invariant.PROBABILITY_UNKNOWN;
+    return core.computeProbability();
+  }
 
-    long modulus = 1;
-    {
-      for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
-        Invariant inv = (Invariant) itor.next();
-        if ((inv instanceof Modulus) && inv.justified()) {
-          modulus = ((Modulus) inv).modulus;
-          break;
-        }
-      }
-    }
+  public boolean isExact() {
+    return core.isExact();
+  }
 
-    // Accept a bound if:
-    //  * it contains more than twice as many elements as it ought to by
-    //    chance alone, and that number is at least 3.
-    //  * it and its predecessor/successor both contain more than half
-    //    as many elements as they ought to by chance alone, and at
-    //    least 3.
-
-    // If I used Math.abs, the order of arguments to minus would not matter.
-    long range = - (min  - max1 ) + 1;
-    double avg_samples_per_val = ((double) ppt.num_mod_non_missing_samples()) * modulus / range;
-
-    // System.out.println("  [Need to fix computation of UpperBound.computeProbability()]");
-    boolean truncated_justified = num_max1  > 5*avg_samples_per_val;
-    if (truncated_justified) {
-      return Invariant.PROBABILITY_JUSTIFIED;
-    }
-
-    boolean uniform_justified = ((- (max3  - max2 ) == modulus)
-                                 && (- (max2  - max1 ) == modulus)
-                                 && (num_max1  > avg_samples_per_val/2)
-                                 && (num_max2  > avg_samples_per_val/2)
-                                 && (num_max3  > avg_samples_per_val/2));
-
-    // System.out.println("UpperBound.computeProbability(): ");
-    // System.out.println("  " + repr_long());
-    // System.out.println("  ppt=" + ppt
-    //                    + ", ppt.num_mod_non_missing_samples()=" + ppt.num_mod_non_missing_samples()
-    //                    + ", values=" + values
-    //                    + ", avg_samples_per_val=" + avg_samples_per_val
-    //                    + ", truncated_justified=" + truncated_justified
-    //                    + ", uniform_justified=" + uniform_justified);
-    // PptSlice pptsg = (PptSlice) ppt;
-    // System.out.println("  " + ppt.name + " ppt.values_cache.tuplemod_samples_summary()="
-    //                    + pptsg.tuplemod_samples_summary());
-
-    if (uniform_justified)
-      return Invariant.PROBABILITY_JUSTIFIED;
-
-    return Invariant.PROBABILITY_UNJUSTIFIED;
+  public boolean isSameFormula(Invariant other)
+  {
+    return core.isSameFormula(((UpperBound ) other).core);
   }
 
   public boolean isObviousDerived() {
@@ -171,17 +88,34 @@ public class UpperBound  extends SingleScalar {
 
       }
     }
-    return false;
-  }
 
-  public boolean isSameFormula(Invariant other)
-  {
-    return max1  == ((UpperBound ) other). max1 ;
+    // For each sequence variable, if this is an obvious member/subsequence, and
+    // it has the same invariant, then this one is obvious.
+    PptTopLevel pptt = (PptTopLevel) ppt.parent;
+    for (int i=0; i<pptt.var_infos.length; i++) {
+      VarInfo vi = pptt.var_infos[i];
+
+      if (Member.isObviousMember(v, vi))
+
+      {
+        PptSlice1 other_slice = pptt.findSlice(vi);
+        if (other_slice != null) {
+          EltUpperBound  eb = EltUpperBound .find(other_slice);
+          if ((eb != null)
+              && eb.justified()
+              && eb. core.max1  == core.max1 ) {
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
   }
 
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof LowerBound ) {
-      if (max1  <  ((LowerBound ) other). min1 )
+      if (core.max1  <  ((LowerBound ) other). core.min1 )
         return true;
     }
     if (other instanceof OneOfScalar) {
@@ -189,4 +123,16 @@ public class UpperBound  extends SingleScalar {
     }
     return false;
   }
+
+  // Look up a previously instantiated invariant.
+  public static UpperBound  find(PptSlice ppt) {
+    Assert.assert(ppt.arity == 1);
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = (Invariant) itor.next();
+      if (inv instanceof UpperBound )
+        return (UpperBound ) inv;
+    }
+    return null;
+  }
+
 }

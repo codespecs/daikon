@@ -65,7 +65,6 @@ public final class EltNonZero extends SingleSequence {
       }
       if (v < min) min = v;
       if (v > max) max = v;
-      // probability_cache_accurate = false;
     }
   }
 

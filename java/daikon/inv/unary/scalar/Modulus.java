@@ -79,7 +79,6 @@ public class Modulus extends SingleScalar {
           modulus = new_modulus;
         }
       }
-      // probability_cache_accurate = false;
     }
     Assert.assert(modulus != 1);
   }

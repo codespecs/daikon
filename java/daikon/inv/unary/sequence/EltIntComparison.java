@@ -4,7 +4,7 @@ import daikon.*;
 import daikon.inv.*;
 import utilMDE.*;
 
-// I should perhaps reimplement this, using IntComparisonCore.
+// I should reimplement this, using IntComparisonCore.
 
 
 // This compares adjacent elements in the sequence.

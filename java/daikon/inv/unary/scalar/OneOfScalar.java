@@ -269,9 +269,9 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
       elts_min = Math.min(elts_min, elts[i]);
       elts_max = Math.max(elts_max, elts[i]);
     }
-    if ((o instanceof LowerBound) && (elts_max < ((LowerBound)o).min1))
+    if ((o instanceof LowerBound) && (elts_max < ((LowerBound)o).core.min1))
       return true;
-    if ((o instanceof UpperBound) && (elts_min > ((UpperBound)o).max1))
+    if ((o instanceof UpperBound) && (elts_min > ((UpperBound)o).core.max1))
       return true;
 
     return false;

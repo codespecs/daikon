@@ -5,6 +5,7 @@ import daikon.inv.*;
 import daikon.inv.binary.*;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.binary.sequenceScalar.*;
+import daikon.derive.unary.*;
 
 import java.util.*;
 
@@ -64,7 +65,6 @@ public class NonZero extends SingleScalar {
     }
     if (v < min) min = v;
     if (v > max) max = v;
-    // probability_cache_accurate = false;
   }
 
   protected double computeProbability() {
@@ -124,6 +124,29 @@ public class NonZero extends SingleScalar {
         if (Member.isObviousMember(v1, v2)) {
           // System.out.println("NonZero.isObviousImplied: Member.isObviousMember(" + v1.name + ", " + v2.name + ") = true");
           return true;
+        }
+      }
+    }
+
+    if ((var.derived != null)
+        && (var.derived instanceof SequenceInitial)) {
+      SequenceInitial si = (SequenceInitial) var.derived;
+      if (si.index == 0) {
+
+        // For each sequence variable, if var is an obvious member, and
+        // the sequence has the same invariant, then this one is obvious.
+        PptTopLevel pptt = (PptTopLevel) ppt.parent;
+        for (int i=0; i<pptt.var_infos.length; i++) {
+          VarInfo vi = pptt.var_infos[i];
+          if (Member.isObviousMember(var, vi)) {
+            PptSlice1 other_slice = pptt.findSlice(vi);
+            if (other_slice != null) {
+              SeqIndexNonEqual sine = SeqIndexNonEqual.find(other_slice);
+              if ((sine != null) && sine.justified()) {
+                return true;
+              }
+            }
+          }
         }
       }
     }

@@ -19,13 +19,18 @@ public final class SingleSequenceFactory {
     Vector result = new Vector();
     if (pass == 1) {
       result.add(OneOfSequence.instantiate(ppt));
-    } else if (pass == 2) {
-      // I'm not checking var.isConstant() for now
-
-      result.add(EltIntComparison.instantiate(ppt));
       result.add(EltOneOf.instantiate(ppt));
-      result.add(EltNonZero.instantiate(ppt));
-      result.add(NoDuplicates.instantiate(ppt));
+    } else if (pass == 2) {
+      EltOneOf eoo = EltOneOf.find(ppt);
+      if (!((eoo != null) && (eoo.num_elts() == 1))) {
+        result.add(EltIntComparison.instantiate(ppt));
+        result.add(EltNonZero.instantiate(ppt));
+        result.add(EltLowerBound.instantiate(ppt));
+        result.add(EltUpperBound.instantiate(ppt));
+        result.add(NoDuplicates.instantiate(ppt));
+        result.add(SeqIndexComparison.instantiate(ppt));
+        result.add(SeqIndexNonEqual.instantiate(ppt));
+      }
     }
     return result;
   }

@@ -1,4 +1,4 @@
-package daikon.inv.unary.scalar;
+package daikon.inv.unary.sequence;
 
 import daikon.*;
 import daikon.inv.*;
@@ -27,42 +27,43 @@ import java.util.*;
 // uniform distribution) requires many samples.
 // Which of these dominates?  Is the behavior what I want?
 
-public class LowerBound  extends SingleScalar  {
+public class EltUpperBound  extends SingleSequence  {
 
-  public LowerBoundCore  core;
+  public UpperBoundCore  core;
 
-  private LowerBound (PptSlice ppt) {
+  private EltUpperBound (PptSlice ppt) {
     super(ppt);
-    core = new LowerBoundCore (this);
+    core = new UpperBoundCore (this);
   }
 
-  public static LowerBound  instantiate(PptSlice ppt) {
-    return new LowerBound (ppt);
+  public static EltUpperBound  instantiate(PptSlice ppt) {
+    return new EltUpperBound (ppt);
   }
 
   public String repr() {
-    return "LowerBound"  + varNames() + ": "
+    return "EltUpperBound"  + varNames() + ": "
       + core.repr();
   }
 
   public String format() {
-    return var().name + " >= " + core.min1 ;
+    return var().name + " elements <= " + core.max1 ;
   }
 
   public String format_esc() {
-    String esc_name = var().esc_name;
-    if (esc_name != null) {
-      return esc_name + " >= " + core.min1 ;
-    } else {
-      return "format_esc " + this.getClass() + " could not speak about: " + format();
-    }
+    String[] esc_forall = var().esc_forall();
+    return "(" + esc_forall[0]
+      + "(" + esc_forall[1] + " <= " + core.max1  + "))";
   }
 
-  public void add_modified(long  value, int count) {
-    // System.out.println("LowerBound"  + varNames() + ": "
+  public void add_modified(long[]  value, int count) {
+    // System.out.println("EltUpperBound"  + varNames() + ": "
     //                    + "add(" + value + ", " + modified + ", " + count + ")");
 
-    core.add_modified(value, count);
+    for (int i=0; i<value.length; i++) {
+      core.add_modified(value[i], count);
+      if (no_invariant)
+        return;
+    }
 
   }
 
@@ -76,7 +77,7 @@ public class LowerBound  extends SingleScalar  {
 
   public boolean isSameFormula(Invariant other)
   {
-    return core.isSameFormula(((LowerBound ) other).core);
+    return core.isSameFormula(((EltUpperBound ) other).core);
   }
 
   public boolean isObviousDerived() {
@@ -84,10 +85,6 @@ public class LowerBound  extends SingleScalar  {
     if (v.isDerived() && (v.derived instanceof SequenceLength)) {
       int vshift = ((SequenceLength) v.derived).shift;
       if (vshift != 0) {
-        return true;
-
-      } else if (core.min1  == 0) {
-        // vshift == 0
         return true;
 
       }
@@ -99,15 +96,15 @@ public class LowerBound  extends SingleScalar  {
     for (int i=0; i<pptt.var_infos.length; i++) {
       VarInfo vi = pptt.var_infos[i];
 
-      if (Member.isObviousMember(v, vi))
+      if (SubSequence.isObviousDerived(v, vi))
 
       {
         PptSlice1 other_slice = pptt.findSlice(vi);
         if (other_slice != null) {
-          EltLowerBound  eb = EltLowerBound .find(other_slice);
+          EltUpperBound  eb = EltUpperBound .find(other_slice);
           if ((eb != null)
               && eb.justified()
-              && eb. core.min1  == core.min1 ) {
+              && eb. core.max1  == core.max1 ) {
             return true;
           }
         }
@@ -118,8 +115,8 @@ public class LowerBound  extends SingleScalar  {
   }
 
   public boolean isExclusiveFormula(Invariant other) {
-    if (other instanceof UpperBound ) {
-      if (core.min1  >  ((UpperBound ) other). core.max1 )
+    if (other instanceof EltLowerBound ) {
+      if (core.max1  <  ((EltLowerBound ) other). core.min1 )
         return true;
     }
     if (other instanceof OneOfScalar) {
@@ -129,12 +126,12 @@ public class LowerBound  extends SingleScalar  {
   }
 
   // Look up a previously instantiated invariant.
-  public static LowerBound  find(PptSlice ppt) {
+  public static EltUpperBound  find(PptSlice ppt) {
     Assert.assert(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof LowerBound )
-        return (LowerBound ) inv;
+      if (inv instanceof EltUpperBound )
+        return (EltUpperBound ) inv;
     }
     return null;
   }

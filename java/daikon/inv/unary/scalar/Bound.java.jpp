@@ -1,57 +1,83 @@
-#if !(defined(LOWER) || defined(UPPER))
-#error "Either LOWER or UPPER should be defined"
+#if !(defined(LOWER) || defined(UPPER) || defined(ELTLOWER) || defined(ELTUPPER))
+#error "LOWER, UPPER, ELTLOWER, or ELTUPPER should be defined"
 #endif
 
-#if defined(LOWER)
+#if defined(LOWER) || defined(ELTLOWER)
 #define LT <
 #define GT >
-#define MIN1 min1
-#define NUM_MIN1 num_min1
-#define MIN2 min2
-#define NUM_MIN2 num_min2
-#define MIN3 min3
-#define NUM_MIN3 num_min3
+#define MIN1 core.min1
 #define MAX max
 #define LONGMAX Long.MAX_VALUE
 #define LONGMIN Long.MIN_VALUE
 #define SIGNADJUST
-#define LOWERBOUND LowerBound
-#define LOWERBOUNDSTR "LowerBound"
 #define MINSTR "min"
 #define MAXSTR "max"
 #define GTSTR ">"
+#define MAX1 core.max1
+#define LOWERBOUNDCORE LowerBoundCore
+#define ELTLOWERBOUND EltLowerBound
+#if defined(LOWER)
+#define LOWERBOUND LowerBound
+#define LOWERBOUNDSTR "LowerBound"
 #define UPPERBOUND UpperBound
-#define MAX1 max1
-#elif defined(UPPER)
+#else
+#define LOWERBOUND EltLowerBound
+#define LOWERBOUNDSTR "EltLowerBound"
+#define UPPERBOUND EltUpperBound
+#endif
+#elif defined(UPPER) || defined(ELTUPPER)
 #define LT >
 #define GT <
-#define MIN1 max1
-#define NUM_MIN1 num_max1
-#define MIN2 max2
-#define NUM_MIN2 num_max2
-#define MIN3 max3
-#define NUM_MIN3 num_max3
+#define MIN1 core.max1
 #define MAX min
 #define LONGMAX Long.MIN_VALUE
 #define LONGMIN Long.MAX_VALUE
 #define SIGNADJUST -
-#define LOWERBOUND UpperBound
-#define LOWERBOUNDSTR "UpperBound"
 #define MINSTR "max"
 #define MAXSTR "min"
 #define GTSTR "<"
+#define MAX1 core.min1
+#define LOWERBOUNDCORE UpperBoundCore
+#define ELTLOWERBOUND EltUpperBound
+#if defined(UPPER)
+#define LOWERBOUND UpperBound
+#define LOWERBOUNDSTR "UpperBound"
 #define UPPERBOUND LowerBound
-#define MAX1 min1
 #else
-#error "Either LOWER or UPPER should be defined"
+#define LOWERBOUND EltUpperBound
+#define LOWERBOUNDSTR "EltUpperBound"
+#define UPPERBOUND EltLowerBound
+#endif
+#else
+#error "LOWER, UPPER, ELTLOWER, or ELTUPPER should be defined"
+#endif
+#if defined(LOWER) || defined(UPPER)
+#define SINGLESCALAR SingleScalar
+#define SCALAR scalar
+#define LONG long
+#else
+#define SINGLESCALAR SingleSequence
+#define SCALAR sequence
+#define LONG long[]
+#endif
+
+#if ! defined(LOWERBOUND)
+#error "LOWERBOUND is not defined"
 #endif
 
 
-package daikon.inv.unary.scalar;
+package daikon.inv.unary.SCALAR;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.unary.sequence.*;
+import daikon.inv.unary.scalar.*;
+import daikon.inv.unary.*;
+import daikon.inv.binary.sequenceScalar.*;
+import daikon.inv.binary.twoSequence.*;
 import daikon.derive.unary.*;
+import utilMDE.*;
+
 
 import java.util.*;
 
@@ -72,19 +98,13 @@ import java.util.*;
 // Which of these dominates?  Is the behavior what I want?
 
 
-public class LOWERBOUND extends SingleScalar {
+public class LOWERBOUND extends SINGLESCALAR {
 
-  // MIN1 LT MIN2 LT MIN3
-  public long MIN1 = LONGMAX;
-  int NUM_MIN1 = 0;
-  long MIN2 = LONGMAX;
-  int NUM_MIN2 = 0;
-  long MIN3 = LONGMAX;
-  int NUM_MIN3 = 0;
-  long MAX = LONGMIN;
+  public LOWERBOUNDCORE core;
 
   private LOWERBOUND(PptSlice ppt) {
     super(ppt);
+    core = new LOWERBOUNDCORE(this);
   }
 
   public static LOWERBOUND instantiate(PptSlice ppt) {
@@ -93,20 +113,10 @@ public class LOWERBOUND extends SingleScalar {
 
   public String repr() {
     return LOWERBOUNDSTR + varNames() + ": "
-      + MIN1;
+      + core.repr();
   }
 
-  public String repr_long() {
-    return LOWERBOUNDSTR + varNames() + ": "
-      + MINSTR + "1=" + MIN1
-      + ", num_" + MINSTR + "1=" + NUM_MIN1
-      + ", " + MINSTR + "2=" + MIN2
-      + ", num_" + MINSTR + "2=" + NUM_MIN2
-      + ", " + MINSTR + "3=" + MIN3
-      + ", num_" + MINSTR + "3=" + NUM_MIN3
-      + ", " + MAXSTR + "=" + MAX;
-  }
-
+#if (defined(LOWER) || defined(UPPER))
   public String format() {
     return var().name + " " + GTSTR + "= " + MIN1;
   }
@@ -119,98 +129,43 @@ public class LOWERBOUND extends SingleScalar {
       return "format_esc " + this.getClass() + " could not speak about: " + format();
     }
   }
+#else
+  public String format() {
+    return var().name + " elements " + GTSTR + "= " + MIN1;
+  }
 
-  public void add_modified(long value, int count) {
-    // probability_cache_accurate = false;
+  public String format_esc() {
+    String[] esc_forall = var().esc_forall();
+    return "(" + esc_forall[0]
+      + "(" + esc_forall[1] + " " + GTSTR + "= " + MIN1 + "))";
+  }
+#endif
 
+  public void add_modified(LONG value, int count) {
     // System.out.println(LOWERBOUNDSTR + varNames() + ": "
     //                    + "add(" + value + ", " + modified + ", " + count + ")");
-
-    long v = value;
-
-    if (v GT MAX) MAX = v;
-
-    if (v == MIN1) {
-      NUM_MIN1 += count;
-    } else if (v LT MIN1) {
-      MIN3 = MIN2;
-      NUM_MIN3 = NUM_MIN2;
-      MIN2 = MIN1;
-      NUM_MIN2 = NUM_MIN1;
-      MIN1 = v;
-      NUM_MIN1 = count;
-    } else if (v == MIN2) {
-      NUM_MIN2 += count;
-    } else if (v LT MIN2) {
-      MIN3 = MIN2;
-      NUM_MIN3 = NUM_MIN2;
-      MIN2 = v;
-      NUM_MIN2 = count;
-    } else if (v == MIN3) {
-      NUM_MIN3 += count;
-    } else if (v LT MIN3) {
-      MIN3 = v;
-      NUM_MIN3 = count;
+#if (defined(LOWER) || defined(UPPER))
+    core.add_modified(value, count);
+#elif (defined(ELTLOWER) || defined(ELTUPPER))
+    for (int i=0; i<value.length; i++) {
+      core.add_modified(value[i], count);
+      if (no_invariant)
+        return;
     }
+#endif
   }
 
   protected double computeProbability() {
-    int values = ppt.num_values();
-    if (values < 3)
-      return Invariant.PROBABILITY_UNKNOWN;
-    if (NUM_MIN1 < 3)
-      return Invariant.PROBABILITY_UNKNOWN;
+    return core.computeProbability();
+  }
 
-    long modulus = 1;
-    {
-      for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
-        Invariant inv = (Invariant) itor.next();
-        if ((inv instanceof Modulus) && inv.justified()) {
-          modulus = ((Modulus) inv).modulus;
-          break;
-        }
-      }
-    }
+  public boolean isExact() {
+    return core.isExact();
+  }
 
-    // Accept a bound if:
-    //  * it contains more than twice as many elements as it ought to by
-    //    chance alone, and that number is at least 3.
-    //  * it and its predecessor/successor both contain more than half
-    //    as many elements as they ought to by chance alone, and at
-    //    least 3.
-
-    // If I used Math.abs, the order of arguments to minus would not matter.
-    long range = SIGNADJUST(MAX - MIN1) + 1;
-    double avg_samples_per_val = ((double) ppt.num_mod_non_missing_samples()) * modulus / range;
-
-    // System.out.println("  [Need to fix computation of " + LOWERBOUNDSTR + ".computeProbability()]");
-    boolean truncated_justified = NUM_MIN1 > 5*avg_samples_per_val;
-    if (truncated_justified) {
-      return Invariant.PROBABILITY_JUSTIFIED;
-    }
-
-    boolean uniform_justified = ((SIGNADJUST(MIN3 - MIN2) == modulus)
-                                 && (SIGNADJUST(MIN2 - MIN1) == modulus)
-                                 && (NUM_MIN1 > avg_samples_per_val/2)
-                                 && (NUM_MIN2 > avg_samples_per_val/2)
-                                 && (NUM_MIN3 > avg_samples_per_val/2));
-
-    // System.out.println(LOWERBOUNDSTR + ".computeProbability(): ");
-    // System.out.println("  " + repr_long());
-    // System.out.println("  ppt=" + ppt
-    //                    + ", ppt.num_mod_non_missing_samples()=" + ppt.num_mod_non_missing_samples()
-    //                    + ", values=" + values
-    //                    + ", avg_samples_per_val=" + avg_samples_per_val
-    //                    + ", truncated_justified=" + truncated_justified
-    //                    + ", uniform_justified=" + uniform_justified);
-    // PptSlice pptsg = (PptSlice) ppt;
-    // System.out.println("  " + ppt.name + " ppt.values_cache.tuplemod_samples_summary()="
-    //                    + pptsg.tuplemod_samples_summary());
-
-    if (uniform_justified)
-      return Invariant.PROBABILITY_JUSTIFIED;
-
-    return Invariant.PROBABILITY_UNJUSTIFIED;
+  public boolean isSameFormula(Invariant other)
+  {
+    return core.isSameFormula(((LOWERBOUND) other).core);
   }
 
   public boolean isObviousDerived() {
@@ -226,13 +181,33 @@ public class LOWERBOUND extends SingleScalar {
 #endif
       }
     }
+
+    // For each sequence variable, if this is an obvious member/subsequence, and
+    // it has the same invariant, then this one is obvious.
+    PptTopLevel pptt = (PptTopLevel) ppt.parent;
+    for (int i=0; i<pptt.var_infos.length; i++) {
+      VarInfo vi = pptt.var_infos[i];
+#if (defined(LOWER) || defined(UPPER))
+      if (Member.isObviousMember(v, vi))
+#else
+      if (SubSequence.isObviousDerived(v, vi))
+#endif
+      {
+        PptSlice1 other_slice = pptt.findSlice(vi);
+        if (other_slice != null) {
+          ELTLOWERBOUND eb = ELTLOWERBOUND.find(other_slice);
+          if ((eb != null)
+              && eb.justified()
+              && eb.MIN1 == MIN1) {
+            return true;
+          }
+        }
+      }
+    }
+
     return false;
   }
 
-  public boolean isSameFormula(Invariant other)
-  {
-    return MIN1 == ((LOWERBOUND) other).MIN1;
-  }
 
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof UPPERBOUND) {
@@ -244,4 +219,16 @@ public class LOWERBOUND extends SingleScalar {
     }
     return false;
   }
+
+  // Look up a previously instantiated invariant.
+  public static LOWERBOUND find(PptSlice ppt) {
+    Assert.assert(ppt.arity == 1);
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = (Invariant) itor.next();
+      if (inv instanceof LOWERBOUND)
+        return (LOWERBOUND) inv;
+    }
+    return null;
+  }
+
 }
