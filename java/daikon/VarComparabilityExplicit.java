@@ -35,7 +35,7 @@ public final class VarComparabilityExplicit extends VarComparability implements 
   String[][] indices;
   int dimensions;		// indicates how many of the indices are in use;
 				// there may be more indices than this
-  String alias;
+  VarInfoName alias;
 
   // These are caches to avoid recomputation.  Their contents are are not
   // used for direct comparison but are constructed on demand (say, when a
@@ -45,7 +45,7 @@ public final class VarComparabilityExplicit extends VarComparability implements 
 
 
   VarComparabilityExplicit(String[] base, String[][] indices, int dimensions,
-			   String alias) {
+			   VarInfoName alias) {
     this.base = base;
     this.indices = indices;
     this.dimensions = dimensions;
@@ -53,7 +53,7 @@ public final class VarComparabilityExplicit extends VarComparability implements 
     indexTypes = new VarComparabilityExplicit[dimensions];
   }
 
-  public VarComparability makeAlias(String name) {
+  public VarComparability makeAlias(VarInfoName name) {
     return new VarComparabilityExplicit(base, indices, dimensions, name);
   }
 
@@ -69,12 +69,32 @@ public final class VarComparabilityExplicit extends VarComparability implements 
     return cached_element_type;
   }
 
+  /**
+   * A special variable name for describing indicies.  This is a bit
+   * of a hack, but isn't really so bad in retrospect.
+   **/
+  public static class IndexVar extends VarInfoName {
+    public final VarInfoName base;
+    public final int dim;
+    public IndexVar(VarInfoName base, int dim) {
+      this.base = base;
+      this.dim = dim;
+    }
+    // We never print this, but name() is used for equality checks
+    protected String name_impl() {
+      return base.name() + "-index" + dim;
+    }
+    protected String esc_name_impl() { throw new UnsupportedOperationException(); }
+    protected String simplify_name_impl() { throw new UnsupportedOperationException(); }
+    public Object accept(VarInfoName.Visitor v) { throw new UnsupportedOperationException(); }
+  }
+
   public VarComparability indexType(int dim) {
     if (indexTypes[dim] == null) {
       indexTypes[dim] = new VarComparabilityExplicit(indices[dim], null, 0,
-						((alias == null)
-						 ? null
-						 : VarNames.indexVar(alias, dim)));
+						     ((alias == null)
+						      ? null
+						      : new IndexVar(alias, dim)));
     }
     return indexTypes[dim];
   }
@@ -160,8 +180,8 @@ public final class VarComparabilityExplicit extends VarComparability implements 
 
   // This is the key function of the class.
   // I could also add a member version.
-  static boolean compatible(String name1_, VarComparabilityExplicit type1,
-			    String name2_, VarComparabilityExplicit type2) {
+  static boolean compatible(VarInfoName name1_, VarComparabilityExplicit type1,
+			    VarInfoName name2_, VarComparabilityExplicit type2) {
     if (type1.alwaysComparable() || type2.alwaysComparable())
       return true;
 
@@ -169,7 +189,7 @@ public final class VarComparabilityExplicit extends VarComparability implements 
       return false;
     int dims = type1.dimensions;
 
-    String name1 = name1_, name2 = name2_;
+    VarInfoName name1 = name1_, name2 = name2_;
     if (type1.alias != null)
       name1 = type1.alias;
     if (type2.alias != null)
@@ -183,8 +203,8 @@ public final class VarComparabilityExplicit extends VarComparability implements 
     // Check each dimension of array
 
     for (int i=0; i<dims; i++) {
-      String indexvar1 = VarNames.indexVar(name1, i);
-      String indexvar2 = VarNames.indexVar(name2, i);
+      VarInfoName indexvar1 = new IndexVar(name1, i);
+      VarInfoName indexvar2 = new IndexVar(name2, i);
       if (!compatible(indexvar1, (VarComparabilityExplicit)type1.indexType(i),
                       indexvar2, (VarComparabilityExplicit)type2.indexType(i)))
 	return false;

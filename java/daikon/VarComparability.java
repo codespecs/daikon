@@ -43,13 +43,13 @@ public abstract class VarComparability {
   public static VarComparability makeAlias(VarInfo vi) {
     return vi.comparability.makeAlias(vi.name);
   }
-  public abstract VarComparability makeAlias(String name);
+  public abstract VarComparability makeAlias(VarInfoName name);
 
   public abstract VarComparability elementType();
   public abstract VarComparability indexType(int dim);
 
-  static boolean compatible(String name1, VarComparability type1,
-                            String name2, VarComparability type2) {
+  static boolean compatible(VarInfoName name1, VarComparability type1,
+                            VarInfoName name2, VarComparability type2) {
     if (type1.getClass() != type2.getClass())
       throw new Error("Trying to compare VarComparabilities of different types");
     if (type1 instanceof VarComparabilityNone) {

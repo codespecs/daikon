@@ -14,7 +14,7 @@ public final class VarComparabilityNone extends VarComparability implements java
     return it;
   }
 
-  public VarComparability makeAlias(String name) {
+  public VarComparability makeAlias(VarInfoName name) {
     return it;
   }
 
