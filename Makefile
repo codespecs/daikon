@@ -11,7 +11,7 @@ README_FILES := README-daikon-java README-dist
 README_PATHS := $(addprefix doc/,$(README_FILES))
 SCRIPT_FILES := modbit-munge.pl java-cpp.pl lines-from
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
-DAIKON_JAVA_FILES := $(shell find daikon \( -name '*daikon-java*' -o -name '*-cpp.java' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
+DAIKON_JAVA_FILES := $(shell find java \( -name '*daikon-java*' -o -name '*-cpp.java' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
 
 MERNST_DIR := /g2/users/mernst
 # This is the current directory!  Maybe I don't need a variable for it.
@@ -26,7 +26,8 @@ C_RUNTIME_PATHS := front-end/c/daikon_runtime.h front-end/c/daikon_runtime.c
 # $(EDG_DIR)/edgcpfe is distributed separately (not in the main tar file)
 # EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/dfec $(EDG_DIR)/dfec.sh
 
-DIST_DIR := $(MERNST_DIR)/www/daikon/dist
+# DIST_DIR := $(MERNST_DIR)/www/daikon/dist
+DIST_DIR := /home/httpd/html/daikon/dist
 DIST_BIN_DIR := $(DIST_DIR)/binaries
 # Files that appear in the top level of the distribution directory
 DIST_DIR_FILES := daikon-source.tar.gz daikon-jar.tar.gz daikon-logo.gif daikon.jar
@@ -41,7 +42,7 @@ CVS_REP := /g4/projects/invariants/.CVS/
 # for "chgrp"
 INV_GROUP := invariants
 
-RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name dfej -o -name dfej-linux -o -name daikon-java -o -name daikon-output -o -name core -o -name '*.bak' -o -name '*.rej' -o -name '*.old' -o -name '.nfs*' -o -name '\#*\#' \) -print`
+RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name dfej -o -name dfej-linux -o -name dfej-linux-x86 -o -name daikon-java -o -name daikon-output -o -name core -o -name '*.bak' -o -name '*.rej' -o -name '*.old' -o -name '.nfs*' -o -name '\#*\#' \) -print`
 
 
 ## Examples of better ways to get the lists:
@@ -88,7 +89,7 @@ DISTTESTDIR := $(HOME)/tmp/daikon.dist
 dist-test: dist-notest dist-test-no-update-dist
 
 # A very simple test:  just verify that the distributed system compiles.
-dist-test-no-update-dist:
+dist-test-no-update-dist: dist-ensure-directory
 	-rm -rf $(DISTTESTDIR)
 	mkdir $(DISTTESTDIR)
 	(cd $(DISTTESTDIR); tar xzf $(DIST_DIR)/daikon-source.tar.gz)
@@ -111,7 +112,9 @@ cvs-test:
 
 dist: dist-test
 
-dist-notest: $(DIST_DIR_PATHS)
+dist-ensure-directory: $(DIST_DIR)
+
+dist-notest: dist-ensure-directory $(DIST_DIR_PATHS)
 	$(MAKE) update-dist-dir 
 	$(MAKE) -n dist-dfej
 
@@ -120,7 +123,7 @@ dist-force:
 	-rm -f daikon-source.tar.gz daikon-jar.tar.gz
 	$(MAKE) dist
 
-update-dist-dir:
+update-dist-dir: dist-ensure-directory
 	# html-update-toc daikon.html
 	-cd $(DIST_DIR) && rm -rf $(DIST_DIR_FILES) doc daikon_manual_html
 	cp -pf $(DIST_DIR_PATHS) $(DIST_DIR)
@@ -157,8 +160,11 @@ daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DA
 	mkdir /tmp/daikon
 
 	mkdir /tmp/daikon/doc
-	cd doc && cp -p $(DOC_FILES) /tmp/daikon/doc
 	cp -p doc/README-dist /tmp/daikon/README
+	cd doc && cp -p $(DOC_FILES_NO_IMAGES) /tmp/daikon/doc
+	mkdir /tmp/daikon/doc/images
+	cd doc && cp -p $(IMAGE_PARTIAL_PATHS) /tmp/daikon/doc/images
+	cp -pR doc/daikon_manual_html /tmp/daikon/doc
 
 	# Auxiliary programs
 	mkdir /tmp/daikon/bin
@@ -171,9 +177,9 @@ daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DA
 	mkdir /tmp/daikon/front-end/c
 	cp -p $(C_RUNTIME_PATHS) /tmp/daikon/front-end/c
 
-	# # Example files
-	# mkdir /tmp/daikon/examples
-	# (cp -p examples-gries.tar.gz /tmp/daikon/examples; cd /tmp/daikon/examples; tar zxf examples-gries.tar.gz; mv examples-gries gries; rm examples-gries.tar.gz)
+	# Example files
+	cp -pR examples /tmp/daikon
+	cd /tmp/daikon && find examples \( -name '*.java' \) -prune -o -type f -o -name CVS -print | xargs rm -rf
 
 	date > /tmp/daikon/VERSION
 	chgrp -R $(INV_GROUP) /tmp/daikon
@@ -270,7 +276,7 @@ $(DIST_BIN_DIR)/dfej-solaris: $(DFEJ_DIR)/src/dfej-solaris
 	update-link-dates $(DIST_DIR)/index.html
 	cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@lcs.mit.edu
 
-dist-dfej-linux-x86: $(DIST_BIN_DIR)/dfej-linux-x86
+dist-dfej-linux-x86: $(DFEJ_DIR)/src/dfej
 	# First remake
 	-mv -f $(DFEJ_DIR)/src/dfej $(DFEJ_DIR)/src/dfej-dynamic
 	-mv -f $(DFEJ_DIR)/src/dfej-linux-x86 $(DFEJ_DIR)/src/dfej
@@ -340,3 +346,7 @@ dist-dfej-windows: dfej-src/build_mingw_dfej/src/dfej.exe
 # 5.  Run "make".  This should make the Windows binary at 
 # build_mingw/src/dfej.exe.  Copy this file to a Windows machine, and run 
 # it.  You should at least get the Daikon usage message.
+
+
+showvars:
+	@echo "DAIKON_JAVA_FILES = " $(DAIKON_JAVA_FILES)
