@@ -604,6 +604,7 @@ public class PptSplitter implements Serializable {
       leaders[i] = ((Equality) parent_eq_invs.get(i)).leader();
       Assert.assertTrue (leaders[i] != null);
     }
+    Arrays.sort (leaders, VarInfo.IndexComparator.getInstance());
 
     // Create unary views
     List unary_slices = new ArrayList();
