@@ -848,10 +848,10 @@ public final class ONEOFSCALAR
         }
         if (no_nulls(0)) {
           String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
-          forall = form[0] + "(" + form[1] + " != null)" + form[2];
+          forall = form[0] + form[1] + " != null" + form[2];
         } else if (all_nulls(0)) {
           String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
-          forall = form[0] + "(" + form[1] + " == null)" + form[2];
+          forall = form[0] + form[1] + " == null" + form[2];
         }
       }
     }
@@ -870,7 +870,7 @@ public final class ONEOFSCALAR
     result = "warning: method " + classname + ".format_jml() needs to be implemented: " + format();
 #endif
 #if defined(ELT) || defined(ELTSTRING)
-    result = form[0] + "(" + result + ")" + form[2];
+    result = form[0] + result + form[2];
 #endif
     return result;
   }
