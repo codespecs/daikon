@@ -1166,9 +1166,6 @@ public class PptTopLevel extends Ppt {
           // System.out.println("Constant " + inv.ppt.name + " " + one_of.var().name + " because of " + unary_view.name);
 	  // Should be Long, not Integer.
 	  Assert.assert(! (one_of.elt() instanceof Integer));
-          // If it's null, we can't distinguish from dynamic_constant
-          // never getting set in the first place.
-          // Assert.assert(one_of.elt() != null);
           one_of.var().dynamic_constant = one_of.elt();
           one_of.var().is_dynamic_constant = true;
           // System.out.println("set dynamic_constant to " + one_of.elt());
