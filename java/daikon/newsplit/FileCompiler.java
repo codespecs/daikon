@@ -3,26 +3,23 @@ package daikon.newsplit;
 import java.lang.*;
 import java.io.*;
 
+/**
+ * This class has a method compile_source which can be used to compile Java source.
+ * It invokes the external command javac
+ **/
 public final class FileCompiler{
-  //compiles a java file called filename.
-  //note: does not return any error yet, if the compile failed.
-  //need to use the proc.getErrorStream() method to get errors, However
-  //this will slow down everything if we are to wait for every compile
-  //to finish before we carry on with the next one.
   
-  static Runtime commander;
-  static Process proc;
-  
-  public FileCompiler(){
-    commander = Runtime.getRuntime();
-  }
-    
-  public static Process compile_Class(String filename){
+  static Runtime commander = Runtime.getRuntime();
+  /**
+   * @param The path of the java source to be compiled
+   * @return The process which executed the external compile command
+   **/
+  static Process compile_source(String filename){
     try {
-      proc = commander.exec("javac " + filename);
+      return commander.exec("javac " + filename);
     } catch (IOException e){
-      System.err.println("IOException while compiling " + filename);
+      System.err.println("IOException while compiling " + filename + "\n" + e.toString());
     }
-    return proc;
+    return null;
   }
 }

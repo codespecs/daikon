@@ -4,9 +4,14 @@ import java.io.*;
 import java.util.*;
 import java.lang.reflect.*;
 
+/**
+ * Reads in and loads compiled Java source and returns a Java Object
+ **/
 public class SplitterLoader extends ClassLoader{
 
-
+  /**
+   * read in the bytes of the .class file
+   **/
   private byte[] read_Class_Data(String fileName) {
 
     try {
@@ -21,7 +26,11 @@ public class SplitterLoader extends ClassLoader{
     }
     return null;
   }
-
+  
+  /**
+   * @param the pathname of a .class file
+   * @return a Java Object corresponding to the .class file
+   **/
   protected Class load_Class(String className, String full_pathname) {
     Class return_class;
     try {
