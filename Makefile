@@ -7,7 +7,7 @@ LISP_FILES := gries-helper.lisp instrument.lisp data-trace.lisp \
 	load-all.lisp \
 	gries.lisp gries-instrumented.lisp inv-medic.lisp
 PYTHON_FILES := invariants.py util.py TextFile.py
-DOC_FILES := invariants.py.doc Makefile TextFile.README
+DOC_FILES := invariants.py.doc Makefile TextFile.README daikon.html
 EDG_DIR := /projects/se/people/jake/invariants/vortex/C++/front-end/release/dist
 # $(EDG_DIR)/edgcpfe is distributed separately (not in the main tar file)
 EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/instrumentor
