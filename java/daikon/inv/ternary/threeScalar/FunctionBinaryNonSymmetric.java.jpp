@@ -34,7 +34,7 @@
 #include "daikon/inv/ternary/threeScalar/FunctionBinaryGeneric.java.jpp"
 
 #if 0
-  // Make sure all arguments are not inadvertantly passed to the next use
+  // Make sure all arguments are not inadvertantly passed to the next user
 #endif
 
 #undef ARG1_BOUND
@@ -45,3 +45,4 @@
 #undef FUNCTION
 #undef EQUALITY_SUPPRESS
 #undef EQUALITY_MIN_MAX_SUPPRESS
+#unassert FTYPE
