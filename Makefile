@@ -12,6 +12,7 @@ README_FILES := README-daikon-java README-dist README-dist-doc
 README_PATHS := $(addprefix doc/,$(README_FILES))
 SCRIPT_FILES := Makefile java-cpp.pl daikon.pl lines-from \
 	daikon.cshrc daikon.bashrc \
+	dfepl dtrace-perl \
 	trace-untruncate trace-purge-fns.pl trace-purge-vars.pl \
 	checkargs.pm util_daikon.pm \
 	runcluster.pl decls-add-cluster.pl extract_vars.pl dtrace-add-cluster.pl
@@ -336,7 +337,7 @@ daikon.tar: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILE
 	# Java example files
 	cp -pR examples /tmp/daikon
 	# Keep .java files, delete everything else
-	cd /tmp/daikon && find examples \( -name '*.java' \) -prune -o \( -type f -o -name CVS -o -name daikon-output -o -name daikon-java -o -name daikon-instrumented \) -print | xargs rm -rf
+	cd /tmp/daikon && find examples \( -name '*.java' -o -name 'Birthday.accessors' -o -name 'Birthday.pm' -o -name 'test_bday.pl' \) -prune -o \( -type f -o -name CVS -o -name daikon-output -o -name daikon-java -o -name daikon-instrumented \) -print | xargs rm -rf
 	# C example files
 	cp examples/c-examples.tar.gz /tmp/daikon/examples
 	cd /tmp/daikon/examples && tar zxf c-examples.tar.gz
@@ -431,8 +432,10 @@ daikon.tar: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILE
 	# (cd /tmp/daikon/java-front-end; $(MAKE) distclean; (cd src; $(MAKE) distclean); $(RM_TEMP_FILES))
 	(cd /tmp/daikon/front-end/java; $(MAKE) distclean; $(RM_TEMP_FILES) )
 
-	# # Perl instrumenter
+	# Perl front end
 	# mkdir /tmp/daikon/front-end/perl
+	cp -pR front-end/perl /tmp/daikon/front-end
+	(cd /tmp/daikon/front-end/perl; $(RM_TEMP_FILES) )
 
 	## Tools
 	cp -pR tools /tmp/daikon
