@@ -1,3 +1,6 @@
+This file contains implementation and design notes on the invariant
+engine.  For user documentation, see the README file in the distribution.
+
 Contents:
  * File format for data trace files
  * Data structures: mapping tuples of values to occurrence counts
