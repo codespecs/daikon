@@ -51,11 +51,9 @@ public class Debug {
       // "SeqIndexNonEqual",
       // "IntEqual",
       // "SeqSeqIntEqual",
-      // "OneOfSequence",
-      // "IntGreaterEqual",
-      // "IntLessEqual",
-      // "LinearTernary",
-      };
+      "NonZero"
+    };
+
 
   /**
    * List of Ppts for logging. Each name listed is compared to
@@ -68,9 +66,21 @@ public class Debug {
 
   public static String[] debugTrackPpt
     = {
+      // "DataStructures.StackAr.makeEmpty()V:::ENTER"
+      // "misc.Dataflow.B.m2():::EXIT24"
+      // "unionCareful(int, int):::EXIT"
+      // "MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT",
+      // "MapQuick1.StreetNumberSet:::OBJECT",
+      // "MapQuick1.StreetNumberSet.max():::EXIT",
+      // "DataStructures.DisjSets.DisjSets(int):::EXIT"
+      // "PolyCalc.RatPoly.hintedGet(PolyCalc.RatTermVec, int, int):::EXIT537"
+      // "misc.StaticInteresting:::OBJECT"
+      "DataStructures.StackAr.top():::EXIT75"
+      // "DataStructures.StackAr.pop():::EXIT"
       // "DataStructures.DisjSets.find(int):::EXIT70"
       // "misc.Fib",
     };
+
   /**
    * List of variable names for logging. Each name listed is compared
    * to each variable in turn.  If each matches exactly it will be
@@ -83,9 +93,17 @@ public class Debug {
 
   public static String[][] debugTrackVars
     = {
-      // { "this.terms.wrapped[orig(c)..]", "this.terms.wrapped[orig(e)+1..]" },
-      // { "this.terms.wrapped[orig(e)+1..]", "this.terms.wrapped[orig(c)..]" }
-      // {"misc.Fib.a", "misc.Fib.b", "misc.Fib.c" },
+      // { "this.ends[return..]" , "this.begins[return..]"}
+      // { "orig(this.s[post(x)])", "this.s[return]" },
+      // { "this.s[return]", "orig(this.s[post(x)])" }
+      // { "orig(pegB)", "return", "orig(pegA)" },
+      // { "orig(pegB)", "orig(pegA)", "return" },
+      // { "return", "orig(pegB)", "orig(pegA)" },
+      // { "return", "orig(pegA)", "orig(pegB)" },
+      // { "orig(pegA)", "return", "orig(pegB)" },
+      // { "orig(pegA)", "orig(pegB)", "return" }
+      // { "this.ends[0..return-1]" }
+      { "return" }
     };
 
   // cached standard parts of the debug print so that multiple calls from

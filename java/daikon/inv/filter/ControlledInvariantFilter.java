@@ -7,7 +7,7 @@ import java.util.logging.Level;
 import java.util.Vector;
 import java.util.Iterator;
 
-class ControlledInvariantFilter extends InvariantFilter {
+public class ControlledInvariantFilter extends InvariantFilter {
   public String getDescription() {
     return "Suppress controlled invariants [deprecated]";
   }
@@ -32,8 +32,6 @@ class ControlledInvariantFilter extends InvariantFilter {
 
 
     if (! isWorthPrinting_sansControlledCheck(inv)) {
-      inv.discardCode = DiscardCode.control_check;
-      inv.discardString = "Invariant fails InvariantFilters.isWorthPrintingFilter";
       return false;
     }
 
@@ -109,7 +107,7 @@ class ControlledInvariantFilter extends InvariantFilter {
         PrintInvariants.debugFiltering.fine ("\t\thas only constant vars " + inv.format() + "\n");
       }
       */ // [INCR]
-      if (inv.isObvious()) {
+      if (inv.isObvious().shouldDiscard()) {
         PrintInvariants.debugFiltering.fine ("\t\tis obvious " + inv.format() + "\n");
       }
       if (!inv.justified()) {

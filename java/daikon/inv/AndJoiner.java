@@ -8,7 +8,7 @@ public class AndJoiner
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020722L;
+  static final long serialVersionUID = 20030822L;
 
   private AndJoiner(PptSlice ppt, Invariant left, Invariant right) {
     super(ppt, left, right);
@@ -41,12 +41,30 @@ public class AndJoiner
     }
   }
 
-  public boolean isObviousDynamically(VarInfo[] vis) {
-    return left.isObviousDynamically(vis) && right.isObviousDynamically(vis);
+  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+    DiscardInfo leftObvious = left.isObviousDynamically(vis);
+    DiscardInfo rightObvious = right.isObviousDynamically(vis);
+    if (leftObvious.shouldDiscard() && rightObvious.shouldDiscard()) {
+      DiscardInfo result = new DiscardInfo(this, DiscardCode.obvious,
+                                           "Left obvious: " + leftObvious.discardString() + "\n"
+                                           + "Right obvious: " + rightObvious.discardString());
+      return result;
+    } else {
+      return new DiscardInfo();
+    }
   }
 
-  public boolean isObviousStatically(VarInfo[] vis) {
-    return left.isObviousStatically(vis) && right.isObviousStatically(vis);
+  public DiscardInfo isObviousStatically(VarInfo[] vis) {
+    DiscardInfo leftObvious = left.isObviousStatically(vis);
+    DiscardInfo rightObvious = right.isObviousStatically(vis);
+    if (leftObvious.shouldDiscard() && rightObvious.shouldDiscard()) {
+      DiscardInfo result = new DiscardInfo(this, DiscardCode.obvious,
+                                           "Left obvious: " + leftObvious.discardString() + "\n"
+                                           + "Right obvious: " + rightObvious.discardString());
+      return result;
+    } else {
+      return new DiscardInfo();
+    }
   }
 
   public boolean isSameInvariant(Invariant other) {

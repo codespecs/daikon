@@ -1,6 +1,7 @@
 package daikon.inv;
 
 import daikon.*;
+import daikon.inv.DiscardInfo;
 
 import java.util.*;
 
@@ -20,7 +21,7 @@ public class Implication
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020722L;
+  static final long serialVersionUID = 20030822L;
 
   public Invariant predicate() { return left; }
   public Invariant consequent() { return right; }
@@ -76,21 +77,9 @@ public class Implication
     double cons_prob = right.computeProbability();
     if ((pred_prob == PROBABILITY_NEVER)
         || (cons_prob == PROBABILITY_NEVER)) {
-      discardCode = DiscardCode.bad_probability;
-      if (pred_prob == PROBABILITY_NEVER)
-        discardString = "Predicate returned PROBABILITY_NEVER in computeProbability().";
-      else
-        discardString = "Consequent returned PROBABILITY_NEVER in computeProbability().";
       return PROBABILITY_NEVER;
     }
-    double answer = prob_and(pred_prob, cons_prob);
-    if (answer > Invariant.dkconfig_probability_limit) {
-      discardCode = DiscardCode.bad_probability;
-      discardString = "Probability{predicate AND consequent} > dkconfig_probability_limit==" +
-        Invariant.dkconfig_probability_limit + ". Pr{predicate}==" + pred_prob + ",Pr{consequent}==" +
-        cons_prob;
-    }
-    return answer;
+    return prob_and(pred_prob, cons_prob);
   }
 
   public String repr() {
@@ -115,26 +104,21 @@ public class Implication
       return "(" + consq_fmt + ")" + mid + "(" + pred_fmt + ")";
     } else if (format == OutputFormat.SIMPLIFY) {
       String cmp = (iff ? "IFF" : "IMPLIES");
-      return "(" + cmp + " " + pred_fmt + " " + consq_fmt + ")";          
+      return "(" + cmp + " " + pred_fmt + " " + consq_fmt + ")";
     } else if (format == OutputFormat.DBCJAVA) {
       if ( iff )
-        // RRN: I'm not sure if this actually works for DBC; 
+        // RRN: I'm not sure if this actually works for DBC;
         //      there seems to be no dedicated biconditional, however.
         return "((" + pred_fmt + ") == (" + consq_fmt + "))";
-      else 
-        return "(" + pred_fmt + " $implies " + consq_fmt + ")";      
+      else
+        return "(" + pred_fmt + " $implies " + consq_fmt + ")";
     } else {
       return format_unimplemented(format);
     }
   }
 
-  public boolean isObviousStatically(VarInfo[] vis) {
-    boolean answer = right.isObviousStatically(vis);
-    if (answer && discardCode==DiscardCode.not_discarded) {
-      discardCode = DiscardCode.obvious;
-      discardString = "Right is obviously derived: "+right.discardString;
-    }
-    return answer;
+  public DiscardInfo isObviousStatically(VarInfo[] vis) {
+    return right.isObviousStatically(vis);
   }
 
   public boolean isSameFormula(Invariant other) {

@@ -12,7 +12,7 @@ public final class StringComparisonCore
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20030822L;
 
   public boolean can_be_eq = false;
   public boolean can_be_lt = false;
@@ -32,8 +32,6 @@ public final class StringComparisonCore
   public boolean obvious_can_be_gt;
   public boolean obvious_can_be_le;
   public boolean obvious_can_be_ge;
-
-  private ValueTracker values_cache = new ValueTracker(8);
 
   public Invariant wrapper;
 
@@ -60,7 +58,6 @@ public final class StringComparisonCore
   public Object clone() {
     try {
       StringComparisonCore result = (StringComparisonCore) super.clone();
-      result.values_cache = (ValueTracker) values_cache.clone();
       return result;
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can't happen
@@ -87,11 +84,6 @@ public final class StringComparisonCore
   public void add_modified(String v1, String v2, int count) {
     if ((v1 == null) || (v2 == null)) {
       wrapper.destroyAndFlow();
-      wrapper.discardCode = DiscardCode.bad_sample;
-      if (v1==null)
-        wrapper.discardString = wrapper.ppt.var_infos[0].name.name() + " took on null value";
-      else
-        wrapper.discardString = wrapper.ppt.var_infos[1].name.name() + "took on null value";
       return;
     }
 
@@ -118,7 +110,6 @@ public final class StringComparisonCore
     }
 
     if (! changed) {
-      values_cache.add(v1, v2);
       return;
     }
 
@@ -136,7 +127,6 @@ public final class StringComparisonCore
     can_be_eq = new_can_be_eq;
     can_be_lt = new_can_be_lt;
     can_be_gt = new_can_be_gt;
-    values_cache.add(v1, v2);
   }
 
   // This is very tricky, because whether two variables are equal should
@@ -147,13 +137,7 @@ public final class StringComparisonCore
     if (wrapper.falsified) {
       return Invariant.PROBABILITY_NEVER;
     } else if (can_be_lt || can_be_gt) {
-      double answer = Math.pow(.5, values_cache.num_values());
-      if (answer > Invariant.dkconfig_probability_limit) {
-        wrapper.discardCode = DiscardCode.bad_probability;
-        wrapper.discardString = "Computed probability " + answer + " > dkconfig_probability_limit==" +
-          Invariant.dkconfig_probability_limit;
-      }
-      return answer;
+      return Math.pow(.5, wrapper.ppt.num_values());
     } else {
       if (can_be_eq) {
         // It's an equality invariant.  I ought to use the actual ranges somehow.
@@ -164,8 +148,6 @@ public final class StringComparisonCore
       } else {
         // None of the can_be_X's are true.
         // (We haven't seen any values yet.)
-        wrapper.discardCode = DiscardCode.not_enough_samples;
-        wrapper.discardString = "0 samples seen";
         return Invariant.PROBABILITY_UNJUSTIFIED;
       }
     }

@@ -42,7 +42,7 @@ public final class CLASSNAME
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030812L;
+  static final long serialVersionUID = 20030822L;
 
   public static final Logger debug
         = Logger.getLogger ("daikon.inv.binary.twoScalar." + CLASSSTRING);
@@ -169,13 +169,7 @@ public final class CLASSNAME
     if (wrapper.falsified) {
       return Invariant.PROBABILITY_NEVER;
     } else if (can_be_lt || can_be_gt) {
-      double answer = Math.pow(.5, wrapper.ppt.num_values());
-      if (answer > Invariant.dkconfig_probability_limit) {
-        wrapper.discardCode = DiscardCode.bad_probability;
-        wrapper.discardString = "Computed probability "+answer+" > dkconfig_probability_limit=="+
-          Invariant.dkconfig_probability_limit;
-      }
-      return answer;
+      return Math.pow(.5, wrapper.ppt.num_values());
     } else {
       if (can_be_eq) {
         // It's an equality invariant.  I ought to use the actual ranges somehow.
@@ -186,8 +180,6 @@ public final class CLASSNAME
       } else {
         // None of the can_be_X's are set.
         // (We haven't seen any samples.)
-        wrapper.discardCode = DiscardCode.not_enough_samples;
-        wrapper.discardString = "No samples seen for this Invariant";
         return Invariant.PROBABILITY_UNJUSTIFIED;
       }
     }
@@ -248,12 +240,7 @@ public final class CLASSNAME
   }
 
   public boolean isExact() {
-    boolean answer = (can_be_eq && (!can_be_lt) && (!can_be_gt));
-    if (answer) {
-      wrapper.discardCode = DiscardCode.exact;
-      wrapper.discardString = "Invariant is equals but neither less than nor greater than";
-    }
-    return answer;
+    return (can_be_eq && (!can_be_lt) && (!can_be_gt));
   }
 
   public boolean isSameFormula(CLASSNAME other)

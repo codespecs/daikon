@@ -52,7 +52,7 @@ public final class CLASSNAME
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030402L;
+  static final long serialVersionUID = 20030822L;
 
     public static final Logger debug
         = Logger.getLogger ("daikon.inv.unary.sequence." + CLASSSTRING);
@@ -202,7 +202,7 @@ public final class CLASSNAME
 
     return form[0] + form[1] + " " + comparator + index1.name() + form[2];
   }
-  
+
   // RRN: unsure of this
   public String format_dbc() {
     String comparator = core.format_comparator();
@@ -278,9 +278,9 @@ public final class CLASSNAME
 
 
   // Copied from IntComparison.
-  public boolean isObviousDynamically(VarInfo[] vis) {
+  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
     if (isExact()) {
-      return false;
+      return new DiscardInfo();
     }
 
     return super.isObviousDynamically(vis);

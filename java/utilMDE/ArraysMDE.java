@@ -1038,6 +1038,53 @@ public final class ArraysMDE {
     return sb.toString();
   }
 
+  /**
+   * Casts obj down to the proper array type then calls the appropriate
+   * toString() method.  Only call this method if obj is a boolean, double,
+   * int, long, or Object array.
+   * @requires obj != null
+   * @throws IllegalArgumentException if obj is not one of the types mentioned above.
+   */
+  public static String toString(Object obj) throws IllegalArgumentException {
+    if (obj instanceof boolean[]) {
+      return toString((boolean[]) obj);
+    } else if (obj instanceof double[]) {
+      return toString((double[]) obj);
+    } else if (obj instanceof int[]) {
+      return toString((int[]) obj);
+    } else if (obj instanceof long[]) {
+      return toString((long[]) obj);
+    } else if (obj instanceof Object[]) {
+      return toString((Object[]) obj);
+    } else {
+      throw new IllegalArgumentException("Argument is " + ((obj == null) ? "null" :
+                                         "of class " + obj.getClass().getName()));
+    }
+  }
+
+  /**
+   * Casts obj down to the proper array type then calls .length.
+   * Only call this method if obj is a boolean, double, int, long, or Object array.
+   * @requires obj != null
+   * @throws IllegalArgumentException if obj is not one of the types mentioned above.
+   */
+  public static int length(Object obj) throws IllegalArgumentException {
+    if (obj instanceof boolean[]) {
+      return ((boolean[]) obj).length;
+    } else if (obj instanceof double[]) {
+      return ((double[]) obj).length;
+    } else if (obj instanceof int[]) {
+      return ((int[]) obj).length;
+    } else if (obj instanceof long[]) {
+      return ((long[]) obj).length;
+    } else if (obj instanceof Object[]) {
+      return ((Object[]) obj).length;
+    } else {
+      throw new IllegalArgumentException("Argument is " + ((obj == null) ? "null" :
+                                         "of class " + obj.getClass().getName()));
+    }
+  }
+
 
   ///////////////////////////////////////////////////////////////////////////
   /// Sortedness

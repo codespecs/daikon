@@ -40,6 +40,8 @@ package daikon.inv.ternary.threeScalar;
 
 import daikon.*;
 import daikon.inv.Invariant;
+import daikon.inv.DiscardInfo;
+import daikon.inv.DiscardCode;
 import daikon.derive.unary.*;
 import daikon.derive.binary.*;
 import java.util.*;
@@ -56,7 +58,7 @@ public class CLASSNAME
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030812L;
+  static final long serialVersionUID = 20030822L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -281,9 +283,10 @@ public class CLASSNAME
     return true;
   }
 
-  public boolean isObviousDynamically(VarInfo[] vis) {
+  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
     if (core.a == 0 || core.b == 0 || core.c == 0) {
-      return true;
+      return new DiscardInfo(this, DiscardCode.obvious, "If a coefficient is 0, a LinearBinary should" +
+                             " exist over the other two variables");
     }
 
     return super.isObviousDynamically(vis);

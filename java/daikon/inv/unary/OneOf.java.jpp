@@ -227,7 +227,7 @@ public final class ONEOFSCALAR
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20030822L;
 
   /**
    * Debugging logger.
@@ -1437,49 +1437,30 @@ public final class ONEOFSCALAR
     if (num_elts == dkconfig_size) {
       if (logOn() || debug.isLoggable(Level.FINE))
         log (debug, "destroy of '" + format() + "' add_modified (" + v + ")");
-      discardCode = DiscardCode.bad_sample;
-      discardString = "number of values taken on has reached dkconfig_size=="+dkconfig_size;
       destroyAndFlow();
       return;
     }
 #if defined(STRING) || defined(ELTSTRING)
     if (is_type() && (num_elts == 1)) {
       destroyAndFlow();
-      discardCode = DiscardCode.bad_sample;
-      discardString = var().name.name()+" is a String representing a class type and took on more one value: ";
-      discardString += elts[0]+" seen then "+v+" introduced.";
       return;
     }
 #elif defined(SEQUENCE)
     if (is_hashcode && (num_elts == 1)) {
       destroyAndFlow();
-      discardCode = DiscardCode.bad_sample;
-      discardString = var().name.name()+" is a sequence hashcode and took on more than one value: ";
-      discardString += elts[0]+" seen then "+v+" introduced.";
       return;
     }
 #elif defined(SCALAR) || defined(ELT)
     if ((is_boolean && (num_elts == 1))
         || (is_hashcode && (num_elts == 2))) {
       destroyAndFlow();
-      discardCode = DiscardCode.bad_sample;
-
-      if (is_boolean)
-        discardString = var().name.name()+" is a boolean and took on both true and false.";
-      else {
-        discardString = var().name.name()+" is a SCALAR or ELT hashcode and took on more than one non-null value: ";
-        discardString += ArraysMDE.toString(elts)+" seen then "+v+" introduced.";
-      }
-
       return;
     }
+
     if (is_hashcode && (num_elts == 1)) {
       // Permit two object values only if one of them is null
       if ((elts[0] != 0) && (v != 0)) {
         destroyAndFlow();
-        discardCode = DiscardCode.bad_sample;
-        discardString = var().name.name()+" is a SCALAR or ELT hashcode and took on more than one non-null value: ";
-        discardString += elts[0]+" seen then "+v+" introduced.";
         return;
       }
     }
@@ -1509,10 +1490,6 @@ public final class ONEOFSCALAR
     for (int ai=0; ai <a.length; ai++) {
       if (!add_mod_elem (a[ai], count)) {
         destroyAndFlow();
-        discardCode = DiscardCode.bad_sample;
-        discardString = "Sample value '" + a[ai] + "' created too many "
-                      + "different values for oneof";
-        log (discardString);
       }
     }
   }
@@ -1522,10 +1499,6 @@ public final class ONEOFSCALAR
   public void add_modified(INT v, int count) {
     if (!add_mod_elem (v, count)) {
       destroyAndFlow();
-      discardCode = DiscardCode.bad_sample;
-      discardString = "Sample value '" + v + "' created too many different"
-                    + " values for oneof";
-      log (discardString);
     }
   }
 
@@ -1594,10 +1567,6 @@ public final class ONEOFSCALAR
   // It is possible to have seen many (array) samples, but no (INT)
   // array element values.
   public boolean enoughSamples() {
-    if (num_elts<=0) {
-      discardCode = DiscardCode.not_enough_samples;
-      discardString = "Not enough samples: had "+num_elts+" but needed 1";
-    }
     return num_elts > 0;
   }
 #endif
@@ -1605,15 +1574,10 @@ public final class ONEOFSCALAR
   protected double computeProbability() {
     // This is not ideal.
     if (num_elts == 0) {
-      discardCode = DiscardCode.bad_probability;
-      discardString = var().name.name()+" never was initialized.";
       return Invariant.PROBABILITY_UNJUSTIFIED;
 #if defined(SCALAR) || defined(ELT)
     } else if (is_hashcode && (num_elts > 1)) {
       // This should never happen
-      discardCode = DiscardCode.bad_probability;
-      discardString = var().name.name()+" was a hashcode and took on more than one value: ";
-      discardString += ArraysMDE.toString(elts);
       return Invariant.PROBABILITY_UNJUSTIFIED;
 #endif
       } else {
@@ -1621,21 +1585,19 @@ public final class ONEOFSCALAR
       }
   }
 
-  public boolean isObviousStatically(VarInfo[] vis) {
+  public DiscardInfo isObviousStatically(VarInfo[] vis) {
     // Static constants are necessarily OneOf precisely one value.
     // This removes static constants from the output, which might not be
     // desirable if the user doesn't know their actual value.
     if (vis[0].isStaticConstant()) {
       Assert.assertTrue(num_elts <= 1);
-      discardCode = DiscardCode.obvious;
-      discardString = var().name.name()+" is a static constant.";
-      return true;
+      return new DiscardInfo(this, DiscardCode.obvious, vis[0].name.name() + " is a static constant.");
     }
     return super.isObviousStatically(vis);
   }
 
 #if defined(IS_NUMERIC)
-  public boolean isObviousDynamically(VarInfo[] vis) {
+  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
     VarInfo v = vis[0];
 
     Debug dlog = new Debug (getClass(), ppt, vis);
@@ -1655,16 +1617,15 @@ public final class ONEOFSCALAR
         if (logOn())
           dlog.log ("isObviousDynamically '" + v.name.name()
                     + " == 0' ==> '" + bv[0].name.name() + " == []'");
-        return (true);
+        return new DiscardInfo(this, DiscardCode.obvious, "size(array) == 0 is implied by array == []");
       }
     }
 
     if (v.isDerived() && (v.derived instanceof SequenceLength)) {
       SequenceLength sl = (SequenceLength) v.derived;
       if (sl.shift != 0) {
-        discardCode = DiscardCode.obvious;
-        discardString = v.name.name() + " is derived with shift!-0 (shift==" + sl.shift + ")";
-        return true;
+        String discardString = v.name.name() + " is derived with shift!=0 (shift==" + sl.shift + ")";
+        return new DiscardInfo(this, DiscardCode.obvious, discardString);
       }
     }
 
@@ -1685,9 +1646,8 @@ public final class ONEOFSCALAR
             sort_rep();
             if (other.compare_rep(num_elts, elts)) {
               // System.out.println("isObviousImplied true");
-              discardCode = DiscardCode.obvious;
-              discardString = v1.name.name()+" is a member of "+v2.name.name()+" for which this Invariant also holds";
-              return true;
+              String discardString = v1.name.name()+" is a member of "+v2.name.name()+" for which this Invariant also holds";
+              return new DiscardInfo(this, DiscardCode.obvious, discardString);
             }
           }
         }
@@ -1697,7 +1657,7 @@ public final class ONEOFSCALAR
     return super.isObviousDynamically(vis);
   }
 #elif defined(IS_ELT_NUMERIC)
-  public boolean isObviousDynamically(VarInfo[] vis) {
+  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
     VarInfo v = vis[0];
     // Look for the same property over a supersequence of this one.
     PptTopLevel pptt = ppt.parent;
@@ -1711,7 +1671,7 @@ public final class ONEOFSCALAR
         if (isSameFormula(other)
           && SubSequence.isObviousSubSequenceDynamically(this, v, other.var())) {
           debug.fine ("isObviousDyn: Returning true because isObviousSubSequenceDynamically");
-          return true;
+          return new DiscardInfo(this, DiscardCode.obvious, "The same property holds over a supersequence");
         }
       }
     }

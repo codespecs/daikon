@@ -52,7 +52,7 @@ public final class CLASSNAME
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030812L;
+  static final long serialVersionUID = 20030822L;
 
   // transient public Method function;  // transient:  Method not serializable
   public final String[] methodname;   // provided to permit serialization
@@ -100,13 +100,6 @@ public final class CLASSNAME
 
     if (! ok) {
       wrapper.destroyAndFlow();
-      wrapper.discardCode = DiscardCode.bad_sample;
-      String name1 = wrapper.ppt.var_infos[0].name.name();
-      String name2 = wrapper.ppt.var_infos[1].name.name();
-      if (inverse)
-        wrapper.discardString = "Function failed for "+name2+"="+x+","+name1+"="+y;
-      else
-        wrapper.discardString = "Function failed for "+name1+"="+x+","+name2+"="+y;
       return;
     }
 
@@ -118,13 +111,7 @@ public final class CLASSNAME
     // For now, only depend on number of samples.
     // But if this prob = 0, should depend on the function as well.
     double answer = 0;
-    answer = Invariant.prob_is_ge(wrapper.ppt.num_values(), 5);
-    if (answer > Invariant.dkconfig_probability_limit) {
-      wrapper.discardCode = DiscardCode.bad_probability;
-      wrapper.discardString = "Number of samples seen not close to goal: "+
-        wrapper.ppt.num_values()+" samples seen,goal was 5";
-    }
-    return answer;
+    return Invariant.prob_is_ge(wrapper.ppt.num_values(), 5);
   }
 
 
@@ -136,7 +123,7 @@ public final class CLASSNAME
     String resultname = (inverse ? vname1 : vname2).name_using(format);
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.IOA)
-        || (format == OutputFormat.JML) 
+        || (format == OutputFormat.JML)
         || (format == OutputFormat.DBCJAVA)) //RRN: unsure of this atm.
     {
       String eq = " == ";

@@ -72,7 +72,7 @@ public class NONZERO
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20030822L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -170,8 +170,6 @@ public class NONZERO
         log (debug, "destroy (value = " + v + ")");
       }
       destroyAndFlow();
-      discardCode = DiscardCode.bad_sample;
-      discardString = "Zero/null sample seen";
       return;
     }
     // The min and max tests will simultaneously succeed exactly once (for
@@ -198,13 +196,6 @@ public class NONZERO
       // makes sense to do if the {Lower,Upper}Bound invariant doesn't imply
       // the non-zeroness.)  In that case, do still check for no values yet
       // received.
-      discardCode = DiscardCode.bad_probability;
-      String descrip;
-      if (min > 0)
-        descrip = "positive";
-      else
-        descrip = "negative";
-      discardString = "override_range==0 and all seen values have been "+descrip;
       return Invariant.PROBABILITY_UNJUSTIFIED;
     } else {
       PRIMITIVE range;
@@ -232,40 +223,30 @@ public class NONZERO
       //   double log_probability = self.samples*math.log(probability);
       // then calling Math.exp (if the value is in the range that wouldn't
       // cause underflow).
-      double answer = 0;
-      answer = Math.pow(probability_one_elt_nonzero, ppt.num_mod_non_missing_samples());
-      if (answer > Invariant.dkconfig_probability_limit) {
-        discardCode = DiscardCode.bad_probability;
-        discardString = "Computed probability "+answer+" > dkconfig_probability_limit=="+dkconfig_probability_limit;
-      }
-      return answer;
+      return Math.pow(probability_one_elt_nonzero, ppt.num_mod_non_missing_samples());
     }
   }
 
-  public boolean isObviousStatically(VarInfo[] vis) {
+  public DiscardInfo isObviousStatically(VarInfo[] vis) {
     VarInfo var = vis[0];
     // In Java, "this" can never be non-null, so "this != null" is vacuous.
     if (var.name.name() == "this") { // interned
-      discardCode = DiscardCode.obvious;
-      discardString = "'this' can never be null in Java";
-      return true;
+      return new DiscardInfo(this, DiscardCode.obvious, "'this' can never be null in Java");
     }
     if (var.name instanceof VarInfoName.Prestate &&
         ((VarInfoName.Prestate) var.name).term.name() == "this") { // interned
-      discardCode = DiscardCode.obvious;
-      discardString = "'this' can never be null in Java";
-      return true;
+      return new DiscardInfo(this, DiscardCode.obvious, "'this' can never be null in Java");
     }
 
     if (!var.aux.getFlag(VarInfoAux.HAS_NULL)) {
       // If it's not a number and null doesn't have special meaning...
-      return true;
+      return new DiscardInfo(this, DiscardCode.obvious, "'null' has no special meaning for " + var.name.name());
     }
 
     return super.isObviousStatically(vis);
   }
 
-  public boolean isObviousDynamically(VarInfo[] vis) {
+  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
     VarInfo var = vis[0];
 
     Debug dlog = new Debug (getClass(), ppt, vis);
@@ -281,18 +262,18 @@ public class NONZERO
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if ((inv instanceof ELTNONZERO) && inv.enoughSamples()) {
-        VarInfo v1 = var();
         VarInfo v2 = inv.ppt.var_infos[0];
-        // System.out.println(NONZEROSTRING + ".isObviousImplied: calling " + MEMBERSTRING + ".isObviousMember(" + v1.name + ", " + v2.name + ")");
+        // System.out.println(NONZEROSTRING + ".isObviousImplied: calling " + MEMBERSTRING + ".isObviousMember(" + var.name + ", " + v2.name + ")");
         // Don't use isEqualToObviousMember:  that is too subtle
         // and eliminates desirable invariants such as "return != null".
-        if (MEMBER.isObviousMember(v1, v2)) {
-          // System.out.println(NONZEROSTRING + ".isObviousImplied: " + MEMBERSTRING + ".isObviousMember(" + v1.name + ", " + v2.name + ") = true");
+        if (MEMBER.isObviousMember(var, v2)) {
+          // System.out.println(NONZEROSTRING + ".isObviousImplied: " + MEMBERSTRING + ".isObviousMember(" + var.name + ", " + v2.name + ") = true");
           if (logOn())
             dlog.log ("isObvDyn- true, arg is member of nonzero sequence");
-          discardCode = DiscardCode.obvious;
-          discardString = v1+" is a member of the non-zero sequence "+v2;
-          return true;
+          String discardString = var.name.name() + " is a member of the non-zero sequence " + v2.name.name();
+          if (logOn())
+            log (format() + " obviously implied from " + inv.format());
+          return new DiscardInfo(this, DiscardCode.obvious, discardString);
         }
       }
     }
@@ -315,9 +296,8 @@ public class NONZERO
                 // System.out.println(NONZEROSTRING + ".isObviousImplied true due to: " + sine.format());
                 if (logOn())
                   dlog.log ("isObvDyn- true due to " + sine.format());
-                discardCode = DiscardCode.obvious;
-                discardString = var+" is a member of the non-zero sequence "+vi;
-                return true;
+                String discardString = var.name.name() + " is a member of the non-zero sequence " + vi.name.name();
+                return new DiscardInfo(this, DiscardCode.obvious, discardString);
               }
             }
           }

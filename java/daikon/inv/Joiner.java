@@ -1,13 +1,14 @@
 package daikon.inv;
 
 import daikon.*;
+import daikon.inv.DiscardInfo;
 
 import utilMDE.Assert;
 
 public abstract class Joiner
   extends Invariant {
 
-  static final long serialVersionUID = 20020722L;
+  static final long serialVersionUID = 20030822L;
 
   public Invariant left;
   public Invariant right;
@@ -51,8 +52,8 @@ public abstract class Joiner
     return false;
   }
 
-  public boolean isObviousImplied() {
-    return false;
+  public DiscardInfo isObviousImplied() {
+    return new DiscardInfo();
   }
 
   public boolean isSameInvariant(Invariant other) {

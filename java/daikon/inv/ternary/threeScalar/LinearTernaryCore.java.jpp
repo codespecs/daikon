@@ -44,12 +44,12 @@ public final class CLASSNAME
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030812L;
+  static final long serialVersionUID = 20030822L;
 
   /** Debug tracer **/
   final static Logger debug = Logger.getLogger("daikon.inv.ternary.threeScalar." + CLASSSTRING);
 
-  // z == ax + by + c; first argument is x, second is y, third is z
+  // ax + by + cz + d = 0; first argument is x, second is y, third is z
   public double a = 0, b = 0, c = 0, d = 0;
   public double min_a, max_a, min_b, max_b, min_c, max_c, min_d, max_d;
   public double separation = 0;
@@ -123,17 +123,14 @@ public final class CLASSNAME
     pclever[permutation[2]] = clever[2];
     if (values_seen >= MINTRIPLES) {
       // Seen enough values, so permuting a, b, c is useful
-      // This is needed so we don't have div by 0 errors
-      //      if (pclever[2] == 0) {
-      if (a == 0 || b == 0 || c == 0) { // Means a bit more than above, but this
-                              // should be okay
+       if (a == 0 || b == 0 || c == 0) {
         // Can't handle this form once rotated.  But if we've seen
         // enough values, yet a or b is zero, then this is covered by
         // a LinearBinary or a constant, so let me just destroy myself
         values_seen = Integer.MAX_VALUE;
         a = b = c = d = 0;
         if (debug.isLoggable(Level.FINE)) {
-          debug.fine ("  Ternary invariant destroyed because a, b, or b = 0");
+          debug.fine ("  Ternary invariant destroyed because a, b, or c = 0");
         }
         return;
       } else {
@@ -151,6 +148,7 @@ public final class CLASSNAME
         d = d / div;
       }
     }
+
     // Fix caches
     {
       PRIMITIVE[] temp = new PRIMITIVE[3];
@@ -186,7 +184,7 @@ public final class CLASSNAME
   }
 
   /**
-   * Looks for points that define a plane (z = ax + by + c).  Collects
+   * Looks for points that define a plane (ax + by + cz + d = 0).  Collects
    * MINTRIPLE points before attempting to define the plane (to
    * hopefully get at least some spread between the points, so that
    * small errors don't get magnified).  Once the equation for the
@@ -230,8 +228,6 @@ public final class CLASSNAME
         maxsep_triples (def_points);
         if (def_points[0] == null) {
           wrapper.destroyAndFlow();
-          wrapper.discardCode = DiscardCode.bad_sample;
-          wrapper.discardString = "No triplet found with non-zero separation";
           return;
         }
 
@@ -240,8 +236,6 @@ public final class CLASSNAME
         try {
           coef = calc_tri_linear (def_points);
         } catch (Exception e) {
-          wrapper.discardCode = DiscardCode.bad_sample;
-          wrapper.discardString = "Exception thrown while calculating coefficients: "+e;
           wrapper.destroyAndFlow();
           return;
         }
@@ -258,11 +252,6 @@ public final class CLASSNAME
             (Math.abs(a) >= Double.MAX_VALUE) ||
             (Math.abs(b) >= Double.MAX_VALUE) ||
             (Math.abs(c) >= Double.MAX_VALUE)) {
-          wrapper.discardCode = DiscardCode.bad_sample;
-          if (a==0)
-            wrapper.discardString = "For "+wrapper.format()+" 'a' was calculated to be 0";
-          if (b==0)
-            wrapper.discardString = "For "+wrapper.format()+" 'b' was calculated to be 0";
           wrapper.destroyAndFlow();
           return;
         }
@@ -281,19 +270,6 @@ public final class CLASSNAME
                             + "+" + b + "*" + def_points[i].y + "+" + c + "*" + def_points[i].z
                             + "+" + d);
               }
-              wrapper.discardCode = DiscardCode.bad_sample;
-#if defined(TYPELONG)
-              LinearTernary ltInv = (LinearTernary) wrapper;
-#elif defined(TYPEDOUBLE)
-              LinearTernaryFloat ltInv = (LinearTernaryFloat) wrapper;
-#endif
-              String name1 = ltInv.var1().name.name();
-              String name2 = ltInv.var2().name.name();
-              String name3 = ltInv.var3().name.name();
-
-              wrapper.discardString = "(a,b,c,d) calculated to be ("+a+","+b+","+c+","+d+") failed"+
-                "for sample ("+name1+","+name2+","+name3+") = ("+def_points[i].x+","+def_points[i].y+
-                ","+def_points[i].z+")";
               wrapper.destroyAndFlow();
 
               return;
@@ -317,17 +293,6 @@ public final class CLASSNAME
                          + " a=" + a + " b=" + b + " c=" + c
                          + " values_seen=" + values_seen);
           }
-          wrapper.discardCode = DiscardCode.bad_sample;
-#if defined(TYPELONG)
-          LinearTernary ltInv = (LinearTernary) wrapper;
-#elif defined(TYPEDOUBLE)
-          LinearTernaryFloat ltInv = (LinearTernaryFloat) wrapper;
-#endif
-          String name1 = ltInv.var1().name.name();
-          String name2 = ltInv.var2().name.name();
-          String name3 = ltInv.var3().name.name();
-          wrapper.discardString = "(a,b,c,d) calculated to be ("+a+","+b+","+c+","+d+
-            ") failed for sample ("+name1+","+name2+","+name3+") = ("+x+","+y+","+z+")";
           wrapper.destroyAndFlow();
           return;
         }
@@ -490,7 +455,7 @@ public final class CLASSNAME
 
 
   // Given ((x0,y0,z0),(x1,y1,z1)), calculate a, b, and c
-  // such that z = ax + by + c.
+  // such that ax + by + cz + d = 0.
   //
   // if no such (a, b, c) exists, it will throw an exception, otherwise
   // an array of doubles will be returned with 3 elements (a, b, c).
@@ -526,7 +491,7 @@ public final class CLASSNAME
   //
 
   /**
-   * Calculates the coefficients for the equation z = ax + by +c for the
+   * Calculates the coefficients for the equation ax + by + cz + d = 0 for the
    * first three points in points.
    *
    * @param points  array of points to use to calculate the coefficents.  Only
@@ -594,13 +559,7 @@ public final class CLASSNAME
     if (wrapper.falsified)
       return Invariant.PROBABILITY_NEVER;
     else {
-      double answer = Invariant.prob_is_ge(wrapper.ppt.num_values(), MINTRIPLES);
-      if (answer > Invariant.dkconfig_probability_limit) {
-        wrapper.discardCode = DiscardCode.bad_probability;
-        wrapper.discardString = "Number of samples seen not close to goal: "+values_seen+" samples"+
-          "seen,goal was "+MINTRIPLES;
-      }
-      return answer;
+      return Invariant.prob_is_ge(wrapper.ppt.num_values(), MINTRIPLES);
     }
   }
 
@@ -687,7 +646,7 @@ public final class CLASSNAME
       str_d = id + "";
     }
 
-    // 0 == ax + by + cz + d
+    // ax + by + cz + d = 0
     String str_z = z.simplify_name();
     String str_x = x.simplify_name();
     String str_y = y.simplify_name();

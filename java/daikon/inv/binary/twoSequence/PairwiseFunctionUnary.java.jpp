@@ -30,6 +30,7 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.Invariant;
+import daikon.inv.DiscardInfo;
 import daikon.inv.DiscardCode;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.binary.twoScalar.*;
@@ -52,7 +53,7 @@ public class CLASSNAME
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20030822L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -125,9 +126,6 @@ public class CLASSNAME
   public void add_modified(PRIMITIVE[] x_arr, PRIMITIVE[] y_arr, int count) {
     if (x_arr.length != y_arr.length) {
       destroyAndFlow();
-      discardCode = DiscardCode.bad_sample;
-      discardString = "Sample seen with different sequence lengths: "+utilMDE.ArraysMDE.toString(x_arr)+
-        " "+utilMDE.ArraysMDE.toString(y_arr);
       return;
     }
     int len = x_arr.length;

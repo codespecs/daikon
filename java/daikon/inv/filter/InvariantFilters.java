@@ -151,25 +151,9 @@ public class InvariantFilters {
     propertyFilters.add( filter );
   }
 
-  public boolean shouldKeep( Invariant invariant ) {
+
+  public InvariantFilter shouldKeepVarFilters( Invariant invariant ) {
     Logger df = PrintInvariants.debugFiltering;
-
-    if (invariant.logOn() || df.isLoggable(Level.FINE)) {
-      invariant.log (df, "filtering");
-    }
-
-    if (invariant instanceof GuardingImplication) {
-      invariant = ((Implication) invariant).right;
-    }
-
-    // Keep track of old codes so that if it passes this test
-    // we can set it back to prevent undesirable side effects
-    // from the filters
-    DiscardCode oldCode = invariant.discardCode;
-    String oldString = invariant.discardString;
-
-    //  Do variable filters first since they eliminate more invariants.
-    invariant.log("Processing " + variableFilters.size() + " variable filters");
     if (variableFilters.size() != 0) {
       if (variableFilterType == InvariantFilters.ANY_VARIABLE) {
         boolean hasAnyVariable = false;
@@ -182,7 +166,7 @@ public class InvariantFilters {
         if (! hasAnyVariable) {
           if (invariant.logOn())
             invariant.log ("Failed ANY_VARIABLE filter");
-            return false;
+          return (InvariantFilter) variableFilters.get(0);
         }
       } else if (variableFilterType == InvariantFilters.ALL_VARIABLES) {
         for (Iterator iter = variableFilters.iterator(); iter.hasNext(); ) {
@@ -191,18 +175,16 @@ public class InvariantFilters {
             if (invariant.logOn())
               invariant.log ("Failed ALL_VARIABLES filter"
                              + filter.getClass().getName());
-              return false;
+              return filter;
           }
         }
       }
     }
-    // If it made it this far, get rid of the side effects from testing it against
-    // variable filters
-    invariant.discardCode = oldCode;
-    invariant.discardString = oldString;
+    return null;
+  }
 
-    //  Property filters.
-    invariant.log ("Processing " + propertyFilters.size() + " Prop filters");
+  public InvariantFilter shouldKeepPropFilters( Invariant invariant ) {
+    Logger df = PrintInvariants.debugFiltering;
     for (Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
       InvariantFilter filter = (InvariantFilter) iter.next();
       if (invariant.logDetail() || df.isLoggable(Level.FINE)) {
@@ -212,16 +194,38 @@ public class InvariantFilters {
         if (invariant.logOn() || df.isLoggable(Level.FINE))
           invariant.log (df, "failed " + filter.getClass().getName() + " num_values = " + invariant.ppt.num_values() +
                          ",num_unmod_missing_samples==" + invariant.ppt.num_mod_non_missing_samples());
-        return false;
+        return filter;
       }
+     }
+     return null;
+  }
+
+  public boolean shouldKeep( Invariant invariant ) {
+    Logger df = PrintInvariants.debugFiltering;
+
+    if (invariant.logOn() || df.isLoggable(Level.FINE)) {
+      invariant.log (df, "filtering");
     }
-    if (df.isLoggable(Level.FINE)) {
-      invariant.log (df, "accepted by InvariantFilters");
+
+    if (invariant instanceof GuardingImplication) {
+      invariant = ((Implication) invariant).right;
     }
-    // Doing this since the filters can side effect desirable Invariants
-    invariant.discardCode = DiscardCode.not_discarded;
-    invariant.discardString = "";
-    return true;
+
+    // Do variable filters first since they eliminate more invariants.
+    if (shouldKeepVarFilters(invariant) != null) {
+      return false;
+    }
+
+    //  Property filters.
+    invariant.log ("Processing " + propertyFilters.size() + " Prop filters");
+    if (shouldKeepPropFilters(invariant) != null) {
+      return false;
+    } else {
+      if (df.isLoggable(Level.FINE)) {
+        invariant.log (df, "accepted by InvariantFilters");
+      }
+      return true;
+    }
   }
 
   public Iterator getPropertyFiltersIterator() {

@@ -4,7 +4,7 @@ import daikon.inv.*;
 import daikon.VarInfo;
 import daikon.inv.filter.*;
 
-class NonCanonicalVariablesFilter extends InvariantFilter {
+public class NonCanonicalVariablesFilter extends InvariantFilter {
   public String getDescription() {
     return "Suppress invariants containing non-canonical variables [deprecated]";
   }

@@ -299,6 +299,10 @@ public final class Daikon {
       System.out.println(release_string);
     }
 
+    if (PrintInvariants.print_discarded_invariants) {
+      DiscReasonMap.initialize();
+    }
+
     fileio_progress.start();
 
     // Load declarations and splitters
@@ -345,8 +349,14 @@ public final class Daikon {
       System.out.println("Some of the debugging output may only make sense to Daikon programmers.");
     }
 
-    PrintInvariants.print_invariants(all_ppts);
-    PrintInvariants.print_reasons(all_ppts);
+    // If they want to see discarded invariants, they probably don't
+    // want to see the true ones.
+    if (!PrintInvariants.print_discarded_invariants) {
+      PrintInvariants.print_invariants(all_ppts);
+    } else {
+      PrintInvariants.print_reasons(all_ppts);
+    }
+
     if (output_num_samples) {
       Global.output_statistics();
     }

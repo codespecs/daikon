@@ -47,7 +47,7 @@ public final class CLASSNAME
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20030822L;
 
  // transient public Method function;
   public final String[] methodname;
@@ -169,15 +169,10 @@ public final class CLASSNAME
           //                    + result + " != " + function + "(" + arg1 + ", " + arg2 + ")"
           //                    + " ; " + var_order_string[var_order]);
           wrapper.destroyAndFlow();
-          wrapper.discardCode = DiscardCode.bad_sample;
-          wrapper.discardString = "Failed for "+name1+"="+x+","+name2+"="+y+","+name3+"="+z;
           return;
         }
     } catch (Exception e) {
       wrapper.destroyAndFlow();
-      wrapper.discardCode = DiscardCode.bad_sample;
-      wrapper.discardString = "Exception caught for sample "+name1+"="+x+","+name2+"="+y+
-        ","+name3+"="+z+": "+e;
       return;
     }
 
@@ -188,24 +183,9 @@ public final class CLASSNAME
       return Invariant.PROBABILITY_NEVER;
     }
     if (values_seen <= equal_values) { // how can equal_values ever be > values_seen ?
-      wrapper.discardCode = DiscardCode.bad_probability;
-
-      String name1 = wrapper.ppt.var_infos[0].name.name();
-      String name2 = wrapper.ppt.var_infos[1].name.name();
-      String name3 = wrapper.ppt.var_infos[2].name.name();
-
-      wrapper.discardString = "In all samples seen, " + name1 + "==" + name2 + "==" + name3;
       return Invariant.PROBABILITY_NEVER;
     }
-    double answer = Invariant.prob_is_ge(wrapper.ppt.num_values(), 5);
-    if (answer > Invariant.dkconfig_probability_limit) {
-      wrapper.discardCode = DiscardCode.bad_probability;
-      wrapper.discardString = "Number of samples seen not close to goal: " + wrapper.ppt.num_values() + " samples " +
-        "seen,goal was 5";
-    }
-    if (wrapper.logDetail())
-      wrapper.log ("ppt.num_values()==" + wrapper.ppt.num_values() + ", ppt.num_values()==" + wrapper.ppt.num_values());
-    return answer;
+    return Invariant.prob_is_ge(wrapper.ppt.num_values(), 5);
   }
 
 

@@ -242,7 +242,7 @@ public class SEQSEQINTEQUAL
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030715L;
+  static final long serialVersionUID = 20030822L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -337,7 +337,7 @@ public class SEQSEQINTEQUAL
     }
 
     if ((format == OutputFormat.DAIKON)
-        || (format == OutputFormat.JAVA)) 
+        || (format == OutputFormat.JAVA))
 //        || (format == OutputFormat.DBCJAVA)) //RRN: This must be verified.
     {
       String name1 = var1().name.name_using(format);
@@ -428,11 +428,6 @@ public class SEQSEQINTEQUAL
            ArraysMDE.toString(v2) + ") " + comparison);
     if (! COMPAREQUALS(comparison,0) ) {
       destroyAndFlow();
-      discardCode = DiscardCode.bad_sample;
-      String var1 = ppt.var_infos[0].name.name();
-      String var2 = ppt.var_infos[1].name.name();
-      discardString = "Falsified by sample: " + var1 + "==" + ArraysMDE.toString(v1) +
-        ", " + var2 + "==" + ArraysMDE.toString(v2);
       return;
     }
   }
@@ -445,8 +440,6 @@ public class SEQSEQINTEQUAL
       return Math.pow(.5, ppt.num_values());
       #else
       if (ppt.num_samples() == 0) {
-        discardCode = DiscardCode.not_enough_samples;
-        discardString = "0 samples seen";
         return Invariant.PROBABILITY_UNJUSTIFIED;
       } else {
         return Invariant.PROBABILITY_JUSTIFIED;
@@ -479,13 +472,9 @@ public class SEQSEQINTEQUAL
    *  handle isObvious especially to avoid circular isObvious
    *  relations.
    **/
-  public VarInfo[] isObviousStatically_SomeInEquality() {
+  public DiscardInfo isObviousStatically_SomeInEquality() {
     if (var1().equalitySet == var2().equalitySet) {
-      if (isObviousStatically (this.ppt.var_infos)) {
-        return this.ppt.var_infos;
-      } else {
-        return null;
-      }
+      return isObviousStatically (this.ppt.var_infos);
     } else {
       return super.isObviousStatically_SomeInEquality();
     }
@@ -496,32 +485,30 @@ public class SEQSEQINTEQUAL
    *  handle isObvious especially to avoid circular isObvious
    *  relations.
    **/
-  public VarInfo[] isObviousDynamically_SomeInEquality() {
+  public DiscardInfo isObviousDynamically_SomeInEquality() {
     if (var1().equalitySet == var2().equalitySet) {
-      if (isObviousDynamically (this.ppt.var_infos)) {
-        return this.ppt.var_infos;
-      } else {
-        return null;
-      }
+      return isObviousDynamically (this.ppt.var_infos);
     } else {
       return super.isObviousDynamically_SomeInEquality();
     }
   }
 
-  public boolean isObviousStatically(VarInfo[] vis) {
+  public DiscardInfo isObviousStatically(VarInfo[] vis) {
     #if (! (defined(EQUALSTRING) || defined(LESSTHANSTRING) || defined(GREATERTHANSTRING) || defined(LESSEQUALSTRING) || defined(GREATEREQUALSTRING)) )
       VarInfo var1 = vis[0];
       VarInfo var2 = vis[1];
       Object[] obv1 = SUBSEQUENCE.isObviousSubSequence(var1, var2);
       Object[] obv2 = SUBSEQUENCE.isObviousSubSequence(var2, var1);
-      if ((obv1[1] != null) || (obv2[1] != null)) {
-        return true;
+      if (obv1[1] != null) {
+        return new DiscardInfo(this, (DiscardCode) obv1[0], (String) obv1[1]);
+      } else if (obv2[1] != null) {
+        return new DiscardInfo(this, (DiscardCode) obv2[0], (String) obv2[1]);
       }
     #endif
     return super.isObviousStatically (vis);
   }
 
-  public boolean isObviousDynamically(VarInfo[] vis) {
+  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
     #if (! (defined(EQUALSTRING) || defined(LESSTHANSTRING) || defined(GREATERTHANSTRING) || defined(LESSEQUALSTRING) || defined(GREATEREQUALSTRING)) )
 
       Debug debug = new Debug (getClass(), ppt, vis);
@@ -535,7 +522,7 @@ public class SEQSEQINTEQUAL
         if (pic != null) {
           if (logOn())
             debug.log ("Obvious Dynamic from " + pic.format() + " (pairwise)");
-            return true;
+          return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + pic.format());
         }
       }
 
@@ -554,15 +541,20 @@ public class SEQSEQINTEQUAL
         ppt = this.ppt.parent.findSlice_unordered (avis);
         if (ppt != null) {
           PAIRWISECOMP_EQ picEQ = PAIRWISECOMP_EQ.find(ppt);
+          if (picEQ != null)
+            return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + picEQ.format());
           PAIRWISECOMP_LT picLT = PAIRWISECOMP_LT.find(ppt);
+          if (picLT != null)
+            return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + picLT.format());
           PAIRWISECOMP_GT picGT = PAIRWISECOMP_GT.find(ppt);
+          if (picGT != null)
+            return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + picGT.format());
           PAIRWISECOMP_LE picLE = PAIRWISECOMP_LE.find(ppt);
+          if (picLE != null)
+            return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + picLE.format());
           PAIRWISECOMP_GE picGE = PAIRWISECOMP_GE.find(ppt);
-          if ((picEQ!= null) || (picLT!=null) || (picGT!=null) || (picLE!=null) || (picGE!=null)) {
-            // if (logOn())
-            //  debug.log ("Obvious Dynamic from " + pic.format());
-            return (true);
-          }
+          if (picGE != null)
+            return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + picGE.format());
         }
       }
 
@@ -571,7 +563,7 @@ public class SEQSEQINTEQUAL
       if ((arr1 != v1) || (arr2 != v2)) {
         if (arr1 == arr2) {
           debug.log ("Obvious Dynamic- subsequence from same array");
-          return (true);
+          return new DiscardInfo(this, DiscardCode.obvious, "Supersequences are related lexically");
         }
         VarInfo[] avis = {arr1, arr2};
         debug.log ("looking for " + avis[0].name.name()
@@ -593,7 +585,7 @@ public class SEQSEQINTEQUAL
               if (logOn())
                 debug.log ("Obvious Dynamic from " + inv.format() +
                            "(" + inv.getClass() + ")");
-              return (true);
+              return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + inv.format());
             }
           }
         }
@@ -605,7 +597,8 @@ public class SEQSEQINTEQUAL
           || SUBSEQUENCE.isObviousSubSequenceDynamically (this, v2, v1)) {
           if (logOn())
             debug.log ("Obvious SubSequence Dynamically");
-          return (true);
+          return new DiscardInfo(this, DiscardCode.obvious, "Both vars are derived and one is a subsequence "
+                                 + "of the other");
         }
       }
 

@@ -19,7 +19,7 @@ public class Positive
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20030822L;
 
   ///
   /// Required methods
@@ -42,8 +42,6 @@ public class Positive
   public void add_modified(long v, int count) {
     if (v <= 0) {
       destroyAndFlow();
-      discardCode = DiscardCode.bad_sample;
-      discardString = "Falsified by sample: "+ var().name.name() + "==" + v;
       return;
     }
   }
@@ -52,13 +50,7 @@ public class Positive
     // Assume that every variable has a .5 chance of being positive by
     // chance.  Then a set of n values have a have (.5)^n chance of all
     // being positive by chance.
-    double answer =  Math.pow(.5, ppt.num_mod_non_missing_samples());
-    if (answer > dkconfig_probability_limit) {
-      discardCode = DiscardCode.bad_probability;
-      discardString = "Computed probability " + answer + " > dkconfig_probability_limit==" +
-        dkconfig_probability_limit;
-    }
-    return answer;
+    return Math.pow(.5, ppt.num_mod_non_missing_samples());
   }
 
 }

@@ -42,7 +42,7 @@ public final class CLASSNAME
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20030822L;
 
   PRIMITIVE min1 = NUMWRAPPER.MAX_VALUE;
   PRIMITIVE min2 = NUMWRAPPER.MAX_VALUE;
@@ -99,13 +99,6 @@ public final class CLASSNAME
         System.out.println(CLASSSTRING + ".destroy()");
       }
       wrapper.destroyAndFlow();
-      wrapper.discardCode = DiscardCode.bad_sample;
-      String name1 = wrapper.ppt.var_infos[0].name.name();
-      wrapper.discardString = "Falsified by sample: " + name1 + "==" + v1;
-      if (wrapper.ppt.var_infos.length > 1) {
-        String name2 = wrapper.ppt.var_infos[1].name.name();
-        wrapper.discardString += ", " + name2 + "==" + v2;
-      }
       return;
     }
     if (v1 < min1) min1 = v1;
@@ -119,11 +112,6 @@ public final class CLASSNAME
     if (wrapper.falsified)
       return Invariant.PROBABILITY_NEVER;
     else if ((min1 > max2) || (max1 < min2)) {
-      wrapper.discardCode = DiscardCode.bad_probability;
-      if (min1 > max2)
-        wrapper.discardString = "!= can be replaced by >, which is stronger";
-      else
-        wrapper.discardString = "!= can be replaced by <, which is stronger";
       return Invariant.PROBABILITY_UNJUSTIFIED;
     }
     else {
@@ -151,13 +139,7 @@ public final class CLASSNAME
         probability_one_nonequal = 1-((double)overlap)/(range1 * range2);
       }
 
-     double answer = Math.pow(probability_one_nonequal, samples);
-     if (answer > Invariant.dkconfig_probability_limit) {
-       wrapper.discardCode = DiscardCode.bad_probability;
-       wrapper.discardString = "Computed probability " + answer + " > dkconfig_probability_limit==" +
-         Invariant.dkconfig_probability_limit;
-     }
-     return answer;
+     return Math.pow(probability_one_nonequal, samples);
     }
   }
 

@@ -10,15 +10,11 @@ import daikon.inv.unary.sequence.EltOneOf;
 import daikon.inv.unary.sequence.EltOneOfFloat;
 import daikon.PptSlice;
 
-class ObviousFilter extends InvariantFilter {
+public class ObviousFilter extends InvariantFilter {
   public String getDescription() { return "Suppress obvious invariants"; }
   boolean shouldDiscardInvariant( Invariant invariant ) {
     // if ((invariant.ppt.arity == 1) || IsEqualityComparison.it.accept(invariant)) {
-      boolean answer = invariant.isObvious();
-      if (answer && invariant.discardString.equals(""))
-        invariant.discardString = invariant.getClass().getName()+": Fix me, "+
-          "discarded because isObvious()";
-      return answer;
+      return invariant.isObvious().shouldDiscard();
       /* }
     else {
       // if y cmp f(x_0,x_1, ..., x_n) and x_n is a constant, then we can

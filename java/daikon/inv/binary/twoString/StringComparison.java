@@ -23,7 +23,7 @@ public final class StringComparison
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20030822L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -153,7 +153,7 @@ public final class StringComparison
     String comparator = core.format_comparator(format);
 
     // RRN: check that this is correct:
-    if (format == OutputFormat.JAVA 
+    if (format == OutputFormat.JAVA
         || format == OutputFormat.JML
         || format == OutputFormat.DBCJAVA) {
       name1 = var1().name.JMLElementCorrector().name_using(format);
@@ -236,13 +236,9 @@ public final class StringComparison
    *  handle isObvious especially to avoid circular isObvious
    *  relations.
    **/
-  public VarInfo[] isObviousStatically_SomeInEquality() {
+  public DiscardInfo isObviousStatically_SomeInEquality() {
     if (var1().equalitySet == var2().equalitySet) {
-      if (isObviousStatically (this.ppt.var_infos)) {
-        return this.ppt.var_infos;
-      } else {
-        return null;
-      }
+      return isObviousStatically (this.ppt.var_infos);
     } else {
       return super.isObviousStatically_SomeInEquality();
     }
@@ -253,13 +249,9 @@ public final class StringComparison
    *  handle isObvious especially to avoid circular isObvious
    *  relations.
    **/
-  public VarInfo[] isObviousDynamically_SomeInEquality() {
+  public DiscardInfo isObviousDynamically_SomeInEquality() {
     if (var1().equalitySet == var2().equalitySet) {
-      if (isObviousDynamically (this.ppt.var_infos)) {
-        return this.ppt.var_infos;
-      } else {
-        return null;
-      }
+      return isObviousDynamically (this.ppt.var_infos);
     } else {
       return super.isObviousDynamically_SomeInEquality();
     }

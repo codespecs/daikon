@@ -127,7 +127,7 @@ public class LOWERBOUNDCORE
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20030822L;
 
   final static int required_samples = 5; // for enoughSamples
   final static int required_samples_at_bound = 3; // for justification
@@ -252,12 +252,7 @@ public class LOWERBOUNDCORE
   }
 
   public boolean enoughSamples() {
-    boolean answer = samples > required_samples;
-    if (!answer) {
-      wrapper.discardCode = DiscardCode.not_enough_samples;
-      wrapper.discardString = "Not enough samples: had "+samples+" but needed "+required_samples;
-    }
-    return answer;
+    return samples > required_samples;
   }
 
   // Convenience methods; avoid need for "Invariant." prefix.
@@ -327,7 +322,7 @@ public class LOWERBOUNDCORE
     double bound_prob = prob_or(trunc_prob, unif_prob);
 
     // Final result
-    double result = prob_and(bound_samples_prob, bound_prob);
+    return prob_and(bound_samples_prob, bound_prob);
 
     // System.out.println(LOWERBOUNDCORESTR + ".computeProbability(): ");
     // System.out.println("  " + repr());
@@ -345,12 +340,6 @@ public class LOWERBOUNDCORE
     // System.out.println("  " + ppt.name + " ppt.values_cache.tuplemod_samples_summary()="
     //                    + pptsg.tuplemod_samples_summary());
 
-    if (result > Invariant.dkconfig_probability_limit) {
-      wrapper.discardCode = DiscardCode.bad_probability;
-      wrapper.discardString = "Computed probability "+result+" > dkconfig_probability_limit=="+
-        Invariant.dkconfig_probability_limit;
-    }
-    return result;
   }
 
   public boolean isSameFormula(LOWERBOUNDCORE other)

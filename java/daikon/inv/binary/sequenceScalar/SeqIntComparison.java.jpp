@@ -137,7 +137,7 @@ public final class SEQINTEQUAL
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030711L;
+  static final long serialVersionUID = 20030822L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -278,22 +278,11 @@ public final class SEQINTEQUAL
     for (int i=0; i<a.length; i++) {
       #if (defined(EQUAL) || defined(EQUALFLOAT))
       if (! EQUALS(a[i], x) ) {
-        discardCode = DiscardCode.bad_sample;
-        discardString = "Falsified by sample: " + seqvar().name.name() + "==" + ArraysMDE.toString(a) +
-          ", " + sclvar().name.name() + "==" + x;
         destroyAndFlow();
         return;
       }
       #else
       if (! EQUALS(a[i], x) || !seqvar().type.elementIsIntegral()) {
-        discardCode = DiscardCode.bad_sample;
-        if (! EQUALS(a[i], x)){
-          discardString = "Falsified by sample: " + seqvar().name.name() + "==" + ArraysMDE.toString(a) +
-            ", " + sclvar().name.name() + "==" + x;
-        }
-        else {
-          // discardString = "Sequence variable "+seqvar().name.name()+" has ProglangType with non-integral element";
-        }
         destroyAndFlow();
         return;
       }
@@ -305,18 +294,10 @@ public final class SEQINTEQUAL
     if (falsified) {
       return PROBABILITY_NEVER;
     } if (ppt.num_values() == 0) {
-      discardCode = DiscardCode.not_enough_samples;
-      discardString = "No samples seen for this Invariant";
       return PROBABILITY_UNJUSTIFIED;
     }
     #if (defined(LESSTHAN) || defined(GREATERTHAN) || defined(LESSEQUAL) || defined(GREATEREQUAL) || defined(LESSTHANFLOAT) || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT) || defined(LESSEQUALFLOAT))
-    double answer = Math.pow(.5, ppt.num_values());
-    if (answer > Invariant.dkconfig_probability_limit) {
-      discardCode = DiscardCode.bad_probability;
-      discardString = "Computed probability "+answer+" > dkconfig_probability_limit=="+
-        Invariant.dkconfig_probability_limit;
-    }
-    return answer;
+    return Math.pow(.5, ppt.num_values());
     #else
     // It's an equality invariant.  I ought to use the actual ranges somehow.
     // Actually, I can't even use this .5 test because it can make
@@ -371,7 +352,7 @@ public final class SEQINTEQUAL
 
 
   // Initially copied from IntComparison.
-  public boolean isObviousDynamically(VarInfo[] vis) {
+  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
     // Also see:  Member.isObviousMember, SubSequence.isObviousDerived.
     VarInfo seqvar = seqvar(vis);
     VarInfo sclvar = sclvar(vis);
@@ -389,15 +370,15 @@ public final class SEQINTEQUAL
         if (isSameFormula(other)
             && (sclvar() == other.sclvar())
             && obvDeriv[1]!=null) {
-          discardCode = (DiscardCode) obvDeriv[0];
-          discardString = (String) obvDeriv[1];
-          return true;
+          DiscardCode discardCode = (DiscardCode) obvDeriv[0];
+          String discardString = (String) obvDeriv[1];
+          return new DiscardInfo(this, (DiscardCode) obvDeriv[0], (String) obvDeriv[1]);
         }
       }
     }
 
     if (isExact()) {
-      return false;
+      return new DiscardInfo();
     }
 
     if (sclvar.isDerived() && (sclvar.derived instanceof SequenceLength)) {
@@ -407,12 +388,12 @@ public final class SEQINTEQUAL
       #if (defined(LESSTHAN) || defined(LESSTHANFLOAT))
       if ((scl_seqlen != null) && (scl_seqlen.shift == 0)) {
         // "x < size(a)"  ("x <= size(a)-1" would be more informative)
-        return true;
+        return new DiscardInfo(this, DiscardCode.obvious, "An Invariant of the form x <= size(a)-1 would be more informative");
       }
       #elif (defined(GREATERTHAN) || defined(GREATERTHANFLOAT))
       if ((scl_seqlen != null) && (scl_seqlen.shift == -1)) {
         // "x > size(a)-1"  ("x >= size(a)" would be more informative)
-        return true;
+        return new DiscardInfo(this, DiscardCode.obvious, "An Invariant of the form x >= size(a) would be more informative");
       }
       #endif
     }
@@ -421,7 +402,7 @@ public final class SEQINTEQUAL
       { // If we know x=y, then any x<=y or x>=y comparison is uninteresting
         SeqIntEqual ie = SeqIntEqual.find(ppt);
         if ((ie != null) /* && ie.enoughSamples() */ ) {
-          return true;
+          return new DiscardInfo(this, DiscardCode.obvious, "x = y implies x <= y or x >= y");
         }
       }
     #endif
@@ -430,7 +411,7 @@ public final class SEQINTEQUAL
       { // If we know x=y, then any x<=y or x>=y comparison is uninteresting
         SeqFloatEqual ie = SeqFloatEqual.find(ppt);
         if ((ie != null) /* && ie.enoughSamples() */ ) {
-          return true;
+          return new DiscardInfo(this, DiscardCode.obvious, "x = y implies x <= y or x >= y");
         }
       }
     #endif
@@ -439,7 +420,7 @@ public final class SEQINTEQUAL
       { // If we know x<y, then x<=y is uninteresting
         SeqIntLessThan ilt = SeqIntLessThan.find(ppt);
         if ((ilt != null) /* && ilt.enoughSamples() */ ) {
-          return true;
+          return new DiscardInfo(this, DiscardCode.obvious, "x < y implies x <= y");
         }
       }
     #endif
@@ -448,7 +429,7 @@ public final class SEQINTEQUAL
       { // If we know x<y, then x<=y is uninteresting
         SeqFloatLessThan ilt = SeqFloatLessThan.find(ppt);
         if ((ilt != null) /* && ilt.enoughSamples() */ ) {
-          return true;
+          return new DiscardInfo(this, DiscardCode.obvious, "x < y implies x <= y");
         }
       }
     #endif
@@ -457,7 +438,7 @@ public final class SEQINTEQUAL
       { // If we know x>y, then x>=y is uninteresting
         SeqIntGreaterThan igt = SeqIntGreaterThan.find(ppt);
         if ((igt != null) /* && igt.enoughSamples() */ ) {
-          return true;
+          return new DiscardInfo(this, DiscardCode.obvious, "x > y implies x >= y");
         }
       }
     #endif
@@ -466,7 +447,7 @@ public final class SEQINTEQUAL
       { // If we know x>y, then x>=y is uninteresting
         SeqFloatGreaterThan igt = SeqFloatGreaterThan.find(ppt);
         if ((igt != null) /* && igt.enoughSamples() */ ) {
-          return true;
+          return new DiscardInfo(this, DiscardCode.obvious, "x > y implies x >= y");
         }
       }
     #endif
@@ -476,9 +457,7 @@ public final class SEQINTEQUAL
       if (seqslice != null) {
         ELTONEOF eoo = ELTONEOF.find(seqslice);
         if ((eoo != null) && eoo.enoughSamples() && (eoo.num_elts() == 1)) {
-          discardCode = DiscardCode.obvious;
-          discardString = "Obviously implied by " + eoo.format();
-          return true;
+          return new DiscardInfo(this, DiscardCode.obvious, "Obvious implied by " + eoo.format());
         }
       }
     }
@@ -492,9 +471,7 @@ public final class SEQINTEQUAL
         if (other_slice != null) {
           SEQINTEQUAL other_sic = SEQINTEQUAL.find(other_slice);
           if ((other_sic != null) && other_sic.enoughSamples()) {
-            discardCode = DiscardCode.obvious;
-            discardString = "Obviously implied by " + other_sic.format();
-            return true;
+            return new DiscardInfo(this, DiscardCode.obvious, "Obvious implied by " + other_sic.format());
           }
         }
       }

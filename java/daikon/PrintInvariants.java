@@ -62,7 +62,7 @@ public class PrintInvariants {
 
   // Fields that will be used if the --disc_reason switch is used
   private static String discClass = null;
-  private static ArrayList discVars = null;
+  private static String discVars = null;
   private static String discPpt = null;
 
   // Avoid problems if daikon.Runtime is loaded at analysis (rather than
@@ -235,10 +235,12 @@ public class PrintInvariants {
    * that will not be printed if the --disc_reason switch is used
    **/
   public static void print_reasons(PptMap ppts) {
-    if (!print_discarded_invariants)
+    if (!print_discarded_invariants || Daikon.no_text_output) {
       return;
+    }
 
-    System.out.println("\n\nDISCARDED INVARIANTS:");
+    System.out.println("\nDISCARDED INVARIANTS:");
+    // DiscReasonMap.debug(discPpt);
 
     // Makes things faster if a ppt is specified
     if (discPpt != null) {
@@ -250,13 +252,6 @@ public class PrintInvariants {
         String toPrint = "";
         toPrint += print_reasons_from_ppt(ppt,ppts);
 
-        if (Daikon.dkconfig_output_conditionals
-          && Daikon.output_style == OutputFormat.DAIKON) {
-          for (int i=0; i<ppt.views_cond.size(); i++) {
-            PptConditional pcond = (PptConditional) ppt.views_cond.elementAt(i);
-            toPrint += print_reasons_from_ppt(pcond,ppts);
-          }
-        }
         StringTokenizer st = new StringTokenizer(toPrint,"\n");
         if (st.countTokens() > 2)
           System.out.print(toPrint);
@@ -278,26 +273,51 @@ public class PrintInvariants {
     // Iterate over the PptTopLevels in ppts
     for (Iterator itor = ppts_sorted.iterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
-      String toPrint = "";
-      toPrint += print_reasons_from_ppt(ppt,ppts);
+      StringBuffer toPrint = new StringBuffer();
+      toPrint.append(print_reasons_from_ppt(ppt,ppts));
 
-      if (Daikon.dkconfig_output_conditionals
-        && Daikon.output_style == OutputFormat.DAIKON) {
-        for (int i=0; i<ppt.views_cond.size(); i++) {
-          PptConditional pcond = (PptConditional) ppt.views_cond.elementAt(i);
-          toPrint += print_reasons_from_ppt(pcond,ppts);
-        }
-      }
       // A little hack so that PptTopLevels without discarded Invariants of
       // interest don't get their names printed
-      StringTokenizer st = new StringTokenizer(toPrint,"\n");
+      StringTokenizer st = new StringTokenizer(toPrint.toString(),"\n");
       if (st.countTokens() > 2) {
-        System.out.print(toPrint);
+        System.out.print(toPrint.toString());
       }
     }
   }
 
+  private static void add_filter_reasons(PptTopLevel ppt, PptMap ppts) {
+    Iterator fullInvItor = ppt.invariants_iterator();
+    InvariantFilters fi = new InvariantFilters();
+    fi.setPptMap(ppts);
+    while (fullInvItor.hasNext()) {
+      Invariant nextInv = (Invariant) fullInvItor.next();
+      InvariantFilter varFilter = fi.shouldKeepVarFilters(nextInv);
+      if (varFilter != null) {
+        DiscReasonMap.put(nextInv, DiscardCode.findCode(varFilter), varFilter.getDescription());
+      } else {
+        InvariantFilter propFilter = fi.shouldKeepPropFilters(nextInv);
+        if (propFilter != null) {
+          DiscardInfo di;
+          if (propFilter instanceof ObviousFilter) {
+            di = nextInv.isObvious();
+            if (nextInv.logOn())
+              nextInv.log ("DiscardInfo's stuff: " + di.className() + "\n" + di.format());
+          } else if (propFilter instanceof UnjustifiedFilter) {
+            di = new DiscardInfo(nextInv, DiscardCode.bad_probability, "Had probability: " + nextInv.getProbability());
+          } else {
+            di = new DiscardInfo(nextInv, DiscardCode.findCode(propFilter), propFilter.getDescription());
+          }
+          DiscReasonMap.put(nextInv, di);
+        }
+      }
+    }
+  }
+
+
   private static String print_reasons_from_ppt(PptTopLevel ppt, PptMap ppts) {
+    // Add all the reasons that would come from filtering to the DiscReasonMap
+    add_filter_reasons(ppt, ppts);
+
     String toPrint = "";
     Iterator fullInvItor = ppt.invariants_iterator();
     String dashes = ("---------------------------------------------------------------------------\n");
@@ -307,68 +327,36 @@ public class PrintInvariants {
       toPrint += (ppt.name+"\n");
     }
 
-    // Iterate over the invariants seen from a PptTopLevel to detect ones
-    // that will not be printed
-    while (fullInvItor.hasNext()) {
-      InvariantFilters fi = new InvariantFilters();
-      fi.setPptMap(ppts);
-      Invariant nextInv = (Invariant) fullInvItor.next();
-      if (!fi.shouldKeep(nextInv) && matches_disc_params(nextInv)) {
-        //Assert.assertTrue(nextInv.discardCode!=DiscardCode.not_discarded,
-        //                nextInv.getClass().getName()+" "+nextInv.discardString+" not falsified");
-        toPrint += (dashes+nextInv.format()+"\nCode: ["+nextInv.discardCode+"]\nReason: "+nextInv.discardString+"\n");
+    Iterator matchesIter = DiscReasonMap.returnMatches_from_ppt(new InvariantInfo(ppt.name, discVars, discClass)).iterator();
+
+    StringBuffer sb = new StringBuffer();
+    while (matchesIter.hasNext()) {
+      DiscardInfo nextInfo = (DiscardInfo) matchesIter.next();
+      sb.append(dashes + nextInfo.format() + "\n");
+    }
+
+    // In case the user is interested in conditional ppt's
+    if (Daikon.dkconfig_output_conditionals
+          && Daikon.output_style == OutputFormat.DAIKON) {
+      for (int i=0; i<ppt.views_cond.size(); i++) {
+        PptConditional pcond = (PptConditional) ppt.views_cond.elementAt(i);
+        sb.append(print_reasons_from_ppt(pcond,ppts));
       }
     }
-
-    // Iterate over each the falsified Invariants in each PptTopLevel
-    for (int i=0; i < ppt.falsified_invars.size(); i++) {
-      Invariant nextInv = (Invariant) ppt.falsified_invars.get(i);
-      if (matches_disc_params(nextInv)) {
-        //Assert.assertTrue(nextInv.discardCode!=DiscardCode.not_discarded,
-        //                nextInv.getClass().getName()+" "+nextInv.discardString+" falsified");
-        toPrint += (dashes+nextInv.format()+"\nCode: ["+nextInv.discardCode+"]\nReason: "+nextInv.discardString+"\n");
-      }
-    }
-    return toPrint;
-  }
-
-
-  // It checks if an Invariant matches all the params entered in the arg for --disc_reason
-  // (used by print_reasons)
-  private static boolean matches_disc_params(Invariant inv) {
-    VarInfo[] arr = inv.ppt.var_infos;
-
-    if (discClass != null) {
-      String name = inv.getClass().getName();
-      String shortName = name.substring(name.lastIndexOf('.')+1); // chop of hierarchical info
-      if (!(discClass.equals(shortName) || discClass.equals(name)))
-        return false;
-    }
-
-    // checks to make sure the vars match
-    // maybe I only need to do this once per slice? -jelani
-    if (discVars != null) {
-      if (discVars.size() != arr.length)
-        return false;
-      for (int i=0; i < arr.length; i++) {
-        if (!discVars.contains(arr[i].name.name()))
-          return false;
-      }
-    }
-    return true;
+    return (toPrint + sb.toString());
   }
 
   // Method used to setup fields if the --disc_reason switch is used
   // if (arg==null) then show all discarded Invariants, otherwise just
   // show the ones specified in arg, where arg = <class-name><<var1>,<var2>,...>@<ppt.name>
-  // e.g.: OneOf(x)@foo:::ENTER would only show OneOf Invariants that involve x at
+  // e.g.: OneOf<x>@foo():::ENTER would only show OneOf Invariants that involve x at
   // the program point foo:::ENTER (any of the 3 params can be ommitted, e.g. OneOf@foo:::ENTER)
   // @throws IllegalArgumentException if arg is not of the proper syntax
   public static void discReasonSetup(String arg) {
     print_discarded_invariants = true;
     usage = "Usage: <class-name><<var1>,<var2>,,,,>@<ppt.name>\n"+
             "or use --disc_reason \"all\" to show all discarded Invariants\n"+
-            "e.g.: OneOf(x)@foo:::ENTER\n";
+            "e.g.: OneOf<x>@foo():::ENTER\n";
 
     // Will print all discarded Invariants in this case
     if (arg==null || arg.length()==0 || arg.equals("all"))
@@ -404,9 +392,10 @@ public class PrintInvariants {
         throw new IllegalArgumentException("Too many brackets\n"+usage);
       StringTokenizer vars = new StringTokenizer(parenTokens.nextToken(),",");
       if (vars.hasMoreTokens()) {
-        discVars = new ArrayList(3);
+        discVars = vars.nextToken();
         while (vars.hasMoreTokens())
-          discVars.add(vars.nextToken());
+          discVars += "," + vars.nextToken();
+        discVars = discVars.replaceAll(" ", ""); // Get rid of *all* spaces since we know varnames can't have them
       }
       if (temp.endsWith(">"))
         return;

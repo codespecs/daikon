@@ -203,7 +203,7 @@ public class LOWERBOUND
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20030822L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -441,16 +441,17 @@ public class LOWERBOUND
     return false;
   }
 
-  public boolean isObviousStatically (VarInfo[] vis) {
+  public DiscardInfo isObviousStatically (VarInfo[] vis) {
     VarInfo var = vis[0];
     if ((var.derived instanceof SequenceLength)
          && (((SequenceLength) var.derived).shift != 0)) {
-      return true;
+      return new DiscardInfo(this, DiscardCode.obvious, "Bounds are preferrable over"
+                             + " sequence lengths with no shift");
     }
     return super.isObviousStatically (vis);
   }
 
-  public boolean isObviousDynamically(VarInfo[] vis) {
+  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
     PptTopLevel pptt = ppt.parent;
 
     // if the value is not in some range (like -1,0,1,2) then say that it is obvious
@@ -461,18 +462,15 @@ public class LOWERBOUND
       // suitable to be turned on everywhere by default. -SMcC
       // if the value is not in some range (like -1,0,1,2) then say that
       // it is obvious
+      String discardString = "";
       if (MIN1 < dkconfig_minimal_interesting) {
-        discardCode = DiscardCode.obvious;
-        discardString = "MIN1="+MIN1+" is less than dkconfig_minimal_interesting=="+
-          dkconfig_minimal_interesting;
-      }
-      else {
-        discardCode = DiscardCode.obvious;
+        discardString = "MIN1="+MIN1+" is less than dkconfig_minimal_interesting=="
+          + dkconfig_minimal_interesting;
+      } else {
         discardString = "MIN1="+MIN1+" is greater than dkconfig_maximal_interesting=="+
           dkconfig_maximal_interesting;
       }
-      log (discardString);
-      return true;
+      return new DiscardInfo(this, DiscardCode.obvious, discardString);
     }
     ONEOF oo = ONEOF.find(ppt);
     if ((oo != null) && oo.enoughSamples() && oo.num_elts() > 0) {
@@ -480,11 +478,10 @@ public class LOWERBOUND
       // We could also use MIN1 == oo.MINELT(), since the LowerBound
       // will never have a MIN1 that does not appear in the OneOf.
       if (MIN1 LTE oo.MINELT()) {
-        discardCode = DiscardCode.obvious;
-        discardString = format() + " is implied by " + oo.format() + "at ppt"
-                        + ppt;
+        String varName = vis[0].name.name();
+        String discardString = varName+LTESTR+MIN1+" is implied by "+varName+LTESTR+oo.MINELT();
         log (discardString);
-        return true;
+        return new DiscardInfo(this, DiscardCode.obvious, discardString);
       }
     }
 
@@ -505,12 +502,11 @@ public class LOWERBOUND
         LOWERBOUND other = (LOWERBOUND) inv;
         if (isSameFormula(other)
             && SUBSEQUENCE.isObviousSubSequenceDynamically(this, v, other.var())) {
-          discardCode = DiscardCode.obvious;
-          String varName = var().name.name();
+          String varName = v.name.name();
           String otherName = other.var().name.name();
-          discardString = varName+" is a subsequence of "+otherName+" for which the invariant holds.";
+          String discardString = varName + " is a subsequence of " + otherName + " for which the invariant holds.";
           log (discardString);
-          return true;
+          return new DiscardInfo(this, DiscardCode.obvious, discardString);
         }
       }
     }
@@ -526,10 +522,7 @@ public class LOWERBOUND
       // Assert.assertTrue(vshift == 0);
       if (vshift == 0 && MIN1 == 0) {
         // "size(a[]) >= 0" is obvious.
-        discardCode = DiscardCode.obvious;
-        discardString = var().name.name()+" >=0 is obvious";
-        log (discardString);
-        return true;
+        return new DiscardInfo(this, DiscardCode.obvious, v.name.name()+" >=0 is obvious");
       }
     }
 #endif
@@ -550,13 +543,11 @@ public class LOWERBOUND
           if ((eb != null)
               && eb.enoughSamples()
               && eb.MIN1 == MIN1) {
-            discardCode = DiscardCode.obvious;
-
             String otherName = other_slice.var_infos[0].name.name();
-            String varName = var().name.name();
-            discardString = varName+" is a subsequence of "+otherName+" for which the invariant holds.";
+            String varName = v.name.name();
+            String discardString = varName+" is a subsequence of "+otherName+" for which the invariant holds.";
             log (discardString);
-            return true;
+            return new DiscardInfo(this, DiscardCode.obvious, discardString);
           }
         }
       }

@@ -57,7 +57,7 @@ public final class CLASSNAME
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20030822L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -224,7 +224,7 @@ public final class CLASSNAME
   // }
 
   // Copied from IntComparison.
-  public boolean isObviousDynamically(VarInfo[] vis) {
+  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
     VarInfo seqvar = vis[0];
 
     // For each other sequence variable, if it is a supersequence of this
@@ -238,7 +238,8 @@ public final class CLASSNAME
         if (other_slice != null) {
           CLASSNAME other_sine = CLASSNAME.find(other_slice);
           if ((other_sine != null) && other_sine.enoughSamples()) {
-            return true;
+            return new DiscardInfo(this, DiscardCode.obvious, "The same invariant holds over a "
+                                   + "supersequence");
           }
         }
       }

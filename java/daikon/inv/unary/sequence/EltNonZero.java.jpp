@@ -66,7 +66,7 @@ public final class CLASSNAME
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020522L;
+  static final long serialVersionUID = 20030822L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -181,45 +181,45 @@ public final class CLASSNAME
         { var().name });
     return form[0] + form[1] + " != " + (pointer_type ? "null" : "0") + form[2];
   }
-     
+
   public String format_dbc() {
-    //@tx   
+    //@tx
     VarInfoName name = var().name;
     if (name instanceof VarInfoName.Elements) {
       VarInfoName term = ((VarInfoName.Elements) name).term;
-    
+
       if (var().type.isArray()) {
       return "{ for (int i = 0; "+ term.dbc_name(var()) + "!= null && i < "
            + term.dbc_name(var())+".length; i++) $assert ("
-           + term.dbc_name(var())+"[i] != null); }";   
+           + term.dbc_name(var())+"[i] != null); }";
       } else {
-        String termname = term.dbc_name(var());      
+        String termname = term.dbc_name(var());
         if (termname.startsWith("this.")) {
           termname = termname.replaceFirst("this\\.","");
         }
 
         // RRNtodo: wow, is this really illegal?
         if (termname.indexOf(".") != -1) {
-          return "$none"; //if the termname contains ., it is illegal in DBC to use forall      
-        } else {    
+          return "$none"; //if the termname contains ., it is illegal in DBC to use forall
+        } else {
           return "{ $assert (" + termname + " != null); " +
-                   "$assert (" + termname + ".$forall (Object e; e != null)); }";   
+                   "$assert (" + termname + ".$forall (Object e; e != null)); }";
         }
         // return term.dbc_name() + ".containsNull == false";
       }
     }
-   
+
     // If this is just part of an array or Collection (name instanceof
     // VarInfoName.Slice), then calling name.dbc_name() will always throw
     // an exception, since var() is certainly a sequence.  So use the
     // standard quantification.
-  
+
     String[] form =
       VarInfoName.QuantHelper.format_dbc(new VarInfoName[]
       { var().name });
       return form[0] + "(" + form[1] + " != " + (pointer_type ? "null" : "0") + ")" + form[2];
   }
-  
+
   /* IOA */
   public String format_ioa() {
     VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var ());
@@ -247,8 +247,6 @@ public final class CLASSNAME
       // the first value).
       if (EQUAL (v, 0)) {
         destroyAndFlow();
-        discardCode = DiscardCode.bad_sample;
-        discardString = var().name.name()+"["+ai+"]==0";
         return;
       }
       // XXX; uh oh -- flowing these is bad stuff; maybe search for
@@ -316,16 +314,16 @@ public final class CLASSNAME
     return false;
   }
 
-  public boolean isObviousStatically(VarInfo[] vis) {
+  public DiscardInfo isObviousStatically(VarInfo[] vis) {
     if (!vis[0].aux.getFlag(VarInfoAux.HAS_NULL)) {
       // If it's not a number and null doesn't have special meaning...
-      return true;
+      return new DiscardInfo(this, DiscardCode.obvious, "'null' has no special meaning for " + vis[0].name.name());
     }
     return super.isObviousStatically (vis);
   }
 
 
-  public boolean isObviousDynamically(VarInfo[] vis) {
+  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
     // For every other EltNonZero at this program point, see if there is a
     // subsequence relationship between that array and this one.
 
@@ -345,9 +343,8 @@ public final class CLASSNAME
 
         // First see if the subsequence relationship can be determined from the VarInfos
         if (SubSequence.isObviousSubSequenceDynamically(this, v1, v2)) {
-          discardCode = DiscardCode.obvious;
-          discardString = v1.name.name()+" is a subsequence of "+v2.name.name()+" for which the result is known";
-          return true;
+          String discardString = v1.name.name() + " is a subsequence of " + v2.name.name() + " for which the invariant holds";
+          return new DiscardInfo(this, DiscardCode.obvious, discardString);
         }
         //     Otherwise, look for the actual SubSequence invariant
         boolean this_var_first = (v1.varinfo_index < v2.varinfo_index);
@@ -365,12 +362,12 @@ public final class CLASSNAME
                 ? ss.var1_in_var2
                 : ss.var2_in_var1) {
               debug.fine ("  True from subsequence search");
-              discardCode = DiscardCode.obvious;
+              String discardString = "";
               if (this_var_first)
-                discardString = v1.name.name()+" is a subsequence of "+v2.name.name()+" for which the result is known";
+                discardString = v1.name.name()+" is a subsequence of " + v2.name.name() + " for which the result is known";
               else
-                discardString = v2.name.name()+" is a subsequence of "+v1.name.name()+" for which the result is known";
-              return true;
+                discardString = v2.name.name()+" is a subsequence of " + v1.name.name() + " for which the result is known";
+              return new DiscardInfo(this, DiscardCode.obvious, discardString);
             }
           }
         }

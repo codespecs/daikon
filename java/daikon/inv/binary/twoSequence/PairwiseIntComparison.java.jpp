@@ -127,11 +127,7 @@ The correct way to build the system is to run 'make'.
 package daikon.inv.binary.twoSequence;
 
 import daikon.*;
-import daikon.inv.Invariant;
-import daikon.inv.DiscardCode;
-import daikon.inv.Comparison;
-import daikon.inv.ValueTracker;
-import daikon.inv.FloatValueTracker;
+import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.binary.twoScalar.*;
 import daikon.derive.binary.*;
@@ -157,7 +153,7 @@ public class PAIRWISEINTEQUAL
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030716L;
+  static final long serialVersionUID = 20030822L;
 
   /**
    * Debug tracer
@@ -202,15 +198,18 @@ public class PAIRWISEINTEQUAL
     return result;
   }
 
-  public boolean isObviousStatically (VarInfo[] vis) {
+  public DiscardInfo isObviousStatically (VarInfo[] vis) {
     VarInfo var1 = vis[0];
     VarInfo var2 = vis[1];
 
     Object[] obv1 = SUBSEQUENCE.isObviousSubSequence(var1, var2);
     Object[] obv2 = SUBSEQUENCE.isObviousSubSequence(var2, var1);
-    if ((obv1[1] != null) || (obv2[1] != null)) {
+    if (obv1[1] != null) {
       Global.implied_noninstantiated_invariants++;
-      return true;
+      return new DiscardInfo(this, (DiscardCode) obv1[0], (String) obv1[1]);
+    } else if (obv2[1] != null) {
+      Global.implied_noninstantiated_invariants++;
+      return new DiscardInfo(this, (DiscardCode) obv1[0], (String) obv1[1]);
     }
 
     // Don't instantiate if the variables can't have order
@@ -220,7 +219,7 @@ public class PAIRWISEINTEQUAL
         debug.fine ("Not instantitating for because order has no meaning: " +
                      var1.name + " and " + var2.name);
       }
-      return true;
+      return new DiscardInfo(this, DiscardCode.obvious, "Obvious statically since order has no meaning");
     }
 
     return super.isObviousStatically (vis);
@@ -228,18 +227,18 @@ public class PAIRWISEINTEQUAL
 
   #if (defined(LESSEQUAL) || defined(GREATEREQUAL) || defined(LESSEQUALFLOAT) || defined(GREATEREQUALFLOAT))
   // Suppress <= by < or ==, and >= by > or ==
-  public boolean isObviousDynamically (VarInfo[] vis) {
+  public DiscardInfo isObviousDynamically (VarInfo[] vis) {
 
     PptSlice ppt = this.ppt.parent.findSlice(vis);
 
     if (ppt == null)
-      return false;
+      return new DiscardInfo();
 
     PAIRWISEEQ_SUPP picEQ = PAIRWISEEQ_SUPP.find(ppt);
     if (picEQ!=null) {
       if (logDetail() || debug.isLoggable(Level.FINE))
         log (debug, format_daikon() + " implied by ==");
-      return true;
+      return new DiscardInfo(this, DiscardCode.obvious, "Implied by ==");
     }
 
     PAIRWISELT_SUPP picLT = PAIRWISELT_SUPP.find(ppt);
@@ -250,7 +249,7 @@ public class PAIRWISEINTEQUAL
         #else
         log(debug, format_daikon() + "implied by >");
         #endif
-      return true;
+      return new DiscardInfo(this, DiscardCode.obvious, "<= (resp. >=) implied by < (resp. >)");
     }
 
     return super.isObviousDynamically(vis);
@@ -333,9 +332,6 @@ public class PAIRWISEINTEQUAL
 
   public void add_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {
     if (a1.length != a2.length) {
-      discardCode = DiscardCode.bad_sample;
-      discardString = "Sample seen with different sequence lengths: "+utilMDE.ArraysMDE.toString(a1)+" "+
-        utilMDE.ArraysMDE.toString(a2);
       destroyAndFlow();
       return;
     }
@@ -347,11 +343,6 @@ public class PAIRWISEINTEQUAL
       PRIMITIVE v1 = a1[i];
       PRIMITIVE v2 = a2[i];
       if (! EQUALS(v1, v2) ) {
-        discardCode = DiscardCode.bad_sample;
-        String name1 = var1().name.name();
-        String name2 = var2().name.name();
-        discardString = "Falsified by sample: " + name1 + "==" + utilMDE.ArraysMDE.toString(a1) + " " +
-          name2 + "==" + utilMDE.ArraysMDE.toString(a2);
         destroyAndFlow();
         return;
       }
@@ -364,8 +355,6 @@ public class PAIRWISEINTEQUAL
 
   protected double computeProbability() {
     if (falsified) {
-      discardCode = DiscardCode.not_enough_samples;
-      discardString = "No samples seen for this Invariant";
       return Invariant.PROBABILITY_NEVER;
     } else if (((PptSlice2) ppt).num_elt_values()==0)
       return Invariant.PROBABILITY_UNJUSTIFIED;

@@ -4,6 +4,7 @@ import daikon.*;
 import daikon.Debug;
 import daikon.inv.unary.sequence.EltOneOf;
 import daikon.inv.unary.stringsequence.EltOneOfString;
+import daikon.inv.DiscardInfo;
 import daikon.inv.filter.*;
 import daikon.suppress.*;
 
@@ -29,7 +30,7 @@ public abstract class Invariant
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030721L;
+  static final long serialVersionUID = 20030822L;
 
   /**
    * General debug tracer.
@@ -221,18 +222,6 @@ public abstract class Invariant
    * invariant at all.  (Except that OneOf invariants are treated differently.)
    **/
   public final static int min_mod_non_missing_samples = 5;
-
-  /**
-   * Stores the enumeration instance representing why this Invariant has
-   * been discarded.  Initialized to DiscardCode.not_discarded.
-   */
-  public DiscardCode discardCode = DiscardCode.not_discarded;
-
-  /**
-   * Stores a string that describes why this Invariant has been discarded.  If
-   * this has not been discarded then discardString.equals("")
-   */
-  public String discardString = "";
 
   /**
    * @return true if the invariant has enough samples to have its
@@ -1175,7 +1164,7 @@ public abstract class Invariant
       + " " + enoughSamples()
       // + " " + (! hasNonCanonicalVariable()) [INCR]
       // + " " + (! hasOnlyConstantVariables()) [INCR]
-      + " " + (! isObvious())
+      + " " + (! isObvious().shouldDiscard())
       + " " + justified()
       // + " " + isWorthPrinting_PostconditionPrestate() [INCR]
       ;
@@ -1189,14 +1178,7 @@ public abstract class Invariant
   // "OneOf". That seems silly, so it's now overriden there.
   public boolean hasFewModifiedSamples() {
     int num_mod_non_missing_samples = ppt.num_mod_non_missing_samples();
-    boolean result = (num_mod_non_missing_samples
-                      < Invariant.min_mod_non_missing_samples);
-    if (result) {
-      discardCode = DiscardCode.few_modified_samples;
-      discardString = "Had " + num_mod_non_missing_samples + " modified samples < min_mod_non_missing_samples==" +
-        min_mod_non_missing_samples;
-    }
-    return result;
+    return (num_mod_non_missing_samples < Invariant.min_mod_non_missing_samples);
   }
 
   // This used to be final, but I want to override in EqualityInvariant.
@@ -1258,7 +1240,7 @@ public abstract class Invariant
    * extending isObviousStatically(VarInfo[]) because it is more
    * general.
    **/
-  public final boolean isObviousStatically() {
+  public final DiscardInfo isObviousStatically() {
     return isObviousStatically(this.ppt.var_infos);
   }
 
@@ -1274,8 +1256,8 @@ public abstract class Invariant
    * this.ppt.var_infos.
    * @pre vis.length == this.ppt.var_infos.length
    **/
-  public boolean isObviousStatically(VarInfo[] vis) {
-    return false;
+  public DiscardInfo isObviousStatically(VarInfo[] vis) {
+    return new DiscardInfo();
   }
 
   /**
@@ -1295,7 +1277,7 @@ public abstract class Invariant
   // of VarInfos and their equality set, so a possible conservative
   // approximation is to simply return false.
   public boolean isObviousStatically_AllInEquality() {
-    if (!isObviousStatically()) return false;
+    if (!isObviousStatically().shouldDiscard()) return false;
 
     for (int i = 0; i < ppt.var_infos.length; i++) {
       if (ppt.var_infos[i].equalitySet.getVars().size() > 1) return false;
@@ -1316,8 +1298,9 @@ public abstract class Invariant
    * elementwise in the same equality set as this.ppt.var_infos.  Can
    * be null if no such assignment exists.
    **/
-  public VarInfo[] isObviousStatically_SomeInEquality() {
-    if (isObviousStatically()) return this.ppt.var_infos;
+  public DiscardInfo isObviousStatically_SomeInEquality() {
+    DiscardInfo result = isObviousStatically();
+    if (result.shouldDiscard()) return result;
     return isObviousStatically_SomeInEqualityHelper (this.ppt.var_infos,
                                                      new VarInfo[this.ppt.var_infos.length],
                                                      0);
@@ -1326,7 +1309,7 @@ public abstract class Invariant
   /**
    * Recurse through vis and generate the cartesian product of
    **/
-  private VarInfo[] isObviousStatically_SomeInEqualityHelper(VarInfo[] vis,
+  private DiscardInfo isObviousStatically_SomeInEqualityHelper(VarInfo[] vis,
                                                              VarInfo[] assigned,
                                                              int position) {
     if (position == vis.length) {
@@ -1339,21 +1322,17 @@ public abstract class Invariant
         debugIsObvious.fine (sb.toString());
       }
 
-      if (isObviousStatically (assigned)) {
-        return assigned;
-      } else {
-        return null;
-      }
+      return isObviousStatically(assigned);
     } else {
       for (Iterator iSet = vis[position].equalitySet.getVars().iterator();
            iSet.hasNext(); ) {
         VarInfo vi = (VarInfo) iSet.next();
         assigned[position] = vi;
-        VarInfo[] temp =
+        DiscardInfo temp =
           isObviousStatically_SomeInEqualityHelper (vis, assigned, position + 1);
-        if (temp != null) return temp;
+        if (temp.shouldDiscard()) return temp;
       }
-      return null;
+      return new DiscardInfo();
     }
   }
 
@@ -1365,7 +1344,7 @@ public abstract class Invariant
    * isObviousDynamically.  Should only do static checking, because
    * suppression should do the dynamic checking.
    **/
-  public final boolean isObvious() {
+  public final DiscardInfo isObvious() {
     // Actually actually, we'll eliminate invariants as they become obvious
     // rather than on output; the point of this is to speed up computation.
     // // Actually, we do need to check isObviousDerived after all because we
@@ -1374,15 +1353,22 @@ public abstract class Invariant
     // // turns out until after testing it.
     // // // We don't need to check isObviousDerived because we won't add
     // // // obvious-derived invariants to lists in the first place.
-    if (isObviousStatically_SomeInEquality() != null ||
-        isObviousDynamically_SomeInEquality() != null) {
+    DiscardInfo staticResult = isObviousStatically_SomeInEquality();
+    if (staticResult.shouldDiscard()) {
       if (debugPrint.isLoggable(Level.FINE))
         debugPrint.fine ("  [obvious:  " + repr_prob() + " ]");
-      return true;
+      return staticResult;
+    } else {
+      DiscardInfo dynamicResult = isObviousDynamically_SomeInEquality();
+      if (dynamicResult.shouldDiscard()) {
+        if (debugPrint.isLoggable(Level.FINE))
+          debugPrint.fine ("  [obvious:  " + repr_prob() + " ]");
+        return dynamicResult;
+      } else {
+        return new DiscardInfo();
+      }
     }
-    return false;
   }
-
 
   /**
    * Return true if this invariant is necessarily true from a fact
@@ -1394,14 +1380,14 @@ public abstract class Invariant
    * checking.  Since this method is dynamic, it should only be called
    * after all processing.
    **/
-  public boolean isObviousDynamically(VarInfo[] vis) {
+  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
     Assert.assertTrue (!Daikon.isInferencing);
     for (int i = 1; i < vis.length; i++) {
       if (vis[i] == vis[i - 1]) {
-        return true;
+        return new DiscardInfo(this, DiscardCode.obvious, "All variables are equal");
       }
     }
-    return false;
+    return new DiscardInfo();
   }
 
 
@@ -1414,7 +1400,7 @@ public abstract class Invariant
    * <p> This method is final because subclasses should extend
    * isObviousDynamically(VarInfo[]) since that method is more general.
    **/
-  public final boolean isObviousDynamically() {
+  public final DiscardInfo isObviousDynamically() {
     Assert.assertTrue (!Daikon.isInferencing);
     return isObviousDynamically (ppt.var_infos);
   }
@@ -1432,8 +1418,9 @@ public abstract class Invariant
    * elementwise in the same equality set as this.ppt.var_infos.  Can
    * be null if no such assignment exists.
    **/
-  public VarInfo[] isObviousDynamically_SomeInEquality() {
-    if (isObviousDynamically()) return this.ppt.var_infos;
+  public DiscardInfo isObviousDynamically_SomeInEquality() {
+    DiscardInfo result = isObviousDynamically();
+    if (result.shouldDiscard()) return result;
     return isObviousDynamically_SomeInEqualityHelper (this.ppt.var_infos,
                                                      new VarInfo[this.ppt.var_infos.length],
                                                      0);
@@ -1447,7 +1434,7 @@ public abstract class Invariant
    * combination.  The combinations are generated via recursive calls to
    * this routine.
    **/
-  private VarInfo[] isObviousDynamically_SomeInEqualityHelper(VarInfo[] vis,
+  private DiscardInfo isObviousDynamically_SomeInEqualityHelper(VarInfo[] vis,
                                                              VarInfo[] assigned,
                                                              int position) {
     if (position == vis.length) {
@@ -1460,22 +1447,18 @@ public abstract class Invariant
         }
         debugIsObvious.fine (sb.toString());
       }
-      if (isObviousDynamically (assigned)) {
-        return assigned;
-      } else {
-        return null;
-      }
+      return isObviousDynamically (assigned);
     } else {
       // recursive case
       for (Iterator iSet = vis[position].equalitySet.getVars().iterator();
            iSet.hasNext(); ) {
         VarInfo vi = (VarInfo) iSet.next();
         assigned[position] = vi;
-        VarInfo[] temp =
+        DiscardInfo temp =
           isObviousDynamically_SomeInEqualityHelper (vis, assigned, position + 1);
-        if (temp != null) return temp;
+        if (temp.shouldDiscard()) return temp;
       }
-      return null;
+      return new DiscardInfo();
     }
   }
 

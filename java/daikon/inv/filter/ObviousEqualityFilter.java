@@ -9,7 +9,7 @@ import daikon.PrintInvariants;
 import utilMDE.Assert;
 import java.util.logging.Level;
 
-class ObviousEqualityFilter extends InvariantFilter {
+public class ObviousEqualityFilter extends InvariantFilter {
   public String getDescription() {
     return "Suppress obvious equality invariants [deprecated]";
   }

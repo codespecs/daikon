@@ -18,7 +18,7 @@ public class Modulus
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20030822L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -70,11 +70,11 @@ public class Modulus
       return "mod(" + var().name.ioa_name() + ", " + modulus + ") = " + remainder;
     }
 
-    if (format == OutputFormat.JAVA 
+    if (format == OutputFormat.JAVA
         || format == OutputFormat.JML
         || format == OutputFormat.DBCJAVA) {
       return var().name.name() + " % " + modulus + " == " + remainder;
-    }  
+    }
 
     return format_unimplemented(format);
   }
@@ -99,8 +99,6 @@ public class Modulus
       long new_modulus = Math.abs(value1 - value);
       if (modulus == 1) {
         destroyAndFlow();
-        discardCode = DiscardCode.bad_sample;
-        discardString = "Modulus calculated to be 1: " + value1 + " seen then " + value + " introduced";
         return;
       }
       modulus = new_modulus;
@@ -110,19 +108,9 @@ public class Modulus
       int new_modulus;
       if (new_modulus_long > Integer.MAX_VALUE
           || (new_modulus_long < Integer.MIN_VALUE)) {
-        discardCode = DiscardCode.bad_sample;
-        if (new_modulus_long > Integer.MAX_VALUE)
-          discardString = "New modulus calculated is too large to be interesting: "+new_modulus_long;
-        else
-          discardString = "New modulus calculated is too small to be interesting: "+new_modulus_long;
         new_modulus = 1;
       } else {
         new_modulus = (int) new_modulus_long;
-        if (new_modulus==1) {
-          discardCode = DiscardCode.bad_sample;
-          discardString = "New modulus calculated to be 1: old_value==" + value1 +
-            " new_value==" + value + " old_modulus==" + modulus;
-        }
         Assert.assertTrue(new_modulus > 0);
       }
       if (new_modulus != modulus) {
@@ -142,18 +130,10 @@ public class Modulus
     if (modulus == 1)
       return Invariant.PROBABILITY_NEVER;
     if (modulus == 0) {
-      discardCode = DiscardCode.obvious;
-      discardString = "Modulus is 0";
       return Invariant.PROBABILITY_UNJUSTIFIED;
     }
     double probability_one_elt_modulus = 1 - 1.0/modulus;
-    double answer = Math.pow(probability_one_elt_modulus, ppt.num_mod_non_missing_samples());
-    if (answer > dkconfig_probability_limit) {
-      discardCode = DiscardCode.bad_probability;
-      discardString = "Computed probability " + answer + " > dkconfig_probability_limit==" +
-        dkconfig_probability_limit;
-    }
-    return answer;
+    return Math.pow(probability_one_elt_modulus, ppt.num_mod_non_missing_samples());
   }
 
   public boolean isSameFormula(Invariant other)

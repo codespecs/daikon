@@ -1,6 +1,7 @@
 package daikon.inv;
 
 import java.io.*;
+import daikon.inv.filter.*;
 
 /** DiscardCode is an enumeration type where the instances
     represent reasons why an invariant is falsified or disregarded.
@@ -37,6 +38,8 @@ import java.io.*;
     exact // isExact() fails
 
     var_filtered // Doesn't contain a desirable variable
+
+    filtered // filtered by some other means not in the above list
  */
 
 public class DiscardCode implements Comparable,Serializable {
@@ -44,7 +47,7 @@ public class DiscardCode implements Comparable,Serializable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030612L;
+  static final long serialVersionUID = 20030822L;
 
   /** used when an invariant has not been discarded */
   public static final DiscardCode not_discarded = new DiscardCode(-1);
@@ -88,6 +91,9 @@ public class DiscardCode implements Comparable,Serializable {
   /** used for invariants that don't contain desired variables */
   public static final DiscardCode var_filtered = new DiscardCode(12);
 
+  /** used for invariants that are filtered by some means not in the above list */
+  public static final DiscardCode filtered = new DiscardCode(13);
+
   /** Each member of the enumeration is associated with a distinct int for comparability */
   public final int enumValue;
 
@@ -119,10 +125,38 @@ public class DiscardCode implements Comparable,Serializable {
     }
   }
 
+  /** Returns the DiscardCode most associated with the given filter */
+  public static DiscardCode findCode(InvariantFilter filter) {
+    if ((filter instanceof ObviousEqualityFilter) || (filter instanceof ObviousFilter) || (filter instanceof SimplifyFilter))
+      return obvious;
+    else if (filter instanceof EnoughSamplesFilter)
+      return not_enough_samples;
+    else if (filter instanceof ControlledInvariantFilter)
+      return control_check;
+    else if (filter instanceof DerivedParameterFilter)
+      return derived_param;
+    else if (filter instanceof FewModifiedSamplesFilter)
+      return few_modified_samples;
+    else if (filter instanceof ImpliedPostconditionFilter)
+      return implied_post_condition;
+    else if (filter instanceof NonCanonicalVariablesFilter)
+      return non_canonical_var;
+    else if (filter instanceof OnlyConstantVariablesFilter)
+      return only_constant_vars;
+    else if (filter instanceof UnjustifiedFilter)
+      return bad_probability;
+    else if (filter instanceof UnmodifiedVariableEqualityFilter)
+      return unmodified_var;
+    else if (filter instanceof VariableFilter)
+      return var_filtered;
+    else
+      return filtered;
+  }
+
   /** Prints out a string describing the reason for discard
    * @returns one of {"Not discarded","Obvious,"Bad sample seen","Unjustified probability","Few modified samples","Not enough samples",
                       "Non-canonical variable","Implied post state","Only constant variables in this expression","Derived Param","Control Check"
-                      ,Exact, Variable Filter}
+                      ,"Exact","Variable Filter","Filtered"}
    */
   public String toString() {
     if (this.enumValue==-1)
@@ -153,6 +187,8 @@ public class DiscardCode implements Comparable,Serializable {
       return "Exact";
     else if (this.enumValue==12)
       return "Variable Filter";
+    else if (this.enumValue==13)
+      return "Filtered";
     else { // this should never happen since the constructor is private
       return "Unknown instance of DiscardCode used";
     }
@@ -191,6 +227,8 @@ public class DiscardCode implements Comparable,Serializable {
       return exact;
     else if (enumValue==12)
       return var_filtered;
+    else if (enumValue==13)
+      return filtered;
     else {//this should never happen
       return null;
     }

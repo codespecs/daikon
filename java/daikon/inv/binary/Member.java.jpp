@@ -90,7 +90,7 @@ public final class CLASSNAME
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20030822L;
 
   public static final Logger debug =
     Logger.getLogger ("daikon.inv.binary.Member");
@@ -126,13 +126,12 @@ public final class CLASSNAME
     return new CLASSNAME(ppt, seq_first);
   }
 
-  public boolean isObviousStatically(VarInfo[] vis) {
+  public DiscardInfo isObviousStatically(VarInfo[] vis) {
     VarInfo seqvar = vis[seq_first ? 0 : 1];
     VarInfo sclvar = vis[seq_first ? 1 : 0];
     if (isObviousMember(sclvar, seqvar)) {
-      discardCode = DiscardCode.obvious;
-      discardString = sclvar().name.name()+" is an obvious member of "+seqvar().name.name();
-      return true;
+      return new DiscardInfo(this, DiscardCode.obvious, sclvar().name.name() + " is an obvious member of "
+                             + seqvar().name.name());
     }
     return super.isObviousStatically (vis);
   }
@@ -491,7 +490,7 @@ public final class CLASSNAME
     } else if (format == OutputFormat.JAVA) {
       return format_java();
     } else if (format == OutputFormat.IOA) {
-      return format_ioa();    
+      return format_ioa();
     } else if (format == OutputFormat.DBCJAVA) {
       return format_dbc();
 #ifdef SCALAR
@@ -564,16 +563,12 @@ public final class CLASSNAME
                      " not in " + ArraysMDE.toString(a));
       }
       destroyAndFlow();
-      discardCode = DiscardCode.bad_sample;
-      discardString = "Falsified since " + i + " not in " + ArraysMDE.toString(a);
       return;
     }
   }
 
   protected double computeProbability() {
     if (falsified) {
-      discardCode = DiscardCode.bad_sample;
-      discardString = "This shouldn't help";
       return Invariant.PROBABILITY_NEVER;
     }
     else

@@ -41,7 +41,7 @@ public final class CLASSNAME
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030325L;
+  static final long serialVersionUID = 20030822L;
 
   /** Debug tracer **/
   public static final Logger debug =
@@ -151,12 +151,6 @@ public final class CLASSNAME
         if (max_i == -1) {
           values_seen--;
           wrapper.destroyAndFlow();
-          wrapper.discardCode = DiscardCode.bad_sample;
-          String name1 = wrapper.ppt.var_infos[0].name.name();
-          String name2 = wrapper.ppt.var_infos[1].name.name();
-          wrapper.discardString = "All pairs of seen points have been close. The arrays in order:\n";
-          wrapper.discardString += name1+":"+utilMDE.ArraysMDE.toString(x_cache)+" "+name2+":"+
-            utilMDE.ArraysMDE.toString(y_cache);
           return;
         }
         // remember the min and max pairs
@@ -205,9 +199,6 @@ public final class CLASSNAME
             }
             values_seen--;
             wrapper.destroyAndFlow();
-            wrapper.discardCode = DiscardCode.obvious;
-            String yName = wrapper.ppt.var_infos[1].name.name();
-            wrapper.discardString = "Point does not match existing line";
             return;
           }
         }
@@ -267,8 +258,6 @@ public final class CLASSNAME
                         + y + " != " + a + "*" + x + "+" + b);
           }
           wrapper.destroyAndFlow();
-          wrapper.discardCode = DiscardCode.bad_sample;
-          wrapper.discardString = "No linear relation found after seeing values: "+x+","+y;
           return;
         }
         //??? wrapper.destroyAndFlow();
@@ -330,12 +319,7 @@ public final class CLASSNAME
   }
 
   public boolean enoughSamples() {
-    boolean answer = (wrapper.ppt.num_values() >= MINPAIRS);
-    if (!answer) {
-      wrapper.discardCode = DiscardCode.not_enough_samples;
-      wrapper.discardString = "Not enough samples seen: had "+values_seen+" needed "+MINPAIRS;
-    }
-    return answer;
+    return (wrapper.ppt.num_values() >= MINPAIRS);
   }
 
   public double computeProbability() {

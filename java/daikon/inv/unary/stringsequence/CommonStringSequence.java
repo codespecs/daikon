@@ -15,7 +15,7 @@ public class CommonStringSequence
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20030822L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -90,9 +90,6 @@ public class CommonStringSequence
       if (size==0) {
         destroyAndFlow();
         VarInfo var = var();
-
-        discardCode = DiscardCode.bad_sample;
-        discardString = printIntersect()+" not a subset of "+var.name.name();
         return;
       }
       intersect = ArraysMDE.subarray(tmp, 0, size);
@@ -109,8 +106,8 @@ public class CommonStringSequence
     }
   }
 
-  public boolean isObviousImplied() {
-    return false;
+  public DiscardInfo isObviousImplied() {
+    return new DiscardInfo();
   }
 
   public boolean isSameFormula(Invariant other) {

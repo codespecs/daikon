@@ -3,7 +3,7 @@ package daikon.inv.filter;
 import daikon.inv.*;
 import daikon.inv.filter.*;
 
-class FewModifiedSamplesFilter extends InvariantFilter {
+public class FewModifiedSamplesFilter extends InvariantFilter {
   public String getDescription() {
     return "Suppress invariants with few modified samples";
   }
@@ -15,10 +15,6 @@ class FewModifiedSamplesFilter extends InvariantFilter {
     if (IsEqualityComparison.it.accept( invariant )) {
       return false;
     }
-    boolean answer = invariant.hasFewModifiedSamples();
-    if (answer && invariant.discardString.equals(""))
-      invariant.discardString = invariant.getClass().getName()+": Fix me, "+
-        "discarded for few modified samples";
-    return answer;
+    return invariant.hasFewModifiedSamples();
   }
 }

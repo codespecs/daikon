@@ -71,7 +71,7 @@ public class CLASSNAME
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20030822L;
 
   private static final Logger debug =
     Logger.getLogger("daikon.inv.binary.twoSequence." + CLASSSTRING);
@@ -329,9 +329,6 @@ public class CLASSNAME
 
     if (! (new_var1_in_var2 || new_var2_in_var1)) {
       destroyAndFlow();
-      discardCode = DiscardCode.bad_sample;
-      discardString = "Falsified by sample: " + var1().name.name() + "==" + ArraysMDE.toString(a1) +
-            ", " + var2().name.name() + "==" + ArraysMDE.toString(a2);
       return;
     }
 
@@ -345,8 +342,6 @@ public class CLASSNAME
     if (falsified)
       return Invariant.PROBABILITY_NEVER;
     else if (var1_in_var2 && var2_in_var1) {
-      discardCode = DiscardCode.obvious;
-      discardString = "Both variables have always been subsequences of each other";
       return Invariant.PROBABILITY_UNJUSTIFIED;
     }
     else
@@ -543,7 +538,7 @@ public class CLASSNAME
     return null;
   }
 
-  public boolean isObviousStatically(VarInfo[] vis) {
+  public DiscardInfo isObviousStatically(VarInfo[] vis) {
     // Why both ways?  Because even if x[0..i+1] is a subsequence of
     // x[0..i] it's not interesting, since the only case this can
     // happen is when i is above x.length.
@@ -567,25 +562,27 @@ public class CLASSNAME
     VarInfo subvar_super = subvar.isDerivedSubSequenceOf();
     if (subvar_super == supervar) {
       debug.fine ("  returning true because subvar_super == supervar");
-      return true;
+      return new DiscardInfo(this, DiscardCode.obvious, "x[0..i] subsequence of x[0..j] is uninteresting");
     }
 
     VarInfo supervar_super = supervar.isDerivedSubSequenceOf();
     if (subvar_super != null && subvar_super == supervar_super) {
       debug.fine ("  returning true because subvar_super == supervar_super");
-      return true;
+      return new DiscardInfo(this, DiscardCode.obvious, "x[0..i] subsequence of x[0..j] is uninteresting");
     }
 
     Object[] obv1 = CLASSNAME.isObviousSubSequence(var1, var2);
     Object[] obv2 = CLASSNAME.isObviousSubSequence(var2, var1);
-    if ((obv1[1] != null) || (obv2[1] != null)) {
-      return (true);
+    if (obv1[1] != null) {
+      return new DiscardInfo(this, (DiscardCode) obv1[0], (String) obv1[1]);
+    } else if (obv2[1] != null) {
+      return new DiscardInfo(this, (DiscardCode) obv2[0], (String) obv2[1]);
     }
 
     if (!var1.aux.getFlag(VarInfoAux.HAS_ORDER) ||
         !var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
       // Doesn't make sense to consider subsequence if order doens't matter
-      return true;
+      return new DiscardInfo(this, DiscardCode.obvious, "Order doesn't matter, so subsequence is meaningless");
     }
 
     return super.isObviousStatically(vis);
@@ -598,7 +595,7 @@ public class CLASSNAME
 
   // (Seems overkill to check for other transitive relationships.
   // Eventually that is probably the right thing, however.)
-  public boolean isObviousDynamically(VarInfo[] vis) {
+  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     // System.out.println("checking isObviousImplied for: " + format());
     if (debug.isLoggable(Level.FINE)) {
@@ -608,15 +605,19 @@ public class CLASSNAME
     if (var1_in_var2 && var2_in_var1) {
       // Suppress this invariant; we should get an equality invariant from
       // elsewhere.
-      discardCode = DiscardCode.obvious;
-      String name1 = var1().name.name();
-      String name2 = var2().name.name();
-      discardString = "All seen samples for "+name1+","+name2+" have represented equal sequences";
-      return true;
+      String name1 = vis[0].name.name();
+      String name2 = vis[1].name.name();
+      String discardString = "All seen samples for "+name1+","+name2+" have represented equal sequences";
+      return new DiscardInfo(this, DiscardCode.obvious, discardString);
     }
 
-    if (var1_in_var2 && isObviousSubSequenceDynamically (this, vis[0], vis[1])) return true;
-    if (var2_in_var1 && isObviousSubSequenceDynamically (this, vis[1], vis[0])) return true;
+    if (var1_in_var2 && isObviousSubSequenceDynamically (this, vis[0], vis[1])) {
+      return new DiscardInfo(this, DiscardCode.obvious, vis[0].name.name()
+                             + " is an obvious subsequence of " + vis[1].name.name());
+    } else if (var2_in_var1 && isObviousSubSequenceDynamically (this, vis[1], vis[0])) {
+      return new DiscardInfo(this, DiscardCode.obvious, vis[1].name.name()
+                             + " is an obvious subsequence of " + vis[0].name.name());
+    }
     return super.isObviousDynamically(vis);
   }
 

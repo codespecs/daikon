@@ -29,6 +29,7 @@ package daikon.inv.binary.twoScalar;
 import daikon.*;
 import daikon.inv.Invariant;
 import daikon.inv.DiscardCode;
+import daikon.inv.DiscardInfo;
 import daikon.derive.unary.SequenceLength;
 import java.util.*;
 import utilMDE.*;
@@ -43,7 +44,7 @@ public class CLASSNAME
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20030822L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -139,7 +140,7 @@ public class CLASSNAME
     return true;
   }
 
-  public boolean isObviousStatically(VarInfo[] vis) {
+  public DiscardInfo isObviousStatically(VarInfo[] vis) {
     // Obvious derived
     VarInfo var1 = vis[0];
     VarInfo var2 = vis[1];
@@ -149,34 +150,31 @@ public class CLASSNAME
       SequenceLength sl1 = (SequenceLength) var1.derived;
       SequenceLength sl2 = (SequenceLength) var2.derived;
       if (sl1.base == sl2.base) {
-        discardCode = DiscardCode.obvious;
-        discardString = var1.name.name()+" and "+var2.name.name()+" derived from "+
+        String discardString = var1.name.name()+" and "+var2.name.name()+" derived from "+
           "same sequence: "+sl1.base.name.name();
-        return true;
+        return new DiscardInfo(this, DiscardCode.obvious, discardString);
       }
     }
     // avoid comparing "size(a)-1" to anything; should compare "size(a)" instead
     if (var1.isDerived() && (var1.derived instanceof SequenceLength)
         && ((SequenceLength) var1.derived).shift != 0) {
-      discardCode = DiscardCode.obvious;
-      discardString = "Variables of the form 'size(a)-1' are not compared since 'size(a)' "+
+      String discardString = "Variables of the form 'size(a)-1' are not compared since 'size(a)' "+
         "will be compared";
-      return true;
+      return new DiscardInfo(this, DiscardCode.obvious, discardString);
     }
     if (var2.isDerived() && (var2.derived instanceof SequenceLength)
         && ((SequenceLength) var2.derived).shift != 0) {
-      discardCode = DiscardCode.obvious;
-      discardString = "Variables of the form 'size(a)-1' are not compared since 'size(a)' "+
+      String discardString = "Variables of the form 'size(a)-1' are not compared since 'size(a)' "+
         "will be compared";
-      return true;
+      return new DiscardInfo(this, DiscardCode.obvious, discardString);
     }
 
     return super.isObviousStatically(vis);
   }
 
-  public boolean isObviousDynamically(VarInfo[] vis) {
-    if (core.a == 0) return true;                // Constant
-    if (core.a == 1 && core.b == 0) return true; // Equality
+  public DiscardInfo isObviousDynamically(VarInfo[] vis) {
+    if (core.a == 0) return new DiscardInfo(this, DiscardCode.obvious, var2().name.name() + " is constant");
+    if (core.a == 1 && core.b == 0) return new DiscardInfo(this, DiscardCode.obvious, "Variables are equal");
     return super.isObviousDynamically(vis);
   }
 

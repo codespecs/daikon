@@ -3,7 +3,7 @@ package daikon.inv.filter;
 import daikon.inv.*;
 import daikon.inv.filter.*;
 
-class OnlyConstantVariablesFilter extends InvariantFilter {
+public class OnlyConstantVariablesFilter extends InvariantFilter {
   public String getDescription() {
     return "Suppress invariants containing only constants [deprecated]";
   }

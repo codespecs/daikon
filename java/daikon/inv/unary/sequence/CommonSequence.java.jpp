@@ -48,7 +48,7 @@ public class CLASSNAME
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20030822L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -137,9 +137,6 @@ public class CLASSNAME
       if (size==0) {
         destroyAndFlow();
         VarInfo var = var();
-
-        discardCode = DiscardCode.bad_sample;
-        discardString = printIntersect()+" not a subset of "+var.name.name();
         return;
       }
 
@@ -154,13 +151,7 @@ public class CLASSNAME
     if (falsified) {
       return Invariant.PROBABILITY_NEVER;
     } else {
-      double answer = Math.pow(.9, elts);
-      if (answer > dkconfig_probability_limit) {
-        discardCode = DiscardCode.bad_probability;
-        discardString = "Computed probability " + answer + " > dkconfig_probability_limit==" +
-          dkconfig_probability_limit;
-      }
-      return answer;
+      return Math.pow(.9, elts);
     }
   }
 

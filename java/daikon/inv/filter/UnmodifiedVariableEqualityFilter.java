@@ -10,7 +10,7 @@ import java.util.logging.Level;
  * Suppress invariants that merely indicate that a variable was
  * unmodified.  Used only for ESC output.
  **/
-class UnmodifiedVariableEqualityFilter extends InvariantFilter {
+public class UnmodifiedVariableEqualityFilter extends InvariantFilter {
   public String getDescription() {
     return "Suppress invariants that merely indicate that a variable was unmodified";
   }
@@ -39,8 +39,6 @@ class UnmodifiedVariableEqualityFilter extends InvariantFilter {
       if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
         PrintInvariants.debugFiltering.fine ("\t(yes...)\n");
       }
-      invariant.discardCode = DiscardCode.unmodified_var;
-      invariant.discardString = "var1 prestate and var2 have .equal() name fields, name.name()=="+var2.name.name();
       return true ;
     }
 
@@ -52,8 +50,6 @@ class UnmodifiedVariableEqualityFilter extends InvariantFilter {
       if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
         PrintInvariants.debugFiltering.fine ("\t(yes...)\n");
       }
-      invariant.discardCode = DiscardCode.unmodified_var;
-      invariant.discardString = "var2 prestate and var1 have .equal() name fields, name.name()=="+var1.name.name();
       return true;
     }
 
