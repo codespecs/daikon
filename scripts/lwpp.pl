@@ -21,6 +21,15 @@ if (@ARGV != 2) {
 }
 
 my ($lackwitdb, $decls) = @ARGV;
+
+# Check that LACKWIT_HOME is set correctly, and that the required
+# files are present and readable
+my $lackwit_home = $ENV{LACKWIT_HOME};
+-d $lackwit_home or die "LACKWIT_HOME is not set correctly\n";
+
+$ENV{LACKWITDB} = $lackwitdb;
+$ENV{PATH} = "$lackwit_home/bin:" . $ENV{PATH};
+
 open DECLS, $decls or die "Can't open $decls: $!\n";
 
 print "VarComparability\n";
