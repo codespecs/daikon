@@ -7,6 +7,7 @@ package ajax.jbc.util;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import ajax.Globals;
 
 class FileSystemClassList implements Enumeration {
     private String prefix;
@@ -15,7 +16,7 @@ class FileSystemClassList implements Enumeration {
     private FileSystemClassList subdirLister = null;
     private int nextFile = 0;
     private String next = null;
-    private Hashtable dirsSeen;
+    private Hashtable dirsSeen = null;
     
     FileSystemClassList(File dir) {
         this(dir, "", new Hashtable());
@@ -26,6 +27,11 @@ class FileSystemClassList implements Enumeration {
         this.dir = dir;
         this.fileList = dir.list();
         this.dirsSeen = dirsSeen;
+
+        if (fileList == null) {
+            Globals.localError("Cannot read file names in " + dir);
+            fileList = new String[0];
+	}
     }
     
     /**
@@ -55,7 +61,7 @@ class FileSystemClassList implements Enumeration {
                 
                 nextFile++;
                 
-                if (f.isDirectory() && markSeen(f)) {
+		if (f.isDirectory() && markSeen(f)) {
                     subdirLister = new FileSystemClassList(f, prefix + name + ".", dirsSeen);
                     if (subdirLister.hasMoreElements()) {
                         next = (String)subdirLister.nextElement();
@@ -68,7 +74,7 @@ class FileSystemClassList implements Enumeration {
             }
         }
     }
-    
+
     public boolean hasMoreElements() {
         advanceToNextElement();
         return next != null;

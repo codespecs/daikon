@@ -65,16 +65,18 @@ public class StandardClassLoader extends JBCClassLoader {
 			if (name.regionMatches(true, name.length() - 4, ".zip", 0, 4)
 			    || name.regionMatches(true, name.length() - 4, ".jar", 0, 4)) {
 			    readers.addElement(new ZipClassReader(file));
-			} else {
+			} else if (file.isDirectory()) {
 			    readers.addElement(new FileSystemClassReader(file));
-			}                        
+			} else {
+                            Globals.userError("Class path entry " + name + " is not a .zip or .jar, "
+					      + "nor a directory; ignoring");
+			}
 		    } else {
-			Globals.writeLog("ajax.jbc.util.StandardClassLoader",
-					 "Class path entry " + name + " not found");
+			Globals.userError("Class path entry " + name + " not found");
 		    }
 		} catch (IOException ex) {
 		    Globals.userError("Can't read class path entry: "
-				      + name + " (" + ex.getMessage() + ")");
+				      + name + " (" + ex.getMessage() + "); ignoring");
 		}
 	    }
         }

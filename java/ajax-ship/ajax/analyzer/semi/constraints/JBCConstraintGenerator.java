@@ -744,19 +744,19 @@ class JBCConstraintGenerator implements OpcodeConstants, DataConstants {
                             array,
 			    manager.getJavaLangObject().registerUserField("arraylength", false),
                             Variable.DMODE).makeEqual(w, entryStackVars[-delta - 2]);
-		    }
-                
+			    }
+
                     if (combineInputs) {
                         array.makeEqual(w, entryStackVars[-delta - 2]);
                         array.makeEqual(w, element);
-                    }
-                    
-                    manager.makeNonstaticUserField(Variable.CMODE,
+			}
+
+		    manager.makeNonstaticUserField(Variable.CMODE,
                             array,
                             manager.getJavaLangObject().registerUserField(
                                 getArrayElementName(code, offset), false),
                             Variable.DMODE)
-                        .makeEqual(w, element);
+			    .makeEqual(w, element);
                 }
                 break;
             }

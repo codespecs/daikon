@@ -128,10 +128,10 @@ public class ConstraintManager implements DataConstants {
     private SEMIVirtualCallResolver callResolver;
     private SEMISingletonUsageDetector singletonUsageDetector;
     private boolean treatVirtualCallsAsNondeterminism = false;
-    private boolean breakoutDowncastSubobjects = true;
-    private boolean useSubchunks = true;
-    private boolean useSubobjects = true;
-    private boolean trackArrayIndices = false;
+    private boolean breakoutDowncastSubobjects = true;        
+    private boolean useSubchunks = true;                      
+    private boolean useSubobjects = true;                     
+    private boolean trackArrayIndices = false;                
     
     private World solver;
     

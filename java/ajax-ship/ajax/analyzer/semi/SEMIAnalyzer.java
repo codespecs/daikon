@@ -39,7 +39,7 @@ public class SEMIAnalyzer implements GenericAnalyzer, AnalyzerEnvironment, VarOb
     private int numComponents;
     private int numParents;
 
-    public static final boolean applyPolarities = true; // CONFIG
+    public static final boolean applyPolarities = false; // CONFIG
     
     private static final Object DEFAULT_QUERY_FIELD = new String("DEFAULT_QUERY_FIELD");
     

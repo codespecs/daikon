@@ -26,7 +26,7 @@ class GeneralBenchmarkTerminationThread implements Runnable {
             int ch = System.in.read();
                     
             if (ch != -1) {
-                benchmark.terminate("KILLED due to user input (char " + ch + ")");
+		benchmark.terminate("KILLED due to user input (char " + ch + ")");
             }
         } catch (IOException ex) {
         }

@@ -40,10 +40,10 @@ This is a map from JBCMethods to JBCClasses to sets of classes and methods.
         try {
             InputStream is = getClass().getResourceAsStream("/" + defaultReflectionResourceName);
             if (is != null) {
-              addReflectionInfo(loader,
-                                new BufferedReader(new InputStreamReader(is)));
+            addReflectionInfo(loader,
+                new BufferedReader(new InputStreamReader(is)));
             } else {
-              Globals.userError("Cannot read the reflection information resource (\"" + defaultReflectionResourceName + "\")");
+                Globals.userError("Cannot read the reflection information resource (\"" + defaultReflectionResourceName + "\")");
             }
         } catch (IOException ex) {
             Globals.userError("Problem with the reflection information resource (\"" + defaultReflectionResourceName + "\");\n"

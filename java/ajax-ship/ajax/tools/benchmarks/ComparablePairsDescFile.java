@@ -19,22 +19,15 @@ class ComparablePairsDescFile {
     private Hashtable detectors = new Hashtable();
     private ComparablePairsDescFileReader owner;
 
-    // directory containing desc files; removed before constructing package
-    private String descDir;
-
     /**
        Create an analysis tool that rewrites one Daikon .decls file.
 
        @param owner the container that manages the actual Ajax analysis
        @param fileName the name of the .decls file
-       @param descDir the base directory for decls files, to which package names are appended to find the
-          actual directory containing the decls file for each class. If 'null', then the current directory
-	  is assumed to be the base directory for the decls files.
     */
-    ComparablePairsDescFile(ComparablePairsDescFileReader owner, String fileName, String descDir) {
+    ComparablePairsDescFile(ComparablePairsDescFileReader owner, String fileName) {
 	this.fileName = fileName;
 	this.owner = owner;
-	this.descDir = descDir;
     }
 
     public String getFileName() {
@@ -54,13 +47,13 @@ class ComparablePairsDescFile {
                 return false;
         }
     }
-
+    
     private static void findReachableInstructions(byte[] code, int offset, int[] singleton, boolean[] visited) {
         while (!visited[offset]) {
             visited[offset] = true;
-
+            
             int[] successors = JBCCodeUtilities.getReachableSuccessors(code, offset, singleton);
-
+                                    
             if (successors.length == 1) {
                 offset = successors[0];
                 continue;
@@ -71,14 +64,14 @@ class ComparablePairsDescFile {
             }
         }
     }
-
+    
     private static int findUniqueReturn(JBCMethod method, int offset) {
         byte[] code = method.getData().getCode();
         boolean[] visited = new boolean[code.length];
         int result = -1;
-
+                            
         findReachableInstructions(code, offset, new int[1], visited);
-
+        
         for (int i = 0; i < visited.length; i++) {
             if (visited[i] && isReturn(code[i] & 0xFF)) {
                 if (result >= 0) {
@@ -88,7 +81,7 @@ class ComparablePairsDescFile {
                 }
             }
         }
-
+        
         return result;
     }
 
@@ -120,7 +113,7 @@ class ComparablePairsDescFile {
 
             return null;
     }
-  }
+  }    
 
   public static JBCType getExpressionType(JBCMethod method, int offset, JBCExpression expression) {
     Enumeration e = getExpressionTypes(method, offset, expression);
@@ -141,36 +134,6 @@ class ComparablePairsDescFile {
 	System.exit(3);
     }
 
-    /** Make the file relative to the directory. */
-    private static String stripDir(String fileName, String dir) {
-        if (dir == null) {
-            return fileName;
-	} else if (fileName.startsWith(dir)) {
-            fileName = fileName.substring(dir.length());
-            if (fileName.startsWith(File.separator)) {
-                fileName = fileName.substring(File.separator.length());
-            }
-        }
-        return fileName;
-    }
-
-    private String extractPackageName(String fileName) {
-	fileName = stripDir(fileName, descDir);
-
-	while (fileName.startsWith("." + File.separatorChar)) {
-	    fileName = fileName.substring(2);
-	}
-
-	int dirPathEnd = fileName.lastIndexOf(File.separatorChar);
-
-	if (dirPathEnd >= 0) {
-	    return fileName.substring(0, dirPathEnd).
-		replace(File.separatorChar, '.');
-	} else {
-	    return null;
-	}
-    }
-
     private static String getArrayElementName(JBCType t) {
 	if (t instanceof JBCObjectType) {
 	    return "arrayelement";
@@ -187,7 +150,6 @@ class ComparablePairsDescFile {
 
     public void configure(Analyzer analyzer) {
         int lineNum = 0;
-	String packageName = extractPackageName(fileName);
 	BufferedReader r = null;
 	JBCClass javaLangObject = analyzer.getWorld().getSystemClassLoader()
 	    .getClass("java.lang.Object");
@@ -198,24 +160,20 @@ class ComparablePairsDescFile {
             r = new BufferedReader(new FileReader(fileName));
 
             String s;
-
+            
             while ((s = r.readLine()) != null) {
                 lineNum++;
-
+                
                 if (s.equals("DECLARE")) {
                     String decl = r.readLine();
                     int lastColon = decl.lastIndexOf(':');
                     String offset = decl.substring(lastColon + 1);
                     String methodName = decl.substring(0, lastColon - 2);
-
+                    
                     lineNum++;
-
-                    // if (packageName != null) {
-                    //     methodName = packageName + "." + methodName;
-                    // }
-
+                    
                     int offsetIndex;
-
+                    
                     if (offset.startsWith("EXIT")) {
                         try {
                             offsetIndex = Integer.parseInt(offset.substring(4));
@@ -232,20 +190,20 @@ class ComparablePairsDescFile {
                         badDescFile("Unknown offset: " + offset);
                         return;
                     }
-
+                    
                     int lastDot = methodName.lastIndexOf('.');
                     String className = methodName.substring(0, lastDot);
-
+                    
                     JBCClass c = owner.getAppLoader().getClass(className);
-
+                    
                     if (c == null) {
                         badDescFile("Cannot find class " + className + " to resolve method " + methodName);
                         return;
                     }
-
+                    
                     methodName = methodName.substring(lastDot + 1);
                     methodName = methodName.replace('/', '.');
-
+                    
                     int firstParen = methodName.indexOf('(');
                     JBCMethod method;
 
@@ -255,9 +213,9 @@ class ComparablePairsDescFile {
 		      methodName = methodName.substring(0, firstParen);
 
 		      method = c.getMethod(methodName, methodSignature);
-
+                    
 		      if (method == null) {
-                        badDescFile("Method not found: " + methodName
+                        badDescFile("Method not found: " + methodName 
 					   + " (signature \"" + methodSignature
                                            + "\") in class " + className);
                         return;
@@ -273,27 +231,27 @@ class ComparablePairsDescFile {
 			}
 		      }
 		    }
-
+                    
 		    if (offsetIndex > 0) {
                         int sourceLine = offsetIndex;
-
+                        
                         offsetIndex = JBCCodeUtilities.getBytecodeOffset(method, sourceLine);
-
+                        
                         if (offsetIndex < 0) {
                             badDescFile("Line number " + sourceLine + " not found in " + method);
                             return;
                         } else {
                             int returnOffset = findUniqueReturn(method, offsetIndex);
-
+                            
                             if (returnOffset < 0) {
                                 badDescFile("Cannot find unique return instruction from offset " + offsetIndex + " in " + method);
                                 return;
                             }
-
+                            
                             offsetIndex = returnOffset;
                         }
                     }
-
+                    
                     CompactSet exprs = new CompactSet();
                     String[] varNames =
                         JBCCodeUtilities.getLocalVariableNames(method, offsetIndex);
@@ -307,14 +265,14 @@ class ComparablePairsDescFile {
 			    }
 			}
                         if (!haveLocalVarInfo) {
-                            System.err.println("Warning: class " + className + " does not have local variable info");
+                            Globals.userError("Warning: class " + className + " does not have local variable info");
 			    warnedClassesNoDebugInfo.put(className, className);
                         }
 		    }
 
                     JBCLocation location = new JBCLocation(method, offsetIndex);
                     Hashtable exprNames = new Hashtable();
-
+                    
                     while ((s = r.readLine()) != null && !s.equals("")) {
                         String name = s;
                         String declType = r.readLine();
@@ -322,7 +280,7 @@ class ComparablePairsDescFile {
                         String compatibility = r.readLine();
                         String originalName = name;
 
-                        System.err.println("Processing '" + name + "'");
+                        Globals.writeLog(null, "Processing Daikon declaration for '" + name + "'");
                         lineNum += 4;
                         if (name.indexOf('~') < 0 && !name.endsWith(".class")
                             && !name.endsWith(".toString")) {
@@ -334,66 +292,62 @@ class ComparablePairsDescFile {
 			      nextPart = nextBracket;
 			    }
                             String baseVar = nextPart < 0 ? name : name.substring(0, nextPart);
-
+                            
                             name = nextPart < 0 ? null : name.substring(nextPart + 1);
-
+                            
                             JBCExpression expr;
-
+                            
                             if (baseVar.equals("this")) {
                                 expr = JBCExpression.makeLocalVarExpression(0);
                             } else if (baseVar.equals("return")) {
                                 expr = JBCExpression.makeStackElemExpression(0);
                             } else {
                                 expr = null;
-
+                                
                                 for (int i = 0; i < varNames.length && expr == null; i++) {
                                     if (varNames[i].equals(baseVar)) {
                                         expr = JBCExpression.makeLocalVarExpression(i);
                                     }
                                 }
-
+                                
                                 while (expr == null && name != null) {
                                     int nextBaseDot = name.indexOf('.');
 				    baseVar = baseVar + "." + (nextBaseDot < 0 ? name : name.substring(0, nextBaseDot));
 
                                     name = nextBaseDot < 0 ? null : name.substring(nextBaseDot + 1);
-
+                                    
                                     int lastBaseDot = baseVar.lastIndexOf('.');
 
 				    if (lastBaseDot > -1) {
 				      String staticClassName = baseVar.substring(0, lastBaseDot);
 
-                                      // if (packageName != null) {
-                                      //     staticClassName = packageName + "." + staticClassName;
-                                      // }
-
 				      JBCClass staticClass = owner.getAppLoader().getClass(staticClassName);
-
+                                    
 				      if (staticClass != null) {
                                         String fieldName = baseVar.substring(lastBaseDot + 1);
                                         JBCField f = staticClass.getField(fieldName);
-
+                                        
                                         if (f != null && f.isStatic()) {
                                             expr = JBCExpression.makeStaticFieldExpression(f);
                                         }
 				      }
                                     }
                                 }
-
+                                    
                                 if (expr == null) {
                                     badDescFile("Variable not found: " + baseVar + " at line " + lineNum);
                                     return;
                                 }
                             }
-
+                            
                             if (name != null) {
 			        JBCType varType = getExpressionType(method, offsetIndex, expr);
 				if (varType == null) {
 				  badDescFile("Ambiguous type for qualified name: " + name);
 				  return;
 				}
-
-                                while (name != null) {
+                    
+                                while (expr != null && name != null) {
     				    nextDot = name.indexOf('.');
 				    nextBracket = name.indexOf('[');
 
@@ -411,19 +365,24 @@ class ComparablePairsDescFile {
 				    }
 
 				    JBCObjectType objType = (JBCObjectType)varType;
-                                    JBCClass containingClass = objType.getClassDef();
-
-                                    if (containingClass == null) {
-                                        badDescFile("Cannot load class " + objType.getClassName()
-						    + " to resolve expression: " + name);
-                                        return;
-                                    }
-
+                                    JBCClass containingClass;
+				    if (objType.equals(JBCType.OBJECT)) {
+					containingClass = null; // null reference
+				    } else {
+					containingClass = objType.getClassDef();
+					if (containingClass == null) {
+					    badDescFile("Cannot load class " + objType.getClassName()
+							+ " to resolve expression: " + name);
+					    return;
+					}
+				    }
+                            
                                     name = nextPart < 0 ? null : name.substring(nextPart + 1);
-
-				    if (fieldName.equals("]")) {
+                                    
+				    if (containingClass == null) {
+				    } else if (fieldName.equals("]")) {
 				      JBCType t = objType.getArrayElementType();
-
+				     
 				      if (t == null) {
 					  if (containingClass.getClassName().equals("java.util.Vector")) {
 					      JBCField f = containingClass.getField("elementData");
@@ -461,7 +420,7 @@ class ComparablePairsDescFile {
                                         badDescFile("Field not found: " + fieldName + " in " + containingClass);
                                         return;
 				      }
-
+                                    
 				      if (f.isStatic()) {
                                         expr = JBCExpression.makeStaticFieldExpression(f);
 				      } else {
@@ -471,30 +430,32 @@ class ComparablePairsDescFile {
 				    }
                                 }
                             }
-
-                            exprs.add(expr);
-                            exprNames.put(expr, originalName);
-			    if (expr instanceof JBCUserFieldExpression
-				&& ((JBCUserFieldExpression)expr).getField()
+                            
+			    if (expr != null) {
+				exprs.add(expr);
+				exprNames.put(expr, originalName);
+				if (expr instanceof JBCUserFieldExpression
+				    && ((JBCUserFieldExpression)expr).getField()
 				    .getFieldName().endsWith("arrayelement")) {
-				JBCExpression indexExpr = ((JBCUserFieldExpression)expr).getBase()
-				    .makeUserFieldExpression(javaLangObject.registerUserField("arraylength", false));
-
-				exprs.add(indexExpr);
-				exprNames.put(indexExpr, originalName + "#");
+				    JBCExpression indexExpr = ((JBCUserFieldExpression)expr).getBase()
+					.makeUserFieldExpression(javaLangObject.registerUserField("arraylength", false));
+				    
+				    exprs.add(indexExpr);
+				    exprNames.put(indexExpr, originalName + "#");
+				}
 			    }
                         }
                     }
-
+                    
                     lineNum++;
-
+                    
                     ComparablePairsDetector detector =
                         new ComparablePairsDetector(location, exprs, exprNames, decl);
                     DatumSpecifier[] specifiers = { detector };
                     ResultListener[] listeners = { detector };
-
+                    
                     (new UnboundedSetTracker(analyzer, specifiers, listeners)).start();
-
+                    
                     detectors.put(decl, detector);
                 }
             }
@@ -508,6 +469,9 @@ class ComparablePairsDescFile {
                 + ex.getMessage());
             System.exit(2);
             return;
+	} catch (RuntimeException ex) {
+            System.err.println("Error reading description file at line " + lineNum);
+	    throw ex;
         } finally {
 	    if (r != null) {
 		try {
@@ -548,7 +512,7 @@ class ComparablePairsDescFile {
 	  }
 
 	  lineNum++;
-          w.write(s + "\n");
+          w.write(s + "\n");                
 
 	  if (s.equals("DECLARE")) {
 	    String decl = r.readLine();
@@ -563,7 +527,7 @@ class ComparablePairsDescFile {
 		String declType = r.readLine();
 		String repType = r.readLine();
 		String compatibility = r.readLine();
-
+                            
                 w.write(name + "\n" + declType + "\n" + repType + "\n"
                     + compatibility + "\n");
 		lineNum += 4;
@@ -612,9 +576,9 @@ class ComparablePairsDescFile {
 		String declType = r.readLine();
 		String repType = r.readLine();
 		String compatibility = r.readLine();
-
+                        
 		lineNum += 4;
-
+                            
 		JBCExpression expr = (JBCExpression)namesToExprs.get(name);
 
                 if (expr == null) {
@@ -657,26 +621,26 @@ class ComparablePairsDescFile {
     public void printBasicReport(Writer w) throws IOException {
         for (Enumeration e = detectors.elements(); e.hasMoreElements();) {
             ComparablePairsDetector detector = (ComparablePairsDetector)e.nextElement();
-
+            
             w.write(detector.getDetectorName() + "\n");
-
+            
             Hashtable exprNames = detector.getExprNames();
             Hashtable results = detector.getResults();
-
+            
             if (results.size() == 0) {
                 JBCLocation loc = detector.getLocation();
-
+                
                 w.write("// Dead code at offset " + loc.getOffset() + " in " + loc.getMethod() + "\n");
             } else {
                 for (Enumeration e2 = exprNames.keys(); e2.hasMoreElements();) {
                     JBCExpression expr = (JBCExpression)e2.nextElement();
-
+                    
                     w.write((String)exprNames.get(expr) + "\n");
-
+                    
                     StringBuffer buf = new StringBuffer();
-
+                    
                     Object o = results.get(expr);
-
+                    
                     if (o != null) {
                         for (Enumeration e3 = UnboundedSetTracker.enumerateIntermediate(o); e3.hasMoreElements();) {
                             if (buf.length() > 0) {
@@ -685,11 +649,11 @@ class ComparablePairsDescFile {
                             buf.append(exprNames.get(e3.nextElement()));
                         }
                     }
-
+                    
                     w.write(buf.toString() + "\n");
                 }
             }
-
+                        
             w.write("\n");
         }
     }
