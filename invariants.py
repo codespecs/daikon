@@ -998,8 +998,11 @@ def read_file(filename, fn_regexp=None):
                 if len(this_value) > 0 and this_value[-1] == "":
                     # Cope with trailing spaces on the line
                     this_value = this_value[0:-1]
-                if re.match("^uninit$", this_value[0]):
-                    this_value = None
+
+                # If sequence variable is uninit, (as opposed to one
+                # element being uninit), mark as None
+                if len(this_value) > 0 and re.match("^uninit$", this_value[0]):
+                        this_value = None
                 else:
                     for seq_elem in range(0, len(this_value)):
                         # dumb to copy this: fix it
@@ -1476,6 +1479,7 @@ def print_invariants(fn_regexp=None, print_unconstrained=0):
             if vi.equal_to == []:
                 continue
             if vi.invariant.is_exact():
+                print "yee"
                 value = "= %s" % vi.invariant.min
             else:
                 value = ""
