@@ -1,15 +1,14 @@
 package daikon.derive.unary;
 
-import daikon.*;
+import java.util.ArrayList;
+import daikon.Daikon;
+import daikon.VarInfo;
+import daikon.ProglangType;
 
 public final class SequenceMinMaxSumFactory extends UnaryDerivationFactory {
 
   public UnaryDerivation[] instantiate(VarInfo vi) {
     // System.out.println("SequenceMinMaxSumFactory.instantiate(" + vi.name + ")");
-
-    if (Global.EXPERIMENTS) {
-      return null;
-    }
 
     if (vi.rep_type != ProglangType.INT_ARRAY)
       return null;
@@ -23,11 +22,16 @@ public final class SequenceMinMaxSumFactory extends UnaryDerivationFactory {
     if (Daikon.output_style != Daikon.OUTPUT_STYLE_NORMAL)
       return null;
 
-    return new UnaryDerivation[] {
-      new SequenceMin(vi),
-      new SequenceMax(vi),
-      new SequenceSum(vi),
-    };
+    ArrayList result = new ArrayList(3);
+    if (SequenceMin.dkconfig_enabled) { result.add(new SequenceMin(vi)); }
+    if (SequenceMax.dkconfig_enabled) { result.add(new SequenceMax(vi)); }
+    if (SequenceSum.dkconfig_enabled) { result.add(new SequenceSum(vi)); }
+
+    if (result.size() == 0) {
+      return null;
+    }
+
+    return (UnaryDerivation[]) result.toArray(new UnaryDerivation[result.size()]);
   }
 
 }
