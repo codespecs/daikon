@@ -70,7 +70,7 @@ public final class UtilMDE {
    * just the first one:  it silently discards all characters (including
    * gzipped files) after the first gzipped file.
    **/
-  public static BufferedWriter BufferedFileWriter(String filename) throws IOException{
+  public static BufferedWriter BufferedFileWriter(String filename) throws IOException {
     Writer file_writer;
     if (filename.endsWith(".gz")) {
       file_writer = new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(filename)));
