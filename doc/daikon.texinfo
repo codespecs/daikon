@@ -130,7 +130,7 @@ Details on running instrumented Java programs
 
 Detect invariants in the data trace files
 
-* Command line options for daikon
+* Command line options for Daikon::  
 
 All-in-one script daikon.pl
 
@@ -1046,54 +1046,68 @@ Finally, run the applet:
 
 Run the Daikon invariant detector via the command
 @example
-    java daikon.Daikon @var{decl-files...} @var{dtrace-files...}
+    java daikon.Daikon @i{[@var{flags}]} @var{decl-files...} @var{dtrace-files...}
 @end example
 
 The @var{decl-files} are declaration (@file{.decl}) files created at
 instrumentation time.
 The @var{trace-files} are data trace (@file{.dtrace}) files created by
 running the instrumented program.
+The file type is determined by whether the file name contains
+@file{.decls} or @file{.dtrace}.
+
 Be sure to include all declaration files that are needed for the particular
 data trace file; the simplest way is to include every the declaration file
 created when instrumenting the program that is read.
 
+The optional flags are described in @ref{Command line options for Daikon}.
+
 @menu
-* Command line options for daikon::
+* Command line options for Daikon::  
 @end menu
 
+@node    Command line options for Daikon,  , Detect invariants, Detect invariants
+@subsection Command line options for Daikon
 
-@node    Command line options for daikon, , Detect invariants, Detect invariants
-@subsection Command line options for daikon
+The Daikon invariant detector is invoked as follows:
+@example
 
-@table @b
-@item @option{-h}
+    java daikon.Daikon @i{[@var{flags}]} @var{decl-files...} @var{dtrace-files...}
+@end example
+
+This section describes the optional flags.
+
+
+@c Not @option{} or @samp{} because they add quotes in the output,
+@c which is not necessary in a table.
+@table @t
+@item -h
 Print usage message.
 
-@item @option{-r} @var{ppt_regexp}
+@item -r @var{ppt_regexp}
 Only process program points matching the regexp.
 
-@item @option{-o} @var{inv_file}
+@item -o @var{inv_file}
 Serialize invariants to the specified file; they can later be
 postprocessed, compared, etc.
 
-@item @option{--suppress_cont}
+@item --suppress_cont
 Suppress display of implied invariants (by controlling ppt).
 
-@item @option{--suppress_post}
+@item --suppress_post
 Suppress display of obvious postconditions on prestate.
 
-@item @option{--prob_limit} @var{pct}
+@item --prob_limit @var{pct}
 Sets the probability limit for justifying invariants.  The default is
 1%.  Smaller values yield stronger filtering.
 
-@item @option{esc_output}
+@item --esc_output
 Write output in ESC-like format.
 
-@item @option{--output_num_samples}
+@item --output_num_samples
 Output numbers of values and samples for invariants and program points;
 for debugging.
 @end table
-
 
 
 @node    All-in-one script,  , Detect invariants, Detecting invariants
@@ -1153,24 +1167,29 @@ options for @command{daikon.pl}.
 @node    daikon.pl arguments,  , All-in-one script, All-in-one script
 @subsection Command line options for daikon.pl
 
-@table @b
-@item @option{-o}, @option{--output} @var{FILE}
+@table @t
+@item -o
+@item --output @var{FILE}
 Save invariants in @file{@var{FILE}.inv} and source in
 @file{@var{FILE}.src.tar.gz}.  If no name 
 is given, a name is automatically generated and used.
 
-@item @option{-t}, @option{--textfile}
+@item -t
+@item --textfile
 Save a textual listing of invariants to a @file{.txt} file.
 
-@item @option{-v}, @option{--verbose}
+@item -v
+@item --verbose
 Display progress messages while running.
 
-@item @option{-c}, @option{--cleanup}
+@item -c
+@item --cleanup
 Remove files left over from an interrupted session before starting.
 Should be used only when @code{daikon.pl} detects left-over files and instructs
 you to use this option.
 
-@item @option{-n}, @option{--nogui}
+@item -n
+@item --nogui
 Create the invariants file (and @file{.txt} file,
 if @option{-t} is given), but do not start the GUI.
 @end table
@@ -1195,7 +1214,7 @@ the @option{--output_num_samples} flag to Daikon; for example,
 @example
   java -mx128m daikon.Daikon --output_num_samples ...
 @end example
-
+For more details, @xref{Command line options for Daikon}.
 
 
 @menu
@@ -1471,11 +1490,11 @@ categories:
 
 Details of the options are as follows:
 
-@table @b
-@item @option{-daikon_debug}
+@table @t
+@item -daikon_debug
 Produce debugging information.
 
-@item @option{-daikon_depth=@var{n}}
+@item -daikon_depth=@var{n}
 Depth to which to examine structure components (default 2).
 This parameter determines which variables dfej causes to be output at
 runtime.  For instance, suppose that a program contained the following
@@ -1512,38 +1531,38 @@ is @code{null} on a particular execution of a program point, then
 @code{myA.b} is not accessed on that execution regardless of the depth
 parameter.
 
-@item @option{+daikon_functions}
+@item +daikon_functions
 Produce data trace output at function entry/exit (default).
 
-@item @option{-daikon_functions}
+@item -daikon_functions
 Do not produce data trace output at function entry/exit.
 
-@item @option{+daikon_classes}
+@item +daikon_classes
 Produce data trace output for class invariants (default).
 
-@item @option{-daikon_classes}
+@item -daikon_classes
 Do not produce data trace output for class invariants.
 
-@item @option{+daikon_loops}
+@item +daikon_loops
 Produce data trace output for loop invariants.
 
-@item @option{-daikon_loops}
+@item -daikon_loops
 Do not produce data trace output for loop invariants (default).
 
-@item @option{-daikon_omit=@var{string}}
+@item -daikon_omit=@var{string}
 Do not produce data trace output for matching classes/functions.
 If a class, method, or program point name contains the @var{string}
 argument, then no trace output is produced for that entity.
 
 
-@item @option{-tracefilename=@var{filename}}
+@item -tracefilename=@var{filename}
 Specifies the default name for the @file{.dtrace} file (default
 @file{daikon-output/@var{CLASSNAME}.dtrace}).  The filename is relative
 to the current directory at runtime, or is absolute.  If the DTRACEFILE
 environment variable is set when the instrumented program is run, it
 overrides this default.
 
-@item @option{-declsfiledir=@var{decldir}}
+@item -declsfiledir=@var{decldir}
 Specifies the directory in which to create
 @file{@var{PACKAGES}/@var{CLASSNAME}.decls} (default
 @file{daikon-output}, unless @option{-declsfiledirflat} is
@@ -1554,11 +1573,11 @@ path from the current directory to the source file.  The directory
 structure of the @file{.dtrace} files mirrors the directory structure of
 the source files.
 
-@item @option{-declsfiledirflat=@var{decldir}}
+@item -declsfiledirflat=@var{decldir}
 Specifies the directory in which to create @file{@var{CLASSNAME}.dtrace}
 (no default).  All @file{.dtrace} files appear in the same directory.
 
-@item @option{-instrsourcedir=@var{instrdir}}
+@item -instrsourcedir=@var{instrdir}
 Specifies the directory in which to write instrumented source files
 (default @file{daikon-instrumented/}).  The instrumented files have the
 same names and directory structure as the original input files.
