@@ -15,7 +15,7 @@ p = x[]
 	x[i]
 )
 ; quantify_simplify_name p
-(FORALL (|i|) (IMPLIES (AND (<= |0| |i|) (<= |i| (- (arrayLength |x|) 1))) 
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |x|) 1))) 
 	(select (select elems |x|) |i|)
 ))
 ;# x.class
@@ -33,7 +33,7 @@ p = x[].class
 	\typeof(x[i])
 )
 ; quantify_simplify_name p
-(FORALL (|i|) (IMPLIES (AND (<= |0| |i|) (<= |i| (- (arrayLength |x|) 1))) 
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |x|) 1))) 
 	(typeof (select (select elems |x|) |i|))
 ))
 ;# this.field
@@ -51,7 +51,7 @@ p = this.field[]
 	this.field[i]
 )
 ; quantify_simplify_name p
-(FORALL (|i|) (IMPLIES (AND (<= |0| |i|) (<= |i| (- (arrayLength (select |field| |this|)) 1))) 
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |field| |this|)) 1))) 
 	(select (select elems (select |field| |this|)) |i|)
 ))
 ;# this.field.again
@@ -69,7 +69,7 @@ p = this.field.again[]
 	this.field.again[i]
 )
 ; quantify_simplify_name p
-(FORALL (|i|) (IMPLIES (AND (<= |0| |i|) (<= |i| (- (arrayLength (select |again| (select |field| |this|))) 1))) 
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |again| (select |field| |this|))) 1))) 
 	(select (select elems (select |again| (select |field| |this|))) |i|)
 ))
 ;# this.field.class
@@ -87,7 +87,7 @@ p = this.field[].class
 	\typeof(this.field[i])
 )
 ; quantify_simplify_name p
-(FORALL (|i|) (IMPLIES (AND (<= |0| |i|) (<= |i| (- (arrayLength (select |field| |this|)) 1))) 
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |field| |this|)) 1))) 
 	(typeof (select (select elems (select |field| |this|)) |i|))
 ))
 ;# x[].field
@@ -98,7 +98,7 @@ p = x[].field
 	x[i].field
 )
 ; quantify_simplify_name p
-(FORALL (|i|) (IMPLIES (AND (<= |0| |i|) (<= |i| (- (arrayLength |x|) 1))) 
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |x|) 1))) 
 	(select |field| (select (select elems |x|) |i|))
 ))
 ;# x[].field.foo
@@ -109,7 +109,7 @@ p = x[].field.foo
 	x[i].field.foo
 )
 ; quantify_simplify_name p
-(FORALL (|i|) (IMPLIES (AND (<= |0| |i|) (<= |i| (- (arrayLength |x|) 1))) 
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |x|) 1))) 
 	(select |foo| (select |field| (select (select elems |x|) |i|)))
 ))
 ;# return
