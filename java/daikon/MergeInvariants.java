@@ -33,6 +33,9 @@ public class MergeInvariants {
       "  --" + Daikon.noinvariantguarding_SWITCH,
       "      Disable invariant guarding, which is normally on for "
              + "JML and ESC output formats.",
+      "  --" + Daikon.track_SWITCH,
+      "      Specify a class, varinfos, and ppt to debug track.  Format"
+             + "is class<var1,var2,var3>@ppt",
       "   -o ",
       "      Specify an output inv file.  If not specified, the results "
              + "are printed"},
@@ -46,6 +49,7 @@ public class MergeInvariants {
                   null, 0),
       new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(Daikon.track_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
     };
 
     Getopt g = new Getopt("daikon.MergeInvariants", args, "ho:", longopts);
@@ -70,6 +74,14 @@ public class MergeInvariants {
 
         } else if (Daikon.debug_SWITCH.equals(option_name)) {
           LogHelper.setLevel(g.getOptarg(), LogHelper.FINE);
+        } else if (Daikon.track_SWITCH.equals(option_name)) {
+          LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
+          String error = Debug.add_track (g.getOptarg());
+          if (error != null) {
+            System.out.println ("Error parsing track argument '"
+                                + g.getOptarg() + "' - " + error);
+            System.exit(1);
+          }
         } else {
           throw new RuntimeException("Unknown long option received: " +
                                      option_name);
