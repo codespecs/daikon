@@ -70,7 +70,7 @@ class JTraceInference extends Thread
                 PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
                 ValueTuple vt = read_single_sample(ppt_name);
                 Integer nonce_ = nonce == 0 ? null : new Integer(nonce);
-                FileIO.process_sample(ppt, vt, nonce_);
+                FileIO.process_sample(all_ppts, ppt, vt, nonce_);
                 control = getControl();
                 Assert.assertTrue(control == CT_PptTraceEnd);
                 break;
