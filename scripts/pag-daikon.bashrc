@@ -36,3 +36,4 @@ alias jikes='/g2/users/mernst/bin/Linux-i686/jikes -g +E +F'
 export DFEJ_VERBOSE=1
 
 export BIBINPUTS=.:/g2/users/mernst/bib:..:
+alias bibfind='/g2/users/mernst/bin/Linux-i686/help .n .F /g2/users/mernst/bib/bibroot.non-mde'
