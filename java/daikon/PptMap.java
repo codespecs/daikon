@@ -158,7 +158,8 @@ public class PptMap
     Iterator iter = nameToPpt.values().iterator();
     while (iter.hasNext()) {
       PptTopLevel ppt = (PptTopLevel)iter.next();
-      if (ppt.num_samples() == 0)
+      if ((ppt.num_samples() == 0)
+          && ! FileIO.has_unmatched_procedure_entry(ppt))
         iter.remove();
     }
   }
