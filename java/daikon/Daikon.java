@@ -235,7 +235,7 @@ public final class Daikon {
   public static boolean noversion_output = false;
 
   /**
-   * Whether Daikon is in its inferncing loop.  Used only for
+   * Whether Daikon is in its inferencing loop.  Used only for
    * assertion checks.
    **/
   public static boolean isInferencing = false;
