@@ -20,21 +20,13 @@ import utilMDE.*;
 public final class Daikon {
 
   static {
-    System.err.println();
-    System.err.println();
-    System.err.println();
-    System.err.println("****************************************");
-    System.err.println();    
-    System.err.println("      YOU ARE USING A DAIKON BRANCH     ");
-    System.err.println();
-    System.err.println("ARE YOU SURE YOU WANTED TO BE DOING THAT");
-    System.err.println();
-    System.err.println("????????????????????????????????????????");
-    System.err.println();
-    System.err.println("****************************************");
-    System.err.println();
-    System.err.println();
-    System.err.println();
+    System.err.
+      print("**************************************************\n" +
+	    "*                     WARNING                    *\n" +
+	    "**************************************************\n" +
+	    "* You are using the REDESIGN version (V3) of the *\n" +
+	    "* Daikon engine. Make sure this is what you want.*\n" +
+	    "**************************************************\n");
     System.err.flush();
   }
 
@@ -164,16 +156,6 @@ public final class Daikon {
    **/
   public static void main(String[] args)
   {
-    {
-      System.err.
-	print("**************************************************\n" +
-	      "*                     WARNING                    *\n" +
-	      "**************************************************\n" +
-	      "* You are using the REDESIGN version (V3) of the *\n" +
-	      "* Daikon engine. Make sure this is what you want.*\n" +
-	      "**************************************************\n");
-    }
-
     // Read command line options
     Set[] files = read_options(args);
     Assert.assert(files.length == 3);
@@ -366,17 +348,17 @@ public final class Daikon {
     // First check that all the file names are OK, so we don't do lots of
     // processing only to bail out at the end.
     for (int i=g.getOptind(); i<args.length; i++) {
-      String arg = args[i];
+      File arg = new File(args[i]);
       // These aren't "endsWith()" because there might be a suffix on the end
       // (eg, a date).
-      if (! new File(arg).exists()) {
+      if (! arg.exists()) {
         throw new Error("File " + arg + " not found.");
       }
-      if (arg.indexOf(".decls") != -1) {
+      if (arg.toString().indexOf(".decls") != -1) {
         decl_files.add(arg);
-      } else if (arg.indexOf(".dtrace") != -1) {
+      } else if (arg.toString().indexOf(".dtrace") != -1) {
         dtrace_files.add(arg);
-      } else if (arg.indexOf(".spinfo") != -1) {
+      } else if (arg.toString().indexOf(".spinfo") != -1) {
 	spinfo_files.add(arg);
       } else {
         throw new Error("Unrecognized argument: " + arg);
@@ -397,7 +379,7 @@ public final class Daikon {
 				   Set dtrace_files,
 				   Set spinfo_files)
   {
-    PptMap all_ppts = new PptMap();
+    PptMap all_ppts;
 
     int num_decl_files = decl_files.size();
     int num_dtrace_files = dtrace_files.size();
@@ -405,9 +387,9 @@ public final class Daikon {
 
     try {
       System.out.print("Reading declaration files ");
-      FileIO.read_declaration_files(decl_files, all_ppts);
+      all_ppts = FileIO.read_declaration_files(decl_files);
       System.out.println();
-      add_combined_exits(all_ppts);
+      // add_combined_exits(all_ppts);
 
       if (!disable_splitting && num_spinfo_files > 0) {
 	System.out.println("Reading Splitter Info files ");
@@ -426,9 +408,6 @@ public final class Daikon {
     System.out.print("Read " + UtilMDE.nplural(num_decl_files, "declaration file"));
     System.out.print(", " + UtilMDE.nplural(num_spinfo_files, "spinfo file"));
     System.out.println(", " + UtilMDE.nplural(num_dtrace_files, "dtrace file"));
-
-    // Old location; but we want to add these before reading trace files.
-    // add_combined_exits(all_ppts);
 
     return all_ppts;
   }
@@ -558,7 +537,7 @@ public final class Daikon {
     }
   }
 
-
+  /* [INCR] ... (moved to FileIO)
   ///////////////////////////////////////////////////////////////////////////
   //
   public static void add_combined_exits(PptMap ppts) {
@@ -602,10 +581,10 @@ public final class Daikon {
             int comb_index = 0;
 
 	    // comb_vars never contains static finals but line_vars can:
-            /* Assert.assert(line_vars.length == comb_vars.length,
-                          "\nIncorrect number of variables (line=" + 
-			  line_vars.length + ", comb=" + comb_vars.length + 
-			  ") at exit points: " + enter_ppt.name ); */
+            // Assert.assert(line_vars.length == comb_vars.length,
+            //            "\nIncorrect number of variables (line=" + 
+	    //	          line_vars.length + ", comb=" + comb_vars.length + 
+	    //		  ") at exit points: " + enter_ppt.name );
             for (int lv_index=0; lv_index<line_vars.length; lv_index++) {
               if (line_vars[lv_index].isStaticConstant()) {
                 continue;
@@ -641,6 +620,7 @@ public final class Daikon {
     }
 
   }
+  */ // ... [INCR] (moved to FileIO)
 
   ///////////////////////////////////////////////////////////////////////////
   //
@@ -649,7 +629,8 @@ public final class Daikon {
   {
     Vector sps = new Vector();
     for (Iterator i = spinfo_files.iterator(); i.hasNext(); ) {
-      sps = SplitterFactory.read_spinfofile((String)i.next(), all_ppts);
+      File filename = (File) i.next();
+      sps = SplitterFactory.read_spinfofile(filename, all_ppts);
     }
     int siz = sps.size();
     Assert.assert(java.lang.Math.IEEEremainder(siz, 2) == 0);
