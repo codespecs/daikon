@@ -234,8 +234,14 @@ daikon/Runtime.class: daikon/Runtime.java
 # It's good to run "make clean" occasionally, because it costs little to
 # regenerate .class files and it's bad to continue to use an orphaned class
 # file (whose source file was renamed).  Or, run "orphaned-class-files".
+# The downside is that the regenerated .class files might cause some Make
+# rules to unnecessarily re-run, if the code hasn't actually changed.
 clean:
 	-rm -f `find . -name "*.class" -print`
+	# Daikon might be a symbolic link; the alternative is to pass
+	# "-follow" to the above find command, but I don't necessarily
+	# want to remove everything reachable through symbolic links.
+	-rm -f `find daikon -name "*.class" -print`
 
 dist_clean: clean
 	-rm -f TAGS
