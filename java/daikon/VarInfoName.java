@@ -737,7 +737,7 @@ public abstract class VarInfoName
           Class result = Class.forName(classname);
           // System.out.println("resolveType => " + result);
           return result;
-        } catch (Exception e) {
+        } catch (Throwable e) {
         }
       }
       return null;
