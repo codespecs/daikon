@@ -12,6 +12,10 @@ import utilMDE.*;
 
 public final class SequenceScalarSubsequence  extends BinaryDerivation {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+
   // base1 is the sequence
   // base2 is the scalar
   public VarInfo seqvar() { return base1; }

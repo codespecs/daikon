@@ -23,6 +23,14 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
   //   base2 is the scalar
 
   public BinaryDerivation[] instantiate(VarInfo vi1, VarInfo vi2) {
+
+    // check if the derivations are globally disabled
+    boolean enable_subscript = SequenceScalarSubscript .dkconfig_enabled;
+    boolean enable_subsequence = SequenceScalarSubsequence .dkconfig_enabled;
+    if (!enable_subscript && !enable_subsequence) {
+      return null;
+    }
+
     // This is not the very most efficient way to do this, but at least it is
     // comprehensible.
     VarInfo seqvar;
@@ -102,11 +110,15 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
           return null;
         } else if (compar.core.can_be_eq) {
           Global.nonsensical_suppressed_derived_variables += 3;
-          return new BinaryDerivation[] {
-            new SequenceScalarSubscript (seqvar, sclvar, true), // a[i-1]
-            new SequenceScalarSubsequence (seqvar, sclvar, true, true), // a[..i-1]
-            new SequenceScalarSubsequence (seqvar, sclvar, false, false), // a[i..]
-          };
+	  ArrayList result = new ArrayList();
+	  if (enable_subscript) {
+	    result.add(new SequenceScalarSubscript (seqvar, sclvar, true)); // a[i-1]
+	  }
+	  if (enable_subsequence) {
+	    result.add(new SequenceScalarSubsequence (seqvar, sclvar, true, true)); // a[..i-1]
+	    result.add(new SequenceScalarSubsequence (seqvar, sclvar, false, false)); // a[i..]
+	  };
+	  return (BinaryDerivation[]) result.toArray(new BinaryDerivation[result.size()]);
         }
       }
     }
@@ -156,17 +168,17 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
       if (scl_constant == 0) {
         Global.tautological_suppressed_derived_variables += 3;
         Global.nonsensical_suppressed_derived_variables += 2;
-        return new BinaryDerivation[] {
+        return (enable_subsequence) ? new BinaryDerivation[] {
           new SequenceScalarSubsequence (seqvar, sclvar, false, true),
-        };
+        } : null;
       }
       if (scl_constant == 1) {
         Global.tautological_suppressed_derived_variables += 3;
-        return new BinaryDerivation[] {
+        return (enable_subsequence) ? new BinaryDerivation[] {
           new SequenceScalarSubsequence (seqvar, sclvar, true, false),
           new SequenceScalarSubsequence (seqvar, sclvar, false, false),
           new SequenceScalarSubsequence (seqvar, sclvar, false, true),
-        };
+	} : null;
       }
     }
 
@@ -191,20 +203,24 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
           return null;
         } else if (lower_bound == -1) {
           Global.nonsensical_suppressed_derived_variables += 5;
-          return new BinaryDerivation[] {
+          return (enable_subsequence) ? new BinaryDerivation[] {
             new SequenceScalarSubsequence (seqvar, sclvar, true, false), // a[..i]
             new SequenceScalarSubsequence (seqvar, sclvar, false, true), // a[i+1..]
-          };
+          } : null;
         } else if (lower_bound == 0) {
           Global.nonsensical_suppressed_derived_variables += 1;
-          return new BinaryDerivation[] {
-            new SequenceScalarSubscript (seqvar, sclvar, false), // a[i]
-            new SequenceScalarSubsequence (seqvar, sclvar, false, false), // a[i..]
-            new SequenceScalarSubsequence (seqvar, sclvar, false, true), // a[i+1..]
-            new SequenceScalarSubsequence (seqvar, sclvar, true, false), // a[..i]
-            new SequenceScalarSubsequence (seqvar, sclvar, true, true), // a[..i-1]
-          };
-        }
+	  ArrayList result = new ArrayList();
+	  if (enable_subscript) {
+            result.add(new SequenceScalarSubscript (seqvar, sclvar, false)); // a[i]
+	  }
+	  if (enable_subsequence) {
+            result.add(new SequenceScalarSubsequence (seqvar, sclvar, false, false)); // a[i..]
+            result.add(new SequenceScalarSubsequence (seqvar, sclvar, false, true)); // a[i+1..]
+            result.add(new SequenceScalarSubsequence (seqvar, sclvar, true, false)); // a[..i]
+            result.add(new SequenceScalarSubsequence (seqvar, sclvar, true, true)); // a[..i-1]
+	  };
+	  return (BinaryDerivation[]) result.toArray(new BinaryDerivation[result.size()]);
+	}
       }
     }
     }
@@ -255,22 +271,25 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
     // End of applicability tests; now actually create the invariants
 
     Vector result = new Vector(6);
-    // a[i]
-    result.add(new SequenceScalarSubscript (seqvar, sclvar, false));
-    // a[i-1]
-    if (! suppress_minus_1)
-      result.add(new SequenceScalarSubscript (seqvar, sclvar, true));
-    // a[i..]
-    result.add(new SequenceScalarSubsequence (seqvar, sclvar, false, false));
-    // a[i+1..]
-    if (! suppress_plus_1)
-      result.add(new SequenceScalarSubsequence (seqvar, sclvar, false, true));
-    // a[..i]
-    result.add(new SequenceScalarSubsequence (seqvar, sclvar, true, false));
-    // a[..i-1]
-    if (! suppress_minus_1)
-      result.add(new SequenceScalarSubsequence (seqvar, sclvar, true, true));
-
+    if (enable_subscript) {
+      // a[i]
+      result.add(new SequenceScalarSubscript (seqvar, sclvar, false));
+      // a[i-1]
+      if (! suppress_minus_1)
+	result.add(new SequenceScalarSubscript (seqvar, sclvar, true));
+    }
+    if (enable_subsequence) {
+      // a[i..]
+      result.add(new SequenceScalarSubsequence (seqvar, sclvar, false, false));
+      // a[i+1..]
+      if (! suppress_plus_1)
+	result.add(new SequenceScalarSubsequence (seqvar, sclvar, false, true));
+      // a[..i]
+      result.add(new SequenceScalarSubsequence (seqvar, sclvar, true, false));
+      // a[..i-1]
+      if (! suppress_minus_1)
+	result.add(new SequenceScalarSubsequence (seqvar, sclvar, true, true));
+    }
     return (BinaryDerivation[]) result.toArray(new BinaryDerivation[0]);
   }
 
