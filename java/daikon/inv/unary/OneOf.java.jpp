@@ -792,13 +792,13 @@ public final class ONEOFSCALAR
       result = "(EQ " + varname + " " + ((elts[0] == 0) ? "|@false|" : "|@true|") + ")";
     } else if (is_hashcode) {
       if (num_elts == 1) {
-	result = "(EQ " + varname + " " + ((elts[0] == 0) ? "null" : ("hash_" + elts[0])) + ")";
+	result = "(EQ " + varname + " " + ((elts[0] == 0) ? "null" : ("|hash_" + elts[0] + "|")) + ")";
       } else {
 	// add_modified allows two elements iff one is null
 	Assert.assert(num_elts == 2);
 	Assert.assert(elts[0] == 0);
 	Assert.assert(elts[1] != 0);
-	result = "(OR (EQ " + varname + " null) (EQ " + varname + "hash_" + elts[1] + "))";
+	result = "(OR (EQ " + varname + " null) (EQ " + varname + "|hash_" + elts[1] + "|))";
       }
     } else {
       result = "";
