@@ -3350,6 +3350,13 @@ then undefine preprocessor macro @code{HAVE_ICONV_H} and try compiling
 again.
 (This has been reported on Red Hat Linux 7.0.)
 
+@c reported 12/19/2001 by Tao Xie
+Also reported on Red Hat Linux 7.0 is the following error:
+@example
+daikon-context.cpp:466: no matching function for call to `pair<Ast *, 
+Ast *>::pair (Ast *&, void *)'
+@end example
+We do not yet have a fix, but if you find one, please let us know.
 
 
 @node    dfej invocation problems,  , dfej compilation problems, dfej problems
@@ -3475,14 +3482,16 @@ Any output generated before the out-of-memory error is perfectly valid.
 
 @cindex Ajax, problem with
 
-The warning ``Problem with Ajax!  Using original .decls files instead''
+The warning ``Problem with Ajax; using original .decls files instead''
 indicats that the Ajax variable comparator could not run.  Ajax
 ordinarily indicates which variables are comparable to which other
 variables.  This information can reduce the amount of spurious output
 from Daikon by preventing it from making spurious comparisons and
-reporting irrelevant output.  If Ajax cannot be run, then a more
-primitive method of determining comparability is used instead.  Even if
-Ajax cannot be run, Daikon proceeds without error.
+reporting irrelevant output.  As of December 2001, Ajax cannot deal with
+JDK 1.2 (or later) libraries, and it sometimes has other problems.  If
+Ajax cannot be run, then a more primitive method of determining
+comparability is used instead.  Even if Ajax cannot be run, Daikon
+proceeds without error.
 
 
 
