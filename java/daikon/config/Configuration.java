@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 import utilMDE.Assert;
+import utilMDE.Fmt;
 
 /**
  * This class applies settings from a configuration file that lists
@@ -230,6 +231,9 @@ public final class Configuration
     } else {
       throw new ConfigException("Unsupported type " + type.getName());
     }
+
+    //Fmt.pf ("setting %s.%s to %s", field.getDeclaringClass(),
+    //          field.getName(), value);
 
     try {
       field.set(null, value);
