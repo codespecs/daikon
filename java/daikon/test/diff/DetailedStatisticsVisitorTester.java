@@ -154,7 +154,7 @@ public class DetailedStatisticsVisitorTester extends TestCase {
       for (int rel = 0;
            rel < DetailedStatisticsVisitor.NUM_RELATIONSHIPS;
            rel++) {
-        Assert.assert(1 == v.freq(type, rel));
+        Assert.assertTrue(1 == v.freq(type, rel));
       }
     }
   }
