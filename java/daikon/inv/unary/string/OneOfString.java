@@ -118,7 +118,7 @@ public final class OneOfString  extends SingleString  implements OneOf {
     //   as     \typeof(other) == \type(package.SomeClass)
 
     result = "";
-    boolean is_type = (var().name instanceof VarInfoName.TypeOf);
+    boolean is_type = (var().name.hasNodeOfType(VarInfoName.TypeOf.class));
     for (int i=0; i<num_elts; i++) {
       if (i != 0) { result += " || "; }
       result += varname + " == ";
@@ -149,7 +149,7 @@ public final class OneOfString  extends SingleString  implements OneOf {
     String result;
 
     result = "";
-    boolean is_type = (var().name instanceof VarInfoName.TypeOf);
+    boolean is_type = (var().name.hasNodeOfType(VarInfoName.TypeOf.class));
     for (int i=0; i<num_elts; i++) {
       String value = elts[i];
       if (!is_type) {
