@@ -5,8 +5,8 @@
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
-# JAVAC ?= jikes -g +E +F
-JAVAC ?= javac -g
+JAVAC ?= jikes -g +E +F
+# JAVAC ?= javac -g
 
 ### end of user customizations
 
@@ -189,7 +189,7 @@ check-serialize:
 # and you want to do junit tests on *this* version.
 junit:
 	@echo java daikon.test.MasterTester
-	@java -server -classpath .:${CLASSPATH} daikon.test.MasterTester
+	@java -server -classpath .:${CLASSPATH}:daikon/test/ daikon.test.MasterTester
 
 ## Documentation
 
