@@ -25,9 +25,10 @@ my $differences_found = 0;
 my $errors_found = 0;
 cmp_dtracen($gdeclshash, $dtaname, $dtbname);
 
-# Exit status same as for "diff" program:  0 if no differences, 1 if
+# Exit status is same as for "diff" program:  0 if no differences, 1 if
 # differences, 2 if error.
 exit($errors_found ? 2 : $differences_found ? 1 : 0);
+
 
 ###########################################################################
 ### Subroutines
