@@ -20,7 +20,8 @@ my $java_modifier_re = '\b(?:abstract|final|private|protected|public|static|stri
 my $java_modifers_plus_re = '\s*(?:' . $java_modifier_re . '\s*)+';
 # matches a full line; groups = ($spaces, $mods, $body, $fieldname);
 
-my $field_decl_re = '^(\s+)(' . $java_modifers_plus_re . ')([^=;]*\b(\w+)(?:\s*\[\])*\s*[;=].*)$';
+my $__dollar = "\$";  # to mollify emacs perl-mode source parsing
+my $field_decl_re = '^(\s+)(' . $java_modifers_plus_re . ')([^=;]*\b(\w+)(?:\s*\[\])*\s*[;=].*)' . $__dollar;
 
 my $warn_on_no_invariants;	# whether to warn if no invariants for a ppt.
 my $merge_unexpressable;	# whether to merge unexpressible invariants;
