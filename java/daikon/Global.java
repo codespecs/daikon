@@ -11,6 +11,8 @@ public final class Global {
   // There are some other variables in the Daikon class.  Probably move
   // them here eventually.
 
+  // public static final boolean EXPERIMENTS = true;
+  public static final boolean EXPERIMENTS = false;
 
   // Don't permit this class to be instantiated
   private Global() { }
