@@ -127,7 +127,7 @@ while(<CSVHANDLE>) {
         my $i = 1;
         chomp ($_);
         chop($_);
-        if ($_ != "")
+        if ($_ ne "")
         {
             $_ =~ s/,0,/,1e-69,/g;
 
