@@ -162,7 +162,7 @@ public final class StringComparison
     } else {
       name1 = var1().name.name_using(format);
       name2 = var2().name.name_using(format);
-      return name1 + " " + comparator + " " + var2().name;
+      return name1 + " " + comparator + " " + name2;
     }
     // return format_unimplemented(format);
   }
