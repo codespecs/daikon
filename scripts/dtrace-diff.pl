@@ -22,13 +22,11 @@ cmp_dtracen($gdeclshash, $dta, $dtb);
 sub getline {
 #gets a line from the filehandle $1
     my $fh = shift;
-    my $l = <$fh>;
-    if ($l) {
-      chomp $l;
-      if ($l =~ m|^\#|) {
-	return getline($fh);
-      }
-    }
+    my $l;
+    do {
+	$l = <$fh>;
+	chomp $l;
+    } while ($l =~ m|^\#|);
     return $l;
 }
 
