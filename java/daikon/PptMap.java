@@ -71,10 +71,4 @@ public class PptMap
   // }
 
 
-  public static PptMap getPptMapFromFile ( String fileName ) throws IOException {
-    return FileIO.read_serialized_pptmap(new File(fileName),
-					 false // use saved config
-					 );
-  }
-
 }
