@@ -86,11 +86,11 @@ public abstract class Ppt implements java.io.Serializable {
    * Typically one should use the dynamic_constant or canBeMissing slots,
    * which cache the invariants of most interest, instead of this function.
    **/
-  public PptSlice getView(VarInfo vi) {
+  public PptSlice1 getView(VarInfo vi) {
     for (Iterator itor = views.iterator(); itor.hasNext(); ) {
       PptSlice slice = (PptSlice) itor.next();
       if ((slice.arity == 1) && slice.usesVar(vi))
-        return slice;
+        return (PptSlice1) slice;
     }
     return null;
   }
@@ -99,11 +99,11 @@ public abstract class Ppt implements java.io.Serializable {
    * Typically one should use the equal_to slot, which caches the
    * invariants of most interest, instead of this function.
    **/
-  public PptSlice getView(VarInfo vi1, VarInfo vi2) {
+  public PptSlice2 getView(VarInfo vi1, VarInfo vi2) {
     for (Iterator itor = views.iterator(); itor.hasNext(); ) {
       PptSlice slice = (PptSlice) itor.next();
       if ((slice.arity == 2) && slice.usesVar(vi1) && slice.usesVar(vi2))
-        return slice;
+        return (PptSlice2) slice;
     }
     return null;
   }

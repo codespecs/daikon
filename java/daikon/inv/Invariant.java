@@ -442,7 +442,7 @@ public abstract class Invariant implements java.io.Serializable {
       // A OneOf should have at least as many samples as it has values.
       // Was an assert...
       if (((OneOf) this).num_elts() > num_mod_non_missing_samples) {
-        System.out.println("num_elts " + ((OneOf) this).num_elts() + ", num_mod " + num_mod_non_missing_samples + ": " + format());
+        System.out.println("OneOf problem: num_elts " + ((OneOf) this).num_elts() + ", num_mod " + num_mod_non_missing_samples + ": " + format());
       }
       return false;
     } else {

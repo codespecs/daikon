@@ -1243,10 +1243,14 @@ public class PptTopLevel extends Ppt {
         // System.out.println("Is " + (IsEquality.it.accept(inv) ? "" : "not ")
         //                    + "equality: " + inv.repr());
         if (IsEquality.it.accept(inv)
-            // added this extra test 3/10/2001 in hopes of avoiding
-            // assertion failures below with non-transitive equals.
-            // (It didn't help, though.)
-            && (inv.justified())) {
+            // THERE IS SOMETHING VERY STRANGE GOING ON HERE!  Whether I
+            // comment out the below test affects other invariants, such as
+            // getting one or the other of the following two outputs:
+            //    this.ends[0..n] elements one of { 1, 3, 5, 7, 1001 }
+            //    this.ends[0..n] elements one of { 1, 3, 5, 1001 }
+            // This needs to be investigated carefully.  -MDE 3/12/2001
+            //  && (inv.justified())
+            ) {
           VarInfo var1 = binary_view.var_infos[0];
           VarInfo var2 = binary_view.var_infos[1];
           Assert.assert(var1.varinfo_index < var2.varinfo_index);
@@ -1489,10 +1493,19 @@ public class PptTopLevel extends Ppt {
       addImplications_internal(cond1, cond2, false);
     } else if (this.ppt_name.isCombinedExitPoint()) {
       Vector exits = this.entry_ppt.exit_ppts;
-      Assert.assert(exits.size() == 2);
-      PptTopLevel ppt1 = (PptTopLevel) exits.elementAt(0);
-      PptTopLevel ppt2 = (PptTopLevel) exits.elementAt(1);
-      addImplications_internal(ppt1, ppt2, true);
+      if (exits.size() == 2) {
+        // Eventually I ought to make this applicable when the number of
+        // individual exits is not 2.
+
+        // System.out.println("num exits = " + exits.size());
+        // for (int i=0; i<exits.size(); i++) {
+        //   System.out.println(((PptTopLevel)exits.elementAt(i)).name);
+        // }
+        Assert.assert(exits.size() == 2, "Bad number of exits: " + exits.size());
+        PptTopLevel ppt1 = (PptTopLevel) exits.elementAt(0);
+        PptTopLevel ppt2 = (PptTopLevel) exits.elementAt(1);
+        addImplications_internal(ppt1, ppt2, true);
+      }
     } else {
       // System.out.println("No implications to add for " + this.name);
     }
@@ -1882,23 +1895,32 @@ public class PptTopLevel extends Ppt {
         && ppt_name.isExitPoint()
         && (!ppt_name.exitLine().equals(""))) {
       String exitname = ppt_name.makeExit().getName();
-      PptTopLevel exit = (PptTopLevel) all_ppts.get(ppt_name.makeExit().getName());
+      PptTopLevel exit = (PptTopLevel) all_ppts.get(exitname);
       // Don't suppress if the :::EXIT point has no invariants.
       // This could happen if :::EXIT1 was executed but :::EXIT2 never was.
       if (exit != null) {
         if (!((exit.views.size() == 0) && (exit.implication_view.invs.size() == 0))) {
-          System.out.println("Suppressing " + name + " in favor of " + ppt_name.makeExit().getName());
+          // System.out.println("Suppressing " + name + " in favor of " + exitname);
           return;
         }
+        // System.out.println("Not suppressing " + name + " in favor of " + exitname + ": " + " exit has " + exit.views.size() + " views and " + exit.implication_view.invs.size() + " implied invs");
+      } else {
+        // System.out.println("Didn't find unified " + exitname + " for " + name + ", so doing output for " + name);
       }
+    } else {
+      // System.out.println("Not an exit, or exitline is \"\": " + name + "; " + ppt_name.isExitPoint() + " <<<" + ppt_name.exitLine() + ">>>");
     }
+
+    // System.out.println("This = " + this + ", Name = " + name + " = " + ppt_name);
 
     out.println("===========================================================================");
     print_invariants(out);
 
-    for (int i=0; i<views_cond.size(); i++) {
-      PptConditional pcond = (PptConditional) views_cond.elementAt(i);
-      pcond.print_invariants_maybe(out, all_ppts);
+    if (! Daikon.esc_output) {
+      for (int i=0; i<views_cond.size(); i++) {
+        PptConditional pcond = (PptConditional) views_cond.elementAt(i);
+        pcond.print_invariants_maybe(out, all_ppts);
+      }
     }
 
   }
@@ -1935,6 +1957,7 @@ public class PptTopLevel extends Ppt {
 
   /** Print invariants for a single program point. */
   public void print_invariants(PrintStream out) {
+    // System.out.println("This = " + this + ", Name(2) = " + name + " = " + ppt_name);
     String better_name = name;
     int init_pos = better_name.indexOf(".<init>");
     if (init_pos != -1) {
@@ -1979,6 +2002,7 @@ public class PptTopLevel extends Ppt {
             unmodified_vars.add(vi);
             unmodified_orig_vars.add(vi_orig);
           } else {
+            System.out.println("Modified: " + vi.name + " (=" + vi.equal_to.name + "), " + vi_orig.name + " (=" + vi_orig.equal_to.name + ")");
             modified_vars.add(vi);
           }
         }
@@ -1986,10 +2010,18 @@ public class PptTopLevel extends Ppt {
     }
     if (Daikon.output_num_samples || Daikon.esc_output) {
       if (modified_vars.size() > 0) {
-        out.print("      Modified variables:");
-        for (int i=0; i<modified_vars.size(); i++)
-          out.print(" " + ((VarInfo)modified_vars.elementAt(i)).name);
-        out.println();
+        boolean printed_header = false;
+        for (int i=0; i<modified_vars.size(); i++) {
+          VarInfo vi = (VarInfo)modified_vars.elementAt(i);
+          PptSlice1 view = getView(vi);
+          if (view.num_values() > 0) {
+            if (! printed_header) {
+              out.print("      Modified variables:");
+              printed_header = true;
+            }
+            out.print(" " + vi.name);
+          }
+        }
       }
       if (unmodified_vars.size() > 0) {
         out.print("      Unmodified variables:");

@@ -26,7 +26,7 @@ public class Modulus extends SingleScalar {
 
   public String repr() {
     return "Modulus" + varNames() + ": "
-      + "m=" + modulus + ",r=" + remainder;
+      + "modulus=" + modulus + ",remainder=" + remainder;
   }
 
   public String format() {
@@ -54,7 +54,7 @@ public class Modulus extends SingleScalar {
       return;
     } else if (modulus == 0) {
       // only one value seen so far
-      modulus = value1 - value;
+      modulus = Math.abs(value1 - value);
       if (modulus == 1) {
         destroy();
         return;

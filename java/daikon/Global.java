@@ -180,6 +180,8 @@ public final class Global {
         { "this.theArray[this.front..]", "this.theArray[orig(this.front)+1..]" },
         { "this.topOfStack", "this.theArray[]" },
         { "this.theArray[]", "this.topOfStack" },
+        { "other.begins", "orig(other.begins)" },
+        { "orig(other.begins)", "other.begins" },
     };
 
   // This may be expensive and so should only be called infrequently.
