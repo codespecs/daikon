@@ -4,7 +4,7 @@ import daikon.*;
 
 /**
  * A collection of useful helper methods that are common to many
- * differnt individual tests.
+ * different individual tests.
  **/
 public class Common
 {
