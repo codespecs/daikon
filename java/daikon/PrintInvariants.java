@@ -98,7 +98,6 @@ public class PrintInvariants {
     daikon.Logger.setupLogs(daikon.Logger.INFO);
 
     LongOpt[] longopts = new LongOpt[] {
-      new LongOpt(Daikon.suppress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -123,8 +122,6 @@ public class PrintInvariants {
         if (Daikon.help_SWITCH.equals(option_name)) {
           System.out.println(usage);
           System.exit(1);
-        } else if (Daikon.suppress_SWITCH.equals(option_name)) {
-          Daikon.suppress_invariants = true;
         } else if (Daikon.suppress_cont_SWITCH.equals(option_name)) {
           Daikon.suppress_implied_controlled_invariants = true;
         } else if (Daikon.suppress_post_SWITCH.equals(option_name)) {
