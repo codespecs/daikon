@@ -317,9 +317,6 @@ public final class Daikon {
             ppt.addConditions(pconds);
         }
         ppt.addImplications();
-	if (suppress_redundant_invariants_with_simplify) {
-	  ppt.mark_implied_via_simplify();
-	}
         {
           // Clear memory
           ppt.set_values_null();
@@ -331,6 +328,19 @@ public final class Daikon {
           }
         }
       }
+    }
+
+    if (suppress_redundant_invariants_with_simplify) {
+      System.out.print("Invoking Simplify to identify redundant invariants... ");
+      System.out.flush();
+      long start = System.currentTimeMillis();
+      for (Iterator itor = all_ppts_sorted.iterator() ; itor.hasNext() ; ) {
+	PptTopLevel ppt = (PptTopLevel) itor.next();
+	ppt.mark_implied_via_simplify();
+      }
+      long end = System.currentTimeMillis();
+      double elapsed = (end - start) / 1000.0;
+      System.out.println((new java.text.DecimalFormat("#.#")).format(elapsed) + "s");
     }
 
     print_invariants(all_ppts);
