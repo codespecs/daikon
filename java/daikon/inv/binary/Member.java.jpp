@@ -238,6 +238,161 @@ public final class CLASSNAME
         int scl_shift = sclsss.index_shift;
         // System.out.println("scl_shift = " + scl_shift + ", seq_shift = " + seq_shift);
 
+        boolean left_included = false, right_included = false;
+        if (seq_left_index == null)
+          left_included = true;
+        if (seq_left_index == scl_index) {
+          if (seq_left_shift <= scl_shift) left_included = true;
+        }
+        if (seq_right_index == null)
+          right_included = true;
+        if (seq_right_index == scl_index) {
+          if (seq_right_shift >= scl_shift) right_included = true;
+        }
+        if (left_included && right_included)
+          return true;
+      } else if (sclvar.derived instanceof SEQUENCEINITIAL) {
+        // System.out.println("sclvar derived from SequenceInitial: " + sclvar.name);
+
+        // isObviousImplied: B[0] in B[0..J]; also B[-1] in B[J..]
+        SEQUENCEINITIAL sclse = (SEQUENCEINITIAL) sclvar.derived;
+        int scl_index = sclse.index;
+        if (((scl_index == 0) && seq_left_index == null)
+            || ((scl_index == -1) && seq_right_index == null))
+          // It might not be true, because the array could be empty;
+          // but if the array isn't empty, then it's obvious.
+          return true;
+      } else if ((sclvar.derived instanceof SequenceMin)
+                 || (sclvar.derived instanceof SequenceMax)) {
+        return SUBSEQUENCE.isObviousSubSequence(sclvar_seq, seqvar);
+      }
+    }
+
+    /// I need to test this code!
+    // Now do tests over variable name, to avoid invariants like:
+    //   header.next in header.~ll~next~
+    //   header.next.element in header.~ll~next~.element
+    //   header.next in header.next.~ll~next~
+    //   return.current in return.current.~ll~next~
+    String sclname = sclvar.name.name(); // mistere adds: this code
+    String seqname = seqvar.name.name(); // looks pretty sketchy (XXX)
+    int llpos = seqname.indexOf("~ll~");
+    if (llpos != -1) {
+      int tildepos = seqname.indexOf("~", llpos+5);
+      if (tildepos != -1) {
+        int midsize = tildepos-llpos-4;
+        int lastsize = seqname.length()-tildepos-1;
+        if (seqname.regionMatches(0, sclname, 0, llpos)
+            && (((tildepos == seqname.length() - 1)
+                 && (llpos == sclname.length()))
+                || (seqname.regionMatches(llpos+4, sclname, llpos, midsize)
+                    && seqname.regionMatches(tildepos+1, sclname, tildepos-4, lastsize))))
+          // isObviousImplied: to do
+          return true;
+      }
+    }
+
+    // int lastdot = sclvar.lastIndexOf(".");
+    // if (lastdot != -1) {
+    //   if (sclname.substring(0, lastdot).equals(seqname.substring(0, lastdot))
+    //       && seqname.substring(lastdot).equals("~ll~" + sclname.substring(lastdot) + "~")) {
+    //     return true;
+    //   }
+    // }
+
+    return false;
+  }
+
+  /**
+   * Check whether sclvar is a member of seqvar can be determined
+   * dynamically.
+   **/
+  public static boolean isObviousMemberDynamically(VarInfo sclvar, VarInfo seqvar) {
+
+    VarInfo sclvar_seq = sclvar.isDerivedSequenceMember();
+    // System.out.println("Member.isObviousMember(" + sclvar.name + ", " + seqvar.name + "):");
+    // System.out.println("  sclvar.derived=" + sclvar.derived
+    //                    + ", sclvar_seq=" + ((sclvar_seq == null) ? "null" : sclvar_seq.name));
+
+    if (sclvar_seq == null) {
+      // The scalar is not obviously (lexically) a member of any array.
+      return false;
+    }
+    // isObviousImplied: a[i] in a; max(a) in a
+    if (sclvar_seq == seqvar) {
+      // The scalar is a member of the same array.
+      return true;
+    }
+    // The scalar is a member of a different array than the sequence.
+    // But maybe the relationship is still obvious, so keep checking.
+
+    // isObviousImplied: when b==a[0..i]:  b[j] in a; max(b) in a
+    // If the scalar is a member of a subsequence of the sequence, then
+    // the scalar is a member of the full sequence.
+    // This is satisfied, for instance, when determining that
+    // max(B[0..I]) is an obvious member of B.
+    VarInfo sclseqsuper = sclvar_seq.isDerivedSubSequenceOf();
+    if (sclseqsuper == seqvar)
+      return true;
+
+    // We know the scalar was derived from some array, but not from the
+    // sequence variable.  If also not from what the sequence variable was
+    // derived from, we don't know anything about membership.
+    // Check:
+    //  * whether comparing B[I] to B[0..J]
+    //  * whether comparing min(B[0..I]) to B[0..J]
+    VarInfo seqvar_super = seqvar.isDerivedSubSequenceOf();
+    if ((seqvar_super != sclvar_seq)
+        && (seqvar_super != sclseqsuper)) {
+      // System.out.println("Member.isObviousMember(" + sclvar.name + ", " + seqvar.name + "):"
+      //                    + " isDerivedSubSequenceOf() != " + sclvar_seq.name);
+      return false;
+    }
+
+
+    // If the scalar is a positional element of the sequence from which
+    // the sequence at hand was derived, then any relationship will be
+    // (mostly) obvious by comparing the length of the sequence to the
+    // index.  By contrast, if the scalar is max(...) or min(...), all bets
+    // are off.
+
+
+    if (seqvar.derived instanceof SEQUENCESCALARSUBSEQUENCE ||
+        seqvar.derived instanceof ARBITRARYSUBSEQUENCE) {
+      VarInfo seq_left_index = null, seq_right_index = null;
+      // I'm careful not to access foo_shift unless foo_var has been set
+      // to a non-null value, but Java is too stupid to recognize that.
+      int seq_left_shift = 0xdead, seq_right_shift = 0xbeef;
+      if (seqvar.derived instanceof SEQUENCESCALARSUBSEQUENCE) {
+        // the sequence is B[0..J-1] or similar.  Get information about it.
+        SEQUENCESCALARSUBSEQUENCE seqsss
+          = (SEQUENCESCALARSUBSEQUENCE)seqvar.derived;
+        if (seqsss.from_start) {
+          seq_right_index = seqsss.sclvar();
+          seq_right_shift = seqsss.index_shift;
+        } else {
+          seq_left_index = seqsss.sclvar();
+          seq_left_shift = seqsss.index_shift;
+        }
+      } else if (seqvar.derived instanceof ARBITRARYSUBSEQUENCE) {
+        // the sequence is B[I+1..J] or similar
+        ARBITRARYSUBSEQUENCE ssass = (ARBITRARYSUBSEQUENCE)seqvar.derived;
+        seq_left_index = ssass.startvar();
+        seq_left_shift = (ssass.left_closed ? 0 : 1);
+        seq_right_index = ssass.endvar();
+        seq_right_shift = (ssass.right_closed ? 0 : -1);
+      } else {
+        Assert.assertTrue(false);
+      }
+
+      if (sclvar.derived instanceof SEQUENCESCALARSUBSCRIPT) {
+        // B[I] in B[0..J]
+
+        SEQUENCESCALARSUBSCRIPT sclsss = (SEQUENCESCALARSUBSCRIPT) sclvar.derived;
+        VarInfo scl_index = sclsss.sclvar(); // "I" in "B[I]"
+        int scl_shift = sclsss.index_shift;
+        // System.out.println("scl_shift = " + scl_shift + ", seq_shift = " + seq_shift);
+
         boolean left_included, right_included;
         if (seq_left_index == null)
           left_included = true;
