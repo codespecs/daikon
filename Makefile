@@ -18,7 +18,7 @@ AJAX_JAVA_FILES := $(shell find java/ajax-ship/ajax \( -name '*daikon-java*' -o 
 # This includes backup files.  But so does
 #   WWW_FILES := $(shell cd doc/www; find . \( -name CVS -o -name uw \) -prune -o \( -type f -not -name '*~' \) -print)
 # I'm not sure of the correct solution.
-WWW_FILES := $(shell cd doc/www; find . \( -name '*~' -o -name CVS -o -name '.\#*' -o -name '*.bak' -o -name uw \) -prune -o -type f -print)
+WWW_FILES := $(shell cd doc/www; find . \( -name '*~' -o -name '.*~' -o -name CVS -o -name .cvsignore -o -name '.\#*' -o -name '*.bak' -o -name uw \) -prune -o -print)
 WWW_DIR := /home/httpd/html/daikon/
 
 MERNST_DIR := /g2/users/mernst
@@ -36,6 +36,7 @@ C_RUNTIME_PATHS := front-end/c/daikon_runtime.h front-end/c/daikon_runtime.cc
 
 DIST_DIR := /home/httpd/html/daikon/dist
 DIST_BIN_DIR := $(DIST_DIR)/binaries
+DIST_PAG_BIN_DIR := /g4/projects/invariants/binaries
 # Files that appear in the top level of the distribution directory
 DIST_DIR_FILES := daikon-source.tar.gz daikon-compiled.tar.gz daikon-logo.gif daikon.jar
 DIST_DIR_PATHS := daikon-source.tar.gz daikon-compiled.tar.gz doc/images/daikon-logo.gif daikon.jar
@@ -53,7 +54,7 @@ TOOLSJAR := /g2/users/mernst/java/jdk/lib/tools.jar
 # for "chgrp"
 INV_GROUP := invariants
 
-RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name dfej -o -name dfej-linux -o -name dfej-linux-x86 -o -name daikon-java -o -name daikon-output -o -name core -o -name '*.bak' -o -name '*.rej' -o -name '*.old' -o -name '.nfs*' -o -name '\#*\#' \) -print`
+RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name dfej -o -name dfej-linux -o -name dfej-linux-x86 -o -name dfej-solaris -o -name daikon-java -o -name daikon-output -o -name core -o -name '*.bak' -o -name '*.rej' -o -name '*.old' -o -name '.nfs*' -o -name '\#*\#' \) -print`
 
 
 ## Examples of better ways to get the lists:
@@ -252,8 +253,8 @@ www:
 daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
 	-rm -rf $@ /tmp/daikon-jar
 	mkdir /tmp/daikon-jar
-	cd java/daikon && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar' all
-	cd java/utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar' all
+	cd java/daikon && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar -classpath ${INV_DIR}/java:${INV_DIR}/java/lib/jakarta-oro.jar:${INV_DIR}/java/lib/log4j.jar:${INV_DIR}/java/lib/java-getopt.jar:${INV_DIR}/java/lib/junit.jar:$(TOOLSJAR)' all_directly
+	cd java/utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar -classpath .:${INV_DIR}/java/lib/junit.jar' all_notest
 	## Old untarring code:
 	#  tar xzf java/lib/java-getopt-1.0.8.tar.gz -C /tmp/daikon-jar
 	#  tar xzf java/lib/OROMatcher-1.1.tar.gz -C /tmp/daikon-jar
@@ -400,7 +401,7 @@ daikon-compiled.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS)
 	# the subsequence rm -rf shouldn't be necessary one day, 
 	# but for the time being (and just in case)...
 	# (cd /tmp/daikon/java-front-end; $(MAKE) distclean; (cd src; $(MAKE) distclean); $(RM_TEMP_FILES))
-	(cd /tmp/daikon/front-end/java; $(MAKE) distclean; $(RM_TEMP_FILES))
+	(cd /tmp/daikon/front-end/java; $(MAKE) distclean; $(RM_TEMP_FILES); rm -rf )
 
 	# Make the source distribution proper
 	rm -rf `find /tmp/daikon -name CVS`
@@ -456,6 +457,12 @@ $(DFEJ_DIR)/src/dfej:
 	cd $(DFEJ_DIR) && $(MAKE)
 
 ## Don't distribute executables for now
+
+# Make the current dfej the one used by the PAG group
+dist-dfej-pag: $(DFEJ_DIR)/src/dfej
+	cp -pf $< $(DIST_PAG_BIN_DIR)
+
+# Make the current dfej the one distributed to the world
 dist-dfej: dist-dfej-linux-x86 dist-dfej-windows
 
 dist-dfej-solaris: $(DIST_BIN_DIR)/dfej-solaris
