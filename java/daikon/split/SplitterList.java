@@ -24,6 +24,7 @@ public abstract class SplitterList {
     ppt_splitters.put(pptname, splits);
   }
 
+  // This is only used by the debugging output in SplitterList.put().
   public static String formatSplitters(Splitter[] splits) {
     if (splits == null)
       return "null";
@@ -75,8 +76,8 @@ public abstract class SplitterList {
           return result;
       }
     }
+    int lparen_index = name.indexOf('(');
     {
-      int lparen_index = name.indexOf("(");
       if (lparen_index != -1) {
         name = name.substring(0, lparen_index);
         result  = get_raw(name);
@@ -89,7 +90,9 @@ public abstract class SplitterList {
       }
     }
     {
-      int dot_index = name.indexOf(".");
+      // The class name runs up to the last dot before any open parenthesis.
+      int dot_limit = (lparen_index == -1) ? name.length() : lparen_index;
+      int dot_index = name.lastIndexOf('.', dot_limit - 1);
       if (dot_index != -1) {
         name = name.substring(0, dot_index);
         result  = get_raw(name);
