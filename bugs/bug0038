@@ -1,6 +1,6 @@
 Version:      $Id$
-Owner:        Alan <adonovan@lcs.mit.edu>
-Cc:           Jeremy <mistere@lcs.mit.edu>
+Owner:        Jeremy <mistere@lcs.mit.edu>
+Cc:           Alan <adonovan@lcs.mit.edu>
 Tool:         bugtrack test
 Summary:      test
 Severity:     Lethal
@@ -15,9 +15,15 @@ al
 [adonovan]
  	gratuitous change here
 
+[adonovan]
+	now you own it, hehehe.
+
 --
 $Log$
-Revision 1.3  2002-04-02 21:30:02  adonovan
+Revision 1.4  2002-04-02 21:30:40  adonovan
+changed bug0038
+
+Revision 1.3  2002/04/02 21:30:02  adonovan
 changed bug0038
 
 Revision 1.2  2002/04/02 21:29:15  adonovan
