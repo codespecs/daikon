@@ -14,7 +14,7 @@ Class name  Declared in     Implemented in  Description of purpose
 ----------  -----------     --------------  ----------------------
 Point       point.h         point.cpp       Stores a single point and some
                                             extra information about it.
-Subcluster  subcluster.h    subcluster.cpp  Stores sufficient statistics
+Cluster  cluster.h    cluster.cpp  Stores sufficient statistics
                                             about a cluster. Has functions 
 					    to compute distances etc.
 KMeans      kmeans.h        kmeans.cpp      An implementation of the

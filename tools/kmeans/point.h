@@ -6,7 +6,7 @@ class Point {
   int clusterNum;
   int clusterChanged;
   float* data;
-  int name;
+  int id;
   
  public:
   
@@ -21,15 +21,15 @@ class Point {
     return data;
   }
 
-  int getName (void) {
-    return name;
+  int getId (void) {
+    return id;
   }
   
   void init(float *x);
   
   void setClusterNum(int number);
   
-  void setName(int name);
+  void setId(int id);
   
   Point* copy(void);
   

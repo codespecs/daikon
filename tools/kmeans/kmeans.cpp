@@ -38,7 +38,8 @@ KMeans::KMeans(char* s ) : s(s) {
   // Reads the first line of the input file, which denotes the
   // number of dimensions of each point
   if ((DataFp = fopen( s, "r")) == NULL) {
-    perror("Unable to open data file\n");
+    perror("Unable to open data file ");
+    cout << s << endl;
     exit(1);
   }
   

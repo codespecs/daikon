@@ -24,12 +24,3 @@ main.o: main.cpp
 
 kmeans: $(OBJS) main.o
 	$(CC) -o kmeans main.o $(OBJS) $(OPTS)
-
-
-
-
-
-
-
-
-

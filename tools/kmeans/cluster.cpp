@@ -17,9 +17,9 @@ Cluster::Cluster (int dim, Point *randpoint, int num) {
 }
 
 /**
- * requires: p is not null effects: 
- * returns the square of the
- * Euclidean distance between the cluster mean and the point p.  
+ * requires: p is not null
+ * effects:  returns the square of the Euclidean distance between the cluster mean and 
+ *           the point p.  
  */
 float Cluster::distanceSquared(Point *p) {
   
@@ -61,9 +61,11 @@ void Cluster::refresh(void) {
  */
 void Cluster::calculateMeans(void) {
   
-  means = new Point(dimensions);
-  means->setName(clusterNum);
+  //refresh the mean
   float *meandata = means->getData();
+  for (int i = 0; i < dimensions; i++) {
+    meandata[i] = 0;
+  }
   
   for (int i = 0; i < numpoints; i++) {
     float *tempdata = points[i]->getData();
@@ -72,7 +74,7 @@ void Cluster::calculateMeans(void) {
     }
   }
   for (int i = 0; i < dimensions; i++) {
-    meandata[j]  = meandata[j]/numpoints;
+    meandata[i]  = meandata[i]/numpoints;
   }
 }
 
@@ -102,7 +104,7 @@ float Cluster::calculateError (void) {
 void Cluster::print(void) {
   float *data = means->getData();
   for (int i = 0; i < numpoints; i++) {
-    printf("%i\n", points[i]->getName());
+    printf("%i\n", points[i]->getId());
   }
 }
 
