@@ -21,18 +21,6 @@ public final class Stopwatch {
     }
   }
 
-  private void assertStarted() {
-    if (startTime == 0) {
-      throw new Error("Stopwatch is not started");
-    }
-  }
-
-  private void assertStopped() {
-    if (startTime != 0) {
-      throw new Error("Stopwatch is not stopped");
-    }
-  }
-
   /** Also starts the stopwatch. */
   public void reset() {
     startTime = 0;
@@ -41,12 +29,16 @@ public final class Stopwatch {
   }
 
   public void start() {
-    assertStopped();
+    if (startTime != 0) {
+      throw new Error("Stopwatch is not stopped");
+    }
     startTime = System.currentTimeMillis();
   }
 
   public void stop() {
-    assertStarted();
+    if (startTime == 0) {
+      throw new Error("Stopwatch is not started");
+    }
     elapsedMillis += (System.currentTimeMillis() - startTime);
     startTime = 0;
   }
@@ -72,7 +64,11 @@ public final class Stopwatch {
   }
 
   public String format(int digits) {
-    return Stopwatch.timeFormat[digits].format(elapsedSeconds()) + "s";
+    long runningMillis = elapsedMillis;
+    if (startTime != 0) {
+      runningMillis += (System.currentTimeMillis() - startTime);
+    }
+    return Stopwatch.timeFormat[digits].format(runningMillis) + "s";
   }
 
 }
