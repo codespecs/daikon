@@ -1,0 +1,92 @@
+#!/usr/bin/env perl
+
+# Convenient interface to the Daikon annotation front-end for Perl programs
+# $Id$
+
+use strict;
+use 5.006;
+use warnings;
+BEGIN {
+    require English;
+    if ($^V ge 5.8.0) {
+	English->import("-no_match_vars"); # avoid speed penaly
+    } else {
+	English->import();
+    }
+}
+
+use Getopt::Long ();
+#use Carp ('carp', 'croak', 'cluck', 'confess');
+
+my $instr_dir = "daikon-instrumented";
+my @types_files = ();
+my $verbose = 0;
+my $perl = $^X;
+
+sub careful_system {
+    my @cmd = @_;
+    if ($verbose) {
+	print join(" ", @cmd), "\n";
+    }
+    my $result = system(@cmd);
+    if ($result != 0) {
+	die "External command failed: " . join(" ", @cmd);
+    }
+    return $result;
+}
+
+sub file_id {
+    my($fname) = @_;
+    my($dev, $inode) = stat($fname);
+    return "$dev:$inode";
+}
+
+my $opt_parse = new Getopt::Long::Parser;
+$opt_parse->configure("bundling_override");
+my $parsed =
+  $opt_parse->getoptions("instrsourcedir=s" => \$instr_dir,
+			 "types|t=s" => \@types_files,
+			 "verbose|v+" => \$verbose,
+			 "perl=s", \$perl,
+			);
+
+if (! -d $instr_dir) {
+    mkdir($instr_dir) or die "Can't create directory $instr_dir: $!\n";
+}
+
+my $inplace = file_id($instr_dir) eq file_id(".");
+
+if ($verbose) {
+    print "Verbosity level $verbose\n";
+    print "Instrumented sources in $instr_dir\n";
+    print "Reading types from @types_files\n" if @types_files;
+    print "Annotating in place? ", $inplace ? "yes" : "no", "\n";
+}
+
+my $types = "";
+for my $tfile (@types_files) {
+    if (-e $tfile) {
+	$types .= ",$tfile";
+    } else {
+	warn "Types file $tfile does not exist\n";
+    }
+}
+
+$types = ",-t" . $types if $types;
+my $deparse_opt = "-MO=DeparseDaikon$types";
+my $perl_lib = "-I$ENV{INV}/front-end/perl/lib";
+
+for my $prog (@ARGV) {
+    my $from;
+    if ($inplace) {
+	$from = "$prog.uninst";
+	if (! -e $from) {
+	    print "Renaming $prog to $from\n" if $verbose;
+	    rename($prog, $from) or die "Can't move $prog to $from: $!\n";
+	}
+    } else {
+	$from = $prog;
+    }
+    careful_system($perl, $perl_lib, "$deparse_opt,-o,$instr_dir/$prog",
+		   $from);
+}
