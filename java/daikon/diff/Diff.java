@@ -113,13 +113,13 @@ public final class Diff {
     if (stats) {
       DetailedStatisticsVisitor v = new DetailedStatisticsVisitor();
       root.accept(v);
-      System.out.println(v.format());
+      System.out.print(v.format());
     }
 
     if (tabSeparatedStats) {
       DetailedStatisticsVisitor v = new DetailedStatisticsVisitor();
       root.accept(v);
-      System.out.println(v.repr());      
+      System.out.print(v.repr());      
     }
     
     if (printDiff) {
