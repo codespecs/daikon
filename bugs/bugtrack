@@ -78,10 +78,11 @@ checkin()
     true
 }
 
-# usage: notify <bugfile>
+# usage: notify <bugfile> <reportfile>
 notify()
 {
    bugfile=$1
+   report=$2
 
    grep -sq "^Owner: *" $bugfile || {
        warn "'Owner' field missing for \`$bugfile'."
@@ -90,7 +91,11 @@ notify()
    summary=`grep "^Summary: *" $bugfile | sed -e 's/^Summary: *//'`
    owner=`  grep "^Owner: *"   $bugfile | sed -e 's/^Owner: *//' `
 
-   head -7 $bugfile | mail "$owner" -s "Bugtrack update: $bugfile: $summary"
+   head -7 $bugfile >.header   
+   cat .header $report |
+       mail "$owner" -s "Bugtrack update: $bugfile: $summary"
+
+   rm -f .header $report
 }
 
 # usage: newbugnumber
@@ -210,10 +215,14 @@ new_bug()
     
     mv $ABORTED $BUGFILE
 
+    report=.report
+
+    tail +7 $BUGFILE >$report # body of message
+
     checkin new $BUGFILE || die "aborting."
 
-    notify $BUGFILE
-    
+    notify $BUGFILE $report 
+
     echo "Added bug: $BUGFILE."
 }
 
@@ -232,10 +241,14 @@ edit_bug()
     
     input "Continue?" "YN" in
     [ "$in" != "Y" ] && die "aborting."
-    
+
+    report=.report
+
+    cvs diff $BUGFILE >$report
+
     checkin changed $BUGFILE || die "aborting."
     
-    notify $BUGFILE
+    notify $BUGFILE $report
 
     echo "Changed bug: $BUGFILE."
 }
