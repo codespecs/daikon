@@ -509,6 +509,16 @@ public final class UtilMDE {
   public static ArrayList randomElements(Iterator itor, int num_elts, Random random) {
     // The elements are chosen with the following probabilities, where n == num_elts:
     //   n n/2 n/3 n/4 n/5
+    
+    RandomSelector rs = new RandomSelector (num_elts, random);
+
+    while (itor.hasNext()) {
+      rs.accept (itor.next());
+    }
+    return rs.getValues();
+    
+
+    /*
     ArrayList result = new ArrayList(num_elts);
     int i=1;
     for (int n=0; n<num_elts && itor.hasNext(); n++, i++) {
@@ -523,6 +533,7 @@ public final class UtilMDE {
       }
     }
     return result;
+    */
   }
 
 

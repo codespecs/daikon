@@ -123,6 +123,7 @@ public class DtraceEquivalenceChecker
 	}
 	throw new RuntimeException ("This invocation didn't contain a nonce: "
 				    + invocation);
+	
     }
 
 }
