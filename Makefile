@@ -2,15 +2,8 @@
 ### Variables
 ###
 
-# Should gries-instrumented be in this list?
-LISP_FILES := gries-helper.lisp instrument.lisp data-trace.lisp \
-	load-all.lisp \
-	gries.lisp gries-instrumented.lisp inv-medic.lisp
-LISP_PATHS := $(addprefix lisp-front-end/,$(LISP_FILES))
-# PYTHON_FILES := daikon.py util.py TextFile.py
 DOC_FILES := dtrace-format.txt Makefile daikon.html gui.html daikon.gif
-PY_DOC_FILES := daikon.py.doc Makefile TextFile.README daikon.gif
-README_FILES := README-daikon-java README-daikon1 README-dist
+README_FILES := README-daikon-java README-dist
 SCRIPT_FILES := modbit-munge.pl java-cpp.pl lines-from
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 DAIKON_JAVA_FILES := $(shell find daikon \( -name '*daikon-java*' -o -name '*-cpp.java' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
@@ -67,9 +60,8 @@ test:
 
 tags: TAGS
 
-TAGS:  $(LISP_PATHS)
+TAGS:
 	cd daikon && $(MAKE) tags
-	etags $(LISP_PATHS) --include=daikon/TAGS
 
 
 ###########################################################################
@@ -138,7 +130,7 @@ daikon.jar: $(DAIKON_JAVA_FILES)
 
 # Use this ordering because daikon-jar is made before daikon-source
 
-daikon-jar.tar daikon-source.tar: $(LISP_PATHS) $(DOC_FILES) $(PY_DOC_FILES) $(EDG_FILES) $(README_files) examples-gries.tar.gz $(DAIKON_JAVA_FILES) daikon.jar
+daikon-jar.tar daikon-source.tar: $(DOC_FILES) $(EDG_FILES) $(README_files) examples-gries.tar.gz $(DAIKON_JAVA_FILES) daikon.jar
 	html-update-toc daikon.html
 
 	-rm -rf /tmp/daikon
@@ -150,10 +142,6 @@ daikon-jar.tar daikon-source.tar: $(LISP_PATHS) $(DOC_FILES) $(PY_DOC_FILES) $(E
 	# Auxiliary programs
 	mkdir /tmp/daikon/bin
 	cp -p $(SCRIPT_PATHS) /tmp/daikon/bin
-
-	# Lisp instrumenter
-	mkdir /tmp/daikon/lisp-front-end
-	cp -p $(LISP_PATHS) /tmp/daikon/lisp-front-end
 
 	# C/C++ instrumenter
 	mkdir /tmp/daikon/c-front-end
@@ -271,12 +259,26 @@ dist-dfej-linux: $(DIST_DIR)/dfej-linux
 # To create build_mingw, I did:
 # 	cd dfej && $(MAKE) distclean
 # 	mkdir build_mingw_dfej
-# 	cd build_mingw_dfej ~mernst/research/invariants/dfej/configure --prefix=/tmp/dfej_Xmingw --host=i386-mingw32msvc
+# 	setenv PATH /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:$PATH; cd build_mingw_dfej; ~mernst/research/invariants/dfej/configure --prefix=/tmp/dfej_Xmingw --host=i386-mingw32msvc
 # Path must include /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin
 
-dist-dfej-windows: 
-	cd build_mingw_dfej; setenv PATH /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:$(PATH); $(MAKE)
-	cp build_mingw_dfej/src/dfej.exe $(DIST_DIR)/dfej.exe
+
+# dfej-src/build_mingw_dfej/src/dfej.exe:
+# 	cd dfej-src/build_mingw_dfej; setenv PATH /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:$(PATH); $(MAKE)
+
+mingw_exe: dfej-src/build_mingw_dfej/src/dfej.exe
+
+## Problem:  I seem to need to move away the .o files in the source
+## directory.  If they exist, then no attempt is made to build locally.
+## So as a hack, move them aside and then replace them.
+
+dfej-src/build_mingw_dfej/src/dfej.exe: dfej-src/dfej/src/*.cpp dfej-src/dfej/src/*.h
+	rename .o .o-for-mingw dfej-src/dfej/src/*.o
+	cd dfej-src/build_mingw_dfej; setenv PATH /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:$(PATH); $(MAKE); 
+	rename .o-for-mingw .o dfej-src/dfej/src/*.o-for-mingw
+
+dist-dfej-windows: dfej-src/build_mingw_dfej/src/dfej.exe
+	cp dfej-src/build_mingw_dfej/src/dfej.exe $(DIST_DIR)/dfej.exe
 	update-link-dates $(DIST_DIR)/index.html
 
 ## Cross-compiling DFEJ to create a Windows executable (instructions by
@@ -310,51 +312,3 @@ dist-dfej-windows:
 # 5.  Run "make".  This should make the Windows binary at 
 # build_mingw/src/dfej.exe.  Copy this file to a Windows machine, and run 
 # it.  You should at least get the Daikon usage message.
-# 
-# Let me know if this works or not.
-# 
-# -Mike Harder
-
-
-
-### Examples
-
-examples: examples-gries
-
-# I made the replace examples by running the following on 4/23/99:
-# /projects/null/se/people/mernst/www
-# mkdir replace-TC1-traces; cp -p /projects/null/se/people/jake/invariants/test_gen/TC1/traces/* replace-TC1-traces/; tar czf replace-TC1-traces.tar.gz replace-TC1-traces; rm -rf replace-TC1-traces
-# mkdir replace-TC3-traces; cp -p /projects/null/se/people/jake/invariants/test_gen/TC3/traces/* replace-TC3-traces/; tar czf replace-TC3-traces.tar.gz replace-TC3-traces; rm -rf replace-TC3-traces
-
-
-
-GRIES_FILES := gries-instrumented.decls \
-	p173-14.3.dtrace \
-	p176.dtrace \
-	p177-1.dtrace \
-	p177-14.8.dtrace \
-	p177-14.9.dtrace \
-	p177-2.dtrace \
-	p178-1b.dtrace \
-	p180-15.1.1.dtrace \
-	p184-3.dtrace \
-	p187.dtrace \
-	p191-2.dtrace
-GRIES_DIR := lisp-front-end
-GRIES_FILE_PATHS := $(addprefix $(GRIES_DIR)/,$(GRIES_FILES))
-
-# Don't bother with this any longer; it's so small that I might as well
-# just include it in the distribution directly.
-# 
-# examples-gries: $(DIST_DIR)/examples-gries.tar.gz
-# 
-# $(DIST_DIR)/examples-gries.tar.gz: examples-gries.tar.gz
-# 	cp -pf $< $@
-# 	update-link-dates $(DIST_DIR)/index.html
-
-examples-gries.tar.gz: $(GRIES_FILE_PATHS) $(GRIES_DIR)/README-examples-gries
-	mkdir examples-gries
-	cp -pf $(GRIES_FILE_PATHS) examples-gries
-	cp -pf $(GRIES_DIR)/README-examples-gries examples-gries/README
-	tar czf examples-gries.tar.gz examples-gries
-	-rm -rf examples-gries
