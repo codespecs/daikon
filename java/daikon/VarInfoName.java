@@ -1156,13 +1156,13 @@ public abstract class VarInfoName
 	    VarInfoName _idx = _boundv[0], _low = _boundv[1];
 	    conditions.append(" && (");
 	    conditions.append(_idx);
-	    conditions.append("-");
+	    conditions.append("-(");
 	    conditions.append(_low);
-	    conditions.append(") == (");
+	    conditions.append(")) == (");
 	    conditions.append(idx);
-	    conditions.append("-");
+	    conditions.append("-(");
 	    conditions.append(low);
-	    conditions.append(")");
+	    conditions.append("))");
 	  }
 	}
       }
