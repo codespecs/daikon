@@ -140,7 +140,7 @@ public class InvariantFilters {
   public boolean shouldKeep( Invariant invariant ) {
     if (PrintInvariants.debugFiltering.isDebugEnabled()) {
       PrintInvariants.debugFiltering.debug(invariant.format());
-      PrintInvariants.debugFiltering.debug("\t\t(type: " + invariant.getClass().getName() +  ")");
+      PrintInvariants.debugFiltering.debug("      (type: " + invariant.getClass().getName() +  ") samples: " + invariant.ppt.num_samples());
     }
 
     if (invariant instanceof GuardingImplication) {
