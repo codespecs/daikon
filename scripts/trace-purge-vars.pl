@@ -1,7 +1,7 @@
 : # Use -*- Perl -*- without knowing its path
   eval 'exec perl -S -wni.bak $0 "$@"'
   if 0;
-# Remove variables from .dtrace files.
+# Remove variables from .dtrace files (changes files in place).
 # Usage:  trace-purge-vars.pl [-v] regexp file ...
 
 # -v flag means to retain rather than discard variables matching the
