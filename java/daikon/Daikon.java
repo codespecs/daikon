@@ -297,7 +297,16 @@ public final class Daikon {
         // System.out.println(ppt.name);
         // ppt.values.dump();
         // System.out.println("end dump-------------------------------------------------------------------");
+	long ppt_start_time = System.currentTimeMillis();
+	if (no_text_output) {
+	  System.out.print(ppt.name + "...");
+	  System.out.flush();
+	}
         ppt.initial_processing();
+	if (no_text_output) {
+	  System.out.print("...");
+	  System.out.flush();
+	}
         if (! disable_splitting) {
           Splitter[] pconds = SplitterList.get(ppt.name);
           if (Global.debugPptSplit)
@@ -319,6 +328,11 @@ public final class Daikon {
             pcond.clear_view_caches();
           }
         }
+	long ppt_end_time = System.currentTimeMillis();
+	if (no_text_output) {
+	  double elapsed = (ppt_end_time - ppt_start_time) / 1000.0;
+	  System.out.println((new java.text.DecimalFormat("#.#")).format(elapsed) + "s");
+	}
       }
     }
 
