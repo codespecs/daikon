@@ -245,7 +245,8 @@ and C++.
 In order to install Daikon, perform the following steps.
 @xref{Requirements}, for a few additional requirements running Daikon
 (in short, you must be able to run Java programs, because Daikon is
-written in Java).
+written in Java).  Differences between various versions of Daikon appear
+in the file @file{doc/CHANGES} in the distribution.
 
 @enumerate
 @item

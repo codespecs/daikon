@@ -1,0 +1,7 @@
+History of Daikon changes
+
+This file lists significant user-visible changes to Daikon.
+
+23 June 2001:
+
+Add linear ternary invariants, of the form z = ax + by + c.
