@@ -32,7 +32,7 @@ public abstract class Ppt
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20030929L;
+  static final long serialVersionUID = 20040914L;
 
   // The "name" and "ppt_name" fields were moved to PptTopLevel:  they take
   // up too much space in PptSlice objects.
@@ -50,15 +50,9 @@ public abstract class Ppt
     }
   }
 
-  /**
-   * Give sample data to this ppt to process.
-   * @return a List of Invariants that have weakened due to the
-   * processing of the sample.
-   **/
-  abstract List add(ValueTuple vt, int count);
-
   protected static final List emptyList = new ArrayList();
 
+  /** Returns a string rep of the specified variable names **/
   public static String varNames(VarInfo[] infos) {
     StringBuffer sb = new StringBuffer();
     sb.append("(");
@@ -75,17 +69,12 @@ public abstract class Ppt
     return sb.toString();
   }
 
-  // Cache, so the value doesn't have to be repeatedly recomputed.
-  private String varNames = null;
-
   /** Return a string representation of the variable names. */
   public String varNames() {
-    if (varNames == null) {
-      varNames = varNames(var_infos);
-    }
-    return varNames;
+    return (varNames (var_infos));
   }
 
+  /** Find the variable with the specified name and returns its VarInfo **/
   public VarInfo findVar(VarInfoName viname) {
     for (int i=0; i<var_infos.length; i++) {
       if (viname.equals(var_infos[i].name))
@@ -94,16 +83,7 @@ public abstract class Ppt
     return null;
   }
 
-  public VarInfo findVar_debugging(VarInfoName viname) {
-    for (int i=0; i<var_infos.length; i++) {
-      System.out.println("Checking " + viname.name() + " against " + var_infos[i].name.name());
-      System.out.println("  Checking " + viname + " against " + var_infos[i].name);
-      if (viname.equals(var_infos[i].name))
-        return var_infos[i];
-    }
-    return null;
-  }
-
+  /** find the variable with specified rep output **/
   public VarInfo findVarByRepr(String repr) {
     for (int i=0; i<var_infos.length; i++) {
       if (repr.equals(var_infos[i].name.repr())) {
@@ -119,47 +99,6 @@ public abstract class Ppt
    **/
   public VarInfo findVar(String name) {
     return findVar(VarInfoName.parse(name));
-  }
-
-  /**
-   * Return a list of all variables that appear in every Ppt in ppts.
-   * The result does NOT include static constants, as it will be used to
-   * index into ValueTuple, which omits static constants.
-   * @param ppts a vector of PptTopLevel objects.
-   **/
-  public static final VarInfo[] common_vars(List ppts) {
-    Vector result = new Vector();
-    Assert.assertTrue(ppts.size() > 1);
-    // First, get all the variables from the first program point.
-    {
-      PptTopLevel ppt = (PptTopLevel) ppts.get(0);
-      VarInfo[] vars = ppt.var_infos;
-      for (int i=0; i<vars.length; i++) {
-        if (vars[i].isStaticConstant())
-          continue;
-        result.add(vars[i]);
-      }
-    }
-    // Now, for each subsequent program point, remove variables that don't
-    // appear in it.
-    for (int i=1; i<ppts.size(); i++) {
-      PptTopLevel ppt = (PptTopLevel) ppts.get(i);
-      VarInfo[] vars = ppt.var_infos;
-      // Remove from result any variables that do not occur in vars
-      VARLOOP:
-      for (int rindex=result.size()-1; rindex>=0; rindex--) {
-        VarInfo rvar = (VarInfo) result.get(rindex);
-        for (int vindex=0; vindex<vars.length; vindex++) {
-          VarInfo vvar = vars[vindex];
-          if (rvar.isSimilarVarInfo(vvar)) {
-            // do not remove
-            continue VARLOOP;
-          }
-        }
-        result.remove(rindex);
-      }
-    }
-    return (VarInfo[]) result.toArray(new VarInfo[result.size()]);
   }
 
   public boolean containsVar (VarInfo vi) {
