@@ -42,22 +42,18 @@ package daikon;
 
 import daikon.inv.*;
 
-#if defined(ARITY1)
   import daikon.inv.unary.*;
   import daikon.inv.unary.scalar.*;
   import daikon.inv.unary.string.*;
   import daikon.inv.unary.sequence.*;
   import daikon.inv.unary.stringsequence.*;
-#elif defined(ARITY2)
   import daikon.inv.binary.*;
   import daikon.inv.binary.twoScalar.*;
   import daikon.inv.binary.twoSequence.*;
   import daikon.inv.binary.twoString.*;
   import daikon.inv.binary.sequenceScalar.*;
-#elif defined(ARITY3)
   import daikon.inv.ternary.*;
   import daikon.inv.ternary.threeScalar.*;
-#endif
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -565,15 +561,6 @@ public final class PPTSLICE1
         values_order.add (vals);
       }
       */ // ... [INCR]
-#if defined(ARITY1)
-      int mod_index = mod1;
-#elif defined(ARITY2)
-      int mod_index = mod1 * 2 + mod2;
-#elif defined(ARITY3)
-      int mod_index = mod1 * 4 + mod2 * 2 + mod3;
-#endif
-      // tm_arr[mod_index] += count; // [INCR]
-      tm_total[mod_index] += count;
     }
     // System.out.println(PPTSLICE1STRING + " " + name + ": add " + full_vt + " = " + vt);
     // System.out.println(PPTSLICE1STRING + " " + name + " has " + invs.size() + " invariants.");
@@ -586,11 +573,28 @@ public final class PPTSLICE1
                           || (mod1 == ValueTuple.MODIFIED))));
 
 #if defined(ARITY1)
-    Assert.assertTrue(mod1 != ValueTuple.MISSING_FLOW && mod1 != ValueTuple.MISSING_NONSENSICAL);
+    add_val (val1, mod1, count);
+#elif defined(ARITY2)
+    add_val (val1, val2, mod1, mod2, count);
+#elif defined(ARITY3)
+    add_val (val1, val2, val3, mod1, mod2, mod3, count);
+#endif
+
+    // undefer_invariant_removal(); [INCR]
+    return flow_and_remove_falsified();
+  }
+
+#if defined (ARITY1)
+  public void add_val (Object val1, int mod1, int count) {
+
+    tm_total[mod1] += count;
+
+    Assert.assertTrue(mod1 != ValueTuple.MISSING_FLOW
+                      && mod1 != ValueTuple.MISSING_NONSENSICAL);
     if (values_cache != null) {
       values_cache.add(val1);
     }
-    for (int i=0; i<num_invs; i++) {
+    for (int i=0; i < invs.size(); i++) {
       UnaryInvariant inv = (UnaryInvariant) invs.get(i);
       if (inv.falsified) continue;
       if (inv.getSuppressor() != null) continue;
@@ -599,16 +603,29 @@ public final class PPTSLICE1
         inv.destroyAndFlow();
       }
       if (PrintInvariants.print_discarded_invariants && inv.falsified) {
-        DiscReasonMap.put(inv, DiscardCode.bad_sample, "Falsified from sample: " + var_infos[0].name.name() +
-                          " = " + (vi1.rep_type.isArray() ? ArraysMDE.toString(val1) : val1));
+        DiscReasonMap.put(inv, DiscardCode.bad_sample,
+          "Falsified from sample: " + var_infos[0].name.name() + " = "
+          + (var_infos[0].rep_type.isArray() ? ArraysMDE.toString(val1) : val1));
       }
     }
-#elif defined(ARITY2)
-    Assert.assertTrue((mod1 != ValueTuple.MISSING_FLOW && mod1 != ValueTuple.MISSING_NONSENSICAL)
-                  && (mod2 != ValueTuple.MISSING_FLOW && mod2 != ValueTuple.MISSING_NONSENSICAL));
+  }
+#elif defined (ARITY2)
+
+  public void add_val (Object val1, Object val2, int mod1, int mod2, int count) {
+
+    Assert.assertTrue ((mod1 != ValueTuple.MISSING_FLOW
+                       && mod1 != ValueTuple.MISSING_NONSENSICAL)
+                       && (mod2 != ValueTuple.MISSING_FLOW
+                       && mod2 != ValueTuple.MISSING_NONSENSICAL));
+
     int mod_index = mod1 * 2 + mod2;
-    boolean array1 = vi1.rep_type.isArray();
-    boolean array2 = vi2.rep_type.isArray();
+    tm_total[mod_index] += count;
+    if (Debug.logDetail())
+      Debug.log (getClass(), this, "mod1 = " + mod1 + " mod2 = " + mod2
+                 + " count = " + count);
+
+    boolean array1 = var_infos[0].rep_type.isArray();
+    boolean array2 = var_infos[1].rep_type.isArray();
     if (values_cache != null) {
       if (array2 && ! array1) {
         values_cache.add(val2, val1);
@@ -617,7 +634,7 @@ public final class PPTSLICE1
       }
     }
     if (array2 && ! array1) {
-      for (int i=0; i<num_invs; i++) {
+      for (int i=0; i < invs.size(); i++) {
         BinaryInvariant inv = (BinaryInvariant) invs.get(i);
         if (inv.falsified) continue;
         if (inv.getSuppressor() != null) continue;
@@ -626,14 +643,15 @@ public final class PPTSLICE1
           inv.destroyAndFlow();
         }
         if (PrintInvariants.print_discarded_invariants && inv.falsified) {
-          DiscReasonMap.put(inv, DiscardCode.bad_sample, "Falsified from sample: " +
+          DiscReasonMap.put(inv, DiscardCode.bad_sample,
+                            "Falsified from sample: " +
                             var_infos[0].name.name() +
                             " = " + val1 + "," + var_infos[1].name.name() +
                             " = " + ArraysMDE.toString(val2));
         }
       }
     } else {
-      for (int i=0; i<num_invs; i++) {
+      for (int i=0; i < invs.size(); i++) {
         BinaryInvariant inv = (BinaryInvariant) invs.get(i);
         if (inv.falsified) continue;
         if (inv.getSuppressor() != null) continue;
@@ -642,27 +660,49 @@ public final class PPTSLICE1
           inv.destroyAndFlow();
         }
         if (PrintInvariants.print_discarded_invariants && inv.falsified) {
-          if (array1 && array2 && (!( (inv instanceof SeqSeqIntEqual) || (inv instanceof SeqSeqFloatEqual) || (inv instanceof SeqSeqStringEqual) ))
+          if (array1 && array2 && (!( (inv instanceof SeqSeqIntEqual)
+              || (inv instanceof SeqSeqFloatEqual)
+              || (inv instanceof SeqSeqStringEqual) ))
               && ArraysMDE.length(val1) != ArraysMDE.length(val2)) {
-            // No need to print out two potentially huge arrays if the reason for discard was because of different array lengths
-            DiscReasonMap.put(inv, DiscardCode.bad_sample, "Samples seen with different array lengths");
+            // No need to print out two potentially huge arrays if the
+            // reason for discard was because of different array lengths
+            DiscReasonMap.put(inv, DiscardCode.bad_sample,
+                                "Samples seen with different array lengths");
           } else {
-            DiscReasonMap.put(inv, DiscardCode.bad_sample, "Falsified from sample: " + var_infos[0].name.name() +
-                              " = " + (array1 ? ArraysMDE.toString(val1) : val1) + "," + var_infos[1].name.name() +
-                              " = " + (array2 ? ArraysMDE.toString(val2) : val2));
+            DiscReasonMap.put(inv, DiscardCode.bad_sample,
+                    "Falsified from sample: " + var_infos[0].name.name()
+                    + " = " + (array1 ? ArraysMDE.toString(val1) : val1)
+                    + "," + var_infos[1].name.name()
+                    + " = " + (array2 ? ArraysMDE.toString(val2) : val2));
           }
         }
       }
     }
-#elif defined(ARITY3)
-    Assert.assertTrue((mod1 != ValueTuple.MISSING_FLOW && mod1 != ValueTuple.MISSING_NONSENSICAL)
-                  && (mod2 != ValueTuple.MISSING_FLOW && mod2 != ValueTuple.MISSING_NONSENSICAL)
-                  && (mod3 != ValueTuple.MISSING_FLOW && mod3 != ValueTuple.MISSING_NONSENSICAL));
+  }
+#elif defined (ARITY3)
+  public void add_val (Object val1, Object val2, Object val3,
+                       int mod1, int mod2, int mod3, int count) {
+
+    Assert.assertTrue ((mod1 != ValueTuple.MISSING_FLOW
+                        && mod1 != ValueTuple.MISSING_NONSENSICAL)
+                        && (mod2 != ValueTuple.MISSING_FLOW
+                        && mod2 != ValueTuple.MISSING_NONSENSICAL)
+                        && (mod3 != ValueTuple.MISSING_FLOW
+                        && mod3 != ValueTuple.MISSING_NONSENSICAL));
+
     int mod_index = mod1 * 4 + mod2 * 2 + mod3;
+    tm_total[mod_index] += count;
+
     if (values_cache != null) {
       values_cache.add(val1, val2, val3);
     }
-    for (int i=0; i<num_invs; i++) {
+
+    // Debug print add info
+    if (Debug.logDetail())
+      Debug.log (getClass(), this, "Adding values: " + val1 + ", " + val2
+                 + ", " + val3);
+
+    for (int i=0; i < invs.size(); i++) {
       TernaryInvariant inv = (TernaryInvariant) invs.get(i);
       if (inv.falsified) continue;
       if (inv.getSuppressor() != null) continue;
@@ -672,19 +712,19 @@ public final class PPTSLICE1
       }
 
       if (PrintInvariants.print_discarded_invariants && inv.falsified) {
-        // Currently there are no ternary invariants with arrays, but if there are in the future
-        // I don't want this to break.
-        DiscReasonMap.put(inv, DiscardCode.bad_sample, "Falsified from sample: " + var_infos[0].name.name() +
-                          " = " + (vi1.rep_type.isArray() ? ArraysMDE.toString(val1) : val1) + "," + var_infos[1].name.name() +
-                          " = " + (vi2.rep_type.isArray() ? ArraysMDE.toString(val2) : val2) + "," + var_infos[2].name.name() +
-                          " = " + (vi3.rep_type.isArray() ? ArraysMDE.toString(val3) : val3));
+        // Currently there are no ternary invariants with arrays, but if
+        // there are in the future, I don't want this to break.
+        DiscReasonMap.put(inv, DiscardCode.bad_sample,
+          "Falsified from sample: " + var_infos[0].name.name() + " = "
+          + (var_infos[0].rep_type.isArray() ? ArraysMDE.toString(val1) : val1)
+          + "," + var_infos[1].name.name() + " = "
+          + (var_infos[1].rep_type.isArray() ? ArraysMDE.toString(val2) : val2)
+          + "," + var_infos[2].name.name() + " = "
+          + (var_infos[2].rep_type.isArray() ? ArraysMDE.toString(val3) : val3));
       }
     }
-#endif
-
-    // undefer_invariant_removal(); [INCR]
-    return flow_and_remove_falsified();
   }
+#endif
 
 //   private void destroyInv(Invariant inv) {
 //     inv.falsified = true;
@@ -915,13 +955,18 @@ public final class PPTSLICE1
     if (values_cache == null) {
       result.values_cache = null;
     } else {
-#if defined(ARITY1)
-      result.values_cache = (ValueTracker.ValueTracker1) this.values_cache.clone();
-#elif defined(ARITY2)
-    result.values_cache = (ValueTracker.ValueTracker2) this.values_cache.clone();
-#elif defined(ARITY3)
-    result.values_cache = (ValueTracker.ValueTracker3) this.values_cache.clone();
-#endif
+      #if defined(ARITY1)
+        result.values_cache = (ValueTracker.ValueTracker1)
+                                                    this.values_cache.clone();
+      #elif defined(ARITY2)
+        result.values_cache = (ValueTracker.ValueTracker2)
+                                                    this.values_cache.clone();
+        result.values_cache.permute (permutation);
+      #elif defined(ARITY3)
+        result.values_cache = (ValueTracker.ValueTracker3)
+                                                    this.values_cache.clone();
+        result.values_cache.permute (permutation);
+      #endif
     }
     // re-parent the invariants and copy them out
     List newInvs = new LinkedList();
@@ -992,8 +1037,11 @@ public final class PPTSLICE1
       PptTopLevel ppt = rel.child;
 
       // Skip any children that have not seen any samples
-      if (ppt.num_samples() == 0)
+      if (ppt.num_samples() == 0) {
+        if (debugMerge.isLoggable (Level.FINE))
+          debugMerge.fine ("-- slice ignored (no samples) " + ppt.ppt_name);
         continue;
+      }
 
       // Child variable info
       VarInfo cvis[] = new VarInfo[var_infos.length];
@@ -1012,6 +1060,19 @@ public final class PPTSLICE1
         cvis_sorted[j] = cv.canonicalRep();
       }
 
+      // If any of the child variables have always been missing, this
+      // particular slice in the child received no samples.  If dynamic
+      // constants are enabled, the slice will have never been created.
+      // These slices can be skipped unless they contain a missing out of
+      // bound var.  Out of bounds variables destroy all invariants in
+      // the slice (since the variable is deemed to be nonsensical)
+      if (slice_missing (ppt, cvis)) {
+        if (debugMerge.isLoggable (Level.FINE))
+          debugMerge.fine ("-- slice ignored (missing) " + ppt.ppt_name
+                           + " vars " + Debug.toString (cvis_sorted));
+        continue;
+      }
+
       // The child variables must be sorted by their index (in the child)
       Arrays.sort (cvis_sorted, VarInfo.IndexComparator.getInstance());
 
@@ -1022,9 +1083,12 @@ public final class PPTSLICE1
       // has no invariants, there can be no invariants to merge (since
       // invariants must exist at each child to exist at the parent)
       PPTSLICE1 cslice = (PPTSLICE1) ppt.findSlice (cvis_sorted);
-      if ((cslice == null) || (cslice.invs.size() == 0))
+      if ((cslice == null) || (cslice.invs.size() == 0)) {
+        if (debugMerge.isLoggable (Level.FINE))
+          debugMerge.fine ("-- slice not found " + ppt.ppt_name
+                           + " vars " + Debug.toString (cvis_sorted));
         return;
-      debugMerge.fine ("-- -- found slice " + cslice.ppt_name);
+      }
 
       // Update sample count info
       for (int j = 0; j < tm_total.length; j++) {
@@ -1052,7 +1116,10 @@ public final class PPTSLICE1
       if (debugMerge.isLoggable (Level.FINE)) {
         debugMerge.fine ("-- Processing child " + ppt.ppt_name + " ("
                          + rel.getRelationType() + ")");
-        debugMerge.fine ("-- -- child vars = " + VarInfo.toString (cvis_sorted));
+        debugMerge.fine ("-- -- child vars = "
+                         + VarInfo.toString (cvis_sorted));
+        debugMerge.fine ("-- -- parent vars = "
+                         + VarInfo.toString (var_infos));
         debugMerge.fine ("-- -- permute = " + ArraysMDE.toString (permute));
       }
 
@@ -1062,8 +1129,24 @@ public final class PPTSLICE1
         Invariant orig_inv = (Invariant) cslice.invs.get (j);
         Invariant inv = orig_inv.clone_and_permute (permute);
         all_invs.add (inv);
+        if (inv.logOn()) {
+          VarInfo[] child_vars = new VarInfo[var_infos.length];
+          for (int k = 0; k < var_infos.length; k++) {
+            VarInfo pv = var_infos[k];
+            VarInfo cv = rel.childVar (pv);
+            child_vars[k] = cv.canonicalRep();
+          }
+          orig_inv.log ("org inv");
+          inv.log ("Created " + inv + " from " + orig_inv + " using permute "
+                   + ArraysMDE.toString(permute) + " cvis_sorted = "
+                   + VarInfo.toString (cvis_sorted) + " cvis = "
+                   + VarInfo.toString (child_vars));
+        }
       }
     }
+
+    if (debugMerge.isLoggable (Level.FINE) && (valid_child_count == 0))
+      debugMerge.fine ("-- No valid children found");
 
     // For each invariant found, find the list of invariants of the
     // same type (type corresponds basically but not exactly to the
@@ -1108,10 +1191,13 @@ public final class PPTSLICE1
       if (child_invs.size() == valid_child_count) {
         Invariant first = (Invariant) child_invs.get(0);
         if (Debug.logOn())
-          first.log ("Attempting merge");
+          first.log ("Attempting merge of " + child_invs.size()
+                     + " invariants into ppt " + ppt_name);
         Invariant parent_inv = first.merge (child_invs, this);
         if (parent_inv != null) {
           invs.add (parent_inv);
+          if (dkconfig_remove_merged_invs)
+            remove_matching_invs (parent_inv, child_invs);
           if (Debug.logOn())
             parent_inv.log ("Merge successful");
         }
@@ -1122,6 +1208,59 @@ public final class PPTSLICE1
                     + "child invariants in " + valid_child_count + " children");
         }
       }
+    }
+  }
+
+  /**
+   * Returns whether or not the slice is missing due to having one or more
+   * of its variables always missing.  This returns true only for missing
+   * flow and/or missing nonsensical.  Out of Bounds is treated differently
+   * since it destroys all of its invariants
+   */
+  private boolean slice_missing (PptTopLevel ppt, VarInfo[] vis) {
+
+    if (ppt.constants != null) {
+      #if defined(ARITY1)
+        if (ppt.constants.is_missing(vis[0])
+            && !vis[0].missingOutOfBounds())
+          return(true);
+      #elif defined(ARITY2)
+        if ((ppt.constants.is_missing(vis[0])
+             || ppt.constants.is_missing(vis[1]))
+            && !vis[0].missingOutOfBounds()
+            && !vis[1].missingOutOfBounds())
+          return(true);
+      #elif defined(ARITY3)
+        if ((ppt.constants.is_missing(vis[0])
+             || ppt.constants.is_missing(vis[1])
+             || ppt.constants.is_missing(vis[2]))
+            && !vis[0].missingOutOfBounds()
+            && !vis[1].missingOutOfBounds()
+            && !vis[2].missingOutOfBounds())
+          return(true);
+      #endif
+    }
+    return (false);
+  }
+
+  private void remove_matching_invs (Invariant parent_inv,
+                                     List /*Invariant*/ child_invs) {
+
+    for (int i = 0; i < child_invs.size(); i++) {
+      Invariant child_inv = (Invariant) child_invs.get (i);
+      if (parent_inv.isSameFormula (child_inv)
+          && (child_inv.getSuppressees().size() == 0))
+//         if (child_inv.ppt.var_infos[0].name.name().equals ("capacity"))
+//           System.out.println ("removing inv " + child_inv + "in ppt "
+//                               + child_inv.ppt + " parent inv = " + parent_inv
+//                               + " in ppt " + parent_inv.ppt);
+//         if (!child_inv.ppt.invs.contains(child_inv))
+//           System.out.println ("inv " + child_inv + " not in its ppt "
+//                               + child_inv.ppt + " parent inv = " + parent_inv
+//                               + " in ppt " + parent_inv.ppt);
+
+        if (child_inv.ppt.invs.contains(child_inv))
+          child_inv.ppt.removeInvariant (child_inv);
     }
   }
 }
