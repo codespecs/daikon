@@ -5,6 +5,7 @@ import daikon.config.Configuration;
 
 import utilMDE.*;
 import org.apache.oro.text.regex.*;
+import org.apache.log4j.Category;
 
 import java.io.*;
 import java.util.*;
@@ -82,6 +83,13 @@ public final class FileIO {
   static boolean to_write_nonce = false;
   static String nonce_value, nonce_string;
 
+  // Logging Categories
+
+  public static final Category debugRead =
+    Category.getInstance (FileIO.class.getName() + ".read");
+  public static final Category debugPrint =
+    Category.getInstance (FileIO.class.getName() + ".printDtrace");
+
 ///////////////////////////////////////////////////////////////////////////
 /// Declaration files
 ///
@@ -116,10 +124,11 @@ public final class FileIO {
    **/
   static Vector read_declaration_file(String filename, PptMap all_ppts) throws IOException {
 
-    if (Global.debugRead)
-      System.out.println("read_declaration_file " + filename
-                         + ((Daikon.ppt_regexp != null) ? " " + Daikon.ppt_regexp.getPattern() : "")
-                         + ((Daikon.ppt_omit_regexp != null) ? " " + Daikon.ppt_omit_regexp.getPattern() : ""));
+    if (debugRead.isDebugEnabled()) {
+      debugRead.debug("read_declaration_file " + filename
+		      + ((Daikon.ppt_regexp != null) ? " " + Daikon.ppt_regexp.getPattern() : "")
+		      + ((Daikon.ppt_omit_regexp != null) ? " " + Daikon.ppt_omit_regexp.getPattern() : ""));
+    }
 
     Vector new_ppts = new Vector();
 
@@ -131,8 +140,8 @@ public final class FileIO {
 
     // line == null when we hit end of file
     for ( ; line != null; line = reader.readLine()) {
-      if (Global.debugRead)
-	System.out.println("read_declaration_file line: " + line);
+      if (debugRead.isDebugEnabled())
+	debugRead.debug("read_declaration_file line: " + line);
       if (line.equals("") || line.startsWith("//") || line.startsWith("#"))
 	continue;
       if (line.equals(declaration_header)) {
@@ -159,8 +168,8 @@ public final class FileIO {
 
       // Not a declaration.
       // Read the rest of this entry (until we find a blank line).
-      if (Global.debugRead)
-	System.out.println("Skipping paragraph starting at line " + reader.getLineNumber() + " of file " + filename + ": " + line);
+      if (debugRead.isDebugEnabled())
+	debugRead.debug("Skipping paragraph starting at line " + reader.getLineNumber() + " of file " + filename + ": " + line);
       while ((line != null) && (!line.equals("")) && !line.startsWith("//")) {
 	System.out.println("Unrecognized paragraph contains line = `" + line + "'");
 	System.out.println("" + (line != null) + " " + (line.equals("")) + " " + !line.startsWith("//"));
@@ -579,10 +588,10 @@ public final class FileIO {
    **/
   static void read_data_trace_file(String filename, PptMap all_ppts) throws IOException {
 
-    if (Global.debugRead) {
-      System.out.println("read_data_trace_file " + filename
-                         + ((Daikon.ppt_regexp != null) ? " " + Daikon.ppt_regexp.getPattern() : "")
-                         + ((Daikon.ppt_omit_regexp != null) ? " " + Daikon.ppt_omit_regexp.getPattern() : ""));
+    if (debugRead.isDebugEnabled()) {
+      debugRead.debug("read_data_trace_file " + filename
+		      + ((Daikon.ppt_regexp != null) ? " " + Daikon.ppt_regexp.getPattern() : "")
+		      + ((Daikon.ppt_omit_regexp != null) ? " " + Daikon.ppt_omit_regexp.getPattern() : ""));
     }
 
     LineNumberReader reader = UtilMDE.LineNumberFileReader(filename);
@@ -710,8 +719,8 @@ public final class FileIO {
 
         ValueTuple vt = new ValueTuple(vals, mods);
 
-        if (Global.debugRead) {
-          System.out.println("Adding ValueTuple to " + ppt.name);
+        if (debugRead.isDebugEnabled()) {
+          debugRead.debug("Adding ValueTuple to " + ppt.name);
         }
         ppt.add(vt, 1);
 

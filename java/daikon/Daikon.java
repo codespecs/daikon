@@ -13,6 +13,7 @@ import java.io.*;
 import java.lang.Thread;
 
 import org.apache.oro.text.regex.*;
+import org.apache.log4j.Category;
 import gnu.getopt.*;
 import utilMDE.*;
 
@@ -114,11 +115,14 @@ public final class Daikon {
   public static final String output_num_samples_SWITCH = "output_num_samples";
   public static final String noternary_SWITCH = "noternary";
   public static final String config_SWITCH = "config";
+  public static final String debugAll_SWITCH = "debug";
+  public static final String debug_SWITCH = "dbg";
 
 
   // A pptMap which contains all the Program Points
   public static PptMap all_ppts;
 
+  public static final Category debugTrace = Category.getInstance (Daikon.class.getName());
 
   static String usage =
     UtilMDE.join(new String[] {
@@ -142,6 +146,10 @@ public final class Daikon {
     Set[] files = read_options(args);
     Assert.assert(files.length == 3);
 
+    // Set up debug traces
+    Logger.setupLogs (Global.debugAll ? Logger.DEBUG : Logger.INFO);
+
+    
     // Load all data
     PptMap all_ppts = load_files(files[0], files[1], files[2]);
 
@@ -206,6 +214,8 @@ public final class Daikon {
       new LongOpt(output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(noternary_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(config_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
     };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:", longopts);
     int c;
@@ -254,6 +264,10 @@ public final class Daikon {
             throw new Error(e.toString());
           }
           break;
+	} else if (debugAll_SWITCH.equals(option_name)) {
+	  Global.debugAll = true;
+	} else if (debug_SWITCH.equals(option_name)) {
+	  Logger.setPriority (g.getOptarg(), Logger.DEBUG);
 	} else if (no_text_output_SWITCH.equals(option_name)) {
 	  no_text_output = true;
 	} else if (show_progress_SWITCH.equals(option_name)) {
@@ -442,11 +456,11 @@ public final class Daikon {
 	  } else {
 	    pconds = SplitterList.get(ppt.name);
 	  }
-          if (Global.debugPptSplit)
-            System.out.println("Got " + ((pconds == null)
-                                         ? "no"
-                                         : Integer.toString(pconds.length))
-                               + " splitters for " + ppt.name);
+          if (Global.debugSplit.isDebugEnabled())
+            Global.debugSplit.debug("Got " + ((pconds == null)
+					   ? "no"
+					   : Integer.toString(pconds.length))
+				 + " splitters for " + ppt.name);
           if (pconds != null)
             ppt.addConditions(pconds);
         }
