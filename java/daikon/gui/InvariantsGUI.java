@@ -3,14 +3,15 @@ package daikon.gui;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.util.*;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.text.DecimalFormat;
 import javax.swing.*;
-import javax.swing.tree.*;
-import javax.swing.table.*;
 import javax.swing.event.*;
+import javax.swing.table.*;
+import javax.swing.tree.*;
 import daikon.*;
 import daikon.inv.*;
 
@@ -70,41 +71,44 @@ public class InvariantsGUI {
 	//  Create the second level of the tree:  method names
 	for (Iterator iter = pptMap.nameStringSet().iterator(); iter.hasNext(); ) {
 	    String name = (String) iter.next();
-	    if (name.indexOf( "CLASS" ) == -1  &&  name.indexOf( "OBJECT" ) == -1 ) { // if this is a method, not a class
-		String className = name.substring( 0, name.indexOf('.'));
-		String methodName = name.substring( name.indexOf('.')+1, name.indexOf( FileIO.ppt_tag_separator ));
-		DefaultMutableTreeNode classNode = getChildByName( root, className );
-		if (classNode == null)
-		    throw new Error( "InvariantsGUI.constructTreeModel():  cannot find class node '" + className + "'" );
-		DefaultMutableTreeNode methodNode = getChildByName( classNode, methodName );
-		if (methodNode == null) 
-		    classNode.add( new DefaultMutableTreeNode( methodName )); // Create a node for this method
-	    }
+	    PptName pptName = new PptName( name );
+	    String methodName = pptName.getFullMethodName();
+	    if (methodName == null) // this is a CLASS or OBJECT ppt, and has no methodName associated with it
+		continue;
+	    String className = pptName.getFullClassName();
+	    DefaultMutableTreeNode classNode = getChildByName( root, className );
+	    if (classNode == null)
+		throw new Error( "InvariantsGUI.constructTreeModel():  cannot find class node '" + className + "'" );
+	    DefaultMutableTreeNode methodNode = getChildByName( classNode, methodName );
+	    if (methodNode == null) 
+		classNode.add( new DefaultMutableTreeNode( methodName )); // Create a node for this method
 	}
 
 	//  Create the third level of the tree:  method entry and exit points
 	for (Iterator iter = pptMap.nameStringSet().iterator(); iter.hasNext(); ) {
 	    String name = (String) iter.next();
-	    PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
-	    if (name.indexOf( "CLASS" ) == -1  &&  name.indexOf( "OBJECT" ) == -1 ) { // if this is a method, not a class
-		String className = name.substring( 0, name.indexOf('.'));
-		String methodName = name.substring( name.indexOf('.')+1, name.indexOf( FileIO.ppt_tag_separator ));
-		String programPointName = name.substring( name.indexOf( FileIO.ppt_tag_separator ) + FileIO.ppt_tag_separator.length());
-		DefaultMutableTreeNode classNode = getChildByName( root, className );
-		if (classNode == null)
-		    throw new Error( "InvariantsGUI.constructTreeModel():  cannot find class node '" + className + "'" );
-		DefaultMutableTreeNode methodNode = getChildByName( classNode, methodName );
-		if (methodNode == null) 
-		    throw new Error( "InvariantsGUI.constructTreeModel():  cannot find method node '" + methodName + "'" );
-		DefaultMutableTreeNode programPointNode = getChildByName( methodNode, programPointName );
-		if (programPointNode == null) 
-		    methodNode.add( new DefaultMutableTreeNode( topLevel )); //  Create a node for this program point
+	    PptName pptName = new PptName( name );
+	    String methodName = pptName.getFullMethodName();
+	    if (methodName == null) // this is a CLASS or OBJECT ppt, and has no methodName associated with it
+		continue;
+	    String className = pptName.getFullClassName();
+	    DefaultMutableTreeNode classNode = getChildByName( root, className );
+	    if (classNode == null)
+		throw new Error( "InvariantsGUI.constructTreeModel():  cannot find class node '" + className + "'" );
+	    DefaultMutableTreeNode methodNode = getChildByName( classNode, methodName );
+	    if (methodNode == null)
+		throw new Error( "InvariantsGUI.constructTreeModel():  cannot find method node '" + methodName + "'" );
+	    String programPointName = pptName.getPoint();
+	    DefaultMutableTreeNode programPointNode = getChildByName( methodNode, programPointName );
+	    if (programPointNode == null) {
+		PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
+		methodNode.add( new DefaultMutableTreeNode( topLevel )); //  Create a node for this program point
 	    }
 	}
 	return new DefaultTreeModel( root );
     }
 
-    //  Returns node with name <code>name</code> if there is one; otherwise return <code>null</code>.
+    //  Returns child with name <code>name</code> if there is one; otherwise return <code>null</code>.
     //  Used by constructTreeModel().
     private static DefaultMutableTreeNode getChildByName( DefaultMutableTreeNode node, String name ) {
 	for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
@@ -117,13 +121,18 @@ public class InvariantsGUI {
 
     protected static void setupGUI( JTree tree, JPanel invariantTablePanel ) {
 	JFrame frame = new JFrame( "Daikon GUI" );
-	Container contentPane = frame.getContentPane();
-	contentPane.setLayout( new GridLayout( 2, 1 ));
-	contentPane.add( new JScrollPane( tree ));
-	contentPane.add( new JScrollPane( invariantTablePanel ));
+	JSplitPane splitPane = new JSplitPane( JSplitPane.VERTICAL_SPLIT,
+					       new JScrollPane( tree ),
+					       new JScrollPane( invariantTablePanel ));
+	splitPane.setOneTouchExpandable( true );
+	splitPane.setDividerSize( 2 );
+
+	frame.getContentPane().add( splitPane );
  	frame.pack();
 	frame.setSize( 600, 700 );
 	frame.setVisible( true );
+
+	splitPane.setDividerLocation( .4 );
     }
 }
 
@@ -144,62 +153,86 @@ class DaikonTreeSelectionListener implements TreeSelectionListener {
 	//	System.out.println( "DaikonTreeSelectionListener.valueChanged() event: " );
 	TreePath paths[] = e.getPaths();
 	for (int i=0; i < paths.length; i++) {
-	    Object userObject = ((DefaultMutableTreeNode) paths[i].getLastPathComponent()).getUserObject();
+	    DefaultMutableTreeNode node = (DefaultMutableTreeNode) paths[i].getLastPathComponent();
+	    Object userObject = node.getUserObject();
 	    //	    System.out.println( "\t" + userObject.toString() + ", " + e.isAddedPath(i));
 	    if (userObject.getClass().getName().equals( "daikon.PptTopLevel" )) {
 		String name = ((PptTopLevel) userObject).name;
 		if (e.isAddedPath( paths[i] )) {
-		    Vector invariants = ((PptTopLevel) userObject).invariants_vector();
-		    JScrollPane scrollPane = setupTable( invariants );
-		    invariantTables.add( scrollPane );
+		    JComponent tableContainer = setupTable( (PptTopLevel) userObject );
+		    invariantTables.add( tableContainer );
 		    invariantTableNames.add( name );
-		    System.out.println( scrollPane.getPreferredSize());
 		}
 		else {		// paths[i] has been removed.  It should already be in invariantTableNames.
 		    int index = invariantTableNames.indexOf( name );
 		    if (index == -1)
 			throw new Error( "DaikonTreeSelectionListener.valueChanged(): " + name + " table not found." );
-		    panel.remove( (JScrollPane) invariantTables.get( index ));
+		    panel.remove( (JComponent) invariantTables.get( index ));
 		    invariantTables.remove( index );
 		    invariantTableNames.remove( index );
 		}
  	    } else {		// This is a class or a method node, not a PptTopLevel node (ie leaf node).
-		if (e.isAddedPath( paths[i] )) { // Add children.
-		    DefaultMutableTreeNode node = (DefaultMutableTreeNode) paths[i].getLastPathComponent();
+		if (e.isAddedPath( paths[i] )) // Add children.
 		    for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
 			TreePath newPath = paths[i].pathByAddingChild( enum.nextElement());
 			TreePath leadPath = treeSelectionModel.getLeadSelectionPath();
 			TreeSelectionEvent event = new TreeSelectionEvent( node, newPath, true, leadPath, leadPath );
-			//			System.out.println("adding path ending in " + newPath.getLastPathComponent().toString());
 			treeSelectionModel.addSelectionPath( newPath );
 		    }
-		}
-		else {		// Remove children.
-		    DefaultMutableTreeNode node = (DefaultMutableTreeNode) paths[i].getLastPathComponent();
+		else		// Remove children.
 		    for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
 			TreePath newPath = paths[i].pathByAddingChild( enum.nextElement());
 			TreePath leadPath = treeSelectionModel.getLeadSelectionPath();
-			TreeSelectionEvent event = new TreeSelectionEvent( node, newPath, true, leadPath, leadPath );
-			//			System.out.println("adding path ending in " + newPath.getLastPathComponent().toString());
+			TreeSelectionEvent event = new TreeSelectionEvent( node, newPath, false, leadPath, leadPath );
 			treeSelectionModel.removeSelectionPath( newPath );
 		    }
-		}
-	    }		
+	    }
 	}
 	panel.repaint();
 	panel.revalidate();
     }
 
-    private JScrollPane setupTable( Vector invariants ) {
-	//	JScrollPane scrollPane = new JScrollPane( new JTable( new InvariantTableModel( invariants )));
-
+    private JComponent setupTable( PptTopLevel topLevel ) {
+	Vector invariants = topLevel.invariants_vector();
 	TableSorter sorter = new TableSorter( new InvariantTableModel( invariants ));
 	JTable table = new JTable( sorter );
 	sorter.addMouseListenerToHeaderInTable( table );
-	InvariantTableModel.resizeColumns( table );
+
+	//  Make invariant column (first column) wider.
+	for (int i = 0; i < table.getColumnCount(); i++) {
+	    TableColumn column = table.getColumnModel().getColumn( i );
+	    if (i == 0)		column.setPreferredWidth( 150 );
+	    else		column.setPreferredWidth( 10 );
+	}
+
+	//  These tables have to appear in scrollPane's, or the headings won't show up.
 	JScrollPane scrollPane = new JScrollPane( table );
-	panel.add( scrollPane );
-	return scrollPane;
+	int width = table.getPreferredSize().width;
+	int height = table.getPreferredSize().height + table.getRowHeight();
+	scrollPane.setPreferredSize( new Dimension( width, height ));
+
+	JPanel pptPanel = new JPanel();
+	pptPanel.setLayout( new BoxLayout( pptPanel, BoxLayout.Y_AXIS ));
+	String headingString = topLevel.name;
+	//	JEditorPane heading = new JEditorPane( "text/plain", headingString );
+	JLabel heading = new JLabel( headingString );
+	heading.setForeground( new Color( 50, 30, 100 ));
+	//	heading.setBackground( Color.white );
+	heading.setAlignmentX( .5f );
+
+	pptPanel.add( Box.createRigidArea( new Dimension( 0, 10 )));
+	pptPanel.add( heading );
+	pptPanel.add( Box.createRigidArea( new Dimension( 0, 10 )));
+	pptPanel.add( scrollPane );
+	pptPanel.setBorder( BorderFactory.createCompoundBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ),
+								BorderFactory.createEtchedBorder()));
+	panel.add( pptPanel );
+	return pptPanel;
+
+	//buttonPane.add(Box.createRigidArea(new Dimension(10, 0)));
+
+	//	panel.add( scrollPane );
+	//	return scrollPane;
     }
 }
     
@@ -227,30 +260,12 @@ class InvariantTableModel extends AbstractTableModel {
 
     public Object getValueAt( int row, int column ) {
 	Invariant invariant = (Invariant) invariants.get( row );
-	if (column == 0)
-	    return invariant.format();
-	else if (column == 1)
-	    return new Integer( invariant.ppt.num_values());
-	else if (column == 2)
-	    return new Integer( invariant.ppt.num_samples());
-	else if (column == 3)
-	    return new Double( format.format( Math.round( 100 * invariant.getProbability()) / 100.0 ));
-	else if (column == 4)
-	    return new Boolean( invariant.justified());
-	    
+	if (column == 0)	    return invariant.format();
+	else if (column == 1)	    return new Integer( invariant.ppt.num_values());
+	else if (column == 2)	    return new Integer( invariant.ppt.num_samples());
+	else if (column == 3)	    return new Double( format.format( Math.round( 100 * invariant.getProbability()) / 100.0 ));
+	else if (column == 4)	    return new Boolean( invariant.justified());
 	return null;
-    }
-
-    // I want the JTable customization code here, rather than in
-    // DaikonTreeSelectionListener.
-    public static void resizeColumns( JTable table ) {
-	for (int i = 0; i < table.getColumnCount(); i++) {
-	    TableColumn column = table.getColumnModel().getColumn( i );
-	    if (i == 0)
-		column.setPreferredWidth( 150 );
-	    else
-		column.setPreferredWidth( 10 );
-	}
     }
 }
 
