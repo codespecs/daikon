@@ -3,7 +3,7 @@
   if 0;
 # merge-esc.pl -- Merge Daikon output into Java source code as ESC assnotations
 # Michael Ernst <mernst@lcs.mit.edu>
-# Time-stamp: <2001-03-13 21:56:54 mernst>
+# Time-stamp: <2001-03-13 23:22:34 mernst>
 
 # The input is a Daikon output file; files from the current directory are
 # rewritten into -escannotated versions.
@@ -118,6 +118,7 @@ sub is_non_supported_invariant( $ ) {
   return (($inv =~ /format_esc class .* needs to be changed/)
 	  || ($inv =~ /"null"/)
 	  || ($inv =~ /\[\] ==/)
+	  || ($inv =~ /~/)
 	  || ($inv =~ /\bmax\(/)
 	  || ($inv =~ /\bmin\(/)
 	  || ($inv =~ /\bsum\(/)
