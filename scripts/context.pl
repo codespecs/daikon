@@ -3,7 +3,7 @@
   if 0;
 # context.pl -- Read dfej's context-sensitivity .map files and produce various things from them.
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2001-11-15 20:09:02 mistere>
+# Time-stamp: <2001-11-26 16:51:56 mistere>
 
 # The input is ... TODO
 
@@ -95,6 +95,21 @@ if ("line" eq $grain) {
       my $from = "daikon_callsite_id == " . $id;
       my $to = "<Called from " . $fromclass . "." . $frommeth . ":" . $fromline . ":" . $fromcol . ">";
       $remap{$from} = $to;
+
+      # Now do the cross product
+      foreach (@records) {
+	my ($id2, $fromclass2, $frommeth2, $fromfile2, $fromline2, $fromcol2, $toexpr2, $toargs2, $toclass2) = @{$_};
+	my $tometh2 = $toexpr2;
+	$tometh2 =~ s/.*\.//;
+	$id2 = hex($id2);
+
+	# "daikon_callsite_id one of { 222222, 333333 }" ==> "Called from one of { Class.method:#:#, Class.method:#:# }"
+	my $from2 = "daikon_callsite_id one of { " . (join ", ", sort($id, $id2)) . " }";
+	my $to2 = "<Called from one of { " .
+	  $fromclass . "." . $frommeth . ":" . $fromline . ":" . $fromcol . ", " .
+	  $fromclass2 . "." . $frommeth2 . ":" . $fromline2 . ":" . $fromcol2 . " }>";
+	$remap{$from2} = $to2;
+      }
     }
   }
 
