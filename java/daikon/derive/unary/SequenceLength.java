@@ -7,6 +7,10 @@ import utilMDE.*;
 // originally from pass1.
 public final class SequenceLength extends UnaryDerivation {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+
   public final int shift;
 
   public SequenceLength(VarInfo vi, int shift) {
