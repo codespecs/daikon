@@ -3,12 +3,11 @@ package daikon.inv.binary.sequenceScalar;
 import daikon.*;
 import daikon.derive.unary.*;
 import daikon.inv.*;
+import daikon.inv.unary.sequence.*;
 import daikon.inv.binary.twoScalar.*;
 import daikon.inv.binary.twoSequence.*;
 import java.util.*;
 import utilMDE.*;
-
-// I should perhaps reimplement this, using IntComparisonCore.
 
 public final class SeqIntComparison extends SequenceScalar {
 
@@ -157,6 +156,7 @@ public final class SeqIntComparison extends SequenceScalar {
     if (isExact()) {
       return false;
     }
+
     VarInfo seqvar = seqvar();
     VarInfo sclvar = sclvar();
     if (sclvar.isDerived() && (sclvar.derived instanceof SequenceLength)) {
@@ -176,9 +176,19 @@ public final class SeqIntComparison extends SequenceScalar {
       }
     }
 
+    PptTopLevel pptt = (PptTopLevel) ppt.parent;
+
+    {
+      PptSlice1 seqslice = pptt.findSlice(seqvar);
+      EltOneOf eoo = EltOneOf.find(seqslice);
+      if ((eoo != null) && eoo.justified() && (eoo.num_elts() == 1)) {
+        return true;
+      }
+    }
+
+
     // For each other sequence variable, if it is a supersequence of this
     // one and it has the same invariant, then this one is obvious.
-    PptTopLevel pptt = (PptTopLevel) ppt.parent;
     for (int i=0; i<pptt.var_infos.length; i++) {
       VarInfo vi = pptt.var_infos[i];
       if (SubSequence.isObviousDerived(seqvar, vi)) {
