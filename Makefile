@@ -256,6 +256,9 @@ www:
 daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
 	-rm -rf $@ /tmp/daikon-jar
 	mkdir /tmp/daikon-jar
+	## Remove obsolete .class files on which the new .class files might
+	## accidentally depend.
+	cd java/daikon && make clean
 	cd java/daikon && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar -classpath ${INV_DIR}/java:${INV_DIR}/java/lib/jakarta-oro.jar:${INV_DIR}/java/lib/log4j.jar:${INV_DIR}/java/lib/java-getopt.jar:${INV_DIR}/java/lib/junit.jar:$(TOOLSJAR)' all_directly
 	cd java/utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar -classpath .:${INV_DIR}/java/lib/junit.jar' all_notest
 	## Old untarring code:
