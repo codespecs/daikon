@@ -119,6 +119,15 @@ public final class CLASSNAME
     return (values_seen >= MINPAIRS);
   }
 
+  /**
+   * LinearBinary can't be flowed because it keeps samples to build the
+   * line.  These sample can't be flowed from ppt to ppt (since they probably
+   * didn't occur at the lower ppt).
+   */
+  public boolean isFlowable() {
+    return (false);
+  }
+
   // Note that this method is relatively inconsistent with respect to
   // differing ordering of the points.  It will always give exactly the
   // same answer with points that are delivered in the same order, but
@@ -198,6 +207,16 @@ public final class CLASSNAME
             values_seen--;
             return InvariantStatus.FALSIFIED;
           }
+        }
+
+        // check to see if this alread exists at the global ppt, it it
+        // does, falsify it here to eliminate the duplicate copy.  This
+        // is not the best place to do this, but easy for now
+        PptSlice gslice = wrapper.ppt.find_global_slice
+                                                  (wrapper.ppt.var_infos);
+        if (gslice != null) {
+          if (gslice.contains_inv_exact (wrapper))
+            return InvariantStatus.FALSIFIED;
         }
       }
     } else {
