@@ -18,7 +18,11 @@ public final class SequenceLength extends UnaryDerivation {
     Assert.assert(vi.rep_type.isArray());
 
     if (vi.derived != null) {
-      Assert.assert(vi.derived instanceof SequenceScalarSubsequence);
+      Assert.assert((vi.derived instanceof SequenceScalarSubsequence) ||
+		    (vi.derived instanceof StringSequencesIntersection) ||
+		    (vi.derived instanceof ScalarSequencesIntersection) ||
+		    (vi.derived instanceof StringSequencesUnion) ||
+		    (vi.derived instanceof ScalarSequencesUnion));
       return false;
     }
     // Don't do this for now, because we depend on being able to call

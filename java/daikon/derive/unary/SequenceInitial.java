@@ -33,7 +33,9 @@ public final class SequenceInitial extends UnaryDerivation {
     // For now, applicable if not a derived variable; a better test is if
     // not a prefix subsequence (sequence slice) we have added.
     if (vi.derived != null) {
-      Assert.assert(vi.derived instanceof SequenceScalarSubsequence);
+      Assert.assert((vi.derived instanceof SequenceScalarSubsequence) ||
+		    (vi.derived instanceof ScalarSequencesIntersection) ||
+		    (vi.derived instanceof ScalarSequencesUnion));
       return false;
     }
 
