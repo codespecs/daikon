@@ -1,0 +1,42 @@
+Version:      $Id$
+Owner:        Jeremy <mistere>, Toh <tohn>
+Tool:         dfej, dfeioa, v2 engine, v3 engine
+Summary:      Program points that receive samples should be indicated in decls file
+Severity:     RFE
+Status:       New
+Reproducible: n/a
+Description:
+
+[mistere]
+In Daikon V3, only certain program points (like ENTERs and EXITs)
+should have samples in the dtrace file.  The sample will flow from
+there to the corresponding OBJECT or CLASS points.  In IOA, though, we
+may occasionally desire samples to be received for the CLASS ppt
+directly, and in general, the front-end should be the one to determine
+this.
+
+Currently, dfej outputs the redundant CLASS and OBJECT samples to the
+dtrace file (since they are not redundant for the v2 engine).  The v3
+engine simply ignores all OBJECT and CLASS samples.  This is
+suboptimal, since IOA has no way to say that these samples should be
+used.
+
+The correct approach is to have the front-end specify in the decls
+file which ppts might receive samples (so that their sample flow route
+will be computed).  In principle, we could error out if we receive a
+sample for a ppt that was not designated as receiving samples.
+
+We would achieve backwards compatability by having dfej output
+"receives samples" information in decls, but continue to place all
+samples in the dtrace.  The v2 engine would parse but ignore the
+"receives samples" inforation in the decls files, and dtrace files
+would be the same.  In the v3 engine, we parse and account for
+"receives samples" information, but just ignore dtrace samples whose
+ppt wasn't designated to receive samples.  In this way, everything
+plays nice together.
+
+--
+$Log$
+Revision 1.1  2002-03-27 21:29:19  mistere
+Add by hand, since daikon-bug broke(?).
+
