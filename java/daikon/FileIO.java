@@ -1,5 +1,5 @@
 package daikon;
-  
+
 import java.io.*;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
@@ -257,8 +257,40 @@ public final class FileIO
       }
     }
 
-    // Each iteration reads a variable name, type, and comparability.
+    // The var_infos that will populate the new program point
     List var_infos = new ArrayList();
+
+    // Rename EXITnn to EXIT
+    {
+      PptName parsed_name = new PptName(ppt_name);
+      if (parsed_name.isExitPoint()) {
+	PptName new_name = parsed_name.makeExit();
+	// Punt if we already read a different EXITnn
+	if (all_ppts.get(new_name) != null) {
+	  String line = file.readLine();
+	  while ((line != null) && !line.equals("")) {
+	    // This fails if some lines of a declaration (e.g., the
+	    // comparability field) are empty.
+	    line = file.readLine();
+	  }
+	  return null;
+	}
+	// Override what was read from file
+	ppt_name = new_name.name().intern();
+	// Add the pseudo-variable $return_line
+	if (false) {
+	  // Skip this for now; we're not sure how to make it work
+	  ProglangType prog_type = ProglangType.INT; // ?? new special type like HASHCODE
+	  ProglangType file_rep_type = ProglangType.INT;
+	  VarComparability comparability = VarComparabilityNone.it; // ?? comparable to nothing -- explicit?
+	  VarInfo line = new VarInfo(VarInfoName.parse("$return_line"),
+				     prog_type, file_rep_type, comparability);
+	  var_infos.add(line);
+	}
+      }
+    }
+
+    // Each iteration reads a variable name, type, and comparability.
     VarInfo vi;
     while ((vi = read_VarInfo(file, varcomp_format, filename, ppt_name)) != null) {
       for (int i=0; i<var_infos.size(); i++) {
@@ -519,6 +551,12 @@ public final class FileIO
         }
 
         String ppt_name = line; // already interned
+	{ // Rename EXITnn to EXIT
+	  PptName parsed = new PptName(ppt_name);
+	  if (parsed.isExitPoint()) {
+	    ppt_name = parsed.makeExit().name().intern();
+	  }
+	}
 
 	if (pptcount++ % 10000 == 0)
 	    System.out.print(":");
