@@ -220,6 +220,7 @@ public abstract class RANGE extends SUPERCLASS {
     result.add (EqualOne.get_proto());
     result.add (EqualMinusOne.get_proto());
     result.add (GreaterEqualZero.get_proto());
+    result.add (GreaterEqual64.get_proto());
     #if defined(SCALAR) || defined (SCALARSEQ)
       result.add (BooleanVal.get_proto());
       result.add (PowerOfTwo.get_proto());
