@@ -1786,12 +1786,17 @@ def read_data_trace_file(filename, fn_regexp=None):
                             this_value[seq_elem] = int(this_value[seq_elem])
                     this_value = tuple(this_value)
             else:
-                assert (this_var_type in integral_types) or (this_var_type == "pointer")
+                # "pointer" is the deprecated name
+                assert (this_var_type in integral_types) or (this_var_type == "pointer") or (this_var_type == "address")
                 if this_value == "uninit":
                     this_value = None
                 elif this_value == "NIL":
                     # HACK
                     this_value = 0
+                elif (this_var_type == "pointer") or (this_var_type == "address"):
+                    assert integer_re.match(this_value)
+                    # Convert the number to signed.  This is gross, will be fixed.
+                    this_value = eval(hex(long(this_value))[:-1])
                 else:
                     assert integer_re.match(this_value)
                     this_value = int(this_value)
