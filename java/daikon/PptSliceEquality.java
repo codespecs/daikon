@@ -1,6 +1,8 @@
 package daikon;
 
 import daikon.inv.*;
+import daikon.suppress.*;
+import daikon.inv.ternary.threeScalar.*;
 
 import utilMDE.*;
 import java.util.logging.Logger;
@@ -308,6 +310,13 @@ public class PptSliceEquality
       else if (vt.isMissing (vi)) {
         addToBindingList (multiMap, dummyMissing, vi);
       } else {
+        if (vi.getValue(vt) == null) {
+          Fmt.pf ("null value for variable %s, mod=%s at ppt %s",
+                vi.name.name(), "" + vt.getModified(vi), parent.name());
+          VarInfo rv = parent.find_var_by_name ("return");
+          Fmt.pf ("return value = " + Debug.toString (rv.getValue(vt)));
+          Fmt.pf("At line number " + FileIO.data_trace_reader.getLineNumber());
+        }
         addToBindingList (multiMap, vi.getValue(vt), vi);
       }
     }
@@ -445,12 +454,30 @@ public class PptSliceEquality
     }
 
     // Copy any invariants from the global ppt to here
-    copy_invs_from_global_leader (leader, newVis);
+    List mod_slices = copy_invs_from_global_leader (leader, newVis);
 
     parent.repCheck();
 
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("  new slices count:" + parent.views_size());
+    }
+
+    // Go through each new invariant and remove any that are ni-suppressed.
+    // This must be done here, rather than when creating the invariant to
+    // guarantee that any possible suppressors have been copied before
+    // doing the suppression check.  It may be that we need to do ALL of
+    // equality set copying before doing this check (in case suppressors
+    // from different equality sets are required).  I think that we only
+    // need to do with invariants copied from global slices since any
+    // local ones should only exist if they are not suppressed.
+    for (Iterator i = mod_slices.iterator(); i.hasNext(); ) {
+      PptSlice slice = (PptSlice) i.next();
+      for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
+        Invariant inv = (Invariant) j.next();
+        if (!inv.copy_ok (slice)) {
+          j.remove();
+        }
+      }
     }
     return (falsified_invs);
   }
@@ -560,17 +587,23 @@ public class PptSliceEquality
    *
    *        If the local slice doesn't already exist, it is created and
    *        added to the list of slices.
+   *
+   * @return a list of all the slices to which new invariants have been
+   * added.
    */
-  public void copy_invs_from_global_leader (VarInfo old_leader,
+  public List /*PptSlice*/ copy_invs_from_global_leader (VarInfo old_leader,
                                             List /*VarInfo*/ new_leaders) {
 
     if (Debug.logDetail())
       debugGlobal.fine ("old_leader = " + old_leader.name.name() +
                         " orig new leaders = " + new_leaders);
 
+    // list of modified slices (new or already present)
+    List mod_slices = new ArrayList();
+
     // If the old leader is not a global, there is nothing to copy
     if (!old_leader.is_global())
-      return;
+      return (mod_slices);
 
     // The below was removed because we always need to copy from
     // an old_global_leader.  This is necessary because equality sets
@@ -592,7 +625,7 @@ public class PptSliceEquality
 
     // If there are no new leaders, there is nothing to do
     if (new_leaders.size() == 0)
-      return;
+      return (mod_slices);
 
     // Get the leader var at the global ppt
     VarInfo old_leader_global = old_leader.global_var();
@@ -624,10 +657,13 @@ public class PptSliceEquality
         VarInfo[] vis = (VarInfo[]) i.next();
 
         // Copy each invariant at gslice to the slice defined by vis
-        gslice.copy_new_invs (parent, vis);
-
+        PptSlice mod_slice = gslice.copy_new_invs (parent, vis);
+        if (mod_slice != null)
+          mod_slices.add (mod_slice);
       }
     }
+
+    return (mod_slices);
   }
 
   /**
@@ -715,6 +751,20 @@ public class PptSliceEquality
       return VarInfo.IndexComparator.theInstance.compare (eq1.leader(), eq2.leader());
     }
 
+  }
+
+  /**
+   * Returns an array of all of the leaders sorted by varinfo_index
+   * for this equality view
+   */
+  public VarInfo[] get_leaders_sorted() {
+    VarInfo[] leaders = new VarInfo[invs.size()];
+    for (int i = 0; i < invs.size(); i++) {
+      leaders[i] = ((Equality) invs.get(i)).leader();
+      Assert.assertTrue (leaders[i] != null);
+    }
+    Arrays.sort (leaders, VarInfo.IndexComparator.getInstance());
+    return (leaders);
   }
 
 }
