@@ -240,6 +240,8 @@ update-dist-dir: dist-ensure-directory-exists
 	# a method or class with more than 0xFFFF bytecodes.
 	cd java/daikon && $(MAKE) all_via_javac
 	cd java/daikon && $(MAKE) junit
+	$(Make) dist-dfej-linux-x86
+	$(MAKE) dist-dfej-windows
 	$(MAKE) update-dist-doc
 	$(MAKE) www-dist
 	$(MAKE) update-dist-version-file
