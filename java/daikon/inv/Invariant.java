@@ -1104,6 +1104,15 @@ public abstract class Invariant
   private static final IsSameInvariantNameExtractor defaultIsSameInvariantNameExtractor = new DefaultIsSameInvariantNameExtractor();
 
   /**
+   * Returns true if the invariant is an equality invariant (ie, a == b).
+   * false otherwise.  Must be overridden by all equality invariants
+   */
+  public boolean is_equality_inv() {
+    return (false);
+  }
+
+
+  /**
    * @return true iff the argument is the "same" invariant as this.
    * Same, in this case, means a matching type, formula, and variable
    * names.
@@ -1424,7 +1433,7 @@ public abstract class Invariant
   /**
    * Recurse through vis and generate the cartesian product of
    **/
-  private DiscardInfo isObviousStatically_SomeInEqualityHelper(VarInfo[] vis,
+  protected DiscardInfo isObviousStatically_SomeInEqualityHelper(VarInfo[] vis,
                                                              VarInfo[] assigned,
                                                              int position) {
     if (position == vis.length) {
@@ -1497,9 +1506,11 @@ public abstract class Invariant
   public DiscardInfo isObviousDynamically(VarInfo[] vis) {
     Assert.assertTrue (!Daikon.isInferencing);
     Assert.assertTrue(vis.length <= 3, "Unexpected more-than-ternary invariant");
-    if (! ArraysMDE.noDuplicates(vis))
+    if (! ArraysMDE.noDuplicates(vis)) {
+      log ("Two or more variables are equal " + format());
       return new DiscardInfo(this, DiscardCode.obvious,
                              "Two or more variables are equal");
+    }
     // System.out.println("Passed Invariant.isObviousDynamically(): " + format());
     return null;
   }
@@ -1564,7 +1575,7 @@ public abstract class Invariant
    * combination.  The combinations are generated via recursive calls to
    * this routine.
    **/
-  private DiscardInfo isObviousDynamically_SomeInEqualityHelper(VarInfo[] vis,
+  protected DiscardInfo isObviousDynamically_SomeInEqualityHelper(VarInfo[] vis,
                                                              VarInfo[] assigned,
                                                              int position) {
     if (position == vis.length) {
@@ -2160,7 +2171,22 @@ public abstract class Invariant
   public String toString() {
     return format();
   }
+
+  public static String toString (Invariant[] invs) {
+
+    String out = "";
+    for (int i = 0; i < invs.length; i++) {
+      if (out != "")
+        out += ", ";
+      if (invs[i] == null)
+        out += "null";
+      else
+        out += invs[i].format();
+    }
+    return (out);
+  }
 }
+
 
 
 //     def format(self, args=None):

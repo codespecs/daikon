@@ -15,6 +15,7 @@ public class EnoughSamplesFilter extends InvariantFilter {
     if (IsEqualityComparison.it.accept( invariant )) {
       return false;
     }
+    invariant.log ("enoughSamples = " + invariant.enoughSamples());
     return !invariant.enoughSamples();
    }
 }
