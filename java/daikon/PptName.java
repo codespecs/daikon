@@ -1,5 +1,7 @@
 package daikon;
 
+import utilMDE.*;
+
 /**
  * ADT which represents naming data associated with a given program
  * point, such as the class or method.
@@ -11,6 +13,28 @@ public class PptName
   private final String cls;
   private final String method;
   private final String point;
+
+  /**
+   * @param name non-null ppt name as given in the decls file
+   **/
+  public PptName(String name)
+  {
+    int sep = name.indexOf(FileIO.ppt_tag_separator);
+    Assert.assert(sep >= 0);
+    String pre_sep = name.substring(0, sep);
+    String post_sep = name.substring(sep + FileIO.ppt_tag_separator.length());
+
+    int dot = pre_sep.lastIndexOf('.');
+    int lparen = pre_sep.indexOf('(');
+    if (lparen == -1) {
+      cls = pre_sep;
+      method = null;
+    } else {
+      cls = name.substring(0, dot);
+      method = name.substring(dot + 1);
+    }
+    point = post_sep;
+  }
 
   /**
    * @param className fully-qualified class name
