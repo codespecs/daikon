@@ -205,7 +205,7 @@ public final class Diff {
         return false;
       } else if (ppt.ppt_name.isEnterPoint()) {
         return true;
-      } else if (ppt.ppt_name.isExitPoint() && ppt.combined_exit == null) {
+      } else if (ppt.ppt_name.isCombinedExitPoint()) {
         return true;
       } else {
         return false;
