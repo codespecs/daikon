@@ -312,10 +312,14 @@ public class PptName
   private void readObject(ObjectInputStream in) throws
   IOException, ClassNotFoundException {
     in.defaultReadObject();
-    cls = cls.intern();
-    method = method.intern();
-    point = point.intern();
-    fullname = fullname.intern();
+    if (cls != null)
+      cls = cls.intern();
+    if (method != null)
+      method = method.intern();
+    if (point != null)
+      point = point.intern();
+    if (fullname != null)
+      fullname = fullname.intern();
   }
 
 
