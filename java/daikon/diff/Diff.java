@@ -98,9 +98,8 @@ public final class Diff {
       }
     }
 
-    // stats, printDiff is the default mode
+    // Turn on the defaults
     if (! optionSelected) {
-      stats = true;
       printDiff = true;
     }
 
