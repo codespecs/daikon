@@ -19,7 +19,7 @@ import java.util.*;
 public final class SequenceScalarUnionFactory  extends BinaryDerivationFactory {
 
   public BinaryDerivation[] instantiate(VarInfo seq1, VarInfo seq2) {
-    if (! SequenceScalarUnion .dkconfig_enabled) {
+    if (! SequenceScalarUnion.dkconfig_enabled) {
       return null;
     }
 

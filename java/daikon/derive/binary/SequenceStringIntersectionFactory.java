@@ -27,7 +27,7 @@ public final class SequenceStringIntersectionFactory  extends BinaryDerivationFa
 
   public BinaryDerivation[] instantiate(VarInfo seq1, VarInfo seq2) {
 
-    if (! SequenceStringIntersection .dkconfig_enabled) {
+    if (! SequenceStringIntersection.dkconfig_enabled) {
       return null;
     }
 

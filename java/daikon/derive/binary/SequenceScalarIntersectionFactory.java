@@ -27,7 +27,7 @@ public final class SequenceScalarIntersectionFactory  extends BinaryDerivationFa
 
   public BinaryDerivation[] instantiate(VarInfo seq1, VarInfo seq2) {
 
-    if (! SequenceScalarIntersection .dkconfig_enabled) {
+    if (! SequenceScalarIntersection.dkconfig_enabled) {
       return null;
     }
 
