@@ -21,6 +21,23 @@
 # classes.  We must translate from lackwit's notion of comparability
 # to Daikon's.
 
+# MISC: Lackwit doesn't know about procedure returns, so we added a
+# dummy variable named "lh_return_value".
+
+# We must remove the leading :: from global variables in the decls
+# file, since lackwit can't handle ::.
+
+# We have to be careful about preserving the transitivity of the
+# comparable relationship.  That is, if a cmp b, then b cmp a.  To
+# guarantee transitivity, we calculate the equivalence classes as
+# follows.  First, we query lackwit to get a set of variables
+# comparable to each variable at the ppt.  Then, we unify the sets by
+# merging sets that have elements in common.  The result is a set of
+# disjoint sets, with each set representing an equivalence class.
+# Next, we filter the equivalence classes, removing elements not
+# present at the ppt.  Finally, we calculate the implicit type of each
+# variable using the equivalence classes.
+
 # ARRAYS/POINTERS: In C, there is almost no difference between a
 # pointer to a single thing, and an array of things.  As far as I can
 # tell, Lackwit treats pointers and arrays identically.  However,
@@ -53,24 +70,6 @@
 # This script can handle only one-dimensional arrays.  This is OK,
 # since dfec can also handle only one-dimensional arrays.
 
-# MISC: Lackwit doesn't know about procedure returns, so again we
-# added a dummy variable named "lh_return_value"
-
-# We must remove the leading :: from global variables in the decls
-# file, since lackwit can't handle ::.
-
-# We have to be careful about preserving the transitivity of the
-# comparable relationship.  That is, if a cmp b, then b cmp a.  One
-# place in this script where transitivity is broken is handling fields
-# of struct pointers.  To determine the comparability of "a->b", we
-# also check the comparability of "a".  If a cmp c, then we assume
-# a->b cmp c->b.  However, this can potentially break transitivity.
-# Say a cmp a->next->next, and a->next cmp b->next->next, but
-# according to lackwit, a !cmp b->next->next->next.  In this case, we
-# will break transitivity.  To fix this, we find the comparability of
-# each result returned from lackwit, and return the closure of the
-# sets of comparable variables.
-
 # STRUCTS: Lackwit gets structs about 90% right.  It has problems with
 # pointers to structs.
 
@@ -100,7 +99,7 @@
 use English;
 use strict;
 $WARNING = 1;
-use vars qw(%cache %int_vars @comp_lists);
+use vars qw(%cache %interesting_vars @compar_lists);
 
 my $element_suffix = "_element";
 my $index_suffix = "_index";
@@ -169,20 +168,27 @@ while (<DECLS>) {
 
     # variables at this program point that Daikon finds interesting,
     # namely parameters and global variables
-    %int_vars = ();
+    %interesting_vars = ();
 
     # list of lists of comparable variables at this program point
     # includes uninteresting variables, which will be filtered out later
-    @comp_lists = ();
+    @compar_lists = ();
 
+    # read the whole program point, creating the hash of interesting
+    # variables and the list of lists of comparable variables
     get_vars_and_comp($function);
 
-    @comp_lists = union_lists(@comp_lists);
-    @comp_lists = filter_lists_by_hash(\@comp_lists, \%int_vars);
+    # combine the lists with common elements
+    @compar_lists = disjoint_lists(@compar_lists);
+
+    # remove all elements that *aren't* interesting
+    @compar_lists = filter_lists_by_hash(\@compar_lists, \%interesting_vars);
 
     # reset the file pointer to the start of the ppt
     seek DECLS, $start_vars, 0;
 
+    # read the program point, printing the variables and implicit
+    # comparability types to the output file
     print_vars_and_comp();
   }
   print OUT "\n";
@@ -195,21 +201,6 @@ foreach my $implicit_type (sort {$a <=> $b;} values %explicit_to_implicit) {
   printf OUT "# %3s : $explicit_type\n", $implicit_type;
 }
 
-
-
-# takes a list of lists and a hash
-# filters each sublist, keeping only the elements present in the hash
-# returns the new list of lists
-sub filter_lists_by_hash {
-  my ($lists_ref, $hash_ref) = @_;
-  my @new_lists = ();
-  foreach my $list_ref (@{$lists_ref}) {
-    my @list = @{$list_ref};
-    my @new_list = grep {exists $hash_ref->{$_}} @list;
-    push @new_lists, \@new_list;
-  }
-  return @new_lists;
-}
 
 
 # read the whole program point, creating the hash of interesting
@@ -228,26 +219,25 @@ sub get_vars_and_comp {
     my $old_comparability = <DECLS>;
     
     if (is_array_element($variable)) {
-      add_array_variables_to_int_vars($variable, \%int_vars);
       my $array_base = $variable;
       $array_base =~ s/\[\]//;
       my $element_variable = $array_base . $element_suffix;
       my $index_variable = $array_base . $index_suffix;
-      $int_vars{$element_variable} = 1;
-      $int_vars{$index_variable} = 1;
+      $interesting_vars{$element_variable} = 1;
+      $interesting_vars{$index_variable} = 1;
       
       my %element_comparable_variables =
         get_comparable_variables($element_variable, $function);
-      push @comp_lists, [keys %element_comparable_variables];
+      push @compar_lists, [keys %element_comparable_variables];
       
       my %index_comparable_variables =
         get_comparable_variables($index_variable, $function);
-      push @comp_lists, [keys %index_comparable_variables];
+      push @compar_lists, [keys %index_comparable_variables];
     } else {
-      $int_vars{$variable} = 1;
+      $interesting_vars{$variable} = 1;
       my %comparable_variables =
           get_comparable_variables($variable, $function);
-      push @comp_lists, [keys %comparable_variables];
+      push @compar_lists, [keys %comparable_variables];
     }
   }
 }
@@ -293,18 +283,23 @@ sub print_vars_and_comp {
 }
 
 
+# returns true if the variable is an array element
 sub is_array_element {
   my ($variable) = @_;
   return $variable =~ /\[\]/ || $variable =~ /\[0\]/;
 }
 
 
+# returns true if the variable is a struct field
 sub is_struct_field {
   my ($variable) = @_;
   return $variable =~ /->/ || $variable =~ /\./;
 }
 
 
+# Returns the list of comparable variables for the specified variable
+# in the specificed function.  Includes possibly uninteresting
+# variables.
 sub get_comparable_variables {
   my ($variable, $function) = @_;
 
@@ -423,7 +418,9 @@ sub split_struct {
 }
 
 
-# memoizes calls to BackEnd to improve performance
+# Returns the string output by BackEnd when queried for the specified
+# variable and function.  Memoizes calls to BackEnd to improve
+# performance.
 sub lackwit {
   my ($variable, $function) = @_;
 
@@ -453,19 +450,7 @@ sub _lackwit {
 }
 
 
-sub add_array_variables_to_int_vars {
-  my ($variable, $int_vars) = @_;
-  my $array_base = $variable;
-  $array_base =~ s/\[\]//;
-  my $element_variable = $array_base . $element_suffix;
-  $int_vars->{$element_variable} = 1;
-  if ($variable =~ /\[\]/) {
-    my $index_variable = $array_base . $index_suffix;
-    $int_vars->{$index_variable} = 1;
-  }
-}
-
-
+# returns the implicit type of a variable, as an integer
 sub implicit_type {
   my ($var) = @_;
   my @explicit_type = explicit_type($var);
@@ -484,12 +469,14 @@ sub implicit_type {
 }
 
 
+# returns the explicit type of a variable, as a list of other
+# variables
 sub explicit_type {
   my ($var) = @_;
-  foreach my $list_ref (@comp_lists) {
-    my @comp_list = @{$list_ref};
-    if (grep {$_ eq $var} @comp_list) {
-      return @comp_list;
+  foreach my $list_ref (@compar_lists) {
+    my @compar_list = @{$list_ref};
+    if (grep {$_ eq $var} @compar_list) {
+      return @compar_list;
     }
   }
 }
@@ -513,9 +500,9 @@ sub transform {
 }
 
 
-# Given a list of list refs, merges the lists with common elements.
+# Given a list of list refs, unifies the lists with common elements.
 # Returns a list of list refs, such that the sublists are disjoint.
-sub union_lists {
+sub disjoint_lists {
   my (@lists) = @_;
   my $cur_list_index = 0;
   while ($cur_list_index < @lists) {
@@ -528,7 +515,7 @@ sub union_lists {
         my $other_list_ref = $lists[$other_list_index];
         my $other_list_removed = 0;
         if (grep {$_ eq $cur_elem} @{$other_list_ref}) {
-          merge_lists($cur_list_ref, $other_list_ref);
+          unify_lists($cur_list_ref, $other_list_ref);
           # remove the other list
           splice @lists, $other_list_index, 1;
           $other_list_removed = 1;
@@ -548,11 +535,26 @@ sub union_lists {
 # Takes two list references as arguments.  Adds each element of the
 # second list to the end of the first, if the element is not already
 # in the first list
-sub merge_lists {
+sub unify_lists {
   my ($list_ref1, $list_ref2) = @_;
   foreach my $elem (@{$list_ref2}) {
     if (! (grep {$_ eq $elem} @{$list_ref1})) {
       push @{$list_ref1}, $elem;
     }
   }
+}
+
+
+# takes a list of lists and a hash
+# filters each sublist, keeping only the elements present in the hash
+# returns the new list of lists
+sub filter_lists_by_hash {
+  my ($lists_ref, $hash_ref) = @_;
+  my @new_lists = ();
+  foreach my $list_ref (@{$lists_ref}) {
+    my @list = @{$list_ref};
+    my @new_list = grep {exists $hash_ref->{$_}} @list;
+    push @new_lists, \@new_list;
+  }
+  return @new_lists;
 }
