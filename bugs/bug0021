@@ -1,5 +1,6 @@
 Version:      $Id$
-Owner:        adonovan <adonovan@lcs.mit.edu>
+Owner:        Nii <dodoo@lcs.mit.edu>
+Cc:           Alan <adonovan@lcs.mit.edu>
 Tool:         daikon
 Summary:      '$' in identifiers causes splitter-code regexps to break
 Severity:     Lethal
@@ -29,6 +30,9 @@ http://java.sun.com/docs/books/jls/second_edition/html/lexical.doc.html#40625:
 
 --
 $Log$
-Revision 1.1  2002-03-12 21:16:52  adonovan
+Revision 1.2  2002-04-05 16:38:38  adonovan
+changed bug0021
+
+Revision 1.1  2002/03/12 21:16:52  adonovan
 new bug0021
 
