@@ -180,7 +180,7 @@ public class EltUpperBoundFloat
   public boolean isObviousDynamically() {
     PptTopLevel pptt = ppt.parent;
     VarInfo v = var();
-    
+
     // if the value is not in some range (like -1,0,1,2) then say that it is obvious
     if ((core.max1 < dkconfig_minimal_interesting) ||
         (core.max1 > dkconfig_maximal_interesting)) {

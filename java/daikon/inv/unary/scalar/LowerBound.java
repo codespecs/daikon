@@ -144,7 +144,7 @@ public class LowerBound
   public boolean isObviousDynamically() {
     PptTopLevel pptt = ppt.parent;
     VarInfo v = var();
-    
+
     // if the value is not in some range (like -1,0,1,2) then say that it is obvious
     if ((core.min1 < dkconfig_minimal_interesting) ||
         (core.min1 > dkconfig_maximal_interesting)) {
