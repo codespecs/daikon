@@ -131,14 +131,17 @@ public final class IntComparison extends TwoScalar implements Comparison {
 
   public String format() {
     String comparator = core.format_comparator();
-    return var1().name + " " + comparator + " " + var2().name;
+    return var1().name.name() + " " + comparator + " " + var2().name.name();
   }
 
   public String format_esc() {
     String comparator = core.format_comparator();
-    return var1().esc_name + " " + comparator + " " + var2().esc_name;
+    return var1().name.esc_name() + " " + comparator + " " + var2().name.esc_name();
   }
 
+  public String format_simplify() {
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+  }
 
   public void add_modified(long v1, long v2, int count) {
     if (ppt.debugged) {
@@ -206,10 +209,8 @@ public final class IntComparison extends TwoScalar implements Comparison {
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
     if (isExact()) {
-      if (var1.name.endsWith("-1")
-          && var2.name.endsWith("-1"))
-        return true;
-      return false;
+      return ((var1.name instanceof VarInfoName.Add) && (var2.name instanceof VarInfoName.Add) &&
+	      ((((VarInfoName.Add) var1.name).amount) == (((VarInfoName.Add) var2.name).amount)));
     }
     { // Check for comparisons against constants
       if (var1.isConstant() || (var2.isConstant())) {

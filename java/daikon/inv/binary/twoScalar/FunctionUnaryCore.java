@@ -1,5 +1,6 @@
 package daikon.inv.binary.twoScalar;
 
+import daikon.*;
 import daikon.inv.*;
 import java.io.*;
 import java.lang.reflect.*;
@@ -87,9 +88,9 @@ public final class FunctionUnaryCore implements java.io.Serializable {
   }
 
 
-  public String format(String vname1, String vname2) {
-    String argname = inverse ? vname2 : vname1;
-    String resultname = inverse ? vname1 : vname2;
+  public String format(VarInfoName vname1, VarInfoName vname2) {
+    VarInfoName argname = inverse ? vname2 : vname1;
+    VarInfoName resultname = inverse ? vname1 : vname2;
     return resultname + " == " + function + "(" + argname + ")";
   }
 
