@@ -18,15 +18,17 @@ REM will not need to do so).  If you do not set DAIKONCLASS_SOURCES, you will
 REM run Daikon from the precompiled bytecode files in daikon.jar.
 REM set DAIKONCLASS_SOURCES=1
 
+REM For Windows, adjacent semicolons in CLASSPATH are harmless, but keep
+REM the CPADD logic for parallelism with daikon.bashrc and daikon.cshrc.
 if defined %DAIKONCLASS_SOURCES% (
-  setlocal CPADD=%DAIKONDIR%\java;%DAIKONDIR%\java\lib\log4j.jar
+  set CPADD=%DAIKONDIR%\java;%DAIKONDIR%\java\lib\log4j.jar
 ) else (
-  setlocal CPADD=%DAIKONDIR%\daikon.jar
+  set CPADD=%DAIKONDIR%\daikon.jar
 )
 if defined %CLASSPATH% (
-  export CLASSPATH=%CPADD%;%CLASSPATH%
+  set CLASSPATH=%CPADD%;%CLASSPATH%
 ) else (
-  export CLASSPATH=%CPADD%
+  set CLASSPATH=%CPADD%
 )
 
 REM tools.jar must be on your classpath.  Also, if you wish to use dfej (the
