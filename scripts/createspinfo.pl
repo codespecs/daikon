@@ -39,12 +39,7 @@ foreach $filename (@ARGV){
 		$method = $1;
 		$args = $2; 
 		print CONDFILE "\nIn function $method:\n";
-		#if ($line =~ /(^|\s)boolean\s/) {
-		#see if it returns a boolean
 		$replace_method = 1;
-		#} else {
-		#$replace_method = 0;
-		#}
 	    }
 	}
 	if ($line =~ /\{/) {
@@ -67,7 +62,7 @@ foreach $filename (@ARGV){
 		    $replace{$method} = $repl;
 		    $arguments{$method} = $args;
 		}
-	    }elsif ($cond =~ /(==|\!=|\<=|=\>|=\<|\>=|\<|\>)/) {
+	    }elsif ($cond =~ /(==|\!=|\<=|=\>|=\<|\>=|\<|\>|&)/) {
 		print CONDFILE $cond."\n";
 		if ($replace_method) {
 		    if($cond =~/^\(([^\(\)]*)\)$/ ){
@@ -244,9 +239,9 @@ foreach $filename (@ARGV){
     for($i = 0; $i < scalar(@subs); $i = $i + 2){
 	$sub = @subs[$i];
 	$sub =~ s/(\(|\?|\))/$1/;
-	$temp = @subs[$i+1];
-	$temp =~ s/\s*return(.*)\s*;\s*$/$1/;
-	$replace = $replace." # ".$sub." # ".$temp;
+	$replace_expr = @subs[$i+1];
+	$replace_expr =~ s/\s*return(.*)\s*;\s*$/$1/;
+	$replace = $replace."\n".$sub."\n".$replace_expr;
     }
 
     if(scalar(@subs)> 0){
@@ -254,8 +249,8 @@ foreach $filename (@ARGV){
     }
     
     foreach $function (keys %HashOfConds){
-	print SPINFOFILE "PPT_NAME# $function";
-	$conditions = "\nCONDITIONS";
+	$conditions = "";
+	print SPINFOFILE "PPT_NAME  $function";
 	$replace = "REPLACE";
 	@conds = @{$HashOfConds{$function}};
 	$function =~ /^(\S*)\./;
@@ -264,13 +259,13 @@ foreach $filename (@ARGV){
 	    if($cond !~ /^\s*true\s*$/){
 		$cond =~ s/^\s*(.*)\s*$/$1/; #strip whitespace from ends 
 		$cond =~ s/^\s*(\S*\s*)\!=(\s*\S*)\s*$/$1==$2/;
-		$conditions = $conditions." # $cond";
+		$conditions = $conditions."\n".$cond;
 	    }else{ next; }
 	}
 	
 	print SPINFOFILE $conditions."\n";
 	print SPINFOFILE "\n";
-	unlink <$filename.conds>;
+	#unlink <$filename.conds>;
     }    
     
     print "output written to $filename.spinfo \n";
