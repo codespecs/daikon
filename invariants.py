@@ -4,8 +4,10 @@
 
 # For some additional documentation, see invariants.py.doc.
 
-import glob, operator, os, re, string, types, copy, posix, math
+# Built-in Python modules
+import glob, math, operator, os, posix, re, string, types
 
+# User-defined Python modules
 import util
 
 true = (1==1)
@@ -33,7 +35,8 @@ if not locals().has_key("fn_var_infos"):
     fn_var_values = {}	    # from function name to (tuple of values to occurrence count)
 
     fn_samples = {}         # from function name to number of samples
-    file_fn_var_infos = {}  # from filename to (infos, values, samples) tuple
+    file_fn_var_infos = {}  # from filename to (function to list of var_infos)
+    file_fn_var_values = {} # from filename to (function to (values-tuple to occurrence))
 
     # From function name to invocation count.  Used to add invocation
     # count variables for each program function
@@ -56,6 +59,7 @@ def clear_variables():
     fn_var_values.clear()
     fn_samples.clear()
     file_fn_var_infos.clear()
+    file_fn_var_values.clear()
     ftn_names_to_call_ct = {}
     ftn_to_orig_param_vals = {}
 
@@ -168,6 +172,7 @@ def merge_variables(filename, sub_fn_var_infos, sub_fn_var_values, sub_fn_sample
             var_values[values] = var_values.get(values, 0) + count
         fn_samples[fname] = fn_samples.get(fname, 0) + sub_fn_samples[fname]
     file_fn_var_infos[filename] = sub_fn_var_infos
+    file_fn_var_values[filename] = sub_fn_var_values
 
 
 def dict_of_tuples_to_tuple_of_dicts(dot, tuple_len=None):
@@ -566,6 +571,11 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
     # Do nothing if this scalar is actually the size of this sequence
     if seq_size_idx == sclidx:
         return
+    # Another check for the same thing, because sclidx may not be canonical,
+    # but we don't call the introduction functions with non-canonical arguments.
+    if seq_size_idx == var_infos[sclidx].canonical_var():
+        return
+
 
     #     if seq_size_idx == 'no_var':
     #         print "sequence %s (size: no_var) and scalar %s (index: %s) unrelated" % (seqvar, sclvar, sclidx)
@@ -1197,7 +1207,7 @@ def all_numeric_invariants(fn_regexp=None):
         assert len(var_infos) == len(var_values.keys()[0])
 
         # I hope this doesn't give too many results
-        print_invariants("^" + re.escape(fn_name) + r"($|\b)")
+        print_invariants("^" + re.escape(fn_name) + r'($|\b)')
 
     # print_invariants(fn_regexp)
 
@@ -1249,29 +1259,55 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
     # for (i1,i2) in util.choose(2, all_indices):
     for i1 in range(0,index_limit-1):
         inv1 = var_infos[i1].invariant
-        if inv1.is_exact():
-            continue
         if inv1.can_be_None:
             continue
         vi1 = var_infos[i1]
         if not vi1.is_canonical():
             continue
-        for i2 in range(i1+1, index_limit):
+        ## Old for loop
+        # for i2 in range(i1+1, index_limit):
+        ## Is this new for loop worth the added complexity and risk of error?
+        ## More benefit would be had by doing this for the three-index iteration.
+        if i1 in indices:
+            i2_range = range(i1+1, index_limit)
+        else:
+            i2_range = filter(lambda i2, lim=i1: i2>lim, indices)
+        for i2 in i2_range:
+            ## This is now implied by the for loop.
             # if i1 == i2:
             #     continue
-            if (not i1 in indices) and (not i2 in indices):
-                # Do nothing if neither variable is under consideration.
-                continue
+            assert i1 != i2
+            ## This is now implied by the for loop.
+            # if (not i1 in indices) and (not i2 in indices):
+            #     # Do nothing if neither variable is under consideration.
+            #     continue
+            assert (i1 in indices) or (i2 in indices)
             vi2 = var_infos[i2]
             inv2 = vi2.invariant
-            if inv2.is_exact():
-                # Do nothing if either of the variables is a constant.
+            if not vi2.is_canonical():
                 continue
             if inv2.can_be_None:
                 # Do nothing if either of the variables can be missing.
                 continue
-            if not vi2.is_canonical():
+            ## I guess I don't want to derive from exact variables,
+            ## but why not infer invariants over them?  The justification
+            ## for commenting this out is to make sure we recognize that
+            ## two values, both always the constant zero, are equal (and
+            ## we set one of them as non-canonical).
+            # Do nothing if either of the variables is a constant.
+            # if inv1.is_exact():
+            #     continue
+            # if inv2.is_exact():
+            #     continue
+            if inv1.is_exact() and inv2.is_exact():
+                assert inv1.min == inv1.max and inv2.min == inv2.max
+                if inv1.min == inv2.min:
+                    vi1.equal_to.append(i2)
+                    vi2.equal_to.append(i1)
                 continue
+            if inv1.is_exact() or inv2.is_exact():
+                continue
+
             values = dict_of_tuples_slice_2(var_values, i1, i2)
             # These are now set earlier on, so they can be reused more.
             # (vi1, vi2) = util.slice_by_sequence(var_infos, (i1,i2))
@@ -1280,14 +1316,7 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
             elif vi1.is_sequence() or vi2.is_sequence():
                 this_inv = scalar_sequence_numeric_invariant(values)
             else:
-                this_inv = two_scalar_numeric_invariant(values)
-
-            #### NEED TO REIMPLEMENT THIS.
-            # if this_inv.is_equality():
-            #     # arbitrarily remove second one; fix this later
-            #     non_exact_single_invs.remove(indices[1])
-            # elif this_inv.is_exact():
-            #     exact_pair_invs.append(indices)
+                this_inv = two_scalar_numeric_invariant(values, inv1, inv2)
 
             assert not vi1.invariants.has_key(i2)
             vi1.invariants[i2] = this_inv
@@ -1317,9 +1346,10 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
         if not vi1.is_canonical():
             continue
         for i2 in range(i1+1, index_limit-1):
-            # print "triples: index2 =", i2
-            if i1 == i2:
-                continue
+            # # print "triples: index2 =", i2
+            # if i1 == i2:
+            #     continue
+            assert i1 != i2
             vi2 = var_infos[i2]
             if vi2.invariant.is_exact():
                 continue
@@ -1330,12 +1360,23 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
                 continue
             if not vi2.is_canonical():
                 continue
-            for i3 in range(i2+1, index_limit):
-                if i1 == i3 or i2 == i3:
-                    continue
-                if (not i1 in indices) and (not i2 in indices) and (not i3 in indices):
-                    # Do nothing if none of the variables is under consideration.
-                    continue
+            ## Old for loop
+            # for i3 in range(i2+1, index_limit):
+            if i1 in indices or i2 in indices:
+                i3_range = range(i2+1, index_limit)
+            else:
+                i3_range = filter(lambda i3, lim=i2: i3>lim, indices)
+            for i3 in i3_range:
+                ## This is now implied by the for loop structure
+                # if i1 == i3 or i2 == i3:
+                #     continue
+                ## This, too, is implied by the for loop structure
+                # if (not i1 in indices) and (not i2 in indices) and (not i3 in indices):
+                #     # Do nothing if none of the variables is under consideration.
+                #     continue
+                assert (i1 in indices) or (i2 in indices) or (i3 in indices)
+                assert i1 != i3 and i2 != i3
+
                 vi3 = var_infos[i3]
                 if vi3.invariant.is_exact():
                     # Do nothing if any of the variables is a constant.
@@ -1403,10 +1444,7 @@ def print_invariants(fn_regexp=None, print_unconstrained=0):
                 continue
             if vi.equal_to == []:
                 continue
-            print vi.name,              # no newline if ends with comma
-            for equal_var in vi.equal_to:
-                print "=", var_infos[equal_var].name,
-            print ""                    # print newline
+            print vi.name, "=", string.join(map(lambda idx, vis=var_infos: vis[idx].name, vi.equal_to), " = ")
         # Single invariants
         for vi in var_infos:
             if not vi.is_canonical():
@@ -1415,6 +1453,9 @@ def print_invariants(fn_regexp=None, print_unconstrained=0):
             if print_unconstrained or not this_inv.is_unconstrained():
                 print " ", this_inv.format((vi.name,))
         # Pairwise invariants
+        nonequal_constraints = []
+        # Maybe this is faster than calling "string.find"; I'm not sure.
+        nonequal_re = re.compile(" != ")
         for vi in var_infos:
             if not vi.is_canonical():
                 continue
@@ -1424,8 +1465,16 @@ def print_invariants(fn_regexp=None, print_unconstrained=0):
                     continue
                 if not var_infos[index].is_canonical():
                     continue
-                if print_unconstrained or not inv.is_unconstrained():
-                    print "   ", inv.format((vname, var_infos[index].name))
+                if (not print_unconstrained) and inv.is_unconstrained():
+                    continue
+                formatted = inv.format((vname, var_infos[index].name))
+                # Not .match(...), which only checks at start of string!
+                if nonequal_re.search(formatted):
+                    nonequal_constraints.append(formatted)
+                else:
+                    print "   ", formatted
+        for ne_constraint in nonequal_constraints:
+            print "    ", ne_constraint
         # Three-way (and greater) invariants
         for vi in var_infos:
             if not vi.is_canonical():
@@ -1588,7 +1637,7 @@ class single_scalar_numeric_invariant(invariant):
         probability = 1 - 1.0/base
         #return probability**self.samples * base < negative_invariant_confidence
         return self.samples*math.log(probability) + math.log(base) < math.log(negative_invariant_confidence)
-        
+
 
 
     # This doesn't produce a readable expression as is the convention, but
@@ -1700,24 +1749,30 @@ class two_scalar_numeric_invariant(invariant):
     sum_invariant = None
     functions = None                    # list of functions such that y=fun(x)
     inv_functions = None                # list of functions such that x=fun(y)
+    inv1 = None                         # invariant over first scalar
+    inv2 = None                         # invariant over second scalar
 
-    # Note that Invariants produced for pairs such that there is a known
-    # invariant for one of the elements (eg, it's constant) aren't interesting.
-    def __init__(self, dict_of_pairs):
+    # When there is a known invariant for one of the elements (eg, it's
+    # constant), the pairwise invariant may not be interesting (though
+    # equality can be).
+    def __init__(self, dict_of_pairs, inv1, inv2):
         """DICT maps from a pair of values to number of occurrences."""
         invariant.__init__(self, dict_of_pairs)
 
         pairs = dict_of_pairs.keys()
 
-        # Range
-        ## Perhaps someday have pointers to the single-scalar invariants
+        self.inv1 = inv1
+        self.inv2 = inv2
+
+        ## Now we use the single-scalar invariants
         ## instead of maintaining these separately here.
-        a_nums = map(lambda x: x[0], pairs)
-        self.a_min = min(a_nums)
-        self.a_max = max(a_nums)
-        b_nums = map(lambda x: x[1], pairs)
-        self.b_min = min(b_nums)
-        self.b_max = max(b_nums)
+        # # Range
+        # a_nums = map(lambda x: x[0], pairs)
+        # self.a_min = min(a_nums)
+        # self.a_max = max(a_nums)
+        # b_nums = map(lambda x: x[1], pairs)
+        # self.b_min = min(b_nums)
+        # self.b_max = max(b_nums)
 
         ## Linear relationship -- try to fit y = ax + b.
         # Should I also try x = ax + b?  I do not plan to call this with
@@ -1776,17 +1831,17 @@ class two_scalar_numeric_invariant(invariant):
         return invariant.is_exact(self) or self.linear
 
     def nonequal_justified(self):
-        overlap = min(self.a_max, self.b_max) - max(self.a_min, self.b_min)
+        overlap = min(self.inv1.max, self.inv2.max) - max(self.inv1.min, self.inv2.min)
         if overlap < 0:
             return false
         overlap = float(overlap + 1)
 
         try:
-            probability = 1 - overlap/((self.a_max - self.a_min + 1) * (self.b_max - self.b_min + 1))
+            probability = 1 - overlap/((self.inv1.max - self.inv1.min + 1) * (self.inv2.max - self.inv2.min + 1))
         except OverflowError:
             probability = 1
         # Equivalent and slower, albeit clearer
-        # probability = 1 - (overlap/(self.a_max - self.a_min + 1)) * (overlap/(self.b_max - self.b_min + 1)) * (1/overlap)
+        # probability = 1 - (overlap/(self.inv1.max - self.inv1.min + 1)) * (overlap/(self.inv2.max - self.inv2.min + 1)) * (1/overlap)
 
         return probability**self.samples < negative_invariant_confidence
 
@@ -2299,7 +2354,7 @@ class single_sequence_numeric_invariant(invariant):
     max = None              # max sequence of all instances
     min_justified = None
     max_justified = None
-    equal = None            # per instance sorting data
+    elts_equal = None            # per instance sorting data
     non_decreasing = None   #
     non_increasing = None   #
 
@@ -2324,25 +2379,25 @@ class single_sequence_numeric_invariant(invariant):
 
         # Check for sorted characteristics
         # how can we justify this as we do with min/max?
-        self.equal = true
+        self.elts_equal = true
         self.non_decreasing = true
         self.non_increasing = true
         for seq in seqs:
             if seq == None:
-                self.equal = self.non_decreasing = self.non_increasing = false
+                self.elts_equal = self.non_decreasing = self.non_increasing = false
                 # if any element is missing, infer nothing over anything
                 return
             for i in range(1, len(seq)):
                 c = cmp(seq[i-1],seq[i])
                 # should we have strictly ascending/descending?
                 if c < 0:
-                    self.equal = self.non_increasing = false
+                    self.elts_equal = self.non_increasing = false
                 elif c > 0:
-                    self.equal = self.non_decreasing = false
-                if not(self.equal or self.non_decreasing \
+                    self.elts_equal = self.non_decreasing = false
+                if not(self.elts_equal or self.non_decreasing \
                        or self.non_increasing):
                     break
-            if not(self.equal or self.non_decreasing \
+            if not(self.elts_equal or self.non_decreasing \
                    or self.non_increasing):
                 break
 
@@ -2364,16 +2419,19 @@ class single_sequence_numeric_invariant(invariant):
                     single_scalar_numeric_invariant(per_index_elems_to_count[i]))
             return result
 
+        ## The per_index_sni and reversed_per_index_sni aren't being used
+        ## right now, so don't bother to compute them.  In any event, we
+        ## only ever used the first element of each, so there is no point
+        ## in computing them all.
         # tuple_len = min(map(len, dict.keys())) # min length of a tuple
         # self.per_index_sni = per_index_invariants(dict, tuple_len)
-
+        # 
         # reversed_dict = {}
         # for (key, value) in dict.items():
-        #   reversed_key = list(key)
-        #    reversed_key.reverse()
-        #    reversed_dict[tuple(reversed_key)] = value
-        #self.reversed_per_index_sni = per_index_invariants(reversed_dict, tuple_len)
-
+        #     reversed_key = list(key)
+        #     reversed_key.reverse()
+        #     reversed_dict[tuple(reversed_key)] = value
+        # self.reversed_per_index_sni = per_index_invariants(reversed_dict, tuple_len)
 
     def __repr__(self):
         result = "<invariant-1 []>"
@@ -2409,7 +2467,7 @@ class single_sequence_numeric_invariant(invariant):
         elif self.max_justified:
             result = result + "\t<= %s" % (self.max)
 
-        if self.equal:
+        if self.elts_equal:
             result = result + "\n" + "\tPer sequence elements equal"
         elif self.non_decreasing:
             result = result + "\n" + "\tPer sequence elements non-decreasing"
@@ -2557,7 +2615,7 @@ class two_sequence_numeric_invariant(invariant):
     can_be_equal = None
     sub_sequence = None
     super_sequence = None
-    reverse = None
+    reverse = None                      # true if one is the reverse of the other
 
     def __init__(self, dict_of_pairs):
         invariant.__init__(self, dict_of_pairs)
@@ -2596,9 +2654,11 @@ class two_sequence_numeric_invariant(invariant):
 
         self.reverse = true
         for (x, y) in pairs:
+            if len(x) != len(y):
+                self.reverse = false
+                return
             # Make shallow copy because reverse works in place.
-            # Must do some nasty casting in the process?!
-            z = list(copy.copy(y))
+            z = list(y)
             z.reverse()
             z = tuple(z)
             if x != z:
@@ -2671,6 +2731,12 @@ class two_sequence_numeric_invariant(invariant):
 
 
 
+###########################################################################
+### Querying the database
+###
+
+def var_index(varname, fnname):
+    return map(lambda vi:vi.name, fn_var_infos[fnname]).index(varname)
 
 
 
@@ -2755,6 +2821,3 @@ def _test():
 #         print fn_name, these_vars
 #         print "   ", `this_inv`
 #         print "   ", this_inv
-
-
-
