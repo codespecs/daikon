@@ -12,7 +12,7 @@ import java.util.*;
 public class NoDuplicates extends SingleSequence {
 
   // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface
+  // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
 
   final static boolean debugNoDuplicates = false;
@@ -44,7 +44,7 @@ public class NoDuplicates extends SingleSequence {
   public String format_ioa(String classname) {
     if (var().isIOASet())
       return "IOA Set " + var().name.ioa_name(classname) + " contains no duplicates by definition";
-    String[] form = 
+    String[] form =
       VarInfoName.QuantHelper.format_ioa(new VarInfo[] {var(),var()}, classname);
     return form[0]+"("+form[1]+"="+form[2]+") => ("+form[4]+"="+form[5]+")"+form[3];
   }
