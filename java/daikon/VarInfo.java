@@ -238,11 +238,18 @@ public final class VarInfo
     postState = vi.postState;
   }
 
+
   /** Create the prestate, or "orig()", version of the variable. **/
   public static VarInfo origVarInfo(VarInfo vi) {
+    // At an exit point, parameters are uninteresting, but orig(param) is not.
+    // So don't call orig(param) a parameter.
+    VarInfoAux aux_nonparam = vi.aux.setValue(VarInfoAux.IS_PARAM,
+                                              VarInfoAux.FALSE);
+    
     VarInfo result = new VarInfo(vi.name.applyPrestate(),
                                  vi.type, vi.file_rep_type,
-                                 vi.comparability.makeAlias(vi.name), vi.aux);
+                                 vi.comparability.makeAlias(vi.name),
+                                 aux_nonparam);
     result.canBeMissing = vi.canBeMissing;
     result.postState = vi;
     return result;
