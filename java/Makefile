@@ -34,6 +34,7 @@ AUTO_GENERATED_FILES = \
 	daikon/PptSlice1.java \
 	daikon/PptSlice2.java \
 	daikon/PptSlice3.java \
+	daikon/Quant.java \
 	daikon/inv/ternary/threeScalar/FunctionBinary.java \
 	daikon/inv/ternary/threeScalar/FunctionBinaryFloat.java \
 	daikon/inv/ternary/threeScalar/FunctionBinaryCore.java \
@@ -553,6 +554,9 @@ daikon/PptSlice2.java: daikon/PptSlice.java.jpp
 
 daikon/PptSlice3.java: daikon/PptSlice.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=ARITY3)
+
+daikon/Quant.java: daikon/Quant.java.jpp daikon/QuantBody.java.jpp
+	$(JAVA_CPP)
 
 daikon/inv/ternary/threeScalar/FunctionBinary.java: daikon/inv/ternary/threeScalar/FunctionBinary.java.jpp daikon/inv/ternary/threeScalar/FunctionBinaryGeneric.java.jpp daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp daikon/inv/suppressionFactory.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
