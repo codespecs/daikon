@@ -1,0 +1,7 @@
+Runtime check instrumenter
+==========================
+
+The runtime check instrumenter creates new versions of java source
+files. The new versions behave in the same way as the originals, but
+invariant properties are checked at runtime.
+
