@@ -6,6 +6,10 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.twoScalar.*;
 import daikon.inv.binary.twoSequence.*;
+import daikon.inv.binary.twoScalar.IntLessThan;
+import daikon.inv.binary.twoScalar.IntGreaterThan;
+import daikon.inv.binary.twoScalar.IntLessEqual;
+import daikon.inv.binary.twoScalar.IntGreaterEqual;
 import daikon.derive.*;
 import daikon.derive.unary.*;
 import daikon.derive.binary.*;
@@ -320,7 +324,10 @@ public final class MemberFloat
   }
 
   private static final SuppressionFactory[] suppressionFactories =
-    new SuppressionFactory[] {MemberSuppressionFactory.getInstance()};
+    new SuppressionFactory[] {
+      MemberSuppressionFactory1.getInstance(),
+      MemberSuppressionFactory2.getInstance()
+    };
 
   public SuppressionFactory[] getSuppressionFactories() {
     return suppressionFactories;
@@ -331,12 +338,13 @@ public final class MemberFloat
    * and B are related such that A is a subset or subsequence of B,
    * all Member invariants like "A[i] in B" are suppressed.
    **/
-  public static class MemberSuppressionFactory extends SuppressionFactory {
+  public static class MemberSuppressionFactory1 extends SuppressionFactory {
 
     public static final Category debug =
       Category.getInstance("daikon.suppress.factories.MemberSuppressionFactory");
 
-    private static final MemberSuppressionFactory theInstance = new MemberSuppressionFactory();
+    private static final MemberSuppressionFactory1 theInstance =
+      new MemberSuppressionFactory1();
 
     public static SuppressionFactory getInstance() {
       return theInstance;
@@ -354,7 +362,7 @@ public final class MemberFloat
       VarInfo seqvar = inv.seqvar();
       if (sclSequence.isDerivedSubSequenceOf() == seqvar) {
         return null;
-        // Actually we should be supressing this for tautological reasons
+        // This should never get instantiated
       }
 
       {
@@ -413,6 +421,107 @@ public final class MemberFloat
           }
         }
       }
+      return null;
+    }
+  }
+
+  /**
+   * Suppression in the form of   0<=i<=j  ==>  b[i] in b[0..j]
+   **/
+  public static class MemberSuppressionFactory2 extends SuppressionFactory {
+
+    public static final Category debug =
+      Category.getInstance("daikon.suppress.factories.MemberSuppressionFactory2");
+
+    private static final MemberSuppressionFactory2 theInstance =
+      new MemberSuppressionFactory2();
+
+    public static SuppressionFactory getInstance() {
+      return theInstance;
+    }
+
+    private Object readResolve() {
+      return theInstance;
+    }
+
+    /**
+     * Check if leftIndex < rightIndex.
+     **/
+    public SuppressionLink generateSuppressionLink (Invariant arg) {
+      Assert.assertTrue (arg instanceof Member);
+      Member inv = (Member) arg;
+      VarInfo sclvar = inv.sclvar();
+      VarInfo sclSequence = sclvar.isDerivedSequenceMember();
+      if (sclSequence == null) {
+        debug.debug ("Sclvar is not from a sequence");
+        return null;
+      }
+      VarInfo leftIndex = ((SequenceScalarSubscript) inv.sclvar().derived).sclvar();
+
+      VarInfo seqvar = inv.seqvar();
+      VarInfo origSeqvar = seqvar.isDerivedSubSequenceOf();
+      if (origSeqvar == null) {
+        debug.debug ("Seqvar is not a subsequence derived var");
+        return null;
+      }
+      VarInfo rightIndex = ((SequenceScalarSubsequence) seqvar.derived).sclvar();
+
+      {
+        SuppressionTemplate template = new SuppressionTemplate();
+        template.invTypes = new Class[] {IntLessThan.class};
+        template.varInfos = new VarInfo[][] {new VarInfo[] {leftIndex, rightIndex}};
+        arg.ppt.parent.fillSuppressionTemplate(template);
+        if (template.filled) {
+          IntLessThan resultInv = (IntLessThan) template.results[0];
+          VarInfo leftResult = template.transforms[0][0];
+          if (leftResult == resultInv.var1()) {
+            return linkFromTemplate (template, inv);
+          }
+        }
+      }
+
+      {
+        SuppressionTemplate template = new SuppressionTemplate();
+        template.invTypes = new Class[] {IntLessEqual.class};
+        template.varInfos = new VarInfo[][] {new VarInfo[] {leftIndex, rightIndex}};
+        arg.ppt.parent.fillSuppressionTemplate(template);
+        if (template.filled) {
+          IntLessEqual resultInv = (IntLessEqual) template.results[0];
+          VarInfo leftResult = template.transforms[0][0];
+          if (leftResult == resultInv.var1()) {
+            return linkFromTemplate (template, inv);
+          }
+        }
+      }
+
+      {
+        SuppressionTemplate template = new SuppressionTemplate();
+        template.invTypes = new Class[] {IntGreaterThan.class};
+        template.varInfos = new VarInfo[][] {new VarInfo[] {leftIndex, rightIndex}};
+        arg.ppt.parent.fillSuppressionTemplate(template);
+        if (template.filled) {
+          IntGreaterThan resultInv = (IntGreaterThan) template.results[0];
+          VarInfo leftResult = template.transforms[0][0];
+          if (leftResult == resultInv.var2()) {
+            return linkFromTemplate (template, inv);
+          }
+        }
+      }
+
+      {
+        SuppressionTemplate template = new SuppressionTemplate();
+        template.invTypes = new Class[] {IntGreaterEqual.class};
+        template.varInfos = new VarInfo[][] {new VarInfo[] {leftIndex, rightIndex}};
+        arg.ppt.parent.fillSuppressionTemplate(template);
+        if (template.filled) {
+          IntGreaterEqual resultInv = (IntGreaterEqual) template.results[0];
+          VarInfo leftResult = template.transforms[0][0];
+          if (leftResult == resultInv.var2()) {
+            return linkFromTemplate (template, inv);
+          }
+        }
+      }
+
       return null;
     }
   }
