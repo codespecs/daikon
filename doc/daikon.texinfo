@@ -41,11 +41,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 2.3.9
+@center Daikon version 2.3.10
 
 @sp 1
-@c Daikon version 2.3.9 date
-@center June  4, 2002
+@c Daikon version 2.3.10 date
+@center June 10, 2002
 
 @sp 5
 @c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
@@ -64,7 +64,7 @@ Copyright @copyright{} 1998-2002
 <h1>Daikon Invariant Detector User Manual</h1>
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.9, released June  4, 2002.
+It describes Daikon version 2.3.10, released June 10, 2002.
 
 @end html
 
@@ -79,7 +79,7 @@ It describes Daikon version 2.3.9, released June  4, 2002.
 
 @ifnottex
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.9, released June  4, 2002.
+It describes Daikon version 2.3.10, released June 10, 2002.
 @end ifnottex
 
 @menu
@@ -652,7 +652,7 @@ In order to run Daikon, you must have a Java 1.3 (or later) JVM
 
 If you wish to re-compile Daikon from scratch, you will need the C
 preprocessor, @command{cpp}.  If you have a C compiler, you almost
-certainly have @command{cpp}.
+certainly have @command{cpp}.  (Alternately, you can use @command{gcc -E}.)
 
 You also need a compiler for whatever language your target programs are
 written in.  For instance, if you wish to analyze Java programs, you
@@ -3824,7 +3824,8 @@ you make changes.
 In order to compile Daikon, you need the C preprocessor
 @command{cpp}, which is used to convert each @file{.jpp} file in the
 distribution into multiple @file{.java} files, which are then compiled.
-If you do not have @command{cpp}, you may run @command{make avoid-jpp}, in
+If you do not have @command{cpp} (or @command{gcc}, which can emulate
+@command{cpp} via @command{gcc -E}), you may run @command{make avoid-jpp}, in
 which case changes to @code{.jpp} files will not be reflected in the
 @file{.java} files or the compiled @file{.class} files.  (The purpose
 of the @file{.jpp} files is to avoid code duplication by placing
@@ -3975,7 +3976,7 @@ Simplify format (for use by the Simplify theorem-prover).
 To support a new output format, you need to do two things:
 @itemize @bullet
 @item
-(This description will change in Daikon version 2.3.9.)
+(This description will change in Daikon version 2.3.10.)
 Add, to every subclass of @samp{Invariant}, a
 @samp{format_@var{newtype}()} method.  Each subclass of Invariant
 already has three such methods --- @samp{format()}, @samp{format_esc()},
@@ -4606,7 +4607,7 @@ English words "die-con".
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 2.3.9, released June  4, 2002.
+This manual describes Daikon version 2.3.10, released June 10, 2002.
 A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.

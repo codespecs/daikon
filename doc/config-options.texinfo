@@ -19,12 +19,8 @@
  exactly two exit points.
   The default value is `false'.
 
-@item daikon.derive.binary.ScalarSequencesIntersection.enabled
-  Boolean.  True iff ScalarSequencesIntersection  derived variables should be generated.
-  The default value is `false'.
-
-@item daikon.derive.binary.ScalarSequencesUnion.enabled
-  Boolean.  True iff ScalarSequencesUnion  derived variables should be generated.
+@item daikon.derive.binary.SequenceScalarIntersection.enabled
+  Boolean.  True iff SequenceScalarIntersection  derived variables should be generated.
   The default value is `false'.
 
 @item daikon.derive.binary.SequenceScalarSubscript.enabled
@@ -35,6 +31,14 @@
   Boolean.  True iff SequenceScalarSubsequence  invariants should be considered.
   The default value is `true'.
 
+@item daikon.derive.binary.SequenceScalarUnion.enabled
+  Boolean.  True iff SequenceScalarUnion  derived variables should be generated.
+  The default value is `false'.
+
+@item daikon.derive.binary.SequenceStringIntersection.enabled
+  Boolean.  True iff SequenceStringIntersection  derived variables should be generated.
+  The default value is `false'.
+
 @item daikon.derive.binary.SequenceStringSubscript.enabled
   Boolean.  True iff SequenceStringSubscript  invariants should be considered.
   The default value is `true'.
@@ -42,6 +46,10 @@
 @item daikon.derive.binary.SequenceStringSubsequence.enabled
   Boolean.  True iff SequenceStringSubsequence  invariants should be considered.
   The default value is `true'.
+
+@item daikon.derive.binary.SequenceStringUnion.enabled
+  Boolean.  True iff SequenceStringUnion  derived variables should be generated.
+  The default value is `false'.
 
 @item daikon.derive.binary.SequencesConcat.enabled
   Boolean.  True iff SequencesConcat derived variables should be created.
@@ -53,14 +61,6 @@
 
 @item daikon.derive.binary.SequencesPredicate.enabled
   Boolean.  True iff SequencesPredicate derived variables should be generated.
-  The default value is `false'.
-
-@item daikon.derive.binary.StringSequencesIntersection.enabled
-  Boolean.  True iff StringSequencesIntersection  derived variables should be generated.
-  The default value is `false'.
-
-@item daikon.derive.binary.StringSequencesUnion.enabled
-  Boolean.  True iff StringSequencesUnion  derived variables should be generated.
   The default value is `false'.
 
 @item daikon.derive.unary.SequenceInitial.enabled
