@@ -350,6 +350,16 @@ public class PptName
   }
 
 
+  /** Debugging output **/
+  public String repr() {
+    return "PptName: fullname=" + fullname
+      + "; fn_name=" + fn_name
+      + "; point=" + point
+      + "; cls=" + cls
+      + "; method=" + method;
+  }
+
+
   // ==================== PRODUCERS ====================
 
   /**
