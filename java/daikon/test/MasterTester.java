@@ -10,7 +10,7 @@ public class MasterTester extends TestCase {
   public static void main(String[] args) {
     junit.textui.TestRunner.run(suite());
   }
-  
+
   public MasterTester(String name) {
     super(name);
   }
@@ -19,6 +19,7 @@ public class MasterTester extends TestCase {
     TestSuite result = new TestSuite();
     result.addTest(new TestSuite(DiffTester.class));
     result.addTest(new TestSuite(InvariantTester.class));
+    result.addTest(new TestSuite(LinearTernaryCoreTest.class));
     result.addTest(new TestSuite(VarInfoNameTest.class));
     return result;
   }
