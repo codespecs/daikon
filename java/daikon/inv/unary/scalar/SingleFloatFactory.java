@@ -21,6 +21,7 @@ public final class SingleFloatFactory {
     result.add(OneOfFloat.instantiate(ppt));
     result.add(LowerBoundFloat.instantiate(ppt));
     result.add(UpperBoundFloat.instantiate(ppt));
+    result.addAll (RangeFloat.instantiate_all (ppt));
     return result;
   }
 

@@ -38,6 +38,7 @@ public final class SingleScalarFactory {
           result.add(Modulus.instantiate(ppt));
           result.add(NonModulus.instantiate(ppt));
           result.add(UpperBound.instantiate(ppt));
+          result.addAll (RangeInt.instantiate_all (ppt));
           // Add a line like this for each invariant you choose to add.
           // "Positive" is a pedagogical example only and should not be
           // used in normal use.
