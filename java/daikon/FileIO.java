@@ -787,11 +787,11 @@ public final class FileIO {
 
 
     String[] oldvalue_reps;
-    boolean ppt_encountered = true;
-    if ( (oldvalue_reps = (String[]) ppt_to_value_reps.get(ppt)) == null){
-	//we've not encountered this program point before
-	oldvalue_reps = new String [num_tracevars];
-	ppt_encountered = false;
+    if ( (oldvalue_reps = (String[]) ppt_to_value_reps.get(ppt)) == null) {
+      // We've not encountered this program point before.  The nulls in
+      // this array will compare non-equal to whatever is in the trace
+      // file, which is the desired behavior.
+      oldvalue_reps = new String [num_tracevars];
     }
 
     if (Global.debugPrintDtrace) {
@@ -873,14 +873,12 @@ public final class FileIO {
       if (mod != ValueTuple.MISSING) {
         // Set the modbit now, depending on whether the value of the variable
         // has been changed or not.
-        if (ppt_encountered) {
-          if (value_rep.equals(oldvalue_reps[val_index])) {
-            if (!Global.addChanged) {
-              mod = ValueTuple.UNMODIFIED;
-            }
-          } else {
-            mod = ValueTuple.MODIFIED;
+        if (value_rep.equals(oldvalue_reps[val_index])) {
+          if (!Global.addChanged) {
+            mod = ValueTuple.UNMODIFIED;
           }
+        } else {
+          mod = ValueTuple.MODIFIED;
         }
       }
 
