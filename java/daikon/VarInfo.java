@@ -116,6 +116,7 @@ public final class VarInfo
   // It can be expensive to find an arbitrary invariant.  These fields
   // cache invariants that we want to be able to look up quickly.
 
+  // Eventually, isCanonical will be restored, but we haven't decided how yet.
   /* [INCR]
   // Only public so that PptTopLevel can access it.
   // Clients should use isCanonical() or canonicalRep() or equalTo().
@@ -378,6 +379,11 @@ public final class VarInfo
 
   /**
    * @return read-only int[] giving the nonces for po_lower()
+   *
+   * (This is an expensive operation, but we don't cache the result,
+   * since this is only called from daikon.Dataflow, which is only
+   * used during decls file setup.)
+   *
    * @see po_lower()
    **/
   public int[] po_lower_nonce() {
@@ -451,7 +457,8 @@ public final class VarInfo
 
   /**
    * @param lower true iff the closure is over lower elements
-   * @return stable BFS iterator
+   * @return BFS iterator that is stable (it returns unordered
+   * elements in the same order each time)
    **/
   public Iterator closurePO(boolean lower) {
     List result = new ArrayList();

@@ -7,17 +7,25 @@ import org.apache.log4j.Category;
 
 /**
  * A collection of code that configures and assists the dataflow
- * system in Daikon.
+ * system in Daikon.  See Chapter 7 of Jeremy Nimmer's Masters Thesis
+ * for the higher-level design ideas.
+ *
+ * <p> Almost all of the methods of this class are used only while
+ * program point declarations ("decls files") are being processed.
+ * The only exception is init_pptslice_po(), which selects a portion
+ * of some pre-computed data to store in the PptSlice.
  **/
 public class Dataflow
 {
+  // Nobody should be instantiating a Dataflow.
+  private Dataflow() { }
 
   public static final Category debug = Category.getInstance("daikon.DataFlow");
 
   // Temporary routine, for debugging
   // Will eventually move into daikon.test.DataflowTest
   //
-  // java daikon.Dataflow `find /scratch/$USER/tests/esc-experiments/StackAr/ -name '*.decls'`
+  // java daikon.Dataflow `find /scratch/$USER/tests/daikon-tests/StackAr/ -name '*.decls'`
   //
   public static void main(String[] args)
     throws Exception
@@ -421,9 +429,12 @@ public class Dataflow
   }
 
   /**
-   * Create the dataflow injection vectors for PptTopLevels
-   * that receive samples.  Must be done after VarInfo partial
-   * ordering relations have been fully set up.
+   * Create the dataflow "injection vectors" for PptTopLevels that
+   * receive samples.  An "injection vector" is a list of all program
+   * points that a samlpe will flow to, and the mapping between the
+   * sample's variables and each flowed-to program point's variables.
+   * Must be done after VarInfo partial ordering relations have been
+   * set up.
    **/
   private static void create_ppt_dataflow(PptTopLevel ppt)
   {
@@ -441,11 +452,13 @@ public class Dataflow
     }
   }
 
-
   /**
-   * Create the invariant flow injection vectors for PptTopLevels.
-   * Must be done after VarInfo partial ordering relations have been
-   * fully set up.
+   * Create the invariant flow injection vectors for PptTopLevels.  An
+   * "injection vector" is a list of all program points that
+   * invariants from <tt>ppt</tt> might flow to, and the mapping
+   * between the <tt>ppt</tt>'s variables and each flowed-to program
+   * point's variables.  Must be done after VarInfo partial ordering
+   * relations have been set up.
    **/
   private static void create_ppt_invflow(PptTopLevel ppt)
   {
@@ -599,11 +612,19 @@ public class Dataflow
   }
 
   /**
-   * Use slice.var_infos[].po_lower to initialize slice.po_lower.
+   * Use slice.var_infos[].po_lower to initialize slice.po_lower.  The
+   * result is slices H such that:
+   * <ul>
    * <li> H.arity == this.arity
    * <li> exist i,j s.t. this.var_infos[i] :[ H.var_infos[j]  (lower in po)
    * <li> Not exist h1 in H, h2 in H s.t. path to h1 is prefix of path to h2  (minimality)
    * <li> Nonces are respected
+   * </ul>
+   *
+   * <p> This method is called whenever a PptSlice is instantiated.
+   * It doesn't actually compute the result directly, but instead
+   * selects a portion of the pre-computed PptTopLevel.invflow_ppts
+   * field to store in the PptSlice.
    **/
   public static void init_pptslice_po(PptSlice slice)
   {
