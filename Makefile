@@ -196,7 +196,7 @@ test-staged-dist: $(STAGING_DIST)
 	(cd $(DISTTESTDIR)/daikon/java && \
 	  $(MAKE) CLASSPATH=$(DISTTESTDIR)/daikon/daikon.jar junit)
 	## Second, test the .java files.
-	# No need to add to classpath: ":$(DISTTESTDIRJAVA)/lib/jakarta-oro.jar:$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar"
+	# No need to add to classpath: ":$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar"
 	# Use javac, not jikes; jikes seems to croak on longer-than-0xFFFF
 	# method or class.
 	(cd $(DISTTESTDIRJAVA)/daikon; touch ../java/ajax; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(RTJAR):$(TOOLSJAR) all_javac)
@@ -213,7 +213,7 @@ cvs-test:
 	-rm -rf $(TESTCVS)
 	mkdir -p $(TESTCVS)
 	cd $(TESTCVS) && cvs -Q -d $(CVS_REPOSITORY) co invariants
-	cd $(TESTCVSJAVA)/daikon && make CLASSPATH=$(TESTCVSJAVA):$(TESTCVSJAVA)/lib/jakarta-oro.jar:$(TESTCVSJAVA)/lib/java-getopt.jar:$(TESTCVSJAVA)/lib/junit.jar:.:$(RTJAR):$(TOOLSJAR)
+	cd $(TESTCVSJAVA)/daikon && make CLASSPATH=$(TESTCVSJAVA):$(TESTCVSJAVA)/lib/java-getopt.jar:$(TESTCVSJAVA)/lib/junit.jar:.:$(RTJAR):$(TOOLSJAR)
 
 
 ###########################################################################
@@ -343,7 +343,7 @@ update-dist-version-file:
 daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
 	-rm -rf $@ /tmp/${USER}/daikon-jar
 	install -d /tmp/${USER}/daikon-jar
-	cd java && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath ${INV_DIR}/java:${INV_DIR}/java/lib/jakarta-oro.jar:${INV_DIR}/java/lib/java-getopt.jar:${INV_DIR}/java/lib/junit.jar:$(TOOLSJAR)' all_directly
+	cd java && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath ${INV_DIR}/java:${INV_DIR}/java/lib/java-getopt.jar:${INV_DIR}/java/lib/junit.jar:$(TOOLSJAR)' all_directly
 	cd java/utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath .:${INV_DIR}/java/lib/junit.jar' all_notest
 	## Old untarring code:
 	#  tar xzf java/lib/java-getopt-1.0.8.tar.gz -C /tmp/${USER}/daikon-jar
@@ -351,10 +351,8 @@ daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_
 	#  mv /tmp/${USER}/daikon-jar/OROMatcher-1.1.0a/com /tmp/${USER}/daikon-jar
 	#  rm -rf /tmp/${USER}/daikon-jar/OROMatcher-1.1.0a
 	# jar does not seem to accept the -C argument.  MDE 6/14/2001
-	# jar xf java/lib/jakarta-oro.jar -C /tmp/${USER}/daikon-jar
 	# jar xf java/lib/java-getopt.jar -C /tmp/${USER}/daikon-jar
 	# jar xf java/lib/junit.jar -C /tmp/${USER}/daikon-jar
-	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/jakarta-oro.jar)
 	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/java-getopt.jar)
 	# (cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
 	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/ajax.jar)
@@ -452,21 +450,6 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	## Apache packages
 	mkdir /tmp/daikon/java/org
 	mkdir /tmp/daikon/java/org/apache
-	## OROMatcher
-	# Old version:
-	#   tar zxf java/lib/OROMatcher-1.1.tar.gz -C /tmp/daikon/java
-	#   (cd /tmp/daikon/java; ln -s OROMatcher-1.1.0a/com .)
-	tar zxf java/lib/jakarta-oro-2.0.6.tar.gz -C /tmp/daikon/java
-	(cd /tmp/daikon/java; mv jakarta-oro-2.0.6/src/java/org/apache/oro org/apache/oro)
-	# Making a link causes duplicate-class-def compilation problems,
-	# so just create a README file instead.
-	(cd /tmp/daikon/java/jakarta-oro-2.0.6/src/java/org/apache; echo "oro directory has been moved to ../../../../../org/apache/oro" > README-oro)
-	# ORO distribution .class files are in docs/classes; this is an obscure
-	# location, and (more importantly) it also makes too-long file names in
-	# the tar file, which causes trouble for some tar programs.
-	(cd /tmp/daikon/java/jakarta-oro-2.0.6/docs/classes/org/apache; cp -p --parents `find oro -name '*.class' -print` /tmp/daikon/java/org/apache/)
-	rm -rf /tmp/daikon/java/jakarta-oro-2.0.6/docs/classes/org/apache/oro
-	(cd /tmp/daikon/java/jakarta-oro-2.0.6/docs/classes/org/apache; echo "oro directory has been moved to ../../../../../org/apache/oro" > README-oro)
 	## JTB
 	cp -pR java/jtb /tmp/daikon/java/
 	## Ajax
