@@ -11,6 +11,22 @@ versions as the user manual.
 
 ===========================================================================
 
+Changed the way that invariants are instantiated.  The get_proto()
+method now always returns a prototype invariant (even if the invariant
+is not enabled).  The enabled() method was added to return whether or
+not an invariant is enabled.  The instantiate_dyn() method directly
+instantiates an invariant (replacing the static instantiate call).  It
+is called by instantiate() in Invariant.  Use
+CLASS.get_proto().instantiate(slice) to create a specific invariant.
+Do not call instantiate_dyn() directly (which should not be possible
+as it is protected).
+
+The valid_types() routine is implemented in the base classes (OneScalar,
+TwoSequence, ThreeFloat, etc) and checks for the correct number and basic
+types of the arguments.  A new method (instantiate_ok()) does more refined
+checking for specific types (such as avoiding hashcodes and booleans on
+numeric invariants, special comparability checks, and the like).
+
 3.1.3 (01 Sep 2004)
 
 Several bugs in the LinearyTernary invariant were fixed.  Under some
