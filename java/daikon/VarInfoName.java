@@ -1145,7 +1145,11 @@ public abstract class VarInfoName
    * or "this+1".
    **/
   public VarInfoName applyAdd(int amount) {
-    return (new Add(this, amount)).intern();
+    if (amount == 0) {
+      return this;
+    } else {
+      return (new Add(this, amount)).intern();
+    }
   }
 
   /** An integer amount more or less than some other value, like "x+2". **/
