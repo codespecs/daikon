@@ -6,6 +6,7 @@ import daikon.split.*;
 import daikon.inv.Invariant;
 
 import java.util.*;
+import java.util.zip.GZIPOutputStream;
 import java.io.*;
 import java.lang.Thread;
 
@@ -82,9 +83,9 @@ public final class Daikon {
   public static Pattern ppt_omit_regexp;
   public static Pattern var_omit_regexp;
 
-  // I appear to need both of these variables.  (Or do I?)
-  public static FileOutputStream inv_ostream;
-  public static ObjectOutputStream inv_oostream;
+  // The invariants detected will be serialized and written to this
+  // file
+  public static File inv_file;
 
   // Public so other programs can reuse the same command-line options
   public static final String help_SWITCH = "help";
@@ -225,17 +226,14 @@ public final class Daikon {
         System.exit(1);
         break;
       case 'o':
-        if (inv_ostream != null)
-          throw new Error("multiple serialization output files supplied on command line");
-        try {
-          String inv_filename = g.getOptarg();
-          System.out.println("Inv filename = " + inv_filename);
-          inv_ostream = new FileOutputStream(inv_filename);
-          inv_oostream = new ObjectOutputStream(inv_ostream);
-          // This sends the header immediately; irrelevant for files.
-          // inv_oostream.flush();
-        } catch (Exception e) {
-          throw new Error(e.toString());
+        //        if (inv_ostream != null)
+        //          throw new Error("multiple serialization output files supplied on command line");
+        String inv_filename = g.getOptarg();
+        System.out.println("Inv filename = " + inv_filename);
+        inv_file = new File(inv_filename);
+
+        if (! UtilMDE.canCreateAndWrite(inv_file)) {
+          throw new Error("Cannot write to file " + inv_file);
         }
         break;
         //
@@ -407,8 +405,16 @@ public final class Daikon {
     //   ppt_tl.print_invariants_maybe();
     // }
 
-    if (inv_ostream != null) {
+    
+    if (inv_file != null) {
       try {
+        OutputStream inv_ostream = new FileOutputStream(inv_file);
+        if (inv_file.getName().endsWith(".gz")) {
+          inv_ostream = new GZIPOutputStream(inv_ostream);
+        }
+        ObjectOutputStream inv_oostream = new ObjectOutputStream(inv_ostream);
+        // This sends the header immediately; irrelevant for files.
+        // inv_oostream.flush();
         inv_oostream.writeObject(all_ppts);
         inv_oostream.flush();
         inv_oostream.close();
