@@ -2,7 +2,7 @@
 
 ;; Utilities for finding invariants
 
-;; Do something like this:
+;; To instrument the Medic package, do something like this:
 ;;   From $inv/medic/data, start Lisp (via  M-x run-lisp, or, better, outside Emacs via just  lisp )
 ;;   (load "../code/main") (in-package medic) (load-all) (load-domains)
 ;;   ;; Either one of these:
@@ -166,7 +166,7 @@
 	   (eq 'quote (car function-name)))
       (setq function-name (second function-name)))
   `(when *inv-output-stream*
-     (format *inv-output-stream* ,(format nil "~a " function-name))
+     (format *inv-output-stream* ,(format nil "~a~~%" function-name))
      ,@(loop for type-list in type-lists
 	     nconc (let ((type (car type-list)))
 		     (loop for var in (cdr type-list) ; actually expressions
@@ -175,18 +175,20 @@
 					 collect (cond
 						  ((eq function 'identity)
 						   `(format *inv-output-stream*
-							    ,(format nil " ~a ~~s" var-sans-spaces)
+							    ,(format nil "~a~c~~s~~%" var-sans-spaces #\tab)
 							    ,var))
 						  ((and (consp function)
 							(atom (cdr function)))
 						   `(format *inv-output-stream*
-							    ,(format nil " ~a.~a ~~s" var-sans-spaces (cdr function))
+							    ,(format nil "~a.~a~c~~s~~%" var-sans-spaces (cdr function) #\tab)
 							    (funcall ,(car function) ,var)))
 						  (t
 						   `(format *inv-output-stream*
-							    ,(format nil " ~a.~a ~~s" var-sans-spaces function)
+							    ,(format nil "~a.~a~c~~s~~%" var-sans-spaces function #\tab)
 							    (,function ,var)))))))))
-     (format *inv-output-stream* "~%")))
+     ;; used when all the above was on one line
+     ;; (format *inv-output-stream* "~%")
+     ))
 
 ;; (macroexpand '(check-for-invariants split-argnum-sprop (integer argnum) (operator op)))
 ;; (macroexpand '(check-for-invariants non-matching-var-sprops (sprop occurrence) (list fluent-args fluent-occurrences) (alist var-argnum-alist)))

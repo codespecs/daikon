@@ -76,10 +76,14 @@
 ;;;
 
 (defun instrument (form)
-  "Insert calls to `check-assertion' in the body."
+  "Insert calls to `check-for-invariants' in FORM, which is a Lisp expression."
   (instrument-internal form nil nil nil))
 
 (defun instrument-internal (form fn-name bound-vars lastp)
+  "Instrument FORM, which appears in function FN-NAME.
+BOUND-VARS is a list of the bound variables in this scope.
+LASTP is non-nil if this is the last form in the function body
+\(that is, it's the return value\)."
   ;; This function should not call instrument, only instrument-internal.
 
   ;; Should make good choices about where to insert the instrumentation and
@@ -99,6 +103,9 @@
 	   (let* ((params (third form))
 		  (body (cdddr form))
 
+		  ;; A list of the parameters that are modified in the
+		  ;; function body.  For these, we'll remember the original
+		  ;; value.
 		  (params-modified (reverse
 				    (intersection params
 						  (modified-variables form))))
@@ -122,9 +129,8 @@
 				    params-modified))
 
 		  ;; Bind the original values, so I can compare against
-		  ;; them.  Maybe only do that if they can be modified
-		  ;; somewhere.  Maybe do that for all forms that
-		  ;; potentially modify a variable.
+		  ;; them.  (Maybe do that for all forms that
+		  ;; potentially modify a variable?)
 
 		  (body-sans-last-stmt
 		   ;; I could imagine adding instrumentation between

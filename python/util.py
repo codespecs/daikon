@@ -14,7 +14,7 @@ def rationalize(num, epsilon=1e-8):
     """Attempt to return a rational value near NUM (within EPSILON of it).
 The value is returned as an integer or (more likely) floating-point number.
 Return None if the value cannot be rationalized.
-DO NOT use the return value as a boolean, because 0 and 0.0 test false.
+*Do not* use the return value as a boolean, because 0 and 0.0 test false.
 Instead, explicitly test the result against None."""
 
     def rationalize_simple(num, eps=epsilon):
@@ -44,13 +44,32 @@ Instead, explicitly test the result against None."""
 
 
 ###########################################################################
+### Strings
+###
+
+def remove_trailing_newline(str):
+    """Return a copy of the input string STR, sans trailing newline.
+If the input string STR has no trailing newline, it is returned unmodified."""
+    if str[-1] == "\n":
+        return str[:-1]
+    else:
+        return str
+
+
+###########################################################################
 ### Mappings
 ###
 
 def mapping_increment(mapping, key, incr=1):
+    """Given a MAPPING from keys to numbers, increment the value associated
+with KEY by INCR.  If KEY does not appear in MAPPING, then add it, with
+initial value INCR."""
     mapping[key] = mapping.get(key, 0) + incr
 
 def mapping_append(mapping, key, element):
+    """Given a MAPPING from keys to arrays, append, to the end of the value
+associated with KEY, ELEMENT.  If KEY does not appear in MAPPING, then add
+it, with initial value a list containing only ELEMENT."""
     mapping[key] = mapping.get(key, []) + [element]
 
 
@@ -59,6 +78,9 @@ def mapping_append(mapping, key, element):
 ###
 
 def slice_by_sequence(seq, indices):
+    """Given a sequence SEQ and a sequence of INDICES, return a new sequence
+whose length is the same as that of INDICES and whose elements are the values
+of SEQ indexed by the respective elements of INDICES."""
     result = []
     for i in indices:
         result.append(seq[i])
@@ -81,8 +103,8 @@ def _test_slice_by_sequence():
 ###
 
 def sorted_list_difference(minuend, subtrahend):
-    """Return a list of elements in MINUEND but not in SUBTRAHEND.
-Both tuples are sorted, as is the output."""
+    """Return a list of elements in sequence MINUEND but not in SUBTRAHEND.
+Both input sequences are sorted, as is the output sequence."""
     # It's more efficient to do this by hand than to use "filter" and index.
     mmax = len(minuend)
     smax = len(subtrahend)
@@ -115,6 +137,8 @@ def _test_sorted_list_difference():
 
 # There MUST be a better way to do this!
 def same_elements(seq1, seq2):
+    """Return true if sequences SEQ1 and SEQ2 contain the same elements
+(in any order)."""
     s1 = list(seq1)
     s2 = list(seq2)
     s1.sort()
@@ -152,7 +176,7 @@ def _test_sorted_list_min_gap():
 
 
 def common_modulus(nums):
-    """Return a tuple of (r,m) where each number in NUMS is equal to r mod m.
+    """Return a tuple of (r,m) where each number in NUMS is equal to r (mod m).
 The largest possible modulus is used, and the trivial constraint that all
 integers are equal to 0 mod 1 is not returned (None is returned instead)."""
     nums = list(nums)			# convert arg if it's a tuple
@@ -178,7 +202,7 @@ def _test_common_modulus():
 # number in the set with each modulus.
 
 def common_nonmodulus_strict(nums):
-    """Return a tuple of (r,m) where no number in NUMS is equal to r mod m
+    """Return a tuple of (r,m) where no number in NUMS is equal to r (mod m)
 but all missing numbers in their range are."""
     nums = list(nums)
     nums.sort()
@@ -189,7 +213,7 @@ def _test_common_nonmodulus_strict():
     assert common_nonmodulus_strict([1,2,3,5,6,7,9,11]) == None
 
 def common_nonmodulus_nonstrict(nums):
-    """Return a tuple of (r,m) where no number in NUMS is equal to r mod m
+    """Return a tuple of (r,m) where no number in NUMS is equal to r (mod m)
 but for every number in NUMS, at least one is equal to every non-r remainder.
 The modulus is chosen as small as possible, but no greater than half the
 range of the input numbers (else None is returned)."""
@@ -215,11 +239,11 @@ def _test_common_nonmodulus_nonstrict():
     assert common_nonmodulus_nonstrict([1,2,3,5,6,7,9,11,12,13,16]) == None
 
 
+###########################################################################
+### Sorting
+###
+
 # Not worth defining -- too trivial
-# ###########################################################################
-# ### Sorting
-# ###
-# 
 # def cmp_second_element(a, b):
 #     # index 1 is second element
 #     return cmp(a[1],  b[1])
@@ -252,7 +276,9 @@ def _test_choose():
 
 # There must be a better way of doing this!
 def permutations(objs):
-    """Assumes OBJS contains no two elements eql to one another (they are
+    """Return a list containing all permutations of OBJS; each permutation
+is itself a list.
+Assumes OBJS contains no two elements eql to one another (they are
 considered to appear just once)."""
     if len(objs) == 0:
         return [[]]
@@ -277,6 +303,7 @@ def _test_permutations():
 ###
 
 def function_rep(fn):
+    """Return an abbreviated printed representation for function FN."""
     fnrep = `fn`
     match = re.compile(r'^<built-in function ([a-zA-Z_]+)>$').match(fnrep)
     if match:
@@ -299,7 +326,7 @@ def _test():
     _test_permutations()
 
 # It's slightly annoying that these run every time that I load this directly.
-# But I shouldn't load it directly except to test anyway
+# But I shouldn't load it directly except to test anyway.
 if __name__=='__main__':
     _test()
     print "util.py tests completed successfully"

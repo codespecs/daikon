@@ -2,12 +2,15 @@
 # invariants.py -- detect patterns in collections of data
 # Michael Ernst <mernst@cs.washington.edu>
 
+# For some additional documentation, see invariants.py.doc.
+
 import glob, operator, os, re, string, types
 
 import util
 
 true = (1==1)
 false = (1==0)
+
 
 ###########################################################################
 ### Variables
@@ -109,19 +112,26 @@ The subset is chosen according to the input indices."""
 # 
 # To detect invariants in a particular program, it is enough to insert code
 # in the application which creates a .inv file.  In Lisp, the
-# check-for-invariants macro performs this task.  Gries-style Lisp programs
-# can be automatically instrumented -- the calls to the check-for-invariants
-# macro are inserted by the instrument function found in gries-helper.lisp.
-# Given a file of Gries-style Lisp functions, instrument produces a new file
-# of instrumented Lisp code which can be compiled and run.
+# `check-for-invariants' macro performs this task.  Gries-style Lisp
+# programs can be automatically instrumented -- the calls to
+# `check-for-invariants' are inserted by the `instrument' function found in
+# gries-helper.lisp.  Given a file of Gries-style Lisp functions,
+# `instrument' produces a new file of instrumented Lisp code which can be
+# compiled and run.
 # 
-# Each line of a .inv file is of the form
+# Each entry of a .inv file is of the form
 # 
-#   tag varname1 value1 varname2 value2 ...
+#   tag
+#   varname1	value1
+#   varname2	value2
+#   ...
 # 
-# The tag is an arbitrary alphanumeric string indicating the program point at
-# which this data was collected.  The varnames are also alphanumeric.
-# Currently the values are integers.
+# The tag is an arbitrary alphanumeric string indicating the program point
+# at which this data was collected.  Varnames are separated by values by a
+# tab (\t) character.  The varnames are uninterpreted strings (but for a
+# given tag, the variable names must be consistent across different
+# entries).  Tags and varnames may not contain the tab (\t) character.
+# Currently the values are integers; this will be extended soon.
 
 
 def read_file(filename):
@@ -134,17 +144,18 @@ def read_file(filename):
     this_var_values = {}	# from function name to (tuple of values to occurrence count)
     this_samples = {}           # from function name to number of samples
 
-    for line in file.readlines():
-	line_elts = string.split(line)
-	function_name = line_elts[0]
-        # # Remove trailing colon
-        # if function_name[-1] == ":":
-        #     function_name = function_name[:-1]
-	these_names = []
+    line = file.readline()
+    if "\t" in line:
+        raise "First line should be tag line; saw: " + line
+
+    while (line != ""):                 # line == "" when we hit end of file
+        # line contains no tab character
+        tag = line[:-1]                 # remove trailing newline
+	these_var_names = []
 	these_values = []
-	for i in range(1, len(line_elts), 2):
-	    this_name = line_elts[i]
-	    this_value = line_elts[i+1]
+        line = file.readline()
+        while "\t" in line:
+            (this_var_name,this_value) = string.split(line, "\t", 1)
 	    if integer_re.match(this_value):
 		this_value = int(this_value)
             elif float_re.match(this_value):
@@ -154,18 +165,20 @@ def read_file(filename):
                 this_value = 0
             else:
                 raise "What value?"
-	    these_names.append(this_name)
+	    these_var_names.append(this_var_name)
 	    these_values.append(this_value)
-	these_names = tuple(these_names)
+            line = file.readline()
+	these_var_names = tuple(these_var_names)
 	these_values = tuple(these_values)
-	if not(this_var_names.has_key(function_name)):
-	    this_var_names[function_name] = these_names
-	    this_var_values[function_name] = {}
+	if not(this_var_names.has_key(tag)):
+	    this_var_names[tag] = these_var_names
+	    this_var_values[tag] = {}
 	else:
-	    assert this_var_names[function_name] == these_names
-	    assert type(this_var_values[function_name]) == types.DictType
-        util.mapping_increment(this_var_values[function_name], these_values, 1)
-        util.mapping_increment(this_samples, function_name, 1)
+	    assert this_var_names[tag] == these_var_names
+	    assert type(this_var_values[tag]) == types.DictType
+        util.mapping_increment(this_var_values[tag], these_values, 1)
+        util.mapping_increment(this_samples, tag, 1)
+
     return (this_var_names, this_var_values, this_samples)
 
 
@@ -381,8 +394,8 @@ class single_field_numeric_invariant(invariant):
                 and ((num_max > twice_avg_num)
                      or ((num_max > half_avg_num) and (dict[nums[-2]] > half_avg_num)))):
                 self.max_justified = true
-            print "min (%d) %d justified? %d %d" % (self.min, self.min_justified, num_min, dict[nums[1]])
-            print "max (%d) %d justified? %d %d" % (self.max, self.max_justified, num_max, dict[nums[-2]])
+            # print "min (%d) justified=%d: %d min elts, %d adjacent" % (self.min, self.min_justified, num_min, dict[nums[1]])
+            # print "max (%d) justified=%d: %d max elts, %d adjacent" % (self.max, self.max_justified, num_max, dict[nums[-2]])
 
         self.can_be_zero = (0 in nums)
         self.modulus = util.common_modulus(nums)
@@ -951,7 +964,7 @@ def all_three_field_numeric_invariants():
 ## Must check the output in case nonsense -- zeroes -- is returned.
 def bi_linear_relationship(pair1, pair2):
     """Given ((x0,y0),(x1,y1)), return (a,b) such that y = ax + b.
-If no such (a,b) exists, then return (0,0)."
+If no such (a,b) exists, then return (0,0)."""
 
     (x0, y0) = pair1
     (x1, y1) = pair2
@@ -997,7 +1010,7 @@ def checked_tri_linear_relationship(triples, permutation):
 ## Must check the output in case nonsense -- zeroes -- is returned.
 def tri_linear_relationship(triple1, triple2, triple3):
     """Given ((x1,y1,z1),(x2,y2,z2),(x3,y3,z3)), return (a,b,c) such that z=ax+by+c.
-If no such (a,b,c) exists, then return (0,0,0)."
+If no such (a,b,c) exists, then return (0,0,0)."""
 
     (x1, y1, z1) = triple1
     (x2, y2, z2) = triple2
@@ -1060,7 +1073,7 @@ If no such (a,b,c) exists, then return (0,0,0)."
 
 def tri_linear_format(abc, xyz):
     """Given ((a,b,c),(x,y,z)), format "z=ax+by+c".
-The result omits addition of zero, multiplication by one, etc."
+The result omits addition of zero, multiplication by one, etc."""
     (a,b,c) = abc
     (x,y,z) = xyz
 
