@@ -26,8 +26,8 @@ public final class VarComparabilityNone extends VarComparability implements java
     return it;
   }
 
-    static boolean compatible(String name1_, VarComparabilityNone type1,
-			      String name2_, VarComparabilityNone type2) {
-	return true;
-    }
+  static boolean compatible(VarInfoName name1, VarComparabilityNone type1,
+			    VarInfoName name2, VarComparabilityNone type2) {
+    return true;
+  }
 }
