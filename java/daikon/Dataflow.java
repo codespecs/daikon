@@ -101,7 +101,7 @@ public final class Dataflow {
           PptTopLevel ppt = (PptTopLevel) i.next();
           progress = "Relating to GLOBAL ppt: " +ppt.ppt_name.toString();
           if (ppt != global)
-            ppt.init_global_transforms (global);
+            ppt.init_global_transforms();
         }
       }
 
@@ -208,8 +208,8 @@ public final class Dataflow {
    * For every variable that has the same name in higher and lower,
    * add a link in the po relating them.  See the definitions of lower
    * and higher in VarInfo for their semantics.
-   * @see VarInfo.po_higher
-   * @see VarInfo.po_lower
+   * @see VarInfo#po_higher()
+   * @see VarInfo#po_lower()
    **/
   private static void setup_po_same_name(VarInfo[] lower,
                                          VarInfo[] higher) {
@@ -221,8 +221,8 @@ public final class Dataflow {
    * For every variable that has the same name in higher and lower (after transformation),
    * add a link in the po relating them.  See the definitions of lower
    * and higher in VarInfo for their semantics.
-   * @see VarInfo.po_higher
-   * @see VarInfo.po_lower
+   * @see VarInfo#po_higher()
+   * @see VarInfo#po_lower()
    **/
   private static void setup_po_same_name(VarInfo[] lower,
                                          VarInfoName.Transformer lower_xform,
