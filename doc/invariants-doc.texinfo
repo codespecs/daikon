@@ -2,7 +2,9 @@
 
 
 @item AndJoiner
-
+This is a special invariant used internally by Daikon to represent
+ an antecedent invariant in an implication where that antecedent
+ consists of two invariants anded together.
 
 @item CommonFloatSequence
 Represents double sequences that contain a common subset.  Prints as
@@ -73,9 +75,10 @@ Represents long sequences where the elements of the sequence
  (when there is only one value), or as "x[] one of @{c1, c2, c3@}" (when
  there are multiple values).
 
-See also the following configuration option:
+See also the following configuration options:
     @itemize @bullet
     @item daikon.inv.unary.sequence.EltOneOf.size
+    @item daikon.inv.unary.sequence.EltOneOf.omit_hashcode_values_Simplify
     @end itemize
 
 @item EltOneOfFloat
@@ -213,23 +216,105 @@ Represents an invariant of "<" between two
 Represents an invariant of "!=" between two
  double scalars.
 
-@item FunctionBinary
-Represents an invariant between three long scalars by applying
- a function to two of the scalars.  Prints as either "x  == function (y, z)"
- or as "x == y op z" depending upon whether it is an actual function call
- or a binary operator.
+@item FunctionBinary.BitwiseAndLong_@{xyz, yxz, zxy@}
+Represents the invariant ' x = BitwiseAnd (y, z)' over three
+ long scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
 
- Current long operators are: * / % << >> >>> & && ^ | || @*
- Current long functions are: min max gcd pow
+@item FunctionBinary.BitwiseOrLong_@{xyz, yxz, zxy@}
+Represents the invariant ' x = BitwiseOr (y, z)' over three
+ long scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
 
-@item FunctionBinaryFloat
-Represents an invariant between three double scalars by applying
- a function to two of the scalars.  Prints as either "x  == function (y, z)"
- or as "x == y op z" depending upon whether it is an actual function call
- or a binary operator.
+@item FunctionBinary.BitwiseXorLong_@{xyz, yxz, zxy@}
+Represents the invariant ' x = BitwiseXor (y, z)' over three
+ long scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
 
- Current double operators are: * / @*
- Current double functions are: min max pow
+@item FunctionBinary.DivisionLong_@{xyz, xzy, yxz, yzx, zxy, zyx@}
+Represents the invariant ' x = Division (y, z)' over three
+ long scalars.
+Since the function is non-symmetric, all six permutations of the variables are checked
+
+@item FunctionBinary.GcdLong_@{xyz, yxz, zxy@}
+Represents the invariant ' x = Gcd (y, z)' over three
+ long scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
+
+@item FunctionBinary.LogicalAndLong_@{xyz, yxz, zxy@}
+Represents the invariant ' x = LogicalAnd (y, z)' over three
+ long scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
+
+@item FunctionBinary.LogicalOrLong_@{xyz, yxz, zxy@}
+Represents the invariant ' x = LogicalOr (y, z)' over three
+ long scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
+
+@item FunctionBinary.LogicalXorLong_@{xyz, yxz, zxy@}
+Represents the invariant ' x = LogicalXor (y, z)' over three
+ long scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
+
+@item FunctionBinary.LshiftLong_@{xyz, xzy, yxz, yzx, zxy, zyx@}
+Represents the invariant ' x = Lshift (y, z)' over three
+ long scalars.
+Since the function is non-symmetric, all six permutations of the variables are checked
+
+@item FunctionBinary.MaximumLong_@{xyz, yxz, zxy@}
+Represents the invariant ' x = Maximum (y, z)' over three
+ long scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
+
+@item FunctionBinary.MinimumLong_@{xyz, yxz, zxy@}
+Represents the invariant ' x = Minimum (y, z)' over three
+ long scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
+
+@item FunctionBinary.ModLong_@{xyz, xzy, yxz, yzx, zxy, zyx@}
+Represents the invariant ' x = Mod (y, z)' over three
+ long scalars.
+Since the function is non-symmetric, all six permutations of the variables are checked
+
+@item FunctionBinary.MultiplyLong_@{xyz, yxz, zxy@}
+Represents the invariant ' x = Multiply (y, z)' over three
+ long scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
+
+@item FunctionBinary.PowerLong_@{xyz, xzy, yxz, yzx, zxy, zyx@}
+Represents the invariant ' x = Power (y, z)' over three
+ long scalars.
+Since the function is non-symmetric, all six permutations of the variables are checked
+
+@item FunctionBinary.RshiftSignedLong_@{xyz, xzy, yxz, yzx, zxy, zyx@}
+Represents the invariant ' x = RshiftSigned (y, z)' over three
+ long scalars.
+Since the function is non-symmetric, all six permutations of the variables are checked
+
+@item FunctionBinary.RshiftUnsignedLong_@{xyz, xzy, yxz, yzx, zxy, zyx@}
+Represents the invariant ' x = RshiftUnsigned (y, z)' over three
+ long scalars.
+Since the function is non-symmetric, all six permutations of the variables are checked
+
+@item FunctionBinaryFloat.DivisionDouble_@{xyz, xzy, yxz, yzx, zxy, zyx@}
+Represents the invariant ' x = Division (y, z)' over three
+ double scalars.
+Since the function is non-symmetric, all six permutations of the variables are checked
+
+@item FunctionBinaryFloat.MaximumDouble_@{xyz, yxz, zxy@}
+Represents the invariant ' x = Maximum (y, z)' over three
+ double scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
+
+@item FunctionBinaryFloat.MinimumDouble_@{xyz, yxz, zxy@}
+Represents the invariant ' x = Minimum (y, z)' over three
+ double scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
+
+@item FunctionBinaryFloat.MultiplyDouble_@{xyz, yxz, zxy@}
+Represents the invariant ' x = Multiply (y, z)' over three
+ double scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
 
 @item FunctionUnary
 Represents an invariant between two long scalars by applying a
@@ -248,7 +333,10 @@ Represents an invariant between two double scalars by applying a
  Current double functions are: none
 
 @item GuardingImplication
-
+This is a special implication invariant that guards any invariants that
+  are over variables that are sometimes missing.  For example, if the
+  invariant 'a.x = 0' is true, the guarded implication is 'a != null =>
+  a.x = 0'
 
 @item Implication
 The Implication invariant class is used internally within Daikon to
@@ -389,9 +477,10 @@ Represents long scalars that take on only a few distinct values.  Prints
  a hashcode (pointer) - this is because the numerical value of the
  hashcode (pointer) is uninteresting).
 
-See also the following configuration option:
+See also the following configuration options:
     @itemize @bullet
     @item daikon.inv.unary.scalar.OneOfScalar.size
+    @item daikon.inv.unary.scalar.OneOfScalar.omit_hashcode_values_Simplify
     @end itemize
 
 @item OneOfSequence
@@ -399,9 +488,10 @@ Represents long[] variables that take on only a few distinct
  values. Prints as either "x == c" (when there is only one value),
  or as "x one of @{c1, c2, c3@}" (when there are multiple values).
 
-See also the following configuration option:
+See also the following configuration options:
     @itemize @bullet
     @item daikon.inv.unary.sequence.OneOfSequence.size
+    @item daikon.inv.unary.sequence.OneOfSequence.omit_hashcode_values_Simplify
     @end itemize
 
 @item OneOfString
@@ -542,70 +632,70 @@ Represents two double sequences where one is in the reverse order
 @item SeqFloatEqual
 Represents double scalars with an invariant to each element of
  double sequences.  Prints as 'x[] elements == y' where x is a
- double sequence and y is a double scalar
+ double sequence and y is a double scalar.
 
 @item SeqFloatGreaterEqual
 Represents double scalars with an invariant to each element of
  double sequences.  Prints as 'x[] elements >= y' where x is a
- double sequence and y is a double scalar
+ double sequence and y is a double scalar.
 
 @item SeqFloatGreaterThan
 Represents double scalars with an invariant to each element of
  double sequences.  Prints as 'x[] elements > y' where x is a
- double sequence and y is a double scalar
+ double sequence and y is a double scalar.
 
 @item SeqFloatLessEqual
 Represents double scalars with an invariant to each element of
  double sequences.  Prints as 'x[] elements <= y' where x is a
- double sequence and y is a double scalar
+ double sequence and y is a double scalar.
 
 @item SeqFloatLessThan
 Represents double scalars with an invariant to each element of
  double sequences.  Prints as 'x[] elements < y' where x is a
- double sequence and y is a double scalar
+ double sequence and y is a double scalar.
 
 @item SeqIndexComparison
-Represents invariants between elements of a long sequence and
- the indices of those elements.  Prints as "x[i] [cmp] i" where
- [cmp] is one of < <= > >=
+Represents invariants asserting that an ordering holds between
+ elements of a long sequence and the indices of those elements.
+ Prints as "x[i] [cmp] i" where [cmp] is one of < <= > >=
 
 @item SeqIndexComparisonFloat
-Represents invariants between elements of a double sequence and
- the indices of those elements.  Prints as "x[i] [cmp] i" where
- [cmp] is one of < <= > >=
+Represents invariants asserting that an ordering holds between
+ elements of a double sequence and the indices of those elements.
+ Prints as "x[i] [cmp] i" where [cmp] is one of < <= > >=
 
 @item SeqIndexNonEqual
 Represents long sequences where the element stored at index i is
- not equal to i.  Prints as "x[i] != i"
+ not equal to i, for any i.  Prints as "x[i] != i"
 
 @item SeqIndexNonEqualFloat
 Represents double sequences where the element stored at index i is
- not equal to i.  Prints as "x[i] != i"
+ not equal to i, for any i.  Prints as "x[i] != i"
 
 @item SeqIntEqual
 Represents long scalars with an invariant to each element of
  long sequences.  Prints as 'x[] elements == y' where x is a
- long sequence and y is a long scalar
+ long sequence and y is a long scalar.
 
 @item SeqIntGreaterEqual
 Represents long scalars with an invariant to each element of
  long sequences.  Prints as 'x[] elements >= y' where x is a
- long sequence and y is a long scalar
+ long sequence and y is a long scalar.
 
 @item SeqIntGreaterThan
 Represents long scalars with an invariant to each element of
  long sequences.  Prints as 'x[] elements > y' where x is a
- long sequence and y is a long scalar
+ long sequence and y is a long scalar.
 
 @item SeqIntLessEqual
 Represents long scalars with an invariant to each element of
  long sequences.  Prints as 'x[] elements <= y' where x is a
- long sequence and y is a long scalar
+ long sequence and y is a long scalar.
 
 @item SeqIntLessThan
 Represents long scalars with an invariant to each element of
  long sequences.  Prints as 'x[] elements < y' where x is a
- long sequence and y is a long scalar
+ long sequence and y is a long scalar.
 
 @item SeqSeqFloatEqual
 Represents invariants between two double sequences.  If order
@@ -772,6 +862,30 @@ Represents invariants between two String sequences.  If order
 @item StringComparison
 Represents lexical invariants between two strings.  Prints as
  "s1 [cmp] s2" where [cmp] is one of == > >= < <=
+
+@item StringEqual
+Represents an invariant of "==" between two
+ String scalars.
+
+@item StringGreaterEqual
+Represents an invariant of ">=" between two
+ String scalars.
+
+@item StringGreaterThan
+Represents an invariant of ">" between two
+ String scalars.
+
+@item StringLessEqual
+Represents an invariant of "<=" between two
+ String scalars.
+
+@item StringLessThan
+Represents an invariant of "<" between two
+ String scalars.
+
+@item StringNonEqual
+Represents an invariant of "!=" between two
+ String scalars.
 
 @item SubSequence
 Represents two long sequences where one sequence is a subsequence
