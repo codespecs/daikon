@@ -379,20 +379,21 @@ public final class OneOfString
 
       }
     if (num_elts == dkconfig_size) {
-      flowThis();
-      destroy();
+      destroyAndFlow();
       return;
     }
 
     if (is_type() && (num_elts == 1)) {
-      flowThis();
-      destroy();
+      destroyAndFlow();
       return;
     }
 
     // We are significantly changing our state (not just zeroing in on
-    // a constant), so we have to flow a copy before we do so.
-    if (num_elts > 0) flowClone();
+    // a constant), so we have to flow a copy before we do so.  We even
+    // need to clone if this has 0 elements becuase otherwise, lower
+    // ppts will get versions of this with multiple elements once this is
+    // expanded.
+    cloneAndFlow();
 
     elts[num_elts] = v;
     num_elts++;

@@ -190,7 +190,7 @@ public final class EltOneOfString
   public String format_java() {
     //have to take a closer look at this!
 
-    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
+    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name });
     String varname = form[1];
 
     String result;
@@ -289,7 +289,7 @@ public final class EltOneOfString
 
   public String format_esc() {
 
-    String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+    String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name });
     String varname = form[1];
 
     String result;
@@ -338,7 +338,7 @@ public final class EltOneOfString
 
   public String format_jml() {
 
-    String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
+    String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name });
     String varname = form[1];
 
     String result;
@@ -374,7 +374,7 @@ public final class EltOneOfString
 
   public String format_simplify() {
 
-    String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
+    String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name });
     String varname = form[1];
 
     String result;
@@ -420,20 +420,21 @@ public final class EltOneOfString
 
       }
     if (num_elts == dkconfig_size) {
-      flowThis();
-      destroy();
+      destroyAndFlow();
       return;
     }
 
     if (is_type() && (num_elts == 1)) {
-      flowThis();
-      destroy();
+      destroyAndFlow();
       return;
     }
 
     // We are significantly changing our state (not just zeroing in on
-    // a constant), so we have to flow a copy before we do so.
-    if (num_elts > 0) flowClone();
+    // a constant), so we have to flow a copy before we do so.  We even
+    // need to clone if this has 0 elements becuase otherwise, lower
+    // ppts will get versions of this with multiple elements once this is
+    // expanded.
+    cloneAndFlow();
 
     elts[num_elts] = v;
     num_elts++;

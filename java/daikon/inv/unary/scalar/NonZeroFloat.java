@@ -100,8 +100,7 @@ public class NonZeroFloat
       if (debug.isDebugEnabled() || ppt.debugged) {
         System.out.println("NonZeroFloat.destroy(" + ppt.name + ")");
       }
-      flowThis();
-      destroy();
+      destroyAndFlow();
       return;
     }
     // The min and max tests will simultaneously succeed exactly once (for

@@ -118,15 +118,13 @@ public class Reverse
 
   public void add_modified(long [] a1, long [] a2, int count) {
     if (a1.length != a2.length) {
-      flowThis();
-      destroy();
+      destroyAndFlow();
       return;
     }
     int len = a1.length;
     for (int i=0, j=len-1; i<len; i++, j--)
       if (a1[i] != a2[j]) {
-        flowThis();
-        destroy();
+        destroyAndFlow();
         return;
       }
   }

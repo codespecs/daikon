@@ -89,8 +89,7 @@ public class PairwiseFunctionUnaryFloat
 
   public void add_modified(double [] x_arr, double [] y_arr, int count) {
     if (x_arr.length != y_arr.length) {
-      flowThis();
-      destroy();
+      destroyAndFlow();
       return;
     }
     int len = x_arr.length;

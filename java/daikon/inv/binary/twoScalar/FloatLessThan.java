@@ -140,8 +140,7 @@ public final class FloatLessThan
     //                      + v1 + "," + v2 + ", count=" + count + ")");
     // }
     if (!(v1 <  v2)) {
-      flowThis();
-      destroy();
+      destroyAndFlow();
       return;
     }
 

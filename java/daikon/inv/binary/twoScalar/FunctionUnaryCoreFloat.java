@@ -82,8 +82,7 @@ public final class FunctionUnaryCoreFloat
           : (y == (FunctionsFloat.invokeUnary(methodNumber, x))));
 
     if (! ok) {
-      wrapper.flowThis();
-      wrapper.destroy();
+      wrapper.destroyAndFlow();
     }
 
     values_cache.add(x, y);

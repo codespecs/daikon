@@ -176,13 +176,11 @@ public class NoDuplicatesFloat
   public void add_modified(double [] a, int count) {
     for (int i=1; i<a.length; i++) {
       if (ArraysMDE.indexOf(a, a[i]) < i) {
-        flowThis();
         if (debug.isDebugEnabled()) {
           debug.debug ("Flowing myself with: " + var().name.repr());
           debug.debug (ArraysMDE.toString(a));
         }
-        flowThis();
-        destroy();
+        destroyAndFlow();
         return;
       }
     }

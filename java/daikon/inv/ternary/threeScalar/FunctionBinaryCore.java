@@ -106,13 +106,11 @@ public final class FunctionBinaryCore
           // System.out.println("FunctionBinaryCore"  +  " failed: "
           //                    + result + " != " + function + "(" + arg1 + ", " + arg2 + ")"
           //                    + " ; " + var_order_string[var_order]);
-          wrapper.flowThis();
-          wrapper.destroy();
+          wrapper.destroyAndFlow();
           return;
         }
     } catch (Exception e) {
-      wrapper.flowThis();
-      wrapper.destroy();
+      wrapper.destroyAndFlow();
       return;
     }
 

@@ -140,8 +140,7 @@ public final class LinearTernaryCore
                             + a + "*" + x_cache[i]
                             + "+" + b + "*" + y_cache[i] + "+" + c);
               }
-              wrapper.flowThis();
-              wrapper.destroy();
+              wrapper.destroyAndFlow();
               return;
             }
           }
@@ -154,8 +153,7 @@ public final class LinearTernaryCore
           debug.debug("Suppressing LinearTernaryCore at new value: "
                       + z + " != " + a + "*" + x + "+" + b + "*" + y + "+" + c + " = " + (a*x+b*y+c));
         }
-        wrapper.flowThis();
-        wrapper.destroy();
+        wrapper.destroyAndFlow();
         return;
       }
     }
@@ -279,8 +277,7 @@ public final class LinearTernaryCore
       if (debug.isDebugEnabled()) {
         debug.debug("Suppressing LinearTernaryCore " + wrapper.ppt.name + " due to zero denominator; " + cache_repr());
       }
-      wrapper.flowThis();
-      wrapper.destroy();
+      wrapper.destroyAndFlow();
       return;
     }
     try {
@@ -291,8 +288,7 @@ public final class LinearTernaryCore
       if (debug.isDebugEnabled()) {
         debug.debug("Suppressing LinearTernaryCore " + wrapper.ppt.name + " due to exception.");
       }
-      wrapper.flowThis();
-      wrapper.destroy();
+      wrapper.destroyAndFlow();
       return;
     }
   }

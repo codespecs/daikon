@@ -260,7 +260,7 @@ public final class EltOneOfFloat
 
   public String format_jml() {
 
-    String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
+    String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name });
     String varname = form[1];
 
     String result;
@@ -315,14 +315,16 @@ public final class EltOneOfFloat
 
       }
     if (num_elts == dkconfig_size) {
-      flowThis();
-      destroy();
+      destroyAndFlow();
       return;
     }
 
     // We are significantly changing our state (not just zeroing in on
-    // a constant), so we have to flow a copy before we do so.
-    if (num_elts > 0) flowClone();
+    // a constant), so we have to flow a copy before we do so.  We even
+    // need to clone if this has 0 elements becuase otherwise, lower
+    // ppts will get versions of this with multiple elements once this is
+    // expanded.
+    cloneAndFlow();
 
     elts[num_elts] = v;
     num_elts++;

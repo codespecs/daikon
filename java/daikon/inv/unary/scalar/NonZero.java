@@ -84,7 +84,9 @@ public class NonZero
         return "nil";
       else
         return "null";
-    } else {
+    } else
+
+    {
       return "0";
     }
   }
@@ -116,8 +118,7 @@ public class NonZero
       if (debug.isDebugEnabled() || ppt.debugged) {
         System.out.println("NonZero.destroy(" + ppt.name + ")");
       }
-      flowThis();
-      destroy();
+      destroyAndFlow();
       return;
     }
     // The min and max tests will simultaneously succeed exactly once (for

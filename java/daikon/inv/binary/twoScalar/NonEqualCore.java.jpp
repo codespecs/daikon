@@ -97,8 +97,7 @@ public final class CLASSNAME
       if (wrapper.ppt.debugged) {
         System.out.println(CLASSSTRING + ".destroy()");
       }
-      wrapper.flowThis();
-      wrapper.destroy();
+      wrapper.destroyAndFlow();
       return;
     }
     if (v1 < min1) min1 = v1;

@@ -86,8 +86,7 @@ public final class StringComparisonCore
 
   public void add_modified(String v1, String v2, int count) {
     if ((v1 == null) || (v2 == null)) {
-      wrapper.flowThis();
-      wrapper.destroy();
+      wrapper.destroyAndFlow();
       return;
     }
 
@@ -124,12 +123,11 @@ public final class StringComparisonCore
         || (obvious_can_be_gt && new_can_be_gt)
         || (obvious_can_be_le && new_can_be_lt && new_can_be_eq)
         || (obvious_can_be_ge && new_can_be_gt && new_can_be_eq)) {
-      wrapper.flowThis();
-      wrapper.destroy();
+      wrapper.destroyAndFlow();
       return;
     }
 
-    wrapper.flowClone();
+    wrapper.cloneAndFlow();
     can_be_eq = new_can_be_eq;
     can_be_lt = new_can_be_lt;
     can_be_gt = new_can_be_gt;

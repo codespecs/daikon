@@ -4,7 +4,13 @@ package daikon.inv.ternary.threeScalar;
 
 import daikon.*;
 import daikon.inv.Invariant;
+import daikon.inv.OneOf;
+import daikon.inv.unary.scalar.OneOfScalar;
+import daikon.inv.unary.scalar.OneOfFloat;
+import daikon.suppress.*;
+import utilMDE.Assert;
 import java.lang.reflect.*;
+import java.util.*;
 import org.apache.log4j.Category;
 
 public class FunctionBinary
@@ -114,5 +120,80 @@ public class FunctionBinary
   //   }
   //   super.destroy();
   // }
+
+  private static final SuppressionFactory[] suppressionFactories =
+    new SuppressionFactory[] {};
+
+  // Disabled because this factory doesn't do suppression.
+  // new SuppressionFactory[] {FunctionBinarySuppressionFactory.getInstance()};
+
+  public SuppressionFactory[] getSuppressionFactories() {
+    return suppressionFactories;
+  }
+
+
+// SuppressionFactory for FunctionBinary invariants.  Right now, we
+// suppress all FunctionBinary such that one of the members is a
+// constant.  This isn't correct for suppression, since constants
+// don't imply FunctionBinary.  However, a FunctionBinary invariant
+// that results from constant components is uninteresting, so this
+// should later be used in filtering for printing.
+/*
+  static class FunctionBinarySuppressionFactory extends SuppressionFactory {
+
+    public static final Category debug = Category.getInstance ("daikon.suppress.factories.FunctionBinarySuppressionFactory");
+
+    public static final FunctionBinarySuppressionFactory theInstance =
+      new FunctionBinarySuppressionFactory();
+
+    private FunctionBinarySuppressionFactory() {
+
+    }
+
+    public static SuppressionFactory getInstance() {
+      return theInstance;
+    }
+
+    public Object readResolve() {
+      return theInstance;
+    }
+
+    public SuppressionLink generateSuppressionLink (Invariant arg) {
+      if (debug.isDebugEnabled()) {
+        debug.debug ("Attempting to generate suppression link for: " + arg.repr());
+      }
+
+      Assert.assertTrue (arg instanceof FunctionBinary);
+
+      FunctionBinary inv = (FunctionBinary) arg;
+
+      // We will make a template for all possible constants.
+      SuppressionTemplate template = new SuppressionTemplate();
+
+      template.invTypes = new Class[] {OneOfScalar.class};
+      template.varInfos = new VarInfo [][] {new VarInfo[1]};
+
+      VarInfo[] vis = new VarInfo[] {inv.var1(), inv.var2(), inv.var3()};
+      for (int i = 0; i < vis.length; i++) {
+        template.varInfos[0][0] = vis[i];
+        template.resetResults();
+        inv.ppt.parent.fillSuppressionTemplate (template);
+        if (template.results[0] != null) {
+          OneOf suppressor = (OneOf) template.results[0];
+          if (suppressor.num_elts() <= 1) {
+            List suppressors = new ArrayList();
+            suppressors.add (suppressor);
+            SuppressionLink sl = new SuppressionLink (this, inv, suppressors);
+            if (debug.isDebugEnabled()) {
+              debug.debug ("Success: " + template.results[0].repr());
+            }
+            return sl;
+          }
+        }
+      }
+      return null;
+    }
+  }
+*/
 
 }

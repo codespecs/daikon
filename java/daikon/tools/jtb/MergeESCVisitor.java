@@ -223,9 +223,9 @@ class MergeESCVisitor extends DepthFirstVisitor {
 
 	if (result.containsValue(exceptionName)) {
 	  exceptionInvariants = (Collection)result.get(exceptionName);
-	  exceptionInvariants.add(ppt.invariants_vector());
+	  exceptionInvariants.add(ppt.getInvariants());
 	} else {
-	  exceptionInvariants = new Vector(ppt.invariants_vector());
+	  exceptionInvariants = new Vector(ppt.getInvariants());
 	  result.put(exceptionName,exceptionInvariants);
 	}
       }

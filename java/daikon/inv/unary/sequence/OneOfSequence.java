@@ -255,10 +255,10 @@ public final class OneOfSequence
           length = var().name.applySize().java_name() + " == " + value.length;
         }
         if (no_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
+          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name });
           forall = form[0] + "(" + form[1] + " != null)" + form[2];
         } else if (all_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
+          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name });
           forall = form[0] + "(" + form[1] + " == null)" + form[2];
         }
       }
@@ -331,10 +331,10 @@ public final class OneOfSequence
           length = var().name.applySize().esc_name() + " == " + value.length;
         }
         if (no_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name });
           forall = form[0] + "(" + form[1] + " != null)" + form[2];
         } else if (all_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name });
           forall = form[0] + "(" + form[1] + " == null)" + form[2];
         }
       }
@@ -372,10 +372,10 @@ public final class OneOfSequence
           length = var().name.applySize().jml_name() + " == " + value.length;
         }
         if (no_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
+          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name });
           forall = form[0] + form[1] + " != null" + form[2];
         } else if (all_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
+          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name });
           forall = form[0] + form[1] + " == null" + form[2];
         }
       }
@@ -409,10 +409,10 @@ public final class OneOfSequence
         length = "(EQ " + var().name.applySize().simplify_name() + " " + value.length + ")";
       }
       if (no_nulls(0)) {
-        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
+        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name });
         forall = form[0] + "(NEQ " + form[1] + "  null)" + form[2];
       } else if (all_nulls(0)) {
-        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
+        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name });
         forall = form[0] + "(EQ " + form[1] + "  null)" + form[2];
       }
     }
@@ -441,20 +441,21 @@ public final class OneOfSequence
 
       }
     if (num_elts == dkconfig_size) {
-      flowThis();
-      destroy();
+      destroyAndFlow();
       return;
     }
 
     if (is_hashcode && (num_elts == 1)) {
-      flowThis();
-      destroy();
+      destroyAndFlow();
       return;
     }
 
     // We are significantly changing our state (not just zeroing in on
-    // a constant), so we have to flow a copy before we do so.
-    if (num_elts > 0) flowClone();
+    // a constant), so we have to flow a copy before we do so.  We even
+    // need to clone if this has 0 elements becuase otherwise, lower
+    // ppts will get versions of this with multiple elements once this is
+    // expanded.
+    cloneAndFlow();
 
     elts[num_elts] = v;
     num_elts++;

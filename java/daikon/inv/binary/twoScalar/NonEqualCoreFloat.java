@@ -69,8 +69,7 @@ public final class NonEqualCoreFloat
       if (wrapper.ppt.debugged) {
         System.out.println("NonEqualCoreFloat.destroy()");
       }
-      wrapper.flowThis();
-      wrapper.destroy();
+      wrapper.destroyAndFlow();
       return;
     }
     if (v1 < min1) min1 = v1;

@@ -176,8 +176,7 @@ public final class EltNonZeroFloat
       // The min and max tests will simultaneoulsy succeed exactly once (for
       // the first value).
       if (v == 0) {
-        flowThis();
-        destroy();
+        destroyAndFlow();
         return;
       }
       // XXX; uh oh -- flowing these is bad stuff; maybe search for

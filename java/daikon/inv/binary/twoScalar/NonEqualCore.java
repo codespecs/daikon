@@ -69,8 +69,7 @@ public final class NonEqualCore
       if (wrapper.ppt.debugged) {
         System.out.println("NonEqualCore.destroy()");
       }
-      wrapper.flowThis();
-      wrapper.destroy();
+      wrapper.destroyAndFlow();
       return;
     }
     if (v1 < min1) min1 = v1;

@@ -222,7 +222,6 @@ public class LinearTernaryFloat
 
   public void add_modified(double  x, double  y, double  z, int count) {
     core.add_modified(x, y, z, count);
-    if (falsified) flowThis();
   }
 
   public boolean enoughSamples() {

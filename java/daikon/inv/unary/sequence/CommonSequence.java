@@ -94,8 +94,7 @@ public class CommonSequence
           tmp[size++] = a[i];
 
       if (size==0) {
-        flowThis();
-        destroy();
+        destroyAndFlow();
         return;
       }
 

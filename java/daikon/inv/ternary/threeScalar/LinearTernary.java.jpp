@@ -255,7 +255,6 @@ public class CLASSNAME
 
   public void add_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
     core.add_modified(x, y, z, count);
-    if (falsified) flowThis();
   }
 
   public boolean enoughSamples() {

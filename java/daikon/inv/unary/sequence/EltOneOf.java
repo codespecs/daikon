@@ -231,7 +231,7 @@ public final class EltOneOf
   public String format_java() {
     //have to take a closer look at this!
 
-    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
+    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name });
     String varname = form[1];
 
     String result;
@@ -251,7 +251,9 @@ public final class EltOneOf
           // + " (hashcode=" + elts[0] + ")"
           ;
       }
-    } else {
+    } else
+
+    {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
@@ -284,7 +286,9 @@ public final class EltOneOf
       } else {
         result = varname + " = {one value}";
       }
-    } else {
+    } else
+
+    {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " \\/ "; }
@@ -299,7 +303,7 @@ public final class EltOneOf
 
   public String format_esc() {
 
-    String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+    String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name });
     String varname = form[1];
 
     String result;
@@ -325,7 +329,9 @@ public final class EltOneOf
         Assert.assertTrue(elts[1] != 0);
         return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
       }
-    } else {
+    } else
+
+    {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
@@ -340,7 +346,7 @@ public final class EltOneOf
 
   public String format_jml() {
 
-    String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
+    String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name });
     String varname = form[1];
 
     String result;
@@ -360,7 +366,9 @@ public final class EltOneOf
           // + " (hashcode=" + elts[0] + ")"
           ;
       }
-    } else {
+    } else
+
+    {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
@@ -375,7 +383,7 @@ public final class EltOneOf
 
   public String format_simplify() {
 
-    String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
+    String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name });
     String varname = form[1];
 
     String result;
@@ -394,7 +402,9 @@ public final class EltOneOf
         Assert.assertTrue(elts[1] != 0);
         result = "(OR (EQ " + varname + " null) (EQ " + varname + "|hash_" + elts[1] + "|))";
       }
-    } else {
+    } else
+
+    {
       result = "";
       for (int i=0; i<num_elts; i++) {
         result += " (EQ " + varname + " " + ((( elts[i]  == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")))  + ")";
@@ -424,29 +434,29 @@ public final class EltOneOf
 
       }
     if (num_elts == dkconfig_size) {
-      flowThis();
-      destroy();
+      destroyAndFlow();
       return;
     }
 
     if ((is_boolean && (num_elts == 1))
         || (is_hashcode && (num_elts == 2))) {
-      flowThis();
-      destroy();
+      destroyAndFlow();
       return;
     }
     if (is_hashcode && (num_elts == 1)) {
       // Permit two object values only if one of them is null
       if ((elts[0] != 0) && (v != 0)) {
-        flowThis();
-        destroy();
+        destroyAndFlow();
         return;
       }
     }
 
     // We are significantly changing our state (not just zeroing in on
-    // a constant), so we have to flow a copy before we do so.
-    if (num_elts > 0) flowClone();
+    // a constant), so we have to flow a copy before we do so.  We even
+    // need to clone if this has 0 elements becuase otherwise, lower
+    // ppts will get versions of this with multiple elements once this is
+    // expanded.
+    cloneAndFlow();
 
     elts[num_elts] = v;
     num_elts++;

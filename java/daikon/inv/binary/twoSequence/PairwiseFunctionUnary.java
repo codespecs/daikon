@@ -89,8 +89,7 @@ public class PairwiseFunctionUnary
 
   public void add_modified(long [] x_arr, long [] y_arr, int count) {
     if (x_arr.length != y_arr.length) {
-      flowThis();
-      destroy();
+      destroyAndFlow();
       return;
     }
     int len = x_arr.length;

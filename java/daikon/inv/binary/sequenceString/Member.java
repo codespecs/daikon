@@ -5,11 +5,14 @@ package daikon.inv.binary.sequenceString;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.twoScalar.*;
+import daikon.inv.binary.twoSequence.*;
 import daikon.derive.*;
 import daikon.derive.unary.*;
 import daikon.derive.binary.*;
+import daikon.suppress.*;
 import java.util.*;
 import utilMDE.*;
+import org.apache.log4j.Category;
 
 public final class Member
   extends SequenceString
@@ -73,8 +76,8 @@ public final class Member
   // variables.
   public static boolean isEqualToObviousMember(VarInfo sclvar, VarInfo seqvar) {
     /* [INCR]
-    // Assert.assertTrue(sclvar.isCanonical()); // [INCR]
-    // Assert.assertTrue(seqvar.isCanonical()); // [INCR]
+    Assert.assertTrue(sclvar.isCanonical());
+    Assert.assertTrue(seqvar.isCanonical());
     Vector scl_equalto = sclvar.equalTo();
     scl_equalto.add(0, sclvar);
     Vector seq_equalto = seqvar.equalTo();
@@ -298,8 +301,7 @@ public final class Member
       if (debugMember) {
         System.out.println("Member destroyed:  " + format() + " because " + i + " not in " + ArraysMDE.toString(a));
       }
-      flowThis();
-      destroy();
+      destroyAndFlow();
       return;
     }
   }
@@ -316,4 +318,103 @@ public final class Member
     Assert.assertTrue(other instanceof Member);
     return true;
   }
+
+  private static final SuppressionFactory[] suppressionFactories =
+    new SuppressionFactory[] {MemberSuppressionFactory.getInstance()};
+
+  public SuppressionFactory[] getSuppressionFactories() {
+    return suppressionFactories;
+  }
+
+  /**
+   * Suppression generator for Member type invariants.  If sequences A
+   * and B are related such that A is a subset or subsequence of B,
+   * all Member invariants like "A[i] in B" are suppressed.
+   **/
+  public static class MemberSuppressionFactory extends SuppressionFactory {
+
+    public static final Category debug =
+      Category.getInstance("daikon.suppress.factories.MemberSuppressionFactory");
+
+    private static final MemberSuppressionFactory theInstance = new MemberSuppressionFactory();
+
+    public static SuppressionFactory getInstance() {
+      return theInstance;
+    }
+
+    private Object readResolve() {
+      return theInstance;
+    }
+
+    public SuppressionLink generateSuppressionLink (Invariant arg) {
+      Assert.assertTrue (arg instanceof Member);
+      Member inv = (Member) arg;
+      VarInfo sclSequence = inv.sclvar().isDerivedSequenceMember();
+      if (sclSequence == null) return null;
+      VarInfo seqvar = inv.seqvar();
+      if (sclSequence.isDerivedSubSequenceOf() == seqvar) {
+        return null;
+        // Actually we should be supressing this for tautological reasons
+      }
+
+      {
+        SuppressionTemplate template = new SuppressionTemplate();
+        template.invTypes = new Class[] {PairwiseIntComparison.class};
+        template.varInfos = new VarInfo[][] {new VarInfo[] {sclSequence, seqvar}};
+        SuppressionLink sl = byTemplate (template, inv);
+        if (sl != null) {
+          String comparator = ((PairwiseIntComparison) template.results[0]).getComparator();
+          if (comparator.indexOf ("=") != -1 ||
+              comparator.indexOf ("?") != -1) {
+            return sl;
+          }
+        }
+      }
+
+      {
+        // Try to see if SubSet invariant is there
+        SuppressionTemplate template = new SuppressionTemplate();
+        template.invTypes = new Class[] {SubSet.class};
+        template.varInfos = new VarInfo[][] {new VarInfo[] {sclSequence, seqvar}};
+        SuppressionLink sl = byTemplate (template, inv);
+        if (sl != null) {
+          // First transformed var in first invariant
+          VarInfo transSclSequence = template.transforms[0][0];
+          // Second transformed var in first invariant
+          VarInfo transSeqvar = template.transforms[0][1];
+          SubSet subSet = (SubSet) template.results[0];
+          if ((subSet.var1_in_var2 && subSet.var1() == transSclSequence) ||
+              (subSet.var2_in_var1 && subSet.var2() == transSclSequence)) {
+            if (debug.isDebugEnabled()) {
+              debug.debug ("Suppressed by subset: " + subSet.repr());
+              debug.debug ("  sclSeq " + transSclSequence.name.name());
+              debug.debug ("  seqVar " + transSeqvar.name.name());
+            }
+            return sl;
+          }
+        }
+      }
+
+      {
+        // Failed on finding the right SubSet invariant.  Now try SubSequence
+        SuppressionTemplate template = new SuppressionTemplate();
+        template.invTypes = new Class[] {SubSequence.class};
+        template.varInfos = new VarInfo[][] {new VarInfo[] {sclSequence, seqvar}};
+        SuppressionLink sl = byTemplate (template, inv);
+        if (sl != null) {
+          // First transformed var in first invariant
+          VarInfo transSclSequence = template.transforms[0][0];
+          // Second transformed var in first invariant
+          VarInfo transSeqvar = template.transforms[0][1];
+          SubSequence subSeq = (SubSequence) template.results[0];
+          if ((subSeq.var1_in_var2 && subSeq.var1() == transSclSequence) ||
+              (subSeq.var2_in_var1 && subSeq.var2() == transSclSequence)) {
+            return sl;
+          }
+        }
+      }
+      return null;
+    }
+  }
+
 }

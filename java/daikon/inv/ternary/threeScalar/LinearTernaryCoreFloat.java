@@ -140,8 +140,7 @@ public final class LinearTernaryCoreFloat
                             + a + "*" + x_cache[i]
                             + "+" + b + "*" + y_cache[i] + "+" + c);
               }
-              wrapper.flowThis();
-              wrapper.destroy();
+              wrapper.destroyAndFlow();
               return;
             }
           }
@@ -154,8 +153,7 @@ public final class LinearTernaryCoreFloat
           debug.debug("Suppressing LinearTernaryCoreFloat at new value: "
                       + z + " != " + a + "*" + x + "+" + b + "*" + y + "+" + c + " = " + (a*x+b*y+c));
         }
-        wrapper.flowThis();
-        wrapper.destroy();
+        wrapper.destroyAndFlow();
         return;
       }
     }
@@ -284,8 +282,7 @@ public final class LinearTernaryCoreFloat
       if (debug.isDebugEnabled()) {
         debug.debug("Suppressing LinearTernaryCoreFloat " + wrapper.ppt.name + " due to zero denominator; " + cache_repr());
       }
-      wrapper.flowThis();
-      wrapper.destroy();
+      wrapper.destroyAndFlow();
       return;
     }
     try {
@@ -296,8 +293,7 @@ public final class LinearTernaryCoreFloat
       if (debug.isDebugEnabled()) {
         debug.debug("Suppressing LinearTernaryCoreFloat " + wrapper.ppt.name + " due to exception.");
       }
-      wrapper.flowThis();
-      wrapper.destroy();
+      wrapper.destroyAndFlow();
       return;
     }
   }

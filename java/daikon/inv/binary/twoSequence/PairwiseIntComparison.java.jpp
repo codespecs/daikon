@@ -122,6 +122,10 @@ public class CLASSNAME
       + core.repr();
   }
 
+  public String getComparator() {
+    return core.format_comparator();
+  }
+
   public String format_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.IOA) return format_ioa();
@@ -179,8 +183,7 @@ public class CLASSNAME
 
   public void add_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {
     if (a1.length != a2.length) {
-      flowThis();
-      destroy();
+      destroyAndFlow();
       return;
     }
     int len = a1.length;

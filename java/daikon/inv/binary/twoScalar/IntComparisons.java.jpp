@@ -343,8 +343,7 @@ invariants.
     //                      + v1 + "," + v2 + ", count=" + count + ")");
     // }
     if (!(v1 EQUALS v2)) {
-      flowThis();
-      destroy();
+      destroyAndFlow();
       return;
     }
 #ifdef TRACK_NUM_VALUES

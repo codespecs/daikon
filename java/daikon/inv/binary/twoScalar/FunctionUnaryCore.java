@@ -82,8 +82,7 @@ public final class FunctionUnaryCore
           : (y == (Functions.invokeUnary(methodNumber, x))));
 
     if (! ok) {
-      wrapper.flowThis();
-      wrapper.destroy();
+      wrapper.destroyAndFlow();
     }
 
     values_cache.add(x, y);

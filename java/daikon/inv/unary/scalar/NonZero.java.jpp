@@ -160,8 +160,7 @@ public class NONZERO
       if (debug.isDebugEnabled() || ppt.debugged) {
         System.out.println(NONZEROSTRING + ".destroy(" + ppt.name + ")");
       }
-      flowThis();
-      destroy();
+      destroyAndFlow();
       return;
     }
     // The min and max tests will simultaneously succeed exactly once (for

@@ -84,8 +84,7 @@ public class CommonStringSequence
           tmp[size++] = a[i];
 
       if (size==0) {
-        flowThis();
-        destroy();
+        destroyAndFlow();
         return;
       }
       intersect = ArraysMDE.subarray(tmp, 0, size);

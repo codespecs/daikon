@@ -121,12 +121,11 @@ public final class FloatComparisonCore
         || (obvious_can_be_gt && new_can_be_gt)
         || (obvious_can_be_le && new_can_be_lt && new_can_be_eq)
         || (obvious_can_be_ge && new_can_be_gt && new_can_be_eq)) {
-      wrapper.flowThis();
-      wrapper.destroy();
+      wrapper.destroyAndFlow();
       return;
     }
 
-    wrapper.flowClone();
+    wrapper.cloneAndFlow();
     can_be_eq = new_can_be_eq;
     can_be_lt = new_can_be_lt;
     can_be_gt = new_can_be_gt;

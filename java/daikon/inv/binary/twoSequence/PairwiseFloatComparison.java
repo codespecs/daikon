@@ -92,6 +92,10 @@ public class PairwiseFloatComparison
       + core.repr();
   }
 
+  public String getComparator() {
+    return core.format_comparator();
+  }
+
   public String format_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.IOA) return format_ioa();
@@ -149,8 +153,7 @@ public class PairwiseFloatComparison
 
   public void add_modified(double [] a1, double [] a2, int count) {
     if (a1.length != a2.length) {
-      flowThis();
-      destroy();
+      destroyAndFlow();
       return;
     }
     int len = a1.length;

@@ -186,13 +186,12 @@ public class SeqComparison
 
     if ((new_can_be_lt && new_can_be_gt)
         || (only_check_eq && (new_can_be_lt || new_can_be_gt))) {
-      flowThis();
-      destroy();
+      destroyAndFlow();
       return;
     }
 
     // changed but didn't die
-    flowClone();
+    cloneAndFlow();
     can_be_eq = new_can_be_eq;
     can_be_lt = new_can_be_lt;
     can_be_gt = new_can_be_gt;

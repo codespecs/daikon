@@ -4,6 +4,7 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.derive.*;
 import daikon.derive.binary.*;
+import daikon.suppress.*;
 import daikon.inv.unary.sequence.EltOneOf;
 import daikon.VarInfoName.QuantHelper;
 import daikon.VarInfoName.QuantHelper.QuantifyReturn;
@@ -132,22 +133,41 @@ public class SubSet
   }
 
   public void add_modified(long [] a1, long [] a2, int count) {
-    if (var1_in_var2 && (!ArraysMDE.isSubset(a1, a2))) {
-      var1_in_var2 = false;
-      if (!var2_in_var1) {
-        flowThis();
-        destroy();
+    boolean new_var1_in_var2 = var1_in_var2;
+    boolean new_var2_in_var1 = var2_in_var1;
+    boolean changed = false;
+    if (debug.isDebugEnabled()) {
+      debug.debug (a1);
+      debug.debug (a2);
+    }
+
+    if (new_var1_in_var2 && (!ArraysMDE.isSubset(a1, a2))) {
+      new_var1_in_var2 = false;
+      debug.debug ("Falsified 1");
+      if (!new_var2_in_var1) {
+        destroyAndFlow();
         return;
+      } else {
+        // We are weakening me
+        changed = true;
       }
     }
-    if (var2_in_var1 && (!ArraysMDE.isSubset(a2, a1))) {
-      var2_in_var1 = false;
-      if (!var1_in_var2) {
-        flowThis();
-        destroy();
+    if (new_var2_in_var1 && (!ArraysMDE.isSubset(a2, a1))) {
+      new_var2_in_var1 = false;
+      debug.debug ("Falsified 2");
+      if (!new_var1_in_var2) {
+        destroyAndFlow();
         return;
+      } else {
+        // We are weakening me
+        changed = true;
       }
     }
+    if (changed) {
+      cloneAndFlow();
+    }
+    var1_in_var2 = new_var1_in_var2;
+    var2_in_var1 = new_var2_in_var1;
     Assert.assertTrue(var1_in_var2 || var2_in_var1);
   }
 
@@ -205,6 +225,56 @@ public class SubSet
   {
     Assert.assertTrue(other instanceof SubSet);
     return true;
+  }
+
+  private static final SuppressionFactory[] suppressionFactories =
+    new SuppressionFactory[] {SubSetSuppressionFactory.getInstance()};
+
+  public SuppressionFactory[] getSuppressionFactories() {
+    return suppressionFactories;
+  }
+
+  /**
+   * Suppression generator for SubSet type invariants.  When A and B
+   * are subsets of each other, they're just equal, so no need to check
+   * them.  Replaces isObviousImplied.
+   **/
+
+  static class SubSetSuppressionFactory extends SuppressionFactory {
+
+    public static final Category debug = Category.getInstance ("daikon.suppress.factories.SubSetSuppressionFactory");
+
+    private static final SubSetSuppressionFactory theInstance =
+      new SubSetSuppressionFactory();
+
+    public static SuppressionFactory getInstance() {
+      return theInstance;
+    }
+
+    private Object readResolve() {
+      return theInstance;
+    }
+
+    public SuppressionLink generateSuppressionLink (Invariant arg) {
+      Assert.assertTrue (arg instanceof SubSet);
+      SubSet inv = (SubSet) arg;
+
+      SuppressionTemplate template = new SuppressionTemplate();
+      template.invTypes = new Class[] {PairwiseIntComparison.class};
+      template.varInfos = new VarInfo[][] {new VarInfo[] {inv.var1(), inv.var2()}};
+
+      SuppressionLink result = byTemplate (template, inv);
+      if (result != null) {
+        String comparator = ((PairwiseIntComparison) template.results[0]).getComparator();
+        if (comparator.indexOf("=") > -1 ||
+            comparator.indexOf("?") > -1) {
+          return result;
+        }
+      }
+      return null;
+
+    }
+
   }
 
 }

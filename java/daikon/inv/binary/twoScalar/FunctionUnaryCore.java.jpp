@@ -108,8 +108,7 @@ public final class CLASSNAME
           : (y == (FUNCTIONS.invokeUnary(methodNumber, x))));
 
     if (! ok) {
-      wrapper.flowThis();
-      wrapper.destroy();
+      wrapper.destroyAndFlow();
     }
 
     values_cache.add(x, y);

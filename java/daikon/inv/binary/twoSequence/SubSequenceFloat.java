@@ -7,6 +7,7 @@ import daikon.inv.*;
 import daikon.derive.*;
 import daikon.derive.unary.*;
 import daikon.derive.binary.*;
+import daikon.suppress.*;
 import daikon.inv.unary.sequence.EltOneOfFloat;
 import daikon.VarInfoName.QuantHelper;
 import daikon.VarInfoName.QuantHelper.QuantifyReturn;
@@ -129,7 +130,7 @@ public class SubSequenceFloat
     VarInfo supervar = (var1_in_var2 ? var2() : var1());
     // (exists k s.t. (forall i, j; (i bounds & j bounds & (i = j + k)) ==> ...))
 
-    QuantifyReturn qret = QuantHelper.quantify(new VarInfoName[] { subvar.name, supervar.name} );
+    QuantifyReturn qret = QuantHelper.quantify(new VarInfoName[] { subvar.name, supervar.name});
     Assert.assertTrue(qret.bound_vars.size() == 2);
     Assert.assertTrue(qret.root_primes.length == 2);
 
@@ -254,13 +255,12 @@ public class SubSequenceFloat
       return;
 
     if (! (new_var1_in_var2 || new_var2_in_var1)) {
-      flowThis();
-      destroy();
+      destroyAndFlow();
       return;
     }
 
     // changed == true but not dead yet
-    flowClone();
+    cloneAndFlow();
     var1_in_var2 = new_var1_in_var2;
     var2_in_var1 = new_var2_in_var1;
   }
@@ -481,6 +481,56 @@ public class SubSequenceFloat
   {
     Assert.assertTrue(other instanceof SubSequenceFloat);
     return true;
+  }
+
+  private static final SuppressionFactory[] suppressionFactories =
+    new SuppressionFactory[] {SubSequenceSuppressionFactory.getInstance()};
+
+  public SuppressionFactory[] getSuppressionFactories() {
+    return suppressionFactories;
+  }
+
+  /**
+   * Suppression generator for SubSequence type invariants.  When A and B
+   * are subsets of each other, they're just equal, so no need to check
+   * them.  Replaces isObviousImplied.
+   **/
+
+  static class SubSequenceSuppressionFactory extends SuppressionFactory {
+
+    public static final Category debug = Category.getInstance ("daikon.suppress.factories.SubSequenceSuppressionFactory");
+
+    private static final SubSequenceSuppressionFactory theInstance =
+      new SubSequenceSuppressionFactory();
+
+    public static SuppressionFactory getInstance() {
+      return theInstance;
+    }
+
+    private Object readResolve() {
+      return theInstance;
+    }
+
+    public SuppressionLink generateSuppressionLink (Invariant arg) {
+      Assert.assertTrue (arg instanceof SubSequence);
+      SubSequence inv = (SubSequence) arg;
+
+      SuppressionTemplate template = new SuppressionTemplate();
+      template.invTypes = new Class[] {PairwiseIntComparison.class};
+      template.varInfos = new VarInfo[][] {new VarInfo[] {inv.var1(), inv.var2()}};
+
+      SuppressionLink result = byTemplate (template, inv);
+      if (result != null) {
+        String comparator = ((PairwiseIntComparison) template.results[0]).getComparator();
+        if (comparator.indexOf("=") > -1 ||
+            comparator.indexOf("?") > -1) {
+          return result;
+        }
+      }
+      return null;
+
+    }
+
   }
 
 }

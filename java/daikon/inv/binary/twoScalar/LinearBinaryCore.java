@@ -133,8 +133,7 @@ public final class LinearBinaryCore
         }
         if (! ok) {
           values_seen--;
-          wrapper.flowClone();
-          wrapper.destroy();
+          wrapper.destroyAndFlow();
           return;
         } else {
           x_cache = null;
@@ -148,8 +147,7 @@ public final class LinearBinaryCore
           debug.debug("Suppressing LinearBinaryCore (" + wrapper.format() + ") at new value: "
                              + y + " != " + a + "*" + x + "+" + b);
         }
-        wrapper.flowThis();
-        wrapper.destroy();
+        wrapper.destroyAndFlow();
         return;
       }
     }
