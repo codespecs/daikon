@@ -272,6 +272,9 @@ public final class Daikon {
 
   public static final Logger debugProgress =Logger.getLogger("daikon.Progress");
 
+  /** prints out statistics concerning equality sets, suppressions, etc **/
+  public static final Logger debugStats = Logger.getLogger ("daikon.stats");
+
   // Avoid problems if daikon.Runtime is loaded at analysis (rather than
   // test-run) time.  This might have to change when JTrace is used.
   static { daikon.Runtime.no_dtrace = true; }
@@ -886,6 +889,9 @@ public final class Daikon {
     if (monitor != null) {
       monitor.stop();
     }
+
+    if (debugStats.isLoggable (Level.FINE))
+      PptSliceEquality.print_equality_stats (debugStats, all_ppts);
 
     // Postprocessing
 

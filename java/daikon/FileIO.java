@@ -784,6 +784,18 @@ public final class FileIO {
         else
           ppt.add_and_flow(vt, 1);
 
+        // Keep track of equality set statistics
+        if (Daikon.debugStats.isLoggable (Level.FINE)) {
+          List slist = (List) Global.stats_map.get (ppt);
+          if (slist == null) {
+            slist = new ArrayList();
+            Global.stats_map.put (ppt, slist);
+          }
+          PptSliceEquality.Stats stats = new PptSliceEquality.Stats();
+          stats.incr (ppt);
+          slist.add (stats);
+        }
+
         // [INCR] temporal_manager.processEvent(temporal_manager.generateSampleEvent(ppt, vt));
 
         // Feeding values to EXITnn points will automatically have
