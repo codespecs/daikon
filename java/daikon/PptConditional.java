@@ -11,7 +11,7 @@ import daikon.split.griesLisp.*;
 // This perhaps shouldn't extend PptTopLevel; fix that in the future.
 // For now, it's convenient to take advantage of its functionality.
 // And they're so similar that maybe this is the right thing after all.
-class PptConditional extends PptTopLevel {
+public class PptConditional extends PptTopLevel {
 
   Ppt parent;
   Splitter splitter;

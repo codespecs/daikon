@@ -17,8 +17,21 @@ class PairwiseIntComparison extends TwoSequence {
     core = new IntComparisonCore(this);
   }
 
+  protected PairwiseIntComparison(PptSlice ppt_, boolean only_eq) {
+    super(ppt_);
+    core = new IntComparisonCore(this, only_eq);
+  }
+
   public static PairwiseIntComparison instantiate(PptSlice ppt) {
-    return new PairwiseIntComparison(ppt);
+    VarInfo var1 = ppt.var_infos[0];
+    VarInfo var2 = ppt.var_infos[1];
+
+    boolean only_eq = false;
+    if (! (var1.type.elementType().isIntegral() && var2.type.elementType().isIntegral())) {
+      only_eq = true;
+    }
+
+    return new PairwiseIntComparison(ppt, only_eq);
   }
 
   public String repr() {
@@ -55,7 +68,13 @@ class PairwiseIntComparison extends TwoSequence {
 
 
   public void add_modified(int[] a1, int[] a2, int count) {
-    int len = Math.min(a1.length, a2.length);
+    if (a1.length != a2.length) {
+      destroy();
+      return;
+    }
+    int len = a1.length;
+    // int len = Math.min(a1.length, a2.length);
+
     for (int i=0; i<len; i++) {
       int v1 = a1[i];
       int v2 = a2[i];

@@ -202,7 +202,11 @@ public class PptSliceGeneric extends PptSlice {
   boolean check_modbits () {
     // The value "0" can be had for missing samples.
     if ((num_mod_non_missing_samples() << arity) < num_values()) {
-      values_cache.dump();
+      if (values_cache == null) {
+        System.out.println("Values cache has been cleared");
+      } else {
+        values_cache.dump();
+      }
       throw new Error("Bad mod bits in dtrace file:\n"
                       + "num_mod_non_missing_samples()=" + num_mod_non_missing_samples()
                       + ", num_samples()=" + num_samples()
@@ -219,13 +223,14 @@ public class PptSliceGeneric extends PptSlice {
     // the cache.  Do this at call sites where appropriate.
     // Assert.assert(check_modbits());
 
-    if (values_cache != null) {
-      num_samples_post_cache = num_samples();
-      num_mod_non_missing_samples_post_cache = num_mod_non_missing_samples();
-      num_values_post_cache = num_values();
-      tuplemod_samples_summary_post_cache = tuplemod_samples_summary();
-      values_cache = null;
-    }
+    // Commented out for debugging[
+    // if (values_cache != null) {
+    //   num_samples_post_cache = num_samples();
+    //   num_mod_non_missing_samples_post_cache = num_mod_non_missing_samples();
+    //   num_values_post_cache = num_values();
+    //   tuplemod_samples_summary_post_cache = tuplemod_samples_summary();
+    //   values_cache = null;
+    // }
   }
 
   // public int num_missing() { return values_cache.num_missing; }

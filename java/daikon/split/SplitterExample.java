@@ -18,6 +18,10 @@ public class SplitterExample extends Splitter {
     return new SplitterExample(ppt);
   }
 
+  public boolean valid() {
+    return (x_varinfo != null);
+  }
+
   public boolean test(ValueTuple vt) {
     // Alternately, use vt.getIntArrayValue(x_varinfo);
     return (x_varinfo.getIntValue(vt) > 0);

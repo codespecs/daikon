@@ -28,14 +28,16 @@ public class IntComparisonCore {
   Invariant wrapper;
 
   public IntComparisonCore(Invariant wrapper_) {
-    this(wrapper_, false, false, false, false);
+    this(wrapper_, false, false, false, false, false);
   }
 
-// , boolean only_eq
-  public IntComparisonCore(Invariant wrapper_, boolean obvious_lt, boolean obvious_gt, boolean obvious_le, boolean obvious_ge) {
+  public IntComparisonCore(Invariant wrapper_, boolean only_eq) {
+    this(wrapper_, only_eq, false, false, false, false);
+  }
+
+  public IntComparisonCore(Invariant wrapper_, boolean only_eq, boolean obvious_lt, boolean obvious_gt, boolean obvious_le, boolean obvious_ge) {
     wrapper = wrapper_;
-//    only_check_eq = only_eq;
-only_check_eq = false;
+    only_check_eq = only_eq;
     obvious_can_be_lt = obvious_lt;
     obvious_can_be_gt = obvious_gt;
     obvious_can_be_le = obvious_le;

@@ -49,8 +49,8 @@ public class ExplicitVarComparability extends VarComparability {
   public static ExplicitVarComparability makeAlias(VarInfo vi) {
     return makeAlias(vi.name, vi.comparability);
   }
-  public static ExplicitVarComparability makeAlias(String name, ExplicitVarComparability vc) {
-    return new ExplicitVarComparability(vc.base, vc.indices, vc.dimensions, name);
+  public static ExplicitVarComparability makeAlias(String name) {
+    return new ExplicitVarComparability(base, indices, dimensions, name);
   }
 
   public boolean alwaysComparable() {

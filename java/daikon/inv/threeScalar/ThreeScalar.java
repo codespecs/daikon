@@ -52,9 +52,14 @@ public abstract class ThreeScalar extends Invariant {
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
-   * Subclasses can overrided this.
+   * Subclasses can override this.
    */
   public void add_unmodified(int v1, int v2, int v3, int count) {
+    if (Daikon.cond_mod_hack && (ppt.parent instanceof PptConditional)) {
+      add_modified(v1, v2, v3, count);
+      return;
+    }
+
     return;
   }
 

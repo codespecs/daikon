@@ -41,9 +41,14 @@ public abstract class SingleSequence extends Invariant {
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
-   * Subclasses can overrided this.
+   * Subclasses can override this.
    */
   public void add_unmodified(int[] value, int count) {
+    if (Daikon.cond_mod_hack && (ppt.parent instanceof PptConditional)) {
+      add_modified(value, count);
+      return;
+    }
+
     return;
   }
 

@@ -12,8 +12,8 @@ import java.io.*;
 
 public class Daikon {
 
-  // public static final boolean disable_splitting = false;
-  public static final boolean disable_splitting = true;
+  public static final boolean disable_splitting = false;
+  // public static final boolean disable_splitting = true;
 
   public static final boolean disable_ternary_invariants = false;
   // public static final boolean disable_ternary_invariants = true;
@@ -22,6 +22,9 @@ public class Daikon {
   public static final boolean check_program_types = true;
   // public static final boolean check_program_types = false;
 
+  // Hack to deal with the fact that sometimes a PptConditional ends up
+  // with data that has no modification bits set.
+  public static final boolean cond_mod_hack = true;
 
   // The two arguments to daikon.Daikon are a comma-separated list of
   // declaration files, and a comma-separated list of data trace files.
@@ -85,6 +88,13 @@ public class Daikon {
       String ppt_name = (String) itor.next();
       PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
       if (ppt.num_samples() > 0) {
+        // System.out.println(ppt.name + ": " + ppt.num_samples() + " samples, "
+        //                    + ppt.num_values() + " values, "
+        //                    + "ratio = " + ((double)ppt.num_samples()) / ((double)ppt.num_values()));
+        // System.out.println("start dump-----------------------------------------------------------------");
+        // System.out.println(ppt.name);
+        // ppt.values.dump();
+        // System.out.println("end dump-------------------------------------------------------------------");
         ppt.initial_processing();
         if (! disable_splitting) {
           Splitter[] pconds = ppt.getSplitters();

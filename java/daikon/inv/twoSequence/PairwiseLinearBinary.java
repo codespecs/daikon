@@ -52,7 +52,12 @@ class PairwiseLinearBinary extends TwoSequence {
   }
 
   public void add_modified(int[] x_arr, int[] y_arr, int count) {
-    int len = Math.min(x_arr.length, y_arr.length);
+    if (x_arr.length != y_arr.length) {
+      destroy();
+      return;
+    }
+    int len = x_arr.length;
+    // int len = Math.min(x_arr.length, y_arr.length);
 
     for (int i=0; i<len; i++) {
       int x = x_arr[i];

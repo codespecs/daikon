@@ -18,12 +18,12 @@ class IntComparison extends TwoScalar implements Comparison {
   public IntComparisonCore core;
 
   protected IntComparison(PptSlice ppt_) {
-    this(ppt_, false, false, false, false);
+    this(ppt_, false, false, false, false, false);
   }
 
-  protected IntComparison(PptSlice ppt_, boolean obvious_lt, boolean obvious_gt, boolean obvious_le, boolean obvious_ge) {
+  protected IntComparison(PptSlice ppt_, boolean only_eq, boolean obvious_lt, boolean obvious_gt, boolean obvious_le, boolean obvious_ge) {
     super(ppt_);
-    core = new IntComparisonCore(this, obvious_lt, obvious_gt, obvious_le, obvious_ge);
+    core = new IntComparisonCore(this, only_eq, obvious_lt, obvious_gt, obvious_le, obvious_ge);
   }
 
   public static IntComparison instantiate(PptSlice ppt) {
@@ -54,55 +54,60 @@ class IntComparison extends TwoScalar implements Comparison {
     // }
 
 
+    boolean only_eq = false;
     boolean obvious_lt = false;
     boolean obvious_gt = false;
     boolean obvious_le = false;
     boolean obvious_ge = false;
-    Derivation deriv1 = var1.derived;
-    Derivation deriv2 = var2.derived;
-    if ((seqvar1 != null) && (seqvar2 != null)) {
-      boolean min1 = (deriv1 instanceof SequenceMin);
-      boolean max1 = (deriv1 instanceof SequenceMax);
-      boolean min2 = (deriv2 instanceof SequenceMin);
-      boolean max2 = (deriv2 instanceof SequenceMax);
-      VarInfo super1 = seqvar1.isDerivedSubSequenceOf();
-      VarInfo super2 = seqvar2.isDerivedSubSequenceOf();
 
-      if (debugIntComparison) {
-        System.out.println("IntComparison.instantiate: "
-                           + "min1=" + min1
-                           + ", max1=" + max1
-                           + ", min2=" + min2
-                           + ", max2=" + max2
-                           + ", super1=" + super1
-                           + ", super2=" + super2
-                           + ", iom(var2, seqvar1)=" + Member.isObviousMember(var2, seqvar1)
-                           + ", iom(var1, seqvar2)=" + Member.isObviousMember(var1, seqvar2));
-      }
-      if (seqvar1 == seqvar2) {
-        // Same sequence.  The invariant is obvious as soon as it's nonequal,
-        // because "all elements equal" will be reported elsewhere.
-        if (min1 || max2)
-          obvious_lt = true;
-        else if (max1 || min2)
-          obvious_gt = true;
-      } else if ((min1 || max1) && Member.isObviousMember(var2, seqvar1)) {
-        if (min1) {
-          obvious_le = true;
-        } else if (max1) {
-          obvious_ge = true;
-        }
-      } else if ((min2 || max2) && Member.isObviousMember(var1, seqvar2)) {
-        if (min2) {
-          obvious_ge = true;
-        } else if (max2) {
-          obvious_le = true;
-        }
-      }
+    if (! (var1.type.isIntegral() && var2.type.isIntegral())) {
+      only_eq = true;
+    } else {
+      if ((seqvar1 != null) && (seqvar2 != null)) {
+        Derivation deriv1 = var1.derived;
+        Derivation deriv2 = var2.derived;
+        boolean min1 = (deriv1 instanceof SequenceMin);
+        boolean max1 = (deriv1 instanceof SequenceMax);
+        boolean min2 = (deriv2 instanceof SequenceMin);
+        boolean max2 = (deriv2 instanceof SequenceMax);
+        VarInfo super1 = seqvar1.isDerivedSubSequenceOf();
+        VarInfo super2 = seqvar2.isDerivedSubSequenceOf();
 
+        if (debugIntComparison) {
+          System.out.println("IntComparison.instantiate: "
+                             + "min1=" + min1
+                             + ", max1=" + max1
+                             + ", min2=" + min2
+                             + ", max2=" + max2
+                             + ", super1=" + super1
+                             + ", super2=" + super2
+                             + ", iom(var2, seqvar1)=" + Member.isObviousMember(var2, seqvar1)
+                             + ", iom(var1, seqvar2)=" + Member.isObviousMember(var1, seqvar2));
+        }
+        if (seqvar1 == seqvar2) {
+          // Same sequence.  The invariant is obvious as soon as it's nonequal,
+          // because "all elements equal" will be reported elsewhere.
+          if (min1 || max2)
+            obvious_lt = true;
+          else if (max1 || min2)
+            obvious_gt = true;
+        } else if ((min1 || max1) && Member.isObviousMember(var2, seqvar1)) {
+          if (min1) {
+            obvious_le = true;
+          } else if (max1) {
+            obvious_ge = true;
+          }
+        } else if ((min2 || max2) && Member.isObviousMember(var1, seqvar2)) {
+          if (min2) {
+            obvious_ge = true;
+          } else if (max2) {
+            obvious_le = true;
+          }
+        }
+      }
     }
 
-    return new IntComparison(ppt, obvious_lt, obvious_gt, obvious_le, obvious_ge);
+    return new IntComparison(ppt, only_eq, obvious_lt, obvious_gt, obvious_le, obvious_ge);
 
   }
 
