@@ -41,7 +41,7 @@ Goal (esc): warning: method daikon.inv.unary.scalar.NonModulus.format(OutputForm
 Goal (ioa): mod(a, 5) ~= 2
 Goal (jml): a % 5 != 2
 Goal (dbc): a % 5 != 2
-Goal (simplify): warning: method daikon.inv.unary.scalar.NonModulus.format(OutputFormat:Simplify) needs to be implemented: a != 2  (mod 5)
+Goal (simplify): (NEQ (MOD |a| 5) 2)
 0
 1
 3
