@@ -1434,5 +1434,79 @@ public final class UtilMDE {
   //   v.toArray(new String[0])
 
 
+  /**
+   * Returns a list of lists of each combination (with repetition, but
+   * not permutations) of the specified objects starting at index
+   * start over dims dimensions.
+   *
+   * For example, create_combinations (1, 0, {a, b, c}) returns:
+   *    {a}, {b}, {c}
+   *
+   * And create_combinations (2, 0, {a, b, c}) returns:
+   *
+   *    {a, a}, {a, b}, {a, c}
+   *    {b, b}, {b, c},
+   *    {c, c}
+   */
+  public static List create_combinations (int dims, int start, List objs) {
+
+    List results = new ArrayList();
+
+    for (int i = start; i < objs.size(); i++) {
+      if (dims == 1) {
+        List simple = new ArrayList();
+        simple.add (objs.get(i));
+        results.add (simple);
+      } else {
+        List combos = create_combinations (dims-1, i, objs);
+        for (Iterator j = combos.iterator(); j.hasNext(); ) {
+          List simple = new ArrayList();
+          simple.add (objs.get(i));
+          simple.addAll ((List) j.next());
+          results.add (simple);
+        }
+      }
+    }
+
+    return (results);
+  }
+
+  /**
+   * Returns a list of lists of each combination (with repetition, but
+   * not permutations) of integers from start to cnt (inclusive) over
+   * arity dimensions.
+   *
+   * For example, create_combinations (1, 0, 2) returns:
+   *    {0}, {1}, {2}
+   *
+   * And create_combinations (2, 0, 2} returns:
+   *
+   *    {0, 0}, {0, 1}, {0, 2}
+   *    {1, 1}  {1, 2},
+   *    {2, 2}
+   */
+  public static List create_combinations (int arity, int start, int cnt) {
+
+    List results = new ArrayList();
+
+    // Return a list with one zero length element if arity is zero
+    if (arity == 0) {
+      results.add (new ArrayList());
+      return (results);
+    }
+
+    for (int i = start; i <= cnt; i++) {
+      List combos = create_combinations (arity-1, i, cnt);
+      for (Iterator j = combos.iterator(); j.hasNext(); ) {
+        List simple = new ArrayList();
+        simple.add (new Integer(i));
+        simple.addAll ((List) j.next());
+        results.add (simple);
+      }
+    }
+
+    return (results);
+
+  }
 
 }
