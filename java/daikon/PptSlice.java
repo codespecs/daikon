@@ -130,7 +130,7 @@ public abstract class PptSlice
 
     if (debugGeneral.isDebugEnabled()) {
       debugGeneral.debug(Arrays.asList(var_infos));
-    }    
+    }
   }
 
   /** Trim the collections used in this PptSlice */
@@ -168,23 +168,33 @@ public abstract class PptSlice
 				true   // higher
 				);
 
-    // We will always have at least one path, since the dataflow
-    // result includes 'here'.  We need a result of size 2 to know
-    // that there is another place higher than here.
+    // We always have at least one path, since the dataflow result
+    // includes 'here' -- we ignore the 'here' path.  If any other
+    // path maps all variables from this program point, we are
+    // controlled.
 
-    if (Global.debugInfer.isDebugEnabled()) {
-      // Warning, this one's expensive
-      Global.debugInfer.debug ("isControlled check: ");
-      StringBuffer sb = new StringBuffer();
-      for (int i = 0; i < higher.ppts.length; i++) {
-	sb.append (" ");
-	sb.append (higher.ppts[i].ppt_name);
+    final int all_except_here = higher.ppts.length - 1;
+    for (int i = 0; i < all_except_here; i++) {
+      int[] flow = higher.ints[i];
+      boolean all = true;
+      for (int j = 0; all && (j < arity); j++) {
+	int varinfo_index = var_infos[j].varinfo_index;
+	int var_flow_to = flow[varinfo_index];
+	boolean flows = (var_flow_to != -1);
+	all = all && flows;
       }
-      Global.debugInfer.debug (sb.toString());
-
+      if (Global.debugInfer.isDebugEnabled()) {
+	Global.debugInfer.debug
+	  ("isControlled: "
+	   + name + " controlled by " + higher.ppts[i].name + "? : "
+	   + (all ? "yes" : "no"));
+      }
+      if (all) {
+	return true;
+      }
     }
 
-    return (higher.ppts.length >= 2);
+    return false;
   }
 
   /**
