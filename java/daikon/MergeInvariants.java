@@ -181,7 +181,7 @@ public final class MergeInvariants {
       decl_files.add (decl_file);
       merge_ppts = FileIO.read_declaration_files(decl_files);
       Daikon.create_splitters(merge_ppts, splitter_files);
-      Dataflow.init_partial_order (merge_ppts);
+      Daikon.init_ppts (merge_ppts);
       merge_ppts.trimToSize();
       PptRelation.init_hierarchy (merge_ppts);
     }
