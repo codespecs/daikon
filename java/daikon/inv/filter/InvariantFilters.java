@@ -70,6 +70,7 @@ public class InvariantFilters {
     }
 
     addPropertyFilter( new SuppressionFilter());
+    addPropertyFilter( new ParentFilter());
     addPropertyFilter( new NonCanonicalVariablesFilter());
     addPropertyFilter( new DerivedParameterFilter());
     addPropertyFilter( new UnjustifiedFilter());
@@ -168,6 +169,7 @@ public class InvariantFilters {
     String oldString = invariant.discardString;
 
     //  Do variable filters first since they eliminate more invariants.
+    invariant.log("Processing " + variableFilters.size() + " variable filters");
     if (variableFilters.size() != 0) {
       if (variableFilterType == InvariantFilters.ANY_VARIABLE) {
         boolean hasAnyVariable = false;
