@@ -26,7 +26,7 @@ public final class PptConditional extends PptTopLevel {
     this.parent = parent;
     this.splitter = splitter.instantiate(this);
     this.splitter_inverse = splitter_inverse;
-    this.controlling_ppts.add(parent);
+    // this.controlling_ppts.add(parent); // [INCR]
   }
 
   // This is tested after constructing a PptConditional but before
