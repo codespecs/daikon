@@ -2,7 +2,7 @@
 # Remove variables from .dtrace files.
 # Usage:  trace-purge-vars.pl [-v] regexp file ...
 
-# -v flag means to retain rather than discard functions matching the
+# -v flag means to retain rather than discard variables matching the
 # regular expression.  (Its name is taken from grep.)
 
 # I'm intentionally not operating by paragraphs, because I want the regexp
