@@ -445,7 +445,7 @@ public final class ONEOFSCALAR
   }
 #endif
 
-#if (defined(SCALAR) || defined(FLOAT))
+#if (defined(IS_SCALAR))
   public INT[] getElts() {
     INT[] temp = new INT[elts.length];
     for (int i=0; i < elts.length; i++) {
