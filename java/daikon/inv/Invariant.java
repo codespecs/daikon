@@ -7,6 +7,8 @@ import daikon.inv.unary.stringsequence.EltOneOfString;
 import daikon.inv.DiscardInfo;
 import daikon.inv.filter.*;
 import daikon.suppress.*;
+import daikon.simplify.SimpUtil;
+import daikon.simplify.LemmaStack;
 
 import utilMDE.*;
 import java.util.logging.Logger;
@@ -981,11 +983,10 @@ public abstract class Invariant
 
   /**
    * Conver a long integer value into a format that Simplify can
-   * use. If the value is too big to fit in a signed 32-bit int, we
-   * have to turn it into floating point, or else Simplify will
-   * be unable to parse it. Unfortunately, this can lose precision.
-   **/
+   * use. If the value is too big, we have to print it in a weird way,
+   * then tell Simplify about its properties specially. **/
   public static String simplify_format_long(long l) {
+    LemmaStack.noticeInt(l);
     if (l >= -32000 && l <= 32000) {
       // Note that the above range is actually smaller than the
       // real range of [-2147483648..2147483647], since Simplify can
@@ -1001,7 +1002,7 @@ public abstract class Invariant
       // > (BG_PUSH (EQ y (* y x)))
       return "" + l;
     } else {
-      return simplify_format_double((double)l);
+      return SimpUtil.formatInteger(l);
     }
   }
 
