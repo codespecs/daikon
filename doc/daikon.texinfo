@@ -1583,7 +1583,15 @@ Don't print invariants as text output.  This option may be used in
 conjunction with the @option{-o} option.
 
 @item --suppress_cont
-Suppress display of implied invariants (by controlling ppt).
+Suppress display of implied invariants (by controlling program
+point). This is now the default behavior, so this option has no
+effect, but exists for backward compatibility.
+
+@item --no_suppress_cont
+Do not suppress the display of implied invariants (based on
+controlling program points). This will reduce the time needed to print
+the invariants, possibly at the expense of printing additional
+redundant invariants.
 
 @item --suppress_post
 Suppress display of obvious postconditions on prestate.
@@ -1987,7 +1995,15 @@ PrintInvariants shares many flags with Daikon:
 Print usage message.
 
 @item --suppress_cont
-Suppress display of implied invariants (by controlling ppt).
+Suppress display of implied invariants (by controlling program point).
+This is now the default behavior, so this option has no effect, but
+exists for backward compatibility.
+
+@item --no_suppress_cont
+Do not suppress the display of implied invariants (based on
+controlling program points). This will reduce the time needed to print
+the invariants, possibly at the expense of printing additional
+redundant invariants.
 
 @item --suppress_post
 Suppress display of obvious postconditions on prestate.
