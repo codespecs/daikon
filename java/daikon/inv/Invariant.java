@@ -1393,7 +1393,7 @@ public abstract class Invariant
 
       return isObviousStatically(assigned);
     } else {
-      for (Iterator iSet = vis[position].equalitySet.getVars().iterator();
+      for (Iterator iSet = vis[position].get_equalitySet_vars ().iterator();
            iSet.hasNext(); ) {
         VarInfo vi = (VarInfo) iSet.next();
         assigned[position] = vi;
@@ -1536,7 +1536,7 @@ public abstract class Invariant
       return isObviousDynamically (assigned);
     } else {
       // recursive case
-      for (Iterator iSet = vis[position].equalitySet.getVars().iterator();
+      for (Iterator iSet = vis[position].get_equalitySet_vars ().iterator();
            iSet.hasNext(); ) {
         VarInfo vi = (VarInfo) iSet.next();
         assigned[position] = vi;
