@@ -25,6 +25,7 @@ EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/dfec $(E
 DFEJ_DIR := $(INV_DIR)/dfej
 
 DIST_DIR := $(MERNST_DIR)/www/daikon/dist
+DIST_DIR_FILES := daikon-source.tar.gz daikon-jar.tar.gz daikon.html
 # For really big files
 # DIST_DIR_2 := /projects/se/people/mernst/www
 DIST_DIR_2 := $(DIST_DIR)
@@ -32,7 +33,7 @@ DIST_DIR_2 := $(DIST_DIR)
 # for "chgrp"
 INV_GROUP := invariants
 
-RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name dfej -o -name daikon-java -o -name daikon-output -o -name core -o -name '*.bak' \) -print`
+RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name dfej -o -name daikon-java -o -name daikon-output -o -name core -o -name '*.bak' -o -name '.nfs*' -o -name '#*#' \) -print`
 
 
 ## Examples of better ways to get the lists:
@@ -83,7 +84,7 @@ dist-test: dist-notest dist-test-no-update-dist
 dist-test-no-update-dist:
 	-rm -rf $(DISTTESTDIR)
 	mkdir $(DISTTESTDIR)
-	(cd $(DISTTESTDIR); tar xzf $(DIST_DIR)/daikon.tar.gz)
+	(cd $(DISTTESTDIR); tar xzf $(DIST_DIR)/daikon-source.tar.gz)
 	(cd $(DISTTESTDIR)/daikon/java/daikon; CLASSPATH=$(DISTTESTDIR)/daikon/java:/g2/users/mernst/java/jdk/jre/lib/rt.jar; rm `find . -name '*.class'`; make)
 
 cvs-test:
@@ -103,50 +104,48 @@ cvs-test:
 
 dist: dist-test
 
-dist-notest: $(DIST_DIR)/daikon.tar.gz
+dist-notest: daikon-source.tar.gz daikon-jar.tar.gz daikon.html
+	$(MAKE) update-dist-dir 
 	$(MAKE) -n dist-dfej
 
 # Is this the right way to do this?
 dist-force:
-	-rm -f daikon.tar.gz
+	-rm -f daikon-source.tar.gz daikon-jar.tar.gz
 	$(MAKE) dist
 
-$(DIST_DIR)/daikon.tar.gz: daikon.tar.gz
+update-dist-dir:
 	html-update-toc daikon.html
 	# This isn't quite right:  $(DIST_DIR) should hold the
-	# daikon.html from daikon.tar.gz, not the current version.
-	-rm -rf $(DIST_DIR)/daikon.tar.gz $(DIST_DIR)/daikon.html
-	cp -pf daikon.tar.gz daikon.html $(DIST_DIR)
-	# Don't edit the copy of daikon.html in the distribution directory
-	chmod ogu-w $(DIST_DIR)/daikon.tar.gz $(DIST_DIR)/daikon.html
+	# daikon.html from daikon-source.tar.gz, not the current version.
+	-cd $(DIST_DIR) && rm -rf $(DIST_DIR_FILES)
+	cp -pf $(DIST_DIR_FILES) $(DIST_DIR)
+	# Don't files in the distribution directory
+	cd $(DIST_DIR) && chmod ogu-w $(DIST_DIR_FILES)
 	update-link-dates $(DIST_DIR)/index.html
 
-daikon.tar: $(LISP_PATHS) $(DOC_FILES) $(PY_DOC_FILES) $(EDG_FILES) $(README_files) examples-gries.tar.gz $(DAIKON_JAVA_FILES)
+daikon.jar: $(DAIKON_JAVA_FILES)
+	-rm -rf daikon.jar /tmp/daikon-jar
+	mkdir /tmp/daikon-jar
+	cd daikon && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar' all
+	cd $(HOME)/java/utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar' all
+	tar xzf java-getopt-1.0.8.tar.gz -C /tmp/daikon-jar
+	tar xzf OROMatcher-1.1.tar.gz -C /tmp/daikon-jar
+	mv /tmp/daikon-jar/OROMatcher-1.1.0a/com /tmp/daikon-jar
+	rm -rf /tmp/daikon-jar/OROMatcher-1.1.0a
+	cd /tmp/daikon-jar && jar cf $@ *
+	mv /tmp/daikon-jar/$@ $@
+	# rm -rf /tmp/daikon-jar
+
+# Use this ordering because daikon-jar is made before daikon-source
+
+daikon-jar.tar daikon-source.tar: $(LISP_PATHS) $(DOC_FILES) $(PY_DOC_FILES) $(EDG_FILES) $(README_files) examples-gries.tar.gz $(DAIKON_JAVA_FILES) daikon.jar
 	html-update-toc daikon.html
 
 	-rm -rf /tmp/daikon
 	mkdir /tmp/daikon
 
-	# # Old Python implementation
-	# mkdir /tmp/daikon/daikon-python
-	# cp -p $(PYTHON_FILES) $(PY_DOC_FILES) /tmp/daikon/daikon-python
-	# cp -p README-daikon1 /tmp/daikon/daikon-python/README
-	# cp -p daikon-19991114.html /tmp/daikon/daikon-python/daikon.html
-
-	# Current Java implementation (ie, not historic Python implementation)
 	cp -p $(DOC_FILES) /tmp/daikon
 	cp -p README-dist /tmp/daikon/README
-	tar chf /tmp/daikon-java.tar --exclude daikon-java --exclude daikon-output daikon
-	(mkdir /tmp/daikon/java; cd /tmp/daikon/java; tar xf /tmp/daikon-java.tar; rm /tmp/daikon-java.tar)
-	cp -p README-daikon-java /tmp/daikon/java/README
-	# Maybe I should do  $(MAKE) doc
-	# Don't do  $(MAKE) clean  which deletes .class files
-	(cd /tmp/daikon/java; $(RM_TEMP_FILES))
-
-	# Java support files
-	(cp -p java-getopt-1.0.7.tar.gz /tmp/daikon/java; cd /tmp/daikon/java; tar zxf java-getopt-1.0.7.tar.gz; rm java-getopt-1.0.7.tar.gz)
-	(cd $(HOME)/java/utilMDE; $(MAKE) utilMDE.tar.gz; cd /tmp/daikon/java; tar zxf $(HOME)/java/utilMDE/utilMDE.tar.gz)
-	(cp -p OROMatcher-1.1.tar.gz /tmp/daikon/java; cd /tmp/daikon/java; tar zxf OROMatcher-1.1.tar.gz; rm OROMatcher-1.1.tar.gz; ln -s OROMatcher-1.1.0a/com .)
 
 	# Auxiliary programs
 	mkdir /tmp/daikon/bin
@@ -164,6 +163,34 @@ daikon.tar: $(LISP_PATHS) $(DOC_FILES) $(PY_DOC_FILES) $(EDG_FILES) $(README_fil
 	# Fix permission problems (does this fully do the trick?)
 	chmod +rw /tmp/daikon/c-front-end/*
 
+	# Example files
+	mkdir /tmp/daikon/examples
+	(cp -p examples-gries.tar.gz /tmp/daikon/examples; cd /tmp/daikon/examples; tar zxf examples-gries.tar.gz; mv examples-gries gries; rm examples-gries.tar.gz)
+
+	date > /tmp/daikon/VERSION
+	chgrp -R $(INV_GROUP) /tmp/daikon
+
+	# Now we are ready to make the daikon-jar distribution
+	cp -p daikon.jar /tmp/daikon
+	(cd /tmp; tar cf daikon-jar.tar daikon)
+	cp -pf /tmp/daikon-jar.tar .
+
+	## Now make the daikon-source distribution
+	# First add some more files to the distribution
+
+	# Daikon itself
+	tar chf /tmp/daikon-java.tar --exclude daikon-java --exclude daikon-output daikon
+	(mkdir /tmp/daikon/java; cd /tmp/daikon/java; tar xf /tmp/daikon-java.tar; rm /tmp/daikon-java.tar)
+	cp -p README-daikon-java /tmp/daikon/java/README
+	# Maybe I should do  $(MAKE) doc
+	# Don't do  $(MAKE) clean  which deletes .class files
+	(cd /tmp/daikon/java; $(RM_TEMP_FILES))
+
+	# Java support files
+	(cp -p java-getopt-1.0.7.tar.gz /tmp/daikon/java; cd /tmp/daikon/java; tar zxf java-getopt-1.0.7.tar.gz; rm java-getopt-1.0.7.tar.gz)
+	(cd $(HOME)/java/utilMDE; $(MAKE) utilMDE.tar.gz; cd /tmp/daikon/java; tar zxf $(HOME)/java/utilMDE/utilMDE.tar.gz)
+	(cp -p OROMatcher-1.1.tar.gz /tmp/daikon/java; cd /tmp/daikon/java; tar zxf OROMatcher-1.1.tar.gz; rm OROMatcher-1.1.tar.gz; ln -s OROMatcher-1.1.0a/com .)
+
 	# Java instrumenter
 	# The -h option saves symbolic links as real files, to avoid problem 
 	# with the fact that I've made dfej into a symbolic link.
@@ -176,29 +203,24 @@ daikon.tar: $(LISP_PATHS) $(DOC_FILES) $(PY_DOC_FILES) $(EDG_FILES) $(README_fil
 	# (cd /tmp/daikon/java-front-end; $(MAKE) distclean; (cd src; $(MAKE) distclean); $(RM_TEMP_FILES))
 	(cd /tmp/daikon/java-front-end; $(MAKE) distclean; $(RM_TEMP_FILES))
 
-	# Example files
-	mkdir /tmp/daikon/examples
-	(cp -p examples-gries.tar.gz /tmp/daikon/examples; cd /tmp/daikon/examples; tar zxf examples-gries.tar.gz; mv examples-gries gries; rm examples-gries.tar.gz)
+	# Make the source distribution proper
+	(cd /tmp; tar cf daikon-source.tar daikon)
+	cp -pf /tmp/daikon-source.tar .
 
-	date > /tmp/daikon/VERSION
-	chgrp -R $(INV_GROUP) /tmp/daikon
-	(cd /tmp; tar cf daikon.tar daikon)
-	cp -pf /tmp/daikon.tar .
+## This apparently does not work
+# %.tar.gz : %.tar
+# 	-rm -rf $@
+# 	gzip -c $< > $@
 
-	## Better than the below dist-* directory, just blow it away.
-	# rm -rf /tmp/daikon /tmp/daikon.tar
+daikon-source.tar.gz: daikon-source.tar
+	-rm -rf $@
+	gzip -c $< > $@
 
-	# # After making the tar file, don't edit the (historical) distribution
-	# chmod -R uog-w daikon/*
-	# Don't bother making a "dist-*" backup directory.
-	# if (test -d dist-`date +'%y%m%d'`); then rm -rf dist-`date +'%y%m%d'`; fi
-	# mv daikon dist-`date +'%y%m%d'`
-	# rm dist
-	# ln -s dist-`date +'%y%m%d'` dist
+daikon-jar.tar.gz: daikon-jar.tar
+	-rm -rf $@
+	gzip -c $< > $@
 
-daikon.tar.gz: daikon.tar
-	-rm -rf daikon.tar.gz
-	gzip -c daikon.tar > daikon.tar.gz
+
 
 ### Front end binaries
 
