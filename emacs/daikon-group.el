@@ -1,7 +1,37 @@
 (setq load-path (cons (substitute-in-file-name "${INV}/emacs/")
                       load-path))
 
+;;; Update timestamps when writing files.
+(add-hook 'write-file-hooks 'time-stamp)
+
+;;; Ediff customizations
+(setq ediff-window-setup-function 'ediff-setup-windows-plain) ; no multiframe
+(setq-default ediff-ignore-similar-regions t)   ; ignore whitespace differences
+(setq ediff-whitespace " \n\t\f\r\240") ; by default omits \r, \240, etc.
+
+;;; PCL-CVS
+(if (not (fboundp 'cvs-update))
+    (if (= 20 emacs-major-version)
+        (autoload 'cvs-update "pcl-cvs" nil t) ; Emacs 20
+      (autoload 'cvs-update "pcvs" nil t))) ; Emacs 21
+
+;;; AUC TeX
+;; Key features:
+;;  * When editing a LaTeX file, do "C-c C-c" to do the next appropriate
+;;    action (LaTeX, BibTeX, View (xdvi), File (dvips)
+;;  * After running latex, do "C-c `" to step through the errors.
+;; You can get the full manual in the usual way:  C-h i d m AUCTeX RET
+(setq load-path (cons (expand-file-name "~mernst/emacs/auctex-11.13")
+		      load-path))
+(if (not (featurep 'tex-site))
+    (progn
+      (require 'tex-site)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Java and C mode
+;;;
+
 (load "c-set-basic-offset")
 (load "remove-trailing-whitespace")
 (defun unset-indent-tabs-mode ()
@@ -66,30 +96,10 @@ This particular function doesn't adjust the block beginning at all."
   (point))
 
 
-;;; Ediff customizations
-(setq ediff-window-setup-function 'ediff-setup-windows-plain) ; no multiframe
-(setq-default ediff-ignore-similar-regions t)   ; ignore whitespace differences
-(setq ediff-whitespace " \n\t\f\r\240") ; by default omits \r, \240, etc.
 
-;;; PCL-CVS
-(if (not (fboundp 'cvs-update))
-    (if (= 20 emacs-major-version)
-        (autoload 'cvs-update "pcl-cvs" nil t) ; Emacs 20
-      (autoload 'cvs-update "pcvs" nil t))) ; Emacs 21
-
-;;; AUC TeX
-;; Key features:
-;;  * When editing a LaTeX file, do "C-c C-c" to do the next appropriate
-;;    action (LaTeX, BibTeX, View (xdvi), File (dvips)
-;;  * After running latex, do "C-c `" to step through the errors.
-;; You can get the full manual in the usual way:  C-h i d m AUCTeX RET
-(setq load-path (cons (expand-file-name "~mernst/emacs/auctex-11.13")
-		      load-path))
-(if (not (featurep 'tex-site))
-    (progn
-      (require 'tex-site)))
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Daikon tags table and manual
+;;;
 
 (if (not (fboundp 'float-time))
     (defun float-time ()
