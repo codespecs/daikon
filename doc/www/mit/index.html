@@ -582,37 +582,6 @@ target.
     incremented.  In this case, simply edit <tt>doc/VERSION</tt> by
     hand back to the correct version number before rebuilding. <p>
 
-  <!-- This is now done automatically
-
-    <li> Build a current version of javadoc and place on the website <p>
-    
-    <code>
-        cd $inv/java <br>
-        make 'JAVADOC_DEST=/home/httpd/html/daikon/download/jdoc_v3' doc <br>
-    </code> <P>
-  -->
-
-  <!-- We no longer maintain or update V2.
-
-    <li> Build, checkout, create a tarfile/jdoc for V2, and 
-    update the website.  If the update doesn't change anything, you
-    can skip this step. <P>
-
-    <code>
-        make use-ver2 <br>
-        cvs update <br>
-        cd $inv/java <br>
-        make <br>
-        make 'JAVADOC_DEST=/home/httpd/html/daikon/download/jdoc_v2' doc <br>
-        cd $inv/tests <br>
-        make diffs <br>        
-        cd $inv <br>
-        make daikon.tar.gz <br>
-        cp daikon.tar.gz /home/httpd/html/daikon/download/daikon_v2.tar.gz <br>
-        update-link-dates /home/httpd/html/daikon/download/index.html <br>
-    </code> <p>
-  -->
-
     <li> Commit any changes back to CVS <p>
 
     <code>
