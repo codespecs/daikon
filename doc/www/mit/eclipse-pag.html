@@ -6,15 +6,19 @@
 <body>
 <h1>Eclipse Setup for PAG Members</h1>
 
-<P>This guide tells you how to:
-
-<ol>
-<li><a href="#startup">Start up Eclipse on PAG machines</a>
-<li><a href="#existing-projects">Work on Daikon and other existing coding projects in Eclipse</a>
-<li><a href="#run-from-terminal">Run projects compiled from Eclipse in command terminal</a>
-<li><a href="#debugger">Use the Eclipse debugger</a>
-<li><a href="#cvs">Use CVS with Eclipse</a>
-</ol>
+Contents:			      <!-- do not edit; run html-update-toc -->
+    <ul>
+      <li><a href="#startup">Start up Eclipse</a>
+      <li><a href="#existing-projects">Work on existing coding projects</a>
+        <ul>
+          <li><a href="#importing-daikon">Importing Daikon</a>
+          <li><a href="#existing-old">Importing a different existing project</a>
+        </ul>
+      <li><a href="#external-tools">Interaction with external tools</a>
+      <li><a href="#debugger">Using the Eclipse debugger</a>
+      <li><a href="#cvs">Using CVS with Eclipse</a>
+    </ul>
+<p>
 
 
 <h2><a name="startup">Start up Eclipse</a></h2>
@@ -27,14 +31,37 @@ ALWAYS launch Eclipse from the same location. For example, you might
 want to alias run-eclipse with '<tt>cd $HOME; eclipse</tt>'.
 For convenience, this is already done for you if you source the pag-daikon
 startup scripts.
-</P>
-
-<P>There are ways around the launch location inconvenience, such as
+There are ways around the launch location inconvenience, such as
 the -data switch, but the alias trick should be the simplest and least
 confusing workaround.</p>
 
+It is strongly recommended that you make the following customizations to Eclipse:
+<pre>
+Window >> Preferences >> Workbench >> Refresh Workspace on Starup
+Window >> Preferences >> Java >> Compiler >> Problems >> Unused imports >> Ignore
+Window >> Preferences >> Java >> Compiler >> Style >> Non-static access >> >> Ignore
+</pre>
+
 
 <h2><a name="existing-projects">Work on existing coding projects</a></h2>
+
+<h3><a name="importing-daikon">Importing Daikon</a></h3>
+
+First, import Daikon into Eclipse.  This works because there is already a
+<tt>.project</tt> and <tt>.classpath</tt> directory in <tt>$inv/java</tt>.
+To import a project that doesn't have these files, you would need to create
+them (for instance, copy them from Daikon's), or else follow a different
+procedure to work on your project in Eclipse.
+<p>
+
+To import Daikon into Eclipse, start Eclipse, then choose menu item
+File->Import->ExistingProjectIntoWorkspace.  Enter directory
+<tt>$inv/java</tt> for Project Contents.
+That's all there is to it!
+<p>
+
+
+<h3><a name="existing-old">Importing a different existing project</a></h3>
 
 <p>(This is the most annoying and error prone part.  I will add screenshots
 soon.)
@@ -79,20 +106,26 @@ junit.jar, jakarta-oro.jar, and java-getopt.jar.  (See your CLASSPATH
 environment variable for full pathnames to these files.)
 </ol>
 
-
-<h2><a name="run-from-terminal">Run projects compiled from Eclipse in the command terminal</a></h2>
-
-<p>Eclipse compiles or attempts to compile your project very often
-(every few seconds). Although Eclipse can launch all of its projects,
-it is more natural to run Daikon and other tools from the
-terminal. <b>The compiled classes do not appear in the directory from
+Note that if you follow these directions, then
+<b>the compiled classes do not appear in the directory from
 which you imported in the previous step</b>.
-
-<p>Instead, the compiled classes appear in the Eclipse workspace
+Instead, the compiled classes appear in the Eclipse workspace
 directory. If you followed the setup instructions above, then the
 compiled code will be in "$HOME/workspace/Daikon/bin", which you
 should add to your CLASSPATH in order to use the updates you make from
 Eclipse.
+
+
+<h2><a name="external-tools">Interaction with external tools</a></h2>
+
+<p>Eclipse compiles your project whenever you save.
+However, it parses frequently during editing and issues most or all of the
+errors and warnings that the compiler would have.  In order to clear a
+warning/error (in the Task List), you must save the file, however.
+
+<p>
+If you change files outside Eclipse, you should refresh Eclipse, via
+right-clicking on the project or via menu item File >> Refresh.
 
 
 <h2><a name="debugger">Using the Eclipse debugger</a></h2>
@@ -125,7 +158,7 @@ the values of objects and fields during a breakpoint halt.  You can also
 type in any legal java expression that could appear at the breakpoint
 and the window will display the value of the expression (don't forget to
 put a semi-colon at the end of your expression!).
-
+</ul>
 
 <h2><a name="cvs">Using CVS with Eclipse</a></h2>
 
