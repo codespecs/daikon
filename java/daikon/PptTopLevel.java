@@ -255,8 +255,8 @@ public class PptTopLevel extends Ppt {
     }
     PptTopLevel class_ppt = (PptTopLevel) all_ppts.get(controlling_class_ppt_name());
     if (class_ppt != null) {
-      controlling_ppts.add(class_ppt);      
-    }    
+      controlling_ppts.add(class_ppt);
+    }
   }
 
   String controlling_object_ppt_name() {
@@ -275,7 +275,7 @@ public class PptTopLevel extends Ppt {
     if (dot_posn < 0)
       return null;
     return name.substring(0, dot_posn) + FileIO.class_static_tag;
-  }  
+  }
 
   ///////////////////////////////////////////////////////////////////////////
   /// Adding special variables
@@ -1522,7 +1522,7 @@ public class PptTopLevel extends Ppt {
     }
     return null;
   }
-  
+
   /**
    * @return true iff the two arguments are the "same" invariant.
    * Same, in this case, means a matching type, formula, and variable
@@ -1534,29 +1534,29 @@ public class PptTopLevel extends Ppt {
     if (!inv.getClass().equals(cand_inv.getClass())) {
       return false;
     }
-    
+
     // Can't be the same if they aren't the same formula
     if (!inv.isSameFormula(cand_inv)) {
       return false;
     }
-    
+
     // The variable names much match up, in order
-    
+
     VarInfo[] vars = inv.ppt.var_infos;
     VarInfo[] cand_vars = cand_inv.ppt.var_infos;
-    
+
     Assert.assert(vars.length == cand_vars.length); // due to inv type match already
     for (int i=0; i < vars.length; i++) {
       VarInfo var = vars[i];
       VarInfo cand_var = cand_vars[i];
-      
+
       // Do the easy check first
       if (var.name.equals(cand_var.name)) {
 	continue;
       }
-      
+
       // Now check while taking account of aliasing
-      
+
       // The names "match" iff there is an intersection of the names
       // of aliased variables
       Vector all_cand_vars = cand_var.canonicalRep().equalTo();
@@ -1576,11 +1576,11 @@ public class PptTopLevel extends Ppt {
 	  return false;
       }
     }
-    
+
     // the type, formula, and vars all matched
     return true;
   }
-  
+
 
   ///////////////////////////////////////////////////////////////////////////
   /// Printing invariants

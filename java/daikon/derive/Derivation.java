@@ -28,14 +28,15 @@ public interface Derivation extends java.io.Serializable {
   // in an interface.
   public abstract VarInfo getVarInfo();
 
-  // // Returns true if the variables from which this one was derived are all
-  // // non-canonical (which makes this derived variable uninteresting).  We
-  // // might not have been able to know before performing the derivation that
-  // // this would be the case -- for instance, when deriving before any
-  // // values are seen.  [So don't do that!]
-  // public abstract boolean isDerivedFromNonCanonical();
+  /// For debugging only.
+  // Returns true if the variables from which this one was derived are all
+  // non-canonical (which makes this derived variable uninteresting).  We
+  // might not have been able to know before performing the derivation that
+  // this would be the case -- for instance, when deriving before any
+  // values are seen.  [So don't do that!]
+  public abstract boolean isDerivedFromNonCanonical();
 
-  // This depth counts this as well as the depths of its bases.
+  // The depth counts this as well as the depths of its bases.
   public abstract int derivedDepth();
 
 }

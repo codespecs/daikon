@@ -11,10 +11,10 @@ public final class SequenceMin extends UnaryDerivation {
   }
 
   public ValueAndModified computeValueAndModified(ValueTuple vt) {
-    int source_mod = var_info.getModified(vt);
+    int source_mod = base.getModified(vt);
     if (source_mod == ValueTuple.MISSING)
       return ValueAndModified.MISSING;
-    Object val = var_info.getValue(vt);
+    Object val = base.getValue(vt);
     if (val == null)
       return ValueAndModified.MISSING;
     long[] val_array = (long[])val;
@@ -25,10 +25,10 @@ public final class SequenceMin extends UnaryDerivation {
   }
 
   protected VarInfo makeVarInfo() {
-    String name = "min(" + var_info.name + ")";
-    ProglangType ptype = var_info.type.elementType();
-    ProglangType rtype = var_info.rep_type.elementType();
-    VarComparability comp = var_info.comparability.elementType();
+    String name = "min(" + base.name + ")";
+    ProglangType ptype = base.type.elementType();
+    ProglangType rtype = base.rep_type.elementType();
+    VarComparability comp = base.comparability.elementType();
     return new VarInfo(name, ptype, rtype, comp);
   }
 

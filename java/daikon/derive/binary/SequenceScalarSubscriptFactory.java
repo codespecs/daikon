@@ -12,8 +12,8 @@ import utilMDE.*;
 public final class SequenceScalarSubscriptFactory extends BinaryDerivationFactory {
 
   // When calling/creating the derivations, arrange that:
-  //   var_info1 is the sequence
-  //   var_info2 is the scalar
+  //   base1 is the sequence
+  //   base2 is the scalar
 
   public BinaryDerivation[] instantiate(VarInfo vi1, VarInfo vi2) {
     // This isn't the very most efficient way to do this, but at least it's

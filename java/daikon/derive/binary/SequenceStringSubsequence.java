@@ -7,10 +7,10 @@ import utilMDE.*;
 
 public final class SequenceStringSubsequence extends BinaryDerivation {
 
-  // var_info1 is the sequence
-  // var_info2 is the scalar
-  public VarInfo seqvar() { return var_info1; }
-  public VarInfo sclvar() { return var_info2; }
+  // base1 is the sequence
+  // base2 is the scalar
+  public VarInfo seqvar() { return base1; }
+  public VarInfo sclvar() { return base2; }
 
   // Indicates whether the subscript is an index of valid data or a limit
   // (one element beyond the data of interest).
@@ -25,17 +25,17 @@ public final class SequenceStringSubsequence extends BinaryDerivation {
   }
 
   public ValueAndModified computeValueAndModified(ValueTuple full_vt) {
-    int mod1 = var_info1.getModified(full_vt);
+    int mod1 = base1.getModified(full_vt);
     if (mod1 == ValueTuple.MISSING)
       return ValueAndModified.MISSING;
-    int mod2 = var_info2.getModified(full_vt);
+    int mod2 = base2.getModified(full_vt);
     if (mod2 == ValueTuple.MISSING)
       return ValueAndModified.MISSING;
-    Object val1 = var_info1.getValue(full_vt);
+    Object val1 = base1.getValue(full_vt);
     if (val1 == null)
       return ValueAndModified.MISSING;
     String[] val1_array = (String[]) val1;
-    int val2 = var_info2.getIndexValue(full_vt);
+    int val2 = base2.getIndexValue(full_vt);
     // len is the number of elements in the subsequence (that's why we add 1).
     int len = val2+1+index_shift;
     if ((len < 0) || (len > val1_array.length))

@@ -27,7 +27,7 @@ public class SequenceExtremum extends UnaryDerivation {
   }
 
   public VarInfo seqvar() {
-    return var_info;
+    return base;
   }
 
   public static boolean applicable(VarInfo vi) {
@@ -43,13 +43,13 @@ public class SequenceExtremum extends UnaryDerivation {
   }
 
   public ValueAndModified computeValueAndModified(ValueTuple vt) {
-    int source_mod = var_info.getModified(vt);
+    int source_mod = base.getModified(vt);
     if (source_mod == ValueTuple.MISSING)
       return ValueAndModified.MISSING;
-    Object val = var_info.getValue(vt);
+    Object val = base.getValue(vt);
     if (val == null)
       return ValueAndModified.MISSING;
-    if (var_info.rep_type == ProglangType.INT_ARRAY) {
+    if (base.rep_type == ProglangType.INT_ARRAY) {
       long[] val_array = (long[])val;
       if (val_array.length < minLength)
         return ValueAndModified.MISSING;
@@ -65,10 +65,10 @@ public class SequenceExtremum extends UnaryDerivation {
   }
 
   protected VarInfo makeVarInfo() {
-    String name = var_info.name + "[" + index + "]";
-    ProglangType ptype = var_info.type.elementType();
-    ProglangType rtype = var_info.rep_type.elementType();
-    VarComparability comp = var_info.comparability.elementType();
+    String name = base.name + "[" + index + "]";
+    ProglangType ptype = base.type.elementType();
+    ProglangType rtype = base.rep_type.elementType();
+    VarComparability comp = base.comparability.elementType();
     return new VarInfo(name, ptype, rtype, comp);
   }
 

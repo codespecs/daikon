@@ -7,10 +7,10 @@ import utilMDE.*;
 
 public final class SequenceScalarSubsequence extends BinaryDerivation {
 
-  // var_info1 is the sequence
-  // var_info2 is the scalar
-  public VarInfo seqvar() { return var_info1; }
-  public VarInfo sclvar() { return var_info2; }
+  // base1 is the sequence
+  // base2 is the scalar
+  public VarInfo seqvar() { return base1; }
+  public VarInfo sclvar() { return base2; }
 
   // Indicates whether the subscript is an index of valid data or a limit
   // (one element beyond the data of interest).
@@ -19,7 +19,7 @@ public final class SequenceScalarSubsequence extends BinaryDerivation {
   // True if we are deriving from the start of the sequence to the scalar.
   // False if we are deriving from the scalar to the end of the sequence.
   public final boolean from_start;
-  
+
   /**
    * @param from_start true means the range goes 0..n; false means the
    * range goes n..end.  (n might be fudged through off_by_one)
@@ -36,18 +36,18 @@ public final class SequenceScalarSubsequence extends BinaryDerivation {
   }
 
   public ValueAndModified computeValueAndModified(ValueTuple full_vt) {
-    int mod1 = var_info1.getModified(full_vt);
+    int mod1 = base1.getModified(full_vt);
     if (mod1 == ValueTuple.MISSING)
       return ValueAndModified.MISSING;
-    int mod2 = var_info2.getModified(full_vt);
+    int mod2 = base2.getModified(full_vt);
     if (mod2 == ValueTuple.MISSING)
       return ValueAndModified.MISSING;
 
-    Object val1 = var_info1.getValue(full_vt);
+    Object val1 = base1.getValue(full_vt);
     if (val1 == null)
       return ValueAndModified.MISSING;
     long[] val1_array = (long[]) val1;
-    int val2 = var_info2.getIndexValue(full_vt);
+    int val2 = base2.getIndexValue(full_vt);
 
     // One could argue that if the range exceeds the array bounds, one
     // should just return the whole array; but we don't do that.  We
@@ -87,7 +87,7 @@ public final class SequenceScalarSubsequence extends BinaryDerivation {
 				    : "+" + index_shift));
     VarInfo seqvar = seqvar();
     VarInfo sclvar = sclvar();
-    String name = from_start ? 
+    String name = from_start ?
       (seqvar.name + "[0.." + sclvar.name + index_shift_string + "]") :
       (seqvar.name + "[" + sclvar.name + index_shift_string + "..]");
     return new VarInfo(name, seqvar.type, seqvar.rep_type, seqvar.comparability);

@@ -486,10 +486,10 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
       return se.seqvar();
     } else if (derived instanceof SequenceMax) {
       SequenceMax sm = (SequenceMax) derived;
-      return sm.var_info;
+      return sm.base;
     } else if (derived instanceof SequenceMin) {
       SequenceMin sm = (SequenceMin) derived;
-      return sm.var_info;
+      return sm.base;
     } else {
       return null;
     }
@@ -519,7 +519,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     for (int i=varinfo_index+1; i<vis.length; i++) {
       VarInfo vi = vis[i];
       if ((vi.derived instanceof SequenceLength)
-          && (((SequenceLength) vi.derived).var_info == this)) {
+          && (((SequenceLength) vi.derived).base == this)) {
         sequenceSize = vi;
         return sequenceSize;
       }
@@ -531,6 +531,11 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   public boolean isIndex() {
     return ((rep_type == ProglangType.INT)
             && type.isIndex());
+  }
+
+  // Debugging
+  public boolean isDerivedFromNonCanonical() {
+    return ((derived != null) && (derived.isDerivedFromNonCanonical()));
   }
 
 }
