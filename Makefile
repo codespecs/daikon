@@ -229,14 +229,14 @@ dist-dfej-solaris: $(DIST_DIR)/dfej-solaris
 $(DIST_DIR)/dfej-solaris: $(DFEJ_DIR)/src/dfej-solaris
 	cp -pf $< $@
 	update-link-dates $(DIST_DIR)/index.html
-	cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@cs.washington.edu
+	cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@lcs.mit.edu
 
 dist-dfej-linux: $(DIST_DIR)/dfej-linux
 
 $(DIST_DIR)/dfej-linux: $(DFEJ_DIR)/src/dfej-linux
 	cp -pf $< $@
 	update-link-dates $(DIST_DIR)/index.html
-	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@cs.washington.edu
+	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@lcs.mit.edu
 
 ### Examples
 
