@@ -68,7 +68,7 @@ RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -n
 help:
 	@echo "Targets:"
 	@echo " tags TAGS"
-	@echo " dist dist-force daikon.tar"
+	@echo " dist dist-force daikon.jar"
 	@echo " dist-edg dist-edg-solaris"
 	@echo " dist-dfej dist-dfej-solaris dist-dfej-linux"
 	@echo " examples examples-gries"
