@@ -22,7 +22,7 @@ use colony_simconf;
 
 
 
-read_sim_conf("$lees_2003_dir/colony/conf/sim.conf");
+read_sim_conf("$lees_2003_dir/conf/sim.conf");
 my @teams = packages();         # package names
 my $num_teams = scalar(@teams);
 my %teams = ();

@@ -33,7 +33,7 @@ if (! -d $tmpdir) {
   mkdir $tmpdir or die "Cannot create directory $tmpdir";
 }
 # relative to $lees_2003_dir
-my @javacp_list = ("colony/sources", "common/classes", "colony/teams", "colony");
+my @javacp_list = ("sources", "teams", ".");
 # absolute
 my $javacp = join(':', map { "$lees_2003_dir/$_" } @javacp_list);
 
@@ -79,7 +79,7 @@ sub setup_directory {
   mkdir $dir;
 
   # Must copy whole conf directory because I need to modify sim.conf.
-  system_or_die("cp -pR $lees_2003_dir/colony/conf $dir");
+  system_or_die("cp -pR $lees_2003_dir/conf $dir");
   rename("$dir/conf/sim.conf", "$dir/conf/sim.conf-orig")
     || die "Cannot rename $dir/conf/sim.conf to $dir/conf/sim.conf-orig";
   read_sim_conf("$dir/conf/sim.conf-orig");
@@ -87,7 +87,7 @@ sub setup_directory {
 
   # Must copy whole maps directory (cannot just link) because the program
   # tries to write maps/randmap.map.
-  system_or_die("cp -pR $lees_2003_dir/colony/maps $dir");
+  system_or_die("cp -pR $lees_2003_dir/maps $dir");
 
   # This directory must exist so that file logs/game-log-null can be created.
   mkdir "$dir/logs";

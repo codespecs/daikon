@@ -31,7 +31,7 @@ if ((scalar(@ARGV) > 0) && ($ARGV[0] eq "-r"))  {
 }
 
 
-read_sim_conf("$lees_2003_dir/colony/conf/sim.conf");
+read_sim_conf("$lees_2003_dir/conf/sim.conf");
 my @teams = packages();
 my $num_teams = scalar(@teams);
 my %teams = ();
