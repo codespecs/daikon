@@ -3,22 +3,7 @@ Todo list sorted in approximate order of importance.
   - The nightly build (2/10) failed when running chicory. 
     [sjl was unable to duplicate the problem]
 
-  - variables declared as Object whose actual type is Number or
-    Boolean will print their values as a Number or boolean and
-    not as a hashcode.  We need to distinguish between these
-    and objects used as wrapper internally (as Eric originally
-    planned) so that these print as hashcodes and not numbers/booleans.
-    Another approach would be to look at the declared type of the variable.
-    If the declared type is primitive, Integer, etc, then the real value
-    should be printed.  IF the declared type is Object or something else,
-    then the hash code should be printed.  This problem can be reproduced
-    in the StackAr example (though not in the StackAr regression test).
-    It would be good to fix this so that the examples we ship work.
 
-    Another interesting solution would be to accept floating point
-    values as a valid hashcode in Daikon (note that integer values
-    work fine right now).  
-    [etf will work on this]
 
   - Fix --ppt-omit-pattern and --ppt-select-pattern to work on each
     ppt point name rather than only on class names.  I think this means
@@ -109,6 +94,26 @@ Completed Tasks
     Feb 10 2005 jhp - Added ChicoryPremain.jar and the BCEL code.  Also
     update daikon.jar to be a valid java agent for Chicory so users don't
     need ChicoryPremain.
+    
+      - variables declared as Object whose actual type is Number or
+    Boolean will print their values as a Number or boolean and
+    not as a hashcode.  We need to distinguish between these
+    and objects used as wrapper internally (as Eric originally
+    planned) so that these print as hashcodes and not numbers/booleans.
+    Another approach would be to look at the declared type of the variable.
+    If the declared type is primitive, Integer, etc, then the real value
+    should be printed.  IF the declared type is Object or something else,
+    then the hash code should be printed.  This problem can be reproduced
+    in the StackAr example (though not in the StackAr regression test).
+    It would be good to fix this so that the examples we ship work.
+
+    Another interesting solution would be to accept floating point
+    values as a valid hashcode in Daikon (note that integer values
+    work fine right now).  
+    [etf will work on this]
+    
+    2/10/05 etf: dTraceWriter.getValue now changes primitives to PrimitiveWrappers
+    printValue now correctly prints PrimitiveWrappers
 
 
 

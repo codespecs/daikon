@@ -490,6 +490,10 @@ public class DeclWriter extends DaikonWriter
     // (implicit list) and prints asociated decls
     private void checkForImplicitList(Class type, String name, String offset, int depth)
     {
+        //disable this method until dtracewriter finishes analogous method
+        if(1 == 1)
+            return;
+        
         if (type.isPrimitive() || type.isArray())
             return;
 
