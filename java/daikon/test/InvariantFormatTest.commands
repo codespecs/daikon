@@ -196,26 +196,26 @@ Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLen
 
 ; array[index] > index
 ; Causes an error now - not exactly sure what the statements inside mean
-daikon.inv.unary.sequence.SeqIndexComparison
+daikon.inv.unary.sequence.SeqIndexIntGreaterThan
 int_array
 Goal (daikon): a[i] > i
-Goal (java): warning: method daikon.inv.unary.sequence.SeqIndexComparison.format(OutputFormat:Java) needs to be implemented: a[i] > i
+Goal (java): warning: method daikon.inv.unary.sequence.SeqIndexIntGreaterThan.format(OutputFormat:Java) needs to be implemented: a[i] > i
 Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] > i))
 Goal (ioa): \A i : Int (i \in a => i > a[i])
-Goal (jml): (\forall int i; 0 <= i && i <= a.length-1; a[i] >i)
+Goal (jml): (\forall int i; 0 <= i && i <= a.length-1; a[i] > i)
 Goal (dbc): quant.Quant.indexGT(a)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (> (select (select elems |a|) |i|) |i|)))
 [5 10 15 20 25 30 35 40]
 
 ; array[index] != index
-daikon.inv.unary.sequence.SeqIndexNonEqual
+daikon.inv.unary.sequence.SeqIndexIntNonEqual
 int_array
 Goal (daikon): a[i] != i
-Goal (java): warning: method daikon.inv.unary.sequence.SeqIndexNonEqual.format(OutputFormat:Java) needs to be implemented: a[i] != i
+Goal (java): warning: method daikon.inv.unary.sequence.SeqIndexIntNonEqual.format(OutputFormat:Java) needs to be implemented: a[i] != i
 Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] != i))
 Goal (ioa): \A i : Int (i \in a => i ~= a[i])
 Goal (jml): (\forall int i; 0 <= i && i <= a.length-1; a[i] != i)
-Goal (dbc): warning: method daikon.inv.unary.sequence.SeqIndexNonEqual.format(OutputFormat:DBC/Java) needs to be implemented: a[i] != i
+Goal (dbc): quant.Quant.index?comparatorDBC?(a)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (NEQ (select (select elems |a|) |i|) |i|)))
 [5 10 15 20 25 30 35 40]
 
