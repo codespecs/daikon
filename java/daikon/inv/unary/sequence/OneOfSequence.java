@@ -151,19 +151,30 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
 
     String result;
 
+    String length = "";
+    String forall = "";
     if (is_hashcode) {
       // we only have one value, b/c add_modified dies if more
       long[]  value = elts[0];
-      result = var().name.applySize().esc_name() + " == " + value.length;
+      if (var().name.isApplySizeSafe()) {
+	length = var().name.applySize().esc_name() + " == " + value.length;
+      }
       if (no_nulls(0)) {
 	String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
-	result = "(" + result + ") && " + form[0] + "(" + form[1] + " != null)" + form[2];
+	forall = form[0] + "(" + form[1] + " != null)" + form[2];
       } else if (all_nulls(0)) {
 	String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
-	result = "(" + result + ") && " + form[0] + "(" + form[1] + " == null)" + form[2];
+	forall = form[0] + "(" + form[1] + " == null)" + form[2];
       }
-    } else {
+    }
+    if (length == "" && forall == "") { // interned
       result = "format_esc " + this.getClass() + " needs to be changed: " + format();
+    } else if (length == "") { // interned
+      result = forall;
+    } else if (forall == "") { // interned
+      result = length;
+    } else {
+      result = "(" + length + ") && (" + forall + ")";
     }
 
     return result;
@@ -173,19 +184,30 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
 
     String result;
 
+    String length = "";
+    String forall = "";
     if (is_hashcode) {
       // we only have one value, b/c add_modified dies if more
       long[]  value = elts[0];
-      result = "(EQ " + var().name.applySize().simplify_name() + " " + value.length + ")";
+      if (var().name.isApplySizeSafe()) {
+	length = "(EQ " + var().name.applySize().simplify_name() + " " + value.length + ")";
+      }
       if (no_nulls(0)) {
 	String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
-	result = "(AND " + result + " " + form[0] + "(NEQ " + form[1] + "  null)" + form[2] + ")";
+	forall = form[0] + "(NEQ " + form[1] + "  null)" + form[2];
       } else if (all_nulls(0)) {
 	String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
-	result = "(AND " + result + " " + form[0] + "(EQ " + form[1] + "  null)" + form[2] + ")";
+	forall = form[0] + "(EQ " + form[1] + "  null)" + form[2];
       }
-    } else {
+    }
+    if (length == "" && forall == "") { // interned
       result = "format_simplify " + this.getClass() + " needs to be changed: " + format();
+    } else if (length == "") { // interned
+      result = forall;
+    } else if (forall == "") { // interned
+      result = length;
+    } else {
+      result = "(AND " + length + " " + forall + ")";
     }
 
     return result;
