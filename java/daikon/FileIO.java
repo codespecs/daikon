@@ -170,12 +170,18 @@ public final class FileIO {
   /** Read one decls file; add it to all_ppts. **/
   private static void read_declaration_file(File filename, PptMap all_ppts)
     throws IOException {
-    Processor processor = new Processor();
-    read_data_trace_file(filename.toString(), all_ppts, processor, true);
+    if(Daikon.using_DaikonSimple) {
+      Processor processor = new DaikonSimple.SimpleProcessor();
+      read_data_trace_file(filename.toString(), all_ppts, processor, true);
+    } else {
+      Processor processor = new Processor();
+      read_data_trace_file(filename.toString(), all_ppts, processor, true);
+    }
+    
   }
     
 
-  // The "DECLARE" line has alredy been read.
+  // The "DECLARE" line has already been read.
   private static PptTopLevel read_declaration(LineNumberReader file,
                                              PptMap all_ppts,
                                              int varcomp_format,
@@ -224,7 +230,40 @@ public final class FileIO {
 
     VarInfo[] vi_array = (VarInfo[])
                             var_infos.toArray(new VarInfo[var_infos.size()]);
-    return new PptTopLevel(ppt_name, vi_array);
+    
+    // taking care of visibility information
+    // the information is needed in the variable hierarchy because private methods
+    // should not be linked under the object program point
+    // the ppt name is truncated before putting it in the pptMap because the visibility
+    // information is only present in the decls file and not the dtrace file
+        
+//    if(ppt_name.startsWith("public")) {
+//      int position = ppt_name.indexOf("public");
+//      ppt_name = ppt_name.substring(7);
+//      PptTopLevel newppt = new PptTopLevel(ppt_name, vi_array);
+//      newppt.ppt_name.setVisibility("public");
+//      return newppt;
+//    }
+//    if(ppt_name.startsWith("private")) {
+//      int position = ppt_name.indexOf("private");
+//      ppt_name = ppt_name.substring(8);
+//      PptTopLevel newppt = new PptTopLevel(ppt_name, vi_array);
+//      newppt.ppt_name.setVisibility("private");
+//      return newppt;
+//    }
+//    if(ppt_name.startsWith("protected")) {
+//      int position = ppt_name.indexOf("protected");
+//      ppt_name = ppt_name.substring(10);
+//      PptTopLevel newppt = new PptTopLevel(ppt_name, vi_array);
+//      newppt.ppt_name.setVisibility("protected");
+//      return newppt;
+//    }
+    
+    //TODO: add a new config variable to turn this accessibility flag processing on?
+    PptTopLevel newppt = new PptTopLevel(ppt_name, vi_array);
+   // newppt.ppt_name.setVisibility("package-protected");
+    return newppt;
+    //return new PptTopLevel(ppt_name, vi_array);
   }
 
   // So that warning message below is only printed once
@@ -641,7 +680,7 @@ public final class FileIO {
         // ppt can be null if this declaration was skipped because of --ppt or --ppt_omit.
         if (ppt != null) {
           all_ppts.add(ppt);
-	  Daikon.init_ppt(ppt, all_ppts);
+          Daikon.init_ppt(ppt, all_ppts);
         }
         continue;
       }
