@@ -739,7 +739,7 @@ public final class MathMDE {
 	  int  prev_nonmissing = current_nonmissing;
 	  current_nonmissing = ((Integer)nums_itor.next()). intValue ();
 	  if (! (prev_nonmissing < current_nonmissing))
-	    throw new Error("Non-sorted Iterator supplied to " + "MissingNumbersIteratorINT"  + ": prev_nonmissing = " + prev_nonmissing + ", current_nonmissing = " + current_nonmissing);
+	    throw new Error("Non-sorted Iterator supplied to MissingNumbersIteratorINT: prev_nonmissing = " + prev_nonmissing + ", current_nonmissing = " + current_nonmissing);
 	} else {
 	  throw new Error("Can't happen");
 	}
@@ -982,7 +982,7 @@ public final class MathMDE {
 	  long  prev_nonmissing = current_nonmissing;
 	  current_nonmissing = ((Long)nums_itor.next()). longValue ();
 	  if (! (prev_nonmissing < current_nonmissing))
-	    throw new Error("Non-sorted Iterator supplied to " + "MissingNumbersIteratorINT"  + ": prev_nonmissing = " + prev_nonmissing + ", current_nonmissing = " + current_nonmissing);
+	    throw new Error("Non-sorted Iterator supplied to MissingNumbersIteratorINT: prev_nonmissing = " + prev_nonmissing + ", current_nonmissing = " + current_nonmissing);
 	} else {
 	  throw new Error("Can't happen");
 	}
