@@ -105,17 +105,38 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
       + ", elts=" + subarray_rep();
   }
 
+  private boolean all_nulls(int value_no) {
+    long[]  seq = elts[value_no];
+    for (int i=0; i<seq.length; i++) {
+      if (seq[i] != 0) return false;
+    }
+    return true;
+  }
+  private boolean no_nulls(int value_no) {
+    long[]  seq = elts[value_no];
+    for (int i=0; i<seq.length; i++) {
+      if (seq[i] == 0) return false;
+    }
+    return true;
+  }
+
   public String format() {
     String varname = var().name.name() ;
     if (num_elts == 1) {
 
       if (is_hashcode) {
-        if (elts[0].length == 0) {
+	// we only have one value, b/c add_modified dies if more
+	long[]  value = elts[0];
+        if (value.length == 0) {
           return varname + " == []";
-        } else if ((elts[0].length == 1) && (elts[0][0] == 0)) {
+        } else if ((value.length == 1) && (value[0] == 0)) {
           return varname + " == [null]";
-        } else {
-          return varname + " has only one value, of length " + elts[0].length;
+        } else if (no_nulls(0)) {
+          return varname + " contains no nulls and has only one value, of length " + value.length;
+        } else if (all_nulls(0)) {
+          return varname + " contains only nulls and has only one value, of length " + value.length;
+	} else {
+          return varname + " has only one value, of length " + value.length;
         }
       } else {
         return varname + " == " + ArraysMDE.toString( elts[0] ) ;
@@ -130,7 +151,20 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
 
     String result;
 
-    result = "format_esc " + this.getClass() + " needs to be changed: " + format();
+    if (is_hashcode) {
+      // we only have one value, b/c add_modified dies if more
+      long[]  value = elts[0];
+      result = var().name.applySize().esc_name() + " == " + value.length;
+      if (no_nulls(0)) {
+	String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+	result = "(" + result + ") && " + form[0] + "(" + form[1] + " != null)" + form[2];
+      } else if (all_nulls(0)) {
+	String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+	result = "(" + result + ") && " + form[0] + "(" + form[1] + " == null)" + form[2];
+      }
+    } else {
+      result = "format_esc " + this.getClass() + " needs to be changed: " + format();
+    }
 
     return result;
   }
@@ -139,7 +173,20 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
 
     String result;
 
-    result =  "format_simplify " + this.getClass() + " needs to be changed: " + format();
+    if (is_hashcode) {
+      // we only have one value, b/c add_modified dies if more
+      long[]  value = elts[0];
+      result = "(EQ " + var().name.applySize().simplify_name() + " " + value.length + ")";
+      if (no_nulls(0)) {
+	String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
+	result = "(AND " + result + " " + form[0] + "(NEQ " + form[1] + "  null)" + form[2] + ")";
+      } else if (all_nulls(0)) {
+	String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
+	result = "(AND " + result + " " + form[0] + "(EQ " + form[1] + "  null)" + form[2] + ")";
+      }
+    } else {
+      result = "format_simplify " + this.getClass() + " needs to be changed: " + format();
+    }
 
     return result;
   }
