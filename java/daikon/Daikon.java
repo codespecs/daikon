@@ -337,7 +337,7 @@ public final class Daikon {
     }
 
     if (suppress_redundant_invariants_with_simplify) {
-      System.out.print("Invoking Simplify to identify redundant invariants... ");
+      System.out.print("Invoking Simplify to identify redundant invariants...");
       System.out.flush();
       long start = System.currentTimeMillis();
       for (Iterator itor = all_ppts_sorted.iterator() ; itor.hasNext() ; ) {
