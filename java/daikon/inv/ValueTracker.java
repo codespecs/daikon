@@ -160,7 +160,6 @@ public class ValueTracker
 
   protected void add_prim(long v1, long v2) {
     if (values_cache == null) return;
-    System.err.println("add_prim(" + v1 + ", " + v2 + ") = " + UtilMDE.hash(v1, v2));
     add_prim(UtilMDE.hash(v1, v2));
   }
 
