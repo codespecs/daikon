@@ -1,0 +1,23 @@
+Version:      $Id$
+Owner:        mharder <mharder@lcs.mit.edu>
+Cc:           
+Tool:         dfec
+Summary:      dfec produces bad output when a local variable shadows a global one
+Severity:     Vexing
+Status:       New
+Reproducible: Yes
+Description:
+
+dfec produces incorrect decls, dtrace files when a local variable
+shadows a global one.  The correct behavior is to output only the
+variable that can actually be seen.  To reproduce, look at
+tot_info.decls in $inv/tests/dfec-tests/tot_info.  At the
+"std.InfoTbl" program point, both "f" and "::f" are in the decls file.
+Only "f" should be in the decls file, since "::f" is shadowed at this
+program point.
+
+--
+$Log$
+Revision 1.1  2002-05-02 15:27:54  mharder
+new bug0048
+
