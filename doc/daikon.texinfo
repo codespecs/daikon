@@ -140,7 +140,7 @@ Details on running instrumented Java programs
 
 Detect invariants in the data trace files
 
-* Command line options for Daikon::  
+* Command line options::        
 
 All-in-one script daikon.pl
 
@@ -200,6 +200,7 @@ C/C++ front end dfec
 
 Enhancing Daikon output
 
+* Configuration options::       
 * Conditional invariants::      
 
 Conditional invariants and implications
@@ -321,7 +322,7 @@ distribution,
 permits you to run Daikon and to detect invariants, but does not permit
 you to modify Daikon or to rebuild it.  The source distribution,
 @uref{http://pag.lcs.mit.edu/daikon/download/daikon-source.tar.gz,,@file{daikon-source.tar.gz}},
-includes everything from the pre-compiled distrobution
+includes everything from the pre-compiled distribution
 plus sources for Daikon and for dfej.
 
 @cindex anonymous CVS access to Daikon sources
@@ -1184,13 +1185,13 @@ Be sure to include all declaration files that are needed for the particular
 data trace file; the simplest way is to include every the declaration file
 created when instrumenting the program.
 
-The optional flags are described in @ref{Command line options for Daikon}.
+The optional flags are described in @ref{Command line options}.
 
 @menu
-* Command line options for Daikon::  
+* Command line options::        
 @end menu
 
-@node    Command line options for Daikon,  , Detect invariants, Detect invariants
+@node    Command line options,  , Detect invariants, Detect invariants
 @subsection Command line options for Daikon
 @cindex command line options for Daikon
 @cindex flags for Daikon
@@ -1229,9 +1230,8 @@ Serialize invariants to the specified file; they can later be
 postprocessed, compared, etc.
 
 @item --config @var{filename}
-Load the settings specified in the given file.
-@c Perhaps add a section describing all of the settings; probably this
-@c is too much detail, though.
+Load the configuration settings specified in the given file.
+@xref{Configuration options}, for details.
 
 @item --no_text_output
 Don't print invariants as text output.  This option may be used in
@@ -1257,7 +1257,8 @@ Write output in Simplify format.
 @cindex samples breakdown output
 @cindex mux output
 Output numbers of values and samples for invariants and program points;
-this is a debugging flag.
+this is a debugging flag.  (That is, it helps you understand why Daikon
+produced the output that it did.)
 
 The ``Samples breakdown'' output indicates how many samples in the
 @file{.dtrace} file had a modified value (``m''), had an unmodified
@@ -1272,6 +1273,23 @@ Only variables that appear in both the pre-state and the post-state
 eligible to be listed as modified or unmodified.  This is why the list
 of all variables is not the union of the modified and unmodified
 variables.
+
+@item --dbg @var{category}
+@item --debug
+@cindex debugging flags
+These debugging options cause output to be written to a log file (by
+default, to the terminal).  The @option{--dbg @var{category}} option
+enables debugging output for a specific part of Daikon; it may be
+specified multiple times, permitting find-grained control over debugging
+output.  The @option{--debug} option turns on all debugging flags.
+(This produces a lot of output!)  Most @var{category}s are class or
+package names in the Daikon implementation, such as @code{daikon.split}
+or @code{daikon.derive.binary.SequencesJoin}.  Only classes that check
+the appropriate categories are affected by the debug flags; you can
+determine this by looking for a call to @samp{Category.getInstance} in
+the specific class.  The debugging/logging output is implemented via the
+Log4j package.
+
 @end table
 
 
@@ -1336,9 +1354,9 @@ options for @command{daikon.pl}.
 
 @table @option
 @item -o
-@item --output @var{FILE}
-Save invariants in @file{@var{FILE}.inv} and source in
-@file{@var{FILE}.src.tar.gz}.  If no name 
+@item --output @var{file}
+Save invariants in @file{@var{file}.inv} and source in
+@file{@var{file}.src.tar.gz}.  If no name 
 is given, a name is automatically generated and used.
 
 @item -t
@@ -1381,7 +1399,7 @@ if @option{-t} is given), but do not start the Tree GUI.
 If nothing gets printed before the @samp{Exiting} line, then Daikon
 found no invariants.  You can get a little bit more information by using
 the @option{--output_num_samples} flag to Daikon (@pxref{Command line
-options for Daikon}).
+options}).
 
 Daikon does not display redundant invariants --- those that are implied
 by other invariants in the output --- because such results would merely
@@ -1746,6 +1764,9 @@ to sort the column in reverse order.
 @subsection Control panel
 
 The Control Panel determines which invariants are displayed.
+@c As of 2/2002
+(This picture of the Control Panel is slightly out of date; it needs to
+be updated.)
 
 @c Force a paragraph break so the image is on its own line.
 @*
@@ -1837,6 +1858,20 @@ obvious and will not be displayed by default.
 ``this.topOfStack<size(this.theArray[])'' is obvious and will not be
 displayed by default.
 @end itemize
+
+@item Suppress obvious equality invariants
+
+Like ``Suppress obvious invariants'', but applies only to equality
+invarians fo the form ``x==y''.
+
+@item Eliminate invariants based on Simplify
+
+Daikon can use the Simplify theorem-prover to eliminate even more
+implied invariants than Daikon's built-in tests are able to eliminte.
+Simplify must be separately obtained (from
+@url{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
+order to take advantage of this filter.
+
 @item Suppress unjustified invariants
 
 For every invariant, Daikon estimates the probability of that invariant
@@ -1852,7 +1887,7 @@ with probabilities of less than .01% are shown.
 
 Variable filters let you display only the invariants that contain
 certain variables.  The left-hand box displays the variables that you
-are interested.  By default, the box is empty and invariants containing
+are interested in.  By default, the box is empty and invariants containing
 any variables are displayed.  There are two ways to add variables to the
 variables list:
 @enumerate
@@ -2809,10 +2844,41 @@ be recorded and hence the may yield sparse output.
 @chapter Enhancing Daikon output
 
 @menu
+* Configuration options::       
 * Conditional invariants::      
 @end menu
 
-@node    Conditional invariants,  , Enhancing Daikon output, Enhancing Daikon output
+@node    Configuration options, Conditional invariants, Enhancing Daikon output, Enhancing Daikon output
+@section Configuration options
+
+Many aspects of Daikon's behavior can be controlled by setting various
+configuration parameters.  These configuration parameters control which
+invariants are checked and reported, the statistical tests for
+invariants, which derived variables are created, and more.
+
+The configuration options are set by creating a configuration file and
+supplying it to Daikon on the command line using the @option{--config
+@var{filename}} option.  Daikon always first reads the default values in
+@file{daikon/java/daikon/config/defaults.txt}, then reads all supplied
+configuration files in order, possibly overriding the defaults.  You may
+wish to use the supplied default configuration file as an example when
+creating your own configuration files (which only need include the
+specific configuration options you wish to change).
+
+At present, the configuration options are documented in the source files
+in which they are defined.  The configuration option name contains the
+Java classes in which it is defined.  (In the Daikon source code, the
+configuration value is stored in a variable which contains a
+@code{dkconfig_} prefix, but that should not be of concern to users.)
+Eventually, this section of the manual will contain a full list of all
+available options.
+
+The debugging flags @option{--debug} and @option{--dbg @var{category}}
+(@pxref{Command line options}) permit Daikon to produce debugging
+output, but do not affect the invariants that it computes.
+
+
+@node    Conditional invariants,  , Configuration options, Enhancing Daikon output
 @section Conditional invariants and implications
 @cindex splitting
 @cindex splitting condition
@@ -2856,7 +2922,8 @@ java daikon.Daikon Foo.decls Foo.spinfo Foo.dtrace
 
 @cindex createspinfo.pl program
 
-The @command{createspinfo.pl} program takes Java source code as input and
+The @command{createspinfo.pl} program (found in the @file{daikon/bin}
+directory) takes Java source code as input and
 creates a splitter info file; for instance,
 @example
 createspinfo.pl Foo.java
@@ -2949,7 +3016,7 @@ every condition can be used at every program point, regardless of where
 in the @file{.spinfo} file the condition appeared; this latter approach is
 called ``indiscriminate splitting''.  Indiscriminate splitting can result
 in Daikon attempting to use many conditions that are inappropriate at
-certain program points, for instance because the the program point does
+certain program points, for instance because the program point does
 not have (in scope) all the variables that are used in the condition.
 For example, the condition @code{myArray.length == x} is inapplicable at
 a program point if either of @samp{myArray} and @samp{x} is not in scope
@@ -2964,11 +3031,14 @@ condition is not applicable everywhere, and when it is, it may not be
 useful at all such locations, so checking for many conditional
 invariants may slow down Daikon without a corresponding benefit. 
 
-To use indiscriminate splitting, set the value of the configuration option
-variable @samp{daikon.split.SplitterList.all_splitters} to a non-zero
-value.
+By default, Daikon uses indiscriminate splitting.  To use
+non-indiscriminate spliting, place the following line in a file which is
+passed to Daikon via the @option{--config} flag (@pxref{Command line
+options}):
+@example
+daikon.split.SplitterList.all_splitters = false
+@end example
 
-@c Cross-reference configuration options when that section is written.
 
 @node    Example splitter info file,  , Indiscriminate splitting, Conditional invariants
 @subsection Example splitter info file
@@ -3353,6 +3423,12 @@ class Example @{
 This chapter gives solutions for certain problems you might have with
 Daikon; it also tells you how to report bugs in a useful manner.
 
+You may find the debugging flags @option{--debug} and @option{--dbg
+@var{category}} useful if you wish to track down bugs or better
+understand Daikon's operation; @xref{Command line options}.
+@xref{Configuration options}, for another way to adjust Daikon's output.
+
+
 @menu
 * dfej problems::               
 * Daikon problems::             
@@ -3361,6 +3437,8 @@ Daikon; it also tells you how to report bugs in a useful manner.
 * Known bugs::                  
 * Further reading::             
 @end menu
+
+
 
 @node    dfej problems, Daikon problems, Troubleshooting, Troubleshooting
 @section Problems with dfej
@@ -3475,15 +3553,16 @@ normal termination, or the target program's run was interrupted.
 In some cases, exceptional exit from a procedure can cause
 @code{orig(@var{x})} values to be incorrect.  This depends on the
 technique used to associate procedure exits with entries.  Daikon has
-two such techniques --- the nonce technique (which is the default for
-Java programs) and the stack technique.  If a @file{.dtrace} file uses
-the nonce technique, @code{orig(@var{x})} values are guaranteed to be
-correct.  If a @file{.dtrace} file uses the stack technique, then
-incorrect @code{orig(@var{x})} values are likely to occur.  You can tell
-which technique Daikon will use by examining the @file{.dtrace} file.
-If the second line of each entry in the @file{.dtrace} file is
-"this_invocation_nonce", then Daikon uses the nonce technique.
-Otherwise, it uses the stack technique.
+two such techniques --- the nonce technique and the stack technique.  If
+a @file{.dtrace} file uses the nonce technique, @code{orig(@var{x})}
+values are guaranteed to be correct.  If a @file{.dtrace} file uses the
+stack technique, then incorrect @code{orig(@var{x})} values are likely
+to occur.  You can tell which technique Daikon will use by examining the
+@file{.dtrace} file.  If the second line of each entry in the
+@file{.dtrace} file is "this_invocation_nonce", then Daikon uses the
+nonce technique.  Otherwise, it uses the stack technique.  Which
+technique is used is determined by the front end, which creates the
+@file{.dtrace} file, and typically cannot be controlled by the user.
 
 
 
@@ -3512,7 +3591,7 @@ Java like so:
 
 Another possible problem is the creation of too many derived variables.
 If you supply the @option{--output_num_samples} argument to Daikon
-(@pxref{Command line options for Daikon}), then it will list all
+(@pxref{Command line options}), then it will list all
 variables at each program point.  If some of these are of no interest,
 you may wish to suppress their creation.  (This manual does not
 presently tell you how to do that.)
@@ -3526,7 +3605,7 @@ Any output generated before the out-of-memory error is perfectly valid.
 @cindex Ajax, problem with
 
 The warning ``Problem with Ajax; using original .decls files instead''
-indicats that the Ajax variable comparator could not run.  Ajax
+indicates that the Ajax variable comparator could not run.  Ajax
 ordinarily indicates which variables are comparable to which other
 variables.  This information can reduce the amount of spurious output
 from Daikon by preventing it from making spurious comparisons and
@@ -3543,7 +3622,7 @@ proceeds without error.
 
 @cindex Simplify, could not utilize
 
-The warning ``Could not utilize Simpilify'' indicates that the Simplify
+The warning ``Could not utilize Simplify'' indicates that the Simplify
 theorem-prover could not be run.  As a consequence, certain redundant
 (logically implied) invariants may appear in the output.  The output is
 otherwise correct.
@@ -3723,7 +3802,7 @@ Daikon homepage, @url{http://pag.lcs.mit.edu/daikon/}.
 @chapter Details
 
 The Daikon invariant detector is named after an Asian radish.
-``Daikon'' is pronunced like the combination of the two one-syllable
+``Daikon'' is pronounced like the combination of the two one-syllable
 English words "die-con".
 
 
@@ -3797,7 +3876,7 @@ to @daikonemail{}.
 If you use Daikon, please send mail to @daikonemail{}, so that you can
 be informed of new versions, enhancements, and bug fixes.  We would also
 appreciate a brief description of how you are using Daikon, because we
-are curious about how users exploit it (and am eager for anecdotes about
+are curious about how users exploit it (and are eager for anecdotes about
 its successes and failures), and we want to make Daikon more effective
 for its users.
 
