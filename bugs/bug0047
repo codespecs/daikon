@@ -9,6 +9,10 @@ Reproducible: Yes
 Description:
 
 [amdunn]
+As pointed out by Jeremy this approach was wrong for static inner classes.
+This issue was resolved, and now I believe the bug is totally fixed.
+
+[amdunn]
 The test case now works. I also tried it on a case I assembled and
 it worked.
 
@@ -28,7 +32,10 @@ but is not merged.
 
 --
 $Log$
-Revision 1.3  2002-08-13 15:03:19  amdunn
+Revision 1.4  2002-08-13 16:15:55  amdunn
+changed bug0047
+
+Revision 1.3  2002/08/13 15:03:19  amdunn
 changed bug0047
 
 Revision 1.2  2002/07/31 21:45:05  mernst
