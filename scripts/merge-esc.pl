@@ -27,14 +27,20 @@ my $warn_on_no_invariants;	# whether to warn if no invariants for a ppt.
 my $merge_unexpressable;	# whether to merge unexpressible invariants;
 				#   if false, they are simply discarded.
 my $recursive;			# whether to look recursively for files.
+my $slashslash;                 # whether to use // or /* comments
 
 BEGIN {
   $warn_on_no_invariants = 0;
   $merge_unexpressable = 1;
   $recursive = 0;
+  $slashslash = 0;
 
   if ($ARGV[0] eq '-r') {
     $recursive = 1;
+    shift @ARGV;
+  }
+  if ($ARGV[0] eq '-s') {
+    $slashslash = 1;
     shift @ARGV;
   }
 }
@@ -78,6 +84,14 @@ if (defined($methodname)) {
   $raw{$methodname} .= $_;
 }
 
+sub esc_comment( $ ) {
+  my ($annot) = @_;
+  if ($slashslash) {
+    return "//$annot\n";
+  } else {
+    return "/*$annot */\n";
+  }
+}
 
 sub simplify_args( $ ) {
   my ($args) = @_;
@@ -282,8 +296,8 @@ END {
 	    if ($need_newline) {
 	      print OUT "\n";
 	      if ($found) {
-		# print OUT "/* Just found $ppt $ppt_fullmeth */\n";
-		# print OUT "/* Already found$found */\n";
+		# print OUT esc_comment(" Just found $ppt $ppt_fullmeth");
+		# print OUT esc_comment(" Already found$found");
 	      }
 	    }
 	    $found .= "  $ppt=$ppt_fullmeth";
@@ -292,10 +306,10 @@ END {
 		for my $inv (split("\n", $raw{$ppt})) {
 		  if (is_non_supported_invariant($inv)) {
 		    if ($merge_unexpressable) {
-		      print OUT "/*! $requires " . $inv . " */\n";
+		      print OUT esc_comment("! $requires " . $inv);
 		    }
 		  } else {
-		    print OUT "/*@ $requires " . $inv . " */\n";
+		    print OUT esc_comment("@ $requires " . $inv);
 		  }
 		}
 	      }
@@ -331,14 +345,14 @@ END {
 		      @mods = grep(!/^this.$field$/, @mods);
 		    }
 		    if (scalar(@mods) > 0) {
-		      print OUT "/*@ $modifies " . join(', ', @mods) . " */\n";
+		      print OUT esc_comment("@ $modifies " . join(', ', @mods));
 		    }
 		  } elsif (is_non_supported_invariant($inv)) {
 		    if ($merge_unexpressable) {
-		      print OUT "/*! $ensures " . $inv . " */\n";
+		      print OUT esc_comment("! $ensures " . $inv);
 		    }
 		  } else {
-		    print OUT "/*@ $ensures " . $inv . " */\n";
+		    print OUT esc_comment("@ $ensures " . $inv);
 		  }
 		}
 	      } else {
@@ -360,7 +374,7 @@ END {
 	} elsif ($postbrace =~ /^(.*)(\}.*\n?)$/) {
 	  print OUT "$1\n";
 	  for my $field (@owned_fields) {
-	    print OUT "/*@ set $field.owner = this */\n";
+	    print OUT esc_comment("@ set $field.owner = this");
 	  }
 	  print OUT $2;
 	} else {
@@ -384,7 +398,7 @@ END {
 	      print OUT $nextline;
 	    }
 	    for my $field (@owned_fields) {
-	      print OUT "/*@ set $field.owner = this */\n";
+	      print OUT esc_comment("@ set $field.owner = this");
 	    }
 	    print OUT $nextline;
 	  }
@@ -412,10 +426,10 @@ END {
 	    for my $inv (split("\n", $raw{$fullmeth})) {
 	      if (is_non_supported_invariant($inv)) {
 	        if ($merge_unexpressable) {
-		  print OUT "/*! invariant " . $inv . " */\n";
+		  print OUT esc_comment("! invariant " . $inv);
 	        }
 	      } else {
-	        print OUT "/*@ invariant " . $inv . " */\n";
+	        print OUT esc_comment("@ invariant " . $inv);
 	      }
 	    }
 	  }
@@ -433,7 +447,7 @@ END {
 	  print OUT "$spaces $mods$body\n";
 	}
 	if ($is_owned) {
-	  print OUT "/*@ invariant $fieldname.owner == this */\n";
+	  print OUT esc_comment("@ invariant $fieldname.owner == this");
 	} else {
 	  # print "not owned: $fieldname @owned_fields\n";
 	}
