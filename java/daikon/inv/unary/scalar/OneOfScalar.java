@@ -75,6 +75,28 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
     Arrays.sort(elts, 0, num_elts  );
   }
 
+  public Object min_elt() {
+    if (num_elts == 0)
+      throw new Error("Represents no elements");
+    sort_rep();
+
+    // Not sure whether interning is necessary (or just returning an Integer
+    // would be sufficient), but just in case...
+    return Intern.internedLong(elts[0]);
+
+  }
+
+  public Object max_elt() {
+    if (num_elts == 0)
+      throw new Error("Represents no elements");
+    sort_rep();
+
+    // Not sure whether interning is necessary (or just returning an Integer
+    // would be sufficient), but just in case...
+    return Intern.internedLong(elts[num_elts-1]);
+
+  }
+
   // Assumes the other array is already sorted
   public boolean compare_rep(int num_other_elts, long [] other_elts) {
     if (num_elts != num_other_elts)
