@@ -93,6 +93,14 @@ public final class Daikon {
   public static boolean show_progress = false;
 
   /**
+   * Whether to use the "new" equality set mechanism for handling
+   * equality, using canonicals to have instantiation of invariants
+   * only over equality sets.
+   **/
+  public static boolean use_equality_set = true;
+
+
+  /**
    * Whether to use general suppression mechanism.
    **/
   public static boolean suppress_invariants = false;
@@ -251,6 +259,8 @@ public final class Daikon {
     load_map_files(all_ppts, map_files);
     // setup_splitters(all_ppts); // XXX splitters are not implemented yet
 
+    setupEquality (all_ppts);
+    
     // Infer invariants
     process_data(all_ppts, dtrace_files);
 
@@ -287,6 +297,17 @@ public final class Daikon {
     System.out.println("Exiting");
   }
 
+  public static void setupEquality (PptMap allPpts) {
+    // PptSliceEquality does all the necessary instantiations
+    if (Daikon.use_equality_set) {
+      for (Iterator i = allPpts.pptIterator(); i.hasNext(); ) {
+        PptTopLevel ppt = (PptTopLevel) i.next();
+        ppt.equality_view = new PptSliceEquality(ppt);
+        ppt.equality_view.instantiate_invariants(true);
+      }
+    }
+    
+  }
 
   ///////////////////////////////////////////////////////////////////////////
   // Read in the command line options
@@ -722,6 +743,14 @@ public final class Daikon {
       monitor.stop();
     }
 
+    // Post process data for each PptTopLevel
+    if (Daikon.use_equality_set) {
+      for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
+        PptTopLevel ppt = (PptTopLevel) itor.next();
+        ppt.postProcessEquality();
+      }
+    }
+
     if (suppress_redundant_invariants_with_simplify) {
       System.out.print("Invoking Simplify to identify redundant invariants");
       System.out.flush();
@@ -734,6 +763,7 @@ public final class Daikon {
       }
       System.out.println(elapsedTime());
     }
+
   }
 
   private static long elapsedTime_timer = System.currentTimeMillis();
