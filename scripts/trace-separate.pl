@@ -5,7 +5,7 @@
 # group samples by class (for Java) or method (for C) they were taken
 # from, writing new trace files with grouped data.
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2002-03-13 22:54:28 mistere>
+# Time-stamp: <2002-03-14 02:09:00 mistere>
 
 use FileHandle;
 use Compress::Zlib;
@@ -13,6 +13,13 @@ use Compress::Zlib;
 BEGIN {
   # Write .dtrace.gz files (instead of .dtrace)
   $compress = 1;
+
+  # Per-method buckets (for Java; C always does per-method)
+  $per_method = 0;
+  if (($#ARGV >= 0) && ($ARGV[0] eq "--per_method")) {
+    $per_method = 1;
+    shift @ARGV;
+  }
 
   # Read by paragraph
   $/ = "\n\n";
@@ -22,7 +29,7 @@ BEGIN {
 }
 
 ($paragraph = $_) =~ s|^\n+||m;             # Remove leading newlines
-($tmp = $paragraph) =~ s|^//[^\n]*$|\n|mg;  # Remove comments 
+($tmp = $paragraph) =~ s|^//[^\n]*$|\n|mg;  # Remove comments
 
 # Identify class
 
@@ -30,13 +37,16 @@ if ($tmp =~ m|^\s*$|) {
   next;
 } elsif ($tmp =~ m|^std\.(\w+)|s) {
   # C programs: std.method(...)
-  $clazz = $1;
+  $bucket_name = $1;
 } elsif ($tmp =~ m|^(.+):::OBJECT\n|s) {
-  $clazz = $1;
+  $bucket_name = $1;
 } elsif ($tmp =~ m|^(.+):::CLASS\n|s) {
-  $clazz = $1;
-} elsif ($tmp =~ m|^(.+)\.[^(]+\([^\)]*\)[^:]+:::\w+\n|s) {
-  $clazz = $1;
+  $bucket_name = $1;
+} elsif ($tmp =~ m|^(.+)(\.[^(]+)\([^\)]*\)[^:]+:::\w+\n|s) {
+  $bucket_name = $1;
+  if ($per_method) {
+    $bucket_name .= $2;
+  }
 } else {
   print STDERR "Could not find ppt name in paragraph:\n";
   print STDERR $tmp;
@@ -46,9 +56,9 @@ if ($tmp =~ m|^\s*$|) {
 # Write record to separate file
 
 {
-  my $fh = $files{$clazz};
+  my $fh = $files{$bucket_name};
   if (! defined($fh)) {
-    my $safeclazz = $clazz;
+    my $safeclazz = $bucket_name;
     $safeclazz =~ s|\W|_|g;
     my $filename = "separate_$safeclazz.dtrace";
     if ($compress) {
@@ -59,7 +69,7 @@ if ($tmp =~ m|^\s*$|) {
       open $fh, ">$filename" or die("Error opening output file: $!");
       print $fh "\n";
     }
-    $files{$clazz} = $fh;
+    $files{$bucket_name} = $fh;
   }
   if ($compress) {
     $fh->gzwrite($paragraph);
