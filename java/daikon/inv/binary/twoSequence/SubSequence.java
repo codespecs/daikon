@@ -4,6 +4,9 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.derive.*;
 import daikon.derive.binary.*;
+import daikon.inv.unary.sequence.EltOneOf;
+import daikon.VarInfoName.QuantHelper;
+import daikon.VarInfoName.QuantHelper.QuantifyReturn;
 
 import java.util.*;
 import utilMDE.*;
@@ -50,17 +53,59 @@ public class SubSequence extends TwoSequence {
   }
 
   public String format_esc() {
-    String[] form =
-      VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-	{ var1().name, var2().name }, true); // elementwise does what we want
-    return form[0] + "(" + form[1] + " == " + form[2] + ")" + form[3];
+    return "format_esc needs to be changed on SubSequence";
   }
 
   public String format_simplify() {
-    String[] form =
-      VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-	{ var1().name, var2().name }, true); // elementwise does what we want
-    return form[0] + "(EQ " + form[1] + " " + form[2] + ")" + form[3];
+    if (1==1) return "format_simplify disabled";
+
+    VarInfo subvar = (var1_in_var2 ? var1() : var2());
+    VarInfo supervar = (var1_in_var2 ? var2() : var1());
+    // (exists k s.t. (forall i, j; (i bounds & j bounds & (i = j + k)) ==> ...)) 
+
+    QuantifyReturn qret = QuantHelper.quantify(new VarInfoName[] { subvar.name, supervar.name} );
+    Assert.assert(qret.bound_vars.size() == 2);
+    Assert.assert(qret.root_primes.length == 2);
+
+    // These variables are, in order: Example element, free Index
+    // variable, Lower bound, Upper bound, Span
+    String aE, aI, aL, aH, aS; // a = subsequence
+    String bE, bI, bL, bH, bS; // b = supersequence
+    {
+      VarInfoName[] boundv;
+
+      boundv = (VarInfoName[]) qret.bound_vars.get(0);
+      aE = qret.root_primes[0].simplify_name();
+      aI = boundv[0].simplify_name();
+      aL = boundv[1].simplify_name();
+      aH = boundv[2].simplify_name();
+      aS = "(+ (- " + aH + " " + aL + ") 1)";
+
+      boundv = (VarInfoName[]) qret.bound_vars.get(1);
+      bE = qret.root_primes[1].simplify_name();
+      bI = boundv[0].simplify_name();
+      bL = boundv[1].simplify_name();
+      bH = boundv[2].simplify_name();
+      bS = "(+ (- " + bH + " " + bL + ") 1)";
+    }
+
+    // If the span of A is no more than the span of B, and the span of
+    // A is non-negative, then there exists an offset in B, where (1)
+    // the offset doesn't cause the matching to push past the end of B
+    // and (2) and for all indices less than the span of A, the
+    // elements starting from A_low and B_low+offset are equal.
+
+    String index = "|__index|";
+    String shift = "|__shift|";
+    String result = 
+      "(EXISTS (" + shift + ") (AND " +
+      "(>= " + aS + " 0) (>= " + bS + " " + aS + ") " + // ??
+      "(<= 0 " + shift + ") (< " + shift + " (- " + bS + " " + aS + ")) " +
+      "(FORALL (" + index + ") (IMPLIES (AND " + "(<= 0 " + index + ") (< " + index + " " + aS + ")) " +
+      "(EQ " +
+      UtilMDE.replaceString(aE, aI, "(+ " + aL + " " + index + ")") + " " +
+      UtilMDE.replaceString(bE, bI, "(+ (+ " + bL + " " + index +") |/|)") + ")))))";
+    return result;
   }
 
   public void add_modified(long[] a1, long[] a2, int count) {
@@ -189,6 +234,31 @@ public class SubSequence extends TwoSequence {
     } else {
       VarInfo subvar = (var1_in_var2 ? var1() : var2());
       VarInfo supervar = (var1_in_var2 ? var2() : var1());
+
+      // If the elements of supervar are always the same (EltOneOf),
+      // we aren't going to learn anything new from this invariant,
+      // since each sequence should have an EltOneOf over it.
+      if (false) {
+	System.out.println("Checking " + format());
+	PptSlice1 slice = ppt.parent.getView(supervar);
+	if (slice == null) {
+	  System.out.println("No slice: ppt=" + ppt + " parent =" + ppt.parent);
+	} else {
+	  System.out.println("Slice var =" + slice.var_info);
+	  Iterator superinvs = slice.invs.iterator();
+	  while (superinvs.hasNext()) {
+	    Object superinv = superinvs.next();
+	    System.out.println("Inv = " + superinv);
+	    if (superinv instanceof EltOneOf) {
+	      EltOneOf eltinv = (EltOneOf) superinv;
+	      if (eltinv.num_elts() > 0) {
+		System.out.println(format() + " obvious because of " + eltinv.format());
+		return true;
+	      }
+	    }
+	  }
+	}
+      }
 
       // Also need to check A[0..i] subseq A[0..j] via compare_vars.
 
