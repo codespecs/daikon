@@ -169,7 +169,7 @@ dist:
 # (Must make it first in order to test it!)
 dist-and-test: dist-notest test-the-dist
 	@echo "*****"
-	@echo "Don't forget to send mail."
+	@echo "Don't forget to send mail to daikon-announce."
 	@echo "*****"
 
 dist-ensure-directory-exists: $(DIST_DIR)
