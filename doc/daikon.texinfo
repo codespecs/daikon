@@ -198,7 +198,7 @@ and C++.
 @chapter Installing Daikon
 
 In order to install Daikon, perform the following steps.
-@ref{Requirements} lists a few additional requirements running Daikon
+@xref{Requirements} for a few additional requirements running Daikon
 (in short, you must be able to run Java programs, because Daikon is
 written in Java).
 
@@ -224,14 +224,18 @@ tar zxvf daikon.tar.gz
 This creates a @file{@var{parent}/daikon/} subdirectory.
 
 @item
-Add the Daikon Java files to your Java class path.  The easiest way to
-do this is to add the supplied @file{.jar} file to your classpath.
+Add the Daikon Java files to your Java class path.  There are two
+different ways to do this.
+@itemize @bullet
+@item The easiest technique is to add the supplied @file{daikon.jar}
+file to your classpath.
 For instance, if your shell is @command{csh}, add the following to your
 @file{.cshrc} file: 
 @example
 setenv CLASSPATH @var{parent}/daikon/daikon.jar:$@{CLASSPATH@}
 @end example
 
+@item
 Alternately, you may add the @file{@var{parent}/daikon/} directory to
 your classpath.  This alternative permits you to modify Daikon; most
 users will not need to do so.  If your shell is @command{csh}, add the
@@ -243,12 +247,13 @@ The distribution includes compiled @file{.class} files, so you do not
 need to compile them yourself; but you may do so by typing @command{make}
 in any directory under @file{@var{parent}/daikon/java/}.  In order to
 compile Daikon, you will need the C preprocessor @command{cpp}.
+@end itemize
 
 @item
 Add the @file{@var{parent}/daikon/bin/} directory to your path.  (Your
 path is a list of directories in which the shell searches for
 commands; this permits you to type just the program name rather than
-supplying a full pathname.)  In csh, put the following in your
+supplying a full pathname.)  In csh, add the following to your
 @file{.cshrc} file:
 @example
 set path = (@var{parent}/daikon/bin $path)
@@ -273,7 +278,8 @@ steps.
 @enumerate
 @item
 Ensure that @file{rt.jar} is on your Java class path.  For instance, if
-your shell is @command{csh}, place the following in your @file{.cshrc} file:
+your shell is @command{csh}, place something like the following in your
+@file{.cshrc} file:
 @example
 setenv CLASSPATH $@{CLASSPATH@}:$HOME/java/jdk/jre/lib/rt.jar
 @end example
@@ -281,12 +287,15 @@ setenv CLASSPATH $@{CLASSPATH@}:$HOME/java/jdk/jre/lib/rt.jar
 @item
 Obtain or build an executable for dfej, the Daikon front end for Java.
 
+@itemize @bullet
+@item
 The easiest approach is to download a precompiled version of @file{dfej}
-from @url{http://sdg.lcs.mit.edu/daikon/download/}.  Place that executable somewhere on
-your path, and you are ready to run dfej.  (If no executable is
-available for your architecture, send mail to @daikonemail{} and we may
-be able to produce an executable for you.)
+from @url{http://sdg.lcs.mit.edu/daikon/download/}.  Place that
+executable somewhere on your path, and you are ready to run dfej.  (If
+no executable is available for your architecture, send mail to
+@daikonemail{} and we may be able to produce an executable for you.)
 
+@item
 Alternately, you can build dfej from the sources which are included in
 the Daikon source distribution.  
 To build dfej, see file @file{INSTALL} in the dfej sources.  In
@@ -330,6 +339,7 @@ If you modify the source code for dfej (which is not recommended
 unless you know what you are doing), just run @command{make} again to
 build a new binary.
 
+@end itemize
 @end enumerate
 
 @node    Installing dfec, Requirements, Installing dfej, Installing
@@ -347,19 +357,19 @@ cd front-end/c
 make
 @end example
 This creates the file @file{daikon_runtime.o}; you will use it and
-@file{daikon_runtime.h}, which was distributed in the same directory,
+@file{daikon_runtime.h}, which also appears in @file{front-end/c},
 when compiling C and C++ programs in which you wish to detect invariants.
 
 @item
 Obtain a dfec executable.
 
-The easiest approach is to download a
-precompiled version from @url{http://sdg.lcs.mit.edu/daikon/download/}.  Place that
-executable somewhere on your path.  (If no executable is available for
-your architecture, send mail to @daikonemail{} and we may be able to
-produce an executable for you.)
+The easiest approach is to download a precompiled version of dfec from
+@url{http://sdg.lcs.mit.edu/daikon/download/}.  Place that executable
+somewhere on your path.  (If no executable is available for your
+architecture, send mail to @daikonemail{} and we may be able to produce
+an executable for you.)
 
-License restrictions permit us from distributing the source for dfec,
+License restrictions prohibit us from distributing the source for dfec,
 except to other parties who hold a license to the EDG (Edison Design
 Group) C/C++ front end.  If you hold such a license, send mail to
 @email{daikon@@sdg.lcs.mit.edu} to obtain a patch to the EDG front end
@@ -393,14 +403,14 @@ This creates the dfec executable,  @file{release_2.44/bin/dfec}.
 @section Requirements for running Daikon
 
 
-In order to run Daikon, you must have a @uref{http://java.sun.com,, Java
-virtual machine}, or JVM.  Daikon is written in Java, so this is needed
-to run Daikon.  Daikon requires a Java 1.3 (or later) JVM.
+In order to run Daikon, you must have a Java 1.3 (or later) JVM, or
+@uref{http://java.sun.com,, Java virtual machine}.
 
 You also need a compiler for whatever language your target programs are
 written in.  For instance, if you wish to analyze Java programs, you
-need a Java compiler.  If you wish to analyze C or C++ programs, you
-need a C or C++ compiler.
+need a Java compiler such as @command{javac} or @command{jikes}.  If you
+wish to analyze C or C++ programs, you need a C or C++ compiler such as
+@command{gcc}.
 
 If you wish to build the Daikon front end for Java yourself, rather than
 using a precompiled binary provided at
@@ -1307,14 +1317,16 @@ The following individuals have contributed to Daikon:
 @item Jake Cockrell
 @item Adam Czeisler
 @item @uref{http://sdg.lcs.mit.edu/~mernst/,,Michael Ernst}
-@item @uref{http://www.cs.ucsd.edu/~wgg/,,Bill Griswold}
+@item @uref{http://www.cs.ucsd.edu/~wgg/,,William Griswold}
 @item Josh Kataoka
 @item @uref{http://web.mit.edu/mhao/www/,,Melissa Hao}
+@item @uref{http://web.mit.edu/mharder/www/,,Michael Harder}
 @item @uref{http://web.mit.edu/mistere/www/,,Jeremy Nimmer}
 @item @uref{http://www.cs.washington.edu/homes/notkin/,,David Notkin}
 @end itemize
 
-@uref{http://www.cs.washington.edu/homes/csk/,,Craig Kaplan} carved the Daikon logo.
+@uref{http://www.cs.washington.edu/homes/csk/,,Craig Kaplan} carved the
+Daikon logo.
 
 Many of our colleagues have been generous with their feedback and advice,
 for which we are grateful.
