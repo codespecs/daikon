@@ -46,6 +46,13 @@ function process_line ($line, $tb) {
   global $HTTP_SERVER_VARS;
   global $url;
 
+  // echo "processing line '$line'<br>\n";
+
+  if ($skip && ereg ("^\[[0-9: PMA]*]: Reading.*\.\.\. *", $line)) {
+      // echo "matched '$line'<br>\n";
+      return;
+  }
+
   // $mark_arr = array ("orig(this.s[post(set1)..])", "this.s[orig(set1)..]");
   $mark_arr = array();
 
@@ -206,15 +213,15 @@ function process_line ($line, $tb) {
     if (isset ($next_line))
       $line = $next_line;
     else
-      $line = rtrim (fgets ($stdin, 5*1024));
+        $line = rtrim (get_line ($stdin));
 
     // Look for a traceback on the following lines
-    $next_line = rtrim (fgets ($stdin, 5*1024));
+    $next_line = rtrim (get_line ($stdin));
     if (strpos ($next_line, "java.lang.Throwable: debug traceback") === 0) {
       $next_line = rtrim (fgets ($stdin, 5*1024));
       while (strpos ($next_line, "\tat daikon.") === 0) {
         $tb[] = $next_line;
-        $next_line = rtrim (fgets ($stdin, 5*1024));
+        $next_line = rtrim (get_line ($stdin));
       }
     }
 
@@ -235,4 +242,27 @@ function process_line ($line, $tb) {
   }
 
   echo "</pre>\n";
+
+// Reads the next line from fp, treating normal line breaks and carriage
+// returns as line breaks
+function get_line ($fp) {
+
+    static $lines;
+    static $pos;
+
+    // Get a new set of lines
+    if (!is_array ($lines) || ($pos >= count($lines))) {
+        $line = fgets ($fp, 10*1024);
+        // echo "Read line '$line'<br>\n";
+        $lines = explode ("", $line);
+        $pos = 0;
+        // echo "line count = " + count($lines) + "<br>\n";
+    }
+
+    $out = $lines[$pos];
+    $pos++;
+    return ($out);
+}
+
+
 ?>
