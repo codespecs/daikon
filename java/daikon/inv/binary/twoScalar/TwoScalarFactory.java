@@ -48,14 +48,23 @@ public final class TwoScalarFactory {
           }
         }
       }
+      // Skip if either is constant.
       if (var1.isConstant() || var2.isConstant()) {
         Global.subexact_noninstantiated_invariants += 2;
       } else {
         result.add(LinearBinary.instantiate(ppt));
-        // Perhaps do not instantiate unless the variables have
-        // the same type; in particular, nonequal for Object variables
-        // is not so likely to be of interest.
-        result.add(NonEqual.instantiate(ppt));
+        // Skip if there is already a > or linear relationship over the
+        // variables; a>b implies a!=b.
+        IntComparison ic = IntComparison.find(ppt);
+        if ((ic != null) && ic.justified() && (! ic.isExact())) {
+          // System.out.println("Torpedoing NonEqual on the basis of " + ic.format());
+          Global.subexact_noninstantiated_invariants += 1;
+        } else {
+          // Perhaps do not instantiate unless the variables have
+          // the same type; in particular, nonequal for Object variables
+          // is not so likely to be of interest.
+          result.add(NonEqual.instantiate(ppt));
+        }
       }
     }
     return result;

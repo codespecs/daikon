@@ -83,6 +83,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   private int num_elts;
 #if defined(SCALAR)
   private boolean is_boolean;
+  private boolean is_object;
 #endif
 
   ONEOFSCALAR(PptSlice ppt) {
@@ -99,6 +100,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     num_elts = 0;
 #if defined(SCALAR)
     is_boolean = (var().type == ProglangType.BOOLEAN);
+    is_object = var().type.isObject();
 #endif
   }
 
@@ -165,8 +167,11 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     if (num_elts == 1) {
 #if defined(SCALAR)
       if (is_boolean) {
-        Assert.assert((elts[0] == 0) || elts[0] == 1);
+        Assert.assert((elts[0] == 0) || (elts[0] == 1));
         return NAME + " = " + ((elts[0] == 0) ? "false" : "true");
+      } else if (is_object) {
+        Assert.assert(elts[0] == 0);
+        return NAME + " = " + "null";
       } else {
       return NAME + " = " + TOSTRING(elts[0]);
       }

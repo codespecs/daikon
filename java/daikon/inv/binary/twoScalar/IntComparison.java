@@ -146,14 +146,13 @@ public final class IntComparison extends TwoScalar implements Comparison {
     return core.isExact();
   }
 
-  // Temporary, for debugging
-  public void destroy() {
-    if (debugIntComparison || ppt.debugged) {
-      System.out.println("IntComparison.destroy(" + ppt.name + ")");
-    }
-
-    super.destroy();
-  }
+  // // Temporary, for debugging
+  // public void destroy() {
+  //   if (debugIntComparison || ppt.debugged) {
+  //     System.out.println("IntComparison.destroy(" + ppt.name + ")");
+  //   }
+  //   super.destroy();
+  // }
 
   public void add(long v1, long v2, int mod_index, int count) {
     if (ppt.debugged) {
