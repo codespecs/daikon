@@ -11,7 +11,7 @@ import java.util.*;
 public class EltwiseIntComparison extends SingleSequence {
 
   // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface
+  // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
 
   final static boolean debugEltwiseIntComparison = false;
@@ -51,7 +51,7 @@ public class EltwiseIntComparison extends SingleSequence {
 
 
   /* IOA */
-  public String format_ioa(String classname) {    
+  public String format_ioa(String classname) {
     String[] form =
       VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var(), var() }, classname);
     String comparator = core.format_comparator();
