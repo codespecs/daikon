@@ -101,11 +101,14 @@ developer.pdf: developer.dvi
 	dvipdfm $<
 
 clean: texi-clean
-	rm -f daikon.log daikon.info daikon.info-[0-9] daikon.tmp daikon.dvi daikon.ps daikon.pdf daikon.html .fix-menu
+	rm -f daikon.tmp \
+		daikon.info daikon.info-[0-9] \
+		daikon.log daikon.dvi daikon.ps daikon.pdf daikon.html .fix-menu
 	rm -f *.bak
 	rm -rf daikon_manual_html
-	rm -f developer.log develoepr.info developer.info-[0-9] developer.tmp \
-		  developer.ps developer.pdf developer.html
+	rm -f developer.tmp developer.pg \
+		developer.info developer.info-[0-9] \
+		developer.log developer.dvi developer.ps developer.pdf developer.html
 
 texi-clean:
 	rm -rf daikon.aux daikon.cp daikon.cps daikon.fn daikon.ky daikon.pg daikon.toc daikon.tp daikon.vr
