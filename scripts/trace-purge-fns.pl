@@ -1,5 +1,7 @@
-#! /uns/bin/perl -wpi.bak
-# Remove program points (functions) from .dtrace files.
+: # Use -*- Perl -*- without knowing its path
+  eval 'exec perl -S -wpi.bak $0 "$@"'
+  if 0;
+# Remove program points (functions) from .dtrace files; works by side effect.
 # Usage:  trace-purge-fns.pl [-v] regexp file ...
 
 # -v flag means to retain rather than discard functions matching the
