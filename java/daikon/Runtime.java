@@ -116,13 +116,20 @@ public final class Runtime {
     public void print(Object obj)  { if (count <= 1) super.print(obj); }
     public void print(String s)    { if (count <= 1) super.print(s); }
     public void println()          { if (count <= 1) { super.println();
-                                                       printedLines++; }
-      // Only do the check when printing a blank line, which happens
-      // (only?) between records.  (I could only count blank lines, instead...)
-      if (printedLines > lineLimit) {
-        System.err.println("Printed " + printedLines + " lines; "
-                           + "limit was " + lineLimit + ".  Exiting.");
-        System.exit(1);
+                                                       printedLines++;
+        // Only do the check when printing a blank line, which happens
+        // (only?) between records.  (I could only count blank lines, instead...)
+        if (printedLines > lineLimit) {
+          System.err.println("Printed " + printedLines + " lines; "
+                             + "limit was " + lineLimit + ".  Exiting.");
+          // The shutdown hook is synchronized on this, so close it up
+          // ourselves, lest the call to System.exit cause deadlock.
+          super.println();
+          super.println("# EOF (added by PrintStreamWithThrottle)");
+          super.close();
+          dtrace = null;
+          System.exit(1);
+        }
       }
     }
     public void println(boolean x) { if (count <= 1) { super.println(x);
