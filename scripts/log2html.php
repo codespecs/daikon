@@ -45,6 +45,9 @@ function process_line ($line, $tb) {
   global $HTTP_SERVER_VARS;
   global $url;
 
+  // $mark_arr = array ("orig(this.s[post(set1)..])", "this.s[orig(set1)..]");
+  $mark_arr = array();
+
   if (strpos ($line, "@") === 0) {
 
     $log_cnt++;
@@ -59,6 +62,9 @@ function process_line ($line, $tb) {
     $out = str_replace (": ", "<td>", $out);
     $out = str_replace (",", ", ", $out);
     $out = ereg_replace ("^@  *", "", $out);
+    foreach ($mark_arr as $mark) 
+      $out = str_replace ($mark, "<font color=red>$mark</font>", $out);
+    // $out = str_replace ("-- ", "<div style=\"margin-left:10px\">", $out);
 
     $code_base = "~/research/invariants/java";
 
@@ -137,13 +143,14 @@ function process_line ($line, $tb) {
   // Read in the current state
   // Right now it has two lines.  The first is all_open and the second
   // is the list of hand-opened tracebacks.
+  $tb_open = array();
   $fp = @fopen ("$file.state", "r+");
   if (!$fp)
     echo "<font color=red> Warning: Can't open state file '$file.state' "
         . "</font><p>\n";
   else {
-    $all_open = trim (fgets ($fp, 1024));
-    $tb_open = explode (" ", trim (fgets ($fp, 1024)));
+    $all_open = trim (fgets ($fp, 5 * 1024));
+    $tb_open = explode (" ", trim (fgets ($fp, 5*1024)));
   }
 
   // if open or close is specified, add it in and rewrite the state
@@ -183,15 +190,15 @@ function process_line ($line, $tb) {
     if (isset ($next_line))
       $line = $next_line;
     else
-      $line = rtrim (fgets ($stdin, 1024));
+      $line = rtrim (fgets ($stdin, 5*1024));
 
     // Look for a traceback on the following lines
-    $next_line = rtrim (fgets ($stdin, 1024));
+    $next_line = rtrim (fgets ($stdin, 5*1024));
     if (strpos ($next_line, "java.lang.Throwable: debug traceback") === 0) {
-      $next_line = rtrim (fgets ($stdin, 1024));
+      $next_line = rtrim (fgets ($stdin, 5*1024));
       while (strpos ($next_line, "\tat daikon.") === 0) {
         $tb[] = $next_line;
-        $next_line = rtrim (fgets ($stdin, 1024));
+        $next_line = rtrim (fgets ($stdin, 5*1024));
       }
     }
 
