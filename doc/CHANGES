@@ -14,10 +14,11 @@ versions as the user manual.
 Daikon now includes a new front-end for C programs, named "Kvasir".
 Unlike previous C front-ends, which worked by rewriting source code,
 Kvasir uses the Valgrind framework and debugging information in the
-DWARF-2 format to trace s program's execution given only a binary.
-Kvasir is generally faster and more robust than the old C front-end,
-but it does not yet support all of the features of the old C
-front-end, and it can be used only on x86 platforms running Linux.
+DWARF-2 format to trace a program's execution given only a binary.
+Kvasir is generally easier to use, faster and more robust than the old
+C front-end, but it does not yet support all of the features of the
+old C front-end, and it can be used only on x86 platforms running
+Linux.
 
 ---------------------------------
 
