@@ -85,6 +85,8 @@ all_except_daikon: ${JAVA_FILES_EXCEPT_DAIKON}
 	@${JAVAC} ${JAVA_FILES_EXCEPT_DAIKON}
 	@chmod -w ${AUTO_GENERATED_FILES}
 
+all_except: all_except_daikon
+
 all_force:	all_directly
 
 all_via_javac:
