@@ -1,6 +1,7 @@
 package daikon;
 
 import daikon.inv.*;
+import daikon.diff.*;
 import java.io.*;
 import java.util.*;
 import javax.swing.tree.*;
@@ -14,13 +15,15 @@ public final class Diff {
     "Usage: java daikon.Diff [OPTION]... FILE1 FILE2" + lineSep + lineSep +
     "  -h  Display this usage message" + lineSep +
     "  -d  Display the tree of differing invariants (default)" + lineSep +
-    "  -a  Display the tree of all invariants" + lineSep
+    "  -a  Display the tree of all invariants" + lineSep +
+    "  -c  Display the number of differing invariants" + lineSep
     ;
 
 
   // The output mode selected by the user
   private static final int PRINT_DIFF_INV = 0;
   private static final int PRINT_ALL_INV = 1;
+  private static final int COUNT_DIFF_INV = 2;
   private static int mode = PRINT_DIFF_INV;
 
   /** Read two PptMap objects from their respective files and diff them. */
@@ -28,7 +31,7 @@ public final class Diff {
   StreamCorruptedException, OptionalDataException, IOException,
   ClassNotFoundException {
 
-    Getopt g = new Getopt("daikon.Diff", args, "hda");
+    Getopt g = new Getopt("daikon.Diff", args, "hdac");
     int c;
     while ((c = g.getopt()) !=-1) {
       switch (c) {
@@ -42,6 +45,8 @@ public final class Diff {
       case 'a':
         mode = PRINT_ALL_INV;
         break;
+      case 'c':
+        mode = COUNT_DIFF_INV;
       case '?':
         break; // getopt() already printed an error
       default:
@@ -68,14 +73,33 @@ public final class Diff {
     PptMap map1 = (PptMap) oistream1.readObject();
     PptMap map2 = (PptMap) oistream2.readObject();
 
-    DefaultMutableTreeNode tree = diffPptMap(map1, map2);
+    RootNode root = diffPptMap(map1, map2);
 
     switch (mode) {
     case PRINT_DIFF_INV:
-      System.out.println(printDifferences(tree));
+      {
+        PrintDifferingInvariantsVisitor v =
+          new PrintDifferingInvariantsVisitor();
+        root.accept(v);
+        System.out.println(v.getOutput());
+      }
       break;
     case PRINT_ALL_INV:
-      System.out.println(printTree(tree));
+      {
+        PrintAllVisitor v = new PrintAllVisitor();
+        root.accept(v);
+        System.out.println(v.getOutput());
+      }
+      break;
+    case COUNT_DIFF_INV:
+      {
+        CountDifferingInvariantsVisitor v =
+          new CountDifferingInvariantsVisitor();
+        root.accept(v);
+        int differingInvariants = v.getDifferingInvariantsCount();
+        System.out.println("There are " + differingInvariants +
+                           " differing invariants.");
+      }
       break;
     default:
       Assert.assert(false, "Can't get here");
@@ -86,19 +110,23 @@ public final class Diff {
   // Returns a tree of corresponding program points, and corresponding
   // invariants at each program point.  This tree can be walked to
   // determine differences between the sets of invaraints.
-  public static DefaultMutableTreeNode diffPptMap(PptMap map1, PptMap map2) {
-    DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
+  public static RootNode diffPptMap(PptMap map1, PptMap map2) {
+    RootNode root = new RootNode();
 
-    SortedSet sset1 = new TreeSet(Ppt.NAME_COMPARATOR);
+    Comparator comparator = new Ppt.NameComparator();
+
+    SortedSet sset1 = new TreeSet(comparator);
     sset1.addAll(map1.asCollection());
-    SortedSet sset2 = new TreeSet(Ppt.NAME_COMPARATOR);
+    SortedSet sset2 = new TreeSet(comparator);
     sset2.addAll(map2.asCollection());    
 
     Iterator opi = new OrderedPairIterator(sset1.iterator(), sset2.iterator(),
-                                           Ppt.NAME_COMPARATOR);
+                                           comparator);
     while(opi.hasNext()) {
       Pair ppts = (Pair) opi.next();
-      DefaultMutableTreeNode node = diffPptTopLevel(ppts);
+      PptTopLevel ppt1 = (PptTopLevel) ppts.a;
+      PptTopLevel ppt2 = (PptTopLevel) ppts.b;
+      PptNode node = diffPptTopLevel(ppt1, ppt2);
       root.add(node);
     }
     
@@ -109,19 +137,19 @@ public final class Diff {
   // Takes a pair of corresponding top-level program points, and
   // returns a tree of the corresponding invariants.  Either of the
   // program points may be null.
-  public static DefaultMutableTreeNode diffPptTopLevel(Pair ppts) {
-    DefaultMutableTreeNode pptsNode = new DefaultMutableTreeNode(ppts);
-    PptTopLevel ppt1 = (PptTopLevel) ppts.a;
-    PptTopLevel ppt2 = (PptTopLevel) ppts.b;
+  private static PptNode diffPptTopLevel(PptTopLevel ppt1, PptTopLevel ppt2) {
+    PptNode pptNode = new PptNode(ppt1, ppt2);
 
+    Comparator pptComparator = new Ppt.NameComparator();
     Assert.assert(ppt1 == null || ppt2 == null ||
-                  Ppt.NAME_COMPARATOR.compare(ppt1, ppt2) == 0,
+                  pptComparator.compare(ppt1, ppt2) == 0,
                   "Program points do not correspond");
 
+    Comparator invComparator = new Invariant.ClassVarnameComparator();
     List invs1;
     if (ppt1 != null) {
       invs1 = ppt1.invariants_vector();
-      Collections.sort(invs1, Invariant.CLASS_VARNAME_COMPARATOR);
+      Collections.sort(invs1, invComparator);
     } else {
       invs1 = Collections.EMPTY_LIST;
     }
@@ -129,23 +157,29 @@ public final class Diff {
     List invs2;
     if (ppt2 != null) {
       invs2 = ppt2.invariants_vector();
-      Collections.sort(invs2, Invariant.CLASS_VARNAME_COMPARATOR);
+      Collections.sort(invs2, invComparator);
     } else {
       invs2 = Collections.EMPTY_LIST;
     }
 
     Iterator opi = new OrderedPairIterator(invs1.iterator(), invs2.iterator(),
-                                           Invariant.CLASS_VARNAME_COMPARATOR);
+                                           invComparator);
     while(opi.hasNext()) {
       Pair invariants = (Pair) opi.next();
-      DefaultMutableTreeNode invsNode =
-        new DefaultMutableTreeNode(invariants, false);
-      pptsNode.add(invsNode);      
+      Invariant inv1 = (Invariant) invariants.a;
+      Invariant inv2 = (Invariant) invariants.b;
+      InvNode invNode = new InvNode(inv1, inv2);
+      pptNode.add(invNode);
     }
 
-    return pptsNode;
+    return pptNode;
   }
 
+
+
+  // This has been moved to the Visitors in the package daikon.diff.
+  
+  /*
   // Prints all nodes in the tree, except nodes with the same
   // invariants.
   public static String printDifferences(DefaultMutableTreeNode root) {
@@ -193,10 +227,9 @@ public final class Diff {
 	pw.println(o);
       }
     }   
-
+    
     return sw.toString();
   }
-
 
   private static String printIndent(DefaultMutableTreeNode node) {
     StringBuffer sb = new StringBuffer();
@@ -236,5 +269,25 @@ public final class Diff {
   private static String printInvariant(Invariant inv) {
     return inv.repr_prob();
   }
+
+  public static int countDifferingInvariants(DefaultMutableTreeNode root) {
+    int differingInvariants = 0;
+    
+    for(Enumeration e = root.preorderEnumeration(); e.hasMoreElements(); ) {
+      DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.nextElement();
+      Object o = node.getUserObject();
+      if (o instanceof Pair) {
+        Pair p = (Pair) o;
+        if ((p.a instanceof Invariant || p.a == null) &&
+            (p.b instanceof Invariant || p.b == null) &&
+            ! sameInvariant(p)) {
+          differingInvariants++;
+        }
+      }
+    }   
+    return differingInvariants;
+    
+  }
+  */
 
 }
