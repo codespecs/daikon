@@ -7,7 +7,7 @@ import daikon.derive.*;
 
 import utilMDE.*;
 
-public final class SequenceFloatUnion
+public final class SequenceFloatUnion 
   extends BinaryDerivation
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -77,7 +77,7 @@ public final class SequenceFloatUnion
   }
 
   public  boolean isSameFormula(Derivation other) {
-    return (other instanceof SequenceFloatUnion);
+    return (other instanceof SequenceFloatUnion );
   }
 
 }

@@ -21,7 +21,7 @@ import org.apache.log4j.Category;
  * original data structure.  Derived type is the same as that of
  * the first sequence.
  **/
-public final class SequencesPredicate
+public final class SequencesPredicate 
   extends BinaryDerivation
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -31,7 +31,7 @@ public final class SequencesPredicate
 
   /** Debug tracer **/
   public static final Category debug
-    = Category.getInstance("daikon.derive.binary.SequencesPredicate");
+    = Category.getInstance("daikon.derive.binary." + "SequencesPredicate" );
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -114,11 +114,11 @@ public final class SequencesPredicate
       length2 = 0;
     }
 
-    if (val1 instanceof long[]) {
+    if (val1 instanceof long []) {
       length1 = ((long []) val1).length;
     }
 
-    if (val2 instanceof long[]) {
+    if (val2 instanceof long []) {
       length2 = ((long []) val2).length;
     }
 
@@ -126,7 +126,7 @@ public final class SequencesPredicate
       length1 = ((long []) val1).length;
     }
 
-    Assert.assertTrue(val2 == null || val2 instanceof long[]);
+    Assert.assertTrue(val2 == null || val2 instanceof long []);
 
     if (length1 != length2) {
       // This derived variable is no longer interesting
@@ -155,7 +155,7 @@ public final class SequencesPredicate
       if ((predicate[i] == choose) ^ !keep) count += 1;
     }
 
-    if (val1 instanceof long[]) {
+    if (val1 instanceof long []) {
       long [] result = new long [count];
       long [] values = (long []) val1;
       int j = 0;
@@ -202,13 +202,13 @@ public final class SequencesPredicate
   }
 
   public String toString() {
-    return "[SequencesPredicate of " + var1().name + " " +
+    return "[" + "SequencesPredicate"  + " of " + var1().name + " " +
       var2().name + " for " + name + "]";
   }
 
   public boolean isSameFormula(Derivation other) {
     // For Toh (tohn) to do.
-    if (other instanceof SequencesPredicate) {
+    if (other instanceof SequencesPredicate ) {
       SequencesPredicate  o = (SequencesPredicate) other;
       return o.var1().equals(var1())
         && o.var2().equals(var2())

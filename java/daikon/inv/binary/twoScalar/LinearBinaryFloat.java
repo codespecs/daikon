@@ -8,8 +8,8 @@ import daikon.derive.unary.SequenceLength;
 import java.util.*;
 import utilMDE.*;
 
-public class LinearBinaryFloat
-  extends TwoFloat
+public class LinearBinaryFloat 
+  extends TwoFloat 
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -33,7 +33,7 @@ public class LinearBinaryFloat
   public static LinearBinaryFloat  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     if (ppt.debugged) {
-      ppt.debug.debug("LinearBinaryFloat.instantiate(" + ppt.name + ")");
+      ppt.debug.debug("LinearBinaryFloat"  + ".instantiate(" + ppt.name + ")");
     }
     return new LinearBinaryFloat (ppt);
   }
@@ -109,7 +109,7 @@ public class LinearBinaryFloat
 
   public boolean isExclusiveFormula(Invariant other)
   {
-    if (other instanceof LinearBinaryFloat) {
+    if (other instanceof LinearBinaryFloat ) {
       return core.isExclusiveFormula(((LinearBinaryFloat) other).core);
     }
     return false;
@@ -120,7 +120,7 @@ public class LinearBinaryFloat
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof LinearBinaryFloat)
+      if (inv instanceof LinearBinaryFloat )
         return (LinearBinaryFloat) inv;
     }
     return null;

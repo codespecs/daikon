@@ -11,7 +11,7 @@ import utilMDE.*;
  * This represents a sequence element at a particular offset (such as
  * first, second, penultimate, last).
  **/
-public final class SequenceInitialFloat
+public final class SequenceInitialFloat 
   extends UnaryDerivation
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -45,13 +45,13 @@ public final class SequenceInitialFloat
   }
 
   public static boolean applicable(VarInfo vi) {
-    Assert.assertTrue(vi.rep_type == ProglangType.DOUBLE_ARRAY);
+    Assert.assertTrue(vi.rep_type == ProglangType.DOUBLE_ARRAY );
     // For now, applicable if not a derived variable; a better test is if
     // not a prefix subsequence (sequence slice) we have added.
     if (vi.derived != null) {
-      Assert.assertTrue((vi.derived instanceof SequenceFloatSubsequence) ||
-                    (vi.derived instanceof SequenceFloatIntersection) ||
-                    (vi.derived instanceof SequenceFloatUnion));
+      Assert.assertTrue((vi.derived instanceof SequenceFloatSubsequence ) ||
+                    (vi.derived instanceof SequenceFloatIntersection ) ||
+                    (vi.derived instanceof SequenceFloatUnion ));
       return false;
     }
 
@@ -115,7 +115,7 @@ public final class SequenceInitialFloat
   }
 
   public  boolean isSameFormula(Derivation other) {
-    return (other instanceof SequenceInitialFloat)
+    return (other instanceof SequenceInitialFloat )
       && (((SequenceInitialFloat) other).index == this.index);
   }
 

@@ -8,7 +8,7 @@ import daikon.inv.Invariant.OutputFormat;
 import utilMDE.*;
 import java.io.Serializable;
 
-public final class FloatComparisonCore
+public final class FloatComparisonCore 
   implements Serializable, Cloneable
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -159,7 +159,7 @@ public final class FloatComparisonCore
   }
 
   public String repr() {
-    return "FloatComparisonCore: "
+    return "FloatComparisonCore"  + ": "
       + "can_be_eq=" + can_be_eq
       + ",can_be_lt=" + can_be_lt
       + ",can_be_gt=" + can_be_gt

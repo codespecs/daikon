@@ -17,8 +17,8 @@ import org.apache.log4j.Category;
 
 import java.util.*;
 
-public final class FloatLessThan
-  extends TwoFloat
+public final class FloatLessThan 
+  extends TwoFloat   
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -33,7 +33,7 @@ public final class FloatLessThan
   public static boolean dkconfig_enabled = true;
 
   public static final Category debug
-    = Category.getInstance("daikon.inv.binary.twoScalar.FloatLessThan");
+    = Category.getInstance("daikon.inv.binary.twoScalar." + "FloatLessThan" );
 
   private FloatValueTracker  values_cache = new FloatValueTracker (8);
 
@@ -60,7 +60,7 @@ public final class FloatLessThan
     }
 
     if (debug.isDebugEnabled() || ppt.debugged) {
-      debug.debug("FloatLessThan.instantiate(" + ppt.name + ")"
+      debug.debug("FloatLessThan"  + ".instantiate(" + ppt.name + ")"
                           + ", seqvar1=" + seqvar1
                           + ", seqvar2=" + seqvar2);
     }
@@ -100,7 +100,7 @@ public final class FloatLessThan
       VarInfo super2 = seqvar2.isDerivedSubSequenceOf();
 
       if (debug.isDebugEnabled() || ppt.debugged) {
-        debug.debug("FloatLessThan.instantiate: "
+        debug.debug("FloatLessThan"  + ".instantiate: "
                             + "min1=" + min1
                             + ", max1=" + max1
                             + ", min2=" + min2
@@ -162,7 +162,7 @@ public final class FloatLessThan
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof FloatLessThan)
+      if (inv instanceof FloatLessThan )
         return (FloatLessThan) inv;
     }
     return null;
@@ -247,7 +247,7 @@ public final class FloatLessThan
   // // Temporary, for debugging
   // public void destroy() {
   //   if (debug.isDebugEnabled() || ppt.debugged) {
-  //     System.out.println("FloatLessThan.destroy(" + ppt.name + ")");
+  //     System.out.println("FloatLessThan"  + ".destroy(" + ppt.name + ")");
   //     System.out.println(repr());
   //     (new Error()).printStackTrace();
   //   }
@@ -434,7 +434,7 @@ public final class FloatLessThan
 //             if ((sic != null)
 //                 && sic.enoughSamples()) {
 //               // This DOES happen
-//               // System.out.println("Surprise:  this can happen (var2 in FloatLessThan).");
+//               // System.out.println("Surprise:  this can happen (var2 in " + "FloatLessThan"  + ").");
 //               // new Error().printStackTrace();
 //               return true;
 //             }

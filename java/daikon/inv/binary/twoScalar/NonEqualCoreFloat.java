@@ -7,7 +7,7 @@ import daikon.inv.*;
 import utilMDE.*;
 import java.io.Serializable;
 
-public final class NonEqualCoreFloat
+public final class NonEqualCoreFloat 
   implements Serializable, Cloneable
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -67,7 +67,7 @@ public final class NonEqualCoreFloat
     }
     if (v1 == v2) {
       if (wrapper.ppt.debugged) {
-        System.out.println("NonEqualCoreFloat.destroy()");
+        System.out.println("NonEqualCoreFloat"  + ".destroy()");
       }
       wrapper.flowThis();
       wrapper.destroy();
@@ -115,7 +115,7 @@ public final class NonEqualCoreFloat
   }
 
   public String repr() {
-    return "NonEqualCoreFloat: "
+    return "NonEqualCoreFloat"  + ": "
       + ",min1=" + min1
       + ",min2=" + min2
       + ",max1=" + max1

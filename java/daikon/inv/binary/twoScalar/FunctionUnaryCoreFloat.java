@@ -22,7 +22,7 @@ import utilMDE.*;
 //          types, not Object
 //        - must convert existing functions to this format.
 
-public final class FunctionUnaryCoreFloat
+public final class FunctionUnaryCoreFloat 
   implements Serializable, Cloneable
 {
   // We are Serializable, so we specify a version to allow changes to

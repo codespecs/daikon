@@ -7,7 +7,7 @@ import daikon.derive.*;
 
 import utilMDE.*;
 
-public final class SequenceStringSubscript
+public final class SequenceStringSubscript 
   extends BinaryDerivation
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -84,7 +84,7 @@ public final class SequenceStringSubscript
   }
 
   public  boolean isSameFormula(Derivation other) {
-    return (other instanceof SequenceStringSubscript)
+    return (other instanceof SequenceStringSubscript )
       && (((SequenceStringSubscript) other).index_shift == this.index_shift);
   }
 

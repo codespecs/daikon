@@ -19,7 +19,7 @@ public final class SequenceFloatIntersectionFactory  extends BinaryDerivationFac
 
   /** Debug tracer **/
   private static final Category debug =
-    Category.getInstance ("daikon.derive.binary.SequenceFloatIntersectionFactory" );
+    Category.getInstance ("daikon.derive.binary." + "SequenceFloatIntersectionFactory" );
 
   public BinaryDerivation[] instantiate(VarInfo seq1, VarInfo seq2) {
 

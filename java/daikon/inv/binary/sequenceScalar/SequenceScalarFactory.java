@@ -11,7 +11,7 @@ public final class SequenceScalarFactory  {
 
   /** Main debug tracer **/
   public static final Category debug =
-   Category.getInstance("daikon.inv.binary.sequenceScalar.SequenceScalarFactory" );
+   Category.getInstance("daikon.inv.binary.sequenceScalar." + "SequenceScalarFactory" );
 
   // public final static boolean debugSequenceScalarFactory = false;
   // public final static boolean debugSequenceScalarFactory = true;
@@ -20,7 +20,7 @@ public final class SequenceScalarFactory  {
   // collection.
   public static Vector instantiate(PptSlice ppt) {
     if (debug.isDebugEnabled()) {
-      debug.debug("SequenceScalarFactory instantiate " + ppt.name);
+      debug.debug("SequenceScalarFactory"  + " instantiate " + ppt.name);
     }
 
     boolean seq_first;

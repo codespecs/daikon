@@ -37,7 +37,7 @@ public final class FunctionsFloat  {
       // decrement: subsumed by LinearBinary
 
       // logicalComplement: subsumed by LinearBinary
-      //"utilMDE.MathMDE.negate(double)",
+      //"utilMDE.MathMDE.negate(" + "double"  + ")",
       /// Non-operators
     };
   //  unaryFunctions = methodNamesToMethods(unaryFunctionNames);
@@ -46,19 +46,19 @@ public final class FunctionsFloat  {
       /// Java language operators (in precedence order, omitting boolean operators)
       // Maybe instead of mul I should have a specific invariant that also
       // looks for a leading constant.
-      "utilMDE.MathMDE.mul(double"  +",double"  +")",
+      "utilMDE.MathMDE.mul(" + "double"  +"," + "double"  +")",
       // plus: subsumed by LinearTernary.
 
       /// Non-operators.
-      "java.lang.Math.min(double,double)",
-      "java.lang.Math.max(double,double)"
+      "java.lang.Math.min(" + "double"  + "," + "double"  + ")",
+      "java.lang.Math.max(" + "double"  + "," + "double"  + ")"
 
     };
     //binarySymmetricFunctions = methodNamesToMethods(binarySymmetricFunctionNames);
 
     binaryNonSymmetricFunctionNames = new String[] {
       /// Java language operators (in precedence order, omitting boolean operators)
-      "utilMDE.MathMDE.div(double,double)",
+      "utilMDE.MathMDE.div(" + "double"  + "," + "double"  + ")",
 
       "java.lang.Math.pow(double, double)"
 

@@ -19,7 +19,7 @@ public final class SequencesPredicateFactoryFloat   extends BinaryDerivationFact
    * Debug tracer
    **/
   public static final Category debug =
-    Category.getInstance ("daikon.derive.binary.SequencesPredicateFactoryFloat" );
+    Category.getInstance ("daikon.derive.binary." + "SequencesPredicateFactoryFloat" );
 
   public BinaryDerivation[] instantiate(VarInfo var1, VarInfo var2) {
     boolean enabled = SequencesPredicateFloat.dkconfig_enabled;

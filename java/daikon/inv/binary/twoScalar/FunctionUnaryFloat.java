@@ -6,8 +6,8 @@ import daikon.*;
 import daikon.inv.Invariant;
 import java.lang.reflect.*;
 
-public class FunctionUnaryFloat
-  extends TwoFloat
+public class FunctionUnaryFloat 
+  extends TwoFloat 
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or

@@ -17,8 +17,8 @@ import org.apache.log4j.Category;
 
 import java.util.*;
 
-public final class FloatEqual
-  extends TwoFloat  implements Comparison
+public final class FloatEqual 
+  extends TwoFloat  implements Comparison 
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -33,7 +33,7 @@ public final class FloatEqual
   public static boolean dkconfig_enabled = true;
 
   public static final Category debug
-    = Category.getInstance("daikon.inv.binary.twoScalar.FloatEqual");
+    = Category.getInstance("daikon.inv.binary.twoScalar." + "FloatEqual" );
 
   protected FloatEqual (PptSlice ppt) {
     super(ppt);
@@ -48,7 +48,7 @@ public final class FloatEqual
     VarInfo seqvar2 = var2.isDerivedSequenceMember();
 
     if (debug.isDebugEnabled() || ppt.debugged) {
-      debug.debug("FloatEqual.instantiate(" + ppt.name + ")"
+      debug.debug("FloatEqual"  + ".instantiate(" + ppt.name + ")"
                           + ", seqvar1=" + seqvar1
                           + ", seqvar2=" + seqvar2);
     }
@@ -88,7 +88,7 @@ public final class FloatEqual
       VarInfo super2 = seqvar2.isDerivedSubSequenceOf();
 
       if (debug.isDebugEnabled() || ppt.debugged) {
-        debug.debug("FloatEqual.instantiate: "
+        debug.debug("FloatEqual"  + ".instantiate: "
                             + "min1=" + min1
                             + ", max1=" + max1
                             + ", min2=" + min2
@@ -148,7 +148,7 @@ public final class FloatEqual
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof FloatEqual)
+      if (inv instanceof FloatEqual )
         return (FloatEqual) inv;
     }
     return null;
@@ -242,7 +242,7 @@ public final class FloatEqual
   // // Temporary, for debugging
   // public void destroy() {
   //   if (debug.isDebugEnabled() || ppt.debugged) {
-  //     System.out.println("FloatEqual.destroy(" + ppt.name + ")");
+  //     System.out.println("FloatEqual"  + ".destroy(" + ppt.name + ")");
   //     System.out.println(repr());
   //     (new Error()).printStackTrace();
   //   }

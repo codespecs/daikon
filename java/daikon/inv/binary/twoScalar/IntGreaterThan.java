@@ -17,8 +17,8 @@ import org.apache.log4j.Category;
 
 import java.util.*;
 
-public final class IntGreaterThan
-  extends TwoScalar
+public final class IntGreaterThan 
+  extends TwoScalar   
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -33,7 +33,7 @@ public final class IntGreaterThan
   public static boolean dkconfig_enabled = true;
 
   public static final Category debug
-    = Category.getInstance("daikon.inv.binary.twoScalar.IntGreaterThan");
+    = Category.getInstance("daikon.inv.binary.twoScalar." + "IntGreaterThan" );
 
   private ValueTracker  values_cache = new ValueTracker (8);
 
@@ -60,7 +60,7 @@ public final class IntGreaterThan
     }
 
     if (debug.isDebugEnabled() || ppt.debugged) {
-      debug.debug("IntGreaterThan.instantiate(" + ppt.name + ")"
+      debug.debug("IntGreaterThan"  + ".instantiate(" + ppt.name + ")"
                           + ", seqvar1=" + seqvar1
                           + ", seqvar2=" + seqvar2);
     }
@@ -100,7 +100,7 @@ public final class IntGreaterThan
       VarInfo super2 = seqvar2.isDerivedSubSequenceOf();
 
       if (debug.isDebugEnabled() || ppt.debugged) {
-        debug.debug("IntGreaterThan.instantiate: "
+        debug.debug("IntGreaterThan"  + ".instantiate: "
                             + "min1=" + min1
                             + ", max1=" + max1
                             + ", min2=" + min2
@@ -162,7 +162,7 @@ public final class IntGreaterThan
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof IntGreaterThan)
+      if (inv instanceof IntGreaterThan )
         return (IntGreaterThan) inv;
     }
     return null;
@@ -247,7 +247,7 @@ public final class IntGreaterThan
   // // Temporary, for debugging
   // public void destroy() {
   //   if (debug.isDebugEnabled() || ppt.debugged) {
-  //     System.out.println("IntGreaterThan.destroy(" + ppt.name + ")");
+  //     System.out.println("IntGreaterThan"  + ".destroy(" + ppt.name + ")");
   //     System.out.println(repr());
   //     (new Error()).printStackTrace();
   //   }
@@ -434,7 +434,7 @@ public final class IntGreaterThan
 //             if ((sic != null)
 //                 && sic.enoughSamples()) {
 //               // This DOES happen
-//               // System.out.println("Surprise:  this can happen (var2 in IntGreaterThan).");
+//               // System.out.println("Surprise:  this can happen (var2 in " + "IntGreaterThan"  + ").");
 //               // new Error().printStackTrace();
 //               return true;
 //             }

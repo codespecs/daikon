@@ -7,7 +7,7 @@ import daikon.inv.*;
 import utilMDE.*;
 import java.io.Serializable;
 
-public final class NonEqualCore
+public final class NonEqualCore 
   implements Serializable, Cloneable
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -67,7 +67,7 @@ public final class NonEqualCore
     }
     if (v1 == v2) {
       if (wrapper.ppt.debugged) {
-        System.out.println("NonEqualCore.destroy()");
+        System.out.println("NonEqualCore"  + ".destroy()");
       }
       wrapper.flowThis();
       wrapper.destroy();
@@ -115,7 +115,7 @@ public final class NonEqualCore
   }
 
   public String repr() {
-    return "NonEqualCore: "
+    return "NonEqualCore"  + ": "
       + ",min1=" + min1
       + ",min2=" + min2
       + ",max1=" + max1

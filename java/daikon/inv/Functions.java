@@ -39,7 +39,7 @@ public final class Functions  {
       "utilMDE.MathMDE.bitwiseComplement(int)"
 
       // logicalComplement: subsumed by LinearBinary
-      //"utilMDE.MathMDE.negate(int)",
+      //"utilMDE.MathMDE.negate(" + "int"  + ")",
       /// Non-operators
     };
   //  unaryFunctions = methodNamesToMethods(unaryFunctionNames);
@@ -48,7 +48,7 @@ public final class Functions  {
       /// Java language operators (in precedence order, omitting boolean operators)
       // Maybe instead of mul I should have a specific invariant that also
       // looks for a leading constant.
-      "utilMDE.MathMDE.mul(int"  +",int"  +")",
+      "utilMDE.MathMDE.mul(" + "int"  +"," + "int"  +")",
       // plus: subsumed by LinearTernary.
 
       "utilMDE.MathMDE.bitwiseAnd(int,int)",
@@ -59,8 +59,8 @@ public final class Functions  {
       "utilMDE.MathMDE.logicalOr(int,int)",
 
       /// Non-operators.
-      "java.lang.Math.min(int,int)",
-      "java.lang.Math.max(int,int)"
+      "java.lang.Math.min(" + "int"  + "," + "int"  + ")",
+      "java.lang.Math.max(" + "int"  + "," + "int"  + ")"
 
      , "utilMDE.MathMDE.gcd(int,int)"
 
@@ -69,7 +69,7 @@ public final class Functions  {
 
     binaryNonSymmetricFunctionNames = new String[] {
       /// Java language operators (in precedence order, omitting boolean operators)
-      "utilMDE.MathMDE.div(int,int)",
+      "utilMDE.MathMDE.div(" + "int"  + "," + "int"  + ")",
 
       "utilMDE.MathMDE.mod(int,int)",
       // minus: subsumed by LinearTernary

@@ -8,7 +8,7 @@ import daikon.inv.binary.*;
 
 import utilMDE.*;
 
-public abstract class TwoScalar
+public abstract class TwoScalar 
   extends BinaryInvariant
 {
   // We are Serializable, so we specify a version to allow changes to

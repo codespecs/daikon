@@ -23,7 +23,7 @@ import org.apache.log4j.Category;
  * data structure rather than just one slice of it.  Works for number
  * and string arrays.
  **/
-public final class SequencesJoin
+public final class SequencesJoin 
   extends BinaryDerivation
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -34,7 +34,7 @@ public final class SequencesJoin
   /**
    * Debug tracer
    **/
-  public static final Category debug = Category.getInstance("daikon.derive.binary.SequencesJoin");
+  public static final Category debug = Category.getInstance("daikon.derive.binary." + "SequencesJoin" );
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -77,19 +77,19 @@ public final class SequencesJoin
       length2 = 0;
     }
 
-    if (val1 instanceof long[]) {
+    if (val1 instanceof long []) {
       length1 = ((long []) val1).length;
     }
 
-    if (val2 instanceof long[]) {
+    if (val2 instanceof long []) {
       length2 = ((long []) val2).length;
     }
 
-    if (val1 instanceof long[]) {
+    if (val1 instanceof long []) {
       length1 = ((long []) val1).length;
     }
 
-    if (val2 instanceof long[]) {
+    if (val2 instanceof long []) {
       length2 = ((long []) val2).length;
     }
 
@@ -107,10 +107,10 @@ public final class SequencesJoin
     for (int i = 0; i < length1; i++) {
       Object e1 = null;
       Object e2 = null;
-      if (val1 instanceof long[]) {
+      if (val1 instanceof long []) {
         e1 = new Long  (((long []) val1) [i]);
       }
-      if (val2 instanceof long[]) {
+      if (val2 instanceof long []) {
         e2 = new Long  (((long []) val2) [i]);
       }
       if (val1 instanceof Object[]) {
@@ -128,12 +128,12 @@ public final class SequencesJoin
        Use this if you don't see no duplicates where you should
     if (debug.isDebugEnabled()) {
       debug.debug (var1().name.toString() + " " + var2().name.toString());
-      if (val1 instanceof long[]) {
+      if (val1 instanceof long []) {
         debug.debug (ArraysMDE.toString((long []) val1));
       } else {
         debug.debug (ArraysMDE.toString((Object[]) val1));
       }
-      if (val2 instanceof long[]) {
+      if (val2 instanceof long []) {
         debug.debug (ArraysMDE.toString((long []) val2));
       } else {
         debug.debug (ArraysMDE.toString((Object[]) val2));
@@ -187,11 +187,11 @@ public final class SequencesJoin
   }
 
   public String toString() {
-    return "[SequencesJoin of " + var1().name + " " + var2().name + "]";
+    return "[" + "SequencesJoin"  + " of " + var1().name + " " + var2().name + "]";
   }
 
   public  boolean isSameFormula(Derivation other) {
-    return (other instanceof SequencesJoin);
+    return (other instanceof SequencesJoin );
   }
 
 }
