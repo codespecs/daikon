@@ -68,8 +68,44 @@ public class Dataflow
    * pre-computed flows.  (Calls init_partial_order(PptTopLevel,
    * PptMap) for each ppt in turn.)
    **/
-  public static void init_partial_order(PptMap all_ppts)
-  {
+  public static void init_partial_order(PptMap all_ppts) {
+
+    // If we are doing bottom up as opposed to top down
+    if (Daikon.dkconfig_df_bottom_up) {
+
+      // Create combined exit points
+      progress = "Creating combined exit points";
+      create_combined_exits (all_ppts);
+
+      // Setup orig variables
+      for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+        PptTopLevel ppt = (PptTopLevel) i.next();
+        progress = "Creating orig variables for: " +ppt.ppt_name.toString();
+        create_and_relate_orig_vars (ppt, all_ppts);
+      }
+
+      // Set up derived variables
+      for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+        PptTopLevel ppt = (PptTopLevel) i.next();
+        progress = "Creating derived variables for: " +ppt.ppt_name.toString();
+        ppt.create_derived_variables();
+      }
+
+      // Relate the global ppt (if any) to each numbered exit
+      PptTopLevel global = all_ppts.getGlobal();
+      PptTopLevel.global = global;
+      if (global != null) {
+        for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+          PptTopLevel ppt = (PptTopLevel) i.next();
+          progress = "Relating to GLOBAL ppt: " +ppt.ppt_name.toString();
+          if (ppt != global)
+            ppt.init_global_transforms (global);
+        }
+      }
+
+      return;
+    }
+
     if (Daikon.use_dataflow_hierarchy) {
       // Create combined exit points
       create_combined_exits (all_ppts);
@@ -78,6 +114,10 @@ public class Dataflow
       for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
         PptTopLevel ppt = (PptTopLevel) i.next();
         progress = "Initializing partial order for: " + ppt.name();
+        //System.out.println ("processing " + ppt.ppt_name + " point = "
+        //                    + ppt.ppt_name.getPoint());
+        if (ppt.ppt_name.isGlobalPoint())
+          continue;
         init_partial_order(ppt, all_ppts);
       }
 
@@ -372,7 +412,8 @@ public class Dataflow
         // Setup PO; relate orig(...) on EXIT to ... on ENTER But only
         // if it's a combined exit point, not for EXITnn, because for
         // EXITnn we let transitive closure handle the relation.
-        if (exit_ppt.ppt_name.isCombinedExitPoint()) {
+        if (!Daikon.dkconfig_df_bottom_up &&
+            exit_ppt.ppt_name.isCombinedExitPoint()) {
           origvar.addHigherPO(vi, static_po_group_nonce);
         }
         // Add to new_vis
@@ -914,6 +955,10 @@ public class Dataflow
    **/
   public static void init_pptslice_po(PptSlice slice)
   {
+    // Don't setup top-down data structures if we are doing bottom up
+    if (Daikon.dkconfig_df_bottom_up)
+      return;
+
     // For all immediately lower groups of variables
     PptTopLevel ppt = slice.parent;
     int size = ppt.invflow_ppts.length;
@@ -1068,8 +1113,6 @@ public class Dataflow
 
     }
   }
-
-
 
   /**
    * Creates upper program points by merging together the invariants
