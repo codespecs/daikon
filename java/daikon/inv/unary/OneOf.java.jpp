@@ -44,7 +44,7 @@
 #define ONEOFSCALAR EltOneOf
 #define ONEOFSCALARSTR "EltOneOf"
 #define SINGLESCALAR SingleSequence
-#define TOSTRING(x) ((!var().type.elementType().isIntegral() && (x == 0)) ? "null" : (Long.toString(x)))
+#define TOSTRING(x) ((!var().type.elementIsIntegral() && (x == 0)) ? "null" : (Long.toString(x)))
 #define NAME var().name + " elements"
 #define ESCNAME var().esc_name + " elements"
 #elif defined(ELTSTRING)

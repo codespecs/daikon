@@ -19,7 +19,7 @@ public final class SeqIndexNonEqual extends SingleSequence {
 
     VarInfo var = var();
     Assert.assert(var.rep_type == ProglangType.INT_ARRAY);
-    Assert.assert(var.type.elementType().isIntegral());
+    Assert.assert(var.type.elementIsIntegral());
     core = new NonEqualCore(this, 0);
 
     if (debugSeqIndexNonEqual) {

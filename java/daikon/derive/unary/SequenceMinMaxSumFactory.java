@@ -11,10 +11,9 @@ public final class SequenceMinMaxSumFactory extends UnaryDerivationFactory {
       return null;
     if (! vi.type.isArray())
       return null;
-    ProglangType elttype = vi.type.elementType();
-    if (! elttype.isIntegral())
+    if (! vi.type.elementIsIntegral())
       return null;
-    if (elttype.base() == "char") // interned
+    if (vi.type.base() == "char") // interned
       return null;
     // Should be reversed at some point; for now, will improve runtime.m
     if (Daikon.esc_output)

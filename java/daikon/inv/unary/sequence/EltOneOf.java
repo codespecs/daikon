@@ -87,7 +87,7 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
-      sb.append(((!var().type.elementType().isIntegral() && ( elts[i]  == 0)) ? "null" : (Long.toString( elts[i] ))) );
+      sb.append(((!var().type.elementIsIntegral() && ( elts[i]  == 0)) ? "null" : (Long.toString( elts[i] ))) );
     }
     sb.append(" }");
     return sb.toString();
@@ -114,7 +114,7 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
           return varname + " has only one value (hashcode=" + elts[0] + ")";
         }
       } else {
-        return varname + " == " + ((!var().type.elementType().isIntegral() && ( elts[0]  == 0)) ? "null" : (Long.toString( elts[0] ))) ;
+        return varname + " == " + ((!var().type.elementIsIntegral() && ( elts[0]  == 0)) ? "null" : (Long.toString( elts[0] ))) ;
       }
 
     } else {
@@ -143,7 +143,7 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
     } else {
       for (int i=0; i<num_elts; i++) {
         if (i>0) result += " || ";
-        result += varname + " == " + ((!var().type.elementType().isIntegral() && ( elts[i]  == 0)) ? "null" : (Long.toString( elts[i] ))) ;
+        result += varname + " == " + ((!var().type.elementIsIntegral() && ( elts[i]  == 0)) ? "null" : (Long.toString( elts[i] ))) ;
       }
     }
 

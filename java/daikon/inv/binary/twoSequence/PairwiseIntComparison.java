@@ -29,7 +29,7 @@ public class PairwiseIntComparison extends TwoSequence {
     VarInfo var2 = ppt.var_infos[1];
 
     boolean only_eq = false;
-    if (! (var1.type.elementType().isIntegral() && var2.type.elementType().isIntegral())) {
+    if (! (var1.type.elementIsIntegral() && var2.type.elementIsIntegral())) {
       only_eq = true;
     }
 
