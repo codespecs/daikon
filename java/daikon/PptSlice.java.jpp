@@ -281,22 +281,22 @@ public final class PPTSLICE1
       return mod_samples + unmod_samples;
     } else {
       // return an approximation
-      #if defined(ARITY1)
+#if defined(ARITY1)
         int num_slice_samples = parent.num_samples(var_info);
-      #elif defined(ARITY2)
+#elif defined(ARITY2)
         int num_slice_samples = parent.num_samples(var_infos[0], var_infos[1]);
-      #elif defined(ARITY3)
+#elif defined(ARITY3)
         int num_slice_samples = parent.num_samples(var_infos[0], var_infos[1],
                                                    var_infos[2]);
-      #endif
+#endif
       if (false) {
         if (mod_samples + unmod_samples != num_slice_samples) {
         System.out.println("num_samples(" + name() + "): "
             + (mod_samples + unmod_samples) + " vs. " + num_slice_samples);
-        #if defined(ARITY1)
-          System.out.println ("mbtracker.num_samples() = "
-                             + parent.mbtracker.num_samples());
-        #endif
+#if defined(ARITY1)
+        System.out.println ("mbtracker.num_samples() = "
+                            + parent.mbtracker.num_samples());
+#endif
         }
       }
       return num_slice_samples;
