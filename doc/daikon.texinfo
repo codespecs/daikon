@@ -1961,7 +1961,6 @@ variables.
 @item --debug
 @cindex debugging flags
 @cindex category, for debugging
-@cindex Log4j package
 These debugging options cause output to be written to a log file (by
 default, to the terminal).  The @option{--dbg @var{category}} option
 enables debugging output for a specific part of Daikon; it may be
@@ -1971,9 +1970,8 @@ output.  The @option{--debug} option turns on all debugging flags.
 package names in the Daikon implementation, such as @code{daikon.split}
 or @code{daikon.derive.binary.SequencesJoin}.  Only classes that check
 the appropriate categories are affected by the debug flags; you can
-determine this by looking for a call to @samp{Category.getInstance} in
-the specific class.  The debugging/logging output is implemented via the
-Log4j package.
+determine this by looking for a call to @samp{Logger.getLogger} in
+the specific class.
 
 @end table
 
