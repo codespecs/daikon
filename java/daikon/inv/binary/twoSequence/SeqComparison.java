@@ -11,16 +11,23 @@ class SeqComparison extends TwoSequence implements Comparison {
 
   static Comparator comparator = new ArraysMDE.LongArrayComparatorLexical();
 
+  public final boolean only_check_eq;
+
   boolean can_be_eq = false;
   boolean can_be_lt = false;
   boolean can_be_gt = false;
 
-  protected SeqComparison(PptSlice ppt) {
+  protected SeqComparison(PptSlice ppt, boolean only_eq) {
     super(ppt);
+    only_check_eq = only_eq;
   }
 
   public static SeqComparison instantiate(PptSlice ppt) {
-    return new SeqComparison(ppt);
+    Assert.assert(ppt.var_infos[0].type.dimensions() == 1);
+    Assert.assert(ppt.var_infos[1].type.dimensions() == 1);
+    boolean only_eq = ((!ppt.var_infos[0].type.baseIsIntegral())
+                       || (!ppt.var_infos[1].type.baseIsIntegral()));
+    return new SeqComparison(ppt, only_eq);
   }
 
   public String repr() {
@@ -29,6 +36,7 @@ class SeqComparison extends TwoSequence implements Comparison {
       + "can_be_eq=" + can_be_eq
       + ",can_be_lt=" + can_be_lt
       + ",can_be_gt=" + can_be_gt
+      + ",only_check_eq=" + only_check_eq
       + "; probability = " + probability;
   }
 
@@ -59,7 +67,8 @@ class SeqComparison extends TwoSequence implements Comparison {
       can_be_lt = true;
     else
       can_be_gt = true;
-    if (can_be_lt && can_be_gt) {
+    if ((can_be_lt && can_be_gt)
+        || (only_check_eq && (can_be_lt || can_be_gt))) {
       destroy();
       return;
     }
@@ -92,5 +101,5 @@ class SeqComparison extends TwoSequence implements Comparison {
       (can_be_lt == other.can_be_lt) &&
       (can_be_gt == other.can_be_gt);
   }
-  
+
 }
