@@ -14,6 +14,3 @@ s = a[0..x]
 ; prestate o s
 o = orig(a[0..x])
 ; quantify_esc_name o
-(\forall int i; (0 <= i && i <= orig(x)) ==> 
-	\old(a[i])
-)
