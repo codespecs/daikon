@@ -175,10 +175,10 @@
   The default value is `1.0E-4'.
 
 @item daikon.inv.Invariant.probability_limit
-  Real number between 0 and 1.  The probability that the invariant
- occurred by chance must be less than this in order for it to be
- displayed.  (May also be set via --prob_limit switch to Daikon;
- refer to manual.)
+  Real number between 0 and 1.    The invariant is displayed only if
+ the probability that the invariant occurred by chance is
+ less than this.  (May also be set
+ via --prob_limit switch to Daikon; refer to manual.)
   The default value is `0.01'.
 
 @item daikon.inv.Invariant.simplify_define_predicates
@@ -319,7 +319,7 @@
   The default value is `true'.
 
 @item daikon.inv.binary.twoSequence.SeqComparisonFloat.enabled
-  Boolean.  True iff SeqComparison invariants should be considered.
+  Boolean.  True iff SeqComparisonFloat invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.binary.twoSequence.SubSequence.enabled
@@ -347,7 +347,7 @@
   The default value is `true'.
 
 @item daikon.inv.ternary.threeScalar.FunctionBinaryFloat.enabled
-  Boolean.  True iff FunctionBinary invariants should be considered.
+  Boolean.  True iff FunctionBinaryFloat invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.ternary.threeScalar.LinearTernary.enabled

@@ -9,6 +9,19 @@ daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
+2.4.8 (13 May 2003)
+
+The internal mechanism for formatting output has been enhanced.  There
+is now a single routine (format_using (OutputFormat)) that replaces
+the previous output specific format routines.  See the "New formatting
+for invariants" section of the manual for more information on adding
+new formatting routines.
+
+Added the capability to use a decls file to the convertcsv.pl script.
+See the usage message of convertcsv.pl for more information.
+
+----------------
+
 2.4.7 (30 April 2003):
 
 The perl front end (dfepl) has been significantly enhanced.  An
