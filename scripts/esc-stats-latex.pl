@@ -7,6 +7,14 @@
 # The input is a number of files, each produced by esc-stats.pl.
 # The output is a .tex file.
 
+# TO DO:
+#  produce complete LaTeX table.
+#  test the LaTeX.
+#  align the columns in the LaTeX source (see largest name).
+#  align the columns in the typeset table (use \zph).
+#  sort by NCNB LOC.
+#  produce mini-tables for specific classes, in addition to one big table.
+
 use English;
 use Carp;
 
@@ -26,7 +34,7 @@ my %prefixes =
 
 my $invdir = $ENV{'INV'} or "/g2/users/mernst/research/invariants";
 
-print "Class   & NCNB LOC & Verified & Unverified & Inexpressible & Redundant & Total reported & Missing & Precision & Recall \\\\ \\hline\n";
+print "Class   & LOC & NCNB LOC & Verified & Unverified & Inexpressible & Redundant & Total reported & Missing & Precision & Recall \\\\ \\hline\n";
 
 for my $file (@ARGV) {
   # print "# $file\n";
@@ -37,12 +45,16 @@ for my $file (@ARGV) {
   my $class = $javafile;
   $class =~ s/\.java$//;
   $class =~ s|^.+/([^/]+)$|$1|; # Strip directories
+
+  # Line of code
+  my $loc_command = "wc -l < $invdir/tests/sources/$javafile";
+  my $loc = `$loc_command`;
+  chomp($loc);
   # Non-comment, non-blank lines of code
-  my $ncnb_command = "cpp -P -nostdinc -undef $invdir/tests/sources/$javafile | grep '[^ \\t]' | wc";
+  my $ncnb_command = "cpp -P -nostdinc -undef $invdir/tests/sources/$javafile | grep '[^ \\t]' | wc -l";
   # print "command = $ncnb_command\n";
   my $ncnbloc = `$ncnb_command`;
   chomp($ncnbloc);
-  $ncnbloc =~ s/^ *([0-9]+) .*$/$1/;
 
   my ($verified, $unverified, $inexpressible, $redundant, $missing) = (0, 0, 0, 0, 0);
   my $line = <SOURCE>;		# header line
@@ -58,7 +70,7 @@ for my $file (@ARGV) {
     $missing += $a;
   }
   close(SOURCE);
-  print "$class\t& $ncnbloc\t& $verified\t& $unverified\t& $inexpressible\t& $redundant\t& ", ($verified + $unverified + $inexpressible + $redundant), "\t& $missing\t& ";
+  print "$class\t& $loc\t& $ncnbloc\t& $verified\t& $unverified\t& $inexpressible\t& $redundant\t& ", ($verified + $unverified + $inexpressible + $redundant), "\t& $missing\t& ";
   printf("%.2f", (1.0 * $verified) / ($verified + $unverified));
   print "\t& ";
   printf("%.2f", (1.0 * $verified) / ($verified + $missing));
