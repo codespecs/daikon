@@ -34,7 +34,12 @@ public class NonModulus extends SingleScalar {
   }
 
   public String format() {
-    return var().name + " != " + remainder + "  (mod " + modulus + ")";
+    updateResults();
+    if (no_result_yet) {
+      return var().name + " != ? (mod ?)";
+    } else {
+      return var().name + " != " + remainder + "  (mod " + modulus + ")";
+    }
   }
 
   public String format_esc() {
