@@ -153,4 +153,27 @@ public class InvDef {
     debug.fine ("inv " + inv.format() + " matches");
     return (true);
   }
+
+  /**
+   * Looks for this invariant (in this ppt).  Returns the invariant if it
+   * finds it, null  otherwise
+   */
+  public Invariant find () {
+
+    PptTopLevel ppt = v1.ppt;
+
+    VarInfo[] vis = null;
+    if (v2 == null)
+      vis = new VarInfo[] {v1};
+    else
+      vis = new VarInfo[] {v1, v2};
+
+    Invariant inv = ppt.find_inv_by_class (vis, inv_class);
+
+    if ((inv != null) && check (inv))
+      return (inv);
+    else
+      return (null);
+  }
+
 }
