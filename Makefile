@@ -163,6 +163,7 @@ dist-force:
 # 	# Because full distribution has full source, shouldn't need: CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIRJAVA)/lib/jakarta-oro.jar:$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar:$(RTJAR)
 update-dist-dir: dist-ensure-directory-exists
 	$(MAKE) update-doc-dist-date
+	$(MAKE) update-doc-dist-version
 	# Would be clever to call "cvs examine" and warn if not up-to-date.
 	# Jikes 1.14 doesn't seem to work here; it apparently tries to build
 	# a method or class with more than 0xFFFF bytecodes.
@@ -181,7 +182,7 @@ update-dist-dir: dist-ensure-directory-exists
 	# Don't modify files in the distribution directory
 	cd $(DIST_DIR) && chmod -R ogu-w $(DIST_DIR_FILES)
 	update-link-dates $(DIST_DIR)/index.html
-	$(MAKE) update-dist-version
+	$(MAKE) update-dist-version-file
 
 TODAY := $(shell date "+%B %d, %Y")
 
@@ -191,11 +192,14 @@ update-doc-dist-date:
 	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(\@c Daikon version .* date\n\@center ).*\n/$$1${TODAY}\n/;' doc/daikon.texinfo
 	perl -wpi -e 's/(version .*, released ).*\.$$/$$1${TODAY}./' doc/README-dist doc/www/download/index.html doc/daikon.texinfo
 
-# Update the version number, and update the documentation accordingly.
-# This is done immediately after releasing a new version.
-update-dist-version: update-dist-version-file
+# Update the documentation according to the version number.
+# This isn't done as part of "make dist" because then subsequent "make www"
+# would show the new version.
+update-doc-dist-version: update-dist-version-file
 	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(Daikon version )[0-9]+(\.[0-9]+)*/$$1 . "$(shell cat doc/VERSION)"/e;' doc/daikon.texinfo doc/README-dist doc/www/download/index.html
 
+# Update the version number.
+# This is done immediately after releasing a new version.
 # This isn't a part of the "update-dist-version" target because if it is,
 # the "shell cat" command gets the old VERSION file.
 # (Note that the last element of VERSION may be negative, such as "-1".
