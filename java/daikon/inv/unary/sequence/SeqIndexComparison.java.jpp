@@ -308,6 +308,8 @@ public class CLASSNAME extends SUPERCLASS {
       comparatorDBC = "GT";
     } else if (comparator.equals(">=")) {
       comparatorDBC = "GTE";
+    } else if (comparator.equals("!=")) {
+      comparatorDBC = "NotEqual";
     } else {
       comparatorDBC = "?comparatorDBC?";
     }
