@@ -1,0 +1,76 @@
+Daikon todo list.  Last updated Oct 23, 2003 by JHP
+
+Outstanding Issues
+
+  jhp     10/30/03      Fix invariant documentation
+
+    The invariant documentation now includes versions for each permutation
+    of each FunctionBinary function.   This needs to be changed to not
+    show a separate class for each function
+
+  jhp     10/30/03      Add documentation for --track switch.  
+
+    Probably should add this to V2 as well.
+
+  jhp     10/30/03      --track should do some error checking
+
+    It would be nice if --track could do some sort of error checking.
+    It should also only print out the tracked vars once, rather than after
+    each --track switch.
+
+  jhp     10/30/03      finish check_vs_global() checking
+
+    check_vs_global makes sure there are no invariants that exist both
+    locally and at the global ppt.  It is called after adding samples
+    in PptTopLevel. This should be uncommented and any remaining problems
+    (which are few) fixed.
+
+  jhp     10/23/03      Global ppt needs to handle derived variables
+
+    The code that creates the relation between global variables at a ppt
+    and the global ppt doesn't handle derived variables correctly.  This
+    should use the same basic approach as in PptRelation.  Its not causing
+    a problem for now because flex doesn't enable derived variables
+
+  jhp     09/02/03      Orig variables are not always found at exit point
+
+    There is an assert in PptRelation.newEnterExitRel() that should be 
+    turned back on.  Fix the resulting errors in the regression tests.
+
+  jhp      09/02/03     Add comparability check when creating binary slices
+
+    Comparability is not checked when creating binary slices since we 
+    creates slices between arrays and integers.  This can be fixed to
+    properly check comparability before creating the slice
+
+   jhp     09/02/03     Fix comments in SuppressionLink.java
+
+     SuppressionLink.java says:
+
+      * Connects one Invariant to a set of suppressor invariants;
+      * immutable.
+
+     but also:
+
+       /**
+        * What stage of use this link is in.  Gets modified.  Can be one of
+        * CREATED, LINKED or UNLINKED.
+        **/
+       private int state = CREATED;
+
+     Which is right?
+
+     And SuppressionLink.java also says:
+
+        Each
+      * SuppressionLink is connected to exactly ONE invariant on each side.
+
+     but later:
+
+       private final List suppressors;
+
+     so this needs to be clarified as well.
+
+    
+
+Completed Issues
