@@ -194,8 +194,13 @@ C front end Kvasir
 
 * Using Kvasir::                
 * Kvasir options::              
+* Pointer type disambiguation::  
 * Kvasir limitations::          
 * Installing Kvasir::           
+
+Pointer type disambiguation
+
+* Pointer type disambiguation example::  
 
 Perl front end dfepl
 
@@ -232,7 +237,6 @@ Source-based C front end dfec
 * dfec examples::               
 * dfec command-line arguments::  
 * Daikon runtime customization::  
-* Pointer type disambiguation::  
 * Instrumentation scope::       
 * dfec requirements::           
 * Installing dfec::             
@@ -240,10 +244,6 @@ Source-based C front end dfec
 dfec examples
 
 * Dfec C examples summary::     
-
-Pointer type disambiguation
-
-* Pointer type disambiguation example::  
 
 Instrumentation scope
 
@@ -2717,11 +2717,13 @@ passing the specified arguments, if any, to Daikon.
 @cindex front end for C
 @cindex C front end
 
-Daikon's front end for C, named Kvasir, instead works by examining the
-operation of an unmodified binary at runtime.  (By contrast, Daikon's
-older C front end, known as dfec (@pxref{Source-based C front end
-dfec}), works by rewriting the source code for your C program.)  Kvasir
-is named after the Norse god of knowledge and beet juice.
+Daikon's front end for C, named Kvasir, executes C programs and creates  
+data trace (.dtrace) files (and separate declaration .decls files if requested 
+by the user) by examining the operation of the binary at runtime.  
+(By contrast, Daikon's older C front end, known as dfec 
+(@pxref{Source-based C front end dfec}), works by rewriting the source 
+code for your C program.)  
+Kvasir is named after the Norse god of knowledge and beet juice.
 
 Kvasir is based on the Valgrind dynamic program supervision framework
 (which is best known for its memory error detection tool).  Using
@@ -2752,6 +2754,7 @@ For information about installing Kvasir, see @ref{Installing Kvasir}.
 @menu
 * Using Kvasir::                
 * Kvasir options::              
+* Pointer type disambiguation::  
 * Kvasir limitations::          
 * Installing Kvasir::           
 @end menu
@@ -2783,25 +2786,37 @@ kvasir-dtrace ./program -option input.file
 @noindent
 As well as running your program (more slowly than usual), this command
 also creates a directory @file{daikon-output} in the current
-directory containing @file{program.decls} and @file{program.dtrace}
-files suitable as input to Daikon.
+directory containing a @file{program.dtrace} file suitable as input to Daikon.
 
 A number of options to Kvasir may be supplied between
 @command{kvasir-dtrace} and the name of your program; see below for a
 list.
 
-Note that Kvasir uses a different scheme for naming variables than dfec
-or the Java front end do.  Because C does not have classes, the `class'
-portion of a program point name (before the last period) instead holds
+Note that Kvasir uses a different scheme for naming variables than the Java
+front end and the old C front end dfec do (@pxref{Variable names}).
+Because C does not have classes, 
+the `class' portion of a program point name (before the last period) instead holds
 the file in which a function was defined, for file-static functions, or
 is simply a single period for global functions. (Thus, global function
-names start with two periods, like @samp{..main():::ENTER}.) In
-variable names, by contrast, the period is used to represent the field
-selection operator, so a slash is used instead: global variables are
-prefixed with a slash, and file-static variables are prefixed with their
-filename (with periods converted into underscores) and then a slash.
+names start with two periods, like @samp{..main():::ENTER}., the first 
+denoting that it is global in scope and the second denoting the separator 
+between the 'class' portion of the program point name and its actual name)  
+In variable names, by contrast, the period is used to represent the field
+selection operator, so a slash is used instead as a separator: 
+global variables are prefixed with a slash (eg. @samp{/globalVar}), 
+and file-static variables are prefixed with their filename (with periods 
+converted into underscores) and then a slash (eg. @samp{Global_c/staticVar} for 
+a file-static variable @var{staticVar} declared in the file @file{Global.c}).  
+For static variables which are declared within functions, an ampersand "@@" 
+separates the filename and the function name and then a slash separates the 
+function name and variable name (eg. @samp{Global_c@@main/funcStaticVar} for a 
+static variable @var{funcStaticVar} declared within the function 
+@var{main} in the file @file{Global.c}).  This syntax ensures that each 
+program point and variable within a C program has a unique name when 
+presented to Daikon.
 
-@node Kvasir options, Kvasir limitations, Using Kvasir, C front end Kvasir
+
+@node Kvasir options, Pointer type disambiguation, Using Kvasir, C front end Kvasir
 @subsection Kvasir options
 
 @table @option
@@ -2822,9 +2837,9 @@ mainly for Kvasir's developers.
 @item --decls-file=@var{filename.decls}
 
 Write the @file{.decls} file listing the names of functions and
-variables to the specified file name.  The default is
-@file{daikon-output/@var{programname}.decls}, where @var{programname}
-is the name of the program.
+variables to the specified file name.  This forces Kvasir to generate separate 
+@file{.decls} and @file{.dtrace} files instead of outputting everything to the 
+@file{.dtrace} file, which is the default behavior.
 
 @item --decls-only
 
@@ -2833,15 +2848,6 @@ generate trace information.  Since the @file{.decls} file is the same for
 any run of a program, it can be generated once and then reused on later
 runs, as long as no new program points are added and each program point
 has the same set of variables.
-
-@item --limit-static-vars
-
-Limits the output of static variables in the @file{.decls} and @file{.dtrace} 
-files. File-static variables are only observed at program points for functions 
-which belong to the same file as the variable.  Static variables 
-declared within a particular function are only observed at program points 
-for that function.  This is a heuristic to reduce the amount of Kvasir
-output without greatly reducing the amount of useful output.
 
 @item --dtrace-append
 
@@ -2880,6 +2886,15 @@ Omit any global or static variables from the @file{.decls} and
 @file{.dtrace} files.  Leaving these out can significantly improve Kvasir
 and Daikon's performance, at the expense of missing properties involving
 them.  The default is to keep global and static variables.
+
+@item --limit-static-vars
+
+Limits the output of static variables in the @file{.decls} and @file{.dtrace} 
+files. File-static variables are only observed at program points for functions 
+which belong to the same file as the variable.  Static variables 
+declared within a particular function are only observed at program points 
+for that function.  This is a heuristic to reduce the amount of Kvasir
+output without greatly reducing the amount of useful output.
 
 @item --output-fifo
 
@@ -2921,22 +2936,260 @@ error, to a single file, you can say @option{--program-stdout='&2'
 --program-stderr='&2' 2>@var{filename}}.
 
 @item --disambig-file=@var{filename}
-Specifies the filename for the pointer type disambiguation file.
+Specifies the filename for the pointer type disambiguation file 
+(@pxref{Pointer type disambiguation}).
 If this file exists, Kvasir uses it to make decisions about how 
 to output the referents of pointer variables.  If the file does not exist, 
-then Kvasir creates it, specifying default instrumentation behavior for all
-pointer types.  It may then be edited and used on subsequent runs.
-(NOTE: Pointer type disambiguation functionality is not yet completed.)
+then Kvasir creates it, inferring whether pointers should output as one 
+element or an array of elements.  
+This file may then be edited and used on subsequent runs.
 
 @item --disambig
-Tells Kvasir to create or read pointer type disambiguation with the
-default filename, which is @file{@var{myprog}.disambig} in the same
-directory as the target program.
-(NOTE: Pointer type disambiguation functionality is not yet completed.)
+Tells Kvasir to create or read pointer type disambiguation 
+(@pxref{Pointer type disambiguation}) with the default filename, 
+which is @file{@var{myprog}.disambig} in the same
+directory as the target program, where @var{myprog} is the name of the 
+target program. This is equivalent to 
+--disambig-file=@file{@var{myprog}.disambig}.
 
 @end table
 
-@node Kvasir limitations, Installing Kvasir, Kvasir options, C front end Kvasir
+@node    Pointer type disambiguation, Kvasir limitations, Kvasir options, C front end Kvasir
+@subsection Pointer type disambiguation
+
+@cindex pointer type disambiguation
+@cindex disambiguation of pointer types
+
+Kvasir permits users (or external analyses) to specify whether pointers
+refer to arrays or to single values.  For example, in
+@example
+void sum(int * array, int * result) @{ ... @}  // definition of "sum"
+...
+int a[40];
+int total;
+...
+sum(a, &total);        // use of "sum"
+@end example
+@noindent
+the first pointer parameter refers to an array while the second refers to
+a single value.  Kvasir (and Daikon) should treat these values
+differently.  For instance, @code{*array} is better printed as @code{array[]}, 
+an array of integers, and @code{result[]} isn't a sensible array 
+at all, even though in C @code{result[0]} is semantically identical to 
+@code{*result}.
+By default, Kvasir treats all pointers as referencing arrays.  For
+instance, it would print @code{result[]} rather than @code{*result}
+and would indicate that the length of array @code{result[]} is always 1.
+In order to improve the formatting of Daikon's output (and to speed it
+up), you can indicate to Daikon that certain pointers refer to single
+elements rather than to arrays.
+Also see the example below (@pxref{Pointer type disambiguation example}).
+
+Information about whether each pointer refers to an array or a single
+element can be specified in a ``disambig file'' that resides in the
+same directory as the target program (by default).  The @option{--disambig} 
+option instructs Kvasir to read this file if it exists.  (If it does not exist, 
+Kvasir produces the file automatically and heuristically infers whether each 
+pointer variable refers to single or multiple elements. Thus, users can
+edit this file for use on subsequent runs rather than having to create it 
+from scratch.)  The disambig file lists all the program points and user-defined 
+types, and under each, a list of all the relevant variables along with their 
+custom disambiguation types as shown below.  
+The list of disambiguation options is:
+
+@enumerate
+@item
+For variables of type @code{char} and @code{unsigned char}:
+@enumerate
+@item
+'I': an integer, signed for @code{char} and unsigned for @code{unsigned char}. (Default)
+@item
+'C': a single character, output as a string.
+@end enumerate
+@item
+For pointers to (or arrays of) @code{char} and @code{unsigned char}:
+@enumerate
+@item
+'S': a string, possibly zero-terminated. (Default)
+@item
+'C': a single character, output as a string.
+@item
+'A': an array of integers.
+@item
+'P': a single integer.
+@end enumerate
+@item 
+For pointers to (or arrays of) all other variable types (Kvasir automatically infers a default 'A' or 'P' for each variable during the generation of a @file{.disambig} file):
+@enumerate
+@item
+'A': an array.  (For an array of structs, an array will be output for each scalar field of the struct.  Aggregate children (arrays, other structs) will not be output.)
+@item
+'P': a pointer to a single element.  (For a pointer to a struct, each field will be output as a single instance, and child aggregate types will be output recursively. This extra information obtained from struct pointers is a powerful consequence of pointer type disambiguation.)
+@end enumerate
+@end enumerate
+
+The disambig file that Kvasir creates contains an entry for each program
+point, which can be used to disambiguate parameter variables visible at
+that program point.  It also contains an entry for every user-defined
+struct, which can be used to disambiguate member variables of
+that struct.  Disambiguation information entered here will apply to all
+instances of a struct or class of that type, at all program points.
+There is also an entry called 'globals', which disambiguates global
+variables which are output at every program point.  The entries in the
+disambig file may appear in any order, and whole entries or individual
+variables within an entry may be omitted.  In this case, Kvasir will
+retain their default values.
+
+
+@menu
+* Pointer type disambiguation example::  
+@end menu
+
+@node    Pointer type disambiguation example,  , Pointer type disambiguation, Pointer type disambiguation
+@subsubsection Pointer type disambiguation example
+
+This example demonstrates the power of pointer type disambiguation in creating 
+more accurate Daikon output.  Consider this file:
+
+@example
+struct record @{
+  char* name;     // Initialize to: "Daikon User"
+  int numbers[5]; // Initialize to: @{5, 4, 3, 2, 1@}
+@};
+
+void foo(struct record* bar) @{
+  int i;
+  for (i = 0; i < 5; i++) @{
+    bar->numbers[i] = (5 - i);
+  @}
+@}
+     
+int main() @{
+  char* myName = "Daikon User";
+  struct record baz;
+  baz.name = myName;
+  foo(&baz);
+@}
+@end example
+
+In @code{foo()}, @code{bar} is a @code{struct record *}.  By inspection, it is 
+evident that in this program, @code{bar} only refers to one element: @code{&baz} 
+within @code{main}.  However, by default, Kvasir assumes that @code{bar} is an 
+array of @code{record} structs since a C pointer contains no information about 
+how many elements it refers to.  Because Kvasir must output @code{bar} as an 
+array and @code{bar->numbers} is an array of integers, it "flattens" 
+@code{bar->numbers} into 5 separate arrays named @code{bar->numbers[0]} through 
+@code{bar->numbers[4]} and creates fairly verbose output.  This is a direct 
+consequence of the fact that Daikon can only handle one layer of sequences 
+(it cannot handle arrays within arrays, ie. multi-dimensional arrays).  
+Here is part of the Daikon output for this program:
+
+@example
+===========================================================================
+..foo():::ENTER
+bar has only one value
+bar[] contains no nulls and has only one value, of length 1
+bar[] elements has only one value
+bar[].name == [Daikon User]
+bar[].name elements == "Daikon User"
+size(bar[]) == 1
+===========================================================================
+..foo():::EXIT
+bar[] == orig(bar[])
+size(bar[].numbers[0][]) == orig(size(bar[]))
+size(bar[].numbers[1][]) == orig(size(bar[]))
+size(bar[].numbers[2][]) == orig(size(bar[]))
+size(bar[].numbers[3][]) == orig(size(bar[]))
+size(bar[].numbers[4][]) == orig(size(bar[]))
+bar[] contains no nulls and has only one value, of length 1
+bar[] elements has only one value
+bar[].name == [Daikon User]
+bar[].name elements == "Daikon User"
+bar[].numbers[0] has only one value
+bar[].numbers[0][] == [5]
+bar[].numbers[0][] elements == 5
+bar[].numbers[1] has only one value
+bar[].numbers[1][] == [4]
+bar[].numbers[1][] elements == 4
+bar[].numbers[2] has only one value
+bar[].numbers[2][] == [3]
+bar[].numbers[2][] elements == 3
+bar[].numbers[3] has only one value
+bar[].numbers[3][] == [2]
+bar[].numbers[3][] elements == 2
+bar[].numbers[4] has only one value
+bar[].numbers[4][] == [1]
+bar[].numbers[4][] elements == 1
+bar[].numbers[4][] elements == orig(size(bar[]))
+orig(size(bar[])) in bar[].numbers[4][]
+@end example
+
+This is a bit wordy due to the fact that Kvasir treats @code{bar} like an array 
+by default when it actually only points to one element.  However, by running 
+Kvasir with the @option{--disambig} option, we create the 
+@file{@var{myprog}.disambig} file, which we can then edit and feed back to 
+Kvasir to change how the pointer is output.  (We run Kvasir twice on the same
+program, but we edit the @file{.disambig} file in between the runs.)
+@example
+  kvasir-dtrace @var{...options...} --disambig @var{myprog}.c
+@end example
+
+This creates the @file{@var{myprog}.disambig} file.  It contains, at the top:
+
+@example
+--------ENTRY--------
+..foo():::ENTER
+bar
+P
+
+--------ENTRY--------
+..foo():::EXIT0
+bar
+P
+@end example
+
+This means that at the two program points corresponding to the entry and
+exit of foo(), the variable @var{bar} is treated as a @samp{P}ointer type. 
+Kvasir automatically inferred Pointer instead of Array for @var{bar} 
+because it observed that @var{bar} only pointed to one element during the 
+execution of the target program which generated the .disambig file. This 
+heuristic (which was not available in the old dfec) allows users to use 
+.disambig files more effectively with less manual editing.
+
+Then, running Kvasir again with the @option{--disambig}
+option causes Kvasir to open the existing
+@file{@var{myprog}.disambig} file, read the definitions, and alter 
+the output accordingly:
+@example
+  kvasir-dtrace @var{...options...} --disambig @var{myprog}.c
+@end example
+
+This means that @var{bar} will be output as a @samp{P}ointer to a
+single element, thus generating much cleaner invariants. Notice that 
+@code{bar->numbers} no longer has to be "flattened" because @var{bar} 
+is now a pointer to one struct so Daikon can recognize @code{bar->numbers} 
+as a single-dimensional array.
+@example
+===========================================================================
+..foo():::ENTER
+bar has only one value
+*bar has only one value
+bar.name == "Daikon User"
+===========================================================================
+..foo():::EXIT
+*bar == orig(*bar)
+*bar has only one value
+bar.name == "Daikon User"
+bar.numbers has only one value
+bar.numbers[] == [5, 4, 3, 2, 1]
+size(bar.numbers[]) == 5
+bar.name == orig(bar.name)
+size(bar.numbers[]) in bar.numbers[]
+size(bar.numbers[])-1 in bar.numbers[]
+@end example
+
+
+@node Kvasir limitations, Installing Kvasir, Pointer type disambiguation, C front end Kvasir
 @subsection Kvasir limitations
 
 This subsection lists some of the known limitations of the
@@ -2949,11 +3202,13 @@ limitations are listed roughly in decreasing order of severity.
 @item
 Kvasir-traced programs a while (often a good fraction of a second)
 to start.  When tracing short-lived programs, this overhead can
-dominate Kvasir's per-instruction runtime overhead.
+dominate Kvasir's per-instruction runtime overhead.  In order to make Kvasir 
+run faster, try the @code{--ignore-globals} or @code{--limit-static-vars} 
+options in order to limit the amount of generated output.
 
 @item
 Kvasir does not support C++ (dfec had small but unreliable C++ support).
-We want to first gauge the demand for this feature.
+We want to first gauge the demand for this feature.  
 Please send email to @email{daikon-developers@@lists.csail.mit.edu} if you
 feel that this addition will benefit your experience with Daikon.
 
@@ -4411,7 +4666,6 @@ java daikon.Daikon daikon-output/myprog.decls \
 * dfec examples::               
 * dfec command-line arguments::  
 * Daikon runtime customization::  
-* Pointer type disambiguation::  
 * Instrumentation scope::       
 * dfec requirements::           
 * Installing dfec::             
@@ -4706,7 +4960,9 @@ the @file{daikon-output} directory.  If this file exists, dfec uses it
 to make decisions about how to output the referents of pointer
 variables.  If the file does not exist, dfec creates it,
 specifying default instrumentation behavior for all
-pointer types.  It may then be edited and used on subsequent runs.
+pointer types.  It may then be edited and used on subsequent runs. 
+NOTE: The dfec version of pointer type disambiguation differs slightly 
+in both syntax and functionality from the Kvasir version.
 
 @item --disambig
 Tells dfec to create or read pointer type disambiguation with the
@@ -4789,7 +5045,7 @@ address-of-array operations in the older, pcc-style manner.
 @end table
 
 
-@node    Daikon runtime customization, Pointer type disambiguation, dfec command-line arguments, Source-based C front end dfec
+@node    Daikon runtime customization, Instrumentation scope, dfec command-line arguments, Source-based C front end dfec
 @subsection Daikon runtime customization
 
 @cindex dfec customizations
@@ -4817,232 +5073,7 @@ You can turn specific Daikon warnings on and off.
 @end itemize
 
 
-
-@node    Pointer type disambiguation, Instrumentation scope, Daikon runtime customization, Source-based C front end dfec
-@subsection Pointer type disambiguation
-
-@cindex pointer type disambiguation
-@cindex disambiguation of pointer types
-
-dfec permits users (or external analyses) to specify whether pointers
-refer to arrays or to single values.  For example, in
-@example
-void sum(int * array, int * result) @{ ... @}  // definition of "sum"
-...
-int a[40];
-int total;
-...
-sum(a, &total);        // use of "sum"
-@end example
-@noindent
-the first pointer parameter refers to an array while the second refers to
-a single value.  dfec (and Daikon) should treat these values
-differently.  For instance, @code{*array} is better printed as @code{array[0]},
-and @code{result[]} isn't a sensible array at all, even though in C
-@code{result[0]} is semantically identical to @code{*result}.
-By default, dfec treats all pointers as referencing arrays.  For
-instance, it would print @code{result[0]} rather than @code{*result}
-and would indicate that the length of array @code{result[]} is always 1.
-In order to improve the formatting of Daikon's output (and to speed it
-up), you can indicate to Daikon that certain pointers refer to single
-elements rather than to arrays.
-Also see the example below (@pxref{Pointer type disambiguation example}).
-
-Information about whether each pointer refers to an array or a single
-element can be specified in a ``disambig file'' that resides in the
-same directory as the decls file.  The @option{--disambig} option
-instructs dfec to read this file.  (dfec can also produce the file
-automatically, permitting users to edit it for use on subsequent runs,
-rather than having to create it from scratch.)  The disambig file
-lists all the instrumented program points, and under each, a list of
-all the variables in scope at that program point, along with the types
-that the variables are instrumented as.  The list of disambiguation
-options is:
-
-@enumerate
-@item
-For variables of type @code{char}:
-@enumerate
-@item
-'I': an integer.
-@item
-'C': a single character, output as a string.
-@end enumerate
-@item
-For pointers to (or arrays of) @code{char}:
-@enumerate
-@item
-'S': a string, possibly zero-terminated.
-@item
-'C': a single character, output as a string.
-@item
-'A': an array of integers.
-@item
-'P': a single integer.
-@end enumerate
-@item 
-For pointers to (or arrays of) @code{int}:
-@enumerate
-@item
-'A': an array of integers.
-@item
-'P': a single integer.
-@end enumerate
-For pointers to (or arrays of) @code{float}:
-@enumerate
-@item
-'A': an array of integers.
-@item
-'P': a single integer.
-@end enumerate
-For pointers to (or arrays of) @code{struct} or @code{class} types:
-@enumerate
-@item
-'A': an array of structs.  For each scalar field of the type, an array of that field will be output.  Aggregate children (arrays, other structs) will not be output.
-@item
-'P': a pointer to a single struct.  Each field of the type will be instrumented as a single instance, and child aggregate types will be output recursively.
-@end enumerate
-@end enumerate
-
-The disambig file that dfec creates contains an entry for each program
-point in instrumentation scope (@pxref{Instrumentation scope}), which
-can be used to disambiguate parameter variables visible at
-that program point.  It also contains an entry for every user-defined
-class or struct, which can be used to disambiguate member variables of
-that struct.  Disambiguation information entered here will apply to all
-instances of a struct or class of that type, at all program points.
-There is also an entry called 'globals', which disambiguates global
-variables which are output at every program point.  The entries in the
-disambig file may appear in any order, and whole entries or individual
-variables within an entry may be omitted.  In this case, dfec will
-retain their default values.
-
-@c This isn't really relevant to users of Daikon, though it is quite
-@c interesting from an implementation point of view.
-@c A C pointer type is output to the decls and dtrace files in two
-@c ways: firstly, as the memory address it points to (the equivalent of the
-@c java hashcode), and secondly, its contents.  By default, the
-@c contents of an array or pointer type is the list of values pointed to by
-@c the pointer variable.  The Daikon runtime library keeps track of all
-@c pointer variables, and notes what the highest referenced value beyond a
-@c base is, and assumes that all values between the base and that are
-@c valid.  Then, when outputting to the decls and dtrace files, it outputs
-@c the full list of ``known valid'' values.  In addition to this, there are
-@c certain safety features built into the Daikon runtime library, such as
-@c bounds-checking on arrays that have been declared with static size.
-@c However, not all pointers point to arrays; many are simply pointers to
-@c single elements.
-
-
-@menu
-* Pointer type disambiguation example::  
-@end menu
-
-@node    Pointer type disambiguation example,  , Pointer type disambiguation, Pointer type disambiguation
-@subsubsection Pointer type disambiguation example
-
-Consider this file:
-
-@example
-  void foo(int *bar) @{
-    (*bar)++;
-  @}
-
-  int main() @{
-    int baz=6;
-    foo(&baz);
-  @}
-@end example
-
-In @code{foo()}, @code{bar} is an @code{int *}.  By default, dfec would
-instrument @code{bar} as an array of int, keeping track of how many ints
-@code{bar} addressed (in this case, only one), and outputting
-@code{bar[]} to the @file{.decls} and @file{.dtrace} files as a
-sequence, which yields these invariants:
-
-@example
-======================================================================
-std.foo(int *;):::ENTER
-bar[0] == min(bar[]) == max(bar[]) == sum(bar[])
-bar has only one value
-bar[] == [6]
-bar[] elements == 6
-size(bar[]) == 1
-======================================================================
-std.foo(int *;):::EXIT1
-bar == orig(bar)
-bar[0] == min(bar[]) == max(bar[]) == sum(bar[])
-orig(bar[0]) == min(orig(bar[])) == max(orig(bar[])) == sum(orig(bar[]))
-bar has only one value
-bar[] == [7]
-bar[] elements == 7
-orig(bar[]) == [6]
-orig(bar[]) elements == 6
-size(bar[]) == 1
-@end example
-
-This is a bit wordy.  But, by running dfec with the @option{--disambig}
-option, we create the @file{daikon-output/@var{myprog}.disambig} file,
-which we can then edit and feed back to dfec to change how the pointer
-is instrumented.  (In other words, we run dfec twice on the same
-source file(s), but we edit the @file{.disambig} file in between the runs.)
-@example
-  dfec @var{...options...} --disambig @var{myprog}.c
-@end example
-
-This creates the @file{daikon-output/@var{myprog}.disambig} file.  It
-contains, at the top:
-
-@example
-std.foo(int *;)void:::ENTER
-bar
-A
-
-std.foo(int *;)void:::EXIT1
-bar
-A
-@end example
-
-This means that at the two program points corresponding to the entry and
-exit of foo(), the variable bar is instrumented as an @samp{A}rray type.  To
-change it so dfec instruments it as a @samp{P}ointer type, change the
-two @samp{A} entries to @samp{P} entries:
-@example
-std.foo(int *;)void:::ENTER
-bar
-P
-
-std.foo(int *;)void:::EXIT1
-bar
-P
-@end example
-
-Then, running dfec again with the @option{--disambig}
-option causes dfec to open the existing
-@file{daikon-output/@var{myprog}.disambig} file, reading the definitions
-you gave, and changing the instrumentation accordingly:
-@example
-  dfec @var{...options...} --disambig @var{myprog}.c
-@end example
-
-This means that bar will be instrumented as a @samp{P}ointer to a
-single element.  If you compile and run the program, then run Daikon
-on the output, you'll see much cleaner invariants:
-@example
-======================================================================
-std.foo(int *;):::ENTER
-bar has only one value
-*bar == 6
-======================================================================
-std.foo(int *;):::EXIT1
-bar == orig(bar)
-bar has only one value
-*bar == 7
-orig(*bar) == 6
-@end example
-
-
-@node    Instrumentation scope, dfec requirements, Pointer type disambiguation, Source-based C front end dfec
+@node    Instrumentation scope, dfec requirements, Daikon runtime customization, Source-based C front end dfec
 @subsection Instrumentation scope
 
 @cindex instrumentation scope

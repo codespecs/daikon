@@ -30,6 +30,23 @@ Daikon
   Configuration option daikon.FileIO.unmatched_procedure_entries_quiet is
   now true by default.
 
+Kvasir
+
+  User Changes
+
+    In accordance with Chicory, Kvasir now produces all of its output 
+    (both variable declarations and runtime values) in one .dtrace file 
+    instead of as separate .decls and .dtrace files.  The --decls-file=<filename>
+    command-line option forces Kvasir to generate separate .decls and 
+    .dtrace files like it used to do.
+
+  Bug Fixes
+
+    Several refinements which produce better output for arrays and 
+    structs when using pointer type disambiguation.  Also fixed some bugs 
+    which allows Kvasir to be more robust across different Linux platforms 
+    (ie. kernel and gcc version differences).
+
 Eclipse plug-in
 
   Version 3.1.10 of the Daikon plug-in for Eclipse (written by David Cok)
