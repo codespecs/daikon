@@ -265,7 +265,12 @@ END {
 		    my @mods = split(/ /, $inv);
 		    @mods = grep(!/\.class$/, @mods);
 		    @mods = grep(!/\~/, @mods);
-		    @mods = grep(!/\[[^*]+\]/, @mods);
+
+		    # was: @mods = grep(!/\[[^*]+\]/, @mods);
+		    # better to a[x] => a[*] than nothing at all
+		    @mods = grep(s/\[([^*]+)\]/[*]/g, @mods);
+		    # even better would be to collect the list of indicies which are modified, and create a \forall to specify that the rest aren't
+
 		    for my $field (@final_fields) {
 		      @mods = grep(!/^this.$field$/, @mods);
 		    }
