@@ -2,9 +2,11 @@
   eval 'exec perl -S -w $0 "$@"'
   if 0;
 
-# Annotate a declaration file with lackwit comparability information
-# Assumes the lackwit database has already been created, and the
-# necessary environment variables have been set.
+# Annotate a declaration file with lackwit comparability information.
+# Prints the new declaration file to STDOUT.  Assumes:
+#   - The lackwit database has already been created
+#   - The LACKWITDB environment variable has been set
+#   - The BackEnd executable is in your path
 
 if ($#ARGV != 0) {
   die "Usage: lwpp.pl <filename.decls>\n";
@@ -22,13 +24,15 @@ while (<DECLS>) {
 
   if (/DECLARE/) {
     
+    # show progress
+    print STDERR '.';
+
     # variables at this program point that Daikon finds interesting,
     # namely parameters and global variables
     %interesting_variables = ();
 
     # read the whole paragraph into a string, excluding the blank line
     $ppt_declaration = <DECLS>;
-
     while (1) {
       $variable = <DECLS>;
       last if ((!$variable) || ($variable =~ /^\s+$/));
@@ -47,12 +51,16 @@ while (<DECLS>) {
     @ppt_declaration = split(/\n/, $ppt_declaration);
     $ppt = shift @ppt_declaration;
     print "$ppt\n";
-    $ppt =~ /.*-(.*):::/;
+
+    $ppt =~ /^.*\.(.*)\(/;
     $function = $1;
 
     # process the variable declarations, one at a time
     while($variable = shift @ppt_declaration) {
-      @comparable_variables = ();
+      %comparable_variables = ();
+
+      # every variable is comparable to itself
+      $comparable_variables{$variable} = 1;
       
       print "$variable\n";
       
@@ -65,7 +73,7 @@ while (<DECLS>) {
       # throw away the old comparability information
       shift @ppt_declaration;
       
-      $lackwit_results =
+      $lackwit_results = 
         `echo "searchlocal $function:$variable -all" | BackEnd 2> /dev/null`;
 
       foreach (split /\n/, $lackwit_results) {
@@ -77,7 +85,11 @@ while (<DECLS>) {
         next if not /^\(.*\) (.*)$/;
         
         $comparable = $1;
-        
+
+        # skip type-cast variables ("{") and parameters of other
+        # functions ("@")
+        next if ($comparable =~ /\{|@/);
+
         # If the variable name contains a colon, it is either local to
         # a function, or a function parameter.  It will be of the
         # format "function:variable".  If the name does not contain a
@@ -96,16 +108,19 @@ while (<DECLS>) {
         # change array[0] to array[]
         $comparable_variable =~ s/\[0\]/[]/;
 
-        # skip type-cast variables ("{") and parameters of other
-        # functions ("@")
-        next if ($comparable_variable =~ /\{|@/);
-        
-        # skip uninteresting variables
-        next if not $interesting_variables{$comparable_variable};
-        
-        push @comparable_variables, $comparable_variable;        
+        if ($interesting_variables{$comparable_variable}) {
+          $comparable_variables{$comparable_variable} = 1;
+        } elsif ($comparable_variable =~ /^([^\[]*)(\[\])*$/) {
+          # an array may be represented in the trace file as a pointer
+          $array_base = $1;
+          $pointer = "*$array_base";
+          if ($interesting_variables{$pointer}) {
+            $comparable_variables{$pointer} = 1;
+          }
+        }
       }
-      
+
+      @comparable_variables = sort keys %comparable_variables;
       print "(@comparable_variables)";
 
       # if the declared type is an array, print the index information
@@ -121,3 +136,5 @@ while (<DECLS>) {
   }
   print "\n";
 }
+
+print STDERR "\n";
