@@ -191,10 +191,10 @@ update-dist-dir: dist-ensure-directory-exists
 	cp -pR doc/daikon_manual_html $(DIST_DIR)/doc
 	# Don't modify files in the distribution directory
 	cd $(DIST_DIR) && chmod -R ogu-w $(DIST_DIR_FILES)
-	update-link-dates $(DIST_DIR)/index.html
+	$(MAKE) www
 	$(MAKE) update-dist-version-file
 
-TODAY := $(shell date "+%B %d, %Y")
+TODAY := $(shell date "+%B %e, %Y")
 
 # Update the documentation with a new distribution date (today).
 # This is done immediately before releasing a new distribution.
@@ -205,7 +205,9 @@ update-doc-dist-date:
 # Update the documentation according to the version number.
 # This isn't done as part of "make dist" because then subsequent "make www"
 # would show the new version.
-update-doc-dist-version: update-dist-version-file
+# I removed the dependence on "update-dist-version-file" because this rule
+# is invoked at the beginning of a make.
+update-doc-dist-version:
 	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(Daikon version )[0-9]+(\.[0-9]+)*/$$1 . "$(shell cat doc/VERSION)"/e;' doc/daikon.texinfo doc/README-dist doc/www/download/index.html
 
 # Update the version number.
