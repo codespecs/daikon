@@ -104,7 +104,7 @@ public final class CLASSNAME
     boolean tmp;
 
     tmp = can_be_lt;
-    can_be_gt = can_be_lt;
+    can_be_lt = can_be_gt;
     can_be_gt = tmp;
 
     tmp = obvious_can_be_lt;
