@@ -42,6 +42,7 @@ public class MasterUnitTester extends TestCase {
       daikon.test.diff.UnionVisitorTester.class,
       daikon.test.diff.XorVisitorTester.class,
       daikon.test.InvariantFormatTester.class,
+      daikon.test.SampleTester.class,
       daikon.test.inv.InvariantTester.class,
       daikon.test.inv.unary.scalar.OneOfScalarTester.class,
       daikon.test.inv.unary.sequence.OneOfSequenceTester.class,
