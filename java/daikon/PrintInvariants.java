@@ -445,10 +445,19 @@ public class PrintInvariants {
         //                    + (Daikon.suppress_redundant_invariants_with_simplify
         //                       && redundant_invs.contains(vi)));
 
+
+	if (debug.isDebugEnabled()) {
+	  debug.debug("Trying to print equality for " + ppt.ppt_name + " + " + equal_vars);
+	}
+
+
         if (equal_vars.size() > 0 &&
 	    // suppress if the equality invariant is implied via simplify
 	    (! (Daikon.suppress_redundant_invariants_with_simplify &&
 		ppt.redundant_invs.contains(vi)))) {
+
+
+
 	  invCounter++;
 	  if (Daikon.output_style == OutputFormat.DAIKON) {
             StringBuffer sb = new StringBuffer(vi.name.name());

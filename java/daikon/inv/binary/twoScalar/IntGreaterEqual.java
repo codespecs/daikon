@@ -11,6 +11,8 @@ import daikon.derive.unary.*;
 
 import utilMDE.*;
 
+import org.apache.log4j.Category;
+
 import java.util.*;
 
 // *****
@@ -34,7 +36,8 @@ public final class IntGreaterEqual
    **/
   public static boolean dkconfig_enabled = true;
 
-  final static boolean debugIntGreaterEqual  = false;
+  public static final Category debugIntGreaterEqual  = Category.getInstance("daikon.inv.binary.twoScalar." +
+								    "IntGreaterEqual" );
 
   private ValueTracker values_cache = new ValueTracker(8);
 
@@ -60,10 +63,10 @@ public final class IntGreaterEqual
       return null;
     }
 
-    if (debugIntGreaterEqual  || ppt.debugged) {
-      System.out.println("IntGreaterEqual.instantiate(" + ppt.name + ")"
-                         + ", seqvar1=" + seqvar1
-                         + ", seqvar2=" + seqvar2);
+    if (debugIntGreaterEqual .isDebugEnabled() || ppt.debugged) {
+      debugIntGreaterEqual .debug("IntGreaterEqual.instantiate(" + ppt.name + ")"
+			  + ", seqvar1=" + seqvar1
+			  + ", seqvar2=" + seqvar2);
     }
 
     { // Tests involving sequence lengths.
@@ -100,16 +103,16 @@ public final class IntGreaterEqual
       VarInfo super1 = seqvar1.isDerivedSubSequenceOf();
       VarInfo super2 = seqvar2.isDerivedSubSequenceOf();
 
-      if (debugIntGreaterEqual  || ppt.debugged) {
-        System.out.println("IntGreaterEqual.instantiate: "
-                           + "min1=" + min1
-                           + ", max1=" + max1
-                           + ", min2=" + min2
-                           + ", max2=" + max2
-                           + ", super1=" + super1
-                           + ", super2=" + super2
-                           + ", iom(var2, seqvar1)=" + Member.isObviousMember(var2, seqvar1)
-                           + ", iom(var1, seqvar2)=" + Member.isObviousMember(var1, seqvar2));
+      if (debugIntGreaterEqual .isDebugEnabled() || ppt.debugged) {
+        debugIntGreaterEqual .debug("IntGreaterEqual.instantiate: "
+			    + "min1=" + min1
+			    + ", max1=" + max1
+			    + ", min2=" + min2
+			    + ", max2=" + max2
+			    + ", super1=" + super1
+			    + ", super2=" + super2
+			    + ", iom(var2, seqvar1)=" + Member.isObviousMember(var2, seqvar1)
+			    + ", iom(var1, seqvar2)=" + Member.isObviousMember(var1, seqvar2));
       }
       if (seqvar1 == seqvar2) {
         // Both variables are derived from the same sequence.  The

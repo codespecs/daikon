@@ -171,6 +171,19 @@ public abstract class PptSlice
     // We will always have at least one path, since the dataflow
     // result includes 'here'.  We need a result of size 2 to know
     // that there is another place higher than here.
+
+    if (Global.debugInfer.isDebugEnabled()) {
+      // Warning, this one's expensive
+      Global.debugInfer.debug ("isControlled check: ");
+      StringBuffer sb = new StringBuffer();
+      for (int i = 0; i < higher.ppts.length; i++) {
+	sb.append (" ");
+	sb.append (higher.ppts[i].ppt_name);
+      }
+      Global.debugInfer.debug (sb.toString());
+
+    }
+
     return (higher.ppts.length >= 2);
   }
 
