@@ -1904,7 +1904,7 @@ Prints all discarded invariants of class @var{inv_class} at the ppt
 specified that involve exactly the vars given, as well as a short reason
 and discard code explaining why they were not worthy of print.  Any of 
 the three parts of the optarg may be made a wildcard by excluding it.
-e.g. @var{inv_class} and <@var{var1,var2,...}>@@@var{ppt} are valid args.
+e.g. @var{inv_class} and <@var{var1},@var{var2},...}>@@@var{ppt} are valid args.
 To print all discarded invariants, use the argument "all".
                                    
 @item --prob_limit @var{val}
@@ -4235,11 +4235,11 @@ the top level (and after raising them, remove any
 
 You should also separate all declarations from uses:
 @example
-  enum { make, user } current_access;
+  enum @{ make, user @} current_access;
 @end example
 Separate the declaration from the use:
 @example
-  enum current_access_type { make, user };
+  enum current_access_type @{ make, user @};
   current_access_type current_access;
 @end example
 
@@ -5381,8 +5381,8 @@ LogicalCompare accepts the following options:
 Specify a single configuration setting. The available settings are the
 same as can be passed to Daikon's @option{--config_option} option,
 though because the invariants have already been generated, some will
-have no effect. See @xref{Configuration options} for a list of
-available options.
+have no effect.  For a list of
+available options, @xref{Configuration options}.
 
 @item --config-file=@var{file}
 Read configuration options from the file @var{file}. This file should
