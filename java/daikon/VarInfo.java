@@ -702,7 +702,11 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
       } else {
         // System.out.println("justified LinearBinary: " + lb.format());
         // lb.b is var2()-var1().
-        index_vari_minus_seq = (vari_is_var1 ? -lb.core.b : lb.core.b);
+
+        // a is 1 or -1, and the values are integers, so be must be an integer
+        long b_int = (long)lb.core.b;
+        Assert.assert(lb.core.b == b_int);
+        index_vari_minus_seq = (vari_is_var1 ? -b_int : b_int);
         index_vari_minus_seq += vari_shift - varj_shift;
       }
     }
@@ -825,7 +829,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 
         if (this.equals(lb.var2()) && (post != lb.var1().isOrigVar())) {
 	  // this = a * v1 + b
-	  long a = lb.core.a, b = lb.core.b;
+	  double a = lb.core.a, b = lb.core.b;
 	  if (a == 1) {
 	    // this = v1 + b
 	    int add = (int) b;
@@ -835,7 +839,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 
 	if (this.equals(lb.var1()) && (post != lb.var2().isOrigVar())) {
 	  // v2 = a * this + b
-	  long a = lb.core.a, b = lb.core.b;
+	  double a = lb.core.a, b = lb.core.b;
 	  if (a == 1) {
 	    // this = v2 - b
 	    int add = -((int) b);
@@ -861,7 +865,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   public void simplify_expression() {
     if (debug_simplify_expression)
       System.out.println("** Simplify: " + name);
-      
+
     if (!isDerived()) {
       if (debug_simplify_expression)
 	System.out.println("** Punt because not derived variable");
@@ -919,7 +923,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 	}
       }
       name = (new VarInfoName.Replacer(postexpr, pre_expr)).replace(name);
-      if (debug_simplify_expression) 
+      if (debug_simplify_expression)
 	System.out.println("** Replaced with: " + name);
     }
 
