@@ -747,6 +747,9 @@ public abstract class Invariant
     } else if (s.indexOf('.') != -1) {
       // 3.14 -> 3.14d0
       s = s + "d0";
+    } else if (s.equals("-Infinity")) {
+      // -Infinity -> NegativeInfinity
+      s = "NegativeInfinity";
     }
     // 5 -> 5
     // NaN -> NaN
@@ -1841,7 +1844,7 @@ public abstract class Invariant
 
     if (debugGuarding.isLoggable(Level.FINE)) {
       debugGuarding.fine ("Guarding predicate being created for: ");
-      debugGuarding.fine (this.format_using(OutputFormat.JML));
+      debugGuarding.fine (this.format());
     }
 
     // Find which VarInfos must be guarded
