@@ -153,7 +153,32 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+
+    String varname = var().name.simplify_name();
+
+    String result;
+
+    if (is_boolean) {
+      Assert.assert(num_elts == 1);
+      Assert.assert((elts[0] == 0) || (elts[0] == 1));
+      result = "(EQ " + varname + " " + ((elts[0] == 0) ? "|@false|" : "|@true|") + ")";
+    } else if (is_hashcode) {
+      Assert.assert(num_elts == 1);
+      result = "(EQ " + varname + " " + ((elts[0] == 0) ? "null" : ("hash_" + elts[0])) + ")";
+    } else {
+      result = "";
+      for (int i=0; i<num_elts; i++) {
+        result += " (EQ " + varname + " " +  elts[i]   + ")";
+      }
+      if (num_elts > 1) {
+	result = "(OR" + result + ")";
+      } else {
+	// chop leading space
+	result = result.substring(1);
+      }
+    }
+
+    return result;
   }
 
   public void add_modified(long  v, int count) {

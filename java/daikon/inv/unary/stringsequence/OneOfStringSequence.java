@@ -118,7 +118,12 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+
+    String result;
+
+    result =  "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+
+    return result;
   }
 
   public void add_modified(String[]  v, int count) {

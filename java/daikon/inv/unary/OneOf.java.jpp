@@ -247,9 +247,6 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 	}
       }
     }
-#if defined(ELTSTRING)
-    result = form[0] + "(" + result + ")" + form[2];
-#endif
 #elif defined(SCALAR) || defined(ELT)
     if (is_boolean) {
       Assert.assert(num_elts == 1);
@@ -269,17 +266,73 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
         result += varname + " == " + TOSTRING(elts[i]);
       }
     }
-#if defined(ELT)
-    result = form[0] + "(" + result + ")" + form[2];
-#endif
 #else
     result = "format_esc " + this.getClass() + " needs to be changed: " + format();
+#endif
+#if defined(ELT) || defined(ELTSTRING)
+    result = form[0] + "(" + result + ")" + form[2];
 #endif
     return result;
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+#if defined(ELT) || defined(ELTSTRING)
+    String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
+    String varname = form[1];
+#elif defined(SCALAR) || defined(STRING)
+    String varname = var().name.simplify_name();
+#endif
+    String result;
+#if defined(STRING) || defined(ELTSTRING)
+    result = "";
+    boolean is_type = (var().name instanceof VarInfoName.TypeOf);
+    for (int i=0; i<num_elts; i++) {
+      String value = elts[i];
+      if (!is_type) {
+	value = "\"" + UtilMDE.quote(value) + "\"";
+      } else {
+	if (value.startsWith("[")) {
+	  value = UtilMDE.classnameFromJvm(value);
+	} else if (value.startsWith("\"") && value.endsWith("\"")) {
+	  value = value.substring(1, value.length()-1);
+	}
+	value = "|T_" + value + "|";
+      }
+      result += " (EQ " + varname + " " + value + ")";
+    }
+    if (num_elts > 1) {
+      result = "(OR" + result + ")";
+    } else {
+      // chop leading space
+      result = result.substring(1);
+    }
+#elif defined(SCALAR) || defined(ELT)
+    if (is_boolean) {
+      Assert.assert(num_elts == 1);
+      Assert.assert((elts[0] == 0) || (elts[0] == 1));
+      result = "(EQ " + varname + " " + ((elts[0] == 0) ? "|@false|" : "|@true|") + ")";
+    } else if (is_hashcode) {
+      Assert.assert(num_elts == 1);
+      result = "(EQ " + varname + " " + ((elts[0] == 0) ? "null" : ("hash_" + elts[0])) + ")";
+    } else {
+      result = "";
+      for (int i=0; i<num_elts; i++) {
+        result += " (EQ " + varname + " " + TOSTRING(elts[i]) + ")";
+      }
+      if (num_elts > 1) {
+	result = "(OR" + result + ")";
+      } else {
+	// chop leading space
+	result = result.substring(1);
+      }
+    }
+#else
+    result =  "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+#endif
+#if defined(ELT) || defined(ELTSTRING)
+    result = form[0] + result + form[2];
+#endif
+    return result;
   }
 
 #if defined(ELT) || defined(ELTSTRING)

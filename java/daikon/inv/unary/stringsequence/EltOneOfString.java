@@ -146,7 +146,38 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+
+    String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
+    String varname = form[1];
+
+    String result;
+
+    result = "";
+    boolean is_type = (var().name instanceof VarInfoName.TypeOf);
+    for (int i=0; i<num_elts; i++) {
+      String value = elts[i];
+      if (!is_type) {
+	value = "\"" + UtilMDE.quote(value) + "\"";
+      } else {
+	if (value.startsWith("[")) {
+	  value = UtilMDE.classnameFromJvm(value);
+	} else if (value.startsWith("\"") && value.endsWith("\"")) {
+	  value = value.substring(1, value.length()-1);
+	}
+	value = "|T_" + value + "|";
+      }
+      result += " (EQ " + varname + " " + value + ")";
+    }
+    if (num_elts > 1) {
+      result = "(OR" + result + ")";
+    } else {
+      // chop leading space
+      result = result.substring(1);
+    }
+
+    result = form[0] + result + form[2];
+
+    return result;
   }
 
   public void add_modified(String [] a, int count) {
