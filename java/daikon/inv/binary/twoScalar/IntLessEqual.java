@@ -124,9 +124,11 @@ public final class IntLessEqual
 
     if (format == OutputFormat.SIMPLIFY) {
 
-    String comparator = "<=";
+      String comparator = "<=";
 
-      return "(" + comparator + " " + var1name + " " + var2name + ")";
+      return "(" + comparator
+        + " " + var1().simplifyFixup(var1name)
+        + " " + var2().simplifyFixup(var2name) + ")";
     }
 
     return format_unimplemented(format);

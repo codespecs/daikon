@@ -351,13 +351,15 @@ invariants.
 
     if (format == OutputFormat.SIMPLIFY) {
 #if defined(EQUAL) || defined(EQUALFLOAT)
-    String comparator = "EQ";
+      String comparator = "EQ";
 #elif defined(NONEQUAL) || defined(NONEQUALFLOAT)
-    String comparator = "NEQ";
+      String comparator = "NEQ";
 #else
-    String comparator = EQUALSstring;
+      String comparator = EQUALSstring;
 #endif
-      return "(" + comparator + " " + var1name + " " + var2name + ")";
+      return "(" + comparator
+        + " " + var1().simplifyFixup(var1name)
+        + " " + var2().simplifyFixup(var2name) + ")";
     }
 
     return format_unimplemented(format);

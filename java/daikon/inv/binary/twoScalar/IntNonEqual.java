@@ -131,9 +131,11 @@ public final class IntNonEqual
 
     if (format == OutputFormat.SIMPLIFY) {
 
-    String comparator = "NEQ";
+      String comparator = "NEQ";
 
-      return "(" + comparator + " " + var1name + " " + var2name + ")";
+      return "(" + comparator
+        + " " + var1().simplifyFixup(var1name)
+        + " " + var2().simplifyFixup(var2name) + ")";
     }
 
     return format_unimplemented(format);
