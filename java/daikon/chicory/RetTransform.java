@@ -2,6 +2,7 @@ package daikon.chicory;
 
 import static java.lang.System.out;
 import java.lang.instrument.*;
+import java.lang.reflect.Modifier;
 import java.security.*;
 import java.io.*;
 import java.util.*;
@@ -71,6 +72,7 @@ public class RetTransform implements ClassFileTransformer {
             Matcher mPpt = pattern.matcher(pptName);
             Matcher mClass = pattern.matcher(className);
             Matcher mMethod = pattern.matcher(methodName);
+            
             if (mPpt.find() || mClass.find() || mMethod.find())
             {
                 log("not instrumenting %s, it matches regex %s\n", pptName, regex);
@@ -171,9 +173,38 @@ public class RetTransform implements ClassFileTransformer {
       // Get the class information
       ClassGen cg = new ClassGen (c);
 
+      //TODO REMOVE
+      //cg.addMethod(createClinit(cg, fullClassName));
+
       // Convert reach non-void method to save its result in a local
       // before returning
-      save_ret_value (cg, fullClassName);
+      ClassInfo c_info = save_ret_value (cg, fullClassName, loader);
+      
+      //get constant static fields!
+      Field[] fields = cg.getFields();
+      for(Field field: fields)
+      {
+          if(field.isFinal() && field.isStatic() && (field.getType() instanceof BasicType))
+          {
+              ConstantValue value = field.getConstantValue();
+              String valString;
+              
+              if(value == null)
+                  {
+                  //System.out.println("WARNING FROM " + field.getName());
+                  //valString = "WARNING!!!";
+                  valString = null;
+                  }
+              else
+                  {
+                  valString = value.toString();
+                  //System.out.println("GOOD FROM " + field.getName() + " --- " + valString);
+                  }
+              
+              if(valString != null)
+                  c_info.staticMap.put(field.getName(), valString);
+          }
+      }
 
       JavaClass njc = cg.getJavaClass();
       if (debug)
@@ -190,14 +221,27 @@ public class RetTransform implements ClassFileTransformer {
   }
 
   /**
+ * @param cg
+ * @param fullClassName
+ * @return
+ */
+private Method createClinit(ClassGen cg, String fullClassName)
+{
+    MethodGen newMethGen = new MethodGen(0, Type.VOID, new Type[0], new String[0], "<clinit>",
+            fullClassName, new InstructionList(), cg.getConstantPool());
+    
+    return newMethGen.getMethod();
+}
+
+/**
    * Changes each return statement to first place the value being returned into
    * a local and then return. This allows us to work around the JDI deficiency
    * of not being able to query return values.
    * @param fullClassName must be packageName.className
    */
-  private void save_ret_value (ClassGen cg, String fullClassName) {
+  private ClassInfo save_ret_value (ClassGen cg, String fullClassName, ClassLoader loader) {
 
-    ClassInfo class_info = new ClassInfo (cg.getClassName());
+    ClassInfo class_info = new ClassInfo (cg.getClassName(), loader);
     List<MethodInfo> method_infos = new ArrayList<MethodInfo>();
 
     boolean shouldInclude = false;
@@ -362,11 +406,17 @@ public class RetTransform implements ClassFileTransformer {
     
     if(shouldInclude)
     {
-    synchronized (Runtime.new_classes) {
+    synchronized (Runtime.new_classes) 
+    {
+    synchronized (Runtime.all_classes)
+    {
       Runtime.new_classes.add (class_info);
       Runtime.all_classes.add (class_info);
     }
     }
+    }
+    
+    return class_info;
   }
 
   /**

@@ -157,7 +157,7 @@ public class DeclWriter extends DaikonWriter
             // System.out.printf ("method %s, syn=%b\n", member,
             //                     member.isSynthetic());
 
-            printMethodEntryInternal(member, methodEntryName(member), argnames);
+            printMethodEntryInternal(cinfo, member, methodEntryName(member), argnames);
 
             //print exit program point for EACH exit location in the method
             //(that was encountered during this execution of the program)
@@ -165,13 +165,13 @@ public class DeclWriter extends DaikonWriter
             for (Integer exitLoc : theExits)
             {
                 String name = methodExitName(member, exitLoc.intValue());
-                printMethodExitInternal(member, name, argnames);
+                printMethodExitInternal(cinfo, member, name, argnames);
             }
         }
 
-        printClassPpt (cinfo.clazz, cinfo.class_name + ":::CLASS");
+        printClassPpt (cinfo, cinfo.clazz, cinfo.class_name + ":::CLASS");
 
-        printObjectInternal(cinfo.clazz, classObjectName(cinfo.clazz));
+        printObjectInternal(cinfo, cinfo.clazz, classObjectName(cinfo.clazz));
     }
 
     /**
@@ -180,23 +180,23 @@ public class DeclWriter extends DaikonWriter
      * Ppt decls one-at-a-time.
      */
 
-    public void printMethodEntry(Member method, List argnames)
+    public void printMethodEntry(ClassInfo cinfo, Member method, List argnames)
     {
         String name = methodEntryName(method);
         if (emittedPpts.contains(name))
             return;
         emittedPpts.add(name);
         if (!Modifier.isStatic(method.getModifiers()))
-            printObject(method.getDeclaringClass());
-        printMethodEntryInternal(method, name, argnames);
+            printObject(cinfo, method.getDeclaringClass());
+        printMethodEntryInternal(cinfo, method, name, argnames);
     }
 
-    private void printMethodEntryInternal(Member method, String name, List argnames)
+    private void printMethodEntryInternal(ClassInfo cinfo, Member method, String name, List argnames)
     {
         //don't print class vars at method entries for constructors
         outFile.println(declareHeader);
         outFile.println(name);
-        printMethod(method, !(method instanceof Constructor), argnames);
+        printMethod(cinfo, method, !(method instanceof Constructor), argnames);
         outFile.println();
     }
 
@@ -205,16 +205,16 @@ public class DeclWriter extends DaikonWriter
      * has not already been emitted.  This can be called externally to print
      * Ppt decls one-at-a-time.
      */
-    public void printMethodExit(Member method, int exitLoc, List argnames)
+    public void printMethodExit(ClassInfo cinfo, Member method, int exitLoc, List argnames)
     {
         String name = methodExitName(method, exitLoc);
         if (emittedPpts.contains(name))
             return;
         emittedPpts.add(name);
-        printMethodExitInternal(method, name, argnames);
+        printMethodExitInternal(cinfo, method, name, argnames);
     }
 
-    private void printMethodExitInternal(Member method, String name, List argnames)
+    private void printMethodExitInternal(ClassInfo cinfo, Member method, String name, List argnames)
     {
         outFile.println(declareHeader);
         outFile.println(name);
@@ -246,27 +246,27 @@ public class DeclWriter extends DaikonWriter
         }
 
         // Print class variables
-        printClassVars( Modifier.isStatic(method.getModifiers()),
+        printClassVars( cinfo, Modifier.isStatic(method.getModifiers()),
                         method.getDeclaringClass(), "", daikonDepth, false);
 
         outFile.println();
     }
 
     //print the Object Ppt decl.
-    private void printObject(Class type)
+    private void printObject(ClassInfo cinfo, Class type)
     {
         String name = classObjectName(type);
         if (emittedPpts.contains(name))
             return;
         emittedPpts.add(name);
-        printObjectInternal(type, name);
+        printObjectInternal(cinfo, type, name);
     }
 
-    private void printObjectInternal(Class type, String name)
+    private void printObjectInternal(ClassInfo cinfo, Class type, String name)
     {
         outFile.println(declareHeader);
         outFile.println(name);
-        printClassVars(false, type, "", daikonDepth, false);
+        printClassVars(cinfo, false, type, "", daikonDepth, false);
         outFile.println();
     }
 
@@ -274,7 +274,7 @@ public class DeclWriter extends DaikonWriter
      * Prints the class program point -- this contains only
      * the static variables
      */
-    private void printClassPpt (Class type, String name)
+    private void printClassPpt (ClassInfo cinfo, Class type, String name)
     {
         Field[] fields = type.getDeclaredFields();
 
@@ -319,11 +319,11 @@ public class DeclWriter extends DaikonWriter
     //prints the decls info for a method
     //called by printMethodEntry (printMethodExit does this directly so it
     // can place the return after the arguments (to match dfej)
-    private void printMethod(Member method, boolean shouldPrintClass, List argnames)
+    private void printMethod(ClassInfo cinfo, Member method, boolean shouldPrintClass, List argnames)
     {
         printLocalVars(method, argnames, "", daikonDepth);
         if (shouldPrintClass)
-            printClassVars(Modifier.isStatic(method.getModifiers()), method.getDeclaringClass(), "", daikonDepth, false);
+            printClassVars(cinfo, Modifier.isStatic(method.getModifiers()), method.getDeclaringClass(), "", daikonDepth, false);
     }
 
     //print local variables (the arguments) of a method
@@ -341,7 +341,7 @@ public class DeclWriter extends DaikonWriter
     }
 
     //print class variables for the given type
-    private void printClassVars(boolean dontPrintInst, Class type, String offset, int depth, boolean inArray)
+    private void printClassVars(ClassInfo cinfo, boolean dontPrintInst, Class type, String offset, int depth, boolean inArray)
     {
         //must be first level of recursion to print "this" field
         if (!dontPrintInst && offset.equals(""))
@@ -451,7 +451,8 @@ public class DeclWriter extends DaikonWriter
                 if (!shouldExcludeClass(arrayType.getName()))
                 {
                     checkForString(arrayType, name + "[]", offset);
-                    printClassVars(false, arrayType, offset + name + "[].", depth - 1, true);
+                    //TODO should be null?
+                    printClassVars(null, false, arrayType, offset + name + "[].", depth - 1, true);
                 }
                 else
                 {
@@ -472,7 +473,8 @@ public class DeclWriter extends DaikonWriter
             //if (classSet.contains(type))
             //if(!shouldExcludeClass(type.getName()))
             if (shouldEnterClass (type))
-                printClassVars(false, type, offset + name + ".", depth - 1,
+                //TODO should be null?
+                printClassVars(null, false, type, offset + name + ".", depth - 1,
                                inArray);
         }
     }
@@ -591,26 +593,45 @@ public class DeclWriter extends DaikonWriter
         //                    type.getName(), type_name);
         outFile.println (type_name + arr_str);
         outFile.print(getRepName(type, inArray) + arr_str);
+        
         if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)
             && type.isPrimitive() && !inArray)
         {
+            ClassInfo cinfo = Runtime.getClassInfoFromClass(field.getDeclaringClass());
+            String value = cinfo.staticMap.get(name);
+            
+            if(value == null)
+            {
+                //don't print anything
+                //because this field wasn't declared with an actual "hardcoded" constant
+                
+                //System.out.println("WARNING: Static final primitive field " + name + ": could not determine value");
+            }
+            else
+            {
+                outFile.println(" = " + value);
+            }
+            
+            /*
             try
             {
                 // Note, getting the value of a static constant triggers
                 // class initialization!!
-                
                 if(!field.isAccessible())
                     field.setAccessible(true);
-                
                 //TODO is there a work-around for forced initialization?
+                //only use const value lookup in decls
+                //in dtrace: check if initialized
+                //(put code in all <clinit>
                 Object val = field.get(null);
                 outFile.println(" = " + val.toString());
+
             }
             catch (IllegalAccessException e)
             {
                 throw new Error ("field " + field + ": " + e);
                 // outFile.println();
-            }
+            }*/
         }
         else
             outFile.println();

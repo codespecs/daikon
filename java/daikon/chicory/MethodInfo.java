@@ -78,7 +78,7 @@ public class MethodInfo {
           //c = Class.forName (aname);
           //change class loading
           //TODO referring class?
-          c = Class.forName (aname, false, this.getClass().getClassLoader());
+          c = Class.forName (aname, false, this.class_info.clazz.getClassLoader());
         }
         
         arg_types[ii] = c;

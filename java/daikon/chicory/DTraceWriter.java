@@ -539,7 +539,11 @@ public class DTraceWriter extends DaikonWriter
             //static const fields:
             //don't need to print value in dtrace file (already put in decls
             // file)
-            if (staticConstField(classField))
+            //TODO: print static const fields???
+            ClassInfo cinfo = Runtime.getClassInfoFromClass(classField.getDeclaringClass());
+            //if (staticConstField(classField))
+              //continue;
+            if(cinfo.staticMap.containsKey(classField.getName()))
                 continue;
 
             Class type = classField.getType();
@@ -573,6 +577,7 @@ public class DTraceWriter extends DaikonWriter
             classField.setAccessible(true);
 
         Class fieldType = classField.getType();
+        
         if (fieldType.equals(int.class))
         {
             try

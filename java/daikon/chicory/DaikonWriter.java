@@ -438,12 +438,15 @@ public class DaikonWriter
             return (true);
 
         // If the field is in any instrumnted class it is always visible
+        synchronized(Runtime.all_classes)
+        {
         for (ClassInfo ci : Runtime.all_classes)
         {
             // System.out.printf ("comparing %s vs %s\n", ci.class_name,
             //                    fclass.getName());
             if (ci.class_name.equals (fclass.getName()))
                 return (true);
+        }
         }
 
         // Otherwise we consider the variable not to be visible, even

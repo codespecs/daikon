@@ -20,10 +20,19 @@ public class ClassInfo {
 
   /** list of methods in the class **/
   public List<MethodInfo> method_infos;
+  
+  /** this class's classloader**/
+  private ClassLoader loader;
+  
+  /** Mapping from field name to string representation of its value**/
+  //only for static final primitives
+  //which are declared by a CONSTANT VALUE in the code
+  public Map <String, String> staticMap = new HashMap<String,String>();
 
   /** Create ClassInfo with specified name **/
-  public ClassInfo (String class_name) {
+  public ClassInfo (String class_name, ClassLoader theLoader) {
     this.class_name = class_name;
+    loader = theLoader;
   }
 
   /** Set the list of methods **/
@@ -47,7 +56,7 @@ public class ClassInfo {
       //change class loading
         
         //TODO referring class?
-      clazz = Class.forName (class_name, false, this.getClass().getClassLoader());
+      clazz = Class.forName (class_name, false, loader);
       
     } catch (Exception e) {
       throw new Error (e);

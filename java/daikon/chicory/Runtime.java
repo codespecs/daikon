@@ -1,5 +1,6 @@
 package daikon.chicory;
 
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.zip.GZIPOutputStream;
 import java.io.*;
 import java.net.*;
@@ -23,10 +24,10 @@ public class Runtime
      * each enter/exit and the decl information for any new classes are
      * printed out and the class is then removed from the list
      */
-    public static List<ClassInfo> new_classes = new ArrayList<ClassInfo>();
+    public static List<ClassInfo> new_classes = new CopyOnWriteArrayList<ClassInfo>(); // new ArrayList<ClassInfo>();
 
     /** List of all instrumented classes **/
-    public static List<ClassInfo> all_classes = new ArrayList<ClassInfo>();
+    public static List<ClassInfo> all_classes = new CopyOnWriteArrayList<ClassInfo>();// new ArrayList<ClassInfo>();
 
     /** flag that indicates when the first class has been processed**/
     public static boolean first_class = true;
@@ -670,6 +671,27 @@ private static StreamRedirectThread out_thread;
 
         System.out.println("Finished endDaikon");
 
+    }
+
+    /**
+     * @param declaringClass
+     * @return
+     */
+    public static ClassInfo getClassInfoFromClass(Class type)
+    {
+        synchronized(all_classes)
+        {
+        for(ClassInfo cinfo : all_classes)
+        {
+            if(cinfo.clazz == null)
+                cinfo.get_reflection();
+            
+            if(cinfo.clazz.equals(type))
+                return cinfo;
+        }
+        }
+        
+        throw new RuntimeException("Unable to find class " + type.getName() + " in Runtime's class list");
     }
 
 
