@@ -1715,6 +1715,26 @@ from the @file{parent/foo} directory, the instrumented version of
 is not consistent with the package structure.)
 @end quotation
 
+@item -noajax
+Do not fill in the variable comparability information in the
+@file{.decls} file.  By default, the Ajax module
+"ComparablePairsDescFileReader" does this rewriting.
+
+@item -ajaxap=@var{apdir}
+This is the directory in the which the Ajax comparability module looks
+for @file{.class} files for the current application.  (It is a classpath
+entry, so the @file{.class} files might appear in a subdirectory named
+for the appropriate package.  If this option is not supplied, the
+current directory is used.  This will fail for code that (for example)
+calls libraries which do not appear under the current directory.
+
+@item -ajax_runnables=@var{classes}
+This is a whitespace-separated list of Java classes, in dot-delimited
+form (e.g., "foo.bar.Baz"), that contain @samp{public static void
+main(String[])} methods.  If omitted, all such methods in the
+instrumented application are used instead.  In order to run, Ajax
+requires the name of at least one runnable class.
+
 @end table
 
 When conflicting options are specified (for instance, both
