@@ -706,7 +706,7 @@ public final class Daikon {
             debugTrace.debug ("Used memory: " +
                               (java.lang.Runtime.getRuntime().totalMemory()
                                - java.lang.Runtime.getRuntime().freeMemory()));
-
+            debugTrace.debug ("Active slices: " + FileIO.data_num_slices);
 
             // We sleep shorter so we can get more information.
             sleep(500);
