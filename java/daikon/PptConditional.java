@@ -29,7 +29,9 @@ public final class PptConditional
   // This does not install the variable values.  The reason is that it's
   // more efficient to do that for two PptConditional objects at once.
 
-  public PptConditional(PptTopLevel parent, Splitter splitter, boolean splitter_inverse) {
+  public PptConditional(PptTopLevel parent, Splitter splitter,
+                       boolean splitter_inverse) {
+
     super(ctor_name_helper(parent, splitter, splitter_inverse),
           ctor_vis_helper(parent, splitter, splitter_inverse));
     // Assert.assertTrue(splitter.instantiated() == false);
@@ -38,8 +40,8 @@ public final class PptConditional
     this.splitter_inverse = splitter_inverse;
     // Assert.assertTrue(splitter.instantiated() == false);
     // Assert.assertTrue(this.splitter.instantiated() == true);
-    this.invflow_ppts = new PptTopLevel[0]; // XXX needs to be fixed, probably
-    this.invflow_transforms = new int[0][];
+    // jhp this.invflow_ppts = new PptTopLevel[0];
+    // jhp this.invflow_transforms = new int[0][];
   }
 
   private static String ctor_name_helper(PptTopLevel parent,
@@ -59,7 +61,7 @@ public final class PptConditional
                                            boolean splitter_inverse)
   {
     // return VarInfo.arrayclone_simple(parent.trace_and_orig_and_const_vars());
-    return VarInfo.arrayclone_simple(parent.var_infos);
+    return (VarInfo.arrayclone_simple(parent.var_infos));
   }
 
   // This is tested after constructing a PptConditional but before
@@ -90,6 +92,8 @@ public final class PptConditional
     } catch (Exception e) {
       // If an exception is thrown, don't put the data on either side
       // of the split.
+      System.out.println ("Exception thrown in add for " + name());
+      System.out.println ("Vars = " + Debug.related_vars (this, vt));
     }
     return emptyList;
   }
