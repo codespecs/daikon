@@ -385,7 +385,7 @@ findbugs: .findbugs-output
 
 .findbugs-output: ../daikon.jar
 	rm -f findbugs-output
-	~mernst/tmp/findbugs-0.7.4/bin/findbugs -emacs -textui -exclude .findbugs-exclude.xml -maxHeap 750 ../daikon.jar | tee .findbugs-output
+	~mernst/tmp/findbugs/bin/findbugs -emacs -textui -exclude .findbugs-exclude.xml -maxHeap 750 ../daikon.jar | tee .findbugs-output
 
 ../daikon.jar: ${JAVA_FILES}
 	cd .. && $(MAKE) daikon.jar
