@@ -19,6 +19,16 @@ public class PptSliceEquality
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20021231L;
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface.
+
+  /**
+   * Create one set for each variable.  This has the effect of turning
+   * the equality optimization off, without actually removing the sets
+   * themselves (which are presumed to exist in many parts of the code)
+   */
+  public static boolean dkconfig_set_per_var = false;
+
   public static final Logger debug =
     Logger.getLogger ("daikon.PptSliceEquality");
 
@@ -91,6 +101,21 @@ public class PptSliceEquality
    * Actually instantiate the equality sets.
    **/
   void instantiate_invariants() {
+
+    // If each variable gets its own set, create those sets and return
+    if (dkconfig_set_per_var) {
+      // Debug.debugTrack.fine ("Vars for " + parent.name());
+      for (int i = 0; i < var_infos.length; i++) {
+        VarInfo vi = var_infos[i];
+        List vi_list = new ArrayList(1);
+        vi_list.add (vi);
+        Equality eq = new Equality (vi_list, this);
+        invs.add (eq);
+        // System.out.println ("  eq set = " + eq.shortString());
+      }
+      return;
+    }
+
     // Start with everything comparable being equal.
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("InstantiateInvariants: " + parent.name() + " vars:") ;
