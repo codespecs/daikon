@@ -1,0 +1,27 @@
+Version:      $Id$
+Owner:        adonovan <adonovan@lcs.mit.edu>, Mike <mernst>, Jeremy <mistere>
+Tool:         Daikon
+Summary:      VarInfoName does target class loading, this is evil.
+Severity:     Vexing
+Status:       New
+Reproducible: Yes
+Description:
+
+During the PrintInvariants phase, VarInfoName.resolve{Field,Type} does
+Class.forName on classes of the target program. This is evil because
+(1) it's not target-language neutral, so it won't work with C++ etc,
+and (b) it has unpleasant side effects, most notably that the target
+class' <clinit> is executed which causes daikon.Runtime.setDtrace to
+trample all over the trace file you just spent the last 52 minutes
+collecting.
+
+Why do we need it?
+
+
+
+
+--
+$Log$
+Revision 1.1  2002-03-14 23:47:24  adonovan
+new bug0024
+
