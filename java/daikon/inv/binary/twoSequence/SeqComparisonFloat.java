@@ -123,7 +123,7 @@ public class SeqComparisonFloat
       String lexically = (var1().aux.getFlag(VarInfoAux.HAS_ORDER)
                           ? " (lexically)"
                           : "");
-      return name1 + " " + comparator + " " + name1 + lexically;
+      return name1 + " " + comparator + " " + name2 + lexically;
     }
 
     if (format == OutputFormat.IOA) {
