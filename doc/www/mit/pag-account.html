@@ -64,9 +64,11 @@ yppasswd $NEWUSERNAME
 <em>echo "## If can't use yppasswd (e.g., no root password), edit /etc/passwd with:"</em>
 openssl passwd NEWPASSWD
 make -C /var/yp
+<!--
 <em>echo "## Add to 'daikon' or 'pag' mailing list"</em>
 emacs /etc/aliases
 newaliases
+-->
 cd ~$NEWUSERNAME
 echo "## Adjust directory permissions"
 chmod og+rx .
