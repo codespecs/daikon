@@ -131,6 +131,20 @@ tags: TAGS
 TAGS:
 	cd java && $(MAKE) tags
 
+valgrind-kvasir/Makefile.am:
+	cvs -d $(CVS_REPOSITORY) co valgrind-kvasir
+	touch $@
+
+valgrind-kvasir/dfec-v2/Makefile.am: valgrind-kvasir/Makefile.am
+	(cd valgrind-kvasir; \
+	 cvs -d $(CVS_REPOSITORY) co dfec-v2)
+	touch $@
+
+build-kvasir: valgrind-kvasir/dfec-v2/Makefile.am
+	(cd valgrind-kvasir; \
+	  ./configure --prefix=`pwd`/inst && \
+	  make && \
+	  make install)
 
 ###########################################################################
 ### Test the distribution
