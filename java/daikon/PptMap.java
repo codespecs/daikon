@@ -15,10 +15,17 @@ public class PptMap
   static final long serialVersionUID = 20020122L;
 
   private final Map nameToPpt = new HashMap();
+  private PptTopLevel global = null;
 
   public void add(PptTopLevel ppt)
   {
     nameToPpt.put(ppt.name(), ppt);
+
+    // Keep track of the global ppt.  There should only be one
+    if (ppt.ppt_name.isGlobalPoint()) {
+      Assert.assertTrue (global == null);
+      global = ppt;
+    }
   }
 
   public void addAll(List ppts)
@@ -37,6 +44,10 @@ public class PptMap
   public PptTopLevel get(PptName name)
   {
     return get(name.toString());
+  }
+
+  public PptTopLevel getGlobal() {
+    return global;
   }
 
   public boolean containsName(String name)

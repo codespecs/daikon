@@ -741,6 +741,7 @@ public final class Daikon {
       if (debugTrace.isLoggable(Level.FINE)) {
         debugTrace.fine ("Partial order initialized");
       }
+      PptTopLevel.init (all_ppts);
       all_ppts.trimToSize();
       System.out.print(" (read ");
       System.out.print(UtilMDE.nplural(decl_files.size(), "file"));
@@ -1035,9 +1036,8 @@ public final class Daikon {
         if (dkconfig_df_bottom_up) {
           // Skip points that are not leaves (anything not a numbered exit point)
           if (use_dataflow_hierarchy) {
-            if (!ppt.ppt_name.isExitPoint())
-              continue;
-            if (ppt.ppt_name.isCombinedExitPoint())
+            if (!ppt.ppt_name.isGlobalPoint() && !(ppt.ppt_name.isExitPoint()
+                && !ppt.ppt_name.isCombinedExitPoint()))
               continue;
           }
         }
