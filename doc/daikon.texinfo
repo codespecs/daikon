@@ -1267,6 +1267,12 @@ capital letter if the sample had any of the corresponding type of
 variable, and a lower-case letter if it had none.  These types affect
 statistical tests that determine whether a particular invariant (that
 was true over all the test runs) is printed.
+
+Only variables that appear in both the pre-state and the post-state
+(variables that are in scope at both procedure exit and entry) are
+eligible to be listed as modified or unmodified.  This is why the list
+of all variables is not the union of the modified and unmodified
+variables.
 @end table
 
 
@@ -1378,6 +1384,13 @@ found no invariants.  You can get a little bit more information by using
 the @option{--output_num_samples} flag to Daikon (@pxref{Command line
 options for Daikon}).
 
+Daikon does not display redundant invariants --- those that are implied
+by other invariants in the output --- because such results would merely
+clutter the output without adding any valuable information.  For
+instance, if Daikon reports ``x==y'', then it never also reports
+``x-1==y-1''.  You can print all invariants, even redundant ones by
+saving the invariants to a @file{.inv} file and then using the
+PrintInvariants or Diff programs to print the results.
 
 @menu
 * Program points::              
@@ -1437,6 +1450,14 @@ primitive type (@samp{B} for byte, @samp{C} for character, @samp{Z} for
 boolean, etc.); @samp{L}@var{classname}@samp{;} for object types; and a
 @samp{[} prefix for each level of array nesting.
 
+The Java instrumenter dfej selects names for program points that include
+an indication of the argument and return types for each method.  These
+signatures are presented in the JVML format:  one character for each
+primitive type (@samp{B} for byte, @samp{C} for character, @samp{Z} for
+boolean (so as not to clash with byte), etc.);
+@samp{L}@var{classname}@samp{;} for object types; and a @samp{[} prefix
+for each level of array nesting.
+
 
 @node    Variable names, Invariant syntax, Program points, Interpreting output
 @subsection Variable names
@@ -1474,6 +1495,12 @@ it is syntactic sugar for @code{a[a.length-1]}.
 @code{s.toString} is the string value of String @code{s}, namely a
 sequence of characters
 @end itemize
+
+Daikon does not produce output for local variables, only for variables
+visible from outside a procedure.  Thus, its output forms a
+specification (mostly) from the view of a client of a procedure.  A
+future version of Daikon will permit output of local variables as a user
+option.
 
 
 @node    Invariant syntax,  , Variable names, Interpreting output
@@ -2178,16 +2205,16 @@ is not consistent with the package structure.)
 @item -noajax
 @cindex AJAX_DIR environment variable
 @cindex environment variable AJAX_DIR
-Do not use the Ajax module "ComparablePairsDescFileReader" to update the
-variable comparability information in the @file{.decls} file.  The
-comparability information can indicate which variables should not be
-compared to one another.  (For instance, the number of people that a
-recipe serves should not be compared to the page number in a cookbook
-where the recipe is found, even if both are integers.)  Use of Ajax to
-update this information is entirely optional; its effect is to suppress
-invariants over incomparable variables.  These comparisons are almost
-always nonsensical, so the result is fewer irrelevant invariants in the
-Daikon output.
+Do not use Ajax.  Ordinarily, the Ajax module
+"ComparablePairsDescFileReader" updates the variable comparability
+information in the @file{.decls} file.  The comparability information
+can indicate which variables should not be compared to one another.
+(For instance, the number of people that a recipe serves should not be
+compared to the page number in a cookbook where the recipe is found,
+even if both are integers.)  Use of Ajax to update this information is
+entirely optional; its effect is to suppress invariants over incomparable
+variables.  These comparisons are usually  nonsensical, so using Ajax makes
+Daikon report fewer irrelevant invariants.
 
 Use of Ajax requires environment variable AJAX_DIR to be set to a
 directory containing various Ajax helper files (such as
@@ -2789,6 +2816,8 @@ Run Daikon with the @file{.spinfo} file as one of its arguments.  For example,
 java daikon.Daikon Foo.decls Foo.spinfo Foo.dtrace
 @end example
 @end enumerate
+
+@cindex createspinfo.pl program
 
 The @command{createspinfo.pl} program takes Java source code as input and
 creates a Splitter info file; for instance,
@@ -3644,6 +3673,8 @@ Daikon homepage, @url{http://sdg.lcs.mit.edu/daikon/}.
 @chapter Details
 
 The Daikon invariant detector is named after an Asian radish.
+``Daikon'' is pronunced like the combination of the two one-syllable
+English words "die-con".
 
 
 @menu
