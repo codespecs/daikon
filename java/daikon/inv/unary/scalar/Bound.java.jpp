@@ -85,7 +85,7 @@ The correct way to build the system is to run 'make'.
     #define LOWERBOUNDCORE UpperBoundCore
     #define ELTLOWERBOUND EltUpperBound
   #elif defined(UPPERFLOAT) || defined(ELTUPPERFLOAT)
-  #define LONGMAX Double.MIN_VALUE
+    #define LONGMAX Double.MIN_VALUE
     #define LONGMIN Double.MAX_VALUE
     #define LOWERBOUNDCORE UpperBoundCoreFloat
     #define ELTLOWERBOUND EltUpperBoundFloat
