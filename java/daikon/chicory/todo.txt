@@ -4,21 +4,19 @@ Todo list sorted in approximate order of importance.
     ppt point name rather than only on class names.  I think this means
     we should consider a class instrumented if any of its methods
     match.  I think this change should be largely back compatible with 
-    their current usage
+    their current usage.
 
   - Support DDTRACELIMIT and DDTRACELIMITTERMINATE environment variables
     just as dfej does.  This is partially in Runtime right now, but
     we need to call the proper methods when writing so it fully
     works.
 
-  - Implement --linked-lists
-
   - Add a Java 5.0 test to the test suite.   This will checkout not
     only Chicory, but annotate as well.  Carlos suggested the files
     in ~jhp/tmp/bst.tar
 
   - Add a simple test of chicory to the tests that are performed on
-    the build itself (before it is copied to the website)
+    the build itself (before it is copied to the website).
 
   - Switch over the regression tests to chicory, leaving dfej as a
     user option.  Checkin the changed goal files.
@@ -41,6 +39,23 @@ Todo list sorted in approximate order of importance.
     is not so much an optimization as a code cleanup so if we change,
     for instance, what variables are instrumented or their order we
     only have to change it in one place.
+
+  - Produce output not merely about the concrete representation of a data
+    structure, but also about its abstract state, by creating new synthetic
+    variables whose values come from the results of calling pure
+    (non-side-effecting) methods.  For example, if we have
+      class Point {
+        double x;
+        double y;
+        double rho() { return Math.sqrt(x*x+y*y); }
+        double theta() { return Math.atan2(x, y); }
+      }
+    then we could imagine reporting properties such as 
+    "myPoint.theta() < 6.28".  There are existing purity analyses that we
+    could use to determine which methods are safe to call; reusing such an
+    analysis could make this extension pretty easy.
+
+  - Implement --linked-lists option.
 
 
 Completed Tasks
