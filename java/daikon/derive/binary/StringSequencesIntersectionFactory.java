@@ -19,7 +19,7 @@ import java.util.*;
 public final class StringSequencesIntersectionFactory  extends BinaryDerivationFactory {
 
   public BinaryDerivation[] instantiate(VarInfo seq1, VarInfo seq2) {
-    if (! StringSequencesIntersection .dkconfig_enabled) {
+    if (! StringSequencesIntersection.dkconfig_enabled) {
       return null;
     }
 

@@ -42,7 +42,7 @@ public final class IntNonEqual
   private ValueTracker values_cache = new ValueTracker(8);
 
   protected Object clone() {
-    IntNonEqual  result = (IntNonEqual ) super.clone();
+    IntNonEqual  result = (IntNonEqual) super.clone();
     result.values_cache = (ValueTracker) values_cache.clone();
     return result;
   }
@@ -63,8 +63,8 @@ public final class IntNonEqual
       return null;
     }
 
-    if (debugIntNonEqual .isDebugEnabled() || ppt.debugged) {
-      debugIntNonEqual .debug("IntNonEqual.instantiate(" + ppt.name + ")"
+    if (debugIntNonEqual.isDebugEnabled() || ppt.debugged) {
+      debugIntNonEqual.debug("IntNonEqual.instantiate(" + ppt.name + ")"
 			  + ", seqvar1=" + seqvar1
 			  + ", seqvar2=" + seqvar2);
     }
@@ -103,8 +103,8 @@ public final class IntNonEqual
       VarInfo super1 = seqvar1.isDerivedSubSequenceOf();
       VarInfo super2 = seqvar2.isDerivedSubSequenceOf();
 
-      if (debugIntNonEqual .isDebugEnabled() || ppt.debugged) {
-        debugIntNonEqual .debug("IntNonEqual.instantiate: "
+      if (debugIntNonEqual.isDebugEnabled() || ppt.debugged) {
+        debugIntNonEqual.debug("IntNonEqual.instantiate: "
 			    + "min1=" + min1
 			    + ", max1=" + max1
 			    + ", min2=" + min2
@@ -167,7 +167,7 @@ public final class IntNonEqual
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof IntNonEqual )
-        return (IntNonEqual ) inv;
+        return (IntNonEqual) inv;
     }
     return null;
   }

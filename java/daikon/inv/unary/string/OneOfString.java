@@ -67,7 +67,7 @@ public final class OneOfString
   }
 
   protected Object clone() {
-    OneOfString  result = (OneOfString ) super.clone();
+    OneOfString  result = (OneOfString) super.clone();
     result.elts = (String []) elts.clone();
 
     return result;
@@ -388,7 +388,7 @@ public final class OneOfString
 
   public boolean isSameFormula(Invariant o)
   {
-    OneOfString  other = (OneOfString ) o;
+    OneOfString  other = (OneOfString) o;
     if (num_elts != other.num_elts)
       return false;
 
@@ -405,7 +405,7 @@ public final class OneOfString
   public boolean isExclusiveFormula(Invariant o)
   {
     if (o instanceof OneOfString ) {
-      OneOfString  other = (OneOfString ) o;
+      OneOfString  other = (OneOfString) o;
 
       for (int i=0; i < num_elts; i++) {
         for (int j=0; j < other.num_elts; j++) {
@@ -436,7 +436,7 @@ public final class OneOfString
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof OneOfString )
-        return (OneOfString ) inv;
+        return (OneOfString) inv;
     }
     return null;
   }

@@ -140,7 +140,7 @@ public final class Member
 
     if (seqvar.derived instanceof SequenceStringSubsequence ) {
       // the sequence is B[0..J-1] or similar.  Get information about it.
-      SequenceStringSubsequence  seqsss = (SequenceStringSubsequence ) seqvar.derived;
+      SequenceStringSubsequence  seqsss = (SequenceStringSubsequence) seqvar.derived;
       // System.out.println("seqvar: " + seqvar.name);
       VarInfo seq_index = seqsss.sclvar();
       int seq_shift = seqsss.index_shift;
@@ -149,7 +149,7 @@ public final class Member
       if (sclvar.derived instanceof SequenceStringSubscript ) {
         // B[I] in B[0..J]
 
-        SequenceStringSubscript  sclsss = (SequenceStringSubscript ) sclvar.derived;
+        SequenceStringSubscript  sclsss = (SequenceStringSubscript) sclvar.derived;
         VarInfo scl_index = sclsss.sclvar(); // "I" in "B[I]"
         int scl_shift = sclsss.index_shift;
         // System.out.println("scl_shift = " + scl_shift + ", seq_shift = " + seq_shift);

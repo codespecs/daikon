@@ -67,8 +67,8 @@ public class EltLowerBound
   }
 
   protected Object clone() {
-    EltLowerBound  result = (EltLowerBound ) super.clone();
-    result.core = (LowerBoundCore ) core.clone();
+    EltLowerBound  result = (EltLowerBound) super.clone();
+    result.core = (LowerBoundCore) core.clone();
     result.core.wrapper = result;
     return result;
   }
@@ -158,7 +158,7 @@ public class EltLowerBound
 
   public boolean isSameFormula(Invariant other)
   {
-    return core.isSameFormula(((EltLowerBound ) other).core);
+    return core.isSameFormula(((EltLowerBound) other).core);
   }
 
   public boolean isObviousImplied() {
@@ -167,7 +167,7 @@ public class EltLowerBound
 	(core.min1  > dkconfig_maximal_interesting)) {
       return true;
     }
-    EltOneOf  oo = EltOneOf .find(ppt);
+    EltOneOf  oo = EltOneOf.find(ppt);
     if ((oo != null) && oo.enoughSamples()) {
       // We could also use core.min1  == oo. min_elt (), since the LowerBound
       // will never have a core.min1  that does not appear in the OneOf.
@@ -185,7 +185,7 @@ public class EltLowerBound
         continue;
       }
       if (inv instanceof EltLowerBound ) {
-        EltLowerBound  other = (EltLowerBound ) inv;
+        EltLowerBound  other = (EltLowerBound) inv;
         if (isSameFormula(other)
             && SubSequence.isObviousDerived(v, other.var())) {
           return true;
@@ -213,11 +213,10 @@ public class EltLowerBound
       VarInfo vi = pptt.var_infos[i];
 
       if (SubSequence.isObviousDerived(v, vi))
-
       {
         PptSlice1 other_slice = pptt.findSlice(vi);
         if (other_slice != null) {
-          EltLowerBound  eb = EltLowerBound .find(other_slice);
+          EltLowerBound  eb = EltLowerBound.find(other_slice);
           if ((eb != null)
               && eb.enoughSamples()
               && eb. core.min1  == core.min1 ) {
@@ -232,7 +231,7 @@ public class EltLowerBound
 
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof EltUpperBound ) {
-      if (core.min1  >  ((EltUpperBound ) other). core.max1 )
+      if (core.min1  >  ((EltUpperBound) other). core.max1 )
         return true;
     }
     if (other instanceof OneOfScalar) {
@@ -247,7 +246,7 @@ public class EltLowerBound
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof EltLowerBound )
-        return (EltLowerBound ) inv;
+        return (EltLowerBound) inv;
     }
     return null;
   }

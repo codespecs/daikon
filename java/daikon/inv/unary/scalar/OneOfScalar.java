@@ -73,7 +73,7 @@ public final class OneOfScalar
   }
 
   protected Object clone() {
-    OneOfScalar  result = (OneOfScalar ) super.clone();
+    OneOfScalar  result = (OneOfScalar) super.clone();
     result.elts = (long []) elts.clone();
 
     return result;
@@ -440,7 +440,7 @@ public final class OneOfScalar
 
   public boolean isSameFormula(Invariant o)
   {
-    OneOfScalar  other = (OneOfScalar ) o;
+    OneOfScalar  other = (OneOfScalar) o;
     if (num_elts != other.num_elts)
       return false;
 
@@ -486,7 +486,7 @@ public final class OneOfScalar
   public boolean isExclusiveFormula(Invariant o)
   {
     if (o instanceof OneOfScalar ) {
-      OneOfScalar  other = (OneOfScalar ) o;
+      OneOfScalar  other = (OneOfScalar) o;
 
       for (int i=0; i < num_elts; i++) {
         for (int j=0; j < other.num_elts; j++) {
@@ -532,7 +532,7 @@ public final class OneOfScalar
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof OneOfScalar )
-        return (OneOfScalar ) inv;
+        return (OneOfScalar) inv;
     }
     return null;
   }

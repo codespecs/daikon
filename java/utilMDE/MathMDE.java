@@ -259,15 +259,15 @@ public final class MathMDE {
   public static int [] modulus_int (Iterator itor) {
     if (!itor.hasNext())
       return null;
-    int  avalue = ((Integer )itor.next()). intValue ();
+    int  avalue = ((Integer)itor.next()). intValue ();
     if (!itor.hasNext())
       return null;
-    int  modulus = Math.abs(avalue - ((Integer )itor.next()). intValue ());
+    int  modulus = Math.abs(avalue - ((Integer)itor.next()). intValue ());
     if (modulus == 1)
       return null;
     int count = 2;
     while (itor.hasNext()) {
-      int  i = ((Integer )itor.next()). intValue ();
+      int  i = ((Integer)itor.next()). intValue ();
       if (i == avalue)
 	continue;
       modulus = MathMDE.gcd(modulus, Math.abs(avalue - i));
@@ -346,20 +346,20 @@ public final class MathMDE {
     int  first_nonstrict = 0;    // arbitrary initial value
     int  last_nonstrict = 0;     // arbitrary initial value
     if (nonstrict_ends) {
-      first_nonstrict = ((Integer )itor.next()). intValue ();
+      first_nonstrict = ((Integer)itor.next()). intValue ();
     }
 
-    int  prev = ((Integer )itor.next()). intValue ();
+    int  prev = ((Integer)itor.next()). intValue ();
     if (!itor.hasNext())
       return null;
-    int  next = ((Integer )itor.next()). intValue ();
+    int  next = ((Integer)itor.next()). intValue ();
     int  modulus = next-prev;
     if (modulus == 1)
       return null;
     int count = 2;
     while (itor.hasNext()) {
       prev = next;
-      next = ((Integer )itor.next()). intValue ();
+      next = ((Integer)itor.next()). intValue ();
       if (nonstrict_ends && (! itor.hasNext())) {
         last_nonstrict = next;
         break;
@@ -421,15 +421,15 @@ public final class MathMDE {
   public static long [] modulus_long (Iterator itor) {
     if (!itor.hasNext())
       return null;
-    long  avalue = ((Long )itor.next()). longValue ();
+    long  avalue = ((Long)itor.next()). longValue ();
     if (!itor.hasNext())
       return null;
-    long  modulus = Math.abs(avalue - ((Long )itor.next()). longValue ());
+    long  modulus = Math.abs(avalue - ((Long)itor.next()). longValue ());
     if (modulus == 1)
       return null;
     int count = 2;
     while (itor.hasNext()) {
-      long  i = ((Long )itor.next()). longValue ();
+      long  i = ((Long)itor.next()). longValue ();
       if (i == avalue)
 	continue;
       modulus = MathMDE.gcd(modulus, Math.abs(avalue - i));
@@ -508,20 +508,20 @@ public final class MathMDE {
     long  first_nonstrict = 0;    // arbitrary initial value
     long  last_nonstrict = 0;     // arbitrary initial value
     if (nonstrict_ends) {
-      first_nonstrict = ((Long )itor.next()). longValue ();
+      first_nonstrict = ((Long)itor.next()). longValue ();
     }
 
-    long  prev = ((Long )itor.next()). longValue ();
+    long  prev = ((Long)itor.next()). longValue ();
     if (!itor.hasNext())
       return null;
-    long  next = ((Long )itor.next()). longValue ();
+    long  next = ((Long)itor.next()). longValue ();
     long  modulus = next-prev;
     if (modulus == 1)
       return null;
     int count = 2;
     while (itor.hasNext()) {
       prev = next;
-      next = ((Long )itor.next()). longValue ();
+      next = ((Long)itor.next()). longValue ();
       if (nonstrict_ends && (! itor.hasNext())) {
         last_nonstrict = next;
         break;
@@ -617,7 +617,7 @@ public final class MathMDE {
       this.add_ends = add_ends;
       if (!nums_itor.hasNext())
 	throw new Error("No elements in nums_itor");
-      current_nonmissing = ((Integer )nums_itor.next()). intValue ();
+      current_nonmissing = ((Integer)nums_itor.next()). intValue ();
       if (add_ends) {
         current_missing = current_nonmissing - 1;
       } else {
@@ -653,7 +653,7 @@ public final class MathMDE {
           }
 	  // prev_nonmissing is for testing only
 	  int  prev_nonmissing = current_nonmissing;
-	  current_nonmissing = ((Integer )nums_itor.next()). intValue ();
+	  current_nonmissing = ((Integer)nums_itor.next()). intValue ();
 	  if (! (prev_nonmissing < current_nonmissing))
 	    throw new Error("Non-sorted Iterator supplied to MissingNumbersIteratorINT: prev_nonmissing = " + prev_nonmissing + ", current_nonmissing = " + current_nonmissing);
 	} else {
@@ -716,8 +716,8 @@ public final class MathMDE {
   private static boolean check_first_and_last_nonmodulus(int [] rm, UtilMDE.RemoveFirstAndLastIterator rfali) {
     int  r = rm[0];
     int  m = rm[1];
-    int  first = ((Integer )rfali.getFirst()). intValue ();
-    int  last = ((Integer )rfali.getLast()). intValue ();
+    int  first = ((Integer)rfali.getFirst()). intValue ();
+    int  last = ((Integer)rfali.getLast()). intValue ();
     return ((r != mod_positive(first, m))
             && (r != mod_positive(last, m)));
   }
@@ -860,7 +860,7 @@ public final class MathMDE {
       this.add_ends = add_ends;
       if (!nums_itor.hasNext())
 	throw new Error("No elements in nums_itor");
-      current_nonmissing = ((Long )nums_itor.next()). longValue ();
+      current_nonmissing = ((Long)nums_itor.next()). longValue ();
       if (add_ends) {
         current_missing = current_nonmissing - 1;
       } else {
@@ -896,7 +896,7 @@ public final class MathMDE {
           }
 	  // prev_nonmissing is for testing only
 	  long  prev_nonmissing = current_nonmissing;
-	  current_nonmissing = ((Long )nums_itor.next()). longValue ();
+	  current_nonmissing = ((Long)nums_itor.next()). longValue ();
 	  if (! (prev_nonmissing < current_nonmissing))
 	    throw new Error("Non-sorted Iterator supplied to MissingNumbersIteratorINT: prev_nonmissing = " + prev_nonmissing + ", current_nonmissing = " + current_nonmissing);
 	} else {
@@ -959,8 +959,8 @@ public final class MathMDE {
   private static boolean check_first_and_last_nonmodulus(long [] rm, UtilMDE.RemoveFirstAndLastIterator rfali) {
     long  r = rm[0];
     long  m = rm[1];
-    long  first = ((Long )rfali.getFirst()). longValue ();
-    long  last = ((Long )rfali.getLast()). longValue ();
+    long  first = ((Long)rfali.getFirst()). longValue ();
+    long  last = ((Long)rfali.getLast()). longValue ();
     return ((r != mod_positive(first, m))
             && (r != mod_positive(last, m)));
   }

@@ -68,7 +68,7 @@ public final class OneOfStringSequence
   }
 
   protected Object clone() {
-    OneOfStringSequence  result = (OneOfStringSequence ) super.clone();
+    OneOfStringSequence  result = (OneOfStringSequence) super.clone();
     result.elts = (String[] []) elts.clone();
 
     for (int i=0; i < num_elts; i++) {
@@ -328,7 +328,7 @@ public final class OneOfStringSequence
 
   public boolean isSameFormula(Invariant o)
   {
-    OneOfStringSequence  other = (OneOfStringSequence ) o;
+    OneOfStringSequence  other = (OneOfStringSequence) o;
     if (num_elts != other.num_elts)
       return false;
 
@@ -345,7 +345,7 @@ public final class OneOfStringSequence
   public boolean isExclusiveFormula(Invariant o)
   {
     if (o instanceof OneOfStringSequence ) {
-      OneOfStringSequence  other = (OneOfStringSequence ) o;
+      OneOfStringSequence  other = (OneOfStringSequence) o;
 
       for (int i=0; i < num_elts; i++) {
         for (int j=0; j < other.num_elts; j++) {
@@ -376,7 +376,7 @@ public final class OneOfStringSequence
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof OneOfStringSequence )
-        return (OneOfStringSequence ) inv;
+        return (OneOfStringSequence) inv;
     }
     return null;
   }

@@ -25,8 +25,8 @@ public final class SequenceStringSubscriptFactory  extends BinaryDerivationFacto
   public BinaryDerivation[] instantiate(VarInfo vi1, VarInfo vi2) {
 
     // check if the derivations are globally disabled
-    boolean enable_subscript = SequenceStringSubscript .dkconfig_enabled;
-    boolean enable_subsequence = SequenceStringSubsequence .dkconfig_enabled;
+    boolean enable_subscript = SequenceStringSubscript.dkconfig_enabled;
+    boolean enable_subsequence = SequenceStringSubsequence.dkconfig_enabled;
     if (!enable_subscript && !enable_subsequence) {
       return null;
     }

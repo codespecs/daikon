@@ -632,10 +632,12 @@ public final class INTEQUAL
   } // isObviousImplied
 
 #if defined(EQUAL)
+  /* [INCR]
   public boolean hasNonCanonicalVariable() {
     VarInfo[] vis = ppt.var_infos;
     return ! (vis[0].isCanonical() || vis[1].isCanonical());
   }
+  */ // ... [INCR]
 #endif
 
 }

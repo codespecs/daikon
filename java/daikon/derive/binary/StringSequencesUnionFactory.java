@@ -19,7 +19,7 @@ import java.util.*;
 public final class StringSequencesUnionFactory  extends BinaryDerivationFactory {
 
   public BinaryDerivation[] instantiate(VarInfo seq1, VarInfo seq2) {
-    if (! StringSequencesUnion .dkconfig_enabled) {
+    if (! StringSequencesUnion.dkconfig_enabled) {
       return null;
     }
 

@@ -88,7 +88,7 @@ public final class SequenceStringSubscript
 
   public  boolean isSameFormula(Derivation other) {
     return (other instanceof SequenceStringSubscript )
-      && (((SequenceStringSubscript ) other).index_shift == this.index_shift);
+      && (((SequenceStringSubscript) other).index_shift == this.index_shift);
   }
 
 }

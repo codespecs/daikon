@@ -42,7 +42,7 @@ public final class IntGreaterEqual
   private ValueTracker values_cache = new ValueTracker(8);
 
   protected Object clone() {
-    IntGreaterEqual  result = (IntGreaterEqual ) super.clone();
+    IntGreaterEqual  result = (IntGreaterEqual) super.clone();
     result.values_cache = (ValueTracker) values_cache.clone();
     return result;
   }
@@ -63,8 +63,8 @@ public final class IntGreaterEqual
       return null;
     }
 
-    if (debugIntGreaterEqual .isDebugEnabled() || ppt.debugged) {
-      debugIntGreaterEqual .debug("IntGreaterEqual.instantiate(" + ppt.name + ")"
+    if (debugIntGreaterEqual.isDebugEnabled() || ppt.debugged) {
+      debugIntGreaterEqual.debug("IntGreaterEqual.instantiate(" + ppt.name + ")"
 			  + ", seqvar1=" + seqvar1
 			  + ", seqvar2=" + seqvar2);
     }
@@ -103,8 +103,8 @@ public final class IntGreaterEqual
       VarInfo super1 = seqvar1.isDerivedSubSequenceOf();
       VarInfo super2 = seqvar2.isDerivedSubSequenceOf();
 
-      if (debugIntGreaterEqual .isDebugEnabled() || ppt.debugged) {
-        debugIntGreaterEqual .debug("IntGreaterEqual.instantiate: "
+      if (debugIntGreaterEqual.isDebugEnabled() || ppt.debugged) {
+        debugIntGreaterEqual.debug("IntGreaterEqual.instantiate: "
 			    + "min1=" + min1
 			    + ", max1=" + max1
 			    + ", min2=" + min2
@@ -169,7 +169,7 @@ public final class IntGreaterEqual
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof IntGreaterEqual )
-        return (IntGreaterEqual ) inv;
+        return (IntGreaterEqual) inv;
     }
     return null;
   }

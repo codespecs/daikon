@@ -21,8 +21,8 @@ import java.util.*;
 // *****
 
 // Also see NonEqual
-public final class IntEqual
-  extends TwoScalar implements Comparison
+public final class IntEqual 
+  extends TwoScalar implements Comparison 
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -51,8 +51,8 @@ public final class IntEqual
     VarInfo seqvar1 = var1.isDerivedSequenceMember();
     VarInfo seqvar2 = var2.isDerivedSequenceMember();
 
-    if (debugIntEqual .isDebugEnabled() || ppt.debugged) {
-      debugIntEqual .debug("IntEqual.instantiate(" + ppt.name + ")"
+    if (debugIntEqual.isDebugEnabled() || ppt.debugged) {
+      debugIntEqual.debug("IntEqual.instantiate(" + ppt.name + ")"
 			  + ", seqvar1=" + seqvar1
 			  + ", seqvar2=" + seqvar2);
     }
@@ -91,8 +91,8 @@ public final class IntEqual
       VarInfo super1 = seqvar1.isDerivedSubSequenceOf();
       VarInfo super2 = seqvar2.isDerivedSubSequenceOf();
 
-      if (debugIntEqual .isDebugEnabled() || ppt.debugged) {
-        debugIntEqual .debug("IntEqual.instantiate: "
+      if (debugIntEqual.isDebugEnabled() || ppt.debugged) {
+        debugIntEqual.debug("IntEqual.instantiate: "
 			    + "min1=" + min1
 			    + ", max1=" + max1
 			    + ", min2=" + min2
@@ -155,7 +155,7 @@ public final class IntEqual
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof IntEqual )
-        return (IntEqual ) inv;
+        return (IntEqual) inv;
     }
     return null;
   }
@@ -296,7 +296,7 @@ public final class IntEqual
     VarInfo[] vis = ppt.var_infos;
     return ! (vis[0].isCanonical() || vis[1].isCanonical());
   }
-  */
+  */ // ... [INCR]
 
 }
 

@@ -67,8 +67,8 @@ public class LowerBound
   }
 
   protected Object clone() {
-    LowerBound  result = (LowerBound ) super.clone();
-    result.core = (LowerBoundCore ) core.clone();
+    LowerBound  result = (LowerBound) super.clone();
+    result.core = (LowerBoundCore) core.clone();
     result.core.wrapper = result;
     return result;
   }
@@ -124,7 +124,7 @@ public class LowerBound
 
   public boolean isSameFormula(Invariant other)
   {
-    return core.isSameFormula(((LowerBound ) other).core);
+    return core.isSameFormula(((LowerBound) other).core);
   }
 
   public boolean isInteresting() {
@@ -137,7 +137,7 @@ public class LowerBound
 	(core.min1  > dkconfig_maximal_interesting)) {
       return true;
     }
-    OneOfScalar  oo = OneOfScalar .find(ppt);
+    OneOfScalar  oo = OneOfScalar.find(ppt);
     if ((oo != null) && oo.enoughSamples()) {
       // We could also use core.min1  == oo. min_elt (), since the LowerBound
       // will never have a core.min1  that does not appear in the OneOf.
@@ -170,11 +170,10 @@ public class LowerBound
       VarInfo vi = pptt.var_infos[i];
 
       if (Member.isObviousMember(v, vi))
-
       {
         PptSlice1 other_slice = pptt.findSlice(vi);
         if (other_slice != null) {
-          EltLowerBound  eb = EltLowerBound .find(other_slice);
+          EltLowerBound  eb = EltLowerBound.find(other_slice);
           if ((eb != null)
               && eb.enoughSamples()
               && eb. core.min1  == core.min1 ) {
@@ -189,7 +188,7 @@ public class LowerBound
 
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof UpperBound ) {
-      if (core.min1  >  ((UpperBound ) other). core.max1 )
+      if (core.min1  >  ((UpperBound) other). core.max1 )
         return true;
     }
     if (other instanceof OneOfScalar) {
@@ -204,7 +203,7 @@ public class LowerBound
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof LowerBound )
-        return (LowerBound ) inv;
+        return (LowerBound) inv;
     }
     return null;
   }

@@ -77,7 +77,7 @@ public final class EltOneOf
   }
 
   protected Object clone() {
-    EltOneOf  result = (EltOneOf ) super.clone();
+    EltOneOf  result = (EltOneOf) super.clone();
     result.elts = (long []) elts.clone();
 
     return result;
@@ -446,7 +446,7 @@ public final class EltOneOf
 
   public boolean isSameFormula(Invariant o)
   {
-    EltOneOf  other = (EltOneOf ) o;
+    EltOneOf  other = (EltOneOf) o;
     if (num_elts != other.num_elts)
       return false;
 
@@ -492,7 +492,7 @@ public final class EltOneOf
   public boolean isExclusiveFormula(Invariant o)
   {
     if (o instanceof EltOneOf ) {
-      EltOneOf  other = (EltOneOf ) o;
+      EltOneOf  other = (EltOneOf) o;
 
       for (int i=0; i < num_elts; i++) {
         for (int j=0; j < other.num_elts; j++) {
@@ -538,7 +538,7 @@ public final class EltOneOf
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof EltOneOf )
-        return (EltOneOf ) inv;
+        return (EltOneOf) inv;
     }
     return null;
   }

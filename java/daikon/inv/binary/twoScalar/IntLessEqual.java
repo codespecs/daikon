@@ -42,7 +42,7 @@ public final class IntLessEqual
   private ValueTracker values_cache = new ValueTracker(8);
 
   protected Object clone() {
-    IntLessEqual  result = (IntLessEqual ) super.clone();
+    IntLessEqual  result = (IntLessEqual) super.clone();
     result.values_cache = (ValueTracker) values_cache.clone();
     return result;
   }
@@ -63,8 +63,8 @@ public final class IntLessEqual
       return null;
     }
 
-    if (debugIntLessEqual .isDebugEnabled() || ppt.debugged) {
-      debugIntLessEqual .debug("IntLessEqual.instantiate(" + ppt.name + ")"
+    if (debugIntLessEqual.isDebugEnabled() || ppt.debugged) {
+      debugIntLessEqual.debug("IntLessEqual.instantiate(" + ppt.name + ")"
 			  + ", seqvar1=" + seqvar1
 			  + ", seqvar2=" + seqvar2);
     }
@@ -103,8 +103,8 @@ public final class IntLessEqual
       VarInfo super1 = seqvar1.isDerivedSubSequenceOf();
       VarInfo super2 = seqvar2.isDerivedSubSequenceOf();
 
-      if (debugIntLessEqual .isDebugEnabled() || ppt.debugged) {
-        debugIntLessEqual .debug("IntLessEqual.instantiate: "
+      if (debugIntLessEqual.isDebugEnabled() || ppt.debugged) {
+        debugIntLessEqual.debug("IntLessEqual.instantiate: "
 			    + "min1=" + min1
 			    + ", max1=" + max1
 			    + ", min2=" + min2
@@ -169,7 +169,7 @@ public final class IntLessEqual
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof IntLessEqual )
-        return (IntLessEqual ) inv;
+        return (IntLessEqual) inv;
     }
     return null;
   }

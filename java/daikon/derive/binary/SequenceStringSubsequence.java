@@ -130,8 +130,8 @@ public final class SequenceStringSubsequence
 
   public  boolean isSameFormula(Derivation other) {
     return (other instanceof SequenceStringSubsequence )
-      && (((SequenceStringSubsequence ) other).index_shift == this.index_shift)
-      && (((SequenceStringSubsequence ) other).from_start == this.from_start);
+      && (((SequenceStringSubsequence) other).index_shift == this.index_shift)
+      && (((SequenceStringSubsequence) other).from_start == this.from_start);
   }
 
 }

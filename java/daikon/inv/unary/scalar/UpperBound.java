@@ -67,8 +67,8 @@ public class UpperBound
   }
 
   protected Object clone() {
-    UpperBound  result = (UpperBound ) super.clone();
-    result.core = (UpperBoundCore ) core.clone();
+    UpperBound  result = (UpperBound) super.clone();
+    result.core = (UpperBoundCore) core.clone();
     result.core.wrapper = result;
     return result;
   }
@@ -124,7 +124,7 @@ public class UpperBound
 
   public boolean isSameFormula(Invariant other)
   {
-    return core.isSameFormula(((UpperBound ) other).core);
+    return core.isSameFormula(((UpperBound) other).core);
   }
 
   public boolean isInteresting() {
@@ -137,7 +137,7 @@ public class UpperBound
 	(core.max1  > dkconfig_maximal_interesting)) {
       return true;
     }
-    OneOfScalar  oo = OneOfScalar .find(ppt);
+    OneOfScalar  oo = OneOfScalar.find(ppt);
     if ((oo != null) && oo.enoughSamples()) {
       // We could also use core.max1  == oo. max_elt (), since the LowerBound
       // will never have a core.max1  that does not appear in the OneOf.
@@ -166,11 +166,10 @@ public class UpperBound
       VarInfo vi = pptt.var_infos[i];
 
       if (Member.isObviousMember(v, vi))
-
       {
         PptSlice1 other_slice = pptt.findSlice(vi);
         if (other_slice != null) {
-          EltUpperBound  eb = EltUpperBound .find(other_slice);
+          EltUpperBound  eb = EltUpperBound.find(other_slice);
           if ((eb != null)
               && eb.enoughSamples()
               && eb. core.max1  == core.max1 ) {
@@ -185,7 +184,7 @@ public class UpperBound
 
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof LowerBound ) {
-      if (core.max1  <  ((LowerBound ) other). core.min1 )
+      if (core.max1  <  ((LowerBound) other). core.min1 )
         return true;
     }
     if (other instanceof OneOfScalar) {
@@ -200,7 +199,7 @@ public class UpperBound
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof UpperBound )
-        return (UpperBound ) inv;
+        return (UpperBound) inv;
     }
     return null;
   }
