@@ -56,7 +56,7 @@ public final class Member extends SEQUENCESCALAR {
     VarInfo seqvar = ppt.var_infos[seq_first ? 0 : 1];
     VarInfo sclvar = ppt.var_infos[seq_first ? 1 : 0];
 
-    if (isEqualToObviousMember(ppt, sclvar, seqvar)) {
+    if (isEqualToObviousMember(sclvar, seqvar)) {
       Global.implied_noninstantiated_invariants += 1;
       if (debugMember) {
         System.out.println("Member not instantiated (obvious): "
@@ -73,14 +73,12 @@ public final class Member extends SEQUENCESCALAR {
   }
 
   public boolean isObviousImplied() {
-    VarInfo seqvar = ppt.var_infos[seq_first ? 0 : 1];
-    VarInfo sclvar = ppt.var_infos[seq_first ? 1 : 0];
-    return isEqualToObviousMember(ppt, sclvar, seqvar);
+    return isEqualToObviousMember(sclvar(), seqvar());
   }
 
   // Like isObviousMember, but also checks everything equal to the given
   // variables.
-  public static boolean isEqualToObviousMember(PptSlice ppt, VarInfo sclvar, VarInfo seqvar) {
+  public static boolean isEqualToObviousMember(VarInfo sclvar, VarInfo seqvar) {
     Assert.assert(sclvar.isCanonical());
     Assert.assert(seqvar.isCanonical());
     Vector scl_equalto = sclvar.equalTo();
@@ -92,14 +90,14 @@ public final class Member extends SEQUENCESCALAR {
       for (int seqidx=0; seqidx<seq_equalto.size(); seqidx++) {
         VarInfo this_sclvar = (VarInfo) scl_equalto.elementAt(sclidx);
         VarInfo this_seqvar = (VarInfo) seq_equalto.elementAt(seqidx);
-        if (isObviousMember(ppt, this_sclvar, this_seqvar))
+        if (isObviousMember(this_sclvar, this_seqvar))
           return true;
       }
     }
     return false;
   }
 
-  public static boolean isObviousMember(PptSlice ppt, VarInfo sclvar, VarInfo seqvar) {
+  public static boolean isObviousMember(VarInfo sclvar, VarInfo seqvar) {
 
     VarInfo sclvar_seq = sclvar.isDerivedSequenceMember();
     // System.out.println("Member.isObviousMember(" + sclvar.name + ", " + seqvar.name + "):");
@@ -125,8 +123,16 @@ public final class Member extends SEQUENCESCALAR {
     // We know the scalar was derived from some array, but not from the
     // sequence variable.  If also not from what the sequence variable was
     // derived from, we don't know anything about membership.
-    if (seqvar.isDerivedSubSequenceOf() != sclvar_seq)
+    // Check:
+    //  * whether comparing B[I] to B[0..J]
+    //  * whether comparing min(B[0..I]) to B[0..J]
+    VarInfo seqvar_super = seqvar.isDerivedSubSequenceOf();
+    if ((seqvar_super != sclvar_seq)
+        && (seqvar_super != sclseqsuper)) {
+      // System.out.println("Member.isObviousMember(" + sclvar.name + ", " + seqvar.name + "):"
+      //                    + " isDerivedSubSequenceOf() != " + sclvar_seq.name);
       return false;
+    }
 
 
     // If the scalar is a positional element of the sequence from which
@@ -136,134 +142,24 @@ public final class Member extends SEQUENCESCALAR {
     // are off.
 
 
-    // [Do I need to treat sclvar_seq.derived in {SequenceMin, SequenceMax}
-    // specially?]
-
-
-
-
-    // the sequence is B[0..J-1] or similar.  Get information about it
+    // the sequence is B[0..J-1] or similar.  Get information about it.
     SEQUENCESCALARSUBSEQUENCE seqsss = (SEQUENCESCALARSUBSEQUENCE) seqvar.derived;
+    System.out.println("seqvar: " + seqvar.name);
     VarInfo seq_index = seqsss.sclvar();
     int seq_shift = seqsss.index_shift;
     boolean seq_from_start = seqsss.from_start;
 
     if (sclvar.derived instanceof SEQUENCESCALARSUBSCRIPT) {
       // B[I] in B[0..J]
-      // I need to compare I to J.  This is a stop-gap that does only
-      // a bit of that.
+
       SEQUENCESCALARSUBSCRIPT sclsss = (SEQUENCESCALARSUBSCRIPT) sclvar.derived;
       VarInfo scl_index = sclsss.sclvar(); // "I" in "B[I]"
       int scl_shift = sclsss.index_shift;
       // System.out.println("scl_shift = " + scl_shift + ", seq_shift = " + seq_shift);
-      if (scl_index == seq_index) {
-        // same variable: B[I] in B[0..I] or B[I] in B[I..]
-        if (seq_from_start) {
-          // same variable: B[I] in B[0..I]
-          if (scl_shift <= seq_shift)
-            return true;
-        } else {
-          // same variable: B[I] in B[I..]
-          if (scl_shift >= seq_shift)
-            return true;
-        }
-      } else {
-        // different variables: B[I] in B[0..J] or B[I] in B[J..]
-        PptSlice indices_ppt = ppt.parent.getView(scl_index, seq_index);
-        if (indices_ppt != null) {
-          boolean scl_is_var1 = (scl_index == indices_ppt.var_infos[0]);
-          LinearBinary lb = LinearBinary.find(indices_ppt);
-          long index_scl_minus_seq = -2222;          // valid only if lb != null
-          if (lb != null) {
-            if (!lb.justified()) {
-              lb = null;
-            } else if (lb.core.a != 1) {
-              // Do not attempt to deal with anything but y=x+b.
-              lb = null;
-            } else {
-              // lb.b is var2()-var1().
-              index_scl_minus_seq = (scl_is_var1 ? -lb.core.b : lb.core.b);
-              index_scl_minus_seq += scl_shift - seq_shift;
-            }
-          }
-          // The LinearBinary gives more info than IntComparison would,
-          // so only compute the IntComparison if no LinearBinary.
-          IntComparison ic = (lb != null) ? null : IntComparison.find(indices_ppt);
-          boolean scl_can_be_lt = false;		// valid only if ic != null
-          boolean scl_can_be_eq = false;		// valid only if ic != null
-          boolean scl_can_be_gt = false;		// valid only if ic != null
-          if (ic != null) {
-            if (! ic.justified()) {
-              ic = null;
-            } else {
-              scl_can_be_eq = ic.core.can_be_eq;
-              if (scl_is_var1) {
-                scl_can_be_lt = ic.core.can_be_lt;
-                scl_can_be_gt = ic.core.can_be_gt;
-              } else {
-                scl_can_be_lt = ic.core.can_be_gt;
-                scl_can_be_gt = ic.core.can_be_lt;
-              }
-            }
-          }
-
-          if (seq_from_start) {
-            // different variables: B[I] in B[0..J]
-            if (lb != null) {
-              if (index_scl_minus_seq <= 0)
-                return true;
-            } else if (ic != null) {
-              // 4 cases:
-              // (a) B[I] in B[0..J]
-              // (b) B[I] in B[0..J-1]
-              // (c) B[I-1] in B[0..J]
-              // (d) B[I-1] in B[0..J-1]
-              // 4 possible comparisons:
-              // (e) I < J
-              // (f) I <= J
-              // (g) I >= J
-              // (h) I > J
-              // Combinations:  (filled in means true)
-              //   abcd
-              // e abcd
-              // f a cd
-              // g
-              // h
-              if ((scl_can_be_lt && ! scl_can_be_eq)
-                  || (scl_can_be_lt && scl_can_be_eq && (scl_shift <= seq_shift)))
-                return true;
-            }
-          } else {
-            // different variables: B[I] in B[J..]
-            if (lb != null) {
-              if (index_scl_minus_seq >= 0)
-                return true;
-            } else if (ic != null) {
-              // 4 cases:
-              // (a) B[I] in B[J..]
-              // (b) B[I] in B[J+1..]
-              // (c) B[I-1] in B[J..]
-              // (d) B[I-1] in B[J+1..]
-              // 4 possible comparisons:
-              // (e) I < J
-              // (f) I <= J
-              // (g) I >= J
-              // (h) I > J
-              // Combinations:  (filled in means true)
-              //   abcd
-              // e
-              // f
-              // g a
-              // h abc
-              if ((scl_can_be_gt && (! scl_can_be_eq)
-                   && (scl_shift + 1 >= seq_shift))
-                  || (scl_can_be_gt && scl_can_be_eq
-                      && (scl_shift == seq_shift)))
-                return true;
-            }
-          }
-        }
-      } // end of different-variables case
+      if (VarInfo.compare_vars(scl_index, scl_shift, seq_index, seq_shift,
+                               seq_from_start)) {
+        return true;
+      }
     } else if (sclvar.derived instanceof SequenceInitial) {
       // System.out.println("sclvar derived from SequenceInitial: " + sclvar.name);
 
@@ -275,6 +171,24 @@ public final class Member extends SEQUENCESCALAR {
         // It might not be true, because the array could be empty;
         // but if the array isn't empty, then it's obvious.
         return true;
+    } else if ((sclvar.derived instanceof SequenceMin)
+               || (sclvar.derived instanceof SequenceMax)) {
+      if (sclvar_seq.derived instanceof SequenceScalarSubsequence) {
+        // min(B[0..I]) in B[0..J]
+        // System.out.println("seqvar_super = " + seqvar_super + ", sclseqsuper = " + sclseqsuper);
+        // System.out.println("seqvar_super = " + seqvar_super.name + ", sclseqsuper = " + sclseqsuper.name);
+        Assert.assert(seqvar_super == sclseqsuper);
+        SequenceScalarSubsequence sclsss = (SequenceScalarSubsequence) sclvar_seq.derived;
+        boolean scl_from_start = sclsss.from_start;
+        if (scl_from_start == seq_from_start) {
+          VarInfo scl_index = sclsss.sclvar();
+          int scl_shift = sclsss.index_shift;
+          if (VarInfo.compare_vars(scl_index, scl_shift, seq_index, seq_shift,
+                                   seq_from_start)) {
+            return true;
+          }
+        }
+      }
     }
 
     /// I need to test this code!

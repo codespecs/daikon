@@ -65,8 +65,8 @@ public final class IntComparison extends TwoScalar implements Comparison {
                              + ", max2=" + max2
                              + ", super1=" + super1
                              + ", super2=" + super2
-                             + ", iom(var2, seqvar1)=" + Member.isObviousMember(ppt, var2, seqvar1)
-                             + ", iom(var1, seqvar2)=" + Member.isObviousMember(ppt, var1, seqvar2));
+                             + ", iom(var2, seqvar1)=" + Member.isObviousMember(var2, seqvar1)
+                             + ", iom(var1, seqvar2)=" + Member.isObviousMember(var1, seqvar2));
         }
         if (seqvar1 == seqvar2) {
           // Same sequence.  The invariant is obvious as soon as it's nonequal,
@@ -75,19 +75,30 @@ public final class IntComparison extends TwoScalar implements Comparison {
             obvious_lt = true;
           else if (max1 || min2)
             obvious_gt = true;
-        } else if ((min1 || max1) && Member.isObviousMember(ppt, var2, seqvar1)) {
+        } else if ((min1 || max1) && Member.isObviousMember(var2, seqvar1)) {
           if (min1) {
             obvious_le = true;
           } else if (max1) {
             obvious_ge = true;
           }
-        } else if ((min2 || max2) && Member.isObviousMember(ppt, var1, seqvar2)) {
+        } else if ((min2 || max2) && Member.isObviousMember(var1, seqvar2)) {
           if (min2) {
             obvious_ge = true;
           } else if (max2) {
             obvious_le = true;
           }
         }
+        // else if (((min1 && max2) || (max1 && min2))
+        //            && (super1 != null) && (super2 != null) && (super1 == super2)
+        //            && VarInfo.seqs_overlap(seqvar1, seqvar2)) {
+        //   // If the sequences overlap, then clearly the min of either is no
+        //   // greater than the max of the other.
+        //   if (min1 && max2) {
+        //     obvious_le = true;
+        //   } else if (max1 && min2) {
+        //     obvious_ge = true;
+        //   }
+        // }
       }
     }
 

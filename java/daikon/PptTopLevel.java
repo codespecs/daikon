@@ -1289,7 +1289,8 @@ public class PptTopLevel extends Ppt {
         } else if (inv.isExact()) {
           // The inv.format() is going to return null
           // because the invariant is not justified!
-          System.out.println("Exact but not justified: " + inv.format() + " " + inv.repr());
+          // This is debugging output; do not use in production code!
+          // System.out.println("Exact but not justified: " + inv.format());
         }
       }
       nonunary_view.clear_cache();
