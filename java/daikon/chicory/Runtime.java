@@ -54,7 +54,7 @@ public class Runtime
     // Dtrace file vars
     //
     /** Max number of records in dtrace file **/
-    public static long dtraceLimit = Integer.MAX_VALUE;
+    public static long dtraceLimit = Long.MAX_VALUE;
 
     /** Number of records printed to date **/
     public static long printedRecords = 0;
@@ -160,7 +160,7 @@ public class Runtime
             printf("exit ste[1] = %s\n", ste[1]);
         }
     }
-    
+
     private static long c  = 0;
 
     /**
@@ -179,13 +179,13 @@ public class Runtime
             process_new_classes();
 
         // System.out.println ("in enter");
-        
+
          /*Throwable stack = new Throwable ("enter");
          stack.fillInStackTrace();
          StackTraceElement[] ste_arr = stack.getStackTrace();
          StackTraceElement ste = ste_arr[1];
          System.out.printf ("%s.%s():::ENTER\n\n", ste.getClassName(), ste.getMethodName());*/
-         
+
         //TODO remove!!! (and the c variable TOO)!
         /*c++;
         if(c > 5000)
@@ -195,7 +195,7 @@ public class Runtime
                 System.exit(1);
             }
          */
-         
+
         MethodInfo mi = methods.get(mi_index);
         //System.out.println ("enter MethodInfo : " + mi.member);
         dtrace_writer.methodEntry(mi, nonce, obj, args);
@@ -277,10 +277,12 @@ public class Runtime
     public static void incrementRecords()
     {
         printedRecords++;
-        
-        if(printedRecords%1000 == 0)
-            System.out.printf("printed=%d, percent printed=%f\n", printedRecords, (float)(100.0*(float)printedRecords/(float)dtraceLimit));
-        
+
+        // This should only print a percentage if dtraceLimit is not its
+        // default vale.
+        // if(printedRecords%1000 == 0)
+        //     System.out.printf("printed=%d, percent printed=%f\n", printedRecords, (float)(100.0*(float)printedRecords/(float)dtraceLimit));
+
         if (printedRecords >= dtraceLimit)
         {
             noMoreOutput();
@@ -310,12 +312,12 @@ public class Runtime
             // dtrace = null;
             dtrace_closed = true;
 
-            
+
             if (dtraceLimitTerminate)
             {
-                System.out.println("Printed " + printedRecords + " records.  Exiting.");
-                //throw new TerminationMessage("Printed " + printedRecords + " records.  Exiting.");
-                System.exit(1);
+                System.out.println("Printed " + printedRecords + " records to dtrace file.  Exiting.");
+                // throw new TerminationMessage("Printed " + printedRecords + " records to dtrace file.  Exiting.");
+                // System.exit(1);
             }
             else
             {
@@ -444,8 +446,7 @@ private static StreamRedirectThread out_thread;
   public static class CharWrap implements PrimitiveWrapper{
     char val;
     public CharWrap (char val) { this.val = val; }
-    
-    //print characters as integers!
+    // Print characters as integers.
     public String toString() {return Integer.toString(val);}
   }
 
@@ -491,7 +492,7 @@ private static StreamRedirectThread out_thread;
         // 8192 is the buffer size in BufferedReader
         BufferedOutputStream bos = new BufferedOutputStream(os, 8192);
         dtrace = new PrintStream(bos);
-        
+
         daikonStdIn = os;
 
         if (supportsAddShutdownHook())
@@ -528,9 +529,9 @@ private static StreamRedirectThread out_thread;
             dtraceLimit = Long.getLong("DTRACELIMIT", Integer.MAX_VALUE).longValue();
             dtraceLimitTerminate = Boolean.getBoolean("DTRACELIMITTERMINATE");
             // 8192 is the buffer size in BufferedReader
-            
+
             //System.out.println("limit = " + dtraceLimit + " terminate " + dtraceLimitTerminate);
-            
+
             BufferedOutputStream bos = new BufferedOutputStream(os, 8192);
             dtrace = new PrintStream(bos);
         }
@@ -607,14 +608,14 @@ private static StreamRedirectThread out_thread;
                         //System.out.println("FLUSHING!!!!"); //TODO remove
                         dtrace.close();
                     }
-                    
-                   
+
+
                 }
-                
+
             }
         });
     }
-    
+
     static void setDaikonInfo(StreamRedirectThread err, StreamRedirectThread out, Process proc)
     {
         chicory_proc = proc;
@@ -623,11 +624,11 @@ private static StreamRedirectThread out_thread;
     }
 
     /**
-     * 
+     *
      */
     public static void endDaikon()
     {
-        
+
         try
         {
             int status = chicory_proc.waitFor();
@@ -638,7 +639,7 @@ private static StreamRedirectThread out_thread;
             // TODO REMOVE Auto-generated catch block
             e1.printStackTrace();
         }
-        
+
         try
         {
         err_thread.join();
@@ -647,9 +648,9 @@ private static StreamRedirectThread out_thread;
         catch(InterruptedException e)
         {
         }
-        
+
         System.out.println("Finished endDaikon");
-        
+
     }
 
 
