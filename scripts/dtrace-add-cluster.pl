@@ -97,7 +97,7 @@ foreach my $dtrace_file (@dtrace_files) {
  
   # need to run the DtraceNonceDoctor in order in order for
   # xmeans and possibly other clustering methods to work
-  system_or_die ("java daikon.tools.DtraceNonceDoctor $dtrace_file");
+  system_or_die ("java daikon.tools.DtraceNonceFixer $dtrace_file");
   if (-e ("$dtrace_file" . "_all_fixed")) {
     system_or_die ("mv $dtrace_file" . "_all_fixed $dtrace_file");
   }
