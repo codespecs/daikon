@@ -57,6 +57,7 @@ public class Session
   public static void main(String[] args)
     throws IOException
   {
+    daikon.Logger.setupLogs (daikon.Logger.INFO);
     Session s = new Session();
 
     CmdCheck cc;

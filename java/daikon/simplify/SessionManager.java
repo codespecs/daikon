@@ -143,6 +143,7 @@ public class SessionManager
   public static void main(String[] args)
     throws Exception
   {
+    daikon.Logger.setupLogs (daikon.Logger.INFO);
     SessionManager m = new SessionManager();
     CmdCheck cc;
 
