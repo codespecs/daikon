@@ -37,15 +37,18 @@ public class DiffTester extends TestCase {
   }
 
   public static VarInfo newIntVarInfo(String name) {
-    return new VarInfo(VarInfoName.parse(name),
-		       ProglangType.INT,
-		       ProglangType.INT,
-		       null); // null Comparability
+    VarInfo result = new VarInfo(VarInfoName.parse(name),
+                                 ProglangType.INT,
+                                 ProglangType.INT,
+                                 null); // null Comparability
+    // VarInfo.isCanonical() insists that equal_to be non-null.
+    result.equal_to = result;
+    return result;
   }
 
   public DiffTester(String name) {
     super(name);
-    
+
     diffSome = new Diff();
     diffAll = new Diff(true);
 
@@ -75,8 +78,8 @@ public class DiffTester extends TestCase {
     ppt1.combined_exit = ppt2;
     ppts4.add(ppt1);
     ppts4.add(ppt2);
-    
-    
+
+
     {
       invs1 = new PptMap();
       VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"),
@@ -167,7 +170,7 @@ public class DiffTester extends TestCase {
       imps1.add(ppt);
     }
 
-    
+
     // Permutation of the nullary invariants in invs1
     {
       imps2 = new PptMap();
