@@ -1,21 +1,22 @@
 package daikon.split.misc;
 
 import daikon.*;
+import daikon.split.*;
 
 // This splitter tests the condition "X>0".
 public final class ReturnTrueSplitter extends Splitter {
 
   VarInfo return_varinfo;
 
-  public SplitterExample() {
+  public ReturnTrueSplitter() {
   }
 
-  public SplitterExample(Ppt ppt) {
-    x_varinfo = ppt.findVar("return");
+  public ReturnTrueSplitter(Ppt ppt) {
+    return_varinfo = ppt.findVar("return");
   }
 
   public Splitter instantiate(Ppt ppt) {
-    return new SplitterExample(ppt);
+    return new ReturnTrueSplitter(ppt);
   }
 
   public boolean valid() {
@@ -28,7 +29,7 @@ public final class ReturnTrueSplitter extends Splitter {
   }
 
   public String condition() {
-    return "return > 0";
+    return "return == true";
   }
 
 }
