@@ -273,7 +273,7 @@ public final class Equality
         String[] form =
           VarInfoName.QuantHelper.format_esc(new VarInfoName[]
             { leader.name, other.name }, true); // elementwise
-        result = result + form[0].toString() + "( " + form[1].toString() + " == " + form[2].toString() + " )" + form[3].toString();
+        result = result + form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3];
       } else {
         result = result + leader.name.esc_name() + " == " + other.name.esc_name();
       }

@@ -144,7 +144,7 @@ class StatementReplacer extends DepthFirstVisitor {
    */
   private List /*String*/ getParameterNames(ReplaceStatement.MethodParameter[] params) {
     List args = new ArrayList();
-    for(int i = 0; i < params.length; i++) {
+    for (int i = 0; i < params.length; i++) {
       args.add(params[i].name);
     }
     return args;

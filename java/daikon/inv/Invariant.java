@@ -1072,7 +1072,7 @@ public abstract class Invariant
     VarInfo[] vars2 = inv2.ppt.var_infos;
 
 //      if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-//        PrintInvariants.debugFiltering.fine ("\t\t----------------" + lineSep);
+//        PrintInvariants.debugFiltering.fine ("\t\t----------------");
 //      }
 
     Assert.assertTrue(vars1.length == vars2.length); // due to inv type match already
@@ -1103,7 +1103,7 @@ public abstract class Invariant
         VarInfoName viname = name_extractor.getFromSecond(elt);
 
 //      if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-//       PrintInvariants.debugFiltering.fine ("\t\t" + viname.toString() + " <--> " + all_vars_names1.toString() + lineSep);
+//       PrintInvariants.debugFiltering.fine ("\t\t" + viname.toString() + " <--> " + all_vars_names1.toString());
 //      }
 
         intersection = all_vars_names1.contains(viname);
@@ -1120,8 +1120,8 @@ public abstract class Invariant
 
     // the type, formula, and vars all matched
 //      if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-//        PrintInvariants.debugFiltering.fine ("\tdecided " + this.format() + lineSep);
-//        PrintInvariants.debugFiltering.fine ("\t is the same as " + inv2.format() + lineSep);
+//        PrintInvariants.debugFiltering.fine ("\tdecided " + this.format());
+//        PrintInvariants.debugFiltering.fine ("\t is the same as " + inv2.format());
 //      }
     return true;
   }

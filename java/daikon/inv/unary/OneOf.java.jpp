@@ -565,7 +565,7 @@ public final class ONEOFSCALAR
           return "sizeof("+varname + ") = 0;";
         } else {
 	//One value case
-		return "$noprint(onevalue)";        
+		return "$noprint(onevalue)";
         }
       } else {
         String varname = REPAIR_NAME;
@@ -1080,7 +1080,7 @@ public final class ONEOFSCALAR
   #elif defined(ELTSTRING)
     String oneOfArray = "new String[] { ";
   #endif
-    for(int i = 0 ; i < num_elts ; i++) {
+    for (int i = 0 ; i < num_elts ; i++) {
       if (i != 0) { oneOfArray += ", "; }
       oneOfArray = oneOfArray + TOSTRING(elts[i]);
     }
@@ -1187,7 +1187,7 @@ public final class ONEOFSCALAR
     #elif defined(FLOATSEQUENCE)
       String seq = "new double[] { ";
     #endif
-      for(int j = 0 ; j < elts[i].length ; j++) {
+      for (int j = 0 ; j < elts[i].length ; j++) {
         if (j != 0) { seq += ", "; }
         seq = seq + TOSTRINGELEMENT(elts[i][j]);
       }
@@ -1393,7 +1393,8 @@ public final class ONEOFSCALAR
       return format_too_few_samples(OutputFormat.SIMPLIFY, null);
     } else {
       Assert.assertTrue(false);
-      result = null;
+      throw new Error("this can't happen");
+      // result = null;
     }
     if (result.trim().equals(""))
       result = "format_simplify() failed on a weird OneOf";

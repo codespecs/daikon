@@ -47,13 +47,13 @@ public final class CLASSNAME
   public static final Logger debug =
     Logger.getLogger("daikon.inv.binary.twoScalar." + CLASSSTRING);
 
-  //***old  
+  //***old
   // This invariant represents y == ax + b; the first argument is x, second is y
   // (This form rules out vertical lines.  We should instead state
   // this invariant like "ax + by = 1".  This would make swapping
   // easier and allow for vertical lines.)
   //***old
-  
+
   // This invariant represents ax + by + c = 0; the first argument is x, second is y
   public double a = 0, b = 0, c = 0;
 
@@ -106,13 +106,13 @@ public final class CLASSNAME
         c = 0;
       } else {
     //since the equation is already in standard form, just guarantee that the x coefficient is positive
-    
-    if(b < 0) {
-      a = b/-1.0;
-      b = a/-1.0;
-      c = c/-1.0;
-  }
-  
+
+        if (b < 0) {
+          a = b/-1.0;
+          b = a/-1.0;
+          c = c/-1.0;
+        }
+
       }
     }
 
@@ -372,7 +372,7 @@ public final class CLASSNAME
           values_seen--;
           return InvariantStatus.FALSIFIED;
         }
-       
+
         for (int i=0; i<MINPAIRS; i++) {
           // if the point is close enough in either x or y it is close enough
           // The double check is used because lines with different slopes may
@@ -414,21 +414,21 @@ public final class CLASSNAME
         }
 
         // calculate a new a, b, c possibly using a new end point
-       
+
         double[] res = new double[3];
         boolean ok = find_bi_linear(min_x, max_x, min_y, max_y, res);
         double new_a = 0;
         double new_b = 0;
         double new_c = 0;
-        if(ok) {
-        new_a = res[0];
-        new_b = res[1];
-        new_c = res[2];
+        if (ok) {
+          new_a = res[0];
+          new_b = res[1];
+          new_c = res[2];
         }
-        
-       // double new_a = (max_y - min_y) / (max_x - min_x);
-       // double new_b = (min_y*max_x - min_x*max_y) / (max_x-min_x);
-       // double new_c = 0;
+
+        // double new_a = (max_y - min_y) / (max_x - min_x);
+        // double new_b = (min_y*max_x - min_x*max_y) / (max_x-min_x);
+        // double new_c = 0;
 
         // if the a or b is a new min/max remember it.
         if (new_a < min_a) min_a = new_a;
@@ -449,7 +449,7 @@ public final class CLASSNAME
         // if the new a, b, c are 'equal' to min/max a, b, c and
         // this point fits, then this new equation is good enough both
         // for existing points and the new point.
-    
+
         if (Global.fuzzy.eq(new_a, min_a) && Global.fuzzy.eq(new_a, max_a) &&
             Global.fuzzy.eq(new_b, min_b) && Global.fuzzy.eq(new_b, max_b) &&
             Global.fuzzy.eq(new_c, min_c) && Global.fuzzy.eq(new_c, max_c) &&
@@ -463,8 +463,8 @@ public final class CLASSNAME
         } else {
           if (debug.isLoggable(Level.FINE)) {
             debug.fine ("Suppressing " + CLASSSTRING + " (" +
-                        wrapper.format() + ") at new value: " + 
-                        a + " * x + " + b + " * y + " + c + " != 0"); 
+                        wrapper.format() + ") at new value: " +
+                        a + " * x + " + b + " * y + " + c + " != 0");
 //                        + y + " != " + a + "*" + x + "+" + b);
           }
           return InvariantStatus.FALSIFIED;
@@ -542,53 +542,53 @@ public final class CLASSNAME
       return false;
     }
 
-// This was the original calculation where result[0] = a and result[1] = b and y = ax + b
-//    result[0] = (y1-y0)/(double) (x1-x0);
-//    result[1] = (y0*x1-x0*y1)/(double)(x1-x0);
-//
-// To get this in standard form:
-// ax - y + b = 0
-// ((y1-y0)/(x1-x0)) * a - y + (y0*x1-x0*y1)/(x1-x0) = 0
-// (y1-y0)*a - (x1-x0)y + (y0*x1-x0*y1) = 0
-//
+    // This was the original calculation where result[0] = a and result[1] = b and y = ax + b
+    //    result[0] = (y1-y0)/(double) (x1-x0);
+    //    result[1] = (y0*x1-x0*y1)/(double)(x1-x0);
+    //
+    // To get this in standard form:
+    // ax - y + b = 0
+    // ((y1-y0)/(x1-x0)) * a - y + (y0*x1-x0*y1)/(x1-x0) = 0
+    // (y1-y0)*a - (x1-x0)y + (y0*x1-x0*y1) = 0
+    //
 
-    
+
     double i_var = y1-y0;
     double j_var = x0-x1;
     double Stand_const = y0*x1-x0*y1;
-    
+
     // call gcd function to get the greatest common divisor of the output
-  // and put the coefficients in lowest terms
-double myGCD = MathMDE.gcd(MathMDE.gcd((int)i_var, (int)j_var) , (int)Stand_const);
+    // and put the coefficients in lowest terms
+    double myGCD = MathMDE.gcd(MathMDE.gcd((int)i_var, (int)j_var) , (int)Stand_const);
 
-double standard_i_var = 0;
-double standard_j_var = 0;
-double standard_Stand_const = 0;
-  
+    double standard_i_var = 0;
+    double standard_j_var = 0;
+    double standard_Stand_const = 0;
 
-// check to see if the "x" term is negative.  If it is,
-// divide all terms by -1.  Also reduce all terms by dividing by
-// the gcd.  If the gcd is 1, no harm done -- divide by 1.
-// ensures postive x coefficient
 
-if(i_var == 0) {
-  standard_i_var = 0;
-  standard_j_var = (j_var)/(myGCD);
-  standard_Stand_const = Stand_const/myGCD;
-}
-else if(i_var < 0) {
-    standard_i_var = -(i_var)/myGCD;
-    standard_j_var = -(j_var)/myGCD;
-    standard_Stand_const = -(Stand_const)/myGCD;
-} else if(i_var > 0) {
-  standard_i_var = i_var/myGCD;
-  standard_j_var = j_var/myGCD;
-  standard_Stand_const = Stand_const/myGCD;
-}
+    // check to see if the "x" term is negative.  If it is,
+    // divide all terms by -1.  Also reduce all terms by dividing by
+    // the gcd.  If the gcd is 1, no harm done -- divide by 1.
+    // ensures postive x coefficient
 
-result[0] = standard_i_var;
-result[1] = standard_j_var;
-result[2] = standard_Stand_const;
+    if(i_var == 0) {
+      standard_i_var = 0;
+      standard_j_var = (j_var)/(myGCD);
+      standard_Stand_const = Stand_const/myGCD;
+    }
+    else if(i_var < 0) {
+      standard_i_var = -(i_var)/myGCD;
+      standard_j_var = -(j_var)/myGCD;
+      standard_Stand_const = -(Stand_const)/myGCD;
+    } else if(i_var > 0) {
+      standard_i_var = i_var/myGCD;
+      standard_j_var = j_var/myGCD;
+      standard_Stand_const = Stand_const/myGCD;
+    }
+
+    result[0] = standard_i_var;
+    result[1] = standard_j_var;
+    result[2] = standard_Stand_const;
 
 
     return true;
@@ -639,7 +639,7 @@ result[2] = standard_Stand_const;
                                   VarInfo vi,
                                   boolean first) {
     int ncoeff = (int) coeff;
-                 
+
     if (ncoeff == 0)
       return "";
     String sign;
@@ -667,22 +667,22 @@ result[2] = standard_Stand_const;
   public String format_using(OutputFormat format,
                              VarInfoName x, VarInfo vix, VarInfoName y, VarInfo viy,
                              double u, double v, double w) {
-                             
+
     //recall that a, b, c in the linear binary equation means ax + by + c = 0;
     //since the output format of the invariant is slope intercept form
-    //the output is of the form by = -ax - c 
-    
+    //the output is of the form by = -ax - c
+
     int a = (int) u;
     int b = (int) v;
     int c = (int) w;
-    
+
     //make y coeff positive
-  if(b < 0) {
-  a = -a;
-  b = -b;
-  c = -c;
-  }     
-    
+    if (b < 0) {
+      a = -a;
+      b = -b;
+      c = -c;
+    }
+
     if (a == 0 && b == 0 && c == 0) {
 //      return wrapper.format_too_few_samples(format, "0 * " + y
 //                                            + " == 0 * " + x + " + 0");
@@ -705,7 +705,7 @@ result[2] = standard_Stand_const;
           + formatTerm(format, -c, null, null, false)
           + ")";
       } else {
-      //  return yname 
+      //  return yname
         return formatTerm(format, b, y, viy, true)
         + " == "
           + formatTerm(format, -a, x, vix, true)
@@ -732,58 +732,58 @@ result[2] = standard_Stand_const;
 
   public static String format_simplify(String str_x, String str_y,
                                        double a, double b, double c) {
-    
+
     //make y coeff positive and prep the coeffs for printing
     // originally: y == a x + b
-    // not anymore, now: ax + by + c = 0; so by = -ax - c 
+    // not anymore, now: ax + by + c = 0; so by = -ax - c
     // so either b or a & c are negated because one of them moved to the other side
-    
-  if(b < 0) {
-  b = -b;
-  } else  {
-  a = -a;
-  c = -c;
-  }            
-      int ia = (int) a;
-      int ib = (int) b;
-      int ic = (int) c;
-      
-      
-      String str_a, str_b, str_c;
-      if (ia == a && ib == b && ic == c) {
-        // integer
-        str_a = Invariant.simplify_format_long(ia);
-        str_b = Invariant.simplify_format_long(ib);
-        str_c = Invariant.simplify_format_long(ic);
-    //***** what does this do?
-    //  } else if (b == 0 && (int)(1.0 / a) == 1.0 / a) {
-        // make integer by swapping
-    //    ia = (int)(1.0 / a);
-    //    ib = 0;
-    //    str_a = Invariant.simplify_format_long(ia);
-    //    str_b = Invariant.simplify_format_long(ib);
-    //    String temp = str_x;
-    //    str_x = str_y;
-    //    str_y = temp;
-      } else {
-        // floating point; probably not very useful
-        str_a = Invariant.simplify_format_double(a);
-        str_b = Invariant.simplify_format_double(b);
-        str_c = Invariant.simplify_format_double(c);
-      }
 
-      // y == a x + b
-      // not anymore, now: ax + by + c = 0; so by = -ax - c [coefficients already negated above]
-//      String str_ax = (a == 1.0) ? str_x : "(* " + str_a + " " + str_x + ")";
-//      String str_axpb = (b == 0.0) ? str_ax :
-//        "(+ " + str_ax + " " + str_b + ")";
-//      return "(EQ " + str_y + " " + str_axpb + ")";
-        
-      String str_ax = (a == 1.0) ? str_x : "(* " + str_a + " " + str_x + ")";
-      String str_axpc = (c == 0.0) ? str_ax :
-        "(+ " + str_ax + " " + str_c + ")";
-      String str_by = (b == 1.0) ? str_y : "(* " + str_b + " " + str_y + ")";
-      return "(EQ " + str_by + " " + str_axpc + ")";
+    if (b < 0) {
+      b = -b;
+    } else  {
+      a = -a;
+      c = -c;
+    }
+    int ia = (int) a;
+    int ib = (int) b;
+    int ic = (int) c;
+
+
+    String str_a, str_b, str_c;
+    if (ia == a && ib == b && ic == c) {
+      // integer
+      str_a = Invariant.simplify_format_long(ia);
+      str_b = Invariant.simplify_format_long(ib);
+      str_c = Invariant.simplify_format_long(ic);
+      //***** what does this do?
+      //  } else if (b == 0 && (int)(1.0 / a) == 1.0 / a) {
+      // make integer by swapping
+      //    ia = (int)(1.0 / a);
+      //    ib = 0;
+      //    str_a = Invariant.simplify_format_long(ia);
+      //    str_b = Invariant.simplify_format_long(ib);
+      //    String temp = str_x;
+      //    str_x = str_y;
+      //    str_y = temp;
+    } else {
+      // floating point; probably not very useful
+      str_a = Invariant.simplify_format_double(a);
+      str_b = Invariant.simplify_format_double(b);
+      str_c = Invariant.simplify_format_double(c);
+    }
+
+    // y == a x + b
+    // not anymore, now: ax + by + c = 0; so by = -ax - c [coefficients already negated above]
+    //      String str_ax = (a == 1.0) ? str_x : "(* " + str_a + " " + str_x + ")";
+    //      String str_axpb = (b == 0.0) ? str_ax :
+    //        "(+ " + str_ax + " " + str_b + ")";
+    //      return "(EQ " + str_y + " " + str_axpb + ")";
+
+    String str_ax = (a == 1.0) ? str_x : "(* " + str_a + " " + str_x + ")";
+    String str_axpc = (c == 0.0) ? str_ax :
+      "(+ " + str_ax + " " + str_c + ")";
+    String str_by = (b == 1.0) ? str_y : "(* " + str_b + " " + str_y + ")";
+    return "(EQ " + str_by + " " + str_axpc + ")";
   }
 
   public String format_using(OutputFormat format,
@@ -837,7 +837,7 @@ result[2] = standard_Stand_const;
         result = (CLASSNAME) c.clone();
       else {
         if (!Global.fuzzy.eq (result.a, c.a)
-            || !Global.fuzzy.eq (result.b, c.b) 
+            || !Global.fuzzy.eq (result.b, c.b)
             || !Global.fuzzy.eq(result.c, c.c))
           return (null);
       }

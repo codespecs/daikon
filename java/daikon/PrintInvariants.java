@@ -942,7 +942,7 @@ public final class PrintInvariants {
       debugPrint.fine ("Printing: [" + inv.repr_prob() + "]");
     }
 
-    if(wrap_xml) {
+    if (wrap_xml) {
       out.print("<INVINFO>");
       out.print("<" + inv.ppt.parent.ppt_name.getPoint() + ">");
       out.print("<INV> ");
@@ -1010,8 +1010,8 @@ public final class PrintInvariants {
     }
     if (debugFiltering.isLoggable(Level.FINE)) {
       debugFiltering.fine ("----------------------------------------"
-        + "--------------------------------------------------------" + lineSep);
-      debugFiltering.fine (ppt.name() + lineSep + lineSep);
+        + "--------------------------------------------------------");
+      debugFiltering.fine (ppt.name());
     }
 
     // Count statistics (via Global) on variables (canonical, missing, etc.)
@@ -1095,7 +1095,7 @@ public final class PrintInvariants {
         Invariant current_inv = (Invariant)inv_iter.next();
         if (current_inv instanceof Equality) {
           debugFiltering.fine ("Found Equality that says "
-                                + current_inv.format() + lineSep);
+                                + current_inv.format());
         }
       }
     }

@@ -75,7 +75,7 @@ public class OrigModifier extends DepthFirstVisitor {
       }
     }
 
-    if(n.f1.size() == 1) {
+    if (n.f1.size() == 1) {
       // System.out.println("if1");
       if (n.f1.elementAt(0) instanceof PrimarySuffix) {
         // System.out.println("if2");

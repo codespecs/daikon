@@ -2071,7 +2071,7 @@ public abstract class VarInfoName
         }
       } else {
         Assert.assertTrue(i != null && j != null);
-        if(derived instanceof SequenceScalarArbitrarySubsequence) {
+        if (derived instanceof SequenceScalarArbitrarySubsequence) {
           SequenceScalarArbitrarySubsequence derived2 = (SequenceScalarArbitrarySubsequence)derived;
           return
             "daikon.Quant.slice("
@@ -2079,7 +2079,7 @@ public abstract class VarInfoName
             + ", " + i.name_using(format, derived2.startvar())
             + ", " + j.name_using(format, derived2.endvar())
             + ")";
-        } else if(derived instanceof SequenceFloatArbitrarySubsequence) {
+        } else if (derived instanceof SequenceFloatArbitrarySubsequence) {
           SequenceFloatArbitrarySubsequence derived2 = (SequenceFloatArbitrarySubsequence)derived;
           return
             "daikon.Quant.slice("

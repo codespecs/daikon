@@ -31,11 +31,11 @@ public class DerivedParameterFilter extends InvariantFilter {
 
   boolean shouldDiscardInvariant( Invariant inv ) {
     if (inv.ppt.parent.ppt_name.isExitPoint()) {
-      PrintInvariants.debugFiltering.fine ("\tconsidering DPF for vars " + inv.ppt.varNames() + lineSep);
+      PrintInvariants.debugFiltering.fine ("\tconsidering DPF for vars " + inv.ppt.varNames());
       for (int i = 0; i < inv.ppt.var_infos.length; i++) {
         VarInfo vi = inv.ppt.var_infos[i];
         // ppt has to be a PptSlice, not a PptTopLevel
-        PrintInvariants.debugFiltering.fine ("\tconsidering DPF for " + vi.name.name() + lineSep);
+        PrintInvariants.debugFiltering.fine ("\tconsidering DPF for " + vi.name.name());
         if (vi.isDerivedParamAndUninteresting()) {
           return true;
         }
