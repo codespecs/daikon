@@ -940,7 +940,7 @@ public final class ArraysMDE {
         sb.append(", ");
         if (quoted) {
           sb.append('\"');
-          sb.append(UtilMDE.quote((String)a[i]));
+          sb.append(UtilMDE.escapeNonJava((String)a[i]));
           sb.append('\"');
         } else {
           sb.append(a[i]);

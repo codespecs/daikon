@@ -1499,45 +1499,64 @@ public final class TestUtilMDE extends TestCase {
     potpourri.add("day"); potpourri.add(new Integer(2)); potpourri.add("day");
     assertTrue(UtilMDE.join(potpourri, " ").equals("day 2 day"));
 
-    // public static String quote(String orig)
-    // public static String quote(Character ch)
+    // public static String escapeNonJava(String orig)
+    // public static String escapeNonJava(Character ch)
 
-    assertTrue(UtilMDE.quote("foobar").equals("foobar"));
-    assertTrue(UtilMDE.quote("").equals(""));
-    assertTrue(UtilMDE.quote("\\").equals("\\\\"));
-    assertTrue(UtilMDE.quote("\\\n\r\"").equals("\\\\\\n\\r\\\""));
-    assertTrue(UtilMDE.quote("split\nlines").equals("split\\nlines"));
-    assertTrue(UtilMDE.quote("\\relax").equals("\\\\relax"));
-    assertTrue(UtilMDE.quote("\"hello\"").equals("\\\"hello\\\""));
-    assertTrue(UtilMDE.quote("\"hello\" \"world\"").equals("\\\"hello\\\" \\\"world\\\""));
+    assertTrue(UtilMDE.escapeNonJava("foobar").equals("foobar"));
+    assertTrue(UtilMDE.escapeNonJava("").equals(""));
+    assertTrue(UtilMDE.escapeNonJava("\\").equals("\\\\"));
+    assertTrue(UtilMDE.escapeNonJava("\\\n\r\"").equals("\\\\\\n\\r\\\""));
+    assertTrue(UtilMDE.escapeNonJava("split\nlines").equals("split\\nlines"));
+    assertTrue(UtilMDE.escapeNonJava("\\relax").equals("\\\\relax"));
+    assertTrue(UtilMDE.escapeNonJava("\"hello\"").equals("\\\"hello\\\""));
+    assertTrue(UtilMDE.escapeNonJava("\"hello\" \"world\"")
+               .equals("\\\"hello\\\" \\\"world\\\""));
 
-    // public static String quoteMore(String orig)
-    // private static String quoteMore(char c)
+    // public static String escapeNonASCII(String orig)
 
-    // public static String unquote(String orig)
+    assertTrue(UtilMDE.escapeNonASCII("foobar").equals("foobar"));
+    assertTrue(UtilMDE.escapeNonASCII("").equals(""));
+    assertTrue(UtilMDE.escapeNonASCII("\\").equals("\\\\"));
+    assertTrue(UtilMDE.escapeNonASCII("\\\n\r\"").equals("\\\\\\n\\r\\\""));
+    assertTrue(UtilMDE.escapeNonASCII("split\nlines").equals("split\\nlines"));
+    assertTrue(UtilMDE.escapeNonASCII("\\relax").equals("\\\\relax"));
+    assertTrue(UtilMDE.escapeNonASCII("\"hello\"").equals("\\\"hello\\\""));
+    assertTrue(UtilMDE.escapeNonASCII("\"hello\" \"world\"")
+               .equals("\\\"hello\\\" \\\"world\\\""));
+    assertTrue(UtilMDE.escapeNonASCII("\0\1\2\7\12\70\100\111\222")
+               .equals("\\000\\001\\002\\007\\n8@I\\222"));
+    assertTrue(UtilMDE.escapeNonASCII("\u0100\u1000\ucafe\uffff")
+               .equals("\\u0100\\u1000\\ucafe\\uffff"));
 
-    assertTrue(UtilMDE.unquote("foobar").equals("foobar"));
-    assertTrue(UtilMDE.unquote("").equals(""));
-    assertTrue(UtilMDE.unquote("\\\\").equals("\\"));
-    assertTrue(UtilMDE.unquote("\\\"").equals("\""));
-    assertTrue(UtilMDE.unquote("\\n").equals("\n"));
-    assertTrue(UtilMDE.unquote("\\r").equals("\r"));
-    assertTrue(UtilMDE.unquote("split\\nlines").equals("split\nlines"));
-    assertTrue(UtilMDE.unquote("\\\\\\n").equals("\\\n"));
-    assertTrue(UtilMDE.unquote("\\n\\r").equals("\n\r"));
-    assertTrue(UtilMDE.unquote("\\\\\\n\\r\\\"").equals("\\\n\r\""));
-    assertTrue(UtilMDE.unquote("\\\\relax").equals("\\relax"));
-    assertTrue(UtilMDE.unquote("\\\"hello\\\"").equals("\"hello\""));
-    assertTrue(UtilMDE.unquote("\\\"hello\\\" \\\"world\\\"").equals("\"hello\" \"world\""));
-    assertTrue(UtilMDE.unquote("\\").equals("\\"));
-    assertTrue(UtilMDE.unquote("foo\\").equals("foo\\"));
-    assertTrue(UtilMDE.unquote("\\*abc").equals("*abc"));
+    // private static String escapeNonASCII(char c)
+
+
+    // public static String unescapeNonJava(String orig)
+
+    assertTrue(UtilMDE.unescapeNonJava("foobar").equals("foobar"));
+    assertTrue(UtilMDE.unescapeNonJava("").equals(""));
+    assertTrue(UtilMDE.unescapeNonJava("\\\\").equals("\\"));
+    assertTrue(UtilMDE.unescapeNonJava("\\\"").equals("\""));
+    assertTrue(UtilMDE.unescapeNonJava("\\n").equals("\n"));
+    assertTrue(UtilMDE.unescapeNonJava("\\r").equals("\r"));
+    assertTrue(UtilMDE.unescapeNonJava("split\\nlines")
+               .equals("split\nlines"));
+    assertTrue(UtilMDE.unescapeNonJava("\\\\\\n").equals("\\\n"));
+    assertTrue(UtilMDE.unescapeNonJava("\\n\\r").equals("\n\r"));
+    assertTrue(UtilMDE.unescapeNonJava("\\\\\\n\\r\\\"").equals("\\\n\r\""));
+    assertTrue(UtilMDE.unescapeNonJava("\\\\relax").equals("\\relax"));
+    assertTrue(UtilMDE.unescapeNonJava("\\\"hello\\\"").equals("\"hello\""));
+    assertTrue(UtilMDE.unescapeNonJava("\\\"hello\\\" \\\"world\\\"")
+               .equals("\"hello\" \"world\""));
+    assertTrue(UtilMDE.unescapeNonJava("\\").equals("\\"));
+    assertTrue(UtilMDE.unescapeNonJava("foo\\").equals("foo\\"));
+    assertTrue(UtilMDE.unescapeNonJava("\\*abc").equals("*abc"));
     // Should add more tests here.
 
-    // unquote CANNOT handle octal escapes -- we changed dfec to fix
-    // this problem
-    // assertTrue(UtilMDE.unquote("\\115").equals("M"));
-    // assertTrue(UtilMDE.unquote("\\115\\111\\124").equals("MIT"));
+    // Unfortunately, there isn't yet a unescapeNonASCII function.
+    // If implemented, it should have the following behavior:
+    // assertTrue(UtilMDE.unescapeNonASCII("\\115").equals("M"));
+    // assertTrue(UtilMDE.unescapeNonASCII("\\115\\111\\124").equals("MIT"));
 
     // public static String removeWhitespaceAround(String arg, String delimiter)
     // public static String removeWhitespaceAfter(String arg, String delimiter)

@@ -906,12 +906,16 @@ public final class UtilMDE {
     return sb.toString();
   }
 
-  // Inspired by the function of the same name in Ajax (but independent code).
+  // Inspired by the 'quote' function in Ajax (but independent code).
   /**
-   * Quote \, ", \n, and \r characters in the target; return a new
-   * string if any modifications were necessary.
+   * Escape \, ", newline, and carriage-return characters in the
+   * target as \\, \\", \n, and \r; return a new string if any
+   * modifications were necessary. The intent is that by surrounding
+   * the return value with double quote marks, the result will be a
+   * Java string literal denoting the original string. Previously
+   * known as quote().
    **/
-  public static String quote(String orig) {
+  public static String escapeNonJava(String orig) {
     StringBuffer sb = new StringBuffer();
     // The previous escape character was seen right before this position.
     int post_esc = 0;
@@ -949,8 +953,8 @@ public final class UtilMDE {
     return sb.toString();
   }
 
-  // The overhead of this is too high to call in quote(String)
-  public static String quote(Character ch) {
+  // The overhead of this is too high to call in escapeNonJava(String)
+  public static String escapeNonJava(Character ch) {
     char c = ch.charValue();
     switch (c) {
     case '\"':
@@ -967,26 +971,26 @@ public final class UtilMDE {
   }
 
   /**
-   * Quote unprintable characters in the target, so  that the result is
-   * sure to be printable ASCII.  Return a new string.
+   * Escape unprintable characters in the target, following the usual
+   * Java backslash conventions, so that the result is sure to be
+   * printable ASCII.  Returns a new string.
    **/
-  public static String quoteMore(String orig) {
+  public static String escapeNonASCII(String orig) {
     StringBuffer sb = new StringBuffer();
     int orig_len = orig.length();
     for (int i=0; i<orig_len; i++) {
       char c = orig.charAt(i);
-      sb.append(quoteMore(c));
+      sb.append(escapeNonASCII(c));
     }
     return sb.toString();
   }
 
   /**
-   * Like quote(), but quote more characters so that the result is
-   * sure to be printable ASCII. I'm not particularly worried about
-   * overhead.
+   * Like escapeNonJava(), but quote more characters so that the
+   * result is sure to be printable ASCII. Not particularly optimized.
    **/
-  private static String quoteMore(char c) {
-    if (c == '\"') {
+  private static String escapeNonASCII(char c) {
+    if (c == '"') {
       return "\\\"";
     } else if (c == '\\') {
       return "\\\\";
@@ -1000,6 +1004,8 @@ public final class UtilMDE {
       return new String(new char[] { c });
     } else if (c < 256) {
       String octal = Integer.toOctalString(c);
+      while (octal.length() < 3)
+        octal = '0' + octal;
       return "\\" + octal;
     } else {
       String hex = Integer.toHexString(c);
@@ -1010,11 +1016,13 @@ public final class UtilMDE {
   }
 
   /**
-   * Replace "\\", "\"", "\n", and "\r" sequences by their one-character
-   * equivalents.  All other backslashes are removed (that is, octal/hex
-   * escape sequences are not turned into their respective characters).
+   * Replace "\\", "\"", "\n", and "\r" sequences by their
+   * one-character equivalents.  All other backslashes are removed
+   * (for instance, octal/hex escape sequences are not turned into
+   * their respective characters). This is the inverse operation of
+   * escapeNonJava(). Previously known as unquote().
    **/
-  public static String unquote(String orig) {
+  public static String unescapeNonJava(String orig) {
     StringBuffer sb = new StringBuffer();
     // The previous escape character was seen just before this position.
     int post_esc = 0;
