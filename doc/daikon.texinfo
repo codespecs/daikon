@@ -5720,7 +5720,7 @@ compiling the instrumented program, first make sure that the program
 being instrumented satisfies dfec's requirements: @xref{C program requirements}.
 
 Problems with dfec can be divided into those encountered when running
-dfec, those encountered when compiling the instrumented code, and
+dfec; those encountered when compiling and linking the instrumented code; and
 those encountered when running the instrumented code.
 
 @menu
@@ -5744,28 +5744,34 @@ dfec, the version of gcc on your path should be 2.95.2, 2.95.3, or
 
 dfec is sometimes confused by the conditional expression (@samp{?:})
 operator, saying that the two sides are of different types.  If either
-of the reported types involve ``DaikonSmartPointer'', then try
-rewriting the expression using a conditional statement (@samp{if
+of the reported types involve ``DaikonSmartPointer'', then the problem
+may be that the compiler could interconvert the two different types in
+the original code, but after dfec instrumented those types, the
+resulting ones were no longer interconvertible.  You have
+two options.  The first option is to
+rewrite the expression using a conditional statement (@samp{if
 ... else}).
 @c Take care, because in C it is illegal to insert statements in the middle
 @c of a list of declarations.
-Otherwise, add an appropriate cast to give the two
+The second option is to add an appropriate cast to give the two
 arms of the conditional expression the same type.  For example, change
+the second line of
 @example
   char * mystring = ...;
   foo ? "literal" : mystring;
 @end example
+@noindent
 to
 @example
-  char * mystring = ...;
   foo ? (char *)"literal" : mystring;
 @end example
+@noindent
 or perhaps to
 @example
-  char * mystring = ...;
   foo ? strdup("literal") : mystring;
 @end example
-
+@noindent
+(though the latter introduces a small memory leak).
 
 @menu
 * Lackwit problems::            
@@ -5818,14 +5824,7 @@ code (with g++) and linking the resulting compiled files.  (In some
 cases, compiling and linking may be performed by a single command line
 invocation, but the two steps are still logically distinct.)
 
-The file and line numbers on g++ error messages may sometimes be
-misleading, because dfec creates @file{.cc} files in which @file{.c} C
-files and @file{.h} header files have been inserted.  Error messages
-are given in terms of the original files.  Often this indicates the
-problem but in other cases, you may wish to know which line in the
-@file{.cc} file is the wrong one.  In that case, remove or comment out
-all the @samp{#line} directives from the @file{.cc} file and
-re-compile.  In Emacs, run this command from the @file{.cc} file
+  In Emacs, run this command from the @file{.cc} file
 buffer to comment out the @samp{#line} directives:
 @example
 (replace-regexp "^\\(#line.*\\)$" "/* \\1 */" nil nil nil)
@@ -5843,28 +5842,24 @@ buffer to comment out the @samp{#line} directives:
 When compiling the instrumented code (e.g., @samp{g++ myfile.cc},
 where @file{myfile.cc} was created by dfec from @file{myfile.c}), g++
 produces error messages referring to lines of the original file
-@file{myfile.c}.  If to investigate some error you need error messages
-that refer to the instrumented code, remove all the @samp{#line}
-directives from the instrumented code.  For example, run this command
-in the @file{daikon-instrumented} directory:
+@file{myfile.c}.  Often this indicates the problem, but in other
+cases, you may wish to know which line in the @file{.cc} file is the
+wrong one.  In that case, remove or comment out all the @samp{#line}
+directives from the @file{.cc} file and re-compile.  For example, run
+this command in the @file{daikon-instrumented} directory:
 @example
-  perl -pi -e 's|^(#line.*)$|/* $1 */|' *.cc
+  perl -pi -e 's|^(#line.*)$|/* $1 */|' myfile.cc
 @end example
 
 
 @cindex DaikonSmartPointer errors in compilation of instrumented code
 @cindex function not defined errors in compilation of instrumented code
 
-A ``function not defined'' error regarding a function with an argument
-of template type DaikonSmartPointer may indicate a type mismatch in
-the original code.  In particular, if uninstrumented code declares a
-@samp{void *} parameter, @command{dfec} will wrap the
-pointer in a DaikonSmartPointer; however, if the calling code simply
-omits the parameters on the function call, the function signatures
-will not match and the compiler will complain about a missing
-function.  The solution is to remove the @samp{void *} from the function
-declaration in the uninstrumented code, thus making the function
-declaration consistent with the use.
+@c Can this happen, if the original g++ compilation worked?
+A ``function not defined'' error may indicate a type mismatch in the
+original code.  Code shold not declare a parameter but omit the
+correspondng argument at the function call.  The solution is to make
+the function declaration consistent with the use.
 
 @cindex template-argument uses local type errors
 @cindex local type in template-argument error
