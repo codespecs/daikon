@@ -19,7 +19,7 @@ daikon.info: daikon.texinfo config-options.texinfo .fix-menu
 html: daikon.html
 
 daikon.html: daikon.texinfo .fix-menu
-	makeinfo --html $<
+	makeinfo --html --no-split $<
 
 html-chap: daikon_manual_html/daikon.html
 
