@@ -23,6 +23,7 @@ public class NISuppression {
   NISuppressee suppressee;
 
   private boolean debug = false;
+  static Stopwatch watch = new Stopwatch (false);
 
   public NISuppression (NISuppressor[] suppressor_set,
                         NISuppressee suppressee) {
@@ -145,7 +146,9 @@ public class NISuppression {
   public void find_suppressed_invs (Set/*SupInv*/ suppressed_invs,
                                     NIS.Antecedents ants) {
 
-    // debug = suppressee.sup_class.getName().indexOf("MaximumLong_xyz") != -1;
+    // debug = suppressee.sup_class.getName().indexOf("NonZero") != -1;
+    if (debug)
+      Fmt.pf ("In find_suppressed_invs for " + this);
 
     // Get the antecedents that match our suppressors.  Return if there are
     // no antecedents for a particular suppressor.
@@ -178,7 +181,7 @@ public class NISuppression {
   public void find_unsuppressed_invs (Set/*SupInv*/ unsuppressed_invs,
                                       NIS.Antecedents ants) {
 
-    // debug = suppressee.sup_class.getName().indexOf("MaximumLong_xyz") != -1;
+    // debug = suppressee.sup_class.getName().indexOf("SeqIntLessEqual") != -1;
 
     // Get the antecedents that match our suppressors.  Return if there are
     // no antecedents for a particular suppressor.
@@ -186,11 +189,34 @@ public class NISuppression {
     if (antecedents == null)
       return;
 
+    int total_false_cnt = 0;
+    // Fmt.pf ("antecedents for suppression " + this);
+    for (int i = 0; i < antecedents.length; i++) {
+      List a = antecedents[i];
+      int false_cnt = 0;
+      for (Iterator j = a.iterator(); j.hasNext(); ) {
+        Invariant inv = (Invariant) j.next();
+        if (inv.is_false())
+          false_cnt++;
+      }
+      // Fmt.pf ("  suppressor %s: %s/%s", suppressors[i], "" + a.size(),
+      //       "" + false_cnt);
+      total_false_cnt += false_cnt;
+    }
+    if (total_false_cnt == 0)
+      return;
+
     // Recursively check each combination of possible antecedents that
     // match our suppressors for suppressions
     VarInfo vis[] = new VarInfo[suppressee.var_count];
+    // watch.clear();
+    // watch.start();
+    // int old_size = unsuppressed_invs.size();
     find_unsuppressed_invs (unsuppressed_invs, antecedents, vis, 0, false);
-
+    // watch.stop();
+    // Fmt.pf ("Found %s invariants in %s msecs",
+    //        "" + (unsuppressed_invs.size() - old_size),
+    //        "" + watch.elapsedMillis());
     if (debug)
       Fmt.pf ("  unsuppressed invariants: " + unsuppressed_invs);
 
@@ -238,13 +264,16 @@ public class NISuppression {
         if (Daikon.dkconfig_internal_check) {
           for (Iterator j = new_invs.iterator(); j.hasNext(); ) {
             NIS.SupInv supinv = (NIS.SupInv) j.next();
-            Invariant cinv = ppt.find_inv_by_class (supinv.vis,
-                                                supinv.suppressee.sup_class);
-            if (cinv != null)
-              Assert.assertTrue (false, "inv " + cinv.format() + " of class "
-                                 + supinv.suppressee
-                                 + " already exists in ppt " + ppt.name);
-
+            Invariant cinv = supinv.already_exists();
+            if (cinv != null) {
+              NISuppressionSet ss = cinv.get_ni_suppressions();
+              ss.suppressed (cinv.ppt);
+              Assert.assertTrue (false, "inv " + cinv.repr() + " of class "
+                                 + supinv.suppressee + " already exists in ppt "
+                                 + ppt.name + " suppressionset = " + ss
+                                 + " suppression = " + this
+                                 + " last antecedent = " + inv.format());
+            }
           }
         }
       } else {
@@ -279,11 +308,22 @@ public class NISuppression {
                                        VarInfo vis[], int idx,
                                        boolean false_antecedents) {
 
+    boolean all_true_at_end = ((idx + 1) == suppressors.length)
+      && !false_antecedents;
+
     // Loop through each antecedent that matches the current suppressor
     NISuppressor s = suppressors[idx];
     for (Iterator i = antecedents[idx].iterator(); i.hasNext(); ) {
       Invariant inv = (Invariant) i.next();
       PptTopLevel ppt = inv.ppt.parent;
+
+      // If this is the last suppressor, no previous antecedents were
+      // false, and this antecedent is not false either, we can stop
+      // checking.  The antecedent lists are sorted so that the false
+      // ones are first.  There is no need to look at antecedents that
+      // are all true.
+      if (all_true_at_end && !inv.is_false())
+        return;
 
       // See if this antecedent can be used with the ones we have found so far
       VarInfo[] cvis = consider_inv (inv, s, vis);
@@ -293,7 +333,8 @@ public class NISuppression {
       // If this is the last suppressor
       if ((idx + 1) == suppressors.length) {
 
-        // Skip if no invariants involved are falsified
+        // JHP: this check can be removed if the earlier check for all
+        // true antecedents is included.
         if (!false_antecedents && !inv.is_false()) {
           if (debug)
             Fmt.pf ("Skipping %s, no false antecedents", VarInfo.toString(cvis));
@@ -310,8 +351,7 @@ public class NISuppression {
         if (Daikon.dkconfig_internal_check) {
           for (Iterator j = new_invs.iterator(); j.hasNext(); ) {
             NIS.SupInv supinv = (NIS.SupInv) j.next();
-            Invariant cinv = ppt.find_inv_by_class (supinv.vis,
-                                                supinv.suppressee.sup_class);
+            Invariant cinv = supinv.already_exists();
             if (cinv != null)
               Assert.assertTrue (false, "inv " + cinv.format() + " of class "
                                  + supinv.suppressee
@@ -365,15 +405,15 @@ public class NISuppression {
     // is already there and doesn't match this variable, then this
     // antecedent can't be used.
     VarInfo v1 = inv.ppt.var_infos[0];
-    VarInfo cvis[] = (VarInfo[]) vis.clone();
-    if ((cvis[supor.v1_index] != null) && (cvis[supor.v1_index] != v1))
+    if ((vis[supor.v1_index] != null) && (vis[supor.v1_index] != v1))
       return (null);
+    if ((supor.v2_index != -1) && (vis[supor.v2_index] != null)
+        && (vis[supor.v2_index] != inv.ppt.var_infos[1]))
+      return (null);
+    VarInfo cvis[] = (VarInfo[]) vis.clone();
     cvis[supor.v1_index] = v1;
     if (supor.v2_index != -1) {
-      VarInfo v2 = inv.ppt.var_infos[1];
-      if ((cvis[supor.v2_index] != null) && (cvis[supor.v2_index] != v2))
-        return (null);
-      cvis[supor.v2_index] = v2;
+      cvis[supor.v2_index] = inv.ppt.var_infos[1];
     }
     if (debug)
       Fmt.pf ("Placed antecedent '%s' into cvis %s", inv.format(),
@@ -440,19 +480,28 @@ public class NISuppression {
   /**
    * Determines if the non-null entries in vis are comparable.  Returns
    * true if they are, false if they are not.
+   * JHP: this should really be part of is_slice_ok
    */
-  private boolean vis_compatible (VarInfo[] vis) {
+  public static boolean vis_compatible (VarInfo[] vis) {
 
+    // Unary vis are always compatble
     if (vis.length == 1)
       return (true);
 
-    if ((vis[0] != null) && (vis[1] != null))
-      if (!vis[0].compatible (vis[1]))
-        return (false);
+    // Check binary
+    if (vis.length == 2) {
+      if ((vis[0] == null) || (vis[1] == null))
+        return (true);
 
-    if (vis.length == 2)
-      return (true);
+      if (vis[0].rep_type.isArray() == vis[1].rep_type.isArray())
+        return (vis[0].compatible(vis[1]));
+      else if (vis[0].rep_type.isArray())
+        return (vis[0].eltsCompatible (vis[1]));
+      else
+        return (vis[1].eltsCompatible (vis[0]));
+    }
 
+    // Check ternary
     if ((vis[1] != null) && (vis[2] != null))
       if (!vis[1].compatible (vis[2]))
         return (false);
