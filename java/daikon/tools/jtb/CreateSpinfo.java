@@ -18,7 +18,7 @@ import utilMDE.*;
  * left unmodified.  A .spinfo file is written for every .java file.
  */
 
-class CreateSpinfo {
+public class CreateSpinfo {
 
 // The expressions in the Java source are extracted as follows:
 // For each method:
@@ -42,12 +42,16 @@ class CreateSpinfo {
   private static String usage =
     UtilMDE.join(new String[] {
       "Usage:  java daikon.tools.CreateSpinfo FILE.java ...",
-      "  -h   Display this usage message",
+      "  -o outputfile   Put all output in specified file",
+      "  -h              Display this usage message",
     },
                  lineSep);
 
 
-  public static void main (String[] args) throws Exception {
+  public static void main (String[] args) throws IOException {
+
+    // If not set, put output in files named after the input (source) files.
+    String outputfilename = null;
 
     daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
     LongOpt[] longopts = new LongOpt[] {
@@ -55,7 +59,7 @@ class CreateSpinfo {
       new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
     };
 
-    Getopt g = new Getopt("daikon.tools.jtb.CreateSpinfo", args, "hs", longopts);
+    Getopt g = new Getopt("daikon.tools.jtb.CreateSpinfo", args, "ho:", longopts);
     int c;
     while ((c = g.getopt()) != -1) {
       switch(c) {
@@ -70,6 +74,9 @@ class CreateSpinfo {
           throw new RuntimeException("Unknown long option received: " +
                                      option_name);
         }
+        break;
+      case 'o':
+        outputfilename = g.getOptarg();
         break;
       case 'h':
         System.out.println(usage);
@@ -90,51 +97,64 @@ class CreateSpinfo {
       System.exit(1);
     }
 
-    for ( ; argindex < args.length; argindex++) {
-
-      String javafile = args[argindex];
-      Reader input = new FileReader(javafile);
-
-      if (javafile.endsWith(".java")) {
-        javafile = javafile.substring(0, javafile.length()-5) + ".spinfo";
+    if (outputfilename != null) {
+      Writer output = new FileWriter(outputfilename);
+      for ( ; argindex < args.length; argindex++) {
+        String javaFileName = args[argindex];
+        writeSplitters(javaFileName, output);
       }
-
-
-      // If the file does not appear to be a .java file, then proceed but
-      // provide a warning.
-      else {
-
-        System.out.println ("Warning, CreateSpinfo is only supported for Java source code! \nYou are getting this message because the input file does not end in .java.");
-
-        // change the file extension to .spinfo
-        if (javafile.indexOf (".") != -1) {
-          javafile = javafile.substring (0, javafile.lastIndexOf (".")) + ".spinfo";
-        }
-
-        else {
-          javafile = javafile + ".spinfo";
-        }
-      }
-
-      System.out.println("Splitter Info file => " + javafile);
-      File outputFile = new File(javafile);
-      Writer output = new FileWriter(outputFile);
-
-      JavaParser parser = new JavaParser(input);
-      Node root = null;
-
-      try {
-        root = parser.CompilationUnit();
-      } catch (ParseException e) {
-        e.printStackTrace();
-        System.exit(1);
-      }
-      debug.debug("CreateSpinfo: processing file " + javafile);
-      ConditionExtractor extractor = new ConditionExtractor();
-      root.accept(extractor);
-      extractor.printSpinfoFile(output);
       output.flush();
       output.close();
+    } else {
+      for ( ; argindex < args.length; argindex++) {
+        String javaFileName = args[argindex];
+
+        String spinfoFileName = spinfoFileName(javaFileName);
+        // System.out.println("Splitter Info file => " + spinfoFileName);
+        Writer output = new FileWriter(spinfoFileName);
+
+        writeSplitters(javaFileName, output);
+        output.flush();
+        output.close();
+      }
     }
+  }
+
+  private static String spinfoFileName(String javaFileName) {
+    if (javaFileName.endsWith(".java")) {
+      return javaFileName.substring(0, javaFileName.length()-5) + ".spinfo";
+    }
+
+    // The file does not end with ".java".  Proceed, but issue a warning.
+    System.err.println ("Warning: CreateSpinfo input file " + javaFileName + "does not end in .java.");
+
+    // change the file extension to .spinfo
+    int dotPos = javaFileName.indexOf (".");
+
+    if (dotPos == -1) {
+      return javaFileName + ".spinfo";
+    } else {
+      return javaFileName.substring (0, dotPos) + ".spinfo";
+    }
+  }
+
+  /** Write splitters for the Java file to the Writer. **/
+  private static void writeSplitters(String javaFileName, Writer output) throws IOException {
+    Reader input = new FileReader(javaFileName);
+    JavaParser parser = new JavaParser(input);
+
+    Node root = null;
+    try {
+      root = parser.CompilationUnit();
+    } catch (ParseException e) {
+      e.printStackTrace();
+      System.exit(1);
+    }
+    debug.debug("CreateSpinfo: processing file " + javaFileName);
+    ConditionExtractor extractor = new ConditionExtractor();
+    root.accept(extractor);
+    // transform conditions
+    // ... convert to String
+    extractor.printSpinfoFile(output);
   }
 }

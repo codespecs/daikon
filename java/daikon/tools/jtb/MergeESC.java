@@ -72,7 +72,6 @@ class MergeESC {
       "       by default these \"inexpressible\" invariants are simply omitted",
       "  -r   Use all .java files under the current directory as arguments",
       "  -s   Use // comments rather than /* comments",
-      "",
       "  --jml_output Insert JML specifications instead of ESC specifcations"
     },
                  lineSep);
@@ -151,7 +150,6 @@ class MergeESC {
                                                 true // use saved config
                                                 );
 
-    Daikon.output_style = OutputFormat.ESCJAVA;
     Daikon.suppress_implied_controlled_invariants = true;
     Daikon.suppress_implied_postcondition_over_prestate_invariants = true;
     Daikon.suppress_redundant_invariants_with_simplify = true;
