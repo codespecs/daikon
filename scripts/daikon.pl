@@ -99,6 +99,7 @@ if ($output) {
 } else {
     $output = $runnable;
     $output =~ s/\./-/;
+    my $sym = 0;
     do {
 	$sym = $sym + 1;
 	while ((length $sym) < 4) { $sym = '0' . $sym }
