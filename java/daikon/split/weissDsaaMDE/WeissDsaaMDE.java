@@ -1,6 +1,5 @@
 package daikon.split.weissDsaaMDE;
 
-import daikon.*;
 import daikon.split.*;
 
 // I really ought to abstract out the tests rather than making each a class

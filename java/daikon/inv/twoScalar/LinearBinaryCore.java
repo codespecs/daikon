@@ -1,6 +1,5 @@
 package daikon.inv.twoScalar;
 
-import daikon.*;
 import daikon.inv.*;
 
 public class LinearBinaryCore {

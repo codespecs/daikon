@@ -35,7 +35,7 @@ public abstract class UnaryDerivation implements Derivation, Cloneable {
   }
 
   // This is in each class, but I can't have a private abstract method.
-  abstract protected VarInfo makeVarInfo();
+  protected abstract VarInfo makeVarInfo();
 
   // public boolean isDerivedFromNonCanonical() {
   //   return ! var_info.isCanonical();

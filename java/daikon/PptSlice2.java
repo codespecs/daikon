@@ -2,13 +2,9 @@ package daikon;
 
 // import daikon.derive.*;
 import daikon.inv.*;
-import daikon.inv.scalar.*;
 import daikon.inv.twoScalar.*;
-import daikon.inv.string.*;
-import daikon.inv.sequence.*;
 import daikon.inv.twoSequence.*;
 import daikon.inv.sequenceScalar.*;
-import daikon.inv.threeScalar.*;
 import java.util.*;
 
 import utilMDE.*;
@@ -243,13 +239,16 @@ public class PptSlice2 extends PptSlice {
   public void addInvariant(Invariant invariant) {
     Assert.assert(invariant != null);
     invs.add(invariant);
-
-    VarInfo vi1 = var_infos[0];
-    VarInfo vi2 = var_infos[1];
-    boolean array1 = vi1.rep_type.isArray();
-    boolean array2 = vi2.rep_type.isArray();
+    Global.instantiated_invariants++;
+    if (Global.debugStatistics)
+      System.out.println("instantiated_invariant: " + invariant);
 
     if (already_seen_all) {
+      VarInfo vi1 = var_infos[0];
+      VarInfo vi2 = var_infos[1];
+      boolean array1 = vi1.rep_type.isArray();
+      boolean array2 = vi2.rep_type.isArray();
+
       if ((!array1) && (!array2)) {
         TwoScalar inv = (TwoScalar) invariant;
         // Make this invariant up to date by supplying it with all the values.

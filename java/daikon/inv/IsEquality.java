@@ -9,7 +9,7 @@ import utilMDE.*;
 
 public class IsEquality implements Filter {
   // Don't create new ones, just use this existing one
-  public static final IsEquality it = new IsEquality();
+  public final static IsEquality it = new IsEquality();
 
   private IsEquality() { }
   public boolean accept(Object o) {

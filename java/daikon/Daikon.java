@@ -2,28 +2,25 @@
 
 package daikon;
 
-import daikon.inv.*;
 import daikon.split.*;
-
-import utilMDE.*;
 
 import java.util.*;
 import java.io.*;
 
 public class Daikon {
 
-  public static final boolean disable_splitting = false;
-  // public static final boolean disable_splitting = true;
+  public final static boolean disable_splitting = false;
+  // public final static boolean disable_splitting = true;
 
-  public static final boolean disable_ternary_invariants = false;
-  // public static final boolean disable_ternary_invariants = true;
+  public final static boolean disable_ternary_invariants = false;
+  // public final static boolean disable_ternary_invariants = true;
 
   // Change this at your peril; high costs in time and space for "false".
-  public static final boolean check_program_types = true;
-  // public static final boolean check_program_types = false;
+  public final static boolean check_program_types = true;
+  // public final static boolean check_program_types = false;
 
-  public static final boolean disable_modbit_check_message = false;
-  public static final boolean disable_modbit_check_error = true;
+  public final static boolean disable_modbit_check_message = false;
+  public final static boolean disable_modbit_check_error = true;
 
   // The two arguments to daikon.Daikon are a comma-separated list of
   // declaration files, and a comma-separated list of data trace files.
@@ -122,9 +119,18 @@ public class Daikon {
             ppt.addConditions(pconds);
         }
         ppt.print_invariants_maybe();
+        // Clear memory
+        ppt.values = null;
         ppt.clear_view_caches();
+        for (int i=0; i<views_cond.size(); i++) {
+          PptConditional pcond = (PptConditional) views_cond.elementAt(i);
+          pcond.values = null;
+          pcond.clear_view_caches();
+        }
       }
     }
+
+    Global.output_statistics();
 
     // Old implementation that didn't interleave invariant inference and
     // reporting.

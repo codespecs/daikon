@@ -55,7 +55,7 @@ public abstract class VarComparability {
     if (type1.getClass() != type2.getClass())
       throw new Error("Trying to compare VarComparabilities of different types");
     if (type1 instanceof VarComparabilityNone) {
-      return VarComparabilityNone.compatible(name1, (VarComparabilityNone)type1,
+      return VarComparabilityNone.compatible(name1, type1,
                                              name2, (VarComparabilityNone)type2);
     // This class doesn't even exist yet!
     // } else if (type1 instanceof VarComparabilityImplicit) {

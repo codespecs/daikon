@@ -5,8 +5,6 @@ package daikon;
 
 import java.util.*;
 
-import utilMDE.*;
-
 
 // Types of Ppt (program point) objects:
 //  Ppt:  abstract base class

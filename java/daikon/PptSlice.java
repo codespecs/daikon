@@ -94,7 +94,7 @@ public abstract class PptSlice extends Ppt {
   }
 
 
-  abstract public void addInvariant(Invariant inv);
+  public abstract void addInvariant(Invariant inv);
 
 
   // I don't just use ppt.invs.remove because I want to be able to defer
@@ -115,13 +115,14 @@ public abstract class PptSlice extends Ppt {
         System.out.println("PptSlice.removeInvariant(" + inv.name() + ")");
       boolean removed = invs.remove(inv);
       Assert.assert(removed);
+      // This could also have been in Invariant.destroy().
+      Global.falsified_invariants++;
       if (invs.size() == 0) {
         no_invariants = true;
         parent.removeView(this);
         // for good measure; shouldn't be necessary, but just in case there
         // is some other pointer to this.
-        if (this instanceof PptSlice)
-          ((PptSlice) this).clear_cache();
+        clear_cache();
       }
     }
   }
@@ -134,7 +135,7 @@ public abstract class PptSlice extends Ppt {
     }
   }
 
-  void addView(PptSlice slice) {
+  void addView(Ppt slice) {
     throw new Error("Don't add views on a slice.");
   }
 
@@ -165,10 +166,10 @@ public abstract class PptSlice extends Ppt {
   }
 
   // These accessors are for abstract methods declared in Ppt
-  abstract public int num_samples();
-  abstract public int num_mod_non_missing_samples();
-  abstract public int num_values();
-  abstract public String tuplemod_samples_summary();
+  public abstract int num_samples();
+  public abstract int num_mod_non_missing_samples();
+  public abstract int num_values();
+  public abstract String tuplemod_samples_summary();
 
   boolean check_modbits () {
     Assert.assert(! no_invariants);

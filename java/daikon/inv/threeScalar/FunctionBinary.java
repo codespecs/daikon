@@ -1,13 +1,12 @@
 package daikon.inv.threeScalar;
 
 import daikon.*;
-import daikon.inv.*;
 import java.lang.reflect.*;
 
 
 class FunctionBinary extends ThreeScalar {
 
-  static final boolean debugFunctionBinary = false;
+  final static boolean debugFunctionBinary = false;
 
   FunctionBinaryCore core;
 
@@ -37,6 +36,7 @@ class FunctionBinary extends ThreeScalar {
     if (resultvar.isConstant() || (arg1.isConstant() && arg2.isConstant())) {
       if (debugFunctionBinary)
         System.out.println("FunctionBinary.instantiate: both args are constant");
+      Global.subexact_noninstantiated_invariants++;
       return null;
     }
 
@@ -85,18 +85,17 @@ class FunctionBinary extends ThreeScalar {
 
   // For testing only; to be commented out
   public void destroy() {
-    Method function = core.function;
-    int var_order = core.var_order;
-
-    int[] indices = FunctionBinaryCore.var_indices[var_order];
-    VarInfo argresult = ppt.var_infos[indices[0]];
-    VarInfo arg1 = ppt.var_infos[indices[1]];
-    VarInfo arg2 = ppt.var_infos[indices[2]];
-
-    if (debugFunctionBinary)
+    if (debugFunctionBinary) {
+      Method function = core.function;
+      int var_order = core.var_order;
+      int[] indices = FunctionBinaryCore.var_indices[var_order];
+      VarInfo argresult = ppt.var_infos[indices[0]];
+      VarInfo arg1 = ppt.var_infos[indices[1]];
+      VarInfo arg2 = ppt.var_infos[indices[2]];
       System.out.println("FunctionBinary.destroy: "
                          + argresult.name + " = "
                          + function.getName() + "(" + arg1.name + ", " + arg2.name + ")");
+    }
     super.destroy();
   }
 

@@ -15,7 +15,7 @@ import java.util.*;
 
 // Similar to OneOfSequence; if I change one, change the other.
 public class OneOfScalar extends SingleScalar implements OneOf {
-  static final int LIMIT = 5;	// maximum size for the one_of list
+  final static int LIMIT = 5;	// maximum size for the one_of list
   // probably needs to keep its own list of the values
 
   private int[] elts;

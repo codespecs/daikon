@@ -7,8 +7,7 @@ import daikon.inv.*;
 import daikon.inv.scalar.*;
 import daikon.inv.sequence.*;
 import daikon.inv.string.*;
-import daikon.inv.twoScalar.*;
-import daikon.inv.twoSequence.*;
+import daikon.inv.threeScalar.*;
 import daikon.split.*;
 import daikon.split.dsaa.*;
 import daikon.split.griesLisp.*;
@@ -420,7 +419,7 @@ public class PptTopLevel extends Ppt {
         System.out.println("pass=" + pass + ", range=" + this_di + ".." + last_di);
       if (this_di == last_di) {
         if (Global.debugDerive) {
-          System.out.println("Bailing...");
+          System.out.println("No pass " + pass + " derivation to do");
         }
 	continue;
       }
@@ -1238,8 +1237,14 @@ public class PptTopLevel extends Ppt {
           }
           if (!var2.isCanonical())
             continue;
-          if (Invariant.hasExactInvariant(var1, var2, this))
+          if (Invariant.hasExactInvariant(var1, var2, this)) {
+            // This isn't quite right:  it depends on what the type of var3
+            // will be.  But leave it as a conservative approximation
+            // (because we would save this many for many different var3).
+            Global.subexact_noninstantiated_invariants
+              += ThreeScalarFactory.max_instantiate;
             continue;
+          }
 
           boolean target2 = (i2 >= vi_index_min) && (i2 < vi_index_limit);
           int i3_min = ((target1 || target2) ? i2+1 : Math.max(i2+1, vi_index_min));
@@ -1265,9 +1270,16 @@ public class PptTopLevel extends Ppt {
             if (!var3.isCanonical())
               continue;
             if (Invariant.hasExactInvariant(var1, var3, this)
-                || Invariant.hasExactInvariant(var2, var3, this))
+                || Invariant.hasExactInvariant(var2, var3, this)) {
+              // This is an overapproximation if one of the variables isn't
+              // a scalar.  But we underapproximated elsewhere, so leave it.
+              Global.subexact_noninstantiated_invariants
+                += ThreeScalarFactory.max_instantiate;
               continue;
+            }
 
+            // (For efficiency, I could move this earlier.  But that's not
+            // completely fair, so I won't for now.)
             // For now, only ternary invariants not involving any arrays
             if (var1.rep_type.isArray()
                 || var2.rep_type.isArray()
@@ -1364,8 +1376,8 @@ public class PptTopLevel extends Ppt {
     int num_splits = num_pconds/2;
 
     for (int i=0; i<num_pconds; i+=2) {
-      Assert.assert(pconds[i].splitter_inverse == false);
-      Assert.assert(pconds[i+1].splitter_inverse == true);
+      Assert.assert(! pconds[i].splitter_inverse);
+      Assert.assert(pconds[i+1].splitter_inverse);
       Assert.assert(pconds[i+1].splitter.condition().equals(pconds[i].splitter.condition()));
     }
 
@@ -1593,8 +1605,20 @@ public class PptTopLevel extends Ppt {
     // We might do no output if all the other variables are vacuous.
     // First make sure that we've computed equal_to everywhere.
     // (We might not have so far.)
-    for (int i=0; i<var_infos.length; i++)
+    for (int i=0; i<var_infos.length; i++) {
+      // Compute by side effect, or check that computation has occurred.
       var_infos[i].isCanonical();
+      if (! var_infos[i].isCanonical()) {
+        Global.non_canonical_variables++;
+      } else if (var_infos[i].canBeMissing) {
+        Global.can_be_missing_variables++;
+      } else {
+        Global.canonical_variables++;
+      }
+      if (var_infos[i].isDerived()) {
+        Global.derived_variables++;
+      }
+    }
     for (int i=0; i<var_infos.length; i++) {
       VarInfo vi = var_infos[i];
       if (vi.isCanonical()) {
@@ -1634,6 +1658,7 @@ public class PptTopLevel extends Ppt {
     //   ia_index++;
     //   ...
     // }
+    Global.non_falsified_invariants += invs_array.length;
     for (int ia_index = 0; ia_index<invs_array.length; ia_index++) {
       Invariant inv = invs_array[ia_index];
       String num_values_samples =
@@ -1642,7 +1667,7 @@ public class PptTopLevel extends Ppt {
 
       // I could imagine printing information about the PptSlice
       // if it has changed since the last Invariant I examined.
-      PptSlice slice = (PptSlice) inv.ppt;
+      PptSlice slice = inv.ppt;
       if (Global.debugPrintInvariants) {
         System.out.println("Slice: " + slice.varNames() + "  "
                            + slice.num_samples() + " samples");
@@ -1658,21 +1683,32 @@ public class PptTopLevel extends Ppt {
 
       // This "5" should be a symbolic constant, not an integer literal.
       // Note exception for OneOf invariants.
-      int num_mod_non_missing_samples = ((PptSlice)inv.ppt).num_mod_non_missing_samples();
+      int num_mod_non_missing_samples = inv.ppt.num_mod_non_missing_samples();
       if ((inv instanceof OneOf) && (((OneOf) inv).num_elts() > num_mod_non_missing_samples)) {
         System.out.println("Modbit problem:  more values (" + ((OneOf) inv).num_elts() + ") than modified samples (" + num_mod_non_missing_samples + ")");
       }
 
 
-      if ((num_mod_non_missing_samples < 5)
+      if ((num_mod_non_missing_samples < Invariant.min_mod_non_missing_samples)
           && (! (inv instanceof OneOf))) {
         if (Global.debugPrintInvariants) {
-          System.out.println("  [Only " + ((PptSlice)inv.ppt).num_mod_non_missing_samples() + " modified non-missing samples (" + ((PptSlice)inv.ppt).num_samples() + " total samples): " + inv.repr() + " ]");
+          System.out.println("  [Only " + inv.ppt.num_mod_non_missing_samples() + " modified non-missing samples (" + inv.ppt.num_samples() + " total samples): " + inv.repr() + " ]");
         }
+        Global.too_few_samples_invariants++;
         continue;
       }
 
-      {
+      if (IsEquality.it.accept(inv)) {
+        Assert.assert(inv.ppt.var_infos.length == 2);
+        Assert.assert(inv.ppt.var_infos[1].isCanonical() == false);
+        if (inv.ppt.var_infos[0].isCanonical()) {
+          Global.reported_invariants++;
+          continue;
+        } else {
+          Global.non_canonical_invariants++;
+          continue;
+        }
+      } else {
         boolean all_canonical = true;
         VarInfo[] vis = inv.ppt.var_infos;
         for (int i=0; i<vis.length; i++) {
@@ -1686,11 +1722,16 @@ public class PptTopLevel extends Ppt {
         if (! all_canonical) {
           if (Global.debugPptTopLevel) {
             System.out.println("  [not all vars canonical:  " + inv.repr() + " ]");
+            System.out.print("    [Canonicalness:");
+            for (int i=0; i<vis.length; i++)
+              System.out.print(" " + vis[i].isCanonical());
+            System.out.println("]");
             // This *does* happen, because we instantiate all invariants
             // simultaneously. so we don't yet know which of the new
             // variables is canonical.  I should fix this.
             // throw new Error("this shouldn't happen");
           }
+          Global.non_canonical_invariants++;
           continue;
         }
       }
@@ -1699,6 +1740,7 @@ public class PptTopLevel extends Ppt {
         if (Global.debugPrintInvariants) {
           System.out.println("  [obvious:  " + inv.repr() + " ]");
         }
+        Global.obvious_invariants++;
         continue;
       }
 
@@ -1706,6 +1748,7 @@ public class PptTopLevel extends Ppt {
         if (Global.debugPrintInvariants) {
           System.out.println("  [not justified:  " + inv.repr() + " ]");
         }
+        Global.unjustified_invariants++;
         continue;
       }
 
@@ -1715,10 +1758,12 @@ public class PptTopLevel extends Ppt {
         if (Global.debugPrintInvariants) {
           System.out.println("  [" + inv.repr() + "]");
         }
+        Global.reported_invariants++;
       } else {
         if (Global.debugPrintInvariants) {
           System.out.println("[format returns null: " + inv.repr() + " ]");
         }
+        Global.unjustified_invariants++;
       }
     }
   }
@@ -1852,7 +1897,6 @@ public class PptTopLevel extends Ppt {
   //           if print_unconstrained or not inv.is_unconstrained():
   //               print "     ", inv.format((vname, var_infos[i1].name, var_infos[i2].name))
   //   sys.stdout.flush()
-
 
 
 }

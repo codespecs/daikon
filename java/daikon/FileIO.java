@@ -559,9 +559,8 @@ public class FileIO {
 	int mod = ValueTuple.parseModified(line);
 	mods[val_index] = mod;
         if (ValueTuple.modIsMissing(mod)) {
-          Assert.assert(value_rep.equals("missing"));
+          Assert.assert(value_rep.equals("missing") || value_rep.equals("uninit"));
           vals[val_index] = null;
-          // This might not be the correct index to use
           vis[val_index].canBeMissing = true;
         } else {
           vals[val_index] = vi.rep_type.parse_value(value_rep);

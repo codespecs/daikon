@@ -46,7 +46,7 @@ public class Invariants extends Vector {
     }
 
     public void remove() { throw new UnsupportedOperationException(); }
-  };
+  }
 
 
   // These lookup functions should perhaps return Iterators or Enumerations

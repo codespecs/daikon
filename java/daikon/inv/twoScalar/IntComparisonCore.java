@@ -42,6 +42,9 @@ public class IntComparisonCore {
     obvious_can_be_gt = obvious_gt;
     obvious_can_be_le = obvious_le;
     obvious_can_be_ge = obvious_ge;
+    if (only_eq || obvious_lt || obvious_gt || obvious_le || obvious_ge) {
+      Global.partially_implied_invariants++;
+    }
   }
 
   public void add_modified(int v1, int v2, int count) {

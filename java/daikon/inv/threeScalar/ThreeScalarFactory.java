@@ -9,6 +9,12 @@ import java.util.*;
 
 public class ThreeScalarFactory {
 
+  public final static int max_instantiate
+    =  ((Functions.binarySymmetricFunctions.length
+         * FunctionBinaryCore.order_symmetric_max)
+        + (Functions.binaryNonSymmetricFunctions.length
+           * FunctionBinaryCore.order_nonsymmetric_max));
+
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
   public static Vector instantiate(PptSlice ppt, int pass) {
@@ -51,9 +57,11 @@ public class ThreeScalarFactory {
             result.add(fb);
         }
       }
-      if ((! var1.isConstant()) && (! var2.isConstant()) && (! var3.isConstant())) {
-        // result.add(LinearTernary.instantiate(ppt));
-      }
+      // if (var1.isConstant() || var2.isConstant() || var3.isConstant()) {
+      //   Global.subexact_noninstantiated_invariants++;
+      // } else {
+      //   result.add(LinearTernary.instantiate(ppt));
+      // }
       return result;
     }
   }

@@ -22,7 +22,7 @@ public abstract class Splitter {
    * Creates a valid splitter than can be used for testing the condition
    * via test(ValueTuple).
    */
-  abstract public Splitter instantiate(Ppt ppt);
+  public abstract Splitter instantiate(Ppt ppt);
 
   /**
    * Returns true or false according to whether this was instantiated
@@ -31,16 +31,16 @@ public abstract class Splitter {
    * but it's a bit easier on implementers of subclasses of Splitter
    * for the work to be done (in just one place) by the caller.
    */
-  abstract public boolean valid();
+  public abstract boolean valid();
 
   /**
    * Returns true or false according to whether the values in the specified
    * VarTuple satisfy the condition represented by this Splitter.
    */
-  abstract public boolean test(ValueTuple vt);
+  public abstract boolean test(ValueTuple vt);
 
   // This method could be static; but don't bother making it so.
   /** Returns the condition being tested, as a String. */
-  abstract public String condition();
+  public abstract String condition();
 
 }

@@ -16,8 +16,10 @@ class SuperSequence extends TwoSequence {
     VarInfo supervar = ppt.var_infos[0];
     // System.out.println("SubSequence.isObviousDerived(" + format() + ") = "
     //                    + SubSequence.isObviousDerived(subvar, supervar));
-    if (SubSequence.isObviousDerived(subvar, supervar))
+    if (SubSequence.isObviousDerived(subvar, supervar)) {
+      Global.implied_noninstantiated_invariants++;
       return null;
+    }
 
     return new SuperSequence(ppt);
   }

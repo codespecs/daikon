@@ -9,8 +9,8 @@ public abstract class SequenceScalar extends Invariant {
 
   // By convention, the sequence is always passed in first
   public boolean seq_first;  // true if seq_index == 0 and scl_index == 1
-  final public int seq_index;                // 0 or 1
-  final public int scl_index;                // 0 or 1
+  public final int seq_index;                // 0 or 1
+  public final int scl_index;                // 0 or 1
 
   protected SequenceScalar(PptSlice ppt_, boolean seq_first_) {
     super(ppt_);
@@ -53,7 +53,7 @@ public abstract class SequenceScalar extends Invariant {
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
    */
-  public void add_unmodified(int v1[], int v2, int count) {
+  public void add_unmodified(int[] v1, int v2, int count) {
     return;
   }
 

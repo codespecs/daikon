@@ -35,13 +35,17 @@ public class TwoScalarFactory {
         VarInfo arg = (invert ? var1 : var2);
         // Skip if the argument is a constant (but not if the result
         // is constant, as we might get something like y=abs(x)).
-        if (! arg.isConstant()) {
+        if (arg.isConstant()) {
+          Global.subexact_noninstantiated_invariants += Functions.unaryFunctions.length;
+        } else {
           for (int j=0; j<Functions.unaryFunctions.length; j++) {
             result.add(FunctionUnary.instantiate(ppt, Functions.unaryFunctions[j], invert));
           }
         }
       }
-      if ((! var1.isConstant()) && (! var2.isConstant())) {
+      if (var1.isConstant() || var2.isConstant()) {
+        Global.subexact_noninstantiated_invariants += 2;
+      } else {
         result.add(LinearBinary.instantiate(ppt));
         // new NonAliased(ppt);
         result.add(NonEqual.instantiate(ppt));

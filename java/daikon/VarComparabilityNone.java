@@ -1,15 +1,11 @@
 package daikon;
 
-import java.util.*;
-
-import utilMDE.*;
-
 public class VarComparabilityNone extends VarComparability {
 
   // There is only one VarComparabilityNone object.
   static VarComparabilityNone it = new VarComparabilityNone();
 
-  private VarComparabilityNone() { };
+  private VarComparabilityNone() { }
 
   static VarComparabilityNone parse(String rep, ProglangType vartype) {
     return it;

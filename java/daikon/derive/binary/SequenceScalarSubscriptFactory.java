@@ -5,8 +5,6 @@ import daikon.inv.twoScalar.*;
 
 import utilMDE.*;
 
-import java.util.*;
-
 // This controls derivations which use the scalar as an index into the
 // sequence, such as getting the element at that index or a subsequence up
 // to that index.
@@ -56,8 +54,10 @@ public class SequenceScalarSubscriptFactory extends BinaryDerivationFactory {
     //                    + ", seqsize_rep=" + seqsize.canonicalRep().name);
     // Since both are canonical, this is equivalent to
     // "if (sclvar.canonicalRep() == seqsize.canonicalRep()) ...
-    if (sclvar == seqsize)
+    if (sclvar == seqsize) {
+      Global.tautological_suppressed_derived_variables += 4;
       return null;
+    }
 
     // Find an IntComparison relationship over the two variables, if possible.
     Assert.assert(sclvar.ppt == seqsize.ppt);
@@ -69,6 +69,7 @@ public class SequenceScalarSubscriptFactory extends BinaryDerivationFactory {
             ? compar.core.can_be_gt // sclvar can be less than seqsize
             : compar.core.can_be_lt // seqsize can be less than sclvar
             ) {
+          Global.nonsensical_suppressed_derived_variables += 4;
           return null;
         }
       }
@@ -81,8 +82,11 @@ public class SequenceScalarSubscriptFactory extends BinaryDerivationFactory {
     // interesting.
     if (sclvar.isConstant()) {
       int scl_constant = ((Integer) sclvar.constantValue()).intValue();
-      if (scl_constant == 0)
+      if (scl_constant == 0) {
+        Global.tautological_suppressed_derived_variables += 2;
+        Global.nonsensical_suppressed_derived_variables += 2;
         return null;
+      }
     }
 
     // Get the lower and upper bounds for the variable, if any.

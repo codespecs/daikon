@@ -1,7 +1,5 @@
 package daikon.inv;
 
-import utilMDE.*;
-
 import java.lang.reflect.*;
 
 public class Functions {

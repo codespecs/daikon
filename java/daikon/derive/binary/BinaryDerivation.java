@@ -41,7 +41,7 @@ public abstract class BinaryDerivation implements Derivation, Cloneable {
   }
 
   // This is in each class, but I can't have a private abstract method.
-  abstract protected VarInfo makeVarInfo();
+  protected abstract VarInfo makeVarInfo();
 
   public int derivedDepth() {
     return 1 + Math.max(var_info1.derivedDepth(), var_info2.derivedDepth());
