@@ -17,11 +17,32 @@ BEGIN {
 
 use Getopt::Long ();
 #use Carp ('carp', 'croak', 'cluck', 'confess');
+use File::Path 'mkpath';
+use File::Basename;
+use File::Spec::Functions 'rel2abs';
 
-my $instr_dir = "daikon-instrumented";
 my @types_files = ();
 my $verbose = 0;
 my $perl = $^X;
+
+my $instr_basedir = "daikon-instrumented";
+my $types_basedir = undef;
+my $decls_basedir = "daikon-output";
+my $dtrace_basedir = "daikon-output";
+
+#my $instr_style = "tree";
+my $types_style = "tree";
+my $decls_style = "tree";
+my $dtrace_style = "tree";
+
+my $types_append = 1;
+my $decls_append = 1;
+my $dtrace_append = 0;
+
+my $absolute = undef;
+my $types_absolute = undef;
+my $decls_absolute = undef;
+my $dtrace_absolute = undef;
 
 sub careful_system {
     my @cmd = @_;
@@ -41,26 +62,92 @@ sub file_id {
     return "$dev:$inode";
 }
 
+unless (exists $ENV{"INV"}) {
+    my $str = "The INV environment variable was not found.\n";
+    $str .= "Please make sure it is set to the location of the ";
+    $str .= "Daikon invariants/ directory.\n";
+    $str .= "Usually, you would do this by running the daikon.bashrc or ";
+    $str .= "daikon.cshrc script\nin your shell startup file.\n";
+    die $str;
+}
+
 my $opt_parse = new Getopt::Long::Parser;
 $opt_parse->configure("bundling_override");
 my $parsed =
-  $opt_parse->getoptions("instrsourcedir=s" => \$instr_dir,
+  $opt_parse->getoptions("instrsourcedir|instr-basedir=s" => \$instr_basedir,
+			 "types-basedir=s" => \$types_basedir,
+			 "decls-basedir=s" => \$decls_basedir,
+			 "dtrace-basedir=s" => \$dtrace_basedir,
+#			 "instr-style=s" => \$instr_style,
+			 "types-style=s" => \$types_style,
+			 "decls-style=s" => \$decls_style,
+			 "dtrace-style=s" => \$dtrace_style,
+			 "types-append!" => \$types_append,
+			 "decls-append!" => \$decls_append,
+			 "dtrace-append!" => \$dtrace_append,
 			 "types|t=s" => \@types_files,
 			 "verbose|v+" => \$verbose,
+			 "absolute!" => \$absolute,
+# This is probably more control than anyone needs
+# 			 "types-absolute!" => \$types_absolute,
+# 			 "decls-absolute!" => \$decls_absolute,
+# 			 "dtrace-absolute!" => \$dtrace_absolute,
 			 "perl=s", \$perl,
 			);
 
-if (! -d $instr_dir) {
-    mkdir($instr_dir) or die "Can't create directory $instr_dir: $!\n";
+exit(1) unless $parsed;
+
+$types_basedir = $instr_basedir if not defined($types_basedir);
+
+if (defined $absolute) {
+    $types_absolute = $absolute unless defined $types_absolute;
+    $decls_absolute = $absolute unless defined $decls_absolute;
+    $dtrace_absolute = $absolute unless defined $dtrace_absolute;
 }
 
-my $inplace = file_id($instr_dir) eq file_id(".");
+$types_absolute = 1 unless defined $types_absolute;
+$decls_absolute = 0 unless defined $decls_absolute;
+$dtrace_absolute = 0 unless defined $dtrace_absolute;
+
+if ($types_absolute) {
+    $types_basedir = rel2abs($types_basedir);
+}
+
+if ($decls_absolute) {
+    $decls_basedir = rel2abs($decls_basedir);
+}
+
+if ($dtrace_absolute) {
+    $dtrace_basedir = rel2abs($dtrace_basedir);
+}
+
+#unless ($instr_style =~ /^tree|flat|combined\z/) {
+#    die "instr-style should be one of tree, flat, or combined\n";
+#}
+
+unless ($types_style =~ /^tree|flat|combined\z/) {
+    die "types-style should be one of tree, flat, or combined\n";
+}
+
+unless ($decls_style =~ /^tree|flat|combined\z/) {
+    die "decls-style should be one of tree, flat, or combined\n";
+}
+
+unless ($dtrace_style =~ /^tree|flat|combined\z/) {
+    die "dtrace-style should be one of tree, flat, or combined\n";
+}
+
+if (! -d $instr_basedir) {
+    mkdir($instr_basedir) or die "Can't create directory $instr_basedir: $!\n";
+}
+
+my $inplace = file_id($instr_basedir) eq file_id(".");
 
 if ($verbose) {
-    print "Verbosity level $verbose\n";
-    print "Instrumented sources in $instr_dir\n";
-    print "Reading types from @types_files\n" if @types_files;
-    print "Annotating in place? ", $inplace ? "yes" : "no", "\n";
+    print STDERR "Verbosity level $verbose\n";
+    print STDERR "Instrumented sources in $instr_basedir\n";
+    print STDERR "Reading types from @types_files\n" if @types_files;
+    print STDERR "Annotating in place? ", $inplace ? "yes" : "no", "\n";
 }
 
 my $types = "";
@@ -71,9 +158,12 @@ for my $tfile (@types_files) {
 	warn "Types file $tfile does not exist\n";
     }
 }
+my $output_opt = ",-O,$types_basedir,$types_style,$types_append";
+$output_opt .= ",$decls_basedir,$decls_style,$decls_append";
+$output_opt .= ",$dtrace_basedir,$dtrace_style,$dtrace_append";
 
 $types = ",-t" . $types if $types;
-my $deparse_opt = "-MO=DeparseDaikon$types";
+my $deparse_opt = "-MO=DeparseDaikon$types$output_opt";
 my $perl_lib = "-I$ENV{INV}/front-end/perl/lib";
 
 for my $prog (@ARGV) {
@@ -81,12 +171,20 @@ for my $prog (@ARGV) {
     if ($inplace) {
 	$from = "$prog.uninst";
 	if (! -e $from) {
-	    print "Renaming $prog to $from\n" if $verbose;
+	    print STDERR "Renaming $prog to $from\n" if $verbose;
 	    rename($prog, $from) or die "Can't move $prog to $from: $!\n";
 	}
     } else {
 	$from = $prog;
     }
-    careful_system($perl, $perl_lib, "$deparse_opt,-o,$instr_dir/$prog",
+    my $outfile = "$instr_basedir/$prog";
+    my $outpath = dirname($outfile);
+    if (not -d $outpath) {
+	print STDERR "Making $outpath\n" if $verbose;
+	mkpath($outpath, $verbose) or die "Couldn't create $outpath: $!\n";
+    } else {
+	print STDERR "$outpath exists\n" if $verbose;
+    }
+    careful_system($perl, $perl_lib, "$deparse_opt,-o,$outfile",
 		   $from);
 }
