@@ -2,6 +2,13 @@
 
 ;; Utilities for writing data traces
 
+;; The `write-to-data-trace' macro creates a trace file.  Gries-style Lisp
+;; programs can be automatically instrumented -- the calls to
+;; `write-to-data-trace' are inserted by the `instrument' function found in
+;; gries-helper.lisp.  Given a file of Gries-style Lisp functions,
+;; `instrument' produces a new file of instrumented Lisp code which can be
+;; compiled and run.
+
 ;; To instrument the Medic package, do something like this:
 ;;   From $inv/medic/data, start Lisp (via  M-x run-lisp, or, better, outside Emacs via just  lisp )
 ;;   (load "../code/main") (in-package medic) (load-all) (load-domains)
