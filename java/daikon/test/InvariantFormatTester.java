@@ -143,7 +143,7 @@ public class InvariantFormatTester extends TestCase
 
     if (!execute()) {
       fail("At least one test failed." +
-           " Inspect test/InvariantFormatTest.diffs for error report.");
+           " Inspect java/daikon/test/InvariantFormatTest.diffs for error report.");
     }
   }
 
