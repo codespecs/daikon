@@ -20,12 +20,17 @@ public class OrderedPairIterator implements java.util.Iterator {
 
   Iterator itor1, itor2;
   Object next1, next2;
-  // Ought to have a constructor that takes a comparator object
-  public OrderedPairIterator(Iterator i1, Iterator i2) {
-    itor1 = i1;
-    itor2 = i2;
+  Comparator comparator;
+
+  public OrderedPairIterator(Iterator itor1, Iterator itor2) {
+    this(itor1, itor2, null);
+  }
+  public OrderedPairIterator(Iterator itor1, Iterator itor2, Comparator comparator) {
+    this.itor1 = itor1;
+    this.itor2 = itor2;
     setnext1();
     setnext2();
+    this.comparator = comparator;
   }
   private void setnext1() { next1 = itor1.hasNext() ? itor1.next() : null; }
   private void setnext2() { next2 = itor2.hasNext() ? itor2.next() : null; }
@@ -65,7 +70,12 @@ public class OrderedPairIterator implements java.util.Iterator {
       if (next2 == null) {
         return return1();
       } else {
-        int comparison = ((Comparable)next1).compareTo(next2);
+        int comparison;
+        if (comparator == null) {
+          comparison = ((Comparable)next1).compareTo(next2);
+        } else {
+          comparison = comparator.compare(next1, next2);
+        }
         if (comparison < 0)
           return return1();
         else if (comparison > 0)
