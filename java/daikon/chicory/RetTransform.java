@@ -56,6 +56,7 @@ public class RetTransform implements ClassFileTransformer {
 
     // debug = className.equals ("DataStructures/StackAr");
     // debug = className.equals ("chicory/Test");
+    // debug = className.equals ("DataStructures/BinarySearchTree");
 
     if (debug)
       out.format ("In Transform: class = %s\n", className);
@@ -151,8 +152,16 @@ public class RetTransform implements ClassFileTransformer {
       for (int i = 0; i < methods.length; i++) {
         MethodGen mg = new MethodGen (methods[i], cg.getClassName(), pgen);
         MethodContext context = new MethodContext (cg, mg);
-        if (debug)
+        if (debug) {
           out.format ("  Method = %s\n", mg);
+          Attribute[] attributes = mg.getCodeAttributes();
+          for (Attribute a : attributes) {
+            int con_index = a.getNameIndex();
+            Constant c = pgen.getConstant (con_index);
+            String att_name = ((ConstantUtf8) c).getBytes();
+            out.format ("attribute: %s [%s]\n", a, att_name);
+          }
+        }
 
         // skip the class init method
         if (mg.getName().equals ("<clinit>"))
@@ -227,6 +236,17 @@ public class RetTransform implements ClassFileTransformer {
           }
           // Go on to the next instruction in the list
           ih = next_ih;
+        }
+
+        // Remove the Local variable type table attribute (if any).
+        // Evidently, some changes we make require this to be updated, but
+        // without BCEL support, that would be hard to do.  Just delete it
+        // for now (since it is optional, and we are unlikely to be used by
+        // a debugger)
+        for (Attribute a : mg.getCodeAttributes()) {
+          if (is_local_variable_type_table (a)) {
+            mg.removeCodeAttribute (a);
+          }
         }
 
         // Update the instruction list
@@ -628,4 +648,20 @@ public class RetTransform implements ClassFileTransformer {
     return new MethodInfo (class_info, mgen.getName(), arg_names,
                            arg_type_strings, exit_locs);
   }
+
+  public boolean is_local_variable_type_table (Attribute a) {
+    return (get_attribute_name (a).equals ("LocalVariableTypeTable"));
+  }
+
+  /**
+   * Returns the attribute name for the specified attribute
+   */
+  public String get_attribute_name (Attribute a) {
+
+    int con_index = a.getNameIndex();
+    Constant c = pgen.getConstant (con_index);
+    String att_name = ((ConstantUtf8) c).getBytes();
+    return (att_name);
+  }
+
 }

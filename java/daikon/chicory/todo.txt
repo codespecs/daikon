@@ -1,8 +1,5 @@
 Todo list sorted in approximate order of importance.
 
-  - ChicoryPremain.jar and BCEL were not properly included in the
-    release distribution file [jhp]
-
   - The nightly build (2/10) failed when running chicory. 
     [sjl was unable to duplicate the problem]
 
@@ -76,6 +73,12 @@ Todo list sorted in approximate order of importance.
 
   - Implement --linked-lists option.
 
+  - Java 1.5 defines a new code attribute: Local Variable Type Table.
+    I think this is there to help debuggers handle local variable that are
+    generic (it only appears on methods with generics).  Unfortunately, this
+    attribute is not supported by BCEL.  For now we are just removing it
+    (because something we are doing makes it inconsistent).  A better 
+    solution would be to update it correctly.
 
 Completed Tasks
 
@@ -93,6 +96,13 @@ Completed Tasks
   - Static variables are not named correctly when a class with
     a static variable is referenced from another class. [sjl]
     fixed 2/10/05 
+
+  - ChicoryPremain.jar and BCEL were not properly included in the
+    release distribution file [jhp]
+
+    Feb 10 2005 jhp - Added ChicoryPremain.jar and the BCEL code.  Also
+    update daikon.jar to be a valid java agent for Chicory so users don't
+    need ChicoryPremain.
 
 
 
