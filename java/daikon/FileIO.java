@@ -180,7 +180,7 @@ public final class FileIO {
     // Read all decls, creating PptTopLevels and VarInfos
     for (Iterator i = files.iterator(); i.hasNext(); ) {
       File file = (File) i.next();
-	  if(!DaikonSimple.dkconfig_empty_diff) {
+	  if(!DaikonSimple.dkconfig_quiet) {
       System.out.print(".");  // show progress
 	  }
       read_declaration_file(file, all_ppts);

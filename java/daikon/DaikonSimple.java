@@ -28,8 +28,9 @@ public class DaikonSimple {
 	//inv file for storing the invariants in serialized form
 	public static File inv_file = null;
 
-	
-	public static boolean dkconfig_empty_diff = false;
+	//configuration option for no progress information so that empty diff files
+	//can be created from Daikon and DaikonSimple output
+	public static boolean dkconfig_quiet = false;
 	
 	private static String usage =
 		UtilMDE.join(
@@ -106,7 +107,7 @@ public class DaikonSimple {
 				Iterator i = invs.iterator();
 			
 
-				if(DaikonSimple.dkconfig_empty_diff) {
+				if(DaikonSimple.dkconfig_quiet) {
 				System.out.println("====================================================");
 				System.out.println(ppt.name());
 				} else {
