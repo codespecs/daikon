@@ -75,7 +75,7 @@ public class SelfSuppressionFactory extends SuppressionFactory  {
     supTemplate.set(0, inv.getClass(), slice.var_infos);
     supTemplate.fill(slice.parent, false);
     if (inv.logOn()) {
-      inv.log ("Searched for" + supTemplate.searchString());
+      inv.log ("Searched for " + supTemplate.searchString());
       if (supTemplate.filled)
         inv.log ("Found " + supTemplate.results[0].format() + " in "
                   + supTemplate.results[0].ppt.name());
