@@ -603,13 +603,13 @@ setup-v2-and-v3: setup-v2-and-v3-tests setup-v2-and-v3-daikon
 
 setup-v2-and-v3-daikon:
 	mv java/daikon daikon.ver3
-	cvs update -r ENGINE_V2_PATCHES java/daikon
+	cvs update -d -P -r ENGINE_V2_PATCHES java/daikon
 	mv java/daikon daikon.ver2
 	ln -s daikon.ver3 java/daikon
 
 setup-v2-and-v3-tests:
 	mv tests tests.ver3
-	cvs update -r ENGINE_V2_PATCHES tests
+	cvs update -d -P -r ENGINE_V2_PATCHES tests
 	mv tests tests.ver2
 	ln -s tests.ver3 java/daikon
 
