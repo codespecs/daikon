@@ -52,7 +52,9 @@ branch of the $inv/java/daikon part of the repository into the trunk
 
 (8) Use PCL-CVS (or some other, less-capable tool) to fix all
     conflicts created during the merge, so that the project compiles.
-    Do "M-x cvs-examine RET $inv/java/daikon RET", then for each conflict:
+    Do "M-x cvs-examine RET $inv/java/daikon RET" or
+      (cvs-examine (substitute-in-file-name "$inv/java/daikon") nil)
+    then for each conflict:
      * "d E" (uses imerge)
      * "d e" (uses ediff)
      * or edit new version (containing conflict markers) directly
@@ -79,6 +81,7 @@ branch of the $inv/java/daikon part of the repository into the trunk
 **** Merge history ****
 (Add entries at the top of the list)
 
+29-Dec-2002 21:13:03 by MDE
 02-Dec-2002 09:13:55 by MDE
 23-Nov-2002 21:10:50 by MDE
 Sun Nov 17 13:37:54 EST 2002 by MDE

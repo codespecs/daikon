@@ -895,14 +895,6 @@ public final class VarInfo
       return vt.getValue(value_index);
   }
 
-  public long getIntValue(ValueTuple vt) {
-    Object raw = getValue(vt);
-    if (raw == null) {
-      throw new Error(this + ".getIntValue(" + vt + ")");
-    }
-    return ((Long)raw).longValue();
-  }
-
   public int getIndexValue(ValueTuple vt) {
     Object raw = getValue(vt);
     if (raw == null) {
@@ -911,12 +903,12 @@ public final class VarInfo
     return ((Long)raw).intValue();
   }
 
-  public String getStringValue(ValueTuple vt) {
-    return (String) getValue(vt);
-  }
-
-  public String[] getStringArrayValue(ValueTuple vt) {
-    return(String[]) getValue(vt);
+  public long getIntValue(ValueTuple vt) {
+    Object raw = getValue(vt);
+    if (raw == null) {
+      throw new Error(this + ".getIntValue(" + vt + ")");
+    }
+    return ((Long)raw).longValue();
   }
 
   public long[] getIntArrayValue(ValueTuple vt) {
@@ -925,6 +917,30 @@ public final class VarInfo
       throw new Error(this + ".getIntArrayValue(" + vt + ")");
     }
     return (long[])raw;
+  }
+
+  public double getDoubleValue(ValueTuple vt) {
+    Object raw = getValue(vt);
+    if (raw == null) {
+      throw new Error(this + ".getDoubleValue(" + vt + ")");
+    }
+    return ((Double)raw).doubleValue();
+  }
+
+  public double[] getDoubleArrayValue(ValueTuple vt) {
+    Object raw = getValue(vt);
+    if (raw == null) {
+      throw new Error(this + ".getDoubleArrayValue(" + vt + ")");
+    }
+    return (double[])raw;
+  }
+
+  public String getStringValue(ValueTuple vt) {
+    return (String) getValue(vt);
+  }
+
+  public String[] getStringArrayValue(ValueTuple vt) {
+    return (String[]) getValue(vt);
   }
 
   static final class usesVarFilter implements Filter {

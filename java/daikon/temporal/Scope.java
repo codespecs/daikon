@@ -5,14 +5,6 @@ import java.util.*;
 // FIXME: In the Future(TM), actually use this structure to store
 // scope state. Right now this is a trick for rollbacks. Do the same
 // thing to InvariantState
-class ScopeState
-{
-    EventRecord eventsSeen;
-    boolean isActive;
-    boolean enteredBefore;
-    boolean exitedBefore;
-}
-
 // FIXME: Make inner classes here. Do it now! High priority 11/26
 
 /**
@@ -56,6 +48,15 @@ public abstract class Scope extends EventReceptor
 	enteredBefore = false;
 	exitedBefore = false;
     }
+
+    static private class ScopeState
+    {
+        EventRecord eventsSeen;
+        boolean isActive;
+        boolean enteredBefore;
+        boolean exitedBefore;
+    }
+
 
     /**
      * This method generates a snapshot of scope state for rollback
@@ -109,12 +110,12 @@ public abstract class Scope extends EventReceptor
 	return out;
     }
 
-    boolean seenEvent(Event e)
+    public boolean seenEvent(Event e)
     {
 	return mEventsSeen.hasEventMatching(e);
     }
 
-    void addChild(EventReceptor r)
+    public void addChild(EventReceptor r)
     {
 	r.mParent = this;
 
@@ -162,7 +163,7 @@ public abstract class Scope extends EventReceptor
 	s.addChild(this);
     }
 
-    void addChildren(Vector v)
+    public void addChildren(Vector v)
     {
 	for (Iterator i = v.iterator(); i.hasNext(); )
 	    {
@@ -197,7 +198,7 @@ public abstract class Scope extends EventReceptor
      * that you are now active).
      **/
 
-    void enter()
+    public void enter()
     {
 	isActive = true;
 
@@ -216,7 +217,7 @@ public abstract class Scope extends EventReceptor
      * When you exit, tell your kids about it and fix your state.
      **/
 
-    void exit()
+    public void exit()
     {
 	isActive = false;
 	exitedBefore = true;
@@ -240,7 +241,7 @@ public abstract class Scope extends EventReceptor
 	    }
     }
 
-    boolean isActive()
+    public boolean isActive()
     {
 	return isActive;
     }
@@ -329,13 +330,13 @@ public abstract class Scope extends EventReceptor
 
 	if (mEventsSeen.noEventsConflictWith(e))
 	    {
-		newKids.add(new AlwaysInvariant(e));
+		newKids.add(new TemporalInvariant.AlwaysInvariant(e));
 	    }
 
 	// FIXME: Possible subtle semantics error here?
 	if (!exitedBefore)
 	    {
-		newKids.add(new EventuallyInvariant(e));
+		newKids.add(new TemporalInvariant.EventuallyInvariant(e));
 	    }
 
 	ScopeAfter afterE = new ScopeAfter(e);
@@ -375,7 +376,7 @@ public abstract class Scope extends EventReceptor
 
 			newAfterUntil.addChildren(af.duplicateChildren());
 
-			EventuallyInvariant erespondstor = new EventuallyInvariant(newAfterUntil, e);
+			TemporalInvariant.EventuallyInvariant erespondstor = new TemporalInvariant.EventuallyInvariant(newAfterUntil, e);
 
 			newKids.add(newAfterUntil);
 
@@ -480,375 +481,379 @@ public abstract class Scope extends EventReceptor
 	return out;
     }
 
-}
+    /* ***************************************************************************
+     * Inner classes
+     */
 
-/**
- * This scope is special. It is entered and exited explicitly. It
- * also does some basic bookkeeping for candidate insantiation.
- **/
+    /**
+     * This scope is special. It is entered and exited explicitly. It
+     * also does some basic bookkeeping for candidate insantiation.
+     **/
 
-class ScopeGlobal extends Scope
-{
-    public boolean doDynamicInstantiation;
-
-    public static ScopeGlobal GLOBAL_SCOPE = null;
-
-    ScopeGlobal()
+    public static class ScopeGlobal extends Scope
     {
-	doDynamicInstantiation = true;
+        public boolean doDynamicInstantiation;
 
-	ScopeGlobal.GLOBAL_SCOPE = this;
+        public static ScopeGlobal GLOBAL_SCOPE = null;
 
-	mParent = null;
+        public ScopeGlobal()
+        {
+            doDynamicInstantiation = true;
+
+            ScopeGlobal.GLOBAL_SCOPE = this;
+
+            mParent = null;
+        }
+
+        EventReceptor produceDuplicate()
+        {
+            throw new RuntimeException("Whatchoo talkin' bout, willis?");
+        }
+
+        public void printState()
+        {
+            System.out.println(toString());
+        }
+
+        public String getNameString()
+        {
+            return "GLOBAL:";
+        }
+
+        public void processEvent(Event e)
+        {
+            Vector v = new Vector();
+
+            v.add(e);
+
+            processEvent(e, v);
+        }
+
+        public void processEvent(Event sampleEvent, Vector basicEvents)
+        {
+            Vector newStuffHashes = null;
+
+            if (doDynamicInstantiation)
+                {
+                    newStuffHashes = new Vector();
+
+                    for (Iterator i = basicEvents.iterator(); i.hasNext(); )
+                        {
+                            Event e = (Event)i.next();
+
+                            System.out.print("DEALING WITH BASIC EVENT: " + e.toString());
+
+                            if (!mEventsSeen.hasEventMatching(e))
+                            {
+                                System.out.println(" -- NEW");
+                            } else {
+                                System.out.println();
+                            }
+
+                            newStuffHashes.add(generateNewCandidates(e));
+                        }
+                }
+
+            sendEventToKids(sampleEvent);
+
+            //	System.out.println("\n\nNEW INVARIANTS\n\n");
+
+            if (doDynamicInstantiation)
+                {
+                    for (Iterator i = newStuffHashes.iterator(); i.hasNext(); )
+                        {
+                            Hashtable res = (Hashtable)i.next();
+
+                            for (Iterator j = res.keySet().iterator(); j.hasNext(); )
+                                {
+                                    Scope s = (Scope)j.next();
+
+                                    s.addChildren((Vector)res.get(s));
+
+                                    for (Iterator k = ((Vector)res.get(s)).iterator(); k.hasNext(); )
+                                        {
+                                            EventReceptor rec = (EventReceptor)k.next();
+
+                                            if (rec instanceof TemporalInvariant)
+                                                {
+                                                    TemporalInvariant n = (TemporalInvariant)rec;
+
+                                                    //												System.out.println(n.outputString());
+                                                }
+                                        }
+                                }
+                        }
+                }
+
+            //	System.out.println("\n\nOVERALL STATE:\n\n");
+
+            //	printState();
+
+        }
     }
 
-    EventReceptor produceDuplicate()
+    public static class ScopeBefore extends Scope
     {
-	throw new RuntimeException("Whatchoo talkin' bout, willis?");
+        Event mEvent;
+
+        public ScopeBefore(Event e)
+        {
+            super();
+
+            mEvent = e;
+        }
+
+        void parentScopeEntering()
+        {
+            enter();
+        }
+
+        void processEvent(Event e)
+        {
+            if (isActive())
+                {
+                    if (mEvent.matches(e))
+                        {
+                            exit();
+                        }
+                    else
+                        {
+                            sendEventToKids(e);
+                        }
+                }
+        }
+
+        Scope instantiateDuplicateScope()
+        {
+            return new ScopeBefore(mEvent);
+        }
+
+        public String getNameString()
+        {
+            return "(BEFORE " + mEvent.toString() + "):";
+        }
+
     }
 
-    public void printState()
+    // Note: Could have implemented this as a ScopeNot with a ScopeBefore.
+    // Should I?
+    public static class ScopeAfter extends Scope
     {
-	System.out.println(toString());
+        Event mEvent;
+
+        public ScopeAfter(Event e)
+        {
+            super();
+
+            mEvent = e;
+        }
+
+        void processEvent(Event e)
+        {
+            if (!isActive())
+                {
+                    if (mEvent.matches(e))
+                        {
+                            enter();
+                        }
+                }
+            else
+                {
+                    sendEventToKids(e);
+                }
+        }
+
+        Scope instantiateDuplicateScope()
+        {
+            return new ScopeAfter(mEvent);
+        }
+
+        public String getNameString()
+        {
+            return "(AFTER " + mEvent.toString() + "):";
+        }
     }
 
-    public String getNameString()
+    /**
+     * This scope has some tricky logic. It should only be active if both
+     * its start event and its end event are seen by it. However, to properly
+     * handle candidate instantiation (without ridiculous backtracking overhead),
+     * it assumes that its closing event will be seen, instantiates candidates/etc,
+     * then reverts state as needed if its parent exits before its closing event
+     * is seen.
+     **/
+
+    // FIXME: MAJOR: Semantics are wrong. Scope should be limited to smallest
+    // space between A and B (i.e. AAB only in scope between the second A and the
+    // b, or rather that is the only scope which needs to be checked, by inclusion)
+    // This same problem probably also applies to afteruntil (find out!)
+    // Could probably also be correctly written as ScopeAfterBefore, but who cares
+    public static class ScopeBetween extends Scope
     {
-	return "GLOBAL:";
+        Event mEventA;
+        Event mEventB;
+
+        private Hashtable savedStates;
+        private Vector kidsCreated;
+
+        public ScopeBetween(Event a, Event b)
+        {
+            super();
+
+            mEventA = a;
+            mEventB = b;
+        }
+
+        public void enter()
+        {
+            savedStates = new Hashtable();
+            kidsCreated = new Vector();
+
+            savedStates.putAll(generateSubtreeSnapshots());
+
+            super.enter();
+        }
+
+        Hashtable generateNewCandidates(Event e)
+        {
+            Hashtable res = super.generateNewCandidates(e);
+
+            for (Iterator i = res.keySet().iterator(); i.hasNext(); )
+                {
+                    EventReceptor r = (EventReceptor)i.next();
+
+                    if (r.equals(this) || r.isChildOf(this))
+                        {
+                            kidsCreated.addAll((Vector)res.get(r));
+                        }
+                }
+
+            return res;
+        }
+
+        void rollback()
+        {
+            for (Iterator i = kidsCreated.iterator(); i.hasNext(); )
+                {
+                    ((EventReceptor)i.next()).delete();
+                }
+
+            for (Iterator i = savedStates.keySet().iterator(); i.hasNext(); )
+                {
+                    EventReceptor r = (EventReceptor)i.next();
+
+                    r.restoreState(savedStates.get(r));
+                }
+
+            // FIXME: May be unnecessary, given that "this" is stored in savedStates by generateSubtreeSnapshots.
+            // Seems kinda sketchy.
+            isActive = false;
+        }
+
+
+        void parentScopeExiting()
+        {
+            if (isActive())
+                {
+                    // Parent scope is closing. This means we never saw our close event,
+                    // so we never actually were active. ha! we were just kidding
+                    rollback();
+                }
+            //	else
+            //	    {
+            //		exit();
+            //	    }
+        }
+
+        void processEvent(Event e)
+        {
+            if (!isActive())
+                {
+                    if (mEventA.matches(e))
+                        {
+                            enter();
+                        }
+                }
+            else
+                {
+                    if (mEventB.matches(e))
+                        {
+                            exit();
+                        }
+                    else
+                        {
+                            sendEventToKids(e);
+                        }
+                }
+        }
+
+        Scope instantiateDuplicateScope()
+        {
+            return new ScopeBetween(mEventA, mEventB);
+        }
+
+        public String getNameString()
+        {
+            return "(BETWEEN " + mEventA.toString() + " and " + mEventB.toString() + "):";
+        }
     }
 
-    public void processEvent(Event e)
+    /**
+     * This scope is active after its event A, and until either its parent scope
+     * closes or until its event B is seen, whichever comes first.
+     **/
+
+    // This scope has an exception - its ending event can be the same thing as an event
+    // contained within (eg in an eventually invariant) - to allow sensible response
+    // invariants
+    public static class ScopeAfterUntil extends Scope
     {
-	Vector v = new Vector();
+        Event mEventA;
+        Event mEventB;
 
-	v.add(e);
+        public ScopeAfterUntil(Event a, Event b)
+        {
+            super();
 
-	processEvent(e, v);
+            mEventA = a;
+            mEventB = b;
+
+            // This may not be right. This is done to suppress generation of subscopes/etc
+            // which depend on event B (except for the explicitly generated response invariant).
+            // In fact, this is ugly/hackish enough that it's almost certainly not right..
+            // but that's why it's a FIXME.
+            mEventsSeen.add(b);
+        }
+
+        void processEvent(Event e)
+        {
+            if (!isActive())
+                {
+                    if (mEventA.matches(e))
+                        {
+                            isActive = true;
+                        }
+                }
+            else
+                {
+                    sendEventToKids(e);
+
+                    if (mEventB.matches(e))
+                        {
+                            exit();
+                        }
+                }
+        }
+
+        Scope instantiateDuplicateScope()
+        {
+            return new ScopeAfterUntil(mEventA, mEventB);
+        }
+
+        public String getNameString()
+        {
+            return "(AFTER " + mEventA.toString() + " UNTIL " + mEventB.toString() + "):";
+        }
     }
 
-    public void processEvent(Event sampleEvent, Vector basicEvents)
-    {
-	Vector newStuffHashes = null;
-
-	if (doDynamicInstantiation)
-	    {
-		newStuffHashes = new Vector();
-
-		for (Iterator i = basicEvents.iterator(); i.hasNext(); )
-		    {
-			Event e = (Event)i.next();
-
-			System.out.print("DEALING WITH BASIC EVENT: " + e.toString());
-
-			if (!mEventsSeen.hasEventMatching(e))
-			{
-			    System.out.println(" -- NEW");
-			} else {
-			    System.out.println();
-			}
-
-			newStuffHashes.add(generateNewCandidates(e));
-		    }
-	    }
-
-	sendEventToKids(sampleEvent);
-
-	//	System.out.println("\n\nNEW INVARIANTS\n\n");
-
-	if (doDynamicInstantiation)
-	    {
-		for (Iterator i = newStuffHashes.iterator(); i.hasNext(); )
-		    {
-			Hashtable res = (Hashtable)i.next();
-
-			for (Iterator j = res.keySet().iterator(); j.hasNext(); )
-			    {
-				Scope s = (Scope)j.next();
-
-				s.addChildren((Vector)res.get(s));
-
-				for (Iterator k = ((Vector)res.get(s)).iterator(); k.hasNext(); )
-				    {
-					EventReceptor rec = (EventReceptor)k.next();
-
-					if (rec instanceof TemporalInvariant)
-					    {
-						TemporalInvariant n = (TemporalInvariant)rec;
-
-						//												System.out.println(n.outputString());
-					    }
-				    }
-			    }
-		    }
-	    }
-
-	//	System.out.println("\n\nOVERALL STATE:\n\n");
-
-	//	printState();
-
-    }
-}
-
-class ScopeBefore extends Scope
-{
-    Event mEvent;
-
-    ScopeBefore(Event e)
-    {
-	super();
-
-	mEvent = e;
-    }
-
-    void parentScopeEntering()
-    {
-	enter();
-    }
-
-    void processEvent(Event e)
-    {
-	if (isActive())
-	    {
-		if (mEvent.matches(e))
-		    {
-			exit();
-		    }
-		else
-		    {
-			sendEventToKids(e);
-		    }
-	    }
-    }
-
-    Scope instantiateDuplicateScope()
-    {
-	return new ScopeBefore(mEvent);
-    }
-
-    public String getNameString()
-    {
-	return "(BEFORE " + mEvent.toString() + "):";
-    }
-
-}
-
-// Note: Could have implemented this as a ScopeNot with a ScopeBefore.
-// Should I?
-class ScopeAfter extends Scope
-{
-    Event mEvent;
-
-    ScopeAfter(Event e)
-    {
-	super();
-
-	mEvent = e;
-    }
-
-    void processEvent(Event e)
-    {
-	if (!isActive())
-	    {
-		if (mEvent.matches(e))
-		    {
-			enter();
-		    }
-	    }
-	else
-	    {
-		sendEventToKids(e);
-	    }
-    }
-
-    Scope instantiateDuplicateScope()
-    {
-	return new ScopeAfter(mEvent);
-    }
-
-    public String getNameString()
-    {
-	return "(AFTER " + mEvent.toString() + "):";
-    }
-}
-
-/**
- * This scope has some tricky logic. It should only be active if both
- * its start event and its end event are seen by it. However, to properly
- * handle candidate instantiation (without ridiculous backtracking overhead),
- * it assumes that its closing event will be seen, instantiates candidates/etc,
- * then reverts state as needed if its parent exits before its closing event
- * is seen.
- **/
-
-// FIXME: MAJOR: Semantics are wrong. Scope should be limited to smallest
-// space between A and B (i.e. AAB only in scope between the second A and the
-// b, or rather that is the only scope which needs to be checked, by inclusion)
-// This same problem probably also applies to afteruntil (find out!)
-// Could probably also be correctly written as ScopeAfterBefore, but who cares
-class ScopeBetween extends Scope
-{
-    Event mEventA;
-    Event mEventB;
-
-    private Hashtable savedStates;
-    private Vector kidsCreated;
-
-    ScopeBetween(Event a, Event b)
-    {
-	super();
-
-	mEventA = a;
-	mEventB = b;
-    }
-
-    void enter()
-    {
-	savedStates = new Hashtable();
-	kidsCreated = new Vector();
-
-	savedStates.putAll(generateSubtreeSnapshots());
-
-	super.enter();
-    }
-
-    Hashtable generateNewCandidates(Event e)
-    {
-	Hashtable res = super.generateNewCandidates(e);
-
-	for (Iterator i = res.keySet().iterator(); i.hasNext(); )
-	    {
-		EventReceptor r = (EventReceptor)i.next();
-
-		if (r.equals(this) || r.isChildOf(this))
-		    {
-			kidsCreated.addAll((Vector)res.get(r));
-		    }
-	    }
-
-	return res;
-    }
-
-    void rollback()
-    {
-	for (Iterator i = kidsCreated.iterator(); i.hasNext(); )
-	    {
-		((EventReceptor)i.next()).delete();
-	    }
-
-	for (Iterator i = savedStates.keySet().iterator(); i.hasNext(); )
-	    {
-		EventReceptor r = (EventReceptor)i.next();
-
-		r.restoreState(savedStates.get(r));
-	    }
-
-	// FIXME: May be unnecessary, given that "this" is stored in savedStates by generateSubtreeSnapshots.
-	// Seems kinda sketchy.
-	isActive = false;
-    }
-
-
-    void parentScopeExiting()
-    {
-	if (isActive())
-	    {
-		// Parent scope is closing. This means we never saw our close event,
-		// so we never actually were active. ha! we were just kidding
-		rollback();
-	    }
-	//	else
-	//	    {
-	//		exit();
-	//	    }
-    }
-
-    void processEvent(Event e)
-    {
-	if (!isActive())
-	    {
-		if (mEventA.matches(e))
-		    {
-			enter();
-		    }
-	    }
-	else
-	    {
-		if (mEventB.matches(e))
-		    {
-			exit();
-		    }
-		else
-		    {
-			sendEventToKids(e);
-		    }
-	    }
-    }
-
-    Scope instantiateDuplicateScope()
-    {
-	return new ScopeBetween(mEventA, mEventB);
-    }
-
-    public String getNameString()
-    {
-	return "(BETWEEN " + mEventA.toString() + " and " + mEventB.toString() + "):";
-    }
-}
-
-/**
- * This scope is active after its event A, and until either its parent scope
- * closes or until its event B is seen, whichever comes first.
- **/
-
-// This scope has an exception - its ending event can be the same thing as an event
-// contained within (eg in an eventually invariant) - to allow sensible response
-// invariants
-class ScopeAfterUntil extends Scope
-{
-    Event mEventA;
-    Event mEventB;
-
-    ScopeAfterUntil(Event a, Event b)
-    {
-	super();
-
-	mEventA = a;
-	mEventB = b;
-
-	// This may not be right. This is done to suppress generation of subscopes/etc
-	// which depend on event B (except for the explicitly generated response invariant).
-	// In fact, this is ugly/hackish enough that it's almost certainly not right..
-	// but that's why it's a FIXME.
-	mEventsSeen.add(b);
-    }
-
-    void processEvent(Event e)
-    {
-	if (!isActive())
-	    {
-		if (mEventA.matches(e))
-		    {
-			isActive = true;
-		    }
-	    }
-	else
-	    {
-		sendEventToKids(e);
-
-		if (mEventB.matches(e))
-		    {
-			exit();
-		    }
-	    }
-    }
-
-    Scope instantiateDuplicateScope()
-    {
-	return new ScopeAfterUntil(mEventA, mEventB);
-    }
-
-    public String getNameString()
-    {
-	return "(AFTER " + mEventA.toString() + " UNTIL " + mEventB.toString() + "):";
-    }
 }

@@ -450,7 +450,7 @@ public final class PPTSLICE1
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.DOUBLE) {
-      // int value = vi1.getDoubleValue(full_vt);
+      // double value = vi1.getDoubleValue(full_vt);
       double value = ((Double) val1).doubleValue();
       for (int i=0; i<num_invs; i++) {
         SingleFloat inv = (SingleFloat)invs.get(i);

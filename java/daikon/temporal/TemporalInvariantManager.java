@@ -36,13 +36,13 @@ import daikon.*;
 
 public class TemporalInvariantManager
 {
-    public ScopeGlobal global_scope;
+    public Scope.ScopeGlobal global_scope;
     public static boolean active = false;
     public static TemporalInvariantManager Manager = null;
 
     public TemporalInvariantManager()
     {
-	global_scope = new ScopeGlobal();
+	global_scope = new Scope.ScopeGlobal();
 	Manager = this;
     }
 

@@ -7,7 +7,8 @@ import java.util.*;
 
 
 /**
- * A SplitterObject is a representation of a Splitter. It holds all the information about a splitter.
+ * A SplitterObject is a representation of a Splitter.
+ * It holds all the information about a splitter.
  **/
 public class SplitterObject implements Comparable{
 

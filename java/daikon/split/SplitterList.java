@@ -49,8 +49,12 @@ public abstract class SplitterList
     // }
 
     if ((Global.debugSplit != null) && Global.debugSplit.isDebugEnabled()) {
+      String[] splits_strings = new String[splits.length];
+      for (int i=0; i<splits.length; i++) {
+        splits_strings[i] = splits[i].condition();
+      }
       Global.debugSplit.debug("Registering splitters for " + pptname + ":"
-                              + Arrays.asList(splits).toString());
+                              + utilMDE.ArraysMDE.toString(splits_strings));
     }
 
     if (ppt_splitters.containsKey(pptname)) {

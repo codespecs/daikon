@@ -1,56 +1,8 @@
-package daikon.temporal;
+package daikon.tests.temporal;
 
+import daikon.temporal.*;
 import junit.framework.*;
 import java.util.*;
-
-class LetterEvent extends Event
-{
-    String name;
-
-    static Hashtable events = new Hashtable();
-
-    LetterEvent(String n)
-    {
-	name = n;
-    }
-
-    public static LetterEvent getEvent(String n)
-    {
-	if (events.containsKey(n))
-	    {
-		return (LetterEvent)events.get(n);
-	    }
-	else
-	    {
-		LetterEvent l = new LetterEvent(n);
-
-		events.put(n, l);
-
-		return l;
-	    }
-    }
-
-
-    public boolean forwardSharesTypeWith(Event e)
-    {
-	return (e instanceof LetterEvent);
-    }
-
-    public boolean forwardMatches(Event e)
-    {
-	if (!(e instanceof LetterEvent))
-	    return false;
-
-	LetterEvent l = (LetterEvent)e;
-
-	return l.name.equals(name);
-    }
-
-    public String toString()
-    {
-	return name;
-    }
-}
 
 // FIXME: Needs some major restructuring for efficiency/clarity.
 public class TemporalTests extends TestCase
@@ -63,7 +15,7 @@ public class TemporalTests extends TestCase
     public static void main(String[] args)
     {
 	// FIXME: Make this work with junit (possibly put it in setup?)
-	TestManager m = new TestManager();
+	SimpleTests.TestManager m = new SimpleTests.TestManager();
 
 	junit.textui.TestRunner.run(new TestSuite(TemporalTests.class));
     }
@@ -73,35 +25,35 @@ public class TemporalTests extends TestCase
 	super(name);
     }
 
-    ScopeGlobal global;
+    Scope.ScopeGlobal global;
 
-    ScopeBefore beforeA;
-    ScopeAfter afterA;
+    Scope.ScopeBefore beforeA;
+    Scope.ScopeAfter afterA;
 
-    ScopeBefore beforeB;
-    ScopeAfter afterB;
+    Scope.ScopeBefore beforeB;
+    Scope.ScopeAfter afterB;
 
-    ScopeBefore beforeC;
-    ScopeAfter afterC;
+    Scope.ScopeBefore beforeC;
+    Scope.ScopeAfter afterC;
 
-    ScopeBefore beforeD;
-    ScopeAfter afterD;
+    Scope.ScopeBefore beforeD;
+    Scope.ScopeAfter afterD;
 
     public void generateBasicScopes()
     {
-	global = new ScopeGlobal();
+	global = new Scope.ScopeGlobal();
 
-	beforeA = new ScopeBefore(A);
-	afterA = new ScopeAfter(A);
+	beforeA = new Scope.ScopeBefore(A);
+	afterA = new Scope.ScopeAfter(A);
 
-	beforeB = new ScopeBefore(B);
-	afterB = new ScopeAfter(B);
+	beforeB = new Scope.ScopeBefore(B);
+	afterB = new Scope.ScopeAfter(B);
 
-	beforeC = new ScopeBefore(C);
-	afterC = new ScopeAfter(C);
+	beforeC = new Scope.ScopeBefore(C);
+	afterC = new Scope.ScopeAfter(C);
 
-	beforeD = new ScopeBefore(D);
-	afterD = new ScopeAfter(D);
+	beforeD = new Scope.ScopeBefore(D);
+	afterD = new Scope.ScopeAfter(D);
     }
 
     public void generateSimpleScopes()
@@ -215,13 +167,13 @@ public class TemporalTests extends TestCase
 
 	global.processEvent(D);
 
-	assertTrue(!beforeD.seenEvent(D));
-	assertTrue(!afterD.seenEvent(D));
-	assertTrue(!afterA.seenEvent(D));
+	assert(!beforeD.seenEvent(D));
+	assert(!afterD.seenEvent(D));
+	assert(!afterA.seenEvent(D));
 
-	assertTrue(beforeA.seenEvent(D));
-	assertTrue(beforeB.seenEvent(D));
-	assertTrue(!afterC.seenEvent(D));
+	assert(beforeA.seenEvent(D));
+	assert(beforeB.seenEvent(D));
+	assert(!afterC.seenEvent(D));
 
 	global.processEvent(C);
 
@@ -263,12 +215,12 @@ public class TemporalTests extends TestCase
 
 	TemporalInvariant g_alwaysB, g_eventuallyB, bA_alwaysB, bA_eventuallyB, aA_alwaysB, aA_eventuallyB;
 
-	g_alwaysB = new AlwaysInvariant(global, B);
-	g_eventuallyB = new EventuallyInvariant(global, B);
-	bA_alwaysB = new AlwaysInvariant(beforeA, B);
-	bA_eventuallyB = new EventuallyInvariant(beforeA, B);
-	aA_alwaysB = new AlwaysInvariant(afterA, B);
-	aA_eventuallyB = new EventuallyInvariant(afterA, B);
+	g_alwaysB = new TemporalInvariant.AlwaysInvariant(global, B);
+	g_eventuallyB = new TemporalInvariant.EventuallyInvariant(global, B);
+	bA_alwaysB = new TemporalInvariant.AlwaysInvariant(beforeA, B);
+	bA_eventuallyB = new TemporalInvariant.EventuallyInvariant(beforeA, B);
+	aA_alwaysB = new TemporalInvariant.AlwaysInvariant(afterA, B);
+	aA_eventuallyB = new TemporalInvariant.EventuallyInvariant(afterA, B);
 
 	assertTrue(!g_alwaysB.isFalsified);
 	assertTrue(g_alwaysB.numConfirmingSequences == 0);
@@ -322,11 +274,11 @@ public class TemporalTests extends TestCase
 
     public void testCoreBetweenScope()
     {
-	ScopeBetween betAB;
+	Scope.ScopeBetween betAB;
 
-	global = new ScopeGlobal();
+	global = new Scope.ScopeGlobal();
 	global.doDynamicInstantiation = false;
-	betAB = new ScopeBetween(A, B);
+	betAB = new Scope.ScopeBetween(A, B);
 
 	// Test 1 - very simple
 
@@ -365,14 +317,14 @@ public class TemporalTests extends TestCase
 
 	// Test 2 - now with an invariant
 
-	global = new ScopeGlobal();
+	global = new Scope.ScopeGlobal();
 	global.doDynamicInstantiation = false;
-	betAB = new ScopeBetween(A, B);
+	betAB = new Scope.ScopeBetween(A, B);
 
-	AlwaysInvariant alwaysC = new AlwaysInvariant(betAB, C);
+	TemporalInvariant.AlwaysInvariant alwaysC = new TemporalInvariant.AlwaysInvariant(betAB, C);
 
 	// to be added later
-	EventuallyInvariant eventuallyD = new EventuallyInvariant(D);
+	TemporalInvariant.EventuallyInvariant eventuallyD = new TemporalInvariant.EventuallyInvariant(D);
 
 	global.addChild(betAB);
 
@@ -409,11 +361,11 @@ public class TemporalTests extends TestCase
 
     public void testCoreAfterUntilScope()
     {
-	ScopeAfterUntil auAB;
+	Scope.ScopeAfterUntil auAB;
 
-	global = new ScopeGlobal();
+	global = new Scope.ScopeGlobal();
 	global.doDynamicInstantiation = false;
-	auAB = new ScopeAfterUntil(A, B);
+	auAB = new Scope.ScopeAfterUntil(A, B);
 
 	global.addChild(auAB);
 
@@ -445,8 +397,8 @@ public class TemporalTests extends TestCase
 
 	assertTrue(!auAB.isActive());
 
-	EventuallyInvariant eventuallyC = new EventuallyInvariant(auAB, C);
-	EventuallyInvariant eventuallyB = new EventuallyInvariant(auAB, B);
+	TemporalInvariant.EventuallyInvariant eventuallyC = new TemporalInvariant.EventuallyInvariant(auAB, C);
+	TemporalInvariant.EventuallyInvariant eventuallyB = new TemporalInvariant.EventuallyInvariant(auAB, B);
 
 	// Sequence ACB satisfies both
 
@@ -528,7 +480,7 @@ public class TemporalTests extends TestCase
     // FIXME: These should be fully automated! no really!
     public void testBasicDynamicInstantiation()
     {
-	global = new ScopeGlobal();
+	global = new Scope.ScopeGlobal();
 
 	global.enter();
 
@@ -575,6 +527,56 @@ public class TemporalTests extends TestCase
 //	global.printState();
 
 	global.exit();
+    }
+
+
+    static public class LetterEvent extends Event
+    {
+        String name;
+
+        static Hashtable events = new Hashtable();
+
+        LetterEvent(String n)
+        {
+            name = n;
+        }
+
+        public static LetterEvent getEvent(String n)
+        {
+            if (events.containsKey(n))
+                {
+                    return (LetterEvent)events.get(n);
+                }
+            else
+                {
+                    LetterEvent l = new LetterEvent(n);
+
+                    events.put(n, l);
+
+                    return l;
+                }
+        }
+
+
+        public boolean forwardSharesTypeWith(Event e)
+        {
+            return (e instanceof LetterEvent);
+        }
+
+        public boolean forwardMatches(Event e)
+        {
+            if (!(e instanceof LetterEvent))
+                return false;
+
+            LetterEvent l = (LetterEvent)e;
+
+            return l.name.equals(name);
+        }
+
+        public String toString()
+        {
+            return name;
+        }
     }
 
 }

@@ -28,7 +28,7 @@ class SimplifyFilter extends InvariantFilter {
       return (true);
     }
 
-    return(false);
+    return false;
 
 //      PptTopLevel topLevel = invariant.ppt.parent;
 

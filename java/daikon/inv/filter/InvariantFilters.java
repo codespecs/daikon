@@ -54,9 +54,8 @@ public class InvariantFilters {
   List propertyFilters = new Vector();
   List variableFilters = new ArrayList();
 
-  // Making it public is gross, but is ok for now.  If we use filters,
-  // in the redesign we can make it cleaner.
-  public PptMap ppt_map = null;
+  // Use public methods {set,get}PptMap to access, if necessary.
+  PptMap ppt_map = null;
 
   public InvariantFilters() {
     if (Daikon.output_style == OutputFormat.JML) {
@@ -124,6 +123,13 @@ public class InvariantFilters {
   }
 
   /**
+   * Set the PptMap that the filters are being applied to.
+   **/
+  public void setPptMap(PptMap ppt_map) {
+    this.ppt_map = ppt_map;
+  }
+
+  /**
    * @return the PptMap that the filters are being applied to.
    **/
   public PptMap getPptMap() {
@@ -136,10 +142,8 @@ public class InvariantFilters {
 
   public boolean shouldKeep( Invariant invariant ) {
     if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-      PrintInvariants.debugFiltering.debug(invariant.format() +
-                                           "\n\t\t(type: " +
-                                           invariant.getClass().getName() +
-                                           ")\n");
+      PrintInvariants.debugFiltering.debug(invariant.format());
+      PrintInvariants.debugFiltering.debug("\t\t(type: " + invariant.getClass().getName() +  ")");
     }
 
     PatternLayout pattern = null;
@@ -177,18 +181,18 @@ public class InvariantFilters {
     for (Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
       InvariantFilter filter = (InvariantFilter) iter.next();
       if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-        PrintInvariants.debugFiltering.debug("\tapplying " + filter.getClass().getName() +" \n");
+        PrintInvariants.debugFiltering.debug("\tapplying " + filter.getClass().getName());
       }
       if (filter.shouldDiscard( invariant )) {
         if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-          PrintInvariants.debugFiltering.debug("\tfailed " + filter.getClass().getName() +" \n");
+          PrintInvariants.debugFiltering.debug("\tfailed " + filter.getClass().getName());
           PrintInvariants.debugFiltering.getAppender(PrintInvariants.daikonFilteringOutputFilename).setLayout(pattern);
         }
         return false;
       }
     }
     if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-      PrintInvariants.debugFiltering.debug("\t(accepted by InvariantFilters)\n");
+      PrintInvariants.debugFiltering.debug("\t(accepted by InvariantFilters)");
       PrintInvariants.debugFiltering.getAppender(PrintInvariants.daikonFilteringOutputFilename).setLayout(pattern);
     }
     return true;
@@ -210,7 +214,7 @@ public class InvariantFilters {
   }
 
   public boolean getFilterSetting( String description ) {
-    return(find(description).getSetting());
+    return find(description).getSetting();
   }
 
   public void changeFilterSetting( String description, boolean turnOn ) {
@@ -346,7 +350,7 @@ public class InvariantFilters {
       Invariant invariant = (Invariant) iter.next();
       if (IsEqualityComparison.it.accept( invariant )) {
         if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-          PrintInvariants.debugFiltering.debug("Found invariant which says " + invariant.format() + "\n");
+          PrintInvariants.debugFiltering.debug("Found invariant which says " + invariant.format());
         }
         // System.out.println("Found equality invariant: " + invariant.format() + " " + invariant.ppt.name);
         // System.out.println("    " + invariant.repr());
@@ -426,7 +430,7 @@ public class InvariantFilters {
         }
       }
 
-      // System.out.println("\n");
+      // System.out.println("");
       // System.out.println("EquivalentGroup   is " + reprVarInfoList(equivalentGroup));
       // System.out.println("ordered_output    is " + reprVarInfoList(ordered_output));
       // System.out.println("ordered_reference is " + reprVarInfoList(ordered_reference));

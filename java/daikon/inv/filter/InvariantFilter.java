@@ -11,8 +11,10 @@ public abstract class InvariantFilter {
     this.isOn = isOn;
   }
 
-  public InvariantFilter() {    // TODO:  This is a hack.  Should add constructors that take a boolean
-    this( true );               // for every subclass.
+  // TODO:  This is a hack.  Should add constructors that take a boolean
+  // for every subclass.
+  public InvariantFilter() {
+    this( true );
   }
 
   abstract public String getDescription();

@@ -38,7 +38,7 @@ class UnmodifiedVariableEqualityFilter extends InvariantFilter {
       if (PrintInvariants.debugFiltering.isDebugEnabled()) {
         PrintInvariants.debugFiltering.debug("\t(yes...)\n");
       }
-      return(true);
+      return true ;
     }
 
     if (PrintInvariants.debugFiltering.isDebugEnabled()) {
@@ -49,7 +49,7 @@ class UnmodifiedVariableEqualityFilter extends InvariantFilter {
       if (PrintInvariants.debugFiltering.isDebugEnabled()) {
         PrintInvariants.debugFiltering.debug("\t(yes...)\n");
       }
-      return(true);
+      return true;
     }
 
     return false;

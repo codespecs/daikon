@@ -43,6 +43,7 @@ public final class FeatureExtractor {
      -t Type:       Type is one of {SVMlight, SVMfu, C5} *Required
      -s FileName:   name of output file for invariant descriptions
      -r repeats:    number of combinations of feature vectors
+     -p             do not output if no positive feature vectors are present
   */
 
   private static String USAGE =
@@ -76,8 +77,10 @@ public final class FeatureExtractor {
     boolean positives = false;
 
     for (int i = 0; i < args.length; i+=2) {
-      if (args[i].equals("-p"))
+      if (args[i].equals("-p")) {
         positives = true;
+        i--;
+      }
       else if (args[i].equals("-u"))
         usefuls.add(args[i+1]);
       else if (args[i].equals("-n"))
@@ -160,15 +163,16 @@ public final class FeatureExtractor {
         }
       }
       else if (output_type.equals("SVMlight")) {
-        File output = new File(args[args.length-1] + ".tmp");
+        File output = new File(output_file + ".tmp");
         printSVMOutput(usefulFeatures, nonusefulFeatures,
                        usefulStrings, nonusefulStrings, output);
         compactSVMFeatureFile(output, new File(args[args.length-1]));
         output.delete();
       }
       else if (output_type.equals("C5")) {
-        File output = new File(args[args.length-1]);
-        printC5Output(usefulFeatures, nonusefulFeatures, output);
+        File output = new File(output_file + ".data");
+        File names = new File(output_file + ".names");
+        printC5Output(usefulFeatures, nonusefulFeatures, output, names);
       }
       else
         System.err.println("Invalid Output Type: " + output_type);
@@ -346,9 +350,12 @@ public final class FeatureExtractor {
 
   /* Prints the labeling using C5 format
    */
-  private static void printC5Output(Vector usefulFeatures, Vector nonusefulFeatures,
-                                    File outputFile) throws IOException {
-    FileWriter output = new FileWriter(outputFile);
+  private static void printC5Output(Vector usefulFeatures,
+                                    Vector nonusefulFeatures,
+                                    File outputFile,File namesFile)
+    throws IOException {
+    FileWriter names = new FileWriter(namesFile);
+
     // First create a TreeSet of all the Feature Numbers and 0 as value
     TreeSet allFeatures =  new TreeSet();
     for (int i = 0; i < usefulFeatures.size(); i++) {
@@ -366,20 +373,21 @@ public final class FeatureExtractor {
       }
     }
 
-
     // Now make the .names part
-    output.write("|Beginning of .names file\n");
-    output.write("GoodBad.\n\nGoodBad: 1, -1.\n");
+    names.write("|Beginning of .names file\n");
+    // names.write("GoodBad.\n\nGoodBad: 1, -1.\n");
+    names.write("good, bad.\n");
     for (Iterator all = allFeatures.iterator(); all.hasNext(); )
-      output.write(((IntDoublePair) all.next()).number + ": continuous.\n");
-    output.write("useless: ignore.\n");
-    output.write("|End of .names file\n\n\n");
+      names.write(((IntDoublePair) all.next()).number + ": continuous.\n");
+    names.write("|End of .names file\n");
+    names.close();
 
+    FileWriter output = new FileWriter(outputFile);
     // Now for each invariant, print out the features C5.0 style
     // first useful
-    printC5DataOutput(usefulFeatures, allFeatures, "1,", output);
+    printC5DataOutput(usefulFeatures, allFeatures, "good", output);
     // and now non useful
-    printC5DataOutput(nonusefulFeatures, allFeatures, "-1,", output);
+    printC5DataOutput(nonusefulFeatures, allFeatures, "bad", output);
     output.close();
   }
 
@@ -393,13 +401,26 @@ public final class FeatureExtractor {
     DecimalFormat df = new DecimalFormat("0.0####");
     for (int i = 0; i < features.size(); i++) {
       TreeSet allFets = ((TreeSet) features.get(i));
-      allFets.addAll(allFeatures); // Add a 0 feature if it is not present
-      output.write(label);
+
+      // check which features are missing and add IntDoublePairs
+      // with those features set to 0
+      for (Iterator h = allFeatures.iterator(); h.hasNext();) {
+        IntDoublePair current = (IntDoublePair) h.next();
+        boolean contains = false;
+        for (Iterator j = allFets.iterator(); j.hasNext();) {
+          IntDoublePair jguy = (IntDoublePair) j.next();
+          if (jguy.number == current.number)
+            contains = true;
+        }
+        if (!contains)
+          allFets.add(current);
+      }
+
       for (Iterator fets = allFets.iterator(); fets.hasNext(); ) {
         IntDoublePair fet = (IntDoublePair) fets.next();
         output.write(df.format(fet.value) + ",");
       }
-      output.write("N/A\n");
+      output.write(label + "\n");
     }
   }
 
@@ -1754,6 +1775,14 @@ public final class FeatureExtractor {
     public IntDoublePair(int num, double val) {
       number = num;
       value = val;
+    }
+
+    public boolean equals(Object o) {
+      if (o instanceof IntDoublePair) {
+        IntDoublePair other = (IntDoublePair) o;
+        return ((number == other.number) && (value == other.value));
+      }
+      else return false;
     }
 
     // Compares an Object to this

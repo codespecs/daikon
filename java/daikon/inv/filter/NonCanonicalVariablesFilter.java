@@ -15,7 +15,7 @@ class NonCanonicalVariablesFilter extends InvariantFilter {
     return false; // INCR
     /* [INCR]
     if (invariant instanceof Implication) {
-      return(((Implication)invariant).consequent.hasNonCanonicalVariable());
+      return ((Implication)invariant).consequent.hasNonCanonicalVariable();
     }
     return (invariant.hasNonCanonicalVariable() && ! IsEqualityComparison.it.accept(invariant));
     */ // [INCR]

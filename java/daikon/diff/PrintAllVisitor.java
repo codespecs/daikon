@@ -11,6 +11,9 @@ import daikon.inv.Invariant;
  **/
 public class PrintAllVisitor extends DepthFirstVisitor {
 
+  protected static boolean HUMAN_OUTPUT = false;
+
+
   private static DecimalFormat PROBABILITY_FORMAT =
     new DecimalFormat("0.####");
 
@@ -71,14 +74,22 @@ public class PrintAllVisitor extends DepthFirstVisitor {
    * and their relationship.
    **/
   public void visit(InvNode node) {
+
+    if (HUMAN_OUTPUT) {
+      printHumanOutput (node);
+      return;
+    }
+
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
 
     bufPrint("  " + "<");
+
     if (inv1 == null) {
       bufPrint((String) null);
     } else {
       printInvariant(inv1);
+
     }
     bufPrint(", ");
     if (inv2 == null) {
@@ -97,6 +108,52 @@ public class PrintAllVisitor extends DepthFirstVisitor {
 
     bufPrintln();
   }
+
+
+  /**
+   * This method is an alternate printing procedure for
+   * an InvNode so that the output is more human readable.
+   * The format resembles cvs diff with '+' and '-' signs for
+   * the differing invariants.  There is no information
+   * on justification or invariant type.
+   **/
+  public void printHumanOutput(InvNode node) {
+
+    Invariant inv1 = node.getInv1();
+    Invariant inv2 = node.getInv2();
+
+    //    bufPrint("  " + "<");
+
+    if (inv1 != null && inv2 != null &&
+        (inv1.format().equals (inv2.format()))) {
+      return;
+    }
+
+    if (inv1 == null) {
+      //   bufPrint((String) null);
+    } else {
+      //  printInvariant(inv1);
+      bufPrintln (("- " + inv1.format()).trim());
+    }
+    //    bufPrint(", ");
+    if (inv2 == null) {
+      //      bufPrint((String) null);
+    } else {
+      bufPrintln (("+ " + inv2.format()).trim());
+      //      printInvariant(inv2);
+    }
+    //    bufPrint(">");
+
+    int type = DetailedStatisticsVisitor.determineType(inv1, inv2);
+    String typeLabel = DetailedStatisticsVisitor.TYPE_LABELS[type];
+    int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
+    String relLabel = DetailedStatisticsVisitor.RELATIONSHIP_LABELS[rel];
+
+    //    bufPrint(" (" + typeLabel + "," + relLabel + ")");
+
+    bufPrintln();
+  }
+
 
   /**
    * Prints an invariant, including its printability and possibly its

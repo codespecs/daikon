@@ -18,7 +18,7 @@ class InvariantState
 
 // FIXME: numConfirmingSequences numbers may not be correct
 // for dynamically instantiated invariants
-abstract class TemporalInvariant extends EventReceptor
+public abstract class TemporalInvariant extends EventReceptor
 {
     public boolean isFalsified;
     public int numConfirmingSequences;
@@ -126,183 +126,190 @@ abstract class TemporalInvariant extends EventReceptor
     }
 
     abstract String getDescriptionString();
-}
 
-class NeverInvariant extends TemporalInvariant
-{
-    Event mEvent;
 
-    void init(Event n)
+    /* ***************************************************************************
+     * Inner classes
+     */
+
+    public static class NeverInvariant extends TemporalInvariant
     {
-	mEvent = n;
+        Event mEvent;
+
+        void init(Event n)
+        {
+            mEvent = n;
+        }
+
+        public NeverInvariant(Event neverWhat)
+        {
+            super();
+
+            init(neverWhat);
+        }
+
+        public NeverInvariant(Scope parent, Event neverWhat)
+        {
+            super(parent);
+
+            init(neverWhat);
+        }
+
+        public void processEvent(Event e)
+        {
+            if (isFalsified) // Implement this check outside to avoid overhead?
+                return;
+
+            if (mEvent.matches(e))
+                {
+                    falsify();
+                }
+        }
+
+        // FIXME: Factor out common produceDuplicate code into a parent helper
+        // method (eg doCommonProduceDuplicateWork)
+        EventReceptor produceDuplicate()
+        {
+            NeverInvariant inv = new NeverInvariant(mEvent);
+
+            inv.numConfirmingSequences = numConfirmingSequences;
+            inv.isFalsified = isFalsified;
+
+            setTiedTo(inv);
+
+            return inv;
+        }
+
+        String getDescriptionString()
+        {
+            return mEvent.toString();
+        }
     }
 
-    NeverInvariant(Event neverWhat)
+    public static class AlwaysInvariant extends TemporalInvariant
     {
-	super();
+        Event mEvent;
 
-	init(neverWhat);
+        void init(Event e)
+        {
+            mEvent = e;
+        }
+
+        public AlwaysInvariant(Event aW)
+        {
+            super();
+
+            init(aW);
+        }
+
+        public AlwaysInvariant(Scope parent, Event aW)
+        {
+            super(parent);
+
+            init(aW);
+        }
+
+        public void processEvent(Event e)
+        {
+            if (isFalsified)
+                return;
+
+            if (mEvent.sharesTypeWith(e) && !mEvent.matches(e))
+                {
+                    falsify();
+                }
+        }
+
+        EventReceptor produceDuplicate()
+        {
+            AlwaysInvariant inv = new AlwaysInvariant(mEvent);
+
+            inv.numConfirmingSequences = numConfirmingSequences;
+            inv.isFalsified = isFalsified;
+
+            setTiedTo(inv);
+
+            return inv;
+        }
+
+        String getDescriptionString()
+        {
+            return mEvent.toString();
+        }
     }
 
-    NeverInvariant(Scope parent, Event neverWhat)
+    public static class EventuallyInvariant extends TemporalInvariant
     {
-	super(parent);
+        Event mEvent;
+        public boolean happenedOnceInScope;
 
-	init(neverWhat);
+        void init(Event e)
+        {
+            mEvent = e;
+            happenedOnceInScope = true;
+        }
+
+        public EventuallyInvariant(Event eW)
+        {
+            super();
+
+            init(eW);
+        }
+
+        public EventuallyInvariant(Scope parent, Event eventuallyWhat)
+        {
+            super(parent);
+
+            init(eventuallyWhat);
+        }
+
+        public void processEvent(Event e)
+        {
+            if (isFalsified)
+                return;
+
+            if (mEvent.matches(e))
+                {
+                    happenedOnceInScope = true;
+                }
+        }
+
+        void parentScopeEntering()
+        {
+            happenedOnceInScope = false;
+        }
+
+        void parentScopeExiting()
+        {
+            if (!happenedOnceInScope)
+                {
+                    falsify();
+                }
+            else
+                {
+                    numConfirmingSequences += 1;
+                }
+
+            happenedOnceInScope = false;
+        }
+
+        EventReceptor produceDuplicate()
+        {
+            EventuallyInvariant inv = new EventuallyInvariant(mEvent);
+
+            inv.numConfirmingSequences = numConfirmingSequences;
+            inv.isFalsified = isFalsified;
+
+            setTiedTo(inv);
+
+            return inv;
+        }
+
+        String getDescriptionString()
+        {
+            return mEvent.toString();
+        }
     }
 
-    public void processEvent(Event e)
-    {
-	if (isFalsified) // Implement this check outside to avoid overhead?
-	    return;
 
-	if (mEvent.matches(e))
-	    {
-		falsify();
-	    }
-    }
-
-    // FIXME: Factor out common produceDuplicate code into a parent helper
-    // method (eg doCommonProduceDuplicateWork)
-    EventReceptor produceDuplicate()
-    {
-	NeverInvariant inv = new NeverInvariant(mEvent);
-
-	inv.numConfirmingSequences = numConfirmingSequences;
-	inv.isFalsified = isFalsified;
-
-	setTiedTo(inv);
-
-	return inv;
-    }
-
-    String getDescriptionString()
-    {
-	return mEvent.toString();
-    }
-}
-
-class AlwaysInvariant extends TemporalInvariant
-{
-    Event mEvent;
-
-    void init(Event e)
-    {
-	mEvent = e;
-    }
-
-    AlwaysInvariant(Event aW)
-    {
-	super();
-
-	init(aW);
-    }
-
-    AlwaysInvariant(Scope parent, Event aW)
-    {
-	super(parent);
-
-	init(aW);
-    }
-
-    public void processEvent(Event e)
-    {
-	if (isFalsified)
-	    return;
-
-	if (mEvent.sharesTypeWith(e) && !mEvent.matches(e))
-	    {
-		falsify();
-	    }
-    }
-
-    EventReceptor produceDuplicate()
-    {
-	AlwaysInvariant inv = new AlwaysInvariant(mEvent);
-
-	inv.numConfirmingSequences = numConfirmingSequences;
-	inv.isFalsified = isFalsified;
-
-	setTiedTo(inv);
-
-	return inv;
-    }
-
-    String getDescriptionString()
-    {
-	return mEvent.toString();
-    }
-}
-
-class EventuallyInvariant extends TemporalInvariant
-{
-    Event mEvent;
-    public boolean happenedOnceInScope;
-
-    void init(Event e)
-    {
-	mEvent = e;
-	happenedOnceInScope = true;
-    }
-
-    EventuallyInvariant(Event eW)
-    {
-	super();
-
-	init(eW);
-    }
-
-    EventuallyInvariant(Scope parent, Event eventuallyWhat)
-    {
-	super(parent);
-
-	init(eventuallyWhat);
-    }
-
-    public void processEvent(Event e)
-    {
-	if (isFalsified)
-	    return;
-
-	if (mEvent.matches(e))
-	    {
-		happenedOnceInScope = true;
-	    }
-    }
-
-    void parentScopeEntering()
-    {
-	happenedOnceInScope = false;
-    }
-
-    void parentScopeExiting()
-    {
-	if (!happenedOnceInScope)
-	    {
-		falsify();
-	    }
-	else
-	    {
-		numConfirmingSequences += 1;
-	    }
-
-	happenedOnceInScope = false;
-    }
-
-    EventReceptor produceDuplicate()
-    {
-	EventuallyInvariant inv = new EventuallyInvariant(mEvent);
-
-	inv.numConfirmingSequences = numConfirmingSequences;
-	inv.isFalsified = isFalsified;
-
-	setTiedTo(inv);
-
-	return inv;
-    }
-
-    String getDescriptionString()
-    {
-	return mEvent.toString();
-    }
 }

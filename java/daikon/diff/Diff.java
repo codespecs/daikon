@@ -1,6 +1,7 @@
 package daikon.diff;
 
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.*;
 import java.io.*;
 import java.util.*;
@@ -57,6 +58,9 @@ public final class Diff {
     "invSortComparator2";
   private static final String INV_PAIR_COMPARATOR_SWITCH =
     "invPairComparator";
+  private static final String IGNORE_UNJUSTIFIED_SWITCH =
+    "ignore_unjustified";
+
 
 
   /** Determine which ppts should be paired together in the tree. **/
@@ -69,6 +73,8 @@ public final class Diff {
   private Comparator invSortComparator1;
   private Comparator invSortComparator2;
   private Comparator invPairComparator;
+
+  int nonce = 0;
 
   private boolean examineAllPpts;
 
@@ -93,7 +99,7 @@ public final class Diff {
     boolean printDiff = false;
     boolean printUninteresting = false;
     boolean printAll = false;
-    boolean includeUnjustified = true; // -y means ignore the unjustified invs
+    boolean includeUnjustified = true;
     boolean stats = false;
     boolean tabSeparatedStats = false;
     boolean minus = false;
@@ -120,10 +126,12 @@ public final class Diff {
                   LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(INV_PAIR_COMPARATOR_SWITCH,
                   LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(IGNORE_UNJUSTIFIED_SWITCH,
+                  LongOpt.NO_ARGUMENT, null, 0),
     };
 
     Getopt g = new Getopt("daikon.diff.Diff", args,
-                          "hyduastmxno:jzpevl", longOpts);
+                          "Hhyduastmxno:jzpevl", longOpts);
     int c;
     while ((c = g.getopt()) !=-1) {
       switch (c) {
@@ -148,6 +156,10 @@ public final class Diff {
                             " classnames supplied on command line");
           }
           invPairComparatorClassname = g.getOptarg();
+        } else if (IGNORE_UNJUSTIFIED_SWITCH.equals(optionName)) {
+          optionSelected = true;
+          includeUnjustified = false;
+          break;
         } else {
           throw new RuntimeException("Unknown long option received: " +
                                      optionName);
@@ -157,7 +169,10 @@ public final class Diff {
         System.out.println(usage);
         System.exit(1);
         break;
-      case 'y':
+      case 'H':
+        PrintAllVisitor.HUMAN_OUTPUT = true;
+        break;
+      case 'y':  //included for legacy code
         optionSelected = true;
         includeUnjustified = false;
         break;
@@ -300,46 +315,67 @@ public final class Diff {
       }
       String filename1 = args[firstFileIndex];
       String filename2 = args[firstFileIndex + 1];
-      String manipA = args[firstFileIndex + 2];
-      String manipB = args[firstFileIndex + 3];
+      String filename3 = args[firstFileIndex + 2];
+      String filename4 = args[firstFileIndex + 3];
       PptMap map1 = FileIO.read_serialized_pptmap(new File(filename1),
                                                   false // use saved config
                                                   );
       PptMap map2 = FileIO.read_serialized_pptmap(new File(filename2),
                                                   false // use saved config
                                                   );
-      manip1 = FileIO.read_serialized_pptmap(new File(manipA),
+      manip1 = FileIO.read_serialized_pptmap(new File(filename3),
                                              false // use saved config
                                              );
-      manip2 = FileIO.read_serialized_pptmap(new File(manipB),
+      manip2 = FileIO.read_serialized_pptmap(new File(filename4),
                                              false // use saved config
                                              );
 
       // get the xor from these two manips
+      treeManip = false;
       RootNode manipRoot = diff.diffPptMap (manip1, manip2, includeUnjustified);
+
       XorInvariantsVisitor xiv = new XorInvariantsVisitor(System.out,
                                                           false,
                                                           false,
                                                           false);
       manipRoot.accept (xiv);
 
-      // stores the new xor set into manip1.  This might
-      // be a hack of a design, but as far as I can tell,
-      // it's quite hard to build a PptMap from scratch
-      // due to the creational patterns invovled. -LL
-
+      // remove for the latest version
+      treeManip = true;
 
       // form the root with tree manips
       RootNode root = diff.diffPptMap (map1, map2, includeUnjustified);
 
+
+      // Extract consequents
+      //ConsequentExtractorVisitor cev = new ConsequentExtractorVisitor();
+      //root.accept (cev);
+
       // now run the stats visitor for checking matches
-      MatchCountVisitor mcv = new MatchCountVisitor
+      //      MatchCountVisitor2 mcv = new MatchCountVisitor2
+      //  (System.out, verbose, false);
+
+      PptCountVisitor mcv = new PptCountVisitor
         (System.out, verbose, false);
+
       root.accept (mcv);
+      mcv.printFinal();
       System.out.println ("Precison: " + mcv.calcPrecision());
       System.out.println ("Recall: " + mcv.calcRecall());
       System.out.println ("Success");
+      //      System.exit(0);
+
+
+      MatchCountVisitor2 mcv2 = new MatchCountVisitor2
+        (System.out, verbose, false);
+
+      root.accept (mcv2);
+      mcv2.printFinal();
+      System.out.println ("Precison: " + mcv2.calcPrecision());
+      System.out.println ("Recall: " + mcv2.calcRecall());
+      System.out.println ("Success");
       System.exit(0);
+
     } else if (numFiles > 2) {
 
       // The new stuff that allows multiple files -LL
@@ -597,27 +633,66 @@ public final class Diff {
                       "Program points do not correspond");
 
     List invs1;
-    if (ppt1 != null) {
+    if (ppt1 != null && !treeManip) {
       invs1 = (List) map1.get(ppt1);
       Collections.sort(invs1, invSortComparator1);
-    } else {
+    }
+
+    else if (ppt1 != null && treeManip && !isCond(ppt1)) {
+      HashSet repeatFilter = new HashSet();
+      ArrayList ret = new ArrayList ();
+      invs1 = (List) map1.get(ppt1);
+      for (Iterator j = invs1.iterator(); j.hasNext();) {
+        Invariant inv = (Invariant)  j.next();
+        if (inv.justified() && inv instanceof Implication) {
+          nonce++;
+          Implication imp = (Implication) inv;
+          if (!repeatFilter.contains (imp.consequent().format_using(OutputFormat.JAVA))) {
+            repeatFilter.add (imp.consequent().format_using(OutputFormat.JAVA));
+            ret.add (imp.consequent());
+          }
+          // add both sides of a biimplication
+          if (imp.iff == true) {
+            if (!repeatFilter.contains(imp.predicate().format())) {
+              repeatFilter.add (imp.predicate().format());
+              ret.add (imp.predicate());
+            }
+          }
+        }
+      }
+      invs1 = ret;
+      Collections.sort(invs1, invSortComparator1);
+    }
+
+    else {
       invs1 = Collections.EMPTY_LIST;
     }
 
     List invs2;
-    if (ppt2 != null) {
+    if (ppt2 != null && !treeManip) {
       invs2 = (List) map2.get(ppt2);
       Collections.sort(invs2, invSortComparator2);
     } else {
-      if ( treeManip && isCond (ppt1)) {
+      if ( false && treeManip && isCond (ppt1)) {
         // remember, only want to mess with the second list
         invs2 = findCondPpt (manip1, ppt1);
         List tmpList = findCondPpt (manip2, ppt1);
 
         invs2.addAll (tmpList);
-        // must call sort or it won't work! -LL after much debugging
+
+        // This uses set difference model instead of XOR
+        //        invs2 = tmpList;
+
+        // must call sort or it won't work!
         Collections.sort(invs2, invSortComparator2);
-      } else {
+      }
+      else if (treeManip && ppt2 != null && !isCond(ppt2)) {
+
+        invs2 = findNormalPpt (manip1, ppt2);
+        invs2.addAll ( findNormalPpt (manip2, ppt2));
+        Collections.sort (invs2, invSortComparator2);
+      }
+      else {
         invs2 = Collections.EMPTY_LIST;
       }
     }
@@ -641,6 +716,7 @@ public final class Diff {
         pptNode.add(invNode);
       }
     }
+    //    System.out.println ("NONCE: " + nonce);
 
     return pptNode;
   }
@@ -668,6 +744,28 @@ public final class Diff {
     System.out.println ("LHS Missing: " + targ);
     return Collections.EMPTY_LIST;
   }
+
+
+  private List findNormalPpt (PptMap manip, PptTopLevel ppt) {
+    // targetName should look like this below
+    // Contest.smallestRoom(II)I:::EXIT9
+    String targetName = ppt.name;
+
+    //    String targ = targetName.substring (0, targetName.lastIndexOf(";condition"));
+
+    for ( Iterator i = manip.nameStringSet().iterator(); i.hasNext();) {
+      String somePptName = (String) i.next();
+      // A conditional Ppt always contains the normal Ppt
+      if (targetName.equals (somePptName)) {
+        PptTopLevel repl = manip.get (somePptName);
+        return UtilMDE.sortList(repl.getInvariants(), PptTopLevel.icfp);
+      }
+    }
+    //    System.out.println ("Could not find the left hand side of implication!!!");
+    System.out.println ("LHS Missing: " + targetName);
+    return Collections.EMPTY_LIST;
+  }
+
 
   /**
    * Use the comparator for sorting both sets and creating the pair

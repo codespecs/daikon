@@ -59,7 +59,7 @@ abstract class EventReceptor
 
     void setTiedTo(EventReceptor r)
     {
-	if (childOfClass(ScopeBetween.class))
+	if (childOfClass(Scope.ScopeBetween.class))
 	    {
 		tiedTo.add(r);
 	    }
@@ -74,7 +74,7 @@ abstract class EventReceptor
 	if (mParent == null)
 	{
 		return -1;
-	} else if (mParent instanceof ScopeGlobal)
+	} else if (mParent instanceof Scope.ScopeGlobal)
 	{
 		return 0;
 	} else {

@@ -1,97 +1,167 @@
 package daikon.diff;
 
 import daikon.inv.Invariant;
+import daikon.inv.Invariant.OutputFormat;
 import java.io.*;
 import daikon.*;
-import daikon.inv.Invariant.OutputFormat;
 import java.util.*;
 
 /**
- * MatchCountVisitor is a visitor that almost does the opposite of
- * PrintDifferingInvariantsVisitor.  MatchCount prints invariant pairs
- * if they are the same, and only if they are a part of a conditional ppt.
- * The visitor also accumulates some state during its traversal for statistics,
- * and can report the match precision.
- *
+ * PptCountVisitor is currently not documented
  *
  * @author Lee Lin
  **/
-public class MatchCountVisitor extends PrintAllVisitor {
+public class PptCountVisitor extends PrintAllVisitor {
+
+
+    // amount of invariants needed for a program point to be
+    // flagged as suspicious
+    private static final int REPORT_REQUIREMENT_NUMBER = 1;
+    private static final int GOAL_REQUIREMENT_NUMBER = 1;
 
     // invariants found by the splitting
     private HashSet cnt = new HashSet();
     // target set of invariants
     private HashSet targSet = new HashSet();
     // invariants found matching
-    private HashSet recall = new HashSet();
+    private HashSet correctSet = new HashSet();
+
+    // invariants reported but not correct
+    private HashSet incorrectSet = new HashSet();
+
+
 
     private HashMap goodMap = new HashMap();
 
 
-    private Invariant dummy = null;
 
-  public MatchCountVisitor (PrintStream ps, boolean verbose,
+    // determiens if this program point has been marked for
+    // suspicious activity.
+    private boolean marked;
+
+
+  public PptCountVisitor (PrintStream ps, boolean verbose,
                                          boolean printEmptyPpts) {
     super(ps, verbose, printEmptyPpts);
   }
 
-    // throw out Program points that are not Conditional,
-    // meaning they were NOT added from our splitters
+    // throw out Program points that are Conditional,
     public void visit (PptNode node) {
         PptTopLevel ppt = node.getPpt1();
-        if (! (ppt instanceof PptConditional)) return;
-        else super.visit (node);
+        marked = false;
+        if ((ppt instanceof PptConditional)) return;
+        //        else super.visit (node);
+
+        boolean report = countReport (node);
+        boolean target = countTarget (node);
+
+        if (report) {
+            cnt.add (ppt.name);
+        }
+
+        if (target) {
+            targSet.add (ppt.name);
+        }
+
+        if (report && target) {
+            correctSet.add (ppt.name);
+        }
     }
 
+    private boolean countReport (PptNode input) {
+
+        int reportCnt = 0;
+        int totalCnt = 0;
+
+        for (Iterator i = input.children(); i.hasNext(); ) {
+            InvNode node = (InvNode) i.next();
+            Invariant inv1 = node.getInv1();
+            Invariant inv2 = node.getInv2();
+
+            totalCnt++;
+
+            if (inv1 != null && inv1.justified() && !filterOut (inv1)) {
+                reportCnt ++;
+            }
+
+        }
+
+        return reportCnt > REPORT_REQUIREMENT_NUMBER;
+
+
+    }
+
+    private boolean countTarget (PptNode input) {
+
+        int targetCnt = 0;
+        int totalCnt = 0;
+
+        for (Iterator i = input.children(); i.hasNext(); ) {
+            InvNode node = (InvNode) i.next();
+            Invariant inv1 = node.getInv1();
+            Invariant inv2 = node.getInv2();
+
+            totalCnt++;
+
+            if (inv2 != null && inv2.justified() && !filterOut (inv2)) {
+                targetCnt ++;
+            }
+
+        }
+
+        return targetCnt > GOAL_REQUIREMENT_NUMBER;
+    }
+
+
+    /** Anytime something matches, we should score it has correct */
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
+
     String key1 = "";
     String key2 = "";
 
-
     if (inv1 != null && inv1.justified() && !filterOut (inv1)) {
-	String tmpStr1 = inv1.ppt.name;
-        //System.out.println ("NAME1: " + tmpStr1);
-	//Contest.smallestRoom(II)I:::EXIT;condition="not(max <= num)"
-	String thisPptName1 = tmpStr1.substring (0,
-						tmpStr1.lastIndexOf (";condition"));
-	key1 = thisPptName1 + "$" + inv1.format_using(OutputFormat.JAVA);
-	// checks for justification
-        if (shouldPrint (inv1, inv1)) // [???]
-        cnt.add (key1);
-        if (dummy == null) dummy = inv1;
+	String thisPptName1 = inv1.ppt.name;
 
+	key1 = thisPptName1 + "$" + inv1.format();
+        cnt.add (key1);
     }
 
     if (inv2 != null && inv2.justified() && !filterOut (inv2)) {
-        String tmpStr2 = inv2.ppt.name;
-        String thisPptName2 = tmpStr2.substring (0,
-                                                tmpStr2.lastIndexOf ('('));
-        key2 = thisPptName2 + "$" + inv2.format_using(OutputFormat.JAVA);
+        String thisPptName2 = inv2.ppt.name;
+        key2 = thisPptName2 + "$" + inv2.format();
         targSet.add (key2);
     }
 
     if (shouldPrint(inv1, inv2)) {
         // inv1 and inv2 should be the same, so it doesn't matter
         // which one we choose when adding to recall -LL
-        recall.add (key1);
+        correctSet.add (key2);
 
         //	System.out.println("K1: " + key1);
         //        System.out.println ("K2: " + key2);
 
-        String tmpStr1 = inv1.ppt.name;
+        String thisPptName1 = inv1.ppt.name;
         //System.out.println ("NAME1: " + tmpStr1);
 	//Contest.smallestRoom(II)I:::EXIT;condition="not(max <= num)"
-	String thisPptName1 = tmpStr1.substring (0,
-						tmpStr1.lastIndexOf (";condition"));
-        String predicate = extractPredicate (tmpStr1);
-        HashSet bucket = (HashSet) goodMap.get (thisPptName1);
+        String bucketKey = thisPptName1.substring (0,
+        	       			thisPptName1.lastIndexOf (";condition"));
+
+
+        /** this is all for printing purposes */
+
+        String predicate = extractPredicate (thisPptName1);
+        HashSet bucket = (HashSet) goodMap.get (bucketKey);
         if (bucket == null) {
             bucket = new HashSet();
-            goodMap.put (thisPptName1, bucket);
+            goodMap.put (bucketKey, bucket);
         }
         bucket.add (predicate + " ==> " + inv1.format());
+
+    }
+    else {
+        incorrectSet.add (key1);
     }
   }
 
@@ -129,6 +199,13 @@ public class MatchCountVisitor extends PrintAllVisitor {
   /** Returns true if the pair of invariants should be printed **/
   protected static boolean shouldPrint(Invariant inv1, Invariant inv2) {
 
+      if (5 == 5) {
+          if (inv1 == null || inv2 == null) {
+              return false;
+          }
+          return  inv1.format().equals (inv2.format());
+      }
+
     int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
     if (rel == DetailedStatisticsVisitor.REL_SAME_JUST1_JUST2 ) {
 
@@ -156,6 +233,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
     /** returns true iff any token of inv.format_java() contains
      *  a number other than -1, 0, 1 or is null. */
     private static boolean filterOut (Invariant inv) {
+
         if (inv == null) return true;
         String str = inv.format_using(OutputFormat.JAVA);
         StringTokenizer st = new StringTokenizer (str, " ()");
@@ -183,9 +261,9 @@ public class MatchCountVisitor extends PrintAllVisitor {
     }
 
     public double calcRecall() {
-        System.out.println ("Recall: "+ recall.size() +" / "+ targSet.size());
+        System.out.println ("Recall: "+ correctSet.size() +" / "+ targSet.size());
         if (targSet.size() == 0) return -1; // avoids divide by zero
-        return (double) recall.size() / targSet.size();
+        return (double) correctSet.size() / targSet.size();
     }
 
 
@@ -202,8 +280,11 @@ public class MatchCountVisitor extends PrintAllVisitor {
         // could be float, look for "."
         if (numLiteral.indexOf (".") > -1) {
             float fnum = Float.parseFloat (numLiteral);
-            // for now, accept all floats
-            return true;
+            if (fnum == 1.0 || fnum == 0.0 || fnum == -1.0) {
+                return true;
+            }
+
+            return false;
         }
         // not float, must be int
         else {
@@ -219,14 +300,39 @@ public class MatchCountVisitor extends PrintAllVisitor {
 
     public double calcPrecision() {
 
-        System.out.println ("Prec: "+ recall.size() +" / "+ cnt.size());
+        System.out.println ("Prec: "+ correctSet.size() +" / "+ cnt.size());
         if (cnt.size() == 0) return -1; // to avoid a divide by zero -LL
-        return (double) recall.size() / cnt.size();
+        return (double) correctSet.size() / cnt.size();
     }
 
 
     /** Prints the results of the correct set in a human-readable format */
     public void printFinal () {
+
+        System.out.println ("CORRECT_FOUND: ");
+        for (Iterator i = targSet.iterator(); i.hasNext();) {
+            String str = (String) i.next();
+            if (correctSet.contains (str)) {
+                System.out.println (str);
+            }
+        }
+
+        System.out.println ("\n\n\nNOT_FOUND: ");
+        for (Iterator i = targSet.iterator(); i.hasNext();) {
+            String str = (String) i.next();
+            if (!correctSet.contains (str)) {
+                System.out.println (str);
+            }
+        }
+
+        System.out.println ("\n\n\nWRONG_REPORTS: ");
+        for (Iterator i = incorrectSet.iterator(); i.hasNext();) {
+            String str = (String) i.next();
+            System.out.println (str);
+        }
+
+
+
         for (Iterator i = goodMap.keySet().iterator(); i.hasNext(); ) {
             String ppt = (String) i.next();
             System.out.println ("\n*****************" + ppt);
@@ -235,6 +341,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
                 System.out.println (j.next());
             }
         }
+
 
     }
 

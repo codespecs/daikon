@@ -59,7 +59,7 @@ public final class Equality
   public void setSamples(int arg) {
     numSamples = arg;
   }
-  
+
   /**
    * The Set of VarInfos that this represents equality for.  Can change
    * over time as invariant weakens.  Sorted by index until pivoting.
@@ -125,7 +125,7 @@ public final class Equality
   //     // little secret.
   //     return false;
   //   }
-  
+
   /**
    * Always return JUSTIFIED because we aggregate Comparison
    * invariants that are all justified to the probability_limit
@@ -268,7 +268,7 @@ public final class Equality
         result += "    (obviously)";
       }
     }
-    return(result);
+    return result;
 
 //      StringBuffer result = new StringBuffer();
 //      if (leader().rep_type.isArray()) {
@@ -401,18 +401,18 @@ public final class Equality
           viValue == null ||
           !(viValue.equals(leaderValue))) {
         // We should be interning here and using == only
-        // 
+        //
         // To do this, we'd have to intern at the ValueTuple level, in
         // FileIO when the tuples get generated.  This would be good for
         // two reasons:
         //   The comparison here would be faster
-        //   Avoid double interning at the Invariant level when f(a, b) 
+        //   Avoid double interning at the Invariant level when f(a, b)
         //   and f(a, c).
         // This would be bad because:
         //   Some VarInfos that are never checked would have to get
         //   interned.  Right now, only VarInfos with invariants on them
         //   are interned. [TNW after talking with MDE 26 Sep 2002]
-        
+
         result.add (vi);
         i.remove();
       }

@@ -895,7 +895,7 @@ public abstract class Invariant
    * Like isWorthPrinting, but doesn't check whether the invariant is controlled.
    **/
   final public boolean isWorthPrinting_sansControlledCheck() {
-    return(InvariantFilters.isWorthPrintingFilter_sansControlledCheck().shouldKeep(this));
+    return InvariantFilters.isWorthPrintingFilter_sansControlledCheck().shouldKeep(this);
   }
 
   final public String isWorthPrinting_sansControlledCheck_debug() {
@@ -1050,7 +1050,7 @@ public abstract class Invariant
         // If entryInvariant with orig() applied to everything matches this invariant
         if (entryInvariant.isSameInvariant( this, preToPostIsSameInvariantNameExtractor)) {
           if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-            PrintInvariants.debugFiltering.debug("\tImplied by precond: " + entryInvariant.format() + " (from " + PrintInvariants.get_better_name(entryInvariant.ppt.parent) + ")\n");
+            PrintInvariants.debugFiltering.debug("\tImplied by precond: " + entryInvariant.format() + " (from " + PrintInvariants.jvm_signature_to_java_signature(entryInvariant.ppt.parent) + ")\n");
           }
           return true;
         }
