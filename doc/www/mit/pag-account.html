@@ -33,6 +33,9 @@ useradd -d /g6/users/$NEWUSERNAME -u $NEWUID $NEWUSERNAME
 emacs /etc/group
 <em>echo "## Insert full name"</em>
 emacs /etc/passwd
+yppasswd $NEWUSERNAME
+<em>echo "## If can't use yppasswd (e.g., no root password), edit /etc/passwd with:"</em>
+openssl passwd NEWPASSWD
 make -C /var/yp
 <em>echo "## Add to 'daikon' mailing list"</em>
 emacs /etc/aliases
@@ -54,16 +57,15 @@ chgrp $NEWUSERNAME .cshrc .cvsrc .emacs
 echo $NEWUSERNAME@mit.edu > .forward
 chown $NEWUSERNAME .forward
 chgrp $NEWUSERNAME .forward
-yppasswd $NEWUSERNAME
 exit
 </pre>
 </blockquote>
 
 <li>
 Now point people at the following webpages:<br>
-Program Analysis Group logistics:
+Program Analysis Group logistics:<br>
 <a href="http://pag.lcs.mit.edu/pag/logistics.html">http://pag.lcs.mit.edu/pag/logistics.html</a><br>
-Using Daikon at MIT LCS:
+Using Daikon at MIT LCS:<br>
 <a href="http://pag.lcs.mit.edu/daikon/mit/">http://pag.lcs.mit.edu/daikon/mit/</a>
 
 </ol>
