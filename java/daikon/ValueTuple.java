@@ -163,21 +163,26 @@ public class ValueTuple {
   }
 
   // Private constructor that doesn't perform interning.
-  private ValueTuple(Object[] vals_, int[] mods_, boolean ignore) {
-    Assert.assert(vals_ == ArraysMDE.intern(vals_));
-    Assert.assert(mods_ == ArraysMDE.intern(mods_));
-    Assert.assert(ignore);	// argument must be "true"
+  private ValueTuple(Object[] vals_, int[] mods_, boolean check) {
+    Assert.assert((!check) || (vals_ == ArraysMDE.intern(vals_)));
+    Assert.assert((!check) || (mods_ == ArraysMDE.intern(mods_)));
     vals = vals_;
     mods = mods_;
+  }
+
+  // More convenient name for the constructor that doesn't intern.
+  // This is not private because read_data_trace_file needs it.
+  // (The alternative would be for derived variables to take separate
+  // vals and mods arguments.)  No one else should use it!
+  public static ValueTuple makeUninterned(Object[] vals_, int[] mods_) {
+    return new ValueTuple(vals_, mods_, false);
   }
 
 
   // Do I need/want this?  Probably in some circumstances...  But in
   // general, users should use the constructor.
   /** Constructor that takes already-interned arguments. */
-  // The "ignore" argument merely disambiguates this from the standard
-  // two-argument constructor.
-  ValueTuple makeFromInterned(Object[] vals_, int[] mods_, boolean ignore) {
+  static ValueTuple makeFromInterned(Object[] vals_, int[] mods_) {
     return new ValueTuple(vals_, mods_, true);
   }
 

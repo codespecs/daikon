@@ -20,6 +20,8 @@ import utilMDE.*;
 class PptTopLevel extends Ppt {
 
   final static boolean debugPptTopLevel = false;
+  final static boolean debugPptTopLevelDerive = true;
+
 
   // do we need both a num_tracevars for the number of variables in the
   // tracefile and a num_non_dreived_vars for the number of variables
@@ -65,27 +67,6 @@ class PptTopLevel extends Ppt {
     // While there are no constants, this works.
     num_tracevars = var_infos.length;
     num_orig_vars = 0;
-
-    derivation_indices = new int[] { 0, 0 };
-
-    // views = new WeakHashMap();
-    views = new HashSet();
-    for (int i=0; i<var_infos.length; i++) {
-      PptSliceGeneric slice1 = new PptSliceGeneric(this, var_infos[i]);
-      addView(slice1);
-      for (int j=i+1; j<var_infos.length; j++) {
-	PptSliceGeneric slice2 = new PptSliceGeneric(this, var_infos[i], var_infos[j]);
-	addView(slice2);
-	/// Arity 3 is not yet implemented.
-	// for (int k=j+1; j<var_infos.length; k++) {
-	//   PptSliceGeneric slice3 = new PptSliceGeneric(this, var_infos[i], var_infos[j], var_infos[k]);
-	//   addView(slice3);
-	// }
-      }
-    }
-    if (debugPptTopLevel)
-      System.out.println("" + views.size() + " views for " + name);
-
   }
 
   // This is used when merging two sets of data, to create Ppts that were
@@ -196,9 +177,10 @@ class PptTopLevel extends Ppt {
     VarInfo[] new_var_infos = new VarInfo[var_infos.length + vis.length];
     System.arraycopy(var_infos, 0, new_var_infos, 0, old_length);
     System.arraycopy(vis, 0, new_var_infos, old_length, vis.length);
-    // for (int i=old_length; i<new_var_infos.length; i++) {
-    //   new_var_infos[i].index = i;
-    // }
+    for (int i=old_length; i<new_var_infos.length; i++) {
+       new_var_infos[i].value_index = i;
+       new_var_infos[i].varinfo_index = i;
+    }
     var_infos = new_var_infos;
   }
 
@@ -208,8 +190,9 @@ class PptTopLevel extends Ppt {
     System.arraycopy(var_infos, 0, new_var_infos, 0, old_length);
     for (int i=0, size=v.size(); i<size; i++) {
       VarInfo vi = (VarInfo) v.elementAt(i);
-      // vi.index = i+old_length;
       new_var_infos[i+old_length] = vi;
+      vi.value_index = i+old_length;
+      vi.varinfo_index = i+old_length;
     }
     var_infos = new_var_infos;
 
@@ -217,7 +200,21 @@ class PptTopLevel extends Ppt {
 
   }
 
+  // This isn't in the constructor because it needs to come after adding
+  // _orig variables.
+  void derive_all() {
+    derivation_indices = new int[derivation_passes+1];
+    for (int i=1; i<=derivation_passes; i++)
+      derivation_indices[i] = 0;
+    derivation_indices[0] = num_tracevars;
 
+    // Eventually, integrate derivation and inference.  That will require
+    // incrementally adding new variables, slices, and invariants.  For
+    // now, don't bother:  I want to just get something working first.
+    while (derivation_indices[derivation_passes] < var_infos.length) {
+      addVarInfos(derive());
+    }
+  }
 
 
   ///
@@ -311,7 +308,26 @@ class PptTopLevel extends Ppt {
   // later.
 
   public static boolean worthDerivingFrom(VarInfo vi) {
-    return (vi.canonical());
+    // This prevents derivation from ever occurring on
+    // derived variables.  Ought to put this under the
+    // control of the individual Derivation objects.
+    return (!vi.isDerived());
+
+    // Testing for being canonical is going to be a touch tricky when we
+    // integrate derivation and inference, because when something becomes
+    // non-canonical we'll have to go back and derive from it, etc.  It's
+    // almost as if that is a new variable appearing.  But it did appear in
+    // the list until it was found to be equal to another and removed from
+    // the list!  I need to decide whether the time savings of not
+    // processing the non-canonical variable are worth the time and
+    // complexity of making variables non-canonical and possibly canonical
+    // again.
+
+    // return (vi.canonical()
+    //         // This prevents derivation from ever occurring on
+    //         // derived variables.  Ought to put this under the
+    //         // control of the individual Derivation objects.
+    //         && !vi.isDerived());
     // Should add this (back) in:
 	    // && !vi.always_missing()
 	    // && !vi.always_equal_to_null();
@@ -364,16 +380,20 @@ class PptTopLevel extends Ppt {
 					   unaryDerivations[pass-1],
 					   binaryDerivations[pass-1]));
     }
-    // convert [a,b,c] into [n,a,b]
-    for (int i=derivation_passes+1; i>0; i--)
+    // shift values in derivation_indices:  convert [a,b,c] into [n,a,b]
+    // in Python:  derivation_index = (num_vars,) + derivation_indices[:-1]
+    for (int i=derivation_passes; i>0; i--)
       derivation_indices[i] = derivation_indices[i-1];
     derivation_indices[0] = var_infos.length;
 
-
-    // derivation_index = (num_vars,) + derivation_indices[:-1]
-    // if debug_derive:
-    //     print "new derivation_index =", derivation_index, "num_vars =", len(var_infos)
-
+    if (debugPptTopLevelDerive) {
+      System.out.println(name + ": derived " + result.size() + " new variables; "
+                         + "new derivation_indices: "
+                         + ArraysMDE.toString(derivation_indices));
+      for (int i=0; i<result.size(); i++) {
+        System.out.println("  " + ((VarInfo)result.elementAt(i)).repr());
+      }
+    }
     return result;
   }
 
@@ -390,7 +410,6 @@ class PptTopLevel extends Ppt {
   //   FUNCTIONS: (long) list of functions for adding new variables; see the code
   Vector deriveVariablesOnePass(int vi_index_min, int vi_index_limit, UnaryDerivationFactory[] unary, BinaryDerivationFactory[] binary) {
 
-    // will be converted into array at end of function
     Vector result = new Vector();
 
     for (int i=vi_index_min; i<vi_index_limit; i++) {
@@ -402,7 +421,7 @@ class PptTopLevel extends Ppt {
 	if (d.applicable(vi)) {
 	  UnaryDerivation[] uderivs = d.instantiate(vi);
 	  for (int udi=0; udi<uderivs.length; udi++)
-	    result.add(uderivs[udi]);
+	    result.add(uderivs[udi].makeVarInfo());
 	}
       }
     }
@@ -432,11 +451,15 @@ class PptTopLevel extends Ppt {
 	    // conceivably make this addAll one day if instantiate returns a Vector
 	    BinaryDerivation[] bderivs = d.instantiate(vi1, vi2);
 	    for (int bdi=0; bdi<bderivs.length; bdi++)
-	      result.add(bderivs[bdi]);
+	      result.add(bderivs[bdi].makeVarInfo());
 	  }
 
 	}
       }
+    }
+
+    for (int i=0; i<result.size(); i++) {
+      Assert.assert(result.elementAt(i) instanceof VarInfo);
     }
 
     return result;
@@ -513,6 +536,31 @@ class PptTopLevel extends Ppt {
   ///////////////////////////////////////////////////////////////////////////
   /// Printing invariants
   ///
+
+  // At present, this needs to occur after deriving variables, because
+  // I haven't integrated derivation and inference yet.
+  // (This function doesn't exactly belong in this part of the file.)
+  void add_views() {
+    // views = new WeakHashMap();
+    views = new HashSet();
+    for (int i=0; i<var_infos.length; i++) {
+      PptSliceGeneric slice1 = new PptSliceGeneric(this, var_infos[i]);
+      addView(slice1);
+      for (int j=i+1; j<var_infos.length; j++) {
+	PptSliceGeneric slice2 = new PptSliceGeneric(this, var_infos[i], var_infos[j]);
+	addView(slice2);
+	/// Arity 3 is not yet implemented.
+	// for (int k=j+1; j<var_infos.length; k++) {
+	//   PptSliceGeneric slice3 = new PptSliceGeneric(this, var_infos[i], var_infos[j], var_infos[k]);
+	//   addView(slice3);
+	// }
+      }
+    }
+    if (debugPptTopLevel)
+      System.out.println("" + views.size() + " views for " + name);
+  }
+
+
 
   // In original implementation, known as print_invariants_ppt
   /*

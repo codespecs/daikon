@@ -27,10 +27,10 @@ public class SequenceScalarSubscriptFactory extends BinaryDerivationFactory {
     VarInfo seqvi;
     VarInfo sclvi;
 
-    if (vi1.type.isArray() && (vi2.type.elementType() != ProglangType.INT)) {
+    if (vi1.rep_type.isArray() && (vi2.rep_type == ProglangType.INT)) {
       seqvi = vi1;
       sclvi = vi2;
-    } else if (vi2.type.isArray() && (vi1.type.elementType() != ProglangType.INT)) {
+    } else if (vi2.rep_type.isArray() && (vi1.rep_type == ProglangType.INT)) {
       seqvi = vi2;
       sclvi = vi1;
     } else {

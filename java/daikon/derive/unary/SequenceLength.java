@@ -22,9 +22,16 @@ public class SequenceLength extends UnaryDerivation {
     Object val = var_info.getValue(vt);
     if (val == null)
       return ValueAndModified.MISSING;
-    else
-      return new ValueAndModified(new Integer(((Object[])val).length),
-				  source_mod);
+    else {
+      int len;
+      // Can't use "==" because ProglangType objecs are not interned.
+      if (var_info.rep_type.equals(ProglangType.INT_ARRAY)) {
+        len = ((int[])val).length;
+      } else {
+        len = ((Object[])val).length;
+      }
+      return new ValueAndModified(new Integer(len), source_mod);
+    }
   }
 
   VarInfo this_var_info;

@@ -43,6 +43,7 @@ public class ExplicitVarComparability extends VarComparability {
     indices = indices_;
     dimensions = dimensions_;
     alias = alias_;
+    indexTypes = new ExplicitVarComparability[dimensions];
   }
 
   public static ExplicitVarComparability makeAlias(VarInfo vi) {

@@ -2,10 +2,14 @@
 
 package daikon;
 
+import daikon.derive.*;
+
+import utilMDE.*;
+import com.oroinc.text.regex.*;
+
 import java.io.*;
 import java.util.*;
-import com.oroinc.text.regex.*;
-import utilMDE.*;
+
 
 class FileIO {
 
@@ -267,7 +271,11 @@ class FileIO {
     //   ppt.add_fn_invocation_counts();
     // }
 
-
+    for (Iterator itor = all_ppts.values().iterator() ; itor.hasNext() ; ) {
+      PptTopLevel ppt = (PptTopLevel) itor.next();
+      ppt.derive_all();
+      ppt.add_views();
+    }
 
 
   }
@@ -465,8 +473,10 @@ class FileIO {
 
       // not vis.length, as that includes constants, derived variables, etc.
       // Actually, we do want to leave space for _orig vars.
+      // And for the time being (and possibly forever), for derived variables.
       int num_vals = ppt.num_tracevars;
-      int vals_array_size = num_vals + ppt.num_orig_vars;
+      // int vals_array_size = num_vals + ppt.num_orig_vars;
+      int vals_array_size = ppt.var_infos.length;
       Object[] vals = new Object[vals_array_size];
       int[] mods = new int[vals_array_size];
 
@@ -509,13 +519,13 @@ class FileIO {
 	    // for the proper matching function entry.
 	    throw new Error("Unexpected function name " + invoc.fn_name
 			    + ", expected " + fn_name);
-	  for (int i=0; i<entry_ppt.num_tracevars; i++) {
-	    vals[i+ppt.num_tracevars] = invoc.vals[i];
-	    mods[i+ppt.num_tracevars] = invoc.mods[i];
+          Assert.assert(ppt.num_orig_vars == entry_ppt.num_tracevars);
+	  for (int i=0; i<ppt.num_orig_vars; i++) {
+	    vals[ppt.num_tracevars+i] = invoc.vals[i];
+	    mods[ppt.num_tracevars+i] = invoc.mods[i];
 	  }
 	}
       }
-
 
       // // Add invocation counts
       // if not no_invocation_counts {
@@ -526,6 +536,27 @@ class FileIO {
       //     current_var_index++;
       //   }
       // }
+
+      // Add derived variables
+      {
+        // This is only temporary because we're suppressing interning,
+        // which we only want to do after we have all the values available.
+        ValueTuple partial_vt = ValueTuple.makeUninterned(vals, mods);
+        int filled_slots = ppt.num_orig_vars+ppt.num_tracevars;
+        for (int i=0; i<filled_slots; i++) {
+          Assert.assert(!ppt.var_infos[i].isDerived());
+        }
+        for (int i=filled_slots; i<ppt.var_infos.length; i++) {
+          Assert.assert(ppt.var_infos[i].isDerived());
+        }
+        for (int i=filled_slots; i<ppt.var_infos.length; i++) {
+          // Add this derived variable's value
+          ValueAndModified vm = ppt.var_infos[i].derived.computeValueAndModified(partial_vt);
+          vals[i] = vm.value;
+          mods[i] = vm.modified;
+        }
+      }
+
 
       // Done adding additional variable values that don't appear directly
       // in the data trace file.

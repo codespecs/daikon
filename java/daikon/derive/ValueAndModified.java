@@ -7,8 +7,8 @@ import daikon.*;
 // This is a temporary structure for grouping elements to be returned from
 // computeValueAndModified, not for permanent storage.
 public final class ValueAndModified {
-  public int modified;
   public Object value;		// not necessarily an interned value
+  public int modified;
 
   public final static ValueAndModified MISSING
     = new ValueAndModified(null, ValueTuple.MISSING);

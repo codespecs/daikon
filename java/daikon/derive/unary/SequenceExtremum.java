@@ -34,12 +34,19 @@ public class SequenceExtremum extends UnaryDerivation {
     Object val = var_info.getValue(vt);
     if (val == null)
       return ValueAndModified.MISSING;
-    // might not work if val is array of primitive type
-    Object[] val_array = (Object[])val;
-    if (val_array.length < minLength)
-      return ValueAndModified.MISSING;
-    int real_index = (index<0 ? val_array.length + index : index);
-    return new ValueAndModified(val_array[real_index], source_mod);
+    if (var_info.rep_type.equals(ProglangType.INT_ARRAY)) {
+      int[] val_array = (int[])val;
+      if (val_array.length < minLength)
+        return ValueAndModified.MISSING;
+      int real_index = (index<0 ? val_array.length + index : index);
+      return new ValueAndModified(new Integer(val_array[real_index]), source_mod);
+    } else {
+      Object[] val_array = (Object[])val;
+      if (val_array.length < minLength)
+        return ValueAndModified.MISSING;
+      int real_index = (index<0 ? val_array.length + index : index);
+      return new ValueAndModified(val_array[real_index], source_mod);
+    }
   }
 
   VarInfo this_var_info;

@@ -69,6 +69,16 @@ public final class ProglangType {
     return intern(base, dims);
   }
 
+  public boolean equals(Object o) {
+    if (!(o instanceof ProglangType))
+      return false;
+    ProglangType plt = (ProglangType)o;
+
+    // System.out.println("Calling equals: " + this + " " + o);
+    return ((base == plt.base)
+            && (dimensions == plt.dimensions));
+  }
+
   // t_base should be interned
   private static ProglangType find(String t_base, int t_dims) {
     Assert.assert(t_base == t_base.intern());

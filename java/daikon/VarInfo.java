@@ -81,6 +81,9 @@ public class VarInfo {
     // Indicates that these haven't yet been set to reasonable values.
     value_index = -1;
     varinfo_index = -1;
+
+    derivees = new Vector(3);
+    equal_to = new Vector(3);
   }
 
   public VarInfo(String name_, ProglangType type_, ProglangType rep_type_, ExplicitVarComparability comparability_) {
@@ -100,6 +103,20 @@ public class VarInfo {
     return true;
   }
 
+
+  String repr() {
+    return "<VarInfo " + name + ": "
+      + "type=" + type
+      + ",rep_type=" + rep_type
+      + ",comparability=" + comparability
+      + ",value_index=" + value_index
+      + ",varinfo_index=" + varinfo_index
+      + ",constant_value=" + constant_value
+      + ",derived=" + derived
+      + ",derivees=" + derivees
+      + ",ppt=" + ppt
+      + ",equal_to=" + equal_to;
+  }
 
   public boolean isConstant() {
     return (constant_value != null);

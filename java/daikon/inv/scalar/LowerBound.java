@@ -102,7 +102,7 @@ class LowerBound extends SingleScalar {
 
     double avg_samples_per_val = ppt.num_mod_non_missing_samples() / values;
 
-    System.out.println("Fix computation of LowerBound.computeProbability()");
+    System.out.println("  [Need to fix computation of LowerBound.computeProbability()]");
     boolean truncated_justified = num_min1 > 2*avg_samples_per_val;
     boolean uniform_justified = ((num_min1 > avg_samples_per_val/2)
 			      && (num_min2 > avg_samples_per_val/2)

@@ -96,7 +96,7 @@ class UpperBound extends SingleScalar {
 
     double avg_samples_per_val = ppt.num_mod_non_missing_samples() / values;
 
-    System.out.println("Fix computation of UpperBound.computeProbability()");
+    System.out.println("  [Need to fix computation of UpperBound.computeProbability()]");
     boolean truncated_justified = num_max1 > 2*avg_samples_per_val;
     boolean uniform_justified = ((num_max1 > avg_samples_per_val/2)
 			      && (num_max2 > avg_samples_per_val/2)
