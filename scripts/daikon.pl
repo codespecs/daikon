@@ -117,7 +117,7 @@ print "Output will go in $output...\n" if $verbose;
 # check to see that we have jikes avaiable
 unless (which('jikes')) {
     die ("You must run the command 'add jikes' before using this tool.\n" .
-	 "You may add that line to your ~/.environmente file to have it" .
+	 "You may add that line to your ~/.environment file to have jikes\n" .
 	 "added automatically every time you log in.\n");
 }
 
