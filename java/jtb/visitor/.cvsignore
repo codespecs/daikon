@@ -1,0 +1,6 @@
+*.class
+*.java-bak
+doc
+Makefile.user
+daikon-instrumented
+daikon-output
