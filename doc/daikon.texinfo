@@ -1906,9 +1906,11 @@ specified that involve exactly the vars given, as well as a short reason
 and discard code explaining why they were not worthy of print.  Any of 
 the three parts of the optarg may be made a wildcard by excluding it.
 For example, @samp{@var{inv_class}} and
-@samp{<@var{var1},@var{var2},...>@@@var{ppt}} are valid argsuments.
+@samp{<@var{var1},@var{var2},...>@@@var{ppt}} are valid arguments.
+Concrete examples are @samp{Implication<x,y>@@foo():::EXIT},
+@samp{Implication<x,y>}, and @samp{<x,y>@@foo():::EXIT}.
 To print all discarded invariants, use the argument "all".
-                                   
+
 @item --prob_limit @var{val}
 Set the probability limit for justifying invariants.  @var{pct} must be
 between 0 and 1; the default is .01 (1%).  Smaller values yield stronger
