@@ -2846,18 +2846,47 @@ public abstract class VarInfoName
       }
     }
 
+    // Return a string distinct from any of the strings in "taken"
+    private static String freshDistinctFrom(Set taken) {
+      char c = 'a';
+      String name;
+      do {
+        name = String.valueOf(c++);
+      } while (taken.contains(name));
+      return name;
+    }
+
     /**
-     * Return a variable name that doesn't appear in the given
+     * Return a fresh variable name that doesn't appear in the given
      * variable name.
      **/
     public static VarInfoName getFreeIndex(VarInfoName vin) {
       Set simples = new SimpleNamesVisitor(vin).simples();
-      char c = 'a';
-      String idx_name;
-      do {
-        idx_name = String.valueOf(c++);
-      } while (simples.contains(idx_name));
-      return new FreeVar(idx_name);
+      return new FreeVar(freshDistinctFrom(simples));
+    }
+
+    /**
+     * Return a fresh variable name that doesn't appear in the given
+     * variable names.
+     **/
+    public static VarInfoName getFreeIndex(VarInfoName vin1,
+                                           VarInfoName vin2) {
+      Set simples = new HashSet(new SimpleNamesVisitor(vin1).simples());
+      simples.addAll(new SimpleNamesVisitor(vin2).simples());
+      return new FreeVar(freshDistinctFrom(simples));
+    }
+
+    /**
+     * Return a fresh variable name that doesn't appear in the given
+     * variable names.
+     **/
+    public static VarInfoName getFreeIndex(VarInfoName vin1,
+                                           VarInfoName vin2,
+                                           VarInfoName vin3) {
+      Set simples = new HashSet(new SimpleNamesVisitor(vin1).simples());
+      simples.addAll(new SimpleNamesVisitor(vin2).simples());
+      simples.addAll(new SimpleNamesVisitor(vin3).simples());
+      return new FreeVar(freshDistinctFrom(simples));
     }
 
     /**
