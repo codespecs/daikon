@@ -128,6 +128,9 @@ public class SplitterList4Dsaa {
 	SplitterList.put("StackLi.topAndPop", new Splitter[] {
 	    new StackLiSplitter_topAndPop()});
 
+	SplitterList.put("StackLi.isEmpty", new Splitter[] {
+	    new StackLiSplitter_isEmpty()});
+	
 	SplitterList.put("Sample82.generateArray", new Splitter[] {
 	    new Sample82Splitter_generateArray()});
 
