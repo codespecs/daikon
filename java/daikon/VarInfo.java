@@ -21,7 +21,7 @@ public class VarInfo {
   public int value_index;	// index in lists of values, VarTuple objects
   // Can I eliminate this slot?
   public int varinfo_index;	// index in lists of VarInfo objects
-  Object constant_value;	// null if not statically constant
+  Object static_constant_value;	// null if not statically constant
 				// if statically constant, then index == -1
 
   // Derived variables
@@ -52,6 +52,7 @@ public class VarInfo {
   public VarInfo equal_to;      // the canonical representative to which
                                 // this variable is equal; points to itself
                                 // if it is canonical.
+  public Object dynamic_constant;
 
   // list of indices of equal variables;
   //   could be derived from invariants
@@ -74,7 +75,7 @@ public class VarInfo {
     // self.invariants = {}	// map from indices to multiple-arity invariants
   }
 
-  public VarInfo(String name_, ProglangType type_, ProglangType rep_type_, VarComparability comparability_, Object constant_value_) {
+  public VarInfo(String name_, ProglangType type_, ProglangType rep_type_, VarComparability comparability_, Object static_constant_value_) {
     // Possibly the call to intern() isn't necessary; but it's safest to
     // make the call to intern() rather than running the risk that a caller
     // didn't.
@@ -82,7 +83,7 @@ public class VarInfo {
     type = type_;
     rep_type = rep_type_;
     comparability = comparability_;
-    constant_value = constant_value_;
+    static_constant_value = static_constant_value_;
 
     // Indicates that these haven't yet been set to reasonable values.
     value_index = -1;
@@ -98,13 +99,13 @@ public class VarInfo {
   }
 
   public VarInfo(VarInfo vi) {
-    this(vi.name, vi.type, vi.rep_type, vi.comparability, vi.constant_value);
+    this(vi.name, vi.type, vi.rep_type, vi.comparability, vi.static_constant_value);
   }
 
 
   boolean repOK() {
     // If statically constant, then value_index is not meaningful
-    if ((constant_value != null) != (value_index == -1))
+    if ((static_constant_value != null) != (value_index == -1))
       return false;
 
     return true;
@@ -118,7 +119,7 @@ public class VarInfo {
       + ",comparability=" + comparability
       + ",value_index=" + value_index
       + ",varinfo_index=" + varinfo_index
-      + ",constant_value=" + constant_value
+      + ",static_constant_value=" + static_constant_value
       + ",derived=" + derived
       + ",derivees=" + derivees
       + ",ppt=" + ppt
@@ -126,7 +127,14 @@ public class VarInfo {
   }
 
   public boolean isConstant() {
-    return (constant_value != null);
+    return (isStaticConstant() || isDynamicConstant());
+  }
+
+  public boolean isDynamicConstant() {
+    return (dynamic_constant != null);
+  }
+  public boolean isStaticConstant() {
+    return (static_constant_value != null);
   }
   public boolean isDerived() {
     return (derived != null);
@@ -141,7 +149,7 @@ public class VarInfo {
 
 
   public int getModified(ValueTuple vt) {
-    if (constant_value != null)
+    if (static_constant_value != null)
       return ValueTuple.UNMODIFIED;
     else
       return vt.getModified(value_index);
@@ -151,8 +159,8 @@ public class VarInfo {
   public boolean isMissing(ValueTuple vt) { return ValueTuple.modIsMissing(getModified(vt)); }
 
   public Object getValue(ValueTuple vt) {
-    if (constant_value != null)
-      return constant_value;
+    if (static_constant_value != null)
+      return static_constant_value;
     else
       return vt.getValue(value_index);
   }
@@ -164,6 +172,16 @@ public class VarInfo {
       // return 0;
       return 222222;
     return ((Integer)raw).intValue();
+  }
+
+  public int[] getIntArrayValue(ValueTuple vt) {
+    Object raw = getValue(vt);
+    if (raw == null)
+      // Perhaps use some distinguished value here, so
+      // that I have some indication when things are going wrong.
+      // return 0;
+      return new int[] { };
+    return (int[])raw;
   }
 
   static class usesVarFilter implements Filter {

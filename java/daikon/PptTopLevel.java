@@ -130,7 +130,7 @@ class PptTopLevel extends Ppt {
   //   // First, move the constants to the end.
   //   Vector constants = new Vector();
   //   for (int i=0; i<var_infos.length; i++) {
-  //     if (var_infos[i].constant_value != null) {
+  //     if (var_infos[i].static_constant_value != null) {
   //       constants.add(var_infos[i]);
   //     }
   //   }
@@ -269,7 +269,7 @@ class PptTopLevel extends Ppt {
     Vector new_vis = new Vector(num_orig_vars);
     for (int i=0; i<num_orig_vars; i++) {
       VarInfo vi = begin_vis[i];
-      if (vi.isConstant() || vi.isDerived())
+      if (vi.isStaticConstant() || vi.isDerived())
 	continue;
       new_vis.add(new VarInfo(vi.name + "_orig", vi.type, vi.rep_type, vi.comparability.makeAlias(vi.name)));
     }
@@ -930,6 +930,25 @@ class PptTopLevel extends Ppt {
       unary_views.add(slice1);
     }
     addViews(unary_views);
+    // Set the dynamic_constant slots of all the new variables.
+    {
+      for (int i=0; i<unary_views.size(); i++) {
+        PptSliceGeneric unary_view = (PptSliceGeneric) unary_views.elementAt(i);
+        Assert.assert(unary_view.arity == 1);
+        if (views.contains(unary_view)) {
+          // There is only one type of unary invariant in pass 1:
+          // OneOf{Scalar,Sequence}.  It must have been successful, or this
+          // view wouldn't have been installed.
+          Assert.assert(unary_view.invs.size() == 1);
+          Invariant inv = (Invariant) unary_view.invs.elementAt(0);
+          Assert.assert(inv instanceof OneOf);
+          OneOf one_of = (OneOf) inv;
+          if (one_of.num_elts() == 1)
+            one_of.var().dynamic_constant = one_of.elt();
+        }
+      }
+    }
+
     // Now some elements of unary_views are installed, but others are not
     // and are incomplete.  We discard them later, but for now we want to
     // remember all the ones we tried.

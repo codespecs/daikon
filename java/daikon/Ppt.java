@@ -1,5 +1,4 @@
 // "Ppt" stands for "Program point" (but is easier to type).
-// Maybe change the name of this from "Ppt" to just "Ppt".
 
 package daikon;
 

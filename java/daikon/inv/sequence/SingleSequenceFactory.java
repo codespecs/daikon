@@ -11,12 +11,14 @@ public class SingleSequenceFactory {
   public static void instantiate(PptSlice ppt, int pass) {
     // return (UnaryDerivation)new SequenceFirst(vi);
 
-    // Not really the right place for this test
-    Assert.assert(ppt.var_infos[0].type.isArray());
+    VarInfo var = ppt.var_infos[0];
+    Assert.assert(var.type.isArray());
+
 
     if (pass == 1) {
       OneOfSequence.instantiate(ppt);
     } else if (pass == 2) {
+      // I'm not checking var.isConstant() for now
       EltIntComparison.instantiate(ppt);
     }
   }

@@ -9,16 +9,19 @@ public class SingleScalarFactory {
   // collection.
   public static void instantiate(PptSlice ppt, int pass) {
 
-    Assert.assert(! ppt.var_infos[0].type.isArray());
+    VarInfo var = ppt.var_infos[0];
+    Assert.assert(! var.type.isArray());
 
     if (pass == 1) {
       OneOfScalar.instantiate(ppt);
     } else if (pass == 2) {
-      LowerBound.instantiate(ppt);
-      Modulus.instantiate(ppt);
-      NonModulus.instantiate(ppt);
-      NonZero.instantiate(ppt);
-      UpperBound.instantiate(ppt);
+      if (! var.isConstant()) {
+        LowerBound.instantiate(ppt);
+        Modulus.instantiate(ppt);
+        NonModulus.instantiate(ppt);
+        NonZero.instantiate(ppt);
+        UpperBound.instantiate(ppt);
+      }
     }
   }
 

@@ -2,6 +2,11 @@ package daikon.inv;
 
 import utilMDE.*;
 
+// This Filter returns true if its argument is an Invariant which satisfies
+// the following conditions:
+//  1. the Invariant is a Comparison (which reports <, >, =, <=, or >=)
+//  2. the relationship reported by the comparison is = (not <, <=, >, or >=)
+
 public class IsEquality implements Filter {
   // Don't create new ones, just use this existing one
   public static final IsEquality it = new IsEquality();

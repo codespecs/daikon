@@ -191,21 +191,21 @@ class FileIO {
       if ((proglang_type_string == null) || (rep_type_string == null) || (comparability_string == null))
 	throw new Error("End of file while reading variable " + varname + " in declaration of program point " + ppt_name);
       int equals_index = proglang_type_string.indexOf(" = ");
-      // constant_value is a future enhancement
-      String constant_value_string = null;
-      Object constant_value = null;
+      // static_constant_value is a future enhancement
+      String static_constant_value_string = null;
+      Object static_constant_value = null;
       if (equals_index != -1) {
-	constant_value_string = proglang_type_string.substring(equals_index+3);
+	static_constant_value_string = proglang_type_string.substring(equals_index+3);
 	proglang_type_string = proglang_type_string.substring(0, equals_index);
       }
       ProglangType prog_type = ProglangType.parse(proglang_type_string);
       ProglangType rep_type = ProglangType.parse(rep_type_string);
-      if (constant_value != null) {
-	constant_value = ProglangType.parse(constant_value_string);
+      if (static_constant_value != null) {
+	static_constant_value = ProglangType.parse(static_constant_value_string);
       }
       VarComparability comparability
 	= VarComparability.parse(varcomp_format, comparability_string, prog_type);
-      var_infos.add(new VarInfo(varname, prog_type, rep_type, comparability, constant_value));
+      var_infos.add(new VarInfo(varname, prog_type, rep_type, comparability, static_constant_value));
       line = file.readLine();
     }
     VarInfo[] vi_array = (VarInfo[]) var_infos.toArray(new VarInfo[0]);
@@ -380,7 +380,7 @@ class FileIO {
       trace_vars = 0;
       for (int i=0; i<ppt.var_infos.length; i++) {
 	VarInfo vi = ppt.var_infos[i];
-	if (! (vi.isConstant() || vi.isDerived())) {
+	if (! (vi.isStaticConstant() || vi.isDerived())) {
 	  trace_vars++;
 	}
       }
@@ -388,7 +388,7 @@ class FileIO {
       int trace_var = 0;
       for (int i=0; i<ppt.var_infos.length; i++) {
 	VarInfo vi = ppt.var_infos[i];
-	if (! (vi.isConstant() || vi.isDerived())) {
+	if (! (vi.isStaticConstant() || vi.isDerived())) {
 	  vi_index[trace_var] = i;
 	  trace_var++;
 	}
@@ -495,7 +495,7 @@ class FileIO {
 
       for (int vi_index=0, val_index=0; val_index<num_vals; vi_index++) {
 	VarInfo vi = vis[vi_index];
-	if (vi.constant_value != null)
+	if (vi.static_constant_value != null)
 	  continue;
 	Assert.assert(val_index == vi.value_index);
 	line = reader.readLine();

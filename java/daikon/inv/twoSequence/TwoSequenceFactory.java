@@ -40,10 +40,13 @@ public class TwoSequenceFactory {
         PairwiseIntComparison.instantiate(ppt);
         PairwiseLinear.instantiate(ppt);
         for (int i=0; i<2; i++) {
-          boolean b = (i==1);
-          PairwiseFunction.instantiate(ppt, Functions.Math_abs, b);
-          PairwiseFunction.instantiate(ppt, Functions.MathMDE_negate, b);
-          PairwiseFunction.instantiate(ppt, Functions.MathMDE_bitwiseComplement, b);
+          boolean invert = (i==1);
+          VarInfo arg = (invert ? var1 : var2);
+          // Don't bother to check arg.isConstant():  we really want to
+          // know whether the elements of arg are constant
+          PairwiseFunction.instantiate(ppt, Functions.Math_abs, invert);
+          PairwiseFunction.instantiate(ppt, Functions.MathMDE_negate, invert);
+          PairwiseFunction.instantiate(ppt, Functions.MathMDE_bitwiseComplement, invert);
         }
       }
     }
