@@ -333,7 +333,7 @@ public class Dataflow
   {
     debug.debug("relate_derived_variables on " + ppt.name);
 
-    // For all immediately higher groups of variables
+    // For all immediately higher (or lower) groups of variables
     PptsAndInts flow = compute_ppt_dataflow(ppt,
 					    false, // one step only
 					    true   // higher
@@ -469,7 +469,7 @@ public class Dataflow
 						 boolean all_steps,
 						 boolean higher)
   {
-    // These two lists collect result that will be written to receiving_ppt
+    // These two lists collect the result that will be returned
     List dataflow_ppts = new ArrayList(); // of type PptTopLevel
     List dataflow_transforms = new ArrayList(); // of type int[nvis]
     int nvis = receiving_ppt.var_infos.length;
@@ -568,7 +568,7 @@ public class Dataflow
   public static void init_pptslice_po(PptSlice slice,
 				      boolean lower)
   {
-    // For all immediately higher groups of variables
+    // For all immediately higher (or lower) groups of variables
     PptsAndInts flow =
       compute_ppt_dataflow(slice.parent,
 			   false, // just one step
