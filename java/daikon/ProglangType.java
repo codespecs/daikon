@@ -396,6 +396,7 @@ public final class ProglangType implements java.io.Serializable {
     return ((dimensions == 1) && baseIsIntegral());
   }
 
+  // Return true if this variable is sensible as an array index.
   public boolean isIndex() {
     return isIntegral();
   }
