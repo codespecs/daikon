@@ -8,6 +8,9 @@
 #   - The LACKWITDB environment variable has been set
 #   - The BackEnd executable is in your path
 
+# Essentially a Perl port of a similar C++ program written by Adam
+# Czeisler
+
 if ($#ARGV != 0) {
   die "Usage: lwpp.pl <filename.decls>\n";
 }
@@ -60,6 +63,8 @@ while (<DECLS>) {
       %comparable_variables = ();
 
       # every variable is comparable to itself
+      # note: Lackwit should provide this information,
+      # but sometimes doesn't.  Can't hurt to add it explicitly.
       $comparable_variables{$variable} = 1;
       
       print "$variable\n";
@@ -123,9 +128,9 @@ while (<DECLS>) {
       @comparable_variables = sort keys %comparable_variables;
       print "(@comparable_variables)";
 
-      # if the declared type is an array, print the index information
+      # if the representation type is an array, print the index information
       $index = 1;
-      while ($declared_type =~ /\[\]/g) {
+      while ($representation_type =~ /\[\]/g) {
         print "[(" . $variable . "-index" . $index . ")]";
         $index++;
       }
