@@ -212,12 +212,16 @@ C/C++ front end dfec
 
 * dfec command-line arguments::  
 * Pointer type disambiguation::  
-* Uninitialized array elements::  
+* Instrumentation scope::       
 * dfec requirements::           
 
 Pointer type disambiguation
 
 * Pointer type disambiguation example::  
+
+Instrumentation scope
+
+* Memory tracking in libraries::  
 
 dfec requirements
 
@@ -2448,7 +2452,12 @@ the first Java file name.
 @c 
 @c @end table
 
-Details of the options are as follows:
+Details of the options are as follows.  
+When conflicting options are specified (for instance, both
+@option{+daikon_functions} and @option{-daikon_functions}, or both
+@option{-declsfiledir} and @option{-declsfiledirflat}), the last one
+takes precedence.
+
 
 @table @t
 @item -daikon_debug
@@ -2693,11 +2702,6 @@ to the current directory.
 
 @end table
 
-When conflicting options are specified (for instance, both
-@option{+daikon_functions} and @option{-daikon_functions}, or both
-@option{-declsfiledir} and @option{-declsfiledirflat}), the last one
-takes precedence.
-
 
 @node    Scope of instrumentation, Refined runtime types, dfej options, Java front end dfej
 @subsection Controlling what classes are instrumented
@@ -2916,7 +2920,7 @@ you can run Daikon:
 @menu
 * dfec command-line arguments::  
 * Pointer type disambiguation::  
-* Uninitialized array elements::  
+* Instrumentation scope::       
 * dfec requirements::           
 @end menu
 
@@ -2924,6 +2928,10 @@ you can run Daikon:
 @subsection dfec command-line arguments
 
 This section describes dfec's command-line options.
+When conflicting options are specified (for instance, both
+@option{--declsfiledir} and @option{--declsfiledirflat}), the last one
+takes precedence.
+
 @table @option
 
 @item -I@var{path}
@@ -3029,7 +3037,8 @@ which is @file{@var{myprog}.disambig} in the same directory as the
 
 @item -l
 This is the only command-line switch that can be used in the midst of the
-list of filenames.  It precedes a file that should not be instrumented.
+list of filenames.  It precedes a file that should not produce
+@file{.dtrace} file output (@pxref{Instrumentation scope}).
 For instance, if you have two source files, @file{file1.c} and @file{file2.c},
 and each has its own header file, but you don't want to instrument the
 functions defined in @file{file2.c}, you would instrument as follows:
@@ -3066,13 +3075,20 @@ output @var{node.val}, @var{node.next}, @var{node.next->val}, and
 allows Daikon to capture invariants about nonadjacent nodes, but results
 in larger dtrace files than smaller values do.
 
+@item --pcc-array-addresses
+In ANSI/ISO C, the address operator applied to an ``array of T''
+yields a ``pointer to array of T,'' whereas some compilers (such as
+pcc) treat @samp{&a} the same as @samp{a} --- that is, as a pointer to
+the first element of @samp{a}.  If you have code that uses the latter
+interpretation, your best bet is to rewrite @samp{&a} as the simpler,
+clearer, and correct @samp{a}.  Failing that, you can supply the
+@option{--pcc-array-addresses} option to dfec to make it treat all
+address-of-array operations in the older, pcc-style manner.
+
 @end table
 
-When conflicting options are specified (for instance, both
-@option{--declsfiledir} and @option{--declsfiledirflat}), the last one
-takes precedence.
 
-@node    Pointer type disambiguation, Uninitialized array elements, dfec command-line arguments, C/C++ front end dfec
+@node    Pointer type disambiguation, Instrumentation scope, dfec command-line arguments, C/C++ front end dfec
 @subsection Pointer type disambiguation
 
 @cindex pointer type disambiguation
@@ -3092,11 +3108,15 @@ sum(a, &total);        // use of "sum"
 the first pointer parameter refers to an array while the second refers to
 a single value.  dfec (and Daikon) should treat these values
 differently.  For instance, @code{*array} is better printed as @code{array[0]},
-and @code{result[]} isn't a sensible array at all.  By default, dfec treats
-all pointers as referencing arrays.  Eliminating unnecessary array
-variables --- in this case, preventing Daikon from treating @code{result} as a
-single-element array --- can speed up Daikon and improve its output.
-(See the example below.)
+and @code{result[]} isn't a sensible array at all, even though in C
+@code{result[0]} is semantically identical to @code{*result}.
+By default, dfec treats all pointers as referencing arrays.  For
+instance, it would print @code{result[0]} rather than @code{*result}
+and would indicate that the length of array @code{result[]} is always 1.
+In order to improve the formatting of Daikon's output (and to speed it
+up), you can indicate to Daikon that certain pointers refer to single
+elements rather than to arrays.
+Also see the example below (@pxref{Pointer type disambiguation example}).
 
 Information about whether each pointer refers to an array or a single
 element can be specified in a ``disambig file'' that resides in the
@@ -3115,7 +3135,8 @@ variable refers to an ASCII character or a short numerical value that
 mathematical invariants should be calculated over.
 
 The disambig file contains an entry for each program point and for every
-user-defined class or struct in instrumentation scope.  Members of structs
+user-defined class or struct in instrumentation scope
+(@pxref{Instrumentation scope}).  Members of structs
 or classes can be disambiguated just like variables at a program point.
 These entries must appear in the order that they are defined in program
 source --- even though there are names in the disambig file, they are there
@@ -3252,8 +3273,62 @@ orig(*bar) == 6
 @end example
 
 
-@node    Uninitialized array elements, dfec requirements, Pointer type disambiguation, C/C++ front end dfec
-@subsection Uninitialized array elements
+@node    Instrumentation scope, dfec requirements, Pointer type disambiguation, C/C++ front end dfec
+@subsection Instrumentation scope
+
+@cindex instrumentation scope
+@cindex scope of instrumentation
+@cindex uninstrumented libraries
+@cindex libraries, uninstrumented
+
+When you run an instrumented C program to produce a @file{.dtrace}
+file, the executable may contain three varieties of code:  fully
+instrumented code that produces @file{.dtrace} file output (and also
+tracks memory), partially instrumented code that only tracks memory,
+and entirely uninstrumented code.  The default level of
+instrumentation is full instrumentation.  The @option{-l} command-line
+argument to @command{dfec} specifies partial instrumentation for a
+file.  Uninstrumented code is only included by being linked from a
+library that was not processed with dfec --- for instance, system
+libraries.  You should not intentionally leave part of your program
+entirely uninstrumented, because dfec's memory tracking is important
+both for improved output and for correctness.
+
+If you must link your program against instrumented libraries, you need
+to understand a little bit about dfec's operation.  Instrumented
+programs perform memory tracking, which checks and records the
+program's memory accesses.  This has many benefits.  It tracks whether
+pointers are valid, so Daikon does not attempt to dereference
+uninitialized or deallocated pointers.  It tracks how many elements of
+memory have been initialized, so Daikon does not output garbage
+values.  It catches memory errors in user programs.  It protects
+Daikon's runtime data structures from program memory errors that would
+otherwise corrupt them (and which would then appear to the user as
+Daikon errors).
+
+Memory tracking is implemented by converting all pointers and arrays
+in the program to ``smart pointers'' and ``smart arrays''.
+Additionally, dfec outputs C++, whereas the original user program is
+written in C@.  Thus, making uninstrumented code interact correctly
+with instrumented code takes some care.
+
+If there are calls from instrumented code to uninstrumented code, then
+memory tracking will not occur in the instrumented code.  To correct
+this problem, see @ref{Memory tracking in libraries}.
+
+If there are calls from uninstrumented code to instrumented code, your
+program will not link, because the instrumented code is C++ and the
+uninstrumented code is C@.  If certain functions are called only from
+instrumented code (an example is @code{usage} in @file{wc.c}), then
+you can place @samp{extern "C"} in front of the function definition.
+
+
+@menu
+* Memory tracking in libraries::  
+@end menu
+
+@node    Memory tracking in libraries,  , Instrumentation scope, Instrumentation scope
+@subsubsection Memory tracking in libraries
 
 The C/C++ front end keeps track of the maximum read or written element
 of each array.  This enables it to avoid outputting (meaningless)
@@ -3280,7 +3355,7 @@ in other library functions) might not be recorded, causing too little
 of the array to be output to Daikon.
 
 The rest of this section describes how to add 
-other functions can be added to dfec's list of special-case functions.
+other functions to dfec's list of special-case functions.
 Suppose system header file @file{<bar.h>} contains a function with signature
 @example
   int foo(char *arg1, char *arg2)
@@ -3290,9 +3365,9 @@ Then you would need to do these things:
 
 @enumerate
 @item
-Add a @code{#include} directive for @file{<bar.h>} to @file{daikon_runtime.cc}.
-For clarity, this should go in the section where the other overloaded functions
-go.  You can find this section by searching for this text:
+Add a @code{#include} directive for @file{<bar.h>} to @file{daikon_runtime.cc},
+in the section with the other overloaded functions.
+That section starts with this text:
 @example
 /* functions that we're overloading with DAIKON_* implementations: */
 #include <string.h>
@@ -3334,7 +3409,7 @@ compile.
 @end enumerate
 
 
-@node    dfec requirements,  , Uninitialized array elements, C/C++ front end dfec
+@node    dfec requirements,  , Instrumentation scope, C/C++ front end dfec
 @subsection dfec requirements
 
 @menu
@@ -3827,7 +3902,7 @@ PPT_NAME  simpleStack.isEmpty
 @node    Enhancing conditional invariant detection,  , Conditional invariants, Enhancing Daikon output
 @section Enhancing conditional invariant detection
 
-The built-in mechanisms (see @ref{Conditional invariants}) have
+The built-in mechanisms (@pxref{Conditional invariants}) have
 limitations in the invariants they can find.  By supplying splitting
 conditions to Daikon via a splitter info file, the user can infer more
 conditional invariants.  To ease this task, there are two methods to
