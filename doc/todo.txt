@@ -1,5 +1,5 @@
 Daikon todo list.
-Time-stamp: <2004-04-05 17:09:53 jhp>
+Time-stamp: <2004-04-17 15:52:27 mernst>
 
 Projects
 
@@ -60,6 +60,23 @@ Projects
     particular, a good way to include results as asserts.
 
 Issues/Bugs
+
+  cpacheco	04/12/04	jmlc and ESC/Java2 regression tests
+
+    Make the regression tests run jmlc and ECS/Java2 and complain if there
+    are any problems.
+
+  jhp	04/12/04	Javadoc regression tests
+
+    Make the overnight tests run javadoc and complain if it gives any
+    warnings.
+
+  jhp	04/12/04	Mailing lists
+
+    Move all mailing lists from pag to lists.csail.mit.edu.  Update the
+    documentation, mailing lists, and certain places in the code to reflect
+    this change.  Stop mailman from running on pag, and instead use
+    /etc/aliases to forward mail that is sent to the old addresses.
 
   jhp     03/25/04      LinearTernary ignores some initial points
 
