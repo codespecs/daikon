@@ -360,6 +360,7 @@ Large data trace (.dtrace) files
 * Reducing program points::     
 * Reducing variables::          
 * Reducing executions::         
+* Reading trace data on the fly::  
 
 Other problems
 
@@ -1261,45 +1262,45 @@ To detect invariants for a program with Kvasir, you need to perform
 three basic tasks: compile the target program (step 1), run the
 instrumented program to create a data trace file (step 2), and run
 Daikon over the data trace file to produce invariants (steps 3-4).
-The following instructions are for the bzip2 example.
+The following instructions are for the wordplay example.
 
 @enumerate
-@item Change to the directory containing the bzip2 program.
+@item Change to the directory containing the program.
 @example
-cd $DAIKONDIR/examples/kvasir-examples/bzip2
+cd $DAIKONDIR/examples/kvasir-examples/wordplay
 @end example
 
 @item Compile the program with DWARF-2 debugging information enabled.
 @example
-gcc -gdwarf-2 bzip2.c -o bzip2
+gcc -gdwarf-2 wordplay.c -o wordplay
 @end example
 
 Kvasir can also be used for programs constructed by compiling a number
 of @file{.c} files separately, and then linking them together; in such
 a program, specify @code{-gdwarf-2} for each source file containing
-code you wish invariants about. For simplicity in this example, we
-have combined all the files from the original bzip2 application into a
-single file.
+code you wish invariants about.
 
 @item Run the program using the kvasir-dtrace script.
 @example
-kvasir-dtrace ./bzip2 -vv1c bzip2.c > bzip2.c.bz2
+kvasir-dtrace ./wordplay -f words.txt daikondynamicinvariantdetector
 @end example
 
 Run the program just as you normally would, but prepend
 @code{kvasir-dtrace} to the front of the command line. Any options to
 the program can be specified as usual; here, for instance, we give
-commands to compress the file @file{bzip2.c} to a file
-@file{bzip2.c.bz2}, and give extra progress information.  Note that we
-specified the program as @file{./bzip2}, rather than simply
-@file{bzip2}, to unambiguously specify that the program in the current
-directory was meant, rather than one elsewhere in your @code{PATH}.
+commands to look for anagrams of the phrase ``Daikon Dynamic Invariant
+Detector'' using words from the file @code{words.txt}.
+Note that we
+specified the program as @file{./wordplay}, rather than simply
+@file{wordplay}, to unambiguously specify that the program in the current
+directory was meant.
+Kvasir will not search for a program on your @code{PATH}.
 
 Executing under Kvasir, the program runs normally, but Kvasir will
 executes additional checks and collects trace information (for this
 reason, the program will run more slowly than usual). Kvasir creates a
 directory named @file{daikon-output} under the current directory, and
-creates files @file{bzip2.decls} and @file{bzip2.dtrace} describing
+creates files @file{wordplay.decls} and @file{wordplay.dtrace} describing
 its observations.
 
 Kvasir will also print messages if it observes your program doing
@@ -1307,21 +1308,20 @@ something with undefined effects; these may indicate bugs in your
 program, or they may be spurious. (If they are bugs, they can also be
 tracked down by using Valgrind with its regular memory checking
 tool; if they do not appear with that tool, they are probably
-spurious). In this example, you may see a warning about an
-uninitialized byte being passed to the @code{write} system call;
-it can be ignored.
+spurious).
 
 @item Run Daikon on the trace file.
 @example
-java daikon.Daikon --var_omit '\[\]' -o bzip2.inv \
-     daikon-output/bzip2.decls daikon-output/bzip2.dtrace
+java daikon.Daikon -o wordplay.inv \
+     --config_option daikon.Daikon.disable_derived_variables=true \
+     daikon-output/wordplay.decls daikon-output/wordplay.dtrace
 @end example
 
 The invariants are printed to standard out, and a binary representation
-of the invariants is written to @file{bzip2.inv}. Note that the example
-above uses the option @code{--var_omit '\[\]'} to omit array variables
-(whose names end with []) to help Daikon run faster, as bzip uses
-several 100,000-element arrays. 
+of the invariants is written to @file{wordplay.inv}. Note that the
+example uses a configuration option to disable the use of derived
+variables; it can also run without that option, but takes significantly
+longer.
 
 @item Examine the invariants.  As described in @xref{Step-by-step
 instructions}, there are several ways to do this:
@@ -7162,10 +7162,16 @@ Diff} to combine the resulting @file{.inv} files into one.
 @c A more correct way to merge the resulting .inv files would be with
 @c the MergeInvariants tool, but it is not yet documented,
 
+Independently from the above techniques, some front ends can generate
+trace data as a stream for Daikon to process on the fly. Using this
+strategy avoids the problem of disk space consumption, and can reduce
+I/O overhead, but does not reduce Daikon's memory usage.
+
 @menu
 * Reducing program points::     
 * Reducing variables::          
 * Reducing executions::         
+* Reading trace data on the fly::  
 @end menu
 
 @node    Reducing program points, Reducing variables, Large dtrace files, Large dtrace files
@@ -7273,7 +7279,7 @@ same variables.
 
 @end enumerate
 
-@node    Reducing executions,  , Reducing variables, Large dtrace files
+@node    Reducing executions, Reading trace data on the fly, Reducing variables, Large dtrace files
 @subsection Reducing executions
 
 Here are ways to run Daikon over fewer executions of each program
@@ -7306,6 +7312,77 @@ faster on very large files.  In order to use
 (@pxref{Installing Daikon}).
 
 @end enumerate
+
+@node Reading trace data on the fly,  , Reducing executions, Large dtrace files
+@subsection Reading trace data on the fly
+
+Some Daikon front-ends support writing trace data to a pipe, so that it
+can be read by Daikon on the fly without ever being written to disk.
+This section describes two techniques for achieving this, and gives
+examples using the C front end Kvasir.
+
+@subsubheading Named pipes
+
+A named pipe, also known as a FIFO, is a special kind of file supported
+by most Unix-compatible systems. When one process tries to open a FIFO
+for reading, it blocks, waiting for another process to open it for
+writing (or vice-versa). When both a reader and a writer are ready, the
+FIFO connects the reader to the writer like a regular Unix pipe. Daikon
+and a front-end can communicate via named pipes as long as each file
+that's a named pipe is written to and read from in the same order by
+both the front-end and Daikon in the same order (if this is not the
+case, deadlock will occur).
+
+The @code{--output-fifo} option to Kvasir causes it to create its output
+@code{.dtrace} and @code{.decls} files as named pipes. When Kvasir is
+run with this option, Daikon needs to be run at the same time to read
+from the FIFOs, such as from another terminal or using the shell's
+@code{&} operator.
+
+For instance, suppose that you have compiled the bzip2 example (in
+$DAIKONDIR/examples/kvasir-examples/bzip2 of the distribution) by saying
+
+@example
+gcc -gdwarf-2 bzip2.c -o bzip2
+@end example
+
+Then the following two commands will run @code{bzip2 --help} and examine
+that execution with Daikon:
+
+(In this and the following example, @code{$DAIKON} stands for the
+command that invokes Daikon with whatever options are necessary, for
+instance @code{java -Xmx512m daikon.Daikon
+ --config_option daikon.Daikon.disable_derived_variables=true}).
+
+@example
+kvasir-dtrace --output-fifo ./bzip2 --help &
+$DAIKON daikon-output/bzip2.decls daikon-output/bzip2.dtrace
+@end example
+
+The two commands (before and after the ampersand) could also be run in
+two different terminals. A similar command could also be used to run a
+longer execution of bzip2, without using any additional disk space; for
+instance, replace @code{--help} with @code{-vv1 file.txt} to compress a
+text file (but start with a small one first).
+
+@subsubheading Regular pipes
+
+Kvasir can also write trace data to a standard Unix pipe. In this case,
+it is easiest to generate the @code{.decls} file on a separate
+execution. Here's a sequence of commands with the same effect as the
+example above:
+
+@example
+kvasir-dtrace --decls-only ./bzip2 --help 
+kvasir-dtrace --decls-file=/dev/null --dtrace-file=- ./bzip2 --help \
+   | $DAIKON daikon-output/bzip2.decls -
+@end example
+
+The first command generates a @code{.decls} file, but does not execute
+the program or produce trace data. The second Kvasir command writes
+trace data to the standard output (being careful not to overwrite the
+@code{.decls} file), which is then piped to Daikon which reads it from
+the standard input.
 
 @node    Other problems, Reporting bugs, Large dtrace files, Troubleshooting
 @section Other problems
