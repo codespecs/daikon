@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # java-cpp -- C preprocessor specialized for Java
 # Michael Ernst
-# Time-stamp: <2002-12-02 09:03:49 mernst>
+# Time-stamp: <2003-01-08 23:07:50 mernst>
 
 # This acts like the C preprocessor, but
 #  * it does not remove comments
@@ -48,7 +48,7 @@ my $file_handle_nonce = 'fh00';
 
   my $argv = join(' ', @ARGV);
   # intentionally does not capture standard error; it goes straight through
-  my $system_result = system("cpp $argv $tmpfile_in > $tmpfile_out 2> $tmpfile_err");
+  my $system_result = system("cpp -traditional $argv $tmpfile_in > $tmpfile_out 2> $tmpfile_err");
   if ($system_result != 0) {
     rewrite_errors($tmpfile_err, $filename);
     # unlink($tmpfile_in);
@@ -135,7 +135,12 @@ sub unescape_comments ( $ ) {
     # Change multiple contiguous spaces into one space, but not at
     # beginning of line (cpp 2.96 (Red Hat) does this).
     s/([^ \t\n] ) +/$1/g;
-    s/JAVACPP_WHITESPACE_SEPARATOR//g;
+    s/$JAVACPP_WHITESPACE_SEPARATOR//og;
+
+    # Perform string contatenation required by use of -traditional cpp flag.
+    s/(\w) \#\# (\w)/$1$2/g;
+    # Stringization, too.  (But not just before "@see".)
+    s/(?!\@see)(.... )\#(\w+)/$1"$2"/g;
 
     # Convert string concatenation ("a" + "b") single string ("ab").
     while (s/(".*)"  ?\+ "(.*")/$1$2/g) { }
@@ -167,6 +172,8 @@ sub unescape_comments ( $ ) {
     # also: "a. FOO)" becomes "a.FOO)"
     s/(\b[A-Za-z]\w*|\))\. ([a-z]\w*) ?\(/$1.$2\(/g;
     s/(\b[A-Za-z]\w*)\. (\w+) ?(\)|;|\.[a-z])/$1.$2$3/g;
+    # convert "new Foo. Bar(...)" to "new Foo.Bar(...)"
+    s/(\bnew [A-Za-z]\w*)\. ([A-Za-z]\w*)\(/$1.$2\(/g;
     # convert " instanceof long [])" to " instanceof long[])"
     s/( instanceof \w+) ((\[\])*\))/$1$2/g;
     # convert "long []" to "long[]" (for cast, prototype, or declaration).

@@ -336,11 +336,11 @@ public final class MathMDE {
 
   /**
    * The iterator produces Integer values.
-   * This can be more efficient than modulus(int[]) if the int [] doesn't already
+   * This can be more efficient than modulus(int[]) if the int[] doesn't already
    * exist, because this does not necessarily examine every value produced by
    * its iterator.
    **/
-  public static int[] modulus_int (Iterator itor) {
+  public static int[] modulus_int(Iterator itor) {
     if (!itor.hasNext())
       return null;
     int avalue = ((Integer)itor.next()).intValue();
@@ -416,14 +416,14 @@ public final class MathMDE {
 
   /**
    * The iterator produces Integer values.
-   * This can be more efficient than modulus(int[]) if the int [] doesn't
+   * This can be more efficient than modulus(int[]) if the int[] doesn't
    * already exist, because this does not necessarily examine every value
    * produced by its iterator.
    *
    * For documentation, see modulus_strict(int[], boolean).
    * @see #modulus_strict(int[], boolean)
    **/
-  public static int[] modulus_strict_int (Iterator itor, boolean nonstrict_ends) {
+  public static int[] modulus_strict_int(Iterator itor, boolean nonstrict_ends) {
     if (!itor.hasNext())
       return null;
 
@@ -498,11 +498,11 @@ public final class MathMDE {
 
   /**
    * The iterator produces Long values.
-   * This can be more efficient than modulus(long[]) if the long [] doesn't already
+   * This can be more efficient than modulus(long[]) if the long[] doesn't already
    * exist, because this does not necessarily examine every value produced by
    * its iterator.
    **/
-  public static long[] modulus_long (Iterator itor) {
+  public static long[] modulus_long(Iterator itor) {
     if (!itor.hasNext())
       return null;
     long avalue = ((Long)itor.next()).longValue();
@@ -578,14 +578,14 @@ public final class MathMDE {
 
   /**
    * The iterator produces Long values.
-   * This can be more efficient than modulus(long[]) if the long [] doesn't
+   * This can be more efficient than modulus(long[]) if the long[] doesn't
    * already exist, because this does not necessarily examine every value
    * produced by its iterator.
    *
    * For documentation, see modulus_strict(long[], boolean).
    * @see #modulus_strict(int[], boolean)
    **/
-  public static long[] modulus_strict_long (Iterator itor, boolean nonstrict_ends) {
+  public static long[] modulus_strict_long(Iterator itor, boolean nonstrict_ends) {
     if (!itor.hasNext())
       return null;
 
@@ -642,7 +642,7 @@ public final class MathMDE {
     Arrays.sort(nums);
     int min = nums[0];
     int max = nums[nums.length-1];
-    int[] result = new int[ max - min + 1 - nums.length ];
+    int[] result = new int[max - min + 1 - nums.length];
     int result_index = 0;
     int val = min;
     for (int i=0; i<nums.length; i++) {
@@ -683,7 +683,7 @@ public final class MathMDE {
     int current_index;
     boolean add_ends;
 
-    MissingNumbersIteratorInt (int[] nums, boolean add_ends) {
+    MissingNumbersIteratorInt(int[] nums, boolean add_ends) {
       this.add_ends = add_ends;
       Arrays.sort(nums);
       current_index = 0;
@@ -697,7 +697,7 @@ public final class MathMDE {
     }
 
     // The argument iterator must return the Integers in sorted order
-    MissingNumbersIteratorInt (Iterator nums_itor, boolean add_ends) {
+    MissingNumbersIteratorInt(Iterator nums_itor, boolean add_ends) {
       this.add_ends = add_ends;
       if (!nums_itor.hasNext())
         throw new Error("No elements in nums_itor");
@@ -739,7 +739,7 @@ public final class MathMDE {
           int prev_nonmissing = current_nonmissing;
           current_nonmissing = ((Integer)nums_itor.next()).intValue();
           if (! (prev_nonmissing < current_nonmissing))
-            throw new Error("Non-sorted Iterator supplied to MissingNumbersIteratorINT: prev_nonmissing = " + prev_nonmissing + ", current_nonmissing = " + current_nonmissing);
+            throw new Error("Non-sorted Iterator supplied to MissingNumbersIteratorInt: prev_nonmissing = " + prev_nonmissing + ", current_nonmissing = " + current_nonmissing);
         } else {
           throw new Error("Can't happen");
         }
@@ -779,16 +779,16 @@ public final class MathMDE {
     int range = ArraysMDE.element_range(nums);
     if (range > 65536)
       return null;
-    return nonmodulus_strict_int_internal (new MissingNumbersIteratorInt(nums, true));
+    return nonmodulus_strict_int_internal(new MissingNumbersIteratorInt(nums, true));
   }
 
-  private static int[] nonmodulus_strict_int_internal (Iterator missing) {
+  private static int[] nonmodulus_strict_int_internal(Iterator missing) {
     // Must not use regular modulus:  that can produce errors, eg
     // nonmodulus_strict({1,2,3,5,6,7,9,11}) => {0,2}.  Thus, use
     // modulus_strict.
     UtilMDE.RemoveFirstAndLastIterator missing_nums
       = new UtilMDE.RemoveFirstAndLastIterator(missing);
-    int[] result = modulus_strict_int (missing_nums, false);
+    int[] result = modulus_strict_int(missing_nums, false);
     if (result == null)
       return result;
     if (! check_first_and_last_nonmodulus(result, missing_nums))
@@ -810,8 +810,8 @@ public final class MathMDE {
    * Return a tuple of (r,m) where no number in NUMS is equal to r (mod
    * m) but all missing numbers in their range are.
    **/
-  public static int[] nonmodulus_strict_int (Iterator nums) {
-    return nonmodulus_strict_int_internal (new MissingNumbersIteratorInt(nums, true));
+  public static int[] nonmodulus_strict_int(Iterator nums) {
+    return nonmodulus_strict_int_internal(new MissingNumbersIteratorInt(nums, true));
   }
 
   // Old, slightly less efficient implementation that uses the version of
@@ -885,7 +885,7 @@ public final class MathMDE {
     Arrays.sort(nums);
     long min = nums[0];
     long max = nums[nums.length-1];
-    long[] result = new long[new Long( max - min + 1 - nums.length ).intValue() ];
+    long[] result = new long[new Long(max - min + 1 - nums.length).intValue()];
     int result_index = 0;
     long val = min;
     for (int i=0; i<nums.length; i++) {
@@ -926,7 +926,7 @@ public final class MathMDE {
     int current_index;
     boolean add_ends;
 
-    MissingNumbersIteratorLong (long[] nums, boolean add_ends) {
+    MissingNumbersIteratorLong(long[] nums, boolean add_ends) {
       this.add_ends = add_ends;
       Arrays.sort(nums);
       current_index = 0;
@@ -940,7 +940,7 @@ public final class MathMDE {
     }
 
     // The argument iterator must return the Integers in sorted order
-    MissingNumbersIteratorLong (Iterator nums_itor, boolean add_ends) {
+    MissingNumbersIteratorLong(Iterator nums_itor, boolean add_ends) {
       this.add_ends = add_ends;
       if (!nums_itor.hasNext())
         throw new Error("No elements in nums_itor");
@@ -982,7 +982,7 @@ public final class MathMDE {
           long prev_nonmissing = current_nonmissing;
           current_nonmissing = ((Long)nums_itor.next()).longValue();
           if (! (prev_nonmissing < current_nonmissing))
-            throw new Error("Non-sorted Iterator supplied to MissingNumbersIteratorINT: prev_nonmissing = " + prev_nonmissing + ", current_nonmissing = " + current_nonmissing);
+            throw new Error("Non-sorted Iterator supplied to MissingNumbersIteratorLong: prev_nonmissing = " + prev_nonmissing + ", current_nonmissing = " + current_nonmissing);
         } else {
           throw new Error("Can't happen");
         }
@@ -1022,16 +1022,16 @@ public final class MathMDE {
     long range = ArraysMDE.element_range(nums);
     if (range > 65536)
       return null;
-    return nonmodulus_strict_long_internal (new MissingNumbersIteratorLong(nums, true));
+    return nonmodulus_strict_long_internal(new MissingNumbersIteratorLong(nums, true));
   }
 
-  private static long[] nonmodulus_strict_long_internal (Iterator missing) {
+  private static long[] nonmodulus_strict_long_internal(Iterator missing) {
     // Must not use regular modulus:  that can produce errors, eg
     // nonmodulus_strict({1,2,3,5,6,7,9,11}) => {0,2}.  Thus, use
     // modulus_strict.
     UtilMDE.RemoveFirstAndLastIterator missing_nums
       = new UtilMDE.RemoveFirstAndLastIterator(missing);
-    long[] result = modulus_strict_long (missing_nums, false);
+    long[] result = modulus_strict_long(missing_nums, false);
     if (result == null)
       return result;
     if (! check_first_and_last_nonmodulus(result, missing_nums))
@@ -1053,8 +1053,8 @@ public final class MathMDE {
    * Return a tuple of (r,m) where no number in NUMS is equal to r (mod
    * m) but all missing numbers in their range are.
    **/
-  public static long[] nonmodulus_strict_long (Iterator nums) {
-    return nonmodulus_strict_long_internal (new MissingNumbersIteratorLong(nums, true));
+  public static long[] nonmodulus_strict_long(Iterator nums) {
+    return nonmodulus_strict_long_internal(new MissingNumbersIteratorLong(nums, true));
   }
 
   // Old, slightly less efficient implementation that uses the version of
@@ -1086,7 +1086,7 @@ public final class MathMDE {
   public static long[] nonmodulus_nonstrict(long[] nums) {
     if (nums.length < 4)
       return null;
-    int max_modulus = new Long( Math.min(nums.length/2, ArraysMDE.element_range(nums)/2) ).intValue();
+    int max_modulus = new Long(Math.min(nums.length/2, ArraysMDE.element_range(nums)/2)).intValue();
 
     // System.out.println("nums.length=" + nums.length + ", range=" + ArraysMDE.element_range(nums) + ", max_modulus=" + max_modulus);
 
@@ -1097,7 +1097,7 @@ public final class MathMDE {
       boolean[] has_modulus = new boolean[m]; // initialized to false?
       int num_nonmodulus = m;
       for (int i=0; i<nums.length; i++) {
-        int rem = new Long( mod_positive(nums[i], m) ).intValue();
+        int rem = new Long(mod_positive(nums[i], m)).intValue();
         if (!has_modulus[rem]) {
           has_modulus[rem] = true;
           num_nonmodulus--;
