@@ -327,6 +327,7 @@ Problems running Daikon
 * No return from procedure::    
 * Out of memory::               
 * Simplify errors::             
+* Contradictory invariants::    
 * Method needs to be implemented::  
 * JVM initialization error::    
 * Daikon runs slowly::          
@@ -2597,9 +2598,25 @@ and 10 five times.  The observed values of @code{x} --- i.e., the samples of
 @code{x} --- did not change enough for Daikon to be confident that this
 invariant is an actual invariant.
 
-@item Suppress invariants containing only constants
+@item Suppress comparisons containing only constants
 
-This filter suppresses invariants containing only constants.
+This filter suppresses comparison invariants in which all of the
+variables being compared were observed to be constant.  In the current
+version of Daikon, most such invariants are not even created in the
+first place, because constants are detected on an early pass over the
+data. However, Daikon will note that all of the invariants that had
+any particular constant value were also equal to each other: such
+invariants will be suppressed by this filter.
+
+@c This one is commented out, since it is in the source too -SMcC
+@c @item Suppress invariants with uninteresting literals
+@c This filter suppresses invariants containing literal numbers, such as
+@c ``x < 45'' and ``y[] one of { [42, 12, 23], [-4, 46] }'', based on a
+@c heuristic judgement that some numbers are more interesting than
+@c others. Such potential invariants are sometimes undesirable because
+@c they are likely to represent a limitation of the way in which a
+@c program was tested, rather than a true invariant thst would hold over
+@c all possible program executions.
 
 @item Suppress implied postcondition invariants
 
@@ -4037,8 +4054,9 @@ include both C's @file{math.h} and C++'s @file{complex.h}.
 release, but it does appear in some Linux distributions, such as Red Hat's.
 @command{dfec} does not currently work with other
 compilers or other versions of gcc.  In particular, gcc 3 does not
-work, nor does ``gcc 2.95.4'' (neither of which is
-an official gcc release but which appear in some Linux distributions).
+work, nor does the pre-release version labeled ``gcc 2.95.4'' that
+appears in some Linux distributions (including some versions of
+Debian).
 
 
 @cindex gcc 2.95.3, installing
@@ -4493,6 +4511,41 @@ on the conditional program points (that is, the parts of the data
 trace) separately and any invariants detected are reported as
 conditional invariants (as implications).
 
+To be precise, we say that an invariant holds exclusively if it is
+discovered on one side of a split, and its negation is discovered on
+the opposite side.  Daikon creates conditional invariants whose
+predicates are invariants that hold exclusively on one side of a
+split, and whose consequents are invariants that hold on that side of
+the split but not on the un-split program point.  If Daikon finds
+multiple exclusive conditions, it will create biconditional (``if and
+only if'') invariants between the equivalent conditions.  Within the
+context of the program, each of the exclusive conditions is equivalent
+to the splitting condition.  In particular, if both the splitting
+condition and its negation are within the grammar of invariants that
+Daikon detects, the splitting condition may appear as the predicate of
+the generated conditional invariants.  On the other hand, if other
+equivalent conditions are found, or if the splitting condition is not
+expressible in Daikon's grammar, it might not appear in the generated
+implications.
+
+In some cases, the default policy of selecting predicates from
+Daikon's output may be insufficient.  For instance, Daikon might not
+detect any invariant equivalent to the splitting condition, if it is
+sufficiently complex or application-specific.  In such situations,
+Daikon can also use the splitting condition itself as the predicate of
+an implication, as what is called a ``dummy invariant''.  A ``dummy
+invariant'' is one whose meaning is not dealt with directly by Daikon;
+instead Daikon knows only how to print the invariant in its output.
+When a tool or a user writes a splitter info file, the file can
+specify a way to print the condition represented by the splitter in
+any of Daikon's output formats.  If the use of dummy invariants is
+enabled, invariants with the supplied output formats will be used as
+the predicates of conditional invariants.
+
+To use dummy invariants, a condition's formatting must be specified in
+the splitter info file, and the configuration option
+@option{daikon.PptTopLevel.dummy_invariant_level} must be set to a
+non-zero value (see @ref{List of configuration options}).
 
 @menu
 * Splitter info file::          
@@ -4523,20 +4576,29 @@ sections and replacement sections.
 
 Program point sections have a line specifying a program point name
 followed by lines specifying the condition(s) associated with that
-program point, each condition on its own line.  For example, a typical
-entry is
+program point, each condition on its own line.  Additional information
+about a condition may be specified on indented lines.  For example, a
+typical entry is
 
 @example
 PPT_NAME @var{pptname}
-condition1
-condition2
+@var{condition1}
+@var{condition2}
+    DAIKON_FORMAT @var{output string}
+    ESC_FORMAT @var{output string}
+@var{condition3}
 ...
 @end example
 @noindent
 @var{pptname} can be any string that matches a part of the desired
 program point name as printed in the decls file.  In finding matching
 program points, Daikon uses the first program point that matches
-@code{pptname}.
+@code{pptname}.  Caution is necessary when dealing with method names
+that are prefixes of other method names.  For instance, if the class
+@code{List} has methods @code{add} and @code{addAll}, specifying
+@code{PPT_NAME List.add} might select either method, depending on
+which was encountered first.  Instead writing @code{PPT_NAME
+List.add(} will match only the @code{add} method.
 
 Each condition is a Java expression of boolean type.  All variables
 that appear in the condition must also appear in the declaration of
@@ -4546,6 +4608,12 @@ is intended to operate.) The automatically generated Splitter source
 code fails to compile (but Daikon proceeds without it) if a variable
 name in a condition is not found at the matching program point.
 
+Indented lines beginning with @option{DAIKON_FORMAT},
+@option{JAVA_FORMAT}, @option{ESC_FORMAT}, @option{SIMPLIFY_FORMAT},
+or @option{IOA_FORMAT} may be used to specify how to represent the
+condition specified by the splitter in each of Daikon's output
+formats, to allow the splitting condition to be used as a dummy
+invariant.
 
 @node    Replacement sections,  , Program point sections, Splitter info file
 @subsubsection Replacement sections
@@ -4557,10 +4625,10 @@ the bodies of methods, permitting conditions to invoke those methods.  The
 format is as follows:
 @example
 REPLACE
-procedure1
-replacement1
-procedure2
-replacement2
+@var{procedure1}
+@var{replacement1}
+@var{procedure2}
+@var{replacement2}
 ...
 @end example
 @noindent
@@ -4608,8 +4676,9 @@ daikon.split.SplitterList.all_splitters = false
 @subsection Example splitter info file
 
 Below is an implementation of a simple Queue for positive integers and
-the @file{.spinfo} file that @command{CreateSpinfo} would create for
-that class.
+a corresponding @file{.spinfo} file. The splitter info file is like
+the one that @command{CreateSpinfo} would create for that class, but
+also demonstrates some other features.
 
 @menu
 * Example class::               
@@ -4677,16 +4746,18 @@ currentSize == 0
 
 PPT_NAME  simpleStack.push
 !isFull() && x >= 0
+    DAIKON_FORMAT !isFull() and x >= 0
+    SIMPLIFY_FORMAT (AND (NOT (isFull this)) (>= x 0))
 
 PPT_NAME  simpleStack.pop
 !isEmpty()
-@end smallexample
 
 PPT_NAME  simpleStack.isFull
-(currentSize == myArray.length - 1)
+currentSize == myArray.length - 1
 
 PPT_NAME  simpleStack.isEmpty
-(currentSize == 0)
+currentSize == 0
+@end smallexample
 
 @node    Enhancing conditional invariant detection,  , Conditional invariants, Enhancing Daikon output
 @section Enhancing conditional invariant detection
@@ -5536,6 +5607,7 @@ understand Daikon's operation; @xref{Command line options}.
 * No return from procedure::    
 * Out of memory::               
 * Simplify errors::             
+* Contradictory invariants::    
 * Method needs to be implemented::  
 * JVM initialization error::    
 * Daikon runs slowly::          
@@ -5622,7 +5694,7 @@ ask an expert.)
 Any output generated before the out-of-memory error is perfectly valid.
 
 
-@node    Simplify errors, Method needs to be implemented, Out of memory, Daikon problems
+@node    Simplify errors, Contradictory invariants, Out of memory, Daikon problems
 @subsection Simplify errors
 
 @cindex Simplify, could not utilize
@@ -5637,8 +5709,52 @@ If Simplify is not used, certain redundant (logically implied)
 invariants may appear in Daikon's output.  The output is
 correct, but more verbose than it would be if you used Simplify.
 
+@node Contradictory invariants, Method needs to be implemented, Simplify errors, Daikon problems
+@subsection Contradictory invariants
 
-@node    Method needs to be implemented, JVM initialization error, Simplify errors, Daikon problems
+@cindex contradictory invariants
+@cindex inconsistent invariants
+@cindex invariants, inconsistent
+@cindex invariants, contradictory
+
+The invariants Daikon produces are all true statements about the
+supplied program executions, so they should be mutually consistent.
+Sometimes, however, because of a bug or a limitation in Daikon,
+contradictory invariants are produced.
+
+One known problem involves object invariants. Daikon infers object
+invariants by observing the state of an object when its public methods
+are called. However, if an object has publicly accessible fields that
+are changed by code outside the class, after which no public methods
+are called, invariants about the state of the object as seen by other
+code can contradict the class's object invariants. A workaround is to
+allow changes to an object's state from outside the class only by
+way of public methods.
+
+Besides confusing the user, contradictory invariants also cause
+trouble for the Simplify theorem prover that implements the
+@option{--suppress_redundant} option. When the invariants at a
+particular program point contradict each other or background
+information (such as the types of objects), Simplify becomes unable to
+distinguish redundant invariants from non-redundant ones.
+
+The best solution in such cases is to fix the underlying cause of the
+contradictory invariants, but since that is sometimes not possible,
+Daikon will try to work around the problem by avoiding the invariants
+that cause a contradiction. Daikon will attempt to find a small subset
+of the invariants that aren't mutually consistent, and remove one,
+repeating this process until the remaining invariants are consistent.
+(Note that the invariants are removed only for the purposes of
+processing by Simplify; this does not affect whether they will be
+printed in the final output).  While this technique can allow
+redundant invariants to be found when they otherwise wouldn't be, it
+has some drawbacks: the choice of which invariant to remove is
+somewhat arbitrary, and the process of finding contradictory subsets
+can be time consuming. The removal process can be disabled with the
+@option{daikon.simplify.LemmaStack.remove_contradictions}
+configuration option.
+
+@node    Method needs to be implemented, JVM initialization error, Contradictory invariants, Daikon problems
 @subsection Method needs to be implemented
 
 @cindex method needs to be implemented warning
