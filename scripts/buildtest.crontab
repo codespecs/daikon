@@ -1,4 +1,9 @@
 # Crontab for daikonbuildtest user
+# Runs on beet.
+
+# To initiate this crontab, run the crontab command on this file.
+# Henceforth, this file will nightly be updated and its commands
+# executed.
 
 USER=daikonbuildtest
 MAILTO=daikon@geyer.lcs.mit.edu

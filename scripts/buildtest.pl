@@ -12,13 +12,14 @@ use Cwd;
 
 # Process the command-line args
 my $usage = "Usage: buildtest.pl [--quiet]\n"
-  . "  Debugging flags:  [--nocleanup] [--skip_daikon] [--skip_dfec] [--skip_dfej]\n";
+  . "  Debugging flags:  [--nocleanup] [--skip_daikon] [--skip_dfec] [--skip_dfej] [--use_ver3]\n";
 my $quiet = 0;
 my $nocleanup = 0;
 # These three flags permit only part of the tests to be run; good for debugging.
 my $skip_daikon = 0;
 my $skip_dfec = 0;
 my $skip_dfej = 0;
+my $use_ver3 = 0;
 while (scalar(@ARGV) > 0) {
   my $arg = shift @ARGV;
   if ($arg eq "--quiet") {
@@ -31,6 +32,9 @@ while (scalar(@ARGV) > 0) {
     $skip_dfec = 1;
   } elsif ($arg eq "--skip_dfej") {
     $skip_dfej = 1;
+  } elsif ($arg eq "--use_ver3") {
+# When on, use version 3 of Daikon
+    $use_ver3 = 1;
   } else {
     die "$usage\n";
   }
@@ -209,7 +213,11 @@ sub daikon_update {
   print_log("Updating Daikon...");
   my $daikon_dir = "invariants/java/daikon";
   chdir($daikon_dir) or die "can't chdir to $daikon_dir: $!\n";
-  `cvs -d $CVS_REP up -r $CVS_TAG &> ../../../daikon_update.out`;
+  if ($use_ver3) {
+      `cvs -d $CVS_REP up &> ../../../daikon_update.out`;
+  } else {
+      `cvs -d $CVS_REP up -r $CVS_TAG &> ../../../daikon_update.out`;
+  }
   chdir($DAIKONPARENT) or die "can't chdir to $DAIKONPARENT: $!\n";
   if ($CHILD_ERROR) {
     print_log("FAILED\n");
@@ -226,7 +234,11 @@ sub tests_update {
   print_log("Updating tests...");
   my $tests_dir = "invariants/tests";
   chdir($tests_dir) or die "can't chdir to $tests_dir: $!\n";
-  `cvs -d $CVS_REP up -r $CVS_TAG &> ../../tests_update.out`;
+  if ($use_ver3) {
+      `cvs -d $CVS_REP up &> ../../tests_update.out`;
+  } else {
+      `cvs -d $CVS_REP up -r $CVS_TAG &> ../../tests_update.out`;
+  }
   chdir($DAIKONPARENT) or die "can't chdir to $DAIKONPARENT: $!\n";
   if ($CHILD_ERROR) {
     print_log("FAILED\n");

@@ -1,0 +1,14 @@
+# Crontab #2 for daikonbuildtest user
+# As of 2-Aug-2002, running on turnip.lcs.mit.edu
+# Used for Daikon v3 tests, because v2 and v3 can't run on the same machine simultaneously
+# because the daikon tests use /scratch/$user
+
+# To initiate this crontab, run the crontab command on this file.
+# Henceforth, this file will nightly be updated and its commands
+# executed.
+
+USER=daikonbuildtest
+MAILTO=daikon@geyer.lcs.mit.edu
+
+02 1 * * * crontab $HOME/research/invariants/scripts/buildtest.crontab2
+02 2 * * * $HOME/research/invariants/scripts/buildtest --use_ver3 --skip_dfec --skip_dfej
