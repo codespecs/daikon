@@ -168,6 +168,12 @@ public final class Daikon {
   public static boolean dkconfig_undo_opts = false;
 
   /**
+   * Boolean.  Indicates to Daikon classes and methods that the methods
+   * calls should be compatible to DaikonSimple because Daikon and DaikonSimple share
+   * methods.  Default value is 'false'.
+   **/
+  public static boolean using_DaikonSimple = false;
+  /**
    * If true, no invariants will be guarded.  Guarding means that
    * if a variable "can be missing" in a dtrace file, predicates
    * are attached to invariants ensuring their values can be dereferenced.
@@ -1161,10 +1167,12 @@ public final class Daikon {
    */
   public static void init_ppt (PptTopLevel ppt, PptMap all_ppts) {
 
+    if(!Daikon.using_DaikonSimple) {
     // Setup splitters.  This must be done before adding derived variables.
     // Do not add splitters to ppts that were already created by splitters!
     if (! (ppt instanceof PptConditional)) {
       setup_splitters(ppt);
+    }
     }
 
     // Create orig and derived variables
@@ -1175,6 +1183,7 @@ public final class Daikon {
       ppt.create_derived_variables();
     }
 
+    if (!Daikon.using_DaikonSimple) {
     // Initialize equality sets on leaf nodes
     setupEquality(ppt);
 
@@ -1185,7 +1194,7 @@ public final class Daikon {
 	init_ppt (ppt_cond, all_ppts);
       }
     }
-
+    }
   }
 
 
@@ -1227,11 +1236,12 @@ public final class Daikon {
 	}
 
         exit_ppt = new PptTopLevel(exit_name.getName(), exit_vars);
-	exit_ppts.add(exit_ppt);
+     //   exit_ppt.ppt_name.setVisibility(exitnn_name.getVisibility());
+        exit_ppts.add(exit_ppt);
         if (debugInit.isLoggable(Level.FINE))
           debugInit.fine ("create_combined_exits: created exit "
                           + exit_name);
-	init_ppt (exit_ppt, ppts);
+        init_ppt (exit_ppt, ppts);
       }
     }
 
@@ -1923,10 +1933,10 @@ public final class Daikon {
       PptSliceEquality sliceEquality = ppt.equality_view;
 
       // some program points have no equality sets?
-      // if (sliceEquality == null) {
-      //   System.out.println(ppt.name);
-      //   continue;
-      // }
+       if (sliceEquality == null) {
+         System.out.println(ppt.name);
+         continue;
+       }
 
 
       Iterator sets = sliceEquality.invs.iterator();
