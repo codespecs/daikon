@@ -7566,6 +7566,8 @@ variables.
 @node    License, Mailing lists reminder, History, Details
 @section License
 
+@index license
+
 Copyright @copyright{} 1998-2005 Massachusetts Institute of Technology
 
 Permission is hereby granted, free of charge, to any person obtaining a
@@ -7600,7 +7602,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE@.
 @c Other licensing terms are available;
 @c send mail to @email{mernst@@csail.mit.edu}.
 
-@sp
+@sp 1
 
 Daikon uses the Java port of the GNU getopt library, which is
 copyright 1998 Aaron M.@: Renn.  The getopt library is free software, and
