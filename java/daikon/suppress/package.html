@@ -9,6 +9,14 @@ An invariant is suppressed if it is implied by another invariant.  A
 suppressed invariant is not checked as long as its suppressor is true.
 This saves time for checking long data trace files.  Not outputting
 suppressed invariants reduces output spam for obvious invariants.
+
+In general, the non printing of invariants can be classified into
+"static" and "dynamic" reasons.  A static reason is one that can be
+determined without looking at the dtrace file.  Suppression is a
+dynamic method.  Suppression is only for true invariants.  Suppression
+is different from other non printing methods because it is based on
+other invariants that can later become falsified.
+
 Suppression is NOT:
 
 <p>
@@ -16,13 +24,18 @@ Suppression is NOT:
 <ul>
 
 <li> The non-instantiation of invariants that are obvious in and of
-themselves.
+themselves.  This is instead done by a combination of static methods
+(e.g. A[i] is an element of A[]) and dynamic methods (LinearBinary
+finds out that it reduces to A==B, which is obvious).
 
 <li> The hiding of invariants during printing for various other
-reasons.  This is because suppression is mostly a checking-time
-mechanism based on left hand sides that aren't known to be true yet.
+reasons.  For example, some invariants are not printed because their
+VarInfos aren't interesting.  Suppression only works where one
+invariant logically implies another.
 
-<li> A mechanism for handling equality invariants.
+<li> A mechanism for (efficiently) handling equality.
+daikon.PptSliceEquality and daikon.inv.Equality do this.  However,
+suppression is able to use Equality invariants for suppressing.
 
 </ul>
 
@@ -45,9 +58,11 @@ method, which asks the invariant's associated SuppressionFactory's to
 attempt suppression.  Each SuppressionFactory in turn generates
 SuppressionTemplates, which are lists of Invariant types and VarInfos
 that would be able to make a valid SuppressionLink.  The
-SuppressionFactory asks the potential suppressee's PptTopLevel to
+SuppressionFactory asks the potential suppressee's PptTopLevel (the
+same one as the one mentioned at the beginning of this paragraph) to
 fillSuppressionTemplate().  If a template is successfully filled, then
-the invariant is suppressed.
+the invariant is suppressed.  During filling, other PptTopLevels are
+accessed to attempt to fill the template.
 
 <p>
 
@@ -65,12 +80,13 @@ resurrected.  Also attempt suppression on any invariants in this ppt
 that weaken.
 
 <li> For any falsified or flowed invariants, take the invariants they
-were suppressing.  Attempt to re-suppress them.  If an invariant is in
-the same PptTopLevel as its former suppressor, add its PptSlice to the
-set of slices to check.  A suppressed invariant could have been in a
-different slice from its suppressor, but it is not necessary to check
-such invariants because a) The slice can't be higher than this and b) If
-the slice is lower, it will be checked later in the data flow.
+were suppressing.  Attempt to re-suppress them by creating a new
+SuppressionLink for them.  If an invariant is in the same PptTopLevel as its
+former suppressor, add its PptSlice to the set of slices to check.  A
+suppressed invariant could have been in a different slice from its
+suppressor, but it is not necessary to check such invariants because
+a) The slice can't be higher than this and b) If the slice is lower,
+it will be checked later in the data flow.
 
 <li> Repeat while there are slices to check.
 
@@ -129,11 +145,9 @@ class already exists in the lower slice.
 
 <p>
 
-Note for Invariant cloning: SuppressionLinks are shared between two
-Invariants iff one is a clone of each other.  Otherwise, Invariants
-have their own suppressor and suppressed fields.  The sharing is
-necessary because a weakened Invariant doesn't flow itself, but a
-clone of itself, and we only have the clone to recheck suppression on.
+Note for Invariant cloning: SuppressionLinks are NEVER shared between
+two Invariants, even if they are clones.  A clone always starts with
+no suppressors or suppressees.
 
 <p>
 
