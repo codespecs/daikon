@@ -14,6 +14,7 @@ public final class SequenceScalarSubscript extends BinaryDerivation {
 
   // Indicates whether the subscript is an index of valid data or a limit
   // (one element beyond the data of interest).
+  // Value is -1 or 0.
   public final int index_shift;
 
   public SequenceScalarSubscript(VarInfo vi1, VarInfo vi2, boolean less1) {

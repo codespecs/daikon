@@ -365,6 +365,67 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     return result;
   }
 
+  // Like equalTo, but drops out things which can be inferred to be equal
+  // to the first.
+
+  public Vector equalToNonobvious() {
+    // should only call this for canonical variables
+    Assert.assert(isCanonical());
+
+    Vector result = new Vector();
+
+    VarInfo[] vis = ppt.var_infos;
+    for (int i=0; i<vis.length; i++) {
+      Assert.assert(vis[i].equal_to == vis[i].equal_to.equal_to);
+      if (i == varinfo_index)
+        continue;
+      VarInfo vi = vis[i];
+      if (vi.equal_to != this)
+        continue;
+
+      // System.out.println("Considering " + vi.name);
+      // Special cases of variables to omit.
+      {
+        // An element b.class is omitted if:
+        //  * "b.class" is non-canonical
+        //    We know this because we are only examining non-canonical
+        //    variables which are equal to this, which is canonical.
+        //  * "b" is non-canonical
+        //  * there exists an a such that a=b (ie, equal_to slot of "b"'s
+        //     varinfo is non-null); also, assert that "a.class" is in equalTo
+
+        String sansclassname = null;
+        if (vi.name.endsWith(".class")) {
+          sansclassname = vi.name.substring(0, vi.name.length() - 6);
+        } else if (vi.name.endsWith(".class)") && vi.name.startsWith("orig(")) {
+          // parent of "orig(x.class)" is "orig(x)"
+          sansclassname = vi.name.substring(0, vi.name.length() - 7) + ")";
+        }
+        if (sansclassname != null) {
+          // System.out.println("Considering .class: " + vi.name + "sansclass=" + sansclassname);
+
+          // "parent" is "b" in the above comment; "vi" is "b.class".
+          // don't bother to intern, as findVar doesn't need it.
+          VarInfo sansclass = ppt.findVar(sansclassname);
+          Assert.assert(sansclass != null);
+          if (! sansclass.isCanonical()) {
+            // We will omit vi.
+            VarInfo a = sansclass.equal_to;
+            VarInfo a_class = ppt.findVar(a.name + ".class");
+            Assert.assert(a_class != null);
+            Assert.assert(a_class.equal_to == this);
+            continue;
+          }
+        }
+      }
+      // Add any additional special cases here.
+
+      result.add(vi);
+    }
+
+    return result;
+  }
+
 
   // Shouldn't have any vacuous variables, so comment this out.
   // /**

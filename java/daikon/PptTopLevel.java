@@ -1488,8 +1488,9 @@ public class PptTopLevel extends Ppt {
 
   /** Print invariants for a single program point. */
   public void print_invariants() {
-    System.out.println(name + "  "
-		       + num_samples() + " samples");
+    int num_samps = num_samples();
+    System.out.println(name + "  " + num_samps
+                       + " sample" + ((num_samps == 1) ? "" : "s"));
     System.out.println("    Samples breakdown: "
 		       + values.tuplemod_samples_summary());
     System.out.print("    Variables:");
@@ -1551,7 +1552,7 @@ public class PptTopLevel extends Ppt {
     for (int i=0; i<var_infos.length; i++) {
       VarInfo vi = var_infos[i];
       if (vi.isCanonical()) {
-        Vector equal_vars = vi.equalTo();
+        Vector equal_vars = vi.equalToNonobvious();
         if (equal_vars.size() > 0) {
           StringBuffer sb = new StringBuffer(vi.name);
           for (int j=0; j<equal_vars.size(); j++) {
@@ -1587,10 +1588,10 @@ public class PptTopLevel extends Ppt {
     for (int ia_index = 0; ia_index<invs_array.length; ia_index++) {
       Invariant inv = invs_array[ia_index];
       int num_vals = inv.ppt.num_values();
-      int num_samps = inv.ppt.num_samples();
+      int inv_num_samps = inv.ppt.num_samples();
       String num_values_samples =
         "\t\t(" + num_vals + " value" + ((num_vals == 1) ? "" : "s") + ", "
-        + num_samps + " samples)";
+        + inv_num_samps + " sample" + ((inv_num_samps == 1) ? "" : "s") + ")";
 
       // I could imagine printing information about the PptSlice
       // if it has changed since the last Invariant I examined.

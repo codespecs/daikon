@@ -81,12 +81,13 @@ public final class SequenceScalarSubscriptFactory extends BinaryDerivationFactor
 
     // Abstract out these next two.
 
-    // If the scalar is the constant 0, do nothing.  We already extract
-    // array[0], and the subarrays array[0..-1] and array[0..0] are not
-    // interesting.
+    // If the scalar is the constant 0 (or less), do nothing.  We already
+    // extract array[0], and the subarrays array[0..-1] and array[0..0] are
+    // not interesting.
     if (sclvar.isConstant()) {
       long scl_constant = ((Long) sclvar.constantValue()).longValue();
-      if (scl_constant == 0) {
+      // System.out.println("It's constant (" + scl_constant + "): " + sclvar.name);
+      if (scl_constant < 1) {
         Global.tautological_suppressed_derived_variables += 2;
         Global.nonsensical_suppressed_derived_variables += 2;
         return null;

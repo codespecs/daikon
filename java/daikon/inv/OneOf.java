@@ -2,7 +2,8 @@ package daikon.inv;
 
 import daikon.*;
 
-// An interface satisfied by OneOfScalar, OneOfString, and OneOfSequence.
+// An interface satisfied by OneOfScalar, OneOfString, OneOfSequence, and
+// OneOfStringSequence.
 // The variable takes on exactly one value.
 public interface OneOf {
   /** The number of elements in the OneOf invariant. */

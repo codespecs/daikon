@@ -6,6 +6,7 @@ import utilMDE.*;
 import daikon.derive.*;
 import daikon.derive.unary.*;
 import daikon.derive.binary.*;
+import java.util.*;
 
 public final class Member extends SequenceScalar {
 
@@ -22,7 +23,7 @@ public final class Member extends SequenceScalar {
     VarInfo seqvar = ppt.var_infos[seq_first ? 0 : 1];
     VarInfo sclvar = ppt.var_infos[seq_first ? 1 : 0];
 
-    if (isObviousMember(sclvar, seqvar)) {
+    if (isEqualToObviousMember(sclvar, seqvar)) {
       Global.implied_noninstantiated_invariants += 1;
       if (debugMember) {
         System.out.println("Member not instantiated (obvious): "
@@ -36,6 +37,33 @@ public final class Member extends SequenceScalar {
                          + sclvar.name + " in " + seqvar.name);
     }
     return new Member(ppt, seq_first);
+  }
+
+  public boolean isObviousImplied() {
+    VarInfo seqvar = ppt.var_infos[seq_first ? 0 : 1];
+    VarInfo sclvar = ppt.var_infos[seq_first ? 1 : 0];
+    return isEqualToObviousMember(sclvar, seqvar);
+  }
+
+  // Like isObviousMember, but also checks everything equal to the given
+  // variables.
+  public static boolean isEqualToObviousMember(VarInfo sclvar, VarInfo seqvar) {
+    Assert.assert(sclvar.isCanonical());
+    Assert.assert(seqvar.isCanonical());
+    Vector scl_equalto = sclvar.equalTo();
+    scl_equalto.add(0, sclvar);
+    Vector seq_equalto = seqvar.equalTo();
+    seq_equalto.add(0, seqvar);
+
+    for (int sclidx=0; sclidx<scl_equalto.size(); sclidx++) {
+      for (int seqidx=0; seqidx<seq_equalto.size(); seqidx++) {
+        VarInfo this_sclvar = (VarInfo) scl_equalto.elementAt(sclidx);
+        VarInfo this_seqvar = (VarInfo) seq_equalto.elementAt(seqidx);
+        if (isObviousMember(this_sclvar, this_seqvar))
+          return true;
+      }
+    }
+    return false;
   }
 
   public static boolean isObviousMember(VarInfo sclvar, VarInfo seqvar) {

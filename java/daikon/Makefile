@@ -1,10 +1,16 @@
-# put user-specific changes in your own Makefile.user
-#  (such as changes to UTILMDE_DIR or JAVAC)
-# make will silently continue if file does not exist
+### User customizations
+
+# Put user-specific changes in your own Makefile.user
+#  (such as changes to UTILMDE_DIR or JAVAC).
+# Make will silently continue if file does not exist.
 -include Makefile.user
 
 UTILMDE_DIR ?= $(HOME)/java/utilMDE
 JAVAC ?= jikes -g +E +F
+
+### end of user customications
+
+
 JAVA_FILES := $(shell find . \( -name '*daikon-java*' -o -name '*-cpp.java' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
 TAG_FILES := $(shell find . \( -name '*daikon-java*' -o -name CVS -o -name 'split' \) -prune -o -name '*.java' -print)
 # Should these really be targets in the below, or should I use "make
