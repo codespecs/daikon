@@ -38,7 +38,12 @@ public class GuardingImplication
     // return !right.isObvious();
   }
 
-  public boolean justified() {
-    return right.justified();
+  public boolean enoughSamples() {
+    return right.enoughSamples();
   }
+
+  public double computeProbability() {
+    return right.computeProbability();
+  }
+
 }

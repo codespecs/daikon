@@ -208,7 +208,7 @@ public abstract class Invariant
     return result;
   }
 
-  /** Return the probability that eithr conditions is satisfied. */
+  /** Return the probability that either condition is satisfied. */
   public static final double prob_or(double p1, double p2) {
     // Not "p1*p2" because that can produce a value too small; we don't
     // want the result to be smaller than the smaller argument.
@@ -233,6 +233,14 @@ public abstract class Invariant
     return true;
   }
 
+  // There are three probability routines:
+  //  justified() is what most clients should call
+  //  getProbability() gives the actual probability.  It used to cache
+  //    results, but it does not do so any longer.
+  //  computeProbability() in an internal helper method that does the
+  //    actual work, but it should not be called externally, only by
+  //    getProbability.
+
   // If probability == PROBABILITY_NEVER, then this invariant can be eliminated.
   /**
    * Given that this invariant has been true for all values seen so far,
@@ -253,8 +261,13 @@ public abstract class Invariant
    *
    * This method need not check the value of field "falsified", as the
    * caller does that.
+   * <p>
+   *
+   * This method is a wrapper around computeProbability(), which does the
+   * actual work.
+   * @see #computeProbability()
    **/
-  public double getProbability() {
+  public final double getProbability() {
     if (falsified)
       return PROBABILITY_NEVER;
     double result = computeProbability();
@@ -283,7 +296,8 @@ public abstract class Invariant
    **/
   protected abstract double computeProbability();
 
-  public boolean justified() {
+  /** A wrapper around getProbability(). **/
+  public final boolean justified() {
     boolean just = !falsified && enoughSamples() &&
                     (getProbability() <= dkconfig_probability_limit);
     if (logOn())
@@ -598,8 +612,9 @@ public abstract class Invariant
     return this.getClass().getName() + varNames();
   }
 
-  // Should not include result of getProbability because this may be called
-  // from computeProbability or elsewhere for debugging purposes.
+  // repr()'s output should not include result of getProbability, because
+  // repr() may be called from computeProbability or elsewhere for
+  // debugging purposes.
   /**
    * For printing invariants, there are two interfaces:
    * repr gives a low-level representation

@@ -195,7 +195,7 @@ public final class StringComparison
   // For Comparison interface
   public double eq_probability() {
     if (isExact())
-      return computeProbability();
+      return getProbability();
     else
       return Invariant.PROBABILITY_NEVER;
   }
