@@ -116,17 +116,18 @@ public class PptSplitter implements Serializable {
     // Choose the appropriate conditional point based on the condition result
     PptConditional ppt_cond = (PptConditional) ppts[splitter_test ? 0 : 1];
 
-    // If any parent variables were missing out of bounds, apply that
-    // to this conditional as well.  A more efficient way to do this would
-    // be better.
-    ppt_cond.get_missingOutOfBounds (parent);
+    // If any parent variables were missing out of bounds on this
+    // sample, apply that to this conditional as well.  A more
+    // efficient way to do this would be better.
+    ppt_cond.get_missingOutOfBounds (parent, vt);
 
     // Add the point
     ppt_cond.add_bottom_up (vt, count);
 
-    if (Debug.logDetail() && Debug.ppt_match (ppt_cond))
+    if (Debug.logDetail() && Debug.ppt_match (ppt_cond)) {
       System.out.println ("Adding sample to " + ppt_cond + " with vars "
                           + Debug.related_vars (ppt_cond, vt));
+    }
 
   }
 
