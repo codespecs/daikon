@@ -25,9 +25,6 @@ public class Chicory {
   /** Depth to wich to examine structure components **/
   public int nesting_depth = 2;
 
-  /** Output decls  as they are seen to the dtrace file **/
-  public boolean incremental = true;
-
   /** Ppts to omit (regular expression) **/
   public List<String> daikon_omit_regex = new ArrayList<String>();
 
@@ -111,14 +108,6 @@ public class Chicory {
           usage("Daikon depth " + depthStr + " must be positive");
           System.exit(1);
         }
-        premain_args.add(arg);
-
-      } else if (arg.equals("--daikon-incremental")) {
-        incremental = true;
-        premain_args.add(arg);
-
-      }  else if (arg.equals("--no-daikon-incremental")) {
-        incremental = false;
         premain_args.add(arg);
 
       } else if (arg.equals("--linked-lists")) {
@@ -391,8 +380,6 @@ public class Chicory {
       //System.err.println("  -all                             Include system classes in output");
       System.err.println("  --nesting-depth=<integer>          Specify Daikon depth (default 2)");
       System.err.println("  --debug");
-      System.err.println("  --daikon-incremental               Enable incremental mode");
-      System.err.println("  --no-daikon-incremental            Disable incremental mode");
       System.err.println("  --linked-lists                     Instrument implicit linked lists as vectors (default)");
       System.err.println("  --no-linked-lists                  Don't instrument implicit linked lists as vectors");
       System.err.println("  --ppt-omit-pattern=<regex>         Specifies an include-only class for instrumentation.  Cannot be used with ppt-select-pattern");

@@ -30,9 +30,6 @@ public class DTraceWriter extends DaikonWriter
     //turns off multi-dimensional array printing
     private static final boolean NoMultiDim = true;
 
-    //associated DeclListener for incremental mode
-    private DeclWriter declWriter;
-
     private static String noStackErrorMsg = "Could not find stack frame in the thread map";
 
     //instance of a nonsensical value
@@ -43,8 +40,6 @@ public class DTraceWriter extends DaikonWriter
     //certain class names
     protected static final String classClassName = "java.lang.Class";
     protected static final String stringClassName = "java.lang.String";
-
-    private boolean incremental;
 
     private PrintStream outFile;
     private int daikonDepth;
@@ -60,12 +55,8 @@ public class DTraceWriter extends DaikonWriter
      *            Formatted strings can include wildcards
      * @param thread
      *		  EventThread for the trace interface
-     * @param incremental
-     *		  Whether to use incremental mode
-     * @param dl
-     *		  Associated DeclListener for incremental mode
      */
-    public DTraceWriter(PrintStream writer, int depth, String[] excludes, List includes, boolean incr, DeclWriter dl)
+    public DTraceWriter(PrintStream writer, int depth, String[] excludes, List includes)
     {
         super(excludes, includes);
 
@@ -74,9 +65,6 @@ public class DTraceWriter extends DaikonWriter
         if (depth <= 0)
             throw new Error("Daikon depth must be positive");
         daikonDepth = depth;
-
-        incremental = incr;
-        declWriter = dl;
     }
 
     /**
@@ -93,14 +81,6 @@ public class DTraceWriter extends DaikonWriter
 
          if (shouldExcludeClass(method.getDeclaringClass().getName()))
          return;
-         */
-
-        // This is done from transform/Runtime
-        /*
-         if (incremental)
-         {
-         declWriter.printMethodEntry(method, argNames);
-         }
          */
 
         Member member = mi.member;
@@ -134,12 +114,6 @@ public class DTraceWriter extends DaikonWriter
 
          if (shouldExcludeClass(method.getDeclaringClass().getName()))
          return;
-         */
-
-        // This is done from transform/Runtime
-        /*
-         if (incremental)
-         declWriter.printMethodExit(method, lineNum, argList);
          */
 
         // this is passed in

@@ -44,7 +44,7 @@ public class ChicoryPremain {
                                           null);
     Runtime.dtrace_writer = new DTraceWriter (Runtime.dtrace,
                                           Runtime.nesting_depth, new String[0],
-                                          null, false, null);
+                                          null);
 
     // Setup the transformer
     RetTransform transformer = new RetTransform (chicory);
