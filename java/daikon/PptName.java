@@ -266,7 +266,7 @@ public class PptName
    **/
   public PptName makeClassStatic()
   {
-    Assert.assert(isExitPoint() || isEnterPoint());
+    Assert.assert(isExitPoint() || isEnterPoint() || isObjectInstanceSynthetic());
     return new PptName(cls, null, FileIO.class_static_suffix);
   }
 
