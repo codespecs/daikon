@@ -53,6 +53,7 @@ DIST_DIR_PATHS := daikon.tar.gz doc/images/daikon-logo.gif daikon.jar
 CVS_REPOSITORY := /g4/projects/invariants/.CVS/
 RTJAR := /g2/users/mernst/java/jdk/jre/lib/rt.jar
 TOOLSJAR := /g2/users/mernst/java/jdk/lib/tools.jar
+JUNIT_VERSION := junit3.8.1
 
 # for "chgrp"
 INV_GROUP := invariants
@@ -295,7 +296,7 @@ daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/ajax.jar)
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar)
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/log4j.jar)
-	(cd java; cp -fP --target-directory=/tmp/daikon-jar $(DAIKON_RESOURCE_FILES))
+	(cd java; cp -f --parents --target-directory=/tmp/daikon-jar $(DAIKON_RESOURCE_FILES))
 	cd /tmp/daikon-jar && jar cf $@ *
 	mv /tmp/daikon-jar/$@ $@
 	rm -rf /tmp/daikon-jar
@@ -401,13 +402,13 @@ daikon.tar: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILE
 
 	## JUnit
 	# This is wrong:
-	#   unzip java/lib/junit3.7.zip -d /tmp/daikon/java
-	#   (cd /tmp/daikon/java; ln -s junit3.7/junit .)
+	#   unzip java/lib/$(JUNIT_VERSION).zip -d /tmp/daikon/java
+	#   (cd /tmp/daikon/java; ln -s $(JUNIT_VERSION)/junit .)
 	# Need to extract a jar file in the zip file, then unjar that.
 	# (src.jar only contains .java files, not .class files.)
 	mkdir /tmp/daikon/tmp-junit
-	unzip java/lib/junit3.7.zip junit3.7/src.jar -d /tmp/daikon/tmp-junit
-	(cd /tmp/daikon/tmp-junit; unzip junit3.7/src.jar; rm -f junit3.7/src.jar; rmdir junit3.7; chmod -R +x *; find . -type f -print | xargs chmod -x; rm -rf META-INF TMP; mv junit /tmp/daikon/java/)
+	unzip java/lib/$(JUNIT_VERSION).zip $(JUNIT_VERSION)/src.jar -d /tmp/daikon/tmp-junit
+	(cd /tmp/daikon/tmp-junit; unzip $(JUNIT_VERSION)/src.jar; rm -f $(JUNIT_VERSION)/src.jar; rmdir $(JUNIT_VERSION); chmod -R +x *; find . -type f -print | xargs chmod -x; rm -rf META-INF TMP; mv junit /tmp/daikon/java/)
 	rm -rf /tmp/daikon/tmp-junit
 	(cd /tmp/daikon/java/junit; javac -g `find . -name '*.java'`)
 
