@@ -441,7 +441,12 @@ public final class Daikon {
 
     // Create the list of all invariant types
     setup_proto_invs();
-
+//    for(Iterator i = proto_invs.iterator(); i.hasNext();) {
+//      System.out.println(i.next().getClass());
+//    }
+//    
+//    System.exit(0);
+    
     if (PrintInvariants.print_discarded_invariants) {
       DiscReasonMap.initialize();
     }
@@ -525,6 +530,7 @@ public final class Daikon {
       || Daikon.output_format == OutputFormat.ESCJAVA)
       && !dkconfig_noInvariantGuarding)
       guardInvariants(all_ppts);
+   // System.exit(0);
     // print out the invariants for each program point
     if (Daikon.dkconfig_undo_opts) {
 
@@ -972,6 +978,10 @@ public final class Daikon {
       proto_invs.add(EltOneOfFloat.get_proto());
       proto_invs.add(EltOneOfString.get_proto());
 
+      // Range invariant (Range.java.jpp)
+      proto_invs.addAll(EltRangeInt.get_proto_all());
+      proto_invs.addAll(EltRangeFloat.get_proto_all());
+      
       // Sequence Index Comparisons (SeqIndexComparison.java.jpp)
       proto_invs.add(SeqIndexIntEqual.get_proto());
       proto_invs.add(SeqIndexIntNonEqual.get_proto());
