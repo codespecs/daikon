@@ -3,6 +3,7 @@
 ; All greater than or equal to -6
 daikon.inv.unary.scalar.LowerBound
 int
+Goal: a >= -6
 5
 7
 -6
@@ -13,6 +14,7 @@ int
 ; All equal to 1 mod 3
 daikon.inv.unary.scalar.Modulus
 int
+Goal: a == 1  (mod 3)
 1
 4
 7
@@ -21,6 +23,7 @@ int
 ; All not equal to 2 mod 5
 daikon.inv.unary.scalar.NonModulus
 int
+Goal: a != 2  (mod 5)
 0
 1
 3
@@ -37,10 +40,12 @@ int
 ; NonZero requires no samples
 daikon.inv.unary.scalar.NonZero
 int
+Goal: a != 0
 
 ; All the time it is 1, 5, or 9
 daikon.inv.unary.scalar.OneOfScalar
 int
+Goal: a one of { 1, 5, 9 }
 1
 5
 9
@@ -58,10 +63,12 @@ int
 ; Positive requires no samples
 daikon.inv.unary.scalar.Positive
 int
+Goal: a > 0
 
 ; All less than or equal to 10
 daikon.inv.unary.scalar.UpperBound
 int
+Goal: a <= 10
 1
 2
 5
@@ -74,31 +81,37 @@ int
 ; All greater than or equal to -57
 daikon.inv.unary.sequence.EltLowerBound
 int_array
+Goal: a[] elements >= -57
 102 5 92 33 -54 -2 -57 -3 -24 29 93
 
 ; EltNonZero needs no samples
 daikon.inv.unary.sequence.EltNonZero
 int_array
+Goal: a[] elements != 0
 
 ; All are 4, 5, or 6
 daikon.inv.unary.sequence.EltOneOf
 int_array
+Goal: a[] elements one of { 4, 5, 6 }
 4 5 6 5 4 5 6 5 4 4 4 5 5 5 6 6 6
 
 ; All less than 895
 daikon.inv.unary.sequence.EltUpperBound
 int_array
+Goal: a[] elements <= 895
 1 -99 2 456 895 673 2 -23 -123 -9824 23
 
 ; Sorted ascending
 ; Prints incorrectly
 daikon.inv.unary.sequence.EltwiseIntComparison
 int_array
+Goal: a[] sorted by <
 1 2 3 5 7 8 9 100
 
 ; No duplicates in array
 daikon.inv.unary.sequence.NoDuplicates
 int_array
+Goal: a[] contains no duplicates
 1 55 2 -123 873 24 99 239
 
 ; OneOfSequence not currently implemented
@@ -107,17 +120,20 @@ int_array
 ; Causes an error now - not exactly sure what the statements inside mean
 daikon.inv.unary.sequence.SeqIndexComparison
 int_array
+Goal: a[i] > i
 5 10 15 20 25 30 35 40
 
 ; array[index] != index
 daikon.inv.unary.sequence.SeqIndexNonEqual
 int_array
+Goal: a[i] != i
 5 10 15 20 25 30 35 40
 
 ; Testing unary string invariants
 ; Always equal to "testString"
 daikon.inv.unary.string.OneOfString
 string
+Goal: a == "testString"
 testString
 
 ; Testing unary stringsequence invariants
@@ -128,6 +144,7 @@ testString
 ; Prints incorrectly
 daikon.inv.unary.stringsequence.EltOneOfString
 string_array
+Goal: a[] elements one of { "gnirtStset", "testString" }
 testString testString gnirtStset gnirtStset testString gnirtStset
 
 ; OneOfStringSequence not yet implemented in JML
@@ -139,26 +156,32 @@ testString testString gnirtStset gnirtStset testString gnirtStset
 ; IntEqual does not need any samples
 daikon.inv.binary.twoScalar.IntEqual
 int int
+Goal: a == b
 
 ; IntGreaterEqual does not need any samples
 daikon.inv.binary.twoScalar.IntGreaterEqual
 int int
+Goal: a >= b
 
 ; IntGreaterThan does not need any samples
 daikon.inv.binary.twoScalar.IntGreaterThan
 int int
+Goal: a > b
 
 ; IntLessEqual does not need any samples
 daikon.inv.binary.twoScalar.IntLessEqual
 int int
+Goal: a <= b
 
 ; IntNonEqual does not need any samples
 daikon.inv.binary.twoScalar.IntNonEqual
 int int
+Goal: a != b
 
 ; b = -3*a + 1
 daikon.inv.binary.twoScalar.LinearBinary
 int int
+Goal: b == - 3 * a + 1
 1
 -2
 10
@@ -175,17 +198,20 @@ int int
 ; a[i] > b[i]
 daikon.inv.binary.twoSequence.PairwiseIntComparison
 int_array int_array
+Goal: a[] > b[] (elementwise)
 5 10 15 20 25 30 35 40
 -5 0 5 10 15 20 25 30
 
 ; a[i] = b[b.length-i]
 daikon.inv.binary.twoSequence.Reverse
 int_array int_array
+Goal: a[] is the reverse of b[]
 
 ; a is subsequence of b
 ; Error in formatting currently, fix later
 daikon.inv.binary.twoSequence.SubSequence
 int_array int_array
+Goal: b[] is a subsequence of a[]
 1 2 3 4 5 6
 7 8 1 2 3 4 5 6 7 8
 
@@ -194,6 +220,7 @@ int_array int_array
 ; a == b (string format)
 daikon.inv.binary.twoString.StringComparison
 string string
+Goal: a == b
 aString
 aString
 
@@ -202,12 +229,14 @@ aString
 ; a is in b
 daikon.inv.binary.sequenceScalar.Member
 int_array int
+Goal: b in a[]
 5 -6 7 -8 9 1 -2 3 -4 5
 7
 
 ; a[i] > b
 daikon.inv.binary.sequenceScalar.SeqIntComparison
 int_array int
+Goal: a[] elements > b
 -9 8 -7 6 -5 4 -3 2 -1 0
 -20
 
@@ -216,6 +245,7 @@ int_array int
 ; a is in b
 daikon.inv.binary.sequenceString.Member
 string_array string
+Goal: b in a[]
 A b C longerString under_score findMe various other strings involved in the array
 findMe
 
@@ -226,6 +256,7 @@ findMe
 ; c = 2a + 3b - 6
 daikon.inv.ternary.threeScalar.LinearTernary
 int int int
+Goal: c == 2 * a + 3 * b - 6
 1
 1
 -1

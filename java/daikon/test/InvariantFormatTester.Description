@@ -4,10 +4,11 @@ InvariantFormatTester.<format name>:
 
 <fully qualified class name>
 <type string>
+<goal string>
 <sample>* <- 0 or more samples
 
 The file format should be the same regardless of blank or commented lines
-except in the samples area. No blank lines or comments should appear after the type
+except in the samples area. No blank lines or comments should appear after the goal
 string before the first sample or between parts of samples (these lines are used
 currently to determine where samples lists end). This will be remedied in a
 future version of the tester.
@@ -20,20 +21,35 @@ This string represents the types that an invariant is supposed to compare
 For instance, a binary integer comparison would have type string "int int".
 A pairwise sequence comparison would have type string "int_array int_array"
 
+Goal string:
+The goal string must start with the prefix "Goal: " (don't actually type the quotes)
+and must represent the invariant result exactly as printed, even white space is significant
+(as proper formatting should be correct down to the whitespace). The first variable
+(the one corresponding to the first type in the type string) corresponds with "a", the second
+with "b" and so on. Format the type string accordingly. (In samples, the value of "a" is read
+first, possibly followed by "b", and then possibly "c", depending on the arity of the
+invariant.)
+
 Samples:
 Values formatted according to the type string, one value per line
+Make sure that the samples provided are actually instances of that particular invariant
+(That is, if the desired invariant is "a < b", then the first number of each sample
+better be less than the second)
+Also be sure to have enough samples to ensure the invariant is apparent (and probable) to
+Daikon (6-8 will do for most binary integer comparisons, 1-3 for array-based comparisons)
 Example: Formatting for samples of a binary integer comparison
 
-int int <- no comment/blank lines after this
-1 <- or before this
+int int        <- type string
+Goal: a < b    <- goal string, no comment/blank lines after this
+1              <- or before this
 2
-2 <-|__ Pair of values
-3 <-|
+2              <-|__ Pair of values (a = 2 , b = 3)
+3              <-|
 
-Please see the included goal files (InvariantFormatTester.<format>.goal) for
+Please see the included files (InvariantFormatTester.<format>) for
 further examples and modify them to more fully cover other output formats.
 
-The output of a test run can be converted into a goals files by using the --generate_goals
+The output of a test run can be converted into goals by using the --generate_goals
 switch to the tester as follows:
 
 java daikon.test.InvariantFormatTester --generate_goals
