@@ -297,7 +297,13 @@ public class PptSliceEquality
         VarInfo[] toFill = new VarInfo[slice.var_infos.length];
         copyInvsFromLeaderHelper (leader, newVis, slice, newSlices,
                                   0, -1, toFill);
-        
+        for (Iterator iSliceInvs = slice.invs.iterator(); iSliceInvs.hasNext(); ) {
+          Invariant inv = (Invariant) iSliceInvs.next();
+          if (inv.isObviousStatically_AllInEquality()) {
+            inv.destroyAndFlow();
+          }
+        }
+        if (slice.invs.size() == 0) i.remove();
       }
     }
 
