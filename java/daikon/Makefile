@@ -50,8 +50,8 @@ all_directly: ${AUTO_GENERATED_FILES}
 
 all_force:	all_directly
 
-all_via_javac: ${AUTO_GENERATED_FILES}
-	javac -g ${JAVA_FILES}
+all_via_javac:
+	$(MAKE) JAVAC='javac -g' all
 
 all_javac:	all_via_javac
 
