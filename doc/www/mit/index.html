@@ -789,11 +789,11 @@ simply run <tt>make</tt> with the desired file as the target. <p> <ol>
     <code> su - daikongroupmember </code> <p>
 
     <li> Update daikon in daikongroupmember to the most recent version
-    of V2. <p>
+    of V3. <p>
 
     <code> 
         cd $inv <br>
-        make use-ver2 <br>
+        make use-ver3 <br>
         cvs update -d  <br>
     </code> <p>
 
@@ -849,23 +849,24 @@ simply run <tt>make</tt> with the desired file as the target. <p> <ol>
     
     <code>
         cd $inv/java <br>
-        make 'JAVADOC_DEST=/home/httpd/html/daikon/download/jdoc_v2' doc <br>
+        make 'JAVADOC_DEST=/home/httpd/html/daikon/download/jdoc_v3' doc <br>
     </code> <P>
 
-    <li> Build, checkout, create a tarfile/jdoc for V3, and 
-    update the website <P>
+    <li> Build, checkout, create a tarfile/jdoc for V2, and 
+    update the website.  If the update doesn't change anything, you
+    can skip this step. <P>
 
     <code>
-        make use-ver3 <br>
+        make use-ver2 <br>
         cvs update <br>
         cd $inv/java <br>
         make <br>
-        make 'JAVADOC_DEST=/home/httpd/html/daikon/download/jdoc_v3' doc <br>
+        make 'JAVADOC_DEST=/home/httpd/html/daikon/download/jdoc_v2' doc <br>
         cd $inv/tests <br>
         make diffs <br>        
         cd $inv <br>
         make daikon.tar.gz <br>
-        cp daikon.tar.gz /home/httpd/html/daikon/download/daikon_v3.tar.gz <br>
+        cp daikon.tar.gz /home/httpd/html/daikon/download/daikon_v2.tar.gz <br>
         update-link-dates /home/httpd/html/daikon/download/index.html <br>
     </code> <p>
 
