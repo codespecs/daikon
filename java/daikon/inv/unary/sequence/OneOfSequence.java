@@ -80,6 +80,24 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
     Arrays.sort(elts, 0, num_elts , comparator );
   }
 
+  public Object min_elt() {
+    if (num_elts == 0)
+      throw new Error("Represents no elements");
+    sort_rep();
+
+    return elts[0];
+
+  }
+
+  public Object max_elt() {
+    if (num_elts == 0)
+      throw new Error("Represents no elements");
+    sort_rep();
+
+    return elts[num_elts-1];
+
+  }
+
   // Assumes the other array is already sorted
   public boolean compare_rep(int num_other_elts, long[] [] other_elts) {
     if (num_elts != num_other_elts)
