@@ -11,6 +11,9 @@
 # Essentially a Perl port of a similar C++ program written by Adam
 # Czeisler
 
+$ELEMENT_SUFFIX = "_element";
+$INDEX_SUFFIX = "_index_";
+
 if ($#ARGV != 0) {
   die "Usage: lwpp.pl <filename.decls>\n";
 }
@@ -121,7 +124,12 @@ sub get_comparable_variables {
 
   # every variable is comparable to itself, except array elements,
   # which are comparable to their _element variable
-  if (not is_array_element($variable)) {
+  if (is_array_element($variable)) {
+    my $array_base = $variable;
+    $array_base =~ s/\[\]//;
+    my $element_variable = $array_base . $ELEMENT_SUFFIX;
+    $comparable_variables{$element_variable} = 1;
+  } else {
     $comparable_variables{$variable} = 1;
   }
 
@@ -158,7 +166,7 @@ sub get_comparable_variables {
     
     if (is_array_element($comparable_variable)) {
       # change array[0][0]... to array_element
-      $comparable_variable =~ s/(\[0\])+/_element/;
+      $comparable_variable =~ s/(\[0\])+/$ELEMENT_SUFFIX/;
     }
 
     if (exists $interesting_variables{$comparable_variable}) {
@@ -181,11 +189,11 @@ sub add_array_variables_to_interesting_variables {
   my ($variable) = @_;
   my $array_base = $variable;
   $array_base =~ s/\[\]//;
-  my $element_variable = $array_base . "_element";
+  my $element_variable = $array_base . $ELEMENT_SUFFIX;
   $interesting_variables{$element_variable} = 1;
   my $count = 0;
   while ($variable =~ /\[\]/g) {
-    my $index_variable = $array_base . "_index_" . $count;
+    my $index_variable = $array_base . $INDEX_SUFFIX . $count;
     $interesting_variables{$index_variable} = 1;
     $count++;
   }
@@ -198,7 +206,7 @@ sub print_array_index_types {
   $array_base =~ s/\[\]//;
   my $count = 0;
   while ($representation_type =~ /\[\]/g) {
-    my $index_variable = $array_base . "_index_" . $count;
+    my $index_variable = $array_base . $INDEX_SUFFIX . $count;
     my $comparable_variables =
       get_comparable_variables($index_variable, $function);
     my $implicit_type = get_implicit_type($comparable_variables);
