@@ -15,9 +15,6 @@ SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 DAIKON_JAVA_FILES := $(shell find java \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name '*ajax-ship*' \) -prune -o -name '*.java' -print)
 DAIKON_RESOURCE_FILES := daikon/config/defaults.txt daikon/simplify/daikon-background.txt
 AJAX_JAVA_FILES := $(shell find java/ajax-ship/ajax \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
-# This includes backup files.  But so does
-#   WWW_FILES := $(shell cd doc/www; find . \( -name CVS -o -name uw \) -prune -o \( -type f -not -name '*~' \) -print)
-# I'm not sure of the correct solution.
 WWW_FILES := $(shell cd doc/www; find . \( -name '*~' -o -name '.*~' -o -name CVS -o -name .cvsignore -o -name '.\#*' -o -name '*.bak' -o -name uw \) -prune -o -print)
 WWW_DIR := /home/httpd/html/daikon/
 
