@@ -11,8 +11,8 @@ import java.lang.reflect.*;
  * That each element from one sequence relates to each corresponding
  * element in another sequence by a function.
  **/
-public class PairwiseFunctionUnaryFloat
-  extends TwoSequenceFloat
+public class PairwiseFunctionUnaryFloat 
+  extends TwoSequenceFloat 
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or

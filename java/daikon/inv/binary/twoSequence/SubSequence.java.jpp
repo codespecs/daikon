@@ -249,12 +249,13 @@ public class CLASSNAME
     String superQuantifyResults[] = QuantHelper.format_jml(superQuantifyReturn,false,false);
 
     QuantifyReturn subQuantifyReturn = QuantHelper.quantify(new VarInfoName[] {subvar.name});
-    VarInfoName subIndexName = ((VarInfoName [])subQuantifyReturn.bound_vars.get(0))[0];
+    VarInfoName subIndexGroup[] = (VarInfoName [])subQuantifyReturn.bound_vars.get(0);
+
+    VarInfoName subIndexName = subIndexGroup[0];
 
     // If indicies have same name modify the quantify return before forming string
     if (superIndexName.equals(subIndexName)) {
-      subIndexName = VarInfoName.parse(new String(new char [] {(char)((int)superIndexName.name().charAt(0)+1)})); // could cause name conflict... unsure of what to do
-      // Must correctly set the name within the QuantifyReturn
+      subIndexName = subIndexGroup[0] = VarInfoName.parse(new String(new char [] {(char)((int)superIndexName.name().charAt(0)+1)})); // could cause name conflict... unsure of what to do
     }
 
     String subQuantifyResults[] = QuantHelper.format_jml(subQuantifyReturn);

@@ -8,7 +8,7 @@ import daikon.inv.binary.*;
 
 import utilMDE.*;
 
-public abstract class TwoSequenceFloat
+public abstract class TwoSequenceFloat 
   extends BinaryInvariant
 {
   // We are Serializable, so we specify a version to allow changes to

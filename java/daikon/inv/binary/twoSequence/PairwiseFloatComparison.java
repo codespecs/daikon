@@ -11,8 +11,8 @@ import org.apache.log4j.Category;
 
 // Requires that the lengths are the same.  Determines a comparison that
 // holds for all (a[i], b[i]) pairs.
-public class PairwiseFloatComparison
-  extends TwoSequenceFloat
+public class PairwiseFloatComparison 
+  extends TwoSequenceFloat 
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -23,7 +23,7 @@ public class PairwiseFloatComparison
    * Debug tracer
    **/
   public static final Category debug =
-    Category.getInstance ("daikon.inv.binary.twoSequence.PairwiseFloatComparison" );
+    Category.getInstance ("daikon.inv.binary.twoSequence." + "PairwiseFloatComparison" );
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -176,7 +176,7 @@ public class PairwiseFloatComparison
 
   public boolean isExclusiveFormula(Invariant other)
   {
-    if (other instanceof PairwiseFloatComparison) {
+    if (other instanceof PairwiseFloatComparison ) {
       return core.isExclusiveFormula(((PairwiseFloatComparison) other).core);
     }
     return false;
@@ -187,7 +187,7 @@ public class PairwiseFloatComparison
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof PairwiseFloatComparison)
+      if (inv instanceof PairwiseFloatComparison )
         return (PairwiseFloatComparison) inv;
     }
     return null;

@@ -6,8 +6,8 @@ import daikon.*;
 import daikon.inv.Invariant;
 import daikon.inv.binary.twoScalar.*;
 
-public class PairwiseLinearBinary
-  extends TwoSequence
+public class PairwiseLinearBinary 
+  extends TwoSequence 
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -120,7 +120,7 @@ public class PairwiseLinearBinary
 
   public boolean isExclusiveFormula(Invariant other)
   {
-    if (other instanceof PairwiseLinearBinary) {
+    if (other instanceof PairwiseLinearBinary ) {
       return core.isExclusiveFormula(((PairwiseLinearBinary) other).core);
     }
     return false;

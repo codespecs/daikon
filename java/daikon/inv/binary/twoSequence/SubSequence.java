@@ -7,7 +7,7 @@ import daikon.inv.*;
 import daikon.derive.*;
 import daikon.derive.unary.*;
 import daikon.derive.binary.*;
-import daikon.inv.unary.sequence.EltOneOf;
+import daikon.inv.unary.sequence. EltOneOf ;
 import daikon.VarInfoName.QuantHelper;
 import daikon.VarInfoName.QuantHelper.QuantifyReturn;
 
@@ -15,8 +15,8 @@ import utilMDE.*;
 import org.apache.log4j.Category;
 import java.util.*;
 
-public class SubSequence
-  extends TwoSequence
+public class SubSequence 
+  extends TwoSequence 
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -24,7 +24,7 @@ public class SubSequence
   static final long serialVersionUID = 20020122L;
 
   private static final Category debug =
-    Category.getInstance("daikon.inv.binary.twoSequence.SubSequence" );
+    Category.getInstance("daikon.inv.binary.twoSequence." + "SubSequence" );
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -209,12 +209,13 @@ public class SubSequence
     String superQuantifyResults[] = QuantHelper.format_jml(superQuantifyReturn,false,false);
 
     QuantifyReturn subQuantifyReturn = QuantHelper.quantify(new VarInfoName[] {subvar.name});
-    VarInfoName subIndexName = ((VarInfoName [])subQuantifyReturn.bound_vars.get(0))[0];
+    VarInfoName subIndexGroup[] = (VarInfoName [])subQuantifyReturn.bound_vars.get(0);
+
+    VarInfoName subIndexName = subIndexGroup[0];
 
     // If indicies have same name modify the quantify return before forming string
     if (superIndexName.equals(subIndexName)) {
-      subIndexName = VarInfoName.parse(new String(new char [] {(char)((int)superIndexName.name().charAt(0)+1)})); // could cause name conflict... unsure of what to do
-      // Must correctly set the name within the QuantifyReturn
+      subIndexName = subIndexGroup[0] = VarInfoName.parse(new String(new char [] {(char)((int)superIndexName.name().charAt(0)+1)})); // could cause name conflict... unsure of what to do
     }
 
     String subQuantifyResults[] = QuantHelper.format_jml(subQuantifyReturn);
@@ -286,7 +287,7 @@ public class SubSequence
   public static boolean isObviousDerived(VarInfo subvar, VarInfo supervar) {
 
      if (debug.isDebugEnabled()) {
-      debug.debug("static SubSequence.isObviousDerived(" + subvar.name +
+      debug.debug("static " + "SubSequence"  + ".isObviousDerived(" + subvar.name +
                   ", " + supervar.name + ") " + subvar.isDerivedSubSequenceOf() +
                   " " + supervar.isDerivedSubSequenceOf());
     }
@@ -305,7 +306,7 @@ public class SubSequence
       return true;
     }
 
-    if (subvar.derived instanceof SequencesPredicate) {
+    if (subvar.derived instanceof SequencesPredicate ) {
       // It's not useful that predicate(x[], b[]) is a subsequence or subset
       // of x[]
       SequencesPredicate  derived = (SequencesPredicate) subvar.derived;
@@ -329,8 +330,8 @@ public class SubSequence
     VarInfo supervar_super = supervar.isDerivedSubSequenceOf();
     if (subvar_super == supervar_super) {
       // both sequences are derived from the same supersequence
-      if ((subvar.derived instanceof SequenceScalarSubsequence)
-          && (supervar.derived instanceof SequenceScalarSubsequence)) {
+      if ((subvar.derived instanceof SequenceScalarSubsequence )
+          && (supervar.derived instanceof SequenceScalarSubsequence )) {
         SequenceScalarSubsequence  sss1 = (SequenceScalarSubsequence) subvar.derived;
         SequenceScalarSubsequence  sss2 = (SequenceScalarSubsequence) supervar.derived;
         VarInfo index1 = sss1.sclvar();
@@ -344,8 +345,8 @@ public class SubSequence
             // System.out.println("Obvious subsequence: " + subvar.name + " " + supervar.name + "; " + index1.name + " " + index2.name);
             return true;
           }
-      } else if ((subvar.derived instanceof SequenceStringSubsequence)
-                 && (supervar.derived instanceof SequenceStringSubsequence)) {
+      } else if ((subvar.derived instanceof SequenceStringSubsequence )
+                 && (supervar.derived instanceof SequenceStringSubsequence )) {
         // Copied from just above
         SequenceStringSubsequence  sss1 = (SequenceStringSubsequence) subvar.derived;
         SequenceStringSubsequence  sss2 = (SequenceStringSubsequence) supervar.derived;
@@ -383,7 +384,7 @@ public class SubSequence
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof SubSequence)
+      if (inv instanceof SubSequence )
         return (SubSequence) inv;
     }
     return null;
@@ -424,7 +425,7 @@ public class SubSequence
           while (superinvs.hasNext()) {
             Object superinv = superinvs.next();
             System.out.println("Inv = " + superinv);
-            if (superinv instanceof EltOneOf) {
+            if (superinv instanceof EltOneOf ) {
               EltOneOf  eltinv = (EltOneOf) superinv;
               if (eltinv.num_elts() > 0) {
                 System.out.println(format() + " obvious because of " + eltinv.format());
@@ -469,7 +470,7 @@ public class SubSequence
 
   public boolean isSameFormula(Invariant other)
   {
-    Assert.assertTrue(other instanceof SubSequence);
+    Assert.assertTrue(other instanceof SubSequence );
     return true;
   }
 
