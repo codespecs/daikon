@@ -198,7 +198,12 @@ public final class IntComparison extends TwoScalar implements Comparison {
 
 
   public boolean isObviousImplied() {
+    VarInfo var1 = ppt.var_infos[0];
+    VarInfo var2 = ppt.var_infos[1];
     if (isExact()) {
+      if (var1.name.endsWith("-1")
+          && var2.name.endsWith("-1"))
+        return true;
       return false;
     }
     LinearBinary lb = LinearBinary.find(ppt);
@@ -207,8 +212,6 @@ public final class IntComparison extends TwoScalar implements Comparison {
       return true;
     }
     { // Sequence length tests
-      VarInfo var1 = ppt.var_infos[0];
-      VarInfo var2 = ppt.var_infos[1];
       SequenceLength sl1 = null;
       if (var1.isDerived() && (var1.derived instanceof SequenceLength))
         sl1 = (SequenceLength) var1.derived;
