@@ -9,7 +9,7 @@ sub usage () {
     . "match-result-files are in output format of colony-runmatch.pl\n";
 }
 
- my $lees_2003_dir = "/g6/users/leelin/research/6.370/colony-2003";
+my $lees_2003_dir = "/g6/users/leelin/research/6.370/colony-2003";
 # my $lees_2003_dir = "/g2/users/mernst/tmp/steering-experiments/lees-2003";
 
 
@@ -25,14 +25,16 @@ use colony_simconf;
 read_sim_conf("$lees_2003_dir/conf/sim.conf");
 my @teams = packages();         # package names
 my $num_teams = scalar(@teams);
-my %teams = ();
+my %teams = ();                 # maps from team names (packages) to numbers
 for (my $i=0; $i<$num_teams; $i++) { $teams{$teams[$i]} = $i; }
 
-# the "array_*" variables are 2-dimensional arrays.
-my @array_matches = ();           # number of matches between two teams
-my @array_wins = ();              # number of wins for the first index over the second
-my @array_time = ();                  # total time for the winning matches
-my $global_parameters;          # should be the same for all matches
+# the "array_*" variables are 2-dimensional arrays; each index is a team
+# number.  Call the two indices $i and $j.
+my @array_matches = ();     # number of matches between team $i and team $j
+my @array_wins = ();        # number of wins for team $i over team $j
+my @array_time = ();        # total time for the matches where team $i beat team $j
+# parameters to the simulator; should be the same for all matches
+my $global_parameters;
 
 for (my $i1=0; $i1<$num_teams; $i1++) {
   for (my $i2=$i1+1; $i2<$num_teams; $i2++) {
@@ -84,11 +86,23 @@ while (@ARGV) {
   }
 }
 
+# $team_wins[$i] is the total number of matches that team $i won.
 my @team_wins = ();
+# $team_losses[$i] is the total number of matches that team $i lost.
 my @team_losses = ();
+# $team_dominates[$i] is the total number of other teams that team $i
+# dominates; larger numbers are better.  Team $i dominates team $j iff team
+# $i won more of the ($i,$j) matches.  Thus, if the two teams won equal
+# numbers of matches against one another, then neither team dominates the
+# other.
 my @team_dominates = ();
+# $team_time[$i] is the times for the matches lost by team $i, minus the
+# time for the matches won by team $i.  Given a particular number of wins
+# and losses, larger numbers are better.
 my @team_time = ();
+# $team_rank[$i] is the rank of team $i.
 my @team_rank = ();
+# $team_rank[$rank] is the number of the team whose rank is $rank.
 my @team_rank_inverted = ();
 
 for (my $i1=0; $i1<$num_teams; $i1++) {
@@ -124,7 +138,8 @@ for (my $i1=0; $i1<$num_teams; $i1++) {
 }
 
 # Note that we never check whether team $a dominates team $b; that is
-# irrelevant (and there can be cycles in that graph).
+# irrelevant (and there can be cycles in that graph).  We only check the
+# total number of other teams that a team dominates.
 # The wins and time should really be divided by the total number of matches
 # for the team.
 sub team_rank_cmp {
