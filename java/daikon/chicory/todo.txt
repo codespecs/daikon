@@ -3,21 +3,14 @@ Todo list sorted in approximate order of importance.
 Add your name/initials to an item when you are actively working on it.
 When the task is complete, move it to the bottom of the file.
 
+  - Fix problem in which we force class initialization with calls to Field.get(null) (for static fields)
+  
   - Fix issue which occurs when classfile does not include line number
     information.  Dtrace/decls info should be syntactically correct.
     Currently, dtrace exit points do not have corresponding declarations
     (different, invalid line numbers)
     
-
-  
-  - Fix --ppt-omit-pattern and --ppt-select-pattern to work on each
-    ppt point name rather than only on class names.  I think this means
-    we should consider a class instrumented if any of its methods
-    match.  I think this change should be largely back compatible with 
-    their current usage.
-    [etf]
-    
-   - Add --exception switch to allow instrumentation of exceptions
+  - Add --exception switch to allow instrumentation of exceptions
 
   - Add new option to Chicory to only output a given percentage of all
     observed records.  This will permit faster execution on large
@@ -91,6 +84,19 @@ When the task is complete, move it to the bottom of the file.
 
 Completed Tasks (add new ones at the top)
 
+  - Fix --ppt-omit-pattern and --ppt-select-pattern to work on each
+    ppt point name rather than only on class names.  I think this means
+    we should consider a class instrumented if any of its methods
+    match.  I think this change should be largely back compatible with 
+    their current usage.
+    [etf]
+    
+    4/3/0 [etf]: I have checked in a change which makes these switches work.  Please refer to the
+    Daikon manual for detailed information about how it works.  In a nutshell, the commands
+    work by checking each regex against the class name, method name, AND program point name, and
+    "matching" if any of these match.
+    
+    
   - Fix bug which occurs for unnamed packages:
     For instance, if Bug.java is the following file:
 
