@@ -26,7 +26,7 @@ index.html:
 abstracts:
 	${BWBIN}/bwconv.pl -format=bibtex -outformat=htmlabstract -to abstracts-unsplit.html -authorurls ${MDEWWW}/pubs/author-urls -filter 'defined($$rec{"usesdaikon"}) && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
 	../pubs-sources/fix-homedir-tilde.pl abstracts-unsplit.html
-	${BWBIN}/htmlabstract-split.pl -footer ../pubs-sources/abstract-footer.html abstracts-unsplit.html
+	${BWBIN}/htmlabstract-split.pl -headfoot ../pubs-sources/abstract-headfoot.html abstracts-unsplit.html
 	rm abstracts-unsplit.html
 
 .PHONY: abstracts index.html
