@@ -110,7 +110,11 @@ for my $file (@ARGV) {
     my $ncnb_command = "cpp -P -nostdinc -undef $one_javafile | grep '[^ \\t]' | wc -l";
     $ncnbloc += `$ncnb_command`;
     # Very coarse: only counts number of public methods.  Should be fixed.
-    my $methods_command = 'perl -n -e ' . "'" . 'if (/\b(?:public|private|protected)\b.*\b(\w+)\s*(\([^\)]*\))(.*[^;])?$/) { print; }' . "'" . ' $f | wc -l';
+    my $methods_command = 'perl -n -e ' .
+      "'" .
+      'if (/\b(?:public|private|protected)\b.*\b(\w+)\s*(\([^\)]*\))(.*[^;])?$/) { print; }' .
+      "'" .
+      " $one_javafile | wc -l";
     $methods += `$methods_command`;
   }
 
@@ -245,7 +249,7 @@ if ($single) {
     my $precision = (1.0 * $verified) / ($verified + $unverified);
     my $recall = (1.0 * $verified) / ($verified + $missing);
 
-    printf("%-15s & %s & %s & %s & %s & %s & %s & %s & %s & %.2f & %.2f \\\\\n",
+    printf("%-15s & %s & %s & %s & %s & %s & %s & %s & %s & %s & %.2f & %.2f \\\\\n",
 	   $class,
 	   pad_left(7, pad_zph(length($maxloc), $loc)),
 	   pad_left(7, pad_zph(length($maxncnbloc), $ncnbloc)),
@@ -274,7 +278,7 @@ if ($single) {
 
   print "\\hline\n";
 # Copied from above.
-  printf("%-15s & %s & %s & %s & %s & %s & %s & %s & %s & %.2f & %.2f \\\\\n",
+  printf("%-15s & %s & %s & %s & %s & %s & %s & %s & %s & %s & %.2f & %.2f \\\\\n",
 	 "Average",
 	 pad_left(7, pad_zph(length($maxloc), avg($total_loc))),
 	 pad_left(7, pad_zph(length($maxncnbloc), avg($total_ncnbloc))),
