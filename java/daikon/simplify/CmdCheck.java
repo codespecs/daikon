@@ -32,6 +32,7 @@ public class CmdCheck
 
 	// read the answer
 	result = s.output.readLine();           // the real result
+	Assert.assert(!result.startsWith("Bad input:"), result);
 	Assert.assert("".equals(s.output.readLine())); // eat blank line
       }
 
