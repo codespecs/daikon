@@ -24,6 +24,25 @@ public abstract class BinaryInvariant extends Invariant {
                                       int count);
 
   /**
+   * applies the variables in the correct order.  If the second variable
+   * is an array and the first variable is not, the order of the values
+   * is reversed (so that the array is always the first argument).
+   */
+  public InvariantStatus add_unordered (Object val1, Object val2, int mod_index,
+                                        int count) {
+
+    VarInfo v1 = ppt.var_infos[0];
+    VarInfo v2 = ppt.var_infos[1];
+
+    if (v2.rep_type.isArray() && !v1.rep_type.isArray())
+      return (add (val2, val1, mod_index, count));
+    else
+      return (add (val1, val2, mod_index, count));
+
+  }
+
+
+  /**
    * Returns true if the binary function is symmetric (x,y ==> y,x)
    * Subclasses that are symmetric should override
    */
