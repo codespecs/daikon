@@ -2,12 +2,18 @@ Version:      $Id$
 Owner:        tohn <tohn>, mistere
 Cc:           
 Tool:         Daikon V3
-Summary:      No splitting of CLASS splitters?
+Summary:      No splitting in V3
 Severity:     Vexing
 Status:       New
 Reproducible: Yes
 Description:
 
+[mistere]
+Conditional program points (splitting) are not implemented in V3.
+I have patches that begin to add this functionality, but they
+currently break things.
+
+[tohn]
 Daikon V3 doesn't seem to split on splitters that mention the CLASS
 program point.  Maybe this has something to do with flow?
 
@@ -115,6 +121,9 @@ Exiting
 
 --
 $Log$
-Revision 1.1  2002-04-22 06:41:43  tohn
+Revision 1.2  2002-04-22 06:50:39  mistere
+changed bug0045
+
+Revision 1.1  2002/04/22 06:41:43  tohn
 new bug0045
 
