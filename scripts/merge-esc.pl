@@ -1,9 +1,9 @@
 : # Use -*- Perl -*- without knowing its path
   eval 'exec perl -S -w -n $0 "$@"'
   if 0;
-# merge-esc.pl -- Merge Daikon output into Java source code as ESC assnotations
+# merge-esc.pl -- Merge Daikon output into Java source code as ESC annotations
 # Michael Ernst <mernst@lcs.mit.edu>
-# Time-stamp: <2002-01-17 19:18:19 mistere>
+# Time-stamp: <2002-01-19 18:32:17 mernst>
 
 # The input is a Daikon output file.  Files from the current directory
 # are rewritten into -escannotated versions (use the -r switch as the
@@ -15,13 +15,12 @@ use File::Find;
 
 
 my $java_modifier_re;		# one modifier
-my $java_modifers_plus_re;	# at least one modifier
+my $java_modifiers_plus_re;	# at least one modifier
 my $field_decl_re;		# matches a full line;
 				#  groups = ($spaces, $mods, $body, $fieldname).
 
-
 my $warn_on_no_invariants;	# whether to warn if no invariants for a ppt.
-my $merge_unexpressable;	# whether to merge unexpressible invariants;
+my $merge_unexpressible;	# whether to merge unexpressible invariants;
 				#   if false, they are simply discarded.
 my $recursive;			# whether to look recursively for files.
 my $slashslash;                 # whether to use // or /* comments.
@@ -29,14 +28,14 @@ my $slashslash;                 # whether to use // or /* comments.
 
 BEGIN {
   $java_modifier_re = '\b(?:abstract|final|private|protected|public|static|strictfp|synchronized|transient)\b';
-  # $java_modifers_re = '\s*(?:' . $java_modifier_re . '\s*)*';
-  $java_modifers_plus_re = '\s*(?:' . $java_modifier_re . '\s*)+';
+  # $java_modifiers_re = '\s*(?:' . $java_modifier_re . '\s*)*';
+  $java_modifiers_plus_re = '\s*(?:' . $java_modifier_re . '\s*)+';
 
   my $__dollar = "\$";  # to mollify emacs perl-mode source parsing
-  $field_decl_re = '^(\s+)(' . $java_modifers_plus_re . ')([^=;]*\b(\w+)(?:\s*\[\])*\s*[;=].*)' . $__dollar;
+  $field_decl_re = '^(\s+)(' . $java_modifiers_plus_re . ')([^=;]*\b(\w+)(?:\s*\[\])*\s*[;=].*)' . $__dollar;
 
   $warn_on_no_invariants = 0;
-  $merge_unexpressable = 1;
+  $merge_unexpressible = 1;
   $recursive = 0;
   $slashslash = 0;
 
@@ -136,7 +135,7 @@ sub simplify_args( $ ) {
 
 ## I'm not sure of the point of the approximate matching.
 ## Maybe string equal would be good enough, if I also used simplify_args.
-# Return true if the argumentes are the same modulo whitespace;
+# Return true if the arguments are the same modulo whitespace;
 # also, names are permitted to match only up to a prefix.
 sub approx_argsmatch($$) {
   my ($args1, $args2) = @_;
@@ -192,7 +191,7 @@ sub is_non_supported_invariant( $ ) {
 	  || ($inv =~ /\\typeof\([^ ]*\.length/));
 }
 
-# Given a program point name, return the canoncial method name
+# Given a program point name, return the canonical method name
 sub ppt_to_meth( $ ) {
   my ($ppt) = @_;
 
@@ -318,7 +317,7 @@ END {
     $classname =~ s|^\./||;     # in case there is a ./ prefix
     $classname =~ s|/|.|g;      # all / to .
 
-    # We assume one clas per file (really: >1 implies all are instrumented)
+    # We assume one class per file (really: >1 implies all are instrumented)
     unless (grep { m/$classname/; } (keys %raw)) {
 	# print "Skipping $classname due to no invariant\n";
 	next;
@@ -381,7 +380,7 @@ END {
 	      if (! $no_requires) {
 		for my $inv (split("\n", $raw{$ppt})) {
 		  if (is_non_supported_invariant($inv)) {
-		    if ($merge_unexpressable) {
+		    if ($merge_unexpressible) {
 		      print OUT esc_comment("! $requires " . $inv);
 		    }
 		  } else {
@@ -408,7 +407,7 @@ END {
 		    grep(s/\[(.*[^*a-zA-Z0-9._].*)\]/[*]/g, @mods);
 		    grep(s/\[(.*\.\..*)\]/[*]/g, @mods);
 		    # even better would be to collect the list of
-		    # indicies which are modified, and create a
+		    # indices which are modified, and create a
 		    # \forall to specify that the rest aren't
 
 		    # change ary[*].field to ary[*]
@@ -426,7 +425,7 @@ END {
 		  } elsif ($inv =~ /^The invariant on the following line means:/) {
 		    print OUT esc_comment(" $inv");
 		  } elsif (is_non_supported_invariant($inv)) {
-		    if ($merge_unexpressable) {
+		    if ($merge_unexpressible) {
 		      print OUT esc_comment("! $ensures " . $inv);
 		    }
 		  } else {
@@ -516,7 +515,7 @@ END {
 	  if (defined($raw{$fullmeth})) {
 	    for my $inv (split("\n", $raw{$fullmeth})) {
 	      if (is_non_supported_invariant($inv)) {
-	        if ($merge_unexpressable) {
+	        if ($merge_unexpressible) {
 		  print OUT esc_comment("! invariant " . $inv);
 	        }
 	      } else {
