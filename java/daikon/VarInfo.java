@@ -33,6 +33,10 @@ public final class VarInfo
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020629L;
 
+  /** Debug missing vals **/
+  public static final Logger debugMissing
+                                = Logger.getLogger("daikon.VarInfo.missing");
+
   /**
    * The program point this variable is in.
    **/
@@ -117,10 +121,39 @@ public final class VarInfo
    * @see Derivation.missingOutOfBounds()
    **/
   public boolean missingOutOfBounds() {
-    if (derived != null)
-      return derived.missingOutOfBounds();
-    else
+    if (derived != null) {
+      if (derived.missingOutOfBounds())
+        return (true);
+      if (Daikon.df_bottom_up)
+        return (false);
+      if (po_lower == null)
+        return (false);
+      if (po_lower instanceof VarInfo) {
+        VarInfo lower = (VarInfo) po_lower;
+        if (lower.missingOutOfBounds()) {
+          debugMissing.fine ("Var " + lower.ppt.ppt_name + " "
+                              + lower.name.name()
+                              + " out of bounds implies " + ppt.ppt_name + " "
+                              + name.name() + " out of bounds. ");
+          derived.missing_array_bounds = true; // don't force us to recalc this
+          return (true);
+        }
+        return (false);
+      }
+      VarInfo[] vis = (VarInfo[]) po_lower;
+      for (int i = 0; i < vis.length; i++) {
+        if (vis[i].missingOutOfBounds()) {
+          debugMissing.fine ("Var " + vis[i].ppt.ppt_name + " "
+                              + vis[i].name.name()
+                              + " out of bounds implies " + ppt.ppt_name + " "
+                              + name.name() + " out of bounds. ");
+          derived.missing_array_bounds = true; // don't force us to recalc this
+          return (true);
+        }
+      }
+    } else
       return (false);
+    return (false);
   }
 
   // Reinstating this in the way Mike and I discussed
@@ -276,7 +309,8 @@ public final class VarInfo
     VarInfoAux aux_nonparam = vi.aux.setValue(VarInfoAux.IS_PARAM,
                                               VarInfoAux.FALSE);
 
-    VarInfo result = new VarInfo(vi.name.applyPrestate(),
+    VarInfoName newname = vi.name.applyPrestate();
+    VarInfo result = new VarInfo(newname,
                                  vi.type, vi.file_rep_type,
                                  vi.comparability.makeAlias(vi.name),
                                  aux_nonparam);
@@ -2215,27 +2249,30 @@ public final class VarInfo
   }
 
   /**
-   * Class used to contain a pair of VarInfos.  Currently used for equality
-   * set merging as a way to store pairs of equal variables.  The lexically
-   * smaller name is always stored first.
+   * Class used to contain a pair of VarInfos and their sample count.
+   * Currently used for equality set merging as a way to store pairs
+   * of equal variables.  The variable with the smaller index is
+   * always stored first.
    *
-   * Pairs are equal if both of their VarInfos are identical.  Note that
-   * the content of the VarInfos are not compared, only their pointer
-   * values.
+   * Pairs are equal if both of their VarInfos are identical.  Note
+   * that the content of the VarInfos are not compared, only their
+   * pointer values.
    */
   static public class Pair {
 
     public VarInfo v1;
     public VarInfo v2;
+    public int samples;
 
-    public Pair (VarInfo v1, VarInfo v2) {
-      if (v1.name.name().compareTo (v2.name.name()) <= 0) {
+    public Pair (VarInfo v1, VarInfo v2, int samples) {
+      if (v1.varinfo_index < v2.varinfo_index) {
         this.v1 = v1;
         this.v2 = v2;
       } else {
         this.v1 = v2;
         this.v2 = v1;
       }
+      this.samples = samples;
     }
 
     public boolean equals (Object obj) {
@@ -2249,6 +2286,21 @@ public final class VarInfo
     public int hashCode() {
       return (v1.hashCode() + v2.hashCode());
     }
+
+    public String toString() {
+      return (v1.name.name() + " = " + v2.name.name());
+    }
   }
 
+  /** returns a string containing the names of the vars in the array **/
+  public static String toString (VarInfo vis[]) {
+
+    String vars = "";
+    for (int i = 0; i < vis.length; i++) {
+      if (vars != "")
+        vars += ", ";
+      vars += vis[i].name.name();
+    }
+    return (vars);
+  }
 }
