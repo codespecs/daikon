@@ -296,7 +296,7 @@ update-dist-version-file:
 www-dist:
 	html-update-toc doc/www/index.html doc/www/mit/index.html
 	# "-P" keeps the directory structure in place
-	cd doc/www && cp -pfP $(WWW_FILES) $(WWW_DIR)
+	cd doc/www && cp -pf --parents $(WWW_FILES) $(WWW_DIR)
 	cd $(WWW_DIR) && chmod -w $(WWW_FILES)
 	update-link-dates $(DIST_DIR)/index.html
 
