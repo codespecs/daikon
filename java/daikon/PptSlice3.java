@@ -278,6 +278,7 @@ public final class PptSlice3  extends PptSlice {
     }
 
     // undefer_invariant_removal(); [INCR]
+    flow_and_remove_falsified();
   }
 
   // void process() {

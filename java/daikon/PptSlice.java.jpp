@@ -540,6 +540,7 @@ public final class PPTSLICE1 extends PptSlice {
 #endif
 
     // undefer_invariant_removal(); [INCR]
+    flow_and_remove_falsified();
   }
 
   // void process() {

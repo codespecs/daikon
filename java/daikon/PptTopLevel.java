@@ -596,7 +596,6 @@ public class PptTopLevel
 	continue;
       }
       view.add(vt, count);
-      view.flow_and_remove_falsified();
       if (view.invs.size() == 0) {
         itor.remove();
 	if (Global.debugInfer.isDebugEnabled()) {

@@ -56,6 +56,12 @@ public abstract class PptSlice extends Ppt {
    **/
   public Invariants invs;
 
+  // Invariants that have been falsified, and need to be flowed down
+  // to lower ppts.  May not actually be a subset of invs, if certain
+  // invariants fracture in two, for instance, or if a untaintied
+  // clone is flowed instead of the falsified invariant itself.
+  private Invariants invs_to_flow;
+
   // Keep private, modifiable copies and public read-only views
   private final Collection private_po_higher = new ArrayList(2); // [PptTopLevel]
   private final Collection private_po_lower = new ArrayList(2);  // [PptTopLevel]
@@ -125,6 +131,7 @@ public abstract class PptSlice extends Ppt {
       value_indices[i] = var_infos[i].value_index;
     }
     invs = new Invariants();
+    invs_to_flow = new Invariants();
 
     // This comes after setting all other variables, as the function call may use name, arity, var_infos, etc.
     debugged = (Global.isDebuggedPptSlice(this));
@@ -231,22 +238,48 @@ public abstract class PptSlice extends Ppt {
   }
 
   /**
+   * Place argument on worklist of invariants to flow when
+   * flow_and_remove_falsified is called.  Should only be called from
+   * Invariant objects as they are falsified.
+   **/
+  public void addToFlow(Invariant inv) {
+    invs_to_flow.add(inv);
+  }
+
+  /**
    * Flow falsified invariants to lower ppts, and remove them from
    * this ppt.
    **/
-  void flow_and_remove_falsified() {
-    // Build a worklist of invariants to flow
-    List worklist = new ArrayList();
+  protected void flow_and_remove_falsified() {
+    // Remove the dead invariants
+    ArrayList to_remove = new ArrayList();
     for (Iterator i = invs.iterator(); i.hasNext(); ) {
       Invariant inv = (Invariant) i.next();
       if (inv.no_invariant) {
-	if (debugFlow.isDebugEnabled()) debugFlow.debug("at ppt " + parent.name + ", flowing falsified invariant " + inv.format());
-	worklist.add(inv);
+	to_remove.add(inv);
       }
     }
-    if (worklist.size() == 0) {
-      return;
+    // Could also assert that classes of invariants killed are all
+    // represented in invs_to_flow, but a size check should be enough,
+    // since most invariants only generate one flowed copy when they
+    // die (and we call this method a lot, so lets not be wasteful).
+    if (to_remove.size() > invs_to_flow.size()) {
+      Set naughty = new HashSet();
+      for (Iterator i = to_remove.iterator(); i.hasNext(); ) {
+	Invariant inv = (Invariant) i.next();
+	naughty.add(inv.getClass().getName());
+      }
+      for (Iterator i = invs_to_flow.iterator(); i.hasNext(); ) {
+	Invariant inv = (Invariant) i.next();
+	naughty.remove(inv.getClass().getName());
+      }
+      throw new RuntimeException
+	("Class(es) did not call addToFlow after calling destroy: " + naughty);
     }
+    removeInvariants(to_remove);
+
+    // Flow newly-generated stuff
+    if (invs_to_flow.size() == 0) return;
     // For each lower PptTopLevel
     for (Iterator j = po_lower.iterator(); j.hasNext(); ) {
       PptTopLevel lower = (PptTopLevel) j.next();
@@ -263,9 +296,11 @@ public abstract class PptSlice extends Ppt {
 	}
 	// For each invariant
       for_each_invariant:
-	for (Iterator i = worklist.iterator(); i.hasNext(); ) {
+	for (Iterator i = invs_to_flow.iterator(); i.hasNext(); ) {
 	  Invariant inv = (Invariant) i.next();
-	  Assert.assert(inv.no_invariant);
+	  if (! inv.no_invariant) {
+	    inv.destroy();
+	  }
 	  // debug
 	  if (debugFlow.isDebugEnabled()) debugFlow.debug(" " + inv.format() + " flowing to " + lower.name);
 	  // If its class does not already exist in lower
@@ -283,7 +318,7 @@ public abstract class PptSlice extends Ppt {
 	}
       }
     }
-    removeInvariants(worklist);
+    invs_to_flow.clear();
   }
 
   void addView(Ppt slice) {

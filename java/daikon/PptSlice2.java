@@ -304,6 +304,7 @@ public final class PptSlice2  extends PptSlice {
     }
 
     // undefer_invariant_removal(); [INCR]
+    flow_and_remove_falsified();
   }
 
   // void process() {
