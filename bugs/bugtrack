@@ -90,10 +90,11 @@ notify()
    }
    summary=`grep "^Summary: *" $bugfile | sed -e 's/^Summary: *//'`
    owner=`  grep "^Owner: *"   $bugfile | sed -e 's/^Owner: *//' `
+   cc=`     grep "^Cc: *"      $bugfile | sed -e 's/^Cc: *//' `
 
-   head -7 $bugfile >.header   
+   header $bugfile >.header   
    cat .header $report |
-       mail "$owner" -s "Bugtrack update: $bugfile: $summary"
+       mail "$owner" "$cc" -s "Bugtrack update: $bugfile: $summary"
 
    rm -f .header $report
 }
@@ -157,6 +158,16 @@ nyi()
     die "not yet implemented!" >&2 
 }
 
+header()
+{
+    head -8 "$1"
+}
+
+body()
+{
+    tail +9 "$1"
+}
+
 ######## NEW ########
 
 # usage: expand 'B' 'Foo,Bar,Wiz'  ->  'Bar'
@@ -186,8 +197,10 @@ new_bug()
     severity=`expand $severity $SEVERITIES`
     
     {
+    # update functions header/body when adding fields:
     echo -e "Version:      \$Id\$"
     echo -e "Owner:        $USER <$EMAIL>"
+    echo -e "Cc:           "
     echo -e "Tool:         $tool"
     echo -e "Summary:      $summary"
     echo -e "Severity:     $severity"
@@ -218,7 +231,7 @@ new_bug()
 
     report=.report
 
-    tail +8 $BUGFILE >$report # body of message
+    body $BUGFILE >$report
 
     checkin new $BUGFILE || die "aborting."
 
@@ -262,7 +275,7 @@ delete_bug()
     BUGFILE=`printf "bug%04i" "$1"`
     [ -f "$BUGFILE" ] || die "no such bugfile \`$BUGFILE'."
 
-    head -7 $BUGFILE
+    header $BUGFILE
 
     input "Delete this bug?" "YN" in
     [ "$in" != "Y" ] && die "aborting."
@@ -280,7 +293,7 @@ delete_bug()
 [ `basename \`pwd\`` = bugs ] ||
     die "must be run from within the \`bugs' directory."
 
-echo "Bug database -- (C) Alan Donovan 2002"
+echo "Bug database"
 
 [ -z "$EDITOR" ] && EDITOR=emacs
 [ -z "$EMAIL"  ] && {
@@ -329,7 +342,7 @@ case "$1" in
         for i in bug[0-9][0-9]*
         do
             grep -sq "Status: *Closed" $i && continue
-            grep -sq "Owner:.*${USER}" $i || continue
+            grep -sq "Owner:.*\\b${USER}\\b" $i || continue
             # use /dev/null so it always has >1 file and thus reports filenames
             grep "^Summary:" $i /dev/null | sed -e 's/Summary: */ /'
         done
