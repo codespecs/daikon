@@ -11,11 +11,13 @@ use vars ('@ISA', '@EXPORT_OK');
 use Exporter;
 @ISA = ('Exporter');
 
+use Carp 'croak', 'confess', 'cluck', 'carp';
+
 @EXPORT_OK = qw(DEPTH_LIMIT LIST_LIMIT
                 parse_type unparse_type type_lub unparse_to_code
                 guess_type_ref guess_type_scalar guess_type_array
                 guess_type_hash guess_type_object guess_type_list
-                is_zero set_limits);
+                is_zero set_limits read_types_into);
 
 sub max { $_[0] > $_[1] ? $_[0] : $_[1] }
 sub min { $_[0] < $_[1] ? $_[0] : $_[1] }
@@ -58,15 +60,20 @@ sub set_limits {
 #
 # type           values
 # ----           ------
-# undef          the undefined value only
-# bool           0/""/undef (meaning false), or 1 (meaning true)
+# nothing        the undefined value, or the defined empty string
+# bit            0 or 1
+# bool           undef/0/"" for false, or 1 for true
 # int            integers
 # num            arbitrary floating-point numbers
 # ref            references
 # str            arbitrary scalars (which always have a stringified form)
 
-# These obey undef <= bool <= int <= num <= str and undef <= ref <= str,
-# where "<=" is the subtype relation.
+# These obey bit <= int <= num <= str and ref <= str, where "<=" is
+# the subtype relation. For each scalar type that doesn't include the
+# empty string or undef, there's also a `lifted' variant that
+# does. Generally these are formed with a "?" on the end like int?,
+# ref?, num?, and str?. "bit?" is called bool, and "\T?" is written
+# "\?T" to make the paser's job easier.
 
 # There are also some type combiners. Let T be a type.
 
@@ -109,24 +116,30 @@ sub set_limits {
 # As an exception, object types use a hash table to store the type
 # corresponding to a particular field key. The full correspondance:
 
-# undef                 'undef'
-# bool                  'bool'
+# bottom                  'bottom'
+# bool                    'bool'
 # ...
-# ref                   ['ref', 'top']
-# \T                    ['ref', T]
-# {Tk=>Tv}              ['hash', Tk, Tv]
-# <a:T1,b:T2>           ['object', {'a' => T1, 'b' => T2}]
-# (T1, T2)              ['list', [T1, T2]]
-# (T1, T2, T*)          ['list', [T1, T2], T]
+# ref                     ['ref', 'top']
+# T?                      ['maybe', T]
+# bool                    ['maybe', 'bit']
+# nothing                 ['maybe', 'bottom']
+# \T                      ['ref', T]
+# \?T                     ['maybe', ['ref', T]]
+# ref?                    ['maybe', ['ref', 'top']]
+# {Tk=>Tv}                ['hash', Tk, Tv]
+# <a:T1,b:T2;f->T3,g->T4> ['object', {'a' => T1, 'b' => T2},
+#                                    {'f' => T3, 'g' => T4}]
+# (T1, T2)                ['list', [T1, T2]]
+# (T1, T2, T*)            ['list', [T1, T2], T]
 
-# 'undef' is a generic bottom type, even though technically it should
-# only be a scalar. There's also a generic top type, called 'top', but
-# it should never show up as a type itself, since scalars, arrays,
-# hashes, code, globs, and lists are all syntactically segregated in
-# Perl; there's no context where you might have more than
-# one. References to all of these things (except lists) are possible
-# as scalars, though, so the ref type turns into the equivalent of
-# \top internally.
+# There is a generic bottom type named 'bottom', which is no longer
+# the same thing as undef.  There's also a generic top type, called
+# 'top', but it should never show up as a type itself, since scalars,
+# arrays, hashes, code, globs, and lists are all syntactically
+# segregated in Perl; there's no context where you might have more
+# than one. References to all of these things (except lists) are
+# possible as scalars, though, so the ref type turns into the
+# equivalent of \top internally.
 
 # Given an internal type representation, return a string representing
 # it. Dies if the type is top or otherwise invalid.
@@ -141,6 +154,22 @@ sub unparse_type {
                 return "ref";
             } else {
                 return "\\" . unparse_type($t->[1]);
+            }
+        } elsif ($t->[0] eq "maybe") {
+            if ($t->[1] eq "bottom") {
+                return "nothing";
+            } elsif ($t->[1] eq "bit") {
+                return "bool";
+            } elsif (ref($t->[1]) and $t->[1]->[0] eq "ref") {
+                if ($t->[1]->[1] eq "top") {
+                    return "ref?";
+                } else {
+                    return "\\?" . unparse_type($t->[1]->[1]);
+                }
+            } elsif (not ref($t->[1])) {
+                return $t->[1] . "?";
+            } else {
+                die "Invalid maybe type";
             }
         } elsif ($t->[0] eq "array") {
             return "[" . unparse_type($t->[1]) . "]";
@@ -193,10 +222,21 @@ sub unparse_type {
 # syntax errors.
 sub parse_type_from {
     my($s) = @_;
-    if ($s =~ /^(undef|bool|int|num|str|code|glob)(.*)\z$/) {
+    if ($s =~ /^ref\?(.*)\z/) {
+        return (['maybe', ['ref', 'top']]);
+    } elsif ($s =~ /^(int|num|str|ref)\?(.*)\z/) {
+        return (['maybe', $1], $2);
+    } elsif ($s =~ /^(bottom|bit|int|num|str|code|glob)(.*)\z/) {
         return ($1, $2);
     } elsif ($s =~ /^ref(.*)\z/) {
         return (['ref', 'top'], $1);
+    } elsif ($s =~ /^nothing(.*)\z/) {
+        return (['maybe', 'bottom'], $1);
+    } elsif ($s =~ /^bool(.*)\z/) {
+        return (['maybe', 'bit'], $1);
+    } elsif ($s =~ /^\\\?(.*)\z/) {
+        my($subtype, $rest) = parse_type_from($1);
+        return (['ref', ['maybe', $subtype]], $rest);
     } elsif ($s =~ /^\\(.*)\z/) {
         my($subtype, $rest) = parse_type_from($1);
         return (['ref', $subtype], $rest);
@@ -218,7 +258,7 @@ sub parse_type_from {
             (my($val_type), $rest) = parse_type_from($2);
             $obj{$key} = $val_type;
             if ($rest !~ /^[;>]/) {
-                $rest =~ s/^,// or die "expected , or > in type";
+                $rest =~ s/^,// or die "expected , ; or > in type";
             }
         }
         my %acc;
@@ -278,14 +318,22 @@ sub parse_type {
 sub type_lub {
     my($t1, $t2) = @_;
     return $t1 if $t1 eq $t2; # efficient special case
-    return $t1 if $t2 eq "undef"; # undef is the bottom
-    return $t2 if $t1 eq "undef";
-    return "top" if $t1 eq "top" or $t2 eq "top"; # top is the top
+    return $t1 if $t2 eq "bottom"; # 'bottom' is the bottom
+    return $t2 if $t1 eq "bottom";
+    return "top" if $t1 eq "top" or $t2 eq "top"; # 'top' is the top
     # code and glob are incomparable with anything else
     return "top" if $t1 eq "code" xor $t2 eq "code";
     return "top" if $t1 eq "glob" xor $t2 eq "glob";
+    my $maybe1 = (ref($t1) and $t1->[0] eq "maybe");
+    my $maybe2 = (ref($t2) and $t2->[0] eq "maybe");
+    if ($maybe1 or $maybe2) {
+        my $ret = type_lub(($maybe1 ? $t1->[1] : $t1),
+                           ($maybe2 ? $t2->[1] : $t2));
+        return "top" if $ret eq "top"; # top? is top, because top is top.
+        return ["maybe", $ret];
+    }
     if (ref $t1 and ref $t2) {
-        # all the composite types are mutually incomparable
+        # all the other composite types are mutually incomparable
         return "top" if $t1->[0] ne $t2->[0];
         if ($t1->[0] eq "array") {
             return ["array", type_lub($t1->[1], $t2->[1])];
@@ -323,7 +371,7 @@ sub type_lub {
             }
             if ($t1->[2] or $t2->[2] or $s1 != $s2) {
                 # The T* of $t1, if any...
-                my $extra = $t1->[2] || 'undef';
+                my $extra = $t1->[2] || 'bottom';
                 for my $i ($s1 .. $s2 - 1) {
                     # ... and the extra fixed types of the longer list
                     $extra = type_lub($extra, $t2->[1][$i]);
@@ -345,7 +393,7 @@ sub type_lub {
         return "str" if $t1 eq "str" or $t2 eq "str";
         return "num" if $t1 eq "num" or $t2 eq "num";
         return "int" if $t1 eq "int" or $t2 eq "int";
-        return "bool" if $t1 eq "bool" or $t2 eq "bool";
+        return "bit" if $t1 eq "bit" or $t2 eq "bit";
         die "Invalid type object";
     } else {
         # The only relationship between the simple and composite types
@@ -398,7 +446,7 @@ sub guess_type_ref {
 # the lub of the types of the elements.
 sub guess_type_array {
     my($ar) = @_;
-    my $elt_t = "undef"; # i.e., bottom
+    my $elt_t = "bottom";
     for my $idx (0 .. $#$ar) {
         $elt_t = type_lub($elt_t, guess_type_scalar($ar->[$idx]));
     }
@@ -409,7 +457,7 @@ sub guess_type_array {
 # the values.
 sub guess_type_hash {
     my($hr) = @_;
-    my($key_t, $value_t) = ("undef", "undef");
+    my($key_t, $value_t) = ("bottom", "bottom");
     my($k, $v);
     while (($k, $v) = each %$hr) {
         $key_t = type_lub($key_t, guess_type_scalar($k));
@@ -447,7 +495,7 @@ sub guess_type_hash {
 
     sub guess_type_scalar {
         my($s) = @_;
-        return "undef" if not defined $s;
+        return ['maybe', 'bottom'] if not defined $s; # nothing
         if (ref $s) {
             if ($depth > DEPTH_LIMIT) {
                 # Botttom out by remaining ignorant about what this is
@@ -463,26 +511,41 @@ sub guess_type_hash {
         }
         # The way we recognize numbers is a little tricky, since we're
         # trying to reintroduce a distinction that Perl deliberately
-        # abstracts away. If $s is not a number, then its numeric
-        # value will be zero. Therefore the numeric values are those
-        # that are != 0, as well as those that look like a string
-        # representation of a integer or floating point zero. The "no
-        # warnings" is to keep Perl from complaining about the
-        # comparison. The entry in perlfaq4 about determining whether
-        # a scalar is a number might also be enlightening.
-        no warnings 'numeric';
-        if ($s != 0 or is_zero($s)) {
-            if (int($s) == $s) {
-                if ($s == 0 or $s == 1) {
-                    return "bool";
-                }
-                return "int";
+        # abstracts away. This also works slightly differently than it
+        # used to, since on futher consideration I've decided that a
+        # float followed by other junk should count as a 'str', not a
+        # 'num'. This means we can't use the compare-to-zero trick,
+        # and instead must resort to defining the set of legal numeric
+        # values as strings with a regex. -SMcC
+        if (not length $s) {
+            # The empty string is also nothing.
+            return ['maybe', 'bottom'];
+        } elsif ($s eq "0" or $s eq "1") {
+            return 'bit';
+        } elsif ($s eq int($s)) {
+            # Note this includes numbers that Perl internally
+            # represents with a double, as long as they're small
+            # enough to be represented exactly.
+            return 'int';
+        } elsif ($s =~ /^[\d+-.]/) {
+            # This regex is guarded by the fast one above, since it
+            # looks ugly.  It may not be that bad in practice, though;
+            # I should benchmark it.
+            # This might also be an opportune place to sneak a look at
+            # the internal NOK flag, somehow. That could only be a
+            # fast yes test, though, not a fast no, since to match the
+            # expectation of Perl programmers, a value whose string
+            # representation is a number should count as a number even
+            # if you haven't done any numeric operations on it:
+            # consider the case of reading an ASCII float from a file.
+            if (/^(?:[+-]?)(?=\d|\.\d)\d*(?:\.\d*)?(?:[Ee](?:[+-]?\d+))?$/) {
+                return 'num';
+            } else {
+                return 'str';
             }
-            return "num";
-        } elsif ($s eq "") {
-            return "bool";
+        } else {
+            return 'str';
         }
-        return "str";
     }
 }
 
@@ -495,7 +558,7 @@ sub guess_type_list {
     my $fixed_len = min($#$ar + 1, LIST_LIMIT);
     my @fixed = map(guess_type_scalar($_), @$ar[0 .. $fixed_len - 1]);
     if (@$ar > LIST_LIMIT) {
-        my $extra = 'undef';
+        my $extra = 'bottom';
         for my $i ($fixed_len .. $#$ar) {
             $extra = type_lub($extra, guess_type_scalar($ar->[$i]));
         }
@@ -511,33 +574,98 @@ sub is_zero {
     return $s =~ /^-?(0+\.?0*|0*\.0+)([eE][-+]?(\d+))?\z$/;
 }
 
+# Read the .types file opened of $fh, and store the types into the
+# hash table referenced by $types_r, which should be a nested hash
+# indexed first by program point and second by variable name.
+# The types file might have multiple entries for a given <program
+# point, variable> pair (for instance, it might be the result of
+# appending the types for several runs), which we just lub
+# together.
+
+# We also do some lubbing together of type information between places
+# that we don't distinguish between while tracing; in particular,
+# Daikon expects a variable to always have the same type, so we have
+# to cater to that. In the .types file, we keep a separate type for a
+# variable at the ENTER program point and at each EXIT program point,
+# as well as separately for the scalar and list context versions of a
+# sub. For every variable except "return", though, we merge all of
+# these together, in a fake program point named
+# "...foo():::UNION". For the sake of "return", we also merge all the
+# scalar :::EXIT PPTs into a "...foo_s():::EXIT" PPT, and similarly
+# for all the list exit points. (Note that this combinining isn't
+# related to the combining of numbered exit points into a single
+# ":::EXIT" program point that Daikon itself does, except that we use
+# the same name).
+sub read_types_into {
+    my($fh, $types_r, $order_r) = @_;
+    my $l;
+    while ($l = <$fh>) {
+        my($ppt, $var, $type) = split(' ', $l);
+        if ($var eq "seen-but-has-no-variables") {
+            $order_r->{$ppt} = [];
+            $types_r->{$ppt} = {};
+            next;
+        }
+        my $parsed = parse_type($type);
+        if (exists $types_r->{$ppt}{$var}) {
+            my $t = $types_r->{$ppt}{$var};
+            $t = type_lub($t, $parsed);
+            $types_r->{$ppt}{$var} = $t;
+        } else {
+            $types_r->{$ppt}{$var} = $parsed;
+            push @{$order_r->{$ppt}}, $var if $order_r;
+        }
+        my $union_ppt = $ppt;
+        $union_ppt =~ s/_[sl]\(\)/()/;
+        $union_ppt =~ s/:::.*$/:::UNION/;
+        if (not exists $types_r->{$union_ppt}{$var}) {
+            $types_r->{$union_ppt}{$var} = 'bottom';
+        }
+        $types_r->{$union_ppt}{$var} = type_lub($types_r->{$union_ppt}{$var},
+                                                $types_r->{$ppt}{$var})
+          unless $var eq "return";
+        if ($ppt =~ /:::EXIT/) {
+            my $exit_union_ppt = $ppt;
+            $exit_union_ppt =~ s/:::EXIT(\d+)/:::EXIT/;
+            if (not exists $types_r->{$exit_union_ppt}{$var}) {
+                $types_r->{$exit_union_ppt}{$var} = 'bottom';
+            }
+            $types_r->{$exit_union_ppt}{$var} =
+                type_lub($types_r->{$exit_union_ppt}{$var},
+                         $types_r->{$ppt}{$var});
+        }
+    }
+}
+
 # Say perl -MDaikon::PerlType -e 'Daikon::PerlType::test_guess()'
 # to play with the guessing routines in a read-eval-print-loop way.
 sub test_guess {
-    my $lub = "undef";
+    my $lub = "bottom";
+    $|=1;
     while (<>) {
         if (/^\s*$/) {
-            $lub = "undef";
+            $lub = "bottom";
             next;
         }
         my $type = guess_type_list([eval $_]);
+        print unparse_type($type);
         $lub = type_lub($lub, $type);
-        print unparse_type($type), ", lub is ", unparse_type($lub), "\n";
+        print ", lub is ", unparse_type($lub), "\n";
     }
 }
 
 # Say perl -MDaikon::PerlType -e 'Daikon::PerlType::test_parse()'
 # to play with the parsing routines in a read-eval-print-loop way.
 sub test_parse {
-    my $lub = "undef";
+    my $lub = "bottom";
     while (<>) {
         if (/^\s*$/) {
-            $lub = "undef";
+            $lub = "bottom";
             next;
         }
         my $type = parse_type($_);
         $lub = type_lub($lub, $type);
-        print unparse_type($type), "\n";
+        print unparse_type($type), ", lub is ", unparse_type($lub), "\n";
     }
 }
 
