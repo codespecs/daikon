@@ -76,13 +76,14 @@ package daikon.inv.binary.PACKAGE;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.unary.*;
-import daikon.inv.unary.scalar.*;
+#ifdef SEQ
 import daikon.inv.unary.sequence.*;
+import utilMDE.*;
+#else
+import daikon.inv.unary.scalar.*;
+#endif
 import daikon.derive.binary.*;
 import daikon.suppress.*;
-import java.lang.reflect.*;
-import utilMDE.*;
 
 import java.util.*;
 
@@ -155,6 +156,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
       } else if (format == OutputFormat.JML) {
         String form[] = VarInfoName.QuantHelper.format_jml(new VarInfoName[]
                               { var1().name, var2().name }, true);
+        fmt_str = form[0] + " " + fmt_str + " " + form[3];
+        v1 = form[1];
+        v2 = form[2];
+      } else if (format == OutputFormat.SIMPLIFY) {
+        String[] form =
+          VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
+            { var1().name, var2().name }, true); // elementwise
         fmt_str = form[0] + " " + fmt_str + " " + form[3];
         v1 = form[1];
         v2 = form[2];
