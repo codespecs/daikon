@@ -45,11 +45,27 @@ public class EltwiseIntComparison extends SingleSequence {
   }
 
   public String format_esc() {
-    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+    String[] form =
+      VarInfoName.QuantHelper.format_esc(new VarInfoName[]
+	{ var().name, var().name });
+    String comparator = core.format_comparator();
+    if ("==".equals(comparator)) {
+      return form[0] + "(" + form[1] + " == " + form[2] + ")" + form[3];
+    } else {
+      return form[0] + "((i+1 == j) ==> (" + form[1] + " " + comparator + " " + form[2] + "))" + form[3];
+    }
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
+    String[] form =
+      VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
+	{ var().name, var().name });
+    String comparator = core.format_comparator();
+    if ("==".equals(comparator)) {
+      return form[0] + "(EQ"  + " " + form[1] + " " + form[2] + ")" + form[3];
+    } else {
+      return form[0] + "(IMPLIES (EQ (+ i 1) j) (" + comparator + " " + form[1] + " " + form[2] + "))" + form[3];
+    }
   }
 
   public void add_modified(long [] a, int count) {
