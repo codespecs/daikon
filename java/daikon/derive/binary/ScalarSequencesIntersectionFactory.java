@@ -19,6 +19,10 @@ import java.util.*;
 public final class ScalarSequencesIntersectionFactory  extends BinaryDerivationFactory {
 
   public BinaryDerivation[] instantiate(VarInfo seq1, VarInfo seq2) {
+    if (! ScalarSequencesIntersection .dkconfig_enabled) {
+      return null;
+    }
+
     if ((seq1.rep_type != ProglangType.INT_ARRAY )
         || (seq2.rep_type != ProglangType.INT_ARRAY )) {
       return null;
