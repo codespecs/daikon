@@ -1,0 +1,56 @@
+
+This file describes how to merge the changes on the ENGINE_V2_PATCHES
+branch of the $inv/java/daikon part of the repository into the trunk
+(which is version 3 of Daikon).
+
+(1) Ensure that your V3 checkout is up to date, and builds:
+
+  cd $inv/java
+  make use-redesign
+  cvs up
+  make
+  
+(2) Make a backup of your current version of the trunk
+
+  cd $inv
+  tar cvfz daikon.redesign.tar.gz daikon.redesign/
+
+(3) Update V3 using cvs.  Construct the date token for the first -j
+    switch using the topmost (most recent) entry from the merge
+    history at the end of this document.
+
+  cd $inv/daikon.redesign
+  cvs up -j "ENGINE_V2_PATCHES:10-Mar-2002 16:33" -j ENGINE_V2_PATCHES
+
+(4) Add a line to the top of the merge history (at the bottom of this
+    file) noting the precise time you ran the cvs command in step 3.
+
+(5) Use PCL-CVS (or some other, less-capable tool) to fix all
+    conflicts created during the merge, so that the project compiles.
+
+(6) Edit the code and unit tests until all unit tests pass (regression
+    tests need not pass).
+
+(7) Examine any modified files you think are deserving before you commit.
+
+(8) Commit the files under $inv/daikon.redesign to CVS, using a log
+    message that communicates the time you ran step 3 (which is the
+    same as the time at the top of the merge history).  Be sure to
+    commit your changes to this file, as well.
+
+
+==========================================================================
+**** Merge history ****
+(Add entries at the top of the list)
+
+Merged  3:56pm Mar  6  by JWN
+Merged  4:33pm Feb 26  by JWN
+Merged  7:40am Feb 24  by JWN
+Merged  5:27pm Feb 17  by JWN
+Merged  3:09pm Feb 13  by JWN
+Merged  2:31pm Feb 05  by JWN
+Merged 12:40am Jan 30  by JWN
+Merged 00:45am Jan 27  by JWN
+Merged  2:10pm Jan 24  by JWN
+Merged  3:10am Jan 20  by JWN
+Merged 12:30am Jan 10  by JWN
