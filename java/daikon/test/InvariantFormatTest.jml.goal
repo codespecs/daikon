@@ -1,0 +1,62 @@
+daikon.inv.unary.scalar.LowerBound
+a >= -6
+daikon.inv.unary.scalar.Modulus
+a % 3 == 1
+daikon.inv.unary.scalar.NonModulus
+a % 5 != 2
+daikon.inv.unary.scalar.NonZero
+a != 0
+daikon.inv.unary.scalar.OneOfScalar
+a == 1 || a == 5 || a == 9
+daikon.inv.unary.scalar.Positive
+a > 0
+daikon.inv.unary.scalar.UpperBound
+a <= 10
+daikon.inv.unary.sequence.EltLowerBound
+(\forall int i; 0 <= i && i <= a.length-1; (a[i] >= -57))
+daikon.inv.unary.sequence.EltNonZero
+\nonnullelements(a)
+daikon.inv.unary.sequence.EltOneOf
+(\forall int i; 0 <= i && i <= a.length-1; a[i] == 4 || a[i] == 5 || a[i] == 6)
+daikon.inv.unary.sequence.EltUpperBound
+(\forall int i; 0 <= i && i <= a.length-1; (a[i] <= 895))
+daikon.inv.unary.sequence.EltwiseIntComparison
+(\forall int i, j; 0 <= i && i <= a.length-1 && 0 <= j && j <= a.length-1; ((i+1 == j) ==> (a[i] < a[j]))
+daikon.inv.unary.sequence.NoDuplicates
+(\forall int i, j; 0 <= i && i <= a.length-1 && 0 <= j && j <= a.length-1; (i != j) ==> (a[i] != a[j]))
+daikon.inv.unary.sequence.SeqIndexComparison
+(\forall int i; 0 <= i && i <= a.length-1; a[i] >i)
+daikon.inv.unary.sequence.SeqIndexNonEqual
+(\forall int i; 0 <= i && i <= a.length-1; a[i] != i)
+daikon.inv.unary.string.OneOfString
+a.equals("testString")
+daikon.inv.unary.stringsequence.EltOneOfString
+(\forall int i; 0 <= i && i <= a.length-1; a[i] == "testString" || a[i] == "gnirtStset")
+daikon.inv.binary.twoScalar.IntEqual
+a == b
+daikon.inv.binary.twoScalar.IntGreaterEqual
+a >= b
+daikon.inv.binary.twoScalar.IntGreaterThan
+a > b
+daikon.inv.binary.twoScalar.IntLessEqual
+a <= b
+daikon.inv.binary.twoScalar.IntNonEqual
+a != b
+daikon.inv.binary.twoScalar.LinearBinary
+b == - 3 * a + 1
+daikon.inv.binary.twoSequence.PairwiseIntComparison
+(\forall int i, j; 0 <= i && i <= a.length-1 && 0 <= j && j <= b.length-1 && i == j; a[i] > b[j])
+daikon.inv.binary.twoSequence.Reverse
+(\forall int i; 0 <= i && i <= a.length-1; a[i] == b[b.length-1-i])
+daikon.inv.binary.twoSequence.SubSequence
+(\exists int i; 0 <= i && i <= b.length-1; (\forall int i; 0 <= i && i <= a.length-1; b[i+j] == a[i]))
+daikon.inv.binary.twoString.StringComparison
+a.equals(b)
+daikon.inv.binary.sequenceScalar.Member
+(\exists int i; 0 <= i && i <= a.length-1; a[i] == b)
+daikon.inv.binary.sequenceScalar.SeqIntComparison
+(\forall int i; 0 <= i && i <= a.length-1; a[i] > b)
+daikon.inv.binary.sequenceString.Member
+(\exists int i; 0 <= i && i <= a.length-1; a[i] == b)
+daikon.inv.ternary.threeScalar.LinearTernary
+c == 2 * a + 3 * b - 6

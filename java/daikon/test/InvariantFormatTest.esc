@@ -1,0 +1,247 @@
+; Test the unary scalar invariants
+
+; All greater than or equal to -6
+daikon.inv.unary.scalar.LowerBound
+int
+5
+7
+-6
+1
+2
+-3
+
+; All equal to 1 mod 3
+daikon.inv.unary.scalar.Modulus
+int
+1
+4
+7
+10
+
+; All not equal to 2 mod 5
+daikon.inv.unary.scalar.NonModulus
+int
+0
+1
+3
+4
+5
+6
+8
+9
+10
+11
+13
+14
+
+; NonZero requires no samples
+daikon.inv.unary.scalar.NonZero
+int
+
+; All the time it is 1, 5, or 9
+daikon.inv.unary.scalar.OneOfScalar
+int
+1
+5
+9
+9
+9
+5
+9
+1
+1
+1
+5
+5
+9
+
+; Positive requires no samples
+daikon.inv.unary.scalar.Positive
+int
+
+; All less than or equal to 10
+daikon.inv.unary.scalar.UpperBound
+int
+1
+2
+5
+7
+-3
+-99
+10
+
+; Test the unary sequence invariants
+; All greater than or equal to -57
+daikon.inv.unary.sequence.EltLowerBound
+int_array
+102 5 92 33 -54 -2 -57 -3 -24 29 93
+
+; EltNonZero needs no samples
+daikon.inv.unary.sequence.EltNonZero
+int_array
+
+; All are 4, 5, or 6
+daikon.inv.unary.sequence.EltOneOf
+int_array
+4 5 6 5 4 5 6 5 4 4 4 5 5 5 6 6 6
+
+; All less than 895
+daikon.inv.unary.sequence.EltUpperBound
+int_array
+1 -99 2 456 895 673 2 -23 -123 -9824 23
+
+; Sorted ascending
+; Prints incorrectly
+daikon.inv.unary.sequence.EltwiseIntComparison
+int_array
+1 2 3 5 7 8 9 100
+
+; No duplicates in array
+daikon.inv.unary.sequence.NoDuplicates
+int_array
+1 55 2 -123 873 24 99 239
+
+; OneOfSequence not currently implemented
+
+; array[index] > index
+; Causes an error now - not exactly sure what the statements inside mean
+daikon.inv.unary.sequence.SeqIndexComparison
+int_array
+5 10 15 20 25 30 35 40
+
+; array[index] != index
+daikon.inv.unary.sequence.SeqIndexNonEqual
+int_array
+5 10 15 20 25 30 35 40
+
+; Testing unary string invariants
+; Always equal to "testString"
+daikon.inv.unary.string.OneOfString
+string
+testString
+
+; Testing unary stringsequence invariants
+
+; CommonStringSequence not yet implemented in JML... not sure what it does...
+
+; Each element is one of the following: "testString" or "gnirtStset"
+; Prints incorrectly
+daikon.inv.unary.stringsequence.EltOneOfString
+string_array
+testString testString gnirtStset gnirtStset testString gnirtStset
+
+; OneOfStringSequence not yet implemented in JML
+
+; Test the binary twoScalar invariants
+
+; Unable to test FunctionUnary with this testing framework: it needs extra data than can be easily supplied
+
+; IntEqual does not need any samples
+daikon.inv.binary.twoScalar.IntEqual
+int int
+
+; IntGreaterEqual does not need any samples
+daikon.inv.binary.twoScalar.IntGreaterEqual
+int int
+
+; IntGreaterThan does not need any samples
+daikon.inv.binary.twoScalar.IntGreaterThan
+int int
+
+; IntLessEqual does not need any samples
+daikon.inv.binary.twoScalar.IntLessEqual
+int int
+
+; IntNonEqual does not need any samples
+daikon.inv.binary.twoScalar.IntNonEqual
+int int
+
+; b = -3*a + 1
+daikon.inv.binary.twoScalar.LinearBinary
+int int
+1
+-2
+10
+-29
+-20
+61
+7
+-20
+
+; Testing binary twoSequence invariants
+
+; Unable to test PairwiseFunctionUnary with this testing framework: it needs extra data than can be easily supplied
+
+; a[i] > b[i]
+daikon.inv.binary.twoSequence.PairwiseIntComparison
+int_array int_array
+5 10 15 20 25 30 35 40
+-5 0 5 10 15 20 25 30
+
+; a[i] = b[b.length-i]
+daikon.inv.binary.twoSequence.Reverse
+int_array int_array
+
+; a is subsequence of b
+; Error in formatting currently, fix later
+daikon.inv.binary.twoSequence.SubSequence
+int_array int_array
+1 2 3 4 5 6
+7 8 1 2 3 4 5 6 7 8
+
+; SubSet currently unimplemented in JML
+
+; a == b (string format)
+daikon.inv.binary.twoString.StringComparison
+string string
+aString
+aString
+
+; Testing binary sequenceScalar invariants
+
+; a is in b
+daikon.inv.binary.sequenceScalar.Member
+int_array int
+5 -6 7 -8 9 1 -2 3 -4 5
+7
+
+; a[i] > b
+daikon.inv.binary.sequenceScalar.SeqIntComparison
+int_array int
+-9 8 -7 6 -5 4 -3 2 -1 0
+-20
+
+; Testing binary sequenceString invariants
+
+; a is in b
+daikon.inv.binary.sequenceString.Member
+string_array string
+A b C longerString under_score findMe various other strings involved in the array
+findMe
+
+; Testing ternary threeScalar invariants
+
+; Cannot test FunctionBinary within this framework
+
+; c = 2a + 3b - 6
+daikon.inv.ternary.threeScalar.LinearTernary
+int int int
+1
+1
+-1
+2
+3
+7
+-5
+-10
+-46
+4
+9
+29
+0
+0
+-6
+10
+10
+44
+

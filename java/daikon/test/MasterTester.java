@@ -53,6 +53,7 @@ public class MasterTester extends TestCase {
     result.addTest(new TestSuite(daikon.test.VarComparabilityTest.class));
     result.addTest(new TestSuite(daikon.test.VarInfoNameTest.class));
     result.addTest(new TestSuite(daikon.test.diff.XorVisitorTester.class));
+    result.addTest(new TestSuite(daikon.test.InvariantFormatTester.class));
 
     // This is possibly not right; the JIT needs to be disabled in order
     // for these tests to succeed.

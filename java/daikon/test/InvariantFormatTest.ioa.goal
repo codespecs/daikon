@@ -1,0 +1,62 @@
+daikon.inv.unary.scalar.LowerBound
+a >= -6
+daikon.inv.unary.scalar.Modulus
+mod(a, 3) = 1
+daikon.inv.unary.scalar.NonModulus
+mod(a, 5) ~= 2
+daikon.inv.unary.scalar.NonZero
+a ~= 0
+daikon.inv.unary.scalar.OneOfScalar
+(a = 1) \/ (a = 5) \/ (a = 9)
+daikon.inv.unary.scalar.Positive
+a > 0
+daikon.inv.unary.scalar.UpperBound
+a <= 10
+daikon.inv.unary.sequence.EltLowerBound
+\A i : Int (i \in a => a[i] >= -57)
+daikon.inv.unary.sequence.EltNonZero
+\A i : Int (i \in a => a[i]~=0)
+daikon.inv.unary.sequence.EltOneOf
+\A i : Int (i \in a => (i = 4) \/ (i = 5) \/ (i = 6))
+daikon.inv.unary.sequence.EltUpperBound
+\A i : Int (i \in a => a[i] <= 895)
+daikon.inv.unary.sequence.EltwiseIntComparison
+\A i : Int \A j : Int ((i \in a /\ j \in ai+1 = j) => a[i] = a[j])
+daikon.inv.unary.sequence.NoDuplicates
+\A i : Int \A j : Int ((i \in a /\ j \in a /\ a[i] = a[j]) => i = j)
+daikon.inv.unary.sequence.SeqIndexComparison
+\A i : Int (i \in a => i > a[i])
+daikon.inv.unary.sequence.SeqIndexNonEqual
+\A i : Int (i \in a => i ~= a[i])
+daikon.inv.unary.string.OneOfString
+a = "testString"))
+daikon.inv.unary.stringsequence.EltOneOfString
+\A i : Int (i \in a => i = "testString") \/ (i = "gnirtStset")))
+daikon.inv.binary.twoScalar.IntEqual
+a = b
+daikon.inv.binary.twoScalar.IntGreaterEqual
+a >= b
+daikon.inv.binary.twoScalar.IntGreaterThan
+a > b
+daikon.inv.binary.twoScalar.IntLessEqual
+a <= b
+daikon.inv.binary.twoScalar.IntNonEqual
+a ~= b
+daikon.inv.binary.twoScalar.LinearBinary
+b = - 3 * a + 1
+daikon.inv.binary.twoSequence.PairwiseIntComparison
+\A i : Int (a[i] > b[i])
+daikon.inv.binary.twoSequence.Reverse
+Not valid for Sets or Arrays: a[] is the reverse of b[]
+daikon.inv.binary.twoSequence.SubSequence
+b \subseteq a
+daikon.inv.binary.twoString.StringComparison
+a = b
+daikon.inv.binary.sequenceScalar.Member
+b \in a
+daikon.inv.binary.sequenceScalar.SeqIntComparison
+\A i : Int (i \in a => a[i]>b)
+daikon.inv.binary.sequenceString.Member
+b \in a
+daikon.inv.ternary.threeScalar.LinearTernary
+c == 2 * a + 3 * b - 6

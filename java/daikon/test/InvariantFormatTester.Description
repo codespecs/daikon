@@ -1,0 +1,44 @@
+Files should be formatted in the following manner:
+
+InvariantFormatTester.<format name>:
+
+<fully qualified class name>
+<type string>
+<sample>* <- 0 or more samples
+
+The file format should be the same regardless of blank or commented lines
+except in the samples area. No blank lines or comments should appear after the type
+string before the first sample or between parts of samples (these lines are used
+currently to determine where samples lists end). This will be remedied in a
+future version of the tester.
+
+Type string:
+A type string must consist of one or more of the following:
+"int","double","string","int_array","double_array","string_array", seperated by
+spaces (without the quotes)
+This string represents the types that an invariant is supposed to compare
+For instance, a binary integer comparison would have type string "int int".
+A pairwise sequence comparison would have type string "int_array int_array"
+
+Samples:
+Values formatted according to the type string, one value per line
+Example: Formatting for samples of a binary integer comparison
+
+int int <- no comment/blank lines after this
+1 <- or before this
+2
+2 <-|__ Pair of values
+3 <-|
+
+Please see the included goal files (InvariantFormatTester.<format>.goal) for
+further examples and modify them to more fully cover other output formats.
+
+The output of a test run can be converted into a goals files by using the --generate_goals
+switch to the tester as follows:
+
+java daikon.test.InvariantFormatTester --generate_goals
+
+Note that this test is included in the set of tests performed by the master tester, and
+so it is not necessary to seperately run this test except to generate goal files.
+
+If you have further questions or comments (or bug reports), email amdunn@mit.edu
