@@ -13,7 +13,12 @@ versions as the user manual.
 
 3.1.5
 
-[Put changes related to version 3.1.5 here.]
+Use a better algorithm for choosing the canonical variable in an
+equality set for printing purposes: a var that is not
+isDerivedParamAndUninteresting is more canonical than one that is, a
+var that is less derived is more canonical than one that is more
+derived, and other things being equal, choose the var with the least
+complex name.
 
 ---------------------------------
 

@@ -491,9 +491,11 @@ public final class Equality
   }
 
   /**
-   * Switch the leader of this invariant, if possible, to a VarInfo
-   * that is not isDerivedParamAndUninteresting.  If not, keep the
-   * same leader.  Call this only after postProcess has been called.
+   * Switch the leader of this invariant, if possible, to a more canonical 
+   * VarInfo:  a VarInfo that is not isDerived() is better than one that is;
+   * one that is not isDerivedParamAndUninteresting() is better than one that
+   * is; and other things being equal, choose the least complex name.
+   * Call this only after postProcess has been called.
    * We do a pivot so that anything that's interesting to be printed
    * gets printed and not filtered out.  For example, if a == b and a
    * is the leader, but not interesting, we still want to print f(b)
@@ -501,18 +503,33 @@ public final class Equality
    * each relevant PptSlice gets pivoted.  But not here.
    **/
   public void pivot() {
-    if (!leader().isDerivedParamAndUninteresting()) return;
     VarInfo newLeader = null;
     for (Iterator iVars = vars.iterator(); iVars.hasNext(); ) {
       VarInfo var = (VarInfo) iVars.next();
-      if (!var.isDerivedParamAndUninteresting()) {
+      if (newLeader == null) {
         newLeader = var;
-        break;
+      }
+      else if (newLeader.isDerivedParamAndUninteresting() &&
+	       !var.isDerivedParamAndUninteresting()) {
+	newLeader = var;
+      }
+      else if (var.isDerivedParamAndUninteresting() &&
+	       !newLeader.isDerivedParamAndUninteresting()) {
+	// do nothing
+      }
+      else if (var.derivedDepth() < newLeader.derivedDepth()) {
+	newLeader = var;
+      }
+      else if (var.derivedDepth() > newLeader.derivedDepth()) {
+	// do nothing
+      }
+      // if we got here, this is the "all other things being equal" case
+      else if (var.name.inOrderTraversal().size() <
+	       newLeader.name.inOrderTraversal().size()) {
+	newLeader = var;
       }
     }
-    if (newLeader != null) {
-      leaderCache = newLeader;
-    }
+    leaderCache = newLeader;
   }
 
   public void repCheck() {

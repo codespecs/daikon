@@ -1739,7 +1739,7 @@ public final class ONEOFSCALAR
         if (isSameFormula(other)
           && SubSequence.isObviousSubSequenceDynamically(this, v, other.var())) {
           debug.fine ("isObviousDyn: Returning true because isObviousSubSequenceDynamically");
-          return new DiscardInfo(this, DiscardCode.obvious, "The same property holds over a supersequence");
+          return new DiscardInfo(this, DiscardCode.obvious, "The same property holds over a supersequence " + other.var().name());
         }
       }
     }
