@@ -387,7 +387,12 @@ public abstract class Invariant
     /* Java boolean expression */
     public static final OutputFormat JAVA = new OutputFormat("Java");
 
+    private final String name;
+    public final String toString() { return "OutputFormat:" + name; }
+
+    // Nobody should ever construct these
     private OutputFormat(String name) {
+      this.name = name;
     }
   }
 
@@ -411,8 +416,7 @@ public abstract class Invariant
     if ((request == OutputFormat.IOA) && debugPrint.isDebugEnabled()) {
       debugPrint.debug ("Format_ioa: " + this.toString());
     }
-    // remove trailing "class"
-    String classname = this.getClass().toString().substring(6);
+    String classname = this.getClass().getName();
     return "warning: method " + classname + ".format(" + request + ")"
       + "needs to be implemented: " + format();
   }
