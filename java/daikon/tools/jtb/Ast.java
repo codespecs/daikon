@@ -110,6 +110,12 @@ public class Ast {
   /// Names (fully qualified and otherwise)
   ///
 
+  public static boolean isAccessModifier(String s) {
+    return (s.equals("public") ||
+	    s.equals("protected") ||
+	    s.equals("private"));
+  }
+
   public static String getName(FormalParameter p) {
     String name = print(p.f2);
     int startBrackets = name.indexOf('[');
@@ -1000,6 +1006,12 @@ public class Ast {
       return new String[0];
     }
     // Ignore first three lines.  Also ignore last line, which is empty.
+    // System.out.println("Outputting assertion check parts in invariants_for: ");
+    // System.out.println("invs.length = " + invs.length);
+    // for (int i=0; i<invs.length; i++) {
+    //   System.out.println("invs[" + i + "] = " + invs[i]);
+    // }
+
     Assert.assertTrue(invs[0].equals("==========================================================================="), "Not row-of-=: " + invs[0]);
     // These might differ, because return values appear in ppt.name but not in invs[1].
     // utilMDE.Assert.assertTrue(invs[1].equals(ppt.name), "Different names: " + invs[1] + ", " + ppt.name);

@@ -139,7 +139,9 @@ class MergeESC {
                                                 true // use saved config
                                                 );
 
-    Daikon.output_style = OutputFormat.ESCJAVA;
+    // Change to an option
+    // Daikon.output_style = OutputFormat.ESCJAVA;
+    Daikon.output_style = OutputFormat.JML;
     Daikon.suppress_implied_controlled_invariants = true;
     Daikon.suppress_implied_postcondition_over_prestate_invariants = true;
     Daikon.suppress_redundant_invariants_with_simplify = true;

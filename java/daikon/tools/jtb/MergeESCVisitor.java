@@ -10,6 +10,7 @@ import jtb.visitor.*;
 import daikon.*;
 import utilMDE.ArraysMDE;
 import utilMDE.UtilMDE;
+import daikon.inv.Invariant;
 import daikon.inv.unary.sequence.EltNonZero;
 import daikon.inv.unary.stringsequence.EltOneOfString;
 import daikon.inv.unary.stringsequence.OneOfStringSequence;
@@ -35,9 +36,13 @@ class MergeESCVisitor extends DepthFirstVisitor {
 
   public final static String lineSep = System.getProperty("line.separator");
 
+  public final static String JML_START_COMMENT = "/*@" + lineSep;
+  public final static String JML_END_COMMENT = "@*/" + lineSep;
+
   public PptMap ppts;
   public boolean slashslash;       // whether to use // or /* style comments
   public boolean insert_inexpressible; // whether to insert annotations not supported by ESC
+  public boolean lightweight;      // whether to use full JML specs or lightweight ESC specs instead
 
   public Vector addedComments = new Vector(); // elements are NodeTokens
 
@@ -52,6 +57,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
     this.ppts = ppts;
     this.slashslash = slashslash;
     this.insert_inexpressible = insert_inexpressible;
+    lightweight = false;
   }
 
   // Like Ast.addComment, but also keeps a list of what comments were added.
@@ -151,7 +157,8 @@ class MergeESCVisitor extends DepthFirstVisitor {
     super.visit(n);             // call "accept(this)" on each field
 
     for (int i=ownedFieldNames.length-1; i>=0; i--) {
-      addComment(n.f4.f1, javaLineComment("@ invariant " + ownedFieldNames[i] + ".owner == this;"), true);
+      if (lightweight)
+        addComment(n.f4.f1, javaLineComment("@ invariant " + ownedFieldNames[i] + ".owner == this;"), true);
     }
     if (object_ppt == null) {
       // System.out.println("No object program point found for " + classname);
@@ -197,12 +204,104 @@ class MergeESCVisitor extends DepthFirstVisitor {
           continue;
         }
         ensures_invs = Ast.invariants_for(ppt, ppts);
-      } else {
-        throw new Error("not enter or exit point: " + ppt.name);
       }
     }
 
     return new String[][] { requires_invs, ensures_invs };
+  }
+
+  HashMap get_exceptions(PptMap ppts, Node n) {
+    HashMap result = new HashMap();
+
+    Vector matching_ppts = Ast.getMatches(ppts, n);
+    for (Iterator itor = matching_ppts.iterator(); itor.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) itor.next();
+      String prefix;
+      if (ppt.ppt_name.isThrowsPoint()) {
+	String exceptionName = "Not getting called"; // ppt.ppt_name.dontKnowHowToDoThis();
+	Collection exceptionInvariants;
+
+	if (result.containsValue(exceptionName)) {
+	  exceptionInvariants = (Collection)result.get(exceptionName);
+	  exceptionInvariants.add(ppt.invariants_vector());
+	} else {
+	  exceptionInvariants = new Vector(ppt.invariants_vector());
+	  result.put(exceptionName,exceptionInvariants);
+	}
+      }
+    }
+
+    return result;
+  }
+
+  public void insertAlso(Node n) {
+    addComment(n, "@ also" + lineSep, true);
+  }
+
+  // n must be a MethodDeclaration or ConstructorDeclaration
+  public void insertBehavior(Node n, boolean noExceptions, boolean noEnsures) {
+    class InsertBehaviorVisitor extends DepthFirstVisitor {
+      Node n;
+      boolean noExceptions, noEnsures, behaviorInserted;
+
+      public InsertBehaviorVisitor(Node n, boolean noExceptions, boolean noEnsures) {
+	super();
+	this.n = n;
+	this.noExceptions = noExceptions;
+	this.noEnsures = noEnsures;
+	behaviorInserted = false;
+      }
+
+      private String getBehaviorString() {
+	return (noExceptions ? "normal_behavior" :
+		(noEnsures ? "exceptional_behavior" : "behavior"));
+      }
+
+      public void visit(NodeChoice nc) {
+	// System.out.println("InsertBehavior visitor visiting a NodeChoice");
+	String modifier = nc.choice.toString();
+	// System.out.println("A node choice here: " + modifier);
+	if (Ast.isAccessModifier(modifier)) {
+	  addComment(n, "@ " + modifier + " " + getBehaviorString() + lineSep, true);
+	  behaviorInserted = true;
+	}
+      }
+
+      public void visit(NodeOptional no) {
+	// System.out.println("InsertBehavior visitor visiting a NodeOptional");
+	visit((NodeChoice)no.node);
+      }
+
+      public void visit(NodeListOptional nlo) {
+	// System.out.println("InsertBehavior visitor visiting a NodeListOptional");
+	// System.out.println("With " + nlo.nodes.size() + " nodes");
+	for (int i=0; i<nlo.nodes.size() && !behaviorInserted; i++) {
+	  // System.out.println("Visiting a NodeChoice");
+
+	  // The other way around (that is, ((NodeChoice)nlo...).accept(this))
+	  // does not work because of the way NodeChoice.accept is defined
+	  visit((NodeChoice)nlo.nodes.get(i));
+	}
+	if (!behaviorInserted)
+	  addComment(n, "@ " + "protected " + getBehaviorString() + lineSep, true);
+      }
+
+      public void visit(MethodDeclaration md) {
+	// System.out.println("InsertBehavior visitor visiting a MethodDeclaration");
+	md.f0.accept(this);
+      }
+
+      public void visit(ConstructorDeclaration cd) {
+	// System.out.println("InsertBehavior visitor visiting a ConstructorDeclaration");
+	cd.f0.accept(this);
+      }
+    }
+
+    InsertBehaviorVisitor v = new InsertBehaviorVisitor(n,noExceptions,noEnsures);
+    if (n instanceof MethodDeclaration)
+      ((MethodDeclaration)n).accept(v);
+    else
+      ((ConstructorDeclaration)n).accept(v);
   }
 
   /**
@@ -221,21 +320,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
     String[] requires_invs = requires_and_ensures[0];
     String[] ensures_invs = requires_and_ensures[1];
 
-    Vector matching_ppts = Ast.getMatches(ppts, n);
-    for (Iterator itor = matching_ppts.iterator(); itor.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
-      String prefix;
-      if (ppt.ppt_name.isEnterPoint()) {
-        requires_invs = Ast.invariants_for(ppt, ppts);
-      } else if (ppt.ppt_name.isExitPoint()) {
-        if (! ppt.ppt_name.isCombinedExitPoint()) {
-          continue;
-        }
-        ensures_invs = Ast.invariants_for(ppt, ppts);
-      } else {
-        throw new Error("not enter or exit point: " + ppt.name);
-      }
-    }
+    HashMap exceptions = get_exceptions(ppts, n);
 
     // Special case for main method:  add "arg != null" and
     // "\nonnullelements(arg)".
@@ -256,22 +341,42 @@ class MergeESCVisitor extends DepthFirstVisitor {
 
     String ensures_tag = "ensures";
     String requires_tag = "requires";
-    String methname = n.f2.f0.tokenImage;
     boolean isOverride = Ast.isOverride(n); // of a superclass
     boolean isImplementation = Ast.isImplementation(n); // of an interface
 
-    if (isImplementation) {
-      requires_tag = "also_" + requires_tag;
-      ensures_tag = "also_" + ensures_tag;
-    }
-    if (isOverride) {
-      requires_invs = null; // no requires permitted on overridden methods
-      ensures_tag = "also_" + ensures_tag;
+    if (lightweight) {
+      if (isImplementation) {
+	requires_tag = "also_" + requires_tag;
+	ensures_tag = "also_" + ensures_tag;
+      }
+      if (isOverride) {
+	requires_invs = null; // no requires permitted on overridden methods
+	ensures_tag = "also_" + ensures_tag;
+      }
     }
 
-    insertInvariants(n, ensures_tag, ensures_invs);
-    insertInvariants(n, requires_tag, requires_invs);
+    if (!lightweight)
+      addComment(n, JML_END_COMMENT, true);
 
+    boolean invariantInserted =
+      insertInvariants(n, ensures_tag, ensures_invs, lightweight);
+
+    invariantInserted =
+      insertInvariants(n, requires_tag, requires_invs, lightweight) ||
+      invariantInserted;
+
+    if (!lightweight) {
+      if (!invariantInserted)
+        insertJMLWorkaround(n);
+      insertBehavior(n, exceptions.isEmpty(), ensures_invs.length == 0);
+      if (isImplementation || isOverride) {
+	insertAlso(n);
+      }
+      addComment(n, JML_START_COMMENT, true);
+    }
+
+    //if (!exceptions.isEmpty())
+    //  insertExceptions(n, exceptions);
   }
 
   /**
@@ -293,16 +398,43 @@ class MergeESCVisitor extends DepthFirstVisitor {
     String[] requires_invs = requires_and_ensures[0];
     String[] ensures_invs = requires_and_ensures[1];
 
-    insertInvariants(n, "ensures", ensures_invs);
-    insertInvariants(n, "requires", requires_invs);
+    HashMap exceptions = get_exceptions(ppts, n);
+
+    if (!lightweight)
+      addComment(n, JML_END_COMMENT, true);
+
+    boolean invariantInserted =
+      insertInvariants(n, "ensures", ensures_invs, lightweight);
+
+    invariantInserted =
+      insertInvariants(n, "requires", requires_invs, lightweight) ||
+      invariantInserted;
+
+    if (!lightweight) {
+      if (!invariantInserted)
+        insertJMLWorkaround(n);
+      insertBehavior(n, exceptions.isEmpty(), ensures_invs.length == 0);
+      addComment(n, JML_START_COMMENT, true);
+    }
 
   }
 
+  public void insertJMLWorkaround(Node n) {
+    addComment(n, "@ requires true;" + lineSep, true);
+  }
+
+  public boolean insertInvariants(Node n, String prefix, String[] invs) {
+    return insertInvariants(n, prefix, invs, true);
+  }
+
   // The "invs" argument may be null, in which case no work is done.
-  public void insertInvariants(Node n, String prefix, String[] invs) {
+  public boolean insertInvariants(Node n, String prefix, String[] invs, boolean useJavaComment) {
     if (invs == null) {
-      return;
+      return false;
     }
+
+    boolean invariantInserted = false;
+
     for (int i=invs.length-1; i>=0; i--) {
       String inv = invs[i];
       if (inv.startsWith("      Unmodified variables: ")
@@ -314,21 +446,32 @@ class MergeESCVisitor extends DepthFirstVisitor {
                  || (inv.indexOf('~') != -1)
                  || (inv.indexOf("\\new") != -1)
 		 || (inv.indexOf(".toString ") != -1)
-		 || (inv.endsWith(".toString"))) {
+		 || (inv.endsWith(".toString"))
+		 || (inv.indexOf("inexpressible") != -1)) {
         // inexpressible invariant
         if (insert_inexpressible) {
           addComment(n, javaLineComment("! " + inv + ";"), true);
         }
         continue;
-      } else if (inv.startsWith("modifies ")) {
-        if (prefix.startsWith("also_")) {
+      } else if (inv.startsWith("modifies ") || inv.startsWith("assignable ")) {
+        if (lightweight && prefix.startsWith("also_")) {
           inv = "also_" + inv;
         }
-        addComment(n, javaLineComment("@ " + inv + ";"), true);
+	String commentContents = "@ " + inv + ";" + lineSep;
+	if (useJavaComment)
+	  commentContents = javaLineComment(commentContents);
+        addComment(n, commentContents, true);
+        invariantInserted = true;
       } else {
-        addComment(n, javaLineComment("@ " + prefix + " " + inv + ";"), true);
+	String commentContents = "@ " + prefix + " " + inv + ";" + lineSep;
+	if (useJavaComment)
+	  commentContents = javaLineComment(commentContents);
+
+        addComment(n, commentContents, true);
+        invariantInserted = true;
       }
     }
+    return invariantInserted;
   }
 
   // Set .owner and/or .containsnull for ++, --, etc expressions within a
@@ -389,7 +532,8 @@ class MergeESCVisitor extends DepthFirstVisitor {
                 // It's safe, however.  But does it cause syntax errors if an
                 // else clause follows a then clause without braces?
                 if (isOwned(fieldname)) {
-                  addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".owner = this;"));
+                  if (lightweight)
+                    addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".owner = this;"));
                 }
                 if (isNotContainsNull(fieldname)) {
                   addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".containsNull = false;"));
@@ -421,7 +565,8 @@ class MergeESCVisitor extends DepthFirstVisitor {
       // System.out.println("In expression, fieldname = " + fieldname);
       Node stmt = Ast.getParent(Statement.class, n);
       if ((fieldname != null) && isOwned(fieldname)) {
-        addCommentAfter(stmt, javaLineComment("@ set " + fieldname + ".owner = this;"));
+        if (lightweight)
+          addCommentAfter(stmt, javaLineComment("@ set " + fieldname + ".owner = this;"));
       }
 
     }
@@ -574,7 +719,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
         if (slice != null) {
           EltNonZero enz = EltNonZero.find(slice);
           if (enz != null) {
-            String enz_format = enz.format_esc();
+            String enz_format = format((Invariant)enz);
             if (enz_format.endsWith(".containsNull == false")) {
               result.add(field);
             }
@@ -611,12 +756,12 @@ class MergeESCVisitor extends DepthFirstVisitor {
         Assert.assertTrue(vi != null);
         PptSlice1 slice = ppt.findSlice(vi);
         if (slice != null) {
-          System.out.println("Slice for " + vi.name.name());
+          // System.out.println("Slice for " + vi.name.name());
           {
             EltOneOfString eoos = EltOneOfString.find(slice);
-            System.out.println("eoos: " + (eoos == null ? "null" : eoos.format_esc()));
+            System.out.println("eoos: " + (eoos == null ? "null" : format((Invariant)eoos)));
             if (eoos != null) {
-              String eoos_format = eoos.format_esc();
+              String eoos_format = format((Invariant)eoos);
               int et_pos = eoos_format.indexOf(".elementType == \\type(");
               if (et_pos != -1) {
                 String type = eoos_format.substring(et_pos + ".elementType == ".length());
@@ -626,9 +771,9 @@ class MergeESCVisitor extends DepthFirstVisitor {
           }
           {
             OneOfStringSequence eooss = OneOfStringSequence.find(slice);
-            System.out.println("eooss: " + (eooss == null ? "null" : eooss.format_esc()));
+            // System.out.println("eooss: " + (eooss == null ? "null" : format((Invariant)eooss)));
             if (eooss != null) {
-              String eooss_format = eooss.format_esc();
+              String eooss_format = format((Invariant)eooss);
               int et_pos = eooss_format.indexOf(".elementType == \\type(");
               if (et_pos != -1) {
                 String type = eooss_format.substring(et_pos + ".elementType == ".length());
@@ -642,6 +787,11 @@ class MergeESCVisitor extends DepthFirstVisitor {
     return result;
   }
 
+  public String format(Invariant i) {
+    if (lightweight)
+      return i.format_using(Invariant.OutputFormat.ESCJAVA);
+    return i.format_using(Invariant.OutputFormat.JML);
+  }
 }
 
 // These are the inexpressible invariants; that is, ESC does not support
