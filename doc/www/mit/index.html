@@ -798,7 +798,7 @@ target.
     <code> 
         cd $inv <br>
         make use-ver3 <br>
-        cvs update -d  <br>
+        cvs -q update -d  <br>
     </code> <p>
 
     <li> Rebuild everything. <p>
@@ -829,7 +829,8 @@ target.
 
     <code>
         cd $inv/doc <br>
-        diff -u -s --from-file /home/httpd/html/daikon/dist/doc *.texinfo <br>
+        diff -b -u -s --from-file /home/httpd/html/daikon/dist/doc *.texinfo 
+        <br>
     </code> <p>
 
     <li> Make the distribution and update the website. <p>
@@ -849,15 +850,18 @@ target.
     incremented.  In this case, simply edit <tt>doc/VERSION</tt> by
     hand back to the correct version number before rebuilding. <p>
 
+  <!-- This is now done automatically
+
     <li> Build a current version of javadoc and place on the website <p>
     
     <code>
         cd $inv/java <br>
         make 'JAVADOC_DEST=/home/httpd/html/daikon/download/jdoc_v3' doc <br>
     </code> <P>
+  -->
 
-<!--
-We no longer maintain or update V2.
+  <!-- We no longer maintain or update V2.
+
     <li> Build, checkout, create a tarfile/jdoc for V2, and 
     update the website.  If the update doesn't change anything, you
     can skip this step. <P>
@@ -875,7 +879,7 @@ We no longer maintain or update V2.
         cp daikon.tar.gz /home/httpd/html/daikon/download/daikon_v2.tar.gz <br>
         update-link-dates /home/httpd/html/daikon/download/index.html <br>
     </code> <p>
--->
+  -->
 
     <li> Commit any changes back to CVS <p>
 
