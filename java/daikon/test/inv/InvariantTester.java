@@ -2,6 +2,7 @@ package daikon.test.inv;
 
 import junit.framework.*;
 import daikon.*;
+import daikon.config.*;
 import daikon.inv.*;
 import daikon.inv.binary.twoScalar.*;
 import java.util.*;
@@ -32,7 +33,9 @@ public class InvariantTester extends TestCase {
     PptSlice slice = new PptSlice2(ppt, vars);
 
     Invariant inv1, inv2, inv2_2, inv2_3, inv2_4, inv2_5, inv2_6, inv3, inv4, inv5, inv6;
- 
+
+    Configuration.getInstance().apply
+      ("daikon.inv.binary.twoScalar.FunctionUnary.enabled = 1");
     inv1 = FunctionUnary.instantiate(slice, null, null, false);
     Assert.assertTrue(c.compare(inv1, inv1) == 0);
 
