@@ -427,28 +427,94 @@ public class ValueTracker
       super(max_values);
     }
 
-    public abstract void add(Object v1);
+    public abstract void add_val(Object v1);
+    public void add (Object v1) {
+      add_val (v1);
+    }
   }
 
   public static abstract class ValueTracker2 extends ValueTracker {
+    private boolean swap = false;
     public ValueTracker2(int max_values) {
       super(max_values);
     }
-    public abstract void add(Object v1, Object v2);
+    public abstract void add_val(Object v1, Object v2);
+    public void add (Object v1, Object v2) {
+      if ((this instanceof ValueTrackerFloatArrayFloat)
+          || (this instanceof ValueTrackerScalarArrayScalar))
+        add_val (v1, v2);
+      else {
+        if (swap)
+          add_val (v2, v1);
+        else
+          add_val (v1, v2);
+      }
+    }
+    public void permute (int[] permutation) {
+      if (permutation[0] == 1)
+        swap = !swap;
+    }
+
   }
 
   public static abstract class ValueTracker3 extends ValueTracker {
+    final static int order_123 = 0;
+    final static int order_213 = 1;
+    final static int order_312 = 2;
+    final static int order_132 = 3;
+    final static int order_231 = 4;
+    final static int order_321 = 5;
+    final static int[][] var_indices;
+    static {
+      var_indices = new int[6][];
+      var_indices[order_123] = new int[] { 0, 1, 2 };
+      var_indices[order_213] = new int[] { 1, 0, 2 };
+      var_indices[order_312] = new int[] { 2, 0, 1 };
+      var_indices[order_132] = new int[] { 0, 2, 1 };
+      var_indices[order_231] = new int[] { 1, 2, 0 };
+      var_indices[order_321] = new int[] { 2, 1, 0 };
+    }
+    private int order = order_123;
+
     public ValueTracker3(int max_values) {
       super(max_values);
     }
-    public abstract void add(Object v1, Object v2, Object v3);
+    public abstract void add_val(Object v1, Object v2, Object v3);
+    public void add (Object v1, Object v2, Object v3) {
+
+      switch (order) {
+        case order_123: add_val (v1, v2, v3); break;
+        case order_213: add_val (v2, v1, v3); break;
+        case order_312: add_val (v3, v1, v2); break;
+        case order_132: add_val (v1, v3, v2); break;
+        case order_231: add_val (v2, v3, v1); break;
+        case order_321: add_val (v3, v2, v1); break;
+      }
+    }
+
+    /** permutation is from the old position to the new position */
+    public void permute (int[] permutation) {
+
+      int[] new_order = new int[3];
+      int[] old_order = var_indices[order];
+      new_order[0] = old_order[permutation[0]];
+      new_order[1] = old_order[permutation[1]];
+      new_order[2] = old_order[permutation[2]];
+      for (int i = 0; i < var_indices.length; i++) {
+        if (Arrays.equals (new_order, var_indices[i])) {
+          order = i;
+          return;
+        }
+      }
+    Assert.assertTrue(false, "Could not find new ordering");
+    }
   }
 
   public static class ValueTrackerScalar extends ValueTracker1 {
     public ValueTrackerScalar(int max_values) {
       super(max_values);
     }
-    public void add(Object v1) {
+    public void add_val(Object v1) {
       add(((Long) v1).longValue());
     }
   }
@@ -457,7 +523,7 @@ public class ValueTracker
     public ValueTrackerFloat(int max_values) {
       super(max_values);
     }
-    public void add(Object v1) {
+    public void add_val(Object v1) {
       add(((Double) v1).doubleValue());
     }
   }
@@ -466,7 +532,7 @@ public class ValueTracker
     public ValueTrackerScalarArray(int max_values) {
       super(max_values);
     }
-    public void add(Object v1) {
+    public void add_val(Object v1) {
       add((long[]) v1);
     }
   }
@@ -475,7 +541,7 @@ public class ValueTracker
     public ValueTrackerFloatArray(int max_values) {
       super(max_values);
     }
-    public void add(Object v1) {
+    public void add_val(Object v1) {
       add((double[]) v1);
     }
   }
@@ -484,7 +550,7 @@ public class ValueTracker
     public ValueTrackerString(int max_values) {
       super(max_values);
     }
-    public void add(Object v1) {
+    public void add_val(Object v1) {
       add((String) v1);
     }
   }
@@ -493,7 +559,7 @@ public class ValueTracker
     public ValueTrackerStringArray(int max_values) {
       super(max_values);
     }
-    public void add(Object v1) {
+    public void add_val(Object v1) {
       add((String[]) v1);
     }
   }
@@ -502,7 +568,7 @@ public class ValueTracker
     public ValueTrackerTwoString(int max_values) {
       super(max_values);
     }
-    public void add(Object v1, Object v2) {
+    public void add_val(Object v1, Object v2) {
       add((String) v1, (String) v2);
     }
   }
@@ -511,7 +577,7 @@ public class ValueTracker
     public ValueTrackerTwoScalar(int max_values) {
       super(max_values);
     }
-    public void add(Object v1, Object v2) {
+    public void add_val(Object v1, Object v2) {
       add(((Long) v1).longValue(), ((Long) v2).longValue());
     }
   }
@@ -520,7 +586,7 @@ public class ValueTracker
     public ValueTrackerTwoFloat(int max_values) {
       super(max_values);
     }
-    public void add(Object v1, Object v2) {
+    public void add_val(Object v1, Object v2) {
       add(((Double) v1).doubleValue(), ((Double) v2).doubleValue());
     }
   }
@@ -529,7 +595,7 @@ public class ValueTracker
     public ValueTrackerFloatArrayFloat(int max_values) {
       super(max_values);
     }
-    public void add(Object v1, Object v2) {
+    public void add_val(Object v1, Object v2) {
       add((double[]) v1, ((Double) v2).doubleValue());
     }
   }
@@ -538,7 +604,7 @@ public class ValueTracker
     public ValueTrackerScalarArrayScalar(int max_values) {
       super(max_values);
     }
-    public void add(Object v1, Object v2) {
+    public void add_val(Object v1, Object v2) {
       add((long[]) v1, ((Long) v2).longValue());
     }
   }
@@ -547,7 +613,7 @@ public class ValueTracker
     public ValueTrackerTwoFloatArray(int max_values) {
       super(max_values);
     }
-    public void add(Object v1, Object v2) {
+    public void add_val(Object v1, Object v2) {
       add((double[]) v1, ((double[]) v2));
     }
   }
@@ -556,7 +622,7 @@ public class ValueTracker
     public ValueTrackerTwoScalarArray(int max_values) {
       super(max_values);
     }
-    public void add(Object v1, Object v2) {
+    public void add_val(Object v1, Object v2) {
       add((long[]) v1, ((long[]) v2));
     }
   }
@@ -565,7 +631,7 @@ public class ValueTracker
     public ValueTrackerThreeScalar(int max_values) {
       super(max_values);
     }
-    public void add(Object v1, Object v2, Object v3) {
+    public void add_val(Object v1, Object v2, Object v3) {
       add(((Long) v1).longValue(), ((Long) v2).longValue(), ((Long) v3).longValue());
     }
   }
@@ -574,7 +640,7 @@ public class ValueTracker
     public ValueTrackerThreeFloat(int max_values) {
       super(max_values);
     }
-    public void add(Object v1, Object v2, Object v3) {
+    public void add_val(Object v1, Object v2, Object v3) {
       add(((Double) v1).longValue(), ((Double) v2).longValue(), ((Double) v3).longValue());
     }
   }
