@@ -252,12 +252,12 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   public boolean isSameFormula(Invariant o)
   {
     ONEOFSCALAR other = (ONEOFSCALAR) o;
-    if (elts.num_elts != other.num_elts.length)
+    if (num_elts != other.num_elts)
       return false;
 
     sort_rep();
     other.sort_rep();
-    for (int i=0; i < elts.num_elts; i++)
+    for (int i=0; i < num_elts; i++)
       if (elts[i] != other.elts[i]) // elements are interned
 	return false;
 
