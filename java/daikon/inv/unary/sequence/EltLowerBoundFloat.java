@@ -94,7 +94,6 @@ public class EltLowerBoundFloat
 
     return format_unimplemented(format);
   }
-
   // ELTLOWEr || ELTUPPEr
   public String format_daikon() {
     return var().name.name() + " elements >= " + core.min1 ;
@@ -178,7 +177,7 @@ public class EltLowerBoundFloat
     if ((oo != null) && oo.enoughSamples()) {
       // We could also use core.min1  == oo.min_elt(), since the LowerBound
       // will never have a core.min1  that does not appear in the OneOf.
-      if (core.min1  <=  oo.min_elt_double()) {
+      if (core.min1  <=  oo.min_elt()) {
         return true;
       }
     }

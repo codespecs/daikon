@@ -827,144 +827,15 @@ public abstract class Invariant
 
   // DO NOT OVERRIDE.  Should be declared "final", but the "final" is
   // omitted to allow for easier testing.
-  public boolean isWorthPrinting()
-  {
-    if (debugIsWorthPrinting.isDebugEnabled()) {
-      debugIsWorthPrinting.debug("isWorthPrinting: " + format() + " at " + ppt.name);
-    }
-
-    // It's hard to know in exactly what order to do these checks that
-    // eliminate some invariants from consideration.  Which is cheapest?
-    // Which is most often successful?  Which assume others have already
-    // been performed?
-    if (! isWorthPrinting_sansControlledCheck()) {
-      if (debugIsWorthPrinting.isDebugEnabled()) {
-        debugIsWorthPrinting.debug("  not worth printing, sans controlled check: " + format() + " at " + ppt.name);
-      }
-      return false;
-    }
-
-    // [INCR] ...
-    // The invariant is worth printing on its own merits, but it may be
-    // controlled.  If any (transitive) controller is worth printing, don't
-    // print this one.
-    // Use _sorted version for reproducibility.  (There's a bug, but I can't find it.)
-    /*
-    if (debugIsWorthPrinting.isDebugEnabled()) {
-      debugIsWorthPrinting.debug("Calling find_controlling_invariants_sorted(" + format() + ")");
-    }
-    Vector contr_invs = find_controlling_invariants_sorted();
-    if (debugIsWorthPrinting.isDebugEnabled()) {
-      if (contr_invs.size() == 0) {
-        debugIsWorthPrinting.debug("No controllers for " + format());
-      }
-    }
-
-    Vector processed = new Vector();
-    while (contr_invs.size() > 0) {
-      Invariant contr_inv = (Invariant) contr_invs.remove(0);
-      if (debugIsWorthPrinting.isDebugEnabled()) {
-        debugIsWorthPrinting.debug("Controller " + contr_inv.format() + " at " +
-                                   contr_inv.ppt.name + " for: " + format() + " at " + ppt.name);
-      }
-
-      processed.add(contr_inv);
-      if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-	PrintInvariants.debugFiltering.debug("\t\tconsidering controlling inv " + contr_inv.format() + "\n");
-      }
-      if (contr_inv.isWorthPrinting_sansControlledCheck()) {
-        // we have a printable controller, so we shouldn't print
-        if (debugIsWorthPrinting.isDebugEnabled()) {
-          debugIsWorthPrinting.debug("  not worth printing, sans controlled check, due to controller " +
-                                     contr_inv.format() + " at " + contr_inv.ppt.name + ": " + format() + " at " + ppt.name);
-        }
-	if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-	  PrintInvariants.debugFiltering.debug("\t\tis controlled by " + contr_inv.format() + " (from " + PrintInvariants.get_better_name(contr_inv.ppt.parent) + ")\n");
-	}
-        return false;
-      }
-      // find the controlling invs of contr_inv and add them to the
-      // working set iff the are not already in it and they have not
-      // been processed already
-      Iterator iter = contr_inv.find_controlling_invariants().iterator();
-      while (iter.hasNext()) {
-        Object elt = iter.next();
-        if (!processed.contains(elt) && !contr_invs.contains(elt)) {
-          contr_invs.add(elt);
-        }
-      }
-    }
-
-    // No controller was worth printing
-    if (debugIsWorthPrinting.isDebugEnabled()) {
-      debugIsWorthPrinting.debug("isWorthPrinting => true for: " + format() + " at " + ppt.name);
-    }
-    */
-    // ... [INCR]
-    return true;
+  public boolean isWorthPrinting() {
+    return InvariantFilters.isWorthPrintingFilter().shouldKeep(this);
   }
-
 
   /**
    * Like isWorthPrinting, but doesn't check whether the invariant is controlled.
    **/
   final public boolean isWorthPrinting_sansControlledCheck() {
-    if (this instanceof Implication) {
-      Implication impl = (Implication) this;
-      if (debugIsWorthPrinting.isDebugEnabled()) {
-        debugIsWorthPrinting.debug("iwpscc(" + format() + ") dispatching");
-      }
-      return impl.left.isWorthPrinting() && impl.right.isWorthPrinting();
-    }
-
-    if (debugIsWorthPrinting.isDebugEnabled()) {
-      System.out.println(isWorthPrinting_sansControlledCheck_debug());
-    }
-
-    boolean result = ((! hasFewModifiedSamples())
-         && enoughSamples()       // perhaps replaces hasFewModifiedSamples
-         // && (! hasNonCanonicalVariable()) [INCR]
-         // && (! hasOnlyConstantVariables()) [INCR]
-         && (! isObvious())
-         && justified()
-         // && isWorthPrinting_PostconditionPrestate() [INCR]
-         );
-
-    //should add this at some point, but don't want to think about
-    //evaluating even more diffs just at the moment.
-    //&& ! new DerivedParameterFilter().shouldDiscard(this)
-
-    if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-      if (hasFewModifiedSamples()) {
-	PrintInvariants.debugFiltering.debug("\t\t\thas few modified samples " + format() + "\n");
-      }
-      if (!enoughSamples()) {
-	PrintInvariants.debugFiltering.debug("\t\t\tnot enough samples " + format() + "\n");
-      }
-      /* [INCR]
-      if (hasNonCanonicalVariable()) {
-	PrintInvariants.debugFiltering.debug("\t\t\thas non canonical var " + format() + "\n");
-      }
-      */ // [INCR]
-      /* [INCR]
-      if (hasOnlyConstantVariables()) {
-	PrintInvariants.debugFiltering.debug("\t\t\thas only constant vars " + format() + "\n");
-      }
-      */ // [INCR]
-      if (isObvious()) {
-	PrintInvariants.debugFiltering.debug("\t\t\tis obvious " + format() + "\n");
-      }
-      if (!justified()) {
-	PrintInvariants.debugFiltering.debug("\t\t\tnot justified " + format() + "\n");
-      }
-      /* [INCR]
-      if (!isWorthPrinting_PostconditionPrestate()) {
-	PrintInvariants.debugFiltering.debug("\t\t\tisn't worth printing postcond/prestate " + format() + "\n");
-      }
-      */ // [INCR]
-    }
-
-    return result;
+    return(InvariantFilters.isWorthPrintingFilter_sansControlledCheck().shouldKeep(this));
   }
 
   final public String isWorthPrinting_sansControlledCheck_debug() {
@@ -1035,11 +906,11 @@ public abstract class Invariant
 
     // At this point, we know all variables are constant.
     Assert.assertTrue(this instanceof OneOf ||
-                  this instanceof Comparison ||
-                  this instanceof Equality
-                  , "Unexpected invariant with all vars constant: "
-                  + this + "  " + repr_prob() + "  " + format()
-                  );
+                      this instanceof Comparison ||
+                      this instanceof Equality
+                      , "Unexpected invariant with all vars constant: "
+                      + this + "  " + repr_prob() + "  " + format()
+                      );
     if (this instanceof Comparison) {
       //      Assert.assertTrue(! IsEqualityComparison.it.accept(this));
       if (debugPrint.isDebugEnabled())
@@ -1112,7 +983,7 @@ public abstract class Invariant
   public boolean isImpliedPostcondition() {
     PptTopLevel topLevel = ppt.parent;
     if (topLevel.entry_ppt() != null) { // if this is an exit point invariant
-      Iterator entryInvariants = topLevel.entry_ppt().invariants_vector().iterator(); // unstable
+      Iterator entryInvariants = topLevel.entry_ppt().getInvariants().iterator(); // unstable
       while (entryInvariants.hasNext()) {
         Invariant entryInvariant = (Invariant) entryInvariants.next();
         // If entryInvariant with orig() applied to everything matches this invariant
@@ -1127,7 +998,7 @@ public abstract class Invariant
     return false;
   }
 
-  private boolean isWorthPrinting_PostconditionPrestate()
+  public boolean isWorthPrinting_PostconditionPrestate()
   {
     PptTopLevel pptt = ppt.parent;
 
@@ -1186,7 +1057,7 @@ public abstract class Invariant
     PptTopLevel pptt = ppt.parent;
 
     // Try to match inv against all controlling invariants
-    Iterator controllers = pptt.controlling_ppts.iterator();
+    Iterator controllers = pptt.controlling_ppts.pptIterator();
     while (controllers.hasNext()) {
       PptTopLevel controller = (PptTopLevel) controllers.next();
       if (debugIsWorthPrinting.isDebugEnabled()) {
@@ -1319,8 +1190,15 @@ public abstract class Invariant
 
       int result = inv1.format().compareTo(inv2.format());
 
-      Assert.assertTrue(result != 0, "isSameInvariant() returned false, " +
-                    "but compareTo() returned 0");
+      Assert.assertTrue(result != 0
+                        // , "isSameInvariant() returned false "
+                        // + "(isSameFormula returned " + inv1.isSameFormula(inv2) + "), "
+                        // + "but format().compareTo() returned 0:\n"
+                        // + "  " + inv1.format() + " "  + inv1.repr() + "\n"
+                        // + "    " + inv1.ppt.parent.name + "\n"
+                        // + "  " + inv2.format() + " "  + inv2.repr() + "\n"
+                        // + "    " + inv1.ppt.parent.name + "\n"
+                        );
 
       return result;
     }

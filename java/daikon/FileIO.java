@@ -3,6 +3,8 @@ package daikon;
 import daikon.derive.Derivation;
 import daikon.derive.ValueAndModified;
 import daikon.config.Configuration;
+import daikon.temporal.TemporalInvariantManager;
+
 
 import utilMDE.*;
 import org.apache.log4j.Category;
@@ -434,8 +436,8 @@ public final class FileIO {
       PrintWriter pw = new PrintWriter(sw);
 
       pw.println("  " + ppt.fn_name());
-      pw.print("    ");      
-      
+      pw.print("    ");
+
       // [adonovan] is this sound? Let me know if not (sorry).
       Assert.assertTrue(ppt.var_infos.length == vals.length);
 
@@ -494,8 +496,8 @@ public final class FileIO {
     }
   }
 
-  // call_hashmap is for functions with a nonce to indicate which returns
-  // are associated with which entries.
+  // call_hashmap is for procedures with a (global, not per-procedure)
+  // nonce that indicates which returns are associated with which entries.
   // call_stack is for functions without nonces.
 
   // I could save some Object overhead by using two parallel stacks
@@ -522,12 +524,15 @@ public final class FileIO {
    * element of filenames.
    **/
   public static void read_data_trace_files(Collection files, // [File]
-                                           PptMap all_ppts)
+                                           PptMap all_ppts,
+                                           TemporalInvariantManager temporal_manager)
     throws IOException
   {
+    // [INCR] init_call_stack_and_hashmap();
+
     for (Iterator i = files.iterator(); i.hasNext(); ) {
       File file = (File) i.next();
-      read_data_trace_file(file, all_ppts);
+      read_data_trace_file(file, all_ppts, temporal_manager);
     }
 
     process_unmatched_procedure_entries();
@@ -539,8 +544,10 @@ public final class FileIO {
   public static File data_trace_filename;
 
   /** Read data from .dtrace file. **/
-  public static void read_data_trace_file(File filename, PptMap all_ppts)
-    throws IOException {
+  static void read_data_trace_file(File filename, PptMap all_ppts,
+                                   TemporalInvariantManager temporal_manager)
+    throws IOException
+  {
     int pptcount = 1;
 
     if (debugRead.isDebugEnabled()) {
@@ -569,7 +576,7 @@ public final class FileIO {
     /* [INCR] ... (punting modbits fixing for now)
     // [PptTopLevel -> [PptTopLevel -> int[]]]
     HashMap cumulative_modbits = new HashMap();
-    for (Iterator itor = all_ppts.iterator() ; itor.hasNext() ; ) {
+    for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       PptTopLevel entry_ppt = ppt.entry_ppt;
       if (entry_ppt != null) {
@@ -585,6 +592,8 @@ public final class FileIO {
       }
     }
     */ // ... [INCR]
+
+    // [INCR] temporal_manager.beginExecution();
 
     // try {
       // "line_" is uninterned, "line" is interned
@@ -738,6 +747,8 @@ public final class FileIO {
         }
         ppt.add_and_flow(vt, 1);
 
+	// [INCR] temporal_manager.processEvent(temporal_manager.generateSampleEvent(ppt, vt));
+
         // Feeding values to EXITnn points will automatically have
         // them flow up to the corresponding EXIT point.
         /* [INCR] ...
@@ -752,6 +763,12 @@ public final class FileIO {
         }
         */
       }
+
+      // [INCR] temporal_manager.endExecution();
+    }
+
+    if (Global.debugPrintDtrace) {
+      Global.dtraceWriter.close();
     }
 
   }
@@ -857,8 +874,8 @@ public final class FileIO {
 
     for (int vi_index=0, val_index=0; val_index<num_tracevars; vi_index++) {
       Assert.assertTrue(vi_index < vis.length
-                    // , "Got to vi_index " + vi_index + " after " + val_index + " of " + num_tracevars + " values"
-                    );
+                        // , "Got to vi_index " + vi_index + " after " + val_index + " of " + num_tracevars + " values"
+                        );
       VarInfo vi = vis[vi_index];
       Assert.assertTrue((! vi.is_static_constant)
                     || (vi.value_index == -1)
@@ -867,10 +884,10 @@ public final class FileIO {
       if (vi.is_static_constant)
         continue;
       Assert.assertTrue(val_index == vi.value_index
-                    // , "Differing val_index = " + val_index
-                    // + " and vi.value_index = " + vi.value_index
-                    // + " for " + vi.name + lineSep + vi.repr()
-                    );
+                        // , "Differing val_index = " + val_index
+                        // + " and vi.value_index = " + vi.value_index
+                        // + " for " + vi.name + lineSep + vi.repr()
+                        );
 
       // In errors, say "for program point", not "at program point" as the
       // latter confuses Emacs goto-error.
@@ -878,7 +895,7 @@ public final class FileIO {
       String line = reader.readLine();
       if (line == null) {
         throw new Error("Unexpected end of file at " + data_trace_filename + " line " + reader.getLineNumber()
-                        + "\n  Expected variable " + vi.name + ", got " + line
+                        + "\n  Expected variable " + vi.name.name() + ", got " + line
                         + " for program point " + ppt.name);
       }
 
@@ -891,7 +908,7 @@ public final class FileIO {
       }
 
       if (!VarInfoName.parse(line).equals(vi.name)) {
-        throw new FileIOException("Expected variable " + vi.name + ", got " + line
+        throw new FileIOException("Expected variable " + vi.name.name() + ", got " + line
                         + " for program point " + ppt.name,
                         reader, data_trace_filename);
 
@@ -899,14 +916,14 @@ public final class FileIO {
       line = reader.readLine();
       if (line == null) {
         throw new Error("Unexpected end of file at " + data_trace_filename + " line " + reader.getLineNumber()
-                        + "\n  Expected value for variable " + vi.name + ", got " + line
+                        + "\n  Expected value for variable " + vi.name.name() + ", got " + line
                         + " for program point " + ppt.name);
       }
       String value_rep = line;
       line = reader.readLine();
       if (line == null) {
         throw new FileIOException("Unexpected end of file at " + data_trace_filename + " line " + reader.getLineNumber()
-                        + "\n  Expected modbit for variable " + vi.name + ", got " + line
+                        + "\n  Expected modbit for variable " + vi.name.name() + ", got " + line
                         + " for program point " + ppt.name);
       }
       if (!((line.equals("0") || line.equals("1") || line.equals("2")))) {
@@ -918,7 +935,7 @@ public final class FileIO {
       int mod = ValueTuple.parseModified(line);
 
       // System.out.println("Mod is " + mod + " at " + data_trace_filename + " line " + reader.getLineNumber()
-      //                   + "\n  for variable " + vi.name
+      //                   + "\n  for variable " + vi.name.name()
       //                   + " for program point " + ppt.name);
 
       // MISSING_FLOW is only found during flow algorithm
@@ -940,25 +957,22 @@ public final class FileIO {
       oldvalue_reps[val_index] = value_rep;
 
       if (Global.debugPrintDtrace) {
-        Global.dtraceWriter.println(vi.name);
+        Global.dtraceWriter.println(vi.name.name());
         Global.dtraceWriter.println(value_rep);
         Global.dtraceWriter.println(mod);
       }
 
-      // Both uninit and nonsensical mean missing modebit 2, because
+      // Both uninit and nonsensical mean missing modbit 2, because
       // it doesn't make sense to look at x.y when x is uninitialized.
-      if (ValueTuple.modIsMissingNonSensical(mod)) {
-        if (!(
-              value_rep.equals("uninit") || 
-              value_rep.equals("nonsensical") ||
-              // backward compatibility
-              value_rep.equals("missing")
-            )) {
-          System.out.println("\nModbit indicates missing value for variable " +
-                             vi.name + " with value \"" + value_rep + 
-                             "\";\n  text of value should be \"missing\"" +
-                             ", \"uninit\" or \"nonsensical\" at " + 
-                             data_trace_filename + " line " + reader.getLineNumber());
+      if (ValueTuple.modIsMissingNonsensical(mod)) {
+        if (!(value_rep.equals("nonsensical") || value_rep.equals("uninit")
+              // backward compatibility (9/27/2002)
+              || value_rep.equals("missing"))) {
+          System.out.println("\nModbit indicates missing value for variable "
+                             + vi.name.name() + " with value \"" + value_rep
+                             + "\";\n  text of value should be \"nonsensical\""
+                             + " or \"uninit\" at " + data_trace_filename
+                             + " line " + reader.getLineNumber());
           System.exit(1);
         } else {
           // Keep track of variables that can be missing
@@ -967,7 +981,7 @@ public final class FileIO {
         vals[val_index] = null;
       } else {
         // System.out.println("Mod is " + mod + " (missing=" +
-        // ValueTuple.MISSING + "), rep=" + value_rep + 
+        // ValueTuple.MISSING + "), rep=" + value_rep +
         // "(modIsMissing=" + ValueTuple.modIsMissing(mod) + ")");
 
         try {
@@ -1069,8 +1083,8 @@ public final class FileIO {
       {
         /* [INCR] punt cumulative modbits
         Assert.assertTrue(ppt.num_orig_vars == entry_ppt.num_tracevars
-                      // , ppt.name + " has " + ppt.num_orig_vars + " orig_vars, but " + entry_ppt.name + " has " + entry_ppt.num_tracevars + " tracevars"
-                      );
+                          // , ppt.name + " has " + ppt.num_orig_vars + " orig_vars, but " + entry_ppt.name + " has " + entry_ppt.num_tracevars + " tracevars"
+                          );
         int[] entrymods = (int[]) ((HashMap)cumulative_modbits.get(entry_ppt)).get(ppt);
         */
         for (int i=0; i<ppt.num_orig_vars; i++) {
@@ -1086,7 +1100,7 @@ public final class FileIO {
           mods[ppt.num_tracevars+i] = mod;
           // Possibly more efficient to set this all at once, late in
           // the game; but this gets it done.
-          if (ValueTuple.modIsMissingNonSensical(mods[ppt.num_tracevars+i])) {
+          if (ValueTuple.modIsMissingNonsensical(mods[ppt.num_tracevars+i])) {
             Assert.assertTrue(vals[ppt.num_tracevars+i] == null);
           }
         }
@@ -1175,10 +1189,3 @@ public final class FileIO {
   }
 
 }
-
-/*
- * Local Variables:
- * c-basic-offset:	2
- * c-indentation-style: "stroustrup"
- * End:
- */

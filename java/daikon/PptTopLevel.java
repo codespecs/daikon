@@ -16,6 +16,7 @@ import daikon.split.*;
 import daikon.split.misc.*;
 import daikon.suppress.*;
 import utilMDE.Assert;
+import daikon.inv.filter.InvariantFilters;
 
 import java.io.*;
 import java.util.*;
@@ -258,6 +259,12 @@ public class PptTopLevel
 
   public int num_vars() {
     return var_infos.length;
+  }
+
+  // Returns true iff this is the only exit point or the combined exit point
+  public boolean isMainExit() {
+    // [INCR] return (ppt_name.isExitPoint() && (combined_exit == null));
+    return ppt_name.isExitPoint();
   }
 
   // Appears to be used only in the memory monitor.
@@ -607,7 +614,11 @@ public class PptTopLevel
 
     if (Global.debugDerive.isDebugEnabled()) {
       Global.debugDerive.debug ("Number of derived variables at program point " + this.name + ": " + result.size());
-      Global.debugDerive.debug("Derived: " + result);
+      String derived_vars = "Derived:";
+      for (Iterator itor = result.iterator(); itor.hasNext(); ) {
+        derived_vars += " " + ((Derivation)itor.next()).getVarInfo().name.name();
+      }
+      Global.debugDerive.debug(derived_vars);
     }
     Derivation[] result_array =
       (Derivation[]) result.toArray(new Derivation[result.size()]);
@@ -1446,68 +1457,85 @@ public class PptTopLevel
         inv.finished = true;
         // binary_view.already_seen_all = true;
         Assert.assertTrue(inv instanceof Comparison);
-        // Not "inv.format" because that is null if not justified.
         // System.out.println("Is " + (IsEqualityComparison.it.accept(inv) ? "" : "not ")
-        //                    + "equality: " + inv.repr());
-        if (IsEqualityComparison.it.accept(inv)
-            && inv.enoughSamples()) {
-          VarInfo var1 = binary_view.var_infos[0];
-          VarInfo var2 = binary_view.var_infos[1];
-          Assert.assertTrue(var1.varinfo_index < var2.varinfo_index);
-          // System.out.println("found equality: " + var1.name + " = " + var2.name);
-          // System.out.println("var1.equal_to="
-          //                    + ((var1.equal_to == null) ? "null" : var1.equal_to.name)
-          //                    + ", var2.equal_to="
-          //                    + ((var2.equal_to == null) ? "null" : var2.equal_to.name));
-          if ((var1.equal_to == null) && (var2.equal_to != null)) {
-            var1.equal_to = var2.equal_to;
-            if (debugEqualTo.isDebugEnabled()) {
-              debugEqualTo.debug("Setting " + var1.name + ".equal_to = " + var1.equal_to.name);
-            }
-          } else if ((var1.equal_to != null) && (var2.equal_to == null)) {
-            var2.equal_to = var1.equal_to;
-            if (debugEqualTo.isDebugEnabled()) {
-              debugEqualTo.debug("Setting " + var2.name + ".equal_to = " + var2.equal_to.name);
-            }
-          } else if ((var1.equal_to == null) && (var2.equal_to == null)) {
-            // Can this cause the canonical version to not be the lowest-
-            // numbered version?  I don't think so, because of the ordering
-            // in which we are examining pairs.
-            var1.equal_to = var1;
-            var2.equal_to = var1;
-            // System.out.println("Make " + var1.name + " canonical over " + var2.name + " at " + name);
-          } else {
-            // This is implied by the if-then sequence.
-            // Assert.assertTrue((var1.equal_to != null) && (var2.equal_to != null));
-            if (var1.compatible(var2)
-                && (var1.equal_to != var2.equal_to)) {
-              // Used to be an assert
-
-              // There is a real problem if this arises, but I have
-              // commented it out to avoid confusing users, and so we can
-              // concentrate on version 3.
-              if (debugEqualTo.isDebugEnabled()) {
-                debugEqualTo.debug("Internal Daikon error: Variables not equal: " + var1.name +
-                                   " (= " + var1.equal_to.name + "), " + var2.name + " (= " +
-                                   var2.equal_to.name + ") [indices " + var1.varinfo_index +
-                                   ", " + var1.equal_to.varinfo_index + ", " + var2.varinfo_index +
-                                   ", " + var2.equal_to.varinfo_index + "] at " + name);
-              }
-            }
-            Assert.assertTrue(var1.equal_to.varinfo_index <= var1.varinfo_index);
-            Assert.assertTrue(var2.equal_to.varinfo_index <= var2.varinfo_index);
+        //                    + "equality: " + inv.format());
+        if (! (IsEqualityComparison.it.accept(inv)
+               && inv.enoughSamples())) {
+          continue;
+        }
+        VarInfo var1 = binary_view.var_infos[0];
+        VarInfo var2 = binary_view.var_infos[1];
+        if (var1.canBeMissing || var2.canBeMissing) {
+          // System.out.println("Not setting equal_to based on " + inv.format()
+          //                    + "\n  because of canBeMissing: "
+          //                    + var1.name.name() + "=" + var1.canBeMissing + " "
+          //                    + var2.name.name() + "=" + var2.canBeMissing);
+          continue;
+        }
+        Assert.assertTrue(var1.varinfo_index < var2.varinfo_index);
+        // System.out.println("found equality: " + var1.name.name() + " = " + var2.name.name());
+        // System.out.println("var1.equal_to="
+        //                    + ((var1.equal_to == null) ? "null" : var1.equal_to.name.name())
+        //                    + ", var2.equal_to="
+        //                    + ((var2.equal_to == null) ? "null" : var2.equal_to.name.name()));
+        // System.out.println(inv.repr());
+        if ((var1.equal_to == null) && (var2.equal_to != null)) {
+          var1.equal_to = var2.equal_to;
+          if (debugEqualTo.isDebugEnabled()) {
+            debugEqualTo.debug("Setting " + var1.name + ".equal_to = " + var1.equal_to.name);
           }
+        } else if ((var1.equal_to != null) && (var2.equal_to == null)) {
+          var2.equal_to = var1.equal_to;
+          if (debugEqualTo.isDebugEnabled()) {
+            debugEqualTo.debug("Setting " + var2.name + ".equal_to = " + var2.equal_to.name);
+          }
+        } else if ((var1.equal_to == null) && (var2.equal_to == null)) {
+          // Can this cause the canonical version to not be the lowest-
+          // numbered version?  I don't think so, because of the ordering
+          // in which we are examining pairs.
+          var1.equal_to = var1;
+          var2.equal_to = var1;
+          // System.out.println("Make " + var1.name + " canonical over " + var2.name + " at " + name);
+        } else {
+          Assert.assertTrue((var1.equal_to != null) && (var2.equal_to != null));
+          if (var1.compatible(var2)
+              && (var1.equal_to != var2.equal_to)) {
+
+            // This can happen if we have canonical variables a and b,
+            // then we introduce new variable c which equals both of
+            // them.
+
+            // This used to be an assert.  There is a real problem if
+            // this arises, but I have commented it out to avoid
+            // confusing users, and so we can concentrate on version 3.
+            if (debugEqualTo.isDebugEnabled()) {
+              // Stars because this message is more important than most.
+              debugEqualTo.debug("*****");
+              debugEqualTo.debug("Internal Daikon error: Variables not equal: " + var1.name.name() +
+                                 " (= " + var1.equal_to.name.name() + "), " + var2.name.name() + " (= " +
+                                 var2.equal_to.name.name() + ") [indices " + var1.varinfo_index +
+                                 ", " + var1.equal_to.varinfo_index + ", " + var2.varinfo_index +
+                                 ", " + var2.equal_to.varinfo_index + "] at " + name);
+                debugEqualTo.debug("*****");
+            }
+
+            // If this reappears as a problem, I could fix the problem by
+            // changing equal_to slots from canon2 to canon1.
+
+          }
+          Assert.assertTrue(var1.equal_to.varinfo_index <= var1.varinfo_index);
+          Assert.assertTrue(var2.equal_to.varinfo_index <= var2.varinfo_index);
         }
       } else {
         binary_view.clear_cache();
       }
     }
-    // Set equal_to for VarInfos that  aren't equal to anything but themselves
+    // Set equal_to for VarInfos that aren't equal to anything but themselves.
     for (int i=vi_index_min; i<vi_index_limit; i++) {
       VarInfo vi = var_infos[i];
       if (vi.equal_to == null) {
         if (debugEqualTo.isDebugEnabled()) {
-          debugEqualTo.debug("Lonesome canonical var " + vi.varinfo_index + ": " + vi.name);
+          debugEqualTo.debug("Lonesome canonical var " + vi.varinfo_index + ": " + vi.name.name());
         }
         vi.equal_to = vi;
       }
@@ -1610,7 +1638,7 @@ public class PptTopLevel
   ///
 
   private boolean initiatedSuppression = false;
-  
+
   /**
    * Starts suppression by 1) unsuppressing all invariants. 2) running
    * full suppression check.  Called at the start of inferencing.  Can
@@ -1704,7 +1732,7 @@ public class PptTopLevel
   public boolean fillSuppressionTemplate (SuppressionTemplate template,
                                           boolean checkSelf) {
     // We do two loops for performance: attempt to fill locally, then
-    // attempt to fill using upper ppts.  
+    // attempt to fill using upper ppts.
 
     boolean firstLoopFilled = false;
     template.filled = false;
@@ -1735,7 +1763,7 @@ public class PptTopLevel
             template.results[iInvs] = inv;
             template.transforms[iInvs] = template.varInfos[iInvs];
           }
-        }      
+        }
       }
       // Formerly, we used to return null if the first loop didn't get
       // at least one invariant.  But there are some types of
@@ -1764,7 +1792,7 @@ public class PptTopLevel
         // debugSuppressFill.debug ("  Already filled");
         continue secondLoop;
       }
-      
+
       VarInfo[] varInfos = template.varInfos[iInvs];
 
       forEachTransform:
@@ -1787,7 +1815,7 @@ public class PptTopLevel
             continue forEachTransform;
           }
         }
-        
+
         PptSlice slice = dataflowPpt.findSlice_unordered (newVarInfos);
         if (slice != null) {
           Invariant inv =
@@ -1798,12 +1826,12 @@ public class PptTopLevel
             template.results[iInvs] = inv;
             template.transforms[iInvs] = newVarInfos;
           }
-        }      
+        }
       }
     }
-    
+
     // Only for checking if template got filled
-    thirdLoop: 
+    thirdLoop:
     for (int iInvs = 0; iInvs < template.invTypes.length; iInvs++) {
       if (template.results[iInvs] == null) {
         debugSuppressFill.debug ("  Unsuccessful fill");
@@ -1860,8 +1888,165 @@ public class PptTopLevel
       pconds.add(cond1);
       PptConditional cond2 = new PptConditional(this, splits[i], true);
       Assert.assertTrue(cond2.splitter_valid());
-      pconds.add(cond2);
+      // [INCR] pconds_vector.add(cond2);
     }
+    /* [INCR] commented due to timidity; uncomment as soon as possible
+    PptConditional[] pconds
+      = (PptConditional[]) pconds_vector.toArray(new PptConditional[0]);
+    int num_pconds = pconds.length;
+    Assert.assertTrue(num_pconds % 2 == 0);
+    int num_splits = num_pconds/2;
+
+    for (int i=0; i<num_pconds; i+=2) {
+      Assert.assertTrue(! pconds[i].splitter_inverse);
+      Assert.assertTrue(pconds[i+1].splitter_inverse);
+      Assert.assertTrue(pconds[i+1].splitter.condition().equals(pconds[i].splitter.condition()));
+    }
+
+    int trimlength = num_tracevars + num_orig_vars;
+
+    int[][] cumulative_modbits = new int[num_pconds][trimlength];
+    for (int i=0; i<num_pconds; i++) {
+      Arrays.fill(cumulative_modbits[i], 1);
+    }
+
+    // Fill the new PptConditionals with values.
+    for (Iterator vt_itor = values.sampleIterator(); vt_itor.hasNext(); ) {
+      VarValuesOrdered.ValueTupleCount entry = (VarValuesOrdered.ValueTupleCount) vt_itor.next();
+      ValueTuple vt = entry.value_tuple;
+      int count = entry.count;
+      // I do not want to use the same ValueTuple every time through the pconds
+      // loop because the inserted ValueTuple will be modified in place.
+      // It's OK to reuse its elements, though.
+      ValueTuple vt_trimmed = vt.trim(trimlength);
+      int[] trimmed_mods = vt_trimmed.mods;
+      Object[] trimmed_vals = vt_trimmed.vals;
+      for (int i=0; i<num_pconds; i+=2) {
+        // I really only have to do one of these (depending on which way
+        // the split goes), unless the splitter throws an error, in which
+        // case I need to have done both.  Thus, do both, to be on the safe
+        // side.
+        ValueTuple.orModsInto(cumulative_modbits[i], trimmed_mods);
+        ValueTuple.orModsInto(cumulative_modbits[i+1], trimmed_mods);
+        boolean splitter_test;
+        boolean split_exception = false;
+        // System.out.println("Testing " + pconds[i].name);
+        // This try block is tight so it doesn't accidentally catch
+        // other errors.
+        try {
+          splitter_test = pconds[i].splitter.test(vt);
+        } catch (Exception e) {
+          // System.out.println("----------------");
+          // System.out.println("splitter condition: " + pconds[i].splitter.condition() + " " + pconds[i].splitter.getClass().getName());
+          // System.out.println("ppt: " + name);
+          // System.out.print("vars:");
+          // for (int j=0; j<var_infos.length; j++) {
+          //   System.out.print(" " + var_infos[j].name.name());
+          // }
+          // System.out.println();
+          // System.out.println("valuetuple: " + vt.toString());
+          // Splitter splitter = pconds[i].splitter;
+          // Class sclass = splitter.getClass();
+          // String sclassname = sclass.getName();
+          // // if (sclassname.equals("std_amatch_0")
+          // //     || sclassname.equals("std_getccl_0")) {
+          // //   try {
+          // //     Method srepr = sclass.getMethod("repr", new Class[] {});
+          // //     Object result = srepr.invoke(splitter, new Object[] {});
+          // //     System.out.println("repr: " + result);
+          // //     // Field f = sclass.getDeclaredField("pat_varinfo");
+          // //     // Object pv = f.get(splitter);
+          // //     // System.out.println(pv);
+          // //   } catch (Exception e2) {
+          // //     throw new Error(e2.toString());
+          // //   }
+          // // }
+          // e.printStackTrace();
+
+          // If an exception is thrown, don't put the data on either side
+          // of the split.
+          split_exception = true;
+          splitter_test = false; // to pacify the Java compiler
+        }
+        if (! split_exception) {
+          // System.out.println("Result = " + splitter_test);
+          int index = (splitter_test ? i : i+1);
+          // Do not reuse cum_mods!  It might itself be the
+          // canonical version (returned by Intern.intern), and then
+          // modifications would be bad.  Instead, create a new array.
+          int[] cum_mods = cumulative_modbits[index];
+          int[] new_mods = (int[]) trimmed_mods.clone();
+          // This is somewhat like orModsInto, but not exactly.
+          for (int mi=0; mi<trimlength; mi++) {
+            if ((cum_mods[mi] == ValueTuple.MODIFIED)
+                && (new_mods[mi] != ValueTuple.MISSING_NONSENSICAL)) {
+              new_mods[mi] = ValueTuple.MODIFIED;
+              cum_mods[mi] = ValueTuple.UNMODIFIED;
+            }
+          }
+          // System.out.println("Adding (count " + count + ") to " + pconds[index].name);
+          pconds[index].add_nocheck(ValueTuple.makeFromInterned(trimmed_vals,
+                                                                Intern.intern(new_mods)),
+                                    count);
+          // I don't want to do "Arrays.fill(cum_mods, 0)" because where
+          // the value was missing, we didn't use up the modification bit.
+          // I've already fixed it up above, anyway.
+        }
+      }
+    }
+
+
+    // Install the new conditional ppts, if they are not trivial.
+    int parent_num_samples = num_samples();
+    Assert.assertTrue(num_pconds % 2 == 0);
+    for (int i=0; i<num_pconds; i+=2) {
+      // Don't bother with this pair of conditioned views if one of
+      // them contains no samples.  This if different than one having
+      // all samples, since some samples may not be added if the
+      // splitter throws an exception.
+
+      int cond0_num_samples = pconds[i].num_samples();
+      int cond1_num_samples = pconds[i+1].num_samples();
+      boolean discard_pair = (cond0_num_samples == 0) || (cond1_num_samples == 0);
+      if (! discard_pair) {
+        views_cond.add(pconds[i]);
+        views_cond.add(pconds[i+1]);
+      } else {
+        if (Global.debugSplit.isDebugEnabled())
+          Global.debugSplit.debug
+            ("Omitting " + pconds[i].name + " (and its inverse): "
+             + cond0_num_samples + "(" + cond1_num_samples + ")/"
+             + parent_num_samples + " samples");
+        // // Unconditional output, because it's too confusing otherwise.
+        // if (this_num_samples == parent_num_samples) {
+        //   System.out.println("Condition always satisfied: "
+        //                      + pconds[i].name + " == " + this.name);
+        // }
+      }
+    }
+
+    // views_cond must have matching pairs
+    Assert.assertTrue(views_cond.size() % 2 == 0);
+    for (int i=0; i < views_cond.size(); i+=2) {
+      PptConditional cond0 = (PptConditional) views_cond.get(i);
+      PptConditional cond1 = (PptConditional) views_cond.get(i+1);
+      Assert.assertTrue(! cond0.splitter_inverse);
+      Assert.assertTrue(cond1.splitter_inverse);
+      Assert.assertTrue(cond0.splitter.condition().equals(cond1.splitter.condition()));
+    }
+
+    if (Global.debugSplit.isDebugEnabled()) {
+      Global.debugSplit.debug("" + views_cond.size() + " views on " + this.name);
+      for (int i=0; i<views_cond.size(); i++) {
+        PptConditional pcond = (PptConditional) views_cond.elementAt(i);
+        debug.debug("    " + pcond.name);
+      }
+    }
+    for (int i=0; i<views_cond.size(); i++) {
+      PptConditional pcond = (PptConditional) views_cond.elementAt(i);
+      pcond.initial_processing();
+    }
+    */ // [INCR]
 
     // Install the new conditional ppts
     views_cond.addAll(pconds);
@@ -2444,7 +2629,7 @@ public class PptTopLevel
       (all_ppts,
        new SimplifyInclusionTester() {
            public boolean include(Invariant inv) {
-             return inv.isWorthPrinting();
+             return InvariantFilters.isWorthPrintingFilter().shouldKeep(inv);
            }
          });
   }
@@ -2580,7 +2765,7 @@ public class PptTopLevel
     // Should this be deleted?  Need to check CVS logs and/or think about this.
     // if (ppt_name.isEnterPoint() && controlling_ppts.size() == 1) {
     //   // Guess the OBJECT ppt; usually right
-    //   PptTopLevel OBJ = (PptTopLevel) controlling_ppts.iterator().next();
+    //   PptTopLevel OBJ = (PptTopLevel) controlling_ppts.pptIterator().next();
     //   if (OBJ.ppt_name.isObjectInstanceSynthetic()) {
     //     // Find variables here of the same type as us
     //     String clsname = ppt_name.getFullClassName();
@@ -2873,6 +3058,7 @@ public class PptTopLevel
       vi.simplify_expression();
     }
   }
+
 
   final public static Comparator icfp = new Invariant.InvariantComparatorForPrinting();
 

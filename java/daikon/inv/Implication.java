@@ -24,6 +24,9 @@ public class Implication
     this.iff = iff;
   }
 
+  public Invariant predicate() { return left; }
+  public Invariant consequent() { return right; }
+
   /**
    * Creates a new Implication Invariant from the predicate,
    * consequent and the boolean iff and adds it to the PptTopLevel.

@@ -16,7 +16,7 @@ public class MinusVisitor extends DepthFirstVisitor {
   public void visit(PptNode node) {
     PptTopLevel ppt1 = node.getPpt1();
     if (ppt1 != null) {
-      result.put(ppt1, new ArrayList());
+      result.addPpt(ppt1);
       currentPpt = ppt1;
       super.visit(node);
     }
@@ -27,7 +27,7 @@ public class MinusVisitor extends DepthFirstVisitor {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
     if (shouldAdd(inv1, inv2)) {
-      result.get(currentPpt).add(inv1);
+      result.add(currentPpt, inv1);
     }
   }
 
@@ -36,8 +36,7 @@ public class MinusVisitor extends DepthFirstVisitor {
    * one is null or unjustified, the first invariant should be added.
    **/
   private static boolean shouldAdd(Invariant inv1, Invariant inv2) {
-    return ((inv1 != null && inv1.justified()) &&
-            (inv2 == null || !inv2.justified()));
+    return ((inv1 != null) && (inv2 == null));
   }
 
   /** Returns the InvMap generated as a result of the traversal. **/

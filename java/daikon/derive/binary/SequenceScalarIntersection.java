@@ -36,8 +36,11 @@ public final class SequenceScalarIntersection
     debug.debug("Computing value and modified");
 
     int mod1 = base1.getModified(full_vt);
+    if (mod1 == ValueTuple.MISSING_NONSENSICAL)
+      return ValueAndModified.MISSING_NONSENSICAL;
     int mod2 = base2.getModified(full_vt);
-
+    if (mod2 == ValueTuple.MISSING_NONSENSICAL)
+      return ValueAndModified.MISSING_NONSENSICAL;
     Object val1 = base1.getValue(full_vt);
     if (val1 == null)
       return ValueAndModified.MISSING_NONSENSICAL;
@@ -45,7 +48,7 @@ public final class SequenceScalarIntersection
     Object val2 = base2.getValue(full_vt);
     if (val2 == null)
       return ValueAndModified.MISSING_NONSENSICAL;
-     long [] val2_array = (long []) val2;
+    long [] val2_array = (long []) val2;
 
     long [] tmp = new long [val1_array.length + val2_array.length];
     int size = 0;

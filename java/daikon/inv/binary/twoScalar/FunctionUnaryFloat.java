@@ -23,12 +23,12 @@ public class FunctionUnaryFloat
 
   public FunctionUnaryCoreFloat  core;
 
-  protected FunctionUnaryFloat (PptSlice ppt, String methodname, int methodNumber, boolean inverse) {
+  protected FunctionUnaryFloat (PptSlice ppt, String[] methodname, int methodNumber, boolean inverse) {
     super(ppt);
     core = new FunctionUnaryCoreFloat (this, methodname, methodNumber, inverse);
   }
 
-  public static FunctionUnaryFloat  instantiate(PptSlice ppt, String methodname, int methodNumber, boolean inverse) {
+  public static FunctionUnaryFloat  instantiate(PptSlice ppt, String[] methodname, int methodNumber, boolean inverse) {
     if (!dkconfig_enabled) return null;
     return new FunctionUnaryFloat (ppt, methodname, methodNumber, inverse);
   }

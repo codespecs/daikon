@@ -25,6 +25,11 @@ public class PrintInvariants {
   /**
    * Debug tracer for printing.
    **/
+  public static final Category debugRepr = Category.getInstance("daikon.PrintInvariants.repr");
+
+  /**
+   * Debug tracer for printing.
+   **/
   public static final Category debugPrint = Category.getInstance("daikon.print");
 
   /**
@@ -38,6 +43,27 @@ public class PrintInvariants {
    * current directory, into a file called filter_transcript.
    **/
   public static final Category debugFiltering = Category.getInstance("daikon.filtering");
+
+  public static final String daikonFilteringOutputFilename = "filtering_transcript";
+  // Set up filter logging to go to a file.
+  static {
+    if (debugFiltering.isDebugEnabled()) {
+      debugFiltering.setAdditivity(false);
+      debugFiltering.removeAllAppenders();
+      FileAppender fa = null;
+      try {
+	fa = new FileAppender( new PatternLayout("%m"), daikonFilteringOutputFilename, true);
+	fa.setName(daikonFilteringOutputFilename);
+      }
+      catch (IOException ioe) {
+	System.err.println("Warning; unable to open file filtering_transcript");
+      }
+      if (fa != null) {
+	debugFiltering.addAppender(fa);
+	fa.activateOptions();
+      }
+    }
+  }
 
   public static final String lineSep = Global.lineSep;
 
@@ -60,11 +86,11 @@ public class PrintInvariants {
       "  --" + Daikon.suppress_redundant_SWITCH,
       "      Suppress display of logically redundant invariants.",
       "  --" + Daikon.esc_output_SWITCH,
-      "      Write output in ESC-like format.",
+      "      Write output in ESC format.",
       "  --" + Daikon.simplify_output_SWITCH,
       "      Write output in Simplify format.",
       "  --" + Daikon.ioa_output_SWITCH,
-      "      Write output in IOA format. (bug exists)",
+      "      Write output in IOA format.",
       "  --" + Daikon.java_output_SWITCH,
       "      Write output as java expressions.",
       "  --" + Daikon.jml_output_SWITCH,
@@ -189,7 +215,7 @@ public class PrintInvariants {
     // Retrieve Ppt objects in sorted order.
     PrintWriter pw = new PrintWriter(System.out, true);
     // PptMap iterator uses a custom comparator for a specific ordering
-    for (Iterator itor = ppts.iterator() ; itor.hasNext() ; ) {
+    for (Iterator itor = ppts.pptIterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       // if (ppt.has_samples() &&  // [[INCR]]
       if (! Daikon.no_text_output) {
@@ -523,17 +549,17 @@ public class PrintInvariants {
     }
 
     // // Filter for parameters here
-    //if (vi.ppt.ppt_name.isExitPoint()) {
-    //  for (Iterator i = equal_vars.iterator(); i.hasNext(); ) {
-    //	VarInfo var = (VarInfo) i.next();
-    //	if (debugPrintEquality.isDebugEnabled()) {
-    //	  debugPrintEquality.debug (" testing derivedParamAndUnint " + var.name.name());
-    //	}
-    //	if (var.isDerivedParamAndUninteresting()) {
-    //	  i.remove();
-    //	}
+    // if (vi.ppt.ppt_name.isExitPoint()) {
+    //   for (Iterator i = equal_vars.iterator(); i.hasNext(); ) {
+    // 	VarInfo var = (VarInfo) i.next();
+    // 	if (debugPrintEquality.isDebugEnabled()) {
+    // 	  debugPrintEquality.debug (" testing derivedParamAndUnint " + var.name.name());
+    // 	}
+    // 	if (var.isDerivedParamAndUninteresting()) {
+    // 	  i.remove();
+    // 	}
+    //  }
     // }
-    //}
     return(equal_vars);
   }
   */ // ... [INCR]
@@ -809,8 +835,6 @@ public class PrintInvariants {
     */
   }
 
-
-
   // ppt should only be used for obtaining the number of values and
   // samples, but not for any other purpose.
   public static void print_invariant(Invariant inv, PrintWriter out, int invCounter, PptTopLevel ppt)
@@ -876,7 +900,9 @@ public class PrintInvariants {
       inv_rep += num_values_samples;
     }
 
-    if (debugPrint.isDebugEnabled()) {
+    if (debugRepr.isDebugEnabled()) {
+      debugRepr.debug("Printing: [" + inv.repr_prob() + "]");
+    } else if (debugPrint.isDebugEnabled()) {
       debugPrint.debug("Printing: [" + inv.repr_prob() + "]");
     }
 
@@ -949,6 +975,7 @@ public class PrintInvariants {
 
   public static boolean includeObviouslyEqual = false;
 
+
   /***********************************************************/
   /** Print invariants for a single program point. */
   public static void print_invariants(PptTopLevel ppt, PrintWriter out) {
@@ -1019,10 +1046,10 @@ public class PrintInvariants {
 
     if (debugFiltering.isDebugEnabled()) {
       Iterator inv_iter = accepted_invariants.iterator();
-      while(inv_iter.hasNext()) {
+      while (inv_iter.hasNext()) {
     	Invariant current_inv = (Invariant)inv_iter.next();
 	if (current_inv instanceof Equality) {
-	  debugFiltering.debug("Found Equality which says " + current_inv.format() + "\n");
+	  debugFiltering.debug("Found Equality that says " + current_inv.format() + "\n");
 	}
       }
     }
@@ -1037,7 +1064,10 @@ public class PrintInvariants {
 	  for (Iterator j = vi.equalTo().iterator(); j.hasNext();) {
 	    sb.append (" ==  " + ((VarInfo) j.next()).name.name());
 	  }
-	  debugFiltering.debug("Found VarInfo which says " + print_equality_invariants(vi, invCounter, ppt) + "\n");
+          StringWriter eq_invs = new StringWriter();
+          PrintWriter pw = new PrintWriter(eq_invs);
+          print_equality_invariants(vi, pw, invCounter, ppt);
+	  debugFiltering.debug("Found VarInfo that says " + eq_invs.toString());
           */ // [INCR]
 	// } [INCR]
       }
@@ -1047,38 +1077,36 @@ public class PrintInvariants {
   }
 
   /**
-   * Does the actual printing of the invariants.  Note that it creates
-   * this totally bogus internal value index which is for the purpose
-   * of patently lying to the IOA stuff about what the value of
-   * InvariantCounter is.
+   * Does the actual printing of the invariants.
    **/
   private static void finally_print_the_invariants(List invariants, PrintWriter out, PptTopLevel ppt)
   {
     int index = 0;
     Iterator inv_iter = invariants.iterator();
-    while(inv_iter.hasNext()) {
+    while (inv_iter.hasNext()) {
       index++;
       Invariant inv = (Invariant)inv_iter.next();
 
       // I could imagine printing information about the PptSlice
       // if it has changed since the last Invariant I examined.
       //
-      // this code may fail in some cases because slice might be
+      // This code may fail in some cases because slice might be
       // null if the invariant is of type Equality.  if you want
       // this to work, you'll want to modify it to handle that case
       // first.
-      //PptSlice slice = inv.ppt;
-      //if (debugPrint.isDebugEnabled()) {
-      //  debugPrint.debug("Slice: " + slice.varNames() + "  "
-      //                   + slice.num_samples() + " samples");
-      //  debugPrint.debug("    Samples breakdown: "
-      //                   + slice.tuplemod_samples_summary());
-      // slice.values_cache.dump();
-      //}
-      //Assert.assertTrue(slice.check_modbits());
+      // PptSlice slice = inv.ppt;
+      // if (debugPrint.isDebugEnabled()) {
+      //   debugPrint.debug("Slice: " + slice.varNames() + "  "
+      //                    + slice.num_samples() + " samples");
+      //   debugPrint.debug("    Samples breakdown: "
+      //                    + slice.tuplemod_samples_summary());
+      //  slice.values_cache.dump();
+      // }
+      // Assert.assertTrue(slice.check_modbits());
 
       print_invariant(inv, out, index, ppt);
-      //System.out.println("\t\t" + inv.getClass().getName());
+
+      // System.out.println("\t\t" + inv.getClass().getName());
     }
   }
 

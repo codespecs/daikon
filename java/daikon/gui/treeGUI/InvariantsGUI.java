@@ -30,7 +30,7 @@ import javax.swing.tree.*;
 //  .inv file (a serialized PptMap), constructs a hierarchy of Ppt's, and allows the user
 //  to view various tables of invariants by selecting points of the hierarchy.
 
-public class InvariantsGUI extends JFrame implements ActionListener, KeyListener {
+public class InvariantsGUI extends JFrame implements ActionListener, KeyListener, VariableListChangeListener {
 
   public static final String PLEASE_REPORT_ERROR_STRING = "\nPlease report this error to daikon-developers@pag.lcs.mit.edu.";
 
@@ -38,6 +38,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
   InvariantFilters invariantFilters = new InvariantFilters();
   List filterCheckBoxes = new ArrayList();
   final JList variablesList = new JList( new DefaultListModel());
+  JScrollPane variablesListScrollPane = null;
 
   public static void main( String args[] ) {
     InvariantsGUI gui;
@@ -88,7 +89,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
       JTree tree = new JTree( constructTreeModel( pptMap ));
 
       TreeSelectionModel treeSelectionModel = tree.getSelectionModel();
-      invariantsTablesPanel = new InvariantTablesPanel( treeSelectionModel, invariantFilters, variablesList );
+      invariantsTablesPanel = new InvariantTablesPanel( treeSelectionModel, invariantFilters, variablesList, this );
       treeSelectionModel.addTreeSelectionListener( invariantsTablesPanel );
 
       setupGUI( tree, invariantsTablesPanel.getScrollPane());
@@ -300,6 +301,16 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     return filtersPanel;
   }
 
+  public void updateVariableList(Vector newList) {
+    //System.out.println("IGUI : newList is " + newList);
+    DefaultListModel listModel = (DefaultListModel) variablesList.getModel();
+    listModel.removeAllElements();
+    for(int i = 0; i < newList.size(); i++) {
+      listModel.addElement(newList.elementAt(i));
+    }
+    variablesList.setModel( listModel );
+  }
+
   JPanel createVariableFilterSection() {
     final JTextField addVariableTextField = new JTextField();
     addVariableTextField.setPreferredSize( new Dimension( 150, 24 ));
@@ -342,16 +353,19 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     variablesControlPanel.add( filterChoicePanel );
 
     ActionListener addVariableActionListener = new ActionListener() {
-        public void actionPerformed( ActionEvent e ) {
-          if (! addVariableTextField.getText().equals( "" )) {
-            invariantFilters.addVariableFilter( addVariableTextField.getText());
-            invariantsTablesPanel.updateInvariantsDisplay();
-            DefaultListModel listModel = (DefaultListModel) variablesList.getModel();
-            listModel.addElement( addVariableTextField.getText());
-            variablesList.setModel( listModel );
-            addVariableTextField.setText( "" );
-          }
-        }};
+	public void actionPerformed( ActionEvent e ) {
+	  if (! addVariableTextField.getText().equals( "" )) {
+	    if (!invariantFilters.containsVariableFilter( addVariableTextField.getText() )) {
+	      invariantFilters.addVariableFilter( addVariableTextField.getText());
+	      invariantsTablesPanel.updateInvariantsDisplay();
+	      DefaultListModel listModel = (DefaultListModel) variablesList.getModel();
+	      listModel.addElement( addVariableTextField.getText());
+	      variablesList.setModel( listModel );
+	    }
+	    addVariableTextField.setText( "" );
+	  }
+	}};
+
     addVariableButton.addActionListener( addVariableActionListener );
     addVariableTextField.addActionListener( addVariableActionListener );
     removeVariablesButton.addActionListener( new ActionListener() {
@@ -382,7 +396,9 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     variablesPanel.setBorder( createBorder( "Variable filters" ));
     variablesPanel.setLayout( new BoxLayout( variablesPanel, BoxLayout.X_AXIS ));
     variablesPanel.setAlignmentX( Component.LEFT_ALIGNMENT );
-    variablesPanel.add( new JScrollPane( variablesList ));
+
+    variablesListScrollPane = new JScrollPane( variablesList );
+    variablesPanel.add( variablesListScrollPane );
     variablesPanel.add( variablesControlPanel );
     Dimension size = new Dimension( 410, 200 );
     variablesPanel.setPreferredSize( size );

@@ -1,5 +1,6 @@
 package daikon.inv.filter;
 
+import daikon.*;
 import daikon.inv.*;
 import daikon.inv.filter.*;
 import daikon.inv.Invariant.OutputFormat;
@@ -20,8 +21,12 @@ public class JMLCompilerWorkaroundFilter extends InvariantFilter {
   }
 
   boolean shouldDiscardInvariant(Invariant inv) {
-    if (inv.format_using(OutputFormat.JML).indexOf("\\type") != -1)
-      return true;
+    VarInfo[] vis = inv.ppt.var_infos;
+    for (int i=0; i<vis.length; i++) {
+      if (vis[i].name.hasNodeOfType(VarInfoName.TypeOf.class)) {
+        return true;
+      }
+    }
     return false;
   }
 }

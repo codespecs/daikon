@@ -31,7 +31,7 @@ branch of the $inv/java/daikon part of the repository into the trunk
     history at the end of this document.
 
   cd $inv/daikon.ver3
-  cvs up -j "ENGINE_V2_PATCHES:10-Mar-2002 16:33" -j ENGINE_V2_PATCHES
+  cvs up -j "ENGINE_V2_PATCHES:DD-MMM-YYYY HH:MM" -j ENGINE_V2_PATCHES
   make tags
   date
 
@@ -40,8 +40,10 @@ branch of the $inv/java/daikon part of the repository into the trunk
 
 (6) Use PCL-CVS (or some other, less-capable tool) to fix all
     conflicts created during the merge, so that the project compiles.
-    Use "d E" or "d e" on each file with a conflict.  It skips
-    over hunks that differ only in whitespace.
+    Do "M-x cvs-examine RET $inv/java/daikon RET", then for each conflict:
+     * "d E" (uses imerge)
+     * "d e" (uses ediff)
+     * or edit new version (containing conflict markers) directly
 
 (7) Edit the code and unit tests until all unit tests pass.
     Regression tests should pass at least to the extent that they
@@ -59,6 +61,7 @@ branch of the $inv/java/daikon part of the repository into the trunk
 **** Merge history ****
 (Add entries at the top of the list)
 
+Fri Nov  8 09:42:51 EST 2002 by MDE
 Mon Jul 29 13:22:02 EDT 2002 by MDE
 Mon Jul 15 11:26:41 EDT 2002 by MDE
 Sun Jul 14 18:04:45 EDT 2002 by MDE

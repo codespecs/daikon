@@ -49,7 +49,6 @@ The correct way to build the system is to run 'make'.
 #  define ELTLOWERBOUND INT(EltLowerBound)
 #  define MINELT min_elt
 #  define MAXELT max_elt
-#  define MINELTLONG min_elt_long
 #  if defined(LOWER)
 #    define LOWERBOUND LowerBound
 #    define LOWERBOUNDSTR "LowerBound"
@@ -94,7 +93,6 @@ The correct way to build the system is to run 'make'.
 #  define ELTLOWERBOUND INT(EltUpperBound)
 #  define MINELT max_elt
 #  define MAXELT min_elt
-#  define MINELTLONG max_elt_long
 #  if defined(UPPER)
 #    define LOWERBOUND UpperBound
 #    define LOWERBOUNDSTR "UpperBound"
@@ -137,11 +135,6 @@ The correct way to build the system is to run 'make'.
 #    define LONG double[]
 #    define SINGLESCALAR SingleFloatSequence
 #  endif
-#endif
-#if (defined(UPPERFLOAT) || defined(ELTUPPERFLOAT))
-#  define MINELTLONG max_elt_double
-#elif (defined(LOWERFLOAT) || defined(ELTLOWERFLOAT))
-#  define MINELTLONG min_elt_double
 #endif
 
 
@@ -266,7 +259,6 @@ public class LOWERBOUND
 
     return format_unimplemented(format);
   }
-
   // ELTLOWEr || ELTUPPEr
   public String format_daikon() {
     return var().name.name() + " elements " + GTSTR + "= " + MIN1;
@@ -363,7 +355,7 @@ public class LOWERBOUND
     if ((oo != null) && oo.enoughSamples()) {
       // We could also use MIN1 == oo.MINELT(), since the LowerBound
       // will never have a MIN1 that does not appear in the OneOf.
-      if (MIN1 LTE oo.MINELTLONG()) {
+      if (MIN1 LTE oo.MINELT()) {
         return true;
       }
     }

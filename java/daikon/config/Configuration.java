@@ -54,7 +54,7 @@ public final class Configuration
     InputStream stream = Configuration.class.getResourceAsStream(CONFIGURABLE_LIST);
     // System.out.println("CONFIGURABLE_LIST stream: " + stream);
     Assert.assertTrue(stream != null, "Cannot load list of configurable "
-                  + "fields from '" + CONFIGURABLE_LIST + "'");
+                      + "fields from '" + CONFIGURABLE_LIST + "'");
     try {
 
       LineNumberReader lines = new LineNumberReader(new BufferedReader(new InputStreamReader(stream)));

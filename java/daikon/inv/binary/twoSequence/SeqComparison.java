@@ -81,7 +81,8 @@ public class SeqComparison
                           && (type2.dimensions() == 1)
                           && type2. baseIsIntegral() ));
     // System.out.println("only_eq: " + only_eq);
-    if (var1.aux.getFlag(VarInfoAux.HAS_ORDER)) {
+    if (var1.aux.getFlag(VarInfoAux.HAS_ORDER)
+        && var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
       return new SeqComparison (ppt, only_eq, true);
     } else {
       return new SeqComparison (ppt, true, false);
@@ -107,7 +108,9 @@ public class SeqComparison
       + ",can_be_lt=" + can_be_lt
       + ",can_be_gt=" + can_be_gt
       + ",only_check_eq=" + only_check_eq
-      + ",orderMatters=" + orderMatters;
+      + ",orderMatters=" + orderMatters
+      + ",enoughSamples=" + enoughSamples()
+      ;
   }
 
   public String format_using(OutputFormat format) {
@@ -123,7 +126,9 @@ public class SeqComparison
       String lexically = (var1().aux.getFlag(VarInfoAux.HAS_ORDER)
                           ? " (lexically)"
                           : "");
-      return name1 + " " + comparator + " " + name2 + lexically;
+      return name1 + " " + comparator + " " + name2 + lexically
+        // + " // " + repr() + " at " + ppt.name
+        ;
     }
 
     if (format == OutputFormat.IOA) {
@@ -145,10 +150,10 @@ public class SeqComparison
   public void add_modified(long [] v1, long [] v2, int count) {
     /// This does not do the right thing; I really want to avoid comparisons
     /// if one is missing, but not if one is zero-length.
-    // Don't make comparisons with empty arrays.
-    if ((v1.length == 0) || (v2.length == 0)) {
-      return;
-    }
+    // // Don't make comparisons with empty arrays.
+    // if ((v1.length == 0) || (v2.length == 0)) {
+    //   return;
+    // }
     num_sc_samples += count;
 
     int comparison = 0;

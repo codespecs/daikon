@@ -18,11 +18,7 @@ public abstract class SingleFloatSequence
     // System.out.println("Created SingleFloatSequence invariant " + this + " at " + ppt);
   }
 
-  public VarInfo var() {
-    return ppt.var_infos[0];
-  }
-
-  // Should never be called with modified == ValueTuple.MISSING.
+  // Should never be called with modified == ValueTuple.MISSING_NONSENSICAL.
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
   public void add(double[] value, int mod_index, int count) {

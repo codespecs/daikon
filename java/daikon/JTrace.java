@@ -35,21 +35,21 @@ public class JTrace
     {
 	// This usage message is displayed on behalf of the toplevel
 	// driver script.
-        if(args.length < 1) {
+        if (args.length < 1) {
             println(V_ERROR,
 		    "usage: jtrace [options] -- <classname> [args] ...");
 	    return;
         }
 
-	println(V_ERROR, "JTrace: running on " + 
-		System.getProperty("java.vm.vendor") + " JVM " + 
+	println(V_ERROR, "JTrace: running on " +
+		System.getProperty("java.vm.vendor") + " JVM " +
 		System.getProperty("java.vm.version"));
 
 	String target_name = args[0]; // first is program, rest is its args
 	String[] target_args = ArraysMDE.subarray(args, 1, args.length - 1);
 
 	Method main_method = loadTargetProgram(target_name);
-	if(main_method == null)
+	if (main_method == null)
 	    return;
 
 	// Crank up the system (load the libJTrace.so debugger)
@@ -82,7 +82,7 @@ public class JTrace
 	// Inference thread to die.
 	stopTracing(Thread.currentThread());
 
-	if(ok) // if it didn't fail to start...
+	if (ok) // if it didn't fail to start...
 	    inference.joinX(); // ...wait for it to stop
 
 	System.setSecurityManager(null);
@@ -139,7 +139,7 @@ public class JTrace
 	}
 
 	int mods = method.getModifiers();
-	if(!Modifier.isPublic(mods) ||
+	if (!Modifier.isPublic(mods) ||
 	   !Modifier.isStatic(mods))
 	{
 	    println(V_ERROR, "JTrace: target's method `main' has wrong " +
@@ -147,21 +147,21 @@ public class JTrace
 	    return null;
 	}
 
-	if(!Void.TYPE.equals(method.getReturnType()))
+	if (!Void.TYPE.equals(method.getReturnType()))
 	{
 	    println(V_ERROR, "JTrace: target's method `main' has wrong " +
 		    "return type (" + method.getReturnType() + ")");
 	    return null;
 	}
 
-	if(!(method.getParameterTypes().length == 1))
+	if (!(method.getParameterTypes().length == 1))
 	{
 	    println(V_ERROR, "JTrace: target's method `main' has wrong " +
 		    "argument count (" + method.getParameterTypes().length + ")");
 	    return null;
 	}
 
-	if(!String[].class.equals(method.getParameterTypes()[0]))
+	if (!String[].class.equals(method.getParameterTypes()[0]))
 	{
 	    println(V_ERROR, "JTrace: target's method `main' has wrong " +
 		    "argument type (" + method.getParameterTypes()[0] + ")");
@@ -181,7 +181,7 @@ public class JTrace
 	    main_method.invoke(null, new Object[] { args });
 	}
         catch(InvocationTargetException e)
-	{	    
+	{
 	    if (e.getTargetException() instanceof SystemExitException)
 	    {
 		println(V_INFO, "JTrace: System.exit() intercepted.");
@@ -231,14 +231,14 @@ public class JTrace
 	// now?
 	public void checkExit(int status) { // System.exit() called
 	    // XXX While not obviously wrong in any way, this
-	    // doesn't seem quite right.  
+	    // doesn't seem quite right.
 
 	    // Note that the exception will not be seen by the tracing
 	    // code because this class is uninstrumented.  Unless it
 	    // is caught and rethrown in app code.
 
 	    stopTracing(Thread.currentThread());
-	    throw new SystemExitException(); 
+	    throw new SystemExitException();
 	}
 	// permit all other calls XXX review this!
 	public void checkPermission(java.security.Permission p, Object o) {}
@@ -253,13 +253,13 @@ public class JTrace
 
     static void println(int verb, String msg)
     {
-	if(verb > verbosity) return;
+	if (verb > verbosity) return;
 	System.err.println(msg);
 	System.err.flush();
     }
     static void print(int verb, String msg)
     {
-	if(verb > verbosity) return;
+	if (verb > verbosity) return;
 	System.err.print(msg);
 	System.err.flush();
     }

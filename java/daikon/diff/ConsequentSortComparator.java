@@ -28,13 +28,13 @@ public class ConsequentSortComparator implements Comparator {
     Invariant inv1, inv2;
     if (o1 instanceof Implication) {
       Implication imp1 = (Implication) o1;
-      inv1 = imp1.right;
+      inv1 = imp1.consequent();
     } else {
       inv1 = (Invariant) o1;
     }
     if (o2 instanceof Implication) {
       Implication imp2 = (Implication) o2;
-      inv2 = imp2.right;
+      inv2 = imp2.consequent();
     } else {
       inv2 = (Invariant) o2;
     }
@@ -45,7 +45,7 @@ public class ConsequentSortComparator implements Comparator {
         o1 instanceof Implication && o2 instanceof Implication) {
       Implication imp1 = (Implication) o1;
       Implication imp2 = (Implication) o2;
-      return c.compare(imp1.left, imp2.left);
+      return c.compare(imp1.predicate(), imp2.predicate());
     } else {
       return result;
     }

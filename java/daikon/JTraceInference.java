@@ -37,14 +37,14 @@ class JTraceInference extends Thread
 	VarComparability.parse(VarComparability.NONE, null, null);
 
     private final List prims = Arrays.asList(new String[] {
-	"int", 
-	"byte", 
-	"char", 
-	"short", 
-	"long", 
+	"int",
+	"byte",
+	"char",
+	"short",
+	"long",
 	"double",
-	"float", 
-	"boolean", 
+	"float",
+	"boolean",
 	"java.lang.String"
     });
 
@@ -69,7 +69,7 @@ class JTraceInference extends Thread
 		ValueTuple vt = read_single_sample(ppt_name);
 		Integer nonce_ = nonce == 0 ? null : new Integer(nonce);
 		FileIO.process_sample(ppt, vt, nonce_);
-		control = getControl(); 
+		control = getControl();
 		Assert.assertTrue(control == CT_PptTraceEnd);
 		break;
 	    }
@@ -96,12 +96,12 @@ class JTraceInference extends Thread
 
 		    ProglangType file_rep_type = prog_type;
 		    // not a prim => hashcode
-		    if(!prims.contains(proglang_type_string))
+		    if (!prims.contains(proglang_type_string))
 			file_rep_type = ProglangType.parse("hashcode");
-		    
+
 		    VarInfo vi = new VarInfo(VarInfoName.parse(varname),
 					     prog_type, file_rep_type,
-					     default_comparability, false, 
+					     default_comparability, false,
 					     null, VarInfoAux.getDefault());
 		    var_infos.add(vi);
 		}
@@ -178,8 +178,8 @@ class JTraceInference extends Thread
 	    // foreach variable associated with this ppt:
 	    for (int vi_index=0, val_index=0; val_index<num_tracevars; vi_index++) {
 		Assert.assertTrue(vi_index < vis.length
-			      // , "Got to vi_index " + vi_index + " after " + val_index + " of " + num_tracevars + " values"
-		    );
+                                  // , "Got to vi_index " + vi_index + " after " + val_index + " of " + num_tracevars + " values"
+                                  );
 		// XXX handling of final statics (compile-time constants)
 		VarInfo vi = vis[vi_index];
 		Assert.assertTrue((! vi.is_static_constant)
@@ -189,9 +189,9 @@ class JTraceInference extends Thread
 		if (vi.is_static_constant)
 		    continue;
 		Assert.assertTrue(val_index == vi.value_index
-			      // , "Differing val_index = " + val_index
-			      // + " and vi.value_index = " + vi.value_index
-			      // + " for " + vi.name + lineSep + vi.repr()
+                                  // , "Differing val_index = " + val_index
+                                  // + " and vi.value_index = " + vi.value_index
+                                  // + " for " + vi.name + lineSep + vi.repr()
 		    );
 
 		// XXX read var name from dtrace file: omitted: we assume that
@@ -245,7 +245,7 @@ class JTraceInference extends Thread
 
 		mods[val_index] = mod;
 //      oldvalue_reps[val_index] = value_rep;
-		if (ValueTuple.modIsMissingNonSensical(mod)) {
+		if (ValueTuple.modIsMissingNonsensical(mod)) {
 		    vals[val_index] = null;
 		} else {
 		    // XXX type check required!
@@ -300,7 +300,7 @@ class JTraceInference extends Thread
 
     // dispense one at a time:
     private double	getDouble() {
-	if(_theDoubles == null || _doubleCount == _theDoubles.length)
+	if (_theDoubles == null || _doubleCount == _theDoubles.length)
 	{
 	    _theDoubles  = getDoubles();
 	    _doubleCount = 0;
@@ -308,7 +308,7 @@ class JTraceInference extends Thread
 	return _theDoubles[_doubleCount++];
     }
     private long	getLong() {
-	if(_theLongs == null || _longCount == _theLongs.length)
+	if (_theLongs == null || _longCount == _theLongs.length)
 	{
 	    _theLongs  = getLongs();
 	    _longCount = 0;
@@ -316,7 +316,7 @@ class JTraceInference extends Thread
 	return _theLongs[_longCount++];
     }
     private int		getInteger() {
-	if(_theIntegers == null || _integerCount == _theIntegers.length)
+	if (_theIntegers == null || _integerCount == _theIntegers.length)
 	{
 	    _theIntegers  = getIntegers();
 	    _integerCount = 0;
@@ -324,7 +324,7 @@ class JTraceInference extends Thread
 	return _theIntegers[_integerCount++];
     }
     private String	getString() {
-	if(_theStrings == null || _stringCount == _theStrings.length)
+	if (_theStrings == null || _stringCount == _theStrings.length)
 	{
 	    _theStrings  = getStrings();
 	    _stringCount = 0;
@@ -332,7 +332,7 @@ class JTraceInference extends Thread
 	return _theStrings[_stringCount++];
     }
     private byte	getControl() {
-	if(_theControls == null || _controlCount == _theControls.length)
+	if (_theControls == null || _controlCount == _theControls.length)
 	{
 	    _theControls  = getControls();
 	    _controlCount = 0;

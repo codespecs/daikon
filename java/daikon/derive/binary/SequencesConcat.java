@@ -60,7 +60,9 @@ public final class SequencesConcat
     int mod2 = base2.getModified(full_vt);
 
     if (mod1 == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
+    if (mod1 == ValueTuple.MISSING_NONSENSICAL) mod = ValueTuple.MISSING_NONSENSICAL;
     if (mod2 == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
+    if (mod2 == ValueTuple.MISSING_NONSENSICAL) mod = ValueTuple.MISSING_NONSENSICAL;
 
     if (val1 == null && val2 == null) {
       return new ValueAndModified (null, mod);

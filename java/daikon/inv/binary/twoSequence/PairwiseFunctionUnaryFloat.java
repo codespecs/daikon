@@ -28,12 +28,12 @@ public class PairwiseFunctionUnaryFloat
 
   public FunctionUnaryCoreFloat  core;
 
-  protected PairwiseFunctionUnaryFloat (PptSlice ppt, String methodname, int function, boolean inverse) {
+  protected PairwiseFunctionUnaryFloat (PptSlice ppt, String[] methodname, int function, boolean inverse) {
     super(ppt);
     core = new FunctionUnaryCoreFloat (this, methodname, function, inverse);
   }
 
-  public static PairwiseFunctionUnaryFloat  instantiate(PptSlice ppt, String methodname, int methodnumber, boolean inverse) {
+  public static PairwiseFunctionUnaryFloat  instantiate(PptSlice ppt, String[] methodname, int methodnumber, boolean inverse) {
     if (!dkconfig_enabled) return null;
      PairwiseFunctionUnaryFloat  result =
       new PairwiseFunctionUnaryFloat (ppt, methodname, methodnumber, inverse);

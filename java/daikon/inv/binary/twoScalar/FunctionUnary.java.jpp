@@ -49,12 +49,12 @@ public class CLASSNAME
 
   public CORECLASS core;
 
-  protected CLASSNAME(PptSlice ppt, String methodname, int methodNumber, boolean inverse) {
+  protected CLASSNAME(PptSlice ppt, String[] methodname, int methodNumber, boolean inverse) {
     super(ppt);
     core = new CORECLASS(this, methodname, methodNumber, inverse);
   }
 
-  public static CLASSNAME instantiate(PptSlice ppt, String methodname, int methodNumber, boolean inverse) {
+  public static CLASSNAME instantiate(PptSlice ppt, String[] methodname, int methodNumber, boolean inverse) {
     if (!dkconfig_enabled) return null;
     return new CLASSNAME(ppt, methodname, methodNumber, inverse);
   }

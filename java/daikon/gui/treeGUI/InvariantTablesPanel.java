@@ -19,7 +19,7 @@ import daikon.inv.filter.InvariantFilters;
 //  updates its list of tables when the user makes a new selection (ie, when the user
 //  clicks elsewhere on the tree browser).
 
-class InvariantTablesPanel implements TreeSelectionListener {
+class InvariantTablesPanel implements TreeSelectionListener, VariableListChangeListener, InvariantsUpdateListener {
   JScrollPane scrollPane = new JScrollPane(); // the main scrollPane, which contains the main panel
   JPanel panel = new JPanel();                // the main panel
   TreeSelectionModel treeSelectionModel;
@@ -32,12 +32,19 @@ class InvariantTablesPanel implements TreeSelectionListener {
   List tableModels = new ArrayList();
   int currentTableIndex;        // used by scrollToTable methods
 
-  public InvariantTablesPanel( TreeSelectionModel treeSelectionModel, InvariantFilters invariantFilters, JList variablesList ) {
+  VariableListChangeListener variableListChangeSink;
+
+  public InvariantTablesPanel( TreeSelectionModel treeSelectionModel, InvariantFilters invariantFilters, JList variablesList, VariableListChangeListener listChangeListener ) {
     this.scrollPane.setViewportView( panel );
     this.panel.setLayout( new BoxLayout( panel, BoxLayout.Y_AXIS ));
     this.treeSelectionModel = treeSelectionModel;
     this.invariantFilters = invariantFilters;
     this.variablesList = variablesList;
+    this.variableListChangeSink = listChangeListener;
+  }
+
+  public void updateVariableList(Vector newVars) {
+    variableListChangeSink.updateVariableList(newVars);
   }
 
   public JScrollPane getScrollPane() { return scrollPane; }
@@ -154,10 +161,10 @@ class InvariantTablesPanel implements TreeSelectionListener {
     final InvariantTablesPanel invariantTablesPanel = this;
 
     showVariablesButton.addActionListener( new ActionListener() {
-        //  Make this an inner class so it can see topLevel
-        public void actionPerformed( ActionEvent e ) {
-          new VariableSelectionDialog( topLevel.var_infos, invariantFilters, invariantTablesPanel, variablesList );
-        }});
+	//  Make this an inner class so it can see topLevel
+	public void actionPerformed( ActionEvent e ) {
+	  new VariableSelectionDialog( topLevel.var_infos, invariantFilters, invariantTablesPanel, variablesList, invariantTablesPanel);
+	}});
     showVariablesButton.setAlignmentX( Component.RIGHT_ALIGNMENT );
     JPanel headingPanel = new JPanel();
     headingPanel.setLayout( new BoxLayout( headingPanel, BoxLayout.X_AXIS ));

@@ -15,11 +15,15 @@ import daikon.inv.filter.InvariantFilters;
 //  the variables in a Ppt, and allows the user to select variables of interest.
 
 class VariableSelectionDialog extends JDialog {
-  public VariableSelectionDialog( VarInfo vInfos[], InvariantFilters iFilters, InvariantTablesPanel iTablesPanel, JList vList ) {
+
+  final Vector selectedVarNames = new Vector();
+
+  public VariableSelectionDialog( VarInfo vInfos[], InvariantFilters iFilters, InvariantsUpdateListener iTablesPanel, JList vList, VariableListChangeListener listChangeListenerIn ) {
     super();
+    final VariableListChangeListener listChangeListener = listChangeListenerIn;
     VarInfo[] varInfos = vInfos;
     final InvariantFilters invariantFilters = iFilters;
-    final InvariantTablesPanel invariantsTablesPanel = iTablesPanel;
+    final InvariantsUpdateListener invariantsTablesPanel = iTablesPanel;
     final JList variablesList = vList;
     final List variableCheckBoxes = new ArrayList();
     this.setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE );
@@ -30,10 +34,10 @@ class VariableSelectionDialog extends JDialog {
     variablesPanel.add( new JLabel( "Select the variables of interest: " ));
     for (int i=0; i < varInfos.length; i++)
       if (! varInfos[i].isDerived()) {
-        final VarInfo varInfo = varInfos[i];
-        JCheckBox checkBox = new JCheckBox( varInfo.name.name() );
-        variablesPanel.add( checkBox );
-        variableCheckBoxes.add( checkBox );
+	final VarInfo varInfo = varInfos[i];
+	JCheckBox checkBox = new JCheckBox( varInfo.name.name(), invariantFilters.containsVariableFilter( varInfo.name.name() ));
+	variablesPanel.add( checkBox );
+	variableCheckBoxes.add( checkBox );
       }
 
     JButton cancelButton = new JButton( "Cancel" );
@@ -47,17 +51,24 @@ class VariableSelectionDialog extends JDialog {
         }});
     final JButton okButton = new JButton( "Filter on selected variables" );
     okButton.addActionListener( new ActionListener() {
-        public void actionPerformed( ActionEvent e ) {
-          DefaultListModel listModel = (DefaultListModel) variablesList.getModel();
-          for (int i=0; i < variableCheckBoxes.size(); i++ )
-            if (((JCheckBox) variableCheckBoxes.get( i )).isSelected()) {
-              invariantFilters.addVariableFilter( ((JCheckBox) variableCheckBoxes.get( i )).getText());
-              invariantsTablesPanel.updateInvariantsDisplay();
-              listModel.addElement( ((JCheckBox) variableCheckBoxes.get( i )).getText());
-            }
-          variableSelectionDialog.setVisible( false );
-          variablesList.setModel( listModel );
-        }});
+	public void actionPerformed( ActionEvent e ) {
+	  selectedVarNames.removeAllElements();
+	  DefaultListModel listModel = (DefaultListModel) variablesList.getModel();
+	  for (int i=0; i < variableCheckBoxes.size(); i++ ) {
+	    if (((JCheckBox) variableCheckBoxes.get( i )).isSelected()) {
+	      invariantFilters.addVariableFilter( ((JCheckBox) variableCheckBoxes.get( i )).getText());
+	      invariantsTablesPanel.updateInvariantsDisplay();
+	      listModel.addElement( ((JCheckBox) variableCheckBoxes.get( i )).getText());
+	      selectedVarNames.add( ((JCheckBox) variableCheckBoxes.get( i )).getText());
+	    } else if (invariantFilters.containsVariableFilter( ((JCheckBox) variableCheckBoxes.get( i )).getText() )) {
+	      invariantFilters.removeVariableFilter( ((JCheckBox) variableCheckBoxes.get( i )).getText() );
+	    }
+	  }
+	  //System.out.println("VSD : " + selectedVarNames);
+	  listChangeListener.updateVariableList(selectedVarNames);
+	  variableSelectionDialog.setVisible( false );
+	  variablesList.setModel( listModel );
+	}});
     getRootPane().setDefaultButton( okButton );
 
     JPanel buttonsPanel = new JPanel();

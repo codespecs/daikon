@@ -18,8 +18,11 @@ import java.util.*;
 
 public class MultiDiff {
 
-    public static void main (String[] args) throws Exception {
-	PrintStream out = System.out;
+    public static void main (String[] args)
+        throws IOException, ClassNotFoundException,
+               InstantiationException, IllegalAccessException {
+	PrintStream out = new PrintStream
+            (new FileOutputStream ("rand_sel.spinfo"));
 	/*
 	  try {
 	    if (args.length != 0) {

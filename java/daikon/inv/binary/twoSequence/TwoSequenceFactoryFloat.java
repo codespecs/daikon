@@ -28,7 +28,7 @@ public final class TwoSequenceFactoryFloat  {
     VarInfo var2 = ppt.var_infos[1];
 
     Assert.assertTrue((var1.rep_type == ProglangType. DOUBLE_ARRAY )
-                  && (var2.rep_type == ProglangType. DOUBLE_ARRAY ));
+                      && (var2.rep_type == ProglangType. DOUBLE_ARRAY ));
 
     if (! var1.compatible(var2))
       return null;
@@ -54,7 +54,12 @@ public final class TwoSequenceFactoryFloat  {
       // I decided that the latter shouldn't even be generated -- we should
       // know the relationship between "this.front" and
       // "orig(this.front)+1" -- and re-enabled the test.
-      if (super1 == super2) {
+      // I re-disabled the test, because equality invariants are special:
+      // they are required for setting of equal_to slots.  -MDE 7/30/2002
+      if (false && super1 == super2) {
+        // This invariant should not be instantiated because if super1 ==
+        // super2, then the invariant will be something like a[i..] ==
+        // a[j..], which should be obvious from knowledge about i and j.
         Global.implied_false_noninstantiated_invariants++;
         // System.out.println("No SeqComparison because same super for " + ppt.name);
         LinearBinaryFloat  lb = LinearBinaryFloat.find(ppt);

@@ -34,7 +34,11 @@ public final class SequenceFloatSubsequence
 
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple full_vt) {
     int mod1 = base1.getModified(full_vt);
+    if (mod1 == ValueTuple.MISSING_NONSENSICAL)
+      return ValueAndModified.MISSING_NONSENSICAL;
     int mod2 = base2.getModified(full_vt);
+    if (mod2 == ValueTuple.MISSING_NONSENSICAL)
+      return ValueAndModified.MISSING_NONSENSICAL;
 
     Object val1 = base1.getValue(full_vt);
     if (val1 == null)
@@ -50,11 +54,15 @@ public final class SequenceFloatSubsequence
     if (from_start) {
       begin_inclusive = 0;
       end_exclusive = val2+index_shift+1; // +1: endpoint is exclusive
+      // end_exclusive = 0 is acceptable; that means the empty array (given
+      // that begin_inclusive is 0)
       if ((end_exclusive < 0) || (end_exclusive > val1_array.length))
         return ValueAndModified.MISSING_NONSENSICAL;
     } else {
       begin_inclusive = val2+index_shift;
       end_exclusive = val1_array.length;
+      // begin_inclusive = val1_array.length is acceptable; that means the
+      // empty array (given that end_exclusive is val1_arrayl.length)
       if ((begin_inclusive < 0) || (begin_inclusive > val1_array.length))
         return ValueAndModified.MISSING_NONSENSICAL;
     }

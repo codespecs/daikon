@@ -113,19 +113,17 @@ public final class OneOfSequence
     Arrays.sort(elts, 0, num_elts , comparator );
   }
 
-  public Object min_elt() {
+  public long[]  min_elt() {
     if (num_elts == 0)
       throw new Error("Represents no elements");
     sort_rep();
-
     return elts[0];
   }
 
-  public Object max_elt() {
+  public long[]  max_elt() {
     if (num_elts == 0)
       throw new Error("Represents no elements");
     sort_rep();
-
     return elts[num_elts-1];
   }
 
@@ -135,7 +133,7 @@ public final class OneOfSequence
       return false;
     sort_rep();
     for (int i=0; i < num_elts; i++)
-      if (elts[i] != other_elts[i]) // elements are interned
+      if (! ( elts[i]  ==  other_elts[i] ) ) // elements are interned
         return false;
     return true;
   }
@@ -178,6 +176,7 @@ public final class OneOfSequence
   }
 
   public String format_using(OutputFormat format) {
+    sort_rep();
     if (format == OutputFormat.DAIKON) {
       return format_daikon();
     } else if (format == OutputFormat.JAVA) {
@@ -324,7 +323,7 @@ public final class OneOfSequence
 
     if (is_hashcode) {
       // we only have one value, because add_modified dies if more
-      Assert.assertTrue(num_elts == 1);
+      Assert.assertTrue(num_elts == 1, "bad num_elts " + num_elts + " " + repr());
       long[]  value = elts[0];
       if (var().type.isArray()) {
         if (var().name.isApplySizeSafe()) {
@@ -524,9 +523,10 @@ public final class OneOfSequence
       return true;
     }
 
-    for (int i=0; i < num_elts; i++)
-      if (elts[i] != other.elts[i]) // elements are interned
+    for (int i=0; i < num_elts; i++) {
+      if (! ( elts[i]  ==  other.elts[i] ) )
         return false;
+    }
 
     return true;
   }
@@ -538,7 +538,7 @@ public final class OneOfSequence
 
       for (int i=0; i < num_elts; i++) {
         for (int j=0; j < other.num_elts; j++) {
-          if (elts[i] == other.elts[j]) // elements are interned
+          if (( elts[i]  ==  other.elts[j] ) ) // elements are interned
             return false;
         }
       }

@@ -31,7 +31,7 @@ public final class FunctionUnaryCoreFloat
   static final long serialVersionUID = 20020122L;
 
  // transient public Method function;  // transient:  Method not serializable
-  public final String methodname;   // provided to permit serialization
+  public final String[] methodname;   // provided to permit serialization
 
   private int methodNumber;
   // false if we're looking for y=fn(x), true if we're looking for x=fn(y)
@@ -41,16 +41,16 @@ public final class FunctionUnaryCoreFloat
 
   public Invariant wrapper;
 
-  public FunctionUnaryCoreFloat (Invariant wrapper, String methodname, int methodNumber, boolean inverse) {
+  public FunctionUnaryCoreFloat (Invariant wrapper, String[] methodname, int methodNumber, boolean inverse) {
     this.wrapper = wrapper;
     this.methodname = methodname;
     this.inverse = inverse;
     this.methodNumber = methodNumber;
   }
 
-  public FunctionUnaryCoreFloat (Invariant wrapper, String methodname, boolean inverse) throws ClassNotFoundException, NoSuchMethodException {
-    this(wrapper, methodname, FunctionsFloat.lookup(methodname), inverse);
-  }
+  // public FunctionUnaryCoreFloat (Invariant wrapper, String methodname[], boolean inverse) throws ClassNotFoundException, NoSuchMethodException {
+  //   this(wrapper, methodname, FunctionsFloat.lookup(methodname), inverse);
+  // }
 
   public Object clone() {
     try {
@@ -118,12 +118,13 @@ public final class FunctionUnaryCoreFloat
 
   public String repr() {
     return "FunctionUnaryCoreFloat"  + wrapper.varNames() + ": "
-      + "function=" + methodname
+      + "function=" + methodname[0]
       + ",inverse=" + inverse;
   }
 
   public boolean isSameFormula(FunctionUnaryCoreFloat  other)
   {
-    return methodname.equals(other.methodname);
+    return methodname[0].equals(other.methodname[0]) &&
+      methodname[1].equals(other.methodname[1]);
   }
 }

@@ -350,7 +350,7 @@ public final class PptSlice1
             break;
         }
       } else if (rep == ProglangType.INT_ARRAY) {
-        SingleSequence inv = (SingleSequence) invariant;
+        SingleScalarSequence inv = (SingleScalarSequence) invariant;
         for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
           Map.Entry entry = (Map.Entry) itor.next();
           long[] val = (long[]) entry.getKey();

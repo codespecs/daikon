@@ -36,8 +36,11 @@ public final class SequenceFloatIntersection
     debug.debug("Computing value and modified");
 
     int mod1 = base1.getModified(full_vt);
+    if (mod1 == ValueTuple.MISSING_NONSENSICAL)
+      return ValueAndModified.MISSING_NONSENSICAL;
     int mod2 = base2.getModified(full_vt);
-
+    if (mod2 == ValueTuple.MISSING_NONSENSICAL)
+      return ValueAndModified.MISSING_NONSENSICAL;
     Object val1 = base1.getValue(full_vt);
     if (val1 == null)
       return ValueAndModified.MISSING_NONSENSICAL;
@@ -45,7 +48,7 @@ public final class SequenceFloatIntersection
     Object val2 = base2.getValue(full_vt);
     if (val2 == null)
       return ValueAndModified.MISSING_NONSENSICAL;
-     double [] val2_array = (double []) val2;
+    double [] val2_array = (double []) val2;
 
     double [] tmp = new double [val1_array.length + val2_array.length];
     int size = 0;

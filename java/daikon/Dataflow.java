@@ -59,7 +59,7 @@ public class Dataflow
    **/
   public static void init_partial_order(PptMap all_ppts)
   {
-    for (Iterator i = all_ppts.iterator(); i.hasNext(); ) {
+    for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) i.next();
       init_partial_order(ppt, all_ppts);
     }
@@ -103,7 +103,7 @@ public class Dataflow
     // Create or modify the data flow and invariant flow vectors.  We
     // recompute all of them, instead of trying to figure out exactly
     // what might have changed.
-    for (Iterator i = all_ppts.iterator(); i.hasNext(); ) {
+    for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
       PptTopLevel item = (PptTopLevel) i.next();
       create_ppt_dataflow(item);
       create_ppt_invflow(item);
@@ -777,7 +777,7 @@ public class Dataflow
     PrintStream out = new PrintStream(outstream);
     out.println(HR);
 
-    for (Iterator iter = ppts.iterator(); iter.hasNext(); ) {
+    for (Iterator iter = ppts.pptIterator(); iter.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) iter.next();
 
       out.println(ppt.name);
@@ -854,7 +854,7 @@ public class Dataflow
   {
     PrintStream out = new PrintStream(outstream);
 
-    for (Iterator iter = ppts.iterator(); iter.hasNext(); ) {
+    for (Iterator iter = ppts.pptIterator(); iter.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) iter.next();
 
       if (ppt.dataflow_ppts != null) {

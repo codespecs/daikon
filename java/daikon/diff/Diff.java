@@ -93,6 +93,7 @@ public final class Diff {
     boolean printDiff = false;
     boolean printUninteresting = false;
     boolean printAll = false;
+    boolean includeUnjustified = true; // -y means ignore the unjustified invs
     boolean stats = false;
     boolean tabSeparatedStats = false;
     boolean minus = false;
@@ -122,7 +123,7 @@ public final class Diff {
     };
 
     Getopt g = new Getopt("daikon.diff.Diff", args,
-                          "hduastmxno:jzpevl", longOpts);
+                          "hyduastmxno:jzpevl", longOpts);
     int c;
     while ((c = g.getopt()) !=-1) {
       switch (c) {
@@ -155,6 +156,10 @@ public final class Diff {
       case 'h':
         System.out.println(usage);
         System.exit(1);
+        break;
+      case 'y':
+        optionSelected = true;
+        includeUnjustified = false;
         break;
       case 'd':
         optionSelected = true;
@@ -242,6 +247,7 @@ public final class Diff {
     Diff diff = new Diff(examineAllPpts);
 
     // Set the comparators based on the command-line options
+
     Comparator defaultComparator;
     if (minus || xor || union) {
       defaultComparator = new Invariant.ClassVarnameFormulaComparator();
@@ -254,6 +260,17 @@ public final class Diff {
       (selectComparator(invSortComparator2Classname, defaultComparator));
     diff.setInvPairComparator
       (selectComparator(invPairComparatorClassname, defaultComparator));
+
+    if ((!(diff.invSortComparator1.getClass().toString().equals
+           (diff.invSortComparator2.getClass().toString()))) ||
+        (!(diff.invSortComparator1.getClass().toString().equals
+           (diff.invPairComparator.getClass().toString())))) {
+      String warning = "You are using different comparators to sort or " +
+        "pair up invariants.\nThis may cause misalignment of invariants " +
+        "and may cause Diff to\nwork incorectly.  Make sure you know what " +
+        "you are doing!\n";
+      System.out.println(warning);
+    }
 
     // The index of the first non-option argument -- the name of the
     // first file
@@ -299,7 +316,7 @@ public final class Diff {
                                              );
 
       // get the xor from these two manips
-      RootNode manipRoot = diff.diffPptMap (manip1, manip2);
+      RootNode manipRoot = diff.diffPptMap (manip1, manip2, includeUnjustified);
       XorInvariantsVisitor xiv = new XorInvariantsVisitor(System.out,
                                                           false,
                                                           false,
@@ -313,7 +330,7 @@ public final class Diff {
 
 
       // form the root with tree manips
-      RootNode root = diff.diffPptMap (map1, map2);
+      RootNode root = diff.diffPptMap (map1, map2, includeUnjustified);
 
       // now run the stats visitor for checking matches
       MatchCountVisitor mcv = new MatchCountVisitor
@@ -344,7 +361,7 @@ public final class Diff {
       MultiDiffVisitor v1 = new MultiDiffVisitor (mapAr[0]);
 
       for (int i = 1; i < mapAr.length; i++) {
-        root = diff.diffPptMap (mapAr[i], v1.currMap);
+        root = diff.diffPptMap (mapAr[i], v1.currMap, includeUnjustified);
         root.accept (v1);
       }
 
@@ -366,7 +383,7 @@ public final class Diff {
     if (logging)
       System.err.println("Invariant Diff: Visiting Tree");
 
-    RootNode root = diff.diffInvMap(invMap1, invMap2);
+    RootNode root = diff.diffInvMap(invMap1, invMap2, includeUnjustified);
 
     if (stats) {
       DetailedStatisticsVisitor v =
@@ -490,18 +507,31 @@ public final class Diff {
    * Returns a pair tree of corresponding program points, and
    * corresponding invariants at each program point.  This tree can be
    * walked to determine differences between the sets of invariants.
+   * Calls diffInvMap and asks to include all justified invariants
    **/
   public RootNode diffInvMap(InvMap map1, InvMap map2) {
+    return diffInvMap(map1, map2, true);
+  }
+
+  /**
+   * Returns a pair tree of corresponding program points, and
+   * corresponding invariants at each program point.  This tree can be
+   * walked to determine differences between the sets of invariants.
+   * The tree consists of the invariants in map1 and map2.  If
+   * includeUnjustified is true, the unjustified invariants are included.
+   **/
+  public RootNode diffInvMap(InvMap map1, InvMap map2,
+                             boolean includeUnjustified) {
     RootNode root = new RootNode();
 
-    Iterator opi = new OrderedPairIterator(map1.iterator(), map2.iterator(),
-                                           PPT_COMPARATOR);
+    Iterator opi = new OrderedPairIterator(map1.pptSortedIterator(PPT_COMPARATOR), map2.pptSortedIterator(PPT_COMPARATOR), PPT_COMPARATOR);
     while (opi.hasNext()) {
       Pair ppts = (Pair) opi.next();
       PptTopLevel ppt1 = (PptTopLevel) ppts.a;
       PptTopLevel ppt2 = (PptTopLevel) ppts.b;
       if (shouldAdd(ppt1) || shouldAdd(ppt2)) {
-        PptNode node = diffPptTopLevel(ppt1, ppt2, map1, map2);
+        PptNode node = diffPptTopLevel(ppt1, ppt2, map1, map2,
+                                       includeUnjustified);
         root.add(node);
       }
     }
@@ -513,11 +543,22 @@ public final class Diff {
   /**
    * Diffs two PptMaps by converting them to InvMaps.  Provided for
    * compatibiliy with legacy code.
+   * Calls diffPptMap and asks to include all invariants.
    **/
   public RootNode diffPptMap(PptMap pptMap1, PptMap pptMap2) {
+    return diffPptMap(pptMap1, pptMap2, true);
+  }
+
+  /**
+   * Diffs two PptMaps by converting them to InvMaps.  Provided for
+   * compatibiliy with legacy code.
+   * If includeUnjustified is true, the unjustified invariants are included.
+   **/
+  public RootNode diffPptMap(PptMap pptMap1, PptMap pptMap2,
+                             boolean includeUnjustified) {
     InvMap map1 = convertToInvMap(pptMap1);
     InvMap map2 = convertToInvMap(pptMap2);
-    return diffInvMap(map1, map2);
+    return diffInvMap(map1, map2, includeUnjustified);
   }
 
   /**
@@ -544,14 +585,16 @@ public final class Diff {
    * Takes a pair of corresponding top-level program points and maps,
    * and returns a tree of the corresponding invariants.  Either of
    * the program points may be null.
+   * If includeUnjustied is true, the unjustified invariants are included.
    **/
   private PptNode diffPptTopLevel(PptTopLevel ppt1, PptTopLevel ppt2,
-                                  InvMap map1, InvMap map2) {
+                                  InvMap map1, InvMap map2,
+                                  boolean includeUnjustified) {
     PptNode pptNode = new PptNode(ppt1, ppt2);
 
     Assert.assertTrue(ppt1 == null || ppt2 == null ||
-                  PPT_COMPARATOR.compare(ppt1, ppt2) == 0,
-                  "Program points do not correspond");
+                      PPT_COMPARATOR.compare(ppt1, ppt2) == 0,
+                      "Program points do not correspond");
 
     List invs1;
     if (ppt1 != null) {
@@ -585,8 +628,18 @@ public final class Diff {
       Pair invariants = (Pair) opi.next();
       Invariant inv1 = (Invariant) invariants.a;
       Invariant inv2 = (Invariant) invariants.b;
-      InvNode invNode = new InvNode(inv1, inv2);
-      pptNode.add(invNode);
+      if (!includeUnjustified) {
+        if ((inv1 != null) && !(inv1.justified())) {
+          inv1 = null;
+        }
+        if ((inv2 != null) && !(inv2.justified())) {
+          inv2 = null;
+        }
+      }
+      if ((inv1 != null) || (inv2 != null)) {
+        InvNode invNode = new InvNode(inv1, inv2);
+        pptNode.add(invNode);
+      }
     }
 
     return pptNode;
@@ -601,7 +654,7 @@ public final class Diff {
     // Contest.smallestRoom(II)I:::EXIT9;condition="max < num
     String targetName = ppt.name;
 
-    String targ = targetName.substring (0, targetName.indexOf(';'));
+    String targ = targetName.substring (0, targetName.lastIndexOf(";condition"));
 
     for ( Iterator i = manip.nameStringSet().iterator(); i.hasNext();) {
       String somePptName = (String) i.next();
@@ -611,7 +664,8 @@ public final class Diff {
         return repl.getInvariants();
       }
     }
-    System.out.println ("Oh no!!!");
+    //    System.out.println ("Could not find the left hand side of implication!!!");
+    System.out.println ("LHS Missing: " + targ);
     return Collections.EMPTY_LIST;
   }
 

@@ -47,7 +47,7 @@ public abstract class SingleSequence
    **/
 
   public static class SubsetImpliedSuppressionFactory extends SuppressionFactory {
-    
+
     public static final Category debug =
       Category.getInstance("daikon.suppress.factories.SubsetImpliedSuppressionFactory");
 
@@ -83,7 +83,7 @@ public abstract class SingleSequence
         SuppressionTemplate template = new SuppressionTemplate();
         template.invTypes = new Class[] {inv.getClass()}; // Has to be same type as inv
         template.varInfos = new VarInfo[][] {new VarInfo[] {orig}};
-      
+
 
         inv.ppt.parent.fillSuppressionTemplate (template);
         if (template.filled) {
@@ -148,7 +148,7 @@ public abstract class SingleSequence
               }
             }
           }
-          
+
           // Now search for non obvious results
           SuppressionTemplate similarTemplate = new SuppressionTemplate();
           similarTemplate.invTypes = new Class[] {inv.getClass()};

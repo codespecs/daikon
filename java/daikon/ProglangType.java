@@ -263,9 +263,9 @@ public final class ProglangType
   final static Long LongZero = Intern.internedLong(0);
   final static Long LongOne = Intern.internedLong(1);
   final static Double DoubleZero = Intern.internedDouble(0);
-  final static Double DoubleNaN = new Double(Double.NaN);
-  final static Double DoublePositiveInfinity = new Double(Double.POSITIVE_INFINITY);
-  final static Double DoubleNegativeInfinity = new Double(Double.NEGATIVE_INFINITY);
+  final static Double DoubleNaN = Intern.internedDouble(Double.NaN);
+  final static Double DoublePositiveInfinity = Intern.internedDouble(Double.POSITIVE_INFINITY);
+  final static Double DoubleNegativeInfinity = Intern.internedDouble(Double.NEGATIVE_INFINITY);
 
   /*
    *  Now that all other static initialisers are done, it is safe to

@@ -13,7 +13,7 @@ import java.util.*;
  * and can report the match precision.
  *
  *
- * @author Lee Lin 2/14/2002
+ * @author Lee Lin 2/14/2002 (updated 10/25/02)
  **/
 public class MatchCountVisitor extends PrintAllVisitor {
 
@@ -113,10 +113,10 @@ public class MatchCountVisitor extends PrintAllVisitor {
 		char firstChar = oneToken.charAt(0);
 		// remember identifiers can not begin with [0-9\-]
 		if (Character.isDigit (firstChar) || firstChar == '-') {
-		    int num = Integer.parseInt (oneToken);
-		    if (num == -1 || num == 0 || num == 1)
-			continue;
-		    return true;
+                    if (acceptableNumber (oneToken)) {
+                        continue;
+                    }
+                    else return true;
 		}
 
 	    }
@@ -134,6 +134,35 @@ public class MatchCountVisitor extends PrintAllVisitor {
 	System.out.println ("Recall: "+ recall.size() +" / "+ targSet.size());
 	if (targSet.size() == 0) return -1; // avoids divide by zero
 	return (double) recall.size() / targSet.size();
+    }
+
+
+    /** returns true iff numLiteral represents a numeric
+     * literal string of integer or float that we believe
+     * will be useful for a splitting condition.  Usually that
+     * includes -1, 0, 1, and any other numeric literal
+     * found in the source code.  */
+    private static boolean acceptableNumber (String numLiteral) {
+
+        // need to make sure that it is an integer vs. floating
+        // point number
+
+        // could be float, look for "."
+        if (numLiteral.indexOf (".") > -1) {
+            float fnum = Float.parseFloat (numLiteral);
+            // for now, accept all floats
+            return true;
+        }
+        // not float, must be int
+        else {
+            int num = Integer.parseInt (numLiteral);
+
+            // accept -1, 0, 1
+            if (num == -1 || num == 0 || num == 1)
+                return true;
+            else return false;
+        }
+
     }
 
     public double calcPrecision() {

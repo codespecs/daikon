@@ -148,7 +148,9 @@ public final class SequencesJoinFloat
 
     int mod = ValueTuple.UNMODIFIED;
     if (mod1 == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
+    if (mod1 == ValueTuple.MISSING_NONSENSICAL) mod = ValueTuple.MISSING_NONSENSICAL;
     if (mod2 == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
+    if (mod2 == ValueTuple.MISSING_NONSENSICAL) mod = ValueTuple.MISSING_NONSENSICAL;
     /*
      * v1\v2  Unm  Mod  Mis
      *

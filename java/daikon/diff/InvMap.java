@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 import daikon.*;
 import daikon.inv.*;
+import utilMDE.Assert;
 
 /**
  * Maps ppts to lists of invariants.  Has an iterator to return the
@@ -14,15 +15,31 @@ public class InvMap implements Serializable {
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020301L;
-  
+
   private Map pptToInvs = new HashMap();
+  // The purpose of this field is apparently to permit the ppts to be
+  // extracted in the same order in which they were inserted.
   private List ppts = new ArrayList();
-    
+
   public InvMap() { }
 
+  public void addPpt(PptTopLevel ppt) {
+    put(ppt, new ArrayList());
+  }
+
   public void put(PptTopLevel ppt, List invs) {
+    if (ppts.contains(ppt)) {
+      throw new Error("Tried to add duplicate PptTopLevel " + ppt.name);
+    }
     ppts.add(ppt);
     pptToInvs.put(ppt, invs);
+  }
+
+  public void add(PptTopLevel ppt, Invariant inv) {
+    if (! ppts.contains(ppt)) {
+      throw new Error("ppt has not yet been added: " + ppt.name);
+    }
+    get(ppt).add(inv);
   }
 
   public List get(PptTopLevel ppt) {
@@ -30,16 +47,41 @@ public class InvMap implements Serializable {
   }
 
   /**
-   * Returns an iterator over the ppts, in the order they were added
-   * to the map.
+   * Returns an iterator over the ppts, in the order they were added to the
+   * map.  Each element is a PptTopLevel.  These ppts are only used as
+   * keys:  do not look in these Ppts to find the invariants associated
+   * with them in the InvMap!  Use invariantIterator instead.
+   * @see #invariantIterator()
    **/
-  public Iterator iterator() {
+  public Iterator pptIterator() {
     return ppts.iterator();
+  }
+
+  // Returns a sorted iterator over the Ppts using c as the comparator
+  public Iterator pptSortedIterator(Comparator c) {
+    int size = size();
+    Collections.sort(ppts, c);
+    Assert.assertTrue(size == size());
+    return ppts.iterator();
+  }
+
+  /**
+   * Returns an iterator over the invariants in this.
+   **/
+  // The ppts are in the order added, and the invariants are in the order
+  // added within each ppt, but the order of all invariants is not
+  // necessarily that in which they were added, depending on calling
+  // sequences.
+  public Iterator invariantIterator() {
+    Vector answer = new Vector();
+    for (Iterator i = ppts.iterator(); i.hasNext();)
+      answer.addAll(get((PptTopLevel) i.next()));
+    return answer.iterator();
   }
 
   public String toString() {
     String result = new String();
-    for (Iterator i = iterator(); i.hasNext(); ) {
+    for (Iterator i = pptIterator(); i.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) i.next();
       result += ppt.name + Global.lineSep;
       List invs = get(ppt);
@@ -50,4 +92,12 @@ public class InvMap implements Serializable {
     }
     return result;
   }
+
+  public int size() {
+    int size1 = ppts.size();
+    int size2 = pptToInvs.size();
+    Assert.assertTrue(size1 == size2);
+    return size1;
+  }
+
 }

@@ -19,6 +19,8 @@ import org.apache.log4j.Category;
 import gnu.getopt.*;
 import utilMDE.*;
 
+import daikon.temporal.TemporalInvariantManager;
+
 public final class Daikon {
 
   private static void show_banner() {
@@ -32,8 +34,8 @@ public final class Daikon {
     System.err.flush();
   }
 
-  public final static String release_version = "2.3.13";
-  public final static String release_date = "July 17, 2002";
+  public final static String release_version = "2.3.19";
+  public final static String release_date = "November 2, 2002";
   public final static String release_string
     = "Daikon version " + release_version
     + ", released " + release_date
@@ -143,7 +145,7 @@ public final class Daikon {
   public static Pattern var_omit_regexp;
 
   // The invariants detected will be serialized and written to this
-  // file
+  // file.
   public static File inv_file;
 
   // Whether we want the memory monitor activated
@@ -188,6 +190,7 @@ public final class Daikon {
   public static final String debug_SWITCH = "dbg";
   public static final String files_from_SWITCH = "files_from";
   public static final String noversion_SWITCH = "noversion";
+  public static final String enable_temporal_SWITCH = "enable_temporal";
   public static final String noinvariantguarding_SWITCH = "no_invariant_guarding";
 
   // A pptMap which contains all the Program Points
@@ -204,8 +207,8 @@ public final class Daikon {
   static String usage =
     UtilMDE.join(new String[] {
       release_string,
-      "Daikon invariant detector.",
-      "Copyright 1998-2002",  // " by Michael Ernst <mernst@lcs.mit.edu>",
+      "Daikon invariant detector, copyright 1998-2002",
+      // " by Michael Ernst <mernst@lcs.mit.edu>",
       "Usage:",
       "    java daikon.Daikon [flags...] files...",
       "  Each file is a declaration file or a data trace file; the file type",
@@ -229,9 +232,14 @@ public final class Daikon {
     Set dtrace_files = files[1]; // [File]
     Set spinfo_files = files[2]; // [File]
     Set map_files = files[3];    // [File]
+    if ((decls_files.size() == 0) && (dtrace_files.size() == 0)) {
+      System.out.println("No .decls or .dtrace files specified");
+      System.exit(1);
+    }
 
     // Set up debug traces
     Logger.setupLogs(Global.debugAll ? Logger.DEBUG : Logger.INFO);
+
     if (! noversion_output) {
       System.out.println(release_string);
     }
@@ -323,6 +331,7 @@ public final class Daikon {
       new LongOpt(debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(files_from_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(noversion_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(enable_temporal_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(noinvariantguarding_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
     };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:", longopts);
@@ -467,6 +476,8 @@ public final class Daikon {
           break;
         } else if (noversion_SWITCH.equals(option_name)) {
           noversion_output = true;
+        } else if (enable_temporal_SWITCH.equals(option_name)) {
+	    TemporalInvariantManager.active = true;
         } else if (noinvariantguarding_SWITCH.equals(option_name)) {
           noInvariantGuarding = true;
         } else {
@@ -600,7 +611,7 @@ public final class Daikon {
       return;
     }
 
-    for (Iterator itor = all_ppts.iterator() ; itor.hasNext() ; ) {
+    for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
 
       Splitter[] pconds = null;
@@ -682,11 +693,11 @@ public final class Daikon {
                          + UtilMDE.nplural(dtrace_files.size(), "file")
                          + ":");
       fileio_progress.start();
-      FileIO.read_data_trace_files(dtrace_files, all_ppts);
+      FileIO.read_data_trace_files(dtrace_files, all_ppts, null);
       fileio_progress.stop();
       System.out.println();
       System.out.print("Creating implications "); // XXX untested code
-      for (Iterator itor = all_ppts.iterator() ; itor.hasNext() ; ) {
+      for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
         PptTopLevel ppt = (PptTopLevel) itor.next();
         System.out.print('.');
         // ppt.addImplications();
@@ -708,7 +719,7 @@ public final class Daikon {
       System.out.print("Invoking Simplify to identify redundant invariants");
       System.out.flush();
       elapsedTime(); // reset timer
-      for (Iterator itor = all_ppts.iterator() ; itor.hasNext() ; ) {
+      for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
         PptTopLevel ppt = (PptTopLevel) itor.next();
         ppt.mark_implied_via_simplify(all_ppts);
         System.out.print(".");
@@ -726,6 +737,91 @@ public final class Daikon {
     elapsedTime_timer = now;
     return result;
   }
+
+  // Not yet used in version 3 (?).
+  /* INCR
+  public static void add_combined_exits(PptMap ppts) {
+    // For each collection of related :::EXITnn ppts, add a new ppt (which
+    // will only contain implication invariants).
+
+    Vector new_ppts = new Vector();
+    for (Iterator itor = ppts.pptIterator() ; itor.hasNext() ; ) {
+      PptTopLevel enter_ppt = (PptTopLevel) itor.next();
+      Vector exits = enter_ppt.exit_ppts;
+      if (exits.size() > 1) {
+        Assert.assertTrue(enter_ppt.ppt_name.isEnterPoint());
+        String exit_name = enter_ppt.ppt_name.makeExit().getName();
+        Assert.assertTrue(ppts.get(exit_name) == null);
+        VarInfo[] comb_vars = VarInfo.arrayclone_simple(Ppt.common_vars(exits));
+        PptTopLevel exit_ppt = new PptTopLevel(exit_name, comb_vars);
+        // {
+        //   System.out.println("Adding " + exit_ppt.name + " because of multiple expt_ppts for " + enter_ppt.name + ":");
+        //   for (int i=0; i<exits.size(); i++) {
+        //     Ppt exit = (Ppt) exits.elementAt(i);
+        //     System.out.print(" " + exit.name);
+        //   }
+        //   System.out.println();
+        // }
+        new_ppts.add(exit_ppt);
+        exit_ppt.entry_ppt = enter_ppt;
+        exit_ppt.set_controlling_ppts(ppts);
+        for (Iterator exit_itor=exits.iterator() ; exit_itor.hasNext() ; ) {
+          PptTopLevel line_exit_ppt = (PptTopLevel) exit_itor.next();
+          line_exit_ppt.controlling_ppts.add(exit_ppt);
+          VarInfo[] line_vars = line_exit_ppt.var_infos;
+          line_exit_ppt.combined_exit = exit_ppt;
+          {
+            // Indices will be used to extract values from a ValueTuple.
+            // ValueTuples do not include static constant values.
+            // comb_index doesn't include those, either.
+
+            int[] indices = new int[comb_vars.length];
+            int new_len = indices.length;
+            int new_index = 0;
+            int comb_index = 0;
+
+            // comb_vars never contains static finals but line_vars can:
+            // Assert.assertTrue(line_vars.length == comb_vars.length,
+            //                   "\nIncorrect number of variables (line=" +
+            //                   line_vars.length + ", comb=" + comb_vars.length +
+            //                   ") at exit points: " + enter_ppt.name );
+            for (int lv_index=0; lv_index<line_vars.length; lv_index++) {
+              if (line_vars[lv_index].isStaticConstant()) {
+                continue;
+              }
+              if (line_vars[lv_index].name == comb_vars[comb_index].name) {
+                indices[new_index] = comb_index;
+                new_index++;
+              }
+              comb_index++;
+            }
+            line_exit_ppt.combined_exit_var_indices = indices;
+            Assert.assertTrue(new_index == new_len);
+
+            // System.out.println("combined_exit_var_indices " + line_exit_ppt.name);
+            // for (int i=0; i<indices.length; i++) {
+            //   // System.out.print(" " + indices[i]);
+            //   System.out.print(" " + indices[i] + " " + comb_vars[indices[i]].name);
+            // }
+            // System.out.println();
+          }
+        }
+
+        // exit_ppt.num_samples = enter_ppt.num_samples;
+        // exit_ppt.num_values = enter_ppt.num_values;
+      }
+    }
+
+    // System.out.println("add_combined_exits: " + new_ppts.size() + " " + new_ppts);
+
+    // Avoid ConcurrentModificationException by adding after the above loop
+    for (int i=0; i<new_ppts.size(); i++) {
+      ppts.add((PptTopLevel) new_ppts.elementAt(i));
+    }
+
+  }
+  */ // [INCR]
+
 
   ///////////////////////////////////////////////////////////////////////////
   //
@@ -778,10 +874,3 @@ public final class Daikon {
     }
   }
 }
-
-/*
- * Local Variables:
- * c-basic-offset:	2
- * c-indentation-style: "java"
- * End:
- */

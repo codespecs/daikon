@@ -49,7 +49,7 @@ public final class ValueTuple implements Cloneable {
   /** Modified  **/
   public final static int MODIFIED = 1;
   /** Missing value because the expression doesn't make sense: x.a
-   * when is null.  Data trace files can contain this modebit. **/
+   * when x is null.  Data trace files can contain this modbit. **/
   public final static int MISSING_NONSENSICAL = 2;
   /** Missing value because of data flow: this.x.x isn't available
    * from a ppt.  Data trace files must not contain this modbit. **/
@@ -68,20 +68,20 @@ public final class ValueTuple implements Cloneable {
   int getModified(VarInfo vi) { return vi.getModified(this); }
   boolean isUnmodified(VarInfo vi) { return vi.isUnmodified(this); }
   boolean isModified(VarInfo vi) { return vi.isModified(this); }
-  boolean isMissingNonSensical(VarInfo vi) { return vi.isMissingNonSensical(this); }
+  boolean isMissingNonsensical(VarInfo vi) { return vi.isMissingNonsensical(this); }
   boolean isMissingFlow(VarInfo vi) { return vi.isMissingFlow(this); }
   // boolean isMissing(VarInfo vi) { return vi.isMissing(this); }
 
   int getModified(int value_index) { return mods[value_index]; }
   boolean isUnmodified(int value_index) { return mods[value_index] == UNMODIFIED; }
   boolean isModified(int value_index) { return mods[value_index] == MODIFIED; }
-  boolean isMissingNonSensical(int value_index) { return mods[value_index] == MISSING_NONSENSICAL; }
+  boolean isMissingNonsensical(int value_index) { return mods[value_index] == MISSING_NONSENSICAL; }
   boolean isMissingFlow(int value_index) { return mods[value_index] == MISSING_FLOW; }
 
   // The arguments ints represent modification information.
   static boolean modIsUnmodified(int mod_value) { return mod_value == UNMODIFIED; }
   static boolean modIsModified(int mod_value) { return mod_value == MODIFIED; }
-  static boolean modIsMissingNonSensical(int mod_value) { return mod_value == MISSING_NONSENSICAL; }
+  static boolean modIsMissingNonsensical(int mod_value) { return mod_value == MISSING_NONSENSICAL; }
   static boolean modIsMissingFlow(int mod_value) { return mod_value == MISSING_FLOW; }
 
   // A tuplemod is summary modification information about the whole tuple
@@ -123,22 +123,22 @@ public final class ValueTuple implements Cloneable {
   static {
     int i1 = 0, i2 = 0;
     for (int tm=0; tm<TUPLEMOD_VALUES; tm++) {
-      if (!tuplemodHasMissingFlow(tm) && !tuplemodHasMissingNonSensical(tm) ) {
+      if (!tuplemodHasMissingFlow(tm) && !tuplemodHasMissingNonsensical(tm) ) {
         tuplemod_not_missing[i1] = tm;
         i1++;
       }
-      if (tuplemodHasModified(tm) && !tuplemodHasMissingFlow(tm) && !tuplemodHasMissingNonSensical(tm)) {
+      if (tuplemodHasModified(tm) && !tuplemodHasMissingFlow(tm) && !tuplemodHasMissingNonsensical(tm)) {
         tuplemod_modified_not_missing[i2] = tm;
         i2++;
       }
     }
   }
 
-  static int make_tuplemod(boolean unmodified, boolean modified, boolean missingNonSensical, boolean missingFlow) {
+  static int make_tuplemod(boolean unmodified, boolean modified, boolean missingNonsensical, boolean missingFlow) {
     int result = 0;
     if (unmodified) result += UNMODIFIED_BITVAL;
     if (modified) result += MODIFIED_BITVAL;
-    if (missingNonSensical) result += MISSING_NONSENSICAL_BITVAL;
+    if (missingNonsensical) result += MISSING_NONSENSICAL_BITVAL;
     if (missingFlow) result += MISSING_FLOW_BITVAL;
     return result;
   }
@@ -149,7 +149,7 @@ public final class ValueTuple implements Cloneable {
   static boolean tuplemodHasUnmodified(int tuplemod) {
     return ((tuplemod & UNMODIFIED_BITVAL) != 0);
   }
-  static boolean tuplemodHasMissingNonSensical(int tuplemod) {
+  static boolean tuplemodHasMissingNonsensical(int tuplemod) {
     return ((tuplemod & MISSING_NONSENSICAL_BITVAL) != 0);
   }
 
@@ -165,7 +165,7 @@ public final class ValueTuple implements Cloneable {
   static String tuplemodToStringBrief(int tuplemod) {
     return ((tuplemodHasModified(tuplemod) ? "M" : "m")
             + (tuplemodHasUnmodified(tuplemod) ? "U" : "u")
-            + (tuplemodHasMissingNonSensical(tuplemod) ? "X" : "x")
+            + (tuplemodHasMissingNonsensical(tuplemod) ? "X" : "x")
             + (tuplemodHasMissingFlow(tuplemod) ? "F" : "f"));
   }
 
@@ -301,7 +301,7 @@ public final class ValueTuple implements Cloneable {
       new_vals[i+old_len] = vm.value;
       new_mods[i+old_len] = vm.modified;
 // [[INCR]] ....
-      // if (vm == ValueAndModified.MISSING)
+      // if (vm == ValueAndModified.MISSING_NONSENSICAL)
       //   deriv.getVarInfo().canBeMissing = true;
 // .... [[INCR]]
     }

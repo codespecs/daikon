@@ -104,7 +104,7 @@ public final class Equality
       result.append (vars[i].name.ioa_name());
       result.append (" = ");
       result.append (vars[i+1].name.ioa_name());
-      if (i < vars.length - 1) {
+      if (i < vars.length - 2) {
         result.append (" /\\ ");
       }
     }

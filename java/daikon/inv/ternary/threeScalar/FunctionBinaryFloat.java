@@ -32,13 +32,14 @@ public class FunctionBinaryFloat
 
   public FunctionBinaryCoreFloat  core;
 
-  protected FunctionBinaryFloat (PptSlice ppt, String methodname, int methodNumber, int var_order) {
+  protected FunctionBinaryFloat (PptSlice ppt, String[] methodname, int methodNumber, int var_order) {
     super(ppt);
     core = new FunctionBinaryCoreFloat (this, methodname, methodNumber, var_order);
   }
 
-  public static FunctionBinaryFloat  instantiate(PptSlice ppt, String methodname, int methodNumber, int var_order) {
-    if (!dkconfig_enabled) return null;
+  public static FunctionBinaryFloat  instantiate(PptSlice ppt, String[] methodname, int methodNumber, int var_order) {
+    if (!dkconfig_enabled)
+      return null;
 
     {
       int[] indices = FunctionBinaryCoreFloat.var_indices[var_order];
@@ -85,7 +86,7 @@ public class FunctionBinaryFloat
   }
 
   public String repr() {
-    return "FunctionBinaryFloat"   + varNames() + ": ";
+    return "FunctionBinaryFloat"   + varNames() + ": " + core.repr();
   }
 
   public String format_using(OutputFormat format) {
@@ -130,7 +131,6 @@ public class FunctionBinaryFloat
   public SuppressionFactory[] getSuppressionFactories() {
     return suppressionFactories;
   }
-
 
 // SuppressionFactory for FunctionBinary invariants.  Right now, we
 // suppress all FunctionBinary such that one of the members is a

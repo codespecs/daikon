@@ -54,7 +54,7 @@ public class PptMap
    * @return an iterator over the PptTopLevels in this, sorted by
    * Ppt.NameComparator on their names.  This is good for consistency.
    **/
-  public Iterator iterator()
+  public Iterator pptIterator()
   {
     TreeSet sorted = new TreeSet(new Ppt.NameComparator());
     sorted.addAll(nameToPpt.values());
@@ -115,10 +115,14 @@ public class PptMap
    * Check the rep invariant of this.  Throws an Error if incorrect.
    **/
   public void repCheck() {
-    for (Iterator i = this.iterator(); i.hasNext(); ) {
+    for (Iterator i = this.pptIterator(); i.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) i.next();
       ppt.repCheck();
     }
+  }
+
+  public int size() {
+    return nameToPpt.size();
   }
 
 }

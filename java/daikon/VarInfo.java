@@ -38,10 +38,10 @@ public final class VarInfo
    **/
   public PptTopLevel ppt;
 
-  // Name and type
-
   /**
-   * Expression of this variable's name.
+   * Name.  Do not compare names of invariants from different program
+   * points, because two different program points could contain unrelated
+   * variables named "x".
    **/
   public VarInfoName name;      // interned
 
@@ -663,7 +663,8 @@ public final class VarInfo
     if (isDerivedParamCached != null) return isDerivedParamCached.booleanValue();
 
     boolean result = false;
-    if (aux.getFlag(VarInfoAux.IS_PARAM)) result = true;
+    if (aux.getFlag(VarInfoAux.IS_PARAM))
+      result = true;
 
     Set paramVars/*VarInfoName*/ = ppt.getParamVars();
 
@@ -717,10 +718,10 @@ public final class VarInfo
    * only be called after equality invariants are known.
    **/
   public boolean isDerivedParamAndUninteresting() {
-    //if (isDerivedParamAndUninterestingCached != null) {
-    //  PrintInvariants.debugFiltering.debug("\t\t\tusing cached " + isDerivedParamAndUninterestingCached.toString() + "\n");
-    //  return isDerivedParamAndUninterestingCached.booleanValue();
-    //}
+    // if (isDerivedParamAndUninterestingCached != null) {
+    //   PrintInvariants.debugFiltering.debug("\t\t\tusing cached " + isDerivedParamAndUninterestingCached.toString() + "\n");
+    //   return isDerivedParamAndUninterestingCached.booleanValue();
+    // }
     if (isDerivedParamAndUninterestingCached != null) {
     } else {
       isDerivedParamAndUninterestingCached = _isDerivedParamAndUninteresting() ? Boolean.TRUE : Boolean.FALSE;
@@ -861,7 +862,7 @@ public final class VarInfo
   }
   public boolean isUnmodified(ValueTuple vt) { return ValueTuple.modIsUnmodified(getModified(vt)); }
   public boolean isModified(ValueTuple vt) { return ValueTuple.modIsModified(getModified(vt)); }
-  public boolean isMissingNonSensical(ValueTuple vt) { return ValueTuple.modIsMissingNonSensical(getModified(vt)); }
+  public boolean isMissingNonsensical(ValueTuple vt) { return ValueTuple.modIsMissingNonsensical(getModified(vt)); }
   public boolean isMissingFlow(ValueTuple vt) { return ValueTuple.modIsMissingFlow(getModified(vt)); }
 
   /**
@@ -916,7 +917,7 @@ public final class VarInfo
 //   Iterator invariants() {
 //     // This assertion will need to be relaxed eventually.
 //     Assert.assertTrue(ppt instanceof PptTopLevel,
-//                   "Ppt " + ppt + " is not instanceof PptTopLevel");
+//                       "Ppt " + ppt + " is not instanceof PptTopLevel");
 //     // Could alternately have used ppt.invs.lookup(vi).
 //     // In fact, that's better, because it doesn't look at so many variables.
 //     Iterator all_invs = ((PptTopLevel) ppt).invariants();
@@ -980,7 +981,7 @@ public final class VarInfo
       // in program points above this that are equal to this (in the
       // upper program point).  When we see these variables in
       // this.ppt, they are "obviously" equal to this.
-      Iterator controllers = ppt.controlling_ppts.iterator();
+      Iterator controllers = ppt.controlling_ppts.pptIterator();
       while (controllers.hasNext()) {
         PptTopLevel controller = (PptTopLevel) controllers.next();
         VarInfo controller_var = controller.findVar(name);
@@ -1122,12 +1123,12 @@ public final class VarInfo
         }
       }
 
-      // In Java, "this" cannot be changed, so "this == orig(this)" is vacuous.
-      // In fact, any comparison with "orig(this)" is vacuous.
-      //if ((name.name() == "this")  // interned
-      //    || (vi.name.name() == "orig(this)")) { // interned
-      //  continue;
-      //}
+      // // In Java, "this" cannot be changed, so "this == orig(this)" is vacuous.
+      // // In fact, any comparison with "orig(this)" is vacuous.
+      // if ((name.name() == "this")  // interned
+      //     || (vi.name.name() == "orig(this)")) { // interned
+      //   continue;
+      // }
 
       // Add any additional special cases here.
 
@@ -1751,9 +1752,23 @@ public final class VarInfo
   }
 
   /**
+   * It is <b>not</b> safe in general to compare based on VarInfoName
+   * alone, because it is possible for two different program points to have
+   * unrelated variables of the same name.
+   **/
+  public static class LexicalComparator implements Comparator {
+    public int compare(Object o1, Object o2) {
+      VarInfoName name1 = ((VarInfo)o1).name;
+      VarInfoName name2 = ((VarInfo)o2).name;
+      return name1.compareTo(name2);
+    }
+  }
+
+
+  /**
    * Create a guarding predicate for this VarInfo, that is, an
    * invariant that ensures that this object is available for access
-   * to variables that reference it, such as fields
+   * to variables that reference it, such as fields.
    **/
   public Invariant createGuardingPredicate(PptTopLevel ppt) {
     // Later for the array, make sure index in bounds
@@ -1944,4 +1959,5 @@ public final class VarInfo
 
     return result;
   }
+
 }

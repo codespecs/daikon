@@ -20,7 +20,7 @@ public class XorVisitor extends DepthFirstVisitor {
     PptTopLevel ppt1 = node.getPpt1();
     PptTopLevel ppt2 = node.getPpt2();
     PptTopLevel pptNonNull = (ppt1 != null ? ppt1 : ppt2);
-    result.put(pptNonNull, new ArrayList());
+    result.addPpt(pptNonNull);
     currentPpt = pptNonNull;
     super.visit(node);
   }
@@ -33,21 +33,19 @@ public class XorVisitor extends DepthFirstVisitor {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
     if (shouldAddInv1(inv1, inv2)) {
-      result.get(currentPpt).add(inv1);
+      result.add(currentPpt, inv1);
     } else if (shouldAddInv2(inv1, inv2)) {
-      result.get(currentPpt).add(inv2);
+      result.add(currentPpt, inv2);
     }
   }
 
 
   private static boolean shouldAddInv1(Invariant inv1, Invariant inv2) {
-    return ((inv1 != null && inv1.justified()) &&
-            (inv2 == null || !inv2.justified()));
+    return ((inv1 != null) && (inv2 == null));
   }
 
   private static boolean shouldAddInv2(Invariant inv1, Invariant inv2) {
-    return ((inv2 != null && inv2.justified()) &&
-            (inv1 == null || !inv1.justified()));
+    return ((inv2 != null) && (inv1 == null));
   }
 
 

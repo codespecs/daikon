@@ -6,13 +6,13 @@ import utilMDE.*;
 
 public final class FunctionsFloat  {
 
-  public final static String[] unaryFunctionNames;
+  public final static String[][] unaryFunctionNames;
 //  public final static Method[] unaryFunctions;
 
-  public final static String[] binarySymmetricFunctionNames;
+  public final static String[][] binarySymmetricFunctionNames;
 //  public final static Method[] binarySymmetricFunctions;
 
-  public final static String[] binaryNonSymmetricFunctionNames;
+  public final static String[][] binaryNonSymmetricFunctionNames;
 //  public final static Method[] binaryNonSymmetricFunctions;
 
 //  private static Method[] methodNamesToMethods(String[] names) {
@@ -31,7 +31,7 @@ public final class FunctionsFloat  {
 
     // I need to have the names available so the methods can be serialized.
 
-    unaryFunctionNames = new String[] {
+    unaryFunctionNames = new String[][] {
       /// Java language operators (in precedence order)
       // increment: subsumed by LinearBinary
       // decrement: subsumed by LinearBinary
@@ -42,26 +42,25 @@ public final class FunctionsFloat  {
     };
   //  unaryFunctions = methodNamesToMethods(unaryFunctionNames);
 
-    binarySymmetricFunctionNames = new String[] {
+    binarySymmetricFunctionNames = new String[][] {
       /// Java language operators (in precedence order, omitting boolean operators)
       // Maybe instead of mul I should have a specific invariant that also
       // looks for a leading constant.
-      "utilMDE.MathMDE.mul(double"  +",double"  +")",
+      {"", " * ", ""},
       // plus: subsumed by LinearTernary.
 
       /// Non-operators.
-      "java.lang.Math.min(double,double)",
-      "java.lang.Math.max(double,double)"
+      {"java.lang.Math.min(", ", ", ")"},
+      {"java.lang.Math.max(", ", ", ")"},
 
     };
     //binarySymmetricFunctions = methodNamesToMethods(binarySymmetricFunctionNames);
 
-    binaryNonSymmetricFunctionNames = new String[] {
+    binaryNonSymmetricFunctionNames = new String[][] {
       /// Java language operators (in precedence order, omitting boolean operators)
-      "utilMDE.MathMDE.div(double,double)",
+      {"", " / ", ""},
 
-      "java.lang.Math.pow(double, double)"
-
+      {"Math.pow(", ", ", ""},
       // MathMDE_cmp = "utilMDE.MathMDE.cmp(int,int)"
       // MathMDE_cmp = "utilMDE.MathMDE.round(int,int)"
     };
@@ -94,10 +93,8 @@ public final class FunctionsFloat  {
     return 0;
   }
 
-  public static int lookup(String methodname) {
-    System.out.println("looking up");
-    return 0;
-  }
+  // public static int lookup(String[] methodname) {
+  // }
 
   // don't permit instantiation
   private FunctionsFloat () { }

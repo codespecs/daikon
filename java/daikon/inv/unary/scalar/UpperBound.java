@@ -141,7 +141,7 @@ public class UpperBound
     if ((oo != null) && oo.enoughSamples()) {
       // We could also use core.max1  == oo.max_elt(), since the LowerBound
       // will never have a core.max1  that does not appear in the OneOf.
-      if (core.max1  >=  oo.max_elt_long()) {
+      if (core.max1  >=  oo.max_elt()) {
         return true;
       }
     }

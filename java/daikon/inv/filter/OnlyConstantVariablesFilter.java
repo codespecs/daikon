@@ -13,7 +13,15 @@ class OnlyConstantVariablesFilter extends InvariantFilter {
       return false;
     }
 
-    // [INCR] return invariant.hasOnlyConstantVariables();
-    return false;
+    return false; // INCR
+
+    /* [INCR]
+    if (invariant instanceof Implication) {
+      Implication impl = (Implication) invariant;
+      return impl.consequent.hasOnlyConstantVariables() || impl.predicate.hasOnlyConstantVariables();
+    }
+
+    return invariant.hasOnlyConstantVariables();
+    */ // INCR
   }
 }

@@ -22,7 +22,7 @@ public final class FunctionBinaryCore
   static final long serialVersionUID = 20020122L;
 
  // transient public Method function;
-  public final String methodname;
+  public final String[] methodname;
   // see "Variable order"
   public int var_order;
   private int methodNumber;
@@ -34,16 +34,17 @@ public final class FunctionBinaryCore
 
   public Invariant wrapper;
 
-  public FunctionBinaryCore (Invariant wrapper, String methodname, int methodNumber, int var_order) {
+  public FunctionBinaryCore (Invariant wrapper, String[] methodname, int methodNumber, int var_order) {
     this.wrapper = wrapper;
     this.methodname = methodname;
     this.methodNumber = methodNumber;
     this.var_order = var_order;
+    Assert.assertTrue(methodname.length == 3);
   }
 
-  public FunctionBinaryCore (Invariant wrapper, String methodname, int var_order) throws ClassNotFoundException, NoSuchMethodException {
-    this(wrapper, methodname, Functions.lookup(methodname), var_order);
-  }
+  // public FunctionBinaryCore (Invariant wrapper, String[] methodname, int var_order) throws ClassNotFoundException, NoSuchMethodException {
+  //   this(wrapper, methodname, Functions.lookup(methodname), var_order);
+  // }
 
   public Object clone() {
     try {
@@ -162,8 +163,8 @@ public final class FunctionBinaryCore
 
   public String repr() {
     return "FunctionBinaryCore"  + wrapper.varNames() + ": "
-      + "function=" + methodname
-      + ",var_order=" + var_order;
+      + "methodname=(" + methodname[0] + "," + methodname[1] + "," + methodname[2] + ")"
+      + ";var_order=" + var_order;
   }
 
   // Perhaps this should take arguments rather than looking into the wrapper.
@@ -178,19 +179,23 @@ public final class FunctionBinaryCore
     String arg2_name = arg2.name_using(format);
 
     if (format == OutputFormat.DAIKON || format == OutputFormat.JML) {
-      return argresult_name + " == " + methodname + "(" + arg1_name + ", " + arg2_name + ")";
+      return argresult_name + " == " + methodname[0] + arg1_name + methodname[1] + arg2_name + methodname[2];
     }
 
     if (format == OutputFormat.IOA) {
-      return argresult_name + " = " + methodname + "(" + arg1_name + ", " + arg2_name + ") ***";
+      return argresult_name + " = " + methodname[0] + arg1_name + methodname[1] + arg2_name + methodname[2] + " ***";
     }
 
     return wrapper.format_unimplemented(format);
   }
 
-  public boolean isSameFormula(FunctionBinaryCore  other)
-  {
-    return methodname.equals(other.methodname);
+  public boolean isSameFormula(FunctionBinaryCore  other) {
+    for (int i=0; i<3; i++) {
+      if (! methodname[i].equals(other.methodname[i])) {
+        return false;
+      }
+    }
+    return true;
   }
 
 }

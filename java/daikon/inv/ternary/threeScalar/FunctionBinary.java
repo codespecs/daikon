@@ -32,13 +32,14 @@ public class FunctionBinary
 
   public FunctionBinaryCore  core;
 
-  protected FunctionBinary (PptSlice ppt, String methodname, int methodNumber, int var_order) {
+  protected FunctionBinary (PptSlice ppt, String[] methodname, int methodNumber, int var_order) {
     super(ppt);
     core = new FunctionBinaryCore (this, methodname, methodNumber, var_order);
   }
 
-  public static FunctionBinary  instantiate(PptSlice ppt, String methodname, int methodNumber, int var_order) {
-    if (!dkconfig_enabled) return null;
+  public static FunctionBinary  instantiate(PptSlice ppt, String[] methodname, int methodNumber, int var_order) {
+    if (!dkconfig_enabled)
+      return null;
 
     {
       int[] indices = FunctionBinaryCore.var_indices[var_order];
@@ -85,7 +86,7 @@ public class FunctionBinary
   }
 
   public String repr() {
-    return "FunctionBinary"   + varNames() + ": ";
+    return "FunctionBinary"   + varNames() + ": " + core.repr();
   }
 
   public String format_using(OutputFormat format) {
@@ -130,7 +131,6 @@ public class FunctionBinary
   public SuppressionFactory[] getSuppressionFactories() {
     return suppressionFactories;
   }
-
 
 // SuppressionFactory for FunctionBinary invariants.  Right now, we
 // suppress all FunctionBinary such that one of the members is a

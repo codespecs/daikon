@@ -92,30 +92,14 @@ public final class EltOneOfFloat
     Arrays.sort(elts, 0, num_elts  );
   }
 
-  public Object min_elt() {
-    if (num_elts == 0)
-      throw new Error("Represents no elements");
-    sort_rep();
-
-    return Intern.internedDouble(elts[0]);
-  }
-
-  public Object max_elt() {
-    if (num_elts == 0)
-      throw new Error("Represents no elements");
-    sort_rep();
-
-    return Intern.internedDouble(elts[num_elts-1]);
-  }
-
-  public double min_elt_double() {
+  public double  min_elt() {
     if (num_elts == 0)
       throw new Error("Represents no elements");
     sort_rep();
     return elts[0];
   }
 
-  public double max_elt_double() {
+  public double  max_elt() {
     if (num_elts == 0)
       throw new Error("Represents no elements");
     sort_rep();
@@ -128,7 +112,7 @@ public final class EltOneOfFloat
       return false;
     sort_rep();
     for (int i=0; i < num_elts; i++)
-      if (elts[i] != other_elts[i]) // elements are interned
+      if (! ( elts[i]  ==  other_elts[i] ) ) // elements are interned
         return false;
     return true;
   }
@@ -156,6 +140,7 @@ public final class EltOneOfFloat
   }
 
   public String format_using(OutputFormat format) {
+    sort_rep();
     if (format == OutputFormat.DAIKON) {
       return format_daikon();
     } else if (format == OutputFormat.JAVA) {
@@ -207,6 +192,7 @@ public final class EltOneOfFloat
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
+        // Not quite right for the case of NaN, I think.
         result += varname + " == " + String.valueOf( elts[i] ) ;
       }
     }
@@ -305,8 +291,8 @@ public final class EltOneOfFloat
 
   public void add_modified(double [] a, int count) {
   OUTER:
-    for (int ai=0; ai<a.length; ai++) {
-      double  v = a[ai];
+   for (int ai=0; ai<a.length; ai++) {
+    double  v = a[ai];
 
     for (int i=0; i<num_elts; i++)
       if (elts[i] == v) {
@@ -329,7 +315,13 @@ public final class EltOneOfFloat
     elts[num_elts] = v;
     num_elts++;
 
-    }
+   }
+  }
+
+  // It is possible to have seen many (array) samples, but no (double)
+  // array element values.
+  public boolean enoughSamples() {
+    return num_elts > 0;
   }
 
   protected double computeProbability() {
@@ -385,9 +377,10 @@ public final class EltOneOfFloat
     sort_rep();
     other.sort_rep();
 
-    for (int i=0; i < num_elts; i++)
-      if (elts[i] != other.elts[i]) // elements are interned
+    for (int i=0; i < num_elts; i++) {
+      if (! ( elts[i]  ==  other.elts[i] ) )
         return false;
+    }
 
     return true;
   }
@@ -399,7 +392,7 @@ public final class EltOneOfFloat
 
       for (int i=0; i < num_elts; i++) {
         for (int j=0; j < other.num_elts; j++) {
-          if (elts[i] == other.elts[j]) // elements are interned
+          if (( elts[i]  ==  other.elts[j] ) ) // elements are interned
             return false;
         }
       }

@@ -28,12 +28,12 @@ public class PairwiseFunctionUnary
 
   public FunctionUnaryCore  core;
 
-  protected PairwiseFunctionUnary (PptSlice ppt, String methodname, int function, boolean inverse) {
+  protected PairwiseFunctionUnary (PptSlice ppt, String[] methodname, int function, boolean inverse) {
     super(ppt);
     core = new FunctionUnaryCore (this, methodname, function, inverse);
   }
 
-  public static PairwiseFunctionUnary  instantiate(PptSlice ppt, String methodname, int methodnumber, boolean inverse) {
+  public static PairwiseFunctionUnary  instantiate(PptSlice ppt, String[] methodname, int methodnumber, boolean inverse) {
     if (!dkconfig_enabled) return null;
      PairwiseFunctionUnary  result =
       new PairwiseFunctionUnary (ppt, methodname, methodnumber, inverse);

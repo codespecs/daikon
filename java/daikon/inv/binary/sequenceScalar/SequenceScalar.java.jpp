@@ -4,7 +4,6 @@ You first need to preprocess it with cpp, the C preprocessor.
 The correct way to build the system is to run 'make'.
 #endif
 
-  // #error statemtn suggests that the condition here before was wrong
 #if (!defined(TYPELONG) && !defined(TYPEDOUBLE))
 #error "TYPELONG or TYPEDOUBLE must be defined"
 #endif

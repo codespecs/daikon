@@ -292,7 +292,7 @@ public class SplitterFactory {
     if (ppt == null) {
       //We just get a random program point (the first) from the pptmap.
       //Hopefully we can find the variables that we need at this ppt
-      Iterator pptIter = all_ppts.iterator();
+      Iterator pptIter = all_ppts.pptIterator();
       if (pptIter.hasNext()) {
         ppt = (PptTopLevel)pptIter.next();
       }
@@ -532,7 +532,7 @@ public class SplitterFactory {
     }
     try {
       Pattern ppt_pattern = re_compiler.compile(ppt_name);
-      Iterator ppt_itor = all_ppts.iterator();
+      Iterator ppt_itor = all_ppts.pptIterator();
 
       while (ppt_itor.hasNext()) {
         String name = ((PptTopLevel)ppt_itor.next()).name;

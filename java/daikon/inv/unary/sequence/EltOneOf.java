@@ -107,34 +107,14 @@ public final class EltOneOf
     Arrays.sort(elts, 0, num_elts  );
   }
 
-  public Object min_elt() {
-    if (num_elts == 0)
-      throw new Error("Represents no elements");
-    sort_rep();
-
-    // Not sure whether interning is necessary (or just returning an Integer
-    // would be sufficient), but just in case...
-    return Intern.internedLong(elts[0]);
-  }
-
-  public Object max_elt() {
-    if (num_elts == 0)
-      throw new Error("Represents no elements");
-    sort_rep();
-
-    // Not sure whether interning is necessary (or just returning an Integer
-    // would be sufficient), but just in case...
-    return Intern.internedLong(elts[num_elts-1]);
-  }
-
-  public long min_elt_long() {
+  public long  min_elt() {
     if (num_elts == 0)
       throw new Error("Represents no elements");
     sort_rep();
     return elts[0];
   }
 
-  public long max_elt_long() {
+  public long  max_elt() {
     if (num_elts == 0)
       throw new Error("Represents no elements");
     sort_rep();
@@ -147,7 +127,7 @@ public final class EltOneOf
       return false;
     sort_rep();
     for (int i=0; i < num_elts; i++)
-      if (elts[i] != other_elts[i]) // elements are interned
+      if (! ( elts[i]  ==  other_elts[i] ) ) // elements are interned
         return false;
     return true;
   }
@@ -175,6 +155,7 @@ public final class EltOneOf
   }
 
   public String format_using(OutputFormat format) {
+    sort_rep();
     if (format == OutputFormat.DAIKON) {
       return format_daikon();
     } else if (format == OutputFormat.JAVA) {
@@ -255,6 +236,7 @@ public final class EltOneOf
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
+        // Not quite right for the case of NaN, I think.
         result += varname + " == " + ((( elts[i]  == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))) ;
       }
     }
@@ -421,8 +403,8 @@ public final class EltOneOf
 
   public void add_modified(long [] a, int count) {
   OUTER:
-    for (int ai=0; ai<a.length; ai++) {
-      long  v = a[ai];
+   for (int ai=0; ai<a.length; ai++) {
+    long  v = a[ai];
 
     for (int i=0; i<num_elts; i++)
       if (elts[i] == v) {
@@ -458,7 +440,13 @@ public final class EltOneOf
     elts[num_elts] = v;
     num_elts++;
 
-    }
+   }
+  }
+
+  // It is possible to have seen many (array) samples, but no (long)
+  // array element values.
+  public boolean enoughSamples() {
+    return num_elts > 0;
   }
 
   protected double computeProbability() {
@@ -546,9 +534,10 @@ public final class EltOneOf
       }
     }
 
-    for (int i=0; i < num_elts; i++)
-      if (elts[i] != other.elts[i]) // elements are interned
+    for (int i=0; i < num_elts; i++) {
+      if (! ( elts[i]  ==  other.elts[i] ) )
         return false;
+    }
 
     return true;
   }
@@ -560,7 +549,7 @@ public final class EltOneOf
 
       for (int i=0; i < num_elts; i++) {
         for (int j=0; j < other.num_elts; j++) {
-          if (elts[i] == other.elts[j]) // elements are interned
+          if (( elts[i]  ==  other.elts[j] ) ) // elements are interned
             return false;
         }
       }

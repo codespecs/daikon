@@ -28,8 +28,11 @@ public final class SequenceStringUnion
 
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple full_vt) {
     int mod1 = base1.getModified(full_vt);
+    if (mod1 == ValueTuple.MISSING_NONSENSICAL)
+      return ValueAndModified.MISSING_NONSENSICAL;
     int mod2 = base2.getModified(full_vt);
-
+    if (mod2 == ValueTuple.MISSING_NONSENSICAL)
+      return ValueAndModified.MISSING_NONSENSICAL;
     Object val1 = base1.getValue(full_vt);
     if (val1 == null)
       return ValueAndModified.MISSING_NONSENSICAL;

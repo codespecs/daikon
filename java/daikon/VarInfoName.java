@@ -412,8 +412,10 @@ public abstract class VarInfoName
     return reprCmp;
   }
 
+  // This is a debugging method, not indended for ordinary output.
+  // Code producing output should usually call name() rather than
+  // calling toString (perhaps implicitly).
   public String toString() {
-    // Code should not use the implicit toString when it really wants name().
     return repr();
   }
 
@@ -587,9 +589,9 @@ public abstract class VarInfoName
     // return (new SizeOf((Elements) this)).intern();
     Elements elems = (new ElementsFinder(this)).elems();
     Assert.assertTrue(elems != null,
-                  "applySize should have elements to use in " + this + ";\n"
-                  + "that is, " + this + " does not appear to be a sequence/collection.\n"
-                  + "Perhaps its name should be suffixed by \"[]\"?");
+                      "applySize should have elements to use in " + this + ";\n"
+                      + "that is, " + this + " does not appear to be a sequence/collection.\n"
+                      + "Perhaps its name should be suffixed by \"[]\"?");
     Replacer r = new Replacer(elems, (new SizeOf(elems)).intern());
     return r.replace(this).intern();
   }

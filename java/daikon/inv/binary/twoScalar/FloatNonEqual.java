@@ -107,6 +107,10 @@ public final class FloatNonEqual
     return "FloatNonEqual"  + varNames();
   }
 
+  public String format() {
+    return var1().name.name() + " != " + var2().name.name();
+  }
+
   public String format_using(OutputFormat format) {
     String var1name = var1().name.name_using(format);
     String var2name = var2().name.name_using(format);

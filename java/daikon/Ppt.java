@@ -227,10 +227,27 @@ public abstract class Ppt
   // It might make more sense to put the sorting into
   // PptMap.sortedIterator(), for example, but it's in here for now
 
+  // Check if o1 and o2 are both main exits (combined or only exits)
+  // If so, compare their name without the EXIT[line]
+  // If the name is the same, return 0, otherwise
   // Orders ppts by the name, except . and : are swapped
   //   so that Foo:::OBJECT and Foo:::CLASS are processed before Foo.method.
   public static final class NameComparator implements Comparator {
     public int compare(Object o1, Object o2) {
+
+      if ((o1 instanceof PptTopLevel) && (o2 instanceof PptTopLevel)) {
+        PptTopLevel p1 = (PptTopLevel) o1;
+        PptTopLevel p2 = (PptTopLevel) o2;
+        if (p1.ppt_name.isExitPoint() && p2.ppt_name.isExitPoint()) {
+          // [INCR] if ((p1.combined_exit == null) && (p2.combined_exit == null)) {
+            String fullName1 = p1.ppt_name.getNameWithoutPoint();
+            String fullName2 = p2.ppt_name.getNameWithoutPoint();
+            if (fullName1.equals(fullName2))
+              return 0;
+          // [INCR] }
+        }
+      }
+
       String name1 = ((Ppt) o1).name;
       String name2 = ((Ppt) o2).name;
 

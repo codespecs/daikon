@@ -60,10 +60,10 @@ public final class SequenceInitialFactoryFloat  extends UnaryDerivationFactory {
 
     int num_invs = upperbound - lowerbound + 1 - (suppress_zero ? 1 : 0);
     Assert.assertTrue(num_invs > 0,
-                  "No SequenceInitial invariants to instantiate; "
-                  + "lowerbound=" + lowerbound
-                  + ", upperbound=" + upperbound
-                  + ", suppress_zero=" + suppress_zero);
+                      "No SequenceInitial invariants to instantiate; "
+                      + "lowerbound=" + lowerbound
+                      + ", upperbound=" + upperbound
+                      + ", suppress_zero=" + suppress_zero);
     UnaryDerivation[] result = new UnaryDerivation[num_invs];
     int j=0;
     for (int i=lowerbound; i<=upperbound; i++) {
@@ -74,11 +74,11 @@ public final class SequenceInitialFactoryFloat  extends UnaryDerivationFactory {
     }
     // No longer needed (I hope!).
     // Assert.assertTrue(j == num_invs,
-    //               "SequenceInitial(" + vi.name + "): "
-    //               + "j=" + j + ", num_invs=" + num_invs
-    //               + ",lowerbound=" + lowerbound
-    //               + ", upperbound=" + upperbound
-    //               + ", suppress_zero=" + suppress_zero);
+    //                   "SequenceInitial(" + vi.name + "): "
+    //                   + "j=" + j + ", num_invs=" + num_invs
+    //                   + ",lowerbound=" + lowerbound
+    //                   + ", upperbound=" + upperbound
+    //                   + ", suppress_zero=" + suppress_zero);
 
     Global.tautological_suppressed_derived_variables += 4 - num_invs;
 

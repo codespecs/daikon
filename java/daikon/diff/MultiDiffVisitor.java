@@ -260,7 +260,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 	    String thisPpt = pToke.nextToken();
 
 	    if (! lastPpt.equals (thisPpt)) {
-		out.println ("\n" + thisPpt);
+		out.println ("\nPPT_NAME " + thisPpt);
 		lastPpt = thisPpt;
 	    }
 	    for (int ii = 0; ii < al.size(); ii++) {

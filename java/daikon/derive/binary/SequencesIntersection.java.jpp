@@ -71,8 +71,11 @@ public final class SCALARSEQUENCESINTERSECTION
     debug.debug("Computing value and modified");
 
     int mod1 = base1.getModified(full_vt);
+    if (mod1 == ValueTuple.MISSING_NONSENSICAL)
+      return ValueAndModified.MISSING_NONSENSICAL;
     int mod2 = base2.getModified(full_vt);
-
+    if (mod2 == ValueTuple.MISSING_NONSENSICAL)
+      return ValueAndModified.MISSING_NONSENSICAL;
     Object val1 = base1.getValue(full_vt);
     if (val1 == null)
       return ValueAndModified.MISSING_NONSENSICAL;
@@ -80,8 +83,8 @@ public final class SCALARSEQUENCESINTERSECTION
     Object val2 = base2.getValue(full_vt);
     if (val2 == null)
       return ValueAndModified.MISSING_NONSENSICAL;
-     SCALAR[] val2_array = (SCALAR[]) val2;
- 
+    SCALAR[] val2_array = (SCALAR[]) val2;
+
     SCALAR[] tmp = new SCALAR[val1_array.length + val2_array.length];
     int size = 0;
     for (int i=0; i<val1_array.length; i++) {

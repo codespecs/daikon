@@ -24,7 +24,7 @@ public class UnionVisitor extends DepthFirstVisitor {
     PptTopLevel ppt1 = node.getPpt1();
     PptTopLevel ppt2 = node.getPpt2();
     PptTopLevel pptNonNull = (ppt1 != null ? ppt1 : ppt2);
-    result.put(pptNonNull, new ArrayList());
+    result.addPpt(pptNonNull);
     currentPpt = pptNonNull;
     super.visit(node);
   }
@@ -38,14 +38,14 @@ public class UnionVisitor extends DepthFirstVisitor {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
     if (inv1 == null) {
-      result.get(currentPpt).add(inv2);
+      result.add(currentPpt, inv2);
     } else if (inv2 == null) {
-      result.get(currentPpt).add(inv1);
+      result.add(currentPpt, inv1);
     } else {
       if (inv1.getProbability() <= inv2.getProbability()) {
-        result.get(currentPpt).add(inv1);
+        result.add(currentPpt, inv1);
       } else {
-        result.get(currentPpt).add(inv2);
+        result.add(currentPpt, inv2);
       }
     }
   }

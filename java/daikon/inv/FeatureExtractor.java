@@ -1,3 +1,4 @@
+package daikon.inv;
 /*********************************************
  * An invariant feature extractor.
  * This class creates a labeling of invariants.
@@ -5,17 +6,18 @@
  * gives a 1 or a -1 based on which of the two input files
  * the invariant came from.
  * The output goes to standard out and is in the format
- * SVM-Light uses.
+ * SVM-Light, SVMfu, or C5 uses.
  *
  * Created by Yuriy Brun, 5/12/2002
+ * Last Edited 9/17/2002
  *********************************************/
 
 import java.io.*;
 import java.util.*;
 import java.text.*;
 import daikon.*;
+import daikon.diff.*;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.unary.*;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.sequence.*;
@@ -27,232 +29,313 @@ import daikon.inv.binary.twoScalar.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.inv.binary.twoString.*;
 import daikon.inv.ternary.threeScalar.*;
+import utilMDE.*;
 
-
-public class FeatureExtractor {
-
-  // the following line gets rid of some extra output that
-  // otherwise gets dumped to System.out:
-  static {
-    Logger.setupLogs(false ? Logger.DEBUG : Logger.INFO);
-  }
-
-  //the THRESHOLD for the largest number that should not be considered 0
-  static double THRESHOLD = 0.0;
-
-  // A bunch of static variables, one for each feature
-  static int FetEnoughSamples = 1;
-  static int FetGetProbability = 2;
-  static int FetIsExact = 3;
-  static int FetJustified = 4;
-  static int FetIsWorthPrinting = 5;
-  static int FetHasFewModifiedSamples = 6;
-  static int FetHasNonCanonicalVariable = 7;
-  static int FetHasOnlyConstantVariables = 8;
-  static int FetIsObvious = 9;
-  static int FetIsObviousDerived = 10;
-  static int FetIsObviousImplied = 11;
-  static int FetIsControlled = 12;
-  static int FetIsImpliedPostcondition = 13;
-  static int FetIsInteresting = 14;
-  static int FetArity = 15;
-  static int FetNumVars = 16;
-  static int FetNumArrayVars = 17;
-  static int FetOneOfNum_elts = 50;
-  static int FetComparison = 51;
-  static int FetComparisonEq_probability = 52;
-  static int FetImplication = 53;
-  static int FetImplicationIff = 54;
-  static int FetUnary = 81;
-  static int FetScalar = 82;
-  static int FetSequence = 83;
-  static int FetString = 84;
-  static int FetStringSequence = 85;
-  static int FetBinary = 86;
-  static int FetTwoScalar = 88;
-  static int FetTwoSequence = 89;
-  static int FetTwoString = 90;
-  static int FetTernary = 91;
-  static int FetThreeScalar = 92;
-  static int FetModulus = 100;
-  static int FetLowerBound = 200;
-  static int FetLowerBoundCoreMin1 = 201;
-  static int FetNonZero = 300;
-  static int FetNonModulus = 400;
-  static int FetOneOfScalar = 500;
-  static int FetPositive = 600;
-  static int FetSingleFloat = 700;
-  static int FetSingleScalar = 800;
-  static int FetUpperBound = 900;
-  static int FetUpperBoundCoreMax1 = 901;
-  static int FetEltLowerBound = 1000;
-  static int FetEltNonZero = 1100;
-  static int FetEltOneOf = 1200;
-  static int FetEltUpperBound = 1300;
-  static int FetEltwiseIntComparison = 1400;
-  static int FetNoDuplicates = 1500;
-  static int FetOneOfSequence = 1600;
-  static int FetSeqIndexComparison = 1700;
-  static int FetSeqIndexNonEqual = 1800;
-  static int FetSingleFloatSequence = 1900;
-  static int FetSingleSequence = 2000;
-  static int FetOneOfString = 2200;
-  static int FetSingleString = 2300;
-  static int FetEltOneOfString = 2400;
-  static int FetOneOfStringSequence = 2500;
-  static int FetSingleStringSequence = 2600;
-  static int FetSeqIntComparison = 2800;
-  static int FetSequenceScalar = 2900;
-  static int FetSequenceScalarSeq_first = 2901;
-  static int FetSequenceScalarSeq_index = 2902;
-  static int FetSequenceScalarScl_index = 2903;
-  static int FetSequenceString = 3000;
-  static int FetSequenceStringSeq_first = 3001;
-  static int FetSequenceStringSeq_index = 3002;
-  static int FetSequenceStringScl_index = 3003;
-  static int FetIntNonEqual = 3100;
-  static int FetIntEqual = 3200;
-  //  static int FetNonEqual = 3300; removed invariant
-  static int FetNonEqualCoreMin1 = 3301;
-  static int FetNonEqualCoreMin2 = 3302;
-  static int FetNonEqualCoreMax1 = 3303;
-  static int FetNonEqualCoreMax2 = 3304;
-  static int FetFunctionUnary = 3400;
-  static int FetFunctionUnaryCoreInverse = 3401;
-  static int FetIntGreaterEqual = 3500;
-  static int FetIntGreaterThan = 3600;
-  static int FetLinearBinary = 3700;
-  static int FetLinearBinaryCoreA = 3701;
-  static int FetLinearBinaryCoreB = 3702;
-  static int FetIntLessEqual = 3800;
-  static int FetIntLessThan = 3900;
-  //  static int FetIntComparison = 4000; removed invariant
-  static int FetIntComparisonCoreCan_Be_Eq = 4001;
-  static int FetIntComparisonCoreCan_Be_Lt = 4002;
-  static int FetIntComparisonCoreCan_Be_Gt = 4003;
-  static int FetPairwiseIntComparison = 4800;
-  static int FetSeqComparison = 4900;
-  static int FetPairwiseLinearBinary = 5000;
-  static int FetSubSequence = 5100;
-  static int FetPairwiseFunctionUnary = 5200;
-  static int FetReverse = 5300;
-  static int FetStringComparison = 5500;
-  static int FetStringComparisonCoreCan_Be_Eq = 5501;
-  static int FetStringComparisonCoreCan_Be_Lt = 5502;
-  static int FetStringComparisonCoreCan_Be_Gt = 5503;
-  static int FetLinearTernary = 5700;
-  static int FetLinearTernaryCoreA = 5701;
-  static int FetLinearTernaryCoreB = 5702;
-  static int FetLinearTernaryCoreC = 5703;
-  static int FetFunctionBinary = 5800;
-  static int FetFunctionBinaryCoreVar_Order = 5801;
-  //Variable Features (10000 - 49999)
-  //10000-19999 are for "invariant contains a variable that ...
-  ///20000 - 29999 are for 1st variable is .... (etc. up to 3 variables)
-  //  static int FetVarInfoName = 10001;
-  static int FetVarInfoIs_Static_Constant = 10002;
-  static int FetVarInfoCanBeNull = 10003;
-  static int FetVarInfoIs_Dynamic_Constant =  10004;
-  static int FetTypeDimensions = 10005;
-  //  static int FetTypeBase = 10006;
-  static int FetTypeIsArray = 10007;
-  static int FetTypeBaseIsArray = 10008;
-  static int FetTypePseudoDimensions = 10009;
-  static int FetTypeIsPseudoArray = 10010;
-  static int FetTypeIsPrimitive = 10011;
-  static int FetTypeBaseIsPrimitive = 10012;
-  static int FetTypeIsIntegral = 10013;
-  static int FetTypeBaseIsIntegral = 10014;
-  static int FetTypeElementIsIntegral = 10015;
-  static int FetTypeIsScalar = 10016;
-  static int FetTypeIsFloat = 10017;
-  static int FetTypeBaseIsFloat = 10018;
-  static int FetTypeIsObject = 10019;
-  static int FetTypeBaseIsObject = 10020;
-  static int FetVarInfoAuxIsParam = 10021;
-  static int FetVarInfoAuxNullTerminating = 10022;
-  static int FetVarInfoAuxHasNull = 10023;
-  static int FetVarInfoAuxHasSize = 10024;
-  static int FetVarInfoAuxHasOrder = 10025;
-  static int FetVarInfoAuxHasDuplicates = 10026;
-
-
+public final class FeatureExtractor {
+  // See end of file for static variable declaration
 
   /* Main reads the input files, extracts features and then
-     outputs the labeling in SVM-Light format.
-
-     Main takes an odd number of arguments, "SVM" or "C5" and then
-     Pairs of .inv files.
-     So arguments look like this:
-     SVM Good.inv Bad.inv Good.inv Bad.inb Good.inv Bad.inv ...
+     outputs the labeling in SVM-Light, SVMfu, or C5.0 format.
+     Arguments:
+     -u FileName:   an invMap inv file with useful invariants
+     -n FileName:   an invMap inv file with nonuseful invariants
+     -o FileName:   output file name *Required
+     -t Type:       Type is one of {SVMlight, SVMfu, C5} *Required
+     -s FileName:   name of output file for invariant descriptions
+     -r repeats:    number of combinations of feature vectors
   */
-  static public void main(String[] args) throws IOException{
+
+  private static String USAGE =
+"\tArguments:\n\t-u FileName:\tan invMap inv file with useful invariants\n" +
+    "\t-n FileName:\tan invMap inv file with nonuseful invariants\n" +
+    "\t-o FileName:\toutput file name *Required\n" +
+    "\t-t Type:\tType is one of {SVMlight, SVMfu, C5}\n" +
+    "\t-s FileName:\tname of output file for invariant descriptions\n" +
+    "\t[-r] repeats:\tnumber of combinations of feature vectors (DISABLED)\n"+
+    "\t[-p] \t\tdo not output if no positive feature vectors are present\n";
+
+  static public void main(String[] args)
+    throws IOException, ClassNotFoundException {
     // Main performs 3 steps:
     // 1)  make two vectors of invariants: useful and nonuseful
     // 2)  extract the features for useful and nonuseful
-    // 3)  print in proper format (based on args[0]) the labeling
+    // 3)  print in proper format the labeling and if asked the descriptions
 
-    //Step 1
-    List fileNames = Arrays.asList(args);
-    fileNames.remove(0);
-    Vector[] allInvariants = getGoodAndBad((String[]) fileNames.toArray());
+    if (args.length == 0) {
+      System.out.print(USAGE);
+      System.exit(0);
+    }
+
+    // First, parse the arguments
+    Vector usefuls = new Vector();
+    Vector nonusefuls = new Vector();
+    String output_file = null;
+    String output_words = null;
+    String output_type = null;
+    int repeats = 1;
+    boolean positives = false;
+
+    for (int i = 0; i < args.length; i+=2) {
+      if (args[i].equals("-p"))
+        positives = true;
+      else if (args[i].equals("-u"))
+        usefuls.add(args[i+1]);
+      else if (args[i].equals("-n"))
+        nonusefuls.add(args[i+1]);
+      else if (args[i].equals("-r"))
+        repeats = Integer.parseInt(args[i+1]);
+      else if (args[i].equals("-o")) {
+        if (output_file == null)
+          output_file = args[i+1];
+        else
+          throw new IOException("Invalid Argument List, repeated output file");
+      }
+      else if (args[i].equals("-s")) {
+        if (output_words == null)
+          output_words = args[i+1];
+        else
+          throw new IOException("Invalid Argument List, repeated " +
+                                "output description file");
+      }
+      else if (args[i].equals("-t")) {
+        if ((output_type == null) || (output_type.equals(args[i+1])))
+          output_type = args[i+1];
+        else
+          throw new IOException("Invalid Argument List, repeated output type");
+      }
+      else
+        throw new IOException("Invalid Argument List, {u,n,o,s,t}" + args[i]);
+    }
+    if (output_file == null)
+      throw new IOException("Invalid Argumnent List, output file not specified");
+    if (output_type == null)
+      throw new IOException("Invalid Argumnent List, output type not specified");
+    if (output_file.equals(output_words))
+      throw new IOException("Invalid Argumnent List, output and description files " +
+                            "cannot be the same");
+    // Step 1
+    Vector[] allInvariants = getSimpleUsefulAndNonuseful(usefuls, nonusefuls);
     Vector useful = allInvariants[0];
     Vector nonuseful = allInvariants[1];
 
-    //Step 2
-    //features will have one element for each invariant.
-    //each element will be a TreeSet of IntDoublePairs
+    // Step 2
+    // Extract the features of each invariant in useful and nonuseful
+    // The invariants' feature vectors are kept in the same order
+    // as the invariants in useful and nonuseful.
+    // Then extract the descriptions of each invariant, also kept in the
+    // same order
     Vector usefulFeatures = getFeatures(useful);
     Vector nonusefulFeatures = getFeatures(nonuseful);
+    Vector usefulStrings = getStrings(useful);
+    Vector nonusefulStrings = getStrings(nonuseful);
+    // and create the proper number of repeats;
 
-    //Step 3
-    String output = new String();
-    if (args[0].indexOf("SVM") > -1)
-      output = printSVMOutput(usefulFeatures, nonusefulFeatures);
-    else if (args[0].indexOf("C5") > -1)
-      output = printC5Output(usefulFeatures, nonusefulFeatures);
-    else
-      System.err.println("Invalid First Argument: " + args[0]);
+    /* DISABLED FEATURE
+       while (repeats >= 2) {
+         Vector[] placeholder = createPermutations(usefulFeatures,
+         nonusefulFeatures,
+         usefulStrings,
+         nonusefulStrings);
+         usefulFeatures = placeholder[0];
+         nonusefulFeatures = placeholder[1];
+         usefulStrings = placeholder[2];
+         nonusefulStrings = placeholder[3];
+         repeats /= 2;
+    }
+    END DISABLED FEATURE */
 
-    System.out.print(output);
+    // Step 3
+    // Output the labeling in desired format.
+    // Also, if output_words is non-null, output the invariant
+    // descriptions.
+
+    if ((!positives) || (usefulFeatures.size() > 0)) {
+
+      if (output_type.equals("SVMfu")) {
+        File output = new File(output_file);
+        printSVMfuOutput(usefulFeatures, nonusefulFeatures, output);
+        if (output_words != null) {
+          File words = new File(output_words);
+          writeInvariantDescriptions(usefulStrings, nonusefulStrings, words);
+        }
+      }
+      else if (output_type.equals("SVMlight")) {
+        File output = new File(args[args.length-1] + ".tmp");
+        printSVMOutput(usefulFeatures, nonusefulFeatures,
+                       usefulStrings, nonusefulStrings, output);
+        compactSVMFeatureFile(output, new File(args[args.length-1]));
+        output.delete();
+      }
+      else if (output_type.equals("C5")) {
+        File output = new File(args[args.length-1]);
+        printC5Output(usefulFeatures, nonusefulFeatures, output);
+      }
+      else
+        System.err.println("Invalid Output Type: " + output_type);
+    }
+
   }
 
-  private static Vector[] getGoodAndBad(String[] args) throws IOException{
-    // the args are pairs of files such each pair
-    // consists of a Bad.inv and Good.inv
-    // Note, Good.inv contains invariants based on non-fault revealing
-    // test cases, and Bad.inv contains invariants based on fault revealing
-    // ones only.
 
-    // returns two Vectors (in an array) of Useful invariants and
-    //non-useful invariants
+  /* permutes the feature vectors repeats times
+     returns a Vector array of size 4 such that
+     return[0] is usefulFeatures
+     return[1] is nonusefulFeatures,
+     return[2] is usefulStrings,
+     return[3] is nonusefulStrings
+   */
+  private static Vector[] createPermutations(Vector usefulFeatures,
+                                       Vector nonusefulFeatures,
+                                       Vector usefulStrings,
+                                       Vector nonusefulStrings) {
+    Vector[] answer = new Vector[4];
+    for (int i = 0; i < 4; i++)
+      answer[i] = new Vector();
+
+    Vector[] placeholder;
+    //first useful-useful
+    placeholder = permute(usefulFeatures, usefulFeatures,
+                          usefulStrings, usefulStrings);
+    answer[0].addAll(placeholder[0]);
+    answer[2].addAll(placeholder[1]);
+    //second useful-nonuseful
+    placeholder = permute(usefulFeatures, nonusefulFeatures,
+                          usefulStrings, nonusefulStrings);
+    answer[0].addAll(placeholder[0]);
+    answer[2].addAll(placeholder[1]);
+    //third nonuseful-useful
+    placeholder = permute(nonusefulFeatures, usefulFeatures,
+                          nonusefulStrings, usefulStrings);
+    answer[0].addAll(placeholder[0]);
+    answer[2].addAll(placeholder[1]);
+    //last nonuseful-nonuseful
+    placeholder = permute(nonusefulFeatures, nonusefulFeatures,
+                          nonusefulStrings, nonusefulStrings);
+    answer[1].addAll(placeholder[0]);
+    answer[3].addAll(placeholder[1]);
+
+    return answer;
+  }
+
+  /* returns two Vectors.  return[0] contain items from oneInput
+     permuted with each item from twoInput.
+     return[1] contains the permuted strings.
+  */
+  private static Vector[] permute(Vector oneInput, Vector twoInput,
+                         Vector oneString, Vector twoString) {
     Vector[] answer = new Vector[2];
     answer[0] = new Vector();
     answer[1] = new Vector();
 
-    for (int i = 0; i < args.length; i+=2) {
-      //good contains string reps of invariants in Good.inv
-      Vector good = new Vector();
-      Iterator goodppts =
-        FileIO.read_serialized_pptmap(new File(args[i]), false).iterator();
-      while(goodppts.hasNext()) {
+    for (int i = 0; i < oneInput.size(); i++)
+      for (int j = 0; j < twoInput.size(); j++) {
+        // Create a new TreeSet that is the union of oneInput.get(i)
+        // and twoInput.get(j) shifted by OneMoreOrderThanLargestFeature.
+        TreeSet current = new TreeSet();
+        current.addAll((TreeSet) oneInput.get(i));
+        current.addAll(shift(((TreeSet) twoInput.get(j)).iterator(),
+                             OneMoreOrderThanLargestFeature));
+        answer[0].add(current);
+
+        // And now strings:
+        answer[1].add(oneString.get(i) + "\t" + twoString.get(j));
+
+      }
+    return answer;
+  }
+
+  /* Adds shift to the int term of every IntDoublePair in the Iterator input
+   */
+  private static TreeSet shift(Iterator input, int shift) {
+    TreeSet answer = new TreeSet();
+    for (;input.hasNext();) {
+      IntDoublePair current = (IntDoublePair) (input.next());
+      answer.add(new IntDoublePair(current.number + shift, current.value));
+    }
+    return answer;
+  }
+
+  /* Takes a vector of invariants and returns a vector of
+     the string representations of those invariants in the same order
+  */
+  private static Vector getStrings(Vector invs) {
+    Vector answer = new Vector();
+    for (int i = 0; i < invs.size(); i++) {
+      Invariant current = (Invariant) invs.get(i);
+      answer.add(current.ppt.parent.name + ":::" + current.format());
+    }
+    return answer;
+  }
+
+  /* Takes two vectors of file names and loads the invariants
+     in those files into two vectors.
+     Returns the useful invariants in return[0],
+     returns the nonuseful invariants in return[1];
+  */
+  private static Vector[] getSimpleUsefulAndNonuseful(Vector usefuls,
+                                                      Vector nonusefuls)
+    throws IOException, ClassNotFoundException {
+
+    // returns two Vectors (in an array) of Useful invariants and
+    // Non-Useful invariants
+    // return[0] are Useful
+    // return[1] are Non-Useful
+
+    Vector[] answer = new Vector[2];
+    answer[0] = new Vector(); //useful
+    answer[1] = new Vector(); //nonuseful
+    for (int i = 0; i < usefuls.size(); i++)
+      for (Iterator invs=readInvMap(new File((String) usefuls.get(i))).invariantIterator(); invs.hasNext();)
+        answer[0].add(invs.next());
+
+    for (int i = 0; i < nonusefuls.size(); i++)
+      for (Iterator invs=readInvMap(new File((String) nonusefuls.get(i))).invariantIterator(); invs.hasNext();)
+        answer[1].add(invs.next());
+
+    return answer;
+  }
+
+  /* Old version of loading invariants from a list of filenames.
+     Compares invariants within the files to determine if they
+     are useful or non-useful.
+  */
+  private static Vector[] getUsefulAndNonuseful(String[] args)
+    throws IOException{
+    // ignore args[0] and args[length-1]
+    // the rest of the args are pairs of files such each pair
+    // consists of a Non-Buggy.inv and Buggy.inv
+    // Note, Non-Buggy.inv contains invariants present in non-buggy code
+    // and Buggy.inv contains invariants present in buggy code
+
+    // returns two Vectors (in an array) of Useful invariants and
+    // non-useful invariants
+    Vector[] answer = new Vector[2];
+    answer[0] = new Vector();
+    answer[1] = new Vector();
+
+    for (int i = 1; i < args.length-1; i+=2) {
+      // good contains string reps of invariants in Non-Buggy.inv
+      HashSet good = new HashSet();
+      for (Iterator goodppts =
+             FileIO.read_serialized_pptmap(new File(args[i]), false).pptIterator();
+           goodppts.hasNext(); ) {
         List temp = ((PptTopLevel) goodppts.next()).getInvariants();
         for (int j = 0; j < temp.size(); j++)
-          good.add(((Invariant) temp.get(j)).format_using(OutputFormat.JAVA));
+          good.add(((Invariant) temp.get(j)).repr());
       }
 
-      //bad contains actual invariants in Bad.inv
+      // bad contains actual invariants in Buggy.inv
       Vector bad = new Vector();
-      Iterator badppts =
-        FileIO.read_serialized_pptmap(new File(args[i+1]), false).iterator();
-      while(badppts.hasNext()) {
+      for (Iterator badppts =
+             FileIO.read_serialized_pptmap(new File(args[i+1]),false).pptIterator();
+           badppts.hasNext(); ) {
         List temp = ((PptTopLevel) badppts.next()).getInvariants();
         for (int j = 0; j < temp.size(); j++)
           bad.add((Invariant) temp.get(j));
       }
 
       for (int j = 0; j < bad.size(); j++) {
-        if (good.contains(((Invariant) bad.get(j)).format_using(OutputFormat.JAVA)))
+        if (good.contains(((Invariant) bad.get(j)).repr()))
           answer[1].add(bad.get(j));
         else
           answer[0].add(bad.get(j));
@@ -261,107 +344,211 @@ public class FeatureExtractor {
     return answer;
   }
 
-  private static String printC5Output(Vector usefulFeatures,
-                                      Vector nonusefulFeatures) {
-    String answer = new String();
-    //First create a TreeSet of all the Feature Numbers and 0 as value
+  /* Prints the labeling using C5 format
+   */
+  private static void printC5Output(Vector usefulFeatures, Vector nonusefulFeatures,
+                                    File outputFile) throws IOException {
+    FileWriter output = new FileWriter(outputFile);
+    // First create a TreeSet of all the Feature Numbers and 0 as value
     TreeSet allFeatures =  new TreeSet();
     for (int i = 0; i < usefulFeatures.size(); i++) {
-      Iterator fets = ((TreeSet) usefulFeatures.get(i)).iterator();
-      while(fets.hasNext()) {
+      for (Iterator fets = ((TreeSet) usefulFeatures.get(i)).iterator();
+           fets.hasNext();) {
         IntDoublePair fet = (IntDoublePair) fets.next();
         allFeatures.add(new IntDoublePair(fet.number, 0));
       }
     }
     for (int i = 0; i < nonusefulFeatures.size(); i++) {
-      Iterator fets = ((TreeSet) nonusefulFeatures.get(i)).iterator();
-      while(fets.hasNext()) {
+      for (Iterator fets = ((TreeSet) nonusefulFeatures.get(i)).iterator();
+           fets.hasNext();) {
         IntDoublePair fet = (IntDoublePair) fets.next();
         allFeatures.add(new IntDoublePair(fet.number, 0));
       }
     }
 
 
-    //Now make the .names part
-    answer += "|Beginning of .names file\n";
-    Iterator all = allFeatures.iterator();
-    answer += "GoodBad.\n\nGoodBad: 1, -1.\n";
-    while (all.hasNext())
-      answer += ((IntDoublePair) all.next()).number + ": continuous.\n";
-    answer += "useless: ignore.\n";
-    answer += "|End of .names file\n\n\n";
+    // Now make the .names part
+    output.write("|Beginning of .names file\n");
+    output.write("GoodBad.\n\nGoodBad: 1, -1.\n");
+    for (Iterator all = allFeatures.iterator(); all.hasNext();)
+      output.write(((IntDoublePair) all.next()).number + ": continuous.\n");
+    output.write("useless: ignore.\n");
+    output.write("|End of .names file\n\n\n");
 
-    //Now for each invariant, print out the features C5.0 style
-    //first useful
-    for (int i = 0; i < usefulFeatures.size(); i++) {
-      TreeSet allFets = ((TreeSet) usefulFeatures.get(i));
-      allFets.addAll(allFeatures); //Add a 0 feature if it is not present
-
-      Iterator fets = allFets.iterator();
-      answer += "1,";
-      DecimalFormat df = new DecimalFormat("0.0####");
-      while(fets.hasNext()) {
-        IntDoublePair fet = (IntDoublePair) fets.next();
-        answer += df.format(fet.value) + ",";
-      }
-      answer += "N/A\n";
-    }
-    //and now non useful
-    for (int i = 0; i < nonusefulFeatures.size(); i++) {
-      TreeSet allFets = ((TreeSet) nonusefulFeatures.get(i));
-      allFets.addAll(allFeatures); //Add a 0 feature if it is not present
-
-      Iterator fets = allFets.iterator();
-      answer += "-1,";
-      DecimalFormat df = new DecimalFormat("0.0####");
-      while(fets.hasNext()) {
-        IntDoublePair fet = (IntDoublePair) fets.next();
-        answer += df.format(fet.value) + ",";
-      }
-      answer += "N/A\n";
-    }
-    return answer;
+    // Now for each invariant, print out the features C5.0 style
+    // first useful
+    printC5DataOutput(usefulFeatures, allFeatures, "1,", output);
+    // and now non useful
+    printC5DataOutput(nonusefulFeatures, allFeatures, "-1,", output);
+    output.close();
   }
 
-  private static String printSVMOutput(Vector usefulFeatures,
-                                       Vector nonusefulFeatures) {
-    String answer = new String();
-    //Now add all the features in SVM-Light format to answer
-    //first the useful
-    for (int i = 0; i < usefulFeatures.size(); i++) {
-      Iterator fets = ((TreeSet) usefulFeatures.get(i)).iterator();
-      answer += "1 ";
-      DecimalFormat df = new DecimalFormat("0.0####");
-      while(fets.hasNext()) {
-	IntDoublePair fet = (IntDoublePair) fets.next();
-	if (fet.value > THRESHOLD)
-	  answer += fet.number + ":" + df.format(fet.value) + " ";
+  /* Prints the partial labeling using C5 format for all feature vectors
+     in features.
+   */
+  private static void printC5DataOutput (Vector features,
+                                           TreeSet allFeatures,
+                                           String label,
+                                           FileWriter output) throws IOException {
+    DecimalFormat df = new DecimalFormat("0.0####");
+    for (int i = 0; i < features.size(); i++) {
+      TreeSet allFets = ((TreeSet) features.get(i));
+      allFets.addAll(allFeatures); // Add a 0 feature if it is not present
+      output.write(label);
+      for (Iterator fets = allFets.iterator(); fets.hasNext();) {
+        IntDoublePair fet = (IntDoublePair) fets.next();
+        output.write(df.format(fet.value) + ",");
       }
-      answer += "\n";
+      output.write("N/A\n");
     }
-    //and now non useful
-    for (int i = 0; i < nonusefulFeatures.size(); i++) {
-      Iterator fets = ((TreeSet) nonusefulFeatures.get(i)).iterator();
-      answer += "-1 ";
-      DecimalFormat df = new DecimalFormat("0.0####");
-      while(fets.hasNext()) {
-	IntDoublePair fet = (IntDoublePair) fets.next();
-	if (fet.value > THRESHOLD)
-	  answer += fet.number + ":" + df.format(fet.value) + " ";
-      }
-      answer += "\n";
-    }
-    return answer;
   }
 
-  /* extracts features for each of the elements on invariants
-     and returns a Vector of TreeSets of the features */
+  /* Prints the labeling using SVMlight format
+   */
+  private static void printSVMOutput(Vector usefulFeatures,
+                                     Vector nonusefulFeatures,
+                                     Vector usefulStrings,
+                                     Vector nonusefulStrings,
+                                     File outputFile) throws IOException {
+    FileWriter output = new FileWriter(outputFile);
+    // Now add all the features in SVM-Light format to output
+    // first the useful
+    printSVMDataOutput(usefulFeatures, usefulStrings, "+1 ", output);
+    // and now non useful
+    printSVMDataOutput(nonusefulFeatures, nonusefulStrings, "-1 ", output);
+    output.close();
+  }
+
+  /* Prints a partial labeling using SVMlight format for all the
+     feature vectors in features.
+   */
+  private static void printSVMDataOutput(Vector features, Vector strings,
+                                         String label,
+                                         FileWriter output) throws IOException{
+    DecimalFormat df = new DecimalFormat("0.0####");
+    for (int i = 0; i < features.size(); i++) {
+      output.write(label);
+      for (Iterator fets = ((TreeSet) features.get(i)).iterator();
+           fets.hasNext();) {
+	IntDoublePair fet = (IntDoublePair) fets.next();
+	if (fet.value > THRESHOLD)
+	  output.write(fet.number + ":" + df.format(fet.value) + " ");
+      }
+      output.write("\n");
+      output.write("#  " + ((String) strings.get(i)) + "\n");
+    }
+  }
+
+  /* Prints the labeling using SVMfu format.
+   */
+  private static void printSVMfuOutput(Vector usefulFeatures,
+                                       Vector nonusefulFeatures,
+                                       File outputFile) throws IOException {
+    FileWriter output = new FileWriter(outputFile);
+    // Now add all the features in SVMfu format to output
+    //first size
+    output.write((usefulFeatures.size() + nonusefulFeatures.size()) + "\n");
+    // first the useful
+    printSVMfuDataOutput(usefulFeatures, "1 ", output);
+    // and now non useful
+    printSVMfuDataOutput(nonusefulFeatures, "-1 ", output);
+    output.close();
+  }
+
+  /* Prints a partial labeling using SVMfu format for all the
+     feature vectors in features.
+   */
+  private static void printSVMfuDataOutput(Vector features, String label,
+                                           FileWriter output) throws IOException{
+    DecimalFormat df = new DecimalFormat("0.0####");
+    for (int i = 0; i < features.size(); i++) {
+      output.write(((TreeSet) features.get(i)).size() * 2 + " ");
+      for (Iterator fets = ((TreeSet) features.get(i)).iterator();
+           fets.hasNext();) {
+	IntDoublePair fet = (IntDoublePair) fets.next();
+        output.write(fet.number + " " + df.format(fet.value) + " ");
+      }
+      output.write(label);
+      output.write("\n");
+    }
+  }
+
+  /* Prints the invariant descriptions to a file.
+   */
+  private static void writeInvariantDescriptions(Vector usefulStrings,
+                                       Vector nonusefulStrings,
+                                       File outputFile) throws IOException {
+    FileWriter output = new FileWriter(outputFile);
+    for (int i = 0; i < usefulStrings.size(); i++)
+      output.write((String) usefulStrings.get(i) + "\n");
+    for (int i = 0; i < nonusefulStrings.size(); i++)
+      output.write((String) nonusefulStrings.get(i) + "\n");
+    output.close();
+  }
+
+  /* compacts an SVMlight file to remove repeats.
+   */
+  private static void compactSVMFeatureFile(File input, File output)
+    throws IOException {
+    BufferedReader br = new BufferedReader(new FileReader(input));
+    HashSet vectors = new HashSet();
+    Vector outputData = new Vector();
+    while (br.ready()) {
+      String line = br.readLine();
+      if (vectors.contains(line))
+        br.readLine();
+      else {
+        vectors.add(line);
+        line += "\n" + br.readLine();
+        outputData.add(line);
+      }
+    }
+    br.close();
+
+    FileWriter fw = new FileWriter(output);
+    for (Iterator i = outputData.iterator(); i.hasNext();)
+      fw.write((String) i.next() + "\n");
+    fw.close();
+  }
+
+  /* compacts an SVMfu file to remove repeats.
+   */
+  private static void compactSVMfuFeatureFile(File input, File output)
+    throws IOException {
+    BufferedReader br = new BufferedReader(new FileReader(input));
+    HashSet vectors = new HashSet();
+    br.readLine();
+    while (br.ready())
+      vectors.add(br.readLine());
+    br.close();
+
+    FileWriter fw = new FileWriter(output);
+    fw.write(vectors.size() + "\n");
+    for (Iterator i = vectors.iterator(); i.hasNext();)
+      fw.write((String) i.next() + "\n");
+    fw.close();
+  }
+
+  /* Reads an InvMap from a file that contains a serialized InvMap.
+   */
+  private static InvMap readInvMap(File file) throws
+  IOException, ClassNotFoundException {
+    Object o = UtilMDE.readObject(file);
+    if (o instanceof InvMap) {
+      return (InvMap) o;
+    } else
+      throw new ClassNotFoundException("inv file does not contain InvMap");
+  }
+
+  /* Extracts features for each of the elements on invariants
+     and returns a Vector of TreeSets of the features.
+  */
   private static Vector getFeatures(Vector invariants) {
     Vector answer = new Vector();
-    //for each invariant, extract all the features and build a new TreeSet
+    // for each invariant, extract all the features and build a new TreeSet
     for (int i = 0; i < invariants.size(); i++) {
-      //extract the common features
-      //then test for all other possible features
+      // extract the common features
+      // then test for all other possible features
       TreeSet invariant = new TreeSet();
 
       Invariant current = (Invariant) invariants.get(i);
@@ -478,44 +665,142 @@ public class FeatureExtractor {
 	invariant.addAll(getLinearTernaryFeatures((LinearTernary) current));
       if (current instanceof FunctionBinary)
 	invariant.addAll(getFunctionBinaryFeatures((FunctionBinary) current));
+
+      // Float Invariants
+      if (current instanceof MemberFloat)
+	invariant.addAll(getMemberFloatFeatures((MemberFloat) current));
+      if (current instanceof SeqFloatComparison)
+	invariant.addAll(getSeqFloatComparisonFeatures((SeqFloatComparison) current));
+      if (current instanceof SequenceFloat)
+	invariant.addAll(getSequenceFloatFeatures((SequenceFloat) current));
+      if (current instanceof FloatEqual)
+	invariant.addAll(getFloatEqualFeatures((FloatEqual) current));
+      if (current instanceof FloatNonEqual)
+	invariant.addAll(getFloatNonEqualFeatures((FloatNonEqual) current));
+      if (current instanceof FloatLessThan)
+	invariant.addAll(getFloatLessThanFeatures((FloatLessThan) current));
+      if (current instanceof FloatLessEqual)
+	invariant.addAll(getFloatLessEqualFeatures((FloatLessEqual) current));
+      if (current instanceof FloatGreaterThan)
+	invariant.addAll(getFloatGreaterThanFeatures((FloatGreaterThan) current));
+      if (current instanceof FloatGreaterEqual)
+	invariant.addAll(getFloatGreaterEqualFeatures((FloatGreaterEqual) current));
+      if (current instanceof FunctionUnaryFloat)
+	invariant.addAll(getFunctionUnaryFloatFeatures((FunctionUnaryFloat) current));
+      if (current instanceof LinearBinaryFloat)
+	invariant.addAll(getLinearBinaryFloatFeatures((LinearBinaryFloat) current));
+      if (current instanceof TwoFloat)
+	invariant.addAll(getTwoFloatFeatures((TwoFloat) current));
+      if (current instanceof SeqComparisonFloat)
+	invariant.addAll(getSeqComparisonFloatFeatures((SeqComparisonFloat) current));
+      if (current instanceof ReverseFloat)
+	invariant.addAll(getReverseFloatFeatures((ReverseFloat) current));
+      if (current instanceof SubSequenceFloat)
+	invariant.addAll(getSubSequenceFloatFeatures((SubSequenceFloat) current));
+      if (current instanceof PairwiseFloatComparison)
+	invariant.addAll(getPairwiseFloatComparisonFeatures((PairwiseFloatComparison) current));
+      if (current instanceof TwoSequenceFloat)
+	invariant.addAll(getTwoSequenceFloatFeatures((TwoSequenceFloat) current));
+      if (current instanceof PairwiseLinearBinaryFloat)
+	invariant.addAll(getPairwiseLinearBinaryFloatFeatures((PairwiseLinearBinaryFloat) current));
+      if (current instanceof PairwiseFunctionUnaryFloat)
+	invariant.addAll(getPairwiseFunctionUnaryFloatFeatures((PairwiseFunctionUnaryFloat) current));
+      if (current instanceof FunctionBinaryFloat)
+	invariant.addAll(getFunctionBinaryFloatFeatures((FunctionBinaryFloat) current));
+      if (current instanceof ThreeFloat)
+	invariant.addAll(getThreeFloatFeatures((ThreeFloat) current));
+      if (current instanceof LinearTernaryFloat)
+	invariant.addAll(getLinearTernaryFloatFeatures((LinearTernaryFloat) current));
+      if (current instanceof OneOfFloat)
+	invariant.addAll(getOneOfFloatFeatures((OneOfFloat) current));
+      if (current instanceof SingleFloat)
+	invariant.addAll(getSingleFloatFeatures((SingleFloat) current));
+      if (current instanceof LowerBoundFloat)
+	invariant.addAll(getLowerBoundFloatFeatures((LowerBoundFloat) current));
+      if (current instanceof UpperBoundFloat)
+	invariant.addAll(getUpperBoundFloatFeatures((UpperBoundFloat) current));
+      if (current instanceof NonZeroFloat)
+	invariant.addAll(getNonZeroFloatFeatures((NonZeroFloat) current));
+      if (current instanceof OneOfFloatSequence)
+	invariant.addAll(getOneOfFloatSequenceFeatures((OneOfFloatSequence) current));
+      if (current instanceof EltOneOfFloat)
+	invariant.addAll(getEltOneOfFloatFeatures((EltOneOfFloat) current));
+      if (current instanceof EltLowerBoundFloat)
+	invariant.addAll(getEltLowerBoundFloatFeatures((EltLowerBoundFloat) current));
+      if (current instanceof EltUpperBoundFloat)
+	invariant.addAll(getEltUpperBoundFloatFeatures((EltUpperBoundFloat) current));
+      if (current instanceof NoDuplicatesFloat)
+	invariant.addAll(getNoDuplicatesFloatFeatures((NoDuplicatesFloat) current));
+      if (current instanceof SeqIndexComparisonFloat)
+	invariant.addAll(getSeqIndexComparisonFloatFeatures((SeqIndexComparisonFloat) current));
+      if (current instanceof SeqIndexNonEqualFloat)
+	invariant.addAll(getSeqIndexNonEqualFloatFeatures((SeqIndexNonEqualFloat) current));
+      if (current instanceof CommonFloatSequence)
+	invariant.addAll(getCommonFloatSequenceFeatures((CommonFloatSequence) current));
+      if (current instanceof EltNonZeroFloat)
+	invariant.addAll(getEltNonZeroFloatFeatures((EltNonZeroFloat) current));
+      if (current instanceof SingleFloatSequence)
+	invariant.addAll(getSingleFloatSequenceFeatures((SingleFloatSequence) current));
+      if (current instanceof EltwiseFloatComparison)
+	invariant.addAll(getEltwiseFloatComparisonFeatures((EltwiseFloatComparison) current));
+
       answer.add(invariant);
     }
     return answer;
   }
 
-
   // The rest of the methods extract features of various invariant
   // types (as defined by the invariant types they take as arguments)
   private static Vector getCommonFeatures(Invariant inv) {
     Vector answer = new Vector();
-    if (inv.enoughSamples()) answer.add(new IntDoublePair(FetEnoughSamples, 1));
-    answer.add(new IntDoublePair(FetGetProbability, inv.getProbability()));
-    if (inv.isExact()) answer.add(new IntDoublePair(FetIsExact, 1));
-    if (inv.justified()) answer.add(new IntDoublePair(FetJustified, 1));
-    if (inv.isWorthPrinting()) answer.add(new IntDoublePair(FetIsWorthPrinting, 1));
-    if (inv.hasFewModifiedSamples()) answer.add(new IntDoublePair(FetHasFewModifiedSamples, 1));
-    // [INCR] if (inv.hasNonCanonicalVariable()) answer.add(new IntDoublePair(FetHasNonCanonicalVariable, 1));
-    // [INCR] if (inv.hasOnlyConstantVariables()) answer.add(new IntDoublePair(FetHasOnlyConstantVariables, 1));
-    if (inv.isObvious()) answer.add(new IntDoublePair(FetIsObvious, 1));
-    if (inv.isObviousDerived()) answer.add(new IntDoublePair(FetIsObviousDerived, 1));
-    if (inv.isObviousImplied()) answer.add(new IntDoublePair(FetIsObviousImplied, 1));
-    // [INCR] if (inv.isControlled()) answer.add(new IntDoublePair(FetIsControlled, 1));
-    // [INCR] if (inv.isImpliedPostcondition()) answer.add(new IntDoublePair(FetIsImpliedPostcondition, 1));
-    if (inv.isInteresting()) answer.add(new IntDoublePair(FetIsInteresting, 1));
-    answer.add(new IntDoublePair(FetArity, inv.ppt.arity));
-    answer.add(new IntDoublePair(FetNumVars, inv.ppt.parent.num_vars()));
-    answer.add(new IntDoublePair(FetNumArrayVars, inv.ppt.parent.num_array_vars()));
-
+    if (inv.enoughSamples()) {
+      answer.add(new IntDoublePair(FetEnoughSamples, 1));
+      answer.add(new IntDoublePair(FetGetProbability, inv.getProbability()));
+      if (inv.isExact()) answer.add(new IntDoublePair(FetIsExact, 1));
+      if (inv.justified()) answer.add(new IntDoublePair(FetJustified, 1));
+      if (inv.isWorthPrinting()) answer.add(new IntDoublePair(FetIsWorthPrinting, 1));
+      if (inv.hasFewModifiedSamples()) answer.add(new IntDoublePair(FetHasFewModifiedSamples, 1));
+      /* [INCR]
+      if (inv.hasNonCanonicalVariable()) answer.add(new IntDoublePair(FetHasNonCanonicalVariable, 1));
+      if (inv.hasOnlyConstantVariables()) answer.add(new IntDoublePair(FetHasOnlyConstantVariables, 1));
+      */ // [INCR]
+      if (inv.isObvious()) answer.add(new IntDoublePair(FetIsObvious, 1));
+      if (inv.isObviousDerived()) answer.add(new IntDoublePair(FetIsObviousDerived, 1));
+      if (inv.isObviousImplied()) answer.add(new IntDoublePair(FetIsObviousImplied, 1));
+      /* [INCR]
+      if (inv.isControlled()) answer.add(new IntDoublePair(FetIsControlled, 1));
+      if (inv.isImpliedPostcondition()) answer.add(new IntDoublePair(FetIsImpliedPostcondition, 1));
+      */ // [INCR]
+      if (inv.isInteresting()) answer.add(new IntDoublePair(FetIsInteresting, 1));
+      answer.addAll(getPptFeatures(inv.ppt));
+    }
     return answer;
   }
 
-  //get the variable features
+  // get the Ppt features
+  private static Vector getPptFeatures(PptSlice ppt) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetArity, ppt.arity));
+    PptTopLevel pptTop = ppt.parent;
+    answer.add(new IntDoublePair(FetNumVars, pptTop.num_vars()));
+    answer.add(new IntDoublePair(FetNumArrayVars, pptTop.num_array_vars()));
+    /* [INCR]
+    if (pptTop.entry_ppt != null)
+      answer.add(new IntDoublePair(FetPptIsExit, 1));
+    if (pptTop.combined_exit != null)
+      answer.add(new IntDoublePair(FetPptIsLineNumberedExit, 1));
+    answer.add(new IntDoublePair(FetPptNumOfExits, pptTop.exit_ppts.size()));
+    */ // [INCR]
+    return answer;
+  }
+
+  // get the variable features
   private static Vector getVarFeatures(VarInfo[] var_infos) {
     Vector answer = new Vector();
-    //the i = 0 case is the OR of all the other i cases.
+    // the i = 0 case is the OR of all the other i cases.
     for (int i = 1; i <= var_infos.length; i++) {
       VarInfo var = var_infos[i-1];
-      //delete feature because hash code is not a continuous function
+      // delete feature because hash code is not a continuous function
       //      answer.add(new IntDoublePair(i*10000 + FetVarInfoName, var.name.name().hashCode()));
       if (var.is_static_constant) {
 	answer.add(new IntDoublePair(i*10000+FetVarInfoIs_Static_Constant, 1));
@@ -524,11 +809,14 @@ public class FeatureExtractor {
       if (var.canBeNull) {
 	answer.add(new IntDoublePair(i*10000 + FetVarInfoCanBeNull, 1));
 	answer.add(new IntDoublePair(FetVarInfoIs_Static_Constant, 1)); }
-      /* [INCR]
       if (var.is_dynamic_constant) {
 	answer.add(new IntDoublePair(i*10000+FetVarInfoIs_Dynamic_Constant,1));
 	answer.add(new IntDoublePair(FetVarInfoIs_Dynamic_Constant, 1)); }
       */ // [INCR]
+      if (var.isPrestate()) {
+	answer.add(new IntDoublePair(i*10000 + FetVarIsPrestate, 1));
+	answer.add(new IntDoublePair(FetVarIsPrestate, 1)); }
+      answer.add(new IntDoublePair(i * 10000 + FetVarDerivedDepth, var.derivedDepth()));
 
       VarInfoAux aux = var.aux;
       if (aux.getFlag(VarInfoAux.IS_PARAM)) {
@@ -552,8 +840,8 @@ public class FeatureExtractor {
 
       ProglangType type = var.type;
       answer.add(new IntDoublePair(i*10000 + FetTypeDimensions, type.dimensions()));
-      //delete feature because hash code is not a continuous function
-      //answer.add(new IntDoublePair(i*10000 + FetTypeBase, type.base().hashCode()));
+      // delete feature because hash code is not a continuous function
+      // answer.add(new IntDoublePair(i*10000 + FetTypeBase, type.base().hashCode()));
       if (type.isArray()) {
 	answer.add(new IntDoublePair(i*10000 + FetTypeIsArray, 1));
 	answer.add(new IntDoublePair(FetTypeIsArray, 1)); }
@@ -613,9 +901,26 @@ public class FeatureExtractor {
     return answer;
   }
 
+  private static Vector getLowerBoundFloatFeatures(LowerBoundFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetLowerBoundFloat, 1));
+    answer.add(new IntDoublePair(FetScalar, 1));
+    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.addAll(getLowerBoundCoreFloatFeatures(inv.core));
+    return answer;
+  }
+
   private static Vector getNonZeroFeatures(NonZero inv) {
     Vector answer = new Vector();
     answer.add(new IntDoublePair(FetNonZero, 1));
+    answer.add(new IntDoublePair(FetScalar, 1));
+    answer.add(new IntDoublePair(FetUnary, 1));
+    return answer;
+  }
+
+  private static Vector getNonZeroFloatFeatures(NonZeroFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetNonZeroFloat, 1));
     answer.add(new IntDoublePair(FetScalar, 1));
     answer.add(new IntDoublePair(FetUnary, 1));
     return answer;
@@ -670,15 +975,36 @@ public class FeatureExtractor {
     return answer;
   }
 
+  private static Vector getUpperBoundFloatFeatures(UpperBoundFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetUpperBoundFloat, 1));
+    answer.add(new IntDoublePair(FetScalar, 1));
+    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.addAll(getUpperBoundCoreFloatFeatures(inv.core));
+    return answer;
+  }
+
   private static Vector getUpperBoundCoreFeatures(UpperBoundCore core) {
     Vector answer = new Vector();
     //    answer.add(new IntDoublePair(FetUpperBoundCoreMax1, core.max1));
     return answer;
   }
 
+  private static Vector getUpperBoundCoreFloatFeatures(UpperBoundCoreFloat core) {
+    Vector answer = new Vector();
+    //    answer.add(new IntDoublePair(FetUpperBoundCoreFloatMax1, core.max1));
+    return answer;
+  }
+
   private static Vector getLowerBoundCoreFeatures(LowerBoundCore core) {
     Vector answer = new Vector();
     //    answer.add(new IntDoublePair(FetLowerBoundCoreMin1, core.min1));
+    return answer;
+  }
+
+  private static Vector getLowerBoundCoreFloatFeatures(LowerBoundCoreFloat core) {
+    Vector answer = new Vector();
+    //    answer.add(new IntDoublePair(FetLowerBoundCoreFloatMin1, core.min1));
     return answer;
   }
 
@@ -691,6 +1017,33 @@ public class FeatureExtractor {
     return answer;
   }
 
+  private static Vector getEltLowerBoundFloatFeatures(EltLowerBoundFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetEltLowerBoundFloat, 1));
+    answer.add(new IntDoublePair(FetSequence, 1));
+    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.addAll(getLowerBoundCoreFloatFeatures(inv.core));
+    return answer;
+  }
+
+  private static Vector getSequenceFloatFeatures(SequenceFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetSequenceFloat, 1));
+    return answer;
+  }
+
+  private static Vector getMemberFloatFeatures(MemberFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetMemberFloat, 1));
+    return answer;
+  }
+
+  private static Vector getCommonFloatSequenceFeatures(CommonFloatSequence inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetCommonFloatSequence, 1));
+    return answer;
+  }
+
   private static Vector getEltNonZeroFeatures(EltNonZero inv) {
     Vector answer = new Vector();
     answer.add(new IntDoublePair(FetEltNonZero, 1));
@@ -699,9 +1052,25 @@ public class FeatureExtractor {
     return answer;
   }
 
+  private static Vector getEltNonZeroFloatFeatures(EltNonZeroFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetEltNonZeroFloat, 1));
+    answer.add(new IntDoublePair(FetSequence, 1));
+    answer.add(new IntDoublePair(FetUnary, 1));
+    return answer;
+  }
+
   private static Vector getEltOneOfFeatures(EltOneOf inv) {
     Vector answer = new Vector();
     answer.add(new IntDoublePair(FetEltOneOf, 1));
+    answer.add(new IntDoublePair(FetSequence, 1));
+    answer.add(new IntDoublePair(FetUnary, 1));
+    return answer;
+  }
+
+  private static Vector getEltOneOfFloatFeatures(EltOneOfFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetEltOneOfFloat, 1));
     answer.add(new IntDoublePair(FetSequence, 1));
     answer.add(new IntDoublePair(FetUnary, 1));
     return answer;
@@ -716,12 +1085,30 @@ public class FeatureExtractor {
     return answer;
   }
 
+  private static Vector getEltUpperBoundFloatFeatures(EltUpperBoundFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetEltUpperBoundFloat, 1));
+    answer.add(new IntDoublePair(FetSequence, 1));
+    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.addAll(getUpperBoundCoreFloatFeatures(inv.core));
+    return answer;
+  }
+
   private static Vector getEltwiseIntComparisonFeatures(EltwiseIntComparison inv) {
     Vector answer = new Vector();
     answer.add(new IntDoublePair(FetEltwiseIntComparison, 1));
     answer.add(new IntDoublePair(FetSequence, 1));
     answer.add(new IntDoublePair(FetUnary, 1));
     answer.addAll(getIntComparisonCoreFeatures(inv.core));
+    return answer;
+  }
+
+  private static Vector getEltwiseFloatComparisonFeatures(EltwiseFloatComparison inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetEltwiseFloatComparison, 1));
+    answer.add(new IntDoublePair(FetSequence, 1));
+    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.addAll(getFloatComparisonCoreFeatures(inv.core));
     return answer;
   }
 
@@ -736,6 +1123,17 @@ public class FeatureExtractor {
     return answer;
   }
 
+  private static Vector getFloatComparisonCoreFeatures(FloatComparisonCore core) {
+    Vector answer = new Vector();
+    if (core.can_be_eq)
+      answer.add(new IntDoublePair(FetFloatComparisonCoreCan_Be_Eq, 1));
+    if (core.can_be_lt)
+      answer.add(new IntDoublePair(FetFloatComparisonCoreCan_Be_Lt, 1));
+    if (core.can_be_gt)
+      answer.add(new IntDoublePair(FetFloatComparisonCoreCan_Be_Gt, 1));
+    return answer;
+  }
+
   private static Vector getNoDuplicatesFeatures(NoDuplicates inv) {
     Vector answer = new Vector();
     answer.add(new IntDoublePair(FetNoDuplicates, 1));
@@ -744,9 +1142,25 @@ public class FeatureExtractor {
     return answer;
   }
 
+  private static Vector getNoDuplicatesFloatFeatures(NoDuplicatesFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetNoDuplicatesFloat, 1));
+    answer.add(new IntDoublePair(FetSequence, 1));
+    answer.add(new IntDoublePair(FetUnary, 1));
+    return answer;
+  }
+
   private static Vector getOneOfSequenceFeatures(OneOfSequence inv) {
     Vector answer = new Vector();
     answer.add(new IntDoublePair(FetOneOfSequence, 1));
+    answer.add(new IntDoublePair(FetSequence, 1));
+    answer.add(new IntDoublePair(FetUnary, 1));
+    return answer;
+  }
+
+  private static Vector getOneOfFloatSequenceFeatures(OneOfFloatSequence inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetOneOfFloatSequence, 1));
     answer.add(new IntDoublePair(FetSequence, 1));
     answer.add(new IntDoublePair(FetUnary, 1));
     return answer;
@@ -761,12 +1175,30 @@ public class FeatureExtractor {
     return answer;
   }
 
+  private static Vector getSeqIndexComparisonFloatFeatures(SeqIndexComparisonFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetSeqIndexComparisonFloat, 1));
+    answer.add(new IntDoublePair(FetSequence, 1));
+    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.addAll(getFloatComparisonCoreFeatures(inv.core));
+    return answer;
+  }
+
   private static Vector getSeqIndexNonEqualFeatures(SeqIndexNonEqual inv) {
     Vector answer = new Vector();
     answer.add(new IntDoublePair(FetSeqIndexNonEqual, 1));
     answer.add(new IntDoublePair(FetSequence, 1));
     answer.add(new IntDoublePair(FetUnary, 1));
     answer.addAll(getNonEqualCoreFeatures(inv.core));
+    return answer;
+  }
+
+  private static Vector getSeqIndexNonEqualFloatFeatures(SeqIndexNonEqualFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetSeqIndexNonEqualFloat, 1));
+    answer.add(new IntDoublePair(FetSequence, 1));
+    answer.add(new IntDoublePair(FetUnary, 1));
+    answer.addAll(getNonEqualCoreFloatFeatures(inv.core));
     return answer;
   }
 
@@ -779,6 +1211,11 @@ public class FeatureExtractor {
     return answer;
   }
 
+  private static Vector getNonEqualCoreFloatFeatures(NonEqualCoreFloat core) {
+    Vector answer = new Vector();
+    return answer;
+  }
+
   private static Vector getSingleFloatSequenceFeatures(SingleFloatSequence inv) {
     Vector answer = new Vector();
     answer.add(new IntDoublePair(FetSingleFloatSequence, 1));
@@ -787,7 +1224,7 @@ public class FeatureExtractor {
     return answer;
   }
 
-  private static Vector getSingleSequenceFeatures(SingleScalarSequence inv) {
+  private static Vector getSingleSequenceFeatures(SingleSequence inv) {
     Vector answer = new Vector();
     answer.add(new IntDoublePair(FetSingleSequence, 1));
     answer.add(new IntDoublePair(FetSequence, 1));
@@ -841,6 +1278,12 @@ public class FeatureExtractor {
     return answer;
   }
 
+  private static Vector getOneOfFloatFeatures(OneOfFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetOneOfFloatNum_elts, inv.num_elts()));
+    return answer;
+  }
+
   private static Vector getComparisonFeatures(Comparison inv) {
     Vector answer = new Vector();
     answer.add(new IntDoublePair(FetComparison, 1));
@@ -861,6 +1304,15 @@ public class FeatureExtractor {
     answer.add(new IntDoublePair(FetSequenceScalar, 1));
     answer.add(new IntDoublePair(FetBinary, 1));
     answer.addAll(getIntComparisonCoreFeatures(inv.core));
+    return answer;
+  }
+
+  private static Vector getSeqFloatComparisonFeatures(SeqFloatComparison inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetSeqFloatComparison, 1));
+    answer.add(new IntDoublePair(FetSequenceScalar, 1));
+    answer.add(new IntDoublePair(FetBinary, 1));
+    answer.addAll(getFloatComparisonCoreFeatures(inv.core));
     return answer;
   }
 
@@ -894,9 +1346,25 @@ public class FeatureExtractor {
     return answer;
   }
 
+  private static Vector getFloatNonEqualFeatures(FloatNonEqual inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetFloatNonEqual, 1));
+    answer.add(new IntDoublePair(FetBinary, 1));
+    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    return answer;
+  }
+
   private static Vector getIntEqualFeatures(IntEqual inv) {
     Vector answer = new Vector();
     answer.add(new IntDoublePair(FetIntEqual, 1));
+    answer.add(new IntDoublePair(FetBinary, 1));
+    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    return answer;
+  }
+
+  private static Vector getFloatEqualFeatures(FloatEqual inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetFloatEqual, 1));
     answer.add(new IntDoublePair(FetBinary, 1));
     answer.add(new IntDoublePair(FetTwoScalar, 1));
     return answer;
@@ -911,10 +1379,26 @@ public class FeatureExtractor {
     return answer;
   }
 
+  private static Vector getFunctionUnaryFloatFeatures(FunctionUnaryFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetFunctionUnaryFloat, 1));
+    answer.add(new IntDoublePair(FetBinary, 1));
+    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    answer.addAll(getFunctionUnaryCoreFloatFeatures(inv.core));
+    return answer;
+  }
+
   private static Vector getFunctionUnaryCoreFeatures(FunctionUnaryCore core) {
     Vector answer = new Vector();
     if (core.inverse)
       answer.add(new IntDoublePair(FetFunctionUnaryCoreInverse, 1));
+    return answer;
+  }
+
+  private static Vector getFunctionUnaryCoreFloatFeatures(FunctionUnaryCoreFloat core) {
+    Vector answer = new Vector();
+    if (core.inverse)
+      answer.add(new IntDoublePair(FetFunctionUnaryCoreFloatInverse, 1));
     return answer;
   }
 
@@ -926,9 +1410,25 @@ public class FeatureExtractor {
     return answer;
   }
 
+  private static Vector getFloatGreaterEqualFeatures(FloatGreaterEqual inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetFloatGreaterEqual, 1));
+    answer.add(new IntDoublePair(FetBinary, 1));
+    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    return answer;
+  }
+
   private static Vector getIntGreaterThanFeatures(IntGreaterThan inv) {
     Vector answer = new Vector();
     answer.add(new IntDoublePair(FetIntGreaterThan, 1));
+    answer.add(new IntDoublePair(FetBinary, 1));
+    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    return answer;
+  }
+
+  private static Vector getFloatGreaterThanFeatures(FloatGreaterThan inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetFloatGreaterThan, 1));
     answer.add(new IntDoublePair(FetBinary, 1));
     answer.add(new IntDoublePair(FetTwoScalar, 1));
     return answer;
@@ -943,10 +1443,32 @@ public class FeatureExtractor {
     return answer;
   }
 
+  private static Vector getLinearBinaryFloatFeatures(LinearBinaryFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetLinearBinaryFloat, 1));
+    answer.add(new IntDoublePair(FetBinary, 1));
+    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    answer.addAll(getLinearBinaryCoreFloatFeatures(inv.core));
+    return answer;
+  }
+
   private static Vector getLinearBinaryCoreFeatures(LinearBinaryCore core) {
     Vector answer = new Vector();
     answer.add(new IntDoublePair(FetLinearBinaryCoreA, core.a));
     answer.add(new IntDoublePair(FetLinearBinaryCoreB, core.b));
+    return answer;
+  }
+
+  private static Vector getLinearBinaryCoreFloatFeatures(LinearBinaryCoreFloat core) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetLinearBinaryCoreFloatA, core.a));
+    answer.add(new IntDoublePair(FetLinearBinaryCoreFloatB, core.b));
+    return answer;
+  }
+
+  private static Vector getTwoFloatFeatures(TwoFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetTwoFloat, 1));
     return answer;
   }
 
@@ -963,9 +1485,25 @@ public class FeatureExtractor {
     return answer;
   }
 
+  private static Vector getFloatLessEqualFeatures(FloatLessEqual inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetFloatLessEqual, 1));
+    answer.add(new IntDoublePair(FetBinary, 1));
+    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    return answer;
+  }
+
   private static Vector getIntLessThanFeatures(IntLessThan inv) {
     Vector answer = new Vector();
     answer.add(new IntDoublePair(FetIntLessThan, 1));
+    answer.add(new IntDoublePair(FetBinary, 1));
+    answer.add(new IntDoublePair(FetTwoScalar, 1));
+    return answer;
+  }
+
+  private static Vector getFloatLessThanFeatures(FloatLessThan inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetFloatLessThan, 1));
     answer.add(new IntDoublePair(FetBinary, 1));
     answer.add(new IntDoublePair(FetTwoScalar, 1));
     return answer;
@@ -988,6 +1526,15 @@ public class FeatureExtractor {
     return answer;
   }
 
+  private static Vector getPairwiseFloatComparisonFeatures(PairwiseFloatComparison inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetPairwiseFloatComparison, 1));
+    answer.add(new IntDoublePair(FetBinary, 1));
+    answer.add(new IntDoublePair(FetTwoSequence, 1));
+    answer.addAll(getFloatComparisonCoreFeatures(inv.core));
+    return answer;
+  }
+
   private static Vector getSeqComparisonFeatures(SeqComparison inv) {
     Vector answer = new Vector();
     answer.add(new IntDoublePair(FetSeqComparison, 1));
@@ -996,8 +1543,23 @@ public class FeatureExtractor {
     return answer;
   }
 
+  private static Vector getSeqComparisonFloatFeatures(SeqComparisonFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetSeqFloatComparison, 1));
+    answer.add(new IntDoublePair(FetBinary, 1));
+    answer.add(new IntDoublePair(FetTwoSequence, 1));
+    return answer;
+  }
+
   private static Vector getTwoSequenceFeatures(TwoSequence inv) {
     Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetTwoSequence, 1));
+    return answer;
+  }
+
+  private static Vector getTwoSequenceFloatFeatures(TwoSequenceFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetTwoSequenceFloat, 1));
     return answer;
   }
 
@@ -1010,9 +1572,26 @@ public class FeatureExtractor {
     return answer;
   }
 
+  private static Vector getPairwiseLinearBinaryFloatFeatures(PairwiseLinearBinaryFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetPairwiseLinearBinaryFloat, 1));
+    answer.add(new IntDoublePair(FetBinary, 1));
+    answer.add(new IntDoublePair(FetTwoSequence, 1));
+    answer.addAll(getLinearBinaryCoreFloatFeatures(inv.core));
+    return answer;
+  }
+
   private static Vector getSubSequenceFeatures(SubSequence inv) {
     Vector answer = new Vector();
     answer.add(new IntDoublePair(FetSubSequence, 1));
+    answer.add(new IntDoublePair(FetBinary, 1));
+    answer.add(new IntDoublePair(FetTwoSequence, 1));
+    return answer;
+  }
+
+  private static Vector getSubSequenceFloatFeatures(SubSequenceFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetSubSequenceFloat, 1));
     answer.add(new IntDoublePair(FetBinary, 1));
     answer.add(new IntDoublePair(FetTwoSequence, 1));
     return answer;
@@ -1027,9 +1606,26 @@ public class FeatureExtractor {
     return answer;
   }
 
+  private static Vector getPairwiseFunctionUnaryFloatFeatures(PairwiseFunctionUnaryFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetPairwiseFunctionUnaryFloat, 1));
+    answer.add(new IntDoublePair(FetBinary, 1));
+    answer.add(new IntDoublePair(FetTwoSequence, 1));
+    answer.addAll(getFunctionUnaryCoreFloatFeatures(inv.core));
+    return answer;
+  }
+
   private static Vector getReverseFeatures(Reverse inv) {
     Vector answer = new Vector();
     answer.add(new IntDoublePair(FetReverse, 1));
+    answer.add(new IntDoublePair(FetBinary, 1));
+    answer.add(new IntDoublePair(FetTwoSequence, 1));
+    return answer;
+  }
+
+  private static Vector getReverseFloatFeatures(ReverseFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetReverseFloat, 1));
     answer.add(new IntDoublePair(FetBinary, 1));
     answer.add(new IntDoublePair(FetTwoSequence, 1));
     return answer;
@@ -1062,6 +1658,13 @@ public class FeatureExtractor {
 
   private static Vector getThreeScalarFeatures(ThreeScalar inv) {
     Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetThreeScalar, 1));
+    return answer;
+  }
+
+  private static Vector getThreeFloatFeatures(ThreeFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetThreeFloat, 1));
     return answer;
   }
 
@@ -1074,11 +1677,28 @@ public class FeatureExtractor {
     return answer;
   }
 
+  private static Vector getLinearTernaryFloatFeatures(LinearTernaryFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetLinearTernaryFloat, 1));
+    answer.add(new IntDoublePair(FetTernary, 1));
+    answer.add(new IntDoublePair(FetThreeScalar, 1));
+    answer.addAll(getLinearTernaryCoreFloatFeatures(inv.core));
+    return answer;
+  }
+
   private static Vector getLinearTernaryCoreFeatures(LinearTernaryCore core) {
     Vector answer = new Vector();
     answer.add(new IntDoublePair(FetLinearTernaryCoreA, core.a));
     answer.add(new IntDoublePair(FetLinearTernaryCoreB, core.b));
     answer.add(new IntDoublePair(FetLinearTernaryCoreC, core.c));
+    return answer;
+  }
+
+  private static Vector getLinearTernaryCoreFloatFeatures(LinearTernaryCoreFloat core) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetLinearTernaryCoreFloatA, core.a));
+    answer.add(new IntDoublePair(FetLinearTernaryCoreFloatB, core.b));
+    answer.add(new IntDoublePair(FetLinearTernaryCoreFloatC, core.c));
     return answer;
   }
 
@@ -1091,10 +1711,476 @@ public class FeatureExtractor {
     return answer;
   }
 
+  private static Vector getFunctionBinaryFloatFeatures(FunctionBinaryFloat inv) {
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetFunctionBinaryFloat, 1));
+    answer.add(new IntDoublePair(FetTernary, 1));
+    answer.add(new IntDoublePair(FetThreeScalar, 1));
+    answer.addAll(getFunctionBinaryCoreFloatFeatures(inv.core));
+    return answer;
+  }
+
   private static Vector getFunctionBinaryCoreFeatures(FunctionBinaryCore core){
     Vector answer = new Vector();
     answer.add(new IntDoublePair(FetFunctionBinaryCoreVar_Order, core.var_order));
     return answer;
   }
+
+  private static Vector getFunctionBinaryCoreFloatFeatures(FunctionBinaryCoreFloat core){
+    Vector answer = new Vector();
+    answer.add(new IntDoublePair(FetFunctionBinaryCoreFloatVar_Order, core.var_order));
+    return answer;
+  }
+
+  /*********************************************
+   * This IntDoublePair represents a connected int and double.
+   * This is pretty much a struct + constructor.
+   * However this also implements Comparable
+   * so that it can be used in a TreeSet or Sorted.
+   * When two IntDoublePairs are compared, they are compared
+   * based on their integer only.  The smaller the interger -- the smaller
+   * the IntDoublePair.  Two IntDoublePairs that have the same integer are
+   * considered equal.
+   *
+   * Created by Yuriy Brun, 6/1/2002
+   * Last edited 7/29/2002
+   *********************************************/
+  private static final class IntDoublePair implements Comparable{
+    // public fields
+    public int number;
+    public double value;
+
+    // returns a new fresh Pair with number set to num and value set to val
+    public IntDoublePair(int num, double val) {
+      number = num;
+      value = val;
+    }
+
+    // Compares an Object to this
+    // Throws ClassCastException if o is not an IntDoublePair
+    public int compareTo(Object o) throws ClassCastException{
+      IntDoublePair p;
+      try {
+        p = (IntDoublePair) o;
+      }
+      catch (ClassCastException e) {
+        throw e;
+      }
+      if (this.number != p.number)
+        return this.number - p.number;
+      else
+        return (int) (this.value - p.value);
+    }
+  }
+
+  /*********************************************
+   * A tool for combining multiple TrainFu files.
+   *
+   * Created by Yuriy Brun, 7/04/2002
+   * Last Edited 9/26/2002
+   *********************************************/
+
+  public static final class CombineFuFiles {
+
+    private static String USAGE =
+      "\tArguments:\n\t-i FileName:\ta TrainFu input file\n" +
+      "\t-o FileName:\toutput file name\n" +
+      "\t[-r] repeat:\tif present then the number of positive and negative\n" +
+      "\t\tvectors will be roughtly normalized (by repeats).\n";
+
+    static public void main(String[] args)
+      throws IOException, ClassNotFoundException {
+
+      //First parse the arguments
+      if (args.length == 0) {
+        System.out.println(USAGE);
+        System.exit(0);
+      }
+      Vector inputs = new Vector();
+      boolean repeats = false;
+      String output = null;
+      for (int i = 0; i < args.length; i++) {
+        if (args[i].equals("-r"))
+          repeats = true;
+        else if (args[i].equals("-i"))
+          inputs.add(args[++i]);
+        else if (args[i].equals("-o")) {
+          if (output == null)
+            output = args[++i];
+          else
+            throw new IOException("Multiple output files not allowed");
+        }
+        else
+          throw new IOException("Invalid argument: " + args[i]);
+      }
+      // Check if the required fields are specified.
+      if (output == null)
+        throw new IOException("You must specify an output file");
+      if (inputs.size() == 0)
+        throw new IOException("You must specify at least one input file");
+
+      // Load the input files into 2 HashSets, pos and neg.
+      HashSet pos = new HashSet();
+      HashSet neg = new HashSet();
+      for (Iterator i = inputs.iterator(); i.hasNext();) {
+        BufferedReader br=new BufferedReader(new FileReader((String)i.next()));
+        br.readLine();
+        while (br.ready()) {
+          String vector = br.readLine();
+
+          int posind = vector.lastIndexOf("1");
+          int negind = vector.lastIndexOf("-1");
+
+          if (negind == posind - 1)
+            neg.add(vector.substring(0, vector.lastIndexOf("-1")));
+          else
+            pos.add(vector.substring(0, vector.lastIndexOf("1")));
+        }
+        br.close();
+      }
+
+      // Now create two vectors, posvectors and negvectors, of the
+      // positive and negative TrainFu vectors respectively.
+      Vector posvectors = new Vector();
+      Vector negvectors = new Vector();
+
+      for (Iterator i = neg.iterator(); i.hasNext();) {
+        String vector = (String) i.next();
+        if (!(pos.contains(vector)))
+          negvectors.add(vector + "-1");
+      }
+
+      for (Iterator i = pos.iterator(); i.hasNext();)
+        posvectors.add(((String) i.next()) + "1");
+
+      // Set the appropriate repeat values.
+      int posrepeat = 1 , negrepeat = 1;
+      if (repeats)
+        if (posvectors.size() > negvectors.size())
+          negrepeat = posvectors.size() / negvectors.size();
+        else
+          posrepeat = negvectors.size() / posvectors.size();
+
+      // Print the output to the output file.
+      FileWriter fw = new FileWriter(output);
+      fw.write((posvectors.size() * posrepeat +
+                negvectors.size() * negrepeat) + " \n");
+
+      for (int repeat = 0; repeat < negrepeat; repeat++)
+        for (Iterator i = negvectors.iterator(); i.hasNext();)
+          fw.write((String) i.next() + " \n");
+      for (int repeat = 0; repeat < posrepeat; repeat++)
+        for (Iterator i = posvectors.iterator(); i.hasNext();)
+          fw.write((String) i.next() + " \n");
+      fw.close();
+
+      // Print a summary of positives and negatives to stdout.
+      System.out.println(posvectors.size() + "*" + posrepeat + " " +
+                         negvectors.size() + "*" + negrepeat);
+    }
+
+  }
+
+  /*********************************************
+   * A tool for permuting TrainFu files.
+   *
+   * Created by Yuriy Brun, 7/04/2002
+   * Last Edited 9/26/2002
+   *********************************************/
+
+  public static final class PermuteFuFiles {
+
+    private static String USAGE =
+      "\tArguments:\n\t-i FileName:\ta TrainFu input file\n" +
+      "\t-o FileName:\toutput file name\n";
+
+    static public void main(String[] args)
+      throws IOException, ClassNotFoundException {
+
+      //First parse the arguments
+      if (args.length == 0) {
+        System.out.println(USAGE);
+        System.exit(0);
+      }
+      String input = null;
+      String output = null;
+      for (int i = 0; i < args.length; i++) {
+        if (args[i].equals("-i")) {
+          if (input == null)
+            input = args[++i];
+          else
+            throw new IOException("Multiple input files not allowed");
+        }
+        else if (args[i].equals("-o")) {
+          if (output == null)
+            output = args[++i];
+          else
+            throw new IOException("Multiple output files not allowed");
+        }
+        else
+          throw new IOException("Invalid argument: " + args[i]);
+      }
+      // Check if the required fields are specified.
+      if (output == null)
+        throw new IOException("You must specify an output file");
+      if (input == null)
+        throw new IOException("You must specify an input file");
+
+      // Load the input file into 2 Vectors, pos and neg.
+      Vector pos = new Vector();
+      Vector neg = new Vector();
+      BufferedReader br = new BufferedReader(new FileReader(input));
+      br.readLine();
+      while (br.ready()) {
+        String vector = br.readLine();
+
+        int posind = vector.lastIndexOf("1");
+        int negind = vector.lastIndexOf("-1");
+
+        if (negind == posind - 1)
+          neg.add(vector.substring(0, vector.lastIndexOf("-1")));
+        else
+          pos.add(vector.substring(0, vector.lastIndexOf("1")));
+      }
+      br.close();
+
+      // Set up output file
+      FileWriter fw = new FileWriter(output);
+      fw.write((int) Math.pow(pos.size() + neg.size(), 2) + "\n");
+
+      writeVectors(pos, pos, "1", fw);
+      writeVectors(pos, neg, "1", fw);
+      writeVectors(neg, pos, "1", fw);
+      writeVectors(neg, neg, "-1", fw);
+      fw.close();
+    }
+
+    private static void writeVectors(Vector one, Vector two,
+                                     String label, FileWriter fw)
+    throws IOException {
+
+      for (int i = 0; i < one.size(); i++)
+        for (int j = 0; j < two.size(); j++) {
+          String first = (String) one.get(i);
+          String second = (String) two.get(j);
+          String answer = first.substring(first.indexOf(" ") + 1) +
+            shift(second);
+          answer = (new StringTokenizer(answer)).countTokens() + " " + answer;
+          fw.write(answer + label + "\n");
+        }
+    }
+
+    private static String shift(String vector) {
+      String answer = new String();
+      StringTokenizer tokens = new StringTokenizer(vector);
+      tokens.nextToken();
+      while (tokens.hasMoreTokens())
+        answer += (Integer.parseInt(tokens.nextToken()) +
+                   OneMoreOrderThanLargestFeature) + " " +
+          tokens.nextToken() + " ";
+      return answer;
+    }
+
+
+  }
+
+  // the following line gets rid of some extra output that
+  // otherwise gets dumped to System.out:
+  static {
+    Logger.setupLogs(false ? Logger.DEBUG : Logger.INFO);
+  }
+
+  // the THRESHOLD is zero
+  static double THRESHOLD = 0.0;
+
+  // A bunch of static variables, one for each feature
+  static int FetEnoughSamples = 1;
+  static int FetGetProbability = 2;
+  static int FetIsExact = 3;
+  static int FetJustified = 4;
+  static int FetIsWorthPrinting = 5;
+  static int FetHasFewModifiedSamples = 6;
+  static int FetHasNonCanonicalVariable = 7;
+  static int FetHasOnlyConstantVariables = 8;
+  static int FetIsObvious = 9;
+  static int FetIsObviousDerived = 10;
+  static int FetIsObviousImplied = 11;
+  static int FetIsControlled = 12;
+  static int FetIsImpliedPostcondition = 13;
+  static int FetIsInteresting = 14;
+  static int FetArity = 15;
+  static int FetNumVars = 16;
+  static int FetNumArrayVars = 17;
+  static int FetOneOfNum_elts = 50;
+  static int FetComparison = 51;
+  static int FetComparisonEq_probability = 52;
+  static int FetImplication = 53;
+  static int FetImplicationIff = 54;
+  static int FetUnary = 81;
+  static int FetScalar = 82;
+  static int FetSequence = 83;
+  static int FetString = 84;
+  static int FetStringSequence = 85;
+  static int FetBinary = 86;
+  static int FetTwoScalar = 88;
+  static int FetTwoSequence = 89;
+  static int FetTwoString = 90;
+  static int FetTernary = 91;
+  static int FetThreeScalar = 92;
+  static int FetModulus = 100;
+  static int FetLowerBound = 200;
+  static int FetLowerBoundCoreMin1 = 201;
+  static int FetNonZero = 300;
+  static int FetNonModulus = 400;
+  static int FetOneOfScalar = 500;
+  static int FetPositive = 600;
+  static int FetSingleFloat = 700;
+  static int FetSingleScalar = 800;
+  static int FetUpperBound = 900;
+  static int FetUpperBoundCoreMax1 = 901;
+  static int FetEltLowerBound = 1000;
+  static int FetEltNonZero = 1100;
+  static int FetEltOneOf = 1200;
+  static int FetEltUpperBound = 1300;
+  static int FetEltwiseIntComparison = 1400;
+  static int FetNoDuplicates = 1500;
+  static int FetOneOfSequence = 1600;
+  static int FetSeqIndexComparison = 1700;
+  static int FetSeqIndexNonEqual = 1800;
+  static int FetSingleFloatSequence = 1900;
+  static int FetSingleSequence = 2000;
+  static int FetOneOfString = 2200;
+  static int FetSingleString = 2300;
+  static int FetEltOneOfString = 2400;
+  static int FetOneOfStringSequence = 2500;
+  static int FetSingleStringSequence = 2600;
+  static int FetSeqIntComparison = 2800;
+  static int FetSequenceScalar = 2900;
+  static int FetSequenceScalarSeq_first = 2901;
+  static int FetSequenceScalarSeq_index = 2902;
+  static int FetSequenceScalarScl_index = 2903;
+  static int FetSequenceString = 3000;
+  static int FetSequenceStringSeq_first = 3001;
+  static int FetSequenceStringSeq_index = 3002;
+  static int FetSequenceStringScl_index = 3003;
+  static int FetIntNonEqual = 3100;
+  static int FetIntEqual = 3200;
+  static int FetNonEqualCoreMin1 = 3301;
+  static int FetNonEqualCoreMin2 = 3302;
+  static int FetNonEqualCoreMax1 = 3303;
+  static int FetNonEqualCoreMax2 = 3304;
+  static int FetFunctionUnary = 3400;
+  static int FetFunctionUnaryCoreInverse = 3401;
+  static int FetIntGreaterEqual = 3500;
+  static int FetIntGreaterThan = 3600;
+  static int FetLinearBinary = 3700;
+  static int FetLinearBinaryCoreA = 3701;
+  static int FetLinearBinaryCoreB = 3702;
+  static int FetIntLessEqual = 3800;
+  static int FetIntLessThan = 3900;
+  static int FetIntComparisonCoreCan_Be_Eq = 4001;
+  static int FetIntComparisonCoreCan_Be_Lt = 4002;
+  static int FetIntComparisonCoreCan_Be_Gt = 4003;
+  static int FetPairwiseIntComparison = 4800;
+  static int FetSeqComparison = 4900;
+  static int FetPairwiseLinearBinary = 5000;
+  static int FetSubSequence = 5100;
+  static int FetPairwiseFunctionUnary = 5200;
+  static int FetReverse = 5300;
+  static int FetStringComparison = 5500;
+  static int FetStringComparisonCoreCan_Be_Eq = 5501;
+  static int FetStringComparisonCoreCan_Be_Lt = 5502;
+  static int FetStringComparisonCoreCan_Be_Gt = 5503;
+  static int FetLinearTernary = 5700;
+  static int FetLinearTernaryCoreA = 5701;
+  static int FetLinearTernaryCoreB = 5702;
+  static int FetLinearTernaryCoreC = 5703;
+  static int FetFunctionBinary = 5800;
+  static int FetFunctionBinaryCoreVar_Order = 5801;
+  static int FetCommonFloatSequence = 5900;
+  static int FetEltLowerBoundFloat = 6000;
+  static int FetEltNonZeroFloat = 6100;
+  static int FetEltOneOfFloat = 6200;
+  static int FetEltUpperBoundFloat = 6300;
+  static int FetEltwiseFloatComparison = 6400;
+  static int FetFloatEqual = 6500;
+  static int FetFloatGreaterEqual = 6600;
+  static int FetFloatGreaterThan = 6700;
+  static int FetFloatLessEqual = 6800;
+  static int FetFloatLessThan = 6900;
+  static int FetFloatNonEqual = 7000;
+  static int FetFunctionBinaryFloat = 7100;
+  static int FetFunctionUnaryFloat = 7200;
+  static int FetLinearBinaryFloat = 7300;
+  static int FetLinearTernaryFloat = 7400;
+  static int FetLowerBoundFloat = 7500;
+  static int FetMemberFloat = 7600;
+  static int FetNoDuplicatesFloat = 7700;
+  static int FetNonZeroFloat = 7800;
+  static int FetOneOfFloat = 7900;
+  static int FetOneOfFloatNum_elts = 7901;
+  static int FetOneOfFloatSequence = 8000;
+  static int FetPairwiseFloatComparison = 8100;
+  static int FetPairwiseFunctionUnaryFloat = 8200;
+  static int FetPairwiseLinearBinaryFloat = 8300;
+  static int FetReverseFloat = 8400;
+  static int FetSeqComparisonFloat = 8500;
+  static int FetSeqFloatComparison = 8600;
+  static int FetSeqIndexComparisonFloat = 8700;
+  static int FetSeqIndexNonEqualFloat = 8800;
+  static int FetSequenceFloat = 8900;
+  static int FetSubSequenceFloat = 9200;
+  static int FetThreeFloat = 9300;
+  static int FetTwoFloat = 9400;
+  static int FetTwoSequenceFloat = 9500;
+  static int FetUpperBoundFloat = 9600;
+  static int FetFunctionUnaryCoreFloatInverse = 9701;
+  static int FetFunctionBinaryCoreFloatVar_Order = 9702;
+  static int FetLinearBinaryCoreFloatA = 9703;
+  static int FetLinearBinaryCoreFloatB = 9704;
+  static int FetLinearTernaryCoreFloatA = 9703;
+  static int FetLinearTernaryCoreFloatB = 9705;
+  static int FetLinearTernaryCoreFloatC = 9706;
+  static int FetFloatComparisonCoreCan_Be_Eq = 9707;
+  static int FetFloatComparisonCoreCan_Be_Lt = 9708;
+  static int FetFloatComparisonCoreCan_Be_Gt = 9709;
+
+  //9800-9900 reserved for Ppt Features
+  static int FetPptIsExit = 9801;
+  static int FetPptIsLineNumberedExit = 9802;
+  static int FetPptNumOfExits = 9803;
+
+  // Variable Features (10000 - 49999)
+  // 10000-19999 are for "invariant contains a variable that ...
+  // 20000 - 29999 are for 1st variable is .... (etc. up to 3 variables)
+  //  static int FetVarInfoName = 10001;
+  static int FetVarInfoIs_Static_Constant = 10002;
+  static int FetVarInfoCanBeNull = 10003;
+  static int FetVarInfoIs_Dynamic_Constant =  10004;
+  static int FetTypeDimensions = 10005;
+  static int FetTypeIsArray = 10007;
+  static int FetTypeBaseIsArray = 10008;
+  static int FetTypePseudoDimensions = 10009;
+  static int FetTypeIsPseudoArray = 10010;
+  static int FetTypeIsPrimitive = 10011;
+  static int FetTypeBaseIsPrimitive = 10012;
+  static int FetTypeIsIntegral = 10013;
+  static int FetTypeBaseIsIntegral = 10014;
+  static int FetTypeElementIsIntegral = 10015;
+  static int FetTypeIsScalar = 10016;
+  static int FetTypeIsFloat = 10017;
+  static int FetTypeBaseIsFloat = 10018;
+  static int FetTypeIsObject = 10019;
+  static int FetTypeBaseIsObject = 10020;
+  static int FetVarInfoAuxIsParam = 10021;
+  static int FetVarInfoAuxNullTerminating = 10022;
+  static int FetVarInfoAuxHasNull = 10023;
+  static int FetVarInfoAuxHasSize = 10024;
+  static int FetVarInfoAuxHasOrder = 10025;
+  static int FetVarInfoAuxHasDuplicates = 10026;
+  static int FetVarIsPrestate = 10027;
+  static int FetVarDerivedDepth = 10028;
+
+  static int OneMoreOrderThanLargestFeature = 100000;
 
 }

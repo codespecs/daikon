@@ -87,9 +87,10 @@ public abstract class BinaryDerivation
       boolean isParam =
         base1.aux.getFlag(VarInfoAux.IS_PARAM) ||
         base2.aux.getFlag(VarInfoAux.IS_PARAM);
-      if (isParam)
+      if (isParam) {
         this_var_info.aux = this_var_info.aux.setValue(VarInfoAux.IS_PARAM,
                                                        VarInfoAux.TRUE);
+      }
       // [INCR] base1.derivees.add(this);
       // [INCR] base2.derivees.add(this);
     }

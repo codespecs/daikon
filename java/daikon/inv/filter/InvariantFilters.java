@@ -1,6 +1,8 @@
 package daikon.inv.filter;
 
 import utilMDE.Assert;
+import org.apache.log4j.PatternLayout;
+import org.apache.log4j.Layout;
 import java.util.*;
 import daikon.inv.*;
 import daikon.inv.IsEqualityComparison;        // For equality invariants work-around
@@ -31,16 +33,24 @@ public class InvariantFilters {
   public static final int ALL_VARIABLES = 2;
   int variableFilterType = ANY_VARIABLE;
 
-  //stores information as to why an invariant was accepted or
-  //rejected. (works on property filters, but not variable filters.
-  public String reason = "";
-
   // propertyFilters is a map from filter description to filter object.  We
   // need this mapping so that the GUI can easily tell InvariantFilters --
   // by passing in a filter description -- which filter was de/selected.
   // Use TreeMap to preserve order of filters (eg, so that
   // ControlledInvariantFilter will always be last).
-  Map propertyFilters = new TreeMap();
+
+  // annoyingly, this doesn't actually do what the original author
+  // intended.  TreeMap orders things based on the keys, which in this
+  // case is the description of the filter (a string).  What we'd
+  // actually like is to order them in order of something like
+  // [probability of eliminating an inv]/[expected running time]...in
+  // other words, based on a benefit to cost measurement.  hence, this
+  // will become a list (in particular a Vector).  This does increase
+  // the running time of lookups based on the descriptions from O(log
+  // n) to O(n), but that functionality isn't used a whole lot and
+  // there are only ~10 filters anyway.
+
+  List propertyFilters = new Vector();
   List variableFilters = new ArrayList();
 
   // Making it public is gross, but is ok for now.  If we use filters,
@@ -70,7 +80,45 @@ public class InvariantFilters {
     // This filter should be added last for speed, because its shouldDiscard()
     // is more complicated in that it evaluates shouldDiscard() for other
     // invariants.
-    addPropertyFilter( new ControlledInvariantFilter( this ));
+    addPropertyFilter( new ControlledInvariantFilter());
+  }
+
+  protected InvariantFilters(List l) {
+    for(Iterator iter = l.iterator(); iter.hasNext(); ) {
+      InvariantFilter filter = (InvariantFilter)iter.next();
+      addPropertyFilter(filter);
+    }
+  }
+
+  public static InvariantFilters emptyFilter() {
+    return new InvariantFilters(new Vector());
+  }
+
+  public static InvariantFilters isWorthPrintingFilter_sansControlledCheck() {
+    Vector v = new Vector();
+    v.add(new FewModifiedSamplesFilter());
+    v.add(new EnoughSamplesFilter());
+    v.add(new NonCanonicalVariablesFilter());
+    v.add(new ObviousFilter());
+    v.add(new UnjustifiedFilter());
+    v.add(new ImpliedPostconditionFilter());
+    v.add(new OnlyConstantVariablesFilter());
+    v.add(new DerivedParameterFilter());
+    return (new InvariantFilters(v));
+  }
+
+  public static InvariantFilters isWorthPrintingFilter() {
+    Vector v = new Vector();
+    v.add(new FewModifiedSamplesFilter());
+    v.add(new EnoughSamplesFilter());
+    v.add(new NonCanonicalVariablesFilter());
+    v.add(new ObviousFilter());
+    v.add(new UnjustifiedFilter());
+    v.add(new ImpliedPostconditionFilter());
+    v.add(new OnlyConstantVariablesFilter());
+    v.add(new DerivedParameterFilter());
+    v.add(new ControlledInvariantFilter());
+    return (new InvariantFilters(v));
   }
 
   /**
@@ -81,7 +129,7 @@ public class InvariantFilters {
   }
 
   void addPropertyFilter( InvariantFilter filter ) {
-    propertyFilters.put( filter.getDescription(), filter );
+    propertyFilters.add( filter );
   }
 
   public boolean shouldKeep( Invariant invariant ) {
@@ -92,8 +140,16 @@ public class InvariantFilters {
                                            ")\n");
     }
 
-    if (invariant instanceof GuardingImplication)
+    PatternLayout pattern = null;
+
+    if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+      pattern = (PatternLayout)PrintInvariants.debugFiltering.getAppender(PrintInvariants.daikonFilteringOutputFilename).getLayout();
+      PrintInvariants.debugFiltering.getAppender(PrintInvariants.daikonFilteringOutputFilename).setLayout(new PatternLayout("\t" + pattern.getConversionPattern()));
+    }
+
+    if (invariant instanceof GuardingImplication) {
       invariant = ((Implication) invariant).right;
+    }
 
     //  Do variable filters first since they eliminate more invariants.
     if (variableFilters.size() != 0) {
@@ -115,7 +171,7 @@ public class InvariantFilters {
       }
     }
     //  Property filters.
-    for (Iterator iter = propertyFilters.values().iterator(); iter.hasNext(); ) {
+    for (Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
       InvariantFilter filter = (InvariantFilter) iter.next();
       if (PrintInvariants.debugFiltering.isDebugEnabled()) {
 	PrintInvariants.debugFiltering.debug("\tapplying " + filter.getClass().getName() +" \n");
@@ -123,27 +179,39 @@ public class InvariantFilters {
       if (filter.shouldDiscard( invariant )) {
 	if (PrintInvariants.debugFiltering.isDebugEnabled()) {
 	  PrintInvariants.debugFiltering.debug("\tfailed " + filter.getClass().getName() +" \n");
+	  PrintInvariants.debugFiltering.getAppender(PrintInvariants.daikonFilteringOutputFilename).setLayout(pattern);
 	}
 	return false;
       }
     }
     if (PrintInvariants.debugFiltering.isDebugEnabled()) {
       PrintInvariants.debugFiltering.debug("\t(accepted by InvariantFilters)\n");
+      PrintInvariants.debugFiltering.getAppender(PrintInvariants.daikonFilteringOutputFilename).setLayout(pattern);
     }
     return true;
   }
 
   public Iterator getPropertyFiltersIterator() {
-    return propertyFilters.values().iterator();
+    return propertyFilters.iterator();
+  }
+
+  private InvariantFilter find(String description) {
+    InvariantFilter answer = null;
+    for(Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
+      InvariantFilter filter = (InvariantFilter) iter.next();
+      if (filter.getDescription().equals(description)) {
+	answer = filter;
+      }
+    }
+    return answer;
   }
 
   public boolean getFilterSetting( String description ) {
-    InvariantFilter filter = (InvariantFilter) propertyFilters.get( description );
-    return filter.getSetting();
+    return(find(description).getSetting());
   }
 
   public void changeFilterSetting( String description, boolean turnOn ) {
-    InvariantFilter filter = (InvariantFilter) propertyFilters.get( description );
+    InvariantFilter filter = find(description);
     if (turnOn)
       filter.turnOn();
     else
@@ -151,14 +219,14 @@ public class InvariantFilters {
   }
 
   public void turnFiltersOn() {
-    for (Iterator iter = propertyFilters.values().iterator(); iter.hasNext(); ) {
+    for (Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
       InvariantFilter filter = (InvariantFilter) iter.next();
       filter.turnOn();
     }
   }
 
   public void turnFiltersOff() {
-    for (Iterator iter = propertyFilters.values().iterator(); iter.hasNext(); ) {
+    for (Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
       InvariantFilter filter = (InvariantFilter) iter.next();
       filter.turnOff();
     }
@@ -168,13 +236,27 @@ public class InvariantFilters {
     variableFilters.add( new VariableFilter( variable ));
   }
 
-  public void removeVariableFilter( String variable ) {
+  public boolean containsVariableFilter( String variable ) {
     for (Iterator iter = variableFilters.iterator(); iter.hasNext(); ) {
-      if (((VariableFilter) iter.next()).getVariable().equals( variable )) {
-        iter.remove();
-        return;
+      VariableFilter vf = (VariableFilter) iter.next();
+      if (vf.getVariable().equals( variable )) {
+	return true;
       }
     }
+    return false;
+  }
+
+  public void removeVariableFilter( String variable ) {
+    boolean foundOnce = false;
+    for (Iterator iter = variableFilters.iterator(); iter.hasNext(); ) {
+      VariableFilter vf = (VariableFilter) iter.next();
+      if (vf.getVariable().equals( variable )) {
+        iter.remove();
+	foundOnce = true;
+      }
+    }
+    if (foundOnce) return;
+
     throw new Error( "InvariantFilters.removeVariableFilter():  filter for variable '" + variable + "' not found" );
   }
 
@@ -193,32 +275,52 @@ public class InvariantFilters {
   //  the GUI package.  Therefore, I put the method here rather than in
   //  InvariantsGUI.java.
 
-  //  This function takes a list of invariants, finds the equality
-  //  Comparison invariants (x==y, y==z), and deletes and replaces them
-  //  with Equality invariants (x==y==z).  The first variable in an
-  //  Equality invariant is always the canonical variable of the group.
-  //  The Equality invariants are inserted into the beginning.  Equality
-  //  invariants are useful when it comes to displaying invariants.
+  /**
+   * This function takes a list of invariants, finds the equality
+   * Comparison invariants (x==y, y==z), and deletes and replaces them
+   * with Equality invariants (x==y==z).  The first variable in an
+   * Equality invariant is always the canonical variable of the group.
+   * The Equality invariants are inserted into the beginning.  Equality
+   * invariants are useful when it comes to displaying invariants.
+   **/
   public static List addEqualityInvariants( List invariants ) {
 
     return invariants; // INCR
 
     /* [INCR]
+    if (invariants.isEmpty())
+      return invariants;
+
+    {
+      // This method is only safe for calling with a list of invariants
+      // from a single program point, because it does comparisons based on
+      // VarInfoName.
+      PptTopLevel ppt = (PptTopLevel) ((Invariant) invariants.get(0)).ppt.parent;
+      for (Iterator itor = invariants.iterator(); itor.hasNext(); ) {
+        Invariant inv = (Invariant) itor.next();
+        PptTopLevel this_ppt = inv.ppt.parent;
+        Assert.assertTrue(this_ppt == ppt);
+      }
+    }
+
     // Performing this operation using the following struture would
     // make more sense to me: Map[Canonical -> Set[Non-Canonicals]],
     // instead of HashSet[List[Canonical, Non-Canonicals]].  -JWN 7/9/01
+    // I have made it a List[List[Canonical, Non-Canonicals]] to get
+    // deterministic iterator behavior; the above comment still makes
+    // sense, though.  -MDE 7/21
 
     // A set of groups of equivalent variables.  The "groups" are actually
     // List's.  We use List's instead of Set's because we need to preserve
     // order, so that canonical variables remain first.
-    Set equivalentGroups = new HashSet();
+    List equivalentGroups = new Vector();
 
     // We want a map from canonical variable to PptSlice.  Equality needs a
     // PptSlice so it can report num_values() and num_samples().
     // However, this maps to an invariant, from which a ppt can be extracted.
     // The reason is that we want to choose the ppt associated with the
     // lexically first invariant, so that this method is deterministic.
-    Map ppts = new HashMap();
+    Map ppts = new HashMap();   // canonical VarInfo -> equality Invariant
 
     // This method makes two passes through the list of invariants.  The
     // first pass is to set up a group for each canonical variable.  The
@@ -228,7 +330,7 @@ public class InvariantFilters {
     // displayed first in the output "x==y==z".  A secondary advantage is
     // that we don't run into the following problem:  Say we have "a == b",
     // "b == c", "c == d".  If we encounter the first and the third
-    // invariants first, they will be put into two seperate sets.  Each set
+    // invariants first, they will be put into two separate sets.  Each set
     // will develop independently and end up having a, b, c, d.
 
     // First pass: set up a group for each canonical variable.  First,
@@ -236,17 +338,20 @@ public class InvariantFilters {
     // Set class is that duplicates are taken care of (we might see a
     // canonical variable more than once).  Second, for each element of
     // canonicalVariables, add a List to equivalentGroups.
-    Set canonicalVariables = new HashSet();
+    Set canonicalVariables = new TreeSet(new VarInfo.LexicalComparator());
     for (Iterator iter = invariants.iterator(); iter.hasNext(); ) {
       Invariant invariant = (Invariant) iter.next();
       if (IsEqualityComparison.it.accept( invariant )) {
 	if (PrintInvariants.debugFiltering.isDebugEnabled()) {
 	  PrintInvariants.debugFiltering.debug("Found invariant which says " + invariant.format() + "\n");
 	}
+        // System.out.println("Found equality invariant: " + invariant.format() + " " + invariant.ppt.name);
+        // System.out.println("    " + invariant.repr());
         VarInfo[] variables = invariant.ppt.var_infos;
         Assert.assertTrue( variables.length == 2 );
         for (int i = 0; i < variables.length; i++) {
           VarInfo vi = variables[i];
+          // System.out.println("  " + vi.name.name() + " canonical=" + vi.isCanonical());
           if (true) { // vi.isCanonical()) { // [INCR] XXX; This whole method sucks now.
             if (! canonicalVariables.contains( vi )) {
               Assert.assertTrue(! ppts.containsKey(vi));
@@ -264,8 +369,9 @@ public class InvariantFilters {
       }
     }
     for (Iterator iter = canonicalVariables.iterator(); iter.hasNext(); ) {
+      VarInfo vi = (VarInfo) iter.next();
       List list = new ArrayList();
-      list.add( iter.next());
+      list.add( vi );
       equivalentGroups.add( list );
     }
 
@@ -301,34 +407,49 @@ public class InvariantFilters {
       VarInfo canonicalVar = (VarInfo) equivalentGroup.get(0);
       PptSlice ppt = ((Invariant) ppts.get(canonicalVar)).ppt;
 
+      // ordered_output contains the same elements as equivalentGroup, but
+      // ordered according to the canonical variable's equalToNonobvious().
+
       // Unfortunately, for printing, we want the equivalent
       // expressions to be ordered in the same order that the appear in
       // in the VarInfo.  (No, this won't be true already, we do
       // actually have to do it by hand.)
-      Vector ordered_output = new Vector();
+      Vector ordered_output = new Vector(); // Vector[VarInfo]
       // [INCR] Vector ordered_reference = PrintInvariants.get_equal_vars(canonicalVar, true);
-      Vector ordered_reference = new Vector();
-      ordered_reference.add(canonicalVar);
       for ( Iterator varIter = ordered_reference.iterator(); varIter.hasNext(); ) {
-	Object tmp = varIter.next();
-	if (equivalentGroup.contains(tmp)) {
-	  ordered_output.add(tmp);
+	VarInfo vi = (VarInfo) varIter.next();
+	if (equivalentGroup.contains(vi)) {
+	  ordered_output.add(vi);
 	}
       }
 
-      //      System.out.println("\n\nEquivalentGroup   is " + equivalentGroup);
-      //System.out.println("ordered_output    is " + ordered_output);
-      //System.out.println("ordered_reference is " + ordered_reference);
+      // System.out.println("\n");
+      // System.out.println("EquivalentGroup   is " + reprVarInfoList(equivalentGroup));
+      // System.out.println("ordered_output    is " + reprVarInfoList(ordered_output));
+      // System.out.println("ordered_reference is " + reprVarInfoList(ordered_reference));
       for ( Iterator allVarsIter = equivalentGroup.iterator(); allVarsIter.hasNext(); ) {
-	Object tmp = allVarsIter.next();
-	Assert.assertTrue(ordered_output.contains(tmp));
+	VarInfo vi = (VarInfo) allVarsIter.next();
+	Assert.assertTrue(ordered_output.contains(vi));
       }
       equality_invariants.add(new Equality(ordered_output, ppt));
-      }
+    }
 
     equality_invariants = PrintInvariants.sort_invariant_list(equality_invariants);
     equality_invariants.addAll(invariants);
     return equality_invariants;
     */ // [INCR]
   }
+
+  // For debugging
+  static String reprVarInfoList(List vis) {
+    String result = "";
+    for (int i=0; i<vis.size(); i++) {
+      if (i!=0) result += " ";
+      VarInfo vi = (VarInfo)vis.get(i);
+      result += vi.name.name();
+      // [INCR] result += " { " + vi.canonicalRep().name.name() + " }";
+    }
+    return "[ " + result + " ]";
+  }
+
 }
