@@ -52,6 +52,9 @@ public final class StringComparison
   public static StringComparison instantiate(PptSlice ppt, boolean onlyEq) {
     if (!dkconfig_enabled) return null;
 
+    if (Debug.logOn())
+      Debug.log (StringComparison.class, ppt, "Attempting instantiate");
+
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
     VarInfo seqvar1 = var1.isDerivedSequenceMember();
