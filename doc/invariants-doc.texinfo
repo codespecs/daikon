@@ -34,13 +34,25 @@
     greater than or equal to a constant. Prints as 'x[] elements >=
     c'
 
-    See also the configuration options daikon.inv.unary.sequence.EltLowerBound.minimal_interesting and daikon.inv.unary.sequence.EltLowerBound.maximal_interesting
+    See also the following configuration options:
+    @itemize @bullet
+    @item
+    daikon.inv.unary.sequence.EltLowerBound.minimal_interesting
+    @item
+    daikon.inv.unary.sequence.EltLowerBound.maximal_interesting
+    @end itemize
 @item EltLowerBoundFloat
     Represents the invariant that each element of a double[] sequence is
     greater than or equal to a constant. Prints as 'x[] elements >=
     c'
 
-    See also the configuration options daikon.inv.unary.sequence.EltLowerBoundFloat.minimal_interesting and daikon.inv.unary.sequence.EltLowerBoundFloat.maximal_interesting
+    See also the following configuration options:
+    @itemize @bullet
+    @item
+    daikon.inv.unary.sequence.EltLowerBoundFloat.minimal_interesting
+    @item
+    daikon.inv.unary.sequence.EltLowerBoundFloat.maximal_interesting
+    @end itemize
 @item EltNonZero
     Represents the invariant "x != 0" where x represents all of the elements
     of a long sequence.  Prints as 'x[] elements != 0'
@@ -53,33 +65,57 @@
     (when there is only one value), or as "x[] one of @{c1, c2, c3@}" (when
     there are multiple values).
 
-    See also configuration option daikon.inv.unary.sequence.EltOneOf.size
+    See also the following configuration option:
+    @itemize @bullet
+    @item
+    daikon.inv.unary.sequence.EltOneOf.size
+    @end itemize
 @item EltOneOfFloat
     Represents double sequences where the elements of the sequence
     take on only a few distinct values.  Prints as either "x[] == c"
     (when there is only one value), or as "x[] one of @{c1, c2, c3@}" (when
     there are multiple values).
 
-    See also configuration option daikon.inv.unary.sequence.EltOneOfFloat.size
+    See also the following configuration option:
+    @itemize @bullet
+    @item
+    daikon.inv.unary.sequence.EltOneOfFloat.size
+    @end itemize
 @item EltOneOfString
     Represents String sequences where the elements of the sequence
     take on only a few distinct values.  Prints as either "x[] == c"
     (when there is only one value), or as "x[] one of @{c1, c2, c3@}" (when
     there are multiple values).
 
-    See also configuration option daikon.inv.unary.stringsequence.EltOneOfString.size
+    See also the following configuration option:
+    @itemize @bullet
+    @item
+    daikon.inv.unary.stringsequence.EltOneOfString.size
+    @end itemize
 @item EltUpperBound
     Represents the invariant that each element of a long[] sequence is
     less than or equal to a constant. Prints as 'x[] elements <=
     c'
 
-    See also the configuration options daikon.inv.unary.sequence.EltUpperBound.minimal_interesting and daikon.inv.unary.sequence.EltUpperBound.maximal_interesting
+    See also the following configuration options:
+    @itemize @bullet
+    @item
+    daikon.inv.unary.sequence.EltUpperBound.minimal_interesting
+    @item
+    daikon.inv.unary.sequence.EltUpperBound.maximal_interesting
+    @end itemize
 @item EltUpperBoundFloat
     Represents the invariant that each element of a double[] sequence is
     less than or equal to a constant. Prints as 'x[] elements <=
     c'
 
-    See also the configuration options daikon.inv.unary.sequence.EltUpperBoundFloat.minimal_interesting and daikon.inv.unary.sequence.EltUpperBoundFloat.maximal_interesting
+    See also the following configuration options:
+    @itemize @bullet
+    @item
+    daikon.inv.unary.sequence.EltUpperBoundFloat.minimal_interesting
+    @item
+    daikon.inv.unary.sequence.EltUpperBoundFloat.maximal_interesting
+    @end itemize
 @item EltwiseFloatEqual
     Represents equality between adjacent elements (x[i], x[i+1]) of a
     double sequence.  Prints as 'x[] elements are equal'
@@ -197,7 +233,11 @@
     Represents an invariant of "!=" between two
     long scalars.
 
-    See also configuration option daikon.inv.binary.twoScalar.IntNonEqual.integral_only
+    See also the following configuration option:
+    @itemize @bullet
+    @item
+    daikon.inv.binary.twoScalar.IntNonEqual.integral_only
+    @end itemize
 @item LinearBinary
     Represents a Linear invariant (y = ax + b) between two long
     scalars.
@@ -214,12 +254,24 @@
     Represents the invariant 'x >= c', where c is a constant and x is
     a long scalar.
 
-    See also the configuration options daikon.inv.unary.scalar.LowerBound.minimal_interesting and daikon.inv.unary.scalar.LowerBound.maximal_interesting
+    See also the following configuration options:
+    @itemize @bullet
+    @item
+    daikon.inv.unary.scalar.LowerBound.minimal_interesting
+    @item
+    daikon.inv.unary.scalar.LowerBound.maximal_interesting
+    @end itemize
 @item LowerBoundFloat
     Represents the invariant 'x >= c', where c is a constant and x is
     a double scalar.
 
-    See also the configuration options daikon.inv.unary.scalar.LowerBoundFloat.minimal_interesting and daikon.inv.unary.scalar.LowerBoundFloat.maximal_interesting
+    See also the following configuration options:
+    @itemize @bullet
+    @item
+    daikon.inv.unary.scalar.LowerBoundFloat.minimal_interesting
+    @item
+    daikon.inv.unary.scalar.LowerBoundFloat.maximal_interesting
+    @end itemize
 @item Member
     Represents long scalars that are always members of long sequences.
     Prints as "x in y[]" where x is a long scalar and y[] is a
@@ -259,13 +311,21 @@
     values. Prints as either "x == c" (when there is only one value),
     or as "x one of @{c1, c2, c3@}" (when there are multiple values).
 
-    See also configuration option daikon.inv.unary.scalar.OneOfFloat.size
+    See also the following configuration option:
+    @itemize @bullet
+    @item
+    daikon.inv.unary.scalar.OneOfFloat.size
+    @end itemize
 @item OneOfFloatSequence
     Represents double[] variables that take on only a few distinct
     values. Prints as either "x == c" (when there is only one value),
     or as "x one of @{c1, c2, c3@}" (when there are multiple values).
 
-    See also configuration option daikon.inv.unary.sequence.OneOfFloatSequence.size
+    See also the following configuration option:
+    @itemize @bullet
+    @item
+    daikon.inv.unary.sequence.OneOfFloatSequence.size
+    @end itemize
 @item OneOfScalar
     Represents long scalars that take on only a few distinct values.  Prints
     as either "x == c" (when there is only one value), "x one of @{c1, c2, c3@}"
@@ -273,25 +333,41 @@
     a hashcode (pointer) - this is because the numerical value of the
     hashcode (pointer) is uninteresting).
 
-    See also configuration option daikon.inv.unary.scalar.OneOfScalar.size
+    See also the following configuration option:
+    @itemize @bullet
+    @item
+    daikon.inv.unary.scalar.OneOfScalar.size
+    @end itemize
 @item OneOfSequence
     Represents long[] variables that take on only a few distinct
     values. Prints as either "x == c" (when there is only one value),
     or as "x one of @{c1, c2, c3@}" (when there are multiple values).
 
-    See also configuration option daikon.inv.unary.sequence.OneOfSequence.size
+    See also the following configuration option:
+    @itemize @bullet
+    @item
+    daikon.inv.unary.sequence.OneOfSequence.size
+    @end itemize
 @item OneOfString
     Represents String variables that take on only a few distinct
     values. Prints as either "x == c" (when there is only one value),
     or as "x one of @{c1, c2, c3@}" (when there are multiple values).
 
-    See also configuration option daikon.inv.unary.string.OneOfString.size
+    See also the following configuration option:
+    @itemize @bullet
+    @item
+    daikon.inv.unary.string.OneOfString.size
+    @end itemize
 @item OneOfStringSequence
     Represents String[] variables that take on only a few distinct
     values. Prints as either "x == c" (when there is only one value),
     or as "x one of @{c1, c2, c3@}" (when there are multiple values).
 
-    See also configuration option daikon.inv.unary.stringsequence.OneOfStringSequence.size
+    See also the following configuration option:
+    @itemize @bullet
+    @item
+    daikon.inv.unary.stringsequence.OneOfStringSequence.size
+    @end itemize
 @item PairwiseFloatComparison
     Represents an invariant between corresponding elements of two
     double sequences.  The length of the sequences must match for
@@ -419,11 +495,23 @@
     Represents the invariant 'x <= c', where c is a constant and x is
     a long scalar.
 
-    See also the configuration options daikon.inv.unary.scalar.UpperBound.minimal_interesting and daikon.inv.unary.scalar.UpperBound.maximal_interesting
+    See also the following configuration options:
+    @itemize @bullet
+    @item
+    daikon.inv.unary.scalar.UpperBound.minimal_interesting
+    @item
+    daikon.inv.unary.scalar.UpperBound.maximal_interesting
+    @end itemize
 @item UpperBoundFloat
     Represents the invariant 'x <= c', where c is a constant and x is
     a double scalar.
 
-    See also the configuration options daikon.inv.unary.scalar.UpperBoundFloat.minimal_interesting and daikon.inv.unary.scalar.UpperBoundFloat.maximal_interesting
+    See also the following configuration options:
+    @itemize @bullet
+    @item
+    daikon.inv.unary.scalar.UpperBoundFloat.minimal_interesting
+    @item
+    daikon.inv.unary.scalar.UpperBoundFloat.maximal_interesting
+    @end itemize
 
 @c END AUTO-GENERATED INVARIANTS LISTING
