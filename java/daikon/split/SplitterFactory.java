@@ -65,8 +65,11 @@ public class SplitterFactory {
     StatementReplacer statementReplacer = fileParser.getReplacer();
     for (int i = 0; i < splitterObjects.length; i++) {
       if (splitterObjects[i].length != 0) {
-        PptTopLevel ppt = findPpt(splitterObjects[i][0].getPptName(), all_ppts);
-        if (ppt != null) {
+        String ppt_name = splitterObjects[i][0].getPptName();
+        PptTopLevel ppt = findPpt(ppt_name, all_ppts);
+        if (ppt == null) {
+          System.out.println("Couldn't find ppt " + ppt_name + "in decls file; used in splitter file " + infofile.getName());
+        } else {
           loadSplitters(splitterObjects[i], ppt, statementReplacer);
         }
       }
@@ -156,36 +159,12 @@ public class SplitterFactory {
 
   /**
    * Finds the PptTopLevel for ppt_name.
+   * ppt_name is usually of the form "MethodName.functionName."
    * @return The PptTopLevel for the Ppt given in ppt_name or if none
    *   can be found, it returns a random PptTopLevel.
    */
   private static PptTopLevel findPpt(String ppt_name, PptMap all_ppts) {
 
-    PptTopLevel ppt = findPptHelper(ppt_name, all_ppts);
-    if (ppt == null) {
-      throw new Error("Couldn't find ppt " + ppt_name);
-    }
-    // if (ppt == null) {
-    //   // try with the OBJECT program point
-    //   ppt = findPptHelper("OBJECT", all_ppts);
-    // }
-    // if (ppt == null) {
-    //   // We just get a random program point (the first) from the pptMap.
-    //   // Hopefully we can find the variables that we need at this ppt
-    //   Iterator pptIter = all_ppts.pptIterator();
-    //   if (pptIter.hasNext()) {
-    //     ppt = (PptTopLevel)pptIter.next();
-    //   }
-    // }
-    return ppt;
-  }
-
-
-  /**
-   * Find a program point in Daikon whose name matches "ppt_name".
-   * ppt_name is usually of the form "MethodName.functionName."
-   **/
-  private static PptTopLevel findPptHelper(String ppt_name, PptMap all_ppts) {
     Object exact_result = all_ppts.get(ppt_name);
     if (exact_result != null) {
       // System.out.println("findPptHelper exact match: " + ppt_name + ((PptTopLevel)exact_result).name);
@@ -215,7 +194,8 @@ public class SplitterFactory {
       }
     }
 
-    PptTopLevel result = findPptRegex(ppt_name, all_ppts);
+    PptTopLevel result = findPptRegex(regex, all_ppts);
+
     return result;
   }
 
@@ -226,7 +206,8 @@ public class SplitterFactory {
       PptTopLevel ppt = (PptTopLevel)itor.next();
       String name = ppt.name;
       java.util.regex.Matcher matcher = pattern.matcher(name);
-      if (matcher.matches()) {
+      // System.out.println("  considering " + name);
+      if (matcher.find()) {
         // return more than one? do more than one match??
         // XXX In particular, we get in trouble here if the method
         // name we want is a prefix of other method names. For
@@ -239,7 +220,7 @@ public class SplitterFactory {
         return all_ppts.get(name);
       }
     }
-    // System.out.println("findPptHelper ==> null");
+    // System.out.println("findPptRegex ==> null");
     return null;
   }
 
