@@ -207,12 +207,45 @@ public abstract class Invariant
     this.ppt = ppt;
   }
 
-  // Has to be public because of wrappers.
+  /**
+   * Mark this invariant as falsified.
+   * Invariants must also call flow when they are falsified
+   * Has to be public because of wrappers; do not call from outside world.
+   * @see flow
+   **/
   public void destroy() {
     no_invariant = true;
-    // Don't do this here; we leave it to the ppt to detect this and
-    // flow the invariant to the right places.
     // ppt.removeInvariant(this);
+  }
+
+  /**
+   * Flow argument to all lower program points.
+   * Has to be public because of wrappers (?); do not call from outside world.
+   * @see destroy
+   **/
+  public void flow(Invariant flowed) {
+    ppt.addToFlow(flowed);
+  }
+
+  /**
+   * Essentially the same as flow(this).  Useful way to flow oneself
+   * without much hassle (as long as internal state is still OK).
+   * Nice point of control in case we later have to tweak things when
+   * flowing outselves.
+   **/
+  public void flowThis() {
+    flow(this);
+  }
+
+  /**
+   * Essentially the same as flow(this.clone()).  Useful way to flow
+   * oneself without much hassle (as long as internal state is still
+   * OK).  Nice point of control in case we later have to tweak things
+   * when flowing outselves.
+   **/
+  public void flowClone() {
+    Invariant flowed = (Invariant) this.clone();
+    flow(flowed);
   }
 
   /** Do nothing special.  Overridden to remove exception from declaration */
