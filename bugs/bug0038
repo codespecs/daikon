@@ -1,0 +1,19 @@
+Version:      $Id$
+Owner:        Alan <adonovan@lcs.mit.edu>
+Cc:           Jeremy <jwnimmer>
+Tool:         bugtrack test
+Summary:      test
+Severity:     Lethal
+Status:       New
+Reproducible: Yes
+Description:
+
+
+Jeremy, just testing the CC feature.
+al
+
+--
+$Log$
+Revision 1.1  2002-04-02 21:27:45  adonovan
+new bug0038
+
