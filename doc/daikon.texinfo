@@ -3267,24 +3267,52 @@ Stop the Context GUI by typing @kbd{M-x daikon-context-gui-end}
 * CSV front end convertcsv.pl::  
 @end menu
 
-@node    Java front end dfej, Binary C front end Kvasir, Front ends, Front ends
-@section Java front end dfej
+@node    Java front end Chicory, Binary C front end Kvasir, Front ends, Front ends
+@section Java front end Chicory
 
 @cindex front end for Java
 @cindex Java front end
+@cindex Chicory (Daikon front end for Java)
+
+[[TODO:  write this section of the manual]]
+
+Chicory is named after a flowering perennial herb whose root is
+sometimes used as a substitute for coffee.
+
+
+
+
+
+@node    Source-based Java front end dfej, Binary C front end Kvasir, Front ends, Front ends
+@section Source-based Java front end dfej
+
+@cindex front end for Java, source-based
+@cindex Java front end, source-based
 @cindex dfej (Daikon front end for Java)
 
-This section contains details about dfej, the Daikon front end for Java.
+This section contains details about dfej, the source-based Daikon front
+end for Java.
 
 For brief information about running dfej, see @ref{Instrumenting Java programs}.
 For information about installing dfej, see @ref{Installing dfej}.
 The @command{dfej} usage message also contains some usage information;
 run @command{dfej --help} to see it.
 
-@command{dfej} works on Java code that corresponds to any version of
-the Java language, from 1.0 to 1.4.
+@command{dfej} works on Java code that corresponds to versions 1.0--1.4
+of the Java language between, from 1.0 to 1.4.  @command{dfej} does not
+work on Java 1.5 (also known as Java 5.0).
 
-The Daikon front end for Java has two effects:
+The Chicory front end for Java (@pxref{Java front end Chicory}) works on
+all versions of the Java language, including Java 1.5 (Java 5.0).
+Another advantage of Chicory is that Chicory is much easier to use.
+dfej's advantage over Chicory is in terms of performance:  code
+instrumented by dfej tends to run faster than code instrumented by
+Chicory.  Since Chicory is about as fast as Daikon itself (and Chicory's
+speed will increase in future releases), Chicory is not the bottleneck.
+Thus, we recommend the use of Chicory over dfej in most circumstances.
+For more details on Chicory, see @ref{Java front end Chicory}.
+
+@command{dfej} has two effects:
 @itemize @bullet
 @item
 dfej writes instrumented versions of the files, by default in directory
@@ -3763,8 +3791,8 @@ comment immediately before the declared type (but after any modifiers like
 @c   			  The current version does not require Python.
 @c @end example
 
-@node Binary C front end Kvasir, Source-based C front end dfec, Java front end dfej, Front ends
-@section Binary C front end Kvasir
+@node C front end Kvasir, Source-based C front end dfec, Java front end dfej, Front ends
+@section C front end Kvasir
 
 @cindex Kvasir (binary front end for C)
 @cindex front end for C
@@ -3793,13 +3821,17 @@ However, Kvasir has some limitations of its own.  Because Kvasir uses
 Valgrind, it shares Valgrind's limitation of working only under the
 Linux operating system, and only on Intel 386-compatible processors
 (the so-called IA-32 architecture) such as the Intel Pentium and the
-AMD Athlon.  Furthermore, requires that your program have debugging
+AMD Athlon.  Furthermore, Kvasir requires that your program have debugging
 information available in the DWARF-2 format, as produced by recent
 versions of GCC@.  Two other limitations are not fundamental, but apply
 to the current version: first, the programs used by Kvasir should be
 compiled without optimization; and second, the programs should be
-written in C@.  (In the future, Kvasir may support C++ and other
-languages that follow C calling conventions.)
+written in C@.  (In the future, Kvasir will support C++ and possibly other
+languages that follow C calling conventions; send mail to 
+@email{daikon-developers@@lists.csail.mit.edu} if this functionality is
+important to you.)
+
+For information about installing Kvasir, see @ref{Installing Kvasir}.
 
 @menu
 * Using Kvasir::                
@@ -4065,9 +4097,9 @@ optimization.
 @cindex front end for C
 @cindex C front end
 
-This section contains details about dfec, the Daikon front end for C@.
-An alternate front end for C, named Kvasir, is also available
-(@pxref{Binary C front end Kvasir}).
+This section describes dfec, the Daikon source-based front end for C@.
+A binary-based front end for C, named Kvasir, is also available
+(@pxref{Binary C front end Kvasir}), and is preferable in most circumstances.
 For brief information about running dfec, see @ref{Instrumenting C programs}.
 For information about installing dfec, see @ref{Installing dfec}.
 

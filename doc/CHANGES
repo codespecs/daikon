@@ -19,29 +19,14 @@ Further documentation can be found in:
 3.2.0 (Feb 1 2005)
 
 The 3.2.0 version of Daikon introduces substantial enhancements in a
-variety of areas ...
+variety of areas.  Most 
+
+ ...
 
 Daikon's licensing terms have been liberalized.  Daikon is now distributed
 without restrictions under an MIT/BSD-style license.
 
-The dfej front end for Java outputs more variables; in particular, you may
-notice slightly more "foo.class" variables that give the run-time type of
-variable foo.
 
-Daikon now permits program point declarations (which ordinarily appear
-in .decls files) to appear in the .dtrace file as well.  Each
-declaration must appear either in a .decls file or in a .dtrace file,
-not in both, and any declaration in a .dtrace file must precede all
-samples for that program point.  This feature allows incremental
-processing of .dtrace files for languages such as Java that support
-dynamic linking.  As part of this change, it is now required that
-:::ENTER program points be declared before corresponding :::EXIT
-program points so that the set of original variables are available
-when processing exit point declarations.
-
-The generation of implications has been modified.  If there are
-multiple exclusive invariants, one is chosen as a predicate and
-used for all of the implications.  [more detail to be added, jhp]
 
 *****
 
@@ -52,7 +37,70 @@ used for all of the implications.  [more detail to be added, jhp]
 
 
 
+Chicory
+
+  Chicory is a new Daikon front end for Java.  Its functionality is very
+  similar to that of the dfej tool, and it supports most of the same
+  command-line options.  However, Chicory has two substantial advantages
+  over dfej:
+   * Chicory is much easier to use:  when running your Java program,
+     just replace the "java" command with "java chicory.Chicory".  For
+     instance, if you usually run
+       java mypackage.MyClass arg1 arg2 arg3
+     then instead you would run
+       java chicory.Chicory mypackage.MyClass arg1 arg2 arg3
+     That's all there is to it!
+     Note that Chicory does not require you to perform separate
+     instrumentation or compilation steps, as dfej does.
+     You can also supply arguments to Chicory, after "java chicory.Chicory"
+     and before the class name.  See the Daikon manual for details.
+   * Chicory supports all versions of Java, including Java 1.5.  By
+     contrast, dfej only supports Java 1.4 and earlier.
+  Chicory has one disadvantage over dfej:  Chicory's instrumentation tends
+  to slow down the target program more than dfej's does.  However, Chicory
+  is still usable, and we will improve its performance in future releases.
+
+Daikon
+
+  User changes
+
+    Daikon's source code is now written in Java version 1.5 (also known as
+    Java 5.0).  This means that you will need a Java 5 compiler to compile
+    Daikon, and you will need a Java 5 JVM to run Daikon.  (You may be able
+    to run Daikon on an older JVM by using a utility like retroweaver:
+    (http://retroweaver.sourceforge.net/.)
+
+    Daikon now permits program point declarations (which ordinarily appear
+    in .decls files) to appear in the .dtrace file as well.  Each
+    declaration must appear either in a .decls file or in a .dtrace file,
+    not in both, and any declaration in a .dtrace file must precede all
+    samples for that program point.  This feature allows incremental
+    processing of .dtrace files for languages such as Java that support
+    dynamic linking.  As part of this change, it is now required that
+    :::ENTER program points be declared before corresponding :::EXIT
+    program points so that the set of original variables are available
+    when processing exit point declarations.
+
+    The generation of implications has been modified.  If there are
+    multiple exclusive invariants, one is chosen as a predicate and
+    used for all of the implications.  [more detail to be added, jhp]
+
+    The following command-line options have been renamed, for consistency
+    with other components of the Daikon distribution.
+
+      OLD              NEW
+      --ppt RE         --ppt-select-pattern=RE
+      --ppt_omit RE    --ppt-omit-pattern=RE
+      --var_omit RE    --var-omit-pattern=RE
+
 dfej
+
+  dfej continues to support only Java 1.4 and earlier.  (You can run dfej's
+  output on any JVM, but dfej takes as input a Java 1.4 program.)
+
+  The dfej front end for Java outputs more variables; in particular, you may
+  notice slightly more "foo.class" variables that give the run-time type of
+  variable foo.
 
   The following command-line options have been renamed, for consistency
   with other components of the Daikon distribution.
@@ -85,16 +133,6 @@ dfepl
     --dtrace-basedir=    --dtrace-dir=
     --decls-basedir=     --decls-dir=
     --instr-basedir=     --instr-dir=
-
-Daikon
-
-  The following command-line options have been renamed, for consistency
-  with other components of the Daikon distribution.
-
-    OLD              NEW
-    --ppt RE         --ppt-select-pattern=RE
-    --ppt_omit RE    --ppt-omit-pattern=RE
-    --var_omit RE    --var-omit-pattern=RE
 
 Kvasir
 
@@ -131,7 +169,6 @@ Runtime-check instrumenter
 
 
 Hopefully, this release will include:
- * Daikon supports Java 5 (also known as Java 1.5) [requires fixed JTB]
  * Carlos's run-time checker
  * Annotate does not double-insert [Carlos should make this change]
  * Eric Fellheimer's Java front end
@@ -191,7 +228,7 @@ Daikon
     file to be specified and avoids the overhead of having Daikon
     counting them.
 
-    Daikon no longer uses the libraries jarkarto-oro.jar and log4j
+    Daikon no longer uses the libraries jarkarta-oro.jar and log4j.
 
     The mechanism for compiling splitter files was improved.
     The process is more reliable, error messages are more

@@ -546,7 +546,9 @@ $(DFEJ_DIR)/src/dfej:
 dist-dfej-pag: $(DIST_PAG_BIN_DIR)/dfej
 
 $(DIST_PAG_BIN_DIR)/dfej: $(DFEJ_DIR)/src/dfej
-	cp -pf $< $@
+	# No "-p" flag:  we want to ensure that dfej is newer than any
+	# generated files in any group member's directory.
+	cp -f $< $@
 
 # Make the current dfej the one distributed to the world
 dist-dfej: dist-dfej-pag dist-dfej-linux-x86 dist-dfej-windows
