@@ -119,10 +119,7 @@ public class PptSplitter implements Serializable {
     // If any parent variables were missing out of bounds, apply that
     // to this conditional as well.  A more efficient way to do this would
     // be better.
-    for (int ii = 0; ii < parent.var_infos.length; ii++) {
-      if (parent.var_infos[ii].missingOutOfBounds())
-        ppt_cond.var_infos[ii].derived.missing_array_bounds = true;
-    }
+    ppt_cond.get_missingOutOfBounds (parent);
 
     // Add the point
     ppt_cond.add_bottom_up (vt, count);
@@ -587,7 +584,15 @@ public class PptSplitter implements Serializable {
   } // add_implications_pair
 
 
-  /** Returns a list of all possible slices that may appear at the parent. **/
+  /**
+   * Returns a list of all possible slices that may appear at the parent.
+   * The parent must have already been created by merging the invariants
+   * from its child conditionals.
+   *
+   * This is different from the slices that actually exist at the parent
+   * becaue there make be implications created from invariants in child
+   * slices that only exist in one child.
+   **/
   private List /*VarInfo[]*/ possible_slices() {
 
     List /*VarInfo[]*/ result = new ArrayList();
