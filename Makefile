@@ -167,6 +167,7 @@ doc/CHANGES: doc/daikon.texinfo
 	@echo "** doc/CHANGES file is not up-to-date with respect to doc/daikon.texinfo"
 	@echo "** doc/CHANGES must be modified by hand:  try"
 	@echo "**   diff -u /home/httpd/html/daikon/dist/doc/daikon.texinfo doc/daikon.texinfo"
+	@echo "** (or maybe  touch doc/CHANGES )."
 	@exit 1
 
 # Is this the right way to do this?
