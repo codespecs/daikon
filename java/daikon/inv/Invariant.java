@@ -684,7 +684,7 @@ public abstract class Invariant
     Invariant result = (Invariant) first.clone();
     result.ppt = ppt;
     result.log ("Merged '" + result.format() + "' from " + invs.size()
-                + " child invariants");
+                + " child invariants " /* + first.ppt.name() */);
 
     // Make sure that each invariant was really of the same type
     if (Assert.enabled) {
@@ -1979,6 +1979,15 @@ public abstract class Invariant
       return (inv.mergeFormulasOk() || isSameFormula (inv));
     else
       return (false);
+  }
+
+  /**
+   * Returns whether or not the invariant matches the specified state.
+   * Must be overriden by subclasses that support this.  Otherwise, it
+   * returns true only if the state is null.
+   */
+  public boolean state_match (Object state) {
+    return (state == null);
   }
 
   // This function creates a guarding predicate for a given invariant
