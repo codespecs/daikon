@@ -29,4 +29,10 @@ public class Pair {
       return false;
     }
   }
+
+  public int hashCode() {
+    return (((a == null) ? 0 : a.hashCode()) +
+            ((b == null) ? 0 : b.hashCode()));
+  }
+
 }
