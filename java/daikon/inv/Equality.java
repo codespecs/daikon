@@ -54,12 +54,12 @@ public final class Equality
    **/
   private int numSamples;
 
-  public int numSamples() {
-    return numSamples;
+  public void setSamples (int sample_cnt) {
+    numSamples = sample_cnt;
   }
 
-  public void setSamples(int arg) {
-    numSamples = arg;
+  public int numSamples() {
+    return numSamples;
   }
 
   /**
@@ -346,6 +346,10 @@ public final class Equality
     return result.toString();
   }
 
+  public String shortString() {
+    return format_daikon();
+  }
+
   //@tx
   // daikon.inv.Equality
   public String format_dbc() {
@@ -379,12 +383,19 @@ public final class Equality
 
   /**
    * @return a List of VarInfos that do not fit into this set anymore
+   *
+   * Originally (8/14/2003), this did not check for the modified bits.
+   * It seems however, quite wrong to leave variables in the same equality
+   * set when one is missing and the other is not.  Its possible we should
+   * go farther and break out of the equality set any variable that is
+   * missingOutOfBounds (JHP)
    **/
   public List add(ValueTuple vt, int count) {
     // Need to handle specially if leader is missing.
     VarInfo leader = leader();
     Object leaderValue = leader.getValue(vt);
     int leaderMod = leader.getModified(vt);
+    boolean leaderOutOfBounds = leader.missingOutOfBounds();
     if (leaderMod == ValueTuple.MISSING_NONSENSICAL ||
         leaderMod == ValueTuple.MISSING_FLOW) {
     } else {
@@ -397,12 +408,16 @@ public final class Equality
     }
     for (Iterator i = vars.iterator(); i.hasNext(); ) {
       VarInfo vi = (VarInfo) i.next();
+      if (vi == leader)
+        continue;
       Assert.assertTrue (vi.comparableNWay (leader));
       Object viValue = vi.getValue(vt);
+      int viMod = vi.getModified(vt);
       // The following is possible because values are interned.  The
       // test also takes into account missing values, since they are
       // null.
-      if (leaderValue == viValue) continue;
+       if ((leaderValue == viValue) && (leaderMod == viMod)
+        && !leaderOutOfBounds && !vi.missingOutOfBounds()) continue;
       //       if (debug.isLoggable(Level.FINE)) {
       //         debug.fine ("  vi name: " + vi.name.name());
       //         debug.fine ("  vi value: " + viValue);
