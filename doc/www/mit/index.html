@@ -495,6 +495,13 @@ makes it clear what is commented out and what is not, even when the code
 is printed or is viewed without color highlighting.
 <p>
 
+Do not place files in the CVS repository with DOS-style line separators;
+use Unix-style separators (at least when first adding a file).  The CVS
+tools don't cope well with DOS line separators; for instance, they may
+erroneously indicate that an entire file is modified, making merges and
+updates very difficult.
+<p>
+
 
 <h2><a name="regression-tests">Testing Daikon</a></h2>
 
