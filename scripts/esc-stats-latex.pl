@@ -14,7 +14,7 @@ use English;
 use Carp;
 use POSIX;
 
-my @types = ("invariant","set","requires","modifies","ensures","exsures","also_requires","also_modifies","also_ensures","also_exsures","axiom");
+my @types = ("invariant","set","requires","modifies","ensures","exsures","also_requires","also_modifies","also_ensures","also_exsures","axiom","assume");
 
 my %types_map = (
 		 "invariant" => "Object",
@@ -27,7 +27,8 @@ my %types_map = (
 		 "also_modifies" => "Modifies",
 		 "also_ensures" => "Ensures",
 		 "also_exsures" => "Ensures",
-		 "axiom" => "Axiom",
+		 "axiom" => "Unsound",
+		 "assume" => "Unsound",
 		 );
 my @printed_types = ("Object", "Requires", "Modifies", "Ensures");
 my %printed_types = ("Object" => 1, "Requires" => 1, "Modifies" => 1, "Ensures" => 1);
@@ -286,5 +287,7 @@ if ($single) {
 	 pad_left(7, pad_zph(length($maxmissing), avg($total_missing))),
 	 $total_precision/$num_samples,
 	 $total_recall/$num_samples);
+#	 (1.0 * $total_verified) / ($total_verified + $total_unverified),
+#	 (1.0 * $total_verified) / ($total_verified + $total_missing));
   print "\\hline\n";
 }
