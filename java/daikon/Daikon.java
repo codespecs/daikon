@@ -107,7 +107,7 @@ public final class Daikon {
    * variable receives a second value, invariants are instantiated and
    * are given the sample representing the previous constant value.
    **/
-  public static boolean use_dynamic_constant_optimization = true;
+  public static boolean dkconfig_use_dynamic_constant_optimization = true;
 
   /**
    * Whether to use general suppression mechanism.
@@ -281,6 +281,7 @@ public final class Daikon {
   // This isn't used anymore; instead, methods have parameters or
   // local variables of the same name, and all_ppts is always null. Is
   // there a reason it shouldn't just go away? -SMcC 4/24/03
+  // JHP 11/20/03, it is used now to avoid passing it in a few spots.
   public static PptMap all_ppts;
 
   /** Debug tracer **/
@@ -346,7 +347,7 @@ public final class Daikon {
     fileio_progress.start();
 
     // Load declarations and splitters
-    PptMap all_ppts = load_decls_files(decls_files);
+    all_ppts = load_decls_files(decls_files);
     load_spinfo_files(all_ppts, spinfo_files);
     load_map_files(all_ppts, map_files);
 
@@ -722,7 +723,7 @@ public final class Daikon {
 
     // Enable dynamic constants for bottom up only
     if (!dkconfig_df_bottom_up)
-      use_dynamic_constant_optimization = false;
+      dkconfig_use_dynamic_constant_optimization = false;
 
     // Setup ppt_max_name based on the specified percentage of ppts to process
     if (dkconfig_ppt_perc != 100) {
@@ -967,7 +968,7 @@ public final class Daikon {
     stopwatch.reset();
 
     // Post process dynamic constants
-    if (use_dynamic_constant_optimization) {
+    if (dkconfig_use_dynamic_constant_optimization) {
       for (Iterator itor = all_ppts.ppt_all_iterator() ; itor.hasNext() ; ) {
         PptTopLevel ppt = (PptTopLevel) itor.next();
         if (ppt.constants != null)
@@ -984,9 +985,11 @@ public final class Daikon {
       debugProgress.fine ("Init Hierarchy ... done");
 
       // Calculate invariants at all non-leaf ppts
-      debugProgress.fine ("createUpperPpts");
-      Dataflow.createUpperPpts (all_ppts);
-      debugProgress.fine ("createUpperPpts ... done");
+      if (use_dataflow_hierarchy) {
+        debugProgress.fine ("createUpperPpts");
+        Dataflow.createUpperPpts (all_ppts);
+        debugProgress.fine ("createUpperPpts ... done");
+      }
     }
 
     // Equality data for each PptTopLevel.
@@ -1076,7 +1079,8 @@ public final class Daikon {
               ppt_cond.equality_view = new PptSliceEquality(ppt_cond);
               ppt_cond.equality_view.instantiate_invariants();
             }
-            continue;
+            if (use_dataflow_hierarchy)
+              continue;
           }
         }
 
