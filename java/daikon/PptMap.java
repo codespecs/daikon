@@ -2,7 +2,9 @@ package daikon;
 
 import java.io.*;
 import java.util.*;
+import java.util.zip.GZIPInputStream;
 import utilMDE.*;
+import daikon.gui.InvariantsGUI; // for InvariantsGUI.PLEASE_REPORT_ERROR_STRING, in getPptMapFromFile()
 
 /** Maps from a name (a String) to a PptTopLevel. */
 public class PptMap
@@ -69,5 +71,29 @@ public class PptMap
   //   }
   // }
 
+
+  // This is used by the GUI, to get the user-specified .inv or .inv.gz file.
+  public static PptMap getPptMapFromFile ( String fileName ) throws IOException {
+    try {
+      InputStream istream = new FileInputStream( fileName );
+      if (fileName.endsWith( ".gz" ))
+	istream = new GZIPInputStream( istream );
+      ObjectInputStream o = new ObjectInputStream( istream );
+      PptMap pptMap = (PptMap) o.readObject();
+      istream.close();
+      return pptMap;
+    } catch (Exception e) {
+      String errorMessage = "";
+      if (e.getClass() == FileNotFoundException.class)
+	errorMessage = "Error: Invariants object file not found.";
+      else if (e.getClass() == StreamCorruptedException.class)
+	errorMessage = "Error: Invariants object file is corrupted.";
+      else if (e.getClass() == InvalidClassException.class)
+	errorMessage = "Error: Invalid invariants object file.  Make sure the invariants\nobject file was made with your latest version of daikon.";
+      else
+	errorMessage = "Unknown error: " + e.getClass() + InvariantsGUI.PLEASE_REPORT_ERROR_STRING;
+      throw new IOException( errorMessage );
+    }
+  }
 }
 
