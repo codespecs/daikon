@@ -87,7 +87,8 @@ public final class PPTSLICE1
 #endif
 
   // These fields are valid only Daikon.slices_see_all_samples is true.
-  /** Records the distinct values (tuples) seen at this slice. **/
+  /** Records the distinct values (tuples) seen at this slice.
+   * Null if instantiate_invariants has not yet been called. **/
   private VALUETRACKER1 values_cache;
   /** Number of modified samples observed. **/
   private int mod_samples = 0;
