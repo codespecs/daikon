@@ -67,7 +67,7 @@ public class VarInfoNameTest
 	String goals = "";
 	String actuals = "";
 	int low = Math.max(0, i-3);
-	int high = Math.min(Math.min(i+3, actual.length), goal.length);
+	int high = Math.min(Math.min(i+3, actual.length-1), goal.length-1);
 	for (int j = low; j <= high; j++) {
 	  if (!goal[j].equals(actual[j])) {
 	    goals += ">";
