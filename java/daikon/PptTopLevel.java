@@ -64,11 +64,10 @@ public class PptTopLevel
   int num_static_constant_vars; // these don't appear in the trace file
 
   // private transient VarValuesOrdered values; // [[INCR]]
-  // these are used only when values is null
   private int values_num_samples;
-  private int values_num_mod_non_missing_samples;
-  private int values_num_values;
-  private String values_tuplemod_samples_summary;
+  // private int values_num_mod_non_missing_samples;
+  // private int values_num_values;
+  // private String values_tuplemod_samples_summary;
 
   // Do I want two collections here (one for slices and one for conditional?
   // This used to be a WeakHashMap; now it is a HashSet, because I'm not sure
@@ -2210,74 +2209,32 @@ public class PptTopLevel
   // In original (Python) implementation, known as print_invariants_ppt.
   // I may still want to integrate some more of its logic here.
   /**
-   * Print invariants for a single program point.
+   * Print invariants for a single program point and its conditionals.
    * Does no output if no samples or no views.
    **/
-  public void print_invariants_maybe(PrintStream out, PptMap all_ppts) {
-    // Maybe this test isn't even necessary, but will be subsumed by others
-    // (as all the invariants will be unjustified).
-// [[INCR]] ....
-//      if (! has_samples()) {
-//        out.println("No samples for " + name);
-//        return;
-//      }
-// .... [[INCR]]
-    if ((views.size() == 0) && (implication_view.invs.size() == 0)) {
-      if (! (this instanceof PptConditional)) {
-        // Presumably all the views that were originally there were deleted
-        // because no invariants remained in any of them.
-        if (Daikon.output_num_samples) {
-          out.println("[No views for " + name + "]");
-        }
-      }
-      return;
-    }
-    // [INCR] ...
-    /*
-    if ((combined_exit != null) && (Daikon.output_style != Daikon.OUTPUT_STYLE_NORMAL)) {
+  public void print_invariants_maybe(PrintStream out)
+  {
+    // Be slient if we never saw any samples
+    if (values_num_samples == 0) {
       if (Daikon.output_num_samples) {
-        out.println("[Is combined exit, output style " + Daikon.output_style + ": " + name + "]");
+	out.println("[No samples for " + name + "]");
       }
       return;
     }
-    */
-    // ... [INCR]
-    /// Old, more broken version.
-    // // This suppression test does not work, because even if :::EXIT exists,
-    // // it doesn't yet have any implication invariants, and we won't know
-    // // about those until we process it in this loop.
-    // // Do not print if this is :::EXIT22 and :::EXIT exists
-    // if (Daikon.esc_output
-    //     && ppt_name.isExitPoint()
-    //     && (!ppt_name.exitLine().equals(""))) {
-    //   String exitname = ppt_name.makeExit().getName();
-    //   PptTopLevel exit = (PptTopLevel) all_ppts.get(exitname);
-    //   // Don't suppress if the :::EXIT point has no invariants.
-    //   // This could happen if :::EXIT1 was executed but :::EXIT2 never was.
-    //   // Or, it could happen if it shouldn't have any invariants!
-    //   if (exit != null) {
-    //     if (!((exit.views.size() == 0) && (exit.implication_view.invs.size() == 0))) {
-    //       System.out.println("Suppressing " + name + " in favor of " + exitname);
-    //       return;
-    //     }
-    //     System.out.println("Not suppressing " + name + " in favor of " + exitname + ": " + " exit has " + exit.views.size() + " views and " + views_cond.size() + " conditional views and " + exit.implication_view.invs.size() + " implication invs" + " for a total of " + exit.invariants_vector().size() + " invariants");
-    //   } else {
-    //     // System.out.println("Didn't find unified " + exitname + " for " + name + ", so doing output for " + name);
-    //   }
-    // } else {
-    //   // System.out.println("Not an exit, or exitline is \"\": " + name + "; " + ppt_name.isExitPoint() + " <<<" + ppt_name.exitLine() + ">>>");
-    // }
 
-
-    // out.println("This = " + this + ", Name = " + name + " = " + ppt_name);
+    // Be slient if we are a conditional ppt with no invariants
+    if ((this instanceof PptConditional) && (invariants_vector().size() == 0))
+      return;
 
     out.println("===========================================================================");
     print_invariants(out);
 
-    if (Daikon.dkconfig_output_conditionals && Daikon.output_style == Daikon.OUTPUT_STYLE_NORMAL) {
+    if (Daikon.dkconfig_output_conditionals
+	&& Daikon.output_style == Daikon.OUTPUT_STYLE_NORMAL)
+    {
       for (int i=0; i<views_cond.size(); i++) {
         PptConditional pcond = (PptConditional) views_cond.elementAt(i);
-        pcond.print_invariants_maybe(out, all_ppts);
+        pcond.print_invariants_maybe(out);
       }
     }
 
