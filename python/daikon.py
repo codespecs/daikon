@@ -347,6 +347,9 @@ class proglang_type:
                 base = base[9:]
             if not (base in known_types):
                 # hack for Java.  (I want to avoid the short names if possible.)
+                # This isn't quite right because "String[]" gets converted
+                # into "char[][]" which gets converted into Object[].  Yuck.
+                # But it is working around some other shortcoming, I think.
                 if (base == "java.lang.String") or (base == "String"):
                     base = "char"
                     dimensionality = dimensionality+1
@@ -1924,10 +1927,27 @@ def read_data_trace_file(filename, fn_regexp=None):
                             elif this_value[seq_elem] == "NIL":
                                 # HACK
                                 this_value[seq_elem] = 0
+                            elif this_value[seq_elem] == "null":
+                                # HACK
+                                this_value[seq_elem] = 0
                             elif this_base_type == "java_object":
-                                jomatch = java_object_re.match(this_value[seq_elem])
-                                assert jomatch != None
-                                this_value[seq_elem] = eval("0x" + jomatch.group(1))
+                                this_val = this_value[seq_elem]
+                                if ((len(this_val) > 1)
+                                    and (this_val[0] == "\"")
+                                    and (this_val[-1] == "\"")):
+                                    # Horrible, horrible hack, because I
+                                    # don't want to deal with Java strings
+                                    # that are in Object slots but were
+                                    # printed out as strings (without a
+                                    # hashcode).  The problem is that the
+                                    # proglang_type initializer converts
+                                    # "String[]" into "char[][]" and then
+                                    # into "Object[]".
+                                    this_value[seq_elem] = 2222
+                                else:
+                                    jomatch = java_object_re.match(this_val)
+                                    assert jomatch != None
+                                    this_value[seq_elem] = eval("0x" + jomatch.group(1))
                             elif this_base_type == "boolean":
                                 assert (this_value[seq_elem] == "true") or (this_value[seq_elem] == "false")
                                 this_value[seq_elem] = (this_value[seq_elem] == "true")
@@ -3227,10 +3247,10 @@ class two_scalar_numeric_invariant(invariant):
 
         if self.comparison and self.comparison != self.comparison_obvious:
             if self.comparison in ["<", "<="]:
-                if diff_inv.max and (diff_inv.max < -1):
+                if diff_inv and diff_inv.max and (diff_inv.max < -1):
                     suffix = " \t%s <= %s - %d" % (x, y, -diff_inv.max) + suffix
                 return "%s %s %s" % (x, self.comparison, y) + suffix
-            if diff_inv.min and (diff_inv.min > 1):
+            if diff_inv and diff_inv.min and (diff_inv.min > 1):
                 suffix = " \t%s <= %s - %d" % (y, x, diff_inv.min) + suffix
             if self.comparison == ">":
                 return "%s < %s" % (y, x) + suffix
