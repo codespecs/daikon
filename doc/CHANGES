@@ -7,6 +7,20 @@ daikon.html, daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
+2.3.11 (?? July 2002):
+
+The runcluster.pl program performs cluster analysis (a machine learning
+technique) to produce splitter info files.  This is in addition to other
+ways of producing splitter info files, such as static analysis or writing
+them by hand.
+
+The .decls file format now supports auxiliary information for declared
+types.  It can indicate that a collection never contains duplicates or that
+order does not matter (both useful for avoiding obvious invariants over
+sets), properties of null in a collection, and whether a variable is a
+call-by-value parameter (and so can never change, from the point of view of
+the caller).  Use of this information reduces Daikon's output.
+
 2.3.10 (10 June 2002):
 
 Bugfix release.

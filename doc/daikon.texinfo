@@ -221,7 +221,7 @@ Pointer type disambiguation
 
 dfec requirements
 
-* Requirements for instrumented programs::  
+* C program requirements::      
 * gcc version::                 
 
 Enhancing Daikon output
@@ -249,6 +249,11 @@ Example splitter info file
 
 * Example class::               
 * Resulting .spinfo file::      
+
+Enhancing conditional invariant detection
+
+* Static analysis for splitters::  
+* Cluster analysis for splitters::  
 
 Tools
 
@@ -659,7 +664,7 @@ You also need a compiler for whatever language your target programs are
 written in.  For instance, if you wish to analyze Java programs, you
 need a Java compiler such as @command{javac} or @command{jikes}.  If you
 wish to analyze C or C++ programs, you need a C or C++ compiler such as
-@command{gcc}.  (In fact, @command{dfec} assumes that @command{gcc} is
+@command{gcc}.  (In fact, @command{dfec} requires that @command{gcc} is
 installed.)
 
 If you wish to build the Daikon front end for Java (dfej) yourself,
@@ -1273,14 +1278,16 @@ For more information about dfej, see @ref{Java front end dfej}.
 To instrument C/C++ source, invoke @command{dfec} on all the source and
 header files at once:
 @example
-     dfec @var{...options...} @var{myprog}.cc
+     dfec @var{...options...} @var{myprog}.c
 @end example
+@strong{Important:}  dfec may only be run on ANSI/ISO C, not on K&R C
+or other dialects (@pxref{C program requirements})
 
 You may want to specify one or more command-line options;
 see @ref{dfec command-line arguments}.
 If the @command{dfec} command produces errors, first check whether running
-@command{gcc -Wall} on the code produces errors; if so, fix them before
-proceeding to use @command{dfec}.
+@command{gcc -g -Wall -ansi -pedantic} on the code produces errors; if so,
+fix them before proceeding to use @command{dfec}.
 
 After dfec is run, you must compile the instrumented source, linking
 it with the object file for the Daikon runtime library and the stdc++
@@ -3024,6 +3031,8 @@ functions defined in @file{file2.c}, you would instrument as follows:
 Displays a usage message.
 
 @item --no-lackwit
+@cindex LACKWIT_HOME environment variable
+@cindex --no-lackwit flag to dfec
 Turns off Lackwit postprocessing of the @file{.decls} file.  You can also
 turn off Lackwit postprocessing by unsetting the LACKWIT_HOME environment
 variable.
@@ -3319,53 +3328,63 @@ compile.
 @subsection dfec requirements
 
 @menu
-* Requirements for instrumented programs::  
+* C program requirements::      
 * gcc version::                 
 @end menu
 
-@node    Requirements for instrumented programs, gcc version, dfec requirements, dfec requirements
-@subsubsection Requirements for instrumented programs
+@node    C program requirements, gcc version, dfec requirements, dfec requirements
+@subsubsection C program requirements
 
 
-Before running @command{dfec}, you should ensure that your code compiles
-cleanly.  We recommend that you use @command{gcc -g -Wall}, as
-@command{dfec} issues warnings about a number of erroneous C constructs
-that @command{gcc} and other compilers accept.
+@command{dfec} only instruments ANSI/ISO C programs.  dfec does not
+support K&R C or other non-ANSI/ISO C dialects.  Before running
+@command{dfec}, you should ensure that your code is legal ANSI/ISO C
+and that it compiles cleanly, because @command{dfec} issues warnings
+about a number of erroneous C constructs that @command{gcc} and other
+compilers accept.
 
 @cindex ANSI C
 @cindex K&R C
 @cindex C prototypes
 @cindex prototypes, C
 
-@command{dfec} only instruments ANSI C programs.  dfec does not
-support K&R C or other non-ANSI/ISO C dialects; convert such programs
-to ISO C before running dfec.  The @command{protoize} program
-(distributed with gcc, among other places) helps to perform this task
-by converting K&R prototypes to ANSI prototypes.  Compiling with
-@command{gcc -g -Wall} will report many problems with non-ANSI code.
-You
+To convert K&R prototypes to ANSI/ISO prototypes, use the
+@command{protoize} program (distributed with gcc, among other places);
+you may wish to check that it has no effect on your code.  To check
+your code for ANSI/ISO compliance, compile it with @command{gcc -g
+-Wall -ansi -pedantic}.  Removing all warnings produced by
+@command{gcc} will reduce the number of confusing warning messages
+produced by dfec.
 
-@command{dfec} technically only instruments C++ programs.  However,
-most ANSI C programs are also legal C++ programs.  Programs that
-define symbols that are C++ keywords, such as @samp{bool}, require
-that these symbols be changed to another name that does not conflict
-with the C++ namespace (for example, @samp{bool} can be changed to
-@samp{boolean}).
+@command{dfec} does not accept every legal ANSI/ISO C program.  Here
+are the exceptions.
+@enumerate
+@item
+@command{dfec} only instruments programs that are both legal C
+and legal C++.  However, most ANSI C programs are also legal C++
+programs.  Programs that define symbols that are C++ keywords, such as
+@samp{bool}, require that these symbols be changed to another name
+that does not conflict with the C++ namespace (for example,
+@samp{bool} can be changed to @samp{boolean}).
+@item 
+Instrumented programs must not redeclare functions defined in system
+headers; for instance, do not do the following:
+@example
+       #include <stdlib.h>
+       ...
+       char *getenv(const char *name);
+@end example
+The reason is that dfec expects every C file to contain either only
+code and declarations that are instrumented (with respect to smart
+pointer tracking), or no code that is instrumented (with respect to
+smart pointer tracking).  User code is so instrumented, but 
+library functions are not,
+so you should use the declaration in @file{stdlib.h} rather than
+repeating it in your own code.
+@end enumerate
 
 
-@c [the following limitation is deprecated as of 7/02/2001.]
-@c [global/local/class vars are now scoped with '::', '', and 'this->'.]
-@c @c 4/10/2001
-@c When a local variable shadows a global variable of the same name, dfec
-@c tries to output both to the @file{.dtrace} and @file{.decls} files.  The
-@c instrumented C program will run fine, but the local variable will be
-@c output twice, and Daikon will issue an error when it is given files
-@c containing two variables of the same name.
-
-
-
-
-@node    gcc version,  , Requirements for instrumented programs, dfec requirements
+@node    gcc version,  , C program requirements, dfec requirements
 @subsubsection gcc version
 
 
@@ -3525,9 +3544,6 @@ For example,
 java daikon.Daikon Foo.decls Foo.spinfo Foo.dtrace
 @end example
 @end enumerate
-
-@cindex createspinfo.pl program
-@cindex CreateSpinfo program
 
 The term ``splitter'' comes from Daikon's technique for detecting
 implications and conditional invariants.  For each predicate, Daikon
@@ -3736,25 +3752,24 @@ PPT_NAME  simpleStack.isEmpty
 @node    Enhancing conditional invariant detection,  , Conditional invariants, Enhancing Daikon output
 @section Enhancing conditional invariant detection
 
+The built-in mechanisms (see @ref{Conditional invariants}) have
+limitations in the invariants they can find.  By supplying splitting
+conditions to Daikon via a splitter info file, the user can infer more
+conditional invariants.  To ease this task, there are two methods to
+automatically create splitter info files for use by Daikon.
+
+@menu
+* Static analysis for splitters::  
+* Cluster analysis for splitters::  
+@end menu
+
+@node   Static analysis for splitters, Cluster analysis for splitters, Enhancing conditional invariant detection, Enhancing conditional invariant detection
+@subsection Static analysis for splitters
+
 @cindex splitting conditions, static analysis
-@cindex splitting conditions, cluster analysis
-@cindex splitting conditions
-
-The built-in mechanisms (see @ref{Conditional invariants}) are quite effective
-in inferring conditional invariants, but have limitations in the invariants they
-can find. To infer more conditional invariants relevant to the program, the user
-must supply splitting conditions to Daikon via a splitter info file.  However,
-it is difficult to predict which splitting conditions will be useful in
-inferring conditional invariants.  A few techniques can be used to automatically
-predict splitting conditions that might produce useful conditional
-invariants. These techniques include static analysis of the program source and
-cluster analysis of the data trace.
-
-@subsection Static analysis
-
-@cindex static analysis
+@cindex static analysis for splitters
 @cindex createspinfo.pl
-@cindex CreateSpinfo program
+@cindex CreateSpinfo
 
 In static analysis, all explicitly stated boolean statements in the program
 source are extracted and used as splitting conditions.  The assumption is that
@@ -3783,9 +3798,11 @@ createspinfo.pl foo.c
 @end example
 @noindent
 
-@subsection Cluster analysis
+@node   Cluster analysis for splitters,  , Static analysis for splitters, Enhancing conditional invariant detection
+@subsection Cluster analysis for splitters
 
-@cindex cluster analysis
+@cindex splitting conditions, cluster analysis
+@cindex cluster analysis for splitters
 @cindex runcluster.pl program
 
 Cluster analysis is a statistical method that is used to find groups or clusters
@@ -3804,25 +3821,29 @@ To find splitting conditions using cluster analysis, run the
 @command{runcluster.pl} program in the following way:
 @example
 runcluster.pl [OPTIONS] dtrace_file(s) decls_files(s)
+@end example
 
 The options are:
+@table @option
 
- -a, --algorithm ALG   
-           ALG specifies an implemtation of a clustering algorithm.
-           Current options are 'km' (for kmeans), 'hierarchical'
-           and 'xm' (for xmeans). Default is xmeans.
--k
+@item -a @var{ALG}
+@item --algorithm @var{ALG}
+        @var{ALG} specifies an implementation of a clustering algorithm.
+           Current options are @samp{km} (for kmeans), @samp{hierarchical}
+           and @samp{xm} (for xmeans). Default is xmeans.
+
+@item -k
            The number of clusters to use (for algorithms which require
-           this input.) The default is 4.
---keep    
+           this input, which is everything except xmeans). The default is 4.
+
+@item --keep    
            Don't delete the temporary files created by the clustering
-           process.
-@end example
+           process.  This is a debugging flag.
+@end table
 
 The @command{runcluster.pl} program performs the following steps: 
 @enumerate
-@item Extracts the variable values from the data trace file using
-@command{extract_vars.pl} (located in the  @file{$DAIKONDIR/bin} directory). 
+@item Extracts the variable values from the data trace file.
 
 @item Performs clustering over these extract variables using a clustering
 tool. Three clustering programs are currently provided in the @file{$DAIKONDIR/bin} directory,
@@ -3831,16 +3852,13 @@ algorithm, hierarchical clustering and the xmeans algorithm (kmeans algorithm
 with efficient discovery of the number of clusters).
 
 @item Writes new data and decls files and, to each point in the data trace file,
-addsinformation about the cluster to which it belongs. (It uses the
-@command{write_dtrace.pl} and @command{decls_add_cluster.pl}, located in the
-@file{$DAIKONDIR/bin} directory)
+addsinformation about the cluster to which it belongs.
 
 @item Runs Daikon on the augmented data trace and decls files, splitting the
 data by cluster number and performing invariant detection in each cluster. The
 consequents of the resulting conditional invariants (which are invariants found
 in certain clusters, but not in others) are then extracted and written into a
-splitter info file (It uses the @command{daikon.ExtractClusterInvariant}
-program)
+splitter info file.
 @end enumerate
 
 
@@ -4227,13 +4245,12 @@ possible that some filenames (including the one contained in
 @section Problems with dfej
 
 @menu
-* dfej compilation problems::   
+* dfej installation problems::   
 * dfej invocation problems::    
 @end menu
 
-@node    dfej compilation problems, dfej invocation problems, dfej problems, dfej problems
-@subsection Problems compiling dfej
-
+@node    dfej installation problems, dfej invocation problems, dfej problems, dfej problems
+@subsection Problems installing dfej
 
 gcc 2.95.2 on Linux raises an internal error when compiling
 @file{stream.cpp} using the @option{-Wall} flag.  You can simply compile
@@ -4281,6 +4298,7 @@ CLASSPATH.  This should be automatic, if you are using the
 @file{daikon.bashrc} or @file{daikon.cshrc} file and have set the
 JDKDIR environment variable correctly.  Also see @ref{Installing dfej}.
 
+@cindex zip file, invalid
 
 If you get a warning like
 @example
@@ -4292,6 +4310,16 @@ file or a file that is not a @file{.jar} Java archive.  You should adjust
 your CLASSPATH to remove the offending file.  This warning has no effect
 on the operation of dfej, however.
 
+@cindex duplicate definition, in instrumented Java file
+
+While compiling files instrumented by dfej, if you get an error like
+@example
+    Duplicate declaration of local variable "this_invocation_nonce".
+    Duplicate declaration of method "daikonPrintArrayMissing" in type "StackAr".
+@end example
+then you have instrumented an already-instrumented file.  Remove the
+instrumented version and re-run dfej on the original version.  (If you
+are using the Daikon regression tests, run @command{make clean}.)
 
 @menu
 * Ajax errors::                 
