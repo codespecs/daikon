@@ -1,10 +1,11 @@
-*.sparcf
-*.pyc
-*.pyo
-gries-instrumented.lisp
-*.dtrace
+binaries
 daikon-jar.tar
 daikon-jar.tar.gz
 daikon-source.tar
 daikon-source.tar.gz
 daikon.jar
+dfec-src
+dfej-src
+mail
+notes
+papers
