@@ -81,17 +81,14 @@ public class PptMap
       PptMap pptMap = (PptMap) o.readObject();
       istream.close();
       return pptMap;
+    } catch (FileNotFoundException e) {
+      throw new IOException("Error: Invariants object file not found: " + fileName);
+    } catch (StreamCorruptedException e) {
+      throw new IOException("Error: Invariants object file is corrupted: " + fileName);
+    } catch (InvalidClassException e) {
+      throw new IOException("Error: Invalid invariants object file: " + fileName + "\nMake sure the file was made with your current version of Daikon.");
     } catch (Exception e) {
-      String errorMessage = "";
-      if (e.getClass() == FileNotFoundException.class)
-	errorMessage = "Error: Invariants object file not found: " + fileName;
-      else if (e.getClass() == StreamCorruptedException.class)
-	errorMessage = "Error: Invariants object file is corrupted: " + fileName;
-      else if (e.getClass() == InvalidClassException.class)
-	errorMessage = "Error: Invalid invariants object file: " + fileName + "\nMake sure the file was made with your current version of Daikon.";
-      else
-	errorMessage = "Unknown error while reading invariants object file " + fileName + ": " + e.getClass();
-      throw new IOException( errorMessage );
+      throw new IOException("Unknown error while reading invariants object file " + fileName + ": " + e.getClass());
     }
   }
 }
