@@ -5969,8 +5969,8 @@ file or a file that is not a @file{.jar} Java archive.  You should adjust
 your CLASSPATH to remove the offending file.  This warning has no effect
 on the operation of dfej, however.
 
-@index SOURCEPATH environment variable
-@index environment variable SOURCEPATH
+@cindex SOURCEPATH environment variable
+@cindex environment variable SOURCEPATH
 
 The behavior of dfej is controlled by many environment variables;
 unexpected behavior may result from your settings for these
