@@ -87,8 +87,6 @@ It describes Daikon version 2.4.9, released June 2, 2003.
 
 Introduction
 
-* Mailing lists::               
-
 Daikon technologies
 
 * Dataflow hierarchy::          
