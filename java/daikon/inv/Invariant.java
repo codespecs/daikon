@@ -1041,7 +1041,7 @@ public abstract class Invariant
   // approximation is to simply return false.
   public boolean isObviousStatically_AllInEquality() {
     if (!isObviousStatically()) return false;
-    
+
     for (int i = 0; i < ppt.var_infos.length; i++) {
       if (ppt.var_infos[i].equalitySet.getVars().size() > 1) return false;
     }
@@ -1069,7 +1069,7 @@ public abstract class Invariant
   }
 
   /**
-   * Recurse through vis and generate the cartesian product of 
+   * Recurse through vis and generate the cartesian product of
    **/
   private VarInfo[] isObviousStatically_SomeInEqualityHelper(VarInfo[] vis,
                                                              VarInfo[] assigned,
@@ -1185,7 +1185,7 @@ public abstract class Invariant
   }
 
   /**
-   * Recurse through vis and generate the cartesian product of 
+   * Recurse through vis and generate the cartesian product of
    **/
   private VarInfo[] isObviousDynamically_SomeInEqualityHelper(VarInfo[] vis,
                                                              VarInfo[] assigned,
@@ -1456,11 +1456,11 @@ public abstract class Invariant
 
       Assert.assertTrue(result != 0
                         , "isSameInvariant() returned false "
-                        + "(isSameFormula returned " + inv1.isSameFormula(inv2) + "), "
+                        + "(isSameFormula returned " + inv1.isSameFormula(inv2) + "),\n"
                         + "but format().compareTo() returned 0:\n"
-                        + "  " + inv1.format() + " "  + inv1.repr() + "\n"
+                        + "  " + inv1.format() + "\n      "  + inv1.repr() + "\n"
                         + "    " + inv1.ppt.parent.name + "\n"
-                        + "  " + inv2.format() + " "  + inv2.repr() + "\n"
+                        + "  " + inv2.format() + "\n      "  + inv2.repr() + "\n"
                         + "    " + inv1.ppt.parent.name + "\n"
                         );
 
