@@ -20,8 +20,8 @@ of these invariants are implied by other true invariants.  Examples include
   a>=0 && b==a[0..i]  ==>  b subseq a
   b subseq a  ==>  b[j] in a                   Done
   b subseq a  ==>  max(b) in a                 Done
-  0<=i<=j  ==>  b[i] in b[0..j]
-  j>=0  ==>  B[0] in B[0..J]
+  0<=i<=j  ==>  b[i] in b[0..j]                Done
+  j>=0  ==>  B[0] in B[0..J]                   Is this interesting?
   j<=b.length  ==>  B[-1] in B[J..]
   0<=i<=j  ==>  min(B[0..I]) in B[0..J]
   0<=i<=j  ==>  A[0..i] subseq A[0..j]
