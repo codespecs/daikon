@@ -28,6 +28,9 @@ public class DaikonSimple {
 	//inv file for storing the invariants in serialized form
 	public static File inv_file = null;
 
+	
+	public static boolean dkconfig_empty_diff = false;
+	
 	private static String usage =
 		UtilMDE.join(
 			new String[] {
@@ -79,35 +82,38 @@ public class DaikonSimple {
 
 		PptMap all_ppts = FileIO.read_declaration_files(decls_files);
 
-		System.out.println(lineSep);
-
 		//	adding orig and derived variables                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 		init_partial_order(all_ppts);
 		if (debug.isLoggable(Level.FINE)) {
 			debug.fine("Partial order initialized");
 		}
-
+		
 		// Read and process the data trace files
 		SimpleProcessor processor = new SimpleProcessor();
 		FileIO.read_data_trace_files(dtrace_files, all_ppts, processor);
 
 		Iterator t = all_ppts.pptIterator();
 
-		
+
 		//		print out the invariants for each program point (sort first)
 		t = all_ppts.pptIterator();
 
 		while (t.hasNext()) {
 			PptTopLevel ppt = (PptTopLevel) t.next();
-			List invs =
-				PrintInvariants.sort_invariant_list(ppt.invariants_vector());
-			Iterator i = invs.iterator();
-
+			
 			if (ppt.num_samples() != 0) {
+				List invs =	PrintInvariants.sort_invariant_list(ppt.invariants_vector());
+				Iterator i = invs.iterator();
+			
 
-				System.out.println(
-					"===================================================+");
+				if(DaikonSimple.dkconfig_empty_diff) {
+				System.out.println("====================================================");
+				System.out.println(ppt.name());
+				} else {
+				System.out.println("===================================================+");					
 				System.out.println(ppt.name() + " +");
+				}
+				
 				while (i.hasNext()) {
 					Invariant x = (Invariant) i.next();
 					VarInfo[] vars = x.ppt.var_infos;
