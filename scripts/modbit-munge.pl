@@ -76,6 +76,12 @@ BEGIN {
 }
 
 if (/^$/) {
+  if (defined($var)) {
+    die "No value for variable $var in ppt $ppt";
+  }
+  if (defined($val)) {
+    die "No modbit for variable $var with value $val in ppt $ppt";
+  }
   undef($ppt);
   undef($var);
   undef($val);
@@ -87,6 +93,9 @@ if (/^$/) {
 } elsif (! defined($var)) {
   $var = $_;
   chomp($var);
+  if ($var =~ /^[0-9]+$/) {
+    die "Bad variable name $var in ppt $ppt";
+  }
   if ($debug) {  print STDERR "var = $var\n"; }
 } elsif (! defined($val)) {
   $val = $_;
@@ -97,7 +106,7 @@ if (/^$/) {
   chomp($mod);
   if ($debug) {  print STDERR "mod = $mod\n"; }
   if (! (($mod eq "0") || ($mod eq "1") || ($mod eq "2"))) {
-    die "Bad modbit $mod for variable $var with value $val in $ppt";
+    die "Bad modbit $mod for variable $var with value $val in ppt $ppt";
   }
   # $counts[$mod]++;
   if ($mod == 2) {
