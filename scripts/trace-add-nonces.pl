@@ -1,7 +1,10 @@
 #!/usr/bin/env perl
 
-# Adds nonces to a dtrace file.  Reads trace file from STDIN and
-# writes new trace file to STDOUT.
+# Adds nonces to a dtrace file.
+# Nonces associate a procedure exit with a procedure entry, and some parts
+# of Daikon's toolset require .dtrace files to contain nonces.
+
+# Reads trace file from STDIN and writes new trace file to STDOUT.
 
 # Assumes no nonces are present, and adds new ones unconditionally.
 # Only adds to :::ENTER and :::EXIT points (not to :::OBJECT or :::CLASS
