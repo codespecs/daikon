@@ -13,6 +13,9 @@ public final class TwoStringFactory {
   // collection.
   public static Vector instantiate(PptSlice ppt) {
 
+    if (Debug.logOn())
+      ppt.log ("Considering two string instantiation");
+
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
 
@@ -20,11 +23,20 @@ public final class TwoStringFactory {
     Assert.assertTrue((var1.rep_type == ProglangType.STRING)
                   && (var2.rep_type == ProglangType.STRING));
 
-    if (! var1.compatible(var2))
+    if (! var1.compatible(var2)) {
+      if (Debug.logOn())
+        ppt.log ("No instantiate, vars not compatible");
       return null;
+    }
 
     Vector result = new Vector();
-    result.add(StringComparison.instantiate(ppt)); // FIXME for equality
+    // result.add(StringComparison.instantiate(ppt)); // FIXME for equality
+    result.add(StringEqual.instantiate(ppt));
+    result.add(StringNonEqual.instantiate(ppt));
+    result.add(StringLessThan.instantiate(ppt));
+    result.add(StringLessEqual.instantiate(ppt));
+    result.add(StringGreaterThan.instantiate(ppt));
+    result.add(StringGreaterEqual.instantiate(ppt));
 
       /// copied from TwoScalarFactory.
       // for (int i=0; i<2; i++) {
