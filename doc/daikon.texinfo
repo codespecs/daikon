@@ -439,13 +439,13 @@ The following mailing lists (and their archives) are available:
 A low-volume, announcement-only list.  For example,
 announcements of new releases are sent to this list.
 To subscribe, visit @uref{http://pag.csail.mit.edu/daikon/download/} or
-@uref{http://pag.csail.mit.edu/mailman/listinfo/daikon-announce}.
+@uref{http://lists.csail.mit.edu/mailman/listinfo/daikon-announce}.
 @item daikon-discuss@@lists.csail.mit.edu
 A moderated list for the community of Daikon users.  Use it to share
 tips and successes, and to get help with questions or problems (after
 checking the documentation).  To subscribe, visit
 @uref{http://pag.csail.mit.edu/daikon/download/} or
-@uref{http://pag.csail.mit.edu/mailman/listinfo/daikon-discuss}.
+@uref{http://lists.csail.mit.edu/mailman/listinfo/daikon-discuss}.
 @item daikon-developers@@lists.csail.mit.edu
 This list goes to the Daikon maintainers.  Use it for bug reports,
 suggestions, and the like.  If you are an active contributor to Daikon,
@@ -5815,6 +5815,7 @@ distribution and are not described elsewhere in the manual.
 @cindex output format, ESC
 @cindex output format, JML
 @cindex output format, Jtest DBC
+@cindex MergeESC tool, see Annotate tool
 
 The Annotate program inserts Daikon-generated invariants into Java
 source code as ESC/JML/DBC annotations.  These annotations are comments that
@@ -5891,16 +5892,6 @@ belongs to (@code{null} for object invariants).
 
 @end table
 
-@node    MergeESC, InvariantChecker, Annotate, Tools
-@section MergeESC
-
-@cindex MergeESC tool
-@cindex ESC output format
-@cindex output format, ESC
-
-The MergeESC program is no longer supported: it has been replaced
-with the Annotate program, which augments MergeESC's functionality to
-handle Jtest's DBC annotations. @xref{Annotate}.
 
 @node    InvariantChecker, LogicalCompare, MergeESC, Tools
 @section InvariantChecker

@@ -410,7 +410,7 @@ Three new mailing lists have been set up:
   daikon-announce@lists.csail.mit.edu
   daikon-discuss@lists.csail.mit.edu
   daikon-developers@lists.csail.mit.edu
-To subscribe, visit http://pag.csail.mit.edu/mailman/listinfo.
+To subscribe, visit http://lists.csail.mit.edu/mailman/listinfo.
 
 The Context GUI now shares the same look and feel as the Tree GUI.
 Furthermore, .dci files are no longer necessary for the Context GUI, and
