@@ -341,7 +341,8 @@ public final class OneOfString
 
     sort_rep();
 
-    String varname = var().simplify_name();
+    String varname =
+      var().simplifyFixup(var().name.name_using(OutputFormat.SIMPLIFY));
 
     String result;
 
