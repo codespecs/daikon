@@ -1,0 +1,19 @@
+Version:      $Id$
+Owner:        Alan <adonovan>, Jeremy <mistere>
+Tool:         dfej
+Summary:      dfej should stop when given unrecognized command-line option
+Severity:     RFE
+Status:       New
+Reproducible: Yes
+Description:
+
+When given uncognized command-line option, dfej should stop with an
+error message, instead of continuing on with just a warning.  Warnings
+are easy to miss given the plethora of output.
+
+
+--
+$Log$
+Revision 1.1  2002-04-02 19:47:38  mistere
+new bug0037
+
