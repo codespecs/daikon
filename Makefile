@@ -244,7 +244,7 @@ $(EDG_DIR)/dfec: $(EDG_DIR)/dfec.sh
 
 ## Don't distribute executables for now
 # dist-dfej: dist-dfej-solaris
-dist-dfej: dist-dfej-linux
+dist-dfej: dist-dfej-linux dist-dfej-windows
 
 dist-dfej-solaris: $(DIST_DIR)/dfej-solaris
 
@@ -267,6 +267,55 @@ dist-dfej-linux: $(DIST_DIR)/dfej-linux
 	cp -pf $(DFEJ_DIR)/src/dfej $(DIST_DIR)/dfej-linux-dynamic
 	update-link-dates $(DIST_DIR)/index.html
 	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@lcs.mit.edu
+
+# To create build_mingw, I did:
+# 	cd dfej && $(MAKE) distclean
+# 	mkdir build_mingw_dfej
+# 	cd build_mingw_dfej ~mernst/research/invariants/dfej/configure --prefix=/tmp/dfej_Xmingw --host=i386-mingw32msvc
+# Path must include /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin
+
+dist-dfej-windows: 
+	cd build_mingw_dfej; setenv PATH /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:$(PATH); $(MAKE)
+	cp build_mingw_dfej/src/dfej.exe $(DIST_DIR)/dfej.exe
+	update-link-dates $(DIST_DIR)/index.html
+
+## Cross-compiling DFEJ to create a Windows executable (instructions by
+## Michael Harder <mharder@MIT.EDU>):
+# 1.  Get the mingw32 cross-compiler for Linux.  Details are avaliable at: 
+# http://www.mingw.org/mingwfaq.shtml#faq-cross.  A pre-built version for 
+# Linux is available at: 
+# http://www.devolution.com/~slouken/SDL/Xmingw32/mingw32-linux-x86-glibc-2.1.tar.gz
+# 
+# 2.  Extract mingw32-linux-x86-glibc-2.1.tar.gz.  The cross compiler tools 
+# are in cross-tools/bin.  The tools start with "i386-mingw32msvc-".  These 
+# tools need to be in your path when you build the Windows binary (including
+# when you configure the Windows binary).
+# 
+# 
+# The following instructions are adapted from daikon/java-front-end/INSTALL
+# 
+# 3.  Make a separate directory to build the Windows executable.
+# 
+# mkdir build_mingw; cd build_mingw
+# 
+# 4.  Run the dfej configure script, with a target platform of 
+# "i386-mingw32msvc".  Assume the dfej source is at ~/daikon/java-front-end.
+# 
+# ~/daikon/java-front-end/configure --prefix=/tmp/dfej_Xmingw 
+# --host=i386-mingw32msvc
+# 
+# Add additional arguments to configure as desired.  I don't know what the 
+# "--prefix" flag is for, but they use it in the jikes INSTALL instructions.
+# 
+# 5.  Run "make".  This should make the Windows binary at 
+# build_mingw/src/dfej.exe.  Copy this file to a Windows machine, and run 
+# it.  You should at least get the Daikon usage message.
+# 
+# Let me know if this works or not.
+# 
+# -Mike Harder
+
+
 
 ### Examples
 
