@@ -8,7 +8,7 @@ import utilMDE.*;
  * ValueTracker stores up to some maximum number of unique values, at
  * which point it rep is nulled.  This is used for efficienct
  * justification tests.
- * 
+ *
  * Declared final only for efficiency.
  **/
 public final class ValueTracker
@@ -31,7 +31,11 @@ public final class ValueTracker
 
   public int num_values() {
     if (values_cache != null) {
-      return ArraysMDE.indexOf(values_cache, 0);
+      int result = ArraysMDE.indexOf(values_cache, 0);
+      if (result == -1) {
+	result = max_values;
+      }
+      return result;
     } else {
       return max_values;
     }
