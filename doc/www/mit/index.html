@@ -484,14 +484,15 @@ target.
       make 
     </code>
 
-    <li> Run the regression tests using the version of dfej that you
-    just built. All of the diff files should be of zero size when this
-    is complete.<p>
+    <li> Run the regression tests.  These will use Chicory as the
+    front end.  To run the tests using dfej, define DFEJ_EXECUTABLE to
+    the dfej built above ($inv/dfej/src/dfej) and USE_DFEJ=1 All of
+    the diff files should be of zero size when this is complete.<p>
 
     <code>
         cd $inv/tests <br>
         make clean <br>
-        make diffs DFEJ_EXECUTABLE=$inv/dfej/src/dfej<br>
+        make diffs <br>
     </code> <p>
 
     <li> Edit the <tt>doc/CHANGES</tt> file to indicate what has changed
@@ -532,9 +533,12 @@ target.
       make staging <br>
     </code>
 
-    <li> Test the distribution in the staging area [<b>Consider moving the
-    staging area to the website so that we can check things out via the
-    webserver before installing</b><p>
+    <li> Test the distribution in the staging area.  The last part of
+    the test runs Chicory/Daikon on the StackAr example in the
+    release.  Success is indicated by invariant output being written
+    to the screen. [<b>Consider moving the staging area to the website
+    so that we can check things out via the webserver before
+    installing</b><p>
 
     <code>
       make test-staged-dist <br>
