@@ -2,7 +2,7 @@
 # checkargs -- check number of args in function calls
 # Michael D. Ernst <mernst@cs.washington.edu>
 # http://sdg.lcs.mit.edu/~mernst/software/checkargs.pm
-# Time-stamp: <2000-10-26 23:08:27 mernst>
+# Time-stamp: <2002-07-31 18:38:46 mernst>
 
 package checkargs;
 require 5.004;			# uses "for my $var"
@@ -71,7 +71,7 @@ sub check_args ( $@ )
   my ($num_formals, @args) = @_;
   my ($pack, $file_arg, $line_arg, $subname, $hasargs, $wantarr) = caller(1);
   # Fake uses to satisfy shadowed-variables-perl: $pack $hasargs $wantarr.
-  if (@_ < 1) { croak "check_args needs at least 7 args, got ", scalar(@_), ": @_\n "; }
+  if (@_ < 1) { croak "check_args needs at least 1 arg, got ", scalar(@_), ": @_\n "; }
   if ((!wantarray) && ($num_formals != 0))
     { croak "check_args called in scalar context"; }
   # Can't use croak below here: it would only go out to caller, not its caller
@@ -93,7 +93,7 @@ sub check_args_range ( $$@ )
   my ($min_formals, $max_formals, @args) = @_;
   my ($pack, $file_arg, $line_arg, $subname, $hasargs, $wantarr) = caller(1);
   # Fake uses to satisfy shadowed-variables-perl: $pack $hasargs $wantarr.
-  if (@_ < 2) { croak "check_args_range needs at least 8 args, got ", scalar(@_), ": @_"; }
+  if (@_ < 2) { croak "check_args_range needs at least 2 args, got ", scalar(@_), ": @_"; }
   if ((!wantarray) && ($max_formals != 0) && ($min_formals !=0) )
     { croak "check_args_range called in scalar context"; }
   # Can't use croak below here: it would only go out to caller, not its caller

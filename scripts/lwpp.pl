@@ -263,7 +263,7 @@ sub print_vars_and_comp {
   my ($function) = @_;
 
   # process the variable declarations, one at a time
-  while(my $variable = <DECLS>) {
+  while (my $variable = <DECLS>) {
     last if ((!$variable) || ($variable =~ /^\s+$/));
 
     chomp $variable;

@@ -113,7 +113,7 @@ if ("line" eq $grain) {
     $spinfos{$header} .= $splitter;
   }
 
-} elsif("method" eq $grain) {
+} elsif ("method" eq $grain) {
   my %method2num = ();
   foreach (@records) {
     my ($id, $fromclass, $frommeth, $fromfile, $fromline, $fromcol, $toexpr, $toargs, $toclass, $tometh) = @{$_};
@@ -137,7 +137,7 @@ if ("line" eq $grain) {
     $spinfos{$header} .= $splitter;
   }
 
-} elsif("class" eq $grain) {
+} elsif ("class" eq $grain) {
   my %class2num = ();
   foreach (@records) {
     my ($id, $fromclass, $frommeth, $fromfile, $fromline, $fromcol, $toexpr, $toargs, $toclass, $tometh) = @{$_};

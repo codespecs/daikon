@@ -3,7 +3,7 @@ package util_daikon;
 require 5.003;			# uses prototypes
 require Exporter;
 @ISA = qw(Exporter);
-@EXPORT = qw( cleanup_pptname system_or_die );
+@EXPORT = qw( cleanup_pptname system_or_die backticks_or_die );
 
 use English;
 use strict;
@@ -13,11 +13,20 @@ use checkargs;
 use Carp;
 
 # Execute the command; die if its execution is erroneous.
-sub system_or_die ( $ ) {
-  my ($cmd) = check_args(1, @_);
-  my $result = system($cmd);
-  if ($result != 0)
-    { croak "Failed executing $cmd"; }
+sub system_or_die ( $;$ ) {
+  my ($command, $verbose) = check_args_range(1, 2, @_);
+  if ($verbose) { print "$command\n"; }
+  my $result = system($command);
+  if ($result != 0) { croak "Failed executing $command"; }
+  return $result;
+}
+
+# Execute the command and return the output; die if its execution is erroneous.
+sub backticks_or_die ( $;$ ) {
+  my ($command, $verbose) = check_args_range(1, 2, @_);
+  if ($verbose) { print "$command\n"; }
+  my $result = `$command`;
+  if ($CHILD_ERROR != 0) { croak "Failed executing $command"; }
   return $result;
 }
 

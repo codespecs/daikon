@@ -36,7 +36,7 @@ foreach my $filename (@ARGV) {
 	    if ($line =~ /\*\//) {
 		next;
 	    } else {
-		while(($line = <INPUTFILE>) !~ /\*\//) {
+		while (($line = <INPUTFILE>) !~ /\*\//) {
 		    next;
 		}
 	    }
@@ -108,7 +108,7 @@ foreach my $filename (@ARGV) {
 	    #looking for a boolean argument to a function
 	    $remainder = $1;
 	    print CONDFILE $2." == true \n";
-	    while($remainder =~ /(.*)boolean\s*([^,\)]*)/) {
+	    while ($remainder =~ /(.*)boolean\s*([^,\)]*)/) {
 		print CONDFILE $2." == true \n";
 		$remainder = $1;
 	    }
@@ -227,7 +227,7 @@ foreach my $filename (@ARGV) {
 	if ($line =~ /replace:/) {
 	    # A "replace:" line. Since these occur at the end
 	    # of the file, read till the end.
-	    while($line = <CONDFILE>) {
+	    while ($line = <CONDFILE>) {
 		if ($line =~ /(\S.*) : (\S*.*)/) {
 		    push (@subs, $1);
 		    push (@subs, $2);
