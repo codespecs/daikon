@@ -10,7 +10,7 @@
 
 use Carp;
 
-my @types = ("invariant","set","requires","modifies","ensures","exsures","also_req","also_mods","also_ens","also_exs");
+my @types = ("invariant","set","requires","modifies","ensures","exsures","also_requires","also_modifies","also_ensures","also_exsures","axiom");
 my @categories = ("EVU","EVR","ENU","ENR","IU","IR","A");
 my %prefixes = 
     (EVU => "/*@",   # Expressible Verified Unique
