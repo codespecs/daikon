@@ -1913,6 +1913,7 @@ point, so that any invariant that holds on the CLASS program point is
 considered to hold true on the ENTER program point.  With no
 hierarchy, each program point is treated independently.  This is for
 using Daikon on applications that do not have a concept of hierarchy.
+Note that this switch applies only to V3 of daikon.
 
 @item --esc_output
 Write output in ESC-like format.
@@ -3233,7 +3234,7 @@ dfej Foo.java Bar.java
 @noindent
 the instrumented versions of @file{Foo.java} and @file{Bar.java} output
 information about all Foo objects (including Foo objects that are
-components of Bar objects, that are arguments to Bar procedurees, etc.),
+components of Bar objects, that are arguments to Bar procedures, etc.),
 and likewise for Bar objects.
 
 After

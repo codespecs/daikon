@@ -9,6 +9,21 @@ daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
+2.4.9 (02 June 2003)
+
+Changed the default for Simplify iterations from 1000000 to 1000.
+This should provide reasonable results while being less
+likely to take an inordinate amount of time.  Also added the
+configuration options daikon.simplify.Session.simplify_timeout and
+daikon.simplify.Session.verbose_progress.  See the "List of
+Configuration Options" section of the manual for more information.
+
+Added new command line options for daikon.pl (--instrument, --nogui,
+--src, and --debug). See the "Command line options for daikon.pl"
+section of the manual for more information.
+
+----------------
+
 2.4.8 (13 May 2003)
 
 The internal mechanism for formatting output has been enhanced.  There
