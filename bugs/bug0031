@@ -1,0 +1,38 @@
+Version:      $Id$
+Owner:        Mike <mernst>, Jeremy <mistere>
+Tool:         MergeESC
+Summary:      MergeESC sets ghost field(s) on incorrect object
+Severity:     Medium
+Status:       New
+Reproducible: Yes
+Description:
+
+[mistere]
+In the RatTermVec project, the copy method is merged as follows:
+
+    public RatTermVec copy() {
+        RatTermVec tv = new RatTermVec();
+        tv.wrapped = (ArrayList) this.wrapped.clone();
+        /*@ set wrapped.elementType = \type(PolyCalc.RatTerm) */
+        /*@ set wrapped.owner = this */
+        return tv;
+    }
+
+In fact, the @set statements should apply to the 'tv' object, and not
+(implicitly) to the 'this' object.  Correct output would be:
+
+    public RatTermVec copy() {
+        RatTermVec tv = new RatTermVec();
+        tv.wrapped = (ArrayList) this.wrapped.clone();
+        /*@ set tv.wrapped.elementType = \type(PolyCalc.RatTerm) */
+        /*@ set tv.wrapped.owner = this */
+        return tv;
+    }
+
+This error prevents verification of the class.
+
+--
+$Log$
+Revision 1.1  2002-03-27 21:42:00  mistere
+new bug0031
+
