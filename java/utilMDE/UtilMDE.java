@@ -1004,6 +1004,47 @@ public final class UtilMDE {
 
 
   ///
+  /// Regexp (regular expression)
+  ///
+
+    // Stolen from JDK 1.5.  Intended for use (and viewing) only by JRL
+    // licensees (if you are not one, proceed no further).  To be removed
+    // as soon as we migrate to Java 1.5.
+    /**
+     * Returns a literal pattern <code>String</code> for the specified
+     * <code>String</code>.
+     *
+     * <p>This method produces a <code>String</code> that can be used to
+     * create a <code>Pattern</code> that would match the string
+     * <code>s</code> as if it were a literal pattern.</p> Metacharacters
+     * or escape sequences in the input sequence will be given no special
+     * meaning.
+     *
+     * @param  s The string to be literalized
+     * @return  A literal string replacement
+     * @since 1.5
+     */
+    public static String patternQuote(String s) {
+        int slashEIndex = s.indexOf("\\E");
+        if (slashEIndex == -1)
+            return "\\Q" + s + "\\E";
+
+        StringBuffer sb = new StringBuffer(s.length() * 2);
+        sb.append("\\Q");
+        slashEIndex = 0;
+        int current = 0;
+        while ((slashEIndex = s.indexOf("\\E", current)) != -1) {
+            sb.append(s.substring(current, slashEIndex));
+            current = slashEIndex + 2;
+            sb.append("\\E\\\\E\\Q");
+        }
+        sb.append(s.substring(current, s.length()));
+        sb.append("\\E");
+        return sb.toString();
+    }
+
+
+  ///
   /// Set
   ///
 
