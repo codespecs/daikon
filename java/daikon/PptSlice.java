@@ -715,12 +715,11 @@ public abstract class PptSlice
       // Don't do this, to permit comparison across different Ppts.
       // (The check may be useful in some situations, though.)
       // Assert.assertTrue(slice1.parent == slice2.parent);
-      if (slice1.arity == slice2.arity) {
-        return slice1.varNames(slice1.var_infos)
-          .compareTo(slice2.varNames(slice2.var_infos));
-      } else {
+      if (slice1.arity != slice2.arity) {
         return slice2.arity - slice1.arity;
       }
+      return slice1.varNames(slice1.var_infos)
+        .compareTo(slice2.varNames(slice2.var_infos));
     }
   }
 

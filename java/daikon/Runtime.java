@@ -296,9 +296,8 @@ public final class Runtime {
     ps.print((ch == null) ? "null" : quote(ch));
   }
 
-  // Lifted directly from utilMDE/UtilMDE.java, where it is now called
-  // escapeNonJava(), but repeated here to make this class
-  // self-contained.
+  // Lifted directly from utilMDE/UtilMDE.java, where it is called
+  // escapeNonJava(), but repeated here to make this class self-contained.
   /** Quote \, ", \n, and \r characters in the target; return a new string. **/
   public static String quote(String orig) {
     StringBuffer sb = new StringBuffer();
