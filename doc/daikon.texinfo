@@ -7422,29 +7422,47 @@ your system administrator to do so.
 If you have any questions, can suggest ways to improve the
 documentation, find bugs in the system, or have suggestions for its
 improvement, please send email to
-@email{daikon-developers@@lists.csail.mit.edu}.  While Daikon is a
-research prototype, we will try to assist you and to correct any
+@email{daikon-developers@@lists.csail.mit.edu}.  (If you can't figure
+out how to do somthing or do not understand why Daikon works the way it
+does, that is a bug, too -- in the Daikon documentation.  Please report
+those as well.)
+We will try to assist you and to correct any
 problems, so please don't hesitate to ask for help or report
 difficulties.  Additionally, if you can contribute enhancements or bug
 fixes, those will be gratefully accepted.
 
-Your bug report will be most helpful if you include:
+In order for us to assist you, please provide a complete and useful bug
+report.  Your bug report must provide all the information that is
+required in order to replicate the bug and verify that our fix corrects
+the problem.  If you do not provide complete information, we will not be
+able to assist you.
+
+Your bug report should include:
 @itemize @bullet
 @item
 the version of Daikon, which appears in the file @file{daikon/README}
-and is also printed when you run Daikon; also, whether you are running
-from the @file{.class} files or from the @file{.jar} file.
+and is also printed when you run Daikon.
+@c ; also, whether you are running
+@c from the @file{.class} files or from the @file{.jar} file.
 If you are not using the most recent version, download a newer version
 from @uref{http://pag.csail.mit.edu/daikon/} to see whether your problem
 has already been corrected.
+If you are using a modified version of Daikon, you should verify that
+the problem exists in Daikon as distributed.
 @item
-a description of exactly what you did, exactly what happened, and what
+a description of exactly what you did (in sufficient detail for others
+to reproduce the problem), exactly what happened, and what
 you expected to happen instead.
 For instance, a transcript of your commands and the system's output
 may provide this information.  (A transcript is @strong{much} more
-useful than a vague description.)
+useful than a vague description; don't just give English when you can
+give a more precise specification instead.)
+It is crucial that you not omit steps in your report.  Do not force the
+developers to speculate about what you did; that is a waste of their
+time, since you already have the knowledge.
 @item
-input files that permit the problem to be replicated.  The
+input files that permit the problem to be replicated (by following the
+detailed steps in your bug report).  The
 most important thing is the original, uninstrumented source files.
 It is also helpful to include instrumented source files,
 @file{.decl} files, and @file{.dtrace} files.
@@ -7452,8 +7470,9 @@ It is also helpful to include instrumented source files,
 any other information that you consider relevant.
 @end itemize
 
-It is frequently more difficult to reproduce an error than to correct
-it; if you make it easy to reproduce and verify the problem, then it is
+When users provide an inadequate bug report, 
+it is frequently more difficult for us to reproduce an error than to correct
+it.  If you make it easy for us to reproduce and verify the problem, then it is
 much more likely to be corrected.
 
 You may also wish to take advantage of the Daikon mailing lists
