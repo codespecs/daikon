@@ -273,6 +273,7 @@ public final class Daikon {
   public static final String noversion_SWITCH = "noversion";
   public static final String noinvariantguarding_SWITCH = "no_invariant_guarding";
   public static final String disc_reason_SWITCH = "disc_reason";
+  public static final String track_SWITCH = "track";
   public static final String suppress_splitter_errors_SWITCH = "suppress_splitter_errors";
   public static final String omit_from_output_SWITCH = "omit_from_output";
 
@@ -478,6 +479,7 @@ public final class Daikon {
       new LongOpt(noversion_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(noinvariantguarding_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(disc_reason_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(track_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(suppress_splitter_errors_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(omit_from_output_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
     };
@@ -496,6 +498,14 @@ public final class Daikon {
           try { PrintInvariants.discReasonSetup(g.getOptarg()); }
           catch (IllegalArgumentException e) {
             System.out.print(e.getMessage());
+            System.exit(1);
+          }
+        } else if (track_SWITCH.equals (option_name)) {
+          LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
+          String error = Debug.add_track (g.getOptarg());
+          if (error != null) {
+            System.out.println ("Error parsing track argument '"
+                                + g.getOptarg() + "' - " + error);
             System.exit(1);
           }
         } else if (ppt_regexp_SWITCH.equals(option_name)) {
