@@ -2137,11 +2137,24 @@ order to specify multiple omitting criteria.  A program point is omitted
 if its class, fully qualified function name, or complete program point
 name exactly matches one of the omitting criteria.
 
-For example, to avoid detecting invariants over an iterator, you can
-call dfej like so:
+For example, to avoid detecting invariants over an iterator class, you
+can call dfej like so:
 @example
   dfej '-daikon_omit=HashSetLinear$HslIterator' HashSetLinear.java
 @end example
+
+As another example, to avoid detecting invariants over a particular
+method, you could use:
+@example
+  dfej '-daikon_omit=StackAr.topAndPop()Ljava/lang/Object;' StackAr.java
+@end example
+
+Finally, to avoid detecting invariants at a particular program point,
+try:
+@example
+  dfej '-daikon_omit=StackAr.<init>(I)V:::EXIT33' StackAr.java
+@end example
+
 
 @cindex DTRACEFILE environment variable
 @cindex environment variable DTRACEFILE
