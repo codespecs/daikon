@@ -91,7 +91,7 @@ public class UpperBound  extends SingleScalar  {
   }
 
   public boolean isInteresting() {
-    return false;
+    return (-1 < core.max1  && core.max1  < 2);
   }
 
   public boolean isObviousImplied() {

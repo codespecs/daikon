@@ -91,7 +91,7 @@ public class LowerBound  extends SingleScalar  {
   }
 
   public boolean isInteresting() {
-    return false;
+    return (-1 < core.min1  && core.min1  < 2);
   }
 
   public boolean isObviousImplied() {

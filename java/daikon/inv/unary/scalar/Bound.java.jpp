@@ -203,7 +203,7 @@ public class LOWERBOUND extends SINGLESCALAR {
 
 #if (defined(LOWER) || defined(UPPER))
   public boolean isInteresting() {
-    return false;
+    return (-1 < MIN1 && MIN1 < 2);
   }
 #endif
 
