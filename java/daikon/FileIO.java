@@ -55,7 +55,7 @@ public final class FileIO {
   public final static String object_tag = ppt_tag_separator + object_suffix;
   public final static String class_static_suffix = "CLASS";
   public final static String class_static_tag = ppt_tag_separator + class_static_suffix;
-
+  public final static String global_suffix = "GLOBAL";
 
   /// Settings
 
@@ -109,6 +109,9 @@ public final class FileIO {
   public static final Logger debugPrint =
     Logger.getLogger("daikon.FileIO.printDtrace");
 
+  /** Debug tracer for printing variable values **/
+  public static final Logger debugVars
+    = Logger.getLogger ("daikon.FileIO.vars");
 
   // Utilities
   // The Daikon manual states that "#" is the comment starter, but
@@ -707,7 +710,7 @@ public final class FileIO {
         ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
 
         // Add orig and derived variables; pass to inference (add_and_flow)
-        process_sample(ppt, vt, nonce);
+        process_sample (all_ppts, ppt, vt, nonce);
         //Debug.check (all_ppts, "counter = " + count + " ppt = "
         //                  + ppt.name() + " " + Debug.related_vars (ppt, vt));
       }
@@ -737,6 +740,7 @@ public final class FileIO {
 
   static java.lang.Runtime runtime = java.lang.Runtime.getRuntime();
   static PptTopLevel.Stats stats = new PptTopLevel.Stats();
+  static PptTopLevel.Stats gstats = new PptTopLevel.Stats();
   static boolean store_stats = false;
 
   /**
@@ -744,7 +748,8 @@ public final class FileIO {
    * supply it to the program point for flowing.
    * @param vt trace data only; modified by side effect to add derived vars
    **/
-  public static void process_sample(PptTopLevel ppt, ValueTuple vt, Integer nonce)  {
+  public static void process_sample(PptMap all_ppts, PptTopLevel ppt,
+                                    ValueTuple vt, Integer nonce)  {
     { // For now, keep indentation the same
       {
         // Now add some additional variable values that don't appear directly
@@ -798,9 +803,12 @@ public final class FileIO {
         }
 
         if (Daikon.dkconfig_df_bottom_up)
-          ppt.add_bottom_up (vt, 1);
+          ppt.add_global_bottom_up (vt, 1);
         else
           ppt.add_and_flow(vt, 1);
+
+        if (debugVars.isLoggable (Level.FINE))
+          debugVars.fine (ppt.name() + " vars: " + Debug.int_vars (ppt, vt));
 
         // Keep track of statistics
         if (Daikon.debugStats.isLoggable (Level.FINE)) {
@@ -809,7 +817,10 @@ public final class FileIO {
             stats = new PptTopLevel.Stats();
           stats.set (ppt, (int) (System.currentTimeMillis() - start),
                       (int) (start_mem - runtime.freeMemory()));
-
+          if (PptTopLevel.global != null)
+            gstats.set (PptTopLevel.global,
+                      (int) (System.currentTimeMillis() - start),
+                      (int) (start_mem - runtime.freeMemory()));
           if (store_stats) {
             List slist = (List) Global.stats_map.get (ppt);
             if (slist == null) {
@@ -819,8 +830,13 @@ public final class FileIO {
             slist.add (stats);
           } else {
             //if ((ppt.num_samples() < 10) || (ppt.num_samples() % 100) == 0) {
+            if (!debugVars.isLoggable (Level.FINE))
               Daikon.debugStats.fine ("vars: " + Debug.related_vars (ppt, vt));
-              stats.dump (Daikon.debugStats);
+            if (PptTopLevel.global != null)
+              gstats.dump (Daikon.debugStats);
+            stats.dump (Daikon.debugStats);
+            //if ((ppt.num_samples() % 10) == 0)
+            //PptTopLevel.count_unique_inv_lists (Daikon.debugStats, all_ppts);
             //}
           }
         }
