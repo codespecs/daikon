@@ -40,8 +40,6 @@ public class UnionInvariants {
     File inv_file = null;
 
     LongOpt[] longopts = new LongOpt[] {
-      // new LongOpt(Daikon.suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(Daikon.suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
     };
     Getopt g = new Getopt("daikon.UnionInvariants", args, "ho:", longopts);
@@ -54,10 +52,6 @@ public class UnionInvariants {
         if (Daikon.help_SWITCH.equals(option_name)) {
           System.out.println(usage);
           System.exit(1);
-        } else if (Daikon.suppress_cont_SWITCH.equals(option_name)) {
-          Daikon.suppress_implied_controlled_invariants = true;
-        } else if (Daikon.suppress_post_SWITCH.equals(option_name)) {
-          Daikon.suppress_implied_postcondition_over_prestate_invariants = true;
         } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
           Daikon.suppress_redundant_invariants_with_simplify = true;
         } else {
