@@ -53,7 +53,7 @@ public final class NonEqualCore implements java.io.Serializable {
     if (wrapper.no_invariant)
       return Invariant.PROBABILITY_NEVER;
     else if ((min1 > max2) || (max1 < min2))
-      return Invariant.PROBABILITY_UNKNOWN;
+      return Invariant.PROBABILITY_UNJUSTIFIED;
     else {
       double probability_one_nonequal;
       if (override_range != 0) {
