@@ -1,5 +1,5 @@
 Version:      $Id$
-Owner:        Mike <mernst>
+Owner:        Alan Dunn <amdunn>, Mike <mernst>
 Cc:           Jeremy <mistere>
 Tool:         MergeESC
 Summary:      Inner class constructor invariants are not merged
@@ -20,6 +20,9 @@ but is not merged.
 
 --
 $Log$
-Revision 1.1  2002-04-28 13:28:16  mistere
+Revision 1.2  2002-07-31 21:45:05  mernst
+changed bug0047
+
+Revision 1.1  2002/04/28 13:28:16  mistere
 new bug0047
 
