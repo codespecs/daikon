@@ -1518,7 +1518,7 @@ invariants.
     supTemplate.varInfos[0][0] = der1.seqvar();
 
     // Build a template for the subscripts being different
-    // Note than INTEQUAL is defined as IntNonEqual (or float) here
+    // Note that INTEQUAL is defined as IntNonEqual (or float) here
     supTemplate.invTypes[1] = INTEQUAL.class;
     supTemplate.varInfos[1][0] = der1.sclvar();
     supTemplate.varInfos[1][1] = der2.sclvar();
