@@ -370,7 +370,7 @@ sub output_xmeans(@) {
   my @output_vararray = @_;
   my $output_pptname = $output_vararray[0];
   my $output_nvars = $pptname_to_nvars{$output_pptname};
-  my $output_string;
+  my $output_string = "";
   local *FH = $pptname_to_fhandles{$output_pptname};
   local *FH2 = $pptname_to_nonce_translation{$output_pptname};
 
