@@ -119,4 +119,10 @@ public class Implication extends Invariant {
     return predicate.hasOnlyConstantVariables();
   }
 
+  // An implication is only interesting if both the predicate and
+  // consequent are interesting
+  public boolean isInteresting() {
+    return (predicate.isInteresting() && consequent.isInteresting());
+  }
+
 }
