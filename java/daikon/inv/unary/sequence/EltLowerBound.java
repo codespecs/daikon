@@ -118,7 +118,6 @@ public class EltLowerBound
     return result;
   }
 
-  
   public String format_simplify() {
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
@@ -127,7 +126,7 @@ public class EltLowerBound
   }
 
   public String format_java() {
-    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] 
+    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[]
       { var().name });
     return form[0] + "(" + form[1] + " >= " + core.min1  + ")" + form[2];
   }
@@ -174,6 +173,23 @@ public class EltLowerBound
       // will never have a core.min1  that does not appear in the OneOf.
       if (core.min1  <=  ((Long)oo. min_elt ()).longValue()) {
         return true;
+      }
+    }
+
+    VarInfo v = var();
+    // Look for the same property over a supersequence of this one.
+    PptTopLevel pptt = (PptTopLevel) ppt.parent;
+    for (Iterator inv_itor = pptt.invariants_iterator(); inv_itor.hasNext(); ) {
+      Invariant inv = (Invariant) inv_itor.next();
+      if (inv == this) {
+        continue;
+      }
+      if (inv instanceof EltLowerBound ) {
+        EltLowerBound  other = (EltLowerBound ) inv;
+        if (isSameFormula(other)
+            && SubSequence.isObviousDerived(v, other.var())) {
+          return true;
+        }
       }
     }
 

@@ -27,8 +27,8 @@ public final class Global {
   public final static String lineSep = System.getProperty("line.separator");
 
   // Regular expressions
-  public final static PatternCompiler regexp_compiler;
-  public final static PatternMatcher regexp_matcher;
+  public final static Perl5Compiler regexp_compiler;
+  public final static Perl5Matcher regexp_matcher;
   public final static Pattern ws_regexp;
 
   static {
@@ -212,7 +212,7 @@ public final class Global {
   // public final static boolean debugPptSliceSpecific = true;
   // public final static boolean debugSimplify = true;
 
-  // Used only if debugPptSliceSpecific is set.
+  // (Earlier, this variable was used only if debugPptSliceSpecific is set.)
   // Variables must appear in the correct order.
   public final static String[][] debuggedPptSliceSpecific
     = {
@@ -234,6 +234,7 @@ public final class Global {
       // { "this.denom" },
       // { "size(this.begins[])", "size(this.ends[])" },
       // { "this.theArray[]" },
+      // { "this.theArray[this.topOfStack+1..]" },
     };
 
   // used only if debugPrintDtrace is true.  User need not set this.

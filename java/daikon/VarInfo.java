@@ -763,8 +763,8 @@ public final class VarInfo
 
       // Special cases of variables to omit.
 
-      // Variables such that both are one less than something else
-      // (or generalized, the same shift from something else
+      // Variables that both are one less than something else
+      // (or generalized, the same shift from something else).
       if ((name instanceof VarInfoName.Add) && (vi.name instanceof VarInfoName.Add) &&
 	  ((((VarInfoName.Add) name).amount) == (((VarInfoName.Add) vi.name).amount))) {
         continue;
@@ -856,12 +856,20 @@ public final class VarInfo
       }
 
       // For esc_output and java_output, omit noting that varibles are unmodified.
-      // Add any additional special cases here.
       if (Daikon.output_style == Daikon.OUTPUT_STYLE_ESC || Daikon.output_style == Daikon.OUTPUT_STYLE_JAVA) {
         if ((vi.postState != null) && vi.postState.name.equals(this.name)) {
           continue;
         }
       }
+
+      // In Java, "this" cannot be changed, so "this == orig(this)" is vacuous.
+      // In fact, any comparison with "orig(this)" is vacuous.
+      if ((name.name() == "this")  // interned
+          || (vi.name.name() == "orig(this)")) { // interned
+        continue;
+      }
+
+      // Add any additional special cases here.
 
       result.add(vi);
     }
@@ -944,6 +952,8 @@ public final class VarInfo
 	  (derived instanceof SequenceSum));
   }
 
+  // Return the original sequence variable from which this derived sequence
+  // was derived.
   public VarInfo isDerivedSubSequenceOf() {
     // System.out.println("isDerivedSubSequenceOf(" + name + "); derived=" + derived);
 

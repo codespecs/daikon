@@ -997,29 +997,14 @@ public final class FileIO
     throws IOException
   {
     SerialFormat record = new SerialFormat(map, Configuration.getInstance());
-    // 8192 is the buffer size in BufferedReader
-    OutputStream bytes =
-      new BufferedOutputStream(new FileOutputStream(file), 8192);
-    if (file.getName().endsWith(".gz")) {
-      bytes = new GZIPOutputStream(bytes);
-    }
-    ObjectOutputStream objs = new ObjectOutputStream(bytes);
-    objs.writeObject(record);
-    objs.close();
+    UtilMDE.writeObject(record, file);
   }
 
   public static PptMap read_serialized_pptmap(File file, boolean use_saved_config)
     throws IOException
   {
     try {
-      // 8192 is the buffer size in BufferedReader
-      InputStream istream =
-        new BufferedInputStream(new FileInputStream(file), 8192);
-      if (file.getName().endsWith(".gz")) {
-	istream = new GZIPInputStream(istream);
-      }
-      ObjectInputStream objs = new ObjectInputStream(istream);
-      SerialFormat record = (SerialFormat) objs.readObject();
+      SerialFormat record = (SerialFormat) UtilMDE.readObject(file);
       if (use_saved_config) {
 	Configuration.getInstance().overlap(record.config);
       }

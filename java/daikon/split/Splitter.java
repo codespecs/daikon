@@ -23,15 +23,28 @@ public abstract class Splitter
    * Creates a splitter "factory" that should only be used for creating new
    * copies via instantiate(Ppt).  (That is, the result of "new Splitter()"
    * should not do any splitting itself.)  There is no need for subclasses
-   * to override this.
+   * to override this (but most will have to, since they will add
+   * their own constructors as well).
    **/
   public Splitter() { }
 
   /**
    * Creates a valid splitter than can be used for testing the condition
-   * via test(ValueTuple).
+   * via test(ValueTuple).  The implementation should always set
+   * the "instantiated" protected field to true, if that field is present
+   * in the Splitter class.
    */
   public abstract Splitter instantiate(Ppt ppt);
+
+  // For debugging.  Commented out to avoid need to change serialVersionUID.
+  // protected boolean instantiated = false;
+  // /**
+  //  * Returns true for an instantiated (non-"factory") splitter.
+  //  * Clients also need to check valid().
+  //  **/
+  // public boolean instantiated() {
+  //   return instantiated;
+  // }
 
   /**
    * Returns true or false according to whether this was instantiated

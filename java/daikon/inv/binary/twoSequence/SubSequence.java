@@ -213,6 +213,11 @@ public class SubSequence
       return Invariant.PROBABILITY_JUSTIFIED;
   }
 
+  // Convenience name to make this easier to find.
+  public static boolean isObviousSubSequence(VarInfo subvar, VarInfo supervar) {
+    return isObviousDerived(subvar, supervar);
+  }
+
   // This is abstracted out so it can be called by SuperSequence as well.
   public static boolean isObviousDerived(VarInfo subvar, VarInfo supervar) {
     // System.out.println("static SubSequence.isObviousDerived(" + subvar.name + ", " + supervar.name + ") " + subvar.isDerivedSubSequenceOf() + " " + supervar.isDerivedSubSequenceOf());

@@ -72,19 +72,26 @@ public final class EltNonZero
   }
 
   public String format_esc() {
-    
-    //ESC can't recognize the .containsNull (Nii)
-    //  if (pointer_type) {
-    //        if (var().name instanceof VarInfoName.Elements) {
-    //          VarInfoName term = ((VarInfoName.Elements) var().name).term;
-    //        	return term.esc_name() + ".containsNull == false"; 
-    //        }
-    //        if (! (var().name instanceof VarInfoName.Slice)) {
-    //  	 Calling var().name.esc_name() will always throw an
-    //  	 exception, since var() is certainly a sequence.
-    //  	 return var().name.esc_name() + ".containsNull == false";
-    //        }
-    //      }
+    // If this is an entire array or Collection (not VarInfoName.Slice), then
+    //  * for arrays: use \nonnullelements(A)
+    //  * for Collections: use collection.containsNull == false
+    //    (the latter also requires that ghost field to get set)
+
+    VarInfoName name = var().name;
+    if (name instanceof VarInfoName.Elements) {
+      VarInfoName term = ((VarInfoName.Elements) name).term;
+      if (var().type.isArray()) {
+        return "\\nonnullelements(" + term.esc_name() + ")";
+      } else {
+        return term.esc_name() + ".containsNull == false";
+      }
+    }
+
+    // If this is just part of an array or Collection (name instanceof
+    // VarInfoName.Slice), then calling name.esc_name() will always throw
+    // an exception, since var() is certainly a sequence.  So use the
+    // standard quantification.
+
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
 	{ var().name });

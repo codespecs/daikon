@@ -1,17 +1,25 @@
 package daikon.split;
 
-import daikon.*;
-
-import org.apache.oro.text.regex.*;
 import java.util.*;
-
+import daikon.*;
 import utilMDE.*;
+import org.apache.oro.text.regex.*;
+import org.apache.log4j.Category;
 
-// SplitterLisp maps from a program point name to an array of Splitter
+// SplitterList maps from a program point name to an array of Splitter
 // objects that should be used when splitting that program point.
+// Invariant:  each of those splitters should be non-instantiated (each is
+// a factory, not an instantiated splitter).
 // It's a shame to have to hard-code for each program point name.
 
-public abstract class SplitterList {
+public abstract class SplitterList
+{
+  // This causes problems right now, probably due to classloading
+  // before logs are configured.
+  // /**
+  //  * Debug tracer
+  //  **/
+  // public static final Category debug = Category.getInstance("daikon.split.SplitterList");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -23,13 +31,25 @@ public abstract class SplitterList {
 
   // maps from string to Splitter[]
   private static final HashMap ppt_splitters = new HashMap();
-  private static final PatternMatcher re_matcher = new Perl5Matcher();
-  private static final PatternCompiler re_compiler = new Perl5Compiler();
+  // These aren't "PatternMatcher" and "PatternCompiler" because we want
+  // Perl5Compiler.quotemeta().
+  private static final Perl5Matcher re_matcher = new Perl5Matcher();
+  private static final Perl5Compiler re_compiler = new Perl5Compiler();
 
-  /*
-   * associate an array of splitters with the program point <pptname>
+  /**
+   * Associate an array of splitters with the program point <pptname>
    */
-  public static void put(String pptname, Splitter[] splits) {
+  public static void put(String pptname, Splitter[] splits)
+  {
+    // for (int i=0; i<splits.length; i++) {
+    //   Assert.assert(splits[i].instantiated() == false);
+    // }
+
+    if ((Global.debugSplit != null) && Global.debugSplit.isDebugEnabled()) {
+      Global.debugSplit.debug("Registering splitters for " + pptname + ":"
+			      + Arrays.asList(splits).toString());
+    }
+
     if (ppt_splitters.containsKey(pptname)) {
       Splitter[] old = (Splitter[]) ppt_splitters.get(pptname);
       Splitter[] new_splits = new Splitter[old.length + splits.length];
@@ -149,7 +169,8 @@ public abstract class SplitterList {
   //////////////////////
 
   /*
-   * return the splitters associated with this program point name only.
+   * Return the splitters associated with this program point name.
+   * The resulting splitters are factories, not instantiated splitters.
    * @param pptName
    * @return an array of splitters
    */
@@ -205,7 +226,8 @@ public abstract class SplitterList {
   }
 
   /*
-   * return all the splitters in this program,
+   * Return all the splitters in this program,
+   * The resulting splitters are factories, not instantiated splitters.
    * @return an array of splitters
    */
   public static Splitter[] get_all( ) {

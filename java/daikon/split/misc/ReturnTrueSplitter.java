@@ -19,6 +19,7 @@ public final class ReturnTrueSplitter
 
   public ReturnTrueSplitter(Ppt ppt) {
     return_varinfo = ppt.findVar("return");
+    // instantiated = true;
   }
 
   public Splitter instantiate(Ppt ppt) {

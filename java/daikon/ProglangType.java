@@ -308,6 +308,7 @@ public final class ProglangType
         // Assert.assert(value.startsWith("\"") && value.endsWith("\""));
 	if (value.startsWith("\"") && value.endsWith("\""))
 	  value = value.substring(1, value.length()-1);
+        value = UtilMDE.unquote(value);
 	return value.intern();
       } else if (base == BASE_CHAR) {
         // This will fail if the character is output as an integer

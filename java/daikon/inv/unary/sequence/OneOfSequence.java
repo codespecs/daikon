@@ -6,6 +6,7 @@ import daikon.derive.unary.*;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.binary.sequenceScalar.*;
+import daikon.inv.binary.twoSequence.SubSequence;
 
 import utilMDE.*;
 
@@ -215,7 +216,6 @@ public final class OneOfSequence
     }
   }
 
-  
   /*
     public String format_java() {
     StringBuffer sb = new StringBuffer();
@@ -236,17 +236,23 @@ public final class OneOfSequence
     String length = "";
     String forall = "";
     if (is_hashcode) {
-      // we only have one value, because add_modified dies if more
-      long[]  value = elts[0];
-      if (var().name.isApplySizeSafe()) {
-	length = var().name.applySize().java_name() + " == " + value.length;
-      }
-      if (no_nulls(0)) {
-	String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
-	forall = form[0] + "(" + form[1] + " != null)" + form[2];
-      } else if (all_nulls(0)) {
-	String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
-	forall = form[0] + "(" + form[1] + " == null)" + form[2];
+      if (num_elts == 0)  {
+        String classname = this.getClass().toString().substring(6); // remove leading "class"
+        result = "warning: method " + classname + ".format_java() needs to be implemented: " + format();
+      } else {
+        Assert.assert(num_elts == 1);
+        // we only have one value, because add_modified dies if more
+        long[]  value = elts[0];
+        if (var().name.isApplySizeSafe()) {
+          length = var().name.applySize().java_name() + " == " + value.length;
+        }
+        if (no_nulls(0)) {
+          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
+          forall = form[0] + "(" + form[1] + " != null)" + form[2];
+        } else if (all_nulls(0)) {
+          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
+          forall = form[0] + "(" + form[1] + " == null)" + form[2];
+        }
       }
     }
     if (length == "" && forall == "") { // interned
@@ -284,12 +290,12 @@ public final class OneOfSequence
 	forall = quant.getQuantifierExp() + quant.getVarIndexed(0) + " = null " + quant.getClosingExp();
       }
     }
-    if (length == "" && forall == "") { // can't say anything about size or elements
+    if (length == "" && forall == "") { // interned; can't say anything about size or elements
       String thisclassname = this.getClass().getName();
       result = "warning: " + thisclassname + ".format_ioa()  needs to be implemented: " + format();
-    } else if (length == "") { // can't say anything about size
+    } else if (length == "") { // interned; can't say anything about size
       result = forall;
-    } else if ((forall == "")||(elts[0].length==0)) { // can't say anything about elements
+    } else if ((forall == "") || (elts[0].length == 0)) { // interned; can't say anything about elements
       result = length;
     } else { // Default, can say about both length and elements
       result = "(" + length + ") /\\ (" + forall + ")";

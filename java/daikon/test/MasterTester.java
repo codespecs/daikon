@@ -42,6 +42,7 @@ public class MasterTester extends TestCase {
      (daikon.test.diff.DetailedStatisticsVisitorTester.class));
     result.addTest(new TestSuite(daikon.test.diff.DiffTester.class));
     result.addTest(new TestSuite(daikon.test.inv.InvariantTester.class));
+    result.addTest(new TestSuite(daikon.test.diff.InvMapTester.class));
     result.addTest(new TestSuite(daikon.test.LinearTernaryCoreTest.class));
     result.addTest(new TestSuite
      (daikon.test.diff.MinusVisitorTester.class));

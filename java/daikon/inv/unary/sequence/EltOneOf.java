@@ -6,6 +6,7 @@ import daikon.derive.unary.*;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.binary.sequenceScalar.*;
+import daikon.inv.binary.twoSequence.SubSequence;
 
 import utilMDE.*;
 
@@ -195,7 +196,6 @@ public final class EltOneOf
     }
   }
 
-  
   /*
     public String format_java() {
     StringBuffer sb = new StringBuffer();
@@ -221,8 +221,9 @@ public final class EltOneOf
       Assert.assert((elts[0] == 0) || (elts[0] == 1));
       result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
     } else if (is_hashcode) {
-      Assert.assert(num_elts == 1);
-      if (elts[0] == 0) {
+      if (num_elts == 2) {
+        return "true";          // one elt is null, the other is non-null
+      } else if (elts[0] == 0) {
         result = varname + " == null";
       } else {
         result = varname + " != null";
@@ -412,6 +413,27 @@ public final class EltOneOf
     } else {
       return Invariant.PROBABILITY_JUSTIFIED;
     }
+  }
+
+  public boolean isObviousImplied() {
+    VarInfo v = var();
+    // Look for the same property over a supersequence of this one.
+    PptTopLevel pptt = (PptTopLevel) ppt.parent;
+    for (Iterator inv_itor = pptt.invariants_iterator(); inv_itor.hasNext(); ) {
+      Invariant inv = (Invariant) inv_itor.next();
+      if (inv == this) {
+        continue;
+      }
+      if (inv instanceof EltOneOf) {
+        EltOneOf other = (EltOneOf) inv;
+        if (isSameFormula(other)
+            && SubSequence.isObviousDerived(v, other.var())) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   public boolean isSameFormula(Invariant o)

@@ -19,7 +19,7 @@ public final class LinearBinaryCore
    * Debug tracer
    **/
 
-  public static final Category debug = 
+  public static final Category debug =
     Category.getInstance("daikon.inv.binary.twoScalar.LinearBinaryCore");
 
   // y == ax + b; first argument is x, second is y
@@ -112,7 +112,10 @@ public final class LinearBinaryCore
 	// Set a and b based on that pair
 	boolean ok =
 	  set_bi_linear(x_cache[max_i], x_cache[max_j], y_cache[max_i], y_cache[max_j]);
-	if (a == 0) { ok = false; }
+	if (a == 0) {
+	  ok = false;
+	  debug.debug("Suppressing " + "LinearBinaryCore (" + wrapper.format() + ") because a == 0");
+	}
 	// Check all values against a and b.
 	for (int i=0; ok && i<MINPAIRS; i++) {
 	  // I should permit a fudge factor here.

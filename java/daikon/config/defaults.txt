@@ -104,4 +104,5 @@ daikon.derive.binary.SequencesPredicate.enabled = 0
 
 daikon.FileIO.add_changed = true
 daikon.split.SplitterList.all_splitters = false
+daikon.split.ContextSplitterFactory.granularity = 1
 daikon.PptTopLevel.pairwise_implications = false

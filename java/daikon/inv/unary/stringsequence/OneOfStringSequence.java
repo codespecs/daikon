@@ -6,6 +6,7 @@ import daikon.derive.unary.*;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.binary.sequenceScalar.*;
+import daikon.inv.binary.twoSequence.SubSequence;
 
 import utilMDE.*;
 
@@ -173,7 +174,6 @@ public final class OneOfStringSequence
     }
   }
 
-  
   /*
     public String format_java() {
     StringBuffer sb = new StringBuffer();

@@ -15,16 +15,21 @@ import gnu.getopt.*;
  * invariants.
  *
  * The following is a high-level description of the program.  Each
- * input file contains a serialized PptMap.  The PptMap is extracted
- * from each file, and the two PptMaps are combined to form a tree.
- * The tree is exactly three levels deep.  The first level contains
- * the root, which holds no data.  Each node in the second level is a
- * pair of Ppts, and each node in the third level is a pair of
- * Invariants.  The tree is constructed by pairing the corresponding
- * Ppts and Invariants in the two PptMaps.  Finally, the tree is
- * traversed via the Visitor pattern to produce output.  The Visitor
- * pattern makes it easy to extend the program, simply by writing a
- * new Visitor.
+ * input file contains a serialized PptMap or InvMap.  PptMap and
+ * InvMap are similar structures, in that they both map program points
+ * to invariants.  However, PptMaps are much more complicated than
+ * InvMaps.  PptMaps are output by Daikon, and InvMaps are output by
+ * this program.
+ *
+ * First, if either input is a PptMap, it is converted to an InvMap.
+ * Next, the two InvMaps are combined to form a tree.  The tree is
+ * exactly three levels deep.  The first level contains the root,
+ * which holds no data.  Each node in the second level is a pair of
+ * Ppts, and each node in the third level is a pair of Invariants.
+ * The tree is constructed by pairing the corresponding Ppts and
+ * Invariants in the two PptMaps.  Finally, the tree is traversed via
+ * the Visitor pattern to produce output.  The Visitor pattern makes
+ * it easy to extend the program, simply by writing a new Visitor.
  **/
 public final class Diff {
 
@@ -44,7 +49,10 @@ public final class Diff {
   // this is set only when the manip flag is set "-z"
   private static PptMap manip1 = null;
   private static PptMap manip2 = null;
-  
+
+  /**
+   * The long command line options
+   **/
   private static final String INV_SORT_COMPARATOR1_SWITCH =
     "invSortComparator1";
   private static final String INV_SORT_COMPARATOR2_SWITCH =
@@ -78,7 +86,9 @@ public final class Diff {
   }
 
   /**
-   * Read two PptMap objects from their respective files and diff them.
+   * Read two PptMap or InvMap objects from their respective files.
+   * Convert the PptMaps to InvMaps as necessary, and diff the
+   * InvMaps.
    **/
   public static void main(String[] args) throws FileNotFoundException,
   StreamCorruptedException, OptionalDataException, IOException,
@@ -383,7 +393,7 @@ public final class Diff {
       if (mapFile != null) {
         MinusVisitor v = new MinusVisitor();
         root.accept(v);
-        writeObject(v.getResult(), mapFile);
+        UtilMDE.writeObject(v.getResult(), mapFile);
         System.out.println("Output written to: " + mapFile);
       } else {
         throw new Error("no output file specified on command line");
@@ -394,7 +404,7 @@ public final class Diff {
       if (mapFile != null) {
         XorVisitor v = new XorVisitor();
         root.accept(v);
-        writeObject(v.getResult(), mapFile);
+        UtilMDE.writeObject(v.getResult(), mapFile);
         System.out.println("Output written to: " + mapFile);
       } else {
         throw new Error("no output file specified on command line");
@@ -413,42 +423,13 @@ public final class Diff {
    **/
   private InvMap readInvMap(File file) throws
   IOException, ClassNotFoundException {
-    Object o = readObject(file);
+    Object o = UtilMDE.readObject(file);
     if (o instanceof InvMap) {
       return (InvMap) o;
     } else {
       PptMap pptMap = FileIO.read_serialized_pptmap(file, false);
       return convertToInvMap(pptMap);
     }
-  }
-
-  /**
-   * Writes an Object to disk
-   **/
-  private static void writeObject(Object o, File file) throws IOException {
-    OutputStream bytes =
-      new BufferedOutputStream(new FileOutputStream(file), 8192);
-    if (file.getName().endsWith(".gz")) {
-      bytes = new GZIPOutputStream(bytes);
-    }
-    ObjectOutputStream objs = new ObjectOutputStream(bytes);
-    objs.writeObject(o);
-    objs.close();
-  }
-
-  /**
-   * Reads an Object from disk
-   **/
-  private static Object readObject(File file) throws
-  IOException, ClassNotFoundException {
-    // 8192 is the buffer size in BufferedReader
-    InputStream istream =
-      new BufferedInputStream(new FileInputStream(file), 8192);
-    if (file.getName().endsWith(".gz")) {
-      istream = new GZIPInputStream(istream);
-    }
-    ObjectInputStream objs = new ObjectInputStream(istream);
-    return objs.readObject();
   }
 
   /**
@@ -508,6 +489,11 @@ public final class Diff {
     return root;
   }
 
+
+  /**
+   * Diffs two PptMaps by converting them to InvMaps.  Provided for
+   * compatibiliy with legacy code.
+   **/
   public RootNode diffPptMap(PptMap pptMap1, PptMap pptMap2) {
     InvMap map1 = convertToInvMap(pptMap1);
     InvMap map2 = convertToInvMap(pptMap2);
@@ -586,7 +572,6 @@ public final class Diff {
     return pptNode;    
   }
 
-
   private boolean isCond (PptTopLevel ppt) {
     return (ppt instanceof PptConditional);
   }
@@ -610,24 +595,42 @@ public final class Diff {
     return Collections.EMPTY_LIST;
   }
 
+  /**
+   * Use the comparator for sorting both sets and creating the pair
+   * tree.
+   **/
   public void setAllInvComparators(Comparator c) {
     setInvSortComparator1(c);
     setInvSortComparator2(c);
     setInvPairComparator(c);
   }
 
+  /**
+   * Use the comparator for sorting the first set.
+   **/
   public void setInvSortComparator1(Comparator c) {
     invSortComparator1 = c;
   }
 
+  /**
+   * Use the comparator for sorting the second set.
+   **/
   public void setInvSortComparator2(Comparator c) {
     invSortComparator2 = c;
   }
 
+  /**
+   * Use the comparator for creating the pair tree.
+   **/
   public void setInvPairComparator(Comparator c) {
     invPairComparator = c;
   }
-  
+
+  /**
+   * Selects the comparator to be used, based on the classname
+   * specified on the command line (if any), and whether this diff is
+   * computing the minus or xor operation.
+   **/
   public static Comparator selectComparator(String customClassname,
                                             boolean minus, boolean xor)
     throws ClassNotFoundException, InstantiationException,

@@ -6,6 +6,7 @@ import daikon.derive.unary.*;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.binary.sequenceScalar.*;
+import daikon.inv.binary.twoSequence.SubSequence;
 
 import utilMDE.*;
 
@@ -191,7 +192,6 @@ public final class OneOfScalar
     }
   }
 
-  
   /*
     public String format_java() {
     StringBuffer sb = new StringBuffer();
@@ -216,8 +216,9 @@ public final class OneOfScalar
       Assert.assert((elts[0] == 0) || (elts[0] == 1));
       result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
     } else if (is_hashcode) {
-      Assert.assert(num_elts == 1);
-      if (elts[0] == 0) {
+      if (num_elts == 2) {
+        return "true";          // one elt is null, the other is non-null
+      } else if (elts[0] == 0) {
         result = varname + " == null";
       } else {
         result = varname + " != null";

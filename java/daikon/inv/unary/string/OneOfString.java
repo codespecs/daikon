@@ -6,6 +6,7 @@ import daikon.derive.unary.*;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.binary.sequenceScalar.*;
+import daikon.inv.binary.twoSequence.SubSequence;
 
 import utilMDE.*;
 
@@ -172,7 +173,6 @@ public final class OneOfString
     return var().name.hasNodeOfType(VarInfoName.TypeOf.class);
   }
 
-  
   /*
     public String format_java() {
     StringBuffer sb = new StringBuffer();
@@ -192,7 +192,6 @@ public final class OneOfString
 
     String result;
 
-    
     result = "";
     boolean is_type = is_type();
     for (int i=0; i<num_elts; i++) {

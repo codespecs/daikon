@@ -42,7 +42,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
 
   private String[] ownedFieldNames;  // list of fields in this and related classes
   private String[] finalFieldNames;  // list of fields in this and related classes
-  private String[] nonNullElementsFieldNames;  // list of fields in this and related classes
+  private String[] notContainsNullFieldNames;  // list of fields in this and related classes
 
 
   public MergeESCVisitor(PptMap ppts, boolean slashslash, boolean insert_inexpressible) {
@@ -77,8 +77,8 @@ class MergeESCVisitor extends DepthFirstVisitor {
     return (ArraysMDE.indexOf(finalFieldNames, fieldname) != -1);
   }
 
-  private boolean isNonNullElements(String fieldname) {
-    return (ArraysMDE.indexOf(nonNullElementsFieldNames, fieldname) != -1);
+  private boolean isNotContainsNull(String fieldname) {
+    return (ArraysMDE.indexOf(notContainsNullFieldNames, fieldname) != -1);
   }
 
   // ClassDeclaration is a top-level (non-nested) construct.  Collect all
@@ -124,16 +124,16 @@ class MergeESCVisitor extends DepthFirstVisitor {
     // visiting inner classes (which have their own fields)
     String[] old_owned = ownedFieldNames;
     String[] old_final = finalFieldNames;
-    String[] old_nonNullElements = nonNullElementsFieldNames;
+    String[] old_notContainsNull = notContainsNullFieldNames;
     { // set fieldNames slots
       CollectFieldsVisitor cfv = new CollectFieldsVisitor();
       n.accept(cfv);
       ownedFieldNames = cfv.ownedFieldNames();
       finalFieldNames = cfv.finalFieldNames();
       if (object_ppt == null) {
-        nonNullElementsFieldNames = new String[0];
+        notContainsNullFieldNames = new String[0];
       } else {
-        nonNullElementsFieldNames = non_null_elements_fields(object_ppt, cfv);
+        notContainsNullFieldNames = not_contains_null_fields(object_ppt, cfv);
       }
     }
 
@@ -155,7 +155,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
 
     ownedFieldNames = old_owned;
     finalFieldNames = old_final;
-    nonNullElementsFieldNames = old_nonNullElements;
+    notContainsNullFieldNames = old_notContainsNull;
   }
 
   /**
@@ -238,7 +238,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
     }
 
     // Special case for main method:  add "arg != null" and
-    // "nonNullElements(arg)".
+    // "\nonnullelements(arg)".
     if (Ast.isMain(n)) {
       if (requires_invs == null) {
         requires_invs = new String[0];
@@ -361,12 +361,24 @@ class MergeESCVisitor extends DepthFirstVisitor {
 
           // Don't take action unless the PrimaryExpression is a simple
           // Name (that's effectively checked below) and has no
-          // PrimarySuffix (check that here).
+          // PrimarySuffix or else its prefix is "this" (check that here).
+          String fieldname = null;
           if (pe.f1.size() == 0) {
-            String fieldname = Ast.fieldName(pe);
+            fieldname = Ast.fieldName(pe);
+          } else if (pe.f1.size() == 1) {
+            if (pe.f0.f0.which == 1) { // prefix is "this"
+              PrimarySuffix ps = (PrimarySuffix) pe.f1.elementAt(0);
+              if (ps.f0.which == 3) { // suffix is an identifier
+                NodeSequence ns2 = (NodeSequence) ps.f0.choice;
+                fieldname = ((NodeToken) ns2.elementAt(1)).tokenImage;
+              }
+            }
+          }
+
+          if (fieldname != null) {
             // System.out.println("In statement, fieldname = " + fieldname);
             if ((fieldname != null)
-                && (isOwned(fieldname) || isNonNullElements(fieldname))) {
+                && (isOwned(fieldname) || isNotContainsNull(fieldname))) {
               ConstructorDeclaration cd
                 = (ConstructorDeclaration) Ast.getParent(ConstructorDeclaration.class, n);
               MethodDeclaration md
@@ -381,7 +393,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
                 if (isOwned(fieldname)) {
                   addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".owner = this"));
                 }
-                if (isNonNullElements(fieldname)) {
+                if (isNotContainsNull(fieldname)) {
                   addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".containsNull = false"));
                 }
               }
@@ -536,8 +548,8 @@ class MergeESCVisitor extends DepthFirstVisitor {
 
 
   // ppt is an :::OBJECT or :::CLASS program point
-  String[] non_null_elements_fields(PptTopLevel ppt, CollectFieldsVisitor cfv) {
-    // System.out.println("non_null_elements_fields(" + ppt + ")");
+  String[] not_contains_null_fields(PptTopLevel ppt, CollectFieldsVisitor cfv) {
+    // System.out.println("not_contains_null_fields(" + ppt + ")");
     Vector result = new Vector();
     String[] fields = cfv.allFieldNames();
     for (int i=0; i<fields.length; i++) {
@@ -552,14 +564,20 @@ class MergeESCVisitor extends DepthFirstVisitor {
         throw new Error("Bad ppt: " + ppt);
       VarInfo vi = ppt.findVar(varname);
       if (vi == null) {
-        // System.out.println("No var: " + varname + " at " + ppt);
-      }
-      Assert.assert(vi != null);
-      PptSlice1 slice = ppt.getView(vi);
-      if (slice != null) {
-        EltNonZero enz = EltNonZero.find(slice);
-        if (enz != null) {
-          result.add(field);
+        // This happens, for example, for final static vars (see
+        // REP_SCALE_FACTOR in MapQuick1/GeoPoint.java).
+        System.out.println("Variable not found: " + varname + " at " + ppt);
+      } else {
+        Assert.assert(vi != null);
+        PptSlice1 slice = ppt.getView(vi);
+        if (slice != null) {
+          EltNonZero enz = EltNonZero.find(slice);
+          if (enz != null) {
+            String enz_format = enz.format_esc();
+            if (enz_format.endsWith(".containsNull == false")) {
+              result.add(field);
+            }
+          }
         }
       }
     }

@@ -198,8 +198,27 @@ public final class SeqIntComparison
   // }
 
 
-  // Copied from IntComparison.
+  // Initially copied from IntComparison.
   public boolean isObviousImplied() {
+    // Also see:  Member.isObviousMember, SubSequence.isObviousDerived.
+
+    // Look for the same property over a supersequence of this one.
+    PptTopLevel pptt = (PptTopLevel) ppt.parent;
+    for (Iterator inv_itor = pptt.invariants_iterator(); inv_itor.hasNext(); ) {
+      Invariant inv = (Invariant) inv_itor.next();
+      if (inv == this) {
+        continue;
+      }
+      if (inv instanceof SeqIntComparison) {
+        SeqIntComparison other = (SeqIntComparison) inv;
+        if (isSameFormula(other)
+            && (sclvar() == other.sclvar())
+            && SubSequence.isObviousDerived(seqvar(), other.seqvar())) {
+          return true;
+        }
+      }
+    }
+
     if (isExact()) {
       return false;
     }
@@ -222,8 +241,6 @@ public final class SeqIntComparison
         }
       }
     }
-
-    PptTopLevel pptt = (PptTopLevel) ppt.parent;
 
     {
       PptSlice1 seqslice = pptt.findSlice(seqvar);

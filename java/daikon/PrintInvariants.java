@@ -51,6 +51,9 @@ public class PrintInvariants {
       new LongOpt(Daikon.ioa_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.java_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
     };
     Getopt g = new Getopt("daikon.PrintInvariants", args, "h", longopts);
     int c;
@@ -78,6 +81,14 @@ public class PrintInvariants {
 	  Daikon.output_style = OutputFormat.IOA;
 	} else if (Daikon.output_num_samples_SWITCH.equals(option_name)) {
 	  Daikon.output_num_samples = true;
+        } else if (Daikon.config_option_SWITCH.equals(option_name)) {
+	  String item = g.getOptarg();
+	  daikon.config.Configuration.getInstance().apply(item);
+          break;
+	} else if (Daikon.debugAll_SWITCH.equals(option_name)) {
+	  Global.debugAll = true;
+	} else if (Daikon.debug_SWITCH.equals(option_name)) {
+	  Logger.setPriority(g.getOptarg(), Logger.DEBUG);
 	} else {
 	  throw new RuntimeException("Unknown long option received: " +
                                      option_name);

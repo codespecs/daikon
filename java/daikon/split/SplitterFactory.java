@@ -16,9 +16,18 @@ import java.lang.reflect.*;
  **/
 public class SplitterFactory {
 
-  private static PatternMatcher re_matcher = Global.regexp_matcher;
-  private static PatternCompiler re_compiler = Global.regexp_compiler;
+  private static Perl5Matcher re_matcher = Global.regexp_matcher;
+  private static Perl5Compiler re_compiler = Global.regexp_compiler;
   private static String tempdir = getTempdirName();
+
+  static Pattern blank_line;
+  static {
+    try {
+      blank_line  = re_compiler.compile("^\\s*$");
+    } catch (MalformedPatternException me) {
+      System.out.println("Error while compiling regular expression " + me.toString());
+    }
+  }
 
   /**
    * Reads the Splitter info.
@@ -38,7 +47,8 @@ public class SplitterFactory {
     try {
       String line = reader.readLine();
       for ( ; line != null; line = reader.readLine()) {
-	if (line.equals("")) {
+        // skip blank lines and comments
+	if (re_matcher.matches(line, blank_line) || line.startsWith("#")) {
 	  continue;
 	} else if (line.startsWith("REPLACE")) {
 	  replace = read_replace_statements(replace, reader);
@@ -71,8 +81,11 @@ public class SplitterFactory {
     throws IOException, FileNotFoundException
   {
     String line = reader.readLine();
-    while ((line != null) && !line.equals("")) {
-      replace.addElement(line.trim());
+    while ((line != null) && !re_matcher.matches(line, blank_line)) {
+      // skip comments
+      if (! line.startsWith("#")) {
+        replace.addElement(line.trim());
+      }
       line = reader.readLine();
     }
     return replace;
@@ -87,8 +100,11 @@ public class SplitterFactory {
   {
     Vector conditions = new Vector(); // [String == splitting condition]
     String line = reader.readLine();
-    while ((line != null) && !line.equals("")) {
-      conditions.addElement(line.trim());
+    while ((line != null) && !re_matcher.matches(line, blank_line)) {
+      // skip comments
+      if (!line.startsWith("#")) {
+        conditions.addElement(line.trim());
+      }
       line = reader.readLine();
     }
     return conditions;
@@ -98,7 +114,7 @@ public class SplitterFactory {
    * Write the Splitter classes, compile and load the Splitter objects
    * for each condition.  The Vector ppts_and_conds contains the
    * pptnames and their associated splitting conditions.
-   * 
+   *
    * @param ppts_and_conds heterogenous collection, with Strings (ppt
    * names) in even indices and Vector[String] (conditions) in odd
    * indices.
@@ -123,15 +139,16 @@ public class SplitterFactory {
       // write the Splitter classes
       try {
 	Vector splitternames = write_function_splitters(ppt_name, conditions, replace, all_ppts);
-	if (splitternames.isEmpty()) continue;
-	pptnames_and_splitterObjects.addElement(ppt_name);
-	pptnames_and_splitterObjects.addElement(splitternames);
-	Vector compile_list = new Vector();
-	for (int j = 0; j < splitternames.size(); j++) {
-	  String className = (String)splitternames.elementAt(j);
-	  compile_list.addElement(tempdir + className + ".java");
+	if (!splitternames.isEmpty()) {
+	  pptnames_and_splitterObjects.addElement(ppt_name);
+	  pptnames_and_splitterObjects.addElement(splitternames);
+	  Vector compile_list = new Vector();
+	  for (int j = 0; j < splitternames.size(); j++) {
+	    String className = (String)splitternames.elementAt(j);
+	    compile_list.addElement(tempdir + className + ".java");
+	  }
+	  processes.addElement(FileCompiler.compile_source(compile_list));
 	}
-	processes.addElement(FileCompiler.compile_source(compile_list));
       } catch (IOException ioe) {
 	System.err.println(ioe.toString() + " while writing Splitter source for " + ppt_name );
       }
@@ -139,10 +156,10 @@ public class SplitterFactory {
 
     // wait for all the compilation processes to terminate
     for (int j = 0; j < processes.size(); j++) {
-      try {
-	((Process)processes.elementAt(j)).waitFor();
-      } catch (InterruptedException ie) {
-	System.err.println( ie.toString () + "\n while compiling Splitters ");
+      TimedProcess tp = (TimedProcess) processes.elementAt(j);
+      if (!tp.finished()) {
+	//todo: put in a option for wait time
+	tp.waitFor(6);
       }
     }
 
@@ -170,7 +187,6 @@ public class SplitterFactory {
 
       pptnames_and_splitterObjects.setElementAt( (Splitter[]) splitters.toArray(new Splitter[0]), i+1 );
     }
-
     return pptnames_and_splitterObjects;
   }
 
@@ -185,7 +201,6 @@ public class SplitterFactory {
 					  PptMap all_ppts)
     throws IOException
   {
-    
     Vector splitternames = new Vector();
     PptTopLevel ppt = find_corresponding_ppt(ppt_name, all_ppts);
     if (ppt == null) {
@@ -223,9 +238,11 @@ public class SplitterFactory {
 	//and orig(x) to orig_x
 	String temp = all_params[i];
 	temp = temp.replace('.','_');
+	temp = temp.replace('[','_');
+	temp = temp.replace(']','_');
 	if (temp.equals("return")) temp = "return_Daikon";
-	//should this be an else if?
-	else if (temp.indexOf("orig") >= 0) temp = replace_orig(temp);
+	if (temp.equals("this")) temp = "this_Daikon";
+	if (temp.indexOf("orig") >= 0) temp = replace_orig(temp);
 	param_names[i] = temp;
       }
 
@@ -273,22 +290,23 @@ public class SplitterFactory {
 
 	// substitute the occurence of "== null" or "!= null" with "== 0" in the
 	// test string
-	test_string = perform_null_substitution(test_string);
 
 	// if the condition has a function call in it which needs to be replaced
 	// with the function body: eg. isEmpty -> myArray.length == 0,
 	// do the replacement now
-	test_string = replace_condition(test_string, replace_data);
 
+	test_string = replace_condition(test_string, replace_data);
 
 	// ensure that the declared variable names in the Splitter match the
 	// variable names in the test string. For example: if the condition tests
 	// for "this.mylength == 0", the variable corresponding to "this.mylength"
 	// in the Splitter is declared as "this_mylength". Therefore change the
 	// condition to "this_mylength == 0"
+
 	test_string = match_Splitter_varnames_with_teststring(params, param_names, test_string, class_name);
 
 	//replace all occurences of "orig(varname)" with "orig_varname" in the condition.
+
 	test_string = replace_orig(test_string);
 
 	// look for all variables which are used as array accessors and change
@@ -297,6 +315,7 @@ public class SplitterFactory {
 	// so they can be used to access arrays. Therefore for these variables,
 	// we need to call a different method (VarInfo.getIndexValue()) to
 	// obtain their values from the VarInfo.
+
 	identify_array_index_variables_as_int(condition, params, all_types);
 
 	StringBuffer file_string = new StringBuffer();
@@ -306,7 +325,8 @@ public class SplitterFactory {
 	file_string.append("public final class " + splitter_fname + " extends Splitter { \n\n");
 
 	// print the condition() method
-	file_string.append("  public String condition () { return\"" + condition + "\" ;} \n\n");
+	file_string.append("  public String condition () { return\"" +
+                           UtilMDE.quote(condition) + "\" ;} \n\n");
 
 	// print the parameters
 	for (int i = 0; i < num_params; i++) {
@@ -317,11 +337,12 @@ public class SplitterFactory {
 	    continue;
 	  String par = param_names[i].trim();
 	  String typ = all_types[i].trim();
-	  file_string = print_parameter_declarations(file_string, par, typ);
+	  print_parameter_declarations(file_string, par, typ);
 	}
 
 	// print the constructors
 	file_string.append("\n  public " + splitter_fname + "() { } \n");
+
 	file_string.append("  public " + splitter_fname + "(Ppt ppt) {  \n");
 	for (int i = 0; i < num_params; i++) {
 	  String param =  params[i];
@@ -329,20 +350,23 @@ public class SplitterFactory {
 	    continue;
 	  String param_name = param_names[i];
 	  String typ = all_types[i];
-	  // attach "_array" to an array variable name anytime to distinguish
-	  // it from its hashCode, which has the same name. (eg change
-	  // "<arrayname>.length" to "<arrayname>_array.length" and
-	  // <arrayname>[i] to <arrayname>_array[i] so that the array , and not
-	  // the hashCode of the array is used in the test). The arrayname is
-	  // also changed to <arrayname>_array in the Splitter.
-	  if (typ.endsWith("[]")) {
-	    file_string.append("    " + param_name + "_array_varinfo = ppt.findVar(\"" + param + "[]\") ; \n");
+	  if (typ.equals("char[]")) {
+	    //char[] is not an array
+	    file_string.append("    " + param_name + "_varinfo = ppt.findVar(VarInfoName.parse(\"" + param + "[]\")) ; \n");
+	  } else if (typ.endsWith("[]")) {
+	    // attach "_array" to an array variable name anytime to distinguish
+	    // it from its hashCode, which has the same name. (eg change
+	    // "<arrayname>.length" to "<arrayname>_array.length" and
+	    // <arrayname>[i] to <arrayname>_array[i] so that the array , and not
+	    // the hashCode of the array is used in the test). The arrayname is
+	    // also changed to <arrayname>_array in the Splitter.
+	    file_string.append("    " + param_name + "_array_varinfo = ppt.findVar(VarInfoName.parse(\"" + param + "[]\")) ; \n");
 	    test_string = distinguish_arraynames_from_hashCodes_in_teststring(param, test_string);
 	  } else {
-	    file_string.append("    " + param_name + "_varinfo = ppt.findVar(\"" + param + "\") ; \n");
+	    file_string.append("    " + param_name + "_varinfo = ppt.findVar(VarInfoName.parse(\"" + param + "\")) ; \n");
 	  }
 	}
-
+        // file_string.append("    instantiated = true;\n");
 	file_string.append("  }\n\n");
 
 	// print the instantiate method.
@@ -355,19 +379,31 @@ public class SplitterFactory {
 	  if (params[i].equals("**remove**"))
 	    continue;
 
-	  if (all_types[i].endsWith("[]")) {
+	  if (all_types[i].endsWith("[]") && !all_types[i].equals("char[]")) {
 	    file_string.append( "(" + param_names[i] + "_array_varinfo != null) && ");
 	  } else {
 	    file_string.append("(" + param_names[i] + "_varinfo != null) && ");
 	  }
 
 	}
-
 	file_string.append(" true );\n  }\n\n");
 
 
 	// print the test() method
-	file_string = print_test_method(file_string, param_names, params, all_types, test_string);
+	print_test_method(file_string, param_names, params, all_types, test_string);
+
+        // print the repr() method
+        file_string.append("  public String repr() { \n    return \"" + splitter_fname + ": \"");
+	for (int i = 0; i < num_params; i++) {
+	  if (params[i].equals("**remove**"))
+	    continue;
+	  String par = param_names[i].trim();
+          file_string.append("        + \"" + par + "_varinfo=\" + " + par + "_varinfo.repr() + \" \"\n");
+	}
+        file_string.append("        ;\n  }\n\n");
+
+        // finish off the class
+        file_string.append("}\n");
 
 	// write to the file. Assuming that the tempdir has already been set
 	try {
@@ -391,7 +427,8 @@ public class SplitterFactory {
   static PptTopLevel find_corresponding_ppt(String ppt_name, PptMap all_ppts) {
     // look for corresponding EXIT ppt. This is because the exit ppt usually has
     // more relevant variables in scope (eg. return, hashcodes) than the enter.
-    ppt_name = ppt_name + ".*EXIT";
+    Vector corresponding_ppts = new Vector();
+    ppt_name = qm(ppt_name) + ".*EXIT";
     try {
       Pattern ppt_pattern = re_compiler.compile(ppt_name);
       Pattern object_pattern = re_compiler.compile("OBJECT");
@@ -400,6 +437,7 @@ public class SplitterFactory {
       while (ppt_itor.hasNext()) {
 	String name = ((PptTopLevel)ppt_itor.next()).name;
 	if (re_matcher.contains( name, ppt_pattern)) {
+	  //return more than one? do more than one match??
 	  return all_ppts.get(name);
 	} else if (re_matcher.contains( ppt_name, object_pattern) && re_matcher.contains(name, object_pattern)) {
 	  // At the OBJECT program point, try all the splitters
@@ -411,8 +449,8 @@ public class SplitterFactory {
     }
     return null;
   }
-  
-  
+
+
   static Pattern find_orig_pattern;
   static Perl5Substitution orig_subst;
   static {
@@ -424,14 +462,14 @@ public class SplitterFactory {
     } catch (MalformedPatternException me){
       System.err.println("Error while compiling regular expresssion find_orig_pattern in SplitterFactory");
     }
-  }  
-  
+  }
+
   static String replace_orig(String orig_string) {
     String result;
     result = Util.substitute(re_matcher, find_orig_pattern, orig_subst, orig_string, Util.SUBSTITUTE_ALL);
     return result;
   }
-  
+
   /**
    * extract the in-scope variables and their corresponding types from the
    * program point
@@ -441,13 +479,12 @@ public class SplitterFactory {
     Vector parameters = new Vector();
     Vector types = new Vector();
 
-    // Number of variables starting with "return". The return variable usually
-    // has a hashcode which is also named return. In extracting the parameters,
-    // we want to get only the return variable and not it's hashcode. Drop any
-    // other variables named return after you have gotten one of them.
-
     VarInfo[] var_infos = ppt.var_infos;
     for (int i = 0; i < var_infos.length; i++) {
+      //we don't want hashcodes. We just want the variable values
+      if (var_infos[i].file_rep_type == ProglangType.HASHCODE) {
+	continue;
+      }
       String temp = var_infos[i].name.name().trim();
       if (temp.endsWith(".class"))
 	continue;
@@ -456,8 +493,10 @@ public class SplitterFactory {
 	temp = temp.substring(0, temp.length() - 2);
       }
       parameters.addElement(temp);
-      if ((var_infos[i].type.format().trim()).equals("boolean")) {
-	types.addElement(new String("boolean"));
+      //do rep_type changes here.
+      if (var_infos[i].type.format().trim().equals("char[]")) {
+	//if char[], we need to treat as a String in Daikon
+	types.addElement ("char[]");
       } else {
 	types.addElement(var_infos[i].rep_type.format().trim());
       }
@@ -613,21 +652,54 @@ public class SplitterFactory {
     try {
       brack_pattern = re_compiler.compile(bracket);
       brack_subst = new Perl5Substitution("$1_array$2", Perl5Substitution.INTERPOLATE_ALL);
-      length_pattern = re_compiler.compile(dot_length);
-      length_subst = new Perl5Substitution("$1_array.length", Perl5Substitution.INTERPOLATE_ALL);
 
       if (re_matcher.contains(test_string, brack_pattern)) {
 	test_string =
 	  Util.substitute(re_matcher, brack_pattern, brack_subst, test_string, Util.SUBSTITUTE_ALL);
       }
+
+      length_pattern = re_compiler.compile(dot_length);
+      length_subst = new Perl5Substitution("$1_array.length", Perl5Substitution.INTERPOLATE_ALL);
+
       if (re_matcher.contains(test_string, length_pattern)) {
 	test_string =
 	  Util.substitute(re_matcher, length_pattern, length_subst, test_string, Util.SUBSTITUTE_ALL);
       }
     } catch (MalformedPatternException e) {
-      debugPrint(e.toString() + " while writing performing substitution on teststring " + test_string + "\n");
+      debugPrint(e.toString() + "\n while performing substitution on teststring " + test_string + "\n");
     }
     return test_string;
+  }
+
+  // Short name for purposes of abbreviation.
+  private static String qm(String exp) {
+    return re_compiler.quotemeta(exp);
+  }
+
+  private static String delimit(String exp) {
+    return delimit_end(delimit_beginning(exp));
+  }
+
+  private static String delimit_end(String exp) {
+    if ((exp == null) || exp.equals(""))
+      return exp;
+    char lastchar = exp.charAt(exp.length()-1);
+    if (Character.isLetterOrDigit(lastchar)
+        || lastchar == '_') {
+      exp = exp + "\\b";
+    }
+    return exp;
+  }
+
+  private static String delimit_beginning(String exp) {
+    if ((exp == null) || exp.equals(""))
+      return exp;
+    char firstchar = exp.charAt(0);
+    if (Character.isLetterOrDigit(firstchar)
+        || firstchar == '_') {
+      exp = "\\b" + exp;
+    }
+    return exp;
   }
 
   /**
@@ -635,7 +707,9 @@ public class SplitterFactory {
    * in the condition (especially those starting with "this").
    **/
   static String match_Splitter_varnames_with_teststring(String[] params, String[] param_names,
-							String test_string, String class_name ) {
+							String test_string, String class_name)
+  {
+      // System.out.println("msvwt: " + test_string);
 
 
       for (int i = 0; i < params.length; i++) {
@@ -647,25 +721,36 @@ public class SplitterFactory {
 	// such a situation, search the test_string for this.myArray or myArray
 	// and change the test string to this_myArray.length == 0.
 	try {
-	  if (params[i].startsWith("this.")) {
+          System.out.println("trying: " + params[i]);
+	  if (params[i].charAt(0) == '*') {
+	    param_names[i] = "star_" + params[i].substring(1);
+	    param_pattern = re_compiler.compile(delimit(qm(params[i])));
+	  } else if (params[i].startsWith("orig(*")) {
+	    param_names[i] = "orig_star_" + params[i].substring(6, params[i].length() - 1) + "_";
+	    param_pattern = re_compiler.compile(delimit_end("orig\\(\\*" + qm(params[i].substring(6))));
+	  } else if (params[i].startsWith("this.")) {
 	    String params_minus_this = params[i].substring(5);
 	    // for example for the variable 'this.myArray', we will be searching
 	    // the condition for the regex "myArray|this.myArray" and replacing
 	    // it with this_myArray as declared in the Splitter.
-	    param_pattern = re_compiler.compile("\\b(" + params[i] + "|" + params_minus_this + ")\\b");
+	    param_pattern = re_compiler.compile("(" + delimit(qm(params[i])) + "|" + delimit(qm(params_minus_this)) + ")");
 	  } else if (!class_name.equals("") && params[i].startsWith(class_name)) {
-	    param_pattern = re_compiler.compile(params[i] + "|" + params[i].substring(class_name.length()));
+	    param_pattern = re_compiler.compile(qm(params[i]) + "|" + qm(params[i].substring(class_name.length())));
 	  } else if (params[i].startsWith("orig")) {
-	    //we've already substituted for example orig(this.Array) with "orig(this_theArray)", 
+	    //we've already substituted for example orig(this.Array) with "orig(this_theArray)",
 	    //so search for "orig(this_theArray)" in the test_string
 	    String temp = param_names[i].replace('.','_');
 	    String search_string = "orig\\s*\\(\\s*" + temp.substring(5) + "\\s*\\)";
 	    if (temp.length() > 10) {
-	      search_string = search_string + "|" + "orig\\s*\\(\\s*" + temp.substring(10) + "\\s*\\)";
+	      search_string = search_string + "|" + "orig\\s*\\(\\s*" + qm(temp.substring(10)) + "\\s*\\)";
 	    }
 	    param_pattern = re_compiler.compile(search_string);
+	  } else if (params[i].charAt(0) == '$') {
+	    //remove unwanted characters from the param name. These confuse the regexp.
+	    //(find a better solution for arbitrary characters at arbitrary locations)
+	    param_pattern = re_compiler.compile(delimit(qm(params[i].substring(1))));
 	  } else {
-	    param_pattern = re_compiler.compile("\\b" + params[i]+"\\b");
+	    param_pattern = re_compiler.compile(delimit(qm(params[i])));
 	  }
 
 	  Perl5Substitution param_subst = new Perl5Substitution(param_names[i], Perl5Substitution.INTERPOLATE_ALL);
@@ -683,6 +768,16 @@ public class SplitterFactory {
 	  debugPrint(e.toString());
 	}
       }
+      {
+        // Change "this_Daikon.this_" to "this_"
+        int this_loc = test_string.indexOf("this_Daikon.this_");
+        while (this_loc != -1) {
+          test_string = (test_string.substring(0, this_loc)
+                         + test_string.substring(this_loc + 12));
+          this_loc = test_string.indexOf("this_Daikon.this_");
+        }
+      }
+      System.out.println("returning: " + test_string);
       return test_string;
   }
 
@@ -705,15 +800,14 @@ public class SplitterFactory {
      * mark the variable(s) in the square brackets as array index variables.
      */
     static void identify_array_index_variables_as_int(String condition, String[] params, String[] types) {
-
-	Vector arrayIndexVariables = new Vector();
+      	Vector arrayIndexVariables = new Vector();
 	try {
 
 	    PatternMatcherInput input = new PatternMatcherInput(condition);
 	    while (re_matcher.contains(input, find_index_pattern)) {
-		MatchResult result = re_matcher.getMatch();
-		String possible_varname = result.group(1);
-		// if we have say myarray[ i + j ], we have to identify both i and j
+	        MatchResult result = re_matcher.getMatch();
+	        String possible_varname = result.group(1);
+	        // if we have say myarray[ i + j ], we have to identify both i and j
 		// as array index variables and treat them as integers.
 		Pattern operator_pattern = re_compiler.compile("[+=!><-]"); // split on this pattern
 		Vector tempIndices = new Vector();
@@ -738,10 +832,11 @@ public class SplitterFactory {
 	}
     }
 
-    /**
-     * Daikon represents the value of null as zero. Replace all occurences of
-     * "== null" or "!= null" with "== 0" in the condition.
-     **/
+  // Replace "== null" by "== 0".
+  /**
+   * Daikon represents the value of null as zero. Replace all occurences of
+   * equality tests against null with tests against 0 in the condition.
+   **/
   static String perform_null_substitution(String test_string) {
 
     try {
@@ -786,8 +881,8 @@ public class SplitterFactory {
    * Print out a message if the debugPptSplit variable is set to "true"
    **/
   static void debugPrint(String s) {
-    System.out.println(s);
-    // Global.debugSplit.debug (s);
+    //System.out.println(s);
+    Global.debugSplit.debug (s);
   }
 
   /**
@@ -796,10 +891,12 @@ public class SplitterFactory {
    * of type "int", it would print "VarInfo myint_varinfo" and for an array
    * "myarr", it would print "VarInfo myarr_array_varinfo"
    **/
-  static StringBuffer print_parameter_declarations(StringBuffer splitter_source, String parameter, String type) {
+  static void print_parameter_declarations(StringBuffer splitter_source, String parameter, String type) {
     if (type.equals("int")) {
       splitter_source.append("  VarInfo " + parameter + "_varinfo; \n");
     } else if (type.equals("int_index")) {
+      splitter_source.append("  VarInfo " + parameter + "_varinfo; \n");
+    } else if (type.equals("char[]")) {
       splitter_source.append("  VarInfo " + parameter + "_varinfo; \n");
     } else if (type.endsWith("[]")) {
       splitter_source.append("  VarInfo " + parameter + "_array_varinfo; \n");
@@ -810,14 +907,19 @@ public class SplitterFactory {
     } else {
       debugPrint("Can't deal with this type " + type + " declared in Splitter file");
     }
-    return splitter_source;
   }
 
   /**
-   *print the test() method of the splitter
+   * Print the test() method of the splitter
    **/
-  static StringBuffer print_test_method(StringBuffer splitter_source, String[] param_names,
+  static void print_test_method(StringBuffer splitter_source, String[] param_names,
 					String[] params, String[] all_types, String test_string ) {
+
+    //This indicates whether we should substitute "== null" with "== 0" in the test string.
+    //Daikon usually substitutes null values of numeric variables with 0. In that case perform
+    //the substitution. In the case where we are comparing a String or other type with null
+    //though, we can't substitute == 0
+    boolean substitute_null = true;
 
     splitter_source.append("  public boolean test(ValueTuple vt) { \n");
     for (int i = 0; i < params.length; i++) {
@@ -838,10 +940,14 @@ public class SplitterFactory {
       } else if (type.equals("int[]")) {
 	splitter_source.append("  long[] " + parameter + "_array = " + parameter
 			       + "_array_varinfo.getIntArrayValue(vt); \n");
-      } else if (type.equals("String") || type.equals("java.lang.String")) {
+      } else if (type.equals("String") || type.equals("java.lang.String") || type.equals("char[]")) {
+	//we probably don't want to substitute "== null" with "== 0" because
+	//the test string contains a String.
+	substitute_null = false;
 	splitter_source.append("    String " + parameter + " = "
 			       + parameter + "_varinfo.getStringValue(vt); \n");
       } else if (type.equals("String[]") || type.equals("java.lang.String[]")) {
+	substitute_null = false;
 	splitter_source.append("    String[] " + parameter + "_array = "
 			       + parameter + "_array_varinfo.getStringArrayValue(vt); \n");
       } else {
@@ -849,7 +955,11 @@ public class SplitterFactory {
       }
     }
 
-    splitter_source.append("    return( " + test_string + " ); \n  }\n}\n");
-    return splitter_source;
+    //If we are comparing a String to null, we don't want to substitute null for 0, otherwise
+    //won't compile
+    if (substitute_null)
+      test_string = perform_null_substitution(test_string);
+
+    splitter_source.append("    return( " + test_string + " ); \n  }\n");
   }
 }

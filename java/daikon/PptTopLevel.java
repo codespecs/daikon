@@ -14,6 +14,7 @@ import daikon.inv.ternary.threeScalar.*;
 import daikon.simplify.*;
 import daikon.split.*;
 import daikon.split.misc.*;
+import utilMDE.Assert;
 
 import java.io.*;
 import java.util.*;
@@ -143,7 +144,7 @@ public class PptTopLevel
    * flow to other points.  They are never null, but may be
    * zero-length if there are no lower ppts.  They obey the following
    * invariants:
-   * 
+   *
    * <li>invflow_transforms contains functions from this to
    * invflow_ppts; elements are int[]-style functions whose domain is
    * the number of var_infos in this, and whose range is number of
@@ -675,7 +676,7 @@ public class PptTopLevel
       }
       // Using addDerivedVariables(derivations) would add data too
       addVarInfos(vis);
-    } 
+    }
     Assert.assert(lower == upper);
     Assert.assert(upper == var_infos.length);
 
@@ -1095,7 +1096,7 @@ public class PptTopLevel
         // // view wouldn't have been installed.
         // Assert.assert(unary_view.invs.size() == 1);
         // Invariant inv = (Invariant) unary_view.invs.elementAt(0);
-	
+
         for (int j=0; j<unary_view.invs.size(); j++) {
           Invariant inv = (Invariant) unary_view.invs.elementAt(j);
           inv.finished = true;
@@ -1180,7 +1181,7 @@ public class PptTopLevel
             if (var1.compatible(var2)
                 && (var1.equal_to != var2.equal_to)) {
               // Used to be an assert
-              System.out.println("Variables not equal: " + var1.name + " (= " + var1.equal_to.name + "), " + var2.name + " (= " + var2.equal_to.name + ") [indices " + var1.varinfo_index + ", " + var1.equal_to.varinfo_index + ", " + var2.varinfo_index + ", " + var2.equal_to.varinfo_index + "] at " + name);
+              System.out.println("Internal Daikon error: Variables not equal: " + var1.name + " (= " + var1.equal_to.name + "), " + var2.name + " (= " + var2.equal_to.name + ") [indices " + var1.varinfo_index + ", " + var1.equal_to.varinfo_index + ", " + var2.varinfo_index + ", " + var2.equal_to.varinfo_index + "] at " + name);
             }
             Assert.assert(var1.equal_to.varinfo_index <= var1.varinfo_index);
             Assert.assert(var2.equal_to.varinfo_index <= var2.varinfo_index);
@@ -1246,12 +1247,18 @@ public class PptTopLevel
 
 
   public void addConditions(Splitter[] splits) {
+    // System.out.println("addConditions(" + splits.length + ") for " + name);
+
     int len = splits.length;
     if ((splits == null) || (len == 0)) {
       if (Global.debugSplit.isDebugEnabled())
         Global.debugSplit.debug("No splits for " + name);
       return;
     }
+
+    // for (int i=0; i<splits.length; i++) {
+    //   Assert.assert(splits[i].instantiated() == false);
+    // }
 
     Vector pconds_vector = new Vector(2 * len);
     for (int i=0; i<len; i++) {
@@ -1402,6 +1409,7 @@ public class PptTopLevel
       PptConditional cond2 = (PptConditional) views_cond.elementAt(1);
       addImplications_internal(cond1, cond2, false);
     }
+
     // [INCR] ...
     /*
     if (this.ppt_name.isCombinedExitPoint()) {
@@ -1442,21 +1450,21 @@ public class PptTopLevel
   	if ( i+1 >= num_conds )
 	  continue;
 	PptConditional cond2 = (PptConditional) views_cond.elementAt(i+1);
-	if (cond1.splitter_inverse == cond2.splitter_inverse) 
+	if (cond1.splitter_inverse == cond2.splitter_inverse)
 	  continue;
-	if (!cond1.splitter.condition().equals(cond2.splitter.condition())) 
+	if (!cond1.splitter.condition().equals(cond2.splitter.condition()))
 	  continue;
 	addImplications_internal(cond1, cond2, false);
 	//skip cond2
 	i++;
-      }      
+      }
     }
 
     /* [INCR] ...
     if (this.ppt_name.isCombinedExitPoint()) {
       Vector exits = this.entry_ppt.exit_ppts;
       int num_exits = exits.size();
-      
+
       // System.out.println("num exits = " + exits.size());
       // for (int i=0; i<exits.size(); i++) {
       //   System.out.println(((PptTopLevel)exits.elementAt(i)).name);
@@ -1476,8 +1484,8 @@ public class PptTopLevel
     }
     */ // ... [INCR]
   }
-  
-  
+
+
   // This method is correct only if the two conditional program points fully
   // partition the input space (their conditionss are negations of one another).
   private void addImplications_internal(PptTopLevel ppt1,
@@ -1586,20 +1594,20 @@ public class PptTopLevel
       excls1[i] = exclusive_conditions[i][0];
       excls2[i] = exclusive_conditions[i][1];
     }
-    
-    
+
+
     for (int i=0; i<exclusive_conditions.length; i++) {
       Assert.assert(exclusive_conditions[i].length == 2);
       Invariant excl1 = exclusive_conditions[i][0];
       Invariant excl2 = exclusive_conditions[i][1];
       Assert.assert(excl1 != null);
       Assert.assert(excl2 != null);
-      
+
       if (debugAddImplications.isDebugEnabled()) {
         debugAddImplications.debug("Adding implications with conditions "
 				   + excl1.format() + " and " + excl2.format());
       }
-      
+
       for (int j=0; j<different_invariants.length; j++) {
         Assert.assert(different_invariants[j].length == 2);
         Invariant diff1 = different_invariants[j][0];
@@ -1608,13 +1616,13 @@ public class PptTopLevel
         Assert.assert((diff1 == null) || (diff2 == null)
                       || (ArraysMDE.indexOf(excls1, diff1)
                           == ArraysMDE.indexOf(excls2, diff2)));
-	
+
         if (debugAddImplications.isDebugEnabled()) {
           debugAddImplications.debug("different_invariants "
 				     + ((diff1 == null) ? "null" : diff1.format())
 				     + ", " + ((diff2 == null) ? "null" : diff2.format()));
         }
-	
+
         // This adds an implication to itself; bad.
         // If one of the diffs implies the other, then should not add
         // an implication for the weaker one.
@@ -1634,7 +1642,7 @@ public class PptTopLevel
         }
       }
     }
-    
+
     HashMap canonical_inv = new HashMap(); // Invariant -> Invariant
     {
       HashMap inv_group = new HashMap(); // Invariant -> HashSet[Invariant]
@@ -1959,8 +1967,8 @@ public class PptTopLevel
   }
 
   /**
-   * Use the Simplify theorem prover to flag invariants which are
-   * logically implied by others.  Considers only invariants which
+   * Use the Simplify theorem prover to flag invariants that are
+   * logically implied by others.  Considers only invariants that
    * pass isWorthPrinting.
    **/
   public void mark_implied_via_simplify() {
@@ -2036,7 +2044,7 @@ public class PptTopLevel
       }
     }
 
-    // Form the closure of the controllers
+    // Form the closure of the controllers; each element is a Ppt
     Set closure = new HashSet();
     {
       // Set working = new HashSet(controlling_ppts); // [INCR]
@@ -2277,12 +2285,19 @@ public class PptTopLevel
    **/
   public Vector invariants_vector() {
     Vector result = new Vector();
-    for (Iterator views_itor = views.iterator(); views_itor.hasNext(); ) {
-      PptSlice slice = (PptSlice) views_itor.next();
-      result.addAll(slice.invs);
+    for (Iterator itor = new ViewsIteratorIterator(this); itor.hasNext(); ) {
+      for (Iterator itor2 = (Iterator) itor.next(); itor2.hasNext(); ) {
+        result.add(itor2.next());
+      }
     }
-    // System.out.println(implication_view.invs.size() + " implication invs for " + name + " at " + implication_view.name);
-    result.addAll(implication_view.invs);
+    // Old implementation:  was slightly more efficient, but separate code
+    // permitted drift between it an ViewsIteratorIterator.
+    // for (Iterator views_itor = views.iterator(); views_itor.hasNext(); ) {
+    //   PptSlice slice = (PptSlice) views_itor.next();
+    //   result.addAll(slice.invs);
+    // }
+    // // System.out.println(implication_view.invs.size() + " implication invs for " + name + " at " + implication_view.name);
+    // result.addAll(implication_view.invs);
     return result;
   }
 
@@ -2304,10 +2319,26 @@ public class PptTopLevel
   /** An iterator whose elements are themselves iterators that return invariants. **/
   public static final class ViewsIteratorIterator implements Iterator {
     Iterator vitor;
-    public ViewsIteratorIterator(PptTopLevel ppt) { vitor = ppt.views_iterator(); }
-    public boolean hasNext() { return vitor.hasNext(); }
-    public Object next() { return ((PptSlice)vitor.next()).invs.iterator(); }
-    public void remove() { throw new UnsupportedOperationException(); }
+    Iterator implication_iterator;
+    public ViewsIteratorIterator(PptTopLevel ppt) {
+      vitor = ppt.views_iterator();
+      implication_iterator = ppt.implication_view.invs.iterator();
+    }
+    public boolean hasNext() {
+      return (vitor.hasNext() || (implication_iterator != null));
+    }
+    public Object next() {
+      if (vitor.hasNext())
+        return ((PptSlice)vitor.next()).invs.iterator();
+      else {
+        Iterator tmp = implication_iterator;
+        implication_iterator = null;
+        return tmp;
+      }
+    }
+    public void remove() {
+      throw new UnsupportedOperationException();
+    }
   }
 
 

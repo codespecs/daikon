@@ -1,6 +1,7 @@
 package daikon;
 
 import daikon.split.*;
+import utilMDE.Assert;
 
 // Information about a disjunctive program point that represents just part
 // of the data.
@@ -29,10 +30,13 @@ public final class PptConditional
   public PptConditional(PptTopLevel parent, Splitter splitter, boolean splitter_inverse) {
     super(parent.name + ";condition=\"" + (splitter_inverse ? "not(" + splitter.condition() + ")" : splitter.condition()) + "\"",
 	  VarInfo.arrayclone_simple(parent.trace_and_orig_and_const_vars()));
+    // Assert.assert(splitter.instantiated() == false);
     this.parent = parent;
     this.splitter = splitter.instantiate(this);
     this.splitter_inverse = splitter_inverse;
     // this.controlling_ppts.add(parent); // [INCR]
+    // Assert.assert(splitter.instantiated() == false);
+    // Assert.assert(this.splitter.instantiated() == true);
   }
 
   // This is tested after constructing a PptConditional but before

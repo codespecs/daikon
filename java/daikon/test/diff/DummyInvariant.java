@@ -62,7 +62,7 @@ public class DummyInvariant
       return false;
     }
   }
-  
+
   public double computeProbability() {
     return 0;
   }
@@ -75,6 +75,9 @@ public class DummyInvariant
     return repr();
   }
 
+  // IsWorthPrinting should not be overridden by subclasses.
+  // But this subclass is special:  it's not really an invariant,
+  // but is only used for testing.
   public boolean isWorthPrinting() {
     return isWorthPrinting;
   }

@@ -135,6 +135,7 @@ public final class Daikon {
   public static final String output_num_samples_SWITCH = "output_num_samples";
   public static final String noternary_SWITCH = "noternary";
   public static final String config_SWITCH = "config";
+  public static final String config_option_SWITCH = "config_option";
   public static final String debugAll_SWITCH = "debug";
   public static final String debug_SWITCH = "dbg";
   public static final String files_from_SWITCH = "files_from";
@@ -168,17 +169,19 @@ public final class Daikon {
   {
     // Read command line options
     Set[] files = read_options(args);
-    Assert.assert(files.length == 3);
+    Assert.assert(files.length == 4);
     Set decls_files = files[0];  // [File]
     Set dtrace_files = files[1]; // [File]
     Set spinfo_files = files[2]; // [File]
-    
+    Set map_files = files[3];    // [File]
+
     // Set up debug traces
     Logger.setupLogs(Global.debugAll ? Logger.DEBUG : Logger.INFO);
 
     // Load declarations and splitters
     PptMap all_ppts = load_decls_files(decls_files);
     load_spinfo_files(all_ppts, spinfo_files);
+    load_map_files(all_ppts, map_files); // xyxy??? TODO
 
     // Infer invariants
     process_data(all_ppts, dtrace_files);
@@ -222,6 +225,7 @@ public final class Daikon {
     Set decl_files = new HashSet();
     Set dtrace_files = new HashSet();
     Set spinfo_files = new HashSet();
+    Set map_files = new HashSet();
 
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -243,6 +247,7 @@ public final class Daikon {
       new LongOpt(output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(noternary_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(config_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(files_from_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -346,6 +351,10 @@ public final class Daikon {
 	    throw new RuntimeException("Could not open config file " + config_file);
 	  }
           break;
+        } else if (config_option_SWITCH.equals(option_name)) {
+	  String item = g.getOptarg();
+	  Configuration.getInstance().apply(item);
+          break;
         } else if (files_from_SWITCH.equals(option_name)) {
 	  try {
 	    BufferedReader files_from = UtilMDE.BufferedFileReader(g.getOptarg());
@@ -364,6 +373,8 @@ public final class Daikon {
 		dtrace_files.add(file);
 	      } else if (filename.indexOf(".spinfo") != -1) {
 		spinfo_files.add(file);
+	      } else if (filename.indexOf(".map") != -1) {
+		map_files.add(file);
 	      } else {
 		throw new Error("Unrecognized file extension: " + filename);
 	      }
@@ -418,6 +429,8 @@ public final class Daikon {
         dtrace_files.add(file);
       } else if (file.toString().indexOf(".spinfo") != -1) {
 	spinfo_files.add(file);
+      } else if (file.toString().indexOf(".map") != -1) {
+	map_files.add(file);
       } else {
         throw new Error("Unrecognized argument: " + file);
       }
@@ -427,6 +440,7 @@ public final class Daikon {
       decl_files,
       dtrace_files,
       spinfo_files,
+      map_files,
     };
   }
 
@@ -472,8 +486,24 @@ public final class Daikon {
 	e.printStackTrace();
 	throw new Error(e.toString());
       } finally {
-	debugTrace.debug("Time spent on create_splitters: " + elapsedTime());
+	debugTrace.debug("Time spent on load_spinfo_files: " + elapsedTime());
       }
+    }
+  }
+
+  private static void load_map_files(PptMap all_ppts,
+				     Set map_files // [File]
+				     )
+  {
+    elapsedTime(); // reset timer
+    if (!disable_splitting && map_files.size() > 0) {
+      System.out.print("Reading map (context) files ");
+      ContextSplitterFactory.load_mapfiles_into_splitterlist
+	(map_files, ContextSplitterFactory.dkconfig_granularity);
+      System.out.print(" (read ");
+      System.out.print(UtilMDE.nplural(map_files.size(), "file"));
+      System.out.println(")");
+      debugTrace.debug("Time spent on load_map_files: " + elapsedTime());
     }
   }
 
@@ -585,12 +615,14 @@ public final class Daikon {
     }
 
     if (suppress_redundant_invariants_with_simplify) {
-      System.out.print("Invoking Simplify to identify redundant invariants...");
+      System.out.print("Invoking Simplify to identify redundant invariants");
       System.out.flush();
       elapsedTime(); // reset timer
       for (Iterator itor = all_ppts.iterator() ; itor.hasNext() ; ) {
 	PptTopLevel ppt = (PptTopLevel) itor.next();
 	ppt.mark_implied_via_simplify();
+        System.out.print(".");
+        System.out.flush();
       }
       System.out.println(elapsedTime());
     }
@@ -603,12 +635,12 @@ public final class Daikon {
   static public void create_splitters(PptMap all_ppts, Set spinfo_files)
     throws IOException
   {
-    Vector spnames_and_splitters = new Vector();
     for (Iterator i = spinfo_files.iterator(); i.hasNext(); ) {
       File filename = (File) i.next();
-      spnames_and_splitters = SplitterFactory.read_spinfofile(filename, all_ppts);
+      Vector spnames_and_splitters =
+	SplitterFactory.read_spinfofile(filename, all_ppts);
       int siz = spnames_and_splitters.size();
-      Assert.assert(java.lang.Math.IEEEremainder(siz, 2) == 0);
+      Assert.assert(siz % 2 == 0);
       for (int j = 0; j < siz; j+=2) {
 	String pptname = (String) spnames_and_splitters.elementAt(j);
 	pptname.trim();

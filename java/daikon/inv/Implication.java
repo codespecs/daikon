@@ -53,19 +53,19 @@ public class Implication
         && predicate.isSameFormula(consequent)) {
       return null;
     }
-    //eliminate some "uninteresting" implications, like OneOf predicates and 
+    //eliminate some "uninteresting" implications, like OneOf predicates and
     //consequents, which are usually not interesting.
     // JWN adds: Why not use the isInteresting method?  Is it Because
     // you still want Bound invariants?
     if (predicate instanceof OneOf) {
-      if ( ((OneOf) predicate).num_elts() > 1) 
-	return null;
-    } 
-    if (consequent instanceof OneOf) {
-      if ( ((OneOf) consequent).num_elts() > 1) 
+      if ( ((OneOf) predicate).num_elts() > 1)
 	return null;
     }
-    
+    if (consequent instanceof OneOf) {
+      if ( ((OneOf) consequent).num_elts() > 1)
+	return null;
+    }
+
     // Don't add this Implication to the program point if the program
     // point already has this implication.  This is slow and dumb; we
     // should use hashing for O(1) check instead.
@@ -80,7 +80,7 @@ public class Implication
       if (! existing.predicate.format().equals(predicate.format())) continue;
       return null;
     }
-    
+
     return new Implication(ppt.implication_view, predicate, consequent, iff);
   }
 
@@ -116,7 +116,7 @@ public class Implication
       String arrow = (iff ? "  ==  " : "  ==>  "); // "interned"
       return "(" + pred_fmt + ")" + arrow + "(" + consq_fmt + ")";
     } else if (format == OutputFormat.JAVA) {
-      String mid = (iff ? " == " : " || !");
+      String mid = (iff ? " == " : " || !"); // "interned"
       return "(" + consq_fmt + ")" + mid + "(" + pred_fmt + ")";
     } else if (format == OutputFormat.SIMPLIFY) {
       String cmp = (iff ? "IFF" : "IMPLIES");
@@ -135,8 +135,13 @@ public class Implication
   }
 
   public boolean isSameFormula(Invariant other) {
-    return (predicate.isSameFormula(((Implication)other).predicate)
-            && consequent.isSameFormula(((Implication)other).consequent));
+    Implication other_implic = (Implication)other;
+    // Guards are necessary because the contract of isSameFormula states
+    // that the argument is of the same class as the receiver.
+    return (((predicate.getClass() == other_implic.predicate.getClass())
+            && predicate.isSameFormula(other_implic.predicate))
+            && ((consequent.getClass() == other_implic.consequent.getClass())
+            && consequent.isSameFormula(other_implic.consequent)));
   }
 
   /* [INCR]

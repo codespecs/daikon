@@ -38,7 +38,7 @@ public abstract class Invariant
    **/
   public static final Category debugIsWorthPrinting = Category.getInstance ("daikon.inv.Invariant.isWorthPrinting");
 
-  
+
   /**
    * Real number between 0 and 1.  The probability that the invariant
    * occurred by chance must be less than this in order for it to be
@@ -510,7 +510,7 @@ public abstract class Invariant
    * "y=ax+b" do for constants a, b, and c), then this method vacuously
    * returns true.
    *
-   * @exception RuntimeException if other.class != this.class
+   * @exception RuntimeException if other.getClass() != this.getClass()
    **/
   public boolean isSameFormula(Invariant other) {
     return false;
@@ -667,8 +667,8 @@ public abstract class Invariant
   /// Tests about the invariant (for printing)
   ///
 
-  // DO NOT OVERRIDE.  Should be declared "final", but isn't to allow
-  // for easier testing.
+  // DO NOT OVERRIDE.  Should be declared "final", but the "final" is
+  // omitted to allow for easier testing.
   public boolean isWorthPrinting()
   {
     if (debugIsWorthPrinting.isDebugEnabled()) {
@@ -692,7 +692,16 @@ public abstract class Invariant
     // print this one.
     // Use _sorted version for reproducibility.  (There's a bug, but I can't find it.)
     /*
+    if (debugIsWorthPrinting.isDebugEnabled()) {
+      debugIsWorthPrinting.debug("Calling find_controlling_invariants_sorted(" + format() + ")");
+    }
     Vector contr_invs = find_controlling_invariants_sorted();
+    if (debugIsWorthPrinting.isDebugEnabled()) {
+      if (contr_invs.size() == 0) {
+        debugIsWorthPrinting.debug("No controllers for " + format());
+      }
+    }
+
     Vector processed = new Vector();
     while (contr_invs.size() > 0) {
       Invariant contr_inv = (Invariant) contr_invs.remove(0);
@@ -966,22 +975,30 @@ public abstract class Invariant
     // suppress this invariant).
     Vector results = new Vector();
 
-    // System.out.println("find_controlling_invariant: " + format());
+    if (debugIsWorthPrinting.isDebugEnabled()) {
+      debugIsWorthPrinting.debug("find_controlling_invariants: " + format());
+    }
     PptTopLevel pptt = (PptTopLevel) ppt.parent;
 
     // Try to match inv against all controlling invariants
     Iterator controllers = pptt.controlling_ppts.iterator();
     while (controllers.hasNext()) {
       PptTopLevel controller = (PptTopLevel) controllers.next();
-      // System.out.println("Looking for controller of " + format() + " in " + controller.name);
+      if (debugIsWorthPrinting.isDebugEnabled()) {
+        debugIsWorthPrinting.debug("Looking for controller of " + format() + " in " + controller.name);
+      }
       Iterator candidates = controller.invariants_iterator(); // unstable
       while (candidates.hasNext()) {
 	Invariant cand_inv = (Invariant) candidates.next();
 	if (isSameInvariant(cand_inv)) {
-	  // System.out.println("Controller found: " + cand_inv.format() + " [worth printing: " + cand_inv.isWorthPrinting() + "]]");
+          if (debugIsWorthPrinting.isDebugEnabled()) {
+            debugIsWorthPrinting.debug("Controller found: " + cand_inv.format() + " [worth printing: " + cand_inv.isWorthPrinting() + "]]");
+          }
 	  results.add(cand_inv);
 	}
-        // System.out.println("Failed candidate: " + cand_inv.format());
+        if (debugIsWorthPrinting.isDebugEnabled()) {
+          debugIsWorthPrinting.debug("Failed candidate: " + cand_inv.format());
+        }
       }
     }
 
@@ -1096,7 +1113,7 @@ public abstract class Invariant
 
       int result = inv1.format().compareTo(inv2.format());
 
-      Assert.assert(result != 0, "isSameInvariant() returned false, " + 
+      Assert.assert(result != 0, "isSameInvariant() returned false, " +
                     "but compareTo() returned 0");
 
       return result;

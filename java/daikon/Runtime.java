@@ -44,6 +44,13 @@ public final class Runtime {
   /// Printing
   ///
 
+  // This flag is used to suppress output during reentrant
+  // instrumentation; for example, when outputting the elements of an
+  // instrumented List-derived object, we don't want to start
+  // outputting the program points in the size()/get() methods of the
+  // List object.
+  public static int ps_count = 0;
+
   public static final class PrintStreamWithThrottle extends PrintStream
   {
     // Use "count <= 1" for compatibility with older dfej
