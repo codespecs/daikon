@@ -135,9 +135,9 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	    istream.close();
 	    return pptMap;
 	} catch (Exception e) {
-	    if (e.getClass().getName().equals( "java.io.FileNotFoundException" ))
+	    if (e.getClass() == java.io.FileNotFoundException.class)
 		System.out.println( "Error: invariants object file not found." );
-	    else if (e.getClass().getName().equals( "java.io.StreamCorruptedException" ))
+	    else if (e.getClass() == java.io.StreamCorruptedException.class)
 		System.out.println( "Error: invariants object file is corrupted." );
 	    else
 		System.out.println( "Error: " + e.getMessage() );
@@ -162,7 +162,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	JMenu menu = new JMenu( "File" );
 	menu.setMnemonic( KeyEvent.VK_F );
 	menuBar.add( menu );
-	JMenuItem menuItem = new JMenuItem( "Load", KeyEvent.VK_L );
+	JMenuItem menuItem = new JMenuItem( "Load file", KeyEvent.VK_L );
 	menuItem.addActionListener( this );
 	menu.add( menuItem );
 	menuItem = new JMenuItem( "Quit", KeyEvent.VK_Q );
@@ -218,7 +218,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 
     public void actionPerformed( ActionEvent e ) {
 	String menuName = ((JMenuItem) (e.getSource())).getText();
-	if (menuName.equals( "Load" )) {
+	if (menuName.equals( "Load file" )) {
 	    String invFileName = pickFileFromFileChooser();
 	    loadInvariantsFromFile( invFileName );
 	}
@@ -299,15 +299,11 @@ class InvariantTablesPanel implements TreeSelectionListener, ItemListener {
 
 	    //  A leaf node (PptTopLevel node) was selected or deselected.  Add or remove
 	    //  the appropriate invariant tables.
-	    if (userObject.getClass().getName().equals( "daikon.PptTopLevel" )) {
-		String name = ((PptTopLevel) userObject).name;
+	    if (userObject.getClass() == daikon.PptTopLevel.class) {
 		if (e.isAddedPath( paths[i] )) {
-		    JComponent tableContainer = setupTable( (PptTopLevel) userObject );
-		    tables.add( tableContainer );
-		    tableNames.add( name );
-		    tableHeights.add( new Integer( (int) tableContainer.getPreferredSize().getHeight()));
-		}
-		else {		// paths[i] was deselected -- it should be in invariantTableNames.
+		    setupTable( (PptTopLevel) userObject );
+		} else {	// paths[i] was deselected -- it should be in invariantTableNames.
+		    String name = ((PptTopLevel) userObject).name;
 		    int index = tableNames.indexOf( name );
 		    if (index == -1)
 			throw new Error( "DaikonTreeSelectionListener.valueChanged(): " + name + " table not found." );
@@ -315,6 +311,7 @@ class InvariantTablesPanel implements TreeSelectionListener, ItemListener {
 		    tables.remove( index );
 		    tableNames.remove( index );
 		    tableHeights.remove( index );
+		    tableModels.remove( index );
 		}
 
 		//  A non-leaf node was selected or deselected.  Select or deselect its children.
@@ -338,7 +335,7 @@ class InvariantTablesPanel implements TreeSelectionListener, ItemListener {
 	if (leadPath == null)
 	    leadPath = (TreePath) e.getOldLeadSelectionPath();
 	DefaultMutableTreeNode leadNode = (DefaultMutableTreeNode) leadPath.getLastPathComponent();
-	if (leadNode.getUserObject().getClass().getName().equals( "daikon.PptTopLevel" ))
+	if (leadNode.getUserObject().getClass() == daikon.PptTopLevel.class)
 	    lastTableName = ((PptTopLevel) leadNode.getUserObject()).name;
 	else {			//  The last selected node was not a leaf node -- ie, it was a method or a class node.
 	                        //  If any of this node's children are selected, display their table.
@@ -346,7 +343,7 @@ class InvariantTablesPanel implements TreeSelectionListener, ItemListener {
 	    for (Enumeration enum = leadNode.children(); enum.hasMoreElements(); ) {
 		child = (DefaultMutableTreeNode) enum.nextElement();
 		if (treeSelectionModel.isPathSelected( leadPath.pathByAddingChild( child )))
-		    if (child.getUserObject().getClass().getName().equals( "daikon.PptTopLevel" )) {
+		    if (child.getUserObject().getClass() == daikon.PptTopLevel.class) {
 			lastTableName = ((PptTopLevel) child.getUserObject()).name;
 			break;
 		    }
@@ -364,10 +361,9 @@ class InvariantTablesPanel implements TreeSelectionListener, ItemListener {
 	panel.revalidate();
     }
 
-    private JComponent setupTable( PptTopLevel topLevel ) {
+    private void setupTable( PptTopLevel topLevel ) {
 	List invariants = new ArrayList( topLevel.invariants_vector());
 	InvariantTableModel tableModel = new InvariantTableModel( invariants, invariantFilters );
-	tableModels.add( tableModel );
 	TableSorter sorter = new TableSorter( tableModel );
 	JTable table = new JTable( sorter );
 	sorter.addMouseListenerToHeaderInTable( table );
@@ -375,15 +371,13 @@ class InvariantTablesPanel implements TreeSelectionListener, ItemListener {
 	//  Make invariant column (first column) wider.
 	for (int i = 0; i < table.getColumnCount(); i++) {
 	    TableColumn column = table.getColumnModel().getColumn( i );
-	    if (i == 0)		column.setPreferredWidth( 150 );
+	    if (i == 0)		column.setPreferredWidth( 200 );
 	    else		column.setPreferredWidth( 10 );
 	}
 
 	//  These tables have to appear in scrollPane's, or the headings won't show up.
 	JScrollPane scrollPane = new JScrollPane( table );
-	int width = table.getPreferredSize().width;
-	int height = table.getPreferredSize().height + table.getRowHeight();
-	scrollPane.setPreferredSize( new Dimension( width, height ));
+	resizeScrollPane( scrollPane );
 
 	JPanel tablePanel = new JPanel();
 	tablePanel.setLayout( new BoxLayout( tablePanel, BoxLayout.Y_AXIS ));
@@ -407,21 +401,37 @@ class InvariantTablesPanel implements TreeSelectionListener, ItemListener {
 	tablePanel.setBorder( BorderFactory.createCompoundBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ),
 								  BorderFactory.createEtchedBorder()));
 	panel.add( tablePanel );
-	return tablePanel;
+
+	this.tables.add( tablePanel );
+	this.tableNames.add( topLevel.name );
+	this.tableHeights.add( new Integer( (int) tablePanel.getPreferredSize().getHeight()));
+	this.tableModels.add( tableModel );
     }
 
     public void itemStateChanged( ItemEvent e ) {
 	String filterID = ((JCheckBox) e.getItem()).getName();
-	boolean shouldTurnOn = (e.getStateChange() == ItemEvent.DESELECTED);
-	invariantFilters.changeFilterSetting( filterID, shouldTurnOn );
-	for (Iterator iter = tableModels.iterator(); iter.hasNext(); ) {
-	    InvariantTableModel tableModel = (InvariantTableModel) iter.next();
+	boolean turnOn = (e.getStateChange() == ItemEvent.DESELECTED);
+	invariantFilters.changeFilterSetting( filterID, turnOn );
+	for (int i = 0; i < tableModels.size(); i++ ) {
+	    InvariantTableModel tableModel = (InvariantTableModel) tableModels.get( i );
 	    tableModel.updateInvariantList( invariantFilters );
+	    JPanel panel = (JPanel) tables.get( i );
+	    JScrollPane scrollPane = (JScrollPane) panel.getComponent( panel.getComponentCount() - 1 );
+	    resizeScrollPane( scrollPane );
+	    tableHeights.set( i, new Integer( (int) panel.getPreferredSize().getHeight()));
 	}
+	
 	panel.repaint();
 	panel.revalidate();
     }
 
+    void resizeScrollPane( JScrollPane scrollPane ) {
+	JTable table = (JTable) scrollPane.getViewport().getView();
+	int width = table.getPreferredSize().width;
+	int height = table.getPreferredSize().height + table.getRowHeight();
+	scrollPane.setPreferredSize( new Dimension( width, height ));
+    }
+    
     void scrollToCurrentTable() {
 	int height = 0;
 	for (int i=0; i < currentTableIndex; i++)
@@ -511,10 +521,9 @@ public class InvariantFilters {
 	return true;
     }
     
-    public void changeFilterSetting( String filterID, boolean shouldTurnOn ) {
-	//  filterID is one of { UNJUSTIFIED_FILTER, OBVIOUS_FILTER, ... }
+    public void changeFilterSetting( String filterID, boolean turnOn ) {
 	InvariantFilter filter = (InvariantFilter) filters.get( filterID );
-	if (shouldTurnOn)
+	if (turnOn)
 	    filter.turnOn();
 	else
 	    filter.turnOff();
@@ -558,4 +567,3 @@ class ObviousFilter extends InvariantFilter {
 	return invariant.isObvious();
     }
 }
-
