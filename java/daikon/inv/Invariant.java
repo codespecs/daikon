@@ -320,8 +320,6 @@ public abstract class Invariant
    * @see #flow(Invariant)
    **/
   public void destroy() {
-    if (logOn())
-      log ("destroy");
     falsified = true;
     if (logOn() || PptSlice.debugFlow.isLoggable(Level.FINE))
       log (PptSlice.debugFlow, "Destroyed " + format());
@@ -342,7 +340,7 @@ public abstract class Invariant
   }
 
   /**
- * Essentially the same as flow(this).  Useful way to flow oneself
+   * Essentially the same as flow(this).  Useful way to flow oneself
    * without much hassle (as long as internal state is still OK).
    * Nice point of control in case we later have to tweak things when
    * flowing ourselves.
@@ -369,11 +367,8 @@ public abstract class Invariant
    * this to list of falsified or weakened invariants.
    **/
   public void destroyAndFlow () {
-    if (debugFlow.isLoggable(Level.FINE) || this.logOn()) {
-      debugFlow.fine (repr() + " at " + ppt.parent.name +
-                      " added to destroyed.");
-      this.log(repr() + " at " + ppt.parent.name +
-               " added to destroyed.");
+    if (debugFlow.isLoggable(Level.FINE) || logOn()) {
+      log (debugFlow, "added to destroyed.");
     }
     flowThis();
     destroy();
@@ -391,15 +386,13 @@ public abstract class Invariant
   public void cloneAndFlow() {
     // We must still do this to check suppression
     ppt.addToChanged (this);
-    if (debugFlow.isLoggable(Level.FINE) || this.logOn()) {
-      debugFlow.fine (repr() + " at " + ppt.parent.name + " added to changed.");
-      this.log(repr() + " at " + ppt.parent.name + " added to changed.");
+    if (debugFlow.isLoggable(Level.FINE) || logOn()) {
+      log (debugFlow, " added to changed.");
     }
 
     if (!flowed) {
-      if (debugFlow.isLoggable(Level.FINE) || this.logOn()) {
-        debugFlow.fine (repr() + " at " + ppt.parent.name + " added to flowed.");
-        this.log(repr() + " at " + ppt.parent.name + " added to flowed.");
+      if (debugFlow.isLoggable(Level.FINE) || logOn()) {
+        log (debugFlow, repr() + " added to flowed.");
       }
       flowClone();
       flowed = true;
