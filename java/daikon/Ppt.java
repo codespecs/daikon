@@ -29,7 +29,13 @@ import utilMDE.*;
 // The common interface for all Ppt objects.
 public abstract class Ppt implements java.io.Serializable {
 
-  public String name;
+  public final String name;
+  public final PptName ppt_name;
+
+  protected Ppt(String name) {
+    this.name = name;
+    ppt_name = new PptName(name);
+  }
 
   public VarInfo[] var_infos;
 
@@ -177,22 +183,16 @@ public abstract class Ppt implements java.io.Serializable {
     return ppt_name.substring(0, fn_name_end).intern();
   }
 
-  // As of 1/31/2000, only called by varNames().
-  /** Put a string representation of the variable names in the StringBuffer. */
-  public void varNames(StringBuffer sb) {
-    // System.out.println("this=" + this);
-    // System.out.println("in varNames(): var_infos = " + var_infos + " = " + this.var_infos);
-    // System.out.println(var_infos);
-    // System.out.println(var_infos[0]);
-    // System.out.println(var_infos[0].name);
+  public static String varNames(VarInfo[] infos) {
+    StringBuffer sb = new StringBuffer();
     sb.append("(");
-    sb.append(var_infos[0].name);
-    // System.out.println("about to loop");
-    for (int i=1; i<var_infos.length; i++) {
+    sb.append(infos[0].name);
+    for (int i=1; i<infos.length; i++) {
       sb.append(", ");
-      sb.append(var_infos[i].name);
+      sb.append(infos[i].name);
     }
     sb.append(")");
+    return sb.toString();
   }
 
   // Cache, so the value doesn't have to be repeatedly recomputed.
@@ -201,9 +201,7 @@ public abstract class Ppt implements java.io.Serializable {
   /** Return a string representation of the variable names. */
   public String varNames() {
     if (varNames == null) {
-      StringBuffer sb = new StringBuffer();
-      varNames(sb);
-      varNames = sb.toString();
+      varNames = varNames(var_infos);
     }
     return varNames;
   }

@@ -21,14 +21,11 @@ public final class PptConditional extends PptTopLevel {
   // more efficient to do that for two PptConditional objects at once.
 
   public PptConditional(PptTopLevel parent, Splitter splitter, boolean splitter_inverse) {
-    super(parent.name, VarInfo.arrayclone_simple(parent.trace_and_orig_and_const_vars()));
+    super(parent.name + ";condition=\"" + (splitter_inverse ? "not(" + splitter.condition() + ")" : splitter.condition()) + "\"",
+	  VarInfo.arrayclone_simple(parent.trace_and_orig_and_const_vars()));
     this.parent = parent;
     this.splitter = splitter.instantiate(this);
     this.splitter_inverse = splitter_inverse;
-    String splitter_formatted = splitter.condition();
-    if (splitter_inverse)
-      splitter_formatted = "not(" + splitter_formatted + ")";
-    name = name + ";condition=\"" + splitter_formatted + "\"";
   }
 
   // This is tested after constructing a PptConditional but before

@@ -111,7 +111,7 @@ public class PptTopLevel extends Ppt {
   // Invariants invs;
 
   PptTopLevel(String name, VarInfo[] var_infos) {
-    this.name = name;
+    super(name);
     this.var_infos = var_infos;
     int val_idx = 0;
     num_static_constant_vars = 0;
@@ -1494,15 +1494,17 @@ public class PptTopLevel extends Ppt {
     Assert.assert(inv.ppt.parent == this);
 
     // Try to match inv against all controlling invariants
-    Vector candidates = new Vector();
     Iterator controllers = controlling_ppts.iterator();
     while (controllers.hasNext()) {
       PptTopLevel controller = (PptTopLevel) controllers.next();
-      Vector object_invs = controller.invariants_vector();
-      candidates.addAll(object_invs);
+      Vector cont_invs = controller.invariants_vector();
+
+      Invariant result = find_same_invariant(cont_invs.iterator(), inv);
+      if (result != null)
+	return result;
     }
 
-    return find_same_invariant(candidates.iterator(), inv);
+    return null;
   }
 
   // TODO: These next two methods are static and can be move into

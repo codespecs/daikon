@@ -50,7 +50,7 @@ public abstract class PptSlice extends Ppt {
 
 
   PptSlice(Ppt parent, VarInfo[] var_infos) {
-    super();
+    super(parent.name + varNames(var_infos));
     this.parent = parent;
     this.var_infos = var_infos;
     // System.out.println("in PptSlice(): this=" + this);
@@ -61,7 +61,6 @@ public abstract class PptSlice extends Ppt {
     // Ensure that the VarInfo objects are in order (and not duplicated).
     for (int i=0; i<var_infos.length-1; i++)
       Assert.assert(var_infos[i].varinfo_index < var_infos[i+1].varinfo_index);
-    name = parent.name + varNames();
     arity = var_infos.length;
     value_indices = new int[arity];
     for (int i=0; i<arity; i++)
