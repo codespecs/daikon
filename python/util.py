@@ -1,6 +1,6 @@
 ### util.py -- Michael Ernst's Python utilities
 
-import math, operator, time, types, re
+import math, operator, posix, string, tempfile, time, types, re, whrandom
 
 true = (1==1)
 false = (1==0)
@@ -60,6 +60,7 @@ def _test_gcd():
 
 
 def gcd_list(nums):
+    """Return the greatest common divisor of the elements of NUMS."""
     if len(nums) == 0:
         raise "No numbers passed to gcd()"
     result = nums[0]
@@ -79,6 +80,49 @@ def _test_gcd_list():
     assert gcd_list([768, 324]) == 12
     assert gcd_list([2400, 48, 36]) == 12
     assert gcd_list([2400, 72, 36]) == 12
+
+
+###########################################################################
+### Random numbers
+###
+
+def random_subset(set, size):
+    """Return a randomly-chosen subset of list or tuple SET of size SIZE."""
+    total_size = len(set)
+
+    if size < 0 or size > total_size:
+        raise "Bad goal size %d passed to random_subset; original set has size %d" % (size, total_size)
+
+    if size < total_size/2:
+        chosen = {}
+        while len(chosen) < size:
+            chosen[set[whrandom.randint(0, total_size-1)]] = 1
+        result = filter(lambda f, c=chosen: c.has_key(f), set)
+    else:
+        # If we ask for (say) 4999 of 5000 items, the above could iterate
+        # a long time while inserting the last one.
+        num_omitted = total_size - size
+        omitted = {}
+        while len(omitted) < num_omitted:
+            omitted[set[whrandom.randint(0, total_size-1)]] = 1
+        result = filter(lambda f, o=omitted: not(o.has_key(f)), set)
+
+    return result
+
+# I wish there was a way to save away the random state so I could restore
+# it after calling this.
+# def _test_random_subset():
+#     whrandom.seed(3, 14, 67)
+#     a_to_j = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j')
+#     assert random_subset(a_to_j, 5) == ('a', 'b', 'c', 'h', 'i')
+#     assert random_subset(a_to_j, 5) == ('a', 'g', 'h', 'i', 'j')
+#     assert random_subset(a_to_j, 5) == ('a', 'b', 'c', 'g', 'j')
+#     assert random_subset(a_to_j, 0) == ()
+#     assert random_subset(a_to_j, 1) == ('c',)
+#     assert random_subset(a_to_j, 2) == ('i', 'j')
+#     assert random_subset(a_to_j, 8) == ('b', 'c', 'd', 'f', 'g', 'h', 'i', 'j')
+#     assert random_subset(a_to_j, 9) == ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'i', 'j')
+#     assert random_subset(a_to_j, 10) == a_to_j
 
 
 ###########################################################################
@@ -146,6 +190,37 @@ def _test_sorted_list_difference():
     assert sorted_list_difference([1,5,6], [1,2,3,4,5,6]) == []
     assert sorted_list_difference([1,5,6], [0,1,2,3,4,6,7]) == [5]
     assert sorted_list_difference([1,2,5,6], [2,3,4,5]) == [1, 6]
+
+# I have a feeling this implementation could be substantially improved
+# (both performance and style).
+def sorted_list_intersection(a, b):
+    amax = len(a)
+    bmax = len(b)
+    if amax == 0 or bmax == 0:
+        return []
+    aindex = 0; bindex = 0
+    result = []
+    while (aindex < amax) and (bindex < bmax):
+        acurr = a[aindex]; bcurr = b[bindex]
+        comparison = cmp(acurr,bcurr)
+        if comparison == 0:
+            result.append(acurr)
+	    aindex = aindex+1
+            bindex = bindex+1
+        elif comparison < 0:
+            aindex = aindex+1
+        else:
+            assert comparison > 0
+            bindex = bindex+1
+    return result
+
+def _test_sorted_list_intersection():
+    assert sorted_list_intersection([1,2,3,4,5,6], [2,4,6]) == [2, 4, 6]
+    assert sorted_list_intersection([1,2,3,4,5,6], [1,2,3]) == [1, 2, 3]
+    assert sorted_list_intersection([1,5,6], [1,2,3,4,5,6]) == [1, 5, 6]
+    assert sorted_list_intersection([1,5,6], [0,1,2,3,4,6,7]) == [1, 6]
+    assert sorted_list_intersection([1,2,5,6], [2,3,4,5]) == [2, 5]
+
 
 # There MUST be a better way to do this!
 def same_elements_setwise(seq1, seq2):
@@ -495,6 +570,79 @@ def timing(f, n, a):
 
 
 ###########################################################################
+### Memory usage
+###
+
+# On both Linux and Solaris, "getrusage" reports zero pages in use, when
+# called from Python, C, or the command line, even if I have just allocated
+# tens of megabytes of memory.  The "ps" and "top" programs do work, however;
+# this implementation uses "ps".
+
+def memory_usage(pid = posix.getpid()):
+    """Return the number of kilobytes of virtual memory used by process PID
+    (by default, the current process)."""
+    os = posix.uname()[0]
+    if os == 'SunOS':
+        # On Solaris, do
+        #   % /usr/bin/ps -p 12162 -o vsz,osz,rss,pmem
+        #    VSZ   SZ  RSS %MEM
+        #   37360 4670 35272 18.5
+        # where the options mean the following (and VSZ is what I want):
+        #      vsz         The size of the process in (virtual)  memory  in
+        #                  kilobytes as a decimal integer.
+        #      osz         The size (in pages) of the  swappable  process's
+        #                  image in main memory.
+        #      rss         The resident set size of the process,  in  kilo-
+        #                  bytes as a decimal integer.
+        #      pmem        The ratio of the process's resident set size  to
+        #                  the physical memory on the machine, expressed as
+        #                  a percentage.
+
+        tfilename = tempfile.mktemp()
+        # Ought to check return status of command
+        posix.system("/usr/bin/ps -p %d -o vsz > %s" % (pid, tfilename))
+        tfile = open(tfilename, "r")
+        line = tfile.readline()
+        assert line == " VSZ\n"
+        vsize = int(string.strip(tfile.readline()))
+        tfile.close()
+        posix.unlink(tfilename)
+    elif os == 'Linux':
+        # On Linux, do
+        # % /bin/ps -mp 24335
+        #   PID TTY MAJFLT MINFLT   TRS   DRS  SIZE  SWAP   RSS  SHRD   LIB  DT COMMAND
+        # 24335  qd  13965  13667     6 11482 13672  2184 11488     9     0 11476 /uns/bin/p
+        # and the SIZE field is what I want (it is code+data+stack).
+
+        tfilename = tempfile.mktemp()
+        # Ought to check return status of command
+        posix.system("/bin/ps -mp %d > %s" % (pid, tfilename))
+        tfile = open(tfilename, "r")
+        line = tfile.readline()
+        assert line == "  PID TTY MAJFLT MINFLT   TRS   DRS  SIZE  SWAP   RSS  SHRD   LIB  DT COMMAND\n"
+        vsize = int(string.split(string.strip(tfile.readline()))[6])
+        tfile.close()
+        posix.unlink(tfilename)
+    else:
+        raise "memory_usage does not understand operating system %s; please teach it" % os
+
+    return vsize
+
+
+###########################################################################
+### Files
+###
+
+def expand_file_name(filename):
+    def env_repl(matchobj):
+        return posix.environ[matchobj.group(0)[1:]]
+    filename = re.sub(r'^~/', '$HOME/', filename)
+    filename = re.sub(r'^~', '/homes/fish/', filename)
+    filename = re.sub(r'\$[a-zA-Z_]+', env_repl, filename)
+    return filename
+
+
+###########################################################################
 ### Tests
 ###
 
@@ -504,6 +652,7 @@ def _test():
     _test_gcd()
     _test_gcd_list()
     _test_sorted_list_difference()
+    _test_sorted_list_intersection()
     _test_slice_by_sequence()
     _test_sorted_list_min_gap()
     _test_list_differences()
