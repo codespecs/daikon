@@ -18,7 +18,9 @@ JAVAC ?= javac -g
 # This command should run after the AUTO_GENERATED_FILES are generated, or
 # else AUTO_GENERATED_FILES should be appended to it (without duplication).
 # In practice, this is good enough, however.
-JAVA_FILES := $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -path './jakarta-oro*/src/java/examples' -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name 'ajax-ship' -o -name '\.\#*' \) -prune -o -name '*.java' -print)
+# Creates a symlink to ajax if it does not exist, so the ajax .java
+# files get compiled as well.
+JAVA_FILES := $(shell [ ! -L ajax ] && ln -s ajax-ship/ajax .; find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -path './jakarta-oro*/src/java/examples' -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name 'ajax-ship' -o -name '\.\#*' \) -prune -o -name '*.java' -print)
 TAG_FILES := $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -name ajax \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
 
 AUTO_GENERATED_FILES = \
@@ -73,7 +75,8 @@ all:	all_directly junit
 all_via_daikon: daikon/Daikon.class daikon/Runtime.class daikon/Diff.class
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
-all_directly: ${AUTO_GENERATED_FILES} ajax
+# all_directly: ${AUTO_GENERATED_FILES} ajax
+all_directly: ${AUTO_GENERATED_FILES}
 	@echo ${JAVAC} '*.java ...'
 	@${JAVAC} ${JAVA_FILES}
 	@chmod -w ${AUTO_GENERATED_FILES}
@@ -114,8 +117,10 @@ daikon/Diff.class: Diff.java ${AUTO_GENERATED_FILES}
 daikon/Runtime.class: daikon/Runtime.java
 	${JAVAC} daikon/Runtime.java
 
-ajax:
-	ln -s ajax-ship/ajax .
+# No longer needed because symlink is created when setting the
+# JAVA_FILES variable
+#ajax:
+#	ln -s ajax-ship/ajax .
 
 
 ###########################################################################
