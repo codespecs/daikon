@@ -25,8 +25,8 @@ public final class FeatureExtractor {
   // Main reads the input files, extracts features and then
   //   outputs the labeling in SVM-Light, SVMfu, or C5.0 format.
   //   Arguments:
-  //   -u FileName:   an invMap inv file with useful invariants
-  //   -n FileName:   an invMap inv file with nonuseful invariants
+  //   -u FileName:   an InvMap inv file with useful invariants
+  //   -n FileName:   an InvMap inv file with nonuseful invariants
   //   -o FileName:   output file name *Required
   //   -t Type:       Type is one of {SVMlight, SVMfu, C5} *Required
   //   -s FileName:   name of output file for invariant descriptions
