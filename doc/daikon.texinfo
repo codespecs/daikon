@@ -4888,6 +4888,18 @@ ends its representation.  If it does, then Daikon looks at the
 collection's size and at the collection's size-1 as "interesting"
 values.  If it doesn't, then Daikon only looks at the collection's
 size.
+
+@item
+isParam: whether a given variable is a parameter to a method.  If a
+variable is a parameter, Daikon avoids printing some information that
+would be considered uninteresting for parameters.  First, invariants
+that use the parameter variable "p" in its post-state form are not
+printed.  Second, invariants that use fields of p (such as "p.x") are
+printed only if p has not changed.  Lastly, some immutable
+characteristics, such as the size of arrays and data types are not
+printed (both can be changed if p is changed, but then, p would no
+longer be interesting).
+
 @end itemize
 
 @item
