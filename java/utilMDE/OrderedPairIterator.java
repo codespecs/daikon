@@ -7,9 +7,11 @@ import java.util.*;
  * sequence/iterator/whatever which pairs the matching elements of the
  * inputs.
  *
+ * Requires that the elements in the input iterators be sorted in the
+ * same order.
+ *
  * It's not clear that this is always the right thing to do; you might
- * find it more convenient to use use set intersection/difference.
- */
+ * find it more convenient to use use set intersection/difference.  */
 public class OrderedPairIterator implements java.util.Iterator {
 
   Iterator itor1, itor2;
