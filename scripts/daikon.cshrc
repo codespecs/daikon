@@ -1,5 +1,6 @@
 ## daikon.cshrc
-## Daikon initialization file for C shell (csh and tcsh) users
+## Daikon initialization file for C shell (csh and tcsh) users.
+## This file should be kept in synch with daikon.bashrc.
 
 ## Set this directory to the directory containing "daikon".
 setenv DAIKONPARENT /path/to/parent/of/daikon
