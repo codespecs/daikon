@@ -23,10 +23,10 @@ public class CountingPrintWriter extends PrintWriter {
   private int writtenBytes;
   /** number of printed bytes using 'print' & 'println' methods */
   private int printedBytes;
-  /** number of printed chars using 'print' & 'println' methods */
-  private int printedChars;
   /** number of written chars using write methods */
   private int writtenChars;
+  /** number of printed chars using 'print' & 'println' methods */
+  private int printedChars;
 
   // Constructors
 
@@ -317,7 +317,7 @@ public class CountingPrintWriter extends PrintWriter {
    */
   public void println(String x) {
     print(x);
-    println(x);
+    println();
   }
 
 

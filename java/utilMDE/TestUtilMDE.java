@@ -1835,6 +1835,10 @@ public final class TestUtilMDE extends TestCase {
     Assert.assertTrue(c1.getNumberOfPrintedBytes() == 9);
     Assert.assertTrue(c1.getNumberOfWrittenBytes() == 22);
     Assert.assertTrue(c1.getNumberOfPrintedChars() == 9);
+    c1.println("foo");
+    Assert.assertTrue(c1.getNumberOfPrintedBytes() == 13);
+    Assert.assertTrue(c1.getNumberOfWrittenBytes() == 28);
+    Assert.assertTrue(c1.getNumberOfPrintedChars() == 13);
   }
 
 
