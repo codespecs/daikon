@@ -244,7 +244,7 @@ edit_bug()
 
     report=.report
 
-    cvs diff $BUGFILE >$report
+    cvs diff -C0 $BUGFILE >$report 2>/dev/null
 
     checkin changed $BUGFILE || die "aborting."
     
