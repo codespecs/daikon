@@ -49,6 +49,7 @@ public class JTrace
 	    return;
 
 	// Crank up the system (load the libJTrace.so debugger)
+	println(V_INFO, "JTrace: loading shared library.");
 	System.loadLibrary("JTrace");
 
 	JTrace.verbosity = getVerbosity();
@@ -222,13 +223,19 @@ public class JTrace
     {
 	if(verb > verbosity) return;
 	System.err.println(msg);
+	System.err.flush();
     }
     static void print(int verb, String msg)
     {
 	if(verb > verbosity) return;
 	System.err.print(msg);
+	System.err.flush();
     }
 
+    /**
+     * The verbosity is actually determined by libJTrace, the shared
+     * library.  Changing it here will have no effect.
+     **/
     private static int	verbosity = 0;
 }
 
