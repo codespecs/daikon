@@ -254,7 +254,7 @@ OLD_AUTO_GENERATED_FILES = \
 	daikon/inv/unary/sequence/SingleScalarSequenceFactory.java \
 	daikon/inv/unary/sequence/SingleFloatSequenceFactory.java \
 	daikon/inv/ternary/threeScalar/ThreeScalarFactory.java \
-    daikon/inv/binary/sequenceString/Member.java
+	daikon/inv/binary/sequenceString/Member.java
 
 
 OLD_AUTO_GENERATED_CLASSES = $(subst .java,.class,${OLD_AUTO_GENERATED_FILES})
@@ -286,7 +286,7 @@ all_via_daikon: daikon/Daikon.class daikon/Runtime.class daikon/Diff.class
 # all_directly: ${AUTO_GENERATED_FILES} ajax
 all_directly: ${AUTO_GENERATED_FILES}
 	@echo ${JAVAC_COMMAND} '*.java ...'
-	@${JAVAC_COMMAND} ${JAVA_FILES}
+	${JAVAC_COMMAND} ${JAVA_FILES}
 	@chmod -w ${AUTO_GENERATED_FILES}
 	$(MAKE) all_pass2
 
@@ -391,7 +391,7 @@ findbugs: .findbugs-output
 	rm -f findbugs-output
 	~mernst/tmp/findbugs/bin/findbugs -emacs -textui -exclude .findbugs-exclude.xml -maxHeap 750 ../daikon.jar | tee .findbugs-output
 
-../daikon.jar: ${JAVA_FILES}
+../daikon.jar: ${JAVA_FILES} compile
 	cd .. && $(MAKE) daikon.jar
 
 checkstyle: checkstyle-cs checkstyle-sun
