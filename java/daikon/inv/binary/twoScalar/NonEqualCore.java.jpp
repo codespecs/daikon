@@ -33,6 +33,7 @@ import daikon.*;
 import daikon.inv.*;
 import utilMDE.*;
 import java.io.Serializable;
+import java.util.*;
 
 
 public final class CLASSNAME
@@ -183,4 +184,39 @@ public final class CLASSNAME
     return false;
   }
 
+  /**
+   * Suppress is not ok since we keep track of min/max values
+   */
+  public boolean inProcessSuppressOk() {
+    return false;
+  }
+
+  /**
+   * Merge the NonEqual cores in cores to form a new core.  This only
+   * needs to merge the values for min1, min2, max1, max2, and samples
+   * across the cores.  The merged core is returned.
+   */
+  public CLASSNAME merge (List cores, Invariant wrapper) {
+
+    // Get a clone of the first core
+    CLASSNAME first = (CLASSNAME) ((CLASSNAME) cores.get (0)).clone();
+    first.wrapper = wrapper;
+
+    // Loop through the remaining cores, modifying min/max as necessary and
+    // incrementing samples
+    for (int i = 1; i < cores.size(); i++) {
+      CLASSNAME c = (CLASSNAME) cores.get (i);
+      if (c.min1 < first.min1)
+        first.min1 = c.min1;
+      if (c.max1 > first.max1)
+        first.max1 = c.max1;
+      if (c.min2 < first.min2)
+        first.min2 = c.min2;
+      if (c.max2 > first.max2)
+        first.max2 = c.max2;
+      first.samples += c.samples;
+    }
+
+    return (first);
+  }
 }
