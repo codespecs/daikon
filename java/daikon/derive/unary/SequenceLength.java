@@ -26,7 +26,10 @@ public final class SequenceLength extends UnaryDerivation {
 		    (vi.derived instanceof StringSequencesIntersection) ||
 		    (vi.derived instanceof ScalarSequencesIntersection) ||
 		    (vi.derived instanceof StringSequencesUnion) ||
-		    (vi.derived instanceof ScalarSequencesUnion));
+		    (vi.derived instanceof ScalarSequencesUnion) ||
+		    (vi.derived instanceof SequencesConcat)      ||
+		    (vi.derived instanceof SequencesJoin)
+		    );
       return false;
     }
     // Don't do this for now, because we depend on being able to call
