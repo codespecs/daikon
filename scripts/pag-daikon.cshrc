@@ -12,7 +12,7 @@ setenv DAIKONCLASS_SOURCES 1
 
 ## Set this directory to the directory containing the JDK.
 # Simplify to just the first branch after the AFS move is done.
-if (-e /afs/csail/group/pag/software) then
+if (-r /afs/csail/group/pag/software) then
     if (! $?JDKDIR) setenv JDKDIR /afs/csail/group/pag/software/pkg/jdk
 else
     if (! $?JDKDIR) setenv JDKDIR /g2/jdk
