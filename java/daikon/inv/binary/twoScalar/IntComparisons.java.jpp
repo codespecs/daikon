@@ -204,6 +204,10 @@ public final class INTEQUAL
       }
     }
 
+#if 0
+This code needs to be re-inserted later, to avoid instantiation of certain
+invariants.
+
     boolean only_eq = false;
     boolean obvious_lt = false;
     boolean obvious_gt = false;
@@ -266,6 +270,7 @@ public final class INTEQUAL
         }
       }
     }
+#endif
 
     return new INTEQUAL(ppt);
   }

@@ -16,7 +16,7 @@ public final class ThreeFloatFactory {
   /**
    * Debug tracer
    **/
-  final static Category debug = Category.getInstance ("daikon.inv.ternary.threeScalar.ThreeFloatFactory");
+  final static Category debug = Category.getInstance("daikon.inv.ternary.threeScalar.ThreeFloatFactory");
 
 
   public final static int max_instantiate

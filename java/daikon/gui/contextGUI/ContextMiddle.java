@@ -43,216 +43,216 @@ import java.util.*;
 // want to set it, but not necessarily get the data right away, etc...
 public class ContextMiddle implements ContextLinker
 {
-	// This will iterate through a list of invariants
-	// that the server end has.
-	Iterator iter;
+    // This will iterate through a list of invariants
+    // that the server end has.
+    Iterator iter;
 
-	// this will iterate through a list of classes in
-	// the database
-	Iterator class_iter;
+    // this will iterate through a list of classes in
+    // the database
+    Iterator class_iter;
 
-	// This will iterate through a list of methods that
-	// for a given class
-	Iterator meth_iter;
+    // This will iterate through a list of methods that
+    // for a given class
+    Iterator meth_iter;
 
-	// This will iterate through a list of variables
-	// for a given class and method
-	Iterator var_iter;
+    // This will iterate through a list of variables
+    // for a given class and method
+    Iterator var_iter;
 
-	// This will iterate through a list of program points
-	// for a given class, method/variable.
-	Iterator pt_iter;
+    // This will iterate through a list of program points
+    // for a given class, method/variable.
+    Iterator pt_iter;
 
-	// Object for the invariant server
-	ContextServer ds;
+    // Object for the invariant server
+    ContextServer ds;
 
-	// The constructor starts up the database
-	public ContextMiddle()
-	{
-		ds = new ContextServer();
-	}
+    // The constructor starts up the database
+    public ContextMiddle()
+    {
+        ds = new ContextServer();
+    }
 
-	// Trys to clean up the database as best as possible
-	public void destroyDatabase()
-	{
-		ds.clear();
-		ds = null;
-	}
+    // Trys to clean up the database as best as possible
+    public void destroyDatabase()
+    {
+        ds.clear();
+        ds = null;
+    }
 
-	// Adds a new file to the database, basically just a pass through
-	// function to the database
-	public String addFile(String filename)
-	{
-		return(ds.addNewFile(filename));
-	}
+    // Adds a new file to the database, basically just a pass through
+    // function to the database
+    public String addFile(String filename)
+    {
+        return(ds.addNewFile(filename));
+    }
 
-	// This sets the iterator for getting invariants based on a certain
-	// criteria, meaning class, method, variable, or program point. The
-	// returning of the string was orginally used for debugging on
-	// the console, however now it is really just ignored.
-	public String setIterator(String class_name, String method_name, String var_name, String place_name)
-	{
-		String display_string = "";
-		String args[] = null;
+    // This sets the iterator for getting invariants based on a certain
+    // criteria, meaning class, method, variable, or program point. The
+    // returning of the string was orginally used for debugging on
+    // the console, however now it is really just ignored.
+    public String setIterator(String class_name, String method_name, String var_name, String place_name)
+    {
+        String display_string = "";
+        String args[] = null;
 
-		if (class_name != null)
-			display_string = "Class: " + class_name + "\n";
+        if (class_name != null)
+            display_string = "Class: " + class_name + "\n";
 
-		if (method_name != null)
-			display_string += "Method: " + method_name + "\n";
+        if (method_name != null)
+            display_string += "Method: " + method_name + "\n";
 
-		if (var_name != null)
-			display_string += "Variable: " + var_name + "\n";
+        if (var_name != null)
+            display_string += "Variable: " + var_name + "\n";
 
-		if (place_name != null)
-			display_string += "Place: " + place_name + "\n";
+        if (place_name != null)
+            display_string += "Place: " + place_name + "\n";
 
-		display_string += "====================\n";
+        display_string += "====================\n";
 
-		iter = ds.getIterator(class_name, method_name, var_name, place_name);
+        iter = ds.getIterator(class_name, method_name, var_name, place_name);
 
-		return display_string;
-	}
+        return display_string;
+    }
 
-	// This gets the invariants to send to the GUI as one large
-	// string, so the GUI will have to parse it.
-	public String getInvariants()
-	{
-		String return_string = "";
+    // This gets the invariants to send to the GUI as one large
+    // string, so the GUI will have to parse it.
+    public String getInvariants()
+    {
+        String return_string = "";
 
-		if (iter == null)
-			return null;
+        if (iter == null)
+            return null;
 
-		while (iter.hasNext())
-			return_string += (String)iter.next() + "\n";
+        while (iter.hasNext())
+            return_string += (String)iter.next() + "\n";
 
-		return return_string;
-	}
+        return return_string;
+    }
 
-	// This will get one invariant at a time so the GUI side does not
-	// have to parse the data. Either way of getting invariants has
-	// disadvantages and advantages. For right now, I am mostly using
-	// this one.
-	public String getIndividualInvariants()
-	{
-		String return_string = "";
+    // This will get one invariant at a time so the GUI side does not
+    // have to parse the data. Either way of getting invariants has
+    // disadvantages and advantages. For right now, I am mostly using
+    // this one.
+    public String getIndividualInvariants()
+    {
+        String return_string = "";
 
-		if (iter == null)
-			return null;
+        if (iter == null)
+            return null;
 
-		if (iter.hasNext())
-			return_string = (String)iter.next();
-		else
-			return null;
+        if (iter.hasNext())
+            return_string = (String)iter.next();
+        else
+            return null;
 
-		return return_string;
-	}
+        return return_string;
+    }
 
-	// Sets iterator that will get method invariants.
-	public void setMethodIterator(String class_name)
-	{
-		meth_iter = ds.getMethods(class_name);
-	}
+    // Sets iterator that will get method invariants.
+    public void setMethodIterator(String class_name)
+    {
+        meth_iter = ds.getMethods(class_name);
+    }
 
-	// This iterates through a list of methods, one at a time.
-	// Does not do anything if nothing more to iterate over.
-	public String getMethods()
-	{
-		if (meth_iter.hasNext())
-			return (String)meth_iter.next();
+    // This iterates through a list of methods, one at a time.
+    // Does not do anything if nothing more to iterate over.
+    public String getMethods()
+    {
+        if (meth_iter.hasNext())
+            return (String)meth_iter.next();
 
-		meth_iter = null;
-		return null;
-	}
+        meth_iter = null;
+        return null;
+    }
 
-	// Sets the iterator for variables based on a class and method.
-	public void setVariableIterator(String class_name, String method_name)
-	{
-		var_iter = ds.getVariables(class_name, method_name);
+    // Sets the iterator for variables based on a class and method.
+    public void setVariableIterator(String class_name, String method_name)
+    {
+        var_iter = ds.getVariables(class_name, method_name);
 
-		if (var_iter == null)
-			System.err.println("Setting the variable iterator failed");
-	}
+        if (var_iter == null)
+            System.err.println("Setting the variable iterator failed");
+    }
 
-	// This gets the variables one at a time, defined by the set
-	// variable iterator function.
-	public String getVariables()
-	{
-		if (var_iter == null)
-		{
-			System.err.println("Null error!");
-			return null;
-		}
+    // This gets the variables one at a time, defined by the set
+    // variable iterator function.
+    public String getVariables()
+    {
+        if (var_iter == null)
+        {
+            System.err.println("Null error!");
+            return null;
+        }
 
-		if (var_iter.hasNext())
-			return var_iter.next().toString();
+        if (var_iter.hasNext())
+            return var_iter.next().toString();
 
-		var_iter = null;
-		return null;
-	}
+        var_iter = null;
+        return null;
+    }
 
-	// This sets the iterator to get a list of program points based on
-	// class name, method name and variable name.
-	public void setPlaceIterator(String class_name, String method_name, String variable_name)
-	{
-		pt_iter = ds.getPlaces(class_name, method_name, variable_name);
+    // This sets the iterator to get a list of program points based on
+    // class name, method name and variable name.
+    public void setPlaceIterator(String class_name, String method_name, String variable_name)
+    {
+        pt_iter = ds.getPlaces(class_name, method_name, variable_name);
 
-	}
+    }
 
-	// This gets the program points one at a time, defined by the set
-	// place iterator function.
-	public String getPlaces()
-	{
-		if (pt_iter.hasNext())
-			return pt_iter.next().toString();
+    // This gets the program points one at a time, defined by the set
+    // place iterator function.
+    public String getPlaces()
+    {
+        if (pt_iter.hasNext())
+            return pt_iter.next().toString();
 
-		pt_iter = null;
-		return null;
-	}
+        pt_iter = null;
+        return null;
+    }
 
-	// This sets the iterator to get the list of classes.
-	public void setClassIterator()
-	{
-		class_iter = ds.getClasses();
-	}
+    // This sets the iterator to get the list of classes.
+    public void setClassIterator()
+    {
+        class_iter = ds.getClasses();
+    }
 
-	// This gets the classes one at a time, defined by the set
-	// class iterator function.
-	public String getClasses()
-	{
-		if (class_iter.hasNext())
-			return (String)class_iter.next();
+    // This gets the classes one at a time, defined by the set
+    // class iterator function.
+    public String getClasses()
+    {
+        if (class_iter.hasNext())
+            return (String)class_iter.next();
 
-		class_iter = null;
+        class_iter = null;
 
-		return null;
-	}
+        return null;
+    }
 
-	// Calls the database function to re read in the data
-	// from the files.
-	public void rebuild()
-	{
-		ds.rebuild();
-	}
+    // Calls the database function to re read in the data
+    // from the files.
+    public void rebuild()
+    {
+        ds.rebuild();
+    }
 
-	// Calls the database function to clear the data out.
-	public void clear()
-	{
-		ds.clear();
-	}
+    // Calls the database function to clear the data out.
+    public void clear()
+    {
+        ds.clear();
+    }
 
-	// This function passes whether the file type is java or c down to
-	// the server layer for opening files. True for c file, false for java
-	// The default is false.
-	public void setCFile(boolean new_CFILE)
-	{
-		ds.setCFile(new_CFILE);
-	}
+    // This function passes whether the file type is java or c down to
+    // the server layer for opening files. True for c file, false for java
+    // The default is false.
+    public void setCFile(boolean new_CFILE)
+    {
+        ds.setCFile(new_CFILE);
+    }
 
-	// This function returns the type of file we are reading in. True for
-	// C Files and false for Java files.
-	public boolean getCFile()
-	{
-		return ds.getCFile();
-	}
+    // This function returns the type of file we are reading in. True for
+    // C Files and false for Java files.
+    public boolean getCFile()
+    {
+        return ds.getCFile();
+    }
 }

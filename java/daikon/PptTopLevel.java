@@ -1515,9 +1515,10 @@ public class PptTopLevel
       }
       // Take each conditional program point and its opposite and make
       // implications. We can't assume that the number or conditional
-      // program points is even, because conditional program points with no
-      // samples are discarded. Otherwise, a conditional program point is
-      // next to its opposite pair in the vector view_conds.
+      // program points is even, because conditional program points
+      // with no samples are discarded. Otherwise, a conditional
+      // program point is usually next to its opposite pair in the
+      // vector view_conds.
       for (int i = 0; i < num_conds; i++) { // note increment is NOT "i+=2".
         PptConditional cond1 = (PptConditional) views_cond.elementAt(i);
         if ( i+1 >= num_conds )

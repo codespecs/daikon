@@ -26,7 +26,7 @@ public class SessionManager
   /**
    * Debug tracer common to all Simplify classes
    **/
-  public static final Category debug = Category.getInstance ("daikon.simplify");
+  public static final Category debug = Category.getInstance("daikon.simplify");
 
   // Deprecated method for setting the debug flag.
   //    // Enable to dump input and output to the console

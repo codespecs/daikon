@@ -3,8 +3,10 @@ package daikon.inv.filter;
 import daikon.inv.*;
 import daikon.inv.filter.*;
 import daikon.VarInfo;
+import daikon.PrintInvariants;
+import daikon.VarInfoAux;
 
-class DerivedParameterFilter extends InvariantFilter {
+public class DerivedParameterFilter extends InvariantFilter {
   public String getDescription() {
     return "Suppress derived parameters that aren't interesting";
   }
@@ -22,15 +24,28 @@ class DerivedParameterFilter extends InvariantFilter {
    * VarInfo.java.  I think the sentence about equality invariants
    * means that it can't be called until the equal_to slots are set,
    * which should be true by the time we get here.
+   *
+   * (I don't think this is applying to equality invariants in quite
+   * the way the author intended, but whatever.)
    **/
 
   boolean shouldDiscardInvariant( Invariant inv ) {
     if (inv.ppt.ppt_name.isExitPoint()) {
+      PrintInvariants.debugFiltering.debug("\t\tconsidering DPF for vars " + inv.ppt.var_infos.toString() + "\n");
       for (int i = 0; i < inv.ppt.var_infos.length; i++) {
         VarInfo vi = inv.ppt.var_infos[i];
         // ppt has to be a PptSlice, not a PptTopLevel
-        if (vi.isDerivedParamAndUninteresting()) {
-          return true;
+	PrintInvariants.debugFiltering.debug("\t\tconsidering DPF for " + vi.name.name() + "\n");
+	if (vi.isDerivedParamAndUninteresting()) {
+	  if (IsEqualityComparison.it.accept( inv )) {
+	    Comparison comp = (Comparison)inv;
+	    VarInfo var1 = comp.var1();
+	    VarInfo var2 = comp.var2();
+	    boolean vars_are_same = var1.name.applyPrestate().equals(var2.name) || var2.name.applyPrestate().equals(var1.name);
+	    PrintInvariants.debugFiltering.debug("\t\t\tvars are same? " + String.valueOf(vars_are_same) + "\n");
+	    if (vars_are_same) return true;
+	  }
+	  return true;
         }
       }
     }

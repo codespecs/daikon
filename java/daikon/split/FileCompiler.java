@@ -8,10 +8,6 @@ import java.util.*;
  * It invokes the external command javac/jikes
  **/
 
-//Todo:
-// 1) add an option for the user to specify javac, jikes
-// 2) get javac to compile more than one file
-
 public final class FileCompiler {
 
   public static Runtime commander = java.lang.Runtime.getRuntime();

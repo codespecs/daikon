@@ -444,15 +444,24 @@ public class SubSequenceFloat
       // For each variable derived from supervar ("B")
       for (int i=0; i<derivees.size(); i++) {
         Derivation der = (Derivation) derivees.get(i);
-        if (der instanceof SequenceScalarSubsequence) {
+        // System.out.println("  ... der = " + der.getVarInfo().name.name() + " " + der);
+        if (der instanceof SequenceFloatSubsequence) {
           // If that variable is "B[0..n]"
           VarInfo supervar_part = der.getVarInfo();
+          /* [INCR]
+          // Get the canonical version; being equal to it is good enough.
+          supervar_part = supervar_part.equal_to;
+          if (supervar_part == subvar) {
+            return true;
+          }
+          */ // [INCR]
+          // test is now obsolete
           // if (supervar_part.isCanonical()) // [INCR]
           {
             PptSlice ss_ppt = ppt_parent.findSlice_unordered(subvar, supervar_part);
-            // System.out.println("  ... considering " + supervar_part.name);
+            // System.out.println("  ... considering " + supervar_part.name.name());
             // if (ss_ppt == null) {
-            //   System.out.println("      no ppt for " + subvar.name + " " + supervar_part.name);
+            //   System.out.println("      no ppt for " + subvar.name.name() + " " + supervar_part.name.name());
             //   Assert.assertTrue(ppt.parent.findSlice_unordered(supervar_part, subvar) == null);
             // }
             if (ss_ppt != null) {

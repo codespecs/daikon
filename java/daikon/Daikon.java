@@ -32,8 +32,8 @@ public final class Daikon {
     System.err.flush();
   }
 
-  public final static String release_version = "2.3.12";
-  public final static String release_date = "July 11, 2002";
+  public final static String release_version = "2.3.13";
+  public final static String release_date = "July 17, 2002";
   public final static String release_string
     = "Daikon version " + release_version
     + ", released " + release_date
@@ -398,6 +398,10 @@ public final class Daikon {
             BufferedReader files_from = UtilMDE.BufferedFileReader(g.getOptarg());
             String filename;
             while ((filename = files_from.readLine()) != null) {
+              // Ignore blank lines in file.
+              if (filename.equals("")) {
+                continue;
+              }
               // This code is duplicated below outside the options loop.
               // These aren't "endsWith()" because there might be a suffix
               // on the end (eg, a date).

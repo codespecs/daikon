@@ -8,6 +8,7 @@ import daikon.inv.Invariant.OutputFormat;
 import utilMDE.*;
 import java.io.Serializable;
 import org.apache.log4j.Category;
+import java.io.Serializable;
 
 public final class LinearBinaryCoreFloat
   implements Serializable, Cloneable
@@ -85,9 +86,10 @@ public final class LinearBinaryCoreFloat
       y_cache[values_seen] = y;
       values_seen++;
       if (values_seen == MINPAIRS) {
-        // Find the most separated pair
+        // Find the most separated pair.
         // Do I really need to check in two dimensions, or would one be enough?
-        // indices of the most-separated pair
+
+        // indices of the most-separated pair of points
         int max_i = -1;
         int max_j = -1;
         // (square of the) distance between the most separated pair
@@ -98,7 +100,10 @@ public final class LinearBinaryCoreFloat
             double xsep = ((double)x_cache[i] - x_cache[j]);
             double ysep = ((double)y_cache[i] - y_cache[j]);
             double separation = xsep*xsep + ysep*ysep;
+
+            // Roundoff error might result in 0.
             // Assert.assertTrue(separation > 0);
+
             if (separation > max_separation) {
               max_separation = separation;
               max_i = i;
@@ -107,11 +112,15 @@ public final class LinearBinaryCoreFloat
           }
         }
         // Set a and b based on that pair
-        boolean ok =
-          set_bi_linear(x_cache[max_i], x_cache[max_j], y_cache[max_i], y_cache[max_j]);
-        if (a == 0) {
+        boolean ok = true;
+        if (max_i == -1) {
           ok = false;
-          debug.debug("Suppressing LinearBinaryCoreFloat (" + wrapper.format() + ") because a == 0");
+        } else {
+          set_bi_linear(x_cache[max_i], x_cache[max_j], y_cache[max_i], y_cache[max_j]);
+          if (a == 0) {
+            ok = false;
+            debug.debug("Suppressing LinearBinaryCoreFloat (" + wrapper.format() + ") because a == 0");
+          }
         }
         // Check all values against a and b.
         for (int i=0; ok && i<MINPAIRS; i++) {
@@ -152,7 +161,7 @@ public final class LinearBinaryCoreFloat
   // Given ((x0,y0),(x1,y1)), set a and b such that y = ax + b.
   // @return true if such an (a,b) exists
   boolean set_bi_linear(double  x0, double  x1, double  y0, double  y1) {
-    if (x0 == x1) {
+    if (x1 - x0 == 0) {         // not "x0 == x1", due to roundoff
       // x being constant would have been discovered elsewhere (and this
       // invariant would not have been instantiated).
       if (debug.isDebugEnabled()) {
@@ -308,4 +317,3 @@ public final class LinearBinaryCoreFloat
   }
 
 }
-

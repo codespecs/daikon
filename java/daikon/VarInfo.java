@@ -689,9 +689,10 @@ public final class VarInfo
    * only be called after equality invariants are known.
    **/
   public boolean isDerivedParamAndUninteresting() {
-    if (isDerivedParamAndUninterestingCached != null) {
-      return isDerivedParamAndUninterestingCached.booleanValue();
-    }
+    //if (isDerivedParamAndUninterestingCached != null) {
+    //  PrintInvariants.debugFiltering.debug("\t\t\tusing cached " + isDerivedParamAndUninterestingCached.toString() + "\n");
+    //  return isDerivedParamAndUninterestingCached.booleanValue();
+    //}
     isDerivedParamAndUninterestingCached = _isDerivedParamAndUninteresting() ? Boolean.TRUE : Boolean.FALSE;
     return isDerivedParamAndUninterestingCached.booleanValue();
   }
@@ -699,12 +700,19 @@ public final class VarInfo
 
 
   private boolean _isDerivedParamAndUninteresting() {
+
+    PrintInvariants.debugFiltering.debug("\t\t\tname is " + name.name() + "\n");
+    PrintInvariants.debugFiltering.debug("\t\t\tisPrestate is " + String.valueOf(isPrestate()) + "\n");
+    PrintInvariants.debugFiltering.debug("\t\t\tname is prestate " + String.valueOf(name instanceof VarInfoName.Prestate) + "\n");
+
     if (isPrestate() || name instanceof VarInfoName.Prestate) {
       // The second part of the || is needed because derived variables
-      // don't match to thier orig() values.
+      // don't match to their orig() values.
       return false;
     }
+
     if (aux.getFlag(VarInfoAux.IS_PARAM)) {
+      PrintInvariants.debugFiltering.debug("\t\t\tnot interesting, IS_PARAM == true for " + name.name() + "\n");
       return true;
     }
     if (Global.debugSuppress.isDebugEnabled()) {
@@ -722,6 +730,7 @@ public final class VarInfo
         VarInfo baseVar = ppt.findVar(base);
         if (baseVar != null && baseVar.aux.getFlag(VarInfoAux.IS_PARAM)) {
           Global.debugSuppress.debug ("TypeOf returning true");
+	  PrintInvariants.debugFiltering.debug("\t\t\tnot interesting, first dpf case\n");
           return true;
         }
       }
@@ -730,6 +739,7 @@ public final class VarInfo
         VarInfo baseVar = ppt.findVar(base);
         if (baseVar != null && baseVar.aux.getFlag(VarInfoAux.IS_PARAM)) {
           Global.debugSuppress.debug ("SizeOf returning true");
+	  PrintInvariants.debugFiltering.debug("\t\t\tnot interesting, second dpf case\n");
           return true;
         }
       }
@@ -754,11 +764,13 @@ public final class VarInfo
       VarInfo origBase = ppt.findVar(base.name.applyPrestate());
       if (origBase == null) {
         Global.debugSuppress.debug ("No orig variable for base, returning true ");
+	PrintInvariants.debugFiltering.debug("\t\t\tnot interesting, no orig variable for base\n");
         return true; // There can't be an equal invariant without orig
       }
       PptSlice2 slice = ppt.findSlice_unordered (base, origBase);
       if (slice == null) {
         Global.debugSuppress.debug ("No slice for equality in base, so uninteresting");
+	PrintInvariants.debugFiltering.debug("\t\t\tequal inv in null slice\n");
         return true; // There can't be an equal invariant in a null slice
       }
       if (Global.debugSuppress.isDebugEnabled()) {
@@ -771,6 +783,7 @@ public final class VarInfo
       }
       if (!seenEqual) {
         Global.debugSuppress.debug ("Didn't see equality in base, so uninteresting");
+	PrintInvariants.debugFiltering.debug("\t\t\tdidn't see equality in base\n");
         return true;
       }
       Global.debugSuppress.debug ("Saw equality.  Derived worth printing.");
@@ -904,8 +917,9 @@ public final class VarInfo
   */ // ... [INCR]
 
   /* [INCR] ...
-  // Like equalTo, but drops out things that can be inferred to be equal
-  // to the first.  This is called only while printing invariants.
+  // Returns a list of variables that are equal to this one, but are not
+  // "obviously" equal to this one.
+  // This is called only while printing invariants.
   public Vector equalToNonobvious() {
     // should only call this for canonical variables
     Assert.assertTrue(isCanonical());
@@ -1062,10 +1076,10 @@ public final class VarInfo
 
       // In Java, "this" cannot be changed, so "this == orig(this)" is vacuous.
       // In fact, any comparison with "orig(this)" is vacuous.
-      if ((name.name() == "this")  // interned
-          || (vi.name.name() == "orig(this)")) { // interned
-        continue;
-      }
+      //if ((name.name() == "this")  // interned
+      //    || (vi.name.name() == "orig(this)")) { // interned
+      //  continue;
+      //}
 
       // Add any additional special cases here.
 

@@ -1,3 +1,22 @@
+#if !(defined(TYPELONG) || defined(TYPEDOUBLE))
+#error "TYPELONG OR TYPEDOUBLE must be defined"
+#endif
+
+#if defined(TYPELONG)
+#define SUBSET SubSet
+#define TWOSEQUENCE TwoSequence
+#define LONG long
+#define SUBSETSTRING "SubSet"
+#define SUBSEQUENCE SubSequence
+
+#elif defined(TYPEDOUBLE)
+#define SUBSET SubSetFloat
+#define TWOSEQUENCE TwoSequenceFloat
+#define LONG double
+#define SUBSETSTRING "SubSetFloat"
+#define SUBSEQUENCE SubSequenceFloat
+#endif
+
 package daikon.inv.binary.twoSequence;
 
 import daikon.*;
@@ -12,8 +31,8 @@ import java.util.*;
 import utilMDE.*;
 import org.apache.log4j.Category;
 
-public class SubSet
-  extends TwoSequence
+public class SUBSET
+  extends TWOSEQUENCE
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -21,7 +40,7 @@ public class SubSet
   static final long serialVersionUID = 20020122L;
 
   private static final Category debug =
-    Category.getInstance("daikon.inv.binary.twoSequence.SubSet" );
+    Category.getInstance("daikon.inv.binary.twoSequence." + SUBSETSTRING);
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -33,11 +52,11 @@ public class SubSet
   public boolean var1_in_var2 = true;
   public boolean var2_in_var1 = true;
 
-  protected SubSet (PptSlice ppt) {
+  protected SUBSET(PptSlice ppt) {
     super(ppt);
   }
 
-  public static SubSet  instantiate(PptSlice ppt) {
+  public static SUBSET instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
@@ -45,8 +64,8 @@ public class SubSet
     // System.out.println("SubSet.isObviousDerived(" + format() + ") = "
     //                    + ((SubSet.isObviousDerived(var1(), var2()))
     //                       || (SubSet.isObviousDerived(var2(), var1()))));
-    if ((SubSet.isObviousDerived(var1, var2))
-        || (SubSet.isObviousDerived(var2, var1))) {
+    if ((SUBSET.isObviousDerived(var1, var2))
+        || (SUBSET.isObviousDerived(var2, var1))) {
       Global.implied_noninstantiated_invariants++;
       if (debug.isDebugEnabled()) {
         debug.debug (var1 + ", " + var2);
@@ -55,11 +74,12 @@ public class SubSet
       return null;
     }
 
+
     if (debug.isDebugEnabled()) {
       debug.debug ("Instantiating " + var1.name + " and " + var2.name);
     }
 
-    return new SubSet (ppt);
+    return new SUBSET(ppt);
   }
 
   protected Invariant resurrect_done_swapped() {
@@ -71,7 +91,7 @@ public class SubSet
   }
 
   public String repr() {
-    return "SubSet"  + varNames() + ": "
+    return SUBSETSTRING + varNames() + ": "
       + "1in2=" + var1_in_var2
       + ",2in1=" + var2_in_var1
       + ",falsified=" + falsified;
@@ -131,7 +151,7 @@ public class SubSet
     return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
   }
 
-  public void add_modified(long [] a1, long [] a2, int count) {
+  public void add_modified(LONG[] a1, LONG[] a2, int count) {
     if (var1_in_var2 && (!ArraysMDE.isSubset(a1, a2))) {
       var1_in_var2 = false;
       if (!var2_in_var1) {
@@ -151,6 +171,7 @@ public class SubSet
     Assert.assertTrue(var1_in_var2 || var2_in_var1);
   }
 
+
   protected double computeProbability() {
     if (falsified)
       return Invariant.PROBABILITY_NEVER;
@@ -167,19 +188,21 @@ public class SubSet
 
   // This is abstracted out so it can be called by SuperSequence as well.
   public static boolean isObviousDerived(VarInfo subvar, VarInfo supervar) {
-    return SubSequence.isObviousDerived (subvar, supervar);
+    return SUBSEQUENCE.isObviousDerived (subvar, supervar);
   }
 
+
   // Look up a previously instantiated SubSet relationship.
-  public static SubSet  find(PptSlice ppt) {
+  public static SUBSET find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof SubSet)
-        return (SubSet) inv;
+      if (inv instanceof SUBSET)
+        return (SUBSET) inv;
     }
     return null;
   }
+
 
   // Two ways to go about this:
   //   * look at all subseq relationships, see if one is over a variable of
@@ -201,9 +224,10 @@ public class SubSet
     }
   }
 
+
   public boolean isSameFormula(Invariant other)
   {
-    Assert.assertTrue(other instanceof SubSet);
+    Assert.assertTrue(other instanceof SUBSET);
     return true;
   }
 

@@ -9,6 +9,10 @@ class ImpliedPostconditionFilter extends InvariantFilter {
   }
 
   boolean shouldDiscardInvariant( Invariant invariant ) {
+    if (IsEqualityComparison.it.accept(invariant)) {
+      return false;
+    }
+
     // return invariant.isImpliedPostcondition(); // [INCR]
     return false;
   }

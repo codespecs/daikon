@@ -30,7 +30,7 @@ class ControlledInvariantFilter extends InvariantFilter {
     //PrintInvariants.  Basically, isWorthPrinting performs a (better)
     //controlled check.  However, it also does some stuff that really
     //shouldn't be in here, so this should be looked at a gain later.
-    if (!invariant.isWorthPrinting()) {
+    if (!invariant.isWorthPrinting() && !IsEqualityComparison.it.accept(invariant)) {
       return true;
     }
     else {

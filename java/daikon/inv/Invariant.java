@@ -3,7 +3,7 @@ package daikon.inv;
 import daikon.*;
 import daikon.inv.unary.sequence.EltOneOf;
 import daikon.inv.unary.stringsequence.EltOneOfString;
-
+import daikon.inv.filter.*;
 import java.util.*;
 import java.io.Serializable;
 
@@ -615,6 +615,10 @@ public abstract class Invariant
     VarInfo[] vars1 = inv1.ppt.var_infos;
     VarInfo[] vars2 = inv2.ppt.var_infos;
 
+//      if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+//        PrintInvariants.debugFiltering.debug("\t\t----------------\n");
+//      }
+
     Assert.assertTrue(vars1.length == vars2.length); // due to inv type match already
     for (int i=0; i < vars1.length; i++) {
       VarInfo var1 = vars1[i];
@@ -641,6 +645,11 @@ public abstract class Invariant
       for (Iterator iter = all_vars2.iterator(); iter.hasNext(); ) {
         VarInfo elt = (VarInfo) iter.next();
         VarInfoName name = name_extractor.getFromSecond(elt);
+
+//  	if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+//  	 PrintInvariants.debugFiltering.debug("\t\t" + name.toString() + " <--> " + all_vars_names1.toString() + "\n");
+//  	}
+
         intersection = all_vars_names1.contains(name);
         if (intersection) {
           break;
@@ -654,6 +663,10 @@ public abstract class Invariant
     // System.out.println("TRUE: isSameInvariant(" + inv1.format() + ", " + inv2.format() + ")");
 
     // the type, formula, and vars all matched
+//      if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+//        PrintInvariants.debugFiltering.debug("\tdecided " + this.format() + "\n");
+//        PrintInvariants.debugFiltering.debug("\t is the same as " + inv2.format() + "\n");
+//      }
     return true;
   }
 
@@ -758,12 +771,18 @@ public abstract class Invariant
       }
 
       processed.add(contr_inv);
+      if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+	PrintInvariants.debugFiltering.debug("\t\tconsidering controlling inv " + contr_inv.format() + "\n");
+      }
       if (contr_inv.isWorthPrinting_sansControlledCheck()) {
         // we have a printable controller, so we shouldn't print
         if (debugIsWorthPrinting.isDebugEnabled()) {
           debugIsWorthPrinting.debug("  not worth printing, sans controlled check, due to controller " +
                                      contr_inv.format() + " at " + contr_inv.ppt.name + ": " + format() + " at " + ppt.name);
         }
+	if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+	  PrintInvariants.debugFiltering.debug("\t\tis controlled by " + contr_inv.format() + " (from " + PrintInvariants.get_better_name(contr_inv.ppt.parent) + ")\n");
+	}
         return false;
       }
       // find the controlling invs of contr_inv and add them to the
@@ -803,8 +822,8 @@ public abstract class Invariant
     if (debugIsWorthPrinting.isDebugEnabled()) {
       System.out.println(isWorthPrinting_sansControlledCheck_debug());
     }
-    boolean result
-      = ((! hasFewModifiedSamples())
+
+    boolean result = ((! hasFewModifiedSamples())
          && enoughSamples()       // perhaps replaces hasFewModifiedSamples
          // && (! hasNonCanonicalVariable()) [INCR]
          // && (! hasOnlyConstantVariables()) [INCR]
@@ -812,6 +831,41 @@ public abstract class Invariant
          && justified()
          // && isWorthPrinting_PostconditionPrestate() [INCR]
          );
+
+    //should add this at some point, but don't want to think about
+    //evaluating even more diffs just at the moment.
+    //&& ! new DerivedParameterFilter().shouldDiscard(this)
+
+    if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+      if (hasFewModifiedSamples()) {
+	PrintInvariants.debugFiltering.debug("\t\t\thas few modified samples " + format() + "\n");
+      }
+      if (!enoughSamples()) {
+	PrintInvariants.debugFiltering.debug("\t\t\tnot enough samples " + format() + "\n");
+      }
+      /* [INCR]
+      if (hasNonCanonicalVariable()) {
+	PrintInvariants.debugFiltering.debug("\t\t\thas non canonical var " + format() + "\n");
+      }
+      */ // [INCR]
+      /* [INCR]
+      if (hasOnlyConstantVariables()) {
+	PrintInvariants.debugFiltering.debug("\t\t\thas only constant vars " + format() + "\n");
+      }
+      */ // [INCR]
+      if (isObvious()) {
+	PrintInvariants.debugFiltering.debug("\t\t\tis obvious " + format() + "\n");
+      }
+      if (!justified()) {
+	PrintInvariants.debugFiltering.debug("\t\t\tnot justified " + format() + "\n");
+      }
+      /* [INCR]
+      if (!isWorthPrinting_PostconditionPrestate()) {
+	PrintInvariants.debugFiltering.debug("\t\t\tisn't worth printing postcond/prestate " + format() + "\n");
+      }
+      */ // [INCR]
+    }
+
     return result;
   }
 
@@ -850,9 +904,6 @@ public abstract class Invariant
       return false;
     } else {
       boolean result = (num_mod_non_missing_samples < Invariant.min_mod_non_missing_samples);
-      // if (! result) {
-      //   System.out.println("hasFewModifiedSamples: " + format());
-      // }
       return result;
     }
   }
@@ -967,8 +1018,12 @@ public abstract class Invariant
       while (entryInvariants.hasNext()) {
         Invariant entryInvariant = (Invariant) entryInvariants.next();
         // If entryInvariant with orig() applied to everything matches this invariant
-        if (entryInvariant.isSameInvariant( this, preToPostIsSameInvariantNameExtractor))
-          return true;
+        if (entryInvariant.isSameInvariant( this, preToPostIsSameInvariantNameExtractor)) {
+	  if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+	    PrintInvariants.debugFiltering.debug("\tImplied by precond: " + entryInvariant.format() + " (from " + PrintInvariants.get_better_name(entryInvariant.ppt.parent) + ")\n");
+	  }
+	  return true;
+	}
       }
     }
     return false;

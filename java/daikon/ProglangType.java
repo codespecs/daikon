@@ -348,9 +348,9 @@ public final class ProglangType
         // comes from the C++ library.
         if (value.equalsIgnoreCase("NaN"))
           return DoubleNaN;
-        if (value.equalsIgnoreCase("Infinity"))
+        if (value.equalsIgnoreCase("Infinity") || value.equals("inf"))
           return DoublePositiveInfinity;
-        if (value.equalsIgnoreCase("-Infinity"))
+        if (value.equalsIgnoreCase("-Infinity") || value.equals("-inf"))
           return DoubleNegativeInfinity;
         return Intern.internedDouble(value);
       } else {

@@ -42,8 +42,8 @@ import java.io.*;
 
 public class ConvertInvToDci
 {
-	public static String error_msg = null;
-	//public static boolean CFILE = false;
+    public static String error_msg = null;
+    //public static boolean CFILE = false;
 
     public static void main(String args[])
     {
@@ -162,7 +162,7 @@ public class ConvertInvToDci
                         }
 
                         StringTokenizer tokens;
-                        if(CFILE)
+                        if (CFILE)
                         {
                             // This is a hack check, should be fixed at later date
                             // when invariant files are marked correctly.
@@ -248,52 +248,52 @@ public class ConvertInvToDci
                 out_info.flush();
             }
             // System.out.println("");
-		}
-		catch (IOException e)
-		{
-			return_state = e.getMessage();
-		}
-		catch (Error e)
-		{
-			return_state = e.getMessage();
-		}
-		finally
-		{
-			try {
+        }
+        catch (IOException e)
+        {
+            return_state = e.getMessage();
+        }
+        catch (Error e)
+        {
+            return_state = e.getMessage();
+        }
+        finally
+        {
+            try {
 
-				out_info.flush();
-				out_info.close();
+                out_info.flush();
+                out_info.close();
 
-			}
-			catch (Exception e) {
-			}
+            }
+            catch (Exception e) {
+            }
 
-			if (return_state != null)
-			{
-				error_msg = return_state;
-				return null;
-			}
+            if (return_state != null)
+            {
+                error_msg = return_state;
+                return null;
+            }
 
-		}
-		return output_file;
-	}
+        }
+        return output_file;
+    }
 
-	public static void deletefilewitherror(String file,
-		BufferedWriter problemfile)
-	{
-		try
-		{
-			problemfile.close();
-		}
-		catch(IOException e)
-		{
-			System.err.println("Having problems with " + file
-				+ ". Please check that the file was removed.");
-		}
-		finally
-		{
-			File dfile = new File(file);
-			dfile.delete();
-		}
-	}
+    public static void deletefilewitherror(String file,
+        BufferedWriter problemfile)
+    {
+        try
+        {
+            problemfile.close();
+        }
+        catch(IOException e)
+        {
+            System.err.println("Having problems with " + file
+                + ". Please check that the file was removed.");
+        }
+        finally
+        {
+            File dfile = new File(file);
+            dfile.delete();
+        }
+    }
 }

@@ -20,7 +20,7 @@ public final class LinearTernaryCoreFloat
   static final long serialVersionUID = 20020122L;
 
   /** Debug tracer **/
-  final static Category debug = Category.getInstance ("daikon.inv.ternary.threeScalar.LinearTernaryCoreFloat");
+  final static Category debug = Category.getInstance("daikon.inv.ternary.threeScalar.LinearTernaryCoreFloat");
 
   // z == ax + by + c; first argument is x, second is y, third is z
   public double a, b, c;
@@ -111,6 +111,10 @@ public final class LinearTernaryCoreFloat
       if (values_seen == MINTRIPLES) {
         // Set a, b, and c based on an appropriate set of 3 (x, y, z) values.
         int[] maxsep_indices = maxsep_triples();
+        if (maxsep_indices[0] == -1) {
+          wrapper.destroy();
+          return;
+        }
         set_tri_linear(maxsep_indices);
 
         // Check all values against a, b, and c.
@@ -119,7 +123,7 @@ public final class LinearTernaryCoreFloat
           // LinearBinary, not a LinearTernary, term.  (It might not show up
           // as LinearBinary because there might not have been enough samples;
           // but a random varying third variable can create enough samples.)
-          /* [INCR] this makes stuff to weird
+          /* [INCR] this makes stuff too weird
           if ((a == 0) || (b == 0)) {
             wrapper.flowThis();
             wrapper.destroy();
@@ -159,23 +163,46 @@ public final class LinearTernaryCoreFloat
 
   // Return the indices of three elements that are furthest from one another.
   int[] maxsep_triples() {
-    // Set maxsep_i and maxsep_j to the indices of the most separated
-    // triple.
+    // Set maxsep_i, maxsep_j, and maxsep_k to the indices of the most
+    // separated triple.
+
     // Do I really need to check in two dimensions, or would one be enough?
-    // indices of the most-separated triple
+    // indices of the three most-separated triples.
     int maxsep_i = -1;
     int maxsep_j = -1;
     int maxsep_k = -1;
     {
-      // (square of the) distance between the most separated triple
+      // cache values for the (square of the) distance between each pair of
+      // points, to avoid duplicating work
+      double[][] separations = new double[MINTRIPLES][MINTRIPLES];
+      for (int i=0; i<MINTRIPLES-1; i++) {
+        for (int j=i+1; j<MINTRIPLES; j++) {
+          separations[i][j] = separation(i, j);
+        }
+      }
+
+      // max_separation is the separation metric for the most separated
+      // triple of points.  We use the sum of the separations as the
+      // metric.  (The metric "min of the three separations" does not work
+      // because it doesn't choose a unique set of points, making the
+      // result dependent on the order in which the points are seen; more
+      // seriously, it may choose a collinear set of points even when a
+      // non-collinear set exists.)
       double max_separation = Double.MIN_VALUE;
+      // System.out.println("Computing separations: " + cache_repr() + " " + wrapper.ppt.name);
       for (int i=0; i<MINTRIPLES-2; i++) {
         for (int j=i+1; j<MINTRIPLES-1; j++) {
-          for (int k=j+1; j<MINTRIPLES; j++) {
-            double separation = (separation(i, j)
-                               + separation(i, k)
-                               + separation(j, k));
-            Assert.assertTrue(separation > 0);
+          double sep_i_j = separations[i][j];
+          for (int k=j+1; k<MINTRIPLES; k++) {
+            double separation = sep_i_j + separations[i][k] + separations[j][k];
+            // System.out.println("Separation for " + i + point_repr(i) + " "
+            //                    + j + point_repr(j) + " "
+            //                    + k + point_repr(k)
+            //                    + " = " + separation + "; max=" + max_separation);
+
+            // Does not hold, because roundoff error might produce 0.
+            // Assert.assertTrue(separation > 0);
+
             if (separation > max_separation) {
               max_separation = separation;
               maxsep_i = i;
@@ -191,14 +218,18 @@ public final class LinearTernaryCoreFloat
 
   // (Square of the) distance between triples i and j.
   double separation(int i, int j) {
-    // not int or even long, lest we get wraparound
+
+    // Potential problem:  This may return 0, for two reasons.  First, x1-x2
+    // might be zero due to underflow, even if x1!=x2.  Second, squaring a
+    // small x1-x2 might result in 0, even if x1-x2!=0.
+
     double xsep = (x_cache[i] - x_cache[j]);
     double ysep = (y_cache[i] - y_cache[j]);
     double zsep = (z_cache[i] - z_cache[j]);
     return xsep*xsep + ysep*ysep + zsep*zsep;
   }
 
-  // Given ((x0,y0,z0),(x1,y1,z1)), set a, b, and c such that z = ax + by + c
+  // Given ((x0,y0,z0),(x1,y1,z1)), set a, b, and c such that z = ax + by + c.
   // If no such (a,b,c) exists, then destroy self.
   // Given a set of equations
   //    z0 = a x0 + b y0 + c
@@ -251,7 +282,7 @@ public final class LinearTernaryCoreFloat
                                 + z2 * (x0 * y1 - x1 * y0));
     if (denominator == 0) {
       if (debug.isDebugEnabled()) {
-        debug.debug("Suppressing LinearTernaryCoreFloat due to zero denominator.");
+        debug.debug("Suppressing LinearTernaryCoreFloat " + wrapper.ppt.name + " due to zero denominator; " + cache_repr());
       }
       wrapper.flowThis();
       wrapper.destroy();
@@ -263,7 +294,7 @@ public final class LinearTernaryCoreFloat
       c = c_numerator / denominator;
     } catch (Exception e) {
       if (debug.isDebugEnabled()) {
-        debug.debug("Suppressing LinearTernaryCoreFloat due to exception.");
+        debug.debug("Suppressing LinearTernaryCoreFloat " + wrapper.ppt.name + " due to exception.");
       }
       wrapper.flowThis();
       wrapper.destroy();
@@ -312,14 +343,28 @@ public final class LinearTernaryCoreFloat
       + ",values_seen=" + values_seen;
   }
 
+  public String point_repr(int i) {
+    return "<" + x_cache[i] + "," + y_cache[i] + "," + z_cache[i] + ">";
+  }
+
+  public String cache_repr() {
+    StringBuffer result = new StringBuffer();
+    for (int i=0; i<values_seen; i++) {
+      if (i!=0) result.append("; ");
+      result.append(point_repr(i));
+    }
+    return result.toString();
+  }
+
+  // In this class for convenience (avoid prefixing "LinearBinaryCore").
+  static String formatTerm(OutputFormat format, double coeff, VarInfoName var, boolean first) {
+    return LinearBinaryCore.formatTerm(format, coeff, var, first);
+  }
+
   public static String format_using(OutputFormat format,
                                     VarInfoName x, VarInfoName y, VarInfoName z,
                                     double a, double b, double c)
   {
-    String xname = x.name_using(format);
-    String yname = y.name_using(format);
-    String zname = z.name_using(format);
-
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.ESCJAVA)
         || (format == OutputFormat.IOA)
@@ -331,13 +376,16 @@ public final class LinearTernaryCoreFloat
       // It shouldn't be the case that a or b is 0 for printed invariants;
       // but that can be true earlier on in processing.
       if ((a == 0) && (b == 0) && (c == 0)) {
+        String xname = x.name_using(format);
+        String yname = y.name_using(format);
+        String zname = z.name_using(format);
         return zname + eq + "(? * " + xname + ") + (? * " + yname + ") + ?";
       }
 
-      return zname + " == "
-        + LinearBinaryCore.formatTerm(format, a, x, true)
-        + LinearBinaryCore.formatTerm(format, b, y, false)
-        + LinearBinaryCore.formatTerm(format, c, null, false);
+      return z.name_using(format) + " == "
+        + formatTerm(format, a, x, true)
+        + formatTerm(format, b, y, false)
+        + formatTerm(format, c, null, false);
     }
 
     return null;

@@ -12,8 +12,8 @@ import java.util.*;
 import utilMDE.*;
 import org.apache.log4j.Category;
 
-public class SubSet
-  extends TwoSequence
+public class SubSetFloat
+  extends TwoSequenceFloat
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -21,7 +21,7 @@ public class SubSet
   static final long serialVersionUID = 20020122L;
 
   private static final Category debug =
-    Category.getInstance("daikon.inv.binary.twoSequence.SubSet" );
+    Category.getInstance("daikon.inv.binary.twoSequence.SubSetFloat" );
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -33,11 +33,11 @@ public class SubSet
   public boolean var1_in_var2 = true;
   public boolean var2_in_var1 = true;
 
-  protected SubSet (PptSlice ppt) {
+  protected SubSetFloat (PptSlice ppt) {
     super(ppt);
   }
 
-  public static SubSet  instantiate(PptSlice ppt) {
+  public static SubSetFloat  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
@@ -45,8 +45,8 @@ public class SubSet
     // System.out.println("SubSet.isObviousDerived(" + format() + ") = "
     //                    + ((SubSet.isObviousDerived(var1(), var2()))
     //                       || (SubSet.isObviousDerived(var2(), var1()))));
-    if ((SubSet.isObviousDerived(var1, var2))
-        || (SubSet.isObviousDerived(var2, var1))) {
+    if ((SubSetFloat.isObviousDerived(var1, var2))
+        || (SubSetFloat.isObviousDerived(var2, var1))) {
       Global.implied_noninstantiated_invariants++;
       if (debug.isDebugEnabled()) {
         debug.debug (var1 + ", " + var2);
@@ -59,7 +59,7 @@ public class SubSet
       debug.debug ("Instantiating " + var1.name + " and " + var2.name);
     }
 
-    return new SubSet (ppt);
+    return new SubSetFloat (ppt);
   }
 
   protected Invariant resurrect_done_swapped() {
@@ -71,7 +71,7 @@ public class SubSet
   }
 
   public String repr() {
-    return "SubSet"  + varNames() + ": "
+    return "SubSetFloat"  + varNames() + ": "
       + "1in2=" + var1_in_var2
       + ",2in1=" + var2_in_var1
       + ",falsified=" + falsified;
@@ -131,7 +131,7 @@ public class SubSet
     return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
   }
 
-  public void add_modified(long [] a1, long [] a2, int count) {
+  public void add_modified(double [] a1, double [] a2, int count) {
     if (var1_in_var2 && (!ArraysMDE.isSubset(a1, a2))) {
       var1_in_var2 = false;
       if (!var2_in_var1) {
@@ -167,16 +167,16 @@ public class SubSet
 
   // This is abstracted out so it can be called by SuperSequence as well.
   public static boolean isObviousDerived(VarInfo subvar, VarInfo supervar) {
-    return SubSequence.isObviousDerived (subvar, supervar);
+    return SubSequenceFloat.isObviousDerived (subvar, supervar);
   }
 
   // Look up a previously instantiated SubSet relationship.
-  public static SubSet  find(PptSlice ppt) {
+  public static SubSetFloat  find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof SubSet)
-        return (SubSet) inv;
+      if (inv instanceof SubSetFloat)
+        return (SubSetFloat) inv;
     }
     return null;
   }
@@ -203,7 +203,7 @@ public class SubSet
 
   public boolean isSameFormula(Invariant other)
   {
-    Assert.assertTrue(other instanceof SubSet);
+    Assert.assertTrue(other instanceof SubSetFloat);
     return true;
   }
 

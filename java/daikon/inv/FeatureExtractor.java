@@ -15,6 +15,7 @@ import java.util.*;
 import java.text.*;
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.unary.*;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.sequence.*;
@@ -237,7 +238,7 @@ public class FeatureExtractor {
       while(goodppts.hasNext()) {
         Vector temp = ((PptTopLevel) goodppts.next()).invariants_vector();
         for (int j = 0; j < temp.size(); j++)
-          good.add(((Invariant) temp.get(j)).format_java());
+          good.add(((Invariant) temp.get(j)).format_using(OutputFormat.JAVA));
       }
 
       //bad contains actual invariants in Bad.inv
@@ -251,7 +252,7 @@ public class FeatureExtractor {
       }
 
       for (int j = 0; j < bad.size(); j++) {
-        if (good.contains(((Invariant) bad.get(j)).format_java()))
+        if (good.contains(((Invariant) bad.get(j)).format_using(OutputFormat.JAVA)))
           answer[1].add(bad.get(j));
         else
           answer[0].add(bad.get(j));
@@ -493,13 +494,13 @@ public class FeatureExtractor {
     if (inv.justified()) answer.add(new IntDoublePair(FetJustified, 1));
     if (inv.isWorthPrinting()) answer.add(new IntDoublePair(FetIsWorthPrinting, 1));
     if (inv.hasFewModifiedSamples()) answer.add(new IntDoublePair(FetHasFewModifiedSamples, 1));
-    if (inv.hasNonCanonicalVariable()) answer.add(new IntDoublePair(FetHasNonCanonicalVariable, 1));
-    if (inv.hasOnlyConstantVariables()) answer.add(new IntDoublePair(FetHasOnlyConstantVariables, 1));
+    // [INCR] if (inv.hasNonCanonicalVariable()) answer.add(new IntDoublePair(FetHasNonCanonicalVariable, 1));
+    // [INCR] if (inv.hasOnlyConstantVariables()) answer.add(new IntDoublePair(FetHasOnlyConstantVariables, 1));
     if (inv.isObvious()) answer.add(new IntDoublePair(FetIsObvious, 1));
     if (inv.isObviousDerived()) answer.add(new IntDoublePair(FetIsObviousDerived, 1));
     if (inv.isObviousImplied()) answer.add(new IntDoublePair(FetIsObviousImplied, 1));
-    if (inv.isControlled()) answer.add(new IntDoublePair(FetIsControlled, 1));
-    if (inv.isImpliedPostcondition()) answer.add(new IntDoublePair(FetIsImpliedPostcondition, 1));
+    // [INCR] if (inv.isControlled()) answer.add(new IntDoublePair(FetIsControlled, 1));
+    // [INCR] if (inv.isImpliedPostcondition()) answer.add(new IntDoublePair(FetIsImpliedPostcondition, 1));
     if (inv.isInteresting()) answer.add(new IntDoublePair(FetIsInteresting, 1));
     answer.add(new IntDoublePair(FetArity, inv.ppt.arity));
     answer.add(new IntDoublePair(FetNumVars, inv.ppt.parent.num_vars()));
@@ -519,12 +520,15 @@ public class FeatureExtractor {
       if (var.is_static_constant) {
 	answer.add(new IntDoublePair(i*10000+FetVarInfoIs_Static_Constant, 1));
 	answer.add(new IntDoublePair(FetVarInfoIs_Static_Constant, 1)); }
+      /* [INCR]
       if (var.canBeNull) {
 	answer.add(new IntDoublePair(i*10000 + FetVarInfoCanBeNull, 1));
 	answer.add(new IntDoublePair(FetVarInfoIs_Static_Constant, 1)); }
+      /* [INCR]
       if (var.is_dynamic_constant) {
 	answer.add(new IntDoublePair(i*10000+FetVarInfoIs_Dynamic_Constant,1));
 	answer.add(new IntDoublePair(FetVarInfoIs_Dynamic_Constant, 1)); }
+      */ // [INCR]
 
       VarInfoAux aux = var.aux;
       if (aux.getFlag(VarInfoAux.IS_PARAM)) {

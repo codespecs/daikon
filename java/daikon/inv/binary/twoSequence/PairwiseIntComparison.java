@@ -23,7 +23,7 @@ public class PairwiseIntComparison
    * Debug tracer
    **/
   public static final Category debug =
-    Category.getInstance ("daikon.inv.binary.twoSequence.PairwiseIntComparison" );
+    Category.getInstance("daikon.inv.binary.twoSequence.PairwiseIntComparison" );
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.

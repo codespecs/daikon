@@ -4,10 +4,13 @@ import utilMDE.Assert;
 import java.util.*;
 import daikon.inv.*;
 import daikon.inv.IsEqualityComparison;        // For equality invariants work-around
+import daikon.inv.Invariant.OutputFormat;
 import daikon.PptMap;
 import daikon.PptSlice;
 import daikon.PptTopLevel;
 import daikon.VarInfo;
+import daikon.PrintInvariants;
+import daikon.Daikon;
 
 //  This class contains a collection of invariant filters, and allows other
 //  code to perform invariant filtering.  To filter invariants, do the
@@ -28,6 +31,10 @@ public class InvariantFilters {
   public static final int ALL_VARIABLES = 2;
   int variableFilterType = ANY_VARIABLE;
 
+  //stores information as to why an invariant was accepted or
+  //rejected. (works on property filters, but not variable filters.
+  public String reason = "";
+
   // propertyFilters is a map from filter description to filter object.  We
   // need this mapping so that the GUI can easily tell InvariantFilters --
   // by passing in a filter description -- which filter was de/selected.
@@ -41,6 +48,10 @@ public class InvariantFilters {
   public PptMap ppt_map = null;
 
   public InvariantFilters() {
+    if (Daikon.output_style == OutputFormat.ESCJAVA) {
+      addPropertyFilter( new UnmodifiedVariableEqualityFilter());
+    }
+
     addPropertyFilter( new NonCanonicalVariablesFilter());
     addPropertyFilter( new DerivedParameterFilter());
     addPropertyFilter( new UnjustifiedFilter());
@@ -70,6 +81,10 @@ public class InvariantFilters {
   }
 
   public boolean shouldKeep( Invariant invariant ) {
+    if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+      PrintInvariants.debugFiltering.debug(invariant.format() + "\n\t\t(type: " + invariant.getClass().getName() +  ")\n");
+    }
+
     //  Do variable filters first since they eliminate more invariants.
     if (variableFilters.size() != 0) {
       if (variableFilterType == InvariantFilters.ANY_VARIABLE) {
@@ -92,10 +107,18 @@ public class InvariantFilters {
     //  Property filters.
     for (Iterator iter = propertyFilters.values().iterator(); iter.hasNext(); ) {
       InvariantFilter filter = (InvariantFilter) iter.next();
-      if (filter.shouldDiscard( invariant )) {
-        //              System.out.println( filter.getClass().getName() + " rules out    \t" + invariant.format());
-        return false;
+      if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+	PrintInvariants.debugFiltering.debug("\tapplying " + filter.getClass().getName() +" \n");
       }
+      if (filter.shouldDiscard( invariant )) {
+	if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+	  PrintInvariants.debugFiltering.debug("\tfailed " + filter.getClass().getName() +" \n");
+	}
+	return false;
+      }
+    }
+    if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+      PrintInvariants.debugFiltering.debug("\t(accepted by InvariantFilters)\n");
     }
     return true;
   }
@@ -204,6 +227,9 @@ public class InvariantFilters {
     for (Iterator iter = invariants.iterator(); iter.hasNext(); ) {
       Invariant invariant = (Invariant) iter.next();
       if (IsEqualityComparison.it.accept( invariant )) {
+	if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+	  PrintInvariants.debugFiltering.debug("Found invariant which says " + invariant.format() + "\n");
+	}
         VarInfo[] variables = invariant.ppt.var_infos;
         Assert.assertTrue( variables.length == 2 );
         for (int i = 0; i < variables.length; i++) {
@@ -254,15 +280,41 @@ public class InvariantFilters {
     }
 
     Assert.assertTrue(ppts.size() == equivalentGroups.size());
+    List equality_invariants = new Vector();
 
     // Add equivalent groups as equality invariants.
     for ( Iterator egIter = equivalentGroups.iterator(); egIter.hasNext(); ) {
       List equivalentGroup = (List) egIter.next();
       VarInfo canonicalVar = (VarInfo) equivalentGroup.get(0);
       PptSlice ppt = ((Invariant) ppts.get(canonicalVar)).ppt;
-      invariants.add( 0, new Equality(equivalentGroup, ppt));
-    }
 
-    return invariants;
+      // Unfortunately, for printing, we want the equivalent
+      // expressions to be ordered in the same order that the appear in
+      // in the VarInfo.  (No, this won't be true already, we do
+      // actually have to do it by hand.)
+      Vector ordered_output = new Vector();
+      // [INCR] Vector ordered_reference = PrintInvariants.get_equal_vars(canonicalVar, true);
+      Vector ordered_reference = new Vector();
+      ordered_reference.add(canonicalVar);
+      for ( Iterator varIter = ordered_reference.iterator(); varIter.hasNext(); ) {
+	Object tmp = varIter.next();
+	if (equivalentGroup.contains(tmp)) {
+	  ordered_output.add(tmp);
+	}
+      }
+
+      //      System.out.println("\n\nEquivalentGroup   is " + equivalentGroup);
+      //System.out.println("ordered_output    is " + ordered_output);
+      //System.out.println("ordered_reference is " + ordered_reference);
+      for ( Iterator allVarsIter = equivalentGroup.iterator(); allVarsIter.hasNext(); ) {
+	Object tmp = allVarsIter.next();
+	Assert.assertTrue(ordered_output.contains(tmp));
+      }
+      equality_invariants.add(new Equality(ordered_output, ppt));
+      }
+
+    equality_invariants = PrintInvariants.sort_invariant_list(equality_invariants);
+    equality_invariants.addAll(invariants);
+    return equality_invariants;
   }
 }

@@ -96,9 +96,6 @@ public class CLASSNAME
       return null;
     }
 
-
-
-
     if (debug.isDebugEnabled()) {
       debug.debug ("Instantiating " + var1.name + " and " + var2.name);
     }
@@ -142,7 +139,6 @@ public class CLASSNAME
       return subvar + " is a subsequence of " + supervar;
     }
   }
-
 
   /* IOA */
   public String format_ioa() {
@@ -305,7 +301,6 @@ public class CLASSNAME
     var2_in_var1 = new_var2_in_var1;
   }
 
-
   protected double computeProbability() {
     if (falsified)
       return Invariant.PROBABILITY_NEVER;
@@ -357,8 +352,6 @@ public class CLASSNAME
       }
     }
 
-
-
     VarInfo subvar_super = subvar.isDerivedSubSequenceOf();
     if (subvar_super == null)
       // If it's not a union, intersection or a subsequence, it's not obvious
@@ -369,7 +362,6 @@ public class CLASSNAME
       // System.out.println("  details: subvar_super=" + subvar_super.name + "; supervar_super=" + supervar.isDerivedSubSequenceOf() == null ? "null" : supervar.isDerivedSubSequenceOf().name);
       return true;
     }
-
 
     VarInfo supervar_super = supervar.isDerivedSubSequenceOf();
     if (subvar_super == supervar_super) {
@@ -409,10 +401,7 @@ public class CLASSNAME
         Assert.assertTrue(false, "how can this happen? " + subvar.name + " " + subvar.derived.getClass() + " " + supervar.name + " " + supervar.derived.getClass());
       }
 
-
-
     }
-
 
     /// To finish later.
     // VarInfo supervar_super = supervar.isDerivedSubSequenceOf();
@@ -423,15 +412,8 @@ public class CLASSNAME
     //   // a[0..i] and a[0..j-1]
     //   // Use compare_vars to determine whether the relationship
 
-
     return false;
-
-
-
-
   }
-
-
 
   // Look up a previously instantiated SubSequence relationship.
   public static CLASSNAME find(PptSlice ppt) {
@@ -443,7 +425,6 @@ public class CLASSNAME
     }
     return null;
   }
-
 
   // Two ways to go about this:
   //   * look at all subseq relationships, see if one is over a variable of
@@ -499,15 +480,24 @@ public class CLASSNAME
       // For each variable derived from supervar ("B")
       for (int i=0; i<derivees.size(); i++) {
         Derivation der = (Derivation) derivees.get(i);
-        if (der instanceof SequenceScalarSubsequence) {
+        // System.out.println("  ... der = " + der.getVarInfo().name.name() + " " + der);
+        if (der instanceof SEQUENCESCALARSUBSEQUENCE) {
           // If that variable is "B[0..n]"
           VarInfo supervar_part = der.getVarInfo();
+          /* [INCR]
+          // Get the canonical version; being equal to it is good enough.
+          supervar_part = supervar_part.equal_to;
+          if (supervar_part == subvar) {
+            return true;
+          }
+          */ // [INCR]
+          // test is now obsolete
           // if (supervar_part.isCanonical()) // [INCR]
           {
             PptSlice ss_ppt = ppt_parent.findSlice_unordered(subvar, supervar_part);
-            // System.out.println("  ... considering " + supervar_part.name);
+            // System.out.println("  ... considering " + supervar_part.name.name());
             // if (ss_ppt == null) {
-            //   System.out.println("      no ppt for " + subvar.name + " " + supervar_part.name);
+            //   System.out.println("      no ppt for " + subvar.name.name() + " " + supervar_part.name.name());
             //   Assert.assertTrue(ppt.parent.findSlice_unordered(supervar_part, subvar) == null);
             // }
             if (ss_ppt != null) {
@@ -522,7 +512,6 @@ public class CLASSNAME
       return false;
     }
   }
-
 
   public boolean isSameFormula(Invariant other)
   {

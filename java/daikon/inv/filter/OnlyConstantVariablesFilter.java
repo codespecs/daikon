@@ -9,7 +9,11 @@ class OnlyConstantVariablesFilter extends InvariantFilter {
   }
 
   boolean shouldDiscardInvariant( Invariant invariant ) {
-    // return invariant.hasOnlyConstantVariables();
+    if (IsEqualityComparison.it.accept(invariant)) {
+      return false;
+    }
+
+    // [INCR] return invariant.hasOnlyConstantVariables();
     return false;
   }
 }

@@ -170,13 +170,13 @@ public final class ContextGUI extends JApplet implements ActionListener
         // for c or java on the fly instead of having to determine it at start
         // time. So technically, you can mix the java the c file invariants
         // by just switching them during run time.
-        else if(e.getSource() == g_JavaOption)
+        else if (e.getSource() == g_JavaOption)
         {
             setCFile(false);
             g_JavaOption.setEnabled(false);
             g_COption.setEnabled(true);
         }
-        else if(e.getSource() == g_COption)
+        else if (e.getSource() == g_COption)
         {
             setCFile(true);
             g_JavaOption.setEnabled(true);

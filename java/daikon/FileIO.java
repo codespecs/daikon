@@ -96,11 +96,11 @@ public final class FileIO {
 
   /** Debug tracer for reading **/
   public static final Category debugRead =
-    Category.getInstance ("daikon.FileIO.read");
+    Category.getInstance("daikon.FileIO.read");
 
   /** Debug tracer for printing **/
   public static final Category debugPrint =
-    Category.getInstance ("daikon.FileIO.printDtrace");
+    Category.getInstance("daikon.FileIO.printDtrace");
 
 
   // Utilities

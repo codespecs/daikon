@@ -24,7 +24,7 @@ import daikon.*;
 
 class ConditionExtractor extends DepthFirstVisitor {
 
-  private String packageName; 
+  private String packageName;
   private String className; //The class name.
   private String curMethodName; //Name of current method being parsed
   private String curMethodDeclaration;
@@ -38,7 +38,7 @@ class ConditionExtractor extends DepthFirstVisitor {
                                               //as values and the method
                                               //declaration as the keys
 
-  
+
   //// DepthFirstVisitor Methods overridden by ConditionExtractor //////////////
   /////
 
@@ -72,7 +72,7 @@ class ConditionExtractor extends DepthFirstVisitor {
    * f4 -> ";"
    */
   /**
-   * Stores the field name, if it is a boolean. 
+   * Stores the field name, if it is a boolean.
    */
   public void visit(FieldDeclaration n) {
     String resultType = Ast.print(n.f1);
@@ -81,7 +81,7 @@ class ConditionExtractor extends DepthFirstVisitor {
     }
     super.visit(n);
   }
-  
+
   /**
    * f0 -> ( "public" | "protected" | "private" | "static" | "abstract" | "final" | "native" | "synchronized" )*
    * f1 -> ResultType()
@@ -89,7 +89,7 @@ class ConditionExtractor extends DepthFirstVisitor {
    * f3 -> [ "throws" NameList() ]
    * f4 -> ( Block() | ";" )
    */
-  
+
   /**
    * It is sometimes helpful to store the method bodies of one-liner
    * methods.  They are useful as 'replace' statements when the
@@ -127,7 +127,7 @@ class ConditionExtractor extends DepthFirstVisitor {
    */
   public void visit(ConstructorDeclaration n) {
     //This goes on the PPT_NAME line of the spinfo file.
-    //eg. QueueAr.isEmpty   
+    //eg. QueueAr.isEmpty
     curMethodName = className + "." + Ast.print(n.f1);
     addMethod(className + Ast.print(n), curMethodName);
     super.visit(n);
@@ -150,7 +150,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   public void visit(SwitchStatement n) {
     String switchExpression = Ast.print(n.f2);
     Collection caseValues = getCaseValues(n.f5);
-     //a condition for the default case. A 'not' of all the different cases. 
+     //a condition for the default case. A 'not' of all the different cases.
     StringBuffer defaultString = new StringBuffer();
     for (Iterator e = caseValues.iterator(); e.hasNext(); ) {
       String switchValue = ((String) e.next()).trim();
@@ -164,10 +164,10 @@ class ConditionExtractor extends DepthFirstVisitor {
     addCondition(defaultString.toString());
     super.visit(n);
   }
-  
+
   /**
    * @return a String[] which contains the different Integer values
-   * which the case expression is tested against 
+   * which the case expression is tested against
    */
   public Collection getCaseValues (NodeListOptional n) {
     ArrayList values = new ArrayList();
@@ -183,7 +183,7 @@ class ConditionExtractor extends DepthFirstVisitor {
     }
     return values;
   }
-  
+
   /**
    * f0 -> "if"
    * f1 -> "("
@@ -261,7 +261,7 @@ class ConditionExtractor extends DepthFirstVisitor {
    *       | SynchronizedStatement()
    *       | TryStatement()
    */
-  
+
   /*
    * If this statement is a one-liner (the sole statement in a
    * function), then it is saved and used as a 'replace' statement in
@@ -286,7 +286,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   /**
    * Keep track of the method we are currently in, and create an entry
    * for it, so that the conditions can be associated with the right
-   * methods.  
+   * methods.
    */
   private void addMethod(String methodDeclaration, String methodname) {
     if (!conditions.containsKey(methodname)) {
@@ -295,7 +295,7 @@ class ConditionExtractor extends DepthFirstVisitor {
     curMethodName = methodname;
     curMethodDeclaration = methodDeclaration;
   }
-  
+
   //add the condition to the current method's list of conditions
   private void addCondition(String cond) {
     Vector conds;
@@ -311,7 +311,7 @@ class ConditionExtractor extends DepthFirstVisitor {
       conds.addElement(cond);
     }
   }
-  
+
   //store the replace statement (expression) in the hashmap
   private void addReplaceStatement(String s) {
     if (curMethodDeclaration != null) {
@@ -324,17 +324,17 @@ class ConditionExtractor extends DepthFirstVisitor {
 
     if (!replaceStatements.values().isEmpty()) {
       output.write("REPLACE\n");
-      
+
       Iterator bools = replaceStatements.keySet().iterator();
       while (bools.hasNext()) {
 	String declaration = (String)bools.next();
 	output.write(declaration + "\n");
 	output.write((String) replaceStatements.get(declaration) + "\n");
       }
-      
+
       output.write("\n");
     }
-    
+
     Vector method_conds;
     Iterator methods = conditions.keySet().iterator();
     while (methods.hasNext()) {
@@ -343,13 +343,13 @@ class ConditionExtractor extends DepthFirstVisitor {
       if (method_conds.size() > 0) {
 	String temp = "PPT_NAME ";
 	if (packageName != null)
-	  temp = packageName + ".";
+	  temp = temp + packageName + ".";
 	output.write(temp + method + "\n");
-	
+
 	for (int i = 0; i < method_conds.size(); i++) {
 	  output.write((String)method_conds.elementAt(i) + "\n");
 	}
-	
+
 	output.write("\n");
       }
     }

@@ -57,21 +57,22 @@ public class SplitterFactory {
       String line = reader.readLine();
       for ( ; line != null; line = reader.readLine()) {
         // skip blank lines and comments
-        if (re_matcher.matches(line, blank_line) || line.startsWith("#")) {
-          continue;
-        } else if (line.startsWith("REPLACE")) {
-          replace = read_replace_statements(replace, reader);
-        } else if (line.startsWith("PPT_NAME")) {
-          StringTokenizer tokenizer = new StringTokenizer(line);
-          tokenizer.nextToken(); // throw away the first token "PPT_NAME"
-          String pptName = tokenizer.nextToken().trim();
-          SplitterObject[] spobjects = read_ppt_conditions(reader, pptName);
-          if (spobjects != null)
-            splitterObjectArrays.addElement(spobjects);
-        } else {
-          System.err.println("Incorrect format in .spinfo " + infofile
-                             + " at line number " + reader.getLineNumber());
-        }
+	line.trim();
+	if (re_matcher.matches(line, blank_line) || line.startsWith("#")) {
+	  continue;
+	} else if (line.startsWith("REPLACE")) {
+	  replace = read_replace_statements(replace, reader);
+	} else if (line.startsWith("PPT_NAME")) {
+	  StringTokenizer tokenizer = new StringTokenizer(line);
+	  tokenizer.nextToken(); // throw away the first token "PPT_NAME"
+	  String pptName = tokenizer.nextToken().trim();
+	  SplitterObject[] spobjects = read_ppt_conditions(reader, pptName);
+	  if (spobjects != null)
+	    splitterObjectArrays.addElement(spobjects);
+	} else {
+	  System.err.println("Incorrect format in .spinfo " + infofile
+			     + " at line number " + reader.getLineNumber());
+	}
       }
     } catch (IOException ioe ) {
       System.err.println(ioe + " \n at line number " + reader.getLineNumber()
@@ -120,10 +121,14 @@ public class SplitterFactory {
       // skip comments
       if (!line.startsWith("#")) {
         String condition = (line.trim());
-        splitterObjects.addElement(new SplitterObject(pptname, condition, tempdir));
-        if (re_matcher.contains(condition, null_pattern)) {
-          splitterObjects.addElement(new SplitterObject(pptname, perform_null_substitution(condition), tempdir));
-        }
+	if (duplicate_condition(condition, pptname)) {
+	  line = reader.readLine();
+	  continue;
+	}
+	splitterObjects.addElement(new SplitterObject(pptname, condition, tempdir));
+	if (re_matcher.contains(condition, null_pattern)) {
+	  splitterObjects.addElement(new SplitterObject(pptname, perform_null_substitution(condition), tempdir));
+	}
       }
       line = reader.readLine();
     }
@@ -303,6 +308,8 @@ public class SplitterFactory {
     Vector parameters = params_and_types[0];
     Vector types = params_and_types[1];
 
+    sort_params_by_length(parameters, types);
+
     if (parameters.size() > 0 && types.size() > 0) {
       String[] all_params = (String[])parameters.toArray(new String[0]);
       String[] all_types = (String[])types.toArray(new String[0]);
@@ -310,20 +317,26 @@ public class SplitterFactory {
 
       // The Splitter variable names corresponding to the variables
       // at the program point.
-      String[] param_names = new String[num_params];
+      ArrayList p_names = new ArrayList();
       for (int i = 0; i < num_params; i++) {
-        //declared variable names in the Splitter class cannot have characters
-        //like ".", "(" etc. Change, for example, "node.parent" to "node_parent"
-        //and orig(x) to orig_x
-        String temp = all_params[i];
-        temp = temp.replace('.','_');
-        temp = temp.replace('[','_');
-        temp = temp.replace(']','_');
-        if (temp.equals("return")) temp = "return_Daikon";
-        if (temp.equals("this")) temp = "this_Daikon";
-        if (temp.indexOf("orig") >= 0) temp = replace_orig(temp);
-        param_names[i] = temp;
+	//declared variable names in the Splitter class cannot have characters
+	//like ".", "(" etc. Change, for example, "node.parent" to "node_parent"
+	//and orig(x) to orig_x
+	String temp = all_params[i];
+	temp = temp.replace('.','_');
+	temp = temp.replace('[','_');
+	temp = temp.replace(']','_');
+	temp = temp.replace(':','_');
+	if (temp.equals("return")) temp = "return_Daikon";
+	if (temp.equals("this")) temp = "this_Daikon";
+	if (temp.indexOf("orig") >= 0) temp = replace_orig(temp);
+	if (p_names.contains(temp))
+	  p_names.add(temp + "_2");
+	else
+	  p_names.add(temp);
       }
+
+      String[] param_names = (String[]) p_names.toArray(new String[0]);
 
       // Get the function names and argument names of functions to be replaced.
       // For example, if the function "max(int a, int b)" is to be replaced by
@@ -584,7 +597,11 @@ public class SplitterFactory {
         //if char[], we need to treat as a String in Daikon
         types.addElement ("char[]");
       } else if (var_infos[i].type.format().trim().equals("boolean")) {
-        types.addElement("boolean");
+	types.addElement("boolean");
+      } else if (var_infos[i].type.format().trim().equals("double")) {
+	types.addElement("int");
+      } else if (var_infos[i].type.format().trim().equals("double[]")) {
+	types.addElement("int[]");
       } else {
         types.addElement(var_infos[i].rep_type.format().trim());
       }
@@ -801,59 +818,57 @@ public class SplitterFactory {
     String orig_test_string = test_string;
     for (int i = 0; i < params.length; i++) {
 
-        Pattern param_pattern;
-        // some instrumented variables start with "this." whereas the "this" is
-        // not always used in the test string. Eg. instrumented variable is
-        // "this.myArray", but the condition test is "myArray.length == 0". In
-        // such a situation, search the test_string for this.myArray or myArray
-        // and change the test string to this_myArray.length == 0.
-        try {
-          if (params[i].charAt(0) == '*') {
-            param_names[i] = "star_" + params[i].substring(1);
-            param_pattern = re_compiler.compile(delimit(qm(params[i])));
-          } else if (params[i].startsWith("orig(*")) {
-            param_names[i] = "orig_star_" + params[i].substring(6, params[i].length() - 1) + "_";
-            param_pattern = re_compiler.compile(delimit_end("orig\\(\\*" + qm(params[i].substring(6))));
-          } else if (params[i].startsWith("this.")) {
-            String params_minus_this = params[i].substring(5);
-            // for example for the variable 'this.myArray', we will be searching
-            // the condition for the regex "myArray|this.myArray" and replacing
-            // it with this_myArray as declared in the Splitter.
-            param_pattern = re_compiler.compile("(" + delimit(qm(params[i])) + "|" + delimit(qm(params_minus_this)) + ")");
-          } else if (!class_name.equals("") && params[i].startsWith(class_name)) {
-            param_pattern = re_compiler.compile(qm(params[i]) + "|" + qm(params[i].substring(class_name.length())));
-          } else if (params[i].startsWith("orig")) {
-            //we've already substituted for example orig(this.Array) with "orig(this_theArray)",
-            //so search for "orig(this_theArray)" in the test_string
-            String temp = param_names[i].replace('.','_');
-            String search_string = "orig\\s*\\(\\s*" + temp.substring(5) + "\\s*\\)";
-            if (temp.length() > 10) {
-              search_string = search_string + "|" + "orig\\s*\\(\\s*" + qm(temp.substring(10)) + "\\s*\\)";
-            }
-            param_pattern = re_compiler.compile(search_string);
-          } else if (params[i].charAt(0) == '$') {
-            //remove unwanted characters from the param name. These confuse the regexp.
-            //(find a better solution for arbitrary characters at arbitrary locations)
-            param_pattern = re_compiler.compile(delimit(qm(params[i].substring(1))));
-          } else {
-            param_pattern = re_compiler.compile(delimit(qm(params[i])));
-          }
-
-          Perl5Substitution param_subst = new Perl5Substitution(param_names[i], Perl5Substitution.INTERPOLATE_ALL);
-          PatternMatcherInput input = new PatternMatcherInput(orig_test_string);
-          // remove any parameters which are not used in the condition
-          if (re_matcher.contains(input, param_pattern)) {
-            test_string = Util.substitute(re_matcher, param_pattern, param_subst, test_string, Util.SUBSTITUTE_ALL);
-            //while (re_matcher.contains(input, param_pattern)) {
-            //test_string = Util.substitute(re_matcher, param_pattern, param_subst, test_string, Util.SUBSTITUTE_ALL);
-            //}
-          } else {
-            params[i] = null;
-          }
-        } catch (MalformedPatternException e) {
-          debugPrint(e.toString());
-        }
-      }
+       Pattern param_pattern;
+	// some instrumented variables start with "this." whereas the "this" is
+	// not always used in the test string. Eg. instrumented variable is
+	// "this.myArray", but the condition test is "myArray.length == 0". In
+	// such a situation, search the test_string for this.myArray or myArray
+	// and change the test string to this_myArray.length == 0.
+	try {
+	  if (params[i].charAt(0) == '*') {
+	    param_names[i] = "star_" + params[i].substring(1);
+	    param_pattern = re_compiler.compile(delimit(qm(params[i])));
+	  } else if (params[i].startsWith("orig(*")) {
+	    param_names[i] = "orig_star_" + params[i].substring(6, params[i].length() - 1) + "_";
+	    param_pattern = re_compiler.compile(delimit_end("orig\\(\\*" + qm(params[i].substring(6))));
+	  } else if (params[i].startsWith("this.")) {
+	    String params_minus_this = params[i].substring(5);
+	    // for example for the variable 'this.myArray', we will be searching
+	    // the condition for the regex "myArray|this.myArray" and replacing
+	    // it with this_myArray as declared in the Splitter.
+	    param_pattern = re_compiler.compile("(" + delimit(qm(params[i])) + "|" + delimit(qm(params_minus_this)) + ")");
+	  } else if (!class_name.equals("") && params[i].startsWith(class_name)) {
+	    //static variable
+	    param_pattern = re_compiler.compile(qm(params[i]) + "|" + qm(params[i].substring(class_name.length())));
+	  } else if (params[i].startsWith("orig")) {
+	    //we've already substituted for example orig(this.Array) with "orig(this_theArray)",
+	    //so search for "orig(this_theArray)" in the test_string
+	    String temp = param_names[i].replace('.','_');
+	    String search_string = "orig\\s*\\(\\s*" + temp.substring(5) + "\\s*\\)";
+	    if (temp.length() > 10) {
+	      search_string = search_string + "|" + "orig\\s*\\(\\s*" + qm(temp.substring(10)) + "\\s*\\)";
+	    }
+	    param_pattern = re_compiler.compile(search_string);
+	  } else if (params[i].charAt(0) == '$') {
+	    //remove unwanted characters from the param name. These confuse the regexp.
+	    //(find a better solution for arbitrary characters at arbitrary locations)
+	    param_pattern = re_compiler.compile(delimit(qm(params[i].substring(1))));
+	  } else {
+	    //to take care of pointer variables too, we search for "(varname|*varname)"
+	    param_pattern = re_compiler.compile("(" + delimit(qm(params[i])) + "|" + delimit(qm("*" + params[i])) + ")");
+	  }
+	  Perl5Substitution param_subst = new Perl5Substitution(param_names[i], Perl5Substitution.INTERPOLATE_ALL);
+	  PatternMatcherInput input = new PatternMatcherInput(orig_test_string);
+	  // remove any parameters which are not used in the condition
+	  if (re_matcher.contains(input, param_pattern)) {
+	    test_string = Util.substitute(re_matcher, param_pattern, param_subst, test_string, Util.SUBSTITUTE_ALL);
+	  } else {
+	    params[i] = null;
+	  }
+	} catch (MalformedPatternException e) {
+	  debugPrint(e.toString());
+	}
+    }
       {
         // Change "this_Daikon.this_" to "this_"
         int this_loc = test_string.indexOf("this_Daikon.this_");
@@ -984,7 +999,6 @@ public class SplitterFactory {
    * Print out a message if the debugPptSplit variable is set to "true"
    **/
   static void debugPrint(String s) {
-    //System.out.println(s);
     Global.debugSplit.debug (s);
   }
 
@@ -1049,5 +1063,85 @@ public class SplitterFactory {
 
     splitter_source.append("    return( " + test_string + " ); \n  }\n");
     return test_string;
+  }
+
+  //Set of all invariants that are good for printing.
+  private static HashSet all_conditions = new HashSet();
+  private static HashMap pptname_to_conditions = new HashMap();
+
+  //Store the invariant for later printing, if it needs to be stored.
+  //To determine whether an invariant should be printed or not, see
+  //cases for indiscriminate and non-indiscriminate splitting below.
+  private static boolean duplicate_condition (String inv, String pptname) {
+    if (!pptname_to_conditions.containsKey(pptname)) {
+      pptname_to_conditions.put(pptname, new HashSet());
+    }
+
+    //With indiscriminate splitting, we need just one occurence of
+    //each splitting condition, and it doesn't matter under which ppt
+    //it appears. However with non-indiscriminate splitting, each
+    //condition must be printed under every ppt that it appears.
+    if (daikon.split.SplitterList.dkconfig_all_splitters) {
+      if (all_conditions.contains(inv))
+	return true;
+      else
+	all_conditions.add(inv);
+    } else {
+      Set conditions = (Set)pptname_to_conditions.get(pptname);
+      if (conditions.contains(inv))
+	return true;
+      else
+	conditions.add(inv);
+    }
+
+    return false;
+  }
+
+  /**
+   * Put the parameter names in order of length (longest first).
+   */
+  private static void sort_params_by_length (Vector params, Vector types) {
+    int num_params = params.size();
+
+    paramTypePair[] ptp = new paramTypePair[num_params];
+    for (int i = 0; i < num_params; i++) {
+      ptp[i] = new paramTypePair((String)params.elementAt(i), (String)types.elementAt(i));
+    }
+    Arrays.sort(ptp, new paramTypePairComparator());
+
+    params.clear();
+    types.clear();
+    for (int i = 0; i < num_params; i++) {
+      params.addElement(ptp[i].getParam());
+      types.addElement(ptp[i].getType());
+    }
+  }
+
+  //A pair consisting of a parameter and its type.
+  static class paramTypePair {
+    String param, type;
+
+    public paramTypePair (String param, String type) {
+      this.param = param;
+      this.type = type;
+    }
+
+    public String getParam () {
+      return this.param;
+    }
+
+    public String getType () {
+      return this.type;
+    }
+  }
+
+  //Compares the parameter names in paramTypePairs by their length
+  static class paramTypePairComparator implements Comparator {
+    public int compare (Object a, Object b) {
+      paramTypePair pa = (paramTypePair) a;
+      paramTypePair pb = (paramTypePair) b;
+
+      return ((pb.getParam()).length() - (pa.getParam()).length());
+    }
   }
 }

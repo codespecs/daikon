@@ -17,7 +17,7 @@ public final class TwoSequenceFactoryFloat  {
   /**
    * Debug tracer
    **/
-  public static final Category debug = Category.getInstance ("daikon.inv.binary.twoSequence.TwoSequenceFactory");
+  public static final Category debug = Category.getInstance("daikon.inv.binary.twoSequence.TwoSequenceFactory");
 
   // Add the appropriate new Invariant objects to the specified Invariants
   // collection.

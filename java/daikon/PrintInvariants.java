@@ -4,6 +4,8 @@ import java.util.*;
 import java.io.*;
 import gnu.getopt.*;
 import org.apache.log4j.Category;
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.PatternLayout;
 import utilMDE.Assert;
 import utilMDE.UtilMDE;
 import daikon.derive.*;
@@ -29,6 +31,32 @@ public class PrintInvariants {
    * Debug tracer for printing equality.
    **/
   public static final Category debugPrintEquality = Category.getInstance("daikon.print.equality");
+
+  /**
+   * Debug tracer for filtering.  When PrintInvariants is invoked it
+   * will write a transcript of everything that the filters did to the
+   * current directory, into a file called filter_transcript.
+   **/
+  public static final Category debugFiltering = Category.getInstance("daikon.filtering");
+
+  // Set up filter logging to go to a file.  It's better that way.
+  static {
+    if (debugFiltering.isDebugEnabled()) {
+      debugFiltering.setAdditivity(false);
+      debugFiltering.removeAllAppenders();
+      FileAppender fa = null;
+      try {
+	fa = new FileAppender( new PatternLayout("%m"), "filtering_transcript", true);
+      }
+      catch (IOException ioe) {
+	System.err.println("Warning; unable to open file filtering_transcript");
+      }
+      if (fa != null) {
+	debugFiltering.addAppender(fa);
+	fa.activateOptions();
+      }
+    }
+  }
 
   public static final String lineSep = Global.lineSep;
 
@@ -69,6 +97,8 @@ public class PrintInvariants {
   public static void main(String[] args) throws FileNotFoundException,
   StreamCorruptedException, OptionalDataException, IOException,
   ClassNotFoundException {
+    daikon.Logger.setupLogs(daikon.Logger.INFO);
+
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(Daikon.suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -227,12 +257,9 @@ public class PrintInvariants {
         print_invariants_maybe(pcond, out);
       }
     }
-
   }
 
-  public static void print_sample_data(PptTopLevel ppt, PrintWriter out)
-  {
-    //System.out.println("entering print_sample_data\n");
+  public static String get_better_name(PptTopLevel ppt) {
     String better_name = ppt.name;
     {
       // Replace <init> with name of class
@@ -261,6 +288,14 @@ public class PrintInvariants {
         + better_name.substring(colon_pos);
     }
 
+    return(better_name);
+  }
+
+  public static void print_sample_data(PptTopLevel ppt, PrintWriter out)
+  {
+    //System.out.println("entering print_sample_data\n");
+    String better_name = get_better_name(ppt);
+
     if (Daikon.output_num_samples) {
       int num_samps = -111; // [[INCR]]
       out.println(better_name + "  " + nplural(num_samps, "sample"));
@@ -275,8 +310,9 @@ public class PrintInvariants {
 	|| (Daikon.output_style == OutputFormat.ESCJAVA)
 	|| (Daikon.output_style == OutputFormat.JML)) {
       out.print("    Variables:");
-      for (int i=0; i<ppt.var_infos.length; i++)
+      for (int i=0; i<ppt.var_infos.length; i++) {
         out.print(" " + ppt.var_infos[i].name.name());
+      }
       out.println();
     }
     //System.out.println("entering print_sample_data\n");
@@ -454,10 +490,21 @@ public class PrintInvariants {
   /* [INCR]
   / **
    * Get all varInfos that are equal to vi.  The result also includes
-   * vi, because it may be that vi shouldn't get printed.  If the
-   * result's size is 1 or less, then no equality printing should take place.
+   * vi, because it may be that vi shouldn't get printed.  Obviously
+   * equal vars are included based on the value of
+   * PrintInvariants.includeObviouslyEqual.
    ** /
-  private static Vector get_equal_vars(VarInfo vi)
+  public static Vector get_equal_vars(VarInfo vi) {
+    return(get_equal_vars(vi, includeObviouslyEqual));
+  }
+
+  / **
+   * Get all varInfos that are equal to vi.  The result also includes
+   * vi, because it may be that vi shouldn't get printed.  Obviously
+   * equal vars are included based on the value of
+   * the parameter includeObviouslyEqual.
+   ** /
+  public static Vector get_equal_vars(VarInfo vi, boolean includeObviouslyEqual)
   {
     Vector equal_vars = new Vector();
     equal_vars.add(vi);
@@ -473,24 +520,23 @@ public class PrintInvariants {
       equal_vars.addAll(vi.equalToNonobvious());
     }
 
-    // Filter for parameters here
-    if (vi.ppt.ppt_name.isExitPoint()) {
-      for (Iterator i = equal_vars.iterator(); i.hasNext(); ) {
-        VarInfo var = (VarInfo) i.next();
-        if (debugPrintEquality.isDebugEnabled()) {
-          debugPrintEquality.debug (" testing derivedParamAndUnint " + var.name.name());
-        }
-        if (var.isDerivedParamAndUninteresting()) {
-          i.remove();
-        }
-      }
-    }
-
+    // // Filter for parameters here
+    //if (vi.ppt.ppt_name.isExitPoint()) {
+    //  for (Iterator i = equal_vars.iterator(); i.hasNext(); ) {
+    //	VarInfo var = (VarInfo) i.next();
+    //	if (debugPrintEquality.isDebugEnabled()) {
+    //	  debugPrintEquality.debug (" testing derivedParamAndUnint " + var.name.name());
+    //	}
+    //	if (var.isDerivedParamAndUninteresting()) {
+    //	  i.remove();
+    //	}
+    // }
+    //}
     return(equal_vars);
   }
   */ // ... [INCR]
 
-  private static Vector get_obviously_equal(VarInfo vi)
+  public static Vector get_obviously_equal(VarInfo vi)
   {
     Vector obviously_equal = null;
 
@@ -529,7 +575,7 @@ public class PrintInvariants {
 
     if (debugPrintEquality.isDebugEnabled()) {
       StringBuffer sb = new StringBuffer();
-      debugPrintEquality.debug("Resultant obviously equality set for "  + vi.ppt.name + " " + vi.name.name());
+        debugPrintEquality.debug("Resultant obviously equality set for "  + vi.ppt.name + " " + vi.name.name());
       for (Iterator j = equal_vars.iterator(); j.hasNext();) {
         sb.append ("  " + ((VarInfo) j.next()).name.name());
       }
@@ -537,7 +583,8 @@ public class PrintInvariants {
     }
 
     // Necessary for [INCR].
-    if (equal_vars.size() <= 1) return;
+    if (equal_vars.size() <= 1)
+      return;
 
     if (Daikon.output_style == OutputFormat.DAIKON) {
       StringBuffer sb = new StringBuffer();
@@ -677,7 +724,7 @@ public class PrintInvariants {
   }
 
   /* [INCR]
-  public static boolean accept_equality_invariant(PptTopLevel ppt, VarInfo vi)
+  public static boolean accept_varinfo(PptTopLevel ppt, VarInfo vi)
   {
     //this needs to be a seperate if statement because if vi is not
     //canonical, it will fail assert statements in some of the things
@@ -773,7 +820,11 @@ public class PrintInvariants {
       if (inv.isValidEscExpression()) {
         inv_rep = inv.format_using(Daikon.output_style);
       } else {
-        inv_rep = "warning: invalid ESC expression; method " + inv.getClass().getName() + ".format_esc() needs to be implemented: " + inv.format();
+	if (inv instanceof Equality) {
+	  inv_rep = "warning: method 'equality'.format_esc() needs to be implemented: " + inv.format();
+	} else {
+          inv_rep = "warning: method " + inv.getClass().getName() + ".format_esc() needs to be implemented: " + inv.format();
+        }
       }
     } else if (Daikon.output_style == OutputFormat.JML) {
       //System.out.println("PrintInvariants.print_invariants under format_jml, formatting inv " + inv.getClass().getName());
@@ -846,6 +897,22 @@ public class PrintInvariants {
 //    }
   }
 
+  /** Takes a list of Invariants and returns a list of Invariants which
+   *  is sorted according to PptTopLevel.icfp.
+   */
+
+  public static List sort_invariant_list(List invs) {
+    Invariant[] invs_array = (Invariant[]) invs.toArray(new Invariant[invs.size()]);
+    Arrays.sort(invs_array, PptTopLevel.icfp);
+
+    Vector result = new Vector(invs_array.length);
+
+    for(int i = 0; i < invs_array.length; i++) {
+      result.add(invs_array[i]);
+    }
+    return(result);
+  }
+
   private static PptMap ppt_map = null;
 
   public static boolean includeObviouslyEqual = false;
@@ -875,6 +942,10 @@ public class PrintInvariants {
                          );
       }
     }
+    if (debugFiltering.isDebugEnabled()) {
+      debugFiltering.debug("------------------------------------------------------------------------------------------------\n");
+      debugFiltering.debug(get_better_name(ppt) + "\n\n");
+    }
 
     // Count statistics (via Global) on variables (canonical, missing, etc.)
     count_global_stats(ppt);
@@ -900,71 +971,43 @@ public class PrintInvariants {
       boolean pi_accepted = accept_invariant(inv);
       boolean fi_accepted = fi.shouldKeep(inv);
 
-      if ((fi_accepted != pi_accepted) && should_gather_data) {
-        FileWriter outputFile = null;
-        try {
-          outputFile = new FileWriter("/SDG/g1/users/emarcus/research/invariants/tests/data_gathered", true);
-          outputFile.write(pi_accepted + "\t" + fi_accepted + "\t" + inv.isWorthPrinting() + "\t" + inv.getClass().getName() + "\t" + reason + "\t" + inv.format() + "\n");
-          outputFile.close();
-        }
-        catch (IOException e) {
-          System.out.println(e);
-        }
-      }
-
-      if (should_gather_data) {
-        FileWriter outputFile = null;
-        try {
-          outputFile = new FileWriter("/SDG/g1/users/emarcus/research/invariants/tests/rejection_reasons", true);
-          outputFile.write(pi_accepted + "\t" + inv.getClass().getName() + "\t" + inv.format() + "\t" + reason + "\n");
-          outputFile.close();
-        }
-        catch (IOException e) {
-          System.out.println(e);
-        }
-      }
-
-      if (fi_accepted && final_output_should_use_new_filtering) {
-        invCounter++;
-        Global.reported_invariants++;
-        accepted_invariants.add(inv);
-      }
-      if (pi_accepted && !final_output_should_use_new_filtering) {
-        invCounter++;
-        Global.reported_invariants++;
-        accepted_invariants.add(inv);
+      if (fi_accepted) {
+	invCounter++;
+	Global.reported_invariants++;
+	accepted_invariants.add(inv);
       }
     }
 
-    if (final_output_should_use_new_filtering) {
-      accepted_invariants = InvariantFilters.addEqualityInvariants(accepted_invariants);
+    accepted_invariants = InvariantFilters.addEqualityInvariants(accepted_invariants);
+
+    if (debugFiltering.isDebugEnabled()) {
+      Iterator inv_iter = accepted_invariants.iterator();
+      while(inv_iter.hasNext()) {
+    	Invariant current_inv = (Invariant)inv_iter.next();
+	if (current_inv instanceof Equality) {
+	  debugFiltering.debug("Found Equality which says " + current_inv.format() + "\n");
+	}
+      }
     }
-    else {
+
+    if (debugFiltering.isDebugEnabled()) {
       for (int i=0; i<ppt.var_infos.length; i++) {
         VarInfo vi = ppt.var_infos[i];
 
-        //if (accept_equality_invariant(ppt, vi)) // [INCR] XXX
-        {
-          invCounter++;
-          if (debugPrintEquality.isDebugEnabled()) {
-            debugPrintEquality.debug("Equality set for ppt "  + ppt.name + " " + vi.name.name());
-            /* [INCR]
-            StringBuffer sb = new StringBuffer();
-            for (Iterator j = vi.equalTo().iterator(); j.hasNext();) {
-              sb.append ("  " + ((VarInfo) j.next()).name.name());
-            }
-            debugPrintEquality.debug(sb);
-            */ // [INCR]
-          }
-          print_equality_invariants(vi, out, invCounter, ppt);
-        }
+	// if (accept_varinfo(ppt, vi)) { // [INCR] XXX
+          /* [INCR]
+	  StringBuffer sb = new StringBuffer();
+	  for (Iterator j = vi.equalTo().iterator(); j.hasNext();) {
+	    sb.append (" ==  " + ((VarInfo) j.next()).name.name());
+	  }
+	  debugFiltering.debug("Found VarInfo which says " + print_equality_invariants(vi, invCounter, ppt) + "\n");
+          */ // [INCR]
+	// } [INCR]
       }
     }
+
     finally_print_the_invariants(accepted_invariants, out, ppt);
   }
-
-  private static final boolean should_gather_data = false;
-  private static final boolean final_output_should_use_new_filtering = false;
 
   /**
    * Does the actual printing of the invariants.  Note that it creates
@@ -998,6 +1041,7 @@ public class PrintInvariants {
       //Assert.assertTrue(slice.check_modbits());
 
       print_invariant(inv, out, index, ppt);
+      //System.out.println("\t\t" + inv.getClass().getName());
     }
   }
 

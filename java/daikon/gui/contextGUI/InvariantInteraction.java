@@ -35,8 +35,8 @@ import java.util.*;
 
 public class InvariantInteraction
 {
-	// Object of the gui, that will be used to perform actions on it
-	private static ContextGUI dg = null;
+    // Object of the gui, that will be used to perform actions on it
+    private static ContextGUI dg = null;
 
     // Used to determine if the gui is visible. Not necessarily the program has
     // started or stopped. This way we can keep the gui object and not lose the
