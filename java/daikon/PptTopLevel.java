@@ -907,6 +907,7 @@ public class PptTopLevel extends Ppt {
     // Unary slices/invariants.
     Vector unary_views = new Vector(vi_index_limit-vi_index_min);
     for (int i=vi_index_min; i<vi_index_limit; i++) {
+      // System.out.println("Perhaps add unary view for " + var_infos[i].name);
       if (var_infos[i].canBeMissingCheck()) {
         if (Global.debugDerive) {
           System.out.println("In binary equality, " + var_infos[i].name + " can be missing");
@@ -921,6 +922,7 @@ public class PptTopLevel extends Ppt {
       // first pass of unary invariant instantiation
       slice1.instantiate_invariants(1);
       unary_views.add(slice1);
+      // System.out.println("Definitely add unary view for " + var_infos[i].name);
     }
     addViews(unary_views);
     set_dynamic_constant_slots(unary_views);
@@ -999,7 +1001,7 @@ public class PptTopLevel extends Ppt {
 
     // 3. all other unary invariants
     if (Global.debugPptTopLevel)
-      System.out.println(unary_views.size() + " unary views for pass 2 instantiate_invariants");
+      System.out.println(unary_views.size() + " unary views for pass 2 instantiate_invariants " + name);
     Vector unary_views_pass2 = new Vector(unary_views.size());
     for (int i=0; i<unary_views.size(); i++) {
       PptSlice1 unary_view = (PptSlice1) unary_views.elementAt(i);
@@ -1011,8 +1013,12 @@ public class PptTopLevel extends Ppt {
                              + var.name + " is not canonical");
         continue;
       }
-      if (unary_view.var_info.isConstant())
+      if (unary_view.var_info.isConstant()) {
+        if (Global.debugPptTopLevel)
+          System.out.println("Skipping pass 2 unary instantiate_invariants: "
+                             + var.name + " is constant=" + unary_view.var_info.constantValue());
         continue;
+      }
       if (views.contains(unary_view)) {
         // There is only one type of unary invariant in pass 1:
         // OneOf{Scalar,Sequence}.  It must have been successful, or this
@@ -1206,7 +1212,7 @@ public class PptTopLevel extends Ppt {
         OneOf one_of = (OneOf) inv;
         // System.out.println("num_elts: " + one_of.num_elts());
         if (one_of.num_elts() == 1) {
-          // System.out.println("Constant " + inv.ppt.name + " " + one_of.var().name + " because of " + unary_view.name);
+          System.out.println("Constant " + inv.ppt.name + " " + one_of.var().name + " because of " + inv.format() + "    " + inv.repr_prob() + "    " + inv.justified());
 	  // Should be Long, not Integer.
 	  Assert.assert(! (one_of.elt() instanceof Integer));
           one_of.var().dynamic_constant = one_of.elt();

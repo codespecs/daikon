@@ -173,15 +173,18 @@ public final class Global {
   // Used only if debugPptSliceSpecific is set.
   // Variables must appear in the correct order.
   public final static String[][] debuggedPptSliceSpecific
-    = { { "arg", "orig(arg)" },
-        { "inCentralCommandMediator.mAspectLegend", "inCentralCommandMediator.mAspectBrowser" },
-        { "list.class" },
-        { "this.theArray[orig(this.front)+1..]", "this.theArray[this.front..]" },
-        { "this.theArray[this.front..]", "this.theArray[orig(this.front)+1..]" },
-        { "this.topOfStack", "this.theArray[]" },
-        { "this.theArray[]", "this.topOfStack" },
-        { "other.begins", "orig(other.begins)" },
-        { "orig(other.begins)", "other.begins" },
+    = {
+      // { "arg", "orig(arg)" },
+      // { "inCentralCommandMediator.mAspectLegend", "inCentralCommandMediator.mAspectBrowser" },
+      // { "list.class" },
+      // { "this.theArray[orig(this.front)+1..]", "this.theArray[this.front..]" },
+      // { "this.theArray[this.front..]", "this.theArray[orig(this.front)+1..]" },
+      // { "this.topOfStack", "this.theArray[]" },
+      // { "this.theArray[]", "this.topOfStack" },
+      // { "other.begins", "orig(other.begins)" },
+      // { "orig(other.begins)", "other.begins" },
+      { "return" },
+      { "return.class" },
     };
 
   // This may be expensive and so should only be called infrequently.
