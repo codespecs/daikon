@@ -119,6 +119,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * specified slice.
    */
   public static boolean instantiate_ok (PptSlice ppt, boolean swap) {
+    if (ppt == null)
+      return (true);
     if (!dkconfig_enabled) return false;
     #if !defined(SEQ)
       if (!ppt.var_infos[0].file_rep_type.isIntegral()
@@ -390,6 +392,15 @@ public abstract class CLASSNAME extends SUPERCLASS {
       result.add (BitwiseSubset.instantiate (slice, false));
       result.add (BitwiseSubset.instantiate (slice, true));
     #endif
+    #if defined (TYPELONG) || defined (TYPEDOUBLE)
+      result.add (ZeroTrack.instantiate (slice, false));
+      result.add (ZeroTrack.instantiate (slice, true));
+    #endif
+    #if defined (TYPELONG)
+      result.add (BitwiseAndZero.instantiate (slice));
+      result.add (ShiftZero.instantiate (slice, false));
+      result.add (ShiftZero.instantiate (slice, true));
+    #endif
     return (result);
   }
 
@@ -424,8 +435,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     public boolean eq_check (PRIMITIVE x, PRIMITIVE y) {
-      if (x < y)
-        return (false);
       return (EQUALS (0, (x % y)));
     }
 
@@ -471,6 +480,49 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Check to see if x == y squared **/
     public boolean eq_check (PRIMITIVE x, PRIMITIVE y) {
       return (EQUALS (x, y*y));
+    }
+  }
+
+  /**
+   * Represents the zero tracks invariant between
+   * COMMENT_TXT.  Prints as ' VAR1 = 0 ==> VAR2 = 0'
+   **/
+  public static class ZeroTrack extends CLASSNAME {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20040313L;
+
+    protected ZeroTrack (PptSlice ppt, boolean swap) {
+      super(ppt, swap);
+    }
+
+    public static ZeroTrack instantiate(PptSlice ppt, boolean swap) {
+      if (!instantiate_ok(ppt, swap)) return null;
+      return new ZeroTrack (ppt, swap);
+    }
+
+    public String get_format_str (OutputFormat format) {
+      if (format == OutputFormat.SIMPLIFY)
+        return ("Simplify not implemented");
+      else
+        return ("(%var1% == 0) ==> (%var2% == 0)");
+    }
+
+    /**
+     * This is only interesting for suppressions
+     */
+    public DiscardInfo isObviousDynamically (VarInfo[] vis) {
+
+      return new DiscardInfo (this, DiscardCode.obvious,
+                              "Interesting only for suppressions");
+    }
+
+    public boolean eq_check (PRIMITIVE x, PRIMITIVE y) {
+      if (x == 0)
+        return (y == 0);
+      else
+        return (true);
     }
   }
 
@@ -553,6 +605,88 @@ public abstract class CLASSNAME extends SUPERCLASS {
         // suppress if var1 == var2
         new SuppressionDef (new InvDef (var1(), var2(), EQUALITY.class)),
       };
+    }
+  }
+
+  /**
+   * Represents the BitwiseAnd == 0 invariant between
+   * COMMENT_TXT.  Prints as ' VAR1 & VAR2 == 0'
+   **/
+  public static class BitwiseAndZero extends CLASSNAME {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20040313L;
+
+    protected BitwiseAndZero (PptSlice ppt) {
+      super(ppt, false);
+    }
+
+    public static BitwiseAndZero instantiate(PptSlice ppt) {
+      if (!instantiate_ok(ppt, false)) return null;
+      return new BitwiseAndZero (ppt);
+    }
+
+    public String get_format_str (OutputFormat format) {
+      if (format == OutputFormat.SIMPLIFY)
+        return ("Simplify not implemented");
+      else
+        return ("(%var1% & %var2%) == 0");
+    }
+
+    public boolean is_symmetric() {
+      return (true);
+    }
+
+    public boolean eq_check (PRIMITIVE x, PRIMITIVE y) {
+      return ((x & y) == 0);
+    }
+
+    /** This is only interesting for suppressions */
+    public DiscardInfo isObviousDynamically (VarInfo[] vis) {
+
+      return new DiscardInfo (this, DiscardCode.obvious,
+                              "Interesting only for suppressions");
+    }
+  }
+
+  /**
+   * Represents the ShiftZero invariant between
+   * COMMENT_TXT.  Prints as ' VAR1 >> VAR2 = 0'
+   **/
+  public static class ShiftZero  extends CLASSNAME {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20040313L;
+
+    protected ShiftZero (PptSlice ppt, boolean swap) {
+      super(ppt, swap);
+    }
+
+    public static ShiftZero instantiate(PptSlice ppt, boolean swap) {
+      if (!instantiate_ok(ppt, swap)) return null;
+      return new ShiftZero (ppt, swap);
+    }
+
+    public String get_format_str (OutputFormat format) {
+      if (format == OutputFormat.SIMPLIFY)
+        return ("Simplify not implemented");
+      else
+        return ("(%var1% >> %var2% == 0)");
+    }
+
+    public boolean eq_check (PRIMITIVE x, PRIMITIVE y) {
+      if ((y < 0) || (y > 63))
+        throw new ArithmeticException ("shift op (" + y + ") is out of range");
+      return ((x >> y) == 0);
+    }
+
+    /** This is only interesting for suppressions */
+    public DiscardInfo isObviousDynamically (VarInfo[] vis) {
+
+      return new DiscardInfo (this, DiscardCode.obvious,
+                              "Interesting only for suppressions");
     }
   }
 
