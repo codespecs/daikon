@@ -86,7 +86,12 @@ if ($algorithm eq 'hierarchical' || $algorithm eq 'km') {
 }
 	  
 foreach my $dtrace_file (@dtrace_files) {
-    open (DTRACE_IN, $dtrace_file) || &dieusage("dtrace file not found\n");
+    if ($dtrace_file =~ /\.gz$/) {
+	open (DTRACE_IN, "zcat $dtrace_file |") || &dieusage("couldn't open dtrace file $dtrace_file with zcat\n");
+    } else {
+	open (DTRACE_IN, $dtrace_file) || &dieusage("couldn't open dtrace file $dtrace_file\n");
+    }
+    
     $dtrace_file =~ /(.*)\.dtrace/;
     my $newfile = $1."_daikon_temp.dtrace";
     
