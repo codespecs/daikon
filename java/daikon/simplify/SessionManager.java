@@ -34,7 +34,7 @@ public class SessionManager
       System.err.println("DEBUG_SIMPLIFY is on");
     }
   }
-  /* package */ static void debugln(String s) {
+  public static void debugln(String s) {
     if (!debug_mgr) return;
     System.err.println(s);
     System.err.flush();
@@ -115,6 +115,7 @@ public class SessionManager
 	    try {
 	      mgr.pending.apply(session);
 	    } catch (SimplifyError e) {
+	      debugln(e.toString());
 	      // Cause a timeout exception by not setting pending to
 	      // null.  This might not be exactly the right thing to
 	      // do, but a core dump from Simplify is arguably the
