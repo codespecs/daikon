@@ -51,6 +51,14 @@ public class SelfSuppressionFactory extends SuppressionFactory  {
       debug.fine ("Attempting on: " + inv.repr());
       debug.fine ("  in ppt     : " + inv.ppt.parent.ppt_name);
     }
+
+    // No self suppression in bottom up approach.  In the long run this
+    // would be much better fixed by not including this factory
+    if (Daikon.df_bottom_up) {
+      inv.log ("Ignoring self suppression in bottom up");
+      return (null);
+    }
+
     if (inv.logOn())
       inv.log ("Attempting self suppression with sample count: " + inv.ppt.num_samples());
 
@@ -71,11 +79,9 @@ public class SelfSuppressionFactory extends SuppressionFactory  {
     if (supTemplate.filled && supTemplate.results[0].isSameFormula(inv)) {
       Assert.assertTrue (supTemplate.transforms[0][0] != supTemplate.varInfos[0][0]);
       if (inv.logOn()) {
-        inv.log ("  Self template filled:");
-        inv.log ("  suppressee: " + inv.repr());
-        inv.log ("      in ppt: " + inv.ppt.parent.name);
-        inv.log ("  with      : " + supTemplate.results[0].repr());
-        inv.log ("      in ppt: " + supTemplate.results[0].ppt.parent.name);
+        inv.log ("  Self template filled with "
+                + supTemplate.results[0].format() + " from "
+                + supTemplate.results[0].ppt.parent.name);
       }
       return linkFromTemplate (supTemplate, inv);
     } else {
