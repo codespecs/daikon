@@ -11,7 +11,7 @@ import java.util.*;
 class SimplifyFilter extends InvariantFilter {
   static String description = "Eliminate invariants based on Simplify (slow)";
   InvariantFilters filters;     // need this reference for MyTester
-  PptTopLevel previousTopLevel; // hack for speed, used in shouldDiscardInvariant()
+  PptTopLevel previousTopLevel; // hack for speed, used in shouldDiscardCode()
 
   public String getDescription() {
     return description;
@@ -25,7 +25,7 @@ class SimplifyFilter extends InvariantFilter {
   boolean shouldDiscardInvariant( Invariant invariant ) {
     if (Daikon.suppress_redundant_invariants_with_simplify &&
         invariant.ppt.parent.redundant_invs.contains(invariant)) {
-      invariant.discardCode = DiscardInvariant.obvious;
+      invariant.discardCode = DiscardCode.obvious;
       invariant.discardString = "This Invariant was filtered due to Simplify.";
       return (true);
     }

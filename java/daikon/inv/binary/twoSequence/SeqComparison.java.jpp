@@ -455,7 +455,7 @@ public class SEQSEQINTEQUAL
       return Invariant.PROBABILITY_NEVER;
     } else {
       #if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
-      return Math.pow(.5, values_cache.num_values());
+      return Math.pow(.5, ppt.num_values());
       #else
       if (ppt.num_samples() == 0) {
         return Invariant.PROBABILITY_UNJUSTIFIED;

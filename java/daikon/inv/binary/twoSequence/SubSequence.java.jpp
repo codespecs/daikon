@@ -329,7 +329,7 @@ public class CLASSNAME
 
     if (! (new_var1_in_var2 || new_var2_in_var1)) {
       destroyAndFlow();
-      discardCode = DiscardInvariant.bad_sample;
+      discardCode = DiscardCode.bad_sample;
       discardString = "Falsified by sample: " + var1().name.name() + "==" + ArraysMDE.toString(a1) +
             ", " + var2().name.name() + "==" + ArraysMDE.toString(a2);
       return;
@@ -345,7 +345,7 @@ public class CLASSNAME
     if (falsified)
       return Invariant.PROBABILITY_NEVER;
     else if (var1_in_var2 && var2_in_var1) {
-      discardCode = DiscardInvariant.obvious;
+      discardCode = DiscardCode.obvious;
       discardString = "Both variables have always been subsequences of each other";
       return Invariant.PROBABILITY_UNJUSTIFIED;
     }
@@ -384,7 +384,7 @@ public class CLASSNAME
     }
 
     // Standard discard reason/string
-    DiscardInvariant discardCode = DiscardInvariant.obvious;
+    DiscardCode discardCode = DiscardCode.obvious;
     String discardString = subvar.name.name()+" obvious subset/subsequence of "+supervar.name.name();
 
     // For unions and intersections, it probably doesn't make sense to
@@ -397,7 +397,7 @@ public class CLASSNAME
         supervar.derived instanceof SEQUENCESCALARUNION ||
         subvar.derived instanceof SEQUENCESCALARINTERSECTION ||
         subvar.derived instanceof SEQUENCESCALARUNION) {
-      discardCode = DiscardInvariant.obvious;
+      discardCode = DiscardCode.obvious;
       discardString = "Invariants involving subsets/subsequences of unions/intersections"+
         "are suppressed";
       debug.fine ("  returning true because of union or intersection");
@@ -409,7 +409,7 @@ public class CLASSNAME
       // of x[]
       SEQUENCESPREDICATE derived = (SEQUENCESPREDICATE) subvar.derived;
       if (derived.var1().equals(supervar)) {
-        discardCode = DiscardInvariant.obvious;
+        discardCode = DiscardCode.obvious;
         discardString = subvar.name.name()+" is derived from "+supervar.name.name();
         debug.fine ("  returning true because of predicate slicing");
         return new Object[] {discardCode, discardString};
@@ -426,7 +426,7 @@ public class CLASSNAME
     if (subvar_super == supervar) {
       // System.out.println("SubSequence.isObviousDerived(" + subvar.name + ", " + supervar.name + ") = true");
       // System.out.println("  details: subvar_super=" + subvar_super.name + "; supervar_super=" + supervar.isDerivedSubSequenceOf() == null ? "null" : supervar.isDerivedSubSequenceOf().name);
-      discardCode = DiscardInvariant.obvious;
+      discardCode = DiscardCode.obvious;
       discardString = subvar.name.name()+"=="+supervar.name.name();
       debug.fine ("  returning true because subvar_super == supervar");
       return new Object[] {discardCode, discardString};
@@ -498,7 +498,7 @@ public class CLASSNAME
           if (super_right_shift > sub_right_shift) right_included = true;
         }
         if (left_included && right_included) {
-          discardCode = DiscardInvariant.obvious;
+          discardCode = DiscardCode.obvious;
           discardString = subvar.name.name()+" obvious subset/subsequence of "+supervar.name.name();
           return new Object[] {discardCode, discardString };
         }
@@ -608,7 +608,7 @@ public class CLASSNAME
     if (var1_in_var2 && var2_in_var1) {
       // Suppress this invariant; we should get an equality invariant from
       // elsewhere.
-      discardCode = DiscardInvariant.obvious;
+      discardCode = DiscardCode.obvious;
       String name1 = var1().name.name();
       String name2 = var2().name.name();
       discardString = "All seen samples for "+name1+","+name2+" have represented equal sequences";

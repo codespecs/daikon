@@ -32,7 +32,7 @@ class ControlledInvariantFilter extends InvariantFilter {
 
 
     if (! isWorthPrinting_sansControlledCheck(inv)) {
-      inv.discardCode = DiscardInvariant.control_check;
+      inv.discardCode = DiscardCode.control_check;
       inv.discardString = "Invariant fails InvariantFilters.isWorthPrintingFilter";
       return false;
     }
@@ -63,7 +63,7 @@ class ControlledInvariantFilter extends InvariantFilter {
         if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
           PrintInvariants.debugFiltering.fine ("\tis controlled by " + contr_inv.format() + " (from " + contr_inv.ppt.parent.name + ")\n");
         }
-        inv.discardCode = DiscardInvariant.control_check;
+        inv.discardCode = DiscardCode.control_check;
         inv.discardString = "("+contr_inv.ppt.name+": "+contr_inv.format()+") is worth printing "+
           "and is a controlling Invariant of this";
         return false;

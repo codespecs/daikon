@@ -33,6 +33,9 @@ import java.io.Serializable;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+import daikon.inv.unary.sequence.SeqIndexComparison;
+import daikon.inv.unary.sequence.SeqIndexComparisonFloat;
+
 public final class CLASSNAME
   implements Serializable, Cloneable
 {
@@ -171,7 +174,7 @@ public final class CLASSNAME
     if (wrapper.falsified) {
       return Invariant.PROBABILITY_NEVER;
     } else if (can_be_lt || can_be_gt) {
-      return Math.pow(.5, values_cache.num_values());
+      return Math.pow(.5, wrapper.ppt.num_values());
     } else {
       if (can_be_eq) {
         // It's an equality invariant.  I ought to use the actual ranges somehow.
@@ -182,7 +185,7 @@ public final class CLASSNAME
       } else {
         // None of the can_be_X's are set.
         // (We haven't seen any samples.)
-        wrapper.discardCode = DiscardInvariant.not_enough_samples;
+        wrapper.discardCode = DiscardCode.not_enough_samples;
         wrapper.discardString = "No samples seen for this Invariant";
         return Invariant.PROBABILITY_UNJUSTIFIED;
       }
@@ -246,7 +249,7 @@ public final class CLASSNAME
   public boolean isExact() {
     boolean answer = (can_be_eq && (!can_be_lt) && (!can_be_gt));
     if (answer) {
-      wrapper.discardCode = DiscardInvariant.exact;
+      wrapper.discardCode = DiscardCode.exact;
       wrapper.discardString = "Invariant is equals but neither less than nor greater than";
     }
     return answer;

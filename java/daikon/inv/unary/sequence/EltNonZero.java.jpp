@@ -208,7 +208,7 @@ public final class CLASSNAME
       // the first value).
       if (EQUAL (v, 0)) {
         destroyAndFlow();
-        discardCode = DiscardInvariant.bad_sample;
+        discardCode = DiscardCode.bad_sample;
         discardString = var().name.name()+"["+ai+"]==0";
         return;
       }
@@ -306,7 +306,7 @@ public final class CLASSNAME
 
         // First see if the subsequence relationship can be determined from the VarInfos
         if (SubSequence.isObviousSubSequenceDynamically(this, v1, v2)) {
-          discardCode = DiscardInvariant.obvious;
+          discardCode = DiscardCode.obvious;
           discardString = v1.name.name()+" is a subsequence of "+v2.name.name()+" for which the result is known";
           return true;
         }
@@ -326,7 +326,7 @@ public final class CLASSNAME
                 ? ss.var1_in_var2
                 : ss.var2_in_var1) {
               debug.fine ("  True from subsequence search");
-              discardCode = DiscardInvariant.obvious;
+              discardCode = DiscardCode.obvious;
               if (this_var_first)
                 discardString = v1.name.name()+" is a subsequence of "+v2.name.name()+" for which the result is known";
               else

@@ -214,11 +214,16 @@ public final class CLASSNAME
   }
 
   public void add_modified(PRIMITIVE[] a, int count) {
+    if (logDetail())
+      log ("Entered add_modified: ppt.num_values()==" + ppt.num_values() +
+           ", sample== " + ArraysMDE.toString(a));
     for (int i=0; i<a.length; i++) {
       core.add_modified(a[i], i, count);
       if (falsified)
         return;
     }
+    if (logDetail())
+      log ("Exiting add_modified with ppt.num_values()==" + ppt.num_values());
   }
 
   protected double computeProbability() {

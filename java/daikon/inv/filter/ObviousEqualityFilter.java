@@ -78,7 +78,7 @@ class ObviousEqualityFilter extends InvariantFilter {
       if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
         PrintInvariants.debugFiltering.fine ("it was obvious that " + canonical.name.name() + " == " + v1.name.name() + "\n");
       }
-      invariant.discardCode = DiscardInvariant.obvious;
+      invariant.discardCode = DiscardCode.obvious;
       invariant.discardString = "Obvious that "+canonical.name.name()+"=="+v1.name.name();
       return true;
     }
@@ -87,7 +87,7 @@ class ObviousEqualityFilter extends InvariantFilter {
       if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
         PrintInvariants.debugFiltering.fine ("it was obvious that " + canonical.name.name() + " == " + v2.name.name() + "\n");
       }
-      invariant.discardCode = DiscardInvariant.obvious;
+      invariant.discardCode = DiscardCode.obvious;
       invariant.discardString = "Obvious that "+canonical.name.name()+"=="+v2.name.name();
       return true;
     }
@@ -100,7 +100,7 @@ class ObviousEqualityFilter extends InvariantFilter {
       VarInfo super1 = v1.isDerivedSubSequenceOf();
       VarInfo super2 = v2.isDerivedSubSequenceOf();
       if ((super1 != null) && (super2 != null) && (super1 == super2)) {
-        invariant.discardCode = DiscardInvariant.obvious;
+        invariant.discardCode = DiscardCode.obvious;
         invariant.discardString = "var1=="+v1.name.name()+" and var2=="+v2.name.name()+
           "both derived from same sequence "+super1.name.name();
         return true;

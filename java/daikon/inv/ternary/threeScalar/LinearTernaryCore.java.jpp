@@ -13,11 +13,13 @@ The correct way to build the system is to run 'make'.
   #define PRIMITIVE long
   #define CLASSSTRING "LinearTernaryCore"
   #define EQUAL(a,b) ((a) == (b))
+  #define VALUETRACKER ValueTracker
 #elif (defined(TYPEDOUBLE))
   #define CLASSNAME LinearTernaryCoreFloat
   #define PRIMITIVE double
   #define CLASSSTRING "LinearTernaryCoreFloat"
   #define EQUAL(a,b) (Global.fuzzy.eq (a, b))
+  #define VALUETRACKER ValueTracker
 #else
   #error "Either TYPELONG or TYPEDOUBLE must be defined"
 #endif
@@ -52,6 +54,7 @@ public final class CLASSNAME
   public double a = 0, b = 0, c = 0;
   public double min_a, max_a, min_b, max_b, min_c, max_c;
   public double separation = 0;
+  VALUETRACKER values_cache = new ValueTracker(8);
 
   //inner class to store points in for more convenient access
   public static class Point implements Serializable, Cloneable {
@@ -86,6 +89,10 @@ public final class CLASSNAME
 
   public CLASSNAME(Invariant wrapper) {
     this.wrapper = wrapper;
+  }
+
+  public final static int minTriples() {
+    return MINTRIPLES;
   }
 
   public Object clone() {
@@ -206,15 +213,15 @@ public final class CLASSNAME
 
       def_points[values_seen] = new Point (x, y, z);
       values_seen++;
+      values_cache.add(x, y, z);
 
       // if we've seen enough values to create the equation
       if (values_seen == MINTRIPLES) {
-
         // Find the three points with the maximum separation
         maxsep_triples (def_points);
         if (def_points[0] == null) {
           wrapper.destroyAndFlow();
-          wrapper.discardCode = DiscardInvariant.bad_sample;
+          wrapper.discardCode = DiscardCode.bad_sample;
           wrapper.discardString = "No triplet found with non-zero separation";
           return;
         }
@@ -225,7 +232,7 @@ public final class CLASSNAME
           coef = calc_tri_linear (def_points);
         } catch (Exception e) {
           wrapper.destroyAndFlow();
-          wrapper.discardCode = DiscardInvariant.bad_sample;
+          wrapper.discardCode = DiscardCode.bad_sample;
           wrapper.discardString = "Exception thrown while calculating coefficients: "+e;
           return;
         }
@@ -241,7 +248,7 @@ public final class CLASSNAME
             (Math.abs(a) >= Double.MAX_VALUE) ||
             (Math.abs(b) >= Double.MAX_VALUE)) {
           wrapper.destroyAndFlow();
-          wrapper.discardCode = DiscardInvariant.bad_sample;
+          wrapper.discardCode = DiscardCode.bad_sample;
           if (a==0)
             wrapper.discardString = "For "+wrapper.format()+" 'a' was calculated to be 0";
           if (b==0)
@@ -261,11 +268,11 @@ public final class CLASSNAME
                             + "+" + b + "*" + def_points[i].y + "+" + c);
               }
               wrapper.destroyAndFlow();
-              wrapper.discardCode = DiscardInvariant.bad_sample;
+              wrapper.discardCode = DiscardCode.bad_sample;
               #if defined(TYPELONG)
-                LinearTernary ltInv = (LinearTernary) wrapper;
+              LinearTernary ltInv = (LinearTernary) wrapper;
               #elif defined(TYPEDOUBLE)
-                LinearTernaryFloat ltInv = (LinearTernaryFloat) wrapper;
+              LinearTernaryFloat ltInv = (LinearTernaryFloat) wrapper;
               #endif
               String name1 = ltInv.var1().name.name();
               String name2 = ltInv.var2().name.name();
@@ -276,7 +283,7 @@ public final class CLASSNAME
                 ","+def_points[i].z+")";
               return;
             }
-          }
+        }
 
           // Discard the points not used to define the coefficients.
           for (int ii = 3; ii < MINTRIPLES; ii++)
@@ -295,11 +302,11 @@ public final class CLASSNAME
                         + y + " != " + a + "*" + x + "+" + b);
           }
           wrapper.destroyAndFlow();
-          wrapper.discardCode = DiscardInvariant.bad_sample;
+          wrapper.discardCode = DiscardCode.bad_sample;
           #if defined(TYPELONG)
-            LinearTernary ltInv = (LinearTernary) wrapper;
+          LinearTernary ltInv = (LinearTernary) wrapper;
           #elif defined(TYPEDOUBLE)
-            LinearTernaryFloat ltInv = (LinearTernaryFloat) wrapper;
+          LinearTernaryFloat ltInv = (LinearTernaryFloat) wrapper;
           #endif
           String name1 = ltInv.var1().name.name();
           String name2 = ltInv.var2().name.name();
@@ -562,13 +569,15 @@ public final class CLASSNAME
   public double computeProbability() {
     if (wrapper.falsified)
       return Invariant.PROBABILITY_NEVER;
-    double answer = Invariant.prob_is_ge(values_seen, MINTRIPLES);
-    if (answer > Invariant.dkconfig_probability_limit) {
-      wrapper.discardCode = DiscardInvariant.bad_probability;
-      wrapper.discardString = "Number of samples seen not close to goal: "+values_seen+" samples"+
-        "seen,goal was "+MINTRIPLES;
+    else {
+      double answer = Invariant.prob_is_ge(wrapper.ppt.num_values(), MINTRIPLES);
+      if (answer > Invariant.dkconfig_probability_limit) {
+        wrapper.discardCode = DiscardCode.bad_probability;
+        wrapper.discardString = "Number of samples seen not close to goal: "+values_seen+" samples"+
+          "seen,goal was "+MINTRIPLES;
+      }
+      return answer;
     }
-    return answer;
   }
 
   public String repr() {

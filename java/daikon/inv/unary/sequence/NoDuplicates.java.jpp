@@ -241,7 +241,7 @@ public class CLASSNAME
             debug.fine (ArraysMDE.toString(a));
           }
           destroyAndFlow();
-          discardCode = DiscardInvariant.bad_sample;
+          discardCode = DiscardCode.bad_sample;
           discardString = "Duplicates at indices "+i+" and "+j+", both have value: "+a[i];
           return;
         }
@@ -264,9 +264,10 @@ public class CLASSNAME
     if (falsified) {
       return Invariant.PROBABILITY_NEVER;
     } else {
-      double answer = Math.pow(.9, elts);
+      double answer = 0;
+      answer = Math.pow(.9, ((PptSlice1) ppt).num_no_dup_values());
       if (answer > Invariant.dkconfig_probability_limit) {
-        discardCode = DiscardInvariant.bad_probability;
+        discardCode = DiscardCode.bad_probability;
         discardString = "Computed probability "+answer+" > dkconfig_probabiliy_limit="+Invariant.dkconfig_probability_limit;
       }
       return answer;
@@ -315,7 +316,7 @@ public class CLASSNAME
             if (this_var_first
                 ? ss.var1_in_var2
                 : ss.var2_in_var1) {
-              discardCode = DiscardInvariant.obvious;
+              discardCode = DiscardCode.obvious;
               discardString = "This sequence is a subsequence of "+inv.ppt.var_infos[0].name.name()+" for which"+
                                "the invariant holds.";
               return true;
@@ -337,7 +338,7 @@ public class CLASSNAME
             || (inv instanceof EltwiseFloatLessThan)
             || (inv instanceof EltwiseIntGreaterThan)
             || (inv instanceof EltwiseFloatGreaterThan)) {
-          discardCode = DiscardInvariant.obvious;
+          discardCode = DiscardCode.obvious;
           discardString = "Sequence is sorted (" + inv.format() + ")";
           log ("obvious- " + discardString);
           return true;

@@ -5,6 +5,8 @@ SubSequence.java
 SubSequenceFloat.java
 SubSet.java
 SubSetFloat.java
+SuperSet.java
+SuperSetFloat.java
 PairwiseLinearBinary.java
 PairwiseLinearBinaryFloat.java
 PairwiseFunctionUnary.java

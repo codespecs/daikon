@@ -15,6 +15,7 @@ The correct way to build the system is to run 'make'.
   #define PROGLANGTYPEARRAY INT_ARRAY
   #define ELTONEOF EltOneOf
   #define SUBSEQUENCE SubSequence
+  #define VALUETRACKER ValueTracker
 #elif (defined(EQUALFLOAT) || defined(LESSTHANFLOAT) || defined(LESSEQUALFLOAT) || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT))
   #define SUPERCLASS SequenceFloat
   #define PRIMITIVE double
@@ -22,6 +23,7 @@ The correct way to build the system is to run 'make'.
   #define PROGLANGTYPEARRAY DOUBLE_ARRAY
   #define ELTONEOF EltOneOfFloat
   #define SUBSEQUENCE SubSequenceFloat
+  #define VALUETRACKER FloatValueTracker
 #endif
 
 #if defined(EQUAL)
@@ -151,6 +153,8 @@ public final class SEQINTEQUAL
 
   static boolean debugSeqIntComparison = false;
 
+  VALUETRACKER values_cache = new VALUETRACKER(8);
+
   protected SEQINTEQUAL(PptSlice ppt, boolean seq_first) {
     super(ppt, seq_first);
     Assert.assertTrue(sclvar().rep_type == ProglangType.PROGLANGTYPESCALAR);
@@ -278,18 +282,18 @@ public final class SEQINTEQUAL
     for (int i=0; i<a.length; i++) {
       #if (defined(EQUAL) || defined(EQUALFLOAT))
       if (! EQUALS(a[i], x) ) {
-        // discardCode = DiscardInvariant.bad_sample; WILL BE UNCOMMENTED AFTER V2/V3 MERGE 7/11/2003
-        // discardString = "Falsified by sample: " + seqvar().name.name() + "==" + ArraysMDE.toString(a) +
-        //  ", " + sclvar().name.name() + "==" + x;
+        discardCode = DiscardCode.bad_sample;
+        discardString = "Falsified by sample: " + seqvar().name.name() + "==" + ArraysMDE.toString(a) +
+          ", " + sclvar().name.name() + "==" + x;
         destroyAndFlow();
         return;
       }
       #else
       if (! EQUALS(a[i], x) || !seqvar().type.elementIsIntegral()) {
-        // discardCode = DiscardInvariant.bad_sample;
+        discardCode = DiscardCode.bad_sample;
         if (! EQUALS(a[i], x)){
-          // discardString = "Falsified by sample: " + seqvar().name.name() + "==" + ArraysMDE.toString(a) +
-          //  ", " + sclvar().name.name() + "==" + x; WILL BE UNCOMMENTED AFTER V2/V3 MERGE 7/11/2003
+          discardString = "Falsified by sample: " + seqvar().name.name() + "==" + ArraysMDE.toString(a) +
+            ", " + sclvar().name.name() + "==" + x;
         }
         else {
           // discardString = "Sequence variable "+seqvar().name.name()+" has ProglangType with non-integral element";
@@ -298,6 +302,7 @@ public final class SEQINTEQUAL
         return;
       }
       #endif
+      values_cache.add(a[i], x);
       num_values++;
     }
   }
@@ -306,16 +311,16 @@ public final class SEQINTEQUAL
     if (falsified) {
       return PROBABILITY_NEVER;
     } if (num_values==0) {
-      // discardCode = DiscardInvariant.not_enough_samples; WILL BE UNCOMMENTED AFTER V2/V3 MERGE 7/11/2003
-      // discardString = "No samples seen for this Invariant";
+      discardCode = DiscardCode.not_enough_samples;
+      discardString = "No samples seen for this Invariant";
       return PROBABILITY_UNJUSTIFIED;
       }
     #if (defined(LESSTHAN) || defined(GREATERTHAN) || defined(LESSEQUAL) || defined(GREATEREQUAL) || defined(LESSTHANFLOAT) || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT) || defined(LESSEQUALFLOAT))
-    double answer = Math.pow(.5, num_values);
+    double answer = Math.pow(.5, ppt.num_values());
     if (answer > Invariant.dkconfig_probability_limit) {
-      // discardCode = DiscardInvariant.bad_probability; WILL BE UNCOMMENTED AFTER V2/V3 MERGE 7/11/2003
-      // discardString = "Computed probability "+answer+" > dkconfig_probability_limit=="+
-      //  Invariant.dkconfig_probability_limit;
+      discardCode = DiscardCode.bad_probability;
+      discardString = "Computed probability "+answer+" > dkconfig_probability_limit=="+
+        Invariant.dkconfig_probability_limit;
     }
     return answer;
     #else

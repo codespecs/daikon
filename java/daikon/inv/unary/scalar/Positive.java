@@ -2,7 +2,7 @@ package daikon.inv.unary.scalar;
 
 import daikon.*;
 import daikon.inv.Invariant.OutputFormat;
-import daikon.inv.DiscardInvariant;
+import daikon.inv.DiscardCode;
 
 // This invariant is true if the variable is always positive (greater than 0).
 // This invariant is provided for pedagogical reasons only.
@@ -42,7 +42,7 @@ public class Positive
   public void add_modified(long v, int count) {
     if (v <= 0) {
       destroyAndFlow();
-      discardCode = DiscardInvariant.bad_sample;
+      discardCode = DiscardCode.bad_sample;
       discardString = "Falsified by sample: "+ var().name.name() + "==" + v;
       return;
     }
@@ -54,7 +54,7 @@ public class Positive
     // being positive by chance.
     double answer =  Math.pow(.5, ppt.num_mod_non_missing_samples());
     if (answer > dkconfig_probability_limit) {
-      discardCode = DiscardInvariant.bad_probability;
+      discardCode = DiscardCode.bad_probability;
       discardString = "Computed probability " + answer + " > dkconfig_probability_limit==" +
         dkconfig_probability_limit;
     }

@@ -15,6 +15,7 @@ import daikon.PptTopLevel;
 import daikon.VarInfo;
 import daikon.PrintInvariants;
 import daikon.Daikon;
+import daikon.Global;
 
 //  This class contains a collection of invariant filters, and allows other
 //  code to perform invariant filtering.  To filter invariants, do the
@@ -162,7 +163,7 @@ public class InvariantFilters {
     // Keep track of old codes so that if it passes this test
     // we can set it back to prevent undesirable side effects
     // from the filters
-    DiscardInvariant oldCode = invariant.discardCode;
+    DiscardCode oldCode = invariant.discardCode;
     String oldString = invariant.discardString;
 
     //  Do variable filters first since they eliminate more invariants.
@@ -206,7 +207,8 @@ public class InvariantFilters {
       }
       if (filter.shouldDiscard( invariant )) {
         if (invariant.logOn() || df.isLoggable(Level.FINE))
-          invariant.log (df, "failed " + filter.getClass().getName());
+          invariant.log (df, "failed " + filter.getClass().getName() + " num_values = " + invariant.ppt.num_values() +
+                         ",num_unmod_missing_samples==" + invariant.ppt.num_mod_non_missing_samples());
         return false;
       }
     }
@@ -214,7 +216,7 @@ public class InvariantFilters {
       invariant.log (df, "accepted by InvariantFilters");
     }
     // Doing this since the filters can side effect desirable Invariants
-    invariant.discardCode = DiscardInvariant.not_discarded;
+    invariant.discardCode = DiscardCode.not_discarded;
     invariant.discardString = "";
     return true;
   }

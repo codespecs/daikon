@@ -28,7 +28,7 @@ package daikon.inv.binary.twoScalar;
 
 import daikon.*;
 import daikon.inv.Invariant;
-import daikon.inv.DiscardInvariant;
+import daikon.inv.DiscardCode;
 import daikon.derive.unary.SequenceLength;
 import java.util.*;
 import utilMDE.*;
@@ -120,7 +120,7 @@ public class CLASSNAME
       SequenceLength sl1 = (SequenceLength) var1.derived;
       SequenceLength sl2 = (SequenceLength) var2.derived;
       if (sl1.base == sl2.base) {
-        discardCode = DiscardInvariant.obvious;
+        discardCode = DiscardCode.obvious;
         discardString = var1.name.name()+" and "+var2.name.name()+" derived from "+
           "same sequence: "+sl1.base.name.name();
         return true;
@@ -129,14 +129,14 @@ public class CLASSNAME
     // avoid comparing "size(a)-1" to anything; should compare "size(a)" instead
     if (var1.isDerived() && (var1.derived instanceof SequenceLength)
         && ((SequenceLength) var1.derived).shift != 0) {
-      discardCode = DiscardInvariant.obvious;
+      discardCode = DiscardCode.obvious;
       discardString = "Variables of the form 'size(a)-1' are not compared since 'size(a)' "+
         "will be compared";
       return true;
     }
     if (var2.isDerived() && (var2.derived instanceof SequenceLength)
         && ((SequenceLength) var2.derived).shift != 0) {
-      discardCode = DiscardInvariant.obvious;
+      discardCode = DiscardCode.obvious;
       discardString = "Variables of the form 'size(a)-1' are not compared since 'size(a)' "+
         "will be compared";
       return true;

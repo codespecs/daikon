@@ -336,10 +336,6 @@ public class PAIRWISEINTEQUAL
   }
 
   public void add_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {
-
-    if (logDetail() || debug.isLoggable(Level.FINE))
-      log (debug, "add_modified (" + ArraysMDE.toString(a1) + ", " + ArraysMDE.toString(a2) + ")");
-
     if (a1.length != a2.length) {
       destroyAndFlow();
       return;
@@ -359,7 +355,9 @@ public class PAIRWISEINTEQUAL
       values_cache.add(v1,v2);
     }
     if (logDetail() || debug.isLoggable(Level.FINE))
-      log (debug, "Exited " + PAIRWISEINTEQUALstring + " add_modified");
+      log (debug, "saw add_modified (" + ArraysMDE.toString(a1) + ", " + ArraysMDE.toString(a2) + ")" +
+           " values_cache.num_values()==" + values_cache.num_values() + ", ppt.num_values()==" + ppt.num_values() +
+           ", ppt.num_elt_values==" + ((PptSlice2) ppt).num_elt_values());
   }
 
   /**
@@ -376,9 +374,9 @@ public class PAIRWISEINTEQUAL
      return Invariant.PROBABILITY_UNJUSTIFIED;
    else {
      #if !(defined(EQUAL) || defined(EQUALFLOAT))
-      return Math.pow(.5, values_cache.num_values());
+     return Math.pow(.5, ((PptSlice2) ppt).num_elt_values());
      #else
-      return Invariant.PROBABILITY_JUSTIFIED;
+     return Invariant.PROBABILITY_JUSTIFIED;
      #endif
    }
   }

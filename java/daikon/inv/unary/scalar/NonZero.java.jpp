@@ -169,7 +169,7 @@ public class NONZERO
         log (debug, "destroy (value = " + v + ")");
       }
       destroyAndFlow();
-      discardCode = DiscardInvariant.bad_sample;
+      discardCode = DiscardCode.bad_sample;
       discardString = "Zero/null sample seen";
       return;
     }
@@ -197,7 +197,7 @@ public class NONZERO
       // makes sense to do if the {Lower,Upper}Bound invariant doesn't imply
       // the non-zeroness.)  In that case, do still check for no values yet
       // received.
-      discardCode = DiscardInvariant.bad_probability;
+      discardCode = DiscardCode.bad_probability;
       String descrip;
       if (min > 0)
         descrip = "positive";
@@ -231,9 +231,10 @@ public class NONZERO
       //   double log_probability = self.samples*math.log(probability);
       // then calling Math.exp (if the value is in the range that wouldn't
       // cause underflow).
-      double answer = Math.pow(probability_one_elt_nonzero, ppt.num_mod_non_missing_samples());
+      double answer = 0;
+      answer = Math.pow(probability_one_elt_nonzero, ppt.num_mod_non_missing_samples());
       if (answer > Invariant.dkconfig_probability_limit) {
-        discardCode = DiscardInvariant.bad_probability;
+        discardCode = DiscardCode.bad_probability;
         discardString = "Computed probability "+answer+" > dkconfig_probability_limit=="+dkconfig_probability_limit;
       }
       return answer;
@@ -244,13 +245,13 @@ public class NONZERO
     VarInfo var = vis[0];
     // In Java, "this" can never be non-null, so "this != null" is vacuous.
     if (var.name.name() == "this") { // interned
-      discardCode = DiscardInvariant.obvious;
+      discardCode = DiscardCode.obvious;
       discardString = "'this' can never be null in Java";
       return true;
     }
     if (var.name instanceof VarInfoName.Prestate &&
         ((VarInfoName.Prestate) var.name).term.name() == "this") { // interned
-      discardCode = DiscardInvariant.obvious;
+      discardCode = DiscardCode.obvious;
       discardString = "'this' can never be null in Java";
       return true;
     }
@@ -288,7 +289,7 @@ public class NONZERO
           // System.out.println(NONZEROSTRING + ".isObviousImplied: " + MEMBERSTRING + ".isObviousMember(" + v1.name + ", " + v2.name + ") = true");
           if (logOn())
             dlog.log ("isObvDyn- true, arg is member of nonzero sequence");
-          discardCode = DiscardInvariant.obvious;
+          discardCode = DiscardCode.obvious;
           discardString = v1+" is a member of the non-zero sequence "+v2;
           return true;
         }
@@ -313,7 +314,7 @@ public class NONZERO
                 // System.out.println(NONZEROSTRING + ".isObviousImplied true due to: " + sine.format());
                 if (logOn())
                   dlog.log ("isObvDyn- true due to " + sine.format());
-                discardCode = DiscardInvariant.obvious;
+                discardCode = DiscardCode.obvious;
                 discardString = var+" is a member of the non-zero sequence "+vi;
                 return true;
               }

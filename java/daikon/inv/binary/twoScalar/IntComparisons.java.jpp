@@ -27,6 +27,10 @@ For example:  scalar equals, float equals, scalar less than, etc.
   #define SEQSEQINTEQUAL SeqSeqIntEqual
   #define SEQ_SUBSCRIPT SequenceScalarSubscript
   #define NO_DUPS NoDuplicates
+  #define INT_TYPE long
+  #define ONEOF OneOfScalar
+  #define LOWERBOUND LowerBound
+  #define UPPERBOUND UpperBound
 #else
   #define PRIMITIVE double
   #define ISTYPE isFloat()
@@ -38,6 +42,10 @@ For example:  scalar equals, float equals, scalar less than, etc.
   #define SEQSEQINTEQUAL SeqSeqFloatEqual
   #define SEQ_SUBSCRIPT SequenceFloatSubscript
   #define NO_DUPS NoDuplicatesFloat
+  #define INT_TYPE double
+  #define ONEOF OneOfFloat
+  #define LOWERBOUND LowerBoundFloat
+  #define UPPERBOUND UpperBoundFloat
 #endif
 
 #if defined(EQUAL)
@@ -139,11 +147,34 @@ For example:  scalar equals, float equals, scalar less than, etc.
   #define INTEQUALstring "FloatGreaterEqual"
   #define EQUALS(a,b) (Global.fuzzy.gte (a, b))
   #define EQUALSstring ">="
+  #define NONEQUALSstring "<="
   #define PAIRWISE_COMPARE PairwiseFloatGreaterEqual
   #define DEBUGINTEQUAL debugIntGreaterEqual
   #define SEQINTEQUAL seqIntGreaterEqual
 #else
   #error "EQUAL, NONEQUAL, LESSTHAN, LESSEQUAL, GREATERTHAN, or GREATEREQUAL must be defined"
+#endif
+
+#if (defined(LESSTHAN) || defined(LESSEQUAL))
+  #define LOWER_BD LowerBound
+  #define UPPER_BD UpperBound
+  #define LB_MIN min1
+  #define UB_MAX max1
+#elif (defined(LESSTHANFLOAT) || defined(LESSEQUALFLOAT))
+  #define LOWER_BD LowerBoundFloat
+  #define UPPER_BD UpperBoundFloat
+  #define LB_MIN min1
+  #define UB_MAX max1
+#elif (defined(GREATERTHAN) || defined(GREATEREQUAL))
+  #define LOWER_BD UpperBound
+  #define UPPER_BD LowerBound
+  #define LB_MIN max1
+  #define UB_MAX min1
+#elif (defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT))
+  #define LOWER_BD UpperBoundFloat
+  #define UPPER_BD LowerBoundFloat
+  #define LB_MIN max1
+  #define UB_MAX min1
 #endif
 
 #if (defined(EQUAL) || defined(EQUALFLOAT))
@@ -204,7 +235,7 @@ public final class INTEQUAL
 #endif
 
 #ifdef TRACK_NUM_VALUES
-  private VALUETRACKER values_cache = new VALUETRACKER(8);
+  protected VALUETRACKER values_cache = new VALUETRACKER(8);
 
   protected Object clone() {
     INTEQUAL result = (INTEQUAL) super.clone();
@@ -360,7 +391,9 @@ invariants.
     // we have no non-static member data, so we only need care about our type
     // As of now, the constructor chain is side-effect free;
     // let's hope it stays that way.
-    return new INTEQUAL_SWAP(ppt);
+    INTEQUAL_SWAP result = new INTEQUAL_SWAP(ppt);
+    result.values_cache = (VALUETRACKER) this.values_cache.clone();
+    return result;
 #endif
   }
 
@@ -417,14 +450,14 @@ invariants.
   }
 
   public void add_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
-    // if (logDetail() || debug.isLoggable(Level.FINE))
-    //   log (debug, "add_modified (" + v1 + ", " + v2 + ",  " + count + ")");
+    if (logDetail() || debug.isLoggable(Level.FINE))
+      log (debug, "add_modified (" + v1 + ", " + v2 + ",  " + "ppt.num_values = " + ppt.num_values() + ")");
     if (!(EQUALS(v1, v2))) {
       if (logOn() || debug.isLoggable(Level.FINE))
         log (debug, "destroy in add_modified (" + v1 + ", " + v2 + ",  "
             + count + ")");
       destroyAndFlow();
-      discardCode = DiscardInvariant.bad_sample;
+      discardCode = DiscardCode.bad_sample;
       discardString = "Falsified by sample: "+var1().name.name()+"="+v1+","+var2().name.name()+
         "="+v2;
       return;
@@ -461,8 +494,8 @@ invariants.
     // The reason for this multiplication is that there might be only a
     // very few possible values.  Example:  towers of hanoi has only 6
     // possible (pegA, pegB) pairs.
-    return (Math.pow(.5, values_cache.num_values())
-            * Math.pow(.99, ppt.num_mod_non_missing_samples()));
+    return (Math.pow(.5, ppt.num_values())
+              * Math.pow(.99, ppt.num_mod_non_missing_samples()));
 #endif
   }
 
@@ -599,7 +632,7 @@ invariants.
       // a+c=b+c is implied, because a=b must have also been reported.
       if ((var1.name instanceof VarInfoName.Add) && (var2.name instanceof VarInfoName.Add) &&
           ((((VarInfoName.Add) var1.name).amount) == (((VarInfoName.Add) var2.name).amount))) {
-          discardCode = DiscardInvariant.obvious;
+          discardCode = DiscardCode.obvious;
           discardString = "Invariants of the form a+c==b+c are implied since a==b is reported.";
           return (true);
         }
@@ -612,7 +645,7 @@ invariants.
           // If we know x<y or x>y, then x!=y is uninteresting
           IntLessThan ilt = IntLessThan.find(ppt);
           if ((ilt != null) /* && ilt.enoughSamples() */ ) {
-            discardCode = DiscardInvariant.obvious;
+            discardCode = DiscardCode.obvious;
             String n1 = var1().name.name();
             String n2 = var2().name.name();
             discardString = n1+"<"+n2+" or "+n1+">"+n2+" --> "+n1+"!="+n2;
@@ -620,7 +653,7 @@ invariants.
           }
           IntGreaterThan igt = IntGreaterThan.find(ppt);
           if ((igt != null) /* && igt.enoughSamples() */ ) {
-            discardCode = DiscardInvariant.obvious;
+            discardCode = DiscardCode.obvious;
             String n1 = var1().name.name();
             String n2 = var2().name.name();
             discardString = n1+"<"+n2+" or "+n1+">"+n2+" --> "+n1+"!="+n2;
@@ -633,7 +666,7 @@ invariants.
         { // If we know x<y or x>y, then x!=y is uninteresting
           FloatLessThan ilt = FloatLessThan.find(ppt);
           if ((ilt != null) /* && ilt.enoughSamples() */ ) {
-            discardCode = DiscardInvariant.obvious;
+            discardCode = DiscardCode.obvious;
             String n1 = var1().name.name();
             String n2 = var2().name.name();
             discardString = n1+"<"+n2+" or "+n1+">"+n2+" --> "+n1+"!="+n2;
@@ -641,7 +674,7 @@ invariants.
           }
           FloatGreaterThan igt = FloatGreaterThan.find(ppt);
           if ((igt != null) /* && igt.enoughSamples() */ ) {
-            discardCode = DiscardInvariant.obvious;
+            discardCode = DiscardCode.obvious;
             String n1 = var1().name.name();
             String n2 = var2().name.name();
             discardString = n1+"<"+n2+" or "+n1+">"+n2+" --> "+n1+"!="+n2;
@@ -654,7 +687,7 @@ invariants.
       { // If we know x=y, then any x<=y or x>=y comparison is uninteresting
         IntEqual ie = IntEqual.find(ppt);
         if ((ie != null) /* && ie.enoughSamples() */ ) {
-          discardCode = DiscardInvariant.obvious;
+          discardCode = DiscardCode.obvious;
           String n1 = var1().name.name();
           String n2 = var2().name.name();
           discardString = n1+"=="+n2+" --> "+n1+">="+n2+" and "+n1+"<="+n2;
@@ -667,7 +700,7 @@ invariants.
       { // If we know x=y, then any x<=y or x>=y comparison is uninteresting
         FloatEqual ie = FloatEqual.find(ppt);
         if ((ie != null) /* && ie.enoughSamples() */ ) {
-          discardCode = DiscardInvariant.obvious;
+          discardCode = DiscardCode.obvious;
           String n1 = var1().name.name();
           String n2 = var2().name.name();
           discardString = n1+"=="+n2+" --> "+n1+">="+n2+" and "+n1+"<="+n2;
@@ -680,7 +713,7 @@ invariants.
       { // If we know x<y, then x<=y is uninteresting
         IntLessThan ilt = IntLessThan.find(ppt);
         if ((ilt != null) /* && ilt.enoughSamples() */ ) {
-          discardCode = DiscardInvariant.obvious;
+          discardCode = DiscardCode.obvious;
           String n1 = var1().name.name();
           String n2 = var2().name.name();
           discardString = n1+"<"+n2+" --> "+n1+"<="+n2;
@@ -692,7 +725,7 @@ invariants.
       { // If we know x<y, then x<=y is uninteresting
         FloatLessThan ilt = FloatLessThan.find(ppt);
         if ((ilt != null) /* && ilt.enoughSamples() */ ) {
-          discardCode = DiscardInvariant.obvious;
+          discardCode = DiscardCode.obvious;
           String n1 = var1().name.name();
           String n2 = var2().name.name();
           discardString = n1+"<"+n2+" --> "+n1+"<="+n2;
@@ -705,7 +738,7 @@ invariants.
       { // If we know x>y, then x>=y is uninteresting
         IntGreaterThan igt = IntGreaterThan.find(ppt);
         if ((igt != null) /* && igt.enoughSamples() */ ) {
-          discardCode = DiscardInvariant.obvious;
+          discardCode = DiscardCode.obvious;
           String n1 = var1().name.name();
           String n2 = var2().name.name();
           discardString = n1+">"+n2+" --> "+n1+">="+n2;
@@ -718,7 +751,7 @@ invariants.
       { // If we know x>y, then x>=y is uninteresting
         FloatGreaterThan igt = FloatGreaterThan.find(ppt);
         if ((igt != null) /* && igt.enoughSamples() */ ) {
-          discardCode = DiscardInvariant.obvious;
+          discardCode = DiscardCode.obvious;
           String n1 = var1().name.name();
           String n2 = var2().name.name();
           discardString = n1+">"+n2+" --> "+n1+">="+n2;
@@ -733,7 +766,7 @@ invariants.
         LinearBinary lb = LinearBinary.find(ppt);
         if ((lb != null) && (lb.core.a == 1) && lb.enoughSamples()) {
           Assert.assertTrue(lb.core.b != 0);
-          discardCode = DiscardInvariant.obvious;
+          discardCode = DiscardCode.obvious;
           String n1 = var1().name.name();
           String n2 = var2().name.name();
           discardString = n1+" and "+n2+" already satisfy "+lb.format();
@@ -747,7 +780,7 @@ invariants.
         LinearBinaryFloat lb = LinearBinaryFloat.find(ppt);
         if ((lb != null) && (lb.core.a == 1) && lb.enoughSamples()) {
           Assert.assertTrue(lb.core.b != 0);
-          discardCode = DiscardInvariant.obvious;
+          discardCode = DiscardCode.obvious;
           String n1 = var1().name.name();
           String n2 = var2().name.name();
           discardString = n1+" and "+n2+" already satisfy "+lb.format();
@@ -814,7 +847,7 @@ invariants.
       if ((s1 != null) && (s2 != null)
           && (s1.equalitySet == s2.equalitySet)) {
         // lengths of equal arrays being compared
-        discardCode = DiscardInvariant.obvious;
+        discardCode = DiscardCode.obvious;
         String n1 = var1().name.name();
         String n2 = var2().name.name();
         discardString = n1+" and  "+n2+" are equal arrays, so equal size is implied";
@@ -824,7 +857,7 @@ invariants.
 #if defined(LESSTHAN) || defined(LESSTHANFLOAT)
       if ((sl2 != null) && (sl2.shift == 0)) {
         // "x < size(a)"  ("x <= size(a)-1" or "x < size(a)-1" would be more informative)
-        discardCode = DiscardInvariant.obvious;
+        discardCode = DiscardCode.obvious;
         String n1 = var1().name.name();
         String n2 = var2().name.name();
         discardString = "Invariants of the form x < size(a) suppressed since x <= size(a)-1 or "+
@@ -832,7 +865,7 @@ invariants.
         return true;
       } else if ((sl1 != null) && (sl1.shift == -1)) {
         // "size(a)-1 < x"  ("size(a) <= x" would be more informative)
-        discardCode = DiscardInvariant.obvious;
+        discardCode = DiscardCode.obvious;
         String n1 = var1().name.name();
         String n2 = var2().name.name();
         discardString = "Invariants of the form size(a)-1 < x are suppressed since size(a) <= x is preferred";
@@ -841,14 +874,14 @@ invariants.
 #elif defined(GREATERTHAN) || defined(GREATERTHANFLOAT)
       if ((sl1 != null) && (sl1.shift == 0)) {
         // "size(a) > x"  ("size(a) >= x" would be more informative)
-        discardCode = DiscardInvariant.obvious;
+        discardCode = DiscardCode.obvious;
         String n1 = var1().name.name();
         String n2 = var2().name.name();
         discardString = "Invariants of the form size(a)-1 > x are suppressed since size(a) >= x is preferred";
         return true;
       } else if ((sl2 != null) && (sl2.shift == -1)) {
         // "x > size(a)-1"  ("x >= size(a)" would be more informative)
-        discardCode = DiscardInvariant.obvious;
+        discardCode = DiscardCode.obvious;
         String n1 = var1().name.name();
         String n2 = var2().name.name();
         discardString = "Invariants of the form x > size(a)-1 are suppressed sinec x >= size(a) is preferred";
@@ -856,6 +889,54 @@ invariants.
       }
 #endif
     }
+
+    // If any of the vars are both constants, or if one is
+    // a constant and the other has a bound,we are not
+    // interested in any IntComparisons
+
+    /* PptSlice1 slice1 = this.ppt.parent.findSlice(var1());
+    if (slice1 != null) {
+      PptSlice1 slice2 = this.ppt.parent.findSlice(var2());
+      if (slice2 != null) {
+        ONEOF oo1 = ONEOF.find(slice1);
+        // Check if var1 is constant
+        if ((oo1 != null) && (oo1.num_elts() == 1)) {
+          LOWERBOUND lb = LOWERBOUND.find(slice2);
+          if ((lb != null)  && lb.justified() && lb.enoughSamples() && !lb.hasUninterestingConstant()) {
+            if (logOn())
+              log ("Discarded because constant var and LOWERBOUND found. Bound is " + lb.core.min1);
+            return true;
+          }
+          UPPERBOUND ub = UPPERBOUND.find(slice2);
+          if ((ub != null) && ub.justified() && ub.enoughSamples() && !ub.hasUninterestingConstant()) {
+            if (logOn())
+              log ("Discarded because constant var and UPPERBOUND found. Bound is " + ub.core.max1);
+            return true;
+          }
+        }
+        ONEOF oo2 = ONEOF.find(slice2);
+        // Check if var2 is constant
+        if ((oo2 != null) && (oo2.num_elts() == 1)) {
+          // Case where both var1 and var2 are constants
+          if ((oo1 != null) && (oo1.num_elts() == 1)) {
+            if (logOn())
+              log ("Discarded because both variables are constants.");
+            return true;
+          }
+          LOWERBOUND lb2 = LOWERBOUND.find(slice1);
+          if ((lb2 != null) && lb2.justified() && lb2.enoughSamples() && !lb2.hasUninterestingConstant()) {
+            if (logOn())
+              log ("Discarded because LOWERBOUND and constant var found. Bound is " + lb2.core.min1);
+            return true;
+          }
+          UPPERBOUND ub2 = UPPERBOUND.find(slice1);
+          if ((ub2 != null) && ub2.justified() && ub2.enoughSamples() && !ub2.hasUninterestingConstant()) {
+            log ("Discarded because UPPERBOUND and constant var found. Bound is " + ub2.core.max1);
+            return true;
+          }
+        }
+      }
+      }*/
 
 //     { // Sequence sum tests
 //       SequenceSum ss1 = null;
@@ -961,7 +1042,7 @@ invariants.
 #if defined (LESSTHAN) || defined (GREATERTHAN) || defined (LESSTHANFLOAT) || defined (GREATERTHANFLOAT)
 
   /**
-   * Suppression in the form y = x + b ==> y EQUALS x (where b EQUALS 0).
+   * Suppression in the form y = x + b ==> y EQUALSstring x (where b EQUALSstring 0).
    */
   public static SuppressionLink lb_suppress (Invariant arg,
                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
@@ -979,7 +1060,7 @@ invariants.
     supTemplate.varInfos[0][0] = inv.var1();
     supTemplate.varInfos[0][1] = inv.var2();
 
-    //look for invariants that match our template
+    // look for invariants that match our template
     SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
     if (sl != null) {
 
@@ -1005,6 +1086,165 @@ invariants.
   }
 
 #endif
+
+  // It appears as though some special stuff happens with Bounds and OneOf's, so I'll leave
+  // the next 3 suppressions out for now and come back to it later. -Jelani 7/30/2003
+#if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(NONEQUAL) || defined(NONEQUALFLOAT))
+  /**
+   * Suppression in the form x LESSTHAN a and y GREATERTHAN b and a LESSTHAN b ==> x LESSTHAN y
+   */
+  public static SuppressionLink bound_suppress (Invariant arg,
+                 SuppressionTemplate supTemplate, SuppressionFactory sfact) {
+
+    // We should only be called with our own invariant
+    Assert.assertTrue (arg instanceof INTEQUAL);
+    INTEQUAL inv = (INTEQUAL) arg;
+
+    if (logOn())
+      inv.log ("Considering suppression of the form ((x cmp a) ^ (y inverse_cmp b) ^ (a cmp b) ==> x cmp y)");
+
+    // Setup to look for Bound's
+    supTemplate.resetResults();
+    supTemplate.invTypes[0] = UPPER_BD.class;
+    supTemplate.varInfos[0][0] = inv.var1();
+
+    supTemplate.invTypes[1] = LOWER_BD.class;
+    supTemplate.varInfos[1][0] = inv.var2();
+
+    SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
+    if (sl != null) {
+      UPPER_BD ub = (UPPER_BD) supTemplate.results[0];
+      LOWER_BD lb = (LOWER_BD) supTemplate.results[1];
+
+      // Check to make sure the Bounds have actually been set
+      if ((lb.ppt.num_samples() == 0) || (ub.ppt.num_samples() == 0))
+        return null;
+
+      INT_TYPE max = ub.core.UB_MAX;
+      INT_TYPE min = lb.core.LB_MIN;
+
+      if (! EQUALS(max, min) )
+        return null;
+
+    }
+    return sl;
+  }
+#endif
+
+  #if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(NONEQUAL) || defined(NONEQUALFLOAT))
+  /**
+   * Suppression in the form x one of A={a,b,c} and y GREATERTHAN d and maxA LESSTHAN d ==> x LESSTHAN y
+   */
+  public static SuppressionLink bound_one_of_suppress (Invariant arg,
+                 SuppressionTemplate supTemplate, SuppressionFactory sfact) {
+
+    // We should only be called with our own invariant
+    Assert.assertTrue (arg instanceof INTEQUAL);
+    INTEQUAL inv = (INTEQUAL) arg;
+
+    if (logOn())
+      inv.log ("Considering suppression of the form ((x cmp a) ^ (y inverse_cmp b) ^ (a cmp b) ==> x cmp y)");
+
+    // Setup to look for Bound's
+    supTemplate.resetResults();
+    supTemplate.invTypes[0] = ONEOF.class;
+    supTemplate.varInfos[0][0] = inv.var1();
+
+    supTemplate.invTypes[1] = LOWER_BD.class;
+    supTemplate.varInfos[1][0] = inv.var2();
+
+    SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
+    if (sl != null) {
+      ONEOF oo = (ONEOF) supTemplate.results[0];
+      LOWER_BD lb = (LOWER_BD) supTemplate.results[1];
+
+      // Check to make sure the Bound has actually been set
+      if ((lb.ppt.num_samples() == 0) || (oo.num_elts() == 0))
+        return null;
+
+      INT_TYPE[] elts = oo.getElts();
+
+      // Find the max (or min for GreaterThan-type invariants) of
+      // the OneOf set
+      INT_TYPE max = elts[0];
+      if (oo.num_elts() > 1) {
+        for (int i=1; i<elts.length; i++) {
+          if (EQUALS(max, elts[i]))
+            max = elts[i];
+        }
+      }
+
+      INT_TYPE min = lb.core.LB_MIN;
+
+      if (! EQUALS(max, min) )
+        return null;
+
+    }
+    return sl;
+  }
+#endif
+
+  /**
+   * Suppression in the form x one of A={a, b, c} and y one of B={d, e, f} and m EQUALSstring n for all m in A,<br>
+   * n in B ==> x EQUALSstring y
+   */
+  public static SuppressionLink one_of_suppress (Invariant arg,
+                 SuppressionTemplate supTemplate, SuppressionFactory sfact) {
+
+    // We should only be called with our own invariant
+    Assert.assertTrue (arg instanceof INTEQUAL);
+    INTEQUAL inv = (INTEQUAL) arg;
+
+    if (logOn())
+      inv.log ("Considering suppression of the form ((x one of A={a,b,c}) ^ (y one of B={d,e,f}) ^ (m cmp n for all" +
+                "m in A, n in B)) ==> x cmp y");
+
+    // Setup to look for OneOf's over our variables
+    supTemplate.resetResults();
+    supTemplate.invTypes[0] = ONEOF.class;
+    supTemplate.varInfos[0][0] = inv.var1();
+
+    supTemplate.invTypes[1] = ONEOF.class;
+    supTemplate.varInfos[1][0] = inv.var2();
+
+    // look for invariants that match our template
+    SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
+    if (sl != null) {
+
+      ONEOF oo1 = (ONEOF) supTemplate.results[0];
+      ONEOF oo2 = (ONEOF) supTemplate.results[1];
+
+      #if (defined(EQUAL) || defined(EQUALFLOAT))
+      // Not interested if both variables are not constants
+      if ((oo1.num_elts() != 1) || (oo2.num_elts() != 1))
+        return (null);
+      #endif
+
+      INT_TYPE[] elts1 = oo1.getElts();
+      INT_TYPE[] elts2 = oo2.getElts();
+
+      #if !(defined(EQUAL) || defined(EQUALFLOAT))
+      // The EQUALSstring relationship must hold on all combinations of constants that
+      // the vars are equal to.  This could be made asymptotically faster
+      // by first sorting both arrays, but since OneOf arrays are never bigger than
+      // length 3, it's not worth it
+      for (int i=0; i < elts1.length; i++) {
+        for (int j=0; j < elts2.length; j++) {
+          if (! EQUALS(elts1[i], elts2[j]) )
+            return (null);
+        }
+      }
+      #else
+      if (! EQUALS(elts1[0], elts2[0]) )
+        return (null);
+      #endif
+
+      if (logOn() || debug.isLoggable(Level.FINE)) {
+        arg.log (debug, " Suppressed by " + oo1.format() + " and " + oo2.format());
+      }
+    }
+    return (sl);
+    }
 
 #if !defined (NOTEQUAL) && !defined (NOTEQUALFLOAT)
   /**
@@ -1117,9 +1357,9 @@ invariants.
 
     // Make sure v1 and v2 are SEQ_SUBSCRIPT with the same subscript
     VarInfo v1 = inv.var1();
-    VarInfo v2 = inv.var2();
     if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSCRIPT))
       return (null);
+    VarInfo v2 = inv.var2();
     if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT))
       return (null);
     SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
@@ -1248,17 +1488,19 @@ invariants.
 
 #if defined(NONEQUAL) || defined(NONEQUALFLOAT)
 
-  // Create a suppression factory for nodups
+  // Create a suppression factory for nodups and constant
   #define FACTORY_CNT       1
   #define FACTORY1          nodups_suppress
   #define FACTORY1_INV_CNT  1
   #define FACTORY1_VAR_INFO {new VarInfo[1]}
-
+  // #define FACTORY2          one_of_suppress
+  // #define FACTORY2_INV_CNT  2
+  // #define FACTORY2_VAR_INFO {new VarInfo[1], new VarInfo[1]}
   #include "daikon/inv/suppressionFactory.java.jpp"
 
 #elif defined (LESSTHAN) || defined (LESSTHANFLOAT) || defined (GREATERTHAN) || defined (GREATERTHANFLOAT)
 
-  // Create a suppression factory for linear binary and pairwise
+  // Create a suppression factory for linear binary, constant, and pairwise
   #define FACTORY_CNT       2
   #define FACTORY1          lb_suppress
   #define FACTORY1_INV_CNT  1
@@ -1266,20 +1508,38 @@ invariants.
   #define FACTORY2          pairwise_suppress
   #define FACTORY2_INV_CNT  1
   #define FACTORY2_VAR_INFO {new VarInfo[2]}
+  // #define FACTORY3          bound_suppress
+  // #define FACTORY3_INV_CNT  2
+  // #define FACTORY3_VAR_INFO {new VarInfo[1], new VarInfo[1]}
+  // #define FACTORY4          bound_one_of_suppress
+  // #define FACTORY4_INV_CNT  2
+  // #define FACTORY4_VAR_INFO {new VarInfo[1], new VarInfo[1]}
+  // #define FACTORY3          one_of_suppress
+  // #define FACTORY3_INV_CNT  2
+  // #define FACTORY3_VAR_INFO {new VarInfo[1], new VarInfo[1]}
   #include "daikon/inv/suppressionFactory.java.jpp"
 
 #elif defined (LESSEQUAL) || defined (LESSEQUALFLOAT) || defined (GREATEREQUAL) || defined (GREATEREQUALFLOAT)
 
-  // Create a suppression factory for pairwise
+  // Create a suppression factory for pairwise and constant
   #define FACTORY_CNT       1
   #define FACTORY1          pairwise_suppress
   #define FACTORY1_INV_CNT  1
   #define FACTORY1_VAR_INFO {new VarInfo[2]}
+  // #define FACTORY2          bound_suppress
+  // #define FACTORY2_INV_CNT  2
+  // #define FACTORY2_VAR_INFO {new VarInfo[1], new VarInfo[1]}
+  // #define FACTORY3          bound_one_of_suppress
+  // #define FACTORY3_INV_CNT  2
+  // #define FACTORY3_VAR_INFO {new VarInfo[1], new VarInfo[1]}
+  // #define FACTORY2          one_of_suppress
+  // #define FACTORY2_INV_CNT  2
+  // #define FACTORY2_VAR_INFO {new VarInfo[1], new VarInfo[1]}
   #include "daikon/inv/suppressionFactory.java.jpp"
 
 #elif defined (EQUAL)
 
-  // Create suppression factory for pairwise, seqlen, seq_equal, seq_sub_equal
+  // Create suppression factory for pairwise, seqlen, seq_equal, seq_sub_equal, and constant
   #define FACTORY_CNT       4
   #define FACTORY1          pairwise_suppress
   #define FACTORY1_INV_CNT  1
@@ -1293,6 +1553,9 @@ invariants.
   #define FACTORY4          seq_sub_equal_suppress
   #define FACTORY4_INV_CNT  2
   #define FACTORY4_VAR_INFO {new VarInfo[2], new VarInfo[2]}
+  // #define FACTORY5          one_of_suppress
+  // #define FACTORY5_INV_CNT  2
+  // #define FACTORY5_VAR_INFO {new VarInfo[1], new VarInfo[1]}
 
   #include "daikon/inv/suppressionFactory.java.jpp"
 

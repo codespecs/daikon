@@ -24,6 +24,7 @@ The correct way to build the system is to run 'make'.
   #define PAIRWISEFUNCTIONUNARY PairwiseFunctionUnary
   #define FUNCTIONS Functions
   #define SUBSET SubSet
+  #define SUPERSET SuperSet
 #elif defined(TYPEDOUBLE)
   #define CLASSNAME TwoSequenceFactoryFloat
   #define PRIMITIVE double
@@ -126,6 +127,7 @@ public final class CLASSNAME {
       result.add(SUBSEQUENCE.instantiate(ppt));
 #if defined(TYPELONG)
       result.add(SUBSET.instantiate(ppt));
+      result.add(SUPERSET.instantiate(ppt));
       result.add(PairwiseIntEqual.instantiate(ppt));
       result.add(PairwiseIntLessThan.instantiate(ppt));
       result.add(PairwiseIntGreaterThan.instantiate(ppt));

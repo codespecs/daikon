@@ -116,7 +116,6 @@ public final class CLASSNAME
   }
 
   public void add_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
-
     values_seen++;
     if (x == y && y == z) {
       equal_values++;
@@ -151,6 +150,7 @@ public final class CLASSNAME
       name2 = n1;
       name3 = n2;
     } else if (var_order == order_xzy) {
+
       result = x; arg1 = z; arg2 = y;
       name1 = n1;
       name2 = n3;
@@ -174,19 +174,23 @@ public final class CLASSNAME
           //                    + result + " != " + function + "(" + arg1 + ", " + arg2 + ")"
           //                    + " ; " + var_order_string[var_order]);
           wrapper.destroyAndFlow();
-          wrapper.discardCode = DiscardInvariant.bad_sample;
+          wrapper.discardCode = DiscardCode.bad_sample;
           wrapper.discardString = "Failed for "+name1+"="+x+","+name2+"="+y+","+name3+"="+z;
           return;
         }
     } catch (Exception e) {
       wrapper.destroyAndFlow();
-      wrapper.discardCode = DiscardInvariant.bad_sample;
+      wrapper.discardCode = DiscardCode.bad_sample;
       wrapper.discardString = "Exception caught for sample "+name1+"="+x+","+name2+"="+y+
         ","+name3+"="+z+": "+e;
       return;
     }
 
     values_cache.add(x, y, z);
+    if (wrapper.logOn() && methodname[1].equals(" || "))
+      wrapper.log ("Exiting add_modified with values: " + x + ", " + y + ", " + z + ", " +
+                   "ppt.num_values()==" + wrapper.ppt.num_values() + ", values_cache.num_values()==" +
+                   values_cache.num_values());
   }
 
   /**
@@ -203,7 +207,7 @@ public final class CLASSNAME
       return Invariant.PROBABILITY_NEVER;
     }
     if (values_seen <= equal_values) { // how can equal_values ever be > values_seen ?
-      wrapper.discardCode = DiscardInvariant.bad_probability;
+      wrapper.discardCode = DiscardCode.bad_probability;
 
       String name1 = wrapper.ppt.var_infos[0].name.name();
       String name2 = wrapper.ppt.var_infos[1].name.name();
@@ -212,12 +216,14 @@ public final class CLASSNAME
       wrapper.discardString = "In all samples seen, "+name1+"=="+name2+"=="+name3;
       return Invariant.PROBABILITY_NEVER;
     }
-    double answer = Invariant.prob_is_ge(values_cache.num_values(), 5);
+    double answer = Invariant.prob_is_ge(wrapper.ppt.num_values(), 5);
     if (answer > Invariant.dkconfig_probability_limit) {
-      wrapper.discardCode = DiscardInvariant.bad_probability;
+      wrapper.discardCode = DiscardCode.bad_probability;
       wrapper.discardString = "Number of samples seen not close to goal: "+values_cache.num_values()+" samples "+
         "seen,goal was 5";
     }
+    if (wrapper.logDetail())
+      wrapper.log ("values_cache.num_values()==" + values_cache.num_values() + ", ppt.num_values()==" + wrapper.ppt.num_values());
     return answer;
   }
 

@@ -98,7 +98,7 @@ public final class CLASSNAME
         System.out.println(CLASSSTRING + ".destroy()");
       }
       wrapper.destroyAndFlow();
-      wrapper.discardCode = DiscardInvariant.bad_sample;
+      wrapper.discardCode = DiscardCode.bad_sample;
       String name1 = wrapper.ppt.var_infos[0].name.name();
       wrapper.discardString = "Falsified by sample: " + name1 + "==" + v1;
       if (wrapper.ppt.var_infos.length > 1) {
@@ -118,7 +118,7 @@ public final class CLASSNAME
     if (wrapper.falsified)
       return Invariant.PROBABILITY_NEVER;
     else if ((min1 > max2) || (max1 < min2)) {
-      wrapper.discardCode = DiscardInvariant.bad_probability;
+      wrapper.discardCode = DiscardCode.bad_probability;
       if (min1 > max2)
         wrapper.discardString = "!= can be replaced by >, which is stronger";
       else
@@ -152,7 +152,7 @@ public final class CLASSNAME
 
      double answer = Math.pow(probability_one_nonequal, samples);
      if (answer > Invariant.dkconfig_probability_limit) {
-       wrapper.discardCode = DiscardInvariant.bad_probability;
+       wrapper.discardCode = DiscardCode.bad_probability;
        wrapper.discardString = "Computed probability " + answer + " > dkconfig_probability_limit==" +
          Invariant.dkconfig_probability_limit;
      }

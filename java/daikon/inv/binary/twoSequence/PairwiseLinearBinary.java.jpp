@@ -28,7 +28,7 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.Invariant;
-import daikon.inv.DiscardInvariant;
+import daikon.inv.DiscardCode;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.binary.twoScalar.*;
 
@@ -168,7 +168,7 @@ public class CLASSNAME
   public void add_modified(PRIMITIVE[] x_arr, PRIMITIVE[] y_arr, int count) {
     if (x_arr.length != y_arr.length) {
       destroyAndFlow();
-      discardCode = DiscardInvariant.bad_sample;
+      discardCode = DiscardCode.bad_sample;
       discardString = "Sample seen with different sequence lengths: "+utilMDE.ArraysMDE.toString(x_arr)+" "+
         utilMDE.ArraysMDE.toString(y_arr);
       return;

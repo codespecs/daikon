@@ -91,7 +91,7 @@ public class CommonStringSequence
         destroyAndFlow();
         VarInfo var = var();
 
-        discardCode = DiscardInvariant.bad_sample;
+        discardCode = DiscardCode.bad_sample;
         discardString = printIntersect()+" not a subset of "+var.name.name();
         return;
       }

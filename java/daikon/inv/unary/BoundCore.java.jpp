@@ -254,7 +254,7 @@ public class LOWERBOUNDCORE
   public boolean enoughSamples() {
     boolean answer = samples > required_samples;
     if (!answer) {
-      wrapper.discardCode = DiscardInvariant.not_enough_samples;
+      wrapper.discardCode = DiscardCode.not_enough_samples;
       wrapper.discardString = "Not enough samples: had "+samples+" but needed "+required_samples;
     }
     return answer;
@@ -346,7 +346,7 @@ public class LOWERBOUNDCORE
     //                    + pptsg.tuplemod_samples_summary());
 
     if (result > Invariant.dkconfig_probability_limit) {
-      wrapper.discardCode = DiscardInvariant.bad_probability;
+      wrapper.discardCode = DiscardCode.bad_probability;
       wrapper.discardString = "Computed probability "+result+" > dkconfig_probability_limit=="+
         Invariant.dkconfig_probability_limit;
     }

@@ -97,7 +97,7 @@ public class Modulus
       long new_modulus = Math.abs(value1 - value);
       if (modulus == 1) {
         destroyAndFlow();
-        discardCode = DiscardInvariant.bad_sample;
+        discardCode = DiscardCode.bad_sample;
         discardString = "Modulus calculated to be 1: " + value1 + " seen then " + value + " introduced";
         return;
       }
@@ -108,7 +108,7 @@ public class Modulus
       int new_modulus;
       if (new_modulus_long > Integer.MAX_VALUE
           || (new_modulus_long < Integer.MIN_VALUE)) {
-        discardCode = DiscardInvariant.bad_sample;
+        discardCode = DiscardCode.bad_sample;
         if (new_modulus_long > Integer.MAX_VALUE)
           discardString = "New modulus calculated is too large to be interesting: "+new_modulus_long;
         else
@@ -117,7 +117,7 @@ public class Modulus
       } else {
         new_modulus = (int) new_modulus_long;
         if (new_modulus==1) {
-          discardCode = DiscardInvariant.bad_sample;
+          discardCode = DiscardCode.bad_sample;
           discardString = "New modulus calculated to be 1: old_value==" + value1 +
             " new_value==" + value + " old_modulus==" + modulus;
         }
@@ -140,14 +140,14 @@ public class Modulus
     if (modulus == 1)
       return Invariant.PROBABILITY_NEVER;
     if (modulus == 0) {
-      discardCode = DiscardInvariant.obvious;
+      discardCode = DiscardCode.obvious;
       discardString = "Modulus is 0";
       return Invariant.PROBABILITY_UNJUSTIFIED;
     }
     double probability_one_elt_modulus = 1 - 1.0/modulus;
     double answer = Math.pow(probability_one_elt_modulus, ppt.num_mod_non_missing_samples());
     if (answer > dkconfig_probability_limit) {
-      discardCode = DiscardInvariant.bad_probability;
+      discardCode = DiscardCode.bad_probability;
       discardString = "Computed probability " + answer + " > dkconfig_probability_limit==" +
         dkconfig_probability_limit;
     }

@@ -138,7 +138,7 @@ public class CLASSNAME
         destroyAndFlow();
         VarInfo var = var();
 
-        discardCode = DiscardInvariant.bad_sample;
+        discardCode = DiscardCode.bad_sample;
         discardString = printIntersect()+" not a subset of "+var.name.name();
         return;
       }
@@ -156,7 +156,7 @@ public class CLASSNAME
     } else {
       double answer = Math.pow(.9, elts);
       if (answer > dkconfig_probability_limit) {
-        discardCode = DiscardInvariant.bad_probability;
+        discardCode = DiscardCode.bad_probability;
         discardString = "Computed probability " + answer + " > dkconfig_probability_limit==" +
           dkconfig_probability_limit;
       }

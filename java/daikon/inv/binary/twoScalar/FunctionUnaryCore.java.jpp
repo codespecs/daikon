@@ -105,7 +105,7 @@ public final class CLASSNAME
 
     if (! ok) {
       wrapper.destroyAndFlow();
-      wrapper.discardCode = DiscardInvariant.bad_sample;
+      wrapper.discardCode = DiscardCode.bad_sample;
       String name1 = wrapper.ppt.var_infos[0].name.name();
       String name2 = wrapper.ppt.var_infos[1].name.name();
       if (inverse)
@@ -123,14 +123,14 @@ public final class CLASSNAME
       return Invariant.PROBABILITY_NEVER;
     // For now, only depend on number of samples.
     // But if this prob = 0, should depend on the function as well.
-    double answer = Invariant.prob_is_ge (values_cache.num_values(), 5);
+    double answer = 0;
+    answer = Invariant.prob_is_ge(wrapper.ppt.num_values(), 5);
     if (answer > Invariant.dkconfig_probability_limit) {
-      wrapper.discardCode = DiscardInvariant.bad_probability;
+      wrapper.discardCode = DiscardCode.bad_probability;
       wrapper.discardString = "Number of samples seen not close to goal: "+
         values_cache.num_values()+" samples seen,goal was 5";
     }
     return answer;
-
   }
 
 

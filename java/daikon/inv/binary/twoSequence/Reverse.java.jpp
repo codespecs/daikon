@@ -185,7 +185,7 @@ public class CLASSNAME
   public void add_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {
     if (a1.length != a2.length) {
       destroyAndFlow();
-      discardCode = DiscardInvariant.bad_sample;
+      discardCode = DiscardCode.bad_sample;
       String var1Name = var1().name.name();
       String var2Name = var2().name.name();
       discardString = var1Name+"=="+utilMDE.ArraysMDE.toString(a1)+" has length "+a1.length+
@@ -196,7 +196,7 @@ public class CLASSNAME
     for (int i=0, j=len-1; i<len; i++, j--)
       if (!EQUAL (a1[i], a2[j])) {
         destroyAndFlow();
-        discardCode = DiscardInvariant.bad_sample;
+        discardCode = DiscardCode.bad_sample;
         String var1Name = var1().name.name();
         String var2Name = var2().name.name();
         discardString = var1Name+"["+i+"]="+a1[i]+" does not equal "+var2Name+"["+j+"]="+a2[j];

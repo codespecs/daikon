@@ -440,12 +440,12 @@ public class LOWERBOUND
       // if the value is not in some range (like -1,0,1,2) then say that
       // it is obvious
       if (MIN1 < dkconfig_minimal_interesting) {
-        discardCode = DiscardInvariant.obvious;
+        discardCode = DiscardCode.obvious;
         discardString = "MIN1="+MIN1+" is less than dkconfig_minimal_interesting=="+
           dkconfig_minimal_interesting;
       }
       else {
-        discardCode = DiscardInvariant.obvious;
+        discardCode = DiscardCode.obvious;
         discardString = "MIN1="+MIN1+" is greater than dkconfig_maximal_interesting=="+
           dkconfig_maximal_interesting;
       }
@@ -457,7 +457,7 @@ public class LOWERBOUND
       // We could also use MIN1 == oo.MINELT(), since the LowerBound
       // will never have a MIN1 that does not appear in the OneOf.
       if (MIN1 LTE oo.MINELT()) {
-        discardCode = DiscardInvariant.obvious;
+        discardCode = DiscardCode.obvious;
         String varName = var().name.name();
         discardString = varName+LTESTR+MIN1+" is implied by "+varName+LTESTR+oo.MINELT();
         return true;
@@ -481,7 +481,7 @@ public class LOWERBOUND
         LOWERBOUND other = (LOWERBOUND) inv;
         if (isSameFormula(other)
             && SUBSEQUENCE.isObviousSubSequenceDynamically(this, v, other.var())) {
-          discardCode = DiscardInvariant.obvious;
+          discardCode = DiscardCode.obvious;
           String varName = var().name.name();
           String otherName = other.var().name.name();
           discardString = varName+" is a subsequence of "+otherName+" for which the invariant holds.";
@@ -501,7 +501,7 @@ public class LOWERBOUND
       // Assert.assertTrue(vshift == 0);
       if (vshift == 0 && MIN1 == 0) {
         // "size(a[]) >= 0" is obvious.
-        discardCode = DiscardInvariant.obvious;
+        discardCode = DiscardCode.obvious;
         discardString = var().name.name()+" >=0 is obvious";
         return true;
       }
@@ -524,7 +524,7 @@ public class LOWERBOUND
           if ((eb != null)
               && eb.enoughSamples()
               && eb.MIN1 == MIN1) {
-            discardCode = DiscardInvariant.obvious;
+            discardCode = DiscardCode.obvious;
 
             String otherName = other_slice.var_infos[0].name.name();
             String varName = var().name.name();
