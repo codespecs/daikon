@@ -10,7 +10,7 @@ setenv DAIKONCLASS_SOURCES 1
 source ${INV}/scripts/daikon.cshrc
 
 # Should also remove "invariants/bin" from PATH.
-setenv PATH $DAIKONDIR/scripts:${PATH}:/home/httpd/html/pag/daikon/download/binaries/mit
+setenv PATH $DAIKONDIR/scripts:${PATH}:/home/httpd/html/pag/daikon/download/binaries/mit:/g4/projects/invariants/tools/escjava/current/bin
 
 setenv LD_LIBRARY_PATH /usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
 

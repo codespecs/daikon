@@ -10,7 +10,7 @@ export DAIKONCLASS_SOURCES=1
 source ${INV}/scripts/daikon.bashrc
 
 # Should also remove "daikon/bin" from PATH.
-export PATH=$DAIKONDIR/scripts:${PATH}:/home/httpd/html/pag/daikon/download/binaries/mit
+export PATH=$DAIKONDIR/scripts:${PATH}:/home/httpd/html/pag/daikon/download/binaries/mit:/g4/projects/invariants/tools/escjava/current/bin
 
 export LD_LIBRARY_PATH=/usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
 
