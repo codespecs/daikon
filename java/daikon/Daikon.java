@@ -868,6 +868,8 @@ public final class Daikon {
         while (status.length() < dkconfig_progress_display_width - 1)
           status += " ";
         System.out.print("\r" + status);
+        System.out.flush();
+        // System.out.println (status);
         try {
           if (debugTrace.isLoggable(Level.FINE)) {
             debugTrace.fine ("Free memory: " + java.lang.Runtime.getRuntime().freeMemory());
@@ -1276,15 +1278,26 @@ public final class Daikon {
       throw new Error (e);
     }
 
-    // Determine the ppt_name that matches the specified percentage
+    // Determine the ppt_name that matches the specified percentage.  Always
+    // return the last exit point from the method (so we don't get half the
+    // exits from a method or enters without exits, etc)
     int ppt_cnt = (ppts.size() * ppt_perc) / 100;
     if (ppt_cnt == 0)
       throw new Error ("ppt_perc of " + ppt_perc + " over " + ppts.size()
                        + " results in 0 ppts to process");
     for (Iterator i = ppts.iterator(); i.hasNext(); ) {
       String ppt_name = (String) i.next();
-      if (--ppt_cnt <= 0)
+      if (--ppt_cnt <= 0) {
+        String last_ppt_name = ppt_name;
+        while (i.hasNext()) {
+          ppt_name = (String) i.next();
+          if ((last_ppt_name.indexOf ("EXIT") != -1)
+              && (ppt_name.indexOf ("EXIT") == -1))
+            return (last_ppt_name);
+          last_ppt_name = ppt_name;
+        }
         return (ppt_name);
+      }
     }
     throw new Error ("ppt_cnt " + ppt_cnt + " ppts.size " + ppts.size());
   }
