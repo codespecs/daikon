@@ -2565,7 +2565,7 @@ instructions; @pxref{Installing the Context GUI}.)
 @c @end ifhtml
 @image{images/context-gui,5in,}
 @c <center><table><tr><td>
-@c <img src="context-gui.gif" width=411 height=425>
+@c <img src="context-gui.jpg" width=411 height=425>
 @c </td></tr></table></center><p>
 @end ifnotinfo
 
