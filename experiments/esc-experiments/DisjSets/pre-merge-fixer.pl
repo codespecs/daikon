@@ -25,9 +25,15 @@
 while (<>) {
     chomp;
 
-    next if $kill{$_};
+    if ($kill{$_}) {
+	print STDERR "REMOVING: $_\n";
+	next;
+    }
 
-    ($_ = $swap{$_}) if $swap{$_};
+    if ($swap{$_}) {
+	print STDERR "REPLACING: $_\n";
+	$_ = $swap{$_};
+    }
 
     # guard array lookups
     $pred = "";
@@ -37,6 +43,7 @@ while (<>) {
 	$pred = "this.s.length-1 >= 0" if (/this\.s\[this\.s\.length-1\]/);
 	$pred = "this.s.length-2 >= 0" if (/this\.s\[this\.s\.length-2\]/);
 	if ($pred) {
+	    # print STDERR "GUARDING: $_\n";
 	    print "(", $pred, ") ==> (", $_, ")\n";
 	    next;
 	}
@@ -45,6 +52,10 @@ while (<>) {
     print $_, "\n";
 
     if ($_ eq "this\.ROOT == -1") {
-	print @add_to_object;
+	for $added (@add_to_object) {
+	    print STDERR "ADDING: $added";
+	    print $added;
+	}
+	@add_to_object = ();
     }
 }
