@@ -6,35 +6,22 @@ import java.util.*;
 
 import utilMDE.*;
 
+// Here Implication is reimplemented as an extension of the new general
+// Joiner class
+
 public class Implication
-  extends Invariant
+  extends Joiner
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20020722L;
 
-  public Invariant predicate;
-  public Invariant consequent;
   public boolean iff;
 
-  protected Implication(PptSlice ppt) {
-    super(ppt);
-    throw new Error("Don't instantiate Implication this way.");
-  }
-
-  private Implication(PptSlice ppt, Invariant predicate, Invariant consequent, boolean iff) {
-    super(ppt);
-    Assert.assertTrue(ppt instanceof PptSlice0);
-    // Should these be true?
-    // Assert.assertTrue(predicate.ppt == ppt);
-    // Assert.assertTrue(consequent.ppt == ppt);
-    this.predicate = predicate;
-    this.consequent = consequent;
+  protected Implication(PptSlice ppt, Invariant predicate, Invariant consequent, boolean iff) {
+    super(ppt, predicate, consequent);
     this.iff = iff;
-    ppt.invs.add(this);
-    // System.out.println("Added implication invariant to " + ppt.name)
-    // System.out.println("  " + this.format());
   }
 
   /**
@@ -68,45 +55,45 @@ public class Implication
     // Don't add this Implication to the program point if the program
     // point already has this implication.  This is slow and dumb; we
     // should use hashing for O(1) check instead.
-    for (Iterator i = ppt.implication_view.invs.iterator(); i.hasNext(); ) {
-      Implication existing = (Implication) i.next();
+    for (Iterator i = ppt.joiner_view.invs.iterator(); i.hasNext(); ) {
+      Invariant nextInv = (Invariant)i.next();
+      if (!(nextInv instanceof Implication)) continue;
+      Implication existing = (Implication) nextInv;
       if (existing.iff != iff) continue;
-      if (existing.consequent.getClass() != consequent.getClass()) continue;
-      if (existing.predicate.getClass() != predicate.getClass()) continue;
+      if (existing.right.getClass() != consequent.getClass()) continue;
+      if (existing.left.getClass() != predicate.getClass()) continue;
       // Why not instead check var_info indices plus isSameFormula?
       // Should use PptSlice identity check instead?
-      if (! existing.consequent.format().equals(consequent.format())) continue;
-      if (! existing.predicate.format().equals(predicate.format())) continue;
+      if (! existing.right.format().equals(consequent.format())) continue;
+      if (! existing.left.format().equals(predicate.format())) continue;
       return null;
     }
 
-    Implication result = new Implication(ppt.implication_view, predicate, consequent, iff);
+    // System.out.println("Adding implication: ");
+    // System.out.println("Predicate: " + predicate.format_using(OutputFormat.JML));
+    // System.out.println("Consequent: " + consequent.format_using(OutputFormat.JML));
+    Implication result = new Implication(ppt.joiner_view, predicate, consequent, iff);
     return result;
   }
 
   protected double computeProbability() {
-    double pred_prob = predicate.computeProbability();
-    double cons_prob = consequent.computeProbability();
+    double pred_prob = left.computeProbability();
+    double cons_prob = right.computeProbability();
     if ((pred_prob == PROBABILITY_NEVER)
         || (cons_prob == PROBABILITY_NEVER))
       return PROBABILITY_NEVER;
     return prob_and(pred_prob, cons_prob);
   }
 
-  // We don't resurrect implications, right?
-  protected Invariant resurrect_done(int[] permutation) {
-    throw new UnsupportedOperationException();
-  }
-
   public String repr() {
-    return "[Implication: " + predicate.repr()
-      + " => " + consequent.repr() + "]";
+    return "[Implication: " + left.repr()
+      + " => " + right.repr() + "]";
   }
 
   public String format_using(OutputFormat format) {
-    String pred_fmt = predicate.format_using(format);
-    String consq_fmt = consequent.format_using(format);
-    if (format == OutputFormat.DAIKON) {
+    String pred_fmt = left.format_using(format);
+    String consq_fmt = right.format_using(format);
+    if (format == OutputFormat.DAIKON || format == OutputFormat.JML) {
       String arrow = (iff ? "  <==>  " : "  ==>  "); // "interned"
       return "(" + pred_fmt + ")" + arrow + "(" + consq_fmt + ")";
     } else if (format == OutputFormat.IOA) {
@@ -126,27 +113,12 @@ public class Implication
     }
   }
 
-  public boolean isValidEscExpression() {
-    return predicate.isValidEscExpression()
-      && consequent.isValidEscExpression();
-  }
-
   public boolean isObviousDerived() {
-    return consequent.isObviousDerived();
+    return right.isObviousDerived();
   }
 
   public boolean isObviousImplied() {
-    return consequent.isObviousImplied();
-  }
-
-  public boolean isSameFormula(Invariant other) {
-    Implication other_implic = (Implication)other;
-    // Guards are necessary because the contract of isSameFormula states
-    // that the argument is of the same class as the receiver.
-    return (((predicate.getClass() == other_implic.predicate.getClass())
-            && predicate.isSameFormula(other_implic.predicate))
-            && ((consequent.getClass() == other_implic.consequent.getClass())
-            && consequent.isSameFormula(other_implic.consequent)));
+    return right.isObviousImplied();
   }
 
   /* [INCR]
@@ -154,11 +126,4 @@ public class Implication
     return predicate.hasOnlyConstantVariables();
   }
   */
-
-  // An implication is only interesting if both the predicate and
-  // consequent are interesting
-  public boolean isInteresting() {
-    return (predicate.isInteresting() && consequent.isInteresting());
-  }
-
 }

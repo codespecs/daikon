@@ -33,7 +33,7 @@ public abstract class Invariant
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20020806L;
 
   /**
    * General debug tracer.
@@ -100,6 +100,11 @@ public abstract class Invariant
    * Actually, it's not used any longer, except to be checked in assertions.
    **/
   // public boolean finished = false; // [INCR] (was just in assertions, is now bogus anyway)
+
+  // Whether an invariant is a guarding predicate, that is, creately solely
+  // for the purpose of ensuring invariants with variables that can be missing
+  // do not cause exceptions when tested
+  public boolean isGuardingPredicate = false;
 
   /**
    * The probability that this could have happened by chance alone. <br>
@@ -892,7 +897,7 @@ public abstract class Invariant
       if (debugIsWorthPrinting.isDebugEnabled()) {
         debugIsWorthPrinting.debug("iwpscc(" + format() + ") dispatching");
       }
-      return impl.predicate.isWorthPrinting() && impl.consequent.isWorthPrinting();
+      return impl.left.isWorthPrinting() && impl.right.isWorthPrinting();
     }
 
     if (debugIsWorthPrinting.isDebugEnabled()) {
@@ -1263,11 +1268,11 @@ public abstract class Invariant
     }
 
     private int compareImplications(Implication inv1, Implication inv2) {
-      int comparePredicate = compare(inv1.predicate, inv2.predicate);
+      int comparePredicate = compare(inv1.left, inv2.left);
       if (comparePredicate != 0)
         return comparePredicate;
 
-      return compare(inv1.consequent, inv2.consequent);
+      return compare(inv1.right, inv2.right);
     }
   }
 
@@ -1304,7 +1309,66 @@ public abstract class Invariant
     }
   }
 
+  // This function creates a guarding predicate for a given invariant
+  public Invariant createGuardingPredicate() {
+    VarInfo varInfos[] = ppt.var_infos;
 
+    // System.out.println("Guarding predicate being created for: ");
+    // System.out.println(this.format_using(OutputFormat.JML));
+
+    // Find which VarInfos must be guarded
+    List mustBeGuarded = getGuardingList(varInfos);
+
+    if (mustBeGuarded.isEmpty())
+      return null;
+
+    // Hard to decide what PptSlice to associate with
+    // VarInfo temp = (VarInfo)i.next();
+    // System.out.println("First VarInfo: " + temp);
+    Invariant guardingPredicate = ((VarInfo)mustBeGuarded.get(0)).createGuardingPredicate(ppt.parent);
+    // System.out.println(guardingPredicate.format_using(OutputFormat.DAIKON));
+    Assert.assertTrue(guardingPredicate != null);
+
+    for (int i=1; i<mustBeGuarded.size(); i++) {
+      VarInfo current = (VarInfo)mustBeGuarded.get(i);
+      // System.out.println("Another VarInfo: " + current);
+      Invariant currentGuard = current.createGuardingPredicate(ppt.parent);
+      // System.out.println(currentGuard.toString());
+
+      Assert.assertTrue(currentGuard != null);
+
+      guardingPredicate = new AndJoiner(ppt.parent, guardingPredicate, currentGuard);
+    }
+
+    // Must eliminate the dupliaction of guarding prefixes, this is liable to be slow
+    // We only care if there is more than one var info, otherwise we are guarenteed that
+    // there is no duplicate by VarInfo.createGuardingPredicate()
+    if (mustBeGuarded.size() > 1) {
+      Invariants joinerViewInvs = ppt.parent.joiner_view.invs;
+      for (int i=0; i<joinerViewInvs.size(); i++) {
+        Invariant currentInv = (Invariant)joinerViewInvs.get(i);
+        if (currentInv.isSameInvariant(guardingPredicate)) {
+          return currentInv;
+        }
+      }
+    }
+    return guardingPredicate;
+  }
+
+  // Gets a list of all the variables that must be guarded for this
+  // invariant
+  public static List getGuardingList(VarInfo varInfos[]) {
+    List guardingList = new GuardingVariableList();
+
+    // System.out.println("Getting guarding set:");
+    for (int i=0; i<varInfos.length; i++) {
+      // System.out.println(varInfos[i]);
+      guardingList.addAll(varInfos[i].getGuardingList());
+      // System.out.println(guardingSet.toString());
+    }
+
+    return guardingList;
+  }
 
 
   ///////////////////////////////////////////////////////////////////////////
@@ -1366,7 +1430,6 @@ public abstract class Invariant
       sl.repCheck();
     }
   }
-
 }
 
 
