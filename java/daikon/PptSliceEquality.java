@@ -87,7 +87,6 @@ public class PptSliceEquality
    **/
   void instantiate_invariants(boolean excludeEquality) {
     // Start with everything comparable being equal.
-    int total = var_infos.length;
     if (debug.isDebugEnabled()) {
       debug.debug ("InstantiateInvariants: " + parent.ppt_name + " vars:") ;
     }
@@ -120,7 +119,7 @@ public class PptSliceEquality
     // Ensure determinism
     Arrays.sort (newInvs, EqualityComparator.theInstance);
     invs.addAll (Arrays.asList (newInvs));
-    Assert.assertTrue (varCount == total); // Check that we get all vis
+    Assert.assertTrue (varCount == var_infos.length); // Check that we get all vis
   }
 
   /**
@@ -161,9 +160,13 @@ public class PptSliceEquality
         // equality field set to their old sets
         List /*[Equality]*/ newInvs =
           createEqualityInvs (nonEqualVis, vt, inv, count);
-
         // Now they don't anymore
-        copyInvsFromLeader (inv, newInvs, count);
+        List newInvsLeaders = new ArrayList (newInvs.size());
+        for (Iterator iNewInvs = newInvs.iterator(); iNewInvs.hasNext(); ) {
+          Equality eq = (Equality) iNewInvs.next();
+          newInvsLeaders.add (eq.leader());
+        }
+        copyInvsFromLeader (inv.leader(), newInvsLeaders, count);
         allNewInvs.addAll (newInvs);
 
         weakenedInvs.add (inv);
@@ -202,7 +205,6 @@ public class PptSliceEquality
                                                  ) {
     Assert.assertTrue (vis.size() > 0);
     Map multiMap = new HashMap(); /* value -> List[VarInfo]*/
-    List/*[VarInfo]*/ missings = new LinkedList();
     for (Iterator i = vis.iterator(); i.hasNext(); ) {
       VarInfo vi = (VarInfo) i.next();
       if (vt.isMissing (vi)) {
@@ -211,7 +213,8 @@ public class PptSliceEquality
         addToBindingList (multiMap, vi.getValue(vt), vi);
       }
     }
-    Equality[] resultArray = new Equality[multiMap.values().size() + (missings.size() > 0 ? 1 : 0)];
+    // Why use an array?  Because we'll be sorting shortly
+    Equality[] resultArray = new Equality[multiMap.values().size()];
     int resultCount = 0;
     for (Iterator i = multiMap.keySet().iterator(); i.hasNext(); ) {
       Object key = i.next();
@@ -240,6 +243,11 @@ public class PptSliceEquality
    * Map maps keys to non-empty lists of elements.
    * This method adds var to the list mapped by key,
    * creating a new list for key if one doesn't already exist.
+   * @param map The map to add the bindings to
+   * @param key If there is already a List associated with key, then
+   * add value to key.  Otherwise create a new List associated with
+   * key and insert value.
+   * @param value The value to insert into the List mapped to key.
    * @pre Each value in map is a list of size 1 or greater
    * @post Each value in map is a list of size 1 or greater
    **/
@@ -257,44 +265,47 @@ public class PptSliceEquality
   /**
    * Instantiate invariants from each inv's leader.  This is like
    * instantiate_invariants at the start of reading the trace file,
-   * where we create new PptSliceNs.  This is called when newInvs have
-   * just split off from leader, and we want the leaders of newInvs to
+   * where we create new PptSliceNs.  This is called when newVis have
+   * just split off from leader, and we want the leaders of newVis to
    * have the same invariants as leader.
    * @param leaderEq the Equality whose leader holds the
    * invariants to be instantiated(copied).
-   * @param newInvs a List of Equality invariants that were created,
-   * whose leaders need invariants copied from leader
+   * @param newVis a List of new VarInfos that used to be equal to
+   * leader.  Actually, it's the list of canonical that were equal to
+   * leader, representing their own newly-created equality sets.
    **/
-  public void copyInvsFromLeader (Equality leaderEq, List newInvs, int count) {
-    VarInfo leader = leaderEq.leader();
+  public void copyInvsFromLeader (VarInfo leader, List newVis, int count) {
     List newSlices = new LinkedList();
     if (debug.isDebugEnabled()) {
       debug.debug ("copyInvsFromLeader  leader:" + leader.name.name());
       debug.debug ("  orig slices count:" + parent.views_size());
     }
-    int newSamples = leaderEq.numSamples() - count;
+    int newSamples = leader.equalitySet.numSamples() - count;
 
-    // three phases: all variables used are *leaders* of their own groups
-    // The first copies existing slices from old leader
-    // The next two creates new slices
+    // Three phases: all variables used are *leaders* of their own
+    // groups. Phase (a) copies existing slices from old
+    // leader. Phases (b) and (c) create new slices such that they
+    // contain at least two variables from the set {leader + newVis}.
 
     // a) Slices from substituting the leader with each of the new
     // variables: f(leader, x) => f(new, x)
     // This handles all unary invariants and some of the bi/ternary
-    // invariants we want to copy
+    // invariants we want to copy.  The copied slices are of any
+    // arity, but contain exactly one varInfo that is a new leader and
+    // no varInfo that's the old leader.
+
     for (Iterator i = parent.views_iterator(); i.hasNext(); ) {
       PptSlice slice = (PptSlice) i.next();
       // For each slice that contains leader
       if (slice.containsVar(leader)) {
         // For each new leader group, clone over the slice
-        for (Iterator iNewInvs = newInvs.iterator(); iNewInvs.hasNext(); ) {
-          Equality newEq = (Equality) iNewInvs.next();
-          VarInfo newLeader = newEq.leader();
+        for (Iterator iNewVis = newVis.iterator(); iNewVis.hasNext(); ) {
+          VarInfo newLeader = (VarInfo) iNewVis.next();
           Assert.assertTrue (newLeader.comparableNWay(leader));
           PptSlice newSlice = slice.cloneOnePivot(leader, newLeader);
           if (debug.isDebugEnabled()) {
-            debug.debug ("result of cloneAndInvs: orig:" + slice);
-            debug.debug ("                        new :" + newSlice);
+            debug.debug ("  result of cloneAndInvs: orig:" + slice);
+            debug.debug ("                          new :" + newSlice);
             for (Iterator iDebug = newSlice.invs.iterator();
                  iDebug.hasNext(); ) {
               Invariant inv = (Invariant) iDebug.next();
@@ -307,27 +318,27 @@ public class PptSliceEquality
       }
     }
 
-    if (debug.isDebugEnabled()) {
-      debug.debug ("  doing binary views");
-    }
 
     // b) Do binary slices to produce the cartesian product of
-    // {newInvs + leader}.  E.g. f(new1, new2), f(new1, leader)
-    for (int i1=-1; i1 < newInvs.size(); i1++) {
+    // {newVis + leader}.  E.g. f(new1, new2), f(new1, leader)
+    if (debug.isDebugEnabled()) {
+      debug.debug ("Doing binary views");
+    }
+    for (int i1=-1; i1 < newVis.size(); i1++) {
       VarInfo var1 = (i1 == -1) ?
-        leader : ((Equality) newInvs.get(i1)).leader();
-      for (int i2= i1 + 1; i2 < newInvs.size(); i2++) {
-        VarInfo var2 = ((Equality) newInvs.get(i2)).leader();
+        leader : (VarInfo) newVis.get(i1);
+      for (int i2= i1 + 1; i2 < newVis.size(); i2++) {
+        VarInfo var2 = (VarInfo) newVis.get(i2);
 
-        // Why?  Because var1 could be leader, which could have a
-        // totally different index.
+        // Why sort?  Because the order of the new invariants don't
+        // have to be ordered by index, while slices have to be.
         PptSlice2 slice2 =
           (var1.varinfo_index < var2.varinfo_index) ?
           new PptSlice2(this.parent, var1, var2) :
           new PptSlice2(this.parent, var2, var1);
         Assert.assertTrue (parent.findSlice_unordered (var1, var2) == null);
-        slice2.repCheck();
         slice2.instantiate_invariants(newSamples > 0);
+        slice2.repCheck();
         slice2.set_samples(newSamples);
         newSlices.add(slice2);
         if (debug.isDebugEnabled()) {
@@ -337,31 +348,35 @@ public class PptSliceEquality
       }
     }
 
+    Set newVisSet = new HashSet (newVis); // This is for fast lookup later
+    newVisSet.add (leader);
+    // c) Create ternary slices of at least 2 variables that are in
+    // the set {leader + newVis}.  Implementation: the first two
+    // loops iterate over the {old + new leader} set to generate (b).
+    // The third loop iterates over all the canonical variables,
+    // including the old leader, the new leaders and other leaders
+    // that were not in the original equality set.  That includes:
+    // f(new1, new2, new3) and f(leader, new1, new2) f(new1, new2,
+    // other1), f(leader, new1, other2).  The loops are structured to
+    // prevent duplication of the same slice, so the inner two loops,
+    // for example, do not contain the old leader.  Why do we include
+    // old variables in the 3rd slot?  Because this achieves the right
+    // cover of the varInfos so we don't miss any ternary slices.
     if (debug.isDebugEnabled()) {
-      debug.debug ("  doing ternary views");
+      debug.debug ("Doing ternary views");
     }
-
-    Set newInvsSet = new HashSet (newInvs); // This is for fast lookup later
-    newInvsSet.add (leaderEq);
-    // c) Do ternary slices between each of the new sets and leader.
-    // This is like the cartesian product of the results of round (b)
-    // with *all* the canonical varInfos of this.parent.  That
-    // includes: f(new1, new2, new3) and f(leader, new1, new2)
-    // f(new1, new2, old1), f(leader, new1, old2)
-    // Why do we include old variables in the 3rd slot?  Because this
-    // achieves the right cover of the varInfos so we don't miss any
-    // ternary slices.
-    for (int i1=-1; i1 < newInvs.size(); i1++) {
+    for (int i1=-1; i1 < newVis.size(); i1++) {
       VarInfo var1 = (i1 == -1) ?
-        leader : ((Equality) newInvs.get(i1)).leader();
-      for (int i2= i1 + 1; i2 < newInvs.size(); i2++) {
-        VarInfo var2 = ((Equality) newInvs.get(i2)).leader();
-        // We need two loops: one for the vis in newInvs and another
-        // for the other variables.  This ensures cover and prevents
+        leader : (VarInfo) newVis.get(i1);
+      for (int i2= i1 + 1; i2 < newVis.size(); i2++) {
+        VarInfo var2 = (VarInfo) newVis.get(i2);
+        // The third loop is split into two for performance.  The
+        // first is for the vis in newVis.  The second is for the
+        // other variables.  This ensures cover and prevents
         // duplication.
 
-        for (int i3= i2 + 1; i3 < newInvs.size(); i3++) {
-          VarInfo var3 = ((Equality) newInvs.get(i3)).leader();
+        for (int i3= i2 + 1; i3 < newVis.size(); i3++) {
+          VarInfo var3 = (VarInfo) newVis.get(i3);
           VarInfo[] vars = new VarInfo[] {var1, var2, var3};
           Arrays.sort (vars, VarInfo.IndexComparator.theInstance);
           PptSlice3 slice3 = new PptSlice3(this.parent, vars);
@@ -381,8 +396,8 @@ public class PptSliceEquality
           VarInfo var3 = parent.var_infos[i3];
           if (var3 == var2 || var3 == var1) continue;
           if (!var3.isCanonical()) continue;
-          // Only fresh vis:
-          if (newInvsSet.contains(var3.equalitySet)) continue;
+          // Only var infos who are not the old leader or new leader
+          if (newVisSet.contains(var3)) continue;
           VarInfo[] vars = new VarInfo[] {var1, var2, var3};
           Arrays.sort (vars, VarInfo.IndexComparator.theInstance);
           PptSlice3 slice3 = new PptSlice3(this.parent, vars);
@@ -405,10 +420,13 @@ public class PptSliceEquality
       if (slice.invs.size() == 0) {
         continue;
       }
-      // These had better be new slices.  Even flow can't make these
-      // slices non-fresh, because flow_and_remove_falsified makes
-      // sure that we never instantiate slices if their elements are
-      // in the same equality set.
+      // Make sure these slices were never previously instantiated.
+      // Instantiation can only occur in two other ways: 1. on
+      // canonical variables and 2. through flow.  It can't happen via
+      // (1) because this is the first time newVis are canonical.
+      // For (2) flow only instantiates slices if they were not part
+      // of the same equality set.  Previously, newVis and leader
+      // were in the same equality set.
       Assert.assertTrue (parent.findSlice (slice.var_infos) == null);
       slice.repCheck();
       parent.addSlice (slice);
@@ -420,7 +438,13 @@ public class PptSliceEquality
     }
   }
 
+  PptSlice cloneOnePivot(VarInfo leader, VarInfo newLeader) {
+    throw new Error("Shouldn't get called");
+  }
 
+  PptSlice cloneAllPivots () {
+    throw new Error("Shouldn't get called");
+  }
 
   public void repCheck() {
     for (Iterator i = invs.iterator(); i.hasNext(); ) {
@@ -431,12 +455,13 @@ public class PptSliceEquality
   }
 
   public String toString() {
-    StringBuffer result = new StringBuffer();
+    StringBuffer result = new StringBuffer("PptSliceEquality: [");
     for (Iterator i = invs.iterator(); i.hasNext(); ) {
       Equality inv = (Equality) i.next();
       result.append (inv.repr());
       result.append ("\n");
     }
+    result.append ("  ]");
     return result.toString();
   }
 

@@ -1753,20 +1753,33 @@ public class PptTopLevel
   private boolean initiatedSuppression = false;
 
   /**
-   * Starts suppression by 1) unsuppressing all invariants. 2) running
-   * full suppression check.  Called at the start of inferencing.  Can
-   * be called repeatedly to refresh suppression, but this is an
-   * expensive operation.  Requires that this and its parents have
-   * already has instantiated invariants.
+   * Starts suppression by attempting to suppress all invariants.
+   * Called at the start of inferencing.  Requires that this and its
+   * parents have already has instantiated invariants.
    *
    * @see daikon.suppress.SuppressionFactory
    * @pre Invariants already instantiated
    **/
   public void initiateSuppression() {
-    if (Daikon.suppress_invariants && !initiatedSuppression) {
+    if (!initiatedSuppression) {
+      suppressAll();
       initiatedSuppression = true;
+    }
+  }
+
+  /**
+   * Attempt to suppress all unsuppressed invariants.  Requires that
+   * this and its parents have already has instantiated
+   * invariants. Can be called repeatedly to refresh suppression, but
+   * this is an expensive operation.
+   *
+   * @see daikon.suppress.SuppressionFactory
+   * @pre Invariants already instantiated
+   **/
+  public void suppressAll() {
+    if (Daikon.suppress_invariants) {
       if (debugSuppressInit.isDebugEnabled()) {
-        debugSuppressInit.debug ("Initiating suppression for: " + name);
+        debugSuppressInit.debug ("SuppressAll for: " + name);
       }
       List invs = getInvariants();
       for (Iterator i = invs.iterator(); i.hasNext(); ) {
@@ -1789,6 +1802,7 @@ public class PptTopLevel
       }
     }
   }
+
 
 
   /**
@@ -2665,7 +2679,7 @@ public class PptTopLevel
    * Two things: a) convert Equality invariants into normal IntEqual
    * type for filtering, printing, etc. b) Pivot uninteresting
    * parameter VarInfos so that each equality set contains only the
-   * interesting one.  a and b have to be done in the above order.
+   * interesting one.
    **/
   public void postProcessEquality () {
     if (debugEqualTo.isDebugEnabled()) {

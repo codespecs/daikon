@@ -24,16 +24,16 @@ import java.util.*;
  * invariants for one member of each Equal set, the leader.  See
  * equality notes in this directory.<p>
  *
- * During postProcessing, each
- * instance of Equality instantiates into displaying several equality
- * Comparison invariants ("x == y", "x == z").  Equality invariants
- * have leaders, which are the canonical forms of their variables.  In
- * the previous example, x is the leader.  Equality invariants sort
- * their variables by index ordering during checking.  During
- * printing, however, equality invariants may "pivot" -- that is,
- * switch leaders if the current leader wouldn't be printed because it
- * was not an interesting variable.  Notice that when pivoting, all
- * the relevant other invariants also need to be pivoted.
+ * During postProcessing, each instance of Equality instantiates into
+ * displaying several equality Comparison invariants ("x == y", "x ==
+ * z").  Equality invariants have leaders, which are the canonical
+ * forms of their variables.  In the previous example, x is the
+ * leader.  Equality invariants sort their variables by index ordering
+ * during checking.  During printing, however, equality invariants may
+ * "pivot" -- that is, switch leaders if the current leader wouldn't
+ * be printed because it was not an interesting variable.  Notice that
+ * when pivoting, all the other invariants based on this.leader also
+ * need to be pivoted.
  **/
 public final class Equality
   extends Invariant
@@ -63,13 +63,14 @@ public final class Equality
   }
 
   /**
-   * The Set of VarInfos that this represents equality for.  Can change
-   * over time as invariant weakens.  Sorted by index until pivoting.
+   * The Set of VarInfos that this represents equality for.  Can
+   * change over time as this invariant weakens.  Sorted by index
+   * until pivoting.
    **/
-  private Set/*VarInfo*/ vars;
+  private TreeSet/*VarInfo*/ vars;
 
-  public Set getVars() {
-    return Collections.unmodifiableSet (vars);
+  public TreeSet getVars() {
+    return (TreeSet) Collections.unmodifiableSet (vars);
   }
 
   /**
@@ -115,17 +116,13 @@ public final class Equality
   public VarInfo leader() {
     if (leaderCache == null) {
       leaderCache = (VarInfo) vars.iterator().next();
-      return leaderCache;
-    } else {
-      return leaderCache;
     }
+    return leaderCache;
   }
 
-  //   public boolean hasNonCanonicalVariable() {
-  //     // In fact, we do have non-canonical variables, but it's our
-  //     // little secret.
-  //     return false;
-  //   }
+  public boolean hasNonCanonicalVariable() {
+    throw new Error("Illegal operation on Equality invariant");
+  }
 
   /**
    * Always return JUSTIFIED because we aggregate Comparison
@@ -177,10 +174,9 @@ public final class Equality
   }
 
 
-  // Most of these methods aren't called, because for output, we
-  // convert to normal two-way IntEqual type invariants.
-  /* java */
-  // daikon.inv.Equality
+  // These format methods aren't called, because for output, we
+  // convert to normal two-way IntEqual type invariants.  However,
+  // they can be called if desired.
   public String format_java() {
     StringBuffer result = new StringBuffer ();
     VarInfo leader = leader();
@@ -195,7 +191,6 @@ public final class Equality
     return result.toString();
   }
 
-  /* IOA */
   public String format_ioa() {
     StringBuffer result = new StringBuffer();
     VarInfo leader = leader();
@@ -298,34 +293,13 @@ public final class Equality
   }
 
 
-
-
-  // This probably belongs in ProglangType proper (?)
-  public boolean is_reference() {
-    VarInfo foo = leader();
-
-    // If the program type has a higher dimension than the rep type,
-    // we are taking a hash or something.
-    if (foo.type.pseudoDimensions() > foo.rep_type.pseudoDimensions()) {
-      return true;
-    }
-
-    // The dimensions are the same.  If the rep type is integral but
-    // the program type isn't primitive, we have a hash, too.
-    if (foo.rep_type.baseIsIntegral() && (!foo.type.baseIsPrimitive())) {
-      return true;
-    }
-
-    return false;
-  }
-
   // When A and B are pointers, don't say (EQ A B); instead say (EQ
   // (hash A) (hash B)).  If we said the former, Simplify would
   // presume that A and B were always interchangeable, which is not
   // the case when your programming language involves mutation.
   private String format_elt(String simname) {
     String result = simname;
-    if (is_reference()) {
+    if (leader().is_reference()) {
       result = "(hash " + result + ")";
     }
     return result;
@@ -367,13 +341,14 @@ public final class Equality
     return repr();
   }
 
+  //////////////////////////////////////////////////////////////////////
+  /// Processing of data
 
   /**
    * @return a List of VarInfos that do not fit into this set anymore
    **/
-
-  // Need to handle specially if leader is missing.
   public List add(ValueTuple vt, int count) {
+    // Need to handle specially if leader is missing.
     VarInfo leader = leader();
     Object leaderValue = leader.getValue(vt);
     int leaderMod = leader.getModified(vt);
@@ -392,11 +367,11 @@ public final class Equality
       Assert.assertTrue (vi.comparableNWay (leader));
       Object viValue = vi.getValue(vt);
       if (leaderValue == viValue) continue; // Including missing
-//       if (debug.isDebugEnabled()) {
-//         debug.debug("  vi name: " + vi.name.name());
-//         debug.debug("  vi value: " + viValue);
-//         debug.debug("  le value: " + leaderValue);
-//       }
+      //       if (debug.isDebugEnabled()) {
+      //         debug.debug("  vi name: " + vi.name.name());
+      //         debug.debug("  vi value: " + viValue);
+      //         debug.debug("  le value: " + leaderValue);
+      //       }
       // The following or expression *must* be done in this specific
       // order so null values are taken into account
       if (leaderValue == null ||
@@ -411,8 +386,8 @@ public final class Equality
         //   Avoid double interning at the Invariant level when f(a, b)
         //   and f(a, c).
         // This would be bad because:
-        //   Some VarInfos that are never checked would have to get
-        //   interned.  Right now, only VarInfos with invariants on them
+        //   Some values that are never checked would have to get
+        //   interned.  Right now, only values with invariants on them
         //   are interned. [TNW after talking with MDE 26 Sep 2002]
 
         result.add (vi);
@@ -482,16 +457,16 @@ public final class Equality
         //             ((SeqComparison) invEquals).can_be_eq = true;
         //           }
         debugPostProcess.debug ("  stringEqual");
-      } else if (Daikon.dkconfig_enable_floats
-                 && rep_is_float) {
-        invEquals = FloatEqual.instantiate (newSlice);
-        debugPostProcess.debug ("  floatEqual");
-      } else if (Daikon.dkconfig_enable_floats
-                 && (rep == ProglangType.DOUBLE_ARRAY)) {
-        debugPostProcess.debug ("  seqFloatEqual");
-        invEquals = SeqComparisonFloat.instantiate (newSlice, true, true);
+      } else if (Daikon.dkconfig_enable_floats) {
+        if (rep_is_float) {
+          invEquals = FloatEqual.instantiate (newSlice);
+          debugPostProcess.debug ("  floatEqual");
+        } else if (rep == ProglangType.DOUBLE_ARRAY) {
+          debugPostProcess.debug ("  seqFloatEqual");
+          invEquals = SeqComparisonFloat.instantiate (newSlice, true, true);
+        }
       } else {
-        // Do nothing; do not even complain
+        throw new Error ("No known Comparison invariant to convert equality into");
       }
 
       if (invEquals != null) {
@@ -518,14 +493,14 @@ public final class Equality
    * that is not isDerivedParamAndUninteresting.  If not, keep the
    * same leader.  Call this only after postProcess has been called.
    * We do a pivot so that anything that's interesting to be printed
-   * gets printed and not filtered out.  For example, of a == b and a
+   * gets printed and not filtered out.  For example, if a == b and a
    * is the leader, but not interesting, we still want to print f(b)
    * as an invariant.  Thus we pivot b to be the leader.  Later on,
    * each relevant PptSlice gets pivoted.  But not here.
    **/
   public void pivot() {
     if (!leader().isDerivedParamAndUninteresting()) return;
-    VarInfo newLeader = leader();
+    VarInfo newLeader = null;
     for (Iterator iVars = vars.iterator(); iVars.hasNext(); ) {
       VarInfo var = (VarInfo) iVars.next();
       if (!var.isDerivedParamAndUninteresting()) {
@@ -533,8 +508,9 @@ public final class Equality
         break;
       }
     }
-    if (leader() == newLeader) return;
-    leaderCache = newLeader;
+    if (newLeader != null) {
+      leaderCache = newLeader;
+    }
   }
 
   public void repCheck() {

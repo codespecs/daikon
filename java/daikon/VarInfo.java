@@ -975,6 +975,27 @@ public final class VarInfo
   }
 
   /**
+   * Return true if this is a pointer or reference to another object.
+   **/
+  public boolean is_reference() {
+    // If the program type has a higher dimension than the rep type,
+    // we are taking a hash or something.
+    if (type.pseudoDimensions() > rep_type.pseudoDimensions()) {
+      return true;
+    }
+
+    // The dimensions are the same.  If the rep type is integral but
+    // the program type isn't primitive, we have a hash, too.
+    if (rep_type.baseIsIntegral() && (!type.baseIsPrimitive())) {
+      return true;
+    }
+
+    return false;
+  }
+
+
+
+  /**
    * Returns all other variables that are equal to this variable.
    * Returns a fresh Vector.
    * The result Vector does not include this.

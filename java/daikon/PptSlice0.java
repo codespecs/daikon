@@ -95,4 +95,11 @@ public class PptSlice0
     throw new Error("Shouldn't get called");
   }
 
+  PptSlice cloneOnePivot(VarInfo leader, VarInfo newLeader) {
+    throw new Error("Shouldn't get called");
+  }
+
+  PptSlice cloneAllPivots () {
+    throw new Error("Shouldn't get called");
+  }
 }

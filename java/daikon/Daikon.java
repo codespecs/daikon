@@ -259,8 +259,6 @@ public final class Daikon {
     load_map_files(all_ppts, map_files);
     // setup_splitters(all_ppts); // XXX splitters are not implemented yet
 
-    setupEquality (all_ppts);
-
     // Infer invariants
     process_data(all_ppts, dtrace_files);
 
@@ -295,18 +293,6 @@ public final class Daikon {
 
     // Done
     System.out.println("Exiting");
-  }
-
-  public static void setupEquality (PptMap allPpts) {
-    // PptSliceEquality does all the necessary instantiations
-    if (Daikon.use_equality_set) {
-      for (Iterator i = allPpts.pptIterator(); i.hasNext(); ) {
-        PptTopLevel ppt = (PptTopLevel) i.next();
-        ppt.equality_view = new PptSliceEquality(ppt);
-        ppt.equality_view.instantiate_invariants(true);
-      }
-    }
-
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -716,6 +702,11 @@ public final class Daikon {
     }
 
     elapsedTime(); // reset timer
+    
+    // Preprocessing
+    setupEquality (all_ppts);
+
+    // Processing (actually using dtrace files)
     try {
       System.out.println("Processing trace data; reading "
                          + UtilMDE.nplural(dtrace_files.size(), "file")
@@ -743,12 +734,20 @@ public final class Daikon {
       monitor.stop();
     }
 
-    // Post process data for each PptTopLevel
+    // Postprocessing
+
+    // Equality data for each PptTopLevel
     if (Daikon.use_equality_set) {
       for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
         PptTopLevel ppt = (PptTopLevel) itor.next();
         ppt.postProcessEquality();
       }
+    }
+
+    // One more round of suppression for printing
+    for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
+      PptTopLevel ppt = (PptTopLevel) itor.next();
+      ppt.suppressAll();
     }
 
     if (suppress_redundant_invariants_with_simplify) {
@@ -762,6 +761,18 @@ public final class Daikon {
         System.out.flush();
       }
       System.out.println(elapsedTime());
+    }
+
+  }
+
+  public static void setupEquality (PptMap allPpts) {
+    // PptSliceEquality does all the necessary instantiations
+    if (Daikon.use_equality_set) {
+      for (Iterator i = allPpts.pptIterator(); i.hasNext(); ) {
+        PptTopLevel ppt = (PptTopLevel) i.next();
+        ppt.equality_view = new PptSliceEquality(ppt);
+        ppt.equality_view.instantiate_invariants(true);
+      }
     }
 
   }

@@ -393,7 +393,7 @@ public final class PptSlice3
   }
 
   /**
-   * @see daikon.PptSlice
+   * @see daikon.PptSlice.cloneOnePivot
    **/
   protected PptSlice cloneOnePivot (VarInfo leader, VarInfo newLeader) {
     VarInfo[] newVarInfos = new VarInfo[arity];
@@ -451,15 +451,10 @@ public final class PptSlice3
   }
 
   /**
-   * @see daikon.PptSlice
+   * @see daikon.PptSlice.cloneAllPivots
    **/
   protected PptSlice cloneAllPivots () {
-    // No need to do it if this is a slice for equality
-    if (this.var_infos.length == 2 &&
-        this.var_infos[0].equalitySet ==
-          this.var_infos[1].equalitySet) {
-      return this;
-    }
+
     VarInfo[] newVarInfos = new VarInfo[this.var_infos.length];
     boolean pivoted = false;
     for (int i = 0; i < this.var_infos.length; i++) {

@@ -827,9 +827,7 @@ public abstract class PptSlice
    * occurance of leader.
    * @return a new PptSlice that satisfies the characteristics above.
    **/
-  PptSlice cloneOnePivot(VarInfo leader, VarInfo newLeader) {
-    throw new Error ("Should be implemented");
-  }
+  abstract PptSlice cloneOnePivot(VarInfo leader, VarInfo newLeader);
 
   // This method is used after inferencing, during postProcessing, to
   // pivot PptSlices to hold leaders only, after Equality sets have
@@ -842,11 +840,11 @@ public abstract class PptSlice
    * cloneOnePivot, this.var_infos may not be their leaders.  We are
    * pivoting to restore this condition.
    * @pre this.var_infos members may not be their leaders
-   * @return a new PptSlice that satisfies the characteristics above.
+   * @return a new PptSlice that satisfies the characteristics above,
+   * unless there is no need for pivoting, in which case we return
+   * this.
    **/
-  protected PptSlice cloneAllPivots () {
-    throw new Error ("Should be implemented");
-  }
+  abstract PptSlice cloneAllPivots ();
 
 
   /**
