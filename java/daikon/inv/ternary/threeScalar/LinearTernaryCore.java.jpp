@@ -155,7 +155,12 @@ public final class CLASSNAME
         p.z = temp[2];
       }
     }
-    // Could assert that caches sync with a,b,c (?)
+    // Assert that caches sync with a,b,c?
+    // This would be a good sanity check, but it would be nontrivial
+    // because we don't keep track of when a, b, and c are really
+    // valid for all the of the points we've cached. If we were
+    // falsified and then resurrected, we might have samples that
+    // didn't fit even before the permutation. -smcc
   }
 
   /**
