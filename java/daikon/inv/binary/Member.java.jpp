@@ -5,7 +5,7 @@ The correct way to build the system is to run 'make'.
 #endif
 
 #if !(defined(SCALAR) || defined(STRING) || defined(FLOAT))
-#error "One of SCALAR or STRING should be defined"
+#error "One of SCALAR, FLOAT or STRING should be defined"
 #endif
 
 #if defined(SCALAR)
@@ -18,6 +18,8 @@ The correct way to build the system is to run 'make'.
 #define PROGLANG_INT_ARRAY ProglangType.INT_ARRAY
 #define SEQUENCESCALARSUBSCRIPT SequenceScalarSubscript
 #define SEQUENCESCALARSUBSEQUENCE SequenceScalarSubsequence
+#define ARBITRARYSUBSEQUENCE SequenceScalarArbitrarySubsequence
+#define SUBSEQUENCE SubSequence
 #  define SEQUENCEINITIAL SequenceInitial
 #elif defined(STRING)
 #define CLASSNAME Member
@@ -31,6 +33,9 @@ The correct way to build the system is to run 'make'.
 #define PROGLANG_INT_ARRAY ProglangType.STRING_ARRAY
 #define SEQUENCESCALARSUBSCRIPT SequenceStringSubscript
 #define SEQUENCESCALARSUBSEQUENCE SequenceStringSubsequence
+#define ARBITRARYSUBSEQUENCE SequenceStringArbitrarySubsequence
+  // XXX There is no SubSequenceString(?)
+#define SUBSEQUENCE SubSequence
 #  define SEQUENCEINITIAL SequenceInitial
 #elif defined(FLOAT)
 #  define CLASSNAME MemberFloat
@@ -41,6 +46,8 @@ The correct way to build the system is to run 'make'.
 #  define PROGLANG_INT_ARRAY ProglangType.DOUBLE_ARRAY
 #  define SEQUENCESCALARSUBSCRIPT SequenceFloatSubscript
 #  define SEQUENCESCALARSUBSEQUENCE SequenceFloatSubsequence
+#  define ARBITRARYSUBSEQUENCE SequenceFloatArbitrarySubsequence
+#  define SUBSEQUENCE SubSequenceFloat
 #  define SEQUENCEINITIAL SequenceInitialFloat
 #else
 #error "One of SCALAR or STRING should be defined"
@@ -61,6 +68,7 @@ import daikon.inv.binary.twoScalar.IntGreaterEqual;
 import daikon.derive.*;
 import daikon.derive.unary.*;
 import daikon.derive.binary.*;
+import daikon.derive.ternary.*;
 import daikon.suppress.*;
 import java.util.*;
 import utilMDE.*;
@@ -197,13 +205,33 @@ public final class CLASSNAME
     // are off.
 
 
-    if (seqvar.derived instanceof SEQUENCESCALARSUBSEQUENCE) {
-      // the sequence is B[0..J-1] or similar.  Get information about it.
-      SEQUENCESCALARSUBSEQUENCE seqsss = (SEQUENCESCALARSUBSEQUENCE) seqvar.derived;
-      // System.out.println("seqvar: " + seqvar.name);
-      VarInfo seq_index = seqsss.sclvar();
-      int seq_shift = seqsss.index_shift;
-      boolean seq_from_start = seqsss.from_start;
+    if (seqvar.derived instanceof SEQUENCESCALARSUBSEQUENCE ||
+        seqvar.derived instanceof ARBITRARYSUBSEQUENCE) {
+      VarInfo seq_left_index = null, seq_right_index = null;
+      // I'm careful not to access foo_shift unless foo_var has been set
+      // to a non-null value, but Java is too stupid to recognize that.
+      int seq_left_shift = 0xdead, seq_right_shift = 0xbeef;
+      if (seqvar.derived instanceof SEQUENCESCALARSUBSEQUENCE) {
+        // the sequence is B[0..J-1] or similar.  Get information about it.
+        SEQUENCESCALARSUBSEQUENCE seqsss
+          = (SEQUENCESCALARSUBSEQUENCE)seqvar.derived;
+        if (seqsss.from_start) {
+          seq_right_index = seqsss.sclvar();
+          seq_right_shift = seqsss.index_shift;
+        } else {
+          seq_left_index = seqsss.sclvar();
+          seq_left_shift = seqsss.index_shift;
+        }
+      } else if (seqvar.derived instanceof ARBITRARYSUBSEQUENCE) {
+        // the sequence is B[I+1..J] or similar
+        ARBITRARYSUBSEQUENCE ssass = (ARBITRARYSUBSEQUENCE)seqvar.derived;
+        seq_left_index = ssass.startvar();
+        seq_left_shift = (ssass.left_closed ? 0 : 1);
+        seq_right_index = ssass.endvar();
+        seq_right_shift = (ssass.right_closed ? 0 : -1);
+      } else {
+        Assert.assertTrue(false);
+      }
 
       if (sclvar.derived instanceof SEQUENCESCALARSUBSCRIPT) {
         // B[I] in B[0..J]
@@ -212,61 +240,41 @@ public final class CLASSNAME
         VarInfo scl_index = sclsss.sclvar(); // "I" in "B[I]"
         int scl_shift = sclsss.index_shift;
         // System.out.println("scl_shift = " + scl_shift + ", seq_shift = " + seq_shift);
-        // when b[i+d] in b[0..i+d+x] or b[i+d+x] in b[i+d..]
-        if (scl_index == seq_index &&
-            (seq_from_start ?
-             seq_shift >= scl_shift :
-             seq_shift <= scl_shift)
-            ) {
-          if (debug.isDebugEnabled()) {
-            debug.debug ("IsObviousMember in ppt: " + sclvar.ppt.name);
-            debug.debug ("  scl_index: " + scl_index.name.name());
-            debug.debug ("  seq_index: " + seq_index.name.name());
-            debug.debug ("  sclvar   : " + sclvar.name.name());
-            debug.debug ("  seqvar   : " + seqvar.name.name());
-          }
-          return true;
-        }
 
-        // This test returns true if scl+scl_shift<=seq+seq_shift
-        // isObviousImplied: when i<=j, b[i] in b[0..j]
-        // isObviousImplied: when i>=j, b[i] in b[j..]
-        if (VarInfo.compare_vars(scl_index, scl_shift, seq_index, seq_shift,
-                                 seq_from_start)) {
+        boolean left_included, right_included;
+        if (seq_left_index == null)
+          left_included = true;
+        else
+          left_included = VarInfo.compare_vars(scl_index, scl_shift,
+                                               seq_left_index, seq_left_shift,
+                                               false /* >= */);
+        if (seq_right_index == null)
+          right_included = true;
+        else
+          right_included
+            = VarInfo.compare_vars(scl_index, scl_shift,
+                                   seq_right_index, seq_right_shift,
+                                   true /* <= */);
+//         System.out.println("Is " + sclvar.name.name() + " contained in "
+//                            + seqvar.name.name()
+//                            + "? left: " + left_included + ", right: "
+//                            + right_included);
+        if (left_included && right_included)
           return true;
-        }
       } else if (sclvar.derived instanceof SEQUENCEINITIAL) {
         // System.out.println("sclvar derived from SequenceInitial: " + sclvar.name);
 
         // isObviousImplied: B[0] in B[0..J]; also B[-1] in B[J..]
         SEQUENCEINITIAL sclse = (SEQUENCEINITIAL) sclvar.derived;
         int scl_index = sclse.index;
-        if (((scl_index == 0) && seq_from_start)
-            || ((scl_index == -1) && !seq_from_start))
+        if (((scl_index == 0) && seq_left_index == null)
+            || ((scl_index == -1) && seq_right_index == null))
           // It might not be true, because the array could be empty;
           // but if the array isn't empty, then it's obvious.
           return true;
       } else if ((sclvar.derived instanceof SequenceMin)
                  || (sclvar.derived instanceof SequenceMax)) {
-        if (sclvar_seq.derived instanceof SEQUENCESCALARSUBSEQUENCE) {
-          // min(B[0..I]) in B[0..J]
-          // System.out.println("seqvar_super = " + seqvar_super + ", sclseqsuper = " + sclseqsuper);
-          // System.out.println("seqvar_super = " + seqvar_super.name + ", sclseqsuper = " + sclseqsuper.name);
-          Assert.assertTrue(seqvar_super == sclseqsuper);
-          SEQUENCESCALARSUBSEQUENCE sclsss = (SEQUENCESCALARSUBSEQUENCE) sclvar_seq.derived;
-          boolean scl_from_start = sclsss.from_start;
-          if (scl_from_start == seq_from_start) {
-            VarInfo scl_index = sclsss.sclvar();
-            int scl_shift = sclsss.index_shift;
-            boolean comparison = VarInfo.compare_vars(scl_index, scl_shift, seq_index, seq_shift,
-                                                      seq_from_start);
-            // System.out.println("comparison="+comparison+" for obvious membership: " + sclvar.name + " " + seqvar.name);
-            // isObviousImplied: when i<=j, min(B[0..I]) in B[0..J]; also for max and B[j..0]
-            if (comparison) {
-              return true;
-            }
-          }
-        }
+        return SUBSEQUENCE.isObviousSubSequence(sclvar_seq, seqvar);
       }
     }
 
@@ -345,6 +353,8 @@ public final class CLASSNAME
     return sclvar().name.ioa_name() + " \\in " + seqvar().name.ioa_name();
   }
 
+  // XXX this "#ifdef SCALAR" test seems unlikely to have its original
+  // meaning, since it's currently always true -smcc
 #ifdef SCALAR
   public String format_esc() {
     // "exists x in a..b : P(x)" gets written as "!(forall x in a..b : !P(x))"
@@ -415,7 +425,7 @@ public final class CLASSNAME
    * that A[i] could also be max(A), etc.
    **/
   public static class MemberSuppressionFactory1 extends SuppressionFactory {
-    
+
     public static final Logger debug =
       Logger.getLogger("daikon.suppress.factories.MemberSuppressionFactory");
 
@@ -466,7 +476,7 @@ public final class CLASSNAME
           }
         }
       }
-      
+
       {
         // Try to see if SubSet invariant is there
         template.resetResults();
@@ -489,7 +499,7 @@ public final class CLASSNAME
           }
         }
       }
-      
+
       {
         // Failed on finding the right SubSet invariant.  Now try SubSequence
         template.resetResults();
@@ -515,7 +525,7 @@ public final class CLASSNAME
    * Suppression in the form of <pre>  0<=i<=j  ==>  b[i] in b[0..j] </pre>
    **/
   public static class MemberSuppressionFactory2 extends SuppressionFactory {
-    
+
     public static final Logger debug =
       Logger.getLogger("daikon.suppress.factories.MemberSuppressionFactory2");
 
