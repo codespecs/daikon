@@ -9,7 +9,8 @@ LISP_FILES := gries-helper.lisp instrument.lisp data-trace.lisp \
 PYTHON_FILES := invariants.py util.py
 DOC_FILES := invariants.py.doc Makefile
 EDG_DIR := /projects/se/people/jake/invariants/vortex/C++/front-end/release/dist
-EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.o $(EDG_DIR)/edgcpfe $(EDG_DIR)/instrumentor
+# $(EDG_DIR)/edgcpfe is distributed separately (not in the main tar file
+EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/instrumentor
 
 ## Examples of better ways to get the lists:
 # PERL_MODULES := $(wildcard *.pm)
@@ -37,10 +38,12 @@ invariants.tar: $(LISP_FILES) $(PYTHON_FILES) $(DOC_FILES) $(EDG_FILES) README-d
 	cp -p README-dist invariants/README
 	# C/C++ instrumenter
 	cp -p $(EDG_FILES) invariants
+	cp -p $(EDG_DIR)/Makefile invariants/Makefile-sample
 	echo "0" > invariants/label.txt
 	rm -rf invariants.tar
 	tar cvf invariants.tar invariants
 	mv invariants dist
+	chmod -R uog-w dist
 
 invariants.tar.gz: invariants.tar
 	rm -rf invariants.tar.gz
