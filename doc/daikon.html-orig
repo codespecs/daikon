@@ -4,6 +4,8 @@
 </head>
 <body>
 
+<img src="daikon.gif">
+
 <h1>Daikon invariant detector</h1>
 
 
@@ -38,6 +40,7 @@ Table of contents:
     </ul>
   <li><a href="#manifest">Manifest (list of files in the distribution)</a>
   <li><a href="#license">License</a>
+  <li><a href="#credits">Credits</a>
   <li><a href="#help">Getting more help</a>
 </ul>
 
@@ -399,6 +402,24 @@ appreciate a brief description of how you are using Daikon, because I am
 curious about how users exploit it (and am eager for anecdotes about its
 successes and failures), and I want to make it more effective for its
 users.<p>
+
+
+<h2><a name="credits">Credits</a></h2>
+
+The Daikon implementation is joint work of
+<a href="http://www.cs.washington.edu/homes/jake/">Jake Cockrell</a>,
+Adam Czeisler, and
+<a href="http://www.cs.washington.edu/homes/mernst/">Michael Ernst</a>.
+<a href="http://www.cs.ucsd.edu/~wgg/">Bill Griswold</a>,
+Josh Kataoka, and
+<a href="http://www.cs.washington.edu/homes/notkin/">David Notkin</a>
+have been very helpful testers.
+Many of our colleagues have been generous with their feedback and advice,
+for which we are grateful.
+<a href="http://www.cs.washington.edu/homes/csk/">Craig Kaplan</a> carved the Daikon logo.
+This work was supported by NSF grants CCR-9506779 and CCR-9508745, an IBM
+Cooperative Fellowship, and a gift from Edison Design Group.
+<p>
 
 
 <h2><a name="help">Getting more help</a></h2>

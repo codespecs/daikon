@@ -559,7 +559,9 @@ def _test_common_nonmodulus_strict():
     # go out on a limb and suggest they're equal mod their difference
     assert common_nonmodulus_strict([1,2,3,5,6,7,9]) == None
     assert common_nonmodulus_strict([-1,1,2,3,5,6,7,9]) == (0,4)
-    assert common_nonmodulus_strict([1,2,3,5,6,7,9,11]) == (0,2)
+    ## This is an error!  The missing numbers ==0 mod 2, but so do
+    ## some of the present numbers.
+    # assert common_nonmodulus_strict([1,2,3,5,6,7,9,11]) == (0,2)
     assert common_nonmodulus_strict([1,2,3,5,6,7,11]) == None
 
 # This seems to give too many false positives.

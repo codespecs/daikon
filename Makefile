@@ -7,7 +7,7 @@ LISP_FILES := lisp-front-end/gries-helper.lisp lisp-front-end/instrument.lisp li
 	lisp-front-end/load-all.lisp \
 	lisp-front-end/gries.lisp lisp-front-end/gries-instrumented.lisp lisp-front-end/inv-medic.lisp
 PYTHON_FILES := daikon.py util.py TextFile.py
-DOC_FILES := daikon.py.doc Makefile TextFile.README daikon.html
+DOC_FILES := daikon.py.doc Makefile TextFile.README daikon.html daikon.gif
 EDG_DIR := /homes/gws/mernst/research/invariants/edg/dist
 # $(EDG_DIR)/edgcpfe is distributed separately (not in the main tar file)
 EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/dfec $(EDG_DIR)/dfec.sh
@@ -48,8 +48,8 @@ tags: TAGS
 ## As of July 1998, my Linux etags works on Python; my Solaris one doesn't.
 ## So I should be sure to do the make on a Linux machine. -MDE
 TAGS:  $(LISP_FILES) $(PYTHON_FILES)
-	cd Daikon; make tags
-	etags $(LISP_FILES) $(PYTHON_FILES) --include=Daikon/TAGS
+	cd daikon; make tags
+	etags $(LISP_FILES) $(PYTHON_FILES) --include=daikon/TAGS
 
 ###########################################################################
 ### Distribution

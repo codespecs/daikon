@@ -52,6 +52,13 @@ if not locals().has_key("fn_var_infos"):
     debug_derive = false                # deriving new values
     debug_infer = false                 # inferring invariants
 
+    # A negative invariant is not reported unless the chance that the invariant
+    # only happens not to be true (and is not a true invariant) is at least this low.
+    negative_invariant_confidence = .01     # .05 might also be reasonable
+
+    # If true, list all the variables when printing a program point's invariants.
+    display_all_vars = false
+
     ### Internal variables
 
     ## Program point variables
@@ -1081,7 +1088,7 @@ def dict_of_tuples_slice(dot, indices):
 def introduce_new_variables_one_pass(var_infos, var_values, indices, functions):
     """Add new computed variables to the dictionaries, by side effect.
     The arguments are:
-      VAR_INFOS: list of var_info objects
+      VAR_INFOS: (complete) list of var_info objects
       INDICES: only values (partially) computed from these indices are candidates
       FUNCTIONS: (long) list of functions for adding new variables; see the code
     The first argument is typically an element of global variable fn_var_infos;
@@ -1315,7 +1322,7 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
     scl_inv = scl_info.invariant
     seq_size_idx = seq_info.derived_len
 
-    ## This makes absoulely no sense; I've left it commented out only
+    ## This makes absolutely no sense; I've left it commented out only
     ## so I don't get tempted to do something so silly again.
     # # Do nothing if the size is known (there's some other var practically
     # # equal to the size).
@@ -2087,10 +2094,6 @@ def print_hashtables():
 ### Invariants -- numeric
 ###
 
-# A negative invariant is not reported unless the chance that the invariant
-# only happens not to be true (and is not a true invariant) is at least this low.
-negative_invariant_confidence = .01     # .05 might also be reasonable
-
 ## An invariant may be exact or approximate.  If an invariant is exact,
 ## then supersets of the variables in it are not supplied to higher-arity
 ## invariants.  For instance, if the variables are w,x,y,z, and an exact
@@ -2176,7 +2179,7 @@ def all_numeric_invariants(fn_regexp=None):
                 # the body of this loop:
                 #     * computes invariants over a..n
                 #     * does pass1 introduction for b..a
-                #     * does pass2 introduction for c..a
+                #     * does pass2 introduction for c..b
                 # and afterward, derivation_index == (n, a, b).
 
                 # original number of vars; this body may well add more
@@ -2449,7 +2452,14 @@ def print_invariants(fn_regexp=None, print_unconstrained=0):
 def print_invariants_ppt(fn_name, print_unconstrained=0):
     """Print invariants for a single program point."""
     print fn_name, fn_samples[fn_name], "samples"
+
     var_infos = fn_var_infos[fn_name]
+
+    if (display_all_vars):
+        print "  variables: ",
+        for vi in var_infos:
+            print vi.name,
+        print
 
     # Equality invariants
     for vi in var_infos:
