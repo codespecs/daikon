@@ -8,7 +8,9 @@ Where the files come from:
  .epsi	ps2epsi daikon-logo.ps  (has a good BoundingBox)
  .eps	cp -p daikon-logo.epsi daikon-logo.eps
  .pdf	ps2pdf daikon-logo.eps; mv daikon-logo.eps.pdf daikon-logo.pdf
-	(bad BoundingBox; I also tried renaming the .eps file as .ps first)
+	(bad BoundingBox; I also tried renaming the .eps file as .ps first;
+        commenting out the trailing info didn't help; and Acrobat distiller
+        produced completely empty PDF files, so that was no help)
  .png	xv daikon-logo.giv, then save as PNG
  .jpg	xv daikon-logo.giv, then save as JPEG
 	(used only if xv crashes when trying to write PNG)
