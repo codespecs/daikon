@@ -270,7 +270,7 @@ public abstract class PptSlice
     // Could also assert that classes of invariants killed are all
     // represented in invs_to_flow, but a size check should be enough,
     // since most invariants only generate one flowed copy when they
-    // die (and we call this method a lot, so lets not be wasteful).
+    // die (and we call this method a lot, so let's not be wasteful).
     if (to_remove.size() > invs_to_flow.size()) {
       Set naughty = new HashSet();
       for (Iterator i = to_remove.iterator(); i.hasNext(); ) {

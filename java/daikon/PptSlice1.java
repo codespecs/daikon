@@ -75,6 +75,7 @@ public final class PptSlice1
     if (po_higher.size() > 0) {
       if (this.debugged || debug.isDebugEnabled())
 	debug.info("instantiate_invariants for " + name + " skipped because controlled");
+      return;
     }
 
     // Instantiate invariants

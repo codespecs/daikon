@@ -595,6 +595,9 @@ public class Dataflow
     }
   }
 
+  private static final String HR =
+    "===========================================================================";
+
   /**
    * @param outstream the stream to send output to
    * @param ppts the program points to dump
@@ -605,7 +608,11 @@ public class Dataflow
   public static void dump_ppts(OutputStream outstream,
 			       PptMap ppts)
   {
+    Map po_lower_stats = new HashMap();
+    Map po_higher_stats = new HashMap();
+
     PrintStream out = new PrintStream(outstream);
+    out.println(HR);
 
     for (Iterator iter = ppts.iterator(); iter.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) iter.next();
@@ -625,6 +632,14 @@ public class Dataflow
 	  int nonce = vi.po_higher_nonce()[count++];
 	  out.println("    " + nonce + ": " + v.name + " in " + v.ppt.name);
 	}
+	{ // stats
+	  Integer _count = new Integer(count);
+	  Integer _n = (Integer) po_higher_stats.get(_count);
+	  int n;
+	  if (_n == null) { n = 0; }
+	  else { n = _n.intValue(); }
+	  po_higher_stats.put(_count, new Integer(n+1));
+	}
 	out.println("  PO lower:");
 	count = 0;
 	for (Iterator vs = vi.po_lower().iterator(); vs.hasNext(); ) {
@@ -632,10 +647,37 @@ public class Dataflow
 	  int nonce = vi.po_lower_nonce()[count++];
 	  out.println("    " + nonce + ": " + v.name + " in " + v.ppt.name);
 	}
+	{ // stats
+	  Integer _count = new Integer(count);
+	  Integer _n = (Integer) po_lower_stats.get(_count);
+	  int n;
+	  if (_n == null) { n = 0; }
+	  else { n = _n.intValue(); }
+	  po_lower_stats.put(_count, new Integer(n+1));
+	}
       }
       out.println();
 
     }
+
+    out.println(HR);
+    out.println("Statistics:");
+    out.println("  PO higher frequencies:");
+    for (int i = 0; i < 1000; i++) {
+      Integer count = (Integer) po_higher_stats.get(new Integer(i));
+      if (count != null) {
+	out.println("    " + i + " : " + count);
+      }
+    }
+    out.println("  PO lower frequencies:");
+    for (int i = 0; i < 1000; i++) {
+      Integer count = (Integer) po_lower_stats.get(new Integer(i));
+      if (count != null) {
+	out.println("    " + i + " : " + count);
+      }
+    }
+    out.println();
+    out.println(HR);
   }
 
   /**
