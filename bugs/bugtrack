@@ -330,7 +330,7 @@ case "$1" in
         ;;
     list)
         echo "$progname: List bug reports."
-        for i in bug[0-9][0-9]*
+        for i in bug[0-9][0-9][0-9][0-9]
         do
             grep -sq "Status: *Closed" $i && continue
             # use /dev/null so it always has >1 file and thus reports filenames
@@ -339,7 +339,7 @@ case "$1" in
         ;;
     owned)
         echo "$progname: List owned bug reports."
-        for i in bug[0-9][0-9]*
+        for i in bug[0-9][0-9][0-9][0-9]
         do
             [ -e $i ] || continue
 	    header $i | grep -sq "Status: *Closed" && continue
