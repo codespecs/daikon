@@ -226,7 +226,7 @@ public final class Member extends SequenceString  {
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
 	{ seqvar().name, sclvar().name });
     String result = form[0] + "(EQ " + form[1] + " " + form[2] + ")" + form[3];
-    return UtilMDE.replaceString(result, "EXISTS", "EXISTS");
+    return UtilMDE.replaceString(result, "FORALL", "EXISTS");
   }
 
   public void add_modified(String [] a, String  i, int count) {
