@@ -1246,12 +1246,11 @@ java -Xmx256m daikon.Daikon -o rijndael.inv \
 
 The Daikon distribution includes sample Perl programs suitable for use
 with Daikon in the @file{examples/perl-examples} directory.
-
-(As of Daikon version 2.3.19, released November 2, 2002, the Perl
+@footnote{As of Daikon version 2.3.19, released November 2, 2002, the Perl
 support is stable and usable, but we intend to further improve and
 simplify its interface with future releases.  Please provide feedback
 to @email{daikon-developers@@pag.lcs.mit.edu} with your comments,
-suggestions, and problems.)
+suggestions, and problems.}
 
 To use the Daikon Perl front end, you need to have installed Daikon
 (see @ref{Installing Daikon}), and you need version 5.8 or later of
@@ -1523,16 +1522,15 @@ on its command-line options, see @ref{C/C++ front end dfec}.
 @node Instrumenting Perl programs,  , Instrumenting C/C++ programs, Instrumentation
 @subsection Instrumenting Perl programs
 
-(As of Daikon version 2.3.19, released November 2, 2002, the Perl
-support is stable and usable, but we intend to further improve and
-simplify its interface with future releases.  Please provide feedback
-to @email{daikon-developers@@pag.lcs.mit.edu} with your comments,
-suggestions, and problems.)
-
 Perl programs must be instrumented twice. First they must be
 instrumented without type information.  Then, once the first
 instrumented version has been run to produce type information, they
 must be instrumented again taking the type information into account.
+@footnote{As of Daikon version 2.3.19, released November 2, 2002, the Perl
+support is stable and usable, but we intend to further improve and
+simplify its interface with future releases.  Please provide feedback
+to @email{daikon-developers@@pag.lcs.mit.edu} with your comments,
+suggestions, and problems.}
 
 To instrument a stand-alone Perl program, invoke @command{dfepl} with
 the name of the program as an argument.
@@ -4029,12 +4027,11 @@ equivalent file.
 This section contains details about dfepl, the Daikon front end for
 Perl. For a brief introduction to dfepl, see @ref{Perl examples} and
 @ref{Instrumenting Perl programs}.
-
-(As of Daikon version 2.3.19, released November 2, 2002, the Perl
+@footnote{As of Daikon version 2.3.19, released November 2, 2002, the Perl
 support is stable and usable, but we intend to further improve and
 simplify its interface with future releases.  Please provide feedback
 to @email{daikon-developers@@pag.lcs.mit.edu} with your comments,
-suggestions, and problems.)
+suggestions, and problems.}
 
 dfepl works with Perl versions 5.8 and later. (To be precise, Perl
 programs instrumented with dfepl can also be run with Perl 5.6, but
