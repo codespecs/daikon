@@ -398,7 +398,7 @@ public class Chicory {
       System.err.println("  --ppt-omit-pattern=<regex>         Specifies an include-only class for instrumentation.  Cannot be used with ppt-select-pattern");
       System.err.println("  --ppt-select-pattern=<regex>       Specifies an include-only class for instrumentation.  Cannot be used with ppt-omit-pattern");
       System.err.println("  --dtrace-file=<file>               Write the dtrace file to this filename.  Usually ends with .dtrace");
-      System.err.println("  --output-dir=<directory>           Write the decls and dtrace files to this directory (default is current directory]");
+      System.err.println("  --output-dir=<directory>           Write the dtrace files to this directory (default is current directory)");
       System.err.println("  --daikon[=<daikon-args>]           Run daikon with no additional args");
       System.err.println("  --help                             Print this help message");
       System.err.println("<class> is the program to trace.  Must exist in the classpath given");
