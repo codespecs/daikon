@@ -470,12 +470,10 @@ public class LogicalCompare {
 
       PptTopLevel app_exit_ppt = app_ppts.get(exit_ppt_name);
       PptTopLevel test_exit_ppt = test_ppts.get(exit_ppt_name);
-      /* JHP V2/V3 merge hack 7/24/03, exit_ppts not in V3
       if (app_exit_ppt == null)
-        app_exit_ppt = (PptTopLevel)app_enter_ppt.exit_ppts.lastElement();
+        app_exit_ppt = app_ppts.get(app_enter_ppt.ppt_name.makeExit());
       if (test_exit_ppt == null)
-        test_exit_ppt = (PptTopLevel)test_enter_ppt.exit_ppts.lastElement();
-      end JHP merge hack */
+        test_exit_ppt = test_ppts.get(test_enter_ppt.ppt_name.makeExit());
       Assert.assertTrue(app_exit_ppt != null);
       Assert.assertTrue(test_exit_ppt != null);
       comparePpts(app_enter_ppt, test_enter_ppt,
@@ -491,15 +489,13 @@ public class LogicalCompare {
       while (it.hasNext()) {
         String name = (String)it.next();
         PptTopLevel app_ppt = app_ppts.get(name);
-        // JHP merge check 7/24/03 - old code:  if (app_ppt.entry_ppt != null) {
+
         if (!app_ppt.ppt_name.isEnterPoint()) {
           // an exit point, and we only want entries
           continue;
         }
-        // JHP merge check 7/24/03 - old code: if (app_ppt.has_samples()) {
         if (app_ppt.getSamplesSeen() > 0) {
           if (test_ppt_names.contains(name)
-              // JHP merge check 7/24/03 - old code: && test_ppts.get(name).has_samples()) {
               && test_ppts.get(name).getSamplesSeen() > 0) {
             common_names.add(name);
           } else {
@@ -514,15 +510,10 @@ public class LogicalCompare {
         System.out.println("Looking at " + name);
         PptTopLevel app_enter_ppt = app_ppts.get(name);
         PptTopLevel test_enter_ppt = test_ppts.get(name);
-        /* JHP V2/V3 merge hack 7/24/03 exit_ppts not in V3
         PptTopLevel app_exit_ppt =
-          (PptTopLevel)app_enter_ppt.exit_ppts.lastElement();
+          app_ppts.get(app_enter_ppt.ppt_name.makeExit());
         PptTopLevel test_exit_ppt =
-          (PptTopLevel)test_enter_ppt.exit_ppts.lastElement();
-        */
-        PptTopLevel app_exit_ppt = null;
-        PptTopLevel test_exit_ppt = null;
-        // end JHP merge hack
+          test_ppts.get(test_enter_ppt.ppt_name.makeExit());
 
         Assert.assertTrue(app_exit_ppt != null);
         Assert.assertTrue(test_exit_ppt != null);
