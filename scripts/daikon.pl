@@ -6,7 +6,7 @@
 # $Id$
 
 sub usage() {
-    print "Usage: $0 [options] runnable class> [arguments]\n";
+    print "Usage: $0 [options] <runnable class> [arguments]\n";
     print "Options: --output file[.inv]\n";
     print "         --verbose\n";
     print "         --killu\n";
@@ -22,7 +22,7 @@ use Getopt::Long;
 
 # global vars
 
-$RTLIB = '/g2/users/mernst/java/jdk/jre/lib/rt.jar';
+$RTLIB = '/g2/users/mernst/java/jdk/jre/lib/rt.jar:/g1/users/mistere/java';
 
 # read options from command line
 
@@ -37,9 +37,10 @@ $runnable_args = join(' ', @ARGV);
 # subroutines first
 
 sub find {
-    my $name = shift or die;
+    my $name = shift || die;
+    my $root = shift || '.';
     my @result;
-    open(F, "find . -name '$name' |");
+    open(F, "find $root -name '$name' |");
     while (my $line = <F>) {
 	chomp $line;
 	push @result, $line;
@@ -104,7 +105,7 @@ $err = system("tar cf - -T $manifest | gzip > $output.src.tar.gz");
 unlink($manifest) or die("Could not unlink source manifest");
 die("Could not archive source") if $err;
 
-# instrument classes reported by --depend
+# setup scratch folders
 print "Preparing to instrument files...\n" if $verbose;
 
 die("daikon-java already exists") if (-e 'daikon-java');
@@ -118,14 +119,37 @@ symlink($working, "daikon-output") or die("Could not make symlink 1");
 symlink("$working/daikon-java", "daikon-java") or die("Could not make symlink 2");
 
 while (1) {
+    # instrument the source files
     print "Instrumenting files...\n" if $verbose;
     $dfejerr = system('dfej ' . join(' ', sort (keys %interesting)));
     last if ($dfejerr);
 
+    # compile the instrumented source files
     print "Compiling files...\n" if $verbose;
-    $jikeserr = system("jikes -classpath $RTLIB:$working/daikon-java -depend -g -nowarn $working/daikon-java/$mainsrc");
+    $cp = "$RTLIB:$working/daikon-java";
+    $jikeserr = system("jikes -classpath $cp -depend -g -nowarn $working/daikon-java/$mainsrc");
     last if $jikeserr;
 
+    # run the test suite / mainline
+    print "Running your java program...\n" if $verbose;
+    $javaerr = system("java -classpath $cp $runnable $runnable_args");
+    last if $javaerr;
+
+    # find the results
+    $dtrace = join(' ', find('*.dtrace', 'daikon-output/'));
+    $decls = join(' ', find('*.decls', 'daikon-output/'));
+
+    # run modbit-munge
+    print "Running modbit-munge...\n" if $verbose;
+    $mberr = system("modbit-munge.pl $dtrace");
+    last if $mberr;
+
+    # run daikon
+    print "Running invariant detector...\n" if $verbose;
+    $dkerr = system("java daikon.Daikon -o $output.inv $decls $dtrace > /dev/null");
+    last if $dkerr;
+
+    last;
 }
 
 unlink("daikon-java") or die("Could not unlink symlink 2");
@@ -134,12 +158,11 @@ system("rm -rf $working") && die("Could not remove working dir");
 
 die("dfej error") if $dfejerr;
 die("jikes error") if $jikeserr;
-
-# run the mainline
-
-die("done");
-`java $runnable $runnable_args`;
-
-# run daikon
+die("java test suite error") if $javaerr;
+die("modbit error") if $mberr;
+die("daikon error") if $dkerr;
 
 # run the gui
+print "Starting the gui...\n" if $verbose;
+
+system("java -classpath $cp daikon.gui.InvariantsGUI $output.inv");
