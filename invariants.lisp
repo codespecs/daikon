@@ -93,12 +93,12 @@
     (alist length)
     (hash-table hash-table-count)
     ;; I should be able to do much better than this.
-    ((array integer 1) array-dim-1 (identity . "[]"))
-    ((array integer 2) array-dim-1 array-dim-2)
-    ((array integer 3) array-dim-1 array-dim-2 array-dim-3)
-    ((array character 1) array-dim-1)
-    ((array character 2) array-dim-1 array-dim-2)
-    ((array character 3) array-dim-1 array-dim-2 array-dim-3)
+    ((array integer 1) array_dim_1 (identity . "[]"))
+    ((array integer 2) array_dim_1 array_dim_2)
+    ((array integer 3) array_dim_1 array_dim_2 array_dim_3)
+    ((array character 1) array_dim_1)
+    ((array character 2) array_dim_1 array_dim_2)
+    ((array character 3) array_dim_1 array_dim_2 array_dim_3)
     ))
 
 ;; Returns either a symbol or a (funcallable-function . print-repr) pair,
