@@ -99,7 +99,7 @@ public class CLASSNAME
   }
 
   public String format_daikon() {
-    return core.format_using(OutputFormat.DAIKON, var1().name, var2().name);
+    return core.format_using(OutputFormat.DAIKON, var1().name, null, var2().name, null);
   }
 
   /* IOA */
@@ -111,8 +111,8 @@ public class CLASSNAME
 
     return quant1.getQuantifierExp()
       + core.format_using(OutputFormat.IOA,
-                          quant1.getVarIndexed(0),
-                          quant2.getVarIndexed(0))
+                          quant1.getVarIndexed(0), null,
+                          quant2.getVarIndexed(0), null)
       + quant1.getClosingExp();
   }
 
@@ -159,8 +159,8 @@ public class CLASSNAME
     //      seq2 = (seq2state == 2 ? seq2.applyPoststate() : seq2);
 
     return quantResult[0] + core.format_using(OutputFormat.JML,
-                                              seq1,
-                                              seq2) + quantResult[3];
+                                              seq1, null,
+                                              seq2, null) + quantResult[3];
   }
 
   public String format_simplify() {
