@@ -8,10 +8,12 @@
   #define RANGE RangeInt
   #define SINGLE_SCALAR SingleScalar
   #define PRIMITIVE long
+  #define BASE_IS_TYPE baseIsIntegral()
 #elif defined(FLOAT)
   #define RANGE RangeFloat
   #define SINGLE_SCALAR SingleFloat
   #define PRIMITIVE double
+  #define BASE_IS_TYPE baseIsFloat()
 #else
   #error "SCALAR or FLOAT must be defined"
 #endif
@@ -59,10 +61,18 @@ public abstract class RANGE extends SINGLE_SCALAR {
     super (ppt);
   }
 
-  public static boolean instantiate_ok (PptSlice ppt) {
+  /**
+   * Check that instantiation is ok.  Checks that range invariants
+   * are enabled and that the type is integral (not boolean or hash
+   * code)
+   */
+  public static boolean instantiate_ok (PptSlice slice) {
 
     if (!dkconfig_enabled)
       return false;
+
+    if ((slice != null) && !slice.var_infos[0].file_rep_type.BASE_IS_TYPE)
+      return (false);
 
     return (true);
   }
@@ -152,6 +162,25 @@ public abstract class RANGE extends SINGLE_SCALAR {
     return (result);
   }
 
+  /**
+   * Returns a list of all of prototypes of all of the range
+   * invariants
+   */
+  public static List get_proto_all () {
+
+    List result = new ArrayList();
+    result.add (EqualZero.get_proto());
+    result.add (EqualOne.get_proto());
+    result.add (GreaterEqualZero.get_proto());
+    #if defined(SCALAR)
+      result.add (BooleanVal.get_proto());
+      result.add (PowerOfTwo.get_proto());
+      result.add (Even.get_proto());
+      result.add (Bound0_63.get_proto());
+    #endif
+    return (result);
+  }
+
 
   /**
    * Internal invariant representing PRIMITIVE scalars that are equal
@@ -167,6 +196,18 @@ public abstract class RANGE extends SINGLE_SCALAR {
 
     protected EqualZero (PptSlice ppt) {
       super (ppt);
+    }
+
+    /** returns the prototype invariant **/
+    public static Invariant get_proto() {
+      if (!dkconfig_enabled)
+        return (null);
+      return new EqualZero (null);
+    }
+
+    /** instantiates the invariant on the specified slice **/
+    public Invariant instantiate_dyn (PptSlice slice) {
+      return instantiate (slice);
     }
 
     public static EqualZero instantiate(PptSlice ppt) {
@@ -202,6 +243,18 @@ public abstract class RANGE extends SINGLE_SCALAR {
       super (ppt);
     }
 
+    /** returns the prototype invariant **/
+    public static Invariant get_proto() {
+      if (!dkconfig_enabled)
+        return (null);
+      return new EqualOne (null);
+    }
+
+    /** instantiates the invariant on the specified slice **/
+    public Invariant instantiate_dyn (PptSlice slice) {
+      return instantiate (slice);
+    }
+
     public static EqualOne instantiate(PptSlice ppt) {
       if (!instantiate_ok(ppt)) return null;
       return new EqualOne (ppt);
@@ -235,6 +288,18 @@ public abstract class RANGE extends SINGLE_SCALAR {
       super (ppt);
     }
 
+    /** returns the prototype invariant **/
+    public static Invariant get_proto() {
+      if (!dkconfig_enabled)
+        return (null);
+      return new GreaterEqualZero (null);
+    }
+
+    /** instantiates the invariant on the specified slice **/
+    public Invariant instantiate_dyn (PptSlice slice) {
+      return instantiate (slice);
+    }
+
     public static GreaterEqualZero instantiate(PptSlice ppt) {
       if (!instantiate_ok(ppt)) return null;
       return new GreaterEqualZero (ppt);
@@ -266,6 +331,18 @@ public abstract class RANGE extends SINGLE_SCALAR {
 
     protected GreaterEqual64 (PptSlice ppt) {
       super (ppt);
+    }
+
+    /** returns the prototype invariant **/
+    public static Invariant get_proto() {
+      if (!dkconfig_enabled)
+        return (null);
+      return new GreaterEqual64 (null);
+    }
+
+    /** instantiates the invariant on the specified slice **/
+    public Invariant instantiate_dyn (PptSlice slice) {
+      return instantiate (slice);
     }
 
     public static GreaterEqual64 instantiate(PptSlice ppt) {
@@ -302,6 +379,18 @@ public abstract class RANGE extends SINGLE_SCALAR {
       super (ppt);
     }
 
+    /** returns the prototype invariant **/
+    public static Invariant get_proto() {
+      if (!dkconfig_enabled)
+        return (null);
+      return new BooleanVal (null);
+    }
+
+    /** instantiates the invariant on the specified slice **/
+    public Invariant instantiate_dyn (PptSlice slice) {
+      return instantiate (slice);
+    }
+
     public static BooleanVal instantiate(PptSlice ppt) {
       if (!instantiate_ok(ppt)) return null;
       return new BooleanVal (ppt);
@@ -334,6 +423,18 @@ public abstract class RANGE extends SINGLE_SCALAR {
 
     protected PowerOfTwo (PptSlice ppt) {
       super (ppt);
+    }
+
+    /** returns the prototype invariant **/
+    public static Invariant get_proto() {
+      if (!dkconfig_enabled)
+        return (null);
+      return new PowerOfTwo (null);
+    }
+
+    /** instantiates the invariant on the specified slice **/
+    public Invariant instantiate_dyn (PptSlice slice) {
+      return instantiate (slice);
     }
 
     public static PowerOfTwo instantiate(PptSlice ppt) {
@@ -376,6 +477,18 @@ public abstract class RANGE extends SINGLE_SCALAR {
       super (ppt);
     }
 
+    /** returns the prototype invariant **/
+    public static Invariant get_proto() {
+      if (!dkconfig_enabled)
+        return (null);
+      return new Even (null);
+    }
+
+    /** instantiates the invariant on the specified slice **/
+    public Invariant instantiate_dyn (PptSlice slice) {
+      return instantiate (slice);
+    }
+
     public static Even instantiate(PptSlice ppt) {
       if (!instantiate_ok(ppt)) return null;
       return new Even (ppt);
@@ -407,6 +520,18 @@ public abstract class RANGE extends SINGLE_SCALAR {
 
     protected Bound0_63 (PptSlice ppt) {
       super (ppt);
+    }
+
+    /** returns the prototype invariant **/
+    public static Invariant get_proto() {
+      if (!dkconfig_enabled)
+        return (null);
+      return new Bound0_63 (null);
+    }
+
+    /** instantiates the invariant on the specified slice **/
+    public Invariant instantiate_dyn (PptSlice slice) {
+      return instantiate (slice);
     }
 
     public static Bound0_63 instantiate(PptSlice ppt) {
