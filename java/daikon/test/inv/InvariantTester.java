@@ -9,6 +9,7 @@ import java.util.*;
 public class InvariantTester extends TestCase {
 
   public static void main(String[] args) {
+    daikon.Logger.setupLogs (daikon.Logger.INFO);
     junit.textui.TestRunner.run(new TestSuite(InvariantTester.class));
   }
 
