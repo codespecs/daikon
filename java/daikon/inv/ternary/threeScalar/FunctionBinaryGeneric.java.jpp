@@ -319,8 +319,8 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
       = new NISuppressionSet (new NISuppression[] {
 
       #if defined (TYPELONG)
-        // (r == 0) && (arg1 < arg2) && (arg2 != 0) ==> r = arg1 / arg2
-        new NISuppression (result_eq_0, arg1_lt_arg2, arg2_ne_0, suppressee),
+        // (r == 0) && (arg1 < arg2) && (arg1 >= 0) && (arg2 != 0) ==> r = arg1 / arg2
+        new NISuppression (result_eq_0, arg1_lt_arg2, arg1_ge_0, arg2_ne_0, suppressee),
       #endif
 
         // (arg1 == arg2) && (arg2 != 0) && (r == 1)
