@@ -230,8 +230,8 @@ public class PptTopLevel extends Ppt {
   // cached in the entry_ppt slot, to prevent repeating this expensive
   // computation.
 
-  PptTopLevel compute_entry_ppt(PptMap all_ppts) {
-    return PptTopLevel.compute_entry_ppt(this, all_ppts);
+  void compute_entry_ppt(PptMap all_ppts) {
+    entry_ppt = (PptTopLevel) all_ppts.get(entry_ppt_name());
   }
 
   final static PatternMatcher re_matcher = Global.regexp_matcher;
@@ -244,24 +244,15 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  // I'm not sure why the main implementation of these next two functions
-  // is static.  It works, but so would making them non-static.
-
-  static String entry_ppt_name(PptTopLevel ppt) {
-    if (!re_matcher.contains(ppt.name, exit_tag_regexp))
+  String entry_ppt_name() {
+    if (!re_matcher.contains(name, exit_tag_regexp))
       return null;
     MatchResult match = re_matcher.getMatch();
     int match_begin = match.beginOffset(0);
-    String fn_name = ppt.name.substring(0, match_begin);
+    String fn_name = name.substring(0, match_begin);
 
     return (fn_name + FileIO.enter_tag).intern();
   }
-
-  static PptTopLevel compute_entry_ppt(PptTopLevel ppt, PptMap all_ppts) {
-    String entry_ppt_name = entry_ppt_name(ppt);
-    return (PptTopLevel) all_ppts.get(entry_ppt_name);
-  }
-
 
   // Add "_orig" variables to the program point.
   // Derivation should not yet have occurred for the entry program point.
