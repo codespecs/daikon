@@ -907,7 +907,7 @@ public class PptTopLevel extends Ppt {
     // Unary slices/invariants.
     Vector unary_views = new Vector(vi_index_limit-vi_index_min);
     for (int i=vi_index_min; i<vi_index_limit; i++) {
-      if (Daikon.invariants_check_canBeMissing && var_infos[i].canBeMissing) {
+      if (var_infos[i].canBeMissingCheck()) {
         if (Global.debugDerive) {
           System.out.println("In binary equality, " + var_infos[i].name + " can be missing");
         }
@@ -936,9 +936,9 @@ public class PptTopLevel extends Ppt {
     // Binary slices/invariants.
     Vector binary_views = new Vector();
     for (int i1=0; i1<vi_index_limit; i1++) {
-      // Don't depend invariants_check_canBeMissing; always check,
+      // Don't call canBeMissingCheck(); check directly,
       // lest equality be non-transitive
-      if ((true || Daikon.invariants_check_canBeMissing) && var_infos[i1].canBeMissing) {
+      if (var_infos[i1].canBeMissing) {
         if (Global.debugDerive) {
           System.out.println("In binary equality, " + var_infos[i1].name + " can be missing");
         }
@@ -965,7 +965,7 @@ public class PptTopLevel extends Ppt {
         // System.out.println("Trying binary instantiate_views"
         //                    + " i1=" + i1 + " (" + var_infos[i1].name + "),"
         //                    + " i2=" + i2 + " (" + var_infos[i2].name + ")");
-        if (Daikon.invariants_check_canBeMissing && var_infos[i2].canBeMissing) {
+        if (var_infos[i2].canBeMissingCheck()) {
           if (Global.debugDerive) {
             System.out.println("In binary equality vs. " + var_infos[i1].name
                                + ", " + var_infos[i2].name + " can be missing");
@@ -1084,7 +1084,7 @@ public class PptTopLevel extends Ppt {
       Vector ternary_views = new Vector();
       for (int i1=0; i1<vi_index_limit; i1++) {
         VarInfo var1 = var_infos[i1];
-        if (Daikon.invariants_check_canBeMissing && var1.canBeMissing) {
+        if (var1.canBeMissingCheck()) {
           if (Global.debugDerive) {
             System.out.println("In ternary, " + var1.name + " can be missing");
           }
@@ -1098,7 +1098,7 @@ public class PptTopLevel extends Ppt {
         boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
         for (int i2=i1+1; i2<vi_index_limit; i2++) {
           VarInfo var2 = var_infos[i2];
-          if (Daikon.invariants_check_canBeMissing && var2.canBeMissing) {
+          if (var2.canBeMissingCheck()) {
             if (Global.debugDerive) {
               System.out.println("In ternary vs. " + var1.name
                                  + ", " + var2.name + " can be missing");
@@ -1134,7 +1134,7 @@ public class PptTopLevel extends Ppt {
                           || ((i3 >= vi_index_min) && (i3 < vi_index_limit)));
             Assert.assert((i1 < i2) && (i2 < i3));
             VarInfo var3 = var_infos[i3];
-            if (Daikon.invariants_check_canBeMissing && var3.canBeMissing) {
+            if (var3.canBeMissingCheck()) {
               if (Global.debugDerive) {
                 System.out.println("In ternary vs. ("
                                    + var1.name + "," + var2.name + ")"
@@ -1659,29 +1659,76 @@ public class PptTopLevel extends Ppt {
     HashMap canonical_inv = new HashMap(); // Invariant -> Invariant
     HashMap inv_group = new HashMap(); // Invariant -> HashSet[Invariant]
 
+    // Problem: I am not iterating through the invariants in any particular
+    // order that will guarantee that I don't see A and B, then C and D,
+    // and then A and C (which both already have different canonical versions).
+    // System.out.println(name + " implication canonicalization");
     for (Iterator itor = implication_view.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if ((inv instanceof Implication) && ((Implication) inv).iff) {
         Implication impl = (Implication) inv;
+        // System.out.println("Implication: " + impl.format());
         Invariant canon1 = (Invariant) canonical_inv.get(impl.predicate);
         Invariant canon2 = (Invariant) canonical_inv.get(impl.consequent);
-        Assert.assert((canon1 == null) || (canon2 == null) || (canon1 == canon2));
-        Invariant canon = (canon1 != null) ? canon1 : (canon2 != null) ? canon2 : impl.predicate;
-        canonical_inv.put(impl.predicate, canon);
-        canonical_inv.put(impl.consequent, canon);
-        HashSet hs = (HashSet) inv_group.get(canon);
-        if (hs == null) {
-          hs = new HashSet();
-          inv_group.put(canon, hs);
+        if ((canon1 != null) && (canon2 != null) && (canon1 != canon2)) {
+          // Move all the invariants for canon2 over to canon1
+          HashSet hs1 = (HashSet) inv_group.get(canon1);
+          HashSet hs2 = (HashSet) inv_group.get(canon2);
+          inv_group.remove(canon2);
+          for (Iterator itor2=hs2.iterator(); itor2.hasNext(); ) {
+            Invariant inv2 = (Invariant) itor2.next();
+            hs1.add(inv2);
+            canonical_inv.put(inv2, canon1);
+          }
+        } else {
+          Invariant canon = (canon1 != null) ? canon1 : (canon2 != null) ? canon2 : impl.predicate;
+          // System.out.println("Canonical: " + canon.format());
+          canonical_inv.put(impl.predicate, canon);
+          canonical_inv.put(impl.consequent, canon);
+          HashSet hs = (HashSet) inv_group.get(canon);
+          if (hs == null) {
+            hs = new HashSet();
+            inv_group.put(canon, hs);
+          }
+          hs.add(impl.predicate);
+          hs.add(impl.consequent);
         }
-        hs.add(impl.predicate);
-        hs.add(impl.consequent);
       }
     }
 
-    // Now, consider adjusting which of the invariants are canonical.
+    // Now adjust which of the invariants are canonical.
     // (That is why inv_group was computed above.)
-    // [Write that code in this space.]
+    for (Iterator itor=inv_group.keySet().iterator(); itor.hasNext(); ) {
+      Invariant canon_orig = (Invariant) itor.next();
+      HashSet hs = (HashSet) inv_group.get(canon_orig);
+      if (hs.size() == 1) {
+        continue;
+      }
+      Invariant canon_new = null;
+      String canon_new_formatted = null;
+      for (Iterator cand_itor=hs.iterator(); itor.hasNext(); ) {
+        Invariant candidate = (Invariant) itor.next();
+        String candidate_formatted = candidate.format();
+        if ((canon_new == null)
+            || (canon_new_formatted.indexOf("\"null\"") != -1)
+            || ((canon_new_formatted.indexOf("orig") != -1)
+                && (candidate_formatted.indexOf("orig") == -1))
+            || (canon_new_formatted.length() > candidate_formatted.length())) {
+          canon_new = candidate;
+          canon_new_formatted = candidate_formatted;
+        }
+      }
+      if (canon_new != canon_orig) {
+        inv_group.put(canon_new, hs);
+        inv_group.remove(canon_orig);
+        for (Iterator inv_itor=hs.iterator(); itor.hasNext(); ) {
+          Invariant inv = (Invariant) itor.next();
+          Assert.assert(canonical_inv.get(inv) == canon_orig);
+          canonical_inv.put(inv, canon_new);
+        }
+      }
+    }
+
 
     // Prune out implications over non-canonical invariants
 
@@ -1693,7 +1740,7 @@ public class PptTopLevel extends Ppt {
         Invariant cpred = (Invariant) canonical_inv.get(impl.predicate);
         Invariant ccons = (Invariant) canonical_inv.get(impl.consequent);
         boolean pred_non_canon = ((cpred != null) && (impl.predicate != cpred));
-          boolean cons_non_canon = ((ccons != null) && (impl.consequent != ccons));
+        boolean cons_non_canon = ((ccons != null) && (impl.consequent != ccons));
         if ((! impl.iff)
             && (pred_non_canon || cons_non_canon)) {
           to_remove.add(inv);
@@ -2094,7 +2141,7 @@ public class PptTopLevel extends Ppt {
     for (int i=0; i<var_infos.length; i++) {
       if (! var_infos[i].isCanonical()) {
         Global.non_canonical_variables++;
-      } else if (Daikon.invariants_check_canBeMissing && var_infos[i].canBeMissing) {
+      } else if (var_infos[i].canBeMissingCheck()) {
         Global.can_be_missing_variables++;
       } else {
         Global.canonical_variables++;

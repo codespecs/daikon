@@ -20,6 +20,9 @@ public class Implication extends Invariant {
   private Implication(PptSlice ppt, Invariant predicate, Invariant consequent, boolean iff) {
     super(ppt);
     Assert.assert(ppt instanceof PptSlice0);
+    // Should these be true?
+    // Assert.assert(predicate.ppt == ppt);
+    // Assert.assert(consequent.ppt == ppt);
     this.predicate = predicate;
     this.consequent = consequent;
     this.iff = iff;

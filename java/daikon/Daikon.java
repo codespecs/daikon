@@ -29,8 +29,14 @@ public final class Daikon {
   //  get no invariants over any value that can ever be missing
   // Problem with setting this to false:
   //  due to differrent number of samples, IsEquality is non-transitive
+  //  (that is specially handled in the code)
   public final static boolean invariants_check_canBeMissing = false;
   // public final static boolean invariants_check_canBeMissing = true;
+
+  // Specialized version for array elements; only examined if
+  // invariants_check_canBeMissing is false
+  // public final static boolean invariants_check_canBeMissing_arrayelt = false;
+  public final static boolean invariants_check_canBeMissing_arrayelt = true;
 
   public final static boolean disable_modbit_check_message = false;
   // Not a good idea to set this to true, as it is too easy to ignore the

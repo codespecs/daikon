@@ -317,6 +317,13 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     return name.indexOf("~") != -1;
   }
 
+  public boolean canBeMissingCheck() {
+    return (canBeMissing
+            && (Daikon.invariants_check_canBeMissing
+                || (Daikon.invariants_check_canBeMissing_arrayelt
+                    // Probably bad to repeat this all the time at runtime.
+                    && (name.indexOf("[") != -1))));
+  }
 
   public int getModified(ValueTuple vt) {
     if (is_static_constant)
