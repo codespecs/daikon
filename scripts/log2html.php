@@ -63,7 +63,7 @@ function process_line ($line, $tb) {
     $out = str_replace (": ", "<td>", $out);
     $out = str_replace (",", ", ", $out);
     $out = ereg_replace ("^@  *", "", $out);
-    foreach ($mark_arr as $mark) 
+    foreach ($mark_arr as $mark)
       $out = str_replace ($mark, "<font color=red>$mark</font>", $out);
     // $out = str_replace ("-- ", "<div style=\"margin-left:10px\">", $out);
 
@@ -124,6 +124,12 @@ function process_line ($line, $tb) {
 }
 
   if ($file) {
+    if (strpos ($file, "daikon") === false) {
+      echo "<b>Error: </b> file '$file' is an invalid daikon output file<br>";
+      echo "email jhp@csail.mit.edu if this is unexpected";
+      exit;
+    }
+
     $stdin = @fopen ($file, "r");
     if (!$stdin) {
       echo "<b>Error: </b> Can't open file $file<br>\n";
@@ -167,7 +173,7 @@ function process_line ($line, $tb) {
       }
       $tb_open = array_values ($tb_open);
       // echo "new tb_open = " . implode (" ", $tb_open) . "<br>\n";
-      
+
     }
     rewind ($fp);
     $x = fwrite ($fp, "$all_open\n");
