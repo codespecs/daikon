@@ -54,10 +54,10 @@ public class Runtime
     // Dtrace file vars
     //
     /** Max number of records in dtrace file **/
-    public static int dtraceLimit = Integer.MAX_VALUE;
+    public static long dtraceLimit = Integer.MAX_VALUE;
 
     /** Number of records printed to date **/
-    public static int printedRecords = 0;
+    public static long printedRecords = 0;
 
     /** Terminate the program when the dtrace limit is reached **/
     public static boolean dtraceLimitTerminate = false;
@@ -197,7 +197,7 @@ public class Runtime
          */
          
         MethodInfo mi = methods.get(mi_index);
-        // System.out.println ("enter MethodInfo : " + mi.member);
+        //System.out.println ("enter MethodInfo : " + mi.member);
         dtrace_writer.methodEntry(mi, nonce, obj, args);
 
     }
@@ -277,6 +277,10 @@ public class Runtime
     public static void incrementRecords()
     {
         printedRecords++;
+        
+        if(printedRecords%1000 == 0)
+            System.out.printf("printed=%d, percent printed=%f\n", printedRecords, (float)(100.0*(float)printedRecords/(float)dtraceLimit));
+        
         if (printedRecords >= dtraceLimit)
         {
             noMoreOutput();
@@ -306,9 +310,12 @@ public class Runtime
             // dtrace = null;
             dtrace_closed = true;
 
+            
             if (dtraceLimitTerminate)
             {
-                throw new TerminationMessage("Printed " + printedRecords + " records.  Exiting.");
+                System.out.println("Printed " + printedRecords + " records.  Exiting.");
+                //throw new TerminationMessage("Printed " + printedRecords + " records.  Exiting.");
+                System.exit(1);
             }
             else
             {
@@ -437,7 +444,9 @@ private static StreamRedirectThread out_thread;
   public static class CharWrap implements PrimitiveWrapper{
     char val;
     public CharWrap (char val) { this.val = val; }
-    public String toString() {return Character.toString(val);}
+    
+    //print characters as integers!
+    public String toString() {return Integer.toString(val);}
   }
 
   /** wrapper used for int arguments **/
@@ -477,7 +486,7 @@ private static StreamRedirectThread out_thread;
 
       public static void setDtraceOnlineMode(OutputStream os)
     {
-        dtraceLimit = Integer.getInteger("DTRACELIMIT", Integer.MAX_VALUE).intValue();
+        dtraceLimit = Long.getLong("DTRACELIMIT", Integer.MAX_VALUE).longValue();
         dtraceLimitTerminate = Boolean.getBoolean("DTRACELIMITTERMINATE");
         // 8192 is the buffer size in BufferedReader
         BufferedOutputStream bos = new BufferedOutputStream(os, 8192);
@@ -516,7 +525,7 @@ private static StreamRedirectThread out_thread;
                     throw new Error("DTRACEAPPEND environment variable is set, " + "Cannot append to gzipped dtrace file " + filename);
                 os = new GZIPOutputStream(os);
             }
-            dtraceLimit = Integer.getInteger("DTRACELIMIT", Integer.MAX_VALUE).intValue();
+            dtraceLimit = Long.getLong("DTRACELIMIT", Integer.MAX_VALUE).longValue();
             dtraceLimitTerminate = Boolean.getBoolean("DTRACELIMITTERMINATE");
             // 8192 is the buffer size in BufferedReader
             
