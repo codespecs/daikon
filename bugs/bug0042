@@ -1,6 +1,5 @@
 Version:      $Id$
-Owner:        scruffy@lcs.mit.edu
-Cc:           mharder <mharder@lcs.mit.edu>
+Owner:        scruffy@lcs.mit.edu, mharder <mharder@lcs.mit.edu>
 Tool:         dfec
 Summary:      Add documentation for --struct-depth=N option
 Severity:     RFE
@@ -13,6 +12,9 @@ dfec usage message or the daikon manual.  Please add it.
 
 --
 $Log$
-Revision 1.1  2002-04-18 20:25:01  mharder
+Revision 1.2  2002-04-30 21:47:00  mharder
+changed bug0042
+
+Revision 1.1  2002/04/18 20:25:01  mharder
 new bug0042
 
