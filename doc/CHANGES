@@ -35,8 +35,8 @@ Daikon
 
     Two new options were added.  The --list_type option specifies
     information to be added to the "ListImplementors" section of the
-    .decls file. The --mem_stat option prints memory usage statistics
-    info a file named "stat.out"  in the current directory.  The
+    .decls file.  The --mem_stat option prints memory usage statistics
+    info a file named "stat.out" in the current directory.  The
     "Command line options for Daikon" section of the users manual
     was also reorganized to be more clear.
 
@@ -75,27 +75,27 @@ Daikon
 #    invariants.  In order to enforce integer coefficients, the value
 #    (a double) was cast to to an int which checking whether the two
 #    values are equal (problem found because the value was too big to
-#    fit into an int).  
+#    fit into an int).
 
   Developer Changes
 
-    The incorrect use of "String" in a .decls file, as a
-    representation type synonym for "java.lang.String", now gives a
-    warning. The use of "String[]" was and continues to be an error,
-    but now gives a more specific message. The C front ends dfec
-    (distributed separately) and Kvasir have been updated accordingly.
+    Daikon warns if you (incorrectly) use "String" in a .decls file, as a
+    representation type synonym for "java.lang.String".  The use of
+    "String[]" was and continues to be an error, but now gives a more
+    specific message.  The C front ends dfec (distributed separately) and
+    Kvasir have been updated accordingly.
 
 Kvasir (C front end)
 
   User Changes
 
-    The dynamic C front end Kvasir has been extensively improved. It
+    The dynamic C front end Kvasir has been extensively improved.  It
     is now based on the stable 2.2.0 release of Valgrind, fixing
-    failures on some Linux distributions. Global variables are now
+    failures on some Linux distributions.  Global variables are now
     instrumented, and there is some support for outputting array
-    values. Changes have been made to allow instrumenting C programs
+    values.  Changes have been made to allow instrumenting C programs
     compiled with a C++ compiler (work to support C++ itself is
-    ongoing). Two incompatibilities should be noted: the format of
+    ongoing).  Two incompatibilities should be noted: the format of
     global function names has changed, for consistency with the new
     names for global variables, and Kvasir may now produce much more
     output for a given program run.
@@ -103,16 +103,16 @@ Kvasir (C front end)
   Developer Changes
 
     Kvasir now uses "java.lang.String" rather than "String" as the
-    representation type for strings in .decls files (see Daikon Developer
-    changes)
+    representation type for strings in .decls files (see "Daikon Developer
+    Changes" in this file).
 
 Dfec (C font end)
 
   Developer Changes
 
     Dfec now uses "java.lang.String" rather than "String" as the
-    representation type for strings in .decls files (see Daikon Developer
-    changes)
+    representation type for strings in .decls files (see "Daikon Developer
+    Changes" in this file).
 
 #   How do we release this??
 
@@ -121,7 +121,7 @@ Dfepl (Perl front end)
   Bug Fixes
 
     An incompatibility between dfepl, the Perl front end, and versions
-    of Perl starting with 5.8.1 has been fixed. Dfepl has been
+    of Perl starting with 5.8.1 has been fixed.  Dfepl has been
     verified to work with Perl version 5.8.4.
 
 Scripts
@@ -146,7 +146,7 @@ See the "Invariant syntax" section of the user manual for more
 information.  The user manual was also updated with improved
 descriptions of the output formats.
 
-LinearBinary invariants are now printed in standard form (ax + by + c = 0) 
+LinearBinary invariants are now printed in standard form (ax + by + c = 0)
 rather than slope intercept form, (y = ax + b).  They also now have
 integer coefficients and like LinearTernary invariants, the
 coefficient of the x variable is positive.
@@ -159,8 +159,8 @@ Removed most calls to System.exit in Daikon.  This makes it easier to call
 methods (including main) defined by Daikon programmatically.
 
 The "--no_reflection" and "--max_invariants_pp N" options were
-added to Annotate tool.  See the "Annotate tool" section of the 
-user manual for more information.  
+added to Annotate tool.  See the "Annotate tool" section of the
+user manual for more information.
 
 The Annotate class was made public so that it could be accessed
 programmatically from other Java applications.  State-holding static
@@ -171,7 +171,7 @@ state.
 Support for a number of deprecated optimizations was removed.
 The global program point hierarchy optimization, the top-down approach
 to optimizing the program point / variable hierarchy, and
-linked suppressions were removed along with their corresponding 
+linked suppressions were removed along with their corresponding
 configuration options.
 
 The Range invariants (EqualMinusOne, EqualOne, EqualZero, GreaterEqual64,
@@ -201,9 +201,9 @@ locations of function parameters in some circumstances.
 Several bugs in the LinearyTernary invariant were fixed.  Under some
 conditions, LinearTernary invariants were missed when initial points
 formed a line and not a plane.  Also, the canonical form of the
-coefficients were changed to be more readable. 
+coefficients were changed to be more readable.
 
-A bug in non-instantiating suppressions was fixed. The problem
+A bug in non-instantiating suppressions was fixed.  The problem
 occurred when multiple distinct negative values were used to specify
 in the decl file that a variable was comparable to all other variables.
 
@@ -293,7 +293,7 @@ DWARF-2 format to trace a program's execution given only a binary.
 Kvasir is generally easier to use, faster and more robust than the old
 C front-end, but it does not yet support all of the features of the
 old C front-end, and it can be used only on x86 platforms running
-Linux. More information on Kvasir is in the "Binary C front end
+Linux.  More information on Kvasir is in the "Binary C front end
 Kvasir" section of the user manual
 
 Several bugs in Daikon's JML output were fixed.  The JML output is now
@@ -307,16 +307,16 @@ in a future release.)
 
 Added Annotate as a replacement for MergeEsc.  Annotate inserts
 Daikon-generated invariants into Java source files as ESC/JML/DBC
-annotations. See the "Annotate" section of the user manual for more
+annotations.  See the "Annotate" section of the user manual for more
 information.
 
-Added InvariantChecker as a replacement for MakeInvariantChecker.  
-InvariantChecker checks invariants against data trace files.  
+Added InvariantChecker as a replacement for MakeInvariantChecker.
+InvariantChecker checks invariants against data trace files.
 InvariantChecker resolves a number of limitations in MakeInvariantChecker.
 See the "InvariantChecker" section of the user manual for more information.
 
-The java output format has been significantly enhanced. See the
---java_output entry in the Daikon "Command line options" section 
+The java output format has been significantly enhanced.  See the
+--java_output entry in the Daikon "Command line options" section
 of the user manual for more information.
 
 Some of the dfej command line options have changed.  See the "dfej options"
@@ -328,7 +328,7 @@ more information.
 
 Some bugs were fixed based on user feedback.  Daikon will no longer
 terminate with an error if the trace file ends in the middle of the
-record.  The last record will simply be ignored. The dtype-perl script
+record.  The last record will simply be ignored.  The dtype-perl script
 is now included in the distribution.
 
 ---------------------------------
@@ -339,14 +339,14 @@ A new optimization was added to Daikon to suppress invariants that
 are implied by other invariants.  Suppressed invariants are neither
 printed nor written to the invariant output file.  This optimization
 reduces memory use and limits the number of redundant invariants that
-are printed.  It can be disabled if desired via the 
+are printed.  It can be disabled if desired via the
 daikon.suppress.NIS.enabled configuration variable.  See the "List of
 Configuration Options" section of the user manual for more
 information.
 
 Added the TraceSelect program which creates random selection of data
 for splitters.  See the "Random selection for splitters" section of
-the user manual for more information. 
+the user manual for more information.
 
 The output that is printed while daikon is running was enhanced to
 show the percentage of the trace file that has been processed.  The
@@ -356,12 +356,12 @@ Configuration Options" section of the user manual for more
 information.
 
 The manual was updated to explain how to pass environment variables
-to an instrumented java program.  See the "dfej options" section 
+to an instrumented java program.  See the "dfej options" section
 of the user manual for more information.
 
-The manual was updated to explain how to work-around the use of 
+The manual was updated to explain how to work-around the use of
 realloc in C programs.  See the "C program requirements" section
-of the user manual for more information. 
+of the user manual for more information.
 
 -----------------
 
@@ -375,9 +375,9 @@ Fixed some bugs in dfej, dfec, and MergeESC.
 
 The implementation of sequence index comparison invariants has been
 changed to create separate invariants for each comparison (Equal,
-NonEqual, LessThan etc). This should have no user visible ramifications
+NonEqual, LessThan etc).  This should have no user visible ramifications
 except that the configuration options to enable these invariants have
-new names. See the "List of Configuration Options" section of the user
+new names.  See the "List of Configuration Options" section of the user
 manual for more information.  These invariants are also documented in
 the "Invariant List" section of the user manual.
 
@@ -391,11 +391,11 @@ The developer manual has been updated with a new "Unit Testing" section.
 -----------------
 
 3.0.1 (02 February 2004)
-  
+
 Three new binary invariants were added to Daikon: square, bitwise subset,
 and divides without remainder.  Each of these is checked both between
 scalar variables and also between the corresponding elements of a
-sequence. For more information, see the "Invariant List" section of the
+sequence.  For more information, see the "Invariant List" section of the
 user manual.
 
 The configuration variable for enabling the BitwiseComplement invariant is
@@ -459,9 +459,9 @@ some sections have been added.
 
 2.5.3 (01 October 2003)
 
-The default VarComparability has been changed from none to implicit.  
+The default VarComparability has been changed from none to implicit.
 Decls file may need to be changed to specify the comparability as
-'none' at the top of the file if implicit is not the appropriate 
+'none' at the top of the file if implicit is not the appropriate
 default.
 
 Some minor changes were made to the user and developer manuals to
@@ -481,7 +481,7 @@ The implementation of SubSet and SuperSet invariants has been changed
 to create separate invariants for SubSet and SuperSet.  This should
 have no user visible ramifications except that the configuration
 options to enable SuperSet invariants have names which are distinct
-from the SubSet invariants (SuperSet, and SuperSetFloat). See the
+from the SubSet invariants (SuperSet, and SuperSetFloat).  See the
 "List of Configuration Options" section of the user manual for more
 information.  These invariants are also documented in the "Invariant
 List" section of the user manual.
@@ -554,7 +554,7 @@ daikon.simplify.Session.verbose_progress.  See the "List of
 Configuration Options" section of the manual for more information.
 
 Added new command line options for daikon.pl (--instrument, --nogui,
---src, and --debug). See the "Command line options for daikon.pl"
+--src, and --debug).  See the "Command line options for daikon.pl"
 section of the manual for more information.
 
 ----------------
@@ -580,7 +580,7 @@ additional Perl example has been added.  See the "Perl examples" and
 information.
 
 The manual has been reformatted and edited in a number of areas to improve
-clarity and readability.  
+clarity and readability.
 
 ----------------
 
@@ -668,7 +668,7 @@ The --no_suppress_cont option to Daikon and to PrintInvariants displays
 invariants even if they are implied by controlling program points.
 
 The -y option to Diff includes (statistically) unjustified invariants.
- 
+
 To customize the behavior of the C runtime system (for instance, to produce
 gzipped .dtrace files or to customize the runtime's behavior when it
 detects a memory error in your program), edit file
@@ -676,7 +676,7 @@ $DAIKONDIR/front-end/c/daikon_runtime.h.
 
 The manual sections on dealing with variable comparability, large .dtrace
 files, and memory exhaustion have been revised and expanded.
- 
+
 ----------------
 
 2.3.18 (2 November 2002):
@@ -742,7 +742,7 @@ Improvements to detection of floating-point invariants.
 Manual gives example of use of orig variables, explains what to do when
 Daikon runs slowly, discusses Ajax "too many levels of symbolic links"
 error.
- 
+
 ----------------
 
 2.3.12 (11 July 2002):
@@ -783,7 +783,7 @@ Bugfix release.
 Improve dfec documentation: explain more error messages (including array
 bounds errors), add gcc installation instructions, explain uninitialized
 array element processing.
- 
+
 ----------------
 
 2.3.8 (10 May 2002):
@@ -863,7 +863,7 @@ Manual enhancements:
  * Fix errors with "-noajax" flag in manual.
  * Describe redundant invariants and how to print them.
  * Explain format of Java program point names.
- * Explain more invariant (Daikon output) syntax. 
+ * Explain more invariant (Daikon output) syntax.
  * Discuss dealing with errors in the external Ajax and Simplify programs.
 
 ----------------
