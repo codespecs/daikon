@@ -31,6 +31,9 @@ Daikon
   Configuration option daikon.FileIO.unmatched_procedure_entries_quiet is
   now true by default.
 
+  Invariants over typeOf derived variables are disabled in the instrumenter
+  and Annotate's output.
+
 Kvasir
 
   User Changes
