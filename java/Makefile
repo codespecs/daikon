@@ -28,6 +28,7 @@ JAVA_FILES := $(shell test -d ajax-ship/ajax && test ! -L ajax && ln -s ajax-shi
 TAG_FILES := $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -name ajax \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
 
 AUTO_GENERATED_FILES = \
+	daikon/test/split/SplitterFactoryTest.java \
 	utilMDE/MathMDE.java \
 	daikon/PptSlice1.java \
 	daikon/PptSlice2.java \
@@ -216,6 +217,7 @@ AUTO_GENERATED_FILES = \
 	daikon/derive/unary/SequenceInitialFactory.java \
 	daikon/derive/unary/SequenceInitialFactoryFloat.java \
 	daikon/inv/binary/twoSequence/TwoSequenceString.java \
+
 
 ###########################################################################
 ### Compilation targets
@@ -439,6 +441,13 @@ list_java_files:
 ###########################################################################
 ### Automatically generated files
 ###
+
+## First, a file not generated via java-cpp
+daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTestUpDater.java
+	javac $<
+	rm -f $@
+	java daikon.test.split.SplitterFactoryTestUpDater
+	chmod -w $@
 
 # Create the auto-generated files with jpp
 .PHONY: jpp
