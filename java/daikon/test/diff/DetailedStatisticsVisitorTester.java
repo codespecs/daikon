@@ -4,6 +4,7 @@ import junit.framework.*;
 import daikon.*;
 import daikon.inv.*;
 import daikon.diff.*;
+import daikon.test.*;
 import java.lang.reflect.*;
 
 public class DetailedStatisticsVisitorTester extends TestCase {
@@ -14,8 +15,8 @@ public class DetailedStatisticsVisitorTester extends TestCase {
   VarInfo[] vars = { DiffTester.newIntVarInfo("x"),
                      DiffTester.newIntVarInfo("y"),
                      DiffTester.newIntVarInfo("z") };
-  PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
-  
+  PptTopLevel ppt = Common.makePptTopLevel("Foo:::OBJECT", vars);
+
   PptSlice slice0 = ppt.implication_view;
   Invariant null_int_1_just = new DummyInvariant(slice0, "1", true);
   Invariant null_int_1_unjust = new DummyInvariant(slice0, "1", false);
