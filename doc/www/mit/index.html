@@ -414,17 +414,24 @@ use <tt>if (foo) bar;</tt> rather than <tt>if(foo)bar;</tt> and use
 <p>
 
 
-<h2><a name="regression-tests">Regression tests</a></h2>
+<h2><a name="regression-tests">Testing Daikon</a></h2>
+
+Daikon has two sets of tests:  regression tests and unit tests.
+If there are any differences between the expected results and the ones you
+get, don't check in your changes until you understand which is the desired
+behavior and possibly update the goals.
+<p>
+
+The unit tests are found in <tt>invariants/java/daikon/test/</tt>; they use
+the JUnit unit testing framework.<p>
 
 Always run the regression tests when checking in any non-trivial change to
 the code.  The regression tests appear in the <tt>invariants/tests</tt>
 directory.  Type "make" in that directory to see a list of options.
 <p>
 
-If there are any differences between the expected results and the ones you
-get, don't check in your changes until you understand which is the desired
-behavior and possibly update the goals.
-<p>
+
+
 
 
 <h2><a name="admin">Reporting on your research</a></h2>
