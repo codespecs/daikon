@@ -1,6 +1,7 @@
 UTILMDE_DIR := $(HOME)/java/utilMDE
 JAVA_FILES := $(shell find . \( -name '*daikon-java*' -o -name '*-cpp.java' -o -name CVS \) -prune -o -name '*.java' -print)
 TAG_FILES := $(shell find . \( -name '*daikon-java*' -o -name CVS \) -prune -o -name '*.java' -print)
+JAVAC := jikes -g +E +F
 # Should these really be targets in the below, or should I use "make
 # ${AUTO_GENERATED_FILES}"? I don't want to omit running just because these
 # are up-to-date.
@@ -18,10 +19,10 @@ AUTO_GENERATED_FILES = \
 all:	all_via_daikon
 
 all_via_daikon:	Runtime.class Diff.class ${AUTO_GENERATED_FILES}
-	jikes -g +E +F Daikon.java
+	${JAVAC} Daikon.java
 
 all_directly: ${AUTO_GENERATED_FILES}
-	jikes -g +E +F ${JAVA_FILES}
+	${JAVAC} ${JAVA_FILES}
 
 all_force:	all_directly
 
@@ -31,14 +32,14 @@ all_via_javac: ${AUTO_GENERATED_FILES}
 all_javac:	all_via_javac
 
 Runtime.class: Runtime.java
-	jikes -g +E +F Runtime.java
+	${JAVAC} Runtime.java
 
 Diff.class: Diff.java
-	jikes -g +E +F Diff.java
+	${JAVAC} Diff.java
 
 # Wrong, becaue Daikon.class might be up to date even if other files aren't
 # Daikon.class:
-# 	jikes -g +E +F Daikon.java
+# 	${JAVAC} Daikon.java
 
 # It's good to do this occasionally, because it costs little to regenerate
 # .class files and it's bad to continue to use an orphaned class file
