@@ -89,6 +89,18 @@ public final class FileIO {
    */
   public static int dkconfig_max_line_number = 0;
 
+  /**
+   * Boolean. When false, don't count the number of lines in the dtrace file
+   * before reading.  This will disable the percentage progress printout
+   */
+  public static boolean dkconfig_count_lines = true;
+
+  /**
+   * Boolean.  When true, only read the samples, but don't process them.
+   * used to gather timing information
+   */
+  public static boolean dkconfig_read_samples_only = false;
+
 /// Variables
 
   // I'm not going to make this static because then it doesn't get restored
@@ -583,7 +595,7 @@ public final class FileIO {
     LineNumberReader reader = UtilMDE.LineNumberFileReader(filename.toString());
     data_trace_reader = reader;
     data_trace_filename = filename;
-    if (Daikon.dkconfig_progress_delay != -1) {
+    if ((Daikon.dkconfig_progress_delay != -1) && dkconfig_count_lines) {
       // avoid divide-by-zero for display while lines are being counted
       data_trace_total_lines = 1;
       data_trace_total_lines = count_lines(filename);
@@ -720,10 +732,16 @@ public final class FileIO {
         read_vals_and_mods_from_trace_file(reader, filename.toString(), ppt, vals, mods);
         ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
 
+        // If we are only reading the sample, don't process them
+        if (dkconfig_read_samples_only) {
+          samples_processed++;
+          continue;
+        }
+
         // Add orig and derived variables; pass to inference (add_and_flow)
         process_sample (all_ppts, ppt, vt, nonce);
-        //Debug.check (all_ppts, "counter = " + count + " ppt = "
-        //                  + ppt.name() + " " + Debug.related_vars (ppt, vt));
+        // Debug.check (all_ppts, " ppt = " + ppt.name()
+        //             + " " + Debug.related_vars (ppt, vt));
       }
     // }
     // // This catch clause is a bit of a pain.  On the plus side, it gives
@@ -1049,6 +1067,10 @@ public final class FileIO {
         Global.dtraceWriter.println(value_rep);
         Global.dtraceWriter.println(mod);
       }
+      Debug dbg = Debug.newDebug (FileIO.class, ppt, Debug.vis(vi));
+      if (dbg != null)
+        dbg.log ("Var " + vi.name.name() + " has value " + value_rep + " mod "
+               + mod);
 
       // Both uninit and nonsensical mean missing modbit 2, because
       // it doesn't make sense to look at x.y when x is uninitialized.
@@ -1074,6 +1096,14 @@ public final class FileIO {
 
         try {
           vals[val_index] = vi.rep_type.parse_value(value_rep);
+          if (vals[val_index] == null) {
+            mods[val_index] = ValueTuple.MISSING_NONSENSICAL;
+            vi.canBeMissing = true;
+            if (false)
+              Fmt.pf ("Var %s in ppt %s at line %s is null and not missing",
+                      vi.name.name(), ppt.name(),
+                      "" + FileIO.data_trace_reader.getLineNumber());
+          }
         } catch (Exception e) {
           throw new FileIOException(
             "Error while parsing value " + value_rep +
