@@ -2,26 +2,35 @@
 ### Variables
 ###
 
-DOC_FILES := dtrace-format.txt Makefile daikon.html gui.html daikon.gif
+IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps gui-ControlPanel.png gui-ControlPanel.eps gui-InvariantsDisplay-small.png gui-InvariantsDisplay-small.eps
+IMAGE_PARTIAL_PATHS := $(addprefix images/,$(DOC_FILES))
+DOC_FILES := dtrace-format.txt Makefile daikon.html $(IMAGE_PARTIAL_PATHS)
+DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 README_FILES := README-daikon-java README-dist
+README_PATHS := $(addprefix doc/,$(README_FILES))
 SCRIPT_FILES := modbit-munge.pl java-cpp.pl lines-from
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 DAIKON_JAVA_FILES := $(shell find daikon \( -name '*daikon-java*' -o -name '*-cpp.java' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
 
 MERNST_DIR := /g2/users/mernst
+# This is the current directory!  Maybe I don't need a variable for it.
 INV_DIR := $(MERNST_DIR)/research/invariants
 
-# EDG_DIR := $(INV_DIR)/edg/dist
-EDG_DIR := $(INV_DIR)/c-front-end
-# $(EDG_DIR)/edgcpfe is distributed separately (not in the main tar file)
-EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/dfec $(EDG_DIR)/dfec.sh
 DFEJ_DIR := $(INV_DIR)/dfej
+DFEC_DIR := $(INV_DIR)/dfec
+# Old C front end
+# EDG_DIR := $(INV_DIR)/edg/dist
+# EDG_DIR := $(INV_DIR)/c-front-end
+# $(EDG_DIR)/edgcpfe is distributed separately (not in the main tar file)
+# EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/dfec $(EDG_DIR)/dfec.sh
 
 DIST_DIR := $(MERNST_DIR)/www/daikon/dist
 DIST_DIR_FILES := daikon-source.tar.gz daikon-jar.tar.gz daikon.html gui.html daikon.jar
 # For really big files
 # DIST_DIR_2 := /projects/se/people/mernst/www
 DIST_DIR_2 := $(DIST_DIR)
+
+CVS_REP := /g4/projects/invariants/.CVS/
 
 # for "chgrp"
 INV_GROUP := invariants
@@ -82,7 +91,8 @@ dist-test-no-update-dist:
 cvs-test:
 	-rm -rf $(HOME)/tmp/daikon.cvs
 	mkdir $(HOME)/tmp/daikon.cvs
-	(cd $(HOME)/tmp/daikon.cvs; cvs -Q -d $(HOME)/research/.CVS-research co invariants; cvs -Q -d $(HOME)/research/.CVS-research co utilMDE)
+	# (cd $(HOME)/tmp/daikon.cvs; cvs -Q -d $(CVS_REP) co invariants; cvs -Q -d $(CVS_REP) co utilMDE)
+	(cd $(HOME)/tmp/daikon.cvs; cvs -Q -d $(CVS_REP) co invariants)
 	(cd $(HOME)/tmp/daikon.cvs/invariants/daikon; CLASSPATH=/g2/users/mernst/tmp/daikon.cvs:/g2/users/mernst/tmp/daikon.cvs/invariants:/g2/users/mernst/java/OROMatcher-1.1:/g2/users/mernst/java/getopt-1.0.8:.:/g2/users/mernst/java/jdk/jre/lib/rt.jar; make)
 
 
@@ -119,7 +129,7 @@ daikon.jar: $(DAIKON_JAVA_FILES)
 	-rm -rf daikon.jar /tmp/daikon-jar
 	mkdir /tmp/daikon-jar
 	cd daikon && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar' all
-	cd $(HOME)/java/utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar' all
+	cd utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/daikon-jar' all
 	tar xzf java-getopt-1.0.8.tar.gz -C /tmp/daikon-jar
 	tar xzf OROMatcher-1.1.tar.gz -C /tmp/daikon-jar
 	mv /tmp/daikon-jar/OROMatcher-1.1.0a/com /tmp/daikon-jar
@@ -130,7 +140,7 @@ daikon.jar: $(DAIKON_JAVA_FILES)
 
 # Use this ordering because daikon-jar is made before daikon-source
 
-daikon-jar.tar daikon-source.tar: $(DOC_FILES) $(EDG_FILES) $(README_files) examples-gries.tar.gz $(DAIKON_JAVA_FILES) daikon.jar
+daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar
 	html-update-toc daikon.html
 
 	-rm -rf /tmp/daikon
@@ -176,7 +186,7 @@ daikon-jar.tar daikon-source.tar: $(DOC_FILES) $(EDG_FILES) $(README_files) exam
 
 	# Java support files
 	(cp -p java-getopt-1.0.7.tar.gz /tmp/daikon/java; cd /tmp/daikon/java; tar zxf java-getopt-1.0.7.tar.gz; rm java-getopt-1.0.7.tar.gz)
-	(cd $(HOME)/java/utilMDE; $(MAKE) utilMDE.tar.gz; cd /tmp/daikon/java; tar zxf $(HOME)/java/utilMDE/utilMDE.tar.gz)
+	(cd utilMDE; $(MAKE) utilMDE.tar.gz; cd /tmp/daikon/java; tar zxf utilMDE/utilMDE.tar.gz)
 	(cp -p OROMatcher-1.1.tar.gz /tmp/daikon/java; cd /tmp/daikon/java; tar zxf OROMatcher-1.1.tar.gz; rm OROMatcher-1.1.tar.gz; ln -s OROMatcher-1.1.0a/com .)
 
 	# Java instrumenter
@@ -214,18 +224,26 @@ daikon-jar.tar.gz: daikon-jar.tar
 
 ## C/C++ front end
 
-dist-edg: dist-edg-solaris
+dist-dfec: dist-dfec-linux
 
-dist-edg-solaris: $(DIST_DIR_2)/edgcpfe-solaris
+dist-dfec-linux:
+	cd $(DFEC_DIR) && $(MAKE) dfec-static
+	cp -pf $(DFEC_DIR)/bin/dfec-static $(DIST_DIR)/dfec-linux
+	cp -pf $(DFEC_DIR)/src/dfec $(DIST_DIR)/dfec-linux-dynamic
 
-$(DIST_DIR_2)/edgcpfe-solaris: $(EDG_DIR)/edgcpfe
-	cp -pf $< $@
-	update-link-dates $(DIST_DIR)/index.html
-
-# This is an attempt to indicate that it is not rebuilt from dfec.sh.
-# I seem to have to have a body in the rule.
-$(EDG_DIR)/dfec: $(EDG_DIR)/dfec.sh
-	@echo
+## Old version
+# dist-edg: dist-edg-solaris
+# 
+# dist-edg-solaris: $(DIST_DIR_2)/edgcpfe-solaris
+# 
+# $(DIST_DIR_2)/edgcpfe-solaris: $(EDG_DIR)/edgcpfe
+# 	cp -pf $< $@
+# 	update-link-dates $(DIST_DIR)/index.html
+# 
+# # This is an attempt to indicate that it is not rebuilt from dfec.sh.
+# # I seem to have to have a body in the rule.
+# $(EDG_DIR)/dfec: $(EDG_DIR)/dfec.sh
+# 	@echo
 
 ## Java front end
 
@@ -243,7 +261,6 @@ $(DIST_DIR)/dfej-solaris: $(DFEJ_DIR)/src/dfej-solaris
 
 dist-dfej-linux: $(DIST_DIR)/dfej-linux
 	# First remake
-	cd $(DFEJ_DIR)/src && $(MAKE) LDFLAGS=-static
 	-mv -f $(DFEJ_DIR)/src/dfej $(DFEJ_DIR)/src/dfej-dynamic
 	-mv -f $(DFEJ_DIR)/src/dfej-linux $(DFEJ_DIR)/src/dfej
 	cd $(DFEJ_DIR)/src && $(MAKE) LDFLAGS=-static
@@ -273,9 +290,9 @@ mingw_exe: dfej-src/build_mingw_dfej/src/dfej.exe
 ## So as a hack, move them aside and then replace them.
 
 dfej-src/build_mingw_dfej/src/dfej.exe: dfej-src/dfej/src/*.cpp dfej-src/dfej/src/*.h
-	rename .o .o-for-mingw dfej-src/dfej/src/*.o
+	rename .o .mingw-saved.o dfej-src/dfej/src/*.o
 	cd dfej-src/build_mingw_dfej; setenv PATH /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:$(PATH); $(MAKE); 
-	rename .o-for-mingw .o dfej-src/dfej/src/*.o-for-mingw
+	rename .mingw-saved.o .o dfej-src/dfej/src/*.mingw-saved.o
 
 dist-dfej-windows: dfej-src/build_mingw_dfej/src/dfej.exe
 	cp dfej-src/build_mingw_dfej/src/dfej.exe $(DIST_DIR)/dfej.exe
