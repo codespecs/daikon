@@ -51,7 +51,7 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
 
   }
 
-  static Comparator comparator = new ArraysMDE.IntArrayComparatorLexical();
+  static Comparator comparator = new ArraysMDE.LongArrayComparatorLexical();
 
   private String subarray_rep() {
     // Not so efficient an implementation, but simple;

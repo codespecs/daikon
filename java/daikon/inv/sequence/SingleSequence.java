@@ -24,7 +24,9 @@ public abstract class SingleSequence extends Invariant {
     Assert.assert(Intern.isInterned(value));
     // System.out.println("SingleSequence.add(" + ArraysMDE.toString(value) + ", " + modified + ", " + count + ")");
     Assert.assert(!finished);
-    if (mod_index == 0) {
+    if (value == null) {
+      ppt.var_infos[0].canBeNull = true;
+    } else if (mod_index == 0) {
       add_unmodified(value, count);
     } else {
       add_modified(value, count);

@@ -165,7 +165,7 @@ public final class PptSlice2  extends PptSlice {
       return;
     }
     if (mod1 == ValueTuple.STATIC_CONSTANT) {
-      Assert.assert(vi1.static_constant_value != null);
+      Assert.assert(vi1.is_static_constant);
       mod1 = ((num_mod_non_missing_samples() == 0)
               ? ValueTuple.MODIFIED : ValueTuple.UNMODIFIED);
     }
@@ -176,7 +176,7 @@ public final class PptSlice2  extends PptSlice {
       return;
     }
     if (mod2 == ValueTuple.STATIC_CONSTANT) {
-      Assert.assert(vi2.static_constant_value != null);
+      Assert.assert(vi2.is_static_constant);
       mod2 = ((num_mod_non_missing_samples() == 0)
               ? ValueTuple.MODIFIED : ValueTuple.UNMODIFIED);
     }

@@ -19,9 +19,14 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   // Obtaining values
   public int varinfo_index;	// index in lists of VarInfo objects
   public int value_index;	// index in lists of values, VarTuple objects
-  Object static_constant_value;	// null if not statically constant
-				//   (static_constant_value != null)
+  public boolean is_static_constant;  // required if static_constant_value==null
+				//   (is_static_constant
                                 //   iff (value_index == -1)
+  Object static_constant_value;	// null if not statically constant
+                                // once upon a time (still?):
+  				//   (static_constant_value != null)
+                                //   iff (value_index == -1)
+
 
   // Derived variables
   public Derivation derived;	// whether (and how) derived
@@ -30,6 +35,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   public PptTopLevel ppt;
 
   boolean canBeMissing = false;
+  public boolean canBeNull = false;    // relevant only for arrays, really
 
   // It can be expensive to find an arbitrary invariant.  These fields
   // cache invariants that we want to be able to look up quickly.
@@ -38,6 +44,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   // Clients should use isCanonical() or canonicalRep() or equalTo().
   public VarInfo equal_to;      // the canonical representative to which
                                 // this variable is equal; may be itself.
+  public boolean is_dynamic_constant;  // required if dynamic_constant==null
   public Object dynamic_constant;
   VarInfo sequenceSize;         // if null, not yet computed (or this VarInfo
                                 //   is not a sequence)
@@ -60,7 +67,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
             || (rep_type == ProglangType.STRING_ARRAY));
   }
 
-  public VarInfo(String name, ProglangType type, ProglangType rep_type, VarComparability comparability, Object static_constant_value) {
+  public VarInfo(String name, ProglangType type, ProglangType rep_type, VarComparability comparability, boolean is_static_constant, Object static_constant_value) {
     // Watch out:  some Lisp and C .decls files have other (unsupported) types.
     Assert.assert(rep_type != null);
     Assert.assert(legalRepType(rep_type),
@@ -73,6 +80,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     this.type = type;
     this.rep_type = rep_type;
     this.comparability = comparability;
+    this.is_static_constant = is_static_constant;
     this.static_constant_value = static_constant_value;
 
     // Indicates that these haven't yet been set to reasonable values.
@@ -85,11 +93,11 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   }
 
   public VarInfo(String name, ProglangType type, ProglangType rep_type, VarComparability comparability) {
-    this(name, type, rep_type, comparability, null);
+    this(name, type, rep_type, comparability, false, null);
   }
 
   public VarInfo(VarInfo vi) {
-    this(vi.name, vi.type, vi.rep_type, vi.comparability, vi.static_constant_value);
+    this(vi.name, vi.type, vi.rep_type, vi.comparability, vi.is_static_constant, vi.static_constant_value);
   }
 
   // I *think* I don't need to implement VarInfo.clone(), as the java.lang.Object
@@ -167,7 +175,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 
   boolean repOK() {
     // If statically constant, then value_index is not meaningful
-    if ((static_constant_value != null) != (value_index == -1))
+    if (is_static_constant != (value_index == -1))
       return false;
 
     return true;
@@ -181,6 +189,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
       + ",comparability=" + comparability
       + ",value_index=" + value_index
       + ",varinfo_index=" + varinfo_index
+      + ",is_static_constant=" + is_static_constant
       + ",static_constant_value=" + static_constant_value
       + ",derived=" + derived
       + ",derivees=" + derivees
@@ -193,10 +202,12 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     return (isStaticConstant() || isDynamicConstant());
   }
   public boolean isDynamicConstant() {
-    return (dynamic_constant != null);
+    // return (dynamic_constant != null);
+    return is_dynamic_constant;
   }
   public boolean isStaticConstant() {
-    return (static_constant_value != null);
+    // return (static_constant_value != null);
+    return is_static_constant;
   }
   public Object constantValue() {
     if (isStaticConstant()) {
@@ -258,7 +269,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 
 
   public int getModified(ValueTuple vt) {
-    if (static_constant_value != null)
+    if (is_static_constant)
       return ValueTuple.STATIC_CONSTANT;
     else
       return vt.getModified(value_index);
@@ -268,7 +279,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   public boolean isMissing(ValueTuple vt) { return ValueTuple.modIsMissing(getModified(vt)); }
 
   public Object getValue(ValueTuple vt) {
-    if (static_constant_value != null)
+    if (is_static_constant)
       return static_constant_value;
     else
       return vt.getValue(value_index);

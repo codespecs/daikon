@@ -21,8 +21,11 @@ public final class TwoScalarFactory {
                   && (var2.rep_type == ProglangType.INT));
 
     if (Daikon.check_program_types
-        && (! var1.type.comparable(var2.type)))
+        && (! var1.type.comparable(var2.type))) {
+      // System.out.println("These have different types: :  "
+      //                    + var1.name + " (" + var1.type.format() + ") " + var2.name +  " (" + var2.type.format() + ") ");
       return null;
+    }
     // System.out.println("These have the same type (" + var1.type.format() + "):  "
     //                    + var1.name + " " + var2.name);
 

@@ -260,6 +260,12 @@ public final class ProglangType implements java.io.Serializable {
 
       value = value.trim();
 
+      if (value.equals("null"))
+        return null;
+
+      // Try requiring the square brackets around arrays (permits
+      // distinguishing between null and an array containing just null).
+      Assert.assert(value.startsWith("[") && value.endsWith("]"));
       // Deal with [] surrounding Java array output
       if (value.startsWith("[") && value.endsWith("]")) {
         value = value.substring(1, value.length() - 1).trim();

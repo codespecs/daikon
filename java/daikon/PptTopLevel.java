@@ -75,18 +75,18 @@ public class PptTopLevel extends Ppt {
     for (int i=0; i<var_infos.length; i++) {
       VarInfo vi = var_infos[i];
       vi.varinfo_index = i;
-      if (vi.static_constant_value == null) {
-        vi.value_index = val_idx;
-        val_idx++;
-      } else {
+      if (vi.is_static_constant) {
         vi.value_index = -1;
         num_static_constant_vars++;
+      } else {
+        vi.value_index = val_idx;
+        val_idx++;
       }
       vi.ppt = this;
     }
     for (int i=0; i<var_infos.length; i++) {
       VarInfo vi = var_infos[i];
-      Assert.assert((vi.value_index == -1) || (vi.static_constant_value == null));
+      Assert.assert((vi.value_index == -1) || (!vi.is_static_constant));
     }
 
     values = new VarValuesOrdered();
@@ -1148,6 +1148,7 @@ public class PptTopLevel extends Ppt {
   void set_dynamic_constant_slots(Vector unary_views) {
     for (int i=0; i<unary_views.size(); i++) {
       PptSlice1 unary_view = (PptSlice1) unary_views.elementAt(i);
+      // System.out.println("set_dynamic_constant_slots " + unary_view.name + " " + views.contains(unary_view));
       Assert.assert(unary_view.arity == 1);
       // If this view has been installed in the views slot (ie, it has not
       // been eliminated already).
@@ -1160,11 +1161,17 @@ public class PptTopLevel extends Ppt {
         inv.finished = true;
         // unary_view.already_seen_all = true;
         OneOf one_of = (OneOf) inv;
+        // System.out.println("num_elts: " + one_of.num_elts());
         if (one_of.num_elts() == 1) {
           // System.out.println("Constant " + inv.ppt.name + " " + one_of.var().name + " because of " + unary_view.name);
 	  // Should be Long, not Integer.
 	  Assert.assert(! (one_of.elt() instanceof Integer));
+          // If it's null, we can't distinguish from dynamic_constant
+          // never getting set in the first place.
+          // Assert.assert(one_of.elt() != null);
           one_of.var().dynamic_constant = one_of.elt();
+          one_of.var().is_dynamic_constant = true;
+          // System.out.println("set dynamic_constant to " + one_of.elt());
         }
       } else {
         unary_view.clear_cache();
@@ -1226,7 +1233,9 @@ public class PptTopLevel extends Ppt {
           } else {
             // This is implied by the if-then sequence.
             // Assert.assert((var1.equal_to != null) && (var2.equal_to != null));
-            Assert.assert(var1.equal_to == var2.equal_to
+            Assert.assert(((Daikon.check_program_types
+                            && (! var1.type.comparable(var2.type)))
+                           || (var1.equal_to == var2.equal_to))
                           // This is ordinarily commented out, to save
                           // time in the common case.
                           , "Variables not equal: " + var1.name + " (= " + var1.equal_to.name + "), " + var2.name + " (= " + var2.equal_to.name + ") at " + name

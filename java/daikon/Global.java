@@ -169,8 +169,11 @@ public final class Global {
   // public final static boolean debugPptSliceGeneric = true;
   // public final static boolean debugPptSliceSpecific = true;
 
+  // used only if debugPptSliceSpecific is set
   public final static String[][] debuggedPptSliceSpecific
-    = { { "arg", "orig(arg)" } };
+    = { { "arg", "orig(arg)" },
+        { "inCentralCommandMediator.mAspectLegend", "inCentralCommandMediator.mAspectBrowser" }
+    };
 
   // This may be expensive and so should only be called infrequently.
   public final static boolean isDebuggedPptSlice(PptSlice slice) {

@@ -9,7 +9,7 @@ import java.util.*;
 
 class SeqComparison extends TwoSequence implements Comparison {
 
-  static Comparator comparator = new ArraysMDE.IntArrayComparatorLexical();
+  static Comparator comparator = new ArraysMDE.LongArrayComparatorLexical();
 
   final static boolean debugSeqComparison = false;
 

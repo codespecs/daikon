@@ -214,7 +214,9 @@ public final class FileIO {
     int equals_index = rep_type_string.indexOf(" = ");
     String static_constant_value_string = null;
     Object static_constant_value = null;
+    boolean is_static_constant = false;
     if (equals_index != -1) {
+      is_static_constant = true;
       static_constant_value_string = rep_type_string.substring(equals_index+3);
       rep_type_string = rep_type_string.substring(0, equals_index);
     }
@@ -222,6 +224,7 @@ public final class FileIO {
     ProglangType rep_type = ProglangType.parse(rep_type_string);
     if (static_constant_value_string != null) {
       static_constant_value = rep_type.parse_value(static_constant_value_string);
+      // Why can't the value be null?
       Assert.assert(static_constant_value != null);
     }
     VarComparability comparability
@@ -232,7 +235,7 @@ public final class FileIO {
       throw new Error("Unsupported representation type " + rep_type.format() + " for variable " + varname + " at line " + file.getLineNumber() + " of file " + filename);
     }
 
-    return new VarInfo(varname, prog_type, rep_type, comparability, static_constant_value);
+    return new VarInfo(varname, prog_type, rep_type, comparability, is_static_constant, static_constant_value);
   }
 
   static final class Invocation {
@@ -679,11 +682,11 @@ public final class FileIO {
                     // , "Got to vi_index " + vi_index + " after " + val_index + " of " + num_tracevars + " values"
                     );
       VarInfo vi = vis[vi_index];
-      Assert.assert((vi.static_constant_value == null)
+      Assert.assert((! vi.is_static_constant)
                     || (vi.value_index == -1)
                     // , "Bad value_index " + vi.value_index + " when static_constant_value = " + vi.static_constant_value + " for " + vi.repr() + " at " + ppt_name
                     );
-      if (vi.static_constant_value != null)
+      if (vi.is_static_constant)
         continue;
       Assert.assert(val_index == vi.value_index
                     // , "Differing val_index = " + val_index
@@ -738,11 +741,20 @@ public final class FileIO {
         call_hashmap.put(nonce, invok);
       }
       HashMap subhash = (HashMap) cumulative_modbits.get(ppt);
-      // System.out.println("Entry " + ppt_name + " has " + subhash.size() + " exits");
-      for (Iterator itor = subhash.values().iterator(); itor.hasNext(); ) {
-        int[] exitmods = (int[]) itor.next();
-        // System.out.println("lengths: " + exitmods.length + " " + mods.length);
-        ValueTuple.orModsInto(exitmods, mods);
+      // If subhash is null, then there must have been no exit program
+      // point that mapped back to this entry.  That could happen if the
+      // body is "while (true) { }"; Jikes/dfej adds no synthetic "return"
+      // statement in that case.
+      // if (subhash == null) {
+      //   System.out.println("Entry " + ppt_name + " has no cumulative_modbits");
+      // }
+      if (subhash != null) {
+        // System.out.println("Entry " + ppt_name + " has " + subhash.size() + " exits");
+        for (Iterator itor = subhash.values().iterator(); itor.hasNext(); ) {
+          int[] exitmods = (int[]) itor.next();
+          // System.out.println("lengths: " + exitmods.length + " " + mods.length);
+          ValueTuple.orModsInto(exitmods, mods);
+        }
       }
     } else {
       PptTopLevel entry_ppt = (PptTopLevel) ppt.entry_ppt;
