@@ -1120,6 +1120,9 @@ public abstract class VarInfoName
      * sequenced subscripted by one of the new bound variables).
      **/
     public static String[] format_esc(VarInfoName[] roots) {
+      return format_esc(roots, false);
+    }
+    public static String[] format_esc(VarInfoName[] roots, boolean elementwise) {
       Assert.assert(roots != null);
 	
       QuantifyReturn qret = quantify(roots);
@@ -1131,6 +1134,7 @@ public abstract class VarInfoName
 	// "i, j, ..."
 	int_list = new StringBuffer();
 	// "ai <= i && i <= bi && aj <= j && j <= bj && ..."
+	// if elementwise, also do "(i-ai) == (b-bi) && ..."
 	conditions = new StringBuffer();
 	for (int i=0; i < qret.bound_vars.size(); i++) {
 	  VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
@@ -1147,6 +1151,19 @@ public abstract class VarInfoName
 	  conditions.append(idx.esc_name());
 	  conditions.append(" <= ");
 	  conditions.append(high.esc_name());
+	  if (elementwise && (i >= 1)) {
+	    VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
+	    VarInfoName _idx = _boundv[0], _low = _boundv[1];
+	    conditions.append(" && (");
+	    conditions.append(_idx);
+	    conditions.append("-");
+	    conditions.append(_low);
+	    conditions.append(") == (");
+	    conditions.append(idx);
+	    conditions.append("-");
+	    conditions.append(low);
+	    conditions.append(")");
+	  }
 	}
       }
       result[0] = "(\\forall int " + int_list + "; (" + conditions + ") ==> ";
