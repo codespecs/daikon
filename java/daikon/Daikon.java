@@ -909,13 +909,13 @@ public final class Daikon {
       FileIO.read_data_trace_files(dtrace_files, all_ppts);
       fileio_progress.shouldStop = true;
       System.out.println();
-      System.out.print("Creating implications "); // XXX untested code
-      for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
-        PptTopLevel ppt = (PptTopLevel) itor.next();
-        System.out.print('.');
-        // ppt.addImplications();
-      }
-      System.out.println();
+      // System.out.print("Creating implications "); // XXX untested code
+      // for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
+      //   PptTopLevel ppt = (PptTopLevel) itor.next();
+      //   System.out.print('.');
+      //   ppt.addImplications();
+      // }
+      // System.out.println();
     } catch (IOException e) {
       System.out.println();
       e.printStackTrace();
@@ -994,6 +994,7 @@ public final class Daikon {
     debugProgress.fine ("Suppress for printing ... done");
 
     // Add implications
+    System.out.print("Creating implications ");
     debugProgress.fine ("Adding Implications ... ");
     for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
