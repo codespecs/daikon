@@ -39,8 +39,6 @@ AUTO_GENERATED_FILES = \
 	daikon/Quant.java \
 	daikon/inv/ternary/threeScalar/FunctionBinary.java \
 	daikon/inv/ternary/threeScalar/FunctionBinaryFloat.java \
-	daikon/inv/ternary/threeScalar/FunctionBinaryCore.java \
-	daikon/inv/ternary/threeScalar/FunctionBinaryCoreFloat.java \
 	daikon/inv/ternary/threeScalar/ThreeScalar.java \
 	daikon/inv/ternary/threeScalar/ThreeFloat.java \
 	daikon/inv/ternary/threeScalar/LinearTernaryCore.java \
@@ -51,8 +49,6 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/unary/UpperBoundCore.java \
 	daikon/inv/unary/LowerBoundCoreFloat.java \
 	daikon/inv/unary/UpperBoundCoreFloat.java \
-	daikon/inv/Functions.java \
-	daikon/inv/FunctionsFloat.java \
 	daikon/inv/unary/scalar/LowerBound.java \
 	daikon/inv/unary/scalar/UpperBound.java \
 	daikon/inv/unary/scalar/LowerBoundFloat.java \
@@ -258,7 +254,11 @@ OLD_AUTO_GENERATED_FILES = \
 	daikon/inv/unary/sequence/SingleScalarSequenceFactory.java \
 	daikon/inv/unary/sequence/SingleFloatSequenceFactory.java \
 	daikon/inv/ternary/threeScalar/ThreeScalarFactory.java \
-	daikon/inv/binary/sequenceString/Member.java
+	daikon/inv/binary/sequenceString/Member.java \
+	daikon/inv/ternary/threeScalar/FunctionBinaryCore.java \
+	daikon/inv/Functions.java \
+	daikon/inv/FunctionsFloat.java \
+	daikon/inv/ternary/threeScalar/FunctionBinaryCoreFloat.java
 
 
 OLD_AUTO_GENERATED_CLASSES = $(subst .java,.class,${OLD_AUTO_GENERATED_FILES})
@@ -661,12 +661,6 @@ daikon/inv/ternary/threeScalar/FunctionBinary.java: daikon/inv/ternary/threeScal
 daikon/inv/ternary/threeScalar/FunctionBinaryFloat.java: daikon/inv/ternary/threeScalar/FunctionBinary.java.jpp daikon/inv/ternary/threeScalar/FunctionBinaryGeneric.java.jpp daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp daikon/inv/suppressionFactory.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
 
-daikon/inv/ternary/threeScalar/FunctionBinaryCore.java: daikon/inv/ternary/threeScalar/FunctionBinaryCore.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
-
-daikon/inv/ternary/threeScalar/FunctionBinaryCoreFloat.java: daikon/inv/ternary/threeScalar/FunctionBinaryCore.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
-
 daikon/inv/ternary/threeScalar/ThreeScalar.java: daikon/inv/ternary/threeScalar/ThreeScalar.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
 
@@ -696,12 +690,6 @@ daikon/inv/unary/LowerBoundCoreFloat.java: daikon/inv/unary/BoundCore.java.jpp
 
 daikon/inv/unary/UpperBoundCoreFloat.java: daikon/inv/unary/BoundCore.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=UPPERFLOAT)
-
-daikon/inv/Functions.java: daikon/inv/Functions.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=LONG)
-
-daikon/inv/FunctionsFloat.java: daikon/inv/Functions.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=FLOAT)
 
 daikon/inv/unary/scalar/NonZero.java: daikon/inv/unary/scalar/NonZero.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=SCALAR)
