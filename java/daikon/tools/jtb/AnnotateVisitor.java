@@ -227,7 +227,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
     if (! Ast.contains(n.f0, "public")) {
       //	if(!dbc) {
-	    addComment(n, "/*@ spec_public */ ");
+	    addComment(n, "/*@ spec_public @*/ ");
             //	}
     }
   }
@@ -982,6 +982,14 @@ public class AnnotateVisitor extends DepthFirstVisitor {
    * The "invs" argument may be null, in which case no work is done.
    */
   public boolean insertInvariants(Node n, String prefix, String[] invs, boolean useJavaComment) {
+
+    // This ensures that we'll put nodes with no invariants into the
+    // nodeToInvs map.
+    Invs invsForNode = (Invs)nodeToInvs.get(n);
+    if (invsForNode == null) {
+      invsForNode = new Invs();
+      nodeToInvs.put(n, invsForNode);
+    }
 
     boolean invariantInserted = false;
 
