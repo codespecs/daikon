@@ -5,20 +5,25 @@ import daikon.inv.binary.twoScalar.*;
 import daikon.inv.ternary.threeScalar.*;
 import daikon.suppress.*;
 import utilMDE.*;
+
 import java.util.*;
 import java.io.*;
 import gnu.getopt.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.util.regex.Pattern;
+
 
 /**
  * DaikonSimple reads a declaration file and trace file and outputs a list
  * of likely invariants using the simple incremental algorithm.
  */
 public class DaikonSimple {
-
+ 
   //printing usage
   public static final String lineSep = Global.lineSep;
+  //public static final String var_omit_regexp_SWITCH = "var_omit";
+  //public static Pattern var_omit_regexp;
 
   //logging information
   public static final Logger debug = Logger.getLogger("daikon.DaikonSimple");
@@ -32,7 +37,7 @@ public class DaikonSimple {
     UtilMDE.join(
       new String[] {
         "",
-        "Usage: java daikon.PrintInvariants [OPTION]... <decls_file> "
+        "Usage: java daikon.DaikonSimple [OPTION]... <decls_file> "
           + "<dtrace_file>",
         "  -h, --" + Daikon.help_SWITCH,
         "      Display this usage message",
@@ -47,7 +52,9 @@ public class DaikonSimple {
         },
       lineSep);
 
-
+  //A pptMap which contains all the program points
+  public static PptMap all_ppts;
+  
   public static void main(final String[] args)
     throws IOException, FileNotFoundException {
     try {
@@ -79,47 +86,48 @@ public class DaikonSimple {
     Daikon.dkconfig_use_dynamic_constant_optimization = false;
     Daikon.suppress_implied_controlled_invariants = false;
     NIS.dkconfig_enabled = false;
-
-    // Create the list of all invariant types
-    Daikon.setup_proto_invs();
+     
+    //boolean needed to tell FIleIO and Daikon classes that methods and classes for DaikonSimple is needed
+    Daikon.using_DaikonSimple = true;
 
     // Read command line options
     Set[] files = read_options(args);
     Assert.assertTrue(files.length == 4);
     Set decls_files = files[0]; // [File]
-    Set dtrace_files = files[1]; // [File]
+    Set dtrace_files = files[1]; // [String]
     Set spinfo_files = files[2]; // [File]
     Set map_files = files[3]; // [File]
     if ((decls_files.size() == 0) && (dtrace_files.size() == 0)) {
-      throw new Daikon.TerminationMessage("No .decls or .dtrace files specified");
+      throw new Daikon.TerminationMessage(
+        "No .decls or .dtrace files specified");
     }
 
+    // Create the list of all invariant types
+    Daikon.setup_proto_invs();
+    
     // Load declarations
-
-    PptMap all_ppts = FileIO.read_declaration_files(decls_files);
-
-    //  adding orig and derived variables
-    init_partial_order(all_ppts);
-    if (debug.isLoggable(Level.FINE)) {
-      debug.fine("Partial order initialized");
-    }
-
+    
+    // Create the program points for enter and numbered exits and 
+    // initializes the points (adding orig and derived variables)
+    all_ppts = FileIO.read_declaration_files(decls_files);
+   
+    // Create the combined exits (and add orig and derived vars)
+    Daikon.create_combined_exits(all_ppts);
+   
+    all_ppts.trimToSize();
+    
     // Read and process the data trace files
     SimpleProcessor processor = new SimpleProcessor();
     FileIO.read_data_trace_files(dtrace_files, all_ppts, processor);
-
-    Iterator t = all_ppts.pptIterator();
-
-    //System.exit(0);
-    //    print out the invariants for each program point (sort first)
-    t = all_ppts.pptIterator();
-
-    while (t.hasNext()) {
+    
+   
+    
+    // Print out the invariants for each program point (sort first)
+    for( Iterator t = all_ppts.pptIterator(); t.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) t.next();
 
       if (ppt.num_samples() != 0) {
-        List invs =
-          PrintInvariants.sort_invariant_list(ppt.invariants_vector());
+        List invs = PrintInvariants.sort_invariant_list(ppt.invariants_vector());
         Iterator i = invs.iterator();
 
         if (Daikon.dkconfig_quiet) {
@@ -177,10 +185,6 @@ public class DaikonSimple {
       }
     }
 
-    // finished; return (and end the program)
-
-    //using print_invariants will add invariant filtering
-    //  PrintInvariants.print_invariants(all_ppts);
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -189,10 +193,19 @@ public class DaikonSimple {
   // element is a set.
   private static Set[] read_options(String args[])
     throws FileNotFoundException {
-    Set decl_files = new HashSet();
-    Set dtrace_files = new HashSet();
-    Set spinfo_files = new HashSet();
-    Set map_files = new HashSet();
+    
+    if (args.length == 0) {
+      System.out.println(
+        "Daikon error: no files supplied on command line.");
+      System.out.println(usage);
+      throw new Daikon.TerminationMessage();
+    }
+    
+    Set decl_files = new HashSet(); /* of Files */
+    Set dtrace_files = new HashSet(); /* of Strings, either file names or "-"*/
+    Set spinfo_files = new HashSet(); /* of Files */
+    Set map_files = new HashSet(); /* of Files */
+    
     LongOpt[] longopts =
       new LongOpt[] {
         new LongOpt(
@@ -200,6 +213,7 @@ public class DaikonSimple {
           LongOpt.REQUIRED_ARGUMENT,
           null,
           0),
+     //   new LongOpt(var_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
         new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         new LongOpt(
@@ -223,6 +237,20 @@ public class DaikonSimple {
             String item = g.getOptarg();
             daikon.config.Configuration.getInstance().apply(item);
             break;
+//          } else if (var_omit_regexp_SWITCH.equals(option_name)) {
+//            if (Daikon.var_omit_regexp != null)
+//              throw new Error(
+//                "multiple --"
+//                  + var_omit_regexp_SWITCH
+//                  + " regular expressions supplied on command line");
+//            try {
+//              String regexp_string = g.getOptarg();
+//              System.out.println("Regexp = " + regexp_string);
+//              Daikon.var_omit_regexp = Pattern.compile(regexp_string);
+//            } catch (Exception e) {
+//              throw new Error(e.toString());
+//            }
+//            break;
           } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
             Global.debugAll = true;
           } else if (Daikon.debug_SWITCH.equals(option_name)) {
@@ -275,87 +303,15 @@ public class DaikonSimple {
       if (filename.indexOf(".decls") != -1) {
         decl_files.add(file);
       } else if (filename.indexOf(".dtrace") != -1) {
-        dtrace_files.add(file);
+        dtrace_files.add(filename);
       } else {
         throw new Error("Unrecognized argument: " + file);
       }
     }
     return new Set[] { decl_files, dtrace_files, spinfo_files, map_files };
   }
-
-  /**
-    * Process all ppts by adding orig and derived variables, relating
-    * variables to other program points, and fixing all necessary
-    * pre-computed flows.  (Calls init_partial_order(PptTopLevel,
-    * PptMap) for each ppt in turn.)
-    **/
-  public static void init_partial_order(PptMap all_ppts) {
-
-    // Create combined exit points
-    Daikon.create_combined_exits(all_ppts);
-
-    // Setup orig variables
-    for (Iterator i = all_ppts.ppt_all_iterator(); i.hasNext();) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
-      create_and_relate_orig_vars(ppt, all_ppts);
-    }
-    // Set up derived variables
-    for (Iterator i = all_ppts.ppt_all_iterator(); i.hasNext();) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
-      ppt.create_derived_variables();
-    }
-    return;
-  }
-
-  /**
-     * Add orig() variables to the given EXIT/EXITnn point, and relate
-     * them to the corresponding ENTER point.  Does nothing if exit_ppt
-     * is not an EXIT/EXITnn.  Does not relate if point is EXITnn.
-     **/
-  private static void create_and_relate_orig_vars(
-    PptTopLevel exit_ppt,
-    PptMap ppts) {
-    if (!exit_ppt.ppt_name.isExitPoint()) {
-      return;
-    }
-    PptTopLevel entry_ppt = ppts.get(exit_ppt.ppt_name.makeEnter());
-    Assert.assertTrue(entry_ppt != null, exit_ppt.name());
-    // comb_exit_ppt may be same as exit_ppt if exit_ppt is EXIT
-    PptTopLevel comb_exit_ppt = ppts.get(exit_ppt.ppt_name.makeExit());
-    // Add "orig(...)" (prestate) variables to the program point.
-    // Don't bother to include the constants.  Walk through
-    // entry_ppt's vars.  For each non-constant, put it on the
-    // new_vis worklist after fixing its comparability information.
-    exit_ppt.num_orig_vars = entry_ppt.num_tracevars;
-    VarInfo[] new_vis = new VarInfo[exit_ppt.num_orig_vars];
-    {
-      VarInfo[] entry_ppt_vis = entry_ppt.var_infos;
-      int new_vis_index = 0;
-      for (int k = 0; k < entry_ppt.num_declvars; k++) {
-        VarInfo vi = entry_ppt_vis[k];
-        Assert.assertTrue(
-          !vi.isDerived(),
-          "Derived when making orig(): " + vi.name);
-        if (vi.isStaticConstant())
-          continue;
-        VarInfo origvar = VarInfo.origVarInfo(vi);
-        // Fix comparability
-        VarInfo postvar = exit_ppt.findVar(vi.name);
-        Assert.assertTrue(
-          postvar != null,
-          "Exit not superset of entry: " + vi.name);
-        origvar.comparability = postvar.comparability.makeAlias(origvar.name);
-
-        // Add to new_vis
-        new_vis[new_vis_index] = origvar;
-        new_vis_index++;
-      }
-      Assert.assertTrue(new_vis_index == exit_ppt.num_orig_vars);
-
-    }
-    exit_ppt.addVarInfos(new_vis);
-  }
-
+   
+  
   /**
      * This function is called to jump-start processing; it creates all
      * the views (and thus candidate invariants), but does not check
@@ -513,19 +469,10 @@ public class DaikonSimple {
               || ((i3 >= vi_index_min) && (i3 < vi_index_limit)));
           Assert.assertTrue((i1 <= i2) && (i2 <= i3));
           VarInfo var3 = ppt.var_infos[i3];
-          //      System.out.println("var3: " + var3);
-
-          //  System.out.println(ppt.name);
-          //  System.out.println(var1.name.name() + " " + var2.name.name() + " " + var3.name.name());
-
+        
           if (!is_slice_ok(var1, var2, var3, ppt)) {
-            //System.out.println("slice not ok");
-
             continue;
-          } else {
-
-            //System.out.println("slice ok");
-          }
+          } 
           PptSlice3 slice3 = new PptSlice3(ppt, var1, var2, var3);
           slice3.instantiate_invariants();
           ternary_views.add(slice3);
@@ -548,15 +495,6 @@ public class DaikonSimple {
    */
   public static boolean is_slice_ok(VarInfo var1, PptTopLevel ppt) {
 
-    //     if (Daikon.dkconfig_use_dynamic_constant_optimization && constants == null)
-    //     return (false);
-    //     if (ppt.is_constant (var1))
-    //     return (false);
-    //     if (ppt.is_missing (var1))
-    //     return (false);
-    //     if (!var1.isCanonical())
-    //     return (false);
-
     return (true);
   }
 
@@ -571,27 +509,6 @@ public class DaikonSimple {
     VarInfo var1,
     VarInfo var2,
     PptTopLevel ppt) {
-
-    //     // Both vars must be leaders
-    //     if (!var1.isCanonical() || !var2.isCanonical())
-    //     return (false);
-    //
-    //     // Check to see if the new slice would be over all constants
-    //     if (ppt.is_constant (var1) && ppt.is_constant (var2))
-    //     return (false);
-    //
-    //     // Each variable must not be always missing
-    //     if (ppt.is_missing (var1) || ppt.is_missing (var2))
-    //     return (false);
-    //
-    //     // Don't create a slice with the same variables if the equality
-    //     // set only contains 1 variable
-    //     // This is not turned on for now since suppressions need invariants
-    //     // of the form a == a even when a is the only item in the set.
-    //     if (false) {
-    //           if ((var1 == var2) && (var1.get_equalitySet_size() == 1))
-    //             return (false);
-    //     }
 
     return (true);
   }
@@ -617,28 +534,6 @@ public class DaikonSimple {
     PptTopLevel ppt) {
 
     Debug dlog = null;
-
-    // Each variable must not be always missing
-    //     if (ppt.is_missing (v1) || ppt.is_missing (v2) || ppt.is_missing (v3))
-    //     return (false);
-    //
-    //     // At least one variable must not be a constant
-    //     if (ppt.is_constant (v1) && ppt.is_constant(v2) && ppt.is_constant (v3))
-    //     return false;
-    //
-    //     // Each variable must be canonical (leader)
-    //     if (!v1.isCanonical()) {
-    //
-    //     return (false);
-    //     }
-    //     if (!v2.isCanonical()) {
-    //
-    //     return (false);
-    //     }
-    //     if (!v3.isCanonical()) {
-    //
-    //     return (false);
-    //     }
 
     // For now, each variable must also not be an array (ternary only)
     if (v1.rep_type.isArray()) {
@@ -675,41 +570,35 @@ public class DaikonSimple {
     Assert.assertTrue(
       v3.file_rep_type.isIntegral() || v3.file_rep_type.isFloat());
 
-    // Don't create a reflexive slice (all vars the same) if there are
-    // only two vars in the equality set
-    //         if ((v1 == v2) && (v2 == v3))
-    //         return (false);
-
-    // Don't create a partially reflexive slice (two vars the same) if there
-    // is only one variable in its equality set
-    //     if (false) {
-    //         if ((v1 == v2) || (v1 == v3) && (v1.get_equalitySet_size() == 1))
-    //           return (false);
-    //         if ((v2 == v3) && (v2.get_equalitySet_size() == 1))
-    //           return (false);
-    //     }
-
     return (true);
   }
 
   /** Class to track matching ppt and its values. */
-  static final class EnterCall {
+  static final class Call {
 
     public PptTopLevel ppt;
     public ValueTuple vt;
 
-    public EnterCall(PptTopLevel ppt, ValueTuple vt) {
+    public Call(PptTopLevel ppt, ValueTuple vt) {
 
       this.ppt = ppt;
       this.vt = vt;
     }
   }
+  
 
-  private static class SimpleProcessor extends FileIO.Processor {
+  public static class SimpleProcessor extends FileIO.Processor {
     PptMap all_ppts = null;
 
-    /** nonce -> EnterCall **/
+    /** nonce -> List[Call, Call] **/
     Map call_map = new LinkedHashMap();
+    
+    //flag for whether there is an out of order in the dtrace file (enter, object, exit)
+    boolean wait = false;
+    
+    //pointer to last nonce to know where to put the object ppt
+    Integer last_nonce = new Integer(-1);
+    
 
     /**
      * process the sample by checking it against each existing invariant
@@ -733,18 +622,41 @@ public class DaikonSimple {
       if (ppt.ppt_name.isEnterPoint()) {
         Assert.assertTrue(nonce != null);
         Assert.assertTrue(call_map.get(nonce) == null);
-        call_map.put(nonce, new EnterCall(ppt, vt));
+        List value = new ArrayList();
+        value.add(new Call(ppt, vt));
+        call_map.put(nonce, value);
+        last_nonce = nonce;
+        wait = true;
         return;
       }
+      
 
-      // If this is an exit point, process the saved enter point
+      //assumes enter always comes before exit
+      //assumes first entry in dtrace is an enter
+      //assumes order is enter, exit, object [constructors] or enter, object, exit, object but not sequentially
+      
+      
+      if(ppt.ppt_name.isObjectInstanceSynthetic()) {
+        if(wait) {
+          List value = (List)call_map.get(last_nonce);
+          Assert.assertTrue(value.size() == 1);		//there should only be an enter call 
+          value.add(new Call(ppt, vt));
+          call_map.put(last_nonce, value); 
+          return;
+        } 
+      }
+      
+      // If this is an exit point, process the saved enter (and sometimes object) point
       if (ppt.ppt_name.isExitPoint()) {
         Assert.assertTrue(nonce != null);
-        EnterCall ec = (EnterCall) call_map.get(nonce);
+        List value = (List) call_map.get(nonce);
         call_map.remove(nonce);
-        add(ec.ppt, ec.vt);
+        for(Iterator i = value.iterator(); i.hasNext();) {
+          Call ec = (Call)i.next();
+          add(ec.ppt, ec.vt);
+        }
+        wait = false;
       }
-
       add(ppt, vt);
     }
 
@@ -770,12 +682,12 @@ public class DaikonSimple {
         //ppt.instantiate_views_and_invariants();
       }
 
-      //manually inc the sample number because i don't use any of ppt's add methods
-      ppt.incSampleNumber();
-
+	  //manually inc the sample number because DaikonSimple does not use any of ppt's add methods
+		ppt.incSampleNumber();
+			
       // Loop through each slice
-      Iterator i = ppt.views_iterator();
-      while (i.hasNext()) {
+      
+        for(Iterator i = ppt.views_iterator(); i.hasNext(); ) {
         PptSlice slice = (PptSlice) i.next();
         List to_remove = new ArrayList();
         List result = new ArrayList();
@@ -792,7 +704,6 @@ public class DaikonSimple {
           // relevant
           //  If any variables are out of bounds, remove the invariants
           if (v.missingOutOfBounds()) {
-
             while (k.hasNext()) {
               Invariant inv = (Invariant) k.next();
               k.remove();
@@ -812,11 +723,8 @@ public class DaikonSimple {
         if (!missing) {
           while (k.hasNext()) {
             Invariant inv = (Invariant) k.next();
-
             InvariantStatus status = inv.add_sample(vt, 1);
-
             if (status == InvariantStatus.FALSIFIED) {
-              //to_remove.add(inv);
               k.remove();
 
             }
@@ -828,13 +736,11 @@ public class DaikonSimple {
           if (!vt.isMissing(j)) {
             ValueSet vs = ppt.value_sets[j];
             vs.add(vt.vals[j]);
-            // System.out.println("ValueSet(" + i + ") now has " + vs.size() + " elements");
           } else {
             ValueSet vs = ppt.value_sets[j];
-            // System.out.println("ValueSet(" + i + ") not added to, still has " + vs.size() + " elements");
           }
-        }
-        ppt.mbtracker.add(vt, 1);
+        }   
+          ppt.mbtracker.add(vt, 1);
 
       }
     }
