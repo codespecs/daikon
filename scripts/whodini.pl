@@ -56,7 +56,7 @@ sub slurpfile {
 
 sub slurpfiles {
     # returns the contents of the arguments (filenames) as files
-    my @files = $_;
+    my @files = @_;
     my @result = ();
     for my $file (@files) {
 	my @slurp = slurpfile($file);
@@ -85,7 +85,7 @@ sub notdir {
 sub reltmp {
     # returns the non-dir part of the filname, with $tmpdir prepended
     my $name = shift;
-    return $tmpdir . "/" . notdir($name);
+    return $tmpdir . "/" . join(' ', notdir($name));
 }
 
 sub writetmp {
@@ -102,15 +102,15 @@ sub copytmp {
     # returns the filename of a fresh file, which is a copy of the argument (filename)
     my $arg = shift;
     my $name = reltmp($arg);
-    die ("source filename does not exist") unless (-e $arg);
-    die ("temporary filename already exists") if (-e $name);
+    die ("source filename '$arg' does not exist") unless (-e $arg);
+    die ("temporary filename '$name' already exists") if (-e $name);
     copy($arg, $name);
     return $name;
 }
 
 # 0 We are given a (possibly-annotated) source file and a txt-esc file
 
-if ($ARGV[0] eq "-d") {
+if (($#ARGV >= 0) && ($ARGV[0] eq "-d")) {
     print STDERR "Debugging on\n";
     $debug = 1;
     shift @ARGV;
@@ -119,7 +119,7 @@ my $txtescfile = shift @ARGV;
 my @sourcefiles = @ARGV;
 
 {
-    my $ok = (-f $txtescfile);
+    my $ok = defined($txtescfile) && (-f $txtescfile);
     for my $sourcefile (@sourcefiles) {
 	$ok &&= (-f $sourcefile) && ($sourcefile =~ /\.java$/);
     }
@@ -158,17 +158,17 @@ while (1) {
 	push @sourcetmps, $sourcetmp;
     }
 
-    # 4 Merge the temp text file into the temp source file
+    # 4 Merge the temp text file into the temp source files
     print STDERR `cd $tmpdir && merge-esc.pl -s $txtesctmp`;
     for my $sourcetmp (@sourcetmps) {
 	unlink($sourcetmp);
 	rename("$sourcetmp-escannotated", $sourcetmp);
     }
 
-    # 5 Run ESC on the temp source file and slurp the results
+    # 5 Run ESC on the temp source files and slurp the results
     print ".";
     my $notdir_sourcetmp = join(" ", notdir(@sourcetmps));
-    my @checked_source = slurpfile($sourcetmps[0]);  # hack; only first file line numbers for now
+    my @checked_sources = slurpfiles(@sourcetmps);
     my @escoutput = `cd $tmpdir && escjava $notdir_sourcetmp`;
 
     # 6 Remove the two temporary files
@@ -200,19 +200,28 @@ while (1) {
 	print "\n";
 	# Create a mapping from line number of the checked source to
 	# the pre-whodini line number.
-	my @map = ("MAPPING ERROR");
-	my ($line_no, $orig_no);
-	for my $line (@checked_source) {
-	    $line_no++;
-	    $orig_no++ unless ($line =~ m|/\*nonce-\d{4}\*/|);
-	    $map[$line_no] = $orig_no;
+	my @map;
+	my $count = 1;
+	for my $checked_source_ref (@checked_sources) {
+	    my @checked_source = @{$checked_source_ref};
+	    my ($line_no, $orig_no);
+	    for my $line (@checked_source) {
+		$line_no++;
+		$orig_no++ unless ($line =~ m|/\*nonce-\d{4}\*/|);
+		$map[$count][$line_no] = $orig_no;
+	    }
+	    $count++;
 	}
 	# Replace line numbers in ESC output with the correct version
+	$count = 0;
 	grep {
-	    s|(\.java\:)(\d+)(\:)|$1$map[$2]$3|;
-	    s|(Suggestion \[)(\d+)(,\d+\]\:)|$1$map[$2]$3|;
-	    s|(at )(\d+)(,\d+ in)|$1$map[$2]$3|;
-	    s|( line )(\d+)(, )|$1$map[$2]$3|;
+	    if (m|^\w+ \.\.\.$|) {
+		$count++;
+	    }
+	    s|(\.java\:)(\d+)(\:)|$1$map[$count][$2]$3|;
+	    s|(Suggestion \[)(\d+)(,\d+\]\:)|$1$map[$count][$2]$3|;
+	    s|(at )(\d+)(,\d+ in)|$1$map[$count][$2]$3|;
+	    s|( line )(\d+)(, )|$1$map[$count][$2]$3|;
 	} @escoutput;
 	# Show ESC's output
 	print @escoutput;
