@@ -448,6 +448,29 @@ public class SubSequence
       debug.debug ("isObviousStatically: " + var1.name.name() + " in " + var2.name.name());
     }
 
+    VarInfo subvar, supervar;
+    if (var1_in_var2) {
+      subvar = var1;
+      supervar = var2;
+    } else {
+      subvar = var2;
+      supervar = var1;
+    }
+
+    // Uninteresting if this is of the form x[0..i] subsequence
+    // x[0..j].  Not necessarily obvious.
+    VarInfo subvar_super = subvar.isDerivedSubSequenceOf();
+    if (subvar_super == supervar) {
+      debug.debug ("  returning true because subvar_super == supervar");
+      return true;
+    }
+
+    VarInfo supervar_super = supervar.isDerivedSubSequenceOf();
+    if (subvar_super != null && subvar_super == supervar_super) {
+      debug.debug ("  returning true because subvar_super == supervar_super");
+      return true;
+    }
+
     if ((SubSequence.isObviousSubSequence(var1, var2))
         || (SubSequence.isObviousSubSequence(var2, var1))) {
       return true;
@@ -458,6 +481,7 @@ public class SubSequence
       // Doesn't make sense to consider subsequence if order doens't matter
       return true;
     }
+
     return super.isObviousStatically(vis);
   }
 
@@ -701,7 +725,7 @@ public class SubSequence
           // }
           if (ss_ppt != null) {
             SubSequence ss = SubSequence.find(ss_ppt);
-            if ((ss != null) && ss.enoughSamples() && ss.ppt.num_samples() > 0) {
+            if ((ss != null) && ss.justified()) {
               if (subvar_is_first ? ss.var1_in_var2 : ss.var2_in_var1) {
                 if (debug.isDebugEnabled()) {
                   debug.debug ("  true from A subseq B[0..n] " + supervar_part.name.name());
@@ -717,10 +741,12 @@ public class SubSequence
     return false;
   }
 
-  public boolean isSameFormula(Invariant other)
+  public boolean isSameFormula(Invariant inv)
   {
-    Assert.assertTrue(other instanceof SubSequence);
-    return true;
+    Assert.assertTrue(inv instanceof SubSequence);
+    SubSequence other = (SubSequence) inv;
+    return (this.var1_in_var2 == other.var1_in_var2 &&
+            this.var2_in_var1 == other.var2_in_var1);
   }
 
   private static SuppressionFactory[] suppressionFactories = null;

@@ -70,27 +70,21 @@ public final class TwoSequenceFactoryFloat {
       }
     }
     { // previously (pass == 2)
-      if (super1 == super2) {
-        Global.subexact_noninstantiated_invariants += 2;
-        Global.implied_false_noninstantiated_invariants += 2 + 2 * FunctionsFloat.unaryFunctionNames.length;
-      } else {
+      result.add(ReverseFloat.instantiate(ppt));
+      // SeqNonEqual.instantiate(ppt);
+      result.add(SubSequenceFloat.instantiate(ppt));
 
-        result.add(ReverseFloat.instantiate(ppt));
-        // SeqNonEqual.instantiate(ppt);
-        result.add(SubSequenceFloat.instantiate(ppt));
-
-        result.add(PairwiseFloatComparison.instantiate(ppt));
-        result.add(PairwiseLinearBinaryFloat.instantiate(ppt));
-        int numFunctions = FunctionsFloat.unaryFunctionNames.length;
-        for (int i=0; i<2; i++) {
-          boolean invert = (i==1);
-          VarInfo arg = (invert ? var1 : var2);
-          // Don't bother to check arg.isConstant():  we really want to
-          // know whether the elements of arg are constant.
-          for (int j=0; j<numFunctions; j++) {
-            result.add(PairwiseFunctionUnaryFloat.instantiate
-                       (ppt, FunctionsFloat.unaryFunctionNames[j], j, invert));
-          }
+      result.add(PairwiseFloatComparison.instantiate(ppt));
+      result.add(PairwiseLinearBinaryFloat.instantiate(ppt));
+      int numFunctions = FunctionsFloat.unaryFunctionNames.length;
+      for (int i=0; i<2; i++) {
+        boolean invert = (i==1);
+        VarInfo arg = (invert ? var1 : var2);
+        // Don't bother to check arg.isConstant():  we really want to
+        // know whether the elements of arg are constant.
+        for (int j=0; j<numFunctions; j++) {
+          result.add(PairwiseFunctionUnaryFloat.instantiate
+                     (ppt, FunctionsFloat.unaryFunctionNames[j], j, invert));
         }
       }
     }

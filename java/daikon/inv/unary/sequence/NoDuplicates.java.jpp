@@ -258,35 +258,41 @@ public class CLASSNAME
           return true;
         }
 
+        /** // [INCR]
         boolean this_var_first = (v1.varinfo_index < v2.varinfo_index);
         PptSlice2 slice_2seq = parent.findSlice_unordered(v1, v2);
         if (slice_2seq == null) {
           // System.out.println("NoDuplicates.isObviousImplied: no slice for " + v1.name + ", " + v2.name);
-        } else  {
+        } else if (slice_2seq.num_samples() > 0) {
           // slice_2seq != null
           SUBSEQUENCE ss = SUBSEQUENCE.find(slice_2seq);
           if (ss == null) {
             // System.out.println("NoDuplicates.isObviousImplied: no SubSequence for " + v1.name + ", " + v2.name);
-          } else {
+          } else if (ss.justified()) {
             // System.out.println("NoDuplicates.isObviousImplied: found SubSequence: " + ss.repr());
             if (this_var_first
                 ? ss.var1_in_var2
                 : ss.var2_in_var1) {
+              debug.debug ("Returning true because: " + ss.repr());
               return true;
             }
           }
         }
+        **/ // [INCR]
       }
     }
 
     // If the sequence is sorted by < or >, then there are obviously no duplicates
 
-    Iterator invs = ppt.invs.iterator();
-    while (invs.hasNext()) {
-      Invariant inv = (Invariant)invs.next();
-      if ((inv instanceof EltwiseIntLessThan) || (inv instanceof EltwiseFloatLessThan) ||
-          (inv instanceof EltwiseIntGreaterThan) || (inv instanceof EltwiseFloatGreaterThan))
-        return true;
+    PptSlice slice = this.ppt.parent.findSlice_unordered (vis);
+    if (slice != null) {
+      Iterator invs = slice.invs.iterator();
+      while (invs.hasNext()) {
+        Invariant inv = (Invariant)invs.next();
+        if ((inv instanceof EltwiseIntLessThan) || (inv instanceof EltwiseFloatLessThan) ||
+            (inv instanceof EltwiseIntGreaterThan) || (inv instanceof EltwiseFloatGreaterThan))
+          return true;
+      }
     }
 
     return super.isObviousDynamically(vis);

@@ -404,7 +404,7 @@ public final class MemberFloat
         SuppressionLink sl = byTemplate (template, inv);
         if (sl != null) {
           String comparator = ((PairwiseIntComparison) template.results[0]).getComparator();
-          if (comparator.indexOf ("=") != -1 ||
+          if (comparator.indexOf ("==") != -1 ||
               comparator.indexOf ("?") != -1) {
             return sl;
           }

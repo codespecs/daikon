@@ -279,7 +279,7 @@ public final class EltNonZero
           SubSequence ss = SubSequence.find(slice_2seq);
           if (ss == null) {
             // System.out.println("EltNonZero.isObviousImplied: no SubSequence for " + v1.name + ", " + v2.name);
-          } else {
+          } else if (ss.justified()) {
             // System.out.println("EltNonZero.isObviousImplied: found SubSequence: " + ss.repr());
             if (this_var_first
                 ? ss.var1_in_var2

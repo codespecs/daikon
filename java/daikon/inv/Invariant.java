@@ -1455,13 +1455,13 @@ public abstract class Invariant
       int result = inv1.format().compareTo(inv2.format());
 
       Assert.assertTrue(result != 0
-                        // , "isSameInvariant() returned false "
-                        // + "(isSameFormula returned " + inv1.isSameFormula(inv2) + "), "
-                        // + "but format().compareTo() returned 0:\n"
-                        // + "  " + inv1.format() + " "  + inv1.repr() + "\n"
-                        // + "    " + inv1.ppt.parent.name + "\n"
-                        // + "  " + inv2.format() + " "  + inv2.repr() + "\n"
-                        // + "    " + inv1.ppt.parent.name + "\n"
+                        , "isSameInvariant() returned false "
+                        + "(isSameFormula returned " + inv1.isSameFormula(inv2) + "), "
+                        + "but format().compareTo() returned 0:\n"
+                        + "  " + inv1.format() + " "  + inv1.repr() + "\n"
+                        + "    " + inv1.ppt.parent.name + "\n"
+                        + "  " + inv2.format() + " "  + inv2.repr() + "\n"
+                        + "    " + inv1.ppt.parent.name + "\n"
                         );
 
       return result;

@@ -15,6 +15,12 @@ public class SuppressionFilter extends InvariantFilter {
   }
 
   boolean shouldDiscardInvariant( Invariant inv ) {
-    return inv.getSuppressor() != null;
+    if (inv.getSuppressor() != null) {
+      if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+        PrintInvariants.debugFiltering.debug ("  suppressed by: " + inv.getSuppressor());
+      }
+      return true;
+    }
+    return false;
   }
 }
