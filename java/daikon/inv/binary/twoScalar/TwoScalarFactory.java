@@ -27,22 +27,17 @@ public final class TwoScalarFactory {
 
     Vector result = new Vector();
     if (pass == 1) {
-      result.add(IntComparison.instantiate(ppt));
+      result.add(IntEqual.instantiate(ppt));
     } else if (pass == 2) {
       if (var1.isConstant() || var2.isConstant()) {
         Global.subexact_noninstantiated_invariants += 2;
 	Global.subexact_noninstantiated_invariants += Functions.unaryFunctions.length;
       } else {
-	// Skip NonEqual if there is already a > or linear
-	// relationship over the variables; a>b implies a!=b.
-	IntComparison ic = IntComparison.find(ppt);
-	if ((ic != null) && ic.enoughSamples() && (! ic.isExact())) {
-	  // System.out.println("Torpedoing NonEqual on the basis of " + ic.format());
-	  Global.subexact_noninstantiated_invariants += 1;
-	} else {
-	  NonEqual maybe = NonEqual.instantiate(ppt);
-	  if (maybe != null) result.add(maybe);
-	}
+        result.add(IntNonEqual.instantiate(ppt));
+        result.add(IntLessThan.instantiate(ppt));
+        result.add(IntLessEqual.instantiate(ppt));
+        result.add(IntGreaterThan.instantiate(ppt));
+        result.add(IntGreaterEqual.instantiate(ppt));
 	// Skip LineayBinary and FunctionUnary unless vars are integral
 	if (!integral) {
 	  Global.subexact_noninstantiated_invariants += 1;
