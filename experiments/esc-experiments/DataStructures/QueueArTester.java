@@ -40,7 +40,9 @@ public class QueueArTester
   public void dequeue()
   { observe(); q.dequeue(); observe(); }
   public void enqueue(int x)
-  { observe(); try { q.enqueue(createItem(x)); } catch (Exception e) { } observe(); }
+  { enqueue(createItem(x)); }
+  public void enqueue(Object o)
+  { observe(); try { q.enqueue(o); } catch (Exception e) { } observe(); }
 
   public void repEnqueue(int n)
   {
@@ -80,8 +82,21 @@ public class QueueArTester
     }
   }
 
+  public void variedTypes()
+  {
+    System.out.println("varied");
+    doNew(10);
+    enqueue("Hello world.");
+    enqueue(new Double(5.5));
+    enqueue(new Integer(10));
+    enqueue(new StringBuffer("Hello again"));
+    enqueue(new ArrayList());
+    enqueue(new LinkedList());
+  }
+
   public void run()
   {
+    variedTypes();
     fillAndEmpty(0);
     fillAndEmpty(1);
     fillAndEmpty(2);
