@@ -134,12 +134,12 @@ public class LOWERBOUNDCORE
 
   // MIN1 LT MIN2 LT MIN3
   public PRIMITIVE MIN1 = LONGMAX;
-  int NUM_MIN1 = 0;
-  PRIMITIVE MIN2 = LONGMAX;
-  int NUM_MIN2 = 0;
-  PRIMITIVE MIN3 = LONGMAX;
-  int NUM_MIN3 = 0;
-  PRIMITIVE MAX = LONGMIN;
+  public int NUM_MIN1 = 0;
+  public PRIMITIVE MIN2 = LONGMAX;
+  public int NUM_MIN2 = 0;
+  public PRIMITIVE MIN3 = LONGMAX;
+  public int NUM_MIN3 = 0;
+  public PRIMITIVE MAX = LONGMIN;
 
   int samples = 0;
 
