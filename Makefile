@@ -25,7 +25,7 @@ EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/dfec $(E
 DFEJ_DIR := $(INV_DIR)/dfej
 
 DIST_DIR := $(MERNST_DIR)/www/daikon/dist
-DIST_DIR_FILES := daikon-source.tar.gz daikon-jar.tar.gz daikon.html gui.html
+DIST_DIR_FILES := daikon-source.tar.gz daikon-jar.tar.gz daikon.html gui.html daikon.jar
 # For really big files
 # DIST_DIR_2 := /projects/se/people/mernst/www
 DIST_DIR_2 := $(DIST_DIR)
@@ -33,7 +33,7 @@ DIST_DIR_2 := $(DIST_DIR)
 # for "chgrp"
 INV_GROUP := invariants
 
-RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name dfej -o -name daikon-java -o -name daikon-output -o -name core -o -name '*.bak' -o -name '.nfs*' -o -name '#*#' \) -print`
+RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name dfej -o -name daikon-java -o -name daikon-output -o -name core -o -name '*.bak' -o -name '.nfs*' -o -name '\#*\#' \) -print`
 
 
 ## Examples of better ways to get the lists:
