@@ -32,6 +32,7 @@ public final class OneOfString  extends SingleString  implements OneOf {
     elts = new String [LIMIT];
 
     num_elts = 0;
+
   }
 
   public static OneOfString  instantiate(PptSlice ppt) {
@@ -81,10 +82,13 @@ public final class OneOfString  extends SingleString  implements OneOf {
   public String format() {
     if (no_invariant || (num_elts == 0) || (! justified()))
       return null;
-    if (num_elts == 1)
+    if (num_elts == 1) {
+
       return var().name  + " = \"" + UtilMDE.quote( elts[0] ) + "\"" ;
-    else
+
+    } else {
       return var().name  + " one of " + subarray_rep();
+    }
   }
 
   public void add_modified(String  v, int count) {
@@ -98,6 +102,7 @@ public final class OneOfString  extends SingleString  implements OneOf {
       destroy();
       return;
     }
+
     elts[num_elts] = v;
     num_elts++;
 

@@ -32,6 +32,7 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
     elts = new String [LIMIT];
 
     num_elts = 0;
+
   }
 
   public static EltOneOfString  instantiate(PptSlice ppt) {
@@ -81,10 +82,13 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
   public String format() {
     if (no_invariant || (num_elts == 0) || (! justified()))
       return null;
-    if (num_elts == 1)
+    if (num_elts == 1) {
+
       return var().name + " elements = \"" + UtilMDE.quote( elts[0] ) + "\"" ;
-    else
+
+    } else {
       return var().name + " elements one of " + subarray_rep();
+    }
   }
 
   public void add_modified(String[] a, int count) {
@@ -98,6 +102,7 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
       destroy();
       return;
     }
+
     elts[num_elts] = v;
     num_elts++;
 

@@ -32,6 +32,7 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
     elts = new long [LIMIT];
 
     num_elts = 0;
+
   }
 
   public static EltOneOf  instantiate(PptSlice ppt) {
@@ -83,10 +84,13 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
   public String format() {
     if (no_invariant || (num_elts == 0) || (! justified()))
       return null;
-    if (num_elts == 1)
+    if (num_elts == 1) {
+
       return var().name + " elements = " +  elts[0]  ;
-    else
+
+    } else {
       return var().name + " elements one of " + subarray_rep();
+    }
   }
 
   public void add_modified(long[] a, int count) {
@@ -100,6 +104,7 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
       destroy();
       return;
     }
+
     elts[num_elts] = v;
     num_elts++;
 

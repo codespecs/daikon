@@ -33,6 +33,7 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
                                 // (in the general online case, not worth interning)
 
     num_elts = 0;
+
   }
 
   public static OneOfStringSequence  instantiate(PptSlice ppt) {
@@ -84,10 +85,13 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
   public String format() {
     if (no_invariant || (num_elts == 0) || (! justified()))
       return null;
-    if (num_elts == 1)
+    if (num_elts == 1) {
+
       return var().name  + " = " + ArraysMDE.toString( elts[0] ) ;
-    else
+
+    } else {
       return var().name  + " one of " + subarray_rep();
+    }
   }
 
   public void add_modified(String[]  v, int count) {
@@ -101,6 +105,7 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
       destroy();
       return;
     }
+
     elts[num_elts] = v;
     num_elts++;
 
