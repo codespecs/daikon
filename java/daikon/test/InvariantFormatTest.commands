@@ -26,7 +26,7 @@ Goal (esc): warning: method daikon.inv.unary.scalar.Modulus.format(OutputFormat:
 Goal (ioa): mod(a, 3) = 1
 Goal (jml): a % 3 == 1
 Goal (dbc): a % 3 == 1
-Goal (simplify): warning: method daikon.inv.unary.scalar.Modulus.format(OutputFormat:Simplify) needs to be implemented: a == 1  (mod 3)
+Goal (simplify): (EQ (MOD |a| 3) 1)
 1
 4
 7
