@@ -16,3 +16,54 @@
 	(autoload 'cvs-update "pcl-cvs" nil t) ; Emacs 20
       (autoload 'cvs-update "pcvs" nil t))) ; Emacs 21
 
+
+(defun daikon-tags-table ()
+  "Use the Daikon TAGS table."
+  (interactive)
+  (visit-tags-table (substitute-in-file-name "$inv/java/TAGS")))
+(fset 'tags-table-daikon 'daikon-tags-table)
+
+(defun daikon-info ()
+  "Browse the Daikon manual, using Info."
+  (interactive)
+  (if (and (file-newer-than-file-p
+	    (substitute-in-file-name "$inv/doc/daikon.texinfo")
+	    (substitute-in-file-name "$inv/doc/daikon.info"))
+	   (y-or-n-p "daikon.info is out of date; re-make it? "))
+      (daikon-remake-manual t))
+  (let ((info-buffer (get-buffer "*info*")))
+    (if (and (buffer-live-p info-buffer)
+	     (with-current-buffer info-buffer
+	       (save-match-data
+		 (string-match "/daikon.info$" Info-current-file))))
+	(pop-to-buffer info-buffer)
+      (info (substitute-in-file-name "$inv/doc/daikon.info")))))
+
+(defun daikon-remake-manual (&optional force)
+  "Remake the Daikon manual.
+Does nothing if a compilation is already running unless `force' is non-nil."
+  (interactive)
+  (require 'compile)
+  (if (or force (not (compilation-is-running)))
+      (let ((default-directory (substitute-in-file-name "$inv/doc/")))
+	(save-some-buffers (not compilation-ask-about-save) nil)
+	(compile-internal "make -k " "No more errors" "make-daikon-info"))))
+
+(defun compilation-is-running ()
+  (let ((compilation-is-running nil))
+    (let ((name-of-mode "Compilation") outbuf name-function)
+      ;; from `compile-internal' (with minmal indentation and other changes)
+      (setq outbuf
+	    (get-buffer-create
+	     (funcall (or name-function compilation-buffer-name-function
+			  (function (lambda (mode)
+				      (concat "*" (downcase mode) "*"))))
+		      name-of-mode)))
+      (set-buffer outbuf)
+      (let ((comp-proc (get-buffer-process (current-buffer))))
+	(if comp-proc
+	    (if (or (not (eq (process-status comp-proc) 'run))
+		    (setq compilation-is-running t))
+		nil))))
+    compilation-is-running))
+
