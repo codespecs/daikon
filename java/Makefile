@@ -70,7 +70,7 @@ default: all
 all:	all_directly junit
 
 ## In general, don't use this; it misses some files
-all_via_daikon: Daikon.class Runtime.class Diff.class
+all_via_daikon: daikon/Daikon.class daikon/Runtime.class daikon/Diff.class
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
 all_directly: ${AUTO_GENERATED_FILES} ajax
@@ -201,6 +201,10 @@ doc-jdk-lookup: doc
 	jdk-add-munged-anchor-names-no-bak `find doc -name '*.html'`
 	echo "Run jdk-index-to-alist > ~/emacs/jdk-index.el"
 
+doc-dkconfig:
+	javadoc -doclet daikon.config.ParameterDoclet \
+		--texinfo ../doc/config-options.texinfo \
+		$(JAVADOC_PACKAGES)
 
 ## For debugging the Makefile.
 showvars:
