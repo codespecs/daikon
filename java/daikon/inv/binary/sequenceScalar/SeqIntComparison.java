@@ -96,7 +96,7 @@ public final class SeqIntComparison extends SequenceScalar {
   }
 
   public void add_modified(long [] a, long x, int count) {
-    for (int i=1; i<a.length; i++) {
+    for (int i=0; i<a.length; i++) {
       core.add_modified(a[i], x, count);
       if (no_invariant)
         return;
