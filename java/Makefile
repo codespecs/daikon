@@ -345,7 +345,7 @@ veryclean: very_clean
 very-clean: very_clean
 
 very_clean: dist_clean
-	-rm -f ${AUTO_GENERATED_FILES}
+	-rm -f ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 
 run:	all
 	java daikon.Daikon
