@@ -258,9 +258,9 @@ daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_
 	# jar xf java/lib/java-getopt.jar -C /tmp/daikon-jar
 	# jar xf java/lib/junit.jar -C /tmp/daikon-jar
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/jakarta-oro.jar)
-	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/log4j.jar)
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/java-getopt.jar)
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar)
+	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/log4j.jar)
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/ajax.jar)
 	(cd java; cp -fP --target-directory=/tmp/daikon-jar $(DAIKON_RESOURCE_FILES))
 	cd /tmp/daikon-jar && jar cf $@ *
@@ -338,14 +338,22 @@ daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DA
 	rm -rf /tmp/daikon/java/utilMDE/doc
 	## getopt
 	tar zxf java/lib/java-getopt-1.0.8.tar.gz -C /tmp/daikon/java
+	## Apache packages
+	mkdir /tmp/daikon/java/org
+	mkdir /tmp/daikon/java/org/apache
 	## OROMatcher
 	# Old version:
 	#   tar zxf java/lib/OROMatcher-1.1.tar.gz -C /tmp/daikon/java
 	#   (cd /tmp/daikon/java; ln -s OROMatcher-1.1.0a/com .)
 	tar zxf java/lib/jakarta-oro-2.0.3.tar.gz -C /tmp/daikon/java
-	(cd /tmp/daikon/java; ln -s jakarta-oro-2.0.3/src/java/org .)
+	(cd /tmp/daikon/java; mv jakarta-oro-2.0.3/src/java/org/apache/oro org/apache/oro)
+	(cd /tmp/daikon/java/jakarta-oro-2.0.3/src/java/org/apache; ln -s ../../../../../org/apache/oro .)
 	# ORO distribution lacks .class files; Daikon dist should have them.
 	(cd /tmp/daikon/java; javac `find org/apache/oro -name '*.java' -print`)
+	## Log4j is a loss; can't include source because its build 
+	## configuration is so weird that it cannot be easily integrated.
+	mkdir /tmp/daikon/java/lib
+	cp -p java/lib/log4j.jar /tmp/daikon/java/lib
 	## JUnit
 	# This is wrong:
 	#   unzip java/lib/junit3.7.zip -d /tmp/daikon/java
