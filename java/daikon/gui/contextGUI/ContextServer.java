@@ -269,7 +269,7 @@ public class ContextServer
 		// line buffer for reading from file.
 		String line = null;
 
-		// temp varaible for holding the position
+		// temp variable for holding the position
 		// of things found in strings.
 		int place_find = 0;
 

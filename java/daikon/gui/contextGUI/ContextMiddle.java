@@ -175,7 +175,7 @@ public class ContextMiddle implements ContextLinker
 	}
 
 	// This gets the variables one at a time, defined by the set
-	// varaible iterator function.
+	// variable iterator function.
 	public String getVariables()
 	{
 		if (var_iter == null)
