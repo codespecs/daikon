@@ -372,30 +372,30 @@ public final class CLASSNAME
       // if we've seen enough values to create the equation
       if (values_seen == MINTRIPLES) {
 
-		//try to fit the points to a line first
-		linearIntervention(def_points);
+    //try to fit the points to a line first
+    linearIntervention(def_points);
 
-		//if line can not be formed, try to form a plane
-		if(line_flag == -1) {
-		InvariantStatus stat = planarIntervention(def_points);
-    	return stat;
+    //if line can not be formed, try to form a plane
+    if(line_flag == -1) {
+    InvariantStatus stat = planarIntervention(def_points);
+      return stat;
 
-      	} else {
+        } else {
 
-      	// points fit in a line
-      	return InvariantStatus.NO_CHANGE;
-      	}
+        // points fit in a line
+        return InvariantStatus.NO_CHANGE;
+        }
       } else  {
 
       // still haven't still enough values
       return InvariantStatus.NO_CHANGE;
-    	}
+      }
     } else {
 
-	//at this point either a line or a plane must have been formed
+  //at this point either a line or a plane must have been formed
 
 
-	// if line already broken, fit to plane equation
+  // if line already broken, fit to plane equation
     if(line_flag == -1) {
       // If the new value doesn't fit the equation
       if (!EQUAL (-c*z, a*x+b*y+d)) {
@@ -418,28 +418,28 @@ public final class CLASSNAME
       }
     } else {
 
-    	// try to fit to the current line
-    	if(!try_points(x, y, z)) {
-    		//put the crucial point in, so that it can be tested against the new line
-    		def_points[MINTRIPLES-1] = new Point (x, y, z);
+      // try to fit to the current line
+      if(!try_points(x, y, z)) {
+        //put the crucial point in, so that it can be tested against the new line
+        def_points[MINTRIPLES-1] = new Point (x, y, z);
 
-    		// try to fit the points onto a line again (not sure if this
-    		// is really necessary, maybe the fuzzy equals really does
-    		// make a difference)
-    		linearIntervention(def_points);
-    	}
+        // try to fit the points onto a line again (not sure if this
+        // is really necessary, maybe the fuzzy equals really does
+        // make a difference)
+        linearIntervention(def_points);
+      }
 
-		// new point has broken the line, try to fit to a plane
-    	if(line_flag == -1) {
-    	InvariantStatus stat = planarIntervention(def_points);
-    	return stat;
-    	} else {
+    // new point has broken the line, try to fit to a plane
+      if(line_flag == -1) {
+      InvariantStatus stat = planarIntervention(def_points);
+      return stat;
+      } else {
 
-    		// fuzzy equals does make a difference
-    		return InvariantStatus.NO_CHANGE;
-    	}
+        // fuzzy equals does make a difference
+        return InvariantStatus.NO_CHANGE;
+      }
 
-    	}
+      }
 
     }
     //should never get here because values_seen is either < or >= MINTRIPLES
@@ -453,22 +453,22 @@ public final class CLASSNAME
    * @param def_point  Array of points.  Must have at least 3 elements.
    *
    * @return the status of the invariant
-   *		 (whether the plane fitting was successful)
+   *     (whether the plane fitting was successful)
    */
-	private InvariantStatus planarIntervention(Point[] def_point) {
+  private InvariantStatus planarIntervention(Point[] def_point) {
 
-	// Find the three points with the maximum separation
+  // Find the three points with the maximum separation
         maxsep_triples (def_point);
         if (def_point[0] == null) {
-        	// this should never be the problem since we check for a line
-        	// first
+          // this should never be the problem since we check for a line
+          // first
           return InvariantStatus.FALSIFIED;
         } else {
 
-		wrapper.log("Definitive point1: " + def_point[0]);
-		wrapper.log("Definitive point2: " + def_point[1]);
-		wrapper.log("Definitive point3: " + def_point[2]);
-		}
+    wrapper.log("Definitive point1: " + def_point[0]);
+    wrapper.log("Definitive point2: " + def_point[1]);
+    wrapper.log("Definitive point3: " + def_point[2]);
+    }
 
         // calculate the coefficients of the equation (a, b, c, d)
         double[] coef = calc_tri_linear (def_point);
@@ -490,7 +490,7 @@ public final class CLASSNAME
             (Math.abs(c) >= Double.MAX_VALUE) ||
             Double.isNaN(a) || Double.isNaN(b) || Double.isNaN(c)) {
 
-			wrapper.log("problematic coefficient: invariant falsified");
+      wrapper.log("problematic coefficient: invariant falsified");
           return InvariantStatus.FALSIFIED;
         }
 
@@ -522,9 +522,9 @@ public final class CLASSNAME
             def_point[ii] = null;
         }
 
-		//if it passes all the checks, then no change to the Invariant
-		return InvariantStatus.NO_CHANGE;
-	}
+    //if it passes all the checks, then no change to the Invariant
+    return InvariantStatus.NO_CHANGE;
+  }
 
 
  /**
@@ -539,38 +539,38 @@ public final class CLASSNAME
    private void linearIntervention(Point[] def_point) {
 
 
-	// make a copy of the array so that the points don't get clobbered because
-	// if a line fails to form; the calc_tri_linear code will need an
-	// unmodified copy of def_point
+  // make a copy of the array so that the points don't get clobbered because
+  // if a line fails to form; the calc_tri_linear code will need an
+  // unmodified copy of def_point
 
-		Point[] dummy = new Point[def_point.length];
-		for (int i = 0; i < def_point.length; i++)
-			dummy[i] = def_point[i];
+    Point[] dummy = new Point[def_point.length];
+    for (int i = 0; i < def_point.length; i++)
+      dummy[i] = def_point[i];
 
-		// find the max separation points
-		maxsep_doubles(dummy);
+    // find the max separation points
+    maxsep_doubles(dummy);
 
-		//dummy[0] could be null when all the points are NaN
-		if(dummy[0] != null) {
-		//find the equation (constants and coeffs now stored in constants[])
-		calc_bi_linear(dummy);
+    //dummy[0] could be null when all the points are NaN
+    if(dummy[0] != null) {
+    //find the equation (constants and coeffs now stored in constants[])
+    calc_bi_linear(dummy);
 
 
-		//check the other points against the constants and coefficients
-		for(int i = 0; i < def_point.length; i++) {
-			//try to fit the current point to the current line
-			boolean ok = try_points(def_point[i].x, def_point[i].y, def_point[i].z);
+    //check the other points against the constants and coefficients
+    for(int i = 0; i < def_point.length; i++) {
+      //try to fit the current point to the current line
+      boolean ok = try_points(def_point[i].x, def_point[i].y, def_point[i].z);
 
-			if(!ok) {
+      if(!ok) {
 
-			line_flag = -1;
-			for(int j = 0; j < constants.length; j++)
-				constants[j] = -999;		//reset constants array
-			break;
-			}
-		}
-		}
-	}
+      line_flag = -1;
+      for(int j = 0; j < constants.length; j++)
+        constants[j] = -999;    //reset constants array
+      break;
+      }
+    }
+    }
+  }
 
 
 
@@ -582,49 +582,49 @@ public final class CLASSNAME
    * @param x,y,z  x,y,z components of the point.
    *
    */
-	private boolean try_points(double x, double y, double z) {
+  private boolean try_points(double x, double y, double z) {
 
-	 switch (line_flag) {
-	 case 0:
-	 		if(!EQUAL(constants[0], x) || !EQUAL(constants[1], y)) {
-	 			return false;
-	 		} else
-	 			return true;
-	 case 1:
-	 		if(!EQUAL(constants[0], x) || !EQUAL(constants[1], z)){
-	 			return false;
-	 		} else
-	 			return true;
-	 case 2:
-	 		if(!EQUAL(constants[0], y) || !EQUAL(constants[1], z)) {
-	 			return false;
-	 		} else
-	 			return true;
-	 case 3:
-	 		if(!EQUAL(constants[0], x) || !EQUAL(z, constants[1] * y + constants[2])) {
-	 			return false;
-	 		} else
-	 			return true;
-	 case 4:
-	 		if(!EQUAL(constants[0], y) || !EQUAL(z, constants[1] * x + constants[2])) {
-	 			return false;
-	 		} else
-	 			return true;
-	 case 5:
-	 		if(!EQUAL(constants[0], z) || !EQUAL(y, constants[1] * x + constants[2])) {
-	 			return false;
-	 		} else
-	 			return true;
-	 case 6:
+   switch (line_flag) {
+   case 0:
+      if(!EQUAL(constants[0], x) || !EQUAL(constants[1], y)) {
+        return false;
+      } else
+        return true;
+   case 1:
+      if(!EQUAL(constants[0], x) || !EQUAL(constants[1], z)){
+        return false;
+      } else
+        return true;
+   case 2:
+      if(!EQUAL(constants[0], y) || !EQUAL(constants[1], z)) {
+        return false;
+      } else
+        return true;
+   case 3:
+      if(!EQUAL(constants[0], x) || !EQUAL(z, constants[1] * y + constants[2])) {
+        return false;
+      } else
+        return true;
+   case 4:
+      if(!EQUAL(constants[0], y) || !EQUAL(z, constants[1] * x + constants[2])) {
+        return false;
+      } else
+        return true;
+   case 5:
+      if(!EQUAL(constants[0], z) || !EQUAL(y, constants[1] * x + constants[2])) {
+        return false;
+      } else
+        return true;
+   case 6:
            if(!EQUAL(y, constants[0] * x + constants[1]) || !EQUAL(z, constants[2] * x + constants[3])) {
-	 			return false;
-	 		} else
-	 			return true;
+        return false;
+      } else
+        return true;
         }
 
         //if it gets here; line_flag must be -1
-	 	return false;
-	}
+    return false;
+  }
 
  /**
    * Calculates the two points that have the maximum separation in pa and
@@ -683,33 +683,33 @@ public final class CLASSNAME
    * @param points  array of points to use to calculate the coefficents.  Only
    *                the first two points are used
    */
-   	//
-	//	the line can fall under 3 categories
     //
-	//	1. parallel to an axis which means that 2 of the following is true
-	//	x = A
-	//	y = B
-	//	z = C
-	//
-	//	and the two that are true form a line in the 3rd dimension (the one that's
-	//	not constant)
-	//
-	//	2. parallel to the plane of an axis, which means that one of the following
-	//	is true
-	//	x = A
-	//	y = B
-	//	z = C
-	//
-	//	and the line is just a line in the non-constant variable plane projected
-	//	onto the third dimension
-	//	and the equation for that line is:
-	//	x = A [supposing that x is the constant one]
-	//	y = Bz + C
-	//
-	//
-	//	3. none of the above and the equation of the line is just:
-	//	y = Ax + B
-	//	z = Cx + D
+  //  the line can fall under 3 categories
+    //
+  //  1. parallel to an axis which means that 2 of the following is true
+  //  x = A
+  //  y = B
+  //  z = C
+  //
+  //  and the two that are true form a line in the 3rd dimension (the one that's
+  //  not constant)
+  //
+  //  2. parallel to the plane of an axis, which means that one of the following
+  //  is true
+  //  x = A
+  //  y = B
+  //  z = C
+  //
+  //  and the line is just a line in the non-constant variable plane projected
+  //  onto the third dimension
+  //  and the equation for that line is:
+  //  x = A [supposing that x is the constant one]
+  //  y = Bz + C
+  //
+  //
+  //  3. none of the above and the equation of the line is just:
+  //  y = Ax + B
+  //  z = Cx + D
 
 
   private void calc_bi_linear(Point[] points) {
@@ -717,52 +717,52 @@ public final class CLASSNAME
     Point p1 = points[1];
 
   if((p0.x == p1.x) && (p0.y == p1.y) && (p0.z != p1.z)) {
-  	//x = A, y = B
-  	line_flag = 0;
-  	constants[0] = p0.x;
-  	constants[1] = p0.y;
-  	}
+    //x = A, y = B
+    line_flag = 0;
+    constants[0] = p0.x;
+    constants[1] = p0.y;
+    }
   if((p0.x == p1.x) && (p0.z == p1.z) && (p0.y != p1.y)) {
-  	//x = A, z = C
-  	line_flag = 1;
-  	constants[0] = p0.x;
-  	constants[1] = p0.z;
-  	}
+    //x = A, z = C
+    line_flag = 1;
+    constants[0] = p0.x;
+    constants[1] = p0.z;
+    }
   if((p0.y == p1.y) && (p0.z == p1.z) && (p0.x != p1.x)) {
-  	//y = B, z = C
-  	line_flag = 2;
-  	constants[0] = p0.y;
-  	constants[1] = p0.z;
-  	}
+    //y = B, z = C
+    line_flag = 2;
+    constants[0] = p0.y;
+    constants[1] = p0.z;
+    }
   if((p0.x == p1.x) && (p0.y != p1.y) && (p0.z != p1.z)) {
-  	//x = A, z = By + C
-  	line_flag = 3;
-  	constants[0] = p0.x;
+    //x = A, z = By + C
+    line_flag = 3;
+    constants[0] = p0.x;
     constants[1] = (p1.z-p0.z)/(double) (p1.y-p0.y);
     constants[2] = (p0.z*p1.y-p0.y*p1.z)/(double)(p1.y-p0.y);
-  	}
+    }
   if((p0.y == p1.y) && (p0.x != p1.x) && (p0.z != p1.z)) {
-  	//y = B, z = Ax + C
-  	line_flag = 4;
-  	constants[0] = p0.y;
+    //y = B, z = Ax + C
+    line_flag = 4;
+    constants[0] = p0.y;
     constants[1] = (p1.z-p0.z)/(double) (p1.x-p0.x);
     constants[2] = (p0.z*p1.x-p0.x*p1.z)/(double)(p1.x-p0.x);
-  	}
+    }
   if((p0.z == p1.z) && (p0.x != p1.x) && (p0.y != p1.y)) {
-  	//z = C, y = Ax + B
-  	line_flag = 5;
-  	constants[0] = p0.z;
-	constants[1] = (p1.y-p0.y)/(double) (p1.x-p0.x);
+    //z = C, y = Ax + B
+    line_flag = 5;
+    constants[0] = p0.z;
+  constants[1] = (p1.y-p0.y)/(double) (p1.x-p0.x);
     constants[2] = (p0.y*p1.x-p0.x*p1.y)/(double)(p1.x-p0.x);
-  	}
+    }
   if((p0.x != p1.x) && (p0.y != p1.y) && (p0.z != p1.z)) {
-  	//y = Ax + B, z = Cx + D
-  	line_flag = 6;
-  	constants[0] = (p1.y-p0.y)/(double) (p1.x-p0.x);
+    //y = Ax + B, z = Cx + D
+    line_flag = 6;
+    constants[0] = (p1.y-p0.y)/(double) (p1.x-p0.x);
     constants[1] = (p0.y*p1.x-p0.x*p1.y)/(double)(p1.x-p0.x);
     constants[2] = (p1.z-p0.z)/(double) (p1.x-p0.x);
     constants[3] = (p0.z*p1.x-p0.x*p1.z)/(double)(p1.x-p0.x);
-  	}
+    }
   }
 
 
@@ -885,9 +885,9 @@ public final class CLASSNAME
    // points, to avoid duplicating work
    double[][] separations = new double[pa.length][pa.length];
    for (int i=0; i<pa.length-1; i++) {
-	 for (int j=i+1; j<pa.length; j++) {
-	   separations[i][j] = separation(pa[i], pa[j]);
-	 }
+   for (int j=i+1; j<pa.length; j++) {
+     separations[i][j] = separation(pa[i], pa[j]);
+   }
    }
 
    // max_separation is the separation metric for the most separated
@@ -900,21 +900,21 @@ public final class CLASSNAME
    double max_separation = Double.MIN_VALUE;
 
    for (int i=0; i < pa.length-2; i++) {
-	 for (int j=i+1; j < pa.length-1; j++) {
-	   double sep_i_j = separations[i][j];
-	   for (int k = j+1; k < pa.length; k++) {
+   for (int j=i+1; j < pa.length-1; j++) {
+     double sep_i_j = separations[i][j];
+     for (int k = j+1; k < pa.length; k++) {
 
-	   	// using the sum of separations is valid, as long as separation is
-	   	// the actual distance between points and not the square of the distance
-		 double separation = sep_i_j + separations[i][k] + separations[j][k];
-		 if (separation > max_separation) {
-		   max_separation = separation;
-		   p1 = pa[i];
-		   p2 = pa[j];
-		   p3 = pa[k];
-		 }
-	   }
-	 }
+      // using the sum of separations is valid, as long as separation is
+      // the actual distance between points and not the square of the distance
+     double separation = sep_i_j + separations[i][k] + separations[j][k];
+     if (separation > max_separation) {
+       max_separation = separation;
+       p1 = pa[i];
+       p2 = pa[j];
+       p3 = pa[k];
+     }
+     }
+   }
    }
 
    pa[0] = p1;
@@ -922,7 +922,7 @@ public final class CLASSNAME
    pa[2] = p3;
 
    if (Debug.logDetail())
-	 wrapper.log ("maxsep_triples = " + pa[0] + " " + pa[1] + " " + pa[2]);
+   wrapper.log ("maxsep_triples = " + pa[0] + " " + pa[1] + " " + pa[2]);
    return (max_separation);
 
  }
@@ -1021,26 +1021,26 @@ double standard_Stand_const = 0;
 // ensures postive x coefficient
 
 if(i_var == 0) {
-	standard_i_var = 0;
-	standard_j_var = (j_var)/(myGCD);
-	standard_k_var = (k_var)/(myGCD);
-	standard_Stand_const = Stand_const/myGCD;
+  standard_i_var = 0;
+  standard_j_var = (j_var)/(myGCD);
+  standard_k_var = (k_var)/(myGCD);
+  standard_Stand_const = Stand_const/myGCD;
 }
 else if(i_var < 0) {
-		standard_i_var = -(i_var)/myGCD;
-		standard_j_var = -(j_var)/myGCD;
-		standard_k_var = -(k_var)/myGCD;
-		standard_Stand_const = -(Stand_const)/myGCD;
+    standard_i_var = -(i_var)/myGCD;
+    standard_j_var = -(j_var)/myGCD;
+    standard_k_var = -(k_var)/myGCD;
+    standard_Stand_const = -(Stand_const)/myGCD;
 } else if(i_var > 0) {
-	standard_i_var = i_var/myGCD;
-	standard_j_var = j_var/myGCD;
-	standard_k_var = k_var/myGCD;
-	standard_Stand_const = Stand_const/myGCD;
+  standard_i_var = i_var/myGCD;
+  standard_j_var = j_var/myGCD;
+  standard_k_var = k_var/myGCD;
+  standard_Stand_const = Stand_const/myGCD;
 }
 
 double[] coef = new double[] {standard_i_var,
-							 standard_j_var,
-								  standard_k_var, standard_Stand_const };
+               standard_j_var,
+                  standard_k_var, standard_Stand_const };
 
 return coef;
 
@@ -1085,24 +1085,24 @@ return coef;
   //
 
 
-//	  float denominator = (float) ((p1.x * p2.y - p2.x * p1.y)
-//						 - (p0.x * p2.y - p2.x * p0.y)
-//						 + (p0.x * p1.y - p1.x * p0.y));
-//	  if (denominator == 0)
-//		throw new ArithmeticException();
-//	  double a_numerator = (double) ((p1.z * p2.y - p2.z * p1.y)
-//								  - (p0.z * p2.y - p2.z * p0.y)
-//								  + (p0.z * p1.y - p1.z * p0.y));
-//	  double b_numerator = (double) ((p1.x * p2.z - p2.x * p1.z)
-//								 - (p0.x * p2.z - p2.x * p0.z)
-//								  + (p0.x * p1.z - p1.x * p0.z));
-//	 double c_numerator = (double) (p0.z * (p1.x * p2.y - p2.x * p1.y)
-//								  - p1.z * (p0.x * p2.y - p2.x * p0.y)
-//								 + p2.z * (p0.x * p1.y - p1.x * p0.y));
-//	  double[] coef = new double[] { a_numerator / denominator,
-//									b_numerator / denominator,
-//								   -1, c_numerator / denominator };
-//	  return (coef);
+//    float denominator = (float) ((p1.x * p2.y - p2.x * p1.y)
+//             - (p0.x * p2.y - p2.x * p0.y)
+//             + (p0.x * p1.y - p1.x * p0.y));
+//    if (denominator == 0)
+//    throw new ArithmeticException();
+//    double a_numerator = (double) ((p1.z * p2.y - p2.z * p1.y)
+//                  - (p0.z * p2.y - p2.z * p0.y)
+//                  + (p0.z * p1.y - p1.z * p0.y));
+//    double b_numerator = (double) ((p1.x * p2.z - p2.x * p1.z)
+//                 - (p0.x * p2.z - p2.x * p0.z)
+//                  + (p0.x * p1.z - p1.x * p0.z));
+//   double c_numerator = (double) (p0.z * (p1.x * p2.y - p2.x * p1.y)
+//                  - p1.z * (p0.x * p2.y - p2.x * p0.y)
+//                 + p2.z * (p0.x * p1.y - p1.x * p0.y));
+//    double[] coef = new double[] { a_numerator / denominator,
+//                  b_numerator / denominator,
+//                   -1, c_numerator / denominator };
+//    return (coef);
 
 
 
@@ -1136,9 +1136,9 @@ return coef;
     return isActive();
   }
 
-	//if it's a line, we have no confidence that it's a plane
+  //if it's a line, we have no confidence that it's a plane
   public double computeConfidence() {
-  	if(isActive()) {
+    if(isActive()) {
     return Invariant.conf_is_ge(values_seen, MINTRIPLES);
     } else
     return 0;
