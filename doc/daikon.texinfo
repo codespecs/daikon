@@ -124,7 +124,7 @@ Requirements for running Daikon
 Example use of Daikon
 
 * Step-by-step instructions::   
-* Summary::                     
+* Summary of Daikon use::       
 * Automating the process::      
 * Understanding the invariants::  
 * Second Java example::         
@@ -367,8 +367,8 @@ null => p.content in elementcollection".
 Invariants can be useful in program understanding and a host of other
 applications.  Daikon operates by running the program and examining the
 values it computes, looking for patterns and relationships among those
-values.  Front ends (@pxref{Instrumentation}) exist for the Java, C, and
-IOA languages; it is easy to extend Daikon to other applications.
+values.  Front ends (@pxref{Instrumentation}) exist for the Java, C,
+C++, and IOA languages; it is easy to extend Daikon to other applications.
 
 
 @node    Installing Daikon, Example use, Introduction, Top
@@ -705,14 +705,14 @@ Daikon.
 
 @menu
 * Step-by-step instructions::   
-* Summary::                     
+* Summary of Daikon use::       
 * Automating the process::      
 * Understanding the invariants::  
 * Second Java example::         
 * C examples::                  
 @end menu
 
-@node    Step-by-step instructions, Summary, Example use, Example use
+@node    Step-by-step instructions, Summary of Daikon use, Example use, Example use
 @section Step-by-step instructions
 
 @c We recommend you run Daikon on Unix, but it can also be run on Windows.
@@ -852,8 +852,8 @@ java daikon.gui.contextGUI.ContextGUI StackAr.inv
 
 @end enumerate
 
-@node    Summary, Automating the process, Step-by-step instructions, Example use
-@section Summary
+@node    Summary of Daikon use, Automating the process, Step-by-step instructions, Example use
+@section Summary of Daikon use
 
 The steps above can be divided into three stages:
 
@@ -888,7 +888,7 @@ java daikon.gui.treeGUI.InvariantsGUI StackAr.inv
 
 @end itemize
 
-@node    Automating the process, Understanding the invariants, Summary, Example use
+@node    Automating the process, Understanding the invariants, Summary of Daikon use, Example use
 @section Automating the process
 
 The script @command{daikon.pl} automates all steps of the invariant
@@ -3755,9 +3755,10 @@ Daikon's sources, you will have to extract the example from
 You may also specify a configuration setting directly on the command line,
 using the @option{--config_option @var{name}=@var{value}} option.
 
-The debugging flags @option{--debug} and @option{--dbg @var{category}}
-(@pxref{Command line options}) permit Daikon to produce debugging
-output, but do not affect the invariants that it computes.
+The configuration options are different from the debugging flags
+@option{--debug} and @option{--dbg @var{category}} (@pxref{Command line
+options}).  The debugging flags permit Daikon to produce debugging
+output, but they do not affect the invariants that Daikon computes.
 
 @menu
 * List of configuration options::  
@@ -4089,7 +4090,8 @@ If you get an error such as
 @example
 ... Lexical error at line 5, column 1.  Encountered: "#" (35), after : ""
 @end example
-Then you forgot to run cpp before running CreateSpinfoC.
+@noindent
+then you forgot to run cpp before running CreateSpinfoC.
 
 @node   Cluster analysis for splitters,  , Static analysis for splitters, Enhancing conditional invariant detection
 @subsection Cluster analysis for splitters
@@ -4601,6 +4603,7 @@ While compiling files instrumented by dfej, if you get an error like
     Duplicate declaration of local variable "this_invocation_nonce".
     Duplicate declaration of method "daikonPrintArrayMissing" in type "StackAr".
 @end example
+@noindent
 then you have instrumented an already-instrumented file.  Remove the
 instrumented version and re-run dfej on the original version.  (If you
 are using the Daikon regression tests, run @command{make clean}.)
@@ -4706,7 +4709,7 @@ sh: lwpp-init.pl: not found
 then you have not correctly installed the dfec distribution
 (@pxref{Installing dfec}).  The @file{lwpp-init.pl} file should appear
 in the directory referred to by environment variable DFECDIR.  (That
-directory is placed on your path by the standard 
+directory is placed on your path by the standard Daikon dotfiles.)
 
 
 @menu

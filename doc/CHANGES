@@ -17,6 +17,8 @@ programs; this complements CreateSpinfo, which works for Java programs.
 daikon_runtime.h lists many customization variables for the Daikon C
 Runtime.
 
+----------------
+
 2.3.13 (17 July 2002):
 
 Fix bug when running from daikon.jar.
@@ -27,10 +29,14 @@ Manual gives example of use of orig variables, explains what to do when
 Daikon runs slowly, discusses Ajax "too many levels of symbolic links"
 error.
  
+----------------
+
 2.3.12 (11 July 2002):
 
 Daikon reports invariants over floating-point numbers.  Previously, it
 silently ignored floating-point numbers.
+
+----------------
 
 2.3.11 (9 July 2002):
 
@@ -50,9 +56,13 @@ The manual emphasizes that dfec only works on ANSI/ISO C programs (that are
 also legal C++ programs), and gives a number of hints for making your C
 programs compliant.
 
+----------------
+
 2.3.10 (10 June 2002):
 
 Bugfix release.
+
+----------------
 
 2.3.9 (4 June 2002):
 
@@ -60,6 +70,8 @@ Improve dfec documentation: explain more error messages (including array
 bounds errors), add gcc installation instructions, explain uninitialized
 array element processing.
  
+----------------
+
 2.3.8 (10 May 2002):
 
 This release coordinates with a new release of the dfec binaries (at
@@ -73,6 +85,8 @@ The Context GUI now supports C programs.
 
 Rearrange distribution to avoid very long file names in tar file.
 
+----------------
+
 2.3.7 (1 May 2002):
 
 Rewrite of dfec documentation.  dfec is now easier to use, more robust, and
@@ -84,6 +98,8 @@ Add documentation for CreateSpinfo program.
 
 Add new configuration options daikon.split.FileCompiler.compiler and
 daikon.split.TimedProcess.compile_wait.
+
+----------------
 
 2.3.6 (5 April 2002):
 
@@ -102,11 +118,15 @@ Ajax tool bug fixes.
 
 Improved installation and troubleshooting instructions.
 
+----------------
+
 2.3.5 (1 March 2002):
 
 Add --files_from command-line argument to Daikon.
 
 Add -a and -l command-line arguments to Diff.
+
+----------------
 
 2.3.4 (17 February 2002):
 
@@ -119,6 +139,8 @@ Manual enhancements:
  * Add text about two new GUI filters.
  * Typo fixes.
 
+----------------
+
 2.3.3 (11 February 2002):
 
 Add new flags to Diff program.
@@ -128,7 +150,7 @@ Manual enhancements:
  * Describe redundant invariants and how to print them.
  * Explain format of Java program point names.
  * Explain more invariant (Daikon output) syntax. 
- * Indicate deal with errors in the external Ajax and Simplify programs.
+ * Discuss dealing with errors in the external Ajax and Simplify programs.
 
 ----------------
 
