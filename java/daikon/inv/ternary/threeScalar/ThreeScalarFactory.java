@@ -36,8 +36,8 @@ public final class ThreeScalarFactory {
                   || var1.type.comparable(var3.type));
 
     if (pass == 1) {
-      return null;
       // nothing to do
+      return null;
     } else {
       Assert.assert(pass == 2);
       Vector result = new Vector();
@@ -64,11 +64,12 @@ public final class ThreeScalarFactory {
             result.add(fb);
         }
       }
-      // if (var1.isConstant() || var2.isConstant() || var3.isConstant()) {
-      //   Global.subexact_noninstantiated_invariants++;
-      // } else {
-      //   result.add(LinearTernary.instantiate(ppt));
-      // }
+      if (var1.isConstant() || var2.isConstant() || var3.isConstant()) {
+        Global.subexact_noninstantiated_invariants++;
+      } else {
+        // Temporarily commented out, to permit making a distribution.  MDE 6/20/2001
+        // result.add(LinearTernary.instantiate(ppt));
+      }
       return result;
     }
   }
