@@ -42,8 +42,8 @@
 #endif
 
 /**
- * Represents a FUNCTION invariant over three PRIMITIVE scalars using
- * permutation result = FUNCTION (arg1, arg2)
+ * Represents the invariant ' result = FUNCTION (arg1, arg2)' over three
+ * PRIMITIVE scalars.
  */
 public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
   // We are Serializable, so we specify a version to allow changes to
