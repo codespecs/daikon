@@ -11,13 +11,45 @@ versions as the user manual.
 
 ===========================================================================
 
+3.0.3 (01 April 2004)
+
+A new optimization was added to Daikon to suppress invariants that
+are implied by other invariants.  Suppressed invariants are neither
+printed nor written to the invariant output file.  This optimization
+reduces memory use and limits the number of redundant invariants that
+are printed.  It can be disabled if desired via the 
+daikon.suppress.NIS.enabled configuration variable.  See the "List of
+Configuration Options" section of the user manual for more
+information.
+
+Added the TraceSelect program which creates random selection of data
+for splitters.  See the "Random selection for splitters" section of
+the user manual for more information. 
+
+The output that is printed while daikon is running was enhanced to
+show the percentage of the trace file that has been processed.  The
+configuration variables daikon.FileIO.count_lines and
+daikon.FileIO.max_line_number control this feature.  See the "List of
+Configuration Options" section of the user manual for more
+information.
+
+The manual was updated to explain how to pass environment variables
+to an instrumented java program.  See the "dfej options" section 
+of the user manual for more information.
+
+The manual was updated to explain how to work-around the use of 
+realloc in C programs.  See the "C program requirements" section
+of the user manual for more information. 
+
+-----------------
+
 3.0.2 (27 February 2004)
 
 The environment variables DTRACELIMIT and DTRACELIMITTERMINATE were
 added to dfej.  These allow the size of the output tracefile to be controlled.
 See the "dfej options" section of the user manual for more information.
 
-Fixed some bugs in dfej and dfec.
+Fixed some bugs in dfej, dfec, and MergeESC.
 
 The implementation of sequence index comparison invariants has been
 changed to create separate invariants for each comparison (Equal,
