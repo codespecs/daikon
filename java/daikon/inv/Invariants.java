@@ -22,6 +22,10 @@ public final class Invariants
     super();
   }
 
+  public Invariants(int initialCapacity) {
+    super(initialCapacity);
+  }
+
   /**
    * Copy constructor.
    **/
