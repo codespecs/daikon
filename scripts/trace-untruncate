@@ -1,0 +1,19 @@
+: # Use -*- Perl -*- without knowing its path
+  eval 'exec perl -S -wni.bak $0 "$@"'
+  if 0;
+# Michael Ernst <mernst@cs.washington.edu>
+
+# This
+#  * removes the last (possibly partial) paragraph
+
+# Previously named "fixup-dtrace".
+
+BEGIN { $/ = ""; }
+
+# This removes a specific bad paragraph
+# if ($_ eq "TestTuple:::CLASS\nshape\nnull\n1\nwinPos\nnull\n1\ncursor\nnull\n1\n\n")
+#   { undef $_; }
+
+if (defined($last))
+  { print $last; }
+$last = $_

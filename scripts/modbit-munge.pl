@@ -101,6 +101,10 @@ if (/^$/) {
   $val = $_;
   chomp($val);
   if ($debug) {  print STDERR "val = $val\n"; }
+  if ($var eq "this_invocation_nonce") {
+    undef($var);
+    undef($val);
+  }
 } else {
   $mod = $_;
   chomp($mod);
