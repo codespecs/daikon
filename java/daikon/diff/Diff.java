@@ -469,13 +469,16 @@ public final class Diff {
 
     for (Iterator i = ppts.iterator(); i.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) i.next();
-      List invs = ppt.getInvariants();
+      // List invs = ppt.getInvariants();
+      List invs = UtilMDE.sortList(ppt.getInvariants(), PptTopLevel.icfp);
       map.put(ppt, invs);
       if (examineAllPpts) {
         // Add conditional ppts
         for (Iterator i2 = ppt.views_cond.iterator(); i2.hasNext(); ) {
           PptConditional pptCond = (PptConditional) i2.next();
-          List invsCond = pptCond.getInvariants();
+          List invsCond = UtilMDE.sortList (pptCond.getInvariants(),
+                                          PptTopLevel.icfp);
+          // List invsCond = pptCond.getInvariants();
           map.put(pptCond, invsCond);
         }
       }

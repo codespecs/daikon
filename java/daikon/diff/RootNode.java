@@ -1,7 +1,7 @@
 package daikon.diff;
 
 /**
- * The root of the tree.  All its children are InvNodes.
+ * The root of the tree.  All its children are PptNodes.
  **/
 public class RootNode extends Node {
   
