@@ -913,6 +913,11 @@ public final class FeatureExtractor {
 
       // Print the output to the output file.
       FileWriter fw = new FileWriter(output);
+      // first calculate size and write the header for SVMfu
+      int size = negrepeat * negvectors.size() + posrepeat * posvectors.size();
+      if (type.equals("SVMfu"))
+        fw.write(size + "\n");
+      // now write the data
       for (int repeat = 0; repeat < negrepeat; repeat++)
         for (Iterator i = negvectors.iterator(); i.hasNext(); )
           fw.write((String) i.next() + " \n");
