@@ -42,12 +42,14 @@ public final class Equality extends Invariant {
     return false;
   }
 
-  //  Here is my rationale for always returning 0.  This Equality invariant aggregates
-  //  several Comparison invariants who passed the IsEqualityComparison.it.accept() test.
-  //  IsEqualityComparison.it.accept() checks if getProbability() returns less than
-  //  Invariant.probability_limit, which is currently .01.  That means the probability for
-  //  any of the involved Comparison invariants is at most .01.  In practice, the
-  //  probability is always almost 0, and .01 is close to 0, so just report 0.
+  //  Here is my rationale for always returning 0.  This Equality invariant
+  //  aggregates several Comparison invariants who passed the
+  //  IsEqualityComparison.it.accept() test.
+  //  IsEqualityComparison.it.accept() checks if getProbability() returns
+  //  less than Invariant.probability_limit, which is currently .01.  That
+  //  means the probability for any of the involved Comparison invariants
+  //  is at most .01.  In practice, the probability is always almost 0, and
+  //  .01 is close to 0, so just report 0.
 
   public double computeProbability() { return 0; }
 
