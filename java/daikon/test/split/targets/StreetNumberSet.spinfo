@@ -6,11 +6,11 @@ toString()
 union(String numbers)
 union(givenNumbers)
 
-PPT_NAME MapQuick2.SimpleParitySet.SimpleParitySet
+PPT_NAME MapQuick1.SimpleParitySet.SimpleParitySet
 (low & 1)!=(high & 1)
 orig((low & 1)!=(high & 1))
 
-PPT_NAME MapQuick2.SimpleParitySet.contains
+PPT_NAME MapQuick1.SimpleParitySet.contains
 (low & 1)!=(i & 1)
 false
 false
@@ -26,23 +26,23 @@ orig(i > high)
 orig(true)
 true
 
-PPT_NAME MapQuick2.SimpleParitySet.orderStatistic
+PPT_NAME MapQuick1.SimpleParitySet.orderStatistic
 i <= low
 i > high
 orig(i <= low)
 orig(i > high)
 
-PPT_NAME MapQuick2.StreetNumberSet.StreetNumberSet
+PPT_NAME MapQuick1.StreetNumberSet.StreetNumberSet
 dashLoc == -1
 items.hasMoreTokens()
 orig(dashLoc == -1)
 orig(items.hasMoreTokens())
 
-PPT_NAME MapQuick2.StreetNumberSet.checkRep
+PPT_NAME MapQuick1.StreetNumberSet.checkRep
 i<sets.length
 orig(i<sets.length)
 
-PPT_NAME MapQuick2.StreetNumberSet.contains
+PPT_NAME MapQuick1.StreetNumberSet.contains
 false
 i<sets.length
 orig(false)
@@ -52,15 +52,15 @@ orig(true)
 sets[i].contains(sn)
 true
 
-PPT_NAME MapQuick2.StreetNumberSet.orderStatistic
+PPT_NAME MapQuick1.StreetNumberSet.orderStatistic
 i<sets.length
 orig(i<sets.length)
 
-PPT_NAME MapQuick2.StreetNumberSet.size
+PPT_NAME MapQuick1.StreetNumberSet.size
 i<sets.length
 orig(i<sets.length)
 
-PPT_NAME MapQuick2.StreetNumberSet.toString
+PPT_NAME MapQuick1.StreetNumberSet.toString
 i < sets.length-1
 i<sets.length
 orig(i < sets.length-1)
