@@ -1064,17 +1064,17 @@ public final class VarInfo implements Cloneable, Serializable {
     if (lb != null) {
       if (!lb.enoughSamples()) {
         lb = null;
-      } else if (lb.core.a != 1) {
-        // Do not attempt to deal with anything but y=x+b.
+      } else if (lb.core.a != 1 || lb.core.b != -1 ) {
+        // Do not attempt to deal with anything but y=x+b, aka x-y+b=0.
         lb = null;
       } else {
         // System.out.println("justified LinearBinary: " + lb.format());
         // lb.b is var2()-var1().
 
-        // a is 1 or -1, and the values are integers, so be must be an integer
-        long b_int = (long) lb.core.b;
-        Assert.assertTrue(lb.core.b == b_int);
-        index_vari_minus_seq = (vari_is_var1 ? -b_int : b_int);
+        // a is 1 or -1, and the values are integers, so c must be an integer
+        long c_int = (long) lb.core.c;
+        Assert.assertTrue(lb.core.c == c_int);
+        index_vari_minus_seq = (vari_is_var1 ? -c_int : c_int);
         index_vari_minus_seq += vari_shift - varj_shift;
       }
     }
@@ -1172,29 +1172,35 @@ public final class VarInfo implements Cloneable, Serializable {
       Vector lbs = LinearBinary.findAll(this);
       for (int i = 0; i < lbs.size(); i++) {
         LinearBinary lb = (LinearBinary) lbs.elementAt(i);
-
         if (this.equals(lb.var2())
           && (post != lb.var1().isPrestate())) {
-          // this = a * v1 + b
-          double a = lb.core.a, b = lb.core.b;
-          if (a == 1) {
-            // this = v1 + b
-            int add = (int) b;
+          
+          // a * v1 + b * this + c = 0 or this == (-a/b) * v1 - c/b
+          double a = lb.core.a, b = lb.core.b, c = lb.core.c;
+         // if (a == 1) {
+          if (-a/b == 1) {
+            // this = v1 - c/b
+           // int add = (int) b;
+            int add = (int) -c/(int)b;
             return lb.var1().name.applyAdd(add);
           }
         }
 
         if (this.equals(lb.var1())
           && (post != lb.var2().isPrestate())) {
-          // v2 = a * this + b
-          double a = lb.core.a, b = lb.core.b;
-          if (a == 1) {
-            // this = v2 - b
-            int add = - ((int) b);
+          // v2 = a * this + b <-- not true anymore
+          // a * this + b * v2 + c == 0 or v2 == (-a/b) * this - c/b
+          double a = lb.core.a, b = lb.core.b, c = lb.core.c;
+          //if (a == 1) {
+            if (-a/b == 1) {
+            // this = v2 + c/b
+            //int add = - ((int) b);
+            int add = (int) c/(int) b;
             return lb.var2().name.applyAdd(add);
           }
         }
       }
+
 
       // Should also try other exact invariants...
     }
