@@ -7470,6 +7470,7 @@ The following individuals have contributed to Daikon:
 Yuriy Brun,
 Jake Cockrell,
 Adam Czeisler,
+Brian Demsky,
 Alan Donovan,
 Nii Dodoo,
 Alan Dunn,
