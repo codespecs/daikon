@@ -25,6 +25,9 @@ Chicory
   previously created invalid program point names for the constructors of
   such programs.
 
+  Correct a problem with character data; Chicory previously did not ouput
+  character in the proper format.
+
 ---------------------------------
 
 4.0.1 (Feb 13 2005)
