@@ -748,7 +748,7 @@ public final class FileIO {
 
   }
 
-  private static void process_unmatched_procedure_entries() {
+  public static void process_unmatched_procedure_entries() {
     if ((!call_stack.empty()) || (!call_hashmap.isEmpty())) {
       System.out.println();
       System.out.println("No return from procedure observed "

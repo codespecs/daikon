@@ -46,6 +46,22 @@ class JTraceInference extends Thread
     /** Non-null when error has occurred */
     public String failure_message = null;
 
+    // XXX use this for now
+    private final VarComparability default_comparability =
+	VarComparability.parse(VarComparability.NONE, null, null);
+
+    private final List prims = Arrays.asList(new String[] {
+	"int", 
+	"byte", 
+	"char", 
+	"short", 
+	"long", 
+	"double",
+	"float", 
+	"boolean", 
+	"java.lang.String"
+    });
+
     public void	run()
     {
       try {
@@ -68,10 +84,12 @@ class JTraceInference extends Thread
 	    case CT_PptTrace: { // Header of a Trace program point
 		int key = getInteger();
 		String ppt_name = getPptNameX(key);
+		int nonce = getInteger();
 		JTrace.println(JTrace.V_INFO, ppt_name);
 		PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
 		ValueTuple vt = read_single_sample(ppt_name);
-		FileIO.process_sample(ppt, vt, null);
+		Integer nonce_ = nonce == 0 ? null : new Integer(nonce);
+		FileIO.process_sample(ppt, vt, nonce_);
 		break;
 	    }
 
@@ -80,6 +98,7 @@ class JTraceInference extends Thread
 		String pptname = getPptNameX(key);
 		JTrace.println(JTrace.V_INFO, pptname);
 		Vector var_infos = new Vector();
+
 		while((control = getControl()) != CT_PptDeclEnd)
 		{
 		    Assert.assertTrue(control == CT_string);
@@ -95,20 +114,14 @@ class JTraceInference extends Thread
 			ProglangType.parse(proglang_type_string);
 
 		    ProglangType file_rep_type = prog_type;
-		    List prims = Arrays.asList(new String[] {
-			"int", "byte", "char", "short", "long", "double",
-			"float", "boolean", "java.lang.String" });
 		    // not a prim => hashcode
 		    if(!prims.contains(proglang_type_string))
 			file_rep_type = ProglangType.parse("hashcode");
-		    VarComparability comparability =
-			VarComparability.parse(VarComparability.NONE,
-					       null, null);
-
+		    
 		    VarInfo vi = new VarInfo(VarInfoName.parse(varname),
 					     prog_type, file_rep_type,
-					     comparability, false, null,
-                                             VarInfoAux.getDefault());
+					     default_comparability, false, 
+					     null, VarInfoAux.getDefault());
 		    var_infos.add(vi);
 		}
 		VarInfo[] vi_array =
@@ -139,6 +152,8 @@ class JTraceInference extends Thread
 	}
 
 	JTrace.println(JTrace.V_DEBUG,"JTrace: out of sample loop.");
+
+	FileIO.process_unmatched_procedure_entries();
 
 	//
 	//  Finish up...
@@ -175,8 +190,6 @@ class JTraceInference extends Thread
 
 	// XXX modbits -- skipped
 
-	// XXX invocation nonce -- skipped
-
 	{
 	    JTrace.println(JTrace.V_INFO, "JTrace: getting " + num_tracevars + " values");
 	    // XXX oldvalue_reps has been thrown away
@@ -210,7 +223,6 @@ class JTraceInference extends Thread
 		Object value = null;
 		byte control = getControl();
 		JTrace.print(JTrace.V_INFO, "JTrace: getControl : " + types[control] + " = " );
-
 
 		switch(control)
 		{
