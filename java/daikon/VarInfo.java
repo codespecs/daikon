@@ -2202,4 +2202,60 @@ public final class VarInfo
 
     public static final IndexComparator theInstance = new IndexComparator();
   }
+
+  /**
+   * Looks for an OBJECT ppt that corresponds to the type of this
+   * variable.  Returns null if such a point is not found.
+   *
+   * @param all_ppts    map of all program points
+   */
+  public PptTopLevel find_object_ppt (PptMap all_ppts) {
+
+    // Pseudo arrays don't have types
+    if (type.isPseudoArray())
+      return (null);
+
+    // build the name of the object ppt based on the variable type
+    String type_str = type.base().replaceFirst ("\\$", ".");
+    PptName objname = new PptName (type_str, null, FileIO.object_suffix);
+    return (all_ppts.get (objname));
+  }
+
+  /**
+   * Class used to contain a pair of VarInfos.  Currently used for equality
+   * set merging as a way to store pairs of equal variables.  The lexically
+   * smaller name is always stored first.
+   *
+   * Pairs are equal if both of their VarInfos are identical.  Note that
+   * the content of the VarInfos are not compared, only their pointer
+   * values.
+   */
+  static public class Pair {
+
+    public VarInfo v1;
+    public VarInfo v2;
+
+    public Pair (VarInfo v1, VarInfo v2) {
+      if (v1.name.name().compareTo (v2.name.name()) <= 0) {
+        this.v1 = v1;
+        this.v2 = v2;
+      } else {
+        this.v1 = v2;
+        this.v2 = v1;
+      }
+    }
+
+    public boolean equals (Object obj) {
+      if (!(obj instanceof Pair))
+        return (false);
+
+      Pair o = (Pair) obj;
+      return ((o.v1 == v1) && (o.v2 == v2));
+    }
+
+    public int hashCode() {
+      return (v1.hashCode() + v2.hashCode());
+    }
+  }
+
 }
