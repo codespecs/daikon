@@ -383,13 +383,12 @@ public final class InvariantChecker {
     String classDeclaration = formatClassDeclaration(javaFileName)+"\n";
 
     String importStatements = "\n//Import Statements \n" +
-      "package daikon.tools;\n" +
+      "import daikon.tools.*;\n" +
       "import daikon.*;\n" +
       "import daikon.inv.*;\n" +
       "import daikon.config.Configuration;\n" +
       "import daikon.temporal.TemporalInvariantManager;\n" +
       "import utilMDE.*;\n" +
-      "import org.apache.log4j.Logger;\n" +
       "import java.io.*;\n" +
       "import java.util.*;\n" +
       "import java.util.zip.GZIPInputStream;\n" +
