@@ -122,7 +122,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
   abstract boolean is_symmetric();
   abstract String[] get_method_name();
   abstract int get_var_order();
-  abstract CLASSNAME instantiate_dyn (PptSlice slice);
   abstract void set_function_id (int function_id);
   abstract int get_function_id ();
 
@@ -182,11 +181,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
   }
 
+#ifdef 0
+  // JHP: remove this
   /**
    * Returns a list of all of the FunctionBinary invariants setup for the
-   * specified slice.  Any invariants that have non-instantantiating
-   * suppressions are not included.  These are instantiated when their
-   * suppressors are falsified.
+   * specified slice.  Any invariants are NI suppressed are not included.
+   * These are instantiated when their suppressors are falsified.
    */
   public static List instantiate_all (PptSlice slice) {
 
@@ -218,6 +218,36 @@ public abstract class CLASSNAME extends SUPERCLASS {
       }
     }
 
+    return (result);
+  }
+#endif
+
+  /**
+   * Returns a list of all of the FunctionBinary prototype invariants
+   */
+  public static List get_proto_all() {
+
+    List result = new ArrayList();
+    if (!dkconfig_enabled)
+      return (result);
+
+    // If this is the first call
+    if (functions == null) {
+      build_func_list();
+    }
+
+    // Get the proto invariant for all of the subclasses and return them
+    if (dkconfig_enabled) {
+      for (int ii = 0; ii < func_list.size(); ii++) {
+        CLASSNAME[] fb_arr = (CLASSNAME[]) func_list.get (ii);
+        for (int jj = 1; jj < fb_arr.length; jj++) {
+          CLASSNAME fb = fb_arr[jj];
+          if (fb != null) {
+            result.add (fb);
+          }
+        }
+      }
+    }
     return (result);
   }
 
