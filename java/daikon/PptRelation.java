@@ -57,8 +57,8 @@ public class PptRelation implements Serializable {
   Map child_to_parent_map;
 
   /**
-   * Boolean.  Controls whether the object-user relation is created in the 
-   * variable hierarchy.  Default is true. 
+   * Boolean.  Controls whether the object-user relation is created in the
+   * variable hierarchy.
    **/
   public static boolean dkconfig_enable_object_user = true;
 
