@@ -32,7 +32,7 @@ public abstract class VarInfoName
 
     // x or this.x
     if ((name.indexOf('[') == -1) && (name.indexOf('(') == -1)) {
-      // checking for only leagal characters would be more robust
+      // checking for only legal characters would be more robust
       return (new Simple(name)).intern();
     }
 
@@ -141,7 +141,7 @@ public abstract class VarInfoName
   public boolean inPrestateContext(VarInfoName node) {
     return (new NodeFinder(this, node)).inPre();
   }
-  
+
   // ============================================================
   // The usual Object methods
 
@@ -385,7 +385,7 @@ public abstract class VarInfoName
   //      return s.substring(0, origpos)
   //        + s.substring(origpos+5, rparenpos)
   //        + s.substring(rparenpos+1);
-  
+
   //      int origpos = s.indexOf("\\old(");
   //      Assert.assert(origpos != -1);
   //      int rparenpos = s.lastIndexOf(")");
@@ -506,7 +506,7 @@ public abstract class VarInfoName
       return term.name() + "[" + index + "]";
     }
     protected String esc_name_impl() {
-      throw new UnsupportedOperationException("ESC cannot format an unquantified sequence of elements" + 
+      throw new UnsupportedOperationException("ESC cannot format an unquantified sequence of elements" +
 					      " [name=" + name() + "]");
     }
     protected String esc_name_impl(String index) {
@@ -714,7 +714,7 @@ public abstract class VarInfoName
     public abstract Object visitSubscript(Subscript o);
     // leave abstract; traversal order and return values matter
     public abstract Object visitSlice(Slice o);
-  }    
+  }
 
   /**
    * Use to report whether a node is in a pre- or post-state context.
@@ -906,7 +906,7 @@ public abstract class VarInfoName
 
     // state and accessors
     private final List result = new ArrayList();
-    
+
     public List nodes() {
       return Collections.unmodifiableList(result);
     }
@@ -1180,7 +1180,7 @@ public abstract class VarInfoName
     }
     public static String[] format_esc(VarInfoName[] roots, boolean elementwise) {
       Assert.assert(roots != null);
-	
+
       QuantifyReturn qret = quantify(roots);
 
       // build the "\forall ..." predicate
@@ -1256,7 +1256,7 @@ public abstract class VarInfoName
      **/
     public static String[] format_simplify(VarInfoName[] roots) {
       Assert.assert(roots != null);
-	
+
       QuantifyReturn qret = quantify(roots);
 
       // build the forall predicate
