@@ -323,7 +323,8 @@ public final class LinearTernaryCore
 
     if ((format == OutputFormat.DAIKON)
 	|| (format == OutputFormat.ESCJAVA)
-	|| (format == OutputFormat.IOA))
+	|| (format == OutputFormat.IOA)
+	|| (format == OutputFormat.JML))
     {
       String eq = " == ";
       if (format == OutputFormat.IOA) eq = " = ";

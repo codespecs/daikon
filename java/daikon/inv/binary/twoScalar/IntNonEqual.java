@@ -180,6 +180,7 @@ public final class IntNonEqual
 
     if ((format == OutputFormat.DAIKON)
 	|| (format == OutputFormat.ESCJAVA)
+	|| (format == OutputFormat.JML)
 	|| (format == OutputFormat.JAVA)
 	|| (format == OutputFormat.IOA))
     {

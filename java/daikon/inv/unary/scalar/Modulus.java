@@ -64,6 +64,10 @@ public class Modulus
       return "mod("+var().name.ioa_name()+", "+modulus+") = "+remainder;
     }
 
+    if (format == OutputFormat.JAVA || format == OutputFormat.JML) {
+      return var().name + " % " + modulus + " == " + remainder;
+    }
+
     return format_unimplemented(format);
   }
 

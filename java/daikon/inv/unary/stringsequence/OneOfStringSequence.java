@@ -160,6 +160,8 @@ public final class OneOfStringSequence
       return format_simplify();
     } else if (format == OutputFormat.ESCJAVA) {
       return format_esc();
+    } else if (format == OutputFormat.JML) {
+      return format_jml();
     } else {
       return format_unimplemented(format);
     }
@@ -269,6 +271,16 @@ public final class OneOfStringSequence
       }
     }
     result = format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
+
+    return result;
+  }
+
+  public String format_jml() {
+
+    String result;
+
+    String classname = this.getClass().toString().substring(6); // remove leading "class"
+    result = "warning: method " + classname + ".format_jml() needs to be implemented: " + format();
 
     return result;
   }

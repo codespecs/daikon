@@ -70,7 +70,8 @@ public class NonZero
     String name = var().name.name_using(format);
 
     if ((format == OutputFormat.DAIKON)
-	|| (format == OutputFormat.ESCJAVA))
+	|| (format == OutputFormat.ESCJAVA)
+	|| (format == OutputFormat.JML))
     {
       return name + " != " + zero();
     }
@@ -90,7 +91,7 @@ public class NonZero
   public String format_java() {
     return var().name.java_name() + " != " + zero();
   }
-  
+
   public void add_modified(long v, int count) {
     // The min and max tests will simultaneously succeed exactly once (for
     // the first value).

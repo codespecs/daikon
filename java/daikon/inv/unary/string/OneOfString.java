@@ -155,6 +155,8 @@ public final class OneOfString
       return format_simplify();
     } else if (format == OutputFormat.ESCJAVA) {
       return format_esc();
+    } else if (format == OutputFormat.JML) {
+      return format_jml();
     } else {
       return format_unimplemented(format);
     }
@@ -198,11 +200,12 @@ public final class OneOfString
     boolean is_type = is_type();
     for (int i=0; i<num_elts; i++) {
       if (i != 0) { result += " || "; }
-      result += varname + " == ";
+      result += varname;
       String str = elts[i];
       if (!is_type) {
-	result += (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"") ;
+	result += ".equals(" +  (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"")   + ")" ;
       } else {
+	result += " == ";
 	if ((str == null) || "null".equals(str)) {
 	  result += "== null)";
 	} else if (str.startsWith("[")) {
@@ -300,6 +303,38 @@ public final class OneOfString
 
     // Inner classes
     result = result.replace('$', '.');
+
+    return result;
+  }
+
+  public String format_jml() {
+
+    String varname = var().name.jml_name();
+
+    String result;
+
+    result = "";
+    boolean is_type = is_type();
+    for (int i=0; i<num_elts; i++) {
+      if (i != 0) { result += " || "; }
+      result += varname;
+      String str = elts[i];
+      if (!is_type) {
+	result += ".equals(" +  (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"")   + ")" ;
+      } else {
+	result += " == ";
+	if ((str == null) || "null".equals(str)) {
+	  result += "== null)";
+	} else if (str.startsWith("[")) {
+	  result += "(" + UtilMDE.classnameFromJvm(str) + ")";
+	} else {
+	  if (str.startsWith("\"") && str.endsWith("\"")) {
+	    str = str.substring(1, str.length()-1);
+	  }
+	  result += "(" + str + ")";
+	}
+      }
+    }
 
     return result;
   }

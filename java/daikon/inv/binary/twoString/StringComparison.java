@@ -144,7 +144,16 @@ public final class StringComparison
     String name1 = var1().name.name_using(format);
     String name2 = var2().name.name_using(format);
     String comparator = core.format_comparator(format);
-    return name1 + " " + comparator + " " + var2().name;
+
+    if (format == OutputFormat.JAVA || format == OutputFormat.JML) {
+      if (comparator.equals("==")) {
+	return name1 + ".equals(" + name2 + ")";
+      } else {
+	return name1 + ".compareTo(" + name2 + ") " + comparator + " 0";
+      }
+    } else {
+      return name1 + " " + comparator + " " + var2().name;
+    }
     // return format_unimplemented(format);
   }
 

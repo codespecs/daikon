@@ -108,6 +108,7 @@ public final class SeqIntComparison
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.ESCJAVA) return format_esc();
+    if (format == OutputFormat.JML) return format_jml();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
 
     return format_unimplemented(format);
@@ -131,6 +132,14 @@ public final class SeqIntComparison
     String comparator = core.format_comparator();
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
+	{ seqvar().name, sclvar().name });
+    return form[0] + "(" + form[1] + " " + comparator + " " + form[2] + ")" + form[3];
+  }
+
+  public String format_jml() { // Must change later
+    String comparator = core.format_comparator();
+    String[] form =
+      VarInfoName.QuantHelper.format_jml(new VarInfoName[]
 	{ seqvar().name, sclvar().name });
     return form[0] + "(" + form[1] + " " + comparator + " " + form[2] + ")" + form[3];
   }

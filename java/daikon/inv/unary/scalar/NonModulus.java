@@ -70,6 +70,10 @@ public class NonModulus
       return "mod("+name+", "+modulus+") ~= "+remainder;
     }
 
+    if (format == OutputFormat.JAVA || format == OutputFormat.JML) {
+      return name + " % " + modulus + " != " + remainder;
+    }
+
     return format_unimplemented(format);
   }
 

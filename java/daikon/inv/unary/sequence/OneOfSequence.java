@@ -185,6 +185,8 @@ public final class OneOfSequence
       return format_simplify();
     } else if (format == OutputFormat.ESCJAVA) {
       return format_esc();
+    } else if (format == OutputFormat.JML) {
+      return format_jml();
     } else {
       return format_unimplemented(format);
     }
@@ -331,6 +333,46 @@ public final class OneOfSequence
     }
     if (length == "" && forall == "") { // interned
       return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
+    } else if (length == "") { // interned
+      result = forall;
+    } else if (forall == "") { // interned
+      result = length;
+    } else {
+      result = "(" + length + ") && (" + forall + ")";
+    }
+
+    return result;
+  }
+
+  public String format_jml() {
+
+    String result;
+
+    String length = "";
+    String forall = "";
+    if (is_hashcode) {
+      if (num_elts == 0)  {
+        String classname = this.getClass().toString().substring(6); // remove leading "class"
+        result = "warning: method " + classname + ".format_jml() needs to be implemented: " + format();
+      } else {
+        Assert.assert(num_elts == 1);
+        // we only have one value, because add_modified dies if more
+        long[]  value = elts[0];
+        if (var().name.isApplySizeSafe()) {
+          length = var().name.applySize().jml_name() + " == " + value.length;
+        }
+        if (no_nulls(0)) {
+          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
+          forall = form[0] + "(" + form[1] + " != null)" + form[2];
+        } else if (all_nulls(0)) {
+          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
+          forall = form[0] + "(" + form[1] + " == null)" + form[2];
+        }
+      }
+    }
+    if (length == "" && forall == "") { // interned
+      String classname = this.getClass().toString().substring(6); // remove leading "class"
+      result = "warning: method " + classname + ".format_jml() needs to be implemented: " + format();
     } else if (length == "") { // interned
       result = forall;
     } else if (forall == "") { // interned

@@ -91,9 +91,11 @@ public class EltUpperBound
     } else if (format == OutputFormat.SIMPLIFY) {
       return format_simplify();
     } else if (format == OutputFormat.JAVA) {
-      return format_java();  
+      return format_java();
     } else if (format == OutputFormat.ESCJAVA) {
-      return format_esc();  
+      return format_esc();
+    } else if (format == OutputFormat.JML) {
+      return format_jml();
     }
 
     return format_unimplemented(format);
@@ -107,6 +109,13 @@ public class EltUpperBound
   public String format_esc() {
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
+	{ var().name });
+    return form[0] + "(" + form[1] + " <= " + core.max1  + ")" + form[2];
+  }
+
+  public String format_jml() {
+    String[] form =
+      VarInfoName.QuantHelper.format_jml(new VarInfoName[]
 	{ var().name });
     return form[0] + "(" + form[1] + " <= " + core.max1  + ")" + form[2];
   }

@@ -155,6 +155,8 @@ public final class EltOneOfString
       return format_simplify();
     } else if (format == OutputFormat.ESCJAVA) {
       return format_esc();
+    } else if (format == OutputFormat.JML) {
+      return format_jml();
     } else {
       return format_unimplemented(format);
     }
@@ -199,11 +201,12 @@ public final class EltOneOfString
     boolean is_type = is_type();
     for (int i=0; i<num_elts; i++) {
       if (i != 0) { result += " || "; }
-      result += varname + " == ";
+      result += varname;
       String str = elts[i];
       if (!is_type) {
-	result += (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"") ;
+	result += " == " +  (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"")   ;
       } else {
+	result += " == ";
 	if ((str == null) || "null".equals(str)) {
 	  result += "== null)";
 	} else if (str.startsWith("[")) {
@@ -328,6 +331,41 @@ public final class EltOneOfString
     }
     if (! valid) {
       result = format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
+    }
+
+    result = form[0] + "(" + result + ")" + form[2];
+
+    return result;
+  }
+
+  public String format_jml() {
+
+    String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
+    String varname = form[1];
+
+    String result;
+
+    result = "";
+    boolean is_type = is_type();
+    for (int i=0; i<num_elts; i++) {
+      if (i != 0) { result += " || "; }
+      result += varname;
+      String str = elts[i];
+      if (!is_type) {
+	result += " == " +  (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"")   ;
+      } else {
+	result += " == ";
+	if ((str == null) || "null".equals(str)) {
+	  result += "== null)";
+	} else if (str.startsWith("[")) {
+	  result += "(" + UtilMDE.classnameFromJvm(str) + ")";
+	} else {
+	  if (str.startsWith("\"") && str.endsWith("\"")) {
+	    str = str.substring(1, str.length()-1);
+	  }
+	  result += "(" + str + ")";
+	}
+      }
     }
 
     result = form[0] + "(" + result + ")" + form[2];

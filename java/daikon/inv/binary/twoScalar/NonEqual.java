@@ -83,7 +83,8 @@ public final class NonEqual
 
     if ((format == OutputFormat.DAIKON)
 	|| (format == OutputFormat.JAVA)
-	|| (format == OutputFormat.ESCJAVA))
+	|| (format == OutputFormat.ESCJAVA)
+	|| (format == OutputFormat.JML))
     {
       return var1().name.name() + " != " + var2().name.name();
     }

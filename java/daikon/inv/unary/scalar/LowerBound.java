@@ -89,7 +89,8 @@ public class LowerBound
     if ((format == OutputFormat.DAIKON)
 	|| (format == OutputFormat.ESCJAVA)
 	|| (format == OutputFormat.IOA)
-	|| (format == OutputFormat.JAVA))
+	|| (format == OutputFormat.JAVA)
+	|| (format == OutputFormat.JML))
     {
       return name + " >= " + core.min1 ;
     }

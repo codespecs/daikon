@@ -234,6 +234,7 @@ public final class LinearBinaryCore
     if ((format == OutputFormat.DAIKON)
 	|| (format == OutputFormat.JAVA)
 	|| (format == OutputFormat.ESCJAVA)
+	|| (format == OutputFormat.JML)
 	|| (format == OutputFormat.IOA))
     {
       String eq = " == ";

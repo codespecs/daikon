@@ -165,6 +165,8 @@ public final class OneOfScalar
       return format_simplify();
     } else if (format == OutputFormat.ESCJAVA) {
       return format_esc();
+    } else if (format == OutputFormat.JML) {
+      return format_jml();
     } else {
       return format_unimplemented(format);
     }
@@ -294,6 +296,38 @@ public final class OneOfScalar
 	Assert.assert(elts[0] == 0);
 	Assert.assert(elts[1] != 0);
 	return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
+      }
+    } else {
+      result = "";
+      for (int i=0; i<num_elts; i++) {
+        if (i != 0) { result += " || "; }
+        result += varname + " == " + ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")) ;
+      }
+    }
+
+    return result;
+  }
+
+  public String format_jml() {
+
+    String varname = var().name.jml_name();
+
+    String result;
+
+    if (is_boolean) {
+      Assert.assert(num_elts == 1);
+      Assert.assert((elts[0] == 0) || (elts[0] == 1));
+      result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
+    } else if (is_hashcode) {
+      if (num_elts == 2) {
+        return "true";          // one elt is null, the other is non-null
+      } else if (elts[0] == 0) {
+        result = varname + " == null";
+      } else {
+        result = varname + " != null";
+	  // varname + " has only one value"
+          // + " (hashcode=" + elts[0] + ")"
+          ;
       }
     } else {
       result = "";

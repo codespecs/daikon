@@ -169,6 +169,8 @@ public final class EltOneOf
       return format_simplify();
     } else if (format == OutputFormat.ESCJAVA) {
       return format_esc();
+    } else if (format == OutputFormat.JML) {
+      return format_jml();
     } else {
       return format_unimplemented(format);
     }
@@ -306,6 +308,41 @@ public final class EltOneOf
 	Assert.assert(elts[0] == 0);
 	Assert.assert(elts[1] != 0);
 	return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
+      }
+    } else {
+      result = "";
+      for (int i=0; i<num_elts; i++) {
+        if (i != 0) { result += " || "; }
+        result += varname + " == " + ((( elts[i]  == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))) ;
+      }
+    }
+
+    result = form[0] + "(" + result + ")" + form[2];
+
+    return result;
+  }
+
+  public String format_jml() {
+
+    String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
+    String varname = form[1];
+
+    String result;
+
+    if (is_boolean) {
+      Assert.assert(num_elts == 1);
+      Assert.assert((elts[0] == 0) || (elts[0] == 1));
+      result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
+    } else if (is_hashcode) {
+      if (num_elts == 2) {
+        return "true";          // one elt is null, the other is non-null
+      } else if (elts[0] == 0) {
+        result = varname + " == null";
+      } else {
+        result = varname + " != null";
+	  // varname + " has only one value"
+          // + " (hashcode=" + elts[0] + ")"
+          ;
       }
     } else {
       result = "";

@@ -182,6 +182,7 @@ public final class IntGreaterEqual
 
     if ((format == OutputFormat.DAIKON)
 	|| (format == OutputFormat.ESCJAVA)
+	|| (format == OutputFormat.JML)
 	|| (format == OutputFormat.JAVA)
 	|| (format == OutputFormat.IOA))
     {
