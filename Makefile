@@ -7,6 +7,9 @@ LISP_FILES := gries-helper.lisp instrument.lisp data-trace.lisp \
 	load-all.lisp \
 	gries.lisp gries-instrumented.lisp inv-medic.lisp
 PYTHON_FILES := invariants.py util.py
+DOC_FILES := invariants.py.doc Makefile
+EDG_DIR := /projects/se/people/jake/invariants/vortex/C++/front-end/release/dist
+EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.o $(EDG_DIR)/edgcpfe $(EDG_DIR)/instrumentor
 
 ## Examples of better ways to get the lists:
 # PERL_MODULES := $(wildcard *.pm)
@@ -22,12 +25,32 @@ PYTHON_FILES := invariants.py util.py
 ### Rules
 ###
 
+### Distribution
+
+dist: invariants.tar.gz
+
+# Also creates a directory called "dist"
+invariants.tar: $(LISP_FILES) $(PYTHON_FILES) $(DOC_FILES) $(EDG_FILES) README-dist
+	if (test -d dist); then rm -rf dist-`date +'%y%m%d'`; mv -f dist dist-`date +'%y%m%d'`; fi
+	mkdir invariants
+	cp -p $(LISP_FILES) $(PYTHON_FILES) $(DOC_FILES) invariants
+	cp -p README-dist invariants/README
+	# C/C++ instrumenter
+	cp -p $(EDG_FILES) invariants
+	echo "0" > invariants/label.txt
+	rm -rf invariants.tar
+	tar cvf invariants.tar invariants
+	mv invariants dist
+
+invariants.tar.gz: invariants.tar
+	rm -rf invariants.tar.gz
+	gzip -c invariants.tar > invariants.tar.gz
+
+### Tags
+
 tags: TAGS
 
 ## As of July 1998, my Linux etags works on Python; my Solaris one doesn't.
 ## So I should be sure to do the make on a Linux machine. -MDE
 TAGS:  $(LISP_FILES) $(PYTHON_FILES)
 	etags $(LISP_FILES) $(PYTHON_FILES)
-
-## I should add a rule for making the distribution, which will include
-## documentation and sample files.
