@@ -195,11 +195,14 @@ new_bug()
     SEVERITIES="Lethal,Vexing,Boneheaded,RFE"
     input "Severity {$SEVERITIES}" "LVBR" severity
     severity=`expand $severity $SEVERITIES`
-    
+
+    NICKNAME=`ypcat passwd | grep $USER | cut -d: -f5 | cut -d' ' -f1`
+    [ -z "$NICKNAME" ] && NICKNAME=$USER
+
     {
     # update functions header/body when adding fields:
     echo -e "Version:      \$Id\$"
-    echo -e "Owner:        $USER <$EMAIL>"
+    echo -e "Owner:        $NICKNAME <$EMAIL>"
     echo -e "Cc:           "
     echo -e "Tool:         $tool"
     echo -e "Summary:      $summary"
