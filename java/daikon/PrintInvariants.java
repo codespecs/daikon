@@ -143,6 +143,7 @@ public class PrintInvariants {
       new LongOpt(Daikon.show_progress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.no_show_progress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(Daikon.track_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
     };
     Getopt g = new Getopt("daikon.PrintInvariants", args, "h", longopts);
     int c;
@@ -201,6 +202,14 @@ public class PrintInvariants {
           // nothing to do
         } else if (Daikon.ppt_regexp_SWITCH.equals(option_name)) {
           // nothing to do
+        } else if (Daikon.track_SWITCH.equals (option_name)) {
+          LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
+          String error = Debug.add_track (g.getOptarg());
+          if (error != null) {
+            System.out.println ("Error parsing track argument '"
+                                + g.getOptarg() + "' - " + error);
+            System.exit(1);
+          }
         } else {
           throw new RuntimeException("Unknown long option received: " +
                                      option_name);
