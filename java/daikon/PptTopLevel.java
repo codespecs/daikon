@@ -4422,16 +4422,6 @@ public class PptTopLevel
     invariants_merged = true;
   }
 
-  // used by merge_conditionals below
-  private static class SplitChild {
-    public PptRelation rel;
-    public PptSplitter ppt_split;
-    public SplitChild (PptRelation rel, PptSplitter ppt_split) {
-      this.rel = rel;
-      this.ppt_split = ppt_split;
-    }
-  }
-
   /**
    * Merges the conditionals from the children of this ppt to this ppt.
    * Only conditionals that exist at each child and whose splitting condition
@@ -4446,11 +4436,11 @@ public class PptTopLevel
       return;
 
     // If the children are only ppt => ppt_cond, there is nothing to do
-    for (Iterator ii = children.iterator(); ii.hasNext(); ) {
-      PptRelation rel = (PptRelation) ii.next();
-      if (rel.getRelationType() == PptRelation.PPT_PPTCOND)
-        return;
-    }
+//     for (Iterator ii = children.iterator(); ii.hasNext(); ) {
+//       PptRelation rel = (PptRelation) ii.next();
+//       if (rel.getRelationType() == PptRelation.PPT_PPTCOND)
+//         return;
+//     }
 
     // If there are no splitters there is nothing to do
     if (!has_splitters())
@@ -4461,52 +4451,6 @@ public class PptTopLevel
       for (int ii = 0; ii < children.size(); ii++ ) {
         PptRelation rel = (PptRelation) children.get(ii);
         debugConditional.fine ("child: " + rel);
-      }
-    }
-
-    // Build a splitters list at this point that contains all of the
-    // splitters that exist at each child.  This should also insure that
-    // the splitter is over the same variables both here and at each
-    // child (but it doesn't).  The shortcut is to accept the splitter if
-    // it is valid at this point.
-
-    // Loop over each splitter
-    splitter_loop:
-    for (Iterator ii = splitters.iterator(); ii.hasNext(); ) {
-      PptSplitter ppt_split = (PptSplitter) ii.next();
-
-      // list of children that match this splitter
-      List /*SplitChild*/ split_children = new ArrayList();
-
-      // Create a list of children for this splitter
-      child_loop: for (int jj = 0; jj < children.size(); jj++ ) {
-        PptRelation rel = (PptRelation) children.get(jj);
-        if (!rel.child.has_splitters())
-          break;
-        for (Iterator kk = rel.child.splitters.iterator(); kk.hasNext(); ) {
-          PptSplitter csplit = (PptSplitter) kk.next();
-          if (ppt_split.splitter == csplit.splitter) {
-            split_children.add (new SplitChild (rel, csplit));
-            continue child_loop;
-          }
-        }
-        break;
-      }
-
-
-      // If we didn't find a matching splitter at each child, can't merge
-      // this point.  Just remove it from the list of splitters
-      if (split_children.size() != children.size()) {
-        ii.remove();
-        continue;
-      }
-
-      // Build the PptRelations for each child.  The PptRelation from
-      // the conditional point is of the same type as the original
-      // relation from parent to child
-      for (Iterator jj = split_children.iterator(); jj.hasNext(); ) {
-        SplitChild sc = (SplitChild) jj.next();
-        ppt_split.add_relation (sc.rel, sc.ppt_split);
       }
     }
 
