@@ -39,6 +39,10 @@ dynamic linking.  As part of this change, it is now required that
 program points so that the set of original variables are available
 when processing exit point declarations.
 
+The generation of implications has been modified.  If there are 
+multiple exclusive invariants, one is chosen as a predicate and
+used for all of the implications.  [more detail to be added, jhp]
+
 *****
 
   Remember that, in general, changes are not permitted to be listed in this
