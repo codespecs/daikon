@@ -364,6 +364,7 @@ LASTP is non-nil if this is the last form (the return value) in the function bod
 	  (declare (ignore weekday dstp time-zone))
 	  (format *decl-output-stream* "# Written ~s ~a ~s ~2,'0d:~2,'0d:~2,'0d~%~%"
 		  date (aref ext::abbrev-month-table (1- month)) year hour min sec))
+	(format *decl-output-stream* "VarComparability~%explicit~%~%")
 	(let ((eof nil)
 	      (eof-marker (gensym)))
 	  (loop while (not eof)
