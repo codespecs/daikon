@@ -29,6 +29,14 @@ DIST_DIR_2 := /projects/se/people/mernst/www
 ### Rules
 ###
 
+### Default tag
+help:
+	@echo "Targets:"
+	@echo " tags TAGS"
+	@echo " dist invariants.tar"
+	@echo " dist-edg dist-edg-solaris"
+	@echo " examples examples-gries"
+
 ### Tags
 
 tags: TAGS
@@ -62,7 +70,7 @@ invariants.tar: $(LISP_FILES) $(PYTHON_FILES) $(DOC_FILES) $(EDG_FILES) README-d
 	cp -p $(EDG_FILES) invariants
 	cp -p $(EDG_DIR)/Makefile invariants/Makefile-sample
 	echo "0" > invariants/label.txt
-	# Fix permission problems with C/C++ instrumenter
+	# Fix permission problems with C/C++ instrumenter (due to Jake's directory)
 	(cd invariants; chmod +r *; chmod -x Makefile-sample dump_trace.c dump_trace.h; chmod +x instrumentor)
 
 	date > invariants/VERSION

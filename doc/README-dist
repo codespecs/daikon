@@ -7,13 +7,13 @@ formal specification, such as "x > abs(y)" or "x = 3*y + 4*z - 7" or "x = 0
 (mod 4)".  These invariants can be useful in program understanding and a
 host of other applications.  The technique is to run the program and
 examine the values it computes, looking for patterns and relationships
-among those values.  Front ends exist for C, C++, and Lisp; a Java version
-is in progress.
+among those values.  Front ends exist for C, C++, Lisp, and Java.
 
 Table of contents of this document:
  * Installing the invariant detection engine
  * Using the invariant detection engine
  * Manifest (list of files in the distribution)
+ * License
  * Getting more help
 
 
@@ -85,14 +85,17 @@ Lisp front end:
     (compile-all)	;; only needs to be done once (ever)
     (load-all)		;; only needs to be done explicitly after compiling
 
-
 Java front end:
-  This is still under development.
-  When complete, there will be two options:
-    * first instrument (step 1), then run the program (step 2)
-    * an integrated command that does both of these steps
- not be separate steps for instrumentation and
-    running the program; instead, one command will accomplish both, though
+  For legal reasons, the Java front end cannot be distributed at this time
+  (early June, 1999), because it uses a commercially-developed library for
+  bytecode manipulation.  Legal papers are in process to make that library
+  distributable.
+
+  The steps of instrumentation and running the program are integrated.  In
+  the command that runs your program, simply replace "java" by "java Xform
+  -x DaikonTransformer", and the program will run as usual but also write
+  declaration and data trace files to a  subdirectory named "daikon-output/".
+
 
 
 Step 2:  Run the program
@@ -180,6 +183,20 @@ Invariant detection engine
 Miscellaneous files
   Makefile		Makefile for the invariant detection system
   VERSION		Timestamp of this distribution
+  License		License agreement
+
+
+License
+=======
+
+Daikon is made available for education and research purposes (not for
+direct commercial gain), and there is no warranty.  All rights are
+reserved, and copyright is held by the authors.  If you have difficulties
+with the software, let us know and we will try to correct the problem, but
+we cannot make any guarantees of support, or any other guarantees regarding
+the software.  As a condition of use, you agree to promptly communicate any
+changes, improvements, or enhancements to the authors for inclusion in a
+future release under these same conditions.
 
 
 Getting more help

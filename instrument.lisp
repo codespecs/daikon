@@ -182,6 +182,12 @@ LASTP is non-nil if this is the last form (the return value) in the function bod
 			       fn-name params bound-vars t)))
 	     (append result-sans-last-stmt (progn-body last-stmt))))
 
+	  ((eq head 'instrument)
+	   (make-write-to-data-trace
+	    (string-append (symbol-name fn-name)
+			   ":::" (symbol-name (second form)))
+	    bound-vars))
+
 	  ;; PROBLEM with do-od: I need to insert something in the
 	  ;; macroexpanded version.
 
