@@ -849,11 +849,20 @@ public final class ArraysMDE {
       Comparable[] a2 = (Comparable[])o2;
       int len = Math.min(a1.length, a2.length);
       for (int i=0; i<len; i++) {
-        int tmp = a1[i].compareTo(a2[i]);
+        Comparable elt1 = a1[i];
+        Comparable elt2 = a2[i];
+        // Make null compare smaller than anything else
+        if ((elt1 == null) && (elt2 == null))
+          continue;
+        if (elt1 == null)
+          return -1;
+        if (elt2 == null)
+          return 1;
+        int tmp = elt1.compareTo(elt2);
         if (tmp != 0)
           return tmp;
         // Check the assumption that the two elements are equal.
-        Assert.assert(a1[i].equals(a2[i]));
+        Assert.assert(elt1.equals(elt2));
       }
       return a1.length - a2.length;
     }
@@ -872,12 +881,21 @@ public final class ArraysMDE {
       Object[] a2 = (Object[])o2;
       int len = Math.min(a1.length, a2.length);
       for (int i=0; i<len; i++) {
-        int tmp = a1[i].hashCode() - a2[i].hashCode();
+        Object elt1 = a1[i];
+        Object elt2 = a2[i];
+        // Make null compare smaller than anything else
+        if ((elt1 == null) && (elt2 == null))
+          continue;
+        if (elt1 == null)
+          return -1;
+        if (elt2 == null)
+          return 1;
+        int tmp = elt1.hashCode() - elt2.hashCode();
         if (tmp != 0)
           return tmp;
         // I'm counting on the fact that hashCode returns a different
         // number for each Object in the system.  This checks that assumption.
-        Assert.assert(a1[i].equals(a2[i]));
+        Assert.assert(elt1.equals(elt2));
       }
       return a1.length - a2.length;
     }
@@ -954,11 +972,20 @@ public final class ArraysMDE {
       if (tmp != 0)
         return tmp;
       for (int i=0; i<a1.length; i++) {
-        tmp = a1[i].compareTo(a2[i]);
+        Comparable elt1 = a1[i];
+        Comparable elt2 = a2[i];
+        // Make null compare smaller than anything else
+        if ((elt1 == null) && (elt2 == null))
+          continue;
+        if (elt1 == null)
+          return -1;
+        if (elt2 == null)
+          return 1;
+        tmp = elt1.compareTo(elt2);
         if (tmp != 0)
           return tmp;
         // Check the assumption that the two elements are equal.
-        Assert.assert(a1[i].equals(a2[i]));
+        Assert.assert(elt1.equals(elt2));
       }
       return 0;
     }
@@ -980,12 +1007,21 @@ public final class ArraysMDE {
       if (tmp != 0)
         return tmp;
       for (int i=0; i<a1.length; i++) {
-        tmp = a1[i].hashCode() - a2[i].hashCode();
+        Object elt1 = a1[i];
+        Object elt2 = a2[i];
+        // Make null compare smaller than anything else
+        if ((elt1 == null) && (elt2 == null))
+          continue;
+        if (elt1 == null)
+          return -1;
+        if (elt2 == null)
+          return 1;
+        tmp = elt1.hashCode() - elt2.hashCode();
         if (tmp != 0)
           return tmp;
         // I'm counting on the fact that hashCode returns a different
         // number for each Object in the system.  This checks that assumption.
-        Assert.assert(a1[i].equals(a2[i]));
+        Assert.assert(elt1.equals(elt2));
       }
       return 0;
     }

@@ -18,7 +18,8 @@ public final class Intern {
    **/
   public static void internStrings(String[] a) {
     for (int i=0; i<a.length; i++)
-      a[i] = a[i].intern();
+      if (a[i] != null)
+        a[i] = a[i].intern();
   }
 
 

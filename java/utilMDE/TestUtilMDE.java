@@ -381,6 +381,7 @@ public final class TestUtilMDE extends TestCase {
       String[] a5 = new String[] { "0","1","2","3","4" };
       String[] a6 = new String[] { "0","1","5","3","4" };
       String[] a7 = new String[] { "1","2","3","4" };
+      String[] a8 = new String[] { "0","1",null,"3","4" };
 
       assert(cacl.compare(a0, a1) == 0);
       assert(caclf.compare(a0, a1) == 0);
@@ -424,8 +425,18 @@ public final class TestUtilMDE extends TestCase {
       assert(caclf.compare(a4, a6) < 0);
       assert(cacl.compare(a7, a4) > 0);
       assert(caclf.compare(a7, a4) < 0);
-      assert(cacl.compare(a4, a7) < 0);
-      assert(caclf.compare(a4, a7) > 0);
+      assert(cacl.compare(a8, a1) > 0);
+      assert(caclf.compare(a8, a1) > 0);
+      assert(cacl.compare(a1, a8) < 0);
+      assert(caclf.compare(a1, a8) < 0);
+      assert(cacl.compare(a8, a2) < 0);
+      assert(caclf.compare(a8, a2) > 0);
+      assert(cacl.compare(a2, a8) > 0);
+      assert(caclf.compare(a2, a8) < 0);
+      assert(cacl.compare(a8, a3) < 0);
+      assert(caclf.compare(a8, a3) < 0);
+      assert(cacl.compare(a3, a8) < 0);
+      assert(caclf.compare(a3, a8) > 0);
     }
 
   }
@@ -996,7 +1007,7 @@ public final class TestUtilMDE extends TestCase {
     assert(UtilMDE.rpad("abcdef", 5).equals("abcde"));
     assert(UtilMDE.rpad("abcdefghij", 5).equals("abcde"));
     assert(UtilMDE.rpad(10, 5).equals("10   "));
-    
+
     // This will be easy to write tests for, when I get around to it.
     // public static Vector tokens(String str, String delim, boolean returnTokens)
     // public static Vector tokens(String str, String delim)
