@@ -1,0 +1,100 @@
+===========================================================================
+
+The colony-* scripts use two different file formats:  match files and
+result files.
+A match file indicates a set of match to be run; it consists of lines
+of the form "team1 team2" (without the quotes).
+A result file indicates the outcome of a set of matches.
+
+colony-tournament-matches.pl	Produces a match file
+colony-runmatches.pl	Takes as input a match file, produes a result file
+colony-runmatch.pl	Produces a result file for a single match
+colony-tournament-summarize.pl	Produces statistics from a set of result files
+
+----------------
+
+Example use:
+
+cd $inv/papers/steering-paper/experiments
+
+##
+## Create matches
+##
+
+# Create a list of all matches in a complete round-robin tournament
+colony-tournament-matches.pl > matches-one-tournament
+
+# Create a list of all matches required to balance any matches in the
+# tournament-results-* files into a round-robin tournament (possibly with
+# multiple matches per pair of teams).
+colony-tournament-matches.pl tournament-results-* > matches-remaining-noargs
+
+##
+## Run matches
+##
+
+# Run all the matches in a match file, with no parameters to the DVM.
+colony-runmatches.pl matches-remaining-noargs tournament-results-remaining-noargs
+# Run all the matches in a match file, supplying arguements to the DVM.
+...
+
+# Run all the matches in a match file, on every machine.
+colony-runmatches.pl --duplicate matches-remaining-noargs tournament-results-remaining-noargs
+
+# Run all the matches in a match file, on every machine whose load is less
+# than .1.
+colony-runmatches.pl --duplicate --loadlimit=.1 matches-remaining-noargs tournament-results-remaining-noargs
+
+# Run all the matches in a match file, distributing the work across
+# multiple machines in order to complete faster.
+colony-runmatches.pl --distribute matches-remaining-noargs tournament-results-remaining-noargs
+
+##
+## Update tournamet status
+##
+
+# Get an update of tournament status:
+colony-tournament-summarize.pl tournament-results-noargs
+
+
+===========================================================================
+
+To run a match on using the DVM engine:
+
+cd ~leelin/research/6.370/2003/colony
+java -cp .:classes:../common/classes colony.simulator.SimClient
+# Usage: java colony.simulator.SimClient [NOGUI?] [mean time to failure] [output filename]
+# Example: java colony.simulator.SimClient GUI 1000 results.txt
+# Example: java colony.simulator.SimClient NOGUI
+# Example: java colony.simulator.SimClient NOGUI -1 testout.txt
+
+SimClient reads the matched teams from file
+  conf/sim.conf
+in which only two distinct lines should be uncommented (no # sign in front).
+
+Lee's code to run multiple matches between two robots (using the Java
+thread engine):
+  ~leelin/research/workspace/6.370/colonyscript.pl
+
+The output file is appended to, not overwritten;
+it contains the last line of the output, like one of:
+  [Mon Sep 15 22:39:57 EDT 2003] Winning Team: truth and justice Elapsed Time: 1874 cycles
+  [Tue Sep 16 07:56:22 EDT 2003] Winning Team: Hyperbola Elapsed Time: 5000 cycles
+The Winning Team may be "No winner."
+(Before this summary line, the "SimClient" command produces scads of
+uninteresting output to standard out.)
+A match takes about 3 minutes to run (on manioc).
+
+----------------
+
+# I can either copy Lee's directory, or link it.  Which is the right
+# approach, if he is likely to make changes?
+
+mkdir ~/tmp/steering-experiments
+cd ~/tmp/steering-experiments
+cp -pR /PAG/g6/users/leelin/research/6.370/lees-2003 ~/tmp/steering-experiments
+
+cd ~/tmp/steering-experiments/lees-2003/colony
+java -cp sources:../common/classes:teams:. colony.simulator.SimClient GUI -1 testout.txt
+
+===========================================================================
