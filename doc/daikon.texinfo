@@ -318,13 +318,18 @@ Tools
 * InvariantChecker::            
 * LogicalCompare::              
 
+Runtime-check instrumenter (runtimechecker)
+
+* Accessing violations::        
+
 Troubleshooting
 
 * dfej problems::               
 * dfec problems::               
 * Daikon problems::             
 * Large dtrace files::          
-* Other problems::              
+* Parsing Java 5.0 code::       
+* Tree GUI font errors::        
 * Reporting bugs::              
 * Known bugs::                  
 * Further reading::             
@@ -370,10 +375,6 @@ Large data trace (.dtrace) files
 * Reducing variables::          
 * Reducing executions::         
 * Reading trace data on the fly::  
-
-Other problems
-
-* Tree GUI font errors::        
 
 Details
 
@@ -2658,7 +2659,8 @@ Daikon does not produce output for local variables, only for variables
 visible from outside a procedure.  Thus, its output forms a
 specification (mostly) from the view of a client of a procedure.  A
 future version of Daikon may permit output of local variables as a user
-option.
+option; send mail to @email{daikon-developers@@lists.csail.mit.edu} if
+this functionality is important to you.)
 
 @menu
 * orig variable example::       
@@ -6231,6 +6233,7 @@ belongs to (@code{null} for object invariants).
 @section Runtime-check instrumenter (runtimechecker)
 
 @cindex runtime-check instrumenter
+@cindex runtimechecker instrumenter
 
 The runtimechecker instrumenter inserts, into a Java file,
 instrumentation code that checks invariants as the program executes.
@@ -6239,19 +6242,25 @@ daikon.tools.runtimechecker.Main help}.
 
 The @code{instrument} command to runtimechecker creates a new directory
 @file{instrumented-classes} containing a new version of the
-user-specified Java files, instrumented to check invariants at runtime.
+user-specified Java files, instrumented to check invariants at runtime
+and to record a list of invariant violations in a Java data structure.
 
-for example, to create a version of file
+Note that the instrumented program does not do anything with the list of
+violations; it merely creates the list.  You will need to write your own
+code to process that list; see @xref{Accessing violations}.
+
+
+Here is an example of use of the runtime-check instrumenter.
+To create a version of file
 @file{ubs/BoundedStack.java} that checks the invariants in 
 invariant file @file{BoundedStack.inv.gz}, do:
 @example
 java daikon.tools.runtimechecker.Main instrument BoundedStack.inv.gz ubs/BoundedStack.java
 @end example
 @noindent
-
 The instrumented Java code references classes in the
 @code{daikon.tools.runtimechecker} package, so those classes must be
-present in the classpath when the instrumented program is compiled and
+present in the classpath when the instrumented classes are compiled and
 executed.
 
 Invariants are evaluated at the program points at which they should
@@ -6283,12 +6292,35 @@ The throwable is not rethrown.
 @end itemize
 
 
-As indicated above, the instrumented class handles violations silently:
+@menu
+* Accessing violations::        
+@end menu
+
+@node    Accessing violations,  , Runtime-check instrumenter, Runtime-check instrumenter
+@subsection Accessing violations
+
+The instrumented class handles violations silently:
 it simply adds them to a list in the class
 @code{daikon.tools.runtimechecker.Runtime.}  
 No "invariant violation" exceptions are thrown, and the violated
 invariants can only be obtained dynamically from class
 @code{daikon.tools.runtimechecker.Runtime}.
+
+A future release of Daikon will provide tools that process the list in
+the following ways:
+@enumerate
+@item To write a file of all the violations for a program execution.
+@cindex WriteViolationFile tool
+  A prototype of such a tool is provided in the Daikon distribution, as
+  program @code{daikon.tools.runtimechecker.WriteViolationFile}.  If you
+  would ordinarily run your program as @samp{java MyProg arg1 arg2},
+  then running @samp{java daikon.tools.runtimechecker.WriteViolationFile
+  MyProg arg1 arg2} creates a file called @file{violations.txt} in the
+  current directory.  If the program under test calls
+  @code{System.exit}, then no @file{violations.txt} file is created.
+@item Throw an exception when any violation occurs.
+@end enumerate
+
 
 The following code snippet contains a method @code{callMethod()} which
 presumably calls one of the methods in the instrumented class.
@@ -6570,7 +6602,8 @@ Daikon; it also tells you how to report bugs in a useful manner.
 * dfec problems::               
 * Daikon problems::             
 * Large dtrace files::          
-* Other problems::              
+* Parsing Java 5.0 code::       
+* Tree GUI font errors::        
 * Reporting bugs::              
 * Known bugs::                  
 * Further reading::             
@@ -7312,7 +7345,7 @@ detecting fewer invariants, especially over sequences.
 For details on improving Daikon's performance, see @ref{Out of
 memory}, and @ref{Large dtrace files}.
 
-@node    Large dtrace files, Other problems, Daikon problems, Troubleshooting
+@node    Large dtrace files, Parsing Java 5.0 code, Daikon problems, Troubleshooting
 @section Large data trace (.dtrace) files
 
 @cindex data trace files, too large
@@ -7559,15 +7592,21 @@ trace data to the standard output (being careful not to overwrite the
 @file{.decls} file), which is then piped to Daikon which reads it from
 the standard input.
 
-@node    Other problems, Reporting bugs, Large dtrace files, Troubleshooting
-@section Other problems
+@node    Parsing Java 5.0 code, Tree GUI font errors, Large dtrace files, Troubleshooting
+@section Parsing Java 5.0 code
 
-@menu
-* Tree GUI font errors::        
-@end menu
+The Annotate (@pxref{Annotate}) and runtimechecker (@pxref{Runtime-check
+instrumenter}) tools use an external library (JTB,
+@uref{http://compilers.cs.ucla.edu/jtb/}) for parsing Java code.  That
+external library has an error in parsing logical shift operators such as
+@code{x << y} or @code{x >> y}.  Therefore, such invariants (along with
+a few other invariants that cannot be propertly formatted as Java code)
+are suppressed from the output of these tools.  (Annotate inserts them
+as comments, and runtimechecker silently ignores them.)
 
-@node    Tree GUI font errors,  , Other problems, Other problems
-@subsection Tree GUI font errors
+
+@node    Tree GUI font errors, Reporting bugs, Parsing Java 5.0 code, Troubleshooting
+@section Tree GUI font errors
 
 @cindex font not found
 
@@ -7596,7 +7635,7 @@ If you don't have permission to edit @file{font.properties}, ask
 your system administrator to do so.
 
 
-@node    Reporting bugs, Known bugs, Other problems, Troubleshooting
+@node    Reporting bugs, Known bugs, Tree GUI font errors, Troubleshooting
 @section Reporting bugs
 
 @cindex reporting bugs
@@ -7665,10 +7704,12 @@ You may also wish to take advantage of the Daikon mailing lists
 @node    Known bugs, Further reading, Reporting bugs, Troubleshooting
 @section Known bugs
 
-@c [The following problems are already known.  (You may report them again,]
-@c [to encourage us to release the fix faster, if you like.)]
+@c @c Use the following if there are no known problems.
+@c There are no outstanding user-reported problems at this time.
 
-There are no outstanding user-reported problems at this time.
+@c The following problems are already known.  (You may report them again,
+@c to encourage us to fix them faster, if the problems are important to you.)
+
 
 
 @node    Further reading,  , Known bugs, Troubleshooting
@@ -7678,14 +7719,15 @@ More information on Daikon can be found in the Daikon Developer Manual.
 For instance, the Daikon Developer Manual indicates how to extend
 Daikon with new invariants, new derived variables, and front ends for
 new languages.  It also contains information about the implementation
-and about debugging flags.
+and about how to debug.
 
-The mailing list archives (@pxref{Mailing lists}) may contain helpful
-information (we strive to incorporate that information in this
-manual), or you may find discussions on those lists helpful to you.
+You may find discussions on the mailing lists (@pxref{Mailing lists})
+helpful.  The mailing list archives may contain helpful information, but
+we strive to incorporate that information in this manual so that you
+don't have to search the archives as well.
 
 For further reading, see the list of publications at the 
-Daikon homepage, @uref{http://pag.csail.mit.edu/daikon/}.
+Daikon homepage, @uref{http://pag.csail.mit.edu/daikon/pubs/}.
 
 
 @node    Details, File formats, Troubleshooting, Top
