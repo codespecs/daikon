@@ -481,7 +481,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	# mkdir /tmp/daikon/front-end/c
 	# cp -p $(C_RUNTIME_PATHS) /tmp/daikon/front-end/c
 
-	# Java instrumenter
+	# Java instrumenter (dfej)
 	# The -h option saves symbolic links as real files, to avoid problem
 	# with the fact that I've made dfej into a symbolic link.
 	(cd $(DFEJ_DIR)/..; tar chf /tmp/dfej.tar --exclude '*.o' --exclude 'src/dfej' --exclude 'src.tar' dfej)
