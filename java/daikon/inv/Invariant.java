@@ -70,7 +70,8 @@ public abstract class Invariant implements java.io.Serializable {
 		  || (result == PROBABILITY_UNJUSTIFIED)
 		  || (result == PROBABILITY_UNKNOWN)
 		  || (result == PROBABILITY_NEVER)
-		  || ((0 <= result) && (result <= 1)));
+		  || ((0 <= result) && (result <= 1)),
+		  getClass().getName());
     return result;
     // if (!probability_cache_accurate) {
     //   probability_cache = computeProbability();
