@@ -568,10 +568,12 @@ public abstract class Invariant implements java.io.Serializable {
       return false;
     }
 
+    // [INCR] ...
     // The invariant is worth printing on its own merits, but it may be
     // controlled.  If any (transitive) controller is worth printing, don't
     // print this one.
     // Use _sorted version for reproducibility.  (There's a bug, but I can't find it.)
+    /*
     Vector contr_invs = find_controlling_invariants_sorted();
     Vector processed = new Vector();
     while (contr_invs.size() > 0) {
@@ -606,6 +608,8 @@ public abstract class Invariant implements java.io.Serializable {
     if (debugIsWorthPrinting.isDebugEnabled()) {
       debugIsWorthPrinting.debug("isWorthPrinting => true for: " + format() + " at " + ppt.name);
     }
+    */
+    // ... [INCR]
     return true;
   }
 
@@ -632,7 +636,8 @@ public abstract class Invariant implements java.io.Serializable {
          && (! hasOnlyConstantVariables())
          && (! isObvious())
 	 && justified()
-         && isWorthPrinting_PostconditionPrestate());
+         // && isWorthPrinting_PostconditionPrestate()
+	 );
     return result;
   }
 
@@ -645,7 +650,8 @@ public abstract class Invariant implements java.io.Serializable {
       + " " + (! hasOnlyConstantVariables())
       + " " + (! isObvious())
       + " " + justified()
-      + " " + isWorthPrinting_PostconditionPrestate();
+      // + " " + isWorthPrinting_PostconditionPrestate()
+      ;
   }
 
   /**
@@ -751,13 +757,16 @@ public abstract class Invariant implements java.io.Serializable {
     return false;
   }
 
+  // [INCR] ...
   /**
    * @return true if this invariant is controlled by another invariant
    **/
+  /*
   public boolean isControlled() {
     Vector controllers = this.find_controlling_invariants();
     return (controllers.size() > 0);
   }
+  */
 
   /**
    * @return true if this invariant is a postcondition that is implied
@@ -766,6 +775,7 @@ public abstract class Invariant implements java.io.Serializable {
    * point invariant orig(x)+3=orig(y), then this methods returns
    * true.
    **/
+  /*
   public boolean isImpliedPostcondition() {
     PptTopLevel topLevel = (PptTopLevel) ppt.parent;
     if (topLevel.entry_ppt() != null) { // if this is an exit point invariant
@@ -803,20 +813,24 @@ public abstract class Invariant implements java.io.Serializable {
     }
     return true;
   }
+  */
 
   /**
    * Used in isImpliedPostcondition() and isWorthPrinting_PostconditionPrestate().
    **/
+  /*
   private final static IsSameInvariantNameExtractor preToPostIsSameInvariantNameExtractor =
     new DefaultIsSameInvariantNameExtractor() {
 	public VarInfoName getFromFirst(VarInfo var)
 	{ return super.getFromFirst(var).applyPrestate(); }
       };
+  */
 
   /**
    * Returns a Vector[Invariant] which are the sameInvariant as this,
    * drawn from the invariants of this.ppt.parent.controllers.
    **/
+  /*
   public Vector find_controlling_invariants()
   {
     // We used to assume there was at most one of these, but that
@@ -850,8 +864,9 @@ public abstract class Invariant implements java.io.Serializable {
 
     return results;
   }
-
+  */
   // For reproducible results when debugging
+  /*
   static Comparator invComparator = new Invariant.ClassVarnameComparator();
   public Vector find_controlling_invariants_sorted() {
     Vector unsorted = find_controlling_invariants();
@@ -862,6 +877,9 @@ public abstract class Invariant implements java.io.Serializable {
       result.add(invs[i]);
     return result;
   }
+  */
+  // ... [INCR]
+
 
   // Uninteresting invariants will override this method to return
   // false
