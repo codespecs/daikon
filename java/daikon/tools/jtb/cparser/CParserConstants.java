@@ -4,6 +4,8 @@ package daikon.tools.jtb.cparser;
 
 public interface CParserConstants {
 
+  // No need for "static final" on these ints, as this is an interface.
+
   int EOF = 0;
   int INTEGER_LITERAL = 7;
   int DECIMAL_LITERAL = 8;

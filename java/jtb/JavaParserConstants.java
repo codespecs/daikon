@@ -2,6 +2,8 @@
 package jtb;
 public interface JavaParserConstants {
 
+  // No need for "static final" on these ints, as this is an interface.
+
   int EOF = 0;
   int SINGLE_LINE_COMMENT = 9;
   int FORMAL_COMMENT = 10;
