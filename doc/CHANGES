@@ -21,13 +21,13 @@ Further documentation can be found in:
 
 The 4.0.0 version of Daikon introduces many substantial enhancements.
 These improvements include:
- * liberalized license permits unrestricted use
- * new Java classfile front end ("Chicory") handles Java 5.0 (and earlier)
- * annotation and other source manipulation components handle Java 5.0
- * new Eclipse plug-in eases running many components of the Daikon system
- * new runtime checking tool can insert assertions into your programs
- * command-line options have been standardized across Daikon components
- * many bug fixes, documentation updates, and other minor improvements
+ * Liberalized license permits unrestricted use.
+ * New Java classfile front end ("Chicory") handles Java 5.0 (and earlier).
+ * Annotation and other source manipulation components handle Java 5.0.
+ * New Eclipse plug-in eases running many components of the Daikon system.
+ * New runtime checking tool can insert assertions into your programs.
+ * Command-line options have been standardized across Daikon components.
+ * Many bug fixes, documentation updates, and other minor improvements.
 
 License
 
