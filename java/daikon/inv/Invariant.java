@@ -178,6 +178,10 @@ public abstract class Invariant implements java.io.Serializable {
    **/
   public abstract String format_esc();
 
+  /**
+   * Representation for the Simplify theorem prover.
+   **/
+  public abstract String format_simplify();
 
   // This should perhaps be merged with some kind of PptSlice comparator.
   // I used to say the follwoing, bu tit might not be true any more.
@@ -233,15 +237,15 @@ public abstract class Invariant implements java.io.Serializable {
 
   public static interface IsSameInvariantNameExtractor
   {
-    public String getFromFirst(VarInfo var1);
-    public String getFromSecond(VarInfo var2);
+    public VarInfoName getFromFirst(VarInfo var1);
+    public VarInfoName getFromSecond(VarInfo var2);
   }
 
   public static class DefaultIsSameInvariantNameExtractor
     implements IsSameInvariantNameExtractor
   {
-    public String getFromFirst(VarInfo var1)  { return var1.name; }
-    public String getFromSecond(VarInfo var2) { return var2.name; }
+    public VarInfoName getFromFirst(VarInfo var1)  { return var1.name; }
+    public VarInfoName getFromSecond(VarInfo var2) { return var2.name; }
   }
   private static final IsSameInvariantNameExtractor defaultIsSameInvariantNameExtractor = new DefaultIsSameInvariantNameExtractor();
 
@@ -302,13 +306,13 @@ public abstract class Invariant implements java.io.Serializable {
       Vector all_vars_names1 = new Vector(all_vars1.size());
       for (Iterator iter = all_vars1.iterator(); iter.hasNext(); ) {
 	VarInfo elt = (VarInfo) iter.next();
-	String name = name_extractor.getFromFirst(elt);
+	VarInfoName name = name_extractor.getFromFirst(elt);
 	all_vars_names1.add(name);
       }
       boolean intersection = false;
       for (Iterator iter = all_vars2.iterator(); iter.hasNext(); ) {
 	VarInfo elt = (VarInfo) iter.next();
-	String name = name_extractor.getFromSecond(elt);
+	VarInfoName name = name_extractor.getFromSecond(elt);
 	intersection = all_vars_names1.contains(name);
 	if (intersection) {
 	  break;
@@ -389,21 +393,33 @@ public abstract class Invariant implements java.io.Serializable {
     // Which is most often successful?  Which assume others have already
     // been performed?
     if (! isWorthPrinting_sansControlledCheck()) {
-      // System.out.println("Not worth printing on its own merits: " + format() + ", " + repr_prob());
       return false;
     }
+
     // The invariant is worth printing on its own merits, but it may be
     // controlled.  If any (transitive) controller is worth printing, don't
     // print this one.
-    Invariant cont_inv = find_controlling_invariant();
-    while (cont_inv != null) {
-      if (cont_inv.isWorthPrinting_sansControlledCheck()) {
-        // System.out.println("Not worth printing " + format() + " on account of controller " + cont_inv.format() + " which is worth printing on its own merits.");
+    Vector contr_invs = find_controlling_invariants();
+    Vector processed = new Vector();
+    while (contr_invs.size() > 0) {
+      Invariant contr_inv = (Invariant) contr_invs.remove(0);
+      processed.add(contr_inv);
+      if (contr_inv.isWorthPrinting_sansControlledCheck()) {
+	// we have a printable controller, so we shouldn't print
         return false;
       }
-      // System.out.println("Maybe worth printing " + format() + " despite controller " + cont_inv.format() + " which is not worth printing on its own merits.");
-      cont_inv = cont_inv.find_controlling_invariant();
+      // find the controlling invs of contr_inv and add them to the
+      // working set iff the are not already in it and they have not
+      // been processed already
+      Iterator iter = contr_inv.find_controlling_invariants().iterator();
+      while (iter.hasNext()) {
+	Object elt = iter.next();
+	if (!processed.contains(elt) && !contr_invs.contains(elt)) {
+	  contr_invs.add(elt);
+	}
+      }
     }
+
     // No controller was worth printing
     return true;
   }
@@ -532,20 +548,21 @@ public abstract class Invariant implements java.io.Serializable {
    * @return true if this invariant is controlled by another invariant
    **/
   public boolean isControlled() {
-    Invariant controller = this.find_controlling_invariant();
-    return (controller != null);
+    Vector controllers = this.find_controlling_invariants();
+    return (controllers.size() > 0);
   }
 
   /**
-   * @return true if this invariant is a postcondition that is implied by prestate
-   * invariants.  For example, if an entry point has the invariant orig(x)+3=orig(y), and
-   * this invariant is the corresponding exit point invariant x+3=y, then this methods
-   * returns true.
+   * @return true if this invariant is a postcondition that is implied
+   * by prestate invariants.  For example, if an entry point has the
+   * invariant x+3=y, and this invariant is the corresponding exit
+   * point invariant orig(x)+3=orig(y), then this methods returns
+   * true.
    **/
   public boolean isImpliedPostcondition() {
     PptTopLevel topLevel = (PptTopLevel) ppt.parent;
     if (topLevel.entry_ppt() != null) { // if this is an exit point invariant
-      Iterator entryInvariants = topLevel.entry_ppt().invariants_vector().iterator();
+      Iterator entryInvariants = topLevel.entry_ppt().invariants_vector().iterator(); // unstable
       while (entryInvariants.hasNext()) {
 	Invariant entryInvariant = (Invariant) entryInvariants.next();
 	// If entryInvariant with orig() applied to everything matches this invariant
@@ -556,40 +573,18 @@ public abstract class Invariant implements java.io.Serializable {
     return false;
   }
 
-  /**
-   * Used in isImpliedPostcondition().
-   **/
-  private final static IsSameInvariantNameExtractor preToPostIsSameInvariantNameExtractor =
-    new DefaultIsSameInvariantNameExtractor() {
-	public String getFromFirst(VarInfo var)
-	{ return VarInfo.makeOrigName(super.getFromFirst(var)); }
-      };
-
-
-  // Not used as of 1/31/2000.
-  // /**
-  //  * Returns true if this invariant implies the argument invariant.
-  //  * Intended to be overridden by subclasses.
-  //  */
-  // public boolean implies(Invariant inv) {
-  //   return false;
-  // }
-
-
-
-
   private boolean isWorthPrinting_PostconditionPrestate()
   {
     PptTopLevel pptt = (PptTopLevel) ppt.parent;
 
     if (Daikon.suppress_implied_postcondition_over_prestate_invariants) {
       if (pptt.entry_ppt != null) {
-	Iterator entry_invs = pptt.entry_ppt.invariants_iterator();
+	Iterator entry_invs = pptt.entry_ppt.invariants_iterator(); // unstable
 	while (entry_invs.hasNext()) {
 	  Invariant entry_inv = (Invariant) entry_invs.next();
 	  // If entry_inv with orig() applied to everything matches this
 	  if (entry_inv.isSameInvariant(this, preToPostIsSameInvariantNameExtractor)) {
-	    if (pptt.entry_ppt.isWorthPrinting(entry_inv)) {
+	    if (entry_inv.isWorthPrinting_sansControlledCheck()) {
 	      return false;
 	    }
 	  }
@@ -599,10 +594,31 @@ public abstract class Invariant implements java.io.Serializable {
     return true;
   }
 
+  /**
+   * Used in isImpliedPostcondition() and isWorthPrinting_PostconditionPrestate().
+   **/
+  private final static IsSameInvariantNameExtractor preToPostIsSameInvariantNameExtractor =
+    new DefaultIsSameInvariantNameExtractor() {
+	public VarInfoName getFromFirst(VarInfo var)
+	{ return super.getFromFirst(var).applyPrestate(); }
+      };
 
-
-  public Invariant find_controlling_invariant()
+  /**
+   * Returns a Vector[Invariant] which are the sameInvariant as this,
+   * drawn from the invariants of this.ppt.parent.controllers.
+   **/
+  public Vector find_controlling_invariants()
   {
+    // We used to assume there was at most one of these, but that
+    // turned out to be wrong.  If this ppt has more equality
+    // invariants than the controller, two different invariants can
+    // match.  For example, a controller might say "a > 0", "b > 0" as
+    // two different invariants, but if this ppt also has "a == b"
+    // then both invariants should be returned.  This especailly
+    // matters if, for example, "a > 0" was obvious (and thus wouldn't
+    // suppress this invariant).
+    Vector results = new Vector();
+
     // System.out.println("find_controlling_invariant: " + format());
     PptTopLevel pptt = (PptTopLevel) ppt.parent;
 
@@ -611,18 +627,18 @@ public abstract class Invariant implements java.io.Serializable {
     while (controllers.hasNext()) {
       PptTopLevel controller = (PptTopLevel) controllers.next();
       // System.out.println("Looking for controller of " + format() + " in " + controller.name);
-      Iterator candidates = controller.invariants_iterator();
+      Iterator candidates = controller.invariants_iterator(); // unstable
       while (candidates.hasNext()) {
 	Invariant cand_inv = (Invariant) candidates.next();
 	if (isSameInvariant(cand_inv)) {
-          // System.out.println("Controller found: " + cand_inv.format() + "  [worth printing: " + ((PptTopLevel)cand_inv.ppt.parent).isWorthPrinting(cand_inv) + "]");
-	  return cand_inv;
+	  // System.out.println("Controller found: " + cand_inv.format() + " [worth printing: " + cand_inv.isWorthPrinting() + "]]");
+	  results.add(cand_inv);
 	}
         // System.out.println("Failed candidate: " + cand_inv.format());
       }
     }
 
-    return null;
+    return results;
   }
 
   // Orders invariants by class, then by variable names.  If the
@@ -671,7 +687,7 @@ public abstract class Invariant implements java.io.Serializable {
         int compare = var1.name.compareTo(var2.name);
         if (compare != 0) return compare;
       }
-      
+
       // All the variable names matched
       return 0;
     }
