@@ -18,10 +18,16 @@ export JDKDIR=${JDKDIR:-/g2/jdk}
 # export DAIKONCLASS_SOURCES=1
 
 if [ $DAIKONCLASS_SOURCES ]; then
-  export CLASSPATH=$DAIKONDIR/java:$DAIKONDIR/java/lib/log4j.jar:${CLASSPATH}
+  CPADD=$DAIKONDIR/java:$DAIKONDIR/java/lib/log4j.jar
 else
-  export CLASSPATH=$DAIKONDIR/daikon.jar:${CLASSPATH}
+  CPADD=$DAIKONDIR/daikon.jar
 fi
+if [ ! -z "$CLASSPATH ]; then
+  export CLASSPATH=${CPADD}:${CLASSPATH}
+else
+  export CLASSPATH=${CPADD}
+endif
+
 
 ## Add the Daikon binaries to your path
 export PATH=$DAIKONDIR/bin:${JDKDIR}/bin:${PATH}

@@ -18,9 +18,14 @@ if (! $?JDKDIR) setenv JDKDIR /g2/jdk
 # setenv DAIKONCLASS_SOURCES 1
 
 if (($?DAIKONCLASS_SOURCES) && ($DAIKONCLASS_SOURCES)) then
-  setenv CLASSPATH $DAIKONDIR/java:$DAIKONDIR/java/lib/log4j.jar:${CLASSPATH}
+  setenv CPADD $DAIKONDIR/java:$DAIKONDIR/java/lib/log4j.jar
 else
-  setenv CLASSPATH $DAIKONDIR/daikon.jar:${CLASSPATH}
+  setenv CPADD $DAIKONDIR/daikon.jar
+endif
+if ($?CLASSPATH) then
+  setenv CLASSPATH ${CPADD}:${CLASSPATH}
+else
+  setenv CLASSPATH ${CPADD}
 endif
 
 ## Add the Daikon binaries to your path
