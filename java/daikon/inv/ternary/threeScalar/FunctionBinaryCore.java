@@ -86,7 +86,7 @@ public final class FunctionBinaryCore implements java.io.Serializable {
   public double computeProbability() {
     if (wrapper.no_invariant)
       return Invariant.PROBABILITY_NEVER;
-    return Invariant.prob_is_gt(wrapper.ppt.num_values(), 5);
+    return Invariant.prob_is_ge(wrapper.ppt.num_values(), 5);
   }
 
 
