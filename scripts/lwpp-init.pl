@@ -43,7 +43,11 @@ foreach my $file (@files) {
   $int_file = "$lackwitdb/$int_file";
 
   if ($file =~ /libc\.c/) {
-    `lh -\$ -w -D_LINUX_IN_H -D_LIBIO_H --gen_c_file_name $int_file $file`;
+      my $lhflags = "";
+      if (`uname` =~ /Linux/) {
+	  $lhflags = "-D_LINUX_IN_H -D_LIBIO_H";
+      }
+    `lh -\$ -w $lhflags --gen_c_file_name $int_file $file`;
   } else {
     `lh -w --gen_c_file_name $int_file $file`;
   }
