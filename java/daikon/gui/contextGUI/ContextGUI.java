@@ -3,8 +3,8 @@
 // the Java Swing code for the Context GUI, as well as all the needed out
 // calls to a ContextMiddle instance to perform functions on the database
 // of invariants.  It is also provides the ability to invoke the
-// daikon_gui.convert class in order to convert .inv (Daikon's standard
-// invariant format) to .dci files (a compact format).
+// daikon.gui.contextGUI.ConvertInvToDci class in order to convert .inv
+// (Daikon's standard invariant format) to .dci files (a compact format).
 //
 
 // ************************************************************************
@@ -668,7 +668,7 @@ public final class ContextGUI extends JApplet implements ActionListener
 		// and get out of this method.
 		if (!input_good)
 		{
-			jlstatus_msg.setText("Incorrect Input Attempt!");
+			jlstatus_msg.setText("Incorrect Input Attempt! (no class)");
 			action_pro = true;
 			return;
 		}
@@ -701,7 +701,7 @@ public final class ContextGUI extends JApplet implements ActionListener
 		// and get out of this method.
 		if (!input_good)
 		{
-			jlstatus_msg.setText("Incorrect Input Attempt!");
+			jlstatus_msg.setText("Incorrect Input Attempt! (no method)");
 			action_pro = true;
 			return;
 		}
