@@ -35,25 +35,24 @@ public class PptSplitter implements Serializable {
 
   /** General debug tracer. **/
   public static final Logger debug = Logger.getLogger ("daikon.PptSplitter");
-  private boolean match = false;
 
   /** PptTopLevel that contains this split */
-  public PptTopLevel parent;
+  private PptTopLevel parent;
 
   /** splitter that choses to which PptConditional a sample is applied */
   public transient Splitter splitter;
 
   /**
    * PptConditionals for each splitter output.  ppts[0] is used when the
-   * when the splitter is true, ppts[1] when the splitter is false
-    */
+   * when the splitter is true, ppts[1] when the splitter is false.  The
+   * contents are PptConditional objects if the splitter is valid, but are
+   * PptTopLevel if the PptSplitter represents two exit points (for which
+   * no splitter is required).
+   **/
   public PptTopLevel ppts[] = new PptTopLevel[2];
 
-  final public static Comparator icfp
+  final private static Comparator icfp
                             = new Invariant.InvariantComparatorForPrinting();
-
-  // Maps permutted invariants to their original invariants
-  private Map orig_invs = null;
 
   /**
    * Create a binary splitter with the specied splitter for the specified
@@ -77,7 +76,7 @@ public class PptSplitter implements Serializable {
   }
 
   /**
-   * Creats a PptSplitter over two exit points.  No splitter is required
+   * Creats a PptSplitter over two exit points.  No splitter is required.
    */
   public PptSplitter (PptTopLevel parent, PptTopLevel exit1,
                       PptTopLevel exit2) {
@@ -102,32 +101,34 @@ public class PptSplitter implements Serializable {
   /** Adds the sample to each conditional ppt in the split */
   public void add_bottom_up (ValueTuple vt, int count) {
 
+    boolean splitter_test;
     try {
-      // Try the condition and choose the appropriate conditional point
-      boolean splitter_test = ((PptConditional)ppts[0]).splitter.test(vt);
-      PptConditional ppt_cond = (PptConditional) ppts[splitter_test ? 0 : 1];
-
-      // If any parent variables were missing out of bounds, apply that
-      // to this conditional as well.  A more efficient way to do this would
-      // be better
-      for (int ii = 0; ii < parent.var_infos.length; ii++) {
-        if (parent.var_infos[ii].missingOutOfBounds())
-          ppt_cond.var_infos[ii].derived.missing_array_bounds = true;
-      }
-
-      // Add the point
-      ppt_cond.add_bottom_up (vt, count);
-
-      if (Debug.logOn() && Debug.ppt_match (ppt_cond))
-        System.out.println ("Adding sample to " + ppt_cond + " with vars "
-                            + Debug.related_vars (ppt_cond, vt));
-
+      splitter_test = ((PptConditional)ppts[0]).splitter.test(vt);
     } catch (Throwable e) {
       // If an exception is thrown, don't put the data on either side
       // of the split.
-      System.out.println ("Exception thrown in add for " + ppts[0].name());
+      System.out.println ("Exception thrown in PptSplitter.add_bottom_up() for " + ppts[0].name());
       System.out.println ("Vars = " + Debug.related_vars (ppts[0], vt));
+      return;
     }
+    // Choose the appropriate conditional point based on the condition result
+    PptConditional ppt_cond = (PptConditional) ppts[splitter_test ? 0 : 1];
+
+    // If any parent variables were missing out of bounds, apply that
+    // to this conditional as well.  A more efficient way to do this would
+    // be better.
+    for (int ii = 0; ii < parent.var_infos.length; ii++) {
+      if (parent.var_infos[ii].missingOutOfBounds())
+        ppt_cond.var_infos[ii].derived.missing_array_bounds = true;
+    }
+
+    // Add the point
+    ppt_cond.add_bottom_up (vt, count);
+
+    if (Debug.logOn() && Debug.ppt_match (ppt_cond))
+      System.out.println ("Adding sample to " + ppt_cond + " with vars "
+                          + Debug.related_vars (ppt_cond, vt));
+
   }
 
   public void add_implications() {
@@ -141,46 +142,58 @@ public class PptSplitter implements Serializable {
   /**
    * Given a pair of conditional program points, form implications from the
    * invariants true at each one.  The algorithm divides the invariants
-   * into three groups:  those that are true at both program points (the
-   * "same" invariants), those that are true at one program point and whose
-   * negation is true at the other program point (the "exclusive"
-   * invariants), and all others (the "different" invariants).  At the
-   * first program point, for each exclusive invariant and each different
-   * invariant, create a conditional of the form "exclusive => different".
-   * Do the same at the second program point.
+   * into two groups:
+   * <ol>
+   *   <li>the "same" invariants are true at both program points
+   *   <li>the "different" invariants are all the others.
+   * </ol>
+   * The "exclusive" invariants (a subset of the "different" inviariants)
+   * are true at one program point, and their negation is true at the other
+   * program point
+   * At the first program point, for each exclusive invariant and each
+   * different invariant, create a conditional of the form "exclusive =>
+   * different".  Do the same at the second program point.
+   * <p>
    *
    * This method is correct only if the two conditional program points
    * fully partition the input space (their conditions are negations of one
    * another).  For instance, suppose there is a three-way split with the
    * following invariants detected at each:
+   * <pre>
    *   {A,B}  {!A,!B}  {A,!B}
+   * </pre>
    * Examining just the first two would suggest that "A <=> B" is valid,
    * but in fact that is a false inference.  Note that this situation can
    * occur if the splitting condition uses variables that can ever be missing.
    */
   private void add_implications_pair (boolean add_nonimplications) {
 
-    Daikon.debugProgress.fine ("  Adding Implications for " + parent.name + ", " + possible_slices().size() + " slices");
+    Daikon.debugProgress.fine ("  Adding Implications for " + parent.name
+                               + ", " + possible_slices().size() + " slices");
     debug.fine ("Adding Implications for " + parent.name);
 
-    orig_invs = new LinkedHashMap();
-
-    // elements are pairs of Invariants
-    Vector exclusive_conditions_vec = new Vector();
+    // Maps permuted invariants to their original invariants
+    Map orig_invs = new LinkedHashMap();
 
     // elements are Invariants
-    Vector same_invariants_vec = new Vector();
+    Vector same_invs_vec = new Vector();
 
     // elements are pairs of Invariants
-    Vector differ_vec = new Vector();
+    Vector exclusive_invs_vec = new Vector();
+
+    // elements are pairs of Invariants
+    Vector different_invs_vec = new Vector();
 
     // Loop through each possible parent slice
     List slices = possible_slices();
     slice_loop:
-    for (Iterator ii = slices.iterator(); ii.hasNext(); ) {
-      VarInfo[] vis = (VarInfo[]) ii.next();
+    for (Iterator itor = slices.iterator(); itor.hasNext(); ) {
+      VarInfo[] vis = (VarInfo[]) itor.next();
 
-      Invariants[] invs = new Invariants[ppts.length];
+      int num_children = ppts.length;
+      // Each element is an invariant from the indexth child, permuted to
+      // the parent (and with a parent slice as its ppt slot).
+      Invariants[] invs = new Invariants[num_children];
 
       // find the parent slice
       PptSlice pslice = parent.get_or_instantiate_slice (vis);
@@ -188,35 +201,36 @@ public class PptSplitter implements Serializable {
       // Daikon.debugProgress.fine ("    slice: " + pslice.name());
 
       // Loop through each child ppt
-      match = false;
-      for (int jj = 0; jj < ppts.length; jj++) {
+      for (int childno = 0; childno < num_children; childno++) {
+        PptTopLevel child_ppt = ppts[childno];
 
-        Assert.assertTrue (ppts[jj].equality_view != null);
+        Assert.assertTrue (child_ppt.equality_view != null);
         Assert.assertTrue (parent.equality_view != null);
 
-        invs[jj] = new Invariants();
+        invs[childno] = new Invariants();
 
         // Get the child vis in the correct order
         VarInfo[] cvis_non_canonical = new VarInfo[vis.length];
         VarInfo[] cvis = new VarInfo[vis.length];
         VarInfo[] cvis_sorted = new VarInfo[vis.length];
         for (int kk = 0; kk < vis.length; kk++) {
-          cvis_non_canonical[kk] = matching_var (ppts[jj], parent, vis[kk]);
-          cvis[kk] = matching_var (ppts[jj], parent, vis[kk]).canonicalRep();
+          cvis_non_canonical[kk] = matching_var (child_ppt, parent, vis[kk]);
+          cvis[kk] = matching_var (child_ppt, parent, vis[kk]).canonicalRep();
           cvis_sorted[kk] = cvis[kk];
         }
         Arrays.sort (cvis_sorted, VarInfo.IndexComparator.getInstance());
 
-        // Look for an equality invariant in the non-canonical slice (if any)
+        // Look for an equality invariant in the non-canonical slice (if any).
         // Note that only an equality invariant can exist in a non-canonical
         // slice.  If it does exist,  we want it rather than the canonical
         // form (which for equality invariants will always be of the form
-        // 'a == a')
+        // 'a == a').
         Invariant eq_inv = null;
         if (!Arrays.equals (cvis_non_canonical, cvis)) {
-          PptSlice nc_slice = ppts[jj].findSlice (cvis_non_canonical);
+          PptSlice nc_slice = child_ppt.findSlice (cvis_non_canonical);
           if (nc_slice != null) {
             if (nc_slice.invs.size() != 1) {
+              // Impossible: multiple invariants found
               System.out.println ("Found " + nc_slice.invs.size() +
                                   " invs at " + nc_slice);
               for (Iterator kk = nc_slice.invs.iterator(); kk.hasNext(); )
@@ -224,7 +238,7 @@ public class PptSplitter implements Serializable {
               for (int kk = 0; kk < cvis_non_canonical.length; kk++)
                 System.out.println (" -- equality set = " +
                       cvis_non_canonical[kk].equalitySet.shortString());
-              Assert.assertTrue (nc_slice.invs.size() == 1);
+              throw new Error("nc_slice.invs.size() == " + nc_slice.invs.size());
             }
             eq_inv = (Invariant) nc_slice.invs.get (0);
             debug.fine ("Found eq inv " + eq_inv);
@@ -232,7 +246,7 @@ public class PptSplitter implements Serializable {
         }
 
         // Find the corresponding slice
-        PptSlice cslice = ppts[jj].findSlice (cvis_sorted);
+        PptSlice cslice = child_ppt.findSlice (cvis_sorted);
         if (cslice == null) {
           if (eq_inv != null)
             Assert.assertTrue (eq_inv == null, "found eq_inv " + eq_inv + " @"
@@ -244,74 +258,44 @@ public class PptSplitter implements Serializable {
         // Copy each invariant permuted to the parent
         int[] permute = PptTopLevel.build_permute (cvis_sorted, cvis);
         for (int j = 0; j < cslice.invs.size(); j++) {
-          Invariant inv = null;
           Invariant orig_inv = (Invariant) cslice.invs.get (j);
-          inv = orig_inv.clone_and_permute (permute);
-          if ((eq_inv != null)&& orig_inv.getClass().equals(eq_inv.getClass()))
-            orig_inv = eq_inv;
+          Invariant inv = orig_inv.clone_and_permute (permute);
           inv.ppt = pslice;
-          invs[jj].add (inv);
-          Assert.assertTrue (orig_invs.get (inv) == null);
+          invs[childno].add (inv);
+          if ((eq_inv != null) && orig_inv.getClass().equals(eq_inv.getClass()))
+            orig_inv = eq_inv;
+          Assert.assertTrue (! orig_invs.containsKey (inv));
           orig_invs.put (inv, orig_inv);
-          if (orig_inv.log ("considering for implication " + jj
-                            + ", orig = " + orig_inv.format()
-                            + ", permute  = " + inv + " vis = "
-                            + VarInfo.toString (vis)))
-            match = true;
-          orig_inv.log ("match = " + match);
         }
-      }
+      } // children loop
 
-      // If the neither child slice has invariants there is nothing to do
+      // If neither child slice has invariants there is nothing to do
       if ((invs[0].size() == 0) && (invs[1].size() == 0)) {
         if (pslice.invs.size() == 0)
           parent.removeSlice (pslice);
         continue;
       }
 
-      if (match)
-        debug.fine ("match is true after loop");
-
       if ((pslice.invs.size() == 0) && Debug.logDetail())
         debug.fine ("PptSplitter: created new slice " +
                             VarInfo.toString (vis) + " @" + parent.name);
 
       // Add any exclusive conditions for this slice to the list
-      exclusive_conditions_vec.addAll(exclusive_conditions(invs[0], invs[1]));
+      exclusive_invs_vec.addAll(exclusive_conditions(invs[0], invs[1]));
 
       // Add any invariants that are the same to the list
-      same_invariants_vec.addAll (same_invariants (invs[0], invs[1]));
+      same_invs_vec.addAll (same_invariants (invs[0], invs[1]));
 
       // Add any invariants that are different to the list
-      Vector diff = different_invariants (invs[0], invs[1]);
-      if (match) {
-        debug.fine ("match is true for vis " + VarInfo.toString (vis));
-        for (Iterator i = diff.iterator(); i.hasNext(); ) {
-          Invariant[] iinvs = (Invariant[]) i.next();
-          if (iinvs[0] != null)
-            iinvs[0].log (iinvs[0] + " differs from "  + iinvs[1]);
-          if (iinvs[1] != null)
-            iinvs[1].log (iinvs[0] + " differs from "  + iinvs[1]);
-          debug.fine ("-- " + Invariant.toString (iinvs));
-        }
-      }
-      differ_vec.addAll (diff);
-      if (match) {
-        debug.fine ("Looking in differ_vec, size = " + differ_vec.size());
-        for (Iterator i = differ_vec.iterator(); i.hasNext(); ) {
-          Invariant[] iinvs = (Invariant[]) i.next();
-          if (iinvs[0] != null)
-            iinvs[0].log (iinvs[0] + " differs from "  + iinvs[1]);
-          if (iinvs[1] != null)
-            iinvs[1].log (iinvs[0] + " differs from "  + iinvs[1]);
-        }
-      }
-    }
+      different_invs_vec.addAll (different_invariants (invs[0], invs[1]));
+    } // slice_loop: slices.iterator() loop
 
-    // This is not tested
+
+    // This is not tested.
     if (add_nonimplications) {
-      for (int i=0; i<same_invariants_vec.size(); i++) {
-        Invariant same_inv = (Invariant)same_invariants_vec.elementAt(i);
+      // Add to the join point all invariants that appeared at both children.
+      for (int i=0; i<same_invs_vec.size(); i++) {
+        Invariant same_inv = (Invariant)same_invs_vec.elementAt(i);
         // This test doesn't seem to be productive.  (That comment may date
         // from the time that all not-worth-printing invariants were
         // already eliminated.)
@@ -321,16 +305,16 @@ public class PptSplitter implements Serializable {
     }
 
     if (Debug.logOn() || debug.isLoggable (Level.FINE)) {
-      debug.fine ("Found " + exclusive_conditions_vec.size()
+      debug.fine ("Found " + exclusive_invs_vec.size()
                   + " exclusive conditions ");
-      for (Iterator i = exclusive_conditions_vec.iterator(); i.hasNext(); ) {
+      for (Iterator i = exclusive_invs_vec.iterator(); i.hasNext(); ) {
         Invariant[] invs = (Invariant[]) i.next();
         invs[0].log ("exclusive condition with " + invs[1].format());
         invs[1].log ("exclusive condition with " + invs[0].format());
         debug.fine ("-- " + Invariant.toString (invs));
       }
-      debug.fine ("Found " + differ_vec.size() + " different invariants ");
-      for (Iterator i = differ_vec.iterator(); i.hasNext(); ) {
+      debug.fine ("Found " + different_invs_vec.size() + " different invariants ");
+      for (Iterator i = different_invs_vec.iterator(); i.hasNext(); ) {
         Invariant[] invs = (Invariant[]) i.next();
         if (invs[0] != null)
           invs[0].log (invs[0] + " differs from "  + invs[1]);
@@ -346,7 +330,7 @@ public class PptSplitter implements Serializable {
 
     // Add the splitting condition as an exclusive condition if requested
     if ((splitter != null) && dkconfig_dummy_invariant_level > 0) {
-      if (exclusive_conditions_vec.size() == 0
+      if (exclusive_invs_vec.size() == 0
           || dkconfig_dummy_invariant_level >= 2) {
         // As a last resort, try using the user's supplied DummyInvariant
         debug.fine ("addImplications: resorting to dummy");
@@ -360,15 +344,15 @@ public class PptSplitter implements Serializable {
           Assert.assertTrue(!cond1.splitter_inverse);
           Assert.assertTrue(cond2.splitter_inverse);
           dummy2.negate();
-          exclusive_conditions_vec.add(new Invariant[] {dummy1, dummy2});
+          exclusive_invs_vec.add(new Invariant[] {dummy1, dummy2});
           dummies.add(new Invariant[] {dummy1, dummy2});
         }
       }
     }
-    differ_vec.addAll(dummies);
+    different_invs_vec.addAll(dummies);
 
     // If there are no exclusive conditions, we can do nothing here
-    if (exclusive_conditions_vec.size() == 0) {
+    if (exclusive_invs_vec.size() == 0) {
       if (debug.isLoggable(Level.FINE)) {
         debug.fine ("addImplications: no exclusive conditions");
       }
@@ -377,30 +361,29 @@ public class PptSplitter implements Serializable {
 
 
     // Create array versions of each
-    Invariant[][] exclusive_conditions
-      = (Invariant[][])exclusive_conditions_vec.toArray(new Invariant[0][0]);
-
+    Invariant[][] exclusive_invariants
+      = (Invariant[][])exclusive_invs_vec.toArray(new Invariant[0][0]);
     Invariant[][] different_invariants
-      = (Invariant[][])differ_vec.toArray(new Invariant[0][0]);
+      = (Invariant[][])different_invs_vec.toArray(new Invariant[0][0]);
 
     // Add an implication from each of a pair of mutually exclusive
     // invariants to everything that differs (at all) about the two
 
     // split into two in order to use indexOf
-    Invariant[] excls1 = new Invariant[exclusive_conditions.length];
-    Invariant[] excls2 = new Invariant[exclusive_conditions.length];
-    for (int i=0; i<exclusive_conditions.length; i++) {
-      excls1[i] = exclusive_conditions[i][0];
-      excls2[i] = exclusive_conditions[i][1];
+    Invariant[] excls1 = new Invariant[exclusive_invariants.length];
+    Invariant[] excls2 = new Invariant[exclusive_invariants.length];
+    for (int i=0; i<exclusive_invariants.length; i++) {
+      excls1[i] = exclusive_invariants[i][0];
+      excls2[i] = exclusive_invariants[i][1];
     }
 
     // Keep track of all of the implications created below
     List imps = new ArrayList();
 
-    for (int i=0; i < exclusive_conditions.length; i++) {
-      Assert.assertTrue(exclusive_conditions[i].length == 2);
-      Invariant excl1 = exclusive_conditions[i][0];
-      Invariant excl2 = exclusive_conditions[i][1];
+    for (int i=0; i < exclusive_invariants.length; i++) {
+      Assert.assertTrue(exclusive_invariants[i].length == 2);
+      Invariant excl1 = exclusive_invariants[i][0];
+      Invariant excl2 = exclusive_invariants[i][1];
       Assert.assertTrue(excl1 != null);
       Assert.assertTrue(excl2 != null);
 
@@ -420,14 +403,14 @@ public class PptSplitter implements Serializable {
           int index1 = ArraysMDE.indexOf(excls1, diff1);
           if ((index1 == -1) || (index1 > i)) {
             boolean iff = (index1 != -1);
-            add_implication (parent, excl1, diff1, iff);
+            add_implication (parent, excl1, diff1, iff, orig_invs);
           }
         }
         if (diff2 != null) {
           int index2 = ArraysMDE.indexOf(excls2, diff2);
           if ((index2 == -1) || (index2 > i)) {
             boolean iff = (index2 != -1);
-            add_implication (parent, excl2, diff2, iff);
+            add_implication (parent, excl2, diff2, iff, orig_invs);
           }
         }
       }
@@ -583,17 +566,19 @@ public class PptSplitter implements Serializable {
       }
     }
 
-  }
+  } // add_implications_pair
 
 
+  /** Returns a list of all possible slices that may appear at the parent. **/
   private List /*VarInfo[]*/ possible_slices() {
 
     List /*VarInfo[]*/ result = new ArrayList();
 
     // Create an array of leaders at the parent to build slices over
-    VarInfo[] leaders = new VarInfo[parent.equality_view.invs.size()];
-    for (int i = 0; i < parent.equality_view.invs.size(); i++) {
-      leaders[i] = ((Equality) parent.equality_view.invs.get(i)).leader();
+    Invariants parent_eq_invs = parent.equality_view.invs;
+    VarInfo[] leaders = new VarInfo[parent_eq_invs.size()];
+    for (int i = 0; i < parent_eq_invs.size(); i++) {
+      leaders[i] = ((Equality) parent_eq_invs.get(i)).leader();
       Assert.assertTrue (leaders[i] != null);
     }
 
@@ -641,16 +626,16 @@ public class PptSplitter implements Serializable {
       for (int i2=0; i2 < invs2.size(); i2++) {
         Invariant inv1 = (Invariant) invs1.get(i1);
         Invariant inv2 = (Invariant) invs2.get(i2);
-        // This is a debugging tool, to make sure that various versions
-        // of isExclusiveFormula remain coordinated.  (That's also one
-        // reason we don't break out of the loop early:  also, there will
-        // be few invariants in a slice, so breaking out is of minimal
-        // benefit.)
-        Assert.assertTrue(inv1.isExclusiveFormula(inv2)
-                          == inv2.isExclusiveFormula(inv1),
-                      "Bad exclusivity: " + inv1.isExclusiveFormula(inv2)
-                       + " " + inv2.isExclusiveFormula(inv1)
-                       + "    " + inv1.format() + "    " + inv2.format());
+        // // This is a debugging tool, to make sure that various versions
+        // // of isExclusiveFormula remain coordinated.  (That's also one
+        // // reason we don't break out of the loop early:  also, there will
+        // // be few invariants in a slice, so breaking out is of minimal
+        // // benefit.)
+        // Assert.assertTrue(inv1.isExclusiveFormula(inv2)
+        //                   == inv2.isExclusiveFormula(inv1),
+        //               "Bad exclusivity: " + inv1.isExclusiveFormula(inv2)
+        //                + " " + inv2.isExclusiveFormula(inv1)
+        //                + "    " + inv1.format() + "    " + inv2.format());
         if (inv1.isExclusiveFormula(inv2)) {
           result.add(new Invariant[] { inv1, inv2 });
         }
@@ -667,27 +652,17 @@ public class PptSplitter implements Serializable {
   Vector /*Invariant[2]*/ different_invariants (Invariants invs1,
                                                 Invariants invs2) {
     SortedSet ss1 = new TreeSet(icfp);
-    for (int j=0; j<invs1.size(); j++) {
-      Invariant inv = (Invariant)invs1.get(j);
-      ss1.add(inv);
-    }
-
+    ss1.addAll(invs1);
     SortedSet ss2 = new TreeSet(icfp);
-    for (int j=0; j<invs2.size(); j++) {
-      Invariant inv = (Invariant)invs2.get(j);
-      ss2.add(inv);
-    }
-
-    if (match)
-      debug.fine ("in different invariants: " + ss1.size() + ", " + ss2.size());
+    ss2.addAll(invs2);
     Vector result = new Vector();
     for (OrderedPairIterator opi = new OrderedPairIterator(ss1.iterator(),
-                                    ss2.iterator(), icfp); opi.hasNext(); ) {
+                                    ss2.iterator(), icfp);
+         opi.hasNext(); ) {
       Pair pair = (Pair) opi.next();
-      if (match)
-        debug.fine ("invs1 = " + pair.a + ": invs2 = " + pair.b);
       if ((pair.a == null) || (pair.b == null)
-        || (icfp.compare(pair.a, pair.b) != 0)) {
+          // || (icfp.compare(pair.a, pair.b) != 0)
+          ) {
         result.add(new Invariant[] { (Invariant) pair.a, (Invariant) pair.b });
       }
     }
@@ -707,7 +682,8 @@ public class PptSplitter implements Serializable {
     ss2.addAll(invs2);
     Vector result = new Vector();
     for (OrderedPairIterator opi = new OrderedPairIterator(ss1.iterator(),
-                                    ss2.iterator(), icfp); opi.hasNext(); ) {
+                                    ss2.iterator(), icfp);
+         opi.hasNext(); ) {
       Pair pair = (Pair) opi.next();
       if (pair.a != null && pair.b != null) {
         Invariant inv1 = (Invariant) pair.a;
@@ -719,28 +695,30 @@ public class PptSplitter implements Serializable {
   }
 
 
-  // Determine which invariants at the program points differ.
-  // Result elements are pairs of Invariants (with one or the other
-  // possibly null.)
-  Vector different_invariants(PptSlice[][] matched_views) {
-    Vector result = new Vector();
-    for (int i=0; i<matched_views.length; i++) {
-      PptSlice cond1 = matched_views[i][0];
-      PptSlice cond2 = matched_views[i][1];
-      Invariants invs1 = (cond1 == null) ? new Invariants() : cond1.invs;
-      Invariants invs2 = (cond2 == null) ? new Invariants() : cond2.invs;
-      result.addAll(different_invariants(invs1, invs2));
-    }
-    return result;
-  }
+  // // Determine which invariants at the program points differ.
+  // // Result elements are pairs of Invariants (with one or the other
+  // // possibly null.)
+  // Vector different_invariants(PptSlice[][] matched_views) {
+  //   Vector result = new Vector();
+  //   for (int i=0; i<matched_views.length; i++) {
+  //     PptSlice cond1 = matched_views[i][0];
+  //     PptSlice cond2 = matched_views[i][1];
+  //     Invariants invs1 = (cond1 == null) ? new Invariants() : cond1.invs;
+  //     Invariants invs2 = (cond2 == null) ? new Invariants() : cond2.invs;
+  //     result.addAll(different_invariants(invs1, invs2));
+  //   }
+  //   return result;
+  // }
 
   /**
    * Creates the invariant specified by predicate and consequent and
    * if it is a valid implication, adds it to the joiner view of
    * parent.
-   */
+   * @param orig_invs Maps permuted invariants to their original invariants
+   **/
   public void add_implication (PptTopLevel ppt, Invariant predicate,
-                               Invariant consequent, boolean iff) {
+                               Invariant consequent, boolean iff,
+                               Map orig_invs) {
 
     Implication imp = Implication.makeImplication (ppt, predicate, consequent,
                                                    iff);
@@ -774,7 +752,7 @@ public class PptSplitter implements Serializable {
    * The variables at each point must match exactly.  This is reasonable
    * assumption for the ppts in PptSplitter and their parent.
    */
-  public VarInfo matching_var (PptTopLevel ppt1, PptTopLevel ppt2,
+  private VarInfo matching_var (PptTopLevel ppt1, PptTopLevel ppt2,
                                VarInfo ppt2_var) {
 
     VarInfo v = ppt1.var_infos[ppt2_var.varinfo_index];
