@@ -1343,4 +1343,32 @@ public final class TestUtilMDE extends TestCase {
   public static void testWeakHasherMap() {
   }
 
+  /**
+   * Test the intering of subsequences as triples of the original
+   * sequence, the start and the end indices.
+   **/
+  public static void testSequenceAndIndices() {
+    int[] a1 = Intern.intern(new int[] {1, 2, 3, 4, 5, 6, 7});
+    int[] a2 = Intern.intern(new int[] {1, 2, 3, 4, 5, 6, 7});
+    int[] a3 = Intern.intern(new int[] {2, 3, 4, 5, 6, 7});
+    int i = 2;
+    int j = 4;
+    int k = 5;
+
+    int[] s1 = Intern.internSubsequence (a1, i, j);
+    int[] s2 = Intern.internSubsequence (a2, i, j);
+    int[] s3 = Intern.internSubsequence (a1, j, k);
+    int[] s4 = Intern.internSubsequence (a1, j, k);
+    int[] s5 = Intern.internSubsequence (a3, j-1, k-1);
+
+    Assert.assertTrue (s1 == s2);
+    Assert.assertTrue (s3 == s4);
+    Assert.assertTrue (s3 == s5);
+    Assert.assertTrue (ArraysMDE.isSubarray(s1, ArraysMDE.subarray (a1, i, j-i), 0));
+    Assert.assertTrue (ArraysMDE.isSubarray(ArraysMDE.subarray (a1, i, j-i), s1, 0));
+
+    long[] l1 = Intern.intern(new long[] {1, 2, 3, 4, 5, 6});
+    Assert.assertTrue (l1 == Intern.internSubsequence (l1, 0, l1.length));
+  }
+
 }

@@ -241,6 +241,7 @@ public final class Intern {
   private static WeakHasherMap internedDoubleArrays;
   private static WeakHasherMap internedStringArrays;
   private static WeakHasherMap internedObjectArrays;
+  private static WeakHasherMap internedSequenceAndIndices;
 
   static {
     internedIntegers = new WeakHasherMap(new IntegerHasher());
@@ -253,6 +254,7 @@ public final class Intern {
     internedDoubleArrays = new WeakHasherMap(new DoubleArrayHasher());
     internedStringArrays = new WeakHasherMap(new StringArrayHasher());
     internedObjectArrays = new WeakHasherMap(new ObjectArrayHasher());
+    internedSequenceAndIndices = new WeakHasherMap(new SequenceAndIndicesHasher());
   }
 
   // For testing only
@@ -508,6 +510,135 @@ public final class Intern {
     } else {
       throw new IllegalArgumentException
         ("Arguments of type " + a.getClass() + " cannot be interned");
+    }
+  }
+
+  /**
+   * Return the subsequence of seq from start (inclusive) to end
+   * (exclusive) that is interned.  What's different about this method
+   * from manually findind the subsequence and interning the
+   * subsequence is that if the subsequence is already interned, we
+   * can avoid having to compute the sequence.  Since derived
+   * variables in Daikon compute the subsequence many times, this
+   * shortcut saves quite a bit of computation.  It saves even more
+   * when there may be many derived variables that are non canonical,
+   * since they are guaranteed to be ==.
+   * @pre seq is already interned
+   * @return a subsequence of seq from start to end that is interned.
+   **/
+  public static int[] internSubsequence (int[] seq, int start, int end) {
+    Assert.assertTrue (Intern.isInterned(seq));
+    SequenceAndIndices sai = new SequenceAndIndices (seq, start, end);
+    Object lookup = internedSequenceAndIndices.get(sai);
+    if (lookup != null) {
+      WeakReference ref = (WeakReference)lookup;
+      return (int[])ref.get();
+    } else {
+      int[] subseq = ArraysMDE.subarray(seq, start, end - start);
+      subseq = Intern.intern (subseq);
+      internedSequenceAndIndices.put (sai, new WeakReference(subseq));
+      return subseq;
+    }    
+  }
+
+  /**
+   * @see internSubSequence(int[], int, int)
+   **/
+  public static long[] internSubsequence (long[] seq, int start, int end) {
+    Assert.assertTrue (Intern.isInterned(seq));
+    SequenceAndIndices sai = new SequenceAndIndices (seq, start, end);
+    Object lookup = internedSequenceAndIndices.get(sai);
+    if (lookup != null) {
+      WeakReference ref = (WeakReference)lookup;
+      return (long[])ref.get();
+    } else {
+      long[] subseq = ArraysMDE.subarray(seq, start, end - start);
+      subseq = Intern.intern (subseq);
+      internedSequenceAndIndices.put (sai, new WeakReference(subseq));
+      return subseq;
+    }    
+  }
+
+  /**
+   * @see internSubSequence(int[], int, int)
+   **/
+  public static Object[] internSubsequence (Object[] seq, int start, int end) {
+    Assert.assertTrue (Intern.isInterned(seq));
+    SequenceAndIndices sai = new SequenceAndIndices (seq, start, end);
+    Object lookup = internedSequenceAndIndices.get(sai);
+    if (lookup != null) {
+      WeakReference ref = (WeakReference)lookup;
+      return (Object[])ref.get();
+    } else {
+      Object[] subseq = ArraysMDE.subarray(seq, start, end - start);
+      subseq = Intern.intern (subseq);
+      internedSequenceAndIndices.put (sai, new WeakReference(subseq));
+      return subseq;
+    }    
+  }
+
+  /**
+   * @see internSubSequence(int[], int, int)
+   **/
+  public static String[] internSubsequence (String[] seq, int start, int end) {
+    Assert.assertTrue (Intern.isInterned(seq));
+    SequenceAndIndices sai = new SequenceAndIndices (seq, start, end);
+    Object lookup = internedSequenceAndIndices.get(sai);
+    if (lookup != null) {
+      WeakReference ref = (WeakReference)lookup;
+      return (String[])ref.get();
+    } else {
+      String[] subseq = ArraysMDE.subarray(seq, start, end - start);
+      subseq = Intern.intern (subseq);
+      internedSequenceAndIndices.put (sai, new WeakReference(subseq));
+      return subseq;
+    }    
+  }
+
+  /**
+   * Data structure for storing triples of a sequence and start and
+   * end indices, to represent a subsequence.  Requires that the
+   * sequence be interned.  Used for interning the repeated finding
+   * of subsequences on the same sequence.
+   **/
+  private static final class SequenceAndIndices {
+    public Object seq;
+    public int start;
+    public int end;
+    
+    /**
+     * @param seq An interned array
+     **/
+    public SequenceAndIndices (Object seq, int start, int end) {
+      this.seq = seq;
+      this.start = start;
+      this.end = end;
+    }
+
+    public boolean equals (SequenceAndIndices other) {
+      return (this.seq == other.seq) &&
+        this.start == other.start &&
+        this.end == other.end;
+    }
+
+    public int hashCode() {
+      return seq.hashCode() + start * 30 - end * 2;
+    }
+  }
+
+  /**
+   * Hasher object which hashes and compares String[] objects according
+   * to their contents.
+   * @see Hasher, java.util.Arrays.equals
+   * 
+   **/
+  private static final class SequenceAndIndicesHasher implements Hasher {
+    public boolean equals(Object a1, Object a2) {
+      return ((SequenceAndIndices) a1).equals ((SequenceAndIndices) a2);
+    }
+
+    public int hashCode(Object o) {
+      return o.hashCode();
     }
   }
 
