@@ -292,6 +292,17 @@ public final class PPTSLICE1
    **/
   public void set_samples (int count) {
     if (tm_total[0] < count) tm_total[0] = count;
+    if (tm_total[1] < count) tm_total[1] = count;
+#if defined(ARITY2) || defined(ARITY3)
+    if (tm_total[2] < count) tm_total[2] = count;
+    if (tm_total[3] < count) tm_total[3] = count;
+#endif
+#if defined(ARITY3)
+    if (tm_total[4] < count) tm_total[4] = count;
+    if (tm_total[5] < count) tm_total[5] = count;
+    if (tm_total[6] < count) tm_total[6] = count;
+    if (tm_total[7] < count) tm_total[7] = count;
+#endif
   }
 
   // These accessors are for abstract methods declared in Ppt
@@ -481,7 +492,7 @@ public final class PPTSLICE1
           inv.destroyAndFlow();
           if (inv.logOn())
             inv.log ("destroyed because " + var_infos[i].name.name()
-                     + "array index out of bounds");
+                     + " array index out of bounds");
         }
         if (VarInfo.debugMissing.isLoggable (Level.FINE))
           VarInfo.debugMissing.fine ("Removing slice " + this +
