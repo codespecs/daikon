@@ -109,7 +109,7 @@ for my $file (@ARGV) {
     my $ncnb_command = "cpp -P -nostdinc -undef $one_javafile | grep '[^ \\t]' | wc -l";
     $ncnbloc += `$ncnb_command`;
     # Very coarse: only counts number of public methods.  Should be fixed.
-    my $methods_command = "grep public $one_javafile | grep -v spec_public | grep -v ' class ' | grep -v ' interface ' | wc -l";
+    my $methods_command = 'perl -n -e ' . "'" . 'if (/\b(?:public|private|protected)\b.*\b(\w+)\s*(\([^\)]*\))(.*[^;])?$/) { print; }' . "'" . ' $f | wc -l';
     $methods += `$methods_command`;
   }
 
