@@ -50,9 +50,9 @@ public class Debug {
       // "FunctionBinary",
       // "IntEqual",
       // "IntGreaterEqual",
-      "IntGreaterThan",
+      // "IntGreaterThan",
       // "IntLessEqual",
-      "IntLessThan",
+      // "IntLessThan",
       // "IntNonEqual",
       // "LinearBinary",
       // "LowerBound",
@@ -67,11 +67,30 @@ public class Debug {
       // "SeqIndexNonEqual",
       // "SeqIntEqual",
       // "SeqSeqIntEqual",
+      // "NonZero",
+      // "FunctionBinary",
+      // "OneOfSequence",
+      // "IntLessEqual",
+      // "IntGreaterEqual",
+      // "IntLessThan",
+      // "IntGreaterThan",
+      // "IntNonEqual",
+      // "Member",
+      // "FunctionBinary"
+      // "EltNonZero",
       // "SeqSeqIntGreaterThan",
       // "SeqSeqIntLessThan",
       // "SubSet",
       // "SuperSet",
-      // "UpperBound",
+      // "EltOneOf",
+      // "Bound",
+      // "SeqSeqIntLessThan",
+      // "SeqSeqIntGreaterThan",
+      // "OneOf"
+      // "StringComparison",
+      // "StringLessThan",
+      // "StringGreaterThan",
+      // "Modlong_zxy",
       // "UpperBound",
    };
 
@@ -82,11 +101,11 @@ public class Debug {
    * for a list of function names
    */
   public static String function_binary_method =
-    // null
+     null
     // "java.lang.Math.max("
     // "java.lang.Math.min("
     // "utilMDE.MathMDE.logicalXor("
-    "utilMDE.MathMDE.gcd("
+    // "utilMDE.MathMDE.gcd("
     ;
 
   /**
@@ -106,26 +125,7 @@ public class Debug {
       // "DataStructures.StackAr.makeEmpty()V:::ENTER",
       // "DataStructures.StackAr.top():::EXIT74",
       // "GLOBAL",
-      // "MapQuick1.StreetNumberSet.contains"
-      // "MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT271",
-      // "PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT96",
-      // "PolyCalc.RatPoly.add(PolyCalc.RatPoly):::EXIT354",
-      // "PolyCalc.RatPoly.findTermIndex(PolyCalc.RatTermVec, int):::EXIT",
-      // "misc.Suppress02.f",
-      // "six170.Hanoi.moveDisk(int, int):::EXIT",
-      // "six170.Hanoi.moveTower(int, int, int):::EXIT",
-      // "six170.Hanoi:::OBJECT",
-      // "std.flex_alloc(unsigned;)void *:::EXIT1",
-      // "std.new_job(int;)int:::EXIT",
-      // "DataStructures.DisjSets.DisjSets(int):::EXIT",
-      // "std.ampval(charac *;charac **;double *;int *;)int:::EXIT",
-      // "misc.Param:::OBJECT",
-      // "PolyCalc.RatPoly.add(PolyCalc.RatPoly):::EXIT350",
-      // "misc.Suppress02.Suppress02():::EXIT",
-      // "misc.Compar1.bar(int, int, int, int):::ENTER",
-      // "std.intmax(int;int;)int:::EXIT",
-      // "PolyCalc.RatNum.gcd(int, int):::EXIT",
-      "misc.Fib.increment():::EXIT",
+      // "std.main(int;char **;)int:::EXIT",
     };
 
   /**
@@ -140,44 +140,9 @@ public class Debug {
 
   public static String[][] debugTrackVars
     = {
-      // { "this.terms.wrapped[orig(e)+1..]", "this.terms.wrapped[orig(c)..]" }
-      // {"misc.Fib.a", "misc.Fib.b", "misc.Fib.c" },
-      // {"size(this.theArray[])", "orig(size(this.theArray[]))"},
-      // { "argSTAT_BUF.st_mtime" }
-      // {"this.theArray[]", "orig(this.theArray[post(this.topOfStack)+1..])"},
-      // {"this.theArray[]", "orig(this.theArray[post(this.topOfStack+1)..])"},
       // {"::printstats"},
-      // {"::yy_last_accepting_state"},
-      // {"size", "size", "size" },
-      // {"this.theArray[0..this.topOfStack]"},
-      // {"orig(this.topOfStack)", "size(this.theArray[])-1"},
-      // {"orig(this.s[post(root1)])", "orig(this.s[root1])"},
-      // {"orig(this.s[])", "orig(this.s[])" },
-      // {"orig(this.s[])"},
-      // {"root1", "orig(root1)"}
-      // {"this.numer", "this.denom"},
-      // {"size(p.terms.wrapped[])-1", "size(return.terms.wrapped[])"},
-      // {"::C_plus_plus", "::syntaxerror", "::numprots"}
-      // {"size(p.terms.wrapped[])-1", "size(return.terms.wrapped[])"},
-      // {"ts.wrapped[return]"},
-      // {"size(this.begins[])", "size(this.ends[])", "size(this.begins[])-1"},
-      // {"n"},
-      // {"size(this.theArray[])", "size(this.theArray2[])-1"},
-      // {"this.begins[]", "this.ends[]"},
-      // {"this.diskLocation[this.height..]"},
-      // {"::performance_report", "ds"},
-      // {"this.diskLocation[this.height..]"},
-      // {"::next_pid", "orig(::next_pid)"},
-      // {"this.s[]"},
-      // {"amp_ptr[]"},
-      // {"this.gi1", "this.gi2", "this.gs1.a"},
-      // {"size(p.terms.wrapped[])", "size(p.terms.wrapped[])-1", "size(return.terms.wrapped[])"},
-      // {"this.theArray[0..this.i-1]", "this.theArray[this.j]"},
-      // {"this.theArray[0..this.i-1]"},
-      // {"return", "a", "b"},
-      // {"return", "orig(_a)", "orig(_b)"},
-      {"misc.Fib.STEPS", "orig(misc.Fib.a)"},
-      {"misc.Fib.a", "misc.Fib.STEPS"},
+      // {"misc.Fib.STEPS", "orig(misc.Fib.a)"},
+      // {"misc.Fib.a", "misc.Fib.STEPS"},
     };
 
   // cached standard parts of the debug print so that multiple calls from
@@ -762,4 +727,63 @@ public class Debug {
     return (vars);
   }
 
+  public static String add_track (String def) {
+
+    String classes = null;
+    String vars = null;
+    String ppt = null;
+
+    // Get the classes, vars, and ppt
+    int var_start = def.indexOf ('<');
+    int ppt_start = def.indexOf ("@");
+    if ((var_start == -1) && (ppt_start == -1))
+      classes = new String (def);
+    else if (var_start != -1) {
+      if (var_start > 0)
+        classes = def.substring (0, var_start);
+      if (ppt_start == -1)
+        vars = def.substring (var_start+1, def.length());
+      else {
+        vars = def.substring (var_start+1, ppt_start-1);
+        ppt = def.substring (ppt_start+1, def.length());
+      }
+    } else {
+      if (ppt_start > 0)
+        classes = def.substring (0, ppt_start);
+      ppt = def.substring (ppt_start+1, def.length());
+    }
+
+    // If classes were specified, get each class
+    if (classes != null) {
+      String[] class_arr = classes.split ("\\|");
+      debugTrackClass = ArraysMDE.concat (debugTrackClass, class_arr);
+    }
+
+    // If vars were specified, get each var
+    if (vars != null) {
+      String[] var_arr = vars.split (", *");
+      String[][] new_var = new String[debugTrackVars.length+1][];
+      for (int ii = 0; ii < debugTrackVars.length; ii++)
+        new_var[ii] = debugTrackVars[ii];
+      new_var[debugTrackVars.length] = var_arr;
+      debugTrackVars = new_var;
+    }
+
+    // if a ppt was specified, add it to the array of tracked ppts
+    if (ppt != null)
+      debugTrackPpt = ArraysMDE.concat (debugTrackPpt, new String[] {ppt});
+
+    System.out.println ();
+    debugTrack.fine ("After --track: " + def);
+    debugTrack.fine ("Track Classes: "
+                     + ArraysMDE.toString (debugTrackClass, false));
+    String vars_out = "";
+    for (int ii = 0; ii < debugTrackVars.length; ii++)
+        vars_out += ArraysMDE.toString(debugTrackVars[ii]) + " ";
+    debugTrack.fine ("Track Vars: " + vars_out);
+    debugTrack.fine ("Track Ppts: "
+                     + ArraysMDE.toString (debugTrackPpt, false));
+
+    return null;
+  }
 }
