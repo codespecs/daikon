@@ -25,6 +25,18 @@
 #		rewrites the file, changing its timestamp.)
 
 
+# Subroutine definition comes early to avoid
+#   main::dos_chomp() called too early to check prototype at ...
+# warnings.
+sub dos_chomp( $ ) {
+  my ($arg) = @_;
+  if ($arg !~ s/\r\n$//) {
+    chomp($arg);
+  }
+  return $arg;
+}
+
+
 BEGIN {
   $debug = 0;
   # $debug = 1;
@@ -152,14 +164,6 @@ if (/^$/) {
   undef($var);
   undef($val);
   undef($mod);
-}
-
-sub dos_chomp( $ ) {
-  my ($arg) = @_;
-  if ($arg !~ s/\r\n$//) {
-    chomp($arg);
-  }
-  return $arg;
 }
 
 END {
