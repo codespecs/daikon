@@ -4,6 +4,7 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.derive.unary.*;
 import daikon.inv.unary.sequence.*;
+import daikon.inv.binary.sequenceScalar.*;
 
 import utilMDE.*;
 
@@ -152,13 +153,13 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
     }
 
     if ((is_boolean && (num_elts == 1))
-        || (is_hashcode && (num_elts > 2))) {
+        || (is_hashcode && (num_elts == 2))) {
       destroy();
       return;
     }
-    if (is_hashcode && (num_elts == 2)) {
+    if (is_hashcode && (num_elts == 1)) {
       // Permit two object values only if one of them is null
-      if ((elts[0] != 0) && (elts[1] != 0)) {
+      if ((elts[0] != 0) && (v != 0)) {
         destroy();
         return;
       }
@@ -198,14 +199,20 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if ((inv instanceof EltOneOf) && inv.justified()) {
+        VarInfo v1 = var();
         VarInfo v2 = inv.ppt.var_infos[0];
-        // System.out.println("isObviousImplied: calling Member.isObviousMember(" + v1.name + ", " + v2.name + ")");
-
-        EltOneOf other = (EltOneOf) inv;
-        if (num_elts == other.num_elts()) {
-          sort_rep();
-          if (other.compare_rep(num_elts, elts))
-            return true;
+        // System.out.println("isObviousImplied: calling  Member.isObviousMember(" + v1.name + ", " + v2.name + ")");
+        // Don't use isEqualToObviousMember:  that is too subtle
+        // and eliminates desirable invariants such as "return == null".
+        if (Member.isObviousMember(v1, v2)) {
+          EltOneOf other = (EltOneOf) inv;
+          if (num_elts == other.num_elts()) {
+            sort_rep();
+            if (other.compare_rep(num_elts, elts)) {
+              // System.out.println("isObviousImplied true");
+              return true;
+            }
+          }
         }
       }
     }

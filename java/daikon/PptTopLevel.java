@@ -1212,7 +1212,7 @@ public class PptTopLevel extends Ppt {
         OneOf one_of = (OneOf) inv;
         // System.out.println("num_elts: " + one_of.num_elts());
         if (one_of.num_elts() == 1) {
-          System.out.println("Constant " + inv.ppt.name + " " + one_of.var().name + " because of " + inv.format() + "    " + inv.repr_prob() + "    " + inv.justified());
+          // System.out.println("Constant " + inv.ppt.name + " " + one_of.var().name + " because of " + inv.format() + "    " + inv.repr_prob() + "    " + inv.justified());
 	  // Should be Long, not Integer.
 	  Assert.assert(! (one_of.elt() instanceof Integer));
           one_of.var().dynamic_constant = one_of.elt();

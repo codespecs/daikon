@@ -4,6 +4,7 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.derive.unary.*;
 import daikon.inv.unary.sequence.*;
+import daikon.inv.binary.sequenceScalar.*;
 
 import utilMDE.*;
 
