@@ -14,7 +14,7 @@ import utilMDE.*;
 
 
 
-// I can't say " implements Map" because this takes KeyTuples and ints, not
+// I can't say " implements Map" because this takes ValueTuples and ints, not
 // Objects and Objects, so it doesn't obey the Map interface.  I could add
 // methods that also obey the Map signatures, but I don't see the point.
 
@@ -138,6 +138,7 @@ public final class VarValuesOrdered {
     }
   }
 
+  // The iterator returns ValueTupleCount objects
   private final class SampleIterator implements Iterator {
     int i;
     SampleIterator() { i=0; }
