@@ -122,7 +122,7 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
   // explore them if they are the root.
   private boolean in_class = false;
   public void visit(ClassDeclaration n) {
-    Assert.assert(! in_class);
+    Assert.assertTrue(! in_class);
     in_class = true;
     super.visit(n);
     in_class = false;

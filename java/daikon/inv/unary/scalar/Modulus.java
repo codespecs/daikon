@@ -104,7 +104,7 @@ public class Modulus
         new_modulus = 1;
       } else {
         new_modulus = (int) new_modulus_long;
-        Assert.assert(new_modulus > 0);
+        Assert.assertTrue(new_modulus > 0);
       }
       if (new_modulus != modulus) {
         if (new_modulus == 1) {
@@ -117,7 +117,7 @@ public class Modulus
         }
       }
     }
-    Assert.assert(modulus != 1);
+    Assert.assertTrue(modulus != 1);
   }
 
   protected double computeProbability() {
@@ -169,7 +169,7 @@ public class Modulus
 
   // Look up a previously instantiated invariant.
   public static Modulus find(PptSlice ppt) {
-    Assert.assert(ppt.arity == 1);
+    Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof Modulus)

@@ -174,7 +174,7 @@ public final class EltNonZero
   }
 
   protected double computeProbability() {
-    Assert.assert(! falsified);
+    Assert.assertTrue(! falsified);
     // Maybe just use 0 as the min or max instead, and see what happens:
     // see whether the "nonzero" invariant holds anyway.  (Perhaps only
     // makes sense to do if the {Lower,Upper}Bound invariant doesn't imply
@@ -216,7 +216,7 @@ public final class EltNonZero
 
   public boolean isSameFormula(Invariant other)
   {
-    Assert.assert(other instanceof EltNonZero);
+    Assert.assertTrue(other instanceof EltNonZero);
     return true;
   }
 
@@ -248,7 +248,7 @@ public final class EltNonZero
 
         boolean this_var_first = (v1.varinfo_index < v2.varinfo_index);
         if (! this_var_first) { VarInfo temp = v1; v1 = v2; v2 = temp; }
-        Assert.assert(v1.varinfo_index < v2.varinfo_index);
+        Assert.assertTrue(v1.varinfo_index < v2.varinfo_index);
         PptSlice2 slice_2seq = parent.findSlice(v1, v2);
         if (slice_2seq == null) {
           // System.out.println("EltNonZero.isObviousImplied: no slice for " + v1.name + ", " + v2.name);
@@ -274,7 +274,7 @@ public final class EltNonZero
 
   // Look up a previously instantiated invariant.
   public static EltNonZero find(PptSlice ppt) {
-    Assert.assert(ppt.arity == 1);
+    Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof EltNonZero)

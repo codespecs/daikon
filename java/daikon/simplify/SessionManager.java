@@ -58,8 +58,8 @@ public class SessionManager
   public void request(Cmd command)
     throws TimeoutException
   {
-    Assert.assert(worker != null, "Cannot use closed SessionManager");
-    Assert.assert(pending == null, "Cannot queue requests");
+    Assert.assertTrue(worker != null, "Cannot use closed SessionManager");
+    Assert.assertTrue(pending == null, "Cannot queue requests");
     if (debug.isDebugEnabled()) {
       System.err.println("Running command " + command + "\n called from\n");
       Throwable t = new Throwable();
@@ -149,26 +149,26 @@ public class SessionManager
 
     cc = new CmdCheck("(EQ 1 1)");
     m.request(cc);
-    Assert.assert(true == cc.valid);
+    Assert.assertTrue(true == cc.valid);
 
     cc = new CmdCheck("(EQ 1 2)");
     m.request(cc);
-    Assert.assert(false == cc.valid);
+    Assert.assertTrue(false == cc.valid);
 
     cc = new CmdCheck("(EQ x z)");
     m.request(cc);
-    Assert.assert(false == cc.valid);
+    Assert.assertTrue(false == cc.valid);
 
     CmdAssume a = new CmdAssume("(AND (EQ x y) (EQ y z))");
     m.request(a);
 
     m.request(cc);
-    Assert.assert(true == cc.valid);
+    Assert.assertTrue(true == cc.valid);
 
     m.request(CmdUndoAssume.single);
 
     m.request(cc);
-    Assert.assert(false == cc.valid);
+    Assert.assertTrue(false == cc.valid);
 
   }
 

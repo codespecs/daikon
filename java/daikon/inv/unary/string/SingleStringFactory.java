@@ -12,7 +12,7 @@ public final class SingleStringFactory {
   public static Vector instantiate(PptSlice ppt) {
 
     VarInfo var = ppt.var_infos[0];
-    Assert.assert(var.rep_type == ProglangType.STRING);
+    Assert.assertTrue(var.rep_type == ProglangType.STRING);
 
     Vector result = new Vector();
     result.add(OneOfString.instantiate(ppt));

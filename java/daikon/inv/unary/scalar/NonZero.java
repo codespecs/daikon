@@ -117,7 +117,7 @@ public class NonZero
   }
 
   protected double computeProbability() {
-    Assert.assert(! falsified);
+    Assert.assertTrue(! falsified);
     if ((override_range == 0) && ((min > 0) || (max < 0))) {
       // Maybe just use 0 as the min or max instead, and see what happens:
       // see whether the "nonzero" invariant holds anyway.  (Perhaps only
@@ -217,7 +217,7 @@ public class NonZero
 
   public boolean isSameFormula(Invariant other)
   {
-    Assert.assert(other instanceof NonZero);
+    Assert.assertTrue(other instanceof NonZero);
     return true;
   }
 

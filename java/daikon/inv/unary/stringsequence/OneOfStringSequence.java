@@ -293,7 +293,7 @@ public final class OneOfStringSequence
 
   public void add_modified(String[]  v, int count) {
 
-    Assert.assert(Intern.isInterned(v));
+    Assert.assertTrue(Intern.isInterned(v));
 
     for (int i=0; i<num_elts; i++)
       if (elts[i] == v) {
@@ -329,7 +329,7 @@ public final class OneOfStringSequence
   public boolean isObviousDerived() {
     // Static constants are necessarily OneOf precisely one value.
     if (var().isStaticConstant()) {
-      Assert.assert(num_elts <= 1);
+      Assert.assertTrue(num_elts <= 1);
       return true;
     }
     return super.isObviousDerived();
@@ -381,7 +381,7 @@ public final class OneOfStringSequence
 
   // Look up a previously instantiated invariant.
   public static OneOfStringSequence  find(PptSlice ppt) {
-    Assert.assert(ppt.arity == 1);
+    Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof OneOfStringSequence)

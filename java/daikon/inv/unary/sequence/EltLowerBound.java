@@ -246,7 +246,7 @@ public class EltLowerBound
 
   // Look up a previously instantiated invariant.
   public static EltLowerBound  find(PptSlice ppt) {
-    Assert.assert(ppt.arity == 1);
+    Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof EltLowerBound)

@@ -107,7 +107,7 @@ public class CommonStringSequence
   }
 
   public boolean isSameFormula(Invariant other) {
-    Assert.assert(other instanceof CommonStringSequence);
+    Assert.assertTrue(other instanceof CommonStringSequence);
     return true;
   }
 }

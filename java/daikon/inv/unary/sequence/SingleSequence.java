@@ -26,9 +26,9 @@ public abstract class SingleSequence
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
   public void add(long[] value, int mod_index, int count) {
-    Assert.assert(! falsified);
-    Assert.assert((mod_index >= 0) && (mod_index < 2));
-    Assert.assert(Intern.isInterned(value));
+    Assert.assertTrue(! falsified);
+    Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
+    Assert.assertTrue(Intern.isInterned(value));
     // System.out.println("SingleSequence.add(" + ArraysMDE.toString(value) + ", " + modified + ", " + count + ")");
     if (value == null) {
       // ppt.var_infos[0].canBeNull = true; // [[INCR]]

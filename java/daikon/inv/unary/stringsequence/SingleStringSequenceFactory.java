@@ -13,7 +13,7 @@ public final class SingleStringSequenceFactory {
   public static Vector instantiate(PptSlice ppt) {
 
     VarInfo var = ppt.var_infos[0];
-    Assert.assert(var.rep_type == ProglangType.STRING_ARRAY);
+    Assert.assertTrue(var.rep_type == ProglangType.STRING_ARRAY);
 
     Vector result = new Vector();
     result.add(OneOfStringSequence.instantiate(ppt));

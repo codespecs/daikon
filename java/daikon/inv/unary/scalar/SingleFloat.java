@@ -26,8 +26,8 @@ public abstract class SingleFloat
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
   public void add(double value, int mod_index, int count) {
-    Assert.assert(! falsified);
-    Assert.assert((mod_index >= 0) && (mod_index < 2));
+    Assert.assertTrue(! falsified);
+    Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
     if (mod_index == 0) {
       add_unmodified(value, count);
     } else {

@@ -65,7 +65,7 @@ public final class OneOfSequence
 
     num_elts = 0;
 
-    Assert.assert(var().type.isPseudoArray(),
+    Assert.assertTrue(var().type.isPseudoArray(),
                   "ProglangType must be pseudo-array for EltOneOf or OneOfSequence");
     is_boolean = (var().file_rep_type.elementType() == ProglangType.BOOLEAN);
     is_hashcode = (var().file_rep_type.elementType() == ProglangType.HASHCODE);
@@ -199,7 +199,7 @@ public final class OneOfSequence
 
       if (is_hashcode) {
         // we only have one value, because add_modified dies if more
-        Assert.assert(num_elts == 1);
+        Assert.assertTrue(num_elts == 1);
         long[]  value = elts[0];
         if (value.length == 0) {
           return varname + " == []";
@@ -245,17 +245,17 @@ public final class OneOfSequence
         String classname = this.getClass().toString().substring(6); // remove leading "class"
         result = "warning: method " + classname + ".format_java() needs to be implemented: " + format();
       } else {
-        Assert.assert(num_elts == 1);
+        Assert.assertTrue(num_elts == 1);
         // we only have one value, because add_modified dies if more
         long[]  value = elts[0];
         if (var().name.isApplySizeSafe()) {
           length = var().name.applySize().java_name() + " == " + value.length;
         }
         if (no_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
+          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name });
           forall = form[0] + "(" + form[1] + " != null)" + form[2];
         } else if (all_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
+          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name });
           forall = form[0] + "(" + form[1] + " == null)" + form[2];
         }
       }
@@ -283,7 +283,7 @@ public final class OneOfSequence
     String forall = "";
     if (is_hashcode) {
       // we only have one value, because add_modified dies if more
-      Assert.assert(num_elts == 1);
+      Assert.assertTrue(num_elts == 1);
       long[]  value = elts[0];
       if (var().name.isApplySizeSafe()) {
         length = "size("+var().name.ioa_name() + ") = " + value.length;
@@ -317,17 +317,17 @@ public final class OneOfSequence
     String forall = "";
     if (is_hashcode) {
       // we only have one value, because add_modified dies if more
-      Assert.assert(num_elts == 1);
+      Assert.assertTrue(num_elts == 1);
       long[]  value = elts[0];
       if (var().type.isArray()) {
         if (var().name.isApplySizeSafe()) {
           length = var().name.applySize().esc_name() + " == " + value.length;
         }
         if (no_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name });
           forall = form[0] + "(" + form[1] + " != null)" + form[2];
         } else if (all_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name });
           forall = form[0] + "(" + form[1] + " == null)" + form[2];
         }
       }
@@ -356,17 +356,17 @@ public final class OneOfSequence
         String classname = this.getClass().toString().substring(6); // remove leading "class"
         result = "warning: method " + classname + ".format_jml() needs to be implemented: " + format();
       } else {
-        Assert.assert(num_elts == 1);
+        Assert.assertTrue(num_elts == 1);
         // we only have one value, because add_modified dies if more
         long[]  value = elts[0];
         if (var().name.isApplySizeSafe()) {
           length = var().name.applySize().jml_name() + " == " + value.length;
         }
         if (no_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
+          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name });
           forall = form[0] + form[1] + " != null" + form[2];
         } else if (all_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
+          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name });
           forall = form[0] + form[1] + " == null" + form[2];
         }
       }
@@ -393,16 +393,16 @@ public final class OneOfSequence
     String forall = "";
     if (is_hashcode) {
       // we only have one value, because add_modified dies if more
-      Assert.assert(num_elts == 1);
+      Assert.assertTrue(num_elts == 1);
       long[]  value = elts[0];
       if (var().name.isApplySizeSafe()) {
         length = "(EQ " + var().name.applySize().simplify_name() + " " + value.length + ")";
       }
       if (no_nulls(0)) {
-        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
+        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name });
         forall = form[0] + "(NEQ " + form[1] + "  null)" + form[2];
       } else if (all_nulls(0)) {
-        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
+        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name });
         forall = form[0] + "(EQ " + form[1] + "  null)" + form[2];
       }
     }
@@ -422,7 +422,7 @@ public final class OneOfSequence
 
   public void add_modified(long[]  v, int count) {
 
-    Assert.assert(Intern.isInterned(v));
+    Assert.assertTrue(Intern.isInterned(v));
 
     for (int i=0; i<num_elts; i++)
       if (elts[i] == v) {
@@ -464,7 +464,7 @@ public final class OneOfSequence
   public boolean isObviousDerived() {
     // Static constants are necessarily OneOf precisely one value.
     if (var().isStaticConstant()) {
-      Assert.assert(num_elts <= 1);
+      Assert.assertTrue(num_elts <= 1);
       return true;
     }
     return super.isObviousDerived();
@@ -491,7 +491,7 @@ public final class OneOfSequence
 
     if (is_hashcode && other.is_hashcode) {
       // we only have one value, because add_modified dies if more
-      Assert.assert(num_elts == 1 && other.num_elts == 1);
+      Assert.assertTrue(num_elts == 1 && other.num_elts == 1);
 
       long[] thisSeq = elts[0];
       long[] otherSeq = other.elts[0];
@@ -546,7 +546,7 @@ public final class OneOfSequence
 
   // Look up a previously instantiated invariant.
   public static OneOfSequence  find(PptSlice ppt) {
-    Assert.assert(ppt.arity == 1);
+    Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof OneOfSequence)

@@ -31,8 +31,8 @@ public final class SeqIndexNonEqual
     super(ppt);
 
     VarInfo var = var();
-    Assert.assert(var.rep_type == ProglangType.INT_ARRAY);
-    Assert.assert(var.type.elementIsIntegral());
+    Assert.assertTrue(var.rep_type == ProglangType.INT_ARRAY);
+    Assert.assertTrue(var.type.elementIsIntegral());
     core = new NonEqualCore(this, 0);
 
     if (debugSeqIndexNonEqual) {
@@ -159,7 +159,7 @@ public final class SeqIndexNonEqual
 
   // Look up a previously instantiated invariant.
   public static SeqIndexNonEqual find(PptSlice ppt) {
-    Assert.assert(ppt.arity == 1);
+    Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof SeqIndexNonEqual)

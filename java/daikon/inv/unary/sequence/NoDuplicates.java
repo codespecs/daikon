@@ -213,7 +213,7 @@ public class NoDuplicates
 
         boolean this_var_first = (v1.varinfo_index < v2.varinfo_index);
         if (! this_var_first) { VarInfo temp = v1; v1 = v2; v2 = temp; }
-        Assert.assert(v1.varinfo_index < v2.varinfo_index);
+        Assert.assertTrue(v1.varinfo_index < v2.varinfo_index);
         PptSlice2 slice_2seq = parent.findSlice(v1, v2);
         if (slice_2seq == null) {
           // System.out.println("NoDuplicates.isObviousImplied: no slice for " + v1.name + ", " + v2.name);
@@ -239,7 +239,7 @@ public class NoDuplicates
 
   public boolean isSameFormula(Invariant other)
   {
-    Assert.assert(other instanceof NoDuplicates);
+    Assert.assertTrue(other instanceof NoDuplicates);
     return true;
   }
 }

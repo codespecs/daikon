@@ -244,36 +244,36 @@ public class Ast {
     // All this could perhaps be replaced with an ad-hoc visitor, as is
     // done in nodeTokenAfter().  But it is written now, so leave it as is.
 
-    Assert.assert(n.f1.present());
+    Assert.assertTrue(n.f1.present());
     ConditionalExpression ce = n.f0;
-    Assert.assert(! ce.f1.present());
+    Assert.assertTrue(! ce.f1.present());
     ConditionalOrExpression coe = ce.f0;
-    Assert.assert(! coe.f1.present());
+    Assert.assertTrue(! coe.f1.present());
     ConditionalAndExpression cae = coe.f0;
-    Assert.assert(! cae.f1.present());
+    Assert.assertTrue(! cae.f1.present());
     InclusiveOrExpression ioe = cae.f0;
-    Assert.assert(! ioe.f1.present());
+    Assert.assertTrue(! ioe.f1.present());
     ExclusiveOrExpression eoe = ioe.f0;
-    Assert.assert(! eoe.f1.present());
+    Assert.assertTrue(! eoe.f1.present());
     AndExpression ande = eoe.f0;
-    Assert.assert(! ande.f1.present());
+    Assert.assertTrue(! ande.f1.present());
     EqualityExpression ee = ande.f0;
-    Assert.assert(! ee.f1.present());
+    Assert.assertTrue(! ee.f1.present());
     InstanceOfExpression iofe = ee.f0;
-    Assert.assert(! iofe.f1.present());
+    Assert.assertTrue(! iofe.f1.present());
     RelationalExpression re = iofe.f0;
-    Assert.assert(! re.f1.present());
+    Assert.assertTrue(! re.f1.present());
     ShiftExpression se = re.f0;
-    Assert.assert(! se.f1.present());
+    Assert.assertTrue(! se.f1.present());
     AdditiveExpression adde = se.f0;
-    Assert.assert(! adde.f1.present());
+    Assert.assertTrue(! adde.f1.present());
     MultiplicativeExpression me = adde.f0;
-    Assert.assert(! me.f1.present());
+    Assert.assertTrue(! me.f1.present());
     UnaryExpression ue = me.f0;
     UnaryExpressionNotPlusMinus uenpm
       = (UnaryExpressionNotPlusMinus) ue.f0.choice;
     PostfixExpression pfe = (PostfixExpression) uenpm.f0.choice;
-    Assert.assert(! pfe.f1.present());
+    Assert.assertTrue(! pfe.f1.present());
     PrimaryExpression pe = pfe.f0;
     return pe;
   }
@@ -300,7 +300,7 @@ public class Ast {
       switch (psnc.which) {
       case 4:
         NodeSequence sn = (NodeSequence) psnc.choice;
-        Assert.assert(sn.size() == 2);
+        Assert.assertTrue(sn.size() == 2);
         return ((NodeToken) sn.elementAt(1)).tokenImage;
       }
     }
@@ -323,7 +323,7 @@ public class Ast {
     switch (ppnc.which) {
     case 2:
       NodeSequence sn = (NodeSequence) ppnc.choice;
-      Assert.assert(sn.size() == 3);
+      Assert.assertTrue(sn.size() == 3);
       return ((NodeToken) sn.elementAt(2)).tokenImage;
     case 6:
       return fieldName((Name) ppnc.choice);
@@ -336,7 +336,7 @@ public class Ast {
     NodeListOptional nlo = n.f1;
     if (nlo.present()) {
       NodeSequence ns = (NodeSequence) nlo.elementAt(nlo.size()-1);
-      Assert.assert(ns.size() == 2);
+      Assert.assertTrue(ns.size() == 2);
       NodeToken nt = (NodeToken) ns.elementAt(1);
       return nt.tokenImage;
     } else {
@@ -562,12 +562,12 @@ public class Ast {
         String pptFullMethodName = ppt_name.getFullMethodName();
         int lparen = pptFullMethodName.indexOf('(');
         int rparen = pptFullMethodName.indexOf(')');
-        Assert.assert(lparen > 0);
-        Assert.assert(rparen > lparen);
+        Assert.assertTrue(lparen > 0);
+        Assert.assertTrue(rparen > lparen);
         String ppt_args_string = UtilMDE.
 	  arglistFromJvm(pptFullMethodName.substring(lparen, rparen+1));
-	Assert.assert(ppt_args_string.startsWith("("), ppt_args_string);
-	Assert.assert(ppt_args_string.endsWith(")"), ppt_args_string);
+	Assert.assertTrue(ppt_args_string.startsWith("("), ppt_args_string);
+	Assert.assertTrue(ppt_args_string.endsWith(")"), ppt_args_string);
 	ppt_args_string = ppt_args_string.substring(1, ppt_args_string.length()-1);
         String[] ppt_args = utilMDE.UtilMDE.split(ppt_args_string, ", ");
         if ((ppt_args.length == 1)
@@ -639,7 +639,7 @@ public class Ast {
   static Class getClass(String s) {
     try {
       Class c = Class.forName(s);
-      Assert.assert(c != null);
+      Assert.assertTrue(c != null);
       return c;
     } catch (ClassNotFoundException e) {
       String orig_s = s;
@@ -655,7 +655,7 @@ public class Ast {
         // System.out.println("Lookup trying: " + s);
         try {
           Class c = Class.forName(s);
-          Assert.assert(c != null);
+          Assert.assertTrue(c != null);
           return c;
         } catch (ClassNotFoundException ex) {
         }
@@ -992,7 +992,7 @@ public class Ast {
     PrintWriter pw = new PrintWriter(sw);
     PrintInvariants.print_invariants_maybe(ppt,pw);
     String[] invs = UtilMDE.split(sw.toString(), '\n');
-    Assert.assert(invs[invs.length-1].equals(""));
+    Assert.assertTrue(invs[invs.length-1].equals(""));
     if (invs.length == 1) {
       return new String[0];
     }
@@ -1000,10 +1000,10 @@ public class Ast {
       return new String[0];
     }
     // Ignore first three lines.  Also ignore last line, which is empty.
-    Assert.assert(invs[0].equals("==========================================================================="), "Not row-of-=: " + invs[0]);
+    Assert.assertTrue(invs[0].equals("==========================================================================="), "Not row-of-=: " + invs[0]);
     // These might differ, because return values appear in ppt.name but not in invs[1].
-    // utilMDE.Assert.assert(invs[1].equals(ppt.name), "Different names: " + invs[1] + ", " + ppt.name);
-    Assert.assert(invs[2].startsWith("    Variables: "));
+    // utilMDE.Assert.assertTrue(invs[1].equals(ppt.name), "Different names: " + invs[1] + ", " + ppt.name);
+    Assert.assertTrue(invs[2].startsWith("    Variables: "));
     return ArraysMDE.subarray(invs, 3, invs.length-1-3);
   }
 

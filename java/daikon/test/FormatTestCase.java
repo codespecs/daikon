@@ -537,7 +537,7 @@ class FormatTestCase {
    * @return a VarInfo object that described the type
    **/
   private static VarInfo getVarInfo(ProglangType type, int i) {
-    Assert.assert(type != null,"Unexpected null variable type passed to getVarInfo");
+    Assert.assertTrue(type != null,"Unexpected null variable type passed to getVarInfo");
 
     String arrayModifier = "";
 
@@ -592,7 +592,7 @@ class FormatTestCase {
       else
         return null;
 
-      Assert.assert(result[i] != null,"ProglangType unexpectedly parsed to null in getTypes(String)");
+      Assert.assertTrue(result[i] != null,"ProglangType unexpectedly parsed to null in getTypes(String)");
     }
 
     return result;

@@ -12,10 +12,10 @@ public final class SingleScalarFactory {
   // collection.
   public static Vector instantiate(PptSlice ppt) {
     // System.out.println("Ppt arity " + ppt.arity + " " + ppt.name + " " + ppt);
-    Assert.assert(ppt.arity == 1);
+    Assert.assertTrue(ppt.arity == 1);
     VarInfo var = ppt.var_infos[0];
-    // Assert.assert(! var.rep_type.isArray());
-    Assert.assert(var.rep_type.isIntegral());
+    // Assert.assertTrue(! var.rep_type.isArray());
+    Assert.assertTrue(var.rep_type.isIntegral());
 
     Vector result = new Vector();
     result.add(OneOfScalar.instantiate(ppt));

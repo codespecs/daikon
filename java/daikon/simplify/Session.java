@@ -43,7 +43,7 @@ public class Session
       byte[] buf = new byte[expect.length()];
       int pos = is.read(buf);
       String actual = new String(buf, 0, pos);
-      Assert.assert(expect.equals(actual), "Prompt expected, got '" + actual + "'");
+      Assert.assertTrue(expect.equals(actual), "Prompt expected, got '" + actual + "'");
 
       // set up result stream
       output = new BufferedReader(new InputStreamReader(is));
@@ -64,26 +64,26 @@ public class Session
 
     cc = new CmdCheck("(EQ 1 1)");
     cc.apply(s);
-    Assert.assert(true == cc.valid);
+    Assert.assertTrue(true == cc.valid);
 
     cc = new CmdCheck("(EQ 1 2)");
     cc.apply(s);
-    Assert.assert(false == cc.valid);
+    Assert.assertTrue(false == cc.valid);
 
     cc = new CmdCheck("(EQ x z)");
     cc.apply(s);
-    Assert.assert(false == cc.valid);
+    Assert.assertTrue(false == cc.valid);
 
     CmdAssume a = new CmdAssume("(AND (EQ x y) (EQ y z))");
     a.apply(s);
 
     cc.apply(s);
-    Assert.assert(true == cc.valid);
+    Assert.assertTrue(true == cc.valid);
 
     CmdUndoAssume.single.apply(s);
 
     cc.apply(s);
-    Assert.assert(false == cc.valid);
+    Assert.assertTrue(false == cc.valid);
   }
 
 }

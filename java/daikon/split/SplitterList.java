@@ -60,8 +60,8 @@ public abstract class SplitterList
       System.arraycopy(splits, 0, new_splits, old.length, splits.length);
       ppt_splitters.put(pptname, new_splits);
     } else {
-      Assert.assert(! ppt_splitters.containsKey(pptname));
-      // Assert.assert(! ppt_splitters.containsKey(pptname),
+      Assert.assertTrue(! ppt_splitters.containsKey(pptname));
+      // Assert.assertTrue(! ppt_splitters.containsKey(pptname),
       //               "SplitterList already contains " + pptname
       //               + " which maps to\n " + ArraysMDE.toString(get_raw(pptname))
       //               + "\n which is " + formatSplitters(get_raw(pptname)));

@@ -64,7 +64,7 @@ public final class EltOneOf
 
     num_elts = 0;
 
-    Assert.assert(var().type.isPseudoArray(),
+    Assert.assertTrue(var().type.isPseudoArray(),
                   "ProglangType must be pseudo-array for EltOneOf or OneOfSequence");
     is_boolean = (var().file_rep_type.elementType() == ProglangType.BOOLEAN);
     is_hashcode = (var().file_rep_type.elementType() == ProglangType.HASHCODE);
@@ -196,7 +196,7 @@ public final class EltOneOf
     if (num_elts == 1) {
 
       if (is_boolean) {
-        Assert.assert((elts[0] == 0) || (elts[0] == 1));
+        Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
         return varname + " == " + ((elts[0] == 0) ? "false" : "true");
       } else if (is_hashcode) {
         if (elts[0] == 0) {
@@ -236,8 +236,8 @@ public final class EltOneOf
     String result;
 
     if (is_boolean) {
-      Assert.assert(num_elts == 1);
-      Assert.assert((elts[0] == 0) || (elts[0] == 1));
+      Assert.assertTrue(num_elts == 1);
+      Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
       result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
     } else if (is_hashcode) {
       if (num_elts == 2) {
@@ -273,11 +273,11 @@ public final class EltOneOf
     String result;
 
     if (is_boolean) {
-      Assert.assert(num_elts == 1);
-      Assert.assert((elts[0] == 0) || (elts[0] == 1));
+      Assert.assertTrue(num_elts == 1);
+      Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
       result = varname + " = " + ((elts[0] == 0) ? "false" : "true");
     } else if (is_hashcode) {
-      Assert.assert(num_elts == 1);
+      Assert.assertTrue(num_elts == 1);
       if (elts[0] == 0) {
         result = varname + " = null";
       } else {
@@ -304,8 +304,8 @@ public final class EltOneOf
     String result;
 
     if (is_boolean) {
-      Assert.assert(num_elts == 1);
-      Assert.assert((elts[0] == 0) || (elts[0] == 1));
+      Assert.assertTrue(num_elts == 1);
+      Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
       result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
     } else if (is_hashcode) {
       if (num_elts == 1) {
@@ -319,9 +319,9 @@ public final class EltOneOf
         }
       } else {
         // add_modified allows two elements iff one is null
-        Assert.assert(num_elts == 2);
-        Assert.assert(elts[0] == 0);
-        Assert.assert(elts[1] != 0);
+        Assert.assertTrue(num_elts == 2);
+        Assert.assertTrue(elts[0] == 0);
+        Assert.assertTrue(elts[1] != 0);
         return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
       }
     } else {
@@ -345,8 +345,8 @@ public final class EltOneOf
     String result;
 
     if (is_boolean) {
-      Assert.assert(num_elts == 1);
-      Assert.assert((elts[0] == 0) || (elts[0] == 1));
+      Assert.assertTrue(num_elts == 1);
+      Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
       result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
     } else if (is_hashcode) {
       if (num_elts == 2) {
@@ -380,17 +380,17 @@ public final class EltOneOf
     String result;
 
     if (is_boolean) {
-      Assert.assert(num_elts == 1);
-      Assert.assert((elts[0] == 0) || (elts[0] == 1));
+      Assert.assertTrue(num_elts == 1);
+      Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
       result = "(EQ " + varname + " " + ((elts[0] == 0) ? "|@false|" : "|@true|") + ")";
     } else if (is_hashcode) {
       if (num_elts == 1) {
         result = "(EQ " + varname + " " + ((elts[0] == 0) ? "null" : ("|hash_" + elts[0] + "|")) + ")";
       } else {
         // add_modified allows two elements iff one is null
-        Assert.assert(num_elts == 2);
-        Assert.assert(elts[0] == 0);
-        Assert.assert(elts[1] != 0);
+        Assert.assertTrue(num_elts == 2);
+        Assert.assertTrue(elts[0] == 0);
+        Assert.assertTrue(elts[1] != 0);
         result = "(OR (EQ " + varname + " null) (EQ " + varname + "|hash_" + elts[1] + "|))";
       }
     } else {
@@ -469,7 +469,7 @@ public final class EltOneOf
   public boolean isObviousDerived() {
     // Static constants are necessarily OneOf precisely one value.
     if (var().isStaticConstant()) {
-      Assert.assert(num_elts <= 1);
+      Assert.assertTrue(num_elts <= 1);
       return true;
     }
     return super.isObviousDerived();
@@ -520,10 +520,10 @@ public final class EltOneOf
                 (elts[0] != 0 && other.elts[0] != 0));
       } else if (num_elts == 2 && other.num_elts == 2) {
         // add_modified allows two elements iff one is null
-        Assert.assert(elts[0] == 0);
-        Assert.assert(other.elts[0] == 0);
-        Assert.assert(elts[1] != 0);
-        Assert.assert(other.elts[1] != 0);
+        Assert.assertTrue(elts[0] == 0);
+        Assert.assertTrue(other.elts[0] == 0);
+        Assert.assertTrue(elts[1] != 0);
+        Assert.assertTrue(other.elts[1] != 0);
 
         // Since we know the first elements of each invariant are
         // zero, and the second elements are nonzero, we can immediately
@@ -586,7 +586,7 @@ public final class EltOneOf
 
   // Look up a previously instantiated invariant.
   public static EltOneOf  find(PptSlice ppt) {
-    Assert.assert(ppt.arity == 1);
+    Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof EltOneOf)

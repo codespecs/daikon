@@ -13,7 +13,7 @@ public final class SingleFloatSequenceFactory {
   public static Vector instantiate(PptSlice ppt) {
 
     VarInfo var = ppt.var_infos[0];
-    Assert.assert(var.rep_type == ProglangType.DOUBLE_ARRAY);
+    Assert.assertTrue(var.rep_type == ProglangType.DOUBLE_ARRAY);
 
 
     Vector result = new Vector();

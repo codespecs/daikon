@@ -60,17 +60,17 @@ public class CmdCheck
 
       // expect "##: [Inv|V]alid."
       int colon = result.indexOf(": ");
-      Assert.assert(colon != -1);
+      Assert.assertTrue(colon != -1);
       try {
         int junk = Integer.parseInt(result.substring(0, colon));
       } catch (NumberFormatException e) {
-        Assert.assert(false, "Expected number to prefix result '" + result + "'");
+        Assert.assertTrue(false, "Expected number to prefix result '" + result + "'");
       }
       result = result.substring(colon + 2);
       if ("Valid.".equals(result)) {
         valid = true;
       } else {
-        Assert.assert("Invalid.".equals(result));
+        Assert.assertTrue("Invalid.".equals(result));
         valid = false;
       }
 
