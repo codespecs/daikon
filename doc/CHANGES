@@ -20,6 +20,13 @@ Daikon
     The list of configuration options in the user manual was reorganized
     to group the options by category.
 
+  Documentation Changes
+
+    The Daikon publications webpage has been reorganized to bring all of
+    the publications relating to Daikon together on a single webpage.
+    Links have been added to other tools that perform dynamic invariant
+    detection.  See http://www.pag.csail.mit.edu/daikon/pubs/.
+
   Bug Fixes
 
     An incorrect assertion that caused Daikon to fail on some inputs
