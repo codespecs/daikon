@@ -28,10 +28,6 @@ else
   export CLASSPATH=${CPADD}
 fi
 
-
-## Add the Daikon binaries to your path
-export PATH=$DAIKONDIR/bin:$DAIKONDIR/front-end/java/src:${DFECDIR}:${JDKDIR}/bin:${PATH}
-
 ## tools.jar must be on your classpath.  Also, if you wish to use dfej (the
 ## Daikon front end for Java), you need to have rt.jar on your classpath.
 if [ "$OSTYPE" != "darwin" ]; then
@@ -45,6 +41,16 @@ fi
 ## (ajax.jar is temporary, will be removed soon, we hope.)
 if [ -e ${DAIKONDIR}/java/ajax-ship/ajax.jar ]; then
   export CLASSPATH=${CLASSPATH}:${DAIKONDIR}/java/ajax-ship/ajax.jar
+fi
+
+## Add the Daikon binaries to your path
+export PATH=$DAIKONDIR/bin:$DAIKONDIR/front-end/java/src:${DFECDIR}:${JDKDIR}/bin:${PATH}
+
+## Indicate where to find Perl modules such as util_daikon.pm.
+if [ $PERLLIB ]; then
+  export PERLLIB=${INV}/scripts:${PERLLIB}
+else
+  export PERLLIB=${INV}/scripts
 fi
 
 ## Indicates where Ajax should find its helper files such as

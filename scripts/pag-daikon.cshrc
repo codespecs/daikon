@@ -14,12 +14,6 @@ source ${INV}/scripts/daikon.cshrc
 # Should also remove "invariants/bin" from PATH.
 setenv PATH $DAIKONDIR/scripts:/usr/local/bin:${PATH}:/g4/projects/invariants/binaries:/g4/projects/invariants/tools/escjava/current/bin
 
-if ($?PERLLIB) then
-  setenv PERLLIB ${INV}/scripts:${PERLLIB}
-else
-  setenv PERLLIB ${INV}/scripts
-endif
-
 setenv LD_LIBRARY_PATH /usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
 
 setenv DAIKON_LIBS `/usr/bin/perl -e 'print join(":", @ARGV);' ${INV}/java/lib/*.jar`

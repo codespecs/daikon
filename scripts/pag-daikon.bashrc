@@ -14,12 +14,6 @@ source ${INV}/scripts/daikon.bashrc
 # Should also remove "daikon/bin" from PATH.
 export PATH=$DAIKONDIR/scripts:/usr/local/bin:${PATH}:/g4/projects/invariants/binaries:/g4/projects/invariants/tools/escjava/current/bin:$DAIKONDIR/front-end/c
 
-if [ $PERLLIB ]; then
-  export PERLLIB=${INV}/scripts:${PERLLIB}
-else
-  export PERLLIB=${INV}/scripts
-fi
-
 export LD_LIBRARY_PATH=/usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
 
 export DAIKON_LIBS=`/usr/bin/perl -e 'print join(":", @ARGV);' ${INV}/java/lib/*.jar`
