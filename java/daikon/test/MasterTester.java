@@ -21,6 +21,7 @@ public class MasterTester extends TestCase {
     result.addTest(new TestSuite(InvariantTester.class));
     result.addTest(new TestSuite(LinearTernaryCoreTest.class));
     result.addTest(new TestSuite(VarInfoNameTest.class));
+    result.addTest(new TestSuite(ProglangTypeTester.class));
     return result;
   }
 
