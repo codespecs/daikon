@@ -17,7 +17,7 @@ $WARNING = 1;
 use Cwd;
 
 # Process the command-line args
-my $usage = "Usage: buildtest.pl [--quiet]\n"
+my $usage = "Usage: buildtest.pl [--quiet] [--test_kvasir]\n"
   . "  Debugging flags:  [--nocleanup] [--skip_daikon] [--skip_dfec] [--skip_dfej] [--use_ver2]\n";
 my $quiet = 0;
 my $nocleanup = 0;
