@@ -6,6 +6,9 @@ OPT = -s -Wall
 # all: difftbl cluster den denxview clgroup
 all: difftbl cluster den clgroup
 
+clean:
+	rm -f difftbl cluster den denxview clgroup
+
 difftbl: difftbl.c
 	gcc $(OPT) -o difftbl difftbl.c -lm
 

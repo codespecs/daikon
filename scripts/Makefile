@@ -1,15 +1,17 @@
+HIERDIR = ../tools/hierarchical
+KMDIR = ../tools/kmeans
+
 all: difftbl cluster clgroup kmeans trace-untruncate-fast
 
 clean:
 	rm -f difftbl cluster clgroup kmeans trace-untruncate-fast
+	$(MAKE) -C $(HIERDIR) clean
+	$(MAKE) -C ($KMDIR) clean
 
 TAGS: tags
 
 tags:
 	etags `find . | grep -v '~\|/CVS\|^\.$$\|^\./[kx]means$$'`
-
-HIERDIR = ../tools/hierarchical
-KMDIR = ../tools/kmeans
 
 difftbl: $(HIERDIR)/difftbl
 	cp -p $^ $@
