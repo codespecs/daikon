@@ -51,7 +51,8 @@ class DisjSets
   {
     int root1 = find(set1);
     int root2 = find(set2);
-    unionDisjoint(root1, root2);
+    if (root1 != root2)
+      unionDisjoint(root1, root2);
   }
   
   /**
