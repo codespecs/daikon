@@ -9,31 +9,37 @@
   #define CLASSNAME TwoFloat
   #define PRIMITIVE double
   #define GET_VAL(obj) (((Double) obj).doubleValue())
+  #define BASE_IS_TYPE baseIsFloat()
 #elif defined(TYPELONG)
   #define PACKAGE twoScalar
   #define CLASSNAME TwoScalar
   #define PRIMITIVE long
   #define GET_VAL(obj) (((Long) obj).longValue())
+  #define BASE_IS_TYPE baseIsScalar()
 #elif defined(TYPESTRING)
   #define PACKAGE twoString
   #define CLASSNAME TwoString
   #define PRIMITIVE String
   #define GET_VAL(obj) ((String) obj)
+  #define BASE_IS_TYPE baseIsString()
 #elif defined(TYPEDOUBLESEQ)
   #define PACKAGE twoSequence
   #define CLASSNAME TwoSequenceFloat
   #define PRIMITIVE double[]
   #define GET_VAL(obj) ((double[]) obj)
+  #define BASE_IS_TYPE baseIsFloat()
 #elif defined(TYPELONGSEQ)
   #define PACKAGE twoSequence
   #define CLASSNAME TwoSequence
   #define PRIMITIVE long[]
   #define GET_VAL(obj) ((long[]) obj)
+  #define BASE_IS_TYPE baseIsScalar()
 #elif defined(TYPESTRINGSEQ)
   #define PACKAGE twoSequence
   #define CLASSNAME TwoSequenceString
   #define PRIMITIVE String[]
   #define GET_VAL(obj) ((String[]) obj)
+  #define BASE_IS_TYPE baseIsString()
 #else
   #error "type(primitive/seq) must be defined"
 #endif
@@ -83,6 +89,21 @@ public abstract class CLASSNAME extends BinaryInvariant {
   /** Pass-through. */
   protected CLASSNAME (PptSlice ppt) {
     super(ppt);
+  }
+
+  /** Returns whether or not the specified types are valid **/
+  public boolean valid_types (ProglangType[] rep_types) {
+
+    if (rep_types.length != 2)
+      return (false);
+
+    #if defined(TYPELONG) || defined(TYPEDOUBLE) || defined(TYPESTRING)
+      boolean dim_ok = !rep_types[0].isArray() && !rep_types[1].isArray();
+    #else
+      boolean dim_ok = rep_types[0].isArray() && rep_types[1].isArray();
+    #endif
+
+    return (dim_ok && rep_types[0].BASE_IS_TYPE && rep_types[1].BASE_IS_TYPE);
   }
 
   /**
