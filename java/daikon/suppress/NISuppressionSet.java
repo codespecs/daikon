@@ -74,7 +74,8 @@ public class NISuppressionSet {
    * each falsified invariant in turn.  Any invariants for which inv is
    * the last valid suppressor are added to new_invs.
    *
-   * @deprecated  Use NIS.process_falsified_invs() instead.
+   * Note, this is no longer the preferred approach, but is kept for
+   * informational purposes.  Use NIS.process_falsified_invs() instead.
    */
   public void falsified (Invariant inv, List new_invs) {
 

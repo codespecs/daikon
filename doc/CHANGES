@@ -11,7 +11,11 @@ versions as the user manual.
 
 ===========================================================================
 
-3.1.5
+Put changes for 3.1.6 here
+
+---------------------------------
+
+3.1.5 (Nov 1 2004)
 
 Daikon
 
@@ -26,13 +30,6 @@ Daikon
     chosen last.  And other things being equal, the variable with the
     least complex name is chosen first.
 
-#   Use a better algorithm for choosing the canonical variable in an
-#   equality set for printing purposes: a var that is not
-#   isDerivedParamAndUninteresting is more canonical than one that is, a
-#   var that is less derived is more canonical than one that is more
-#   derived, and other things being equal, choose the var with the least
-#   complex name.
-
     Two new options were added.  The --list_type option specifies
     information to be added to the "ListImplementors" section of the
     .decls file.  The --mem_stat option prints memory usage statistics
@@ -40,23 +37,10 @@ Daikon
     "Command line options for Daikon" section of the users manual
     was also reorganized to be more clear.
 
-#    Added new Daikon option --list_type, which can be used to add to
-#    the information in the "ListImplementors" section of the .decls
-#    file.
-
-#    Added new Daikon option --mem_stat, which prints memory usage
-#    statistics into a file named "stat.out" in the current directory.
-
     The configuration option "Daikon.disable_derived_variables" was
     added.  Derived variables will not be created if this option is set to
     true.  See the "List of Configuration Options" section of the user
     manual for more information.
-
-#    Repair output changes.  I don't think we document the repair output
-#    yet (except as a switch).
-
-#    Carlos 'Fixed java-family formatting of .getclass variables'  Not
-#    sure what that means.
 
   Bug Fixes
 
@@ -64,18 +48,6 @@ Daikon
     conditions, LinearTernary invariants were reported when there were
     samples that did not fit.  Also, coefficients too large for an
     integer were printed incorrectly.
-
-#    Fixed a bug in the LinearTernary invariant where the array holding
-#    the sample points is clobbered by the method that finds the three
-#    maximum separated points.  The method mutates the array so that
-#    sometimes conflicting points are overwritten before they can be
-#    used to check the coefficients calculated.
-
-#    Fixed a bug in the formatting of LinearTernary and LinearBinary
-#    invariants.  In order to enforce integer coefficients, the value
-#    (a double) was cast to to an int which checking whether the two
-#    values are equal (problem found because the value was too big to
-#    fit into an int).
 
   Developer Changes
 
@@ -113,8 +85,6 @@ Dfec (C font end)
     Dfec now uses "java.lang.String" rather than "String" as the
     representation type for strings in .decls files (see "Daikon
     Developer Changes" in this file).
-
-#   How do we release this??
 
 Dfepl (Perl front end)
 

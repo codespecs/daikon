@@ -9,6 +9,7 @@ IMAGE_PARTIAL_PATHS := $(addprefix images/,$(IMAGE_FILES))
 DOC_FILES_NO_IMAGES := Makefile daikon.texinfo config-options.texinfo invariants-doc.texinfo daikon.ps daikon.pdf daikon.html developer.texinfo developer.html CHANGES
 DOC_FILES := ${DOC_FILES_NO_IMAGES} $(IMAGE_PARTIAL_PATHS)
 DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
+DOC_FILES_USER := daikon.ps daikon.pdf daikon.html developer.html 
 EMACS_PATHS := emacs/daikon-context-gui.el
 README_FILES := README-daikon-java README-dist README-dist-doc
 README_PATHS := $(addprefix doc/,$(README_FILES))
@@ -22,7 +23,6 @@ SCRIPT_FILES := Makefile java-cpp.pl daikon.pl lines-from \
 	checkargs.pm util_daikon.pm \
 	runcluster.pl decls-add-cluster.pl extract_vars.pl dtrace-add-cluster.pl
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
-MIT_PHP := scripts/log2html.php scripts/emacs_launch.php
 # This is so toublesome that it isn't used except as a list of dependences for make commands
 DAIKON_JAVA_FILES := $(shell find java \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name '*ajax-ship*' \) -prune -o -name '*.java' -print) $(shell find java/daikon -follow \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name '*ajax-ship*' \) -prune -o -name '*.java' -print)
 DAIKON_RESOURCE_FILES := daikon/config/example-settings.txt daikon/simplify/daikon-background.txt
@@ -33,7 +33,7 @@ AJAX_JAVA_FILES := $(shell find java/ajax-ship/ajax \( -name '*daikon-java*' -o 
 # WWW_FILES := $(shell cd doc/www; find . \( \( -name '*~' -o -name '.*~' -o -name CVS -o -name .cvsignore -o -name '.\#*' -o -name '*.bak' -o -name uw \) -prune -a -type f \) -o -print | grep -v '^.$$')
 WWW_FILES := $(shell cd doc/www; find . -type f -print | egrep -v '~$$|CVS|.cvsignore|/.\#|.bak$$|uw/')
 #WWW_DIR := /home/httpd/html/daikon/
-WWW_ROOT := /var/autofs/net/pag/home/httpd/html/daikon/
+WWW_ROOT := /afs/csail.mit.edu/group/pag/docroot/www.pag.csail.mit.edu/daikon/
 WWW_DIR := $(WWW_ROOT)
 # This needs not to be hardcoded to a particular users directory if
 # anyone else is going to use it.
@@ -41,13 +41,27 @@ WWW_DIR := $(WWW_ROOT)
 # This is the current directory!  Maybe I don't need a variable for it.
 #INV_DIR := $(MERNST_DIR)/research/invariants
 INV_DIR := $(shell pwd)
-JDKDIR ?= /g2/jdk
+JDKDIR ?= /afs/csail/group/pag/software/pkg/jdk
+
+# Files to copy to the website
+WWW_DAIKON_FILES := faq.html index.html mailing-lists.html StackAr.html \
+				    anoncvs.html download/index.html download/doc/index.html \
+					pubs-sources/abstract-headfoot.html \
+					pubs-sources/abstract-headfoot-testsubject.html  \
+					pubs-sources/index-headfoot.html \
+					pubs-sources/fix-homedir-tilde.pl \
+				    pubs-sources/Makefile
+
+# Staging area for the distribution
+STAGING_DIST := $(INV_DIR)/dist
 
 # build the windows version of dfej here
 MINGW_DFEJ_LOC := $(INV_DIR)
 
 # The crosscompile is stored here
-MINGW_TOOLS := /var/autofs/net/pag/g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1
+#MINGW_TOOLS := /var/autofs/net/pag/g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1
+
+MINGW_TOOLS := /afs/csail/group/pag/software/pkg/mingw32-linux-x86-glibc-2.1
 
 DFEJ_DIR := $(INV_DIR)/dfej
 DFEC_DIR := $(INV_DIR)/dfec
@@ -105,11 +119,12 @@ help:
 	@echo " compile compile-java"
 	@echo " junit test"
 	@echo " tags TAGS"
+	@echo " install PAG specific files pag-install"
 	@echo "Creating the Daikon distribution:"
 	@echo " daikon.tar daikon.jar    -- just makes the tar files"
-	@echo " dist dist-force          -- also makes it public, updates webpages, etc."
-	@echo " dist-edg dist-edg-solaris"
-	@echo " dist-dfej dist-dfej-solaris dist-dfej-cygwin dist-dfej-linux"
+	@echo " staging                  -- moves all release file to $inv/dist"
+	@echo " test-staged-dist         -- tests the distribution in $inv/dist"
+	@echo " staging-to-www           -- copies $inv/dist to website"
 	@echo " "
 	@echo "This Makefile is for manipulations of the entire invariants module."
 	@echo "Daikon proper can be found in the java/daikon subdirectory."
@@ -160,20 +175,22 @@ TAGS:
 DISTTESTDIR := /tmp/daikon.dist
 DISTTESTDIRJAVA := /tmp/daikon.dist/daikon/java
 
-# Test that the distributed system compiles.
-# Don't create any new distribution.
-test-the-dist: dist-ensure-directory-exists
+# Test that the files in the staging area are correct.
+test-staged-dist: $(STAGING_DIST)
 	-rm -rf $(DISTTESTDIR)
 	mkdir $(DISTTESTDIR)
-	(cd $(DISTTESTDIR); tar xzf $(DIST_DIR)/daikon.tar.gz)
+	(cd $(DISTTESTDIR); tar xzf $(STAGING_DIST)/download/daikon.tar.gz)
 	## First, test daikon.jar.
-	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) CLASSPATH=$(DISTTESTDIR)/daikon/daikon.jar junit)
+	(cd $(DISTTESTDIR)/daikon/java && \
+	  $(MAKE) CLASSPATH=$(DISTTESTDIR)/daikon/daikon.jar junit)
 	## Second, test the .java files.
 	# No need to add to classpath: ":$(DISTTESTDIRJAVA)/lib/jakarta-oro.jar:$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar"
 	# Use javac, not jikes; jikes seems to croak on longer-than-0xFFFF
 	# method or class.
 	(cd $(DISTTESTDIRJAVA)/daikon; touch ../java/ajax; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIRJAVA)/lib/log4j.jar:$(RTJAR):$(TOOLSJAR) all_javac)
 	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIRJAVA)/lib/log4j.jar junit)
+	# Test the main target of the makefile
+	cd $(DISTTESTDIR)/daikon && make
 
 # I would rather define this inside the cvs-test rule.  (In that case I
 # must use "$$FOO", not $(FOO), to refer to it.)
@@ -193,105 +210,85 @@ cvs-test:
 
 # Main distribution
 
-# The "dist" target not only creates .tar files, but also increments the
-# version number and release date, installs a new distribution on the
-# website, updates webpages, tests the distribution, etc.  If you only want
-# to make a new .tar file, do "make daikon.tar" or "make daikon.tar.gz".
-# The "MAKEFLAGS=" argument discards any "-k" argument.  (It doesn't seem
-# to work, so supply explicit "-S" flag instead.)
-dist:
-	$(MAKE) -S dist-and-test
-
-# Both make and test the distribution.
-# (Must make it first in order to test it!)
-dist-and-test: dist-notest test-the-dist
+# The staging target builds all of the files that will be distributed
+# to the website in the directory $(STAGING_DIST).  This includes:
+# daikon.tar.gz, daikon.zip, daikon.jar, javadoc, dfej-linux-x86
+# (static version), dfej.exe (mingw windows) and the documentation.
+# See the dist target for moving these files to the website.
+# Note that this process does NOT include: dfej-cygwin.exe, dfej-solaris,
+# dfej-macosx, dfec-linux-x86.tar.gz and dfec-solaris.tar.gz.  These
+# must be built separately.
+staging: doc/CHANGES update-doc-dist-date-and-version
+	/bin/rm -rf $(STAGING_DIST)
+	install -d $(STAGING_DIST)/download
+	# Build the main tarfile for daikon
+	@echo "]2;Building daikon.tar"
+	$(MAKE) daikon.tar
+	mv daikon.jar $(STAGING_DIST)/download
+	# Build javadoc
+	@echo "]2;Building Java doc"
+	install -d $(STAGING_DIST)/download/jdoc
+	cd java; make 'JAVADOC_DEST=$(STAGING_DIST)/download/jdoc' doc
+	# Copy the documentation
+	@echo "]2;Copying documentation"
+	install -d $(STAGING_DIST)/download/doc
+	cd doc && cp -pf $(DOC_FILES_USER) $(STAGING_DIST)/download/doc
+	cp -pR doc/images $(STAGING_DIST)/download/doc
+	cp -pR doc/daikon_manual_html $(STAGING_DIST)/download/doc
+	cd doc/www && cp --parents -pf $(WWW_DAIKON_FILES) $(STAGING_DIST)
+	# Build static dfej and copy to staging dir
+	@echo "]2;Building static dfej"
+	$(MAKE) static-dfej-linux-x86
+	install -d $(STAGING_DIST)/download/bin
+	cp $(DFEJ_DIR)/src/dfej-linux-x86 $(STAGING_DIST)/download/bin
+	# Build the windows (mingw) version of dfej and copy to staging dir
+	@echo "]2;Building mingw dfej"
+	$(MAKE) mingw
+	cp $(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe \
+	  $(STAGING_DIST)/download/bin/dfej.exe
+	# all distributed files should be readonly
+	chmod -R -w $(STAGING_DIST)
+	# compare new list of files in tarfile to previous list
+	@echo "]2;New or removed files"
 	@echo "***** New or removed files:"
-	tar tzf daikon.tar.gz | sort | diff -u0 prev-release-contents - | grep -v '^--- \|^\+\+\+ -\|^@'
+	tar tzf $(WWW_ROOT)/download/daikon.tar.gz | sort > /tmp/old_tar.txt
+	tar tzf $(STAGING_DIST)/download/daikon.tar.gz | sort > /tmp/new_tar.txt
+	-diff -u /tmp/old_tar.txt /tmp/new_tar.txt 
+
+# Copy the files in the staging area to the website.  This will copy
+# all of the files in staging, but will not delete any files in the website
+# that are not in staging.  T
+staging-to-www: $(STAGING_DIST)
+	(cd $(STAGING_DIST) && tar cf - .) | (cd $(WWW_ROOT) && tar xfBp -)
+	@echo "**Update the dates and sizes in the various index files**"
+	update-link-dates $(DIST_DIR)/index.html
+	$(MAKE) update-dist-version-file
 	@echo "*****"
-	@echo "Don't forget to send mail to daikon-announce and commit documentation changes."
+	@echo "Don't forget to send mail to daikon-announce and commit changes."
 	@echo "(See sample messages in ~mernst/research/invariants/mail/daikon-lists.mail.)"
 	@echo "*****"
 
-dist-ensure-directory-exists: $(DIST_DIR)
-
-# Create the distribution, but don't test it.
-# Note that update-doc-dist-date-and-version must occur before the Java
-# files are recompiled and before the .tar files are created.
-# ("doc/CHANGES" goes even before that, because
-# update-doc-dist-date-and-version changes its modification date.)
-
-dist-notest: dist-ensure-directory-exists doc/CHANGES update-doc-dist-date-and-version clean-java compile-java prev-release-contents $(DIST_DIR_PATHS)
-	$(MAKE) update-dist-dir
-	$(MAKE) -n dist-dfej
 
 # Webpages of publications that use Daikon
 pubs:
 	$(MAKE) -C doc/www pubs
 
-# These versions are for comparison, to permit checking for added/removed files.
-# This rule does NOT depend on "daikon.tar" or "daikon.tar.gz"; we don't want
-# them re-made.
-prev-release-contents:
-	rm -f prev-release-contents
-	tar tzf daikon.tar.gz | sort > prev-release-contents
-
-doc/CHANGES: doc/daikon.texinfo doc/config-options.texinfo doc/invariants-doc.texinfo
-	@echo "***************************************************************************"
-	@echo "** doc/CHANGES file is not up-to-date with respect to documentation files."
+doc/CHANGES: doc/daikon.texinfo doc/config-options.texinfo \
+			 doc/invariants-doc.texinfo
+	@echo "******************************************************************"
+	@echo "** doc/CHANGES file is not up-to-date with respect to doc files."
 	@echo "** doc/CHANGES must be modified by hand."
 	@echo "** Try:"
 	@echo "     diff -u -s --from-file   $(WWW_ROOT)/dist/doc doc/*.texinfo"
 	@echo "** (or maybe  touch doc/CHANGES )."
-	@echo "***************************************************************************"
+	@echo "******************************************************************"
 	@exit 1
 
-# Is this the right way to do this?
-dist-force:
-	-rm -f daikon.tar.gz
-	$(MAKE) dist
-
-# 	echo CLASSPATH: $(CLASSPATH)
-# 	# echo DAIKON_JAVA_FILES: ${DAIKON_JAVA_FILES}
-# 	# Because full distribution has full source, shouldn't need: CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIRJAVA)/lib/jakarta-oro.jar:$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar:$(RTJAR):$(TOOLSJAR)
-
-# Given up-to-date .tar files, copies them (and documentation) to
-# distribution directory (ie, webpage).
-update-dist-dir: dist-ensure-directory-exists
-	$(MAKE) update-doc-dist-date-and-version
-	# Would be clever to call "cvs examine" and warn if not up-to-date.
-	# Jikes 1.14 doesn't seem to work here; it apparently tries to build
-	# a method or class with more than 0xFFFF bytecodes.
-	cd java && $(MAKE) all_via_javac
-	cd java && $(MAKE) junit
-	$(MAKE) dist-dfej-linux-x86
-	$(MAKE) dist-dfej-windows
-	$(MAKE) dist-java-doc
-	$(MAKE) update-dist-doc
-	$(MAKE) www-dist
-	$(MAKE) update-dist-version-file
-
-dist-java-doc:
-	cd java; make 'JAVADOC_DEST=$(WWW_ROOT)/download/jdoc_v3' doc
 
 doc-all:
 	# "make" in doc directory may fail the first time, but do show output.
 	-cd doc && $(MAKE) all
 	cd doc && $(MAKE) all
-
-update-dist-doc: doc-all
-	-cd $(DIST_DIR) && rm -rf $(DIST_DIR_FILES) doc daikon_manual_html
-	cp -pf $(DIST_DIR_PATHS) $(DIST_DIR)
-	# This isn't quite right:  $(DIST_DIR) should hold the
-	# daikon.html from daikon.tar.gz, not the current version.
-	mkdir $(DIST_DIR)/doc
-	cd doc && cp -pf $(DOC_FILES_NO_IMAGES) $(DIST_DIR)/doc
-	cp -pf $(MIT_PHP) $(MIT_DIR)
-	cp -pR doc/images $(DIST_DIR)/doc
-	cp -pR doc/daikon_manual_html $(DIST_DIR)/doc
-	# Don't modify files in the distribution directory
-	cd $(DIST_DIR) && chmod -R ogu-w $(DIST_DIR_FILES)
-	update-link-dates $(DIST_DIR)/index.html
-	cd $(DIST_DIR) && chgrp -R $(INV_GROUP) $(DIST_DIR_FILES) doc
 
 # Perl command compresses multiple spaces to one, for first 9 days of month.
 TODAY := $(shell date "+%B %e, %Y" | perl -p -e 's/  / /')
@@ -329,13 +326,6 @@ update-doc-dist-version:
 # This is useful in order to make the next version end with ".0".)
 update-dist-version-file:
 	perl -wpi -e 's/\.(-?[0-9]+)$$/"." . ($$1+1)/e' doc/VERSION
-
-www-dist:
-	html-update-toc doc/www/mit/index.html
-	# "--parents" keeps the directory structure in place
-	cd doc/www && cp -pf --parents $(WWW_FILES) $(WWW_DIR)
-	cd $(WWW_DIR) && chmod -w $(WWW_FILES)
-	update-link-dates $(DIST_DIR)/index.html
 
 # Perhaps daikon.jar shouldn't include JUnit or the test files.
 daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
@@ -380,6 +370,7 @@ java/lib/ajax.jar: $(AJAX_JAVA_FILES)
 # checkout.
 daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar java/Makefile
 
+	install -d $(STAGING_DIST)
 	-rm -rf /tmp/daikon
 	mkdir /tmp/daikon
 
@@ -419,7 +410,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	mkdir /tmp/daikon/examples/kvasir-examples/bzip2
 	cp -p examples/kvasir-examples/bzip2/bzip2.c /tmp/daikon/examples/kvasir-examples/bzip2
 
-	chgrp -R $(INV_GROUP) /tmp/daikon
+	# chgrp -R $(INV_GROUP) /tmp/daikon
 
 	cp -p daikon.jar /tmp/daikon
 	# # Now we are ready to make the daikon-compiled distribution
@@ -484,10 +475,11 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	rm -rf /tmp/daikon/tmp-junit
 	(cd /tmp/daikon/java/junit; javac -g `find . -name '*.java'`)
 
+	## JHP: I don't think we need this anymore
 	## Log4j is a loss; can't include source because its build
 	## configuration is so weird that it cannot be easily integrated.
-	mkdir /tmp/daikon/java/lib
-	cp -p java/lib/log4j.jar /tmp/daikon/java/lib
+	# mkdir /tmp/daikon/java/lib
+	# cp -p java/lib/log4j.jar /tmp/daikon/java/lib
 
 	## Front ends
 	mkdir /tmp/daikon/front-end
@@ -529,10 +521,11 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	## Make the source distribution proper
 	rm -rf `find /tmp/daikon -name CVS`
 	(cd /tmp; tar cf daikon.tar daikon)
-	cp -pf /tmp/daikon.tar .
+	gzip -c /tmp/daikon.tar > $(STAGING_DIST)/download/daikon.tar.gz
+	# cp -pf /tmp/daikon.tar 
 	rm -f /tmp/daikon.zip
 	(cd /tmp; zip -r daikon daikon)
-	cp -pf /tmp/daikon.zip .
+	cp -pf /tmp/daikon.zip $(STAGING_DIST)/download/daikon.zip
 
 # Rule for daikon.tar.gz
 %.gz : %
@@ -552,21 +545,6 @@ dist-dfec-linux:
 	cp -pf $(DFEC_DIR)/src/dfec $(DIST_BIN_DIR)/dfec-linux-x86-dynamic
 	update-link-dates $(DIST_DIR)/index.html
 	# cp -pf $(DFEC_DIR)/src/dfec $(NFS_BIN_DIR)
-
-
-## Old version
-# dist-edg: dist-edg-solaris
-# 
-# dist-edg-solaris: $(DIST_DIR)/edgcpfe-solaris
-# 
-# $(DIST_DIR)/edgcpfe-solaris: $(EDG_DIR)/edgcpfe
-# 	cp -pf $< $@
-# 	update-link-dates $(DIST_DIR)/index.html
-# 
-# # This is an attempt to indicate that it is not rebuilt from dfec.sh.
-# # I seem to have to have a body in the rule.
-# $(EDG_DIR)/dfec: $(EDG_DIR)/dfec.sh
-# 	@echo
 
 ## Java front end
 
@@ -605,14 +583,16 @@ $(DIST_BIN_DIR)/dfej-cygwin.exe: $(DFEJ_DIR)/src/dfej-cygwin.exe
 	update-link-dates $(DIST_DIR)/index.html
 	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@csail.mit.edu
 
-dist-dfej-linux-x86: $(DFEJ_DIR)/src/dfej
-	# First remake
+static-dfej-linux-x86: $(DFEJ_DIR)/src/dfej
+	# Move away the dynamic version and build the static one.
+	# The result is in $(DFEJ_DIR)/src/dfej-linux-x86
 	-mv -f $(DFEJ_DIR)/src/dfej $(DFEJ_DIR)/src/dfej-dynamic
 	-mv -f $(DFEJ_DIR)/src/dfej-linux-x86 $(DFEJ_DIR)/src/dfej
 	cd $(DFEJ_DIR)/src && $(MAKE) LDFLAGS=-static
 	mv -f $(DFEJ_DIR)/src/dfej $(DFEJ_DIR)/src/dfej-linux-x86
 	mv -f $(DFEJ_DIR)/src/dfej-dynamic $(DFEJ_DIR)/src/dfej
 
+dist-dfej-linux-x86: $(DFEJ_DIR)/src/dfej static-dfej-linux-x86
 	# Now copy it over
 	cp -pf $(DFEJ_DIR)/src/dfej-linux-x86 $(DIST_BIN_DIR)/dfej-linux-x86
 	cp -pf $(DFEJ_DIR)/src/dfej $(DIST_BIN_DIR)/dfej-linux-x86-dynamic
@@ -646,20 +626,13 @@ $(MINGW_DFEJ_LOC)/build_mingw_dfej:
 
 mingw_exe: $(MINGW_DFEJ_LOC)/build_mingw_dfej $(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe
 
-## Problem:  I seem to need to move away the .o files in the source
-## directory.  If they exist, then no attempt is made to build locally.
-## So as a hack, move them aside and then replace them.
-
-## JHP 5/1/03 - The renames don't seem necessary since the build is in a
-## separate directory.
-
 $(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe: dfej/src/*.cpp dfej/src/*.h
-	# -rename .o .mingw-saved.o dfej/src/*.o
 	(cd $(MINGW_DFEJ_LOC)/build_mingw_dfej && export PATH=$(MINGW_TOOLS)/cross-tools/bin:${PATH} && $(MAKE))
-	# -rename .mingw-saved.o .o dfej/src/*.mingw-saved.o
 
-dist-dfej-windows: $(MINGW_DFEJ_LOC)/build_mingw_dfej $(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe mingw_exe
-	cp -pf $(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe $(DIST_BIN_DIR)/dfej.exe
+dist-dfej-windows: $(MINGW_DFEJ_LOC)/build_mingw_dfej \
+				   $(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe mingw_exe
+	cp -pf $(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe \
+		   $(DIST_BIN_DIR)/dfej.exe
 	chmod +r $(DIST_BIN_DIR)/dfej.exe
 	update-link-dates $(DIST_DIR)/index.html
 
@@ -699,6 +672,21 @@ dist-dfej-windows: $(MINGW_DFEJ_LOC)/build_mingw_dfej $(MINGW_DFEJ_LOC)/build_mi
 ###########################################################################
 ### Utilities
 ###
+
+#
+# Copies PAG specific files to the website and group area
+WWW_PAG_FILES := doc/www/mit/eclipse-pag.html \
+				 doc/www/mit/index.html \
+				 doc/www/mit/pag-account.html \
+				 scripts/log2html.php \
+				 scripts/emacs_launch.php
+GROUP_FILES   := scripts/pag-daikon.bashrc scripts/pag-daikon.cshrc
+
+pag-install:
+	install --mode=ugo=r -p $(WWW_PAG_FILES) $(MIT_DIR)
+	install --mode=ugo=r -p $(GROUP_FILES) /afs/csail/group/pag/software/bin
+	install --mode=ugo=r -p emacs/daikon-group.el \
+	  /afs/csail/group/pag/software/config/emacs-daikon-group.el
 
 showvars:
 	@echo "DAIKON_JAVA_FILES = " $(DAIKON_JAVA_FILES)

@@ -41,11 +41,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 3.1.4
+@center Daikon version 3.1.5
 
 @sp 1
-@c Daikon version 3.1.4 date
-@center October 1, 2004
+@c Daikon version 3.1.5 date
+@center November 7, 2004
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -67,7 +67,7 @@ Copyright @copyright{} 1998-2003
 @c <h1>Daikon Invariant Detector User Manual</h1>
 @c
 @c This is the user manual for the Daikon invariant detector.
-@c It describes Daikon version 3.1.4, released October 1, 2004.
+@c It describes Daikon version 3.1.5, released November 7, 2004.
 @c @end html
 
 @c Putting this lower in the HTML version looks a little bit strange,
@@ -86,7 +86,7 @@ Copyright @copyright{} 1998-2003
 @c 
 @c @end ifinfo
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 3.1.4, released October 1, 2004.
+It describes Daikon version 3.1.5, released November 7, 2004.
 @end ifnottex
 
 @menu
@@ -196,6 +196,7 @@ Interpreting Daikon output
 * Invariant syntax::            
 * Program points::              
 * Variable names::              
+* Equal variables::             
 * Invariant list::              
 
 Variable names
@@ -2165,12 +2166,6 @@ have a concept of hierarchy.
 Suppress display of logically redundant invariants, using the Simplify
 automatic theorem prover.  Simplify must be separately obtained (from
 @uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
-order to take advantage of this option.
-
-@item --suppress_redundant
-Suppress display of logically redundant invariants, using the Simplify
-automatic theorem prover.  Simplify must be separately obtained (from
-@uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
 order to take advantage of this option.  Beware that the process of
 detecting redundant invariants can sometimes be time-consuming; the
 amount of effort Simplify exerts for each invariant can be controlled
@@ -2399,6 +2394,7 @@ Diff}) programs to print the results.)
 * Invariant syntax::            
 * Program points::              
 * Variable names::              
+* Equal variables::             
 * Invariant list::              
 @end menu
 
@@ -2602,7 +2598,7 @@ boolean (so as not to clash with byte), etc.);
 for each level of array nesting.
 
 
-@node    Variable names, Invariant list, Program points, Interpreting output
+@node    Variable names, Equal variables, Program points, Interpreting output
 @subsection Variable names
 
 Here is an incomplete list of the conventions used by Daikon for
@@ -2716,8 +2712,21 @@ In the post-state, @code{a} indexed by the original value of
 The value of @code{a[i]} in the post-state.
 @end table
 
+@node    Equal variables, Invariant list, Variable names, Interpreting output
+@subsection Equal variables
 
-@node   Invariant list,  , Variable names, Interpreting output
+When two or more variables are always equal, any invariant that
+is true over one variable is true over all of the variables.  Daikon
+prints invariants only over one variable (the leader) from the equal
+set. 
+
+An equality invariant is printed for each non-leader in the equal set.
+For example, if the variables @var{a}, @var{b}, and @var{c} are all
+equal and @var{a} is chosen as the leader, the printed invariants will
+include any invariants over @var{a} and the equality invariants "a=b"
+and "a=c"
+
+@node   Invariant list,  , Equal variables, Interpreting output
 @subsection Invariant list
 
 The following is a list of all of the invariants that Daikon detects.
@@ -3846,7 +3855,7 @@ filename (with periods converted into underscores) and then a slash.
 
 @c Be sure to remove this once it becomes out of date
 @c (This version number should be automatically updated, though.)
-As of Daikon version 3.1.4, Kvasir is still in an active stage of
+As of Daikon version 3.1.5, Kvasir is still in an active stage of
 development. While it works well on many programs, it does not yet
 support all of the options that the older dfec did, nor all of its
 features. This subsection lists some of the known limitations of the
@@ -7309,7 +7318,7 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 3.1.4, released October 1, 2004.
+This manual describes Daikon version 3.1.5, released November 7, 2004.
 A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.

@@ -529,41 +529,50 @@ target.
 
     <code>
         cd $inv/doc <br>
-        diff -b -u -s --from-file /home/httpd/html/daikon/dist/doc *.texinfo 
+        diff -b -u -s --from-file /afs/csail/group/pag/docroot/www.pag.csail.mit.edu/daikon/dist/doc *.texinfo 
 
         <br>
-    </code> <p>
-    or on afs <p>
-    <code>
-        cd $inv/doc <br>
-        diff -b -u -s --from-file /var/autofs/net/pag/home/httpd/html/daikon/dist/doc *.texinfo 
-    </code> <p>
+    </code> <p> 
 
     Another good source of information is to examine the cvs logs over the
     last month: <p>
 
     <code>
       cd $inv/java <br>
-      cvs -q log -d ">1 month ago" -N | cvs-log-summarize.pl <br>
+      cvs -q log -d ">Oct 1 2004" -N | cvs-log-summarize.pl <br>
     </code>
 
-    <li> Make the distribution and update the website. <p>
+    <li> Set the distribution date and versions number.  The date will
+    be set to today, but can be overridden by redefining today (e.g.,
+    'TODAY=November 1 2004').  The version is specified in the file
+    $inv/doc/VERSION <p>
 
-    On Red Hat Linux (NFS filesystem): <p>
     <code>
-        cd $inv <br>
-        make dist <br>
+      cd $inv <br>
+      make update-doc-dist-date-and-version  <br>
+    </code>
+
+    <li> Build everything to be distributed and copy it to the
+    staging area ($inv/dist).  The final output will be a list 
+    of files that were added/removed since the last release.<p>
+
+    <code>
+      make staging <br>
+    </code>
+
+    <li> Test the distribution in the staging area <p>
+
+    <code>
+      make test-staged-dist <br>
+    </code>
+
+    <li> Update the website. <p>
+
+    <code>
+        make staging-to-www <br>
     </code> <p>
 
-    On Debian Linux (AFS filesystem), set group to invariants <p>
-    <code>
-        cd $inv <br>
-        sudo perl -e '$( = $) = "14127 14127 14128"; $< = $> = 15313; \ <br>
-            system "xterm"' <br>
-        make dist <br>
-    </code> <p>
-
-    Note that <code>make dist</code> will automatically update the
+    Note that <code>make staging-to-www</code> will automatically update the
     version numbers in the source code and documentation from the file
     <tt>doc/VERSION</tt>.  After doing so, it will correctly update
     the version number in <tt>doc/VERSION</tt>.  This should not
