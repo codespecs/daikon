@@ -7,22 +7,30 @@ LISP_FILES := gries-helper.lisp instrument.lisp data-trace.lisp \
 	load-all.lisp \
 	gries.lisp gries-instrumented.lisp inv-medic.lisp
 LISP_PATHS := $(addprefix lisp-front-end/,$(LISP_FILES))
-PYTHON_FILES := daikon.py util.py TextFile.py
+# PYTHON_FILES := daikon.py util.py TextFile.py
 DOC_FILES := dtrace-format.txt Makefile daikon.html daikon.gif
 PY_DOC_FILES := daikon.py.doc Makefile TextFile.README daikon.gif
 README_FILES := README-daikon-java README-daikon1 README-dist
 SCRIPT_FILES := modbit-munge.pl java-cpp lines-from
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 
-# EDG_DIR := /homes/gws/mernst/research/invariants/edg/dist
-EDG_DIR := /homes/gws/mernst/research/invariants/c-front-end
+MERNST_DIR := /g2/users/mernst
+INV_DIR := $(MERNST_DIR)/research/invariants
+
+# EDG_DIR := $(INV_DIR)/edg/dist
+EDG_DIR := $(INV_DIR)/c-front-end
 # $(EDG_DIR)/edgcpfe is distributed separately (not in the main tar file)
 EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/dfec $(EDG_DIR)/dfec.sh
-DFEJ_DIR := /homes/gws/mernst/research/invariants/dfej
+DFEJ_DIR := $(INV_DIR)/dfej
 
-DIST_DIR := /homes/gws/mernst/www/daikon/dist
+DIST_DIR := $(MERNST_DIR)/www/daikon/dist
 # For really big files
 DIST_DIR_2 := /projects/se/people/mernst/www
+
+# for "chgrp"
+INV_GROUP := invariants
+
+RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name jikes -o -name dfej \) -print`
 
 
 ## Examples of better ways to get the lists:
@@ -52,11 +60,9 @@ help:
 
 tags: TAGS
 
-## As of July 1998, my Linux etags works on Python; my Solaris one doesn't.
-## So I should be sure to do the make on a Linux machine. -MDE
-TAGS:  $(LISP_PATHS) $(PYTHON_FILES)
+TAGS:  $(LISP_PATHS)
 	cd daikon; $(MAKE) tags
-	etags $(LISP_PATHS) $(PYTHON_FILES) --include=daikon/TAGS
+	etags $(LISP_PATHS) --include=daikon/TAGS
 
 ###########################################################################
 ### Distribution
@@ -75,21 +81,26 @@ dist-force:
 	$(MAKE) dist
 
 $(DIST_DIR)/daikon.tar.gz: daikon.tar.gz
-	# This isn't quite right:  I want the copy of daikon.html in daikon.tar.gz.
+	html-update-toc daikon.html
+	# This isn't quite right:  $(DIST_DIR) should hold the
+	# daikon.html from daikon.tar.gz, not the current version.
 	rm -rf $(DIST_DIR)/daikon.tar.gz $(DIST_DIR)/daikon.html
 	cp -pf daikon.tar.gz daikon.html $(DIST_DIR)
 	# Don't edit the copy of daikon.html in the distribution directory
 	chmod ogu-w $(DIST_DIR)/daikon.tar.gz $(DIST_DIR)/daikon.html
 	update-link-dates $(DIST_DIR)/index.html
 
-daikon.tar: $(LISP_PATHS) $(PYTHON_FILES) $(DOC_FILES) $(PY_DOC_FILES) $(EDG_FILES) $(README_files) examples-gries.tar.gz
+daikon.tar: $(LISP_PATHS) $(DOC_FILES) $(PY_DOC_FILES) $(EDG_FILES) $(README_files) examples-gries.tar.gz
+	html-update-toc daikon.html
+
+	rm -rf /tmp/daikon
 	mkdir /tmp/daikon
 
-	# Old Python implementation
-	mkdir /tmp/daikon/daikon-python
-	cp -p $(PYTHON_FILES) $(PY_DOC_FILES) /tmp/daikon/daikon-python
-	cp -p README-daikon1 /tmp/daikon/daikon-python/README
-	cp -p daikon-19991114.html /tmp/daikon/daikon-python/daikon.html
+	# # Old Python implementation
+	# mkdir /tmp/daikon/daikon-python
+	# cp -p $(PYTHON_FILES) $(PY_DOC_FILES) /tmp/daikon/daikon-python
+	# cp -p README-daikon1 /tmp/daikon/daikon-python/README
+	# cp -p daikon-19991114.html /tmp/daikon/daikon-python/daikon.html
 
 	# Current Java implementation
 	cp -p $(DOC_FILES) /tmp/daikon
@@ -97,9 +108,9 @@ daikon.tar: $(LISP_PATHS) $(PYTHON_FILES) $(DOC_FILES) $(PY_DOC_FILES) $(EDG_FIL
 	tar chf /tmp/daikon-java.tar daikon
 	(mkdir /tmp/daikon/java; cd /tmp/daikon/java; tar xf /tmp/daikon-java.tar; rm /tmp/daikon-java.tar)
 	cp -p README-daikon-java /tmp/daikon/java/README
-	# Maybe I should do  $(MAKE) doc  
-	# Maybe I should do  $(MAKE) clean  which will also get rid of .class
-	(cd /tmp/daikon/java; rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' \) -print`)
+	# Maybe I should do  $(MAKE) doc
+	# Don't do  $(MAKE) clean  which deletes .class files
+	(cd /tmp/daikon/java; $(RM_TEMP_FILES))
 
 	# Java support files
 	(cp -p java-getopt-1.0.7.tar.gz /tmp/daikon/java; cd /tmp/daikon/java; tar zxf java-getopt-1.0.7.tar.gz; rm java-getopt-1.0.7.tar.gz)
@@ -129,14 +140,14 @@ daikon.tar: $(LISP_PATHS) $(PYTHON_FILES) $(DOC_FILES) $(PY_DOC_FILES) $(EDG_FIL
 	(cd /tmp/daikon; tar xf /tmp/dfej.tar; mv dfej java-front-end; rm /tmp/dfej.tar)
 	# the subsequence rm -rf shouldn't be necessary one day, 
 	# but for the time being (and just in case)...
-	(cd /tmp/daikon/java-front-end; (cd src; $(MAKE) distclean); rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name jikes -o -name dfej -o -name '*.o' -o -name '*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' \) -print`)
+	(cd /tmp/daikon/java-front-end; (cd src; $(MAKE) distclean); $(RM_TEMP_FILES))
 
 	# Example files
 	mkdir /tmp/daikon/examples
 	(cp -p examples-gries.tar.gz /tmp/daikon/examples; cd /tmp/daikon/examples; tar zxf examples-gries.tar.gz; mv examples-gries gries; rm examples-gries.tar.gz)
 
 	date > /tmp/daikon/VERSION
-	chgrp -R invariants /tmp/daikon
+	chgrp -R $(INV_GROUP) /tmp/daikon
 	(cd /tmp; tar cf daikon.tar daikon)
 	cp -pf /tmp/daikon.tar .
 
@@ -174,7 +185,10 @@ $(EDG_DIR)/dfec: $(EDG_DIR)/dfec.sh
 
 ## Java front end
 
-dist-dfej: dist-dfej-solaris
+
+## Don't distribute executables for now
+# dist-dfej: dist-dfej-solaris
+dist-dfej: 
 
 dist-dfej-solaris: $(DIST_DIR_2)/dfej-solaris
 
