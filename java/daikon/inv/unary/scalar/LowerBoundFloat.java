@@ -138,7 +138,8 @@ public class LowerBoundFloat
       return true;
     }
     OneOfFloat oo = OneOfFloat.find(ppt);
-    if ((oo != null) && oo.enoughSamples()) {
+    if ((oo != null) && oo.enoughSamples() && oo.num_elts() > 0) {
+      Assert.assertTrue (oo.var().isCanonical());
       // We could also use core.min1 == oo.min_elt(), since the LowerBound
       // will never have a core.min1 that does not appear in the OneOf.
       if (core.min1 <= oo.min_elt()) {

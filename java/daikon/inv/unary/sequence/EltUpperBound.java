@@ -174,7 +174,8 @@ public class EltUpperBound
       return true;
     }
     EltOneOf oo = EltOneOf.find(ppt);
-    if ((oo != null) && oo.enoughSamples()) {
+    if ((oo != null) && oo.enoughSamples() && oo.num_elts() > 0) {
+      Assert.assertTrue (oo.var().isCanonical());
       // We could also use core.max1 == oo.max_elt(), since the LowerBound
       // will never have a core.max1 that does not appear in the OneOf.
       if (core.max1 >= oo.max_elt()) {
