@@ -565,6 +565,27 @@ public class LogicalCompare {
   public static void main(String[] args)
     throws FileNotFoundException, IOException, SimplifyError
   {
+    try {
+      mainHelper(args);
+    } catch (Daikon.TerminationMessage e) {
+      System.err.println(e.getMessage());
+      System.exit(1);
+    }
+    // Any exception other than Daikon.TerminationMessage gets propagated.
+    // This simplifies debugging by showing the stack trace.
+  }
+
+  /**
+   * This does the work of main, but it never calls System.exit, so it
+   * is appropriate to be called progrmmatically.
+   * Termination of the program with a message to the user is indicated by
+   * throwing Daikon.TerminationMessage.
+   * @see #main(String[])
+   * @see Daikon.TerminationMessage
+   **/
+  public static void mainHelper(final String[] args)
+    throws FileNotFoundException, IOException, SimplifyError
+  {
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt("assume",              LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt("cfg",                 LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -602,7 +623,7 @@ public class LogicalCompare {
         String option_name = longopts[g.getLongind()].getName();
         if (option_name.equals("help")) {
           System.out.println(usage);
-          System.exit(1);
+          throw new Daikon.TerminationMessage();
         } else if (option_name.equals("config-file")) {
           String config_file = g.getOptarg();
           try {
@@ -651,12 +672,10 @@ public class LogicalCompare {
         break;
       case 'h':
         System.out.println(usage);
-        System.exit(1);
-        break;
+        throw new Daikon.TerminationMessage();
       case '?':
         // getopt() already printed an error
-        System.exit(1);
-        break;
+        throw new Daikon.TerminationMessage("Bad argument");
       }
     }
 
@@ -669,9 +688,7 @@ public class LogicalCompare {
     int num_args = args.length - g.getOptind();
 
     if (num_args < 2) {
-      System.err.println("Must have at least two non-option arguments");
-      System.out.println(usage);
-      System.exit(1);
+      throw new Daikon.TerminationMessage("Must have at least two non-option arguments" + daikon.Global.lineSep + usage);
     }
 
     String app_filename = args[g.getOptind() + 0];
@@ -756,9 +773,7 @@ public class LogicalCompare {
 
       }
     } else {
-      System.err.println("Too many arguments");
-      System.out.println(usage);
-      System.exit(1);
+      throw new Daikon.TerminationMessage("Too many arguments" + daikon.Global.lineSep + usage);
     }
   }
 }

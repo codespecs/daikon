@@ -37,7 +37,7 @@ public class Ast {
     }
     catch (ParseException e) {
       e.printStackTrace();
-      System.exit(1);
+      throw new Daikon.TerminationMessage("ParseException in applyVisitorInsertComments");
     }
     root.accept(visitor);
     root.accept(new InsertCommentFormatter(visitor.addedComments));
@@ -56,7 +56,7 @@ public class Ast {
     }
     catch (ParseException e) {
       e.printStackTrace();
-      System.exit(1);
+      throw new Daikon.TerminationMessage("ParseException in applyVisitorReformat");
     }
     root.accept(visitor);
     // This is unfortunately necessary because TreeDumper dies if line or
@@ -102,7 +102,7 @@ public class Ast {
     } catch (Exception e) {
       System.err.println("create(" + type + ", \"" + stringRep + "\")");
       e.printStackTrace();
-      System.exit(1);
+      throw new Daikon.TerminationMessage("Error in Ast.create");
     }
     return n;
   }

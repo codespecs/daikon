@@ -10,8 +10,8 @@ public class TraceSelect {
     private static final int DEFAULT_NUM = 10;
 
 
-  public static boolean CLEAN = true;
-  public static boolean INCLUDE_UNRETURNED = false;
+    public static boolean CLEAN = true;
+    public static boolean INCLUDE_UNRETURNED = false;
     public static boolean DO_DIFFS = false;
 
     private static int num_reps;
@@ -30,16 +30,40 @@ public class TraceSelect {
     private static Random randObj;
 
 
-  private static int daikonArgStart = 0;
+    private static int daikonArgStart = 0;
 
     // This allows us to simply call MultiDiff
     // with the same files we just created
     private static String[] sampleNames;
 
-    public static void main (String[] args) {
-	argles = args;
-	if (args.length == 0) printUsage();
+    private static final String usage =
+	"USAGE: TraceSelect num_reps sample_size [options] [Daikon-args]..." + daikon.Global.lineSep
+        + "Example: java TraceSelect 20 10 -NOCLEAN -INCLUDE_UNRETURNED-SEED 1000 foo.dtrace foo2.dtrace foo.decls RatPoly.decls foo3.dtrace";
 
+    public static void main (String[] args) {
+        try {
+            mainHelper(args);
+        } catch (daikon.Daikon.TerminationMessage e) {
+            System.err.println(e.getMessage());
+            System.exit(1);
+        }
+        // Any exception other than daikon.Daikon.TerminationMessage gets propagated.
+        // This simplifies debugging by showing the stack trace.
+    }
+
+    /**
+     * This does the work of main, but it never calls System.exit, so it
+     * is appropriate to be called progrmmatically.
+     * Termination of the program with a message to the user is indicated by
+     * throwing daikon.Daikon.TerminationMessage.
+     * @see #main(String[])
+     * @see daikon.Daikon.TerminationMessage
+     **/
+    public static void mainHelper(final String[] args) {
+	argles = args;
+	if (args.length == 0) {
+            throw new daikon.Daikon.TerminationMessage("No arguments found." + daikon.Global.lineSep + usage);
+        }
 
         num_reps = Integer.parseInt (args[0]);
         numPerSample = Integer.parseInt (args[1]);
@@ -51,8 +75,7 @@ public class TraceSelect {
           // allows seed setting
           if (args[i].toUpperCase().equals ("-SEED")) {
             if (i+1 >= args.length) {
-              System.out.println ("-SEED options requires argument");
-              System.exit(0);
+              throw new daikon.Daikon.TerminationMessage ("-SEED options requires argument");
             }
 	    randObj = new Random (Long.parseLong (args[++i]));
             daikonArgStart = i+1;
@@ -97,8 +120,7 @@ public class TraceSelect {
               fileName = args[i];
             }
             else {
-              System.out.println ("Only 1 dtrace file for input allowed");
-              System.exit(0);
+              throw new daikon.Daikon.TerminationMessage ("Only 1 dtrace file for input allowed");
             }
 
             if (!knowArgStart) {
@@ -281,11 +303,6 @@ public class TraceSelect {
 	return product.toString();
     }
 
-    private static void printUsage () {
-	System.out.println ("USAGE: TraceSelect num_reps sample_size [options] [Daikon-args]...");
-        System.out.println ("Example: java TraceSelect 20 10 -NOCLEAN -INCLUDE_UNRETURNED-SEED 1000 foo.dtrace foo2.dtrace foo.decls RatPoly.decls foo3.dtrace");
-	System.exit(0);
-    }
 }
 
 // I don't think any of this is used anymore...

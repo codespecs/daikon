@@ -53,6 +53,27 @@ public final class FeatureExtractor {
   public static void main(String[] args)
     throws IOException, ClassNotFoundException, IllegalAccessException,
            InvocationTargetException {
+    try {
+      mainHelper(args);
+    } catch (Daikon.TerminationMessage e) {
+      System.err.println(e.getMessage());
+      System.exit(1);
+    }
+    // Any exception other than Daikon.TerminationMessage gets propagated.
+    // This simplifies debugging by showing the stack trace.
+  }
+
+  /**
+   * This does the work of main, but it never calls System.exit, so it
+   * is appropriate to be called progrmmatically.
+   * Termination of the program with a message to the user is indicated by
+   * throwing Daikon.TerminationMessage.
+   * @see #main(String[])
+   * @see Daikon.TerminationMessage
+   **/
+  public static void mainHelper(final String[] args)
+    throws IOException, ClassNotFoundException, IllegalAccessException,
+           InvocationTargetException {
     // Main performs 3 steps:
     // 1)  make two vectors of invariants: useful and nonuseful
     // 2)  extract the features for useful and nonuseful
@@ -60,7 +81,7 @@ public final class FeatureExtractor {
 
     if (args.length == 0) {
       System.out.println(USAGE);
-      System.exit(0);
+      throw new Daikon.TerminationMessage("No arguments found");
     }
 
     // First, parse the arguments
@@ -767,7 +788,7 @@ public final class FeatureExtractor {
   public static final class CombineFiles {
 
     private static String USAGE =
-    UtilMDE.join(
+      UtilMDE.join(
       new String[] {
         "Arguments:",
         "-i FileName:\ta SVMfu or C5 input file (with .data)",
@@ -780,11 +801,31 @@ public final class FeatureExtractor {
 
     public static void main(String[] args)
       throws IOException, ClassNotFoundException {
+      try {
+        mainHelper(args);
+      } catch (Daikon.TerminationMessage e) {
+        System.err.println(e.getMessage());
+        System.exit(1);
+      }
+      // Any exception other than Daikon.TerminationMessage gets propagated.
+      // This simplifies debugging by showing the stack trace.
+    }
+
+    /**
+     * This does the work of main, but it never calls System.exit, so it
+     * is appropriate to be called progrmmatically.
+     * Termination of the program with a message to the user is indicated by
+     * throwing Daikon.TerminationMessage.
+     * @see #main(String[])
+     * @see Daikon.TerminationMessage
+     **/
+    public static void mainHelper(final String[] args)
+      throws IOException, ClassNotFoundException {
 
       // First parse the arguments
       if (args.length == 0) {
         System.out.println(USAGE);
-        System.exit(0);
+        throw new Daikon.TerminationMessage("No arguments found");
       }
       ArrayList inputs = new ArrayList();
       boolean normalize = false;
@@ -921,7 +962,7 @@ public final class FeatureExtractor {
       // First parse the arguments
       if (args.length == 0) {
         System.out.println(USAGE);
-        System.exit(0);
+        throw new Daikon.TerminationMessage("No arguments found");
       }
       ArrayList trains = new ArrayList();
       ArrayList tests = new ArrayList();

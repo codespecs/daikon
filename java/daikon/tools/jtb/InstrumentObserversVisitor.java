@@ -203,12 +203,32 @@ public class InstrumentObserversVisitor
   public static void main(String[] args)
     throws IOException
   {
+    try {
+      mainHelper(args);
+    } catch (daikon.Daikon.TerminationMessage e) {
+      System.err.println(e.getMessage());
+      System.exit(1);
+    }
+    // Any exception other than daikon.Daikon.TerminationMessage gets propagated.
+    // This simplifies debugging by showing the stack trace.
+  }
+
+  /**
+   * This does the work of main, but it never calls System.exit, so it
+   * is appropriate to be called progrmmatically.
+   * Termination of the program with a message to the user is indicated by
+   * throwing daikon.Daikon.TerminationMessage.
+   * @see #main(String[])
+   * @see daikon.Daikon.TerminationMessage
+   **/
+  public static void mainHelper(final String[] args)
+    throws IOException
+  {
     for (int i=0; i < args.length; i++) {
       String javafile = args[i];
 
       if (! javafile.endsWith(".java")) {
-        System.out.println("File does not end in .java: " + javafile);
-        System.exit(1);
+        throw new daikon.Daikon.TerminationMessage("File does not end in .java: " + javafile);
       }
 
       Node root = null;
@@ -219,7 +239,7 @@ public class InstrumentObserversVisitor
         input.close();
       } catch (ParseException e) {
         e.printStackTrace();
-        System.exit(1);
+        throw new daikon.Daikon.TerminationMessage("ParseException");
       }
 
       GrepObserversVisitor grep = new GrepObserversVisitor();

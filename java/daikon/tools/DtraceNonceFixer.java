@@ -38,10 +38,29 @@ public class DtraceNonceFixer {
         },
       lineSep);
 
+
   public static void main (String[] args) {
+    try {
+      mainHelper(args);
+    } catch (daikon.Daikon.TerminationMessage e) {
+      System.err.println(e.getMessage());
+      System.exit(1);
+    }
+    // Any exception other than daikon.Daikon.TerminationMessage gets propagated.
+    // This simplifies debugging by showing the stack trace.
+  }
+
+  /**
+   * This does the work of main, but it never calls System.exit, so it
+   * is appropriate to be called progrmmatically.
+   * Termination of the program with a message to the user is indicated by
+   * throwing daikon.Daikon.TerminationMessage.
+   * @see #main(String[])
+   * @see daikon.Daikon.TerminationMessage
+   **/
+  public static void mainHelper(final String[] args) {
     if (args.length != 1) {
-      printUsage();
-      System.exit (0);
+      throw new daikon.Daikon.TerminationMessage(usage);
     }
 
     String outputFilename = (args[0].endsWith(".gz")) ?
@@ -193,12 +212,5 @@ public class DtraceNonceFixer {
     }
     return sb.toString();
   }
-
-  private static void printUsage() {
-    System.out.println ("Usage: DtraceNonceFixer filename" +
-                        lineSep + lineSep + "filename is the dtrace that will be modified so that the invocation nonces are consistent.  The output will be filename + \"_fixed\" and another output included nonces for OBJECT and CLASS invocations called filename + \"_all_fixed\" ");
-  }
-
-
 
 }

@@ -17,10 +17,8 @@ public class MasterUnitTester extends TestCase {
   public static void main(String[] args) {
     TestRunner runner = new TestRunner();
     TestResult result = runner.doRun(suite(), false);
-    if (result.wasSuccessful()) {
-      System.exit(0);
-    } else {
-      System.exit(1);
+    if (! result.wasSuccessful()) {
+      throw new daikon.Daikon.TerminationMessage("Unsuccessful test!");
     }
   }
 

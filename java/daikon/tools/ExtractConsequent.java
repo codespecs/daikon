@@ -68,6 +68,27 @@ public class ExtractConsequent {
   public static void main(String[] args)
     throws FileNotFoundException, IOException, ClassNotFoundException
   {
+    try {
+      mainHelper(args);
+    } catch (Daikon.TerminationMessage e) {
+      System.err.println(e.getMessage());
+      System.exit(1);
+    }
+    // Any exception other than Daikon.TerminationMessage gets propagated.
+    // This simplifies debugging by showing the stack trace.
+  }
+
+  /**
+   * This does the work of main, but it never calls System.exit, so it
+   * is appropriate to be called progrmmatically.
+   * Termination of the program with a message to the user is indicated by
+   * throwing Daikon.TerminationMessage.
+   * @see #main(String[])
+   * @see Daikon.TerminationMessage
+   **/
+  public static void mainHelper(final String[] args)
+    throws FileNotFoundException, IOException, ClassNotFoundException
+  {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(Daikon.suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -84,7 +105,7 @@ public class ExtractConsequent {
         String option_name = longopts[g.getLongind()].getName();
         if (Daikon.help_SWITCH.equals(option_name)) {
           System.out.println(usage);
-          System.exit(1);
+          throw new Daikon.TerminationMessage();
         } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
           Daikon.suppress_redundant_invariants_with_simplify = true;
         } else if (Daikon.config_option_SWITCH.equals(option_name)) {
@@ -102,8 +123,7 @@ public class ExtractConsequent {
         break;
       case 'h':
         System.out.println(usage);
-        System.exit(1);
-        break;
+        throw new Daikon.TerminationMessage();
       case '?':
         break; // getopt() already printed an error
       default:
@@ -114,8 +134,7 @@ public class ExtractConsequent {
     // The index of the first non-option argument -- the name of the file
     int fileIndex = g.getOptind();
     if (args.length - fileIndex != 1) {
-        System.out.println(usage);
-        System.exit(1);
+      throw new Daikon.TerminationMessage("Wrong number of arguments." + lineSep + usage);
     }
     String filename = args[fileIndex];
     PptMap ppts = FileIO.read_serialized_pptmap(new File(filename),

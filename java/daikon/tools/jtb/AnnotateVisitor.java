@@ -279,8 +279,7 @@ class AnnotateVisitor extends DepthFirstVisitor {
     Assert.assertTrue(num_invs == 0);
     for (int i=0; i<requires_invs.length; i++) {
       if (requires_invs[i] == null) {
-        System.out.println("Null invariant at index " + i + "/" + requires_invs.length);
-        System.exit(1);
+        throw new Daikon.TerminationMessage("Null invariant at index " + i + "/" + requires_invs.length);
       }
     }
     Assert.assertTrue(ArraysMDE.indexOfEq(requires_invs, (Object)null) == -1);

@@ -12,8 +12,8 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /**
- * DaikonSimple reads a declaration file and trace file and outputs a list of likely invariants
- * using the simple incremental algorithm.
+ * DaikonSimple reads a declaration file and trace file and outputs a list
+ * of likely invariants using the simple incremental algorithm.
  */
 public class DaikonSimple {
 
@@ -47,7 +47,28 @@ public class DaikonSimple {
         },
       lineSep);
 
-  public static void main(String[] args)
+
+  public static void main(final String[] args)
+    throws IOException, FileNotFoundException {
+    try {
+      mainHelper(args);
+    } catch (Daikon.TerminationMessage e) {
+      System.err.println(e.getMessage());
+      System.exit(1);
+    }
+    // Any exception other than Daikon.TerminationMessage gets propagated.
+    // This simplifies debugging by showing the stack trace.
+  }
+
+  /**
+   * This does the work of main, but it never calls System.exit, so it
+   * is appropriate to be called progrmmatically.
+   * Termination of the program with a message to the user is indicated by
+   * throwing Daikon.TerminationMessage.
+   * @see #main(String[])
+   * @see Daikon.TerminationMessage
+   **/
+  public static void mainHelper(final String[] args)
     throws IOException, FileNotFoundException {
 
     //set up logs
@@ -70,8 +91,7 @@ public class DaikonSimple {
     Set spinfo_files = files[2]; // [File]
     Set map_files = files[3]; // [File]
     if ((decls_files.size() == 0) && (dtrace_files.size() == 0)) {
-      System.out.println("No .decls or .dtrace files specified");
-      System.exit(1);
+      throw new Daikon.TerminationMessage("No .decls or .dtrace files specified");
     }
 
     // Load declarations
@@ -157,7 +177,7 @@ public class DaikonSimple {
       }
     }
 
-    System.exit(0);
+    // finished; return (and end the program)
 
     //using print_invariants will add invariant filtering
     //  PrintInvariants.print_invariants(all_ppts);
@@ -198,7 +218,7 @@ public class DaikonSimple {
           String option_name = longopts[g.getLongind()].getName();
           if (Daikon.help_SWITCH.equals(option_name)) {
             System.out.println(usage);
-            System.exit(1);
+            throw new Daikon.TerminationMessage();
           } else if (Daikon.config_option_SWITCH.equals(option_name)) {
             String item = g.getOptarg();
             daikon.config.Configuration.getInstance().apply(item);
@@ -211,12 +231,11 @@ public class DaikonSimple {
             LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
             String error = Debug.add_track(g.getOptarg());
             if (error != null) {
-              System.out.println(
+              throw new Daikon.TerminationMessage(
                 "Error parsing track argument '"
                   + g.getOptarg()
                   + "' - "
                   + error);
-              System.exit(1);
             }
           } else {
             throw new RuntimeException(
@@ -234,8 +253,7 @@ public class DaikonSimple {
           break;
         case 'h' :
           System.out.println(usage);
-          System.exit(1);
-          break;
+          throw new Daikon.TerminationMessage();
         case '?' :
           break; // getopt() already printed an error
         default :

@@ -103,6 +103,25 @@ public class Annotate {
                  lineSep);
 
   public static void main(String[] args) throws Exception {
+    try {
+      mainHelper(args);
+    } catch (Daikon.TerminationMessage e) {
+      System.err.println(e.getMessage());
+      System.exit(1);
+    }
+    // Any exception other than Daikon.TerminationMessage gets propagated.
+    // This simplifies debugging by showing the stack trace.
+  }
+
+  /**
+   * This does the work of main, but it never calls System.exit, so it
+   * is appropriate to be called progrmmatically.
+   * Termination of the program with a message to the user is indicated by
+   * throwing Daikon.TerminationMessage.
+   * @see #main(String[])
+   * @see Daikon.TerminationMessage
+   **/
+  public static void mainHelper(final String[] args) throws Exception {
     boolean slashslash = false;
     boolean insert_inexpressible = false;
     boolean setLightweight = true;
@@ -159,8 +178,7 @@ public class Annotate {
         break;
       case 'h':
         System.out.println(usage);
-        System.exit(1);
-        break;
+        throw new Daikon.TerminationMessage();
       case 'i':
         insert_inexpressible = true;
         break;
@@ -184,16 +202,12 @@ public class Annotate {
     // The index of the first non-option argument -- the name of the file
     int argindex = g.getOptind();
     if (argindex >= args.length) {
-      System.out.println("Error: No .inv file or .java file arguments supplied.");
-      System.out.println(usage);
-      System.exit(1);
+      throw new Daikon.TerminationMessage("Error: No .inv file or .java file arguments supplied." + lineSep + usage);
     }
     String invfile = args[argindex];
     argindex++;
     if (argindex >= args.length) {
-      System.out.println("Error: No .java file arguments supplied.");
-      System.out.println(usage);
-      System.exit(1);
+      throw new Daikon.TerminationMessage("Error: No .java file arguments supplied." + lineSep + usage);
     }
     PptMap ppts = FileIO.read_serialized_pptmap(new File(invfile),
                                                 true // use saved config
@@ -206,8 +220,7 @@ public class Annotate {
     for ( ; argindex < args.length; argindex++) {
       String javafile = args[argindex];
       if (! javafile.endsWith(".java")) {
-        System.out.println("File does not end in .java: " + javafile);
-        System.exit(1);
+        throw new Daikon.TerminationMessage("File does not end in .java: " + javafile);
       }
       Reader input = new FileReader(javafile);
       File outputFile = null;
@@ -231,10 +244,8 @@ public class Annotate {
                    new AnnotateVisitor(ppts, slashslash, insert_inexpressible, setLightweight));
       } catch (Error e) {
         if (e.getMessage().startsWith("Didn't find class ")) {
-          System.out.println();
-          System.out.println(e.getMessage() + ".");
-          System.out.println("Be sure to compile Java classes before calling Annotate.");
-          System.exit(1);
+          throw new Daikon.TerminationMessage(e.getMessage() + "." + lineSep
+            + "Be sure to compile Java classes before calling Annotate.");
         }
         throw e;
       }

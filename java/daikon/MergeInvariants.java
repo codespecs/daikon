@@ -38,7 +38,28 @@ public final class MergeInvariants {
              + "are printed"},
       lineSep);
 
-  public static void main(String[] args)
+  public static void main(final String[] args)
+    throws FileNotFoundException, StreamCorruptedException,
+           OptionalDataException, IOException, ClassNotFoundException {
+    try {
+      mainHelper(args);
+    } catch (Daikon.TerminationMessage e) {
+      System.err.println(e.getMessage());
+      System.exit(1);
+    }
+    // Any exception other than Daikon.TerminationMessage gets propagated.
+    // This simplifies debugging by showing the stack trace.
+  }
+
+  /**
+   * This does the work of main, but it never calls System.exit, so it
+   * is appropriate to be called progrmmatically.
+   * Termination of the program with a message to the user is indicated by
+   * throwing Daikon.TerminationMessage.
+   * @see #main(String[])
+   * @see Daikon.TerminationMessage
+   **/
+  public static void mainHelper(String[] args)
     throws FileNotFoundException, StreamCorruptedException,
            OptionalDataException, IOException, ClassNotFoundException {
     LongOpt[] longopts = new LongOpt[] {
@@ -59,8 +80,7 @@ public final class MergeInvariants {
         String option_name = longopts[g.getLongind()].getName();
         if (Daikon.help_SWITCH.equals(option_name)) {
           System.out.println(usage);
-          System.exit(1);
-
+          throw new Daikon.TerminationMessage();
         } else if (Daikon.config_option_SWITCH.equals(option_name)) {
           String item = g.getOptarg();
           daikon.config.Configuration.getInstance().apply(item);
@@ -75,9 +95,8 @@ public final class MergeInvariants {
           LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
           String error = Debug.add_track (g.getOptarg());
           if (error != null) {
-            System.out.println ("Error parsing track argument '"
+            throw new Daikon.TerminationMessage ("Error parsing track argument '"
                                 + g.getOptarg() + "' - " + error);
-            System.exit(1);
           }
         } else {
           throw new RuntimeException("Unknown long option received: " +
@@ -87,8 +106,7 @@ public final class MergeInvariants {
 
       case 'h':
         System.out.println(usage);
-        System.exit(1);
-        break;
+        throw new Daikon.TerminationMessage();
 
       case 'o':
         if (output_inv_file != null)

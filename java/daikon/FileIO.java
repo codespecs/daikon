@@ -1041,12 +1041,11 @@ public final class FileIO {
         if (!(value_rep.equals("nonsensical")
           || value_rep.equals("uninit") // backward compatibility (9/27/2002)
           || value_rep.equals("missing"))) {
-          System.out.println();
-          System.out.println("Modbit indicates missing value for variable "
-              + vi.name.name() + " with value \"" + value_rep + "\";");
-          System.out.println("  text of value should be \"nonsensical\" or \"uninit\" at "
+          throw new Daikon.TerminationMessage(
+            "Modbit indicates missing value for variable "
+              + vi.name.name() + " with value \"" + value_rep + "\";" + lineSep
+            + "  text of value should be \"nonsensical\" or \"uninit\" at "
               + data_trace_filename + " line " + reader.getLineNumber());
-          System.exit(1);
         } else {
           // Keep track of variables that can be missing
           vi.canBeMissing = true;

@@ -101,9 +101,32 @@ public final class Diff {
    * Convert the PptMaps to InvMaps as necessary, and diff the
    * InvMaps.
    **/
-  public static void main(String[] args) throws FileNotFoundException,
-  StreamCorruptedException, OptionalDataException, IOException,
-  ClassNotFoundException, InstantiationException, IllegalAccessException {
+  public static void main(String[] args)
+    throws FileNotFoundException, StreamCorruptedException,
+           OptionalDataException, IOException, ClassNotFoundException,
+           InstantiationException, IllegalAccessException {
+    try {
+      mainHelper(args);
+    } catch (Daikon.TerminationMessage e) {
+      System.err.println(e.getMessage());
+      System.exit(1);
+    }
+    // Any exception other than Daikon.TerminationMessage gets propagated.
+    // This simplifies debugging by showing the stack trace.
+  }
+
+  /**
+   * This does the work of main, but it never calls System.exit, so it
+   * is appropriate to be called progrmmatically.
+   * Termination of the program with a message to the user is indicated by
+   * throwing Daikon.TerminationMessage.
+   * @see #main(String[])
+   * @see Daikon.TerminationMessage
+   **/
+  public static void mainHelper(final String[] args)
+    throws FileNotFoundException, StreamCorruptedException,
+           OptionalDataException, IOException, ClassNotFoundException,
+           InstantiationException, IllegalAccessException {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
 
     boolean printDiff = false;
@@ -184,8 +207,7 @@ public final class Diff {
         break;
       case 'h':
         System.out.println(usage);
-        System.exit(1);
-        break;
+        throw new Daikon.TerminationMessage();
       case 'H':
         PrintAllVisitor.HUMAN_OUTPUT = true;
         break;
@@ -257,8 +279,7 @@ public final class Diff {
       case '?':
         // getopt() already printed an error
         System.out.println(usage);
-        System.exit(1);
-        break;
+        throw new Daikon.TerminationMessage("Bad argument");
       default:
         System.out.println("getopt() returned " + c);
         break;
@@ -408,7 +429,7 @@ public final class Diff {
       System.out.println ("Precison: " + mcv2.calcPrecision());
       System.out.println ("Recall: " + mcv2.calcRecall());
       System.out.println ("Success");
-      System.exit(0);
+      throw new Daikon.TerminationMessage();
 
     } else if (numFiles > 2) {
 
@@ -444,7 +465,7 @@ public final class Diff {
       return;
     } else {
       System.out.println (usage);
-      System.exit(0);
+      throw new Daikon.TerminationMessage();
     }
 
     if (logging)
@@ -523,7 +544,7 @@ public final class Diff {
     if (logging)
       System.err.println("Invariant Diff: Ending Log");
 
-    System.exit(0);
+    // finished; return (and end program)
   }
 
   /**

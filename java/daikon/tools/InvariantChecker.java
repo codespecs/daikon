@@ -54,9 +54,30 @@ public class InvariantChecker {
   static PrintStream output_stream = System.out;
   static int error_cnt = 0;
 
-  public static void main(String[] args) throws FileNotFoundException,
-  StreamCorruptedException, OptionalDataException, IOException,
-  ClassNotFoundException {
+  public static void main(String[] args)
+    throws FileNotFoundException, StreamCorruptedException,
+           OptionalDataException, IOException, ClassNotFoundException {
+    try {
+      mainHelper(args);
+    } catch (Daikon.TerminationMessage e) {
+      System.err.println(e.getMessage());
+      System.exit(1);
+    }
+    // Any exception other than Daikon.TerminationMessage gets propagated.
+    // This simplifies debugging by showing the stack trace.
+  }
+
+  /**
+   * This does the work of main, but it never calls System.exit, so it
+   * is appropriate to be called progrmmatically.
+   * Termination of the program with a message to the user is indicated by
+   * throwing Daikon.TerminationMessage.
+   * @see #main(String[])
+   * @see Daikon.TerminationMessage
+   **/
+  public static void mainHelper(final String[] args)
+    throws FileNotFoundException, StreamCorruptedException,
+           OptionalDataException, IOException, ClassNotFoundException {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
 
     LongOpt[] longopts = new LongOpt[] {
@@ -78,7 +99,7 @@ public class InvariantChecker {
         String option_name = longopts[g.getLongind()].getName();
         if (Daikon.help_SWITCH.equals(option_name)) {
           System.out.println(usage);
-          System.exit(1);
+          throw new Daikon.TerminationMessage();
         } else if (output_SWITCH.equals (option_name)) {
           output_file = new File (g.getOptarg());
           output_stream = new PrintStream (new FileOutputStream (output_file));
@@ -94,9 +115,8 @@ public class InvariantChecker {
           LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
           String error = Debug.add_track (g.getOptarg());
           if (error != null) {
-            System.out.println ("Error parsing track argument '"
+            throw new Daikon.TerminationMessage ("Error parsing track argument '"
                                 + g.getOptarg() + "' - " + error);
-            System.exit(1);
           }
         } else {
           throw new RuntimeException("Unknown long option received: " +
@@ -105,8 +125,7 @@ public class InvariantChecker {
         break;
       case 'h':
         System.out.println(usage);
-        System.exit(1);
-        break;
+        throw new Daikon.TerminationMessage();
       case '?':
         break; // getopt() already printed an error
       default:
@@ -129,9 +148,7 @@ public class InvariantChecker {
       String filename = file.toString();
       if (filename.indexOf(".inv") != -1) {
         if (inv_file != null) {
-          System.out.println ("multiple inv files specified");
-          System.out.println(usage);
-          System.exit(1);
+          throw new Daikon.TerminationMessage ("multiple inv files specified" + lineSep + usage);
         }
         inv_file = file;
       } else if (filename.indexOf(".dtrace") != -1) {

@@ -39,10 +39,29 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
   static JFrame ctrlPanel=null;
 
   public static void main( String[] args ) {
+    try {
+      mainHelper(args);
+    } catch (Daikon.TerminationMessage e) {
+      System.err.println(e.getMessage());
+      System.exit(1);
+    }
+    // Any exception other than Daikon.TerminationMessage gets propagated.
+    // This simplifies debugging by showing the stack trace.
+  }
+
+  /**
+   * This does the work of main, but it never calls System.exit, so it
+   * is appropriate to be called progrmmatically.
+   * Termination of the program with a message to the user is indicated by
+   * throwing Daikon.TerminationMessage.
+   * @see #main(String[])
+   * @see Daikon.TerminationMessage
+   **/
+  public static void mainHelper(final String[] args) {
     daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
     if (args.length > 1) {
       showErrorMessage( "The GUI must be invoked with only one argument, a .inv or .inv.gz file." + lineSep + "Please try running the gui again." );
-      System.exit( 0 );
+      throw new Daikon.TerminationMessage("Wrong number of arguments");
     } else if (args.length == 1)
       gui = new InvariantsGUI( args[0] );
     else
@@ -468,7 +487,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	displayInvariantsFromFile( invFileName );
       }
       else if (menuText.equals( "Quit" ))
-	System.exit( 0 );
+	throw new Daikon.TerminationMessage();
     }
     //  Handle checkbox events involving filters
     else if (e.getSource().getClass() == JCheckBox.class) {

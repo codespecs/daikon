@@ -32,6 +32,26 @@ public final class JTrace
 
     public static void main(String[] args)
     {
+        try {
+            mainHelper(args);
+        } catch (Daikon.TerminationMessage e) {
+            System.err.println(e.getMessage());
+            System.exit(1);
+        }
+        // Any exception other than Daikon.TerminationMessage gets propagated.
+        // This simplifies debugging by showing the stack trace.
+    }
+
+    /**
+     * This does the work of main, but it never calls System.exit, so it
+     * is appropriate to be called progrmmatically.
+     * Termination of the program with a message to the user is indicated by
+     * throwing Daikon.TerminationMessage.
+     * @see #main(String[])
+     * @see Daikon.TerminationMessage
+     **/
+    public static void mainHelper(final String[] args)
+    {
         // This usage message is displayed on behalf of the toplevel
         // driver script.
         if (args.length < 1) {
@@ -87,9 +107,8 @@ public final class JTrace
         System.setSecurityManager(null);
 
         if (inference.failure_message != null) {
-            System.err.println("JTrace: inference thread failed with message: "
+            throw new Daikon.TerminationMessage("JTrace: inference thread failed with message: "
                                + inference.failure_message);
-            System.exit(1);
         }
 
         // Write out the invariant file
@@ -97,8 +116,7 @@ public final class JTrace
         try {
             FileIO.write_serialized_pptmap(inference.all_ppts, inv_file);
         } catch (IOException e) {
-            System.err.println("Error while writing '" + inv_file + "': " + e);
-            System.exit(1);
+            throw new Daikon.TerminationMessage("Error while writing '" + inv_file + "': " + e);
         }
 
         // Display the invariants

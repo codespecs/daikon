@@ -79,7 +79,7 @@ public class InvariantFormatTester extends TestCase
     else if (args.length > 0) {
       System.out.println("Usage: java daikon.test.InvariantFormatTester" +
                          " [--generate_goals]");
-      System.exit(0);
+      return;
     }
 
     junit.textui.TestRunner.run(new TestSuite(InvariantFormatTester.class));

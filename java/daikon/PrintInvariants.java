@@ -140,7 +140,28 @@ public final class PrintInvariants {
       "      Print debug info on the specified invariant class, vars, and ppt",
     }, lineSep);
 
-  public static void main(String[] args)
+  public static void main(final String[] args)
+    throws FileNotFoundException, StreamCorruptedException,
+           OptionalDataException, IOException, ClassNotFoundException {
+    try {
+      mainHelper(args);
+    } catch (Daikon.TerminationMessage e) {
+      System.err.println(e.getMessage());
+      System.exit(1);
+    }
+    // Any exception other than Daikon.TerminationMessage gets propagated.
+    // This simplifies debugging by showing the stack trace.
+  }
+
+  /**
+   * This does the work of main, but it never calls System.exit, so it
+   * is appropriate to be called progrmmatically.
+   * Termination of the program with a message to the user is indicated by
+   * throwing Daikon.TerminationMessage.
+   * @see #main(String[])
+   * @see Daikon.TerminationMessage
+   **/
+  public static void mainHelper(String[] args)
     throws FileNotFoundException, StreamCorruptedException,
            OptionalDataException, IOException, ClassNotFoundException {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
@@ -171,12 +192,11 @@ public final class PrintInvariants {
         String option_name = longopts[g.getLongind()].getName();
         if (Daikon.help_SWITCH.equals(option_name)) {
           System.out.println(usage);
-          System.exit(1);
+          throw new Daikon.TerminationMessage();
         } else if (Daikon.disc_reason_SWITCH.equals(option_name)) {
           try { PrintInvariants.discReasonSetup(g.getOptarg()); }
           catch (IllegalArgumentException e) {
-            System.out.print(e.getMessage());
-            System.exit(1);
+            throw new Daikon.TerminationMessage(e.getMessage());
           }
         } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
           Daikon.suppress_redundant_invariants_with_simplify = true;
@@ -221,9 +241,8 @@ public final class PrintInvariants {
           LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
           String error = Debug.add_track (g.getOptarg());
           if (error != null) {
-            System.out.println ("Error parsing track argument '"
+            throw new Daikon.TerminationMessage ("Error parsing track argument '"
                                 + g.getOptarg() + "' - " + error);
-            System.exit(1);
           }
         } else {
           throw new RuntimeException("Unknown long option received: " +
@@ -232,8 +251,7 @@ public final class PrintInvariants {
         break;
       case 'h':
         System.out.println(usage);
-        System.exit(1);
-        break;
+        throw new Daikon.TerminationMessage();
       case '?':
         break; // getopt() already printed an error
       default:
@@ -246,7 +264,7 @@ public final class PrintInvariants {
     int fileIndex = g.getOptind();
     if (args.length - fileIndex != 1) {
         System.out.println(usage);
-        System.exit(1);
+        throw new Daikon.TerminationMessage("Wrong number of arguments (expected 1)");
     }
 
     // Read in the invariants

@@ -144,8 +144,9 @@ public final class Runtime {
       dtrace_closed = true;
 
       if (dtraceLimitTerminate) {
-        System.err.println("Printed " + printedRecords + " records.  Exiting.");
-        System.exit(1);
+        // System.err.println("Printed " + printedRecords + " records.  Exiting.");
+        // System.exit(1);
+        throw new Daikon.TerminationMessage("Printed " + printedRecords + " records.  Exiting.");
       } else {
         // By default, no special output if the system continues to run.
         // System.err.println("Printed " + printedRecords + " records.  No more Daikon output.");

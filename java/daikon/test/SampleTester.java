@@ -74,7 +74,7 @@ public class SampleTester extends TestCase {
         String option_name = longopts[g.getLongind()].getName();
         if (Daikon.help_SWITCH.equals(option_name)) {
           System.out.println(usage);
-          System.exit(1);
+          throw new Daikon.TerminationMessage();
 
         } else if (Daikon.config_option_SWITCH.equals(option_name)) {
           String item = g.getOptarg();
@@ -90,9 +90,8 @@ public class SampleTester extends TestCase {
           LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
           String error = Debug.add_track (g.getOptarg());
           if (error != null) {
-            System.out.println ("Error parsing track argument '"
+            throw new Daikon.TerminationMessage ("Error parsing track argument '"
                                 + g.getOptarg() + "' - " + error);
-            System.exit(1);
           }
         } else {
           throw new RuntimeException("Unknown long option received: " +
@@ -102,8 +101,7 @@ public class SampleTester extends TestCase {
 
       case 'h':
         System.out.println(usage);
-        System.exit(1);
-        break;
+        throw new Daikon.TerminationMessage();
 
       case '?':
         break; // getopt() already printed an error

@@ -32,6 +32,7 @@ import utilMDE.*;
 
 /**
  * The "main" method is the main entry point for the Daikon invariant detector.
+ * The "mainHelper" method is the entry point, when called programmatically.
  **/
 public final class Daikon {
 
@@ -353,10 +354,41 @@ public final class Daikon {
       lineSep);
 
   /**
+   * Thrown to indicate that main should not print a stack trace, but only
+   * print the message itself to the user.
+   * If the string is null, then this is normal termination, not an error.
+   **/
+  public static class TerminationMessage extends RuntimeException {
+    public TerminationMessage(String s) { super(s); }
+    public TerminationMessage() { super(); }
+  }
+
+  /**
    * The arguments to daikon.Daikon are file names.  Declaration file names
    * end in ".decls", and data trace file names end in ".dtrace".
    **/
   public static void main(final String[] args) {
+    try {
+      mainHelper(args);
+    } catch (TerminationMessage e) {
+      if (e.getMessage() != null) {
+        System.err.println(e.getMessage());
+        System.exit(1);
+      }
+    }
+    // Any exception other than TerminationMessage gets propagated.  This
+    // simplifies debugging by showing the stack trace.
+  }
+
+  /**
+   * This does the work of main, but it never calls System.exit, so it
+   * is appropriate to be called progrmmatically.
+   * Termination of the program with a message to the user is indicated by
+   * throwing TerminationMessage.
+   * @see #main(String[])
+   * @see TerminationMessage
+   **/
+  public static void mainHelper(final String[] args) {
     // Read command line options
     Set[] files = read_options(args);
     Assert.assertTrue(files.length == 4);
@@ -366,7 +398,7 @@ public final class Daikon {
     Set map_files = files[3]; // [File]
     if ((decls_files.size() == 0) && (dtrace_files.size() == 0)) {
       System.out.println("No .decls or .dtrace files specified");
-      System.exit(1);
+      throw new Daikon.TerminationMessage("No .decls or .dtrace files specified");
     }
 
     if (Daikon.dkconfig_undo_opts) {
@@ -520,7 +552,8 @@ public final class Daikon {
           }
         }
       }
-      System.exit(0);
+      // exit the program
+      return;
     }
 
     // Display invariants
@@ -574,7 +607,7 @@ public final class Daikon {
       System.out.println(
         "Daikon error: no files supplied on command line.");
       System.out.println(usage);
-      System.exit(1);
+      throw new Daikon.TerminationMessage();
     }
 
     Set decl_files = new HashSet();
@@ -693,24 +726,22 @@ public final class Daikon {
           String option_name = longopts[g.getLongind()].getName();
           if (help_SWITCH.equals(option_name)) {
             System.out.println(usage);
-            System.exit(1);
+            throw new Daikon.TerminationMessage();
           } else if (disc_reason_SWITCH.equals(option_name)) {
             try {
               PrintInvariants.discReasonSetup(g.getOptarg());
             } catch (IllegalArgumentException e) {
-              System.out.print(e.getMessage());
-              System.exit(1);
+              throw new Daikon.TerminationMessage(e.getMessage());
             }
           } else if (track_SWITCH.equals(option_name)) {
             LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
             String error = Debug.add_track(g.getOptarg());
             if (error != null) {
-              System.out.println(
+              throw new Daikon.TerminationMessage(
                 "Error parsing track argument '"
                   + g.getOptarg()
                   + "' - "
                   + error);
-              System.exit(1);
             }
           } else if (ppt_regexp_SWITCH.equals(option_name)) {
             if (ppt_regexp != null)
@@ -884,8 +915,7 @@ public final class Daikon {
           break;
         case 'h' :
           System.out.println(usage);
-          System.exit(1);
-          break;
+          throw new Daikon.TerminationMessage();
         case 'o' :
           if (inv_file != null)
             throw new Error("multiple serialization output files supplied on command line");
@@ -1591,13 +1621,13 @@ public final class Daikon {
     }
 
     if (FileIO.dkconfig_read_samples_only) {
-      Fmt.pf(
-        "Finished reading %s samples",
-        "" + FileIO.samples_processed);
-      System.exit(0);
+      throw new Daikon.TerminationMessage(
+        Fmt.spf(
+          "Finished reading %s samples",
+          "" + FileIO.samples_processed));
     }
 
-        // ppt_stats (all_ppts);
+    // ppt_stats (all_ppts);
 
     //     if (debugStats.isLoggable (Level.FINE)) {
     //       PptSliceEquality.print_equality_stats (debugStats, all_ppts);
@@ -2263,4 +2293,5 @@ public final class Daikon {
     Assert.assertTrue(result.size() > 0);
     return result;
   }
+
 }
