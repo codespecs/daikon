@@ -58,7 +58,7 @@ public final class Daikon {
     + "    -r ppt_regexp     Only process program points matching the regexp\n"
     + "    -o inv_file       Serialize invariants to the specified file;\n"
     + "                        they can later be postprocessed, compared, etc.\n"
-    + "    --suppress_object Suppress display of object invariants at program points"
+    + "    --suppress_object Suppress display of object invariants at program points\n"
     + "                        where they are implied (public method entry / exit).\n"
     ;
 
