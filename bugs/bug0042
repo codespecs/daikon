@@ -1,5 +1,5 @@
 Version:      $Id$
-Owner:        scruffy@lcs.mit.edu, mharder <mharder@lcs.mit.edu>
+Owner:        scruffy@geyer.lcs.mit.edu, mharder <mharder@lcs.mit.edu>
 Tool:         dfec
 Summary:      Add documentation for --struct-depth=N option
 Severity:     RFE
@@ -16,7 +16,10 @@ Good enough for me.
 
 --
 $Log$
-Revision 1.3  2002-04-30 22:18:58  mharder
+Revision 1.4  2002-05-02 22:12:23  mernst
+Change Ben's email to @geyer
+
+Revision 1.3  2002/04/30 22:18:58  mharder
 changed bug0042
 
 Revision 1.2  2002/04/30 21:47:00  mharder
