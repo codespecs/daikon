@@ -242,7 +242,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   }
 
   // Returns true if this is an "orig()" variable
-  public boolean isOrigVar() {
+  public boolean isPrestate() {
     return postState != null;
   }
 
@@ -469,7 +469,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 	VarInfoName sansclassname = null;
 	if (vi.name instanceof VarInfoName.TypeOf) {
 	   sansclassname = ((VarInfoName.TypeOf) vi.name).term;
-	} else if (vi.isOrigVar()) {
+	} else if (vi.isPrestate()) {
 	  VarInfoName post = vi.postState.name;
 	  if (post instanceof VarInfoName.TypeOf) {
 	    // parent of "orig(x.class)" is "orig(x)"
@@ -513,7 +513,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 
         // We expect the variable name to end with "[]", possibly wrapped
         // in "orig()" and/or suffixed by ".class".
-        if (seq_contents.isOrigVar()) {
+        if (seq_contents.isPrestate()) {
 	  VarInfoName unorig = seq_contents.postState.name;
 	  // orig(a[].class) -> skip
 	  if (unorig instanceof VarInfoName.TypeOf) continue;
@@ -531,7 +531,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 	if (seq_object_name == null) {
           // throw new Error("Expected \"[]\" at end of sequence variable name "
           //                 + seq_contents_name
-          //                 + (seq_contents.isOrigVar() ? " : " + seq_contents.postState.name : ""));
+          //                 + (seq_contents.isPrestate() ? " : " + seq_contents.postState.name : ""));
 	  // Used to be error; dfec actually does this though (?)
           System.out.println("Warning: sequence variable " + seq_contents.name
                              + " does not seem to be a sequence I can handle");
@@ -819,8 +819,8 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   public VarInfoName otherStateEquivalent(boolean post) {
 
     // Below is equivalent to:
-    // Assert.assert(post == isOrigVar());
-    if (post != isOrigVar()) {
+    // Assert.assert(post == isPrestate());
+    if (post != isPrestate()) {
       throw new Error("Shouldn't happen (should it?): "
                       + (post ? "post" : "pre") + "StateEquivalent(" + name + ")");
     }
@@ -830,7 +830,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     Vector equal_vars = equalTo();
     for (int i=0; i<equal_vars.size(); i++) {
       VarInfo vi = (VarInfo)equal_vars.elementAt(i);
-      if (post != vi.isOrigVar()) {
+      if (post != vi.isPrestate()) {
         return vi.name;
       }
     }
@@ -841,7 +841,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
       for (int i=0; i<lbs.size(); i++) {
         LinearBinary lb = (LinearBinary) lbs.elementAt(i);
 
-        if (this.equals(lb.var2()) && (post != lb.var1().isOrigVar())) {
+        if (this.equals(lb.var2()) && (post != lb.var1().isPrestate())) {
 	  // this = a * v1 + b
 	  double a = lb.core.a, b = lb.core.b;
 	  if (a == 1) {
@@ -851,7 +851,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 	  }
         }
 
-	if (this.equals(lb.var1()) && (post != lb.var2().isOrigVar())) {
+	if (this.equals(lb.var1()) && (post != lb.var2().isPrestate())) {
 	  // v2 = a * this + b
 	  double a = lb.core.a, b = lb.core.b;
 	  if (a == 1) {

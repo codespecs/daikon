@@ -9,8 +9,8 @@ public final class SequenceLengthFactory extends UnaryDerivationFactory {
     //   return null;
     if (! vi.rep_type.isArray())
       return null;
-    if ((vi.name instanceof VarInfoName.TypeOf) || 
-        (vi.isOrigVar() && (vi.postState.name instanceof VarInfoName.TypeOf))) {
+    if ((vi.name instanceof VarInfoName.TypeOf) ||
+        (vi.isPrestate() && (vi.postState.name instanceof VarInfoName.TypeOf))) {
       return null;
     }
 

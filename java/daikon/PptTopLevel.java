@@ -2309,7 +2309,7 @@ public class PptTopLevel extends Ppt {
     for (int i=0; i<var_infos.length; i++) {
       VarInfo vi = var_infos[i];
       // This test is purely an optimization.
-      if (! vi.isOrigVar()) {
+      if (! vi.isPrestate()) {
         VarInfo vi_orig = findVar(vi.name.applyPrestate());
         if (vi_orig != null) {
           // Assert.assert(vi_orig.postState.name == vi.name, "vi_orig="+vi_orig.name+", vi_orig.postState="+vi_orig.postState+((vi_orig.postState!=null)?"="+vi_orig.postState.name:"")+", vi="+vi+"="+vi.name);
