@@ -7,7 +7,7 @@
 
 sub usage() {
     print
-	"Usage: $0 [OPTION] <MAIN CLASS> [MAIN ARGUMENTS]\n",
+	"Usage: daikon [OPTION] <MAIN CLASS> [MAIN ARGUMENTS]\n",
 	"\n",
 	"Options:\n",
 	"  -o, --output FILE   Save invariants in FILE.inv\n",
@@ -17,7 +17,7 @@ sub usage() {
 	"  -n, --nogui         Do not start the gui\n",
 	"\n",
 	"Example:\n",
-	"  $0 --output test1 packfoo.MyTestSuite 200\n",
+	"  daikon --output test1 packfoo.MyTestSuite 200\n",
 	;
 }
 
