@@ -19,7 +19,7 @@ public abstract class VarInfoName
 {
 
   // It would be nice if a generalized form of the mechanics of
-  // interning were abstrated out somewhere.
+  // interning were abstracted out somewhere.
   private static final WeakHashMap internTable = new WeakHashMap();
   public VarInfoName intern() {
     Object lookup = internTable.get(this);
@@ -39,7 +39,24 @@ public abstract class VarInfoName
    * is not certain to be true.
    **/
   public static VarInfoName parse(String name) {
-    throw new Error();
+    // x or this.x
+    if ((name.indexOf('[') < 0) && (name.indexOf('(') < 0)) {
+      // checking for only leagal characters would be more robust
+      return (new Simple(name)).intern();
+    }
+
+    // a[]
+    if (name.endsWith("[]")) {
+      return parse(name.substring(0, name.length()-2)).applyElements();
+    }
+
+    // x.class
+    if (name.endsWith(".class")) {
+      return parse(name.substring(0, name.length()-6)).applyTypeOf();
+    }
+
+    // ??
+    throw new UnsupportedOperationException("parse error: '" + name + "'");
   }
 
   /**
@@ -116,7 +133,7 @@ public abstract class VarInfoName
    * a sequence).  Form is like "size(this)" or "this.length".
    **/
   public VarInfoName applySize() {
-    return new SizeOf(this);
+    return (new SizeOf(this)).intern();
   }
 
   /**
@@ -144,7 +161,7 @@ public abstract class VarInfoName
    * "sum(this)".
    **/
   public VarInfoName applyFunction(String function) {
-    return new FunctionOf(function, this);
+    return (new FunctionOf(function, this)).intern();
   }
 
   /**
@@ -173,7 +190,7 @@ public abstract class VarInfoName
    * "this.class" or "\typeof(this)".
    **/
   public VarInfoName applyTypeOf() {
-    return new TypeOf(this);
+    return (new TypeOf(this)).intern();
   }
 
   /**
@@ -200,7 +217,7 @@ public abstract class VarInfoName
    * like "orig(this)" or "\old(this)".
    **/
   public VarInfoName applyPrestate() {
-    return new Prestate(this);
+    return (new Prestate(this)).intern();
   }
 
   /**
@@ -239,11 +256,37 @@ public abstract class VarInfoName
   //        + s.substring(rparenpos+1);
 
   /**
+   * Returns a name for the decrement of this term, like "this-1".
+   **/
+  public VarInfoName applyDecrement() {
+    return (new Decrement(this)).intern();
+  }
+
+  /**
+   * One less than some other value
+   **/
+  public static class Decrement extends VarInfoName {
+    public final VarInfoName term;
+    public Decrement(VarInfoName term) {
+      this.term = term;
+    }
+    protected String name_impl() {
+      return term.name() + "-1";
+    }
+    protected String esc_name_impl() {
+      return term.name() + "-1";
+    }
+    protected String simplify_name_impl() {
+      return "(- " + term.name() + " 1)";
+    }
+  }
+
+  /**
    * Returns a name for the elements of a container (as opposed to the
    * identity of the container) like "this[]" or "(elements this)".
    **/
   public VarInfoName applyElements() {
-    return new Prestate(this);
+    return (new Elements(this)).intern();
   }
 
   /**
@@ -273,7 +316,7 @@ public abstract class VarInfoName
    **/
   public VarInfoName applySubscript(VarInfoName index) {
     // a[] -> a[index]
-    return new Subscript(this, index);
+    return (new Subscript(this, index)).intern();
   }
 
   /**
@@ -353,13 +396,7 @@ public abstract class VarInfoName
 //      Assert.assert(subscript.indexOf("]") == -1);
 //      Assert.assert(suffix.indexOf("]") == -1);
 //      return base + "[" + subscript + "]" + suffix;
-//    }  
-
-  // x-i
-  public VarInfoName withShift(int i) {
-    if (i == 0) return this;
-    return this; // XXX
-  }
+//    }
 
   /**
    * Return an array of two strings:
@@ -479,7 +516,7 @@ public abstract class VarInfoName
   }
 
   public boolean equals(VarInfoName other) {
-    return (other != null) && (this.name().equals(other.name()));
+    return (other == this) || ((other != null) && (this.name().equals(other.name())));
   }
 
   public int hashCode() {
@@ -489,5 +526,9 @@ public abstract class VarInfoName
   public int compareTo(Object o) {
     return name().compareTo((VarInfoName) o);
   }
-  
+
+  public String toString() {
+    return name();
+  }
+
 }
