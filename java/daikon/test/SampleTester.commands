@@ -1,0 +1,10 @@
+decl: daikon/test/SampleTester.decls
+
+ppt: foo.f():::EXIT35
+  vars: x y z
+  data: 1 1 0
+  data: 2 1 0
+  assert: inv("x >= y", x, y)
+  assert: inv(daikon.inv.binary.twoScalar.IntGreaterEqual,x,y)
+  assert: !inv("x <= y", x, y)
+
