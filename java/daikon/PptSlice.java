@@ -419,9 +419,9 @@ public abstract class PptSlice
       throw new RuntimeException
         ("Class(es) did not call addToFlow after calling destroy: " + naughty);
     }
-    if (invs_changed.size() != invs_to_flow.size()) {
+    if (invs_changed.size() < invs_to_flow.size()) {
       throw new RuntimeException
-        ("Changed Invariants count must equal flowed invariants count");
+        ("Changed Invariants count must equal to or greater than flowed invariants count");
     }
 
     removeInvariants(to_remove);
@@ -431,7 +431,8 @@ public abstract class PptSlice
       if (debugFlow.isDebugEnabled()) {
         debugFlow.debug ("No invariants to flow for " + this);
       }
-      return new ArrayList();
+      List result = new ArrayList (invs_changed);
+      return result;
     } else {
       if (debugFlow.isDebugEnabled()) {
         debugFlow.debug (">> Flowing and removing falsified for: " + this);
@@ -495,23 +496,6 @@ public abstract class PptSlice
                             comparableNWay (this.var_infos[iSliceVis]));
         }
 
-
-        // Check because of equality.  If two VarInfos in this
-        // PptSlice map to the same VarInfos in this PptSlice, we do
-        // not flow the invariant.  Instead, when inequality is seen
-        // at the lower's PptTopLevel, we instantiate slices.
-        if (slice_vis.length >= 2) {
-          if (slice_vis[0] == slice_vis[1]) {
-            continue for_each_slice;
-          }
-          if (slice_vis.length >= 3) {
-            if (slice_vis[2] == slice_vis[1] ||
-                slice_vis[2] == slice_vis[0]) {
-              continue for_each_slice;
-            }
-          }
-        }
-
         // Ensure the slice exists.
         PptSlice slice = lower.get_or_instantiate_slice(slice_vis);
         // slice.repCheck();  // Can do, but commented out for performance
@@ -523,6 +507,7 @@ public abstract class PptSlice
           // slice.var_infos is small, so this call is relatively inexpensive
           permutation[i] = ArraysMDE.indexOf(slice.var_infos, slice_vis[i]);
         }
+        fixPermutation (permutation);
         // For each invariant
       for_each_invariant:
         for (Iterator iInvsToFlow = invs_to_flow.iterator();
@@ -576,9 +561,30 @@ public abstract class PptSlice
       }
     }
     List result = new ArrayList (invs_changed);
+
     invs_to_flow.clear();
     invs_changed.clear();
     return result;
+  }
+
+  /**
+   * Remove repeated entries in a permutation.  The repeats are a
+   * consequence of equality optimization: a VarInfo may be a
+   * destination more than once due to equality splitting.  The fix is
+   * to, for each repeat, increment the value.  So 0, 0, 2 becomes 0,
+   * 1, 2.
+   **/
+  private void fixPermutation (int[] permutation) {
+    for (int i = 0; i < permutation.length; i++) {
+      int count = 0;
+      for (int j = 0; j < permutation.length; j++) {
+        if (permutation[i] == permutation[j]) {
+          permutation[j] += count;
+          count++;
+        }
+      }
+    }
+    Assert.assertTrue(ArraysMDE.fn_is_permutation(permutation));
   }
 
   void addSlice(Ppt slice) {
