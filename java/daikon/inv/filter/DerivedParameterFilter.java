@@ -14,6 +14,15 @@ public class DerivedParameterFilter extends InvariantFilter {
   }
 
   /**
+   * Boolean. If true, DerivedParameterFilter is initially turned on. 
+   */
+  public static boolean dkconfig_enabled = true;
+
+  public DerivedParameterFilter () {
+    isOn = dkconfig_enabled;
+  }
+
+  /**
    * Returns true if the invariant describes changes made to
    * pass-by-value parameters that shouldn't be part of a routine's
    * visible interface. E.g, suppose that "param" is a parameter to a

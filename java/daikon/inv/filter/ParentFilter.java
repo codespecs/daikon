@@ -13,6 +13,15 @@ public class ParentFilter extends InvariantFilter {
     return "Filter invariants that match a parent program point invariant";
   }
 
+  /**
+   * Boolean. If true, ParentFilter is initially turned on. 
+   */
+  public static boolean dkconfig_enabled = true;
+
+  public ParentFilter () {
+    isOn = dkconfig_enabled;
+  }
+
   boolean shouldDiscardInvariant( Invariant inv ) {
 
     // If there are no parents, can't discard

@@ -4,6 +4,17 @@ import daikon.inv.*;
 
 public class ObviousFilter extends InvariantFilter {
   public String getDescription() { return "Suppress obvious invariants"; }
+
+  /**
+   * Boolean. If true, ObviousFilter is initially turned on. 
+   */
+  public static boolean dkconfig_enabled = true;
+
+  public ObviousFilter () {
+    isOn = dkconfig_enabled;
+  }
+
+
   boolean shouldDiscardInvariant( Invariant invariant ) {
     // if ((invariant.ppt.arity() == 1) || IsEqualityComparison.it.accept(invariant)) {
     DiscardInfo discard = invariant.isObvious();

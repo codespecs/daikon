@@ -123,18 +123,10 @@ public class DiscardCode implements Comparable,Serializable {
 
   /** Returns the DiscardCode most associated with the given filter */
   public static DiscardCode findCode(InvariantFilter filter) {
-    if ((filter instanceof ObviousEqualityFilter) || (filter instanceof ObviousFilter) || (filter instanceof SimplifyFilter))
+    if ((filter instanceof ObviousFilter) || (filter instanceof SimplifyFilter))
       return obvious;
-    else if (filter instanceof EnoughSamplesFilter)
-      return not_enough_samples;
-    else if (filter instanceof ControlledInvariantFilter)
-      return control_check;
     else if (filter instanceof DerivedParameterFilter)
       return derived_param;
-    else if (filter instanceof ImpliedPostconditionFilter)
-      return implied_post_condition;
-    else if (filter instanceof NonCanonicalVariablesFilter)
-      return non_canonical_var;
     else if (filter instanceof OnlyConstantVariablesFilter)
       return only_constant_vars;
     else if (filter instanceof UnjustifiedFilter)

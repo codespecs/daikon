@@ -48,100 +48,33 @@ public class InvariantFilters {
   List propertyFilters = new Vector();
   List variableFilters = new ArrayList();
 
-  // Use public methods {set,get}PptMap to access, if necessary.
-  PptMap ppt_map = null;
-
   public InvariantFilters() {
+    
+    addPropertyFilter( new UnjustifiedFilter());
+    addPropertyFilter( new ParentFilter());
+    addPropertyFilter( new ObviousFilter());
+
+    // This set of filters is invoked when preparing invariants for processing
+    // by Simplify, but before Simplify actually runs this will just not
+    // filter anything, so no need to fear recursiveness here.
+    addPropertyFilter( new SimplifyFilter( this ));
+
+    addPropertyFilter( new OnlyConstantVariablesFilter());
+    addPropertyFilter( new DerivedParameterFilter());
     if (Daikon.output_format == OutputFormat.ESCJAVA) {
-      //        || Daikon.output_format == OutputFormat.DBCJAVA) {
       addPropertyFilter( new UnmodifiedVariableEqualityFilter());
     }
-
-    addPropertyFilter( new ParentFilter());
-    addPropertyFilter( new SuppressionFilter());
-    addPropertyFilter( new NonCanonicalVariablesFilter());
-    addPropertyFilter( new DerivedParameterFilter());
-    addPropertyFilter( new UnjustifiedFilter());
-    addPropertyFilter( new ObviousFilter());
-    addPropertyFilter( new OnlyConstantVariablesFilter());
-    // UninterestingConstantFilter is turned off for the moment, since
-    // without a static check it's too strong, not to mention being a
-    // behavior change.
-    //    addPropertyFilter( new UninterestingConstantFilter());
-    addPropertyFilter( new ImpliedPostconditionFilter());
-    //    addPropertyFilter( new RedundantFilter());
-    addPropertyFilter( new SimplifyFilter( this ));
-    addPropertyFilter( new ObviousEqualityFilter());
-
-    // This filter should be added last for speed, because its shouldDiscard()
-    // is more complicated in that it evaluates shouldDiscard() for other
-    // invariants.
-    if (Daikon.suppress_implied_controlled_invariants)
-      addPropertyFilter( new ControlledInvariantFilter());
   }
 
-  protected InvariantFilters(List l) {
-    for (Iterator iter = l.iterator(); iter.hasNext(); ) {
-      InvariantFilter filter = (InvariantFilter)iter.next();
-      addPropertyFilter(filter);
-    }
+
+  private static InvariantFilters default_filters = null;
+
+  public static InvariantFilters defaultFilters() {
+    if (default_filters == null)
+      default_filters = new InvariantFilters ();
+    return default_filters;
   }
 
-  public static InvariantFilters emptyFilter() {
-    return new InvariantFilters(new Vector());
-  }
-
-  private static InvariantFilters isWorthPrintingFilter_sansControlledCheck_filters;
-  static {
-    Vector v = new Vector();
-    v.add(new EnoughSamplesFilter());
-    v.add(new NonCanonicalVariablesFilter());
-    v.add(new ObviousFilter());
-    v.add(new UnjustifiedFilter());
-    v.add(new ImpliedPostconditionFilter());
-    v.add(new OnlyConstantVariablesFilter());
-    // v.add(new UninterestingConstantFilter());
-    // v.add(new DerivedParameterFilter());
-    isWorthPrintingFilter_sansControlledCheck_filters = new InvariantFilters(v);
-  }
-
-  public static InvariantFilters isWorthPrintingFilter_sansControlledCheck() {
-    return isWorthPrintingFilter_sansControlledCheck_filters;
-  }
-
-  private static InvariantFilters isWorthPrintingFilter_filters;
-  // I hope this static block is invoked only after
-  // suppress_implied_controlled_invariants is set.
-  static {
-    Vector v = new Vector();
-    v.add(new EnoughSamplesFilter());
-    v.add(new NonCanonicalVariablesFilter());
-    v.add(new ObviousFilter());
-    v.add(new UnjustifiedFilter());
-    v.add(new ImpliedPostconditionFilter());
-    v.add(new OnlyConstantVariablesFilter());
-    //v.add(new UninterestingConstantFilter());
-    if (Daikon.suppress_implied_controlled_invariants)
-      v.add(new ControlledInvariantFilter());
-    isWorthPrintingFilter_filters = new InvariantFilters(v);
-  }
-  public static InvariantFilters isWorthPrintingFilter() {
-    return isWorthPrintingFilter_sansControlledCheck_filters;
-  }
-
-  /**
-   * Set the PptMap that the filters are being applied to.
-   **/
-  public void setPptMap(PptMap ppt_map) {
-    this.ppt_map = ppt_map;
-  }
-
-  /**
-   * @return the PptMap that the filters are being applied to.
-   **/
-  public PptMap getPptMap() {
-    return ppt_map;
-  }
 
   void addPropertyFilter( InvariantFilter filter ) {
     propertyFilters.add( filter );

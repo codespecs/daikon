@@ -2579,7 +2579,7 @@ public class PptTopLevel extends Ppt {
         proverStack = new LemmaStack();
       markImpliedViaSimplify_int(all_ppts, new SimplifyInclusionTester() {
         public boolean include(Invariant inv) {
-          return InvariantFilters.isWorthPrintingFilter().shouldKeep(inv)
+          return InvariantFilters.defaultFilters().shouldKeep(inv)
             == null;
         }
       });

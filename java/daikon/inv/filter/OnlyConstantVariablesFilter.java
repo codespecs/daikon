@@ -6,8 +6,18 @@ import daikon.inv.unary.scalar.*;
 
 public class OnlyConstantVariablesFilter extends InvariantFilter {
   public String getDescription() {
-    return "Suppress invariants containing only constants [deprecated]";
+    return "Suppress invariants containing only constants";
   }
+
+  /**
+   * Boolean. If true, OnlyConstantVariablesFilter is initially turned on. 
+   */
+  public static boolean dkconfig_enabled = true;
+
+  public OnlyConstantVariablesFilter () {
+    isOn = dkconfig_enabled;
+  }
+
 
   boolean shouldDiscardInvariant( Invariant invariant ) {
     // System.out.println("OnlyConstantVariablesFilter: " + invariant.format());

@@ -13,6 +13,18 @@ versions as the user manual.
 
 Put changes for 3.1.6 here
 
+The invariant filtering code has been cleaned up and simplified so
+that the same set of filters is used both for checking
+isWorthPrinting() and for actual printing.  This may cause some slight
+differences in output, but hopefully in the direction of making things
+more consistent.  Filters that were formerly deprecated or unused have
+been removed, and each of the remaining filters now has a
+configuration parameter to allow it to be turned off from the command
+line.  The currently supported filters are: UnjustifiedFilter,
+ParentFilter, ObviousFilter, SimplifyFilter, OnlyConstantVariablesFilter, 
+DerivedParameterFilter, and UnmodifiedVariableEqualityFilter.
+
+
 ---------------------------------
 
 3.1.5 (Nov 1 2004)

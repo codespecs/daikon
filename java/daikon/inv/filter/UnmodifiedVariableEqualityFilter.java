@@ -14,6 +14,15 @@ public class UnmodifiedVariableEqualityFilter extends InvariantFilter {
     return "Suppress invariants that merely indicate that a variable was unmodified";
   }
 
+  /**
+   * Boolean. If true, UnmodifiedVariableEqualityFilter is initially turned on. 
+   */
+  public static boolean dkconfig_enabled = true;
+
+  public UnmodifiedVariableEqualityFilter () {
+    isOn = dkconfig_enabled;
+  }
+
   boolean shouldDiscardInvariant( Invariant invariant ) {
     if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
       PrintInvariants.debugFiltering.fine ("\tEntering UmVEF.shouldDiscard");

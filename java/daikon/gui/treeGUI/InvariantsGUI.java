@@ -119,7 +119,6 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	pptMap = FileIO.read_serialized_pptmap( new File(invFileName),
 						true // use saved config
 						);
-	invariantFilters.setPptMap(pptMap); // haha this sucks
       } catch (IOException e) {
 	InvariantsGUI.showErrorMessage( e.getMessage() + lineSep + "Please select another .inv or .inv.gz file." );
 	invFileName = pickFileFromFileChooser(System.getProperty("user.dir"));

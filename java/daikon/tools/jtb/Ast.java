@@ -1083,8 +1083,7 @@ public class Ast {
         Assert.assertTrue (!inv.ppt.var_infos[j].missingOutOfBounds(),
                            "var '" + inv.ppt.var_infos[j].name.name()
                            + "' out of bounds in " + inv.format());
-      InvariantFilters fi = new InvariantFilters();
-      fi.setPptMap(ppt_map);
+      InvariantFilters fi = InvariantFilters.defaultFilters();
 
       boolean fi_accepted = true;
       InvariantFilter filter_result = null;

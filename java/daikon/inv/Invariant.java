@@ -1144,7 +1144,7 @@ public abstract class Invariant
   // DO NOT OVERRIDE.  Should be declared "final", but the "final" is
   // omitted to allow for easier testing.
   public boolean isWorthPrinting() {
-    return InvariantFilters.isWorthPrintingFilter().shouldKeep(this) == null;
+    return InvariantFilters.defaultFilters().shouldKeep(this) == null;
   }
 
   ////////////////////////////////////////////////////////////////////////////

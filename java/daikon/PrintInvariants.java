@@ -340,8 +340,7 @@ public final class PrintInvariants {
    */
   private static void add_filter_reasons(PptTopLevel ppt, PptMap ppts) {
     Iterator fullInvItor = ppt.invariants_iterator();
-    InvariantFilters fi = new InvariantFilters();
-    fi.setPptMap(ppts);
+    InvariantFilters fi = InvariantFilters.defaultFilters();
     while (fullInvItor.hasNext()) {
       Invariant nextInv = (Invariant) fullInvItor.next();
       InvariantFilter varFilter = fi.shouldKeepVarFilters(nextInv);
@@ -1048,8 +1047,7 @@ public final class PrintInvariants {
         Assert.assertTrue (!inv.ppt.var_infos[j].missingOutOfBounds(),
                            "var '" + inv.ppt.var_infos[j].name.name()
                             + "' out of bounds in " + inv.format());
-      InvariantFilters fi = new InvariantFilters();
-      fi.setPptMap(ppt_map);
+      InvariantFilters fi = InvariantFilters.defaultFilters();
 
       boolean fi_accepted = true;
       InvariantFilter filter_result = null;
@@ -1318,8 +1316,7 @@ public final class PrintInvariants {
     for (int i = 0; i < invs_array.length; i++) {
       Invariant inv = invs_array[i];
 
-      InvariantFilters fi = new InvariantFilters();
-      fi.setPptMap(ppt_map);
+      InvariantFilters fi = InvariantFilters.defaultFilters();
       InvariantFilter filter = fi.shouldKeep(inv);
       Class filter_class = null;
       if (filter != null)
