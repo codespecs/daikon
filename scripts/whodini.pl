@@ -206,6 +206,7 @@ while (1) {
 	# Create a mapping from line number of the checked source to
 	# the pre-whodini line number.
 	local @map;
+	local %class2count;
 	my $count = 1;
 	for my $checked_source_ref (@checked_sources) {
 	    my @checked_source = @{$checked_source_ref};
@@ -215,16 +216,17 @@ while (1) {
 		$orig_no++ unless ($line =~ m|/\*nonce-\d{4}\*/|);
 		$map[$count][$line_no] = $orig_no;
 	    }
+	    $class2count{$sourcefiles[$count-1]} = $count;
 	    $count++;
 	}
 	# Replace line numbers in ESC output with the correct version
 	$count = 0;
 	grep {
-	    # Find "classname ...".
+	    # Find "classname ..." to know when ESC has changed to the next file.
 	    if (m|^\w+ \.\.\.$|) {
 		$count++;
 	    }
-	    s|(\.java\:)(\d+)(\:)|$1 . &swap_lineno($count,$2) . $3|e;
+	    s|(\w+\.java)(\:)(\d+)(\:)|$1.$2 . &swap_lineno_file($1,$3) . $4|e;
 	    s|(Suggestion \[)(\d+)(,\d+\]\:)|$1 . &swap_lineno($count,$2) . $3|e;
 	    s|(at )(\d+)(,\d+ in)|$1 . &swap_lineno($count,$2) . $3|e;
 	    s|( line )(\d+)(, )|$1 . &swap_lineno($count,$2) . $3|e;
@@ -239,10 +241,15 @@ sub swap_lineno ( $$ ) {
   my ($count, $reported_line) = @_;
   my $result = $map[$count][$reported_line];
   if (! defined($result)) {
-    die "Not defined: map[$count][$reported_line]\n";
-  }
-  if ($result eq "") {
-    die "Empty: map[$count][$reported_line]\n";
+    print STDERR "whodini.pl: Internal error: map[$count][$reported_line]\n";
+    $result = $reported_line;
   }
   return $result;
 }
+
+sub swap_lineno_file ( $$ ) {
+  my ($class, $reported_line) = @_;
+  my $count = $class2count{$class};
+  return swap_lineno($count, $reported_line);
+}
+
