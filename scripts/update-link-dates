@@ -1,14 +1,15 @@
 #!/usr/bin/perl -wpi.bak
 # update-link-dates
 # Michael Ernst <mernst@alum.mit.edu>
-# Time-stamp: <2002-07-05 12:42:56 mernst>
+# Time-stamp: <2003-01-24 20:59:25 mernst>
 
 # usage:
 #   update-link-dates file [...]
 # For any text of the form <a href="FILE">text</a> (14 Mar 1967),
 # update the date text, but don't update the file's modification date.
 
-# Need to operate by paragraphs, not by lines.
+# To do:
+#   Need to operate by paragraphs, not by lines.
 
 use checkargs;
 
