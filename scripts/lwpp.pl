@@ -56,6 +56,25 @@
 # We must remove the leading :: from global variables in the decls
 # file, since lackwit can't handle ::.
 
+# STRUCTS: Lackwit gets structs about 90% right.  It has problems with
+# pointers to structs.
+
+# If two struct pointers are comparable, their respective fields
+# should also be comparable.  If s1 cmp s2, then s1->a cmp s2->a.
+# However, Lackwit gets this wrong.  Thus, when checking the
+# comparability of a structure field, we need to do some work on our
+# end.  When checking the comparability of s1->a, also check the
+# comparability of s1.  Say s1 is comparable to s2 and s3.  If either
+# s2->a or s3->a is in the list of interesting variables, make s1->a
+# comparable to them.
+
+# When determining the comparability of a struct field, lackwit can
+# crash if the expression involves pointers (like a->b) and the
+# expression is not present in the program text.  However, if the
+# expression is not in the program text, it can only be comparable due
+# to its parent structure.  Thus, if lackwit crashes on a struct
+# expression, just assume it returned no comparability information,
+# and use the comparability of its parent.
 
 use English;
 use strict;
@@ -71,6 +90,17 @@ if (@ARGV != 2) {
 }
 
 my ($lackwitdb, $outfn) = @ARGV;
+
+# Check args
+-d $lackwitdb or die "$lackwitdb is not a directory\n";
+-e "$lackwitdb/globals.db" or die "$lackwitdb/globals.db does not exist\n";
+-e $outfn or die "$outfn does not exist\n";
+
+# Exit if the decls file is empty.
+if (-z $outfn) {
+  print STDERR "Warning: $outfn is empty\n";
+  exit 0;
+}
 
 # Check that LACKWIT_HOME is set correctly
 my $lackwit_home = $ENV{LACKWIT_HOME};
@@ -189,6 +219,10 @@ sub is_array_element {
   return $variable =~ /\[\]/ || $variable =~ /\[0\]/;
 }
 
+sub is_struct_field {
+  my ($variable) = @_;
+  return $variable =~ /->/ || $variable =~ /\./;
+}
 
 sub _get_comparable_variables {
   my ($variable, $function, $interesting_variables) = @_;
@@ -267,7 +301,36 @@ sub get_comparable_variables {
     }
   }
 
+  # If the variable is a field of a structure, we need to check the
+  # comparability of its parent structure.  If the parent is
+  # comparable to other structures, we need to add the corresponding
+  # fields of those structures.  This is done recursively, to handle
+  # multiply-nested structures like "a.b.c.d"
+  if (is_struct_field($variable)) {
+    my ($struct, $field) = split_struct($variable);
+    my %parent_comp_var =
+      get_comparable_variables($struct, $function, $interesting_variables);
+    foreach my $parent_comp_var (keys %parent_comp_var) {
+      my $field_comp_var = $parent_comp_var . $field;
+      if (exists $interesting_variables->{$field_comp_var}) {
+        $comparable_variables{$field_comp_var} = 1;
+      }
+    }
+  }
+
   return %comparable_variables;
+}
+
+# Splits a structure field variable into the parent structure and the
+# field.  The field accessor is appended to the front of the field.
+# For example:
+# get_struct("a.b") = ("a", ".b")
+# get_struct("a.b.c.d") = ("a.b.c", ".d")
+# get_struct("a.b->c") = ("a.b", "->c")
+sub split_struct {
+  my ($variable) = @_;
+  $variable =~ s/(.*)(\.|->)([^\.-]*)$//;
+  return ($1, $2.$3);
 }
 
 # memoizes calls to BackEnd to improve performance
@@ -288,7 +351,15 @@ sub _lackwit {
   my ($function, $variable) = @_;
   my $result =
     `echo "searchlocal $function:$variable -all" | BackEnd 2> /dev/null`;
-  die "BackEnd failed on $function:$variable\n" if ($CHILD_ERROR != 0);
+  if ($CHILD_ERROR != 0) {
+    if (is_struct_field($variable)) {
+      print STDERR
+        "Warning: BackEnd failed on struct field $function:$variable\n";
+      return "";
+    } else {
+      die "FAILURE: BackEnd failed on $function:$variable\n";
+    }
+  }
   return $result;
 }
 
