@@ -1,0 +1,209 @@
+#if !(defined(LOWER) || defined(UPPER))
+#error "Either LOWER or UPPER should be defined"
+#endif
+
+#if defined(LOWER)
+#define LT <
+#define GT >
+#define MIN1 min1
+#define NUM_MIN1 num_min1
+#define MIN2 min2
+#define NUM_MIN2 num_min2
+#define MIN3 min3
+#define NUM_MIN3 num_min3
+#define MAX max
+#define INTMAX Integer.MAX_VALUE
+#define INTMIN Integer.MIN_VALUE
+#define SIGNADJUST
+#define LOWERBOUND LowerBound
+#define LOWERBOUNDSTR "LowerBound"
+#define MINSTR "min"
+#define MAXSTR "max"
+#define GTSTR ">"
+#elif defined(UPPER)
+#define LT >
+#define GT <
+#define MIN1 max1
+#define NUM_MIN1 num_max1
+#define MIN2 max2
+#define NUM_MIN2 num_max2
+#define MIN3 max3
+#define NUM_MIN3 num_max3
+#define MAX min
+#define INTMAX Integer.MIN_VALUE
+#define INTMIN Integer.MAX_VALUE
+#define SIGNADJUST -
+#define LOWERBOUND UpperBound
+#define LOWERBOUNDSTR "UpperBound"
+#define MINSTR "max"
+#define MAXSTR "min"
+#define GTSTR "<"
+#else
+#error "Either LOWER or UPPER should be defined"
+#endif
+
+
+package daikon.inv.scalar;
+
+import daikon.*;
+import daikon.inv.*;
+
+import java.util.*;
+
+// *****
+// Automatically generated from Bound-cpp.java
+// *****
+
+#ifdef LOWER
+// LowerBound >= 0 is implied by the variable being the length of an array or list.
+//         self.nonnegative_obvious = (self.var_infos != None) and ("size(" == self.var_infos[0].name[0:5])
+// That affects only printing, I think.
+#endif
+
+// What should we do if there are few values in the range?
+// This can make justifying that invariant easier, because with few values
+// naturally there are more instances of each value.
+// This might also make justifying that invariant harder, because to get more
+// than (say) twice the expected number of samples (under the assumption of
+// uniform distribution) requires many samples.
+// Which of these dominates?  Is the behavior what I want?
+
+
+class LOWERBOUND extends SingleScalar {
+
+  // MIN1 LT MIN2 LT MIN3
+  int MIN1 = INTMAX;
+  int NUM_MIN1 = 0;
+  int MIN2 = INTMAX;
+  int NUM_MIN2 = 0;
+  int MIN3 = INTMAX;
+  int NUM_MIN3 = 0;
+  int MAX = INTMIN;
+
+  private LOWERBOUND(PptSlice ppt_) {
+    super(ppt_);
+  }
+
+  public static LOWERBOUND instantiate(PptSlice ppt) {
+    return new LOWERBOUND(ppt);
+  }
+
+  public String repr() {
+    double probability = getProbability();
+    return LOWERBOUNDSTR + varNames() + ": "
+      + MIN1 + "; probability = " + probability;
+  }
+
+  public String repr_long() {
+    // doesn't include result of getProbability because this
+    // is called from computeProbability for debugging purposes.
+    return LOWERBOUNDSTR + varNames() + ": "
+      + MINSTR + "1=" + MIN1
+      + ", num_" + MINSTR + "1=" + NUM_MIN1
+      + ", " + MINSTR + "2=" + MIN2
+      + ", num_" + MINSTR + "2=" + NUM_MIN2
+      + ", " + MINSTR + "3=" + MIN3
+      + ", num_" + MINSTR + "3=" + NUM_MIN3
+      + ", " + MAXSTR + "=" + MAX;
+  }
+
+  public String format() {
+    if (justified())
+      return var().name + " " + GTSTR + "= " + MIN1;
+    else
+      return null;
+  }
+
+  public void add_modified(int value, int count) {
+    // probability_cache_accurate = false;
+
+    // System.out.println(LOWERBOUNDSTR + varNames() + ": "
+    //                    + "add(" + value + ", " + modified + ", " + count + ")");
+
+    int v = value;
+
+    if (v GT MAX) MAX = v;
+
+    if (v == MIN1) {
+      NUM_MIN1 += count;
+    } else if (v LT MIN1) {
+      MIN3 = MIN2;
+      NUM_MIN3 = NUM_MIN2;
+      MIN2 = MIN1;
+      NUM_MIN2 = NUM_MIN1;
+      MIN1 = v;
+      NUM_MIN1 = count;
+    } else if (v == MIN2) {
+      NUM_MIN2 += count;
+    } else if (v LT MIN2) {
+      MIN3 = MIN2;
+      NUM_MIN3 = NUM_MIN2;
+      MIN2 = v;
+      NUM_MIN2 = count;
+    } else if (v == MIN3) {
+      NUM_MIN3 += count;
+    } else if (v LT MIN3) {
+      MIN3 = v;
+      NUM_MIN3 = count;
+    }
+  }
+
+  protected double computeProbability() {
+    int values = ppt.num_values();
+    if (values < 3)
+      return Invariant.PROBABILITY_UNKNOWN;
+    if (NUM_MIN1 < 3)
+      return Invariant.PROBABILITY_UNKNOWN;
+
+    int modulus = 1;
+    {
+      for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+        Invariant inv = (Invariant) itor.next();
+        if ((inv instanceof Modulus) && inv.justified()) {
+          modulus = ((Modulus) inv).modulus;
+          break;
+        }
+      }
+    }
+
+    // Accept a bound if:
+    //  * it contains more than twice as many elements as it ought to by
+    //    chance alone, and that number is at least 3.
+    //  * it and its predecessor/successor both contain more than half
+    //    as many elements as they ought to by chance alone, and at
+    //    least 3.
+
+    // If I used Math.abs, the order of arguments to minus wouldn't matter.
+    int range = SIGNADJUST(MAX - MIN1) + 1;
+    double avg_samples_per_val = ((double) ppt.num_mod_non_missing_samples()) * modulus / range;
+
+    // System.out.println("  [Need to fix computation of " + LOWERBOUNDSTR + ".computeProbability()]");
+    boolean truncated_justified = NUM_MIN1 > 5*avg_samples_per_val;
+    if (truncated_justified) {
+      return Invariant.PROBABILITY_JUSTIFIED;
+    }
+
+    boolean uniform_justified = ((SIGNADJUST(MIN3 - MIN2) == modulus)
+                                 && (SIGNADJUST(MIN2 - MIN1) == modulus)
+                                 && (NUM_MIN1 > avg_samples_per_val/2)
+                                 && (NUM_MIN2 > avg_samples_per_val/2)
+                                 && (NUM_MIN3 > avg_samples_per_val/2));
+
+    // System.out.println(LOWERBOUNDSTR + ".computeProbability(): ");
+    // System.out.println("  " + repr_long());
+    // System.out.println("  ppt=" + ppt
+    //                    + ", ppt.num_mod_non_missing_samples()=" + ppt.num_mod_non_missing_samples()
+    //                    + ", values=" + values
+    //                    + ", avg_samples_per_val=" + avg_samples_per_val
+    //                    + ", truncated_justified=" + truncated_justified
+    //                    + ", uniform_justified=" + uniform_justified);
+    // PptSlice pptsg = (PptSlice) ppt;
+    // System.out.println("  " + ppt.name + " ppt.values_cache.tuplemod_samples_summary()="
+    //                    + pptsg.tuplemod_samples_summary());
+
+    if (uniform_justified)
+      return Invariant.PROBABILITY_JUSTIFIED;
+
+    return Invariant.PROBABILITY_UNJUSTIFIED;
+  }
+}
