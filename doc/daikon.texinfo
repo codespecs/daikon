@@ -2958,31 +2958,31 @@ tab-separated list.
 Compute (file1 - file2).  This is all the invariants that appear in
 file1 but not file2.  Unjustified invariants are treated as if they
 don't exist.  Output is written as a serialized InvMap to the file
-specified with the -o option.  To view the contents of the serialized
+specified with the @option{-o} option.  To view the contents of the serialized
 InvMap, run @command{java daikon.diff.Diff @var{file}}.
 
 @item -x
 Compute (file1 XOR file2).  This is all the invariants that appear in
 one file but not the other.  Unjustified invariants are treated as if
 they don't exist.  Output is written as a serialized InvMap to the file
-specified with the -o option.  To view the contents of the serialized
+specified with the @option{-o} option.  To view the contents of the serialized
 InvMap, run @command{java daikon.diff.Diff @var{file}}.
 
 @item -n
 Compute (file1 UNION file2).  This is all the invariants that appear in
 either file.  If the same invariant appears in both files, the one with
 the better justification is chosen.  Output is written as a serialized
-InvMap to the file specified with the -o option.  To view the contents
+InvMap to the file specified with the @option{-o} option.  To view the contents
 of the serialized InvMap, run @command{java daikon.diff.Diff @var{file}}.
 
 @item -o @var{inv_file}
-Used in combination with the -m or -x option.  Writes the output as a
-serialized InvMap to the specified file.
+Used in combination with the @option{-m} or @option{-x} option.  Writes
+the output as a serialized InvMap to the specified file.
 
 @item -j
 For internal use only.  Treat justification as a continuous value when
 gathering statistics.  By default, justification is treated as
-a binary value -- an invariant is either justified or it is not.  For
+a binary value --- an invariant is either justified or it is not.  For
 example, assume invariant I1 has a probability of .01, and I2 has a
 probability of .5.  By default, this will be a difference of 1,
 since I1 is justified but I2 is not.  With this option, this will be a
@@ -3345,6 +3345,8 @@ is a valid invocation of Java.
 
 This section lists the optional command-line arguments to Chicory, which
 appear before the @var{classname} on the Chicory command line.
+dfej accepts the same command-line arguments, plus a few more
+(@pxref{dfej options}).
 
 
 @table @option
@@ -3356,7 +3358,7 @@ Produce debugging information.
 
 @item --nesting-depth=@var{n}
 Depth to which to examine structure components (default 2).
-This parameter determines which variables dfej causes to be output at
+This parameter determines which variables the front end causes to be output at
 runtime.  For instance, suppose that a program contained the following
 data structures and variables:
 @example
@@ -3393,12 +3395,6 @@ Values that do not exist are not examined.  For instance, if @code{myA}
 is @code{null} on a particular execution of a program point, then
 @code{myA.b} is not accessed on that execution regardless of the depth
 parameter.
-
-@item --linked-lists
-Render linked lists as vectors (default) [not yet fully implemented].
-
-@item --no-linked-lists
-Do not render linked lists as vectors.
 
 @item --ppt-select-pattern=@var{ppt_regexp}
 Only produce trace output for matching classes/procedures.  Cannot be used
@@ -3463,7 +3459,7 @@ java daikon.Chicory '--ppt-omit-pattern=StackAr.<init>(I)V:::EXIT33' ...
 The argument is treated as a regular expression.
 
 For example, to avoid detecting invariants over all classes in package
-daikon.util, you can call dfej like so:
+daikon.util, you can call Chicory like so:
 @example
   java daikon.Chicory '--ppt-omit-pattern=^daikon\.util\..*' ...
 @end example
@@ -3592,6 +3588,24 @@ Produce tracing output (default).
 @item --no-instrument
 Do not produce tracing output.
 
+@item --linked-lists
+Render linked lists as vectors (default).
+
+Suppose you have a class one of whose fields is of the class's own type,
+such as
+@example
+class Link {
+  Object value;
+  Link next;
+}
+@end example
+Then if the @option{--linked-list} option is set, the Daikon front end
+will output a list consisting of all the elements reachable via
+@code{next} pointers.
+
+@item --no-linked-lists
+Do not render linked lists as vectors.
+
 @item +daikon_context
 Produce context sensitive output.
 
@@ -3702,7 +3716,7 @@ code that (for example) calls libraries that do not appear under the
 current directory.
 
 @item -ajaxcp=@var{cpdir}
-Classpath to give to Ajax in its "-cp" flag, similar to -ajaxap.
+Classpath to give to Ajax in its @option{-cp} flag, similar to @option{-ajaxap}.
 
 @item -ajax_runnable=@var{class}
 This is a Java class, in dot-delimited form (e.g., "foo.bar.Baz"), that
@@ -3753,9 +3767,10 @@ inspect environment variables.  So if you're generating a
 @file{.dtrace} from a Java class, you may need to pass the environment
 variable directly as an argument to Java.  For example:
 
-@smallexample
-java -classpath daikon-instrumented:$CLASSPATH -DDTRACELIMIT=10000 -DDTRACELIMITTERMINATE=true Foo
-@end smallexample
+@example
+java -classpath daikon-instrumented:$CLASSPATH \
+    -DDTRACELIMIT=10000 -DDTRACELIMITTERMINATE=true Foo
+@end example
 
 
 @node    Scope of instrumentation, Refined runtime types, dfej options, Source-based Java front end dfej
@@ -7498,7 +7513,7 @@ modifies each file in place, removing every program point (function)
 whose name matches the regular expression.  The @option{-v} flag means
 to retain rather than discard matching program points.  For instance,
 to create two subparts of a @file{.dtrace} file --- one containing the
-getters and setters, and the other containing all other functions --
+getters and setters, and the other containing all other functions ---
 use the following commands:
 @example
   cp myprog.dtrace myprog-setters.dtrace
@@ -7732,7 +7747,7 @@ documentation, find bugs in the system, or have suggestions for its
 improvement, please send email to
 @email{daikon-developers@@lists.csail.mit.edu}.  (If you can't figure
 out how to do somthing or do not understand why Daikon works the way it
-does, that is a bug, too -- in the Daikon documentation.  Please report
+does, that is a bug, too --- in the Daikon documentation.  Please report
 those as well.)
 We will try to assist you and to correct any
 problems, so please don't hesitate to ask for help or report
@@ -7904,7 +7919,7 @@ procedure entries and exits.  A front end also exists for the IOA
 programming language, but is not included in the Daikon distribution.
 
 Daikon 3 is a redesign of the invariant detection engine to work
-incrementally -- that is, to examine each sample (execution of a
+incrementally --- that is, to examine each sample (execution of a
 program point) once, then discard it.  By contrast, Daikon 1 and
 Daikon 2 made multiple passes over the data.  This simplified their
 algorithms but required storing all the data in memory at once, which
