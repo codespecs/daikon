@@ -448,6 +448,11 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
       // System.out.println("Considering " + vi.name);
 
       // Special cases of variables to omit.
+
+      // Variables such that both are one less than something else
+      if (name.endsWith("-1") && vi.name.endsWith("-1")) {
+        continue;
+      }
       {
         // An element b.class is omitted if:
         //  * "b.class" is non-canonical
