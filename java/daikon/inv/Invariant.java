@@ -143,13 +143,6 @@ public abstract class Invariant
    **/
   private Set/*[SuppressionLink]*/ suppressees;
 
-  /**
-   * True if we've seen all values and should ignore further add() methods.
-   * This is rather a hack and should be removed later.
-   * Actually, it's not used any longer, except to be checked in assertions.
-   **/
-  // public boolean finished = false; // [INCR] (was just in assertions, is now bogus anyway)
-
   // Whether an invariant is a guarding predicate, that is, creately solely
   // for the purpose of ensuring invariants with variables that can be missing
   // do not cause exceptions when tested
@@ -444,97 +437,6 @@ public abstract class Invariant
     return (falsified);
   }
 
-//   /**
-//    * Mark this invariant as falsified.
-//    * Invariants must also call flow when they are falsified
-//    * Has to be public because of wrappers; do not call from outside world.
-//    * @see #flow(Invariant)
-//    **/
-//   public void destroy() {
-//     falsified = true;
-//     if (logOn() || PptSlice.debugFlow.isLoggable(Level.FINE))
-//       log (PptSlice.debugFlow, "Destroyed " + format());
-
-//     // Add invariant to discard list.  Note this may not be correct
-//     // given the comment below.
-//     if (PrintInvariants.print_discarded_invariants)
-//       ppt.parent.falsified_invars.add(this);
-
-//     // [INCR] Commented out because removeInvariant removes this from
-//     // the pptslice.  In V3, this happens after invariants are
-//     // checked.  Plus, destroy() may be called during such removal.
-//     // ppt.removeInvariant(this);
-//   }
-
-//   /**
-//    * Flow argument to all lower program points.
-//    * Has to be public because of wrappers (?); do not call from outside world.
-//    * @see #destroy
-//    **/
-//   private void flow(Invariant flowed) {
-//     ppt.addToFlow(flowed);
-//   }
-
-//   /**
-//    * Essentially the same as flow(this).  Useful way to flow oneself
-//    * without much hassle (as long as internal state is still OK).
-//    * Nice point of control in case we later have to tweak things when
-//    * flowing ourselves.
-//    **/
-//   private void flowThis() {
-//     flow(this);
-//   }
-
-//   /**
-//    * Essentially the same as flow(this.clone()).  Useful way to flow
-//    * oneself without much hassle (as long as internal state is still
-//    * OK).  Nice point of control in case we later have to tweak things
-//    * when flowing ourselves.  This method and destroy() are made
-//    * private because both of them require a call to addToChanged() for
-//    * correct suppression.
-//    **/
-//   private void flowClone() {
-//     Invariant flowed = (Invariant) this.clone();
-//     flow(flowed);
-//   }
-
-//   /**
-//    * Destroy this, add this to the list of Invariants to flow, and add
-//    * this to list of falsified or weakened invariants.
-//    **/
-//   public void destroyAndFlow () {
-//     if (debugFlow.isLoggable(Level.FINE) || logOn()) {
-//       log (debugFlow, "added to destroyed.");
-//     }
-//     flowThis();
-//     destroy();
-//     ppt.addToChanged (this);
-//   }
-
-//   /**
-//    * Add a copy of this to the list of Invariants to flow, and add
-//    * this to list of falsified or weakened invariants.  Why is this
-//    * different from flowClone?  Because the Invariant to flow is a
-//    * clone of this, but the Invariant that's weakened is this.  The
-//    * former is needed for flow, the latter for suppression.  By
-//    * contract, users should call cloneAndFlow rather than flowClone.
-//    **/
-//   public void cloneAndFlow() {
-//     // We must still do this to check suppression
-//     ppt.addToChanged (this);
-//     if (debugFlow.isLoggable(Level.FINE) || logOn()) {
-//       log (debugFlow, " added to changed.");
-//     }
-
-//     if (!flowed) {
-//       if (debugFlow.isLoggable(Level.FINE) || logOn()) {
-//         log (debugFlow, repr() + " added to flowed.");
-//       }
-//       flowClone();
-//       flowed = true;
-//     }
-//   }
-
   /**
    * Do nothing special, except disconnect the clone from
    * this.suppressor and this.suppressees.  Overridden to remove
@@ -670,21 +572,20 @@ public abstract class Invariant
    * on the actual samples seen.  It should be overriden for more complex
    * invariants (eg, bound, oneof, linearbinary, etc).
    *
-   * @param invs    List of invariants to merge.  The invariants must all be
-   *                of the same type and should come from the children of
-   *                ppt.  They should also all be permuted to match the variable
-   *                order in ppt.
-   * @param ppt     program point that will contain the new invariant
+   * @param invs        List of invariants to merge.  The invariants must
+   *                    all be of the same type and should come from
+   *                    the children of parent_ppt.  They should also all be
+   *                    permuted to match the variable order in parent_ppt.
+   * @param parent_ppt  Slice that will contain the new invariant
    *
    * @return the merged invariant or null if the invariants didn't represent
    * the same invariant.
    */
-  public Invariant merge (List invs, PptSlice ppt) {
-
+  public Invariant merge (List invs, PptSlice parent_ppt) {
 
     Invariant first = (Invariant) invs.get(0);
     Invariant result = (Invariant) first.clone();
-    result.ppt = ppt;
+    result.ppt = parent_ppt;
     result.log ("Merged '" + result.format() + "' from " + invs.size()
                 + " child invariants " /* + first.ppt.name() */);
 
@@ -1207,10 +1108,10 @@ public abstract class Invariant
 
       // The names "match" iff there is an intersection of the names
       // of equal variables.
-      Vector all_vars1 = new Vector(); // var1.canonicalRep().equalTo(); // [INCR]
-      Vector all_vars2 = new Vector(); // var2.canonicalRep().equalTo(); // [INCR]
-      all_vars1.add(var1); // all_vars1.add(var1.canonicalRep()); // [INCR]
-      all_vars1.add(var2); // all_vars2.add(var2.canonicalRep()); // [INCR]
+      Vector all_vars1 = new Vector();
+      Vector all_vars2 = new Vector();
+      all_vars1.add(var1);
+      all_vars1.add(var2);
       Vector all_vars_names1 = new Vector(all_vars1.size());
       for (Iterator iter = all_vars1.iterator(); iter.hasNext(); ) {
         VarInfo elt = (VarInfo) iter.next();
@@ -1386,58 +1287,10 @@ public abstract class Invariant
       "iwpscc(" + format() + " @ " + ppt.name()
       + ") <=== "
       + enoughSamples()
-      // + " " + (! hasNonCanonicalVariable()) [INCR]
-      // + " " + (! hasOnlyConstantVariables()) [INCR]
       + " " + (isObvious() != null)
       + " " + justified()
-      // + " " + isWorthPrinting_PostconditionPrestate() [INCR]
       ;
   }
-
-  // This used to be final, but I want to override in EqualityInvariant.
-  // (Also in IntEqual, etc. -MDE 5/6/2002)
-  /** @return true if this invariant involves a non-canonical variable **/
-  /* [INCR] ...
-  public boolean hasNonCanonicalVariable() {
-    VarInfo[] vis = ppt.var_infos;
-    for (int i=0; i<vis.length; i++) {
-      if (! vis[i].isCanonical()) {
-        return true;
-      }
-    }
-    return false;
-  }
-  */ // ... [INCR]
-
-  /**
-   * @return true if this invariant involves only constant variables
-   *         and is a comparison
-   **/
-  /* [INCR] ...
-  public boolean hasOnlyConstantVariables() {
-    VarInfo[] varInfos = ppt.var_infos;
-    for (int i=0; i < varInfos.length; i++) {
-      if (! varInfos[i].isConstant())
-        return false;
-    }
-
-    // At this point, we know all variables are constant.
-    Assert.assertTrue(this instanceof OneOf ||
-                      this instanceof Comparison ||
-                      this instanceof Equality ||
-                      this instanceof DummyInvariant
-                      , "Unexpected invariant with all vars constant: "
-                      + this + "  " + repr_prob() + "  " + format()
-                      );
-    if (this instanceof Comparison) {
-      //      Assert.assertTrue(! IsEqualityComparison.it.accept(this));
-      if (debugPrint.isLoggable(Level.FINE))
-        debugPrint.fine ("  [over constants:  " + this.repr_prob() + " ]");
-      return true;
-    }
-    return false;
-  }
-  */ // ... [INCR]
 
   ////////////////////////////////////////////////////////////////////////////
   // Static and dynamic checks for obviousness
@@ -1713,129 +1566,6 @@ public abstract class Invariant
     return true;
   }
 
-  /**
-   * @return a prestate invariant that implies this as a postcondition
-   * or null if no such prestate invariant exists.
-   * For example, if an entry point has the invariant x+3=y, and this
-   * invariant is the corresponding exit point invariant orig(x)+3=orig(y),
-   * then this method would return the Invariant corresponding to x+3=y.
-   **/
-  /* [INCR]
-  public Invariant isImpliedPostcondition() {
-    PptTopLevel topLevel = ppt.parent;
-    if (topLevel.entry_ppt() != null) { // if this is an exit point invariant
-      Iterator entryInvariants = topLevel.entry_ppt().getInvariants().iterator(); // unstable
-      while (entryInvariants.hasNext()) {
-        Invariant entryInvariant = (Invariant) entryInvariants.next();
-        // If entryInvariant with orig() applied to everything matches this invariant
-        if (entryInvariant.isSameInvariant( this, preToPostIsSameInvariantNameExtractor)) {
-          if (PrintInvariants.debugFiltering.isLoggable(Level.FINE)) {
-            PrintInvariants.debugFiltering.fine ("\tImplied by precond: " + entryInvariant.format() + " (from " + entryInvariant.ppt.parent.name + ")\n");
-          }
-          return entryInvariant;
-        }
-      }
-    }
-    return null;
-  }
-
-  public boolean isWorthPrinting_PostconditionPrestate() {
-    PptTopLevel pptt = ppt.parent;
-
-    if (Daikon.suppress_implied_postcondition_over_prestate_invariants) {
-      if (pptt.entry_ppt != null) {
-        Iterator entry_invs = pptt.entry_ppt.invariants_iterator(); // unstable
-        while (entry_invs.hasNext()) {
-          Invariant entry_inv = (Invariant) entry_invs.next();
-          // If entry_inv with orig() applied to everything matches this
-          if (entry_inv.isSameInvariant(this, preToPostIsSameInvariantNameExtractor)) {
-            if (entry_inv.isWorthPrinting_sansControlledCheck()) {
-              if (debugIsWorthPrinting.isLoggable(Level.FINE)) {
-                debugIsWorthPrinting.fine ("isWorthPrinting_PostconditionPrestate => false for " + format());
-              }
-              return false;
-            }
-          }
-        }
-      }
-    }
-    return true;
-  }
-  // ... [INCR]
-
-  /**
-   * Used in isImpliedPostcondition() and isWorthPrinting_PostconditionPrestate().
-   **/
-  /*  [INCR]
-  private static final IsSameInvariantNameExtractor preToPostIsSameInvariantNameExtractor =
-    new DefaultIsSameInvariantNameExtractor() {
-        public VarInfoName getFromFirst(VarInfo var)
-        { return super.getFromFirst(var).applyPrestate(); }
-      };
-  */ // ... [INCR]
-
-  /**
-   * Returns a Vector[Invariant] which are the sameInvariant as this,
-   * drawn from the invariants of this.ppt.parent.controllers.
-   **/
-  /*  [INCR]
-  public Vector find_controlling_invariants() {
-    // We used to assume there was at most one of these, but that
-    // turned out to be wrong.  If this ppt has more equality
-    // invariants than the controller, two different invariants can
-    // match.  For example, a controller might say "a > 0", "b > 0" as
-    // two different invariants, but if this ppt also has "a == b"
-    // then both invariants should be returned.  This especailly
-    // matters if, for example, "a > 0" was obvious (and thus wouldn't
-    // suppress this invariant).
-    Vector results = new Vector();
-
-    if (logOn() || debugIsWorthPrinting.isLoggable(Level.FINE)) {
-      log (debugIsWorthPrinting, "find_controlling_invariants: " + format());
-    }
-    PptTopLevel pptt = ppt.parent;
-
-    // Try to match inv against all controlling invariants
-    Iterator controllers = pptt.controlling_ppts.pptIterator();
-    while (controllers.hasNext()) {
-      PptTopLevel controller = (PptTopLevel) controllers.next();
-      if (logOn() || debugIsWorthPrinting.isLoggable(Level.FINE)) {
-        log (debugIsWorthPrinting, "Looking for controller of " + format()
-             + " in " + controller.name);
-      }
-      Iterator candidates = controller.invariants_iterator(); // unstable
-      while (candidates.hasNext()) {
-        Invariant cand_inv = (Invariant) candidates.next();
-        if (isSameInvariant(cand_inv)) {
-          if (logOn() || debugIsWorthPrinting.isLoggable(Level.FINE)) {
-            log (debugIsWorthPrinting, "Controller found: "
-                 + cand_inv.format() + " [worth printing: "
-                 + cand_inv.isWorthPrinting() + "]]");
-          }
-          results.add(cand_inv);
-        }
-        if (logDetail() || debugIsWorthPrinting.isLoggable(Level.FINE)) {
-          log (debugIsWorthPrinting, "Failed candidate: " + cand_inv.format());
-        }
-      }
-    }
-
-    return results;
-  }
-  */ // ... [INCR]
-  /*  [INCR]
-  // For reproducible results when debugging
-  static Comparator invComparator = new Invariant.ClassVarnameComparator();
-  public Vector find_controlling_invariants_sorted() {
-    Vector unsorted = find_controlling_invariants();
-    Invariant[] invs = (Invariant[]) unsorted.toArray(new Invariant[0]);
-    Arrays.sort(invs, invComparator);
-    Vector result = new Vector(invs.length);
-    for (int i=0; i<invs.length; i++)
-      result.add(invs[i]);
-    return result;
-  }
-  */ // ... [INCR]
 
 
   // The notion of "interesting" embodied by this method is
@@ -2065,14 +1795,15 @@ public abstract class Invariant
     // Hard to decide what PptSlice to associate with
     // VarInfo temp = (VarInfo)i.next();
     // debugGuarding.fine ("First VarInfo: " + temp);
-    Invariant guardingPredicate = ((VarInfo)mustBeGuarded.get(0)).createGuardingPredicate(ppt.parent);
+    Invariant guardingPredicate
+       = ((VarInfo)mustBeGuarded.get(0)).createGuardingPredicate();
     // debugGuarding.fine (guardingPredicate.format_using(OutputFormat.DAIKON));
     Assert.assertTrue(guardingPredicate != null);
 
     for (int i=1; i<mustBeGuarded.size(); i++) {
       VarInfo current = (VarInfo)mustBeGuarded.get(i);
       // debugGuarding.fine ("Another VarInfo: " + current);
-      Invariant currentGuard = current.createGuardingPredicate(ppt.parent);
+      Invariant currentGuard = current.createGuardingPredicate();
       // debugGuarding.fine (currentGuard.toString());
 
       Assert.assertTrue(currentGuard != null);
@@ -2080,9 +1811,10 @@ public abstract class Invariant
       guardingPredicate = new AndJoiner(ppt.parent, guardingPredicate, currentGuard);
     }
 
-    // Must eliminate the dupliaction of guarding prefixes, this is liable to be slow
-    // We only care if there is more than one var info, otherwise we are guarenteed that
-    // there is no duplicate by VarInfo.createGuardingPredicate()
+    // Must eliminate the dupliaction of guarding prefixes, this is
+    // liable to be slow We only care if there is more than one var
+    // info, otherwise we are guarenteed that there is no duplicate by
+    // VarInfo.createGuardingPredicate()
     if (mustBeGuarded.size() > 1) {
       Invariants joinerViewInvs = ppt.parent.joiner_view.invs;
       for (int i=0; i<joinerViewInvs.size(); i++) {
@@ -2284,10 +2016,10 @@ public abstract class Invariant
    * VarInfo[], String)}.
    */
 
-  public void log (Logger debug, String msg) {
+  public void log (Logger log, String msg) {
 
     if (Debug.logOn())
-      Debug.log (debug, getClass(), ppt, msg);
+      Debug.log (log, getClass(), ppt, msg);
   }
 
 
