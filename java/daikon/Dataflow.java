@@ -59,7 +59,18 @@ public class Dataflow
    **/
   public static void init_partial_order(PptMap all_ppts)
   {
-    init_partial_order (all_ppts.asCollection(), all_ppts);
+    for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) i.next();
+      init_partial_order(ppt, all_ppts);
+    }
+
+    // Create or modify the data flow and invariant flow vectors.  We
+    // *must* recompute all of them, rather than just the new ones.
+    for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel item = (PptTopLevel) i.next();
+      create_ppt_dataflow(item);
+      create_ppt_invflow(item);
+    }
   }
 
   /**
