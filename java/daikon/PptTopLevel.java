@@ -1452,102 +1452,13 @@ public class PptTopLevel extends Ppt {
       Iterator candidates = controller.invariants_vector().iterator();
       while (candidates.hasNext()) {
 	Invariant cand_inv = (Invariant) candidates.next();
-	if (is_same_invariant(cand_inv, inv)) {
+	if (cand_inv.isSameInvariant(inv)) {
 	  return cand_inv;
 	}
       }
     }
 
     return null;
-  }
-
-  // TODO: This next part, including the is_same_invariant methods, is
-  // static and can be moved into another class.  Is there a better
-  // place for it?
-
-  public static interface IsSameInvariantNameExtractor
-  {
-    public String getFromFirst(VarInfo var1);
-    public String getFromSecond(VarInfo var2);
-  }
-
-  private static class DefaultIsSameInvariantNameExtractor
-    implements IsSameInvariantNameExtractor
-  {
-    public String getFromFirst(VarInfo var1)  { return var1.name; }
-    public String getFromSecond(VarInfo var2) { return var2.name; }
-  }
-  private static final IsSameInvariantNameExtractor defaultIsSameInvariantNameExtractor = new DefaultIsSameInvariantNameExtractor();
-
-  /**
-   * @return true iff the two arguments are the "same" invariant.
-   * Same, in this case, means a matching type, formula, and variable
-   * names.
-   **/
-  public static boolean is_same_invariant(Invariant inv1, Invariant inv2)
-  {
-    return is_same_invariant(inv1, inv2, defaultIsSameInvariantNameExtractor);
-  }
-
-  /**
-   * @param name_extractor lambda to extract the variable name from the VarInfos
-   * @return true iff the two arguments are the "same" invariant.
-   * Same, in this case, means a matching type, formula, and variable
-   * names.
-   **/
-  public static boolean is_same_invariant(Invariant inv1, Invariant inv2,
-					  IsSameInvariantNameExtractor name_extractor)
-  {
-    // Can't be the same if they aren't the same type
-    if (!inv1.getClass().equals(inv2.getClass())) {
-      return false;
-    }
-
-    // Can't be the same if they aren't the same formula
-    if (!inv1.isSameFormula(inv2)) {
-      return false;
-    }
-
-    // The variable names much match up, in order
-
-    VarInfo[] vars1 = inv1.ppt.var_infos;
-    VarInfo[] vars2 = inv2.ppt.var_infos;
-
-    Assert.assert(vars1.length == vars2.length); // due to inv type match already
-    for (int i=0; i < vars1.length; i++) {
-      VarInfo var1 = vars1[i];
-      VarInfo var2 = vars2[i];
-
-      // Do the easy check first
-      if (name_extractor.getFromFirst(var1).equals(name_extractor.getFromSecond(var2))) {
-	continue;
-      }
-
-      // The names "match" iff there is an intersection of the names
-      // of aliased variables
-      Vector all_vars1 = var1.canonicalRep().equalTo();
-      Vector all_vars2 = var2.canonicalRep().equalTo();
-      all_vars1.add(var1.canonicalRep());
-      all_vars2.add(var2.canonicalRep());
-      Vector all_vars_names1 = new Vector(all_vars1.size());
-      for (Iterator iter = all_vars1.iterator(); iter.hasNext(); ) {
-	VarInfo elt = (VarInfo) iter.next();
-	String name = name_extractor.getFromFirst(elt);
-	all_vars_names1.add(name);
-      }
-      boolean intersection = false;
-      for (Iterator iter = all_vars2.iterator(); !intersection && iter.hasNext(); ) {
-	VarInfo elt = (VarInfo) iter.next();
-	String name = name_extractor.getFromSecond(elt);
-	intersection = all_vars_names1.contains(name);
-      }
-      if (!intersection) {
-	return false;
-      }
-    }
-
-    // the type, formula, and vars all matched
-    return true;
   }
 
 
@@ -1965,7 +1876,8 @@ public class PptTopLevel extends Ppt {
     return true;
   }
 
-  private final static IsSameInvariantNameExtractor preToPostIsSameInvariantNameExtractor = new DefaultIsSameInvariantNameExtractor() {
+  private final static Invariant.IsSameInvariantNameExtractor preToPostIsSameInvariantNameExtractor =
+    new Invariant.DefaultIsSameInvariantNameExtractor() {
       public String getFromFirst(VarInfo var)
       { return "orig(" + super.getFromFirst(var) + ")"; }
     };
@@ -1980,7 +1892,7 @@ public class PptTopLevel extends Ppt {
 	while (entry_invs.hasNext()) {
 	  Invariant entry_inv = (Invariant) entry_invs.next();
 	  // If entry_inv with orig() applied to everything matches inv
-	  if (is_same_invariant(entry_inv, inv, preToPostIsSameInvariantNameExtractor)) {
+	  if (entry_inv.isSameInvariant(inv, preToPostIsSameInvariantNameExtractor)) {
 	    if (entry_ppt.isWorthPrinting(entry_inv)) {
 	      if (add_to_stats) {
 		// TODO: Fix global statistics for this?
