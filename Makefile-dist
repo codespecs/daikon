@@ -15,6 +15,11 @@ ifdef $DAIKONCLASS_SOURCES
 endif
 	$(MAKE) -C clean
 
+kvasir:
+	cd kvasir && ./configure --prefix=`pwd`/inst
+	cd kvasir && make
+	cd kvasir && make install
+
 java-front-end: front-end/java/config.status
 	@echo "If this command fails, see 'Installing dfej' section in manual"
 	$(MAKE) -C front-end/java
@@ -23,5 +28,5 @@ front-end/java/config.status:
 	@echo "If this command fails, see 'Installing dfej' section in manual"
 	cd front-end/java && ./configure
 
-.PHONY: java-front-end
+.PHONY: java-front-end kvasir
 .SECONDARY: front-end/java/config.status
