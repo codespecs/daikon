@@ -26,7 +26,7 @@ if [ ! -z "$CLASSPATH" ]; then
   export CLASSPATH=${CPADD}:${CLASSPATH}
 else
   export CLASSPATH=${CPADD}
-endif
+fi
 
 
 ## Add the Daikon binaries to your path
