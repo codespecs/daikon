@@ -6,9 +6,16 @@ import daikon.inv.binary.twoScalar.*;
 
 import utilMDE.*;
 
+import org.apache.log4j.Category;
+
 import java.util.*;
 
 public final class TwoSequenceFactory {
+
+  /** 
+   * Debugging logger
+   **/
+  public static final Category debug = Category.getInstance (TwoSequenceFactory.class.getName());
 
   // Add the appropriate new Invariant objects to the specified Invariants
   // collection.
@@ -31,8 +38,12 @@ public final class TwoSequenceFactory {
     if (super2 == null)
       super2 = var2;
 
-    // System.out.println("TwoSequenceFactory(pass " + pass + ") " + ppt.name
-    //                    + "      super1 = " + super1.name + ", super2 = " + super2.name);
+    if (debug.isDebugEnabled()) {
+      debug.debug ("Instantiating for pass " + new Integer(pass) + " and ppt " + ppt.name);
+      debug.debug ("name1 " + super1.getDebugString());
+      debug.debug ("name2 " + super2.getDebugString());
+    }
+
 
     Vector result = new Vector();
     if (pass == 1) {
@@ -62,6 +73,7 @@ public final class TwoSequenceFactory {
         // If the variables (super1 and super2) are different, then their
         // names must be different, too.  In other words. no two distinct
         // variables have the same names.
+
         Assert.assert(super1.name != super2.name);
 
         // NonEqual.instantiate(ppt);
