@@ -1,7 +1,7 @@
 #!/bin/sh
 # sh version of java-cpp (which see)
 # Josh Kataoka
-# Time-stamp: <2000-10-31 08:00:43 mernst>
+# Time-stamp: <2000-10-31 08:11:31 mernst>
 
 # If first argument is a file, it is used as input.  Otherwise, input comes
 # from standard in.  Output goes to standard out.
@@ -35,8 +35,8 @@ done
 # echo filearg $filearg
 # echo argv $argv
 
-perl -p -e 's/\/\//DOUBLESLASHCOMMENT/g;' -e 's/\/\*/SLASHSTARCOMMENT/g;' -e 's/\'/SINGLEQUOTE/g;' $filearg > /tmp/java-cpp-$$-input
+perl -p -w -e 's/\/\//DOUBLESLASHCOMMENT/g;' -e 's/\/\*/SLASHSTARCOMMENT/g;' -e 's/\'/SINGLEQUOTE/g;' $filearg > /tmp/java-cpp-$$-input
 cpp $argv /tmp/java-cpp-$$-input > /tmp/java-cpp-$$-output
-cat /tmp/java-cpp-$$-output | perl -p -e 's/DOUBLESLASHCOMMENT/\/\//g;' -e 's/SLASHSTARCOMMENT/\/\*/g;' -e 's/SINGLEQUOTE/\'/g;' -e 's/"  ?\+ "//g;' -e 's/^(package .*\.) ([^ ]*) ?;/$1$2;/;' -e 's/^# [0-9]+ ".*$//;' | perl -p -e 'use English; $INPUT_RECORD_SEPARATOR = "";' | lines-from "package"
+cat /tmp/java-cpp-$$-output | perl -p -w -e 's/DOUBLESLASHCOMMENT/\/\//g;' -e 's/SLASHSTARCOMMENT/\/\*/g;' -e 's/SINGLEQUOTE/\'/g;' -e 's/"  ?\+ "//g;' -e 's/^(package .*\.) ([^ ]*) ?;/$1$2;/;' -e 's/^# [0-9]+ ".*$//;' | perl -p -w -e 'use English; $INPUT_RECORD_SEPARATOR = "";' | lines-from "package"
 # Problem:  doesn't propagate error codes correctly
 rm /tmp/java-cpp-$$-input /tmp/java-cpp-$$-output

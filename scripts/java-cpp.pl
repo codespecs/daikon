@@ -3,7 +3,7 @@
   if 0;
 # Perl version of java-cpp (which see for comments)
 # Josh Kataoka
-# Time-stamp: <2000-5-2 mernst>
+# Time-stamp: <2000-10-31 07:37:51 mernst>
 
 $tmpfile = "/tmp/java-cpp-$$";
 
@@ -49,7 +49,7 @@ sub run_cpp {
 	s|SLASHSTARCOMMENT|/\*|g;
 	s/SINGLEQUOTE/\'/g;
 	s/"  ?\+ "//g;
-	s/^(package .*\.) ([^ ]*) ?;/1\2;/;
+	s/^(package .*\.) ([^ ]*) ?;/1$2;/;
 	s/^# [0-9]+ ".*"//;
 	use English;
 	$INPUT_RECORD_SEPARATOR = "";
