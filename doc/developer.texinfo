@@ -108,6 +108,9 @@ Daikon internals
 * Avoiding work for redundant invariants::  
 * Dataflow hierarchy::          
 * Equality optimization::       
+
+Avoiding work for redundant invariants
+
 * Suppression optimization::    
 
 @end detailmenu
@@ -796,7 +799,6 @@ writable for log2html.php to work correctly.
 * Avoiding work for redundant invariants::  
 * Dataflow hierarchy::          
 * Equality optimization::       
-* Suppression optimization::    
 @end menu
 
 This chapter describes some of the techniques used in Daikon to make
@@ -823,7 +825,7 @@ With the equality sets optimization (@pxref{Equality optimization}),
 non-instantiation can only happen if all equality permutations are
 statically obvious.
 
-@emph{Non-checking}, also known as ``suppression'', cretes invariants
+@emph{Non-checking}, also known as ``suppression'', creates invariants
 but does not check them; an invariant can be suppressed (not checked)
 if some other set of true invariants implies it.  For example, ``a[]
 contains no duplicates'' implies ``a[i..j] contains no duplicates''.
@@ -833,9 +835,8 @@ are implied by other true invariants.  It is similar to suppression,
 but it differs in that it can implement checks that are not sound to
 perform until all data samples have been seen.  Non-printing is implemented by
 the isObviousDynamically method.  The isObviousStatically method is
-also used by the non-printing checks.  (Why?  It was already called at
-the beginning for non-instantiation, so it seems it shouldn't have any
-effect when called during printing.)
+also used by the non-printing checks; it can be called at the end
+without reference to equality sets.
 
 Non-printing can do anything that non-checking can, and more.
 However, implication checks that do not require all data samples to be
@@ -843,9 +844,15 @@ seen should be implemented as suppressions, not as non-printing.
 There are two cases in which non-printing must be used.  First,
 invariants that must see every data sample, because they cache
 information about all samples, cannot be suppressed, because
-suppressed invariants do not see all samples.  Second,
-there are invariants that are obvious by themselves, without relying
-on other invariants.
+suppressed invariants do not see all samples.  Second, there are
+invariants that are obvious by themselves, without relying on other
+invariants.  Third (and this is a questionable usage, but does appear
+in the code as of October 2003), non-printing can suppress
+uninteresting invariants, whereas non-checking is only valid for
+mathematically true implications.  For example, if ``a[] == b[]'' we
+may choose not to print invariants such as ``a[i..] < b[j..]'' even
+though ``a[] == b[]'' does not imply anything about the truth of
+``a[i..] < b[j..]''.
 
 More detail can be found in two theses.  See Chapter 7,
 ``Scalability'', of @cite{Automatic Generation and Checking of Program
@@ -858,7 +865,11 @@ distributed algorithms with dynamic analysis}
 Toh Ne Win's Master's thesis.
 
 
-@node    Suppression optimization,  , Equality optimization, Daikon internals
+@menu
+* Suppression optimization::    
+@end menu
+
+@node    Suppression optimization,  , Avoiding work for redundant invariants, Avoiding work for redundant invariants
 @subsection Suppression optimization
 
 Suppression optimization allows for elimination of redundancy based on
@@ -918,7 +929,7 @@ the only samples that are examined by Daikon are the EXIT program
 points (plus ``orig'' variables) since these contain a complete view of
 the data.
 
-@node    Equality optimization, Suppression optimization, Dataflow hierarchy, Daikon internals
+@node    Equality optimization,  , Dataflow hierarchy, Daikon internals
 @section Equality optimization
 
 When N variables are equal within a program point there will be
