@@ -761,7 +761,7 @@ public abstract class Invariant
    * be unable to parse it. Unfortunately, this can lose precision.
    **/
   public static String simplify_format_long(long l) {
-    if (l >= -500000000 && l <= 500000000) {
+    if (l >= -32000 && l <= 32000) {
       // Note that the above range is actually smaller than the
       // real range of [-2147483648..2147483647], since Simplify can
       // get in trouble close to the boundary (try
@@ -771,6 +771,9 @@ public abstract class Invariant
       // > (BG_PUSH (>= x -1073741825))
       // > (BG_PUSH (<= x 1073741825))
       // > (OR)
+      // Or, close to the square root of the boundary:
+      // > (BG_PUSH (EQ x 56312))
+      // > (BG_PUSH (EQ y (* y x)))
       return "" + l;
     } else {
       return simplify_format_double((double)l);
@@ -1382,14 +1385,47 @@ public abstract class Invariant
    **/
   public DiscardInfo isObviousDynamically(VarInfo[] vis) {
     Assert.assertTrue (!Daikon.isInferencing);
-    for (int i = 1; i < vis.length; i++) {
-      if (vis[i] == vis[i - 1]) {
-        return new DiscardInfo(this, DiscardCode.obvious, "All variables are equal");
-      }
-    }
+    if (isReflexive(vis))
+      return new DiscardInfo(this, DiscardCode.obvious,
+                             "Two or more variables are equal");
     return new DiscardInfo();
   }
 
+  private boolean isReflexive(VarInfo[] vis) {
+    if (vis.length < 2)
+      return false;
+    else if (vis.length == 2)
+      return vis[0] == vis[1];
+    else if (vis.length == 3)
+      return vis[0] == vis[1] || vis[1] == vis[2] || vis[0] == vis[2];
+    else {
+      Assert.assertTrue(false, "Unexpected more-than-ternary invariant");
+      for (int i = 1; i < vis.length; i++) {
+        for (int j = 0; j < i; j++) {
+          if (vis[i] == vis[j]) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+  }
+
+  /**
+   * Return true if more than one of the variables in the invariant
+   * are the same variable. We create such invariants for the purpose
+   * of equality set processing, but they aren't intended for
+   * printing; there should be invariants with the same meaning but
+   * lower arity instead. For instance, we don't need "x = x + x"
+   * because we have "x = 0" instead.
+   *
+   * Actually, this isn't strictly true: we don't have an invariant
+   * "a[] is a palindrome" corresponding to "a[] is the reverse of
+   * a[]", for instance.
+   **/
+  public boolean isReflexive() {
+    return isReflexive(ppt.var_infos);
+  }
 
   /**
    * Return true if this invariant is necessarily true from a fact
