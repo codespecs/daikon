@@ -166,8 +166,8 @@ sub cmp_ppts ( $$$ ) {
 # Arguments 2 and 3 are "ppt_trace_info" objects (see load_ppt for definition).
     my ($declshash, $ppta, $pptb) = @_;
     if ($$ppta[0] ne $$pptb[0]) {
-	print "ppt name difference: ${dtaname}=\"" . $$ppta[0] .
-	    "\", ${dtbname}=\"" . $$pptb[0] . "\"\n";
+	print "ppt name difference: ${dtaname}=\"" . $$ppta[0] . " [line " . $$ppta[1] 
+        . "] ". "\", ${dtbname}=\"" . $$pptb[0] . "\" [line ". $$pptb[1] ."]\n";
         $differences_found++;
 	return;
     }
