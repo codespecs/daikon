@@ -420,14 +420,23 @@ public final class CLASSNAME
       int ib = (int) b;
 
       String str_a, str_b;
-      if (ia != a || ib != b) {
-        // floating point
-        str_a = Invariant.simplify_format_double(a);
-        str_b = Invariant.simplify_format_double(b);
-      } else {
+      if (ia == a && ib == b) {
         // integer
         str_a = Invariant.simplify_format_long(ia);
         str_b = Invariant.simplify_format_long(ib);
+      } else if (b == 0 && (int)(1.0 / a) == 1.0 / a) {
+        // make integer by swapping
+        ia = (int)(1.0 / a);
+        ib = 0;
+        str_a = Invariant.simplify_format_long(ia);
+        str_b = Invariant.simplify_format_long(ib);
+        String temp = str_x;
+        str_x = str_y;
+        str_y = temp;
+      } else {
+        // floating point; probably not very useful
+        str_a = Invariant.simplify_format_double(a);
+        str_b = Invariant.simplify_format_double(b);
       }
 
       // y == a x + b
