@@ -464,6 +464,8 @@ indentation amount to whatever an existing file already happens to use (for
 C and Java code).
 <p>
 
+When a comment is a sentence, start it with a capital letter, end it with a
+period, and use correct grammar.
 Please keep comments to 80 characters and code to 80 characters whenever
 possible.  This makes it possible to print the code in a readable fashion
 and also to read the code in a standard-sized window.
@@ -471,11 +473,13 @@ and also to read the code in a standard-sized window.
 
 Place whitespace around the outside of grouping punctuation.  For instance,
 use "<tt>if (foo) bar;</tt>" rather than "<tt>if(foo)bar;</tt>" and use
-"<tt>} else {</tt>" rather than "<tt>}else{</tt>".
+"<tt>} else {</tt>" rather than "<tt>}else{</tt>".  Also place space after
+<tt>//</tt> that starts a comment.  Jamming punctuation against other
+entities in a program, makes the program very hard to read.
 <p>
 
 Do not comment out large blocks of code with <tt>/*</tt> ... <tt>*/</tt>;
-instead, prefix each line by <tt>//</tt>.  Among other things, this does
+instead, prefix each line by <tt>// </tt>.  Among other things, this does
 not lose the indentation of the original code; without that indentation,
 the commented-out code is much too hard to read and understand.  It also
 makes it clear what is commented out and what is not, even when the code
