@@ -1,4 +1,4 @@
-package ps3;
+package MapQuick;
 
 import junit.framework.*;
 import java.io.*;
