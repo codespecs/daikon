@@ -67,12 +67,26 @@ RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -n
 ### Default tag
 help:
 	@echo "Targets:"
+	@echo " compile compile-java"
+	@echo " junit test"
 	@echo " tags TAGS"
+	@echo "Creating the Daikon distribution:"
 	@echo " dist dist-force daikon.jar"
 	@echo " dist-edg dist-edg-solaris"
 	@echo " dist-dfej dist-dfej-solaris dist-dfej-linux"
 	@echo " examples examples-gries"
-	@echo " test"
+	@echo " "
+	@echo "This Makefile is for manipulations of the entire invariants module."
+	@echo "Daikon proper can be found in the java/daikon subdirectory."
+
+### Compiling the code
+
+compile: compile-java
+
+compile-java:
+	cd java && $(MAKE) all
+
+### Testing the code
 
 test:
 	cd tests && $(MAKE) all
