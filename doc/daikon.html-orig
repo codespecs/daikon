@@ -148,6 +148,7 @@ Installing Daikon:
 	      to<br>
 	      <tt>LDFLAGS=-L. -lw -o $(EXECUTABLE)</tt>
 	  <li><tt>make</tt>
+              <br>Compiling all the files may take several minutes.
 	  <li>Add <tt>java-front-end/src/dfej</tt> to your path; either
             <ul>
 	      <li>copy or link the <tt>dfej</tt> program to a directory on
@@ -619,12 +620,26 @@ flag.
 
 If you get an error like
 <pre>
+stream.cpp: In method `void LexStream::ProcessInputUnicode (const char *, long int)':
+stream.cpp:901: cannot convert `const char **' to `char **' for
+argument `2' to `iconv (void *, char **, size_t *, char **, size_t *)'
+</pre>
+then undefine preprocessor macro <tt>HAVE_ICONV_H</tt> and try compiling
+again.
+(This has been reported on Red Hat Linux 7.0.)
+<p>
+
+
+<!--
+If you get an error like
+<pre>
 body.cpp:183: `class AstLocalVariableDeclarationStatement' has no member named `lex_stream_opt'
 </pre>
 then you probably failed to add the <tt>-DJIKES_DEBUG</tt> flag to the
 COMPILE and CXXCOMPILE lines of <tt>src/Makefile</tt>.  (This should not be
 necessary any longer, as <tt>platform.h</tt> includes the definition.)
 <p>
+-->
 
 <h3><a name="help-dfej-run">Problems running dfej</a></h3>
 
