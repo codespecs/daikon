@@ -22,8 +22,8 @@ import utilMDE.*;
 
 public final class Daikon {
 
-  public final static String release_version = "3.0.0";
-  public final static String release_date = "December 19, 2003";
+  public final static String release_version = "3.0.1";
+  public final static String release_date = "February 2, 2004";
   public final static String release_string
     = "Daikon version " + release_version
     + ", released " + release_date

@@ -9,9 +9,33 @@ daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.  There is also a
 developer manual (source developer.texinfo) with the same formatted
 versions as the user manual.
 
-
-
 ===========================================================================
+
+3.0.1 (02 February 2004)
+  
+Three new binary invariants were added to Daikon: square, bitwise subset,
+and divides without remainder.  Each of these is checked both between
+scalar variables and also between the corresponding elements of a
+sequence. For more information, see the "Invariant List" section of the
+user manual.
+
+The configuration variable for enabling the BitwiseComplement invariant is
+now a member of the type specific Numeric class rather than of the type
+specific FunctionUnary class.  See the "Configuration options" section of
+the user manual for details.
+
+The configuration variable daikon.Daikon.use_suppression_optimization
+(default true) was added.  This controls whether or not invariants that are
+implied by other invariants are suppressed.  See the "Configuration
+options" section of the user manual for details.
+
+The command line option '--omit_from_output [0rs]' was added to Daikon.
+This option controls what invariants are written to the output invariant
+file.  It is possible to remove program points that are not referenced in
+the trace file, reflexive invariants, and invariants that are suppressed.
+See the "Command line options" section of the manual for more information.
+
+-----------------
 
 3.0.0 (19 December 2003)
 

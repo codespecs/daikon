@@ -1,6 +1,11 @@
 @c BEGIN AUTO-GENERATED INVARIANTS LISTING
 
 
+@item AndJoiner
+This is a special invariant used internally by Daikon to represent
+ an antecedent invariant in an implication where that antecedent
+ consists of two invariants anded together.
+
 @item CommonFloatSequence
 Represents double sequences that contain a common subset.  Prints as
  "@{e1, e2, e3, ...@} subset of x[]"
@@ -70,9 +75,10 @@ Represents long sequences where the elements of the sequence
  (when there is only one value), or as "x[] one of @{c1, c2, c3@}" (when
  there are multiple values).
 
-See also the following configuration option:
+See also the following configuration options:
     @itemize @bullet
     @item daikon.inv.unary.sequence.EltOneOf.size
+    @item daikon.inv.unary.sequence.EltOneOf.omit_hashcode_values_Simplify
     @end itemize
 
 @item EltOneOfFloat
@@ -168,13 +174,23 @@ Represents the invariant "<" between adjacent elements
  "<" '
 
 @item Equality
-The Equality invariant is used for displaying several equality
- Comparison invariants ("x == y", "x == z") as one Equality
- invariant ("x == y == z").  This class is created after the actual
- invariant detection, and right before printing Hence this is not a
- real invariant class; it does not implement many of the methods
- that most invariant classes do.  Furthermore, calling arbitrary
- methods on this class may not work.
+Keeps track of sets of variables that are equal.@*@*
+
+ During checking, Equality keeps track of VarInfos that are
+ comparable and equal, so we only need to instantiate (other)
+ invariants for one member of each Equal set, the leader.  See
+ equality notes in this directory.@*@*
+
+ During postProcessing, each instance of Equality instantiates into
+ displaying several equality Comparison invariants ("x == y", "x ==
+ z").  Equality invariants have leaders, which are the canonical
+ forms of their variables.  In the previous example, x is the
+ leader.  Equality invariants sort their variables by index ordering
+ during checking.  During printing, however, equality invariants may
+ "pivot" -- that is, switch leaders if the current leader wouldn't
+ be printed because it was not an interesting variable.  Notice that
+ when pivoting, all the other invariants based on this.leader also
+ need to be pivoted.
 
 @item FloatEqual
 Represents an invariant of "==" between two
@@ -200,369 +216,111 @@ Represents an invariant of "<" between two
 Represents an invariant of "!=" between two
  double scalars.
 
-@item FunctionBinary.BitwiseAndLong_xyz
-Represents a BitwiseAnd invariant over three long scalars using
- permutation x = BitwiseAnd (y, z)
-
-@item FunctionBinary.BitwiseAndLong_yxz
-Represents a BitwiseAnd invariant over three long scalars using
- permutation y = BitwiseAnd (x, z)
-
-@item FunctionBinary.BitwiseAndLong_zxy
-Represents a BitwiseAnd invariant over three long scalars using
- permutation z = BitwiseAnd (x, y)
-
-@item FunctionBinary.BitwiseOrLong_xyz
-Represents a BitwiseOr invariant over three long scalars using
- permutation x = BitwiseOr (y, z)
-
-@item FunctionBinary.BitwiseOrLong_yxz
-Represents a BitwiseOr invariant over three long scalars using
- permutation y = BitwiseOr (x, z)
-
-@item FunctionBinary.BitwiseOrLong_zxy
-Represents a BitwiseOr invariant over three long scalars using
- permutation z = BitwiseOr (x, y)
-
-@item FunctionBinary.BitwiseXorLong_xyz
-Represents a BitwiseXor invariant over three long scalars using
- permutation x = BitwiseXor (y, z)
-
-@item FunctionBinary.BitwiseXorLong_yxz
-Represents a BitwiseXor invariant over three long scalars using
- permutation y = BitwiseXor (x, z)
-
-@item FunctionBinary.BitwiseXorLong_zxy
-Represents a BitwiseXor invariant over three long scalars using
- permutation z = BitwiseXor (x, y)
-
-@item FunctionBinary.DivisionLong_xyz
-Represents a Division invariant over three long scalars using
- permutation x = Division (y, z)
-
-@item FunctionBinary.DivisionLong_xzy
-Represents a Division invariant over three long scalars using
- permutation x = Division (z, y)
-
-@item FunctionBinary.DivisionLong_yxz
-Represents a Division invariant over three long scalars using
- permutation y = Division (x, z)
-
-@item FunctionBinary.DivisionLong_yzx
-Represents a Division invariant over three long scalars using
- permutation y = Division (z, x)
-
-@item FunctionBinary.DivisionLong_zxy
-Represents a Division invariant over three long scalars using
- permutation z = Division (x, y)
-
-@item FunctionBinary.DivisionLong_zyx
-Represents a Division invariant over three long scalars using
- permutation z = Division (y, x)
-
-@item FunctionBinary.GcdLong_xyz
-Represents a Gcd invariant over three long scalars using
- permutation x = Gcd (y, z)
-
-@item FunctionBinary.GcdLong_yxz
-Represents a Gcd invariant over three long scalars using
- permutation y = Gcd (x, z)
-
-@item FunctionBinary.GcdLong_zxy
-Represents a Gcd invariant over three long scalars using
- permutation z = Gcd (x, y)
-
-@item FunctionBinary.LogicalAndLong_xyz
-Represents a LogicalAnd invariant over three long scalars using
- permutation x = LogicalAnd (y, z)
-
-@item FunctionBinary.LogicalAndLong_yxz
-Represents a LogicalAnd invariant over three long scalars using
- permutation y = LogicalAnd (x, z)
-
-@item FunctionBinary.LogicalAndLong_zxy
-Represents a LogicalAnd invariant over three long scalars using
- permutation z = LogicalAnd (x, y)
-
-@item FunctionBinary.LogicalOrLong_xyz
-Represents a LogicalOr invariant over three long scalars using
- permutation x = LogicalOr (y, z)
-
-@item FunctionBinary.LogicalOrLong_yxz
-Represents a LogicalOr invariant over three long scalars using
- permutation y = LogicalOr (x, z)
-
-@item FunctionBinary.LogicalOrLong_zxy
-Represents a LogicalOr invariant over three long scalars using
- permutation z = LogicalOr (x, y)
-
-@item FunctionBinary.LogicalXorLong_xyz
-Represents a LogicalXor invariant over three long scalars using
- permutation x = LogicalXor (y, z)
-
-@item FunctionBinary.LogicalXorLong_yxz
-Represents a LogicalXor invariant over three long scalars using
- permutation y = LogicalXor (x, z)
-
-@item FunctionBinary.LogicalXorLong_zxy
-Represents a LogicalXor invariant over three long scalars using
- permutation z = LogicalXor (x, y)
-
-@item FunctionBinary.LshiftLong_xyz
-Represents a Lshift invariant over three long scalars using
- permutation x = Lshift (y, z)
-
-@item FunctionBinary.LshiftLong_xzy
-Represents a Lshift invariant over three long scalars using
- permutation x = Lshift (z, y)
-
-@item FunctionBinary.LshiftLong_yxz
-Represents a Lshift invariant over three long scalars using
- permutation y = Lshift (x, z)
-
-@item FunctionBinary.LshiftLong_yzx
-Represents a Lshift invariant over three long scalars using
- permutation y = Lshift (z, x)
-
-@item FunctionBinary.LshiftLong_zxy
-Represents a Lshift invariant over three long scalars using
- permutation z = Lshift (x, y)
-
-@item FunctionBinary.LshiftLong_zyx
-Represents a Lshift invariant over three long scalars using
- permutation z = Lshift (y, x)
-
-@item FunctionBinary.MaximumLong_xyz
-Represents a Maximum invariant over three long scalars using
- permutation x = Maximum (y, z)
-
-@item FunctionBinary.MaximumLong_yxz
-Represents a Maximum invariant over three long scalars using
- permutation y = Maximum (x, z)
-
-@item FunctionBinary.MaximumLong_zxy
-Represents a Maximum invariant over three long scalars using
- permutation z = Maximum (x, y)
-
-@item FunctionBinary.MinimumLong_xyz
-Represents a Minimum invariant over three long scalars using
- permutation x = Minimum (y, z)
-
-@item FunctionBinary.MinimumLong_yxz
-Represents a Minimum invariant over three long scalars using
- permutation y = Minimum (x, z)
-
-@item FunctionBinary.MinimumLong_zxy
-Represents a Minimum invariant over three long scalars using
- permutation z = Minimum (x, y)
-
-@item FunctionBinary.ModLong_xyz
-Represents a Mod invariant over three long scalars using
- permutation x = Mod (y, z)
-
-@item FunctionBinary.ModLong_xzy
-Represents a Mod invariant over three long scalars using
- permutation x = Mod (z, y)
-
-@item FunctionBinary.ModLong_yxz
-Represents a Mod invariant over three long scalars using
- permutation y = Mod (x, z)
-
-@item FunctionBinary.ModLong_yzx
-Represents a Mod invariant over three long scalars using
- permutation y = Mod (z, x)
-
-@item FunctionBinary.ModLong_zxy
-Represents a Mod invariant over three long scalars using
- permutation z = Mod (x, y)
-
-@item FunctionBinary.ModLong_zyx
-Represents a Mod invariant over three long scalars using
- permutation z = Mod (y, x)
-
-@item FunctionBinary.MultiplyLong_xyz
-Represents a Multiply invariant over three long scalars using
- permutation x = Multiply (y, z)
-
-@item FunctionBinary.MultiplyLong_yxz
-Represents a Multiply invariant over three long scalars using
- permutation y = Multiply (x, z)
-
-@item FunctionBinary.MultiplyLong_zxy
-Represents a Multiply invariant over three long scalars using
- permutation z = Multiply (x, y)
-
-@item FunctionBinary.PowerLong_xyz
-Represents a Power invariant over three long scalars using
- permutation x = Power (y, z)
-
-@item FunctionBinary.PowerLong_xzy
-Represents a Power invariant over three long scalars using
- permutation x = Power (z, y)
-
-@item FunctionBinary.PowerLong_yxz
-Represents a Power invariant over three long scalars using
- permutation y = Power (x, z)
-
-@item FunctionBinary.PowerLong_yzx
-Represents a Power invariant over three long scalars using
- permutation y = Power (z, x)
-
-@item FunctionBinary.PowerLong_zxy
-Represents a Power invariant over three long scalars using
- permutation z = Power (x, y)
-
-@item FunctionBinary.PowerLong_zyx
-Represents a Power invariant over three long scalars using
- permutation z = Power (y, x)
-
-@item FunctionBinary.RshiftSignedLong_xyz
-Represents a RshiftSigned invariant over three long scalars using
- permutation x = RshiftSigned (y, z)
-
-@item FunctionBinary.RshiftSignedLong_xzy
-Represents a RshiftSigned invariant over three long scalars using
- permutation x = RshiftSigned (z, y)
-
-@item FunctionBinary.RshiftSignedLong_yxz
-Represents a RshiftSigned invariant over three long scalars using
- permutation y = RshiftSigned (x, z)
-
-@item FunctionBinary.RshiftSignedLong_yzx
-Represents a RshiftSigned invariant over three long scalars using
- permutation y = RshiftSigned (z, x)
-
-@item FunctionBinary.RshiftSignedLong_zxy
-Represents a RshiftSigned invariant over three long scalars using
- permutation z = RshiftSigned (x, y)
-
-@item FunctionBinary.RshiftSignedLong_zyx
-Represents a RshiftSigned invariant over three long scalars using
- permutation z = RshiftSigned (y, x)
-
-@item FunctionBinary.RshiftUnsignedLong_xyz
-Represents a RshiftUnsigned invariant over three long scalars using
- permutation x = RshiftUnsigned (y, z)
-
-@item FunctionBinary.RshiftUnsignedLong_xzy
-Represents a RshiftUnsigned invariant over three long scalars using
- permutation x = RshiftUnsigned (z, y)
-
-@item FunctionBinary.RshiftUnsignedLong_yxz
-Represents a RshiftUnsigned invariant over three long scalars using
- permutation y = RshiftUnsigned (x, z)
-
-@item FunctionBinary.RshiftUnsignedLong_yzx
-Represents a RshiftUnsigned invariant over three long scalars using
- permutation y = RshiftUnsigned (z, x)
-
-@item FunctionBinary.RshiftUnsignedLong_zxy
-Represents a RshiftUnsigned invariant over three long scalars using
- permutation z = RshiftUnsigned (x, y)
-
-@item FunctionBinary.RshiftUnsignedLong_zyx
-Represents a RshiftUnsigned invariant over three long scalars using
- permutation z = RshiftUnsigned (y, x)
-
-@item FunctionBinaryFloat.DivisionDouble_xyz
-Represents a Division invariant over three double scalars using
- permutation x = Division (y, z)
-
-@item FunctionBinaryFloat.DivisionDouble_xzy
-Represents a Division invariant over three double scalars using
- permutation x = Division (z, y)
-
-@item FunctionBinaryFloat.DivisionDouble_yxz
-Represents a Division invariant over three double scalars using
- permutation y = Division (x, z)
-
-@item FunctionBinaryFloat.DivisionDouble_yzx
-Represents a Division invariant over three double scalars using
- permutation y = Division (z, x)
-
-@item FunctionBinaryFloat.DivisionDouble_zxy
-Represents a Division invariant over three double scalars using
- permutation z = Division (x, y)
-
-@item FunctionBinaryFloat.DivisionDouble_zyx
-Represents a Division invariant over three double scalars using
- permutation z = Division (y, x)
-
-@item FunctionBinaryFloat.MaximumDouble_xyz
-Represents a Maximum invariant over three double scalars using
- permutation x = Maximum (y, z)
-
-@item FunctionBinaryFloat.MaximumDouble_yxz
-Represents a Maximum invariant over three double scalars using
- permutation y = Maximum (x, z)
-
-@item FunctionBinaryFloat.MaximumDouble_zxy
-Represents a Maximum invariant over three double scalars using
- permutation z = Maximum (x, y)
-
-@item FunctionBinaryFloat.MinimumDouble_xyz
-Represents a Minimum invariant over three double scalars using
- permutation x = Minimum (y, z)
-
-@item FunctionBinaryFloat.MinimumDouble_yxz
-Represents a Minimum invariant over three double scalars using
- permutation y = Minimum (x, z)
-
-@item FunctionBinaryFloat.MinimumDouble_zxy
-Represents a Minimum invariant over three double scalars using
- permutation z = Minimum (x, y)
-
-@item FunctionBinaryFloat.MultiplyDouble_xyz
-Represents a Multiply invariant over three double scalars using
- permutation x = Multiply (y, z)
-
-@item FunctionBinaryFloat.MultiplyDouble_yxz
-Represents a Multiply invariant over three double scalars using
- permutation y = Multiply (x, z)
-
-@item FunctionBinaryFloat.MultiplyDouble_zxy
-Represents a Multiply invariant over three double scalars using
- permutation z = Multiply (x, y)
-
-@item FunctionBinaryFloat.PowerDouble_xyz
-Represents a Power invariant over three double scalars using
- permutation x = Power (y, z)
-
-@item FunctionBinaryFloat.PowerDouble_xzy
-Represents a Power invariant over three double scalars using
- permutation x = Power (z, y)
-
-@item FunctionBinaryFloat.PowerDouble_yxz
-Represents a Power invariant over three double scalars using
- permutation y = Power (x, z)
-
-@item FunctionBinaryFloat.PowerDouble_yzx
-Represents a Power invariant over three double scalars using
- permutation y = Power (z, x)
-
-@item FunctionBinaryFloat.PowerDouble_zxy
-Represents a Power invariant over three double scalars using
- permutation z = Power (x, y)
-
-@item FunctionBinaryFloat.PowerDouble_zyx
-Represents a Power invariant over three double scalars using
- permutation z = Power (y, x)
-
-@item FunctionUnary
-Represents an invariant between two long scalars by applying a
- function to one of the scalars.  Prints as either "x == function(y)"
- or "x = [op] y" depending upon whether it is an actual function call
- or a unary operator.
-
- Current long functions are: ~
-
-@item FunctionUnaryFloat
-Represents an invariant between two double scalars by applying a
- function to one of the scalars.  Prints as either "x == function(y)"
- or "x = [op] y" depending upon whether it is an actual function call
- or a unary operator.
-
- Current double functions are: none
+@item FunctionBinary.BitwiseAndLong_@{xyz, yxz, zxy@}
+Represents the invariant ' x = BitwiseAnd (y, z)' over three
+ long scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
+
+@item FunctionBinary.BitwiseOrLong_@{xyz, yxz, zxy@}
+Represents the invariant ' x = BitwiseOr (y, z)' over three
+ long scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
+
+@item FunctionBinary.BitwiseXorLong_@{xyz, yxz, zxy@}
+Represents the invariant ' x = BitwiseXor (y, z)' over three
+ long scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
+
+@item FunctionBinary.DivisionLong_@{xyz, xzy, yxz, yzx, zxy, zyx@}
+Represents the invariant ' x = Division (y, z)' over three
+ long scalars.
+Since the function is non-symmetric, all six permutations of the variables are checked
+
+@item FunctionBinary.GcdLong_@{xyz, yxz, zxy@}
+Represents the invariant ' x = Gcd (y, z)' over three
+ long scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
+
+@item FunctionBinary.LogicalAndLong_@{xyz, yxz, zxy@}
+Represents the invariant ' x = LogicalAnd (y, z)' over three
+ long scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
+
+@item FunctionBinary.LogicalOrLong_@{xyz, yxz, zxy@}
+Represents the invariant ' x = LogicalOr (y, z)' over three
+ long scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
+
+@item FunctionBinary.LogicalXorLong_@{xyz, yxz, zxy@}
+Represents the invariant ' x = LogicalXor (y, z)' over three
+ long scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
+
+@item FunctionBinary.LshiftLong_@{xyz, xzy, yxz, yzx, zxy, zyx@}
+Represents the invariant ' x = Lshift (y, z)' over three
+ long scalars.
+Since the function is non-symmetric, all six permutations of the variables are checked
+
+@item FunctionBinary.MaximumLong_@{xyz, yxz, zxy@}
+Represents the invariant ' x = Maximum (y, z)' over three
+ long scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
+
+@item FunctionBinary.MinimumLong_@{xyz, yxz, zxy@}
+Represents the invariant ' x = Minimum (y, z)' over three
+ long scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
+
+@item FunctionBinary.ModLong_@{xyz, xzy, yxz, yzx, zxy, zyx@}
+Represents the invariant ' x = Mod (y, z)' over three
+ long scalars.
+Since the function is non-symmetric, all six permutations of the variables are checked
+
+@item FunctionBinary.MultiplyLong_@{xyz, yxz, zxy@}
+Represents the invariant ' x = Multiply (y, z)' over three
+ long scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
+
+@item FunctionBinary.PowerLong_@{xyz, xzy, yxz, yzx, zxy, zyx@}
+Represents the invariant ' x = Power (y, z)' over three
+ long scalars.
+Since the function is non-symmetric, all six permutations of the variables are checked
+
+@item FunctionBinary.RshiftSignedLong_@{xyz, xzy, yxz, yzx, zxy, zyx@}
+Represents the invariant ' x = RshiftSigned (y, z)' over three
+ long scalars.
+Since the function is non-symmetric, all six permutations of the variables are checked
+
+@item FunctionBinary.RshiftUnsignedLong_@{xyz, xzy, yxz, yzx, zxy, zyx@}
+Represents the invariant ' x = RshiftUnsigned (y, z)' over three
+ long scalars.
+Since the function is non-symmetric, all six permutations of the variables are checked
+
+@item FunctionBinaryFloat.DivisionDouble_@{xyz, xzy, yxz, yzx, zxy, zyx@}
+Represents the invariant ' x = Division (y, z)' over three
+ double scalars.
+Since the function is non-symmetric, all six permutations of the variables are checked
+
+@item FunctionBinaryFloat.MaximumDouble_@{xyz, yxz, zxy@}
+Represents the invariant ' x = Maximum (y, z)' over three
+ double scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
+
+@item FunctionBinaryFloat.MinimumDouble_@{xyz, yxz, zxy@}
+Represents the invariant ' x = Minimum (y, z)' over three
+ double scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
+
+@item FunctionBinaryFloat.MultiplyDouble_@{xyz, yxz, zxy@}
+Represents the invariant ' x = Multiply (y, z)' over three
+ double scalars.
+Since the function is symmetric, only the permutations xyz, yxz, and zxy are checked. 
+
+@item GuardingImplication
+This is a special implication invariant that guards any invariants that
+  are over variables that are sometimes missing.  For example, if the
+  invariant 'a.x = 0' is true, the guarded implication is 'a != null =>
+  a.x = 0'
 
 @item Implication
 The Implication invariant class is used internally within Daikon to
@@ -676,6 +434,30 @@ Represents long scalars that are non-zero.  Prints as either
 @item NonZeroFloat
 Represents double scalars that are non-zero.  Prints as "x != 0"
 
+@item NumericFloat.Divides
+Represents the divides without remainder invariant between
+ two double scalars.  Prints as ' x % y == 0'
+
+@item NumericFloat.Square
+Represents the square invariant between
+ two double scalars.  Prints as ' x = y**2'
+
+@item NumericInt.BitwiseComplement
+Represents the bitwise complement invariant between
+ two long scalars. Prints as ' x = ~y '
+
+@item NumericInt.BitwiseSubset
+Represents the bitwise subset invariant between
+ two long scalars. Prints as ' x = y | x '
+
+@item NumericInt.Divides
+Represents the divides without remainder invariant between
+ two long scalars.  Prints as ' x % y == 0'
+
+@item NumericInt.Square
+Represents the square invariant between
+ two long scalars.  Prints as ' x = y**2'
+
 @item OneOfFloat
 Represents double variables that take on only a few distinct
  values. Prints as either "x == c" (when there is only one value),
@@ -703,9 +485,10 @@ Represents long scalars that take on only a few distinct values.  Prints
  a hashcode (pointer) - this is because the numerical value of the
  hashcode (pointer) is uninteresting).
 
-See also the following configuration option:
+See also the following configuration options:
     @itemize @bullet
     @item daikon.inv.unary.scalar.OneOfScalar.size
+    @item daikon.inv.unary.scalar.OneOfScalar.omit_hashcode_values_Simplify
     @end itemize
 
 @item OneOfSequence
@@ -713,9 +496,10 @@ Represents long[] variables that take on only a few distinct
  values. Prints as either "x == c" (when there is only one value),
  or as "x one of @{c1, c2, c3@}" (when there are multiple values).
 
-See also the following configuration option:
+See also the following configuration options:
     @itemize @bullet
     @item daikon.inv.unary.sequence.OneOfSequence.size
+    @item daikon.inv.unary.sequence.OneOfSequence.omit_hashcode_values_Simplify
     @end itemize
 
 @item OneOfString
@@ -773,26 +557,6 @@ Represents an invariant between corresponding elements of two
  pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
  Prints as 'x[] < y[]'
 
-@item PairwiseFunctionUnary
-Represents an invariant between corresponding elements of two
- long sequences by applying a function to one of the elements.
- The length of the sequences must match for the invariant to hold.
- The function is applied to each (x[i], y[i]) pair.  Prints as
- either "x[] == function(y[])" or "x[] = [op] y[]" depending upon
- whether it is an actual function call or a unary operator.
-
- Current long Functions are: ~
-
-@item PairwiseFunctionUnaryFloat
-Represents an invariant between corresponding elements of two
- double sequences by applying a function to one of the elements.
- The length of the sequences must match for the invariant to hold.
- The function is applied to each (x[i], y[i]) pair.  Prints as
- either "x[] == function(y[])" or "x[] = [op] y[]" depending upon
- whether it is an actual function call or a unary operator.
-
- Current double Functions are: none
-
 @item PairwiseIntEqual
 Represents an invariant between corresponding elements of two
  long sequences.  The length of the sequences must match for
@@ -840,6 +604,30 @@ Represents a linear invariant (ie, y = ax + b) between the corresponding
  Thus, x[0] is compared to y[0], x[1] to y[1] and so forth.  Prints
  as "y[] = a * x[] + b"
 
+@item PairwiseNumericFloat.Divides
+Represents the divides without remainder invariant between
+ corresponding elements of two double sequences.  Prints as ' x[] % y[] == 0'
+
+@item PairwiseNumericFloat.Square
+Represents the square invariant between
+ corresponding elements of two double sequences.  Prints as ' x[] = y[]**2'
+
+@item PairwiseNumericInt.BitwiseComplement
+Represents the bitwise complement invariant between
+ corresponding elements of two long sequences. Prints as ' x[] = ~y[] '
+
+@item PairwiseNumericInt.BitwiseSubset
+Represents the bitwise subset invariant between
+ corresponding elements of two long sequences. Prints as ' x[] = y[] | x[] '
+
+@item PairwiseNumericInt.Divides
+Represents the divides without remainder invariant between
+ corresponding elements of two long sequences.  Prints as ' x[] % y[] == 0'
+
+@item PairwiseNumericInt.Square
+Represents the square invariant between
+ corresponding elements of two long sequences.  Prints as ' x[] = y[]**2'
+
 @item Positive
 Represents the invariant 'x > 0' where x is a long scalar.  This exists
  only as an example for the purposes of the manual.  It isn't actually
@@ -856,70 +644,70 @@ Represents two double sequences where one is in the reverse order
 @item SeqFloatEqual
 Represents double scalars with an invariant to each element of
  double sequences.  Prints as 'x[] elements == y' where x is a
- double sequence and y is a double scalar
+ double sequence and y is a double scalar.
 
 @item SeqFloatGreaterEqual
 Represents double scalars with an invariant to each element of
  double sequences.  Prints as 'x[] elements >= y' where x is a
- double sequence and y is a double scalar
+ double sequence and y is a double scalar.
 
 @item SeqFloatGreaterThan
 Represents double scalars with an invariant to each element of
  double sequences.  Prints as 'x[] elements > y' where x is a
- double sequence and y is a double scalar
+ double sequence and y is a double scalar.
 
 @item SeqFloatLessEqual
 Represents double scalars with an invariant to each element of
  double sequences.  Prints as 'x[] elements <= y' where x is a
- double sequence and y is a double scalar
+ double sequence and y is a double scalar.
 
 @item SeqFloatLessThan
 Represents double scalars with an invariant to each element of
  double sequences.  Prints as 'x[] elements < y' where x is a
- double sequence and y is a double scalar
+ double sequence and y is a double scalar.
 
 @item SeqIndexComparison
-Represents invariants between elements of a long sequence and
- the indices of those elements.  Prints as "x[i] [cmp] i" where
- [cmp] is one of < <= > >=
+Represents invariants asserting that an ordering holds between
+ elements of a long sequence and the indices of those elements.
+ Prints as "x[i] [cmp] i" where [cmp] is one of < <= > >=
 
 @item SeqIndexComparisonFloat
-Represents invariants between elements of a double sequence and
- the indices of those elements.  Prints as "x[i] [cmp] i" where
- [cmp] is one of < <= > >=
+Represents invariants asserting that an ordering holds between
+ elements of a double sequence and the indices of those elements.
+ Prints as "x[i] [cmp] i" where [cmp] is one of < <= > >=
 
 @item SeqIndexNonEqual
 Represents long sequences where the element stored at index i is
- not equal to i.  Prints as "x[i] != i"
+ not equal to i, for any i.  Prints as "x[i] != i"
 
 @item SeqIndexNonEqualFloat
 Represents double sequences where the element stored at index i is
- not equal to i.  Prints as "x[i] != i"
+ not equal to i, for any i.  Prints as "x[i] != i"
 
 @item SeqIntEqual
 Represents long scalars with an invariant to each element of
  long sequences.  Prints as 'x[] elements == y' where x is a
- long sequence and y is a long scalar
+ long sequence and y is a long scalar.
 
 @item SeqIntGreaterEqual
 Represents long scalars with an invariant to each element of
  long sequences.  Prints as 'x[] elements >= y' where x is a
- long sequence and y is a long scalar
+ long sequence and y is a long scalar.
 
 @item SeqIntGreaterThan
 Represents long scalars with an invariant to each element of
  long sequences.  Prints as 'x[] elements > y' where x is a
- long sequence and y is a long scalar
+ long sequence and y is a long scalar.
 
 @item SeqIntLessEqual
 Represents long scalars with an invariant to each element of
  long sequences.  Prints as 'x[] elements <= y' where x is a
- long sequence and y is a long scalar
+ long sequence and y is a long scalar.
 
 @item SeqIntLessThan
 Represents long scalars with an invariant to each element of
  long sequences.  Prints as 'x[] elements < y' where x is a
- long sequence and y is a long scalar
+ long sequence and y is a long scalar.
 
 @item SeqSeqFloatEqual
 Represents invariants between two double sequences.  If order
@@ -1123,7 +911,7 @@ Represents two double sequences where one sequence is a subsequence
 Represents two long sequences where one of the sequences is a
  subset (each element appears in the other sequence) of the other.
  Prints as either "x[] is a subset of y[]" or as
- "x[] is a @{sub,super@}set of y[]" if x and y are set equivalent.
+ "x[] is a superset of y[]".
 
 This invariant is not enabled by default.  See the configuration option
 daikon.inv.binary.twoSequence.SubSet.enabled
@@ -1132,7 +920,7 @@ daikon.inv.binary.twoSequence.SubSet.enabled
 Represents two double sequences where one of the sequences is a
  subset (each element appears in the other sequence) of the other.
  Prints as either "x[] is a subset of y[]" or as
- "x[] is a @{sub,super@}set of y[]" if x and y are set equivalent.
+ "x[] is a superset of y[]".
 
 This invariant is not enabled by default.  See the configuration option
 daikon.inv.binary.twoSequence.SubSetFloat.enabled
@@ -1141,7 +929,7 @@ daikon.inv.binary.twoSequence.SubSetFloat.enabled
 Represents two long sequences where one of the sequences is a
  subset (each element appears in the other sequence) of the other.
  Prints as either "x[] is a subset of y[]" or as
- "x[] is a @{sub,super@}set of y[]" if x and y are set equivalent.
+ "x[] is a superset of y[]".
 
 This invariant is not enabled by default.  See the configuration option
 daikon.inv.binary.twoSequence.SuperSet.enabled
@@ -1150,7 +938,7 @@ daikon.inv.binary.twoSequence.SuperSet.enabled
 Represents two double sequences where one of the sequences is a
  subset (each element appears in the other sequence) of the other.
  Prints as either "x[] is a subset of y[]" or as
- "x[] is a @{sub,super@}set of y[]" if x and y are set equivalent.
+ "x[] is a superset of y[]".
 
 This invariant is not enabled by default.  See the configuration option
 daikon.inv.binary.twoSequence.SuperSetFloat.enabled
