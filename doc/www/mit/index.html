@@ -165,6 +165,32 @@ or just <a href=".cvsrc">download this one</a> to your home directory.
 <p>
 
 
+<h3><a name="classpath"></a>Classpath</h2>
+
+(by Jeremy Nimmer)
+<p>
+
+In case anyone is curious, this is how I set my CLASSPATH.  If you use this,
+you should change $INV to where your CVS checkout of <tt>invariants</tt> is.
+<p>
+
+<pre>
+setenv INV ${HOME}/research/invariants
+setenv JAVA_HOME /g2/users/mernst/java/jdk
+setenv RTJAR ${JAVA_HOME}/jre/lib/rt.jar
+setenv DAIKON_LIBS `/usr/bin/perl -e 'print join(":", @ARGV);' ${INV}/java/lib/*.jar`
+setenv CLASSPATH .:${INV}/java:${DAIKON_LIBS}:${RTJAR}
+</pre>
+
+This includes on your path:
+<pre>
+  .            - the cwd
+  $INV/java    - your current checkout of daikon engine
+  $DAIKON_LIBS - all of the .jar files in $INV/java/lib
+  $RTJAR       - the JDK runtime (for jikes)
+</pre>
+
+
 <h2><a name="getting-daikon"></a>Getting your copy of Daikon</h2>
 
 You can always download and install Daikon from its .tar.gz distribution.
