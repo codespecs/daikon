@@ -279,6 +279,14 @@ public final class TestUtilMDE extends TestCase {
       assertTrue(ArraysMDE.indexOf(a, f) == 7);
       assertTrue(ArraysMDE.indexOf(a, g) == -1);
       assertTrue(ArraysMDE.indexOf(a, h) == -1);
+
+      // Tests pulled from actual StackAr data
+      int[] origTheArray = new int[] {1267757, 1267757, 1267757, 1267757, 1267757, 1267757, 1267757, 1267757, 1267757, 1267757, 1267757, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+      int[] postTheArray = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+      assertTrue(ArraysMDE.indexOf(postTheArray, origTheArray) == -1);
+      assertTrue(ArraysMDE.indexOf(origTheArray, postTheArray) == -1);
+
     }
 
     // public static int indexOf(boolean[] a, boolean[] sub)
