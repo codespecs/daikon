@@ -2019,19 +2019,36 @@ public class PptTopLevel extends Ppt {
     return prover_background;
   }
 
-  // Start up simplify, and send the universal backgound
-  private static void ensure_prover_started() {
-    if (prover == null) {
-      prover = new SessionManager();
+  // Start up simplify, and send the universal backgound.
+  // Is successful exactly when this.prover != null.
+  private static void attempt_prover_startup()
+  {
+    // If already started, we are fine
+    if (prover != null) {
+      return;
+    }
+
+    // Limit ourselves to a few tries
+    if (prover_instantiate_count > 5) {
+      return;
+    }
+
+    // Start the prover
+    try {
       prover_instantiate_count++;
+      prover = new SessionManager();
       if (Daikon.no_text_output) {
 	System.out.print("...");
       }
-      try {
-	prover.request(new CmdAssume(prover_background()));
-      } catch (TimeoutException e) {
-	throw new RuntimeException("Timeout on universal background " + e);
-      }
+    } catch (SimplifyError e) {
+      System.err.println("Could not utilize Simpilify: " + e);
+      return;
+    }
+
+    try {
+      prover.request(new CmdAssume(prover_background()));
+    } catch (TimeoutException e) {
+      throw new RuntimeException("Timeout on universal background " + e);
     }
   }
 
@@ -2231,7 +2248,8 @@ public class PptTopLevel extends Ppt {
 
     // Send the background to the prover
     try {
-      ensure_prover_started();
+      attempt_prover_startup();
+      if (prover == null) return;
       prover.request(background);
     } catch (TimeoutException e) {
       prover = null;
@@ -2267,7 +2285,8 @@ public class PptTopLevel extends Ppt {
       try {
 	// If the background is necessarily false, we are in big trouble
 	CmdCheck bad = new CmdCheck("(NOT " + bg + ")");
-	ensure_prover_started();
+	attempt_prover_startup();
+	if (prover == null) return;
 	prover.request(bad);
 	if (bad.valid) {
 	  // BAD!!
@@ -2308,7 +2327,8 @@ public class PptTopLevel extends Ppt {
       } catch (TimeoutException e) {
 	// Reset the prover with the controlling invariant background
 	prover = null;
-	ensure_prover_started();
+	attempt_prover_startup();
+	if (prover == null) return;
 	try {
 	  prover.request(background);
 	} catch (TimeoutException f) {
