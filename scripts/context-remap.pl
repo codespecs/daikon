@@ -3,7 +3,7 @@
   if 0;
 # context.pl -- Read dfej's context-sensitivity .map files and produce various things from them.
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2001-11-29 17:04:21 mistere>
+# Time-stamp: <2001-12-08 12:30:27 mistere>
 
 # The input is ... TODO
 
@@ -15,7 +15,7 @@ my $debug = 0;
 # ********** Read command line options **********
 
 sub usagedie {
-  print STDERR "Usage: context.pl {--spinfo | --remap invs.txt} {--grain line | meth | class} file1.map [file2.map ...] (", @_, ")\n";
+  print STDERR "Usage: context.pl {--spinfo | --remap invs.txt} {--grain line | method | class} file1.map [file2.map ...] (", @_, ")\n";
   exit 1;
 }
 
@@ -61,8 +61,8 @@ for my $filename (@ARGV) {
     # lines e.g.
     # 0x85c2e8c PC.RPStack get [PC/RPStack.java:156:29] -> "getCons" [(I)LPC/Cons;] PC.RP
 
-    my @rec;
-    if (@rec = ($line =~ /^(0x[0-9a-f]+)\s+([\w\.]+)\s+([\w\.]+)\s+\[(.*?):(\d+):(\d+)\]\s+->\s+"([\w\.]+)"\s+\[(.*?)\]\s+([\w\.]+)$/)) {
+    my @rec; 
+    if (@rec = ($line =~ /^(0x[0-9a-f]+)\s+([\w\$\.]+)\s+([\w\$\.]+)\s+\[(.*?):(\d+):(\d+)\]\s+->\s+"([^"]*?)"\s+\[(.*?)\]\s+([\w\$\.]+)$/)) {
       # id, fromclass, frommeth, fromfile, fromline, fromcol, toexpr, toargs, toclass
       push @records, \@rec;
     } else {
