@@ -1859,8 +1859,15 @@ public final class ONEOFSCALAR
 
   // Interning is lost when an object is serialized and deserialized.
   // Manually re-intern any interned fields upon deserialization.
-  private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+  private void readObject(ObjectInputStream in) throws IOException,
+    ClassNotFoundException {
     in.defaultReadObject();
+    #if defined (STRINGSEQUENCE)
+      for (int i = 0; i < num_elts; i++) {
+        for (int j = 0; j < elts[i].length; j++)
+          elts[i][j] = Intern.intern (elts[i][j]);
+      }
+    #endif
     for (int i=0; i < num_elts; i++)
       elts[i] = Intern.intern(elts[i]);
   }
