@@ -1215,19 +1215,19 @@ public abstract class VarInfoName
 	      conditions.append(_idx);
 	    } else {
 	      conditions.append("(");
-	      conditions.append(_idx);
+	      conditions.append(_idx.esc_name());
 	      conditions.append("-(");
-	      conditions.append(_low);
+	      conditions.append(_low.esc_name());
 	      conditions.append("))");
 	    }
 	    conditions.append(" == ");
 	    if (ZERO.equals(low)) {
-	      conditions.append(idx);
+	      conditions.append(idx.esc_name());
 	    } else {
 	      conditions.append("(");
-	      conditions.append(idx);
+	      conditions.append(idx.esc_name());
 	      conditions.append("-(");
-	      conditions.append(low);
+	      conditions.append(low.esc_name());
 	      conditions.append("))");
 	    }
 	    conditions.append(")");
