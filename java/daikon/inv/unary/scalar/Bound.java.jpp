@@ -224,7 +224,7 @@ public class LOWERBOUND
   public static boolean dkconfig_enabled = true;
   /**
    * Long integer.  Together with maximal_interesting, specifies the
-   * range of the computed constant that is "intersting" --- the range
+   * range of the computed constant that is "interesting" --- the range
    * that should be reported.  For instance, setting minimal_interesting
    * to -1 and maximal_interesting to 2 would only permit output of
    * LOWERBOUND invariants whose cutoff was one of (-1,0,1,2).
@@ -232,7 +232,7 @@ public class LOWERBOUND
   public static long dkconfig_minimal_interesting = -1;
   /**
    * Long integer.  Together with minimal_interesting, specifies the
-   * range of the computed constant that is "intersting" --- the range
+   * range of the computed constant that is "interesting" --- the range
    * that should be reported.  For instance, setting minimal_interesting
    * to -1 and maximal_interesting to 2 would only permit output of
    * LOWERBOUND invariants whose cutoff was one of (-1,0,1,2).

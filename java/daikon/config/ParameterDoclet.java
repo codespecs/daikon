@@ -9,7 +9,7 @@ import utilMDE.*;
 /**
  * ParameterDoclet is a JavaDoc doclet that collects information about
  * the runtime configuration options for the Daikon tools.  Refer to
- * the "--config" switch in the Daikon maunal for an introduction to
+ * the "--config" switch in the Daikon manual for an introduction to
  * the configuration system.
  **/
 public class ParameterDoclet
@@ -74,12 +74,44 @@ public class ParameterDoclet
 
   // ============================== NON-STATIC METHODS ==============================
 
+  class DocCategory {
+    public String prefixPattern;
+    public String fieldName;
+    public String description;
+    public Map fields;  // field -> description
+
+    public DocCategory (String prefix, String name, String desc) {
+      prefixPattern = prefix;
+      if (name == null)
+	fieldName = null;
+      else
+	fieldName = Configuration.PREFIX + name;
+      description = desc;
+      fields = new HashMap ();
+    }
+  }
+
   protected RootDoc root; // root document
-  protected Map fields;   // field -> description
+  protected DocCategory[] categories;
 
   public ParameterDoclet(RootDoc doc) {
     root = doc;
-    fields = new HashMap();
+    categories = new DocCategory[] {
+      // Do not re-order these options!  The pattern-matching is sensitive
+      // to the order and the parent document knows the filter option comes
+      // first (for node linking).
+      new DocCategory("daikon.inv.filter.", "enabled",
+		      "Options to enable/disable filters"),
+      new DocCategory("daikon.inv.", "enabled",
+		      "Options to enable/disable specific invariants"),
+      new DocCategory("daikon.inv.", null,
+		      "Other invariant configuration parameters"),
+      new DocCategory("daikon.derive.", null,
+		      "Options to enable/disable derived variables"),
+      new DocCategory("daikon.simplify.", null,
+		      "Simplify interface configuration options"),
+      new DocCategory(null, null,
+		      "General configuration options") };
   }
 
   /**
@@ -97,7 +129,7 @@ public class ParameterDoclet
   }
 
   /**
-   * Call Process(String, String) for each configuration field found.
+   * Call Process(String, String, String) for each configuration field found.
    * Intended to be overridden.
    **/
   public void processField(FieldDoc field) {
@@ -108,7 +140,7 @@ public class ParameterDoclet
       fullname = fullname.substring(0, snip)
         + fullname.substring(snip + Configuration.PREFIX.length());
       String desc = field.commentText();
-      process(fullname, desc);
+      process(fullname, name, desc);
     }
   }
 
@@ -117,13 +149,22 @@ public class ParameterDoclet
   public static String UNKNOWN_DEFAULT = "The default value is not known.";
 
   /**
-   * Add <name, desc> pair to the map field 'fields'.
+   * Add <name, desc> pair to the map field 'fields' for the appropriate
+   * category.
    **/
-  public void process(String name, String desc) {
+  public void process(String fullname, String name, String desc) {
     if ("".equals(desc.trim()))
       desc = NO_DESCRIPTION;
 
-    fields.put(name, desc);
+    for (int i = 0; i < categories.length; i++) {
+      if (((categories[i].prefixPattern == null) ||
+	   fullname.startsWith(categories[i].prefixPattern)) &&
+	  ((categories[i].fieldName == null) ||
+	   name.equals(categories[i].fieldName))) {
+	categories[i].fields.put(fullname, desc);
+	break;
+      }
+    }
   }
 
   private String getDefaultString(String field) {
@@ -145,20 +186,41 @@ public class ParameterDoclet
     out.println("@c BEGIN AUTO-GENERATED CONFIG OPTIONS LISTING");
     out.println();
 
-    List keys = new ArrayList(fields.keySet());
-    Collections.sort(keys);
-    for (Iterator i = keys.iterator(); i.hasNext(); ) {
-      String field = (String) i.next();
-      String desc = (String) fields.get(field);
-      String defstr = getDefaultString(field);
+    out.println("@menu");
+    for (int c = 0; c < categories.length; c++) {
+      out.println("* " + categories[c].description + "::");
+    }
+    out.println("@end menu");
+    out.println();
 
-      // @item [field]
-      //  [desc]
-      out.println("@item " + field);
-      // Remove leading spaces, which throw off Info.
-      desc = UtilMDE.replaceString (desc, lineSep + " ", lineSep);
-      out.println(desc);
-      out.println(defstr);
+    String up = "List of configuration options";
+    for (int c = 0; c < categories.length; c++) {
+      String node = categories[c].description;
+      String next = (c+1 < categories.length) ? categories[c+1].description : "";
+      String prev = (c > 0) ? categories[c-1].description : up;
+      out.println("@node " + node + ", " + next + ", " + prev + ", " + up);
+      out.println("@subsubsection " + node);
+      out.println();
+      out.println("@table @asis");
+      out.println();
+
+      List keys = new ArrayList(categories[c].fields.keySet());
+      Collections.sort(keys);
+      for (Iterator i = keys.iterator(); i.hasNext(); ) {
+	String field = (String) i.next();
+	String desc = (String) categories[c].fields.get(field);
+	String defstr = getDefaultString(field);
+	
+	// @item [field]
+	//  [desc]
+	out.println("@item " + field);
+	// Remove leading spaces, which throw off Info.
+	desc = UtilMDE.replaceString (desc, lineSep + " ", lineSep);
+	out.println(desc);
+	out.println(defstr);
+	out.println();
+      }
+      out.println("@end table");
       out.println();
     }
 
@@ -167,28 +229,35 @@ public class ParameterDoclet
   }
 
   public void writeText(PrintWriter out) {
-    List keys = new ArrayList(fields.keySet());
-    Collections.sort(keys);
-    for (Iterator i = keys.iterator(); i.hasNext(); ) {
-      String field = (String) i.next();
-      String desc = (String) fields.get(field);
-      String defstr = getDefaultString(field);
-
-      // [field]
-      //   [desc]
-      out.println(field);
-      out.println("  " + desc);
-      out.println("  " + defstr);
+    for (int c = 0; c < categories.length; c++) {
+      out.println(categories[c].description);
       out.println();
+
+      List keys = new ArrayList(categories[c].fields.keySet());
+      Collections.sort(keys);
+      for (Iterator i = keys.iterator(); i.hasNext(); ) {
+	String field = (String) i.next();
+	String desc = (String) categories[c].fields.get(field);
+	String defstr = getDefaultString(field);
+	
+	// [field]
+	//   [desc]
+	out.println("  " + field);
+	out.println("    " + desc);
+	out.println("    " + defstr);
+	out.println();
+      }
     }
   }
 
   public void writeList(PrintWriter out) {
-    List keys = new ArrayList(fields.keySet());
-    Collections.sort(keys);
-    for (Iterator i = keys.iterator(); i.hasNext(); ) {
-      String field = (String) i.next();
-      out.println(field);
+    for (int c = 0; c < categories.length; c++) {
+      List keys = new ArrayList(categories[c].fields.keySet());
+      Collections.sort(keys);
+      for (Iterator i = keys.iterator(); i.hasNext(); ) {
+	String field = (String) i.next();
+	out.println(field);
+      }
     }
   }
 
