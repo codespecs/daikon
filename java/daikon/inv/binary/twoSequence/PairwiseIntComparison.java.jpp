@@ -214,6 +214,10 @@ public class PAIRWISEINTEQUAL
   public boolean isObviousDynamically (VarInfo[] vis) {
 
     PptSlice ppt = this.ppt.parent.findSlice(vis);
+
+    if (ppt == null)
+      return false;
+
     PAIRWISEEQ_SUPP picEQ = PAIRWISEEQ_SUPP.find(ppt);
     if (picEQ!=null) {
       if (logDetail() || debug.isLoggable(Level.FINE))
