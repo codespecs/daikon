@@ -1,25 +1,27 @@
 package daikon;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
+import javax.swing.tree.*;
+import utilMDE.*;
 
-/** Maps from a name (a String) to a Ppt. */
+/** Maps from a name (a String) to a PptTopLevel. */
 public class PptMap
   implements Serializable
 {
   private final Map nameToPpt = new HashMap();
 
-  public void add(Ppt ppt)
+  public void add(PptTopLevel ppt)
   {
     nameToPpt.put(ppt.name, ppt);
   }
 
-  public Ppt get(String name)
+  public PptTopLevel get(String name)
   {
-    return (Ppt) nameToPpt.get(name);
+    return (PptTopLevel) nameToPpt.get(name);
   }
 
-  public Ppt get(PptName name)
+  public PptTopLevel get(PptName name)
   {
     return get(name.toString());
   }
@@ -43,6 +45,36 @@ public class PptMap
   {
     return asCollection().iterator();
   }
+
+  public DefaultMutableTreeNode diff(PptMap other) {
+    DefaultMutableTreeNode result = new DefaultMutableTreeNode();
+
+    Iterator itor1 = new TreeSet(this.nameStringSet()).iterator();
+    Iterator itor2 = new TreeSet(other.nameStringSet()).iterator();
+    /*
+    for (Iterator opi = new OrderedPairIterator(itor1, itor2);
+	 opi.hasNext(); ) {
+      Pair pair = (Pair) opi.next();
+      if (pair.b == null) {
+        result.add("Program point " + pair.a +
+		   " only in first set of invariants");
+      } else if (pair.a == null) {
+        result.add("Program point " + pair.b +
+		   " only in second set of invariants");
+      } else {
+        String ppt_name = (String) pair.a;
+        Assert.assert(ppt_name.equals(pair.b));
+	// mjh - How do we know the ppt in the pptmap is PptTopLevel?
+	// Not specified in PptMap.
+        PptTopLevel thisPpt = this.get(ppt_name);
+        PptTopLevel otherPpt = other.get(ppt_name);
+        result.addAll(thisPpt.diff(otherPpt));
+      }
+    }
+    */
+    return result;
+  }
+
 
   // // Is this of any interest?  Will I ever call it?
   // // This used to take a "String filename" initial argument.

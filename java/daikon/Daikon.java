@@ -414,7 +414,7 @@ public final class Daikon {
 
     // Avoid ConcurrentModificationException by adding after the above loop
     for (int i=0; i<new_ppts.size(); i++) {
-      ppts.add((Ppt) new_ppts.elementAt(i));
+      ppts.add((PptTopLevel) new_ppts.elementAt(i));
     }
 
   }

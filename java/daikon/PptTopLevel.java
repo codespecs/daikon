@@ -1846,7 +1846,7 @@ public class PptTopLevel extends Ppt {
     ss2.addAll(ppt2.views);
 
     for (OrderedPairIterator opi = new OrderedPairIterator(ss1.iterator(), ss2.iterator(), arityVarnameComparator); opi.hasNext(); ) {
-      OrderedPairIterator.Pair pair = (OrderedPairIterator.Pair) opi.next();
+      Pair pair = (Pair) opi.next();
       result.add(new PptSlice[] { (PptSlice) pair.a, (PptSlice) pair.b });
     }
     return (PptSlice[][])result.toArray(new PptSlice[0][0]);
@@ -1906,7 +1906,7 @@ public class PptTopLevel extends Ppt {
 
     Vector result = new Vector();
     for (OrderedPairIterator opi = new OrderedPairIterator(ss1.iterator(), ss2.iterator(), icfp); opi.hasNext(); ) {
-      OrderedPairIterator.Pair pair = (OrderedPairIterator.Pair) opi.next();
+      Pair pair = (Pair) opi.next();
       if ((pair.a == null) || (pair.b == null) || (icfp.compare(pair.a, pair.b) != 0)) {
         result.add(new Invariant[] { (Invariant) pair.a, (Invariant) pair.b });
       }
@@ -1940,7 +1940,7 @@ public class PptTopLevel extends Ppt {
     SortedSet ss2 = new TreeSet(icfp);
     ss2.addAll(invs2);
     for (OrderedPairIterator opi = new OrderedPairIterator(ss1.iterator(), ss2.iterator(), icfp); opi.hasNext(); ) {
-      OrderedPairIterator.Pair pair = (OrderedPairIterator.Pair) opi.next();
+      Pair pair = (Pair) opi.next();
       if (pair.a != null && pair.b != null) {
         Invariant inv1 = (Invariant) pair.a;
         Invariant inv2 = (Invariant) pair.b;
@@ -2382,13 +2382,13 @@ public class PptTopLevel extends Ppt {
   static Comparator arityPptnameComparator = new PptSlice.ArityPptnameComparator();
   static Comparator arityVarnameComparator = new PptSlice.ArityVarnameComparator();
 
-  public void diff(PptTopLevel other) {
+  public Vector diff(PptTopLevel other) {
     SortedSet ss1 = new TreeSet(arityVarnameComparator);
     ss1.addAll(this.views);
     SortedSet ss2 = new TreeSet(arityVarnameComparator);
     ss2.addAll(other.views);
     for (OrderedPairIterator opi = new OrderedPairIterator(ss1.iterator(), ss2.iterator()); opi.hasNext(); ) {
-      OrderedPairIterator.Pair pair = (OrderedPairIterator.Pair) opi.next();
+      Pair pair = (Pair) opi.next();
       if (pair.b == null) {
         // Invariants are only on the left-hand side.
         System.out.println("Invariants are only on the left-hand side.");
@@ -2400,6 +2400,8 @@ public class PptTopLevel extends Ppt {
         System.out.println("Invariants on both sides, must do more diffing.");
       }
     }
+
+    return new Vector();
 
   }
 

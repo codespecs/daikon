@@ -152,7 +152,7 @@ public final class FileIO {
       continue;
     }
     for (int i=0; i<new_ppts.size(); i++) {
-      Ppt ppt = (Ppt) new_ppts.elementAt(i);
+      PptTopLevel ppt = (PptTopLevel) new_ppts.elementAt(i);
       all_ppts.add(ppt);
     }
     after_processing_file_declarations(new_ppts, all_ppts);
