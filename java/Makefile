@@ -136,6 +136,12 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/binary/twoScalar/TwoFloatFactory.java \
 	daikon/inv/binary/twoScalar/TwoScalar.java \
 	daikon/inv/binary/twoScalar/TwoFloat.java \
+	daikon/inv/binary/twoString/StringEqual.java \
+	daikon/inv/binary/twoString/StringNonEqual.java \
+	daikon/inv/binary/twoString/StringLessThan.java \
+	daikon/inv/binary/twoString/StringLessEqual.java \
+	daikon/inv/binary/twoString/StringGreaterThan.java \
+	daikon/inv/binary/twoString/StringGreaterEqual.java \
 	daikon/inv/binary/twoSequence/SeqSeqIntEqual.java \
 	daikon/inv/binary/twoSequence/SeqSeqIntLessThan.java \
 	daikon/inv/binary/twoSequence/SeqSeqIntGreaterThan.java \
@@ -756,11 +762,17 @@ daikon/inv/binary/twoScalar/IntEqual.java: daikon/inv/binary/twoScalar/IntCompar
 daikon/inv/binary/twoScalar/FloatEqual.java: daikon/inv/binary/twoScalar/IntComparisons.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=EQUALFLOAT)
 
+daikon/inv/binary/twoString/StringEqual.java: daikon/inv/binary/twoScalar/IntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=EQUALSTRING)
+
 daikon/inv/binary/twoScalar/IntNonEqual.java: daikon/inv/binary/twoScalar/IntComparisons.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=NONEQUAL)
 
 daikon/inv/binary/twoScalar/FloatNonEqual.java: daikon/inv/binary/twoScalar/IntComparisons.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=NONEQUALFLOAT)
+
+daikon/inv/binary/twoString/StringNonEqual.java: daikon/inv/binary/twoScalar/IntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=NONEQUALSTRING)
 
 daikon/inv/binary/twoScalar/IntLessThan.java: daikon/inv/binary/twoScalar/IntComparisons.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=LESSTHAN)
@@ -768,11 +780,17 @@ daikon/inv/binary/twoScalar/IntLessThan.java: daikon/inv/binary/twoScalar/IntCom
 daikon/inv/binary/twoScalar/FloatLessThan.java: daikon/inv/binary/twoScalar/IntComparisons.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=LESSTHANFLOAT)
 
+daikon/inv/binary/twoString/StringLessThan.java: daikon/inv/binary/twoScalar/IntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=LESSTHANSTRING)
+
 daikon/inv/binary/twoScalar/IntLessEqual.java: daikon/inv/binary/twoScalar/IntComparisons.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=LESSEQUAL)
 
 daikon/inv/binary/twoScalar/FloatLessEqual.java: daikon/inv/binary/twoScalar/IntComparisons.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=LESSEQUALFLOAT)
+
+daikon/inv/binary/twoString/StringLessEqual.java: daikon/inv/binary/twoScalar/IntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=LESSEQUALSTRING)
 
 daikon/inv/binary/twoScalar/IntGreaterThan.java: daikon/inv/binary/twoScalar/IntComparisons.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=GREATERTHAN)
@@ -780,11 +798,17 @@ daikon/inv/binary/twoScalar/IntGreaterThan.java: daikon/inv/binary/twoScalar/Int
 daikon/inv/binary/twoScalar/FloatGreaterThan.java: daikon/inv/binary/twoScalar/IntComparisons.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=GREATERTHANFLOAT)
 
+daikon/inv/binary/twoString/StringGreaterThan.java: daikon/inv/binary/twoScalar/IntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=GREATERTHANSTRING)
+
 daikon/inv/binary/twoScalar/IntGreaterEqual.java: daikon/inv/binary/twoScalar/IntComparisons.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=GREATEREQUAL)
 
 daikon/inv/binary/twoScalar/FloatGreaterEqual.java: daikon/inv/binary/twoScalar/IntComparisons.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=GREATEREQUALFLOAT)
+
+daikon/inv/binary/twoString/StringGreaterEqual.java: daikon/inv/binary/twoScalar/IntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=GREATEREQUALSTRING)
 
 daikon/inv/binary/twoScalar/FunctionUnaryCore.java: daikon/inv/binary/twoScalar/FunctionUnaryCore.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
