@@ -1,7 +1,33 @@
 # This is a -*- Makefile -*- which each subdirectory (project) will include
 
-## Complete usage:
-##     make reset-stackar-java compile data daikon merge esc
+# ==================================================================
+# Variables which project Makefiles should declare before including
+# this Makefile:
+#
+# PROJECT           Name of the directory in which the project resides (e.g. StackAr)
+# TRACE_NAME        Name of the trace file daikon will generate (e.g. StackAr.dtrace)
+# SOURCE_UNCHANGED  List of .java files which the files inder examination need (e.g. DataStructures/Hashable.java ...)
+# SOURCE_TO_DFEJ    List of .java files which should be instrumented (e.g. DataStructures/StackAr.java)
+# PACKAGE           Package where the instrumented files lice (e.g. DataStructures)
+# MAIN_RUN          File name of main class to run for data collection (e.g. DataStructures.StackArTester)
+#
+
+# ==================================================================
+# Basic facts about this Makefile
+#
+# Assumes that each project has it's own subdirectory under esc-experiments/
+# Assumes that uninstumented code lives at esc-experiments/ (+ package structure)
+# Creates /tmp/esc-experiments/PROJECT/ directory to hold
+#   * instrumented source
+#   * decls files
+#   * compiled source
+#   * dtrace files
+# Creates PROJECT/PROJECT.txt-daikon with daikon-style invariants
+# Creates PROJECT/PROJECT.txt-esc with esc-style invariants
+# Creates PROJECT/(+ package) with esc-annotated versions of the source
+# Creates PROJECT/PROJECT.esc with output from escjava verification
+#
+
 
 DAIKON_OPTS=--suppress_cont
 
@@ -113,7 +139,7 @@ merge:
 # run escjava on the annontated files
 # StackAr.esc: DataStructures/StackAr.java-escannotated
 esc:
-	escjava ${SOURCE_TO_DFEJ} > StackAr.esc
+	escjava ${SOURCE_TO_DFEJ} > ${PROJECT}.esc
 
 # ###########################################################################
 
