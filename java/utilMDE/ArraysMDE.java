@@ -196,7 +196,7 @@ public final class ArraysMDE {
     return min_max[1] - min_max[0];
   }
 
-  
+
   // Returns the sum of an array of integers
   public static int sum(int[] a) {
     int sum = 0;

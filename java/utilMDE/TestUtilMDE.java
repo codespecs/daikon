@@ -1,5 +1,6 @@
 package utilMDE;
 
+import junit.framework.*;
 import java.util.*;
 
 // run like this:
@@ -18,30 +19,45 @@ import java.util.*;
 // UtilMDE.java
 // WeakHasherMap.java
 
+
 /** Test code for the utilMDE package. */
-public final class TestUtilMDE {
+public final class TestUtilMDE extends TestCase {
 
   public static void main(String[] args) {
-    testTestUtilMDE();
-    testArraysMDE();
-    testEqHashMap();
-    testHasher();
-    testIntern();
-    testMathMDE();
-    testOrderedPairIterator();
-    testUtilMDE();
-    testWeakHasherMap();
-    System.out.println("All utilMDE tests succeeded.");
+    junit.textui.TestRunner.run(new TestSuite(TestUtilMDE.class));
   }
 
-// I don't use Assert.assert() because that can be turned off by setting
-// Assert.enabled = false, and I want these tests to always be performed.
-  private static final void assert(boolean b) { if (!b) throw new Error(); }
-  private static final void assert(boolean b, String s) { if (!b) throw new Error(s); }
-  private static final void assert_arrays_equals(int[] a1, int[] a2) {
-    assert(Arrays.equals(a1, a2),
-	   "Arrays differ: " + ArraysMDE.toString(a1) + ", " + ArraysMDE.toString(a2));
+  public TestUtilMDE(String name) {
+    super(name);
   }
+
+//   public static void main(String[] args) {
+//     testTestUtilMDE();
+//     testArraysMDE();
+//     testEqHashMap();
+//     testHasher();
+//     testIntern();
+//     testMathMDE();
+//     testOrderedPairIterator();
+//     testUtilMDE();
+//     testWeakHasherMap();
+//     System.out.println("All utilMDE tests succeeded.");
+//   }
+
+// // I don't use Assert.assert() because that can be turned off by setting
+// // Assert.enabled = false, and I want these tests to always be performed.
+//   private static final void assert(boolean b) { if (!b) throw new Error(); }
+//   private static final void assert(boolean b, String s) { if (!b) throw new Error(s); }
+   private static final void assert_arrays_equals(int[] a1, int[] a2) {
+     boolean result = Arrays.equals(a1, a2);
+     if (! result)
+       System.out.println("Arrays differ: " + ArraysMDE.toString(a1)
+                          + ", " + ArraysMDE.toString(a2));
+     assert(result);
+//      assert(Arrays.equals(a1, a2),
+//  	   "Arrays differ: " + ArraysMDE.toString(a1) + ", " + ArraysMDE.toString(a2));
+   }
+
 
   ///////////////////////////////////////////////////////////////////////////
   /// Utility functions
@@ -292,7 +308,7 @@ public final class TestUtilMDE {
     // public static class IntArrayComparatorLengthFirst implements Comparator
     {
       Comparator iacl = new ArraysMDE.IntArrayComparatorLexical();
-      Comparator iaclf = new ArraysMDE.IntArrayComparatorLexical();
+      Comparator iaclf = new ArraysMDE.IntArrayComparatorLengthFirst();
       int[] a0 = new int[] { };
       int[] a1 = new int[] { };
       int[] a2 = new int[] { 0,1,2,3 };
@@ -327,9 +343,9 @@ public final class TestUtilMDE {
       assert(iacl.compare(a6, a5) > 0);
       assert(iaclf.compare(a6, a5) > 0);
       assert(iacl.compare(a6, a7) < 0);
-      assert(iaclf.compare(a6, a7) < 0);
+      assert(iaclf.compare(a6, a7) > 0);
       assert(iacl.compare(a7, a6) > 0);
-      assert(iaclf.compare(a7, a6) > 0);
+      assert(iaclf.compare(a7, a6) < 0);
       assert(iacl.compare(a1, a4) < 0);
       assert(iaclf.compare(a1, a4) < 0);
       assert(iacl.compare(a4, a1) > 0);
@@ -343,14 +359,74 @@ public final class TestUtilMDE {
       assert(iacl.compare(a4, a6) < 0);
       assert(iaclf.compare(a4, a6) < 0);
       assert(iacl.compare(a7, a4) > 0);
-      assert(iaclf.compare(a7, a4) > 0);
+      assert(iaclf.compare(a7, a4) < 0);
       assert(iacl.compare(a4, a7) < 0);
-      assert(iaclf.compare(a4, a7) < 0);
+      assert(iaclf.compare(a4, a7) > 0);
     }
 
     // Here I can only sensibly compare for equal vs. nonequal.
     // public static class ObjectArrayComparatorLexical implements Comparator
     // public static class ObjectArrayComparatorLengthFirst implements Comparator
+
+    // public static final class ComparableArrayComparatorLexical implements Comparator
+    // public static final class ComparableArrayComparatorLengthFirst implements Comparator
+{
+      Comparator cacl = new ArraysMDE.ComparableArrayComparatorLexical();
+      Comparator caclf = new ArraysMDE.ComparableArrayComparatorLengthFirst();
+      String[] a0 = new String[] { };
+      String[] a1 = new String[] { };
+      String[] a2 = new String[] { "0","1","2","3" };
+      String[] a3 = new String[] { "0","1","2","3","0" };
+      String[] a4 = new String[] { "0","1","2","3","4" };
+      String[] a5 = new String[] { "0","1","2","3","4" };
+      String[] a6 = new String[] { "0","1","5","3","4" };
+      String[] a7 = new String[] { "1","2","3","4" };
+
+      assert(cacl.compare(a0, a1) == 0);
+      assert(caclf.compare(a0, a1) == 0);
+      assert(cacl.compare(a1, a0) == 0);
+      assert(caclf.compare(a1, a0) == 0);
+      assert(cacl.compare(a1, a2) < 0);
+      assert(caclf.compare(a1, a2) < 0);
+      assert(cacl.compare(a2, a1) > 0);
+      assert(caclf.compare(a2, a1) > 0);
+      assert(cacl.compare(a2, a3) < 0);
+      assert(caclf.compare(a2, a3) < 0);
+      assert(cacl.compare(a3, a2) > 0);
+      assert(caclf.compare(a3, a2) > 0);
+      assert(cacl.compare(a3, a4) < 0);
+      assert(caclf.compare(a3, a4) < 0);
+      assert(cacl.compare(a4, a3) > 0);
+      assert(caclf.compare(a4, a3) > 0);
+      assert(cacl.compare(a4, a5) == 0);
+      assert(caclf.compare(a4, a5) == 0);
+      assert(cacl.compare(a5, a4) == 0);
+      assert(caclf.compare(a5, a4) == 0);
+      assert(cacl.compare(a5, a6) < 0);
+      assert(caclf.compare(a5, a6) < 0);
+      assert(cacl.compare(a6, a5) > 0);
+      assert(caclf.compare(a6, a5) > 0);
+      assert(cacl.compare(a6, a7) < 0);
+      assert(caclf.compare(a6, a7) > 0);
+      assert(cacl.compare(a7, a6) > 0);
+      assert(caclf.compare(a7, a6) < 0);
+      assert(cacl.compare(a1, a4) < 0);
+      assert(caclf.compare(a1, a4) < 0);
+      assert(cacl.compare(a4, a1) > 0);
+      assert(caclf.compare(a4, a1) > 0);
+      assert(cacl.compare(a2, a4) < 0);
+      assert(caclf.compare(a2, a4) < 0);
+      assert(cacl.compare(a4, a2) > 0);
+      assert(caclf.compare(a4, a2) > 0);
+      assert(cacl.compare(a6, a4) > 0);
+      assert(caclf.compare(a6, a4) > 0);
+      assert(cacl.compare(a4, a6) < 0);
+      assert(caclf.compare(a4, a6) < 0);
+      assert(cacl.compare(a7, a4) > 0);
+      assert(caclf.compare(a7, a4) < 0);
+      assert(cacl.compare(a4, a7) < 0);
+      assert(caclf.compare(a4, a7) > 0);
+    }
 
   }
 
