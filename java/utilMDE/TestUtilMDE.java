@@ -11,7 +11,7 @@ import java.lang.*;
 // Files to test:
 // ArraysMDE.java
 // Assert.java
-// CountingPrintWriter
+// CountingPrintWriter.java
 // Digest.java
 // EqHashMap.java
 // FuzzyFloat.java
@@ -1419,7 +1419,7 @@ public final class TestUtilMDE extends TestCase {
     c1.write("a");
     c1.write("a");
     Assert.assertTrue(c1.getNumberOfPrintedBytes() == 9);
-    Assert.assertTrue(c1.getNumberOfWrittenBytes()== 22);
+    Assert.assertTrue(c1.getNumberOfWrittenBytes() == 22);
     Assert.assertTrue(c1.getNumberOfPrintedChars() == 9);
   }
 
