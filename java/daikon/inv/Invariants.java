@@ -102,4 +102,45 @@ public final class Invariants
     return result;
   }
 
+  // Override superclass implementation
+  public boolean remove(Object o) {
+    boolean result = super.remove(o);
+    // Perhaps trim to size.
+    // The test I really want is "if size() < capacity()/2".
+    // But I don't have a way of determining the capacity.
+    // Instead, determine whether the size is a power of 2.
+    if (result && isPowerOfTwo(size())) {
+      trimToSize();
+    }
+    return result;
+  }
+
+  // Works for non-negative
+  private final static boolean isPowerOfTwo(int x) {
+    if (x == 0)
+      return true;
+    while (x % 16 == 0) {
+      x = x >> 4;
+    }
+    return ((x == 1) || (x == 2) || (x == 4) || (x == 8));
+  }
+
+  /// For testing
+  // private final static boolean isPowerOfTwoSlow(int x) {
+  //   for (int i=0; true; i++) {
+  //     int pow = utilMDE.MathMDE.pow(2, i);
+  //     if (pow == x)
+  //       return true;
+  //     if (pow > x)
+  //       return false;
+  //   }
+  // }
+  // public static void main(String[] args) {
+  //   for (int i=1; i<10000; i++) {
+  //     if (isPowerOfTwo(i) != isPowerOfTwoSlow(i)) {
+  //       throw new Error("" + i);
+  //     }
+  //   }
+  // }
+
 }

@@ -269,7 +269,7 @@ public final class PPTSLICE1
         && (rep3 == ProglangType.INT)) {
       new_invs = ThreeScalarFactory.instantiate(this);
       if (! Invariant.dkconfig_use_confidence) {
-        values_cache = new ValueTracker.ValueTrackerThreeScalar(44);
+        values_cache = new ValueTracker.ValueTrackerThreeScalar(5);
       }
     } else if ((rep1 == ProglangType.DOUBLE)
                && (rep2 == ProglangType.DOUBLE)
@@ -277,7 +277,7 @@ public final class PPTSLICE1
       if (Daikon.dkconfig_enable_floats) {
         new_invs = ThreeFloatFactory.instantiate(this);
         if (! Invariant.dkconfig_use_confidence) {
-          values_cache = new ValueTracker.ValueTrackerThreeFloat(44);
+          values_cache = new ValueTracker.ValueTrackerThreeFloat(5);
         }
       }
     } else {
