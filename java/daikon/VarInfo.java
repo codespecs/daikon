@@ -682,5 +682,33 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     }
   }
 
+  /**
+   * @return ESC-formatted name for this variable, or null if variable is not describable
+   **/
+  public String esc_name()
+  {
+    String result = name;
+
+    // "size(array[])" -> "array.length"
+    {
+      int sizelp = result.indexOf("size(");
+      int brackrp = result.indexOf("[])");
+      if (sizelp >= 0) {
+	Assert.assert(brackrp >= sizelp, "[]) follows size(");
+	result =
+	  result.substring(0, sizelp) +
+	  result.substring(sizelp+5, brackrp) +
+	  ".length" +
+	  result.substring(brackrp+3);
+      }
+    }
+
+    // "orig(var)" -> "\old(var)"
+    if (result.startsWith("orig(")) {
+      result = "\\old" + result.substring(4);
+    }
+
+    return result;
+  }
 
 }
