@@ -20,7 +20,7 @@ JAVAC ?= javac -g
 # In practice, this is good enough, however.
 # Creates a symlink to ajax if it does not exist, so the ajax .java
 # files get compiled as well.
-JAVA_FILES := $(shell [ ! -L ajax ] && ln -s ajax-ship/ajax .; find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -path './jakarta-oro*/src/java/examples' -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name 'ajax-ship' -o -name '\.\#*' \) -prune -o -name '*.java' -print)
+JAVA_FILES := $(shell [ -d ajax-ship/ajax -a ! -L ajax ] && ln -s ajax-ship/ajax .; find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -path './jakarta-oro*/src/java/examples' -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name 'ajax-ship' -o -name '\.\#*' \) -prune -o -name '*.java' -print)
 TAG_FILES := $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -name ajax \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
 
 AUTO_GENERATED_FILES = \
