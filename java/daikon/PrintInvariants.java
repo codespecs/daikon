@@ -30,6 +30,7 @@ public class PrintInvariants {
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(Daikon.suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(Daikon.suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.esc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.simplify_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -44,8 +45,9 @@ public class PrintInvariants {
 	if (Daikon.suppress_cont_SWITCH.equals(option_name)) {
 	  Daikon.suppress_implied_controlled_invariants = true;
 	} else if (Daikon.suppress_post_SWITCH.equals(option_name)) {
-	  Daikon.suppress_implied_postcondition_over_prestate_invariants =
-            true;
+	  Daikon.suppress_implied_postcondition_over_prestate_invariants = true;
+	} else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
+	  Daikon.suppress_redundant_invariants_with_simplify = true;
 	} else if (Daikon.esc_output_SWITCH.equals(option_name)) {
 	  Daikon.output_style = Daikon.OUTPUT_STYLE_ESC;
 	} else if (Daikon.simplify_output_SWITCH.equals(option_name)) {
