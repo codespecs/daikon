@@ -123,13 +123,22 @@ public final class Configuration
       throw new ConfigException("No class " + classname);
     }
 
+    apply(clazz, fieldname, value);
+  }
+
+  public void apply(Class clazz, String fieldname, String value)
+  {
+    Assert.assert(clazz != null);
+    Assert.assert(fieldname != null);
+    Assert.assert(value != null);
+    
     Field field;
     try {
       field = clazz.getDeclaredField(PREFIX + fieldname);
     } catch (SecurityException e) {
-      throw new ConfigException("No access to field " + fieldname);
+      throw new ConfigException("No access to field " + fieldname + " in class " + clazz.getName());
     } catch (NoSuchFieldException e) {
-      throw new ConfigException("No such field " + fieldname);
+      throw new ConfigException("No such field " + fieldname + " in class " + clazz.getName());
     }
 
     apply(field, value);
@@ -151,6 +160,12 @@ public final class Configuration
     } else if (type.equals(Integer.TYPE) || type.equals(Integer.class)) {
       try {
 	value = Integer.decode(unparsed);
+      } catch (NumberFormatException e) {
+	throw new ConfigException("Unsupported int " + unparsed);
+      }
+    } else if (type.equals(Long.TYPE) || type.equals(Long.class)) {
+      try {
+	value = Long.decode(unparsed);
       } catch (NumberFormatException e) {
 	throw new ConfigException("Unsupported int " + unparsed);
       }
