@@ -1,5 +1,6 @@
          Finding Conditional Invariants using Splitting
          ============================================== 
+
 Conditional invariants are invariants which are true only part of the
 time.  For instance, for a function which computes the absolute value
 of a number, the postcondition is 
@@ -15,27 +16,44 @@ detection is then performed on the parts separately and any
 sub-invariants detected are reported.  A Splitter is a concrete
 instantiatiation of a predicate or splitting condition. Splitters
 operate at program points independently, and are created while Daikon
-is running. To use Splitting to detect conditional invariants, follow 
-the steps listed below:
+is running.
 
-================================
-1) Create the Splitter Info file
-================================
-Conditional invariants can be found by supplying a Splitter Info file
-as a commandline argument to daikon. This file contains information 
-about the splitting conditions which should be used create the splitters.
+To use splitting to detect conditional invariants, perform these three
+steps:
+
+1) Create the splitter info file, either automatically or by hand.
+ * Use the createspinfo.pl program to create a splitter info file from Java
+   source code; for instance,
+     createspinfo.pl Foo.java 
+   creates the splitter info file Foo.spinfo.
+   Then, optionally edit the splitter info file Foo.spinfo to enhance the
+   information that it contains.
+ * Alternately, create the splitter info file by hand; see the format below.
+
+2) Run Daikon as usual, with the .spinfo file as one of its arguments.  For
+example,
+  java daikon.Daikon -o Foo.inv Foo.dtrace Foo.decls Foo.spinfo
+
+The next section describes the splitter info file in more detail.
+
+======================
+The Splitter Info file
+======================
+
+A Splitter Info file contains information about the splitting conditions
+that should be used create contitional invariants.
 The splitter info file, with suffix .spinfo, can be written by hand or
-generated from the java source by the perl script createspinfo.pl
-(located in the scripts directory). The perl script extracts 
+generated from the Java source by the createspinfo.pl program
+(located in the scripts/ directory). The perl script extracts 
 conditional statements from the java source to create the .spinfo file.
 
-Usage: createspinfo.pl foo.java 
-Output: foo.spinfo
+Usage: createspinfo.pl Foo.java 
+Output: Foo.spinfo
 
-The .spinfo file is divided into sections. Each section has a line
-with information about the program point at which the splitting 
-condition occured in the java source, and a line specifying the splitting 
-condition(s) that should be associated with that program point.
+Each entry in the .spinfo file has a line naming the program point and a
+line specifying the splitting condition(s) associated with that program
+point.  Enties are separated by blank lines.  For example, a typical entry
+is
 
 PPT_NAME, <ppt name>
 CONDITIONS, cond1, cond2, cond3 ...
@@ -43,50 +61,58 @@ CONDITIONS, cond1, cond2, cond3 ...
 ===========
 REPLACEMENT
 ===========
-Suppose a splitting condition involves a call to another function
-which is not native to Java but has been implemented by a user, then
-daikon cannot use this splitting condition to perform splitting unless
-it knows what to do when it encounters this function call. There is an
-optional line at the TOP of the .spinfo file, which contains
-information about such user-implemented functions and the statement(s)
-that must be evaluated in their place. The format is as follows:
+
+Ordinarily, a splitting condition may not invoke user-defined methods,
+because when Daikon reads data trace files, it does not have access to the
+program source.  The .spinfo file can specify the bodies of methods,
+permitting those methods to be called in splitting conditions.  The format
+is as follows:
 
 REPLACE, function1, replacement1, function2, replacement2, ...
 
 where replacement1 and replacement2 contain a (usually simple)
 statement representing the bodies of function1 and function2
-respectively. Everytime daikon finds such a function call in a
+respectively. When Daikon finds such a function call in a
 splitting condition, it replaces the function call with its
-replacement. At the moment it does not work for functions which take
-arguments.
+replacement.
 
 ========================
 INDISCRIMINATE SPLITTING
 ========================
-There are two ways daikon tries to install splitters at program
-points.  In indiscriminate splitting, daikon tries to install all the
-splitters for the program at all the program points. In
-non-indiscriminate splitting, the splitters are installed only at the
-program points with which they are associated. Note that installation
-of a splitter at a program point fails if the program point does not
-have (in scope) all the variables that are used in the splitting
-condition. To use non-indiscriminate splitting, set the value of the
-variable 'allSplitters' to false in the file Global.java, located in
-the daikon directory.
+
+[[What does it mean to "install" a splitter?  Either define, or use other
+terminology that a reader (a Daikon user) may understand.]]  Daikon may
+install splitters at program points in one of two ways.  Indiscriminate
+splitting installs all the splitters for the program at each program
+point. Non-indiscriminate splitting installs splitters only at the program
+points with which they are associated.  Installation of a splitter at a
+program point fails [[What happens?  Does Daikon crash?  Should this
+concern users?]] if the program point does not have (in scope) all the
+variables that are used in the splitting condition. [[Give an example; this
+is too abstract.]]  To use non-indiscriminate splitting, set the value of
+the variable 'allSplitters' to false in the file java/daikon/Global.java.
 
 ========
 EXAMPLES
 ========
-For example, if the file 'foo.java' has a function 'bar' which tests
+
+[[It is good to have a section for examples, and this one is good, but it
+needs more detail. and less text.  In particular, give a complete Java
+class (it might only have three methods, bar, baz, and isEmpty, which you
+show below), and also give a complete .spinfo file for the class, not just
+certain extracts from it.  Seeing the full file will help readers better
+understand it.]]
+
+If the file 'Foo.java' has a function 'bar' which tests
 for the conditions "x > 0", "myarray.length == x", The splitter info
 file will have a section as follows for this program point:
 
-PPT_NAME, foo.bar
+PPT_NAME, Foo.bar
 CONDITIONS, x > 0, myarray.length == x
 
-As another example, if the function 'baz' in 'foo.java' tests for the
+As another example, if the function 'baz' in 'Foo.java' tests for the
 condition "isEmpty()" and the "isEmpty()" method has the body "return
-(myarray.length == 0)", then 'foo.spinfo' will have a replace section:
+(myarray.length == 0)", then 'Foo.spinfo' will have a replace section:
 
 REPLACE, isEmpty(), myarray.length == 0
 
@@ -94,10 +120,13 @@ Note that the script creates the .spinfo file using only the
 conditional statements and booleans explicitly stated in the program
 text as splitting conditions. If you want to split based on other
 conditions, you need to add them to the file before you run daikon.
+
 See the file QueueAr.spinfo in the scripts directory for another
 example.
+[[The scripts/ directory is the wrong place for such a file -- the scripts
+directory should only contain scripts (and their documentation).  Perhaps
+this should go in the examples directory.  Even better, though, would be to
+give a command that users can ruh to create and examine the file for
+themselves.  That would give them practice in running the tool.]]
 
-2)Running Daikon with the Splitter Info File
-============================================
-Run Daikon as usual, with the .spinfo file as one of its arguments.
-eg. java daikon.Daikon -o foo.inv 'foo.dtrace' 'foo.decls' 'foo.spinfo'
+
