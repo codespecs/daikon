@@ -1890,6 +1890,9 @@ public class PptTopLevel extends Ppt {
       }
       return;
     }
+    // This suppression test does not work, because even if :::EXIT exists,
+    // it doesn't yet have any implication invariants, and we won't know
+    // about those until we process it in this loop.
     // Do not print if this is :::EXIT22 and :::EXIT exists
     if (Daikon.esc_output
         && ppt_name.isExitPoint()
@@ -1900,10 +1903,10 @@ public class PptTopLevel extends Ppt {
       // This could happen if :::EXIT1 was executed but :::EXIT2 never was.
       if (exit != null) {
         if (!((exit.views.size() == 0) && (exit.implication_view.invs.size() == 0))) {
-          // System.out.println("Suppressing " + name + " in favor of " + exitname);
+          System.out.println("Suppressing " + name + " in favor of " + exitname);
           return;
         }
-        // System.out.println("Not suppressing " + name + " in favor of " + exitname + ": " + " exit has " + exit.views.size() + " views and " + exit.implication_view.invs.size() + " implied invs");
+        // System.out.println("Not suppressing " + name + " in favor of " + exitname + ": " + " exit has " + exit.views.size() + " views and " + views_cond.size() + " conditional views and " + exit.implication_view.invs.size() + " implication invs" + " for a total of " + exit.invariants_vector().size() + " invariants");
       } else {
         // System.out.println("Didn't find unified " + exitname + " for " + name + ", so doing output for " + name);
       }
