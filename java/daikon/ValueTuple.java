@@ -65,7 +65,7 @@ public final class ValueTuple implements Cloneable {
 
   // implementation for unpacked representation
 
-  int getModified(VarInfo vi) { return vi.getModified(this); }
+  public int getModified(VarInfo vi) { return vi.getModified(this); }
   boolean isUnmodified(VarInfo vi) { return vi.isUnmodified(this); }
   boolean isModified(VarInfo vi) { return vi.isModified(this); }
   boolean isMissingNonsensical(VarInfo vi) { return vi.isMissingNonsensical(this); }
