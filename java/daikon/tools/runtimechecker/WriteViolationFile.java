@@ -45,7 +45,7 @@ class WriteViolationFile {
     }
     int mods = main_method.getModifiers();
     if (! Modifier.isPublic(mods)) {
-      throw new Error("maIn method is not public in class " + class_name);
+      throw new Error("main method is not public in class " + class_name);
     }
     if (! Modifier.isStatic(mods)) {
       throw new Error("main method is not static in class " + class_name);
@@ -78,9 +78,17 @@ class WriteViolationFile {
       // written to disk.
       try {
         BufferedWriter writer = new BufferedWriter(new FileWriter("violations.txt"));
-        for (Violation v : vios) {
-          writer.write(v.toStringWithMethod());
-          writer.newLine();
+        writer.write("Number of times an invariant was evaluated: "
+                     + Long.toString(Runtime.numEvaluations)
+                     + daikon.Global.lineSep
+                     + "Violations: ");
+        if (vios.size() == 0) {
+          writer.write("none." + daikon.Global.lineSep);
+        } else{
+          for (Violation v : vios) {
+            writer.write(v.toStringWithMethod());
+            writer.newLine();
+          }
         }
         writer.close();
       } catch (IOException e) {

@@ -29,7 +29,7 @@ import daikon.tools.jtb.*;
  */
 public class InstrumentVisitor extends DepthFirstVisitor {
 
-    // If true, instrumented will make all fields of the class
+    // If true, the instrumenter will make all fields of the class
     // visible. The reason for doing this is so that invariants over
     // potentially inaccessible object fields can be evaluated.
     public static boolean makeAllFieldsPublic = false;
@@ -80,6 +80,10 @@ public class InstrumentVisitor extends DepthFirstVisitor {
      * declaration public.
      */
     public void visit(FieldDeclaration fd) {
+
+        // Fix any line/col inconsistencies first
+        fd.accept(new TreeFormatter());
+
         super.visit(fd);
         /**
          * Grammar production for ClassOrInterfaceBodyDeclaration:
@@ -133,6 +137,10 @@ public class InstrumentVisitor extends DepthFirstVisitor {
      * Add code that initializes the properties array.
      */
     public void visit(ClassOrInterfaceBody clazz) {
+
+        // Fix any line/col inconsistencies first
+        clazz.accept(new TreeFormatter());
+
         super.visit(clazz);
 
         // add method to check object and class invariants.
@@ -163,6 +171,10 @@ public class InstrumentVisitor extends DepthFirstVisitor {
      * on exit.
      */
     public void visit(ConstructorDeclaration ctor) {
+
+        // Fix any line/col inconsistencies first
+        ctor.accept(new TreeFormatter());
+
         super.visit(ctor);
 
         // Find declared throwables.
@@ -228,6 +240,10 @@ public class InstrumentVisitor extends DepthFirstVisitor {
      *
      */
     public void visit(MethodDeclaration method) {
+
+        // Fix any line/col inconsistencies first
+        method.accept(new TreeFormatter());
+
         super.visit(method);
 
         method.accept(new TreeFormatter());
@@ -390,6 +406,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             }
 
             code.append("try {" + daikon.Global.lineSep + "");
+            code.append("daikon.tools.runtimechecker.Runtime.numEvaluations++;");
             code.append("if (!(" + daikon.Global.lineSep + "");
             code.append(javarep);
             code.append(")) {");

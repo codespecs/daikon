@@ -17,6 +17,10 @@ public class Runtime {
 
     private static List<Violation> violations = new ArrayList<Violation>();
 
+    // The number of times that an invariant was checked (whether the
+    // check succeeded or failed).
+    public static long numEvaluations = 0;
+
     /**
      * Returns the list of violations.
      */
