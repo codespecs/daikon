@@ -879,38 +879,4 @@ public abstract class PptSlice
     return this.getClass().getName() + ": " + parent.ppt_name + " " + sb + " samples: " + num_samples();
   }
 
-  /**
-   * Class used to store invariants in a MAP where their equality depends on
-   * the invariant representing the same invariant (ie, their class is the same)
-   * and the same internal state (when multiple invariants with the same class
-   * are possible)
-   *
-   * Note that this is based on the Invariant type (ie, class) and the
-   * internal state and not on what ppt the invariant is in or what variables
-   * it is over.  Thus, invariants from different ppts are the same if
-   * they represent the same type of invariant.
-   */
-  public static class InvMatch {
-
-    public Invariant inv;
-
-    public InvMatch (Invariant inv) {
-      this.inv = inv;
-    }
-
-    public boolean equals (Object obj) {
-      if (!(obj instanceof InvMatch))
-        return (false);
-
-      InvMatch ic = (InvMatch) obj;
-      if (ic.inv.getClass() ==  inv.getClass())
-        return (inv.mergeFormulasOk() || inv.isSameFormula (ic.inv));
-      else
-        return (false);
-    }
-
-    public int hashCode() {
-      return (inv.getClass().hashCode());
-    }
-  }
 }
