@@ -119,4 +119,11 @@ public class Fmt {
     return;
   }
 
+  static public void pf (String format, Object arg1, Object arg2,
+                           Object arg3, Object arg4, Object arg5,
+                           Object arg6) {
+    pf (format, new Object[] {arg1, arg2, arg3, arg4, arg5, arg6});
+    return;
+  }
+
 }
