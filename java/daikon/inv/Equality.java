@@ -444,7 +444,7 @@ public final class Equality
         ((StringComparison) invEquals).core.can_be_eq = true;
       } else if ((rep == ProglangType.INT_ARRAY)) {
         invEquals = SeqComparison.instantiate (newSlice, true);
-        ((SeqComparison) invEquals).can_be_eq = true;
+        if (invEquals != null) ((SeqComparison) invEquals).can_be_eq = true;
         debugPostProcess.fine ("  seqEqual");
       } else if ((rep == ProglangType.STRING_ARRAY)) {
         // JHP commented out to see what diffs are coming from here (5/3/3)
