@@ -250,6 +250,20 @@ public final class Intern {
   public static Iterator stringArrays() { return internedStringArrays.keySet().iterator(); }
   public static Iterator objectArrays() { return internedObjectArrays.keySet().iterator(); }
 
+  // Interns a String.
+  // Delegates to the builtin String.intern() method.  Provided for
+  // completeness, so we can intern() any type used in OneOf.java.jpp.
+  public static String intern(String a) {
+    return a.intern();
+  }
+
+  // Interns a String.
+  // A no-op.  Provided for completeness, so we can intern() any type
+  // used in OneOf.java.jpp.
+  public static long intern(long l) {
+    return l;
+  }
+
   /**
    * Intern (canonicalize) an Integer.
    * Returns a canonical representation for the Integer.
