@@ -3,12 +3,12 @@ package B::DeparseDaikon;
 use B::Deparse;
 
 use B qw(main_root main_start main_cv SVf_POK CVf_METHOD CVf_LOCKED
-         CVf_LVALUE class);
+         CVf_LVALUE OPpCONST_ARYBASE class);
 
 use Daikon::PerlType qw(parse_type unparse_type type_lub
-                        unparse_to_code);
+                        unparse_to_code read_types_into);
 
-#use Carp 'croak', 'cluck', 'carp', 'confess';
+use Carp 'croak', 'cluck', 'carp', 'confess';
 
 @ISA = ("B::Deparse");
 
@@ -31,43 +31,11 @@ my $dv_name = '@Daikon_variables';
 my %types;
 
 # Read a .types file from the given filename, and incorporate that
-# information into %types for use in annotating. The types file might
-# have multiple entries for a given <program point, variable> pair
-# (for instance, it might be the result of appending the types for
-# several runs), which we just lub together. We also union together
-# the types from the _s and _l (scalar and list context) versions of a
-# program point, and the different exit points of a single subroutine.
+# information into %types for use in annotating.
 sub read_types {
     my($fname) = @_;
     open(TYPES, "<$fname") or die "Can't open $fname: $!";
-    my $l;
-    while ($l = <TYPES>) {
-        my($ppt, $var, $type) = split(' ', $l);
-        my $parsed = parse_type($type);
-        if (exists $types{$ppt}{$var}) {
-            my $t = $types{$ppt}{$var};
-            $t = type_lub($t, $parsed);
-            $types{$ppt}{$var} = $t;
-        } else {
-            $types{$ppt}{$var} = $parsed;
-        }
-        my $union_ppt = $ppt;
-        $union_ppt =~ s/_[sl]\(\)/()/;
-        if (not exists $types{$union_ppt}{$var}) {
-            $types{$union_ppt}{$var} = 'undef';
-        }
-        $types{$union_ppt}{$var} = type_lub($types{$union_ppt}{$var},
-                                            $types{$ppt}{$var});
-        if ($ppt =~ /:::EXIT/) {
-            my $exit_union_ppt = $ppt;
-            $exit_union_ppt =~ s/:::EXIT(\d+)/:::EXIT/;
-            if (not exists $types{$exit_union_ppt}{$var}) {
-                $types{$exit_union_ppt}{$var} = 'undef';
-            }
-            $types{$exit_union_ppt}{$var} =
-                type_lub($types{$exit_union_ppt}{$var}, $types{$ppt}{$var});
-        }
-    }
+    read_types_into(\*TYPES, \%types); # in Daikon::PerlType
     close TYPES;
 }
 
@@ -100,6 +68,7 @@ sub compile {
     my @output_style = ();
     my @accessors = ();
     my @depths = ();
+    my $saw_types = 0;
     return sub {
         # Parse and remove any Daikon-specific args from @args
         for my $i (0 .. $#args) {
@@ -114,6 +83,7 @@ sub compile {
                 my $fname = $args[$i+1];
                 read_types($fname);
                 $args[$i] = $args[$i+1] = undef;
+                $saw_types = 1;
             } elsif ($args[$i] eq "-o") {
                 # -o: write output to a given file, rather than STDOUT
                 my $fname = $args[$i+1];
@@ -121,8 +91,8 @@ sub compile {
                 $args[$i] = $args[$i+1] = undef;
             } elsif ($args[$i] eq "-O") {
                 # -O: control how generated code outputs results
-                @output_style = @args[$i + 1 .. $i + 9];
-                @args[$i .. $i + 9] = (undef) x (1 + 9);
+                @output_style = @args[$i + 1 .. $i + 6];
+                @args[$i .. $i + 6] = (undef) x (1 + 6);
             } elsif ($args[$i] eq "-D") {
                 # -D: set data structure tracing depths
                 @depths = @args[$i + 1 .. $i + 3];
@@ -144,6 +114,8 @@ sub compile {
             print join(", ", @depths);
             print "); }\n";
         }
+        print "BEGIN { daikon_runtime::set_tracing(",
+          ($saw_types ? 1 : 0), "); }\n";
         $self->deparse_program();
         if (@accessors) {
             print "sub DAIKON_ACCESSORS { (";
@@ -199,6 +171,28 @@ sub deparse_program {
     if (defined *{$laststash."::DATA"}{IO}) {
         print "__DATA__\n";
         print readline(*{$laststash."::DATA"});
+    }
+}
+
+# Mainly unchanged
+sub todo {
+    my $self = shift;
+    my($cv, $is_form) = @_;
+    ###
+    # Throw out subs from other files, but (changed from 5.8 version)
+    # keep constant subs that show up as being from "op.c"
+    return unless ($cv->FILE eq $0 || exists $self->{files}{$cv->FILE}
+		  || $cv->FILE eq "op.c");
+    ###
+    my $seq;
+    if (!null($cv->START) and B::Deparse::is_state($cv->START)) {
+        $seq = $cv->START->cop_seq;
+    } else {
+        $seq = 0;
+    }
+    push @{$self->{'subs_todo'}}, [$seq, $cv, $is_form];
+    unless ($is_form || class($cv->STASH) eq 'SPECIAL') {
+        $self->{'subs_deparsed'}{$cv->STASH->NAME."::".$cv->GV->NAME} = 1;
     }
 }
 
@@ -307,6 +301,8 @@ sub next_todo {
     ####
     # save the name of the subroutine for later use
     local($self->{'sub_name'}) = $name;
+    # But throw out our own subs (like our constants)
+    return "" if $name =~ /^(B|Daikon)::/;
     ####
     if ($ent->[2]) {
         return "format $name =\n"
@@ -425,7 +421,13 @@ sub is_args {
         # Subroutine call, check args recursively
         my $k = $op->first->sibling->first;
         return 0 unless $$k;
-        for ($k = $k->first; $$k; $k = $k->sibling) {
+	if ($k->can("first")) {
+	    # Usual subroutine case
+	    $k = $k->first;
+	} else {
+	    # Can happen with methods; we're already at the right level
+	}
+        for (; $$k; $k = $k->sibling) {
             # If any of the args is @_, that counts.
             return 1 if $self->is_args($k);
         }
@@ -551,7 +553,7 @@ sub lineseq {
                 # array and call trace_enter().
                 $expr .= "my $dv_name = (";
                 for my $arg (@args) {
-                    my $type = $types{$self->{'ppt_base'}.":::ENTER"}{$arg}
+                    my $type = $types{$self->{'ppt_base'}.":::UNION"}{$arg}
                         || "unknown";
                     $type = unparse_type($type);
                     # Escape all the backslashes used for reference
@@ -658,5 +660,90 @@ sub pp_cond_expr {
     }
     return $head . join($cuddle, "", @elsifs) . $false; 
 }
+
+# Mostly unchanged
+sub dq {
+    my $self = shift;
+    my $op = shift;
+    my $type = $op->name;
+    if ($type eq "const") {
+        return '$[' if $op->private & OPpCONST_ARYBASE;
+        return B::Deparse::uninterp(B::Deparse::escape_str(B::Deparse::unback($self->const_sv($op)->as_string)));
+    } elsif ($type eq "concat") {
+        my $first = $self->dq($op->first);
+        my $last  = $self->dq($op->last);
+
+	####
+	# Fix in the next statement: handle "$a\::foo" correctly
+        # This was also fixed (independently) in bleadperl #19127
+
+        # Disambiguate "${foo}bar", "${foo}{bar}", "${foo}[1]"
+        ($last =~ /^[A-Z\\\^\[\]_?]/ &&
+            $first =~ s/([\$@])\^$/${1}{^}/)  # "${^}W" etc
+            || ($last =~ /^([{\[\w_]|::)/ &&
+                $first =~ s/([\$@])([A-Za-z_]\w*)$/${1}{$2}/);
+	###
+
+        return $first . $last;
+    } elsif ($type eq "uc") {
+        return '\U' . $self->dq($op->first->sibling) . '\E';
+    } elsif ($type eq "lc") {
+        return '\L' . $self->dq($op->first->sibling) . '\E';
+    } elsif ($type eq "ucfirst") {
+        return '\u' . $self->dq($op->first->sibling);
+    } elsif ($type eq "lcfirst") {
+        return '\l' . $self->dq($op->first->sibling);
+    } elsif ($type eq "quotemeta") {
+        return '\Q' . $self->dq($op->first->sibling) . '\E';
+    } elsif ($type eq "join") {
+        return $self->deparse($op->last, 26); # was join($", @ary)
+    } else {
+        return $self->deparse($op, 26);
+    }
+}
+
+# This isn't a method, so we have to replace all the methods that call
+# it.
+sub const {
+    my $sv = shift;
+    if (class($sv) eq "SPECIAL") {
+        # In the 5.8.0 version of Deparse, the string for sv_no was
+        # '0', rather than '""'. 
+        return ('undef', '1', '""')[$$sv-1]; # sv_undef, sv_yes, sv_no
+    } else {
+        return B::Deparse::const($sv);
+    }
+}
+
+# Unchanged, except for the call to "const"
+sub pp_const {
+    my $self = shift;
+    my($op, $cx) = @_;
+    if ($op->private & OPpCONST_ARYBASE) {
+        return '$[';
+    }
+#    if ($op->private & OPpCONST_BARE) { # trouble with `=>' autoquoting 
+#       return $self->const_sv($op)->PV;
+#    }
+    my $sv = $self->const_sv($op);
+#    return const($sv);
+    my $c = const $sv; 
+    return $c =~ /^-\d/ ? $self->maybe_parens($c, $cx, 21) : $c;
+}
+
+# Unchanged, except for the call to "const"
+sub pp_rv2av {
+    my $self = shift;
+    my($op, $cx) = @_;
+    my $kid = $op->first;
+    if ($kid->name eq "const") { # constant list
+        my $av = $self->const_sv($kid);
+        return "(" . join(", ", map(const($_), $av->ARRAY)) . ")";
+    } else {
+        return $self->maybe_local($op, $cx, $self->rv2x($op, $cx, "\@"));
+    }
+ }
+
+
 
 1;
