@@ -92,6 +92,12 @@ public class QueueArTester
     enqueue(new StringBuffer("Hello again"));
     enqueue(new ArrayList());
     enqueue(new LinkedList());
+    dequeue();
+    dequeue();
+    dequeue();
+    dequeue();
+    dequeue();
+    dequeue();
   }
 
   public void run()
