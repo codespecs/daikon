@@ -436,9 +436,10 @@ public final class Equality
         debugPostProcess.debug ("  intEqual");
       } else if ((rep == ProglangType.STRING)) {
         invEquals = StringComparison.instantiate (newSlice, true);
-        debugPostProcess.debug ("  seqEqual");
+        debugPostProcess.debug ("  stringEqual");
       } else if ((rep == ProglangType.INT_ARRAY)) {
-        invEquals = SeqComparison.instantiate (newSlice, true, true);
+        invEquals = SeqComparison.instantiate (newSlice, true);
+        ((SeqComparison) invEquals).can_be_eq = true;
         debugPostProcess.debug ("  seqEqual");
       } else if ((rep == ProglangType.STRING_ARRAY)) {
         //           invEquals = StringComparison.instantiate (newSlice, true);
@@ -452,7 +453,8 @@ public final class Equality
           debugPostProcess.debug ("  floatEqual");
         } else if (rep == ProglangType.DOUBLE_ARRAY) {
           debugPostProcess.debug ("  seqFloatEqual");
-          invEquals = SeqComparisonFloat.instantiate (newSlice, true, true);
+          invEquals = SeqComparisonFloat.instantiate (newSlice, true);
+          ((SeqComparisonFloat) invEquals).can_be_eq = true;
         }
       } else {
         throw new Error ("No known Comparison invariant to convert equality into");

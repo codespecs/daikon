@@ -83,9 +83,8 @@ public class PptSliceEquality
 
   /**
    * Actually instantiate the equality sets.
-   * @param excludeEquality Not used here.
    **/
-  void instantiate_invariants(boolean excludeEquality) {
+  void instantiate_invariants() {
     // Start with everything comparable being equal.
     if (debug.isDebugEnabled()) {
       debug.debug ("InstantiateInvariants: " + parent.ppt_name + " vars:") ;
@@ -273,8 +272,10 @@ public class PptSliceEquality
    * @param newVis a List of new VarInfos that used to be equal to
    * leader.  Actually, it's the list of canonical that were equal to
    * leader, representing their own newly-created equality sets.
+   * @post Adds the newly instantiated invariants and slices to
+   * this.parent.
    **/
-  public void copyInvsFromLeader (VarInfo leader, List newVis, int count) {
+  private void copyInvsFromLeader (VarInfo leader, List newVis, int count) {
     List newSlices = new LinkedList();
     if (debug.isDebugEnabled()) {
       debug.debug ("copyInvsFromLeader  leader:" + leader.name.name());
@@ -282,136 +283,21 @@ public class PptSliceEquality
     }
     int newSamples = leader.equalitySet.numSamples() - count;
 
-    // Three phases: all variables used are *leaders* of their own
-    // groups. Phase (a) copies existing slices from old
-    // leader. Phases (b) and (c) create new slices such that they
-    // contain at least two variables from the set {leader + newVis}.
-
-    // a) Slices from substituting the leader with each of the new
-    // variables: f(leader, x) => f(new, x)
-    // This handles all unary invariants and some of the bi/ternary
-    // invariants we want to copy.  The copied slices are of any
-    // arity, but contain exactly one varInfo that is a new leader and
-    // no varInfo that's the old leader.
-
+    // Copy all possible combinations (with repetition) of replacing
+    // leader with different members of newVis.
     for (Iterator i = parent.views_iterator(); i.hasNext(); ) {
       PptSlice slice = (PptSlice) i.next();
       // For each slice that contains leader
+      if (debug.isDebugEnabled()) {
+        debug.debug ("  Slice is: " + slice.toString());
+        debug.debug ("  With invs: " + slice.invs);
+      }
+
       if (slice.containsVar(leader)) {
-        // For each new leader group, clone over the slice
-        for (Iterator iNewVis = newVis.iterator(); iNewVis.hasNext(); ) {
-          VarInfo newLeader = (VarInfo) iNewVis.next();
-          Assert.assertTrue (newLeader.comparableNWay(leader));
-          PptSlice newSlice = slice.cloneOnePivot(leader, newLeader);
-          if (debug.isDebugEnabled()) {
-            debug.debug ("  result of cloneAndInvs: orig:" + slice);
-            debug.debug ("                          new :" + newSlice);
-            for (Iterator iDebug = newSlice.invs.iterator();
-                 iDebug.hasNext(); ) {
-              Invariant inv = (Invariant) iDebug.next();
-              debug.debug ("  " + inv.repr());
-            }
-          }
-          newSlice.repCheck();
-          newSlices.add (newSlice);
-        }
-      }
-    }
-
-
-    // b) Do binary slices to produce the cartesian product of
-    // {newVis + leader}.  E.g. f(new1, new2), f(new1, leader)
-    if (debug.isDebugEnabled()) {
-      debug.debug ("Doing binary views");
-    }
-    for (int i1=-1; i1 < newVis.size(); i1++) {
-      VarInfo var1 = (i1 == -1) ?
-        leader : (VarInfo) newVis.get(i1);
-      for (int i2= i1 + 1; i2 < newVis.size(); i2++) {
-        VarInfo var2 = (VarInfo) newVis.get(i2);
-
-        // Why sort?  Because the order of the new invariants don't
-        // have to be ordered by index, while slices have to be.
-        PptSlice2 slice2 =
-          (var1.varinfo_index < var2.varinfo_index) ?
-          new PptSlice2(this.parent, var1, var2) :
-          new PptSlice2(this.parent, var2, var1);
-        Assert.assertTrue (parent.findSlice_unordered (var1, var2) == null);
-        slice2.instantiate_invariants(newSamples > 0);
-        slice2.repCheck();
-        slice2.set_samples(newSamples);
-        newSlices.add(slice2);
-        if (debug.isDebugEnabled()) {
-          debug.debug ("  adding new Slice2: " + slice2);
-        }
-
-      }
-    }
-
-    Set newVisSet = new HashSet (newVis); // This is for fast lookup later
-    newVisSet.add (leader);
-    // c) Create ternary slices of at least 2 variables that are in
-    // the set {leader + newVis}.  Implementation: the first two
-    // loops iterate over the {old + new leader} set to generate (b).
-    // The third loop iterates over all the canonical variables,
-    // including the old leader, the new leaders and other leaders
-    // that were not in the original equality set.  That includes:
-    // f(new1, new2, new3) and f(leader, new1, new2) f(new1, new2,
-    // other1), f(leader, new1, other2).  The loops are structured to
-    // prevent duplication of the same slice, so the inner two loops,
-    // for example, do not contain the old leader.  Why do we include
-    // old variables in the 3rd slot?  Because this achieves the right
-    // cover of the varInfos so we don't miss any ternary slices.
-    if (debug.isDebugEnabled()) {
-      debug.debug ("Doing ternary views");
-    }
-    for (int i1=-1; i1 < newVis.size(); i1++) {
-      VarInfo var1 = (i1 == -1) ?
-        leader : (VarInfo) newVis.get(i1);
-      for (int i2= i1 + 1; i2 < newVis.size(); i2++) {
-        VarInfo var2 = (VarInfo) newVis.get(i2);
-        // The third loop is split into two for performance.  The
-        // first is for the vis in newVis.  The second is for the
-        // other variables.  This ensures cover and prevents
-        // duplication.
-
-        for (int i3= i2 + 1; i3 < newVis.size(); i3++) {
-          VarInfo var3 = (VarInfo) newVis.get(i3);
-          VarInfo[] vars = new VarInfo[] {var1, var2, var3};
-          Arrays.sort (vars, VarInfo.IndexComparator.theInstance);
-          PptSlice3 slice3 = new PptSlice3(this.parent, vars);
-          slice3.instantiate_invariants(newSamples > 0);
-          slice3.repCheck();
-          slice3.set_samples(newSamples);
-          newSlices.add(slice3);
-          if (debug.isDebugEnabled()) {
-            debug.debug ("  adding new Slice3: " + slice3 + "from: ");
-            debug.debug (var1.name.name() + ", " +
-                         var2.name.name() + ", " +
-                         var3.name.name());
-          }
-        }
-
-        for (int i3 = 0; i3 < parent.var_infos.length; i3++) {
-          VarInfo var3 = parent.var_infos[i3];
-          if (var3 == var2 || var3 == var1) continue;
-          if (!var3.isCanonical()) continue;
-          // Only var infos who are not the old leader or new leader
-          if (newVisSet.contains(var3)) continue;
-          VarInfo[] vars = new VarInfo[] {var1, var2, var3};
-          Arrays.sort (vars, VarInfo.IndexComparator.theInstance);
-          PptSlice3 slice3 = new PptSlice3(this.parent, vars);
-          slice3.instantiate_invariants(newSamples > 0);
-          slice3.repCheck();
-          slice3.set_samples(newSamples);
-          newSlices.add(slice3);
-          if (debug.isDebugEnabled()) {
-            debug.debug ("  adding new Slice3: " + slice3 + " from: ");
-            debug.debug (var1.name.name() + ", " +
-                         var2.name.name() + ", " +
-                         var3.name.name());
-          }
-        }
+        VarInfo[] toFill = new VarInfo[slice.var_infos.length];
+        copyInvsFromLeaderHelper (leader, newVis, slice, newSlices,
+                                  0, -1, toFill);
+        
       }
     }
 
@@ -420,13 +306,6 @@ public class PptSliceEquality
       if (slice.invs.size() == 0) {
         continue;
       }
-      // Make sure these slices were never previously instantiated.
-      // Instantiation can only occur in two other ways: 1. on
-      // canonical variables and 2. through flow.  It can't happen via
-      // (1) because this is the first time newVis are canonical.
-      // For (2) flow only instantiates slices if they were not part
-      // of the same equality set.  Previously, newVis and leader
-      // were in the same equality set.
       Assert.assertTrue (parent.findSlice (slice.var_infos) == null);
       slice.repCheck();
       parent.addSlice (slice);
@@ -438,13 +317,72 @@ public class PptSliceEquality
     }
   }
 
-  PptSlice cloneOnePivot(VarInfo leader, VarInfo newLeader) {
-    throw new Error("Shouldn't get called");
+  /**
+   * Clones slice (zero or more times) such that instances of leader
+   * are replaced by members of newVis; places new slices in
+   * newSlices.  The replacement is such that we get all combinations,
+   * with repetition of newVis and leader in every slot in slice where
+   * there used to be leader.  For example, if slice contained (A1,
+   * A1, B) and A1 is leader and newVis contains A2 and A3, then the
+   * slices we produce would be: (A1, A2, B), (A1, A3, B), (A2, A2, B)
+   * (A2, A3, B), (A3, A3, B).  We do not produce (A1, A1, B) because
+   * it is already there.  We do not produce (A2, A1, B) because it is
+   * the same as (A1, A2, B) wrt combinations.  This method does the
+   * main work of copyInvsFromLeader so that each new equality set
+   * that spawned off leader has the correct slices.  It works as a
+   * nested series of for loops, whose depth is equal to the length of
+   * slice.var_infos.  The position and loop arguments along with the
+   * call stack keep track of the loop nesting.  When position reaches
+   * the end of slice.var_infos, this method attempts to instantiate
+   * the slice that has been produced.  The standard start for
+   * position is 0, and for loop is -1.
+   * @param leader The variable to replace in slice
+   * @param newVis of VarInfos that will replace leader in combination in slice
+   * @param slice The slice to clone
+   * @param newSlices Where to put the cloned slices
+   * @param position The position currently being replaced in source.  Starts at 0.
+   * @param loop The iteration of the loop for this position.  If -1,
+   * means the previous replacement is leader.
+   * @param soFar Buffer to which assignments temporarily go before
+   * becoming instantiated.  Has to equal slice.var_infos in length.
+   **/
+  private void copyInvsFromLeaderHelper (VarInfo leader, List newVis,
+                                         PptSlice slice, List newSlices,
+                                         int position, int loop,
+                                         VarInfo[] soFar) {
+    if (position >= slice.var_infos.length) {
+      // Done with assigning positions and recursion
+      if (parent.findSlice_unordered (soFar) == null) {
+        // If slice is already there, no need to clone.
+        PptSlice newSlice = slice.cloneAndPivot(soFar);
+        if (debug.isDebugEnabled()) {
+          debug.debug ("  created new slice: " + newSlice.toString());
+        }
+        newSlices.add (newSlice);
+      }
+      return;
+    } else {
+      // Not yet done with recursion, keep assigning to soFar
+      if (slice.var_infos[position] == leader) {
+        // If leader does need replacing
+        // newLoop starts at loop so that we don't have repeats
+        for (int newLoop = loop; newLoop < newVis.size(); newLoop++) {
+          VarInfo vi = newLoop == -1 ? leader : (VarInfo) newVis.get(newLoop);
+          soFar[position] = vi;
+          // Advance position to next step, let next loop variable be
+          // this loop's counter.
+          copyInvsFromLeaderHelper (leader, newVis, slice, newSlices,
+                                    position + 1, newLoop, soFar);
+        }
+      } else {
+        // Non leader position, just keep going after assigning soFar
+        soFar[position] = slice.var_infos[position];
+          copyInvsFromLeaderHelper (leader, newVis, slice, newSlices,
+                                    position + 1, loop, soFar);
+      }
+    }
   }
 
-  PptSlice cloneAllPivots () {
-    throw new Error("Shouldn't get called");
-  }
 
   public void repCheck() {
     for (Iterator i = invs.iterator(); i.hasNext(); ) {

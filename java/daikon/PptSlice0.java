@@ -103,7 +103,7 @@ public class PptSlice0
   public int num_values() { return 2222; }
   public String tuplemod_samples_summary() { return "tuplemod_samples_summary for PptSlice0 " + name; }
 
-  void instantiate_invariants(boolean excludeEquality) {
+  void instantiate_invariants() {
     throw new Error("Shouldn't get called");
   }
 
@@ -111,11 +111,4 @@ public class PptSlice0
     throw new Error("Shouldn't get called");
   }
 
-  PptSlice cloneOnePivot(VarInfo leader, VarInfo newLeader) {
-    throw new Error("Shouldn't get called");
-  }
-
-  PptSlice cloneAllPivots() {
-    throw new Error("Shouldn't get called");
-  }
 }

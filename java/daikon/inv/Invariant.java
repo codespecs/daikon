@@ -1141,6 +1141,11 @@ public abstract class Invariant
    **/
   public boolean isObviousDynamically(VarInfo[] vis) {
     Assert.assertTrue (!Daikon.isInferencing);
+    for (int i = 1; i < vis.length; i++) {
+      if (vis[i] == vis[i - 1]) {
+        return true;
+      }
+    }
     return false;
   }
 

@@ -135,7 +135,7 @@ public abstract class PptSlice
     this.var_infos = var_infos;
     // Ensure that the VarInfo objects are in order (and not duplicated).
     for (int i=0; i<var_infos.length-1; i++) {
-      Assert.assertTrue(var_infos[i].varinfo_index < var_infos[i+1].varinfo_index);
+      Assert.assertTrue(var_infos[i].varinfo_index <= var_infos[i+1].varinfo_index);
     }
     arity = var_infos.length;
     value_indices = new int[arity];
@@ -644,16 +644,8 @@ public abstract class PptSlice
 
   /**
    * Instantiate invariants on the VarInfos this slice contains.
-   * @param excludeEquality This actually means "if true, avoid
-   * instantiating invariants that are implied false because the
-   * VarInfos on them were equal".  An example of this is IntLessThan.
-   * If two VarInfos were previous equal and had non missing samples
-   * for their slice, it would be unsound to instantiate IntLessThan
-   * later.  excludeEquality is set to true when calling slices to
-   * instantiate from PptSliceEquality, but false at PptTopLevel's
-   * call.
    **/
-  abstract void instantiate_invariants(boolean excludeEquality);
+  abstract void instantiate_invariants();
 
   /**
    * This class is used for comparing PptSlice objects.
@@ -812,7 +804,7 @@ public abstract class PptSlice
 
     for (int i = 0; i < var_infos.length; i++) {
       for (int j = i+1; j < var_infos.length; j++) {
-        Assert.assertTrue (var_infos[i] != var_infos[j]);
+        // Assert.assertTrue (var_infos[i] != var_infos[j]);
       }
     }
     for (Iterator i = invs.iterator(); i.hasNext(); ) {
@@ -822,40 +814,19 @@ public abstract class PptSlice
     }
   }
 
-  // This method is used *during* inferencing to create invariants
-  // that are checked.
   /**
-   * Clone self and replace leader with newLeader.  Do the same in all
-   * invariants that this holds.  Return a new PptSlice that's like
-   * this except with the above replacement, along with correct flow
-   * pointers for varInfos.  In this method, unlike cloneAllPivots,
-   * this.var_infos are their leaders -- we are creating new
-   * PptSlices for duplication during inferencing.
-   * @pre leader is part of this.var_infos
-   * @param leader The var to replace
-   * @param newLeader The varInfos to replace (in order) each
-   * occurance of leader.
+   * Clone self and replace this.var_infos with newVis.  Do the same
+   * in all invariants that this holds.  Return a new PptSlice that's
+   * like this except with the above replacement, along with correct
+   * flow pointers for varInfos.  Invariants are also pivoted so that
+   * any VarInfo index order swapping is handled correctly.
+   *
+   * @param newVis to replace this.var_infos.
    * @return a new PptSlice that satisfies the characteristics above.
    **/
-  abstract PptSlice cloneOnePivot(VarInfo leader, VarInfo newLeader);
-
-  // This method is used after inferencing, during postProcessing, to
-  // pivot PptSlices to hold leaders only, after Equality sets have
-  // themselves pivoted.
-  /**
-   * Clone self and replace non leader varInfos with leaders.  Do the
-   * same in all invariants that this holds.  Return a new PptSlice
-   * that's like this except with the above replacement, along with
-   * correct flow pointers for varInfos.  In this method, unlike
-   * cloneOnePivot, this.var_infos may not be their leaders.  We are
-   * pivoting to restore this condition.
-   * @pre this.var_infos members may not be their leaders
-   * @return a new PptSlice that satisfies the characteristics above,
-   * unless there is no need for pivoting, in which case we return
-   * this.
-   **/
-  abstract PptSlice cloneAllPivots ();
-
+  PptSlice cloneAndPivot(VarInfo[] newVis) {
+    throw new Error("Shouldn't get called");
+  }
 
   /**
    * For debugging only.

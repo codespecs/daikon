@@ -68,7 +68,7 @@ public final class PptSlice1
     this(parent, new VarInfo[] { var_info });
   }
 
-  void instantiate_invariants(boolean excludeEquality) {
+  void instantiate_invariants() {
     Assert.assertTrue(!no_invariants);
 
     // This test should be done by caller (PptTopLevel):
@@ -83,19 +83,19 @@ public final class PptSlice1
     ProglangType rep_type = var_info.rep_type;
     boolean is_scalar = rep_type.isScalar();
     if (is_scalar) {
-      new_invs = SingleScalarFactory.instantiate(this, excludeEquality);
+      new_invs = SingleScalarFactory.instantiate(this);
     } else if (rep_type == ProglangType.INT_ARRAY) {
-      new_invs = SingleScalarSequenceFactory.instantiate(this, excludeEquality);
+      new_invs = SingleScalarSequenceFactory.instantiate(this);
     } else if (Daikon.dkconfig_enable_floats
                && rep_type == ProglangType.DOUBLE) {
-      new_invs = SingleFloatFactory.instantiate(this, excludeEquality);
+      new_invs = SingleFloatFactory.instantiate(this);
     } else if (Daikon.dkconfig_enable_floats
                && rep_type == ProglangType.DOUBLE_ARRAY) {
-      new_invs = SingleFloatSequenceFactory.instantiate(this, excludeEquality);
+      new_invs = SingleFloatSequenceFactory.instantiate(this);
     } else if (rep_type == ProglangType.STRING) {
-      new_invs = SingleStringFactory.instantiate(this, excludeEquality);
+      new_invs = SingleStringFactory.instantiate(this);
     } else if (rep_type == ProglangType.STRING_ARRAY) {
-      new_invs = SingleStringSequenceFactory.instantiate(this, excludeEquality);
+      new_invs = SingleStringSequenceFactory.instantiate(this);
     } else {
       // Do nothing; do not even complain
     }
@@ -418,32 +418,43 @@ public final class PptSlice1
   /**
    * @see daikon.PptSlice#cloneOnePivot(VarInfo leader, VarInfo newLeader)
    **/
-  protected PptSlice cloneOnePivot (VarInfo leader, VarInfo newLeader) {
+  protected PptSlice cloneAndPivot (VarInfo[] argNewVarInfos) {
     VarInfo[] newVarInfos = new VarInfo[arity];
     // rename the VarInfo references to subsitute newLeader for leader
-    for (int i = 0; i < var_infos.length; i++) {
-      if (var_infos[i] == leader) {
-        newVarInfos[i] = newLeader;
-      } else {
-        newVarInfos[i] = var_infos[i];
+    int [] permutation = new int[arity];
+    for (int i = 0; i < arity; i++) {
+      newVarInfos[i] = argNewVarInfos[i];
+      permutation[i] = i;
+    }
+
+    // Now sort both of the above arrays, by using index comparisons
+    // on the former.  Why am I hard-wiring?  Because Java doesn't
+    // have a double-array sort routine, and slice sizes won't exceed
+    // 3.
+    for (int i = 0; i < arity - 1; i++) {
+      for (int j = arity - 2; j >= i; j--) {
+        VarInfo tempVi;
+        int temp;
+        if (newVarInfos[j].varinfo_index > newVarInfos[j+1].varinfo_index) {
+          tempVi = newVarInfos[j];
+          newVarInfos[j] = newVarInfos[j+1];
+          newVarInfos[j+1] = tempVi;
+
+          temp = permutation[j];
+          permutation[j] = permutation[j+1];
+          permutation[j+1] = temp;
+        }
       }
     }
+    // Assert sorted
+    for (int i = 0; i < arity - 1; i++) {
+      Assert.assertTrue (newVarInfos[i].varinfo_index <= newVarInfos[i+1].varinfo_index);
+    }
+    Assert.assertTrue(ArraysMDE.fn_is_permutation(permutation));
+    
     // Why not just clone?  Because then index order wouldn't be
     // preserved
-    Arrays.sort (newVarInfos, VarInfo.IndexComparator.theInstance);
     PptSlice1 result = new PptSlice1 (this.parent, newVarInfos);
-
-    // Why do we have to pick out the permutation again?  Because we
-    // sort it above by index order
-    int [] permutation = new int[arity];
-    for (int i = 0; i < var_infos.length; i++) {
-      if (var_infos[i] == leader) {
-        permutation[i] = ArraysMDE.indexOfEq (newVarInfos, newLeader);
-      } else {
-        permutation[i] = ArraysMDE.indexOfEq (newVarInfos, var_infos[i]);
-      }
-      Assert.assertTrue (permutation[i] != -1);
-    }
 
     // Set sample counts
     for (int i = 0; i < tm_total.length; i++) {
@@ -467,75 +478,10 @@ public final class PptSlice1
 
     result.invs.addAll (newInvs);
     if (PptSliceEquality.debug.isDebugEnabled()) {
-      PptSliceEquality.debug.debug ("cloneOnePivot: newInvs " + invs);
+      PptSliceEquality.debug.debug ("cloneAndPivot: newInvs " + invs);
     }
     result.repCheck();
     return result;
   }
 
-  /**
-   * @see daikon.PptSlice#cloneAllPivots()
-   **/
-  protected PptSlice cloneAllPivots() {
-
-    VarInfo[] newVarInfos = new VarInfo[this.var_infos.length];
-    boolean pivoted = false;
-    for (int i = 0; i < this.var_infos.length; i++) {
-      VarInfo vi = this.var_infos[i];
-      if (vi.canonicalRep() != vi) {
-        pivoted = true;
-        newVarInfos[i] = vi.canonicalRep();
-      } else {
-        newVarInfos[i] = vi;
-      }
-    }
-    if (!pivoted) return this;
-
-    // Why not just clone?  Because then index order wouldn't be
-    // preserved
-    Arrays.sort (newVarInfos, VarInfo.IndexComparator.theInstance);
-    PptSlice1 result = new PptSlice1 (this.parent, newVarInfos);
-
-    // Why do we have to pick out the permutation again?  Because we
-    // sort it above by index order
-    int [] permutation = new int[arity];
-    for (int i = 0; i < var_infos.length; i++) {
-      permutation[i] = ArraysMDE.indexOfEq (newVarInfos,
-                                            var_infos[i].canonicalRep());
-      Assert.assertTrue (permutation[i] != -1);
-    }
-
-    // Set sample counts
-    for (int i = 0; i < tm_total.length; i++) {
-      result.tm_total[i] = this.tm_total[i];
-    }
-
-    // re-parent the invariants and copy them out
-    List newInvs = new LinkedList();
-    for (Iterator i = invs.iterator(); i.hasNext(); ) {
-      Invariant inv = (Invariant) i.next();
-      Assert.assertTrue (inv.ppt == this);
-      if (Equality.debugPostProcess.isDebugEnabled()) {
-        Equality.debugPostProcess.debug ("before: " + inv.repr());
-      }
-      Invariant newInv = inv.transfer (result, permutation);
-      if (Equality.debugPostProcess.isDebugEnabled()) {
-        Equality.debugPostProcess.debug ("after: " + newInv.repr());
-      }
-      newInvs.add (newInv);
-      // if (!newInv.isObvious()) {
-      parent.attemptSuppression (newInv);
-      Assert.assertTrue (newInv != inv);
-      Assert.assertTrue (newInv.ppt == result);
-      Assert.assertTrue (inv.ppt == this);
-      // }
-    }
-
-    result.invs.addAll (newInvs);
-    if (Equality.debugPostProcess.isDebugEnabled()) {
-      Equality.debugPostProcess.debug ("cloneAllPivots: newInvs " + invs);
-    }
-    result.repCheck();
-    return result;
-  }
 }

@@ -1334,7 +1334,7 @@ public class PptTopLevel
    * slice and then looking for the invariant in the slice.
    **/
   public PptSlice2 findSlice(VarInfo v1, VarInfo v2) {
-    Assert.assertTrue(v1.varinfo_index < v2.varinfo_index);
+    Assert.assertTrue(v1.varinfo_index <= v2.varinfo_index);
     return (PptSlice2)findSlice(new VarInfo [] {v1, v2});
     //      for (Iterator itor = views_iterator() ; itor.hasNext() ; ) {
     //        PptSlice view = (PptSlice) itor.next();
@@ -1351,7 +1351,7 @@ public class PptTopLevel
    * in order of varinfo_index.
    **/
   public PptSlice2 findSlice_unordered(VarInfo v1, VarInfo v2) {
-    Assert.assertTrue(v1.varinfo_index != v2.varinfo_index);
+    // Assert.assertTrue(v1.varinfo_index != v2.varinfo_index);
     if (v1.varinfo_index < v2.varinfo_index) {
       return findSlice(v1, v2);
     } else {
@@ -1370,8 +1370,8 @@ public class PptTopLevel
    * slice and then looking for the invariant in the slice.
    **/
   public PptSlice3 findSlice(VarInfo v1, VarInfo v2, VarInfo v3) {
-    Assert.assertTrue(v1.varinfo_index < v2.varinfo_index);
-    Assert.assertTrue(v2.varinfo_index < v3.varinfo_index);
+    Assert.assertTrue(v1.varinfo_index <= v2.varinfo_index);
+    Assert.assertTrue(v2.varinfo_index <= v3.varinfo_index);
     return (PptSlice3)findSlice(new VarInfo [] {v1, v2, v3});
     //      for (Iterator itor = views_iterator() ; itor.hasNext() ; ) {
     //        PptSlice view = (PptSlice) itor.next();
@@ -1488,7 +1488,7 @@ public class PptTopLevel
       //           Global.debugInfer.debug("Skipping " + slice1.name + "; is controlled(1).");
       //         continue;
       //       }
-      slice1.instantiate_invariants(false);
+      slice1.instantiate_invariants();
       unary_views.add(slice1);
     }
     addViews(unary_views);
@@ -1506,7 +1506,7 @@ public class PptTopLevel
       // comparability info exists" then continue.
       // if (var1.isStaticConstant()) continue;
       boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
-      int i2_min = (target1 ? i1+1 : Math.max(i1+1, vi_index_min));
+      int i2_min = (target1 ? i1 : Math.max(i1, vi_index_min));
       for (int i2=i2_min; i2<vi_index_limit; i2++) {
         VarInfo var2 = var_infos[i2];
         if (!var2.isCanonical()) continue;
@@ -1521,7 +1521,7 @@ public class PptTopLevel
         //             Global.debugInfer.debug("Skipping " + slice2.name + "; is controlled(2).");
         //           continue;
         //         }
-        slice2.instantiate_invariants(false);
+        slice2.instantiate_invariants();
         binary_views.add(slice2);
       }
     }
@@ -1547,7 +1547,7 @@ public class PptTopLevel
           continue;
 
         boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
-        for (int i2=i1+1; i2<vi_index_limit; i2++) {
+        for (int i2=i1; i2<vi_index_limit; i2++) {
           VarInfo var2 = var_infos[i2];
           if (!var2.isCanonical()) continue;
 
@@ -1559,12 +1559,12 @@ public class PptTopLevel
             continue;
 
           boolean target2 = (i2 >= vi_index_min) && (i2 < vi_index_limit);
-          int i3_min = ((target1 || target2) ? i2+1 : Math.max(i2+1, vi_index_min));
+          int i3_min = ((target1 || target2) ? i2 : Math.max(i2, vi_index_min));
           for (int i3=i3_min; i3<vi_index_limit; i3++) {
             Assert.assertTrue(((i1 >= vi_index_min) && (i1 < vi_index_limit))
                           || ((i2 >= vi_index_min) && (i2 < vi_index_limit))
                           || ((i3 >= vi_index_min) && (i3 < vi_index_limit)));
-            Assert.assertTrue((i1 < i2) && (i2 < i3));
+            Assert.assertTrue((i1 <= i2) && (i2 <= i3));
             VarInfo var3 = var_infos[i3];
             if (!var3.isCanonical()) continue;
 
@@ -1587,7 +1587,7 @@ public class PptTopLevel
             //                 Global.debugInfer.debug("Skipping " + slice3.name + "; is controlled(3).");
             //               continue;
             //             }
-            slice3.instantiate_invariants(false);
+            slice3.instantiate_invariants();
             if (Global.debugInfer.isDebugEnabled()) {
               Global.debugInfer.debug("Instantiated for PptSlice3");
             }
@@ -2912,7 +2912,21 @@ public class PptTopLevel
     for (Iterator iSlices = slices.iterator();
          iSlices.hasNext(); ) {
       PptSlice slice = (PptSlice) iSlices.next();
-      PptSlice newSlice = slice.cloneAllPivots();
+      VarInfo[] newVis = new VarInfo[slice.arity];
+      if (slice.arity == 2 &&
+          slice.var_infos[0].equalitySet == slice.var_infos[1].equalitySet) {
+        // Actually a postPorcessed equality
+        continue;
+      }
+      boolean needPivoting = false;
+      for (int i = 0; i < slice.arity; i++) {
+        needPivoting = needPivoting || slice.var_infos[i].canonicalRep() != slice.var_infos[i];
+      }
+      if (!needPivoting) continue;
+      for (int i = 0; i < slice.arity; i++) {
+        newVis[i] = slice.var_infos[i].canonicalRep();
+      }
+      PptSlice newSlice = slice.cloneAndPivot(newVis);
       if (slice != newSlice) {
         pivoted.add (newSlice);
         iSlices.remove(); // Because the key is now wrong

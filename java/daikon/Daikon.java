@@ -789,7 +789,7 @@ public final class Daikon {
       for (Iterator i = allPpts.pptIterator(); i.hasNext(); ) {
         PptTopLevel ppt = (PptTopLevel) i.next();
         ppt.equality_view = new PptSliceEquality(ppt);
-        ppt.equality_view.instantiate_invariants(true);
+        ppt.equality_view.instantiate_invariants();
       }
     }
 
