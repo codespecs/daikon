@@ -24,6 +24,9 @@ public class ModBitTrackerTest extends TestCase {
   // give them modbits so that they are all separated.  See if the results
   // are as they should be.
 
+  // I should probably add some tests that test arguments other than 1 for
+  // the "count" argument to ModBitTracker.add().
+
   private Random r = new Random(20031014L);
 
   private ModBitTracker makeModBitTracker(BitSet[] bitsets) {
@@ -40,7 +43,7 @@ public class ModBitTrackerTest extends TestCase {
       for (int var=0; var<numvars; var++) {
         mods[var] = booleanToModBit(bitsets[var].get(sampleno));
       }
-      result.add(vt);
+      result.add(vt, 1);
     }
     return result;
   }
