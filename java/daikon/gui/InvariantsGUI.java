@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.text.DecimalFormat;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -15,24 +16,27 @@ import javax.swing.tree.*;
 import daikon.*;
 import daikon.inv.*;
 
-public class InvariantsGUI {
+public class InvariantsGUI extends JFrame {
 
     public static void main( String args[] ) {
-	String objectFileName = "/g1/users/mhao/daikon/inv_files/dsaa.inv"; // use this by default, for now
+	String invFileName = "/g1/users/mhao/daikon/inv_files/dsaa.inv"; // use this by default, for now
 	if (args.length > 0)
-	    objectFileName = args[0];
-
-	DefaultTreeModel treeModel = constructTreeModel( objectFileName );
-	JTree tree = new JTree( treeModel );
-	JPanel invariantTablePanel = new JPanel();
-	setupGUI( tree, invariantTablePanel );
-
-	TreeSelectionModel treeSelectionModel = tree.getSelectionModel();
-	DaikonTreeSelectionListener treeSelectionListener = new DaikonTreeSelectionListener( invariantTablePanel, treeSelectionModel );
-	treeSelectionModel.addTreeSelectionListener( treeSelectionListener );
+	    invFileName = args[0];
+	InvariantsGUI gui = new InvariantsGUI( invFileName );
     }
 
-    protected static PptMap getPptMapFromFile( String fileName ) {
+    public InvariantsGUI( String invFileName ) {
+	DefaultTreeModel treeModel = constructTreeModel( invFileName );
+	JTree tree = new JTree( treeModel );
+	JScrollPane invariantTablesScrollPane = new JScrollPane();
+	setupGUI( tree, invariantTablesScrollPane );
+
+	TreeSelectionModel treeSelectionModel = tree.getSelectionModel();
+	InvariantTablesPanel invariantsTablesPanel = new InvariantTablesPanel( invariantTablesScrollPane, treeSelectionModel );
+	treeSelectionModel.addTreeSelectionListener( invariantsTablesPanel );
+    }
+
+    public PptMap getPptMapFromFile( String fileName ) {
 	try {
 	    FileInputStream istream = new FileInputStream( fileName );
 	    ObjectInputStream o = new ObjectInputStream( istream );
@@ -50,7 +54,7 @@ public class InvariantsGUI {
 	}
     }
 
-    protected static DefaultTreeModel constructTreeModel( String fileName ) {
+    public DefaultTreeModel constructTreeModel( String fileName ) {
 	PptMap pptMap = getPptMapFromFile( fileName );
 
 	DefaultMutableTreeNode root = new DefaultMutableTreeNode( "All classes" );
@@ -118,12 +122,15 @@ public class InvariantsGUI {
 		methodNode.add( new DefaultMutableTreeNode( topLevel )); //  Create a node for this program point
 	    }
 	}
+
+	//  Sort the method nodes within a class.  Sort according to a method's exit number.
+	
 	return new DefaultTreeModel( root );
     }
 
     //  Returns child with name <code>name</code> if there is one; otherwise return <code>null</code>.
     //  Used by constructTreeModel().
-    private static DefaultMutableTreeNode getChildByName( DefaultMutableTreeNode node, String name ) {
+    protected DefaultMutableTreeNode getChildByName( DefaultMutableTreeNode node, String name ) {
 	for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
 	    DefaultMutableTreeNode child = ((DefaultMutableTreeNode)enum.nextElement());
 	    if (child.toString().equals( name ))
@@ -132,37 +139,40 @@ public class InvariantsGUI {
 	return null;
     }
 
-    protected static void setupGUI( JTree tree, JPanel invariantTablePanel ) {
+    protected void setupGUI( JTree tree, JScrollPane invariantTablesScrollPane ) {
 	//  If the user clicks on a method, the method's ppt's will be selected
 	//  but we don't want the method node to expand.
 	tree.setExpandsSelectedPaths( false );
 
-	JFrame frame = new JFrame( "Daikon GUI" );
+	invariantTablesScrollPane.setViewportView( new JPanel());
 	JSplitPane splitPane = new JSplitPane( JSplitPane.VERTICAL_SPLIT,
 					       new JScrollPane( tree ),
-					       new JScrollPane( invariantTablePanel ));
+					       invariantTablesScrollPane );
 	splitPane.setOneTouchExpandable( true );
 	splitPane.setDividerSize( 2 );
 
-	frame.getContentPane().add( splitPane );
- 	frame.pack();
-	frame.setSize( 600, 700 );
-	frame.setVisible( true );
+	setTitle( "Daikon GUI" );
+	getContentPane().add( splitPane );
+ 	pack();
+	setSize( 600, 700 );
+	setVisible( true );
 
 	splitPane.setDividerLocation( .4 );
     }
 }
 
 
-class DaikonTreeSelectionListener implements TreeSelectionListener {
-    JPanel panel;
-    List invariantTables = new ArrayList();
-    List invariantTableNames = new ArrayList();
+class InvariantTablesPanel implements TreeSelectionListener {
+    JScrollPane scrollPane;	// the main scrollPane, which contains the main panel
+    JPanel panel;		// the main panel
+    List tables = new ArrayList();
+    List tableNames = new ArrayList();
     TreeSelectionModel treeSelectionModel;
     
-    public DaikonTreeSelectionListener( JPanel invariantTablePanel, TreeSelectionModel treeSelectionModel ) {
-	panel = invariantTablePanel;
-	panel.setLayout( new BoxLayout( panel, BoxLayout.Y_AXIS ));
+    public InvariantTablesPanel( JScrollPane scrollPane, TreeSelectionModel treeSelectionModel ) {
+	this.scrollPane = scrollPane;
+	this.panel = (JPanel) scrollPane.getViewport().getView();
+	this.panel.setLayout( new BoxLayout( panel, BoxLayout.Y_AXIS ));
 	this.treeSelectionModel = treeSelectionModel;
     }
 
@@ -178,16 +188,16 @@ class DaikonTreeSelectionListener implements TreeSelectionListener {
 		String name = ((PptTopLevel) userObject).name;
 		if (e.isAddedPath( paths[i] )) {
 		    JComponent tableContainer = setupTable( (PptTopLevel) userObject );
-		    invariantTables.add( tableContainer );
-		    invariantTableNames.add( name );
+		    tables.add( tableContainer );
+		    tableNames.add( name );
 		}
 		else {		// paths[i] was deselected -- it should be in invariantTableNames.
-		    int index = invariantTableNames.indexOf( name );
+		    int index = tableNames.indexOf( name );
 		    if (index == -1)
 			throw new Error( "DaikonTreeSelectionListener.valueChanged(): " + name + " table not found." );
-		    panel.remove( (JComponent) invariantTables.get( index ));
-		    invariantTables.remove( index );
-		    invariantTableNames.remove( index );
+		    panel.remove( (JComponent) tables.get( index ));
+		    tables.remove( index );
+		    tableNames.remove( index );
 		}
 
       	    //  A non-leaf node was selected or deselected.  Select or deselect its children.
@@ -205,7 +215,33 @@ class DaikonTreeSelectionListener implements TreeSelectionListener {
 	    }
 	}
 
-	//  Make the lead selection's invariant table scroll to the top.
+	//  Scroll to the last invariant table that was added.
+	String lastTableName = "";
+	TreePath leadPath = (TreePath) e.getNewLeadSelectionPath();
+	if (leadPath == null)
+	    leadPath = (TreePath) e.getOldLeadSelectionPath();
+	DefaultMutableTreeNode leadNode = (DefaultMutableTreeNode) leadPath.getLastPathComponent();
+	if (leadNode.getUserObject().getClass().getName().equals( "daikon.PptTopLevel" ))
+	    lastTableName = ((PptTopLevel) leadNode.getUserObject()).name;
+	else {			//  The last selected node was not a leaf node -- ie, it was a method or a class node.
+	                        //  If any of this node's children are selected, display their table.
+	    DefaultMutableTreeNode child;
+	    for (Enumeration enum = leadNode.children(); enum.hasMoreElements(); ) {
+		child = (DefaultMutableTreeNode) enum.nextElement();
+		if (treeSelectionModel.isPathSelected( leadPath.pathByAddingChild( child ))) {
+		    lastTableName = ((PptTopLevel) child.getUserObject()).name;
+		    break;
+		}
+	    }
+	}
+	int index = tableNames.indexOf( lastTableName );
+	if (index != -1) {
+	    int height = 0;
+	    for (int i=0; i < index; i++)
+		height += ((JComponent) tables.get( i )).getPreferredSize().getHeight();
+	    scrollPane.getViewport().setViewPosition( new Point( 0, height ));
+	    //	    System.out.println("scrolling to " + height + " / " + scrollPane.getPreferredSize().getHeight() + "\t" + tableNames.get(index));
+	}
 
 	panel.repaint();
 	panel.revalidate();
@@ -230,8 +266,8 @@ class DaikonTreeSelectionListener implements TreeSelectionListener {
 	int height = table.getPreferredSize().height + table.getRowHeight();
 	scrollPane.setPreferredSize( new Dimension( width, height ));
 
-	JPanel pptPanel = new JPanel();
-	pptPanel.setLayout( new BoxLayout( pptPanel, BoxLayout.Y_AXIS ));
+	JPanel tablePanel = new JPanel();
+	tablePanel.setLayout( new BoxLayout( tablePanel, BoxLayout.Y_AXIS ));
 
 	PptName pptName = new PptName( topLevel.name );
 	String headingString;
@@ -244,20 +280,15 @@ class DaikonTreeSelectionListener implements TreeSelectionListener {
 	heading.setForeground( new Color( 50, 30, 100 ));
 	heading.setAlignmentX( .5f );
 
-	pptPanel.add( Box.createRigidArea( new Dimension( 0, 10 )));
-	pptPanel.add( heading );
-	pptPanel.add( Box.createRigidArea( new Dimension( 0, 10 )));
+	tablePanel.add( Box.createRigidArea( new Dimension( 0, 10 )));
+	tablePanel.add( heading );
+	tablePanel.add( Box.createRigidArea( new Dimension( 0, 10 )));
 	if (invariants.size() != 0)
-	    pptPanel.add( scrollPane );
-	pptPanel.setBorder( BorderFactory.createCompoundBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ),
-								BorderFactory.createEtchedBorder()));
-	panel.add( pptPanel );
-	return pptPanel;
-
-	//buttonPane.add(Box.createRigidArea(new Dimension(10, 0)));
-
-	//	panel.add( scrollPane );
-	//	return scrollPane;
+	    tablePanel.add( scrollPane );
+	tablePanel.setBorder( BorderFactory.createCompoundBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ),
+								  BorderFactory.createEtchedBorder()));
+	panel.add( tablePanel );
+	return tablePanel;
     }
 }
     
@@ -278,10 +309,6 @@ class InvariantTableModel extends AbstractTableModel {
     public String getColumnName( int column ) {
 	return columnNames[ column ];
     }
-    
-	//	    topLevel.print_invariants();
-	//	    System.out.println( topLevel.num_samples());
-	//		System.out.println( invariant.ppt.name + ":*****" + invariant.format() + " with " + invariant.ppt.num_values() + " values and " + invariant.ppt.num_samples() + " samples." );
 
     public Object getValueAt( int row, int column ) {
 	Invariant invariant = (Invariant) invariants.get( row );
