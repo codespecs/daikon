@@ -403,7 +403,7 @@ public final class ContextGUI extends JApplet implements ActionListener
 			if (method_pass.equals("All"))
 				method_pass = null;
 
-			// This gets the currently selected varaible name or if all
+			// This gets the currently selected variable name or if all
 			// then we don't care about the variable name and we are going
 			// to send the iterator a null
 			String variable_pass = jcvariable.getSelectedItem().toString();

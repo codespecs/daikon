@@ -141,19 +141,19 @@ public final class Daikon {
     // Read command line options
     Set[] files = read_options(args);
     Assert.assert(files.length == 3);
-    
+
     // Load all data
     PptMap all_ppts = load_files(files[0], files[1], files[2]);
-    
+
     // Infer invariants
     do_inference(all_ppts);
-    
+
     // Display invariants
     print_invariants(all_ppts);
     if (output_num_samples) {
       Global.output_statistics();
     }
-    
+
     // Write serialized output
     if (inv_file != null) {
       try {
@@ -163,7 +163,7 @@ public final class Daikon {
 				   + "'" + inv_file + "': " + e.toString());
       }
     }
-    
+
     // Done
     System.out.println("Exiting");
   }
@@ -179,11 +179,11 @@ public final class Daikon {
       System.out.println(usage);
       System.exit(1);
     }
-    
+
     Set decl_files = new HashSet();
     Set dtrace_files = new HashSet();
     Set spinfo_files = new HashSet();
-    
+
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -205,7 +205,7 @@ public final class Daikon {
     };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:", longopts);
     int c;
-    
+
     while ((c = g.getopt()) != -1) {
       switch(c) {
       case 0:
@@ -348,7 +348,7 @@ public final class Daikon {
 				   Set spinfo_files)
   {
     PptMap all_ppts = new PptMap();
-    
+
     int num_decl_files = decl_files.size();
     int num_dtrace_files = dtrace_files.size();
     int num_spinfo_files = spinfo_files.size();
@@ -384,7 +384,7 @@ public final class Daikon {
     return all_ppts;
   }
 
-  
+
   ///////////////////////////////////////////////////////////////////////////
   // Infer invariants over the trace data
   private static void do_inference(PptMap all_ppts)
@@ -487,7 +487,7 @@ public final class Daikon {
       double elapsed = (end - start) / 1000.0;
       System.out.println((new java.text.DecimalFormat("#.#")).format(elapsed) + "s");
     }
-    
+
   }
 
 

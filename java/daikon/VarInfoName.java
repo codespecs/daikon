@@ -295,19 +295,19 @@ public abstract class VarInfoName
 
   // ============================================================
   // IOA
-  
+
   // remove all "this." and "classname."
   public String ioaFormatVar(String varname, String classname) {
     int this_index = varname.indexOf("this.");
     int class_index = varname.indexOf(classname+".");
     String ioa_name = varname;
-    
+
     while ((this_index>=0) || (class_index>=0)) {
       if (this_index>=0) {
 	ioa_name = varname.substring(this_index+5, varname.length());
 	if (this_index>0)
 	  ioa_name = varname.substring(0, this_index) + ioa_name;
-      } else if (class_index>=0) {	
+      } else if (class_index>=0) {
 	ioa_name = varname.substring(class_index+classname.length(), varname.length());
 	if (class_index>0)
 	  ioa_name = varname.substring(0, class_index) + ioa_name;
@@ -317,7 +317,7 @@ public abstract class VarInfoName
     }
     return ioa_name;
   }
-  
+
 
   // ============================================================
   // Static inner classes which form the expression langugage
@@ -541,7 +541,7 @@ public abstract class VarInfoName
       return "\\typeof(" + term.esc_name() + ")";
     }
     protected String ioa_name_impl(String classname) {
-      return "(typeof " + term.ioa_name(classname) + ")**"; 
+      return "(typeof " + term.ioa_name(classname) + ")**";
     }
     protected String simplify_name_impl(boolean prestate) {
       return "(typeof " + term.simplify_name(prestate) + ")";
@@ -740,7 +740,7 @@ public abstract class VarInfoName
     }
     protected String ioa_name_impl(String classname) {
       return term.ioa_name(classname);
-    }	
+    }
     protected String ioa_name_impl(String classname, String index) {
       return term.ioa_name(classname) + "[" + index + "]";
     }
@@ -798,15 +798,15 @@ public abstract class VarInfoName
     if (!index.isLiteralConstant()) {
       return index;
     }
-    
+
     int i = Integer.parseInt(index.name());
     if (i >= 0) {
       return index;
     }
-  
+
     return sequence.applySize().applyAdd(i);
   }
-  
+
   /**
    * An element from a sequence, like "sequence[index]"
    **/
@@ -866,7 +866,7 @@ public abstract class VarInfoName
   public static class Intersection extends VarInfoName {
     public final VarInfoName seq1, seq2;
     public final boolean isIntersection;
-    public Intersection(VarInfoName seq1, VarInfoName seq2, boolean isIntersection) { 
+    public Intersection(VarInfoName seq1, VarInfoName seq2, boolean isIntersection) {
       Assert.assert(seq1 != null);
       Assert.assert(seq2 != null);
       this.seq1 = seq1;
@@ -1381,7 +1381,7 @@ public abstract class VarInfoName
 	return super.simplify_name_impl(false);
       }
     }
-    
+
     // <root, needy, index> -> <root', lower, upper>
     /**
      * Replaces a needy (unquantified term) with its subscripted
@@ -1537,24 +1537,24 @@ public abstract class VarInfoName
       VarInfoName[] roots = new VarInfoName[v_roots.length];
       for (int i=0; i<v_roots.length; i++)
 	roots[i] = v_roots[i].name;
-      
+
       QuantifyReturn qret = quantify(roots);
       String[] result = new String[2*roots.length+2];
       StringBuffer ptr_list = new StringBuffer();
       StringBuffer conditions = new StringBuffer();
       int numConditions = 0;
-      
+
       for (int i=0; i < qret.bound_vars.size(); i++) {
 	Assert.assert(v_roots[i].isIOASet() || v_roots[i].isIOAArray());
 	VarInfoName ptr = ((VarInfoName[]) qret.bound_vars.get(i))[0];
 	if (i != 0)
 	  ptr_list.append(", ");
-	
+
 	// if the corresponding var is of type 'Set':
 	//    - 'ptr' is an IOA Set element, of type elementTypeIOA()
 	//    - the following condition must be added: (ptr /in set)
 	// otherwise, if type is IOA Array, ptr is an integer index
-	
+
 	if (v_roots[i].isIOASet()) {
 	  ptr_list.append(ptr + ":" + v_roots[i].elementTypeIOA());
 	  if (conditions.length()>0)
@@ -1562,26 +1562,26 @@ public abstract class VarInfoName
 	  conditions.append("("+ptr.ioa_name(classname) +" \\in ");
 	  conditions.append(roots[i].ioa_name(classname)+")");
 	  numConditions++;
-	} else 
-	  ptr_list.append(ptr.ioa_name(classname) + ":Int");	
+	} else
+	  ptr_list.append(ptr.ioa_name(classname) + ":Int");
       }
-      
+
       result[0] = "\\A " + ptr_list + " (";
       result[roots.length+1] = ")";
 
       if (numConditions>0) {
-	  result[0] += (numConditions==1) ? conditions+" => (" : 
+	  result[0] += (numConditions==1) ? conditions+" => (" :
 	      "(" + conditions + ") => (";
 	result[roots.length+1] += ")";
       }
 
       // stringify the terms.  If root is 'Set' type, the pointer is sent instead
       for (int i=0; i < roots.length; i++) {
-	VarInfoName ptr = ((VarInfoName[]) qret.bound_vars.get(i))[0];  
+	VarInfoName ptr = ((VarInfoName[]) qret.bound_vars.get(i))[0];
 	if (v_roots[i].isIOASet()) {
 	  result[i+1] = ptr.ioa_name(classname);
 	  result[roots.length+i+2] = result[i+1];
-	} else { 
+	} else {
 	  result[i+1] = qret.root_primes[i].ioa_name(classname);
 	  result[roots.length+i+2] = ptr.ioa_name(classname);
 	}
