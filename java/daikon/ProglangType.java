@@ -38,17 +38,17 @@ public final class ProglangType implements java.io.Serializable {
   public final static ProglangType INT = ProglangType.intern("int", 0);
   public final static ProglangType LONG_PRIMITIVE = ProglangType.intern("long", 0);
   public final static ProglangType DOUBLE = ProglangType.intern("double", 0);
-  public final static ProglangType STRING = ProglangType.intern("String", 0);
+  public final static ProglangType STRING = ProglangType.intern("java.lang.String", 0);
   public final static ProglangType INT_ARRAY = ProglangType.intern("int", 1);
   public final static ProglangType LONG_PRIMITIVE_ARRAY = ProglangType.intern("long", 1);
   public final static ProglangType DOUBLE_ARRAY = ProglangType.intern("double", 1);
-  public final static ProglangType STRING_ARRAY = ProglangType.intern("String", 1);
+  public final static ProglangType STRING_ARRAY = ProglangType.intern("java.lang.String", 1);
 
-  public final static ProglangType INTEGER = ProglangType.intern("Integer", 0);
-  public final static ProglangType LONG_OBJECT = ProglangType.intern("Long", 0);
+  public final static ProglangType INTEGER = ProglangType.intern("java.lang.Integer", 0);
+  public final static ProglangType LONG_OBJECT = ProglangType.intern("java.lang.Long", 0);
 
-  public final static ProglangType VECTOR = ProglangType.intern("Vector", 0);
-  public final static ProglangType OBJECT = ProglangType.intern("Object", 0);
+  public final static ProglangType VECTOR = ProglangType.intern("java.util.Vector", 0);
+  public final static ProglangType OBJECT = ProglangType.intern("java.lang.Object", 0);
 
   public final static ProglangType BOOLEAN = ProglangType.intern("boolean", 0);
   public final static ProglangType HASHCODE = ProglangType.intern("hashcode", 0);
@@ -235,8 +235,9 @@ public final class ProglangType implements java.io.Serializable {
   final static String BASE_SHORT = "short";
 
   // Nonprimitive types
-  final static String BASE_STRING = "String";
-  final static String BASE_INTEGER = "Integer";
+  final static String BASE_OBJECT = "java.lang.Object";
+  final static String BASE_STRING = "java.lang.String";
+  final static String BASE_INTEGER = "java.lang.Integer";
   // "hashcode", "address", and "pointer" are identical;
   // "hashcode" is preferred.
   final static String BASE_HASHCODE = "hashcode";
@@ -357,7 +358,7 @@ public final class ProglangType implements java.io.Serializable {
 
       // This big if ... else should deal with all the primitive types --
       // or at least all the ones that can be rep_types.
-      if (base == BASE_INT) {
+      if (base == BASE_INT || base == BASE_LONG || base == BASE_SHORT) {
         long[] result = new long[len];
         for (int i=0; i<len; i++) {
           if (value_strings[i].equals("null"))
@@ -386,8 +387,8 @@ public final class ProglangType implements java.io.Serializable {
         Intern.internStrings(value_strings);
         // ... then, intern the entire array, and return it
         return Intern.intern(value_strings);
-      } else {
-        throw new Error("Can't deal with array of base type " + base);
+      } else {	  
+        throw new Error("Can't yet deal with array of base type " + base);
       }
 
       // This is a more general technique; but when will we need
@@ -494,8 +495,8 @@ public final class ProglangType implements java.io.Serializable {
     if (thisIntegral && otherIntegral)
       return true;
     // Make Object castable to everything, except booleans
-    if (((this.base == "Object") && other.baseIsObject()) // interned strings
-        || ((other.base == "Object") && baseIsObject())) // interned strings
+    if (((this.base == BASE_OBJECT) && other.baseIsObject()) // interned strings
+        || ((other.base == BASE_OBJECT) && baseIsObject())) // interned strings
       return true;
 
     return false;
