@@ -79,7 +79,10 @@ public class PptTopLevel extends Ppt {
 
   public PptSlice0 implication_view = new PptSlice0(this);
 
-  // Filled in by the method mark_implied_via_simplify below
+  // The set of redundant_invs is filled in by the below method
+  // mark_implied_via_simplify.  Contents are either Invariant
+  // objects, or, in the case of Equality invariants, the canonical
+  // VarInfo for the equality.
   public Set redundant_invs = new HashSet();
 
   public PptTopLevel(String name, VarInfo[] var_infos) {
@@ -2123,7 +2126,14 @@ public class PptTopLevel extends Ppt {
 	ensure_prover_started();
 	prover.request(cc);
 	if (cc.valid) {
-	  redundant_invs.add(inv);
+	  // ick ick ick
+	  if (inv instanceof Equality) {
+	    // Equality is not represented with a permanent invariant
+	    // object, so store the canonical variable instead.
+	    redundant_invs.add(((Equality) inv).leader());
+	  } else {
+	    redundant_invs.add(inv);
+	  }
 	  present[checking] = false;
 	}
 	SessionManager.debugln((present[checking] ? "UNIQUE" : "REDUNDANT") + " " + invs[checking].format());
@@ -2470,7 +2480,10 @@ public class PptTopLevel extends Ppt {
 	// Vector obviously_equal = new Vector(equal_vars);
 	// obviously_equal.removeAll(vi.equalToNonobvious());
 
-        if (equal_vars.size() > 0) {
+        if (equal_vars.size() > 0 &&
+	    // suppress if the equality invariant is implied via simplify
+	    (! (Daikon.suppress_redundant_invariants_with_simplify &&
+		redundant_invs.contains(vi)))) {
 	  switch (Daikon.output_style) {
           case Daikon.OUTPUT_STYLE_ESC:
             for (int j=0; j<equal_vars.size(); j++) {
