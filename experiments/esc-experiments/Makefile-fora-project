@@ -32,7 +32,7 @@
 DAIKON_OPTS?=--suppress_cont --suppress_post
 
 ## Copied from another makefile; uncomment as needed
-# DAIKON = java -mx128m daikon.Daikon
+DAIKON ?= java -mx128m daikon.Daikon
 # DFEJ = dfej +E
 # JAVAC := jikes -g +E +F
 INV = $(HOME)/research/invariants
@@ -84,7 +84,7 @@ clean: reset-scratch
 	@echo \#\#\# clean
 	@echo
 	rm -f ${PROJECT}.txt-daikon ${PROJECT}.txt-daikon-failed ${PROJECT}.txt-esc ${PROJECT}.txt-esc-failed ${PROJECT}.esc *.bak
-	rm -rf ${PACKAGE}
+	# rm -rf ${PACKAGE}
 
 #esc: StackAr.esc
 
@@ -158,7 +158,7 @@ ${PROJECT}.txt-daikon: ${SCRATCH_FOR_DAIKON}/.run-timestamp $(DAIKON_CLASS)
 	@echo \#\#\# txt-daikon
 	@echo
 	-rm -f $@-failed
-	java daikon.Daikon --output_num_samples ${DAIKON_OPTS} `find ${SCRATCH_FOR_DAIKON} -name '*.decls' -o -name '*.dtrace'` >& $@ || (mv $@ $@-failed && false)
+	${DAIKON} --output_num_samples ${DAIKON_OPTS} `find ${SCRATCH_FOR_DAIKON} -name '*.decls' -o -name '*.dtrace'` >& $@ || (mv $@ $@-failed && false)
 	# ../remove-conditional-ppts.pl $@
 
 ${PROJECT}.txt-esc: ${SCRATCH_FOR_DAIKON}/.run-timestamp $(DAIKON_CLASS)
@@ -166,7 +166,7 @@ ${PROJECT}.txt-esc: ${SCRATCH_FOR_DAIKON}/.run-timestamp $(DAIKON_CLASS)
 	@echo \#\#\# txt-esc
 	@echo
 	-rm -f $@-failed
-	java daikon.Daikon --esc_output ${DAIKON_OPTS} `find ${SCRATCH_FOR_DAIKON} -name '*.decls' -o -name '*.dtrace'` >& $@ || (mv $@ $@-failed && false)
+	${DAIKON} --esc_output ${DAIKON_OPTS} `find ${SCRATCH_FOR_DAIKON} -name '*.decls' -o -name '*.dtrace'` >& $@ || (mv $@ $@-failed && false)
 	# ../remove-conditional-ppts.pl $@
 
 #../DataStructures/StackAr.java-escannotated: txt-esc
