@@ -88,7 +88,8 @@ function process_line ($line, $tb) {
     } else {
       foreach ($tb as $frame) {
         if (strpos ($frame, "inv.Invariant.log")
-          || strpos ($frame, "Debug.log"))
+          || strpos ($frame, "Debug.log")
+          || strpos ($frame, "Implication.log"))
           continue;
         list ($file, $qname, $uqname, $method, $line_no) = parse_frame($frame);
         break;
