@@ -1,0 +1,27 @@
+Version:      $Id$
+Owner:        adonovan <adonovan@lcs.mit.edu>, Nii <dodoo@mit.edu>
+Tool:         Daikon
+Summary:      compilation of splitters sometimes fails
+Severity:     Vexing
+Status:       New
+Reproducible: Dunno
+Description:
+
+When a .spinfo file is supplied to Daikon, it creates splitter files
+in /tmp/daikon*Split/ and tries to compile them.  However there are
+sometimes  errors in those source files, eg. the string:
+
+   VarInfo return[]daikon_caller;
+
+appeared in one of the class definitions as if it was a field defn.
+
+When this happens the java compiler threads just sit there and Daikon
+hangs, waiting.
+
+ 
+
+--
+$Log$
+Revision 1.1  2002-03-12 04:50:54  adonovan
+repairing repository broken during attemp to move it today... :-(
+

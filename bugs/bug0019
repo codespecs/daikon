@@ -1,0 +1,49 @@
+Version:      $Id$
+Owner:        Alan <adonovan@lcs.mit.edu>, Mike <mernst@lcs.mit.edu>
+Tool:         dfej
+Summary:      inconsistent decls/dtrace with array[] syntax
+Severity:     Vexing
+Status:       New
+Reproducible: Yes
+Description:
+
+[10-Mar-02]
+Try running:
+
+  cd $inv/tests/daikon-tests/Vector
+  make clean
+  make inv
+
+It dies because every instance of
+
+  javautil.VectorTest.this.vectors[].elementData.length
+
+in the VectorTest.decls file corresponds to
+
+  +javautil.VectorTest.this.vectors[].elementData[].length
+
+in the .dtrace file.
+
+Likewise, each VectorTest.decls instance of
+
+  this.vectors[].elementData.length
+
+should actually be
+
+  this.vectors[].elementData[].length
+
+(When reproducing the problem, it's important that your Makefile in that
+directory not contain an instrument-files-revise rule, which I am about to
+check in to avoid the problem.) [mernst]
+
+
+
+
+--
+$Log$
+Revision 1.1  2002-03-12 04:50:54  adonovan
+repairing repository broken during attemp to move it today... :-(
+
+Revision 1.1  2002/03/11 05:12:32  adonovan
+new bug0019
+

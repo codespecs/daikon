@@ -1,0 +1,103 @@
+Version:      $Id$
+Tool:         dfej
+Owner:        adonovan <adonovan@lcs.mit.edu>
+Summary:      can't do lexical-scoping with finals to local classes
+Status:       Open
+Severity:     Vexing
+Reproducible: Yes
+Description:
+
+
+When dfej hoists local classes up to inner-class level, it fails
+if the local class body refers to finals in scope of class declaration.
+Need to transform the code to pass these explicitly.
+
+[06-Mar-02, adonovan, quoting mistere:]
+This is for the local class closure issue.
+First is normal source; then is unparsed source.
+
+- Jeremy
+
+package MapQuick.tigerdb;
+
+import java.util.Iterator;
+
+/**
+ * ImmIterator.java
+ *
+ *
+ * Created: Thu Aug 17 17:12:54 2000
+ *
+ * @author Felix S. Klock
+ */
+
+public abstract class ImmIterator implements Iterator {
+  public static Iterator wrap(final Iterator i) {
+    return new ImmIterator() {
+        public boolean hasNext() { return i.hasNext(); }
+        public Object next() { return i.next(); }
+      };
+  }
+  public void remove() {
+    throw new UnsupportedOperationException();
+  }
+    
+} // ImmIterator
+
+
+
+package MapQuick.tigerdb;
+import java.util.Iterator;
+public abstract class ImmIterator implements Iterator {
+  public ImmIterator () {
+    {
+      return;
+    }
+  }
+  static class ImmIterator$1 extends ImmIterator {
+    private final Iterator i; // add
+    public boolean hasNext () {
+      return i.hasNext();
+    }
+    public Object next () {
+      return i.next();
+    }
+    public ImmIterator$1 (Iterator val$i) {
+      i = val$i; // add
+      {
+        return;
+      }
+    }
+  }
+
+  public static Iterator wrap (final Iterator i) {
+    {
+      ;
+      return new ImmIterator$1( /*add*/ i );
+    }
+  }
+  public void remove () {
+    {
+      throw new UnsupportedOperationException(  );
+    }
+  }
+}
+
+
+--
+$Log$
+Revision 1.1  2002-03-12 04:50:54  adonovan
+repairing repository broken during attemp to move it today... :-(
+
+Revision 1.5  2002/03/07 06:40:20  adonovan
+changed bug0008
+
+Revision 1.4  2002/03/07 05:30:08  adonovan
+*** empty log message ***
+
+Revision 1.3  2002/03/07 05:26:22  adonovan
+*** empty log message ***
+
+Revision 1.2  2002/03/04 23:56:44  adonovan
+fix careless typo
+

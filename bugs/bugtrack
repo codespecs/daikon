@@ -1,0 +1,318 @@
+#!/bin/sh
+# 
+#   (C) 2002 Alan Donovan
+# 
+#   Author: Alan Donovan <adonovan@lcs.mit.edu>
+# 
+#   bugtrack -- bug tracking database
+# 
+#   $Id$
+# 
+#   This program is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU General Public License
+#   as published by the Free Software Foundation; either version 2
+#   of the License, or any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied waranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#   See the GNU General Public License for more details.
+#   <http://www.gnu.org/copyleft/gpl.html>.
+#
+
+#   TODO
+#
+#   - Add spoonfeeding for required fields;
+#       status=new|open|fixed|closed	# verify after edits
+#       tool=<select from a list>
+#       reproducible=yes|no
+#   - Produce more sophisticated listings reports;
+#       include tool name in summary.
+#   - cvs up doesn't clean out the crap (ie local mods to bugfiles)
+#   - add trap handlers (input is already written for one)
+
+BUGFILE=""
+progname=`basename $0`
+in=""
+
+warn()
+{
+    echo "$progname: $1" >&2
+}
+
+die()
+{
+    echo "$progname: $1" >&2
+    exit 1
+}
+
+# usage: readline <prompt> <var>
+readline()
+{
+    echo -en "$1 "
+    in=""
+    while [ -z "$in" ]
+    do
+        read in
+    done
+}
+
+# usage: checkin <"new"|"changed"> <bugfile> 
+checkin()
+{
+    ok=true
+    >CVSERR
+    if [ "X$1" = "Xnew" ]; then
+        cvs add "$2" >>CVSERR 2>&1 || ok=false
+    fi
+    $ok && cvs ci -m "$1 $2" "$2" >>CVSERR 2>&1 || ok=false
+    $ok || {
+        echo "There were errors during check-in:"
+        cat CVSERR
+        rm CVSERR
+        false
+        return
+    }
+    
+    rm CVSERR
+    true
+}
+
+# usage: notify <bugfile>
+notify()
+{
+   bugfile=$1
+
+   grep -sq "^Owner: *" $bugfile || {
+       warn "'Owner' field missing for \`$bugfile'."
+       return
+   }
+   summary=`grep "^Summary: *" $bugfile | sed -e 's/^Summary: *//'`
+   owner=`  grep "^Owner: *"   $bugfile | sed -e 's/^Owner: *//' `
+
+   head -7 $bugfile | mail "$owner" -s "Bugtrack update: $bugfile: $summary"
+}
+
+# usage: newbugnumber
+newbugnumber()
+{
+    # XXX should make this atomic!
+
+    [ -f "BUGNUMBER" ] || { 
+        warn "can't find BUGNUMBER."
+        false
+        return
+    }
+    bugnum=`cat BUGNUMBER`
+    expr $bugnum + 1 >BUGNUMBER
+    BUGFILE=`printf "bug%04i" "$bugnum"`
+    [ -f "$BUGFILE" ] && die "duplicate bugfile \`$BUGFILE'!"
+    cvs ci -m " " BUGNUMBER >/dev/null 2>&1
+    true
+}
+
+# usage: input <displaystring> <options> <varname>
+input()
+{
+    while true
+    do
+        echo -e "$1 [$2] \c"
+        ok=true
+        read in
+        $ok || { eval $3=_; return; }
+        in=`echo $in | tr a-z A-Z`
+        case $in in
+        [$2]) break
+            ;;
+        *)  echo "bad input: '$in'"
+            ;;
+       esac
+    done
+
+    # this is safe because we guarantee no metachars
+    eval $3=$in
+}
+
+usage()
+{
+    {
+    echo "usage: $progname <command> [options]"
+    echo " new:         add a new bug to the database"
+    echo " del <n>:     remove a bug from the database"
+    echo " edit <n>:    edit a bug in the database"
+    echo " list:        show summary of bugs"
+    echo " show <n>:    show a single bug report"
+    } >&2
+    exit 1
+}
+
+nyi()
+{
+    die "not yet implemented!" >&2 
+}
+
+######## NEW ########
+
+# usage: expand 'B' 'Foo,Bar,Wiz'  ->  'Bar'
+expand()
+{
+    echo $2 | sed -e "s/^.*\($1[^,]*\).*/\1/"
+}
+
+# usage: new_bug
+new_bug()
+{
+    ABORTED=newbug.aborted
+
+    # sanity checks:
+    [ -f "$ABORTED" ] && 
+        die "please remove file \`$ABORTED' before running $progname."
+    
+    readline "Tool:" ; tool=$in
+
+    readline "Summary:" ; summary=$in
+
+    input "Reproducible?" "YND" rep
+    rep=`expand $rep Yes,No,Dunno`
+
+    SEVERITIES="Lethal,Vexing,Boneheaded,RFE"
+    input "Severity {$SEVERITIES}" "LVBR" severity
+    severity=`expand $severity $SEVERITIES`
+    
+    {
+    echo -e "Version:      \$Id\$"
+    echo -e "Owner:        $USER <$EMAIL>"
+    echo -e "Tool:         $tool"
+    echo -e "Summary:      $summary"
+    echo -e "Severity:     $severity"
+    echo -e "Status:       New"
+    echo -e "Reproducible: $rep"
+    echo    "Description:"
+    } >$ABORTED
+    
+    echo "Now add a description... (invoking $EDITOR)"
+    sleep 1
+    
+    $EDITOR $ABORTED || warn "$EDITOR failed."
+    
+    {
+    echo    ""
+    echo    "--"
+    echo    "\$Log\$"
+    } >>$ABORTED
+    
+    input "Continue?" "YN" in
+    [ "$in" != "Y" ] &&
+        die "aborting -- bug file dumped in \`newbug.aborted'."
+    
+    newbugnumber ||
+        die "aborting -- bug file dumped in \`newbug.aborted'."
+    
+    mv $ABORTED $BUGFILE
+
+    checkin new $BUGFILE || die "aborting."
+
+    notify $BUGFILE
+    
+    echo "Added bug: $BUGFILE."
+}
+
+######## EDIT ########
+
+# usage: edit_bug <bugnum>
+edit_bug()
+{
+    BUGFILE=`printf "bug%04i" "$1"`
+    [ -f "$BUGFILE" ] || die "no such bugfile \`$BUGFILE'."
+
+    echo "Now edit the description... (invoking $EDITOR)"
+    sleep 1
+
+    $EDITOR $BUGFILE || warn "$EDITOR failed."
+    
+    input "Continue?" "YN" in
+    [ "$in" != "Y" ] && die "aborting."
+    
+    checkin changed $BUGFILE || die "aborting."
+    
+    notify $BUGFILE
+
+    echo "Changed bug: $BUGFILE."
+}
+
+####### DEL ########
+
+# usage: delete_bug <bugnum>
+delete_bug()
+{    
+    BUGFILE=`printf "bug%04i" "$1"`
+    [ -f "$BUGFILE" ] || die "no such bugfile \`$BUGFILE'."
+
+    head -7 $BUGFILE
+
+    input "Delete this bug?" "YN" in
+    [ "$in" != "Y" ] && die "aborting."
+ 
+    rm -f $BUGFILE   
+    cvs remove $BUGFILE || die "error during CVS remove."
+    cvs ci -m "remove $2" "$2" >/dev/null 2>&1
+
+    echo "Deleted bug: $BUGFILE."
+
+}
+
+######## MAIN ########
+
+[ `basename \`pwd\`` = bugs ] ||
+    die "must be run from within the \`bugs' directory."
+
+echo "Bug database -- (C) Alan Donovan 2002"
+
+[ -z "$EDITOR" ] && EDITOR=vi
+[ -z "$EMAIL"  ] && {
+    warn "EMAIL env var unset: defaulting to <$USER>"
+    EMAIL=$USER
+}
+
+# bring this dir up to date
+cvs up >/dev/null 2>&1 ||
+     die "couldn't bring database up to date.";
+
+case "$1" in
+    new)
+        echo "$progname: Add new bug report."
+        new_bug
+        ;;
+    del)
+        [ -z "$2" ] && usage
+        echo "$progname: Delete a bug report."
+        delete_bug "$2"
+        ;;
+    edit)
+        [ -z "$2" ] && usage
+        echo "$progname: Edit a bug report."
+        edit_bug "$2"
+        ;;
+    show)
+        [ -z "$2" ] && usage
+        echo "$progname: Show a bug report."
+        BUGFILE=`printf "bug%04i" "$2"`
+        [ -f "$BUGFILE" ] || die "no such bugfile \`$BUGFILE'."
+        more $BUGFILE
+        ;;
+    list)
+        echo "$progname: List bug reports."
+        for i in bug[0-9][0-9]*
+        do
+            grep -sq "Status: *Closed" $i && continue
+            # use /dev/null so it always has >1 file and thus reports filenames
+            grep "^Summary:" $i /dev/null | sed -e 's/Summary: */ /'
+        done
+        ;;
+    *)
+        usage
+        ;;
+esac
+
+echo "Done."
+exit 0

@@ -1,0 +1,24 @@
+Version:      $Id$
+Owner:        Jeremy <mistere>, Mike <mernst>
+Tool:         dfej (Ajax)
+Summary:      Crash on myvector[] elements (can't find array)
+Severity:     Vexing
+Status:       New
+Reproducible: Yes
+Description:
+
+ajax crashes on RatTermVec (and therefore RatPoly) because of the
+'wrapped[]' field.  It is the elements of an ArrayList, but ajax
+thinks its an array (I think).  This changes a few lines in the output
+(compared to the goal) due to missing comparability
+information. [mistere]
+
+
+--
+$Log$
+Revision 1.1  2002-03-12 04:50:54  adonovan
+repairing repository broken during attemp to move it today... :-(
+
+Revision 1.1  2002/03/07 19:15:59  mistere
+new bug0017
+

@@ -1,0 +1,66 @@
+Version:      $Id$
+Owner:        adonovan <adonovan@lcs.mit.edu>
+Tool:         TEST
+Summary:      dummy report just for testing
+Status:       Closed
+Severity:     Vexing
+Reproducible: No
+Description:
+
+This is just to permit testing of the bug database.  Feel free
+to make mods here.
+
+- test modification [adonovan]
+
+- test2 [adonovan]
+
+- test3 [adonovan]
+
+- test4,5,6,7,8 [adonovan]
+
+- test9 [adonovan]
+
+--
+$Log$
+Revision 1.1  2002-03-12 04:50:54  adonovan
+repairing repository broken during attemp to move it today... :-(
+
+Revision 1.15  2002/03/11 07:18:02  adonovan
+changed bug0001
+
+Revision 1.14  2002/03/11 07:17:15  adonovan
+changed bug0001
+
+Revision 1.13  2002/03/07 05:23:39  adonovan
+changed bug0001
+
+Revision 1.12  2002/03/07 05:23:23  adonovan
+changed bug0001
+
+Revision 1.11  2002/03/06 16:02:54  adonovan
+changed bug0001
+
+Revision 1.10  2002/03/06 16:02:32  adonovan
+changed bug0001
+
+Revision 1.9  2002/03/06 16:02:07  adonovan
+changed bug0001
+
+Revision 1.8  2002/03/06 16:01:14  adonovan
+changed bug0001
+
+Revision 1.7  2002/03/06 16:00:37  adonovan
+changed bug0001
+
+Revision 1.6  2002/03/06 15:59:50  adonovan
+changed bug0001
+
+Revision 1.5  2002/03/05 15:09:21  adonovan
+changed bug0001
+
+Revision 1.4  2002/03/05 15:07:46  adonovan
+*** empty log message ***
+
+Revision 1.3  2002/03/05 15:05:48  adonovan
+*** empty log message ***
+

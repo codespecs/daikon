@@ -1,0 +1,41 @@
+Version:      $Id$
+Owner:        Alan <adonovan@lcs.mit.edu>, Jeremy <mistere@lcs.mit.edu>
+Tool:         dfej
+Summary:      missing values in trace instrumentation
+Severity:     Vexing
+Status:       Closed
+Reproducible: Yes
+Description:
+
+[mistere]: This is a duplicate of 16; furthermore, I fixed this in CVS
+dfej a while ago.  Alan, you can close this bug out.
+
+In the RatTermVec test, it seems that the hashcode (pointer) for
+'this.wrapped' is no longer being instrumented!  'this.wrapped' is a
+field of type ArrayList in PolyCalc/RatTermVec.java, so maybe
+something with the List instrumenting code is in error?  If you can
+take at look at it, that would be great.  I suspect you'll have to
+make a fresh checkout of dfej to work with, if you have significant
+changes on your end already. [mistere]
+
+P.S. One other point: ajax crashes on RatTermVec (and therefore
+RatPoly) because of the 'wrapped[]' field.  It is the elements of an
+ArrayList, but ajax thinks its an array (I think).  This changes a few
+lines in the output (compared to the goal) due to missing
+comparability information. [mistere]
+
+
+--
+$Log$
+Revision 1.1  2002-03-12 04:50:54  adonovan
+repairing repository broken during attemp to move it today... :-(
+
+Revision 1.3  2002/03/07 07:41:55  adonovan
+changed bug0013
+
+Revision 1.2  2002/03/07 07:40:12  mistere
+changed bug0013
+
+Revision 1.1  2002/03/07 06:02:33  adonovan
+new bug0013
+
