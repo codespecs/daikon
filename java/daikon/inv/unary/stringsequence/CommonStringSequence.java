@@ -89,7 +89,6 @@ public class CommonStringSequence
           tmp[size++] = a[i];
 
       if (size==0) {
-        destroyAndFlow();
         VarInfo var = var();
         return InvariantStatus.FALSIFIED;
       }

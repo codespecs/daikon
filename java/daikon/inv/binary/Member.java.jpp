@@ -562,7 +562,6 @@ public final class CLASSNAME
         debug.fine ("Member destroyed:  " + format() + " because " + i +
                      " not in " + ArraysMDE.toString(a));
       }
-      destroyAndFlow();
       return InvariantStatus.FALSIFIED;
     }
     return InvariantStatus.NO_CHANGE;

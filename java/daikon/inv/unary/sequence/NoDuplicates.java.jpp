@@ -247,7 +247,6 @@ public class CLASSNAME
             debug.fine ("Destroying myself with: " + var().name.repr());
             debug.fine (ArraysMDE.toString(a));
           }
-          destroyAndFlow();
           return InvariantStatus.FALSIFIED;
         }
       }

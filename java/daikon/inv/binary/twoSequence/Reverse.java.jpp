@@ -191,13 +191,11 @@ public class CLASSNAME
 
   public InvariantStatus add_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {
     if (a1.length != a2.length) {
-      destroyAndFlow();
       return InvariantStatus.FALSIFIED;
     }
     int len = a1.length;
     for (int i=0, j=len-1; i<len; i++, j--) {
       if (!EQUAL (a1[i], a2[j])) {
-        destroyAndFlow();
         return InvariantStatus.FALSIFIED;
       }
     }

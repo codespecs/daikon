@@ -229,9 +229,10 @@ public final class CLASSNAME
       log ("Entered add_modified: ppt.num_values()==" + ppt.num_values() +
            ", sample== " + ArraysMDE.toString(a));
     for (int i=0; i<a.length; i++) {
-      InvariantStatus status = core.add_modified(a[i], i, count);
-      if (falsified)
+      if (core.add_modified(a[i], i, count) ==
+          InvariantStatus.FALSIFIED) {
         return InvariantStatus.FALSIFIED;
+      }
     }
     if (logDetail())
       log ("Exiting add_modified with ppt.num_values()==" + ppt.num_values());

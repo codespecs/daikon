@@ -328,7 +328,6 @@ public class CLASSNAME
       return InvariantStatus.NO_CHANGE;
 
     if (! (new_var1_in_var2 || new_var2_in_var1)) {
-      destroyAndFlow();
       return InvariantStatus.FALSIFIED;
     }
 

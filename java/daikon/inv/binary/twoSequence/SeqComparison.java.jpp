@@ -427,7 +427,6 @@ public class SEQSEQINTEQUAL
       log ("add_modified (" + ArraysMDE.toString(v1) + ", " +
            ArraysMDE.toString(v2) + ") " + comparison);
     if (! COMPAREQUALS(comparison,0) ) {
-      destroyAndFlow();
       return InvariantStatus.FALSIFIED;
     }
     return InvariantStatus.NO_CHANGE;

@@ -246,7 +246,6 @@ public final class CLASSNAME
       // The min and max tests will simultaneously succeed exactly once (for
       // the first value).
       if (EQUAL (v, 0)) {
-        destroyAndFlow();
         return InvariantStatus.FALSIFIED;
       }
       // XXX; uh oh -- flowing these is bad stuff; maybe search for

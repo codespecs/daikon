@@ -443,7 +443,6 @@ invariants.
       if (logOn() || debug.isLoggable(Level.FINE))
         log (debug, "destroy in add_modified (" + v1 + ", " + v2 + ",  "
             + count + ")");
-      destroyAndFlow();
       return InvariantStatus.FALSIFIED;
     }
     return InvariantStatus.NO_CHANGE;

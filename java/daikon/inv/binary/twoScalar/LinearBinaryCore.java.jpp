@@ -149,7 +149,6 @@ public final class CLASSNAME
         // Set a and b based on that pair
         if (max_i == -1) {
           values_seen--;
-          wrapper.destroyAndFlow();
           return InvariantStatus.FALSIFIED;
         }
         // remember the min and max pairs
@@ -165,9 +164,7 @@ public final class CLASSNAME
         max_y = y_cache[max_j];
 
         // calculate a and b for this pair and remember them as min/max a,b
-        if (set_bi_linear(min_x, max_x, min_y, max_y) == InvariantStatus.FALSIFIED) {
-          return InvariantStatus.FALSIFIED;
-        }
+        set_bi_linear(min_x, max_x, min_y, max_y);
         min_a = a;
         max_a = a;
         min_b = b;
@@ -180,7 +177,6 @@ public final class CLASSNAME
         if (a == 0) {
           debug.fine ("Suppressing " + CLASSSTRING + " (" + wrapper.format() + ") because a == 0");
           values_seen--;
-          wrapper.destroyAndFlow();
           return InvariantStatus.FALSIFIED;
         }
         for (int i=0; i<MINPAIRS; i++) {
@@ -199,7 +195,6 @@ public final class CLASSNAME
               debug.fine ("    ");
             }
             values_seen--;
-            wrapper.destroyAndFlow();
             return InvariantStatus.FALSIFIED;
           }
         }
@@ -220,7 +215,6 @@ public final class CLASSNAME
         PRIMITIVE delta_x = max_x - min_x;
         // should be fixed in the future to permit vertical lines
         if (delta_x == 0) {
-          wrapper.destroyAndFlow();
           return InvariantStatus.FALSIFIED;
         }
 
@@ -258,7 +252,6 @@ public final class CLASSNAME
                         wrapper.format() + ") at new value: "
                         + y + " != " + a + "*" + x + "+" + b);
           }
-          wrapper.destroyAndFlow();
           return InvariantStatus.FALSIFIED;
         }
         //??? wrapper.destroyAndFlow();
@@ -496,9 +489,11 @@ public final class CLASSNAME
       if (c.isActive())
         continue;
       for (int j = 0; j < c.values_seen; j++) {
-        result.add_modified (c.x_cache[j], c.y_cache[j], 1);
-        if (wrapper.falsified)
+        if (result.add_modified (c.x_cache[j], c.y_cache[j], 1) ==
+            InvariantStatus.FALSIFIED) {
+          //        if (wrapper.falsified)
           return (null);
+        }
       }
     }
 

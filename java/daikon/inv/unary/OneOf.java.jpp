@@ -1498,7 +1498,6 @@ public final class ONEOFSCALAR
 
     for (int ai=0; ai <a.length; ai++) {
       if (!add_mod_elem (a[ai], count)) {
-        destroyAndFlow();
         return InvariantStatus.FALSIFIED;
       }
     }

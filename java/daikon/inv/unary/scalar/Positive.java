@@ -43,7 +43,6 @@ public class Positive
   // This is called when a new sample is encountered
   public InvariantStatus add_modified(long v, int count) {
     if (v <= 0) {
-      destroyAndFlow();
       return InvariantStatus.FALSIFIED;
     }
     return InvariantStatus.NO_CHANGE;

@@ -278,12 +278,10 @@ public final class SEQINTEQUAL
     for (int i=0; i<a.length; i++) {
       #if (defined(EQUAL) || defined(EQUALFLOAT))
       if (! EQUALS(a[i], x) ) {
-        destroyAndFlow();
         return InvariantStatus.FALSIFIED;
       }
       #else
       if (! EQUALS(a[i], x) || !seqvar().type.elementIsIntegral()) {
-        destroyAndFlow();
         return InvariantStatus.FALSIFIED;
       }
       #endif

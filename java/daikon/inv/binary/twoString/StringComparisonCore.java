@@ -83,7 +83,6 @@ public final class StringComparisonCore
 
   public InvariantStatus add_modified(String v1, String v2, int count) {
     if ((v1 == null) || (v2 == null)) {
-      wrapper.destroyAndFlow();
       return InvariantStatus.FALSIFIED;
     }
 
@@ -119,7 +118,6 @@ public final class StringComparisonCore
         || (obvious_can_be_gt && new_can_be_gt)
         || (obvious_can_be_le && new_can_be_lt && new_can_be_eq)
         || (obvious_can_be_ge && new_can_be_gt && new_can_be_eq)) {
-      wrapper.destroyAndFlow();
       return InvariantStatus.FALSIFIED;
     }
 

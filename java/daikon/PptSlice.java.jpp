@@ -432,6 +432,7 @@ public final class PPTSLICE1
   /// Manipulating values
   ///
 
+
   /**
    * This procedure accepts a sample (a ValueTuple), extracts the values
    * from it, casts them to the proper types, and passes them along to the
@@ -593,7 +594,10 @@ public final class PPTSLICE1
       UnaryInvariant inv = (UnaryInvariant) invs.get(i);
       if (inv.falsified) continue;
       if (inv.getSuppressor() != null) continue;
-      inv.add(val1, mod1, count);
+      if (inv.add(val1, mod1, count) ==
+          InvariantStatus.FALSIFIED) {
+        inv.destroyAndFlow();
+      }
       if (PrintInvariants.print_discarded_invariants && inv.falsified) {
         DiscReasonMap.put(inv, DiscardCode.bad_sample, "Falsified from sample: " + var_infos[0].name.name() +
                           " = " + (vi1.rep_type.isArray() ? ArraysMDE.toString(val1) : val1));
@@ -617,9 +621,13 @@ public final class PPTSLICE1
         BinaryInvariant inv = (BinaryInvariant) invs.get(i);
         if (inv.falsified) continue;
         if (inv.getSuppressor() != null) continue;
-        inv.add(val2, val1, mod1, count);
+        if (inv.add(val2, val1, mod1, count) ==
+            InvariantStatus.FALSIFIED) {
+          inv.destroyAndFlow();
+        }
         if (PrintInvariants.print_discarded_invariants && inv.falsified) {
-          DiscReasonMap.put(inv, DiscardCode.bad_sample, "Falsified from sample: " + var_infos[0].name.name() +
+          DiscReasonMap.put(inv, DiscardCode.bad_sample, "Falsified from sample: " +
+                            var_infos[0].name.name() +
                             " = " + val1 + "," + var_infos[1].name.name() +
                             " = " + ArraysMDE.toString(val2));
         }
@@ -629,7 +637,10 @@ public final class PPTSLICE1
         BinaryInvariant inv = (BinaryInvariant) invs.get(i);
         if (inv.falsified) continue;
         if (inv.getSuppressor() != null) continue;
-        inv.add(val1, val2, mod1, count);
+        if (inv.add(val1, val2, mod1, count) ==
+            InvariantStatus.FALSIFIED) {
+          inv.destroyAndFlow();
+        }
         if (PrintInvariants.print_discarded_invariants && inv.falsified) {
           if (array1 && array2 && (!( (inv instanceof SeqSeqIntEqual) || (inv instanceof SeqSeqFloatEqual) || (inv instanceof SeqSeqStringEqual) ))
               && ArraysMDE.length(val1) != ArraysMDE.length(val2)) {
@@ -655,7 +666,11 @@ public final class PPTSLICE1
       TernaryInvariant inv = (TernaryInvariant) invs.get(i);
       if (inv.falsified) continue;
       if (inv.getSuppressor() != null) continue;
-      inv.add(val1, val2, val3, mod1, count);
+      if (inv.add(val1, val2, val3, mod1, count) ==
+          InvariantStatus.FALSIFIED) {
+        inv.destroyAndFlow();
+      }
+
       if (PrintInvariants.print_discarded_invariants && inv.falsified) {
         // Currently there are no ternary invariants with arrays, but if there are in the future
         // I don't want this to break.
@@ -671,12 +686,12 @@ public final class PPTSLICE1
     return flow_and_remove_falsified();
   }
 
-  private void destroyInv(Invariant inv) {
-    inv.falsified = true;
-    if (PrintInvariants.print_discarded_invariants)
-      parent.falsified_invars.add(this);
-    removeInvariant(inv);
-  }
+//   private void destroyInv(Invariant inv) {
+//     inv.falsified = true;
+//     if (PrintInvariants.print_discarded_invariants)
+//       parent.falsified_invars.add(this);
+//     removeInvariant(inv);
+//   }
 
   public void addInvariant(Invariant invariant) {
     Assert.assertTrue(invariant != null);

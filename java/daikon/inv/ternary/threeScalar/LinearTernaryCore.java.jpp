@@ -226,7 +226,6 @@ public final class CLASSNAME
         // Find the three points with the maximum separation
         maxsep_triples (def_points);
         if (def_points[0] == null) {
-          wrapper.destroyAndFlow();
           return InvariantStatus.FALSIFIED;
         }
 
@@ -235,7 +234,6 @@ public final class CLASSNAME
         try {
           coef = calc_tri_linear (def_points);
         } catch (Exception e) {
-          wrapper.destroyAndFlow();
           return InvariantStatus.FALSIFIED;
         }
         a = coef[0];
@@ -251,7 +249,6 @@ public final class CLASSNAME
             (Math.abs(a) >= Double.MAX_VALUE) ||
             (Math.abs(b) >= Double.MAX_VALUE) ||
             (Math.abs(c) >= Double.MAX_VALUE)) {
-          wrapper.destroyAndFlow();
           return InvariantStatus.FALSIFIED;
         }
 
@@ -269,12 +266,9 @@ public final class CLASSNAME
                             + "+" + b + "*" + def_points[i].y + "+" + c + "*" + def_points[i].z
                             + "+" + d);
               }
-              wrapper.destroyAndFlow();
-
               return InvariantStatus.FALSIFIED;
             }
-
-        }
+          }
 
           // Discard the points not used to define the coefficients.
           for (int ii = 3; ii < MINTRIPLES; ii++)
@@ -293,7 +287,6 @@ public final class CLASSNAME
                          + " a=" + a + " b=" + b + " c=" + c
                          + " values_seen=" + values_seen);
           }
-          wrapper.destroyAndFlow();
           return InvariantStatus.FALSIFIED;
         }
       }

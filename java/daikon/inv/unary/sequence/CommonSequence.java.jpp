@@ -136,7 +136,6 @@ public class CLASSNAME
         }
       }
       if (size==0) {
-        destroyAndFlow();
         VarInfo var = var();
         return InvariantStatus.FALSIFIED;
       }

@@ -332,7 +332,7 @@ public class PAIRWISEINTEQUAL
 
   public InvariantStatus add_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {
     if (a1.length != a2.length) {
-      destroyAndFlow();
+      // destroyAndFlow();
       return InvariantStatus.FALSIFIED;
     }
 
@@ -343,7 +343,7 @@ public class PAIRWISEINTEQUAL
       PRIMITIVE v1 = a1[i];
       PRIMITIVE v2 = a2[i];
       if (! EQUALS(v1, v2) ) {
-        destroyAndFlow();
+        //  destroyAndFlow();
         return InvariantStatus.FALSIFIED;
       }
     }

@@ -191,7 +191,6 @@ public class SUBSET
     #endif
     {
       debug.fine ("Falsified 1");
-      destroyAndFlow();
       return InvariantStatus.FALSIFIED;
     }
     return InvariantStatus.NO_CHANGE;

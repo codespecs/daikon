@@ -393,12 +393,12 @@ public class LOWERBOUND
           changed = true;
           status = InvariantStatus.WEAKENED;
         }
-        core.add_modified(value[i], count);
-        if (falsified)
+        if (core.add_modified(value[i], count)  == InvariantStatus.FALSIFIED) {
           return InvariantStatus.FALSIFIED;
+        }
       }
       return status;
-    #endif
+#endif
 
   }
 

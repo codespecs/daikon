@@ -253,6 +253,14 @@ public abstract class PptSlice
     return controlling_cached;
   }
 
+  public void destroyInv(Invariant inv) {
+    inv.falsified = true;
+    if (PrintInvariants.print_discarded_invariants)
+      parent.falsified_invars.add(this);
+    removeInvariant(inv);
+  }
+
+
   /** @return true if all of this slice's variables are orig() variables. */
   public boolean allPrestate() {
     for (int i = 0; i < var_infos.length; i++) {

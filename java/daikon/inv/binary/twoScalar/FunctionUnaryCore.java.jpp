@@ -99,7 +99,6 @@ public final class CLASSNAME
           : (y == (FUNCTIONS.invokeUnary(methodNumber, x))));
 
     if (! ok) {
-      wrapper.destroyAndFlow();
       return InvariantStatus.FALSIFIED;
     }
     return InvariantStatus.NO_CHANGE;

@@ -172,7 +172,6 @@ public class CLASSNAME
 
   public InvariantStatus add_modified(PRIMITIVE[] x_arr, PRIMITIVE[] y_arr, int count) {
     if (x_arr.length != y_arr.length) {
-      destroyAndFlow();
       return InvariantStatus.FALSIFIED;
     }
     int len = x_arr.length;
@@ -182,9 +181,7 @@ public class CLASSNAME
       PRIMITIVE x = x_arr[i];
       PRIMITIVE y = y_arr[i];
 
-      core.add_modified(x, y, count);
-      if (falsified) {
-        // destroy() must have already been called
+      if (core.add_modified(x, y, count) == InvariantStatus.FALSIFIED) {
         return InvariantStatus.FALSIFIED;
       }
     }

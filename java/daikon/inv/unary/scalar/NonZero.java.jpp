@@ -169,7 +169,6 @@ public class NONZERO
       if (logOn() || debug.isLoggable(Level.FINE) || ppt.debugged) {
         log (debug, "destroy (value = " + v + ")");
       }
-      destroyAndFlow();
       return InvariantStatus.FALSIFIED;
     }
     // The min and max tests will simultaneously succeed exactly once (for

@@ -98,7 +98,6 @@ public final class CLASSNAME
       if (wrapper.ppt.debugged) {
         System.out.println(CLASSSTRING + ".destroy()");
       }
-      wrapper.destroyAndFlow();
       return InvariantStatus.FALSIFIED;
     }
     if (v1 < min1) min1 = v1;

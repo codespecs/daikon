@@ -276,7 +276,6 @@ public class CLASSNAME
       if (!COMPARATOR (a[i-1], a[i])) {
         // System.out.println ("destroy " + i + COMPARATORSTRING
         //                    + ArraysMDE.toString (a));
-        destroyAndFlow();
         return InvariantStatus.FALSIFIED;
       }
     }
