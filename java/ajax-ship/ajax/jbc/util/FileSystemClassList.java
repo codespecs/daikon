@@ -5,6 +5,7 @@ Copyright (c) Robert O'Callahan <roc@cs.cmu.edu> and Carnegie Mellon University
 package ajax.jbc.util;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 class FileSystemClassList implements Enumeration {
@@ -14,15 +15,32 @@ class FileSystemClassList implements Enumeration {
     private FileSystemClassList subdirLister = null;
     private int nextFile = 0;
     private String next = null;
+    private Hashtable dirsSeen;
     
     FileSystemClassList(File dir) {
-        this(dir, "");
+        this(dir, "", new Hashtable());
     }
     
-    private FileSystemClassList(File dir, String prefix) {
+    private FileSystemClassList(File dir, String prefix, Hashtable dirsSeen) {
         this.prefix = prefix;
         this.dir = dir;
         this.fileList = dir.list();
+        this.dirsSeen = dirsSeen;
+    }
+    
+    /**
+     * Prevents infinite recursion when directory symlinks point backwards
+     * @return true if had not been seen before (was added)
+     **/
+    private boolean markSeen(File candidate) {
+        try {
+	    String canonical = candidate.getCanonicalPath();
+	    Object last = dirsSeen.put(canonical, canonical);
+	    return (last == null);
+	} catch (IOException e) {
+	    // File system error; better bail.
+	  throw new RuntimeException(e.toString());
+	}
     }
     
     private void advanceToNextElement() {
@@ -37,8 +55,8 @@ class FileSystemClassList implements Enumeration {
                 
                 nextFile++;
                 
-                if (f.isDirectory()) {
-                    subdirLister = new FileSystemClassList(f, prefix + name + ".");
+                if (f.isDirectory() && markSeen(f)) {
+                    subdirLister = new FileSystemClassList(f, prefix + name + ".", dirsSeen);
                     if (subdirLister.hasMoreElements()) {
                         next = (String)subdirLister.nextElement();
                         return;
