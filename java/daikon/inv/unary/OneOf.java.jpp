@@ -1242,7 +1242,8 @@ public final class ONEOFSCALAR
   #endif
 #endif
     for (int i=0; i<num_elts; i++) {
-      // System.out.println ("Oneof: checking " + ppt.name + " value = " + v);
+      //if (logDetail())
+      //  log ("add_modified (" + v + ")");
       if (EQUALS (elts[i], v)) {
 #if defined(IS_ELT)
         continue OUTER;
@@ -1252,6 +1253,8 @@ public final class ONEOFSCALAR
       }
     }
     if (num_elts == dkconfig_size) {
+      if (logOn() || debug.isDebugEnabled())
+        log (debug, "destroy of '" + format() + "' add_modified (" + v + ")");
       destroyAndFlow();
       return;
     }
@@ -1331,6 +1334,28 @@ public final class ONEOFSCALAR
 #if defined(IS_NUMERIC)
   public boolean isObviousDynamically(VarInfo[] vis) {
     VarInfo v = vis[0];
+
+    Debug dlog = new Debug (getClass(), ppt, vis);
+
+    if (logOn())
+      dlog.log ("enter isObviousDynamically");
+
+    // Obvious if we are 'size(array) == 0'  The thinking is that this
+    // will also always show up as 'array == []' which is a little more
+    // illuminating.  At this point we insist that we are a SequenceLength
+    // derivation of a base (underived) array.  Its quite possible this should
+    // just apply to all arrays.
+    if (v.isDerived() && (v.derived instanceof SequenceLength)
+      && (num_elts == 1) && (elts[0] == 0)) {
+      VarInfo[] bv = v.derived.getBases();
+      if (!bv[0].isDerived()) {
+        if (logOn())
+          dlog.log ("isObviousDynamically '" + v.name.name()
+                    + " == 0' ==> '" + bv[0].name.name() + " == []'");
+        return (true);
+      }
+    }
+
     if (v.isDerived() && (v.derived instanceof SequenceLength)) {
       SequenceLength sl = (SequenceLength) v.derived;
       if (sl.shift != 0) {
@@ -1377,7 +1402,7 @@ public final class ONEOFSCALAR
       if (inv instanceof ONEOFSCALAR) {
         ONEOFSCALAR other = (ONEOFSCALAR) inv;
         if (isSameFormula(other)
-            && SubSequence.isObviousSubSequenceDynamically(v, other.var())) {
+          && SubSequence.isObviousSubSequenceDynamically(this, v, other.var())) {
           debug.debug ("isObviousDyn: Returning true because isObviousSubSequenceDynamically");
           return true;
         }
