@@ -919,10 +919,30 @@ public final class ArraysMDE {
 
 
   ///////////////////////////////////////////////////////////////////////////
-  /// Array unions and intersections
+  /// Set operations, like subset, unions and intersections
   ///
 
+  /**
+   * Whether smaller is a subset of bigger.  The implmentation is to
+   * use collections because we want to take advantage of hashSet's
+   * constant time membership tests.  Hopefully Longs are interned.
+   **/
 
+  public static boolean isSubset(long[] smaller, long[] bigger) {
+    Set setBigger = new HashSet();
+
+    for (int i = 0; i < bigger.length; i++) {
+      setBigger.add (new Long(bigger[i]));
+    }
+
+    for (int i = 0; i < smaller.length; i++) {
+      Long elt = new Long(smaller[i]);
+      if (!setBigger.contains(elt)) return false;
+    }
+    
+    return true;
+
+  }
 
 
 
