@@ -2,6 +2,8 @@ package daikon.chicory;
 
 import java.util.zip.GZIPOutputStream;
 import java.io.*;
+import java.net.*;
+import java.net.Socket;
 import java.util.*;
 
 /**
@@ -186,16 +188,6 @@ public class Runtime
          StackTraceElement ste = ste_arr[1];
          System.out.printf ("%s.%s():::ENTER\n\n", ste.getClassName(), ste.getMethodName());*/
 
-        //TODO remove!!! (and the c variable TOO)!
-        /*c++;
-        if(c > 5000)
-            {
-                System.out.println("LETS GET OUT OF HERE!!!");
-                dtrace.close();
-                System.exit(1);
-            }
-         */
-
         MethodInfo mi = methods.get(mi_index);
         //System.out.println ("enter MethodInfo : " + mi.member);
         dtrace_writer.methodEntry(mi, nonce, obj, args);
@@ -374,8 +366,6 @@ public class Runtime
 
   private static HashMap primitiveClassesFromJvm = new HashMap(8);
 
-private static OutputStream daikonStdIn;
-
 private static Process chicory_proc;
 
 private static StreamRedirectThread err_thread;
@@ -485,15 +475,38 @@ private static StreamRedirectThread out_thread;
     public String toString() {return Double.toString(val);}
   }
 
-      public static void setDtraceOnlineMode(OutputStream os)
+    public static void setDtraceOnlineMode(int port)
     {
         dtraceLimit = Long.getLong("DTRACELIMIT", Integer.MAX_VALUE).longValue();
         dtraceLimitTerminate = Boolean.getBoolean("DTRACELIMITTERMINATE");
         // 8192 is the buffer size in BufferedReader
-        BufferedOutputStream bos = new BufferedOutputStream(os, 8192);
-        dtrace = new PrintStream(bos);
-
-        daikonStdIn = os;
+        
+        
+        Socket daikonSocket = null;
+        try
+        {
+            daikonSocket = new Socket(InetAddress.getLocalHost(), port);
+        }
+        catch (UnknownHostException e)
+        {
+            System.out.println("UnknownHostException connecting to Daikon : " + e.getMessage() + ". Exiting");
+            System.exit(1);
+        }
+        catch (IOException e)
+        {
+            System.out.println("IOException connecting to Daikon : " + e.getMessage() + ". Exiting");
+            System.exit(1);
+        }
+        
+        try
+        {
+            dtrace = new PrintStream(daikonSocket.getOutputStream());
+        }
+        catch (IOException e)
+        {
+            System.out.println("IOException connecting to Daikon : " + e.getMessage() + ". Exiting");
+            System.exit(1);
+        }
 
         if (supportsAddShutdownHook())
         {
@@ -503,7 +516,6 @@ private static StreamRedirectThread out_thread;
         {
             System.err.println("Warning: .dtrace file may be incomplete if program is aborted");
         }
-        // System.out.println("...done calling setDtrace(" + filename + ")");
     }
 
     /** Specify the dtrace file to which to write **/

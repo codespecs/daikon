@@ -75,16 +75,23 @@ private List<String> cmdList;
 private static final String traceLimTermString = "DTRACELIMITTERMINATE";
 private static final String traceLimString = "DTRACELIMIT";
 
+/**socket port to communicate with Daikon**/
+private int daikonPort = -1;
+
   /**
    * Entry point of Chicory <p>
    * @param args see usage for argument descriptions
    */
   public static void main(String[] args) {
       
-    Chicory chicory = new Chicory();
-    chicory.parse_args(args, false);
-
-    chicory.start_target();
+      parseAndLoadTarget(args);
+  }
+  
+  public static void parseAndLoadTarget(String[] args)
+  {
+      Chicory chicory = new Chicory();
+      chicory.parse_args(args, false);
+      chicory.start_target();
   }
 
   /** debug print **/
@@ -122,7 +129,22 @@ private static final String traceLimString = "DTRACELIMIT";
         }
         premain_args.add(arg);
 
-      } else if (arg.equals("--linked-lists")) {
+      }
+      else if (arg.startsWith("--daikon-port="))
+            {
+                String portStr = arg.substring("--daikon-port=".length());
+                try
+                {
+                    daikonPort  = Integer.parseInt(portStr);
+                }
+                catch (NumberFormatException e)
+                {
+                    usage("Invalid port: " + portStr);
+                    System.exit(1);
+                }
+
+            } 
+          else if (arg.equals("--linked-lists")) {
         linked_lists = true;
         premain_args.add(arg);
 
@@ -193,12 +215,14 @@ private static final String traceLimString = "DTRACELIMIT";
       }
           
          else if (arg.equals("--daikon-online")) {
-        daikon_cmd_online = "daikon.Daikon -";
+        daikon_cmd_online = "daikon.Daikon +";
         premain_args.add(arg);
+        premain_args.add("--daikon-port=8111"); //TODO get port from daikon!
 
       } else if (arg.startsWith ("--daikon-online=")) {
-        daikon_cmd_online = "daikon.Daikon " + arg.substring ("--daikon=".length()) + "-";
+        daikon_cmd_online = "daikon.Daikon " + arg.substring ("--daikon=".length()) + "+";
         premain_args.add(arg);
+        premain_args.add("--daikon-port=8111"); //TODO get port from daikon!
 
       } else if (arg.equals("--verbose")) {
         verbose = true;
@@ -303,6 +327,19 @@ private static final String traceLimString = "DTRACELIMIT";
     dtraceLim = System.getProperty(traceLimString);
     terminate = System.getProperty(traceLimTermString);
 
+    //run Daikon if we're in online mode
+    if(daikon_cmd_online != null)
+        {
+        runDaikon(true);
+        StreamRedirectThread err_thread
+        = new StreamRedirectThread("stderr", daikon_proc.getErrorStream(), System.err);
+      StreamRedirectThread out_thread
+        = new StreamRedirectThread("stdout", daikon_proc.getInputStream(), System.out);
+      err_thread.start();
+      out_thread.start();
+        }
+    
+    
     // Build the command line to execute the target with the javaagent
     List<String> cmdlist = new ArrayList<String>();
     cmdlist.add ("java");
@@ -350,13 +387,13 @@ private static final String traceLimString = "DTRACELIMIT";
       System.exit (result);
     }
     
-    runDaikon();
+    runDaikon(false);
     result = waitForDaikon();
     System.exit(result);
   }
  
 
-  public void runDaikon()
+  public void runDaikon(boolean isOnline)
   {
       java.lang.Runtime rt = java.lang.Runtime.getRuntime();
       
@@ -372,8 +409,15 @@ private static final String traceLimString = "DTRACELIMIT";
       
       System.out.println("cp = " + cp);*/
       
-    String cmdstr = String.format ("java -Xmx500m -cp %s -ea %s %s/%s",
-                                   cp, daikon_cmd, output_dir, trace_file_name);
+      String cmdstr;
+        if (isOnline)
+        {
+            cmdstr = String.format("java -Xmx500m -cp %s -ea %s", cp, daikon_cmd_online);
+        }
+        else
+        {
+            cmdstr = String.format("java -Xmx500m -cp %s -ea %s %s/%s", cp, daikon_cmd, output_dir, trace_file_name);
+        }
     
     //cmdstr = "java -Xmx500m -cp " + cp + " -ea " + daikon_cmd + " " + output_dir+"/"+trace_file_name;
     
@@ -501,8 +545,8 @@ private static final String traceLimString = "DTRACELIMIT";
       return (System.currentTimeMillis() - start);
   }
 
-  public void runDaikon(String daikonArgs)
-  {
+  //public void runDaikon(String daikonArgs)
+  //{
       /*
        String tFileName;
        String dFileName;
@@ -570,7 +614,7 @@ private static final String traceLimString = "DTRACELIMIT";
        System.out.println("could not run Daikon: " + e1);
        }
        */
-  }
+  //}
 
   /** convert a list of arguments into a command line string **/
   public String args_to_string(List<String> args)
@@ -587,5 +631,13 @@ private static final String traceLimString = "DTRACELIMIT";
       //TODO deal with quotation marks...
       return arg.split(" ");
   }
+
+/**
+ * @return The local socket port on which Daikon is listening
+ */
+public int getDaikonPort()
+{
+    return daikonPort;
+}
 
 }

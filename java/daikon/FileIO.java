@@ -10,6 +10,8 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 import java.io.*;
+import java.net.*;
+import java.net.ServerSocket;
 import java.util.*;
 
 public final class FileIO {
@@ -595,6 +597,39 @@ public final class FileIO {
     read_data_trace_file(filename, all_ppts, processor, false);
   }
 
+  static InputStream connectToChicory()
+  {
+      ServerSocket daikonServer = null;
+      try
+    {
+        daikonServer = new ServerSocket(8111); //TODO get random free port, and notify chicory of the value
+    }
+    catch (IOException e)
+    {
+        throw new RuntimeException("Unable to create server: " + e.getMessage());
+    }
+    
+    Socket chicSocket = null;
+    try
+    {
+        chicSocket = daikonServer.accept();
+    }
+    catch (IOException e)
+    {
+        throw new RuntimeException("Unable to connect to Chicory: " + e.getMessage());
+    }
+    
+    try
+    {
+        return chicSocket.getInputStream();
+    }
+    catch (IOException e)
+    {
+        throw new RuntimeException("Unable to get Chicory's input stream: " + e.getMessage());
+    }
+      
+  }
+  
   /** Read data from .dtrace file. **/
   static void read_data_trace_file(String filename, PptMap all_ppts,
                                    Processor processor, boolean is_decl_file)
@@ -615,7 +650,14 @@ public final class FileIO {
       // "-" means read from the standard input stream
       Reader file_reader = new InputStreamReader(System.in, "ISO-8859-1");
       reader = new LineNumberReader(file_reader);
-    } else {
+    }
+    else if (filename.equals("+")) //socket comm with Chicory
+    {
+        InputStream chicoryInput = connectToChicory();
+        InputStreamReader chicReader = new InputStreamReader(chicoryInput);
+        reader = new LineNumberReader(chicReader);
+    }
+    else {
       reader = UtilMDE.LineNumberFileReader(filename);
     }
 
