@@ -70,7 +70,7 @@ public final class ValueTuple implements Cloneable {
   boolean isModified(VarInfo vi) { return vi.isModified(this); }
   boolean isMissingNonsensical(VarInfo vi) { return vi.isMissingNonsensical(this); }
   boolean isMissingFlow(VarInfo vi) { return vi.isMissingFlow(this); }
-  // boolean isMissing(VarInfo vi) { return vi.isMissing(this); }
+  boolean isMissing(VarInfo vi) { return vi.isMissing(this); }
 
   int getModified(int value_index) { return mods[value_index]; }
   boolean isUnmodified(int value_index) { return mods[value_index] == UNMODIFIED; }
@@ -337,16 +337,21 @@ public final class ValueTuple implements Cloneable {
     for (int i=0; i<vals.length; i++) {
       if (i>0)
         sb.append(", ");
-      if (vals[i] instanceof long[])
-        sb.append(ArraysMDE.toString((long[])vals[i]));
-      else if (vals[i] instanceof int[])
-        // shouldn't reach this case -- should be long[], not int[]
-        sb.append(ArraysMDE.toString((int[])vals[i]));
-      else
-        sb.append(vals[i]);
+      sb.append (valToString (vals[i]));
     }
     sb.append("]");
     return sb.toString();
+  }
+  
+  public static String valToString (Object val) {
+    if (val == null) return "null";
+    if (val instanceof long[])
+      return(ArraysMDE.toString((long[])val));
+    else if (val instanceof int[])
+      // shouldn't reach this case -- should be long[], not int[]
+      return(ArraysMDE.toString((int[])val));
+    else
+      return(val.toString());
   }
 
   /** For each index i, do dest[i] = dest[i] or other[i]. */
