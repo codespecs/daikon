@@ -94,8 +94,11 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
         Assert.assert((elts[0] == 0) || (elts[0] == 1));
         return var().name  + " = " + ((elts[0] == 0) ? "false" : "true");
       } else if (is_object) {
-        Assert.assert(elts[0] == 0);
-        return var().name  + " = null";
+        if (elts[0] == 0) {
+          return var().name  + " = null";
+        } else {
+          return var().name  + " has only one value (" + elts[0] + ")";
+        }
       } else {
       return var().name  + " = " +  elts[0]  ;
       }
@@ -115,9 +118,17 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
       return;
     }
 
-    if (is_boolean && (num_elts == 1)) {
+    if ((is_boolean && (num_elts == 1))
+        || (is_object && (num_elts > 2))) {
       destroy();
       return;
+    }
+    if (is_object && (num_elts == 2)) {
+      // Permit two object values only if one of them is null
+      if ((elts[0] != 0) && (elts[1] != 0)) {
+        destroy();
+        return;
+      }
     }
 
     elts[num_elts] = v;
@@ -129,6 +140,11 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
     // This is not ideal.
     if (num_elts == 0) {
       return Invariant.PROBABILITY_UNKNOWN;
+
+    } else if (is_object && (num_elts > 1)) {
+      // This should never happen
+      return Invariant.PROBABILITY_UNJUSTIFIED;
+
     } else {
       return Invariant.PROBABILITY_JUSTIFIED;
     }
@@ -147,6 +163,17 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
 	return false;
 
     return true;
+  }
+
+  // Look up a previously instantiated invariant.
+  public static OneOfScalar  find(PptSlice ppt) {
+    Assert.assert(ppt.arity == 1);
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = (Invariant) itor.next();
+      if (inv instanceof OneOfScalar )
+        return (OneOfScalar ) inv;
+    }
+    return null;
   }
 
 }

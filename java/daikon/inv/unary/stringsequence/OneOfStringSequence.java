@@ -113,6 +113,7 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
     // This is not ideal.
     if (num_elts == 0) {
       return Invariant.PROBABILITY_UNKNOWN;
+
     } else {
       return Invariant.PROBABILITY_JUSTIFIED;
     }
@@ -131,6 +132,17 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
 	return false;
 
     return true;
+  }
+
+  // Look up a previously instantiated invariant.
+  public static OneOfStringSequence  find(PptSlice ppt) {
+    Assert.assert(ppt.arity == 1);
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = (Invariant) itor.next();
+      if (inv instanceof OneOfStringSequence )
+        return (OneOfStringSequence ) inv;
+    }
+    return null;
   }
 
 }
