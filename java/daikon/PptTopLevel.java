@@ -2113,7 +2113,9 @@ public class PptTopLevel extends Ppt {
         + better_name.substring(init_pos+7);
     }
     int open_paren_pos = better_name.indexOf("(");
-    if (open_paren_pos != -1) {
+    if ((open_paren_pos != -1)
+        // if open paren is first character, don't try to be clever
+        && (open_paren_pos != 0)) {
       int close_paren_pos = better_name.indexOf(")");
       int colon_pos = better_name.indexOf(":::");
       better_name = better_name.substring(0, open_paren_pos)
