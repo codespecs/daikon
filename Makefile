@@ -418,6 +418,9 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	mkdir /tmp/daikon/examples/kvasir-examples
 	mkdir /tmp/daikon/examples/kvasir-examples/bzip2
 	cp -p examples/kvasir-examples/bzip2/bzip2.c /tmp/daikon/examples/kvasir-examples/bzip2
+	mkdir /tmp/daikon/examples/kvasir-examples/wordplay
+	cp -p examples/kvasir-examples/wordplay/wordplay.c /tmp/daikon/examples/kvasir-examples/wordplay
+	cp -p examples/kvasir-examples/wordplay/words.txt /tmp/daikon/examples/kvasir-examples/wordplay
 
 	# chgrp -R $(INV_GROUP) /tmp/daikon
 
