@@ -458,7 +458,7 @@ public final class UtilMDE {
    * If the key isn't in the HashMap, it is added.
    * Throws an error if the key is in the HashMap but maps to a non-Integer.
    **/
-  public Object incrementHashMap(HashMap hm, Object key, int count) {
+  public static Object incrementHashMap(HashMap hm, Object key, int count) {
     Object old = hm.get(key);
     int new_total;
     if (old == null) {
@@ -468,6 +468,93 @@ public final class UtilMDE {
     }
     return hm.put(key, new Integer(new_total));
   }
+
+
+  // In hashing, there are two separate issues.  First, one must convert
+  // the input datum into an integer.  Then, one must transform the
+  // resulting integer in a pseudorandom way so as to result in a number
+  // that is far separated from other values that may have been near it to
+  // begin with.  Often these two steps are combined, particularly if
+  // one wishes to avoid creating too large an integer (losing information
+  // off the top bits).
+
+  // http://burtleburtle.net/bob/hash/hashfaq.html says (of combined methods):
+  //  * for (h=0, i=0; i<len; ++i) { h += key[i]; h += (h<<10); h ^= (h>>6); }
+  //    h += (h<<3); h ^= (h>>11); h += (h<<15);
+  //    is good.
+  //  * for (h=0, i=0; i<len; ++i) h = tab[(h^key[i])&0xff]; may be good.
+  //  * for (h=0, i=0; i<len; ++i) h = (h>>8)^tab[(key[i]+h)&0xff]; may be good.
+
+  // In this part of the file, perhaps I will eventually write good hash
+  // functions.  For now, write cheesy ones that primarily deal with the
+  // first issue, transforming a data structure into a single number.  This
+  // is also known as fingerprinting.
+
+  public static final double hashToDouble(double[] a) {
+    double result = 17;
+    for (int i = 0; i < a.length; i++) {
+      result = result * 37 + a[i];
+    }
+    return result;
+  }
+
+  public static final double hashToDouble(double a, double b, double c) {
+    double result = 17;
+    result = result * 37 + a;
+    result = result * 37 + b;
+    result = result * 37 + c;
+    return result;
+  }
+
+  public static final double hashToDouble(double a, double b) {
+    double result = 17;
+    result = result * 37 + a;
+    result = result * 37 + b;
+    return result;
+  }
+
+  // Note that this differs from the result of Double.hashCode (which see).
+  public static final int hash(double x) {
+    return hash(Double.doubleToLongBits(x));
+  }
+
+  // Don't define hash with int args; use the long versions instead.
+
+  // Note that this differs from the result of Long.hashCode (which see)
+  // But it doesn't map -1 and 0 to the same value.
+  public static final int hash(long l) {
+    int result = 17;
+    int hibits = (int) (l >> 32);
+    int lobits = (int) l;
+    result = result * 37 + hibits;
+    result = result * 37 + lobits;
+    return result;
+  }
+
+  public static final int hash(long[] a) {
+    long result = 17;
+    for (int i = 0; i < a.length; i++) {
+      result = result * 37 + a[i];
+    }
+    return hash(result);
+  }
+
+  public static final long hash(long a, long b, long c) {
+    long result = 17;
+    result = result * 37 + a;
+    result = result * 37 + b;
+    result = result * 37 + c;
+    return hash(result);
+  }
+
+  public static final long hash(long a, long b) {
+    long result = 17;
+    result = result * 37 + a;
+    result = result * 37 + b;
+    return hash(result);
+  }
+
+
 
 
   ///
