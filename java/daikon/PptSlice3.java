@@ -79,7 +79,8 @@ public final class PptSlice3  extends PptSlice {
       System.out.println("the invariants are:");
       for (int i=0; i<invs.size(); i++) {
         Invariant inv = (Invariant) invs.elementAt(i);
-        System.out.println("  " + inv.format() + "\n    " + inv.repr());
+        System.out.println("  " + inv.format());
+        System.out.println("    " + inv.repr());
       }
     }
 

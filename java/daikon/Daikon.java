@@ -13,6 +13,7 @@ import gnu.getopt.*;
 import utilMDE.*;
 
 public final class Daikon {
+  public static final String lineSep = Global.lineSep;
 
   public final static boolean disable_splitting = false;
   // public final static boolean disable_splitting = true;
@@ -72,24 +73,24 @@ public final class Daikon {
 
 
   static String usage =
-    "Daikon invariant detector.\n"
-    + "Copyright 1998-2001 by Michael Ernst <mernst@lcs.mit.edu>\n"
-    + "Usage:\n"
-    + "    java daikon.Daikon [flags...] files...\n"
-    + "  Each file is a declaration file or a data trace file; the file type\n"
-    + "  is determined by the file name (containing \".decls\" or \".dtrace\").\n"
-    + "  Flags:\n"
-    + "    -h		     Print this usage message\n"
-    + "    -r ppt_regexp     Only process program points matching the regexp\n"
-    + "    -o inv_file       Serialize invariants to the specified file;\n"
-    + "                        they can later be postprocessed, compared, etc.\n"
-    + "    --suppress_cont   Suppress display of implied invariants (by controlling ppt).\n"
-    + "    --suppress_post   Suppress display of obvious postconditions on prestate.\n"
-    + "    --prob_limit pct  Sets the probability limit for justifying invariants.\n"
-    + "                        The default is 1%.  Smaller values yield stronger filtering.\n"
-    + "    --esc_output      Write output in ESC-like format.\n"
-    + "    --output_num_samples      Output numbers of values and samples for\n"
-    + "				       invariants and program points; for debugging.\n"
+    "Daikon invariant detector." + lineSep
+    + "Copyright 1998-2001 by Michael Ernst <mernst@lcs.mit.edu>" + lineSep
+    + "Usage:" + lineSep
+    + "    java daikon.Daikon [flags...] files..." + lineSep
+    + "  Each file is a declaration file or a data trace file; the file type" + lineSep
+    + "  is determined by the file name (containing \".decls\" or \".dtrace\")." + lineSep
+    + "  Flags:" + lineSep
+    + "    -h		     Print this usage message" + lineSep
+    + "    -r ppt_regexp     Only process program points matching the regexp" + lineSep
+    + "    -o inv_file       Serialize invariants to the specified file;" + lineSep
+    + "                        they can later be postprocessed, compared, etc." + lineSep
+    + "    --suppress_cont   Suppress display of implied invariants (by controlling ppt)." + lineSep
+    + "    --suppress_post   Suppress display of obvious postconditions on prestate." + lineSep
+    + "    --prob_limit pct  Sets the probability limit for justifying invariants." + lineSep
+    + "                        The default is 1%.  Smaller values yield stronger filtering." + lineSep
+    + "    --esc_output      Write output in ESC-like format." + lineSep
+    + "    --output_num_samples      Output numbers of values and samples for" + lineSep
+    + "				       invariants and program points; for debugging." + lineSep
     ;
 
   /**
@@ -175,7 +176,7 @@ public final class Daikon {
         break; // getopt() already printed an error
         //
       default:
-        System.out.print("getopt() returned " + c + "\n");
+        System.out.print("getopt() returned " + c + lineSep);
         break;
       }
     }

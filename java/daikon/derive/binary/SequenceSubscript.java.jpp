@@ -106,7 +106,7 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
             if (sclvar_names == null) {
               sclvar_name = "post(" + sclvar_name + ")";
               sclvar_esc_name = "\\new(" + sclvar_esc_name + ")";
-              // throw new Error("can't find prestate index (or poststate array) for\n  "
+              // throw new Error("can't find prestate index (or poststate array) for" + "      "
               //                 + seqvar_name + "[" + sclvar_name + "]"
               //                 + "  where " + orig.name + " != " + sclvar.name);
             } else {

@@ -93,7 +93,8 @@ public final class PptSlice1  extends PptSlice {
       System.out.println("the invariants are:");
       for (int i=0; i<invs.size(); i++) {
         Invariant inv = (Invariant) invs.elementAt(i);
-        System.out.println("  " + inv.format() + "\n    " + inv.repr());
+        System.out.println("  " + inv.format());
+        System.out.println("    " + inv.repr());
       }
     }
 
@@ -238,8 +239,6 @@ public final class PptSlice1  extends PptSlice {
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.STRING_ARRAY) {
-      // System.out.println(name);
-      // System.out.println(((Object[]) val1).length);
       String[] value = (String[]) val1;
       for (int i=0; i<num_invs; i++) {
         SingleStringSequence inv = (SingleStringSequence)invs.elementAt(i);

@@ -663,11 +663,11 @@ public final class FileIO {
     // // compromise, perhaps eliminate this but have callers use the public
     // // "data_trace_reader" and "data_trace_filename" members.
     // catch (RuntimeException e) {
-    //   System.out.println("\nAt " + filename + " line " + reader.getLineNumber() + ":");
+    //   System.out.println(lineSep + "At " + filename + " line " + reader.getLineNumber() + ":");
     //   e.printStackTrace();
     //   throw e;
     // } catch (Error e) {
-    //   System.out.println("\nAt " + filename + " line " + reader.getLineNumber() + ":");
+    //   System.out.println(lineSep + "At " + filename + " line " + reader.getLineNumber() + ":");
     //   e.printStackTrace();
     //   throw e;
     // }
@@ -675,7 +675,8 @@ public final class FileIO {
     // We've read all of the records in the dtrace file
     // Look for unmatched procedure entry points
     if ((!call_stack.empty()) || (!call_hashmap.isEmpty())) {
-      System.out.println("\nDetected abnormal termination of "
+      System.out.println();
+      System.out.println("Detected abnormal termination of "
 			 + (call_stack.size() + call_hashmap.size())
                          + " functions.");
       if (!call_hashmap.isEmpty()) {
@@ -719,7 +720,7 @@ public final class FileIO {
       Assert.assert(val_index == vi.value_index
                     // , "Differing val_index = " + val_index
                     // + " and vi.value_index = " + vi.value_index
-                    // + " for " + vi.name + "\n" + vi.repr()
+                    // + " for " + vi.name + lineSep + vi.repr()
                     );
       String line = reader.readLine();
       if ((line == null) || !line.equals(vi.name)) {

@@ -14,6 +14,7 @@ import utilMDE.*;
 // themselves are not interned.
 public final class ValueTuple implements Cloneable {
 
+
   // These arrays are interned, and so are their elements.
 
   public Object[] vals;		// the values themselves (as Objects, if necessary)

@@ -27,8 +27,8 @@ public class Implication extends Invariant {
     this.consequent = consequent;
     this.iff = iff;
     ppt.invs.add(this);
-    // System.out.println("Added implication invariant to " + ppt.name
-    //                    + "\n  " + this.format());
+    // System.out.println("Added implication invariant to " + ppt.name)
+    // System.out.println("  " + this.format());
   }
 
   static public Implication makeImplication(PptTopLevel ppt, Invariant predicate, Invariant consequent, boolean iff) {

@@ -18,6 +18,8 @@ public final class Global {
   /// Constants
   ///
 
+  public final static String lineSep = System.getProperty("line.separator");
+
   // Regular expressions
   public final static PatternCompiler regexp_compiler;
   public final static PatternMatcher regexp_matcher;

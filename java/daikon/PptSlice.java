@@ -13,6 +13,7 @@ import utilMDE.*;
 // need to find them all to give a good result).
 
 public abstract class PptSlice extends Ppt {
+  public static final String lineSep = Global.lineSep;
 
   public boolean debugged;
 
@@ -198,15 +199,15 @@ public abstract class PptSlice extends Ppt {
   boolean check_modbits () {
     Assert.assert(! no_invariants);
     if (num_mod_non_missing_samples() < num_values()) {
-      String message = "Bad mod bits in dtrace file:\n"
+      String message = "Bad mod bits in dtrace file:" + lineSep
         + "num_mod_non_missing_samples()=" + num_mod_non_missing_samples()
         + ", num_samples()=" + num_samples()
-        + ", num_values()=" + num_values() + "\n"
-        + "for " + name + "\n"
-        + tuplemod_samples_summary() + "\n"
-        + "Consider running modbit-munge.pl\n"
+        + ", num_values()=" + num_values() + lineSep
+        + "for " + name + lineSep
+        + tuplemod_samples_summary() + lineSep
+        + "Consider running modbit-munge.pl" + lineSep
         + ((values_cache == null)
-           ? "Values cache has been cleared\n"
+           ? "Values cache has been cleared" + lineSep
            : "Values cache has not been cleared");
       if (! Daikon.disable_modbit_check_message) {
         System.out.println(message);

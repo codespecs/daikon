@@ -947,7 +947,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
       throw new Error("index_range failed for " + name);
     }
     return new String[] {
-      "\\forall int i; (" + index_range[0] + " <= i & i <= " + index_range[1] + ") ==> ",
+      "\\forall int i; (" + index_range[0] + " <= i && i <= " + index_range[1] + ") ==> ",
       index_range[2],
     };
   }

@@ -1729,7 +1729,7 @@ public class PptTopLevel extends Ppt {
         for (Iterator cand_itor=hs.iterator(); cand_itor.hasNext(); ) {
           Invariant candidate = (Invariant) cand_itor.next();
           String candidate_formatted = candidate.format();
-          // System.out.println("Comparing:\n    " + candidate_formatted + "\n    " + canon_new_formatted);
+          // System.out.println("Comparing:" + lineSep + "    " + candidate_formatted + lineSep + "    " + canon_new_formatted);
           // It is also desirable to be over the prestate;
           // but that is only true for variables that are modified.
           // A variable without "orig()" is fine if it's not modified.
@@ -1827,7 +1827,7 @@ public class PptTopLevel extends Ppt {
         Assert.assert(inv1.isExclusiveFormula(inv2)
                       == inv2.isExclusiveFormula(inv1),
                       "Bad exclusivity: " + inv1.isExclusiveFormula(inv2) + " " + inv2.isExclusiveFormula(inv1)
-                      + "\n  " + inv1.format() + "\n  " + inv2.format());
+                       + "    " + inv1.format() + "    " + inv2.format());
         // System.out.println("isExclusiveFormula(" + inv1.format() + ", " + inv2.format() + ") = " + inv1.isExclusiveFormula(inv2));
         if (inv1.isExclusiveFormula(inv2)) {
           result.add(new Invariant[] { inv1, inv2 });
@@ -2026,11 +2026,11 @@ public class PptTopLevel extends Ppt {
 
     // // The value "0" can be had for missing samples.
     // if (num_mod_non_missing_samples() < num_values() - 1) {
-    //   throw new Error("Bad mod bits in dtrace file:\n"
+    //   throw new Error("Bad mod bits in dtrace file:" + lineSep
     //                   + "num_mod_non_missing_samples()=" + num_mod_non_missing_samples()
-    //                   + ", num_values()=" + num_values() + "\n"
-    //                   + "for " + name + "\n"
-    //                   + tuplemod_samples_summary() + "\n"
+    //                   + ", num_values()=" + num_values() + lineSep
+    //                   + "for " + name + lineSep
+    //                   + tuplemod_samples_summary() + lineSep
     //                   + "Consider running modbit-munge.pl");
     // }
 

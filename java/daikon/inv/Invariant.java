@@ -11,6 +11,7 @@ import utilMDE.*;
 // I should probably rename this to "Invariant" and get rid of that interface.o
 
 public abstract class Invariant implements java.io.Serializable {
+
   public PptSlice ppt;      // includes values, number of samples, VarInfos, etc.
 
   // Has to be public so wrappers can read it.
@@ -63,8 +64,10 @@ public abstract class Invariant implements java.io.Serializable {
     double result = computeProbability();
     if (result > PROBABILITY_NEVER) {
       // Can't print this.repr_prob(), as it may compute the probability!
-      System.out.println("Bad invariant probability " + result + ": \n" + this.getClass() + "\n" + repr() + "\n"
-			 + this.format() + "\n");
+      System.out.println("Bad invariant probability " + result + ": ");
+      System.out.println(this.getClass());
+      System.out.println(repr());
+      System.out.println(this.format());
     }
     Assert.assert((result == PROBABILITY_JUSTIFIED)
 		  || (result == PROBABILITY_UNJUSTIFIED)

@@ -33,7 +33,7 @@ public final class TwoSequenceFactory {
       return null;
 
     // System.out.println("TwoSequenceFactory(pass " + pass + ") " + ppt.name
-    //                    + "\n  super1 = " + super1.name + ", super2 = " + super2.name);
+    //                    + "      super1 = " + super1.name + ", super2 = " + super2.name);
 
     Vector result = new Vector();
     if (pass == 1) {
