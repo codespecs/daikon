@@ -68,20 +68,33 @@ public class InvariantsGUI {
 	    }
 	}
 
-	//  Create the second level of the tree:  method names
+	//  Create the second level of the tree: method names OR class-level ppt.
+	//  If the ppt is associated with a method, then create the method node which will
+	//  later contain entry and exit ppt's as children.  If the ppt is a class-level
+	//  ppt (CLASS or CLASS-STATIC or OBJECT), then create the leaf node for this ppt
+	//  right away.
 	for (Iterator iter = pptMap.nameStringSet().iterator(); iter.hasNext(); ) {
 	    String name = (String) iter.next();
 	    PptName pptName = new PptName( name );
-	    String methodName = pptName.getFullMethodName();
-	    if (methodName == null) // this is a CLASS or OBJECT ppt, and has no methodName associated with it
-		continue;
 	    String className = pptName.getFullClassName();
 	    DefaultMutableTreeNode classNode = getChildByName( root, className );
 	    if (classNode == null)
 		throw new Error( "InvariantsGUI.constructTreeModel():  cannot find class node '" + className + "'" );
-	    DefaultMutableTreeNode methodNode = getChildByName( classNode, methodName );
-	    if (methodNode == null) 
-		classNode.add( new DefaultMutableTreeNode( methodName )); // Create a node for this method
+	    //	    System.out.println(name);
+	    if (pptName.isObjectInstanceSynthetic() || pptName.isClassStaticSynthetic()) {
+		String programPointName = pptName.getPoint();
+		DefaultMutableTreeNode programPointNode = getChildByName( classNode, programPointName );
+		if (programPointNode == null) {
+		    PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
+		    classNode.add( new DefaultMutableTreeNode( topLevel )); //  Create a node for this program point
+		}
+	    }
+	    else {		// is a regular method ppt
+		String methodName = pptName.getFullMethodName();
+		DefaultMutableTreeNode methodNode = getChildByName( classNode, methodName );
+		if (methodNode == null) 
+		    classNode.add( new DefaultMutableTreeNode( methodName )); // Create a node for this method
+	    }
 	}
 
 	//  Create the third level of the tree:  method entry and exit points
@@ -120,6 +133,10 @@ public class InvariantsGUI {
     }
 
     protected static void setupGUI( JTree tree, JPanel invariantTablePanel ) {
+	//  If the user clicks on a method, the method's ppt's will be selected
+	//  but we don't want the method node to expand.
+	tree.setExpandsSelectedPaths( false );
+
 	JFrame frame = new JFrame( "Daikon GUI" );
 	JSplitPane splitPane = new JSplitPane( JSplitPane.VERTICAL_SPLIT,
 					       new JScrollPane( tree ),
@@ -142,7 +159,7 @@ class DaikonTreeSelectionListener implements TreeSelectionListener {
     List invariantTables = new ArrayList();
     List invariantTableNames = new ArrayList();
     TreeSelectionModel treeSelectionModel;
-
+    
     public DaikonTreeSelectionListener( JPanel invariantTablePanel, TreeSelectionModel treeSelectionModel ) {
 	panel = invariantTablePanel;
 	panel.setLayout( new BoxLayout( panel, BoxLayout.Y_AXIS ));
@@ -150,12 +167,13 @@ class DaikonTreeSelectionListener implements TreeSelectionListener {
     }
 
     public void valueChanged( TreeSelectionEvent e ) {
-	//	System.out.println( "DaikonTreeSelectionListener.valueChanged() event: " );
 	TreePath paths[] = e.getPaths();
 	for (int i=0; i < paths.length; i++) {
 	    DefaultMutableTreeNode node = (DefaultMutableTreeNode) paths[i].getLastPathComponent();
 	    Object userObject = node.getUserObject();
-	    //	    System.out.println( "\t" + userObject.toString() + ", " + e.isAddedPath(i));
+
+	    //  A leaf node (PptTopLevel node) was selected or deselected.  Add or remove
+	    //  the appropriate invariant tables.
 	    if (userObject.getClass().getName().equals( "daikon.PptTopLevel" )) {
 		String name = ((PptTopLevel) userObject).name;
 		if (e.isAddedPath( paths[i] )) {
@@ -163,7 +181,7 @@ class DaikonTreeSelectionListener implements TreeSelectionListener {
 		    invariantTables.add( tableContainer );
 		    invariantTableNames.add( name );
 		}
-		else {		// paths[i] has been removed.  It should already be in invariantTableNames.
+		else {		// paths[i] was deselected -- it should be in invariantTableNames.
 		    int index = invariantTableNames.indexOf( name );
 		    if (index == -1)
 			throw new Error( "DaikonTreeSelectionListener.valueChanged(): " + name + " table not found." );
@@ -171,23 +189,24 @@ class DaikonTreeSelectionListener implements TreeSelectionListener {
 		    invariantTables.remove( index );
 		    invariantTableNames.remove( index );
 		}
- 	    } else {		// This is a class or a method node, not a PptTopLevel node (ie leaf node).
+
+      	    //  A non-leaf node was selected or deselected.  Select or deselect its children.
+ 	    } else {
 		if (e.isAddedPath( paths[i] )) // Add children.
 		    for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
 			TreePath newPath = paths[i].pathByAddingChild( enum.nextElement());
-			TreePath leadPath = treeSelectionModel.getLeadSelectionPath();
-			TreeSelectionEvent event = new TreeSelectionEvent( node, newPath, true, leadPath, leadPath );
 			treeSelectionModel.addSelectionPath( newPath );
 		    }
 		else		// Remove children.
 		    for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
 			TreePath newPath = paths[i].pathByAddingChild( enum.nextElement());
-			TreePath leadPath = treeSelectionModel.getLeadSelectionPath();
-			TreeSelectionEvent event = new TreeSelectionEvent( node, newPath, false, leadPath, leadPath );
 			treeSelectionModel.removeSelectionPath( newPath );
 		    }
 	    }
 	}
+
+	//  Make the lead selection's invariant table scroll to the top.
+
 	panel.repaint();
 	panel.revalidate();
     }
@@ -213,17 +232,23 @@ class DaikonTreeSelectionListener implements TreeSelectionListener {
 
 	JPanel pptPanel = new JPanel();
 	pptPanel.setLayout( new BoxLayout( pptPanel, BoxLayout.Y_AXIS ));
-	String headingString = topLevel.name;
+
+	PptName pptName = new PptName( topLevel.name );
+	String headingString;
+	if (pptName.getShortMethodName() == null)
+	    headingString = pptName.getFullClassName() + " : " + pptName.getPoint();
+	else			// want SHORT method name so table headings doesn't get too wide
+	    headingString = pptName.getFullClassName() + "." + pptName.getShortMethodName() + "() : " + pptName.getPoint();
 	//	JEditorPane heading = new JEditorPane( "text/plain", headingString );
 	JLabel heading = new JLabel( headingString );
 	heading.setForeground( new Color( 50, 30, 100 ));
-	//	heading.setBackground( Color.white );
 	heading.setAlignmentX( .5f );
 
 	pptPanel.add( Box.createRigidArea( new Dimension( 0, 10 )));
 	pptPanel.add( heading );
 	pptPanel.add( Box.createRigidArea( new Dimension( 0, 10 )));
-	pptPanel.add( scrollPane );
+	if (invariants.size() != 0)
+	    pptPanel.add( scrollPane );
 	pptPanel.setBorder( BorderFactory.createCompoundBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ),
 								BorderFactory.createEtchedBorder()));
 	panel.add( pptPanel );
@@ -268,10 +293,4 @@ class InvariantTableModel extends AbstractTableModel {
 	return null;
     }
 }
-
-
-
-
-
-
 
