@@ -171,15 +171,15 @@ public abstract class SplitterList {
 	  }
 	}
       }catch(Exception e) {
-	if (Global.debugPptSplit) {
-	  System.out.println("Error matching regex for " + pptName + "\n" + e.toString());
+	if (Global.debugSplit.isDebugEnabled()) {
+	  Global.debugSplit.debug("Error matching regex for " + pptName + "\n" + e.toString());
 	}
       }
     }
     
     if (splitterArrays.size() == 0) {
-      if (Global.debugPptSplit) {
-	System.out.println("SplitterList.get found no splitters for " + pptName);
+      if (Global.debugSplit.isDebugEnabled()) {
+	Global.debugSplit.debug("SplitterList.get found no splitters for " + pptName);
 	return null;
       }
     }else{
@@ -192,8 +192,8 @@ public abstract class SplitterList {
 	  counter++;
 	}
       }
-      if (Global.debugPptSplit)
-	System.out.println("SplitterList.get found " + counter + " splitters for " + pptName);
+      if (Global.debugSplit.isDebugEnabled())
+	Global.debugSplit.debug("SplitterList.get found " + counter + " splitters for " + pptName);
     }    
     return (Splitter[])splitters.toArray(new Splitter[0]);
   }

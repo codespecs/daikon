@@ -704,9 +704,7 @@ public class SplitterFactory {
    * Print out a message if the debugPptSplit variable is set to "true"
    **/
   static void debugPrint(String s) {
-    if (Global.debugPptSplit) {
-      System.out.println(s);
-    }
+    Global.debugSplit.debug (s);
   }
 
   /**
