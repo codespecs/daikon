@@ -8,7 +8,7 @@ import daikon.diff.*;
 public class DetailedStatisticsVisitorTester extends TestCase {
 
   RootNode root = new RootNode();
-  DetailedStatisticsVisitor v = new DetailedStatisticsVisitor();
+  DetailedStatisticsVisitor v = new DetailedStatisticsVisitor(false);
   
   VarInfo[] vars = { DiffTester.newIntVarInfo("x"),
                      DiffTester.newIntVarInfo("y"),
@@ -16,10 +16,19 @@ public class DetailedStatisticsVisitorTester extends TestCase {
   PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
   
   PptSlice slice0 = ppt.implication_view;
-  Invariant null_1_just = new DummyInvariant(slice0, "1", true);
-  Invariant null_1_unjust = new DummyInvariant(slice0, "1", false);
-  Invariant null_2_just = new DummyInvariant(slice0, "2", true);
-  Invariant null_2_unjust = new DummyInvariant(slice0, "2", false);
+  Invariant null_int_1_just = new DummyInvariant(slice0, "1", true);
+  Invariant null_int_1_unjust = new DummyInvariant(slice0, "1", false);
+  Invariant null_int_2_just = new DummyInvariant(slice0, "2", true);
+  Invariant null_int_2_unjust = new DummyInvariant(slice0, "2", false);
+
+  Invariant null_unint_1_just =
+    new DummyInvariant(slice0, "1", true, false);
+  Invariant null_unint_1_unjust =
+    new DummyInvariant(slice0, "1", false, false);
+  Invariant null_unint_2_just =
+    new DummyInvariant(slice0, "2", true, false);
+  Invariant null_unint_2_unjust =
+    new DummyInvariant(slice0, "2", false, false);
 
   PptSlice slice1 = new PptSlice1(ppt, new VarInfo[] {vars[0]});
   Invariant unary_int_1_just = new DummyInvariant(slice1, "1", true);
@@ -57,18 +66,31 @@ public class DetailedStatisticsVisitorTester extends TestCase {
 
     PptNode pptNode = new PptNode(ppt, ppt);
     
-    pptNode.add(new InvNode(null_1_just, null_1_just));
-    pptNode.add(new InvNode(null_1_just, null_1_unjust));
-    pptNode.add(new InvNode(null_1_unjust, null_1_just));
-    pptNode.add(new InvNode(null_1_unjust, null_1_unjust));
-    pptNode.add(new InvNode(null_1_just, null_2_just));
-    pptNode.add(new InvNode(null_1_just, null_2_unjust));
-    pptNode.add(new InvNode(null_1_unjust, null_2_just));
-    pptNode.add(new InvNode(null_1_unjust, null_2_unjust));
-    pptNode.add(new InvNode(null_1_just, null));
-    pptNode.add(new InvNode(null_1_unjust, null));
-    pptNode.add(new InvNode(null, null_1_just));
-    pptNode.add(new InvNode(null, null_1_unjust));
+    pptNode.add(new InvNode(null_int_1_just, null_int_1_just));
+    pptNode.add(new InvNode(null_int_1_just, null_int_1_unjust));
+    pptNode.add(new InvNode(null_int_1_unjust, null_int_1_just));
+    pptNode.add(new InvNode(null_int_1_unjust, null_int_1_unjust));
+    pptNode.add(new InvNode(null_int_1_just, null_int_2_just));
+    pptNode.add(new InvNode(null_int_1_just, null_int_2_unjust));
+    pptNode.add(new InvNode(null_int_1_unjust, null_int_2_just));
+    pptNode.add(new InvNode(null_int_1_unjust, null_int_2_unjust));
+    pptNode.add(new InvNode(null_int_1_just, null));
+    pptNode.add(new InvNode(null_int_1_unjust, null));
+    pptNode.add(new InvNode(null, null_int_1_just));
+    pptNode.add(new InvNode(null, null_int_1_unjust));
+
+    pptNode.add(new InvNode(null_unint_1_just, null_unint_1_just));
+    pptNode.add(new InvNode(null_unint_1_just, null_unint_1_unjust));
+    pptNode.add(new InvNode(null_unint_1_unjust, null_unint_1_just));
+    pptNode.add(new InvNode(null_unint_1_unjust, null_unint_1_unjust));
+    pptNode.add(new InvNode(null_unint_1_just, null_unint_2_just));
+    pptNode.add(new InvNode(null_unint_1_just, null_unint_2_unjust));
+    pptNode.add(new InvNode(null_unint_1_unjust, null_unint_2_just));
+    pptNode.add(new InvNode(null_unint_1_unjust, null_unint_2_unjust));
+    pptNode.add(new InvNode(null_unint_1_just, null));
+    pptNode.add(new InvNode(null_unint_1_unjust, null));
+    pptNode.add(new InvNode(null, null_unint_1_just));
+    pptNode.add(new InvNode(null, null_unint_1_unjust));
 
     pptNode.add(new InvNode(unary_int_1_just, unary_int_1_just));
     pptNode.add(new InvNode(unary_int_1_just, unary_int_1_unjust));

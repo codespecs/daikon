@@ -44,25 +44,25 @@ public class DiffTester extends TestCase {
     empty = new PptMap();
 
     ppts1 = new PptMap();
-    ppts1.add(new PptTopLevel("Foo:::OBJECT", new VarInfo[0]));
+    ppts1.add(new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
     ppts1.add(new PptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
-    ppts1.add(new PptTopLevel("Foo.Bar(int):::EXIT19", new VarInfo[0]));
+    ppts1.add(new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
 
     ppts2 = new PptMap();
-    ppts2.add(new PptTopLevel("Foo:::OBJECT", new VarInfo[0]));
+    ppts2.add(new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
     ppts2.add(new PptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
 
     // Permutation of ppts1
     ppts3 = new PptMap();
     ppts3.add(new PptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
-    ppts3.add(new PptTopLevel("Foo:::OBJECT", new VarInfo[0]));
-    ppts3.add(new PptTopLevel("Foo.Bar(int):::EXIT19", new VarInfo[0]));
+    ppts3.add(new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
+    ppts3.add(new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
     
     {
       invs1 = new PptMap();
       VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"),
                          newIntVarInfo("z")};
-      PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
+      PptTopLevel ppt = new PptTopLevel("Foo.Baa(int):::ENTER", vars);
       PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
       Invariant invx = LowerBound.instantiate(slicex);
       slicex.addInvariant(invx);
@@ -85,7 +85,7 @@ public class DiffTester extends TestCase {
       invs2 = new PptMap();
       VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"),
                          newIntVarInfo("z")};
-      PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
+      PptTopLevel ppt = new PptTopLevel("Foo.Baa(int):::ENTER", vars);
       PptSlice slicey = new PptSlice1(ppt, new VarInfo[] {vars[1]});
       Invariant invy = LowerBound.instantiate(slicey);
       slicey.addInvariant(invy);
@@ -107,7 +107,7 @@ public class DiffTester extends TestCase {
       invs3 = new PptMap();
       VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"),
                          newIntVarInfo("z")};
-      PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
+      PptTopLevel ppt = new PptTopLevel("Foo.Baa(int):::ENTER", vars);
       PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
       Invariant invx = LowerBound.instantiate(slicex);
       slicex.addInvariant(invx);
@@ -128,7 +128,7 @@ public class DiffTester extends TestCase {
     {
       imps1 = new PptMap();
       VarInfo[] vars = { newIntVarInfo("x") };
-      PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
+      PptTopLevel ppt = new PptTopLevel("Foo.Baa(int):::ENTER", vars);
       PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
       Invariant inv1 = LowerBound.instantiate(slicex);
       Invariant inv2 = Modulus.instantiate(slicex);
@@ -147,7 +147,7 @@ public class DiffTester extends TestCase {
     {
       imps2 = new PptMap();
       VarInfo[] vars = { newIntVarInfo("x") };
-      PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
+      PptTopLevel ppt = new PptTopLevel("Foo.Baa(int):::ENTER", vars);
       PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
       Invariant inv1 = LowerBound.instantiate(slicex);
       Invariant inv2 = Modulus.instantiate(slicex);
@@ -178,7 +178,7 @@ public class DiffTester extends TestCase {
     PptNode node;
     node = new PptNode
       (null,
-       new PptTopLevel("Foo:::OBJECT", new VarInfo[0]));
+       new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
     ref.add(node);
     node = new PptNode
       (null,
@@ -186,7 +186,7 @@ public class DiffTester extends TestCase {
     ref.add(node);
     node = new PptNode
       (null,
-       new PptTopLevel("Foo.Bar(int):::EXIT19", new VarInfo[0]));
+       new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
     ref.add(node);
 
     Assert.assertEquals(printTree(ref), printTree(diff));
@@ -198,7 +198,7 @@ public class DiffTester extends TestCase {
     RootNode ref = new RootNode();
     PptNode node;
     node = new PptNode
-      (new PptTopLevel("Foo:::OBJECT", new VarInfo[0]),
+      (new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
        null);
     ref.add(node);
     node = new PptNode
@@ -206,7 +206,7 @@ public class DiffTester extends TestCase {
        null);
     ref.add(node);
     node = new PptNode
-      (new PptTopLevel("Foo.Bar(int):::EXIT19", new VarInfo[0]),
+      (new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
        null);
     ref.add(node);
 
@@ -220,16 +220,16 @@ public class DiffTester extends TestCase {
     RootNode ref = new RootNode();
     PptNode node;
     node = new PptNode
-      (new PptTopLevel("Foo:::OBJECT", new VarInfo[0]),
-       new PptTopLevel("Foo:::OBJECT", new VarInfo[0]));
+      (new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
+       new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
     ref.add(node);
     node = new PptNode
       (new PptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]),
        new PptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
     ref.add(node);
     node = new PptNode
-      (new PptTopLevel("Foo.Bar(int):::EXIT19", new VarInfo[0]),
-       new PptTopLevel("Foo.Bar(int):::EXIT19", new VarInfo[0]));
+      (new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
+       new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
     ref.add(node);
 
     Assert.assertEquals(printTree(ref), printTree(diff));
@@ -241,15 +241,15 @@ public class DiffTester extends TestCase {
     RootNode ref = new RootNode();
     PptNode node;
     node = new PptNode
-      (new PptTopLevel("Foo:::OBJECT", new VarInfo[0]),
-       new PptTopLevel("Foo:::OBJECT", new VarInfo[0]));
+      (new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
+       new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
     ref.add(node);
     node = new PptNode
       (new PptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]),
        new PptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
     ref.add(node);
     node = new PptNode
-      (new PptTopLevel("Foo.Bar(int):::EXIT19", new VarInfo[0]),
+      (new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
        null);
     ref.add(node);
 
@@ -262,16 +262,16 @@ public class DiffTester extends TestCase {
     RootNode ref = new RootNode();
     PptNode node;
     node = new PptNode
-      (new PptTopLevel("Foo:::OBJECT", new VarInfo[0]),
-       new PptTopLevel("Foo:::OBJECT", new VarInfo[0]));
+      (new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
+       new PptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
     ref.add(node);
     node = new PptNode
       (new PptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]),
        new PptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
     ref.add(node);
     node = new PptNode
-      (new PptTopLevel("Foo.Bar(int):::EXIT19", new VarInfo[0]),
-       new PptTopLevel("Foo.Bar(int):::EXIT19", new VarInfo[0]));
+      (new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]),
+       new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
     ref.add(node);
 
     Assert.assertEquals(printTree(ref), printTree(diff));
@@ -285,7 +285,7 @@ public class DiffTester extends TestCase {
 
     VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"),
                        newIntVarInfo("z") };
-    PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
+    PptTopLevel ppt = new PptTopLevel("Foo.Baa(int):::ENTER", vars);
     PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
     Invariant invx = LowerBound.instantiate(slicex);
     slicex.addInvariant(invx);
@@ -317,7 +317,7 @@ public class DiffTester extends TestCase {
 
     VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"),
                        newIntVarInfo("z") };
-    PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
+    PptTopLevel ppt = new PptTopLevel("Foo.Baa(int):::ENTER", vars);
     PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
     Invariant invx = LowerBound.instantiate(slicex);
     slicex.addInvariant(invx);
@@ -349,7 +349,7 @@ public class DiffTester extends TestCase {
 
     VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"),
                        newIntVarInfo("z") };
-    PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
+    PptTopLevel ppt = new PptTopLevel("Foo.Baa(int):::ENTER", vars);
     PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
     Invariant invx = LowerBound.instantiate(slicex);
     slicex.addInvariant(invx);
@@ -381,7 +381,7 @@ public class DiffTester extends TestCase {
 
     VarInfo[] vars = { newIntVarInfo("x"), newIntVarInfo("y"),
                        newIntVarInfo("z") };
-    PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
+    PptTopLevel ppt = new PptTopLevel("Foo.Baa(int):::ENTER", vars);
     PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
     Invariant invx = LowerBound.instantiate(slicex);
     PptSlice slicey = new PptSlice1(ppt, new VarInfo[] {vars[1]});
@@ -413,7 +413,7 @@ public class DiffTester extends TestCase {
   public void testNonModulus() {
     PptMap map = new PptMap();
     VarInfo[] vars = { newIntVarInfo("x") };
-    PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
+    PptTopLevel ppt = new PptTopLevel("Foo.Baa(int):::ENTER", vars);
     PptSlice slice = new PptSlice1(ppt, vars);
     Invariant inv = NonModulus.instantiate(slice);
     slice.addInvariant(inv);
