@@ -66,6 +66,8 @@ StackAr.esc: DataStructures/StackAr.java
 
 ###########################################################################
 
+## Extras that should be patterned after the above once it is generalized.
+
 daikon-output/StackAr-init.dtrace: daikon-output/StackAr.dtrace
 	cp -pf $< $@
 	trace-purge-fns.pl -v '<init>' $@
