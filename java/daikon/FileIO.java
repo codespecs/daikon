@@ -57,6 +57,16 @@ public final class FileIO {
   public final static String class_static_tag = ppt_tag_separator + class_static_suffix;
   public final static String global_suffix = "GLOBAL";
 
+  /** total number of samples read in */
+  public static int samples_considered = 0;
+  /**
+   * Total number of samples passed to process_sample().  This should
+   * exactly match the number processed except for dataflow optimizations
+   * in process_sample() (which have the end result of processing the
+   * sample without the work)
+   */
+  public static int samples_processed = 0;
+
   /// Settings
 
   // Variables starting with dkconfig_ should only be set via the
@@ -254,7 +264,10 @@ public final class FileIO {
                                  file, filename);
     }
 
-    if (!daikon.split.SplitterList.dkconfig_all_splitters) {
+    // Despite the comments below, its not clear to me why we have to
+    // create all ppts if we the user has explicitly asked them to
+    // be excluded.
+    //if (!daikon.split.SplitterList.dkconfig_all_splitters) {
       // If all the splitters are to be tried at all program points,
       // then we need to create all the program points because the
       // creation of splitters requires information from the program
@@ -267,7 +280,7 @@ public final class FileIO {
 
       if (!ppt_included (ppt_name)) {
         // Discard this declaration
-        // System.out.println("Discarding non-matching program point declaration " + name());
+        // System.out.println("Discarding non-matching program point declaration " + ppt_name);
         String line = file.readLine();
         // This fails if some lines of a declaration (e.g., the comparability
         // field) are empty.
@@ -276,7 +289,7 @@ public final class FileIO {
         }
         return null;
       }
-    }
+      // }
 
     // The var_infos that will populate the new program point
     List var_infos = new ArrayList();
@@ -619,6 +632,9 @@ public final class FileIO {
             && (reader.getLineNumber() > dkconfig_max_line_number))
           break;
 
+        // Keep track of the total number of samples we have seen.
+        samples_considered++;
+
         String line = line_.intern();
 
         if ((line == declaration_header) || !ppt_included (line)) {
@@ -656,7 +672,8 @@ public final class FileIO {
         }
 
         PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
-        Assert.assertTrue(ppt != null, "Program point " + ppt_name + " appears in dtrace file but not in any decl file");
+        Assert.assertTrue(ppt != null, "Program point " + ppt_name
+                        + " appears in dtrace file but not in any decl file");
 
         VarInfo[] vis = ppt.var_infos;
 
@@ -735,8 +752,6 @@ public final class FileIO {
   static PptTopLevel.Stats stats = new PptTopLevel.Stats();
   static PptTopLevel.Stats gstats = new PptTopLevel.Stats();
   static boolean store_stats = false;
-  public static int samples_considered = 0;
-  public static int samples_processed = 0;
 
   /**
    * Add orig() and derived variables to vt (by side effect), then
@@ -745,7 +760,10 @@ public final class FileIO {
    **/
   public static void process_sample(PptMap all_ppts, PptTopLevel ppt,
                                     ValueTuple vt, Integer nonce)  {
-    samples_considered++;
+
+    // We consider a sample processed even if we don't do any actual
+    // processing below becaue of the dataflow optimizations.
+    samples_processed++;
 
     { // For now, keep indentation the same
       {
@@ -791,7 +809,6 @@ public final class FileIO {
           debugRead.fine ("  length is " + vt.vals.length);
         }
 
-        samples_processed++;
         long start = 0;
         long start_mem = 0;
         if (Daikon.debugStats.isLoggable (Level.FINE)) {
@@ -1437,16 +1454,19 @@ public final class FileIO {
   /**
    * Returns whether or not the specified ppt name should be included
    * in processing.  Ppts can be excluded because they match the omit_regexp,
-   * don't match ppt_regexp, or are greater than ppt_max_name
+   * don't match ppt_regexp, or are greater than ppt_max_name.
    */
   public static boolean ppt_included (String ppt_name) {
 
+    // System.out.println ("ppt_name = '" + ppt_name + "' max name = '"
+    //                     + Daikon.ppt_max_name + "'");
     if (((Daikon.ppt_omit_regexp != null)
           && Global.regexp_matcher.contains(ppt_name, Daikon.ppt_omit_regexp))
         || ((Daikon.ppt_regexp != null)
           && ! Global.regexp_matcher.contains(ppt_name, Daikon.ppt_regexp))
         || ((Daikon.ppt_max_name != null)
-           && (Daikon.ppt_max_name.compareTo (ppt_name) < 0)))
+           && ((Daikon.ppt_max_name.compareTo (ppt_name) < 0)
+               && (ppt_name.indexOf (global_suffix) == -1))))
       return (false);
     else
       return (true);
