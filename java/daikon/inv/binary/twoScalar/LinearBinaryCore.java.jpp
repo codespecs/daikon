@@ -30,6 +30,7 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
 import utilMDE.*;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.io.Serializable;
@@ -456,6 +457,66 @@ public final class CLASSNAME
   {
     Assert.assertTrue(a == 1 || a == -1);
     return format_using(format, y, x, a, -b/a);
+  }
+
+  /**
+   * In general, we can't merge formulas, but we can merge invariants with
+   * too few samples to have formed a line with invariants with enough
+   * samples.  And those will appear to have different formulas.
+   */
+
+  public boolean mergeFormulasOk() {
+    return (true);
+  }
+
+  /**
+   * Merge the linear binary cores in cores to form a new core. Any
+   * core in the list that has seen enough points to define a
+   * line, must define the same line.  Any cores that have not
+   * yet seen enough points, will have each of their points applied to
+   * that invariant.  The merged core is returned.  Null is
+   * returned if the cores don't describe the same line
+   *
+   * @param cores   List of LinearBinary cores to merge.  They should
+   *                all be permuted to match the variable order in
+   *                ppt.
+   */
+  public CLASSNAME merge (List cores, Invariant wrapper) {
+
+    // Look for any active lines.  All must define the same line
+    CLASSNAME first = null;
+    for (int i = 0; i < cores.size(); i++) {
+      CLASSNAME c = (CLASSNAME) cores.get (i);
+      if (!c.isActive())
+        continue;
+      if (first == null)
+        first = (CLASSNAME) c.clone();
+      else {
+        if (!Global.fuzzy.eq (first.a, c.a)
+            || !Global.fuzzy.eq (first.b, c.b))
+          return (null);
+      }
+    }
+
+    // If no active lines were found, created an empty core
+    if (first == null)
+      first = new CLASSNAME (wrapper);
+    else
+      first.wrapper = wrapper;
+
+    // Merge in any points from non-active cores
+    for (int i = 0; i < cores.size(); i++) {
+      CLASSNAME c = (CLASSNAME) cores.get (i);
+      if (c.isActive())
+        continue;
+      for (int j = 0; j < c.values_seen; j++) {
+        first.add_modified (c.x_cache[j], c.y_cache[j], 1);
+        if (wrapper.falsified)
+          return (null);
+      }
+    }
+
+    return (first);
   }
 
   public boolean isSameFormula(CLASSNAME other)
