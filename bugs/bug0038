@@ -12,8 +12,14 @@ Description:
 Jeremy, just testing the CC feature.
 al
 
+[adonovan]
+ 	gratuitous change here
+
 --
 $Log$
-Revision 1.1  2002-04-02 21:27:45  adonovan
+Revision 1.2  2002-04-02 21:29:15  adonovan
+changed bug0038
+
+Revision 1.1  2002/04/02 21:27:45  adonovan
 new bug0038
 
