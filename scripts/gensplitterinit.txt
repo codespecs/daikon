@@ -1,0 +1,18 @@
+Input: 
+  - class name ('-c' option)
+    You have to choose a class name for the splitter list. The default
+    value is "SplitterListForSomething."
+  - package name ('-p' option)
+    You have to choose a package name for the splitter list. The
+    default value is "daikon.split."
+  - splitter list ('-l' option)
+    You have to specify a splitter list, which includes all splitter
+    file names. The default value is "splitter.lst."
+    The simple way to generate this list is to do:
+    % ls -1 *.java > splitter.lst
+    in a directory which only contains required splitters.
+
+Output:
+  - splitter initiator source
+    This class only has the static initiative. So everything has been
+    done when the object is created. This initiate all splitters.
