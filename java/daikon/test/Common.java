@@ -45,8 +45,6 @@ public class Common
 
   public static PptTopLevel makePptTopLevel(String pptname, VarInfo[] vars) {
     PptTopLevel ppt = new PptTopLevel(pptname, vars);
-    ppt.invflow_ppts = new PptTopLevel[0];
-    ppt.invflow_transforms = new int[0][];
     return ppt;
   }
 
