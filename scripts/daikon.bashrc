@@ -29,7 +29,7 @@ fi
 
 
 ## Add the Daikon binaries to your path
-export PATH=$DAIKONDIR/bin:$DAIKONDIR/front-end/java/src:${JDKDIR}/bin:${PATH}
+export PATH=$DAIKONDIR/bin:$DAIKONDIR/front-end/java/src:$DAIKONDIR/front-end/c:${JDKDIR}/bin:${PATH}
 
 ## tools.jar must be on your classpath.  Also, if you wish to use dfej (the
 ## Daikon front end for Java), you need to have rt.jar on your classpath.

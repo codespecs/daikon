@@ -31,7 +31,7 @@ else
 endif
 
 ## Add the Daikon binaries to your path
-set path = ($DAIKONDIR/bin $DAIKONDIR/front-end/java/src $JDKDIR/bin $path)
+set path = ($DAIKONDIR/bin $DAIKONDIR/front-end/java/src $DAIKONDIR/front-end/c $JDKDIR/bin $path)
 
 ## tools.jar must be on your classpath.  Also, if you wish to use dfej (the
 ## Daikon front end for Java), rt.jar must be on your classpath.
