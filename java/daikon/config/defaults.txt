@@ -85,6 +85,8 @@ daikon.derive.binary.StringSequencesIntersection.enabled = 0
 daikon.derive.binary.ScalarSequencesIntersection.enabled = 0
 daikon.derive.binary.StringSequencesUnion.enabled = 0
 daikon.derive.binary.ScalarSequencesUnion.enabled = 0
+daikon.derive.binary.SequencesJoin.enabled = 0
+daikon.derive.binary.SequencesConcat.enabled = 0
 
 ### OTHER SETTINGS
 
