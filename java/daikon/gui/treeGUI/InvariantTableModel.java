@@ -15,7 +15,10 @@ import daikon.inv.filter.InvariantFilters;
 class InvariantTableModel extends AbstractTableModel {
   static final String[] columnNames = { "invariant", "# values", "# samples", "probability", "justified" };
   static final Class[] columnClasses = { String.class, Integer.class, Integer.class, Double.class, Boolean.class };
-  static final DecimalFormat format = new DecimalFormat( "0.##E0" ); // for displaying probabilities
+  private static DecimalFormat PROBABILITY_FORMAT =
+    new DecimalFormat("0.####");
+  private static DecimalFormat CONFIDENCE_FORMAT =
+    new DecimalFormat("0.####");
 
   List allInvariants;
   List filteredInvariants;	// only filtered invariants are displayed
@@ -37,7 +40,12 @@ class InvariantTableModel extends AbstractTableModel {
     if (column == 0)        return invariant.format();
     else if (column == 1)           return new Double(Double.NaN); // [INCR] invariant.ppt.num_values()
     else if (column == 2)           return new Integer( invariant.ppt.num_samples());
-    else if (column == 3)           return new Double( format.format( Math.round( 100 * invariant.getProbability()) / 100.0 ));
+    else if (column == 3) {
+      double val = (Invariant.dkconfig_use_confidence
+                    ? invariant.getConfidence()
+                    : invariant.getProbability());
+      return new Double( Math.round( 100 * val) / 100.0 );
+    }
     else /* (column == 4) */        return new Boolean( invariant.justified());
   }
 

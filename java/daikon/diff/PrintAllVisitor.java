@@ -16,6 +16,8 @@ public class PrintAllVisitor extends DepthFirstVisitor {
 
   private static DecimalFormat PROBABILITY_FORMAT =
     new DecimalFormat("0.####");
+  private static DecimalFormat CONFIDENCE_FORMAT =
+    new DecimalFormat("0.####");
 
   private PrintStream ps;
   private boolean verbose;
@@ -179,13 +181,19 @@ public class PrintAllVisitor extends DepthFirstVisitor {
    * .0001 and 0 are rounded to .0001.
    **/
   private void printProbability(Invariant inv) {
-    double prob = inv.getProbability();
-
-    if (0 < prob && prob < .0001) {
-      prob = .0001;
+    if (Invariant.dkconfig_use_confidence) {
+      double conf = inv.getConfidence();
+      if (.9999 < conf && conf < 1) {
+        conf = .9999;
+      }
+      bufPrint(CONFIDENCE_FORMAT.format(conf));
+    } else {
+      double prob = inv.getProbability();
+      if (0 < prob && prob < .0001) {
+        prob = .0001;
+      }
+      bufPrint(PROBABILITY_FORMAT.format(prob));
     }
-
-    bufPrint(PROBABILITY_FORMAT.format(prob));
   }
 
   /** Prints '+' if the invariant is worth printing, '-' otherwise. **/

@@ -21,7 +21,8 @@ public class ModBitTracker
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20031014L;
 
-  private boolean debug = true;
+  // Should make this a configuration option.
+  private static boolean debug = false;
 
   /** The maximum number of BitSets; the size of modbits_arrays. **/
   private int num_vars;

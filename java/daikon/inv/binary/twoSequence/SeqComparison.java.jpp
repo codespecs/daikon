@@ -451,6 +451,15 @@ public class SEQSEQINTEQUAL
   }
 
   // For Comparison interface
+  public double eq_confidence() {
+    #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
+      return getConfidence();
+    #else
+      return Invariant.CONFIDENCE_NEVER;
+    #endif
+  }
+
+  // For Comparison interface
   public double eq_probability() {
     #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
       return getProbability();

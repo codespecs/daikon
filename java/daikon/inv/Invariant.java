@@ -72,8 +72,24 @@ public abstract class Invariant
    * the probability that the invariant occurred by chance is
    * less than this.  (May also be set
    * via --prob_limit switch to Daikon; refer to manual.)
+   * Enabled only if configuration variable use_confidence is false.
    **/
   public static double dkconfig_probability_limit = .01;
+
+  /**
+   * Real number between 0 and 1.  The invariant is displayed only if
+   * the confidence that the invariant did not occur by chance is
+   * greater than this.  (May also be set
+   * via --conf_limit switch to Daikon; refer to manual.)
+   * Enabled only if configuration variable use_confidence is true.
+   **/
+  public static double dkconfig_confidence_limit = .99;
+
+  /**
+   * If true, use confidence-style filtering.
+   * Otherwise, use probability-style filtering.
+   **/
+  public static boolean dkconfig_use_confidence = false;
 
   /**
    * A boolean value. If true, Daikon's Simplify output (printed when
@@ -157,10 +173,29 @@ public abstract class Invariant
    *   0 = could never have happened by chance; that is, we are fully confident
    *       that this invariant is a real invariant
    **/
-  public final static double PROBABILITY_JUSTIFIED = 0;
+  public final static double CONFIDENCE_JUSTIFIED = 1;
 
   /**
    * (0..1) = greater to lesser likelihood of coincidence <br>
+   *      0 = must have happened by chance
+   **/
+  public final static double CONFIDENCE_UNJUSTIFIED = 0;
+
+  /**
+   * -1 = delete this invariant; we know it's not true
+   **/
+  public final static double CONFIDENCE_NEVER = -1;
+
+
+  /**
+   * The probability that this could have happened by chance alone. <br>
+   *   0 = could never have happened by chance; that is, we are fully confident
+   *       that this invariant is a real invariant
+   **/
+  public final static double PROBABILITY_JUSTIFIED = 0;
+
+  /**
+   * (0..1) = lesser to greater likelihood of coincidence <br>
    *      1 = must have happened by chance
    **/
   public final static double PROBABILITY_UNJUSTIFIED = 1;
@@ -233,13 +268,43 @@ public abstract class Invariant
     return true;
   }
 
+  // There are two ways to compute justification.
+  //  * The probability routines (getProbability and internal helper
+  //    computeProbability) use ValueTracker information.
+  //  * The confidence routines (getConfidence and internal helper
+  //    computeConfidence) use ModBitTracker information.
+  // Configuration variable dkconfig_use_confidence controls which of the
+  // two techniques is used.
+
   // There are three probability routines:
   //  justified() is what most clients should call
-  //  getProbability() gives the actual probability.  It used to cache
-  //    results, but it does not do so any longer.
+  //  getProbability() gives the actual probability.  (Likewise for
+  //    getConfidence().)  It used to cache results, but it does not
+  //    do so any longer.
   //  computeProbability() in an internal helper method that does the
   //    actual work, but it should not be called externally, only by
-  //    getProbability.
+  //    getProbability.  (Likewise for computeConfidence().)
+
+  /** A wrapper around getConfidence() or getProbability(). **/
+  public final boolean justified() {
+    if (dkconfig_use_confidence) {
+      boolean just = (!falsified
+                      && (getConfidence() >= dkconfig_confidence_limit));
+      if (logOn())
+        log ("justified = " + just + ", confidence = " + getConfidence());
+      return (just);
+    } else {
+      boolean just = !falsified && enoughSamples() &&
+        (getProbability() <= dkconfig_probability_limit);
+      if (logOn())
+        log ("justified = " + just + ", enoughSamples = " + enoughSamples()
+             + ", probability = " + getProbability() + ", repr = " + repr() +
+             ", ppt.num_values() = " + ppt.num_values()
+             +", num_mod_non_missing_samples = "
+             + ppt.num_mod_non_missing_samples());
+      return (just);
+    }
+  }
 
   // If probability == PROBABILITY_NEVER, then this invariant can be eliminated.
   /**
@@ -296,17 +361,64 @@ public abstract class Invariant
    **/
   protected abstract double computeProbability();
 
-  /** A wrapper around getProbability(). **/
-  public final boolean justified() {
-    boolean just = !falsified && enoughSamples() &&
-                    (getProbability() <= dkconfig_probability_limit);
-    if (logOn())
-      log ("justified = " + just + ", enoughSamples = " + enoughSamples()
-           + ", probability = " + getProbability() + ", repr = " + repr() +
-           ", ppt.num_values() = " + ppt.num_values()
-           +", num_mod_non_missing_samples = "
-           + ppt.num_mod_non_missing_samples());
-    return (just);
+
+  // If confidence == CONFIDENCE_NEVER, then this invariant can be eliminated.
+  /**
+   * Given that this invariant has been true for all values seen so far,
+   * this method returns the confidence that that situation has occurred
+   * by chance alone.  The result is a value between 0 and 1 inclusive.  0
+   * means that this invariant could never have occurred by chance alone;
+   * we are fully confident that its truth is no coincidence.  1 means that
+   * the invariant is certainly a happenstance, so the truth of the
+   * invariant is not relevant and it should not be reported.  Values
+   * between 0 and 1 give differing confidences in the invariant.
+   * <p>
+   *
+   * As an example, if the invariant is "x!=0", and only one value, 22, has
+   * been seen for x, then the conclusion "x!=0" is not justified.  But if
+   * there have been 1,000,000 values, and none of them were 0, then we may
+   * be confident that the property "x!=0" is not a coincidence.
+   * <p>
+   *
+   * This method need not check the value of field "falsified", as the
+   * caller does that.
+   * <p>
+   *
+   * This method is a wrapper around computeConfidence(), which does the
+   * actual work.
+   * @see #computeConfidence()
+   **/
+  public final double getConfidence() {
+    if (falsified)
+      return CONFIDENCE_NEVER;
+    double result = computeConfidence();
+    if (result > CONFIDENCE_NEVER) {
+      // Can't print this.repr_prob(), as it may compute the confidence!
+      System.out.println("Bad invariant confidence " + result + ": ");
+      System.out.println(this.getClass());
+      System.out.println(repr());
+      System.out.println(this.format());
+    }
+    // System.out.println("getConfidence: " + getClass().getName() + " " + ppt.varNames());
+    Assert.assertTrue((result == CONFIDENCE_JUSTIFIED)
+                  || (result == CONFIDENCE_UNJUSTIFIED)
+                  || (result == CONFIDENCE_NEVER)
+                  || ((0 <= result) && (result <= 1))
+                  // This can be expensive, so comment out.
+                  // , getClass().getName() + ": " + repr()
+                  );
+    return result;
+  }
+
+  /**
+   * This method computes the confidence that this invariant occurred by chance.
+   * Users should use getConfidence() instead.
+   * @see     #getConfidence()
+   **/
+  // protected abstract double computeConfidence();
+  // Temporary body, to permit compilation.
+  protected double computeConfidence() {
+    throw new Error("Not yet implemented");
   }
 
   /**
@@ -634,7 +746,9 @@ public abstract class Invariant
    * format gives a high-level representation for user output.
    **/
   public String repr_prob() {
-    return repr() + "; probability = " + getProbability();
+    return repr()
+      + "; probability = " + getProbability()
+      + "; confidence = " + getConfidence();
   }
 
   /**

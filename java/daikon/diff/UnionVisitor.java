@@ -42,7 +42,9 @@ public class UnionVisitor extends DepthFirstVisitor {
     } else if (inv2 == null) {
       result.add(currentPpt, inv1);
     } else {
-      if (inv1.getProbability() <= inv2.getProbability()) {
+      if (Invariant.dkconfig_use_confidence
+          ? (inv1.getConfidence() >= inv2.getConfidence())
+          : (inv1.getProbability() <= inv2.getProbability())) {
         result.add(currentPpt, inv1);
       } else {
         result.add(currentPpt, inv2);

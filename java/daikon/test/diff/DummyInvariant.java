@@ -19,14 +19,13 @@ public class DummyInvariant
   public boolean isWorthPrinting;
 
   public DummyInvariant(PptSlice ppt, String formula, boolean justified) {
-    this(ppt, formula, (justified ? .001 : 1), true, true);
+    this(ppt, formula, justified, true, true);
   }
 
   public DummyInvariant(PptSlice ppt, String formula,
                         boolean justified, boolean interesting) {
-    this(ppt, formula, (justified ? .001 : 1), interesting, true);
+    this(ppt, formula, justified, interesting, true);
   }
-
 
   public DummyInvariant(PptSlice ppt, String formula,
                         boolean justified, boolean interesting,
@@ -55,10 +54,6 @@ public class DummyInvariant
 
   protected Invariant resurrect_done(int[] permutation) {
     throw new UnsupportedOperationException();
-  }
-
-  public boolean justified() {
-    return (probability <= .01);
   }
 
   public boolean isInteresting() {

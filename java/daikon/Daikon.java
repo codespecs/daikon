@@ -243,6 +243,7 @@ public final class Daikon {
   public static final String no_suppress_cont_SWITCH = "no_suppress_cont";
   public static final String suppress_post_SWITCH = "suppress_post";
   public static final String suppress_redundant_SWITCH = "suppress_redundant";
+  public static final String conf_limit_SWITCH = "conf_limit";
   public static final String prob_limit_SWITCH = "prob_limit";
   public static final String esc_output_SWITCH = "esc_output";
   public static final String ioa_output_SWITCH = "ioa_output";
@@ -438,6 +439,7 @@ public final class Daikon {
       new LongOpt(no_suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(conf_limit_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(prob_limit_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(esc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(simplify_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -541,6 +543,13 @@ public final class Daikon {
           suppress_implied_postcondition_over_prestate_invariants = true;
         } else if (suppress_redundant_SWITCH.equals(option_name)) {
           suppress_redundant_invariants_with_simplify = true;
+        } else if (conf_limit_SWITCH.equals(option_name)) {
+          double limit = Double.parseDouble(g.getOptarg());
+          if ((limit < 0.0) || (limit > 1.0)) {
+            throw new Error(conf_limit_SWITCH + " must be between [0..1]");
+          }
+          Configuration.getInstance().apply
+            ("daikon.inv.Invariant.confidence_limit", String.valueOf(limit));
         } else if (prob_limit_SWITCH.equals(option_name)) {
           double limit = Double.parseDouble(g.getOptarg());
           if ((limit < 0.0) || (limit > 1.0)) {
