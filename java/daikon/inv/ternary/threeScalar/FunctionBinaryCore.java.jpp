@@ -318,12 +318,17 @@ public final class CLASSNAME
   }
 
   public boolean isSameFormula(CLASSNAME other) {
-    for (int i=0; i<3; i++) {
-      if (! methodname[i].equals(other.methodname[i])) {
-        return false;
-      }
-    }
-    return true;
+    return ((methodNumber == other.methodNumber)
+            && (var_order == other.var_order));
+
+    // Old version, not clear why var_order is not included or why methodname
+    // is used rather than methodNumber (jhp 7/31/03)
+    //     for (int i=0; i<3; i++) {
+    //       if (! methodname[i].equals(other.methodname[i])) {
+    //         return false;
+    //       }
+    //     }
+    //     return true;
   }
 
 }
