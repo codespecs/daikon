@@ -144,8 +144,8 @@ public final class Daikon {
 
   /**
    * False if any top-down processing is in effect.
-   * If so, then an invariant may not see every sample, and certain
-   * statistics such as ValueTracker and tm_total are not valid.
+   * If so, then an invariant/slice may not see every sample, and certain
+   * statistics maintained at the slice are not valid.
    * TODO: When Jeff checks in his code with PptMap.global, then this
    * variable's setting needs to be updated.
    **/

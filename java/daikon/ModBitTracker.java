@@ -8,6 +8,8 @@ import utilMDE.*;
 import daikon.Global;
 
 
+// "ModBitTracker" is a poor name for this class, since it tracks
+// whether a value is missing, not whether it is modified.
 /**
  * ModBitTracker maintains a BitSet for each variable at a program point.
  * The BitSet indicates, for each sample seen in order, whether that
