@@ -12,7 +12,7 @@ import java.util.*;
 import java.io.Serializable;
 import java.io.ObjectInputStream;
 import java.io.IOException;
-  
+
 /**
  * Represents information about a particular variable for a program
  * point.  This object doesn't hold the value of the variable at a
@@ -74,6 +74,7 @@ public final class VarInfo
    * ValueTuple
    **/
   public int value_index;	// index in lists of values, VarTuple objects
+                                // (-1 iff is_static_constant)
 
   public boolean is_static_constant;  // required if static_constant_value==null
 				//   (is_static_constant
@@ -161,7 +162,7 @@ public final class VarInfo
       VarInfo[] ary = (VarInfo[]) po_higher;
       Assert.assert(! ArraysMDE.any_null(ary));
       Assert.assert(po_higher_nonce != null);
-      Assert.assert(po_higher_nonce.length == ary.length);      
+      Assert.assert(po_higher_nonce.length == ary.length);
     }
     if (po_lower == null) {
       Assert.assert(po_higher_nonce == null);
@@ -344,7 +345,7 @@ public final class VarInfo
    * If A is higher than B then every value seen at B is seen at A.
    * Elements are VarInfos.  Contains no duplicates.
    * @see po_lower()
-   * @see po_higher_nonce()   
+   * @see po_higher_nonce()
    **/
   public List po_higher() {
     if (po_higher == null) {
@@ -419,7 +420,7 @@ public final class VarInfo
 
     boolean already = lower.po_higher().contains(higher);
     Assert.assert(already == higher.po_lower().contains(lower));
-    if (already) 
+    if (already)
       throw new IllegalArgumentException("Relation already exists");
 
     // lower.po_higher.add(higher)
