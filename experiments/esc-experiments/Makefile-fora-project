@@ -6,17 +6,17 @@
 #
 # PROJECT           Name of the directory in which the project resides (e.g. StackAr)
 # TRACE_NAME        Name of the trace file daikon will generate (e.g. StackAr.dtrace)
-# SOURCE_UNCHANGED  List of .java files which the files inder examination need (e.g. DataStructures/Hashable.java ...)
+# SOURCE_UNCHANGED  List of .java files which the files under examination need (e.g. DataStructures/Hashable.java ...)
 # SOURCE_TO_DFEJ    List of .java files which should be instrumented (e.g. DataStructures/StackAr.java)
-# PACKAGE           Package where the instrumented files lice (e.g. DataStructures)
+# PACKAGE           Package where the instrumented files lie (e.g. DataStructures)
 # MAIN_RUN          File name of main class to run for data collection (e.g. DataStructures.StackArTester)
 #
 
 # ==================================================================
 # Basic facts about this Makefile
 #
-# Assumes that each project has it's own subdirectory under esc-experiments/
-# Assumes that uninstumented code lives at esc-experiments/ (+ package structure)
+# Assumes that each project has its own subdirectory under esc-experiments/
+# Assumes that uninstrumented code lives at esc-experiments/ (+ package structure)
 # Creates /scratch/$USER/esc-experiments/PROJECT/ directory to hold
 #   * instrumented source
 #   * decls files
@@ -48,10 +48,10 @@ default: help
 
 help:
 	@echo "make options...."
-	@echo "  make reset-scratch  : removes the /tmp folder (clean slate)"
+	@echo "  make reset-scratch  : removes the /scratch folder (clean slate)"
 	@echo ""
-	@echo "  make create-scratch : 1 sets up the /tmp folder"
-	@echo "  make instrument     : 2 instuments the source under test"
+	@echo "  make create-scratch : 1 sets up the /scratch folder"
+	@echo "  make instrument     : 2 instruments the source under test"
 	@echo "  make compile        : 3 compiles the source under test"
 	@echo "  make data           : 4 runs the source under test"
 	@echo "  make txt-daikon     : 5 detects invariants, writes in daikon style"
@@ -88,9 +88,6 @@ clean: reset-scratch
 	rm -f ${PROJECT}.txt-daikon ${PROJECT}.txt-daikon-failed ${PROJECT}.txt-esc ${PROJECT}.txt-esc-failed ${PROJECT}.esc *.bak
 	# rm -rf ${PACKAGE}
 
-#esc: StackAr.esc
-
-#daikon: StackAr.txt-esc
 
 ###########################################################################
 
@@ -102,7 +99,7 @@ reset-scratch-impl:
 	rm -rf daikon-output
 	rm -rf ${SCRATCH_FOR_DAIKON}
 
-# setup the /tmp directory for this project
+# setup the /scratch directory for this project
 
 ${SCRATCH_FOR_DAIKON}/.exists:
 	@echo
@@ -113,19 +110,19 @@ ${SCRATCH_FOR_DAIKON}/.exists:
 	ln -s ${SCRATCH_FOR_DAIKON}/daikon daikon-output
 	touch ${SCRATCH_FOR_DAIKON}/.exists
 
-# copy files which are used but not instrumented to /tmp and .
+# copy files which are used but not instrumented to /scratch and .
 
 DOT_DOT_SOURCE_UNCHANGED:=${patsubst %,../%,${SOURCE_UNCHANGED}}
 ${SCRATCH_FOR_DAIKON}/.copy-timestamp: ${SCRATCH_FOR_DAIKON}/.exists ${DOT_DOT_SOURCE_UNCHANGED}
 	@echo
-	@echo \#\#\# copy-uninstrumented to /tmp and [project]
+	@echo \#\#\# copy-uninstrumented to /scratch and [project]
 	@echo
 	cd .. && cp -pP --target-directory=${SCRATCH_FOR_DAIKON}/ ${SOURCE_UNCHANGED} 
 	cd .. && cp -pP --target-directory=${PROJECT}/ ${SOURCE_UNCHANGED} 
 	cd ${PACKAGE} && rm -f *.java-unannotated
 	touch ${SCRATCH_FOR_DAIKON}/.copy-timestamp
 
-# instument files under detection, and copy the uninstrumented versions to . for later merging
+# instrument files under detection, and copy the uninstrumented versions to . for later merging
 
 DOT_DOT_SOURCE_TO_DFEJ:=$(patsubst %,../%,${SOURCE_TO_DFEJ})
 ${SCRATCH_FOR_DAIKON}/.instrument-timestamp: ${SCRATCH_FOR_DAIKON}/.copy-timestamp ${DOT_DOT_SOURCE_TO_DFEJ}
@@ -136,7 +133,7 @@ ${SCRATCH_FOR_DAIKON}/.instrument-timestamp: ${SCRATCH_FOR_DAIKON}/.copy-timesta
 	cd .. && cp -pP --target-directory=${PROJECT}/ ${SOURCE_TO_DFEJ}
 	touch ${SCRATCH_FOR_DAIKON}/.instrument-timestamp
 
-# compile the files in /tmp
+# compile the files in /scratch
 
 ${SCRATCH_FOR_DAIKON}/.compile-timestamp: ${SCRATCH_FOR_DAIKON}/.instrument-timestamp
 	@echo
@@ -145,7 +142,7 @@ ${SCRATCH_FOR_DAIKON}/.compile-timestamp: ${SCRATCH_FOR_DAIKON}/.instrument-time
 	cd ${SCRATCH_FOR_DAIKON} && jikes `find . -name '*.java'`
 	touch ${SCRATCH_FOR_DAIKON}/.compile-timestamp
 
-# run the program under inspection from /tmp
+# run the program under inspection from /scratch
 
 ${SCRATCH_FOR_DAIKON}/.run-timestamp: ${SCRATCH_FOR_DAIKON}/.compile-timestamp
 	@echo
@@ -182,7 +179,7 @@ merge:
 	cd ${PACKAGE} && ls *.java | perl -p -e 's/^(.*)$$/mv \1 \1-unannotated/' | sh
 	cd ${PACKAGE} && ls *.java-escannotated | perl -p -e 's/^(.*)-escannotated$$/mv \1-escannotated \1/' | sh
 
-# run escjava on the annontated files
+# run escjava on the annotated files
 
 # Used to depend on ${PROJECT}.txt-esc, but that's not quite right.
 ${PROJECT}.esc: ${SOURCE_TO_DFEJ}
@@ -200,7 +197,7 @@ stats-impl:
 	@echo Stats for ${SOURCE_TO_DFEJ}:
 	@echo '  invariant ' `egrep '^/\*@ inv' ${SOURCE_TO_DFEJ} | wc -l` ' (+' `egrep '^/\*! inv' ${SOURCE_TO_DFEJ} | wc -l` 'unexpressable)'
 	@echo '  set       ' `egrep '^/\*@ set' ${SOURCE_TO_DFEJ} | wc -l` ' (+' `egrep '^/\*! set' ${SOURCE_TO_DFEJ} | wc -l` 'unexpressable)'
-	@echo '  requirse  ' `egrep '^/\*@ req' ${SOURCE_TO_DFEJ} | wc -l` ' (+' `egrep '^/\*! req' ${SOURCE_TO_DFEJ} | wc -l` 'unexpressable)'
+	@echo '  requires  ' `egrep '^/\*@ req' ${SOURCE_TO_DFEJ} | wc -l` ' (+' `egrep '^/\*! req' ${SOURCE_TO_DFEJ} | wc -l` 'unexpressable)'
 	@echo '  modifies  ' `egrep '^/\*@ mod' ${SOURCE_TO_DFEJ} | wc -l` ' (+' `egrep '^/\*! mod' ${SOURCE_TO_DFEJ} | wc -l` 'unexpressable)'
 	@echo '  ensures   ' `egrep '^/\*@ ens' ${SOURCE_TO_DFEJ} | wc -l` ' (+' `egrep '^/\*! ens' ${SOURCE_TO_DFEJ} | wc -l` 'unexpressable)'
 
