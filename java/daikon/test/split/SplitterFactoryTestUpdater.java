@@ -100,7 +100,7 @@ public class SplitterFactoryTestUpdater {
       PptMap allPpts = FileIO.read_declaration_files(declsFileSet);
       Dataflow.init_partial_order(allPpts);
       Dataflow.create_combined_exits(allPpts);
-      Daikon.suppressSplitterErrors = true;
+      Daikon.dkconfig_suppressSplitterErrors = true;
       for (int i = 0; i < spinfoFiles.size(); i++) {
         //create the java files
         String spinfoFile = (String) spinfoFiles.get(i);
@@ -255,7 +255,7 @@ public class SplitterFactoryTestUpdater {
     code.append("      if (saveFiles) {" + lineSep);
     code.append("        SplitterFactory.dkconfig_delete_splitters_on_exit = false;" + lineSep);
     code.append("      }" + lineSep);
-    code.append("     Daikon.suppressSplitterErrors = true;" + lineSep);
+    code.append("     Daikon.dkconfig_suppressSplitterErrors = true;" + lineSep);
     code.append("      for (int i = 0; i < spinfos.size(); i++) {" + lineSep);
     code.append("        //create the java files" + lineSep);
     code.append("        String spinfoFile = (String) spinfos.get(i);" + lineSep);

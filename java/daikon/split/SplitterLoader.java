@@ -21,7 +21,7 @@ public class SplitterLoader extends ClassLoader {
       fi.read(classBytes);
       return classBytes;
     } catch (FileNotFoundException e) {
-      if (! Daikon.suppressSplitterErrors) {
+      if (! Daikon.dkconfig_suppressSplitterErrors) {
         System.out.println("File "
                            + fileName.substring(0, fileName.length()-6)
                            + ".java did not compile");
