@@ -22,7 +22,7 @@ public final class PptConditional
   static final long serialVersionUID = 20020122L;
 
   Ppt parent;
-  Splitter splitter;
+  transient Splitter splitter;
   // indicates whether we're on the true side or the false side of the Splitter
   boolean splitter_inverse;
 
@@ -98,19 +98,20 @@ public final class PptConditional
     return emptyList;
   }
 
-  private void writeObject(java.io.ObjectOutputStream out)
-    throws java.io.IOException
-  {
-    // Remove the splitter itself, in case it was compiled on the fly
-    // (and so could not be re-loaded).  Later, perhaps change
-    // de-serialization so that it is reconstructed on the fly.
-    if (splitter != null) {
-      Package pkg = splitter.getClass().getPackage();
-      if (pkg == null ) { // no package
-        splitter = null;
-      }
-    }
-    out.defaultWriteObject();
-  }
+//   jhp - Changed Splitter to transient instead
+//   private void writeObject(java.io.ObjectOutputStream out)
+//     throws java.io.IOException
+//   {
+//     // Remove the splitter itself, in case it was compiled on the fly
+//     // (and so could not be re-loaded).  Later, perhaps change
+//     // de-serialization so that it is reconstructed on the fly.
+//     if (splitter != null) {
+//       Package pkg = splitter.getClass().getPackage();
+//       if (pkg == null ) { // no package
+//         splitter = null;
+//       }
+//     }
+//     out.defaultWriteObject();
+//   }
 
 }
