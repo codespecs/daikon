@@ -83,4 +83,3 @@ public class OrderedPairIterator implements java.util.Iterator {
   }
   public void remove() { throw new UnsupportedOperationException(); }
 }
-
