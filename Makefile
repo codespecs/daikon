@@ -254,6 +254,8 @@ update-dist-doc: doc-all
 	# Don't modify files in the distribution directory
 	cd $(DIST_DIR) && chmod -R ogu-w $(DIST_DIR_FILES)
 	update-link-dates $(DIST_DIR)/index.html
+	cd $(DIST_DIR) && chgrp -R invariants $(DIST_DIR_FILES) doc \
+		daikon_manual_html
 
 # Perl command compresses multiple spaces to one, for first 9 days of month.
 TODAY := $(shell date "+%B %e, %Y" | perl -p -e 's/  / /')
@@ -291,11 +293,11 @@ update-dist-version-file:
 	perl -wpi -e 's/\.(-?[0-9]+)$$/"." . ($$1+1)/e' doc/VERSION
 
 www-dist:
-	/g2/users/mernst/bin/share/html-update-toc doc/www/index.html doc/www/mit/index.html
+	html-update-toc doc/www/index.html doc/www/mit/index.html
 	# "-P" keeps the directory structure in place
 	cd doc/www && cp -pfP $(WWW_FILES) $(WWW_DIR)
 	cd $(WWW_DIR) && chmod -w $(WWW_FILES)
-	/g2/users/mernst/bin/share/update-link-dates $(DIST_DIR)/index.html
+	update-link-dates $(DIST_DIR)/index.html
 
 daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
 	-rm -rf $@ /tmp/daikon-jar
