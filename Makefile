@@ -14,7 +14,7 @@ SCRIPT_FILES := Makefile java-cpp.pl daikon.pl lines-from \
 	daikon.cshrc daikon.bashrc \
 	trace-untruncate trace-purge-fns.pl trace-purge-vars.pl \
 	checkargs.pm util_daikon.pm \
-	runcluster.pl decls-add-cluster.pl extract_vars.pl write_dtrace.pl
+	runcluster.pl decls-add-cluster.pl extract_vars.pl dtrace-add-cluster.pl
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 # This is so toublesome that it isn't used except as a list of dependences for make commands
 DAIKON_JAVA_FILES := $(shell find java \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name '*ajax-ship*' \) -prune -o -name '*.java' -print) $(shell find java/daikon -follow \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name '*ajax-ship*' \) -prune -o -name '*.java' -print)
@@ -221,7 +221,8 @@ update-dist-doc:
 	cd $(DIST_DIR) && chmod -R ogu-w $(DIST_DIR_FILES)
 	update-link-dates $(DIST_DIR)/index.html
 
-TODAY := $(shell date "+%B %e, %Y")
+# Perl command compresses multiple spaces to one, for first 9 days of month.
+TODAY := $(shell date "+%B %e, %Y" | perl -p -e 's/  / /')
 
 # Update the documentation with a new distribution date (today).
 # This is done immediately before releasing a new distribution.
@@ -472,11 +473,13 @@ $(DFEJ_DIR)/src/dfej:
 # Make the current dfej the one used by the PAG group
 # (Warning:  As of 7/3/2002 the DIST_PAG_BIN_DIR version is not used by
 # $inv/tests/Makefile.common!)
-dist-dfej-pag: $(DFEJ_DIR)/src/dfej
-	cp -pf $< $(DIST_PAG_BIN_DIR)
+dist-dfej-pag: $(DIST_PAG_BIN_DIR)/dfej
+
+$(DIST_PAG_BIN_DIR)/dfej: $(DFEJ_DIR)/src/dfej
+	cp -pf $< $@
 
 # Make the current dfej the one distributed to the world
-dist-dfej: dist-dfej-linux-x86 dist-dfej-windows
+dist-dfej: dist-dfej-pag dist-dfej-linux-x86 dist-dfej-windows
 
 dist-dfej-solaris: $(DIST_BIN_DIR)/dfej-solaris
 
