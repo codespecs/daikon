@@ -96,6 +96,20 @@ if ($ARGV[0] eq '-s') {
 for my $file (@ARGV) {
   # print "# $file\n";
   open(SOURCE, $file) or die("Cannot open $file!");
+  my @sources = grep(s|\# merged/(.*)\n|$invdir/tests/sources/$1|, <SOURCE>);
+  close(SOURCE);
+
+  my ($loc, $ncnbloc);
+  for my $one_javafile (@sources) {
+    # Line of code
+    my $loc_command = "cat $one_javafile | wc -l";
+    $loc += `$loc_command`;
+    # Non-comment, non-blank lines of code
+    my $ncnb_command = "cpp -P -nostdinc -undef $one_javafile | grep '[^ \\t]' | wc -l";
+    $ncnbloc += `$ncnb_command`;
+  }
+
+  open(SOURCE, $file) or die("Cannot open $file!");
   my $javafile = <SOURCE>;
   chomp($javafile);
   $javafile =~ s/\# merged\///;
@@ -103,18 +117,6 @@ for my $file (@ARGV) {
   $class =~ s/\.java$//;
   $class =~ s|^.+/([^/]+)$|$1|; # Strip directories
   $class =~ s/WeightedNodePath/WeightedPath/; # shorten this name
-
-  # Line of code
-  my $loc_command = "wc -l < $invdir/tests/sources/$javafile";
-  my $loc = `$loc_command`;
-  chomp($loc);
-  $loc =~ s/^ *//;
-  # Non-comment, non-blank lines of code
-  my $ncnb_command = "cpp -P -nostdinc -undef $invdir/tests/sources/$javafile | grep '[^ \\t]' | wc -l";
-  # print "command = $ncnb_command\n";
-  my $ncnbloc = `$ncnb_command`;
-  chomp($ncnbloc);
-  $ncnbloc =~ s/^ *//;
 
   my ($verified, $unverified, $inexpressible, $redundant, $missing) = (0, 0, 0, 0, 0);
   for my $typ (@printed_types) {
@@ -124,7 +126,6 @@ for my $file (@ARGV) {
     $redun{$typ} = 0;
     $miss{$typ} = 0;
   }
-
 
   my $line = <SOURCE>;		# header line
   my $gotlines = 0;
