@@ -2515,8 +2515,9 @@ Value information includes:
 double-quotes and backslashes are escaped by a backslash; newlines and
 carriage returns are represented as "\n" and "\r", respectively
 @item    array: elements are listed on one line, separated by spaces.
-The elements may optionally be enclosed in [square brackets]; this
-is encouraged for clarity.
+The entire array contents are in square brackets.  (Also, the array name
+should end in "[]"; use "a[]" for array contents, but "a" for the identity
+of the array itself.)
 @end itemize
 @item modified? (0 or 1).
 This value is 0 if the variable has not been assigned to since the
@@ -2567,7 +2568,7 @@ explicit
 
 DECLARE
 P180-15.1.1:::LOOP-389
-B
+B[]
 int[]
 int[]
 (S B-element)[(B-index1 I N)]
@@ -2586,7 +2587,7 @@ int
 
 DECLARE
 P180-15.1.1:::EXIT
-B
+B[]
 int[]
 int[]
 (S B-element)[(B-index1 I N)]
@@ -2605,7 +2606,7 @@ int
 
 DECLARE
 P180-15.1.1:::ENTER
-B
+B[]
 int[]
 int[]
 (S B-element)[(B-index1 I N)]
@@ -2642,16 +2643,16 @@ This is the first part of file @file{p180-15.1.1.dtrace}.
 
 @example
 P180-15.1.1:::ENTER
-B
-92 56 -96 -49 76 92 -3 -88
+B[]
+[92 56 -96 -49 76 92 -3 -88]
 1
 N
 8
 1
 
 P180-15.1.1:::LOOP-389
-B
-92 56 -96 -49 76 92 -3 -88
+B[]
+[92 56 -96 -49 76 92 -3 -88]
 1
 N
 8
@@ -2664,8 +2665,8 @@ S
 1
 
 P180-15.1.1:::LOOP-389
-B
-92 56 -96 -49 76 92 -3 -88
+B[]
+[92 56 -96 -49 76 92 -3 -88]
 0
 N
 8
@@ -2678,8 +2679,8 @@ S
 1
 
 P180-15.1.1:::LOOP-389
-B
-92 56 -96 -49 76 92 -3 -88
+B[]
+[92 56 -96 -49 76 92 -3 -88]
 0
 N
 8
