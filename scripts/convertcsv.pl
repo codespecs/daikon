@@ -12,17 +12,14 @@
 
 
 my $USAGE =
-"Usage: ./convertcsv.pl [options] <inputfilename>
-     Options:
-        -m [nonsensical old interpolate zero]
-           -m nonsensical : inserts a \"nonsensical\" tag for any
-              missing values in the csv file.
-           -m old : inserts the last value of a variable for any
-              missing value found in the csv file.
-           -m interpolate : uses linear interpolation to predict
-              the values of missing fields in the csv file.
-           -m zero : inserts zeros for all the missing values
-              in the csv file.\n";
+  "Usage: ./convertcsv.pl [options] <inputfilename>
+  Options:
+     -m [behavior]:  behavior for missing values in the csv file
+        -m nonsensical : use Daikon \"nonsensical\" values
+        -m old : use the last non-missing value of the variable (default).
+        -m interpolate : linearly interpolate between non-missing values.
+        -m zero : use zero
+";
 
 # number of input arguments.
 $noOfArgs = @ARGV ;
