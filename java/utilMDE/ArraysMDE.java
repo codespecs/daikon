@@ -844,13 +844,9 @@ public final class ArraysMDE {
     boolean[] see = new boolean[a.length];
     for (int i=0; i<a.length; i++) {
       int n = a[i];
-      if (!(0 <= n && n < a.length))
+      if (n < 0 || n >= a.length || see[n])
 	return false;
       see[n] = true;
-    }
-    for (int i=0; i<a.length; i++) {
-      if (!see[i])
-	return false;
     }
     return true;
   }
@@ -905,6 +901,7 @@ public final class ArraysMDE {
 	result[i] = b[inner];
       }
     }
+    return result;
   }
 
   ///////////////////////////////////////////////////////////////////////////
