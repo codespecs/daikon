@@ -207,13 +207,16 @@ public class RetTransform implements ClassFileTransformer {
         // Add nonce local to matchup enter/exits
         add_method_startup (il, context);
 
+        
+        Iterator <Integer> exitLocIter = mi.exit_locations.iterator();
+        
         // Loop through each instruction
         for (InstructionHandle ih = il.getStart(); ih != null; ) {
           InstructionList new_il = null;
           Instruction inst = ih.getInstruction();
 
           // Get the translation for this instruction (if any)
-          new_il = xform_inst (inst, context);
+          new_il = xform_inst (inst, context, exitLocIter);
 
           // Remember the next instruction to process
           InstructionHandle next_ih = ih.getNext();
@@ -240,8 +243,10 @@ public class RetTransform implements ClassFileTransformer {
               ih = next_ih;
               continue;
             }
+            
             if (debug)
               out.format ("Replacing %s by %s\n", ih, new_il);
+            
             il.append (ih, new_il);
             InstructionTargeter[] targeters = ih.getTargeters();
             if (targeters != null) {
@@ -316,7 +321,8 @@ public class RetTransform implements ClassFileTransformer {
    * variable (return__$trace2_val) and then do the return.  Also, calls
    * Runtime.exit() immediately before the return.
    */
-  private InstructionList xform_inst (Instruction inst, MethodContext c) {
+  private InstructionList xform_inst (Instruction inst, MethodContext c, Iterator <Integer> exitIter) 
+  {
 
     switch (inst.getOpcode()) {
 
@@ -339,8 +345,11 @@ public class RetTransform implements ClassFileTransformer {
       il.append (c.ifact.createDup (type.getSize()));
       il.append (c.ifact.createStore (type, return_loc.getIndex()));
     }
-    //TODO: check ppt against select/omit
-    il.append (call_enter_exit (c, "exit"));
+    
+    if(!exitIter.hasNext())
+        throw new RuntimeException("Not enough exit locations in the List");
+    
+    il.append (call_enter_exit (c, "exit", exitIter.next()));
     il.append (inst);
     return (il);
   }
@@ -432,8 +441,7 @@ public class RetTransform implements ClassFileTransformer {
     nl.append (c.ifact.createStore (Type.INT, nonce_lv.getIndex()));
 
     // call Runtime.enter()
-    //TODO: check ppt against select/omit
-    nl.append (call_enter_exit (c, "enter"));
+    nl.append (call_enter_exit (c, "enter", -1));
 
     // Add the new instruction at the start and move any LineNumbers
     // and Local variables to point to them.  Other targeters
@@ -478,7 +486,7 @@ public class RetTransform implements ClassFileTransformer {
    * as an array of objects.  Any primitive values are wrapped
    * in the appropriate Runtime wrapper (IntWrap, FloatWrap, etc)
    */
-   InstructionList call_enter_exit (MethodContext c, String method_name) {
+   InstructionList call_enter_exit (MethodContext c, String method_name, int line) {
 
      InstructionList il = new InstructionList();
      InstructionFactory ifact = c.ifact;
@@ -525,7 +533,8 @@ public class RetTransform implements ClassFileTransformer {
        param_index += at.getSize();
      }
 
-     // If this is an exit, push the return value.  The return value
+     // If this is an exit, push the return value and line number.  
+     // The return value
      // is stored in the local "return__$trace2_val"  If the return
      // value is a primitive, wrap it in the appropriate runtime wrapper
      if (method_name.equals ("exit")) {
@@ -540,13 +549,18 @@ public class RetTransform implements ClassFileTransformer {
            il.append (ifact.createLoad (Type.OBJECT, return_local.getIndex()));
          }
        }
+       
+       
+       //push line number
+       //System.out.println(c.mgen.getName() + " --> " + line);
+       il.append (ifact.createConstant (line));
      }
 
      // Call the specified method
      Type[] method_args = null;
      if (method_name.equals ("exit"))
        method_args = new Type[] {Type.OBJECT, Type.INT, Type.INT,
-                                 object_arr_typ, Type.OBJECT};
+                                 object_arr_typ, Type.OBJECT, Type.INT};
      else
        method_args = new Type[] {Type.OBJECT, Type.INT, Type.INT,
                                  object_arr_typ};
@@ -631,7 +645,7 @@ public class RetTransform implements ClassFileTransformer {
 
     // Loop through each instruction and find the line number for each
     // return opcode
-    Set<Integer> exit_locs = new LinkedHashSet<Integer>();
+    List <Integer> exit_locs = new ArrayList<Integer>();
 
     // log ("Looking for exit points in %s\n", mgen.getName());
     InstructionList il = mgen.getInstructionList();

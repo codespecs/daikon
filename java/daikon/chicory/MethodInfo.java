@@ -31,7 +31,7 @@ public class MethodInfo {
   public Class[] arg_types;
 
   /** exit locations for this method **/
-  public Set<Integer> exit_locations;
+  public List <Integer> exit_locations;
 
   /**
    * Creates a MethodInfo with the specified class, arg_names, and
@@ -39,7 +39,7 @@ public class MethodInfo {
    */
   public MethodInfo (ClassInfo class_info, String method_name,
                      String[] arg_names, String[] arg_type_strings,
-                     Set<Integer> exit_locations) {
+                     List <Integer> exit_locations) {
 
     this.class_info = class_info;
     this.method_name = method_name;

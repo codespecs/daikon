@@ -204,16 +204,12 @@ public class Runtime
      * @param args     - array of arguments to method
      * @param ret_val  - return value of method.  null if method is void
      */
-    public static void exit(Object obj, int nonce, int mi_index, Object[] args, Object ret_val)
+    public static void exit(Object obj, int nonce, int mi_index, Object[] args, Object ret_val, int lineNum)
     {
 
         if (new_classes.size() > 0)
             process_new_classes();
 
-        Throwable stack = new Throwable("exit");
-        stack.fillInStackTrace();
-        StackTraceElement[] ste_arr = stack.getStackTrace();
-        StackTraceElement ste = ste_arr[1];
         /*
          printf ("%s.%s():::EXIT%d\n", ste.getClassName(), ste.getMethodName(),
          ste.getLineNumber());
@@ -231,7 +227,7 @@ public class Runtime
          println ();
          */
         MethodInfo mi = methods.get(mi_index);
-        dtrace_writer.methodExit(mi, nonce, obj, args, ret_val, ste.getLineNumber());
+        dtrace_writer.methodExit(mi, nonce, obj, args, ret_val, lineNum);
         // System.out.println ("enter MethodInfo : " + mi.member);
 
     }

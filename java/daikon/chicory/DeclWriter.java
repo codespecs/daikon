@@ -159,7 +159,8 @@ public class DeclWriter extends DaikonWriter
 
             //print exit program point for EACH exit location in the method
             //(that was encountered during this execution of the program)
-            for (Integer exitLoc : mi.exit_locations)
+            Set <Integer> theExits = new HashSet<Integer>(mi.exit_locations);
+            for (Integer exitLoc : theExits)
             {
                 String name = methodExitName(member, exitLoc.intValue());
                 printMethodExitInternal(member, name, argnames);
