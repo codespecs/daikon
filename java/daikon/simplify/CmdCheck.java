@@ -14,7 +14,7 @@ public class CmdCheck
 {
   public final String proposition;
   public boolean valid = false;
-    
+
   public CmdCheck(String proposition) {
     this.proposition = proposition.trim();
     SimpUtil.assert_well_formed(proposition);
@@ -32,7 +32,7 @@ public class CmdCheck
 
 	// read the answer
 	// first, the real result
-	result = s.output.readLine();           
+	result = s.output.readLine();
 	if (result == null) {
 	  throw new SimplifyError("Probable core dump");
 	}
