@@ -46,6 +46,32 @@ public class Ast {
   // reformats only to insert comments, and writes the resulting AST to the
   // output stream.
   public static void applyVisitorInsertComments(Reader input, Writer output,
+                                                AnnotateVisitor visitor) {
+    JavaParser parser = new JavaParser(input);
+    Node root = null;
+    try {
+      root = parser.CompilationUnit();
+    }
+    catch (ParseException e) {
+      e.printStackTrace();
+      System.exit(1);
+    }
+    root.accept(visitor);
+
+    // CP: once the AST is visited, we still possibly need to add the
+    // comments to the nodes (see insertInvariants() in
+    // AnnotateVisitor.java). This actually happens only for DBC
+    // format. (Also see first comment in the implementation of this
+    // method.)
+    visitor.addInvariantsToNodes();
+
+    root.accept(new InsertCommentFormatter(visitor.addedComments));
+    root.accept(new TreeDumper(output));
+  }
+
+  // cp: just for comparison with MergeDBC. once i make sure Merge works
+  //     correctly, both this method and MergeDBC classes should be removed.
+  public static void applyVisitorInsertComments(Reader input, Writer output,
                                                 MergeDBCVisitor visitor) {
     JavaParser parser = new JavaParser(input);
     Node root = null;
@@ -60,6 +86,7 @@ public class Ast {
     root.accept(new InsertCommentFormatter(visitor.addedComments));
     root.accept(new TreeDumper(output));
   }
+
 
   // Reads an AST from the input stream, applies the visitor to the AST,
   // completely reformats the Ast (losing previous formating), and writes
