@@ -24,7 +24,7 @@ import java.io.*;
 // nonetheless?  Probably not, as this will simplify implication and such.
 
 public final class EltOneOf  extends SingleSequence  implements OneOf {
-  final static int LIMIT = 5;	// maximum size for the one_of list
+  final static int LIMIT = 5 ;	// maximum size for the one_of list
   // Probably needs to keep its own list of the values, and number of each seen.
   // (That depends on the slice; maybe not until the slice is cleared out.
   // But so few values is cheap, so this is quite fine for now and long-term.)

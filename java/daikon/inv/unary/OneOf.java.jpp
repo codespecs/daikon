@@ -16,6 +16,7 @@ The correct way to build the system is to run 'make'.
 #define SINGLESCALAR SingleScalar
 #define TOSTRING(x) x
 #define NAME var().name.name()
+#define DEFLIMIT 5
 #elif defined(STRING)
 #define SCALARPKG string
 #define INT String
@@ -24,6 +25,7 @@ The correct way to build the system is to run 'make'.
 #define SINGLESCALAR SingleString
 #define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.quote(x) + "\"")
 #define NAME var().name.name()
+#define DEFLIMIT 3
 #elif defined(SEQUENCE)
 #define SCALARPKG sequence
 #define INT long[]
@@ -32,6 +34,7 @@ The correct way to build the system is to run 'make'.
 #define SINGLESCALAR SingleSequence
 #define TOSTRING(x) ArraysMDE.toString(x)
 #define NAME var().name.name()
+#define DEFLIMIT 3
 #elif defined(STRINGSEQUENCE)
 #define SCALARPKG stringsequence
 #define INT String[]
@@ -40,6 +43,7 @@ The correct way to build the system is to run 'make'.
 #define SINGLESCALAR SingleStringSequence
 #define TOSTRING(x) ArraysMDE.toString(x)
 #define NAME var().name.name()
+#define DEFLIMIT 2
 #elif defined(ELT)
 #define SCALARPKG sequence
 #define INT long
@@ -48,6 +52,7 @@ The correct way to build the system is to run 'make'.
 #define SINGLESCALAR SingleSequence
 #define TOSTRING(x) ((!var().type.elementIsIntegral() && (x == 0)) ? "null" : (Long.toString(x)))
 #define NAME var().name.name() + " elements"
+#define DEFLIMIT 5
 #elif defined(ELTSTRING)
 #define SCALARPKG stringsequence
 #define INT String
@@ -56,6 +61,7 @@ The correct way to build the system is to run 'make'.
 #define SINGLESCALAR SingleStringSequence
 #define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.quote(x) + "\"")
 #define NAME var().name.name() + " elements"
+#define DEFLIMIT 3
 #else
 #error "One of SCALAR, STRING, SEQUENCE, STRINGSEQUENCE, ELT, or ELTSTRING should be defined"
 #endif
@@ -86,7 +92,7 @@ import java.io.*;
 // nonetheless?  Probably not, as this will simplify implication and such.
 
 public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
-  final static int LIMIT = 5;	// maximum size for the one_of list
+  final static int LIMIT = DEFLIMIT;	// maximum size for the one_of list
   // Probably needs to keep its own list of the values, and number of each seen.
   // (That depends on the slice; maybe not until the slice is cleared out.
   // But so few values is cheap, so this is quite fine for now and long-term.)
@@ -229,6 +235,12 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     }
   }
 
+#if defined(STRING) || defined(ELTSTRING)
+  private boolean is_type() {
+    return var().name.hasNodeOfType(VarInfoName.TypeOf.class);
+  }
+#endif
+
   public String format_esc() {
 #if defined(ELT) || defined(ELTSTRING)
     String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
@@ -245,7 +257,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     //   as     \typeof(other) == \type(package.SomeClass)
 
     result = "";
-    boolean is_type = (var().name.hasNodeOfType(VarInfoName.TypeOf.class));
+    boolean is_type = is_type();
     for (int i=0; i<num_elts; i++) {
       if (i != 0) { result += " || "; }
       result += varname + " == ";
@@ -379,13 +391,17 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
       destroy();
       return;
     }
-#if defined(SEQUENCE)
+#if defined(STRING) || defined(ELTSTRING)
+    if (is_type() && (num_elts == 1)) {
+      destroy();
+      return;
+    }
+#elif defined(SEQUENCE)
     if (is_hashcode && (num_elts == 1)) {
       destroy();
       return;
     }
-#endif
-#if defined(SCALAR) || defined(ELT)
+#elif defined(SCALAR) || defined(ELT)
     if ((is_boolean && (num_elts == 1))
         || (is_hashcode && (num_elts == 2))) {
       destroy();
@@ -398,7 +414,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
         return;
       }
     }
-#endif
+#endif    
     elts[num_elts] = v;
     num_elts++;
 #if defined(ELT) || defined(ELTSTRING)

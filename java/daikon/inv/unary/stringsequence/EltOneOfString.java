@@ -24,7 +24,7 @@ import java.io.*;
 // nonetheless?  Probably not, as this will simplify implication and such.
 
 public final class EltOneOfString  extends SingleStringSequence  implements OneOf {
-  final static int LIMIT = 5;	// maximum size for the one_of list
+  final static int LIMIT = 3 ;	// maximum size for the one_of list
   // Probably needs to keep its own list of the values, and number of each seen.
   // (That depends on the slice; maybe not until the slice is cleared out.
   // But so few values is cheap, so this is quite fine for now and long-term.)
@@ -107,6 +107,10 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
     }
   }
 
+  private boolean is_type() {
+    return var().name.hasNodeOfType(VarInfoName.TypeOf.class);
+  }
+
   public String format_esc() {
 
     String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
@@ -121,7 +125,7 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
     //   as     \typeof(other) == \type(package.SomeClass)
 
     result = "";
-    boolean is_type = (var().name.hasNodeOfType(VarInfoName.TypeOf.class));
+    boolean is_type = is_type();
     for (int i=0; i<num_elts; i++) {
       if (i != 0) { result += " || "; }
       result += varname + " == ";
@@ -195,6 +199,11 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
 
       }
     if (num_elts == LIMIT) {
+      destroy();
+      return;
+    }
+
+    if (is_type() && (num_elts == 1)) {
       destroy();
       return;
     }
