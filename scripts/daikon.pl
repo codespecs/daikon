@@ -67,6 +67,8 @@ sub which {
     open(LINES, "which $command |");
     while ($line = <LINES>) {
 	chomp $line;
+	next if $line =~ /not found/i;
+	next if $line =~ /no $command in/;
 	push @result, $line;
     }
     return @result;
