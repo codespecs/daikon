@@ -461,6 +461,11 @@ public final class Runtime {
     ps.println(']');
   }
 
+  // The parsing routines can't deal with "missing" in the middle of an
+  // array (I think), so if an element is null, use 0 for its length.
+  // (A better solution be to mark the "length" derived variable as missing.
+  // For expediency, I'm not doing that right now.  -MDE 2/1/2004)
+
   // Print the lengths of the elements of the top-level array.
   // This is for Object[][] or for anything[][][], where "anything" may
   // be either Object or a base class.
@@ -471,10 +476,10 @@ public final class Runtime {
     }
     ps.print('[');
     if (a.length > 0) {
-      ps.print((a[0]).length);
+      ps.print(a[0] == null ? 0 : a[0].length);
       for (int i=1; i<a.length; i++) {
         ps.print(' ');
-        ps.print((a[i]).length);
+        ps.print(a[i] == null ? 0 : a[i].length);
       }
     }
     ps.println(']');
@@ -494,10 +499,10 @@ public final class Runtime {
     }
     ps.print('[');
     if (a.length > 0) {
-      ps.print(a[0].size());
+      ps.print(a[0] == null ? 0 : a[0].size());
       for (int i=1; i<a.length; i++) {
         ps.print(' ');
-        ps.print(a[i].size());
+        ps.print(a[i] == null ? 0 : a[i].size());
       }
     }
     ps.println(']');
@@ -510,10 +515,10 @@ public final class Runtime {
     }
     ps.print('[');
     if (a.length > 0) {
-      ps.print(((List)a[0]).size());
+      ps.print(a[0] == null ? 0 : ((List)a[0]).size());
       for (int i=1; i<a.length; i++) {
         ps.print(' ');
-        ps.print(((List)a[i]).size());
+        ps.print(a[i] == null ? 0 : ((List)a[i]).size());
       }
     }
     ps.println(']');
@@ -527,10 +532,10 @@ public final class Runtime {
     ps.print('[');
     int size = v.size();
     if (size > 0) {
-      ps.print(((List)v.get(0)).size());
+      ps.print(v.get(0) == null ? 0 : ((List)v.get(0)).size());
       for (int i=1; i<size; i++) {
         ps.print(' ');
-        ps.print(((List)v.get(i)).size());
+        ps.print(v.get(i) == null ? 0 : ((List)v.get(i)).size());
       }
     }
     ps.println(']');
