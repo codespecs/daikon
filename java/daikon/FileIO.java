@@ -635,6 +635,9 @@ public final class FileIO {
       count_lines = false;
     } else if (Daikon.dkconfig_progress_delay == -1) {
       count_lines = false;
+    } else if ((new File(filename)).length() == 0) {
+      // Either it's actually empty, or it's something like a pipe.
+      count_lines = false;
     }
 
     String nice_filename; /* For use in messages to user */
