@@ -197,8 +197,8 @@ update-dist-dir: dist-ensure-directory-exists
 	$(MAKE) update-dist-version-file
 
 update-dist-doc:
-	# "make" in doc directory will fail the first time
-	-cd doc && $(MAKE) all > /dev/null
+	# "make" in doc directory will fail the first time, but show output.
+	-cd doc && $(MAKE) all
 	cd doc && $(MAKE) all
 	-cd $(DIST_DIR) && rm -rf $(DIST_DIR_FILES) doc daikon_manual_html
 	cp -pf $(DIST_DIR_PATHS) $(DIST_DIR)
@@ -231,7 +231,8 @@ update-doc-dist-version:
 	touch doc/CHANGES
 
 # Update the version number.
-# This is done immediately after releasing a new version.
+# This is done immediately after releasing a new version; thus, VERSION
+# refers to the next version to be released, not the previously-released one.
 # This isn't a part of the "update-dist-version" target because if it is,
 # the "shell cat" command gets the old VERSION file.
 # (Note that the last element of VERSION may be negative, such as "-1".
