@@ -354,14 +354,21 @@ public abstract class VarInfoName
   }
 
   /**
+   * Returns a name for the this term plus a constant, like "this-1"
+   * or "this+1".
+   **/
+  public VarInfoName applyAdd(int amount) {
+    return (new Add(this, amount)).intern();
+  }
+
+  /**
    * An integer amount more or less than some other value
    **/
-  public static abstract class Foocrement extends VarInfoName {
+  public static class Add extends VarInfoName {
     public final VarInfoName term;
     public final int amount;
-    public Foocrement(VarInfoName term, int amount) {
+    public Add(VarInfoName term, int amount) {
       Assert.assert(term != null);
-      Assert.assert(amount != 0);
       this.term = term;
       this.amount = amount;
     }
@@ -379,44 +386,28 @@ public abstract class VarInfoName
 	"(- " + term.simplify_name() + " " + (-amount) + ")" :
 	"(+ " + term.simplify_name() + " " + amount + ")";
     }
+    public Object accept(Visitor v) {
+      return v.visitAdd(this);
+    }
+    // override for cleanliness
+    public VarInfoName applyAdd(int _amount) {
+      int amt = _amount + this.amount;
+      return (amt == 0) ? term : term.applyAdd(amt);
+    }
   }
 
   /**
    * Returns a name for the decrement of this term, like "this-1".
    **/
   public VarInfoName applyDecrement() {
-    return (new Decrement(this)).intern();
-  }
-
-  /**
-   * An integer amount more or less than some other value
-   **/
-  public static class Decrement extends Foocrement {
-    public Decrement(VarInfoName term) {
-      super(term, -1);
-    }
-    public Object accept(Visitor v) {
-      return v.visitDecrement(this);
-    }
+    return applyAdd(-1);
   }
 
   /**
    * Returns a name for the increment of this term, like "this+1".
    **/
   public VarInfoName applyIncrement() {
-    return (new Increment(this)).intern();
-  }
-
-  /**
-   * One more than some other value
-   **/
-  public static class Increment extends Foocrement {
-    public Increment(VarInfoName term) {
-      super(term, 1);
-    }
-    public Object accept(Visitor v) {
-      return v.visitIncrement(this);
-    }
+    return applyAdd(+1);
   }
 
   /**
@@ -465,24 +456,17 @@ public abstract class VarInfoName
     // 2 orig(a[]) . index       -> orig(a[post(index)])
     if (index instanceof Prestate) {
       index = ((Prestate) index).term; // #1
-    } else {
-      if (index instanceof Foocrement) {
-	VarInfoName term = ((Foocrement) index).term;
-	if (term instanceof Prestate) {
-	  if (index instanceof Decrement) {
-	    index = ((Prestate) term).term.applyDecrement(); // #1
-	  } else {
-	    Assert.assert(index instanceof Increment);
-	    index = ((Prestate) term).term.applyIncrement(); // #1
-	  }
-	} else {
-	  index = index.applyPoststate();  // #2
-	}
-      } else if (index.isLiteralConstant()) {
-	// we don't want orig(a[post(0)]), so leave index alone
+    } else if (index instanceof Add) {
+      Add add = (Add) index;
+      if (add.term instanceof Prestate) {
+	index = ((Prestate) add.term).term.applyAdd(add.amount); // #1
       } else {
 	index = index.applyPoststate();  // #2
       }
+    } else if (index.isLiteralConstant()) {
+      // we don't want orig(a[post(0)]), so leave index alone
+    } else {
+      index = index.applyPoststate();  // #2
     }
     return index;
   }
@@ -495,7 +479,7 @@ public abstract class VarInfoName
     Assert.assert(index != null);
     ElementsFinder finder = new ElementsFinder(this);
     Elements elems = finder.elems();
-    Assert.assert(elems != null);
+    Assert.assert(elems != null, "applySubscript should have elements to use");
     if (finder.inPre()) {
       index = indexToPrestate(index);
     }
@@ -650,8 +634,7 @@ public abstract class VarInfoName
     public Object visitTypeOf(TypeOf o);
     public Object visitPrestate(Prestate o);
     public Object visitPoststate(Poststate o);
-    public Object visitIncrement(Increment o);
-    public Object visitDecrement(Decrement o);
+    public Object visitAdd(Add o);
     public Object visitElements(Elements o);
     public Object visitSubscript(Subscript o);
     public Object visitSlice(Slice o);
@@ -683,10 +666,7 @@ public abstract class VarInfoName
     public Object visitPoststate(Poststate o) {
       return o.term.accept(this);
     }
-    public Object visitIncrement(Increment o) {
-      return o.term.accept(this);
-    }
-    public Object visitDecrement(Decrement o) {
+    public Object visitAdd(Add o) {
       return o.term.accept(this);
     }
     public Object visitElements(Elements o) {
@@ -783,13 +763,9 @@ public abstract class VarInfoName
       return (o == old) ? _new :
 	((VarInfoName) super.visitPoststate(o)).applyPoststate();
     }
-    public Object visitIncrement(Increment o) {
+    public Object visitAdd(Add o) {
       return (o == old) ? _new :
-	((VarInfoName) super.visitIncrement(o)).applyIncrement();
-    }
-    public Object visitDecrement(Decrement o) {
-      return (o == old) ? _new :
-	((VarInfoName) super.visitDecrement(o)).applyDecrement();
+	((VarInfoName) super.visitAdd(o)).applyAdd(o.amount);
     }
     public Object visitElements(Elements o) {
       return (o == old) ? _new :
@@ -803,8 +779,74 @@ public abstract class VarInfoName
     public Object visitSlice(Slice o) {
       return (o == old) ? _new :
 	((VarInfoName) o.sequence.accept(this)).
-	applySlice((VarInfoName) o.i.accept(this),
-		   (VarInfoName) o.j.accept(this));
+	applySlice((o.i == null) ? null : ((VarInfoName) o.i.accept(this)),
+		   (o.j == null) ? null : ((VarInfoName) o.j.accept(this)));
+    }
+  }
+
+  /**
+   * Use to collect all elements in a tree into an inorder-traversal
+   * list.  Result includes the root element.
+   **/
+  public static class InorderFlattener
+    extends AbstractVisitor
+  {
+    public InorderFlattener(VarInfoName root) {
+      root.accept(this);
+    }
+
+    // state and accessors
+    private final List result = new ArrayList();
+    
+    public List nodes() {
+      return Collections.unmodifiableList(result);
+    }
+
+    // visitor methods which get the job done
+    public Object visitSimple(Simple o) {
+      result.add(o);
+      return super.visitSimple(o);
+    }
+    public Object visitSizeOf(SizeOf o) {
+      result.add(o);
+      return super.visitSizeOf(o);
+    }
+    public Object visitFunctionOf(FunctionOf o) {
+      result.add(o);
+      return super.visitFunctionOf(o);
+    }
+    public Object visitTypeOf(TypeOf o) {
+      result.add(o);
+      return super.visitTypeOf(o);
+    }
+    public Object visitPrestate(Prestate o) {
+      result.add(o);
+      return super.visitPrestate(o);
+    }
+    public Object visitPoststate(Poststate o) {
+      result.add(o);
+      return super.visitPoststate(o);
+    }
+    public Object visitAdd(Add o) {
+      result.add(o);
+      return super.visitAdd(o);
+    }
+    public Object visitElements(Elements o) {
+      result.add(o);
+      return super.visitElements(o);
+    }
+    public Object visitSubscript(Subscript o) {
+      result.add(o);
+      o.sequence.accept(this);
+      o.index.accept(this);
+      return null;
+    }
+    public Object visitSlice(Slice o) {
+      result.add(o);
+      o.sequence.accept(this);
+      if (o.i != null) o.i.accept(this);
+      if (o.j != null) o.j.accept(this);
+      return null;
     }
   }
 
@@ -992,96 +1034,6 @@ public abstract class VarInfoName
       return result;
     }
 
-  }
+  } // QuantHelper
 
 }
-
-
-//    /**
-//     * @return three-element array indicating upper and lower (inclusive)
-//     * bounds of the range of this array variable, and a canonical element at
-//     * index i.
-//     **/
-//    public String[] index_range() {
-//      String working_name = name.esc_name();
-//      String pre_wrapper = "";
-//      String post_wrapper = "";
-//      while (working_name.startsWith("\\") && working_name.endsWith(")")) {
-//        int open_paren_pos = working_name.indexOf("(");
-//        pre_wrapper += working_name.substring(0, open_paren_pos+1);
-//        post_wrapper += ")";
-//        working_name = working_name.substring(open_paren_pos+1, working_name.length()-1);
-//      }
-//      String minindex;
-//      String maxindex;
-//      String arrayname;
-//      if (working_name.endsWith("[]")) {
-//        minindex = "";
-//        maxindex = "";
-//        arrayname = working_name.substring(0, working_name.length()-2);
-//      } else if (! working_name.endsWith("]")) {
-//        minindex = "";
-//        maxindex = "";
-//        arrayname = working_name;
-//      } else {
-//        int open_bracket_pos = working_name.lastIndexOf("[");
-//        arrayname = working_name.substring(0, open_bracket_pos);
-//        String subscripts = working_name.substring(open_bracket_pos+1, working_name.length()-1);
-//        int dots_pos = subscripts.indexOf("..");
-//        if (dots_pos == -1) {
-//          throw new Error("can't find \"..\" in " + working_name);
-//        }
-//        minindex = subscripts.substring(0, dots_pos);
-//        maxindex = subscripts.substring(dots_pos+2);
-
-//      }
-//      if (minindex.equals("")) minindex = "0";
-//      if (maxindex.equals("")) maxindex = arrayname + ".length-1";
-//      String arrayelt = pre_wrapper + arrayname + "[i]" + post_wrapper;
-//      // System.out.println("index_range: " + name + " ( = " + esc_name + " ) ");
-//      // System.out.println("    => " + minindex + ", " + maxindex + ", " + arrayelt);
-
-//      return new String[] { minindex, maxindex, arrayelt };
-//    }
-
-
-//    /**
-//     * Return an array of two strings:
-//     * an esc forall quantifier, and
-//     * the expression for the element at index i of the array
-//     **/
-//    public String[] esc_forall() {
-//      String[] index_range = index_range();
-//      if (index_range.length != 3) {
-//        throw new Error("index_range failed for " + name());
-//      }
-//      return new String[] {
-//        "\\forall int i; (" + index_range[0] + " <= i && i <= " + index_range[1] + ") ==> ",
-//        index_range[2],
-//      };
-//    }
-
-//    /**
-//     * Return an array of three strings:
-//     * an esc forall quantifier, and
-//     * the expressions for the elements at index i of the two arrays
-//     **/
-//    public static String[] esc_forall_2(VarInfo var1, VarInfo var2) {
-//      String[] index_range1 = var1.index_range();
-//      String[] index_range2 = var2.index_range();
-//      Assert.assert(index_range1.length == 3, "no index_range: " + var1.name);
-//      Assert.assert(index_range2.length == 3, "no index_range: " + var2.name);
-//      String[] esc_forall1 = var1.esc_forall();
-//      String elt2 = index_range2[2];
-//      if (! index_range1[0].equals(index_range2[0])) {
-//        int i_pos = elt2.lastIndexOf("[i]");
-//        elt2 = elt2.substring(0, i_pos+2)
-//          + "-" + index_range1[0] + "+" + index_range2[0] + "]"
-//          + elt2.substring(i_pos+3);
-//      }
-//      return new String[] {
-//        esc_forall1[0],
-//        esc_forall1[1],
-//        elt2,
-//      };
-//    }
