@@ -31,7 +31,7 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
         FieldDeclaration fd = fieldDeclsArray[i];
         boolean isFinal = hasModifier(fd, "final");
         Type fdtype = fd.f1;
-	// See specification in MergeESC.java for which fields are owned.
+	// See specification in Annotate.java for which fields are owned.
         // boolean isOwned = ! isPrimitive(fdtype);
         boolean isOwned = isArray(fdtype);
         {

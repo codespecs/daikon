@@ -27,25 +27,6 @@ public class Ast {
   // reformats only to insert comments, and writes the resulting AST to the
   // output stream.
   public static void applyVisitorInsertComments(Reader input, Writer output,
-                                                MergeESCVisitor visitor) {
-    JavaParser parser = new JavaParser(input);
-    Node root = null;
-    try {
-      root = parser.CompilationUnit();
-   }
-    catch (ParseException e) {
-      e.printStackTrace();
-      System.exit(1);
-    }
-    root.accept(visitor);
-    root.accept(new InsertCommentFormatter(visitor.addedComments));
-    root.accept(new TreeDumper(output));
-  }
-
-  // Reads an AST from the input stream, applies the visitor to the AST,
-  // reformats only to insert comments, and writes the resulting AST to the
-  // output stream.
-  public static void applyVisitorInsertComments(Reader input, Writer output,
                                                 AnnotateVisitor visitor) {
     JavaParser parser = new JavaParser(input);
     Node root = null;
@@ -60,25 +41,6 @@ public class Ast {
     root.accept(new InsertCommentFormatter(visitor.addedComments));
     root.accept(new TreeDumper(output));
   }
-
-  // cp: just for comparison with MergeDBC. once i make sure Merge works
-  //     correctly, both this method and MergeDBC classes should be removed.
-  public static void applyVisitorInsertComments(Reader input, Writer output,
-                                                MergeDBCVisitor visitor) {
-    JavaParser parser = new JavaParser(input);
-    Node root = null;
-    try {
-      root = parser.CompilationUnit();
-    }
-    catch (ParseException e) {
-      e.printStackTrace();
-      System.exit(1);
-    }
-    root.accept(visitor);
-    root.accept(new InsertCommentFormatter(visitor.addedComments));
-    root.accept(new TreeDumper(output));
-  }
-
 
   // Reads an AST from the input stream, applies the visitor to the AST,
   // completely reformats the Ast (losing previous formating), and writes
@@ -651,9 +613,6 @@ public class Ast {
           if (debug_getMatches) System.out.println("Unmatched; continuing");
           continue;
         }
-        MergeESC.debug.fine ("Ast.getMatch succeeded: " + ppt.name()
-                             + " to " + classname + "." + methodname
-                             + "(" + UtilMDE.join(param_types, ",") + ")");
         result.add(ppt);
       }
     }
