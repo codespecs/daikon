@@ -30,7 +30,8 @@ $ENV{LACKWIT_ARGS} = "-ignore __restrict";
 my $emitheaders_output = `EmitHeaders $lackwit_home/lib/Default.sigs`;
 die "EmitHeaders failed:\n$emitheaders_output\n" if ($CHILD_ERROR != 0);
 
-unshift @files, "$lackwit_home/lib/libc.c";
+my $libc = "$lackwit_home/lib/libc.c";
+unshift @files, $libc;
 
 foreach my $file (@files) {
   # An intermediate file is created for each source file to be
@@ -45,7 +46,7 @@ foreach my $file (@files) {
   $int_file = "$lackwitdb/$int_file";
 
   my $lh_output;
-  if ($file =~ /libc\.c/) {
+  if ($file eq $libc) {
     my $lhflags = "";
     if (`uname` =~ /Linux/) {
       $lhflags = "-D_LINUX_IN_H -D_LIBIO_H";
