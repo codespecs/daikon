@@ -613,9 +613,14 @@ public class PptTopLevel
   ///
 
   /**
-   * Given a sample that was observed at this ppt, flow it down from
-   * any higher ppts (and to this ppt, of course).  Hit conditional
+   * Given a sample that was observed at this ppt, flow it up to
+   * any higher ppts and lastly to this ppt.  Hit conditional
    * ppts along the way (via the add method).
+   *
+   * Contract: since we hit higher ppts first and check this last,
+   * invariants that have flown down from the higher ppt are also
+   * checked by this vt.  If we hit this before parents, then this
+   * wouldn't be the case.
    **/
   public void add_and_flow(ValueTuple vt, int count) {
     //     if (debugFlow.isDebugEnabled()) {
@@ -683,6 +688,9 @@ public class PptTopLevel
     if (values_num_samples == 0) {
       //       debugFlow.debug ("  Instantiating views for the first time");
       instantiate_views_and_invariants();
+      if (Global.debugInfer.isDebugEnabled()) {
+	Global.debugInfer.debug ("Instantiated views first time for " + this);
+      }
     }
     values_num_samples += count;
 
@@ -698,6 +706,9 @@ public class PptTopLevel
       if (view.invs.size() == 0) {
 	System.err.println("No invs for " + view.name);
 	continue;
+      }
+      if (Global.debugInfer.isDebugEnabled()) {
+	Global.debugInfer.debug ("Giving value to " + view);
       }
       if (!view.no_invariants) {
 	// We have to check here now because there may be some views

@@ -41,7 +41,7 @@ public abstract class PptSlice
   /** Debug tracer **/
   public static final Category debug = Category.getInstance("daikon.PptSlice");
   public static final Category debugGeneral = Category.getInstance("daikon.PptSlice.general");
-  public static final Category debugFlow = Category.getInstance("daikon.PptSlice.flow");
+  public static final Category debugFlow = Category.getInstance("daikon.flow.flow");
 
   /** This is a slice of the 'parent' ppt. */
   public PptTopLevel parent;
@@ -290,7 +290,9 @@ public abstract class PptSlice
    * Invariant objects as they are falsified.
    **/
   public void addToFlow(Invariant inv) {
-    debugFlow.debug(inv.format() + " at " + parent.name + " added to flow");
+    if (debugFlow.isDebugEnabled()) {
+      debugFlow.debug(inv.repr() + " at " + parent.name + " added to flow");
+    }
     invs_to_flow.add(inv);
   }
 
@@ -375,7 +377,10 @@ public abstract class PptSlice
 	    inv.destroy();
 	  }
 	  // debug
-	  if (debugFlow.isDebugEnabled()) debugFlow.debug(" " + inv.format() + " flowing from " + parent.name + " to " + lower.name);
+	  if (debugFlow.isDebugEnabled()) {
+	    debugFlow.debug(" " + inv.format() + " flowing from " +
+			    parent.name + " to " + lower.name);
+	  }
 	  // If its class does not already exist in lower
 	  for (Iterator h = slice.invs.iterator(); h.hasNext(); ) {
 	    Object item = h.next();
@@ -391,6 +396,10 @@ public abstract class PptSlice
 	  }
 	  // Let it be reborn
 	  Invariant reborn = inv.resurrect(slice, permutation);
+	  if (debugFlow.isDebugEnabled()) {
+	    debugFlow.debug("  rebirthing invariant");
+	  }
+
 	  slice.addInvariant(reborn);
 	}
       }

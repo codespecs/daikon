@@ -178,7 +178,9 @@ public final class PptSlice2
       Assert.assert(invs.get(i) != null);
     }
 
-    // System.out.println("PptSlice2.add(" + full_vt + ", " + count + ") for " + name);
+    //     if (Global.debugInfer.isDebugEnabled()) {
+    //       Global.debugInfer.debug ("PptSlice2.add(" + full_vt + ", " + count + ") for " + name);
+    //     }
 
     // Do not bother putting values into a slice if missing.
 
