@@ -13,26 +13,6 @@ import java.util.*;
  **/
 public final class ArraysMDE {
 
-  /**
-   * Returns an integer approximation to v:  either v rounded to an
-   * integer, or the maximum/minimum integer if v is too large to fit, or
-   * -1 or +1 if v is nonzero and between -1 and 1.  Returns 0 only if the
-   * argument is 0.
-   */
-  static int compare_result (double v) {
-    if (v < Integer.MIN_VALUE) {
-      return Integer.MIN_VALUE;
-    } else if (v > Integer.MAX_VALUE) {
-      return Integer.MAX_VALUE;
-    } else if ((v < 1) && (v > 0)) {
-      return (1);
-    } else if ((v > -1) && (v < 0)) {
-      return (-1);
-    } else {
-      return (int) v;
-    }
-  }
-
   ///////////////////////////////////////////////////////////////////////////
   /// min, max
   ///
@@ -1369,9 +1349,8 @@ public final class ArraysMDE {
       int[] a2 = (int[])o2;
       int len = Math.min(a1.length, a2.length);
       for (int i=0; i<len; i++) {
-        int tmp = a1[i] - a2[i];
-        if (tmp != 0)
-          return tmp;
+        if (a1[i] != a2[i])
+          return ((a1[i] > a2[i]) ? 1 : -1);
       }
       return a1.length - a2.length;
     }
@@ -1390,16 +1369,8 @@ public final class ArraysMDE {
       long[] a2 = (long[])o2;
       int len = Math.min(a1.length, a2.length);
       for (int i=0; i<len; i++) {
-        long tmp = a1[i] - a2[i];
-        if (tmp != 0) {
-          if (tmp < Integer.MIN_VALUE) {
-            return Integer.MIN_VALUE;
-          } else if (tmp > Integer.MAX_VALUE) {
-            return Integer.MAX_VALUE;
-          } else {
-            return (int) tmp;
-          }
-        }
+        if (a1[i] != a2[i])
+          return ((a1[i] > a2[i]) ? 1 : -1);
       }
       return a1.length - a2.length;
     }
@@ -1418,10 +1389,9 @@ public final class ArraysMDE {
       double[] a2 = (double[])o2;
       int len = Math.min(a1.length, a2.length);
       for (int i=0; i<len; i++) {
-        double tmp = a1[i] - a2[i];
-        if (tmp != 0) {
-          return (compare_result (tmp));
-        }
+        int result = Double.compare(a1[i], a2[i]);
+        if (result != 0)
+          return (result);
       }
       return a1.length - a2.length;
     }
@@ -1537,9 +1507,8 @@ public final class ArraysMDE {
       if (tmp != 0)
         return tmp;
       for (int i=0; i<a1.length; i++) {
-        tmp = a1[i] - a2[i];
-        if (tmp != 0)
-          return tmp;
+        if (a1[i] != a2[i])
+          return ((a1[i] > a2[i]) ? 1 : -1);
       }
       return 0;
     }
@@ -1561,16 +1530,8 @@ public final class ArraysMDE {
         return lendiff;
       long tmp;
       for (int i=0; i<a1.length; i++) {
-        tmp = a1[i] - a2[i];
-        if (tmp != 0) {
-          if (tmp < Integer.MIN_VALUE) {
-            return Integer.MIN_VALUE;
-          } else if (tmp > Integer.MAX_VALUE) {
-            return Integer.MAX_VALUE;
-          } else {
-            return (int) tmp;
-          }
-      }
+        if (a1[i] != a2[i])
+          return ((a1[i] > a2[i]) ? 1 : -1);
       }
       return 0;
     }
