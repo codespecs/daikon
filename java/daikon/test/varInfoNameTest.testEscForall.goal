@@ -22,7 +22,7 @@ suffix = a[x..]
 o_suffix = orig(a[x..])
 ; quantify_esc_name o_suffix suffix
 (\forall int i, j; (\old(x) <= i && i <= \old(a.length-1) && x <= j && j <= a.length-1) ==> 
-(\forall int i, j; (\old(x) <= i && i <= \old(a.length-1) && x <= j && j <= a.length-1 && (i-(\old(x))) == (j-(x)))) ==> 
+(\forall int i, j; (\old(x) <= i && i <= \old(a.length-1) && x <= j && j <= a.length-1 && (i-(\old(x))) == (j-(x))) ==> 
 	\old(a[i])
 	a[j]
 )
