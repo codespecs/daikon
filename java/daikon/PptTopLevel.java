@@ -2005,8 +2005,8 @@ public class PptTopLevel extends Ppt {
               } else {
                 // sb.append("\t\t(no slice)");
               }
-              out.println(sb.toString());
             }
+            out.println(sb.toString());
           }
         }
       }
@@ -2051,6 +2051,7 @@ public class PptTopLevel extends Ppt {
       if (Daikon.output_num_samples) {
         inv_rep += num_values_samples;
       }
+      out.println(inv_rep);
       if (Global.debugPrintInvariants) {
         out.println("  [" + inv.repr() + "]");
       }

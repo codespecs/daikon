@@ -90,6 +90,7 @@ public final class Global {
     if (! output_statistics)
       return;
 
+    System.out.println("===========================================================================");
     System.out.println("Variables:");
     System.out.println("  non_canonical_variables = " + non_canonical_variables);
     System.out.println("  can_be_missing_variables = " + can_be_missing_variables);
