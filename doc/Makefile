@@ -22,11 +22,22 @@ invariants-doc:
 # sh seems not to permit redirecting standard error to standard out
 .fix-menu: daikon.texinfo
 	@echo "Updating menus in daikon.texinfo..."
-	@emacs --batch daikon.texinfo --eval '(progn (texinfo-master-menu t) (save-buffer))' 2>&1 | grep -v "^Updating node: " | grep -v '^Updated ".*" level menu' | grep -v "^Inserting menu for" | grep -v '^Inserting chapter menu entry:'
-	perl -pi -e '$$/="\n\n"; s/(::) *(\@ifhtml\n\@contents\n)/\1\n\n\2\@end ifhtml\n\@ifnothtml\n/; s/(\@end detailmenu\n)(\@end menu)/\1\@end ifnothtml\n\2/' daikon.texinfo
+	@cp daikon.texinfo daikon.texinfo.new
+	@emacs --batch daikon.texinfo.new --eval '(progn (texinfo-master-menu t) (save-buffer))' 2>&1 | grep -v "^Updating node: " | grep -v '^Updated ".*" level menu' | grep -v "^Inserting menu for" | grep -v '^Inserting chapter menu entry:'
+	perl -pi -e '$$/="\n\n"; s/(::) *(\@ifhtml\n\@contents\n)/\1\n\n\2\@end ifhtml\n\@ifnothtml\n/; s/(\@end detailmenu\n)(\@end menu)/\1\@end ifnothtml\n\2/' daikon.texinfo.new
+	@if cmp daikon.texinfo daikon.texinfo.new >/dev/null 2>&1; then echo "daikon.texinfo unchanged"; rm -f daikon.texinfo.new; else mv daikon.texinfo.new daikon.texinfo; fi
 	touch .fix-menu
 
-html: daikon.html
+images/%.eps: images/%.dot
+	dot -Tps $< >$@
+
+images/dfepl-flow.png: images/dfepl-flow.eps
+	eps2png-mono-alpha.zsh $< 500
+
+images/%.pdf: images/%.eps
+	epstopdf $< --outfile=$@
+
+html: daikon.html images/dfepl-flow.png
 
 # The perl moves </ul> from after the table of contents to before it,
 # preventing it from being too deeply indented.  It's needed with makeinfo 4.2.
@@ -49,21 +60,20 @@ daikon_manual_html/daikon.html: daikon.texinfo
 daikon.dvi: daikon.texinfo config-options.texinfo invariants-doc.texinfo
 	texi2dvi $<
 
-ps: daikon.ps
+ps: daikon.ps images/dfepl-flow.eps
 
 daikon.ps: daikon.dvi
 	dvips -t letter -o $@ $<
 
 pdf: daikon.pdf
 
-# I can't get the images to convert to PDF, so this doesn't work
-pdf-direct: daikon.texinfo daikon.dvi
+pdf-direct: daikon.texinfo daikon.dvi images/daikon-logo.pdf images/gui-InvariantsDisplay-small.pdf images/gui-ControlPanel.pdf images/context-gui.pdf
 	pdftex $<
 
 # daikon.pdf: daikon.ps
 # 	ps2pdf $<
 
-daikon.pdf: daikon.dvi
+daikon.pdf: daikon.dvi images/dfepl-flow.eps
 	dvipdfm $<
 
 clean: texi-clean
