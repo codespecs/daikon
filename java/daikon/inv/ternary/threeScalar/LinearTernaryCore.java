@@ -97,14 +97,14 @@ public final class LinearTernaryCore implements java.io.Serializable {
     int maxsep_k = -1;
     {
       // (square of the) distance between the most separated triple
-      long max_separation = 0;
+      double max_separation = Double.MIN_VALUE;
       for (int i=0; i<MINTRIPLES-2; i++) {
         for (int j=i+1; j<MINTRIPLES-1; j++) {
           for (int k=j+1; j<MINTRIPLES; j++) {
-            long separation = (separation(i, j)
+            double separation = (separation(i, j)
                                + separation(i, k)
                                + separation(j, k));
-            // Assert.assert(separation > 0);
+            Assert.assert(separation > 0);
             if (separation > max_separation) {
               max_separation = separation;
               maxsep_i = i;
@@ -120,11 +120,11 @@ public final class LinearTernaryCore implements java.io.Serializable {
 
 
   // (Square of the) distance between triples i and j.
-  long separation(int i, int j) {
-    // not int, lest we get wraparound
-    long xsep = (x_cache[i] - x_cache[j]);
-    long ysep = (y_cache[i] - y_cache[j]);
-    long zsep = (z_cache[i] - z_cache[j]);
+  double separation(int i, int j) {
+    // not int or even long, lest we get wraparound
+    double xsep = (x_cache[i] - x_cache[j]);
+    double ysep = (y_cache[i] - y_cache[j]);
+    double zsep = (z_cache[i] - z_cache[j]);
     return xsep*xsep + ysep*ysep + zsep*zsep;
   }
 
