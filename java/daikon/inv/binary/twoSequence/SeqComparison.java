@@ -23,8 +23,13 @@ class SeqComparison extends TwoSequence implements Comparison {
   }
 
   public static SeqComparison instantiate(PptSlice ppt) {
-    Assert.assert(ppt.var_infos[0].type.dimensions() == 1);
-    Assert.assert(ppt.var_infos[1].type.dimensions() == 1);
+    // System.out.println("Ppt: " + ppt.name);
+    // System.out.println("vars[0]: " + ppt.var_infos[0].type.format());
+    // System.out.println("vars[1]: " + ppt.var_infos[1].type.format());
+    Assert.assert((ppt.var_infos[0].type.dimensions() == 1)
+                  || (ppt.var_infos[0].type == ProglangType.VECTOR));
+    Assert.assert((ppt.var_infos[1].type.dimensions() == 1)
+                  || (ppt.var_infos[1].type == ProglangType.VECTOR));
     boolean only_eq = ((!ppt.var_infos[0].type.baseIsIntegral())
                        || (!ppt.var_infos[1].type.baseIsIntegral()));
     return new SeqComparison(ppt, only_eq);
