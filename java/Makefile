@@ -78,13 +78,11 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/unary/sequence/EltwiseIntComparison.java \
 	daikon/inv/unary/sequence/EltwiseFloatComparison.java \
 	daikon/inv/unary/sequence/EltwiseIntEqual.java \
-	daikon/inv/unary/sequence/EltwiseIntNonEqual.java \
 	daikon/inv/unary/sequence/EltwiseIntLessThan.java \
 	daikon/inv/unary/sequence/EltwiseIntLessEqual.java \
 	daikon/inv/unary/sequence/EltwiseIntGreaterThan.java \
 	daikon/inv/unary/sequence/EltwiseIntGreaterEqual.java \
 	daikon/inv/unary/sequence/EltwiseFloatEqual.java \
-	daikon/inv/unary/sequence/EltwiseFloatNonEqual.java \
 	daikon/inv/unary/sequence/EltwiseFloatLessThan.java \
 	daikon/inv/unary/sequence/EltwiseFloatLessEqual.java \
 	daikon/inv/unary/sequence/EltwiseFloatGreaterThan.java \
@@ -583,9 +581,6 @@ daikon/inv/unary/sequence/EltwiseFloatComparison.java: daikon/inv/unary/sequence
 daikon/inv/unary/sequence/EltwiseIntEqual.java: daikon/inv/unary/sequence/EltwiseIntComparisons.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=EQUAL)
 
-daikon/inv/unary/sequence/EltwiseIntNonEqual.java: daikon/inv/unary/sequence/EltwiseIntComparisons.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=NONEQUAL)
-
 daikon/inv/unary/sequence/EltwiseIntLessThan.java: daikon/inv/unary/sequence/EltwiseIntComparisons.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=LESSTHAN)
 
@@ -600,9 +595,6 @@ daikon/inv/unary/sequence/EltwiseIntGreaterEqual.java: daikon/inv/unary/sequence
 
 daikon/inv/unary/sequence/EltwiseFloatEqual.java: daikon/inv/unary/sequence/EltwiseIntComparisons.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=EQUALFLOAT)
-
-daikon/inv/unary/sequence/EltwiseFloatNonEqual.java: daikon/inv/unary/sequence/EltwiseIntComparisons.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=NONEQUALFLOAT)
 
 daikon/inv/unary/sequence/EltwiseFloatLessThan.java: daikon/inv/unary/sequence/EltwiseIntComparisons.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=LESSTHANFLOAT)
