@@ -28,7 +28,7 @@ public final class PptSlice2  extends PptSlice {
 
   int[] tm_total = new int[4 ];  // "tm" stands for "tuplemod"
 
-  PptSlice2 (Ppt parent, VarInfo[] var_infos) {
+  public PptSlice2 (Ppt parent, VarInfo[] var_infos) {
     super(parent, var_infos);
     Assert.assert(var_infos.length == 2 );
 

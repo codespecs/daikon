@@ -77,7 +77,7 @@ public final class PPTSLICE1 extends PptSlice {
   int[] tm_total = new int[NUM_TM];  // "tm" stands for "tuplemod"
 
 
-  PPTSLICE1(Ppt parent, VarInfo[] var_infos) {
+  public PPTSLICE1(Ppt parent, VarInfo[] var_infos) {
     super(parent, var_infos);
     Assert.assert(var_infos.length == ARITY);
 #if defined(ARITY1)
