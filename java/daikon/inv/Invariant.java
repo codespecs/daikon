@@ -16,17 +16,17 @@ public abstract class Invariant implements java.io.Serializable {
 
   /**
    * General logging Category.
-   **/ 
+   **/
   public static final Category debug = Category.getInstance (Invariant.class.getName());
 
   /**
    * Logging Category for printing invariants
-   **/ 
+   **/
   public static final Category debugPrint = Category.getInstance (Invariant.class.getName() + ".print");
 
   /**
    * Logging Category for debugging isWorthPrinting() checks.
-   **/ 
+   **/
   public static final Category debugIsWorthPrinting = Category.getInstance (Invariant.class.getName() + ".isWorthPrinting");
 
   /**
@@ -34,7 +34,7 @@ public abstract class Invariant implements java.io.Serializable {
    * samples, VarInfos, etc.
    **/
 
-  public PptSlice ppt; 
+  public PptSlice ppt;
 
   // Has to be public so wrappers can read it.
   /**
@@ -622,9 +622,8 @@ public abstract class Invariant implements java.io.Serializable {
       return impl.predicate.isWorthPrinting() && impl.consequent.isWorthPrinting();
     }
 
-    if (debugIsWorthPrinting.isDebugEnabled()) {
-      //System.out.println(isWorthPrinting_sansControlledCheck_debug());
-      // FIXME: calling the above method causes an assertion failure
+    if (true || debugIsWorthPrinting.isDebugEnabled()) {
+      System.out.println(isWorthPrinting_sansControlledCheck_debug());
     }
     boolean result
       = ((! hasFewModifiedSamples())
