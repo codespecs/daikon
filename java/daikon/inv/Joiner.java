@@ -62,6 +62,9 @@ public abstract class Joiner
 
     Joiner otherAsJoiner = (Joiner)other;
 
+    if (left == otherAsJoiner.left && right == otherAsJoiner.right)
+      return true;
+
     return left.isSameInvariant(otherAsJoiner.left) &&
       right.isSameInvariant(otherAsJoiner.right);
   }
