@@ -537,16 +537,16 @@ dfej DataStructures/StackAr.java
 We instrument only this one file because we are only interested in the
 invariants of the StackAr class, not the other classes in the program.
 
-This command creates two directories, @file{daikon-java} and
+This command creates two directories, @file{daikon-instrumented} and
 @file{daikon-output}.  It creates an instrumented version of
-@file{StackAr.java} at @file{daikon-java/DataStructures/StackAr.java}.
+@file{StackAr.java} at @file{daikon-instrumented/DataStructures/StackAr.java}.
 It creates a declaration file at
 @file{daikon-output/DataStructures/StackAr.decls}.
 
 @item Compile the instrumented version of StackAr.java.
 
 @example
-javac daikon-java/DataStructures/StackAr.java
+javac daikon-instrumented/DataStructures/StackAr.java
 @end example
 
 @item Run the StackAr test suite, using the instrumented
@@ -554,7 +554,7 @@ javac daikon-java/DataStructures/StackAr.java
 original version of all other files):
 
 @example
-java -classpath "daikon-java:$CLASSPATH" DataStructures.StackArTester
+java -classpath "daikon-instrumented:$CLASSPATH" DataStructures.StackArTester
 @end example
 
 This will generate a trace file at
@@ -617,12 +617,12 @@ The steps above can be divided into three stages:
 cd examples/StackAr
 javac DataStructures/*.java
 dfej DataStructures/StackAr.java
-javac daikon-java/DataStructures/StackAr.java
+javac daikon-instrumented/DataStructures/StackAr.java
 @end example
 
 @item Trace file generation (steps 5-7)
 @example
-java -classpath "daikon-java:$CLASSPATH" DataStructures.StackArTester
+java -classpath "daikon-instrumented:$CLASSPATH" DataStructures.StackArTester
 cd daikon-output
 modbit-munge.pl StackAr.dtrace
 @end example
@@ -726,12 +726,12 @@ Run this sample using the following steps:
 cd examples/QueueAr
 javac DataStructures/*.java
 dfej DataStructures/QueueAr.java
-javac daikon-java/DataStructures/QueueAr.java
+javac daikon-instrumented/DataStructures/QueueAr.java
 @end example
 
 @item Trace file generation (steps 5-7)
 @example
-java -classpath "daikon-java:$CLASSPATH" DataStructures.QueueArTester
+java -classpath "daikon-instrumented:$CLASSPATH" DataStructures.QueueArTester
 cd daikon-output
 modbit-munge.pl QueueAr.dtrace
 @end example
@@ -812,13 +812,13 @@ Daikon front end for Java, on them:
 @end example
 
 After running dfej, compile the instrumented version of the code, which
-by default appears in the @file{daikon-java/} directory.
+by default appears in the @file{daikon-instrumented/} directory.
 
 The Daikon front end for Java has two effects:
 @itemize @bullet
 @item
   dfej writes instrumented versions of the files to a
-  @file{daikon-java/} directory 
+  @file{daikon-instrumented/} directory 
 @item
   dfej creates declaration files named
   @file{@var{filename1}.decls}, etc. in a
@@ -843,15 +843,21 @@ The three crucial files are @file{dfec},
 
 To instrument a C file, run @command{dfec} on it.  dfec produces
 instrumented source as well as a @file{.decls} file.  When you run dfec,
-supply a @option{-I} argument indicating the system include directory;
+supply a @option{-I} argument for each directory on the system include path;
 for instance,
 @example
-dfec -I/usr/lib/gcc-lib/i386-redhat-linux/egcs-2.91.66/include myfile.c
+dfec -I/usr/local/include -I/usr/local/i686-pc-linux-gnu/include ... myfile.c
 @end example
 @noindent
-You can probably find the name of your system directory by running
-@command{gcc -v} on any myfile, and looking for what follows the line
-stating @code{#include <...> search starts here:}.
+You can find the name of your system directories by running
+@command{gcc -v} and looking for what follows the line
+stating @samp{#include <...> search starts here:}.  For instance, on
+Unix run one of these commands, depending on whether you want the C or
+C++ search path:
+@example
+touch searchpath.c; gcc -v -E searchpath.c > /dev/null; rm searchpath.c
+touch searchpath.cc; gcc -v -E searchpath.cc > /dev/null; rm searchpath.cc
+@end example
 
 Running @command{dfec @var{arguments} myfile.c} creates
 a file named @file{myfile.instrumented.cc} in the current
@@ -977,12 +983,12 @@ This step fixes up some potential problems that may appear in the
 
 After instrumentation, there are two versions of your Java program:  the
 original version, and the instrumented version which appears in the
-@file{daikon-java/} directory.  Make sure that the
-@file{daikon-java/} directory appears on your class path before the
+@file{daikon-instrumented/} directory.  Make sure that the
+@file{daikon-instrumented/} directory appears on your class path before the
 directory containing the original Java code.  You can do this by running
 the program from that directory, if @file{.} (the current directory)
 appears early on your class path, or you can add the relevant
-@file{daikon-java/} directory to your class path explicitly.
+@file{daikon-instrumented/} directory to your class path explicitly.
 
 
 @menu
@@ -997,10 +1003,10 @@ In order to run an applet, you must take two additional steps.
 @enumerate
 @item
 Copy or link all class files, jar files, input files, and html files
-that your applet needs to the @file{daikon-java/} directory.  This
+that your applet needs to the @file{daikon-instrumented/} directory.  This
 includes the @file{daikon/java} directory itself.  For example, to
 create a link to the @file{daikon/java} directory, type (while in the
-@file{daikon-java/} directory):
+@file{daikon-instrumented/} directory):
 @example
 ln -s @var{parent}/daikon .
 @end example
@@ -1008,7 +1014,7 @@ ln -s @var{parent}/daikon .
 @item
 By default, the Java 2 applet security model does not allow applets to
 write files.  To get around this so that Daikon can write its @file{.dtrace}
-files, create a file named @file{javaPolicy} in the @file{daikon-java/}
+files, create a file named @file{javaPolicy} in the @file{daikon-instrumented/}
 directory that contains the text
 @example
 grant @{
@@ -1387,7 +1393,7 @@ The Daikon front end for Java has two effects:
 @itemize @bullet
 @item
   dfej writes instrumented versions of the files, by default in directory
-  @file{daikon-java/}
+  @file{daikon-instrumented/}
 @item
   dfej creates declaration files named
   @file{@var{filename1}.decls}, etc., by default in directory
@@ -1495,36 +1501,60 @@ Specifies the directory in which to create
 @file{@var{PACKAGES}/@var{CLASSNAME}.decls} (default
 @file{daikon-output}, unless @option{-declsfiledirflat} is
 specified).  @var{PACKAGES} is the relative path from the current
-directory to the @file{.java} file; that is, the relative path from
+directory to the source file; that is, the relative path from
 @var{decldir} to the @file{.dtrace} file is the same as the relative
-path from the current directory to the @file{.java} file.  The directory
+path from the current directory to the source file.  The directory
 structure of the @file{.dtrace} files mirrors the directory structure of
-the @file{.java} files.
+the source files.
 
 @item @option{-declsfiledirflat=@var{decldir}}
 Specifies the directory in which to create @file{@var{CLASSNAME}.dtrace}
 (no default).  All @file{.dtrace} files appear in the same directory.
 
 @item @option{-instrsourcedir=@var{instrdir}}
-Specifies the directory in which to write instrumented java files
-(default @file{daikon-java/}).  The instrumented files have the same
-names and directory structure as the original input files.
+Specifies the directory in which to write instrumented source files
+(default @file{daikon-instrumented/}).  The instrumented files have the
+same names and directory structure as the original input files.
+
+@c not yet implemented for dfej as of 6/13/2001
+If the value of this field is @samp{.} (i.e., a single period), then
+instrumented files replace the original versions in the original
+directories, but the orginal source files are backed up by appending
+@file{.uninst}.  More specifically,
+@enumerate
+@item each instrumented file is copied from @file{filename} to
+@file{filename.uninst}, unless filename @file{filename.uninst} already
+exists, in which case no copying occurs
+@item the system reads from @file{filename.uninst} and writes to
+@file{filename}.
+@end enumerate
+This behavior permits in-place instrumentation, which may be desirable
+to ease compiling the instrumented code.  (This feature is probably more
+important for C/C++ than for Java programs.)  Running the instrumenter a
+second time reads the original source code rather than inserting an
+additional set of instrumentation into the alrady-instrumented source
+code files.
+
+@quotation
+Note for Java:
 
 If you do not override the default value of this variable (and possibly
-even if you do), then you should run @command{dfej} from a directory in
-your classpath.  For example, if directory @file{parent/} is in your
-classpath and you want to instrument @file{parent/foo/Bar.java}, you
-should run @samp{dfej foo/Bar.java} from directory @file{parent/}.  This
-will create a file @file{parent/daikon-java/foo/Bar.java}.  You must add
-directory @file{parent/daikon-java} to your classpath.
+even if you do, if you do not set it to @samp{.}), then you should run
+@command{dfej} from a directory in your classpath.  For example, if
+directory @file{parent/} is in your classpath and you want to instrument
+@file{parent/foo/Bar.java}, you should run @samp{dfej foo/Bar.java} from
+directory @file{parent/}.  This will create a file
+@file{parent/daikon-instrumented/foo/Bar.java}.  You must add directory
+@file{parent/daikon-instrumented} to your classpath.
 
 (The reason for running @command{dfej} from a directory in your
 classpath is that it allows the directory structure to remain consistent
 with the package structure. If @file{Bar.java} specifies its package, it
 does so with a line like @samp{package foo;}.  If you run @command{dfej}
 from the @file{parent/foo} directory, the instrumented version of
-@file{Bar.java} will go in @file{parent/foo/daikon-java/Bar.java}; this
+@file{Bar.java} will go in @file{parent/foo/daikon-instrumented/Bar.java}; this
 is not consistent with the package structure.)
+@end quotation
 
 @end table
 
@@ -2236,21 +2266,22 @@ Value information includes:
 @itemize @bullet
 @item    integer: sequence of digits, optionally preceded by a minus sign
 @item    string: characters surrounded by double-quotes; internal
-	 double-quotes and backslashes are escaped by a backslash
+double-quotes and backslashes are escaped by a backslash; newlines and
+carriage returns are represented as "\n" and "\r", respectively
 @item    array: elements are listed on one line, separated by spaces.
-         The elements may optionally be enclosed in [square brackets]; this
-         is encouraged for clarity.
+The elements may optionally be enclosed in [square brackets]; this
+is encouraged for clarity.
 @end itemize
 @item modified? (0 or 1).
-      This value is 0 if the variable has not been assigned to since the
-      last time this program point was executed, and 1 if the variable has
-      been assigned to since then.  It is safe for an implementation to
-      always set it to 1.  It is also safe to always set it to 0, if the
-      modbit-munge.pl script is run on the resulting @file{.dtrace} file to fix up
-      the modbits.
+This value is 0 if the variable has not been assigned to since the
+last time this program point was executed, and 1 if the variable has
+been assigned to since then.  It is safe for an implementation to
+always set it to 1.  It is also safe to always set it to 0, if the
+modbit-munge.pl script is run on the resulting @file{.dtrace} file to fix up
+the modbits.
 @end itemize
-   The variables should appear in the same order as they did in the
-   declaration of the program point, without omissions or additions.
+The variables should appear in the same order as they did in the
+declaration of the program point, without omissions or additions.
 @end itemize
 
 As a special case, the first variable in a record may be
