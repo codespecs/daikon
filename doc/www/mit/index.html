@@ -108,9 +108,9 @@ You should most likely perform your work on one of these client machines:
   shallot, cassava, potato,
   meoptiplex.
 All of the client machines use the
-geyer.lcs.mit.edu (also known as pag.lcs.mit.edu) filesystem, which has
+pag.lcs.mit.edu (alternately known as geyer.lcs.mit.edu) filesystem, which has
 plenty of disk space and direct access to the main CVS repository and
-precompiled binaries.  (You should not work on geyer itself, which is a
+precompiled binaries.  (You should not work on pag itself, which is a
 file server, mail server, etc.  It is polite to avoid running
 compute-intensive jobs on a machine that someone else is currently using;
 for instance, if you have your ssh-agent credentials set up, you can find
@@ -132,7 +132,7 @@ your password, use the <tt>yppasswd</tt> command; do not use plain
 Ask <a href="mailto:mernst@lcs.mit.edu">Michael Ernst</a> or someone else
 with sysadmin privileges to make you an account; be sure to specify the
 username you prefer.  Only that person needs to know the <a
-href="geyer-account.html">details of account creation</a>.
+href="pag-account.html">details of account creation</a>.
 <p>
 
 When you log in, you will encounter an error in your initial
@@ -453,21 +453,6 @@ Every non-trivial procedure should also contain a brief comment saying what
 it does.
 <p>
 
-All perl scripts should
-<ol>
-  <li>use <tt>#!/usr/bin/env perl</tt> as their first line, to permit
-      independence from the specific location where perl is installed.
-  <li>include the following code, which enables checking for common perl
-      errors, near the top of the file (but usually after the brief
-      description of the script's purpose and how to use it):
-<pre>
-  use English;
-  use strict;
-  $WARNING = 1;
-</pre>
-</ol>
-<p>
-
 When code has a consistent style, particularly within a single file but
 also over an entire project, the code is much easier to read and
 understand.  I don't wish to spend an excessive amount of time or energy
@@ -519,7 +504,28 @@ Do not place files in the CVS repository with DOS-style line separators;
 use Unix-style separators (at least when first adding a file).  The CVS
 tools don't cope well with DOS line separators; for instance, they may
 erroneously indicate that an entire file is modified, making merges and
-updates very difficult.
+updates very difficult.  One way to fix a DOS-style file is to do <tt>(setq
+buffer-file-coding-system nil)</tt> in Emacs, then save the file.
+<p>
+
+All perl scripts should
+<ol>
+  <li>use <tt>#!/usr/bin/env perl</tt> as their first line, to permit
+      independence from the specific location where perl is installed.
+  <li>include the following code, which enables checking for common perl
+      errors, near the top of the file (but usually after the brief
+      description of the script's purpose and how to use it):
+<pre>
+  use English;
+  use strict;
+  $WARNING = 1;
+</pre>
+  <li>Always check the status for every use of system() or backticks.
+      Better yet, use the system_or_die() and backticks_or_die() functions,
+      which automatically do the checking.  To use them, put <tt>use
+      util_daikon;</tt> near the top of your Perl script (after the <tt>use
+      strict;</tt> block).
+</ol>
 <p>
 
 
