@@ -513,6 +513,7 @@ public final class Daikon {
   /** A way to output FileIO progress information easily */
   private final static Thread fileio_progress = new FileIOProgress();
   static class FileIOProgress extends Thread {
+    public FileIOProgress() { setDaemon(true); }
     public void run() {
       DateFormat df = DateFormat.getTimeInstance(/*DateFormat.LONG*/);
       while (true) {
