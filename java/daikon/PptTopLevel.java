@@ -2380,34 +2380,6 @@ public class PptTopLevel extends Ppt {
   }
 
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Diffing invariants
-  ///
-
-  static Comparator arityPptnameComparator = new PptSlice.ArityPptnameComparator();
   static Comparator arityVarnameComparator = new PptSlice.ArityVarnameComparator();
-
-  public Vector diff(PptTopLevel other) {
-    SortedSet ss1 = new TreeSet(arityVarnameComparator);
-    ss1.addAll(this.views);
-    SortedSet ss2 = new TreeSet(arityVarnameComparator);
-    ss2.addAll(other.views);
-    for (OrderedPairIterator opi = new OrderedPairIterator(ss1.iterator(), ss2.iterator()); opi.hasNext(); ) {
-      Pair pair = (Pair) opi.next();
-      if (pair.b == null) {
-        // Invariants are only on the left-hand side.
-        System.out.println("Invariants are only on the left-hand side.");
-      } else if (pair.a == null) {
-        // Invariants are only on the right-hand side.
-        System.out.println("Invariants are only on the right-hand side.");
-      } else {
-        // Invariants on both sides, must do more diffing.
-        System.out.println("Invariants on both sides, must do more diffing.");
-      }
-    }
-
-    return new Vector();
-
-  }
 
 }
