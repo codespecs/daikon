@@ -5,7 +5,7 @@ package daikon;
 
 import java.util.*;
 import utilMDE.*;
-
+import org.apache.log4j.Category;
 
 // Types of Ppt (program point) objects:
 //  Ppt:  abstract base class

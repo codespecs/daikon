@@ -5,6 +5,7 @@ package daikon;
 import java.io.*;
 import java.util.*;
 import org.apache.oro.text.regex.*;
+import org.apache.log4j.Category;
 
 public final class Global {
 
@@ -59,7 +60,6 @@ public final class Global {
   // easier to output and to initialize, both by looping).
 
   public final static boolean output_statistics = true;
-  public final static boolean debugStatistics = false;
 
   /// Invariant inference or variable derivation
   // These I will compute from a final postpass over each Ppt.
@@ -155,20 +155,54 @@ public final class Global {
 
   ///////////////////////////////////////////////////////////////////////////
   /// Debugging
-  ///
+  /// Anything that's commented in the false section is now implemented
+  /// via log4j.
 
-  public final static boolean debugRead = false;
-  public final static boolean debugPptTopLevel = false;
-  public final static boolean debugDerive = false;
-  public final static boolean debugInfer = false;
-  public final static boolean debugPptSplit = false;
-  public final static boolean debugPrintInvariants = false;
-  public final static boolean debugPptSlice = false;
-  public final static boolean debugPptSliceGeneric = false;
-  public final static boolean debugPptSliceSpecific = false;
-  public final static boolean debugSimplify = false;
+  public static boolean debugAll = false;
+  
+  /**
+   * Category for debugging statistics output
+   **/
+
+  public static final Category debugStatistics = Category.getInstance ("daikon.statistics");
+
+  /**
+   * Category for debugging Simplify output
+   **/
+
+  public static final Category debugSimplify = Category.getInstance ("daikon.simplify");
+
+  /**
+   * Logging Category to debug derived vars
+   **/
+  public static Category debugDerive = Category.getInstance("daikon.derive");
+
+
+  /**
+   * Logging Category to debug splitting
+   **/
+  public static Category debugSplit = Category.getInstance("daikon.split");
+
+  /**
+   * Logging Category to debug inferences
+   **/
+  public static Category debugInfer = Category.getInstance("daikon.infer");
+
+
+  //public final static boolean debugStatistics = false;             Use Global.debugStatistics
+  //public final static boolean debugRead = false;                   Use FileIO.debugRead
+  //public final static boolean debugPptTopLevel = false;            Use PptTopLevel.debug
+  //public final static boolean debugDerive = false;                 Use Global.debugDerive
+  //public final static boolean debugInfer = false;                  Use Global.debugInfer
+  //public final static boolean debugPptSplit = false;               Use Global.debugSplit
+  //public final static boolean debugPrintInvariants = false;        Use inv.Invariant.debugPrint
+
+  //public final static boolean debugPptSlice = false;               Use PptSlice.debug
+  //public final static boolean debugPptSliceGeneric = false;        Not used anywhere in code
+  //public final static boolean debugPptSliceSpecific = false;       Not used anywhere in code
+  //public final static boolean debugSimplify = false;               Use Global.debugSimplify
   //print out a new dtrace file with changed modbits
-  public final static boolean debugPrintDtrace = false;
+  public final static boolean debugPrintDtrace = false;              // Can't change; uses special outputter
 
   // public final static boolean debugRead = true;
   // public final static boolean debugPptTopLevel = true;
