@@ -320,7 +320,7 @@ my $output_opt = ",-O,$types_basedir,$types_style,$types_append";
 $output_opt .= ",$dtrace_basedir,$dtrace_style,$dtrace_append";
 $output_opt .= ",-D,$reference_depth,$accessor_depth,$list_depth";
 
-my $deparse_opt = "-MO=DeparseDaikon$types$output_opt";
+my $deparse_opt = "-MO=-qq,DeparseDaikon$types$output_opt";
 my $perl_lib = "-I$ENV{DAIKONDIR}/front-end/perl/lib";
 
 my $local_types;
