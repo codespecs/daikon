@@ -9,7 +9,7 @@ DOC_FILES := ${DOC_FILES_NO_IMAGES} $(IMAGE_PARTIAL_PATHS)
 DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 README_FILES := README-daikon-java README-dist
 README_PATHS := $(addprefix doc/,$(README_FILES))
-SCRIPT_FILES := modbit-munge.pl java-cpp.pl lines-from
+SCRIPT_FILES := modbit-munge.pl modbit-munge.bat java-cpp.pl daikon.pl lines-from
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 DAIKON_JAVA_FILES := $(shell find java \( -name '*daikon-java*' -o -name '*-cpp.java' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
 
@@ -86,7 +86,7 @@ TAGS:
 ### Test the distribution
 ###
 
-DISTTESTDIR := $(HOME)/tmp/daikon.dist
+DISTTESTDIR := /tmp/daikon.dist
 
 dist-test: dist-notest dist-test-no-update-dist
 
@@ -126,6 +126,7 @@ dist-force:
 	$(MAKE) dist
 
 update-dist-dir: dist-ensure-directory
+	cd doc && $(MAKE) html html-chap
 	# html-update-toc daikon.html
 	-cd $(DIST_DIR) && rm -rf $(DIST_DIR_FILES) doc daikon_manual_html
 	cp -pf $(DIST_DIR_PATHS) $(DIST_DIR)
@@ -318,7 +319,7 @@ dfej-src/build_mingw_dfej/src/dfej.exe: dfej-src/dfej/src/*.cpp dfej-src/dfej/sr
 	rename .mingw-saved.o .o dfej-src/dfej/src/*.mingw-saved.o
 
 dist-dfej-windows: dfej-src/build_mingw_dfej/src/dfej.exe
-	cp dfej-src/build_mingw_dfej/src/dfej.exe $(DIST_BIN_DIR)/dfej.exe
+	cp -p dfej-src/build_mingw_dfej/src/dfej.exe $(DIST_BIN_DIR)/dfej.exe
 	update-link-dates $(DIST_DIR)/index.html
 
 ## Cross-compiling DFEJ to create a Windows executable (instructions by
