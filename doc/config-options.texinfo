@@ -285,9 +285,15 @@
  callsite splitter processing.  0 is line-level granularity; 1 is
  method-level granularity; 2 is class-level granularity.
 
+@item daikon.split.FileCompiler.compiler
+  (no description provided)
+
 @item daikon.split.SplitterList.all_splitters
   Boolean.  Enables indiscriminate splitting (see Daikon manual for
  an explanation of this technique).
+
+@item daikon.split.TimedProcess.compile_wait
+  (no description provided)
 
 @c END AUTO-GENERATED CONFIG OPTIONS LISTING
 
