@@ -5,6 +5,11 @@ For documentation of Daikon, see the Daikon manual.  Its source is file
 daikon.texinfo; formatted, it appears as daikon.html, daikon.info,
 daikon.dvi, daikon.ps, or daikon.pdf.
 
+2.3.1:
+
+Added Context GUI, which shows relevant invariants in a separate window as
+you browse code in a text editor.
+
 23 June 2001:
 
-Add linear ternary invariants, of the form z = ax + by + c.
+Added linear ternary invariants, of the form z = ax + by + c.
