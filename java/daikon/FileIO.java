@@ -150,17 +150,6 @@ public final class FileIO {
                                               )
     throws IOException
   {
-
-    // XXX for now, hard-code these list-implementing types. We should
-    // make the front-end dump the language-specific ones into .decls.
-    ProglangType.list_implementors.add("java.util.List");
-    ProglangType.list_implementors.add("java.util.AbstractList");
-    ProglangType.list_implementors.add("java.util.Vector");
-    ProglangType.list_implementors.add("java.util.ArrayList");
-    ProglangType.list_implementors.add("java.util.AbstractSequentialList");
-    ProglangType.list_implementors.add("java.util.LinkedList");
-    ProglangType.list_implementors.add("java.util.Stack");
-
     PptMap all_ppts = new PptMap();
     // Read all decls, creating PptTopLevels and VarInfos
     for (Iterator i = files.iterator(); i.hasNext(); ) {

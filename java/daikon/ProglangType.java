@@ -51,6 +51,18 @@ public final class ProglangType
   // java.util.List
   public static HashSet list_implementors = new HashSet();
 
+  static {
+    // XXX for now, hard-code these list-implementing types. We should
+    // make the front-end dump the language-specific ones into .decls.
+    list_implementors.add("java.util.List");
+    list_implementors.add("java.util.AbstractList");
+    list_implementors.add("java.util.Vector");
+    list_implementors.add("java.util.ArrayList");
+    list_implementors.add("java.util.AbstractSequentialList");
+    list_implementors.add("java.util.LinkedList");
+    list_implementors.add("java.util.Stack");
+  }
+
   private String base;          // interned name of base type
   public String base() { return base; }
   private int dimensions;       // number of dimensions
