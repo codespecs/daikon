@@ -5,7 +5,7 @@
 # group samples by class (for Java) or method (for C) they were taken
 # from, writing new trace files with grouped data.
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2002-03-14 02:09:00 mistere>
+# Time-stamp: <2002-03-28 17:06:30 mistere>
 
 use FileHandle;
 use Compress::Zlib;
@@ -86,7 +86,7 @@ END {
     my $fh = $files{$ppt};
     if ($compress) {
       $fh->gzwrite("// EOF\n");
-      $fh->gzclose;
+      $fh->gzclose();
     } else {
       print $fh "// EOF\n";
       close $fh;
