@@ -97,6 +97,11 @@ Extending Daikon
 * New suppressors::             
 * System.exit::                 
 
+New front ends
+
+* Example instrumented Java program::  
+* Instrumenting C programs::    
+
 Debugging Daikon
 
 * Track logging::               
@@ -392,23 +397,41 @@ to enable selecting your new output format.
 @cindex front end, writing
 
 A front end for Daikon converts data into a form Daikon can process,
-producing files in Daikon's input format --- @file{.decls} files and
-@file{.dtrace} files.
-(Typically, Daikon front ends arrange to obtain information from
-program executions, though front ends have been also been built for
-stock data, weather forecasts, and truck weight data, among others.
-In other words, it is possible to produce Daikon input from sources
-other than program executions, but this section focuses on the latter.)
-
-A front end for Daikon takes as input a target program to be analyzed.
-The front end produces two outputs:  a @file{.decls} file and an
-instrumented program.  Executing the instrumented program produces a
-@file{.dtrace} file containing records for all the program points that
-appear in the @file{.dtrace} file.
-For more information about these files, see @ref{File
+producing files in Daikon's input format --- data trace declarations and
+records.  For more information about these files, see @ref{File
 formats,,,./daikon,Daikon User Manual}.
 
-Conceptually, instrumentation is very simple.
+The data traces can be obtained from any source.  For instance, front
+ends have been built for stock data, weather forecasts, truck weight
+data, and spreadsheet data (@pxref{convertcsv.pl,,,./daikon,Daikon User
+Manual}), among others.  More often, users apply a programming language
+front end (also called an ``instrumenter'') to a program, causing
+executions of the program to write files in Daikon's format.  (For
+information about existing front ends, see @ref{Front
+ends,,,./daikon,Daikon User Manual}.)  When a general front end is not
+available, it is possible to manually instrument a specific program so
+that it writes files in Daikon's format.  The resulting instrumented
+program is very similar to what an instrumenter would have created, so
+this section is relevant to both approaches.
+
+Conceptually, instrumentation is very simple.  For each program point
+(say, a line of code or the entry or exit from a procedure) at which you
+wish to detect invariants, the front end must arrange to create a
+declaration (@pxref{Declarations,,,./daikon,Daikon User Manual}) that
+lists the variables in scope at that program point, and the front end
+must arrange that execution creates a data trace record (@pxref{Data
+trace records,,,./daikon,Daikon User Manual}) for each execution of that
+program point.
+
+
+@menu
+* Example instrumented Java program::  
+* Instrumenting C programs::    
+@end menu
+
+@node    Example instrumented Java program, Instrumenting C programs, New front ends, New front ends
+@subsection Example instrumented Java program
+
 This section gives an example of how an instrumenter for Java might
 work; other languages are analogous.
 Suppose we wish to instrument file @file{Example.java}.
@@ -453,6 +476,8 @@ int
 @end example
 
 The instrumented @file{.java} file might look like the following.
+This example does not compute the ``modified bits'', but simply sets
+them all to 1, which is a safe default.
 @example
 class Example @{
   static @{
@@ -496,31 +521,167 @@ class Example @{
 @end example
 
 
+@node    Instrumenting C programs,  , Example instrumented Java program, New front ends
+@subsection Instrumenting C programs
+
+Daikon comes with two front ends for the C language:  Kvasir
+(@pxref{Kvasir,,,./daikon,Daikon User Manual}) and dfec
+(@pxref{dfec,,,./daikon,Daikon User Manual}).  Each has its limitations.
+Kvasir only works under the Linux operating system, and it works only on
+``x86'' (Intel 386-compatible) processors.  dfec is based on a
+relatively fragile smart pointer library and does not scale to large
+programs (it has been successfully applied only to programs of about
+10,000 lines).
+
+You may wish to infer invariants over C programs running on other
+platforms; for instance, you want a robust C front end that works under
+Microsoft Windows.  This section will help you to either write such a
+front end or to hand-instrument your program to produce output that
+Daikon can process.
+
+We welcome additions and corrections to this part of the manual.  And,
+if you write a C instrumenter that might be of use to others, please
+contribute it back to the Daikon project.
+
+
+A front end for C (or any other language) performs two tasks.  It
+determines the names of all variables that are in scope at a particular
+program point, and it prints the values of those variables each time the
+program point executes.
+
+Determining the names of the variables is straightforward.  It requires
+either parsing source code or parsing a compiled executable.  In the
+latter case, the variables can be determined from debugging information
+that the compiler places in the executable.
+
+The challenge for C programs is determining the values of variables at
+execution time:  for each variable, the front end must determine whether
+the variable's value is valid, and how big the value is.
+
+A front end should print only variables that have @emph{valid} values.
+Examples of invalid values are variables that have not yet been
+initialized and pointers whose content has been deallocated.  (A pointer
+dereference, such as @samp{*p} or @samp{p->field}, can itself
+be to uninitialized and/or deallocated memory.)  Invalid values should
+be printed as ``nonsensical'' (@pxref{Data trace
+records,,,./daikon,Daikon User Manual}).
+
+It is desirable to print ``nonsensical'' rather than an invalid value,
+for two reasons.  First, outputting nonsense values can degrade
+invariant detection; patterns in the valid data may be masked by noise
+from invalid values.  Second, an attempt to access an invalid value can
+cause the instrumented program to crash!  For instance, suppose that
+pointer @samp{p} is not yet initialized --- the pointer value refers to
+some arbitrary location in memory, possibly even an address that the
+operating system has not allocated to the program.  An attempt to print
+the value of @samp{*p} or @samp{p->field} will result in a segmentation
+fault when @samp{*p} is accessed.  (If you choose never to dereference a
+pointer while performing instrumentation, then you do not need to worry
+about invalid references.  However, you will be unable to output any
+fields of a struct or class, making your front end much less useful.)
+
+C relies on the programmer to remember which variables are valid, and
+the programmer must take care never to access invalid variables.
+Unfortunately, there is no simple automatic way to determine variable
+validity for an arbitrary C program.  (Languages with automatic memory
+management, such as Java, do not pose these problems.  All variables
+always have an initial value, so there is no danger of printing
+uninitialized memory, though the initial value may not be particularly
+meaningful.  Because pointed-to memory is never deallocated, all
+non-null pointers are always valid, so there is no danger of a
+segmentation fault.)
+
+An instrumenter needs information about validity of variable values.
+This could be obtained from the programmer (which requires work on the
+part of the user of Daikon), or obtained automatically by creating a new
+run-time system that tracks the information (which requires a more
+sophisticated front end).
+
+In addition to determining which variables are uninitialized and which
+pointers are to allocated memory, there are additional problems for a C
+front end.  For example, given a char pointer @samp{*c}, does it point
+to a single character, or to an array of characters?  If it points to an
+array of characters, how big is that array?  And for each element of the
+array, is that element initialized or not?
+
+
+The problem of tracking C memory may seem daunting, but it is not
+insurmountable.  There exist many tools for detecting or debugging
+memory errors in C, and they need to perform exactly the same memory
+tracking as a Daikon front end must perform.  Therefore, a Daikon front
+end can use the same well-known techniques, and possibly can even be
+built on top of such a tool.  For instance, the C front end Kvasir is
+built on top of the Valgrind tool (@uref{http://valgrind.kde.org/}),
+greatly reducing the implementation effort.  Valgrind only works under
+Linux, but a C front end for another platform could build on a similar
+tool; many other such tools exist.
+
+
+There are two basic approaches to instrumenting a C program (or a
+program in any other language):  instrument the source code, or
+instrument a compiled binary representation of the program.  In each
+case, additional code that tracks all memory allocations, deallocations,
+writes, and reads must be executed at run time.  Which approach is most
+appropriate for you depends on what tools you use when building your C
+instrumentation system.
+
+
+In some cases, it may not be necessary to build a fully general C
+instrumentation system.  You may be able to craft a smaller, simpler
+extension to an existing program -- enabling that program (only) to
+produce files for Daikon to analyze.
+
+For instance, many programs use specialized memory allocation routines
+(customized versions of @code{malloc} and @code{free}), in order to
+prevent or detect memory errors.  The information that such libraries
+collect is often sufficient to determine which variable values should be
+printed, and which should be suppressed in favor of printing
+``nonsensical'' instead.
+
+
+The presence of memory errors --- even in a program that @emph{appears}
+to run correctly --- makes it much harder to create Daikon's output.
+Therefore, as a prerequisite to instrumenting a C program, it is usually
+a good idea to run a memory checker on that program and to eliminate any
+memory errors.
+
+@c If you don't have a memory checking tool, then what platform are you
+@c on??  But you could use some Very simple half-measures such s zeroing
+@c out memory when it is allocated (always use @code{calloc}, never
+@c @code{malloc}) and when it is deallocated, and zeroing out pointers
+@c when they are freed.
+
+@c An example of compiler (not runtime) infrastructure for Microsoft
+@c Windows is Phoenix:
+@c http://research.microsoft.com/phoenix/
+
+
+
 
 @node New suppressors, System.exit, New front ends, Extending Daikon
 @section New suppressors
 
 As mentioned in @ref{Daikon internals}, one way to make Daikon more
-efficient, and to reduce clutter in output to the user, is to reduce
-the number of redundant invariants of various kinds.  This section
-describes how to add a new suppressor relation, such that if invariant
-A implies B, B is not instantiated or checked as long as A holds,
-saving time and space.  Suppression implications use some terminology.
-A @emph{suppressor} (defined in the class @var{NISuppressor}) is one
-of a set of invariants (@var{NISuppression}) that imply and suppress a
-@emph{suppressee} invariant (@var{NISuppressee}).  The set of all of
-the suppressions that suppress a particular suppressee is stored in
-the class @var{NISuppressionSet}.
+efficient, and to reduce clutter in output to the user, is to reduce the
+number of redundant invariants of various kinds.  This section describes
+how to add a new suppressor relation, such that if invariant A implies
+B, B is not instantiated or checked as long as A holds, saving time and
+space.  Suppression implications use some terminology.  A
+@emph{suppressor} (defined in the class @code{NISuppressor}) is one of a
+set of invariants (@code{NISuppression}) that imply and suppress a
+@emph{suppressee} invariant (@code{NISuppressee}).  The set of all of
+the suppressions that suppress a particular suppressee is stored in the
+class @code{NISuppressionSet}.
 
 Adding a new suppression is straightforward.  Define the suppressee and
 each of the suppressions that suppress it using the corresponding
-constructors.  Add the method @var{get_ni_suppressions} to the class
+constructors.  Add the method @code{get_ni_suppressions} to the class
 of the invariant being suppressed and return the appropriate
-suppression set.  Make sure that @var{get_ni_suppressions} always
+suppression set.  Make sure that @code{get_ni_suppressions} always
 returns the same suppression set (i.e., that storage to store
 the suppressions is only allocated once).  Normally this is
 done by defining a static variable to hold the suppression sets
-and initializing this variable the first time that @var{get_ni_suppressions}
+and initializing this variable the first time that @code{get_ni_suppressions}
 is called.
 
 The following example defines suppressions for ``x == y'' implies
@@ -747,7 +908,8 @@ situations.  The following instructions only apply to MIT, but the tool
 is shipped in the scripts directory and can easily be setup elsewhere
 as well.
 
-Use the URL @uref{http://pag.csail.mit.edu/daikon/mit/log2html.php} to access log2html.
+Use the URL @uref{http://pag.csail.mit.edu/daikon/mit/log2html.php} to
+access @command{log2html}.
 It will ask you for a file of daikon output.  One good way to create this
 file is to use the tee command.  For example:
 
@@ -1238,7 +1400,7 @@ ppt: foo.f():::EXIT35
 @c Tell those who receive the repository:
 @c   You can find a copy of the Daikon CVS repository at
 @c     http://pag.csail.mit.edu/~mernst/tmp/inv-cvs.tar.gz
-@c   The copmressed repository is about 800 Mbytes in size.  Please tell
+@c   The compressed repository is about 800 Mbytes in size.  Please tell
 @c   me when you have downloaded it, so I can remove the  file. Please
 @c   carefully read the "Analyzing historical versions of Daikon"
 @c   section of the Daikon Developer Manual.  Let us know if you have
@@ -1306,7 +1468,7 @@ when development on it ceased.
 @section Branches
 
 The Daikon CVS repository contains two branches:  a main trunk and a
-branch (named ENGINE_V2_PATCHES) for version 2 of Daikon.
+branch (named @samp{ENGINE_V2_PATCHES}) for version 2 of Daikon.
 
 The CVS manual
 @ifinfo
@@ -1330,9 +1492,9 @@ describes CVS branches:
 @end quotation
 
 In early January 2002 (or perhaps in late 2001), we created the
-ENGINE_V2_PATCHES branch at the @file{invariants/java/daikon level} of
+@samp{ENGINE_V2_PATCHES} branch at the @file{invariants/java/daikon level} of
 the Daikon CVS repository.  Primary development continued along the CVS
-branch ENGINE_V2_PATCHES, which we called ``Daikon version 4.0.2''.  We
+branch @samp{ENGINE_V2_PATCHES}, which we called ``Daikon version 4.0.2''.  We
 called the CVS trunk ``Daikon version 3''; it was experimental, and very
 few people ran its code or performed development on it.  Periodically,
 all changes made to the branch would be merged into the trunk, as one
@@ -1394,7 +1556,9 @@ trunk (respectively, the branch).
 @c  LocalWords:  Javadoc Varinfo logOn getClass foo vars isLoggable logDetail
 @c  LocalWords:  msg showTrackback args webserver addInvariant href emacsclient
 @c  LocalWords:  inv PptTopLevel FileIO php isObviousStatically LCS Nimmer's cp
-@c  LocalWords:  isObviousDynamically Toh Win's nohierarchy noequality diffs
+@c  LocalWords:  isObviousDynamically Toh Win's nohierarchy noequality diffs pl
 @c  LocalWords:  diff InvariantFormatTest classpath ioa jml aString valueOf val
 @c  LocalWords:  deffn SampleTester decl subsubsection arg iff testsubject ajax
-@c  LocalWords:  jtb cvs checkin smallexample checkins printindex
+@c  LocalWords:  jtb cvs checkin smallexample checkins printindex Dataflow gcc
+@c  LocalWords:  convertcsv dfec malloc TerminationMessage un Mozilla FSE cd
+@c  LocalWords:  dataflow czf mernst pag calloc Mbytes Miryung ifnotinfo
