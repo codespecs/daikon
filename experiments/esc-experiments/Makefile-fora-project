@@ -129,7 +129,7 @@ ${SCRATCH_FOR_DAIKON}/.instrument-timestamp: ${SCRATCH_FOR_DAIKON}/.copy-timesta
 	@echo
 	@echo \#\#\# instrument
 	@echo
-	dfej -classpath ../:${CLASSPATH} ${DOT_DOT_SOURCE_TO_DFEJ}
+	dfej -classpath ../:${CLASSPATH} ${DFEJ_OPTIONS} ${DOT_DOT_SOURCE_TO_DFEJ}
 	cd .. && cp -pP --target-directory=${PROJECT}/ ${SOURCE_TO_DFEJ}
 	touch ${SCRATCH_FOR_DAIKON}/.instrument-timestamp
 
