@@ -644,7 +644,7 @@ public final class PrintInvariants {
   /**
    * If Daikon.output_num_samples is enabled, prints the number of samples
    * for the specified ppt.  Also prints all of the variables for the ppt
-   * if Daikon.output_num_samples is enabled or the format is ESCIJAVA,
+   * if Daikon.output_num_samples is enabled or the format is ESCJAVA,
    * JML, or DBCJAVA
    */
   public static void print_sample_data(PptTopLevel ppt, PrintWriter out) {
