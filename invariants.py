@@ -4,7 +4,7 @@
 
 # For some additional documentation, see invariants.py.doc.
 
-import glob, operator, os, re, string, types
+import glob, operator, os, re, string, types, copy
 
 import util
 
@@ -25,9 +25,9 @@ if not locals().has_key("var_names"):
     samples = {}            # from function name to number of samples
     file_vars = {}          # from filename to (names, values, samples) tuple
 
-
 integer_re = re.compile(r'^-?[0-9]+$')
 float_re = re.compile(r'^-?[0-9]*\.[0-9]+$|^-?[0-9]+\.[0-9]*$')
+sequence_re = re.compile(r'^.*\[\]$')
 
 def clear_variables():
     """Reset the values of some global variables."""
@@ -81,6 +81,21 @@ the second output the second element of the original keys, and so forth."""
     return result
 # dict_of_tuples_to_tuple_of_dicts(var_values["PUSH-ACTION"])
 
+
+def dict_of_sequences_to_element_dict(dot):
+        """Input: a dictionary mapping instances of a sequence (tuples) to
+        a count.
+        Output: a dictionary, mapping elements of all of the sequence
+        instances to a count."""
+        tuple_len = len(dot.keys()[0])
+        tuple_indices = range(0, tuple_len)
+        result = {}
+        for (key_tuple, count) in dot.items():
+            for i in tuple_indices:
+                this_key = key_tuple[i]
+                util.mapping_increment(result, this_key, count)
+        return result
+# dict_of_sequences_to_element_dict(dot)
 
 def dict_of_tuples_slice(dot, indices):
     """Input: a dictionary mapping a tuple of elements to a count, and a
@@ -156,17 +171,35 @@ def read_file(filename):
         line = file.readline()
         while "\t" in line:
             (this_var_name,this_value) = string.split(line, "\t", 1)
-	    if integer_re.match(this_value):
-		this_value = int(this_value)
-            elif float_re.match(this_value):
-                this_value = float(this_value)
-            elif this_value == "NIL":
-                # HACK
-                this_value = 0
+            if sequence_re.match(this_var_name):
+                # variable is a sequence
+                this_value = string.split(this_value, " ")
+                this_value = this_value[:-1]   # remove trailing newline
+                for seq_elem in range(0, len(this_value)):
+                    # dumb to copy this: fix it
+                    if integer_re.match(this_value[seq_elem]):
+                        this_value[seq_elem] = int(this_value[seq_elem])
+                    elif float_re.match(this_value[seq_elem]):
+                        this_value[seq_elem] = float(this_value[seq_elem])
+                    elif this_value[seq_elem] == "NIL":
+                        # HACK
+                        this_value[seq_elem] = 0
+                    else:
+                        raise "What value?"
+                this_value = tuple(this_value)
             else:
-                raise "What value?"
+                if integer_re.match(this_value):
+                    this_value = int(this_value)
+                elif float_re.match(this_value):
+                    this_value = float(this_value)
+                elif this_value == "NIL":
+                    # HACK
+                    this_value = 0
+                else:
+                    raise "What value?"
 	    these_var_names.append(this_var_name)
 	    these_values.append(this_value)
+            print this_var_name, this_value
             line = file.readline()
 	these_var_names = tuple(these_var_names)
 	these_values = tuple(these_values)
@@ -278,7 +311,10 @@ def all_numeric_invariants():
         for i in range(0, len(fn_vars)):
             this_var = fn_vars[i]
             this_dict = dicts[i]
-            this_inv = single_field_numeric_invariant(this_dict)
+            if sequence_re.match(this_var):
+                this_inv = single_sequence_numeric_invariant(this_dict)
+            else:
+                this_inv = single_field_numeric_invariant(this_dict)
             print " ", this_inv.format((this_var,))
             # print " ", this_var, this_inv
             # print "   ", `this_inv`
@@ -289,10 +325,18 @@ def all_numeric_invariants():
             for indices in util.choose(2, non_exact_single_invs):
                 this_dict = dict_of_tuples_slice(var_values[fn_name], indices)
                 these_vars = util.slice_by_sequence(fn_vars, indices)
-                this_inv = two_field_numeric_invariant(this_dict)
-                if (this_inv.is_exact()):
-                    exact_pair_invs.append(indices)
-                print "   ", this_inv.format(these_vars)
+                if sequence_re.match(these_vars[0]) \
+                   and sequence_re.match(these_vars[1]):
+                    this_inv = two_sequence_numeric_invariant(this_dict)
+                elif sequence_re.match(these_vars[0]) \
+                     or sequence_re.match(these_vars[1]):
+                    this_inv = field_sequence_numeric_invariant(this_dict)
+                else:
+                    this_inv = two_field_numeric_invariant(this_dict)
+                if this_inv != None:
+                    if (this_inv.is_exact()):
+                        exact_pair_invs.append(indices)
+                    print "   ", this_inv.format(these_vars)
                 # print "   ", these_vars, this_inv
                 # print "     ", `this_inv`
         if len(non_exact_single_invs) > 2:
@@ -304,7 +348,13 @@ def all_numeric_invariants():
                 # print "didn't find two of", indices, "in", exact_pair_invs, ";", util.slice_by_sequence(fn_vars, indices), fn_vars
                 this_dict = dict_of_tuples_slice(var_values[fn_name], indices)
                 these_vars = util.slice_by_sequence(fn_vars, indices)
-                this_inv = three_field_numeric_invariant(this_dict)
+                if sequence_re.match(these_vars[0]) \
+                   or sequence_re.match(these_vars[1]) \
+                   or sequence_re.match(these_vars[2]):
+                    print "got sequence in a triple"
+                    this_inv = None
+                else:
+                    this_inv = three_field_numeric_invariant(this_dict)
                 if this_inv != None:
                     # if this_inv[0] == "linear":
                     #     print "found tri_linear: %s = %s %s + %s %s + %s" % (these_vars[2], this_inv[1], these_vars[0], this_inv[2], these_vars[1], this_inv[3])
@@ -405,6 +455,7 @@ class single_field_numeric_invariant(invariant):
         self.modulus = util.common_modulus(nums)
         ## Too many false positives
         # self.nonmodulus = util.common_nonmodulus_nonstrict(nums)
+        #error here
         self.nonmodulus = util.common_nonmodulus_strict(nums)
 
     ## Can do no more than the parent can
@@ -487,6 +538,116 @@ class single_field_numeric_invariant(invariant):
             return arg + "!= 0"
 
         return arg + " unconstrained"
+
+
+class single_sequence_numeric_invariant(invariant):
+    # Invariants over sequence as a whole
+    min = None              # min sequence of all instances
+    max = None              # max sequence of all instances
+    min_justified = None
+    max_justified = None
+    equal = None            # per instance sorting data
+    non_decreasing = None   #
+    non_increasing = None   #
+
+    # Invariants over elements of sequence
+    all_index_sfi = None    # sfi for all elements of the sequence
+    per_index_sfi = None    # tuple of element sfi's for each index
+                            #   across sequence instances
+    
+    def __init__(self, dict):
+        """dict maps from tuples of values to number of occurrences"""
+        invariant.__init__(self,dict)
+        seqs = dict.keys()
+        seqs.sort()
+        self.min = seqs[0]
+        self.max = seqs[-1]
+
+        # how to justify? i don't think the method used for single field
+        #  invariants really makes sense here.
+        self.min_justified = true
+        self.max_justified = true
+
+        # Check for sorted characteristics
+        # how can we justify this as we do with min/max?
+        self.equal = true
+        self.non_decreasing = true
+        self.non_increasing = true
+        for seq in seqs:
+            for i in range(1, len(seq)):
+                c = cmp(seq[i-1],seq[i])
+                # should we have strictly ascending/descending?
+                if c < 0:
+                    self.equal = self.non_increasing = false
+                elif c > 0:
+                    self.equal = self.non_decreasing = false
+                if not(self.equal or self.non_decreasing \
+                       or self.non_increasing):
+                    break
+            if not(self.equal or self.non_decreasing \
+                   or self.non_increasing):
+                break
+
+        # Invariant check over elements of all sequence instances
+        element_to_count = []
+        element_to_count = dict_of_sequences_to_element_dict(dict)
+        self.all_index_sfi = \
+            single_field_numeric_invariant(element_to_count)
+
+        # Invariant check for each index over all sequence instances
+        # Use 'dict_of_tuples_to_tuple_of_dicts' in slightly different
+        #  way than before.  Splits up sequence elements into dicts
+        #  for each index.  Then do invariant check on per_index basis.
+        per_index_elems_to_count = dict_of_tuples_to_tuple_of_dicts(dict)
+        self.per_index_sfi = []
+        indices = range(0, len(per_index_elems_to_count))
+        for i in indices:
+            self.per_index_sfi.append(\
+                single_field_numeric_invariant(per_index_elems_to_count[i]))
+            
+    def __repr__(self):
+        result = "<invariant-1 []: "
+        # finish once get properties set 
+
+    def __str__(self):
+        self.format(("x[]",))
+    
+    def format(self, arg_tuple):
+        (arg,) = arg_tuple
+
+        as_base = invariant.format(self, arg)
+        #if as_base:
+        #    return as_base
+
+        # Which is the strongest relationship (so we can ignore others)?
+        # Do we care more that it is sorted, or that it is in given range?
+        # How much of this do we want to print out?
+
+        result = arg + "\n"
+        if self.min_justified and self.max_justified:
+            result = result + "\tin [%s..%s]" % (self.min, self.max)
+        elif self.min_justified:
+            result = result + "\t>= %s" % self.min
+        elif self.max_justified:
+            result = result + "\t<= %s" % (self.max)
+
+        if self.equal:
+            result = result + "\n" + "\tPer sequence elements equal"
+        elif self.non_decreasing:
+            result = result + "\n" + "\tPer sequence elements non-decreasing"
+        elif self.non_increasing:
+            result = result + "\n" + "\tPer sequence elements non-increasing"
+            
+        result = result + "\n" + "\tAll sequence elements: " \
+                 + self.all_index_sfi.format(("",))
+
+        result = result + "\n" + "\tFirst sequence element: " \
+                 + self.per_index_sfi[0].format(("",))
+        result = result + "\n" + "\tLast sequence element: " \
+                 + self.per_index_sfi[-1].format(("",))
+        
+        # How to note that unconstrained???
+        return result
 
 
 # single_field_numeric_invariant(dict_of_tuples_to_tuple_of_dicts(var_values["PUSH-ACTION"])[0])
@@ -748,7 +909,239 @@ class two_field_numeric_invariant(invariant):
         else:
             return "(%s, %s) unconstrained" % (x,y)
 
+            
+class field_sequence_numeric_invariant(invariant): 
+    # I'm not entirely sure what to do with this one
+    member = None
+    size = None
+    per_index_linear = None   # Array whose elements describe the linear
+                              # relationship between the number field and
+                              # the sequence element at that index.
+    
+    def __init__(self, dict_of_pairs):
 
+        # Does it make sense to call super class __init__ here?
+        pairs = dict_of_pairs.keys()
+
+        # For each (num, sequence), determine if num is a member of seq
+        self.member = true
+        for i in range(0, len(pairs)):
+            (p1, p2) = pairs[i]
+            # This is dumb.  Do it better
+            if type(p1) == types.TupleType:
+                num = p2
+                seq = p1
+            else:
+                num = p1
+                seq = p2
+            if not(num in seq):
+                self.member = false
+
+        # Determine if the field is the size of the sequence.
+        # Only need to check sequence size once.
+        self.size = true
+        for i in range(0, len(pairs)):
+            (p1, p2) = pairs[i]
+            # This is dumb.  Do it better
+            if type(p1) == types.TupleType:
+                num = p2
+                seq = p1
+            else:
+                num = p1
+                seq = p2
+            if num != len(seq):
+                self.size = false
+
+        ## Linear relationship --
+        # Find linear relationship between single field and each element
+        # of the sequence.  Then determine if relationship at each index
+        # holds  across all instances of the pairs (num,seq)
+        #per_index_linear = []
+        #(num,seq) = pairs[0]
+        #for i in range(0, len(seq)):
+        #    per_index_linear.append(None)
+        #try:
+        #    if len(pairs) > 1:
+        #        for i in range(0, len(seq)):
+        #            (num1,seq1) = pairs[0]
+        #            (num2,seq2) = pairs[1]
+        #            per_index_linear[i] = bi_linear_relationship((num1,num2), \
+        #                                                   (seq1[0],seq2[0]))
+        #        for (num,seq) in pairs:
+        #            for i in range(0, len(seq)):
+        #               (a,b) = per_index_linear[i]
+        #                if seq[i] != a*num+b:
+        #                    per_index_linear[i] = None
+        #                    break
+        #                if not(maybe_linear):
+        #                    break
+        #            else:
+        #                self.linear = (a,b)
+        #    except OverflowError:
+        #        pass
+
+    def __str__(self):
+        self.format(("num","seq"))
+
+    def format(self, arg_tuple):
+        (x, y) = arg_tuple
+
+        # How do we make sure which is num and which is seq???
+        if type(x) == types.TupleType:
+            if self.member:
+                return "%s is a member of %s" % (y,x)
+            if self.size:
+                return "%s is the size of %s" % (y,x)
+        else:
+            if self.member:
+                return "%s is a member of %s" % (x,y)
+            if self.size:
+                return "%s is the size of %s" % (x,y)
+
+        return "(%s,%s) are unconstrained" % (x,y)
+
+class two_sequence_numeric_invariant(invariant):
+
+    linear = None          # Relationship describing elements at same indices
+                           # in the two sequences.  If not None, it is the same
+                           # for each index.
+    # per_index_linear = None # Array whose elements describe the linear
+                              # relationship between the pair of sequence 
+                              # elements at that index.
+    comparison = None      # can be "=", "<", "<=", ">", ">="
+    can_be_equal = None
+    sub_sequence = None
+    super_sequence = None
+    reverse = None
+    
+    def __init__(self, dict_of_pairs):
+        invariant.__init__(self, dict_of_pairs)
+
+        pairs = dict_of_pairs.keys()
+
+        ## Linear relationship -- try to fit y[] = ax[] + b.
+        # Get one sample from the first elements of the first pair of
+        #  sequences.  Then test all corresponding pairs in all other
+        #  sequences.
+        # How interesting is this?
+        # only want if equal size, right?
+        maybe_linear = true
+        (seq1,seq2) = pairs[0]
+        if len(seq1) == len(seq2):
+            try:
+                if len(pairs) > 1:
+                    (a,b) = bi_linear_relationship((seq1[0],seq2[0]), \
+                                                   (seq1[1],seq2[1]))
+                    for (seq1,seq2) in pairs:
+                        for i in range(0, len(seq1)):
+                            if seq2[i] != a*seq1[i]+b:
+                                maybe_linear = false
+                                break
+                        if not(maybe_linear):
+                            break
+                    else:
+                        self.linear = (a,b)
+            except OverflowError:
+                pass
+    
+        ## Less-than or greater-than (or less-or-equal, greater-or-equal)
+        maybe_eq = true
+        maybe_lt = true
+        maybe_le = true
+        maybe_gt = true
+        maybe_ge = true
+        maybe_noneq = true
+        for (x, y) in pairs:
+            c = cmp(x,y)
+            if c == 0:
+                maybe_lt = maybe_gt = maybe_noneq = false
+            elif c < 0:
+                maybe_eq = maybe_gt = maybe_ge = false
+            elif c > 0:
+                maybe_eq = maybe_lt = maybe_le = false
+            else:
+                raise "no relationship -- impossible"
+            if not(maybe_eq or maybe_lt or maybe_le or maybe_gt or maybe_ge):
+                break
+        else:
+            if maybe_eq:
+                self.comparison = "="
+            elif maybe_lt:
+                self.comparison = "<"
+            elif maybe_le:
+                self.comparison = "<="
+            elif maybe_gt:
+                self.comparison = ">"
+            elif maybe_ge:
+                self.comparison = ">="
+        # Watch out: with few data points (say, even 100 data points when
+        # values are in the range -100..100), we oughtn't conclude without
+        # basis that the values are nonequal.
+        self.can_be_equal = not(maybe_noneq)
+        
+        self.reverse = true
+        for (x, y) in pairs:
+            # Make shallow copy because reverse works in place.
+            # Must do some nasty casting in the process?!
+            z = list(copy.copy(y))
+            z.reverse()
+            z = tuple(z)
+            if x != z:
+                self.reverse = false
+                break
+        self.sub_sequence = true
+        self.super_sequence = true
+        for (x, y) in pairs:
+            if not(util.sub_sequence_of(x, y)):
+                self.sub_sequence = false
+        for (x, y) in pairs:
+            if not(util.sub_sequence_of(y, x)):
+                self.super_sequence = false
+                
+    def __str__(self):
+        self.format(("x[]","y[]"))
+
+    def format(self, arg_tuple):
+        as_base = invariant.format(self, arg_tuple)
+        #if as_base:
+        #    return as_base
+
+        (x, y) = arg_tuple
+        if self.comparison == "=":
+            return "%s = %s" % (x,y)
+        if self.linear:
+            (a,b) = self.linear
+            if a == 1:
+                if b < 0:
+                    return "%s = %s - %s" % (y,x,abs(b))
+                else:
+                    return "%s = %s + %s" % (y,x,b)
+            elif b == 0:
+                return "%s = %s %s" % (y,a,x)
+            else:
+                if b < 0:
+                    return "%s = %s %s - %s" % (y,a,x,abs(b))
+                else:
+                    return "%s = %s %s + %s" % (y,a,x,b)
+
+        if self.sub_sequence:
+            return "%s is a subsequence of %s" % (x,y)
+        if self.super_sequence:
+            return "%s is a subsequence of %s" % (y,x)
+        if self.reverse:
+            return "%s is the reverse of %s" % (x,y)
+
+        if self.comparison:
+            if self.comparison in ["<", "<="]:
+                return "%s %s %s" % (x, self.comparison, y)
+            if self.comparison == ">":
+                return "%s < %s" % (y, x)
+            if self.comparison == ">=":
+                return "%s <= %s" % (y, x)
+            raise "Can't get here"
+
+        return "(%s,%s) unconstrained" % (x,y)
+    
 def all_two_field_numeric_invariants():
     sorted_keys = var_names.keys()
     sorted_keys.sort()
@@ -1169,3 +1562,6 @@ def foo():
         print fn_name, these_vars
         print "   ", `this_inv`
         print "   ", this_inv
+
+
+
