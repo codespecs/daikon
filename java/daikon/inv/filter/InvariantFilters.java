@@ -7,8 +7,8 @@ import daikon.inv.IsEqualityComparison;	       // For equality invariants work-a
 import daikon.PptSlice;			       // For equality invariants work-around
 import daikon.VarInfo;
 
-//  This class allows other code to perform invariant filtering.  To filter invariants,
-//  do the following:
+//  This class contains a collection of invariant filters, and allows other code to
+//  perform invariant filtering.  To filter invariants, do the following:
 //      o   Instantiate an InvariantFilters object.
 //      o   At any time, adjust the filters as necessary using the public methods.
 //      o   Call:  invariantFilters.shouldKeep( invariant );
@@ -20,54 +20,36 @@ import daikon.VarInfo;
 //  manual for more information on property and variable filters.
   
 public class InvariantFilters {
-  // ID numbers for property filters
-  public static final int NON_CANONICAL_VARIABLES_FILTER = 0;// Do this check first, since it's fast
-  public static final int UNJUSTIFIED_FILTER = 1;
-  public static final int OBVIOUS_FILTER = 2;
-  public static final int FEW_MODIFIED_SAMPLES_FILTER = 3;
-  public static final int ONLY_CONSTANT_VARIABLES_FILTER = 4;
-  public static final int IMPLIED_POSTCONDITION_FILTER = 5;
-  public static final int CONTROLLED_INVARIANT_FILTER = 6;
-
-  public static final int ANY_VARIABLE = 10;
-  public static final int ALL_VARIABLES = 11;
+  public static final int ANY_VARIABLE = 1;
+  public static final int ALL_VARIABLES = 2;
   int variableFilterType = ANY_VARIABLE;
 
-  List propertyFilters = new ArrayList();
+  // propertyFilters is a map from filter description to filter object.  We need this
+  // mapping so that the GUI can easily tell InvariantFilters -- by passing in a filter
+  // description -- which filter was de/selected.  Use TreeMap to preserve order of
+  // filters (eg, so that ControlledInvariantFilter will always be last).
+  Map propertyFilters = new TreeMap();
   List variableFilters = new ArrayList();
     
   public InvariantFilters() {
-    propertyFilters.add( InvariantFilters.NON_CANONICAL_VARIABLES_FILTER, new NonCanonicalVariablesFilter());
-    propertyFilters.add( InvariantFilters.UNJUSTIFIED_FILTER,             new UnjustifiedFilter());
-    propertyFilters.add( InvariantFilters.OBVIOUS_FILTER,                 new ObviousFilter());
-    propertyFilters.add( InvariantFilters.FEW_MODIFIED_SAMPLES_FILTER,    new FewModifiedSamplesFilter());
-    propertyFilters.add( InvariantFilters.ONLY_CONSTANT_VARIABLES_FILTER, new OnlyConstantVariablesFilter());
-    propertyFilters.add( InvariantFilters.IMPLIED_POSTCONDITION_FILTER,   new ImpliedPostconditionFilter());
+    addPropertyFilter( (InvariantFilter) new NonCanonicalVariablesFilter());
+    addPropertyFilter( (InvariantFilter) new UnjustifiedFilter());
+    addPropertyFilter( (InvariantFilter) new ObviousFilter());
+    addPropertyFilter( (InvariantFilter) new FewModifiedSamplesFilter());
+    addPropertyFilter( (InvariantFilter) new OnlyConstantVariablesFilter());
+    addPropertyFilter( (InvariantFilter) new ImpliedPostconditionFilter());
 
-    // This filter should be added last for speed, because its shouldDiscard() is more complicated
-    // in that it evaluates shouldDiscard() for other invariants.
-    propertyFilters.add( InvariantFilters.CONTROLLED_INVARIANT_FILTER,    new ControlledInvariantFilter());
+    // This filter should be added last for speed, because its shouldDiscard() is more
+    // complicated in that it evaluates shouldDiscard() for other invariants.
+    //    ControlledInvariantFilter filter7 = new ControlledInvariantFilter( this );
+    //    propertyFilters.put( filter7.getDescription(), filter7 );
+    addPropertyFilter( (InvariantFilter) new ControlledInvariantFilter( this ));
   }
 
-  public void addVariableFilter( String variable ) {
-    variableFilters.add( new VariableFilter( variable ));
+  void addPropertyFilter( InvariantFilter filter ) {
+    propertyFilters.put( filter.getDescription(), filter );
   }
 
-  public void removeVariableFilter( String variable ) {
-    for (Iterator iter = variableFilters.iterator(); iter.hasNext(); ) {
-      if (((VariableFilter) iter.next()).getVariable().equals( variable )) {
-	iter.remove();
-	return;
-      }
-    }
-    throw new Error( "InvariantFilters.removeVariableFilter():  filter for variable '" + variable + "' not found" );
-  }
-
-  // variableFilterType is either InvariantFilters.ANY_VARIABLE or InvariantFilters.ALL_VARIABLES
-  public void setVariableFilterType( int variableFilterType ) {
-    this.variableFilterType = variableFilterType;
-  }
-    
   public boolean shouldKeep( Invariant invariant ) {
     //  Do variable filters first since they eliminate more invariants.
     if (variableFilters.size() != 0) {
@@ -89,7 +71,7 @@ public class InvariantFilters {
       }
     }
     //  Property filters.
-    for (Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
+    for (Iterator iter = propertyFilters.values().iterator(); iter.hasNext(); ) {
       InvariantFilter filter = (InvariantFilter) iter.next();
       if (filter.shouldDiscard( invariant )) {
 	//		System.out.println( filter.getClass().getName() + " rules out    \t" + invariant.format());
@@ -99,8 +81,12 @@ public class InvariantFilters {
     return true;
   }
 
-  public void changeFilterSetting( int filterID, boolean turnOn ) {
-    InvariantFilter filter = (InvariantFilter) propertyFilters.get( filterID );
+  public Iterator getPropertyFiltersIterator() {
+    return propertyFilters.values().iterator();
+  }
+
+  public void changeFilterSetting( String description, boolean turnOn ) {
+    InvariantFilter filter = (InvariantFilter) propertyFilters.get( description );
     if (turnOn)
       filter.turnOn();
     else
@@ -108,19 +94,38 @@ public class InvariantFilters {
   }
 
   public void turnFiltersOn() {
-    for (Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
+    for (Iterator iter = propertyFilters.values().iterator(); iter.hasNext(); ) {
       InvariantFilter filter = (InvariantFilter) iter.next();
       filter.turnOn();
     }
   }
 
   public void turnFiltersOff() {
-    for (Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
+    for (Iterator iter = propertyFilters.values().iterator(); iter.hasNext(); ) {
       InvariantFilter filter = (InvariantFilter) iter.next();
       filter.turnOff();
     }
   }
 
+  public void addVariableFilter( String variable ) {
+    variableFilters.add( new VariableFilter( variable ));
+  }
+
+  public void removeVariableFilter( String variable ) {
+    for (Iterator iter = variableFilters.iterator(); iter.hasNext(); ) {
+      if (((VariableFilter) iter.next()).getVariable().equals( variable )) {
+	iter.remove();
+	return;
+      }
+    }
+    throw new Error( "InvariantFilters.removeVariableFilter():  filter for variable '" + variable + "' not found" );
+  }
+
+  // variableFilterType is either InvariantFilters.ANY_VARIABLE or InvariantFilters.ALL_VARIABLES
+  public void setVariableFilterType( int variableFilterType ) {
+    this.variableFilterType = variableFilterType;
+  }
+    
   //  I wasn't sure where to put this method, but this class seems like the best place.
   //  Equality invariants only exist to make invariant output more readable, so this
   //  shouldn't be in the main Daikon engine code.  Equality invariants aren't *directly*
@@ -204,105 +209,5 @@ public class InvariantFilters {
     return invariants;
   }
 }
-
-
-
-//  The template for an invariant filter.
-abstract class InvariantFilter {
-  boolean isOn;
-
-  public InvariantFilter( boolean isOn ) {
-    this.isOn = isOn;
-  }
-
-  public InvariantFilter() {	// TODO:  This is a hack.  Should add constructors that take a boolean
-    this( true );		// for every subclass.
-  }
-
-  public void turnOn()  { isOn = true; }
-  public void turnOff() { isOn = false; }
-
-  public boolean shouldDiscard( Invariant invariant ) {
-    if (! isOn)
-      return false;
-    else
-      return shouldDiscardInvariant( invariant );
-  }
-
-  abstract boolean shouldDiscardInvariant( Invariant invariant );
-}
-
-class NonCanonicalVariablesFilter extends InvariantFilter {
-  //  We should discard this invariant only if it has non-canonical variables AND it is
-  //  not an equality Comparison invariant.  We need to keep equality Comparison
-  //  invariants so that later on, Equality invariants will be made out of them.
-  boolean shouldDiscardInvariant( Invariant invariant ) {
-    return (invariant.hasNonCanonicalVariable() && ! IsEqualityComparison.it.accept(invariant));
-  }
-}
-
-class UnjustifiedFilter extends InvariantFilter {
-  boolean shouldDiscardInvariant( Invariant invariant ) {
-    return ! invariant.justified();
-  }
-}
-
-class ObviousFilter extends InvariantFilter {
-  boolean shouldDiscardInvariant( Invariant invariant ) {
-    return invariant.isObvious();
-  }
-}
-
-class FewModifiedSamplesFilter extends InvariantFilter {
-  boolean shouldDiscardInvariant( Invariant invariant ) {
-    return invariant.hasFewModifiedSamples();
-  }
-}
-
-class OnlyConstantVariablesFilter extends InvariantFilter {
-  boolean shouldDiscardInvariant( Invariant invariant ) {
-    return invariant.hasOnlyConstantVariables();
-  }
-}
-
-class ImpliedPostconditionFilter extends InvariantFilter {
-  boolean shouldDiscardInvariant( Invariant invariant ) {
-    return invariant.isImpliedPostcondition();
-  }
-}
-
-class ControlledInvariantFilter extends InvariantFilter {
-  boolean shouldDiscardInvariant( Invariant invariant ) {
-    //  	Invariant controllingInvariant = inv.find_controlling_invariant();
-    //  	while (controllingInvariant != null) {
-    //  	    if (shouldKeep( controllingInvariant ))
-    //  		return true;
-    //  	    controllingInvariant = controllingInvariant.find_controlling_invariant();
-    //  	}
-    return false;
-  }
-}
-
-
-
-class VariableFilter extends InvariantFilter {
-  String variable;
-
-  public VariableFilter( String variable ) {
-    this.variable = variable;
-  }
-
-  public String getVariable() {
-    return variable;
-  }
-
-  boolean shouldDiscardInvariant( Invariant invariant ) {
-    if (invariant.usesVar( variable ))
-      return false;
-    else
-      return true;
-  }
-}
-
 
 
