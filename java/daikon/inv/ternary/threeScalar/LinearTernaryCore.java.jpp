@@ -227,7 +227,9 @@ public final class CLASSNAME
         // LinearBinary, not a LinearTernary, term.  (It might not show up
         // as LinearBinary because there might not have been enough samples;
         // but a random varying third variable can create enough samples.)
-        if ((a == 0) || (b == 0)) {
+        if ((a == 0) || (b == 0) ||
+            (Math.abs(a) >= Double.MAX_VALUE) ||
+            (Math.abs(b) >= Double.MAX_VALUE)) {
           wrapper.destroyAndFlow();
           return;
         }
@@ -645,8 +647,18 @@ public final class CLASSNAME
 
   public boolean isSameFormula(CLASSNAME other)
   {
-    boolean thisMeaningless = values_seen < MINTRIPLES;
-    boolean otherMeaningless = other.values_seen < MINTRIPLES;
+    boolean thisMeaningless =
+      values_seen < MINTRIPLES ||
+      (a == 0 && b == 0 && c == 0) ||
+      Math.abs(a) >= Double.MAX_VALUE ||
+      Math.abs(b) >= Double.MAX_VALUE
+      ;
+    boolean otherMeaningless =
+      other.values_seen < MINTRIPLES ||
+      (other.a == 0 && other.b == 0 && other.c == 0) ||
+      Math.abs(other.a) >= Double.MAX_VALUE ||
+      Math.abs(other.b) >= Double.MAX_VALUE
+      ;
 
     if (thisMeaningless && otherMeaningless) {
       return true;
