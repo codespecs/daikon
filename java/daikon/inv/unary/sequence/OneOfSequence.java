@@ -10,6 +10,7 @@ import daikon.inv.binary.sequenceScalar.*;
 import utilMDE.*;
 
 import java.util.*;
+import java.io.*;
 
 // *****
 // Automatically generated from OneOf.java.jpp
@@ -188,6 +189,13 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
         return (OneOfSequence ) inv;
     }
     return null;
+  }
+
+  private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+    in.defaultReadObject(); 
+    // Intern the strings
+    for (int i=0; i < num_elts; i++)
+      elts[i] = Intern.intern(elts[i]);
   }
 
 }
