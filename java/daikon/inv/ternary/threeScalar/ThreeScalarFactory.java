@@ -17,7 +17,7 @@ public final class ThreeScalarFactory {
 
   // Add the appropriate new Invariant objects to the specified Invariants
   // collection.
-  public static Vector instantiate(PptSlice ppt, int pass) {
+  public static Vector instantiate(PptSlice ppt) {
 
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
@@ -40,11 +40,7 @@ public final class ThreeScalarFactory {
     // Check transitivity of "compatible" relationship.
     Assert.assert(var1.compatible(var3));
 
-    if (pass == 1) {
-      // nothing to do
-      return null;
-    } else {
-      Assert.assert(pass == 2);
+    {
       Vector result = new Vector();
       for (int var_order = FunctionBinaryCore.order_symmetric_start;
            var_order <= FunctionBinaryCore.order_symmetric_max;
@@ -69,11 +65,7 @@ public final class ThreeScalarFactory {
             result.add(fb);
         }
       }
-      if (var1.isConstant() || var2.isConstant() || var3.isConstant()) {
-        Global.subexact_noninstantiated_invariants++;
-      } else {
-        result.add(LinearTernary.instantiate(ppt));
-      }
+      result.add(LinearTernary.instantiate(ppt));
       return result;
     }
   }

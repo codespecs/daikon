@@ -122,13 +122,17 @@ public final class VarInfo
   // It can be expensive to find an arbitrary invariant.  These fields
   // cache invariants that we want to be able to look up quickly.
 
+  /* [INCR]
   // Only public so that PptTopLevel can access it.
   // Clients should use isCanonical() or canonicalRep() or equalTo().
   public VarInfo equal_to;      // the canonical representative to which
                                 // this variable is equal; may be itself;
                                 // should not be null.
+  */
+  /* [INCR]
   public boolean is_dynamic_constant;  // required if dynamic_constant==null
   public Object dynamic_constant;
+  */
   VarInfo sequenceSize;         // if null, not yet computed (or this VarInfo
                                 //   is not a sequence)
 
@@ -137,8 +141,7 @@ public final class VarInfo
 
   // Does not include equal_to, which is dealt with elsewhere.
   // An invariant is only listed on the first VarInfo, not all VarInfos.
-  public Vector exact_nonunary_invariants;
-
+  // public Vector exact_nonunary_invariants; // [INCR]
 
   static boolean legalRepType(ProglangType rep_type) {
     return ((rep_type == ProglangType.INT)
@@ -185,7 +188,7 @@ public final class VarInfo
 
     derivees = new Vector(3);
 
-    exact_nonunary_invariants = new Vector(2);
+    // exact_nonunary_invariants = new Vector(2); // [INCR]
   }
 
   public VarInfo(VarInfoName name, ProglangType type, ProglangType file_rep_type, VarComparability comparability) {
@@ -232,7 +235,7 @@ public final class VarInfo
       // a_new[i].canBeMissing = false; // [[INCR]]
       // I must set this; even though the specified variables will still
       // be equal, they may have a different canonical representative.
-      a_new[i].equal_to = null;
+      // a_new[i].equal_to = null; // [INCR]
       // this doesn't really need to be set; if non-null, it's guaranteed
       // to be the same in the child
       // a_new[i].dynamic_constant = null;
@@ -315,10 +318,11 @@ public final class VarInfo
       + ",derived=" + derived
       + ",derivees=" + derivees
       + ",ppt=" + ppt
-      + ",equal_to=" + equal_to
+      // + ",equal_to=" + equal_to // [INCR]
       + ">";
   }
 
+  /* [INCR]
   public boolean isConstant() {
     return (isStaticConstant() || isDynamicConstant());
   }
@@ -326,6 +330,7 @@ public final class VarInfo
     // return (dynamic_constant != null);
     return is_dynamic_constant;
   }
+  */
   public boolean isStaticConstant() {
     // return (static_constant_value != null);
     return is_static_constant;
@@ -333,8 +338,10 @@ public final class VarInfo
   public Object constantValue() {
     if (isStaticConstant()) {
       return static_constant_value;
+    /* [INCR]
     } else if (isDynamicConstant()) {
       return dynamic_constant;
+    */
     } else {
       throw new Error("Variable " + name + " is not constant");
     }
@@ -345,6 +352,7 @@ public final class VarInfo
     return postState != null;
   }
 
+  /* [INCR] ...
   public boolean hasExactInvariant(VarInfo other) {
     Assert.assert(this.varinfo_index < other.varinfo_index);
     for (int i=0; i<exact_nonunary_invariants.size(); i++) {
@@ -378,7 +386,7 @@ public final class VarInfo
     }
     return false;
   }
-
+  */ // ... [INCR]
 
   public boolean isDerived() {
     return (derived != null);
@@ -485,16 +493,20 @@ public final class VarInfo
 //     return new UtilMDE.FilteredIterator(all_invs, new usesVarFilter(this));
 //   }
 
+  /* [INCR]
   public boolean isCanonical() {
     Assert.assert(equal_to != null);
     return (equal_to == this);
   }
+  */
 
   // Canonical representative that's equal to this variable.
+  /* [INCR]
   public VarInfo canonicalRep() {
     Assert.assert(equal_to != null);
     return equal_to;
   }
+  */
 
   /**
    * Returns all other variables that are equal to this variable.
@@ -502,6 +514,7 @@ public final class VarInfo
    * The result Vector does not include this.
    * Also see @link{equalToNonobvious}.
    **/
+  /* [INCR] ...
   public Vector equalTo() {
     // should only call this for canonical variables
     Assert.assert(isCanonical());
@@ -519,7 +532,9 @@ public final class VarInfo
 
     return result;
   }
+  */ // ... [INCR]
 
+  /* [INCR] ...
   // Like equalTo, but drops out things which can be inferred to be equal
   // to the first.  This is called only while printing invariants.
   public Vector equalToNonobvious() {
@@ -530,8 +545,6 @@ public final class VarInfo
 
     HashSet controlling_equalTo = new HashSet(); // of VarInfoName
     {
-      // [INCR] ...
-      /*
       Iterator controllers = ppt.controlling_ppts.iterator();
       while (controllers.hasNext()) {
         PptTopLevel controller = (PptTopLevel) controllers.next();
@@ -547,8 +560,6 @@ public final class VarInfo
 	  }
         }
       }
-      */
-      // ... [INCR]
     }
 
     VarInfo[] vis = ppt.var_infos;
@@ -671,7 +682,7 @@ public final class VarInfo
 
     return result;
   }
-
+  */ // ... [INCR]
 
   // Shouldn't have any vacuous variables, so comment this out.
   // /**
@@ -819,10 +830,12 @@ public final class VarInfo
             && type.isIndex());
   }
 
+  /* [INCR]
   // Debugging
   public boolean isDerivedFromNonCanonical() {
     return ((derived != null) && (derived.isDerivedFromNonCanonical()));
   }
+  */
 
 
   ///////////////////////////////////////////////////////////////////////////
@@ -1029,6 +1042,7 @@ public final class VarInfo
     }
 
     // First look for equality invariants
+    /* [INCR]
     Assert.assert(isCanonical());
     Vector equal_vars = equalTo();
     for (int i=0; i<equal_vars.size(); i++) {
@@ -1037,6 +1051,7 @@ public final class VarInfo
         return vi.name;
       }
     }
+    */
 
     // Didn't find an exactly equal variable; try LinearBinary.
     {

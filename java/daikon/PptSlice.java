@@ -51,19 +51,21 @@ public abstract class PptSlice extends Ppt {
 
   // This holds keys and elements of different types, depending on
   // he concrete child of PptSlice.
-  HashMap values_cache;
+  // HashMap values_cache; // [INCR]
+
   // These are used only when the values_cache has been set to null.
   int num_samples_post_cache = -2222;
   int num_mod_non_missing_samples_post_cache = -2222;
   int num_values_post_cache = -2222;
   String tuplemod_samples_summary_post_cache = "UNINITIALIZED";
 
+  /* [INCR] ...
   // This is rather a hack and should be removed later.
-
   // True if we've seen all values and are performing add() based on values
   // already in the values_cache; so add() should not add its arguments to
   // values_cache.
   public boolean already_seen_all = false;
+  */ // ... [INCR]
 
 
   PptSlice(Ppt parent, VarInfo[] var_infos) {
@@ -170,7 +172,7 @@ public abstract class PptSlice extends Ppt {
         parent.removeView(this);
         // for good measure; shouldn't be necessary, but just in case there
         // is some other pointer to this.
-        clear_cache();
+        // clear_cache(); // [INCR]
       }
     }
   }
@@ -195,7 +197,7 @@ public abstract class PptSlice extends Ppt {
   }
 
 
-
+  /* [INCR]
   public void clear_cache() {
     // Don't do check_modbits()!  We might have only partially filled up
     // the cache.  Do this at call sites where appropriate.
@@ -211,6 +213,7 @@ public abstract class PptSlice extends Ppt {
       values_cache = null;
     }
   }
+  */
 
   // These accessors are for abstract methods declared in Ppt
   public abstract int num_samples();
@@ -228,16 +231,19 @@ public abstract class PptSlice extends Ppt {
         + "for " + name + lineSep
         + tuplemod_samples_summary() + lineSep
         + "Consider running modbit-munge.pl" + lineSep
-        + ((values_cache == null)
-           ? "Values cache has been cleared" + lineSep
-           : "Values cache has not been cleared");
+        // + ((values_cache == null)
+        //    ? "Values cache has been cleared" + lineSep
+        //    : "Values cache has not been cleared")
+	;
       if (! Daikon.disable_modbit_check_message) {
         System.out.println(message);
+	/* [INCR]
         if (values_cache != null) {
           System.out.println("To do:  Dump values_cache");
           // This is probably specific to the specializers of PptSlice.
           // values_cache.dump();
         }
+	*/
       }
       if (! Daikon.disable_modbit_check_error)
         throw new Error(message);
@@ -245,7 +251,7 @@ public abstract class PptSlice extends Ppt {
     return true;
   }
 
-  abstract void instantiate_invariants(int pass);
+  abstract void instantiate_invariants();
 
   /**
      This class is used for comparing PptSlice objects.

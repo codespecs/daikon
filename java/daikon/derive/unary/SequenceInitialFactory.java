@@ -29,6 +29,7 @@ public final class SequenceInitialFactory extends UnaryDerivationFactory {
     int upperbound = 1;
 
     // If the length is constant, adjust the bounds accordingly.
+    /* [INCR]
     VarInfo lengthvar = vi.sequenceSize();
     if (lengthvar != null && lengthvar.isConstant()) {
       int length_constant = ((Long) lengthvar.constantValue()).intValue();
@@ -40,6 +41,7 @@ public final class SequenceInitialFactory extends UnaryDerivationFactory {
         upperbound = length_constant - 1;
       }
     }
+    */
 
     boolean suppress_zero = false;
     // We know that var.~ll~[0] == var and var.~ll~.field[0] == var.field.

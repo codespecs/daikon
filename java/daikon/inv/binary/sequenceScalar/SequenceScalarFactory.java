@@ -11,9 +11,9 @@ public final class SequenceScalarFactory {
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
-  public static Vector instantiate(PptSlice ppt, int pass) {
+  public static Vector instantiate(PptSlice ppt) {
     if (debugSequenceScalarFactory) {
-      System.out.println("SequenceScalarFactory instantiate (pass " + pass + ") " + ppt.name);
+      System.out.println("SequenceScalarFactory instantiate " + ppt.name);
     }
 
     boolean seq_first;
@@ -42,13 +42,9 @@ public final class SequenceScalarFactory {
       return null;
 
     Vector result = new Vector();
-    if (pass == 1) {
-      // nothing to do
-    } else {
-      // I could check that the length of the sequence isn't always 0.
-      result.add(Member.instantiate(ppt, seq_first));
-      result.add(SeqIntComparison.instantiate(ppt, seq_first));
-    }
+    // I could check that the length of the sequence isn't always 0.
+    result.add(Member.instantiate(ppt, seq_first));
+    result.add(SeqIntComparison.instantiate(ppt, seq_first));
     return result;
   }
 

@@ -10,7 +10,7 @@ public final class SingleScalarFactory {
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
-  public static Vector instantiate(PptSlice ppt, int pass) {
+  public static Vector instantiate(PptSlice ppt) {
     // System.out.println("Ppt arity " + ppt.arity + " " + ppt.name + " " + ppt);
     Assert.assert(ppt.arity == 1);
     VarInfo var = ppt.var_infos[0];
@@ -18,13 +18,9 @@ public final class SingleScalarFactory {
     Assert.assert(var.rep_type == ProglangType.INT);
 
     Vector result = new Vector();
-    if (pass == 1) {
-      result.add(OneOfScalar.instantiate(ppt));
-    } else if (pass == 2) {
-      if (var.isConstant()) {
-        // SUPPRESS INVARIANT: if var is constant, suppress NonZero, LowerBound, Modulus, NonModulus, UpperBound
-        Global.subexact_noninstantiated_invariants += 5;
-      } else {
+    result.add(OneOfScalar.instantiate(ppt));
+    { // previously only if (pass == 2)
+      { // previously only if !dynamicConstant
         result.add(NonZero.instantiate(ppt));
         if (var.type.isIntegral()) {
           result.add(LowerBound.instantiate(ppt));

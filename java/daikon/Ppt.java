@@ -66,13 +66,17 @@ public abstract class Ppt implements java.io.Serializable {
   Vector views_cond;
 
   /** Add a new derived Ppt. */
+  /* [INCR] These were never used on a Ppt, always on PptTopLevel, so move their declaration there.
   void addView(Ppt slice) {
     Vector slices = new Vector(1);
     slices.add(slice);
     addViews(slices);
   }
+  */
   /** This may be more efficient than repeated calls to addView. */
+  /* [INCR]
   abstract void addViews(Vector slices);
+  */
 
 
   abstract void removeView(Ppt slice);
@@ -108,12 +112,14 @@ public abstract class Ppt implements java.io.Serializable {
     return null;
   }
 
+  /* [INCR]
   public void clear_view_caches() {
     for (Iterator itor = views.iterator(); itor.hasNext(); ) {
       PptSlice slice = (PptSlice) itor.next();
       slice.clear_cache();
     }
   }
+  */
 
   /** Number of samples, not including missing values. */
   // public abstract int num_samples(); // [[INCR]]

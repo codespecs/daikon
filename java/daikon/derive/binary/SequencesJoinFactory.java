@@ -47,8 +47,8 @@ public final class SequencesJoinFactory  extends BinaryDerivationFactory {
 
     // Now we finally can derive
 
-    Assert.assert(var1.isCanonical());
-    Assert.assert(var2.isCanonical());
+    // Assert.assert(var1.isCanonical()); // [INCR]
+    // Assert.assert(var2.isCanonical()); // [INCR]
 
     if (debug.isDebugEnabled()) {
       debug.debug (var1.ppt + ": " + var1.name + " and " +

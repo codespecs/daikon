@@ -32,8 +32,8 @@ public final class ScalarSequencesIntersectionFactory  extends BinaryDerivationF
     if (!seq1.type.base().equals(seq2.type.base()))
       return null;
 
-    Assert.assert(seq1.isCanonical());
-    Assert.assert(seq2.isCanonical());
+    // Assert.assert(seq1.isCanonical()); // [INCR]
+    // Assert.assert(seq2.isCanonical()); // [INCR]
 
     // For now, do nothing if the sequences are derived.
     if ((seq1.derived != null)||(seq2.derived != null))

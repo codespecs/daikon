@@ -11,7 +11,7 @@ public final class TwoScalarFactory {
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
-  public static Vector instantiate(PptSlice ppt, int pass) {
+  public static Vector instantiate(PptSlice ppt) {
 
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
@@ -26,33 +26,29 @@ public final class TwoScalarFactory {
     boolean integral = var1.type.isIntegral() && var2.type.isIntegral();
 
     Vector result = new Vector();
-    if (pass == 1) {
-      result.add(IntEqual.instantiate(ppt));
-    } else if (pass == 2) {
-      if (var1.isConstant() || var2.isConstant()) {
-        Global.subexact_noninstantiated_invariants += 2;
-	Global.subexact_noninstantiated_invariants += Functions.unaryFunctions.length;
-      } else {
-        result.add(IntNonEqual.instantiate(ppt));
-        result.add(IntLessThan.instantiate(ppt));
-        result.add(IntLessEqual.instantiate(ppt));
-        result.add(IntGreaterThan.instantiate(ppt));
-        result.add(IntGreaterEqual.instantiate(ppt));
-	// Skip LineayBinary and FunctionUnary unless vars are integral
-	if (!integral) {
-	  Global.subexact_noninstantiated_invariants += 1;
-	  Global.subexact_noninstantiated_invariants += Functions.unaryFunctions.length;
-	} else {
-	  result.add(LinearBinary.instantiate(ppt));
-	  for (int i=0; i<2; i++) {
-	    boolean invert = (i==1);
-	    for (int j=0; j<Functions.unaryFunctions.length; j++) {
-	      result.add(FunctionUnary.instantiate(ppt, Functions.unaryFunctionNames[j], Functions.unaryFunctions[j], invert));
-	    }
-	  }
+    if (var1.isStaticConstant() || var2.isStaticConstant()) {
+      return null;
+    }
+    result.add(IntEqual.instantiate(ppt));
+    result.add(IntNonEqual.instantiate(ppt));
+    result.add(IntLessThan.instantiate(ppt));
+    result.add(IntLessEqual.instantiate(ppt));
+    result.add(IntGreaterThan.instantiate(ppt));
+    result.add(IntGreaterEqual.instantiate(ppt));
+    // Skip LineayBinary and FunctionUnary unless vars are integral
+    if (!integral) {
+      Global.subexact_noninstantiated_invariants += 1;
+      Global.subexact_noninstantiated_invariants += Functions.unaryFunctions.length;
+    } else {
+      result.add(LinearBinary.instantiate(ppt));
+      for (int i=0; i<2; i++) {
+	boolean invert = (i==1);
+	for (int j=0; j<Functions.unaryFunctions.length; j++) {
+	  result.add(FunctionUnary.instantiate(ppt, Functions.unaryFunctionNames[j], Functions.unaryFunctions[j], invert));
 	}
       }
     }
+
     return result;
   }
 

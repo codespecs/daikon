@@ -112,9 +112,11 @@ public class Implication extends Invariant {
             && consequent.isSameFormula(((Implication)other).consequent));
   }
 
+  /* [INCR]
   public boolean hasOnlyConstantVariables() {
     return predicate.hasOnlyConstantVariables();
   }
+  */
 
   // An implication is only interesting if both the predicate and
   // consequent are interesting

@@ -11,7 +11,7 @@ public final class TwoStringFactory {
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
-  public static Vector instantiate(PptSlice ppt, int pass) {
+  public static Vector instantiate(PptSlice ppt) {
 
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
@@ -24,9 +24,8 @@ public final class TwoStringFactory {
       return null;
 
     Vector result = new Vector();
-    if (pass == 1) {
-      result.add(StringComparison.instantiate(ppt));
-    } else if (pass == 2) {
+    result.add(StringComparison.instantiate(ppt));
+
       /// copied from TwoScalarFactory.
       // for (int i=0; i<2; i++) {
       //   boolean invert = (i==1);
@@ -49,7 +48,7 @@ public final class TwoStringFactory {
       // } else {
       //   result.add(NonEqual.instantiate(ppt));
       // }
-    }
+
     return result;
   }
 

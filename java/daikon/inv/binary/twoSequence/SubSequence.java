@@ -316,7 +316,8 @@ public class SubSequence extends TwoSequence {
         if (der instanceof SequenceScalarSubsequence) {
           // If that variable is "B[0..n]"
           VarInfo supervar_part = der.getVarInfo();
-          if (supervar_part.isCanonical()) {
+          // if (supervar_part.isCanonical()) // [INCR]
+	  {
             PptSlice ss_ppt = ppt.parent.getView(subvar, supervar_part);
             // System.out.println("  ... considering " + supervar_part.name);
             // if (ss_ppt == null) {

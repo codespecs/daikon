@@ -43,10 +43,13 @@ public final class SequenceInitial extends UnaryDerivation {
       return false;
     }
 
+    /* [INCR]
     if (vi.isConstant() && vi.constantValue() == null) {
       return false;
     }
+    */
 
+    /* [INCR]
     VarInfo lengthvar = vi.sequenceSize();
     if (lengthvar != null && lengthvar.isConstant()) {
       long length_constant = ((Long) lengthvar.constantValue()).longValue();
@@ -54,6 +57,7 @@ public final class SequenceInitial extends UnaryDerivation {
         return false;
       }
     }
+    */
 
     return true;
   }

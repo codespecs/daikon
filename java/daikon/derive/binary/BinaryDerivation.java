@@ -75,9 +75,11 @@ public abstract class BinaryDerivation implements Derivation, Cloneable {
     return 1 + Math.max(base1.derivedDepth(), base2.derivedDepth());
   }
 
+  /* [INCR]
   public boolean isDerivedFromNonCanonical() {
     // We insist that both are canonical, not just one.
     return !(base1.isCanonical() && base2.isCanonical());
   }
+  */
 
 }

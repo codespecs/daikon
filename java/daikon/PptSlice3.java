@@ -38,7 +38,7 @@ public final class PptSlice3  extends PptSlice {
     super(parent, var_infos);
     Assert.assert(var_infos.length == 3 );
 
-    values_cache = new HashMap();
+    // values_cache = new HashMap(); // [INCR]
     if (this.debugged || debug.isDebugEnabled())
       debug.info("Created PptSlice3 " + this.name);
 
@@ -52,12 +52,12 @@ public final class PptSlice3  extends PptSlice {
     this(parent, new VarInfo[] { var_info1, var_info2, var_info3 });
   }
 
-  void instantiate_invariants(int pass) {
+  void instantiate_invariants() {
     Assert.assert(!no_invariants);
 
     // Instantiate invariants
     if (this.debugged || debug.isDebugEnabled())
-      debug.info("instantiate_invariants (pass " + pass + ") for " + name + ": originally " + invs.size() + " invariants in " + invs);
+      debug.info("instantiate_invariants for " + name + ": originally " + invs.size() + " invariants in " + invs);
 
     Vector new_invs = null;
 
@@ -67,7 +67,7 @@ public final class PptSlice3  extends PptSlice {
     if ((rep1 == ProglangType.INT)
         && (rep2 == ProglangType.INT)
         && (rep3 == ProglangType.INT)) {
-      new_invs = ThreeScalarFactory.instantiate(this, pass);
+      new_invs = ThreeScalarFactory.instantiate(this);
     } else {
       // Do nothing; do not even complain
     }
@@ -82,7 +82,7 @@ public final class PptSlice3  extends PptSlice {
     }
 
     if (this.debugged || debug.isDebugEnabled()) {
-      debug.info("after instantiate_invariants (pass " + pass + "), PptSlice3 " + name + " = " + this + " has " + invs.size() + " invariants in " + invs);
+      debug.info("after instantiate_invariants PptSlice3 " + name + " = " + this + " has " + invs.size() + " invariants in " + invs);
     }
     if (this.debugged && (invs.size() > 0)) {
       debug.info("the invariants are:");
@@ -108,11 +108,11 @@ public final class PptSlice3  extends PptSlice {
 
   public int num_values() {
     Assert.assert(! no_invariants);
-    if (values_cache == null) {
+    // if (values_cache == null) { [INCR]
       return num_values_post_cache;
-    } else {
-      return values_cache.size();
-    }
+    // } else {
+    //   return values_cache.size();
+    // }
   }
 
   public String tuplemod_samples_summary() {
@@ -150,7 +150,7 @@ public final class PptSlice3  extends PptSlice {
   void add(ValueTuple full_vt, int count) {
     Assert.assert(! no_invariants);
     Assert.assert(invs.size() > 0);
-    Assert.assert(! already_seen_all);
+    // Assert.assert(! already_seen_all); // [INCR]
     for (int i=0; i<invs.size(); i++) {
       Assert.assert(invs.elementAt(i) != null);
     }
@@ -201,19 +201,22 @@ public final class PptSlice3  extends PptSlice {
     Object val2 = full_vt.getValue(vi2);
     Object val3 = full_vt.getValue(vi3);
 
-    if (! already_seen_all) {
+    // if (! already_seen_all) // [INCR]
+    {
 
       Object[] vals = Intern.intern(new Object[] { val1, val2, val3 });
 
+      /* [INCR]
       int[] tm_arr = (int[]) values_cache.get(vals);
       if (tm_arr == null) {
         tm_arr = new int[8 ];
         values_cache.put(vals, tm_arr);
       }
+      */
 
       int mod_index = mod1 * 4 + mod2 * 2 + mod3;
 
-      tm_arr[mod_index] += count;
+      // tm_arr[mod_index] += count; // [INCR]
       tm_total[mod_index] += count;
     }
 
@@ -273,9 +276,9 @@ public final class PptSlice3  extends PptSlice {
     invs.add(invariant);
     Global.instantiated_invariants++;
     if (Global.debugStatistics.isDebugEnabled() || this.debugged)
-      debug.info("instantiated_invariant: " + invariant
-		 + "; already_seen_all=" + already_seen_all);
+      debug.info("instantiated_invariant: " + invariant);
 
+    /* [INCR] ... I think this is now unnecessary; not sure. XXX
     if (already_seen_all) {
       // Make this invariant up to date by supplying it with all the values
       // which have already been seen.
@@ -315,6 +318,7 @@ public final class PptSlice3  extends PptSlice {
       }
 
     }
+    */ // ... [INCR]
   }
 
 }

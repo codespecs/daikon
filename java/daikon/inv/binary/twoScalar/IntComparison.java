@@ -244,6 +244,7 @@ public final class IntComparison extends TwoScalar implements Comparison {
       return ((var1.name instanceof VarInfoName.Add) && (var2.name instanceof VarInfoName.Add) &&
 	      ((((VarInfoName.Add) var1.name).amount) == (((VarInfoName.Add) var2.name).amount)));
     }
+    /* [INCR]
     { // Check for comparisons against constants
       if (var1.isConstant() || (var2.isConstant())) {
         VarInfo varconst;
@@ -279,6 +280,7 @@ public final class IntComparison extends TwoScalar implements Comparison {
         }
       }
     }
+    */ // ... [INCR]
     {
       LinearBinary lb = LinearBinary.find(ppt);
       if ((lb != null) && (lb.core.a == 1) && lb.enoughSamples()) {
@@ -301,11 +303,13 @@ public final class IntComparison extends TwoScalar implements Comparison {
       // This might never get invoked, as equality is printed out specially.
       VarInfo s1 = (sl1 == null) ? null : sl1.base;
       VarInfo s2 = (sl2 == null) ? null : sl2.base;
+      /* [INCR]
       if ((s1 != null) && (s2 != null)
           && (s1.equal_to == s2.equal_to)) {
         // lengths of equal arrays being compared
         return true;
       }
+      */
 
       if (core.can_be_lt && (!core.can_be_eq)) {
         if ((sl2 != null) && (sl2.shift == 0)) {

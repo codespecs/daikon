@@ -10,7 +10,7 @@ public final class SingleFloatFactory {
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
-  public static Vector instantiate(PptSlice ppt, int pass) {
+  public static Vector instantiate(PptSlice ppt) {
     // System.out.println("Ppt arity " + ppt.arity + " " + ppt.name + " " + ppt);
     Assert.assert(ppt.arity == 1);
     VarInfo var = ppt.var_infos[0];
@@ -18,9 +18,7 @@ public final class SingleFloatFactory {
     Assert.assert(var.rep_type == ProglangType.DOUBLE);
 
     Vector result = new Vector();
-    if (pass == 1) {
-    } else if (pass == 2) {
-    }
+    // I guess there are none?
     return result;
   }
 

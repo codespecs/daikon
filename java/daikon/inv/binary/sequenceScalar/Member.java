@@ -59,6 +59,7 @@ public final class Member extends SequenceScalar  {
   // Like isObviousMember, but also checks everything equal to the given
   // variables.
   public static boolean isEqualToObviousMember(VarInfo sclvar, VarInfo seqvar) {
+    /* [INCR]
     Assert.assert(sclvar.isCanonical());
     Assert.assert(seqvar.isCanonical());
     Vector scl_equalto = sclvar.equalTo();
@@ -74,6 +75,7 @@ public final class Member extends SequenceScalar  {
           return true;
       }
     }
+    */
     return false;
   }
 

@@ -195,7 +195,7 @@ public class InvariantFilters {
 	Assert.assert( variables.length == 2 );
 	for (int i = 0; i < variables.length; i++) {
           VarInfo vi = variables[i];
-	  if (vi.isCanonical()) {
+	  if (true) { // vi.isCanonical()) { // [INCR] XXX; This whole method sucks now.
             if (! canonicalVariables.contains( vi )) {
               Assert.assert(! ppts.containsKey(vi));
               canonicalVariables.add( vi );

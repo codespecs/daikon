@@ -19,7 +19,7 @@ public final class TwoSequenceFactory {
 
   // Add the appropriate new Invariant objects to the specified Invariants
   // collection.
-  public static Vector instantiate(PptSlice ppt, int pass) {
+  public static Vector instantiate(PptSlice ppt) {
     Assert.assert(ppt.arity == 2);
     // Not really the right place for these tests
     VarInfo var1 = ppt.var_infos[0];
@@ -39,14 +39,15 @@ public final class TwoSequenceFactory {
       super2 = var2;
 
     if (debug.isDebugEnabled()) {
-      debug.debug ("Instantiating for pass " + new Integer(pass) + " and ppt " + ppt.name);
+      debug.debug ("Instantiating for ppt " + ppt.name);
       debug.debug ("name1 " + super1.repr());
       debug.debug ("name2 " + super2.repr());
     }
 
 
     Vector result = new Vector();
-    if (pass == 1) {
+    { // previously only if (pass == 1) 
+
       // This was test disabled because it resulted in preventing a comparison for
       // this.theArray[this.front..], this.theArray[orig(this.front)+1..]
       // which are actually equal.
@@ -62,7 +63,8 @@ public final class TwoSequenceFactory {
       } else {
         result.add(SeqComparison.instantiate(ppt));
       }
-    } else if (pass == 2) {
+    }
+    { // previously only if (pass == 2)
       result.add(Reverse.instantiate(ppt));
       if (super1 == super2) {
         Global.subexact_noninstantiated_invariants += 2;

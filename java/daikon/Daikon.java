@@ -159,16 +159,22 @@ public final class Daikon {
     // Read command line options
     Set[] files = read_options(args);
     Assert.assert(files.length == 3);
-
+    Set decls_files = files[0];
+    Set dtrace_files = files[1];
+    Set spinfo_files = files[2];
+    
     // Set up debug traces
     Logger.setupLogs (Global.debugAll ? Logger.DEBUG : Logger.INFO);
 
+    // Load declarations and splitters
+    PptMap all_ppts = load_decls_files(decls_files);
+    load_spinfo_files(all_ppts, spinfo_files);
 
-    // Load all data
-    PptMap all_ppts = load_files(files[0], files[1], files[2]);
+    // Create candidate invariants
+    setup_invariants(all_ppts);
 
     // Infer invariants
-    do_inference(all_ppts);
+    process_data(all_ppts, dtrace_files);
 
     // Display invariants
     if (output_num_samples) {
@@ -185,8 +191,8 @@ public final class Daikon {
       try {
 	FileIO.write_serialized_pptmap(all_ppts, inv_file);
       } catch (IOException e) {
-	throw new RuntimeException("Error while writing .inv file "
-				   + "'" + inv_file + "': " + e.toString());
+	System.err.println("Error while writing '" + inv_file + "': " + e);
+	System.exit(1);
       }
     }
 
@@ -375,90 +381,101 @@ public final class Daikon {
 
   ///////////////////////////////////////////////////////////////////////////
   // Read decls, dtrace, etc. files
-  private static PptMap load_files(Set decl_files,
-				   Set dtrace_files,
-				   Set spinfo_files)
+
+  private static PptMap load_decls_files(Set decl_files)
   {
-    PptMap all_ppts;
-
-    int num_decl_files = decl_files.size();
-    int num_dtrace_files = dtrace_files.size();
-    int num_spinfo_files = spinfo_files.size();
-
+    elapsedTime(); // reset timer
     try {
       System.out.print("Reading declaration files ");
-      all_ppts = FileIO.read_declaration_files(decl_files);
-      System.out.println();
-      // add_combined_exits(all_ppts);
-
-      if (!disable_splitting && num_spinfo_files > 0) {
-	System.out.println("Reading Splitter Info files ");
-	create_splitters(all_ppts, spinfo_files);
-      }
-
-      System.out.print("Reading data trace files ");
-      FileIO.read_data_trace_files(dtrace_files, all_ppts);
-      System.out.println();
+      PptMap all_ppts = FileIO.read_declaration_files(decl_files);
+      System.out.print(" (read ");
+      System.out.print(UtilMDE.nplural(decl_files.size(), "file"));
+      System.out.println(")");
+      return all_ppts;
     } catch (IOException e) {
       System.out.println();
       e.printStackTrace();
       throw new Error(e.toString());
+    } finally {
+      debugTrace.debug("Time spent on read_declaration_files: " + elapsedTime());
     }
-    // Jikes complains when I put this all in one big string.
-    System.out.print("Read " + UtilMDE.nplural(num_decl_files, "declaration file"));
-    System.out.print(", " + UtilMDE.nplural(num_spinfo_files, "spinfo file"));
-    System.out.println(", " + UtilMDE.nplural(num_dtrace_files, "dtrace file"));
-
-    return all_ppts;
   }
 
+  private static void load_spinfo_files(PptMap all_ppts,
+					Set spinfo_files)
+  {
+    elapsedTime(); // reset timer
+    if (!disable_splitting && spinfo_files.size() > 0) {
+      try {
+	System.out.print("Reading splitter info files ");
+	create_splitters(all_ppts, spinfo_files);
+	System.out.print(" (read ");
+	System.out.print(UtilMDE.nplural(spinfo_files.size(), "file"));
+	System.out.println(")");
+      } catch (IOException e) {
+	System.out.println();
+	e.printStackTrace();
+	throw new Error(e.toString());
+      } finally {
+	debugTrace.debug("Time spent on create_splitters: " + elapsedTime());
+      }
+    }
+  }
+
+  private static void setup_invariants(PptMap all_ppts)
+  {
+    elapsedTime(); // reset timer
+    System.out.print("Instantiating candidate invariants ");
+    for (Iterator itor = all_ppts.iterator() ; itor.hasNext() ; ) {
+      PptTopLevel ppt = (PptTopLevel) itor.next();
+      System.out.print('.');
+      ppt.setup_invariants();
+    }
+    System.out.print(" (processed ");
+    System.out.print(UtilMDE.nplural(all_ppts.asCollection().size(), "program point"));
+    System.out.println(")");
+    debugTrace.debug("Time spent on setup_invariants: " + elapsedTime());
+  }
 
   ///////////////////////////////////////////////////////////////////////////
   // Infer invariants over the trace data
-  private static void do_inference(PptMap all_ppts)
-  {
-    // Retrieve Ppt objects in sorted order.
-    // Use a custom comparator for a specific ordering
-    Comparator comparator = new Ppt.NameComparator();
-    TreeSet all_ppts_sorted = new TreeSet(comparator);
-    all_ppts_sorted.addAll(all_ppts.asCollection());
 
-    MemMonitor monitor=null;
+  /**
+   * The main data-processing routine of the daikon engine.  At this
+   * point, the decls and spinfo files have been loaded, all of the
+   * program points have been setup, and candidate invariants have
+   * been instantiated.  This routine processes data to falsify the
+   * candidate invariants.
+   **/
+  private static void process_data(PptMap all_ppts,
+				   Set dtrace_files)
+  {
+    MemMonitor monitor = null;
     if (use_mem_monitor) {
       monitor = new MemMonitor("stat.out");
       new Thread((Runnable) monitor).start();
     }
 
-    for (Iterator itor = all_ppts_sorted.iterator() ; itor.hasNext() ; ) {
+    elapsedTime(); // reset timer
+    try {
+      System.out.print("Processing trace data ");
+      FileIO.read_data_trace_files(dtrace_files, all_ppts);
+      System.out.print(" (read ");
+      System.out.print(UtilMDE.nplural(dtrace_files.size(), "file"));
+      System.out.println(")");
+    } catch (IOException e) {
+      System.out.println();
+      e.printStackTrace();
+      throw new Error(e.toString());
+    } finally {
+      debugTrace.debug("Time spent on read_data_trace_files: " + elapsedTime());
+    }
+
+    /* [INCR] ...
+    for (Iterator itor = all_ppts.iterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
-        // int num_samples = ppt.num_samples(); // [[INCR]]
-	int num_array_vars = ppt.num_array_vars();
-	int num_scalar_vars = ppt.num_vars() - num_array_vars;
-	int num_static_vars = ppt.num_static_constant_vars;
-	int num_orig_vars = ppt.num_orig_vars;
+      System.out.print('.');
 
-        // System.out.println(ppt.name + ": " + ppt.num_samples() + " samples, "
-        //                    + ppt.num_values() + " values, "
-        //                    + "ratio = " + ((double)ppt.num_samples()) / ((double)ppt.num_values()));
-        // System.out.println("start dump-----------------------------------------------------------------");
-        // System.out.println(ppt.name);
-        // ppt.values.dump();
-        // System.out.println("end dump-------------------------------------------------------------------");
-	long ppt_start_time = System.currentTimeMillis();
-	if (no_text_output && show_progress) {
-	  System.out.print(ppt.name + "...");
-	  System.out.flush();
-	}
-        ppt.initial_processing();
-
-	int num_derived_array_vars = ppt.num_array_vars() - num_array_vars;
-	int num_derived_scalar_vars = ppt.num_vars() - ppt.num_array_vars() - num_scalar_vars;
-
-
-	if (no_text_output && show_progress) {
-	  System.out.print("...");
-	  System.out.flush();
-	}
         if (! disable_splitting) {
 	  Splitter[] pconds = null;
 	  if (SplitterList.dkconfig_all_splitters) {
@@ -466,13 +483,15 @@ public final class Daikon {
 	  } else {
 	    pconds = SplitterList.get(ppt.name);
 	  }
-          if (Global.debugSplit.isDebugEnabled())
-            Global.debugSplit.debug("Got " + ((pconds == null)
-					   ? "no"
-					   : Integer.toString(pconds.length))
-				 + " splitters for " + ppt.name);
-          if (pconds != null)
-            ppt.addConditions(pconds);
+	  if (pconds == null) {
+	    pconds = new Splitter[0];
+	  }
+          if (Global.debugSplit.isDebugEnabled()) {
+            Global.debugSplit.debug("Got "
+				    + UtilMDE.nplural(pconds.length, "splitter")
+				    + " for " + ppt.name);
+	  }
+	  ppt.addConditions(pconds);
         }
         ppt.addImplications();
 
@@ -487,33 +506,26 @@ public final class Daikon {
           }
         }
 
-	if (monitor!=null) {
-	  monitor.end_of_iteration(ppt.name,
-				   -1, // [[INCR]]
-				   num_static_vars, num_orig_vars, num_scalar_vars, num_array_vars, num_derived_scalar_vars, num_derived_array_vars);
-	}
-	long ppt_end_time = System.currentTimeMillis();
-	if (no_text_output && show_progress) {
-	  double elapsed = (ppt_end_time - ppt_start_time) / 1000.0;
-	  System.out.println((new java.text.DecimalFormat("#.#")).format(elapsed) + "s");
+	if (monitor != null) {
+	  // monitor.end_of_iteration(ppt.name, ...); // [[INCR]]
 	}
     }
+    System.out.println();
+    */ // ... [INCR]
 
-    if (monitor!=null) {
+    if (monitor != null) {
       monitor.stop();
     }
 
     if (suppress_redundant_invariants_with_simplify) {
       System.out.print("Invoking Simplify to identify redundant invariants...");
       System.out.flush();
-      long start = System.currentTimeMillis();
-      for (Iterator itor = all_ppts_sorted.iterator() ; itor.hasNext() ; ) {
+      elapsedTime(); // reset timer
+      for (Iterator itor = all_ppts.iterator() ; itor.hasNext() ; ) {
 	PptTopLevel ppt = (PptTopLevel) itor.next();
 	ppt.mark_implied_via_simplify();
       }
-      long end = System.currentTimeMillis();
-      double elapsed = (end - start) / 1000.0;
-      System.out.println((new java.text.DecimalFormat("#.#")).format(elapsed) + "s");
+      System.out.println(elapsedTime());
     }
 
   }
@@ -638,4 +650,14 @@ public final class Daikon {
       SplitterList.put( (String )sps.elementAt(j), (Splitter[]) sps.elementAt(j+1));
     }
   }
+
+  private static long elapsedTime_timer = System.currentTimeMillis();
+  private static String elapsedTime() {
+    long now = System.currentTimeMillis();
+    double elapsed = (now - elapsedTime_timer) / 1000.0;
+    String result = (new java.text.DecimalFormat("#.#")).format(elapsed) + "s";
+    elapsedTime_timer = now;
+    return result;
+  }
+
 }

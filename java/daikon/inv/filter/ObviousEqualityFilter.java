@@ -6,10 +6,11 @@ import daikon.inv.filter.*;
 
 class ObviousEqualityFilter extends InvariantFilter {
   public String getDescription() {
-    return "Suppress obvious equality invariants";
+    return "Suppress obvious equality invariants [deprecated]";
   }
 
   boolean shouldDiscardInvariant( Invariant invariant ) {
+    /* [INCR]
     if (IsEqualityComparison.it.accept( invariant )) {
 	VarInfo[] variables = invariant.ppt.var_infos; // note: only 2 variables
 	for (int i = 0; i < variables.length; i++)
@@ -21,6 +22,7 @@ class ObviousEqualityFilter extends InvariantFilter {
 	    else
 	      return true;
     }
+    */
     return false;
   }
 }

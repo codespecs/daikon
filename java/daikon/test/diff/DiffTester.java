@@ -41,8 +41,9 @@ public class DiffTester extends TestCase {
                                  ProglangType.INT,
                                  ProglangType.INT,
                                  null); // null Comparability
-    // VarInfo.isCanonical() insists that equal_to be non-null.
-    result.equal_to = result;
+    // equal_to no longer exists!
+    // // VarInfo.isCanonical() insists that equal_to be non-null.
+    // result.equal_to = result;
     return result;
   }
 
@@ -98,7 +99,7 @@ public class DiffTester extends TestCase {
       v.add(slicex);
       v.add(slicey);
       v.add(slicez);
-      ppt.addViews(v);
+      // ppt.addViews(v); JWN: XXX FIXME
       invs1.add(ppt);
     }
 
@@ -121,7 +122,7 @@ public class DiffTester extends TestCase {
       v.add(slicey);
       v.add(slicex);
       v.add(slicez);
-      ppt.addViews(v);
+      // ppt.addViews(v); JWN: XXX FIXME
       invs2.add(ppt);
     }
 
@@ -143,7 +144,7 @@ public class DiffTester extends TestCase {
       v.add(slicex);
       v.add(slicey);
       v.add(slicez);
-      ppt.addViews(v);
+      // ppt.addViews(v); JWN: XXX FIXME
       invs3.add(ppt);
     }
 

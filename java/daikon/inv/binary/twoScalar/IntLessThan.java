@@ -309,11 +309,13 @@ public final class IntLessThan  extends TwoScalar   {
       // This might never get invoked, as equality is printed out specially.
       VarInfo s1 = (sl1 == null) ? null : sl1.base;
       VarInfo s2 = (sl2 == null) ? null : sl2.base;
+      /* [INCR]
       if ((s1 != null) && (s2 != null)
           && (s1.equal_to == s2.equal_to)) {
         // lengths of equal arrays being compared
         return true;
       }
+      */
 
       if ((sl2 != null) && (sl2.shift == 0)) {
         // "x < size(a)"  ("x <= size(a)-1" or "x < size(a)-1" would be more informative)

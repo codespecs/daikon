@@ -464,10 +464,10 @@ public abstract class Invariant implements java.io.Serializable {
 
       // The names "match" iff there is an intersection of the names
       // of equal variables.
-      Vector all_vars1 = var1.canonicalRep().equalTo();
-      Vector all_vars2 = var2.canonicalRep().equalTo();
-      all_vars1.add(var1.canonicalRep());
-      all_vars2.add(var2.canonicalRep());
+      Vector all_vars1 = null; // var1.canonicalRep().equalTo(); // [INCR]
+      Vector all_vars2 = null; // var2.canonicalRep().equalTo(); // [INCR]
+      // all_vars1.add(var1.canonicalRep()); // [INCR]
+      // all_vars2.add(var2.canonicalRep()); // [INCR]
       Vector all_vars_names1 = new Vector(all_vars1.size());
       for (Iterator iter = all_vars1.iterator(); iter.hasNext(); ) {
 	VarInfo elt = (VarInfo) iter.next();
@@ -632,11 +632,11 @@ public abstract class Invariant implements java.io.Serializable {
     boolean result
       = ((! hasFewModifiedSamples())
          && enoughSamples()       // perhaps replaces hasFewModifiedSamples
-         && (! hasNonCanonicalVariable())
-         && (! hasOnlyConstantVariables())
+         // && (! hasNonCanonicalVariable()) [INCR]
+         // && (! hasOnlyConstantVariables()) [INCR]
          && (! isObvious())
 	 && justified()
-         // && isWorthPrinting_PostconditionPrestate()
+         // && isWorthPrinting_PostconditionPrestate() [INCR]
 	 );
     return result;
   }
@@ -646,11 +646,11 @@ public abstract class Invariant implements java.io.Serializable {
       "iwpscc(" + format() + " @ " + ppt.name
       + ") <= " + (! hasFewModifiedSamples())
       + " " + enoughSamples()
-      + " " + (! hasNonCanonicalVariable())
-      + " " + (! hasOnlyConstantVariables())
+      // + " " + (! hasNonCanonicalVariable()) [INCR]
+      // + " " + (! hasOnlyConstantVariables()) [INCR]
       + " " + (! isObvious())
       + " " + justified()
-      // + " " + isWorthPrinting_PostconditionPrestate()
+      // + " " + isWorthPrinting_PostconditionPrestate() [INCR]
       ;
   }
 
@@ -679,6 +679,7 @@ public abstract class Invariant implements java.io.Serializable {
 
   // This used to be final, but I want to override in EqualityInvariant
   /** @return true if this invariant involves a non-canonical variable **/
+  /* [INCR] ...
   public boolean hasNonCanonicalVariable() {
     VarInfo[] vis = ppt.var_infos;
     for (int i=0; i<vis.length; i++) {
@@ -688,12 +689,13 @@ public abstract class Invariant implements java.io.Serializable {
     }
     return false;
   }
-
+  */ // ... [INCR]
 
   /**
    * @return true if this invariant involves only constant variables
    *         and is a comparison
    **/
+  /* [INCR] ...
   public boolean hasOnlyConstantVariables() {
     VarInfo[] varInfos = ppt.var_infos;
     for (int i=0; i < varInfos.length; i++) {
@@ -716,6 +718,7 @@ public abstract class Invariant implements java.io.Serializable {
     }
     return false;
   }
+  */ // ... [INCR]
 
   /**
    * @return true if this invariant is necessarily true, due to derived

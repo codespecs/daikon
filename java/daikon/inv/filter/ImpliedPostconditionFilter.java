@@ -5,7 +5,7 @@ import daikon.inv.filter.*;
 
 class ImpliedPostconditionFilter extends InvariantFilter {
   public String getDescription() {
-    return "Suppress implied postcondition invariants";
+    return "Suppress implied postcondition invariants [deprecated]";
   }
 
   boolean shouldDiscardInvariant( Invariant invariant ) {

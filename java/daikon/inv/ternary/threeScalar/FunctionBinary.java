@@ -37,6 +37,7 @@ public class FunctionBinary extends ThreeScalar {
     // constant, as we might get something like y=abs(x)).  (Actually, for
     // now I'm skipping if the result is constant, too: that's a
     // relationship over the two arguments, not a ternary relationship.)
+    /* [INCR]
     int[] indices = FunctionBinaryCore.var_indices[var_order];
     VarInfo resultvar = ppt.var_infos[indices[0]];
     VarInfo arg1 = ppt.var_infos[indices[1]];
@@ -47,6 +48,7 @@ public class FunctionBinary extends ThreeScalar {
       Global.subexact_noninstantiated_invariants++;
       return null;
     }
+    */
 
     return new FunctionBinary(ppt, methodname, function, var_order);
   }

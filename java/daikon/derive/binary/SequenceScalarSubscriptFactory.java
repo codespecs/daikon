@@ -48,8 +48,8 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
       return null;
     }
 
-    Assert.assert(sclvar.isCanonical());
-    Assert.assert(seqvar.isCanonical());
+    // Assert.assert(sclvar.isCanonical()); // [INCR]
+    // Assert.assert(seqvar.isCanonical()); // [INCR]
 
     if (! seqvar.indexCompatible(sclvar))
       return null;
@@ -62,9 +62,11 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
       return null;
 
     VarInfo seqsize = seqvar.sequenceSize();
+    /* [INCR]
     if (seqsize != null) {
       seqsize = seqsize.canonicalRep();
     }
+    */
     // System.out.println("BinaryDerivation.instantiate: sclvar=" + sclvar.name
     //                    + ", sclvar_rep=" + sclvar.canonicalRep().name
     //                    + ", seqsize=" + seqsize.name
@@ -155,6 +157,7 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
     // SUPPRESS DERIVED VARIABLE: a[i-1] where i==1
     // SUPPRESS DERIVED VARIABLE: a[..i] where i==1
     // SUPPRESS DERIVED VARIABLE: a[..i-1] where i==1
+    /* [INCR] ...
     if (sclvar.isConstant()) {
       long scl_constant = ((Long) sclvar.constantValue()).longValue();
       // System.out.println("It is constant (" + scl_constant + "): " + sclvar.name);
@@ -178,6 +181,7 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
 	} : null;
       }
     }
+    */ // ... [INCR]
 
     // Commented out:  seems to be eliminating desired invariants.
     if (false) {

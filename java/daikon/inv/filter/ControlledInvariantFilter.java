@@ -6,7 +6,7 @@ import java.util.Vector;
 
 class ControlledInvariantFilter extends InvariantFilter {
   public String getDescription() {
-    return "Suppress controlled invariants";
+    return "Suppress controlled invariants [deprecated]";
   }
 
   // We need to have a reference to an InvariantFilters object, so we

@@ -70,7 +70,7 @@ public interface Derivation extends java.io.Serializable {
    * don't do that!]  
    **/
 
-  public abstract boolean isDerivedFromNonCanonical();
+  // public abstract boolean isDerivedFromNonCanonical(); // [INCR]
 
   /**
    * Returns how many levels of derivation this Derivation is based
