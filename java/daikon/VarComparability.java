@@ -109,13 +109,13 @@ public abstract class VarComparability {
   public static boolean comparable(VarInfoName name1, VarComparability type1,
                                    VarInfoName name2, VarComparability type2) {
 
-    if (type1.getClass() != type2.getClass())
+    if (type1 != null && type2 != null && type1.getClass() != type2.getClass())
       throw new Error("Trying to compare VarComparabilities " +
                       "of different types: " + Global.lineSep
                       + "    " + name1 + " " + type1 + Global.lineSep
                       + "    " + name2 + " " + type2);
 
-    if (type1 instanceof VarComparabilityNone) {
+    if (type1 instanceof VarComparabilityNone || type1 == null || type2 == null) {
       return VarComparabilityNone.comparable
         (name1, (VarComparabilityNone)type1,
          name2, (VarComparabilityNone)type2);
