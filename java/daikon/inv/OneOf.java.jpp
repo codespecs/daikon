@@ -34,11 +34,19 @@
 #define SINGLESCALAR SingleSequence
 #define TOSTRING(x) x
 #define NAME var().name + " elements"
+#elif defined(ELT)
+#define SCALARPKG stringsequence
+#define INT String
+#define ONEOFSCALAR EltOneOfString
+#define ONEOFSCALARSTR "EltOneOfString"
+#define SINGLESCALAR SingleSequenceString
+#define TOSTRING(x) "\"" + UtilMDE.quote(x) + "\""
+#define NAME var().name + " elements"
 #else
 #error "One of SCALAR, STRING, SEQUENCE, or ELT should be defined"
 #endif
 
-package daikon.inv.SCALARPKG;
+package daikon.inv.unary.SCALARPKG;
 
 import daikon.*;
 import daikon.inv.*;

@@ -6,12 +6,12 @@ JAVAC := jikes -g +E +F
 # ${AUTO_GENERATED_FILES}"? I don't want to omit running just because these
 # are up-to-date.
 AUTO_GENERATED_FILES = \
-	inv/scalar/LowerBound.java \
-	inv/scalar/UpperBound.java \
-	inv/scalar/OneOfScalar.java \
-	inv/string/OneOfString.java \
-	inv/sequence/OneOfSequence.java \
-	inv/sequence/EltOneOf.java \
+	inv/unary/scalar/LowerBound.java \
+	inv/unary/scalar/UpperBound.java \
+	inv/unary/scalar/OneOfScalar.java \
+	inv/unary/string/OneOfString.java \
+	inv/unary/sequence/OneOfSequence.java \
+	inv/unary/sequence/EltOneOf.java \
 	PptSlice1.java \
 	PptSlice2.java \
 	PptSlice3.java
@@ -114,23 +114,26 @@ JAVA_CPP = (mv -f $@ $@-bak; set -e; java-cpp.pl -DDEFINEDVAR $< > $@; chmod -w 
 # JAVA_CPP_END = > $@-postproc; mv -f $@-postproc $@; chmod -w $@)
 
 
-inv/scalar/LowerBound.java: inv/scalar/Bound-cpp.java
+inv/unary/scalar/LowerBound.java: inv/unary/scalar/Bound-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=LOWER)
 
-inv/scalar/UpperBound.java: inv/scalar/Bound-cpp.java
+inv/unary/scalar/UpperBound.java: inv/unary/scalar/Bound-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=UPPER)
 
-inv/scalar/OneOfScalar.java: inv/OneOf-cpp.java
+inv/unary/scalar/OneOfScalar.java: inv/OneOf-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=SCALAR)
 
-inv/string/OneOfString.java: inv/OneOf-cpp.java
+inv/unary/string/OneOfString.java: inv/OneOf-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=STRING)
 
-inv/sequence/OneOfSequence.java: inv/OneOf-cpp.java
+inv/unary/sequence/OneOfSequence.java: inv/OneOf-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=SEQUENCE)
 
-inv/sequence/EltOneOf.java: inv/OneOf-cpp.java
+inv/unary/sequence/EltOneOf.java: inv/OneOf-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=ELT)
+
+inv/unary/sequence/EltOneOfString.java: inv/OneOf-cpp.java
+	$(JAVA_CPP:DEFINEDVAR=ELTSTRING)
 
 PptSlice1.java: PptSlice-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=ARITY1)

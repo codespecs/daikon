@@ -2,10 +2,10 @@ package daikon;
 
 import daikon.inv.*;
 
-import daikon.inv.twoScalar.*;
-import daikon.inv.twoSequence.*;
-import daikon.inv.twoString.*;
-import daikon.inv.sequenceScalar.*;
+import daikon.inv.binary.twoScalar.*;
+import daikon.inv.binary.twoSequence.*;
+import daikon.inv.binary.twoString.*;
+import daikon.inv.binary.sequenceScalar.*;
 
 import java.util.*;
 

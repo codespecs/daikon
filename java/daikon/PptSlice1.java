@@ -2,9 +2,9 @@ package daikon;
 
 import daikon.inv.*;
 
-import daikon.inv.scalar.*;
-import daikon.inv.string.*;
-import daikon.inv.sequence.*;
+import daikon.inv.unary.scalar.*;
+import daikon.inv.unary.string.*;
+import daikon.inv.unary.sequence.*;
 
 import java.util.*;
 

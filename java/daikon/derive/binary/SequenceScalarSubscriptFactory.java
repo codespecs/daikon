@@ -1,7 +1,7 @@
 package daikon.derive.binary;
 
 import daikon.*;
-import daikon.inv.twoScalar.*;
+import daikon.inv.binary.twoScalar.*;
 
 import utilMDE.*;
 

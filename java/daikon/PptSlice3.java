@@ -2,7 +2,7 @@ package daikon;
 
 import daikon.inv.*;
 
-import daikon.inv.threeScalar.*;
+import daikon.inv.ternary.threeScalar.*;
 
 import java.util.*;
 

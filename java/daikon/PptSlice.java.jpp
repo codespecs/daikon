@@ -26,16 +26,16 @@ package daikon;
 import daikon.inv.*;
 
 #if defined(ARITY1)
-import daikon.inv.scalar.*;
-import daikon.inv.string.*;
-import daikon.inv.sequence.*;
+import daikon.inv.unary.scalar.*;
+import daikon.inv.unary.string.*;
+import daikon.inv.unary.sequence.*;
 #elif defined(ARITY2)
-import daikon.inv.twoScalar.*;
-import daikon.inv.twoSequence.*;
-import daikon.inv.twoString.*;
-import daikon.inv.sequenceScalar.*;
+import daikon.inv.binary.twoScalar.*;
+import daikon.inv.binary.twoSequence.*;
+import daikon.inv.binary.twoString.*;
+import daikon.inv.binary.sequenceScalar.*;
 #elif defined(ARITY3)
-import daikon.inv.threeScalar.*;
+import daikon.inv.ternary.threeScalar.*;
 #endif
 
 import java.util.*;
