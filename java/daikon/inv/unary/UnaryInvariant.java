@@ -22,8 +22,8 @@ public abstract class UnaryInvariant
 
   /** @return this */
   protected Invariant resurrect_done(int[] permutation) {
-    Assert.assert(permutation.length == 1);
-    Assert.assert(permutation[0] == 0);
+    Assert.assertTrue(permutation.length == 1);
+    Assert.assertTrue(permutation[0] == 0);
     return this;
   }
 
