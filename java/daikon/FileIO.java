@@ -721,6 +721,10 @@ public final class FileIO {
     //   throw e;
     // }
 
+    if (Global.debugPrintDtrace) {
+      Global.dtraceWriter.close();
+    }
+
   }
 
 
