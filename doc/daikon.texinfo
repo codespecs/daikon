@@ -148,7 +148,7 @@ Example use of Daikon
 C examples
 
 * C examples summary::          
-* Rijndael example::            
+* Dealing with large examples::  
 
 Using Daikon to detect invariants
 
@@ -1232,8 +1232,9 @@ Under Windows, you must insert in the source file a gcc-specific
 our test suite.  Run the following commands:
 @example
 alias fix="sed -f $DFECDIR/fix.sed"
-(cd daikon-instrumented; fix print_tokens.cc \
-                         > print_tokens_fixed.cc)
+(cd daikon-instrumented; \
+  fix print_tokens.cc > fixed.cc;
+  mv fixed.cc print_tokens.cc)
 @end example
 @end quotation
 
@@ -1241,19 +1242,10 @@ alias fix="sed -f $DFECDIR/fix.sed"
 executable @file{print_tokens} in the current directory.
 
 @example
-g++ -g -w -o print_tokens \
-    daikon-instrumented/print_tokens_fixed.cc \
-    $DFECDIR/daikon_runtime.o
-@end example
-@quotation
-Note for Windows users:  Name the executable @file{print_tokens.exe}, not
-@file{print_tokens}:
-@example
 g++ -g -w -o print_tokens.exe \
-    daikon-instrumented/print_tokens_fixed.cc \
+    daikon-instrumented/print_tokens.cc \
     $DFECDIR/daikon_runtime.o
 @end example
-@end quotation
 
 @item Run the print_tokens test suite.  First set the DTRACEAPPEND
 environment variable, so that a final @file{.dtrace} file contains
@@ -1302,10 +1294,10 @@ For help understanding the invariants, see @ref{Interpreting output}.
 
 @menu
 * C examples summary::          
-* Rijndael example::            
+* Dealing with large examples::  
 @end menu
 
-@node    C examples summary, Rijndael example, C examples, C examples
+@node    C examples summary, Dealing with large examples, C examples, C examples
 @subsection C examples summary
 
 The above steps can be divided into three stages:
@@ -1314,7 +1306,7 @@ Instrumentation (Steps 1-3)
 @example
 cd $DAIKONDIR/examples/c-examples/print_tokens
 dfec print_tokens.c stream.h tokens.h
-g++ -g -w -o print_tokens daikon-instrumented/print_tokens_fixed.cc \
+g++ -g -w -o print_tokens daikon-instrumented/print_tokens.cc \
     $DFECDIR/daikon_runtime.o
 @end example
 
@@ -1332,39 +1324,46 @@ java -Xmx256m daikon.Daikon -o print_tokens.inv \
 @end example
 
 
-@node    Rijndael example,  , C examples summary, C examples
-@subsection Rijndael example
+@node    Dealing with large examples,  , C examples summary, C examples
+@subsection Dealing with large examples
 
-The Rijndael program requires some special instructions, due to the
-size of its data trace file.  The data trace file is over 1GB in size
-when first created, so make sure you have adequate disk space.
+Beware that several of the C example programs require significant
+resources in terms of memory, CPU time, or disk space. Therefore they
+can also serve as examples of techniques for limiting Daikon's
+resource usage.
 
-First, you should set the TRACE_KAT_MCT variable when you run the C
-front end; this causes the Rijndael program to produce output when
-running the test suite.  Replace the dfec command in step 2 above by
-this one:
-@example
-dfec -DTRACE_KAT_MCT rijndael.c rijndael-alg-ref.h rijndael-api-ref.h
-@end example
+Since the default memory size used by Java virtual machines varies, we
+suggest that the examples be run with at least 256 megabytes of
+memory, specified for many JVMs by the option @option{-Xmx256m}.
+The schedule example uses even more space: we suggest specifying
+@option{-Xmx768m}, and avoiding the example altogether unless you
+workstation has at least a gigabyte of physical memory. For more
+information about specifying the memory usage for Daikon, see
+@ref{Out of memory}.
 
-Second, you will need to manually reduce the size of the dtrace file.
-Run these commands after step 4 above.
-@example
-head -1000000 daikon-output/rijndael.dtrace > \
-      daikon-output/rijndael.truncated.dtrace
-trace-untruncate daikon-output/rijndael.truncated.dtrace
-@end example
-@noindent
-The first command selects the first million lines of the file, and the
-second command cleans up the end of the file, in case we truncate in
-the middle of a data structure.
+Most of the C examples shouldn't require more than a minute of
+processing time for any single step, but the schedule2 example
+requires about 10 minutes, the Rijndael example about 20, and the
+schedule example more than an hour, on a relatively modern
+workstation.
 
-Finally, run Daikon using the truncated trace file (step 5).
-@example
-java -Xmx256m daikon.Daikon -o rijndael.inv \
-     daikon-output/rijndael.decls \
-     daikon-output/rijndael.truncated.dtrace
-@end example
+Most of the C examples require no more than 50 megabytes of disk
+space, but the schedule and schedule2 examples require around 200
+megabytes each, and the Rijndael example requires about 600
+megabytes. This disk usage can be reduced by recompiling the Daikon
+runtime to compress its output dtrace files; see @ref{Daikon runtime
+customization}.
+
+In some cases, the time and space requirements of the examples can be
+reduced by reducing the length of the program run. For instance, when
+the test.sh script contains many invocations of the program, some can
+be commented out. The Rijndael example includes preprocessor
+definitions at the top of the @file{rijndaeltest-ref.c} that control
+how many iterations are performed. However, Daikon's running time
+depends on both the length of the test run and the size of the program
+(especially in its use of global variables and nested data
+structures). For more techniques for using Daikon with large programs
+and long program runs, see @ref{Large dtrace files}.
 
 @node Perl examples,  , C examples, Example use
 @section Perl examples
@@ -1431,7 +1430,7 @@ This step repeats step 2, except that the @option{-T} flag to
 previous step, and to put the output in the directory
 @file{daikon-instrumented}. @command{dfepl} also uses converts the
 type information into a file @file{daikon-output/Birthday.decls}
-suitable for containing subroutine declarations suitable for Daikon.
+containing subroutine declarations suitable for Daikon.
 
 @item Run the full test suite with the type-instrumented
 @file{Birthday.pm}.
@@ -6109,7 +6108,7 @@ occurred and to prevent memory corruption.  The Daikon runtime's
 discovery of these errors, while not directly related to invariant
 detection, is a pleasant side effect of using Daikon.  You also might
 want to consider using the Valgrind tool for Linux on x86 processors
-(@uref{http://developer.kde.org/~sewardj/}), which can help you correct
+(@uref{http://valgrind.kde.org/}), which can help you correct
 memory errors; this reduces the number of warnings/errors produced by
 the Daikon runtime, and it also improves your code.
 
@@ -6209,7 +6208,9 @@ In addition to the solutions discussed in @ref{Reducing program points},
 you can try increasing the amount of memory available to Java
 with the @option{-mx} argument to @command{java}.  (This flag is
 JVM-specific; see your JVM documentation for details.  For instance,
-its correct name in JDK versions 1.3 and later is @option{-Xmx}.)  
+its correct name in JDK versions 1.3 and later is @option{-Xmx}.)
+However, the value you use should be less your system's total amount
+of physical memory.  
 The default may be 64 megabytes or less; to permit use of up to 256
 megabytes, you would run Java like so:
 @example
