@@ -1505,74 +1505,79 @@ public class PptTopLevel extends Ppt {
     return find_same_invariant(candidates.iterator(), inv);
   }
 
-  // TODO: This can move into another class.  Is there a better place
-  // for it?
+  // TODO: These next two methods are static and can be move into
+  // another class.  Is there a better place for them?
 
   // Searches through the iterator for an Invariant which is the
-  // "same" as the goal (inv).  Same, in this case, means a matching
-  // type, formula, and variable names.
+  // same as the goal, as defined by is_same_invariant.
   public static Invariant find_same_invariant(Iterator candidates, Invariant inv)
   {
-  CANDIDATE_LOOP:
     while (candidates.hasNext()) {
       Invariant cand_inv = (Invariant) candidates.next();
-
-      // Can't be the same if they aren't the same type
-      if (!inv.getClass().equals(cand_inv.getClass())) {
-	continue;
-      }
-
-      // Can't be the same if they aren't the same formula
-      if (!inv.isSameFormula(cand_inv)) {
-	continue;
-      }
-
-      // The variable names much match up, in order
-
-      VarInfo[] vars = inv.ppt.var_infos;
-      VarInfo[] cand_vars = cand_inv.ppt.var_infos;
-
-      Assert.assert(vars.length == cand_vars.length); // due to inv type match already
-      for (int i=0; i < vars.length; i++) {
-	VarInfo var = vars[i];
-	VarInfo cand_var = cand_vars[i];
-
-	// Do the easy check first
-	if (var.name.equals(cand_var.name)) {
-	  continue;
-	}
-
-	// Now check for aliasing problems
-
-	// The names "match" iff there is an intersection of the names
-	// of aliased variables
-	Vector all_cand_vars = cand_var.canonicalRep().equalTo();
-	all_cand_vars.add(cand_var.canonicalRep());
-	Vector all_cand_vars_names = new Vector(all_cand_vars.size());
-	for (Iterator iter = all_cand_vars.iterator(); iter.hasNext(); ) {
-	  VarInfo elt = (VarInfo) iter.next();
-	  all_cand_vars_names.add(elt.name);
-	}
-	Vector all_vars = new Vector(var.canonicalRep().equalTo());
-	all_vars.add(var.canonicalRep());
-	boolean name_matched = false;
-	for (Iterator iter = all_vars.iterator(); !name_matched && iter.hasNext(); ) {
-	  VarInfo elt = (VarInfo) iter.next();
-	  name_matched = all_cand_vars_names.contains(elt.name);
-	}
-	if (!name_matched) {
-	  continue CANDIDATE_LOOP;
-	}
-      }
-
-      // the type, formula, and vars all matched
-      return cand_inv;
+      if (is_same_invariant(cand_inv, inv))
+	return cand_inv;
     }
-
-    // no more candidates in set of object invs
     return null;
   }
-
+  
+  /**
+   * @return true iff the two arguments are the "same" invariant.
+   * Same, in this case, means a matching type, formula, and variable
+   * names.
+   **/
+  public static boolean is_same_invariant(Invariant cand_inv, Invariant inv)
+  {
+    // Can't be the same if they aren't the same type
+    if (!inv.getClass().equals(cand_inv.getClass())) {
+      return false;
+    }
+    
+    // Can't be the same if they aren't the same formula
+    if (!inv.isSameFormula(cand_inv)) {
+      return false;
+    }
+    
+    // The variable names much match up, in order
+    
+    VarInfo[] vars = inv.ppt.var_infos;
+    VarInfo[] cand_vars = cand_inv.ppt.var_infos;
+    
+    Assert.assert(vars.length == cand_vars.length); // due to inv type match already
+    for (int i=0; i < vars.length; i++) {
+      VarInfo var = vars[i];
+      VarInfo cand_var = cand_vars[i];
+      
+      // Do the easy check first
+      if (var.name.equals(cand_var.name)) {
+	continue;
+      }
+      
+      // Now check while taking account of aliasing
+      
+      // The names "match" iff there is an intersection of the names
+      // of aliased variables
+      Vector all_cand_vars = cand_var.canonicalRep().equalTo();
+      all_cand_vars.add(cand_var.canonicalRep());
+      Vector all_cand_vars_names = new Vector(all_cand_vars.size());
+      for (Iterator iter = all_cand_vars.iterator(); iter.hasNext(); ) {
+	VarInfo elt = (VarInfo) iter.next();
+	all_cand_vars_names.add(elt.name);
+      }
+      Vector all_vars = new Vector(var.canonicalRep().equalTo());
+      all_vars.add(var.canonicalRep());
+      boolean name_matched = false;
+      for (Iterator iter = all_vars.iterator(); !name_matched && iter.hasNext(); ) {
+	VarInfo elt = (VarInfo) iter.next();
+	name_matched = all_cand_vars_names.contains(elt.name);
+	if (!name_matched)
+	  return false;
+      }
+    }
+    
+    // the type, formula, and vars all matched
+    return true;
+  }
+  
 
   ///////////////////////////////////////////////////////////////////////////
   /// Printing invariants
