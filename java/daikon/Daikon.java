@@ -240,7 +240,7 @@ public final class Daikon {
   // PptMap.sortedIterator(), for example, but it's in here for now
 
   // Orders ppts by the name, except . and : are swapped
-  //   so that Foo:::CLASS is processed before Foo.method
+  //   so that Foo:::OBJECT and Foo:::CLASS are processed before Foo.method.
   private static class PptOrderComparator
     implements Comparator
   {
