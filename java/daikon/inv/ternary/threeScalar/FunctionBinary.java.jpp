@@ -20,6 +20,8 @@ The correct way to build the system is to run 'make'.
   #define CLASSSTRING "FunctionBinary"
   #define OP_LIST * / % << >> >>> & && ^ | ||
   #define FUNCTION_LIST min max gcd pow
+  #define EQ_FUNC_NUMS 1, 5, 7, 8, 9
+  #define EQUALITY IntEqual
 #elif defined(TYPEDOUBLE)
   #define CLASSNAME FunctionBinaryFloat
   #define CORECLASSNAME FunctionBinaryCoreFloat
@@ -30,6 +32,8 @@ The correct way to build the system is to run 'make'.
   #define CLASSSTRING "FunctionBinaryFloat"
   #define OP_LIST * /
   #define FUNCTION_LIST min max pow
+  #define EQ_FUNC_NUMS 1, 2
+  #define EQUALITY FloatEqual
 #else
   #error "bad def"
 #endif
@@ -43,8 +47,9 @@ import daikon.inv.*;
 import daikon.inv.OneOf;
 import daikon.inv.unary.scalar.OneOfScalar;
 import daikon.inv.unary.scalar.OneOfFloat;
+import daikon.inv.binary.twoScalar.*;
 import daikon.suppress.*;
-import utilMDE.Assert;
+import utilMDE.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.logging.Logger;
@@ -94,7 +99,7 @@ public class CLASSNAME
       VarInfo argresult = ppt.var_infos[indices[0]];
       VarInfo arg1 = ppt.var_infos[indices[1]];
       VarInfo arg2 = ppt.var_infos[indices[2]];
-      if (logOn())
+      if (logOn() && is_debug_method (methodname))
         Debug.log (CLASSNAME.class, ppt, "Instantiate vars "
                   + indices[0] + ", " + indices[1] + ", " + indices[2]);
       if (debug.isLoggable(Level.FINE))
@@ -237,5 +242,138 @@ public class CLASSNAME
     }
   }
 */
+
+  // Create a suppression factory for functionBinary
+  #define FACTORY_CNT       2
+  #define FACTORY1          equality_suppress1
+  #define FACTORY1_INV_CNT  1
+  #define FACTORY1_VAR_INFO {new VarInfo[2]}
+  #define FACTORY2          equality_suppress2
+  #define FACTORY2_INV_CNT  2
+  #define FACTORY2_VAR_INFO {new VarInfo[2], new VarInfo[2]}
+  #include "daikon/inv/suppressionFactory.java.jpp"
+
+
+  /**
+   * Suppress 'z = func(x, y)' by 'z == x == y' where func is bitwiseAnd,
+   * bitwiseOr, min, max, or gcd.  This versions is used only when x and
+   * y are the same variable.  The following version works when x and y
+   * are distinct.  This is necessary because there are assertions elsewhere
+   * that don't allow us to include the same invariant twice as a suppressor.
+   * And that is what happens if x, y, and z actually refer to the same variable
+   * (we get var == var and var == var as our two suppressors
+   **/
+  public static SuppressionLink equality_suppress1 (Invariant arg,
+                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
+
+    // We should only be called with our own invariant
+    Assert.assertTrue (arg instanceof CLASSNAME);
+    CLASSNAME inv = (CLASSNAME) arg;
+
+    // Check the method type for those implied by equality
+    int[] eq_func_nums = new int[] {EQ_FUNC_NUMS};
+    if (ArraysMDE.indexOf (eq_func_nums, inv.core.methodNumber) == -1)
+      return (null);
+
+    // If the variables are not all the same, give up and let the second
+    // factory handle this.
+    if ((inv.var1() != inv.var2()) || (inv.var2() != inv.var3()))
+      return (null);
+
+    // Build the tempmlate and look for matches
+    supTemplate.set (0, EQUALITY.class, inv.var2(), inv.var3());
+    SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
+    return (sl);
+  }
+
+  /**
+   * Suppress 'z = func(x, y)' by 'z == x == y' where func is bitwiseAnd,
+   * bitwiseOr, min, max, or gcd.  This versions is used only when x and
+   * y are not the same variable.  The previous version works when x and y
+   * are the same.  This is necessary because there are assertions elsewhere
+   * that don't allow us to include the same invariant twice as a suppressor.
+   * And that is what happens if x, y, and z actually refer to the same variable
+   * (we get var == var and var == var as our two suppressors
+   **/
+  public static SuppressionLink equality_suppress2 (Invariant arg,
+                  SuppressionTemplate supTemplate, SuppressionFactory sfact) {
+
+    // We should only be called with our own invariant
+    Assert.assertTrue (arg instanceof CLASSNAME);
+    CLASSNAME inv = (CLASSNAME) arg;
+
+    // Check the method type for those implied by equality
+    int[] eq_func_nums = new int[] {EQ_FUNC_NUMS};
+    if (ArraysMDE.indexOf (eq_func_nums, inv.core.methodNumber) == -1)
+      return (null);
+
+    // If all the variables are the same, let the first factory handle this.
+    if ((inv.var1() == inv.var2()) && (inv.var2() == inv.var3()))
+      return (null);
+
+    // Pick pairs of variables that don't match
+    VarInfo v1 = inv.var1();
+    VarInfo v2 = inv.var2();
+    VarInfo v3 = inv.var3();
+    if (v1 == v3) {
+      VarInfo tmp = v2;
+      v2 = v3;
+      v3 = tmp;
+    }
+
+    // Build the tempmlate and look for matches
+    supTemplate.set (0, EQUALITY.class, v1, v2);
+    supTemplate.set (1, EQUALITY.class, v2, v3);
+    SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
+    return (sl);
+  }
+
+  private static boolean is_debug_method (String[] methodname) {
+    if (Debug.function_binary_method != null) {
+      if (methodname[0].equals (Debug.function_binary_method)
+        || methodname[1].equals (Debug.function_binary_method))
+        return (true);
+      else
+        return (false);
+    }
+    return (true);
+  }
+
+ /**
+  * Logs a description of the invariant and the specified msg via the
+  * log4j logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
+  * VarInfo[], String)}
+  *
+  * This version is specific to FunctionBinary and allows us to restrict
+  * logging to a particular function
+  *
+  * @return whether or not it logged anything
+  */
+
+  public boolean log (String msg) {
+
+    if (is_debug_method (core.methodname))
+      return (Debug.log (getClass(), ppt, "var_order=" + core.var_order
+              + " " + msg));
+    else
+      return (false);
+  }
+
+  /**
+   * Logs a description of the invariant and the specified msg via the
+   * log4j logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
+   * VarInfo[], String)}
+   *
+   * This version is specific to FunctionBinary and allows us to restrict
+   * logging to a particular function
+   */
+
+  public void log (Logger debug, String msg) {
+
+    if (is_debug_method (core.methodname))
+      Debug.log (debug, getClass(), ppt, "var_order=" + core.var_order
+                + " " + msg);
+  }
+
 
 }
