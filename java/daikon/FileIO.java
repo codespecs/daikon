@@ -779,7 +779,7 @@ public final class FileIO {
     for (Iterator i = counter.keySet().iterator(); i.hasNext(); ) {
       Invocation invok = (Invocation) i.next();
       Integer count = (Integer) counter.get(invok);
-      System.out.println(count + " instances of:");
+      System.out.println(count + " instance" + ((count.intValue() == 1) ? "" : "s") + " of:");
       System.out.println(invok.format());
     }
   }
