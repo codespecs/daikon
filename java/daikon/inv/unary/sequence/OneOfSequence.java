@@ -109,7 +109,17 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
     String varname = var().name.name() ;
     if (num_elts == 1) {
 
-      return varname + " == " + ArraysMDE.toString( elts[0] ) ;
+      if (is_hashcode) {
+        if (elts[0].length == 0) {
+          return varname + " == []";
+        } else if ((elts[0].length == 1) && (elts[0][0] == 0)) {
+          return varname + " == [null]";
+        } else {
+          return varname + " has only one value, of length " + elts[0].length;
+        }
+      } else {
+        return varname + " == " + ArraysMDE.toString( elts[0] ) ;
+      }
 
     } else {
       return varname + " one of " + subarray_rep();
