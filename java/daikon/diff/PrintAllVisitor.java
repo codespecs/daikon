@@ -91,13 +91,13 @@ public class PrintAllVisitor implements NodeVisitor {
     print(" {");
 
     double prob = inv.getProbability();
-    String probString;
+
+    // Round small probabilities to .0001
     if (0 < prob && prob < .0001) {
-      probString = ".0001";
-    } else {
-      probString = PROBABILITY_FORMAT.format(prob);
+      prob = .0001;
     }
-    print(probString);
+
+    print(PROBABILITY_FORMAT.format(prob));
     if (inv.isWorthPrinting()) {
       print("+");
     } else {
