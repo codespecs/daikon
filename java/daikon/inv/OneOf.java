@@ -12,7 +12,7 @@ public interface OneOf {
   /**
    * The single value represented by the OneOf invariant.
    * Throws an error if not exactly one value is represented by this.
-   */
+   **/
   public Object elt();
 
   public VarInfo var();

@@ -35,13 +35,13 @@ public abstract class TwoScalar extends Invariant {
   /**
    * This method need not check for no_invariant;
    * that is done by the caller.
-   */
+   **/
   public abstract void add_modified(long v1, long v2, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
-   */
+   **/
   public void add_unmodified(long v1, long v2, int count) {
     return;
   }

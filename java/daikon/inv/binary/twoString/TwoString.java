@@ -35,13 +35,13 @@ public abstract class TwoString extends Invariant {
   /**
    * This method need not check for no_invariant;
    * that is done by the caller.
-   */
+   **/
   public abstract void add_modified(String v1, String v2, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
-   */
+   **/
   public void add_unmodified(String v1, String v2, int count) {
     return;
   }

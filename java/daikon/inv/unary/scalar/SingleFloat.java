@@ -32,13 +32,13 @@ public abstract class SingleFloat extends Invariant {
   /**
    * This method need not check for no_invariant;
    * that is done by the caller.
-   */
+   **/
   public abstract void add_modified(double value, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
-   */
+   **/
   public void add_unmodified(double value, int count) {
     // System.out.println("SingleFloat.add_unmodified " + ppt.name + ": parent=" + ppt.parent);
     return;
