@@ -140,8 +140,6 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/binary/twoScalar/LinearBinaryCoreFloat.java \
 	daikon/inv/binary/twoScalar/LinearBinary.java \
 	daikon/inv/binary/twoScalar/LinearBinaryFloat.java \
-	daikon/inv/binary/twoScalar/NonEqualCore.java \
-	daikon/inv/binary/twoScalar/NonEqualCoreFloat.java \
 	daikon/inv/binary/twoScalar/TwoScalarFactory.java \
 	daikon/inv/binary/twoScalar/TwoFloatFactory.java \
 	daikon/inv/binary/twoScalar/TwoScalar.java \
@@ -236,7 +234,6 @@ AUTO_GENERATED_FILES = \
 	daikon/derive/unary/SequenceInitialFactory.java \
 	daikon/derive/unary/SequenceInitialFactoryFloat.java \
 
-
 # These files were auto-generated previously; they still might exist in
 # some user's directory.
 OLD_AUTO_GENERATED_FILES = \
@@ -252,6 +249,8 @@ OLD_AUTO_GENERATED_FILES = \
 	daikon/inv/unary/sequence/SeqIndexComparisonFloat.java \
 	daikon/inv/unary/sequence/SeqIndexNonEqual.java \
 	daikon/inv/unary/sequence/SeqIndexNonEqualFloat.java \
+	daikon/inv/binary/twoScalar/NonEqualCore.java \
+	daikon/inv/binary/twoScalar/NonEqualCoreFloat.java \
 
 
 OLD_AUTO_GENERATED_CLASSES = $(subst .java,.class,${OLD_AUTO_GENERATED_FILES})
@@ -927,12 +926,6 @@ daikon/inv/binary/twoScalar/LinearBinary.java: daikon/inv/binary/twoScalar/Linea
 	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
 
 daikon/inv/binary/twoScalar/LinearBinaryFloat.java: daikon/inv/binary/twoScalar/LinearBinary.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
-
-daikon/inv/binary/twoScalar/NonEqualCore.java: daikon/inv/binary/twoScalar/NonEqualCore.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
-
-daikon/inv/binary/twoScalar/NonEqualCoreFloat.java: daikon/inv/binary/twoScalar/NonEqualCore.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
 
 daikon/inv/binary/twoScalar/TwoScalarFactory.java: daikon/inv/binary/twoScalar/TwoScalarFactory.java.jpp
