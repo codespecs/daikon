@@ -60,11 +60,9 @@ public class InvariantFilters {
   PptMap ppt_map = null;
 
   public InvariantFilters() {
-    /* [INCR]
     if (Daikon.output_style == OutputFormat.JML) {
       addPropertyFilter( new JMLCompilerWorkaroundFilter());
     }
-    ... [INCR] */
 
     if (Daikon.output_style == OutputFormat.ESCJAVA) {
       addPropertyFilter( new UnmodifiedVariableEqualityFilter());
