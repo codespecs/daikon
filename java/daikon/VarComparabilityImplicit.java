@@ -90,21 +90,21 @@ public final class VarComparabilityImplicit extends VarComparability implements 
       return unknown;
   }
 
-  static boolean compatible(VarInfoName name1, VarComparabilityImplicit type1,
+  static boolean comparable(VarInfoName name1, VarComparabilityImplicit type1,
 			    VarInfoName name2, VarComparabilityImplicit type2) {
     if ((type1.dimensions == 0) && (type1.base < 0))
       return true;
     if ((type2.dimensions == 0) && (type2.base < 0))
       return true;
     if ((type1.dimensions > 0) && (type2.dimensions > 0)) {
-      return (compatible(type1.indexType(type1.dimensions-1),
+      return (comparable(type1.indexType(type1.dimensions-1),
                          type2.indexType(type2.dimensions-1))
-              && compatible(type1.elementType(),
+              && comparable(type1.elementType(),
                             type2.elementType()));
     }
     if ((type1.dimensions == 0) && (type2.dimensions == 0))
       return type1.base == type2.base;
-    // One array, one non-array, and the non-array isn't universally compatible.
+    // One array, one non-array, and the non-array isn't universally comparable.
     Assert.assert(type1.dimensions == 0 || type2.dimensions == 0);
     return false;
   }
