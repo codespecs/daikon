@@ -6,8 +6,9 @@ import daikon.inv.filter.*;
 import daikon.inv.Invariant.OutputFormat;
 
 public class JMLCompilerWorkaroundFilter extends InvariantFilter {
-  public static final String DESCRIPTION = "Suppresses invariants that cause " +
-    "the jmlc tool to fail they are used in JML annotations";
+  public static final String DESCRIPTION
+    = "Suppresses invariants that cause the jmlc tool to fail "
+    + "when they are used in JML annotations";
   public static boolean createNextFilterOn = false;
 
   public JMLCompilerWorkaroundFilter() {
