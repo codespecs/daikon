@@ -17,19 +17,15 @@ my ($lackwitdb, @files) = @ARGV;
 # files are present and readable
 my $lackwit_home = $ENV{LACKWIT_HOME};
 -d $lackwit_home or die "LACKWIT_HOME is not set correctly\n";
--r "$lackwit_home/lib/Default.sigs"
-  or die "$lackwit_home/lib/Default.sigs does not exist or is not readable\n";
--r "$lackwit_home/lib/libc.c"
-  or die "$lackwit_home/lib/libc.c does not exist or is not readable\n";
 
 $ENV{LACKWITDB} = $lackwitdb;
 $ENV{PATH} = "$lackwit_home/bin:" . $ENV{PATH};
 $ENV{LACKWIT_ARGS} = "-ignore __restrict";
 
 `EmitHeaders $lackwit_home/lib/Default.sigs`;
+die "EmitHeaders failed\n" if ($CHILD_ERROR != 0);
 
 unshift @files, "$lackwit_home/lib/libc.c";
-
 
 foreach my $file (@files) {
   # An intermediate file is created for each source file to be
