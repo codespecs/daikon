@@ -90,7 +90,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
       
       setupGUI( tree, invariantsTablesPanel.getScrollPane());
     }
-    catch (Exception e) {
+    catch (Exception e) {	// catch AssertionException's
       InvariantsGUI.showErrorMessage( "Error: Unable to display invariants." + PLEASE_REPORT_ERROR_STRING );
     }
   }
@@ -105,7 +105,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
   //  error message shown is "Error: Unable to display invariants."  I'm leaving the more
   //  descriptive, arcane error messages in the code for convenience, for when I might
   //  need them.
-  public DefaultTreeModel constructTreeModel( PptMap pptMap ) throws Exception {
+  public DefaultTreeModel constructTreeModel( PptMap pptMap ) {
     DefaultMutableTreeNode root = new DefaultMutableTreeNode( "All classes" );
 
     //  Create the first level of the tree:  classes
@@ -133,8 +133,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
       PptName pptName = new PptName( name );
       String className = pptName.getFullClassName();
       DefaultMutableTreeNode classNode = getChildByName( root, className );
-      if (classNode == null)
-	throw new Exception( "InvariantsGUI.constructTreeModel():  cannot find class node '" + className + "'" );
+      Assert.assert( classNode != null );
       //	    System.out.println(name);
       if (pptName.isObjectInstanceSynthetic() || pptName.isClassStaticSynthetic()) {
 	String programPointName = pptName.getPoint();
@@ -146,9 +145,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	}
       } else {		// is a regular method ppt
 	String methodName = pptName.getFullMethodName();
-	if (methodName == null) {
-	  throw new Exception( "No method name: " + name );
-	}
+	Assert.assert( methodName != null );
 	DefaultMutableTreeNode methodNode = getChildByName( classNode, methodName );
 	if (methodNode == null) {
 	  classNode.add( new DefaultMutableTreeNode( methodName )); // Create a node for this method
@@ -165,56 +162,49 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	continue;
       String className = pptName.getFullClassName();
       DefaultMutableTreeNode classNode = getChildByName( root, className );
-      if (classNode == null)
-	throw new Exception( "InvariantsGUI.constructTreeModel():  cannot find class node '" + className + "'" );
+      Assert.assert( classNode != null );
       DefaultMutableTreeNode methodNode = getChildByName( classNode, methodName );
-      if (methodNode == null)
-	throw new Exception( "InvariantsGUI.constructTreeModel():  cannot find method node '" + methodName + "'" );
+      Assert.assert( methodName != null );
       String programPointName = pptName.getPoint();
       DefaultMutableTreeNode programPointNode = getChildByName( methodNode, programPointName );
+      Assert.assert( programPointNode == null );
 
-      //  Create a node for this program point.  If this is the first program point
-      //  node under this method, simply add the node.  If there are already some
-      //  program point nodes, add this node in order.  Eg, make sure EXIT23 goes
-      //  after ENTER and before EXIT97.
-      if (programPointNode == null) {
-	PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
-	if (methodNode.getChildCount() == 0) {
-	  Assert.assert(topLevel != null);
-	  methodNode.add( new DefaultMutableTreeNode( topLevel ));
-	} else {
-	  int exitNumber = pptName.getPointSubscript();
-	  int childIndex;
-	  for (childIndex = 0; childIndex < methodNode.getChildCount(); childIndex++ ) {
-	    Ppt currentChild = (Ppt) ((DefaultMutableTreeNode) methodNode.getChildAt( childIndex )).getUserObject();
-	    int currentChildExitNumber = currentChild.ppt_name.getPointSubscript();
-	    if (currentChildExitNumber > exitNumber)
-	      break;
-	  }
-	  Assert.assert(topLevel != null);
-	  methodNode.insert( new DefaultMutableTreeNode( topLevel ), childIndex );
+      //  Create a node for this program point.  If this is the first program point node
+      //  under this method, simply add the node.  If there are already some program point
+      //  nodes, add this node in order.  Eg, make sure EXIT23 goes after ENTER and before
+      //  EXIT97.
+      PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
+      if (methodNode.getChildCount() == 0) {
+	Assert.assert(topLevel != null);
+	methodNode.add( new DefaultMutableTreeNode( topLevel ));
+      } else {
+	int exitNumber = pptName.getPointSubscript();
+	int childIndex;
+	for (childIndex = 0; childIndex < methodNode.getChildCount(); childIndex++ ) {
+	  Ppt currentChild = (Ppt) ((DefaultMutableTreeNode) methodNode.getChildAt( childIndex )).getUserObject();
+	  int currentChildExitNumber = currentChild.ppt_name.getPointSubscript();
+	  if (currentChildExitNumber > exitNumber)
+	    break;
 	}
-      } else
-	throw new Exception( "InvariantsGUI.constructTreeModel():  ppt '" + name + "' has already been added to tree" );
+	Assert.assert(topLevel != null);
+	methodNode.insert( new DefaultMutableTreeNode( topLevel ), childIndex );
+      }
     }
-
+    
     //  TODO:  Sort the method nodes within a class.  Sort according to a method's exit number.
-
+    
     return new DefaultTreeModel( root );
   }
-
+    
   //  Returns child with name <code>name</code> if there is one; otherwise return <code>null</code>.
   //  Used by constructTreeModel().
-  protected DefaultMutableTreeNode getChildByName( DefaultMutableTreeNode node, String name ) throws Exception {
+  protected DefaultMutableTreeNode getChildByName( DefaultMutableTreeNode node, String name ) {
     for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
       DefaultMutableTreeNode child = ((DefaultMutableTreeNode) enum.nextElement());
-      if (child == null) {
-	throw new Exception( "Null child" );
-      } else if (child.toString() == null) {
-	throw new Exception( "Null toString() for child of type " + child.getClass());
-      } else if (child.toString().equals( name )) {
+      Assert.assert( child != null );
+      Assert.assert( child.toString() != null );
+      if (child.toString().equals( name ))
 	return child;
-      }
     }
     return null;
   }
