@@ -748,9 +748,11 @@ public abstract class VarInfoName
     // is wrong because this might be "orig(a[])".
     Elements elems = (new ElementsFinder(this)).elems();
     Assert.assertTrue(elems != null,
-                      "applySize should have elements to use in " + this + ";\n"
-                      + "that is, " + this + " does not appear to be a sequence/collection.\n"
-                      + "Perhaps its name should be suffixed by \"[]\"?");
+                      "applySize should have elements to use in "
+                      + name() + ";\n" + "that is, " + name()
+                      + " does not appear to be a sequence/collection.\n"
+                      + "Perhaps its name should be suffixed by \"[]\"?"
+                      + " this.class = " + getClass().getName());
     Replacer r = new Replacer(elems, (new SizeOf(elems)).intern());
     return r.replace(this).intern();
   }
