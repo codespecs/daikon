@@ -25,6 +25,11 @@ public final class UtilMDE {
   /**
    * Returns a BufferedReader for the file, accounting for the possibility
    * that the file is compressed.
+   * <p>
+   * Warning: The "gzip" program writes and reads files containing
+   * concatenated gzip files.  As of Java 1.3, Java reads
+   * just the first one:  it silently discards all characters (including
+   * gzipped files) after the first gzipped file.
    **/
   public static BufferedReader BufferedFileReader(String filename) throws FileNotFoundException, IOException {
     Reader file_reader;
@@ -40,6 +45,11 @@ public final class UtilMDE {
   /**
    * Returns a LineNumberReader for the file, accounting for the possibility
    * that the file is compressed.
+   * <p>
+   * Warning: The "gzip" program writes and reads files containing
+   * concatenated gzip files.  As of Java 1.3, Java reads
+   * just the first one:  it silently discards all characters (including
+   * gzipped files) after the first gzipped file.
    **/
   public static LineNumberReader LineNumberFileReader(String filename) throws FileNotFoundException, IOException {
     Reader file_reader;
@@ -54,6 +64,11 @@ public final class UtilMDE {
   /**
    * Returns a BufferedWriter for the file, accounting for the possibility
    * that the file is compressed.
+   * <p>
+   * Warning: The "gzip" program writes and reads files containing
+   * concatenated gzip files.  As of Java 1.3, Java reads
+   * just the first one:  it silently discards all characters (including
+   * gzipped files) after the first gzipped file.
    **/
   public static BufferedWriter BufferedFileWriter(String filename) throws IOException{
     Writer file_writer;
