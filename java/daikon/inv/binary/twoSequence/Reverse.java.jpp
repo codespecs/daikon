@@ -205,10 +205,6 @@ public class CLASSNAME
     return Invariant.CONFIDENCE_JUSTIFIED;
   }
 
-  protected double computeProbability() {
-    return Invariant.PROBABILITY_JUSTIFIED;
-  }
-
   public boolean isSameFormula(Invariant other)
   {
     Assert.assertTrue(other instanceof CLASSNAME);

@@ -321,21 +321,6 @@ public final class SEQINTEQUAL
     #endif
   }
 
-  protected double computeProbability() {
-    if (ppt.num_values() == 0) {
-      return PROBABILITY_UNJUSTIFIED;
-    }
-    #if (defined(EQUAL) || defined(EQUALFLOAT))
-    // It's an equality invariant.  I ought to use the actual ranges somehow.
-    // Actually, I can't even use this .5 test because it can make
-    // equality non-transitive.
-    // return Math.pow(.5, ppt.num_samples());
-    return Invariant.PROBABILITY_JUSTIFIED;
-    #else
-    return Math.pow(.5, ppt.num_values());
-    #endif
-  }
-
   public boolean isExact() {
     #if (defined(EQUAL) || defined(EQUALFLOAT))
     return true;

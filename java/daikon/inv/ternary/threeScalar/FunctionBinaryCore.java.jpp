@@ -203,10 +203,6 @@ public final class CLASSNAME
     return Invariant.conf_is_ge(wrapper.ppt.num_values(), 5);
   }
 
-  public double computeProbability() {
-    return Invariant.prob_is_ge(wrapper.ppt.num_values(), 5);
-  }
-
 
 
   /// Variable order

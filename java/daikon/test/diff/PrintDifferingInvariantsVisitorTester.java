@@ -14,9 +14,9 @@ public class PrintDifferingInvariantsVisitorTester extends TestCase {
   PptTopLevel ppt = new PptTopLevel("Foo:::OBJECT", vars);
 
   PptSlice slice0 = ppt.joiner_view;
-  Invariant null_int_1_just = new DummyInvariant(slice0, "1", true);
-  Invariant null_noprint = new DummyInvariant(slice0, "0", true, true, false);
-  Invariant null_uninteresting = new DummyInvariant(slice0, "0", true, false, true);
+  Invariant null_int_1_just = new DiffDummyInvariant(slice0, "1", true);
+  Invariant null_noprint = new DiffDummyInvariant(slice0, "0", true, true, false);
+  Invariant null_uninteresting = new DiffDummyInvariant(slice0, "0", true, false, true);
 
   public static void main(String[] args) {
     daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);

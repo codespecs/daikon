@@ -14,8 +14,6 @@ public class PrintAllVisitor extends DepthFirstVisitor {
   protected static boolean HUMAN_OUTPUT = false;
 
 
-  private static DecimalFormat PROBABILITY_FORMAT =
-    new DecimalFormat("0.####");
   private static DecimalFormat CONFIDENCE_FORMAT =
     new DecimalFormat("0.####");
 
@@ -159,7 +157,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
 
   /**
    * Prints an invariant, including its printability and possibly its
-   * probability.  Example: "argv != null {0.0001+}"
+   * confidence.  Example: "argv != null {0.9999+}"
    **/
   protected void printInvariant(Invariant inv) {
     if (verbose) {
@@ -170,30 +168,22 @@ public class PrintAllVisitor extends DepthFirstVisitor {
     } else {
       bufPrint(inv.format());
       bufPrint(" {");
-      printProbability(inv);
+      printConfidence(inv);
       printPrintability(inv);
       bufPrint("}");
     }
   }
 
   /**
-   * Prints the probability of the invariant.  Probabilities between
-   * .0001 and 0 are rounded to .0001.
+   * Prints the confidence of the invariant.  Confidences between
+   * .9999 and 1 are rounded to .9999.
    **/
-  private void printProbability(Invariant inv) {
-    if (Invariant.dkconfig_use_confidence) {
-      double conf = inv.getConfidence();
-      if (.9999 < conf && conf < 1) {
-        conf = .9999;
-      }
-      bufPrint(CONFIDENCE_FORMAT.format(conf));
-    } else {
-      double prob = inv.getProbability();
-      if (0 < prob && prob < .0001) {
-        prob = .0001;
-      }
-      bufPrint(PROBABILITY_FORMAT.format(prob));
+  private void printConfidence(Invariant inv) {
+    double conf = inv.getConfidence();
+    if (.9999 < conf && conf < 1) {
+      conf = .9999;
     }
+    bufPrint(CONFIDENCE_FORMAT.format(conf));
   }
 
   /** Prints '+' if the invariant is worth printing, '-' otherwise. **/

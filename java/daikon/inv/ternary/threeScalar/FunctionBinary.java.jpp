@@ -370,10 +370,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return Invariant.conf_is_ge(ppt.num_values(), 5);
   }
 
-  public double computeProbability() {
-    return Invariant.prob_is_ge (ppt.num_values(), 5);
-  }
-
   /**
    * If the arg is a sequence size, return the sequence; otherwise return null.
    **/

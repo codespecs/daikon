@@ -129,15 +129,6 @@ public class NonModulus
     return 1 - Math.pow(probability_one_elt_nonmodulus, ppt.num_samples());
   }
 
-  protected double computeProbability() {
-    updateResults();
-    if (no_result_yet)
-      return Invariant.PROBABILITY_UNJUSTIFIED;
-    double probability_one_elt_nonmodulus = 1 - 1.0/modulus;
-    // return Math.pow(probability_one_elt_nonmodulus, ppt.num_mod_samples());
-    return Math.pow(probability_one_elt_nonmodulus, ppt.num_samples());
-  }
-
   public boolean isSameFormula(Invariant o)
   {
     NonModulus other = (NonModulus) o;

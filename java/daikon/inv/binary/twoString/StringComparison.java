@@ -195,24 +195,12 @@ public final class StringComparison
     return core.computeConfidence();
   }
 
-  protected double computeProbability() {
-    return core.computeProbability();
-  }
-
   // For Comparison interface
   public double eq_confidence() {
     if (isExact())
       return getConfidence();
     else
       return Invariant.CONFIDENCE_NEVER;
-  }
-
-  // For Comparison interface
-  public double eq_probability() {
-    if (isExact())
-      return getProbability();
-    else
-      return Invariant.PROBABILITY_NEVER;
   }
 
   public boolean isExact() {

@@ -32,7 +32,7 @@ public class UnionVisitor extends DepthFirstVisitor {
   /**
    * If only one invariant is non-null, always add it. If two
    * invariants are non-null, add the invariant with the better
-   * (lower) probability.
+   * (higher) confidence.
    **/
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
@@ -42,9 +42,7 @@ public class UnionVisitor extends DepthFirstVisitor {
     } else if (inv2 == null) {
       result.add(currentPpt, inv1);
     } else {
-      if (Invariant.dkconfig_use_confidence
-          ? (inv1.getConfidence() >= inv2.getConfidence())
-          : (inv1.getProbability() <= inv2.getProbability())) {
+      if (inv1.getConfidence() >= inv2.getConfidence()) {
         result.add(currentPpt, inv1);
       } else {
         result.add(currentPpt, inv2);

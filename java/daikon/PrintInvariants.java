@@ -328,10 +328,8 @@ public class PrintInvariants {
             if (nextInv.logOn())
               nextInv.log ("DiscardInfo's stuff: " + di.className() + "\n" + di.format());
           } else if (propFilter instanceof UnjustifiedFilter) {
-            di = new DiscardInfo(nextInv, DiscardCode.bad_probability,
-                                 (Invariant.dkconfig_use_confidence
-                                  ? "Had confidence: " + nextInv.getConfidence()
-                                  : "Had probability: " + nextInv.getProbability()));
+            di = new DiscardInfo(nextInv, DiscardCode.bad_confidence,
+                                 "Had confidence: " + nextInv.getConfidence());
           } else {
             di = new DiscardInfo(nextInv, DiscardCode.findCode(propFilter), propFilter.getDescription());
           }

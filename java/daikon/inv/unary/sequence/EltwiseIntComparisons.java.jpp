@@ -289,18 +289,6 @@ public class CLASSNAME
 #endif
   }
 
-  protected double computeProbability() {
-#if defined(EQUAL) || defined(EQUALFLOAT)
-    if (ppt.num_samples() != 0) {
-      return Invariant.PROBABILITY_JUSTIFIED;
-    } else {
-      return Invariant.PROBABILITY_UNJUSTIFIED;
-    }
-#else
-    return Math.pow(.5, ppt.num_samples());
-#endif
-  }
-
   public boolean isExact() {
 #if defined(EQUAL) || defined(EQUALFLOAT)
     return true;

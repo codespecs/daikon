@@ -5,7 +5,7 @@ package daikon.test.diff;
 import daikon.*;
 import daikon.inv.*;
 
-public class DummyInvariant
+public class DiffDummyInvariant
   extends Invariant
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -14,40 +14,40 @@ public class DummyInvariant
   static final long serialVersionUID = 20020122L;
 
   public String formula;
-  public double probability;
+  public double confidence;
   public boolean interesting;
   public boolean isWorthPrinting;
 
-  public DummyInvariant(PptSlice ppt, String formula, boolean justified) {
+  public DiffDummyInvariant(PptSlice ppt, String formula, boolean justified) {
     this(ppt, formula, justified, true, true);
   }
 
-  public DummyInvariant(PptSlice ppt, String formula,
+  public DiffDummyInvariant(PptSlice ppt, String formula,
                         boolean justified, boolean interesting) {
     this(ppt, formula, justified, interesting, true);
   }
 
-  public DummyInvariant(PptSlice ppt, String formula,
+  public DiffDummyInvariant(PptSlice ppt, String formula,
                         boolean justified, boolean interesting,
                         boolean isWorthPrinting) {
-    this(ppt, formula, (justified ? .001 : 1), interesting, isWorthPrinting);
+    this(ppt, formula, (justified ? Invariant.CONFIDENCE_JUSTIFIED : Invariant.CONFIDENCE_UNJUSTIFIED), interesting, isWorthPrinting);
   }
 
-  public DummyInvariant(PptSlice ppt, String formula, double probability) {
-    this(ppt, formula, probability, true, true);
+  public DiffDummyInvariant(PptSlice ppt, String formula, double confidence) {
+    this(ppt, formula, confidence, true, true);
   }
 
-  public DummyInvariant(PptSlice ppt, String formula,
-                        double probability, boolean interesting) {
-    this(ppt, formula, probability, interesting, true);
+  public DiffDummyInvariant(PptSlice ppt, String formula,
+                        double confidence, boolean interesting) {
+    this(ppt, formula, confidence, interesting, true);
   }
 
-  public DummyInvariant(PptSlice ppt, String formula,
-                        double probability, boolean interesting,
+  public DiffDummyInvariant(PptSlice ppt, String formula,
+                        double confidence, boolean interesting,
                         boolean isWorthPrinting) {
     super(ppt);
     this.formula = formula;
-    this.probability = probability;
+    this.confidence = confidence;
     this.interesting = interesting;
     this.isWorthPrinting = isWorthPrinting;
   }
@@ -65,8 +65,8 @@ public class DummyInvariant
   }
 
   public boolean isSameFormula(Invariant other) {
-    if (other instanceof DummyInvariant) {
-      DummyInvariant o = (DummyInvariant) other;
+    if (other instanceof DiffDummyInvariant) {
+      DiffDummyInvariant o = (DiffDummyInvariant) other;
       return this.formula.equals(o.formula);
     } else {
       return false;
@@ -74,15 +74,11 @@ public class DummyInvariant
   }
 
   public double computeConfidence() {
-    return 1-probability;
-  }
-
-  public double computeProbability() {
-    return probability;
+    return confidence;
   }
 
   public String repr() {
-    return "DummyInvariant(" + ppt.arity + "," + formula + "," + probability + ")";
+    return "DiffDummyInvariant(" + ppt.arity + "," + formula + "," + confidence + ")";
   }
 
   public String format_using(OutputFormat format) {

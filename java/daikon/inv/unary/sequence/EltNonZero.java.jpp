@@ -92,7 +92,7 @@ public final class CLASSNAME
   PRIMITIVE max = NUMWRAPPER.MIN_VALUE;
 
   // If nonzero, use this as the range instead of the actual range.
-  // This lets one use a specified probability of nonzero (say, 1/10
+  // This lets one use a specified confidence of nonzero (say, 1/10
   // for pointers).
   int override_range = 0;
   boolean pointer_type = false;
@@ -299,21 +299,6 @@ public final class CLASSNAME
       double probability_one_elt_nonzero = 1 - confidence_one_elt_nonzero();
       // return 1 - Math.pow(probability_one_elt_nonzero, ppt.num_mod_samples());
       return 1 - Math.pow(probability_one_elt_nonzero, ppt.num_samples());
-    }
-  }
-
-  protected double computeProbability() {
-    // Maybe just use 0 as the min or max instead, and see what happens:
-    // see whether the "nonzero" invariant holds anyway.  (Perhaps only
-    // makes sense to do if the {Lower,Upper}Bound invariant doesn't imply
-    // the non-zeroness.)  In that case, do still check for no values yet
-    // received.
-    if ((override_range == 0) && ((min > 0) || (max < 0))) {
-      return Invariant.PROBABILITY_UNJUSTIFIED;
-    } else {
-      double probability_one_elt_nonzero = 1 - confidence_one_elt_nonzero();
-      // return Math.pow(probability_one_elt_nonzero, ppt.num_mod_samples());
-      return Math.pow(probability_one_elt_nonzero, ppt.num_samples());
     }
   }
 

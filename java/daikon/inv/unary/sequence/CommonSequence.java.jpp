@@ -152,10 +152,6 @@ public class CLASSNAME
     return 1 - Math.pow(.9, elts);
   }
 
-  protected double computeProbability() {
-    return Math.pow(.9, elts);
-  }
-
   public boolean isSameFormula(Invariant other) {
     Assert.assertTrue(other instanceof CLASSNAME);
     return true;

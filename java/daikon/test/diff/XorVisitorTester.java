@@ -44,16 +44,16 @@ public class XorVisitorTester extends TestCase {
     PptSlice slicem = new PptSlice1(A, new VarInfo[] {vars[4]});
     PptSlice slicen = new PptSlice1(A, new VarInfo[] {vars[5]});
     PptSlice sliceo = new PptSlice1(A, new VarInfo[] {vars[6]});
-    Invariant W = new DummyInvariant(slicew, "W", true);
-    Invariant X1 = new DummyInvariant(slicex, "X1", true);
-    Invariant X2 = new DummyInvariant(slicex, "X2", true);
-    Invariant Y = new DummyInvariant(slicey, "Y", true);
-    Invariant Z = new DummyInvariant(slicez, "Z", true);
-    Invariant M = new DummyInvariant(slicem, "M", true);
-    Invariant unjM = new DummyInvariant(slicem, "M", false);
-    Invariant N = new DummyInvariant(slicen, "N", true);
-    Invariant unjN = new DummyInvariant(slicen, "N", false);
-    Invariant unjO = new DummyInvariant(sliceo, "O", false);
+    Invariant W = new DiffDummyInvariant(slicew, "W", true);
+    Invariant X1 = new DiffDummyInvariant(slicex, "X1", true);
+    Invariant X2 = new DiffDummyInvariant(slicex, "X2", true);
+    Invariant Y = new DiffDummyInvariant(slicey, "Y", true);
+    Invariant Z = new DiffDummyInvariant(slicez, "Z", true);
+    Invariant M = new DiffDummyInvariant(slicem, "M", true);
+    Invariant unjM = new DiffDummyInvariant(slicem, "M", false);
+    Invariant N = new DiffDummyInvariant(slicen, "N", true);
+    Invariant unjN = new DiffDummyInvariant(slicen, "N", false);
+    Invariant unjO = new DiffDummyInvariant(sliceo, "O", false);
 
     InvMap map1 = new InvMap();
     map1.put(A, Arrays.asList(new Object[] {W, X1, Y}));

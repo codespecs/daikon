@@ -446,34 +446,12 @@ public class SEQSEQINTEQUAL
 #endif
   }
 
-  protected double computeProbability() {
-#if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
-    // It's an equality invariant
-    if (ppt.num_samples() == 0) {
-      return Invariant.PROBABILITY_UNJUSTIFIED;
-    } else {
-      return Invariant.PROBABILITY_JUSTIFIED;
-    }
-#else
-    return Math.pow(.5, ppt.num_values());
-#endif
-  }
-
   // For Comparison interface
   public double eq_confidence() {
     #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
       return getConfidence();
     #else
       return Invariant.CONFIDENCE_NEVER;
-    #endif
-  }
-
-  // For Comparison interface
-  public double eq_probability() {
-    #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
-      return getProbability();
-    #else
-      return Invariant.PROBABILITY_NEVER;
     #endif
   }
 

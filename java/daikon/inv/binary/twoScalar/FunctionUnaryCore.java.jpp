@@ -108,10 +108,6 @@ public final class CLASSNAME
     return Invariant.conf_is_ge(wrapper.ppt.num_values(), 5);
   }
 
-  public double computeProbability() {
-    return Invariant.prob_is_ge(wrapper.ppt.num_values(), 5);
-  }
-
 
   public String format_using(OutputFormat format,
                              VarInfoName vname1, VarInfo vi1,

@@ -24,10 +24,6 @@ public class AndJoiner
     return Invariant.confidence_and(left.computeConfidence(), right.computeConfidence());
   }
 
-  protected double computeProbability() {
-    return Invariant.prob_and(left.computeProbability(), right.computeProbability());
-  }
-
   public String repr() {
     return "[" + left.repr() + " and " +
       right.repr() + "]";

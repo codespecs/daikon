@@ -103,14 +103,6 @@ public class CommonStringSequence
     throw new Error("Not yet implemented");
   }
 
-  protected double computeProbability() {
-    if (falsified) {
-      return Invariant.PROBABILITY_NEVER;
-    } else {
-      return Math.pow(.9, elts);
-    }
-  }
-
   public DiscardInfo isObviousImplied() {
     return null;
   }

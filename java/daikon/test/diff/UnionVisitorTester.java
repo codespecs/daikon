@@ -47,16 +47,16 @@ public class UnionVisitorTester extends TestCase {
     PptSlice slicem = new PptSlice1(A, new VarInfo[] {vars[4]});
     PptSlice slicen = new PptSlice1(A, new VarInfo[] {vars[5]});
     PptSlice sliceo = new PptSlice1(A, new VarInfo[] {vars[6]});
-    Invariant W = new DummyInvariant(slicew, "W", true);
-    Invariant X1 = new DummyInvariant(slicex, "X1", true);
-    Invariant X2 = new DummyInvariant(slicex, "X2", true);
-    Invariant Y = new DummyInvariant(slicey, "Y", true);
-    Invariant Z = new DummyInvariant(slicez, "Z", true);
-    Invariant M_001 = new DummyInvariant(slicem, "M", .001);
-    Invariant M_1 = new DummyInvariant(slicem, "M", 1);
-    Invariant N_001 = new DummyInvariant(slicen, "N", .001);
-    Invariant N_0001 = new DummyInvariant(slicen, "N", .0001);
-    Invariant O_1 = new DummyInvariant(sliceo, "O", 1);
+    Invariant W = new DiffDummyInvariant(slicew, "W", true);
+    Invariant X1 = new DiffDummyInvariant(slicex, "X1", true);
+    Invariant X2 = new DiffDummyInvariant(slicex, "X2", true);
+    Invariant Y = new DiffDummyInvariant(slicey, "Y", true);
+    Invariant Z = new DiffDummyInvariant(slicez, "Z", true);
+    Invariant M_001 = new DiffDummyInvariant(slicem, "M", .999);
+    Invariant M_1 = new DiffDummyInvariant(slicem, "M", 0);
+    Invariant N_001 = new DiffDummyInvariant(slicen, "N", .999);
+    Invariant N_0001 = new DiffDummyInvariant(slicen, "N", .9999);
+    Invariant O_1 = new DiffDummyInvariant(sliceo, "O", 0);
 
     InvMap map1 = new InvMap();
     map1.put(A, Arrays.asList(new Object[] {W, X1, Y}));

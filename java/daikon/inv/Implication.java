@@ -82,16 +82,6 @@ public class Implication
     return confidence_and(pred_conf, cons_conf);
   }
 
-  protected double computeProbability() {
-    double pred_prob = left.computeProbability();
-    double cons_prob = right.computeProbability();
-    if ((pred_prob == PROBABILITY_NEVER)
-        || (cons_prob == PROBABILITY_NEVER)) {
-      return PROBABILITY_NEVER;
-    }
-    return prob_and(pred_prob, cons_prob);
-  }
-
   public String repr() {
     return "[Implication: " + left.repr()
       + " => " + right.repr() + "]";

@@ -250,10 +250,6 @@ public class CLASSNAME
     return 1 - Math.pow(.9, ((PptSlice1) ppt).num_samples());
   }
 
-  protected double computeProbability() {
-    return Math.pow(.9, ((PptSlice1) ppt).num_no_dup_values());
-  }
-
   public DiscardInfo isObviousStatically (VarInfo[] vis) {
     if (!vis[0].aux.getFlag(VarInfoAux.HAS_DUPLICATES)) {
       return new DiscardInfo(this, DiscardCode.obvious, "Obvious statically");
@@ -338,7 +334,7 @@ public class CLASSNAME
 
   // /**
   //  * Don't allow suppression because it will not allow us to track elts
-  //  * which is needed for computeProbability
+  //  * which is needed for computeConfidence
   //  */
   // public boolean inProcessSuppressOk() {
   //   return false;

@@ -21,8 +21,8 @@ public final class IsEqualityComparison implements Filter {
     Assert.assertTrue(o instanceof Invariant);
     if (!(o instanceof Comparison))
       return false;
-    double chance_prob = ((Comparison) o).eq_probability();
-    return chance_prob < Invariant.dkconfig_probability_limit;
+    double chance_conf = ((Comparison) o).eq_confidence();
+    return chance_conf > Invariant.dkconfig_confidence_limit;
   }
 
   // Sadly, this does not work -- it conflicts with the member definition.

@@ -116,26 +116,12 @@ public final class CLASSNAME
       // The two ranges do overlap.  Determine the extent of each range and
       // the extent of the overlap.  From this, compute the probability
       // that the values are different each time through.
-      double probability_one_nonequal = 1 - confidence_one_nonequal();
-      return 1 - Math.pow(probability_one_nonequal, samples);
-    }
-  }
-
-  public double computeProbability() {
-    if ((min1 > max2) || (max1 < min2)) {
-      // The two ranges do not overlap.
-      return Invariant.PROBABILITY_UNJUSTIFIED;
-    } else {
-      // The two ranges do overlap.  Determine the extent of each range and
-      // the extent of the overlap.  From this, compute the probability
-      // that the values are different each time through.
-      double probability_one_nonequal = 1 - confidence_one_nonequal();
-      return Math.pow(probability_one_nonequal, samples);
+      return 1 - Math.pow(1 - confidence_one_nonequal(), samples);
     }
   }
 
   // The two ranges do overlap.  Determine the extent of each range and
-  // the extent of the overlap.  From this, compute the probability
+  // the extent of the overlap.  From this, compute the confidence
   // that the values are different each time through.
   private double confidence_one_nonequal() {
     if (override_range != 0) {

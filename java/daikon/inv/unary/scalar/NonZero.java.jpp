@@ -88,11 +88,11 @@ public class NONZERO
   PRIMITIVE min = WRAPPER.MAX_VALUE;
   /** Largest value seen so far. **/
   PRIMITIVE max = WRAPPER.MIN_VALUE;
-  /** Maximum value ever used for max-min in probability calculation. **/
+  /** Maximum value ever used for max-min in confidence calculation. **/
   long range_max = 50;
 
   // If nonzero, use this as the range instead of the actual range.
-  // This lets one use a specified probability of nonzeroness (say, 1/10
+  // This lets one use a specified confidence of nonzeroness (say, 9/10
   // for pointers).
   long override_range = 0;
 #ifdef SCALAR
@@ -185,6 +185,7 @@ public class NONZERO
     return 1 - computeProbability();
   }
 
+  // used by computeConfidence
   protected double computeProbability() {
     Assert.assertTrue(! falsified);
     // This method works by looking at all sample values and calculating

@@ -20,7 +20,6 @@ daikon.derive.unary.SequenceLength.enabled
 daikon.derive.unary.SequenceMax.enabled
 daikon.derive.unary.SequenceMin.enabled
 daikon.derive.unary.SequenceSum.enabled
-daikon.inv.Invariant.probability_limit
 daikon.inv.binary.sequenceScalar.Member.enabled
 daikon.inv.binary.sequenceScalar.SeqIntLessThan.enabled
 daikon.inv.binary.sequenceScalar.SeqIntLessEqual.enabled

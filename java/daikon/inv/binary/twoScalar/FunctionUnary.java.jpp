@@ -98,10 +98,6 @@ public class CLASSNAME
     return core.computeConfidence();
   }
 
-  protected double computeProbability() {
-    return core.computeProbability();
-  }
-
   public boolean isExact() {
     return true;
   }

@@ -18,48 +18,48 @@ public class DetailedStatisticsVisitorTester extends TestCase {
   PptTopLevel ppt = Common.makePptTopLevel("Foo:::OBJECT", vars);
 
   PptSlice slice0 = ppt.joiner_view;
-  Invariant null_int_1_just = new DummyInvariant(slice0, "1", true);
-  Invariant null_int_1_unjust = new DummyInvariant(slice0, "1", false);
-  Invariant null_int_2_just = new DummyInvariant(slice0, "2", true);
-  Invariant null_int_2_unjust = new DummyInvariant(slice0, "2", false);
+  Invariant null_int_1_just = new DiffDummyInvariant(slice0, "1", true);
+  Invariant null_int_1_unjust = new DiffDummyInvariant(slice0, "1", false);
+  Invariant null_int_2_just = new DiffDummyInvariant(slice0, "2", true);
+  Invariant null_int_2_unjust = new DiffDummyInvariant(slice0, "2", false);
 
   Invariant null_unint_1_just =
-    new DummyInvariant(slice0, "1", true, false);
+    new DiffDummyInvariant(slice0, "1", true, false);
   Invariant null_unint_1_unjust =
-    new DummyInvariant(slice0, "1", false, false);
+    new DiffDummyInvariant(slice0, "1", false, false);
   Invariant null_unint_2_just =
-    new DummyInvariant(slice0, "2", true, false);
+    new DiffDummyInvariant(slice0, "2", true, false);
   Invariant null_unint_2_unjust =
-    new DummyInvariant(slice0, "2", false, false);
+    new DiffDummyInvariant(slice0, "2", false, false);
 
-  Invariant null_noprint = new DummyInvariant(slice0, "0", true, true, false);
+  Invariant null_noprint = new DiffDummyInvariant(slice0, "0", true, true, false);
 
   PptSlice slice1 = new PptSlice1(ppt, new VarInfo[] {vars[0]});
-  Invariant unary_int_1_just = new DummyInvariant(slice1, "1", true);
-  Invariant unary_int_1_unjust = new DummyInvariant(slice1, "1", false);
-  Invariant unary_int_2_just = new DummyInvariant(slice1, "2", true);
-  Invariant unary_int_2_unjust = new DummyInvariant(slice1, "2", false);
+  Invariant unary_int_1_just = new DiffDummyInvariant(slice1, "1", true);
+  Invariant unary_int_1_unjust = new DiffDummyInvariant(slice1, "1", false);
+  Invariant unary_int_2_just = new DiffDummyInvariant(slice1, "2", true);
+  Invariant unary_int_2_unjust = new DiffDummyInvariant(slice1, "2", false);
 
   Invariant unary_unint_1_just =
-    new DummyInvariant(slice1, "1", true, false);
+    new DiffDummyInvariant(slice1, "1", true, false);
   Invariant unary_unint_1_unjust =
-    new DummyInvariant(slice1, "1", false, false);
+    new DiffDummyInvariant(slice1, "1", false, false);
   Invariant unary_unint_2_just =
-    new DummyInvariant(slice1, "2", true, false);
+    new DiffDummyInvariant(slice1, "2", true, false);
   Invariant unary_unint_2_unjust =
-    new DummyInvariant(slice1, "2", false, false);
+    new DiffDummyInvariant(slice1, "2", false, false);
 
   PptSlice slice2 = new PptSlice2(ppt, new VarInfo[] {vars[0], vars[1]});
-  Invariant binary_1_just = new DummyInvariant(slice2, "1", true);
-  Invariant binary_1_unjust = new DummyInvariant(slice2, "1", false);
-  Invariant binary_2_just = new DummyInvariant(slice2, "2", true);
-  Invariant binary_2_unjust = new DummyInvariant(slice2, "2", false);
+  Invariant binary_1_just = new DiffDummyInvariant(slice2, "1", true);
+  Invariant binary_1_unjust = new DiffDummyInvariant(slice2, "1", false);
+  Invariant binary_2_just = new DiffDummyInvariant(slice2, "2", true);
+  Invariant binary_2_unjust = new DiffDummyInvariant(slice2, "2", false);
 
   PptSlice slice3 = new PptSlice3(ppt, vars);
-  Invariant ternary_1_just = new DummyInvariant(slice3, "1", true);
-  Invariant ternary_1_unjust = new DummyInvariant(slice3, "1", false);
-  Invariant ternary_2_just = new DummyInvariant(slice3, "2", true);
-  Invariant ternary_2_unjust = new DummyInvariant(slice3, "2", false);
+  Invariant ternary_1_just = new DiffDummyInvariant(slice3, "1", true);
+  Invariant ternary_1_unjust = new DiffDummyInvariant(slice3, "1", false);
+  Invariant ternary_2_just = new DiffDummyInvariant(slice3, "2", true);
+  Invariant ternary_2_unjust = new DiffDummyInvariant(slice3, "2", false);
 
   public static void main(String[] args) {
     daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);

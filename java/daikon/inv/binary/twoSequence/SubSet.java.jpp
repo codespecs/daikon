@@ -207,10 +207,6 @@ public class SUBSET
     return Invariant.CONFIDENCE_JUSTIFIED;
   }
 
-  protected double computeProbability() {
-    return Invariant.PROBABILITY_JUSTIFIED;
-  }
-
   // Convenience name to make this easier to find.
   public static Object[] isObviousSubSet(VarInfo subvar, VarInfo supervar) {
     return SUBSEQUENCE.isObviousSubSequence(subvar, supervar);

@@ -89,7 +89,7 @@ public class Modulus
       // destroyed instead.
       throw new Error("Modulus = 1");
       // Assert.assertTrue(falsified);
-      // // We already know this probability fails
+      // // We already know this confidence fails
       // return;
     } else if (no_samples_seen) {
       value1 = value;
@@ -138,17 +138,6 @@ public class Modulus
     double probability_one_elt_modulus = 1 - 1.0/modulus;
     // return 1 - Math.pow(probability_one_elt_modulus, ppt.num_mod_samples());
     return 1 - Math.pow(probability_one_elt_modulus, ppt.num_samples());
-  }
-
-  protected double computeProbability() {
-    if (modulus == 1)
-      return Invariant.PROBABILITY_NEVER;
-    if (modulus == 0) {
-      return Invariant.PROBABILITY_UNJUSTIFIED;
-    }
-    double probability_one_elt_modulus = 1 - 1.0/modulus;
-    // return Math.pow(probability_one_elt_modulus, ppt.num_mod_samples());
-    return Math.pow(probability_one_elt_modulus, ppt.num_samples());
   }
 
   public boolean isSameFormula(Invariant other)

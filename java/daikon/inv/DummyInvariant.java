@@ -151,10 +151,6 @@ public class DummyInvariant
     return Invariant.CONFIDENCE_JUSTIFIED;
   }
 
-  protected double computeProbability() {
-    return Invariant.PROBABILITY_JUSTIFIED;
-  }
-
   public void negate() {
     negated = !negated;
   }

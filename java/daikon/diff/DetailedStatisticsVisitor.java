@@ -122,7 +122,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
     switch (relationship) {
     case REL_SAME_JUST1_UNJUST2:
     case REL_SAME_UNJUST1_JUST2:
-      freq[type][relationship] += calculateProbabilityDifference(inv1, inv2);
+      freq[type][relationship] += calculateConfidenceDifference(inv1, inv2);
       break;
     default:
       freq[type][relationship]++;
@@ -133,22 +133,16 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
 
   /**
    * Returns the difference in the probabilites of the two invariants.
-   * Probability values greater than 1 (i.e. PROBABILITY_NEVER) are
-   * rounded down to 1.
+   * Confidence values less than 0 (i.e. CONFIDENCE_NEVER) are
+   * rounded up to 0.
    **/
-  private static double calculateProbabilityDifference(Invariant inv1,
+  private static double calculateConfidenceDifference(Invariant inv1,
                                                       Invariant inv2) {
     Assert.assertTrue(inv1 != null && inv2 != null);
     double diff;
-    if (Invariant.dkconfig_use_confidence) {
-      double conf1 = Math.max(inv1.getConfidence(), 0);
-      double conf2 = Math.max(inv2.getConfidence(), 0);
-      diff = Math.abs(conf1 - conf2);
-    } else {
-      double prob1 = Math.min(inv1.getProbability(), 1);
-      double prob2 = Math.min(inv2.getProbability(), 1);
-      diff = Math.abs(prob1 - prob2);
-    }
+    double conf1 = Math.max(inv1.getConfidence(), 0);
+    double conf2 = Math.max(inv2.getConfidence(), 0);
+    diff = Math.abs(conf1 - conf2);
     return diff;
   }
 

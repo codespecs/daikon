@@ -341,10 +341,6 @@ public final class CLASSNAME
     return Invariant.conf_is_ge(values_seen, MINPAIRS);
   }
 
-  public double computeProbability() {
-    return Invariant.prob_is_ge(values_seen, MINPAIRS);
-  }
-
   public String repr() {
     return CLASSSTRING + wrapper.varNames() + ": "
       + "a=" + a

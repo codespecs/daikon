@@ -15,7 +15,7 @@ import daikon.inv.filter.*;
 
     bad_sample // is falsified by a seen example
 
-    bad_probability // has an unjustified probability
+    bad_confidence // has an unjustified confidence
 
     <unused> // was few_modified_samples
 
@@ -56,8 +56,8 @@ public class DiscardCode implements Comparable,Serializable {
   /** used when an invariant is falsified by a seen example */
   public static final DiscardCode bad_sample = new DiscardCode(1);
 
-  /** used when an invariant has an unjustified probability */
-  public static final DiscardCode bad_probability = new DiscardCode(2);
+  /** used when an invariant has an unjustified confidence */
+  public static final DiscardCode bad_confidence = new DiscardCode(2);
 
   /** used when an invariant has not had enough samples */
   public static final DiscardCode not_enough_samples = new DiscardCode(4);
@@ -106,7 +106,7 @@ public class DiscardCode implements Comparable,Serializable {
 
   /** The enumeration members in assorted order: <br>
       // not_discarded,
-      obvious, bad_sample, bad_probability, [unused], not_enough_samples, non_canonical_var,<br>
+      obvious, bad_sample, bad_confidence, [unused], not_enough_samples, non_canonical_var,<br>
       implied_post_condition, only_constant_vars, derived_param, unmodified_var, control_check, exact, var filter
    * @return this.enumValue.compareTo(o.enumValue) where the enumValue are treated as Integers
    * @throws ClassCastException iff !(o instanceof DiscardCode)
@@ -138,7 +138,7 @@ public class DiscardCode implements Comparable,Serializable {
     else if (filter instanceof OnlyConstantVariablesFilter)
       return only_constant_vars;
     else if (filter instanceof UnjustifiedFilter)
-      return bad_probability;
+      return bad_confidence;
     else if (filter instanceof UnmodifiedVariableEqualityFilter)
       return unmodified_var;
     else if (filter instanceof VariableFilter)
@@ -148,7 +148,7 @@ public class DiscardCode implements Comparable,Serializable {
   }
 
   /** Prints out a string describing the reason for discard
-   * @return one of {"Not discarded","Obvious,"Bad sample seen","Unjustified probability","Few modified samples","Not enough samples",
+   * @return one of {"Not discarded","Obvious,"Bad sample seen","Unjustified confidence","Few modified samples","Not enough samples",
                       "Non-canonical variable","Implied post state","Only constant variables in this expression","Derived Param","Control Check"
                       ,"Exact","Variable Filter","Filtered"}
    */
@@ -160,7 +160,7 @@ public class DiscardCode implements Comparable,Serializable {
     else if (this.enumValue==1)
       return "Bad sample seen";
     else if (this.enumValue==2)
-      return "Unjustified probability";
+      return "Unjustified confidence";
     else if (this.enumValue==3)
       return "Few modified samples";
     else if (this.enumValue==4)
@@ -201,7 +201,7 @@ public class DiscardCode implements Comparable,Serializable {
     else if (enumValue==1)
       return bad_sample;
     else if (enumValue==2)
-      return bad_probability;
+      return bad_confidence;
     else if (enumValue==3)
       throw new Error("few_modified_samples no longer exists");
     else if (enumValue==4)

@@ -192,10 +192,6 @@ public class CLASSNAME
     return core.computeConfidence();
   }
 
-  protected double computeProbability() {
-    return core.computeProbability();
-  }
-
   public boolean isSameFormula(Invariant other)
   {
     return core.isSameFormula(((CLASSNAME) other).core);

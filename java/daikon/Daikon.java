@@ -581,13 +581,6 @@ public final class Daikon {
           }
           Configuration.getInstance().apply
             ("daikon.inv.Invariant.confidence_limit", String.valueOf(limit));
-        } else if (prob_limit_SWITCH.equals(option_name)) {
-          double limit = Double.parseDouble(g.getOptarg());
-          if ((limit < 0.0) || (limit > 1.0)) {
-            throw new Error(prob_limit_SWITCH + " must be between [0..1]");
-          }
-          Configuration.getInstance().apply
-            ("daikon.inv.Invariant.probability_limit", String.valueOf(limit));
         } else if (esc_output_SWITCH.equals(option_name)) {
           output_style = OutputFormat.ESCJAVA;
         } else if (simplify_output_SWITCH.equals(option_name)) {

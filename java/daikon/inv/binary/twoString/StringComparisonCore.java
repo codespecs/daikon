@@ -127,6 +127,10 @@ public final class StringComparisonCore
     return InvariantStatus.WEAKENED;
   }
 
+  // This is very tricky, because whether two variables are equal should
+  // presumably be transitive, but it's not guaranteed to be so when using
+  // this method and not dropping out all variables whose values are ever
+  // missing.
   public double computeConfidence() {
     if (can_be_lt || can_be_gt) {
       return 1 - Math.pow(.5, wrapper.ppt.num_values());
@@ -141,28 +145,6 @@ public final class StringComparisonCore
         // None of the can_be_X's are true.
         // (We haven't seen any values yet.)
         return Invariant.CONFIDENCE_UNJUSTIFIED;
-      }
-    }
-  }
-
-  // This is very tricky, because whether two variables are equal should
-  // presumably be transitive, but it's not guaranteed to be so when using
-  // this method and not dropping out all variables whose values are ever
-  // missing.
-  public double computeProbability() {
-    if (can_be_lt || can_be_gt) {
-      return Math.pow(.5, wrapper.ppt.num_values());
-    } else {
-      if (can_be_eq) {
-        // It's an equality invariant.  I ought to use the actual ranges somehow.
-        // Actually, I can't even use this .5 test because it can make
-        // equality non-transitive.
-        // return Math.pow(.5, wrapper.ppt.num_values());
-        return Invariant.PROBABILITY_JUSTIFIED;
-      } else {
-        // None of the can_be_X's are true.
-        // (We haven't seen any values yet.)
-        return Invariant.PROBABILITY_UNJUSTIFIED;
       }
     }
   }

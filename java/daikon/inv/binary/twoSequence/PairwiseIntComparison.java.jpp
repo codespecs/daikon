@@ -369,20 +369,6 @@ public class PAIRWISEINTEQUAL
     }
   }
 
-  protected double computeProbability() {
-    int num_values = ((PptSlice2) ppt).num_elt_values();
-    if (num_values == 0) {
-      return Invariant.PROBABILITY_UNJUSTIFIED;
-    } else {
-#if (defined(EQUAL) || defined(EQUALFLOAT))
-      // It's an equality invariant
-      return Invariant.PROBABILITY_JUSTIFIED;
-#else
-      return Math.pow(.5, num_values);
-#endif
-    }
-  }
-
   public boolean isSameFormula(Invariant other)
   {
     return true;

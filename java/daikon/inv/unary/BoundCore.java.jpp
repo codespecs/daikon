@@ -283,6 +283,7 @@ public class LOWERBOUNDCORE
     return 1 - computeProbability();
   }
 
+  // used by computeConfidence
   public double computeProbability() {
     // The bound is justified if both of two conditions is satisfied:
     //  1. there are at least required_samples_at_bound samples at the bound

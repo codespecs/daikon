@@ -345,14 +345,6 @@ public class CLASSNAME
     }
   }
 
-  protected double computeProbability() {
-    if (var1_in_var2 && var2_in_var1) {
-      return Invariant.PROBABILITY_UNJUSTIFIED;
-    } else {
-      return Invariant.PROBABILITY_JUSTIFIED;
-    }
-  }
-
   /**
    * @return Array "a" such that a[0] is a valid discardCode and a[1] is
    * a valid discardString.  If the Invariant is not an obvious subsequence, both

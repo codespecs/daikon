@@ -71,28 +71,11 @@ public abstract class Invariant
 
   /**
    * Real number between 0 and 1.  The invariant is displayed only if
-   * the probability that the invariant occurred by chance is
-   * less than this.  (May also be set
-   * via --prob_limit switch to Daikon; refer to manual.)
-   * Enabled only if configuration variable use_confidence is false.
-   **/
-  public static double dkconfig_probability_limit = .01;
-
-  /**
-   * Real number between 0 and 1.  The invariant is displayed only if
    * the confidence that the invariant did not occur by chance is
    * greater than this.  (May also be set
    * via --conf_limit switch to Daikon; refer to manual.)
-   * Enabled only if configuration variable use_confidence is true.
    **/
   public static double dkconfig_confidence_limit = .99;
-
-  /**
-   * If true, use confidence-style filtering (computed from ModBitTracker
-   * and ValueSet).
-   * Otherwise, use probability-style filtering (computed from ValueTracker).
-   **/
-  public static boolean dkconfig_use_confidence = true;
 
   /**
    * A boolean value. If true, Daikon's Simplify output (printed when
@@ -243,7 +226,7 @@ public abstract class Invariant
   }
 
 
-  /** Return the probability that both conditions are satisfied. */
+  /** Return the confidence that both conditions are satisfied. */
   public static final double confidence_and(double c1, double c2) {
     Assert.assertTrue(0 <= c1 && c1 <= 1, "confidence_and: bad c1 = " + c1);
     Assert.assertTrue(0 <= c2 && c2 <= 1, "confidence_and: bad c2 = " + c2);
@@ -254,7 +237,7 @@ public abstract class Invariant
     return result;
   }
 
-  /** Return the probability that all three conditions are satisfied. */
+  /** Return the confidence that all three conditions are satisfied. */
   public static final double confidence_and(double c1, double c2, double c3) {
     Assert.assertTrue(0 <= c1 && c1 <= 1, "confidence_and: bad c1 = " + c1);
     Assert.assertTrue(0 <= c2 && c2 <= 1, "confidence_and: bad c2 = " + c1);
@@ -266,12 +249,13 @@ public abstract class Invariant
     return result;
   }
 
-  /** Return the probability that either condition is satisfied. */
+  /** Return the confidence that either condition is satisfied. */
   public static final double confidence_or(double c1, double c2) {
     // Not "1-(1-c1)*(1-c2)" because that can produce a value too large; we
     // don't want the result to be larger than the larger argument.
     return Math.max(c1, c2);
   }
+
 
   /** Return the probability that both conditions are satisfied. */
   public static final double prob_and(double p1, double p2) {
@@ -323,32 +307,26 @@ public abstract class Invariant
   }
 
 
-  // There are two ways to compute justification.
-  //  * The probability routines (getProbability and internal helper
-  //    computeProbability) use ValueTracker information.
-  //  * The confidence routines (getConfidence and internal helper
-  //    computeConfidence) use ModBitTracker information.
-  // Configuration variable dkconfig_use_confidence controls which of the
-  // two techniques is used.
+  // The confidence routines (getConfidence and internal helper
+  // computeConfidence) use ModBitTracker information to compute
+  // justification.
 
-  // There are three probability/confidence routines:
+  // There are three confidence routines:
   //  justified() is what most clients should call
-  //  getProbability() gives the actual probability.  (Likewise for
-  //    getConfidence().)  It used to cache results, but it does not
-  //    do so any longer.
-  //  computeProbability() in an internal helper method that does the
+  //  getConfidence() gives the actual confidence.  It used to cache
+  //    results, but it does not do so any longer.
+  //  computeConfidence() is an internal helper method that does the
   //    actual work, but it should not be called externally, only by
-  //    getProbability.  (Likewise for computeConfidence().)  It ignores
-  //    whether the invariant is falsified.
+  //    getConfidence.  It ignores whether the invariant is falsified.
 
-  // There are two general approaches to computing probability/confidence
+  // There are two general approaches to computing confidence
   // when there is a threshold (such as needing to see 10 samples):
-  //  * Make the probability typically either 0 or 1, transitioning
+  //  * Make the confidence typically either 0 or 1, transitioning
   //    suddenly between the two as soon as the 10th sample is observed.
-  //  * Make the probability transition more gradually; for instance, each
-  //    sample chnages the probability by 10%.
+  //  * Make the confidence transition more gradually; for instance, each
+  //    sample changes the confidence by 10%.
   // The gradual approach has advantages and disadvantages:
-  //  + Users can set the probability limit to see invariants earlier; this
+  //  + Users can set the confidence limit to see invariants earlier; this
   //    is simpler than figuring out all the thresholds to set.
   //  + Tools such as the operational difference for test suite generation
   //    are assisted by knowing whether they are getting closer to
@@ -356,83 +334,14 @@ public abstract class Invariant
   //  - The code is a bit more complicated.
 
 
-  /** A wrapper around getConfidence() or getProbability(). **/
+  /** A wrapper around getConfidence() or getConfidence(). **/
   public final boolean justified() {
-    if (dkconfig_use_confidence) {
-      boolean just = (!falsified
-                      && (getConfidence() >= dkconfig_confidence_limit));
-      if (logOn())
-        log ("justified = " + just + ", confidence = " + getConfidence());
-      return (just);
-    } else {
-      boolean just = !falsified && enoughSamples() &&
-        (getProbability() <= dkconfig_probability_limit);
-      if (logOn())
-        log ("justified = " + just + ", enoughSamples = " + enoughSamples()
-             + ", probability = " + getProbability() + ", repr = " + repr() +
-             ", ppt.num_values() = " + ppt.num_values()
-             // + ", num_mod_samples = " + ppt.num_mod_samples()
-             );
-      return (just);
-    }
+    boolean just = (!falsified
+                    && (getConfidence() >= dkconfig_confidence_limit));
+    if (logOn())
+      log ("justified = " + just + ", confidence = " + getConfidence());
+    return (just);
   }
-
-  // If probability == PROBABILITY_NEVER, then this invariant can be eliminated.
-  /**
-   * Given that this invariant has been true for all values seen so far,
-   * this method returns the probability that that situation has occurred
-   * by chance alone.  The result is a value between 0 and 1 inclusive.  0
-   * means that this invariant could never have occurred by chance alone;
-   * we are fully confident that its truth is no coincidence.  1 means that
-   * the invariant is certainly a happenstance, so the truth of the
-   * invariant is not relevant and it should not be reported.  Values
-   * between 0 and 1 give differing confidences in the invariant.
-   * <p>
-   *
-   * As an example, if the invariant is "x!=0", and only one value, 22, has
-   * been seen for x, then the conclusion "x!=0" is not justified.  But if
-   * there have been 1,000,000 values, and none of them were 0, then we may
-   * be confident that the property "x!=0" is not a coincidence.
-   * <p>
-   *
-   * This method need not check the value of field "falsified", as the
-   * caller does that.
-   * <p>
-   *
-   * This method is a wrapper around computeProbability(), which does the
-   * actual work.
-   * @see #computeProbability()
-   **/
-  public final double getProbability() {
-    Assert.assertTrue(! falsified);
-    // if (falsified)
-    //   return PROBABILITY_NEVER;
-    double result = computeProbability();
-    if (result < PROBABILITY_JUSTIFIED || result > PROBABILITY_NEVER) {
-      // Can't print this.repr_prob(), as it may compute the probability!
-      System.out.println("Bad invariant probability " + result + ": ");
-      System.out.println(this.getClass());
-      System.out.println(repr());
-      System.out.println(this.format());
-    }
-    // System.out.println("getProbability: " + getClass().getName() + " " + ppt.varNames());
-    Assert.assertTrue((result == PROBABILITY_JUSTIFIED)
-                  || (result == PROBABILITY_UNJUSTIFIED)
-                  || (result == PROBABILITY_NEVER)
-                  || ((0 <= result) && (result <= 1))
-                  // This can be expensive, so comment out.
-                  // , getClass().getName() + ": " + repr()
-                  );
-    return result;
-  }
-
-  /**
-   * This method computes the probability that this invariant occurred by chance.
-   * Users should use getProbability() instead.
-   * @see     #getProbability()
-   **/
-  protected abstract double computeProbability();
-
 
   // If confidence == CONFIDENCE_NEVER, then this invariant can be eliminated.
   /**
@@ -480,20 +389,6 @@ public abstract class Invariant
                   // This can be expensive, so comment out.
                   // , getClass().getName() + ": " + repr()
                   );
-    if (false) {
-      // getProbability fails unless dkconfig_use_confidence is false
-      boolean old_use_conf = Invariant.dkconfig_use_confidence;
-      Invariant.dkconfig_use_confidence = false;
-      double prob = getProbability();
-      if (result != 1 - prob) {
-        if (result >= .99 && result <= 1 && prob >=0 && prob <= .01) {
-          System.out.println("Justification mismatch ("
-                             + "conf=" + result + ", prob=" + prob
-                             + ") for " + format());
-        }
-      }
-      Invariant.dkconfig_use_confidence = old_use_conf;
-    }
     return result;
   }
 
@@ -806,13 +701,13 @@ public abstract class Invariant
     return this.getClass().getName() + varNames();
   }
 
-  // repr()'s output should not include result of getProbability, because
-  // repr() may be called from computeProbability or elsewhere for
+  // repr()'s output should not include result of getConfidence, because
+  // repr() may be called from computeConfidence or elsewhere for
   // debugging purposes.
   /**
    * For printing invariants, there are two interfaces:
    * repr gives a low-level representation
-   * (repr_prop also prints the probability), and
+   * (repr_prop also prints the confidence), and
    * format gives a high-level representation for user output.
    **/
   public String repr() {
@@ -824,13 +719,12 @@ public abstract class Invariant
   /**
    * For printing invariants, there are two interfaces:
    * repr gives a low-level representation
-   * (repr_prop also prints the probability), and
+   * (repr_prop also prints the confidence), and
    * format gives a high-level representation for user output.
    **/
   public String repr_prob() {
     return repr()
-      + "; probability = " + getProbability()
-      // + "; confidence = " + getConfidence()
+      + "; confidence = " + getConfidence()
       ;
   }
 
@@ -873,7 +767,7 @@ public abstract class Invariant
   /**
    * For printing invariants, there are two interfaces:
    * repr gives a low-level representation
-   * (repr_prop also prints the probability), and
+   * (repr_prop also prints the confidence), and
    * format gives a high-level representation for user output.
    **/
   public String format() {
