@@ -235,8 +235,7 @@ C/C++ front end dfec
 * Daikon runtime customization::  
 * Pointer type disambiguation::  
 * Instrumentation scope::       
-* dfec requirements and troubleshooting::  
-* dfec troubleshooting::        
+* dfec requirements::           
 
 Pointer type disambiguation
 
@@ -247,16 +246,11 @@ Instrumentation scope
 * Memory tracking details::     
 * Memory tracking in libraries::  
 
-dfec requirements and troubleshooting
+dfec requirements
 
 * C program requirements::      
 * Header file dependencies::    
 * gcc version::                 
-
-dfec troubleshooting
-
-* Trouble running dfec::        
-* Trouble running instrumented code::  
 
 Perl front end dfepl
 
@@ -323,7 +317,11 @@ Problems with dfec
 
 * dfec instrumentation problems::  
 * Compilation and linking of instrumented code problems::  
-* Instrumented code problems::  
+* Running instrumented code problems::  
+
+Problems running dfec
+
+* Lackwit problems::            
 
 Problems compiling and linking instrumented programs
 
@@ -3369,7 +3367,7 @@ Run Daikon on the declaration files and data trace files.
 @end enumerate
 
 This section discusses the steps in more detail, with an emphasis on the
-first step.  If you have trouble, @xref{dfec requirements and troubleshooting}
+first step.  If you have trouble, @xref{dfec requirements}
 
 @c The three crucial files are @command{dfec}, 
 @c @file{daikon_runtime.h}, and 
@@ -3441,8 +3439,7 @@ java daikon.Daikon daikon-output/myprog.decls \
 * Daikon runtime customization::  
 * Pointer type disambiguation::  
 * Instrumentation scope::       
-* dfec requirements and troubleshooting::  
-* dfec troubleshooting::        
+* dfec requirements::           
 @end menu
 
 @node    dfec command-line arguments, Daikon runtime customization, C/C++ front end dfec, C/C++ front end dfec
@@ -3887,7 +3884,7 @@ orig(*bar) == 6
 @end example
 
 
-@node    Instrumentation scope, dfec requirements and troubleshooting, Pointer type disambiguation, C/C++ front end dfec
+@node    Instrumentation scope, dfec requirements, Pointer type disambiguation, C/C++ front end dfec
 @subsection Instrumentation scope
 
 @cindex instrumentation scope
@@ -4048,8 +4045,8 @@ compile.
 @end enumerate
 
 
-@node    dfec requirements and troubleshooting, dfec troubleshooting, Instrumentation scope, C/C++ front end dfec
-@subsection dfec requirements and troubleshooting
+@node    dfec requirements,  , Instrumentation scope, C/C++ front end dfec
+@subsection dfec requirements
 
 @command{dfec} does not output the contents of C unions.  This section
 of the manual lists other requirements and limitations.
@@ -4067,7 +4064,7 @@ For additional help troubleshooting dfec, @xref{dfec problems}.
 * gcc version::                 
 @end menu
 
-@node    C program requirements, Header file dependencies, dfec requirements and troubleshooting, dfec requirements and troubleshooting
+@node    C program requirements, Header file dependencies, dfec requirements, dfec requirements
 @subsubsection C program requirements
 
 
@@ -4184,8 +4181,8 @@ which may not work with your C compiler).
 @command{dfec} does not accept every legal program in the intersection
 of ANSI/ISO C and ANSI/ISO C++.  Here are the exceptions.
 @enumerate
-@item
 
+@item
 If g++ gives an error message while compiling the instrumented code,
 then first try compiling the uninstrumented code with @command{g++},
 and remove any errors that g++ issues.  For instance, C++ requires
@@ -4214,7 +4211,7 @@ in a non-standard way, you may experience trouble.
 @end enumerate
 
 
-@node    Header file dependencies, gcc version, C program requirements, dfec requirements and troubleshooting
+@node    Header file dependencies, gcc version, C program requirements, dfec requirements
 @subsubsection Header file dependencies
 
 Some programs contain dependences on header files that make code that
@@ -4269,7 +4266,7 @@ ensure that your code is both legal C and legal C++, or to work around
 other problems.
 
 
-@node    gcc version,  , Header file dependencies, dfec requirements and troubleshooting
+@node    gcc version,  , Header file dependencies, dfec requirements
 @subsubsection gcc version
 
 
@@ -5494,28 +5491,23 @@ should solve the problem.
 @node    dfec problems, Daikon problems, dfej problems, Troubleshooting
 @section Problems with dfec
 
+If you have trouble while instrumenting a C program, or while
+compiling the instrumented program, first make sure that the program
+being instrumented satisfies dfec's requirements: @xref{C program requirements}.
 
 Problems with dfec can be divided into those encountered when running
 dfec, those encountered when compiling the instrumented code, and
 those encountered when running the instrumented code.
 
-
-
-
 @menu
 * dfec instrumentation problems::  
 * Compilation and linking of instrumented code problems::  
-* Instrumented code problems::  
+* Running instrumented code problems::  
 @end menu
+
 
 @node    dfec instrumentation problems, Compilation and linking of instrumented code problems, dfec problems, dfec problems
 @subsection Problems running dfec
-
-If you have trouble while instrumenting a C program, or while
-compiling the instrumented program, @xref{C program requirements}.
-
-@node    Compilation and linking of instrumented code problems, Instrumented code problems, dfec instrumentation problems, dfec problems
-@subsection Problems compiling and linking instrumented programs
 
 dfec errors in system files, such as
 @file{.../gcc-3.2.1/include/c++/3.2.1/cstdlib}, or in the Daikon C
@@ -5528,11 +5520,15 @@ dfec is sometimes confused by the conditional expression (@samp{?:})
 operator, saying that the two sides are of different types.  If either
 of the reported types involve ``DaikonSmartPointer'', then try
 rewriting the expression using a conditional statement (@samp{if
-... else}).  Otherwise, just add an appropriate cast to give the two
+... else}).  Otherwise, add an appropriate cast to give the two
 arms of the conditional expression the same type.
 
 
-@node    Lackwit problems, Compilation and linking of instrumented code problems, dfec problems, dfec problems
+@menu
+* Lackwit problems::            
+@end menu
+
+@node    Lackwit problems,  , dfec instrumentation problems, dfec instrumentation problems
 @subsubsection Lackwit problems
 
 @cindex Lackwit error, identifier undefined
@@ -5563,6 +5559,11 @@ then you have not correctly installed the dfec distribution
 (@pxref{Installing dfec}).  The @file{lwpp-init.pl} file should appear
 in the directory referred to by environment variable DFECDIR.  (That
 directory is placed on your path by the standard Daikon dotfiles.)
+
+
+@node    Compilation and linking of instrumented code problems, Running instrumented code problems, dfec instrumentation problems, dfec problems
+@subsection Problems compiling and linking instrumented programs
+
 
 
 @menu
