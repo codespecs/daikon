@@ -9,7 +9,7 @@ import java.lang.reflect.*;
 public class PairwiseFunctionUnary extends TwoSequence {
 
   // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface
+  // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
 
   FunctionUnaryCore core;
@@ -35,18 +35,18 @@ public class PairwiseFunctionUnary extends TwoSequence {
   public String format_esc() {
     return "format_esc " + this.getClass() + " needs to be changed: " + format();
   }
-   
+
   /* IOA */
   public String format_ioa(String classname) {
-    if (var1().isIOASet() || var2().isIOASet()) 
+    if (var1().isIOASet() || var2().isIOASet())
       return "Not valid for sets: " + format();
-    String[] form = 
+    String[] form =
       VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var1(), var2() }, classname);
     return form[0]+"("+form[4]+"="+form[5]+") => ("+core.format_ioa(form[1],form[2])+")"+form[3];
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
   }
 
   public void add_modified(long[] x_arr, long[] y_arr, int count) {
