@@ -191,10 +191,6 @@ Java front end dfej
 * Scope of instrumentation::    
 * Refined runtime types::       
 
-Refined runtime types
-
-* C/C++ front end dfec::
-
 C/C++ front end dfec
 
 * dfec command-line arguments::  
@@ -245,8 +241,10 @@ Problems with dfej
 
 Problems running Daikon
 
-* Abnormal termination::        
+* No return from procedure::    
 * Out of memory::               
+* Ajax errors::                 
+* Simplify errors::             
 
 Other problems
 
@@ -2386,9 +2384,7 @@ comment immediately before the declared type (but after any modifiers like
 @c   			  The current version does not require Python.
 @c @end example
 
-@menu
-* C/C++ front end dfec::
-@end menu
+
 
 @node    C/C++ front end dfec,  , Java front end dfej, Front ends
 @section C/C++ front end dfec
@@ -3406,8 +3402,10 @@ your application, but not those with anonymous classes.
 
 
 @menu
-* Abnormal termination::        
+* No return from procedure::    
 * Out of memory::               
+* Ajax errors::                 
+* Simplify errors::             
 @end menu
 
 @node    No return from procedure, Out of memory, Daikon problems, Daikon problems
@@ -3439,7 +3437,7 @@ Otherwise, it uses the stack technique.
 
 
 
-@node    Out of memory,  , Abnormal termination, Daikon problems
+@node    Out of memory, Ajax errors, No return from procedure, Daikon problems
 @subsection Out of memory
 
 @cindex out of memory error
@@ -3472,8 +3470,8 @@ presently tell you how to do that.)
 Any output generated before the out-of-memory error is perfectly valid.
 
 
-@node    Simplify errors,  , Abnormal termination, Daikon problems
-@subsection Simplify errors
+@node    Ajax errors, Simplify errors, Out of memory, Daikon problems
+@subsection Ajax errors
 
 @cindex Ajax, problem with
 
@@ -3488,7 +3486,7 @@ Ajax cannot be run, Daikon proceeds without error.
 
 
 
-@node    Simplify errors,  , Abnormal termination, Daikon problems
+@node    Simplify errors,  , Ajax errors, Daikon problems
 @subsection Simplify errors
 
 @cindex Simplify, could not utilize
