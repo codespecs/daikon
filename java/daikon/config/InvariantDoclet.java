@@ -48,18 +48,16 @@ public class InvariantDoclet
 
   protected RootDoc root;   // root document
   protected TreeMap cmap;   // map of classdoc to derived classes for the class
-  protected HashMap fields;
   protected boolean dump_class_tree = false;
 
 
   public InvariantDoclet(RootDoc doc) {
     root = doc;
-    fields = new HashMap();
     cmap = new TreeMap();
   }
 
   /**
-   * Process a javadoc tree and call processField for each field found.
+   * Process a javadoc tree and create the specified invariant output.
    **/
   public void process()
     throws IOException {
@@ -254,25 +252,25 @@ public class InvariantDoclet
       }
 
       //get a list of any other configuration variables
-      Vector fields = find_fields (dc, Configuration.PREFIX);
-      for (int i = 0; i < fields.size(); i++) {
-        FieldDoc f =   (FieldDoc) fields.get (i);
+      Vector config_vars = find_fields (dc, Configuration.PREFIX);
+      for (int i = 0; i < config_vars.size(); i++) {
+        FieldDoc f =   (FieldDoc) config_vars.get (i);
         if (f.name().equals (Configuration.PREFIX + "enabled")) {
-          fields.remove (i);
+          config_vars.remove (i);
           break;
         }
       }
 
       //note the other configuration variables
 
-      if (fields.size() > 0) {
+      if (config_vars.size() > 0) {
         out.println();
         out.println("See also the following configuration option"
-                    + (fields.size() > 1 ? "s" : "") + ":");
+                    + (config_vars.size() > 1 ? "s" : "") + ":");
         out.println("    @itemize @bullet");
-        for (int i = 0; i < fields.size(); i++) {
+        for (int i = 0; i < config_vars.size(); i++) {
           out.print("    @item ");
-          FieldDoc f = (FieldDoc) fields.get (i);
+          FieldDoc f = (FieldDoc) config_vars.get (i);
           out.println(UtilMDE.replaceString(f.qualifiedName(),
                                             Configuration.PREFIX, ""));
         }
@@ -345,7 +343,7 @@ public class InvariantDoclet
   }
 
   /**
-   * Look for fields in the specified class that being with the
+   * Look for fields in the specified class that begin with the
    * specified prefix.
    *
    * @param cd          ClassDoc of the class to search
@@ -368,100 +366,6 @@ public class InvariantDoclet
     }
 
     return (list);
-  }
-
-  /**
-   * Call Process(String, String) for each configuration field found.
-   * Intended to be overridden.
-   **/
-  public void processField(FieldDoc field) {
-    String name = field.name();
-    if (name.startsWith(Configuration.PREFIX)) {
-      String fullname = field.qualifiedName();
-      int snip = fullname.indexOf(Configuration.PREFIX);
-      fullname = fullname.substring(0, snip)
-        + fullname.substring(snip + Configuration.PREFIX.length());
-      String desc = field.commentText();
-      process(fullname, desc);
-    }
-  }
-
-
-  public static String NO_DESCRIPTION = "(no description provided)";
-  public static String UNKNOWN_DEFAULT = "The default value is not known.";
-
-  /**
-   * Add <name, desc> pair to the map field 'fields'.
-   **/
-  public void process(String name, String desc) {
-    if ("".equals(desc.trim()))
-      desc = NO_DESCRIPTION;
-
-    fields.put(name, desc);
-  }
-
-  private String getDefaultString(String field) {
-    try {
-      int i = field.lastIndexOf('.');
-      String classname = field.substring(0, i);
-      String fieldname = field.substring(i+1);
-      Class c = Class.forName(classname);
-      Field f = c.getField(Configuration.PREFIX + fieldname);
-      Object value = f.get(null);
-      return "The default value is `" + value + "'.";
-    } catch (Exception e) {
-      System.err.println(e);
-      return UNKNOWN_DEFAULT;
-    }
-  }
-
-  public void writeTexInfo(PrintWriter out) {
-    out.println("@c BEGIN AUTO-GENERATED CONFIG OPTIONS LISTING");
-    out.println();
-
-    List keys = new ArrayList(fields.keySet());
-    Collections.sort(keys);
-    for (Iterator i = keys.iterator(); i.hasNext(); ) {
-      String field = (String) i.next();
-      String desc = (String) fields.get(field);
-      String defstr = getDefaultString(field);
-
-      // @item [field]
-      //  [desc]
-      out.println("@item " + field);
-      out.println("  " + desc);
-      out.println("  " + defstr);
-      out.println();
-    }
-
-    out.println("@c END AUTO-GENERATED CONFIG OPTIONS LISTING");
-    out.println();
-  }
-
-  public void writeText(PrintWriter out) {
-    List keys = new ArrayList(fields.keySet());
-    Collections.sort(keys);
-    for (Iterator i = keys.iterator(); i.hasNext(); ) {
-      String field = (String) i.next();
-      String desc = (String) fields.get(field);
-      String defstr = getDefaultString(field);
-
-      // [field]
-      //   [desc]
-      out.println(field);
-      out.println("  " + desc);
-      out.println("  " + defstr);
-      out.println();
-    }
-  }
-
-  public void writeList(PrintWriter out) {
-    List keys = new ArrayList(fields.keySet());
-    Collections.sort(keys);
-    for (Iterator i = keys.iterator(); i.hasNext(); ) {
-      String field = (String) i.next();
-      out.println(field);
-    }
   }
 
 }
