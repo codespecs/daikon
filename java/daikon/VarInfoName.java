@@ -1261,6 +1261,7 @@ public abstract class VarInfoName
         } else {
           // complicated case: x.y.foo[].bar
           String object = splits[0].replaceAll("\\[\\]", ""); // remove brackets
+          if (object.equals("return")) { object = "$return"; }
           Assert.assertTrue(splits.length > 1);
           String fields = "";
           for (int j = 1 ; j < splits.length ; j++) {
@@ -1668,7 +1669,14 @@ public abstract class VarInfoName
     // we should check if its type is long, and do the casting only for that
     // case.
     protected String dbc_name_impl(String index, VarInfo v) {
-      return term.dbc_name(v) + "[(int)" + index + "]";
+
+      if (v.type.pseudoDimensions() > v.type.dimensions()) {
+        // it's a collection
+        return term.name_using(OutputFormat.DBCJAVA, v) + ".get((int)" + index + ")";
+      } else {
+        // it's an array
+        return term.name_using(OutputFormat.DBCJAVA, v) + "[(int)" + index + "]";
+      }
     }
     protected String identifier_name_impl(String index) {
       if (index.equals(""))
