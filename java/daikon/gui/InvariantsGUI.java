@@ -6,6 +6,7 @@ import java.util.*;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.text.DecimalFormat;
 import javax.swing.*;
 import javax.swing.tree.*;
 import javax.swing.table.*;
@@ -16,16 +17,16 @@ import daikon.inv.*;
 public class InvariantsGUI {
 
     public static void main( String args[] ) {
-	String objectFileName = "/g1/users/mhao/daikon/invariants/daikon/gui/stack.inv"; // use this by default, for now
-	if ( args.length > 0 )
+	String objectFileName = "/g1/users/mhao/daikon/inv_files/dsaa.inv"; // use this by default, for now
+	if (args.length > 0)
 	    objectFileName = args[0];
 
 	DefaultTreeModel treeModel = constructTreeModel( objectFileName );
-	DefaultTreeSelectionModel treeSelectionModel = new DefaultTreeSelectionModel();
+	DaikonTreeSelectionModel treeSelectionModel = new DaikonTreeSelectionModel();
 
 	JTree tree = new JTree( treeModel );
 	JPanel invariantTablePanel = new JPanel();
-	tree.addTreeSelectionListener( new InvariantTableSelectionListener( invariantTablePanel ));
+	tree.addTreeSelectionListener( new InvariantTableSelectionListener( invariantTablePanel, treeSelectionModel ));
 
 	setupGUI( tree, invariantTablePanel );
     }
@@ -56,12 +57,13 @@ public class InvariantsGUI {
 	//  Create the first level of the tree:  classes
 	for (Iterator iter = pptMap.nameStringSet().iterator(); iter.hasNext(); ) {
 	    String name = (String) iter.next();
-	    PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
-	    if (name.indexOf( "CLASS" ) != -1  ||  name.indexOf( "OBJECT" ) != -1 ) { // if this is a class, not just a method
-		String className = name.substring( 0, name.indexOf( FileIO.ppt_tag_separator ));
-		DefaultMutableTreeNode classNode = getChildByName( root, className );
-		if (classNode == null)
-		    root.add( new DefaultMutableTreeNode( topLevel )); // Create a node for this class
+	    PptName pptName = new PptName( name );
+	    String className = pptName.getFullClassName();
+	    //	    System.out.println( "name is " + name + ", className is " + className );
+	    DefaultMutableTreeNode classNode = getChildByName( root, className );
+	    if (classNode == null) {
+		PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
+		root.add( new DefaultMutableTreeNode( className )); // Create a node for this class
 	    }
 	}
 
@@ -128,9 +130,8 @@ public class InvariantsGUI {
 	JFrame frame = new JFrame( "Daikon GUI" );
 	Container contentPane = frame.getContentPane();
 	contentPane.setLayout( new GridLayout( 2, 1 ));
-	contentPane.add( tree );
-	JScrollPane scrollPane = new JScrollPane( invariantTablePanel );
-	contentPane.add( scrollPane );
+	contentPane.add( new JScrollPane( tree ));
+	contentPane.add( new JScrollPane( invariantTablePanel ));
  	frame.pack();
 	frame.setSize( 600, 700 );
 	frame.setVisible( true );
@@ -138,14 +139,21 @@ public class InvariantsGUI {
 }
 
 
+class DaikonTreeSelectionModel extends DefaultTreeSelectionModel {
+    
+}
+    
+
 class InvariantTableSelectionListener implements TreeSelectionListener {
     JPanel panel;
     List invariantTables = new ArrayList();
     List invariantTableNames = new ArrayList();
+    DefaultTreeSelectionModel treeSelectionModel;
 
-    public InvariantTableSelectionListener( JPanel invariantTablePanel ) {
+    public InvariantTableSelectionListener( JPanel invariantTablePanel, DefaultTreeSelectionModel treeSelectionModel ) {
 	panel = invariantTablePanel;
 	panel.setLayout( new BoxLayout( panel, BoxLayout.Y_AXIS ));
+	this.treeSelectionModel = treeSelectionModel;
     }
 
     public void valueChanged( TreeSelectionEvent e ) {
@@ -159,43 +167,55 @@ class InvariantTableSelectionListener implements TreeSelectionListener {
 		    JScrollPane scrollPane = setupTable( invariants );
 		    invariantTables.add( scrollPane );
 		    invariantTableNames.add( name );
-		    System.out.println(name + " added");
+		    //		    System.out.println(name + " added");
+		    //		    System.out.println( scrollPane.getPreferredSize());
 		}
 		else {		// paths[i] has been removed.  It should already be in invariantTableNames.
 		    int index = invariantTableNames.indexOf( name );
 		    if (index == -1)
 			throw new Error( "InvariantTableSelectionListener.valueChanged(): " + name + " table not found." );
 		    panel.remove( (JScrollPane) invariantTables.get( index ));
-		    System.out.println(name + " removed");
+		    //		    System.out.println(name + " removed");
 		    invariantTables.remove( index );
 		    invariantTableNames.remove( index );
 		}
-		panel.repaint();
-		panel.revalidate();
-	    }
+	    } else {		// This is a class or a method node, not a PptTopLevel node.
+		if (e.isAddedPath( paths[i] )) {
+		    DefaultMutableTreeNode node = (DefaultMutableTreeNode) paths[i].getLastPathComponent();
+		    for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
+			TreePath newPath = paths[i].pathByAddingChild( enum.nextElement());
+			TreePath leadPath = treeSelectionModel.getLeadSelectionPath();
+			TreeSelectionEvent event = new TreeSelectionEvent( node, newPath, true, leadPath, leadPath );
+			//			treeSelectionModel.fireValueChanged( event );
+			System.out.println("added path");
+		    }
+		    
+		}
+		else {		// paths[i] has been removed.  It should already be in invariantTableNames.
+		}
+	    }		
 	}
+	panel.repaint();
+	panel.revalidate();
     }
 
     private JScrollPane setupTable( Vector invariants ) {
-TableSorter sorter = new TableSorter( new InvariantTableModel( invariants ));
-JTable table = new JTable( sorter );
-sorter.addMouseListenerToHeaderInTable( table );
-InvariantTableModel.resizeColumns( table );
-JScrollPane scrollPane = new JScrollPane( table );
-panel.add( scrollPane );
-return scrollPane;
+	//	JScrollPane scrollPane = new JScrollPane( new JTable( new InvariantTableModel( invariants )));
 
-//  	JTable table = new JTable( new InvariantTableModel( invariants ));
-//  	InvariantTableModel.resizeColumns( table );
-//  	JScrollPane scrollPane = new JScrollPane( table );
-//  	panel.add( scrollPane );
-//  	return scrollPane;
+	TableSorter sorter = new TableSorter( new InvariantTableModel( invariants ));
+	JTable table = new JTable( sorter );
+	sorter.addMouseListenerToHeaderInTable( table );
+	InvariantTableModel.resizeColumns( table );
+	JScrollPane scrollPane = new JScrollPane( table );
+	panel.add( scrollPane );
+	return scrollPane;
     }
 }
 
 class InvariantTableModel extends AbstractTableModel {
     Vector invariants;
     final String[] columnNames = { "invariant", "# values", "# samples", "probability", "justified" };
+    DecimalFormat format = new DecimalFormat( "0.##E0" ); // for displaying probabilities
 
     public InvariantTableModel( Vector invariants ) {
 	this.invariants = invariants;
@@ -222,7 +242,7 @@ class InvariantTableModel extends AbstractTableModel {
 	else if (column == 2)
 	    return new Integer( invariant.ppt.num_samples());
 	else if (column == 3)
-	    return new Double( invariant.getProbability());
+	    return new Double( format.format( Math.round( 100 * invariant.getProbability()) / 100.0 ));
 	else if (column == 4)
 	    return new Boolean( invariant.justified());
 	    
