@@ -183,7 +183,8 @@ public final class Equality
         start = false;
       }
       result.append(var.name.name());
-      result.append("[" + var.comparability + "]");
+      result.append ("[" + var.varinfo_index + "]");
+      // result.append("[" + var.comparability + "]");
       if (var == leader())
         result.append ("L");
     }
