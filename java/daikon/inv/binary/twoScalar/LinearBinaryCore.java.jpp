@@ -692,7 +692,7 @@ public final class CLASSNAME
 
       if (viy.type.isFloat() || vix.type.isFloat()) {
         return
-          "daikon.Quant.fuzzy.eq(0"
+          "daikon.Quant.fuzzy.eq(0, "
           + formatTerm(format, a, x, vix, true)
           + formatTerm(format, b, y, viy, false)
           + formatTerm(format, c, null, null, false)
