@@ -45,7 +45,7 @@ public class PptTopLevel extends Ppt {
   int num_tracevars;            // number of variables in the trace file
   int num_orig_vars;            // number of _orig vars
   int num_static_constant_vars; // these don't appear in the trace file
-  
+
   // Indicates which derived variables have been introduced.
   // First number: invariants are computed up to this index, non-inclusive.
   // Remaining numbers: values have been derived from up to these indices.
@@ -164,11 +164,11 @@ public class PptTopLevel extends Ppt {
 
   public int num_array_vars() {
     int num_arrays=0;
-    for (int i=0; i<var_infos.length; i++) 
+    for (int i=0; i<var_infos.length; i++)
       if (var_infos[i].rep_type.isArray())
 	num_arrays++;
     return num_arrays;
-  }				  
+  }
 
   Iterator var_info_iterator() {
     return Arrays.asList(var_infos).iterator();
@@ -467,7 +467,7 @@ public class PptTopLevel extends Ppt {
 	//new ScalarSequencesIntersectionFactory(),
 	//new StringSequencesIntersectionFactory(),
 	//new ScalarSequencesUnionFactory(),
-	//new StringSequencesUnionFactory(),	
+	//new StringSequencesUnionFactory(),
         new SequenceStringSubscriptFactory(), }
     };
 
@@ -1397,25 +1397,25 @@ public class PptTopLevel extends Ppt {
   // This apparently can't appear in PptConditional, lest it never get called.
   // I guess PptConditional isn't instantiated unless it needs to be, but
   // it doesn't need to be unless GriesLisp has been instantiated already.
-  
+
   static {
     // Would it be enough to say "GriesLisp dummy = null;"?  I'm not sure.
     // This does work, though.
-    
+
     if (! Daikon.disable_splitting) {
        //new MiscSplitters();
-      
+
       SplitterList.put(".*", new Splitter[] {
 	new ReturnTrueSplitter(),
       });
-    
+
       //new GriesLisp();
       //new WeissDsaaMDE();
       // These are outdated; they look for "field" instead of "this.field".
       // new SplitterList4Dsaa();
     }
   }
-  
+
 
   public void addConditions(Splitter[] splits) {
     int len = splits.length;
@@ -2209,7 +2209,7 @@ public class PptTopLevel extends Ppt {
 	      all_cont.append("\n");
 	      inv.ppt = saved;
 	    }
-	    all_cont.append(")");	    
+	    all_cont.append(")");
 	  }
 	}
       }
@@ -2236,6 +2236,8 @@ public class PptTopLevel extends Ppt {
       for (int i=0; i < present.length; i++) {
 	if (present[i] && (i != checking)) {
 	  bg.append(" ");
+          // format_simplify() is guaranteed to return a sensible result
+          // for invariants in invs[].
 	  bg.append(invs[i].format_simplify());
 	}
       }
@@ -2477,7 +2479,7 @@ public class PptTopLevel extends Ppt {
     }
 
     // IOA, quick fix
-    String classname = better_name.substring(0, better_name.indexOf(":::"));  
+    String classname = better_name.substring(0, better_name.indexOf(":::"));
     classname = (classname.indexOf(".")==-1) ? classname :
       classname.substring(0, classname.indexOf("."));
     // end IOA
@@ -2681,12 +2683,12 @@ public class PptTopLevel extends Ppt {
 	    break;
 	  case Daikon.OUTPUT_STYLE_IOA:
             sb = new StringBuffer();
-            for (int j=0; j<equal_vars.size(); j++) {	      
+            for (int j=0; j<equal_vars.size(); j++) {
               VarInfo other = (VarInfo) equal_vars.elementAt(j);
 	      if (j>0) sb.append("\n");
 	      sb.append("invariant of " + classname + ": ");
 	      sb.append(vi.name.ioa_name(classname) + " = ");
-	      sb.append(other.name.ioa_name(classname)); 
+	      sb.append(other.name.ioa_name(classname));
 	    }
 	    out.println(sb.toString());
 	    break;
