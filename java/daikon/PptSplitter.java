@@ -551,6 +551,8 @@ public class PptSplitter implements Serializable {
                                   && (impl.consequent() != ccons));
         if ((! impl.iff)
             && (pred_non_canon || cons_non_canon)) {
+          // TODO: This is an inefficient call.  It would be better to avoid
+          // introducing the noncanonical invariants in the first place.
           to_remove.add(inv);
         }
       }

@@ -113,6 +113,7 @@ public class PptSlice0
     // checkRep();
     // Assert.assertTrue(hasImplication((Implication) inv));
     initInvariantsSeen();
+    // TODO: this is a bottleneck.
     invs.remove(inv);
     invariantsSeen.remove(new ImplicationByFormatWrapper((Implication)inv));
     // checkRep();
@@ -185,10 +186,10 @@ public class PptSlice0
 
     public int hashCode() {
       if (hashCode == 0) {
-        // hashCode = format().hashCode();
-        hashCode = (theImp.iff ? 1 : 0);
-        hashCode = 37 * hashCode + theImp.predicate().getClass().hashCode();
-        hashCode = 37 * hashCode + theImp.consequent().getClass().hashCode();
+        hashCode = format().hashCode();
+        // hashCode = (theImp.iff ? 1 : 0);
+        // hashCode = 37 * hashCode + theImp.predicate().getClass().hashCode();
+        // hashCode = 37 * hashCode + theImp.consequent().getClass().hashCode();
       }
       return hashCode;
     }
