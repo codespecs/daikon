@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # java-cpp -- C preprocessor specialized for Java
 # Michael Ernst
-# Time-stamp: <2003-01-08 23:07:50 mernst>
+# Time-stamp: <2003-01-08 23:19:07 mernst>
 
 # This acts like the C preprocessor, but
 #  * it does not remove comments
@@ -135,64 +135,65 @@ sub unescape_comments ( $ ) {
     # Change multiple contiguous spaces into one space, but not at
     # beginning of line (cpp 2.96 (Red Hat) does this).
     s/([^ \t\n] ) +/$1/g;
-    s/$JAVACPP_WHITESPACE_SEPARATOR//og;
+    s/JAVACPP_WHITESPACE_SEPARATOR//og;
 
     # Perform string contatenation required by use of -traditional cpp flag.
     s/(\w) \#\# (\w)/$1$2/g;
-    # Stringization, too.  (But not just before "@see".)
+    # Perform stringization, too.  (But not just before "@see".)
     s/(?!\@see)(.... )\#(\w+)/$1"$2"/g;
 
-    # Convert string concatenation ("a" + "b") single string ("ab").
+    # Convert string concatenation ("a" + "b") into single string ("ab").
     while (s/(".*)"  ?\+ "(.*")/$1$2/g) { }
     # Remove "# 22" lines.
     s/^\# [0-9]+ ".*"($|\n)//g;	# don't leave blank line at start of file
     s/(\n)\# [0-9]+ ".*"($|\n)/$1$2/g;
 
-    # print STDERR "pre-horizontal: $_";
+    # # print STDERR "pre-horizontal: $_";
 
-    ## Remove extra horizontal space
-    ## (Some of these are cosmetic; others are necessary to get identical
-    ## output under all versions of cpp.)
-    # Remove all trailing space
-    s/[ \t]+\n/\n/g;
-    # Remove space before trailing semicolon
-    s/ ;$/;/gm;
-    # Remove space after package name
-    s/^(package .*\.) ([^ ]*;)/$1$2/gm;
-    # Remove all extra spaces in import list
-    while (s/^(import [^ \n]*) (.*;)$/$1$2/m) { }
-    # convert " );" to ");"; requires "=" somewhere earlier in line
-    s/(=.*[^ \t\n\}]) (\);\n)/$1$2/g;
-    # convert "(Foo )" to "(Foo)"
-    s/\((\b[A-Za-z]\w*) \)/($1)/g;
-    # convert "a .b" to "a.b".
-    s/(\b[A-Za-z]\w*) \.([A-Za-z]\w*\b)/$1.$2/g;
-    # convert "a. foo (" to "a.foo("
-    # (Note single spaces, lowercase first letter.)
-    # also: "a. FOO)" becomes "a.FOO)"
-    s/(\b[A-Za-z]\w*|\))\. ([a-z]\w*) ?\(/$1.$2\(/g;
-    s/(\b[A-Za-z]\w*)\. (\w+) ?(\)|;|\.[a-z])/$1.$2$3/g;
-    # convert "new Foo. Bar(...)" to "new Foo.Bar(...)"
-    s/(\bnew [A-Za-z]\w*)\. ([A-Za-z]\w*)\(/$1.$2\(/g;
-    # convert " instanceof long [])" to " instanceof long[])"
-    s/( instanceof \w+) ((\[\])*\))/$1$2/g;
-    # convert "long []" to "long[]" (for cast, prototype, or declaration).
-    # also "long[] " to "long[]".
-    s/((?:\(|^ *|(?:(?:,|public|private|protected)(?: static)? ))\w+(?:\[\])*) ([\[\)])/$1$2/gm;
-    # convert "new int[2 ]" to "new int[2]"; also "new int [", "new Foo ("
-    s/(\bnew \w+) (\()/$1$2/g;
-    s/(\bnew \w+) (\[)/$1$2/g;
-    s/(\bnew \w+\[\w+) *(\])/$1$2/g;
-    # convert "public PptSlice1 (" to "public PptSlice1("
-    s/(^ *(?:public|private|protected)(?: static)? \w+) (\()/$1$2/gm;
-    # convert "double [] val1_array =" to "double[] val1_array ="
-    s/(^ *\w+) (\[\] \w+(;| *=))/$1$2/gm;
-    # remove space before close paren, if there is an open w/o a space after it
-    # and this is not a "for" loop.
-    # old version: s/(\(\S.*) (\)(;|\)| {|$))/$1$2/gm;
-    s/(^ *(?!(?:\/\/ *)?for\b)[^ ].*\(\S.*) (\)(;|\)| {|$))/$1$2/gm;
+    ## This is no longer necessary, because I use "-traditional" cpp flag
+    # ## Remove extra horizontal space
+    # ## (Some of these are cosmetic; others are necessary to get identical
+    # ## output under all versions of cpp.)
+    # # Remove all trailing space
+    # s/[ \t]+\n/\n/g;
+    # # Remove space before trailing semicolon
+    # s/ ;$/;/gm;
+    # # Remove space after package name
+    # s/^(package .*\.) ([^ ]*;)/$1$2/gm;
+    # # Remove all extra spaces in import list
+    # while (s/^(import [^ \n]*) (.*;)$/$1$2/m) { }
+    # # convert " );" to ");"; requires "=" somewhere earlier in line
+    # s/(=.*[^ \t\n\}]) (\);\n)/$1$2/g;
+    # # convert "(Foo )" to "(Foo)"
+    # s/\((\b[A-Za-z]\w*) \)/($1)/g;
+    # # convert "a .b" to "a.b".
+    # s/(\b[A-Za-z]\w*) \.([A-Za-z]\w*\b)/$1.$2/g;
+    # # convert "a. foo (" to "a.foo("
+    # # (Note single spaces, lowercase first letter.)
+    # # also: "a. FOO)" becomes "a.FOO)"
+    # s/(\b[A-Za-z]\w*|\))\. ([a-z]\w*) ?\(/$1.$2\(/g;
+    # s/(\b[A-Za-z]\w*)\. (\w+) ?(\)|;|\.[a-z])/$1.$2$3/g;
+    # # convert "new Foo. Bar(...)" to "new Foo.Bar(...)"
+    # s/(\bnew [A-Za-z]\w*)\. ([A-Za-z]\w*)\(/$1.$2\(/g;
+    # # convert " instanceof long [])" to " instanceof long[])"
+    # s/( instanceof \w+) ((\[\])*\))/$1$2/g;
+    # # convert "long []" to "long[]" (for cast, prototype, or declaration).
+    # # also "long[] " to "long[]".
+    # s/((?:\(|^ *|(?:(?:,|public|private|protected)(?: static)? ))\w+(?:\[\])*) ([\[\)])/$1$2/gm;
+    # # convert "new int[2 ]" to "new int[2]"; also "new int [", "new Foo ("
+    # s/(\bnew \w+) (\()/$1$2/g;
+    # s/(\bnew \w+) (\[)/$1$2/g;
+    # s/(\bnew \w+\[\w+) *(\])/$1$2/g;
+    # # convert "public PptSlice1 (" to "public PptSlice1("
+    # s/(^ *(?:public|private|protected)(?: static)? \w+) (\()/$1$2/gm;
+    # # convert "double [] val1_array =" to "double[] val1_array ="
+    # s/(^ *\w+) (\[\] \w+(;| *=))/$1$2/gm;
+    # # remove space before close paren, if there is an open w/o a space after it
+    # # and this is not a "for" loop.
+    # # old version: s/(\(\S.*) (\)(;|\)| {|$))/$1$2/gm;
+    # s/(^ *(?!(?:\/\/ *)?for\b)[^ ].*\(\S.*) (\)(;|\)| {|$))/$1$2/gm;
 
-    # print STDERR "post-horizontal: $_";
+    # # print STDERR "post-horizontal: $_";
 
     # print STDERR "pre-vertical: $_";
 

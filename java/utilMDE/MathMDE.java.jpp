@@ -92,7 +92,7 @@ public final class MathMDE {
     return x >>> y;
   }
 
-  public static long rshiftUnsigned(long x, long y ) {
+  public static long rshiftUnsigned(long x, long y) {
     return x >>> y;
   }
 

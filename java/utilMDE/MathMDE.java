@@ -361,7 +361,7 @@ public final class MathMDE {
       }
     if (count < 3)
       return null;
-    return new int[] { MathMDE.mod_positive(avalue, modulus), modulus };
+    return new int[] { MathMDE.mod_positive(avalue, modulus), modulus } ;
   }
 
   /**
@@ -463,7 +463,7 @@ public final class MathMDE {
         return null;
     }
 
-    return new int[] { r, modulus };
+    return new int[] { r, modulus } ;
   }
 
   /// modulus for long (as opposed to int) values
@@ -523,7 +523,7 @@ public final class MathMDE {
       }
     if (count < 3)
       return null;
-    return new long[] { MathMDE.mod_positive(avalue, modulus), modulus };
+    return new long[] { MathMDE.mod_positive(avalue, modulus), modulus } ;
   }
 
   /**
@@ -625,7 +625,7 @@ public final class MathMDE {
         return null;
     }
 
-    return new long[] { r, modulus };
+    return new long[] { r, modulus } ;
   }
 
   ///
