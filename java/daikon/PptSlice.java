@@ -83,10 +83,12 @@ public abstract class PptSlice extends Ppt {
     return (ArraysMDE.indexOfEq(var_infos, vi) != -1);
   }
 
+  // This is only called from inv.filter.VariableFilter.
   public boolean usesVar(String name) {
-    Assert.assert(Intern.isInterned(name));
     for (int i=0; i<var_infos.length; i++) {
-      if (var_infos[i].name == name) {
+      // mistere: I'm not sure is this is the right thing for
+      // the gui, but it's probably close
+      if (var_infos[i].name.name().equals(name)) {
         return true;
       }
     }
