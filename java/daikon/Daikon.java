@@ -89,12 +89,12 @@ public final class Daikon {
   public static Pattern ppt_omit_regexp;
   public static Pattern var_omit_regexp;
 
-  // I appear to need both of these variables.  (Or do I?)
-  static Set spinfo_files = new HashSet();
-
   // The invariants detected will be serialized and written to this
   // file
   public static File inv_file;
+
+  // Whether we want the memory monitor activated
+  private static boolean use_mem_monitor = false;
 
   // Public so other programs can reuse the same command-line options
   public static final String help_SWITCH = "help";
@@ -136,16 +136,54 @@ public final class Daikon {
    * The arguments to daikon.Daikon are file names; declaration file names end
    * in ".decls" and data trace file names end in ".dtrace".
    **/
-  public static void main(String[] args) {
-    Set decl_files = new HashSet();
-    Set dtrace_files = new HashSet();
+  public static void main(String[] args)
+  {
+    // Read command line options
+    Set[] files = read_options(args);
+    Assert.assert(files.length == 3);
+    
+    // Load all data
+    PptMap all_ppts = load_files(files[0], files[1], files[2]);
+    
+    // Infer invariants
+    do_inference(all_ppts);
+    
+    // Display invariants
+    print_invariants(all_ppts);
+    if (output_num_samples) {
+      Global.output_statistics();
+    }
+    
+    // Write serialized output
+    if (inv_file != null) {
+      try {
+	FileIO.write_serialized_pptmap(all_ppts, inv_file);
+      } catch (IOException e) {
+	throw new RuntimeException("Error while writing .inv file "
+				   + "'" + inv_file + "': " + e.toString());
+      }
+    }
+    
+    // Done
+    System.out.println("Exiting");
+  }
 
+
+  ///////////////////////////////////////////////////////////////////////////
+  // Read in the command line options
+  // Return an array of {decls, dtrace, spinfo} filenames
+  private static Set[] read_options(String args[])
+  {
     if (args.length == 0) {
       System.out.println("Daikon error: no files supplied on command line.");
       System.out.println(usage);
       System.exit(1);
     }
-
+    
+    Set decl_files = new HashSet();
+    Set dtrace_files = new HashSet();
+    Set spinfo_files = new HashSet();
+    
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -167,8 +205,7 @@ public final class Daikon {
     };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:", longopts);
     int c;
-    boolean memMonitorOK = false;
-
+    
     while ((c = g.getopt()) != -1) {
       switch(c) {
       case 0:
@@ -232,7 +269,7 @@ public final class Daikon {
 	} else if (ioa_output_SWITCH.equals(option_name)) {
 	  output_style = OUTPUT_STYLE_IOA;
 	} else if (mem_stat_SWITCH.equals(option_name)) {
-	  memMonitorOK = true;
+	  use_mem_monitor = true;
 	} else if (output_num_samples_SWITCH.equals(option_name)) {
 	  output_num_samples = true;
 	} else if (noternary_SWITCH.equals(option_name)) {
@@ -296,8 +333,22 @@ public final class Daikon {
       }
     }
 
-    all_ppts = new PptMap();
+    return new Set[] {
+      decl_files,
+      dtrace_files,
+      spinfo_files,
+    };
+  }
 
+
+  ///////////////////////////////////////////////////////////////////////////
+  // Read decls, dtrace, etc. files
+  private static PptMap load_files(Set decl_files,
+				   Set dtrace_files,
+				   Set spinfo_files)
+  {
+    PptMap all_ppts = new PptMap();
+    
     int num_decl_files = decl_files.size();
     int num_dtrace_files = dtrace_files.size();
     int num_spinfo_files = spinfo_files.size();
@@ -310,7 +361,7 @@ public final class Daikon {
 
       if (!disable_splitting && num_spinfo_files > 0) {
 	System.out.println("Reading Splitter Info files ");
-	create_splitters(all_ppts);
+	create_splitters(all_ppts, spinfo_files);
       }
 
       System.out.print("Reading data trace files ");
@@ -330,6 +381,14 @@ public final class Daikon {
     // Old location; but we want to add these before reading trace files.
     // add_combined_exits(all_ppts);
 
+    return all_ppts;
+  }
+
+  
+  ///////////////////////////////////////////////////////////////////////////
+  // Infer invariants over the trace data
+  private static void do_inference(PptMap all_ppts)
+  {
     // Retrieve Ppt objects in sorted order.
     // Use a custom comparator for a specific ordering
     Comparator comparator = new Ppt.NameComparator();
@@ -337,7 +396,7 @@ public final class Daikon {
     all_ppts_sorted.addAll(all_ppts.asCollection());
 
     MemMonitor monitor=null;
-    if (memMonitorOK) {
+    if (use_mem_monitor) {
       monitor = new MemMonitor("stat.out");
       new Thread((Runnable) monitor).start();
     }
@@ -428,41 +487,12 @@ public final class Daikon {
       double elapsed = (end - start) / 1000.0;
       System.out.println((new java.text.DecimalFormat("#.#")).format(elapsed) + "s");
     }
-
-    print_invariants(all_ppts);
-
-    if (output_num_samples) {
-      Global.output_statistics();
-    }
-
-    // Old implementation that didn't interleave invariant inference and
-    // reporting.
-    // for (Iterator itor = all_ppts.values().iterator() ; itor.hasNext() ; ) {
-    //   PptTopLevel ppt = (PptTopLevel) itor.next();
-    //   ppt.initial_processing();
-    // }
-    // // Now examine the invariants.
-    // System.out.println("Examining the invariants.");
-    // for (Iterator itor = new TreeSet(all_ppts.keySet()).iterator() ; itor.hasNext() ; ) {
-    //   String ppt_name = (String) itor.next();
-    //   PptTopLevel ppt_tl = (PptTopLevel) all_ppts.get(ppt_name);
-    //   ppt_tl.print_invariants_maybe();
-    // }
-
-
-    if (inv_file != null) {
-      try {
-	FileIO.write_serialized_pptmap(all_ppts, inv_file);
-      } catch (IOException e) {
-	throw new RuntimeException("Error while writing .inv file "
-				   + "'" + inv_file + "': " + e.toString());
-      }
-    }
-
-    System.out.println("Exiting");
-
+    
   }
 
+
+  ///////////////////////////////////////////////////////////////////////////
+  //
   public static void print_invariants(PptMap ppts) {
     // Retrieve Ppt objects in sorted order.
     // Use a custom comparator for a specific ordering
@@ -478,6 +508,9 @@ public final class Daikon {
     }
   }
 
+
+  ///////////////////////////////////////////////////////////////////////////
+  //
   public static void add_combined_exits(PptMap ppts) {
     // For each collection of related :::EXITnn ppts, add a new ppt (which
     // will only contain implication invariants).
@@ -557,12 +590,11 @@ public final class Daikon {
 
   }
 
-  static public Collection get_splitterinfo_files() {
-    return spinfo_files;
-  }
-
-  static public void create_splitters(PptMap all_ppts)throws IOException{
-
+  ///////////////////////////////////////////////////////////////////////////
+  //
+  static public void create_splitters(PptMap all_ppts, Set spinfo_files)
+    throws IOException
+  {
     Vector sps = new Vector();
     for (Iterator i = spinfo_files.iterator(); i.hasNext(); ) {
       sps = SplitterFactory.read_spinfofile((String)i.next(), all_ppts);
