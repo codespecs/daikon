@@ -389,7 +389,7 @@ class AnnotateVisitor extends DepthFirstVisitor {
    * f4 -> ( Block() | ";" )
    */
   public void visit(MethodDeclaration n) {
-    // System.out.println("MethodDeclaration: " + n.f2.f0);
+    //System.out.println("MethodDeclaration: " + n.f2.f0);
 
     super.visit(n);             // call "accept(this)" on each field
 
@@ -431,7 +431,9 @@ class AnnotateVisitor extends DepthFirstVisitor {
       insertBehavior(n,
                      (exceptions != null ? exceptions.isEmpty() : true),
                      (ensures_invs != null ? (ensures_invs.length == 0) : true));
-      if (isImplementation || isOverride) {
+      if (isImplementation || isOverride
+          // temporary fix: not processed correctly by Ast.java
+          || n.f2.f0.toString().equals("clone")) {
 	insertAlso(n);
       }
       addComment(n, JML_START_COMMENT, true);
@@ -467,7 +469,7 @@ class AnnotateVisitor extends DepthFirstVisitor {
 
     if (!lightweight) {
       addComment(n, JML_END_COMMENT, true);
-      insertAssignableEverything(n);
+      //insertAssignableEverything(n);
     }
 
     boolean invariantInserted =
@@ -486,8 +488,30 @@ class AnnotateVisitor extends DepthFirstVisitor {
 
   }
 
+
+  public boolean pureInJML(Node n) {
+    String name = null;
+    if (n instanceof MethodDeclaration) {
+      name = ((MethodDeclaration)n).f2.f0.toString();
+      // have to do this because ... ?
+      if (name.equals("hasNext") ||
+          name.equals("hasMoreElements") ||
+          name.equals("equals") ||
+          name.equals("clone")) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public void insertAssignableEverything(Node n) {
-    addComment(n, "@ assignable \\everything;" + lineSep, true);
+    // pure methods in JML should not have this clause. Here is a list
+    // of methods that are pure by being implementations of interfaces
+    // or overridden methods.
+    if (!pureInJML(n)) {
+      //System.out.println("^^^CURRLINE:" + Ast.printCurrentLine(n) + "^^^");
+      addComment(n, "@ assignable \\everything;" + lineSep, true);
+    }
   }
 
   public void insertJMLWorkaround(Node n) {
@@ -533,7 +557,12 @@ class AnnotateVisitor extends DepthFirstVisitor {
       } else if (inv.startsWith("modifies ") || inv.startsWith("assignable ")) {
         // Currently, assignable clauses produce illegal JML, like a[*].
         if (Daikon.output_style == Invariant.OutputFormat.JML) {
-          inv = "assignable \\everything";
+          if (!pureInJML(n)) {
+            //System.out.println("^^^CURRLINE:" + Ast.printCurrentLine(n) + "^^^");
+            inv = "assignable \\everything";
+          } else {
+            continue;
+          }
         } else if (Daikon.output_style == Invariant.OutputFormat.DBCJAVA) {
           // Modifies/assignable has no translation in Jtest DBC
           continue;

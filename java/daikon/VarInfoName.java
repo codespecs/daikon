@@ -1196,6 +1196,16 @@ public abstract class VarInfoName
       return java_family_name(OutputFormat.DBCJAVA, v);
     }
 
+    // Special case: the fake "toString" field in Daikon is output
+    // with parens, so that it's legal Java.
+    protected String java_field(String f) {
+      if (f.equals("toString")) {
+        return "toString()";
+      } else {
+        return f;
+      }
+    }
+
     // For JAVA, JML and DBC formats.
     protected String java_family_name(OutputFormat format, VarInfo v) {
 
@@ -1223,7 +1233,7 @@ public abstract class VarInfoName
         } else {
           term_name = term.dbc_name(v);
         }
-        return term_name + "." + field;
+        return term_name + "." + java_field(field);
       } else {
         // Case 2: An array collection
 
@@ -1239,6 +1249,11 @@ public abstract class VarInfoName
         // The method Quant.collect takes care of the "y.foo[].bar.f"
         // mess for object x.
 
+        if (field.equals("toString")) {
+          return "(warning: " + format + " format cannot express a slice with String objects:"
+            + " obtained by toString():  [repr=" + repr() + "])";
+        }
+
         String term_name_no_brackets = term.name().replaceAll("\\[\\]", "") + "." + field;
         String[] splits = term_name_no_brackets.split("\\.");
         Assert.assertTrue(splits.length > 1, term_name_no_brackets);
@@ -1250,7 +1265,7 @@ public abstract class VarInfoName
             object = "\\result";
           }
         }
-        String collectType =  (v.type.isPrimitive() ? v.type.base() : "Object");
+        String collectType =  (v.type.baseIsPrimitive() ? v.type.base() : "Object");
         String fields = "";
         for (int j = 1 ; j < splits.length ; j++) {
           if (j != 1) { fields += "."; }
@@ -1644,31 +1659,35 @@ public abstract class VarInfoName
       return term.java_name(v);
     }
     protected String java_name_impl(String index, VarInfo v) {
-      return term.java_name(v) + "[" + index + "]";
+      return java_family_impl(OutputFormat.JAVA, v, index);
     }
     protected String jml_name_impl(VarInfo v) {
       return term.jml_name(v);
     }
     protected String jml_name_impl(String index, VarInfo v) {
-      return term.jml_name(v) + "[" + index + "]";
+      return java_family_impl(OutputFormat.JML, v, index);
     }
     protected String dbc_name_impl(VarInfo v) {
       return term.dbc_name(v);
     }
+    protected String dbc_name_impl(String index, VarInfo v) {
+      return java_family_impl(OutputFormat.DBCJAVA, v, index);
+    }
+
     // XXX temporary fix: sometimes long is passed as index (utilMDE.StopWatch).
     // I can't find where the VarInfo for "index" is found. Wherever that is,
     // we should check if its type is long, and do the casting only for that
     // case.
-    protected String dbc_name_impl(String index, VarInfo v) {
-
+    protected String java_family_impl(OutputFormat format, VarInfo v, String index) {
       if (v.type.pseudoDimensions() > v.type.dimensions()) {
         // it's a collection
-        return term.name_using(OutputFormat.DBCJAVA, v) + ".get((int)" + index + ")";
+        return term.name_using(format, v) + ".get((int)" + index + ")";
       } else {
         // it's an array
-        return term.name_using(OutputFormat.DBCJAVA, v) + "[(int)" + index + "]";
+        return term.name_using(format, v) + "[(int)" + index + "]";
       }
     }
+
     protected String identifier_name_impl(String index) {
       if (index.equals(""))
         return term.identifier_name() + "_elems";

@@ -666,8 +666,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EQ %var1% (* %var2% %var2))");
-      else
+      else if (format.isJavaFamily()) {
+        return ("%var1% == %var2%*%var2%");
+      } else {
         return ("%var1% == %var2%**2");
+      }
     }
 
     /** Check to see if x == y squared **/

@@ -819,9 +819,11 @@ public class PrintInvariants {
         if ((vi != null) && (vi.name instanceof VarInfoName.Elements)) {
           VarInfoName.Elements elems = (VarInfoName.Elements) vi.name;
           VarInfo base = ppt.findVar(elems.term);
-          Assert.assertTrue(base != null);
-          if (! base.type.isArray()) {
-            vi = base;
+          // Assert.assertTrue(base != null);
+          if (base != null) {
+            if (! base.type.isArray()) {
+              vi = base;
+            }
           }
         }
         // System.out.println("really modified var: " + ((vi == null) ? "null" : vi.name.name()));
@@ -834,17 +836,19 @@ public class PrintInvariants {
           out.print("modifies ");
         else
           out.print("assignable ");
+        int inserted = 0;
         for (int i=0; i<mods.size(); i++) {
           VarInfo vi = (VarInfo)mods.elementAt(i);
           String name = vi.name.name();
           if (!name.equals("this")) {
-            if (i>0) {
+            if (inserted>0) {
               out.print(", ");
             }
             if (name.endsWith("[]")) {
               name = name.substring(0, name.length()-1) + "*]";
             }
             out.print(name);
+          inserted++;
           }
         }
         out.println();
@@ -1282,6 +1286,7 @@ public class PrintInvariants {
 
     if(wrap_xml) {
       out.print("<INVINFO>");
+      out.print("<" + inv.ppt.parent.ppt_name.getPoint() + ">");
       out.print("<INV> ");
       out.print(inv_rep);
       out.print(" </INV> ");

@@ -74,7 +74,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR_STRING "OneOfFloat"
   #define SINGLESCALAR SingleFloat
   #define NUMWRAPPER Double
-  #define TOSTRING(x) String.valueOf(x)
+  #define TOSTRING(x) (Double.isNaN(x) ? "Double.NaN" : String.valueOf(x))
   #define TOSTRING_SIMPLIFY(x) simplify_format_double(x)
   #define NAME var().name.name()
   #define JAVA_NAME var().name.java_name(var())
@@ -114,7 +114,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR_STRING "OneOfSequenceFloat"
   #define SINGLESCALAR SingleFloatSequence
   #define TOSTRING(x) ArraysMDE.toString(x)
-  #define TOSTRINGELEMENT(x) String.valueOf(x)
+  #define TOSTRINGELEMENT(x) (Double.isNaN(x) ? "Double.NaN" : String.valueOf(x))
   #define TOSTRING_SIMPLIFY(x) simplify_format_double(x)
   #define ELT_EQUALS(a,b) (((a) == (b)) || (Double.isNaN(a) &&Double.isNaN(b)))
   #define NAME var().name.name()
