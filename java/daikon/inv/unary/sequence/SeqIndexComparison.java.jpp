@@ -225,15 +225,20 @@ public final class CLASSNAME
     if (logDetail())
       log ("Entered add_modified: ppt.num_values()==" + ppt.num_values() +
            ", sample== " + ArraysMDE.toString(a));
+    InvariantStatus finalStatus = InvariantStatus.NO_CHANGE;
     for (int i=0; i<a.length; i++) {
-      if (core.add_modified(a[i], i, count) ==
-          InvariantStatus.FALSIFIED) {
+      InvariantStatus status = core.add_modified(a[i], i, count);
+      if(status == InvariantStatus.FALSIFIED) {
         return InvariantStatus.FALSIFIED;
+      } else if (status == InvariantStatus.WEAKENED) {
+        finalStatus = status;
       }
     }
+
     if (logDetail())
       log ("Exiting add_modified with ppt.num_values()==" + ppt.num_values());
-    return InvariantStatus.NO_CHANGE;
+
+    return finalStatus;
   }
 
   protected double computeConfidence() {

@@ -114,8 +114,9 @@ public final class CLASSNAME
     obvious_can_be_ge = tmp;
   }
 
-  public InvariantStatus add_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
 
+  // I am used in SeqIndexComparision.java.jpp
+  public InvariantStatus add_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
     boolean new_can_be_eq = can_be_eq;
     boolean new_can_be_lt = can_be_lt;
     boolean new_can_be_gt = can_be_gt;
@@ -151,7 +152,6 @@ public final class CLASSNAME
       return InvariantStatus.FALSIFIED;
     }
 
-    wrapper.cloneAndFlow();
     can_be_eq = new_can_be_eq;
     can_be_lt = new_can_be_lt;
     can_be_gt = new_can_be_gt;

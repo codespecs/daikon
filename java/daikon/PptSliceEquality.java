@@ -391,7 +391,10 @@ public class PptSliceEquality
         for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
           Invariant inv = (Invariant) j.next();
           if (inv.isObviousStatically_AllInEquality()) {
-            inv.destroyAndFlow();
+            //            inv.destroyAndFlow();
+            inv.ppt.addToFlow(inv);
+            inv.falsified = true;
+            inv.ppt.addToChanged(inv);
           }
         }
         if (slice.invs.size() == 0) i.remove();

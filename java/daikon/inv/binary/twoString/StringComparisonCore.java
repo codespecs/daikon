@@ -121,7 +121,6 @@ public final class StringComparisonCore
       return InvariantStatus.FALSIFIED;
     }
 
-    wrapper.cloneAndFlow();
     can_be_eq = new_can_be_eq;
     can_be_lt = new_can_be_lt;
     can_be_gt = new_can_be_gt;

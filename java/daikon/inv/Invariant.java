@@ -510,96 +510,96 @@ public abstract class Invariant
     suppressees = null;
   }
 
-  /**
-   * Mark this invariant as falsified.
-   * Invariants must also call flow when they are falsified
-   * Has to be public because of wrappers; do not call from outside world.
-   * @see #flow(Invariant)
-   **/
-  public void destroy() {
-    falsified = true;
-    if (logOn() || PptSlice.debugFlow.isLoggable(Level.FINE))
-      log (PptSlice.debugFlow, "Destroyed " + format());
+//   /**
+//    * Mark this invariant as falsified.
+//    * Invariants must also call flow when they are falsified
+//    * Has to be public because of wrappers; do not call from outside world.
+//    * @see #flow(Invariant)
+//    **/
+//   public void destroy() {
+//     falsified = true;
+//     if (logOn() || PptSlice.debugFlow.isLoggable(Level.FINE))
+//       log (PptSlice.debugFlow, "Destroyed " + format());
 
-    // Add invariant to discard list.  Note this may not be correct
-    // given the comment below.
-    if (PrintInvariants.print_discarded_invariants)
-      ppt.parent.falsified_invars.add(this);
+//     // Add invariant to discard list.  Note this may not be correct
+//     // given the comment below.
+//     if (PrintInvariants.print_discarded_invariants)
+//       ppt.parent.falsified_invars.add(this);
 
-    // [INCR] Commented out because removeInvariant removes this from
-    // the pptslice.  In V3, this happens after invariants are
-    // checked.  Plus, destroy() may be called during such removal.
-    // ppt.removeInvariant(this);
-  }
+//     // [INCR] Commented out because removeInvariant removes this from
+//     // the pptslice.  In V3, this happens after invariants are
+//     // checked.  Plus, destroy() may be called during such removal.
+//     // ppt.removeInvariant(this);
+//   }
 
-  /**
-   * Flow argument to all lower program points.
-   * Has to be public because of wrappers (?); do not call from outside world.
-   * @see #destroy
-   **/
-  private void flow(Invariant flowed) {
-    ppt.addToFlow(flowed);
-  }
+//   /**
+//    * Flow argument to all lower program points.
+//    * Has to be public because of wrappers (?); do not call from outside world.
+//    * @see #destroy
+//    **/
+//   private void flow(Invariant flowed) {
+//     ppt.addToFlow(flowed);
+//   }
 
-  /**
-   * Essentially the same as flow(this).  Useful way to flow oneself
-   * without much hassle (as long as internal state is still OK).
-   * Nice point of control in case we later have to tweak things when
-   * flowing ourselves.
-   **/
-  private void flowThis() {
-    flow(this);
-  }
+//   /**
+//    * Essentially the same as flow(this).  Useful way to flow oneself
+//    * without much hassle (as long as internal state is still OK).
+//    * Nice point of control in case we later have to tweak things when
+//    * flowing ourselves.
+//    **/
+//   private void flowThis() {
+//     flow(this);
+//   }
 
-  /**
-   * Essentially the same as flow(this.clone()).  Useful way to flow
-   * oneself without much hassle (as long as internal state is still
-   * OK).  Nice point of control in case we later have to tweak things
-   * when flowing ourselves.  This method and destroy() are made
-   * private because both of them require a call to addToChanged() for
-   * correct suppression.
-   **/
-  private void flowClone() {
-    Invariant flowed = (Invariant) this.clone();
-    flow(flowed);
-  }
+//   /**
+//    * Essentially the same as flow(this.clone()).  Useful way to flow
+//    * oneself without much hassle (as long as internal state is still
+//    * OK).  Nice point of control in case we later have to tweak things
+//    * when flowing ourselves.  This method and destroy() are made
+//    * private because both of them require a call to addToChanged() for
+//    * correct suppression.
+//    **/
+//   private void flowClone() {
+//     Invariant flowed = (Invariant) this.clone();
+//     flow(flowed);
+//   }
 
-  /**
-   * Destroy this, add this to the list of Invariants to flow, and add
-   * this to list of falsified or weakened invariants.
-   **/
-  public void destroyAndFlow () {
-    if (debugFlow.isLoggable(Level.FINE) || logOn()) {
-      log (debugFlow, "added to destroyed.");
-    }
-    flowThis();
-    destroy();
-    ppt.addToChanged (this);
-  }
+//   /**
+//    * Destroy this, add this to the list of Invariants to flow, and add
+//    * this to list of falsified or weakened invariants.
+//    **/
+//   public void destroyAndFlow () {
+//     if (debugFlow.isLoggable(Level.FINE) || logOn()) {
+//       log (debugFlow, "added to destroyed.");
+//     }
+//     flowThis();
+//     destroy();
+//     ppt.addToChanged (this);
+//   }
 
-  /**
-   * Add a copy of this to the list of Invariants to flow, and add
-   * this to list of falsified or weakened invariants.  Why is this
-   * different from flowClone?  Because the Invariant to flow is a
-   * clone of this, but the Invariant that's weakened is this.  The
-   * former is needed for flow, the latter for suppression.  By
-   * contract, users should call cloneAndFlow rather than flowClone.
-   **/
-  public void cloneAndFlow() {
-    // We must still do this to check suppression
-    ppt.addToChanged (this);
-    if (debugFlow.isLoggable(Level.FINE) || logOn()) {
-      log (debugFlow, " added to changed.");
-    }
+//   /**
+//    * Add a copy of this to the list of Invariants to flow, and add
+//    * this to list of falsified or weakened invariants.  Why is this
+//    * different from flowClone?  Because the Invariant to flow is a
+//    * clone of this, but the Invariant that's weakened is this.  The
+//    * former is needed for flow, the latter for suppression.  By
+//    * contract, users should call cloneAndFlow rather than flowClone.
+//    **/
+//   public void cloneAndFlow() {
+//     // We must still do this to check suppression
+//     ppt.addToChanged (this);
+//     if (debugFlow.isLoggable(Level.FINE) || logOn()) {
+//       log (debugFlow, " added to changed.");
+//     }
 
-    if (!flowed) {
-      if (debugFlow.isLoggable(Level.FINE) || logOn()) {
-        log (debugFlow, repr() + " added to flowed.");
-      }
-      flowClone();
-      flowed = true;
-    }
-  }
+//     if (!flowed) {
+//       if (debugFlow.isLoggable(Level.FINE) || logOn()) {
+//         log (debugFlow, repr() + " added to flowed.");
+//       }
+//       flowClone();
+//       flowed = true;
+//     }
+//   }
 
   /**
    * Do nothing special, except disconnect the clone from
