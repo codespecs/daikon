@@ -180,10 +180,15 @@ public abstract class VarInfoName
 
   /**
    * Returns a name for the size of this (this object should be a
-   * sequence).  Form is like "size(this)" or "this.length".
+   * sequence).  Form is like "size(a[])" or "a.length".
    **/
   public VarInfoName applySize() {
-    return (new SizeOf(this)).intern();
+    // The simple approach is wrong because this might be "orig(a[])"
+    // return (new SizeOf((Elements) this)).intern();
+    Elements elems = (new ElementsFinder(this)).elems();
+    Assert.assert(elems != null, "applySize should have elements to use in " + this);
+    Replacer r = new Replacer(elems, (new SizeOf(elems)).intern());
+    return r.replace(this).intern();
   }
 
   /**
@@ -191,8 +196,8 @@ public abstract class VarInfoName
    * or "sequence.length".
    **/
   public static class SizeOf extends VarInfoName {
-    public final VarInfoName sequence;
-    public SizeOf(VarInfoName sequence) {
+    public final Elements sequence;
+    public SizeOf(Elements sequence) {
       Assert.assert(sequence != null);
       this.sequence = sequence;
     }
@@ -200,10 +205,10 @@ public abstract class VarInfoName
       return "size(" + sequence.name() + ")";
     }
     protected String esc_name_impl() {
-      return sequence.esc_name() + ".length";
+      return sequence.term.esc_name() + ".length";
     }
     protected String simplify_name_impl() {
-      return "(arrayLength " + sequence.simplify_name() + ")";
+      return "(arrayLength " + sequence.term.simplify_name() + ")";
     }
     public Object accept(Visitor v) {
       return v.visitSizeOf(this);
@@ -434,7 +439,8 @@ public abstract class VarInfoName
       return term.name() + "[" + index + "]";
     }
     protected String esc_name_impl() {
-      throw new UnsupportedOperationException("ESC cannot format an unquantified sequence of elements");
+      throw new UnsupportedOperationException("ESC cannot format an unquantified sequence of elements" + 
+					      " [name=" + name() + "]");
     }
     protected String esc_name_impl(String index) {
       return term.name() + "[" + index + "]";
@@ -513,69 +519,14 @@ public abstract class VarInfoName
     }
   }
 
-//    public static String addSubscript(String base, String subscript) {
-//      // This logic may belong elsewhere (and the heuristics are incorrect anyway).
-//      String suffix = "";
-//      if (base.endsWith("[]")) {
-//        base = base.substring(0, base.length()-2);
-//      } else if (base.startsWith("orig(") && base.endsWith("[])")) {
-//        // This is heuristic; I think it's probably OK.
-//        base = base.substring(0, base.length()-3);
-//        suffix = ")";
-//      } else if (base.startsWith("\\old(") && base.endsWith(")")) {
-//        // This is even more heuristic; I think it's probably also OK.
-//        base = base.substring(0, base.length()-1);
-//        suffix = ")";
-//        // Even more heuristic; starting to get scary.
-//        int subold = subscript.indexOf("\\old(");
-//        while (subold != -1) {
-//          int oldcloseparen = subscript.indexOf(")", subold);
-//          Assert.assert(oldcloseparen != -1);
-//          subscript = (subscript.substring(0, subold)
-//                       + subscript.substring(subold+5, oldcloseparen)
-//                       + subscript.substring(oldcloseparen+1));
-//          subold = subscript.indexOf("\\old(");
-//        }
-//      } else {
-//        throw new Error("what base? addSubscript(" + base + ", " + subscript + ")");
-//      }
-//      Assert.assert(subscript.indexOf("]") == -1);
-//      Assert.assert(suffix.indexOf("]") == -1);
-//      return base + "[" + subscript + "]" + suffix;
-//    }
-
-//    // The caller must assure that if the base is \old, so is the subscript.
-//    public static String addSubscript_esc(String base, String subscript) {
-//      // This logic may belong elsewhere (and the heuristics are incorrect anyway).
-//      String suffix = "";
-//      Assert.assert (! base.endsWith("[]"));
-
-//      if (base.startsWith("\\old(") && base.endsWith(")")) {
-//        base = base.substring(0, base.length()-1);
-//        suffix = ")";
-//        int subold = subscript.indexOf("\\old(");
-//        while (subold != -1) {
-//          int oldcloseparen = subscript.indexOf(")", subold);
-//          Assert.assert(oldcloseparen != -1);
-//          subscript = (subscript.substring(0, subold)
-//                       + subscript.substring(subold+5, oldcloseparen)
-//                       + subscript.substring(oldcloseparen+1));
-//          subold = subscript.indexOf("\\old(");
-//        }
-//      }
-//      Assert.assert(subscript.indexOf("]") == -1);
-//      Assert.assert(suffix.indexOf("]") == -1);
-//      return base + "[" + subscript + "]" + suffix;
-//    }
-
   /**
    * Returns a name for a slice of element selected from a sequence,
    * like "this[i..j]".  If an endpoint is null, it means "from the
    * start" or "to the end".
    **/
   public VarInfoName applySlice(VarInfoName i, VarInfoName j) {
-    // a[] -> a[index]
-    // orig(a[]) -> orig(a[post(index)])
+    // a[] -> a[index..]
+    // orig(a[]) -> orig(a[post(index)..])
     ElementsFinder finder = new ElementsFinder(this);
     Elements elems = finder.elems();
     Assert.assert(elems != null);
@@ -908,9 +859,9 @@ public abstract class VarInfoName
       return o.sequence.term.accept(this);
     }
     public Object visitSlice(Slice o) {
-      unquant.add(this);
-      o.i.accept(this);
-      o.j.accept(this);
+      unquant.add(o);
+      if (o.i != null) { o.i.accept(this); }
+      if (o.j != null) { o.j.accept(this); }
       // don't visit the sequence; we will replace the slice with the
       // subscript, so we want to leave the elements alone
       return o.sequence.term.accept(this);
@@ -920,29 +871,48 @@ public abstract class VarInfoName
   public static class QuantHelper {
 
     // <root, needy, index> -> <root', lower, upper>
+    /**
+     * Replaces a needy (unquantified term) with its subscripted
+     * equivalent, using the given index variable.
+     *
+     * @param root the root of the expression to be modified
+     * @param needy the term to be subscripted (must be of type Elements or Slice)
+     * @param index the variable to place in the subscript
+     *
+     * @return a 3-element array consisting of the new root, the lower
+     * bound for the index (inclusive), and the upper bound for the
+     * index (inclusive), in that order.
+     **/
     public static VarInfoName[] replace(VarInfoName root, VarInfoName needy, VarInfoName index) {
       Assert.assert(root != null);
       Assert.assert(needy != null);
       Assert.assert(index != null);
       Assert.assert((needy instanceof Elements) || (needy instanceof Slice));
 
-      VarInfoName root_prime, lower, upper;
-
+      // Figure out what to replace needy with, and the appropriate
+      // bounds to use
       VarInfoName replace_with;
+      VarInfoName lower, upper;
       if (needy instanceof Elements) {
-	VarInfoName sequence = ((Elements) needy).term;
-	root_prime = sequence.applySubscript(index);
+	Elements sequence = (Elements) needy;
+	replace_with = sequence.applySubscript(index);
 	lower = parse("0");
 	upper = sequence.applySize().applyDecrement();
       } else if (needy instanceof Slice) {
 	Slice slice = (Slice) needy;
-	root_prime = slice.sequence.applySubscript(index);
-	lower = slice.i;
-	upper = slice.j;
+	replace_with = slice.sequence.applySubscript(index);
+	lower = (slice.i != null) ? slice.i :
+	  parse("0");
+	upper = (slice.j != null) ? slice.j :
+	  slice.sequence.applySize().applyDecrement();
       } else {
-	// placate javac
-	return null;
+	// unreachable; placate javac
+	throw new IllegalStateException();
       }
+      Assert.assert(replace_with != null);
+
+      // replace needy
+      VarInfoName root_prime = (new Replacer(needy, replace_with)).replace(root).intern();
 
       Assert.assert(root_prime != null);
       Assert.assert(lower != null);
@@ -951,17 +921,32 @@ public abstract class VarInfoName
       return new VarInfoName[] { root_prime, lower, upper };
     }
 
-    // <root*> -> <<root', index, lower, upper>?*>
-    public static VarInfoName[][] quantify(VarInfoName[] roots) {
+    /**
+     * Record type for return value of the quantify method below
+     **/
+    public static class QuantifyReturn {
+      public VarInfoName[] root_primes;
+      public Vector bound_vars; // of VarInfoName[3] = <variable, lower, upper>
+    }
+
+    // <root*> -> <root'*, <index, lower, upper>*>
+    /**
+     * Given a list of roots, changes all Elements or Slice terms to
+     * Subscripts by inserting a new free variable; also return bounds
+     * for the new variables.
+     **/
+    public static QuantifyReturn quantify(VarInfoName[] roots) {
       Assert.assert(roots != null);
 
-      VarInfoName[][] result = new VarInfoName[roots.length][];
+      // create empty result
+      QuantifyReturn result = new QuantifyReturn();
+      result.root_primes = new VarInfoName[roots.length];
+      result.bound_vars = new Vector();
 
-      // a Set[Simples] representing all of the simple identifiers
-      // used by these roots
-      Set simples = new HashSet();
+      // all of the simple identifiers used by these roots
+      Set simples = new HashSet(); // [Simple]
 
-      // build helper for each roots
+      // build helper for each roots; collect identifiers
       QuantifierVisitor[] helper = new QuantifierVisitor[roots.length];
       for (int i=0; i < roots.length; i++) {
 	helper[i] = new QuantifierVisitor(roots[i]);
@@ -973,14 +958,24 @@ public abstract class VarInfoName
       char tmp = 'i';
       for (int i=0; i < roots.length; i++) {
 	List uq = new ArrayList(helper[i].unquants());
-	if (uq.size() > 0) {
+	if (uq.size() == 0) {
+	  // nothing needs qnautification
+	  result.root_primes[i] = roots[i];
+	} else {
 	  Assert.assert(uq.size() == 1, "We can only handle 1D arrays for now");
 	  VarInfoName uq_elt = (VarInfoName) uq.get(0);
 
 	  VarInfoName idx = (new Simple(String.valueOf(tmp++))).intern();
 	  Assert.assert(!simples.contains(idx), "Index variable unexpectedly used");
 
-	  result[i] = replace(roots[i], uq_elt, idx);
+	  // call replace and unpack results
+	  VarInfoName[] replace_result = replace(roots[i], uq_elt, idx);
+	  VarInfoName root_prime = replace_result[0];
+	  VarInfoName lower = replace_result[1];
+	  VarInfoName upper = replace_result[2];
+
+	  result.root_primes[i] = replace_result[i]; 
+	  result.bound_vars.add(new VarInfoName[] { idx, lower, upper });
 	}
       }
 
@@ -988,52 +983,100 @@ public abstract class VarInfoName
     }
 
     // <root*> -> <string string*>
+    /**
+     * Given a list of roots, return a String array where the first
+     * element is a ESC-style quantification over newly-introduced
+     * bound variables, the last element is a closer, and the other
+     * elements are esc-named strings for the provided roots (with
+     * sequenced subscripted by one of the new bound variables).
+     **/
     public static String[] format_esc(VarInfoName[] roots) {
       Assert.assert(roots != null);
 	
-      VarInfoName[][] intermediate = quantify(roots);
+      QuantifyReturn qret = quantify(roots);
 
       // build the "\forall ..." predicate
-      String[] result = new String[roots.length+1];
-      StringBuffer forall;
+      String[] result = new String[roots.length+2];
+      StringBuffer int_list, conditions;
       {
-	forall = new StringBuffer("\\forall int ");
-	// i,j,...
-	boolean comma = false;
-	for (int i=0; i < intermediate.length; i++) {
-	  if (intermediate[i] != null) {
-	    if (comma) { forall.append(", "); }
-	    forall.append(intermediate[i][1]); // 1 = index
-	    comma = true;
+	// "i, j, ..."
+	int_list = new StringBuffer();
+	// "ai <= i && i <= bi && aj <= j && j <= bj && ..."
+	conditions = new StringBuffer();
+	for (int i=0; i < qret.bound_vars.size(); i++) {
+	  VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
+	  VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
+	  if (i != 0) {
+	    int_list.append(", ");
+	    conditions.append(" && ");
 	  }
+	  int_list.append(idx.esc_name());
+	  conditions.append(low.esc_name());
+	  conditions.append(" <= ");
+	  conditions.append(idx.esc_name());
+	  conditions.append(" && ");
+	  conditions.append(idx.esc_name());
+	  conditions.append(" <= ");
+	  conditions.append(high.esc_name());
 	}
-	forall.append("; (");
-	boolean andand = false;
-	// ai <= i && i <= bi && aj <= j && j <= bj && ...
-	for (int i=0; i < intermediate.length; i++) {
-	  if (intermediate[i] != null) {
-	  if (andand) { forall.append(" && "); }
-	    forall.append(intermediate[i][2].esc_name()); // 2 = lower
-	    forall.append(" <= ");
-	    forall.append(intermediate[i][1].esc_name()); // 1 = index
-	    forall.append(" && ");
-	    forall.append(intermediate[i][1].esc_name()); // 1 = index
-	    forall.append(" <= ");
-	    forall.append(intermediate[i][3].esc_name()); // 3 = lower
-	    andand = true;
-	  }
-	}
-	forall.append(") ==> ");
       }
-      result[0] = forall.toString();
+      result[0] = "(\\forall int " + int_list + "; (" + conditions + ") ==> ";
+      result[result.length-1] = ")";
 
       // stringify the terms
       for (int i=0; i < roots.length; i++) {
-	if (intermediate[i] != null) {
-	  result[i+1] = intermediate[i][0].esc_name(); // 0 = root'
-	} else {
-	  result[i+1] = roots[i].esc_name();
+	result[i+1] = qret.root_primes[i].esc_name();
+      }
+
+      return result;
+    }
+
+    // <root*> -> <string string*>
+    /**
+     * Given a list of roots, return a String array where the first
+     * element is a simplify-style quantification over
+     * newly-introduced bound variables, the last element is a closer,
+     * and the other elements are simplify-named strings for the
+     * provided roots (with sequenced subscripted by one of the new
+     * bound variables).
+     **/
+    public static String[] format_simplify(VarInfoName[] roots) {
+      Assert.assert(roots != null);
+	
+      QuantifyReturn qret = quantify(roots);
+
+      // build the forall predicate
+      String[] result = new String[roots.length+2];
+      StringBuffer int_list, conditions;
+      {
+	// "i j ..."
+	int_list = new StringBuffer();
+	// "(AND (<= ai i) (<= i bi) (<= aj j) (<= j bj) ...)"
+	conditions = new StringBuffer();
+	for (int i=0; i < qret.bound_vars.size(); i++) {
+	  VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
+	  VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
+	  if (i != 0) {
+	    int_list.append(" ");
+	  }
+	  int_list.append(idx.simplify_name());
+	  conditions.append("(<= ");
+	  conditions.append(low.simplify_name());
+	  conditions.append(" ");
+	  conditions.append(idx.simplify_name());
+	  conditions.append(") (<= ");
+	  conditions.append(idx.simplify_name());
+	  conditions.append(" ");
+	  conditions.append(high.simplify_name());
+	  conditions.append(")");
 	}
+      }
+      result[0] = "(FORALL (" + int_list + ") (IMPLES (AND " + conditions + ") ";
+      result[result.length-1] = "))"; // close IMPLIES, FORALL
+
+      // stringify the terms
+      for (int i=0; i < roots.length; i++) {
+	result[i+1] = qret.root_primes[i].simplify_name();
       }
 
       return result;
