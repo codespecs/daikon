@@ -9,7 +9,7 @@ all: ${AUTO_GENERATED_FILES}
 clean:
 	rm -f *.class
 
-veryclean: clean
+very_clean: clean
 	rm -f ${AUTO_GENERATED_FILES}
 
 tags:
@@ -20,12 +20,19 @@ tags:
 test:	clean all
 	set JAVA_COMPILER=NONE; java utilMDE.TestUtilMDE
 
+# I do this in another directory to prevent javadoc from getting confused
+# by the -cpp.java files, which aren't legal Java source.
 doc: $(JAVA_FILES)
+	rm -rf /tmp/utilMDE-doc
+	mkdir -p /tmp/utilMDE-doc/utilMDE
+	cp -p $(JAVA_FILES) /tmp/utilMDE-doc/utilMDE
 	mkdir -p doc
-	javadoc -d doc utilMDE
+	javadoc -sourcepath /tmp/utilMDE-doc -d doc utilMDE
+	# makes "doc" (the target of this rule) look up to date
 	touch doc
 	jdk-add-munged-anchor-names doc/utilMDE/*.html
 	@echo "Run jdk-index-to-alist (see ~/bin/share/jdk-index-to-alist)"
+	rm -rf /tmp/utilMDE-doc
 
 audit:
 	(cd ..; maudit utilMDE)
@@ -35,7 +42,7 @@ audit:
 utilMDE.tar.gz: $(JAVA_FILES) Makefile README
 	rm -rf /tmp/utilMDE
 	mkdir /tmp/utilMDE
-	cp -p $(JAVA_FILES) /tmp/utilMDE
+	cp -p $(ALL_JAVA_FILES) /tmp/utilMDE
 	cp -p Makefile README /tmp/utilMDE	
 	(cd /tmp/utilMDE; make all doc)
 	(cd /tmp; tar zcf utilMDE.tar.gz utilMDE)

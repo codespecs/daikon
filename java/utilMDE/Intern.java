@@ -32,12 +32,16 @@ public final class Intern {
       return true;
     } else if (value instanceof String) {
       return (value == ((String) value).intern());
+    } else if (value instanceof String[]) {
+      return (value == intern((String[]) value));
     } else if (value instanceof Integer) {
       return (value == intern((Integer) value));
     } else if (value instanceof Long) {
       return (value == intern((Long) value));
     } else if (value instanceof int[]) {
       return (value == intern((int[]) value));
+    } else if (value instanceof long[]) {
+      return (value == intern((long[]) value));
     } else if (value instanceof Double) {
       return (value == intern((Double) value));
     } else if (value instanceof double[]) {
@@ -102,6 +106,25 @@ public final class Intern {
         result = result * FACTOR + a[i];
       }
       return result;
+    }
+  }
+
+  /**
+   * Hasher object which hashes and compares long[] objects according
+   * to their contents.
+   * @see Hasher, java.util.Arrays.equals
+   */
+  private static final class LongArrayHasher implements Hasher {
+    public boolean equals(Object a1, Object a2) {
+      return java.util.Arrays.equals((long[])a1, (long[])a2);
+    }
+    public int hashCode(Object o) {
+      long[] a = (long[])o;
+      long result = 0;
+      for (int i=0; i<a.length; i++) {
+        result = result * FACTOR + a[i];
+      }
+      return (int) (result % Integer.MAX_VALUE);
     }
   }
 
@@ -172,6 +195,7 @@ public final class Intern {
   private static WeakHasherMap internedIntegers;
   private static WeakHasherMap internedLongs;
   private static WeakHasherMap internedIntArrays;
+  private static WeakHasherMap internedLongArrays;
   private static WeakHasherMap internedDoubles;
   private static WeakHasherMap internedDoubleArrays;
   private static WeakHasherMap internedObjectArrays;
@@ -180,6 +204,7 @@ public final class Intern {
     internedIntegers = new WeakHasherMap(new IntegerHasher());
     internedLongs = new WeakHasherMap(new LongHasher());
     internedIntArrays = new WeakHasherMap(new IntArrayHasher());
+    internedLongArrays = new WeakHasherMap(new LongArrayHasher());
     internedDoubles = new WeakHasherMap(new DoubleHasher());
     internedDoubleArrays = new WeakHasherMap(new DoubleArrayHasher());
     internedObjectArrays = new WeakHasherMap(new ObjectArrayHasher());
@@ -189,12 +214,14 @@ public final class Intern {
   public static int numIntegers() { return internedIntegers.size(); }
   public static int numLongs() { return internedLongs.size(); }
   public static int numIntArrays() { return internedIntArrays.size(); }
+  public static int numLongArrays() { return internedLongArrays.size(); }
   public static int numDoubles() { return internedDoubles.size(); }
   public static int numDoubleArrays() { return internedDoubleArrays.size(); }
   public static int numObjectArrays() { return internedObjectArrays.size(); }
   public static Iterator integers() { return internedIntegers.keySet().iterator(); }
   public static Iterator longs() { return internedLongs.keySet().iterator(); }
   public static Iterator intArrays() { return internedIntArrays.keySet().iterator(); }
+  public static Iterator longArrays() { return internedLongArrays.keySet().iterator(); }
   public static Iterator doubles() { return internedDoubles.keySet().iterator(); }
   public static Iterator doubleArrays() { return internedDoubleArrays.keySet().iterator(); }
   public static Iterator objectArrays() { return internedObjectArrays.keySet().iterator(); }
@@ -272,6 +299,22 @@ public final class Intern {
       return (int[])ref.get();
     } else {
       internedIntArrays.put(a, new WeakReference(a));
+      return a;
+    }
+  }
+
+  /**
+   * Intern (canonicalize) an long[].
+   * Returns a canonical representation for the long[] array.
+   * Arrays are compared according to their elements.
+   */
+  public static long[] intern(long[] a) {
+    Object lookup = internedLongArrays.get(a);
+    if (lookup != null) {
+      WeakReference ref = (WeakReference)lookup;
+      return (long[])ref.get();
+    } else {
+      internedLongArrays.put(a, new WeakReference(a));
       return a;
     }
   }
