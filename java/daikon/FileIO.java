@@ -90,7 +90,7 @@ public final class FileIO {
   public static boolean dkconfig_read_samples_only = false;
 
   /** Boolean.  When true, don't print unmatched procedure entries. **/
-  public static boolean dkconfig_unmatched_procedure_entries_quiet = false;
+  public static boolean dkconfig_unmatched_procedure_entries_quiet = true;
 
   /**
    * Boolean.  When true, suppress Exceptions related to file reading.
