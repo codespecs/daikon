@@ -298,6 +298,9 @@ public final class ONEOFSCALAR
 
   public static ONEOFSCALAR instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
+    if (debug.isDebugEnabled())
+      debug.debug (ONEOFSCALAR_STRING + " instantiate " + ppt.name);
+
     return new ONEOFSCALAR(ppt);
   }
 
