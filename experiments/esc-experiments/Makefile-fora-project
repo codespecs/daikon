@@ -17,7 +17,7 @@
 #
 # Assumes that each project has it's own subdirectory under esc-experiments/
 # Assumes that uninstumented code lives at esc-experiments/ (+ package structure)
-# Creates /scratch/esc-experiments/PROJECT/ directory to hold
+# Creates /scratch/$USER/esc-experiments/PROJECT/ directory to hold
 #   * instrumented source
 #   * decls files
 #   * compiled source
@@ -67,7 +67,7 @@ help:
 
 all: txt-esc merge esc
 
-SCRATCH_FOR_DAIKON?=/scratch/esc-experiments/${PROJECT}
+SCRATCH_FOR_DAIKON?=/scratch/${USER}/esc-experiments/${PROJECT}
 
 reset-scratch: reset-scratch-impl
 create-scratch: ${SCRATCH_FOR_DAIKON}/.exists
