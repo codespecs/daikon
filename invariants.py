@@ -3,7 +3,7 @@
 # Michael Ernst <mernst@cs.washington.edu>
 
 # For some additional documentation, see invariants.py.doc.
-import glob, operator, os, re, string, types, copy, posix, math
+import glob, operator, os, re, string, types, copy, posix, math, time
 
 import util
 
@@ -20,9 +20,10 @@ false = (1==0)
 # But if they're indented, maybe my future tools for variable decls won't work.
 if not locals().has_key("fn_var_infos"):
     ### User configuration variables
-    no_ternary_invariants = false
-    no_invocation_counts = false
-
+    no_ternary_invariants = true
+    no_invocation_counts = true
+    collect_stats = true
+    
     ### Debugging
     debug_read = false                  # reading files
     debug_derive = false                # deriving new values
@@ -37,7 +38,8 @@ if not locals().has_key("fn_var_infos"):
     file_fn_var_values = {} # from filename to (function to (values-tuple to occurrence))
 
     # From function name to invocation count.  Used to add invocation
-    # count variables for each program function
+    # count variables for each program function.
+    # Note the function name does not include the suffix ':::END...'
     ftn_names_to_call_ct = {}
 
     # From function name to (parameter names to list of param values)
@@ -47,7 +49,11 @@ if not locals().has_key("fn_var_infos"):
     # We have a list for the param values to provide for recursive
     # function calls.  As we pop recursive calls to the function off
     # the stack, we pop orig parameter vals off the list.
+    # Note the function name does not include the suffix ':::END...'
     ftn_to_orig_param_vals = {}
+
+    # From function name to stats.  Used *only* if collect_stats = true
+    fn_to_stats = {}
 
 def clear_variables():
     """Reset the values of some global variables."""
@@ -60,7 +66,8 @@ def clear_variables():
     file_fn_var_values.clear()
     ftn_names_to_call_ct = {}
     ftn_to_orig_param_vals = {}
-
+    fn_to_stats = {}
+    
 def clear_invariants(fn_regexp=None):
     """Reset the values of invariants, globally."""
     for fn_name in fn_var_infos.keys():
@@ -77,7 +84,6 @@ float_re = re.compile(r'^-?[0-9]*\.[0-9]+$|^-?[0-9]+\.[0-9]*$')
 # This should only be used once per variable; after that, read out the
 # type from the var_info object
 sequence_re = re.compile(r'^[^	]+\[(|[^][]+\.\.[^][]+)\]$')
-
 
 class var_info:
     name = None                         # string
@@ -1175,11 +1181,17 @@ def all_numeric_invariants(fn_regexp=None):
 
     clear_invariants(fn_regexp)
 
+    if collect_stats:
+        collect_pre_derive_data()
+        
     fn_names = fn_var_infos.keys()
     fn_names.sort()
     for fn_name in fn_names:
         if fn_regexp and not fn_regexp.match(fn_name):
             continue
+        if collect_stats:
+            begin_fn_timing(fn_name)
+            
         # If we discover that two values are equal, then there is no sense
         # in using both at any later stage; eliminate one of them and so
         # avoid redundant computation.
@@ -1243,6 +1255,12 @@ def all_numeric_invariants(fn_regexp=None):
         # I hope this doesn't give too many results
         print_invariants("^" + re.escape(fn_name) + r'($|\b)')
 
+        if collect_stats:
+            end_fn_timing(fn_name)
+
+    if collect_stats:
+        collect_post_derive_data()
+        print_stats()
     # print_invariants(fn_regexp)
 
 ## Testing:
@@ -1479,7 +1497,6 @@ def print_invariants(fn_regexp=None, print_unconstrained=0):
             if vi.equal_to == []:
                 continue
             if vi.invariant.is_exact():
-                print "yee"
                 value = "= %s" % vi.invariant.min
             else:
                 value = ""
@@ -2953,3 +2970,204 @@ def _test():
 #         print fn_name, these_vars
 #         print "   ", `this_inv`
 #         print "   ", this_inv
+
+###########################################################################
+### Gathering performance data
+###
+
+class stats:
+    # Used to encapsulate all the stats we need to store for the invariant engine
+    # Used on a per function basis
+
+    # Collected after reading in files and before deriving variables
+    orig_num_scl_params = None
+    orig_num_scl_locals = None
+    orig_num_scl_globals = None
+    orig_num_seq_params = None
+    orig_num_seq_locals = None
+    orig_num_seq_globals = None
+
+    # Collected after deriving variables
+    # Note that we aren't keeping track of derived parameters/locals/globals???
+    total_num_scl = None
+    total_num_seq = None
+    
+    samples = None
+
+    # Collect the values separately for invariants on singles/pairs
+    total_num_values_ind = None
+    total_num_invs_pair = None
+    total_num_values_pair = None
+
+    # in secs...
+    fn_begin_time = None
+    fn_end_time = None
+    #read_files_begin_time = None
+    #read_files_end_time = None
+        
+    def __init__(self):
+        self.orig_num_scl_params = 0
+        self.orig_num_scl_locals = 0
+        self.orig_num_scl_globals = 0
+        self.orig_num_seq_params = 0
+        self.orig_num_seq_locals = 0
+        self.orig_num_seq_globals = 0
+
+        self.total_num_scl = 0
+        self.total_num_seq = 0
+
+        self.samples = 0
+        self.total_num_values_ind = 0
+        self.total_num_invs_pair = 0
+        self.total_num_values_pair = 0
+
+        self.fn_begin_time = 0.0
+        self.fn_end_time = 0.0
+        #self.read_files_begin_time = 0
+        #self.read_files_end_time = 0
+
+    def format(self):
+        total_secs = self.fn_end_time - self.fn_begin_time
+        hours = int(total_secs / 3600.0)
+        minutes = int((total_secs % 3600)/60.0)
+        seconds = float(total_secs % 60)
+        print "    CPU time: %s hours, %s minutes, %s seconds" % (hours, minutes, seconds) 
+        print "    CPU time (secs):                       ", total_secs
+        print "    Total number of scalars:               ", self.total_num_scl
+        print "    Total number of sequences:             ", self.total_num_seq
+        # next stmt not true if triples!?
+        print "    Total number of invariants checked:    ", self.total_num_scl + self.total_num_seq + self.total_num_invs_pair
+        print "    Total number of samples:               ", self.samples
+        print "    Total number of individual values:     ", self.total_num_values_ind
+        if (self.total_num_scl + self.total_num_seq) != 0: 
+            print "    Average number of individual values:   ", float(self.total_num_values_ind) / float(self.total_num_scl + self.total_num_seq)
+        print "    Total number of pairs of values:       ", self.total_num_values_pair
+        if (self.total_num_invs_pair != 0):
+            print "    Average number of pairs of values:     ", float(self.total_num_values_pair) / float(self.total_num_invs_pair)
+        print ""
+        print "    Original number scalar parameters:     ", self.orig_num_scl_params
+        print "    Original number scalar locals:         ", self.orig_num_scl_locals
+        print "    Original number scalar globals:        ", self.orig_num_scl_globals
+        print "    =================================="
+        print "    Total original number scalars:         ", self.orig_num_scl_params + self.orig_num_scl_locals + self.orig_num_scl_globals
+        print ""
+        print "    Original number sequence parameters:   ", self.orig_num_seq_params
+        print "    Original number sequence locals:       ", self.orig_num_seq_locals
+        print "    Original number sequence globals:      ", self.orig_num_seq_globals
+        print "    =================================="
+        print "    Total original number sequences:       ", self.orig_num_seq_params + self.orig_num_seq_locals + self.orig_num_seq_globals
+        print ""
+        print "    Derived number of scalars:             ", self.total_num_scl - (self.orig_num_scl_params + self.orig_num_scl_locals + self.orig_num_scl_globals)
+        print "    Derived number of sequences:           ", self.total_num_seq - (self.orig_num_seq_params + self.orig_num_seq_locals + self.orig_num_seq_globals)
+
+
+def init_collect_stats():
+    """ Initialize the function to stats dictionary."""
+    for fn_name in fn_var_infos.keys():
+        fn_to_stats[fn_name] = stats()
+        
+def get_global_var_list():
+    """Compile a list of globals for use in stat collection."""
+
+    # Grab variable list for first function as possible globals.
+    # Eliminate elements that don't appear in other function var lists.
+    function_names = fn_var_infos.keys()
+    possible_global_var_infos = fn_var_infos[function_names[0]]
+    globals = []
+    for a_var_info in possible_global_var_infos:
+        is_global_var = true
+        for var_info_list in fn_var_infos.values():
+            if a_var_info.name not in map(lambda vi: vi.name, var_info_list):
+                is_global_var = false
+                continue
+        if is_global_var:
+            globals.append(a_var_info.name)
+    return globals
+            
+def collect_pre_derive_data():
+    init_collect_stats()
+    globals = get_global_var_list()
+
+    for (fn_name,var_info_list) in fn_var_infos.items():
+        fn_stats = fn_to_stats[fn_name]
+        (fn_name_sans_suffix, suffix) = string.split(fn_name, ":::", 1)
+        params = (ftn_to_orig_param_vals[fn_name_sans_suffix]).keys()
+        for var in var_info_list:
+            # original values of parameters should be considered derived? 
+            if string.find(var.name, "_orig") == -1:
+                if var.type == types.ListType:
+                    if var.name in params:
+                        fn_stats.orig_num_seq_params = fn_stats.orig_num_seq_params + 1
+                    elif var.name in globals:
+                        fn_stats.orig_num_seq_globals = fn_stats.orig_num_seq_globals + 1
+                    else:
+                        fn_stats.orig_num_seq_locals = fn_stats.orig_num_seq_locals + 1
+                else:
+                    if var.name in params:
+                        fn_stats.orig_num_scl_params = fn_stats.orig_num_scl_params + 1
+                    elif var.name in globals:
+                        fn_stats.orig_num_scl_globals = fn_stats.orig_num_scl_globals + 1
+                    else:
+                        fn_stats.orig_num_scl_locals = fn_stats.orig_num_scl_locals + 1
+
+def collect_post_derive_data():
+    for (fn_name,var_info_list) in fn_var_infos.items():
+        fn_stats = fn_to_stats[fn_name]
+        fn_stats.samples = fn_samples[fn_name]
+        for var in var_info_list:
+            fn_stats.total_num_values_ind = fn_stats.total_num_values_ind + var.invariant.values
+                
+            # Count all values for pairs of invariants.
+            # Be careful not to double count.  For example, if there is a pair invariant for indices (2,7),
+            # the invariant will appear in index 2's invariants[7] and in index 7's invariants[2].
+            # So we'll only include the invariants[j] in the list for index i if i < j
+            # This doesn't work if include triple invariants???
+
+            for i in var.invariants.keys():
+                if i > var.index:
+                    fn_stats.total_num_values_pair = fn_stats.total_num_values_pair + var.invariants[i].values
+                    fn_stats.total_num_invs_pair = fn_stats.total_num_invs_pair + 1
+
+            if var.type == types.ListType:
+                    fn_stats.total_num_seq = fn_stats.total_num_seq + 1
+            else:
+                    fn_stats.total_num_scl = fn_stats.total_num_scl + 1
+                    
+def begin_fn_timing(fn):
+    fn_stats = fn_to_stats[fn]
+    fn_stats.fn_begin_time = time.clock()
+
+def end_fn_timing(fn):
+    fn_stats = fn_to_stats[fn]
+    fn_stats.fn_end_time = time.clock()
+    
+def print_stats():
+    print "Invariant Engine Stats"
+    print "Configuration: no_invocation_counts: %s, no_ternary_invariants: %s, no_opts: %s" % (no_invocation_counts, no_ternary_invariants, __debug__)
+
+    total_secs = 0
+    for (fn_name,fn_stats) in fn_to_stats.items():
+        total_secs = total_secs + (fn_stats.fn_end_time - fn_stats.fn_begin_time)
+        
+    hours = int(total_secs / 3600.0)
+    minutes = int((total_secs % 3600)/60.0)
+    seconds = int(total_secs % 60)
+    print "CPU time: %s hours, %s minutes, %s seconds" % (hours, minutes, seconds) 
+    print "CPU time in secs: ", total_secs
+    
+    fn_names = fn_to_stats.keys()
+    fn_names.sort()
+    for fn_name in fn_names: 
+         fn_stats = fn_to_stats[fn_name]
+         print "==================================================================================="
+         print fn_name
+         fn_stats.format()
+    
+
+
+
+
+
+
+
+
