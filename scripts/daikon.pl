@@ -97,14 +97,14 @@ if ($output) {
     die("File $output.inv exists") if (-f "$output.inv");
     die("File $output.src.tar.gz exists") if (-f "$output.src.tar.gz");
 } else {
-    $output = $runnable;
-    $output =~ s/\./-/;
+    $prefix = $runnable;
+    $prefix =~ s/\./-/;
     my $sym = 0;
     do {
 	$sym = $sym + 1;
 	while ((length $sym) < 4) { $sym = '0' . $sym }
-    } while (-x "$output-$sym.inv" or -x "$output-$sym.src.tar.gz");
-    $output = $output . $sym;
+	$output = "$prefix-$sym";
+    } while (-x "$output.inv" or -x "$output.src.tar.gz");
 }
 print "Output will go in $output...\n" if $verbose;
 
