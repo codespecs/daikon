@@ -116,6 +116,10 @@ public final class FileIO
   {
     String inf = "daikon/test/fileIOTest.testStackAr";
     String outf = "daikon/test/fileIOTest.testStackAr.goal";
+    if (args.length > 0) {
+      inf = args[0];
+      outf = inf + ".parsed";
+    }
     PptMap map = read_declaration_files(Arrays.asList(new File[] { new File(inf) } ));
     dump_ppts(new FileOutputStream(new File(outf)), map);
   }
@@ -155,7 +159,7 @@ public final class FileIO
     // Set up orig() declarations and relationships
     setup_orig_decls(all_ppts);
     // Set up OBJECT on arguments relationships
-    // XXX
+    setup_argument_relations(all_ppts);
     return all_ppts;
   }
 
@@ -351,14 +355,32 @@ public final class FileIO
    * @see VarInfo.po_higher
    * @see VarInfo.po_lower
    **/
-  private static void setup_po_same_name(VarInfo[] higher,
-					 VarInfo[] lower)
+  private static void setup_po_same_name(VarInfo[] lower,
+					 VarInfo[] higher)
+  {
+    setup_po_same_name(lower, VarInfoName.IDENTITY_TRANSFORMER,
+		       higher, VarInfoName.IDENTITY_TRANSFORMER);
+  }
+
+  /**
+   * For every variable that has the same name in higher and lower (after transformation),
+   * add a link in the po relating them.  See the definitions of lower
+   * and higher in VarInfo for their semantics.
+   * @see VarInfo.po_higher
+   * @see VarInfo.po_lower
+   **/
+  private static void setup_po_same_name(VarInfo[] lower,
+					 VarInfoName.Transformer lower_xform,
+					 VarInfo[] higher,
+					 VarInfoName.Transformer higher_xform)
   {
     for (int i=0; i<higher.length; i++) {
       VarInfo higher_vi = higher[i];
+      VarInfoName higher_vi_name = higher_xform.transform(higher_vi.name);
       for (int j=0; j<lower.length; j++) {
 	VarInfo lower_vi = lower[j];
-	if (higher_vi.name == lower_vi.name) { // interned
+	VarInfoName lower_vi_name = lower_xform.transform(lower_vi.name);
+	if (higher_vi_name == lower_vi_name) { // VarInfoNames are interned
 	  lower_vi.addHigherPO(higher_vi);
 	}
       }
@@ -496,6 +518,65 @@ public final class FileIO
 	  Assert.assert(new_vis_index == exit_ppt.num_orig_vars);
 	}
 	exit_ppt.addVarInfos(new_vis);
+      }
+    }
+  }
+
+  /**
+   * For all ENTER point arguments that have a type that we have an
+   * OBJECT ppt for, add the appropriate partial order relation.  This
+   * must be done after OBJECT-ENTER controlling relations are already
+   * set up.
+   **/
+  private static void setup_argument_relations(PptMap ppts)
+  {
+    for (Iterator itor = ppts.iterator() ; itor.hasNext() ; ) {
+      PptTopLevel entry_ppt = (PptTopLevel) itor.next();
+      if (! entry_ppt.ppt_name.isEnterPoint()) {
+	continue;
+      }
+      // All derived expressions from arguments
+      List args = new ArrayList(); // [VarInfo]
+      // Subset of above which we have an OBJECT ppt for
+      Map known = new HashMap(); // [VarInfo -> PptTopLevel]
+      // Search and fill these lists
+      VarInfo[] vis = entry_ppt.var_infos;
+      for (int i=0; i<vis.length; i++) {
+	VarInfo vi = vis[i];
+	// Arguments are the things with no controller yet
+	if (vi.po_higher.size() == 0) {
+	  args.add(vi);
+	  if (! vi.type.isPseudoArray()) {
+	    PptName objname = new PptName(vi.type.base(), // class
+					  null, // method
+					  FileIO.object_suffix // point
+					  );
+	    Assert.assert(objname.isObjectInstanceSynthetic());
+	    PptTopLevel object_ppt = ppts.get(objname);
+	    if (object_ppt != null) {
+	      known.put(vi, object_ppt);
+	    }
+	  }
+	}
+      }
+      // For each known-type variable, substitute its name in for
+      // 'this' in the OBJECT ppt and see if we get any expression
+      // matches with other "argument" variables.
+      VarInfo[] args_array = (VarInfo[]) args.toArray(new VarInfo[args.size()]);
+      for (Iterator it = known.keySet().iterator(); it.hasNext(); ) {
+	final VarInfo known_vi = (VarInfo) it.next();
+	PptTopLevel object_ppt = (PptTopLevel) known.get(known_vi);
+	setup_po_same_name(args_array, // lower
+			   VarInfoName.IDENTITY_TRANSFORMER,
+			   object_ppt.var_infos, // higher
+			   // but with known_vi.name in for "this"
+			   new VarInfoName.Transformer() {
+			       public VarInfoName transform(VarInfoName v) {
+				 return v.replaceAll(VarInfoName.parse("this"),
+						     known_vi.name);
+			       }
+			     }
+			   );
       }
     }
   }
