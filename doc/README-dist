@@ -7,3 +7,5 @@ which is available in a variety of formats:
   doc/daikon.ps
   doc/daikon.pdf
   doc/daikon
+
+Javadoc for the Daikon implementation appears in directory ../java/doc/.

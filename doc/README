@@ -4,3 +4,5 @@ the primary documentation, after all.
 
 VERSION describes the NEXT version of Daikon to be released.  That is, it
 is typically incremented by 1 as compared to the distributed release.
+
+Javadoc for the Daikon implementation appears in directory ../java/doc/.
