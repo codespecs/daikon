@@ -250,7 +250,7 @@ public class MergeInvariants {
 
     // Suppression
     debugProgress.fine ("Suppression processing");
-    Daikon.use_suppression_optimization = true;
+    Daikon.dkconfig_use_suppression_optimization = true;
     for (Iterator itor = merge_ppts.pptIterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       ppt.suppressAll (false);

@@ -136,9 +136,10 @@ public final class Daikon {
   public static boolean dkconfig_suppressSplitterErrors = false;
 
   /**
-   * Whether to use general suppression mechanism.
+   * When true, invariants that are implied by other invariants are
+   * suppressed.
    **/
-  public static boolean use_suppression_optimization = true;
+  public static boolean dkconfig_use_suppression_optimization = true;
 
   /**
    * Whether suppressed invariants can suppress others.  Eventually
