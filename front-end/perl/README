@@ -16,6 +16,15 @@ included.
 files.
 5. Run daikon on the .decls and .dtrace files.
 
+----------------------------------------------------------------------
+NOTE:
+The rest of this file is a description of B::DeparseDaikon, the Perl
+compiler back-end that instruments Perl programs for Daikon. While the
+description is still accurate, there's now an easier-to-use front-end
+script named "dfepl" that most people will want to use instead. dfepl
+is documented in the regular Daikon manual.
+----------------------------------------------------------------------
+
 * Setting up your environment
 
 The front-end works with version 5.8.0 of Perl. (Instrumented programs
@@ -25,7 +34,8 @@ PAG machines, version 5.8.0 is in /usr/local/bin/perl).
 
 The modules used are in $INV/front-end/perl/lib, so you'll either want
 to add "-I$INV/front-end/perl/lib" to the perl command line or add the
-directory to the PERLLIB environment variable.
+directory to the PERLLIB environment variable. (dfepl and dtrace-perl
+do this for you).
 
 * Instrumenter
 
