@@ -120,10 +120,6 @@ public class CLASSNAME
     return core.isActive();
   }
 
-  public boolean isFlowable() {
-    return (core.isFlowable());
-  }
-
   public boolean mergeFormulasOk() {
     return (core.mergeFormulasOk());
   }

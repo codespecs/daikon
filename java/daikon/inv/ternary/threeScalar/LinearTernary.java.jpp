@@ -314,10 +314,6 @@ public class CLASSNAME
     return core.isActive();
   }
 
-  public boolean isFlowable() {
-    return core.isFlowable();
-  }
-
   public InvariantStatus setup (LINEAR_BINARY lb, VarInfo con_var,
                                 PRIMITIVE con_val) {
     return core.setup (lb, con_var, con_val);

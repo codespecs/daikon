@@ -638,13 +638,6 @@ public class LOWERBOUND
   }
 
   /**
-   * Not okay because this keeps track of samples seen at certain min/max values.
-   **/
-  public boolean inProcessSuppressOk() {
-    return false;
-  }
-
-  /**
    * Bound can merge different formulas from lower points to create a single
    * formula at an upper point.  See merge() below.
    */
