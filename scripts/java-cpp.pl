@@ -47,6 +47,10 @@ my $file_handle_nonce = 'fh00';
   if ((scalar(@ARGV) > 0) && (-r $ARGV[$#ARGV])) {
     $filename = pop @ARGV;	# remove last (filename) element
   } else {
+    if ($ARGV[$#ARGV] !~ /^-/ and $ARGV[$#ARGV] =~ /\.jpp$/) {
+      # Hmm, looks like a filename, even though we can't read it.
+      die "Can't read $ARGV[$#ARGV], stopped";
+    }
     if ($debug) {
       print STDERR "// Last arg not a filename; reading from standard in.\n";
     }
@@ -123,13 +127,24 @@ sub escape_comments ( $ ) {
     # space, which loses space both preceding and within comments.  Don't do
     # this inside cpp directives, however, and don't change leading space.
     if (! /^[ \t]*\#/) {
-      while (s/(^.*[^ \t].*[ \t])([ \t])/$1$JAVACPP_WHITESPACE_SEPARATOR$2/) { }
+      my($leading_ws, $rest) = /^(\s*)(.*?)\z/s;
+      $rest =~ s/(\s{2,})/separate_spaces($1)/eg;
+      $_ = $leading_ws . $rest;
     }
     print TMPFILE;
     # print STDERR "// bottom of escape_comments loop: $_";
   }
   close($inhandle);
 
+}
+
+# Insert "JAVACPP_WHITESPACE_SEPARATOR" in between each pair of
+# characters in the argument (which presumably consists only of
+# whitespace characters)
+sub separate_spaces {
+  my ($spaces) = @_;
+  my @spaces = split(//, $spaces);
+  return join "JAVACPP_WHITESPACE_SEPARATOR", @spaces;
 }
 
 
