@@ -97,7 +97,7 @@ public class PptSliceEquality
       VarInfoAndComparability viac = new VarInfoAndComparability(vi);
       addToBindingList (multiMap, viac, vi);
       if (debug.isLoggable(Level.FINE)) {
-        debug.fine ("  " + vi.name.name());
+        debug.fine ("  " + vi.name.name() + ": " + vi.comparability);
       }
     }
     if (debug.isLoggable(Level.FINE)) {
@@ -208,11 +208,12 @@ public class PptSliceEquality
         List /*[Equality]*/ newInvs =
           createEqualityInvs (nonEqualVis, vt, inv, count);
 
-        // Get a list of all of the new leaders
+        // Get a list of all of the new non-missing leaders
         List newInvsLeaders = new ArrayList (newInvs.size());
         for (Iterator iNewInvs = newInvs.iterator(); iNewInvs.hasNext(); ) {
           Equality eq = (Equality) iNewInvs.next();
-          newInvsLeaders.add (eq.leader());
+          if ((parent.constants == null) || !parent.constants.is_missing (eq.leader()))
+            newInvsLeaders.add (eq.leader());
         }
 
         //Debug print the new leaders
@@ -444,25 +445,28 @@ public class PptSliceEquality
       // Done with assigning positions and recursion
       if (parent.findSlice_unordered (soFar) == null) {
         // If slice is already there, no need to clone.
-        PptSlice newSlice = slice.cloneAndPivot(soFar);
-        // Debug.debugTrack.fine ("LeaderHelper: Created Slice " + newSlice);
-        if (Debug.logOn()) {
-          dlog.log ("Created slice " + newSlice + " Leader equality set = "
-                    + soFar[0].equalitySet);
-          Debug.log (getClass(), newSlice, "Created this slice");
-        }
-        List invs = newSlice.invs;
-        for (Iterator iInvs = invs.iterator(); iInvs.hasNext(); ) {
-          Invariant inv = (Invariant) iInvs.next();
-          if (inv.isObviousStatically_AllInEquality()) {
-            iInvs.remove();
+
+        if (parent.is_slice_ok (soFar, slice.arity)) {
+          PptSlice newSlice = slice.cloneAndPivot(soFar);
+          // Debug.debugTrack.fine ("LeaderHelper: Created Slice " + newSlice);
+          if (Debug.logOn()) {
+            dlog.log ("Created slice " + newSlice + " Leader equality set = "
+                      + soFar[0].equalitySet);
+            Debug.log (getClass(), newSlice, "Created this slice");
           }
-        }
-        if (newSlice.invs.size() == 0) {
-          Debug.log (debug, getClass(), newSlice, soFar,
-                     "slice not added because 0 invs");
-        } else {
-          newSlices.add (newSlice);
+          List invs = newSlice.invs;
+          for (Iterator iInvs = invs.iterator(); iInvs.hasNext(); ) {
+            Invariant inv = (Invariant) iInvs.next();
+            if (inv.isObviousStatically_AllInEquality()) {
+              iInvs.remove();
+            }
+          }
+          if (newSlice.invs.size() == 0) {
+            Debug.log (debug, getClass(), newSlice, soFar,
+                       "slice not added because 0 invs");
+          } else {
+            newSlices.add (newSlice);
+          }
         }
       } else {
         if (Debug.logOn())
@@ -529,72 +533,4 @@ public class PptSliceEquality
 
   }
 
-  public static class Stats {
-
-    /** number of equality sets **/
-    public int set_cnt = 0;
-
-    /** total number of variables in all equality sets **/
-    public int var_cnt = 0;
-
-    /**
-     * Increments the number of equality sets and total variables by those
-     * in the specified ppt
-     */
-    void incr (PptTopLevel ppt) {
-      if (ppt.equality_view != null) {
-        for (int j = 0; j < ppt.equality_view.invs.size(); j++) {
-          set_cnt++;
-          Equality e = (Equality) ppt.equality_view.invs.get(j);
-          Collection vars = e.getVars();
-          var_cnt += vars.size();
-        }
-      }
-
-    }
-
-  }
-  /**
-   * print statistics concerning equality sets over the entire set of
-   * ppts to the specified logger
-   */
-  public static void print_equality_stats (Logger debug, PptMap all_ppts) {
-
-    if (!debug.isLoggable (Level.FINE))
-      return;
-
-    NumberFormat dfmt = NumberFormat.getInstance();
-    dfmt.setMaximumFractionDigits (2);
-    double equality_set_cnt = 0;
-    double vars_cnt = 0;
-    double total_sample_cnt = 0;
-    Map stats_map = Global.stats_map;
-
-    for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
-      List slist = (List) stats_map.get (ppt);
-      int sample_cnt = 0;
-      double avg_equality_cnt = 0;
-      double avg_var_cnt = 0;
-      double avg_vars_per_equality = 0;
-      if (slist != null) {
-        sample_cnt = slist.size();
-        total_sample_cnt += sample_cnt;
-        for (int j = 0; j < slist.size(); j++) {
-          Stats stats = (Stats) slist.get (j);
-          avg_equality_cnt += stats.set_cnt;
-          avg_var_cnt += stats.var_cnt;
-          equality_set_cnt += stats.set_cnt;
-          vars_cnt += stats.var_cnt;
-        }
-        avg_equality_cnt = avg_equality_cnt / sample_cnt;
-        avg_var_cnt = avg_var_cnt / sample_cnt;
-      }
-      if (avg_equality_cnt > 0)
-        avg_vars_per_equality = avg_var_cnt / avg_equality_cnt;
-      debug.fine (ppt.ppt_name + " : " + dfmt.format (avg_equality_cnt) + " : "
-                  + dfmt.format (avg_var_cnt) + " : "
-                  + dfmt.format (avg_vars_per_equality));
-    }
-  }
 }
