@@ -17,7 +17,7 @@ public final class SequencesJoinFactory   extends BinaryDerivationFactory {
 
   /** Debug tracer **/
   public static final Category debug =
-    Category.getInstance ("daikon.derive.binary." + "SequencesJoinFactory" );
+    Category.getInstance ("daikon.derive.binary.SequencesJoinFactory" );
 
   public BinaryDerivation[] instantiate(VarInfo var1, VarInfo var2) {
 

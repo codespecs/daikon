@@ -51,28 +51,6 @@ public final class ProglangType
   // java.util.List
   public static HashSet list_implementors = new HashSet();
 
-  // Use == to compare, because ProglangType objects are interned.
-  public final static ProglangType INT = ProglangType.intern("int", 0);
-  public final static ProglangType LONG_PRIMITIVE = ProglangType.intern("long", 0);
-  public final static ProglangType DOUBLE = ProglangType.intern("double", 0);
-  public final static ProglangType STRING = ProglangType.intern("java.lang.String", 0);
-  public final static ProglangType INT_ARRAY = ProglangType.intern("int", 1);
-  public final static ProglangType LONG_PRIMITIVE_ARRAY = ProglangType.intern("long", 1);
-  public final static ProglangType DOUBLE_ARRAY = ProglangType.intern("double", 1);
-  public final static ProglangType STRING_ARRAY = ProglangType.intern("java.lang.String", 1);
-
-  public final static ProglangType INTEGER = ProglangType.intern("java.lang.Integer", 0);
-  public final static ProglangType LONG_OBJECT = ProglangType.intern("java.lang.Long", 0);
-
-  public final static ProglangType OBJECT = ProglangType.intern("java.lang.Object", 0);
-
-  public final static ProglangType BOOLEAN = ProglangType.intern("boolean", 0);
-  public final static ProglangType HASHCODE = ProglangType.intern("hashcode", 0);
-  public final static ProglangType BOOLEAN_ARRAY = ProglangType.intern("boolean", 1);
-  public final static ProglangType HASHCODE_ARRAY = ProglangType.intern("hashcode", 1);
-
-
-
   private String base;          // interned name of base type
   public String base() { return base; }
   private int dimensions;       // number of dimensions
@@ -288,6 +266,32 @@ public final class ProglangType
   final static Double DoubleNaN = new Double(Double.NaN);
   final static Double DoublePositiveInfinity = new Double(Double.POSITIVE_INFINITY);
   final static Double DoubleNegativeInfinity = new Double(Double.NEGATIVE_INFINITY);
+
+  /*
+   *  Now that all other static initialisers are done, it is safe to
+   *  construct some instances, also statically.  Note that these are
+   *  down here to delay their instantiation until after we have
+   *  created (e.g.) the list_implementors object, etc.  */
+
+  // Use == to compare, because ProglangType objects are interned.
+  public final static ProglangType INT = ProglangType.intern("int", 0);
+  public final static ProglangType LONG_PRIMITIVE = ProglangType.intern("long", 0);
+  public final static ProglangType DOUBLE = ProglangType.intern("double", 0);
+  public final static ProglangType STRING = ProglangType.intern("java.lang.String", 0);
+  public final static ProglangType INT_ARRAY = ProglangType.intern("int", 1);
+  public final static ProglangType LONG_PRIMITIVE_ARRAY = ProglangType.intern("long", 1);
+  public final static ProglangType DOUBLE_ARRAY = ProglangType.intern("double", 1);
+  public final static ProglangType STRING_ARRAY = ProglangType.intern("java.lang.String", 1);
+
+  public final static ProglangType INTEGER = ProglangType.intern("java.lang.Integer", 0);
+  public final static ProglangType LONG_OBJECT = ProglangType.intern("java.lang.Long", 0);
+
+  public final static ProglangType OBJECT = ProglangType.intern("java.lang.Object", 0);
+
+  public final static ProglangType BOOLEAN = ProglangType.intern("boolean", 0);
+  public final static ProglangType HASHCODE = ProglangType.intern("hashcode", 0);
+  public final static ProglangType BOOLEAN_ARRAY = ProglangType.intern("boolean", 1);
+  public final static ProglangType HASHCODE_ARRAY = ProglangType.intern("hashcode", 1);
 
   // Given a string representation of a value (of the type represented by
   // this ProglangType), return the interpretation of that value.

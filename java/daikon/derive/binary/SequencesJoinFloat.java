@@ -23,7 +23,7 @@ import org.apache.log4j.Category;
  * data structure rather than just one slice of it.  Works for number
  * and string arrays.
  **/
-public final class SequencesJoinFloat 
+public final class SequencesJoinFloat
   extends BinaryDerivation
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -34,7 +34,7 @@ public final class SequencesJoinFloat
   /**
    * Debug tracer
    **/
-  public static final Category debug = Category.getInstance("daikon.derive.binary." + "SequencesJoinFloat" );
+  public static final Category debug = Category.getInstance("daikon.derive.binary.SequencesJoinFloat");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -77,19 +77,19 @@ public final class SequencesJoinFloat
       length2 = 0;
     }
 
-    if (val1 instanceof double []) {
+    if (val1 instanceof double[]) {
       length1 = ((double []) val1).length;
     }
 
-    if (val2 instanceof double []) {
+    if (val2 instanceof double[]) {
       length2 = ((double []) val2).length;
     }
 
-    if (val1 instanceof double []) {
+    if (val1 instanceof double[]) {
       length1 = ((double []) val1).length;
     }
 
-    if (val2 instanceof double []) {
+    if (val2 instanceof double[]) {
       length2 = ((double []) val2).length;
     }
 
@@ -107,10 +107,10 @@ public final class SequencesJoinFloat
     for (int i = 0; i < length1; i++) {
       Object e1 = null;
       Object e2 = null;
-      if (val1 instanceof double []) {
+      if (val1 instanceof double[]) {
         e1 = new Double  (((double []) val1) [i]);
       }
-      if (val2 instanceof double []) {
+      if (val2 instanceof double[]) {
         e2 = new Double  (((double []) val2) [i]);
       }
       if (val1 instanceof Object[]) {
@@ -128,12 +128,12 @@ public final class SequencesJoinFloat
        Use this if you don't see no duplicates where you should
     if (debug.isDebugEnabled()) {
       debug.debug (var1().name.toString() + " " + var2().name.toString());
-      if (val1 instanceof double []) {
+      if (val1 instanceof double[]) {
         debug.debug (ArraysMDE.toString((double []) val1));
       } else {
         debug.debug (ArraysMDE.toString((Object[]) val1));
       }
-      if (val2 instanceof double []) {
+      if (val2 instanceof double[]) {
         debug.debug (ArraysMDE.toString((double []) val2));
       } else {
         debug.debug (ArraysMDE.toString((Object[]) val2));
@@ -187,11 +187,11 @@ public final class SequencesJoinFloat
   }
 
   public String toString() {
-    return "[" + "SequencesJoinFloat"  + " of " + var1().name + " " + var2().name + "]";
+    return "[SequencesJoinFloat of " + var1().name + " " + var2().name + "]";
   }
 
   public  boolean isSameFormula(Derivation other) {
-    return (other instanceof SequencesJoinFloat );
+    return (other instanceof SequencesJoinFloat);
   }
 
 }

@@ -21,7 +21,7 @@ import org.apache.log4j.Category;
  * original data structure.  Derived type is the same as that of
  * the first sequence.
  **/
-public final class SequencesPredicateFloat 
+public final class SequencesPredicateFloat
   extends BinaryDerivation
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -31,7 +31,7 @@ public final class SequencesPredicateFloat
 
   /** Debug tracer **/
   public static final Category debug
-    = Category.getInstance("daikon.derive.binary." + "SequencesPredicateFloat" );
+    = Category.getInstance("daikon.derive.binary.SequencesPredicateFloat");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -114,11 +114,11 @@ public final class SequencesPredicateFloat
       length2 = 0;
     }
 
-    if (val1 instanceof double []) {
+    if (val1 instanceof double[]) {
       length1 = ((double []) val1).length;
     }
 
-    if (val2 instanceof double []) {
+    if (val2 instanceof double[]) {
       length2 = ((double []) val2).length;
     }
 
@@ -126,7 +126,7 @@ public final class SequencesPredicateFloat
       length1 = ((double []) val1).length;
     }
 
-    Assert.assertTrue(val2 == null || val2 instanceof double []);
+    Assert.assertTrue(val2 == null || val2 instanceof double[]);
 
     if (length1 != length2) {
       // This derived variable is no longer interesting
@@ -155,7 +155,7 @@ public final class SequencesPredicateFloat
       if ((predicate[i] == choose) ^ !keep) count += 1;
     }
 
-    if (val1 instanceof double []) {
+    if (val1 instanceof double[]) {
       double [] result = new double [count];
       double [] values = (double []) val1;
       int j = 0;
@@ -202,13 +202,13 @@ public final class SequencesPredicateFloat
   }
 
   public String toString() {
-    return "[" + "SequencesPredicateFloat"  + " of " + var1().name + " " +
+    return "[SequencesPredicateFloat of " + var1().name + " " +
       var2().name + " for " + name + "]";
   }
 
   public boolean isSameFormula(Derivation other) {
     // For Toh (tohn) to do.
-    if (other instanceof SequencesPredicateFloat ) {
+    if (other instanceof SequencesPredicateFloat) {
       SequencesPredicateFloat  o = (SequencesPredicateFloat) other;
       return o.var1().equals(var1())
         && o.var2().equals(var2())

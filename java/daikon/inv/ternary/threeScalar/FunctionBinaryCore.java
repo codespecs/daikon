@@ -13,7 +13,7 @@ import java.io.Serializable;
 
 // See FunctionUnaryCore for discussion of tradeoffs between constructing
 // from java.lang.reflect.Method objects vs. Invokable objects.
-public final class FunctionBinaryCore 
+public final class FunctionBinaryCore
   implements Serializable, Cloneable
 {
   // We are Serializable, so we specify a version to allow changes to

@@ -7,7 +7,7 @@ import daikon.derive.*;
 
 import utilMDE.*;
 
-public final class SequenceScalarUnion 
+public final class SequenceScalarUnion
   extends BinaryDerivation
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -77,7 +77,7 @@ public final class SequenceScalarUnion
   }
 
   public  boolean isSameFormula(Derivation other) {
-    return (other instanceof SequenceScalarUnion );
+    return (other instanceof SequenceScalarUnion);
   }
 
 }

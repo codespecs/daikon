@@ -18,14 +18,14 @@ import java.util.*;
 // a specific value.  Do I want to make that a separate invariant
 // nonetheless?  Probably not, as this will simplify implication and such.
 
-public final class EltNonZeroFloat 
-  extends SingleFloatSequence 
+public final class EltNonZeroFloat
+  extends SingleFloatSequence
 {
   /**
    * Debug tracer.
    **/
   public static final Category debug =
-    Category.getInstance("daikon.inv.unary.sequence." + "EltNonZeroFloat" );
+    Category.getInstance("daikon.inv.unary.sequence.EltNonZeroFloat" );
 
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -66,7 +66,7 @@ public final class EltNonZeroFloat
     }
 
     if (debug.isDebugEnabled()) {
-      System.out.println("EltNonZeroFloat"  + ".instantiate: " + result.format());
+      System.out.println("EltNonZeroFloat.instantiate: " + result.format());
     }
     return result;
   }
@@ -230,13 +230,13 @@ public final class EltNonZeroFloat
 
   public boolean isSameFormula(Invariant other)
   {
-    Assert.assertTrue(other instanceof EltNonZeroFloat );
+    Assert.assertTrue(other instanceof EltNonZeroFloat);
     return true;
   }
 
   public boolean isExclusiveFormula(Invariant other)
   {
-    if (other instanceof EltOneOfFloat ) {
+    if (other instanceof EltOneOfFloat) {
       EltOneOfFloat  eoo = (EltOneOfFloat) other;
       if ((eoo.num_elts() == 1) && (((Double)eoo.elt()). doubleValue()  == 0)) {
         return true;
@@ -252,7 +252,7 @@ public final class EltNonZeroFloat
     PptTopLevel parent = ppt.parent;
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if ((inv instanceof EltNonZeroFloat ) && (inv != this) && inv.enoughSamples()) {
+      if ((inv instanceof EltNonZeroFloat) && (inv != this) && inv.enoughSamples()) {
         VarInfo v1 = var();
         VarInfo v2 = inv.ppt.var_infos[0];
         if (SubSequence.isObviousDerived(v1, v2)) {
@@ -265,14 +265,14 @@ public final class EltNonZeroFloat
         Assert.assertTrue(v1.varinfo_index < v2.varinfo_index);
         PptSlice2 slice_2seq = parent.findSlice(v1, v2);
         if (slice_2seq == null) {
-          // System.out.println("EltNonZeroFloat"  + ".isObviousImplied: no slice for " + v1.name + ", " + v2.name);
+          // System.out.println("EltNonZeroFloat.isObviousImplied: no slice for " + v1.name + ", " + v2.name);
         } else  {
           // slice_2seq != null
           SubSequence ss = SubSequence.find(slice_2seq);
           if (ss == null) {
-            // System.out.println("EltNonZeroFloat"  + ".isObviousImplied: no SubSequence for " + v1.name + ", " + v2.name);
+            // System.out.println("EltNonZeroFloat.isObviousImplied: no SubSequence for " + v1.name + ", " + v2.name);
           } else {
-            // System.out.println("EltNonZeroFloat"  + ".isObviousImplied: found SubSequence: " + ss.repr());
+            // System.out.println("EltNonZeroFloat.isObviousImplied: found SubSequence: " + ss.repr());
             if (this_var_first
                 ? ss.var1_in_var2
                 : ss.var2_in_var1) {
@@ -291,7 +291,7 @@ public final class EltNonZeroFloat
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof EltNonZeroFloat )
+      if (inv instanceof EltNonZeroFloat)
         return (EltNonZeroFloat) inv;
     }
     return null;

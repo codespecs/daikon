@@ -21,8 +21,8 @@ import java.io.*;
 // a specific value.  Do I want to make that a separate invariant
 // nonetheless?  Probably not, as this will simplify implication and such.
 
-public final class OneOfScalar 
-  extends SingleScalar 
+public final class OneOfScalar
+  extends SingleScalar
   implements OneOf
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -156,7 +156,7 @@ public final class OneOfScalar
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
-      sb.append(((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")) );
+      sb.append(((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")));
     }
     sb.append(" }");
     return sb.toString();
@@ -196,7 +196,7 @@ public final class OneOfScalar
         return varname + " == " + ((elts[0] == 0) ? "false" : "true");
       } else if (is_hashcode) {
         if (elts[0] == 0) {
-          return varname + " == " + "null";
+          return varname + " == null";
         } else {
           return varname + " has only one value"
             // + " (hashcode=" + elts[0] + ")"
@@ -238,16 +238,14 @@ public final class OneOfScalar
       if (num_elts == 2) {
         return "true";          // one elt is null, the other is non-null
       } else if (elts[0] == 0) {
-        result = varname + " == " + "null";
+        result = varname + " == null";
       } else {
         result = varname + " != null";
           // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
           ;
       }
-    } else
-
-    {
+    } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
@@ -272,13 +270,11 @@ public final class OneOfScalar
     } else if (is_hashcode) {
       Assert.assertTrue(num_elts == 1);
       if (elts[0] == 0) {
-        result = varname + " = " + "null";
+        result = varname + " = null";
       } else {
-        result = varname + " = " + "{one value}";
+        result = varname + " = {one value}";
       }
-    } else
-
-    {
+    } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " \\/ "; }
@@ -302,7 +298,7 @@ public final class OneOfScalar
     } else if (is_hashcode) {
       if (num_elts == 1) {
         if (elts[0] == 0) {
-          result = varname + " == " + "null";
+          result = varname + " == null";
         } else {
           result = varname + " != null";
           // varname + " has only one value"
@@ -316,9 +312,7 @@ public final class OneOfScalar
         Assert.assertTrue(elts[1] != 0);
         return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
       }
-    } else
-
-    {
+    } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
@@ -343,16 +337,14 @@ public final class OneOfScalar
       if (num_elts == 2) {
         return "true";          // one elt is null, the other is non-null
       } else if (elts[0] == 0) {
-        result = varname + " == " + "null";
+        result = varname + " == null";
       } else {
         result = varname + " != null";
           // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
           ;
       }
-    } else
-
-    {
+    } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
@@ -383,9 +375,7 @@ public final class OneOfScalar
         Assert.assertTrue(elts[1] != 0);
         result = "(OR (EQ " + varname + " null) (EQ " + varname + "|hash_" + elts[1] + "|))";
       }
-    } else
-
-    {
+    } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         result += " (EQ " + varname + " " + ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))  + ")";
@@ -454,6 +444,8 @@ public final class OneOfScalar
   // Use isObviousDerived since some isObviousImplied methods already exist.
   public boolean isObviousDerived() {
     // Static constants are necessarily OneOf precisely one value.
+    // This removes static constants from the output, which might not be
+    // desirable if the user doesn't know their actual value.
     if (var().isStaticConstant()) {
       Assert.assertTrue(num_elts <= 1);
       return true;
@@ -475,7 +467,7 @@ public final class OneOfScalar
     PptTopLevel parent = ppt.parent;
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if ((inv instanceof EltOneOf ) && inv.enoughSamples()) {
+      if ((inv instanceof EltOneOf) && inv.enoughSamples()) {
         VarInfo v1 = var();
         VarInfo v2 = inv.ppt.var_infos[0];
         // System.out.println("isObviousImplied: calling  Member.isObviousMember(" + v1.name + ", " + v2.name + ")");
@@ -544,7 +536,7 @@ public final class OneOfScalar
 
   public boolean isExclusiveFormula(Invariant o)
   {
-    if (o instanceof OneOfScalar ) {
+    if (o instanceof OneOfScalar) {
       OneOfScalar  other = (OneOfScalar) o;
 
       for (int i=0; i < num_elts; i++) {
@@ -557,7 +549,7 @@ public final class OneOfScalar
     }
 
     // Many more checks can be added here:  against nonzero, modulus, etc.
-    if ((o instanceof NonZero ) && (num_elts == 1) && (elts[0] == 0)) {
+    if ((o instanceof NonZero) && (num_elts == 1) && (elts[0] == 0)) {
       return true;
     }
     long  elts_min = Long.MAX_VALUE;
@@ -590,7 +582,7 @@ public final class OneOfScalar
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof OneOfScalar )
+      if (inv instanceof OneOfScalar)
         return (OneOfScalar) inv;
     }
     return null;

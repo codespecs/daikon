@@ -6,8 +6,8 @@ import daikon.*;
 import daikon.inv.Invariant;
 import daikon.inv.binary.twoScalar.*;
 
-public class PairwiseLinearBinaryFloat 
-  extends TwoSequenceFloat 
+public class PairwiseLinearBinaryFloat
+  extends TwoSequenceFloat
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -120,7 +120,7 @@ public class PairwiseLinearBinaryFloat
 
   public boolean isExclusiveFormula(Invariant other)
   {
-    if (other instanceof PairwiseLinearBinaryFloat ) {
+    if (other instanceof PairwiseLinearBinaryFloat) {
       return core.isExclusiveFormula(((PairwiseLinearBinaryFloat) other).core);
     }
     return false;

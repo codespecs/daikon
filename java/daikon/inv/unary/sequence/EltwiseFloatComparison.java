@@ -4,15 +4,15 @@ package daikon.inv.unary.sequence;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.binary.twoScalar. FloatComparisonCore ;
+import daikon.inv.binary.twoScalar.FloatComparisonCore;
 import utilMDE.*;
 import java.util.*;
 
 /**
  * This compares adjacent elements in the sequence.
  **/
-public class EltwiseFloatComparison 
-  extends SingleFloatSequence 
+public class EltwiseFloatComparison
+  extends SingleFloatSequence
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -158,7 +158,7 @@ public class EltwiseFloatComparison
 
   public boolean isExclusiveFormula(Invariant other)
   {
-    if (other instanceof EltwiseFloatComparison ) {
+    if (other instanceof EltwiseFloatComparison) {
       return core.isExclusiveFormula(((EltwiseFloatComparison) other).core);
     }
     return false;
@@ -169,7 +169,7 @@ public class EltwiseFloatComparison
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof EltwiseFloatComparison )
+      if (inv instanceof EltwiseFloatComparison)
         return (EltwiseFloatComparison) inv;
     }
     return null;

@@ -62,6 +62,7 @@ public abstract class BinaryDerivation
     if (this_var_info == null) {
       this_var_info = this.makeVarInfo();
       this_var_info.derived = this;
+
       // Set whether the derivation is a param according to aux info
       boolean isParam =
         base1.aux.getFlag(VarInfoAux.IS_PARAM) ||

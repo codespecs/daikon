@@ -9,7 +9,7 @@ import utilMDE.*;
 import java.io.Serializable;
 import org.apache.log4j.Category;
 
-public final class LinearBinaryCoreFloat 
+public final class LinearBinaryCoreFloat
   implements Serializable, Cloneable
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -19,7 +19,7 @@ public final class LinearBinaryCoreFloat
 
   /** Debug tracer **/
   public static final Category debug =
-    Category.getInstance("daikon.inv.binary.twoScalar." + "LinearBinaryCoreFloat" );
+    Category.getInstance("daikon.inv.binary.twoScalar.LinearBinaryCoreFloat" );
 
   // y == ax + b; first argument is x, second is y
   public double a, b;
@@ -111,14 +111,14 @@ public final class LinearBinaryCoreFloat
           set_bi_linear(x_cache[max_i], x_cache[max_j], y_cache[max_i], y_cache[max_j]);
         if (a == 0) {
           ok = false;
-          debug.debug("Suppressing " + "LinearBinaryCoreFloat"  + " (" + wrapper.format() + ") because a == 0");
+          debug.debug("Suppressing LinearBinaryCoreFloat (" + wrapper.format() + ") because a == 0");
         }
         // Check all values against a and b.
         for (int i=0; ok && i<MINPAIRS; i++) {
           // I should permit a fudge factor here.
           if (y_cache[i] != a*x_cache[i]+b) {
             if (debug.isDebugEnabled()) {
-              debug.debug("Suppressing " + "LinearBinaryCoreFloat"  + " (" + wrapper.format() + ") at index " + i + ": "
+              debug.debug("Suppressing LinearBinaryCoreFloat (" + wrapper.format() + ") at index " + i + ": "
                           + y_cache[i] + " != " + a + "*" + x_cache[i] + "+" + b);
               debug.debug("    ");
             }
@@ -139,7 +139,7 @@ public final class LinearBinaryCoreFloat
       // Check the new value against a and b.
       if (y != a*x+b) {
         if (debug.isDebugEnabled()) {
-          debug.debug("Suppressing " + "LinearBinaryCoreFloat"  + " (" + wrapper.format() + ") at new value: "
+          debug.debug("Suppressing LinearBinaryCoreFloat (" + wrapper.format() + ") at new value: "
                              + y + " != " + a + "*" + x + "+" + b);
         }
         wrapper.flowThis();
@@ -156,7 +156,7 @@ public final class LinearBinaryCoreFloat
       // x being constant would have been discovered elsewhere (and this
       // invariant would not have been instantiated).
       if (debug.isDebugEnabled()) {
-        debug.debug("Suppressing " + "LinearBinaryCoreFloat"  + " due to equal x values: (" + x0 + "," + y0 + "), (" + x1 + "," + y1 + ")");
+        debug.debug("Suppressing LinearBinaryCoreFloat due to equal x values: (" + x0 + "," + y0 + "), (" + x1 + "," + y1 + ")");
       }
       return false;
     }

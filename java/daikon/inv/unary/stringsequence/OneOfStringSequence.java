@@ -21,8 +21,8 @@ import java.io.*;
 // a specific value.  Do I want to make that a separate invariant
 // nonetheless?  Probably not, as this will simplify implication and such.
 
-public final class OneOfStringSequence 
-  extends SingleStringSequence 
+public final class OneOfStringSequence
+  extends SingleStringSequence
   implements OneOf
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -55,7 +55,7 @@ public final class OneOfStringSequence
     super(ppt);
 
     Assert.assertTrue(var().type.isPseudoArray(),
-                  "ProglangType must be pseudo-array for " + "OneOfStringSequence" );
+                  "ProglangType must be pseudo-array for OneOfStringSequence" );
 
     // Elements are interned, so can test with ==
     // (in the general online case, it's not worth interning).
@@ -331,6 +331,8 @@ public final class OneOfStringSequence
   // Use isObviousDerived since some isObviousImplied methods already exist.
   public boolean isObviousDerived() {
     // Static constants are necessarily OneOf precisely one value.
+    // This removes static constants from the output, which might not be
+    // desirable if the user doesn't know their actual value.
     if (var().isStaticConstant()) {
       Assert.assertTrue(num_elts <= 1);
       return true;
@@ -356,7 +358,7 @@ public final class OneOfStringSequence
 
   public boolean isExclusiveFormula(Invariant o)
   {
-    if (o instanceof OneOfStringSequence ) {
+    if (o instanceof OneOfStringSequence) {
       OneOfStringSequence  other = (OneOfStringSequence) o;
 
       for (int i=0; i < num_elts; i++) {
@@ -387,7 +389,7 @@ public final class OneOfStringSequence
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof OneOfStringSequence )
+      if (inv instanceof OneOfStringSequence)
         return (OneOfStringSequence) inv;
     }
     return null;

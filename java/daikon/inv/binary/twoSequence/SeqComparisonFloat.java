@@ -18,8 +18,8 @@ import java.util.*;
  * equality.  If the two Aux fields of the VarInfos are not identical,
  * then we don't compare at all.
  **/
-public class SeqComparisonFloat 
-  extends TwoSequenceFloat 
+public class SeqComparisonFloat
+  extends TwoSequenceFloat
   implements Comparison
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -77,7 +77,7 @@ public class SeqComparisonFloat
     ProglangType type2 = var2.type;
     // This intentonally checks dimensions(), not pseudoDimensions.
     boolean only_eq = (! ((type1.dimensions() == 1)
-                          && type1. baseIsFloat() 
+                          && type1. baseIsFloat()
                           && (type2.dimensions() == 1)
                           && type2. baseIsFloat() ));
     // System.out.println("only_eq: " + only_eq);
@@ -111,7 +111,7 @@ public class SeqComparisonFloat
   }
 
   public String format_using(OutputFormat format) {
-    // System.out.println("Calling " + "SeqComparisonFloat"  + ".format for: " + repr());
+    // System.out.println("Calling SeqComparisonFloat.format for: " + repr());
     String comparator = FloatComparisonCore.format_comparator
       (format, can_be_lt, can_be_eq, can_be_gt);
 
@@ -232,7 +232,7 @@ public class SeqComparisonFloat
 
   public boolean isExclusiveFormula(Invariant o)
   {
-    if (o instanceof SeqComparisonFloat ) {
+    if (o instanceof SeqComparisonFloat) {
       SeqComparisonFloat  other = (SeqComparisonFloat) o;
       return (! ((can_be_eq && other.can_be_eq)
                  || (can_be_lt && other.can_be_lt)

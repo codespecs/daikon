@@ -15,6 +15,7 @@ public final class SingleStringSequenceFactory {
     VarInfo var = ppt.var_infos[0];
     Assert.assertTrue(var.rep_type == ProglangType.STRING_ARRAY);
 
+
     Vector result = new Vector();
     result.add(OneOfStringSequence.instantiate(ppt));
       // // I'm not checking var.isConstant() for now

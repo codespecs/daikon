@@ -156,8 +156,8 @@ class MergeESCVisitor extends DepthFirstVisitor {
 
     super.visit(n);             // call "accept(this)" on each field
 
-    for (int i=ownedFieldNames.length-1; i>=0; i--) {
-      if (lightweight)
+    if (lightweight)
+      for (int i=ownedFieldNames.length-1; i>=0; i--) {
         addComment(n.f4.f1, javaLineComment("@ invariant " + ownedFieldNames[i] + ".owner == this;"), true);
     }
     if (object_ppt == null) {

@@ -65,9 +65,7 @@ public final class VarInfo
 
   // Obtaining values
 
-  /**
-   * The index in lists of VarInfo objects.
-   **/
+  /** The index in lists of VarInfo objects. **/
   public int varinfo_index;
 
   /**
@@ -611,8 +609,6 @@ public final class VarInfo
     // when I rename those variables to "closure(...)".
     return name.name().indexOf("~") != -1; // XXX
   }
-
-
 
 
   /**
@@ -1544,11 +1540,10 @@ public final class VarInfo
 
 
   /** Debug tracer **/
-  private static final Category debug = Category.getInstance ("daikon.VarInfo");
-
+  private static final Category debug = Category.getInstance("daikon.VarInfo");
 
   /** Debug tracer for simplifying expressions **/
-  private static final Category debugSimplifyExpression = Category.getInstance ("daikon.VarInfo.simplifyExpression");
+  private static final Category debugSimplifyExpression = Category.getInstance("daikon.VarInfo.simplifyExpression");
 
   /**
    * Change the name of this VarInfo by side effect into a more simplified

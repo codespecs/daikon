@@ -9,8 +9,8 @@ import daikon.derive.binary.*;
 import java.util.*;
 import utilMDE.*;
 
-public class LinearTernaryFloat 
-  extends ThreeFloat 
+public class LinearTernaryFloat
+  extends ThreeFloat
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -55,9 +55,9 @@ public class LinearTernaryFloat
     VarInfo x_summand = null;
     VarInfo y_summand = null;
     VarInfo z_summand = null;
-    if (x.derived instanceof SequenceSum ) x_summand = ((SequenceSum) x.derived).base;
-    if (y.derived instanceof SequenceSum ) y_summand = ((SequenceSum) y.derived).base;
-    if (z.derived instanceof SequenceSum ) z_summand = ((SequenceSum) z.derived).base;
+    if (x.derived instanceof SequenceSum) x_summand = ((SequenceSum) x.derived).base;
+    if (y.derived instanceof SequenceSum) y_summand = ((SequenceSum) y.derived).base;
+    if (z.derived instanceof SequenceSum) z_summand = ((SequenceSum) z.derived).base;
 
     if ((x_summand != null) && (y_summand != null) && (z_summand != null)) {
       // all 3 of x, y, and z are "sum(...)"
@@ -94,7 +94,7 @@ public class LinearTernaryFloat
           if (debugLinearTernary) {
             System.out.println("considering: " + summand.name + " " + vi.name);
           }
-          if (summand.derived instanceof SequenceFloatSubsequence ) {
+          if (summand.derived instanceof SequenceFloatSubsequence) {
             SequenceFloatSubsequence  sss = (SequenceFloatSubsequence) summand.derived;
             if (sss.from_start) {
               part1 = sss;
@@ -156,7 +156,7 @@ public class LinearTernaryFloat
       partb = ((SequenceSum) partb.derived).base;
       VarInfo seq = null;
       VarInfo eltindex = null;
-      if (notpart.derived instanceof SequenceFloatSubscript ) {
+      if (notpart.derived instanceof SequenceFloatSubscript) {
         SequenceFloatSubscript  sss = (SequenceFloatSubscript) notpart.derived;
         seq = sss.seqvar();
         eltindex = sss.sclvar();
@@ -189,7 +189,7 @@ public class LinearTernaryFloat
 
     LinearTernaryFloat  result = new LinearTernaryFloat (ppt);
     if (debugLinearTernary) {
-      System.out.println("LinearTernaryFloat"  + ".instantiate: " + result.repr());
+      System.out.println("LinearTernaryFloat.instantiate: " + result.repr());
     }
     return result;
   }
@@ -252,7 +252,7 @@ public class LinearTernaryFloat
 
   public boolean isExclusiveFormula(Invariant other)
   {
-    if (other instanceof LinearTernaryFloat ) {
+    if (other instanceof LinearTernaryFloat) {
       return core.isExclusiveFormula(((LinearTernaryFloat) other).core);
     }
     return false;
@@ -263,7 +263,7 @@ public class LinearTernaryFloat
     Assert.assertTrue(ppt.arity == 3);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof LinearTernaryFloat )
+      if (inv instanceof LinearTernaryFloat)
         return (LinearTernaryFloat) inv;
     }
     return null;

@@ -21,8 +21,8 @@ import java.util.*;
  * invariant is that they have separate justifications:  one may be
  * justified when the other is not.
  **/
-public class LowerBound 
-  extends SingleScalar 
+public class LowerBound
+  extends SingleScalar
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -85,11 +85,11 @@ public class LowerBound
         || (format == OutputFormat.JAVA)
         || (format == OutputFormat.JML))
     {
-      return name + " " + ">"  + "= " + core.min1 ;
+      return name + " >= " + core.min1 ;
     }
 
     if (format == OutputFormat.SIMPLIFY) {
-      return "(" + ">"  + "= " + name + " " + core.min1  + ")";
+      return "(>= " + name + " " + core.min1  + ")";
     }
 
     return format_unimplemented(format);
@@ -180,11 +180,11 @@ public class LowerBound
   }
 
   public boolean isExclusiveFormula(Invariant other) {
-    if (other instanceof UpperBound ) {
+    if (other instanceof UpperBound) {
       if (core.min1  >  ((UpperBound) other). core.max1 )
         return true;
     }
-    if (other instanceof OneOfScalar ) {
+    if (other instanceof OneOfScalar) {
       return other.isExclusiveFormula(this);
     }
     return false;
@@ -195,7 +195,7 @@ public class LowerBound
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof LowerBound )
+      if (inv instanceof LowerBound)
         return (LowerBound) inv;
     }
     return null;

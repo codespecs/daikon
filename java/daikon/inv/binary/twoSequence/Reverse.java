@@ -10,8 +10,8 @@ import org.apache.log4j.Category;
 /**
  * Where one sequence is the reverse of another.
  **/
-public class Reverse 
-  extends TwoSequence 
+public class Reverse
+  extends TwoSequence
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -19,7 +19,7 @@ public class Reverse
   static final long serialVersionUID = 20020122L;
 
   public static final Category debug =
-    Category.getInstance("daikon.inv.binary.twoSequence." + "Reverse" );
+    Category.getInstance("daikon.inv.binary.twoSequence.Reverse" );
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -39,7 +39,7 @@ public class Reverse
     if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
         !result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {
       if (debug.isDebugEnabled()) {
-        debug.debug ("Not instantitating for " + "Reverse"  + " because order has no meaning: " +
+        debug.debug ("Not instantitating for Reverse because order has no meaning: " +
                      result.var1().name + " and " + result.var2().name);
       }
       return null;
@@ -140,7 +140,7 @@ public class Reverse
 
   public boolean isSameFormula(Invariant other)
   {
-    Assert.assertTrue(other instanceof Reverse );
+    Assert.assertTrue(other instanceof Reverse);
     return true;
   }
 

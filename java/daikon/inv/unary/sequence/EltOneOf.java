@@ -21,8 +21,8 @@ import java.io.*;
 // a specific value.  Do I want to make that a separate invariant
 // nonetheless?  Probably not, as this will simplify implication and such.
 
-public final class EltOneOf 
-  extends SingleSequence 
+public final class EltOneOf
+  extends SingleSequence
   implements OneOf
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -60,7 +60,7 @@ public final class EltOneOf
     super(ppt);
 
     Assert.assertTrue(var().type.isPseudoArray(),
-                  "ProglangType must be pseudo-array for " + "EltOneOf" );
+                  "ProglangType must be pseudo-array for EltOneOf" );
 
     elts = new long [dkconfig_size];
 
@@ -161,7 +161,7 @@ public final class EltOneOf
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
-      sb.append(((( elts[i]  == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))) );
+      sb.append(((( elts[i]  == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))));
     }
     sb.append(" }");
     return sb.toString();
@@ -201,7 +201,7 @@ public final class EltOneOf
         return varname + " == " + ((elts[0] == 0) ? "false" : "true");
       } else if (is_hashcode) {
         if (elts[0] == 0) {
-          return varname + " == " + "null";
+          return varname + " == null";
         } else {
           return varname + " has only one value"
             // + " (hashcode=" + elts[0] + ")"
@@ -244,16 +244,14 @@ public final class EltOneOf
       if (num_elts == 2) {
         return "true";          // one elt is null, the other is non-null
       } else if (elts[0] == 0) {
-        result = varname + " == " + "null";
+        result = varname + " == null";
       } else {
         result = varname + " != null";
           // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
           ;
       }
-    } else
-
-    {
+    } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
@@ -282,13 +280,11 @@ public final class EltOneOf
     } else if (is_hashcode) {
       Assert.assertTrue(num_elts == 1);
       if (elts[0] == 0) {
-        result = varname + " = " + "null";
+        result = varname + " = null";
       } else {
-        result = varname + " = " + "{one value}";
+        result = varname + " = {one value}";
       }
-    } else
-
-    {
+    } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " \\/ "; }
@@ -315,7 +311,7 @@ public final class EltOneOf
     } else if (is_hashcode) {
       if (num_elts == 1) {
         if (elts[0] == 0) {
-          result = varname + " == " + "null";
+          result = varname + " == null";
         } else {
           result = varname + " != null";
           // varname + " has only one value"
@@ -329,9 +325,7 @@ public final class EltOneOf
         Assert.assertTrue(elts[1] != 0);
         return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
       }
-    } else
-
-    {
+    } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
@@ -359,16 +353,14 @@ public final class EltOneOf
       if (num_elts == 2) {
         return "true";          // one elt is null, the other is non-null
       } else if (elts[0] == 0) {
-        result = varname + " == " + "null";
+        result = varname + " == null";
       } else {
         result = varname + " != null";
           // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
           ;
       }
-    } else
-
-    {
+    } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
@@ -402,9 +394,7 @@ public final class EltOneOf
         Assert.assertTrue(elts[1] != 0);
         result = "(OR (EQ " + varname + " null) (EQ " + varname + "|hash_" + elts[1] + "|))";
       }
-    } else
-
-    {
+    } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         result += " (EQ " + varname + " " + ((( elts[i]  == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")))  + ")";
@@ -479,6 +469,8 @@ public final class EltOneOf
   // Use isObviousDerived since some isObviousImplied methods already exist.
   public boolean isObviousDerived() {
     // Static constants are necessarily OneOf precisely one value.
+    // This removes static constants from the output, which might not be
+    // desirable if the user doesn't know their actual value.
     if (var().isStaticConstant()) {
       Assert.assertTrue(num_elts <= 1);
       return true;
@@ -495,7 +487,7 @@ public final class EltOneOf
       if (inv == this) {
         continue;
       }
-      if (inv instanceof EltOneOf ) {
+      if (inv instanceof EltOneOf) {
         EltOneOf  other = (EltOneOf) inv;
         if (isSameFormula(other)
             && SubSequence.isObviousDerived(v, other.var())) {
@@ -554,7 +546,7 @@ public final class EltOneOf
 
   public boolean isExclusiveFormula(Invariant o)
   {
-    if (o instanceof EltOneOf ) {
+    if (o instanceof EltOneOf) {
       EltOneOf  other = (EltOneOf) o;
 
       for (int i=0; i < num_elts; i++) {
@@ -567,7 +559,7 @@ public final class EltOneOf
     }
 
     // Many more checks can be added here:  against nonzero, modulus, etc.
-    if ((o instanceof EltNonZero ) && (num_elts == 1) && (elts[0] == 0)) {
+    if ((o instanceof EltNonZero) && (num_elts == 1) && (elts[0] == 0)) {
       return true;
     }
     long  elts_min = Long.MAX_VALUE;
@@ -600,7 +592,7 @@ public final class EltOneOf
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof EltOneOf )
+      if (inv instanceof EltOneOf)
         return (EltOneOf) inv;
     }
     return null;

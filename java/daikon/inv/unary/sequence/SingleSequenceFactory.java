@@ -15,7 +15,7 @@ public final class SingleSequenceFactory  {
   public static Vector instantiate(PptSlice ppt) {
 
     VarInfo var = ppt.var_infos[0];
-    Assert.assertTrue(var.rep_type == ProglangType. INT_ARRAY );
+    Assert.assertTrue(var.rep_type == ProglangType. INT_ARRAY);
     Assert.assertTrue(var.type.pseudoDimensions() > 0);
 
     Vector result = new Vector();

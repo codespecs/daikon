@@ -14,8 +14,8 @@ import utilMDE.*;
 
 // This also serves as NonNull.
 
-public class NonZero
-  extends SingleScalar
+public class NonZeroFloat
+  extends SingleFloat
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -25,17 +25,17 @@ public class NonZero
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff NonZero  invariants should be considered.
+   * Boolean.  True iff NonZeroFloat  invariants should be considered.
    **/
   public static boolean dkconfig_enabled = true;
 
   /** Debug tracer **/
-  public static final Category debug = Category.getInstance("daikon.inv.unary.scalar.NonZero");
+  public static final Category debug = Category.getInstance("daikon.inv.unary.scalar.NonZeroFloat");
 
   /** Smallest value seen so far. **/
-  long  min = Long.MAX_VALUE;
+  double  min = Long.MAX_VALUE;
   /** Largest value seen so far. **/
-  long  max = Long.MIN_VALUE;
+  double  max = Long.MIN_VALUE;
   /** Maximum value ever used for max-min in probability calculation. **/
   long range_max = 50;
 
@@ -44,47 +44,31 @@ public class NonZero
   // for pointers).
   long override_range = 0;
 
-  boolean pointer_type = false;
-
-  private NonZero (PptSlice ppt) {
+  private NonZeroFloat (PptSlice ppt) {
     super(ppt);
   }
 
-  public static NonZero  instantiate(PptSlice ppt) {
+  public static NonZeroFloat  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled)
       return null;
 
     if (debug.isDebugEnabled() || ppt.debugged) {
-      debug.debug("NonZero.instantiate(" + ppt.name + ")");
+      debug.debug("NonZeroFloat.instantiate(" + ppt.name + ")");
     }
 
-    NonZero  result = new NonZero (ppt);
-
-    if (ppt.var_infos[0].file_rep_type == ProglangType.HASHCODE) {
-      result.pointer_type = true;
-      result.override_range = 3;
-      if (!result.var().aux.getFlag(VarInfoAux.HAS_NULL)) {
-        // If it's not a number and null doesn't have special meaning...
-        return null;
-      }
-    }
+    NonZeroFloat  result = new NonZeroFloat (ppt);
 
     return result;
   }
 
   public String repr() {
-    return "NonZero"  + varNames() + ": "
+    return "NonZeroFloat"  + varNames() + ": "
       + !falsified + ",min=" + min + ",max=" + max;
   }
 
   private String zero(OutputFormat format) {
 
-    if (pointer_type) {
-      if (format == OutputFormat.IOA)
-        return "nil";
-      else
-        return "null";
-    } else {
+    {
       return "0";
     }
   }
@@ -111,10 +95,10 @@ public class NonZero
     return format_unimplemented(format);
   }
 
-  public void add_modified(long  v, int count) {
+  public void add_modified(double  v, int count) {
     if (v == 0) {
       if (debug.isDebugEnabled() || ppt.debugged) {
-        System.out.println("NonZero.destroy(" + ppt.name + ")");
+        System.out.println("NonZeroFloat.destroy(" + ppt.name + ")");
       }
       flowThis();
       destroy();
@@ -136,7 +120,7 @@ public class NonZero
       // received.
       return Invariant.PROBABILITY_UNJUSTIFIED;
     } else {
-      long  range;
+      double  range;
       if (override_range != 0) {
         range = override_range;
       } else {
@@ -179,27 +163,27 @@ public class NonZero
 
     // System.out.println("isObviousImplied: " + format());
 
-    // For every EltNonZero  at this program point, see if this variable is
+    // For every EltNonZeroFloat  at this program point, see if this variable is
     // an obvious member of that sequence.
     PptTopLevel parent = ppt.parent;
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if ((inv instanceof EltNonZero) && inv.enoughSamples()) {
+      if ((inv instanceof EltNonZeroFloat) && inv.enoughSamples()) {
         VarInfo v1 = var();
         VarInfo v2 = inv.ppt.var_infos[0];
-        // System.out.println("NonZero.isObviousImplied: calling Member.isObviousMember(" + v1.name + ", " + v2.name + ")");
+        // System.out.println("NonZeroFloat.isObviousImplied: calling " + MemberFloat  + ".isObviousMember(" + v1.name + ", " + v2.name + ")");
         // Don't use isEqualToObviousMember:  that is too subtle
         // and eliminates desirable invariants such as "return != null".
-        if (Member.isObviousMember(v1, v2)) {
-          // System.out.println("NonZero.isObviousImplied: Member.isObviousMember(" + v1.name + ", " + v2.name + ") = true");
+        if (MemberFloat.isObviousMember(v1, v2)) {
+          // System.out.println("NonZeroFloat.isObviousImplied: " + MemberFloat  + ".isObviousMember(" + v1.name + ", " + v2.name + ") = true");
           return true;
         }
       }
     }
 
     if ((var.derived != null)
-        && (var.derived instanceof SequenceInitial)) {
-      SequenceInitial  si = (SequenceInitial) var.derived;
+        && (var.derived instanceof SequenceInitialFloat)) {
+      SequenceInitialFloat  si = (SequenceInitialFloat) var.derived;
       if (si.index == 0) {
 
         // For each sequence variable, if var is an obvious member, and
@@ -207,12 +191,12 @@ public class NonZero
         PptTopLevel pptt = ppt.parent;
         for (int i=0; i<pptt.var_infos.length; i++) {
           VarInfo vi = pptt.var_infos[i];
-          if (Member.isObviousMember(var, vi)) {
+          if (MemberFloat.isObviousMember(var, vi)) {
             PptSlice1 other_slice = pptt.findSlice(vi);
             if (other_slice != null) {
-              SeqIndexNonEqual  sine = SeqIndexNonEqual.find(other_slice);
+              SeqIndexNonEqualFloat  sine = SeqIndexNonEqualFloat.find(other_slice);
               if ((sine != null) && sine.enoughSamples()) {
-                // System.out.println("NonZero.isObviousImplied true due to: " + sine.format());
+                // System.out.println("NonZeroFloat.isObviousImplied true due to: " + sine.format());
                 return true;
               }
             }
@@ -226,7 +210,7 @@ public class NonZero
 
   public boolean isSameFormula(Invariant other)
   {
-    Assert.assertTrue(other instanceof NonZero);
+    Assert.assertTrue(other instanceof NonZeroFloat);
     return true;
   }
 
@@ -234,7 +218,7 @@ public class NonZero
   {
     if (other instanceof OneOfScalar) {
       OneOfScalar oos = (OneOfScalar) other;
-      if ((oos.num_elts() == 1) && (((Long)oos.elt()). longValue () == 0)) {
+      if ((oos.num_elts() == 1) && (((Long)oos.elt()). doubleValue () == 0)) {
         return true;
       }
     }

@@ -19,7 +19,7 @@ public final class SequencesConcatFactory  extends BinaryDerivationFactory {
    * Debug tracer
    **/
   public static final Category debug =
-    Category.getInstance ("daikon.derive.binary.SequencesConcatFactory");
+    Category.getInstance("daikon.derive.binary.SequencesConcatFactory");
 
   public BinaryDerivation[] instantiate(VarInfo var1, VarInfo var2) {
 

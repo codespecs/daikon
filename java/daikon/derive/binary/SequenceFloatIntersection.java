@@ -11,10 +11,10 @@ import org.apache.log4j.Category;
 /**
  * Intersection between two comparable sequences.
  **/
-public final class SequenceFloatIntersection 
+public final class SequenceFloatIntersection
   extends BinaryDerivation
 {
-  public static final Category debug = Category.getInstance("daikon.derive.binary." + "SequenceFloatIntersection" );
+  public static final Category debug = Category.getInstance("daikon.derive.binary.SequenceFloatIntersection");
 
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -81,7 +81,7 @@ public final class SequenceFloatIntersection
   }
 
   public  boolean isSameFormula(Derivation other) {
-    return (other instanceof SequenceFloatIntersection );
+    return (other instanceof SequenceFloatIntersection);
   }
 
 }

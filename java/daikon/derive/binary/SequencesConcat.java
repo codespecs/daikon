@@ -28,7 +28,7 @@ public final class SequencesConcat
   /**
    * Debug tracer
    **/
-  public static final Category debug = Category.getInstance ("daikon.derive.binary.SequencesConcat");
+  public static final Category debug = Category.getInstance("daikon.derive.binary.SequencesConcat");
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.

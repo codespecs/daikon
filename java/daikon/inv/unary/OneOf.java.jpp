@@ -59,6 +59,8 @@ The correct way to build the system is to run 'make'.
 #  define JAVA_NAME var().name.java_name()
 #  define NONZERO NonZero
 #  define ELTONEOF EltOneOf
+#  define LOWERBOUND LowerBound
+#  define UPPERBOUND UpperBound
 #elif defined(FLOAT)
 #  define SCALARPKG scalar
 #  define INT double
@@ -69,8 +71,10 @@ The correct way to build the system is to run 'make'.
 #  define TOSTRING(x) String.valueOf(x)
 #  define NAME var().name.name()
 #  define JAVA_NAME var().name.java_name()
-#  define NONZERO NonZero
+#  define NONZERO NonZeroFloat
 #  define ELTONEOF EltOneOfFloat
+#  define LOWERBOUND LowerBoundFloat
+#  define UPPERBOUND UpperBoundFloat
 #elif defined(STRING)
 #  undef JAVA_EQUALS
 #  define JAVA_EQUALS(x) ".equals(" + x + ")"
@@ -120,6 +124,8 @@ The correct way to build the system is to run 'make'.
 #  define NAME var().name.name() + " elements"
 #  define JAVA_NAME var().name.java_name()
 #  define NONZERO EltNonZero
+#  define LOWERBOUND LowerBound
+#  define UPPERBOUND UpperBound
 #elif defined(ELTFLOAT)
 #  define SCALARPKG sequence
 #  define INT double
@@ -131,6 +137,8 @@ The correct way to build the system is to run 'make'.
 #  define NAME var().name.name() + " elements"
 #  define JAVA_NAME var().name.java_name()
 #  define NONZERO EltNonZeroFloat
+#  define LOWERBOUND LowerBoundFloat
+#  define UPPERBOUND UpperBoundFloat
 #elif defined(ELTSTRING)
 #  define SCALARPKG stringsequence
 #  define INT String
@@ -283,10 +291,10 @@ public final class ONEOFSCALAR
 #  define COMPARATOR_ARG , comparator
 #elif defined(SEQUENCE)
   static Comparator comparator = new ArraysMDE.LongArrayComparatorLexical();
-#  define COMPARATOR_ARG , comparator
+#define COMPARATOR_ARG , comparator
 #elif defined(FLOATSEQUENCE)
   static Comparator comparator = new ArraysMDE.DoubleArrayComparatorLexical();
-#  define COMPARATOR_ARG , comparator
+#define COMPARATOR_ARG , comparator
 #elif defined(STRINGSEQUENCE)
   static Comparator comparator = new ArraysMDE.ComparableArrayComparatorLexical();
 #  define COMPARATOR_ARG , comparator
@@ -343,7 +351,6 @@ public final class ONEOFSCALAR
     return elts[num_elts-1];
   }
 #elif defined(FLOAT) || defined(ELTFLOAT)
-
   public double min_elt_double() {
     if (num_elts == 0)
       throw new Error("Represents no elements");
@@ -1185,6 +1192,8 @@ public final class ONEOFSCALAR
   // Use isObviousDerived since some isObviousImplied methods already exist.
   public boolean isObviousDerived() {
     // Static constants are necessarily OneOf precisely one value.
+    // This removes static constants from the output, which might not be
+    // desirable if the user doesn't know their actual value.
     if (var().isStaticConstant()) {
       Assert.assertTrue(num_elts <= 1);
       return true;
@@ -1352,9 +1361,9 @@ public final class ONEOFSCALAR
       elts_min = Math.min(elts_min, elts[i]);
       elts_max = Math.max(elts_max, elts[i]);
     }
-    if ((o instanceof LowerBound) && (elts_max < ((LowerBound)o).core.min1))
+    if ((o instanceof LOWERBOUND) && (elts_max < ((LOWERBOUND)o).core.min1))
       return true;
-    if ((o instanceof UpperBound) && (elts_min > ((UpperBound)o).core.max1))
+    if ((o instanceof UPPERBOUND) && (elts_min > ((UPPERBOUND)o).core.max1))
       return true;
 #endif
 

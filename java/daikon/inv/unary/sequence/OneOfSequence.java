@@ -21,8 +21,8 @@ import java.io.*;
 // a specific value.  Do I want to make that a separate invariant
 // nonetheless?  Probably not, as this will simplify implication and such.
 
-public final class OneOfSequence 
-  extends SingleSequence 
+public final class OneOfSequence
+  extends SingleSequence
   implements OneOf
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -60,7 +60,7 @@ public final class OneOfSequence
     super(ppt);
 
     Assert.assertTrue(var().type.isPseudoArray(),
-                  "ProglangType must be pseudo-array for " + "OneOfSequence" );
+                  "ProglangType must be pseudo-array for OneOfSequence" );
 
     // Elements are interned, so can test with ==
     // (in the general online case, it's not worth interning).
@@ -303,7 +303,7 @@ public final class OneOfSequence
 
     if (length == "" && forall == "") { // interned; can't say anything about size or elements
       String thisclassname = this.getClass().getName();
-      result = "warning: " + thisclassname + ".format_ioa() " + " needs to be implemented: " + format();
+      result = "warning: " + thisclassname + ".format_ioa()  needs to be implemented: " + format();
     } else if (length == "") { // interned; can't say anything about size
       result = forall;
     } else if ((forall == "") || (elts[0].length == 0)) { // interned; can't say anything about elements
@@ -473,6 +473,8 @@ public final class OneOfSequence
   // Use isObviousDerived since some isObviousImplied methods already exist.
   public boolean isObviousDerived() {
     // Static constants are necessarily OneOf precisely one value.
+    // This removes static constants from the output, which might not be
+    // desirable if the user doesn't know their actual value.
     if (var().isStaticConstant()) {
       Assert.assertTrue(num_elts <= 1);
       return true;
@@ -528,7 +530,7 @@ public final class OneOfSequence
 
   public boolean isExclusiveFormula(Invariant o)
   {
-    if (o instanceof OneOfSequence ) {
+    if (o instanceof OneOfSequence) {
       OneOfSequence  other = (OneOfSequence) o;
 
       for (int i=0; i < num_elts; i++) {
@@ -559,7 +561,7 @@ public final class OneOfSequence
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof OneOfSequence )
+      if (inv instanceof OneOfSequence)
         return (OneOfSequence) inv;
     }
     return null;

@@ -21,8 +21,8 @@ import java.io.*;
 // a specific value.  Do I want to make that a separate invariant
 // nonetheless?  Probably not, as this will simplify implication and such.
 
-public final class OneOfString 
-  extends SingleString 
+public final class OneOfString
+  extends SingleString
   implements OneOf
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -127,7 +127,7 @@ public final class OneOfString
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
-      sb.append((( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"") );
+      sb.append((( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\""));
     }
     sb.append(" }");
     return sb.toString();
@@ -176,7 +176,7 @@ public final class OneOfString
     public String format_java() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + var().name.java_name()  + ".equals(" +  (( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"")   + ")" );
+    sb.append (" || (" + var().name.java_name()  + ".equals(" +  (( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"")   + ")");
     sb.append (")");
     }
     // trim off the && at the beginning for the first case
@@ -411,6 +411,8 @@ public final class OneOfString
   // Use isObviousDerived since some isObviousImplied methods already exist.
   public boolean isObviousDerived() {
     // Static constants are necessarily OneOf precisely one value.
+    // This removes static constants from the output, which might not be
+    // desirable if the user doesn't know their actual value.
     if (var().isStaticConstant()) {
       Assert.assertTrue(num_elts <= 1);
       return true;
@@ -436,7 +438,7 @@ public final class OneOfString
 
   public boolean isExclusiveFormula(Invariant o)
   {
-    if (o instanceof OneOfString ) {
+    if (o instanceof OneOfString) {
       OneOfString  other = (OneOfString) o;
 
       for (int i=0; i < num_elts; i++) {
@@ -467,7 +469,7 @@ public final class OneOfString
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof OneOfString )
+      if (inv instanceof OneOfString)
         return (OneOfString) inv;
     }
     return null;

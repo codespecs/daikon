@@ -83,6 +83,7 @@ public class InvariantTester extends TestCase {
 
 
 
+
     VarInfo[] vars2 = { Common.makeIntVarInfo("x"), Common.makeIntVarInfo("z") };
     PptTopLevel ppt2 = Common.makePptTopLevel("Foo:::OBJECT", vars2);
     PptSlice slice2 = new PptSlice2(ppt2, vars2);

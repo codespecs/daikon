@@ -14,8 +14,8 @@ import utilMDE.*;
 /**
  * We compare each element in a sequence to a particular variable.
  **/
-public final class SeqFloatComparison 
-  extends SequenceFloat 
+public final class SeqFloatComparison
+  extends SequenceFloat
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -35,8 +35,8 @@ public final class SeqFloatComparison
 
   protected SeqFloatComparison (PptSlice ppt, boolean seq_first, boolean only_eq, boolean obvious_le, boolean obvious_ge) {
     super(ppt, seq_first);
-    Assert.assertTrue(sclvar().rep_type == ProglangType. DOUBLE );
-    Assert.assertTrue(seqvar().rep_type == ProglangType. DOUBLE_ARRAY );
+    Assert.assertTrue(sclvar().rep_type == ProglangType. DOUBLE);
+    Assert.assertTrue(seqvar().rep_type == ProglangType. DOUBLE_ARRAY);
     core = new FloatComparisonCore (this, only_eq, false, false, obvious_le, obvious_ge);
   }
 
@@ -61,7 +61,7 @@ public final class SeqFloatComparison
     // }
 
     if (debugSeqIntComparison) {
-      System.out.println("SeqFloatComparison"  + " instantiated: "
+      System.out.println("SeqFloatComparison instantiated: "
                          + sclvar.name + " vs. " + seqvar.name);
     }
 
@@ -196,7 +196,7 @@ public final class SeqFloatComparison
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof SeqFloatComparison )
+      if (inv instanceof SeqFloatComparison)
         return (SeqFloatComparison) inv;
     }
     return null;
@@ -225,7 +225,7 @@ public final class SeqFloatComparison
       if (inv == this) {
         continue;
       }
-      if (inv instanceof SeqFloatComparison ) {
+      if (inv instanceof SeqFloatComparison) {
         SeqFloatComparison  other = (SeqFloatComparison) inv;
         if (isSameFormula(other)
             && (sclvar() == other.sclvar())

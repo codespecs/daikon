@@ -19,7 +19,7 @@ public final class SequenceStringIntersectionFactory  extends BinaryDerivationFa
 
   /** Debug tracer **/
   private static final Category debug =
-    Category.getInstance ("daikon.derive.binary." + "SequenceStringIntersectionFactory" );
+    Category.getInstance("daikon.derive.binary.SequenceStringIntersectionFactory" );
 
   public BinaryDerivation[] instantiate(VarInfo seq1, VarInfo seq2) {
 

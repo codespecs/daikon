@@ -166,7 +166,7 @@ public final class Daikon {
   public static PptMap all_ppts;
 
   /** Debug tracer **/
-  public static final Category debugTrace = Category.getInstance ("daikon.Daikon");
+  public static final Category debugTrace = Category.getInstance("daikon.Daikon");
 
   // Avoid problems if daikon.Runtime is loaded at analysis (rather than
   // test-run) time.  This might have to change when JTrace is used.
@@ -200,6 +200,8 @@ public final class Daikon {
     Set spinfo_files = files[2]; // [File]
     Set map_files = files[3];    // [File]
 
+    // Set up debug traces
+    Logger.setupLogs(Global.debugAll ? Logger.DEBUG : Logger.INFO);
     if (! noversion_output) {
       System.out.println(release_string);
     }
@@ -660,6 +662,14 @@ public final class Daikon {
 
   }
 
+  private static long elapsedTime_timer = System.currentTimeMillis();
+  private static String elapsedTime() {
+    long now = System.currentTimeMillis();
+    double elapsed = (now - elapsedTime_timer) / 1000.0;
+    String result = (new java.text.DecimalFormat("#.#")).format(elapsed) + "s";
+    elapsedTime_timer = now;
+    return result;
+  }
 
   ///////////////////////////////////////////////////////////////////////////
   //
@@ -693,15 +703,6 @@ public final class Daikon {
         }
       }
     }
-  }
-
-  private static long elapsedTime_timer = System.currentTimeMillis();
-  private static String elapsedTime() {
-    long now = System.currentTimeMillis();
-    double elapsed = (now - elapsedTime_timer) / 1000.0;
-    String result = (new java.text.DecimalFormat("#.#")).format(elapsed) + "s";
-    elapsedTime_timer = now;
-    return result;
   }
 
 }

@@ -28,7 +28,7 @@ public abstract class VarComparability {
 
   /** Debug tracer **/
   public static final Category debug =
-    Category.getInstance ("daikon.VarComparability");
+    Category.getInstance("daikon.VarComparability");
 
 
   public static final int NONE = 0;

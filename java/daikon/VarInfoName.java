@@ -1928,8 +1928,8 @@ public abstract class VarInfoName
       return o.term;
     }
 
-
   }
+
 
   /**
    * Use to collect all elements in a tree into an inorder-traversal
@@ -2127,7 +2127,7 @@ public abstract class VarInfoName
     /**
      * Debug tracer
      **/
-    public static final Category debug = Category.getInstance ("daikon.inv.Invariant.print.QuantHelper");
+    public static final Category debug = Category.getInstance("daikon.inv.Invariant.print.QuantHelper");
 
     /**
      * A FreeVar is very much like a Simple, except that it doesn't

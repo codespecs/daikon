@@ -40,6 +40,8 @@ public abstract class PptSlice
 
   /** Debug tracer **/
   public static final Category debug = Category.getInstance("daikon.PptSlice");
+
+  /** Debug tracer for debugging both this and PptSlices **/
   public static final Category debugGeneral = Category.getInstance("daikon.PptSlice.general");
   public static final Category debugFlow = Category.getInstance("daikon.flow.flow");
 

@@ -6,9 +6,9 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.twoSequence.*;
 
-import daikon.derive.binary. SequencesPredicate ;
+import daikon.derive.binary.SequencesPredicate;
 import daikon.derive.binary.SequencesConcat;
-import daikon.derive.binary. SequencesJoinFloat ;
+import daikon.derive.binary.SequencesJoinFloat;
 
 import utilMDE.*;
 
@@ -16,8 +16,8 @@ import org.apache.log4j.Category;
 
 import java.util.*;
 
-public class NoDuplicatesFloat 
-  extends SingleFloatSequence 
+public class NoDuplicatesFloat
+  extends SingleFloatSequence
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -32,7 +32,7 @@ public class NoDuplicatesFloat
   public static boolean dkconfig_enabled = true;
 
   /** Debug tracer **/
-  public static final Category debug = Category.getInstance("daikon.inv.unary.sequence." + "NoDuplicatesFloat" );
+  public static final Category debug = Category.getInstance("daikon.inv.unary.sequence.NoDuplicatesFloat");
   int elts = 0;
 
   protected NoDuplicatesFloat (PptSlice ppt) {
@@ -92,7 +92,7 @@ public class NoDuplicatesFloat
     }
 
     // We first see if we can special case for certain types of variables
-    if (var().isDerived() && var().derived instanceof SequencesPredicate ) {
+    if (var().isDerived() && var().derived instanceof SequencesPredicate) {
       VarInfoName.FunctionOfN myName =
         (VarInfoName.FunctionOfN) ((VarInfoName.Elements) var().name).term;
       String predicateValue = myName.getArg(2).ioa_name();
@@ -128,7 +128,7 @@ public class NoDuplicatesFloat
         //  =>      i           =       j           )
         ") => " + quant.getVarName(0).ioa_name() + " = " + quant.getVarName(1).ioa_name() + quant.getClosingExp();
 
-    } else if (var().isDerived() && var().derived instanceof SequencesJoinFloat ) {
+    } else if (var().isDerived() && var().derived instanceof SequencesJoinFloat) {
       SequencesJoinFloat  derivation = (SequencesJoinFloat) var().derived;
       VarInfo varField1 = derivation.var1();
       VarInfoName.Field varFieldName1 = (VarInfoName.Field) varField1.name;
@@ -206,7 +206,7 @@ public class NoDuplicatesFloat
     PptTopLevel parent = ppt.parent;
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if ((inv instanceof NoDuplicatesFloat ) && (inv != this) && inv.enoughSamples()) {
+      if ((inv instanceof NoDuplicatesFloat) && (inv != this) && inv.enoughSamples()) {
         VarInfo v1 = var();
         VarInfo v2 = inv.ppt.var_infos[0];
         if (SubSequenceFloat.isObviousDerived(v1, v2)) {
@@ -242,7 +242,7 @@ public class NoDuplicatesFloat
 
   public boolean isSameFormula(Invariant other)
   {
-    Assert.assertTrue(other instanceof NoDuplicatesFloat );
+    Assert.assertTrue(other instanceof NoDuplicatesFloat);
     return true;
   }
 }

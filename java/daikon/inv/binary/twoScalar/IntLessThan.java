@@ -17,8 +17,8 @@ import org.apache.log4j.Category;
 
 import java.util.*;
 
-public final class IntLessThan 
-  extends TwoScalar   
+public final class IntLessThan
+  extends TwoScalar
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -33,7 +33,7 @@ public final class IntLessThan
   public static boolean dkconfig_enabled = true;
 
   public static final Category debug
-    = Category.getInstance("daikon.inv.binary.twoScalar." + "IntLessThan" );
+    = Category.getInstance("daikon.inv.binary.twoScalar.IntLessThan");
 
   private ValueTracker  values_cache = new ValueTracker (8);
 
@@ -60,7 +60,7 @@ public final class IntLessThan
     }
 
     if (debug.isDebugEnabled() || ppt.debugged) {
-      debug.debug("IntLessThan"  + ".instantiate(" + ppt.name + ")"
+      debug.debug("IntLessThan.instantiate(" + ppt.name + ")"
                           + ", seqvar1=" + seqvar1
                           + ", seqvar2=" + seqvar2);
     }
@@ -100,7 +100,7 @@ public final class IntLessThan
       VarInfo super2 = seqvar2.isDerivedSubSequenceOf();
 
       if (debug.isDebugEnabled() || ppt.debugged) {
-        debug.debug("IntLessThan"  + ".instantiate: "
+        debug.debug("IntLessThan.instantiate: "
                             + "min1=" + min1
                             + ", max1=" + max1
                             + ", min2=" + min2
@@ -162,7 +162,7 @@ public final class IntLessThan
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof IntLessThan )
+      if (inv instanceof IntLessThan)
         return (IntLessThan) inv;
     }
     return null;
@@ -189,7 +189,7 @@ public final class IntLessThan
 
     if (format == OutputFormat.SIMPLIFY) {
 
-      String comparator = "<" ;
+    String comparator = "<" ;
 
       return "(" + comparator + " " + var1name + " " + var2name + ")";
     }
@@ -247,7 +247,7 @@ public final class IntLessThan
   // // Temporary, for debugging
   // public void destroy() {
   //   if (debug.isDebugEnabled() || ppt.debugged) {
-  //     System.out.println("IntLessThan"  + ".destroy(" + ppt.name + ")");
+  //     System.out.println("IntLessThan.destroy(" + ppt.name + ")");
   //     System.out.println(repr());
   //     (new Error()).printStackTrace();
   //   }
@@ -434,7 +434,7 @@ public final class IntLessThan
 //             if ((sic != null)
 //                 && sic.enoughSamples()) {
 //               // This DOES happen
-//               // System.out.println("Surprise:  this can happen (var2 in " + "IntLessThan"  + ").");
+//               // System.out.println("Surprise:  this can happen (var2 in IntLessThan).");
 //               // new Error().printStackTrace();
 //               return true;
 //             }

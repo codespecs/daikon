@@ -28,7 +28,7 @@ public abstract class Invariant
   /**
    * General debug tracer.
    **/
-  public static final Category debug = Category.getInstance ("daikon.inv.Invariant");
+  public static final Category debug = Category.getInstance("daikon.inv.Invariant");
 
   /**
    * Debug tracer for printing invariants
@@ -43,7 +43,8 @@ public abstract class Invariant
   /**
    * Debug tracer for isWorthPrinting() checks.
    **/
-  public static final Category debugIsWorthPrinting = Category.getInstance ("daikon.print.isWorthPrinting");
+  public static final Category debugIsWorthPrinting = Category.getInstance("daikon.print.isWorthPrinting");
+
 
   /**
    * Real number between 0 and 1.  The probability that the invariant
@@ -836,9 +837,13 @@ public abstract class Invariant
 
     if (this instanceof OneOf) {
       // A OneOf should have at least as many samples as it has values.
+      // That isn't true for "elements", though:  a single sample "[1 2]"
+      // contains two values for the elements.
       // Was an assert...
       /* [INCR]
-      if (((OneOf) this).num_elts() > num_mod_non_missing_samples) {
+      if (((OneOf) this).num_elts() > num_mod_non_missing_samples
+          && !(this instanceof EltOneOf)
+          && !(this instanceof EltOneOfString)) {
         System.out.println("OneOf problem: num_elts " + ((OneOf) this).num_elts() + ", num_mod " + num_mod_non_missing_samples + ": " + format());
       }
       */

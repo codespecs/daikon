@@ -8,8 +8,8 @@ import daikon.derive.unary.SequenceLength;
 import java.util.*;
 import utilMDE.*;
 
-public class LinearBinary 
-  extends TwoScalar 
+public class LinearBinary
+  extends TwoScalar
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -33,7 +33,7 @@ public class LinearBinary
   public static LinearBinary  instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     if (ppt.debugged) {
-      ppt.debug.debug("LinearBinary"  + ".instantiate(" + ppt.name + ")");
+      ppt.debug.debug("LinearBinary.instantiate(" + ppt.name + ")");
     }
     return new LinearBinary (ppt);
   }
@@ -109,7 +109,7 @@ public class LinearBinary
 
   public boolean isExclusiveFormula(Invariant other)
   {
-    if (other instanceof LinearBinary ) {
+    if (other instanceof LinearBinary) {
       return core.isExclusiveFormula(((LinearBinary) other).core);
     }
     return false;
@@ -120,7 +120,7 @@ public class LinearBinary
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof LinearBinary )
+      if (inv instanceof LinearBinary)
         return (LinearBinary) inv;
     }
     return null;

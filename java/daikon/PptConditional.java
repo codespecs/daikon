@@ -27,13 +27,13 @@ public final class PptConditional
   // This does not install the variable values.  The reason is that it's
   // more efficient to do that for two PptConditional objects at once.
 
-  public PptConditional(PptTopLevel parent, Splitter splitter, boolean inverse) {
-    super(ctor_name_helper(parent, splitter, inverse),
-          ctor_vis_helper(parent, splitter, inverse));
+  public PptConditional(PptTopLevel parent, Splitter splitter, boolean splitter_inverse) {
+    super(ctor_name_helper(parent, splitter, splitter_inverse),
+          ctor_vis_helper(parent, splitter, splitter_inverse));
     // Assert.assertTrue(splitter.instantiated() == false);
     this.parent = parent;
     this.splitter = splitter.instantiate(this);
-    this.splitter_inverse = inverse;
+    this.splitter_inverse = splitter_inverse;
     // Assert.assertTrue(splitter.instantiated() == false);
     // Assert.assertTrue(this.splitter.instantiated() == true);
     this.invflow_ppts = new PptTopLevel[0]; // XXX needs to be fixed, probably
@@ -96,7 +96,7 @@ public final class PptConditional
     // de-serialization so that it is reconstructed on the fly.
     if (splitter != null) {
       Package pkg = splitter.getClass().getPackage();
-      if (pkg == null) { // no package
+      if (pkg == null ) { // no package
         splitter = null;
       }
     }

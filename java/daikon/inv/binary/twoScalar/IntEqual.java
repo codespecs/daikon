@@ -17,8 +17,8 @@ import org.apache.log4j.Category;
 
 import java.util.*;
 
-public final class IntEqual 
-  extends TwoScalar  implements Comparison 
+public final class IntEqual
+  extends TwoScalar  implements Comparison
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -33,7 +33,7 @@ public final class IntEqual
   public static boolean dkconfig_enabled = true;
 
   public static final Category debug
-    = Category.getInstance("daikon.inv.binary.twoScalar." + "IntEqual" );
+    = Category.getInstance("daikon.inv.binary.twoScalar.IntEqual");
 
   protected IntEqual (PptSlice ppt) {
     super(ppt);
@@ -48,7 +48,7 @@ public final class IntEqual
     VarInfo seqvar2 = var2.isDerivedSequenceMember();
 
     if (debug.isDebugEnabled() || ppt.debugged) {
-      debug.debug("IntEqual"  + ".instantiate(" + ppt.name + ")"
+      debug.debug("IntEqual.instantiate(" + ppt.name + ")"
                           + ", seqvar1=" + seqvar1
                           + ", seqvar2=" + seqvar2);
     }
@@ -88,7 +88,7 @@ public final class IntEqual
       VarInfo super2 = seqvar2.isDerivedSubSequenceOf();
 
       if (debug.isDebugEnabled() || ppt.debugged) {
-        debug.debug("IntEqual"  + ".instantiate: "
+        debug.debug("IntEqual.instantiate: "
                             + "min1=" + min1
                             + ", max1=" + max1
                             + ", min2=" + min2
@@ -148,7 +148,7 @@ public final class IntEqual
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof IntEqual )
+      if (inv instanceof IntEqual)
         return (IntEqual) inv;
     }
     return null;
@@ -177,7 +177,7 @@ public final class IntEqual
 
     if (format == OutputFormat.SIMPLIFY) {
 
-      String comparator = "EQ";
+    String comparator = "EQ";
 
       return "(" + comparator + " " + var1name + " " + var2name + ")";
     }
@@ -242,7 +242,7 @@ public final class IntEqual
   // // Temporary, for debugging
   // public void destroy() {
   //   if (debug.isDebugEnabled() || ppt.debugged) {
-  //     System.out.println("IntEqual"  + ".destroy(" + ppt.name + ")");
+  //     System.out.println("IntEqual.destroy(" + ppt.name + ")");
   //     System.out.println(repr());
   //     (new Error()).printStackTrace();
   //   }
@@ -279,6 +279,7 @@ public final class IntEqual
     VarInfo var2 = ppt.var_infos[1];
 
     // a+c=b+c is implied, because a=b must have also been reported.
+
     return ((var1.name instanceof VarInfoName.Add) && (var2.name instanceof VarInfoName.Add) &&
               ((((VarInfoName.Add) var1.name).amount) == (((VarInfoName.Add) var2.name).amount)));
 

@@ -14,8 +14,8 @@ import utilMDE.*;
  * and the indices of those elements; for instance, * "for all i,
  * a[i] > i".
  **/
-public final class SeqIndexComparisonFloat 
-  extends SingleFloatSequence 
+public final class SeqIndexComparisonFloat
+  extends SingleFloatSequence
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -35,7 +35,7 @@ public final class SeqIndexComparisonFloat
 
   protected SeqIndexComparisonFloat (PptSlice ppt) {
     super(ppt);
-    Assert.assertTrue(var().rep_type == ProglangType. DOUBLE_ARRAY );
+    Assert.assertTrue(var().rep_type == ProglangType. DOUBLE_ARRAY);
     core = new FloatComparisonCore (this);
     if (debugSeqIndexComparison) {
       System.out.println("Instantiated: " + format());
@@ -50,14 +50,14 @@ public final class SeqIndexComparisonFloat
     // if (isEqualToObviousSeqIndexComparison(sclvar, seqvar)) {
     //   Global.implied_noninstantiated_invariants += 1;
     //   if (debugSeqIndexComparison) {
-    //     System.out.println("SeqIndexComparisonFloat"  + " not instantiated (obvious): "
+    //     System.out.println("SeqIndexComparisonFloat not instantiated (obvious): "
     //                        + sclvar.name + " in " + seqvar.name);
     //   }
     //   return null;
     // }
 
     if (debugSeqIndexComparison) {
-      System.out.println("SeqIndexComparisonFloat"  + " instantiated: " + seqvar.name);
+      System.out.println("SeqIndexComparisonFloat instantiated: " + seqvar.name);
     }
 
     // Don't compare indices to object addresses.
@@ -200,7 +200,7 @@ public final class SeqIndexComparisonFloat
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if (inv instanceof SeqIndexComparisonFloat )
+      if (inv instanceof SeqIndexComparisonFloat)
         return (SeqIndexComparisonFloat) inv;
     }
     return null;

@@ -67,15 +67,15 @@ public class PptTopLevel
 
   /** Main debug tracer **/
   public static final Category debug =
-    Category.getInstance ("daikon.PptTopLevel");
+    Category.getInstance("daikon.PptTopLevel");
 
   /** Debug tracer for equalTo checks **/
   public static final Category debugEqualTo =
-    Category.getInstance ("daikon.PptTopLevel.equalTo");
+    Category.getInstance("daikon.PptTopLevel.equalTo");
 
   /** Debug tracer for addImplications. **/
   public static final Category debugAddImplications =
-    Category.getInstance ("daikon.PptTopLevel.addImplications");
+    Category.getInstance("daikon.PptTopLevel.addImplications");
 
   /** Debug tracer for data flow. **/
   public static final Category debugFlow =
@@ -480,7 +480,7 @@ public class PptTopLevel
 
     if (Global.debugDerive.isDebugEnabled()) {
       Global.debugDerive.debug("Deriving one pass for ppt " + this.name);
-      Global.debugDerive.debug("  vi_index_min=" + vi_index_min
+      Global.debugDerive.debug("vi_index_min=" + vi_index_min
                                + ", vi_index_limit=" + vi_index_limit
                                + ", unary.length=" + unary.length
                                + ", binary.length=" + binary.length);
@@ -1536,7 +1536,9 @@ public class PptTopLevel
     /* [INCR] ...
     if (this.ppt_name.isCombinedExitPoint()) {
       Vector exits = this.entry_ppt.exit_ppts;
-      int num_exits = exits.size();
+      if (exits.size() == 2) {
+        // Eventually I ought to make this applicable when the number of
+        // individual exits is not 2.
 
       // System.out.println("num exits = " + exits.size());
       // for (int i=0; i<exits.size(); i++) {

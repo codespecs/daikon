@@ -102,6 +102,7 @@ public final class FileIO {
   public static final Category debugPrint =
     Category.getInstance ("daikon.FileIO.printDtrace");
 
+
   // Utilities
   // The Daikon manual states that "#" is the comment starter, but
   // some code assumes "//", so permit both (at least temporarily).

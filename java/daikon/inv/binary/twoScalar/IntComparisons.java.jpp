@@ -109,7 +109,7 @@ The correct way to build the system is to run 'make'.
 #  error "Impossible"
 #endif
 #if (defined(EQUAL) || defined(EQUALFLOAT))
-#  define IMPLEMENTSCOMPARISON implements Comparison
+#define IMPLEMENTSCOMPARISON implements Comparison
 #else
 #  define IMPLEMENTSCOMPARISON
 #  define TRACK_NUM_VALUES
@@ -320,11 +320,11 @@ public final class INTEQUAL
 
     if (format == OutputFormat.SIMPLIFY) {
 #if defined(EQUAL) || defined(EQUALFLOAT)
-      String comparator = "EQ";
+    String comparator = "EQ";
 #elif defined(NONEQUAL) || defined(NONEQUALFLOAT)
-      String comparator = "NEQ";
+    String comparator = "NEQ";
 #else
-      String comparator = EQUALSstring;
+    String comparator = EQUALSstring;
 #endif
       return "(" + comparator + " " + var1name + " " + var2name + ")";
     }
