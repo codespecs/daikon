@@ -847,7 +847,8 @@ public final class FileIO
   }
 
 
-  private static void add_orig_variables(PptTopLevel ppt,
+    /* JTrace hack : private */
+          static void add_orig_variables(PptTopLevel ppt,
 					 // HashMap cumulative_modbits,
 					 Object[] vals,
 					 int[] mods,
@@ -947,7 +948,8 @@ public final class FileIO
   }
 
   // Add derived variables
-  private static void add_derived_variables(PptTopLevel ppt,
+  /* JTrace hack : private */
+          static void add_derived_variables(PptTopLevel ppt,
 					    Object[] vals,
 					    int[] mods)
     throws IOException
