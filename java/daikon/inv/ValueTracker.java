@@ -34,37 +34,22 @@ public class ValueTracker
   static final long serialVersionUID = 20020122L;
   public final int max_values;
 
-  // 8 was chosen because the only Invariants that use this,
-  // the PairwiseIntComparisons, only need to see 8 values
-  // before their computeProbability() methods return something
-  // justified
-  public final static int max_elt_values = 8;
-
   // These fields are protected so that subclasses can view them, for debugging.
 
   protected int[] values_cache;
 
-  // Only PairwiseIntComparison uses this
-  protected int[] elt_values_cache;
-
   // Keep track of where the ends of the caches are.  These are the number
   // of active elements (equivalently, the first unused index).
   private int values_end = 0;
-  private int elt_values_end = 0;
 
   public ValueTracker(int max_values) {
     Assert.assertTrue(max_values > 0);
     this.max_values = max_values;
     this.values_cache = new int[max_values];
-    this.elt_values_cache = new int[max_elt_values];
   }
 
   public int num_values() {
     return values_end;
-  }
-
-  public int num_elt_values() {
-    return elt_values_end;
   }
 
   private int hashLong(long l) {
@@ -89,34 +74,17 @@ public class ValueTracker
       values_cache = null;
   }
 
-  public void elt_add(int v1) {
-    if (elt_values_cache == null) return;
-
-    for (int i = 0; i < max_elt_values; i++) {
-      int elt = elt_values_cache[i];
-      if (elt == v1) {
-        return;
-      }
-    }
-    elt_values_cache[elt_values_end++] = v1;
-
-    if (elt_values_end == max_elt_values)
-      elt_values_cache = null;
-  }
-
   public Object clone() {
+    ValueTracker result;
     try {
-      ValueTracker result = (ValueTracker) super.clone();
-      if (values_cache != null) {
-        result.values_cache = (int[]) values_cache.clone();
-      }
-      if (elt_values_cache != null) {
-        result.elt_values_cache = (int[]) elt_values_cache.clone();
-      }
-      return result;
+      result = (ValueTracker) super.clone();
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can't happen
     }
+    if (values_cache != null) {
+      result.values_cache = (int[]) values_cache.clone();
+    }
+    return result;
   }
 
 
@@ -144,25 +112,6 @@ public class ValueTracker
       } else {
         for (int j = 0; j < vt.num_values(); j++)
           result.add_int (vt.values_cache[j]);
-      }
-
-      // TODO
-      // // Merge these values into the sequence index cache
-      // if (vt.seq_index_cache == null) {
-      //   result.seq_index_cache = null;
-      //   result.seq_index_values_end = vt.seq_index_values_end;
-      // } else {
-      //   for (int j = 0; j < vt.num_seq_index_values(); j++)
-      //     result.seq_index_add (vt.seq_index_cache[j]);
-      // }
-
-      // Merge these values into the elt_values_cache
-      if (vt.elt_values_cache == null) {
-        result.elt_values_cache = null;
-        result.elt_values_end = vt.elt_values_end;
-      } else {
-        for (int j = 0; j < vt.num_elt_values(); j++)
-          result.elt_add (vt.elt_values_cache[j]);
       }
 
     }
@@ -276,6 +225,31 @@ public class ValueTracker
         result.seq_index_cache = (int[]) seq_index_cache.clone();
       }
       return result;
+    }
+
+    public static ValueTrackerOneArray merge_vt1a (List /*ValueTrackerOneArray*/ vtlist) {
+
+      ValueTrackerOneArray result = (ValueTrackerOneArray) ValueTracker.merge(vtlist);
+
+      // Loop through the remaining value trackers
+      for (int i = 1; i < vtlist.size(); i++) {
+
+        // Get the next value tracker
+        ValueTrackerOneArray vt = (ValueTrackerOneArray) vtlist.get (i);
+
+        // Merge these values into the no_dup_elt_count
+        result.no_dup_elt_count += vt.no_dup_elt_count;
+
+        // Merge these values into the sequence index cache
+        if (vt.seq_index_cache == null) {
+          result.seq_index_cache = null;
+          result.seq_index_values_end = vt.seq_index_values_end;
+        } else {
+          for (int j = 0; j < vt.num_seq_index_values(); j++)
+            result.seq_index_add (vt.seq_index_cache[j]);
+        }
+      }
+      return (result);
     }
 
   }
@@ -506,7 +480,72 @@ public class ValueTracker
     }
   }
 
-  public static class ValueTrackerTwoFloatArray extends ValueTracker2 {
+  public static abstract class ValueTrackerTwoArray extends ValueTracker2 {
+
+    // PairwiseIntComparison only needs to see 8 values before becoming justified
+    public final static int max_elt_values = 8;
+    // Only PairwiseIntComparison uses this
+    protected int[] elt_values_cache;
+    // The number of active elements (equivalently, the first unused index).
+    private int elt_values_end = 0;
+
+    public ValueTrackerTwoArray(int max_values) {
+      super(max_values);
+      this.elt_values_cache = new int[max_elt_values];
+    }
+
+    public int num_elt_values() {
+      return elt_values_end;
+    }
+
+    public void elt_add(int v1) {
+      if (elt_values_cache == null) return;
+
+      for (int i = 0; i < max_elt_values; i++) {
+        int elt = elt_values_cache[i];
+        if (elt == v1) {
+          return;
+        }
+      }
+      elt_values_cache[elt_values_end++] = v1;
+
+      if (elt_values_end == max_elt_values)
+        elt_values_cache = null;
+    }
+
+    public Object clone() {
+      ValueTrackerTwoArray result = (ValueTrackerTwoArray) super.clone();
+      if (elt_values_cache != null) {
+        result.elt_values_cache = (int[]) elt_values_cache.clone();
+      }
+      return result;
+    }
+
+    public static ValueTrackerTwoArray merge_vt2a (List /*ValueTrackerTwoArray*/ vtlist) {
+
+      ValueTrackerTwoArray result = (ValueTrackerTwoArray) ValueTracker.merge(vtlist);
+
+      // Loop through the remaining value trackers
+      for (int i = 1; i < vtlist.size(); i++) {
+
+        // Get the next value tracker
+        ValueTrackerTwoArray vt = (ValueTrackerTwoArray) vtlist.get (i);
+
+        // Merge these values into the elt_values_cache
+        if (vt.elt_values_cache == null) {
+          result.elt_values_cache = null;
+          result.elt_values_end = vt.elt_values_end;
+        } else {
+          for (int j = 0; j < vt.num_elt_values(); j++)
+            result.elt_add (vt.elt_values_cache[j]);
+        }
+      }
+      return (result);
+    }
+
+  }
+
+  public static class ValueTrackerTwoFloatArray extends ValueTrackerTwoArray {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.
@@ -528,7 +567,7 @@ public class ValueTracker
     }
   }
 
-  public static class ValueTrackerTwoScalarArray extends ValueTracker2 {
+  public static class ValueTrackerTwoScalarArray extends ValueTrackerTwoArray {
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
     // remove fields, you should change this number to the current date.

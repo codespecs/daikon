@@ -375,10 +375,11 @@ public final class PPTSLICE1
     if (Invariant.dkconfig_use_confidence) {
       throw new Error("to be implemented");
     } else {
-      if (values_cache == null) {
+      ValueTracker.ValueTrackerTwoArray vt2a = (ValueTracker.ValueTrackerTwoArray) values_cache;
+      if (vt2a == null) {
         return 0;
       } else {
-        return this.values_cache.num_elt_values();
+        return vt2a.num_elt_values();
       }
     }
   }
@@ -1212,8 +1213,25 @@ public final class PPTSLICE1
 
     // Create value tracker information for the parent.
     if (! Invariant.dkconfig_use_confidence) {
-      if (vtlist.size() > 0)
+      if (vtlist.size() > 0) {
+#if defined(ARITY1)
+        VALUETRACKER1 first_vt = (VALUETRACKER1) vtlist.get(0);
+        if (first_vt instanceof ValueTracker.ValueTrackerOneArray) {
+          values_cache = ValueTracker.ValueTrackerOneArray.merge_vt1a (vtlist);
+        } else {
+          values_cache = (VALUETRACKER1) ValueTracker.merge (vtlist);
+        }
+#elif defined(ARITY2)
+        VALUETRACKER1 first_vt = (VALUETRACKER1) vtlist.get(0);
+        if (first_vt instanceof ValueTracker.ValueTrackerTwoArray ) {
+          values_cache = ValueTracker.ValueTrackerTwoArray.merge_vt2a (vtlist);
+        } else {
+          values_cache = (VALUETRACKER1) ValueTracker.merge (vtlist);
+        }
+#else
         values_cache = (VALUETRACKER1) ValueTracker.merge (vtlist);
+#endif
+      }
     } else {
       Assert.assertTrue(vtlist.size() == 0);
     }
