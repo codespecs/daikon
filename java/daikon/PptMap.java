@@ -5,7 +5,7 @@ package daikon;
 import java.util.*;
 
 /** Maps from a name (a String) to a Ppt. */
-class PptMap extends HashMap {
+public class PptMap extends HashMap {
 
   // // Is this of any interest?  Will I ever call it?
   // // This used to take a "String filename" initial argument.
