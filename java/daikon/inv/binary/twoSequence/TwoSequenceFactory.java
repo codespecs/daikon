@@ -59,6 +59,9 @@ public final class TwoSequenceFactory {
       } else {
         Assert.assert(Intern.isInterned(super1.name));
         Assert.assert(Intern.isInterned(super2.name));
+        // If the variables (super1 and super2) are different, then their
+        // names must be different, too.  In other words. no two distinct
+        // variables have the same names.
         Assert.assert(super1.name != super2.name);
 
         // NonEqual.instantiate(ppt);
