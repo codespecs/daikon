@@ -244,7 +244,7 @@ The following commands create and populate the
     chgrp -R invariants invariants
     chmod -R g+r invariants
     chmod g+x `find invariants -type d -print`
-    cd java/daikon
+    cd invariants/java/daikon
     cvs update -r ENGINE_V2_PATCHES
 </pre>
 (The last two lines make sure that you use Daikon version 2, rather than
@@ -424,11 +424,6 @@ promulgating coding guidelines, but here are a few things to pay
 attention to when you contribute to Daikon.
 <p>
 
-Please keep comments to 80 characters and code to 80 characters whenever
-possible.  This makes it possible to print the code in a readable fashion
-and also to read the code in a standard-sized window.
-<p>
-
 Every class should have a descriptive comment at the top -- perhaps just
 one or two sentences, perhaps something more extensive.  This is very
 important now that there are many people working on the project, as it will
@@ -439,17 +434,30 @@ with any code, definitely ask for help so the code and/or comments can be
 improved.)
 <p>
 
-Place whitespace around the outside of grouping punctuation.  For instance,
-use "<tt>if (foo) bar;</tt>" rather than "<tt>if(foo)bar;</tt>" and use
-"<tt>} else {</tt>" rather than "<tt>}else{</tt>".
-<p>
-
 Use a consistent indentation style.  When editing an existing file, adopt
 its indentation style rather than writing your additions in an incompatible
 style.  In Emacs, you can use procedure `<tt>c-set-basic-offset</tt>',
 defined in <tt>invariants/emacs/c-set-basic-offset.el</tt>, to set the
 indentation amount to whatever an existing file already happens to use (for
 C and Java code).
+<p>
+
+Please keep comments to 80 characters and code to 80 characters whenever
+possible.  This makes it possible to print the code in a readable fashion
+and also to read the code in a standard-sized window.
+<p>
+
+Place whitespace around the outside of grouping punctuation.  For instance,
+use "<tt>if (foo) bar;</tt>" rather than "<tt>if(foo)bar;</tt>" and use
+"<tt>} else {</tt>" rather than "<tt>}else{</tt>".
+<p>
+
+Do not comment out large blocks of code with <tt>/*</tt> ... <tt>*/</tt>;
+instead, prefix each line by <tt>//</tt>.  Among other things, this does
+not lose the indentation of the original code; without that indentation,
+the commented-out code is much too hard to read and understand.  It also
+makes it clear what is commented out and what is not, even when the code
+is printed or is viewed without color highlighting.
 <p>
 
 
@@ -500,7 +508,7 @@ meetings with Michael Ernst are on Fridays.
 Each week, the Daikon group meets to hear a more in-depth report on the
 current state of one group member.  Each member presents during group
 meeting every 2-3 months.  These presentations may be informal, but they
-should be organized in a way that permits othrs to both understand and
+should be organized in a way that permits others to both understand and
 critique the work.  The presentation may use handouts, overhead
 transparencies, and/or a whiteboard.  Plan the presentation for 20-30
 minutes; questions are likely to draw out the meeting to one hour, but we
