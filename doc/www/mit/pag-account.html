@@ -28,7 +28,9 @@ su
 useradd -d /g6/users/<em>username</em> -u <em>UID</em> <em>username</em>
 <em>echo "## Add to 'invariants' and 'pag' groups"</em>
 emacs /etc/group
-(cd /var/yp; make)
+<em>echo "## Insert full name"</em>
+emacs /etc/passwd
+make -C /var/yp
 <em>echo "## Add to 'daikon' mailing list"</em>
 emacs /etc/aliases
 newaliases
@@ -47,8 +49,8 @@ chown <em>username</em> .cshrc .cvsrc .emacs
 chgrp <em>username</em> .cshrc .cvsrc .emacs
 <em>echo "## Set up email forwarding to Athena"</em>
 echo <em>username</em>@mit.edu > .forward
-chown <em>username</em> .cshrc .cvsrc .emacs .forward
-chgrp <em>username</em> .cshrc .cvsrc .emacs .forward
+chown <em>username</em> .forward
+chgrp <em>username</em> .forward
 yppasswd <em>username</em>
 exit
 </pre>
