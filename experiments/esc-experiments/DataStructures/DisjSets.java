@@ -20,8 +20,6 @@ package DataStructures;
 class DisjSets
 {
   
-  public int ROOT = -1;
-
   /**
    * Construct the disjoint sets object.
    * @param numElements the initial number of disjoint sets.
