@@ -676,6 +676,8 @@ public final class FileIO {
   }
 
   /**
+   * Process a value tuple associated with a given program point by
+   * giving the data to the program point for flowing.
    * @param vt trace data only
    **/
   public static void process_sample(PptTopLevel ppt, ValueTuple vt, Integer nonce)

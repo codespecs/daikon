@@ -372,12 +372,18 @@ public abstract class VarInfoName
   public VarInfoName replaceAll(VarInfoName node, VarInfoName replacement) {
     if (node == replacement)
       return this;
-    Assert.assert(! replacement.hasNode(node)); // no infinite loop
+    
+    // Assert.assert(! replacement.hasNode(node)); // no infinite loop
+    // It doesn't make sense to assert this as we have plenty of times when
+    // we want to replace x by y where y may contain x.
+    
     VarInfoName result = this;
     Replacer r = new Replacer(node, replacement);
-    while (result.hasNode(node)) {
-      result = r.replace(result).intern();
-    }
+
+    // This code used to loop as long as node was in result, but this isn't
+    // necessary - all occurances are replaced by replacer.
+
+    result = r.replace(result).intern();
     return result;
   }
 
@@ -1678,9 +1684,22 @@ public abstract class VarInfoName
     }
 
 
+    /**
+     * Returns true iff some part of root is contained in this.goals.
+     **/
     public boolean contains (VarInfoName root) {
-      Object o = root.intern().accept(this);
+      Object o = getPart(root);
       return (o != null);
+    }
+
+
+    /**
+     * Returns the part of root that is contained in this.goals, or
+     * null if not found.
+     **/
+    public Object getPart (VarInfoName root) {
+      Object o = root.intern().accept(this);
+      return o;
     }
 
     // visitor methods that get the job done
@@ -1694,14 +1713,14 @@ public abstract class VarInfoName
       return (goals.contains(o)) ? o : super.visitFunctionOf(o);
     }
     public Object visitFunctionOfN(FunctionOfN o) {
-      Object retval = null;
+      Object result = null;
       if (goals.contains(o)) return o;
       for (Iterator i = o.args.iterator(); i.hasNext();) {
 	VarInfoName vin = (VarInfoName)i.next();
-	retval = vin.accept(this);
-	if (retval != null) return retval;
+	result = vin.accept(this);
+	if (result != null) return result;
       }
-      return retval;
+      return result;
     }
     public Object visitField(Field o) {
       return (goals.contains(o)) ? o : super.visitField(o);
@@ -1725,18 +1744,28 @@ public abstract class VarInfoName
     }
     public Object visitSubscript(Subscript o) {
       if (goals.contains(o)) return o;
-      if (o.sequence.accept(this) != null) return o;
-      if (o.index.accept(this) != null) return o;
+      Object temp = o.sequence.accept(this);
+      if (temp != null) return temp;
+      temp = o.index.accept(this);
+      if (temp != null) return temp;
       return null;
     }
     public Object visitSlice(Slice o) {
       if (goals.contains(o)) return o;
-      if (o.sequence.accept(this) != null) return o;
-      if ((o.i != null) && (o.i.accept(this) != null)) return o;
-      if ((o.j != null) && (o.j.accept(this) != null)) return o;
+      Object temp = o.sequence.accept(this);
+      if (temp != null) return temp;
+      if (o.i != null) {
+	temp = o.i.accept(this);
+	if (temp != null) return temp;
+      }
+      if (o.j != null) {
+	temp = o.j.accept(this);
+	if (temp != null) return temp;
+      }
       return null;
     }
   }
+
 
   /**
    * Use to traverse a tree, find the first (elements ...) node, and

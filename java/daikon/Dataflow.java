@@ -22,6 +22,10 @@ public class Dataflow
 
   public static final Category debug = Category.getInstance("daikon.DataFlow");
 
+
+  /** Debug tracer for ppt initialization.   **/
+  public static final Category debugInit = Category.getInstance("daikon.DataFlow.init");
+
   // Temporary routine, for debugging
   // Will eventually move into daikon.test.DataflowTest
   //
@@ -72,12 +76,26 @@ public class Dataflow
     // Set up EXIT points to control EXITnn points
     // create_and_relate_combined_exits(ppt, all_ppts);
 
+    if (debugInit.isDebugEnabled()) {
+      debugInit.debug ("Initializing partial order for ppt " + ppt.ppt_name);
+    }
+
     // Set up OBJECT and CLASS relationships
     relate_object_procedure_ppts(ppt, all_ppts);
     // Set up orig() declarations and relationships
     create_and_relate_orig_vars(ppt, all_ppts);
     // Set up OBJECT on arguments relationships
     relate_types_to_object_ppts(ppt, all_ppts);
+
+    if (debugInit.isDebugEnabled()) {
+      for (int i=0; i< ppt.var_infos.length; i++) {
+	VarInfo vi = ppt.var_infos[i];
+	debugInit.debug ("Parent for " + vi.name.name() + ":" +
+			 vi.po_higher());
+
+      }
+    }
+
 
     // Set up derived variables
     create_derived_variables(ppt, all_ppts);
@@ -170,11 +188,15 @@ public class Dataflow
    **/
   private static void relate_object_procedure_ppts(PptTopLevel ppt, PptMap ppts)
   {
+    if (debugInit.isDebugEnabled()) {
+      debugInit.debug ("Realting object and procedure ppts for " + ppt.ppt_name);
+    }
     PptName ppt_name = ppt.ppt_name;
     // Find the ppt that controls this one.
     // CLASS controls OBJECT, and OBJECT controls ENTER/EXIT.
     PptTopLevel controlling_ppt = null;
     if (ppt_name.isObjectInstanceSynthetic()) {
+      debugInit.debug ("This is an OBJECT ppt");
       controlling_ppt = ppts.get(ppt_name.makeClassStatic());
     } else {
       boolean enter = ppt_name.isEnterPoint();
@@ -190,8 +212,17 @@ public class Dataflow
       }
     }
     // Create VarInfo relations with the controller when names match.
+
+
     if (controlling_ppt != null) {
+      if (debugInit.isDebugEnabled()) {
+	debugInit.debug ("Controlling ppt is " + controlling_ppt.ppt_name);
+      }
       setup_po_same_name(ppt.var_infos, controlling_ppt.var_infos);
+    } else {
+    if (debugInit.isDebugEnabled()) {
+      debugInit.debug ("Controlling ppt is null");
+    }
     }
   }
 
@@ -205,6 +236,11 @@ public class Dataflow
     if (! exit_ppt.ppt_name.isCombinedExitPoint()) {
       return;
     }
+
+    if (debugInit.isDebugEnabled()) {
+      debugInit.debug ("Doing create and relate orig vars for: " + exit_ppt.ppt_name);
+    }
+
     PptTopLevel entry_ppt = ppts.get(exit_ppt.ppt_name.makeEnter());
     Assert.assert(entry_ppt != null, exit_ppt.name);
 
@@ -249,6 +285,11 @@ public class Dataflow
    **/
   private static void relate_types_to_object_ppts(PptTopLevel ppt, PptMap ppts)
   {
+    if (debugInit.isDebugEnabled()) {
+      debugInit.debug ("Doing relate types to objects: " + ppt.ppt_name);
+    }
+
+
     // All expresions with no parent
     List orphans = new ArrayList(); // [VarInfo]
     // Subset of orphans which we have an OBJECT ppt for
@@ -257,9 +298,14 @@ public class Dataflow
     VarInfo[] vis = ppt.var_infos;
     for (int i=0; i<vis.length; i++) {
       VarInfo vi = vis[i];
+      if (debugInit.isDebugEnabled()) {
+	debugInit.debug ("Processing VarInfo: " + vi.name.name());
+      }
+      
       if (vi.name.equals(VarInfoName.THIS)) continue;
       // Arguments are the things with no controller yet
       if (vi.po_higher().size() == 0) {
+	debugInit.debug ("which is an orphan");
 	orphans.add(vi);
 	if (! vi.type.isPseudoArray()) {
 	  PptName objname = new PptName(vi.type.base(), // class
@@ -269,6 +315,7 @@ public class Dataflow
 	  Assert.assert(objname.isObjectInstanceSynthetic());
 	  PptTopLevel object_ppt = ppts.get(objname);
 	  if (object_ppt != null) {
+	    debugInit.debug ("whose type is known");
 	    known.put(vi, object_ppt);
 	  } else {
 	    // TODO: Note that orphan has no relatives, for later hook?
@@ -279,6 +326,12 @@ public class Dataflow
     // For each known-type variable, substitute its name for
     // 'this' in the OBJECT ppt and see if we get any expression
     // matches with other orphaned variables.
+
+    // So for example, if we have a and a.x in a lower ppt B, where a
+    // is of type A, we relate the two variables to this and this.x in
+    // the ppt for A.  We do this by using a transformer that replaces
+    // "this" with a and checks for matches between A:::a and B:::a.
+
     VarInfo[] orphans_array = (VarInfo[]) orphans.toArray(new VarInfo[orphans.size()]);
     for (Iterator it = known.keySet().iterator(); it.hasNext(); ) {
       final VarInfo known_vi = (VarInfo) it.next();
@@ -295,6 +348,7 @@ public class Dataflow
 			   }
 			 );
     }
+
   }
 
   /**

@@ -16,9 +16,19 @@ import daikon.inv.filter.*;
 public class PrintInvariants {
 
   /**
-   * Main debug tracer.
+   * Main debug tracer for PrintInvariants (for things unrelated to printing).
    **/
   public static final Category debug = Category.getInstance ("daikon.PrintInvariants");
+
+  /**
+   * Debug tracer for printing.
+   **/
+  public static final Category debugPrint = Category.getInstance ("daikon.print");
+
+  /**
+   * Debug tracer for printing equality.
+   **/
+  public static final Category debugPrintEquality = Category.getInstance ("daikon.print.equality");
 
   public static final String lineSep = Global.lineSep;
 
@@ -408,29 +418,29 @@ public class PrintInvariants {
   }
 
   /* [INCR]
-  private static Vector get_equal_vars(VarInfo vi)
-  {
-    Vector equal_vars = null;
+     private static Vector get_equal_vars(VarInfo vi)
+     {
+     Vector equal_vars = null;
 
-    if (includeObviouslyEqual) {
-      equal_vars = vi.equalTo();
-    } else {
-      equal_vars = vi.equalToNonobvious();
-    }
+     if (includeObviouslyEqual) {
+     equal_vars = vi.equalTo();
+     } else {
+     equal_vars = vi.equalToNonobvious();
+     }
 
-    // Filter for parameters here
-    if (vi.ppt.ppt_name.isExitPoint()) {
-      for (Iterator i = equal_vars.iterator(); i.hasNext(); ) {
-	VarInfo var = (VarInfo) i.next();
-	if (vi.isDerivedParam()) {
-	  i.remove();
-	}
+     // Filter for parameters here
+     if (vi.ppt.ppt_name.isExitPoint()) {
+     for (Iterator i = equal_vars.iterator(); i.hasNext(); ) {
+     VarInfo var = (VarInfo) i.next();
+     if (vi.isDerivedParam()) {
+     i.remove();
+     }
 
-      }
-    }
+     }
+     }
 
-    return(equal_vars);
-  }
+     return(equal_vars);
+     }
   */ // ... [INCR]
 
   private static Vector get_obviously_equal(VarInfo vi)
@@ -438,20 +448,20 @@ public class PrintInvariants {
     Vector obviously_equal = null;
 
     /* [INCR]
-    if (includeObviouslyEqual)
-      {
-	obviously_equal = new Vector(vi.equalTo());
-	obviously_equal.removeAll(vi.equalToNonobvious());
+       if (includeObviouslyEqual)
+       {
+       obviously_equal = new Vector(vi.equalTo());
+       obviously_equal.removeAll(vi.equalToNonobvious());
 
-	// System.out.println("equal_vars.size() = " + equal_vars.size());
-	// System.out.println("Redundant due to simplify = "
-	//                    + (Daikon.suppress_redundant_invariants_with_simplify
-	//                       && redundant_invs.contains(vi)));
-      }
-    else
-      {
-	obviously_equal = new Vector();
-      }
+       // System.out.println("equal_vars.size() = " + equal_vars.size());
+       // System.out.println("Redundant due to simplify = "
+       //                    + (Daikon.suppress_redundant_invariants_with_simplify
+       //                       && redundant_invs.contains(vi)));
+       }
+       else
+       {
+       obviously_equal = new Vector();
+       }
     */ // ... [INCR]
     obviously_equal = new Vector(); // [INCR]
 
@@ -462,9 +472,16 @@ public class PrintInvariants {
   // samples, but not for any other purpose.
   public static void print_equality_invariants(VarInfo vi, PrintWriter out, int invCounter, PptTopLevel ppt)
   {
+    if (debugPrintEquality.isDebugEnabled()) {
+      debugPrintEquality.debug ("Attempting to print equality for: " + vi.name.name());
+    }
+
     // switch commented lines to include obviously equal in output
     Vector equal_vars = new Vector(); // get_equal_vars(); // [INCR] XXX
     Vector obviously_equal = get_obviously_equal(vi);
+
+    if (equal_vars.size() <= 1) return;
+
 
     if (Daikon.output_style == OutputFormat.DAIKON) {
       StringBuffer sb = new StringBuffer(vi.name.name());
@@ -551,24 +568,18 @@ public class PrintInvariants {
       }
     } else if (Daikon.output_style == OutputFormat.IOA) {
       StringBuffer sb = new StringBuffer();
-
       String invName = get_ioa_invname (invCounter, ppt);
-      if (Invariant.debugPrint.isDebugEnabled()) {
-	Invariant.debugPrint.debug("Printing equality for " + invName);
-      }
       sb.append("invariant " + invName + " of " + ppt.ppt_name.getFullClassName() + ": ");
       sb.append (get_ioa_precondition (invCounter, ppt));
-
+	
       StringBuffer sb2 = new StringBuffer();
-      sb2.append ("(" + vi.name.ioa_name() + " = " +
-		  ((VarInfo) equal_vars.get(0)).name.ioa_name() + ")");
       for (int j = 1; j < equal_vars.size(); j++) {
 	VarInfo one = (VarInfo) equal_vars.get(j-1);
 	VarInfo two = (VarInfo) equal_vars.get(j);
-	sb2.append (" /\\ ");
+	if (j > 1) sb2.append (" /\\ ");
 	sb2.append("(" + one.name.ioa_name() + " = " + two.name.ioa_name() + ")");
       }
-
+	
       String rawOutput = sb2.toString();
       int startPos = rawOutput.indexOf("anIndex");
       if (startPos != -1) {
@@ -576,7 +587,7 @@ public class PrintInvariants {
 	String qvar = rawOutput.substring (startPos, endPos);
 	rawOutput = "\\A " + qvar + " (" + rawOutput + ")";
       }
-
+	
       sb.append(rawOutput);
       out.println(sb.toString());
     } else if (Daikon.output_style == OutputFormat.JAVA) {
@@ -666,7 +677,7 @@ public class PrintInvariants {
     if (inv.ppt.ppt_name.isExitPoint()) {
       for (int i = 0; i < inv.ppt.var_infos.length; i++) {
 	VarInfo vi = inv.ppt.var_infos[i];
-	if (vi.isDerivedParam()) {
+	if (vi.isDerivedParamAndUninteresting()) {
 	  reason = "is derived parameter & uninteresting";
 	  return false;
 	}
@@ -701,8 +712,8 @@ public class PrintInvariants {
       inv_rep = inv.format_using(Daikon.output_style);
     } else if (Daikon.output_style == OutputFormat.IOA) {
       String invName = get_ioa_invname (invCounter, ppt);
-      if (Invariant.debugPrint.isDebugEnabled()) {
-	Invariant.debugPrint.debug ("Printing normal for " + invName + " with inv " +
+      if (debugPrint.isDebugEnabled()) {
+	debugPrint.debug ("Printing normal for " + invName + " with inv " +
 			  inv.getClass().getName());
       }
 
@@ -733,8 +744,8 @@ public class PrintInvariants {
       inv_rep += num_values_samples;
     }
 
-    if (Invariant.debugPrint.isDebugEnabled()) {
-      Invariant.debugPrint.debug("Printing: [" + inv.repr_prob() + "]");
+    if (debugPrint.isDebugEnabled()) {
+      debugPrint.debug("Printing: [" + inv.repr_prob() + "]");
     }
 
     out.println(inv_rep);
@@ -777,8 +788,8 @@ public class PrintInvariants {
     print_modified_vars(ppt, out);
 
     // Dump some debugging info, if enabled
-    if (Invariant.debugPrint.isDebugEnabled()) {
-      Invariant.debugPrint.debug("    Variables:");
+    if (debugPrint.isDebugEnabled()) {
+      debugPrint.debug("    Variables:");
       for (int i=0; i<ppt.var_infos.length; i++) {
         VarInfo vi = ppt.var_infos[i];
         PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;

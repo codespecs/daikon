@@ -600,6 +600,10 @@ public final class VarInfo
 
 
 
+  /**
+   * Cached value for getDerivedParam()
+   **/
+  public VarInfo derivedParamCached = null;
 
   /**
    * Cached value for isDerivedParam()
@@ -615,31 +619,154 @@ public final class VarInfo
    * the name contains any of the variables.  We have to do this
    * because we only have name info, and we assume that x and x.a are
    * related from the names alone.
+   * @effects Sets isDerivedParamCached and derivedParamCached to
+   * values the first time this method is called.  Subsequent calls
+   * use these cached values.
    **/
   public boolean isDerivedParam() {
-    if (isDerivedParamCached != null)
-      return isDerivedParamCached.booleanValue();
+    if (isDerivedParamCached != null) return isDerivedParamCached.booleanValue();
 
     boolean result = false;
     if (aux.getFlag(VarInfoAux.IS_PARAM)) result = true;
 
-    Set paramedVars/*VarInfoName*/ = ppt.getParamVars();
+    Set paramVars/*VarInfoName*/ = ppt.getParamVars();
 
-    VarInfoName.Finder finder = new VarInfoName.Finder(paramedVars);
-    if (finder.contains(name)) {
+    VarInfoName.Finder finder = new VarInfoName.Finder(paramVars);
+    Object baseMaybe = finder.getPart(name);
+    if (baseMaybe != null) {
+      VarInfoName base = (VarInfoName) baseMaybe;
+      derivedParamCached = this.ppt.findVar(base);
       if (Global.debugSuppress.isDebugEnabled()) {
-	Global.debugSuppress.debug (name);
-	Global.debugSuppress.debug (paramedVars);
-	Global.debugSuppress.debug ("VarInfo.isDerivedParam: " +
-				    "Returning true because I am " +
-				    "derived from a param");
-
+	Global.debugSuppress.debug (name.name() + " is a derived param");
+	Global.debugSuppress.debug ("derived from " + base.name());
+	Global.debugSuppress.debug (paramVars);
       }
       result = true;
     }
 
     isDerivedParamCached = result ? Boolean.TRUE : Boolean.FALSE;
     return result;
+  }
+
+
+  /**
+   * Return a VarInfo that has two properties: this is a derivation of
+   * it, and it is a parameter variable.  If this is a parameter, then
+   * this is returned.  For examplpe, "this" is always a parameter.
+   * The return value of getDerivedParam for "this.a" (which is not a
+   * parameter) is "this".
+   * @return null if the above condition doesn't hold.
+   * @effects Sets isDerivedParamCached and derivedParamCached to
+   * values the first time this method is called.  Subsequent calls
+   * use these cached values.
+   **/
+  public VarInfo getDerivedParam() {
+    isDerivedParam();
+    return derivedParamCached;
+  }
+
+
+
+  private Boolean isDerivedParamAndUninterestingCached = null;
+
+  /**
+   * Returns true if a given VarInfo is derived from a parameter
+   * variable and printing it would be uninteresting.  There are 2
+   * cases when this would return true for x:
+   * <li> If x is a parameter
+   * <li> If x is in the form p.a, and it is not true that p = orig(p)
+   * In both cases, x.name has to be a postState VarInfoName.  This can
+   * only be called after equality invariants are known.
+   **/
+  public boolean isDerivedParamAndUninteresting() {
+    if (isDerivedParamAndUninterestingCached != null) {
+      return isDerivedParamAndUninterestingCached.booleanValue();
+    }
+    isDerivedParamAndUninterestingCached = _isDerivedParamAndUninteresting() ? Boolean.TRUE : Boolean.FALSE;
+    return isDerivedParamAndUninterestingCached.booleanValue();
+  }
+
+
+
+  private boolean _isDerivedParamAndUninteresting() {
+    if (isPrestate() || name instanceof VarInfoName.Prestate) {
+      // The second part of the || is needed because derived variables
+      // don't match to thier orig() values.
+      return false;
+    }
+    if (aux.getFlag(VarInfoAux.IS_PARAM)) {
+      return true;
+    }
+    if (Global.debugSuppress.isDebugEnabled()) {
+      Global.debugSuppress.debug ("Testing isDerivedParamUninteresting for: " + name.name());
+      Global.debugSuppress.debug (aux);
+      Global.debugSuppress.debug ("At ppt " + ppt.name);
+    }
+    if (isDerivedParam()) {
+      // I am uninteresting if I'm a derived param from X and X's
+      // type or X's size, because these things are boring if X
+      // changes (the default for the rest of the code here, and
+      // boring if X stays the same (because it's obviously true).
+      if (name instanceof VarInfoName.TypeOf) {
+	VarInfoName base = ((VarInfoName.TypeOf) name).term;
+	VarInfo baseVar = ppt.findVar(base);
+	if (baseVar != null && baseVar.aux.getFlag(VarInfoAux.IS_PARAM)) {
+	  Global.debugSuppress.debug ("TypeOf returning true");
+	  return true;
+	}
+      }
+      if (name instanceof VarInfoName.SizeOf) {
+	VarInfoName base = ((VarInfoName.SizeOf) name).sequence.term;
+	VarInfo baseVar = ppt.findVar(base);
+	if (baseVar != null && baseVar.aux.getFlag(VarInfoAux.IS_PARAM)) {
+	  Global.debugSuppress.debug ("SizeOf returning true");
+	  return true;
+	}
+      }
+
+      
+      VarInfo base = getDerivedParam();
+      // Actually we should be getting all the derivations that could
+      // be params, and if any of them are uninteresting, this is
+      // uninteresting.
+      
+      // Remember that if this is derived from a true param, then this
+      // is a param too, so we don't need to worry.  However, if this
+      // is derived from a derivedParam, then we need to find all
+      // derivation parents that could possibly fail under these
+      // rules.  Right now, we just get the first one.
+      
+      // So if x = Foo(this.y, p.y) and this hasn't changed then we
+      // will be ignoring the fact that y has changed.
+
+      // Henceforth only interesting if it's true that base = orig(base)
+      if (base.name.name().equals("this")) return false;
+      VarInfo origBase = ppt.findVar(base.name.applyPrestate());
+      if (origBase == null) {
+	Global.debugSuppress.debug ("No orig variable for base, returning true ");
+	return true; // There can't be an equal invariant without orig	
+      }
+      PptSlice2 slice = ppt.findSlice_unordered (base, origBase);
+      if (slice == null) {
+	Global.debugSuppress.debug ("No slice for equality in base, so uninteresting");
+	return true; // There can't be an equal invariant in a null slice	
+      }
+      if (Global.debugSuppress.isDebugEnabled()) {
+	Global.debugSuppress.debug ("Parent and orig slice for finding equality: " + slice.name);
+      }
+      boolean seenEqual = false;
+      for (Iterator iInvs = slice.invs.iterator(); iInvs.hasNext(); ) {
+	Invariant sliceInv = (Invariant) iInvs.next();
+	if (IsEqualityComparison.it.accept(sliceInv)) seenEqual = true;
+      }
+      if (!seenEqual) {
+	Global.debugSuppress.debug ("Didn't see equality in base, so uninteresting");
+	return true;	
+      }
+      Global.debugSuppress.debug ("Saw equality.  Derived worth printing.");
+      
+    }
+    return false;
   }
 
 

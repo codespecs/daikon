@@ -315,11 +315,11 @@ public abstract class PptSlice
       Set naughty = new HashSet();
       for (Iterator i = to_remove.iterator(); i.hasNext(); ) {
 	Invariant inv = (Invariant) i.next();
-	naughty.add(inv.getClass().getName());
+	naughty.add(inv.repr());
       }
       for (Iterator i = invs_to_flow.iterator(); i.hasNext(); ) {
 	Invariant inv = (Invariant) i.next();
-	naughty.remove(inv.getClass().getName());
+	naughty.remove(inv.repr());
       }
       throw new RuntimeException
 	("Class(es) did not call addToFlow after calling destroy: " + naughty);
