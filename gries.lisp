@@ -14,6 +14,7 @@
 
 
 ;; (load "data-trace.lisp")
+;; (load "instrument.lisp")
 ;; (load "gries-helper.lisp")
 ;; (load "gries.lisp")
 
@@ -21,11 +22,13 @@
 ;; (instrument-file "gries.lisp" "gries-instrumented.lisp")
 
 ;; (compile-file "data-trace.lisp")
+;; (compile-file "instrument.lisp")
 ;; (compile-file "gries-helper.lisp")
 ;; (compile-file "gries.lisp")
 
 ;; (load "data-trace")
 ;; (load "gries-helper")
+;; (load "instrument")         ;; due to defvar of instrumentation-timestamp
 ;; ;; (load "gries")
 ;; (load "gries-instrumented")
 
@@ -195,6 +198,18 @@
 		     do (setf (aref b j) (random-range -100 100)))
 	       (p180-15.1.1 b n)))))
 
+(defun test-p180-15.1.1-e ()
+  (with-data-trace "p180-15.1.1-e.dtrace"
+    (loop for i from 1 to 100
+	  do (let* ((n (random-exponential 10))
+		    (b (make-array n)))
+	       (loop for j from 0 to (- n 1)
+		     do (setf (aref b j)
+			      (random-exponential-signed 1000)))
+	       (p180-15.1.1 b n)))))
+
+
+;; Don't use this!!
 ;; Probably exponential decay is a lot more reasonable than harmonic,
 ;; which can produce a lot of really big numbers (and is slow to compute!).
 (defun test-p180-15.1.1-h ()
@@ -210,17 +225,6 @@
 	       (format t "done filling up array of size ~a~%" n)
 	       (force-output)
 	       (p180-15.1.1 b n)))))
-
-(defun test-p180-15.1.1-e ()
-  (with-data-trace "p180-15.1.1-e.dtrace"
-    (loop for i from 1 to 100
-	  do (let* ((n (random-exponential 10))
-		    (b (make-array n)))
-	       (loop for j from 0 to (- n 1)
-		     do (setf (aref b j)
-			      (random-exponential-signed 1000)))
-	       (p180-15.1.1 b n)))))
-
 
 ;;; This one isn't stated formally, but via pictures and "x not here".
 ;; page 183, program (15.1.7):

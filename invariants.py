@@ -44,6 +44,7 @@ if not locals().has_key("fn_var_infos"):
     collect_stats = true                # performance statistics
     lackwit_type_format = "explicit"    # types list the comparable values
     # lackwit_type_format = "implicit"  # types name a symbol
+    # lackwit_type_format = "none"      # no lackwit types provided
 
     ### Debugging
     debug_read = false                  # reading files
@@ -361,7 +362,9 @@ ws_regexp = re.compile(r'[ \t]+')
 #  * special:  the string "always" means always comparable
 
 def is_lackwit_type(lt):
-    if lackwit_type_format == "implicit":
+    if lackwit_type_format == "none":
+        return true
+    elif lackwit_type_format == "implicit":
         return type(lt) == types.StringType
     else:
         return ((lt == "always")
@@ -384,7 +387,9 @@ def lackwit_type_alias_name(lt):
         return None
 
 def lackwit_make_alias(name, type):
-    if lackwit_type_format == "implicit":
+    if lackwit_type_format == "none":
+        return None
+    elif lackwit_type_format == "implicit":
         return type
     else:
         return ("alias", name, type)
@@ -401,10 +406,12 @@ def lackwit_type_element_type(lt):
 
 def lackwit_type_element_type_alias(vi):
     assert isinstance(vi, var_info)
-    lt = vi.lackwit_type
-    if lackwit_type_format == "implicit":
+    if lackwit_type_format == "none":
+        return None
+    elif lackwit_type_format == "implicit":
         return "always"
     else:
+        lt = vi.lackwit_type
         seq_var_name = lackwit_type_alias_name(lt) or vi.name
         return ("alias", "%s-element" % seq_var_name,
                 lackwit_type_element_type(lt))
@@ -421,6 +428,8 @@ def lackwit_type_index_type(lt, dim):
 
 def lackwit_type_index_type_alias(vi, dim):
     assert isinstance(vi, var_info)
+    if lackwit_type_format == "none":
+        return None
     if lackwit_type_format == "implicit":
         return "always"
     else:
@@ -431,6 +440,8 @@ def lackwit_type_index_type_alias(vi, dim):
 
 
 def parse_lackwit_vartype(raw_str, vartype):
+    if lackwit_type_format == "none":
+        return None
     if lackwit_type_format == "implicit":
         return raw_str
     elif is_array_var_type(vartype):
@@ -460,6 +471,8 @@ def lackwit_types_compatible(name1, type1, name2, type2):
     # print "lackwit_types_compatible", name1, type1, name2, type2
     assert type(name1) == types.StringType
     assert type(name2) == types.StringType
+    if lackwit_type_format == "none":
+        return true
     if (type1 == "always") or (type2 == "always"):
         return true
     if lackwit_type_format == "implicit":
@@ -1619,7 +1632,7 @@ def process_declaration(file, this_fn_var_infos, fn_regexp=None):
     if debug_read:
         print "process_declaration", program_point
     (tag_sans_suffix, tag_suffix) = (string.split(program_point, ":::", 1) + [""])[0:2]
-    if tag_suffix == "BEGIN":
+    if (tag_suffix == "ENTER") or (tag_suffix == "BEGIN"):
         functions.append(tag_sans_suffix)
 
     assert not this_fn_var_infos.has_key(program_point)
@@ -1677,10 +1690,13 @@ def after_processing_all_declarations():
     # Add "_orig"inal values
     for ppt in fns_to_process:
         (ppt_sans_suffix, ppt_suffix) = (string.split(ppt, ":::", 1) + [""])[0:2]
-        if ppt_suffix != "END":
+        if (ppt_suffix != "END") and (ppt_suffix != "EXIT"):
             continue
         these_var_infos = fn_var_infos[ppt]
-        begin_ppt = ppt_sans_suffix + ":::BEGIN"
+        if (ppt_suffix == "END"):
+            begin_ppt = ppt_sans_suffix + ":::BEGIN"
+        else:
+            begin_ppt = ppt_sans_suffix + ":::ENTER"
         for vi in fn_var_infos[begin_ppt][0:fn_truevars[begin_ppt]]:
             these_var_infos.append(var_info(vi.name + "_orig", vi.type, lackwit_make_alias(vi.name, vi.lackwit_type), len(these_var_infos)))
 
@@ -1753,7 +1769,7 @@ def read_data_trace_file(filename, fn_regexp=None):
         (tag_sans_suffix, tag_suffix) = (string.split(tag, ":::", 1) + [""])[0:2]
 
         # Increment function invocation count if ':::BEGIN'
-        if (not no_invocation_counts) and (tag_suffix == "BEGIN"):
+        if (not no_invocation_counts) and ((tag_suffix == "ENTER") or (tag_suffix == "BEGIN")):
             fn_invocations[tag_sans_suffix] = fn_invocations[tag_sans_suffix] + 1
 
         ## Read the variable values
@@ -1773,6 +1789,11 @@ def read_data_trace_file(filename, fn_regexp=None):
             this_var_type = this_var_info.type
             if is_array_var_type(this_var_type):
                 # variable is an array
+
+                # Deal with [] surrounding Java array output
+                if (this_value[0] == "[") and (this_value[-1] == "]"):
+                    this_value = this_value[1:-1]
+
                 this_value = string.split(this_value, " ")
                 if len(this_value) > 0 and this_value[-1] == "":
                     # Cope with trailing spaces on the line
@@ -1810,6 +1831,9 @@ def read_data_trace_file(filename, fn_regexp=None):
                     assert integer_re.match(this_value)
                     # Convert the number to signed.  This is gross, will be fixed.
                     this_value = eval(hex(long(this_value))[:-1])
+                elif (this_var_type == "char"):
+                    assert len(this_value) == 1
+                    this_value = ord(this_value)
                 else:
                     assert integer_re.match(this_value)
                     this_value = int(this_value)
@@ -1830,11 +1854,11 @@ def read_data_trace_file(filename, fn_regexp=None):
         ## Original values.
         params_to_orig_val_stack = fn_to_orig_param_vals[tag_sans_suffix]
         # If beginning of function, store the original param val
-        if tag_suffix == "BEGIN":
+        if (tag_suffix == "ENTER") or (tag_suffix == "BEGIN"):
             params_to_orig_val_stack.append(these_values)
         # If end of function call, pop previous original param value and
         # add to current parameter values.
-        if tag_suffix == "END":
+        if (tag_suffix == "EXIT") or (tag_suffix == "END"):
             # Equivalently, in Python 1.5.2:
             #   these_values = these_values + params_to_orig_val_stack.pop()
             old_values = params_to_orig_val_stack[-1]
@@ -1981,6 +2005,19 @@ def all_numeric_invariants(fn_regexp=None):
             continue
 
         assert not var_values_invalid_modinkey(var_values)
+
+        # Avoid repeated variable derivation:
+        #  * it happens every time we call all_numeric_invariants; we don't
+        #    want it to happen multiple times.
+        #  * after derivation, do bad things happen if we try to read new
+        #    values from files?
+        # The solution here:
+        #  * remember which program points have been derived from and don't
+        #    re-derive them.  I can't conveniently
+        #    read new data trace values (can I?).
+        # Another approach:
+        #  * add a function called in the same contexts as clear_invariants
+        #    which eliminates all derived variables.
 
         if fn_derived_from.has_key(fn_name):
             # Don't do any variable derivation, only invariant inference
@@ -3578,6 +3615,7 @@ class single_sequence_numeric_invariant(invariant):
             if not(self.elts_equal or self.non_decreasing \
                    or self.non_increasing):
                 break
+        # print "sequence %s: non_decreasing = %d; non_increasing = %d; elts_equal = %d" % (var_infos[0], self.non_decreasing, self.non_increasing, self.elts_equal)
 
         # Invariant check over elements of all sequence instances
         element_to_count = dict_of_sequences_to_element_dict(dict)
@@ -4442,7 +4480,7 @@ def find_violations(condition, fn_regexp=None):
     The condition is a Python expression (a string) using symbolic
     variable names (that is, the variable names used in the program).
     Example calls:
-      find_violations("lj <= j", "makepat:::END")
+      find_violations("lj <= j", "makepat:::EXIT")
       find_violations("*j_orig == *j - 1", "plclose:::END")
     """
 
