@@ -421,13 +421,21 @@ public final class VarInfo
   {
     VarInfo lower = this;
 
-    Assert.assertTrue(lower != higher, "lower != higher");
-    //Assert.assertTrue(lower.ppt != higher.ppt, "lower.ppt != higher.ppt");
+    if (lower == higher) {
+      System.err.println ("Error, lower != higher in:");
+      System.err.println ("   lower: " + lower.name.name());
+      System.err.println ("  higher: " + higher.name.name());
+      System.err.println ("     ppt: " + this.ppt.name);
+      Assert.assertTrue(lower != higher, "lower != higher");
+
+    }
+
     // We remove this assertion because it could be that A has a member a
     // of type A, so A::this should be < A::this.a.  The only thing we want
     // to prevent is cycles, so the first assertion above is sufficient.
     // Presumably, if the above situation happens, the transformers will
     // handle recursing properly.
+    // Assert.assertTrue(lower.ppt != higher.ppt, "lower.ppt != higher.ppt");
 
 
     Assert.assertTrue(lower.type == higher.type, "lower.type == higher.type");
