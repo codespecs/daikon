@@ -1643,4 +1643,15 @@ public final class UtilMDE {
       return (qualified_name);
     return (qualified_name.substring (offset+1));
   }
+
+  /**
+   * Returns the simple unqualified class name that corresponds to the
+   * specified class.  For example if qualified name of the class
+   * is java.lang.String, String will be returned.
+   **/
+  public static String unqualified_name (Class cls) {
+
+    return (unqualified_name (cls.getName()));
+  }
+
 }
