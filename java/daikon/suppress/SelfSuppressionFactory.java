@@ -51,7 +51,7 @@ public class SelfSuppressionFactory extends SuppressionFactory  {
       debug.debug ("  in ppt     : " + inv.ppt.parent.ppt_name);
     }
     if (inv.logOn())
-      inv.log ("Attempting self suppression");
+      inv.log ("Attempting self suppression with sample count: " + inv.ppt.num_samples());
 
     PptSlice slice = inv.ppt;
 
@@ -69,17 +69,17 @@ public class SelfSuppressionFactory extends SuppressionFactory  {
     // suppress ourselves in the same ppt
     if (supTemplate.filled && supTemplate.results[0].isSameFormula(inv)) {
       Assert.assertTrue (supTemplate.transforms[0][0] != supTemplate.varInfos[0][0]);
-      if (debug.isDebugEnabled()) {
-        debug.debug ("  Self template filled:");
-        debug.debug ("  suppressee: " + inv.repr());
-        debug.debug ("      in ppt: " + inv.ppt.parent.name);
-        debug.debug ("  with      : " + supTemplate.results[0].repr());
-        debug.debug ("      in ppt: " + supTemplate.results[0].ppt.parent.name);
+      if (inv.logOn()) {
+        inv.log ("  Self template filled:");
+        inv.log ("  suppressee: " + inv.repr());
+        inv.log ("      in ppt: " + inv.ppt.parent.name);
+        inv.log ("  with      : " + supTemplate.results[0].repr());
+        inv.log ("      in ppt: " + supTemplate.results[0].ppt.parent.name);
       }
       return linkFromTemplate (supTemplate, inv);
     } else {
       if (supTemplate.filled) {
-        debug.debug ("Not same formula, returning null");
+        inv.log ("Not same formula, returning null");
       }
       return null;
     }
