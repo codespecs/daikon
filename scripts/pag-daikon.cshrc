@@ -28,7 +28,7 @@ setenv PATH `echo $PATH | ${INV}/scripts/path-remove.pl`
 # Alternately, run CVS under emacs via "M-x cvs-update".
 alias	cvsupdate	'cvs -q update -d \!* |& egrep -e "^C |update aborted|non-existent repository|Permission denied|cannot open|^cvs update: [^U]"'
 
-alias jikes /g2/users/mernst/bin/Linux-i686/jikes -g +E +F
+alias jikes /g2/users/mernst/bin/Linux-i686/jikes-1.15 -g +E +F
 
 setenv DFEJ_VERBOSE 1
 
