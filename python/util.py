@@ -630,7 +630,7 @@ def memory_usage(pid = posix.getpid()):
 
 
 ###########################################################################
-### Files
+### File names
 ###
 
 def expand_file_name(filename):
@@ -640,6 +640,57 @@ def expand_file_name(filename):
     filename = re.sub(r'^~', '/homes/fish/', filename)
     filename = re.sub(r'\$[a-zA-Z_]+', env_repl, filename)
     return filename
+
+
+###########################################################################
+### Forms
+###
+
+def read_form(file, form):
+    """Reads input from the file, parse the input according to the form,
+    and returns a list of values.
+    The form is an array of the form
+      ((REGEXP-OR-STRING [, STRING] [, group1, group2, group3, ...[, (default1, default2, ...)]])
+       [, ...])
+    The form may be modified to insert a regexp before the string, if no
+    regexp is provided.  If both of the first two elements are strings, the
+    second is ignored and the first is treated literally (not as a regexp).
+    Not yet implemented:
+      If defaults are provided, it is not an error for a line not to match
+      (the next pattern is tried).  The last pattern should not be optional,
+      lest this code gobble a line without processing it.
+    """
+
+    re_class = re.compile("a").__class__
+
+    # First, convert any strings to regular expressions
+    for elt in form:
+        re_or_str = elt[0]
+        if ((type(re_or_str) == types.StringType)
+            and ((len(elt) == 1) or (type(elt[1]) != types.StringType))):
+            elt.insert(0, re.compile(elt[0], re.IGNORECASE))
+        else:
+            assert (((type(re_or_str) == types.StringType) and (type(elt[1]) == types.StringType))
+                    or (re_or_str.__class__ == re_class))
+
+    result = []
+    for elt in form:
+        line = file.readline()
+        this_re = elt[0]
+        if type(this_re) == types.StringType:
+            if line != this_re:
+                raise "Expected line to be " + this_re + "\nbut found " + line
+        else:
+            match = this_re.search(line)
+            if not match:
+                raise "Expected match for " + elt[1] + "\nbut found " + line
+            if len(elt) > 2:
+                # This seems to require calling apply; yuck.
+                # result.fromlist(apply(MatchObject.group(match, (elt[range(2, len(elt)))))))
+                for i in range(2, len(elt)):
+                    result.append(match.group(elt[i]))
+
+    return result
 
 
 ###########################################################################

@@ -3777,11 +3777,9 @@ class stats:
         print "    Total number of invariants checked:    ", self.total_num_scl + self.total_num_seq + self.total_num_invs_pair
         print "    Total number of samples:               ", self.samples
         print "    Total number of individual values:     ", self.total_num_values_ind
-        if (self.total_num_scl + self.total_num_seq) != 0:
-            print "    Average number of individual values:   ", round(float(self.total_num_values_ind) / float(self.total_num_scl + self.total_num_seq), 2)
+        print "    Average number of individual values:   ", round(float(self.total_num_values_ind) / float(self.total_num_scl + self.total_num_seq), 2)
         print "    Total number of pairs of values:       ", self.total_num_values_pair
-        if (self.total_num_invs_pair != 0):
-            print "    Average number of pairs of values:     ", round(float(self.total_num_values_pair) / float(self.total_num_invs_pair), 2)
+        print "    Average number of pairs of values:     ", round(float(self.total_num_values_pair) / float(self.total_num_invs_pair), 2)
         print ""
         print "    Original number scalar parameters:     ", "%3i" % self.orig_num_scl_params
         print "    Original number scalar locals:         ", "%3i" % self.orig_num_scl_locals
