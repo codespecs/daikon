@@ -13,7 +13,7 @@ versions as the user manual.
 
 3.1.2
 
-Added configuration option daikon.FileIO.continue_after_ioexception.
+Added configuration option daikon.FileIO.continue_after_file_exception.
 
 ---------------------------------
 
