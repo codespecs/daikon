@@ -28,15 +28,17 @@ The dfej front end for Java outputs more variables; in particular, you may
 notice slightly more "foo.class" variables that give the run-time type of
 variable foo.
 
-[Sandra should write this item more precisely, and make sure that it
-appears in the manual as well.]
-Daikon permits program point declarations (which ordinarily appear in
-.decls files) to appear in the .dtrace file as well.  Each declaration
-must appear either in a .decls file or in a .dtrace file, not in both, and
-any declaration in a .dtrace file must precede all samples for that program
-point.
-[Note (either here or in the manual) the consequences of this, notably that
-it enables incremental operation.]
+Daikon now permits program point declarations (which ordinarily appear
+in .decls files) to appear in the .dtrace file as well.  Each
+declaration must appear either in a .decls file or in a .dtrace file,
+not in both, and any declaration in a .dtrace file must precede all
+samples for that program point.  This feature allows incremental
+processing of .dtrace files for languages such as Java that support
+dynamic linking.  As part of this change, it is now required that
+:::ENTER program points be declared before corresponding :::EXIT
+program points so that the set of original variables are available
+when processing exit point declarations.
+
 
 Hopefully, this release will include:
  * Daikon supports Java 5 (also known as Java 1.5)

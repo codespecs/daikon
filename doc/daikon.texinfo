@@ -1988,9 +1988,11 @@ the file type is determined by whether the file name contains
 As a special case, a file name of @code{-} means to read data trace
 information from the standard input.
 
-Be sure to include all declaration files that are needed for the particular
-data trace file; the simplest way is to include every the declaration file
-created when instrumenting the program.
+Be sure to include all declaration files that are needed for the
+particular data trace file; the simplest way is to include every
+declaration file created when instrumenting the program.  Some Daikon
+front ends may emit program point declarations embedded in data trace
+files instead of producing separate declaration files.
 
 The optional flags are described in @ref{Command line options}.
 
@@ -7797,13 +7799,18 @@ static lexical information about a program point can be determined when
 a program is instrumented.  By convention, declaration files have the
 suffix @file{.decls} or @file{.decl}.
 
-(Actually, both declarations and data trace records may appear together in
-a single file.  In that case, the program point information must precede
-the first appearance of values at that point, but it is not required that
-all the program point declarations appear before any values are written to
-the file.  This is intended to provide flexibility for instrumentation
-implementations.  However, it is encouraged to place declarations in
-different files than data traces.)
+(Actually, both declarations and data trace records may appear
+together in a single @file{.dtrace} file.  In that case, the program
+point declaration must precede the first appearance of values for that
+point, but it is not required that all the program point declarations
+appear before any of the data trace records.  This is intended to
+provide flexibility for instrumentation implementations for languages
+such as Java that support dynamic linking, and to permit Daikon to
+incrementally process @file{.dtrace} files as they are generated instead of
+requiring the application to run to completion in order to collect a
+complete set of declarations before any Daikon processing can begin.
+However, for staticallly linked languages it is usually better to
+place declarations and data trace records in separate files.)
 
 
 @menu
@@ -7869,6 +7876,9 @@ are multiple exit points, then each one should be suffixed by a number
 the main (non-numbered) ":::EXIT" point automatically.  All the
 numbered exits should contain the same set of variables; in general,
 this means that local variables are not included at exit points.
+Daikon currently requires that declarations for ":::ENTER" program
+points appear before any declarations for matching ":::EXIT" program
+points.
 
 Another convention is to have another program point whose name ends
 with ":::OBJECT" for the representation invariant of an object or
@@ -8053,11 +8063,11 @@ Instrumenting code creates a @file{.decls} file that contains program
 point names such as:
 
 @example
-  StackAr.makeEmpty()V:::EXIT54
   StackAr.makeEmpty()V:::ENTER
+  StackAr.makeEmpty()V:::EXIT54
+  StackAr.top()Ljava/lang/Object;:::ENTER
   StackAr.top()Ljava/lang/Object;:::EXIT64
   StackAr.top()Ljava/lang/Object;:::EXIT65
-  StackAr.top()Ljava/lang/Object;:::ENTER
 @end example
 
 This section describes the format of these program point names.  Someone
@@ -8105,7 +8115,13 @@ rather than for just one method:
 @cindex data trace file format
 @cindex .dtrace file format
 
-The format of the value information is:
+Data trace files can contain the same declaration records that appear in
+declaration files, as well as trace information records.  Each program point
+point can be declared only once, and the declaration must either appear in a
+@file{.decls} file or in the @file{.dtrace} file prior to the first trace
+information record for that program point.
+
+The format of the value information in a data trace record is:
 @example
   program-point-name
   varname1
