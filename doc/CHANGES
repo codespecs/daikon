@@ -44,6 +44,7 @@ Hopefully, this release will include:
  * Carlos's run-time checker
  * Eric Fellheimer's Java front end
  * incremental operation for both the new Java front end and for Kvasir
+ * The Daikon regression tests are available on the Daikon downloads webpage
  * David Cok's Eclipse plug-in
  * Jeff Perkins's dynamic comparability analysis [this one might not be
    reasonable by February 1]
