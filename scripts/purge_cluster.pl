@@ -1,13 +1,17 @@
-#!/usr/bin/perl -w
+#!/usr/bin/env perl
 
-$inv_file = $ARGV[0];
-$out = $inv_file.".purge";
+use English;
+use strict;
+$WARNING = 1;			# "-w" flag
+
+my $inv_file = $ARGV[0];
+my $out = $inv_file.".purge";
 open (IN, $inv_file) || die "couldn't open $inv_file\n";
 open (OUT, ">$out") || die "couldn't open $out for output\n";
 
 while (<IN>) {
-    $line = $_;
-    if($line !~ /\[.*cluster.*\]/ && $line !~ /reverse/) {
+    my $line = $_;
+    if ($line !~ /\[.*cluster.*\]/ && $line !~ /reverse/) {
 	print OUT $line;
     }
 }

@@ -3,7 +3,10 @@
 # Conveniently run daikon to create a .inv file and start the gui
 # $Id$
 
+use English;
 use strict;
+$WARNING = 1;
+
 use POSIX qw(tmpnam);
 use Getopt::Long;
 

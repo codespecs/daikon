@@ -1,7 +1,11 @@
-#! /uns/bin/perl -w
+#!/usr/bin/env perl
 # prop-modified trace-file ...
 # Return the percentage of non-compulsory modification bits that are set
 # in each of the specified dtrace files.
+
+use English;
+# use strict;
+$WARNING = 1;			# "-w" flag
 
 for $file (@ARGV) {
   system("cp -pf $file $file-preserve-prop-modified");

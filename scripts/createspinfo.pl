@@ -1,8 +1,5 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/env perl
 # createspinfo.pl
-
-# This needs to be uncommented.
-# use strict;
 
 # Usage:
 #   createspinfo.pl file.java
@@ -13,6 +10,11 @@
 # This script creates the splitter info file in two stages.  First, it
 # creates a .conds file, and then it creates the splitter info file from
 # the .conds file.
+
+use English;
+# use strict;
+$WARNING = 1;			# "-w" flag
+
 
 #creation of .conds file
 foreach my $filename (@ARGV) {

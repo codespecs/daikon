@@ -1,4 +1,8 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/env perl
+
+use English;
+# use strict;
+$WARNING = 1;			# "-w" flag
 
 $decls_file; #holds the name of the .decls file
 $dtrace_file; #holds the name of the .dtrace file

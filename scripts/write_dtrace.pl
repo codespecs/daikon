@@ -1,9 +1,13 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/env perl
 # This perl script is used to insert cluster information into a dtrace file.
 # The subroutine "read_cluster_info_xxx" reads one or more files (or takes in
 # some input) and returns an associative array. This associative array has
 # as key the program point name, and as value an array whose index is the
 # invocation nonce and the value cluster number of that point.
+
+use English;
+# use strict;
+$WARNING = 1;			# "-w" flag
 
 %pptname_to_cluster;
 $object_invoc = 0; #assigns invocation number of the OBJECT program point

@@ -1,8 +1,12 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/env perl
 
 #dtrace-diff
 #arguments:  dtrace-diff declsfile dtrace1 dtrace2
 #outputs differences that aren't hashcodes.
+
+use English;
+# use strict;
+$WARNING = 1;
 
 ($decls, $dta, $dtb) = @ARGV;
 

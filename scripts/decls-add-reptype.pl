@@ -1,8 +1,12 @@
-#!/uns/bin/perl -wpi.bak
+#!/usr/bin/env perl
 # decls-add-reptype.pl -- add representation type to .decls files
 
 # Run like this:  decls-add-reptype.pl file ...
 
+use English;
+# use strict;
+$WARNING = 1;			# "-w" flag
+$INPLACE_EDIT = "bak";		# "-ibak" flag
 
 BEGIN {
   $debug = 0;
