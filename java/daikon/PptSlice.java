@@ -857,7 +857,7 @@ public abstract class PptSlice
     for (int i = 0; i < var_infos.length; i++) {
       sb.append (" " + var_infos[i].name.name());
     }
-    return this.getClass().getName() + ": " + parent.ppt_name + " " + sb;
+    return this.getClass().getName() + ": " + parent.ppt_name + " " + sb + " samples: " + num_samples();
   }
 
 }
