@@ -60,8 +60,8 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/unary/string/OneOfString.java \
 	daikon/inv/unary/scalar/NonZero.java \
 	daikon/inv/unary/scalar/NonZeroFloat.java \
-    daikon/inv/unary/scalar/RangeInt.java \
-    daikon/inv/unary/scalar/RangeFloat.java \
+	daikon/inv/unary/scalar/RangeInt.java \
+	daikon/inv/unary/scalar/RangeFloat.java \
 	daikon/inv/unary/sequence/OneOfSequence.java \
 	daikon/inv/unary/sequence/OneOfFloatSequence.java \
 	daikon/inv/unary/sequence/EltOneOf.java \
