@@ -570,6 +570,66 @@ public final class TestUtilMDE extends TestCase {
     assertTrue(l.intValue() == 0x1234abcd);
   }
 
+  // Tests the method "Object intern(Object)" in Intern.java
+  public static void testInternObject() {
+    Object nIntern = Intern.intern((Object) null);
+    assertEquals(null, nIntern);
+
+    String sOrig = new String("foo");
+    String sIntern = Intern.intern(sOrig);
+    Object sOIntern = Intern.intern((Object) sOrig);
+    assertTrue(sIntern == sOIntern);
+
+    String[] saOrig = new String[] {"foo", "bar"};
+    String[] saIntern = Intern.intern(saOrig);
+    Object saOIntern = Intern.intern((Object) saOrig);
+    assertTrue(saIntern == saOIntern);
+
+    Integer iOrig = new Integer(1);
+    Integer iIntern = Intern.intern(iOrig);
+    Object iOIntern = Intern.intern((Object) iOrig);
+    assertTrue(iIntern == iOIntern);
+
+    Long lOrig = new Long(12345678901234l);
+    Long lIntern = Intern.intern(lOrig);
+    Object lOIntern = Intern.intern((Object) lOrig);
+    assertTrue(lIntern == lOIntern);
+
+    int[] iaOrig = new int[] {1, 2, 3};
+    int[] iaIntern = Intern.intern(iaOrig);
+    Object iaOIntern = Intern.intern((Object) iaOrig);
+    assertTrue(iaIntern == iaOIntern);
+
+    long[] laOrig = new long[] {12345678901234l, 98765432109876l};
+    long[] laIntern = Intern.intern(laOrig);
+    Object laOIntern = Intern.intern((Object) laOrig);
+    assertTrue(laIntern == laOIntern);
+    
+    Double dOrig = new Double(3.14);
+    Double dIntern = Intern.intern(dOrig);
+    Object dOIntern = Intern.intern((Object) dOrig);
+    assertTrue(dIntern == dOIntern);
+
+    double[] daOrig = new double[] {3.14, 2.71};
+    double[] daIntern = Intern.intern(daOrig);
+    Object daOIntern = Intern.intern((Object) daOrig);
+    assertTrue(daIntern == daOIntern);
+
+    Object[] oaOrig = new Object[] {new String("foo"), new Integer(1)};
+    Object[] oaIntern = Intern.intern(oaOrig);
+    Object oaOIntern = Intern.intern((Object) oaOrig);
+    assertTrue(oaIntern == oaOIntern);
+
+    java.awt.Point pOrig = new java.awt.Point(1,2);
+    boolean exceptionCaught = false;
+    try {
+      Object pIntern = Intern.intern((Object) pOrig);
+    } catch (IllegalArgumentException e) {
+      exceptionCaught = true;
+    }
+    assertTrue(exceptionCaught);
+  }
+
   // This cannot be static because it instantiates an inner class.
   public void testMathMDE() {
 

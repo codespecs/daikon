@@ -444,6 +444,38 @@ public final class Intern {
   }
 
 
+  /**
+   * Convenince method to intern an Object when we don't know its
+   * runtime type.  Its runtime type must be one of the types for
+   * which we have an intern() method, else an exception is thrown.
+   **/
+  public static Object intern(Object a) {
+    if (a == null) {
+      return null;
+    } else if (a instanceof String) {
+      return intern((String) a);
+    } else if (a instanceof String[]) {
+      return intern((String[]) a);
+    } else if (a instanceof Integer) {
+      return intern((Integer) a);
+    } else if (a instanceof Long) {
+      return intern((Long) a);
+    } else if (a instanceof int[]) {
+      return intern((int[]) a);
+    } else if (a instanceof long[]) {
+      return intern((long[]) a);
+    } else if (a instanceof Double) {
+      return intern((Double) a);
+    } else if (a instanceof double[]) {
+      return intern((double[]) a);
+    } else if (a instanceof Object[]) {
+      return intern((Object[]) a);
+    } else {
+      throw new IllegalArgumentException
+        ("Arguments of type " + a.getClass() + " cannot be interned");
+    }
+  }
+
   ///////////////////////////////////////////////////////////////////////////
   /// Interning arrays:  old implementation #1
   ///
