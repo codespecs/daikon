@@ -5,6 +5,7 @@ import java.util.*;
 import daikon.inv.*;
 import daikon.inv.IsEqualityComparison;	       // For equality invariants work-around
 import daikon.PptSlice;			       // For equality invariants work-around
+import daikon.PptTopLevel;
 import daikon.VarInfo;
 
 //  This class contains a collection of invariant filters, and allows other
@@ -163,9 +164,11 @@ public class InvariantFilters {
     // order, so that canonical variables remain first.
     Set equivalentGroups = new HashSet();
 
-    // Map from canonical variable to PptSlice.
-    // A PptSlice for each set.  Equality needs a PptSlice so it can report
-    // num_values() and num_samples().
+    // We want a map from canonical variable to PptSlice.  Equality needs a
+    // PptSlice so it can report num_values() and num_samples().
+    // However, this maps to an invariant, from which a ppt can be extracted.
+    // The reason is that we want to choose the ppt associated with the
+    // lexically first invariant, so that this method is deterministic.
     Map ppts = new HashMap();
 
     // This method makes two passes through the list of invariants.  The
@@ -196,7 +199,13 @@ public class InvariantFilters {
             if (! canonicalVariables.contains( vi )) {
               Assert.assert(! ppts.containsKey(vi));
               canonicalVariables.add( vi );
-              ppts.put( vi, invariant.ppt );
+              ppts.put( vi, invariant );
+            } else {
+              Assert.assert(ppts.containsKey(vi));
+              Invariant old_inv = (Invariant) ppts.get(vi);
+              if (PptTopLevel.icfp.compare(invariant, old_inv) < 0) {
+                ppts.put( vi, invariant );
+              }
             }
 	  }
         }
@@ -237,7 +246,7 @@ public class InvariantFilters {
     for ( Iterator egIter = equivalentGroups.iterator(); egIter.hasNext(); ) {
       List equivalentGroup = (List) egIter.next();
       VarInfo canonicalVar = (VarInfo) equivalentGroup.get(0);
-      PptSlice ppt = (PptSlice) ppts.get(canonicalVar);
+      PptSlice ppt = ((Invariant) ppts.get(canonicalVar)).ppt;
       invariants.add( 0, new Equality(equivalentGroup, ppt));
     }
 
