@@ -2800,7 +2800,7 @@ Daikon must be supplied with the predicate for an implication.  Certain
 such conditions are built into Daikon; examples are which return
 statement was executed in a procedure and whether a boolean procedure
 returns true or false.  Additionally, Daikon can read predicates from a
-file called a Splitter info (@file{.spinfo}) file.  The splitter info
+file called a splitter info (@file{.spinfo}) file.  The splitter info
 file can be produced automatically, such as by the
 @command{createspinfo.pl} script (see below).  Users can also create
 splitter info files by hand or manually augment automatically-created
@@ -2809,7 +2809,7 @@ ones.
 To detect condition invariants and implications:
 @enumerate
 @item
-Create the Splitter info file, either automatically or by hand.
+Create the splitter info file, either automatically or by hand.
 @item
 Run Daikon with the @file{.spinfo} file as one of its arguments.  For example,
 @example
@@ -2820,7 +2820,7 @@ java daikon.Daikon Foo.decls Foo.spinfo Foo.dtrace
 @cindex createspinfo.pl program
 
 The @command{createspinfo.pl} program takes Java source code as input and
-creates a Splitter info file; for instance,
+creates a splitter info file; for instance,
 @example
 createspinfo.pl Foo.java
 @end example
@@ -2873,7 +2873,7 @@ Each condition is a Java expression of boolean type.  All variables that
 appear in the condition must also appear in the declaration of the program
 point in the @file{.decls} file.  (In other words, all the variables must be in
 scope at the program point(s) where the Splitter is intended to
-operate.
+operate.)
 
 @c Exceptions to this are described in the REPLACEMENT section.
 
@@ -2901,7 +2901,7 @@ replacement2
 where @samp{replacement@var{i}} contains an expression representing the body
 of @samp{procedure@var{i}}.  In each condition, Daikon replaces procedure
 calls by their replacements.  A replace section can appear anywhere in
-the Splitter Info file.
+the splitter info file.
 
 @node    Indiscriminate splitting, Example splitter info file, Splitter info file, Conditional invariants
 @subsection Indiscriminate splitting
