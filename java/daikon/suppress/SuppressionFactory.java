@@ -56,6 +56,29 @@ public abstract class SuppressionFactory implements Serializable {
   /**
    * Generate a SuppressionLink by asking an inv's PptTopLevel to fill
    * in the template.  If the template filling is successful, return a
+   * SuppressionLink.  Else return null.  Same as {@link #byTemplate}
+   * except more debug information is optionally generated.
+   *
+   * @param supTemplate The template to fill
+   * @param inv the Invariant that is potentially being suppressed.
+   * @return the matching suppression link or null.
+   **/
+  public SuppressionLink findTemplate (SuppressionTemplate supt,
+                                       Invariant inv) {
+    if (inv.logOn())
+      inv.log ("Suppression Template - " + supt.searchString());
+    SuppressionLink sl = byTemplate (supt, inv);
+    if (inv.logOn())
+      if (sl != null)
+        inv.log ("Found Template Match " + supt.results[0].format());
+      else
+        inv.log ("No Template Match found");
+    return (sl);
+  }
+
+  /**
+   * Generate a SuppressionLink by asking an inv's PptTopLevel to fill
+   * in the template.  If the template filling is successful, return a
    * SuppressionLink.  Else return null.
    * @param supTemplate The template to fill
    * @param inv the Invariant that is potentially being suppressed.
