@@ -543,6 +543,10 @@ public final class ProglangType
             && (! (base == BASE_BOOLEAN)));
   }
 
+  public boolean baseIsString() {
+    return (base == BASE_STRING);
+  }
+
   /**
    * Return true if these two types can be sensibly compared to one
    * another, or if one can be cast to the other.  For instance, int
