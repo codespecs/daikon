@@ -466,6 +466,10 @@ daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTes
 	${JAVAC_COMMAND} daikon.test.split.SplitterFactoryTestUpdater
 	chmod -w $@
 
+## I don't understand why this is necessary, but it seems to be
+daikon/test/split/SplitterFactoryTest.class: daikon/test/split/SplitterFactoryTest.java
+	${JAVAC_COMMAND} $<
+
 # Create the auto-generated files with jpp
 .PHONY: jpp
 jpp: ${AUTO_GENERATED_FILES}
