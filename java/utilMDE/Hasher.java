@@ -13,7 +13,7 @@ package utilMDE;
  *     boolean equals(Object o, Object o2) { return o.equals(o2); }
  *   }
  * </pre>
- */
+ **/
 public interface Hasher {
   /** hashCode function for objects under consideration (not for Hasher objects). */
   int hashCode(Object o);

@@ -3,7 +3,7 @@ package utilMDE;
 /**
  * Simple pair class.  Moved from OrderedPairIterator to its own
  * class, so it can be used in more places.
- */
+ **/
 public class Pair {
   public Object a;
   public Object b;

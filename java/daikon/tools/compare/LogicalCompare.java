@@ -277,7 +277,7 @@ public class LogicalCompare {
     t_post = filterSimplifyFormat(t_post);
 
     simplifySession = SessionManager.attemptProverStartup();
-    simplifySession.setTimeout(1000*60); // one minute
+    // simplifySession.setTimeout(1000*60); // one minute
     Assert.assertTrue(simplifySession != null);
 
     System.out.println("Apre (real) is:");

@@ -766,8 +766,9 @@ class MergeESCVisitor extends DepthFirstVisitor {
       varname += "[].class";
       VarInfo vi = ppt.findVar(varname);
       if (vi == null) {
-        // This happens, for example, for .class variables
-        System.out.println("Warning: MergeESC: Variable not found: " + varname + " at " + ppt);
+        // This means that we found a variable in the source code that is
+        // not computed by Daikon.
+        System.out.println("Warning: MergeESC: Daikon knows nothing about variable " + varname + " at " + ppt);
       } else {
         Assert.assertTrue(vi != null);
         PptSlice1 slice = ppt.findSlice(vi);

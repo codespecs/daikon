@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * Utilities for manipulating arrays.
  * This complements @link{java.util.Arrays}.
- */
+ **/
 public final class ArraysMDE {
 
   /**

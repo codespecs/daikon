@@ -5,7 +5,7 @@ import java.util.*;
 
 /**
  * Utilities for interning objects.
- */
+ **/
 public final class Intern {
 
   ///////////////////////////////////////////////////////////////////////////
@@ -538,7 +538,7 @@ public final class Intern {
       subseq = Intern.intern (subseq);
       internedSequenceAndIndices.put (sai, new WeakReference(subseq));
       return subseq;
-    }    
+    }
   }
 
   /**
@@ -556,7 +556,7 @@ public final class Intern {
       subseq = Intern.intern (subseq);
       internedSequenceAndIndices.put (sai, new WeakReference(subseq));
       return subseq;
-    }    
+    }
   }
 
   /**
@@ -574,7 +574,7 @@ public final class Intern {
       subseq = Intern.intern (subseq);
       internedSequenceAndIndices.put (sai, new WeakReference(subseq));
       return subseq;
-    }    
+    }
   }
 
   /**
@@ -592,7 +592,7 @@ public final class Intern {
       subseq = Intern.intern (subseq);
       internedSequenceAndIndices.put (sai, new WeakReference(subseq));
       return subseq;
-    }    
+    }
   }
 
   /**
@@ -610,7 +610,7 @@ public final class Intern {
       subseq = Intern.intern (subseq);
       internedSequenceAndIndices.put (sai, new WeakReference(subseq));
       return subseq;
-    }    
+    }
   }
 
   /**
@@ -623,7 +623,7 @@ public final class Intern {
     public Object seq;
     public int start;
     public int end;
-    
+
     /**
      * @param seq An interned array
      **/
@@ -648,7 +648,7 @@ public final class Intern {
    * Hasher object which hashes and compares String[] objects according
    * to their contents.
    * @see Hasher, java.util.Arrays.equals
-   * 
+   *
    **/
   private static final class SequenceAndIndicesHasher implements Hasher {
     public boolean equals(Object a1, Object a2) {

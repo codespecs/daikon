@@ -4,7 +4,7 @@ import daikon.temporal.*;
 import junit.framework.*;
 import java.util.*;
 
-//FIXME: Needs some major restructuring for efficiency/clarity.
+// FIXME: Needs some major restructuring for efficiency/clarity.
 public class SimpleTests
 {
     public static void main(String[] args)

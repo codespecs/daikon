@@ -65,7 +65,7 @@ class CreateSpinfo {
         if (Daikon.debugAll_SWITCH.equals(option_name)) {
           Global.debugAll = true;
         } else if (Daikon.debug_SWITCH.equals(option_name)) {
-          LogHelper.setPriority (g.getOptarg(), LogHelper.DEBUG);
+          LogHelper.setLevel (g.getOptarg(), LogHelper.DEBUG);
         } else {
           throw new RuntimeException("Unknown long option received: " +
                                      option_name);

@@ -25,5 +25,5 @@ The correct way to build the system is to run 'make'.
 #define MissingNumbersIteratorINT MissingNumbersIteratorLong
 #define CastToInt(expr) new Long(expr).intValue()
 #else
-#error "One of PARAM_INT or PARAM_LONG should be defined"
+#error "One of PARAM_INT or PARAM_LONG must be defined"
 #endif

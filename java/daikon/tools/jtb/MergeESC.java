@@ -99,7 +99,7 @@ class MergeESC {
         if (Daikon.debugAll_SWITCH.equals(option_name)) {
           Global.debugAll = true;
         } else if (Daikon.debug_SWITCH.equals(option_name)) {
-          LogHelper.setPriority (g.getOptarg(), LogHelper.DEBUG);
+          LogHelper.setLevel (g.getOptarg(), LogHelper.DEBUG);
         } else if (useJML_SWITCH.equals(option_name)) {
           Daikon.output_style = OutputFormat.JML;
           setLightweight = false;

@@ -18,7 +18,7 @@ import java.util.*;
  * <BR>number_to_take --> The number of elements to choose ('k' above)
  * <BR>keep_probability --> The percentage of elements to keep
  * <BR>selector_mode --> either fixed amount of samples or fixed percent.
- */
+ **/
 
 public class RandomSelector {
 

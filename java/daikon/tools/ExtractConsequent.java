@@ -27,6 +27,30 @@ public class ExtractConsequent {
   private static Perl5Matcher re_matcher = new Perl5Matcher();
   private static Perl5Compiler re_compiler = new Perl5Compiler();
 
+  private static class HashedConsequent {
+    Invariant inv;
+
+    // We prefer "x < y", "x > y", and "x == y" to the conditions
+    // "x >= y", "x <= y", and "x != y" that (respectively) give the
+    // same split.  When we see a dispreferred form, we index it by
+    // the preferred form, and if there's already an entry (from the
+    // real preferred one) we throw the new one out. Otherwise, we
+    // insert both the dispreferred form and an entry for the
+    // preferred form, with a pointer pack to the dispreferred
+    // form. If we later see the preferred form, we replace the
+    // placeholder and remove the dispreferred form.
+    String fakeFor;
+
+    HashedConsequent(Invariant i, String ff) {
+      inv = i;
+      fakeFor = ff;
+    }
+  };
+
+  /* A HashMap whose keys are PPT names (Strings) and whose values are
+      HashMaps whose keys are predicate names (Strings) and whose values are
+       HashMaps whose keys are Strings (normalized java-format invariants)
+         and whose values are HashedConsequent objects. */
   private static HashMap pptname_to_conditions = new HashMap();
 
   private static String usage =
@@ -76,7 +100,7 @@ public class ExtractConsequent {
         } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
           Global.debugAll = true;
         } else if (Daikon.debug_SWITCH.equals(option_name)) {
-          LogHelper.setPriority(g.getOptarg(), LogHelper.DEBUG);
+          LogHelper.setLevel(g.getOptarg(), LogHelper.DEBUG);
         } else {
           throw new RuntimeException("Unknown long option received: " +
                                      option_name);
@@ -116,11 +140,12 @@ public class ExtractConsequent {
     TreeSet ppts_sorted = new TreeSet(comparator);
     ppts_sorted.addAll(ppts.asCollection());
 
-    PrintWriter pw = new PrintWriter(System.out, true);
     for (Iterator itor = ppts_sorted.iterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
-      extract_consequent_maybe(ppt, pw, ppts);
+      extract_consequent_maybe(ppt, ppts);
     }
+
+    PrintWriter pw = new PrintWriter(System.out, true);
 
     // All conditions at a program point.  A TreeSet to enable
     // deterministic output.
@@ -132,25 +157,56 @@ public class ExtractConsequent {
       for ( Iterator predIter = (cluster_to_conditions.keySet()).iterator() ;
             predIter.hasNext() ; ) {
         String predicate = (String) predIter.next();
-        Set conditions = (Set) cluster_to_conditions.get(predicate);
-        StringBuffer conjunction = new StringBuffer();
-        for (Iterator condsIter = conditions.iterator(); condsIter.hasNext(); ) {
-          String cond = (String)condsIter.next();
-          allConds.add(cond);
-          conjunction.append(" && ");
-          conjunction.append(cond);
+        Map conditions = (Map) cluster_to_conditions.get(predicate);
+        StringBuffer conjunctionJava = new StringBuffer();
+        StringBuffer conjunctionDaikon = new StringBuffer();
+        StringBuffer conjunctionIOA = new StringBuffer();
+        StringBuffer conjunctionESC = new StringBuffer();
+        StringBuffer conjunctionSimplify = new StringBuffer("(AND ");
+        int count = 0;
+        for (Iterator condsIter = conditions.keySet().iterator();
+             condsIter.hasNext(); count++) {
+          String condIndex = (String)condsIter.next();
+          HashedConsequent cond = (HashedConsequent)conditions.get(condIndex);
+          if (cond.fakeFor != null) {
+            count--;
+            continue;
+          }
+          String javaStr = cond.inv.format_using(OutputFormat.JAVA);
+          String daikonStr = cond.inv.format_using(OutputFormat.DAIKON);
+          String ioaStr = cond.inv.format_using(OutputFormat.IOA);
+          String escStr = cond.inv.format_using(OutputFormat.ESCJAVA);
+          String simplifyStr = cond.inv.format_using(OutputFormat.SIMPLIFY);
+          allConds.add(combineDummy(condIndex, "<dummy> " + daikonStr,
+                                    ioaStr, escStr, simplifyStr));
+//           allConds.add(condIndex);
+          if (count > 0) {
+            conjunctionJava.append(" && ");
+            conjunctionDaikon.append(" and ");
+            conjunctionIOA.append(" /\\ ");
+            conjunctionESC.append(" && ");
+            conjunctionSimplify.append(" ");
+          }
+          conjunctionJava.append(javaStr);
+          conjunctionDaikon.append(daikonStr);
+          conjunctionIOA.append(ioaStr);
+          conjunctionESC.append(escStr);
+          conjunctionSimplify.append(simplifyStr);
         }
-        conjunction.delete(0, 4); // remove leading " && "
-
-        String conj = conjunction.toString();
+        conjunctionSimplify.append(")");
+        String conj = conjunctionJava.toString();
         // Avoid inserting self-contradictory conditions such as "x == 1 &&
-        // x == 2";
-        if (re_matcher.contains(conj, contradict_inv_pattern)
+        // x == 2", or conjunctions of only a single condition.
+        if (count < 2 || re_matcher.contains(conj, contradict_inv_pattern)
             || re_matcher.contains(conj, useless_inv_pattern_1)
             || re_matcher.contains(conj, useless_inv_pattern_2)) {
           // System.out.println("Suppressing: " + conj);
         } else {
-          allConds.add(conj);
+          allConds.add(combineDummy(conjunctionJava.toString(),
+                                    conjunctionDaikon.toString(),
+                                    conjunctionIOA.toString(),
+                                    conjunctionESC.toString(),
+                                    conjunctionSimplify.toString()));
         }
       }
 
@@ -166,13 +222,27 @@ public class ExtractConsequent {
     pw.flush();
   }
 
+  static String combineDummy(String inv, String daikon, String ioa, String esc,
+                             String simplify) {
+    StringBuffer combined = new StringBuffer(inv);
+    combined.append("\n\tDAIKON_FORMAT ");
+    combined.append(daikon);
+    combined.append("\n\tIOA_FORMAT ");
+    combined.append(ioa);
+    combined.append("\n\tESC_FORMAT ");
+    combined.append(esc);
+    combined.append("\n\tSIMPLIFY_FORMAT ");
+    combined.append(simplify);
+    return combined.toString();
+  }
+
+
   /**
    * Extract consequents from a implications at a single program
    * point. It only searches for top level Program points because
    * Implications are produced only at those points.
    **/
   public static void extract_consequent_maybe(PptTopLevel ppt,
-                                              PrintWriter out,
                                               PptMap all_ppts) {
     /* [INCR]
     if (! ppt.has_samples()) {
@@ -230,9 +300,9 @@ public class ExtractConsequent {
         // extract the consequent (predicate) if the predicate
         // (consequent) uses the variable "cluster".  Ignore if they
         // both depend on "cluster"
-        if (consequent.usesVar("cluster"))
+        if (consequent.usesVarDerived("cluster"))
           cons_uses_cluster = true;
-        if (predicate.usesVar("cluster"))
+        if (predicate.usesVarDerived("cluster"))
           pred_uses_cluster = true;
 
         if (!(pred_uses_cluster ^ cons_uses_cluster))
@@ -277,27 +347,54 @@ public class ExtractConsequent {
         if (re_matcher.contains(inv_string, orig_pattern) || re_matcher.contains(inv_string, dot_class_pattern)) {
           continue;
         }
-        inv_string = simplify_inequalities(inv_string);
-        store_invariant(cluster_inv.format_using(OutputFormat.DAIKON), inv_string, pptname);
+        String fake_inv_string = simplify_inequalities(inv_string);
+        HashedConsequent real = new HashedConsequent(inv, null);
+        if (!fake_inv_string.equals(inv_string)) {
+          // For instance, inv_string is "x != y", fake_inv_string is "x == y"
+          HashedConsequent fake = new HashedConsequent(inv, inv_string);
+          boolean added =
+            store_invariant(cluster_inv.format_using(OutputFormat.JAVA), fake_inv_string,
+                            fake, pptname);
+          if (!added) {
+            // We couldn't add "x == y", (when we're "x != y") because
+            // it already exists; so don't add "x == y" either.
+            continue;
+          }
+        }
+        store_invariant(cluster_inv.format_using(OutputFormat.DAIKON), inv_string, real, pptname);
       }
     }
   }
 
   // Store the invariant for later printing. Ignore duplicate
   // invariants at the same program point.
-  private static void store_invariant (String predicate, String consequent, String pptname) {
+  private static boolean store_invariant (String predicate,
+                                          String index,
+                                          HashedConsequent consequent,
+                                          String pptname) {
     if (!pptname_to_conditions.containsKey(pptname)) {
       pptname_to_conditions.put(pptname, new HashMap());
     }
 
     HashMap cluster_to_conditions = (HashMap) pptname_to_conditions.get(pptname);
     if (!cluster_to_conditions.containsKey(predicate)) {
-      cluster_to_conditions.put(predicate, new HashSet());
+      cluster_to_conditions.put(predicate, new HashMap());
     }
 
-    HashSet conditions = (HashSet)cluster_to_conditions.get(predicate);
-    if (! conditions.contains(consequent)) {
-      conditions.add(consequent);
+    HashMap conditions = (HashMap)cluster_to_conditions.get(predicate);
+    if (conditions.containsKey(index)) {
+      HashedConsequent old = (HashedConsequent)conditions.get(index);
+      if (old.fakeFor != null && consequent.fakeFor == null) {
+        // We already saw (say) "x != y", but we're "x == y", so replace it.
+        conditions.remove(index);
+        conditions.remove(old.fakeFor);
+        conditions.put(index, consequent);
+        return true;
+      }
+      return false;
+    } else {
+      conditions.put(index, consequent);
+      return true;
     }
   }
 

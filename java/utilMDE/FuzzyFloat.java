@@ -14,7 +14,7 @@ import java.util.*;
  * to a non-zero number using this method. <p>
  *
  * Additionally two NaN values are always considered equal. <p>
- */
+ **/
 
 public class FuzzyFloat {
 
