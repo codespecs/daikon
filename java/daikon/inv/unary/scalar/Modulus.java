@@ -80,6 +80,16 @@ public class Modulus
       return var().name.name() + " % " + modulus + " == " + remainder;
     }
 
+    if (format == OutputFormat.SIMPLIFY) {
+      if (modulus > 0) {
+        return "(EQ (MOD " + var().name.simplify_name() + " "
+          + simplify_format_long(modulus) + ") "
+          + simplify_format_long(remainder) + ")";
+      } else {
+        return format_too_few_samples(format, null);
+      }
+    }
+
     return format_unimplemented(format);
   }
 
@@ -101,7 +111,7 @@ public class Modulus
     } else if (modulus == 0) {
       // only one value seen so far
       long new_modulus = Math.abs(value1 - value);
-      if (modulus == 1) {
+      if (new_modulus == 1) {
         return InvariantStatus.FALSIFIED;
       }
       modulus = new_modulus;
