@@ -1,4 +1,3 @@
-
 package daikon;
 
 import daikon.derive.*;
@@ -788,7 +787,7 @@ public class PptTopLevel
     // Ternary derivations follow the same pattern, one level deeper.
     for (int i1=0; i1<var_infos.length; i1++) {
       VarInfo vi1 = var_infos[i1];
-      if (!worthDerivingFrom(vi1)) {
+      if (vi1.isDerived()) {
         if (Global.debugDerive.isLoggable(Level.FINE)) {
           Global.debugDerive.fine ("Ternary first VarInfo: not worth " +
                                    "deriving from " + vi1.name.name());
@@ -813,7 +812,9 @@ public class PptTopLevel
       //                      + ", i2_limit=" + i2_limit);
       for (int i2=i2_min; i2<i2_limit; i2++) {
         VarInfo vi2 = var_infos[i2];
-        if (!worthDerivingFrom(vi2)) {
+        if (vi2.isDerived() ||
+            !TernaryDerivationFactory.checkType(vi1,vi2) ||
+            !TernaryDerivationFactory.checkComparability(vi1,vi2)){
           if (Global.debugDerive.isLoggable(Level.FINE)) {
             Global.debugDerive.fine ("Ternary 2nd: not worth deriving from ("
                                      + vi1.name.name() + ","
@@ -836,7 +837,7 @@ public class PptTopLevel
         }
         for (int i3=i3_min; i3<i3_limit; i3++) {
           VarInfo vi3 = var_infos[i3];
-          if (!worthDerivingFrom(vi3)) {
+          if (vi3.isDerived()) {
             if (Global.debugDerive.isLoggable(Level.FINE)) {
               Global.debugDerive.fine ("Ternary 3rd: not worth deriving from ("
                                        + vi1.name.name() + ","
