@@ -37,7 +37,7 @@ my $CVS_TAG = "ENGINE_V2_PATCHES";
 $ENV{"JAVAC"} = "javac -g";
 
 # Whether or not to run Make in two-job mode
-# my $J2 = "$J2";
+# my $J2 = "-j2";
 my $J2 = "";
 
 # Run java using the -classic switch, to workaround JVM exit deadlock
