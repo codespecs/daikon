@@ -37,10 +37,8 @@ public class PairwiseIntComparison extends TwoSequence {
   }
 
   public String repr() {
-    double probability = getProbability();
-    return "PairwiseIntComparison(" + var1().name + "," + var2().name + "): "
-      + "probability = " + probability
-      + "; " + core.repr();
+    return "PairwiseIntComparison" + varNames() + ": "
+      + core.repr();
   }
 
   public String format() {

@@ -25,10 +25,8 @@ public class Modulus extends SingleScalar {
   }
 
   public String repr() {
-    double probability = getProbability();
-    return "Modulus(" + var().name + "): "
-      + "m=" + modulus + ",r=" + remainder
-      + "; probability = " + probability;
+    return "Modulus" + varNames() + ": "
+      + "m=" + modulus + ",r=" + remainder;
   }
 
   public String format() {

@@ -127,7 +127,7 @@ public final class FunctionBinaryCore implements java.io.Serializable {
                                              "z=f(y,x)" };
 
   public String repr() {
-    return "FunctionBinaryCore: "
+    return "FunctionBinaryCore" + wrapper.varNames() + ": "
       + "function=" + function
       + ",var_order=" + var_order;
   }

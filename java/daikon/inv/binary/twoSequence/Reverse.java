@@ -16,10 +16,8 @@ public class Reverse extends TwoSequence {
 
 
   public String repr() {
-    double probability = getProbability();
     return "Reverse" + varNames() + ": "
-      + "no_invariant=" + no_invariant
-      + "; probability = " + probability;
+      + "no_invariant=" + no_invariant;
   }
 
   public String format() {

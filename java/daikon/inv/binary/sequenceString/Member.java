@@ -200,10 +200,8 @@ public final class Member extends SequenceString  {
   }
 
   public String repr() {
-    double probability = getProbability();
     return "Member" + varNames() + ": "
-      + "no_invariant=" + no_invariant
-      + "; probability = " + probability;
+      + "no_invariant=" + no_invariant;
   }
 
   public String format() {

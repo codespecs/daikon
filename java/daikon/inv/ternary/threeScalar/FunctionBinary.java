@@ -45,9 +45,7 @@ public class FunctionBinary extends ThreeScalar {
   }
 
   public String repr() {
-    double probability = getProbability();
-    return "FunctionBinary" + varNames() + ": "
-      + "; probability = " + probability;
+    return "FunctionBinary" + varNames() + ": ";
   }
 
   public String format() {

@@ -41,14 +41,11 @@ public class UpperBound  extends SingleScalar {
   }
 
   public String repr() {
-    double probability = getProbability();
     return "UpperBound"  + varNames() + ": "
-      + max1  + "; probability = " + probability;
+      + max1 ;
   }
 
   public String repr_long() {
-    // does not include result of getProbability because this
-    // is called from computeProbability for debugging purposes.
     return "UpperBound"  + varNames() + ": "
       + "max1=" + max1 
       + ", num_max1=" + num_max1 

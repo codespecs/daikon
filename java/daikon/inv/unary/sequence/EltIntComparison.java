@@ -31,17 +31,16 @@ public class EltIntComparison extends SingleSequence {
   }
 
   public String repr() {
-    double probability = getProbability();
-    return "EltIntComparison(" + var().name + "): "
+    return "EltIntComparison" + varNames() + ": "
       + "can_be_eq=" + can_be_eq
       + ",can_be_lt=" + can_be_lt
       + ",can_be_gt=" + can_be_gt
-      + ",only_check_eq=" + only_check_eq
-      + "; probability = " + probability;
+      + ",only_check_eq=" + only_check_eq;
   }
 
   public String format() {
-    Assert.assert(!justified() || can_be_eq || can_be_lt || can_be_gt);
+    // Don't do this; format() shouldn't check justification (in general...).
+    // Assert.assert(!justified() || can_be_eq || can_be_lt || can_be_gt);
     String inequality = (can_be_lt ? "<" : can_be_gt ? ">" : "");
     String comparison = (can_be_eq ? "=" : "");
     if (debugEltIntComparison) {

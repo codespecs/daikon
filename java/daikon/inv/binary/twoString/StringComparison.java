@@ -110,10 +110,7 @@ public final class StringComparison extends TwoString implements Comparison {
 
 
   public String repr() {
-    double probability = getProbability();
-    return "StringComparison(" + var1().name + "," + var2().name + "): "
-      + "probability = " + probability
-      + "; " + core.repr();
+    return "StringComparison" + varNames() + ": " + core.repr();
   }
 
   public String format() {

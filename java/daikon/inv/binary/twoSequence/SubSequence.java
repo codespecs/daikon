@@ -33,12 +33,10 @@ public class SubSequence extends TwoSequence {
   }
 
   public String repr() {
-    double probability = getProbability();
     return "SubSequence" + varNames() + ": "
       + "1in2=" + var1_in_var2
       + ",2in1=" + var2_in_var1
-      + ",no_invariant=" + no_invariant
-      + "; probability = " + probability;
+      + ",no_invariant=" + no_invariant;
   }
 
   public String format() {

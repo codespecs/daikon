@@ -29,10 +29,8 @@ public class NonModulus extends SingleScalar {
   }
 
   public String repr() {
-    double probability = getProbability();
-    return "NonModulus(" + var().name + "): "
-      + "m=" + modulus + ",r=" + remainder
-      + "; probability = " + probability;
+    return "NonModulus" + varNames() + ": "
+      + "m=" + modulus + ",r=" + remainder;
   }
 
   public String format() {

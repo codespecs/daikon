@@ -39,13 +39,11 @@ public class SeqComparison extends TwoSequence implements Comparison {
   }
 
   public String repr() {
-    double probability = getProbability();
-    return "SeqComparison(" + var1().name + "," + var2().name + "): "
+    return "SeqComparison" + varNames() + ": "
       + "can_be_eq=" + can_be_eq
       + ",can_be_lt=" + can_be_lt
       + ",can_be_gt=" + can_be_gt
-      + ",only_check_eq=" + only_check_eq
-      + "; probability = " + probability;
+      + ",only_check_eq=" + only_check_eq;
   }
 
   public String format() {
@@ -70,7 +68,7 @@ public class SeqComparison extends TwoSequence implements Comparison {
     num_sc_samples += count;
 
     int comparison = comparator.compare(v1, v2);
-    // System.out.println("SeqComparison(" + var1().name + "," + var2().name + "): "
+    // System.out.println("SeqComparison" + varNames() + ": "
     //                    + "compare(" + ArraysMDE.toString(v1)
     //                    + ", " + ArraysMDE.toString(v2) + ") = " + comparison);
     if (comparison == 0)

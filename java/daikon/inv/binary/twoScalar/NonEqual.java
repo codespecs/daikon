@@ -34,14 +34,12 @@ public final class NonEqual extends TwoScalar {
   }
 
   public String repr() {
-    double probability = getProbability();
     return "NonEqual" + varNames() + ": "
       + "no_invariant=" + no_invariant
       + ",min1=" + min1
       + ",min2=" + min2
       + ",max1=" + max1
-      + ",max2=" + max2
-      + "; probability = " + probability;
+      + ",max2=" + max2;
   }
 
   public String format() {

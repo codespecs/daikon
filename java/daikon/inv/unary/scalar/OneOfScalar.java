@@ -92,8 +92,7 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
   }
 
   public String repr() {
-    double probability = getProbability();
-    return "OneOfScalar(" + var().name + "): "
+    return "OneOfScalar"  + varNames() + ": "
       + "no_invariant=" + no_invariant
       + ", num_elts=" + num_elts
       + ", elts=" + subarray_rep();

@@ -87,8 +87,7 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
   }
 
   public String repr() {
-    double probability = getProbability();
-    return "OneOfSequence(" + var().name + "): "
+    return "OneOfSequence"  + varNames() + ": "
       + "no_invariant=" + no_invariant
       + ", num_elts=" + num_elts
       + ", elts=" + subarray_rep();

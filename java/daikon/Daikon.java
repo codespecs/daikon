@@ -346,9 +346,9 @@ public final class Daikon {
       Vector exits = enter_ppt.exit_ppts;
       if (exits.size() > 1) {
         Assert.assert(enter_ppt.ppt_name.isEnterPoint());
-        PptTopLevel exit_ppt
-          = new PptTopLevel(enter_ppt.ppt_name.makeExit().getName(),
-                            new VarInfo[0]);
+        String exit_name = enter_ppt.ppt_name.makeExit().getName();
+        Assert.assert(ppts.get(exit_name) == null);
+        PptTopLevel exit_ppt = new PptTopLevel(exit_name, new VarInfo[0]);
         // {
         //   System.out.println("Adding " + exit_ppt.name + " because of multiple expt_ppts for " + enter_ppt.name + ":");
         //   for (int i=0; i<exits.size(); i++) {

@@ -24,10 +24,8 @@ public class NoDuplicates extends SingleSequence {
   }
 
   public String repr() {
-    double probability = getProbability();
-    return "NoDuplicates(" + var().name + "): "
-      + "elts=\"" + elts
-      + "; probability = " + probability;
+    return "NoDuplicates" + varNames() + ": "
+      + "elts=\"" + elts;
   }
 
   public String format() {
@@ -49,7 +47,8 @@ public class NoDuplicates extends SingleSequence {
         return;
       }
     }
-    elts += a.length-1;
+    if (a.length > 1)
+      elts += 1;
   }
 
   protected double computeProbability() {

@@ -36,10 +36,8 @@ public class NonZero extends SingleScalar {
   }
 
   public String repr() {
-    double probability = getProbability();
-    return "NonZero(" + var().name + "): "
-      + !no_invariant + ",min=" + min + ",max=" + max
-      + "; probability = " + probability;
+    return "NonZero" + varNames() + ": "
+      + !no_invariant + ",min=" + min + ",max=" + max;
   }
 
   public String format() {

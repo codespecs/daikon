@@ -19,10 +19,7 @@ public class FunctionUnary extends TwoScalar {
   }
 
   public String repr() {
-    double probability = getProbability();
-    return "FunctionUnary" + varNames() + ": "
-      + "probability = " + probability
-      + "; " + core.repr();
+    return "FunctionUnary" + varNames() + ": " + core.repr();
   }
 
   public String format() {

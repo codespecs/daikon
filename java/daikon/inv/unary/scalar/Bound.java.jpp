@@ -92,14 +92,11 @@ public class LOWERBOUND extends SingleScalar {
   }
 
   public String repr() {
-    double probability = getProbability();
     return LOWERBOUNDSTR + varNames() + ": "
-      + MIN1 + "; probability = " + probability;
+      + MIN1;
   }
 
   public String repr_long() {
-    // does not include result of getProbability because this
-    // is called from computeProbability for debugging purposes.
     return LOWERBOUNDSTR + varNames() + ": "
       + MINSTR + "1=" + MIN1
       + ", num_" + MINSTR + "1=" + NUM_MIN1

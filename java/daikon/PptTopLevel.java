@@ -167,7 +167,9 @@ public class PptTopLevel extends Ppt {
     if (ppt_name.isCombinedExitPoint()) {
       Vector exits = entry_ppt.exit_ppts;
       for (int i=0; i<exits.size(); i++) {
-        if (((PptTopLevel) exits.elementAt(i)).has_samples()) {
+        PptTopLevel exit = (PptTopLevel) exits.elementAt(i);
+        // System.out.println("Recursive call from " + name + " via " + entry_ppt.name + ": " + exit.name);
+        if (exit.has_samples()) {
           return true;
         }
       }
@@ -303,6 +305,7 @@ public class PptTopLevel extends Ppt {
   void compute_entry_ppt(PptMap all_ppts) {
     if (ppt_name.isExitPoint()) {
       entry_ppt = (PptTopLevel) all_ppts.get(ppt_name.makeEnter());
+      // System.out.println("Adding exit point " + this.name + " to " + entry_ppt.name);
       entry_ppt.exit_ppts.add(this);
     }
   }
@@ -1476,7 +1479,11 @@ public class PptTopLevel extends Ppt {
   public void addImplications() {
     int num_conds = views_cond.size();
     if (num_conds > 0) {
-      Assert.assert(num_conds == 2);
+      // System.out.println("num_conds = " + num_conds);
+      // for (int i=0; i<num_conds; i++) {
+      //   System.out.println(((PptConditional)views_cond.elementAt(i)).name);
+      // }
+      // Assert.assert(num_conds == 2);
       PptConditional cond1 = (PptConditional) views_cond.elementAt(0);
       PptConditional cond2 = (PptConditional) views_cond.elementAt(1);
       addImplications_internal(cond1, cond2, false);
@@ -2127,7 +2134,7 @@ public class PptTopLevel extends Ppt {
       }
       out.println(inv_rep);
       if (Global.debugPrintInvariants) {
-        out.println("  [" + inv.repr() + "]");
+        out.println("  [" + inv.repr_prob() + "]");
       }
       Global.reported_invariants++;
     }

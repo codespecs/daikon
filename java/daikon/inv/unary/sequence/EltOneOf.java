@@ -86,8 +86,7 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
   }
 
   public String repr() {
-    double probability = getProbability();
-    return "EltOneOf(" + var().name + "): "
+    return "EltOneOf"  + varNames() + ": "
       + "no_invariant=" + no_invariant
       + ", num_elts=" + num_elts
       + ", elts=" + subarray_rep();

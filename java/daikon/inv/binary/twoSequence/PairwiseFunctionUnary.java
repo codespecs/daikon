@@ -20,10 +20,7 @@ public class PairwiseFunctionUnary extends TwoSequence {
   }
 
   public String repr() {
-    double probability = getProbability();
-    return "PairwiseFunctionUnary" + varNames() + ": "
-      + "probability = " + probability
-      + "; " + core.repr();
+    return "PairwiseFunctionUnary" + varNames() + ": " + core.repr();
   }
 
   public String format() {

@@ -18,10 +18,8 @@ public class PairwiseLinearBinary extends TwoSequence {
   }
 
   public String repr() {
-    double probability = getProbability();
     return "PairwiseLinearBinary" + varNames() + ": "
       + "no_invariant=" + no_invariant
-      + ",probability = " + probability
       + "; " + core.repr();
   }
 

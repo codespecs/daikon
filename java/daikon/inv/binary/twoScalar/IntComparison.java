@@ -122,10 +122,8 @@ public final class IntComparison extends TwoScalar implements Comparison {
 
 
   public String repr() {
-    double probability = getProbability();
-    return "IntComparison(" + var1().name + "," + var2().name + "): "
-      + "probability = " + probability
-      + "; " + core.repr();
+    return "IntComparison" + varNames() + ": "
+      + core.repr();
   }
 
   public String format() {

@@ -62,16 +62,17 @@ public abstract class Invariant implements java.io.Serializable {
       return PROBABILITY_NEVER;
     double result = computeProbability();
     if (result > PROBABILITY_NEVER) {
-      // Can't print this.repr(), as it may compute the probability!
-      System.out.println("Bad invariant probability " + result + ": \n" + this.getClass() + "\n" +
-			 this.format() + "\n");
+      // Can't print this.repr_prob(), as it may compute the probability!
+      System.out.println("Bad invariant probability " + result + ": \n" + this.getClass() + "\n" + repr() + "\n"
+			 + this.format() + "\n");
     }
     Assert.assert((result == PROBABILITY_JUSTIFIED)
 		  || (result == PROBABILITY_UNJUSTIFIED)
 		  || (result == PROBABILITY_UNKNOWN)
 		  || (result == PROBABILITY_NEVER)
 		  || ((0 <= result) && (result <= 1)),
-		  getClass().getName());
+                  // don't call format(); it might call justified which calls this!
+		  getClass().getName() + ": " + repr());
     return result;
     // if (!probability_cache_accurate) {
     //   probability_cache = computeProbability();
@@ -151,15 +152,30 @@ public abstract class Invariant implements java.io.Serializable {
     return this.getClass().getName() + varNames();
   }
 
+  // Should not include result of getProbability because this may be called
+  // from computeProbability or elsewhere for debugging purposes.
   /**
    * For printing invariants, there are two interfaces:
-   * repr gives a low-level representation, and
+   * repr gives a low-level representation
+   * (repr_prop also prints the probability), and
    * format gives a high-level representation for user output.
    **/
   public abstract String repr();
+
   /**
    * For printing invariants, there are two interfaces:
-   * repr gives a low-level representation, and
+   * repr gives a low-level representation
+   * (repr_prop also prints the probability), and
+   * format gives a high-level representation for user output.
+   **/
+  public String repr_prob() {
+    return repr() + "; probability = " + getProbability();
+  }
+
+  /**
+   * For printing invariants, there are two interfaces:
+   * repr gives a low-level representation
+   * (repr_prop also prints the probability), and
    * format gives a high-level representation for user output.
    **/
   public abstract String format();
@@ -373,7 +389,7 @@ public abstract class Invariant implements java.io.Serializable {
     // Which is most often successful?  Which assume others have already
     // been performed?
     if (! isWorthPrinting_sansControlledCheck()) {
-      // System.out.println("Not worth printing on its own merits: " + format() + ", " + repr());
+      // System.out.println("Not worth printing on its own merits: " + format() + ", " + repr_prob());
       return false;
     }
     // The invariant is worth printing on its own merits, but it may be
@@ -460,12 +476,12 @@ public abstract class Invariant implements java.io.Serializable {
     // At this point, we know all variables are constant.
     Assert.assert(this instanceof OneOf  ||  this instanceof Comparison
 		  , "Unexpected invariant with all vars constant: "
-		  + this + "  " + repr() + "  " + format()
+		  + this + "  " + repr_prob() + "  " + format()
 		  );
     if (this instanceof Comparison) {
       //      Assert.assert(! IsEquality.it.accept(this));
       if (Global.debugPrintInvariants)
-	System.out.println("  [over constants:  " + this.repr() + " ]");
+	System.out.println("  [over constants:  " + this.repr_prob() + " ]");
       return true;
     }
     return false;
@@ -487,7 +503,7 @@ public abstract class Invariant implements java.io.Serializable {
     // // // obvious-derived invariants to lists in the first place.
     if (isObviousDerived() || isObviousImplied()) {
       if (Global.debugPrintInvariants)
-	System.out.println("  [obvious:  " + repr() + " ]");
+	System.out.println("  [obvious:  " + repr_prob() + " ]");
       return true;
     }
     return false;

@@ -39,10 +39,8 @@ public final class EltNonZero extends SingleSequence {
   }
 
   public String repr() {
-    double probability = getProbability();
-    return "EltNonZero(" + var().name + "): "
-      + !no_invariant + ",min=" + min + ",max=" + max
-      + "; probability = " + probability;
+    return "EltNonZero" + varNames() + ": "
+      + !no_invariant + ",min=" + min + ",max=" + max;
   }
 
   public String format() {

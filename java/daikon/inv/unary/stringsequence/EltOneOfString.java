@@ -84,8 +84,7 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
   }
 
   public String repr() {
-    double probability = getProbability();
-    return "EltOneOfString(" + var().name + "): "
+    return "EltOneOfString"  + varNames() + ": "
       + "no_invariant=" + no_invariant
       + ", num_elts=" + num_elts
       + ", elts=" + subarray_rep();

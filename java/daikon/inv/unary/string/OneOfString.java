@@ -84,8 +84,7 @@ public final class OneOfString  extends SingleString  implements OneOf {
   }
 
   public String repr() {
-    double probability = getProbability();
-    return "OneOfString(" + var().name + "): "
+    return "OneOfString"  + varNames() + ": "
       + "no_invariant=" + no_invariant
       + ", num_elts=" + num_elts
       + ", elts=" + subarray_rep();

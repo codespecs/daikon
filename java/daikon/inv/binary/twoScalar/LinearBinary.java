@@ -20,10 +20,8 @@ public class LinearBinary extends TwoScalar {
   }
 
   public String repr() {
-    double probability = getProbability();
     return "LinearBinary" + varNames() + ": "
       + "no_invariant=" + no_invariant
-      + ",probability = " + probability
       + "; " + core.repr();
   }
 

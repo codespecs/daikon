@@ -497,7 +497,9 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
                           + (seq_contents.isOrigVar() ? " : " + seq_contents.postState.name : ""));
         }
         VarInfo seq_object = ppt.findVar(seq_object_name);
-        if (! seq_object.isCanonical())
+        // System.out.println("seq_object_name = " + seq_object_name);
+        // First part of test is for Lisp output files; shouldn't happen in general
+        if (seq_object != null && ! seq_object.isCanonical())
           continue;
       }
       // For esc_output, omit noting that varibles are unmodified.
