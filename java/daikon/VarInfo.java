@@ -1247,8 +1247,8 @@ public final class VarInfo
       }
 
       // For esc_output, dbc output, and java_output, omit noting that varibles are unmodified.
-      if (Daikon.output_style == OutputFormat.ESCJAVA 
-	  || Daikon.output_style == OutputFormat.ESCJAVA 
+      if (Daikon.output_style == OutputFormat.ESCJAVA
+	  || Daikon.output_style == OutputFormat.ESCJAVA
 	  || Daikon.output_style == OutputFormat.DBCJAVA) { //@tx
         if ((vi.postState != null) && vi.postState.name.equals(this.name)) {
           continue;
@@ -2044,8 +2044,11 @@ public final class VarInfo
       }
 
       return retval;
+    } else {
+      System.err.println("Unexpected guarding based on " + name.name());
+      Assert.assertTrue(false);
+      return null;
     }
-    return null;
   }
 
   // Finds a list of variables that must be guarded for a VarInfo to
@@ -2060,22 +2063,10 @@ public final class VarInfo
       }
       public Object visitSizeOf(SizeOf o) {
         List result = (List)o.sequence.accept(this);
-
-        VarInfo vi = ppt.findVar(o);
-        Invariant.debugGuarding.fine(vi != null ? vi.name + " exists and can " + (vi.canBeMissing ? "" : "not ") + "be missing" : o + " does not exist");
-        if (vi != null && vi.canBeMissing)
-          result.add(ppt.findVar(o.sequence));
-
         return result;
       }
       public Object visitFunctionOf(FunctionOf o) {
         List result = (List)o.argument.accept(this);
-
-        VarInfo vi = ppt.findVar(o);
-        Invariant.debugGuarding.fine(vi != null ? vi.name + " exists and can " + (vi.canBeMissing ? "" : "not ") + "be missing" : o + " does not exist");
-        if (vi != null && vi.canBeMissing)
-          result.add(ppt.findVar(o.argument));
-
         return result;
       }
       public Object visitFunctionOfN(FunctionOfN o) {
@@ -2087,21 +2078,15 @@ public final class VarInfo
           result.addAll((List)((VarInfoName)args.get(i)).accept(this));
         }
 
-        VarInfo vi = ppt.findVar(o);
-        Invariant.debugGuarding.fine(vi != null ? vi.name + " exists and can " + (vi.canBeMissing ? "" : "not ") + "be missing" : o + " does not exist");
-        if (vi != null && vi.canBeMissing) {
-          for (int i=0; i<args.size(); i++) {
-            result.add(ppt.findVar((VarInfoName)args.get(i)));
-          }
-        }
-
         return result;
       }
       public Object visitField(Field o) {
         List result = (List)o.term.accept(this);
 
         VarInfo vi = ppt.findVar(o);
-        Invariant.debugGuarding.fine(vi != null ? vi.name + " exists and can " + (vi.canBeMissing ? "" : "not ") + "be missing" : o + " does not exist");
+        Invariant.debugGuarding.fine(vi != null ? vi.name + " exists and can "
+                                     + (vi.canBeMissing ? "" : "not ")
+                                     + "be missing" : o + " does not exist");
         if (vi != null && vi.canBeMissing)
           result.add(ppt.findVar(o.term));
 
@@ -2111,7 +2096,9 @@ public final class VarInfo
         List result = (List)o.term.accept(this);
 
         VarInfo vi = ppt.findVar(o);
-        Invariant.debugGuarding.fine(vi != null ? vi.name + " exists and can " + (vi.canBeMissing ? "" : "not ") + "be missing" : o + " does not exist");
+        Invariant.debugGuarding.fine(vi != null ? vi.name + " exists and can "
+                                     + (vi.canBeMissing ? "" : "not ")
+                                     + "be missing" : o + " does not exist");
         if (vi != null && vi.canBeMissing)
           result.add(ppt.findVar(o.term));
 
@@ -2119,32 +2106,14 @@ public final class VarInfo
       }
       public Object visitPrestate(Prestate o) {
         List result = (List)o.term.accept(this);
-
-        VarInfo vi = ppt.findVar(o);
-        Invariant.debugGuarding.fine(vi != null ? vi.name + " exists and can " + (vi.canBeMissing ? "" : "not ") + "be missing" : o + " does not exist");
-        if (vi != null && vi.canBeMissing)
-          result.add(ppt.findVar(o.term));
-
         return result;
       }
       public Object visitPoststate(Poststate o) {
         List result = (List)o.term.accept(this);
-
-        VarInfo vi = ppt.findVar(o);
-        Invariant.debugGuarding.fine(vi != null ? vi.name + " exists and can " + (vi.canBeMissing ? "" : "not ") + "be missing" : o + " does not exist");
-        if (vi != null && vi.canBeMissing)
-          result.add(ppt.findVar(o.term));
-
         return result;
       }
       public Object visitAdd(Add o) {
         List result = (List)o.term.accept(this);
-
-        VarInfo vi = ppt.findVar(o);
-        Invariant.debugGuarding.fine(vi != null ? vi.name + " exists and can " + (vi.canBeMissing ? "" : "not ") + "be missing" : o + " does not exist");
-        if (vi != null && vi.canBeMissing)
-          result.add(ppt.findVar(o.term));
-
         return result;
       }
       public Object visitElements(Elements o) {
@@ -2152,7 +2121,9 @@ public final class VarInfo
         List result = (List)o.term.accept(this);
         result.addAll(takeActionOnDerived(vi));
 
-        Invariant.debugGuarding.fine(vi != null ? vi.name + " exists and can " + (vi.canBeMissing ? "" : "not ") + "be missing" : o + " does not exist");
+        Invariant.debugGuarding.fine(vi != null ? vi.name + " exists and can "
+                                     + (vi.canBeMissing ? "" : "not ")
+                                     + "be missing" : o + " does not exist");
         if (vi != null && vi.canBeMissing)
           result.add(ppt.findVar(o.term));
 
@@ -2163,7 +2134,9 @@ public final class VarInfo
         result.addAll((List)o.index.accept(this));
 
         VarInfo vi = ppt.findVar(o);
-        Invariant.debugGuarding.fine(vi != null ? vi.name + " exists and can " + (vi.canBeMissing ? "" : "not ") + "be missing" : o + " does not exist");
+        Invariant.debugGuarding.fine(vi != null ? vi.name + " exists and can "
+                                     + (vi.canBeMissing ? "" : "not ")
+                                     + "be missing" : o + " does not exist");
         if (vi != null && ppt.findVar(o).canBeMissing) {
           result.add(ppt.findVar(o.sequence));
           result.add(ppt.findVar(o.index));
@@ -2179,7 +2152,9 @@ public final class VarInfo
           result.addAll((List)o.j.accept(this));
 
         VarInfo vi = ppt.findVar(o);
-        Invariant.debugGuarding.fine(vi != null ? vi.name + " exists and can " + (vi.canBeMissing ? "" : "not ") + "be missing" : o + " does not exist");
+        Invariant.debugGuarding.fine(vi != null ? vi.name + " exists and can "
+                                     + (vi.canBeMissing ? "" : "not ")
+                                     + "be missing" : o + " does not exist");
         if (vi != null && vi.canBeMissing) {
           result.add(ppt.findVar(o.sequence));
           if (o.i != null)
@@ -2206,9 +2181,14 @@ public final class VarInfo
     List result = (List)name.accept(new GuardingVisitor());
     if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
       Invariant.debugGuarding.fine ("VarInfo.getGuardingList: ");
-      Invariant.debugGuarding.fine ("  this: " + this.name.name());
+      Invariant.debugGuarding.fine ("  for variable " + this.name.name());
       // Invariant.debugGuarding.fine ("        " + this.repr());
-      Invariant.debugGuarding.fine (result.toString());
+      String str = "[ ";
+      for (int i = 0; i < result.size(); i++) {
+        str += ((VarInfo)result.get(i)).name.name() + " ";
+      }
+      str += "]";
+      Invariant.debugGuarding.fine ("  list is " + str);
     }
 
     return result;
