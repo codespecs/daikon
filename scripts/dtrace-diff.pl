@@ -37,15 +37,12 @@ sub getline {
 sub gzopen {
 #takes a fh/filename, opens it (using zcat if necessary), and returns
 #a reference to a filehandle/linenumber object.
-#    my $args = shift;
-#    my $fh = $$args[0];
-#    my $fn = $$args[1];
     my $fh = shift;
     my $fn = shift;
     if ($fn =~ /\.gz$/) {
-	$fn = "zcat " . $fn . "|";
+	$fn = "gzcat " . $fn . "|";
     }
-    open ($fh, $fn) or die "couldn't open \"" . $$args[1] . "\"\n";
+    open ($fh, $fn) or die "couldn't open \"$fn\"\n";
     return [$fh, 0];
 }
 
