@@ -248,6 +248,24 @@ public final class UtilMDE {
     }
   }
 
+  
+  // Returns true if:
+  // 1. The file exists and is writable
+  // OR
+  // 2. The file can be created
+  public static boolean canCreateAndWrite(File file) {
+    try {
+      if (file.exists()) {
+        return file.canWrite();
+      } else {
+        file.createNewFile();
+        file.delete();
+        return true;
+      }
+    } catch (IOException e) {
+      return false;
+    }
+  }
 
   ///
   /// HashMap

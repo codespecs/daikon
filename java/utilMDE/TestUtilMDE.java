@@ -2,6 +2,7 @@ package utilMDE;
 
 import junit.framework.*;
 import java.util.*;
+import java.io.*;
 
 // run like this:
 //   java utilMDE.TestUtilMDE
@@ -860,6 +861,24 @@ public final class TestUtilMDE extends TestCase {
     //   public boolean accept(File dir, String name)
     // public Object incrementHashMap(HashMap hm, Object key, int count)
 
+    try {
+      junit.framework.Assert.assertEquals(true,
+        UtilMDE.canCreateAndWrite(new File("TestUtilMDE.java")));
+      File readOnly = new File("temp");
+      readOnly.createNewFile();
+      readOnly.setReadOnly();
+      junit.framework.Assert.assertEquals(false,
+        UtilMDE.canCreateAndWrite(readOnly));
+      readOnly.delete();
+
+      junit.framework.Assert.assertEquals(true,
+        UtilMDE.canCreateAndWrite(new File("temp")));
+      junit.framework.Assert.assertEquals(false,
+        UtilMDE.canCreateAndWrite(new File("temp/temp")));
+    } catch (IOException e) {
+      junit.framework.Assert.fail(e.toString());
+    }
+
     {
       // These names are taken from APL notation, where iota creates an
       // array of all the numbers up to its argument.
@@ -1015,7 +1034,6 @@ public final class TestUtilMDE extends TestCase {
 
     // This is tested by the tokens methods.
     // public static Vector makeVector(Enumeration e)
-
   }
 
   public static void testWeakHasherMap() {
