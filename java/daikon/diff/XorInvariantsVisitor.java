@@ -72,11 +72,11 @@ public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
 
         else {
             if (inv1 != null) {
-                inv1.ppt.invs.remove(inv1);
+                inv1.ppt.removeInvariant(inv1);
             }
 
             if (inv2 != null) {
-                inv2.ppt.invs.remove(inv2);
+                inv2.ppt.removeInvariant(inv2);
             }
 
         }

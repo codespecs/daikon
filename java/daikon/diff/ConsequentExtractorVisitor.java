@@ -58,7 +58,7 @@ public class ConsequentExtractorVisitor extends DepthFirstVisitor  {
         // Now add back everything in accum
         for (int i = 0; i < accum.size(); i++) {
             Invariant inv = (Invariant) accum.get(i);
-            inv.ppt.invs.add (inv);
+            inv.ppt.addInvariant (inv);
         }
         System.out.println ("NONCE: " + nonce);
     }
@@ -88,7 +88,7 @@ public class ConsequentExtractorVisitor extends DepthFirstVisitor  {
                }
            }
          }
-         inv1.ppt.invs.remove (inv1);
+         inv1.ppt.removeInvariant (inv1);
          System.out.println (inv1.ppt.invs.size() + " " + repeatFilter.size());
        }
        else {

@@ -4870,8 +4870,8 @@ public class PptTopLevel
       invEquals = IntEqual.instantiate (newSlice);
     } else if ((rep == ProglangType.STRING)) {
       // invEquals = StringEqual.instantiate (newSlice);
-       invEquals = StringComparison.instantiate (newSlice, true);
-       ((StringComparison) invEquals).core.can_be_eq = true;
+      invEquals = StringComparison.instantiate (newSlice, true);
+      ((StringComparison) invEquals).core.can_be_eq = true;
     } else if ((rep == ProglangType.INT_ARRAY)) {
       invEquals = SeqSeqIntEqual.instantiate (newSlice, true);
     } else if ((rep == ProglangType.STRING_ARRAY)) {
@@ -4902,8 +4902,8 @@ public class PptTopLevel
         // System.out.println ("created equality " + invEquals.format());
       }
     } else {
-    // System.out.println ("Can't create equality for " + v1.name.name() + ", "
-    //                      + v2.name.name());
+      // System.out.println ("Can't create equality for " + v1.name.name() + ", "
+      //                      + v2.name.name());
       if (newSlice.invs.size() == 0)
         newSlice.parent.removeSlice (newSlice);
     }

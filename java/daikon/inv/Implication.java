@@ -63,31 +63,20 @@ public class Implication
       return null;
     }
 
+    Implication result = new Implication(ppt.joiner_view, predicate, consequent, iff,
+                                         orig_predicate, orig_consequent);
+
     // Don't add this Implication to the program point if the program
     // point already has this implication.  This is slow and dumb; we
     // should use hashing for O(1) check instead.
-    for (Iterator i = ppt.joiner_view.invs.iterator(); i.hasNext(); ) {
-      Invariant nextInv = (Invariant)i.next();
-      if (!(nextInv instanceof Implication)) continue;
-      Implication existing = (Implication) nextInv;
-      if (existing.iff != iff) continue;
-      if (existing.right.getClass() != consequent.getClass()) continue;
-      if (existing.left.getClass() != predicate.getClass()) continue;
-      // Why not instead check var_info indices plus isSameFormula?
-      // Should use PptSlice identity check instead?
-      if (! existing.right.format().equals(consequent.format())) continue;
-      if (! existing.left.format().equals(predicate.format())) continue;
-      PptSplitter.debug.fine ("Not creating implication " + predicate +
-                              " ==> " + consequent + "- it already exists as "
-                              + existing);
+
+    if (ppt.joiner_view.hasImplication(result)) {
       return null;
     }
 
     if (PptSplitter.debug.isLoggable (Level.FINE))
       PptSplitter.debug.fine ("Creating implication " + predicate + " ==> "
                             + consequent);
-    Implication result = new Implication(ppt.joiner_view, predicate, consequent, iff,
-                                         orig_predicate, orig_consequent);
     return result;
   }
 

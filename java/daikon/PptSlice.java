@@ -50,6 +50,10 @@ public abstract class PptSlice
 
   /**
    * The invariants contained in this slice.
+   * This should not be used directly, in general.  In particular,
+   * subclasses such as PptSlice0 need to synchronize it with other values.
+   * Therefore, it should be manipulated via addInvariant() and
+   * removeInvariant().
    **/
   public Invariants invs;
 
@@ -288,7 +292,7 @@ public abstract class PptSlice
     if (Debug.logDetail())
       log ("Removing invariant '" + inv.format() + "'");
     Assert.assertTrue (invs.contains(inv), "inv " + inv + " not in ppt "
-                                    + name());
+                       + name());
     boolean removed = invs.remove(inv);
     Assert.assertTrue(removed);
     // This increment could also have been in Invariant.destroy().
@@ -708,7 +712,7 @@ public abstract class PptSlice
         continue;
       }
       Invariant guardingPredicate = inv.createGuardingPredicate();
-      Invariant guardingImplication;
+      Implication guardingImplication;
       if (debugGuarding.isLoggable(Level.FINE)) {
         if (guardingPredicate != null) {
           debugGuarding.fine ("  Predicate: " +
@@ -724,14 +728,16 @@ public abstract class PptSlice
         guardingImplication =
           GuardingImplication.makeGuardingImplication(parent, guardingPredicate, inv, false);
 
-        parent.joiner_view.addInvariant(guardingImplication);
-        invariantsToGuard.add(inv);
+        if (! parent.joiner_view.hasImplication(guardingImplication)) {
+          parent.joiner_view.addInvariant(guardingImplication);
+          invariantsToGuard.add(inv);
 
-        if (debugGuarding.isLoggable(Level.FINE)) {
-          debugGuarding.fine ("Adding " +
-                           guardingImplication.format());
-          debugGuarding.fine ("Removing " +
-                           inv.format());
+          if (debugGuarding.isLoggable(Level.FINE)) {
+            debugGuarding.fine ("Adding " +
+                                guardingImplication.format());
+            debugGuarding.fine ("Removing " +
+                                inv.format());
+          }
         }
       }
     }

@@ -63,10 +63,6 @@ public class PptSlice0
   // We trade space for time by keeping a hash table of all the
   // implications (they're also stored as a vector in invs) so we can
   // efficiently avoid adding implications more than once.
-  // - I had to make this transient because when it wasn't, the hash
-  // set tried to get the hash codes of all the invariants when it
-  // read them in, but their format methods croaked when they couldn't
-  // get their varInfos -smcc
 
   // Really a HashSet<ImplicationByFormatWrapper>.
   // This should not be transient:  more implications can be created during
@@ -88,15 +84,42 @@ public class PptSlice0
     throw new Error("Shouldn't get called");
   }
 
+  public void checkRep() {
+    if (invariantsSeen != null && invs.size() != invariantsSeen.size()) {
+      Assert.assertTrue(invs.size() == invariantsSeen.size(),
+                        "invs.size()=" + invs.size() + ", invariantsSeen.size()=" + invariantsSeen.size());
+    }
+    Assert.assertTrue(invariantsSeen == null || invs.size() == invariantsSeen.size());
+  }
+
   public void addInvariant(Invariant inv) {
+    checkRep();
     Assert.assertTrue(inv != null);
-    // The assertion on the next line used to be commented out; why? -smcc
+    // The assertion that "inv instanceof Implication" used to be commented out; why? -smcc
     // (The reason is that PptSlice0 can contain other joiners than implications,
     // such as "and" or "or".  I don't think this feature is used rigth now.  -MDE)
     Assert.assertTrue(inv instanceof Implication);
-    invs.add(inv);
+    Assert.assertTrue(! hasImplication((Implication) inv));
     initInvariantsSeen();
+    invs.add(inv);
     invariantsSeen.add(new ImplicationByFormatWrapper((Implication)inv));
+    checkRep();
+  }
+
+  public void removeInvariant(Invariant inv) {
+    checkRep();
+    Assert.assertTrue(inv instanceof Implication);
+    Assert.assertTrue(hasImplication((Implication) inv));
+    initInvariantsSeen();
+    invs.remove(inv);
+    invariantsSeen.remove(new ImplicationByFormatWrapper((Implication)inv));
+    checkRep();
+  }
+
+  public void removeInvariants(Collection c) {
+    for (Iterator itor = c.iterator(); itor.hasNext(); ) {
+      removeInvariant((Invariant) itor.next());
+    }
   }
 
   public boolean hasImplication(Implication imp) {
@@ -104,41 +127,78 @@ public class PptSlice0
     return invariantsSeen.contains(new ImplicationByFormatWrapper(imp));
   }
 
+  // // For debugging only
+  // public Implication getImplication(Implication imp) {
+  //   initInvariantsSeen();
+  //   ImplicationByFormatWrapper resultWrapper
+  //     = (ImplicationByFormatWrapper) UtilMDE.getFromSet(
+  //              invariantsSeen, new ImplicationByFormatWrapper(imp));
+  //   if (resultWrapper == null) {
+  //     return null;
+  //   }
+  //   return (Implication) resultWrapper.theImp;
+  // }
+
+
   // We'd like to use a more sophisticated equality check and hashCode
   // for implications when they appear in the invariantsSeen HashSet,
   // but not anywhere else, so we make wrapper objects with the
   // desired methods to go directly in the set.
-  private static final class ImplicationByFormatWrapper {
-    static final long serialVersionUID = 20021113L;
 
-    private Implication theImp;
-    private String format;
+  // Not "implements serializable":  If this is serializable, then the hash
+  // set tries to get the hash codes of all the invariants when it
+  // reads them in, but their format methods croak when they couldn't
+  // get their varInfos.
+
+  // It seems like a bit of a hack to use format() this way, but the
+  // check this is replacing (used to be in makeImplication())
+  // compared two invariants by their format() values, so I'm
+  // assuming there's some good reason. -SMcC
+
+  // Yes, it is a hack and should be fixed.  Note that there are certain
+  // invariants that print identically but are internally different:
+  // "this.theArray[this.topOfStack..] == this.theArray[this.topOfStack..]"
+  // can be either SeqSeqIntEqual or PairwiseLinearBinary.  Thus, I changed
+  // it from using format() to using repr(); but that doesn't fix the
+  // underlying issue.
+
+  private static final class ImplicationByFormatWrapper {
+
+    public Implication theImp;
+    // private String format;
+    // hashCode is cached to make equality checks faster.
+    private int hashCode;
 
     public ImplicationByFormatWrapper(Implication theImp) {
       this.theImp = theImp;
-      this.format = theImp.format();
+      // this.format = theImp.format();
+      this.hashCode = 0;
     }
 
     // Abstracted out to permit use of a cached value
     private String format() {
-      return format;
+      // return format;
+      // return theImp.format();
+      return theImp.repr();
     }
 
-    // For efficiency, I could cache the hashCode and check it first.
+    public int hashCode() {
+      if (hashCode == 0) {
+        hashCode = format().hashCode();
+      }
+      return hashCode;
+    }
+
     public boolean equals(Object o) {
       if (o == null || !(o instanceof ImplicationByFormatWrapper))
         return false;
       ImplicationByFormatWrapper other = (ImplicationByFormatWrapper)o;
-      // It seems like a bit of a hack to use format() this way, but the
-      // check this is replacing (used to be in makeImplication())
-      // compared two invariants by their format() values, so I'm
-      // assuming there's some good reason. -SMcC
+      if (hashCode() != other.hashCode()) {
+        return false;
+      }
       return format().equals(other.format());
     }
 
-    public int hashCode() {
-      return format().hashCode();
-    }
   }
 
   // I need to figure out how to set these.

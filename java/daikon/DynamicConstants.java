@@ -514,12 +514,17 @@ public class DynamicConstants implements Serializable {
 
 
     // Remove any false invariants
-    for (int i = 0; i < new_views.size(); i++) {
-      PptSlice slice = (PptSlice) new_views.get (i);
-      for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
-        Invariant inv = (Invariant) j.next();
-        if (inv.is_false())
-          j.remove();
+    {
+      List/*Invariant*/ toRemove;
+      for (int i = 0; i < new_views.size(); i++) {
+        PptSlice slice = (PptSlice) new_views.get (i);
+        toRemove = new ArrayList();
+        for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
+          Invariant inv = (Invariant) j.next();
+          if (inv.is_false())
+            toRemove.add(inv);
+        }
+        slice.removeInvariants(toRemove);
       }
     }
 

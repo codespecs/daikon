@@ -585,7 +585,7 @@ public class PptSplitter implements Serializable {
       }
     }
 
-    parent.joiner_view.invs.removeAll(to_remove);
+    parent.joiner_view.removeInvariants(to_remove);
 
     if (Debug.logOn() || debug.isLoggable (Level.FINE)) {
       debug.fine ("Joiner View ");
