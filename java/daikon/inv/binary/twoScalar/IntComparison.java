@@ -169,6 +169,15 @@ public final class IntComparison extends TwoScalar implements Comparison {
     return core.isSameFormula(((IntComparison) other).core);
   }
 
+  public boolean isExclusiveFormula(Invariant other)
+  {
+    if (other instanceof IntComparison) {
+      return core.isExclusiveFormula(((IntComparison) other).core);
+    }
+    return false;
+  }
+
+
   public boolean isObviousImplied() {
     if (isExact()) {
       return false;

@@ -9,6 +9,9 @@ import java.util.*;
 // Automatically generated from Bound-cpp.java
 // *****
 
+// One reason not to combine LowerBound and Upperbound is that they have
+// separate justifications:  one may be justified when the other is not.
+
 // What should we do if there are few values in the range?
 // This can make justifying that invariant easier, because with few values
 // naturally there are more instances of each value.
@@ -155,5 +158,13 @@ class UpperBound  extends SingleScalar {
   public boolean isSameFormula(Invariant other)
   {
     return max1  == ((UpperBound ) other). max1 ;
+  }
+
+  public boolean isExclusiveFormula(Invariant other) {
+    if (other instanceof LowerBound ) {
+      if (max1  <  ((LowerBound ) other). min1 )
+        return true;
+    }
+    return false;
   }
 }

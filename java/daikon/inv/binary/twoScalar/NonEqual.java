@@ -107,5 +107,15 @@ public final class NonEqual extends TwoScalar {
     Assert.assert(other instanceof NonEqual);
     return true;
   }
-  
+
+  public boolean isExclusiveFormula(Invariant other)
+  {
+    if (other instanceof IntComparison) {
+      if (((IntComparison)other).isExact()) {
+        return true;
+      }
+    }
+    return true;
+  }
+
 }

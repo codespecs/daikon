@@ -82,6 +82,16 @@ public abstract class PptSlice extends Ppt {
     return (ArraysMDE.indexOfEq(var_infos, vi) != -1);
   }
 
+  public boolean usesVar(String name) {
+    for (int i=0; i<var_infos.length; i++) {
+      if (var_infos[i].name.equals(name)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+
   // When non-null, removeInvariants adds to this list instead of actually
   // removing.  (We might need to defer removal because we're currently
   // iterating over the invariants by index rather than using an Iterator.)
@@ -213,16 +223,44 @@ public abstract class PptSlice extends Ppt {
 
   abstract void instantiate_invariants(int pass);
 
-  /** Order by arity, then by name. */
-  public static final class ArityNameComparator implements Comparator {
+  /**
+     This class is used for comparing PptSlice objects.
+     It orders by arity, then by variable names.
+     It's somewhat less efficient than ArityPptnameComparator.
+   **/
+  public static final class ArityVarnameComparator implements Comparator {
     public int compare(Object o1, Object o2) {
       if (o1 == o2)
         return 0;
       PptSlice slice1 = (PptSlice) o1;
       PptSlice slice2 = (PptSlice) o2;
-      // This class is used for comparing PptSlice objects.
-      // (Should it be in PptSlice?)
-      Assert.assert(slice1.parent == slice2.parent);
+      // Don't do this, to permit comparison across different Ppts.
+      // (The check may be useful in some situations, though.)
+      // Assert.assert(slice1.parent == slice2.parent);
+      if (slice1.arity == slice2.arity) {
+        return slice1.varNames(slice1.var_infos)
+          .compareTo(slice2.varNames(slice2.var_infos));
+      } else {
+        return slice2.arity - slice1.arity;
+      }
+    }
+  }
+
+  /**
+     This class is used for comparing PptSlice objects.
+     It orders by arity, then by name.
+     Because of the dependence on name, it should be used only for slices
+     on the same Ppt.
+   **/
+  public static final class ArityPptnameComparator implements Comparator {
+    public int compare(Object o1, Object o2) {
+      if (o1 == o2)
+        return 0;
+      PptSlice slice1 = (PptSlice) o1;
+      PptSlice slice2 = (PptSlice) o2;
+      // Don't do this, to permit comparison across different Ppts.
+      // (The check may be useful in some situations, though.)
+      // Assert.assert(slice1.parent == slice2.parent);
       if (slice1.arity == slice2.arity) {
         return slice1.name.compareTo(slice2.name);
       } else {

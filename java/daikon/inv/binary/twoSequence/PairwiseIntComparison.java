@@ -75,5 +75,13 @@ class PairwiseIntComparison extends TwoSequence {
   {
     return core.isSameFormula(((PairwiseIntComparison) other).core);
   }
-  
+
+  public boolean isExclusiveFormula(Invariant other)
+  {
+    if (other instanceof PairwiseIntComparison) {
+      return core.isExclusiveFormula(((PairwiseIntComparison) other).core);
+    }
+    return false;
+  }
+
 }

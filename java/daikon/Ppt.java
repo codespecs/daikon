@@ -186,10 +186,14 @@ public abstract class Ppt implements java.io.Serializable {
   public static String varNames(VarInfo[] infos) {
     StringBuffer sb = new StringBuffer();
     sb.append("(");
-    sb.append(infos[0].name);
-    for (int i=1; i<infos.length; i++) {
-      sb.append(", ");
-      sb.append(infos[i].name);
+    if (infos.length == 0) {
+      sb.append("<implication slice>");
+    } else {
+      sb.append(infos[0].name);
+      for (int i=1; i<infos.length; i++) {
+        sb.append(", ");
+        sb.append(infos[i].name);
+      }
     }
     sb.append(")");
     return sb.toString();

@@ -71,8 +71,9 @@ public class PptTopLevel extends Ppt {
   // and conditional points are controlled by the unconditional
   // parent point.  This set contains only the immediate controllers,
   // not the transitive closure of all controllers.
-  Set controlling_ppts = new HashSet(); // [PptTopLevel]
+  Set controlling_ppts = new HashSet(); // elements are PptTopLevel objects
 
+  public PptSlice0 implication_view = new PptSlice0(this);
 
 
   PptTopLevel(String name, VarInfo[] var_infos) {
@@ -1442,6 +1443,188 @@ public class PptTopLevel extends Ppt {
   }
 
 
+  // (Where did I intend this to be called?  Near add-ppt-conditional,
+  // presumably.)
+  public void addImplications() {
+    int num_conds = views_cond.size();
+    if (num_conds == 0) {
+      // System.out.println("addImplications: " + this.name + " has no conditional views");
+      return;
+    }
+
+    Assert.assert(num_conds == 2);
+
+    // Find invariants in the
+
+    PptConditional cond1 = (PptConditional) views_cond.elementAt(0);
+    PptConditional cond2 = (PptConditional) views_cond.elementAt(1);
+
+    PptSlice[][] matched_views = match_views(cond1, cond2);
+
+    Vector exclusive_conditions_vec = new Vector(); // elements are pairs of Invariants
+
+    for (int i=0; i<matched_views.length; i++) {
+      PptSlice slice1 = matched_views[i][0];
+      PptSlice slice2 = matched_views[i][1];
+
+      if ((slice1 == null) || (slice2 == null)) {
+        // System.out.println("addImplications: matched views skipped "
+        //                    + (slice1 == null ? "null" : slice1.name) + " "
+        //                    + (slice2 == null ? "null" : slice2.name));
+        continue;
+      }
+
+      Invariants invs1 = slice1.invs;
+      Invariants invs2 = slice2.invs;
+
+      Vector this_excl = exclusive_conditions(invs1, invs2);
+      // System.out.println("addImplications: "
+      //                    + this_excl.size() + " exclusive conditions for "
+      //                    + slice1.name + " " + slice2.name);
+      exclusive_conditions_vec.addAll(this_excl);
+    }
+
+
+    if (exclusive_conditions_vec.size() == 0) {
+      // System.out.println("addImplications: no exclusive conditions");
+      return;
+    }
+
+    // These two program points are mutually exclusive
+
+    Invariant[][] exclusive_conditions
+      = (Invariant[][])exclusive_conditions_vec.toArray(new Invariant[0][0]);
+    Invariant[][] different_invariants
+      = (Invariant[][])different_invariants(matched_views).toArray(new Invariant[0][0]);
+
+    // System.out.println("addImplications: "
+    //                    + exclusive_conditions.length + " exclusive conditions, "
+    //                    + different_invariants.length + " different invariants");
+
+
+    // Add an implication from each of a pair of mutually exclusive
+    // invariants to everything that differs (at all) about the two
+
+    for (int i=0; i<exclusive_conditions.length; i++) {
+      Assert.assert(exclusive_conditions[i].length == 2);
+      Invariant excl1 = exclusive_conditions[i][0];
+      Invariant excl2 = exclusive_conditions[i][1];
+      Assert.assert(excl1 != null);
+      Assert.assert(excl2 != null);
+
+      // System.out.println("Adding implications with conditions "
+      //                    + excl1.format() + " and " + excl2.format());
+
+      for (int j=0; j<different_invariants.length; j++) {
+        Assert.assert(different_invariants[j].length == 2);
+        Invariant diff1 = different_invariants[j][0];
+        Invariant diff2 = different_invariants[j][1];
+
+        // System.out.println("different_invariants "
+        //                    + ((diff1 == null) ? "null" : diff1.format())
+        //                    + ", " + ((diff2 == null) ? "null" : diff2.format()));
+
+        // This adds an implication to itself; bad.
+        // If one of the diffs implies the other, then should not add
+        // an implication for the weaker one.
+        if (diff1 != null) {
+          new Implication(this, excl1, diff1);
+        }
+        if (diff2 != null) {
+          new Implication(this, excl2, diff2);
+        }
+      }
+    }
+    // System.out.println("Done adding up to "
+    //                    + (exclusive_conditions.length * different_invariants.length)
+    //                    + " implicatins.");
+
+  }
+
+
+  // Match up the slices in the two program points.
+  // Each element is a PptSlice[2].
+  // (Perhaps I need to do something special in the case of differing canonical
+  // variables; deal with that later.)
+  public PptSlice[][] match_views(Ppt ppt1, Ppt ppt2) {
+    Vector result = new Vector();
+
+    SortedSet ss1 = new TreeSet(arityVarnameComparator);
+    ss1.addAll(ppt1.views);
+    SortedSet ss2 = new TreeSet(arityVarnameComparator);
+    ss2.addAll(ppt2.views);
+
+    for (OrderedPairIterator opi = new OrderedPairIterator(ss1.iterator(), ss2.iterator(), arityVarnameComparator); opi.hasNext(); ) {
+      OrderedPairIterator.Pair pair = (OrderedPairIterator.Pair) opi.next();
+      result.add(new PptSlice[] { (PptSlice) pair.a, (PptSlice) pair.b });
+    }
+    return (PptSlice[][])result.toArray(new PptSlice[0][0]);
+  }
+
+
+  // Determine which elements of invs1 are mutually exclusive with elements
+  // of invs2.
+  // Result elements are pairs of Invariants.
+  Vector exclusive_conditions(Invariants invs1, Invariants invs2) {
+    Vector result = new Vector();
+    for (int i1=0; i1<invs1.size(); i1++) {
+      for (int i2=0; i2<invs2.size(); i2++) {
+        Invariant inv1 = (Invariant) invs1.elementAt(i1);
+        Invariant inv2 = (Invariant) invs2.elementAt(i2);
+        // This is a debugging tool, to make sure that various versions
+        // of isExclusiveFormula remain coordinated.  (That's also one
+        // reason we don't break out of the loop early:  also, there will
+        // be few invariants in a slice.)
+        Assert.assert(inv1.isExclusiveFormula(inv2)
+                      == inv2.isExclusiveFormula(inv1),
+                      "Bad exclusivity: " + inv1.isExclusiveFormula(inv2) + " " + inv2.isExclusiveFormula(inv1)
+                      + "\n  " + inv1.format() + "\n  " + inv2.format());
+        // System.out.println("isExclusiveFormula(" + inv1.format() + ", " + inv2.format() + ") = " + inv1.isExclusiveFormula(inv2));
+        if (inv1.isExclusiveFormula(inv2)) {
+          result.add(new Invariant[] { inv1, inv2 });
+        }
+      }
+    }
+    return result;
+  }
+
+
+  // Determine which elements of invs1 differ from elements of invs2.
+  // Result elements are pairs of Invariants (with one or the other
+  // possibly null.)
+  Vector different_invariants(Invariants invs1, Invariants invs2) {
+    SortedSet ss1 = new TreeSet(icfp);
+    ss1.addAll(invs1);
+    SortedSet ss2 = new TreeSet(icfp);
+    ss2.addAll(invs2);
+
+    Vector result = new Vector();
+    for (OrderedPairIterator opi = new OrderedPairIterator(ss1.iterator(), ss2.iterator(), icfp); opi.hasNext(); ) {
+      OrderedPairIterator.Pair pair = (OrderedPairIterator.Pair) opi.next();
+      if ((pair.a == null) || (pair.b == null) || (icfp.compare(pair.a, pair.b) != 0)) {
+        result.add(new Invariant[] { (Invariant) pair.a, (Invariant) pair.b });
+      }
+    }
+    return result;
+  }
+
+
+  // Determine which invariants at the program points differ.
+  // Result elements are pairs of Invariants (with one or the other
+  // possibly null.)
+  Vector different_invariants(PptSlice[][] matched_views) {
+    Vector result = new Vector();
+    for (int i=0; i<matched_views.length; i++) {
+      PptSlice cond1 = matched_views[i][0];
+      PptSlice cond2 = matched_views[i][1];
+      Invariants invs1 = (cond1 == null) ? new Invariants() : cond1.invs;
+      Invariants invs2 = (cond2 == null) ? new Invariants() : cond2.invs;
+      result.addAll(different_invariants(invs1, invs2));
+    }
+    return result;
+  }
+
+
   ///////////////////////////////////////////////////////////////////////////
   /// Locating implied (same) invariants
   ///
@@ -1485,6 +1668,8 @@ public class PptTopLevel extends Ppt {
       PptSlice slice = (PptSlice) views_itor.next();
       result.addAll(slice.invs);
     }
+    // System.out.println(implication_view.invs.size() + " implication invs for " + name + " at " + implication_view.name);
+    result.addAll(implication_view.invs);
     return result;
   }
 
@@ -1830,7 +2015,8 @@ public class PptTopLevel extends Ppt {
       return false;
     }
     if (! some_nonconstant) {
-      Assert.assert((inv instanceof OneOf) || (inv instanceof Comparison)
+      Assert.assert(((inv instanceof OneOf) || (inv instanceof Comparison)
+                     || (inv instanceof Implication))
                     // , "Unexpected invariant with all vars constant: "
                     // + inv + "  " + inv.repr() + "  " + inv.format()
                     );
@@ -1943,12 +2129,13 @@ public class PptTopLevel extends Ppt {
   /// Diffing invariants
   ///
 
-  static Comparator arityNameComparator = new PptSlice.ArityNameComparator();
+  static Comparator arityPptnameComparator = new PptSlice.ArityPptnameComparator();
+  static Comparator arityVarnameComparator = new PptSlice.ArityVarnameComparator();
 
   public void diff(PptTopLevel other) {
-    SortedSet ss1 = new TreeSet(arityNameComparator);
+    SortedSet ss1 = new TreeSet(arityVarnameComparator);
     ss1.addAll(this.views);
-    SortedSet ss2 = new TreeSet(arityNameComparator);
+    SortedSet ss2 = new TreeSet(arityVarnameComparator);
     ss2.addAll(other.views);
     for (OrderedPairIterator opi = new OrderedPairIterator(ss1.iterator(), ss2.iterator()); opi.hasNext(); ) {
       OrderedPairIterator.Pair pair = (OrderedPairIterator.Pair) opi.next();

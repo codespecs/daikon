@@ -132,7 +132,14 @@ public final class StringComparisonCore implements java.io.Serializable {
       (can_be_lt == other.can_be_lt) &&
       (can_be_gt == other.can_be_gt);
   }
-  
+
+  public boolean isExclusiveForumla(StringComparisonCore other)
+  {
+    return (! ((can_be_eq && other.can_be_eq)
+               || (can_be_lt && other.can_be_lt)
+               || (can_be_gt && other.can_be_gt)));
+  }
+
 }
 
 

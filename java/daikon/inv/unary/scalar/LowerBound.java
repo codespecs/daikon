@@ -9,6 +9,9 @@ import java.util.*;
 // Automatically generated from Bound-cpp.java
 // *****
 
+// One reason not to combine LowerBound and Upperbound is that they have
+// separate justifications:  one may be justified when the other is not.
+
 // LowerBound >= 0 is implied by the variable being the length of an array or list.
 //         self.nonnegative_obvious = (self.var_infos != None) and ("size(" == self.var_infos[0].name[0:5])
 // That affects only printing, I think.
@@ -159,5 +162,13 @@ class LowerBound  extends SingleScalar {
   public boolean isSameFormula(Invariant other)
   {
     return min1  == ((LowerBound ) other). min1 ;
+  }
+
+  public boolean isExclusiveFormula(Invariant other) {
+    if (other instanceof UpperBound ) {
+      if (min1  >  ((UpperBound ) other). max1 )
+        return true;
+    }
+    return false;
   }
 }

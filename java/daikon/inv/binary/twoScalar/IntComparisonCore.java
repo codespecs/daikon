@@ -132,6 +132,14 @@ public final class IntComparisonCore implements java.io.Serializable {
       (can_be_lt == other.can_be_lt) &&
       (can_be_gt == other.can_be_gt);
   }
+
+  public boolean isExclusiveFormula(IntComparisonCore other)
+  {
+    return (! ((can_be_eq && other.can_be_eq)
+               || (can_be_gt && other.can_be_gt)
+               || (can_be_lt && other.can_be_lt)));
+  }
+
 }
 
 

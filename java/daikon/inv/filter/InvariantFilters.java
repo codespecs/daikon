@@ -14,7 +14,7 @@ public class InvariantFilters {
     public static final int IMPLIED_POSTCONDITION_FILTER = 5;
 
     List filters = new ArrayList();
-    
+
     public InvariantFilters() {
 	filters.add( InvariantFilters.UNJUSTIFIED_FILTER,             new UnjustifiedFilter());
 	filters.add( InvariantFilters.OBVIOUS_FILTER,                 new ObviousFilter());
@@ -73,14 +73,14 @@ abstract class InvariantFilter {
 
     public void turnOn()  { isOn = true; }
     public void turnOff() { isOn = false; }
-    
+
     public boolean shouldDiscard( Invariant invariant ) {
 	if (! isOn)
 	    return false;
 	else
 	    return shouldDiscardInvariant( invariant );
     }
-    
+
     abstract boolean shouldDiscardInvariant( Invariant invariant );
 }
 
@@ -119,7 +119,3 @@ class ImpliedPostconditionFilter extends InvariantFilter {
 	return invariant.isImpliedPostcondition();
     }
 }
-
-
-
-

@@ -58,4 +58,12 @@ class PairwiseLinearBinary extends TwoSequence {
     return core.isSameFormula(((PairwiseLinearBinary) other).core);
   }
 
+  public boolean isExclusiveFormula(Invariant other)
+  {
+    if (other instanceof PairwiseLinearBinary) {
+      return core.isExclusiveFormula(((PairwiseLinearBinary) other).core);
+    }
+    return false;
+  }
+
 }

@@ -107,4 +107,15 @@ class SeqComparison extends TwoSequence implements Comparison {
       (can_be_gt == other.can_be_gt);
   }
 
+  public boolean isExclusiveFormula(Invariant o)
+  {
+    if (o instanceof SeqComparison) {
+      SeqComparison other = (SeqComparison) o;
+      return (! ((can_be_eq && other.can_be_eq)
+                 || (can_be_lt && other.can_be_lt)
+                 || (can_be_gt && other.can_be_gt)));
+    }
+    return false;
+  }
+
 }

@@ -169,4 +169,13 @@ public final class StringComparison extends TwoString implements Comparison {
   {
     return core.equals(((StringComparison) other).core);
   }
+
+  public boolean isExclusiveFormula(Invariant other)
+  {
+    if (other instanceof StringComparison) {
+      return core.equals(((StringComparison) other).core);
+    }
+    return false;
+  }
+
 }

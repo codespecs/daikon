@@ -100,4 +100,23 @@ class Modulus extends SingleScalar {
       (remainder == ((Modulus) other).remainder);
   }
 
+  public boolean isExclusiveFormula(Invariant other)
+  {
+    if ((modulus == 0) || (modulus == 1))
+      return false;
+
+    // Weak test, can be strengthened.
+    //  * x = 1 mod 4  is exclusive with  x = 6 mod 8
+    //  * x = 1 mod 4  is exclusive with  x = 0 mod 2
+    //  * x = 0 mod 4  is exclusive with  1 <= x <= 3
+    if (other instanceof Modulus) {
+      return ((modulus == ((Modulus) other).modulus)
+              && (remainder != ((Modulus) other).remainder));
+    } else if (other instanceof NonModulus) {
+      return ((NonModulus) other).hasModulusRemainder(modulus, remainder);
+    }
+
+    return false;
+  }
+
 }

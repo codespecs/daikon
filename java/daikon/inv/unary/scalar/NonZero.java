@@ -99,4 +99,17 @@ class NonZero extends SingleScalar {
     Assert.assert(other instanceof NonZero);
     return true;
   }
+
+  public boolean isExclusiveFormula(Invariant other)
+  {
+    if (other instanceof OneOfScalar) {
+      OneOfScalar oos = (OneOfScalar) other;
+      if ((oos.num_elts() == 1) && (((Long)oos.elt()).longValue() == 0)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+
 }

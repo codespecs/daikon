@@ -47,6 +47,15 @@ public class LinearBinary extends TwoScalar {
     return core.isSameFormula(((LinearBinary) other).core);
   }
 
+  public boolean isExclusiveFormula(Invariant other)
+  {
+    if (other instanceof LinearBinary) {
+      return core.isExclusiveFormula(((LinearBinary) other).core);
+    }
+    return false;
+  }
+
+
   // Look up a previously instantiated invariant.
   public static LinearBinary find(PptSlice ppt) {
     Assert.assert(ppt.arity == 2);

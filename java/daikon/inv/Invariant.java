@@ -129,6 +129,10 @@ public abstract class Invariant implements java.io.Serializable {
     return ppt.usesVar(vi);
   }
 
+  public boolean usesVar(String name) {
+    return ppt.usesVar(name);
+  }
+
   // Not used as of 1/31/2000.
   // // For use by subclasses.
   // /** Put a string representation of the variable names in the StringBuffer. */
@@ -206,7 +210,7 @@ public abstract class Invariant implements java.io.Serializable {
       if (! varInfos[i].isConstant())
 	return false;
     }
-    
+
     // At this point, we know all variables are constant.
     Assert.assert(this instanceof OneOf  ||  this instanceof Comparison
 		  // , "Unexpected invariant with all vars constant: "
@@ -217,7 +221,7 @@ public abstract class Invariant implements java.io.Serializable {
       if (Global.debugPrintInvariants)
 	System.out.println("  [over constants:  " + this.repr() + " ]");
       return true;
-    } 
+    }
     return false;
   }
 
@@ -356,7 +360,7 @@ public abstract class Invariant implements java.io.Serializable {
 	return 0;
       Invariant inv1 = (Invariant)o1;
       Invariant inv2 = (Invariant)o2;
-      Assert.assert(inv1.ppt.parent == inv2.ppt.parent);
+      // Assert.assert(inv1.ppt.parent == inv2.ppt.parent);
       VarInfo[] vis1 = inv1.ppt.var_infos;
       VarInfo[] vis2 = inv2.ppt.var_infos;
       int arity_cmp = vis1.length - vis2.length;
@@ -398,7 +402,7 @@ public abstract class Invariant implements java.io.Serializable {
     public String getFromFirst(VarInfo var1);
     public String getFromSecond(VarInfo var2);
   }
-  
+
   public static class DefaultIsSameInvariantNameExtractor
     implements IsSameInvariantNameExtractor
   {
@@ -439,15 +443,15 @@ public abstract class Invariant implements java.io.Serializable {
     }
 
     // The variable names much match up, in order
-    
+
     VarInfo[] vars1 = inv1.ppt.var_infos;
     VarInfo[] vars2 = inv2.ppt.var_infos;
-    
+
     Assert.assert(vars1.length == vars2.length); // due to inv type match already
     for (int i=0; i < vars1.length; i++) {
       VarInfo var1 = vars1[i];
       VarInfo var2 = vars2[i];
-      
+
       // Do the easy check first
       if (name_extractor.getFromFirst(var1).equals(name_extractor.getFromSecond(var2))) {
 	continue;
@@ -481,6 +485,17 @@ public abstract class Invariant implements java.io.Serializable {
 
     // the type, formula, and vars all matched
     return true;
+  }
+
+
+  /**
+   * @return true iff the two invariants represent mutually exclusive
+   * mathematical formulas.  Does not consider the context such as
+   * variable names, confidences, sample counts, value counts, or
+   * related quantities.
+   **/
+  public boolean isExclusiveFormula(Invariant other) {
+    return false;
   }
 
 

@@ -139,5 +139,16 @@ public final class LinearBinaryCore implements java.io.Serializable {
       (b == other.b);
   }
 
+  public boolean isExclusiveFormula(LinearBinaryCore other)
+  {
+    if ((values_seen < MINPAIRS) ||
+        (other.values_seen < MINPAIRS)) {
+      return false;
+    }
+
+    return ((a == other.a)
+            && (b != other.b));
+  }
+
 }
 

@@ -264,6 +264,26 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     return true;
   }
 
+  public boolean isExclusiveFormula(Invariant o)
+  {
+    if (o instanceof ONEOFSCALAR) {
+      ONEOFSCALAR other = (ONEOFSCALAR) o;
+
+      for (int i=0; i < num_elts; i++) {
+        for (int j=0; j < other.num_elts; j++) {
+          if (elts[i] == other.elts[j]) // elements are interned
+            return false;
+        }
+      }
+      return true;
+    }
+    // Many more checks can be added here:  against nonzero, modulus, etc.
+
+
+
+    return false;
+  }
+
   // Look up a previously instantiated invariant.
   public static ONEOFSCALAR find(PptSlice ppt) {
     Assert.assert(ppt.arity == 1);

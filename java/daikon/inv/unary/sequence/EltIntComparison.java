@@ -99,6 +99,17 @@ class EltIntComparison extends SingleSequence {
       (can_be_lt == other.can_be_lt);
   }
 
+  public boolean isExclusiveFormula(Invariant o)
+  {
+    if (o instanceof EltIntComparison) {
+      EltIntComparison other = (EltIntComparison) o;
+      return (! ((can_be_eq && other.can_be_eq)
+                 || (can_be_gt && other.can_be_gt)
+                 || (can_be_lt && other.can_be_lt)));
+    }
+    return false;
+  }
+
   public boolean isObviousImplied() {
     EltOneOf eoo = EltOneOf.find(ppt);
     if ((eoo != null) && eoo.justified() && (eoo.num_elts() == 1)) {

@@ -20,6 +20,8 @@
 #define MINSTR "min"
 #define MAXSTR "max"
 #define GTSTR ">"
+#define UPPERBOUND UpperBound
+#define MAX1 max1
 #elif defined(UPPER)
 #define LT >
 #define GT <
@@ -38,6 +40,8 @@
 #define MINSTR "max"
 #define MAXSTR "min"
 #define GTSTR "<"
+#define UPPERBOUND LowerBound
+#define MAX1 min1
 #else
 #error "Either LOWER or UPPER should be defined"
 #endif
@@ -53,6 +57,10 @@ import java.util.*;
 // *****
 // Automatically generated from Bound-cpp.java
 // *****
+
+// One reason not to combine LowerBound and Upperbound is that they have
+// separate justifications:  one may be justified when the other is not.
+
 
 #ifdef LOWER
 // LowerBound >= 0 is implied by the variable being the length of an array or list.
@@ -207,5 +215,13 @@ class LOWERBOUND extends SingleScalar {
   public boolean isSameFormula(Invariant other)
   {
     return MIN1 == ((LOWERBOUND) other).MIN1;
+  }
+
+  public boolean isExclusiveFormula(Invariant other) {
+    if (other instanceof UPPERBOUND) {
+      if (MIN1 GT ((UPPERBOUND) other).MAX1)
+        return true;
+    }
+    return false;
   }
 }

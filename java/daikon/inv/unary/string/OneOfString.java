@@ -119,16 +119,34 @@ public final class OneOfString  extends SingleString  implements OneOf {
   public boolean isSameFormula(Invariant o)
   {
     OneOfString  other = (OneOfString ) o;
-    if (elts.length != other.elts.length)
+    if (num_elts != other.num_elts)
       return false;
 
     sort_rep();
     other.sort_rep();
-    for (int i=0; i < elts.length; i++)
+    for (int i=0; i < num_elts; i++)
       if (elts[i] != other.elts[i]) // elements are interned
 	return false;
 
     return true;
+  }
+
+  public boolean isExclusiveFormula(Invariant o)
+  {
+    if (o instanceof OneOfString ) {
+      OneOfString  other = (OneOfString ) o;
+
+      for (int i=0; i < num_elts; i++) {
+        for (int j=0; j < other.num_elts; j++) {
+          if (elts[i] == other.elts[j]) // elements are interned
+            return false;
+        }
+      }
+      return true;
+    }
+    // Many more checks can be added here:  against nonzero, modulus, etc.
+
+    return false;
   }
 
   // Look up a previously instantiated invariant.

@@ -40,14 +40,14 @@ public final class Daikon {
   // already has them.  For example, this is the case for invariants
   // in public methods which are already given as part of the object
   // invariant for that class.
-  public static boolean suppress_implied_controlled_invariants = false; 
-  // public static boolean suppress_implied_controlled_invariants = true; 
+  public static boolean suppress_implied_controlled_invariants = false;
+  // public static boolean suppress_implied_controlled_invariants = true;
 
   // When true, don't print EXIT invariants over strictly orig()
   // variables when the corresponding entry ppt already has the
   // invariant.
-  public static boolean suppress_implied_postcondition_over_prestate_invariants = false; 
-  // public static boolean suppress_implied_postcondition_over_prestate_invariants = false; 
+  public static boolean suppress_implied_postcondition_over_prestate_invariants = false;
+  // public static boolean suppress_implied_postcondition_over_prestate_invariants = false;
 
   public static Pattern ppt_regexp;
   // I appear to need both of these variables.  Or do I?  I don't know.
@@ -225,6 +225,7 @@ public final class Daikon {
           if (pconds != null)
             ppt.addConditions(pconds);
         }
+        ppt.addImplications();
         ppt.print_invariants_maybe(System.out);
         {
           // Clear memory

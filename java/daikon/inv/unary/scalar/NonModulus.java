@@ -91,5 +91,35 @@ class NonModulus extends SingleScalar {
       (modulus == other.modulus) &&
       (remainder == other.remainder);
   }
-  
+
+  public boolean hasModulusRemainder(long modulus, long remainder) {
+    updateResults();
+    if (no_result_yet)
+      return false;
+
+    return ((modulus == this.modulus)
+            && (remainder == this.remainder));
+  }
+
+
+  public boolean isExclusiveFormula(Invariant o) {
+    updateResults();
+    if (no_result_yet)
+      return false;
+    if (o instanceof NonModulus) {
+      NonModulus other = (NonModulus) o;
+      other.updateResults();
+      if (other.no_result_yet)
+        return false;
+      return ((modulus == other.modulus)
+              && (remainder != other.remainder));
+    } else if (o instanceof Modulus) {
+      Modulus other = (Modulus) o;
+      return ((modulus == other.modulus)
+              && (remainder == other.remainder));
+    }
+
+    return false;
+  }
+
 }

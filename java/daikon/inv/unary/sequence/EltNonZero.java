@@ -109,4 +109,16 @@ public final class EltNonZero extends SingleSequence {
     Assert.assert(other instanceof EltNonZero);
     return true;
   }
+
+  public boolean isExclusiveFormula(Invariant other)
+  {
+    if (other instanceof EltOneOf) {
+      EltOneOf eoo = (EltOneOf) other;
+      if ((eoo.num_elts() == 1) && (((Long)eoo.elt()).longValue() == 0)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
 }
