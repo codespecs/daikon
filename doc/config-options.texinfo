@@ -21,6 +21,14 @@
  verbosely.
   The default value is `false'.
 
+@item daikon.PptTopLevel.dummy_invariant_level
+  Integer. A value of zero indicates that dummy invariants should
+ not be created. A value of one indicates that dummy invariants
+ should be created only when no suitable condition was found in
+ the regular output. A value of two indicates that dummy
+ invariants should be created for each splitting condition.
+  The default value is `0'.
+
 @item daikon.PptTopLevel.pairwise_implications
   Boolean.  If true, create implications for all pairwise
  combinations of conditions, and all pairwise combinations of exit
@@ -118,15 +126,18 @@
   The default value is `true'.
 
 @item daikon.derive.ternary.SequenceFloatArbitrarySubsequence.enabled
-  Boolean.  True iff SequenceFloatArbitrarySubsequence invariants should be considered.
+  Boolean.  True iff SequenceFloatArbitrarySubsequence derived variables
+ should be generated.
   The default value is `false'.
 
 @item daikon.derive.ternary.SequenceScalarArbitrarySubsequence.enabled
-  Boolean.  True iff SequenceScalarArbitrarySubsequence invariants should be considered.
+  Boolean.  True iff SequenceScalarArbitrarySubsequence derived variables
+ should be generated.
   The default value is `false'.
 
 @item daikon.derive.ternary.SequenceStringArbitrarySubsequence.enabled
-  Boolean.  True iff SequenceStringArbitrarySubsequence invariants should be considered.
+  Boolean.  True iff SequenceStringArbitrarySubsequence derived variables
+ should be generated.
   The default value is `false'.
 
 @item daikon.derive.unary.SequenceInitial.enabled
@@ -170,7 +181,7 @@
  others will not appear at all. When enabled, Simplify may be able
  to make more inferences, allowing --suppress_redundant to
  suppress more redundant invariants, but Simplify may also run
- more slowly. The default value is false.
+ more slowly.
   The default value is `false'.
 
 @item daikon.inv.binary.sequenceScalar.Member.enabled
@@ -685,6 +696,37 @@
   Positive integer.  Specifies the maximum set size for this type
  of invariant (x is one of 'n' items).
   The default value is `2'.
+
+@item daikon.simplify.LemmaStack.print_contradictions
+  Boolean. Controls Daikon's response when inconsistent invariants
+ are discovered while running Simplify. If true, Daikon will print
+ an error message to the standard error stream listing the
+ contradictory invariants. This is mainly intended for debugging
+ Daikon itself, but can sometimes be helpful in tracing down other
+ problems. For more information, see the section on
+ troubleshooting contradictory invariants in the Daikon manual.
+  The default value is `false'.
+
+@item daikon.simplify.LemmaStack.remove_contradictions
+  Boolean. Controls Daikon's response when inconsistent invariants
+ are discovered while running Simplify. If false, Daikon will give
+ up on using Simplify for that program point. If true, Daikon will
+ try to find a small subset of the invariants that cause the
+ contradiction and avoid them, to allow processing to
+ continue. For more information, see the section on
+ troubleshooting contradictory invariants in the Daikon manual.
+  The default value is `true'.
+
+@item daikon.simplify.Session.simplify_max_iterations
+  A non-negative integer, representing the largest number of
+ iterations for which Simplify should be allowed to run on any
+ single conjecture before giving up. Larger values may cause
+ --simplify_redundant to run longer, but will increase the number
+ of invariants that can be recognized as redundant. The default
+ value is small enough to keep Simplify from running for more than
+ a few seconds on any one conjecture, allowing it to verify most
+ simple theorems without getting bogged down in long searches.
+  The default value is `1000000'.
 
 @item daikon.split.ContextSplitterFactory.granularity
   Enumeration (integer).  Specifies the granularity to use for
