@@ -6,7 +6,7 @@ import utilMDE.*;
 public final class SequenceSum extends UnaryDerivation {
 
   // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface
+  // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
 
   public SequenceSum(VarInfo vi) {

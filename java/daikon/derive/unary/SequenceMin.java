@@ -7,7 +7,7 @@ import utilMDE.*;
 public final class SequenceMin extends UnaryDerivation {
 
   // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface
+  // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
 
   public SequenceMin(VarInfo vi) {
