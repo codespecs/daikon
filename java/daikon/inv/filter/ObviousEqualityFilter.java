@@ -24,6 +24,14 @@ class ObviousEqualityFilter extends InvariantFilter {
 
 
   boolean shouldDiscardInvariant( Invariant invariant ) {
+    if (!(invariant instanceof Equality)) return false;
+
+    Equality eq = (Equality) invariant;
+
+    if (eq.getVars().size() < 2) return true;
+
+    return false;
+
     /* [INCR]
     if (!IsEqualityComparison.it.accept( invariant )) {
       return false;
@@ -82,8 +90,6 @@ class ObviousEqualityFilter extends InvariantFilter {
       }
     }
     */
-
-    return false;
 
 //        VarInfo[] variables = invariant.ppt.var_infos; // note: only 2 variables
 //        for (int i = 0; i < variables.length; i++) {
