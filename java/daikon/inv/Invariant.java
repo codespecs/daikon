@@ -366,15 +366,19 @@ public abstract class Invariant implements java.io.Serializable {
     // eliminate some invariants from consideration.  Which is cheapest?
     // Which is most often successful?  Which assume others have already
     // been performed?
-    if (! isWorthPrinting_sansControlledCheck())
+    if (! isWorthPrinting_sansControlledCheck()) {
+      // System.out.println("Not worth printing on its own merits: " + format() + ", " + repr());
       return false;
+    }
     // The invariant is worth printing on its own merits, but it may be
     // controlled.  If any (transitive) controller is worth printing, don't
     // print this one.
     Invariant cont_inv = find_controlling_invariant();
     while (cont_inv != null) {
-      if (cont_inv.isWorthPrinting_sansControlledCheck())
+      if (cont_inv.isWorthPrinting_sansControlledCheck()) {
+        // System.out.println("Not worth printing " + format() + " on account of controller " + cont_inv.format() + " which is worth printing on its own merits.");
         return false;
+      }
       cont_inv = cont_inv.find_controlling_invariant();
     }
     // No controller was worth printing
@@ -573,7 +577,7 @@ public abstract class Invariant implements java.io.Serializable {
       Iterator candidates = controller.invariants_iterator();
       while (candidates.hasNext()) {
 	Invariant cand_inv = (Invariant) candidates.next();
-	if (cand_inv.isSameInvariant(cand_inv)) {
+	if (isSameInvariant(cand_inv)) {
           // System.out.println("Controller found: " + cand_inv.format() + "  [worth printing: " + ((PptTopLevel)cand_inv.ppt.parent).isWorthPrinting(cand_inv) + "]");
 	  return cand_inv;
 	}
