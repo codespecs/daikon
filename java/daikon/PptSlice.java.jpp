@@ -150,6 +150,8 @@ public final class PPTSLICE1
     // Instantiate invariants
     if (this.debugged || debug.isLoggable(Level.FINE) || debugSpecific.isLoggable(Level.FINE))
       debug.info("instantiate_invariants for " + name() + ": originally " + invs.size() + " invariants in " + invs);
+    if (Debug.logOn())
+      log ("instantiate invariants");
 
     Vector new_invs = null;
 #if defined(ARITY1)
@@ -476,7 +478,7 @@ public final class PPTSLICE1
     //       debugFlow.fine ("    with values:" + sb);
     //     }
 
-    Assert.assertTrue(! no_invariants);
+    Assert.assertTrue(! no_invariants, "no_invariants at " + this);
     Assert.assertTrue(invs.size() > 0);
     // Assert.assertTrue(! already_seen_all); // [INCR]
     for (int i=0; i<invs.size(); i++) {
@@ -785,6 +787,7 @@ public final class PPTSLICE1
 
   public void addInvariant(Invariant invariant) {
     Assert.assertTrue(invariant != null);
+    // Assert.assertTrue(invariant.ppt == this);
 
     invs.add(invariant);
     Global.instantiated_invariants++;
@@ -945,42 +948,24 @@ public final class PPTSLICE1
   }
 
   /**
-   * @see daikon.PptSlice#cloneOnePivot(VarInfo leader, VarInfo newLeader)
+   * Copy invariants from this slice to a new slice over the variables
+   * argNewVarInfos.  The new slice should not already exist.  Only
+   * invariants that do not exist at the corresponding global ppt slice
+   * are copied.
    **/
   protected PptSlice cloneAndPivot (VarInfo[] argNewVarInfos) {
-    VarInfo[] newVarInfos = new VarInfo[arity];
-    // rename the VarInfo references to subsitute newLeader for leader
-    int [] permutation = new int[arity];
-    for (int i = 0; i < arity; i++) {
-      newVarInfos[i] = argNewVarInfos[i];
-      permutation[i] = i;
-    }
 
-    // Now sort both of the above arrays, by using index comparisons
-    // on the former.  Why am I hard-wiring?  Because Java doesn't
-    // have a double-array sort routine, and slice sizes won't exceed
-    // 3.
-    for (int i = 0; i < arity - 1; i++) {
-      for (int j = arity - 2; j >= i; j--) {
-        VarInfo tempVi;
-        int temp;
-        if (newVarInfos[j].varinfo_index > newVarInfos[j+1].varinfo_index) {
-          tempVi = newVarInfos[j];
-          newVarInfos[j] = newVarInfos[j+1];
-          newVarInfos[j+1] = tempVi;
-
-          temp = permutation[j];
-          permutation[j] = permutation[j+1];
-          permutation[j+1] = temp;
-        }
-      }
-    }
+    // Sort the VarInfos by var_index and build a matching permutation
+    // from the current order to the new order
+    VarInfo[] vis_sorted = (VarInfo[]) argNewVarInfos.clone();
+    Arrays.sort (vis_sorted, VarInfo.IndexComparator.getInstance());
+    int[] permutation = PptTopLevel.build_permute (argNewVarInfos, vis_sorted);
 
     // Assert sorted
     for (int i = 0; i < arity - 1; i++) {
-      Assert.assertTrue (newVarInfos[i].varinfo_index <= newVarInfos[i+1].varinfo_index);
+      Assert.assertTrue (vis_sorted[i].varinfo_index
+                         <= vis_sorted[i+1].varinfo_index);
     }
-    permutation = ArraysMDE.fn_inverse_permutation(permutation);
 
     Assert.assertTrue(ArraysMDE.fn_is_permutation(permutation));
     // Assert that the permutation represents the rearrangement
@@ -988,13 +973,18 @@ public final class PPTSLICE1
       // the variable that used to be at position "i" is now found at
       // position permutation[i].
       VarInfo oldvi = argNewVarInfos[i];
-      VarInfo newvi = newVarInfos[permutation[i]];
+      VarInfo newvi = vis_sorted[permutation[i]];
       Assert.assertTrue(oldvi == newvi);
     }
 
+    // Find the matching global slice.  To match each variable must
+    // have the same transformation (orig/post) from here to the
+    // global ppt.
+    PptSlice gslice = find_global_slice (vis_sorted);
+
     // Why not just clone?  Because then index order wouldn't be
     // preserved
-    PPTSLICE1 result = new PPTSLICE1 (this.parent, newVarInfos);
+    PPTSLICE1 result = new PPTSLICE1 (this.parent, vis_sorted);
 
     // Set sample counts
     result.mod_samples = this.mod_samples;
@@ -1010,27 +1000,135 @@ public final class PPTSLICE1
       }
     }
 
-    // re-parent the invariants and copy them out
+    // re-parent the invariants and copy them out.  Don't copy any that
+    // are duplicated (exactly) at the global slice.
     List newInvs = new LinkedList();
     for (Iterator i = invs.iterator(); i.hasNext(); ) {
       Invariant inv = (Invariant) i.next();
       Assert.assertTrue (inv.ppt == this);
       Invariant newInv = inv.transfer (result, permutation);
-      // if (!newInv.isObvious()) {
-      newInvs.add (newInv);
-      parent.attemptSuppression (newInv, true);
-      Assert.assertTrue (newInv != inv);
-      Assert.assertTrue (newInv.ppt == result);
-      Assert.assertTrue (inv.ppt == this);
-      // }
+      if ((gslice == null) || !gslice.contains_inv_exact (newInv)) {
+        newInvs.add (newInv);
+        parent.attemptSuppression (newInv, true);
+        Assert.assertTrue (newInv != inv);
+        Assert.assertTrue (newInv.ppt == result);
+        Assert.assertTrue (inv.ppt == this);
+      }
     }
 
+    if (Debug.logOn())
+      result.log ("Copied " + newInvs.size() + " invariants from "
+                  + this.name() + " with " + invs.size() + " invariants");
     result.invs.addAll (newInvs);
     if (PptSliceEquality.debug.isLoggable(Level.FINE)) {
       PptSliceEquality.debug.fine ("cloneAndPivot: newInvs " + invs);
     }
     return result;
   }
+
+  /**
+   * Copies new invariants (those that don't already exist) to the
+   * slice defined by vis in ppt.  Vis should initially match the
+   * order of variables in this slice (ie, it shouldn't be sorted)
+   * Creates and adds the new slice if it doesn't already exist
+   */
+  public PptSlice copy_new_invs (PptTopLevel ppt, VarInfo[] vis) {
+
+    // sort the varinfos and find the corresponding slice
+    VarInfo[] vis_sorted = (VarInfo[]) vis.clone();
+    Arrays.sort (vis_sorted, VarInfo.IndexComparator.getInstance());
+    PPTSLICE1 slice = (PPTSLICE1) ppt.findSlice (vis_sorted);
+
+    // Build the permutation from the here to the new slice
+    int[] permute = PptTopLevel.build_permute (vis, vis_sorted);
+
+    // Find the matching global slice.  Note that this may not match
+    // this slice because of equality set differences
+    PptSlice parent_gslice = find_global_slice (vis_sorted);
+
+    // If the parent global slice, does match this one, there is nothing
+    // to copy (since everything is already at the global ppt)
+    if (parent_gslice == this)
+      return (null);
+
+    // If the slice doesn't already exist, create it.  Note that the
+    // values filled in for sample counts and valueTracker won't be
+    // correct.  This is just a short-term hack to get something there.
+    if (slice == null) {
+
+      // if no samples have arrived yet, don't flow anything.  The correct
+      // invariants are created when the firs instantiations occur
+      if (ppt.num_samples() == 0)
+        return (null);
+
+      // Don't create unnecessary slices
+      if (!ppt.is_slice_ok (vis_sorted, vis_sorted.length))
+        return (null);
+
+      slice = new PPTSLICE1 (ppt, vis_sorted);
+
+      // Set sample counts
+      slice.mod_samples = mod_samples;
+      slice.unmod_samples = unmod_samples;
+
+      // Set ValueTracker
+      if (values_cache == null) {
+        slice.values_cache = null;
+      } else {
+        slice.values_cache = (VALUETRACKER1) this.values_cache.clone();
+        slice.values_cache.permute (permute);
+      }
+      ppt.addSlice (slice);
+    }
+
+    // Copy each invariant from here to slice.  Don't copy any invariants
+    // that already exist at slice or at slice's global parent slice
+    List new_invs = new ArrayList (invs.size());
+    for (Iterator i = invs.iterator(); i.hasNext(); ) {
+      Invariant inv = (Invariant) i.next();
+      Invariant new_inv = inv.transfer (slice, permute);
+      if (!slice.contains_inv (new_inv) && ((parent_gslice == null) ||
+        !parent_gslice.contains_inv_exact (new_inv)))
+        new_invs.add (new_inv);
+    }
+    slice.invs.addAll (new_invs);
+
+    return (slice);
+  }
+
+  /**
+   * Removes any invariants in this slice that are flowable and are
+   * already present at the matching global slice.  These are
+   * duplicates since any invariant at the global ppt is known to be
+   * true here as well.
+   *
+   * Note that some invariants are not flowable since the contain
+   * sample dependent state that is not normally true at the lower
+   * ppt.
+   */
+
+  public void remove_global_invs() {
+
+    // Find the matching gblobal slice.  To match each variable
+    // must have the same transformation (orig/post) from here
+    // to the global ppt
+    PptSlice gslice = find_global_slice (var_infos);
+    log ("Found global slice " + gslice);
+
+    // If there is not a matching global slice, there is nothing to do
+    if (gslice == null)
+      return;
+
+    for (Iterator i = invs.iterator(); i.hasNext(); ) {
+      Invariant inv = (Invariant) i.next();
+      if (gslice.contains_inv_exact (inv) && inv.isFlowable()) {
+        inv.log ("Removing because of match in global slice");
+        i.remove();
+      }
+    }
+
+  }
+
   /**
    * Creates invariants at this ppt by merging invariants from each of its
    * children.  An invariant must exist at each of the children in order
@@ -1087,7 +1185,6 @@ public final class PPTSLICE1
       // Child variable info
       VarInfo cvis[] = new VarInfo[var_infos.length];
       VarInfo cvis_sorted[] = new VarInfo[var_infos.length];
-      int permute[] = new int[var_infos.length];
 
       // Build the corresponding array of VarInfos for the child.  If any
       // of the vars don't exist in this child, skip the child (since we
@@ -1144,15 +1241,7 @@ public final class PPTSLICE1
       }
 
       // Build the permutation array from child to parent slice
-      for (int j = 0; j < cvis_sorted.length; j++) {
-        for (int k = 0; k < cvis.length; k++) {
-          if (cvis_sorted[j] == cvis[k]) {
-            permute[j] = k;
-            cvis[k] = null;  // don't match the same one twice
-            break;
-          }
-        }
-      }
+      int[] permute = PptTopLevel.build_permute (cvis_sorted, cvis);
 
       // Debug print child vars and permute to parent
       if (debugMerge.isLoggable (Level.FINE)) {
@@ -1325,5 +1414,15 @@ public final class PPTSLICE1
         if (child_inv.ppt.invs.contains(child_inv))
           child_inv.ppt.removeInvariant (child_inv);
     }
+  }
+
+  /**
+   * Initialize the values cache for this slice from the specified
+   * slice
+   */
+  public void clone_values_cache_from (PptSlice slice, int[] permute) {
+
+    values_cache = (VALUETRACKER1) ((PPTSLICE1) slice).values_cache.clone();
+    values_cache.permute (permute);
   }
 }
