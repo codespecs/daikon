@@ -27,16 +27,23 @@ $ENV{LACKWIT_ARGS} = "-ignore __restrict";
 
 `EmitHeaders $lackwit_home/lib/Default.sigs`;
 
-my $ret = `gcc -c $lackwit_home/lib/libc.c -o /dev/null 2>&1`;
-$ret =~ /^(.*)Launching real compiler/s;
-die "Error processing $lackwit_home/lib/libc.c\n$1\n" if ($1);
+unshift @files, "$lackwit_home/lib/libc.c";
+
 
 foreach my $file (@files) {
-  `lh $file`;
-  my $file_int = $file;
-  $file_int =~ s!\.c!.int.c!;
-  my $ret = `gcc -c $file_int -o /dev/null 2>&1`;
+  # An intermediate file is created for each source file to be
+  # analyzed.  The intermediate files are created in the $lackwitdb
+  # directory.  All files are written to the root of $lackwitdb,
+  # regardless of leading directories.  It is not a big problem if
+  # filenames clash -- each file is analyzed immediately after it is
+  # created.  The files are left around for debugging purposes only.
+  my $int_file = $file;
+  $int_file =~ s!\.c!.int.c!;
+  $int_file =~ s!(.*)/(.*)\.c!$2.c!; # strip leading directories
+  $int_file = "$lackwitdb/$int_file";
+
+  `lh -\$ -w --gen_c_file_name $int_file $file`;
+  my $ret = `gcc -c $int_file -o /dev/null 2>&1`;
   $ret =~ /^(.*)Launching real compiler/s;
-  die "Error processing $file_int\n$1\n" if ($1);
-  unlink $file_int;
+  die "Error processing $int_file\n$1\n" if ($1);
 }
