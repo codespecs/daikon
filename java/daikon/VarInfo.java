@@ -399,6 +399,8 @@ public final class VarInfo
     VarInfo[] a_new = new VarInfo[len];
     for (int i=0; i<len; i++) {
       a_new[i] = new VarInfo(a_old[i]);
+      if (a_old[i].derived != null)
+        Assert.assertTrue (a_new[i].derived != null);
       a_new[i].varinfo_index = a_old[i].varinfo_index;
       a_new[i].value_index = a_old[i].value_index;
     }
@@ -1053,6 +1055,11 @@ public final class VarInfo
    * Canonical representative that's equal to this variable.
    **/
   public VarInfo canonicalRep() {
+    if (equalitySet == null) {
+      System.out.println ("equality sets = " + ppt.equality_sets_txt());
+      Assert.assertTrue (equalitySet != null, "Variable " + name.name()
+                     + " in ppt " + ppt.name() + " index = " + varinfo_index);
+    }
     return equalitySet.leader();
   }
 
