@@ -427,6 +427,7 @@ public class PptSliceEquality
         // they will now be the only item in their set)
         for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
           Invariant inv = (Invariant) j.next();
+          if(!Daikon.dkconfig_undo_opts) {
           if (inv.isObviousStatically_AllInEquality()) {
             //            inv.destroyAndFlow();
             inv.falsify();
@@ -436,6 +437,7 @@ public class PptSliceEquality
               inv.ppt.addToFlow(inv);
             }
           }
+        }
         }
         if (slice.invs.size() == 0) i.remove();
       }
@@ -536,9 +538,11 @@ public class PptSliceEquality
           List invs = newSlice.invs;
           for (Iterator iInvs = invs.iterator(); iInvs.hasNext(); ) {
             Invariant inv = (Invariant) iInvs.next();
+            if(!Daikon.dkconfig_undo_opts) {
             if (inv.isObviousStatically_AllInEquality()) {
               iInvs.remove();
             }
+          }
           }
           if (newSlice.invs.size() == 0) {
             Debug.log (debug, getClass(), newSlice, soFar,
