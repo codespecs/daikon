@@ -4,16 +4,19 @@ Cc:           Toh <tohn>
 Tool:         Daikon V3
 Summary:      Stack overflow with certain derived variables or invariants?
 Severity:     Vexing
-Status:       New
+Status:       Fixed
 Reproducible: Yes
 Description:
 
 [mistere]
-I fixed the first bug (stack overflow).  A workaround for the second
-bug is to disable that invariant in your config file.  It is disabled
-now in the default config file.  In general, your config file should
+Toh, please confirm fix and close out.
+
+[mistere]
+Both bugs are now fixed.  However, this pointed out to me that
+LinearTernary currently does not to the right thing for flowing in V3.
+This may lead to incorrect linear ternary results, or crashes similar
+to the one below.  Also note that in general, your config file should
 only contain changes from the default, instead of repeating them.
-I'll look at fixing the other bug soon, too.
 
 [tohn]
 I do not yet know the exact cause for this bug, but there is a stack
@@ -62,7 +65,10 @@ and come from IOA.
 
 --
 $Log$
-Revision 1.3  2002-04-03 20:36:50  mistere
+Revision 1.4  2002-04-03 20:48:31  mistere
+changed bug0039
+
+Revision 1.3  2002/04/03 20:36:50  mistere
 changed bug0039
 
 Revision 1.2  2002/04/03 20:18:14  mistere
