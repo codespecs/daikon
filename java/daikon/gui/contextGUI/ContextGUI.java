@@ -998,10 +998,10 @@ class MyTableModel extends AbstractTableModel
 	}
 }
 
-// this is used so when the user hits the table header, it will sort according to that
-// column, part of the code has been taken from a tutorial page from SUN Microsystems.
-// Some code has been added and changed around to reduce the actual amount of code in
-// this class.
+// This is used so when the user hits the table header, it will sort
+// according to that column.  Part of the code has been taken from a
+// tutorial page from SUN Microsystems.  Some code has been added and
+// changed around to reduce the actual amount of code in this class.
 class TableSorter extends TableMap
 {
 	int indexes[];
