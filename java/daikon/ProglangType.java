@@ -296,6 +296,10 @@ public final class ProglangType implements java.io.Serializable {
         for (int i=0; i<len; i++) {
           if (value_strings[i].equals("null"))
             result[i] = 0;
+          else if (value_strings[i].equals("false"))
+            result[i] = 0;
+          else if (value_strings[i].equals("true"))
+            result[i] = 1;
           else
             result[i] = Long.parseLong(value_strings[i]);
         }
@@ -305,6 +309,8 @@ public final class ProglangType implements java.io.Serializable {
         for (int i=0; i<len; i++) {
           if (value_strings[i].equals("null"))
             result[i] = 0;
+          else if (value_strings[i].equals("NaN"))
+            result[i] = Double.NaN;
           else
             result[i] = Double.parseDouble(value_strings[i]);
         }
