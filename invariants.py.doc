@@ -13,7 +13,9 @@ File format for data trace files
 A data trace (.dtrace) file contains two types of record:
  * static lexical information about a program point
  * dynamic information about values at a program point
-A declaration (.decls) file contains only program point records.
+A declaration (.decls) file contains only program point records; when a
+declaration file exists, typically the data trace file contains only value
+records.
 
 Blank lines separate records.
 Lines beginning with the '#' character are ignored (except inside a record,
@@ -48,13 +50,23 @@ Program point information includes:
       This is currently uninterpreted (that is, the strings are compared
       for equality but not destructed into their constituent parts).
       For arrays, this looks like "int[]" or "char[][]"
-    * comparable variables:  A space-separated list of all the other
-      variables mentioned in this record that are comparable to this one.
-      If no information is supplied (ie, this line is blank), then the
-      variable is compared to all other variables of the same type.  This
-      information is typically obtained via a Lackwit-style analysis.  For
-      arrays, the lists are surrounded by parentheses, and variables are
-      given in parentheses for indices, like so: "(a b c)[(d e)][(f g h)]".
+    * comparable variables, also known as "Lackwit types".  These indicate
+      which other variables are comparable to this one, which is typically
+      obtained via type-inference based analysis.  There are two formats,
+      "implicit" and "explicit", for this information.
+       * An implicit lackwit type is an arbitrary string, and comparisons
+	 succeed exactly if the two lackwit types are identical.
+       * An explicit lackwit type is a list of other variables, and
+	 comparisons succeed if each variable is in the list of the other.
+	 It takes the form of
+	  * for scalar types:  A space-separated list of all the other
+	    variables mentioned in this record that are comparable to this
+	    one.
+	  * for array types:  The lists are surrounded by parentheses, and
+	    variables are given in parentheses for indices, like so:
+            "(a b c)[(d e)][(f g h)]".
+          * If no information is supplied (ie, this line is blank), then
+	    the variable is compared to all other variables of the same type.
  * Future enhancements:
     * permit variables to be omitted if they haven't changed (but always
       outputting the bit permits us to write a sanity checker)
@@ -92,27 +104,32 @@ format takes up too many lines in the file.
 
 
 Here is an example of the file format:
-[It is slightly out of date as of 4/22/99.]
 
 # Program: sub.c
 # Instrumented by: EDG front end version 3.14, 2/22/99
 # Input: test22.in
+# Lacwit types (comparable values) are given in "implicit" form.
 
 DECLARE
 subtract:::BEGIN
 minuend
 int
+7
 subtrahend
 int
+7
 
 DECLARE
 subtract:::END
-minuend					We could omit these variables if they
-int					cannot be modified and we use the
-subtrahend				current scheme of remembering the
-int					original values in the engine.
+minuend
+int
+7
+subtrahend
+int
+7
 result
 int
+7
 
 subtract:::BEGIN
 minuend

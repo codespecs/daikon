@@ -27,20 +27,25 @@ DIST_DIR := /homes/gws/mernst/www/invariants-dist
 ### Rules
 ###
 
+### Tags
+
+tags: TAGS
+
+## As of July 1998, my Linux etags works on Python; my Solaris one doesn't.
+## So I should be sure to do the make on a Linux machine. -MDE
+TAGS:  $(LISP_FILES) $(PYTHON_FILES)
+	etags $(LISP_FILES) $(PYTHON_FILES)
+
+###########################################################################
 ### Distribution
+###
+
+# Main distribution
 
 dist: $(DIST_DIR)/invariants.tar.gz
 
 $(DIST_DIR)/invariants.tar.gz: invariants.tar.gz
 	cp -pf invariants.tar.gz dist/README dist/VERSION $(DIST_DIR)
-	update-link-dates $(DIST_DIR)/index.html
-
-dist-edg: dist-edg-solaris
-
-dist-edg-solaris: $(DIST_DIR)/edgcpfe-solaris
-
-$(DIST_DIR)/edgcpfe-solaris: $(EDG_DIR)/edgcpfe
-	cp -pf $< $@
 	update-link-dates $(DIST_DIR)/index.html
 
 # Also creates a directory called "dist"
@@ -71,11 +76,48 @@ invariants.tar.gz: invariants.tar
 	rm -rf invariants.tar.gz
 	gzip -c invariants.tar > invariants.tar.gz
 
-### Tags
+### C front end
 
-tags: TAGS
+dist-edg: dist-edg-solaris
 
-## As of July 1998, my Linux etags works on Python; my Solaris one doesn't.
-## So I should be sure to do the make on a Linux machine. -MDE
-TAGS:  $(LISP_FILES) $(PYTHON_FILES)
-	etags $(LISP_FILES) $(PYTHON_FILES)
+dist-edg-solaris: $(DIST_DIR)/edgcpfe-solaris
+
+$(DIST_DIR)/edgcpfe-solaris: $(EDG_DIR)/edgcpfe
+	cp -pf $< $@
+	update-link-dates $(DIST_DIR)/index.html
+
+### Examples
+
+examples: examples-gries
+
+# I made the replace examples by running the following on 4/23/99:
+# /projects/null/se/people/mernst/www
+# mkdir replace-TC1-traces; cp -p /projects/null/se/people/jake/invariants/test_gen/TC1/traces/* replace-TC1-traces/; tar czf replace-TC1-traces.tar.gz replace-TC1-traces; rm -rf replace-TC1-traces
+# mkdir replace-TC3-traces; cp -p /projects/null/se/people/jake/invariants/test_gen/TC3/traces/* replace-TC3-traces/; tar czf replace-TC3-traces.tar.gz replace-TC3-traces; rm -rf replace-TC3-traces
+
+
+GRIES_FILES := gries-instrumented.decls \
+	p173-14.3.dtrace \
+	p176.dtrace \
+	p177-1.dtrace \
+	p177-14.8.dtrace \
+	p177-14.9.dtrace \
+	p177-2.dtrace \
+	p178-1b.dtrace \
+	p180-15.1.1.dtrace \
+	p184-3.dtrace \
+	p187.dtrace \
+	p191-2.dtrace
+
+examples-gries: $(DIST_DIR)/examples-gries.tar.gz
+
+$(DIST_DIR)/examples-gries.tar.gz: examples-gries.tar.gz
+	cp -pf $< $@
+	update-link-dates $(DIST_DIR)/index.html
+
+examples-gries.tar.gz: $(GRIES_FILES) README-examples-gries
+	mkdir examples-gries
+	cp -pf $(GRIES_FILES) examples-gries
+	cp -pf README-examples-gries examples-gries/README
+	tar czf examples-gries.tar.gz examples-gries
+	rm -rf examples-gries

@@ -1179,7 +1179,7 @@ def introduce_from_sequence_pass2(var_infos, var_new_values, seqidx):
     if not seq_var_info.is_derived:
         seq_len_inv = var_infos[seq_var_info.derived_len].invariant
         assert isinstance(seq_var_info, var_info)
-        len_min = seq_len_inv.min
+        len_min = seq_len_inv.min or 0
         # The point of this is not to do checks over every last irrelevant
         # element; just look at the one or two at the beginning and the end.
         len_min = min(2, len_min)
@@ -2480,9 +2480,9 @@ class single_scalar_numeric_invariant(invariant):
         # self.max = max(nums)
         self.min_justified = false
         self.max_justified = false
-        # Watch out: "None" sorts less than any number
-        if self.min == None:
-            self.max = None
+        # Watch out: "None" sorts greater than any number
+        if self.max == None:
+            self.min = None
         elif len(nums) < 3:
             self.min_justified = true
             self.max_justified = true
