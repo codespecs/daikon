@@ -514,8 +514,6 @@ public final class Daikon {
           show_progress = true;
         } else if (use_dataflow_hierarchy_SWITCH.equals(option_name)) {
           use_dataflow_hierarchy = false;
-          // TODO: make --nohierarchy compatible with equality optimization
-          use_equality_optimization = false;
         } else if (use_suppression_optimization_SWITCH.equals(option_name)) {
           use_suppression_optimization = true;
         } else if (suppress_cont_SWITCH.equals(option_name)) {
@@ -795,14 +793,22 @@ public final class Daikon {
   public static int dkconfig_progress_display_width = 80;
 
   /** A way to output FileIO progress information easily */
-  private final static Thread fileio_progress = new FileIOProgress();
+  private final static FileIOProgress fileio_progress = new FileIOProgress();
   static class FileIOProgress extends Thread {
     public FileIOProgress() { setDaemon(true); }
+    /**
+     * Clients should set this variable instead of calling Thread.stop(),
+     * which is deprecated.
+     **/
+    public boolean shouldStop = false;
     public void run() {
       if (dkconfig_progress_delay == -1)
         return;
       DateFormat df = DateFormat.getTimeInstance(/*DateFormat.LONG*/);
       while (true) {
+        if (shouldStop) {
+          return;
+        }
         String status = "[" + (df.format(new Date())) + "]: " + message();
         if (status.length() > dkconfig_progress_display_width - 1)
           status = status.substring(0, dkconfig_progress_display_width - 1);
@@ -865,7 +871,7 @@ public final class Daikon {
                          + UtilMDE.nplural(dtrace_files.size(), "file")
                          + ":");
       FileIO.read_data_trace_files(dtrace_files, all_ppts);
-      fileio_progress.stop();
+      fileio_progress.shouldStop = true;
       System.out.println();
       System.out.print("Creating implications "); // XXX untested code
       for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
@@ -952,12 +958,14 @@ public final class Daikon {
       for (Iterator i = allPpts.pptIterator(); i.hasNext(); ) {
         PptTopLevel ppt = (PptTopLevel) i.next();
 
-        // Skip points that are not leaves (anything not a numbered exit point)
         if (df_bottom_up) {
-          if (!ppt.ppt_name.isExitPoint())
-            continue;
-          if (ppt.ppt_name.isCombinedExitPoint())
-            continue;
+          // Skip points that are not leaves (anything not a numbered exit point)
+          if (use_dataflow_hierarchy) {
+            if (!ppt.ppt_name.isExitPoint())
+              continue;
+            if (ppt.ppt_name.isCombinedExitPoint())
+              continue;
+          }
         }
 
         // Create the initial equality sets
