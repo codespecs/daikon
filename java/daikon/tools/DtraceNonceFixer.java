@@ -1,0 +1,193 @@
+// DtraceNonceDoctor.java
+
+
+package daikon.tools;
+import java.io.*;
+import java.util.*;
+import utilMDE.*;
+
+
+
+/** This tool fixes a Dtrace file whose invocation nonces became inaccurate
+ * as a result of a "cat" command combining multiple dtrace files. Every
+ * dtrace file besides the first will have the invocation nonces increased
+ * by the "correct" amount, determined in the following way:
+ *
+ * <br><br>Keep track of all the nonces you see and maintain a record
+ * of the highest nonce observed.  The next time you see a '0' valued
+ * nonce that is not part of an EXIT program point, then you know you have
+ * reached the beginning of the next dtrace file.  Use that as the number
+ * to add to the remaining nonces and repeat.  This should only require
+ * one pass through the file.
+ *
+ *
+ *
+ * @author Lee Lin 4/8/2002 */
+
+
+public class DtraceNonceFixer {
+
+  public static void main (String[] args) {
+    if (args.length != 1) {
+      printUsage();
+      System.exit (0);
+    }
+
+    String outputFilename = (args[0].endsWith(".gz")) ?
+      (args[0] + "_fixed.gz") :
+      (args[0] + "_fixed");
+
+    try {
+      BufferedReader br = UtilMDE.BufferedFileReader (args[0]);
+      PrintWriter out =
+        new PrintWriter (UtilMDE.BufferedFileWriter (outputFilename));
+
+
+      // maxNonce - the biggest nonce ever found in the file
+      // correctionFactor - the amount to add to each observed nonce
+      int maxNonce = 0;
+      int correctionFactor = 0;
+      boolean first = true;
+      while (br.ready()) {
+        String nextInvo = grabNextInvocation (br);
+        int non = peekNonce (nextInvo);
+        // The first legit 0 nonce will have an ENTER and EXIT
+        // seeing a 0 means we have reached the next file
+        if (non == 0 && nextInvo.indexOf ("EXIT") == -1) {
+          if (first) {
+            // on the first file, keep the first nonce as 0
+            first = false;
+          }
+          else {
+            correctionFactor = maxNonce + 1;
+          }
+        }
+        int newNonce = non + correctionFactor;
+        maxNonce = (newNonce > maxNonce) ? newNonce : maxNonce;
+        if (non != -1) {
+          out.println (spawnWithNewNonce (nextInvo, newNonce));
+        }
+        else out.println (nextInvo);
+      }
+      out.flush();
+      out.close();
+
+      // now go back and add the OBJECT and CLASS invocations
+      String allFixedFilename = (outputFilename.endsWith(".gz")) ?
+        (args[0] + "_all_fixed.gz") :
+        (args[0] + "_all_fixed");
+
+      br = UtilMDE.BufferedFileReader (outputFilename);
+      out =
+        new PrintWriter (UtilMDE.BufferedFileWriter (allFixedFilename));
+
+      while (br.ready()) {
+        String nextInvo = grabNextInvocation (br);
+        int non = peekNonce (nextInvo);
+        // if there is no nonce at this point it must be an OBJECT
+        // or a CLASS invocation
+        if (non == -1) {
+          out.println (spawnWithNewNonce (nextInvo, ++maxNonce));
+        }
+        else {
+          out.println (nextInvo);
+        }
+      }
+
+      out.flush();
+      out.close();
+    }
+
+
+    catch (IOException e) {e.printStackTrace();}
+
+  }
+
+  /** Returns a String representing an invocation with the
+   * line directly under 'this_invocation_nonce' changed
+   * to 'newNone'.  If the String 'this_invocation_nonce'
+   * is not found, then creates a line 'this_invocation_nonce'
+   * directly below the program point name and a line containing
+   * newNonce directly under that. */
+  private static String spawnWithNewNonce (String invo, int newNonce) {
+
+
+    //    System.out.println (invo);
+
+    StringBuffer sb = new StringBuffer();
+    StringTokenizer st = new StringTokenizer (invo, "\n");
+
+    if (!st.hasMoreTokens()) {
+      return sb.toString();
+    }
+
+    // First line is the program point name
+    sb.append (st.nextToken()).append("\n");
+
+    // There is a chance that this is not really an invocation
+    // but a EOF shutdown hook instead.
+    if (!st.hasMoreTokens()) {
+      return sb.toString();
+    }
+
+    // See if the second line is the nonce
+    String line = st.nextToken();
+    if (line.equals ("this_invocation_nonce")) {
+      // modify the next line to include the new nonce
+      sb.append(line).append("\n").append(newNonce).append("\n");
+      // throw out the next token, because it will be the old nonce
+      st.nextToken();
+    }
+    else {
+      // otherwise create the required this_invocation_nonce line
+      sb.append ("this_invocation_nonce\n").append(newNonce).append("\n");
+    }
+
+    while (st.hasMoreTokens()) {
+      sb.append (st.nextToken()).append("\n");
+    }
+
+    return sb.toString();
+
+
+  }
+
+  /** Returns the nonce of the invocation 'invo' or -1 if the
+   * String 'this_invocation_nonce' is not found in invo */
+  private static int peekNonce (String invo) {
+    StringTokenizer st = new StringTokenizer(invo, "\n");
+    while (st.hasMoreTokens()) {
+      String line = st.nextToken();
+      if (line.equals ("this_invocation_nonce")) {
+        return Integer.parseInt (st.nextToken());
+      }
+
+    }
+    return -1;
+  }
+
+  /** Grabs the next invocation out of the dtrace buffer and returns
+   *  a String with endline characters preserved. This method will return
+   *  a single blank line if the original dtrace file contained consecutive
+   *  blank lines. */
+  private static String grabNextInvocation (BufferedReader br)
+    throws IOException {
+    StringBuffer sb = new StringBuffer();
+    while (br.ready()) {
+      String line = br.readLine();
+      if (line.trim().equals ("")) {
+        break;
+      }
+      sb.append(line.trim()).append ("\n");
+    }
+    return sb.toString();
+  }
+
+  private static void printUsage() {
+    System.out.println ("Usage: DtraceNonceFixer filename" +
+                        "\n\nfilename is the dtrace that will be modified so that the invocation nonces are consistent.  The output will be filename + \"_fixed\" and another output included nonces for OBJECT and CLASS invocations called filename + \"_all_fixed\" ");
+  }
+
+
+
+}
