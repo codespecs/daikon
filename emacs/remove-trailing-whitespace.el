@@ -45,8 +45,9 @@ unless the file is maintained by someone else."
 (defun remove-trailing-newlines ()
   "Remove trailing blank lines from the file.  Does not modify point."
   (interactive)
-  (goto-char (point-max))
-  (if (re-search-backward "\\([^\n]\n\\)\n+\\'" nil t)
-      (replace-match "\\1"))
+  (save-excursion
+    (goto-char (point-max))
+    (if (re-search-backward "\\([^\n]\n\\)\n+\\'" nil t)
+	(replace-match "\\1")))
   ;; Return nil so this can be used as a write-{file,contents}-hook
   nil)
