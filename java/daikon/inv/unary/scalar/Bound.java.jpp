@@ -5,155 +5,143 @@ The correct way to build the system is to run 'make'.
 #endif
 
 #if !(defined(LOWER) || defined(UPPER) || defined(ELTLOWER) || defined(ELTUPPER) || defined(LOWERFLOAT) || defined(UPPERFLOAT) || defined(ELTUPPERFLOAT) || defined(ELTLOWERFLOAT))
-#error "LOWER, UPPER, ELTLOWER, or ELTUPPER should be defined"
+#  error "LOWER, UPPER, ELTLOWER, or ELTUPPER should be defined"
 #endif
 
 #if (defined(LOWERFLOAT) || defined(UPPERFLOAT) || defined(ELTUPPERFLOAT) || defined(ELTLOWERFLOAT))
-#define ONEOFSCALAR OneOfFloat
-#define MEMBER MemberFloat
-#define SUBSEQUENCE SubSequenceFloat
+#  define BASE_FLOAT
+#  define ONEOFSCALAR OneOfFloat
+#  define MEMBER MemberFloat
+#  define SUBSEQUENCE SubSequenceFloat
+#  define INT(x) x ## Float
+#  define PRIMITIVE Double
+#  define LONGVALUE doubleValue()
 #else
-#define ONEOFSCALAR OneOfScalar
-#define MEMBER Member
-#define SUBSEQUENCE SubSequence
+#  define BASE_INT
+#  define ONEOFSCALAR OneOfScalar
+#  define MEMBER Member
+#  define SUBSEQUENCE SubSequence
+#  define INT(x) x
+#  define PRIMITIVE Long
+#  define LONGVALUE longValue()
 #endif
 
 #if defined(LOWER) || defined(ELTLOWER) || defined(LOWERFLOAT) || defined(ELTLOWERFLOAT)
-#define LT <
-#define LTE <=
-#define GT >
-#define GTE >=
-#define MIN1 core.min1
-#define MAX max
-#define LONGMAX Long.MAX_VALUE
-#define LONGMIN Long.MIN_VALUE
-#define PRIMITIVE Long
-#define LONGVALUE longValue()
-#if defined(LOWERFLOAT) || defined(ELTLOWERFLOAT)
-#define LONGMAX Double.MAX_VALUE
-#define LONGMIN Double.MIN_VALUE
-#define PRIMITIVE Double
-#define LONGVALUE doubleValue()
-#endif
-#define SIGNADJUST
-#define MINSTR "min"
-#define MAXSTR "max"
-#define GTSTR ">"
-#define MAX1 core.max1
-#define LOWERBOUNDCORE LowerBoundCore
-#if defined(LOWERFLOAT) || defined(ELTLOWERFLOAT)
-#define LOWERBOUNDCORE LowerBoundCoreFloat
-#endif
-#define ELTLOWERBOUND EltLowerBound
-#if defined(ELTLOWERFLOAT) || defined(LOWERFLOAT)
-#define ELTLOWERBOUND EltLowerBoundFloat
-#endif
-#define MINELT min_elt
-#define MAXELT max_elt
-
-#define MINELTLONG min_elt_long
-
-#if defined(LOWER)
-#define LOWERBOUND LowerBound
-#define LOWERBOUNDSTR "LowerBound"
-#define UPPERBOUND UpperBound
-#define ONEOF OneOfScalar
-#elif defined(LOWERFLOAT)
-#define LOWERBOUND LowerBoundFloat
-#define LOWERBOUNDSTR "LowerBoundFloat"
-#define UPPERBOUND UpperBoundFloat
-#define ONEOF OneOfFloat
-#elif defined(ELTLOWERFLOAT)
-#define LOWERBOUND EltLowerBoundFloat
-#define LOWERBOUNDSTR "EltLowerBoundFloat"
-#define UPPERBOUND EltUpperBoundFloat
-#define ONEOF EltOneOfFloat
-#else
-#define LOWERBOUND EltLowerBound
-#define LOWERBOUNDSTR "EltLowerBound"
-#define UPPERBOUND EltUpperBound
-#define ONEOF EltOneOf
-#endif
+#  define LT <
+#  define LTE <=
+#  define GT >
+#  define GTE >=
+#  define MIN1 core.min1
+#  define MAX max
+#  if defined(BASE_INT)
+#    define LONGMAX Long.MAX_VALUE
+#    define LONGMIN Long.MIN_VALUE
+#  else
+#    define LONGMAX Double.MAX_VALUE
+#    define LONGMIN Double.MIN_VALUE
+#  endif
+#  define SIGNADJUST
+#  define MINSTR "min"
+#  define MAXSTR "max"
+#  define GTSTR ">"
+#  define MAX1 core.max1
+#  define LOWERBOUNDCORE INT(LowerBoundCore)
+#  define ELTLOWERBOUND INT(EltLowerBound)
+#  define MINELT min_elt
+#  define MAXELT max_elt
+#  define MINELTLONG min_elt_long
+#  if defined(LOWER)
+#    define LOWERBOUND LowerBound
+#    define LOWERBOUNDSTR "LowerBound"
+#    define UPPERBOUND UpperBound
+#    define ONEOF OneOfScalar
+#  elif defined(LOWERFLOAT)
+#    define LOWERBOUND LowerBoundFloat
+#    define LOWERBOUNDSTR "LowerBoundFloat"
+#    define UPPERBOUND UpperBoundFloat
+#    define ONEOF OneOfFloat
+#  elif defined(ELTLOWERFLOAT)
+#    define LOWERBOUND EltLowerBoundFloat
+#    define LOWERBOUNDSTR "EltLowerBoundFloat"
+#    define UPPERBOUND EltUpperBoundFloat
+#    define ONEOF EltOneOfFloat
+#  else
+#    define LOWERBOUND EltLowerBound
+#    define LOWERBOUNDSTR "EltLowerBound"
+#    define UPPERBOUND EltUpperBound
+#    define ONEOF EltOneOf
+#  endif
 #elif defined(UPPER) || defined(ELTUPPER) || defined(UPPERFLOAT) || defined(ELTUPPERFLOAT)
-#define LT >
-#define LTE >=
-#define GT <
-#define GTE <=
-#define MIN1 core.max1
-#define MAX min
-#define LONGMAX Long.MIN_VALUE
-#define LONGMIN Long.MAX_VALUE
-#define PRIMITIVE Long
-#define LONGVALUE longValue()
-#if defined(UPPERFLOAT) || defined(ELTUPPERFLOAT)
-#define LONGMAX Double.MIN_VALUE
-#define LONGMIN Double.MAX_VALUE
-#define PRIMITIVE Double
-#define LONGVALUE doubleValue()
-#endif
-#define SIGNADJUST -
-#define MINSTR "max"
-#define MAXSTR "min"
-#define GTSTR "<"
-#define MAX1 core.min1
-#define LOWERBOUNDCORE UpperBoundCore
-#if defined (UPPERFLOAT) || defined(ELTUPPERFLOAT)
-#define LOWERBOUNDCORE UpperBoundCoreFloat
-#endif
-#define ELTLOWERBOUND EltUpperBound
-
-#if defined(ELTUPPERFLOAT) || defined(UPPERFLOAT)
-#define ELTLOWERBOUND EltUpperBoundFloat
-#endif
-#define MINELT max_elt
-#define MAXELT min_elt
-
-#define MINELTLONG max_elt_long
-#if defined(UPPER)
-#define LOWERBOUND UpperBound
-#define LOWERBOUNDSTR "UpperBound"
-#define UPPERBOUND LowerBound
-#define ONEOF OneOfScalar
-#elif defined(UPPERFLOAT)
-#define LOWERBOUND UpperBoundFloat
-#define LOWERBOUNDSTR "UpperBoundFloat"
-#define UPPERBOUND LowerBoundFloat
-#define ONEOF OneOfFloat
-#elif defined(ELTUPPERFLOAT)
-#define LOWERBOUND EltUpperBoundFloat
-#define LOWERBOUNDSTR "EltUpperBoundFloat"
-#define ONEOF EltOneOfFloat
-#define UPPERBOUND EltLowerBound
+#  define LT >
+#  define LTE >=
+#  define GT <
+#  define GTE <=
+#  define MIN1 core.max1
+#  define MAX min
+#  if defined(UPPER) || defined(ELTUPPER)
+#    define LONGMAX Long.MIN_VALUE
+#    define LONGMIN Long.MAX_VALUE
+#  elif defined(UPPERFLOAT) || defined(ELTUPPERFLOAT)
+#    define LONGMAX Double.MIN_VALUE
+#    define LONGMIN Double.MAX_VALUE
+#  endif
+#  define SIGNADJUST -
+#  define MINSTR "max"
+#  define MAXSTR "min"
+#  define GTSTR "<"
+#  define MAX1 core.min1
+#  define LOWERBOUNDCORE INT(UpperBoundCore)
+#  define ELTLOWERBOUND INT(EltUpperBound)
+#  define MINELT max_elt
+#  define MAXELT min_elt
+#  define MINELTLONG max_elt_long
+#  if defined(UPPER)
+#    define LOWERBOUND UpperBound
+#    define LOWERBOUNDSTR "UpperBound"
+#    define UPPERBOUND LowerBound
+#    define ONEOF OneOfScalar
+#  elif defined(UPPERFLOAT)
+#    define LOWERBOUND UpperBoundFloat
+#    define LOWERBOUNDSTR "UpperBoundFloat"
+#    define UPPERBOUND LowerBoundFloat
+#    define ONEOF OneOfFloat
+#  elif defined(ELTUPPERFLOAT)
+#    define LOWERBOUND EltUpperBoundFloat
+#    define LOWERBOUNDSTR "EltUpperBoundFloat"
+#    define ONEOF EltOneOfFloat
+#    define UPPERBOUND EltLowerBound
+#  else
+#    define LOWERBOUND EltUpperBound
+#    define LOWERBOUNDSTR "EltUpperBound"
+#    define UPPERBOUND EltLowerBound
+#    define ONEOF EltOneOf
+#  endif
 #else
-#define LOWERBOUND EltUpperBound
-#define LOWERBOUNDSTR "EltUpperBound"
-#define UPPERBOUND EltLowerBound
-#define ONEOF EltOneOf
-#endif
-#else
-#error "LOWER, UPPER, ELTLOWER, or ELTUPPER should be defined"
+#  error "LOWER, UPPER, ELTLOWER, or ELTUPPER should be defined"
 #endif
 #if defined(LOWER) || defined(UPPER) || defined(LOWERFLOAT) || defined(UPPERFLOAT)
-#define SINGLESCALAR SingleScalar
-#define SCALAR scalar
-#define LONG long
-#if defined(LOWERFLOAT) || defined(UPPERFLOAT)
-#define LONG double
-#define SINGLESCALAR SingleFloat
-#endif
+#  define SCALAR scalar
+#  if defined(LOWER) || defined(UPPER)
+#    define LONG long
+#    define SINGLESCALAR SingleScalar
+#  else
+#    define LONG double
+#    define SINGLESCALAR SingleFloat
+#  endif
 #else
-#define SINGLESCALAR SingleSequence
-#define SCALAR sequence
-#define LONG long[]
-#if defined(ELTUPPERFLOAT) || defined(ELTLOWERFLOAT)
-#define SINGLESCALAR SingleFloatSequence
-#define LONG double[]
-#endif
+#  define SCALAR sequence
+#  if defined(ELTLOWER) || defined(ELTUPPER)
+#    define LONG long[]
+#    define SINGLESCALAR SingleSequence
+#  elif defined(ELTLOWERFLOAT) || defined(ELTUPPERFLOAT)
+#    define LONG double[]
+#    define SINGLESCALAR SingleFloatSequence
+#  endif
 #endif
 #if (defined(UPPERFLOAT) || defined(ELTUPPERFLOAT))
-#define MINELTLONG max_elt_double
+#  define MINELTLONG max_elt_double
 #elif (defined(LOWERFLOAT) || defined(ELTLOWERFLOAT))
-#define MINELTLONG min_elt_double
+#  define MINELTLONG min_elt_double
 #endif
 
 

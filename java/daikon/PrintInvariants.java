@@ -456,7 +456,7 @@ public class PrintInvariants {
     equal_vars.add(vi);
 
     if (debugPrintEquality.isDebugEnabled()) {
-      debugPrintEquality.debug ("Testing equality for " + vi.name.name());
+      debugPrintEquality.debug("Testing equality for " + vi.name.name());
     }
 
 
@@ -471,10 +471,9 @@ public class PrintInvariants {
       for (Iterator i = equal_vars.iterator(); i.hasNext(); ) {
         VarInfo var = (VarInfo) i.next();
         if (debugPrintEquality.isDebugEnabled()) {
-          debugPrintEquality.debug (" testing derivedParamAndUnint " + var.name.name());
+          debugPrintEquality.debug(" testing derivedParamAndUnint " + var.name.name());
         }
         if (var.isDerivedParamAndUninteresting()) {
-
           i.remove();
         }
       }
@@ -514,7 +513,7 @@ public class PrintInvariants {
   public static void print_equality_invariants(VarInfo vi, PrintWriter out, int invCounter, PptTopLevel ppt)
   {
     if (debugPrintEquality.isDebugEnabled()) {
-      debugPrintEquality.debug ("Attempting to print equality for: " + vi.name.name());
+      debugPrintEquality.debug("Attempting to print equality for: " + vi.name.name());
     }
 
     // switch commented lines to include obviously equal in output
@@ -527,7 +526,7 @@ public class PrintInvariants {
       for (Iterator j = equal_vars.iterator(); j.hasNext();) {
         sb.append ("  " + ((VarInfo) j.next()).name.name());
       }
-      debugPrintEquality.debug (sb);
+      debugPrintEquality.debug(sb);
     }
 
     // Necessary for [INCR].
@@ -773,7 +772,7 @@ public class PrintInvariants {
     } else if (Daikon.output_style == OutputFormat.IOA) {
       String invName = get_ioa_invname (invCounter, ppt);
       if (debugPrint.isDebugEnabled()) {
-        debugPrint.debug ("Printing normal for " + invName + " with inv " +
+        debugPrint.debug("Printing normal for " + invName + " with inv " +
                           inv.getClass().getName());
       }
 
@@ -793,7 +792,7 @@ public class PrintInvariants {
       }
       inv_rep += rawOutput;
       if (PptTopLevel.debug.isDebugEnabled()) {
-        PptTopLevel.debug.debug (inv.repr());
+        PptTopLevel.debug.debug(inv.repr());
       }
     } else if (Daikon.output_style == OutputFormat.JAVA) {
       inv_rep = inv.format_using(Daikon.output_style);
@@ -933,13 +932,13 @@ public class PrintInvariants {
         {
           invCounter++;
           if (debugPrintEquality.isDebugEnabled()) {
-            debugPrintEquality.debug ("Equality set for ppt "  + ppt.name + " " + vi.name.name());
+            debugPrintEquality.debug("Equality set for ppt "  + ppt.name + " " + vi.name.name());
             /* [INCR]
             StringBuffer sb = new StringBuffer();
             for (Iterator j = vi.equalTo().iterator(); j.hasNext();) {
               sb.append ("  " + ((VarInfo) j.next()).name.name());
             }
-            debugPrintEquality.debug (sb);
+            debugPrintEquality.debug(sb);
             */ // [INCR]
           }
           print_equality_invariants(vi, out, invCounter, ppt);

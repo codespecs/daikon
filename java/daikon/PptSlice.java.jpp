@@ -253,7 +253,7 @@ public final class PPTSLICE1
 #elif defined(ARITY2)
     int result = tm_total[1] + tm_total[2] + tm_total[3];
 #elif defined(ARITY3)
-     int result = tm_total[1] + tm_total[2] + tm_total[3]
+    int result = tm_total[1] + tm_total[2] + tm_total[3]
        + tm_total[4] + tm_total[5] + tm_total[6] + tm_total[7];
 #endif
     Assert.assertTrue(result >= 0);

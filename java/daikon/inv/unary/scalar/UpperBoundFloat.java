@@ -52,16 +52,16 @@ public class UpperBoundFloat
    **/
   public static long dkconfig_maximal_interesting = 2;
 
-  public UpperBoundCoreFloat  core;
+  public  UpperBoundCoreFloat   core;
 
   private UpperBoundFloat (PptSlice ppt) {
     super(ppt);
-    core = new UpperBoundCoreFloat (this);
+    core = new  UpperBoundCoreFloat  (this);
   }
 
   protected Object clone() {
     UpperBoundFloat  result = (UpperBoundFloat) super.clone();
-    result.core = (UpperBoundCoreFloat) core.clone();
+    result.core = ( UpperBoundCoreFloat  ) core.clone();
     result.core.wrapper = result;
     return result;
   }
@@ -163,7 +163,7 @@ public class UpperBoundFloat
       {
         PptSlice1 other_slice = pptt.findSlice(vi);
         if (other_slice != null) {
-          EltUpperBoundFloat  eb = EltUpperBoundFloat.find(other_slice);
+           EltUpperBoundFloat   eb =  EltUpperBoundFloat  .find(other_slice);
           if ((eb != null)
               && eb.enoughSamples()
               && eb. core.max1  == core.max1 ) {

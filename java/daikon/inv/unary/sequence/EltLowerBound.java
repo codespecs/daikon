@@ -52,16 +52,16 @@ public class EltLowerBound
    **/
   public static long dkconfig_maximal_interesting = 2;
 
-  public LowerBoundCore  core;
+  public  LowerBoundCore    core;
 
   private EltLowerBound (PptSlice ppt) {
     super(ppt);
-    core = new LowerBoundCore (this);
+    core = new  LowerBoundCore   (this);
   }
 
   protected Object clone() {
     EltLowerBound  result = (EltLowerBound) super.clone();
-    result.core = (LowerBoundCore) core.clone();
+    result.core = ( LowerBoundCore   ) core.clone();
     result.core.wrapper = result;
     return result;
   }
@@ -217,7 +217,7 @@ public class EltLowerBound
       {
         PptSlice1 other_slice = pptt.findSlice(vi);
         if (other_slice != null) {
-          EltLowerBound  eb = EltLowerBound.find(other_slice);
+           EltLowerBound    eb =  EltLowerBound   .find(other_slice);
           if ((eb != null)
               && eb.enoughSamples()
               && eb. core.min1  == core.min1 ) {

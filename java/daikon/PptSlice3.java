@@ -121,7 +121,7 @@ public final class PptSlice3
 
   public int num_mod_non_missing_samples() {
 
-     int result = tm_total[1] + tm_total[2] + tm_total[3]
+    int result = tm_total[1] + tm_total[2] + tm_total[3]
        + tm_total[4] + tm_total[5] + tm_total[6] + tm_total[7];
 
     Assert.assertTrue(result >= 0);

@@ -4,7 +4,7 @@ You first need to preprocess it with cpp, the C preprocessor.
 The correct way to build the system is to run 'make'.
 #endif
 
-#if !(defined(SCALAR) || defined(STRING))
+#if !(defined(SCALAR) || defined(FLOAT) || defined(STRING))
 #error "One of SCALAR or STRING should be defined"
 #endif
 
