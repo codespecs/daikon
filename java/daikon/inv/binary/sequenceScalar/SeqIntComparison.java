@@ -182,9 +182,11 @@ public final class SeqIntComparison extends SequenceScalar {
       VarInfo vi = pptt.var_infos[i];
       if (SubSequence.isObviousDerived(seqvar, vi)) {
         PptSlice2 other_slice = pptt.findSlice_unordered(vi, sclvar());
-        SeqIntComparison other_sic = SeqIntComparison.find(other_slice);
-        if ((other_sic != null) && other_sic.justified()) {
-          return true;
+        if (other_slice != null) {
+          SeqIntComparison other_sic = SeqIntComparison.find(other_slice);
+          if ((other_sic != null) && other_sic.justified()) {
+            return true;
+          }
         }
       }
     }
