@@ -1105,6 +1105,11 @@ public final class TestUtilMDE extends TestCase {
     assertTrue(MathMDE.gcd(25, 10) == 5);
     assertTrue(MathMDE.gcd(17, 25) == 1);
     assertTrue(MathMDE.gcd(25, 17) == 1);
+    assertTrue(MathMDE.gcd(0,10) == 10);
+    assertTrue(MathMDE.gcd(10,0) == 10);
+    assertTrue(MathMDE.gcd(25, -10) == 5);
+    assertTrue(MathMDE.gcd(-25, -10) == 5);
+    assertTrue(MathMDE.gcd(-25, 10) == 5);
 
     // int gcd(int[] a)
     assertTrue(MathMDE.gcd(new int[] {2, 50}) == 2);
