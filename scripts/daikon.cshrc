@@ -21,3 +21,8 @@ set path = ($DAIKONPARENT/daikon/bin $path)
 ## rt.jar on your classpath.  Set the directory appropriately.  If you do
 ## not wish to use dfej, you may comment out this line.
 setenv CLASSPATH ${CLASSPATH}:/g2/jdk1.3.1/jre/lib/rt.jar
+
+## Indicates where Ajax should find its helper files such as
+## main-harness.csal, tweaked-classes.zip, etc.  Given a Java program, Ajax
+## determines which variables can be sensibly compared to one another.
+setenv AJAX_DIR $DAIKONPARENT/daikon/java/ajax-ship
