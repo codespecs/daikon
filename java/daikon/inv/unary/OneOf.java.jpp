@@ -1197,17 +1197,21 @@ public final class ONEOFSCALAR
 
 #elif defined(IS_SEQUENCE)
 
+  #if defined(SEQUENCE)
+
+    result = "(\"oneOf.java.jpp: SEQUENCE unimplemented\" != null)";
+
+  #else
+
     result = "";
     for (int i=0; i<num_elts; i++) {
       if (i != 0) { result += " || "; }
 
-#if defined(SEQUENCE)
-      String seq = "new " + type + "[] { ";
-#elif defined(STRINGSEQUENCE)
+    #if defined(STRINGSEQUENCE)
       String seq = "new String[] { ";
-#elif defined(FLOATSEQUENCE)
+    #elif defined(FLOATSEQUENCE)
       String seq = "new double[] { ";
-#endif
+    #endif
       for(int j = 0 ; j < elts[i].length ; j++) {
         if (j != 0) { seq += ", "; }
         seq = seq + TOSTRINGELEMENT(elts[i][j]);
@@ -1216,6 +1220,7 @@ public final class ONEOFSCALAR
 
       result += "quant.Quant.pairwiseEqual(" + varname + ", " + seq + ")";
     }
+  #endif
 
 #endif
 
