@@ -775,11 +775,35 @@ simply run <tt>make</tt> with the desired file as the target. <p> <ol>
     incremented.  In this case, simply edit <tt>doc/VERSION</tt> by
     hand back to the correct version number before rebuilding. <p>
 
+    <li> Build a current version of javadoc and place on the website <p>
+    
+    <code>
+        cd $inv/java <br>
+        make 'JAVADOC_DEST=/home/httpd/html/daikon/download/jdoc_v2' doc <br>
+    </code> <P>
+
+    <li> Build, checkout, create a tarfile/jdoc for V3, and 
+    update the website <P>
+
+    <code>
+        make use-ver3 <br>
+        cvs update <br>
+        cd $inv/java <br>
+        make <br>
+        make 'JAVADOC_DEST=/home/httpd/html/daikon/download/jdoc_v3' doc <br>
+        cd $inv/tests <br>
+        make diffs <br>        
+        cd $inv <br>
+        make daikon.tar.gz <br>
+        cp daikon.tar.gz /home/httpd/html/daikon/download/daikon_v3.tar.gz <br>
+        update-link-dates /home/httpd/html/daikon/index.html <br>
+    </code> <p>
+
     <li> Commit any changes back to CVS <p>
 
     <code>
         cd $inv <br>
-        cvs commit -m "Change version to &lt;X.Y.Z>" <br>
+        cvs -q commit -m "Change version to &lt;X.Y.Z>" <br>
     </code>
 
     <li> Send mail to the daikon-announce mailing list.  There are sample
