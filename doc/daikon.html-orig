@@ -664,9 +664,20 @@ Running code instrumented by dfej can result in very large
 <tt>.dtrace</tt> files.  This can be a problem because writing the large
 files can slow the target programs substantially, because the large files
 may fill up your disk, or because Daikon is unable to process the large
-files.  There are three solutions to this problem.
+files.  There are several solutions to this problem.
 
 <ol>
+  <li>
+    You can terminate the instrumented program when it has created a
+    sufficiently large <tt>.dtrace</tt> file.  If you interrupr the program
+    while it is in the middle of writing a record to the <tt>.dtrace</tt>
+    file, the last record may be only partially written.  Use the
+    <tt>invariants/scripts/trace-untruncate</tt> script to remove the last,
+    possibly partial, record from the file:
+    <pre>
+      trace-untruncate <em>myfile</em>.dtrace
+    </pre>
+    modifies <tt>myfile.dtrace</tt> in place to remove the last record.
   <li>
     If you wish to instrument fewer methods, you can use the 
     <pre>
@@ -680,9 +691,10 @@ files.  There are three solutions to this problem.
   <li>
     You can pare down an existing <tt>.dtrace</tt> file using the
     <tt>invariants/scripts/trace-purge-fns.pl</tt> and
-    <tt>trace-purge-vars.pl</tt> scripts.
-    These remove (or retain) certain program points, or certain variables, from
-    .dtrace files.  Removing program points obviously makes Daikon ignore them;
+    <tt>trace-purge-vars.pl</tt> scripts These remove (or retain) certain
+    program points, or certain variables, from <tt>.dtrace</tt> files; see
+    their documentation (at the top of the files) for details.  Removing
+    program points obviously prevents Daikon from considering them;
     removing variables can eliminate certain large uses of memory or keep
     Daikon from doing uninteresting comparisons.
   <li>
@@ -691,9 +703,9 @@ files.  There are three solutions to this problem.
       -r <i>PPT_REGEXP</i>
     </pre>
     argument.  (Run "<tt>java daikon.Daikon</tt>" to see a list of
-    arguments.)  With the -r flag, only program points matching the regular
-    expression are processed.  This can take the place of the
-    trace-purge-fns.pl script.
+    arguments.)  With the <tt>-r</tt> flag, only program points matching
+    the regular expression are processed.  This can take the place of the
+    <tt>trace-purge-fns.pl</tt> script.
 </ol>
 <p>
 
