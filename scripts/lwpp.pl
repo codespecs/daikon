@@ -11,6 +11,52 @@
 
 # Perl port of a similar C++ program written by Adam Czeisler
 
+# This program is complicated for several reasons.  First, we need to
+# "translate" between dfec and lackwit.  We need to massage the output
+# of dfec before it is sent to lackwit, and we need to massage the
+# output of lackwit before writing it to the decls file.  Second,
+# there are some bugs and missing features in lackwit we need to work
+# around.  Last, lackwit outputs comparability as a list of comparable
+# variables.  Daikon needs to have variables grouped into equivalence
+# classes.  We must translate from lackwit's notion of comparability
+# to Daikon's.
+
+# ARRAYS/POINTERS: In C, there is almost no difference between a
+# pointer to a single thing, and an array of things.  As far as I can
+# tell, Lackwit treats pointers and arrays identically.  However,
+# Lackwit does not have very good support for arrays.  We need to
+# determine three different comparabilities for an array: the
+# comparability of the pointer, the comparability of the elements, and
+# the comparability of the indices.  Assume we have an array a[].
+
+# Lackwit can find pointer comparability fine.  Just query for "a".
+
+# Lackwit has a bug when finding element comparability.  If you query
+# for "a[]" or "*a", you will usually get the right answer, except
+# when the comparability crosses procedure boundaries.  Look at the
+# lackwit.c file in dfec-tests/lackwit.  On its own, lackwit gets the
+# right answer for array_elements, but the wrong answer for
+# call_array_elements.  To fix this, we add the variable "a_element"
+# to the source code before instrumenting it.  Expressions in the
+# program are changed from "a[0] = b" to "a_element = b, a[0] =
+# a_element".  To find the comparability of "a[]", we actually query
+# lackwit for "a_element".  Then, the results must be processed to
+# convert "a_element" back to "a[]".
+
+# Lackwit cannot find array index comparability.  We add the variable
+# "a_index" to the source code before instrumenting it.  Expressions
+# in the program are changed from "a[0] = b" to "a_index = 0,
+# a[a_index] = b".  We query lackwit for "a_index" to find the
+# comparability of the variables used to index "a".  We currently only
+# handle single-dimensional arrays.
+
+# MISC: Lackwit doesn't know about procedure returns, so again we
+# added a dummy variable named "lh_return_value"
+
+# We must remove the leading :: from global variables in the decls
+# file, since lackwit can't handle ::.
+
+
 use English;
 use strict;
 $WARNING = 1;
