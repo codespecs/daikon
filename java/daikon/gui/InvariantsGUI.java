@@ -655,8 +655,7 @@ class InvariantTablesPanel implements TreeSelectionListener {
     tablePanel.add( Box.createRigidArea( new Dimension( 10, 10 )));
     tablePanel.add( headingPanel );
     tablePanel.add( Box.createRigidArea( new Dimension( 10, 10 )));
-    if (table.getRowCount() > 0)
-      tablePanel.add( scrollPane );
+    tablePanel.add( scrollPane );
     tablePanel.setBorder( BorderFactory.createCompoundBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ),
 							      BorderFactory.createEtchedBorder()));
     panel.add( tablePanel );
@@ -672,10 +671,7 @@ class InvariantTablesPanel implements TreeSelectionListener {
       InvariantTableModel tableModel = (InvariantTableModel) tableModels.get( i );
       tableModel.updateInvariantList( invariantFilters );
       JPanel panel = (JPanel) tables.get( i );
-
-      if ((panel.getComponent( panel.getComponentCount() - 1 )).getClass() == JScrollPane.class)
-	resizeScrollPane( (JScrollPane) panel.getComponent( panel.getComponentCount() - 1 ));
-
+      resizeScrollPane( (JScrollPane) panel.getComponent( panel.getComponentCount() - 1 ));
       tableHeights.set( i, new Integer( (int) panel.getPreferredSize().getHeight()));
     }
     panel.repaint();
