@@ -20,6 +20,7 @@ endif
 
 # Remove references to /g4 after AFS move is complete
 setenv PATH /usr/local/bin:${PATH}:/g4/projects/invariants/binaries:/afs/csail/group/pag/projects/invariants/binaries:/g4/projects/invariants/tools/escjava/current/bin
+setenv PATH `echo $PATH | ${INV}/scripts/path-remove.pl`
 
 source ${INV}/scripts/daikon.cshrc
 
