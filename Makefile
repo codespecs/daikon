@@ -254,6 +254,7 @@ staging: doc/CHANGES
 	$(MAKE) mingw
 	cp $(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe \
 	  $(STAGING_DIST)/download/binaries/dfej.exe
+	cd $(STAGING_DIST)/download/binaries && zip dfej dfej.exe
 	# all distributed files should be readonly
 	chmod -R -w $(STAGING_DIST)
 	# compare new list of files in tarfile to previous list
