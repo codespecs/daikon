@@ -596,7 +596,7 @@ public final class OutputFormat
 
     /** This class stores information on a given program point. */
 
-    public static class Definition {
+    public static class Definition implements Cloneable {
       String setrelation="";
       String modelrule="";
       String globaldecls="";
@@ -621,15 +621,29 @@ public final class OutputFormat
       }
 
       public Object clone() {
-        Definition newd=new Definition();
-        newd.setrelation=setrelation;
-        newd.modelrule=modelrule;
-        newd.globaldecls=globaldecls;
-        newd.generatespecial=generatespecial;
-        newd.rangetable.putAll(rangetable);
-        newd.globaltable.addAll(globaltable);
+        Definition newd;
+        try {
+          newd=(Definition)super.clone();
+        } catch (CloneNotSupportedException e) {
+          // Can't happen because Definition directly extends Object
+          throw new Error("This can't happen: " + e.toString());
+        }
+        rangetable = (Hashtable) rangetable.clone();
+        globaltable = (HashSet) globaltable.clone();
         return newd;
       }
+
+      // Old implementation
+      // public Object clone() {
+      //   Definition newd=new Definition();
+      //   newd.setrelation=setrelation;
+      //   newd.modelrule=modelrule;
+      //   newd.globaldecls=globaldecls;
+      //   newd.generatespecial=generatespecial;
+      //   newd.rangetable.putAll(rangetable);
+      //   newd.globaltable.addAll(globaltable);
+      //   return newd;
+      // }
     }
   }
 }
