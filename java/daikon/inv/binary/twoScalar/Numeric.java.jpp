@@ -384,6 +384,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * COMMENT_TXT.  Prints as ' VAR1 % VAR2 == 0'
    */
   public static class Divides extends CLASSNAME {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20040113L;
 
     protected Divides (PptSlice ppt, boolean swap) {
       super(ppt, swap);
@@ -425,6 +429,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * COMMENT_TXT.  Prints as ' VAR1 = VAR2**2'
    **/
   public static class Square extends CLASSNAME {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20040113L;
 
     protected Square (PptSlice ppt, boolean swap) {
       super(ppt, swap);
@@ -455,6 +463,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * COMMENT_TXT. Prints as ' VAR1 = ~VAR2 '
    **/
   public static class BitwiseComplement extends CLASSNAME {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20040113L;
 
     protected BitwiseComplement (PptSlice ppt) {
       super(ppt, false);
@@ -487,6 +499,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * COMMENT_TXT. Prints as ' VAR1 = VAR2 | VAR1 '
    **/
   public static class BitwiseSubset extends CLASSNAME {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20040113L;
 
     protected BitwiseSubset (PptSlice ppt, boolean swap) {
       super(ppt, swap);
