@@ -4,7 +4,7 @@
 
 IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps gui-ControlPanel.jpg gui-ControlPanel.eps gui-InvariantsDisplay-small.jpg gui-InvariantsDisplay-small.eps context-gui.jpg context-gui.eps
 IMAGE_PARTIAL_PATHS := $(addprefix images/,$(IMAGE_FILES))
-DOC_FILES_NO_IMAGES := Makefile daikon.texinfo daikon.ps daikon.pdf daikon.html CHANGES
+DOC_FILES_NO_IMAGES := Makefile daikon.texinfo config-options.texinfo invariants-doc.texinfo daikon.ps daikon.pdf daikon.html CHANGES
 DOC_FILES := ${DOC_FILES_NO_IMAGES} $(IMAGE_PARTIAL_PATHS)
 DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 EMACS_PATHS := emacs/daikon-context-gui.el
@@ -66,7 +66,7 @@ JUNIT_VERSION := junit3.8.1
 # for "chgrp"
 INV_GROUP := invariants
 
-RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name dfej -o -name dfej-linux -o -name dfej-linux-x86 -o -name 'dfej-solaris*' -o -name daikon-java -o -name daikon-output -o -name core -o -name '*.bak' -o -name '*.rej' -o -name '*.old' -o -name '.nfs*' -o -name '\#*\#' \) -print`
+RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name dfej -o -name dfej-linux -o -name dfej-linux-x86 -o -name 'dfej-solaris*' -o -name 'dfej-dynamic' -o -name daikon-java -o -name daikon-output -o -name core -o -name '*.bak' -o -name '*.rej' -o -name '*.old' -o -name '.nfs*' -o -name '\#*\#' \) -print`
 
 
 ## Examples of better ways to get the lists:
@@ -164,10 +164,10 @@ cvs-test:
 
 # Main distribution
 
-# The "dist" target not only creates .tar files, but also installs a new
-# distribution on the website, updates webpages, tests the distribution,
-# etc.  If you only want to make a new .tar file, do "make
-# daikon.tar".
+# The "dist" target not only creates .tar files, but also increments the
+# version number and release date, installs a new distribution on the
+# website, updates webpages, tests the distribution, etc.  If you only want
+# to make a new .tar file, do "make daikon.tar" or "make daikon.tar.gz".
 # The "MAKEFLAGS=" argument discards any "-k" argument.  (It doesn't seem
 # to work, so supply explicit "-S" flag instead.)
 dist:
@@ -177,7 +177,8 @@ dist:
 # (Must make it first in order to test it!)
 dist-and-test: dist-notest test-the-dist
 	@echo "*****"
-	@echo "Don't forget to send mail to daikon-announce."
+	@echo "Don't forget to send mail to daikon-announce and commit documentation changes."
+	@echo "(See Sample messages in ~mernst/research/invariants/mail/daikon-lists.mail.)"
 	@echo "*****"
 
 dist-ensure-directory-exists: $(DIST_DIR)
@@ -192,10 +193,13 @@ dist-notest: dist-ensure-directory-exists doc/CHANGES update-doc-dist-date-and-v
 	$(MAKE) update-dist-dir
 	$(MAKE) -n dist-dfej
 
-doc/CHANGES: doc/daikon.texinfo
-	@echo "** doc/CHANGES file is not up-to-date with respect to doc/daikon.texinfo"
-	@echo "** doc/CHANGES must be modified by hand:  try"
+doc/CHANGES: doc/daikon.texinfo doc/config-options.texinfo doc/invariants-doc.texinfo
+	@echo "** doc/CHANGES file is not up-to-date with respect to documentation files."
+	@echo "** doc/CHANGES must be modified by hand."
+	@echo "** Try:"
 	@echo "**   diff -u /home/httpd/html/daikon/dist/doc/daikon.texinfo doc/daikon.texinfo"
+	@echo "**   diff -u /home/httpd/html/daikon/dist/doc/config-options.texinfo doc/config-options.texinfo"
+	@echo "**   diff -u /home/httpd/html/daikon/dist/doc/invariants-doc.texinfo doc/invariants-doc.texinfo"
 	@echo "** (or maybe  touch doc/CHANGES )."
 	@exit 1
 
@@ -603,7 +607,7 @@ showvars:
 	@echo "DAIKON_JAVA_FILES = " $(DAIKON_JAVA_FILES)
 	@echo "AJAX_JAVA_FILES = " $(AJAX_JAVA_FILES)
 	@echo "WWW_FILES = " $(WWW_FILES)
-
+	@echo "DIST_DIR_PATHS = " $(DIST_DIR_PATHS)
 
 
 
