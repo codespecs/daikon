@@ -67,7 +67,7 @@ public final class SeqIndexNonEqual extends SingleSequence {
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
   }
 
   public void add_modified(long [] a, int count) {
@@ -143,9 +143,12 @@ public final class SeqIndexNonEqual extends SingleSequence {
       VarInfo vi = pptt.var_infos[i];
       if (SubSequence.isObviousDerived(seqvar, vi)) {
         PptSlice1 other_slice = pptt.findSlice(vi);
-        SeqIndexNonEqual other_sine = SeqIndexNonEqual.find(other_slice);
-        if ((other_sine != null) && other_sine.justified()) {
-          return true;
+        // I'm not sure exactly how this can be null, but it can.
+        if (other_slice != null) {
+          SeqIndexNonEqual other_sine = SeqIndexNonEqual.find(other_slice);
+          if ((other_sine != null) && other_sine.justified()) {
+            return true;
+          }
         }
       }
     }
