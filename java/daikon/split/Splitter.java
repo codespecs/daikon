@@ -1,5 +1,7 @@
 package daikon.split;
 
+import daikon.*;
+
 /**
  * A Splitter represents a test that can be used to separate all samples
  * into two parts.  For instance, a Splitter might represent the condition

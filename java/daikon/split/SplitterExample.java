@@ -1,5 +1,7 @@
 package daikon.split;
 
+import daikon.*;
+
 // This splitter tests the condition "X>0".
 public class SplitterExample extends Splitter {
 
