@@ -396,7 +396,7 @@ public final class PPTSLICE1
     } else {
       ValueTracker.ValueTrackerOneArray vt1a = (ValueTracker.ValueTrackerOneArray) values_cache;
       if (vt1a == null) {
-        // Shouldn't this be the max value rather than zero??
+        // instantiate_invariants has not yet been called
         return 0;
       } else {
         return vt1a.num_no_dup_values();
@@ -413,7 +413,7 @@ public final class PPTSLICE1
     } else {
       ValueTracker.ValueTrackerOneArray vt1a = (ValueTracker.ValueTrackerOneArray) values_cache;
       if (vt1a == null) {
-        // Shouldn't this be the max value rather than zero??
+        // instantiate_invariants has not yet been called
         return 0;
       } else {
         return vt1a.num_seq_index_values();
