@@ -479,15 +479,17 @@ When "a" is an array, then
 
 <h3><a name="gui">Using the GUI</a></h3>
 
-By default, Daikon outputs a long textual list of invariants.  Sometimes it is
-difficult to find the invariants you want, and sometimes you are overwhelmed
-by the sheer number of invariants.  There is now a graphical user interface
-(GUI) designed to make the task of browsing invariants easier.  Using the GUI,
-you can look at invariants for only the methods and program points you care
-about.  You can also filter invariants (information on this will be added at
-a later point in time).  <p>
+By default, Daikon outputs a long textual list of invariants.  Sometimes 
+one is overwhelmed by the sheer number of invariants.  The graphical user
+interface (GUI) designed to make the task of browsing invariants easier.
+The GUI contains a tree which hierarchically organizes program points
+according to their class and method.  Using the GUI, you can look at
+invariants for only the methods and program
+points you care about.  You can also sort invariants by a property (eg, 
+probability) or filter invariants (eg, only look at invariants containing
+a certain variable). <p>
 
-First, make a <tt>.inv</tt> file by invoking Daikon with the <tt>-o</tt>
+To use the GUI, first make a <tt>.inv</tt> file by invoking Daikon with the <tt>-o</tt>
 option; to create <tt>foo.inv</tt>, you would do
 
 <pre>    java daikon.Daikon -o <em>foo</em>.inv <em>decl-files...</em> <em>trace-files...</em></pre>
