@@ -23,8 +23,8 @@ public final class UtilMDE {
   ///
 
   /**
-   * Returns an appropriate BufferedReader, accounting for the possibility
-   * that the specified file is compressed.
+   * Returns a BufferedReader for the file, accounting for the possibility
+   * that the file is compressed.
    **/
   public static BufferedReader BufferedFileReader(String filename) throws FileNotFoundException, IOException {
     Reader file_reader;
@@ -38,8 +38,8 @@ public final class UtilMDE {
 
 
   /**
-   * Returns an appropriate LineNumberReader, accounting for the possibility
-   * that the specified file is compressed.
+   * Returns a LineNumberReader for the file, accounting for the possibility
+   * that the file is compressed.
    **/
   public static LineNumberReader LineNumberFileReader(String filename) throws FileNotFoundException, IOException {
     Reader file_reader;
@@ -52,15 +52,19 @@ public final class UtilMDE {
   }
 
   /**
-   * Returns a BufferedWriter which can be used to write to files.
-   *
+   * Returns a BufferedWriter for the file, accounting for the possibility
+   * that the file is compressed.
    **/
   public static BufferedWriter BufferedFileWriter(String filename) throws IOException{
     Writer file_writer;
-    file_writer = new FileWriter(filename);
+    if (filename.endsWith(".gz")) {
+      file_writer = new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(filename)));
+    } else {
+      file_writer = new FileWriter(filename);
+    }
     return new BufferedWriter(file_writer);
   }
-  
+
   ///
   /// Class
   ///
