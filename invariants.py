@@ -6,7 +6,7 @@
 
 # Built-in Python modules
 import glob, math, operator, os, pickle, posix, re, resource, string, time, types, whrandom
-# Do NOT use cPickle.  It is buggy!
+# Do NOT use cPickle.  It is buggy!  (Or so it seems.)
 
 # User-defined Python modules
 import util
@@ -1729,6 +1729,8 @@ class invariant:
         inv1 = self
         inv2 = other
         assert inv1.__class__ == inv2.__class__
+        if inv1.is_unconstrained() and inv2.is_unconstrained():
+            return None
         if inv1.is_unconstrained() ^ inv2.is_unconstrained():
             return "One is unconstrained, the other is not"
         if inv1.one_of and inv2.one_of and inv1.one_of != inv2.one_of:
@@ -2242,7 +2244,7 @@ class two_scalar_numeric_invariant(invariant):
             else:
                 return "%s - %s = %d (mod %d)" % (x,y,a,b) + suffix
         if diff_inv.min_justified and diff_inv.max_justified:
-            return "%d <= %s - %s <= %d \tjustified" % (diff_inv.min, x, y, diff_inv.max)
+            return "%d <= %s - %s <= %d \tjustified" % (diff_inv.min, x, y, diff_inv.max) + suffix
         if diff_inv.min_justified:
             if diff_inv.min == 0:
                 return "%s <= %s \tjustified" % (y,x) + suffix
@@ -3477,7 +3479,7 @@ def diff_var_infos(var_infos1, var_infos2):
                 print "First group contains invariant:", invs1[j].format((vi1.name, var_infos1[j].name))
                 pair_different = pair_different + 1
                 continue
-            if in1 and not in2:
+            if in2 and not in1:
                 print "Second group contains invariant:", invs2[j].format((vi2.name, var_infos2[j].name))
                 pair_different = pair_different + 1
                 continue
