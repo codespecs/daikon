@@ -72,6 +72,8 @@ help:
 
 all: txt-esc merge esc
 
+# This is where we put instrumented source, decls, dtrace, etc.
+SCRATCH_BASE?=/scratch
 SCRATCH_FOR_DAIKON?=/scratch/${USER}/esc-experiments/${PROJECT}
 
 reset-scratch: reset-scratch-impl
