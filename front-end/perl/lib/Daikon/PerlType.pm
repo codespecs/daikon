@@ -91,7 +91,7 @@ sub min { $_[0] < $_[1] ? $_[0] : $_[1] }
 # ['ref', ['hash', 'int', ['ref', 'num']]]
 
 # As an exception, object types use a hash table to store the type
-# corresponding to a particular field key. The full correpsondance:
+# corresponding to a particular field key. The full correspondance:
 
 # undef                 'undef'
 # bool                  'bool'
