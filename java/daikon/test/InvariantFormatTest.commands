@@ -337,7 +337,7 @@ Goal (esc): a % b == 0
 Goal (ioa): a % b = 0
 Goal (jml): a % b == 0
 Goal (dbc): a % b == 0
-Goal (simplify): (EQ 0 (|a| % |b|))
+Goal (simplify): (EQ 0 (MOD |a| |b|))
 
 daikon.inv.binary.twoScalar.NumericInt$Divides boolean true
 int int
@@ -347,7 +347,7 @@ Goal (esc): b % a == 0
 Goal (ioa): b % a = 0
 Goal (jml): b % a == 0
 Goal (dbc): b % a == 0
-Goal (simplify): (EQ 0 (|b| % |a|))
+Goal (simplify): (EQ 0 (MOD |b| |a|))
 
 ; Testing binary twoSequence invariants
 
