@@ -42,6 +42,8 @@ my @machines = ('parsnip', 'peanut',
 my $current_dir;
 
 
+cleanup();
+
 while ((scalar(@ARGV) > 0) && ($ARGV[0] =~ /^-/)) {
   my $arg = shift @ARGV;
   if ($arg eq "--debug") {
@@ -87,6 +89,22 @@ my $parameters = join(' ', @ARGV);
 ###########################################################################
 ### Subroutines
 ###
+
+#Clean up old temp files
+sub cleanup () {
+    my $tmpdir = "/tmp/$ENV{'USER'}";
+    opendir (DIR, $tmpdir);
+    my @files = readdir DIR;
+    close DIR;
+    # look through the directory for files matching the pattern
+    # runmatch-[digits]
+    foreach my $file (@files) {
+	if ($file =~ /runmatch.\d+/) {
+	    system_or_die("rm -rf $tmpdir/$file");    
+	}
+    }    
+}
+
 
 # Filter out elements of @machines whose load is greater than $loadlimit.
 # If this would filter out all machines, run on all machines anyway.
