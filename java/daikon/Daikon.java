@@ -712,7 +712,7 @@ public final class Daikon {
                 }
                 // This code is duplicated below outside the options loop.
                 // These aren't "endsWith()" because there might be a suffix
-                // on the end (eg, a date).
+                // on the end (eg, a date, or ".gz").
                 File file = new File(filename);
                 if (!file.exists()) {
                   throw new Error(
@@ -891,7 +891,7 @@ public final class Daikon {
       }
     }
 
-    // This code is duplicated above within the switch processing
+    // This code is duplicated above within the switch processing.
     // First check that all the file names are OK, so we don't do lots of
     // processing only to bail out at the end.
     for (int i = g.getOptind(); i < args.length; i++) {
@@ -905,11 +905,26 @@ public final class Daikon {
         filename = file.toString();
       }
       // These aren't "endsWith()" because there might be a suffix on the end
-      // (eg, a date).
+      // (eg, a date or ".gz").
       if (filename.indexOf(".decls") != -1) {
         decl_files.add(file);
       } else if (filename.indexOf(".dtrace") != -1) {
         dtrace_files.add(filename);
+        // Always output an invariant file by default, even if none is
+        // specified on the command line.
+        if (inv_file == null) {
+          String basename;
+          // This puts the .inv file in the current directory.
+          basename = new File(filename).getName();
+          // This puts the .inv file in the same directory as the .dtrace file.
+          // basename = filename;
+          int base_end = basename.indexOf(".dtrace");
+          String inv_filename = filename.substring(0, base_end) + ".inv.gz";
+          inv_file = new File(inv_filename);
+          if (!UtilMDE.canCreateAndWrite(inv_file)) {
+            throw new Error("Cannot write to file " + inv_file);
+          }
+        }
       } else if (filename.indexOf(".spinfo") != -1) {
         spinfo_files.add(file);
       } else if (filename.indexOf(".map") != -1) {
