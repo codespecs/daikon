@@ -103,6 +103,7 @@ public final class SequenceScalarSubscriptFactory extends BinaryDerivationFactor
       // System.out.println("It's constant (" + scl_constant + "): " + sclvar.name);
       if (scl_constant < 0) {
         Global.nonsensical_suppressed_derived_variables += 6;
+	return null;
       }
       if (scl_constant == 0) {
         Global.tautological_suppressed_derived_variables += 3;
