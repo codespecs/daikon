@@ -284,7 +284,6 @@ public class CLASSNAME
     return false;
   }
 
-
   public boolean isSameFormula(Invariant other)
   {
     return core.isSameFormula(((CLASSNAME) other).core);
