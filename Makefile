@@ -8,7 +8,7 @@ LISP_FILES := gries-helper.lisp instrument.lisp data-trace.lisp \
 	gries.lisp gries-instrumented.lisp inv-medic.lisp
 LISP_PATHS := $(addprefix lisp-front-end/,$(LISP_FILES))
 # PYTHON_FILES := daikon.py util.py TextFile.py
-DOC_FILES := dtrace-format.txt Makefile daikon.html daikon.gif
+DOC_FILES := dtrace-format.txt Makefile daikon.html gui.html daikon.gif
 PY_DOC_FILES := daikon.py.doc Makefile TextFile.README daikon.gif
 README_FILES := README-daikon-java README-daikon1 README-dist
 SCRIPT_FILES := modbit-munge.pl java-cpp.pl lines-from
@@ -25,7 +25,7 @@ EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/dfec $(E
 DFEJ_DIR := $(INV_DIR)/dfej
 
 DIST_DIR := $(MERNST_DIR)/www/daikon/dist
-DIST_DIR_FILES := daikon-source.tar.gz daikon-jar.tar.gz daikon.html
+DIST_DIR_FILES := daikon-source.tar.gz daikon-jar.tar.gz daikon.html gui.html
 # For really big files
 # DIST_DIR_2 := /projects/se/people/mernst/www
 DIST_DIR_2 := $(DIST_DIR)
@@ -104,7 +104,7 @@ cvs-test:
 
 dist: dist-test
 
-dist-notest: daikon-source.tar.gz daikon-jar.tar.gz daikon.html
+dist-notest: $(DIST_DIR_FILES)
 	$(MAKE) update-dist-dir 
 	$(MAKE) -n dist-dfej
 
