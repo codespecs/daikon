@@ -460,10 +460,10 @@ list_java_files:
 ###
 
 ## First, a file not generated via java-cpp.
-daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTestUpDater.java
+daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTestUpdater.java
 	${JAVAC_COMMAND} $<
 	rm -f $@
-	${JAVAC_COMMAND} daikon.test.split.SplitterFactoryTestUpDater
+	${JAVAC_COMMAND} daikon.test.split.SplitterFactoryTestUpdater
 	chmod -w $@
 
 # Create the auto-generated files with jpp
