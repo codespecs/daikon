@@ -64,20 +64,28 @@ public class Dataflow
    **/
   public static void init_partial_order(PptMap all_ppts)
   {
-    for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
-      progress = "Initializing partial order for: " + ppt.ppt_name.toString();
-      init_partial_order(ppt, all_ppts);
-    }
-    progress = null;
-
-    // Create or modify the data flow and invariant flow vectors.  We
-    // *must* recompute all of them, rather than just the new ones.
-    for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel item = (PptTopLevel) i.next();
-      progress = "Initializing data flow order for: " + item.ppt_name.toString();
-      create_ppt_dataflow(item);
-      create_ppt_invflow(item);
+    if (Daikon.use_dataflow_hierarchy) {
+      for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+        PptTopLevel ppt = (PptTopLevel) i.next();
+        progress = "Initializing partial order for: " + ppt.ppt_name.toString();
+        init_partial_order(ppt, all_ppts);
+      }
+      progress = null;
+      
+      // Create or modify the data flow and invariant flow vectors.  We
+      // *must* recompute all of them, rather than just the new ones.
+      for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+        PptTopLevel item = (PptTopLevel) i.next();
+        progress = "Initializing data flow order for: " + item.ppt_name.toString();
+        create_ppt_dataflow(item);
+        create_ppt_invflow(item);
+      }
+    } else {
+      for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+        PptTopLevel ppt = (PptTopLevel) i.next();
+        progress = "Initializing simple partial order for: " + ppt.ppt_name.toString();
+        create_simple_pptflow(ppt);
+      }
     }
     progress = null;
   }
@@ -587,6 +595,26 @@ public class Dataflow
       ppt.invflow_ppts = rec.ppts;
       ppt.invflow_transforms = rec.ints;
     }
+  }
+
+  /**
+   * Create the simple data and invariant flow that represents each
+   * program point only flowing to itself.  Used for flat hierarchies
+   * when Daikon.use_dataflow_hierarchy is set to false.
+   **/
+  private static void create_simple_pptflow(PptTopLevel ppt) {
+    Assert.assertTrue (!Daikon.use_dataflow_hierarchy);
+
+    ppt.dataflow_ppts = new PptTopLevel[] {ppt};
+    // Identity transform
+    int[] transform = new int[ppt.var_infos.length];
+    for (int i = 0; i < transform.length; i++) {
+      transform[i] = i;
+    }
+    ppt.dataflow_transforms = new int[][] {transform};
+
+    ppt.invflow_ppts = new PptTopLevel[0];
+    ppt.invflow_transforms = new int[0][];
   }
 
   /**

@@ -97,13 +97,13 @@ public final class Daikon {
    * equality, using canonicals to have instantiation of invariants
    * only over equality sets.
    **/
-  public static boolean use_equality_set = true;
+  public static boolean use_equality_optimization = true;
 
 
   /**
    * Whether to use general suppression mechanism.
    **/
-  public static boolean suppress_invariants = false;
+  public static boolean use_suppression_optimization = false;
 
   /**
    * Whether suppressed invariants can suppress others.  Eventually
@@ -118,6 +118,13 @@ public final class Daikon {
    * seeing samples.
    **/
   public static int suppress_samples_min = 0;
+
+  /**
+   * Whether to associate the program points in a dataflow hierarchy,
+   * as via Nimmer's thesis.  Deactivate only for languages and
+   * analyses where flow relation is nonsensical.
+   **/
+  public static boolean use_dataflow_hierarchy = true;
 
   // When true, don't print invariants when their controlling ppt
   // already has them.  For example, this is the case for invariants
@@ -188,7 +195,8 @@ public final class Daikon {
   public static final String var_omit_regexp_SWITCH = "var_omit";
   public static final String no_text_output_SWITCH = "no_text_output";
   public static final String show_progress_SWITCH = "show_progress";
-  public static final String suppress_SWITCH = "suppress";
+  public static final String use_dataflow_hierarchy_SWITCH = "nohierarchy";
+  public static final String use_suppression_optimization_SWITCH = "suppress";
   public static final String suppress_cont_SWITCH = "suppress_cont";
   public static final String no_suppress_cont_SWITCH = "no_suppress_cont";
   public static final String suppress_post_SWITCH = "suppress_post";
@@ -343,7 +351,8 @@ public final class Daikon {
       new LongOpt(var_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(no_text_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(show_progress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(suppress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(use_dataflow_hierarchy_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(use_suppression_optimization_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(no_suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -430,8 +439,10 @@ public final class Daikon {
           no_text_output = true;
         } else if (show_progress_SWITCH.equals(option_name)) {
           show_progress = true;
-        } else if (suppress_SWITCH.equals(option_name)) {
-          suppress_invariants = true;
+        } else if (use_dataflow_hierarchy_SWITCH.equals(option_name)) {
+          use_dataflow_hierarchy = false;
+        } else if (use_suppression_optimization_SWITCH.equals(option_name)) {
+          use_suppression_optimization = true;
         } else if (suppress_cont_SWITCH.equals(option_name)) {
           suppress_implied_controlled_invariants = true;
         } else if (no_suppress_cont_SWITCH.equals(option_name)) {
@@ -773,7 +784,7 @@ public final class Daikon {
     // Postprocessing
 
     // Equality data for each PptTopLevel
-    if (Daikon.use_equality_set) {
+    if (Daikon.use_equality_optimization) {
       for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
         PptTopLevel ppt = (PptTopLevel) itor.next();
         ppt.postProcessEquality();
@@ -802,7 +813,7 @@ public final class Daikon {
 
   public static void setupEquality (PptMap allPpts) {
     // PptSliceEquality does all the necessary instantiations
-    if (Daikon.use_equality_set) {
+    if (Daikon.use_equality_optimization) {
       for (Iterator i = allPpts.pptIterator(); i.hasNext(); ) {
         PptTopLevel ppt = (PptTopLevel) i.next();
         ppt.equality_view = new PptSliceEquality(ppt);

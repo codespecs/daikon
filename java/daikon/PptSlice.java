@@ -471,7 +471,7 @@ public abstract class PptSlice
 
         Assert.assertTrue (slice_vis.length == this.var_infos.length);
 
-        if (Daikon.use_equality_set) {
+        if (Daikon.use_equality_optimization) {
           // Why clone?  Because we'll be doing clobbers to transform these
           // into leaders.
           VarInfo[] old_slice_vis = slice_vis;

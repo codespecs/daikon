@@ -983,7 +983,7 @@ public final class VarInfo
    * Whether this VarInfo is the leader of its equality set
    **/
   public boolean isCanonical() {
-    if (!Daikon.use_equality_set) return true;
+    if (!Daikon.use_equality_optimization) return true;
     return (equalitySet.leader() == this);
   }
 

@@ -995,7 +995,7 @@ public class PptTopLevel
       initiateSuppression();
     }
 
-    if (Daikon.use_equality_set) {
+    if (Daikon.use_equality_optimization) {
       equality_view.add (vt, count);
     }
 
@@ -2003,7 +2003,7 @@ public class PptTopLevel
    * @pre Invariants already instantiated
    **/
   public void suppressAll() {
-    if (Daikon.suppress_invariants) {
+    if (Daikon.use_suppression_optimization) {
       if (debugSuppressInit.isDebugEnabled()) {
         debugSuppressInit.debug ("SuppressAll for: " + name);
       }
@@ -2041,7 +2041,7 @@ public class PptTopLevel
    * @pre Invariants already instantiated.  inv not already suppressed.
    **/
   public boolean attemptSuppression (Invariant inv) {
-    if (Daikon.suppress_invariants) {
+    if (Daikon.use_suppression_optimization) {
       if (inv.getSuppressor() != null) {
         System.err.println ("Error: the invariant " + inv.format() +
                             " already has a suppressor");

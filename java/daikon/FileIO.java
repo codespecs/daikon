@@ -733,7 +733,7 @@ public final class FileIO {
         // XXX (for now, until front ends are changed)
         // No, always do this, because exit ppts have all the interesting values,
         // and doing anything else is redundant.
-        if (! ppt.ppt_name.isExitPoint()) {
+        if (Daikon.use_dataflow_hierarchy && !ppt.ppt_name.isExitPoint()) {
           return;
         }
 
