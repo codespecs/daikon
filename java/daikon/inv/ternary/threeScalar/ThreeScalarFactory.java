@@ -27,6 +27,12 @@ public final class ThreeScalarFactory {
                   && (var2.rep_type == ProglangType.INT)
                   && (var3.rep_type == ProglangType.INT));
 
+    // Save ourselves some trouble and never compute threeScalar
+    // invariants over pointer types.
+    if (!(var1.type.isIntegral() && var2.type.isIntegral() && var3.type.isIntegral())) {
+      return null;
+    }
+	
     if (! var1.compatible(var2))
       return null;
     if (! var2.compatible(var3))
