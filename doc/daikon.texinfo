@@ -115,9 +115,9 @@ Using Daikon to detect invariants
 Instrumentation
 
 * Instrumenting Java programs::  
-* Instrumenting C programs::    
+* Instrumenting C/C++ programs::  
 
-Instrumenting C programs
+Instrumenting C/C++ programs
 
 * Limitations::                 
 
@@ -161,12 +161,21 @@ Using the invariant browser
 Front ends
 
 * Java front end dfej::         
+* C/C++ front end dfec::        
 
 Java front end dfej
 
 * dfej options::                
 * Scope of instrumentation::    
 * Refined runtime types::       
+
+Refined runtime types
+
+* C/C++ front end dfec::
+
+C/C++ front end dfec
+
+* dfec command-line arguments::  
 
 Troubleshooting
 
@@ -817,10 +826,10 @@ Java front end is more complete and robust than the C/C++ front end.
 
 @menu
 * Instrumenting Java programs::  
-* Instrumenting C programs::    
+* Instrumenting C/C++ programs::  
 @end menu
 
-@node    Instrumenting Java programs, Instrumenting C programs, Instrumentation, Instrumentation
+@node    Instrumenting Java programs, Instrumenting C/C++ programs, Instrumentation, Instrumentation
 @subsection Instrumenting Java programs
 
 To instrument Java source programs, simply invoke @file{dfej}, the
@@ -847,89 +856,73 @@ For more information about dfej, see @ref{Java front end dfej}
 or the @file{dfej} usage message for more information.
 
 
-@node    Instrumenting C programs,  , Instrumenting Java programs, Instrumentation
-@subsection Instrumenting C programs
+@node    Instrumenting C/C++ programs,  , Instrumenting Java programs, Instrumentation
+@subsection Instrumenting C/C++ programs
 
-dfec works only on ANSI/ISO C, not on K&R C.  If you wish to instrument
-K&R C, first convert it to ISO C.  One way to do this is to use the
-@command{protoize} program distributed with many versions of Unix and
-also widely available online.
+The Daikon front end for C/C++, @file{dfec}, technically only
+instruments C++ programs.  However, most ANSI C programs are a subset
+of C++ programs, and can be instrumented just fine.  However, a few
+have problems, the most notable exceptions being programs that define
+symbols that are keywords in C++ but are undefined in C, such as bool.
 
-The three crucial files are @file{dfec}, 
-@file{daikon_runtime.h}, and 
-@file{daikon_runtime.o}.
-
-To instrument a C file, run @command{dfec} on it.  dfec produces
-instrumented source as well as a @file{.decls} file.  When you run dfec,
-supply a @option{-I} argument for each directory on the system include path;
-for instance,
+dfec works similarly to dfej.  In short, to instrument C/C++ source,
+you invoke @file{dfec} on a single source file at a time.  @file{dfec}
+must be run from a directory that contains the file @file{daikon_runtime.h},
+the header file for the Daikon runtime library:
 @example
-dfec -I/usr/local/include -I/usr/include myfile.c
-@end example
-@noindent
-You can find the name of your system directories by running
-@command{gcc -v} and looking for what follows the line
-stating @samp{#include <...> search starts here:}.  For instance, on
-Unix run one of these commands, depending on whether you want the C or
-C++ search path:
-@example
-touch searchpath.c; gcc -v -E searchpath.c > /dev/null; rm searchpath.c
-touch searchpath.cc; gcc -v -E searchpath.cc > /dev/null; rm searchpath.cc
+     ln -s ~/daikon/front-end/c/daikon_runtime.h .
+     dfec @var{filename}.cc
 @end example
 
-Running @command{dfec @var{arguments} myfile.c} creates
-a file named @file{myfile.instrumented.cc} in the current
-directory.  (It has a @file{.cc} extension, regardless of its original
-extension.)  It also creates a file named @file{myfile.decls}.
-
-Do not run dfec on header files (ending in @file{.h}), only on C or C++
-source files.
-
-Either copy or link @file{daikon_runtime.h} and @file{daikon_runtime.o} from
-@file{daikon/front-end/c/} to the current directory.
-
-Compile the instrumented program in the usual way, except that the link
-step should include @file{daikon_runtime.o}.  For instance,
+After dfec is run, you must compile the instrumented source, linking
+it with the object file for the Daikon runtime library and the stdc++
+library.  By default, dfec places instrumented code in the
+@file{daikon-instrumented/} directory.
 @example
-  gcc -o @var{exefile} myfile.c
-@end example
-@noindent
-would become
-@example
-  gcc -o @var{exefile} myfile.instrumented.cc daikon_runtime.o
-@end example
-@noindent
-(If you get lots of errors, try renaming the instrumented file from
-@file{.cc} to @file{.c}.  That may also permit you to instrument K&R C.)
-
-Now you can run your executable in the usual way.  Running the
-executable creates a @file{myfile.dtrace} file in the current directory,
-and subsequent runs append to that file.
-
-Given the @file{myfile.decls} file that dfec created and the
-@file{myfile.dtrace} file that running the instrumented program created,
-you can run Daikon:
-@example
-  java daikon.Daikon myfile.decls myfile.dtrace
+      gcc -o @var{filename}.exe daikon-instrumented/@var{filename}.cc ~/daikon/daikon_runtime.o -lstdc++
 @end example
 
+Similarly to dfej, the Daikon front end for C/C++ has two effects:
+@itemize @bullet
+@item
+  dfec writes instrumented versions of the files to a
+  @file{daikon-instrumented/} directory 
+@item
+  dfej creates declaration files named
+  @file{@var{filename}.decls}, etc. in a
+  @file{daikon-output/} directory.
+@end itemize
+
+For more information about dfec, including more detailed documentation
+on the command-line options dfec needs to correctly instrument on your
+system, see @ref{C/C++ front end dfec}.
 
 @menu
 * Limitations::                 
 @end menu
 
-@node    Limitations,  , Instrumenting C programs, Instrumenting C programs
+@node    Limitations,  , Instrumenting C/C++ programs, Instrumenting C/C++ programs
 @subsubsection Limitations
 
-@c 4/10/2001
-The current C/C++ front end does minimal instrumentation of pointers.
+@c 7/02/2001
+The current C/C++ front end does minimal instrumentation of pointers.  It
+keeps track of the memory address they hold (roughly equivalent to the
+Java hashcode).  In the case of arrays and pointers to blocks of data,
+it holds information about the maximum 'touched' element of the array, to
+enable it to make guesses about what part of the array is valid, and only
+output that much.  This guessing is not always completely accurate, however,
+and changes to array variables done outside the scope of instrumentation
+(for instance, in the stdc library functions found in 'string.h') will not
+be recorded and hence may yield sparse output.
 
-@c 4/10/2001
-When a local variable shadows a global variable of the same name, dfec
-tries to output both to the @file{.dtrace} and @file{.decls} files.  The
-instrumented C program will run fine, but the local variable will be
-output twice, and Daikon will issue an error when it is given files
-containing two variables of the same name.
+@c [the following limitation is deprecated as of 7/02/2001.]
+@c [global/local/class vars are now scoped with '::', '', and 'this->'.]
+@c @c 4/10/2001
+@c When a local variable shadows a global variable of the same name, dfec
+@c tries to output both to the @file{.dtrace} and @file{.decls} files.  The
+@c instrumented C program will run fine, but the local variable will be
+@c output twice, and Daikon will issue an error when it is given files
+@c containing two variables of the same name.
 
 
 @c <ol>
@@ -1544,9 +1537,10 @@ of the variables in the variables list.
 
 @menu
 * Java front end dfej::         
+* C/C++ front end dfec::        
 @end menu
 
-@node    Java front end dfej,  , Front ends, Front ends
+@node    Java front end dfej, C/C++ front end dfec, Front ends, Front ends
 @section Java front end dfej
 
 This section contains details about dfej, the Daikon front end for Java.
@@ -1682,14 +1676,14 @@ Specifies the directory in which to create
 @file{daikon-output}, unless @option{-declsfiledirflat} is
 specified).  @var{PACKAGES} is the relative path from the current
 directory to the source file; that is, the relative path from
-@var{decldir} to the @file{.dtrace} file is the same as the relative
+@var{decldir} to the @file{.decls} file is the same as the relative
 path from the current directory to the source file.  The directory
-structure of the @file{.dtrace} files mirrors the directory structure of
+structure of the @file{.decls} files mirrors the directory structure of
 the source files.
 
 @item -declsfiledirflat=@var{decldir}
-Specifies the directory in which to create @file{@var{CLASSNAME}.dtrace}
-(no default).  All @file{.dtrace} files appear in the same directory.
+Specifies the directory in which to create @file{@var{CLASSNAME}.decls}
+(no default).  All @file{.decls} files appear in the same directory.
 
 @item -instrsourcedir=@var{instrdir}
 Specifies the directory in which to write instrumented source files
@@ -1865,7 +1859,163 @@ comment immediately before the declared type (but after any modifiers like
 @c   			  The current version does not require Python.
 @c @end example
 
+@menu
+* C/C++ front end dfec::
+@end menu
 
+@node    C/C++ front end dfec,  , Java front end dfej, Front ends
+@section C/C++ front end dfec
+
+This section contains details about dfec, the Daikon front end for C/C++.
+
+For brief information about running dfec, see @ref{Instrumenting C/C++ programs}.
+
+dfec works only on ANSI/ISO C, not on K&R C.  If you wish to instrument
+K&R C, first convert it to ISO C.  One way to do this is to use the
+@command{protoize} program distributed with many versions of Unix and
+also widely available online.
+
+The three crucial files are @file{dfec}, 
+@file{daikon_runtime.h}, and 
+@file{daikon_runtime.o}.
+
+To instrument a C file, run @command{dfec} on it.  dfec produces
+instrumented source as well as a @file{.decls} file.  When you run dfec,
+supply a @option{-I} argument for each directory on the system include path;
+for instance,
+@example
+dfec -I/usr/local/include -I/usr/include myfile.c
+@end example
+@noindent
+You can find the name of your system directories by running
+@command{gcc -v} and looking for what follows the line
+stating @samp{#include <...> search starts here:}.
+For instance, on Unix, run this command:
+@example
+touch searchpath.cc; gcc -v -E searchpath.cc > /dev/null; rm searchpath.cc
+@end example
+
+@c [this is deprecated - we want the c++ searchpath only.]
+@c For instance, on
+@c Unix run one of these commands, depending on whether you want the C or
+@c C++ search path:
+@c @example
+@c touch searchpath.c; gcc -v -E searchpath.c > /dev/null; rm searchpath.c
+@c touch searchpath.cc; gcc -v -E searchpath.cc > /dev/null; rm searchpath.cc
+@c @end example
+
+Running @command{dfec @var{arguments} myfile.c} creates
+a file named @file{myfile.cc} in the @file{daikon-instrumented/}
+directory.  (It has a @file{.cc} extension, regardless of its original
+extension.)  It also creates a file named @file{myfile.decls}, which
+appears in the @file{daikon-output/} directory by default.  To change
+these defaults, see the @ref{dfec command-line arguments} section.
+
+Do not run dfec on header files (ending in @file{.h}), only on C or C++
+source files.
+
+Either copy or link @file{daikon_runtime.h} and @file{daikon_runtime.o} from
+@file{daikon/front-end/c/} to the current directory.
+
+Compile the instrumented program in the usual way, except that the link
+step should include @file{daikon_runtime.o} and the stdc++ library.
+For instance,
+@example
+  gcc -o @var{exefile} myfile.c
+@end example
+@noindent
+would become
+@example
+  gcc -o @var{exefile} -lstdc++ daikon-instrumented/myfile.cc daikon_runtime.o
+@end example
+@noindent
+
+@c [deprecated.  we don't want to do this anymore.]
+@c (If you get lots of errors, try renaming the instrumented file from
+@c @file{.cc} to @file{.c}.  That may also permit you to instrument K&R C.)
+
+Now you can run your executable in the usual way.  Running the
+executable creates a @file{myfile.dtrace} file.  By default, this file
+will appear in the @file{daikon-output/}, and subsequent runs overwrite
+to that file.  This default can be overridden in two ways - at
+instrumentation time, a --tracefilename=X argument can be supplied to
+dfec.  X can be a filename with an absolute or relative path.  When the
+user program is run, the tracefile will be created either absolutely, or
+relative to where the program is executed.  The second tracefile option
+is at runtime.  By setting the environmental variable DTRACEFILE, the
+user program will use this value as the filename for the dtrace file
+instead.  Also, if you set the DTRACEAPPEND environmental variable to
+any value, the dtrace file will be appended to instead of overwritten,
+which can be handy if you have a script to run the user program multiple
+times.
+
+Given the @file{myfile.decls} file that dfec created and the
+@file{myfile.dtrace} file that running the instrumented program created,
+you can run Daikon:
+@example
+  java daikon.Daikon daikon-output/myfile.decls daikon-output/myfile.dtrace
+@end example
+
+@menu
+* dfec command-line arguments::  
+@end menu
+
+@node    dfec command-line arguments,  , C/C++ front end dfec, C/C++ front end dfec
+@subsection dfec-command-line arguments
+
+This section describes the commandline options dfec accepts.
+@table @option
+
+@item -I@var{path}
+Adds @var{path} to the end of the system include path.  For instance,
+@example
+  dfec -I/usr/local/include -I/usr/include
+@end example
+will tell dfec to look for system include files first in
+@file{/usr/local/include}, then in @file{/usr/include}.
+
+@item -D@var{macro}=@var{value}
+Defines the preprocessor macro @var{macro} to be @var{value}.  For example,
+to get dfec to correctly traverse the include files on our system, we use
+@example
+  dfec @var{...includepath...} -D__GNUG__=1 -D__null=0
+@end example
+
+@item --tracefilename=@var{filename}
+Specifies the default name for the @file{.dtrace} file (default
+@file{daikon-output/@var{FILENAME}.dtrace}).  The filename is relative
+to the current directory at runtime, or is absolute.  If the DTRACEFILE
+environment variable is set when the instrumented program is run, it
+overrides this default.
+
+@item --declsfiledir=@var{decldir}
+Specifies the directory in which to create
+@file{@var{PATH}/@var{FILENAME}.decls} (default
+@file{daikon-output/}, unless @option{--declsfiledirflat} is
+specified).  @var{PATH} is the relative path from the current
+directory to the source file; that is, the relative path from
+@var{decldir} to the @file{.decls} file is the same as the relative
+path from the current directory to the source file.  The directory
+structure of the @file{.decls} files mirrors the directory structure of
+the source files.
+
+@item --declsfiledirflat=@var{decldir}
+Specifies the directory in which to create @file{@var{FILENAME}.decls}
+(no default).  All @file{.decls} files appear in the same directory.
+
+@item --instrsourcedir=@var{instrdir}
+Specifies the directory in which to write instrumented source files
+(default @file{daikon-instrumented/}).  The instrumented files have the
+same names and directory structure as the original input files, with the
+slight exception that the file suffix is set to .cc, so if you instrument
+@file{@var{myfile}.c}, you will end up with
+@file{daikon-instrumented/@var{myfile}.cc}.
+
+@end table
+
+When conflicting options are specified (for instance, both
+@option{--declsfiledir} and @option{--declsfiledirflat}), the last one
+takes precedence.
 
 @node    Troubleshooting, Details, Front ends, Top
 @chapter Troubleshooting
