@@ -133,7 +133,7 @@ cvs-test:
 	-rm -rf $(TESTCVS)
 	mkdir -p $(TESTCVS)
 	cd $(TESTCVS) && cvs -Q -d $(CVS_REP) co invariants
-	cd $(TESTCVSJAVA)/daikon && make CLASSPATH=$(TESTCVSJAVA):$(TESTCVSJAVA)/lib/jakarta-oro.jar:$(TESTCVSJAVA)/lib/java-getopt.jar:$(TESTCVSJAVA)/lib/junit.jar:.:$(RTJAR)
+	cd $(TESTCVSJAVA)/daikon && make CLASSPATH=$(TESTCVSJAVA):$(TESTCVSJAVA)/lib/jakarta-oro.jar:$(TESTCVSJAVA)/lib/log4j.jar:$(TESTCVSJAVA)/lib/java-getopt.jar:$(TESTCVSJAVA)/lib/junit.jar:.:$(RTJAR)
 
 
 ###########################################################################
@@ -258,6 +258,7 @@ daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_
 	# jar xf java/lib/java-getopt.jar -C /tmp/daikon-jar
 	# jar xf java/lib/junit.jar -C /tmp/daikon-jar
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/jakarta-oro.jar)
+	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/log4j.jar)
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/java-getopt.jar)
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar)
 	(cd /tmp/daikon-jar; jar xf $(INV_DIR)/java/lib/ajax.jar)
