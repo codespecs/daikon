@@ -13,7 +13,7 @@ import utilMDE.*;
 import java.util.*;
 
 // *****
-// Automatically generated from Bound.java.cpp
+// Automatically generated from Bound.java.jpp
 // *****
 
 // One reason not to combine LowerBound and Upperbound is that they have

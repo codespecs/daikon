@@ -4,7 +4,7 @@ You first need to preprocess it with cpp, the C preprocessor.
 The correct way to build the system is to run 'make'.
 #endif
 
-#include "MathMDE-help.java.cpp"
+#include "MathMDE-help.java.jpp"
 
   /** Return z such that (z == x mod y) and (0 <= z < abs(y)). */
   public static final INT mod_positive(INT x, INT y) {
@@ -121,7 +121,7 @@ The correct way to build the system is to run 'make'.
   }
 
 
-#include "MathMDE-helpend.java.cpp"
+#include "MathMDE-helpend.java.jpp"
 
 
 #if 0

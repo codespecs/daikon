@@ -12,7 +12,7 @@ import java.util.*;
 import utilMDE.*;
 
 // *****
-// Automatically generated from PptSlice.java.cpp
+// Automatically generated from PptSlice.java.jpp
 // *****
 
 // This looks a *lot* like part of PptTopLevel.  (That is fine; its purpose

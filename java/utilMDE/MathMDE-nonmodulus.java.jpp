@@ -4,7 +4,7 @@ You first need to preprocess it with cpp, the C preprocessor.
 The correct way to build the system is to run 'make'.
 #endif
 
-#include "MathMDE-help.java.cpp"
+#include "MathMDE-help.java.jpp"
 
 
   /**
@@ -202,7 +202,7 @@ The correct way to build the system is to run 'make'.
   }
 
 
-#include "MathMDE-helpend.java.cpp"
+#include "MathMDE-helpend.java.jpp"
 
 
 #if 0

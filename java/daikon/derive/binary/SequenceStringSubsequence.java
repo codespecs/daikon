@@ -6,7 +6,7 @@ import daikon.derive.*;
 import utilMDE.*;
 
 // *****
-// Automatically generated from SequenceSubsequence.java.cpp
+// Automatically generated from SequenceSubsequence.java.jpp
 // *****
 
 public final class SequenceStringSubsequence  extends BinaryDerivation {

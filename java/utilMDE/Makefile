@@ -9,7 +9,7 @@ JAVAC ?= jikes -g +E +F
 
 
 JAVA_FILES := $(shell find . -name '*.java' -print)
-JAVA_CPP_FILES := $(shell find . -name '*.java.cpp' -print)
+JAVA_CPP_FILES := $(shell find . -name '*.java.jpp' -print)
 ALL_JAVA_FILES := ${JAVA_FILES} ${JAVA_CPP_FILES}
 AUTO_GENERATED_FILES = \
 	MathMDE.java
@@ -85,7 +85,7 @@ showvars:
 
 JAVA_CPP = java-cpp.pl $< -DDEFINEDVAR > $@
 
-MathMDE.java: MathMDE.java.cpp MathMDE-gcd.java.cpp MathMDE-modulus.java.cpp MathMDE-nonmodulus.java.cpp  MathMDE-help.java.cpp MathMDE-helpend.java.cpp
+MathMDE.java: MathMDE.java.jpp MathMDE-gcd.java.jpp MathMDE-modulus.java.jpp MathMDE-nonmodulus.java.jpp  MathMDE-help.java.jpp MathMDE-helpend.java.jpp
 	-mv -f $@ $@-bak
 	java-cpp.pl $< > $@
 	chmod -w $@

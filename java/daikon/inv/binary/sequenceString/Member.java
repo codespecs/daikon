@@ -10,7 +10,7 @@ import java.util.*;
 import utilMDE.*;
 
 // *****
-// Automatically generated from Member.java.cpp
+// Automatically generated from Member.java.jpp
 // *****
 
 public final class Member extends SequenceString  {

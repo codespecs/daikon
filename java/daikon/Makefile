@@ -12,8 +12,8 @@ JAVAC ?= jikes -g +E +F
 
 
 JAVA_FILES := $(shell find . \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
-DAIKON_TAG_FILES := $(shell find . \( -name '*daikon-java*' -o -name CVS -o -name 'split' \) -prune -o -name '*.java' -o -name '*.java.cpp' -print)
-UTILMDE_TAG_FILES := $(shell find ${UTILMDE_DIR} \( -name '*daikon-java*' -o -name CVS -o -name 'split' \) -prune -o -name '*.java' -o -name '*.java.cpp' -print)
+DAIKON_TAG_FILES := $(shell find . \( -name '*daikon-java*' -o -name CVS -o -name 'split' \) -prune -o -name '*.java' -o -name '*.java.jpp' -print)
+UTILMDE_TAG_FILES := $(shell find ${UTILMDE_DIR} \( -name '*daikon-java*' -o -name CVS -o -name 'split' \) -prune -o -name '*.java' -o -name '*.java.jpp' -print)
 TAG_FILES := ${DAIKON_TAG_FILES} ${UTILMDE_TAG_FILES}
 # Should these really be targets in the below, or should I use "make
 # ${AUTO_GENERATED_FILES}"? I don't want to omit running just because these
@@ -147,73 +147,73 @@ JAVA_CPP ?= (rm -f $@; set -e; java-cpp.pl -DDEFINEDVAR $< >| $@; chmod -w $@)
 # JAVA_CPP_END = > $@-postproc; mv -f $@-postproc $@; chmod -w $@)
 
 
-PptSlice1.java: PptSlice.java.cpp
+PptSlice1.java: PptSlice.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=ARITY1)
 
-PptSlice2.java: PptSlice.java.cpp
+PptSlice2.java: PptSlice.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=ARITY2)
 
-PptSlice3.java: PptSlice.java.cpp
+PptSlice3.java: PptSlice.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=ARITY3)
 
-inv/unary/LowerBoundCore.java: inv/unary/BoundCore.java.cpp
+inv/unary/LowerBoundCore.java: inv/unary/BoundCore.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=LOWER)
 
-inv/unary/UpperBoundCore.java: inv/unary/BoundCore.java.cpp
+inv/unary/UpperBoundCore.java: inv/unary/BoundCore.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=UPPER)
 
-inv/unary/scalar/LowerBound.java: inv/unary/scalar/Bound.java.cpp
+inv/unary/scalar/LowerBound.java: inv/unary/scalar/Bound.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=LOWER)
 
-inv/unary/scalar/UpperBound.java: inv/unary/scalar/Bound.java.cpp
+inv/unary/scalar/UpperBound.java: inv/unary/scalar/Bound.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=UPPER)
 
-inv/unary/scalar/OneOfScalar.java: inv/unary/OneOf.java.cpp
+inv/unary/scalar/OneOfScalar.java: inv/unary/OneOf.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=SCALAR)
 
-inv/unary/string/OneOfString.java: inv/unary/OneOf.java.cpp
+inv/unary/string/OneOfString.java: inv/unary/OneOf.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=STRING)
 
-inv/unary/sequence/OneOfSequence.java: inv/unary/OneOf.java.cpp
+inv/unary/sequence/OneOfSequence.java: inv/unary/OneOf.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=SEQUENCE)
 
-inv/unary/sequence/EltOneOf.java: inv/unary/OneOf.java.cpp
+inv/unary/sequence/EltOneOf.java: inv/unary/OneOf.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=ELT)
 
-inv/unary/sequence/EltLowerBound.java: inv/unary/scalar/Bound.java.cpp
+inv/unary/sequence/EltLowerBound.java: inv/unary/scalar/Bound.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=ELTLOWER)
 
-inv/unary/sequence/EltUpperBound.java: inv/unary/scalar/Bound.java.cpp
+inv/unary/sequence/EltUpperBound.java: inv/unary/scalar/Bound.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=ELTUPPER)
 
-inv/unary/stringsequence/EltOneOfString.java: inv/unary/OneOf.java.cpp
+inv/unary/stringsequence/EltOneOfString.java: inv/unary/OneOf.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=ELTSTRING)
 
-inv/unary/stringsequence/OneOfStringSequence.java: inv/unary/OneOf.java.cpp
+inv/unary/stringsequence/OneOfStringSequence.java: inv/unary/OneOf.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=STRINGSEQUENCE)
 
-inv/binary/sequenceScalar/Member.java: inv/binary/Member.java.cpp
+inv/binary/sequenceScalar/Member.java: inv/binary/Member.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=SCALAR)
 
-inv/binary/sequenceString/Member.java: inv/binary/Member.java.cpp
+inv/binary/sequenceString/Member.java: inv/binary/Member.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=STRING)
 
-derive/binary/SequenceScalarSubscript.java: derive/binary/SequenceSubscript.java.cpp
+derive/binary/SequenceScalarSubscript.java: derive/binary/SequenceSubscript.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=SCALAR)
 
-derive/binary/SequenceStringSubscript.java: derive/binary/SequenceSubscript.java.cpp
+derive/binary/SequenceStringSubscript.java: derive/binary/SequenceSubscript.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=STRING)
 
-derive/binary/SequenceScalarSubsequence.java: derive/binary/SequenceSubsequence.java.cpp
+derive/binary/SequenceScalarSubsequence.java: derive/binary/SequenceSubsequence.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=SCALAR)
 
-derive/binary/SequenceStringSubsequence.java: derive/binary/SequenceSubsequence.java.cpp
+derive/binary/SequenceStringSubsequence.java: derive/binary/SequenceSubsequence.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=STRING)
 
-derive/binary/SequenceScalarSubscriptFactory.java: derive/binary/SequenceSubscriptFactory.java.cpp
+derive/binary/SequenceScalarSubscriptFactory.java: derive/binary/SequenceSubscriptFactory.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=SCALAR)
 
-derive/binary/SequenceStringSubscriptFactory.java: derive/binary/SequenceSubscriptFactory.java.cpp
+derive/binary/SequenceStringSubscriptFactory.java: derive/binary/SequenceSubscriptFactory.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=STRING)
 
 ## I decided against this.  It gave little enough help, and it cluttered
@@ -223,25 +223,25 @@ derive/binary/SequenceStringSubscriptFactory.java: derive/binary/SequenceSubscri
 ## Vector subdirectory (that was ignored by tags, etc.).
 
 # This one is just for testing
-IntegerVector.java: VectorTemplate.java.cpp
+IntegerVector.java: VectorTemplate.java.jpp
 	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon -DELTVECTOR=IntegerVector -DELTTYPE=Integer")
 
-PptVector.java: VectorTemplate.java.cpp
+PptVector.java: VectorTemplate.java.jpp
 	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon -DELTVECTOR=PptVector -DELTTYPE=Ppt")
 
-PptTopLevelVector.java: VectorTemplate.java.cpp
+PptTopLevelVector.java: VectorTemplate.java.jpp
 	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon -DELTVECTOR=PptTopLevelVector -DELTTYPE=PptTopLevel")
 
-PptConditionalVector.java: VectorTemplate.java.cpp
+PptConditionalVector.java: VectorTemplate.java.jpp
 	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon -DELTVECTOR=PptConditionalVector -DELTTYPE=PptConditional")
 
-VarInfoVector.java: VectorTemplate.java.cpp
+VarInfoVector.java: VectorTemplate.java.jpp
 	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon -DELTVECTOR=VarInfoVector -DELTTYPE=VarInfo")
 
-inv/InvariantVector.java: VectorTemplate.java.cpp
+inv/InvariantVector.java: VectorTemplate.java.jpp
 	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon.inv -DELTVECTOR=InvariantVector -DELTTYPE=Invariant")
 
-derive/DerivationVector.java:  VectorTemplate.java.cpp
+derive/DerivationVector.java:  VectorTemplate.java.jpp
 	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon.derive -DELTVECTOR=DerivationVector -DELTTYPE=Derivation")
 
 

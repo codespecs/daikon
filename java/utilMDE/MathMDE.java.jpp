@@ -10,7 +10,7 @@ package utilMDE;
 import java.util.*;
 
 // *****
-// Automatically generated from MathMDE.java.cpp
+// Automatically generated from MathMDE.java.jpp
 // *****
 
 
@@ -136,13 +136,13 @@ public final class MathMDE {
   ///
 
 #define INT int
-#include "MathMDE-gcd.java.cpp"
+#include "MathMDE-gcd.java.jpp"
 #undef INT
 
   // gcd -- version for manipulating long (rather than int) values
 
 #define INT long
-#include "MathMDE-gcd.java.cpp"
+#include "MathMDE-gcd.java.jpp"
 #undef INT
 
 
@@ -151,13 +151,13 @@ public final class MathMDE {
   ///
 
 #define PARAM_INT
-#include "MathMDE-modulus.java.cpp"
+#include "MathMDE-modulus.java.jpp"
 #undef PARAM_INT
 
   // modulus for long (as opposed to int) values
 
 #define PARAM_LONG
-#include "MathMDE-modulus.java.cpp"
+#include "MathMDE-modulus.java.jpp"
 #undef PARAM_LONG
 
 
@@ -166,13 +166,13 @@ public final class MathMDE {
   ///
 
 #define PARAM_INT
-#include "MathMDE-nonmodulus.java.cpp"
+#include "MathMDE-nonmodulus.java.jpp"
 #undef PARAM_INT
 
   // non-modulus for long (as opposed to int) values
 
 #define PARAM_LONG
-#include "MathMDE-nonmodulus.java.cpp"
+#include "MathMDE-nonmodulus.java.jpp"
 #undef PARAM_LONG
 
 

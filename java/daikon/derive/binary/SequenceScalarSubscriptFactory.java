@@ -7,7 +7,7 @@ import utilMDE.*;
 import java.util.*;
 
 // *****
-// Automatically generated from SequenceSubscriptFactory.java.cpp
+// Automatically generated from SequenceSubscriptFactory.java.jpp
 // *****
 
 // This controls derivations which use the scalar as an index into the

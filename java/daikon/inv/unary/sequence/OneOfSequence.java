@@ -12,7 +12,7 @@ import utilMDE.*;
 import java.util.*;
 
 // *****
-// Automatically generated from OneOf.java.cpp
+// Automatically generated from OneOf.java.jpp
 // *****
 
 // States that the value is one of the specified values.
