@@ -5,19 +5,28 @@
 # Michael Ernst <mernst@lcs.mit.edu>
 # Time-stamp: <2001-03-16 01:41:19 mernst>
 
-# The input is a Daikon output file; files from the current directory are
-# rewritten into -escannotated versions.
-
+# The input is a Daikon output file.  Files from the current directory
+# are rewritten into -escannotated versions (use the -r switch as the
+# first thing on the command line to recursively search from the
+# current directory).
 
 use Carp;
+use File::Find;
 
 my $warn_on_no_invariants;
 my $merge_unexpressable;
+my $recursive;
 
 BEGIN {
   # Nothing to do
   $warn_on_no_invariants = 0;
   $merge_unexpressable = 1;
+  $recursive = 0;
+
+  if ($ARGV[0] eq '-r') {
+    $recursive = 1;
+    shift @ARGV;
+  }
 }
 
 if ((/^Inv filename = /)
@@ -149,9 +158,12 @@ END {
     # print $raw{$ppt};
   }
 
-  opendir(DIR, ".") || die "can't opendir \".\": $!";
-  my @javafiles = grep { /\.java$/ && -f "$_" } readdir(DIR);
-  closedir DIR;
+  my @javafiles = ();
+  my $nodeep = !$recursive;
+  find(sub {
+    push @javafiles, $File::Find::name if (/\.java$/ && -f);
+    $File::Find::prune = (-d && $nodeep && ($_ ne '.'));
+  }, ".");
 
   for my $javafile (@javafiles) {
     @fields = ();
