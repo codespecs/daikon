@@ -2160,7 +2160,7 @@ public abstract class Invariant
    **/
   public void addSuppressee (SuppressionLink sl) {
     if (suppressees == null) {
-      suppressees = new LinkedHashSet();
+      suppressees = new LinkedHashSet(1);
     }
     Assert.assertTrue (!(suppressees.contains(sl)));
     suppressees.add (sl);
