@@ -287,6 +287,7 @@ Problems running Daikon
 * Out of memory::               
 * Simplify errors::             
 * Method needs to be implemented::  
+* Local class not compatible::  
 
 Other problems
 
@@ -3741,13 +3742,13 @@ PPT_NAME  simpleStack.push
 
 PPT_NAME  simpleStack.pop
 !isEmpty()
-@end smallexample
 
 PPT_NAME  simpleStack.isFull
 (currentSize == myArray.length - 1)
 
 PPT_NAME  simpleStack.isEmpty
 (currentSize == 0)
+@end smallexample
 
 
 @node    Tools, Extending Daikon, Enhancing Daikon output, Top
@@ -4289,6 +4290,7 @@ understand Daikon's operation; @xref{Command line options}.
 * Out of memory::               
 * Simplify errors::             
 * Method needs to be implemented::  
+* Local class not compatible::  
 @end menu
 
 @node    No return from procedure, Out of memory, Daikon problems, Daikon problems
@@ -4372,7 +4374,7 @@ invariants may appear in Daikon's output.  The output is otherwise
 correct.
 
 
-@node    Method needs to be implemented,  , Simplify errors, Daikon problems
+@node    Method needs to be implemented, Local class not compatible, Simplify errors, Daikon problems
 @subsection Method needs to be implemented
 
 @cindex method needs to be implemented warning
@@ -4397,6 +4399,33 @@ or else use an output formatting that can handle those invariants.
 MergeESC (@pxref{MergeESC}) automatically ignores unformattable invariants.
 
 
+@node    Local class not compatible,  , Method needs to be implemented, Daikon problems
+@subsection Local class not compatible
+
+@cindex local class not compatible error
+@cindex InvalidClassException error
+@cindex reading .inv files, errors while
+
+A program such as PrintInvariants (@pxref{Printing invariants}) may
+issue the following error while reading an @file{.inv} file:
+@example
+java.io.InvalidClassException: daikon.VarInfo; Local class not compatible:
+  stream classdesc serialVersionUID=20020122
+  local class serialVersionUID=20020614
+@end example
+
+This error indicates that Daikon has changed since the @file{.inv}
+file was created.  Most likely, new fields have been added to some
+Daikon data structure (in the example above, @samp{daikon.VarInfo}).
+Thus, the data structures stored in the old @file{.inv} file cannot be
+read by the current version of the program.
+
+To work around this problem, re-create the @file{.inv} file using the
+current version of Daikon.  This is possible because although Daikon's
+internal implementation changed, its external interfaces
+(@file{.decls} and @file{.dtrace} file formats, etc.)@ have not.
+
+
 @node    Other problems, Reporting bugs, Daikon problems, Troubleshooting
 @section Other problems
 
@@ -4407,6 +4436,8 @@ MergeESC (@pxref{MergeESC}) automatically ignores unformattable invariants.
 
 @node    Large dtrace files, Tree GUI font errors, Other problems, Other problems
 @subsection Large data trace (.dtrace) files
+
+@cindex large .dtrace files
 
 Running instrumented code can create very large
 @file{.dtrace} files.  This can be a problem because writing the large
