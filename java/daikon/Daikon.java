@@ -49,6 +49,10 @@ public final class Daikon {
   // When true, don't print textual output.
   public static boolean no_text_output = false;
 
+  // When true, show how much time each program point took.
+  // Has no effect unless no_text_output is "false".
+  public static boolean show_progress = false;
+
   // When true, don't print invariants when their controlling ppt
   // already has them.  For example, this is the case for invariants
   // in public methods which are already given as part of the object
@@ -101,6 +105,7 @@ public final class Daikon {
   public static final String ppt_omit_regexp_SWITCH = "ppt_omit";
   public static final String var_omit_regexp_SWITCH = "var_omit";
   public static final String no_text_output_SWITCH = "no_text_output";
+  public static final String show_progress_SWITCH = "show_progress";
   public static final String suppress_cont_SWITCH = "suppress_cont";
   public static final String suppress_post_SWITCH = "suppress_post";
   public static final String suppress_redundant_SWITCH = "suppress_redundant";
@@ -151,6 +156,7 @@ public final class Daikon {
       new LongOpt(ppt_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(var_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(no_text_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(show_progress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -212,6 +218,8 @@ public final class Daikon {
           break;
 	} else if (no_text_output_SWITCH.equals(option_name)) {
 	  no_text_output = true;
+	} else if (show_progress_SWITCH.equals(option_name)) {
+	  show_progress = true;
 	} else if (suppress_cont_SWITCH.equals(option_name)) {
 	  suppress_implied_controlled_invariants = true;
 	} else if (suppress_post_SWITCH.equals(option_name)) {
@@ -344,7 +352,7 @@ public final class Daikon {
         // ppt.values.dump();
         // System.out.println("end dump-------------------------------------------------------------------");
 	long ppt_start_time = System.currentTimeMillis();
-	if (no_text_output) {
+	if (no_text_output && show_progress) {
 	  System.out.print(ppt.name + "...");
 	  System.out.flush();
 	}
@@ -354,7 +362,7 @@ public final class Daikon {
 	int num_derived_scalar_vars = ppt.num_vars() - ppt.num_array_vars() - num_scalar_vars;
 
 
-	if (no_text_output) {
+	if (no_text_output && show_progress) {
 	  System.out.print("...");
 	  System.out.flush();
 	}
@@ -390,7 +398,7 @@ public final class Daikon {
 	  monitor.end_of_iteration(ppt.name, num_samples, num_static_vars, num_orig_vars, num_scalar_vars, num_array_vars, num_derived_scalar_vars, num_derived_array_vars);
 	}
 	long ppt_end_time = System.currentTimeMillis();
-	if (no_text_output) {
+	if (no_text_output && show_progress) {
 	  double elapsed = (ppt_end_time - ppt_start_time) / 1000.0;
 	  System.out.println((new java.text.DecimalFormat("#.#")).format(elapsed) + "s");
 	}
@@ -512,7 +520,7 @@ public final class Daikon {
             int new_len = indices.length;
             int new_index = 0;
             int comb_index = 0;
-            
+
             Assert.assert(line_vars.length == comb_vars.length,
                           "\nIncorrect number of variables at exit points: " +
                           enter_ppt.name);
