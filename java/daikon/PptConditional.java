@@ -57,7 +57,6 @@ public final class PptConditional
   private static VarInfo[] ctor_vis_helper(PptTopLevel parent,
                                            Splitter splitter,
                                            boolean splitter_inverse) {
-    // return VarInfo.arrayclone_simple(parent.trace_and_orig_and_const_vars());
     return (VarInfo.arrayclone_simple(parent.var_infos));
   }
 
@@ -71,46 +70,5 @@ public final class PptConditional
   public DummyInvariant dummyInvariant() {
     return splitter.getDummyInvariant();
   }
-
-  // Call this for tuples that are guaranteed to pass the test.
-  void add_nocheck(ValueTuple vt, int count) {
-    super.add(vt, count);
-  }
-
-  public List add(ValueTuple vt, int count) {
-    // This try block may be a very inefficient way to do this computation.
-    // Perhaps figure out another way, or invalidate the whole PptConditional
-    // if any exception is thrown.
-
-    try {
-      boolean splitter_test = splitter.test(vt);
-      if (splitter_inverse ? (! splitter_test) : splitter_test)
-        return super.add(vt, count);
-    } catch (Exception e) {
-      // If an exception is thrown, don't put the data on either side
-      // of the split.
-      if (false) {              // need to add a debugging flag for this
-        System.out.println ("Exception thrown in add for " + name());
-        System.out.println ("Vars = " + Debug.related_vars (this, vt));
-      }
-    }
-    return emptyList;
-  }
-
-//   jhp - Changed Splitter to transient instead
-//   private void writeObject(java.io.ObjectOutputStream out)
-//     throws java.io.IOException
-//   {
-//     // Remove the splitter itself, in case it was compiled on the fly
-//     // (and so could not be re-loaded).  Later, perhaps change
-//     // de-serialization so that it is reconstructed on the fly.
-//     if (splitter != null) {
-//       Package pkg = splitter.getClass().getPackage();
-//       if (pkg == null ) { // no package
-//         splitter = null;
-//       }
-//     }
-//     out.defaultWriteObject();
-//   }
 
 }
