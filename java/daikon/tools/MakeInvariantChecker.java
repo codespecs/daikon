@@ -10,7 +10,7 @@ import gnu.getopt.*;
 
 import java.io.*;
 import java.util.*;
-import java.util.Date;
+import java.util.logging.*;
 
 /**
  *   MakeInvariantChecker creates a java program that checks if the
@@ -30,6 +30,9 @@ import java.util.Date;
 public final class MakeInvariantChecker {
 
   // FIELD VARIABLES
+
+  public static final Logger debug
+    = Logger.getLogger ("daikon.tools.MakeInvariantChecker");
 
   /**
    * Maps invalid variable names to valid variable names.
@@ -72,11 +75,21 @@ public final class MakeInvariantChecker {
 
   /** List of command line options. */
   protected static String flagList =
-    UtilMDE.join (new String [] {"    " + assertion_behavior_SWITCH +
-                                 " -- defines the method to be called to check invariants.",
-                                 filter_behavior_SWITCH +
-                                 " -- determines what filters will be used in eliminating invariants."},
-                  Daikon.lineSep + "    ");
+    UtilMDE.join (new String []
+      {"    " + assertion_behavior_SWITCH +
+      " -- defines the method to be called to check invariants.",
+      filter_behavior_SWITCH +
+      " -- determines what filters will be used in eliminating invariants.",
+      "  --" + Daikon.config_option_SWITCH + " config_var=val",
+      "      Sets the specified configuration variable.  ",
+      "  --" + Daikon.debugAll_SWITCH,
+      "      Turns on all debug flags (voluminous output)",
+      "  --" + Daikon.debug_SWITCH + " logger",
+      "      Turns on the specified debug logger",
+      "  --" + Daikon.track_SWITCH + " class<var1,var2,var3>@ppt",
+      "      Print debug info on the specified invariant class, vars, and ppt",
+      },
+      Daikon.lineSep + "    ");
 
   /** Usage string. */
   protected static String usage =
@@ -183,7 +196,8 @@ public final class MakeInvariantChecker {
   protected static Set[] readOptions(String args[])
   {
     if (args.length == 0) {
-      System.out.println("MakeInvariantChecker error: no files supplied on command line.");
+      System.out.println("MakeInvariantChecker error: "
+                          + "no files supplied on command line.");
       System.out.println(usage);
       System.exit(1);
     }
@@ -194,8 +208,12 @@ public final class MakeInvariantChecker {
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(assertion_behavior_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt(filter_behavior_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0)};
-
+      new LongOpt(filter_behavior_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(Daikon.track_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+    };
     Getopt g = new Getopt("daikon.tools.MakeInvariantChecker", args, "ho:", longopts);
     int c;
 
@@ -222,8 +240,25 @@ public final class MakeInvariantChecker {
             throw new Error(e.toString());
           }
           break;
+        } else if (Daikon.config_option_SWITCH.equals(option_name)) {
+          String item = g.getOptarg();
+          daikon.config.Configuration.getInstance().apply(item);
+          break;
+        } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
+          Global.debugAll = true;
+        } else if (Daikon.debug_SWITCH.equals(option_name)) {
+          LogHelper.setLevel(g.getOptarg(), LogHelper.FINE);
+        } else if (Daikon.track_SWITCH.equals (option_name)) {
+          LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
+          String error = Debug.add_track (g.getOptarg());
+          if (error != null) {
+            System.out.println ("Error parsing track argument '"
+                                + g.getOptarg() + "' - " + error);
+            System.exit(1);
+          }
         } else {
-          throw new RuntimeException("Unknown long option received: " + option_name);
+          throw new RuntimeException ("Unknown long option received: "
+                                      + option_name);
         }
         break;
 
@@ -326,7 +361,7 @@ public final class MakeInvariantChecker {
 
       varNameMap.put(aVarInfoName.java_name(aVarInfo),
                      makeValidJavaIdentifier(aVarInfoName.java_name(aVarInfo)));
-      ((List) currentLists[0]).add(aVarInfo);
+      currentLists[0].add(aVarInfo);
       }
 
       // Get the invariants for this PptTopLevel.
@@ -335,11 +370,15 @@ public final class MakeInvariantChecker {
       fi.setPptMap(pptMap);
 
       while(invariants.hasNext()){
-        Invariant anInvariant = (Invariant) invariants.next();
-        boolean fi_accepted = fi.shouldKeep(anInvariant) == null;
-        String stringInvariant = anInvariant.format_using(Daikon.output_style);
-        if (fi_accepted && (isImplementedYet(stringInvariant)))
-          ((List) currentLists[1]).add(anInvariant);
+        Invariant inv = (Invariant) invariants.next();
+        if (fi.shouldKeep (inv) == null)
+          continue;
+        if (!inv.justified())
+          continue;
+        debug.fine ("processing invariant " + inv.format());
+        String stringInvariant = inv.format_using(Daikon.output_style);
+        if (isImplementedYet (stringInvariant))
+          ((List) currentLists[1]).add (inv);
       }
     }
     return invariantInfo;
@@ -800,7 +839,7 @@ public final class MakeInvariantChecker {
         "               if (daikon.tools.InvariantChecker.makeValidJavaIdentifier",
         "                   (atoplevel.name()).equals(\"" +
         pptPointName  + "\")) ",
-        "                    assertPpt"+ pptPointName +"(info);"}, Daikon.lineSep));
+        "                    assertPpt"+ pptPointName +"(info);", ""}, Daikon.lineSep));
     }
     javaSourceWriter.print("          }\n\n");
 
