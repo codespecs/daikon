@@ -22,7 +22,7 @@ public class PptMap
     nameToPpt.put(ppt.name(), ppt);
 
     // Keep track of the global ppt.  There should only be one
-    if (ppt.ppt_name.isGlobalPoint()) {
+    if (ppt.ppt_name.isGlobalPoint() && Daikon.use_dataflow_hierarchy) {
       Assert.assertTrue (global == null);
       global = ppt;
     }

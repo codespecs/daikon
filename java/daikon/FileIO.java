@@ -767,39 +767,21 @@ public final class FileIO {
 
     { // For now, keep indentation the same
       {
-        // Now add some additional variable values that don't appear directly
-        // in the data trace file but aren't traditional derived variables.
 
-        // add_orig_variables(ppt, cumulative_modbits, vals, mods, nonce); // [INCR] (punt modbits)
+        // Add orig variables.  This must be above the check below because
+        // it saves away the orig values from enter points for later use
+        // by exit points.
         add_orig_variables(ppt, vt.vals, vt.mods, nonce);
 
-        // XXX (for now, until front ends are changed)
-        // No, always do this, because exit ppts have all the interesting values,
-        // and doing anything else is redundant.
-        if (Daikon.use_dataflow_hierarchy && !ppt.ppt_name.isExitPoint()) {
-          return;
+        // Only process the leaves of the ppt tree
+        if (Daikon.use_dataflow_hierarchy) {
+          if (!ppt.ppt_name.isExitPoint())
+            return;
+          Assert.assertTrue (!ppt.ppt_name.isCombinedExitPoint());
         }
-
-        // Only do leaves in bottom up
-        if (Daikon.dkconfig_df_bottom_up && ppt.ppt_name.isCombinedExitPoint())
-          return;
-
-        // // Add invocation counts
-        // if not no_invocation_counts {
-        //   for ftn_ppt_name in fn_invocations.keys() {
-        //     calls_var_name = "calls(%s)" % ftn_ppt_name;
-        //     assert calls_var_name == these_var_infos[current_var_index].name;
-        //     these_values.append((fn_invocations[ftn_ppt_name],1))e;
-        //     current_var_index++;
-        //   }
-        // }
-
 
         // Add derived variables
         add_derived_variables(ppt, vt.vals, vt.mods);
-
-        // Done adding additional variable values that don't appear directly
-        // in the data trace file.
 
         // Causes interning
         vt = new ValueTuple(vt.vals, vt.mods);
