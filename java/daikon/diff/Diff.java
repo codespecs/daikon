@@ -27,31 +27,37 @@ public final class Diff {
     lineSep +
     "  -j  Treat justification as a continuous value" +
     lineSep +
+    "  -p  Examine all program points" +
+    lineSep +
     "  -v  Verbose output" +
     lineSep;
 
+  private boolean examineAllPpts;
 
-  // Types of output
-  private static boolean printDiff = false;
-  private static boolean printAll = false;
-  private static boolean stats = false;
-  private static boolean tabSeparatedStats = false;
-  private static boolean verbose = false;
-  
-  // If true, justification is handled as a continuous quantity, so
-  // the difference between two invariants is the numerical difference
-  // between their justifications.  If false, the difference is always
-  // 0 or 1.
-  private static boolean continuousJustification = false;
+  public Diff() {
+    this(false);
+  }
 
-  private static boolean optionSelected = false;
+  public Diff(boolean examineAllPpts) {
+    this.examineAllPpts = examineAllPpts;
+  }
 
   /** Read two PptMap objects from their respective files and diff them. */
   public static void main(String[] args) throws FileNotFoundException,
   StreamCorruptedException, OptionalDataException, IOException,
   ClassNotFoundException {
 
-    Getopt g = new Getopt("daikon.diff.Diff", args, "hdastjv");
+    boolean printDiff = false;
+    boolean printAll = false;
+    boolean stats = false;
+    boolean tabSeparatedStats = false;
+    boolean examineAllPpts = false;
+    boolean verbose = false;
+    boolean continuousJustification = false;
+
+    boolean optionSelected = false;
+
+    Getopt g = new Getopt("daikon.diff.Diff", args, "hdastjpv");
     int c;
     while ((c = g.getopt()) !=-1) {
       switch (c) {
@@ -78,6 +84,9 @@ public final class Diff {
       case 'j':
         continuousJustification = true;
         break;
+      case 'p':
+        examineAllPpts = true;
+        break;
       case 'v':
         verbose = true;
         break;
@@ -94,6 +103,8 @@ public final class Diff {
       stats = true;
       printDiff = true;
     }
+
+    Diff diff = new Diff(examineAllPpts);
 
     // The index of the first non-option argument -- the name of the
     // first file
@@ -117,7 +128,7 @@ public final class Diff {
       System.exit(1);
     }
 
-    RootNode root = diffPptMap(map1, map2);
+    RootNode root = diff.diffPptMap(map1, map2);
 
     if (stats) {
       DetailedStatisticsVisitor v =
@@ -150,7 +161,7 @@ public final class Diff {
   // Returns a tree of corresponding program points, and corresponding
   // invariants at each program point.  This tree can be walked to
   // determine differences between the sets of invariants.
-  public static RootNode diffPptMap(PptMap map1, PptMap map2) {
+  public RootNode diffPptMap(PptMap map1, PptMap map2) {
     RootNode root = new RootNode();
 
     Comparator comparator = new Ppt.NameComparator();
@@ -175,15 +186,19 @@ public final class Diff {
     return root;
   }
 
-  private static boolean shouldAdd(PptTopLevel ppt) {
-    if (ppt == null) {
-      return false;
-    } else if (ppt.ppt_name.isEnterPoint()) {
-      return true;
-    } else if (ppt.ppt_name.isExitPoint() && ppt.combined_exit == null) {
+  private boolean shouldAdd(PptTopLevel ppt) {
+    if (examineAllPpts) {
       return true;
     } else {
-      return false;
+      if (ppt == null) {
+        return false;
+      } else if (ppt.ppt_name.isEnterPoint()) {
+        return true;
+      } else if (ppt.ppt_name.isExitPoint() && ppt.combined_exit == null) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 
@@ -191,7 +206,7 @@ public final class Diff {
   // Takes a pair of corresponding top-level program points, and
   // returns a tree of the corresponding invariants.  Either of the
   // program points may be null.
-  private static PptNode diffPptTopLevel(PptTopLevel ppt1, PptTopLevel ppt2) {
+  private PptNode diffPptTopLevel(PptTopLevel ppt1, PptTopLevel ppt2) {
     PptNode pptNode = new PptNode(ppt1, ppt2);
 
     Comparator pptComparator = new Ppt.NameComparator();
