@@ -22,7 +22,8 @@ public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
     boolean shouldPrint = true;
 
     int type = DetailedStatisticsVisitor.determineType(inv1, inv2);
-    if (type == DetailedStatisticsVisitor.TYPE_UNARY_UNINTERESTING) {
+    if (type == DetailedStatisticsVisitor.TYPE_NULLARY_UNINTERESTING ||
+        type == DetailedStatisticsVisitor.TYPE_UNARY_UNINTERESTING) {
       shouldPrint = false;
     }
 
