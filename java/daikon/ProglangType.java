@@ -51,6 +51,8 @@ public final class ProglangType implements java.io.Serializable {
   public final static ProglangType VECTOR = ProglangType.intern("Vector", 0);
   public final static ProglangType OBJECT = ProglangType.intern("Object", 0);
 
+  public final static ProglangType HASHCODE = ProglangType.intern("hashcode", 0);
+
   private String base;		// interned name of base type
   public String base() { return base; }
   private int dimensions;	// number of dimensions
@@ -99,11 +101,14 @@ public final class ProglangType implements java.io.Serializable {
     return intern(new_base, dims);
   }
 
-  /** Like parse, but does certain conversions for representation types. **/
+  /**
+   * Like parse, but does certain conversions for representation types, in
+   * order to return representation types.
+   **/
   public static ProglangType rep_parse(String rep) {
     ProglangType candidate = parse(rep);
-    if (candidate.base == "boolean") {  // interned
-      return intern("int", candidate.dimensions);
+    if ((candidate.base == "address") || (candidate.base == "pointer")) { // interned
+      return intern("hashcode", candidate.dimensions);
     } else if (candidate.base == "float") { // interned
       return intern("double", candidate.dimensions);
     } else {
@@ -217,14 +222,12 @@ public final class ProglangType implements java.io.Serializable {
   final static String BASE_SHORT = "short";
 
   // Nonprimitive types
-  final static String BASE_ADDRESS = "address";
-  // Hmmm, not sure about the difference between these two.
-//   final static String BASE_JAVA_OBJECT = "java_object";
-//   final static String BASE_OBJECT = "Object";
-  // deprecated; use "address" in preference to "pointer"
-  final static String BASE_POINTER = "pointer";
   final static String BASE_STRING = "String";
   final static String BASE_INTEGER = "Integer";
+  // "hashcode", "address", and "pointer" are identical; "address" is preferred
+  final static String BASE_HASHCODE = "hashcode";
+  // final static String BASE_ADDRESS = "address";
+  // final static String BASE_POINTER = "pointer";
 
   // avoid duplicate allocations
   // No need for the Integer versions; use Long instead.
@@ -256,8 +259,12 @@ public final class ProglangType implements java.io.Serializable {
 	if (value.startsWith("\"") && value.endsWith("\""))
 	  value = value.substring(1, value.length()-1);
 	return value.intern();
-      } else if ((base == BASE_ADDRESS) || (base == BASE_POINTER)) {
+      } else if (base == BASE_HASHCODE) {
 	return Intern.intern(Long.valueOf(value, 16));
+      // } else if (base == BASE_HASHCODE) {
+      //   if (value.equals("null"))
+      //     return LongZero;
+      //   return Intern.internedLong(value);
       } else if (base == BASE_CHAR) {
         // This will fail if the character is output as an integer
         // (as I believe the C front end does).
@@ -267,27 +274,32 @@ public final class ProglangType implements java.io.Serializable {
           c = value.charAt(0);
         else if ((value.length() == 2) && (value.charAt(0) == '\\'))
           c = UtilMDE.unquote(value).charAt(0);
+        else if ((value.length() == 4) && (value.charAt(0) == '\\')) {
+          Byte b = Byte.decode("0" + value.substring(1));
+          return Intern.internedLong(b.longValue());
+        }
         else
           throw new Error("Bad character: " + value);
         return Intern.internedLong(Character.getNumericValue(c));
       } else if (base == BASE_INT) {
-        // Is this still necessary?
-        // Hack for Java objects, fix later I guess.
-        if (value.equals("null"))
-          return LongZero;
-        // Hack for booleans
-        if (value.equals("false"))
-          return LongZero;
-        if (value.equals("true"))
-          return LongOne;
+        {
+          // Temporary hack, to be removed when instrumenters use
+          // "boolean" and "hashcode" rep_types properly.
+          if (value.equals("null"))
+            return LongZero;
+          if (value.equals("false") || value.equals("0"))
+            return LongZero;
+          if (value.equals("true") || value.equals("1"))
+            return LongOne;
+        }
 	return Intern.internedLong(value);
-      // } else if (base == BASE_BOOLEAN) {
-      //   return new Boolean(value);
+      } else if (base == BASE_BOOLEAN) {
+        if (value.equals("false") || value.equals("0"))
+          return LongZero;
+        if (value.equals("true") || value.equals("1"))
+          return LongOne;
+        throw new Error("Bad value for boolean: " + value);
       } else if (base == BASE_DOUBLE) {
-        // Is this still necessary?
-        // Hack for Java objects, fix later I guess.
-        if (value.equals("null"))
-          return DoubleZero;
         if (value.equals("NaN"))
           return DoubleNaN;
 	return Intern.internedDouble(value);
@@ -311,8 +323,7 @@ public final class ProglangType implements java.io.Serializable {
         value = value.substring(1, value.length() - 1).trim();
       }
 
-      // This isn't right if a string contains embedded spaces.
-      // I could instead use StreamTokenizer.
+      // This properly handles strings containing embedded spaces.
       String[] value_strings;
       if (value.length() == 0) {
         value_strings = new String[0];
@@ -415,6 +426,8 @@ public final class ProglangType implements java.io.Serializable {
     return ((dimensions == 0) && baseIsPrimitive());
   }
 
+  // Does not include boolean.  Is that intentional?  (If it were added,
+  // we would need to change isIndex().)
   public boolean baseIsIntegral() {
     return ((base == BASE_BYTE) ||
             (base == BASE_CHAR) ||
@@ -436,6 +449,14 @@ public final class ProglangType implements java.io.Serializable {
   // Return true if this variable is sensible as an array index.
   public boolean isIndex() {
     return isIntegral();
+  }
+
+  public boolean isScalar() {
+    // For reptypes, checking against INT is sufficient, rather than
+    // calling isIntegral().
+    return (isIntegral()
+            || (this == HASHCODE)
+            || (this == BOOLEAN));
   }
 
   public boolean baseIsFloat() {

@@ -114,7 +114,7 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
     String result;
 
     String[]  value = elts[0];
-    if (var().name.isApplySizeSafe()) 
+    if (var().name.isApplySizeSafe())
       result = "size("+var().name.ioa_name(classname) + ") = " + value.length;
     else
       result = "format_ioa " + this.getClass() + " needs to be changed: " + format();

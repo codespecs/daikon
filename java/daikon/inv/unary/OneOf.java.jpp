@@ -50,7 +50,7 @@ The correct way to build the system is to run 'make'.
 #define ONEOFSCALAR EltOneOf
 #define ONEOFSCALARSTR "EltOneOf"
 #define SINGLESCALAR SingleSequence
-#define TOSTRING(x) ((!var().type.elementIsIntegral() && (x == 0)) ? "null" : (Long.toString(x)))
+#define TOSTRING(x) (((x == 0) && ((var().rep_type == ProglangType.HASHCODE) || (!var().type.elementIsIntegral()))) ? "null" : (Long.toString(x)))
 #define NAME var().name.name() + " elements"
 #define DEFLIMIT 5
 #elif defined(ELTSTRING)
@@ -117,13 +117,19 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 #endif
     num_elts = 0;
 #if defined(SCALAR)
-    is_boolean = (var().type == ProglangType.BOOLEAN);
-    is_hashcode = var().type.isObject() || var().type.isArray();
+    is_boolean = (var().rep_type == ProglangType.BOOLEAN);
+    is_hashcode = (var().rep_type == ProglangType.HASHCODE);
+    // Temporary; for backward compatibility
+    is_boolean = is_boolean || (var().type == ProglangType.BOOLEAN);
+    is_hashcode = is_hashcode || var().type.isObject() || var().type.isArray();
 #elif defined(ELT) || defined(SEQUENCE)
     Assert.assert(var().type.isPseudoArray(),
 		  "ProglangType must be pseudo-array for EltOneOf or OneOfSequence");
-    is_boolean = (var().type.elementType() == ProglangType.BOOLEAN);
-    is_hashcode = var().type.elementType().isObject() || var().type.elementType().isArray();
+    is_boolean = (var().rep_type.elementType() == ProglangType.BOOLEAN);
+    is_hashcode = (var().rep_type.elementType() == ProglangType.HASHCODE);
+    // Temporary; for backward compatibility
+    is_boolean = is_boolean || (var().type.elementType() == ProglangType.BOOLEAN);
+    is_hashcode = is_hashcode || var().type.elementType().isObject() || var().type.elementType().isArray();
 #endif
   }
 
@@ -318,7 +324,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
         result += varname + " = " + TOSTRING(elts[i]) + ")";
       }
     }
-#elif defined(SEQUENCE) 
+#elif defined(SEQUENCE)
     String length = "";
     String forall = "";
     if (is_hashcode) {
@@ -346,7 +352,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     }
 #elif defined(STRINGSEQUENCE)
     INT value = elts[0];
-    if (var().name.isApplySizeSafe()) 
+    if (var().name.isApplySizeSafe())
       result = "size("+var().name.ioa_name(classname) + ") = " + value.length;
     else
       result = "format_ioa " + this.getClass() + " needs to be changed: " + format();
@@ -582,7 +588,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
         return;
       }
     }
-#endif    
+#endif
     elts[num_elts] = v;
     num_elts++;
 #if defined(ELT) || defined(ELTSTRING)

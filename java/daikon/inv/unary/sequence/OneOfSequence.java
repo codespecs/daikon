@@ -45,8 +45,11 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
 
     Assert.assert(var().type.isPseudoArray(),
 		  "ProglangType must be pseudo-array for EltOneOf or OneOfSequence");
-    is_boolean = (var().type.elementType() == ProglangType.BOOLEAN);
-    is_hashcode = var().type.elementType().isObject() || var().type.elementType().isArray();
+    is_boolean = (var().rep_type.elementType() == ProglangType.BOOLEAN);
+    is_hashcode = (var().rep_type.elementType() == ProglangType.HASHCODE);
+    // Temporary; for backward compatibility
+    is_boolean = is_boolean || (var().type.elementType() == ProglangType.BOOLEAN);
+    is_hashcode = is_hashcode || var().type.elementType().isObject() || var().type.elementType().isArray();
 
   }
 

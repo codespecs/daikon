@@ -35,7 +35,10 @@ public class NonZero extends SingleScalar {
     }
 
     NonZero result = new NonZero(ppt);
-    if (! ppt.var_infos[0].type.isIntegral()) {
+    if ((ppt.var_infos[0].rep_type == ProglangType.HASHCODE)
+        // temporary, for backward compatibility
+        || ((! ppt.var_infos[0].type.isIntegral())
+            && (! (ppt.var_infos[0].type == ProglangType.BOOLEAN)))) {
       result.pointer_type = true;
       result.override_range = 3;
     }
@@ -60,7 +63,7 @@ public class NonZero extends SingleScalar {
   /* IOA */
   public String format_ioa(String classname) {
     String result = var().name.ioa_name(classname)+" ~= ";
-    result += (pointer_type ? "Null("+var().elementTypeIOA()+") ***" : "0"); 
+    result += (pointer_type ? "Null("+var().elementTypeIOA()+") ***" : "0");
     return result;
   }
 

@@ -15,7 +15,9 @@ public final class SingleScalarFactory {
     Assert.assert(ppt.arity == 1);
     VarInfo var = ppt.var_infos[0];
     // Assert.assert(! var.rep_type.isArray());
-    Assert.assert(var.rep_type == ProglangType.INT);
+    Assert.assert((var.rep_type == ProglangType.INT)
+                  || (var.rep_type == ProglangType.HASHCODE)
+                  || (var.rep_type == ProglangType.BOOLEAN));
 
     Vector result = new Vector();
     if (pass == 1) {
@@ -31,6 +33,10 @@ public final class SingleScalarFactory {
           result.add(Modulus.instantiate(ppt));
           result.add(NonModulus.instantiate(ppt));
           result.add(UpperBound.instantiate(ppt));
+          // Add a line like this for each invariant you choose to add.
+          // "Positive" is a pedagogical example only and should not be
+          // used in normal use.
+          // result.add(Positive.instantiate(ppt));
         } else {
           // This is suppressed because of types; not sure what global
           // variable to increment for statistics output.

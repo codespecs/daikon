@@ -66,6 +66,8 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 
   static boolean legalRepType(ProglangType rep_type) {
     return ((rep_type == ProglangType.INT)
+            || (rep_type == ProglangType.BOOLEAN)
+            || (rep_type == ProglangType.HASHCODE)
             || (rep_type == ProglangType.DOUBLE)
             || (rep_type == ProglangType.STRING)
             || (rep_type == ProglangType.INT_ARRAY)

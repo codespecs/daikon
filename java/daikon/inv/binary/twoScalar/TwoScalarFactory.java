@@ -17,8 +17,8 @@ public final class TwoScalarFactory {
     VarInfo var2 = ppt.var_infos[1];
 
     // Assert.assert((! var1.rep_type.isArray()) && (! var2.rep_type.isArray()));
-    Assert.assert((var1.rep_type == ProglangType.INT)
-                  && (var2.rep_type == ProglangType.INT));
+    Assert.assert(var1.rep_type.isScalar());
+    Assert.assert(var2.rep_type.isScalar());
 
     if (! var1.compatible(var2))
       return null;

@@ -62,7 +62,8 @@ public final class PptSlice1  extends PptSlice {
     Vector new_invs = null;
 
     ProglangType rep_type = var_info.rep_type;
-    if (rep_type == ProglangType.INT) {
+    boolean is_scalar = rep_type.isScalar();
+    if (is_scalar) {
       new_invs = SingleScalarFactory.instantiate(this, pass);
     } else if (rep_type == ProglangType.INT_ARRAY) {
       new_invs = SingleSequenceFactory.instantiate(this, pass);
@@ -203,7 +204,8 @@ public final class PptSlice1  extends PptSlice {
 
     Assert.assert(mod1 != ValueTuple.MISSING);
     ProglangType rep = vi1.rep_type;
-    if (rep == ProglangType.INT) {
+    boolean rep_is_scalar = rep.isScalar();
+    if (rep_is_scalar) {
       // long value = vi1.getIntValue(full_vt);
       long value = ((Long) val1).longValue();
       for (int i=0; i<num_invs; i++) {

@@ -58,8 +58,9 @@ public final class PptSlice2  extends PptSlice {
 
     ProglangType rep1 = var_infos[0].rep_type;
     ProglangType rep2 = var_infos[1].rep_type;
-    if ((rep1 == ProglangType.INT)
-        && (rep2 == ProglangType.INT)) {
+    boolean rep1_is_scalar = rep1.isScalar();
+    boolean rep2_is_scalar = rep2.isScalar();
+    if (rep1_is_scalar && rep2_is_scalar) {
       new_invs = TwoScalarFactory.instantiate(this, pass);
     } else if ((rep1 == ProglangType.STRING)
         && (rep2 == ProglangType.STRING)) {
