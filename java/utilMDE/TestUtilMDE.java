@@ -764,6 +764,7 @@ public final class TestUtilMDE extends TestCase {
     testNonModulus.check_strict(new int[] {-1,1,2,3,5,6,7,9}, new int[] {0,4});
     testNonModulus.check_strict(new int[] {1,2,3,5,6,7,9,11}, null);
     testNonModulus.check_strict(new int[] {1,2,3,5,6,7,11}, null);
+    testNonModulus.check_strict(new int[] {1,2,4,6,8,10}, null);
 
     // null because only 7 elements, so don't try modulus = 4
     testNonModulus.check_nonstrict(new int[] {1,2,3,5,6,7,9}, null);
