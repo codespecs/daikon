@@ -30,13 +30,13 @@ public class DynamicConstants implements Serializable {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030913L;
 
+  // If true don't create any invariants (including OneOfs) over dynamic
+  // constants during post processing.  Normally, the configuration
+  // variable OneOf_only is more appropriate
+  static final boolean no_post_process = false;
+
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /**
-   * Boolean.  If true, don't create post processed invariants
-   * over dynamic constants.  For experimental purposes only
-   **/
-  public static boolean dkconfig_no_post_process = false;
 
   /**
    * Boolean. If true only create OneOf invariants for variables that
@@ -562,7 +562,7 @@ public class DynamicConstants implements Serializable {
   public void post_process () {
 
     // if requested, don't create any post-processed invariants
-    if (dkconfig_no_post_process) {
+    if (no_post_process) {
       int con_count = 0;
       for (int i = 0; i < con_list.size(); i++) {
         Constant con = (Constant) con_list.get(i);
