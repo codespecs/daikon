@@ -1452,10 +1452,12 @@ public class PptTopLevel extends Ppt {
     Iterator controllers = controlling_ppts.iterator();
     while (controllers.hasNext()) {
       PptTopLevel controller = (PptTopLevel) controllers.next();
+      // System.out.println("Looking for controller of " + inv.format() + " in " + controller.name);
       Iterator candidates = controller.invariants_vector().iterator();
       while (candidates.hasNext()) {
 	Invariant cand_inv = (Invariant) candidates.next();
 	if (cand_inv.isSameInvariant(inv)) {
+          // System.out.println("Controller found: " + cand_inv.format() + "  [worth printing: " + ((PptTopLevel)cand_inv.ppt.parent).isWorthPrinting(cand_inv) + "]");
 	  return cand_inv;
 	}
       }
@@ -1868,7 +1870,14 @@ public class PptTopLevel extends Ppt {
       if (cont_inv != null) {
 	// TODO: Is this the right parent-finding to do even with conditionals?
 	PptTopLevel top = (PptTopLevel) cont_inv.ppt.parent;
-	if (top.isWorthPrinting(cont_inv)) {
+        // Don't want to use isWorthPrinting directly; if a controlled by b
+        // controlled by c, then isWorthPrinting should return false for a
+        // as well as for b.
+        // This is a hack; fix it later.
+        Daikon.suppress_implied_controlled_invariants = false;
+        boolean controller_isWorthPrinting = top.isWorthPrinting(cont_inv);
+        Daikon.suppress_implied_controlled_invariants = true;
+	if (controller_isWorthPrinting) {
 	  if (add_to_stats) {
 	    // TODO: Fix global statistics for this?
 	  }
