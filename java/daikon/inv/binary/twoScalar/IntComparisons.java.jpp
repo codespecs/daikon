@@ -409,8 +409,8 @@ invariants.
   }
 
   public String format_using(OutputFormat format) {
-    String var1name = var1().name.name_using(format);
-    String var2name = var2().name.name_using(format);
+    String var1name = var1().name.name_using(format, var1());
+    String var2name = var2().name.name_using(format, var2());
 
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.ESCJAVA)

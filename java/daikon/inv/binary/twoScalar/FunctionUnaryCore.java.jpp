@@ -114,15 +114,15 @@ public final class CLASSNAME
 
 
   public String format_using(OutputFormat format,
-                             VarInfoName vname1,
-                             VarInfoName vname2)
+                             VarInfoName vname1, VarInfo vi1,
+                             VarInfoName vname2, VarInfo vi2)
   {
-    String argname = (inverse ? vname2 : vname1).name_using(format);
-    String resultname = (inverse ? vname1 : vname2).name_using(format);
+    String argname = (inverse ? vname2 : vname1).name_using(format, vi1);
+    String resultname = (inverse ? vname1 : vname2).name_using(format, vi2);
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.IOA)
         || (format == OutputFormat.JML)
-        || (format == OutputFormat.DBCJAVA)) //RRN: unsure of this atm.
+        || (format == OutputFormat.DBCJAVA))
     {
       String eq = " == ";
       if (format == OutputFormat.IOA) eq = " = ";

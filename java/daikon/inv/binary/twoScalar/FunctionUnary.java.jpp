@@ -86,7 +86,7 @@ public class CLASSNAME
   }
 
   public String format_using(OutputFormat format) {
-    return core.format_using(format, var1().name, var2().name);
+    return core.format_using(format, var1().name, var1(), var2().name, var2());
   }
 
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, int count) {
