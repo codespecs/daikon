@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import utilMDE.Assert;
 import utilMDE.MathMDE;
+import utilMDE.UtilMDE;
 
 /**
  * ADT for a SuppressionFactory to specify what invariants
@@ -67,6 +68,35 @@ public class SuppressionTemplate {
     transforms = new VarInfo[0][];
   }
 
+  /**
+   * Fill in the invariant and argument for unary invariants
+   *
+   * @param indx    index in invTypes and varInfos to set
+   * @param cls     Invariant to search for
+   * @param arg     Argument to invariant
+   */
+  public void set (int indx, Class cls, VarInfo arg) {
+
+    invTypes[indx] = cls;
+    varInfos[indx][0] = arg;
+  }
+
+  /**
+   * Fill in the invariant and argument for binary invariants
+   *
+   * @param indx    index in invTypes and varInfos to set
+   * @param cls     Invariant to search for
+   * @param arg1    First invariant arg
+   * @param arg2    Second invariant arg
+   */
+  public void set (int indx, Class cls, VarInfo arg1, VarInfo arg2) {
+
+    invTypes[indx] = cls;
+    varInfos[indx][0] = arg1;
+    varInfos[indx][1] = arg2;
+  }
+
+
   //////////////
   // Accessors
 
@@ -78,6 +108,31 @@ public class SuppressionTemplate {
     return "SuppressionTemplate: " + invTypes + " " + varInfos + " " + results;
   }
 
+  /**
+   * Returns a description of the searched for invariant(s).  The description
+   * is of the form Invariant(arg1, arg2, arg3) || Invariant(arg1, arg2, arg3).
+   * For debug purposes.  Note that invTypes and VarInfos must be filled in.
+   */
+
+  public String searchString() {
+
+    String str = "";
+
+    for (int i = 0; i < invTypes.length; i++) {
+      if (i > 0)
+        str += " || ";
+      str += UtilMDE.replaceString (invTypes[i].getName(),
+                        invTypes[i].getPackage().getName() + ".", "")  + "(";
+      for (int j = 0; j < varInfos[i].length; j++) {
+        if (j > 0)
+          str += ", ";
+        str += varInfos[i][j].name.name();
+      }
+      str += ")";
+    }
+
+    return (str);
+  }
   ////////////////
   // Constructors
 
