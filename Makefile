@@ -18,6 +18,7 @@ SCRIPT_FILES := Makefile java-cpp.pl daikon.pl lines-from \
 	kvasir-dtrace \
 	convertcsv.pl \
 	trace-untruncate trace-untruncate-fast.c trace-purge-fns.pl trace-purge-vars.pl \
+	trace-add-nonces.pl \
 	checkargs.pm util_daikon.pm \
 	runcluster.pl decls-add-cluster.pl extract_vars.pl dtrace-add-cluster.pl
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
