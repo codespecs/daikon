@@ -4,23 +4,24 @@
 
 # Annotate a declaration file with implicit lackwit comparability information.
 # Prints the new declaration file to STDOUT.  Assumes:
+#   - $LACKWIT_HOME is set to the directory where lackwit is installed
 #   - The lackwit database has already been created
-#   - The LACKWITDB environment variable has been set
 #   - The BackEnd executable is in your path
 
-# Essentially a Perl port of a similar C++ program written by Adam
-# Czeisler
+# Perl port of a similar C++ program written by Adam Czeisler
 
-$ELEMENT_SUFFIX = "_element";
-$INDEX_SUFFIX = "_index";
-$DUMMY_RETURN = "lh_return_value";
+use strict;
 
-if (@ARGV != 1) {
-  die "Usage: lwpp.pl <filename.decls>\n";
+my $element_suffix = "_element";
+my $index_suffix = "_index";
+my $dummy_return = "lh_return_value";
+
+if (@ARGV != 2) {
+  die "Usage: lwpp.pl <lackwitdb> <filename.decls>\n";
 }
 
-($DECLS) = @ARGV;
-open DECLS or die "Can't open $DECLS: $!\n";
+my ($lackwitdb, $decls) = @ARGV;
+open DECLS, $decls or die "Can't open $decls: $!\n";
 
 print "VarComparability\n";
 print "implicit\n";
@@ -28,7 +29,7 @@ print "\n";
 
 # maps explicit types (a string of space-separated comparable
 # variables) to implicit types (integers)
-%implicit_types = ();
+my %implicit_types = ();
 
 while (<DECLS>) {
   print;
@@ -40,12 +41,12 @@ while (<DECLS>) {
 
     # variables at this program point that Daikon finds interesting,
     # namely parameters and global variables
-    %interesting_variables = ();
+    my %interesting_variables = ();
 
     # read the whole paragraph into a string, excluding the blank line
-    $ppt_declaration = <DECLS>;
+    my $ppt_declaration = <DECLS>;
     while (1) {
-      $variable = <DECLS>;
+      my $variable = <DECLS>;
       last if ((!$variable) || ($variable =~ /^\s+$/));
 
       $ppt_declaration .= $variable;
@@ -55,7 +56,8 @@ while (<DECLS>) {
       $variable = transform($variable);
 
       if (is_array_element($variable)) {
-        add_array_variables_to_interesting_variables($variable);
+        add_array_variables_to_interesting_variables($variable,
+                                                     \%interesting_variables);
       } else {
         $interesting_variables{$variable} = 1;
       }
@@ -66,18 +68,18 @@ while (<DECLS>) {
       $ppt_declaration .= <DECLS>;
     }
 
-    @ppt_declaration = split(/\n/, $ppt_declaration);
-    $ppt = shift @ppt_declaration;
+    my @ppt_declaration = split(/\n/, $ppt_declaration);
+    my $ppt = shift @ppt_declaration;
 
     $ppt =~ /^.*\.(.*)\(/;
-    $function = $1;
+    my $function = $1;
 
     print "$ppt\n";
 
     # process the variable declarations, one at a time
-    while($variable = shift @ppt_declaration) {
-      $declared_type = shift @ppt_declaration;
-      $representation_type = shift @ppt_declaration;
+    while(my $variable = shift @ppt_declaration) {
+      my $declared_type = shift @ppt_declaration;
+      my $representation_type = shift @ppt_declaration;
 
       # throw away the old comparability information
       shift @ppt_declaration;
@@ -87,10 +89,11 @@ while (<DECLS>) {
       print "$representation_type\n";
 
       if (is_array_element($variable)) {
-        print_implicit_type($variable, $function);
-        print_array_index_types($variable, $function);
+        print_implicit_type($variable, $function, \%interesting_variables);
+        print_array_index_types($variable, $function, $representation_type,
+                                \%interesting_variables);
       } else {
-        print_implicit_type($variable, $function);
+        print_implicit_type($variable, $function, \%interesting_variables);
       }
       
       print "\n";
@@ -102,9 +105,9 @@ while (<DECLS>) {
 print STDERR "\n";
 
 print "# Implicit Type to Explicit Type\n";
-foreach $implicit_type (sort {$a <=> $b;} values %implicit_types) {
-  %explicit_types = reverse %implicit_types;
-  $explicit_type = $explicit_types{$implicit_type};
+foreach my $implicit_type (sort {$a <=> $b;} values %implicit_types) {
+  my %explicit_types = reverse %implicit_types;
+  my $explicit_type = $explicit_types{$implicit_type};
   printf "# %3s : $explicit_type\n", $implicit_type;
 }
 
@@ -116,7 +119,7 @@ sub is_array_element {
 
 
 sub get_comparable_variables {
-  my ($variable, $function) = @_;
+  my ($variable, $function, $interesting_variables) = @_;
 
   my %comparable_variables = ();
 
@@ -125,7 +128,7 @@ sub get_comparable_variables {
   if (is_array_element($variable)) {
     my $array_base = $variable;
     $array_base =~ s/\[\]//;
-    my $element_variable = $array_base . $ELEMENT_SUFFIX;
+    my $element_variable = $array_base . $element_suffix;
     $comparable_variables{$element_variable} = 1;
   } else {
     $comparable_variables{$variable} = 1;
@@ -164,16 +167,16 @@ sub get_comparable_variables {
     
     if (is_array_element($comparable_variable)) {
       # change array[0][0]... to array_element
-      $comparable_variable =~ s/(\[0\])+/$ELEMENT_SUFFIX/;
+      $comparable_variable =~ s/(\[0\])+/$element_suffix/;
     }
 
-    if (exists $interesting_variables{$comparable_variable}) {
+    if (exists $interesting_variables->{$comparable_variable}) {
       $comparable_variables{$comparable_variable} = 1;
-    } elsif ($comparable_variable =~ /^(.*)$ELEMENT_SUFFIX/) {
+    } elsif ($comparable_variable =~ /^(.*)$element_suffix/) {
       # an array element may be represented in the trace file as a pointer
       my $array_base = $1;
       my $pointer = "*$array_base";
-      if (exists $interesting_variables{$pointer}) {
+      if (exists $interesting_variables->{$pointer}) {
         $comparable_variables{$pointer} = 1;
       }
     }
@@ -184,20 +187,20 @@ sub get_comparable_variables {
 
 
 sub add_array_variables_to_interesting_variables {
-  my ($variable) = @_;
+  my ($variable, $interesting_variables) = @_;
   my $array_base = $variable;
   $array_base =~ s/\[\]//;
-  my $element_variable = $array_base . $ELEMENT_SUFFIX;
-  $interesting_variables{$element_variable} = 1;
+  my $element_variable = $array_base . $element_suffix;
+  $interesting_variables->{$element_variable} = 1;
   if ($variable =~ /\[\]/) {
-    my $index_variable = $array_base . $INDEX_SUFFIX;
-    $interesting_variables{$index_variable} = 1;
+    my $index_variable = $array_base . $index_suffix;
+    $interesting_variables->{$index_variable} = 1;
   }
 }
 
 
 sub print_array_index_types {
-  my ($variable, $function) = @_;
+  my ($variable, $function, $representation_type, $interesting_variables) = @_;
 
   $variable = transform($variable);
 
@@ -211,17 +214,18 @@ sub print_array_index_types {
   }
 
   if ($representation_type =~ /\[\]/) {
-    my $index_variable = $array_base . $INDEX_SUFFIX;
-    my %comparable_variables =
-      get_comparable_variables($index_variable, $function);
+    my $index_variable = $array_base . $index_suffix;
+    my %comparable_variables = get_comparable_variables($index_variable,
+      $function, $interesting_variables);
 
     if (is_array_element($variable)) {
       my $pointer_var = $variable;
       $pointer_var =~ s/(\[\]|\[0\])//;
-      my %pointer_comp_var = get_comparable_variables($pointer_var, $function);
+      my %pointer_comp_var = get_comparable_variables($pointer_var,
+        $function, $interesting_variables);
       foreach my $pointer_comp_var (keys %pointer_comp_var) {
-        my $index_comp_var = $pointer_comp_var . $INDEX_SUFFIX;
-        if (exists $interesting_variables{$index_comp_var}) {
+        my $index_comp_var = $pointer_comp_var . $index_suffix;
+        if (exists $interesting_variables->{$index_comp_var}) {
           $comparable_variables{$index_comp_var} = 1;
         }
       }
@@ -235,19 +239,21 @@ sub print_array_index_types {
 
 
 sub print_implicit_type {
-  my ($variable, $function) = @_;
+  my ($variable, $function, $interesting_variables) = @_;
 
   $variable = transform($variable);
 
-  my %comparable_variables = get_comparable_variables($variable, $function);
+  my %comparable_variables = get_comparable_variables($variable,
+    $function, $interesting_variables);
 
   if (is_array_element($variable)) {
     my $pointer_var = $variable;
     $pointer_var =~ s/(\[\]|\[0\])//;
-    my %pointer_comp_var = get_comparable_variables($pointer_var, $function);
+    my %pointer_comp_var = get_comparable_variables($pointer_var,
+      $function, $interesting_variables);
     foreach my $pointer_comp_var (keys %pointer_comp_var) {
-      my $elem_comp_var = $pointer_comp_var . $ELEMENT_SUFFIX;
-      if (exists $interesting_variables{$elem_comp_var}) {
+      my $elem_comp_var = $pointer_comp_var . $element_suffix;
+      if (exists $interesting_variables->{$elem_comp_var}) {
         $comparable_variables{$elem_comp_var} = 1;
       }
     }
@@ -279,7 +285,7 @@ sub get_implicit_type {
 sub transform {
   my ($var) = @_;
   if ($var eq "return" || $var eq "return[]") {
-    $var =~ s/return/$DUMMY_RETURN/;
+    $var =~ s/return/$dummy_return/;
   }
   
   # remove the leading "::" from global variables
