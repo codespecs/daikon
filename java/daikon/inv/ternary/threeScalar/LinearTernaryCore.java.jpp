@@ -243,7 +243,7 @@ public final class CLASSNAME
         double coef[];
         try {
           coef = calc_tri_linear (def_points);
-        } catch (Exception e) {
+        } catch (ArithmeticException e) {
           return InvariantStatus.FALSIFIED;
         }
         a = coef[0];
@@ -255,10 +255,13 @@ public final class CLASSNAME
         // LinearBinary, not a LinearTernary, term.  (It might not show up
         // as LinearBinary because there might not have been enough samples;
         // but a random varying third variable can create enough samples.)
+        // Also, throw out the invariant if any of the coefficients would
+        // be infinite or not-a-number.
         if ((a == 0) || (b == 0) || (c == 0) ||
             (Math.abs(a) >= Double.MAX_VALUE) ||
             (Math.abs(b) >= Double.MAX_VALUE) ||
-            (Math.abs(c) >= Double.MAX_VALUE)) {
+            (Math.abs(c) >= Double.MAX_VALUE) ||
+            Double.isNaN(a) || Double.isNaN(b) || Double.isNaN(c)) {
           return InvariantStatus.FALSIFIED;
         }
 
@@ -516,7 +519,7 @@ public final class CLASSNAME
    * @return a three element array where a is the first element, b the second,
    * and c the third.
    */
-  public double[] calc_tri_linear(Point[] points) {
+  public double[] calc_tri_linear(Point[] points) throws ArithmeticException {
 
     Point p0 = points[0];
     Point p1 = points[1];
@@ -525,6 +528,8 @@ public final class CLASSNAME
     float denominator = (float) ((p1.x * p2.y - p2.x * p1.y)
                        - (p0.x * p2.y - p2.x * p0.y)
                        + (p0.x * p1.y - p1.x * p0.y));
+    if (denominator == 0)
+      throw new ArithmeticException();
     float a_numerator = (float) ((p1.z * p2.y - p2.z * p1.y)
                                 - (p0.z * p2.y - p2.z * p0.y)
                                 + (p0.z * p1.y - p1.z * p0.y));
