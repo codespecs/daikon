@@ -19,8 +19,6 @@ The correct way to build the system is to run 'make'.
   #endif
   #define ELTLOWERBOUND EltLowerBound
   #define ELTUPPERBOUND EltUpperBound
-  #define SEQINDEXCOMPARISON SeqIndexComparison
-  #define SEQINDEXNONEQUAL SeqIndexNonEqual
   #define ARRAY_TYPE INT_ARRAY
   #define ISTYPE elementIsIntegral()
   #define COMMONSEQUENCE CommonSequence
@@ -35,8 +33,6 @@ The correct way to build the system is to run 'make'.
   #endif
   #define ELTLOWERBOUND EltLowerBoundFloat
   #define ELTUPPERBOUND EltUpperBoundFloat
-  #define SEQINDEXCOMPARISON SeqIndexComparisonFloat
-  #define SEQINDEXNONEQUAL SeqIndexNonEqualFloat
   #define ARRAY_TYPE DOUBLE_ARRAY
   #define ISTYPE elementIsFloat()
   #define COMMONSEQUENCE CommonFloatSequence
@@ -82,8 +78,21 @@ public final class CLASSNAME {
 
           result.add(ELTLOWERBOUND.instantiate(ppt));
           result.add(ELTUPPERBOUND.instantiate(ppt));
-          result.add(SEQINDEXCOMPARISON.instantiate(ppt));
-          result.add(SEQINDEXNONEQUAL.instantiate(ppt));
+          #if defined(TYPELONG)
+            result.add(SeqIndexIntEqual.instantiate(ppt));
+            result.add(SeqIndexIntNonEqual.instantiate(ppt));
+            result.add(SeqIndexIntGreaterEqual.instantiate(ppt));
+            result.add(SeqIndexIntGreaterThan.instantiate(ppt));
+            result.add(SeqIndexIntLessEqual.instantiate(ppt));
+            result.add(SeqIndexIntLessThan.instantiate(ppt));
+          #else
+            result.add(SeqIndexFloatEqual.instantiate(ppt));
+            result.add(SeqIndexFloatNonEqual.instantiate(ppt));
+            result.add(SeqIndexFloatGreaterEqual.instantiate(ppt));
+            result.add(SeqIndexFloatGreaterThan.instantiate(ppt));
+            result.add(SeqIndexFloatLessEqual.instantiate(ppt));
+            result.add(SeqIndexFloatLessThan.instantiate(ppt));
+          #endif
         }
 
         // Must now instantiate one of each type... perhaps this functionality
