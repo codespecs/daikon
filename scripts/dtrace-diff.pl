@@ -1,30 +1,41 @@
 #!/usr/bin/env perl
 
-#dtrace-diff
-#arguments:  dtrace-diff declsfile dtrace1 dtrace2
-#outputs differences that aren't hashcodes.
+# dtrace-diff
+# arguments:  dtrace-diff declsfile dtrace1 dtrace2
+# outputs differences that aren't hashcodes.
 
 use English;
-# use strict;
+use strict;
 $WARNING = 1;
 
-($declsname, $dtaname, $dtbname) = @ARGV;
+
+my ($declsname, $dtaname, $dtbname) = @ARGV;
 
 ($declsname && $dtaname && $dtbname) or die
     "Usage: $0 <declsname> <dtrace1> <dtrace2>\n";
 
-#load decls file
-$gdeclshash = load_decls($declsname);
+# load decls file
+my $gdeclshash = load_decls($declsname);
 
-#dump it
-#dump_decls($gdeclshash);
+# dump it
+# dump_decls($gdeclshash);
 
-#compare the dtraces
+# compare the dtraces
+my $differences_found = 0;
+my $errors_found = 0;
 cmp_dtracen($gdeclshash, $dtaname, $dtbname);
 
-sub getline {
-#gets a line from the filehandle/count $1
-    my $fhobj = shift;
+# Exit status same as for "diff" program:  0 if no differences, 1 if
+# differences, 2 if error.
+exit($errors_found ? 2 : $differences_found ? 1 : 0);
+
+###########################################################################
+### Subroutines
+###
+
+sub getline ( $ ) {
+# gets a line from the filehandle/count $1
+    my ($fhobj) = @_;
     my $fh = $$fhobj[0];
     my $l;
     do {
@@ -34,11 +45,10 @@ sub getline {
     return $l;
 }
 
-sub gzopen {
-#takes a fh/filename, opens it (using zcat if necessary), and returns
-#a reference to a filehandle/linenumber object.
-    my $fh = shift;
-    my $fn = shift;
+sub gzopen ( $$ ) {
+# takes a fh and a filename, opens it (using zcat if necessary), and returns
+# a reference to a filehandle/linenumber object.
+    my ($fh, $fn) = @_;
     if ($fn =~ /\.gz$/) {
         my $gzcat = `which gzcat 2>&1`;
 	if ($gzcat =~ /Command not found|which: no gzcat in/) {
@@ -54,11 +64,11 @@ sub gzopen {
 }
 
 
-sub load_decls {
-#loads the decls file given by $1 into a hash, returns a ref
-    my $declsname = shift;
-#    open DECLS, $declsname or die "couldn't open decls \"$decls\"\n";
-    my $decls = gzopen(DECLS, $declsname);
+sub load_decls ( $ ) {
+# loads the decls file given by $1 into a hash, returns a ref
+    my ($mydeclsname) = @_;
+#    open DECLS, $mydeclsname or die "couldn't open decls \"$decls\"\n";
+    my $decls = gzopen(\*DECLS, $mydeclsname);
     my $declshash = {};
     my $ppt_seen = 0;
     while (defined (my $l = getline($decls))) {
@@ -90,14 +100,13 @@ sub load_decls {
 	    die "malformed decls file: \"$l\" at line" . $$decls[1];
 	}
     }
-    close DECLS;
+    close \*DECLS;
     return $declshash;
 }
 
-sub load_ppt {
-#loads a single ppt from a dtrace fh given by $1
-    my $dtfh = shift;
-    my $dtfhname = shift;
+sub load_ppt ( $$ ) {
+# loads a single ppt from a dtrace fh given by $1
+    my ($dtfh, $dtfhname) = @_;
     my $pptname = getline($dtfh);
     while ((defined $pptname) && ($pptname eq "")) {
 	$pptname = getline($dtfh);
@@ -110,7 +119,7 @@ sub load_ppt {
     my $ppthash = {};
 
     while (my $varname = getline($dtfh)) {
-        my $modbit, $varval;
+        my ($modbit, $varval);
 	(defined ($varval = getline($dtfh)))
 	    # or die "malformed dtrace file (ppt $pptname, var $varname, no varval) $dtfhname";
 	    or die "malformed dtrace file (ppt $pptname) $dtfhname";
@@ -127,9 +136,9 @@ sub load_ppt {
     return [$pptname, $pptline, $ppthash];
 }
 
-sub print_ppt {
-#prints a ppt for debugging purposes
-    my $ppt = shift;
+sub print_ppt ( $ ) {
+# prints a ppt for debugging purposes
+    my ($ppt) = @_;
     my $pptname = $$ppt[0];
     my $pptline = $$ppt[1];
     my $ppth = $$ppt[2];
@@ -142,20 +151,20 @@ sub print_ppt {
     }
 }
 
-sub cmp_ppts {
-#compares the two ppts given by $2 and $3 according to the decls $1
-    my $declshash = shift;
-    my $ppta = shift;
-    my $pptb = shift;
+sub cmp_ppts ( $$$ ) {
+# compares the two ppts given by $2 and $3 according to the decls $1
+    my ($declshash, $ppta, $pptb) = @_;
     if ($$ppta[0] ne $$pptb[0]) {
 	print "ppt name difference: ${dtaname}=\"" . $$ppta[0] .
 	    "\", ${dtbname}=\"" . $$pptb[0] . "\"\n";
+        $differences_found++;
 	return;
     }
     my $pptname = $$ppta[0];
     my $ppt = $$declshash{$pptname};
     if (not defined $ppt) {
 	print "ppt name not in decls: \"${pptname}\"\n";
+	$errors_found++;
 	return;
     }
     my $ha = $$ppta[2];  my $hb = $$pptb[2];
@@ -166,11 +175,15 @@ sub cmp_ppts {
 	#la == lb == [varval, modbit]
 	if ((not defined $la) && (not defined $lb)) {
 	    print "${varname} \@ ${pptname} undefined in both dtrace files\n";
+	    $errors_found++;
 	} elsif (not defined $la) {
 	    print "${varname} \@ ${pptname} undefined in ${dtaname}\n";
+	    $errors_found++;
 	} elsif (not defined $lb) {
 	    print "${varname} \@ ${pptname} undefined in ${dtbname}\n";
+	    $errors_found++;
 	} elsif ($$varl[1] eq "double") {
+  	    my $difference;
 	    if (($$la[0] eq "uninit")||($$lb[0] eq "uninit")) {
 		$difference = !($$la[0] eq $$lb[0]);
 	    } elsif (($$la[0] eq "nan")||($$lb[0] eq "nan")) {
@@ -182,11 +195,13 @@ sub cmp_ppts {
 		print "${varname} \@ ${pptname} floating-point difference:\n"
 		    . "  \"" . $$la[0] . "\" in ${dtaname} (line " . $$ppta[1] . ")\n"
 			. "  \"" . $$lb[0] . "\" in ${dtbname} (line " . $$pptb[1] . ")\n";
+		$differences_found++;
 	    }
 	    if ($$la[1] ne $$lb[1]) {
 		print "${varname} \@ ${pptname} modbit difference:\n"
 		    . "  \"" . $$la[1] . "\" in ${dtaname} (line " . $$ppta[1] . ")\n"
 			. "  \"" . $$lb[1] . "\" in ${dtbname} (line " . $$pptb[1] . ")\n";
+		$differences_found++;
 	    }
 	} else {
 	    if ($$varl[1] =~ /^hashcode/) {
@@ -199,35 +214,38 @@ sub cmp_ppts {
 		print "${varname} \@ ${pptname} difference:\n"
 		    . "  \"" . $$la[0] . "\" in ${dtaname} (line " . $$ppta[1] . ")\n"
 			. "  \"" . $$lb[0] . "\" in ${dtbname} (line " . $$pptb[1] . ")\n";
+		$differences_found++;
 	    }
 	    if ($$la[1] ne $$lb[1]) {
 		print "${varname} \@ ${pptname} modbit difference:\n"
 		    . "  \"" . $$la[1] . "\" in ${dtaname} (line " . $$ppta[1] . ")\n"
 			. "  \"" . $$lb[1] . "\" in ${dtbname} (line " . $$pptb[1] . ")\n";
+		$differences_found++;
 	    }
 	}
     }
 }
 
-sub cmp_dtracen {
-#opens the dtrace files named by $2 and $3, compares them using decls hash $1
-    my $declshash = shift;
-    my $dtaname = shift;
-    my $dtbname = shift;
-#    open DTA, $dtaname or die "couldn't open dtrace \"$dtaname\"\n";
-#    open DTB, $dtbname or die "couldn't open dtrace \"$dtbname\"\n";
-    $dta = gzopen(DTA, $dtaname);
-    $dtb = gzopen(DTB, $dtbname);
+sub cmp_dtracen ( $$$ ) {
+# opens the dtrace files named by $2 and $3, compares them using decls hash $1
+    my ($declshash, $mydtaname, $mydtbname) = @_;
+#    open DTA, $mydtaname or die "couldn't open dtrace \"$mydtaname\"\n";
+#    open DTB, $mydtbname or die "couldn't open dtrace \"$mydtbname\"\n";
+    my $dta = gzopen(\*DTA, $mydtaname);
+    my $dtb = gzopen(\*DTB, $mydtbname);
 
   PPT: while (1) {
-      my $ppta = load_ppt($dta, $dtaname); my $pptb = load_ppt($dtb, $dtbname);
+      my $ppta = load_ppt($dta, $mydtaname);
+      my $pptb = load_ppt($dtb, $mydtbname);
       if ((not defined $ppta) && (not defined $pptb)) {
 	  last PPT;
       } elsif (not defined $ppta) {
-	  print "dtrace file $dtaname ends before $dtbname.\n";
+	  print "dtrace file $mydtaname ends before $mydtbname.\n";
+	  $differences_found++;
 	  last PPT;
       } elsif (not defined $pptb) {
-	  print "dtrace file $dtbname ends before $dtaname.\n";
+	  print "dtrace file $mydtbname ends before $mydtaname.\n";
+	  $differences_found++;
 	  last PPT;
       } else {
 	  cmp_ppts($declshash, $ppta, $pptb);
@@ -235,13 +253,13 @@ sub cmp_dtracen {
       }
   }
 
-    close DTA;
-    close DTB;
+    close \*DTA;
+    close \*DTB;
 }
 
-sub dump_decls {
-#dump the decls struct given by $1
-    my $declshash = shift;
+sub dump_decls ( $ ) {
+# dump the decls struct given by $1
+    my ($declshash) = @_;
     foreach my $ppt (keys %$declshash) {
 	my $lhashref = $$declshash{$ppt};
 	print "\@${ppt}:\n";
