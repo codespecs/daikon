@@ -217,7 +217,6 @@ public class SampleTester extends TestCase {
     // Setup everything to run
     Daikon.init_ppts (all_ppts);
     PptTopLevel.init (all_ppts);
-    Daikon.setupEquality (all_ppts);
     if (first_decl) {
       Daikon.setup_proto_invs();
       Daikon.setup_NISuppression();

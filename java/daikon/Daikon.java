@@ -448,16 +448,12 @@ public final class Daikon {
     load_map_files(all_ppts, map_files);
 
     init_ppts (all_ppts);
-    if (debugTrace.isLoggable(Level.FINE)) {
-      debugTrace.fine("Partial order initialized");
-    }
     PptTopLevel.init(all_ppts);
     all_ppts.trimToSize();
 
     // If requested, just calculate the total number of invariants possible
     if (dkconfig_calc_possible_invs) {
       fileio_progress.shouldStop = true;
-      setupEquality(all_ppts);
       int total_invs = 0;
       for (Iterator itor = all_ppts.ppt_all_iterator();
         itor.hasNext();
@@ -1166,31 +1162,39 @@ public final class Daikon {
    * derived variables,
    */
   public static void init_ppts (PptMap all_ppts) {
-
-    // Create combined exit points
-    progress = "Creating combined exit points";
-    create_combined_exits (all_ppts);
-
-    // Setup splitters.  This must be done after creating the
-    // combined exit points and before adding derived variables
-    setup_splitters(all_ppts);
-
-    // Setup orig variables
-    for (Iterator i = all_ppts.ppt_all_iterator(); i.hasNext(); ) {
+    for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) i.next();
-      progress = "Creating orig variables for: " +ppt.ppt_name.toString();
-      create_and_relate_orig_vars (ppt, all_ppts);
+      init_ppt (ppt, all_ppts);
+    }
+  }
+
+  public static void init_ppt (PptTopLevel ppt, PptMap all_ppts) {
+
+    // Setup splitters.  This must be done before adding derived variables.  
+    // Do not add splitters to ppts that were already created by splitters!
+    if (! (ppt instanceof PptConditional)) {
+      setup_splitters(ppt);
     }
 
-    // Set up derived variables
-    for (Iterator i = all_ppts.ppt_all_iterator(); i.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
-      if (!dkconfig_disable_derived_variables) {
-        progress = "Creating derived variables for: " +ppt.ppt_name.toString();
-        ppt.create_derived_variables();
+    // Create orig and derived variables
+    progress = "Creating orig variables for: " +ppt.ppt_name.toString();
+    create_orig_vars (ppt, all_ppts);
+    if (!dkconfig_disable_derived_variables) {
+      progress = "Creating derived variables for: " +ppt.ppt_name.toString();
+      ppt.create_derived_variables();
+    }
+
+    // Initialize equality sets on leaf nodes
+    setupEquality(ppt);
+
+    // Recursively initialize ppts created by splitters
+    if (ppt.has_splitters()) {
+      for (Iterator ii = ppt.cond_iterator(); ii.hasNext(); ) {
+	PptTopLevel ppt_cond = (PptTopLevel) ii.next();
+	init_ppt (ppt_cond, all_ppts);
       }
     }
-
+    
   }
 
 
@@ -1198,11 +1202,9 @@ public final class Daikon {
    * Create EXIT program points as needed for EXITnn program points.
    */
   public static void create_combined_exits(PptMap ppts) {
-    List newPpts = new LinkedList();
-
-    for (Iterator i = ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = (PptTopLevel) i.next();
-    }
+    // We can't add the newly created exit Ppts directly to ppts while we
+    // are iterating over it, so store them temporarily in this map.
+    PptMap exit_ppts = new PptMap();
 
     for (Iterator i = ppts.pptIterator(); i.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) i.next();
@@ -1214,7 +1216,7 @@ public final class Daikon {
       PptTopLevel exitnn_ppt = ppt;
       PptName exitnn_name = exitnn_ppt.ppt_name;
       PptName exit_name = ppt.ppt_name.makeExit();
-      PptTopLevel exit_ppt = ppts.get(exit_name);
+      PptTopLevel exit_ppt = exit_ppts.get(exit_name);
 
       if (debugInit.isLoggable(Level.FINE))
         debugInit.fine ("create_combined_exits: encounted exit "
@@ -1222,24 +1224,39 @@ public final class Daikon {
 
       // Create the exit, if necessary
       if (exit_ppt == null) {
-        VarInfo[] exit_vars = VarInfo.arrayclone_simple(ppt.var_infos);
+	// this is a hack.  it should probably filter out orig and derived
+	// vars instead of taking the first n.
+	int len = ppt.num_tracevars + ppt.num_static_constant_vars;
+        VarInfo[] exit_vars = new VarInfo[len];
+	for (int j = 0; j < len; j++) {
+	  exit_vars[j] = new VarInfo(ppt.var_infos[j]);
+	  exit_vars[j].varinfo_index = ppt.var_infos[j].varinfo_index;
+	  exit_vars[j].value_index = ppt.var_infos[j].value_index;
+	  exit_vars[j].equalitySet = null;
+	}
+	
         exit_ppt = new PptTopLevel(exit_name.getName(), exit_vars);
-        newPpts.add(exit_ppt);
+	exit_ppts.add(exit_ppt);
         if (debugInit.isLoggable(Level.FINE))
           debugInit.fine ("create_combined_exits: created exit "
                           + exit_name);
+	init_ppt (exit_ppt, ppts);
       }
     }
 
-    ppts.addAll (newPpts);
+    // Now add the newly created Ppts to the global map.
+    for (Iterator i = exit_ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) i.next();
+      ppts.add(ppt);
+    }
   }
+
 
   /**
    * Add orig() variables to the given EXIT/EXITnn point, Does nothing if
-   * exit_ppt is not an EXIT/EXITnn.  Does not relate if point is EXITnn.
+   * exit_ppt is not an EXIT/EXITnn.
    */
-  private static void create_and_relate_orig_vars(PptTopLevel exit_ppt,
-                                                  PptMap ppts) {
+  private static void create_orig_vars(PptTopLevel exit_ppt, PptMap ppts) {
     if (! exit_ppt.ppt_name.isExitPoint()) {
       return;
     }
@@ -1252,8 +1269,6 @@ public final class Daikon {
     PptTopLevel entry_ppt = ppts.get(exit_ppt.ppt_name.makeEnter());
     Assert.assertTrue(entry_ppt != null, exit_ppt.name());
 
-    // comb_exit_ppt may be same as exit_ppt if exit_ppt is EXIT
-    PptTopLevel comb_exit_ppt = ppts.get(exit_ppt.ppt_name.makeExit());
     // Add "orig(...)" (prestate) variables to the program point.
     // Don't bother to include the constants.  Walk through
     // entry_ppt's vars.  For each non-constant, put it on the
@@ -1360,30 +1375,26 @@ public final class Daikon {
    * over boolean returns or exactly two return statements are enabled
    * by default (though other splitters can be defined by the user)
    */
-  public static void setup_splitters(PptMap all_ppts) {
+  public static void setup_splitters(PptTopLevel ppt) {
     if (dkconfig_disable_splitting) {
       return;
     }
 
-    for (Iterator itor = all_ppts.pptIterator(); itor.hasNext();) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
-
-      Splitter[] pconds = null;
-      if (SplitterList.dkconfig_all_splitters) {
-        pconds = SplitterList.get_all();
-      } else {
-        pconds = SplitterList.get(ppt.name());
+    Splitter[] pconds = null;
+    if (SplitterList.dkconfig_all_splitters) {
+      pconds = SplitterList.get_all();
+    } else {
+      pconds = SplitterList.get(ppt.name());
+    }
+    if (pconds != null) {
+      if (Global.debugSplit.isLoggable(Level.FINE)) {
+	Global.debugSplit.fine(
+			       "Got "
+			       + UtilMDE.nplural(pconds.length, "splitter")
+			       + " for "
+			       + ppt.name());
       }
-      if (pconds != null) {
-        if (Global.debugSplit.isLoggable(Level.FINE)) {
-          Global.debugSplit.fine(
-            "Got "
-              + UtilMDE.nplural(pconds.length, "splitter")
-              + " for "
-              + ppt.name());
-        }
-        ppt.addConditions(pconds);
-      }
+      ppt.addConditions(pconds);
     }
   }
 
@@ -1531,7 +1542,6 @@ public final class Daikon {
     stopwatch.reset();
 
     // Preprocessing
-    setupEquality(all_ppts);
     setup_NISuppression();
 
     // Processing (actually using dtrace files)
@@ -1602,6 +1612,8 @@ public final class Daikon {
     // Postprocessing
 
     stopwatch.reset();
+
+    create_combined_exits(all_ppts);
 
     // Post process dynamic constants
     if (dkconfig_use_dynamic_constant_optimization) {
@@ -1747,44 +1759,28 @@ public final class Daikon {
   /**
    * Initialize the equality sets for each variable
    */
-  public static void setupEquality(PptMap allPpts) {
 
-    // PptSliceEquality does all the necessary instantiations
+  public static void setupEquality (PptTopLevel ppt) {
     if (Daikon.use_equality_optimization) {
 
-      // Foreach program point
-      for (Iterator i = allPpts.pptIterator(); i.hasNext();) {
-        PptTopLevel ppt = (PptTopLevel) i.next();
-
-        // Skip points that are not leaves
-        if (use_dataflow_hierarchy) {
-          if (!ppt.ppt_name.isGlobalPoint()
-            && !ppt.ppt_name.isNumberedExitPoint())
-            continue;
-        }
-
-        // setup equality on the splitters of a point with splitters
-        if (ppt.has_splitters()) {
-          for (Iterator ii = ppt.cond_iterator();
-            ii.hasNext();
-            ) {
-            PptConditional ppt_cond =
-              (PptConditional) ii.next();
-            ppt_cond.equality_view =
-              new PptSliceEquality(ppt_cond);
-            ppt_cond.equality_view.instantiate_invariants();
-          }
-          if (use_dataflow_hierarchy)
-            continue;
-        }
-
-        // Create the initial equality sets
-        ppt.equality_view = new PptSliceEquality(ppt);
-        ppt.equality_view.instantiate_invariants();
+      // Skip points that are not leaves.  
+      if (use_dataflow_hierarchy) {
+	PptTopLevel p = ppt;
+	if (ppt instanceof PptConditional)
+	  p = ((PptConditional)ppt).parent;
+	if (!p.ppt_name.isGlobalPoint()
+            && !p.ppt_name.isNumberedExitPoint())
+	  return;
+	if (ppt.has_splitters())
+	  return;
       }
+      
+      // Create the initial equality sets
+      ppt.equality_view = new PptSliceEquality(ppt);
+      ppt.equality_view.instantiate_invariants();
     }
-
   }
+
 
   /**
    * Create user defined splitters

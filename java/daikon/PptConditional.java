@@ -18,9 +18,9 @@ public final class PptConditional
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20041216L;
 
-  Ppt parent;
+  public PptTopLevel parent;
   transient Splitter splitter;
   // indicates whether we're on the true side or the false side of the Splitter
   boolean splitter_inverse;

@@ -284,6 +284,7 @@ public final class VarInfo implements Cloneable, Serializable {
     return a_new;
   }
 
+
   /** Trims the collections used by this VarInfo. */
   public void trimToSize() {
     // if (derivees != null) { derivees.trimToSize(); }
