@@ -7,6 +7,13 @@ import org.apache.oro.text.regex.*;
 
 import utilMDE.*;
 
+/**
+ * Represents the type of a variable, for its declared, dtrace file
+ * representation, and internal representations.  ProgLangTypes are
+ * interned, so they can be == compared.
+ *
+ **/
+
 
 // I could also consider using Class; however:
 //  * that ties this to a Java front end, as Class can't represent types of
@@ -91,7 +98,7 @@ public final class ProglangType implements java.io.Serializable {
    * This can't be a constructor because it returns a canonical
    * representation (that can be compared with ==), not necessarily a new
    * object.
-   *  @argument rep  the name of the type, optionally suffixed by
+   *  @param rep the name of the type, optionally suffixed by
    *  (possibly multiple) "[]"
    **/
   public static ProglangType parse(String rep) {

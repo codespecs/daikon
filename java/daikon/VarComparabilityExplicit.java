@@ -40,6 +40,7 @@ import utilMDE.*;
  **/
 public final class VarComparabilityExplicit extends VarComparability implements java.io.Serializable {
 
+
   // All strings that appear in VarComparabilityExplicit objects are interned.
 
   String[] base;
@@ -120,6 +121,9 @@ public final class VarComparabilityExplicit extends VarComparability implements 
     String rep_ = rep;          // for debugging
 
     if (vartype.isArray()) {
+      if (debug.isDebugEnabled()) {
+	debug.debug ("Parsing array " + rep + " " + vartype.toString());
+      }
       // The VarComparability is of the form
       //  (var1 var2 var3)[var1 var2 var3][var1 var2 var3]
       int dims = vartype.dimensions();
@@ -127,6 +131,7 @@ public final class VarComparabilityExplicit extends VarComparability implements 
       re_matcher.matches(rep, dims_regexp(dims));
       MatchResult match = re_matcher.getMatch();
       // "+2" because "groups" includes the whole match (group 0).
+      Assert.assert(match != null);
       Assert.assert(match.groups() == dims+2);
 
       String base_raw = match.group(1);

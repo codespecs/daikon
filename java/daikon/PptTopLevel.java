@@ -23,22 +23,32 @@ import org.apache.log4j.Category;
 import utilMDE.*;
 
 
-// All information about a single program point.
-// A Ppt may also represent just part of the data: a disjunction (see
-// PptConditional).
-// This probably doesn't do any direct computation, instead deferring that
-// to its views that are slices and that actually contain the invariants.
+/** All information about a single program point.
+ * A Ppt may also represent just part of the data: a disjunction (see
+ * PptConditional).
+ * <br>
+ * This probably doesn't do any direct computation, instead deferring that
+ * to its views that are slices and that actually contain the invariants.
+ **/
 
 public class PptTopLevel extends Ppt {
 
   /**
-   * Logging Category.
+   * Logging Category for this class.
    **/
   
   public static final Category debug =
     Category.getInstance (PptTopLevel.class.getName());
+
+  /**
+   * Logging Category for equalTo checks
+   **/  
   public static final Category debugEqualTo =
     Category.getInstance (PptTopLevel.class.getName() + "equalTo");
+
+  /**
+   * Logging Category for addImplications.
+   **/
   public static final Category debugAddImplications =
     Category.getInstance (PptTopLevel.class.getName() + "addImplications");
 
@@ -476,7 +486,10 @@ public class PptTopLevel extends Ppt {
 	new StringSequencesIntersectionFactory(),
 	new ScalarSequencesUnionFactory(),
 	new StringSequencesUnionFactory(),
-        new SequenceStringSubscriptFactory(), }
+        new SequenceStringSubscriptFactory(), 
+        new SequencesConcatFactory(),
+	new SequencesJoinFactory(),
+      }
     };
 
 
@@ -487,10 +500,12 @@ public class PptTopLevel extends Ppt {
    * If derivation_index == (a, b, c) and n = len(var_infos), then
    * the body of this loop:
    * <li>
-   *   <ul> does pass1 introduction for b..a
-   *   <ul> does pass2 introduction for c..b
-   * </li>
+   *   does pass1 introduction for b..a
+   * <li>
+   *   does pass2 introduction for c..b
+   * <br>
    * and afterward, derivation_index == (n, a, b).
+   * @return A Vector of of VarInfo
    **/
   public Vector derive() {
     Assert.assert(ArraysMDE.sorted_descending(derivation_indices));
@@ -530,11 +545,14 @@ public class PptTopLevel extends Ppt {
 
 
   /**
-   * This routine does one "pass"; that is, it adds some set of derived
-   * variables, according to the functions that are passed in.  All the
-   * results involve VarInfo objects at indices i such that vi_index_min <=
-   * i < vi_index_limit (and possibly also involve other VarInfos).
+   * This routine creates derivations for one "pass"; that is, it adds
+   * some set of derived variables, according to the functions that
+   * are passed in.  All the results involve VarInfo objects at
+   * indices i such that vi_index_min <= i < vi_index_limit (and
+   * possibly also involve other VarInfos).
+   * @return a Vector of VarInfo
    **/
+
   Vector deriveVariablesOnePass(int vi_index_min, int vi_index_limit, UnaryDerivationFactory[] unary, BinaryDerivationFactory[] binary) {
 
     if (Global.debugDerive.isDebugEnabled())
@@ -681,27 +699,28 @@ public class PptTopLevel extends Ppt {
 
 
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Initial processing
-  ///
-
-  // This function is called to jump-start processing; it creates all the
-  // views (and thus invariants) and derived variables.  Afterward, we just
-  // check those invariants.  (That might require us to add more derived
-  // variables and invariants, though -- for instance, if an invariant that
-  // had suppressed a derived variable becomes falsified.  An equality
-  // invariant is an example of such an invariant.)
-
-  // As of 10/25/99, we don't do the second part:  just read the entire
-  // data file before doing any processing.
-
-  // The way this works is:
-  //  * do derivation by stages
-  //  * all inference must be performed over a variable before it may be
-  //    derived from.  This implies that as soon as we derive a variable,
-  //    we should do all inference over it.
-  //  * inference is done by stages, too:  first equality invariants,
-  //    then others.  See instantiate_views.
+  /**
+   * Initial processing <br>
+   *
+   * This function is called to jump-start processing; it creates all
+   * the views (and thus invariants) and derived variables.
+   * Afterward, we just check those invariants.  (That might require
+   * us to add more derived variables and invariants, though -- for
+   * instance, if an invariant that had suppressed a derived variable
+   * becomes falsified.  An equality invariant is an example of such
+   * an invariant.)
+   * <br>
+   * As of 10/25/99, we don't do the second part:  just read the entire
+   * data file before doing any processing.
+   * <br>
+   * The way this works is:
+   *  <li> do derivation by stages
+   *  <li> all inference must be performed over a variable before it may be
+   *    derived from.  This implies that as soon as we derive a variable,
+   *    we should do all inference over it.
+   *  <li> inference is done by stages, too:  first equality invariants,
+   *    then others.  See instantiate_views.
+   **/
 
 
   public void initial_processing() {

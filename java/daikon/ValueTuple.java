@@ -2,18 +2,28 @@ package daikon;
 
 import daikon.derive.*;
 
+import org.apache.log4j.Category;
+
 import java.util.*;
 
 import utilMDE.*;
 
 
-// This is the data structure that holds the tuples of values see so far
-// (and how many times each was seen).
-
-// While the arrays and their elements are interned, the ValueTuple objects
-// themselves are not interned.
+/**
+ * This is the data structure that holds the tuples of values seen so far
+ * (and how many times each was seen) for a particular program point.  VarInfo
+ * objects can use this to get the values of the variables they represent.
+ * <br>
+ * While the arrays and their elements are interned, the ValueTuple objects
+ * themselves are not interned.
+ **/
 public final class ValueTuple implements Cloneable {
 
+  /**
+   * Debugging Category
+   **/
+
+  public static Category debug = Category.getInstance (ValueTuple.class.getName());
 
   // These arrays are interned, and so are their elements.
 
@@ -166,8 +176,19 @@ public final class ValueTuple implements Cloneable {
     return result;
   }
 
-  // The VarInfo form is preferred
+
+  /**
+   * Get the value of the variable vi in this ValueTuple.  Note: the
+   * VarInfo form is preferred
+   * @param vi the variable whose value is to be returned
+   * @return the value of the variable at this ValueTuple
+   **/
   Object getValue(VarInfo vi) { return vi.getValue(this); }
+
+  /**
+   * Get the value at the val_index.  Note: the VarInfo form is
+   * preferred
+   **/
   Object getValue(int val_index) { return vals[val_index]; }
 
 

@@ -31,6 +31,8 @@ public abstract class PptSlice extends Ppt {
 
   public static final Category debug = Category.getInstance(PptSlice.class.getName());
 
+  public static final Category debugGeneral = Category.getInstance(PptSlice.class.getName() + ".general");
+
   public Ppt parent;
   public int arity;
   // var_infos appears in Ppt; don't repeat it here!!
@@ -90,6 +92,10 @@ public abstract class PptSlice extends Ppt {
 
     // This comes after setting all other variables, as the function call may use name, arity, var_infos, etc.
     debugged = (Global.isDebuggedPptSlice(this)); 
+
+    if (debugGeneral.isDebugEnabled()) {
+      debugGeneral.debug (Arrays.asList(var_infos));
+    }
     
   }
 
