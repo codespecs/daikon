@@ -73,6 +73,7 @@ public final class FileIO {
    **/
   public static boolean dkconfig_add_changed = true;
 
+
 /// Variables
 
   // This hashmap maps every program point to an array, which contains the
@@ -1124,45 +1125,6 @@ public final class FileIO {
     }
     // } catch (StreamCorruptedException e) { // already extends IOException
     // } catch (OptionalDataException e) {    // already extends IOException
-  }
-
-}
-
-
-
-
-class FileIOException extends IOException {
-
-  public final LineNumberReader reader;
-  public final String fileName;
-
-  public FileIOException () {
-    super();
-    reader = null;
-    fileName = null;
-  }
-
-  public FileIOException (String s) {
-    this(s, null, (String)null);
-  }
-
-  public FileIOException (String s, LineNumberReader reader, String fileName) {
-    super(s);
-    this.reader = reader;
-    this.fileName = fileName;
-  }
-
-  public FileIOException (String s, LineNumberReader reader, File file) {
-    this(s, reader, file.getName());
-  }
-
-  public String toString() {
-    if (reader == null || fileName == null) {
-      return super.toString();
-    } else {
-      return "\nError: " + super.toString() + " on line " + reader.getLineNumber() +
-	" of file " + fileName;
-    }
   }
 
 }
