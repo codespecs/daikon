@@ -18,6 +18,10 @@ public class SequenceLength extends UnaryDerivation {
       Assert.assert(vi.derived instanceof SequenceScalarSubsequence);
       return false;
     }
+    // Don't do this for now, because we depend on being able to call
+    // sequenceSize() later.
+    // if (vi.name.indexOf("~ll~.") != -1)
+    //   return false;
 
     return true;
   }
@@ -33,7 +37,6 @@ public class SequenceLength extends UnaryDerivation {
       int len;
       ProglangType rep_type = var_info.rep_type;
 
-      // Can't use "==" because ProglangType objects are not interned.
       if (rep_type.equals(ProglangType.INT_ARRAY)) {
         len = ((int[])val).length;
       } else {

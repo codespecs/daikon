@@ -53,6 +53,7 @@ class IntComparison extends TwoScalar implements Comparison {
     //   }
     // }
 
+
     boolean obvious_lt = false;
     boolean obvious_gt = false;
     boolean obvious_le = false;
@@ -213,6 +214,15 @@ class IntComparison extends TwoScalar implements Comparison {
 
     return (can_be_eq && (!can_be_lt) && (!can_be_gt));
   }
+
+  // Temporary, for debugging
+  public void destroy() {
+    if (debugIntComparison) {
+      System.out.println("IntComparison.destroy(" + ppt.name + ")");
+    }
+    super.destroy();
+  }
+
 
 
 }

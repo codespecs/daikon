@@ -9,6 +9,8 @@ public class SequenceMinMaxSumFactory extends UnaryDerivationFactory {
 
     if (! vi.rep_type.equals(ProglangType.INT_ARRAY))
       return null;
+    if (! (vi.type.isArray() && vi.type.elementType().isIntegral()))
+      return null;
 
     UnaryDerivation[] result = new UnaryDerivation[3];
     result[0] = new SequenceMin(vi);

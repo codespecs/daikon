@@ -11,6 +11,7 @@ import daikon.inv.twoScalar.*;
 import daikon.inv.twoSequence.*;
 import daikon.split.*;
 import daikon.split.griesLisp.*;
+import daikon.split.weissDsaaMDE.*;
 
 import java.util.*;
 import com.oroinc.text.regex.*;
@@ -51,8 +52,13 @@ public class PptTopLevel extends Ppt {
   // These accessors are for abstract methods declared in Ppt
   public int num_samples() { return values.num_samples; }
   public int num_mod_non_missing_samples() { return values.num_mod_non_missing_samples(); }
+  // WARNING!  This is the number of distinct ValueTuple objects,
+  // which can be as much as 2^arity times as many as the number of
+  // distinct tuples of values.
   public int num_values() { return values.num_values; }
   // public int num_missing() { return values.num_missing; }
+  public String tuplemod_samples_summary() { return values.tuplemod_samples_summary();
+  }
 
 
   // These are now in PptSlice objects instead.
@@ -780,6 +786,12 @@ public class PptTopLevel extends Ppt {
     slices = (PptSliceGeneric[]) slices_vector.toArray(new PptSliceGeneric[] { });
     num_slices = slices.length;
 
+    // System.out.println("Adding views for " + name);
+    // for (int i=0; i<slices.length; i++) {
+    //   System.out.println("  View: " + slices[i].name);
+    // }
+    // values.dump();
+
     for (Iterator vt_itor = values.entrySet().iterator(); vt_itor.hasNext(); ) {
       Map.Entry entry = (Map.Entry) vt_itor.next();
       ValueTuple vt = (ValueTuple) entry.getKey();
@@ -1067,12 +1079,17 @@ public class PptTopLevel extends Ppt {
           inv.finished = true;
           binary_view.already_seen_all = true;
           Assert.assert(inv instanceof Comparison);
+          // Not "inv.format" because that is null if not justified.
+          // System.out.println("Is " + (IsEquality.it.accept(inv) ? "" : "not ")
+          //                    + "equality: " + inv.repr());
           if (IsEquality.it.accept(inv)) {
             VarInfo var1 = binary_view.var_infos[0];
             VarInfo var2 = binary_view.var_infos[1];
             // System.out.println("found equality: " + var1.name + " = " + var2.name);
-            // System.out.println("var1.equal_to=" + var1.equal_to
-            //                    + ", var2.equal_to=" + var2.equal_to);
+            // System.out.println("var1.equal_to="
+            //                    + ((var1.equal_to == null) ? "null" : var1.equal_to.name)
+            //                    + ", var2.equal_to="
+            //                    + ((var2.equal_to == null) ? "null" : var2.equal_to.name));
             if ((var1.equal_to == null) && (var2.equal_to != null)) {
               var1.equal_to = var2.equal_to;
               // System.out.println("Setting " + var1.name + ".equal_to = " + var1.equal_to.name);
@@ -1101,7 +1118,8 @@ public class PptTopLevel extends Ppt {
       for (int i=vi_index_min; i<vi_index_limit; i++) {
         VarInfo vi = var_infos[i];
         if (vi.equal_to == null) {
-          // System.out.println("Lonesome canonical " + vi.name);
+          // System.out.println("Lonesome canonical var " + vi.varinfo_index
+          //                    + ": " + vi.name);
           vi.equal_to = vi;
         }
       }
@@ -1296,8 +1314,9 @@ public class PptTopLevel extends Ppt {
   // it doesn't need to be unless GiesLisp has been instantiated already.)
   static {
     // Would it be enough to say "GriesLisp dummy = null;"?  I'm not sure.
-    // This for does work, thoguh.
+    // This for does work, though.
     new GriesLisp();
+    new WeissDsaaMDE();
   }
 
   public Splitter[] getSplitters() {
@@ -1443,6 +1462,25 @@ public class PptTopLevel extends Ppt {
 
   }
 
+  boolean check_modbits () {
+    // This test is wrong for PptTopLevel because something is considered
+    // unmodified only if none of its values are modified.  The test is
+    // appropriate for PptSliceGeneric because we don't put missing values
+    // there.
+
+    // // The value "0" can be had for missing samples.
+    // if (num_mod_non_missing_samples() < num_values() - 1) {
+    //   throw new Error("Bad mod bits in dtrace file:\n"
+    //                   + "num_mod_non_missing_samples()=" + num_mod_non_missing_samples()
+    //                   + ", num_values()=" + num_values() + "\n"
+    //                   + "for " + name + "\n"
+    //                   + tuplemod_samples_summary() + "\n"
+    //                   + "Consider running modbit-munge.pl");
+    // }
+
+    return true;
+  }
+
   static Comparator icfp = new Invariant.InvariantComparatorForPrinting();
 
   /** Print invariants for a single program point. */
@@ -1456,6 +1494,7 @@ public class PptTopLevel extends Ppt {
       System.out.print(" " + var_infos[i].name);
     System.out.println();
 
+    Assert.assert(check_modbits());
 
     // System.out.println("Views:");
     // for (Iterator itor = views.iterator(); itor.hasNext(); ) {
@@ -1549,6 +1588,7 @@ public class PptTopLevel extends Ppt {
                            + slice.tuplemod_samples_summary());
         // slice.values_cache.dump();
       }
+      Assert.assert(slice.check_modbits());
 
       // It's hard to know in exactly what order to do these checks that
       // eliminate some invariants from consideration.  Which is cheapest?

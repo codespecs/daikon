@@ -33,8 +33,8 @@ public class VarValues {
 
   public int num_samples;	// total number of samples
   public int[] tuplemod_samples;	// multiplicities of all tuples with each tuplemod
-  public int num_values;	// number of distinct values.  (Differences in
-				//   mod bits make tuples distinct.)
+  public int num_values;	// number of distinct values.  (NOTE: Differences
+                                //   in mod bits make tuples distinct!)
 				//   This is equal to values.size() only if
 				//   we haven't discarded any information
 				//   from the values hashtable.

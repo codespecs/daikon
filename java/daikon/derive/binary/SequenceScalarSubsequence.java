@@ -62,9 +62,11 @@ public class SequenceScalarSubsequence extends BinaryDerivation {
 				 : ((index_shift < 0)
 				    ? Integer.toString(index_shift)
 				    : "+" + index_shift));
-    String name = var_info1.name
-      + "[0.." + var_info2.name + index_shift_string + "]";
-    return new VarInfo(name, var_info1.type, var_info1.rep_type, var_info1.comparability);
+    VarInfo seqvar = seqvar();
+    VarInfo sclvar = sclvar();
+    String name = seqvar.name
+      + "[0.." + sclvar.name + index_shift_string + "]";
+    return new VarInfo(name, seqvar.type, seqvar.rep_type, seqvar.comparability);
   }
 
 }

@@ -20,10 +20,10 @@ public class ThreeScalarFactory {
                   && var3.rep_type.equals(ProglangType.INT));
 
     if (Daikon.check_program_types
-        && (! (var1.type.equals(var2.type)
-               && var2.type.equals(var3.type))))
+        && (! (var1.type.comparable(var2.type)
+               && var2.type.comparable(var3.type))))
       return;
-    Assert.assert(var1.type.equals(var3.type));
+    Assert.assert(var1.type.comparable(var3.type));
 
     if (pass == 1) {
       // nothing to do

@@ -22,6 +22,8 @@ public abstract class SingleSequence extends Invariant {
     Assert.assert(! no_invariant);
     Assert.assert((modified == ValueTuple.MODIFIED)
 		  || (modified == ValueTuple.UNMODIFIED));
+    Assert.assert(value == Intern.intern(value));
+    // System.out.println("SingleSequence.add(" + ArraysMDE.toString(value) + ", " + modified + ", " + count + ")");
     if (finished)
       return;
     if (modified == ValueTuple.MODIFIED) {

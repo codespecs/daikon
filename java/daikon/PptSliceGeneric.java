@@ -171,9 +171,19 @@ public class PptSliceGeneric extends PptSlice {
     if (values_cache == null) {
       return num_mod_non_missing_samples_post_cache;
     } else {
-      return values_cache.num_mod_non_missing_samples();
+      int result = values_cache.num_mod_non_missing_samples();
+      // mod bits get wonky for conditional program points
+      // (in particular, all the modified versions might be
+      // filtered out).
+      if (parent instanceof PptConditional) {
+        return Math.max(result, num_values());
+      }
+      return result;
     }
   }
+  // WARNING!  This is the number of distinct ValueTuple objects,
+  // which can be as much as 2^arity times as many as the number of
+  // distinct tuples of values.
   public int num_values() {
     if (values_cache == null) {
       return num_values_post_cache;
@@ -189,7 +199,26 @@ public class PptSliceGeneric extends PptSlice {
     }
   }
 
+  boolean check_modbits () {
+    // The value "0" can be had for missing samples.
+    if ((num_mod_non_missing_samples() << arity) < num_values()) {
+      values_cache.dump();
+      throw new Error("Bad mod bits in dtrace file:\n"
+                      + "num_mod_non_missing_samples()=" + num_mod_non_missing_samples()
+                      + ", num_samples()=" + num_samples()
+                      + ", num_values()=" + num_values() + "\n"
+                      + "for " + name + "\n"
+                      + tuplemod_samples_summary() + "\n"
+                      + "Consider running modbit-munge.pl");
+    }
+    return true;
+  }
+
   public void clear_cache() {
+    // Don't do check_modbits()!  We might have only partially filled up
+    // the cache.  Do this at call sites where appropriate.
+    // Assert.assert(check_modbits());
+
     if (values_cache != null) {
       num_samples_post_cache = num_samples();
       num_mod_non_missing_samples_post_cache = num_mod_non_missing_samples();
@@ -224,19 +253,27 @@ public class PptSliceGeneric extends PptSlice {
   void add(ValueTuple full_vt, int count) {
     Assert.assert(invs.size() > 0);
 
-    // Avoid constructing a new Vector every time through this function.
-    invs_to_remove_deferred = itrd_cache;
+    // System.out.println("PptSliceGeneric.add(" + full_vt + ", " + count + ")"
+    //                    + " for " + name);
 
-    if (! already_seen_all) {
-      Object[] vals = new Object[arity];
-      int[] mods = new int[arity];
-      for (int i=0; i<arity; i++) {
-        // The values in parens were incorrectly "i" instead of value_index.
-        // How could anything have possibly worked before?
-        int value_index = var_infos[i].value_index;
-        vals[i] = full_vt.getValue(value_index);
-        mods[i] = full_vt.getModified(value_index);
+    // Don't bother putting values into a slice if not modified, because we
+    // won't be doing anything with it!
+
+    Object[] vals = new Object[arity];
+    int[] mods = new int[arity];
+    for (int i=0; i<arity; i++) {
+      // The values in parens were incorrectly "i" instead of value_index.
+      // How could anything have possibly worked before?
+      int value_index = var_infos[i].value_index;
+      vals[i] = full_vt.getValue(value_index);
+      mods[i] = full_vt.getModified(value_index);
+      if (mods[i] == ValueTuple.MISSING) {
+        // System.out.println("Bailing out of add(" + full_vt + ") for " + name);
+        return;
       }
+    }
+    // I won't reuse the array below because I would have to do casting anyway.
+    if (! already_seen_all) {
       ValueTuple vt = new ValueTuple(vals, mods);
       values_cache.increment(vt, count);
       // System.out.println(name + " values_cache.increment("
@@ -247,59 +284,63 @@ public class PptSliceGeneric extends PptSlice {
     // System.out.println("PptSliceGeneric " + name + ": add " + full_vt + " = " + vt);
     // System.out.println("PptSliceGeneric " + name + " has " + invs.size() + " invariants.");
 
+    // Avoid constructing a new Vector every time through this function.
+    invs_to_remove_deferred = itrd_cache;
+    Assert.assert(invs_to_remove_deferred.size() == 0);
+
     // Supply the new values to all the invariant objects.
     // Use full_vt and the VarInfo objects,
     // or else use vt (which is pruned) and small indices (< arity).
     int num_invs = invs.size();
     if (arity == 1) {
       VarInfo vi = var_infos[0];
+      // int mod = vi.getModified(full_vt);
+      int mod = mods[0];
+      Assert.assert(mod == vi.getModified(full_vt));
+      Assert.assert(mod != ValueTuple.MISSING);
       ProglangType rep = vi.rep_type;
       if (rep.equals(ProglangType.INT)) {
+        // int value = vi.getIntValue(full_vt);
+        int value = ((Integer) vals[0]).intValue();
         for (int i=0; i<num_invs; i++) {
           SingleScalar inv = (SingleScalar)invs.elementAt(i);
-          int mod = vi.getModified(full_vt);
-          if (mod == ValueTuple.MISSING)
-            continue;
-          int value = vi.getIntValue(full_vt);
           inv.add(value, mod, count);
         }
       } else if (rep.equals(ProglangType.STRING)) {
+        // String value = vi.getStringValue(full_vt);
+        String value = (String) vals[0];
         for (int i=0; i<num_invs; i++) {
           // System.out.println("Trying " + invs.elementAt(i));
           SingleString inv = (SingleString) invs.elementAt(i);
-          int mod = vi.getModified(full_vt);
-          if (mod == ValueTuple.MISSING)
-            continue;
-          String value = vi.getStringValue(full_vt);
           inv.add(value, mod, count);
         }
       } else if (rep.equals(ProglangType.INT_ARRAY)) {
+        // int[] value = vi.getIntArrayValue(full_vt);
+        int[] value = (int[]) vals[0];
         for (int i=0; i<num_invs; i++) {
           SingleSequence inv = (SingleSequence)invs.elementAt(i);
-          int mod = vi.getModified(full_vt);
-          if (mod == ValueTuple.MISSING)
-            continue;
-          int[] value = (int[])vi.getValue(full_vt);
           inv.add(value, mod, count);
         }
       }
     } else if (arity == 2) {
       VarInfo vi1 = var_infos[0];
       VarInfo vi2 = var_infos[1];
+      // int mod1 = vi1.getModified(full_vt);
+      // int mod2 = vi2.getModified(full_vt);
+      int mod1 = mods[0];
+      int mod2 = mods[1];
+      Assert.assert((mod1 != ValueTuple.MISSING)
+                    && (mod2 != ValueTuple.MISSING));
       int num_arrays = 0;
       if (vi1.rep_type.isArray()) num_arrays++;
       if (vi2.rep_type.isArray()) num_arrays++;
       if (num_arrays == 0) {
+        // int value1 = vi1.getIntValue(full_vt);
+        // int value2 = vi2.getIntValue(full_vt);
+        int value1 = ((Integer) vals[0]).intValue();
+        int value2 = ((Integer) vals[1]).intValue();
         for (int i=0; i<num_invs; i++) {
           TwoScalar inv = (TwoScalar)invs.elementAt(i);
-          int mod1 = vi1.getModified(full_vt);
-          if (mod1 == ValueTuple.MISSING)
-            continue;
-          int mod2 = vi2.getModified(full_vt);
-          if (mod2 == ValueTuple.MISSING)
-            continue;
-          int value1 = vi1.getIntValue(full_vt);
-          int value2 = vi2.getIntValue(full_vt);
           inv.add(value1, mod1, value2, mod2, count);
         }
       } else if (num_arrays == 1) {
@@ -317,30 +358,22 @@ public class PptSliceGeneric extends PptSlice {
             seqvi = vi2;
             sclvi = vi1;
           }
+          int[] value1 = (int[])seqvi.getValue(full_vt);
+          int value2 = sclvi.getIntValue(full_vt);
           for (int i=0; i<num_invs; i++) {
             SequenceScalar inv = (SequenceScalar)invs.elementAt(i);
-            int mod1 = seqvi.getModified(full_vt);
-            if (mod1 == ValueTuple.MISSING)
-              continue;
-            int mod2 = sclvi.getModified(full_vt);
-            if (mod2 == ValueTuple.MISSING)
-              continue;
-            int[] value1 = (int[])seqvi.getValue(full_vt);
-            int value2 = sclvi.getIntValue(full_vt);
+            // Can this reordering be right?  SequenceScalar
+            // is supposed to take care of it itself.
             inv.add(value1, mod1, value2, mod2, count);
           }
         }
       } else if (num_arrays == 2) {
+        // int[] value1 = vi1.getIntArrayValue(full_vt);
+        // int[] value2 = vi2.getIntArrayValue(full_vt);
+        int[] value1 = (int[]) vals[0];
+        int[] value2 = (int[]) vals[1];
         for (int i=0; i<num_invs; i++) {
           TwoSequence inv = (TwoSequence)invs.elementAt(i);
-          int mod1 = vi1.getModified(full_vt);
-          if (mod1 == ValueTuple.MISSING)
-            continue;
-          int mod2 = vi2.getModified(full_vt);
-          if (mod2 == ValueTuple.MISSING)
-            continue;
-          int[] value1 = (int[])vi1.getValue(full_vt);
-          int[] value2 = (int[])vi2.getValue(full_vt);
           inv.add(value1, mod1, value2, mod2, count);
         }
       } else {
@@ -350,19 +383,28 @@ public class PptSliceGeneric extends PptSlice {
       VarInfo vi1 = var_infos[0];
       VarInfo vi2 = var_infos[1];
       VarInfo vi3 = var_infos[2];
+      // int mod1 = vi1.getModified(full_vt);
+      // int mod2 = vi2.getModified(full_vt);
+      // int mod3 = vi3.getModified(full_vt);
+      int mod1 = mods[0];
+      int mod2 = mods[1];
+      int mod3 = mods[2];
+      Assert.assert((mod1 != ValueTuple.MISSING)
+                    && (mod2 != ValueTuple.MISSING)
+                    && (mod3 != ValueTuple.MISSING));
       int num_arrays = 0;
       if (vi1.rep_type.isArray()) num_arrays++;
       if (vi2.rep_type.isArray()) num_arrays++;
       if (vi3.rep_type.isArray()) num_arrays++;
       if (num_arrays == 0) {
+        // int value1 = vi1.getIntValue(full_vt);
+        // int value2 = vi2.getIntValue(full_vt);
+        // int value3 = vi3.getIntValue(full_vt);
+        int value1 = ((Integer) vals[0]).intValue();
+        int value2 = ((Integer) vals[1]).intValue();
+        int value3 = ((Integer) vals[2]).intValue();
         for (int i=0; i<invs.size(); i++) {
           ThreeScalar inv = (ThreeScalar) invs.elementAt(i);
-          int value1 = vi1.getIntValue(full_vt);
-          int mod1 = vi1.getModified(full_vt);
-          int value2 = vi2.getIntValue(full_vt);
-          int mod2 = vi2.getModified(full_vt);
-          int value3 = vi3.getIntValue(full_vt);
-          int mod3 = vi3.getModified(full_vt);
           inv.add(value1, mod1, value2, mod2, value3, mod3, count);
         }
       } else {

@@ -65,8 +65,13 @@ public abstract class PptSlice extends Ppt {
       System.out.println("PptSlice.removeInvariant(" + inv.name() + ")");
     boolean removed = invs.remove(inv);
     Assert.assert(removed);
-    if (invs.size() == 0)
+    if (invs.size() == 0) {
       parent.removeView(this);
+      // for good measure; shouldn't be necessary, but just in case there
+      // is some other pointer to this.
+      if (this instanceof PptSliceGeneric)
+        ((PptSliceGeneric) this).clear_cache();
+    }
   }
 
   // I could make this more efficient, but it's probably fine as it is.

@@ -24,6 +24,10 @@ public final class ProglangType {
   public static ProglangType INT_ARRAY = new ProglangType("int", 1);
   public static ProglangType STRING_ARRAY = new ProglangType("String", 1);
 
+  public static ProglangType BOOLEAN = new ProglangType("boolean", 0);
+  public static ProglangType INTEGER = new ProglangType("Integer", 0);
+
+
   private String base;		// interned name of base type
   public String base() { return base; }
   private int dimensions;	// number of dimensions
@@ -144,25 +148,27 @@ public final class ProglangType {
   }
 
   // These used to all be private.  Why??
+  // (Actually, why are they public?  Is that necessary?)
 
   // Primitive types
-  public final static String TYPE_BOOLEAN = "boolean";
-  public final static String TYPE_BYTE = "byte";
-  public final static String TYPE_CHAR = "char";
-  public final static String TYPE_DOUBLE = "double";
-  public final static String TYPE_FLOAT = "float";
-  public final static String TYPE_INT = "int";
-  public final static String TYPE_LONG = "long";
-  public final static String TYPE_SHORT = "short";
+  final static String BASE_BOOLEAN = "boolean";
+  final static String BASE_BYTE = "byte";
+  final static String BASE_CHAR = "char";
+  final static String BASE_DOUBLE = "double";
+  final static String BASE_FLOAT = "float";
+  final static String BASE_INT = "int";
+  final static String BASE_LONG = "long";
+  final static String BASE_SHORT = "short";
 
   // Nonprimitive types
-  public final static String TYPE_ADDRESS = "address";
+  final static String BASE_ADDRESS = "address";
   // Hmmm, not sure about the difference between these two.
-//   public final static String TYPE_JAVA_OBJECT = "java_object";
-//   public final static String TYPE_OBJECT = "Object";
+//   final static String BASE_JAVA_OBJECT = "java_object";
+//   final static String BASE_OBJECT = "Object";
   // deprecated; use "address" in preference to "pointer"
-  public final static String TYPE_POINTER = "pointer";
-  public final static String TYPE_STRING = "String";
+  final static String BASE_POINTER = "pointer";
+  final static String BASE_STRING = "String";
+  final static String BASE_INTEGER = "Integer";
 
   // avoid duplicate allocations
   final static Integer Zero = Intern.internedInteger(0);
@@ -177,13 +183,13 @@ public final class ProglangType {
     // types in the underlying programming language.
 
     if (dimensions == 0) {
-      if (base == TYPE_STRING) {
+      if (base == BASE_STRING) {
 	if (value.startsWith("\"") && value.endsWith("\""))
 	  value = value.substring(1, value.length()-1);
 	return value.intern();
-      } else if ((base == TYPE_ADDRESS) || (base == TYPE_POINTER)) {
+      } else if ((base == BASE_ADDRESS) || (base == BASE_POINTER)) {
 	return Intern.intern(Integer.valueOf(value, 16));
-      } else if ((base == TYPE_CHAR) || (base == TYPE_INT)) {
+      } else if ((base == BASE_CHAR) || (base == BASE_INT)) {
         // Is this still necessary?
         // Hack for Java objects, fix later I guess.
         if (value.equals("null"))
@@ -205,7 +211,7 @@ public final class ProglangType {
 	// 	value = ord(value)
 	// else:
 	//     raise "Bad character value in data trace file: " + value
-      // } else if (base == TYPE_BOOLEAN) {
+      // } else if (base == BASE_BOOLEAN) {
       //   return new Boolean(value);
       } else {
 	throw new Error("unrecognized type " + base);
@@ -219,7 +225,7 @@ public final class ProglangType {
       //     && (value == "null"))
       //   value = "\"\"";
 
-      // if (base == TYPE_CHAR) {
+      // if (base == BASE_CHAR) {
       //   if ((value.length() > 1)
       //       && value.startsWith("\"") && value.endsWith("\"")) {
       //     // variable is a string
@@ -251,7 +257,7 @@ public final class ProglangType {
 
       // This big if ... else should deal with all the primitive types --
       // or at least all the ones that can be rep_types.
-      if (base == TYPE_INT) {
+      if (base == BASE_INT) {
         int[] result = new int[len];
         for (int i=0; i<len; i++) {
           if (value_strings[i].equals("null"))
@@ -260,7 +266,7 @@ public final class ProglangType {
             result[i] = Integer.parseInt(value_strings[i]);
         }
         return Intern.intern(result);
-      } else if (base == TYPE_STRING) {
+      } else if (base == BASE_STRING) {
         // First, intern each String in the array ...
         Intern.internStrings(value_strings);
         // ... then, intern the entire array, and return it
@@ -279,7 +285,7 @@ public final class ProglangType {
       //   result[i] = ***;
 
     } else if (dimensions == 2) {
-      if (base == TYPE_CHAR) {
+      if (base == BASE_CHAR) {
 	// Array of strings
 	throw new Error("To implement");
 	// value = tuple(eval(value));
@@ -291,5 +297,55 @@ public final class ProglangType {
     }
   }
 
+  public boolean baseIsIntegral() {
+    return (// (base == BASE_BOOLEAN) ||
+            (base == BASE_BYTE)
+            || (base == BASE_CHAR)
+            || (base == BASE_INT)
+            || (base == BASE_LONG)
+            || (base == BASE_SHORT)
+            || (base == BASE_INTEGER));
+  }
+
+  public boolean isIntegral() {
+    if (dimensions != 0)
+      return false;
+
+    if (baseIsIntegral()) {
+      return true;
+    }
+    return false;
+  }
+
+  public boolean isIndex() {
+    return isIntegral();
+
+    // Old implementation
+    // ProglangType type = var.type;
+    // if (type.isIntegral() && (! type.equals(ProglangType.BOOLEAN)))
+    //   return true;
+    // return false;
+  }
+
+  public boolean comparable(ProglangType other) {
+    if (this.equals(other))
+      return true;
+    if (this.dimensions != other.dimensions)
+      return false;
+    if (this.baseIsIntegral() && other.baseIsIntegral())
+      return true;
+    return false;
+  }
+
+  public String format() {
+    if (dimensions == 0)
+      return base;
+
+    StringBuffer sb = new StringBuffer();
+    sb.append(base);
+    for (int i=0; i<dimensions; i++)
+      sb.append("[]");
+    return sb.toString();
+  }
 
 }

@@ -19,8 +19,10 @@ public class TwoScalarFactory {
                   && var2.rep_type.equals(ProglangType.INT));
 
     if (Daikon.check_program_types
-        && (! var1.type.equals(var2.type)))
+        && (! var1.type.comparable(var2.type)))
       return;
+    // System.out.println("These have the same type (" + var1.type.format() + "):  "
+    //                    + var1.name + " " + var2.name);
 
     if (pass == 1) {
       IntComparison.instantiate(ppt);

@@ -12,14 +12,15 @@ import java.io.*;
 
 public class Daikon {
 
-  public static final boolean disable_splitting = false;
-  // static final boolean disable_splitting = true;
+  // public static final boolean disable_splitting = false;
+  public static final boolean disable_splitting = true;
 
   public static final boolean disable_ternary_invariants = false;
-  // static final boolean disable_ternary_invariants = true;
+  // public static final boolean disable_ternary_invariants = true;
 
+  // Change this at your peril; high costs in time and space for "false".
   public static final boolean check_program_types = true;
-  // static final boolean check_program_types = false;
+  // public static final boolean check_program_types = false;
 
 
   // The two arguments to daikon.Daikon are a comma-separated list of
@@ -39,7 +40,6 @@ public class Daikon {
    * comma-separated list of data trace files.
    */
   public static void main(String[] args) {
-
 
     PptMap all_ppts = new PptMap();
 

@@ -526,11 +526,14 @@ class FileIO {
 	  continue;
 	Assert.assert(val_index == vi.value_index);
 	line = reader.readLine();
-	Assert.assert(line.equals(vi.name));
+	Assert.assert(line.equals(vi.name),
+                      "Expected variable " + vi.name + ", got " + line
+                      + " at " + filename + " line " + reader.getLineNumber());
 	line = reader.readLine();
 	String value_rep = line;
 	line = reader.readLine();
-	Assert.assert(line.equals("0") || line.equals("1") || line.equals("2"));
+	Assert.assert(line.equals("0") || line.equals("1") || line.equals("2"),
+                      "Bad modbit " + line);
 	String mod_string = line;
 	int mod = ValueTuple.parseModified(line);
 	mods[val_index] = mod;

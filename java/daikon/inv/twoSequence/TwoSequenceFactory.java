@@ -27,7 +27,7 @@ public class TwoSequenceFactory {
       super2 = var2;
 
     if (Daikon.check_program_types
-        && (! var1.type.equals(var2.type)))
+        && (! var1.type.comparable(var2.type)))
       return;
 
     if (pass == 1) {

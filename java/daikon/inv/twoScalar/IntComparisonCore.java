@@ -19,6 +19,7 @@ public class IntComparisonCore {
   // uninteresting.
 
   // These are final for efficiency's sake.
+  public final boolean only_check_eq;
   public final boolean obvious_can_be_lt;
   public final boolean obvious_can_be_gt;
   public final boolean obvious_can_be_le;
@@ -30,8 +31,11 @@ public class IntComparisonCore {
     this(wrapper_, false, false, false, false);
   }
 
+// , boolean only_eq
   public IntComparisonCore(Invariant wrapper_, boolean obvious_lt, boolean obvious_gt, boolean obvious_le, boolean obvious_ge) {
     wrapper = wrapper_;
+//    only_check_eq = only_eq;
+only_check_eq = false;
     obvious_can_be_lt = obvious_lt;
     obvious_can_be_gt = obvious_gt;
     obvious_can_be_le = obvious_le;
@@ -46,6 +50,7 @@ public class IntComparisonCore {
     else
       can_be_gt = true;
     if ((can_be_lt && can_be_gt)
+        || (only_check_eq && (can_be_lt || can_be_gt))
         || (obvious_can_be_lt && can_be_lt)
         || (obvious_can_be_gt && can_be_gt)
         || (obvious_can_be_le && can_be_lt && can_be_eq)

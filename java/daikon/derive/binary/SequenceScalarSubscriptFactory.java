@@ -32,7 +32,11 @@ public class SequenceScalarSubscriptFactory extends BinaryDerivationFactory {
       return null;
     }
 
-    // I need to incorporate all this code eventually.
+    if (! sclvar.isIndex())
+      return null;
+
+
+    // I need to incorporate all the below commented-out code eventually.
 
     // For now, do nothing if the sequence is itself derived.
     if (seqvar.derived != null)
@@ -48,6 +52,11 @@ public class SequenceScalarSubscriptFactory extends BinaryDerivationFactory {
     //                    + ", seqsize_rep=" + seqsize.canonicalRep().name);
     if (sclvar.canonicalRep() == seqsize.canonicalRep())
       return null;
+    // This means that the above "sclvar.canonicalRep()" could be just "sclvar".
+    Assert.assert(sclvar.isCanonical());
+
+
+
 
     // Find an IntComparison relationship over the two variables, if possible.
 

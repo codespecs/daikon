@@ -403,7 +403,13 @@ public class VarInfo implements Cloneable {
           && (((SequenceLength) vi.derived).var_info == this))
         return vi;
     }
-    throw new Error("Couldn't find size");
+    throw new Error("Couldn't find size of " + name);
+  }
+
+  // Returns true if the type in the original program is integer
+  public boolean isIndex() {
+    return (rep_type.equals(ProglangType.INT)
+            && type.isIndex());
   }
 
 }

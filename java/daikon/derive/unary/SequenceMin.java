@@ -25,8 +25,8 @@ public class SequenceMin extends UnaryDerivation {
 
   protected VarInfo makeVarInfo() {
     String name = "min(" + var_info.name + ")";
-    ProglangType ptype = ProglangType.INT;
-    ProglangType rtype = ProglangType.INT;
+    ProglangType ptype = var_info.type.elementType();
+    ProglangType rtype = var_info.rep_type.elementType();
     VarComparability comp = var_info.comparability.elementType();
     return new VarInfo(name, ptype, rtype, comp);
   }
