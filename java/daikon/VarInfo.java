@@ -101,6 +101,12 @@ public final class VarInfo
   private Object po_lower;  // either null, VarInfo, or VarInfo[] with no duplicates
   private int[] po_higher_nonce; // null iff po_higher is null, else length == po_higher().size()
 
+  /**
+   * Index of this variable in the global ppt, -1 if there is no transform
+   * to the global ppt for this variable
+   */
+  public short global_index = -1;
+
   // Derived variables
 
   /** Whether and how derived.  Null if this is not derived. **/
@@ -2300,5 +2306,71 @@ public final class VarInfo
         vars += vis[i].name.name();
     }
     return (vars);
+  }
+
+  /** returns a string containing the names of the vars in the list **/
+  public static String toString (List /* VarInfo */ vlist) {
+
+    if (vlist == null)
+      return ("null");
+    String vars = "";
+    for (int i = 0; i < vlist.size(); i++) {
+      if (vars != "")           // interned
+        vars += ", ";
+      VarInfo v = (VarInfo) vlist.get(i);
+      if (v == null)
+        vars += "null";
+      else
+        vars += v.name.name();
+    }
+    return (vars);
+  }
+
+  /**
+   * Returns true if this variable is linked to the global ppt via the
+   * orig transform
+   */
+  public boolean is_orig_global() {
+
+    if (global_index == -1)
+      return (false);
+
+    if (ppt.global_transform_orig[global_var().value_index] == value_index)
+      return (true);
+    else
+      return (false);
+  }
+  /**
+   * Returns true if this variable is linked to the global ppt via the
+   * post transform
+   */
+  public boolean is_post_global() {
+
+    if (global_index == -1)
+      return (false);
+
+    if (ppt.global_transform_post[global_var().value_index] == value_index)
+      return (true);
+    else
+      return (false);
+  }
+
+  /**
+   * Returns true if this variable is linked to the global ppt via either
+   * the orig or post transforms
+   */
+  public boolean is_global() {
+    return (global_index != -1);
+  }
+
+  /**
+   * Returns the global variable that corresponds to this one.  Null if
+   * there is no transformation
+   */
+  public VarInfo global_var() {
+    if (global_index == -1)
+      return (null);
+    else
+      return (PptTopLevel.global.var_infos[global_index]);
   }
 }
