@@ -123,15 +123,7 @@ Introduction
 
 Installing Daikon
 
-* Installing dfej::             
-* Installing Kvasir::           
-* Installing dfec::             
-* Installing the Context GUI::  
 * Requirements::                
-
-Installing dfec, the source-based Daikon front end for C
-
-* dfec EDG sources::            
 
 Requirements for running Daikon
 
@@ -229,6 +221,7 @@ Control panel
 Context GUI
 
 * Context GUI with Emacs::      
+* Installing the Context GUI::  
 
 Front ends
 
@@ -248,12 +241,14 @@ Source-based Java front end dfej
 * dfej options::                
 * Scope of instrumentation::    
 * Refined runtime types::       
+* Installing dfej::             
 
 C front end Kvasir
 
 * Using Kvasir::                
 * Kvasir options::              
 * Kvasir limitations::          
+* Installing Kvasir::           
 
 Source-based C front end dfec
 
@@ -262,6 +257,7 @@ Source-based C front end dfec
 * Pointer type disambiguation::  
 * Instrumentation scope::       
 * dfec requirements::           
+* Installing dfec::             
 
 Pointer type disambiguation
 
@@ -277,6 +273,10 @@ dfec requirements
 * C program requirements::      
 * Header file dependencies::    
 * gcc version::                 
+
+Installing dfec, the source-based Daikon front end for C
+
+* dfec EDG sources::            
 
 Perl front end dfepl
 
@@ -410,27 +410,44 @@ Examples
 @node    Introduction, Installing Daikon, Top, Top
 @chapter Introduction
 
-The @uref{http://pag.csail.mit.edu/daikon/, ,Daikon invariant detector}
-reports likely program invariants.  An invariant is a property that
-holds a a certain point or points in a program; these are often seen
-in assert statements, documentation, and formal specifications.
-Examples include arithmetic equations such as "x > abs(y)", "x = 3*y +
-4*z - 7", or "x = 0 (mod 4)", and properties over arrays and other
-collections, including those accessed via pointers.  Daikon also
-reports implications (invariants whose truth depends on some other
-property), such as "p != null => p.content in collection".
+@c If you edit the introduction, then re-generate daikon.html and insert
+@c its ``Introduction'' section into $inv/doc/www/index.html .
 
+
+@uref{http://pag.csail.mit.edu/daikon/, ,Daikon} is an implementation of
+dynamic detection of likely invariants; that is, the Daikon invariant
+detector reports likely program invariants.  An invariant is a property
+that holds at a certain point or points in a program; these are often
+seen in assert statements, documentation, and formal specifications.
 Invariants can be useful in program understanding and a host of other
-applications.  Daikon operates by running the program and examining
-the values it computes, looking for patterns and relationships among
-those values.  Front ends (@pxref{Instrumentation}) exist for the
-Java, C, C++, @uref{http://theory.csail.mit.edu/tds/ioa/, ,IOA}, and
-Perl languages.  Front ends also exist for other applications, such as
-the @uref{http://ase.arc.nasa.gov/visser/jpf/, , Java PathFinder model
-checker}.  It is easy to extend Daikon to other applications.
+applications.  Examples include "x.field > abs(y)"; "y = 2*x+3"; "array
+a is sorted"; "for all list objects lst, lst.next.prev = lst"; "for all
+treenode objects n, n.left.value < n.right.value"; "p != null =>
+p.content in myArray"; and many more.  You can extend Daikon to add new
+properties.
 
-Daikon is freely available for all uses; for details, see
-@ref{License}.
+Dynamic invariant detection runs a program, observes the values that the
+program computes, and then reports properties that were true over the
+observed executions.  
+@c Daikon's output, which is sometimes called an "operational abstraction",
+@c looks like a formal specification, or the contents of assert statements.
+Daikon can detect properties in Java,
+Perl, C, and @uref{http://theory.csail.mit.edu/tds/ioa/, ,IOA} programs;
+in spreadsheet files; and in other data sources.  (Dynamic invariant
+detection is a machine learning technique that can be applied to
+arbitrary data.)  It is easy to extend Daikon to other applications; as
+one example, an interface exists to the
+@uref{http://ase.arc.nasa.gov/visser/jpf/, , Java PathFinder model
+checker}.
+
+Daikon is freely available for download from
+@uref{http://pag.csail.mit.edu/daikon/download/}.  The distribution
+includes both source code and
+@uref{http://pag.csail.mit.edu/daikon/download/doc/, ,documentation},
+and Daikon's license permits unrestricted use (@pxref{License}).  Many
+researchers and practitioners have used Daikon; those uses, and Daikon
+itself, are described in various
+@uref{http://pag.csail.mit.edu/daikon/pubs/, ,publications}.
 
 More information on Daikon can be found in the Daikon Developer
 Manual.  For instance, the Daikon Developer Manual indicates how to
@@ -472,7 +489,12 @@ you may send mail to the list asking to be added.
 @chapter Installing Daikon
 @cindex installing Daikon
 
-In order to install Daikon, perform the following steps.
+Daikon is written in Java.  In order to run Daikon, all you really need
+is the @file{daikon.jar} file, which is included in the distribution.
+Place @file{daikon.jar} on your classpath so that Java can find it, and
+you are done!
+
+This section gives step-by-step instructions for installing Daikon.
 @xref{Requirements}, for a few additional requirements running Daikon
 (in short, you must be able to run Java programs, because Daikon is
 written in Java).  Differences between various versions of Daikon appear
@@ -480,42 +502,30 @@ in the file @file{doc/CHANGES} in the distribution.
 
 @enumerate
 @item
-Download Daikon.  It is available as a tar file from
-@uref{http://pag.csail.mit.edu/daikon/download/daikon.tar.gz}.
+In the directory where you want to install Daikon (we'll call this
+the @var{daikonparent} directory), 
+download and unpack Daikon.  Daikon is available as a tar file from
+@uref{http://pag.csail.mit.edu/daikon/download/daikon.tar.gz},
 or as a zip file from
 @uref{http://pag.csail.mit.edu/daikon/download/daikon.zip}.
 The two files contain the same information; you only need one of them.
-One way to obtain Daikon is to use one of the following command lines:
+For example, you could use one of the following sets of commands:
 @example
 wget http://pag.csail.mit.edu/daikon/download/daikon.tar.gz
-@end example
-@noindent
-or
-@example
-wget http://pag.csail.mit.edu/daikon/download/daikon.zip
-@end example
-
-You may wish to subscribe to one of the mailing lists (@pxref{Mailing
-lists}), in order to be notified of new releases or join discussions
-with other Daikon users and developers.
-
-@cindex @var{daikonparent} directory
-@item
-In the directory where you want to install Daikon (we'll call this
-the @var{daikonparent} directory), unpack the distribution; for example:
-@example
 tar zxvf daikon.tar.gz
 @end example
 @noindent
 or
 @example
+wget http://pag.csail.mit.edu/daikon/download/daikon.zip
 unzip daikon.zip
 @end example
 @noindent
 This creates a @file{@var{daikonparent}/daikon/} subdirectory.
 
 @item
-Set up your environment.
+Set up your environment.  You can either arrange for @file{daikon.jar}
+to be on your Java classpath, or you can follow these three steps:
 @enumerate
 @item Make your shell initialization file source the appropriate
 Daikon environment file.
@@ -541,22 +551,24 @@ source @var{daikonparent}/daikon/bin/daikon.bashrc
 @end itemize
 
 @item
-Also, you must edit the @file{daikon.cshrc} or @file{daikon.bashrc} file
+Edit the @file{daikon.cshrc} or @file{daikon.bashrc} file
 to indicate the @var{daikonparent} directory and to perform any desired
 customizations.  (Alternately, you may place such customizations in your
 own @file{.cshrc} or @file{.bash_profile} file, just before and/or
 after the @samp{source ... daikon.cshrc} or @samp{source
 ... daikon.bashrc} line.)
-@end enumerate
 
 @item
 Execute the @command{source} command you placed in your shell
 initialization file, or else log out and log back in to achieve the
 same effect.
+@end enumerate
 
 @item
-Build various executables used by Daikon.  (This step is optional; you
-can look in the Makefile to see what will get made.)
+Optionally, build various executables used by Daikon, such as Kvasir
+(@pxref{C front end Kvasir}) and dfej (@pxref{Source-based Java front
+end dfej}).  (This step is not required; you can look in the Makefile to
+see what will get made.)
 @example
 cd $DAIKONDIR
 make
@@ -577,254 +589,41 @@ make
 
 @end enumerate
 
+Finally, you may wish to subscribe to one of the mailing lists
+(@pxref{Mailing lists}), in order to be notified of new releases or join
+discussions with other Daikon users and developers.
+
+
+Other sections of the manual give installation instructions for several
+special-purpose components of Daikon:  the C front end Kvasir
+(@pxref{Installing Kvasir}), the source-based Java front end dfej
+(@pxref{Installing dfej}), the source-based C front end dfec
+(@pxref{Installing dfec}), and the Context GUI (@pxref{Installing the
+Context GUI}).  Most users will not need to read those instructions,
+however.
+
+
+
 @menu
-* Installing dfej::             
-* Installing Kvasir::           
-* Installing dfec::             
-* Installing the Context GUI::  
 * Requirements::                
 @end menu
 
-@node    Installing dfej, Installing Kvasir, Installing Daikon, Installing Daikon
-@section Installing dfej, the Daikon front end for Java
-
-@cindex installing dfej
-@cindex dfej installation
-
-This manual section is optional; if you ran @command{make} from
-$DAIKONDIR (@pxref{Installing Daikon}), you can skip it.
-
-If you wish to detect invariants in Java programs, you need to obtain
-or build an executable for dfej, the Daikon front end for Java.
-
-
-@itemize @bullet
-@item
-The easiest approach is to download a precompiled version of
-@command{dfej} from @uref{http://pag.csail.mit.edu/daikon/download/}.
-Place that executable in directory
-@file{$DAIKONDIR/front-end/java/src} (or, alternately, elsewhere on
-your path), then run @command{rehash}.  Now you are ready to run dfej.
-(If no executable is available for your architecture, send mail to
-@email{daikon-developers@@lists.csail.mit.edu} and we may be able to produce an
-executable for you.)
-
-@item
-Alternately, you can build dfej from the sources, which are included in
-the Daikon source distribution.  
-To build dfej, see file @file{INSTALL} in the dfej sources.  In
-summary, you should be able to build dfej by running the following
-commands:
-@example
-cd daikon/front-end/java
-./configure
-make
-rehash
-@end example
-@noindent
-after which file @file{src/dfej} (on Windows, @file{src/dfej.exe}) is
-the dfej executable.  It is already on your path.
-
-If you modify the source code for dfej (which is not recommended
-unless you know what you are doing), just run @command{make} again to
-build a new binary.
-
-Because it uses some obsolescent C++ features, dfej cannot be compiled
-using gcc/g++ 3.2; dfej can be compiled with gcc 2.95.3 (and possibly
-other versions).
-
-@b{Cygwin note:}  Cygwin uses gcc 3.2 by default; there is also an
-option to install gcc 2.95.3.  After installing gcc 2.95.3, you can
-make it the default in the following way:
-@example
-	cd /usr/bin
-	mv gcc.exe gcc-3.exe
-	mv g++.exe g++-3.exe
-	cp gcc-2.exe gcc.exe
-	cp g++-2.exe g++.exe
-@end example
-
-@b{Solaris note:}
-If you are running under Solaris, you may need to edit
-@file{Makefile} to indicate use of the @file{libw} library; change
-@example
-LDFLAGS=-L. -o $(EXECUTABLE)
-@end example
-@noindent
-to
-@example
-LDFLAGS=-L. -lw -o $(EXECUTABLE)
-@end example
-
-
-@end itemize
-
-@node    Installing Kvasir, Installing dfec, Installing dfej, Installing Daikon
-@section Installing Kvasir, the binary-based Daikon front end for C
-
-@cindex installing Kvasir
-@cindex Kvasir installation
-
-Kvasir is the recommended C front end for use on Linux/x86.  The source
-code for Kvasir is included in the main Daikon distribution, but it is
-not compiled by default.
-
-To compile and install Kvasir, give the command @code{make kvasir}
-from the top-level Daikon directory:
-
-@example
-cd $DAIKONDIR
-make kvasir
-@end example
-
-This will check that you have the appropriate prerequisites (such as
-GCC), configure Kvasir for your machine, compile it, and install
-it in the directory @file{kvasir/inst}.
-
-Once Kvasir has been installed, it can be used via the
-@file{kvasir-dtrace} script in the @file{$DAIKONDIR/bin} directory; if
-you have set up the Daikon environment according to the instructions
-above, it should already be in your @code{PATH}.  For instructions on using
-Kvasir, see @ref{C front end Kvasir}.
-
-@node    Installing dfec, Installing the Context GUI, Installing Kvasir, Installing Daikon
-@section Installing dfec, the source-based Daikon front end for C
-
-@cindex installing dfec
-@cindex dfec installation
-
-Daikon's older, source-code based front end for the C language, named
-dfec, is distributed separately.  If you wish to use dfec,
-first perform the following installation
-steps.
-
-@enumerate
-@item
-Download the dfec distribution from
-@uref{http://pag.csail.mit.edu/daikon/download/}; choose the version for
-your architecture and operating system.  The distribution includes
-both the dfec executable and Lackwit.  Lackwit is a variable
-comparability analysis package; its use is optional, but it can make
-invariant detection more accurate and efficient.
-@item
-Unpack the tarfile.
-@example
-cd $DAIKONDIR/front-end
-tar zxvf dfec-linux-x86.tar.gz
-@end example
-@item
-Compile the Daikon C runtime library.
-@example
-cd $DAIKONDIR/front-end/c
-make
-@end example
-@noindent
-This creates the file @file{daikon_runtime.o}; you will use it (and
-@file{daikon_runtime.h}, which also appears in @file{front-end/c})
-when compiling C and C++ programs in which you wish to detect invariants.
-@end enumerate
-
-For information about customizing the behavior of your instrumented
-programs, @pxref{Daikon runtime customization}.
-
-@menu
-* dfec EDG sources::            
-@end menu
-
-@node    dfec EDG sources,  , Installing dfec, Installing dfec
-@subsection Installing dfec from EDG sources
-
-@cindex EDG C front end
-@cindex Edison Design Group C front end
-
-License restrictions prohibit us from distributing the source for dfec,
-except to other parties who hold a license to the EDG (Edison Design
-Group) C front end.  If you hold such a license, send mail to
-@email{daikon-developers@@lists.csail.mit.edu} to obtain a patch to the
-EDG front end.  To build dfec for yourself, perform the following steps:
-@enumerate
-@item Unpack your EDG source code (which you obtained from EDG).
-@example
-    tar zxf edgcpfe_3.0.tar.gz
-@end example
-@item cd into the EDG source directory
-@example
-    cd release_3.0
-@end example
-@item Apply the patch (which you received from the Daikon group) with
-@option{-p1}; this adds the dfec source modifications.
-@example
-    patch -p1 < edg-3.0_to_dfec.patch
-@end example
-@item Compile the software, creating the dfec executable
-@file{release_3.0/bin/dfec}.
-@example
-    make
-@end example
-@end enumerate
-
-(A different patch is available for EDG version 2.45; substitute
-@file{2.45} for @file{3.0} in the above instructions.  However, we
-recommend the use of EDG version 3.0, because the version of dfec built
-using EDG 2.45 contains some known bugs that are corrected in the
-version of dfec that is built using EDG 3.0.)
-
-@c how to put something on your path:
-@c 	      <li>copy or link the @command{dfej} program to a directory on
-@c 	          your path, or
-@c 	      <li>add the @file{java-front-end/src} directory to your path;
-@c 		  for instance, in csh place the following in your
-@c 		  @file{.cshrc} file:<br>
-@c 		  <tt>set path = (<em>daikonparent</em>/daikon/java-front-end/src $path)</tt><br>
-
-@node    Installing the Context GUI, Requirements, Installing dfec, Installing Daikon
-@section Installing the Context GUI
-
-If you wish to run the Daikon Context GUI (@pxref{Context GUI}), perform
-the following two steps:
-
-@enumerate
-@item
-If you wish to use the Context GUI with Java code, then
-download and install JDE, the Java Development Environment for Emacs,
-from @uref{http://jdee.sunsite.dk/}.
-If you wish to use the Context GUI with C code, no extra packages are needed.
-@item
-Add the Emacs Lisp code for the Daikon Context GUI to your Emacs load
-path.  Add the following to your @file{.emacs} or @file{prj.el} file:
-@example
-  ;; Daikon Context GUI
-  (add-to-list 'load-path
-               (substitute-in-file-name "$DAIKONDIR/emacs"))
-  (autoload 'daikon-context-gui "daikon-context-gui"
-            "Daikon Context GUI" t)
-  (custom-set-variables '(jde-global-classpath '("$CLASSPATH")))
-@end example
-@end enumerate
-
-@node    Requirements,  , Installing the Context GUI, Installing Daikon
+@node    Requirements,  , Installing Daikon, Installing Daikon
 @section Requirements for running Daikon
 
-In order to run Daikon, you must have a Java 1.4 (or later) JVM
+In order to run Daikon, you must have a Java 5.0 (or later) JVM
 (@uref{http://java.sun.com,, Java Virtual Machine}).
-
-If you wish to re-compile Daikon from scratch, you will need the C
-preprocessor, @command{cpp}.  If you have a C compiler, you almost
-certainly have @command{cpp}.  (Alternately, you can use @command{gcc -E}.)
 
 You also need a compiler for whatever language your target programs are
 written in.  For instance, if you wish to analyze Java programs, you
 need a Java compiler such as @command{javac} or @command{jikes}.  If you
 wish to analyze C or C++ programs, you need a C or C++ compiler such as
-@command{gcc}.  (In fact, @command{dfec} requires that @command{gcc} is
-installed.)
+@command{gcc}.
 
-If you wish to build the Daikon front end for Java (dfej) yourself,
-rather than using a precompiled binary provided at
-@uref{http://pag.csail.mit.edu/daikon/}, you need a C++ compiler such as
-@uref{http://gcc.gnu.org/,, gcc}.  (The dfej front end, which permits you to
-detect invariants in Java programs, is written in C++, and sources are
-distributed with Daikon.)
+If you wish to edit the Daikon sources, then re-compile Daikon, you will
+need the C preprocessor, @command{cpp}.  If you have a C compiler, you
+almost certainly have @command{cpp}.  (Alternately, you can use
+@command{gcc -E}.)
 
 @menu
 * Windows requirements::        
@@ -3240,9 +3039,10 @@ user wants to do a quick lookup on invariants.
 
 @menu
 * Context GUI with Emacs::      
+* Installing the Context GUI::  
 @end menu
 
-@node    Context GUI with Emacs,  , Context GUI, Context GUI
+@node    Context GUI with Emacs, Installing the Context GUI, Context GUI, Context GUI
 @subsection Running the Context GUI with Emacs
 @cindex Emacs, with Context GUI
 
@@ -3268,6 +3068,32 @@ Stop the Context GUI by typing @kbd{M-x daikon-context-gui-end}
 
 @end enumerate
 
+
+
+@node    Installing the Context GUI,  , Context GUI with Emacs, Context GUI
+@subsection Installing the Context GUI
+
+If you wish to run the Daikon Context GUI (@pxref{Context GUI}), perform
+the following two steps:
+
+@enumerate
+@item
+If you wish to use the Context GUI with Java code, then
+download and install JDE, the Java Development Environment for Emacs,
+from @uref{http://jdee.sunsite.dk/}.
+If you wish to use the Context GUI with C code, no extra packages are needed.
+@item
+Add the Emacs Lisp code for the Daikon Context GUI to your Emacs load
+path.  Add the following to your @file{.emacs} or @file{prj.el} file:
+@example
+  ;; Daikon Context GUI
+  (add-to-list 'load-path
+               (substitute-in-file-name "$DAIKONDIR/emacs"))
+  (autoload 'daikon-context-gui "daikon-context-gui"
+            "Daikon Context GUI" t)
+  (custom-set-variables '(jde-global-classpath '("$CLASSPATH")))
+@end example
+@end enumerate
 
 
 @node    Front ends, Enhancing Daikon output, GUIs, Top
@@ -3566,6 +3392,7 @@ For more details on Chicory, see @ref{Java front end Chicory}.
 * dfej options::                
 * Scope of instrumentation::    
 * Refined runtime types::       
+* Installing dfej::             
 @end menu
 
 @node    dfej options, Scope of instrumentation, Source-based Java front end dfej, Source-based Java front end dfej
@@ -3839,7 +3666,7 @@ makes approximations to the missing modification information.
 @c modification information.
 
 
-@node    Refined runtime types,  , Scope of instrumentation, Source-based Java front end dfej
+@node    Refined runtime types, Installing dfej, Scope of instrumentation, Source-based Java front end dfej
 @subsection Refined runtime types
 
 Daikon uses the declared types of variables to determine what fields
@@ -3915,6 +3742,93 @@ comment immediately before the declared type (but after any modifiers like
 @c   			  The current version does not require Python.
 @c @end example
 
+
+@node    Installing dfej,  , Refined runtime types, Source-based Java front end dfej
+@subsection Installing dfej, the Daikon front end for Java
+
+@cindex installing dfej
+@cindex dfej installation
+
+This manual section is optional; if you ran @command{make} from
+$DAIKONDIR (@pxref{Installing Daikon}), you can skip it.
+
+If you wish to use the dfej source-based front end for Java, you need to
+obtain or build an executable for dfej.  However, it is usually simpler
+to just use the Chicory front end for Java (@pxref{Java front end
+Chicory} instead.
+
+
+@itemize @bullet
+@item
+You can download a precompiled version of
+@command{dfej} from @uref{http://pag.csail.mit.edu/daikon/download/}.
+Place that executable in directory
+@file{$DAIKONDIR/front-end/java/src} (or, alternately, elsewhere on
+your path), then run @command{rehash}.  Now you are ready to run dfej.
+(If no executable is available for your architecture, send mail to
+@email{daikon-developers@@lists.csail.mit.edu} and we may be able to produce an
+executable for you.)
+
+@item
+You can build dfej from the sources, which are included in
+the Daikon source distribution.  
+After building, file @file{src/dfej} (on Windows, @file{src/dfej.exe}) is
+the dfej executable.  It is already on your path.
+
+@itemize
+@item
+The easiest way to do this is to type @command{make dfej} from the top
+level of your Daikon distribution.
+
+@item
+Alternatively, see file @file{INSTALL} in the dfej sources.  In
+summary, you should be able to build dfej by running the following
+commands:
+@example
+cd daikon/front-end/java
+./configure
+make
+rehash
+@end example
+@noindent
+@end itemize
+@noindent
+
+If you modify the source code for dfej (which is not recommended
+unless you know what you are doing), just run @command{make} again to
+build a new binary.
+
+@c Because it uses some obsolescent C++ features, dfej cannot be compiled
+@c using gcc/g++ 3.2; dfej can be compiled with gcc 2.95.3 (and possibly
+@c other versions).
+@c 
+@c @b{Cygwin note:}  Cygwin uses gcc 3.2 by default; there is also an
+@c option to install gcc 2.95.3.  After installing gcc 2.95.3, you can
+@c make it the default in the following way:
+@c @example
+@c 	cd /usr/bin
+@c 	mv gcc.exe gcc-3.exe
+@c 	mv g++.exe g++-3.exe
+@c 	cp gcc-2.exe gcc.exe
+@c 	cp g++-2.exe g++.exe
+@c @end example
+
+@b{Solaris note:}
+If you are running under Solaris, you may need to edit
+@file{Makefile} to indicate use of the @file{libw} library; change
+@example
+LDFLAGS=-L. -o $(EXECUTABLE)
+@end example
+@noindent
+to
+@example
+LDFLAGS=-L. -lw -o $(EXECUTABLE)
+@end example
+
+
+@end itemize
+
+
 @node C front end Kvasir, Source-based C front end dfec, Source-based Java front end dfej, Front ends
 @section C front end Kvasir
 
@@ -3958,6 +3872,7 @@ For information about installing Kvasir, see @ref{Installing Kvasir}.
 * Using Kvasir::                
 * Kvasir options::              
 * Kvasir limitations::          
+* Installing Kvasir::           
 @end menu
 
 @node Using Kvasir, Kvasir options, C front end Kvasir, C front end Kvasir
@@ -4139,7 +4054,7 @@ directory as the target program.
 
 @end table
 
-@node Kvasir limitations,  , Kvasir options, C front end Kvasir
+@node Kvasir limitations, Installing Kvasir, Kvasir options, C front end Kvasir
 @subsection Kvasir limitations
 
 This subsection lists some of the known limitations of the
@@ -4206,6 +4121,43 @@ well.  We recommend that you compile programs for Kvasir without
 optimization.
 
 @end itemize
+
+
+@node    Installing Kvasir,  , Kvasir limitations, C front end Kvasir
+@subsection Installing Kvasir, the binary-based Daikon front end for C
+
+@cindex installing Kvasir
+@cindex Kvasir installation
+
+Kvasir is the recommended C front end for use on Linux/x86.  The source
+code for Kvasir is included in the main Daikon distribution, but it is
+not compiled by default.
+
+To compile and install Kvasir, give the command @code{make kvasir}
+from the top-level Daikon directory:
+Other sections of the manual give installation instructions for several
+special-purpose components of Daikon:  the C front end Kvasir
+(@pxref{Installing Kvasir}), the source-based Java front end dfej
+(@pxref{Installing dfej}), the source-based C front end dfec
+(@pxref{Installing dfec}), and the Context GUI (@pxref{Installing the
+Context GUI}).  Most users will not need to read those instructions,
+however.
+
+@example
+cd $DAIKONDIR
+make kvasir
+@end example
+
+This will check that you have the appropriate prerequisites (such as
+GCC), configure Kvasir for your machine, compile it, and install
+it in the directory @file{kvasir/inst}.
+
+Once Kvasir has been installed, it can be used via the
+@file{kvasir-dtrace} script in the @file{$DAIKONDIR/bin} directory; if
+you have set up the Daikon environment according to the instructions
+above, it should already be in your @code{PATH}.  For instructions on using
+Kvasir, see @ref{C front end Kvasir}.
+
 
 @node    Source-based C front end dfec, Perl front end dfepl, C front end Kvasir, Front ends
 @section Source-based C front end dfec
@@ -4308,6 +4260,7 @@ java daikon.Daikon daikon-output/myprog.decls \
 * Pointer type disambiguation::  
 * Instrumentation scope::       
 * dfec requirements::           
+* Installing dfec::             
 @end menu
 
 @node    dfec command-line arguments, Daikon runtime customization, Source-based C front end dfec, Source-based C front end dfec
@@ -4920,7 +4873,7 @@ compile.
 @end enumerate
 
 
-@node    dfec requirements,  , Instrumentation scope, Source-based C front end dfec
+@node    dfec requirements, Installing dfec, Instrumentation scope, Source-based C front end dfec
 @subsection dfec requirements
 
 @command{dfec} does not output the contents of C unions.  This section
@@ -5268,6 +5221,97 @@ equivalent file.
 @example
   export PATH=/tmp/build-gcc-2.95.3/gcc-installation:$PATH
 @end example
+
+@node    Installing dfec,  , dfec requirements, Source-based C front end dfec
+@subsection Installing dfec, the source-based Daikon front end for C
+
+@cindex installing dfec
+@cindex dfec installation
+
+Daikon's older, source-code based front end for the C language, named
+dfec, is distributed separately.  If you wish to use dfec,
+first perform the following installation
+steps.
+
+@enumerate
+@item
+Download the dfec distribution from
+@uref{http://pag.csail.mit.edu/daikon/download/}; choose the version for
+your architecture and operating system.  The distribution includes
+both the dfec executable and Lackwit.  Lackwit is a variable
+comparability analysis package; its use is optional, but it can make
+invariant detection more accurate and efficient.
+@item
+Unpack the tarfile.
+@example
+cd $DAIKONDIR/front-end
+tar zxvf dfec-linux-x86.tar.gz
+@end example
+@item
+Compile the Daikon C runtime library.
+@example
+cd $DAIKONDIR/front-end/c
+make
+@end example
+@noindent
+This creates the file @file{daikon_runtime.o}; you will use it (and
+@file{daikon_runtime.h}, which also appears in @file{front-end/c})
+when compiling C and C++ programs in which you wish to detect invariants.
+@end enumerate
+
+For information about customizing the behavior of your instrumented
+programs, @pxref{Daikon runtime customization}.
+
+@menu
+* dfec EDG sources::            
+@end menu
+
+@node    dfec EDG sources,  , Installing dfec, Installing dfec
+@subsubsection Installing dfec from EDG sources
+
+@cindex EDG C front end
+@cindex Edison Design Group C front end
+
+License restrictions prohibit us from distributing the source for dfec,
+except to other parties who hold a license to the EDG (Edison Design
+Group) C front end.  If you hold such a license, send mail to
+@email{daikon-developers@@lists.csail.mit.edu} to obtain a patch to the
+EDG front end.  To build dfec for yourself, perform the following steps:
+@enumerate
+@item Unpack your EDG source code (which you obtained from EDG).
+@example
+    tar zxf edgcpfe_3.0.tar.gz
+@end example
+@item cd into the EDG source directory
+@example
+    cd release_3.0
+@end example
+@item Apply the patch (which you received from the Daikon group) with
+@option{-p1}; this adds the dfec source modifications.
+@example
+    patch -p1 < edg-3.0_to_dfec.patch
+@end example
+@item Compile the software, creating the dfec executable
+@file{release_3.0/bin/dfec}.
+@example
+    make
+@end example
+@end enumerate
+
+(A different patch is available for EDG version 2.45; substitute
+@file{2.45} for @file{3.0} in the above instructions.  However, we
+recommend the use of EDG version 3.0, because the version of dfec built
+using EDG 2.45 contains some known bugs that are corrected in the
+version of dfec that is built using EDG 3.0.)
+
+@c how to put something on your path:
+@c 	      <li>copy or link the @command{dfej} program to a directory on
+@c 	          your path, or
+@c 	      <li>add the @file{java-front-end/src} directory to your path;
+@c 		  for instance, in csh place the following in your
+@c 		  @file{.cshrc} file:<br>
+@c 		  <tt>set path = (<em>daikonparent</em>/daikon/java-front-end/src $path)</tt><br>
+
 
 @node Perl front end dfepl, CSV front end convertcsv.pl, Source-based C front end dfec, Front ends
 @section Perl front end dfepl
