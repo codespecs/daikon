@@ -79,6 +79,7 @@ sub max ( $$ ) {
 
 my $maxloc = 0;
 my $maxncnbloc = 0;
+my $maxmethods = 0;
 my $maxverified = 0;
 my $maxunverified = 0;
 my $maxinexpressible = 0;
@@ -99,7 +100,7 @@ for my $file (@ARGV) {
   my @sources = grep(s|\# merged/(.*)\n|$invdir/tests/sources/$1|, <SOURCE>);
   close(SOURCE);
 
-  my ($loc, $ncnbloc) = (0, 0);
+  my ($loc, $ncnbloc, $methods) = (0, 0, 0);
   for my $one_javafile (@sources) {
     # Lines of code
     my $loc_command = "cat $one_javafile | wc -l";
@@ -107,6 +108,8 @@ for my $file (@ARGV) {
     # Non-comment, non-blank lines of code
     my $ncnb_command = "cpp -P -nostdinc -undef $one_javafile | grep '[^ \\t]' | wc -l";
     $ncnbloc += `$ncnb_command`;
+    my $methods_command = "grep public $one_javafile | grep -v spec_public | grep -v ' class ' | grep -v ' interface ' | wc -l";
+    $methods += `$methods_command`;
   }
 
   open(SOURCE, $file) or die("Cannot open $file!");
@@ -167,6 +170,7 @@ for my $file (@ARGV) {
 
   $maxloc = max($maxloc, $loc);
   $maxncnbloc = max($maxncnbloc, $ncnbloc);
+  $maxmethods = max($maxmethods, $methods);
   $maxverified = max($maxverified, $verified);
   $maxunverified = max($maxunverified, $unverified);
   $maxinexpressible = max($maxinexpressible, $inexpressible);
@@ -174,9 +178,9 @@ for my $file (@ARGV) {
   $maxreported = max($maxreported, $reported);
   $maxmissing = max($maxmissing, $missing);
 
-  # print "$class := [$loc, $ncnbloc, $verified, $unverified, $inexpressible, $redundant, $reported, $missing]\n";
+  # print "$class := [$loc, $ncnbloc, $methods, $verified, $unverified, $inexpressible, $redundant, $reported, $missing]\n";
 
-  $classdata{$class} = [$loc, $ncnbloc, $verified, $unverified, $inexpressible, $redundant, $reported, $missing];
+  $classdata{$class} = [$loc, $ncnbloc, $methods, $verified, $unverified, $inexpressible, $redundant, $reported, $missing];
 }
 
 # for my $class (sort keys %classdata) {
@@ -185,6 +189,7 @@ for my $file (@ARGV) {
 
 my $total_loc = 0;
 my $total_ncnbloc = 0;
+my $total_methods = 0;
 my $total_verified = 0;
 my $total_unverified = 0;
 my $total_inexpressible = 0;
@@ -226,14 +231,14 @@ if ($single) {
 	 "Total", $total_verified, $total_unverified, $total_inexpressible,
 	 $total_redundant, $total_reported, $total_missing);
 } else {
-  print "% Class         & LOC     & NCNB    & Verif.  & Unverif & Inexpr.    & Redund. & TotRept & Missing & Prec & Rec. \\\\\n";
+  print "% Class         & LOC     & NCNB    & Methods & Verif.  & Unverif & Inexpr.    & Redund. & TotRept & Missing & Prec & Rec. \\\\\n";
   for my $class (sort {$ {$classdata{$a}}[1] <=> $ {$classdata{$b}}[1]} keys %classdata) {
     ## This doesn't work; not sure why.
-    # my ($loc, $ncnbloc, $verified, $unverified, $inexpressible, $redundant, $reported, $missing) = $ $classdata{$class};
+    # my ($loc, $ncnbloc, $methods, $verified, $unverified, $inexpressible, $redundant, $reported, $missing) = $ $classdata{$class};
     ## This is a craven admission of defeat:
-    my ($loc, $ncnbloc, $verified, $unverified, $inexpressible, $redundant, $reported, $missing) =
-      ($ {$classdata{$class}}[0], $ {$classdata{$class}}[1], $ {$classdata{$class}}[2], $ {$classdata{$class}}[3], $ {$classdata{$class}}[4], $ {$classdata{$class}}[5], $ {$classdata{$class}}[6], $ {$classdata{$class}}[7]);
-    # print "$class: ($loc, $ncnbloc, $verified, $unverified, $inexpressible, $redundant, $reported, $missing)\n";
+    my ($loc, $ncnbloc, $methods, $verified, $unverified, $inexpressible, $redundant, $reported, $missing) =
+      ($ {$classdata{$class}}[0], $ {$classdata{$class}}[1], $ {$classdata{$class}}[2], $ {$classdata{$class}}[3], $ {$classdata{$class}}[4], $ {$classdata{$class}}[5], $ {$classdata{$class}}[6], $ {$classdata{$class}}[7], $ {$classdata{$class}}[8]);
+    # print "$class: ($loc, $ncnbloc, $methods, $verified, $unverified, $inexpressible, $redundant, $reported, $missing)\n";
 
     my $precision = (1.0 * $verified) / ($verified + $unverified);
     my $recall = (1.0 * $verified) / ($verified + $missing);
@@ -242,6 +247,7 @@ if ($single) {
 	   $class,
 	   pad_left(7, pad_zph(length($maxloc), $loc)),
 	   pad_left(7, pad_zph(length($maxncnbloc), $ncnbloc)),
+	   pad_left(7, pad_zph(length($maxmethods), $methods)),
 	   pad_left(7, pad_zph(length($maxverified), $verified)),
 	   pad_left(7, pad_zph(length($maxunverified), $unverified)),
 	   pad_left(10, pad_zph(length($maxinexpressible), $inexpressible)),
@@ -253,6 +259,7 @@ if ($single) {
 
     $total_loc += $loc;
     $total_ncnbloc += $ncnbloc;
+    $total_methods += $methods;
     $total_verified += $verified;
     $total_unverified += $unverified;
     $total_inexpressible += $inexpressible;
@@ -269,6 +276,7 @@ if ($single) {
 	 "Average",
 	 pad_left(7, pad_zph(length($maxloc), avg($total_loc))),
 	 pad_left(7, pad_zph(length($maxncnbloc), avg($total_ncnbloc))),
+	 pad_left(7, pad_zph(length($maxmethods), avg($total_methods))),
 	 pad_left(7, pad_zph(length($maxverified), avg($total_verified))),
 	 pad_left(7, pad_zph(length($maxunverified), avg($total_unverified))),
 	 pad_left(10, pad_zph(length($maxinexpressible), avg($total_inexpressible))),
