@@ -3,5 +3,8 @@
 *.pyo
 gries-instrumented.lisp
 *.dtrace
-daikon.tar
-daikon.tar.gz
+daikon-jar.tar
+daikon-jar.tar.gz
+daikon-source.tar
+daikon-source.tar.gz
+daikon.jar
