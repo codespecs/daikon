@@ -348,6 +348,42 @@ public final class UtilMDE {
     return objs.readObject();
   }
 
+  /**
+   * Creates an empty directory in the default temporary-file directory,
+   * using the given prefix and suffix to generate its name. For example
+   * calling createTempDir("myPrefix", "mySuffix") will create the following
+   * directory: temporaryFileDirectory/myUserName/myPrefix_someString_suffix.
+   * someString is internally generated to ensure no temporary files of the
+   * same name are generated.
+   * @param prefix The prefix string to be used in generating the file's
+   *  name; must be at least three characters long
+   * @param suffix The suffix string to be used in generating the file's
+   *  name; may be null, in which case the suffix ".tmp" will be used Returns:
+   *  An abstract pathname denoting a newly-created empty file
+   * @throws IllegalArgumentException If the prefix argument contains fewer
+   *  than three characters
+   * @throws IOException If a file could not be created
+   * @throws SecurityException If a security manager exists and its
+   *  SecurityManager.checkWrite(java.lang.String) method does not allow a
+   *  file to be created
+   * @see java.io.File#getTempFile(String, String, File)
+   **/
+  public static File createTempDir(String prefix, String suffix)
+    throws IOException {
+    String fs = File.separator;
+    String path = System.getProperty("java.io.tmpdir") + fs +
+      System.getProperty("user.name") + fs;
+    File pathFile =  new File(path);
+    pathFile.mkdirs();
+    File tmpfile = File.createTempFile(prefix + "_", "_", pathFile);
+    String tmpDirPath = tmpfile.getPath() + suffix;
+    tmpfile.delete();
+    File tmpDir = new File(tmpDirPath);
+    tmpDir.mkdirs();
+    return tmpDir;
+  }
+
+
 
   ///
   /// HashMap
