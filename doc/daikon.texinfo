@@ -1201,7 +1201,7 @@ Finally, run the applet:
 
 Run the Daikon invariant detector via the command
 @example
-    java daikon.Daikon @i{[@var{flags}]} @var{decl-files...} @var{dtrace-files...}
+    java daikon.Daikon @i{[@var{flags}]} @var{decl-files...} @var{dtrace-files...} @var{spinfo-files...}
 @end example
 
 (For help in interpreting the output, @xref{Interpreting output}.)
@@ -1210,8 +1210,10 @@ The @var{decl-files} are declaration (@file{.decl}) files created at
 instrumentation time.
 The @var{dtrace-files} are data trace (@file{.dtrace}) files created by
 running the instrumented program.
+The @var{spinfo-files} are splitter info (@file{.spinfo}) files created
+automatically or by hand.
 The file type is determined by whether the file name contains
-@file{.decls} or @file{.dtrace}.
+@file{.decls}, @file{.dtrace}, or @file{.spinfo}.
 
 Be sure to include all declaration files that are needed for the particular
 data trace file; the simplest way is to include every the declaration file
@@ -1230,7 +1232,7 @@ The optional flags are described in @ref{Command line options}.
 
 The Daikon invariant detector is invoked as follows:
 @example
-    java daikon.Daikon @i{[@var{flags}]} @var{decl-files...} @var{dtrace-files...}
+    java daikon.Daikon @i{[@var{flags}]} @var{decl-files...} @var{dtrace-files...} @var{spinfo-files...}
 @end example
 
 This section describes the optional flags.
