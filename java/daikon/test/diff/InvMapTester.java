@@ -25,7 +25,8 @@ public class InvMapTester extends TestCase {
     super(name);
   }
 
-  public void setUp() {
+  public void setUp() throws Exception {
+    super.setUp();
     map = new InvMap();
   }
 
