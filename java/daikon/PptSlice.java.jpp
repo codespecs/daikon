@@ -858,7 +858,7 @@ public final class PPTSLICE1
 
     // This map is from the invariant type to a list of all of the invariants
     // of that type.  In most cases invariant type is equivalent to invariant
-    // class.  See class InvMatch for more info.
+    // class.  See class Invariant.Match for more info.
     Map inv_map = new LinkedHashMap();
     int slice_count = 0;
 
@@ -941,7 +941,7 @@ public final class PPTSLICE1
       for (int j = 0; j < cslice.invs.size(); j++) {
         Invariant orig_inv = (Invariant) cslice.invs.get (j);
         Invariant inv = orig_inv.clone_and_permute (permute);
-        InvMatch imatch = new InvMatch (inv);
+        Invariant.Match imatch = new Invariant.Match (inv);
         ArrayList invs = (ArrayList) inv_map.get (imatch);
         if (inv.logOn()) {
           inv.log ("Adding to " + ppt_name + " invs list " + invs
