@@ -6,6 +6,7 @@
 
 (add-hook 'c-mode-hook 'add-whitespace-hooks)
 (add-hook 'java-mode-hook 'add-whitespace-hooks)
+(add-hook 'makefile-mode-hook 'add-whitespace-hooks)
 
 ;; Customize the tests if desired.
 (defun maybe-remove-trailing-whitespace ()
