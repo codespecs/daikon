@@ -264,7 +264,7 @@ setenv CLASSPATH @var{parent}/daikon/daikon.jar:$@{CLASSPATH@}
 @end example
 
 @item
-Alternately, you may add the @file{@var{parent}/daikon/} directory to
+Alternately, you may add the @file{@var{parent}/daikon/java/} directory to
 your classpath.  This alternative permits you to modify Daikon; most
 users will not need to do so.  If your shell is @command{csh}, add the
 following to your @file{.cshrc} file:
@@ -1051,8 +1051,8 @@ display.  Currently, this script only works on Unix.
 
 Running @command{daikon.pl} without without any arguments will display usage information:
 @example
-% <i>daikon</i>
-Usage: daikon [OPTIONS] MAIN_CLASS [MAIN_ARGUMENTS]
+% daikon.pl
+Usage: daikon.pl [OPTIONS] MAIN_CLASS [MAIN_ARGUMENTS]
 Options:
   -o, --output FILE   Save invariants in FILE.inv
   ...
