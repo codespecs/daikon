@@ -355,29 +355,45 @@ public final class Equality
     return format_daikon();
   }
 
-  //@tx
-  // daikon.inv.Equality
+  // CP: why would Tao have coded this method as he did? (See
+  // commented-out code below.)
   public String format_dbc() {
     StringBuffer result = new StringBuffer ();
-    String first = null; // = vars[0].name.name();
-    Iterator i = vars.iterator();
-    if (i.hasNext()) {
-      first = ((VarInfo) i.next()).name.name();
-    } else {
-      return "";
-    }
-    boolean firstLoop = true;
-    while (i.hasNext()) {
-
-      // for (int i = 1; i < vars.length; i++) {
-      // // appends " && ( v[0] == v[i] )" to the stringbuffer
-      if (! firstLoop) result.append(" && ");
-      result.append("( ").append(first).append(" == "); // "interned"
-      result.append(((VarInfo) i.next()).name.name()).append(" ) ");
-      firstLoop = false;
+    VarInfo leader = leader();
+    String leaderName = leader.name.dbc_name(leader);
+    for (Iterator i = vars.iterator(); i.hasNext(); ) {
+      VarInfo var = (VarInfo) i.next();
+      if (leader == var) continue;
+      result.append("(").append(leaderName).append(" == "); // "interned"
+      result.append(var.name.dbc_name(var)).append(")");
+      if (i.hasNext()) result.append(" && ");
     }
     return result.toString();
   }
+
+//   //@tx
+//   // daikon.inv.Equality
+//   public String format_dbc() {
+//     StringBuffer result = new StringBuffer ();
+//     String first = null; // = vars[0].name.name();
+//     Iterator i = vars.iterator();
+//     if (i.hasNext()) {
+//       first = ((VarInfo) i.next()).name.name();
+//     } else {
+//       return "";
+//     }
+//     boolean firstLoop = true;
+//     while (i.hasNext()) {
+
+//       // for (int i = 1; i < vars.length; i++) {
+//       // // appends " && ( v[0] == v[i] )" to the stringbuffer
+//       if (! firstLoop) result.append(" && ");
+//       result.append("( ").append(first).append(" == "); // "interned"
+//       result.append(((VarInfo) i.next()).name.name()).append(" ) ");
+//       firstLoop = false;
+//     }
+//     return result.toString();
+//   }
 
   public String toString() {
     return repr();
