@@ -11,6 +11,7 @@ The correct way to build the system is to run 'make'.
 #if (defined(EQUAL) || defined(LESSTHAN) || defined(GREATERTHAN) || defined(LESSEQUAL) || defined(GREATEREQUAL))
   #define SUPERCLASS TwoSequence
   #define PRIMITIVE long
+  #define NUMERIC
   #define ARRAYCOMPARATOR new ArraysMDE.LongArrayComparatorLexical()
   #define ELEM_MATCH_COMPARE(v1, v2) (ArraysMDE.isSubset (v1, v2) && \
                                       ArraysMDE.isSubset (v2, v1))
@@ -30,6 +31,7 @@ The correct way to build the system is to run 'make'.
 #elif (defined(EQUALFLOAT) || defined(LESSTHANFLOAT) || defined(GREATERTHANFLOAT) || defined(LESSEQUALFLOAT) || defined(GREATEREQUALFLOAT))
   #define SUPERCLASS TwoSequenceFloat
   #define PRIMITIVE double
+  #define NUMERIC
   #define ARRAYCOMPARATOR Global.fuzzy.new DoubleArrayComparatorLexical()
   #define ELEM_MATCH_COMPARE(v1, v2) Global.fuzzy.isElemMatch (v1, v2)
   #define SUBSEQUENCE SubSequenceFloat
@@ -221,17 +223,13 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
-import daikon.inv.binary.twoScalar.*;
-import daikon.inv.binary.twoString.*;
+#ifdef NUMERIC
 import daikon.suppress.*;
-import daikon.derive.*;
-import daikon.derive.ternary.*;
 import daikon.derive.binary.*;
+#endif
 
 import utilMDE.*;
 import java.util.logging.Logger;
-import java.util.logging.Level;
 import java.util.*;
 
 
@@ -523,7 +521,7 @@ public class SEQSEQINTEQUAL
   }
 
   public DiscardInfo isObviousStatically(VarInfo[] vis) {
-    #if (! (defined(EQUALSTRING) || defined(LESSTHANSTRING) || defined(GREATERTHANSTRING) || defined(LESSEQUALSTRING) || defined(GREATEREQUALSTRING)) )
+    #ifdef NUMERIC
       VarInfo var1 = vis[0];
       VarInfo var2 = vis[1];
       Object[] obv1 = SUBSEQUENCE.isObviousSubSequence(var1, var2);
@@ -543,7 +541,7 @@ public class SEQSEQINTEQUAL
       return super_result;
     }
 
-    #if (! (defined(EQUALSTRING) || defined(LESSTHANSTRING) || defined(GREATERTHANSTRING) || defined(LESSEQUALSTRING) || defined(GREATEREQUALSTRING)) )
+    #ifdef NUMERIC
 
       Debug debug = new Debug (getClass(), ppt, vis);
 
@@ -672,7 +670,7 @@ public class SEQSEQINTEQUAL
     return null;
   }
 
-#if !(defined(EQUALSTRING) || defined(LESSTHANSTRING) || defined(GREATERTHANSTRING) || defined(LESSEQUALSTRING) || defined(GREATEREQUALSTRING))
+#ifdef NUMERIC
 
   // Create a suppression factory for pairwise and lexical
   #define FACTORY_INVCLASS  SEQSEQINTEQUAL
@@ -725,7 +723,7 @@ public class SEQSEQINTEQUAL
       // Make sure the variables are SEQ_SUBSEQUENCE with the same start/end
       if (!(v1.derived instanceof SEQ_SUBSEQUENCE))
         return (null);
-      if (!(v1.derived instanceof SEQ_SUBSEQUENCE))
+      if (!(v2.derived instanceof SEQ_SUBSEQUENCE))
         return (null);
       SEQ_SUBSEQUENCE der1 = (SEQ_SUBSEQUENCE) v1.derived;
       SEQ_SUBSEQUENCE der2 = (SEQ_SUBSEQUENCE) v2.derived;
@@ -784,7 +782,7 @@ public class SEQSEQINTEQUAL
       return (null);
     if (!(v1.derived instanceof SEQ_SUBSEQUENCE))
       return (null);
-    if (!(v1.derived instanceof SEQ_SUBSEQUENCE))
+    if (!(v2.derived instanceof SEQ_SUBSEQUENCE))
       return (null);
     SEQ_SUBSEQUENCE der1 = (SEQ_SUBSEQUENCE) v1.derived;
     SEQ_SUBSEQUENCE der2 = (SEQ_SUBSEQUENCE) v2.derived;

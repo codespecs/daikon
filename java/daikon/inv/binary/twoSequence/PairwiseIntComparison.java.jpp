@@ -138,8 +138,6 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.Invariant.OutputFormat;
-import daikon.inv.binary.twoScalar.*;
 import daikon.derive.binary.*;
 import daikon.suppress.*;
 
@@ -442,7 +440,7 @@ public class PAIRWISEINTEQUAL
     VarInfo v2 = inv.var2();
     if (!v1.isDerived() || !(v1.derived instanceof SEQ_SUBSEQUENCE))
       return (null);
-    if (!v2.isDerived() || !(v1.derived instanceof SEQ_SUBSEQUENCE))
+    if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSEQUENCE))
       return (null);
     SEQ_SUBSEQUENCE der1 = (SEQ_SUBSEQUENCE) v1.derived;
     SEQ_SUBSEQUENCE der2 = (SEQ_SUBSEQUENCE) v2.derived;
