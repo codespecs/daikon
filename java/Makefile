@@ -187,7 +187,7 @@ check-serialize:
 # Include CLASSPATH on command line for Cygwin compatibility
 junit:
 	@echo java daikon.test.MasterTester
-	@java -classpath ${CLASSPATH} daikon.test.MasterTester
+	@java -server -classpath ${CLASSPATH} daikon.test.MasterTester
 
 ## Documentation
 
