@@ -460,7 +460,8 @@ dist-dfej-solaris: $(DIST_BIN_DIR)/dfej-solaris
 
 $(DIST_BIN_DIR)/dfej-solaris: $(DFEJ_DIR)/src/dfej-solaris
 	cp -pf $< $@
-	strip $@
+	# strip $@
+	chmod +r $@
 	update-link-dates $(DIST_DIR)/index.html
 	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@lcs.mit.edu
 
@@ -476,6 +477,7 @@ dist-dfej-linux-x86: $(DFEJ_DIR)/src/dfej
 	cp -pf $(DFEJ_DIR)/src/dfej-linux-x86 $(DIST_BIN_DIR)/dfej-linux-x86
 	cp -pf $(DFEJ_DIR)/src/dfej $(DIST_BIN_DIR)/dfej-linux-x86-dynamic
 	strip $(DIST_BIN_DIR)/dfej-linux-x86 $(DIST_BIN_DIR)/dfej-linux-x86-dynamic
+	chmod +r $(DIST_BIN_DIR)/dfej-linux-x86 $(DIST_BIN_DIR)/dfej-linux-x86-dynamic
 	update-link-dates $(DIST_DIR)/index.html
 	# # Unstripped, to permit better debugging
 	# cp -pf $(DFEJ_DIR)/src/dfej $(NFS_BIN_DIR)
@@ -506,6 +508,7 @@ dfej-src/build_mingw_dfej/src/dfej.exe: dfej-src/dfej/src/*.cpp dfej-src/dfej/sr
 
 dist-dfej-windows: dfej-src/build_mingw_dfej/src/dfej.exe
 	cp -pf dfej-src/build_mingw_dfej/src/dfej.exe $(DIST_BIN_DIR)/dfej.exe
+	chmod +r $(DIST_BIN_DIR)/dfej.exe
 	update-link-dates $(DIST_DIR)/index.html
 
 ## Cross-compiling DFEJ to create a Windows executable (instructions by
