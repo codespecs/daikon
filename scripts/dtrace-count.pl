@@ -11,7 +11,7 @@ my %long_names;
 
 $/ = ""; # Read by paragraph
 while (<>) {
-    /^(.*):::([A-Z\d]+)$/m or die "Unexpected PPT name";
+    /^(.*):::([A-Z\d]+)$/m or die "Can't parse PPT name from <$_>";
     my $name = "$1:::$2";
     $long_names{$1}{$2} = 1;
     s/\n+$//;
