@@ -17,7 +17,7 @@ Further documentation can be found in:
 
 ===========================================================================
 
-4.0.x
+4.0.4 (Apr 1 2005)
 
 Daikon
 
@@ -28,7 +28,44 @@ Daikon
     sections have been reorganized, and some redundant material has
     been eliminated.  These changes should make the manual more readable.
 
+Kvasir
 
+  User Changes
+
+     Added C++ support:
+
+       Features:
+         Outputs the member variables of C++ classes just like those 
+         within C structs, generates :::OBJECT and :::CLASS invariants,
+         properly performs C++ name demangling, 
+         treats member functions like regular functions with an extra 
+         'this' pointer parameter, and correctly outputs static class 
+         member variables.
+
+       Limitations:
+         Cannot print out the contents of classes which are 
+         defined in external libraries rather than in the user's program 
+         (e.g., Kvasir can properly output a C-string represented as 
+         char* but not the contents of the C++ string class).
+         Also, Kvasir can only recognize classes which have member function
+         definitions located outside of the class body like in typical C++ 
+         style instead of inside the class body like in Java style.
+         Support for inheritance and polymorphic member function calls 
+         have not yet been tested.
+
+     In order to reduce the amount of extraneous output, added heuristics 
+     to avoid dereferencing pointers to certain types of variables 
+     (such as FILE*) associated with the C library and operating 
+     system which are unlikely to be interesting for the user.
+
+  Bug Fixes
+    
+     Fixed some segfaults which occurred while printing large 
+     multi-dimensional arrays.
+     
+     Fixed various other bugs which only showed up when running Kvasir 
+     on fairly large programs (e.g. Perl, gcc).  Now Kvasir can 
+     successfully run on programs of significant size.
 
 ---------------------------------
 
