@@ -1,6 +1,6 @@
 ### util.py -- Michael Ernst's Python utilities
 
-import math, types, re
+import math, operator, time, types, re
 
 true = (1==1)
 false = (1==0)
@@ -135,12 +135,16 @@ def format_as_set(seq1):
 ### Mappings
 ###
 
+# This is too slow; inline it.
 def mapping_increment(mapping, key, incr=1):
     """Given a MAPPING from keys to numbers, increment the value associated
 with KEY by INCR.  If KEY does not appear in MAPPING, then add it, with
-initial value INCR."""
+initial value INCR.
+It's a bad idea to use this function due to poor performance;
+inline its (simple) definition instead."""
     mapping[key] = mapping.get(key, 0) + incr
 
+# This is probably too slow (but I am not currently using it).
 def mapping_append(mapping, key, element):
     """Given a MAPPING from keys to arrays, append, to the end of the value
 associated with KEY, ELEMENT.  If KEY does not appear in MAPPING, then add
@@ -152,15 +156,22 @@ it, with initial value a list containing only ELEMENT."""
 ### Slicing
 ###
 
+## This function is TOO SLOW!  To speed it up, perhaps inline all calls:
+##   foo = util.slice_by_sequence(seq, (i1, i2))
+## ==>
+##   foo = (seq[i1], seq[i2])
 def slice_by_sequence(seq, indices):
     """Given a sequence SEQ and a sequence of INDICES, return a new sequence
 whose length is the same as that of INDICES and whose elements are the values
-of SEQ indexed by the respective elements of INDICES."""
+of SEQ indexed by the respective elements of INDICES.
+This function is so slow that you probably shouldn't use it; inline the calls
+instead."""
     result = []
     for i in indices:
         result.append(seq[i])
-    if type(seq) == types.TupleType:
-        result = tuple(result)
+    ## This is probably completely extraneous.
+    # if type(seq) == types.TupleType:
+    #     result = tuple(result)
     return result
 
 def _test_slice_by_sequence():
@@ -177,8 +188,35 @@ def _test_slice_by_sequence():
 ### Lists of numbers
 ###
 
+# This implementation appears to be the best I can easily write; see
+# timings below.
 def sum(nums):
+    result = 0
+    for num in nums:
+        result = result + num
+    return result
+
+# Timing data indicates sum3 is fastest by quite a bit:
+#   sum1 2.36
+#   sum2 1.91
+#   sum3 1.35
+# Moral: avoid function calls!
+def sum1(nums):
     return reduce(lambda x,y: x+y, nums, 0)
+def sum2(nums):
+    return reduce(operator.add, nums, 0)
+def sum3(nums):
+    result = 0
+    for num in nums:
+        result = result + num
+    return result
+def time_sums():
+    testdata = range(256)
+    print `testdata`
+    testfuncs = sum1, sum2, sum3
+    for f in testfuncs: print f.func_name, f(testdata)
+    for f in testfuncs: timing(f, 100, testdata)
+
 
 def sorted_list_min_gap(sorted_nums):
     """Return the smallest difference between adjacent elements of the sorted list."""
@@ -363,6 +401,20 @@ def function_rep(fn):
     if match:
         fnrep = match.group(1)
     return fnrep
+
+
+###########################################################################
+### Timing (from http://www.python.org/doc/essays/f.py)
+###
+
+def timing(f, n, a):
+    print f.__name__,
+    r = range(n)
+    t1 = time.clock()
+    for i in r:
+        f(a); f(a); f(a); f(a); f(a); f(a); f(a); f(a); f(a); f(a)
+    t2 = time.clock()
+    print round(t2-t1, 3)
 
 
 ###########################################################################
