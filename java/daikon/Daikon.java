@@ -140,7 +140,7 @@ public final class Daikon {
    * calculated by joining the invariants from each of their children
    * points
    **/
-  public static boolean df_bottom_up = false;
+  public static boolean dkconfig_df_bottom_up = true;
 
   // When true, don't print invariants when their controlling ppt
   // already has them.  For example, this is the case for invariants
@@ -261,7 +261,6 @@ public final class Daikon {
   public static final String files_from_SWITCH = "files_from";
   public static final String noversion_SWITCH = "noversion";
   public static final String noinvariantguarding_SWITCH = "no_invariant_guarding";
-  public static final String bottom_up_SWITCH = "bottom_up";
   public static final String disc_reason_SWITCH = "disc_reason";
   public static final String suppress_splitter_errors_SWITCH = "suppress_splitter_errors";
   public static final String omit_from_output_SWITCH = "omit_from_output";
@@ -456,7 +455,6 @@ public final class Daikon {
       new LongOpt(files_from_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(noversion_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(noinvariantguarding_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(bottom_up_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(disc_reason_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(suppress_splitter_errors_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(omit_from_output_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -570,8 +568,6 @@ public final class Daikon {
           output_num_samples = true;
         } else if (noternary_SWITCH.equals(option_name)) {
           disable_ternary_invariants = true;
-        } else if (bottom_up_SWITCH.equals(option_name)) {
-          df_bottom_up = true;
         } else if (config_SWITCH.equals(option_name)) {
           String config_file = g.getOptarg();
           try {
@@ -690,7 +686,7 @@ public final class Daikon {
     Global.fuzzy.set_rel_diff (Invariant.dkconfig_fuzzy_ratio);
 
     // Enable dynamic constants for bottom up only
-    if (!df_bottom_up)
+    if (!dkconfig_df_bottom_up)
       use_dynamic_constant_optimization = false;
 
     return new Set[] {
@@ -941,7 +937,7 @@ public final class Daikon {
     }
 
     // If we are processing dataflow bottom up
-    if (df_bottom_up) {
+    if (dkconfig_df_bottom_up) {
 
       // Initialize the partial order hierarchy
       debugProgress.fine ("Init Hierarchy");
@@ -1009,7 +1005,7 @@ public final class Daikon {
       for (Iterator i = allPpts.pptIterator(); i.hasNext(); ) {
         PptTopLevel ppt = (PptTopLevel) i.next();
 
-        if (df_bottom_up) {
+        if (dkconfig_df_bottom_up) {
           // Skip points that are not leaves (anything not a numbered exit point)
           if (use_dataflow_hierarchy) {
             if (!ppt.ppt_name.isExitPoint())
