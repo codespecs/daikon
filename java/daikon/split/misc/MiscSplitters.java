@@ -1,4 +1,4 @@
-package daikon.split.dsaa;
+package daikon.split.misc;
 
 import daikon.split.*;
 
