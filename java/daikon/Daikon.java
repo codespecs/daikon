@@ -1023,7 +1023,6 @@ public final class Daikon {
       // debugProgress.fine ("  Adding Implications for " + ppt.name);
       ppt.addImplications();
     }
-    stopwatch.stop();
     debugProgress.fine ("Time spent adding implications: " + stopwatch.format());
 
     // debug print suppressed invariants
