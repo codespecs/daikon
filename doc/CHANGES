@@ -13,9 +13,6 @@ versions as the user manual.
 
 Put changes for 3.1.6 here
 
-(Fixed a bug in dfej that could cause errors in programs that used
-variables named "ps", "depth", or "prefix".)
-
 The invariant filtering code has been cleaned up and simplified so
 that the same set of filters is used both for checking
 isWorthPrinting() and for actual printing.  This may cause some slight
@@ -27,9 +24,13 @@ line.  The currently supported filters are: UnjustifiedFilter,
 ParentFilter, ObviousFilter, SimplifyFilter, OnlyConstantVariablesFilter, 
 DerivedParameterFilter, and UnmodifiedVariableEqualityFilter.
 
-The Kvasir C front end now supports a number of command line options
-for controlling what output is produced and where it is written. See
-the manual for a list.
+A bug in dfej, the front end for Java, has been fixed.  The bug could
+cause errors in programs that used variables named "ps", "depth", or
+"prefix".
+
+The Kvasir C front end now supports command line options for
+controlling what output is produced and where it is written.  See the
+manual for a list.
 
 A number of bugs in Kvasir have been fixed since the last release,
 including one that accidentally reduced the number of program points
