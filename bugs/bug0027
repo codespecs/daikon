@@ -1,0 +1,25 @@
+Version:      $Id$
+Owner:        mharder <mharder@lcs.mit.edu>, scruffy@lcs.mit.edu
+Tool:         dtrace-diff.pl
+Summary:      Two warnings running dtrace-diff.pl on Space test
+Severity:     Boneheaded
+Status:       New
+Reproducible: Yes
+Description:
+
+I get two warnings when running dtrace-diff.pl on the Space test in
+dfec tests:
+
+Deep recursion on subroutine "main::getline" at /SDG/g1/users/daikonbuildtest/build/20020321-040000/invariants/scripts/dtrace-diff.pl line 28, <DECLS> line 17994.
+
+Argument "nan" isn't numeric in subtraction (-) at /SDG/g1/users/daikonbuildtest/build/20020321-040000/invariants/scripts/dtrace-diff.pl line 147, <DTB> line 6589281.
+
+As with bug0026, these warnings appear since Mike E. turned on
+warnings in the script.  The code should be changed to eliminate these
+warnings.
+
+--
+$Log$
+Revision 1.1  2002-03-21 17:57:03  mharder
+new bug0027
+
