@@ -37,7 +37,7 @@ public class SplitterFactory {
    * Splitters.  This can be the full path name or whatever is used on
    * the commandline.
    **/
-  private static String dkconfig_compiler = "javac";
+  public static String dkconfig_compiler = "javac";
 
   /**
    * Positive integer.  Specifies the Splitter compilation timeout, in

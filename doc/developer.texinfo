@@ -22,11 +22,11 @@
 @center @titlefont{Daikon Invariant Detector Developer Manual}
 
 @sp 2
-@center Daikon version 3.1.5
+@center Daikon version 3.1.6
 
 @sp 1
-@c Daikon version 3.1.5 date
-@center November 16, 2004
+@c Daikon version 3.1.6 date
+@center December 1, 2004
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -48,7 +48,7 @@ Copyright @copyright{} 1998-2003
 @c <h1>Daikon Invariant Detector User Manual</h1>
 @c
 @c This is the developer manual for the Daikon invariant detector.
-@c It describes Daikon version 3.1.5, released November 7, 2004.
+@c It describes Daikon version 3.1.6, released December 1, 2004.
 @c @end html
 
 @c Putting this lower in the HTML version looks a little bit strange,
@@ -67,7 +67,7 @@ Copyright @copyright{} 1998-2003
 @c 
 @c @end ifinfo
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 3.1.5, released November 7, 2004.
+It describes Daikon version 3.1.6, released December 1, 2004.
 @end ifnottex
 
 @menu
@@ -1240,7 +1240,7 @@ when development on it ceased.
 @chapter Branches
 
 The Daikon CVS repository contains two branches:  a main trunk and a
-branch (named ENGINE_V2_PATCHES) for Daikon version 2.
+branch (named ENGINE_V2_PATCHES) for Daikon version 3.1.6.
 
 The CVS manual (@pxref{Branching and merging,,,cvs,CVS -- Concurrent
 Versions System}) describes CVS branches:
@@ -1260,7 +1260,7 @@ Versions System}) describes CVS branches:
 In early January 2002 (or perhaps in late 2001), we created the
 ENGINE_V2_PATCHES branch at the @file{invariants/java/daikon level} of
 the Daikon CVS repository.  Primary development continued along the CVS
-branch ENGINE_V2_PATCHES, which we called ``Daikon version 2''.  We
+branch ENGINE_V2_PATCHES, which we called ``Daikon version 3.1.6''.  We
 called the CVS trunk ``Daikon version 3''; it was experimental, and very
 few people ran its code or performed development on it.  Periodically,
 all changes made to the branch would be merged into the trunk, as one

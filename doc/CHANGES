@@ -38,6 +38,8 @@ Daikon
     file to be specified and avoids the overhead of having Daikon 
     counting them. 
 
+    Daikon no longer uses the libraries jarkarto-oro.jar and log4j
+
     The mechanism for compiling splitter files was improved.  
     The process is more reliable, error messages are more 
     meaningful and the names of related configuration options 
@@ -77,60 +79,6 @@ Kvasir
     accidentally reduced the number of program points it output, and
     another that caused arrays to have too many elements.  On the
     whole, Kvasir produces significantly more output than before.
-
--------------------------
-
-(Fixed a bug in dfej that could cause errors in programs that used
-variables named "ps", "depth", or "prefix".)
-
-Sections added to developer manual on testing and CVS 'Analyzing
-historical versions of Daikon'
-
-Added daikon.FileIO.dtrace_line_count, 
-    daikon.inv.filter.DerivedParameterFilter.enabled
-    daikon.inv.filter.OnlyConstantVariablesFilter.enabled
-    daikon.inv.filter.ParentFilter.enabled
-    daikon.inv.filter.SimplifyFilter.enabled
-    daikon.inv.filter.UnmodifiedVariableEqualityFilter.enabled
-Removed:
-    daikon.split.FileCompiler.compiler
-    
-Removed Log4j and org.apache.oro.text.regex
-
-Improved error messages when errors occur when compiling splitter files
-
-The invariant filtering code has been cleaned up and simplified so
-that the same set of filters is used both for checking
-isWorthPrinting() and for actual printing.  This may cause some slight
-differences in output, but hopefully in the direction of making things
-more consistent.  Filters that were formerly deprecated or unused have
-been removed, and each of the remaining filters now has a
-configuration parameter to allow it to be turned off from the command
-line.  The currently supported filters are: UnjustifiedFilter,
-ParentFilter, ObviousFilter, SimplifyFilter, OnlyConstantVariablesFilter, 
-DerivedParameterFilter, and UnmodifiedVariableEqualityFilter.
-
-A bug in dfej, the front end for Java, has been fixed.  The bug could
-cause errors in programs that used variables named "ps", "depth", or
-"prefix".
-
-The "Quit" command of the tree GUI now works again.
-
-The Kvasir C front end now supports command line options for
-controlling what output is produced and where it is written.  See the
-manual for a list.
-
-A number of bugs in Kvasir have been fixed since the last release,
-including one that accidentally reduced the number of program points
-it output, and another that caused arrays to have too many elements.
-On the whole, Kvasir produces significantly more output than before.
-
-Daikon now has improved support for reading trace data from the
-standard input or a named pipe, and the Kvasir C front end has support
-for writing to a pipe. Used together, these features can remove the
-need for an intermediate trace file, allowing Daikon to operate on
-larger or longer-running programs. For more details, see section 
-10.4.4 of the manual, "Reading trace data on the fly".
 
 ---------------------------------
 

@@ -9,7 +9,12 @@ IMAGE_PARTIAL_PATHS := $(addprefix images/,$(IMAGE_FILES))
 DOC_FILES_NO_IMAGES := Makefile daikon.texinfo config-options.texinfo invariants-doc.texinfo daikon.ps daikon.pdf daikon.html developer.texinfo developer.html CHANGES
 DOC_FILES := ${DOC_FILES_NO_IMAGES} $(IMAGE_PARTIAL_PATHS)
 DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
-DOC_FILES_USER := daikon.ps daikon.pdf daikon.html developer.html
+# The texinfo files are included so we can diff to see what has changed from
+# release to release.  They are in the dist/doc directory, but not
+# visible to the user
+DOC_FILES_USER := daikon.ps daikon.pdf daikon.html developer.html \
+				  daikon.texinfo developer.texinfo config-options.texinfo \
+				  invariants-doc.texinfo
 EMACS_PATHS := emacs/daikon-context-gui.el
 README_FILES := README-daikon-java README-dist README-dist-doc
 README_PATHS := $(addprefix doc/,$(README_FILES))
