@@ -24,6 +24,7 @@ false = (1==0)
 if not locals().has_key("fn_var_infos"):
     ### User configuration variables
     no_ternary_invariants = false
+    no_invocation_counts = false
 
     ### Debugging
     debug_read = false                  # reading files
@@ -1012,9 +1013,10 @@ def read_file(filename, fn_regexp=None):
             line = file.readline()
         # Add invocation counts
         # Accessing global here-crappy
-        for ftn_tag in ftn_names_to_call_ct.keys():
-            these_var_infos.append(var_info("calls(%s)" % (ftn_tag,), types.IntType, len(these_var_infos)))
-            these_values.append(ftn_names_to_call_ct[ftn_tag])
+        if not no_invocation_counts:
+            for ftn_tag in ftn_names_to_call_ct.keys():
+                these_var_infos.append(var_info("calls(%s)" % (ftn_tag,), types.IntType, len(these_var_infos)))
+                these_values.append(ftn_names_to_call_ct[ftn_tag])
 
         # Add original parameter values if end of function call
         # Then pop previous original param value off of param val list
@@ -1544,10 +1546,10 @@ class invariant:
             args = args[0]
         if self.one_of:
             if len(self.one_of) == 1:
-                return "%s = %s \t(%s samples)" % (args, self.one_of[0], self.samples)
+                return "%s = %s" % (args, self.one_of[0])
             # If few samples, don't try to infer a function over the values
             elif self.samples < 100:
-                return "%s in %s \t(%s samples)" % (args, util.format_as_set(self.one_of), self.samples)
+                return "%s in %s" % (args, util.format_as_set(self.one_of))
         self.unconstrained_internal = true
         return None
 
@@ -1676,7 +1678,7 @@ class single_scalar_numeric_invariant(invariant):
             return as_base
         self.unconstrained_internal = false
 
-        suffix = " \t(%s values, %s samples" % (self.values, self.samples)
+        suffix = " \t(%s values" % (self.values,)
         if self.can_be_None:
             suffix = suffix + ", can be None)"
         else:
@@ -1875,7 +1877,7 @@ class two_scalar_numeric_invariant(invariant):
 
         (x,y) = arg_tuple
 
-        suffix = " \t(%s values, %s samples)" % (self.values, self.samples)
+        suffix = " \t(%s values)" % (self.values)
 
         if self.comparison == "=":
             return "%s = %s" % (x,y) + suffix
@@ -2089,7 +2091,7 @@ class three_scalar_numeric_invariant(invariant):
 
         (x,y,z) = arg_tuple
 
-        suffix = " \t(%s values, %s samples)" % (self.values, self.samples)
+        suffix = " \t(%s values)" % (self.values,)
 
         if self.linear_z or self.linear_y or self.linear_x:
             results = []
@@ -2455,7 +2457,7 @@ class single_sequence_numeric_invariant(invariant):
         # Do we care more that it is sorted, or that it is in given range?
         # How much of this do we want to print out?
 
-        suffix = " \t(%s values, %s samples)" % (self.values, self.samples)
+        suffix = " \t(%s values)" % (self.values,)
         result = ""
         if self.min_justified and self.max_justified:
             if self.min == self.max:
@@ -2586,7 +2588,7 @@ class scalar_sequence_numeric_invariant(invariant):
 
         self.unconstrained_internal = false
 
-        suffix = " \t(%s values, %s samples)" % (self.values, self.samples)
+        suffix = " \t(%s values)" % (self.values,)
 
         # arg_tuple is a pair of names; it contains no info about types
         if self.seq_first:
@@ -2690,7 +2692,7 @@ class two_sequence_numeric_invariant(invariant):
 
         self.unconstrained_internal = false
 
-        suffix = " \t(%s values, %s samples)" % (self.values, self.samples)
+        suffix = " \t(%s values)" % (self.values,)
 
         (x, y) = arg_tuple
         if self.comparison == "=":
@@ -2736,8 +2738,46 @@ class two_sequence_numeric_invariant(invariant):
 ###
 
 def var_index(varname, fnname):
-    return map(lambda vi:vi.name, fn_var_infos[fnname]).index(varname)
+    try:
+        return map(lambda vi:vi.name, fn_var_infos[fnname]).index(varname)
+    except ValueError:
+        return None
+## Testing
+# invariants.var_index("lj", 'makepat:::END(arg_0[],start,delim,pat_100[])')
+# invariants.var_index("lj", 'makepat:::END(arg_0[],start,delim,pat_100[])')
 
+
+## Maybe this should be stated positively:  output when the condition is
+## true.  (Easy enough to add...)
+def find_violations(condition, fn):
+    """Given a condition and a function name, output the values for all
+    variables whenever that condition is violated in the function.
+    The condition is a Python expression (a string) using symbolic
+    variable names (that is, the variable names used in the program).
+    Example call:
+      find_violations("lj <= j", "makepat:::END(arg_0[],start,delim,pat_100[])")
+    """
+
+    # I want to use re.split(r'\b', but that doesn't work.  Why??
+    # This does exactly what I would think that would do...
+    condition_words = re.split('(\W+)', condition)
+    for i in range(0,len(condition_words)):
+        var_idx = var_index(condition_words[i], fn)
+        if var_idx != None:
+            condition_words[i] = "(vals[%s])" % var_idx
+    cond = string.join(condition_words, "")
+
+    vis = invariants.fn_var_infos[fn]
+    for (file, fn_var_values) in invariants.file_fn_var_values.items():
+        # print "checking file", file
+        for (vals, count) in fn_var_values[fn].items():
+            # This should test the condition
+            if not eval(cond, globals(), locals()):
+                assert len(vals) == len(vis)
+                print "==========================================================================="
+                print "file %s, %s samples" % (file, count)
+                for i in range(0,len(vals)):
+                    print mp_vis[i].name, "\t", vals[i]
 
 
 ###########################################################################
