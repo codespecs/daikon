@@ -831,9 +831,8 @@ public final class ArraysMDE {
 
 
   ///////////////////////////////////////////////////////////////////////////
-  /// Arrays as functions of int->int
+  /// Arrays as partial functions of int->int
   ///
-
 
   /**
    * @return true iff all elements of a are in [0..a.length) and a
@@ -859,6 +858,17 @@ public final class ArraysMDE {
   }
 
   /**
+   * @return fresh array that is the identitity function of the given length
+   **/
+  public static int[] fn_identity(int length) {
+    int[] result = new int[length];
+    for (int i=0; i < length; i++) {
+      result[i] = i;
+    }
+    return result;
+  }
+
+  /**
    * @requires is_permutation(a)
    * @param a the input permutation
    * @return fresh array which is the inverse of the given perutation.
@@ -870,8 +880,8 @@ public final class ArraysMDE {
 
   /**
    * @param a function from [0..a.length) to [0..arange)
-   * @return function from [0..arange) to [0..a.length) that is the
-   * inverse of a
+   * @return function from [0..arange) to [0..a.length) that is the inverse of a
+   * @exception UnsupportedOperationException when the function is not invertible
    **/
   public static int[] fn_inverse(int[] a, int arange) {
     int[] result = new int[arange];
@@ -879,6 +889,9 @@ public final class ArraysMDE {
     for (int i=0; i < a.length; i++) {
       int ai = a[i];
       if (ai != -1) {
+	if (result[ai] != -1) {
+	  throw new UnsupportedOperationException("Not invertible");
+	}
 	result[ai] = i;
       }
     }
