@@ -2513,6 +2513,12 @@ Do not produce data trace output for class invariants.
 @c @item -daikon_loops
 @c Do not produce data trace output for loop invariants (default).
 
+@item -daikon_includeonly=@var{string}
+Only produce trace output for matching classes/functions. Cannot be used
+in conjunction with @option{-daikon_omit}. May only be supplied once.
+The argument provided must be a regex (and be surrounded by forward
+slashes on both sides).
+
 @item -daikon_omit=@var{string}
 Do not produce data trace output for matching classes/functions.  This
 reduces the size of the data trace file and also may make the
