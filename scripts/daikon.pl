@@ -87,18 +87,25 @@ if ($cleanup) {
 
 # figure out the configuration
 
+$mainsrc = $runnable;
+$mainsrc =~ s/\./\//;
+$mainsrc .= ".java";
+die ("Source file $mainsrc does not exist") unless (-f $mainsrc);
+
 if ($output) {
     $output =~ s/\.inv$//;
     die("File $output.inv exists") if (-f "$output.inv");
     die("File $output.src.tar.gz exists") if (-f "$output.src.tar.gz");
 } else {
-    die("gensym not supported yet");
+    $output = $runnable;
+    $output =~ s/\./-/;
+    do {
+	$sym = $sym + 1;
+	while ((length $sym) < 4) { $sym = '0' . $sym }
+    } while (-x "$output-$sym.inv" or -x "$output-$sym.src.tar.gz");
+    $output = $output . $sym;
 }
-
-$mainsrc = $runnable;
-$mainsrc =~ s/\./\//;
-$mainsrc .= ".java";
-die ("Source file $mainsrc does not exist") unless (-f $mainsrc);
+print "Output will go in $output...\n" if $verbose;
 
 # check to see that we have jikes avaiable
 die ("Put jikes in your path before using this tool") unless which('jikes');
