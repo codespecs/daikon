@@ -1,776 +1,824 @@
 @c BEGIN AUTO-GENERATED INVARIANTS LISTING
 
+
 @item CommonFloatSequence
-    Represents double sequences that contain a common subset.  Prints as
-    "@{e1, e2, e3, ...@} subset of x[]"
+Represents double sequences that contain a common subset.  Prints as
+ "@{e1, e2, e3, ...@} subset of x[]"
 
-    This invariant is not enabled by default.  See the configuration option
-    daikon.inv.unary.sequence.CommonFloatSequence.enabled
+This invariant is not enabled by default.  See the configuration option
+daikon.inv.unary.sequence.CommonFloatSequence.enabled
+
 @item CommonSequence
-    Represents long sequences that contain a common subset.  Prints as
-    "@{e1, e2, e3, ...@} subset of x[]"
+Represents long sequences that contain a common subset.  Prints as
+ "@{e1, e2, e3, ...@} subset of x[]"
 
-    This invariant is not enabled by default.  See the configuration option
-    daikon.inv.unary.sequence.CommonSequence.enabled
+This invariant is not enabled by default.  See the configuration option
+daikon.inv.unary.sequence.CommonSequence.enabled
+
 @item CommonStringSequence
-    Represents string sequences that contain a common subset.  Prints as
-    "@{s1, s2, s3, ...@} subset of x[]"
+Represents string sequences that contain a common subset.  Prints as
+ "@{s1, s2, s3, ...@} subset of x[]"
 
-    This invariant is not enabled by default.  See the configuration option
-    daikon.inv.unary.stringsequence.CommonStringSequence.enabled
+This invariant is not enabled by default.  See the configuration option
+daikon.inv.unary.stringsequence.CommonStringSequence.enabled
+
 @item DummyInvariant
-    This is a special invariant used internally by Daikon to represent
-    invariants whose meaning Daikon doesn't understand. The only
-    operation that can be performed on a DummyInvariant is to print it.
-    For instance, dummy invariants can be created to correspond to
-    splitting conditions, when no other invariant in Daikon's grammar
-    is equivalent to the condition.
-   
-    To use dummy invariants for splitting conditions, the configuration
-    option daikon.PptTopLevel.dummy_invariant_level must be set, and
-    formatting information must be supplied in the splitter info file.
+This is a special invariant used internally by Daikon to represent
+ invariants whose meaning Daikon doesn't understand. The only
+ operation that can be performed on a DummyInvariant is to print it.
+ For instance, dummy invariants can be created to correspond to
+ splitting conditions, when no other invariant in Daikon's grammar
+ is equivalent to the condition.
+
+ To use dummy invariants for splitting conditions, the configuration
+ option daikon.PptTopLevel.dummy_invariant_level must be set, and
+ formatting information must be supplied in the splitter info file.
+
 @item EltLowerBound
-    Represents the invariant that each element of a long[] sequence is
-    greater than or equal to a constant. Prints as 'x[] elements >=
-    c'
+Represents the invariant that each element of a long[] sequence is
+ greater than or equal to a constant. Prints as 'x[] elements >=
+ c'
 
-    See also the following configuration options:
+See also the following configuration options:
     @itemize @bullet
-    @item
-    daikon.inv.unary.sequence.EltLowerBound.minimal_interesting
-    @item
-    daikon.inv.unary.sequence.EltLowerBound.maximal_interesting
+    @item daikon.inv.unary.sequence.EltLowerBound.minimal_interesting
+    @item daikon.inv.unary.sequence.EltLowerBound.maximal_interesting
     @end itemize
+
 @item EltLowerBoundFloat
-    Represents the invariant that each element of a double[] sequence is
-    greater than or equal to a constant. Prints as 'x[] elements >=
-    c'
+Represents the invariant that each element of a double[] sequence is
+ greater than or equal to a constant. Prints as 'x[] elements >=
+ c'
 
-    See also the following configuration options:
+See also the following configuration options:
     @itemize @bullet
-    @item
-    daikon.inv.unary.sequence.EltLowerBoundFloat.minimal_interesting
-    @item
-    daikon.inv.unary.sequence.EltLowerBoundFloat.maximal_interesting
+    @item daikon.inv.unary.sequence.EltLowerBoundFloat.minimal_interesting
+    @item daikon.inv.unary.sequence.EltLowerBoundFloat.maximal_interesting
     @end itemize
+
 @item EltNonZero
-    Represents the invariant "x != 0" where x represents all of the elements
-    of a long sequence.  Prints as 'x[] elements != 0'
+Represents the invariant "x != 0" where x represents all of the elements
+ of a long sequence.  Prints as 'x[] elements != 0'
+
 @item EltNonZeroFloat
-    Represents the invariant "x != 0" where x represents all of the elements
-    of a double sequence.  Prints as 'x[] elements != 0'
+Represents the invariant "x != 0" where x represents all of the elements
+ of a double sequence.  Prints as 'x[] elements != 0'
+
 @item EltOneOf
-    Represents long sequences where the elements of the sequence
-    take on only a few distinct values.  Prints as either "x[] == c"
-    (when there is only one value), or as "x[] one of @{c1, c2, c3@}" (when
-    there are multiple values).
+Represents long sequences where the elements of the sequence
+ take on only a few distinct values.  Prints as either "x[] == c"
+ (when there is only one value), or as "x[] one of @{c1, c2, c3@}" (when
+ there are multiple values).
 
-    See also the following configuration option:
+See also the following configuration option:
     @itemize @bullet
-    @item
-    daikon.inv.unary.sequence.EltOneOf.size
+    @item daikon.inv.unary.sequence.EltOneOf.size
     @end itemize
+
 @item EltOneOfFloat
-    Represents double sequences where the elements of the sequence
-    take on only a few distinct values.  Prints as either "x[] == c"
-    (when there is only one value), or as "x[] one of @{c1, c2, c3@}" (when
-    there are multiple values).
+Represents double sequences where the elements of the sequence
+ take on only a few distinct values.  Prints as either "x[] == c"
+ (when there is only one value), or as "x[] one of @{c1, c2, c3@}" (when
+ there are multiple values).
 
-    See also the following configuration option:
+See also the following configuration option:
     @itemize @bullet
-    @item
-    daikon.inv.unary.sequence.EltOneOfFloat.size
+    @item daikon.inv.unary.sequence.EltOneOfFloat.size
     @end itemize
+
 @item EltOneOfString
-    Represents String sequences where the elements of the sequence
-    take on only a few distinct values.  Prints as either "x[] == c"
-    (when there is only one value), or as "x[] one of @{c1, c2, c3@}" (when
-    there are multiple values).
+Represents String sequences where the elements of the sequence
+ take on only a few distinct values.  Prints as either "x[] == c"
+ (when there is only one value), or as "x[] one of @{c1, c2, c3@}" (when
+ there are multiple values).
 
-    See also the following configuration option:
+See also the following configuration option:
     @itemize @bullet
-    @item
-    daikon.inv.unary.stringsequence.EltOneOfString.size
+    @item daikon.inv.unary.stringsequence.EltOneOfString.size
     @end itemize
+
 @item EltUpperBound
-    Represents the invariant that each element of a long[] sequence is
-    less than or equal to a constant. Prints as 'x[] elements <=
-    c'
+Represents the invariant that each element of a long[] sequence is
+ less than or equal to a constant. Prints as 'x[] elements <=
+ c'
 
-    See also the following configuration options:
+See also the following configuration options:
     @itemize @bullet
-    @item
-    daikon.inv.unary.sequence.EltUpperBound.minimal_interesting
-    @item
-    daikon.inv.unary.sequence.EltUpperBound.maximal_interesting
+    @item daikon.inv.unary.sequence.EltUpperBound.minimal_interesting
+    @item daikon.inv.unary.sequence.EltUpperBound.maximal_interesting
     @end itemize
+
 @item EltUpperBoundFloat
-    Represents the invariant that each element of a double[] sequence is
-    less than or equal to a constant. Prints as 'x[] elements <=
-    c'
+Represents the invariant that each element of a double[] sequence is
+ less than or equal to a constant. Prints as 'x[] elements <=
+ c'
 
-    See also the following configuration options:
+See also the following configuration options:
     @itemize @bullet
-    @item
-    daikon.inv.unary.sequence.EltUpperBoundFloat.minimal_interesting
-    @item
-    daikon.inv.unary.sequence.EltUpperBoundFloat.maximal_interesting
+    @item daikon.inv.unary.sequence.EltUpperBoundFloat.minimal_interesting
+    @item daikon.inv.unary.sequence.EltUpperBoundFloat.maximal_interesting
     @end itemize
+
 @item EltwiseFloatEqual
-    Represents equality between adjacent elements (x[i], x[i+1]) of a
-    double sequence.  Prints as 'x[] elements are equal'
+Represents equality between adjacent elements (x[i], x[i+1]) of a
+ double sequence.  Prints as 'x[] elements are equal'
+
 @item EltwiseFloatGreaterEqual
-    Represents the invariant ">=" between adjacent elements
-    (x[i], x[i+1]) of a double sequence.  Prints as 'x[] sorted by
-    ">=" '
+Represents the invariant ">=" between adjacent elements
+ (x[i], x[i+1]) of a double sequence.  Prints as 'x[] sorted by
+ ">=" '
+
 @item EltwiseFloatGreaterThan
-    Represents the invariant ">" between adjacent elements
-    (x[i], x[i+1]) of a double sequence.  Prints as 'x[] sorted by
-    ">" '
+Represents the invariant ">" between adjacent elements
+ (x[i], x[i+1]) of a double sequence.  Prints as 'x[] sorted by
+ ">" '
+
 @item EltwiseFloatLessEqual
-    Represents the invariant "<=" between adjacent elements
-    (x[i], x[i+1]) of a double sequence.  Prints as 'x[] sorted by
-    "<=" '
+Represents the invariant "<=" between adjacent elements
+ (x[i], x[i+1]) of a double sequence.  Prints as 'x[] sorted by
+ "<=" '
+
 @item EltwiseFloatLessThan
-    Represents the invariant "<" between adjacent elements
-    (x[i], x[i+1]) of a double sequence.  Prints as 'x[] sorted by
-    "<" '
+Represents the invariant "<" between adjacent elements
+ (x[i], x[i+1]) of a double sequence.  Prints as 'x[] sorted by
+ "<" '
+
 @item EltwiseIntEqual
-    Represents equality between adjacent elements (x[i], x[i+1]) of a
-    long sequence.  Prints as 'x[] elements are equal'
+Represents equality between adjacent elements (x[i], x[i+1]) of a
+ long sequence.  Prints as 'x[] elements are equal'
+
 @item EltwiseIntGreaterEqual
-    Represents the invariant ">=" between adjacent elements
-    (x[i], x[i+1]) of a long sequence.  Prints as 'x[] sorted by
-    ">=" '
+Represents the invariant ">=" between adjacent elements
+ (x[i], x[i+1]) of a long sequence.  Prints as 'x[] sorted by
+ ">=" '
+
 @item EltwiseIntGreaterThan
-    Represents the invariant ">" between adjacent elements
-    (x[i], x[i+1]) of a long sequence.  Prints as 'x[] sorted by
-    ">" '
+Represents the invariant ">" between adjacent elements
+ (x[i], x[i+1]) of a long sequence.  Prints as 'x[] sorted by
+ ">" '
+
 @item EltwiseIntLessEqual
-    Represents the invariant "<=" between adjacent elements
-    (x[i], x[i+1]) of a long sequence.  Prints as 'x[] sorted by
-    "<=" '
+Represents the invariant "<=" between adjacent elements
+ (x[i], x[i+1]) of a long sequence.  Prints as 'x[] sorted by
+ "<=" '
+
 @item EltwiseIntLessThan
-    Represents the invariant "<" between adjacent elements
-    (x[i], x[i+1]) of a long sequence.  Prints as 'x[] sorted by
-    "<" '
+Represents the invariant "<" between adjacent elements
+ (x[i], x[i+1]) of a long sequence.  Prints as 'x[] sorted by
+ "<" '
+
 @item Equality
-    The Equality invariant is used for displaying several equality
-    Comparison invariants ("x == y", "x == z") as one Equality
-    invariant ("x == y == z").  This class is created after the actual
-    invariant detection, and right before printing Hence this is not a
-    real invariant class; it does not implement many of the methods
-    that most invariant classes do.  Furthermore, calling arbitrary
-    methods on this class may not work.
+The Equality invariant is used for displaying several equality
+ Comparison invariants ("x == y", "x == z") as one Equality
+ invariant ("x == y == z").  This class is created after the actual
+ invariant detection, and right before printing Hence this is not a
+ real invariant class; it does not implement many of the methods
+ that most invariant classes do.  Furthermore, calling arbitrary
+ methods on this class may not work.
+
 @item FloatEqual
-    Represents an invariant of "==" between two
-    double scalars.
+Represents an invariant of "==" between two
+ double scalars.
+
 @item FloatGreaterEqual
-    Represents an invariant of ">=" between two
-    double scalars.
+Represents an invariant of ">=" between two
+ double scalars.
+
 @item FloatGreaterThan
-    Represents an invariant of ">" between two
-    double scalars.
+Represents an invariant of ">" between two
+ double scalars.
+
 @item FloatLessEqual
-    Represents an invariant of "<=" between two
-    double scalars.
+Represents an invariant of "<=" between two
+ double scalars.
+
 @item FloatLessThan
-    Represents an invariant of "<" between two
-    double scalars.
+Represents an invariant of "<" between two
+ double scalars.
+
 @item FloatNonEqual
-    Represents an invariant of "!=" between two
-    double scalars.
+Represents an invariant of "!=" between two
+ double scalars.
+
 @item FunctionBinary
-    Represents an invariant between three long scalars by applying
-    a function to two of the scalars.  Prints as either "x  == function (y, z)"
-    or as "x == y op z" depending upon whether it is an actual function call
-    or a binary operator.
-   
-    Current long operators are: * / % << >> >>> & && ^ | || @*
-    Current long functions are: min max gcd pow
+Represents an invariant between three long scalars by applying
+ a function to two of the scalars.  Prints as either "x  == function (y, z)"
+ or as "x == y op z" depending upon whether it is an actual function call
+ or a binary operator.
+
+ Current long operators are: * / % << >> >>> & && ^ | || @*
+ Current long functions are: min max gcd pow
+
 @item FunctionBinaryFloat
-    Represents an invariant between three double scalars by applying
-    a function to two of the scalars.  Prints as either "x  == function (y, z)"
-    or as "x == y op z" depending upon whether it is an actual function call
-    or a binary operator.
-   
-    Current double operators are: * / @*
-    Current double functions are: min max pow
+Represents an invariant between three double scalars by applying
+ a function to two of the scalars.  Prints as either "x  == function (y, z)"
+ or as "x == y op z" depending upon whether it is an actual function call
+ or a binary operator.
+
+ Current double operators are: * / @*
+ Current double functions are: min max pow
+
 @item FunctionUnary
-    Represents an invariant between two long scalars by applying a
-    function to one of the scalars.  Prints as either "x == function(y)"
-    or "x = [op] y" depending upon whether it is an actual function call
-    or a unary operator.
-   
-    Current long functions are: ~
+Represents an invariant between two long scalars by applying a
+ function to one of the scalars.  Prints as either "x == function(y)"
+ or "x = [op] y" depending upon whether it is an actual function call
+ or a unary operator.
+
+ Current long functions are: ~
+
 @item FunctionUnaryFloat
-    Represents an invariant between two double scalars by applying a
-    function to one of the scalars.  Prints as either "x == function(y)"
-    or "x = [op] y" depending upon whether it is an actual function call
-    or a unary operator.
-   
-    Current double functions are: none
+Represents an invariant between two double scalars by applying a
+ function to one of the scalars.  Prints as either "x == function(y)"
+ or "x = [op] y" depending upon whether it is an actual function call
+ or a unary operator.
+
+ Current double functions are: none
+
 @item Implication
-    The Implication invariant class is used internally within Daikon to
-    handle invariants that are only true when certain other conditions are
-    also true (splitting).
+The Implication invariant class is used internally within Daikon to
+ handle invariants that are only true when certain other conditions are
+ also true (splitting).
+
 @item IntEqual
-    Represents an invariant of "==" between two
-    long scalars.
+Represents an invariant of "==" between two
+ long scalars.
+
 @item IntGreaterEqual
-    Represents an invariant of ">=" between two
-    long scalars.
+Represents an invariant of ">=" between two
+ long scalars.
+
 @item IntGreaterThan
-    Represents an invariant of ">" between two
-    long scalars.
+Represents an invariant of ">" between two
+ long scalars.
+
 @item IntLessEqual
-    Represents an invariant of "<=" between two
-    long scalars.
+Represents an invariant of "<=" between two
+ long scalars.
+
 @item IntLessThan
-    Represents an invariant of "<" between two
-    long scalars.
+Represents an invariant of "<" between two
+ long scalars.
+
 @item IntNonEqual
-    Represents an invariant of "!=" between two
-    long scalars.
+Represents an invariant of "!=" between two
+ long scalars.
 
-    See also the following configuration option:
+See also the following configuration option:
     @itemize @bullet
-    @item
-    daikon.inv.binary.twoScalar.IntNonEqual.integral_only
+    @item daikon.inv.binary.twoScalar.IntNonEqual.integral_only
     @end itemize
+
 @item LinearBinary
-    Represents a Linear invariant (y = ax + b) between two long
-    scalars.
+Represents a Linear invariant (y = ax + b) between two long
+ scalars.
+
 @item LinearBinaryFloat
-    Represents a Linear invariant (y = ax + b) between two double
-    scalars.
+Represents a Linear invariant (y = ax + b) between two double
+ scalars.
+
 @item LinearTernary
-    Represents a Linear invariant (ie, z = ax + by + c) over three long
-    scalars.
+Represents a Linear invariant (ie, z = ax + by + c) over three long
+ scalars.
+
 @item LinearTernaryFloat
-    Represents a Linear invariant (ie, z = ax + by + c) over three double
-    scalars.
+Represents a Linear invariant (ie, z = ax + by + c) over three double
+ scalars.
+
 @item LowerBound
-    Represents the invariant 'x >= c', where c is a constant and x is
-    a long scalar.
+Represents the invariant 'x >= c', where c is a constant and x is
+ a long scalar.
 
-    See also the following configuration options:
+See also the following configuration options:
     @itemize @bullet
-    @item
-    daikon.inv.unary.scalar.LowerBound.minimal_interesting
-    @item
-    daikon.inv.unary.scalar.LowerBound.maximal_interesting
+    @item daikon.inv.unary.scalar.LowerBound.minimal_interesting
+    @item daikon.inv.unary.scalar.LowerBound.maximal_interesting
     @end itemize
+
 @item LowerBoundFloat
-    Represents the invariant 'x >= c', where c is a constant and x is
-    a double scalar.
+Represents the invariant 'x >= c', where c is a constant and x is
+ a double scalar.
 
-    See also the following configuration options:
+See also the following configuration options:
     @itemize @bullet
-    @item
-    daikon.inv.unary.scalar.LowerBoundFloat.minimal_interesting
-    @item
-    daikon.inv.unary.scalar.LowerBoundFloat.maximal_interesting
+    @item daikon.inv.unary.scalar.LowerBoundFloat.minimal_interesting
+    @item daikon.inv.unary.scalar.LowerBoundFloat.maximal_interesting
     @end itemize
+
 @item Member
-    Represents long scalars that are always members of long sequences.
-    Prints as "x in y[]" where x is a long scalar and y[] is a
-    long sequence
+Represents long scalars that are always members of long sequences.
+ Prints as "x in y[]" where x is a long scalar and y[] is a
+ long sequence
+
 @item MemberFloat
-    Represents double scalars that are always members of double sequences.
-    Prints as "x in y[]" where x is a double scalar and y[] is a
-    double sequence
+Represents double scalars that are always members of double sequences.
+ Prints as "x in y[]" where x is a double scalar and y[] is a
+ double sequence
+
 @item Modulus
-    Represents the invariant "x == r (mod m)" where x is a long scalar, r is
-    the remainder, and m is the modulus
+Represents the invariant "x == r (mod m)" where x is a long scalar, r is
+ the remainder, and m is the modulus
 
-    This invariant is not enabled by default.  See the configuration option
-    daikon.inv.unary.scalar.Modulus.enabled
+This invariant is not enabled by default.  See the configuration option
+daikon.inv.unary.scalar.Modulus.enabled
+
 @item NoDuplicates
-    Represents long sequences that contain no duplicate elements.
-    Prints as 'x[] contains no duplicates'
+Represents long sequences that contain no duplicate elements.
+ Prints as 'x[] contains no duplicates'
+
 @item NoDuplicatesFloat
-    Represents double sequences that contain no duplicate elements.
-    Prints as 'x[] contains no duplicates'
+Represents double sequences that contain no duplicate elements.
+ Prints as 'x[] contains no duplicates'
+
 @item NonModulus
-    Represents long scalars that are never equal to r (mod m) (for all
-    reasonable values of r and m) but all other numbers in the same
-    range (ie, all the values that x doesn't take from min(x) to
-    max(x)) are equal to r (mod m).  Prints as "x != r (mod m)" where r
-    is the remainder and m is the modulus.
+Represents long scalars that are never equal to r (mod m) (for all
+ reasonable values of r and m) but all other numbers in the same
+ range (ie, all the values that x doesn't take from min(x) to
+ max(x)) are equal to r (mod m).  Prints as "x != r (mod m)" where r
+ is the remainder and m is the modulus.
 
-    This invariant is not enabled by default.  See the configuration option
-    daikon.inv.unary.scalar.NonModulus.enabled
+This invariant is not enabled by default.  See the configuration option
+daikon.inv.unary.scalar.NonModulus.enabled
+
 @item NonZero
-    Represents long scalars that are non-zero.  Prints as either
-    "x != 0" or "x != null" for pointer types
+Represents long scalars that are non-zero.  Prints as either
+ "x != 0" or "x != null" for pointer types
+
 @item NonZeroFloat
-    Represents double scalars that are non-zero.  Prints as "x != 0"
+Represents double scalars that are non-zero.  Prints as "x != 0"
+
 @item OneOfFloat
-    Represents double variables that take on only a few distinct
-    values. Prints as either "x == c" (when there is only one value),
-    or as "x one of @{c1, c2, c3@}" (when there are multiple values).
+Represents double variables that take on only a few distinct
+ values. Prints as either "x == c" (when there is only one value),
+ or as "x one of @{c1, c2, c3@}" (when there are multiple values).
 
-    See also the following configuration option:
+See also the following configuration option:
     @itemize @bullet
-    @item
-    daikon.inv.unary.scalar.OneOfFloat.size
+    @item daikon.inv.unary.scalar.OneOfFloat.size
     @end itemize
+
 @item OneOfFloatSequence
-    Represents double[] variables that take on only a few distinct
-    values. Prints as either "x == c" (when there is only one value),
-    or as "x one of @{c1, c2, c3@}" (when there are multiple values).
+Represents double[] variables that take on only a few distinct
+ values. Prints as either "x == c" (when there is only one value),
+ or as "x one of @{c1, c2, c3@}" (when there are multiple values).
 
-    See also the following configuration option:
+See also the following configuration option:
     @itemize @bullet
-    @item
-    daikon.inv.unary.sequence.OneOfFloatSequence.size
+    @item daikon.inv.unary.sequence.OneOfFloatSequence.size
     @end itemize
+
 @item OneOfScalar
-    Represents long scalars that take on only a few distinct values.  Prints
-    as either "x == c" (when there is only one value), "x one of @{c1, c2, c3@}"
-    (when there are multiple values), or "x has only one value" (when x is
-    a hashcode (pointer) - this is because the numerical value of the
-    hashcode (pointer) is uninteresting).
+Represents long scalars that take on only a few distinct values.  Prints
+ as either "x == c" (when there is only one value), "x one of @{c1, c2, c3@}"
+ (when there are multiple values), or "x has only one value" (when x is
+ a hashcode (pointer) - this is because the numerical value of the
+ hashcode (pointer) is uninteresting).
 
-    See also the following configuration option:
+See also the following configuration option:
     @itemize @bullet
-    @item
-    daikon.inv.unary.scalar.OneOfScalar.size
+    @item daikon.inv.unary.scalar.OneOfScalar.size
     @end itemize
+
 @item OneOfSequence
-    Represents long[] variables that take on only a few distinct
-    values. Prints as either "x == c" (when there is only one value),
-    or as "x one of @{c1, c2, c3@}" (when there are multiple values).
+Represents long[] variables that take on only a few distinct
+ values. Prints as either "x == c" (when there is only one value),
+ or as "x one of @{c1, c2, c3@}" (when there are multiple values).
 
-    See also the following configuration option:
+See also the following configuration option:
     @itemize @bullet
-    @item
-    daikon.inv.unary.sequence.OneOfSequence.size
+    @item daikon.inv.unary.sequence.OneOfSequence.size
     @end itemize
+
 @item OneOfString
-    Represents String variables that take on only a few distinct
-    values. Prints as either "x == c" (when there is only one value),
-    or as "x one of @{c1, c2, c3@}" (when there are multiple values).
+Represents String variables that take on only a few distinct
+ values. Prints as either "x == c" (when there is only one value),
+ or as "x one of @{c1, c2, c3@}" (when there are multiple values).
 
-    See also the following configuration option:
+See also the following configuration option:
     @itemize @bullet
-    @item
-    daikon.inv.unary.string.OneOfString.size
+    @item daikon.inv.unary.string.OneOfString.size
     @end itemize
+
 @item OneOfStringSequence
-    Represents String[] variables that take on only a few distinct
-    values. Prints as either "x == c" (when there is only one value),
-    or as "x one of @{c1, c2, c3@}" (when there are multiple values).
+Represents String[] variables that take on only a few distinct
+ values. Prints as either "x == c" (when there is only one value),
+ or as "x one of @{c1, c2, c3@}" (when there are multiple values).
 
-    See also the following configuration option:
+See also the following configuration option:
     @itemize @bullet
-    @item
-    daikon.inv.unary.stringsequence.OneOfStringSequence.size
+    @item daikon.inv.unary.stringsequence.OneOfStringSequence.size
     @end itemize
-@item PairwiseFloatComparison
-    Represents an invariant between corresponding elements of two
-    double sequences.  The length of the sequences must match for
-    the invariant to hold.  A comparison is made over each x[i], y[i]
-    pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
-    Prints as "x[] [cmp] y[]" where [cmp] is one of == != > >= < <=
+
 @item PairwiseFloatEqual
-    Represents an invariant between corresponding elements of two
-    double sequences.  The length of the sequences must match for
-    the invariant to hold.  A comparison is made over each x[i], y[i]
-    pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
-    Prints as 'x[] == y[]'
+Represents an invariant between corresponding elements of two
+ double sequences.  The length of the sequences must match for
+ the invariant to hold.  A comparison is made over each x[i], y[i]
+ pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
+ Prints as 'x[] == y[]'
+
 @item PairwiseFloatGreaterEqual
-    Represents an invariant between corresponding elements of two
-    double sequences.  The length of the sequences must match for
-    the invariant to hold.  A comparison is made over each x[i], y[i]
-    pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
-    Prints as 'x[] >= y[]'
+Represents an invariant between corresponding elements of two
+ double sequences.  The length of the sequences must match for
+ the invariant to hold.  A comparison is made over each x[i], y[i]
+ pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
+ Prints as 'x[] >= y[]'
+
 @item PairwiseFloatGreaterThan
-    Represents an invariant between corresponding elements of two
-    double sequences.  The length of the sequences must match for
-    the invariant to hold.  A comparison is made over each x[i], y[i]
-    pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
-    Prints as 'x[] > y[]'
+Represents an invariant between corresponding elements of two
+ double sequences.  The length of the sequences must match for
+ the invariant to hold.  A comparison is made over each x[i], y[i]
+ pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
+ Prints as 'x[] > y[]'
+
 @item PairwiseFloatLessEqual
-    Represents an invariant between corresponding elements of two
-    double sequences.  The length of the sequences must match for
-    the invariant to hold.  A comparison is made over each x[i], y[i]
-    pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
-    Prints as 'x[] <= y[]'
+Represents an invariant between corresponding elements of two
+ double sequences.  The length of the sequences must match for
+ the invariant to hold.  A comparison is made over each x[i], y[i]
+ pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
+ Prints as 'x[] <= y[]'
+
 @item PairwiseFloatLessThan
-    Represents an invariant between corresponding elements of two
-    double sequences.  The length of the sequences must match for
-    the invariant to hold.  A comparison is made over each x[i], y[i]
-    pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
-    Prints as 'x[] < y[]'
+Represents an invariant between corresponding elements of two
+ double sequences.  The length of the sequences must match for
+ the invariant to hold.  A comparison is made over each x[i], y[i]
+ pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
+ Prints as 'x[] < y[]'
+
 @item PairwiseFunctionUnary
-    Represents an invariant between corresponding elements of two
-    long sequences by applying a function to one of the elements.
-    The length of the sequences must match for the invariant to hold.
-    The function is applied to each (x[i], y[i]) pair.  Prints as
-    either "x[] == function(y[])" or "x[] = [op] y[]" depending upon
-    whether it is an actual function call or a unary operator.
-   
-    Current long Functions are: ~
+Represents an invariant between corresponding elements of two
+ long sequences by applying a function to one of the elements.
+ The length of the sequences must match for the invariant to hold.
+ The function is applied to each (x[i], y[i]) pair.  Prints as
+ either "x[] == function(y[])" or "x[] = [op] y[]" depending upon
+ whether it is an actual function call or a unary operator.
+
+ Current long Functions are: ~
+
 @item PairwiseFunctionUnaryFloat
-    Represents an invariant between corresponding elements of two
-    double sequences by applying a function to one of the elements.
-    The length of the sequences must match for the invariant to hold.
-    The function is applied to each (x[i], y[i]) pair.  Prints as
-    either "x[] == function(y[])" or "x[] = [op] y[]" depending upon
-    whether it is an actual function call or a unary operator.
-   
-    Current double Functions are: none
-@item PairwiseIntComparison
-    Represents an invariant between corresponding elements of two
-    long sequences.  The length of the sequences must match for
-    the invariant to hold.  A comparison is made over each x[i], y[i]
-    pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
-    Prints as "x[] [cmp] y[]" where [cmp] is one of == != > >= < <=
+Represents an invariant between corresponding elements of two
+ double sequences by applying a function to one of the elements.
+ The length of the sequences must match for the invariant to hold.
+ The function is applied to each (x[i], y[i]) pair.  Prints as
+ either "x[] == function(y[])" or "x[] = [op] y[]" depending upon
+ whether it is an actual function call or a unary operator.
+
+ Current double Functions are: none
+
 @item PairwiseIntEqual
-    Represents an invariant between corresponding elements of two
-    long sequences.  The length of the sequences must match for
-    the invariant to hold.  A comparison is made over each x[i], y[i]
-    pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
-    Prints as 'x[] == y[]'
+Represents an invariant between corresponding elements of two
+ long sequences.  The length of the sequences must match for
+ the invariant to hold.  A comparison is made over each x[i], y[i]
+ pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
+ Prints as 'x[] == y[]'
+
 @item PairwiseIntGreaterEqual
-    Represents an invariant between corresponding elements of two
-    long sequences.  The length of the sequences must match for
-    the invariant to hold.  A comparison is made over each x[i], y[i]
-    pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
-    Prints as 'x[] >= y[]'
+Represents an invariant between corresponding elements of two
+ long sequences.  The length of the sequences must match for
+ the invariant to hold.  A comparison is made over each x[i], y[i]
+ pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
+ Prints as 'x[] >= y[]'
+
 @item PairwiseIntGreaterThan
-    Represents an invariant between corresponding elements of two
-    long sequences.  The length of the sequences must match for
-    the invariant to hold.  A comparison is made over each x[i], y[i]
-    pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
-    Prints as 'x[] > y[]'
+Represents an invariant between corresponding elements of two
+ long sequences.  The length of the sequences must match for
+ the invariant to hold.  A comparison is made over each x[i], y[i]
+ pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
+ Prints as 'x[] > y[]'
+
 @item PairwiseIntLessEqual
-    Represents an invariant between corresponding elements of two
-    long sequences.  The length of the sequences must match for
-    the invariant to hold.  A comparison is made over each x[i], y[i]
-    pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
-    Prints as 'x[] <= y[]'
+Represents an invariant between corresponding elements of two
+ long sequences.  The length of the sequences must match for
+ the invariant to hold.  A comparison is made over each x[i], y[i]
+ pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
+ Prints as 'x[] <= y[]'
+
 @item PairwiseIntLessThan
-    Represents an invariant between corresponding elements of two
-    long sequences.  The length of the sequences must match for
-    the invariant to hold.  A comparison is made over each x[i], y[i]
-    pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
-    Prints as 'x[] < y[]'
+Represents an invariant between corresponding elements of two
+ long sequences.  The length of the sequences must match for
+ the invariant to hold.  A comparison is made over each x[i], y[i]
+ pair.  Thus, x[0] is compared to y[0], x[1] to y[1], and so forth.
+ Prints as 'x[] < y[]'
+
 @item PairwiseLinearBinary
-    Represents a linear invariant (ie, y = ax + b) between the corresponding
-    elements of two long sequences.  Each (x[i], y[i]) pair is examined.
-    Thus, x[0] is compared to y[0], x[1] to y[1] and so forth.  Prints
-    as "y[] = a * x[] + b"
+Represents a linear invariant (ie, y = ax + b) between the corresponding
+ elements of two long sequences.  Each (x[i], y[i]) pair is examined.
+ Thus, x[0] is compared to y[0], x[1] to y[1] and so forth.  Prints
+ as "y[] = a * x[] + b"
+
 @item PairwiseLinearBinaryFloat
-    Represents a linear invariant (ie, y = ax + b) between the corresponding
-    elements of two double sequences.  Each (x[i], y[i]) pair is examined.
-    Thus, x[0] is compared to y[0], x[1] to y[1] and so forth.  Prints
-    as "y[] = a * x[] + b"
+Represents a linear invariant (ie, y = ax + b) between the corresponding
+ elements of two double sequences.  Each (x[i], y[i]) pair is examined.
+ Thus, x[0] is compared to y[0], x[1] to y[1] and so forth.  Prints
+ as "y[] = a * x[] + b"
+
 @item Positive
-    Represents the invariant 'x > 0' where x is a long scalar.  This exists
-    only as an example for the purposes of the manual.  It isn't actually
-    used (it is replaced by the more general invariant LowerBound).
+Represents the invariant 'x > 0' where x is a long scalar.  This exists
+ only as an example for the purposes of the manual.  It isn't actually
+ used (it is replaced by the more general invariant LowerBound).
+
 @item Reverse
-    Represents two long sequences where one is in the reverse order
-    of the other.  Prints as "x[] is the reverse of y[]"
+Represents two long sequences where one is in the reverse order
+ of the other.  Prints as "x[] is the reverse of y[]"
+
 @item ReverseFloat
-    Represents two double sequences where one is in the reverse order
-    of the other.  Prints as "x[] is the reverse of y[]"
-@item SeqComparison
-    Represents invariants between two long sequences.  If order
-    matters for each variable (which it does by default), then the
-    sequences are compared lexically.  Prints as "x[] [cmp] y[] lexically"
-    where [cmp] can be == < <= > >=.
-   
-    If order doesn't matter for each variable, then the sequences
-    are compared to see if they are set equivalent.  Prints as
-    "x[] == y[]"
-   
-    If the auxillary information (eg, order matters) doesn't match then
-    no comparison is made at all.
-@item SeqComparisonFloat
-    Represents invariants between two double sequences.  If order
-    matters for each variable (which it does by default), then the
-    sequences are compared lexically.  Prints as "x[] [cmp] y[] lexically"
-    where [cmp] can be == < <= > >=.
-   
-    If order doesn't matter for each variable, then the sequences
-    are compared to see if they are set equivalent.  Prints as
-    "x[] == y[]"
-   
-    If the auxillary information (eg, order matters) doesn't match then
-    no comparison is made at all.
-@item SeqComparisonString
-    Represents invariants between two String sequences.  If order
-    matters for each variable (which it does by default), then the
-    sequences are compared lexically.  Prints as "x[] [cmp] y[] lexically"
-    where [cmp] can be == < <= > >=.
-   
-    If order doesn't matter for each variable, then the sequences
-    are compared to see if they are set equivalent.  Prints as
-    "x[] == y[]"
-   
-    If the auxillary information (eg, order matters) doesn't match then
-    no comparison is made at all.
-@item SeqFloatComparison
-    Represents double scalars with an invariant to each element of
-    double sequences.  Prints as "x[] elements [cmp] y" where x is a
-    double sequence, y is a double scalar, and [cmp] is one of
-    the comparators == < <= > >=
+Represents two double sequences where one is in the reverse order
+ of the other.  Prints as "x[] is the reverse of y[]"
+
 @item SeqFloatEqual
-    Represents double scalars with an invariant to each element of
-    double sequences.  Prints as 'x[] elements == y' where x is a
-    double sequence and y is a double scalar
+Represents double scalars with an invariant to each element of
+ double sequences.  Prints as 'x[] elements == y' where x is a
+ double sequence and y is a double scalar
+
 @item SeqFloatGreaterEqual
-    Represents double scalars with an invariant to each element of
-    double sequences.  Prints as 'x[] elements >= y' where x is a
-    double sequence and y is a double scalar
+Represents double scalars with an invariant to each element of
+ double sequences.  Prints as 'x[] elements >= y' where x is a
+ double sequence and y is a double scalar
+
 @item SeqFloatGreaterThan
-    Represents double scalars with an invariant to each element of
-    double sequences.  Prints as 'x[] elements > y' where x is a
-    double sequence and y is a double scalar
+Represents double scalars with an invariant to each element of
+ double sequences.  Prints as 'x[] elements > y' where x is a
+ double sequence and y is a double scalar
+
 @item SeqFloatLessEqual
-    Represents double scalars with an invariant to each element of
-    double sequences.  Prints as 'x[] elements <= y' where x is a
-    double sequence and y is a double scalar
+Represents double scalars with an invariant to each element of
+ double sequences.  Prints as 'x[] elements <= y' where x is a
+ double sequence and y is a double scalar
+
 @item SeqFloatLessThan
-    Represents double scalars with an invariant to each element of
-    double sequences.  Prints as 'x[] elements < y' where x is a
-    double sequence and y is a double scalar
+Represents double scalars with an invariant to each element of
+ double sequences.  Prints as 'x[] elements < y' where x is a
+ double sequence and y is a double scalar
+
 @item SeqIndexComparison
-    Represents invariants between elements of a long sequence and
-    the indices of those elements.  Prints as "x[i] [cmp] i" where
-    [cmp] is one of < <= > >=
+Represents invariants between elements of a long sequence and
+ the indices of those elements.  Prints as "x[i] [cmp] i" where
+ [cmp] is one of < <= > >=
+
 @item SeqIndexComparisonFloat
-    Represents invariants between elements of a double sequence and
-    the indices of those elements.  Prints as "x[i] [cmp] i" where
-    [cmp] is one of < <= > >=
+Represents invariants between elements of a double sequence and
+ the indices of those elements.  Prints as "x[i] [cmp] i" where
+ [cmp] is one of < <= > >=
+
 @item SeqIndexNonEqual
-    Represents long sequences where the element stored at index i is
-    not equal to i.  Prints as "x[i] != i"
+Represents long sequences where the element stored at index i is
+ not equal to i.  Prints as "x[i] != i"
+
 @item SeqIndexNonEqualFloat
-    Represents double sequences where the element stored at index i is
-    not equal to i.  Prints as "x[i] != i"
-@item SeqIntComparison
-    Represents long scalars with an invariant to each element of
-    long sequences.  Prints as "x[] elements [cmp] y" where x is a
-    long sequence, y is a long scalar, and [cmp] is one of
-    the comparators == < <= > >=
+Represents double sequences where the element stored at index i is
+ not equal to i.  Prints as "x[i] != i"
+
 @item SeqIntEqual
-    Represents long scalars with an invariant to each element of
-    long sequences.  Prints as 'x[] elements == y' where x is a
-    long sequence and y is a long scalar
+Represents long scalars with an invariant to each element of
+ long sequences.  Prints as 'x[] elements == y' where x is a
+ long sequence and y is a long scalar
+
 @item SeqIntGreaterEqual
-    Represents long scalars with an invariant to each element of
-    long sequences.  Prints as 'x[] elements >= y' where x is a
-    long sequence and y is a long scalar
+Represents long scalars with an invariant to each element of
+ long sequences.  Prints as 'x[] elements >= y' where x is a
+ long sequence and y is a long scalar
+
 @item SeqIntGreaterThan
-    Represents long scalars with an invariant to each element of
-    long sequences.  Prints as 'x[] elements > y' where x is a
-    long sequence and y is a long scalar
+Represents long scalars with an invariant to each element of
+ long sequences.  Prints as 'x[] elements > y' where x is a
+ long sequence and y is a long scalar
+
 @item SeqIntLessEqual
-    Represents long scalars with an invariant to each element of
-    long sequences.  Prints as 'x[] elements <= y' where x is a
-    long sequence and y is a long scalar
+Represents long scalars with an invariant to each element of
+ long sequences.  Prints as 'x[] elements <= y' where x is a
+ long sequence and y is a long scalar
+
 @item SeqIntLessThan
-    Represents long scalars with an invariant to each element of
-    long sequences.  Prints as 'x[] elements < y' where x is a
-    long sequence and y is a long scalar
+Represents long scalars with an invariant to each element of
+ long sequences.  Prints as 'x[] elements < y' where x is a
+ long sequence and y is a long scalar
+
 @item SeqSeqFloatEqual
-    Represents invariants between two double sequences.  If order
-    matters for each variable (which it does by default), then the
-    sequences are compared lexically.  Prints as 'x[] == y[] lexically'
-   
-   
-    If order doesn't matter for each variable, then the sequences
-    are compared to see if they are set equivalent.  Prints as
-    "x[] == y[]"
-   
-   
-    If the auxillary information (eg, order matters) doesn't match then
-    no comparison is made at all.
+Represents invariants between two double sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as 'x[] == y[] lexically'
+
+
+ If order doesn't matter for each variable, then the sequences
+ are compared to see if they are set equivalent.  Prints as
+ "x[] == y[]"
+
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
 @item SeqSeqFloatGreaterEqual
-    Represents invariants between two double sequences.  If order
-    matters for each variable (which it does by default), then the
-    sequences are compared lexically.  Prints as 'x[] >= y[] lexically'
-   
-   
-   
-    If the auxillary information (eg, order matters) doesn't match then
-    no comparison is made at all.
+Represents invariants between two double sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as 'x[] >= y[] lexically'
+
+
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
 @item SeqSeqFloatGreaterThan
-    Represents invariants between two double sequences.  If order
-    matters for each variable (which it does by default), then the
-    sequences are compared lexically.  Prints as 'x[] > y[] lexically'
-   
-   
-   
-    If the auxillary information (eg, order matters) doesn't match then
-    no comparison is made at all.
+Represents invariants between two double sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as 'x[] > y[] lexically'
+
+
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
 @item SeqSeqFloatLessEqual
-    Represents invariants between two double sequences.  If order
-    matters for each variable (which it does by default), then the
-    sequences are compared lexically.  Prints as 'x[] <= y[] lexically'
-   
-   
-   
-    If the auxillary information (eg, order matters) doesn't match then
-    no comparison is made at all.
+Represents invariants between two double sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as 'x[] <= y[] lexically'
+
+
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
 @item SeqSeqFloatLessThan
-    Represents invariants between two double sequences.  If order
-    matters for each variable (which it does by default), then the
-    sequences are compared lexically.  Prints as 'x[] < y[] lexically'
-   
-   
-   
-    If the auxillary information (eg, order matters) doesn't match then
-    no comparison is made at all.
+Represents invariants between two double sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as 'x[] < y[] lexically'
+
+
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
 @item SeqSeqIntEqual
-    Represents invariants between two long sequences.  If order
-    matters for each variable (which it does by default), then the
-    sequences are compared lexically.  Prints as 'x[] == y[] lexically'
-   
-   
-    If order doesn't matter for each variable, then the sequences
-    are compared to see if they are set equivalent.  Prints as
-    "x[] == y[]"
-   
-   
-    If the auxillary information (eg, order matters) doesn't match then
-    no comparison is made at all.
+Represents invariants between two long sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as 'x[] == y[] lexically'
+
+
+ If order doesn't matter for each variable, then the sequences
+ are compared to see if they are set equivalent.  Prints as
+ "x[] == y[]"
+
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
 @item SeqSeqIntGreaterEqual
-    Represents invariants between two long sequences.  If order
-    matters for each variable (which it does by default), then the
-    sequences are compared lexically.  Prints as 'x[] >= y[] lexically'
-   
-   
-   
-    If the auxillary information (eg, order matters) doesn't match then
-    no comparison is made at all.
+Represents invariants between two long sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as 'x[] >= y[] lexically'
+
+
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
 @item SeqSeqIntGreaterThan
-    Represents invariants between two long sequences.  If order
-    matters for each variable (which it does by default), then the
-    sequences are compared lexically.  Prints as 'x[] > y[] lexically'
-   
-   
-   
-    If the auxillary information (eg, order matters) doesn't match then
-    no comparison is made at all.
+Represents invariants between two long sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as 'x[] > y[] lexically'
+
+
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
 @item SeqSeqIntLessEqual
-    Represents invariants between two long sequences.  If order
-    matters for each variable (which it does by default), then the
-    sequences are compared lexically.  Prints as 'x[] <= y[] lexically'
-   
-   
-   
-    If the auxillary information (eg, order matters) doesn't match then
-    no comparison is made at all.
+Represents invariants between two long sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as 'x[] <= y[] lexically'
+
+
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
 @item SeqSeqIntLessThan
-    Represents invariants between two long sequences.  If order
-    matters for each variable (which it does by default), then the
-    sequences are compared lexically.  Prints as 'x[] < y[] lexically'
-   
-   
-   
-    If the auxillary information (eg, order matters) doesn't match then
-    no comparison is made at all.
+Represents invariants between two long sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as 'x[] < y[] lexically'
+
+
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
 @item SeqSeqStringEqual
-    Represents invariants between two String sequences.  If order
-    matters for each variable (which it does by default), then the
-    sequences are compared lexically.  Prints as 'x[] == y[] lexically'
-   
-   
-    If order doesn't matter for each variable, then the sequences
-    are compared to see if they are set equivalent.  Prints as
-    "x[] == y[]"
-   
-   
-    If the auxillary information (eg, order matters) doesn't match then
-    no comparison is made at all.
+Represents invariants between two String sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as 'x[] == y[] lexically'
+
+
+ If order doesn't matter for each variable, then the sequences
+ are compared to see if they are set equivalent.  Prints as
+ "x[] == y[]"
+
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
 @item SeqSeqStringGreaterEqual
-    Represents invariants between two String sequences.  If order
-    matters for each variable (which it does by default), then the
-    sequences are compared lexically.  Prints as 'x[] >= y[] lexically'
-   
-   
-   
-    If the auxillary information (eg, order matters) doesn't match then
-    no comparison is made at all.
+Represents invariants between two String sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as 'x[] >= y[] lexically'
+
+
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
 @item SeqSeqStringGreaterThan
-    Represents invariants between two String sequences.  If order
-    matters for each variable (which it does by default), then the
-    sequences are compared lexically.  Prints as 'x[] > y[] lexically'
-   
-   
-   
-    If the auxillary information (eg, order matters) doesn't match then
-    no comparison is made at all.
+Represents invariants between two String sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as 'x[] > y[] lexically'
+
+
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
 @item SeqSeqStringLessEqual
-    Represents invariants between two String sequences.  If order
-    matters for each variable (which it does by default), then the
-    sequences are compared lexically.  Prints as 'x[] <= y[] lexically'
-   
-   
-   
-    If the auxillary information (eg, order matters) doesn't match then
-    no comparison is made at all.
+Represents invariants between two String sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as 'x[] <= y[] lexically'
+
+
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
 @item SeqSeqStringLessThan
-    Represents invariants between two String sequences.  If order
-    matters for each variable (which it does by default), then the
-    sequences are compared lexically.  Prints as 'x[] < y[] lexically'
-   
-   
-   
-    If the auxillary information (eg, order matters) doesn't match then
-    no comparison is made at all.
+Represents invariants between two String sequences.  If order
+ matters for each variable (which it does by default), then the
+ sequences are compared lexically.  Prints as 'x[] < y[] lexically'
+
+
+
+ If the auxillary information (eg, order matters) doesn't match then
+ no comparison is made at all.
+
 @item StringComparison
-    Represents lexical invariants between two strings.  Prints as
-    "s1 [cmp] s2" where [cmp] is one of == > >= < <=
+Represents lexical invariants between two strings.  Prints as
+ "s1 [cmp] s2" where [cmp] is one of == > >= < <=
+
 @item SubSequence
-    Represents two long sequences where one sequence is a subsequence
-    of the other.  Prints as "x[] is a subsequence of y[]"
+Represents two long sequences where one sequence is a subsequence
+ of the other.  Prints as "x[] is a subsequence of y[]"
+
 @item SubSequenceFloat
-    Represents two double sequences where one sequence is a subsequence
-    of the other.  Prints as "x[] is a subsequence of y[]"
+Represents two double sequences where one sequence is a subsequence
+ of the other.  Prints as "x[] is a subsequence of y[]"
+
 @item SubSet
-    Represents two long sequences where one of the sequences is a
-    subset (each element appears in the other sequence) of the other.
-    Prints as either "x[] is a subset of y[]" or as
-    "x[] is a @{sub,super@}set of y[]" if x and y are set equivalent.
+Represents two long sequences where one of the sequences is a
+ subset (each element appears in the other sequence) of the other.
+ Prints as either "x[] is a subset of y[]" or as
+ "x[] is a @{sub,super@}set of y[]" if x and y are set equivalent.
 
-    This invariant is not enabled by default.  See the configuration option
-    daikon.inv.binary.twoSequence.SubSet.enabled
+This invariant is not enabled by default.  See the configuration option
+daikon.inv.binary.twoSequence.SubSet.enabled
+
 @item SubSetFloat
-    Represents two double sequences where one of the sequences is a
-    subset (each element appears in the other sequence) of the other.
-    Prints as either "x[] is a subset of y[]" or as
-    "x[] is a @{sub,super@}set of y[]" if x and y are set equivalent.
+Represents two double sequences where one of the sequences is a
+ subset (each element appears in the other sequence) of the other.
+ Prints as either "x[] is a subset of y[]" or as
+ "x[] is a @{sub,super@}set of y[]" if x and y are set equivalent.
 
-    This invariant is not enabled by default.  See the configuration option
-    daikon.inv.binary.twoSequence.SubSetFloat.enabled
+This invariant is not enabled by default.  See the configuration option
+daikon.inv.binary.twoSequence.SubSetFloat.enabled
+
+@item SuperSet
+Represents two long sequences where one of the sequences is a
+ subset (each element appears in the other sequence) of the other.
+ Prints as either "x[] is a subset of y[]" or as
+ "x[] is a @{sub,super@}set of y[]" if x and y are set equivalent.
+
+This invariant is not enabled by default.  See the configuration option
+daikon.inv.binary.twoSequence.SuperSet.enabled
+
+@item SuperSetFloat
+Represents two double sequences where one of the sequences is a
+ subset (each element appears in the other sequence) of the other.
+ Prints as either "x[] is a subset of y[]" or as
+ "x[] is a @{sub,super@}set of y[]" if x and y are set equivalent.
+
+This invariant is not enabled by default.  See the configuration option
+daikon.inv.binary.twoSequence.SuperSetFloat.enabled
+
 @item UpperBound
-    Represents the invariant 'x <= c', where c is a constant and x is
-    a long scalar.
+Represents the invariant 'x <= c', where c is a constant and x is
+ a long scalar.
 
-    See also the following configuration options:
+See also the following configuration options:
     @itemize @bullet
-    @item
-    daikon.inv.unary.scalar.UpperBound.minimal_interesting
-    @item
-    daikon.inv.unary.scalar.UpperBound.maximal_interesting
+    @item daikon.inv.unary.scalar.UpperBound.minimal_interesting
+    @item daikon.inv.unary.scalar.UpperBound.maximal_interesting
     @end itemize
-@item UpperBoundFloat
-    Represents the invariant 'x <= c', where c is a constant and x is
-    a double scalar.
 
-    See also the following configuration options:
+@item UpperBoundFloat
+Represents the invariant 'x <= c', where c is a constant and x is
+ a double scalar.
+
+See also the following configuration options:
     @itemize @bullet
-    @item
-    daikon.inv.unary.scalar.UpperBoundFloat.minimal_interesting
-    @item
-    daikon.inv.unary.scalar.UpperBoundFloat.maximal_interesting
+    @item daikon.inv.unary.scalar.UpperBoundFloat.minimal_interesting
+    @item daikon.inv.unary.scalar.UpperBoundFloat.maximal_interesting
     @end itemize
 
 @c END AUTO-GENERATED INVARIANTS LISTING
