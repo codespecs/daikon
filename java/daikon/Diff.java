@@ -29,8 +29,8 @@ public class Diff {
   public static void diffPptMap(PptMap pm1, PptMap pm2) {
     // I could have used set intersection/difference instead of the
     // OrderedPairIterator; but the latter works, too.
-    Iterator itor1 = new TreeSet(pm1.keySet()).iterator();
-    Iterator itor2 = new TreeSet(pm2.keySet()).iterator();
+    Iterator itor1 = new TreeSet(pm1.nameStringSet()).iterator();
+    Iterator itor2 = new TreeSet(pm2.nameStringSet()).iterator();
     for (Iterator opi = new OrderedPairIterator(itor1, itor2); opi.hasNext(); ) {
       OrderedPairIterator.Pair pair = (OrderedPairIterator.Pair) opi.next();
       if (pair.b == null) {

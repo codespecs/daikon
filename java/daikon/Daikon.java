@@ -193,7 +193,7 @@ public final class Daikon {
     // Retrieve Ppt objects in sorted order.
     // Use a custom comparator for a specific ordering
     TreeSet all_ppts_sorted = new TreeSet(new PptOrderComparator());
-    all_ppts_sorted.addAll(all_ppts.values());
+    all_ppts_sorted.addAll(all_ppts.asCollection());
     for (Iterator itor = all_ppts_sorted.iterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       if (ppt.num_samples() > 0) {

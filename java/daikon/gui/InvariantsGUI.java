@@ -54,7 +54,7 @@ public class InvariantsGUI {
 	DefaultMutableTreeNode root = new DefaultMutableTreeNode( "All classes" );
 
 	//  Create the first level of the tree:  classes
-	for (Iterator iter = pptMap.keySet().iterator(); iter.hasNext(); ) {
+	for (Iterator iter = pptMap.nameStringSet().iterator(); iter.hasNext(); ) {
 	    String name = (String) iter.next();
 	    PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
 	    if (name.indexOf( "CLASS" ) != -1  ||  name.indexOf( "OBJECT" ) != -1 ) { // if this is a class, not just a method
@@ -66,7 +66,7 @@ public class InvariantsGUI {
 	}
 
 	//  Create the second level of the tree:  method names
-	for (Iterator iter = pptMap.keySet().iterator(); iter.hasNext(); ) {
+	for (Iterator iter = pptMap.nameStringSet().iterator(); iter.hasNext(); ) {
 	    String name = (String) iter.next();
 	    if (name.indexOf( "CLASS" ) == -1  &&  name.indexOf( "OBJECT" ) == -1 ) { // if this is a method, not a class
 		String className = name.substring( 0, name.indexOf('.'));
@@ -81,7 +81,7 @@ public class InvariantsGUI {
 	}
 
 	//  Create the third level of the tree:  method entry and exit points
-	for (Iterator iter = pptMap.keySet().iterator(); iter.hasNext(); ) {
+	for (Iterator iter = pptMap.nameStringSet().iterator(); iter.hasNext(); ) {
 	    String name = (String) iter.next();
 	    PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
 	    if (name.indexOf( "CLASS" ) == -1  &&  name.indexOf( "OBJECT" ) == -1 ) { // if this is a method, not a class

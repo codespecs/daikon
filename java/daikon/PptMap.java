@@ -1,11 +1,43 @@
-// Kinda weak name.
-
 package daikon;
 
+import java.io.Serializable;
 import java.util.*;
 
 /** Maps from a name (a String) to a Ppt. */
-public class PptMap extends HashMap {
+public class PptMap
+  implements Serializable
+{
+  private final Map nameToPpt = new HashMap();
+
+  public void add(Ppt ppt)
+  {
+    nameToPpt.put(ppt.name, ppt);
+  }
+
+  public Ppt get(String name)
+  {
+    return (Ppt) nameToPpt.get(name);
+  }
+
+  public boolean containsName(String name)
+  {
+    return nameToPpt.containsKey(name);
+  }
+
+  public Collection asCollection()
+  {
+    return Collections.unmodifiableCollection(nameToPpt.values());
+  }
+
+  public Collection nameStringSet()
+  {
+    return Collections.unmodifiableSet(nameToPpt.keySet());
+  }
+
+  public Iterator iterator()
+  {
+    return asCollection().iterator();
+  }
 
   // // Is this of any interest?  Will I ever call it?
   // // This used to take a "String filename" initial argument.

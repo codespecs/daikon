@@ -155,7 +155,7 @@ public final class FileIO {
     }
     for (int i=0; i<new_ppts.size(); i++) {
       Ppt ppt = (Ppt) new_ppts.elementAt(i);
-      all_ppts.put(ppt.name, ppt);
+      all_ppts.add(ppt);
     }
     after_processing_file_declarations(new_ppts, all_ppts);
     return new_ppts;
@@ -168,7 +168,7 @@ public final class FileIO {
     String ppt_name = file.readLine().intern();
 
     // This program point name has already been encountered.
-    if (all_ppts.containsKey(ppt_name)) {
+    if (all_ppts.containsName(ppt_name)) {
       throw new Error("Duplicate declaration of program point " + ppt_name
                       + " found at file " + filename
                       + " line " + file.getLineNumber());
@@ -544,7 +544,7 @@ public final class FileIO {
     // the entry since the time other elements were seen.  There is one tag
     // for each exit point associated with this entry.
     HashMap cumulative_modbits = new HashMap();
-    for (Iterator itor = all_ppts.values().iterator() ; itor.hasNext() ; ) {
+    for (Iterator itor = all_ppts.iterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       PptTopLevel entry_ppt = ppt.entry_ppt;
       if (entry_ppt != null) {
