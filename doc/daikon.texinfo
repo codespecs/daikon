@@ -5518,6 +5518,18 @@ configuration value is stored in a variable whose name contains a
 To learn more about a specific invariant or derived variable, see
 its source code.
 
+@c The config options are categorized into sections by pattern-matching
+@c their names.  If you are adding new options, you might want to choose
+@c names similar to those of similar options.  
+@c Currently the categories are:
+@c   daikon.inv.filter.*.enabled  -> turn filters on/off
+@c   daikon.inv.*.enabled -> turn invariant detection on/off
+@c   daikon.inv.* -> other invariant configuration
+@c   daikon.derive.* -> turn derived parameters on/off
+@c   daikon.simplify.* -> options for Simplify
+@c   * -> general options
+@c See ParameterDoclet.java for details.
+
 @include config-options.texinfo
 
 
@@ -7663,6 +7675,7 @@ Michael Harder,
 Lee Lin,
 Greg Jay,
 Josh Kataoka,
+Sandra Loosemore,
 Vikash Mansinghka,
 Stephen McCamant,
 Samir Meghani,
