@@ -9,6 +9,18 @@ daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
+2.4.5 (1 April 2003):
+
+"Dummy invariants" permit properties that are not in Daikon's grammar to be
+output, when they appear as splitting conditions.  It is possible to
+specify in the splitter info file how to format such properties in each of
+the output formats that Daikon supports.
+
+The manual describes how to deal with contradictory invariants, which
+Daikon might sometimes produce due to a bug or a limitation.
+
+----------------
+
 2.4.4 (2 March 2003):
 
 dfec now works with gcc 2.96 (the version that is distributed with Red Hat

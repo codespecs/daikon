@@ -344,7 +344,8 @@ regular CVS.
 <p>
 
 If you use remote CVS, you will need to set up your environment properly.
-(This was done for you when your PAG account was created, so you don't have
+(This was done for you when your PAG account was <a
+href="pag-account.html">created</a>, so you don't have
 to worry about it when using a local CVS checkout.)
 For example, you will want to copy over your dotfiles or at least copy the
 contents of the dotfiles in <tt>$inv/doc/www/mit/</tt> (at a minimum,
@@ -647,15 +648,19 @@ it twice) in order to generate formatted versions of the manual
 
 <h2><a name="other-tasks">Other tasks</a></h2>
 
-<h3><a name="distribution">Making a distribution</a></h2>
+<h3><a name="distribution">Making a distribution</a></h3>
 
 To publish a Daikon distribution, do
 <pre>
   cd $inv
+  make use-ver2
   make dist
 </pre>
 Before doing so, ensure that the <tt>doc/CHANGES</tt> file is up-to-date.
-After doing so, send mail to the daikon-announce mailing list.
+After doing so, check the contents of the new tar file against those of the
+old one, to ensure that you have not inadvertently added files to the
+distribution that you should not have.
+Finally, send mail to the daikon-announce mailing list.
 <p>
 
 <tt>make dist</tt> not only creates a tar file, but also updates version

@@ -25,7 +25,10 @@ Create a new account on pag like so:
 <blockquote>
 <pre>
 su
-useradd -d /g6/users/<em>username</em> -u <em>UID</em> <em>username</em>
+setenv NEWUSERNAME <em>username</em>
+setenv NEWUID <em>uid</em>
+
+useradd -d /g6/users/$NEWUSERNAME -u $NEWUID $NEWUSERNAME
 <em>echo "## Add to 'invariants' and 'pag' groups"</em>
 emacs /etc/group
 <em>echo "## Insert full name"</em>
@@ -34,7 +37,7 @@ make -C /var/yp
 <em>echo "## Add to 'daikon' mailing list"</em>
 emacs /etc/aliases
 newaliases
-cd ~<em>username</em>
+cd ~$NEWUSERNAME
 echo "## Adjust directory permissions"
 chmod og+rx .
 <em>echo "## Set up dotfiles"</em>
@@ -45,13 +48,13 @@ cp -pf /g2/users/mernst/research/invariants/doc/www/mit/.cvsrc .
 echo "" >> .emacs
 echo "" >> .emacs
 cat /g2/users/mernst/research/invariants/doc/www/mit/.emacs >> .emacs
-chown <em>username</em> .cshrc .cvsrc .emacs
-chgrp <em>username</em> .cshrc .cvsrc .emacs
+chown $NEWUSERNAME .cshrc .cvsrc .emacs
+chgrp $NEWUSERNAME .cshrc .cvsrc .emacs
 <em>echo "## Set up email forwarding to Athena"</em>
-echo <em>username</em>@mit.edu > .forward
-chown <em>username</em> .forward
-chgrp <em>username</em> .forward
-yppasswd <em>username</em>
+echo $NEWUSERNAME@mit.edu > .forward
+chown $NEWUSERNAME .forward
+chgrp $NEWUSERNAME .forward
+yppasswd $NEWUSERNAME
 exit
 </pre>
 </blockquote>
