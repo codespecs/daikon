@@ -3,7 +3,6 @@ package utilMDE;
 import junit.framework.*;
 import java.util.*;
 import java.io.*;
-import java.lang.*;
 
 // run like this:
 //   java utilMDE.TestUtilMDE
@@ -1897,7 +1896,7 @@ public final class TestUtilMDE extends TestCase {
     assertTrue (!ff.eq (0, Double.MIN_VALUE));
     assertTrue (!ff.eq (0, -Double.MIN_VALUE));
     assertTrue (ff.ne (0, Double.MIN_VALUE));
-    assertTrue (ff.ne (0, -Double.MIN_VALUE));;
+    assertTrue (ff.ne (0, -Double.MIN_VALUE));
 
     //make sure that 0 equals 0
     assertTrue (ff.eq (0, 0));

@@ -23,9 +23,9 @@ public class CountingPrintWriter extends PrintWriter {
   private int writtenBytes;
   /** number of printed bytes using 'print' & 'println' methods */
   private int printedBytes;
-  /** number of printed chars using 'print' & 'println' methods */;
+  /** number of printed chars using 'print' & 'println' methods */
   private int printedChars;
-  /** number of written chars using write methods */;
+  /** number of written chars using write methods */
   private int writtenChars;
 
   // Constructors
