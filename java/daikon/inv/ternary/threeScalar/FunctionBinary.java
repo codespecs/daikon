@@ -68,7 +68,7 @@ public class FunctionBinary extends ThreeScalar {
 
   public boolean isSameFormula(Invariant other)
   {
-    return core.equals(((FunctionBinary) other).core);
+    return core.isSameFormula(((FunctionBinary) other).core);
   }
 
   // // For testing only; to be commented out
