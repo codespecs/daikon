@@ -13,7 +13,7 @@ import utilMDE.*;
 public final class SeqIndexComparison extends SingleSequence {
 
   // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface
+  // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
 
   public IntComparisonCore core;
@@ -88,7 +88,7 @@ public final class SeqIndexComparison extends SingleSequence {
   public String format_ioa(String classname) {
     if (var().isIOASet())
       return "Not valid for Sets: " + format();
-    String comparator = (core.format_comparator().equals("==")) ? 
+    String comparator = (core.format_comparator().equals("==")) ?
 	"=" : core.format_comparator();
     String[] form =
       VarInfoName.QuantHelper.format_ioa(new VarInfo[] { var() }, classname);
