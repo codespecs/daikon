@@ -2,7 +2,7 @@
 # checkargs -- check number of args in function calls
 # Michael D. Ernst <mernst@cs.washington.edu>
 # http://sdg.lcs.mit.edu/~mernst/software/checkargs.pm
-# Time-stamp: <2002-07-31 18:38:46 mernst>
+# Time-stamp: <2003-09-13 12:57:23 mernst>
 
 package checkargs;
 require 5.004;			# uses "for my $var"
@@ -18,6 +18,9 @@ checkargs -- Check number of args in function calls
 
 =head1 SYNOPSIS
 
+  use checkargs;
+
+Then
   check_args(cArgsExpected, @_)
   check_args_range(cArgsMin, cArgsMax, @_)
   check_args_at_least(cArgsMin, @_)
