@@ -36,8 +36,8 @@ DIST_BIN_DIR := $(DIST_DIR)/binaries
 # Files that appear in the top level of the distribution directory
 DIST_DIR_FILES := daikon-source.tar.gz daikon-jar.tar.gz daikon-logo.gif daikon.jar
 DIST_DIR_PATHS := daikon-source.tar.gz daikon-jar.tar.gz doc/images/daikon-logo.gif daikon.jar
-# Location for NFS-mounted binaries
-NFS_BIN_DIR := /g2/users/mernst/research/invariants/binaries
+# # Location for NFS-mounted binaries
+# NFS_BIN_DIR := /g2/users/mernst/research/invariants/binaries
 
 # For really big files
 # DIST_DIR_2 := /projects/se/people/mernst/www
@@ -422,7 +422,7 @@ dist-dfec-linux:
 	cp -pf $(DFEC_DIR)/bin/dfec-static $(DIST_BIN_DIR)/dfec-linux-x86
 	cp -pf $(DFEC_DIR)/src/dfec $(DIST_BIN_DIR)/dfec-linux-x86-dynamic
 	update-link-dates $(DIST_DIR)/index.html
-	cp -pf $(DFEC_DIR)/src/dfec $(NFS_BIN_DIR)
+	# cp -pf $(DFEC_DIR)/src/dfec $(NFS_BIN_DIR)
 
 
 ## Old version
@@ -468,8 +468,8 @@ dist-dfej-linux-x86: $(DFEJ_DIR)/src/dfej
 	cp -pf $(DFEJ_DIR)/src/dfej $(DIST_BIN_DIR)/dfej-linux-x86-dynamic
 	strip $(DIST_BIN_DIR)/dfej-linux-x86 $(DIST_BIN_DIR)/dfej-linux-x86-dynamic
 	update-link-dates $(DIST_DIR)/index.html
-	# Unstripped, to permit better debugging
-	cp -pf $(DFEJ_DIR)/src/dfej $(NFS_BIN_DIR)
+	# # Unstripped, to permit better debugging
+	# cp -pf $(DFEJ_DIR)/src/dfej $(NFS_BIN_DIR)
 	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@lcs.mit.edu
 
 # Creates the build_mingw_dfej directory.  This probably needs to be redone
