@@ -54,6 +54,8 @@ public final class Diff {
   private static PptMap manip2 = null;
 
   /** The long command line options. **/
+  private static final String HELP_SWITCH =
+    "help";
   private static final String INV_SORT_COMPARATOR1_SWITCH =
     "invSortComparator1";
   private static final String INV_SORT_COMPARATOR2_SWITCH =
@@ -154,6 +156,8 @@ public final class Diff {
 //     daikon.LogHelper.setLevel ("daikon.diff", daikon.LogHelper.FINE);
 
     LongOpt[] longOpts = new LongOpt[] {
+      new LongOpt(Daikon.help_SWITCH,
+                  LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(INV_SORT_COMPARATOR1_SWITCH,
                   LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(INV_SORT_COMPARATOR2_SWITCH,
@@ -174,7 +178,10 @@ public final class Diff {
       case 0:
         // got a long option
         String optionName = longOpts[g.getLongind()].getName();
-        if (INV_SORT_COMPARATOR1_SWITCH.equals(optionName)) {
+        if (Daikon.help_SWITCH.equals(optionName)) {
+          System.out.println(usage);
+          throw new Daikon.TerminationMessage();
+        } else if (INV_SORT_COMPARATOR1_SWITCH.equals(optionName)) {
           if (invSortComparator1Classname != null) {
             throw new Error("multiple --" + INV_SORT_COMPARATOR1_SWITCH +
                             " classnames supplied on command line");

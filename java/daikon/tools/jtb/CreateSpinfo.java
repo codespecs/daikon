@@ -75,6 +75,7 @@ public class CreateSpinfo {
 
     daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
     LongOpt[] longopts = new LongOpt[] {
+      new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
     };
@@ -87,7 +88,10 @@ public class CreateSpinfo {
       case 0:
         // got a long option
         String option_name = longopts[g.getLongind()].getName();
-        if (Daikon.debugAll_SWITCH.equals(option_name)) {
+        if (Daikon.help_SWITCH.equals(option_name)) {
+          System.out.println(usage);
+          throw new Daikon.TerminationMessage();
+        } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
           Global.debugAll = true;
         } else if (Daikon.debug_SWITCH.equals(option_name)) {
           LogHelper.setLevel (g.getOptarg(), LogHelper.FINE);

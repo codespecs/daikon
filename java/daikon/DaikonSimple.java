@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  * of likely invariants using the simple incremental algorithm.
  */
 public class DaikonSimple {
- 
+
   //printing usage
   public static final String lineSep = Global.lineSep;
   //public static final String var_omit_regexp_SWITCH = "var_omit";
@@ -54,7 +54,7 @@ public class DaikonSimple {
 
   //A pptMap which contains all the program points
   public static PptMap all_ppts;
-  
+
   public static void main(final String[] args)
     throws IOException, FileNotFoundException {
     try {
@@ -86,7 +86,7 @@ public class DaikonSimple {
     Daikon.dkconfig_use_dynamic_constant_optimization = false;
     Daikon.suppress_implied_controlled_invariants = false;
     NIS.dkconfig_enabled = false;
-     
+
     //boolean needed to tell FIleIO and Daikon classes that methods and classes for DaikonSimple is needed
     Daikon.using_DaikonSimple = true;
 
@@ -104,24 +104,24 @@ public class DaikonSimple {
 
     // Create the list of all invariant types
     Daikon.setup_proto_invs();
-    
+
     // Load declarations
-    
-    // Create the program points for enter and numbered exits and 
+
+    // Create the program points for enter and numbered exits and
     // initializes the points (adding orig and derived variables)
     all_ppts = FileIO.read_declaration_files(decls_files);
-   
+
     // Create the combined exits (and add orig and derived vars)
     Daikon.create_combined_exits(all_ppts);
-   
+
     all_ppts.trimToSize();
-    
+
     // Read and process the data trace files
     SimpleProcessor processor = new SimpleProcessor();
     FileIO.read_data_trace_files(dtrace_files, all_ppts, processor);
-    
-   
-    
+
+
+
     // Print out the invariants for each program point (sort first)
     for( Iterator t = all_ppts.pptIterator(); t.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) t.next();
@@ -193,21 +193,22 @@ public class DaikonSimple {
   // element is a set.
   private static Set[] read_options(String args[])
     throws FileNotFoundException {
-    
+
     if (args.length == 0) {
       System.out.println(
         "Daikon error: no files supplied on command line.");
       System.out.println(usage);
       throw new Daikon.TerminationMessage();
     }
-    
+
     Set decl_files = new HashSet(); /* of Files */
     Set dtrace_files = new HashSet(); /* of Strings, either file names or "-"*/
     Set spinfo_files = new HashSet(); /* of Files */
     Set map_files = new HashSet(); /* of Files */
-    
+
     LongOpt[] longopts =
       new LongOpt[] {
+        new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
         new LongOpt(
           Daikon.config_option_SWITCH,
           LongOpt.REQUIRED_ARGUMENT,
@@ -310,8 +311,8 @@ public class DaikonSimple {
     }
     return new Set[] { decl_files, dtrace_files, spinfo_files, map_files };
   }
-   
-  
+
+
   /**
      * This function is called to jump-start processing; it creates all
      * the views (and thus candidate invariants), but does not check
@@ -469,10 +470,10 @@ public class DaikonSimple {
               || ((i3 >= vi_index_min) && (i3 < vi_index_limit)));
           Assert.assertTrue((i1 <= i2) && (i2 <= i3));
           VarInfo var3 = ppt.var_infos[i3];
-        
+
           if (!is_slice_ok(var1, var2, var3, ppt)) {
             continue;
-          } 
+          }
           PptSlice3 slice3 = new PptSlice3(ppt, var1, var2, var3);
           slice3.instantiate_invariants();
           ternary_views.add(slice3);
@@ -585,20 +586,20 @@ public class DaikonSimple {
       this.vt = vt;
     }
   }
-  
+
 
   public static class SimpleProcessor extends FileIO.Processor {
     PptMap all_ppts = null;
 
     /** nonce -> List[Call, Call] **/
     Map call_map = new LinkedHashMap();
-    
+
     //flag for whether there is an out of order in the dtrace file (enter, object, exit)
     boolean wait = false;
-    
+
     //pointer to last nonce to know where to put the object ppt
     Integer last_nonce = new Integer(-1);
-    
+
 
     /**
      * process the sample by checking it against each existing invariant
@@ -629,23 +630,23 @@ public class DaikonSimple {
         wait = true;
         return;
       }
-      
+
 
       //assumes enter always comes before exit
       //assumes first entry in dtrace is an enter
       //assumes order is enter, exit, object [constructors] or enter, object, exit, object but not sequentially
-      
-      
+
+
       if(ppt.ppt_name.isObjectInstanceSynthetic()) {
         if(wait) {
           List value = (List)call_map.get(last_nonce);
-          Assert.assertTrue(value.size() == 1);		//there should only be an enter call 
+          Assert.assertTrue(value.size() == 1);		//there should only be an enter call
           value.add(new Call(ppt, vt));
-          call_map.put(last_nonce, value); 
+          call_map.put(last_nonce, value);
           return;
-        } 
+        }
       }
-      
+
       // If this is an exit point, process the saved enter (and sometimes object) point
       if (ppt.ppt_name.isExitPoint()) {
         Assert.assertTrue(nonce != null);
@@ -684,9 +685,9 @@ public class DaikonSimple {
 
 	  //manually inc the sample number because DaikonSimple does not use any of ppt's add methods
 		ppt.incSampleNumber();
-			
+
       // Loop through each slice
-      
+
         for(Iterator i = ppt.views_iterator(); i.hasNext(); ) {
         PptSlice slice = (PptSlice) i.next();
         List to_remove = new ArrayList();
@@ -739,7 +740,7 @@ public class DaikonSimple {
           } else {
             ValueSet vs = ppt.value_sets[j];
           }
-        }   
+        }
           ppt.mbtracker.add(vt, 1);
 
       }
