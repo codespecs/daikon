@@ -814,6 +814,29 @@ public final class ArraysMDE {
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical objects).
    */
+  public static final class ComparableArrayComparatorLexical implements Comparator {
+    public int compare(Object o1, Object o2) {
+      if (o1 == o2)
+        return 0;
+      Comparable[] a1 = (Comparable[])o1;
+      Comparable[] a2 = (Comparable[])o2;
+      int len = Math.min(a1.length, a2.length);
+      for (int i=0; i<len; i++) {
+        int tmp = a1[i].compareTo(a2[i]);
+        if (tmp != 0)
+          return tmp;
+        // Check the assumption that the two elements are equal.
+        Assert.assert(a1[i].equals(a2[i]));
+      }
+      return a1.length - a2.length;
+    }
+  }
+
+  /**
+   * Note: this comparator imposes orderings that are inconsistent with equals.
+   * That is, it may return 0 if the arrays are not equal (but do contain
+   * identical objects).
+   */
   public static final class ObjectArrayComparatorLexical implements Comparator {
     public int compare(Object o1, Object o2) {
       if (o1 == o2)
@@ -893,6 +916,32 @@ public final class ArraysMDE {
    * That is, it may return 0 if the arrays are not equal (but do contain
    * identical objects).
    */
+  public static final class ComparableArrayComparatorLengthFirst implements Comparator {
+    public int compare(Object o1, Object o2) {
+      if (o1 == o2)
+        return 0;
+      Comparable[] a1 = (Comparable[])o1;
+      Comparable[] a2 = (Comparable[])o2;
+      int tmp;
+      tmp = a1.length - a2.length;
+      if (tmp != 0)
+        return tmp;
+      for (int i=0; i<a1.length; i++) {
+        tmp = a1[i].compareTo(a2[i]);
+        if (tmp != 0)
+          return tmp;
+        // Check the assumption that the two elements are equal.
+        Assert.assert(a1[i].equals(a2[i]));
+      }
+      return 0;
+    }
+  }
+
+  /**
+   * Note: this comparator imposes orderings that are inconsistent with equals.
+   * That is, it may return 0 if the arrays are not equal (but do contain
+   * identical objects).
+   */
   public static final class ObjectArrayComparatorLengthFirst implements Comparator {
     public int compare(Object o1, Object o2) {
       if (o1 == o2)
@@ -914,7 +963,6 @@ public final class ArraysMDE {
       return 0;
     }
   }
-
 
 
   ///////////////////////////////////////////////////////////////////////////
