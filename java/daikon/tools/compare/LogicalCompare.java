@@ -7,12 +7,18 @@ import utilMDE.Assert;
 import utilMDE.UtilMDE;
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.unary.scalar.*;
+import daikon.inv.unary.sequence.*;
+import daikon.inv.unary.string.*;
 import daikon.simplify.*;
 import daikon.inv.Invariant.OutputFormat;
 
 public class LogicalCompare {
   public static final Logger debug
     = Logger.getLogger("daikon.compare.LogicalCompare");
+
+  // Stopgap waiting for real options reading support
+  private static int flags;
 
   //  public static final String lineSep = Global.lineSep;
 //   private static String usage =
@@ -26,10 +32,10 @@ public class LogicalCompare {
 //       "      Suppress display of obvious postconditions on prestate.",
 //       "  --" + Daikon.suppress_redundant_SWITCH,
 //       "      Suppress display of logically redundant invariants."}, lineSep);
-  private static Vector filterSimplifyFormat(List/*<Invariant>*/ invs) {
+  private static Vector filterSimplifyFormat(Vector/*<Invariant>*/ invs) {
     Vector/*<Invariant>*/ new_invs = new Vector/*<Invariant>*/();
     for (int i = 0; i < invs.size(); i++) {
-      Invariant inv = (Invariant)invs.get(i);
+      Invariant inv = (Invariant)invs.elementAt(i);
       String simp = inv.format_using(OutputFormat.SIMPLIFY);
       if (simp.indexOf("format_simplify") == -1 &&
           simp.indexOf("OutputFormat:Simplify") == -1)
@@ -40,215 +46,199 @@ public class LogicalCompare {
     return new_invs;
   }
 
-  private static List filterPostIntoPre(List/*<Invariant>*/ invs) {
-    List/*<Invariant>*/ new_invs = new Vector/*<Invariant>*/();
-    for (int i = 0; i < invs.size(); i++) {
-      Invariant inv = (Invariant)invs.get(i);
-      if (inv.isAllPrestate())
-        new_invs.add(inv);
-    }
-    return new_invs;
-  }
-
-  private static List translateAddOrig(List/*<Invariant>*/ invs) {
-    List/*<Invariant>*/ new_invs = new Vector/*<Invariant>*/();
-    for (int i = 0; i < invs.size(); i++) {
-      Invariant inv = ((Invariant)invs.get(i));
-      // XXX might want to save the old inv.ppt
-      inv.ppt = PptSlice0.makeFakePrestate(inv.ppt);
-      new_invs.add(inv);
-    }
-    return new_invs;
-  }
-
-  private static List filterPreOutOfPost(List/*<Invariant>*/ invs) {
-    List/*<Invariant>*/ new_invs = new Vector/*<Invariant>*/();
-    for (int i = 0; i < invs.size(); i++) {
-      Invariant inv = (Invariant)invs.get(i);
-      if (!inv.isAllPrestate())
-        new_invs.add(inv);
-    }
-    return new_invs;
-  }
-
-  private static SessionManager simplifySession;
-
-  private static void assume(Invariant inv) {
-    try {
-      simplifySession.request(new CmdAssume(inv.format_using(OutputFormat.SIMPLIFY)));
-    } catch (TimeoutException e) {
-      Assert.assertTrue(false);
-    }
-  }
-
-  private static void unAssume() {
-    try {
-      simplifySession.request(CmdUndoAssume.single);
-    } catch (TimeoutException e) {
-      Assert.assertTrue(false);
-    }
-  }
-
-  private static void assumeAll(List/*<Invariant>*/ invs) {
-    for (int i = 0; i < invs.size(); i++) {
-      assume((Invariant)invs.get(i));
-    }
-  }
-
-  private static void unAssumeAll(List/*<Invariant>*/ invs) {
-    for (int i = 0; i < invs.size(); i++) {
-      unAssume();
-    }
-  }
-
-  private static boolean check(Invariant inv) {
-    CmdCheck cc = new CmdCheck(inv.format_using(OutputFormat.SIMPLIFY));
-    //System.out.print("[");
-    try {
-      simplifySession.request(cc);
-      //System.out.print("]");
-      return cc.valid;
-    } catch (TimeoutException e) {
-      return false;
-    }
-  }
-
-  private static String getCounterexample(Invariant inv) {
-    CmdCheck cc = new CmdCheck(inv.format_using(OutputFormat.SIMPLIFY));
-    //System.out.print("[");
-    try {
-      Assert.assertTrue(cc != null);
-      simplifySession.request(cc);
-      //System.out.print("]");
-    } catch (TimeoutException e) {
-      Assert.assertTrue(false, "Unexpected timeout on " + inv.format());
-      return null;
-    }
-    if (cc.valid) {
-      return null;
-    } else {
-      if (cc.counterexample != null)
-        return cc.counterexample;
-      else
-        return "(counterexamples disabled)";
-    }
-  }
-
-  private static boolean allExceptImply(Invariant[] invs, boolean[] excluded,
-                                        int min, int max, Invariant conseq) {
-    int assumed = 0;
-    for (int i = 0; i < invs.length; i++) {
-      if (!excluded[i] && (i < min || i > max)) {
-        assume(invs[i]);
-        assumed++;
-      }
-    }
-    boolean valid = check(conseq);
-    for (int i = 0; i < assumed; i++) {
-      unAssume();
-    }
-    return valid;
-  }
-
-  private static boolean allTrue(boolean[] bools, int min, int max) {
-    for (int i = min; i <= max; i++) {
-      if (!bools[i])
-        return false;
-    }
-    return true;
-  }
-
-  private static Vector minimizeAssumptions(Invariant[] invs,
-                                            Invariant consequence) {
-    boolean[] excluded = new boolean[invs.length];
-
-    for (int size = invs.length / 2; size > 1; size /= 2) {
-      for (int start = 0; start < invs.length; start += size) {
-        int end = Math.min(start + size - 1, invs.length - 1);
-        if (!allTrue(excluded, start, end) &&
-            allExceptImply(invs, excluded, start, end, consequence)) {
-          for (int i = start; i <= end; i++)
-            excluded[i] = true;
-        }
-      }
-    }
-
-    boolean reduced;
-    do {
-      reduced = false;
-      for (int i = 0; i < invs.length; i++) {
-        if (!excluded[i]) {
-          if (allExceptImply(invs, excluded, i, i, consequence)) {
-            excluded[i] = true;
-            reduced = true;
-          }
-        }
-      }
-    } while (reduced);
+  private static Vector filterTrueHeuristics(Vector/*<Invariant>*/ invs) {
     Vector/*<Invariant>*/ new_invs = new Vector/*<Invariant>*/();
-    for (int i = 0; i < invs.length; i++) {
-      if (!excluded[i])
-        new_invs.add(invs[i]);
+    for (int i = 0; i < invs.size(); i++) {
+      Invariant inv = (Invariant)invs.elementAt(i);
+      //      if (true)
+      //      if (!inv.isObvious())
+      //      if (inv.justified() && !inv.isObvious())
+      //      if (inv.isObvious())
+      if (!(inv.hasUninterestingConstant() && !(inv instanceof OneOf)
+            /*&&
+            (inv instanceof LowerBound || inv instanceof UpperBound ||
+            inv instanceof EltLowerBound || inv instanceof EltUpperBound)*/)) {
+        new_invs.add(inv);
+      }
     }
     return new_invs;
   }
 
-  private static void printInvariants(List/*<Invariant>*/ invs) {
+  private static boolean shouldDiscardInvariant( Invariant inv ) {
+    for (int i = 0; i < inv.ppt.var_infos.length; i++) {
+      VarInfo vi = inv.ppt.var_infos[i];
+      // ppt has to be a PptSlice, not a PptTopLevel
+      PrintInvariants.debugFiltering.debug("\tconsidering DPF for " + vi.name.name() + "\n");
+      if (vi.isDerivedParamAndUninteresting()) {
+        // Exception: let invariants like "orig(arg) == arg" through.
+        if (IsEqualityComparison.it.accept( inv )) {
+          Comparison comp = (Comparison)inv;
+          VarInfo var1 = comp.var1();
+          VarInfo var2 = comp.var2();
+          boolean vars_are_same = var1.name.applyPrestate().equals(var2.name) || var2.name.applyPrestate().equals(var1.name);
+          PrintInvariants.debugFiltering.debug("\t\tvars are same? " + String.valueOf(vars_are_same) + "\n");
+          //if (vars_are_same) return false;
+        }
+//         if (inv instanceof OneOf || inv instanceof OneOfString ||
+//             inv instanceof OneOfString)
+//           return false;
+        //System.err.println("Because of " + vi.name.name() + ",");
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private static Vector filterRemoveImplementation(Vector invs) {
+    Vector/*<Invariant>*/ new_invs = new Vector/*<Invariant>*/();
     for (int i = 0; i < invs.size(); i++) {
-      Invariant inv = (Invariant)invs.get(i);
-      //System.out.println(inv.format() + " ==> " + inv.format_using(OutputFormat.SIMPLIFY));
+      Invariant inv = (Invariant)invs.elementAt(i);
+      if (!shouldDiscardInvariant(inv))
+        new_invs.add(inv);
+    }
+    return new_invs;
+  }
+
+  private static Vector filterRemoveImplications(Vector/*<Invariant>*/ invs) {
+    Vector/*<Invariant>*/ new_invs = new Vector/*<Invariant>*/();
+    for (int i = 0; i < invs.size(); i++) {
+      Invariant inv = (Invariant)invs.elementAt(i);
+      if (!(inv instanceof Implication))
+        new_invs.add(inv);
+    }
+    return new_invs;
+  }
+
+  private static Vector translateStraight(Vector/*<Invariant>*/ invs) {
+    Vector/*<Lemma>*/ lemmas = new Vector();
+    for (int i = 0; i < invs.size(); i++) {
+      Invariant inv = (Invariant)invs.elementAt(i);
+      lemmas.add(new InvariantLemma(inv));
+    }
+    return lemmas;
+  }
+
+  private static Vector translateRemovePre(Vector/*<Invariant>*/ invs) {
+    Vector/*<Lemma>*/ lemmas = new Vector();
+    for (int i = 0; i < invs.size(); i++) {
+      Invariant inv = (Invariant)invs.elementAt(i);
+      if (!inv.isAllPrestate())
+        lemmas.add(new InvariantLemma(inv));
+    }
+    return lemmas;
+  }
+
+  private static Vector translateAddOrig(Vector/*<Invariant>*/ invs) {
+    Vector/*<Lemma>*/ lemmas = new Vector();
+    for (int i = 0; i < invs.size(); i++) {
+      Invariant inv = (Invariant)invs.elementAt(i);
+      lemmas.add(InvariantLemma.makeLemmaAddOrig(inv));
+    }
+    return lemmas;
+  }
+
+  private static LemmaStack lemmas;
+
+  private static void printInvariants(Vector/*<Invariant>*/ invs) {
+    for (int i = 0; i < invs.size(); i++) {
+      Invariant inv = (Invariant)invs.elementAt(i);
       System.out.println(inv.format());
     }
 
     for (int i = 0; i < invs.size(); i++) {
-      Invariant inv = (Invariant)invs.get(i);
-      System.out.println("(BG_PUSH "
-                         + inv.format_using(OutputFormat.SIMPLIFY) +")");
+      Invariant inv = (Invariant)invs.elementAt(i);
+      System.out.println("(BG_PUSH " +
+                         inv.format_using(OutputFormat.SIMPLIFY) +")");
     }
   }
 
-  private static void evaluateImplications(List assumptions,
-                                           List consequences) {
+  private static int evaluateImplications(Vector assumptions,
+                                          Vector consequences)
+  throws SimplifyError {
+    int invalidCount = 0;
+    int mark = lemmas.markLevel();
+    lemmas.pushLemmas(assumptions);
+    if (lemmas.checkForContradiction() == 'T') {
+      System.out.println("Contradictory assumptions:");
+      Vector min = lemmas.minimizeContradiction();
+      LemmaStack.printLemmas(System.out, min);
+      Assert.assertTrue(false, "Aborting");
+    }
+
+    if ((flags & 8) != 0) {
+      lemmas.dumpLemmas(System.out);
+    }
+
     for (int i = 0; i < consequences.size(); i++) {
-      Invariant inv = (Invariant)consequences.get(i);
-      assumeAll(assumptions);
-      String counterexample = getCounterexample(inv);
-      boolean valid = (counterexample == null);
-      unAssumeAll(assumptions);
-      if (valid) {
-        Invariant[] ass_ary = (Invariant[])
-          assumptions.toArray(new Invariant[1]);
-        Vector/*<Invariant>*/ assume = minimizeAssumptions(ass_ary, inv);
-        System.out.println();
-        for (int j = 0; j < assume.size(); j++)
-          System.out.println(((Invariant)assume.elementAt(j)).format());
-        System.out.println("----------------------------------");
-        System.out.println(inv.format());
-        System.out.println();
-        for (int j = 0; j < assume.size(); j++)
-          System.out.println("    "  + ((Invariant)assume.elementAt(j))
-                             .format_using(OutputFormat.SIMPLIFY));
-        System.out.println("    ------------------------------------------");
-        System.out.println("    " + inv.format_using(OutputFormat.SIMPLIFY));
-      } else {
+      Lemma inv = (Lemma)consequences.elementAt(i);
+      char result = lemmas.checkLemma(inv);
+
+      if (result == 'T') {
+        if ((flags & 1) != 0) {
+          Lemma[] ass_ary = (Lemma[])assumptions.toArray(new Lemma[1]);
+          Vector/*<Lemma>*/ assume = lemmas.minimizeProof(inv);
+          System.out.println();
+          for (int j = 0; j < assume.size(); j++)
+            System.out.println(((Lemma)assume.elementAt(j)).summarize());
+          System.out.println("----------------------------------");
+          System.out.println(inv.summarize());
+          if ((flags & 2) != 0) {
+            System.out.println();
+            for (int j = 0; j < assume.size(); j++)
+              System.out.println("    "  + ((Lemma)assume.elementAt(j))
+                                 .formula);
+            System.out.println("    ----------------------"
+                               + "--------------------");
+            System.out.println("    " + inv.formula);
+          }
+        } else if ((flags & 16) != 0) {
+          System.out.println();
+          System.out.print("Valid: ");
+          System.out.println(inv.summary);
+          if ((flags & 2) != 0)
+            System.out.println("    " + inv.formula);
+        }
+      } else if (result == 'F') {
+        invalidCount++;
         System.out.println();
         System.out.print("Invalid: ");
-        System.out.println(inv.format());
-        System.out.println("    " + inv.format_using(OutputFormat.SIMPLIFY));
-        System.out.print(counterexample);
+        System.out.println(inv.summary);
+        if ((flags & 2) != 0)
+          System.out.println("    " + inv.formula);
+      } else {
+        Assert.assertTrue(result == '?');
+        System.out.println();
+        System.out.print("Timeout: ");
+        System.out.println(inv.summary);
+        if ((flags & 2) != 0)
+          System.out.println("    " + inv.formula);
       }
     }
+    lemmas.popToMark(mark);
+    return invalidCount;
+  }
+
+  private static Vector invariants_vector(PptTopLevel ppt) {
+    return new Vector(ppt.getInvariants());
   }
 
   public static void main(String[] args)
-    throws FileNotFoundException, IOException, ClassNotFoundException
+    throws FileNotFoundException, IOException, ClassNotFoundException,
+           SimplifyError
   {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
-    //LogHelper.setPriority("daikon.simplify", LogHelper.DEBUG);
+    // LogHelper.setPriority("daikon.simplify", LogHelper.DEBUG);
+    daikon.inv.Invariant.dkconfig_simplify_define_predicates = true;
+
     String app_filename = args[0];
     String test_filename = args[1];
     String enter_ppt_name = args[2];
     String exit_ppt_name = args[3];
+    flags = Integer.parseInt(args[4]);
+
+    if ((flags & 64) == 0)
+      Session.dkconfig_simplify_max_iterations = 2147483647;
+
     System.out.println("Comparing " + enter_ppt_name + " and " + exit_ppt_name
                        + " in " + app_filename + " and " + test_filename);
     PptMap app_ppts = FileIO.read_serialized_pptmap(new File(app_filename),
@@ -259,62 +249,94 @@ public class LogicalCompare {
                                                      );
     PptTopLevel app_enter_ppt = app_ppts.get(enter_ppt_name);
     PptTopLevel test_enter_ppt = test_ppts.get(enter_ppt_name);
-    PptTopLevel app_exit_ppt = app_ppts.get(exit_ppt_name);
-    PptTopLevel test_exit_ppt = test_ppts.get(exit_ppt_name);
     Assert.assertTrue(app_enter_ppt != null);
     Assert.assertTrue(test_enter_ppt != null);
+
+    PptTopLevel app_exit_ppt = app_ppts.get(exit_ppt_name);
+    PptTopLevel test_exit_ppt = test_ppts.get(exit_ppt_name);
     Assert.assertTrue(app_exit_ppt != null);
     Assert.assertTrue(test_exit_ppt != null);
 
-    List/*<Invariant>*/ a_pre = app_enter_ppt.getInvariants();
-    List/*<Invariant>*/ t_pre = test_enter_ppt.getInvariants();
-    List/*<Invariant>*/ a_post = app_exit_ppt.getInvariants();
-    List/*<Invariant>*/ t_post = test_exit_ppt.getInvariants();
+    Vector a_pre = invariants_vector(app_enter_ppt);
+    Vector t_pre = invariants_vector(test_enter_ppt);
+    Vector a_post = invariants_vector(app_exit_ppt);
+    Vector t_post = invariants_vector(test_exit_ppt);
+
+    a_pre = filterRemoveImplications(a_pre);
+    t_pre = filterRemoveImplications(t_pre);
+
+    a_post = filterRemoveImplementation(a_post);
+    t_post = filterRemoveImplementation(t_post);
+
+    a_pre = filterTrueHeuristics(a_pre);
+    t_pre = filterTrueHeuristics(t_pre);
+    a_post = filterTrueHeuristics(a_post);
+    t_post = filterTrueHeuristics(t_post);
 
     a_pre = filterSimplifyFormat(a_pre);
     t_pre = filterSimplifyFormat(t_pre);
     a_post = filterSimplifyFormat(a_post);
     t_post = filterSimplifyFormat(t_post);
 
-    simplifySession = SessionManager.attemptProverStartup();
-    // simplifySession.setTimeout(1000*60); // one minute
-    Assert.assertTrue(simplifySession != null);
+    lemmas = new LemmaStack();
 
-    System.out.println("Apre (real) is:");
-    printInvariants(a_pre);
-    System.out.println();
+    if ((flags & 4) != 0) {
+      System.out.println("Apre (real) is:");
+      printInvariants(a_pre);
+      System.out.println();
+    }
 
     System.out.println("Tpre consists of " + t_pre.size() + " invariants.");
-    evaluateImplications(a_pre, t_pre);
+    Vector/*<Lemma>*/ pre_assumptions = new Vector();
+    pre_assumptions.addAll(translateStraight(a_pre));
+    Vector/*<Lemma>*/ pre_conclusions = new Vector();
+    pre_conclusions.addAll(translateStraight(t_pre));
+    Collections.sort(pre_conclusions);
+
+    int bad_pre = evaluateImplications(pre_assumptions, pre_conclusions);
+    if (bad_pre > 0 && (flags & 32) == 0) {
+      System.out.println("Precondition failure, skipping postconditions");
+      return;
+    }
+
     System.out.println("==============================================================================");
 
-    Vector/*<Invariant>*/ post_assumptions = new Vector/*<Invariant>*/();
+    Vector/*<Lemma>*/ post_assumptions = new Vector();
+    Vector/*<Lemma>*/ post_conclusions = new Vector();
 
-    //post_assumptions.addAll(filterPostIntoPre(a_post));
+    // post_assumptions.addAll(filterPostIntoPre(a_post));
+    post_assumptions.addAll(Lemma.lemmasVector());
     post_assumptions.addAll(translateAddOrig(a_pre));
 
-    System.out.println("Apre (translated) is:");
-    printInvariants(post_assumptions);
-    System.out.println();
+    if ((flags & 4) != 0) {
+      System.out.println("Apre (translated) is:");
+      LemmaStack.printLemmas(System.out, post_assumptions);
+      System.out.println();
+    }
 
-    post_assumptions.addAll(t_post);
+    post_assumptions.addAll(translateStraight(t_post));
 
-    a_post = filterPreOutOfPost(a_post);
+    post_conclusions.addAll(translateRemovePre(a_post));
 
-    System.out.println("Apost is:");
-    printInvariants(a_post);
-    System.out.println();
+    Collections.sort(post_conclusions);
+
+    if ((flags & 4) != 0) {
+      System.out.println("Apost is:");
+      //printInvariants(a_post);
+      LemmaStack.printLemmas(System.out, translateRemovePre(a_post));
+      System.out.println();
+    }
 
     //    Assert.assertTrue(false);
 
-    System.out.println("Apre /\\ Tpost is");
-    printInvariants(post_assumptions);
+    if ((flags & 4) != 0) {
+      System.out.println("Apre /\\ Tpost is");
+      LemmaStack.printLemmas(System.out, post_assumptions);
+    }
 
-    System.out.println("Apost consists of " + a_post.size() + " invariants.");
+    System.out.println("Apost consists of " + post_conclusions.size()
+                       + " invariants.");
 
-    evaluateImplications(post_assumptions, a_post);
-
-//     System.out.println("Apre consists of " + a_pre.size() + " invariants:");
-//     }
+    evaluateImplications(post_assumptions, post_conclusions);
   }
 }
