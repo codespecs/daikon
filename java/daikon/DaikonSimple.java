@@ -272,24 +272,21 @@ public class DaikonSimple {
     * PptMap) for each ppt in turn.)
     **/
   public static void init_partial_order(PptMap all_ppts) {
-    // If we are doing bottom up as opposed to top down
-    if (Daikon.dkconfig_df_bottom_up) {
 
-      // Create combined exit points
-      Dataflow.create_combined_exits(all_ppts);
+    // Create combined exit points
+    Daikon.create_combined_exits(all_ppts);
 
-      // Setup orig variables
-      for (Iterator i = all_ppts.ppt_all_iterator(); i.hasNext();) {
-        PptTopLevel ppt = (PptTopLevel) i.next();
-        create_and_relate_orig_vars(ppt, all_ppts);
-      }
-      // Set up derived variables
-      for (Iterator i = all_ppts.ppt_all_iterator(); i.hasNext();) {
-        PptTopLevel ppt = (PptTopLevel) i.next();
-        ppt.create_derived_variables();
-      }
-      return;
+    // Setup orig variables
+    for (Iterator i = all_ppts.ppt_all_iterator(); i.hasNext();) {
+      PptTopLevel ppt = (PptTopLevel) i.next();
+      create_and_relate_orig_vars(ppt, all_ppts);
     }
+    // Set up derived variables
+    for (Iterator i = all_ppts.ppt_all_iterator(); i.hasNext();) {
+      PptTopLevel ppt = (PptTopLevel) i.next();
+      ppt.create_derived_variables();
+    }
+    return;
   }
 
   /**
