@@ -1,3 +1,9 @@
+#if 0
+Do not attempt to compile this file with a Java compiler such as javac.
+You first need to preprocess it with cpp, the C preprocessor.
+The correct way to build the system is to run 'make'.
+#endif
+
 #if !(defined(ARITY1) || defined(ARITY2) || defined(ARITY3))
 #error "One of ARITY1, ARITY2, or ARITY3 should be defined"
 #endif

@@ -1,3 +1,9 @@
+#if 0
+Do not attempt to compile this file with a Java compiler such as javac.
+You first need to preprocess it with cpp, the C preprocessor.
+The correct way to build the system is to run 'make'.
+#endif
+
 #define stringify(NAME) #NAME
 
 package utilMDE;
