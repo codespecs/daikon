@@ -586,7 +586,8 @@ public abstract class Invariant
     }
 
     // All the variables are always-comparable, just return the first one
-    return (ppt.var_infos[0].comparability);
+   // return (ppt.var_infos[0].comparability);
+   return VarComparabilityImplicit.unknown;
   }
 
   /**
