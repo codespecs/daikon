@@ -191,7 +191,7 @@ public final class Daikon {
   // expressions with lots of parens
   public static OutputFormat output_style = OutputFormat.DAIKON;
   // public static OutputFormat output_style = OutputFormat.ESCJAVA;
-  // public static OutputFormat output_style = OutputFormat.DBCJAVA; //@tx
+  // public static OutputFormat output_style = OutputFormat.DBCJAVA;
   // public static OutputFormat output_style = OutputFormat.SIMPLIFY;
 
   // When true, output numbers of values and samples (also names of variables)
@@ -265,7 +265,7 @@ public final class Daikon {
   public static final String test_ioa_output_SWITCH = "test_ioa_output";
   public static final String java_output_SWITCH = "java_output";
   public static final String jml_output_SWITCH = "jml_output";
-  public static final String dbc_output_SWITCH = "dbc_output";  //@tx
+  public static final String dbc_output_SWITCH = "dbc_output";
   public static final String mem_stat_SWITCH = "mem_stat";
   public static final String simplify_output_SWITCH = "simplify_output";
   public static final String output_num_samples_SWITCH = "output_num_samples";
@@ -480,7 +480,7 @@ public final class Daikon {
       new LongOpt(conf_limit_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(esc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(simplify_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(dbc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0), // @CP
+      new LongOpt(dbc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(ioa_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(test_ioa_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(java_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -601,7 +601,7 @@ public final class Daikon {
           output_style = OutputFormat.JAVA;
         } else if (jml_output_SWITCH.equals(option_name)) {
           output_style = OutputFormat.JML;
-        } else if (dbc_output_SWITCH.equals(option_name)) { //@tx
+        } else if (dbc_output_SWITCH.equals(option_name)) {
           output_style = OutputFormat.DBCJAVA;
         } else if (mem_stat_SWITCH.equals(option_name)) {
           use_mem_monitor = true;
