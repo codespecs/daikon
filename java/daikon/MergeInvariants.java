@@ -30,9 +30,6 @@ public class MergeInvariants {
       "      Specify a configuration option ",
       "  --" + Daikon.debug_SWITCH,
       "      Specify a logger to enable",
-      "  --" + Daikon.noinvariantguarding_SWITCH,
-      "      Disable invariant guarding, which is normally on for "
-             + "JML and ESC output formats.",
       "  --" + Daikon.track_SWITCH,
       "      Specify a class, varinfos, and ppt to debug track.  Format"
              + "is class<var1,var2,var3>@ppt",
