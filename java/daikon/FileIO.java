@@ -105,13 +105,13 @@ public final class FileIO {
   public static boolean dkconfig_unmatched_procedure_entries_quiet = false;
 
   /**
-   * Boolean.  When true, suppress (rather than re-throw) IOExceptions.
+   * Boolean.  When true, suppress Exceptions related to file reading.
    * This permits Daikon to continue even if there is a malformed trace
    * file.  Use this with care:  in general, it is better to fix the
    * problem that caused a bad trace file, rather than to suppress the
    * exception.
    **/
-  public static boolean dkconfig_continue_after_ioexception = false;
+  public static boolean dkconfig_continue_after_file_exception = false;
 
 /// Variables
 
@@ -752,11 +752,13 @@ public final class FileIO {
             System.out.println ("WARNING: Unexpected EOF while processing "
                           + "trace file - last record of trace file ignored");
             break;
-          } else if (dkconfig_continue_after_ioexception) {
+          } else if (dkconfig_continue_after_file_exception) {
             System.out.println ();
             System.out.println ("WARNING: IOException while processing "
                           + "trace file - record ignored");
+            System.out.print ("Ignored backtrace:");
             e.printStackTrace(System.out);
+            System.out.println ();
             while (nextLine != null && ! nextLine.equals("")) {
               // System.out.println("Discarded line " + reader.getLineNumber() + ": " + nextLine);
               nextLine = reader.readLine();
@@ -776,7 +778,20 @@ public final class FileIO {
         }
 
         // Add orig and derived variables; pass to inference (add_and_flow)
-        processor.process_sample (all_ppts, ppt, vt, nonce);
+        try {
+          processor.process_sample (all_ppts, ppt, vt, nonce);
+        } catch (Error e) {
+          if (! dkconfig_continue_after_file_exception) {
+            throw e;
+          } else {
+            System.out.println ();
+            System.out.println ("WARNING: Error while processing "
+                          + "trace file - record ignored");
+            System.out.print ("Ignored backtrace:");
+            e.printStackTrace(System.out);
+            System.out.println ();
+          }
+        }
         // Debug.check (all_ppts, " ppt = " + ppt.name()
         //             + " " + Debug.related_vars (ppt, vt));
       }
