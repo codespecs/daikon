@@ -42,10 +42,13 @@ alias	cvsupdate	'cvs -q update -d \!* |& egrep -e "^C |update aborted|non-existe
 setenv DFEJ_VERBOSE 1
 
 # Update after AFS move
-if (-e /g2/users/mernst) then
+if (-e /afs/csail.mit.edu/u/m/mernst) then
+    setenv BIBINPUTS .:/afs/csail.mit.edu/u/m/mernst/bib:..:
+    alias bibfind /afs/csail.mit.edu/u/m/mernst/bin/Linux-i686/help .n .F /afs/csail.mit.edu/u/m/mernst/bib/bibroot.non-mde
+else if (-e /g2/users/mernst) then
     setenv BIBINPUTS .:/g2/users/mernst/bib:..:
     alias bibfind /g2/users/mernst/bin/Linux-i686/help .n .F /g2/users/mernst/bib/bibroot.non-mde
-else if (-e /var/autofs/net/pag/g2/users/mernst) then
+else if (-e /var/autofs/net/pag/g2/users/mernst/bib) then
     setenv BIBINPUTS .:/var/autofs/net/pag/g2/users/mernst/bib:..:
     alias bibfind /var/autofs/net/pag/g2/users/mernst/bin/Linux-i686/help .n .F /var/autofs/net/pag/g2/users/mernst/bib/bibroot.non-mde
 endif

@@ -44,7 +44,10 @@ export PATH=`echo $PATH | ${INV}/scripts/path-remove.pl`
 export DFEJ_VERBOSE=1
 
 # Update after AFS move
-if [ -e /g2/users/mernst ]; then
+if [ -e /afs/csail.mit.edu/u/m/mernst ]; then
+  alias bibfind='/afs/csail.mit.edu/u/m/mernst/bin/Linux-i686/help .n .F /afs/csail.mit.edu/u/m/mernst/bib/bibroot.non-mde'
+  export BIBINPUTS=.:/afs/csail.mit.edu/u/m/mernst/bib:..:
+elif [ -e /g2/users/mernst ]; then
   alias bibfind='/g2/users/mernst/bin/Linux-i686/help .n .F /g2/users/mernst/bib/bibroot.non-mde'
   export BIBINPUTS=.:/g2/users/mernst/bib:..:
 elif [ -e /var/autofs/net/pag/g2/users/mernst ]; then
