@@ -321,6 +321,9 @@ public final class Daikon {
   public static final Logger debugEquality =
     Logger.getLogger("daikon.Equality");
 
+  /** Debug tracer for ppt initialization. **/
+  public static final Logger debugInit = Logger.getLogger("daikon.init");
+
   /** Prints out statistics concerning equality sets, suppressions, etc. **/
   public static final Logger debugStats = Logger.getLogger("daikon.stats");
 
@@ -394,7 +397,7 @@ public final class Daikon {
     load_spinfo_files(all_ppts, spinfo_files);
     load_map_files(all_ppts, map_files);
 
-    Dataflow.init_partial_order(all_ppts);
+    init_ppts (all_ppts);
     if (debugTrace.isLoggable(Level.FINE)) {
       debugTrace.fine("Partial order initialized");
     }
@@ -1158,6 +1161,142 @@ public final class Daikon {
     }
   }
 
+  /**
+   * Creates upper program points by merging together the invariants
+   * from all of the lower points.
+   */
+  public static void createUpperPpts (PptMap all_ppts) {
+
+    // Process each ppt that doesn't have a parent
+    for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) i.next();
+      if (ppt.parents.size() == 0) {
+        ppt.mergeInvs();
+      }
+    }
+  }
+
+  /**
+   * Create combined exit points, setup splitters, and add orig and
+   * derived variables,
+   */
+  public static void init_ppts (PptMap all_ppts) {
+
+    // Create combined exit points
+    progress = "Creating combined exit points";
+    create_combined_exits (all_ppts);
+
+    // Setup splitters.  This must be done after creating the
+    // combined exit points and before adding derived variables
+    setup_splitters(all_ppts);
+
+    // Setup orig variables
+    for (Iterator i = all_ppts.ppt_all_iterator(); i.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) i.next();
+      progress = "Creating orig variables for: " +ppt.ppt_name.toString();
+      create_and_relate_orig_vars (ppt, all_ppts);
+    }
+
+    // Set up derived variables
+    for (Iterator i = all_ppts.ppt_all_iterator(); i.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) i.next();
+      progress = "Creating derived variables for: " +ppt.ppt_name.toString();
+      ppt.create_derived_variables();
+    }
+
+  }
+
+
+  /**
+   * Create EXIT program points as needed for EXITnn program points.
+   */
+  public static void create_combined_exits(PptMap ppts) {
+    List newPpts = new LinkedList();
+
+    for (Iterator i = ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) i.next();
+    }
+
+    for (Iterator i = ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) i.next();
+      // skip unless its an EXITnn
+      if (! (ppt.ppt_name.isExitPoint() && !ppt.ppt_name.isCombinedExitPoint())) {
+        continue;
+      }
+
+      PptTopLevel exitnn_ppt = ppt;
+      PptName exitnn_name = exitnn_ppt.ppt_name;
+      PptName exit_name = ppt.ppt_name.makeExit();
+      PptTopLevel exit_ppt = ppts.get(exit_name);
+
+      if (debugInit.isLoggable(Level.FINE))
+        debugInit.fine ("create_combined_exits: encounted exit "
+                        + exitnn_ppt.name());
+
+      // Create the exit, if necessary
+      if (exit_ppt == null) {
+        VarInfo[] exit_vars = VarInfo.arrayclone_simple(ppt.var_infos);
+        exit_ppt = new PptTopLevel(exit_name.getName(), exit_vars);
+        newPpts.add(exit_ppt);
+        if (debugInit.isLoggable(Level.FINE))
+          debugInit.fine ("create_combined_exits: created exit "
+                          + exit_name);
+      }
+    }
+
+    ppts.addAll (newPpts);
+  }
+
+  /**
+   * Add orig() variables to the given EXIT/EXITnn point, Does nothing if
+   * exit_ppt is not an EXIT/EXITnn.  Does not relate if point is EXITnn.
+   */
+  private static void create_and_relate_orig_vars(PptTopLevel exit_ppt,
+                                                  PptMap ppts) {
+    if (! exit_ppt.ppt_name.isExitPoint()) {
+      return;
+    }
+
+    if (debugInit.isLoggable(Level.FINE)) {
+      debugInit.fine ("Doing create and relate orig vars for: "
+                       + exit_ppt.name());
+    }
+
+    PptTopLevel entry_ppt = ppts.get(exit_ppt.ppt_name.makeEnter());
+    Assert.assertTrue(entry_ppt != null, exit_ppt.name());
+
+    // comb_exit_ppt may be same as exit_ppt if exit_ppt is EXIT
+    PptTopLevel comb_exit_ppt = ppts.get(exit_ppt.ppt_name.makeExit());
+    // Add "orig(...)" (prestate) variables to the program point.
+    // Don't bother to include the constants.  Walk through
+    // entry_ppt's vars.  For each non-constant, put it on the
+    // new_vis worklist after fixing its comparability information.
+    exit_ppt.num_orig_vars = entry_ppt.num_tracevars;
+    VarInfo[] new_vis = new VarInfo[exit_ppt.num_orig_vars];
+    {
+      VarInfo[] entry_ppt_vis = entry_ppt.var_infos;
+      int new_vis_index = 0;
+      for (int k = 0; k < entry_ppt.num_declvars; k++) {
+        VarInfo vi = entry_ppt_vis[k];
+        Assert.assertTrue(!vi.isDerived(), "Derived when making orig(): " + vi.name);
+        if (vi.isStaticConstant())
+          continue;
+        VarInfo origvar = VarInfo.origVarInfo(vi);
+        // Fix comparability
+        VarInfo postvar = exit_ppt.findVar(vi.name);
+        Assert.assertTrue(postvar != null, "Exit not superset of entry: "  + vi.name);
+        origvar.comparability = postvar.comparability.makeAlias(origvar.name);
+
+        // Add to new_vis
+        new_vis[new_vis_index] = origvar;
+        new_vis_index++;
+      }
+      Assert.assertTrue(new_vis_index == exit_ppt.num_orig_vars);
+    }
+    exit_ppt.addVarInfos(new_vis);
+  }
+
+
   ///////////////////////////////////////////////////////////////////////////
   // Read decls, dtrace, etc. files
 
@@ -1229,6 +1368,11 @@ public final class Daikon {
     }
   }
 
+  /**
+   * Sets up splitting on all ppts.  Currently only binary splitters
+   * over boolean returns or exactly two return statements are enabled
+   * by default (though other splitters can be defined by the user)
+   */
   public static void setup_splitters(PptMap all_ppts) {
     if (dkconfig_disable_splitting) {
       return;
@@ -1265,6 +1409,9 @@ public final class Daikon {
    * print the progress display at all.
    **/
   public static int dkconfig_progress_delay = 1000;
+
+  /** Indicate progress for FileIOProgress. **/
+  public static String progress = "";
 
   /**
    * The number of columns of progress information to display. In many
@@ -1359,7 +1506,7 @@ public final class Daikon {
         if (Dataflow.progress == null) {
           return "[no status]";
         } else {
-          return Dataflow.progress;
+          return Daikon.progress;
         }
       }
       LineNumberReader lnr = FileIO.data_trace_reader;
@@ -1491,7 +1638,7 @@ public final class Daikon {
       // Calculate invariants at all non-leaf ppts
       if (use_dataflow_hierarchy) {
         debugProgress.fine("createUpperPpts");
-        Dataflow.createUpperPpts(all_ppts);
+        createUpperPpts(all_ppts);
         debugProgress.fine("createUpperPpts ... done");
       }
     }
@@ -1514,6 +1661,7 @@ public final class Daikon {
       undoOpts(all_ppts);
     }
 
+    // Debug print information about equality sets
     if (debugEquality.isLoggable(Level.FINE)) {
       for (Iterator itor = all_ppts.ppt_all_iterator();
         itor.hasNext();
@@ -1523,16 +1671,14 @@ public final class Daikon {
       }
     }
 
-    debugProgress.fine(
-      "Time spent on non-implication postprocessing: "
-        + stopwatch.format());
+    debugProgress.fine ("Time spent on non-implication postprocessing: "
+                        + stopwatch.format());
 
     // Add implications
     stopwatch.reset();
     fileio_progress.clear();
-    if(!Daikon.dkconfig_quiet) {
-    System.out.println("Creating implications ");
-    }
+    if(!Daikon.dkconfig_quiet)
+      System.out.println("Creating implications ");
     debugProgress.fine("Adding Implications ... ");
     for (Iterator itor = all_ppts.pptIterator(); itor.hasNext();) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
@@ -1550,6 +1696,10 @@ public final class Daikon {
     }
   }
 
+  /**
+   * Print out basic statistics (samples, invariants, variables, etc)
+   * about each ppt
+   */
   public static void ppt_stats (PptMap all_ppts) {
 
     int all_ppt_cnt = 0;
@@ -1587,6 +1737,9 @@ public final class Daikon {
     Fmt.pf ("PPts w/sample count = " + ppt_w_sample_cnt);
   }
 
+  /**
+   * Process the invariants with simplify to remove redundant invariants
+   */
   private static void suppressWithSimplify(PptMap all_ppts) {
     System.out.print("Invoking Simplify to identify redundant invariants");
     System.out.flush();
@@ -1600,11 +1753,16 @@ public final class Daikon {
     System.out.println(stopwatch.format());
   }
 
+  /**
+   * Initialize NIS suppression
+   */
   public static void setup_NISuppression() {
-
     NIS.init_ni_suppression();
   }
 
+  /**
+   * Initialize the equality sets for each variable
+   */
   public static void setupEquality(PptMap allPpts) {
 
     // PptSliceEquality does all the necessary instantiations
@@ -1614,28 +1772,26 @@ public final class Daikon {
       for (Iterator i = allPpts.pptIterator(); i.hasNext();) {
         PptTopLevel ppt = (PptTopLevel) i.next();
 
-        if (dkconfig_df_bottom_up) {
-          // Skip points that are not leaves
-          if (use_dataflow_hierarchy) {
-            if (!ppt.ppt_name.isGlobalPoint()
-              && !ppt.ppt_name.isNumberedExitPoint())
-              continue;
-          }
+        // Skip points that are not leaves
+        if (use_dataflow_hierarchy) {
+          if (!ppt.ppt_name.isGlobalPoint()
+            && !ppt.ppt_name.isNumberedExitPoint())
+            continue;
+        }
 
-          // setup equality on the splitters of a point with splitters
-          if (ppt.has_splitters()) {
-            for (Iterator ii = ppt.cond_iterator();
-              ii.hasNext();
-              ) {
-              PptConditional ppt_cond =
-                (PptConditional) ii.next();
-              ppt_cond.equality_view =
-                new PptSliceEquality(ppt_cond);
-              ppt_cond.equality_view.instantiate_invariants();
-            }
-            if (use_dataflow_hierarchy)
-              continue;
+        // setup equality on the splitters of a point with splitters
+        if (ppt.has_splitters()) {
+          for (Iterator ii = ppt.cond_iterator();
+            ii.hasNext();
+            ) {
+            PptConditional ppt_cond =
+              (PptConditional) ii.next();
+            ppt_cond.equality_view =
+              new PptSliceEquality(ppt_cond);
+            ppt_cond.equality_view.instantiate_invariants();
           }
+          if (use_dataflow_hierarchy)
+            continue;
         }
 
         // Create the initial equality sets
@@ -1646,6 +1802,9 @@ public final class Daikon {
 
   }
 
+  /**
+   * Create user defined splitters
+   */
   public static void create_splitters(PptMap all_ppts, Set spinfo_files)
     throws IOException {
     for (Iterator i = spinfo_files.iterator(); i.hasNext();) {
@@ -1685,10 +1844,12 @@ public final class Daikon {
     }
   }
 
-  // Guard the invariants at all PptTopLevels. Note that this changes
-  // the contents of the PptTopLevels, and the changes made should
-  // probably not be written out to an inv file (save the file before
-  // this is called).
+  /**
+   * Guard the invariants at all PptTopLevels. Note that this changes
+   * the contents of the PptTopLevels, and the changes made should
+   * probably not be written out to an inv file (save the file before
+   * this is called).
+   */
   public static void guardInvariants(PptMap allPpts) {
     for (Iterator i = allPpts.asCollection().iterator(); i.hasNext();) {
       PptTopLevel ppt = (PptTopLevel) i.next();
@@ -1707,6 +1868,9 @@ public final class Daikon {
     }
   }
 
+  /**
+   * Removed invariants as specified in omit_types
+   */
   private static void processOmissions(PptMap allPpts) {
     if (omit_types['0'])
       allPpts.removeUnsampled();
@@ -1788,9 +1952,10 @@ public final class Daikon {
     throw new Error("ppt_cnt " + ppt_cnt + " ppts.size " + ppts.size());
   }
 
-  /** Undoes the invariants suppressed for the dynamic constant, suppression and equality set
-  *  optimizations (should yield the same invariants as the simple incremental algorithm
-  *
+ /**
+  * Undoes the invariants suppressed for the dynamic constant,
+  * suppression and equality set optimizations (should yield the same
+  * invariants as the simple incremental algorithm
   */
   private static void undoOpts(PptMap all_ppts) {
 
@@ -1858,18 +2023,18 @@ public final class Daikon {
   }
 
   /**
-       * Instantiate invariants from each inv's leader.  This is like
-       * instantiate_invariants at the start of reading the trace file,
-       * where we create new PptSliceNs.  This is called when newVis have
-       * just split off from leader, and we want the leaders of newVis to
-       * have the same invariants as leader.
-       * @param leader the old leader
-       * @param newVis a List of new VarInfos that used to be equal to
-       * leader.  Actually, it's the list of canonical that were equal to
-       * leader, representing their own newly-created equality sets.
-       * post: Adds the newly instantiated invariants and slices to
-       * this.parent.
-       **/
+   * Instantiate invariants from each inv's leader.  This is like
+   * instantiate_invariants at the start of reading the trace file,
+   * where we create new PptSliceNs.  This is called when newVis have
+   * just split off from leader, and we want the leaders of newVis to
+   * have the same invariants as leader.
+   * @param leader the old leader
+   * @param newVis a List of new VarInfos that used to be equal to
+   * leader.  Actually, it's the list of canonical that were equal to
+   * leader, representing their own newly-created equality sets.
+   * post: Adds the newly instantiated invariants and slices to
+   * this.parent.
+   */
   private static List /*Invariant*/
   copyInvsFromLeader(
     PptSliceEquality equality,
@@ -1882,7 +2047,7 @@ public final class Daikon {
     //      debug.fine ("copyInvsFromLeader: " + parent.name() + ": leader "
     //            + leader.name.name()
     //            + ": new leaders = " + VarInfo.toString (newVis));
-    //      debug.fine ("  orig slices count:" + parent.views_size());
+    //      debug.fine ("  orig slices count:" + parent.numViews());
     //    }
 
     // Copy all possible combinations from the current ppt (with repetition)
@@ -1929,32 +2094,8 @@ public final class Daikon {
       equality.parent.addSlice(slice);
     }
 
-    // Copy any invariants from the global ppt to here
-    List mod_slices = equality.copy_invs_from_global_leader(leader, newVis);
-
     equality.parent.repCheck();
 
-    //    if (debug.isLoggable(Level.FINE)) {
-    //      debug.fine ("  new slices count:" + parent.views_size());
-    //    }
-
-    // Go through each new invariant and remove any that are ni-suppressed.
-    // This must be done here, rather than when creating the invariant to
-    // guarantee that any possible suppressors have been copied before
-    // doing the suppression check.  It may be that we need to do ALL of
-    // equality set copying before doing this check (in case suppressors
-    // from different equality sets are required).  I think that we only
-    // need to do with invariants copied from global slices since any
-    // local ones should only exist if they are not suppressed.
-    for (Iterator i = mod_slices.iterator(); i.hasNext();) {
-      PptSlice slice = (PptSlice) i.next();
-      for (Iterator j = slice.invs.iterator(); j.hasNext();) {
-        Invariant inv = (Invariant) j.next();
-        if (!inv.copy_ok(slice)) {
-          j.remove();
-        }
-      }
-    }
     return (falsified_invs);
   }
 
@@ -2073,22 +2214,22 @@ public final class Daikon {
     }
   }
   /**
-     * Create a List of Equality invariants based on the values given
-     * by vt for the VarInfos in vis.  Any variables that are out
-     * of bounds are forced into a separate equality set (since they
-     * no longer make sense and certainly shouldn't be equal to anything
-     * else)
-     * @param vis The VarInfos that were different from leader
-     * @param vt The ValueTuple associated with the VarInfos now
-     * @param leader The original leader of VarInfos
-     * @param count The number of samples seen (needed to set the number
-     * of samples for the new Equality invariants)
-     * @return a List of Equality invariants bundling together same
-     * values from vis, and if needed, another representing all the
-     * missing values.
-     * pre vis.size() > 0
-     * post result.size() > 0
-     **/
+   * Create a List of Equality invariants based on the values given
+   * by vt for the VarInfos in vis.  Any variables that are out
+   * of bounds are forced into a separate equality set (since they
+   * no longer make sense and certainly shouldn't be equal to anything
+   * else)
+   * @param vis The VarInfos that were different from leader
+   * @param vt The ValueTuple associated with the VarInfos now
+   * @param leader The original leader of VarInfos
+   * @param count The number of samples seen (needed to set the number
+   * of samples for the new Equality invariants)
+   * @return a List of Equality invariants bundling together same
+   * values from vis, and if needed, another representing all the
+   * missing values.
+   * pre vis.size() > 0
+   * post result.size() > 0
+   */
   private static List /*[Equality]*/
   createEqualityInvs(List vis, Equality leader, PptSliceEquality slice) {
     Assert.assertTrue(vis.size() > 0);
