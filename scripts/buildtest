@@ -2,5 +2,13 @@
 
 # Used by the cron job that runs as user daikonbuildtest
 
+# How to setup an account for nightly build/test:
+# 1. Create user named 'daikonbuildtest'
+# 2. Login as user 'daikonbuildtest'
+# 3. `mkdir $HOME/build $HOME/research`
+# 4. `cd $HOME/research`
+# 5. `cvs -d /g4/projects/invariants/.CVS/ co invariants/scripts`
+# 6. `crontab $HOME/research/invariants/scripts/buildtest.crontab`
+
 cd $HOME/build
 exec /usr/local/bin/perl $HOME/research/invariants/scripts/buildtest.pl --quiet
