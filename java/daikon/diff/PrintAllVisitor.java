@@ -19,14 +19,13 @@ public class PrintAllVisitor implements NodeVisitor {
   }
 
   public void visitRootNode(RootNode node) {
-    println("root");
   }
 
   public void visitPptNode(PptNode node) {
     Ppt ppt1 = node.getPpt1();
     Ppt ppt2 = node.getPpt2();
 
-    print("  " + "<");
+    print("<");
     if (ppt1 == null) {
       print((String) null);
     } else {
@@ -48,7 +47,7 @@ public class PrintAllVisitor implements NodeVisitor {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
 
-    print("    " + "<");
+    print("  " + "<");
     if (inv1 == null) {
       print((String) null);
     } else {
@@ -74,22 +73,19 @@ public class PrintAllVisitor implements NodeVisitor {
   protected void printInvariant(Invariant inv, InvNode node) {
     if (verbose) {
       print(inv.repr_prob());
-      printVerbosePrintability(inv);
+      print(" {");
+      printPrintability(inv);
+      print("}");
     } else {
       print(inv.format());
-      printProbabilityAndPrintability(inv);
-    }
+      print(" {");
+      printProbability(inv);
+      printPrintability(inv);
+      print("}");
+    }    
   }
 
-  private void printVerbosePrintability(Invariant inv) {
-    print(" {");
-    print(inv.isWorthPrinting_sansControlledCheck_debug());
-    print("}");
-  }
-
-  private void printProbabilityAndPrintability(Invariant inv) {
-    print(" {");
-
+  private void printProbability(Invariant inv) {
     double prob = inv.getProbability();
 
     // Round small probabilities to .0001
@@ -98,12 +94,14 @@ public class PrintAllVisitor implements NodeVisitor {
     }
 
     print(PROBABILITY_FORMAT.format(prob));
+  }
+
+  private void printPrintability(Invariant inv) {
     if (inv.isWorthPrinting()) {
       print("+");
     } else {
       print("-");
     }
-    print("}");
   }
 
   protected void print(String s) {
