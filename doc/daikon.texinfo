@@ -3781,10 +3781,10 @@ follows:
 
 dfec uses the non-@samp{__GNUC__} branch.  (Many non-standard
 extensions are enabled when @samp{__GNUC__} is defined, and dfec can
-many but not all of them.)  In C, it is legal to cast the number 0 to
-a struct.  Such a cast is not legal in C++.  Because dfec's input must
-be both legal C and legal C++, dfec issues an error message for line
-179 of @file{wc.c}.
+understand many but not all of them.)  In C, it is legal to cast the
+number 0 to a struct.  Such a cast is not legal in C++.  Because
+dfec's input must be both legal C and legal C++, dfec issues an error
+message for line 179 of @file{wc.c}.
 
 To work around the problem, execute the following two lines to create
 a local copy of @file{bits/types.h}:
