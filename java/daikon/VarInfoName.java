@@ -33,34 +33,6 @@ public abstract class VarInfoName
       return parse(name.substring(0, name.length()-6)).applyTypeOf();
     }
 
-    // stringvar.hashCode
-    if (name.endsWith(".hashCode")) {
-      // This is a temporary term in the AST, so that we can
-      // instrument String hashcodes.  We will change dfej to do that
-      // in another more general way when time allows.
-      final VarInfoName term = parse(name.substring(0, name.length()-9));
-      return (new VarInfoName() {
-	  protected String repr_impl() {
-	    return "HashCode[" + term.repr() + "]";
-	  }
-	  protected String name_impl() {
-	    return term.name();
-	  }
-	  protected String esc_name_impl() {
-	    return term.esc_name();
-	  }
-	  protected String ioa_name_impl(String classname) {
-	    return term.ioa_name(classname);
-	  }
-	  protected String simplify_name_impl(boolean prestate) {
-	    return term.simplify_name(prestate);
-	  }
-	  public Object accept(Visitor v) {
-	    return term.accept(v);
-	  }
-	}).intern();
-    }
-
     // x or this.x
     if ((name.indexOf('[') == -1) && (name.indexOf('(') == -1)) {
       // checking for only legal characters would be more robust

@@ -4,6 +4,8 @@ import daikon.*;
 
 import org.apache.log4j.Category;
 
+import java.io.Serializable;
+
 /**
  * Structure that represents a derivation; can generate values and
  * derived variables from base variables.  A Derivation has a set of
@@ -14,52 +16,61 @@ import org.apache.log4j.Category;
  * variables and finds the value of the derived variable.  Use
  * computeValueandModified() to get value.  Derivations are created by
  * DerivationFactory.
- *
  **/
-
-public interface Derivation extends java.io.Serializable {
+public abstract class Derivation
+  implements Serializable
+{
 
   public static final Category debug = Category.getInstance (Derivation.class.getName());
 
   // This is static, so we can't mention it here.
-  // It's in DerivationFactory, though.
+  // It's in DerivationFactory, though. // really?
   // public boolean applicable();
 
 
   // This is essentially a clone() method that also switches the variables.
-  public Derivation switchVars(VarInfo[] old_vars, VarInfo[] new_vars);
+  public abstract Derivation switchVars(VarInfo[] old_vars, VarInfo[] new_vars);
 
   /**
-   * Return a pair of: the derived value and whether the variable
+   * @return array of the VarInfos this was derived from
+   **/
+  public abstract VarInfo[] getBases();
+
+  /**
+   * @return a pair of: the derived value and whether the variable
    * counts as modified.
    * @param vt The set of values in a program point that will be
    * used to derive the value.
    *
    **/
+  public abstract ValueAndModified computeValueAndModified(ValueTuple vt);
 
   // I think the separate computeModified and computeValue functions aren't
   // so useful, particularly since the same computation must usually be done
   // in both functions.
-
   // public abstract int computeModified(ValueTuple vt);
   // public abstract int computeModified(int[] mods);
-
   // public abstract Object computeValue(ValueTuple vt);
   // public abstract Object computeValue(Object[] vals);
-
-  public abstract ValueAndModified computeValueAndModified(ValueTuple vt);
 
   /**
    * Get the VarInfo that this would represent.  However,
    * the VarInfo can't be used to obtain values without further
    * modification - use computeValueAndModified() for this.
    * @see Derivation#computeValueAndModified
-   *
    **/
+  public VarInfo getVarInfo() {
+    if (this_var_info == null) {
+      this_var_info = makeVarInfoWithPO();
+      this_var_info.derived = this;
+      getBases();
+    }
+    return this_var_info;
+  }
+  private VarInfo this_var_info;
 
-  // Same implementation in all subclasses, but I can't give it here
-  // in an interface.
-  public abstract VarInfo getVarInfo();
+  // This is in each class, but I can't have a private abstract method.
+  protected abstract VarInfo makeVarInfoWithPO();
 
   /** 
    * For debugging only; returns true if the variables from which this

@@ -856,6 +856,7 @@ public class PptTopLevel
   /**
    * Install views (and thus invariants).
    * We create NO views over static constant variables, but everything else is fair game.
+   * We don't create views over variables which have a higher (controlling) view
    * This function does NOT cause invariants over the new views to be checked.
    * The installed views and invariants will all have at least one element with
    * index i such that vi_index_min <= i < vi_index_limit.
@@ -891,6 +892,8 @@ public class PptTopLevel
       if (vi.isStaticConstant())
         continue;
       PptSlice1 slice1 = new PptSlice1(this, vi);
+      if (slice1.po_higher.size() > 0)
+	continue; // let invariant flow from controlling slice
       slice1.instantiate_invariants();
       unary_views.add(slice1);
     }
@@ -912,6 +915,8 @@ public class PptTopLevel
 	if (var2.isStaticConstant())
 	  continue;
         PptSlice slice2 = new PptSlice2(this, var1, var2);
+	if (slice2.po_higher.size() > 0)
+	  continue; // let invariant flow from controlling slice
         slice2.instantiate_invariants();
         binary_views.add(slice2);
       }
@@ -954,6 +959,8 @@ public class PptTopLevel
               continue;
 
             PptSlice3 slice3 = new PptSlice3(this, var1, var2, var3);
+	    if (slice3.po_higher.size() > 0)
+	      continue; // let invariant flow from controlling slice
             slice3.instantiate_invariants();
             ternary_views.add(slice3);
           }

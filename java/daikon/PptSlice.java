@@ -60,8 +60,8 @@ public abstract class PptSlice extends Ppt {
   private final Collection private_po_lower = new ArrayList(2);  // [PptTopLevel]
   // Map[PptTopLevel -> List[VarInfo[arity]]]; store as the value an array
   // where this.var_infos corresponds to the VarInfos in value.
-  private final Map po_higher_vis = new HashMap();
-  private final Map po_lower_vis = new HashMap();
+  private final Map private_po_higher_vis = new HashMap();
+  private final Map private_po_lower_vis = new HashMap();
 
   /**
    * Slices immediately higher in the partial order (compared to this).
@@ -74,6 +74,7 @@ public abstract class PptSlice extends Ppt {
    * @see po_lower
    **/
   public final Collection po_higher = Collections.unmodifiableCollection(private_po_higher);
+  public final Map po_higher_vis = Collections.unmodifiableMap(private_po_higher_vis);
 
   /**
    * Slices immediately lower in the partial order (compared to this).
@@ -86,6 +87,7 @@ public abstract class PptSlice extends Ppt {
    * @see po_higher
    **/
   public final Collection po_lower = Collections.unmodifiableCollection(private_po_lower);
+  public final Map po_lower_vis = Collections.unmodifiableMap(private_po_lower_vis);
 
   // This holds keys and elements of different types, depending on
   // he concrete child of PptSlice.
@@ -162,17 +164,19 @@ public abstract class PptSlice extends Ppt {
     Assert.assert(slice_vis.length == arity);
 
     Collection private_po = lower ? private_po_lower : private_po_higher;
-    Map po_vis = lower ? po_lower_vis : po_higher_vis;
+    Map po_vis = lower ? private_po_lower_vis : private_po_higher_vis;
 
-    if (!private_po.contains(adj)) {
+    List slices;
+    if (! private_po.contains(adj)) {
       private_po.add(adj);
-      List slices = (List) po_vis.get(adj);
-      if (slices == null) {
-	slices = new ArrayList(1);
-	po_vis.put(adj, slices);
-      }
-      slices.add(slice_vis);
+      Assert.assert(! po_vis.containsKey(adj));
+      slices = new ArrayList(1);
+      po_vis.put(adj, slices);
+    } else {
+      slices = (List) po_vis.get(adj);
+      Assert.assert(slices != null);
     }
+    slices.add(slice_vis);
   }
 
   /* [INCR]
@@ -244,7 +248,7 @@ public abstract class PptSlice extends Ppt {
     for (Iterator j = po_lower.iterator(); j.hasNext(); ) {
       PptTopLevel lower = (PptTopLevel) j.next();
       // For all of the slices
-      List slices_vis = (List) po_lower_vis.get(lower);
+      List slices_vis = (List) private_po_lower_vis.get(lower);
       for (Iterator k = slices_vis.iterator(); k.hasNext(); ) {
 	VarInfo[] slice_vis = (VarInfo[]) k.next();
 	// Ensure the slice exists.

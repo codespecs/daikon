@@ -323,29 +323,10 @@ public class SubSequence extends TwoSequence {
 
       // A subseq B[0..n] => A subseq B
 
-      Vector derivees = new Vector(); // = supervar.derivees; [INCR]
-      {
-	VarInfo[] vis = supervar.ppt.var_infos;
-	for (int i=0; i<vis.length; i++) {
-	  VarInfo vi = vis[i];
-	  Derivation der = vi.derived;
-	  if (der == null) continue;
-	  // perhaps a getBases() method in Derivation would be better
-	  if (der instanceof UnaryDerivation) {
-	    UnaryDerivation uder = (UnaryDerivation) der;
-	    if (uder.base == supervar) derivees.add(der);
-	  } else if (der instanceof BinaryDerivation) {
-	    BinaryDerivation bder = (BinaryDerivation) der;
-	    if (bder.base1 == supervar) derivees.add(der);
-	    if (bder.base2 == supervar) derivees.add(der);
-	  } else {
-	    throw new Error();
-	  }
-	}
-      }
+      List derivees = supervar.derivees();
       // For each variable derived from supervar ("B")
       for (int i=0; i<derivees.size(); i++) {
-        Derivation der = (Derivation) derivees.elementAt(i);
+        Derivation der = (Derivation) derivees.get(i);
         if (der instanceof SequenceScalarSubsequence) {
           // If that variable is "B[0..n]"
           VarInfo supervar_part = der.getVarInfo();

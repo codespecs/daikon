@@ -385,6 +385,7 @@ public final class Daikon {
     try {
       System.out.print("Reading declaration files ");
       PptMap all_ppts = FileIO.read_declaration_files(decl_files);
+      Dataflow.init(all_ppts);
       all_ppts.trimToSize();
       System.out.print(" (read ");
       System.out.print(UtilMDE.nplural(decl_files.size(), "file"));
@@ -419,23 +420,6 @@ public final class Daikon {
       }
     }
   }
-
-  /* Now done as the first sample hits each program point
-  private static void generate_invariants(PptMap all_ppts)
-  {
-    elapsedTime(); // reset timer
-    System.out.print("Creating candidate invariants ");
-    for (Iterator itor = all_ppts.iterator() ; itor.hasNext() ; ) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
-      System.out.print('.');
-      ppt.generate_invariants();
-    }
-    System.out.print(" (processed ");
-    System.out.print(UtilMDE.nplural(all_ppts.asCollection().size(), "program point"));
-    System.out.println(")");
-    debugTrace.debug("Time spent on setup_invariants: " + elapsedTime());
-  }
-  */
 
   ///////////////////////////////////////////////////////////////////////////
   // Infer invariants over the trace data
@@ -548,91 +532,6 @@ public final class Daikon {
       }
     }
   }
-
-  /* [INCR] ... (moved to FileIO)
-  ///////////////////////////////////////////////////////////////////////////
-  //
-  public static void add_combined_exits(PptMap ppts) {
-    // For each collection of related :::EXITnn ppts, add a new ppt (which
-    // will only contain implication invariants).
-
-    Vector new_ppts = new Vector();
-    for (Iterator itor = ppts.iterator() ; itor.hasNext() ; ) {
-      PptTopLevel enter_ppt = (PptTopLevel) itor.next();
-      Vector exits = enter_ppt.exit_ppts;
-      if (exits.size() > 1) {
-        Assert.assert(enter_ppt.ppt_name.isEnterPoint());
-        String exit_name = enter_ppt.ppt_name.makeExit().getName();
-        Assert.assert(ppts.get(exit_name) == null);
-        VarInfo[] comb_vars = VarInfo.arrayclone_simple(Ppt.common_vars(exits));
-        PptTopLevel exit_ppt = new PptTopLevel(exit_name, comb_vars);
-        // {
-        //   System.out.println("Adding " + exit_ppt.name + " because of multiple expt_ppts for " + enter_ppt.name + ":");
-        //   for (int i=0; i<exits.size(); i++) {
-        //     Ppt exit = (Ppt) exits.elementAt(i);
-        //     System.out.print(" " + exit.name);
-        //   }
-        //   System.out.println();
-        // }
-        new_ppts.add(exit_ppt);
-        exit_ppt.entry_ppt = enter_ppt;
-        exit_ppt.set_controlling_ppts(ppts);
-        for (Iterator exit_itor=exits.iterator() ; exit_itor.hasNext() ; ) {
-          PptTopLevel line_exit_ppt = (PptTopLevel) exit_itor.next();
-          line_exit_ppt.controlling_ppts.add(exit_ppt);
-          VarInfo[] line_vars = line_exit_ppt.var_infos;
-          line_exit_ppt.combined_exit = exit_ppt;
-          {
-            // Indices will be used to extract values from a ValueTuple.
-            // ValueTuples do not include static constant values.
-            // comb_index doesn't include those, either.
-
-            int[] indices = new int[comb_vars.length];
-            int new_len = indices.length;
-            int new_index = 0;
-            int comb_index = 0;
-
-	    // comb_vars never contains static finals but line_vars can:
-            // Assert.assert(line_vars.length == comb_vars.length,
-            //            "\nIncorrect number of variables (line=" + 
-	    //	          line_vars.length + ", comb=" + comb_vars.length + 
-	    //		  ") at exit points: " + enter_ppt.name );
-            for (int lv_index=0; lv_index<line_vars.length; lv_index++) {
-              if (line_vars[lv_index].isStaticConstant()) {
-                continue;
-              }
-              if (line_vars[lv_index].name == comb_vars[comb_index].name) {
-                indices[new_index] = comb_index;
-                new_index++;
-              }
-              comb_index++;
-            }
-            line_exit_ppt.combined_exit_var_indices = indices;
-            Assert.assert(new_index == new_len);
-
-            // System.out.println("combined_exit_var_indices " + line_exit_ppt.name);
-            // for (int i=0; i<indices.length; i++) {
-            //   // System.out.print(" " + indices[i]);
-            //   System.out.print(" " + indices[i] + " " + comb_vars[indices[i]].name);
-            // }
-            // System.out.println();
-          }
-        }
-
-        // exit_ppt.num_samples = enter_ppt.num_samples;
-        // exit_ppt.num_values = enter_ppt.num_values;
-      }
-    }
-
-    // System.out.println("add_combined_exits: " + new_ppts.size() + " " + new_ppts);
-
-    // Avoid ConcurrentModificationException by adding after the above loop
-    for (int i=0; i<new_ppts.size(); i++) {
-      ppts.add((PptTopLevel) new_ppts.elementAt(i));
-    }
-
-  }
-  */ // ... [INCR] (moved to FileIO)
 
   ///////////////////////////////////////////////////////////////////////////
   //

@@ -8,10 +8,11 @@ import utilMDE.*;
 /**
  * Abstract class to represent a derived variable that came from
  * two base variables.
- *
  **/
-
-public abstract class BinaryDerivation implements Derivation, Cloneable {
+public abstract class BinaryDerivation
+  extends Derivation
+  implements Cloneable
+{
 
   /**
    * Original variable 1
@@ -33,6 +34,19 @@ public abstract class BinaryDerivation implements Derivation, Cloneable {
     base2 = vi2;
   }
 
+  public VarInfo[] getBases() {
+    return new VarInfo[] { base1, base2 };
+  }
+
+  // This is in each class, but I can't have a private abstract method.
+  protected abstract VarInfo makeVarInfo();
+
+  protected VarInfo makeVarInfoWithPO() {
+    VarInfo result = makeVarInfo();
+    // po..?
+    return result;
+  }
+
   public Derivation switchVars(VarInfo[] old_vars, VarInfo[] new_vars) {
     try {
       BinaryDerivation result = (BinaryDerivation) this.clone();
@@ -46,30 +60,6 @@ public abstract class BinaryDerivation implements Derivation, Cloneable {
   }
 
   public abstract ValueAndModified computeValueAndModified(ValueTuple full_vt);
-
-  /**
-   * Return value for for getVarInfo().
-   **/
-
-  private VarInfo this_var_info;
-  public VarInfo getVarInfo() {
-    if (this_var_info == null) {
-      this_var_info = this.makeVarInfo();
-      this_var_info.derived = this;
-      // base1.derivees.add(this); // [INCR]
-      // base2.derivees.add(this); // [INCR]
-    }
-    return this_var_info;
-  }
-
-  /**
-   * Used by all child classes to actually create the VarInfo this
-   * represents, after which it is interned for getVarInfo().
-   *
-   **/
-
-  // This is in each class, but I can't have a private abstract method.
-  protected abstract VarInfo makeVarInfo();
 
   public int derivedDepth() {
     return 1 + Math.max(base1.derivedDepth(), base2.derivedDepth());

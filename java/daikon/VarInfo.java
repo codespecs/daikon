@@ -96,7 +96,7 @@ public final class VarInfo
   /**
    * Vector of Derivation objects
    **/
-  /* [INC] dead code
+  /* [INCR] is now computed on the fly by derivees() method
   public Vector derivees;
   */
 
@@ -341,12 +341,12 @@ public final class VarInfo
    * @see po_lower()
    * @see po_higher_nonce()   
    **/
-  public Collection po_higher() {
+  public List po_higher() {
     if (po_higher == null) {
       return Collections.EMPTY_LIST;
     }
     if (po_higher instanceof VarInfo) {
-      return Collections.singleton(po_higher);
+      return Collections.singletonList(po_higher);
     }
     VarInfo[] ary = (VarInfo[]) po_higher;
     return Collections.unmodifiableList(Arrays.asList(ary));
@@ -367,15 +367,33 @@ public final class VarInfo
    * Elements are VarInfos.  Contains no duplicates.
    * @see po_higher()
    **/
-  public Collection po_lower() {
+  public List po_lower() {
     if (po_lower == null) {
       return Collections.EMPTY_LIST;
     }
     if (po_lower instanceof VarInfo) {
-      return Collections.singleton(po_lower);
+      return Collections.singletonList(po_lower);
     }
     VarInfo[] ary = (VarInfo[]) po_lower;
     return Collections.unmodifiableList(Arrays.asList(ary));
+  }
+
+  /**
+   * @return read-only int[] giving the nonces for po_higher()
+   * @see po_higher()
+   **/
+  public int[] po_lower_nonce() {
+    List lo = po_lower();
+    int[] result = new int[lo.size()];
+    for (int i = 0; i < result.length; i++) {
+      VarInfo lower = (VarInfo) lo.get(i);
+      List hi = lower.po_higher();
+      int index = hi.indexOf(this);
+      Assert.assert(index >= 0);
+      int nonce = lower.po_higher_nonce[index];
+      result[i] = nonce;
+    }
+    return result;
   }
 
   /**
@@ -461,7 +479,7 @@ public final class VarInfo
       + ",is_static_constant=" + is_static_constant
       + ",static_constant_value=" + static_constant_value
       + ",derived=" + derived
-      // + ",derivees=" + derivees
+      + ",derivees=" + derivees()
       + ",ppt=" + ppt.name
       // + ",equal_to=" + equal_to // [INCR]
       + ">";
@@ -542,6 +560,21 @@ public final class VarInfo
     else
       return derived.derivedDepth();
   }
+
+  public List derivees() {
+    ArrayList result = new ArrayList();
+    VarInfo[] vis = ppt.var_infos;
+    for (int i=0; i < vis.length; i++) {
+      VarInfo vi = vis[i];
+      Derivation der = vi.derived;
+      if (der == null) continue;
+      if (ArraysMDE.indexOf(der.getBases(), this) >= 0) {
+	result.add(der);
+      }
+    }
+    return result;
+  }
+
   public boolean isClosure() {
     // This should eventually turn into
     //   return name.indexOf("closure(") != -1;
