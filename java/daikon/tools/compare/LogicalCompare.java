@@ -37,6 +37,7 @@ public class LogicalCompare {
   private static boolean opt_show_valid     = false;
   private static boolean opt_post_after_pre = false;
   private static boolean opt_timing         = false;
+  private static boolean opt_show_sets      = false;
 
   private static LemmaStack lemmas;
 
@@ -62,6 +63,8 @@ public class LogicalCompare {
       "      Print Simplify representation of invariants",
       "  --show-valid",
       "      Show invariants that are verified as well as those that fail",
+      "  --show-sets",
+      "      Show all the invariants asssumed and considered",
       "  --post-after-pre-failure",
       "      Check postcondition match even if preconditions fail",
       "  --timing",
@@ -200,20 +203,16 @@ public class LogicalCompare {
     return lemmas;
   }
 
-  // Print a vector of invariants and their Simplify translations, for
-  // debugging purposes.
-  private static void printInvariants(Vector/*<Invariant>*/ invs) {
-    for (int i = 0; i < invs.size(); i++) {
-      Invariant inv = (Invariant)invs.elementAt(i);
-      System.out.println(inv.format());
-    }
-
-    for (int i = 0; i < invs.size(); i++) {
-      Invariant inv = (Invariant)invs.elementAt(i);
-      System.out.println("(BG_PUSH "
-                         + inv.format_using(OutputFormat.SIMPLIFY) +")");
-    }
-  }
+//   // Print a vector of invariants and their Simplify translations, for
+//   // debugging purposes.
+//   private static void printInvariants(Vector/*<Invariant>*/ invs) {
+//     for (int i = 0; i < invs.size(); i++) {
+//       Invariant inv = (Invariant)invs.elementAt(i);
+//       System.out.println("   " + inv.format());
+//       System.out.println("(BG_PUSH "
+//                          + inv.format_using(OutputFormat.SIMPLIFY) +")");
+//     }
+//   }
 
   // Check that each of the invariants in CONSEQUENCES follows from
   // zero or more of the invariants in ASSUMPTIONS. Returns the number
@@ -223,6 +222,7 @@ public class LogicalCompare {
   throws SimplifyError {
     int invalidCount = 0;
     int mark = lemmas.markLevel();
+    lemmas.pushOrdering();
     lemmas.pushLemmas(assumptions);
     if (lemmas.checkForContradiction() == 'T') {
       System.out.println("Contradictory assumptions:");
@@ -294,6 +294,8 @@ public class LogicalCompare {
                                   PptTopLevel test_enter_ppt,
                                   PptTopLevel app_exit_ppt,
                                   PptTopLevel test_exit_ppt) {
+    lemmas.clearInts();
+
     app_enter_ppt.guardInvariants();
     test_enter_ppt.guardInvariants();
     app_exit_ppt.guardInvariants();
@@ -312,6 +314,35 @@ public class LogicalCompare {
     t_pre  = filterInvariants(t_pre, false);
     a_post = filterInvariants(a_post, true);
     t_post = filterInvariants(t_post, true);
+
+    if (opt_show_sets) {
+      System.out.println("Background assumptions:");
+      LemmaStack.printLemmas(System.out, Lemma.lemmasVector());
+      System.out.println("");
+
+      Vector v = new Vector();
+      v.addAll(translateAddOrig(a_pre));
+      System.out.println("Weak preconditions (Apre):");
+      LemmaStack.printLemmas(System.out, v);
+      System.out.println("");
+
+      v = new Vector();
+      v.addAll(translateAddOrig(t_pre));
+      System.out.println("Strong preconditions (Tpre):");
+      LemmaStack.printLemmas(System.out, v);
+      System.out.println("");
+
+      v = new Vector();
+      v.addAll(translateStraight(t_post));
+      System.out.println("Strong postconditions (Tpost):");
+      LemmaStack.printLemmas(System.out, v);
+      System.out.println("");
+
+      v = new Vector();
+      v.addAll(translateStraight(a_post));
+      System.out.println("Weak postconditions (Apost):");
+      LemmaStack.printLemmas(System.out, v);
+    }
 
     if (opt_show_count)
       System.out.println("Strong preconditions consist of "
@@ -369,6 +400,7 @@ public class LogicalCompare {
       new LongOpt("show-count",             LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt("show-formulas",          LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt("show-valid",             LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt("show-sets",              LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt("post-after-pre-failure", LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt("timing",                 LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt("filters",          LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -415,6 +447,8 @@ public class LogicalCompare {
           opt_show_formulas = true;
         } else if (option_name.equals("show-valid")) {
           opt_show_valid = true;
+        } else if (option_name.equals("show-sets")) {
+          opt_show_sets = true;
         } else if (option_name.equals("post-after-pre-failure")) {
           opt_post_after_pre = true;
         } else if (option_name.equals("timing")) {
@@ -484,7 +518,7 @@ public class LogicalCompare {
 
       Collection app_ppt_names = app_ppts.nameStringSet();
       Collection test_ppt_names = test_ppts.nameStringSet();
-      Set common_names = new HashSet();
+      Set common_names = new TreeSet();
 
       Iterator it = app_ppt_names.iterator();
       while (it.hasNext()) {
