@@ -1,16 +1,18 @@
 package daikon.diff;
 
 import daikon.inv.Invariant;
+import java.io.*;
 
 public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
 
   private boolean printUninteresting;
   private boolean considerJustification;
 
-  public PrintDifferingInvariantsVisitor(boolean verbose,
+  public PrintDifferingInvariantsVisitor(PrintStream ps,
+                                         boolean verbose,
                                          boolean printUninteresting,
                                          boolean considerJustification) {
-    super(verbose);
+    super(ps, verbose);
     this.printUninteresting = printUninteresting;
     this.considerJustification = considerJustification;
   }

@@ -546,9 +546,11 @@ public class DiffTester extends TestCase {
   }
 
   private static String printTree(RootNode root) {
-    PrintAllVisitor v = new PrintAllVisitor(false);
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PrintStream ps = new PrintStream(baos);
+    PrintAllVisitor v = new PrintAllVisitor(ps, false);
     root.accept(v);
-    return v.getOutput();
+    return baos.toString();
   }
 
   private static int countDifferingInvariants(RootNode root) {

@@ -115,22 +115,18 @@ public final class Diff {
     if (stats) {
       StatisticsVisitor v = new StatisticsVisitor();
       root.accept(v);
-      System.out.println();
       System.out.println(v.format());
     }
 
     if (printDiff) {
-      PrintDifferingInvariantsVisitor v =
-        new PrintDifferingInvariantsVisitor(verbose, printUninteresting,
-                                            considerJustification);
+      PrintDifferingInvariantsVisitor v = new PrintDifferingInvariantsVisitor
+        (System.out, verbose, printUninteresting, considerJustification);
       root.accept(v);
-      System.out.println(v.getOutput());
     }
 
     if (printAll) {
-      PrintAllVisitor v = new PrintAllVisitor(verbose);
+      PrintAllVisitor v = new PrintAllVisitor(System.out, verbose);
       root.accept(v);
-      System.out.println(v.getOutput());
     }
 
  }
