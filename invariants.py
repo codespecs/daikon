@@ -130,7 +130,7 @@ def add_to_binary():
     global diff_to_ct, unary_diff_to_ct, bin_diff_to_ct
     for ind in range(0, g_pair_different+1):
         bin_diff_to_ct[ind] = bin_diff_to_ct[ind] + diff_to_ct[ind]
-        
+
 def print_inv_diff_tracking():
     print "UNARY DIFFS"
     print "General inv diffs:"
@@ -206,7 +206,7 @@ def print_inv_diff_tracking():
     print "Identical unary invariants:", unary_diff_to_ct[g_unary_same]
     print "Differing unary invariants:", unary_diff_to_ct[g_unary_different]
     print "Identical binary invariants:", unary_diff_to_ct[g_pair_same]
-    print "Differing binary invariants:", unary_diff_to_ct[g_pair_different] 
+    print "Differing binary invariants:", unary_diff_to_ct[g_pair_different]
 ######end Jakes inv diff tracking
 
 def clear_variables():
@@ -2137,7 +2137,7 @@ class single_scalar_numeric_invariant(invariant):
             result.append("Different maximum")
             diff_to_ct[ssc_max_diff] = diff_to_ct[ssc_max_diff] + 1
         if zero_different:
-            result.append("One can't be zero, one can")
+            result.append("One can't be zero but other can")
             diff_to_ct[ssc_one_can_be_zero] = diff_to_ct[ssc_one_can_be_zero] + 1
         if modulus_different:
             result.append("Different modulus")
@@ -2502,7 +2502,7 @@ class two_scalar_numeric_invariant(invariant):
             result.append("Different linear reln")
             diff_to_ct[tsc_diff_lin_reln] = diff_to_ct[tsc_diff_lin_reln] + 1
         if equal_different:
-            result.append("One can be equal, other can't")
+            result.append("One can be equal but other can't")
             diff_to_ct[tsc_one_equal] = diff_to_ct[tsc_one_equal] + 1
         if comparison_different:
             result.append("Different comparison")
@@ -3559,7 +3559,7 @@ class two_sequence_numeric_invariant(invariant):
             result.append("Different linear reln")
             diff_to_ct[two_seq_diff_lin_reln] = diff_to_ct[two_seq_diff_lin_reln] + 1
         if equal_different:
-            result.append("One can be equal, other can't")
+            result.append("One can be equal but other can't")
             diff_to_ct[two_seq_one_equ] = diff_to_ct[two_seq_one_equ] + 1
         if comparison_different:
             result.append("Different comparison")
