@@ -30,6 +30,13 @@ public abstract class VarInfoName
       return parse(name.substring(0, name.length()-6)).applyTypeOf();
     }
 
+    // foo[].size (for multi-dimentional arrays or vectors)
+    if (name.endsWith("[].size")) {
+      // XXX: HACK! This is not the right thing to do (?), but OK for now
+      name = name.substring(0, name.length()-"[].size".length());
+      return parse(name + ".size").applyElements();
+    }
+
     // x or this.x
     if ((name.indexOf('[') == -1) && (name.indexOf('(') == -1)) {
       // checking for only leagal characters would be more robust
