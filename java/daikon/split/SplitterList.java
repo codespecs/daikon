@@ -190,8 +190,10 @@ public abstract class SplitterList
       // a PptName, assumed to begin with "ClassName.functionName"
       String name = (String)itor.next();
       try {
+        // XXX This doesn't do the right thing if "name" contains regular
+        // expression metacharacters, like parentheses or asterisks.
         Pattern pat = re_compiler.compile(name);
-        if (re_matcher.contains(pptName, pat)) {
+        if (pptName.equals(name) || re_matcher.contains(pptName, pat)) {
           Splitter[] result = get_raw(name);
           if (result != null) {
             splitterArrays.addElement(result);
