@@ -423,43 +423,14 @@ it twice) in order to generate formatted versions of the manual
 
 <h3><a name="regression-tests">Testing Daikon</a></h3>
 
-Daikon has two sets of tests:  regression tests and unit tests.
-If there are any differences between the expected results and the ones you
-get, don't check in your changes until you understand which is the desired
-behavior and possibly update the goals.
 <p>
-
-The unit tests are found in <tt>invariants/java/daikon/test/</tt>; they use
-the JUnit unit testing framework.  They take a few seconds to run.  They
-are automatically run each time you compile Daikon (by running
-<tt>make</tt> in <tt>$inv/java</tt> or any of its subdirectories).  You can
-also run them explicitly via <tt>make unit</tt>.  When you write new code
-or modify old code, please try to add unit tests.<p>
-
-The regression tests run Daikon on many different inputs and compare
-Daikon's output to expected output.  They take an hour or longer to run.
-When you make a change, you should generally run the regression tests
-before checking it in.  Always run the regression tests when checking in
-any non-trivial change to the code.  If any has a non-zero size, then your
-edits have changed Daikon's output and you should not check in without
-carefully determining that the changes are intentional and desirable (and
-you should update the goal output files, so that the diffs are again zero).
-The regression tests appear in the <tt>$inv/tests</tt> directory.  Type
-<tt>make</tt> in that directory to see a list of options.  Generally you
-will want to run <tt>make diffs</tt> and ensure that the list of diff files
-that is created all have zero size.  You do not generally need to do
-<tt>make clean</tt>, which forces re-instrumentation (a slow process) the
-next time you run the tests.
-<p>
-
-You can report bugs, examine reported bugs, and edit or remove existing bug
-reports by running the <tt>daikon-bug</tt> program.  Run it without arguments
-to see valid arguments.  The typical use is:  a user adds a new bug; the owner
-fixes the bug, verifies the fix, and changes the bug status to "fixed"; and
-then the original reporter changes the status to "Closed".
-(The bugs themselves are stored in directory
-<tt>$inv/bugs</tt>, but you shouldn't need to know that.)
-<p>
+See the description of <a
+href="http://www.pag.csail.mit.edu/daikon/download/doc/developer.html#Testing">Daikon's
+tests</a> in the Daikon Developer Manual.  It is important that you
+understand that Daikon has two sets of tests (unit tests and regression
+tests), and that if any of these tests fails, you should not check in your
+changes.
+</p>
 
 
 <h3><a name="distribution">Making a distribution</a></h3>

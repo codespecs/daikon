@@ -22,11 +22,11 @@
 @center @titlefont{Daikon Invariant Detector Developer Manual}
 
 @sp 2
-@center Daikon version 3.1.5
+@center Daikon version 3.1.6
 
 @sp 1
-@c Daikon version 3.1.5 date
-@center November 7, 2004
+@c Daikon version 3.1.6 date
+@center November 16, 2004
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -48,7 +48,7 @@ Copyright @copyright{} 1998-2003
 @c <h1>Daikon Invariant Detector User Manual</h1>
 @c
 @c This is the developer manual for the Daikon invariant detector.
-@c It describes Daikon version 3.1.5, released November 7, 2004.
+@c It describes Daikon version 3.1.6, released November 16, 2004.
 @c @end html
 
 @c Putting this lower in the HTML version looks a little bit strange,
@@ -67,7 +67,7 @@ Copyright @copyright{} 1998-2003
 @c 
 @c @end ifinfo
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 3.1.5, released November 7, 2004.
+It describes Daikon version 3.1.6, released November 16, 2004.
 @end ifnottex
 
 @menu
@@ -75,7 +75,9 @@ It describes Daikon version 3.1.5, released November 7, 2004.
 * Extending Daikon::            
 * Debugging Daikon::            
 * Daikon internals::            
-* Unit Testing::                
+* Testing::                     
+* Historical::                  
+* Branches::                    
 * Index::
 
 @ifhtml
@@ -114,6 +116,10 @@ Avoiding work for redundant invariants
 
 * Suppression optimization::    
 
+Testing
+
+* Unit Testing::                
+
 Unit Testing
 
 * Invariant Format Testing::    
@@ -137,6 +143,8 @@ For information about Daikon, see its user manual.
 This manual is intended for those who are already familiar with the use
 of Daikon, but wish to customize or extend it.
 
+Additional information can be found in technical papers available from
+@uref{http://pag.csail.mit.edu/pubs/}.
 
 
 @node    Extending Daikon, Debugging Daikon, Introduction, Top
@@ -148,22 +156,6 @@ of Daikon, but wish to customize or extend it.
 @cindex modifying Daikon
 
 This chapter describes how to customize or modify Daikon.
-
-Readers are also referred to Chapter 7, ``Implementation'', of
-@cite{Dynamically Discovering Likely Program Invariants} by Michael
-D. Ernst, PhD dissertation, University of Washington Department of
-Computer Science and Engineering, Seattle, Washington, USA, August 2000.
-This document is available online at
-@uref{http://pag.csail.mit.edu/~mernst/pubs/invariants-ernst-phdthesis-abstract.html}.
-
-For Daikon version
-@c line break to avoid automatically updating the version number
-3, also see 
-Chapter 7, ``Scalability'', of @cite{Automatic Generation and Checking
-of Program Specifications}, by Jeremy W. Nimmer, Master's thesis.  
-This document is available, as 
-technical report MIT-LCS-TR-852, at
-@uref{http://pag.csail.mit.edu/~mistere/pubs/thesis-abstract.html}.
 
 
 @menu
@@ -791,7 +783,7 @@ kept in a file named the same as your Daikon output file with
 world writable for log2html.php to work correctly.
 
 
-@node    Daikon internals, Unit Testing, Debugging Daikon, Top
+@node    Daikon internals, Testing, Debugging Daikon, Top
 @chapter Daikon internals
 
 @menu
@@ -946,8 +938,45 @@ imply ``odd(b)''.  Equality can be turned off at the command line with
 the @option{--noequality} flag.
 
 
-@node    Unit Testing, Index, Daikon internals, Top
-@chapter Unit Testing
+@node    Testing, Historical, Daikon internals, Top
+@chapter Testing
+
+Daikon has two sets of tests: regression tests and unit tests. If there
+are any differences between the expected results and the ones you get,
+don't check in your changes until you understand which is the desired
+behavior and possibly update the goals.
+
+The unit tests are found in @file{invariants/java/daikon/test/}; they use
+the JUnit unit testing framework.  They take a few seconds to run.  They
+are automatically run each time you compile Daikon (by running
+@samp{make} in
+ @file{$inv/java} or any of its subdirectories).  You can
+also run them explicitly via @samp{make unit}.  When you write new code
+or modify old code, please try to add unit tests.<p>
+
+The regression tests run Daikon on many different inputs and compare
+Daikon's output to expected output.  They take an hour or longer to run.
+When you make a change, you should generally run the regression tests
+before checking it in.  Always run the regression tests when checking in
+any non-trivial change to the code.  If any has a non-zero size, then your
+edits have changed Daikon's output and you should not check in without
+carefully determining that the changes are intentional and desirable (and
+you should update the goal output files, so that the diffs are again zero).
+The regression tests appear in the @file{$inv/tests} directory.  Type
+@samp{make} in that directory to see a list of options.  Generally you
+will want to run @samp{make diffs} and ensure that the list of diff files
+that is created all have zero size.  You do not generally need to do
+@samp{make clean}, which forces re-instrumentation (a slow process) the
+next time you run the tests.
+
+
+
+@menu
+* Unit Testing::                
+@end menu
+
+@node    Unit Testing,  , Testing, Testing
+@section Unit Testing
 
 @menu
 * Invariant Format Testing::    
@@ -955,7 +984,7 @@ the @option{--noequality} flag.
 @end menu
 
 @node    Invariant Format Testing, Sample Testing, Unit Testing, Unit Testing
-@section Invariant Format Testing
+@subsection Invariant Format Testing
 
 This tests the formatting of invariants with specified input.  The
 tests are configured in the file InvariantFormatTest.commands under
@@ -1084,7 +1113,7 @@ such an object from a string. All primitives and the String type are
 already recognized.
 
 @node    Sample Testing,  , Invariant Format Testing, Unit Testing
-@section Sample Testing
+@subsection Sample Testing
 
 Sample testing tests various components of Daikon as samples are being
 processed.  A file (normally @file{daikon/test/SampleTester.commands}) 
@@ -1132,7 +1161,7 @@ are:
 @end menu
 
 @node       Assertions, Example File, Sample Testing, Sample Testing
-@subsection Assertions
+@subsubsection Assertions
 
 Assertions are formatted like function calls: <name>(arg1, arg2, ...).
 The valid assertions for the assert: command are:
@@ -1154,7 +1183,7 @@ The valid assertions for the assert: command are:
 More assertions can easily be added to @file{SampleTester.java} as required.
 
 @node       Example File,  , Assertions, Sample Testing
-@subsection Example File
+@subsubsection Example File
 
 The following is an simple example of sample testing.
 @example
@@ -1170,7 +1199,105 @@ ppt: foo.f():::EXIT35
 @end example
 
 
-@node     Index,  , Unit Testing, Top
+@node    Historical, Branches, Testing, Top
+@chapter Analyzing historical versions of Daikon
+
+This section is intended primarily for researchers who are analyzing
+historical versions of Daikon.  A number of researchers (for example, in
+the testing community) use Daikon because it contains both a CVS
+repository and a set of tests.
+
+If you wish access to the Daikon CVS repository, send mail to
+@email{daikon-developers@@lists.csail.mit.edu}; please let us know why
+you need it and what you want to use it for.  Also, we request that you
+keep us appraised of any problems that you encounter or discoveries that
+you make, and that you let us know of any publications so that we can
+publicize them at
+@uref{http://www.pag.csail.mit.edu/daikon/pubs-using/#daikon-testsubject}.
+
+This section points out some pitfalls for such researchers.  Although
+these problems are easy to avoid, some previous published work has made
+these mistakes; don't let that happen to you!
+
+Recall that Daikon contains two sets of tests (@pxref{Testing}); you
+should include both in any analysis of Daikon's tests.
+
+Daikon intentionally does not contain tests for third-party libraries
+that are included (sometimes in source form) in the Daikon distribution.
+For example, the @file{java/ajax} and @file{java/jtb} directories
+contain external libraries.  Therefore, any measurement of Daikon's code
+coverage should not include those libraries (or other libraries, some of
+which are distributed as @file{.jar} files).
+
+Be sure to see file @file{doc/www/mit/index.html} in the repository for
+information about how group members use Daikon.  (This file chnages from
+time to time --- for instance, when the CVS branch was created and later
+when development on it ceased.
+
+
+@node    Branches, Index, Historical, Top
+@chapter Branches
+
+The Daikon CVS repository contains two branches:  a main trunk and a
+branch (named ENGINE_V2_PATCHES) for Daikon version 2.
+
+The CVS manual (@pxref{Branching and merging,,,cvs,CVS -- Concurrent
+Versions System}) describes CVS branches:
+
+@quotation
+  CVS allows you to isolate changes onto a separate line of development,
+  known as a "branch".  When you change files on a branch, those changes
+  do not appear on the main trunk or other branches.
+
+  Later you can move changes from one branch to another branch (or the
+  main trunk) by "merging".  Merging involves first running `cvs update
+  -j', to merge the changes into the working directory.  You can then
+  commit that revision, and thus effectively copy the changes onto
+  another branch.
+@end quotation
+
+In early January 2002 (or perhaps in late 2001), we created the
+ENGINE_V2_PATCHES branch at the @file{invariants/java/daikon level} of
+the Daikon CVS repository.  Primary development continued along the CVS
+branch ENGINE_V2_PATCHES, which we called ``Daikon version 2''.  We
+called the CVS trunk ``Daikon version 3''; it was experimental, and very
+few people ran its code or performed development on it.  Periodically,
+all changes made to the branch would be merged into the trunk, as one
+large checkin on the trunk.  Later, development on version 3 became more
+common, some changes were merged from the trunk to the branch, and and
+version 2 was finally retired (and no more changes were made to the
+branch) in December 2003.
+
+A regular "cvs checkout" gets the trunk.  The "-r" flag specifies a
+branch.  For example, to get the branch as of June 9, 2002, one could do
+@smallexample
+cvs -d /g4/projects/invariants/.CVS co -r ENGINE_V2_PATCHES -D 2003/06/09 invariants/java/daikon
+@end smallexample
+
+Some warnings about analyzing historical versions of Daikon:
+@enumerate
+@item
+When analyzing 2002 (and at least parts of 2003) you should be careful
+to use the branch, not the trunk.  Or, you could analyze both (but as a
+single development effort, not as separate efforts).
+@item
+When a programmer periodically merged changes from the branch to the
+trunk (or vice versa), that operation resulted in very large checkins.
+The times at which these merges occurred is indicated in file
+@file{invariants/java/daikon/merging.txt} in the repository; for
+example, this happened 34 times during calendar year 2002.  CVS checkins
+for the branch properly attribute and time-stamp the work that appears
+as a single large checkin on the trunk.
+@item
+There may be long periods of time in the branch (respectively, the
+trunk) with no checkins, but that does not necessarily indicate a lacuna
+in development, as checkins might have occurred in the meanwhile in the
+trunk (respectively, the branch).
+@end enumerate
+
+
+
+@node     Index,  , Branches, Top
 @unnumbered Index
 
 @printindex cp
