@@ -145,9 +145,12 @@ cvs-test:
 # Main distribution
 
 # The "dist" target not only creates .tar files, but also installs a new
-# distribution, updates webpages, tests the distributionn, etc.  If you
-# only want ot make a new .tar file, do "make daikon-source.tar".
-dist: dist-and-test
+# distribution on the website, updates webpages, tests the distributionn,
+# etc.  If you only want ot make a new .tar file, do "make
+# daikon-source.tar".
+# The "MAKEFLAGS=" argument discards any "-k" argument.
+dist: 
+	$(MAKE) MAKEFLAGS= dist-and-test
 
 # Both make and test the distribution.
 # (Must make it first in order to test it!)
@@ -161,7 +164,7 @@ dist-notest: dist-ensure-directory-exists $(DIST_DIR_PATHS)
 	$(MAKE) -n dist-dfej
 
 doc/CHANGES: doc/daikon.texinfo
-	@echo "** doc/CHANGES file is not up-to-date with respect to daikon.texinfo."
+	@echo "** doc/CHANGES file is not up-to-date with respect to doc/daikon.texinfo"
 	@echo "** doc/CHANGES must be modified by hand:  try"
 	@echo "**   diff -u /home/httpd/html/daikon/dist/doc/daikon.texinfo doc/daikon.texinfo"
 	@exit 1
@@ -186,8 +189,8 @@ update-dist-dir: dist-ensure-directory-exists
 	cd java/daikon && $(MAKE) all_via_javac 
 	cd java/daikon && $(MAKE) junit
 	# "make" in doc directory will fail the first time
-	-cd doc && $(MAKE) html html-chap
-	cd doc && $(MAKE) html html-chap
+	-cd doc && $(MAKE) all > /dev/null
+	cd doc && $(MAKE) all
 	# html-update-toc daikon.html
 	-cd $(DIST_DIR) && rm -rf $(DIST_DIR_FILES) doc daikon_manual_html
 	cp -pf $(DIST_DIR_PATHS) $(DIST_DIR)
@@ -209,6 +212,7 @@ TODAY := $(shell date "+%B %e, %Y")
 update-doc-dist-date:
 	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(\@c Daikon version .* date\n\@center ).*\n/$$1${TODAY}\n/;' doc/daikon.texinfo
 	perl -wpi -e 's/(version .*, released ).*\.$$/$$1${TODAY}./' doc/README-dist doc/www/download/index.html doc/daikon.texinfo
+	touch doc/CHANGES
 
 # Update the documentation according to the version number.
 # This isn't done as part of "make dist" because then subsequent "make www"
@@ -217,6 +221,7 @@ update-doc-dist-date:
 # is invoked at the beginning of a make.
 update-doc-dist-version:
 	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(Daikon version )[0-9]+(\.[0-9]+)*/$$1 . "$(shell cat doc/VERSION)"/e;' doc/daikon.texinfo doc/README-dist doc/www/download/index.html
+	touch doc/CHANGES
 
 # Update the version number.
 # This is done immediately after releasing a new version.
