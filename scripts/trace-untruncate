@@ -3,10 +3,14 @@
   if 0;
 # Michael Ernst <mernst@cs.washington.edu>
 
-# This
-#  * removes the last (possibly partial) paragraph
+# This script removes the last (possibly partial) record from a .dtrace file.
+# More specifically, it removes the last paragraph of a file (everything
+# after the last double-newline).
 
-# Previously named "fixup-dtrace".
+# The script operates by side effect, changing the files whose names are
+# given on the command line; however, it leaves teh original versions in a
+# backup file whose name has suffix ".bak".
+
 
 BEGIN { $/ = ""; }
 
