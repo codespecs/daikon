@@ -254,9 +254,17 @@ $(DIST_DIR)/dfej-solaris: $(DFEJ_DIR)/src/dfej-solaris
 	cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@lcs.mit.edu
 
 dist-dfej-linux: $(DIST_DIR)/dfej-linux
+	# First remake
+	cd $(DFEJ_DIR)/src && $(MAKE) LDFLAGS=-static
+	-mv -f $(DFEJ_DIR)/src/dfej $(DFEJ_DIR)/src/dfej-dynamic
+	-mv -f $(DFEJ_DIR)/src/dfej-linux $(DFEJ_DIR)/src/dfej
+	cd $(DFEJ_DIR)/src && $(MAKE) LDFLAGS=-static
+	mv -f $(DFEJ_DIR)/src/dfej $(DFEJ_DIR)/src/dfej-linux
+	mv -f $(DFEJ_DIR)/src/dfej-dynamic $(DFEJ_DIR)/src/dfej
 
-$(DIST_DIR)/dfej-linux: $(DFEJ_DIR)/src/dfej-linux
-	cp -pf $< $@
+	# Now copy it over
+	cp -pf $(DFEJ_DIR)/src/dfej-linux $(DIST_DIR)/dfej-linux
+	cp -pf $(DFEJ_DIR)/src/dfej $(DIST_DIR)/dfej-linux-dynamic
 	update-link-dates $(DIST_DIR)/index.html
 	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@lcs.mit.edu
 
