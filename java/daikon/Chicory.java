@@ -242,6 +242,13 @@ public class Chicory {
               premain_path = poss_premain;
           }
       }
+    if (premain_path == null) {
+      System.err.printf ("Can't find ChicoryPremain.jar on the classpath\n");
+      System.err.printf ("It should be find in directory where Daikon was "
+                         + " installed\n");
+      System.err.printf ("Use the --premain switch to specify its location\n");
+      System.err.printf ("or change your classpath to include it\n");
+    }
 
     // Build the command line to execute the target with the javaagent
     List<String> cmdlist = new ArrayList<String>();
