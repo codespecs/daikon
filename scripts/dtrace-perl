@@ -1,0 +1,49 @@
+#!/usr/bin/env perl
+
+# Convenient interface to running Perl on Daikon-annotated perl programs
+
+# $Id$
+
+use strict;
+use 5.006;
+use warnings;
+BEGIN {
+    require English;
+    if ($^V ge 5.8.0) {
+        English->import("-no_match_vars"); # avoid speed penaly
+    } else {
+        English->import();
+    }
+}
+
+unless (exists $ENV{"INV"}) {
+    my $str = "The INV environment variable was not found.\n";
+    $str .= "Please make sure it is set to the location of the ";
+    $str .= "Daikon invariants/ directory.\n";
+    $str .= "Usually, you would do this by running the daikon.bashrc or ";
+    $str .= "daikon.cshrc script\nin your shell startup file.\n";
+    die $str;
+}
+
+my @locs = ('daikon-instrumented', 'lib/daikon-instrumented',
+            'blib/lib/daikon-instrumented', '../blib/lib/daikon-instrumented');
+
+my $perl = $^X;
+my $perl_lib = "-I$ENV{INV}/front-end/perl/lib";
+
+my @args = ($perl_lib, @ARGV);
+
+for my $loc (@locs) {
+    if (-e $loc) {
+        unshift @args, "-I$loc";
+        last;
+    }
+}
+
+unshift @args, $perl;
+
+print join(" ", @args), "\n";
+
+my $result = system(@args);
+
+exit $result;
