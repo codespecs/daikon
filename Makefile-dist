@@ -5,8 +5,10 @@ all:
 ifdef $DAIKONCLASS_SOURCES
 	$(MAKE) -C java
 endif
-	# This comes last because it might fail
-	$(MAKE) java-front-end
+# This ought to check the output of /bin/arch as well:  it needs x86.
+ifeq (Linux,$(shell uname))
+	$(MAKE) kvasir
+endif
 
 clean:
 	$(MAKE) -C bin clean
@@ -19,6 +21,8 @@ kvasir:
 	cd kvasir && ./configure --prefix=`pwd`/inst
 	cd kvasir && make
 	cd kvasir && make install
+
+dfej: java-front-end
 
 java-front-end: front-end/java/config.status
 	@echo "If this command fails, see 'Installing dfej' section in manual"
