@@ -26,15 +26,15 @@ public final class Member
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
+  public static final Category debug =
+    Category.getInstance ("daikon.inv.binary.Member");
+
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
    * Boolean.  True iff Member invariants should be considered.
    **/
   public static boolean dkconfig_enabled = true;
-
-  public final static boolean debugMember = false;
-  // public final static boolean debugMember = true;
 
   protected Member (PptSlice ppt, boolean seq_first) {
     super(ppt, seq_first);
@@ -58,16 +58,16 @@ public final class Member
     // if (isEqualToObviousMember(sclvar, seqvar)) {
     if (isObviousMember(sclvar, seqvar)) {
       Global.implied_noninstantiated_invariants += 1;
-      if (debugMember) {
-        System.out.println("Member not instantiated (obvious): "
-                           + sclvar.name + " in " + seqvar.name);
+      if (debug.isDebugEnabled()) {
+        debug.debug ("Member not instantiated (obvious): "
+                     + sclvar.name + " in " + seqvar.name);
       }
       return null;
     }
 
-    if (debugMember) {
-      System.out.println("Member instantiated: "
-                         + sclvar.name + " in " + seqvar.name);
+    if (debug.isDebugEnabled()) {
+      debug.debug ("Member instantiated: "
+                   + sclvar.name + " in " + seqvar.name);
     }
     return new Member (ppt, seq_first);
   }
@@ -162,8 +162,19 @@ public final class Member
         VarInfo scl_index = sclsss.sclvar(); // "I" in "B[I]"
         int scl_shift = sclsss.index_shift;
         // System.out.println("scl_shift = " + scl_shift + ", seq_shift = " + seq_shift);
-        // when b[i] in b[0..i] or b[i] in b[i..]
-        if (scl_index == sclvar_seq) {
+        // when b[i+d] in b[0..i+d+x] or b[i+d+x] in b[i+d..]
+        if (scl_index == seq_index &&
+            (seq_from_start ?
+             seq_shift >= scl_shift :
+             seq_shift <= scl_shift)
+            ) {
+          if (debug.isDebugEnabled()) {
+            debug.debug ("IsObviousMember in ppt: " + sclvar.ppt.name);
+            debug.debug ("  scl_index: " + scl_index.name.name());
+            debug.debug ("  seq_index: " + seq_index.name.name());
+            debug.debug ("  sclvar   : " + sclvar.name.name());
+            debug.debug ("  seqvar   : " + seqvar.name.name());
+          }
           return true;
         }
 
@@ -307,8 +318,9 @@ public final class Member
 
   public void add_modified(long [] a, long  i, int count) {
     if (ArraysMDE.indexOf(a, i) == -1) {
-      if (debugMember) {
-        System.out.println("Member destroyed:  " + format() + " because " + i + " not in " + ArraysMDE.toString(a));
+      if (debug.isDebugEnabled()) {
+        debug.debug ("Member destroyed:  " + format() + " because " + i +
+                     " not in " + ArraysMDE.toString(a));
       }
       destroyAndFlow();
       return;
@@ -339,9 +351,8 @@ public final class Member
   }
 
   /**
-   * Suppression generator for Member type invariants.  If sequences A
-   * and B are related such that A is a subset or subsequence of B,
-   * all Member invariants like "A[i] in B" are suppressed.
+   * Suppression in the form of A subset B => A[i] subset B.  Note
+   * that A[i] could also be max(A), etc.
    **/
   public static class MemberSuppressionFactory1 extends SuppressionFactory {
 
@@ -351,6 +362,12 @@ public final class Member
     private static final MemberSuppressionFactory1 theInstance =
       new MemberSuppressionFactory1();
 
+    private MemberSuppressionFactory1() {
+      template = new SuppressionTemplate();
+      template.invTypes = new Class[1];
+      template.varInfos = new VarInfo[][] {new VarInfo[2]};
+    }
+
     public static SuppressionFactory getInstance() {
       return theInstance;
     }
@@ -358,6 +375,8 @@ public final class Member
     private Object readResolve() {
       return theInstance;
     }
+
+    private transient SuppressionTemplate template;
 
     public SuppressionLink generateSuppressionLink (Invariant arg) {
       Assert.assertTrue (arg instanceof Member);
@@ -370,10 +389,10 @@ public final class Member
         // This should never get instantiated
       }
 
+      template.varInfos[0][0] = sclSequence;
+      template.varInfos[0][1] =  seqvar;
       {
-        SuppressionTemplate template = new SuppressionTemplate();
-        template.invTypes = new Class[] {PairwiseIntComparison.class};
-        template.varInfos = new VarInfo[][] {new VarInfo[] {sclSequence, seqvar}};
+        template.invTypes[0] = PairwiseIntComparison.class;
         SuppressionLink sl = byTemplate (template, inv);
         if (sl != null) {
           String comparator = ((PairwiseIntComparison) template.results[0]).getComparator();
@@ -386,9 +405,7 @@ public final class Member
 
       {
         // Try to see if SubSet invariant is there
-        SuppressionTemplate template = new SuppressionTemplate();
-        template.invTypes = new Class[] {SubSet.class};
-        template.varInfos = new VarInfo[][] {new VarInfo[] {sclSequence, seqvar}};
+        template.invTypes[0] = SubSet.class;
         SuppressionLink sl = byTemplate (template, inv);
         if (sl != null) {
           // First transformed var in first invariant
@@ -410,9 +427,7 @@ public final class Member
 
       {
         // Failed on finding the right SubSet invariant.  Now try SubSequence
-        SuppressionTemplate template = new SuppressionTemplate();
-        template.invTypes = new Class[] {SubSequence.class};
-        template.varInfos = new VarInfo[][] {new VarInfo[] {sclSequence, seqvar}};
+        template.invTypes[0] = SubSequence.class;
         SuppressionLink sl = byTemplate (template, inv);
         if (sl != null) {
           // First transformed var in first invariant
