@@ -1,5 +1,6 @@
 package daikon.test;
 
+import utilMDE.*;
 import daikon.*;
 
 import daikon.inv.Invariant;
@@ -413,6 +414,7 @@ class FormatTestCase {
     arg_vals[0] = sl;
     Invariant invariantToTest = instantiateClass(classToTest, arg_types,
                                                  arg_vals);
+    Assert.assertTrue (invariantToTest != null, "class " + className);
 
     String goalOutput = "";
     String currentLine = null;
@@ -918,6 +920,8 @@ class FormatTestCase {
   private static void populateWithSamples(Invariant inv, List samples) {
     if (samples == null || samples.size() == 0) return;
 
+    Assert.assertTrue (inv != null);
+
     // System.out.println(inv.getClass().getName());
     // System.out.println(samples.size());
 
@@ -1054,7 +1058,11 @@ class FormatTestCase {
         throw new RuntimeException("Could not instantiate invariant "
                                    + theClass.getName());
 
-      return (Invariant)instanceCreator.invoke(null, new Object [] {sl});
+      Invariant inv = (Invariant)instanceCreator.invoke(null,
+                                                        new Object [] {sl});
+      if (inv == null)
+        throw new RuntimeException ("null inv for " + theClass.getName());
+      return (inv);
     }
     catch (Exception e) {
       e.printStackTrace(System.out);
