@@ -21,11 +21,9 @@ import daikon.suppress.*;
  * for invariants:
  *
  * <li> For each program point's set of VarInfos, there exists exactly
- * ONE invariant of its type.  For example, between variables a and b
- * at PptTopLevel T, there will not be two instances of invariant I(a,
- * b).
- *
- *
+ * no more than one invariant of its type.  For example, between
+ * variables a and b at PptTopLevel T, there will not be two instances
+ * of invariant I(a, b).
  **/
 public abstract class Invariant
   implements Serializable, Cloneable // but don't YOU clone it
@@ -57,10 +55,10 @@ public abstract class Invariant
 
 
   /**
-   * Real number between 0 and 1.  The probability that the invariant
-   * occurred by chance must be less than this in order for it to be
-   * displayed.  (May also be set via --prob_limit switch to Daikon;
-   * refer to manual.)
+   * Real number between 0 and 1.  The invariant is displayed only if
+   * the probability that the invariant occurred by chance is
+   * less than this.  (May also be set
+   * via --prob_limit switch to Daikon; refer to manual.)
    **/
   public static double dkconfig_probability_limit = .01;
 
@@ -83,16 +81,18 @@ public abstract class Invariant
   // Should this just be a public field?  Probably yes for performance, but
   // not now.
   /**
-   * The invariant that suppresses this.  Can be null if unsuppressed.
+   * The SuppressionLink to the Invariants that suppress this.  null if
+   * unsuppressed.  Clones of this have this field set to null.
    **/
   private SuppressionLink suppressor;
 
   /**
-   * The set of invariants that this suppresses.  Never null, but can
-   * be empty.  The only time this would share a set of suppressees
-   * with another Invariant is if the Invariant was a clone of this.
+   * Set of SuppressionLinks this suppresses (perhaps in conjunction
+   * with some other invariants).  Each link holds a suppressed
+   * invariant.  Never null, but can be empty.  Clones of this 
+   * have this field set to an empty set.
    **/
-  private Set suppressees;
+  private Set/*[SuppressionLink]*/ suppressees;
 
   /**
    * True if we've seen all values and should ignore further add() methods.
@@ -336,7 +336,11 @@ public abstract class Invariant
     ppt.addToChanged (this);
   }
 
-  /** Do nothing special.  Overridden to remove exception from declaration */
+  /**
+   * Do nothing special, except disconnect the clone from
+   * this.suppressor and this.suppressees.  Overridden to remove
+   * exception from declaration
+   **/
   protected Object clone() {
     try {
       Invariant result = (Invariant) super.clone();
@@ -1392,7 +1396,7 @@ public abstract class Invariant
 
   /**
    * Get the SuppressionLinks that this is suppressing.
-   * @return can be null if there are no suppressees
+   * @return never null.
    **/
   public Set getSuppressees () {
     return Collections.unmodifiableSet (suppressees);

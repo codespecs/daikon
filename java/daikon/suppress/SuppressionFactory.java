@@ -39,7 +39,7 @@ public abstract class SuppressionFactory implements Serializable {
 
 
   /**
-   * Check whether this type of suppression applies to a givern
+   * Check whether this type of suppression applies to a given
    * invariant at a given program point.  If so, return a
    * SuppressionLink.  Otherwise return null.  A SuppressionFactory
    * should not attempt to search through the invariants by itself,

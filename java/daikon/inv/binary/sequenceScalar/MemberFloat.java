@@ -431,7 +431,7 @@ public final class MemberFloat
   }
 
   /**
-   * Suppression in the form of   0<=i<=j  ==>  b[i] in b[0..j]
+   * Suppression in the form of <pre>  0<=i<=j  ==>  b[i] in b[0..j] </pre>
    **/
   public static class MemberSuppressionFactory2 extends SuppressionFactory {
 
@@ -453,90 +453,64 @@ public final class MemberFloat
      * Check if leftIndex < rightIndex.
      **/
     public SuppressionLink generateSuppressionLink (Invariant arg) {
-      Assert.assertTrue (arg instanceof Member);
-      Member inv = (Member) arg;
+      Assert.assertTrue (arg instanceof MemberFloat);
+      MemberFloat  inv = (MemberFloat) arg;
       VarInfo sclvar = inv.sclvar();
       VarInfo sclSequence = sclvar.isDerivedSequenceMember();
+      if (debug.isDebugEnabled()) {
+        debug.debug ("Trying for: " + inv.repr());
+      }
+
       if (sclSequence == null) {
-        debug.debug ("Sclvar is not from a sequence");
+        debug.debug ("  Sclvar is not from a sequence");
         return null;
       }
-      VarInfo leftIndex = ((SequenceScalarSubscript) inv.sclvar().derived).sclvar();
+      VarInfo leftIndex = ((SequenceFloatSubscript) inv.sclvar().derived).sclvar();
 
       VarInfo seqvar = inv.seqvar();
       VarInfo origSeqvar = seqvar.isDerivedSubSequenceOf();
       if (origSeqvar == null) {
-        debug.debug ("Seqvar is not a subsequence derived var");
+        debug.debug ("  Seqvar is not a subsequence derived var");
         return null;
       }
-      VarInfo rightIndex = ((SequenceScalarSubsequence) seqvar.derived).sclvar();
+      if (sclSequence != origSeqvar) {
+        debug.debug ("  Not from the same sequences");
+        return null;
+      }
+      SequenceFloatSubsequence  ssss = (SequenceFloatSubsequence) seqvar.derived;
+      VarInfo rightIndex = ssss.sclvar();
       if (debug.isDebugEnabled()) {
-        debug.debug ("Attempting to find <= template for: ");
-        debug.debug (leftIndex.name.name());
-        debug.debug (rightIndex.name.name());
-        debug.debug ("In inv: " + inv.repr());
+        debug.debug ("  Attempting to find <= template for: ");
+        debug.debug ("  " + leftIndex.name.name());
+        debug.debug ("  " + rightIndex.name.name());
+        debug.debug ("  In inv: " + inv.repr());
       }
       if (leftIndex == rightIndex) {
         return null;
       }
 
-      {
-        SuppressionTemplate template = new SuppressionTemplate();
-        template.invTypes = new Class[] {IntLessThan.class};
-        template.varInfos = new VarInfo[][] {new VarInfo[] {leftIndex, rightIndex}};
-        arg.ppt.parent.fillSuppressionTemplate(template);
-        if (template.filled) {
-          IntLessThan resultInv = (IntLessThan) template.results[0];
-          VarInfo leftResult = template.transforms[0][0];
-          if (leftResult == resultInv.var1()) {
-            return linkFromTemplate (template, inv);
-          }
-        }
-      }
+      // Here's the math, explained:
 
-      {
-        SuppressionTemplate template = new SuppressionTemplate();
-        template.invTypes = new Class[] {IntLessEqual.class};
-        template.varInfos = new VarInfo[][] {new VarInfo[] {leftIndex, rightIndex}};
-        arg.ppt.parent.fillSuppressionTemplate(template);
-        if (template.filled) {
-          IntLessEqual resultInv = (IntLessEqual) template.results[0];
-          VarInfo leftResult = template.transforms[0][0];
-          if (leftResult == resultInv.var1()) {
-            return linkFromTemplate (template, inv);
-          }
-        }
-      }
+      // We want A[i] in A[0..j+shift]
+      // i <= j+shift
+      // That's like saying:
+      // i <= j + interval
+      // interval = - shift
 
-      {
-        SuppressionTemplate template = new SuppressionTemplate();
-        template.invTypes = new Class[] {IntGreaterThan.class};
-        template.varInfos = new VarInfo[][] {new VarInfo[] {leftIndex, rightIndex}};
-        arg.ppt.parent.fillSuppressionTemplate(template);
-        if (template.filled) {
-          IntGreaterThan resultInv = (IntGreaterThan) template.results[0];
-          VarInfo leftResult = template.transforms[0][0];
-          if (leftResult == resultInv.var2()) {
-            return linkFromTemplate (template, inv);
-          }
-        }
-      }
+      // We want A[i] in A[j+shift..]
+      // j+shift <= i
+      // That's like saying:
+      // j <= i + interval
+      // interval = shift
 
-      {
-        SuppressionTemplate template = new SuppressionTemplate();
-        template.invTypes = new Class[] {IntGreaterEqual.class};
-        template.varInfos = new VarInfo[][] {new VarInfo[] {leftIndex, rightIndex}};
-        arg.ppt.parent.fillSuppressionTemplate(template);
-        if (template.filled) {
-          IntGreaterEqual resultInv = (IntGreaterEqual) template.results[0];
-          VarInfo leftResult = template.transforms[0][0];
-          if (leftResult == resultInv.var2()) {
-            return linkFromTemplate (template, inv);
-          }
-        }
+      int interval = 0;
+      if (ssss.from_start) {
+        interval -= ssss.index_shift;
+        return findLessEqual (leftIndex, rightIndex, inv, interval);
+      } else {
+        interval += ssss.index_shift;
+        return findLessEqual (rightIndex, leftIndex, inv, interval);
       }
-
-      return null;
     }
   }
 
