@@ -5653,6 +5653,9 @@ entered were never recorded to have exited: either they threw an
 exception, skipping the instrumentation code that would have recorded
 normal termination, or the target program's run was interrupted.
 
+@cindex nonce, invocation
+@cindex this_invocation_nonce
+
 In some cases, exceptional exit from a procedure can cause
 @code{orig(@var{x})} values to be incorrect.  This depends on the
 technique used to associate procedure exits with entries.  Daikon has
@@ -6661,6 +6664,9 @@ field is "nonsensical".
 The variables should appear in the same order as they did in the
 declaration of the program point, without omissions or additions.
 @end itemize
+
+@cindex nonce, invocation
+@cindex this_invocation_nonce
 
 As a special case, the first variable in a record may be
 "this_invocation_nonce", in which case there is no modification
