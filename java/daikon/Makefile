@@ -53,7 +53,7 @@ AUTO_GENERATED_FILES = \
 
 default: all
 
-all:	all_directly
+all:	all_directly junit
 
 ## In general, don't use this; it misses some files
 all_via_daikon:	Runtime.class Diff.class ${AUTO_GENERATED_FILES}
