@@ -28,8 +28,8 @@ The correct way to build the system is to run 'make'.
 #endif
 
 #if 0
-  // Macro ORDER_VALUES forces values of interest to their original order.
-  // This has a small execution cost -- see Vector values_order.
+Macro ORDER_VALUES forces values of interest to their original order.
+This has a small execution cost -- see Vector values_order.
 #endif
 #define ORDER_VALUES
 

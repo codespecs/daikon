@@ -49,7 +49,7 @@ branch of the $inv/java/daikon part of the repository into the trunk
     history at the end of this document.
 
   cd $inv/daikon.ver3
-  cvs up -j "ENGINE_V2_PATCHES:DD-MMM-YYYY HH:MM" -j ENGINE_V2_PATCHES
+  cvs up -j "ENGINE_V2_PATCHES:DD-MMM-YYYY HH:MM:SS" -j ENGINE_V2_PATCHES
   make tags
   date +"%d-%b-%Y %H:%M:%S"
 
@@ -65,6 +65,11 @@ branch of the $inv/java/daikon part of the repository into the trunk
      * "d e" (uses ediff)
      * or edit new version (containing conflict markers) directly
     In imerge/ediff, "MINE" is V3, and "OTHER" is V2.
+
+    If you wish to see what V2 looked like at the time of the last merge
+    (for example, to see what changed between then an now in V2), run the
+    following in a temporary directory:
+      cvs -q -d /g4/projects/invariants/.CVS co -r ENGINE_V2_PATCHES -D 2003/06/09 invariants/java/daikon
 
 (9) Examine any modified files you think are deserving before you run tests
     or commit.
@@ -88,6 +93,7 @@ branch of the $inv/java/daikon part of the repository into the trunk
 **** Merge history ****
 (Add entries at the top of the list)
 
+06-Aug-2003 20:42:21 by MDE
 26-Jul-2003 11:43:46 by MDE
 22-Jul-2003 10:57:27 by JHP
 10-Jun-2003 19:43:18 by MDE

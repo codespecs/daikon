@@ -174,7 +174,13 @@ public final class CLASSNAME
     if (wrapper.falsified) {
       return Invariant.PROBABILITY_NEVER;
     } else if (can_be_lt || can_be_gt) {
-      return Math.pow(.5, wrapper.ppt.num_values());
+      double answer = Math.pow(.5, wrapper.ppt.num_values());
+      if (answer > Invariant.dkconfig_probability_limit) {
+        wrapper.discardCode = DiscardCode.bad_probability;
+        wrapper.discardString = "Computed probability "+answer+" > dkconfig_probability_limit=="+
+          Invariant.dkconfig_probability_limit;
+      }
+      return answer;
     } else {
       if (can_be_eq) {
         // It's an equality invariant.  I ought to use the actual ranges somehow.

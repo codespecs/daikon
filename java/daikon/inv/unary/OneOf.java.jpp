@@ -1404,7 +1404,7 @@ public final class ONEOFSCALAR
       SequenceLength sl = (SequenceLength) v.derived;
       if (sl.shift != 0) {
         discardCode = DiscardCode.obvious;
-        discardString = v.name.name()+" is derived with shift!-0 (shift=="+sl.shift+")";
+        discardString = v.name.name() + " is derived with shift!-0 (shift==" + sl.shift + ")";
         return true;
       }
     }

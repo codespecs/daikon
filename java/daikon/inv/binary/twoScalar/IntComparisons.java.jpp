@@ -690,7 +690,7 @@ invariants.
           discardCode = DiscardCode.obvious;
           String n1 = var1().name.name();
           String n2 = var2().name.name();
-          discardString = n1+"=="+n2+" --> "+n1+">="+n2+" and "+n1+"<="+n2;
+          discardString = n1 + "==" + n2 + " --> " + n1 + ">=" + n2 + " and " + n1 + "<=" + n2;
           return true;
         }
       }
@@ -703,7 +703,7 @@ invariants.
           discardCode = DiscardCode.obvious;
           String n1 = var1().name.name();
           String n2 = var2().name.name();
-          discardString = n1+"=="+n2+" --> "+n1+">="+n2+" and "+n1+"<="+n2;
+          discardString = n1 + "==" + n2 + " --> " + n1 + ">=" + n2 + " and " + n1 + "<=" + n2;
           return true;
         }
       }

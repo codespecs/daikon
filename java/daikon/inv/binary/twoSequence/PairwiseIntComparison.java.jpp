@@ -130,6 +130,7 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.Invariant;
+import daikon.inv.DiscardCode;
 import daikon.inv.Comparison;
 import daikon.inv.ValueTracker;
 import daikon.inv.FloatValueTracker;
@@ -337,6 +338,9 @@ public class PAIRWISEINTEQUAL
 
   public void add_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {
     if (a1.length != a2.length) {
+      discardCode = DiscardCode.bad_sample;
+      discardString = "Sample seen with different sequence lengths: "+utilMDE.ArraysMDE.toString(a1)+" "+
+        utilMDE.ArraysMDE.toString(a2);
       destroyAndFlow();
       return;
     }
@@ -348,6 +352,11 @@ public class PAIRWISEINTEQUAL
       PRIMITIVE v1 = a1[i];
       PRIMITIVE v2 = a2[i];
       if (! EQUALS(v1, v2) ) {
+        discardCode = DiscardCode.bad_sample;
+        String name1 = var1().name.name();
+        String name2 = var2().name.name();
+        discardString = "Falsified by sample: " + name1 + "==" + utilMDE.ArraysMDE.toString(a1) + " " +
+          name2 + "==" + utilMDE.ArraysMDE.toString(a2);
         destroyAndFlow();
         return;
       }
@@ -368,17 +377,20 @@ public class PAIRWISEINTEQUAL
   }
 
   protected double computeProbability() {
-   if (falsified) {
-     return Invariant.PROBABILITY_NEVER;
-   } else if (num_values==0)
-     return Invariant.PROBABILITY_UNJUSTIFIED;
-   else {
-     #if !(defined(EQUAL) || defined(EQUALFLOAT))
-     return Math.pow(.5, ((PptSlice2) ppt).num_elt_values());
-     #else
-     return Invariant.PROBABILITY_JUSTIFIED;
-     #endif
-   }
+    if (falsified) {
+      discardCode = DiscardCode.not_enough_samples;
+      discardString = "No samples seen for this Invariant";
+      return Invariant.PROBABILITY_NEVER;
+    } else if (num_values==0)
+      return Invariant.PROBABILITY_UNJUSTIFIED;
+    else {
+#if !(defined(EQUAL) || defined(EQUALFLOAT))
+      return Math.pow(.5, ((PptSlice2) ppt).num_elt_values());
+#else
+      // It's an equality invariant
+      return Invariant.PROBABILITY_JUSTIFIED;
+#endif
+    }
   }
 
   public boolean isSameFormula(Invariant other)

@@ -13,7 +13,16 @@ class ImpliedPostconditionFilter extends InvariantFilter {
       return false;
     }
 
-    // return invariant.isImpliedPostcondition(); // [INCR]
+    /* [INCR]
+    Invariant answer = invariant.isImpliedPostcondition();
+    if (answer!=null) {
+      invariant.discardCode = DiscardCode.implied_post_condition;
+      invariant.discardString = "Implied by prestate invariant: "+answer.format()+" at ppt "+answer.ppt.parent.name;
+      return true;
+    } else {
+      return false;
+    }
+    */ // [INCR]
     return false;
   }
 }

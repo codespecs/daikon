@@ -22,7 +22,17 @@ class NonCanonicalVariablesFilter extends InvariantFilter {
       answer = (invariant.hasNonCanonicalVariable() && !IsEqualityComparison.it.accept(invariant));
       vis = invariant.ppt.var_infos;
     }
-    return (invariant.hasNonCanonicalVariable() && ! IsEqualityComparison.it.accept(invariant));
+
+    if (answer) {
+      invariant.discardCode = DiscardCode.non_canonical_var;
+      for (int i=0; i < vis.length; i++) {
+        if (!vis[i].isCanonical()) {
+          invariant.discardString = vis[i].name.name()+" has canonical form "+vis[i].equal_to.name.name();
+          break;
+        }
+      }
+    }
+    return answer;
     */ // [INCR]
   }
 }

@@ -86,8 +86,8 @@ public class Implication
     double answer = prob_and(pred_prob, cons_prob);
     if (answer > Invariant.dkconfig_probability_limit) {
       discardCode = DiscardCode.bad_probability;
-      discardString = "Probability{predicate AND consequent} > dkconfig_probability_limit=="+
-        Invariant.dkconfig_probability_limit+". Pr{predicate}=="+pred_prob+",Pr{consequent}=="+
+      discardString = "Probability{predicate AND consequent} > dkconfig_probability_limit==" +
+        Invariant.dkconfig_probability_limit + ". Pr{predicate}==" + pred_prob + ",Pr{consequent}==" +
         cons_prob;
     }
     return answer;

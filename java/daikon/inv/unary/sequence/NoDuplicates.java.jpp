@@ -342,7 +342,7 @@ public class CLASSNAME
           discardString = "Sequence is sorted (" + inv.format() + ")";
           log ("obvious- " + discardString);
           return true;
-      }
+        }
       }
     }
 

@@ -445,6 +445,11 @@ public class SEQSEQINTEQUAL
            ArraysMDE.toString(v2) + ") " + comparison);
     if (! COMPAREQUALS(comparison,0) ) {
       destroyAndFlow();
+      discardCode = DiscardCode.bad_sample;
+      String var1 = ppt.var_infos[0].name.name();
+      String var2 = ppt.var_infos[1].name.name();
+      discardString = "Falsified by sample: " + var1 + "==" + ArraysMDE.toString(v1) +
+        ", " + var2 + "==" + ArraysMDE.toString(v2);
       return;
     }
     values_cache.add(v1, v2);
@@ -458,6 +463,8 @@ public class SEQSEQINTEQUAL
       return Math.pow(.5, ppt.num_values());
       #else
       if (ppt.num_samples() == 0) {
+        discardCode = DiscardCode.not_enough_samples;
+        discardString = "0 samples seen";
         return Invariant.PROBABILITY_UNJUSTIFIED;
       } else {
         return Invariant.PROBABILITY_JUSTIFIED;

@@ -16,12 +16,12 @@ class OnlyConstantVariablesFilter extends InvariantFilter {
     return false;
 
     /* [INCR]
-    if (invariant instanceof Implication) {
-      Implication impl = (Implication) invariant;
-      return impl.consequent().hasOnlyConstantVariables() || impl.predicate().hasOnlyConstantVariables();
-    }
-
-    return invariant.hasOnlyConstantVariables();
+    boolean answer = invariant.hasOnlyConstantVariables();
+    if (answer) {
+      invariant.discardCode = DiscardCode.only_constant_vars;
+      invariant.discardString = "Every variable in this invariant is constant.";
+      return true;
+    } else return false;
     */ // INCR
   }
 }

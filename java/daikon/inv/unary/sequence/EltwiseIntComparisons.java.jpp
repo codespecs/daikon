@@ -268,8 +268,8 @@ public class CLASSNAME
         discardCode = DiscardCode.bad_sample;
 
         String varName = var().name.name();
-        discardString = "Falsified since: "+varName+"["+(i-1)+"]=="+a[i-1]+" "+
-          INVERSECOMPARATORSTRING+" "+varName+"["+i+"]=="+a[i];
+        discardString = "Falsified since: " + varName + "[" + (i-1) + "]==" + a[i-1] + " " +
+          INVERSECOMPARATORSTRING + " " + varName + "[" + i + "]==" + a[i];
 
         return;
       }

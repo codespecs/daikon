@@ -297,7 +297,7 @@ public class PrintInvariants {
       fi.setPptMap(ppts);
       Invariant nextInv = (Invariant) fullInvItor.next();
       if (!fi.shouldKeep(nextInv) && matches_disc_params(nextInv)) {
-        //Assert.assertTrue(nextInv.discardCode!=DiscardInvariant.not_discarded,
+        //Assert.assertTrue(nextInv.discardCode!=DiscardCode.not_discarded,
         //                nextInv.getClass().getName()+" "+nextInv.discardString+" not falsified");
         toPrint += (dashes+nextInv.format()+"\nCode: ["+nextInv.discardCode+"]\nReason: "+nextInv.discardString+"\n");
       }
@@ -307,7 +307,7 @@ public class PrintInvariants {
     for (int i=0; i < ppt.falsified_invars.size(); i++) {
       Invariant nextInv = (Invariant) ppt.falsified_invars.get(i);
       if (matches_disc_params(nextInv)) {
-        //Assert.assertTrue(nextInv.discardCode!=DiscardInvariant.not_discarded,
+        //Assert.assertTrue(nextInv.discardCode!=DiscardCode.not_discarded,
         //                nextInv.getClass().getName()+" "+nextInv.discardString+" falsified");
         toPrint += (dashes+nextInv.format()+"\nCode: ["+nextInv.discardCode+"]\nReason: "+nextInv.discardString+"\n");
       }

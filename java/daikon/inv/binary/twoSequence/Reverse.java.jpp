@@ -188,8 +188,8 @@ public class CLASSNAME
       discardCode = DiscardCode.bad_sample;
       String var1Name = var1().name.name();
       String var2Name = var2().name.name();
-      discardString = var1Name+"=="+utilMDE.ArraysMDE.toString(a1)+" has length "+a1.length+
-        " while "+var2Name+"=="+utilMDE.ArraysMDE.toString(a2)+" has length "+a2.length;
+      discardString = var1Name + "==" + utilMDE.ArraysMDE.toString(a1) + " has length " + a1.length +
+        " while " + var2Name + "==" + utilMDE.ArraysMDE.toString(a2) + " has length " + a2.length;
       return;
     }
     int len = a1.length;

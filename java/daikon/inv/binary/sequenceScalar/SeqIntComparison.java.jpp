@@ -54,7 +54,7 @@ The correct way to build the system is to run 'make'.
   #define SEQINTEQUAL SeqFloatLessThan
   #define SEQINTEQUALstring "SeqFloatLessThan"
   #define EQUALS(a,b) (Global.fuzzy.lt (a, b))
-  #define COMPARE >
+  #define COMPARE <
   #define EQUALSstring "<"
   #define EQUALSIOAstring "<"
   #define EQUALSSIMPLIFYstring "<"
@@ -391,10 +391,12 @@ public final class SEQINTEQUAL
       }
       if (inv instanceof SEQINTEQUAL) {
         SEQINTEQUAL other = (SEQINTEQUAL) inv;
-        Object obv[] = SUBSEQUENCE.isObviousSubSequence (seqvar(), other.seqvar());
+        Object obvDeriv[] = SUBSEQUENCE.isObviousSubSequence (seqvar(), other.seqvar());
         if (isSameFormula(other)
             && (sclvar() == other.sclvar())
-            && (obv[1] != null)) {
+            && obvDeriv[1]!=null) {
+          discardCode = (DiscardCode) obvDeriv[0];
+          discardString = (String) obvDeriv[1];
           return true;
         }
       }
@@ -480,6 +482,8 @@ public final class SEQINTEQUAL
       if (seqslice != null) {
         ELTONEOF eoo = ELTONEOF.find(seqslice);
         if ((eoo != null) && eoo.enoughSamples() && (eoo.num_elts() == 1)) {
+          discardCode = DiscardCode.obvious;
+          discardString = "Obviously implied by " + eoo.format();
           return true;
         }
       }
@@ -494,6 +498,8 @@ public final class SEQINTEQUAL
         if (other_slice != null) {
           SEQINTEQUAL other_sic = SEQINTEQUAL.find(other_slice);
           if ((other_sic != null) && other_sic.enoughSamples()) {
+            discardCode = DiscardCode.obvious;
+            discardString = "Obviously implied by " + other_sic.format();
             return true;
           }
         }

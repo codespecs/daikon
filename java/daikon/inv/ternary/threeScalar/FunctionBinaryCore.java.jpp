@@ -213,13 +213,13 @@ public final class CLASSNAME
       String name2 = wrapper.ppt.var_infos[1].name.name();
       String name3 = wrapper.ppt.var_infos[2].name.name();
 
-      wrapper.discardString = "In all samples seen, "+name1+"=="+name2+"=="+name3;
+      wrapper.discardString = "In all samples seen, " + name1 + "==" + name2 + "==" + name3;
       return Invariant.PROBABILITY_NEVER;
     }
     double answer = Invariant.prob_is_ge(wrapper.ppt.num_values(), 5);
     if (answer > Invariant.dkconfig_probability_limit) {
       wrapper.discardCode = DiscardCode.bad_probability;
-      wrapper.discardString = "Number of samples seen not close to goal: "+values_cache.num_values()+" samples "+
+      wrapper.discardString = "Number of samples seen not close to goal: " + values_cache.num_values() + " samples " +
         "seen,goal was 5";
     }
     if (wrapper.logDetail())
