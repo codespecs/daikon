@@ -10,12 +10,14 @@ import daikon.*;
  * independently.
  */
 
-public abstract class Splitter {
+public abstract class Splitter implements java.io.Serializable {
 
   /**
-   * Creates a splitter "factory" that should only be used for creating
-   * new copies via instantiate(Ppt).
-   * There is no need for subclasses to override this.  */
+   * Creates a splitter "factory" that should only be used for creating new
+   * copies via instantiate(Ppt).  (That is, the result of "new Splitter()"
+   * should not do any splitting itself.)  There is no need for subclasses
+   * to override this.
+   **/
   public Splitter() { }
 
   /**

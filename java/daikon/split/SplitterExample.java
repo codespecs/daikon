@@ -3,7 +3,7 @@ package daikon.split;
 import daikon.*;
 
 // This splitter tests the condition "X>0".
-public class SplitterExample extends Splitter {
+public final class SplitterExample extends Splitter {
 
   VarInfo x_varinfo;
 
@@ -23,7 +23,8 @@ public class SplitterExample extends Splitter {
   }
 
   public boolean test(ValueTuple vt) {
-    // Alternately, use vt.getIntArrayValue(x_varinfo);
+    // Alternately, if x represents an array, use
+    //   vt.getIntArrayValue(x_varinfo);
     return (x_varinfo.getIntValue(vt) > 0);
   }
 
