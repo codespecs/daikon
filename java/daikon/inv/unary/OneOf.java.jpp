@@ -16,7 +16,7 @@ The correct way to build the system is to run 'make'.
 #define SINGLESCALAR SingleScalar
 #define TOSTRING(x) x
 #define NAME var().name.name()
-#define DEFLIMIT 5
+#define DEFLIMIT (Global.EXPERIMENTS ? 3 : 5);
 #elif defined(STRING)
 #define SCALARPKG string
 #define INT String
