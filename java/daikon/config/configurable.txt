@@ -80,8 +80,6 @@ daikon.inv.unary.sequence.EltUpperBound.minimal_interesting
 daikon.inv.unary.sequence.NoDuplicates.enabled
 daikon.inv.unary.sequence.OneOfSequence.enabled
 daikon.inv.unary.sequence.OneOfSequence.size
-daikon.inv.unary.sequence.SeqIndexComparison.enabled
-daikon.inv.unary.sequence.SeqIndexNonEqual.enabled
 daikon.inv.unary.string.OneOfString.enabled
 daikon.inv.unary.string.OneOfString.size
 daikon.inv.unary.stringsequence.CommonStringSequence.enabled
