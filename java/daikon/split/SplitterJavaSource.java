@@ -2,13 +2,15 @@ package daikon.split;
 
 import daikon.*;
 import daikon.split.misc.*;
-import java.io.*;
-import java.util.*;
 import jtb.syntaxtree.*;
 import jtb.JavaParser;
 import jtb.ParseException;
 import jtb.visitor.*;
+import utilMDE.ArraysMDE;
+import java.io.*;
+import java.util.*;
 import java.util.regex.*;
+
 
 /**
  * SplitterJavaSource writes the splitter Java file's contents to a string
@@ -172,6 +174,7 @@ class SplitterJavaSource {
    * Writes the body of the test method to fileText.
    */
   private void writeTestBody() {
+    add("    " + "/* writeTestBody: " + vars.length + " declarations */");
     for (int i = 0; i < vars.length; i++) {
       String type = vars[i].getType();
       String get_expr;
@@ -340,6 +343,8 @@ class SplitterJavaSource {
     for (int i = 0; i < varInfos.length; i++) {
       if (isNormalVar(varInfos[i])) {
         filteredList.add(varInfos[i]);
+      } else {
+        // System.out.println("filterNonVars removed " + varInfos[i].name.name());
       }
     }
     return (VarInfo[]) filteredList.toArray(new VarInfo[0]);
@@ -347,7 +352,7 @@ class SplitterJavaSource {
 
   /**
    * Determines if the variable represented by varInfo
-   * is may appear in the splitting condition.
+   * may appear in the splitting condition.
    * @param varInfo the VarInfo for the variable that may be
    *  use in the condition.
    * @return true iff the variable represented by varInfo
@@ -757,10 +762,13 @@ class SplitterJavaSource {
       VarInfo varInfo = varInfos[i];
       try {
         String compilableName = compilableName(varInfo, className);
+        // System.out.println("varInfo " + varInfo.name.name() + ", compilableName=" + compilableName + ", isNeeded=" + isNeeded(compilableName, classVars));
         if (isNeeded(compilableName, classVars)) {
           variableManagerList.add(new VariableManager(varInfo, condition, className));
         }
-      } catch(ParseException e) {}
+      } catch(ParseException e) {
+        System.out.println("ParseException: " + e.toString());
+      }
     }
     return (VariableManager[]) variableManagerList.toArray(new VariableManager[0]);
   }
@@ -782,6 +790,7 @@ class SplitterJavaSource {
   private static List findPossibleClassVariables(String condition)
     throws ParseException {
     NodeToken[] tokens = TokenExtractor.extractTokens(condition);
+    // System.out.println("TokenExtractor.extractTokens(" + condition + ") ==> " + ArraysMDE.toString(tokens));
     List variables = new ArrayList();
     final int IDENTIFIER = 71;
     final int LPAREN = 74;
@@ -817,6 +826,7 @@ class SplitterJavaSource {
         variables.add(tokens[lastIndex].tokenImage);
       }
     }
+    // System.out.println("findPossibleClassVariables(" + condition + ") ==> " + variables.toString());
     return variables;
   }
 

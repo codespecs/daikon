@@ -1,14 +1,16 @@
 package daikon.split;
 
-import utilMDE.*;
-import org.apache.oro.text.regex.*;
 import daikon.*;
 import daikon.split.misc.*;
+
+import utilMDE.*;
+import jtb.ParseException;
+import org.apache.oro.text.regex.*;
+// import java.util.regex.*;
 import java.io.*;
 import java.util.*;
 import java.lang.reflect.*;
 import java.util.logging.Logger;
-import jtb.ParseException;
 
 /**
  * This class contains static method read_spinfofile( spinfofilename ),
@@ -105,6 +107,7 @@ public class SplitterFactory {
                                     PptTopLevel ppt,
                                     StatementReplacer statementReplacer)
     throws IOException {
+    // System.out.println("loadSplitters for " + ppt.name);
     for (int i = 0; i < splitterObjects.length; i++) {
       SplitterObject splitObj = splitterObjects[i];
       String fileName = getFileName(splitObj.getPptName());
@@ -160,17 +163,20 @@ public class SplitterFactory {
 
     PptTopLevel ppt = findPptHelper(ppt_name, all_ppts);
     if (ppt == null) {
-      // try with the OBJECT program point
-      ppt = findPptHelper("OBJECT", all_ppts);
+      throw new Error("Couldn't find ppt " + ppt_name);
     }
-    if (ppt == null) {
-      // We just get a random program point (the first) from the pptMap.
-      // Hopefully we can find the variables that we need at this ppt
-      Iterator pptIter = all_ppts.pptIterator();
-      if (pptIter.hasNext()) {
-        ppt = (PptTopLevel)pptIter.next();
-      }
-    }
+    // if (ppt == null) {
+    //   // try with the OBJECT program point
+    //   ppt = findPptHelper("OBJECT", all_ppts);
+    // }
+    // if (ppt == null) {
+    //   // We just get a random program point (the first) from the pptMap.
+    //   // Hopefully we can find the variables that we need at this ppt
+    //   Iterator pptIter = all_ppts.pptIterator();
+    //   if (pptIter.hasNext()) {
+    //     ppt = (PptTopLevel)pptIter.next();
+    //   }
+    // }
     return ppt;
   }
 
@@ -182,32 +188,45 @@ public class SplitterFactory {
   private static PptTopLevel findPptHelper(String ppt_name, PptMap all_ppts) {
     Object exact_result = all_ppts.get(ppt_name);
     if (exact_result != null) {
+      // System.out.println("findPptHelper exact match: " + ppt_name + ((PptTopLevel)exact_result).name);
       return (PptTopLevel) exact_result;
     }
+    if (ppt_name.endsWith(":::EXIT")) {
+      String regex = qm(ppt_name) + "[0-9]+";
+      PptTopLevel numbered_exit = findPptRegex(regex, all_ppts);
+      if (numbered_exit != null) {
+        return numbered_exit;
+      }
+    }
+
     // look for corresponding EXIT ppt. This is because the exit ppt usually has
     // more relevant variables in scope (eg. return, hashcodes) than the enter.
+    String regex;
     int index = ppt_name.indexOf("OBJECT");
     if (index == -1) {
       // Didn't find "OBJECT" suffix; add ".*EXIT".
-      ppt_name = qm(ppt_name) + ".*EXIT";
+      regex = qm(ppt_name) + ".*EXIT";
     } else {
       // Found "OBJECT" suffix.
       if (ppt_name.length() > 6) {
-        ppt_name = ppt_name.substring(0, index-1) + ":::OBJECT";
+        regex = qm(ppt_name.substring(0, index-1)) + ":::OBJECT";
+      } else {
+        regex = qm(ppt_name);
       }
     }
-    Pattern ppt_pattern;
-    try {
-      ppt_pattern = re_compiler.compile(ppt_name);
-    } catch (MalformedPatternException e) {
-      e.printStackTrace();
-      throw new Error("Error in regexp ppt_name: " + ppt_name + lineSep
-                      + e.toString());
-    }
-    Iterator ppt_itor = all_ppts.pptIterator();
-    while (ppt_itor.hasNext()) {
-      String name = ((PptTopLevel)ppt_itor.next()).name;
-      if (re_matcher.contains(name, ppt_pattern)) {
+
+    PptTopLevel result = findPptRegex(ppt_name, all_ppts);
+    return result;
+  }
+
+  private static PptTopLevel findPptRegex(String ppt_regex, PptMap all_ppts) {
+    // System.out.println("findPptRegex: " + ppt_regex);
+    java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(ppt_regex);
+    for (Iterator itor = all_ppts.pptIterator(); itor.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel)itor.next();
+      String name = ppt.name;
+      java.util.regex.Matcher matcher = pattern.matcher(name);
+      if (matcher.matches()) {
         // return more than one? do more than one match??
         // XXX In particular, we get in trouble here if the method
         // name we want is a prefix of other method names. For
@@ -216,12 +235,13 @@ public class SplitterFactory {
         // match /Pkg.frob.*EXIT/, and it's luck of the draw as to
         // which one we get. A workaround is to put "Pkg.frob(",
         // rather than just "Pkg.frob", in your .spinfo file. -smcc
+        // System.out.println("findPptRegex regex match: " + name);
         return all_ppts.get(name);
       }
     }
+    // System.out.println("findPptHelper ==> null");
     return null;
   }
-
 
   /**
    * Returns a file name for a splitter file to be used with a Ppt
