@@ -32,9 +32,15 @@ sub system_or_die ( $;$ ) {
 sub backticks_or_die ( $;$ ) {
   my ($command, $verbose) = check_args_range(1, 2, @_);
   if ($verbose) { print "$command\n"; }
-  my $result = `$command`;
-  if ($CHILD_ERROR != 0) { croak "Failed executing $command"; }
-  return $result;
+  if (wantarray) {
+    my @result = `$command`;
+    if ($CHILD_ERROR != 0) { croak "Failed executing $command"; }
+    return @result;
+  } else {
+    my $result = `$command`;
+    if ($CHILD_ERROR != 0) { croak "Failed executing $command"; }
+    return $result;
+  }
 }
 
 # Remove non-word characters from a program point name, as declared in a
