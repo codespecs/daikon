@@ -667,8 +667,8 @@ public final class Daikon {
       }
     }
 
-    //Set the fuzzy float comparison ratio.  This needs to be done after
-    //any configuration options (which may set the ratio) are processed.
+    // Set the fuzzy float comparison ratio.  This needs to be done after
+    // any configuration options (which may set the ratio) are processed.
     Global.fuzzy.set_rel_diff (Invariant.dkconfig_fuzzy_ratio);
 
     return new Set[] {

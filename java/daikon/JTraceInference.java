@@ -36,7 +36,7 @@ class JTraceInference extends Thread
 
     // XXX use this for now
     private final VarComparability default_comparability =
-        VarComparability.parse(VarComparability.NONE, null, null);
+        VarComparabilityNone.it;
 
     private final List prims = Arrays.asList(new String[] {
         "int",
