@@ -147,9 +147,11 @@ public final class UtilMDE {
     } else {
       result = (String) primitiveClassesFromJvm.get(classname);
       if (result == null) {
-        // For now, hope for the best.
-        result = classname;
-        // throw new Error("Malformed base class: " + classname);
+        // // throw new Error("Malformed base class: " + classname);
+        // // For now, hope for the best.
+        // result = classname;
+	// Never hope for the best, because you're probably wrong
+	return null;
       }
     }
     for (int i=0; i<dims; i++) {
@@ -177,7 +179,11 @@ public final class UtilMDE {
         result += classnameFromJvm(arglist.substring(pos, semi_pos+1));
         pos = semi_pos + 1;
       } else {
-        result += classnameFromJvm(arglist.substring(pos, nonarray_pos+1));
+	String maybe = classnameFromJvm(arglist.substring(pos, nonarray_pos+1));
+	if (maybe == null) {
+	  return null;
+	}
+        result += maybe;
         pos = nonarray_pos+1;
       }
     }
