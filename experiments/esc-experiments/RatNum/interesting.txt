@@ -1,0 +1,224 @@
+
+This file lists interesting things which this example has shown:
+
+=====================================================================
+
+Test created lots of stupid bound invariants.
+
+=====================================================================
+
+Even with a fixed text suite, we would still fall down on gcd RI,
+which some invariants depend on (e.g. negate).
+
+=====================================================================
+
+Here is the patche to make it prove.
+
+--- RatNum.java	Sat Mar 17 20:55:34 2001
++++ RatNum.fixed	Sat Mar 17 20:48:39 2001
+@@ -17,7 +17,6 @@
+     Examples of RatNums include "-1/13", "53/7", "4", "NaN", and "0".
+ */
+ public class RatNum {
+-/*@ invariant this.denom <= 2146800166 */
+ /*@ invariant this.denom >= 0 */
+ 
+     /*@ spec_public */ private int numer;
+@@ -53,10 +52,7 @@
+ 	          constructs a new RatNum = (n / d).
+     */
+     public RatNum(int n, int d) 
+-/*@ ensures this.denom <= 2146800166 */
+ /*@ ensures this.denom >= 0 */
+-
+-/*@ requires d <= 2146800166 */
+ {
+ 	// special case for zero denominator; gcd(n,d) requires d != 0
+ 	if (d == 0) {
+@@ -80,8 +76,6 @@
+     public boolean isNaN() 
+ /*@ ensures (\result == false)  ==  (this.denom >= 1) */
+ /*@ ensures (\result == true)  ==  (this.denom == 0) */
+-/*@ ensures (this.denom >= 1)  ==>  (this.numer <= 19699097) */
+-/*@ ensures (this.denom >= 1)  ==>  (this.numer >= -19747645) */
+ {
+         return (denom == 0);
+     }
+@@ -89,16 +83,12 @@
+ 
+     /** @return true iff this < 0. */
+     public boolean isNegative() 
+-/*@ ensures (\result == false)  ==>  (this.denom >= 0) */
+-/*@ ensures (\result == true)  ==>  (this.numer < this.denom) */
+ {
+ 	return (compareTo( new RatNum(0) ) < 0);
+     }
+ 
+     /** @return true iff this > 0. */
+     public boolean isPositive() 
+-/*@ ensures (\result == false)  ==>  (this.numer < this.denom) */
+-/*@ ensures (\result == true)  ==>  (this.denom >= 0) */
+ {
+ 	return (compareTo( new RatNum(0) ) > 0);
+     }
+@@ -112,11 +102,7 @@
+ /*@ ensures this.denom >= 0 */
+ 
+ /*@ requires rn != null */
+-/*@ requires rn.denom <= 19719720 */
+ /*@ requires rn.denom >= 0 */
+-/*@ requires this.numer <= 19699097 */
+-/*@ requires this.numer >= -19747645 */
+-/*@ requires this.denom <= 19719720 */
+ {
+ 	if (this.isNaN() && rn.isNaN()) {
+ 	    return 0;
+@@ -141,8 +127,6 @@
+ 	Java Language Specification, section 4.2.3</a>, for more details.
+     */
+     public double approx() 
+-/*@ ensures (this.denom == 0)  ==>  (this.numer == 1) */
+-/*@ ensures (this.denom == 0)  ==>  (this.numer == 1) */
+ {
+ 	if (isNaN()) {
+ 	    return Double.NaN;
+@@ -177,12 +161,9 @@
+ 
+     /** @return a new Rational equal to (0 - this). */
+     public RatNum negate() 
+-/*@ ensures \result.denom == this.denom */
+-/*@ ensures \result.denom == \old(this.denom) */
++/*!! ensures \result.denom == this.denom */
+ /*@ ensures \result != null */
+-/*@ ensures this.numer == -1 * \result.numer */
+-
+-/*@ requires this.denom <= 19719720 */
++/*!! ensures this.numer == -1 * \result.numer */
+ {
+ 	return new RatNum( - this.numer , this.denom );
+     }
+@@ -193,14 +174,8 @@
+      */
+     public RatNum add(RatNum arg) 
+ /*@ requires arg != null */
+-/*@ requires arg.denom <= 19719720 */
+ /*@ requires arg.denom >= 0 */
+-/*@ requires this.numer <= 19699097 */
+-/*@ requires this.numer >= -19747645 */
+-/*@ requires this.denom <= 19719720 */
+-
+ /*@ ensures \result != null */
+-/*@ ensures \result.denom <= 2146800166 */
+ /*@ ensures \result.denom >= 0 */
+ /*@ ensures arg != \result */
+ {
+@@ -215,15 +190,10 @@
+     */
+     public RatNum sub(RatNum arg) 
+ /*@ requires arg != null */
+-/*@ requires arg.denom <= 19719720 */
+ /*@ requires arg.denom >= 0 */
+-/*@ requires this.numer <= 19699097 */
+-/*@ requires this.numer >= -19747645 */
+-/*@ requires this.denom <= 19719720 */
+-
+ /*@ ensures \result != null */
+ /*@ ensures \result.denom >= 0 */
+-/*@ ensures arg != \result */
++/*!! ensures arg != \result */
+ {
+ 	// a/b - x/y = a/b + -x/y
+ 	return this.add( arg.negate() );
+@@ -237,9 +207,7 @@
+ /*@ ensures \result != null */
+ /*@ ensures \result.denom >= 0 */
+ /*@ ensures arg != \result */
+-
+ /*@ requires arg != null */
+-/*@ requires arg.denom <= 19719720 */
+ /*@ requires arg.denom >= 0 */
+ {
+ 	// (a/b) * (x/y) = ax/by
+@@ -253,9 +221,7 @@
+     */
+     public RatNum div(RatNum arg) 
+ /*@ requires arg != null */
+-/*@ requires arg.denom <= 19719720 */
+ /*@ requires arg.denom >= 0 */
+-
+ /*@ ensures (arg != \result)  ==  (arg.denom >= 1) */
+ /*@ ensures (arg == \result)  ==  (arg.denom == 0) */
+ /*@ ensures (arg.denom == 0)  ==>  (arg.denom <= this.denom) */
+@@ -282,20 +248,15 @@
+ 	@return d such that a % d = 0 and b % d = 0
+      */
+     private static int gcd(int a, int b) 
+-/*@ ensures a == \result */
+-/*@ ensures b == 0 */
+-
+-/*@ requires b <= 2146800166 */
++    /*@ ensures ((a == 0) && (b == 0)) == (\result == 0) */
+ {
+         // Euclid's method
+-	if (b == 0)
+-	    return 0;
+ 	while (b != 0) {
+ 	    int tmp = b;
+ 	    b = a % b;
+ 	    a = tmp;
+ 	}
+-	return a;
++	/*@ nowarn */ return a;
+     }
+ 
+     /** Standard hashCode function.
+@@ -311,12 +272,6 @@
+ 	and 'this' = 'obj'.  Note that NaN = NaN for RatNums.
+     */
+     public boolean equals(Object obj) 
+-/*@ also_ensures (\result == false)  ==>  (this.denom == 1 || this.denom == 2) */
+-/*@ also_ensures (\result == false)  ==>  (this.numer == -1 || this.numer == 0 || this.numer == 1 || this.numer == 2 || this.numer == 3) */
+-/*@ also_ensures (\result == true)  ==>  (this.denom >= 0) */
+-/*@ also_ensures (\result == true)  ==>  (this.denom == 0 || this.denom == 1 || this.denom == 2) */
+-/*@ also_ensures this.denom >= 0 */
+-
+ {
+ 	if (obj instanceof RatNum) {
+ 	    RatNum rn = (RatNum) obj;
+@@ -333,7 +288,9 @@
+     }
+ 
+     /** @return implementation specific debugging string. */
+-    public String debugPrint() {
++    public String debugPrint()
++    /*@ ensures \result != null */
++{
+ 	return "RatNum<numer:"+this.numer+" denom:"+this.denom+">";
+     }
+ 
+@@ -354,10 +311,10 @@
+                   RatNum r = ( N / M ), letting M be 1 in the case
+                   where only "N" is passed in.
+     */
+-    public static RatNum parse(String ratStr) 
+-/*@ ensures \result.numer == -1 || \result.numer == 0 || \result.numer == 1 || \result.numer == 2 || \result.numer == 3 */
+-/*@ ensures \result.denom == 0 || \result.denom == 1 || \result.denom == 2 */
++    public static RatNum parse(String ratStr)
++    /*@ requires ratStr != null */
+ {
++  try {
+ 	int slashLoc = ratStr.indexOf('/');
+ 	if (ratStr.equals("NaN")) {
+ 	    return new RatNum(1,0);
+@@ -371,5 +328,9 @@
+ 						       ratStr.length()));
+ 	    return new RatNum( n , d );
+ 	}
++  } catch (NumberFormatException e) {
++    return null;
++  }
+     }
++
+ }
+
+=====================================================================
