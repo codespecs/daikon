@@ -16,14 +16,14 @@ The correct way to build the system is to run 'make'.
   #define SCALAR long
   #define PROGLANG_INT ProglangType.INT
   #define PROGLANG_INT_ARRAY ProglangType.INT_ARRAY
-  #define SEQUENCESCALARSUBSCRIPT SequenceScalarSubscript
-  #define SEQUENCESCALARSUBSEQUENCE SequenceScalarSubsequence
+  #define SEQ_SUBSCRIPT SequenceScalarSubscript
+  #define SEQ_SUBSEQUENCE SequenceScalarSubsequence
   #define ARBITRARYSUBSEQUENCE SequenceScalarArbitrarySubsequence
   #define SUBSEQUENCE SubSequence
   #define SEQUENCEINITIAL SequenceInitial
   #define INDEXOF ArraysMDE.indexOf
 #elif defined(STRING)
-  #define CLASSNAME Member
+  #define CLASSNAME MemberString
   #define SEQUENCESCALAR SequenceString
   #define SEQUENCESCALARPKG sequenceString
   #undef SCALAR
@@ -32,8 +32,8 @@ The correct way to build the system is to run 'make'.
   #undef STRING
   #define PROGLANG_INT ProglangType.STRING
   #define PROGLANG_INT_ARRAY ProglangType.STRING_ARRAY
-  #define SEQUENCESCALARSUBSCRIPT SequenceStringSubscript
-  #define SEQUENCESCALARSUBSEQUENCE SequenceStringSubsequence
+  #define SEQ_SUBSCRIPT SequenceStringSubscript
+  #define SEQ_SUBSEQUENCE SequenceStringSubsequence
   #define ARBITRARYSUBSEQUENCE SequenceStringArbitrarySubsequence
 #if 0
   // XXX There is no SubSequenceString(?)
@@ -48,8 +48,8 @@ The correct way to build the system is to run 'make'.
   #define SCALAR double
   #define PROGLANG_INT ProglangType.DOUBLE
   #define PROGLANG_INT_ARRAY ProglangType.DOUBLE_ARRAY
-  #define SEQUENCESCALARSUBSCRIPT SequenceFloatSubscript
-  #define SEQUENCESCALARSUBSEQUENCE SequenceFloatSubsequence
+  #define SEQ_SUBSCRIPT SequenceFloatSubscript
+  #define SEQ_SUBSEQUENCE SequenceFloatSubsequence
   #define ARBITRARYSUBSEQUENCE SequenceFloatArbitrarySubsequence
   #define SUBSEQUENCE SubSequenceFloat
   #define SEQUENCEINITIAL SequenceInitialFloat
@@ -96,28 +96,39 @@ public final class CLASSNAME
    **/
   public static boolean dkconfig_enabled = true;
 
-  protected CLASSNAME(PptSlice ppt, boolean seq_first) {
-    super(ppt, seq_first);
-    Assert.assertTrue(sclvar().rep_type == PROGLANG_INT);
-    Assert.assertTrue(seqvar().rep_type == PROGLANG_INT_ARRAY);
+  protected CLASSNAME(PptSlice ppt) {
+    super(ppt);
   }
 
-  // This constructor enables testing with InvariantFormatTester.
-  public static CLASSNAME instantiate(PptSlice ppt) {
-    return instantiate(ppt,true);
+  /** Returns the prototype invariant for CLASSNAME **/
+  public static Invariant get_proto() {
+    if (!dkconfig_enabled)
+      return (null);
+    return (new CLASSNAME (null));
   }
 
-  public static CLASSNAME instantiate(PptSlice ppt, boolean seq_first) {
+  /** instantiates the invariant on the specified slice **/
+  public Invariant instantiate_dyn (PptSlice slice) {
+    return instantiate (slice);
+  }
+
+  public static CLASSNAME instantiate (PptSlice slice) {
     if (!dkconfig_enabled) return null;
 
-    VarInfo seqvar = ppt.var_infos[seq_first ? 0 : 1];
-    VarInfo sclvar = ppt.var_infos[seq_first ? 1 : 0];
-
-    if (debug.isLoggable(Level.FINE)) {
-      debug.fine ("Member instantiated: "
-                   + sclvar.name + " in " + seqvar.name);
+    VarInfo seqvar = null;
+    VarInfo sclvar = null;
+    if (slice.var_infos[0].rep_type == PROGLANG_INT_ARRAY) {
+      seqvar = slice.var_infos[0];
+      sclvar = slice.var_infos[1];
+    } else {
+      seqvar = slice.var_infos[1];
+      sclvar = slice.var_infos[0];
     }
-    return new CLASSNAME(ppt, seq_first);
+
+    Assert.assertTrue(sclvar.rep_type == PROGLANG_INT);
+    Assert.assertTrue(seqvar.rep_type == PROGLANG_INT_ARRAY);
+
+    return new CLASSNAME (slice);
   }
 
   public DiscardInfo isObviousStatically(VarInfo[] vis) {
@@ -136,9 +147,6 @@ public final class CLASSNAME
   public static boolean isObviousMember(VarInfo sclvar, VarInfo seqvar) {
 
     VarInfo sclvar_seq = sclvar.isDerivedSequenceMember();
-    // System.out.println("Member.isObviousMember(" + sclvar.name + ", " + seqvar.name + "):");
-    // System.out.println("  sclvar.derived=" + sclvar.derived
-    //                    + ", sclvar_seq=" + ((sclvar_seq == null) ? "null" : sclvar_seq.name));
 
     if (sclvar_seq == null) {
       // The scalar is not obviously (lexically) a member of any array.
@@ -183,16 +191,16 @@ public final class CLASSNAME
     // are off.
 
 
-    if (seqvar.derived instanceof SEQUENCESCALARSUBSEQUENCE ||
+    if (seqvar.derived instanceof SEQ_SUBSEQUENCE ||
         seqvar.derived instanceof ARBITRARYSUBSEQUENCE) {
       VarInfo seq_left_index = null, seq_right_index = null;
       // I'm careful not to access foo_shift unless foo_var has been set
       // to a non-null value, but Java is too stupid to recognize that.
       int seq_left_shift = 0xdead, seq_right_shift = 0xbeef;
-      if (seqvar.derived instanceof SEQUENCESCALARSUBSEQUENCE) {
+      if (seqvar.derived instanceof SEQ_SUBSEQUENCE) {
         // the sequence is B[0..J-1] or similar.  Get information about it.
-        SEQUENCESCALARSUBSEQUENCE seqsss
-          = (SEQUENCESCALARSUBSEQUENCE)seqvar.derived;
+        SEQ_SUBSEQUENCE seqsss
+          = (SEQ_SUBSEQUENCE)seqvar.derived;
         if (seqsss.from_start) {
           seq_right_index = seqsss.sclvar();
           seq_right_shift = seqsss.index_shift;
@@ -211,10 +219,10 @@ public final class CLASSNAME
         Assert.assertTrue(false);
       }
 
-      if (sclvar.derived instanceof SEQUENCESCALARSUBSCRIPT) {
+      if (sclvar.derived instanceof SEQ_SUBSCRIPT) {
         // B[I] in B[0..J]
 
-        SEQUENCESCALARSUBSCRIPT sclsss = (SEQUENCESCALARSUBSCRIPT) sclvar.derived;
+        SEQ_SUBSCRIPT sclsss = (SEQ_SUBSCRIPT) sclvar.derived;
         VarInfo scl_index = sclsss.sclvar(); // "I" in "B[I]"
         int scl_shift = sclsss.index_shift;
         // System.out.println("scl_shift = " + scl_shift + ", seq_shift = " + seq_shift);
@@ -285,170 +293,6 @@ public final class CLASSNAME
     return false;
   }
 
-  /**
-   * Check whether sclvar is a member of seqvar can be determined
-   * dynamically.
-   **/
-  public static boolean isObviousMemberDynamically(VarInfo sclvar, VarInfo seqvar) {
-
-    VarInfo sclvar_seq = sclvar.isDerivedSequenceMember();
-    // System.out.println("Member.isObviousMember(" + sclvar.name + ", " + seqvar.name + "):");
-    // System.out.println("  sclvar.derived=" + sclvar.derived
-    //                    + ", sclvar_seq=" + ((sclvar_seq == null) ? "null" : sclvar_seq.name));
-
-    if (sclvar_seq == null) {
-      // The scalar is not obviously (lexically) a member of any array.
-      return false;
-    }
-    // isObviousImplied: a[i] in a; max(a) in a
-    if (sclvar_seq == seqvar) {
-      // The scalar is a member of the same array.
-      return true;
-    }
-    // The scalar is a member of a different array than the sequence.
-    // But maybe the relationship is still obvious, so keep checking.
-
-    // isObviousImplied: when b==a[0..i]:  b[j] in a; max(b) in a
-    // If the scalar is a member of a subsequence of the sequence, then
-    // the scalar is a member of the full sequence.
-    // This is satisfied, for instance, when determining that
-    // max(B[0..I]) is an obvious member of B.
-    VarInfo sclseqsuper = sclvar_seq.isDerivedSubSequenceOf();
-    if (sclseqsuper == seqvar)
-      return true;
-
-    // We know the scalar was derived from some array, but not from the
-    // sequence variable.  If also not from what the sequence variable was
-    // derived from, we don't know anything about membership.
-    // Check:
-    //  * whether comparing B[I] to B[0..J]
-    //  * whether comparing min(B[0..I]) to B[0..J]
-    VarInfo seqvar_super = seqvar.isDerivedSubSequenceOf();
-    if ((seqvar_super != sclvar_seq)
-        && (seqvar_super != sclseqsuper)) {
-      // System.out.println("Member.isObviousMember(" + sclvar.name + ", " + seqvar.name + "):"
-      //                    + " isDerivedSubSequenceOf() != " + sclvar_seq.name);
-      return false;
-    }
-
-
-    // If the scalar is a positional element of the sequence from which
-    // the sequence at hand was derived, then any relationship will be
-    // (mostly) obvious by comparing the length of the sequence to the
-    // index.  By contrast, if the scalar is max(...) or min(...), all bets
-    // are off.
-
-
-    if (seqvar.derived instanceof SEQUENCESCALARSUBSEQUENCE ||
-        seqvar.derived instanceof ARBITRARYSUBSEQUENCE) {
-      VarInfo seq_left_index = null, seq_right_index = null;
-      // I'm careful not to access foo_shift unless foo_var has been set
-      // to a non-null value, but Java is too stupid to recognize that.
-      int seq_left_shift = 0xdead, seq_right_shift = 0xbeef;
-      if (seqvar.derived instanceof SEQUENCESCALARSUBSEQUENCE) {
-        // the sequence is B[0..J-1] or similar.  Get information about it.
-        SEQUENCESCALARSUBSEQUENCE seqsss
-          = (SEQUENCESCALARSUBSEQUENCE)seqvar.derived;
-        if (seqsss.from_start) {
-          seq_right_index = seqsss.sclvar();
-          seq_right_shift = seqsss.index_shift;
-        } else {
-          seq_left_index = seqsss.sclvar();
-          seq_left_shift = seqsss.index_shift;
-        }
-      } else if (seqvar.derived instanceof ARBITRARYSUBSEQUENCE) {
-        // the sequence is B[I+1..J] or similar
-        ARBITRARYSUBSEQUENCE ssass = (ARBITRARYSUBSEQUENCE)seqvar.derived;
-        seq_left_index = ssass.startvar();
-        seq_left_shift = (ssass.left_closed ? 0 : 1);
-        seq_right_index = ssass.endvar();
-        seq_right_shift = (ssass.right_closed ? 0 : -1);
-      } else {
-        Assert.assertTrue(false);
-      }
-
-      if (sclvar.derived instanceof SEQUENCESCALARSUBSCRIPT) {
-        // B[I] in B[0..J]
-
-        SEQUENCESCALARSUBSCRIPT sclsss = (SEQUENCESCALARSUBSCRIPT) sclvar.derived;
-        VarInfo scl_index = sclsss.sclvar(); // "I" in "B[I]"
-        int scl_shift = sclsss.index_shift;
-        // System.out.println("scl_shift = " + scl_shift + ", seq_shift = " + seq_shift);
-
-        boolean left_included, right_included;
-        if (seq_left_index == null)
-          left_included = true;
-        else
-          left_included = VarInfo.compare_vars(scl_index, scl_shift,
-                                               seq_left_index, seq_left_shift,
-                                               false /* >= */);
-        if (seq_right_index == null)
-          right_included = true;
-        else
-          right_included
-            = VarInfo.compare_vars(scl_index, scl_shift,
-                                   seq_right_index, seq_right_shift,
-                                   true /* <= */);
-//         System.out.println("Is " + sclvar.name.name() + " contained in "
-//                            + seqvar.name.name()
-//                            + "? left: " + left_included + ", right: "
-//                            + right_included);
-        if (left_included && right_included)
-          return true;
-      } else if (sclvar.derived instanceof SEQUENCEINITIAL) {
-        // System.out.println("sclvar derived from SequenceInitial: " + sclvar.name);
-
-        // isObviousImplied: B[0] in B[0..J]; also B[-1] in B[J..]
-        SEQUENCEINITIAL sclse = (SEQUENCEINITIAL) sclvar.derived;
-        int scl_index = sclse.index;
-        if (((scl_index == 0) && seq_left_index == null)
-            || ((scl_index == -1) && seq_right_index == null))
-          // It might not be true, because the array could be empty;
-          // but if the array isn't empty, then it's obvious.
-          return true;
-      } else if ((sclvar.derived instanceof SequenceMin)
-                 || (sclvar.derived instanceof SequenceMax)) {
-        Object[] obvDeriv = SUBSEQUENCE.isObviousSubSequence(sclvar_seq, seqvar);
-        return (obvDeriv[1]!=null);
-      }
-    }
-
-    /// I need to test this code!
-    // Now do tests over variable name, to avoid invariants like:
-    //   header.next in header.~ll~next~
-    //   header.next.element in header.~ll~next~.element
-    //   header.next in header.next.~ll~next~
-    //   return.current in return.current.~ll~next~
-    String sclname = sclvar.name.name(); // mistere adds: this code
-    String seqname = seqvar.name.name(); // looks pretty sketchy (XXX)
-    int llpos = seqname.indexOf("~ll~");
-    if (llpos != -1) {
-      int tildepos = seqname.indexOf("~", llpos+5);
-      if (tildepos != -1) {
-        int midsize = tildepos-llpos-4;
-        int lastsize = seqname.length()-tildepos-1;
-        if (seqname.regionMatches(0, sclname, 0, llpos)
-            && (((tildepos == seqname.length() - 1)
-                 && (llpos == sclname.length()))
-                || (seqname.regionMatches(llpos+4, sclname, llpos, midsize)
-                    && seqname.regionMatches(tildepos+1, sclname, tildepos-4, lastsize))))
-          // isObviousImplied: to do
-          return true;
-      }
-    }
-
-    // int lastdot = sclvar.lastIndexOf(".");
-    // if (lastdot != -1) {
-    //   if (sclname.substring(0, lastdot).equals(seqname.substring(0, lastdot))
-    //       && seqname.substring(lastdot).equals("~ll~" + sclname.substring(lastdot) + "~")) {
-    //     return true;
-    //   }
-    // }
-
-    return false;
-  }
-
-
   public String repr() {
     return "Member" + varNames() + ": "
       + "falsified=" + falsified;
@@ -503,14 +347,6 @@ public final class CLASSNAME
     return "!" + form[0] + "(" + form[1] + " != " + form[2] + ")" + form[3];
   }
 
-//   public String format_jml() {
-//     // Uses jml exists option
-//     String[] form =
-//       VarInfoName.QuantHelper.format_jml(new VarInfoName[]
-//         { seqvar().name, sclvar().name },false,false);
-//     return form[0] + form[1] + " == " + form[2] + form[3];
-//   }
-
   public String format_simplify() {
     if (Invariant.dkconfig_simplify_define_predicates) {
       String[] seq_name =
@@ -543,12 +379,12 @@ public final class CLASSNAME
 
 
   public InvariantStatus add_modified(SCALAR[] a, SCALAR i, int count) {
-    if (debug.isLoggable(Level.FINE) &&
-        check_modified(a, i, count) == InvariantStatus.FALSIFIED) {
+
+    InvariantStatus is = check_modified(a, i, count);
+    if (debug.isLoggable(Level.FINE) && (is == InvariantStatus.FALSIFIED))
       debug.fine ("Member destroyed:  " + format() + " because " + i +
                   " not in " + ArraysMDE.toString(a));
-    }
-    return check_modified(a, i, count);
+    return (is);
   }
 
   protected double computeConfidence() {
@@ -560,257 +396,148 @@ public final class CLASSNAME
     return true;
   }
 
+  /**
+   * Checks to see if this is obvious over the specified variables.
+   * Implements the following checks: <pre>
+   *
+   *   (0 <= i <= j) ^ (A[] == B[]) ==> A[i] in B[0..j]
+   *   (0 <= i <= j) ^ (A[] == B[]) ==> A[j] in B[i..]
+   *   (A subset B)                 ==> A[i] in B
+   * </pre>
+   */
+  public DiscardInfo isObviousDynamically (VarInfo[] vis) {
 
+    if (Debug.logOn())
+      Debug.log (getClass(), ppt.parent, vis, "is obvious check" + format());
 
-  private static SuppressionFactory[] suppressionFactories = null;
-
-  public SuppressionFactory[] getSuppressionFactories() {
-    if (suppressionFactories == null) {
-      SuppressionFactory[] supers = super.getSuppressionFactories();
-      suppressionFactories = new SuppressionFactory[supers.length + 2];
-      System.arraycopy (supers, 0, suppressionFactories, 0, supers.length);
-      suppressionFactories[supers.length] = MemberSuppressionFactory1.getInstance();
-      suppressionFactories[supers.length + 1] = MemberSuppressionFactory2.getInstance();
+    DiscardInfo super_result = super.isObviousDynamically(vis);
+    if (super_result != null) {
+      return super_result;
     }
-    return suppressionFactories;
+
+    VarInfo scl_var = sclvar (vis);
+    VarInfo seq_var = seqvar (vis);
+
+    //
+    // JHP: For now don't check other elements in the equality set so that we
+    // match up better with the old suppression code.
+    if ((scl_var != sclvar()) || (seq_var != seqvar())) {
+      Debug.log (getClass(), ppt.parent, vis,
+                 "non-leader check: " + scl_var.name.name()
+                 + " " + seq_var.name.name()
+                 + " " + ppt.var_infos[0].name.name()
+                 + " " + ppt.var_infos[1].name.name());
+      return (null);
+    }
+
+    // Check for subscript in subsequence
+    DiscardInfo di = subscript_in_subsequence (vis);
+    if (di != null)
+      return (di);
+
+    // Check for (A subset B) ==> (A[i] member B)
+    di = subset_in_subsequence (vis);
+    if (di != null)
+      return (di);
+
+    return (null);
   }
 
-  /**
-   * Suppression in the form of A subset B => A[i] member B.  Note
-   * that A[i] could also be max(A), etc.
-   **/
-  public static class MemberSuppressionFactory1 extends SuppressionFactory {
+  /*
+   * Checks to see if this is obvious over the specified variables.
+   * Implements the following check: <pre>
+   *
+   * (A subset B) ==> (A[i] member B)
+   * </pre>
+   */
+  private DiscardInfo subset_in_subsequence (VarInfo[] vis) {
 
-    public static final Logger debug =
-      Logger.getLogger("daikon.suppress.factories.MemberSuppressionFactory");
+    VarInfo scl_var = sclvar (vis);
+    VarInfo seq_var = seqvar (vis);
 
-    private static final MemberSuppressionFactory1 theInstance =
-      new MemberSuppressionFactory1();
+    if (Debug.logOn())
+      Debug.log (getClass(), ppt.parent, vis, "looking for subset in subseq");
 
-    private MemberSuppressionFactory1() {
-      supTemplate = new SuppressionTemplate(1);
-    }
-
-    public static SuppressionFactory getInstance() {
-      return theInstance;
-    }
-
-    private Object readResolve() {
-      return theInstance;
-    }
-
-    private transient SuppressionTemplate supTemplate;
-
-    public SuppressionLink generateSuppressionLink (Invariant arg) {
-      Assert.assertTrue (arg instanceof CLASSNAME);
-      CLASSNAME inv = (CLASSNAME) arg;
-      if (Debug.logOn())
-        arg.log ("Considering suppression: A subset B => A[i] member B");
-
-      VarInfo sclSequence = inv.sclvar().isDerivedSequenceMember();
-      if (sclSequence == null) return null;
-      VarInfo seqvar = inv.seqvar();
-      if (sclSequence.isDerivedSubSequenceOf() == seqvar) {
-        return null;
-        // This should never get instantiated
-      }
-
-      supTemplate.resetResults();
-      // Shouldn't happen, because isObvious should
-      // have handled it, but in case it does, no big deal, just say no suppression
-      if (sclSequence == seqvar) return null;
-      {
-        supTemplate.set(0, PairwiseIntEqual.class, sclSequence, seqvar);
-        SuppressionLink sl = linkFromUnfilledTemplate (supTemplate, inv);
-        if (sl != null)
-          return sl;
-      }
-      {
-        // Try to see if SubSet invariant is there
-        supTemplate.resetResults();
-        supTemplate.set(0, SubSet.class, sclSequence, seqvar);
-        SuppressionLink sl = linkFromUnfilledTemplate (supTemplate, inv);
-        if (sl != null) {
-          // First transformed var in first invariant
-          VarInfo transSclSequence = supTemplate.transforms[0][0];
-          // Second transformed var in first invariant
-          VarInfo transSeqvar = supTemplate.transforms[0][1];
-          SubSet subSet = (SubSet) supTemplate.results[0];
-          if (subSet.var1() == transSclSequence) {
-            if (debug.isLoggable(Level.FINE)) {
-              debug.fine ("Suppressed by subset: " + subSet.repr());
-              debug.fine ("  sclSeq " + transSclSequence.name.name());
-              debug.fine ("  seqVar " + transSeqvar.name.name());
-            }
-            return sl;
-          }
-        }
-      }
-
-      {
-        // Try to see if SuperSet invariant is there
-        supTemplate.resetResults();
-        supTemplate.set(0, SuperSet.class, sclSequence, seqvar);
-        SuppressionLink sl = linkFromUnfilledTemplate (supTemplate, inv);
-        if (sl != null) {
-          // First transformed var in first invariant
-          VarInfo transSclSequence = supTemplate.transforms[0][0];
-          // Second transformed var in first invariant
-          VarInfo transSeqvar = supTemplate.transforms[0][1];
-          SuperSet supSet = (SuperSet) supTemplate.results[0];
-          if (supSet.var2() == transSclSequence) {
-            if (debug.isLoggable(Level.FINE)) {
-              debug.fine ("Suppressed by subset: " + supSet.repr());
-              debug.fine ("  sclSeq " + transSclSequence.name.name());
-              debug.fine ("  seqVar " + transSeqvar.name.name());
-            }
-            return sl;
-          }
-        }
-      }
-
-      {
-        // Failed to find the right SubSet/SuperSet invariants.  Now try SubSequence
-        supTemplate.resetResults();
-        supTemplate.set(0, SubSequence.class, sclSequence, seqvar);
-        SuppressionLink sl = linkFromUnfilledTemplate (supTemplate, inv);
-        if (sl != null) {
-          // First transformed var in first invariant
-          VarInfo transSclSequence = supTemplate.transforms[0][0];
-          // Second transformed var in first invariant
-          VarInfo transSeqvar = supTemplate.transforms[0][1];
-          SubSequence subSeq = (SubSequence) supTemplate.results[0];
-          if ((subSeq.var1_in_var2 && subSeq.var1() == transSclSequence) ||
-              (subSeq.var2_in_var1 && subSeq.var2() == transSclSequence)) {
-            if (Debug.logOn())
-              arg.log ("Suppressed with subSeq = " + subSeq.format()
-                       + " var1_in_var2=" + subSeq.var1_in_var2
-                       + " var2_in_var1=" + subSeq.var2_in_var1
-                       + " TransSclSequence=" + transSclSequence.name()
-                       + " var1=" + subSeq.var1().name()
-                       + " var2=" + subSeq.var2().name());
-            return sl;
-          }
-        }
-      }
+    // If the scalar is not a subscript of a seq there is nothing to check.
+    if (scl_var.derived == null)
       return null;
+    if (!(scl_var.derived instanceof SEQ_SUBSCRIPT))
+      return null;
+    SEQ_SUBSCRIPT sssc = (SEQ_SUBSCRIPT) scl_var.derived;
+    if (Debug.logOn())
+      Debug.log (getClass(), ppt.parent, vis, "Looking for "
+                 + sssc.seqvar().name.name() + " subset of "
+                 + seq_var.name.name());
+
+    // check to see if subscripts sequence is a subset of the sequence var
+    if (ppt.parent.is_subset (sssc.seqvar(), seq_var)) {
+      return new DiscardInfo(this, DiscardCode.obvious,
+                             "(" + sssc.seqvar().name.name() + " subset "
+                             + seq_var.name.name() + ") ==> "
+                             + sssc.seqvar().name.name() + "["
+                             + sssc.sclvar().name.name()
+                             + "] member " + seq_var.name.name());
     }
+
+    return (null);
   }
 
-  /**
-   * Suppression in the form of <pre>  0<=i<=j  ==>  b[i] in b[0..j] </pre>
-   **/
-  public static class MemberSuppressionFactory2 extends SuppressionFactory {
+  /*
+   * Checks to see if this is obvious over the specified variables.
+   * Implements the following checks: <pre>
+   *
+   *   (0 <= i <= j) ^ (a[] == b[]) ==> a[i] in b[0..j]
+   *   (0 <= i <= j) ^ (a[] == b[]) ==> a[j] in b[i..]
+   * </pre>
+   */
+  private DiscardInfo subscript_in_subsequence (VarInfo[] vis) {
 
-    public static final Logger debug =
-      Logger.getLogger("daikon.suppress.factories.MemberSuppressionFactory2");
+    VarInfo scl_var = sclvar (vis);
+    VarInfo seq_var = seqvar (vis);
 
-    private static final MemberSuppressionFactory2 theInstance =
-      new MemberSuppressionFactory2();
+    // Both variables must be derived
+    if ((scl_var.derived == null) || (seq_var.derived == null))
+      return (null);
 
-    public static SuppressionFactory getInstance() {
-      return theInstance;
+    // If the scalar is not SequenceScalarSubscript, there is nothing to check.
+    if (!(scl_var.derived instanceof SEQ_SUBSCRIPT))
+      return null;
+    SEQ_SUBSCRIPT sssc = (SEQ_SUBSCRIPT) scl_var.derived;
+
+    // If the sequence is not SequenceScalarSubsequence, nothing to check
+    if (!(seq_var.derived instanceof SEQ_SUBSEQUENCE))
+      return (null);
+    SEQ_SUBSEQUENCE ssss = (SEQ_SUBSEQUENCE) seq_var.derived;
+
+    // Both variables must be derived from equal sequences
+    if (!ppt.parent.is_equal (sssc.seqvar(), ssss.seqvar()))
+      return (null);
+
+    // if a[i] in a[0..n], look for i <= n
+    if (ssss.from_start) {
+      if (Debug.logOn())
+        Debug.log (getClass(), ppt.parent, vis,
+          "Looking for " + sssc.sclvar().name.name() + sssc.index_shift
+           + " <= " + ssss.sclvar().name.name() + ssss.index_shift);
+      if (ppt.parent.is_less_equal (sssc.sclvar(), sssc.index_shift,
+                             ssss.sclvar(), ssss.index_shift))
+        return new DiscardInfo(this, DiscardCode.obvious,
+                     "i <= n ==> a[i] in a[..n] for "
+                     + scl_var.name.name() + " and " + seq_var.name.name());
+    } else { // a[i] in a[n..], look for i >= n
+      if (Debug.logOn())
+        Debug.log (getClass(), ppt.parent, vis,
+          "Looking for " + ssss.sclvar().name.name() + ssss.index_shift
+           + " <= " + sssc.sclvar().name.name() + sssc.index_shift);
+      if (ppt.parent.is_less_equal (ssss.sclvar(), ssss.index_shift,
+                             sssc.sclvar(), sssc.index_shift))
+        return new DiscardInfo(this, DiscardCode.obvious,
+                     "i >= n ==> a[i] in a[n..] for "
+                     + scl_var.name.name() + " and " + seq_var.name.name());
     }
+    return (null);
 
-    private Object readResolve() {
-      return theInstance;
-    }
-
-    private transient SuppressionTemplate supTemplate;
-
-    /**
-     * Check if leftIndex < rightIndex.
-     **/
-    public SuppressionLink generateSuppressionLink (Invariant arg) {
-      Assert.assertTrue (arg instanceof CLASSNAME);
-      CLASSNAME inv = (CLASSNAME) arg;
-      VarInfo sclvar = inv.sclvar();
-      VarInfo sclSequence = sclvar.isDerivedSequenceMember();
-      if (debug.isLoggable(Level.FINE)) {
-        debug.fine ("Trying for: " + inv.repr());
-      }
-
-      if (sclSequence == null) {
-        debug.fine ("  Sclvar is not from a sequence");
-        return null;
-      }
-      if (!(sclvar.derived instanceof SEQUENCESCALARSUBSCRIPT)) {
-        debug.fine ("  Sclvar is a sequence elt other than a subscript");
-        return null;
-      }
-      SEQUENCESCALARSUBSCRIPT sssc = (SEQUENCESCALARSUBSCRIPT) inv.sclvar().derived;
-      VarInfo leftIndex = sssc.sclvar();
-      VarInfo seqvar = inv.seqvar();
-      VarInfo origSeqvar = seqvar.isDerivedSubSequenceOf();
-      if (origSeqvar == null) {
-        debug.fine ("  Seqvar is not a subsequence derived var");
-        return null;
-      }
-      if (sclSequence != origSeqvar) {
-        debug.fine ("  Not from the same sequences");
-        return null;
-
-      }
-      if (!(seqvar.derived instanceof SEQUENCESCALARSUBSEQUENCE)) {
-        // TODO: extend to handle SequenceScalarArbitrarySubsequence too
-        debug.fine ("  Unhandled subsequence derivation type");
-        return null;
-      }
-      SEQUENCESCALARSUBSEQUENCE ssss = (SEQUENCESCALARSUBSEQUENCE) seqvar.derived;
-      VarInfo rightIndex = ssss.sclvar();
-      if (debug.isLoggable(Level.FINE)) {
-        debug.fine ("  Attempting to find <= template for: ");
-        debug.fine ("  " + leftIndex.name.name());
-        debug.fine ("  " + rightIndex.name.name());
-        debug.fine ("  In inv: " + inv.repr());
-      }
-      if (leftIndex == rightIndex) {
-        return null;
-      }
-
-
-      // jhp - The code below seems a bit unclear.  I would restate
-      // the explanation as follows:
-
-      // sc_shift is the scalar shift
-      // seq_shift is the sequence shift
-      //
-      // We want A[i+sc_shift] in A[0..j+seq_shift]
-      //   i+sc_shift <= j+seq_shift
-      //   i <= j + seq_shift - sc_shift
-      //
-      // We want A[i+sc_shift] in A[j+seq_shift..]
-      //  j+seq_shift <= i+sc_shift
-      //  j <= i + sc_shift - seq_shift
-
-      // The original explanation...
-      // Here's the math, explained:
-
-      // We want A[i] in A[0..j+shift]
-      // i <= j+shift
-      // That's like saying:
-      // i <= j + interval
-      // interval = - shift
-
-      // We want A[i] in A[j+shift..]
-      // j+shift <= i
-      // That's like saying:
-      // j <= i + interval
-      // interval = shift
-
-      // jhp- Its not clear to me why the calculation of interval is
-      // reversed from what I show above.  Perhaps interval as used
-      // in findLessEqualInt has an inverted meaning
-
-      int interval = 0;
-      if (ssss.from_start) {
-        interval = sssc.index_shift - ssss.index_shift ;
-        return findLessEqualInt (inv, leftIndex, rightIndex, interval);
-      } else {
-        interval = ssss.index_shift - sssc.index_shift;
-        return findLessEqualInt (inv, rightIndex, leftIndex, interval);
-      }
-    }
   }
+
 
 }
