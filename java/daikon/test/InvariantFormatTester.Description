@@ -1,3 +1,7 @@
+IMPORTANT NOTE: Make sure the InvariantFormatTest.commands file is
+in the classpath when this tester is run or the tester will not work.
+(It will just tell you that the file is not in the classpath)
+
 Files should be formatted in the following manner:
 
 InvariantFormatTest.commands:
