@@ -26,6 +26,11 @@ and <a href="../download/">the Daikon distribution</a>.  See the <a
 href="../download/doc/daikon.html">Daikon manual</a> for more details.
 <p>
 
+If you work in the Program Analysis Group, then you should also be familiar
+with the <a href="http://pag.csail.mit.edu/pag/logistics.html">logistics
+for work at PAG</a>.
+<p>
+
 <p>
 Contents:
 <!-- start toc.  do not edit; run html-update-toc instead -->
@@ -46,20 +51,11 @@ Contents:
       <li><a href="#editing-daikon">Editing Daikon source code</a>
         <ul>
           <li><a href="#Emacs-commands">Emacs commands</a>
-          <li><a href="#code-conventions">Coding conventions</a>
-            <ul>
-              <li><a href="#local-variables">Local variables</a>
-              <li><a href="#generic-types">Generic types</a>
-              <li><a href="#comments">Comments</a>
-              <li><a href="#code-formatting">Code formatting</a>
-              <li><a href="#perl">Perl</a>
-            </ul>
           <li><a href="#editing-daikon.texinfo">Editing daikon.texinfo</a>
         </ul>
       <li><a href="#other-tasks">Other tasks</a>
         <ul>
           <li><a href="#regression-tests">Testing Daikon</a>
-          <li><a href="#merging">Merging V2 and V3</a>
           <li><a href="#distribution">Making a distribution</a>
         </ul>
       <li><a href="#reporting">Reporting on your research</a>
@@ -93,166 +89,17 @@ its applications; which ones to read depends on your particular interest.
 
 <h3><a name="getting-account"></a>Getting a computer account</h3>
 
-<!-- machines:
-  beet
-  cassava
-  daikon
-  leek
-  manioc
-  meoptiplex
-  parsnip
-  peanut
-  potato
-  rutabaga
-  scallion
-  shallot
-  turnip
-  yam
-available:
-  batata
-  celeriac
-  finnochio
-  kumara
-  lotus
-  taro
-  yuca
-already taken:
-  carrot
-  onion
-  radish
-taken, but possibly available ("ping" fails):
-  garlic
-to be checked:
--->
-
-You should perform your work on one of these client machines
-(listed from fastest to slowest):  
-  parsnip, peanut,
-  beet, daikon, manioc, rutabaga, turnip,
-  scallion, yam,
-  shallot, cassava, potato,
-  meoptiplex.
-All of the client machines use the
-pag.csail.mit.edu (previously known as geyer.csail.mit.edu) filesystem, which has
-plenty of disk space and direct access to the main CVS repository and
-precompiled binaries.  (You should not work on pag itself, which is a
-file server, mail server, etc.  It is polite to avoid running
-compute-intensive jobs on a machine that someone else is currently using;
-for instance, if you have your ssh-agent credentials set up, you can find
-out which machines are not currently in use via
-<tt>~mernst/bin/share/pagdo uptime</tt> or <tt>~mernst/bin/share/pagdo
-myxloads</tt>.)
-<p>
-
-Do not use standard telnet or rlogin to log into the machines remotely;
-always use ssh.  Similarly, for file transfer, use anonymous means or use
-scp.  The ssh and scp programs protect your password from eavesdroppers; we
-don't want our machines to get broken into due to negligence.  To change
-your password, use the <tt>yppasswd</tt> command; do not use plain
-<tt>passwd</tt>.
-<p>
-
-Ask <a href="mailto:mernst@csail.mit.edu">Michael Ernst</a> or someone else
-with sysadmin privileges to make you an account; be sure to specify the
-username you prefer.  Only that person needs to know the <a
-href="pag-account.html">details of account creation</a>.
+See the <a
+href="http://pag.csail.mit.edu/pag/logistics.html#getting-account">PAG
+instructions for getting a computer account</a>.
 <p>
 
 When you log in, you will encounter an error in your initial
 <tt>.bashrc</tt> or <tt>.cshrc</tt> until you <a href="#local-cvs">check
-out your copy of the CVS repository</a>.
+out your copy of the CVS repository</a>.  (The error message will tell you
+to perform the checkout.)
 <p>
 
-
-<!-- All this is taken care of automatically; don't mention them here, in
-order to avoid overloading readers.
--->
-
-<!-- <h2><a name="environment-1"></a>Setting up your environment (part 1, before installing Daikon)</h2>
-
-
-Mail to <em>yourusername</em>@pag.csail.mit.edu will be forwarded according
-to the contents of your <tt>.forward</tt> file, which you may change if you
-like.<p>
-
-It is important that you be a member of the "invariants" Unix group.  (Run
-the command <tt>groups</tt> to see which ones you are in.)  If you are not
-in these groups, you cannot access the CVS repository.<p>
-
-To make CVS produce diffs in "unified format", and to make CVS create
-directories that exist in the repository but are missing from the working
-directory, create a file in your home directory named <tt>.cvsrc</tt>
-containing the following contents:
-<blockquote>
-<pre>
-diff -u
-update -d -P
-</pre>
-</blockquote>
-or just <a href=".cvsrc">download this one</a> to your home directory.
-<p>
-
-If you wish to run <tt>dfej</tt> on a PAG machine, then you will need to
-adjust your LD_LIBRARY_PATH environment variable.  A reasonable setting
-(csh syntax; this would go in your <tt>.cshrc</tt> file) is
-<blockquote>
-<pre>
-setenv LD_LIBRARY_PATH   /usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
-</pre>
-</blockquote>
-<p>
-
-Stable versions of both <tt>dfej</tt> and <tt>dfec</tt> (the Daikon Front
-End for Java) appear in 
-<tt>~mernst/research/invariants/binaries</tt>.  You should put that
-directory on your path or make links to those binaries from a directory on
-your path.  (The development version of <tt>dfej</tt>, the Daikon Front End
-for Java, is available via CVS, and one checked-out version appears in
-<tt>~mernst/research/invariants/dfej/src/</tt>.)
-<p>
-
-I recommend that you use the latest possible version of the JDK (Java
-Development Kit).  A link to this  can always be found at
-<tt>/g2/jdk</tt>; you probably want to put the
-<tt>bin</tt> subdirectory in your path and to add 
-<tt>jre/lib/rt.jar</tt> and <tt>lib/tools.jar</tt> to the end of your
-CLASSPATH:
-<pre>
-  set path = ( /g2/jdk/bin $path )
-  setenv CLASSPATH ${CLASSPATH}:/g2/jdk/jre/lib/rt.jar:/g2/jdk/lib/tools.jar
-</pre>
-<p>
-
--->
-
-
-
-<!-- <h4><a name="classpath"></a>Classpath</h4>
-
-(by Jeremy Nimmer)
-<p>
-
-In case anyone is curious, this is how I set my CLASSPATH.  If you use this,
-you should change $INV to where your CVS checkout of <tt>invariants</tt> is.
-<p>
-
-<pre>
-setenv INV ${HOME}/research/invariants
-setenv JAVA_HOME /g2/jdk
-setenv RTJAR ${JAVA_HOME}/jre/lib/rt.jar
-setenv DAIKON_LIBS `/usr/bin/perl -e 'print join(":", @ARGV);' ${INV}/java/lib/*.jar`
-setenv CLASSPATH .:${INV}/java:${DAIKON_LIBS}:${RTJAR}
-</pre>
-
-This includes on your path:
-<pre>
-  .            - the cwd
-  $INV/java    - your current checkout of daikon engine
-  $DAIKON_LIBS - all of the .jar files in $INV/java/lib
-  $RTJAR       - the JDK runtime (for jikes)
-</pre>
-
--->
 
 <h3><a name="getting-daikon"></a>Getting your copy of Daikon</h3>
 
@@ -318,6 +165,7 @@ Before trying to compile (via <tt>make</tt> in any directory under
 <tt>$inv/java</tt>), log out and log back in, to set up your environment.
 <p>
 
+<p>
 Optionally, you may check out a copy of the <tt>dfej</tt> directory.
 You should not need to do this, however; just use the executable in
 <tt>/home/httpd/html/pag/daikon/download/binaries/mit</tt>, which should
@@ -327,30 +175,37 @@ use this command:
     cd ~/research/invariants
     cvs -d /g4/projects/invariants/.CVS co dfej
 </pre>
-<p>
 
-You may also want the <tt>papers</tt> directory
+You may also want the <tt>papers</tt> directory:
 <pre>
     cd ~/research/invariants
     cvs -d /g4/projects/invariants/.CVS co papers
 </pre>
 
+If you want to instrument C programs, get kvasir:
+<pre>
+    cd ~/research/invariants
+    make build-kvasir
+</pre>
+</p>
+
 
 <h4><a name="remote-cvs"></a>Remote CVS</h4>
 
 You can also create your copy of the repository on a remote machine (that
-is, not a PAG/taproot machine).  You can do so using anonymous CVS or
-regular CVS.
+is, not a PAG client machine).  You can do so using regular CVS or
+anonymous CVS.
 <ul>
-  <li><a href="../anoncvs.html">Anonymous CVS instructions</a>
   <li><a href="../remote-cvs.html">Regular remote CVS instructions</a>.
       Also, see a description of <a
       href="http://www.cag.csail.mit.edu/~rugina/ssh-procedures/">using ssh
       without password queries</a>.
+  <li><a href="../anoncvs.html">Anonymous CVS instructions</a>
 </ul>
 <p>
 
-If you use remote CVS, you will need to set up your environment properly.
+If you use regular remote CVS, you will need to set up your environment
+properly on the remote machine.
 (This was done for you when your PAG account was <a
 href="pag-account.html">created</a>, so you don't have
 to worry about it when using a local CVS checkout.)
@@ -404,18 +259,6 @@ By default, your account uses bash as its shell.  To use another shell, run
 the <tt>chsh</tt> command (for instance, <tt>chsh -s /bin/tcsh</tt>), then log
 out and log back in.
 <p>
-
-<!--
-For compiling Java programs, you may wish to use <tt>jikes</tt> instead of
-<tt>javac</tt>.  Jikes tends to be faster than javac.  If you have any
-problems with it, you can always fall back to using javac.  To use jikes,
-add the line
-<pre>
-    JAVAC ?= jikes -g +E +F
-</pre>
-to your <tt>$inv/java/Makefile.user</tt> file.
-<p>
--->
 
 If you wish to use the Eclipse IDE, see the <a
 href="eclipse-pag.html">instructions for using Eclipse at PAG</a>.
@@ -482,11 +325,52 @@ there).<p>
 
 <h2><a name="running-daikon"></a>Running Daikon</h2>
 
-See the <a href="../download/doc/">Daikon manual</a> for instructions.
 <p>
+See the <a href="../download/doc/">Daikon manual</a> for instructions.
+</p>
+
+<h2><a name="scratch-directories"></a>Large files and scratch directories</h2>
+
+<p>
+To avoid filling up our disks with very large files (and to avoid causing
+backups to be made of those large files), avoid creating dtrace files in
+your home directory; instead, use a temporary directory.  Each pag client
+machine has two such directories:  /scratch and /scratch2.  These
+directories are quite large (dozens of gigabytes) and are not backed up.
+The pag machines allow cross-mounting of /scratch and /scratch2 from other
+machines:
+<pre>
+  cd /net/<em>pag-client</em>/scratch  
+  cd /net/<em>pag-client</em>/scratch2
+</pre>
+Typically each group member creates a subdirectory called
+/scratch/$USER/.
+</p>
+
+<p>
+To ensure that dtrace files are created on one of the scratch drives, you
+can specify an absolute pathname for the trace file, or you can run your
+experiments in a scratch directory, or you can use the makefiles in the
+$inv/tests/ directory, which automatically put dtrace files on scratch
+drives.  Another advantage of using the makefiles is that it is easy to set
+up and ensures that all the required steps are performed in the proper
+order, in an easily reproducible way.
+</p>
+
+<p>
+You should almost specify a trace file name that includes ".gz" at the end;
+see the "-tracefilename=FILENAME" argument to dfej, or the DTRACEFILE
+environment variable.  (Since compressing dtrace files is always a good
+thing, perhaps this should be the default.)
+</p>
 
 
 <h2><a name="editing-daikon">Editing Daikon source code</a></h2>
+
+Important:  see the <a
+href="http://pag.csail.mit.edu/pag/logistics.html#code-conventions">PAG
+coding conventions</a>.
+<p>
 
 <h3><a name="Emacs-commands">Emacs commands</a></h3>
 
@@ -500,173 +384,6 @@ The command <tt>M-x daikon-info</tt> views the Daikon manual using the Info
 viewer within Emacs.  You may also choose to use the stand-alone viewer, to
 use a Web browser to read the manual in HTML form, or to read the
 PostScript or PDF version either electronically or on paper.
-<p>
-
-
-<h3><a name="code-conventions">Coding conventions</a></h3>
-
-Before you check in code for the first time, you must get a code review to
-to help you improve your programming and to make sure that you haven't
-inadvertently written code that will be hard for others to understand or
-modify.
-<p>
-
-
-<h4><a name="local-variables">Local variables</a></h4>
-
-Local variables should have the most restrictive scope possible.  For
-instance, don't do this:
-<pre>
-  int x;
-  ...
-  for () {
-    ...
-    x = ...;
-    ...
-  }
-</pre>
-Instead, do this:
-<pre>
-  for () {
-    ...
-    int x = ...;
-    ...
-  }
-</pre>
-Loop-carried dependences (the variable is sometimes set on one loop
-iteration and used on the next one before being re-set) are the only reason
-to declare, external to a loop, a variable that is set in the loop;
-reducing scopes makes it clear that there are no loop-carried dependences.
-Likewise, if two loops both use a temporary variable, you should declare
-two separate variables rather than reusing the same one, to indicate that
-there are no inter-loop dependences.
-<p>
-
-
-<h4><a name="generic-types">Generic types</a></h4>
-
-When you declare a variable of generic type (such as <tt>List</tt> or
-<tt>HashMap</tt>, always indicate, in a comment just after the type name,
-the types of the elements.  For example, use one of the following formats:
-<pre>
-  private static Map/*[VarInfoAux->VarInfoAux]*/ interningMap = null;
-  List /*String*/ names;
-</pre>
-
-
-<h4><a name="comments">Comments</a></h4>
-
-Every code file that you write (Java classes, perl scripts, etc.) needs to
-have a comment at the top explaining exactly what is does and (if
-applicable) how to run it.  Otherwise it will be a mystery to others -- and
-perhaps to you when you return to it.  In some cases one or two sentences
-will do; in many other cases, the description needs to be more complete.
-Every non-trivial procedure should also contain a brief comment saying what
-it does.
-<p>
-
-Every class should have a descriptive comment at the top -- perhaps just
-one or two sentences, perhaps something more extensive.  This is very
-important now that there are many people working on the project, as it will
-help those people understand what a class is intended to do.  (It wasn't
-always true for code written when there was only one person working on the
-project; we will try to correct that code by stages.  If you have problem
-with any code, definitely ask for help so the code and/or comments can be
-improved.)
-<p>
-
-When a comment is a sentence, start it with a capital letter, end it with a
-period, and use correct grammar.
-Please keep comments to 80 characters and code to 80 characters whenever
-possible.  This makes it possible to print the code in a readable fashion
-and also to read the code in a standard-sized window.
-<p>
-
-Do not comment out large blocks of code with <tt>/*</tt> ... <tt>*/</tt>;
-instead, prefix each line by <tt>// </tt>.  Among other things, this does
-not lose the indentation of the original code; without that indentation,
-the commented-out code is much too hard to read and understand.  It also
-makes it clear what is commented out and what is not, even when the code
-is printed or is viewed without color highlighting.
-<p>
-
-
-<h4><a name="code-formatting">Code formatting</a></h4>
-
-When code has a consistent style, particularly within a single file but
-also over an entire project, the code is much easier to read and
-understand.  I don't wish to spend an excessive amount of time or energy
-promulgating coding guidelines, but here are a few things to pay
-attention to when you contribute to Daikon.
-<p>
-
-Use a consistent indentation style.  When editing an existing file, adopt
-its indentation style rather than writing your additions in an incompatible
-style.  In Emacs, you can use procedure `<tt>c-set-basic-offset</tt>',
-defined in <tt>invariants/emacs/c-set-basic-offset.el</tt>, to set the
-indentation amount to whatever an existing file already happens to use (for
-C and Java code).
-<p>
-
-Place whitespace around the outside of grouping punctuation; for instance,
-use "<tt>if (foo) bar;</tt>" rather than "<tt>if(foo)bar;</tt>".  (Do not
-place whitespace between a procedure name and its arguments.  Together,
-these rules ensure that function calls and keyword usage are visually
-distinct and easy to differentiate.)  Use "<tt>} else {</tt>" rather than
-"<tt>}else{</tt>".  Also place space after <tt>//</tt> that starts a
-comment.  Jamming punctuation against other entities in a program makes the
-program very hard to read.
-<p>
-
-Do not use tabs in code files.  They display differently in different
-editors, and they may print differently than they display in an editor.
-Always use spaces instead.  (If you are using the group's Emacs
-customizations, this should already be set up for you.)
-<p>
-
-Do not place files in the CVS repository with DOS-style line separators;
-use Unix-style separators (at least when first adding a file).  The CVS
-tools don't cope well with DOS line separators; for instance, they may
-erroneously indicate that an entire file is modified, making merges and
-updates very difficult.  One way to fix a DOS-style file is to do <tt>(setq
-buffer-file-coding-system nil)</tt> in Emacs, then save the file.
-<p>
-
-
-<h4><a name="perl">Perl</a></h4>
-
-<ol>
-  <li>Use <tt>#!/usr/bin/env perl</tt> as the first line, to permit
-      independence from the specific location where perl is installed.
-  <li>Include the following code, which enables checking for common perl
-      errors, near the top of the file (but usually after the brief
-      description of the script's purpose and how to use it):
-<pre>
-  use English;
-  use strict;
-  $WARNING = 1;
-</pre>
-  <li>Always check the status for every use of system() or backticks.
-      Better yet, use the system_or_die() and backticks_or_die() functions,
-      which automatically do the checking.  To use them, put <tt>use
-      util_daikon;</tt> near the top of your Perl script (after the <tt>use
-      strict;</tt> block).
-  <li>Avoid system() and backticks when possible; instead, use Perl
-      procedures, which tend to be more portable, more efficient, and
-      usually clearer.  For instance, don't do <tt>@files = split('\n', `ls
-      *.c`);</tt>; instead, use <tt>@files = glob("*.c");</tt>.
-  <li>When writing a subroutine that takes arguments, use the
-      <tt>checkargs</tt> facility to ensure that you have passed the
-      correct number of them.  Put <tt>use checkargs;</tt> near the top of
-      your Perl script, then, as the first line of user-written subroutine
-      foo, do one of the following:
-<pre>
-  my ($arg1, $arg2) = check_args(2, @_);
-  my ($arg1, @rest) = check_args_range(1, 4, @_);
-  my ($arg1, @rest) = check_args_at_least(1, @_);
-  my @args = check_args_at_least(0, @_);
-</pre>
-</ol>
 <p>
 
 
@@ -698,7 +415,7 @@ even be the same), and you may replace "@chapter" by "@section",
 <p>
 Once you have edited the manual, run <tt>make</tt> twice (yes, you must run
 it twice) in order to generate formatted versions of the manual
-(<tt>daikon.{html,info,ps,pdf}</tt>).
+(<tt>daikon.</tt>{<tt>html,info,ps,pdf</tt>}).
 <p>
 
 
@@ -743,36 +460,6 @@ fixes the bug, verifies the fix, and changes the bug status to "fixed"; and
 then the original reporter changes the status to "Closed".
 (The bugs themselves are stored in directory
 <tt>$inv/bugs</tt>, but you shouldn't need to know that.)
-<p>
-
-
-<h3><a name="merging">Merging V2 and V3</a></h3>
-
-Detailed instructions for doing a V2-V3 merge appear in
-<tt>$inv/daikon.ver3/merging.txt</tt>.
-<p>
-
-If you make a major change to one version of Daikon, then
-please also ensure that the change makes it to the other version of Daikon,
-and do a merge to indicate that the two versions are in correspondence.  A
-major change involves anything that would make a merge error-prone or
-difficult (for someone besides the original author of the change), such as:
-<ul>
-<li>renaming files
-<li>moving code within a file
-<li>widescale code changes (that touch many files)
-</ul>
-<p>
-
-There are two ways to get your changes into both versions of Daikon.
-<ol>
-<li>Make your change to Daikon V2, then do a merge to copy over the changes.
-<li>Do a merge, make the change to both versions by hand, then do another
-    merge.  (It is important that no one else must have checked in any
-    changes between your two merges.  If no one has, then you can ignore any
-    changes during the second merge.  In particular, you may omit the
-    "cvs up -j" command, but you must run all other commands.)
-</ol>
 <p>
 
 
@@ -916,14 +603,10 @@ what you have accomplished, what you have learned, and what you plan to do
 next.  This is very helpful both in permitting others to understand what
 you have done, and also in focusing your attention on whether you have been
 productive and keeping you on top of your progress.
-<!-- <br>
-As of summer 2001, the reports are written on Thursdays, and individual
-meetings with Michael Ernst are on Fridays.
--->
 <p>
 
-Each week, the Daikon group meets to hear a more in-depth report on the
-current state of one group member.  Each member presents during group
+Each week, the Program Analysis Group meets to hear a more in-depth report
+on the current status of one group member.  Each member presents during group
 meeting every 2-3 months.  These presentations may be informal, but they
 should be organized in a way that permits others to both understand and
 critique the work.  The presentation may use handouts, overhead
@@ -942,3 +625,14 @@ will try to avoid meetings longer than that.
 
 </body>
 </html>
+
+<!--  LocalWords:  TSE cshrc yourusername cvsrc dfej LD csh setenv dfec jre cwd
+ -->
+<!--  LocalWords:  CLASSPATH Classpath RTJAR ARGV cvs gz mkdir cd chmod rx cp
+ -->
+<!--  LocalWords:  chgrp inv dotfiles filesystem autoload pcl Dired chsh javac
+ -->
+<!--  LocalWords:  Jikes jikes dtrace tracefilename DTRACEFILE Baz html ps pdf
+ -->
+<!--  LocalWords:  daikongroupmember tarfile jdoc whiteboard
+ -->
