@@ -83,6 +83,7 @@
   (pre (and (= x orig-x) (= y orig-y)))
   (if-fi ((<= x y) (skip))
 	 ((<= y x) (swap x y)))
+  ;; equivalently, (and (= x (min orig-x orig-y)) (= y (max orig-x orig-y)))
   (post (and (<= x y) (or (and (= x orig-x) (= y orig-y))
 			  (and (= y orig-x) (= x orig-y))))))
 
@@ -275,6 +276,7 @@
 	   ((/= i n)
 	    (if-fi ((>= x (aref b i)) (psetq i (+ i 1) x (aref b i)))
 		   ((<= x (aref b i)) (setq i (+ i 1))))))
+    ;; equivalently, (= x (array-min b))
     (post (and (<= x b[0..n-1]) (exists (j) (and (<= 0 j) (< j n) (= x (aref b j))))))))
 
 (defun test-p184-3 ()
@@ -365,11 +367,12 @@
 (defun p191-2 (x y)
   (declare (type integer x y))
   (pre (and (> orig-x 0) (> orig-y 0)))
-  (do-od (inv (and (< x 0) (< y 0) (= (gcd x y) (gcd orig-x orig-y))))
+  // Should these "inv" "<" be ">" ?
+  (do-od (inv (and (< 0 x) (< 0 y) (= (gcd x y) (gcd orig-x orig-y))))
 	 (bound (+ x y))
 	 ((> x y) (setq x (- x y)))
 	 ((> y x) (setq y (- y x))))
-  (post (and (< 0 x) (< y 0) (= (gcd x y) (gcd orig-x orig-y)) (= x y (gcd x y)))))
+  (post (and (< 0 x) (= x y (gcd x y) (gcd orig-x orig-y)))))
 
 (defun test-p191-2 ()
   (with-data-trace "p191-2.dtrace"
