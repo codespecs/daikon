@@ -8,6 +8,8 @@ use B qw(main_root main_start main_cv SVf_POK CVf_METHOD CVf_LOCKED
 use Daikon::PerlType qw(parse_type unparse_type type_lub
 			unparse_to_code);
 
+#use Carp 'croak', 'cluck', 'carp', 'confess';
+
 @ISA = ("B::Deparse");
 
 # We use this enough that I just copied it from Deparse.pm rather than say
@@ -72,6 +74,7 @@ sub read_types {
 # interpreter)
 sub compile {
     my(@args) = @_;
+    my @output_style = ();
     return sub {
 	# Parse and remove any Daikon-specific args from @args
 	for my $i (0 .. $#args) {
@@ -84,8 +87,12 @@ sub compile {
 	    } elsif ($args[$i] eq "-o") {
 		# -o: write output to a given file, rather than STDOUT
 		my $fname = $args[$i+1];
-		open(STDOUT, ">", "$fname") or die "Can't open $_: $!\n";
+		open(STDOUT, ">", "$fname") or die "Can't open $fname: $!\n";
 		$args[$i] = $args[$i+1] = undef;
+	    } elsif ($args[$i] eq "-O") {
+		# -O: control how generated code outputs results
+		@output_style = @args[$i + 1 .. $i + 9];
+		@args[$i .. $i + 9] = (undef) x (1 + 9);
 	    }
 	}
 	@args = grep(defined($_), @args);
@@ -93,6 +100,11 @@ sub compile {
 	# As the first thing in the output, put in a hook to our
 	# tracing routines.
 	print "use daikon_runtime;\n";
+	if (@output_style) {
+	    print "BEGIN { daikon_runtime::set_output_style(";
+	    print join(", ", map(qq/"$_"/, @output_style));
+	    print "); }\n";
+	}
 	$self->deparse_program();
    }
 }
@@ -164,7 +176,8 @@ sub deparse {
 	# We're on the lookout for an OP whose next OP (roughly) is
 	# $self->{'leavesub'}.
 	my $o = $op;
-	$o = $o->next while $o->next->name =~ /^leave(loop|try)?$/;
+	$o = $o->next while !null($op->next) and 
+	    $o->next->name =~ /^leave(loop|try)?$/;
 	if (${$o->next} == ${$self->{'leavesub'}}) {
 	    $self->{'returns_count'}++ if $meth eq "pp_return";
 	    if ($meth !~ /^pp_(return|leave(loop|try)?)$/) {
@@ -280,8 +293,9 @@ sub deparse_sub {
     my $self = shift;
     my $cv = shift;
     my $proto = "";
-    if ($self->{'sub_name'} =~ /^BEGIN|END|INIT|CHECK$/) {
-	# Don't try to trace special blocks
+    if ($self->{'sub_name'} =~ /^BEGIN|END|INIT|CHECK$/ or null $cv->ROOT) {
+	# Don't try to trace special blocks, or undefined subs,
+	# or constant subs
 	return B::Deparse::deparse_sub($self, $cv, @_);
     }
     Carp::confess("NULL in deparse_sub") if !defined($cv)||$cv->isa("B::NULL");
@@ -310,50 +324,39 @@ sub deparse_sub {
     local(@$self{qw'curstash warnings hints'})
 		= @$self{qw'curstash warnings hints'};
     my $body;
-    if (not null $cv->ROOT) {
-	# This is the op whose predecessors we're interested
-	local($self->{'leavesub'}) = $cv->ROOT;
-	# Keep track of the number of statements we wrap as being the
-	# last in the sub, so that if we don't find any, we can put an
-	# empty return at the end.
-	local($self->{'returns_count'}) = 0;
-	my $lineseq = $cv->ROOT->first;
-	if ($lineseq->name eq "lineseq") {
-	    my @ops;
-	    for(my$o=$lineseq->first; $$o; $o=$o->sibling) {
-		push @ops, $o;
-	    }
-	    {
-		# We treat the top level sequence of statements in the
-		# sub specially.
-		local($self->{'sub_top_level'}) = 1;
-		$body = $self->lineseq(undef, @ops).";";
-	    }
-	    if ($self->{'returns_count'} == 0) {
-		# If all else faills, add a trace of an empty
-		# return. This can happen, for instance, if the last
-		# statement in the subroutine is a loop.
-		$body .= "\n" . $self->make_trace_return("()", $cv->ROOT);
-	    }
-	    my $scope_en = $self->find_scope_en($lineseq);
-	    if (defined $scope_en) {
-		my $subs = join"", $self->seq_subs($scope_en);
-		$body .= ";\n$subs" if length($subs);
-	    }
+    # This is the op whose predecessors we're interested
+    local($self->{'leavesub'}) = $cv->ROOT;
+    # Keep track of the number of statements we wrap as being the
+    # last in the sub, so that if we don't find any, we can put an
+    # empty return at the end.
+    local($self->{'returns_count'}) = 0;
+    my $lineseq = $cv->ROOT->first;
+    if ($lineseq->name eq "lineseq") {
+	my @ops;
+	for(my$o=$lineseq->first; $$o; $o=$o->sibling) {
+	    push @ops, $o;
 	}
-	else {
-#	    $body = $self->deparse($cv->ROOT->first, 0);
-	    $body = "";
+	{
+	    # We treat the top level sequence of statements in the
+	    # sub specially.
+	    local($self->{'sub_top_level'}) = 1;
+	    $body = $self->lineseq(undef, @ops).";";
+	}
+	if ($self->{'returns_count'} == 0) {
+	    # If all else faills, add a trace of an empty
+	    # return. This can happen, for instance, if the last
+	    # statement in the subroutine is a loop.
+	    $body .= "\n" . $self->make_trace_return("()", $cv->ROOT);
+	}
+	my $scope_en = $self->find_scope_en($lineseq);
+	if (defined $scope_en) {
+	    my $subs = join"", $self->seq_subs($scope_en);
+	    $body .= ";\n$subs" if length($subs);
 	}
     }
     else {
-	my $sv = $cv->const_sv;
-	if ($$sv) {
-	    # no tracing for constant subroutines (yet?)
-	    return $proto . "{ " . const($sv) . " }\n";
-	} else { # XSUB? (or just a declaration)
-	    return "$proto;\n";
-	}
+	#	    $body = $self->deparse($cv->ROOT->first, 0);
+	$body = "";
     }
     return $proto ."{\n\t$body\n\b}" ."\n";
 }
@@ -535,10 +538,21 @@ sub pp_return {
     my($op, $cx) = @_;
     my(@exprs);
     my $kid = $op->first->sibling;
-    push @exprs, $self->deparse($kid, 6);
-    $kid = $kid->sibling;
-    for (; !null($kid); $kid = $kid->sibling) {
+    if (null $kid) {
+	####
+	# scalar() is an error (too few args to scalar), but
+	# scalar(()) is undef. This is convenient, since return with
+	# no arguments from a subroutine in scalar context also
+	# produces undef. Thus we can treat "return;" as if it were
+	# "return(());".
+	@exprs = ("()");
+	####
+    } else {
 	push @exprs, $self->deparse($kid, 6);
+	$kid = $kid->sibling;
+	for (; !null($kid); $kid = $kid->sibling) {
+	    push @exprs, $self->deparse($kid, 6);
+	}
     }
     my $val;
     $val = join(", ", @exprs);
@@ -562,7 +576,9 @@ sub pp_cond_expr {
 	     || B::Deparse::is_ifelse_cont($false))
             and $self->{'expand'} < 7) {
         $cond = $self->deparse($cond, 8);
-        $true = $self->deparse($true, 8);
+	# XXX Need to think about precedence and associativity more here
+	# maybe a bug in Deparse (which had 8 on the next line)
+        $true = $self->deparse($true, 6);
         $false = $self->deparse($false, 8);
         return $self->maybe_parens("$cond ? $true : $false", $cx, 8);
     }
