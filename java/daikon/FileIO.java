@@ -1,5 +1,3 @@
-
-
 package daikon;
 
 import daikon.derive.*;
