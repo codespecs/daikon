@@ -55,6 +55,10 @@ public final class Daikon {
   public static boolean esc_output = false;
   // public static boolean esc_output = true;
 
+  // When true, output numbers of values and samples (also names of variables)
+  public static boolean output_num_samples = false;
+  // public static boolean output_num_samples = true;
+
   public static Pattern ppt_regexp;
   // I appear to need both of these variables.  Or do I?  I don't know.
   public static FileOutputStream inv_ostream;
@@ -78,6 +82,8 @@ public final class Daikon {
     + "    --prob_limit pct  Sets the probability limit for justifying invariants.\n"
     + "                        The default is 1%.  Smaller values yield stronger filtering.\n"
     + "    --esc_output      Write output in ESC-like format.\n"
+    + "    --output_num_samples      Output numbers of values and samples for\n"
+    + "				       invariants and program points; for debugging.\n"
     ;
 
   /**
@@ -98,11 +104,13 @@ public final class Daikon {
     final String suppress_post_SWITCH = "suppress_post";
     final String prob_limit_SWITCH = "prob_limit";
     final String esc_output_SWITCH = "esc_output";
+    final String output_num_samples_SWITCH = "output_num_samples";
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(prob_limit_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(esc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
     };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:r:", longopts);
     int c;
@@ -119,6 +127,8 @@ public final class Daikon {
 	  Invariant.probability_limit = 0.01 * Double.parseDouble(g.getOptarg());
 	} else if (esc_output_SWITCH.equals(option_name)) {
 	  esc_output = true;
+	} else if (output_num_samples_SWITCH.equals(option_name)) {
+	  output_num_samples = true;
 	} else {
 	  throw new RuntimeException("Unknown long option received: " + option_name);
 	}
@@ -256,7 +266,7 @@ public final class Daikon {
       }
     }
 
-    if (! esc_output) {
+    if (output_num_samples) {
       Global.output_statistics();
     }
 

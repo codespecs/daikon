@@ -1856,7 +1856,7 @@ public class PptTopLevel extends Ppt {
       if (! (this instanceof PptConditional)) {
         // Presumably all the views that were originally there were deleted
         // because no invariants remained in any of them.
-        if (! Daikon.esc_output) {
+        if (Daikon.output_num_samples) {
           out.println("[No views for " + name + "]");
         }
       }
@@ -1904,9 +1904,7 @@ public class PptTopLevel extends Ppt {
 
   /** Print invariants for a single program point. */
   public void print_invariants(PrintStream out) {
-    if (Daikon.esc_output) {
-      out.println(name);
-    } else {
+    if (Daikon.output_num_samples) {
       int num_samps = num_samples();
       out.println(name + "  " + nplural(num_samps, "sample"));
       out.println("    Samples breakdown: " + tuplemod_samples_summary());
@@ -1914,6 +1912,8 @@ public class PptTopLevel extends Ppt {
       for (int i=0; i<var_infos.length; i++)
         out.print(" " + var_infos[i].name);
       out.println();
+    } else {
+      out.println(name);
     }
 
     Assert.assert(check_modbits());
@@ -1997,14 +1997,16 @@ public class PptTopLevel extends Ppt {
             }
             PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;
             PptSlice slice1 = ppt_tl.findSlice(vi);
-            if (slice1 != null) {
-              sb.append("\t\t(" +
-                        nplural(slice1.num_values(), "value") + ", " +
-                        nplural(slice1.num_samples(), "sample") + ")");
-            } else {
-              // sb.append("\t\t(no slice)");
+            if (Daikon.output_num_samples) {
+              if (slice1 != null) {
+                sb.append("\t\t(" +
+                          nplural(slice1.num_values(), "value") + ", " +
+                          nplural(slice1.num_samples(), "sample") + ")");
+              } else {
+                // sb.append("\t\t(no slice)");
+              }
+              out.println(sb.toString());
             }
-            out.println(sb.toString());
           }
         }
       }
@@ -2045,17 +2047,14 @@ public class PptTopLevel extends Ppt {
 	continue;
       }
 
-      if (Daikon.esc_output) {
-        out.println(inv.format_esc());
-      } else {
-        String inv_rep = inv.format();
-        Assert.assert(inv_rep != null);
-        out.println(inv_rep + num_values_samples);
-        if (Global.debugPrintInvariants) {
-          out.println("  [" + inv.repr() + "]");
-        }
-        Global.reported_invariants++;
+      String inv_rep = (Daikon.esc_output ? inv.format_esc() : inv.format());
+      if (Daikon.output_num_samples) {
+        inv_rep += num_values_samples;
       }
+      if (Global.debugPrintInvariants) {
+        out.println("  [" + inv.repr() + "]");
+      }
+      Global.reported_invariants++;
     }
   }
 
