@@ -91,9 +91,9 @@ javac:	all_via_javac
 all_via_jikes:
 	$(MAKE) JAVAC='jikes -g +E +F' all
 
-all_jikes:	all_via_javac
+all_jikes:	all_via_jikes
 
-jikes:	all_via_javac
+jikes:	all_via_jikes
 
 Runtime.class: Runtime.java
 	${JAVAC} Runtime.java
