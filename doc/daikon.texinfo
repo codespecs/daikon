@@ -3310,6 +3310,16 @@ variable DTRACELIMITTERMINATE is set to "true", then the instrumented
 program halts (with exit code 1) when the specified number of records is
 output.
 
+Note that recent version of the JDK do not allow Java programs to
+inspect environment variables. So if you're generating a
+@file{.dtrace} from a Java class, you may need to pass the environment
+variable directly as an argument to Java. For example:
+
+@example
+java -classpath daikon-instrumented:$CLASSPATH -DDTRACELIMIT=10000 -DDTRACELIMITTERMINATE=true Foo
+@end example
+@noindent
+
 
 @node    Scope of instrumentation, Refined runtime types, dfej options, Java front end dfej
 @subsection Controlling what classes are instrumented
