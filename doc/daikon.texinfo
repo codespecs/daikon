@@ -40,7 +40,7 @@
 
 @sp 1
 @c Daikon version 2.5.0 date
-@center August 17, 2001
+@center August 26, 2001
 
 @sp 5
 @c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
@@ -59,6 +59,7 @@ Copyright @copyright{} 1998-2001
 <h1>Daikon invariant detector</h1>
 
 This is the manual for the Daikon invariant detector.
+It describes Daikon version 2.5.0, released August 26, 2001.
 
 @end html
 
@@ -85,7 +86,8 @@ This is the manual for the Daikon invariant detector.
 * Extending Daikon::            
 * Troubleshooting::             
 * Details::                     
-* File formats::
+* File formats::                
+* Index::
 
 @ifhtml
 @contents
@@ -297,9 +299,15 @@ This creates a @file{@var{parent}/daikon/} subdirectory.
 
 @item
 Add the Daikon Java files to your Java class path.  There are two
-different ways to do this.
+different ways to do this; you should choose one or the other.
+
 @itemize @bullet
-@item The easiest technique is to add the supplied @file{daikon.jar}
+@item
+The first technique is to run Daikon from the precompiled bytecode files
+in @file{daikon.jar}.  This is the easiest way to proceed, and it must
+be used if you downloaded the pre-compiled Daikon distribution.
+
+Add the supplied @file{daikon.jar}
 file to your classpath.
 For instance, if your shell is @command{csh}, add the following to your
 @file{.cshrc} file: 
@@ -308,23 +316,22 @@ setenv CLASSPATH @var{parent}/daikon/daikon.jar:$@{CLASSPATH@}
 @end example
 
 @item
-Alternately, you may add the @file{@var{parent}/daikon/java/} directory to
-your classpath.  This alternative permits you to modify Daikon; most
-users will not need to do so.  If your shell is @command{csh}, add the
-following to your @file{.cshrc} file, all on one line without any spaces
-after the colons
+Alternately, you may run run Daikon from @file{.class} files that you
+compile yourself.  This permits you to modify Daikon (most users will
+not need to do so), and may be used if you downloaded the source
+distribution.
+
+Add the @file{@var{parent}/daikon/java/} directory to
+your classpath.  If your shell is @command{csh}, add the
+following to your @file{.cshrc} file.
 @example
-setenv CLASSPATH @var{parent}/daikon/java:
-	@var{parent}/daikon/java/lib/jakarta-oro.jar:
-        @var{parent}/daikon/java/lib/java-getopt.jar:
-        @var{parent}/daikon/java/lib/junit.jar:
-        $@{CLASSPATH@}
+setenv CLASSPATH @var{parent}/daikon/java:$@{CLASSPATH@}
 @end example
 
 The distribution includes compiled @file{.class} files, so you do not
-need to compile them yourself; but you may do so by typing @command{make}
-in any directory under @file{@var{parent}/daikon/java/}.  In order to
-compile Daikon, you need the C preprocessor @command{cpp}.
+need to compile them yourself unless you make changes; @xref{Compiling
+Daikon}.
+
 @end itemize
 
 @item
@@ -579,6 +586,8 @@ It creates a declaration file at
 @file{daikon-output/DataStructures/StackAr.decls}.
 
 @item Compile the instrumented version of StackAr.java.
+@c I think this comment about "." on the classpath is correct.  -MDE 8/26/01
+(This step requires "." to be on your classpath.)
 
 @example
 javac daikon-instrumented/DataStructures/StackAr.java
@@ -616,7 +625,7 @@ cd daikon-output
 @item Run Daikon on the trace file.
 
 @example
-java daikon.Daikon -o StackAr.inv DataStructures/StackAr.decls StackAr.dtrace
+java daikon.Daikon -noajax -o StackAr.inv DataStructures/StackAr.decls StackAr.dtrace
 @end example
 
 The invariants are printed to standard output, and a binary
@@ -669,7 +678,7 @@ java -classpath "daikon-instrumented:$CLASSPATH" DataStructures.StackArTester
 @item Invariant detection (steps 6-8)
 @example
 cd daikon-output
-java daikon.Daikon -o StackAr.inv DataStructures/StackAr.decls StackAr.dtrace
+java daikon.Daikon -noajax -o StackAr.inv DataStructures/StackAr.decls StackAr.dtrace
 java daikon.gui.InvariantsGUI StackAr.inv
 @end example
 
@@ -780,7 +789,7 @@ java -classpath "daikon-instrumented:$CLASSPATH" DataStructures.QueueArTester
 @item Invariant detection (steps 6-8)
 @example
 cd daikon-output
-java daikon.Daikon -o QueueAr.inv DataStructures/QueueAr.decls QueueAr.dtrace
+java daikon.Daikon -noajax -o QueueAr.inv DataStructures/QueueAr.decls QueueAr.dtrace
 java daikon.gui.InvariantsGUI QueueAr.inv
 @end example
 
@@ -1242,20 +1251,37 @@ options for Daikon}).
 
 @node    Program points, Variable names, Interpreting output, Interpreting output
 @subsection Program points
+@cindex program point
 
-Daikon's output is organized by program points, both in the textual
-output and in the GUI.  A program point is usually associated with a
-specific place in the source code.  For example, @code{foo():::ENTER} is
-the point at the entry to procedure @code{foo()}; the invariants at that
-point are the preconditions upon entry to the @code{foo()} method.
+A program point is a specific place in the source code, such as
+immediately before a particular line of code.  Daikon's output is
+organized by program points, both in the textual output and in the GUI.
 
-Likewise, invariants at @code{foo():::EXIT} are postconditions.  When
-there are multiple exit points from a procedure (for instance, because
-of multiple @code{return} statements), the different exits are
-differentiated by suffixing them with their line numbers; for instance,
+@cindex :::ENTER program point
+@cindex ENTER program point
+
+For example, @code{foo():::ENTER} is the point at the entry to procedure
+@code{foo()}; the invariants at that point are the preconditions for the
+@code{foo()} method.
+
+@cindex :::EXIT program point
+@cindex EXIT program point
+
+Likewise, @code{foo():::EXIT} is the program point at the procedure
+exit, and invariants there are postconditions.  When there are multiple
+exit points from a procedure (for instance, because of multiple
+@code{return} statements), the different exits are differentiated by
+suffixing them with their line numbers; for instance,
 @code{StackAr.top():::EXIT79}.  The exit point lacking a line number (in
 this example, @code{StackAr.top():::EXIT}) collects the postconditions
-that are true at every numbered exit point.
+that are true at every numbered exit point.  This is an example of a
+program point that represents a collection of locations in the program
+source rather than a single location.
+
+@cindex :::OBJECT program point
+@cindex OBJECT program point
+@cindex :::CLASS program point
+@cindex CLASS program point
 
 Two other program point tags are @code{:::OBJECT} and @code{:::CLASS}.
 The former indicates object invariants (sometimes called representation
@@ -1622,6 +1648,10 @@ Verbose output.
 @node    Java front end dfej, C/C++ front end dfec, Front ends, Front ends
 @section Java front end dfej
 
+@cindex front end for Java
+@cindex Java front end
+@cindex dfej (Daikon front end for Java)
+
 This section contains details about dfej, the Daikon front end for Java.
 
 For brief information about running dfej, see @ref{Instrumenting Java programs}.
@@ -1981,6 +2011,11 @@ comment immediately before the declared type (but after any modifiers like
 
 @node    C/C++ front end dfec,  , Java front end dfej, Front ends
 @section C/C++ front end dfec
+
+@cindex front end for C/C++
+@cindex C/C++ front end
+@cindex dfec (Daikon front end for C/C++)
+
 
 This section contains details about dfec, the Daikon front end for C/C++.
 For brief information about running dfec, see @ref{Instrumenting C/C++ programs}.
@@ -2344,6 +2379,9 @@ be recorded and hence may yield sparse output.
 
 @node    Extending Daikon, Troubleshooting, Front ends, Top
 @chapter Extending Daikon
+@cindex extending Daikon
+@cindex changing Daikon
+@cindex modifying Daikon
 
 This chapter describes how to customize Daikon to your specific needs.
 
@@ -2357,10 +2395,36 @@ This document is available online at
 
 
 @menu
+* Compiling Daikon::
 * New invariants::              
 * New derived variables::       
 * New formatting for invariants::  
 @end menu
+
+@node    Compiling Daikon, New derived variables, Extending Daikon, Extending Daikon
+@section Compiling Daikon
+@cindex compiling daikon
+
+To compile Daikon, type @command{make} in any directory under
+@file{@var{parent}/daikon/java/}.  The distribution includes compiled
+@file{.class} files, so you do not need to compile them yourself unless
+you make changes.
+
+In order to compile Daikon, you either need the C preprocessor
+@command{cpp}, which is used to convert each @file{.jpp} file in the
+distribution into multiple @file{.java} files, which are then compiled.
+If you do not have @command{cpp}, you may run @command{make avoid-jpp}, in
+which case changes to @code{.jpp} files will not be reflected in the
+compiled @file{.class} files.
+
+You may wish to create a @file{Makefile.user} file to set your Java
+compiler:
+@example
+  JAVAC ?= jikes -g +E +F
+@end example
+
+For more information about copmiling Daikon, see the comments in the Makefiles.
+
 
 @node    New invariants, New derived variables, Extending Daikon, Extending Daikon
 @section New invariants
@@ -2492,6 +2556,102 @@ method, near the calls to the other formatting methods.
 @end itemize
 
 
+@node    New front ends,  , New derived variables, Extending Daikon
+@section New front ends
+
+@cindex front end, writing
+
+A front end for Daikon takes as input a target program to be analyzed.
+The front end produces two outputs:  a @file{.decls} file and an
+instrumented program which, when run, produces a @file{.dtrace} file.
+For more information about these files, @xref{File formats}.
+
+Conceptually, instrumentation is very simple.  For instance, suppose we
+wish to instrument file @file{Example.java}.
+@example
+class Example {
+  // Return either the square of x or the square of (x+1).
+  int squar(int x, boolean b) {
+    if (b)
+      x++;
+    return x*x;
+  }
+}
+@end example
+
+The @file{.decls} file might look like the following.
+@example
+DECLARE
+Example.squar:::ENTER
+x
+int
+int
+1
+b
+boolean
+int
+2
+
+DECLARE
+Example.squar:::EXIT
+x
+int
+int
+1
+b
+boolean
+int
+2
+return
+int
+int
+1
+@end example
+
+The instrumented @file{.java} file might look like the following.
+@example
+class Example {
+  static {
+    daikon.Runtime.setDtraceMaybe("daikon-output/StackAr.dtrace");
+  }
+
+  // Return either the square of x or the square of (x+1).
+  int squar(int x, boolean b) {
+    synchronized (daikon.Runtime.dtrace) {
+      daikon.Runtime.dtrace.println();
+      daikon.Runtime.dtrace.println("Example.squar:::ENTER");
+      daikon.Runtime.dtrace.println("x");
+      daikon.Runtime.dtrace.println(x);
+      daikon.Runtime.dtrace.println(1);  // modified bit
+      daikon.Runtime.dtrace.println("b");
+      daikon.Runtime.dtrace.println(b ? 1 : 0);
+      daikon.Runtime.dtrace.println(1);  // modified bit
+    }
+
+    if (b)
+      x++;
+
+    int daikon_return_value = x*x;
+    synchronized (daikon.Runtime.dtrace) {
+      daikon.Runtime.dtrace.println();
+      daikon.Runtime.dtrace.println("Example.squar:::EXIT");
+      daikon.Runtime.dtrace.println("x");
+      daikon.Runtime.dtrace.println(x);
+      daikon.Runtime.dtrace.println(1);  // modified bit
+      daikon.Runtime.dtrace.println("b");
+      daikon.Runtime.dtrace.println(b ? 1 : 0);
+      daikon.Runtime.dtrace.println(1);  // modified bit
+      daikon.Runtime.dtrace.println("return");
+      daikon.Runtime.dtrace.println(daikon_return_value);
+      daikon.Runtime.dtrace.println(1);  // modified bit
+    }
+
+    return daikon_return_value;
+  }
+}
+@end example
+
+
 @node    Troubleshooting, Details, Extending Daikon, Top
 @chapter Troubleshooting
 
@@ -2568,7 +2728,7 @@ dfej does not handle anonymous classes like that created by the expression
 @example
   new ItemListener() @{
       public void itemStateChanged( ItemEvent evt ) @{
-	 ...
+         ...
       @}
   @}
 @end example
@@ -2622,8 +2782,8 @@ the nonce technique.  Otherwise, it uses the stack technique.
 
 If Daikon runs out of memory, generating a message like
 @example
-	Exception in thread "main" java.lang.OutOfMemoryError
-	        <<no stack trace available>>
+        Exception in thread "main" java.lang.OutOfMemoryError
+                <<no stack trace available>>
 @end example
 @noindent
 then the problem is likely to be an excessively large @file{.dtrace}
@@ -2634,7 +2794,7 @@ JVM-specific; see your JVM documentation for details.)  The default is
 only 1 megabyte; to permit use of up to 128 megabytes, you would run
 Java like so:
 @example
-	java -mx128m ...
+        java -mx128m ...
 @end example
 
 Another possible problem is the creation of too many derived variables.
@@ -2834,6 +2994,46 @@ Dynamically
 * Credits::                     
 @end menu
 
+@node    History, Credits, Details, Details
+@section History
+@cindex history of Daikon
+
+This manual describes Daikon version 2.5.0, released August 26, 2001.
+
+There have been two major implementations of Daikon, with different
+features and capabilities.  Readers of technical papers may be confused
+by the apparently different claims about Daikon's capabilities.  These
+apparent contradictions result from the papers referring to the current
+version of Daikon at the time of publication.  This section of the
+manual clarifies the development of the Daikon tool in order to reduce
+such confusion.
+
+@cindex Lisp front end
+@cindex front end for Lisp
+@cindex loop heads, instrumenting
+@cindex instrumenting loop heads
+
+Daikon 1 was written in the Python programming language.  It included
+front ends for C, Java, and Lisp.  The C front end was extremely limited
+and failed to operate correctly on all C programs.  Sometimes it
+suffered a segmentation fault while instrumenting a target program; even
+when that did not happen, sometimes the instrumented program
+segmentation-faulted while running.  The Lisp front end operated
+correctly on all Lisp programs, but only instrumented certain common
+constructs, leaving other language features unmodified.  The Java front
+end was reasonably reliable.  The Lisp front end instrumented procedure
+entries, exits, and loop heads; the C front ends instrumented only
+procedure entries and exits; and the Java front end instrumented program
+points for object invariants as well as procedure entries and exits.
+
+Daikon 2 was a complete rewrite in the Java programming language and was
+the first version to contain a substantive manual.  Daikon 2 uses the
+same Java front end as did Daikon 1, though with certain enhancements.
+Its C/C++ front end is rewritten from scratch; it instruments only
+procedure entries and exits.  A front end also exists for the IOA
+programming language, but is not included in the distribution.
+
+
 @node    License, Credits, Details, Details
 @section License
 
@@ -2886,7 +3086,7 @@ This work was supported in part by NSF grants CCR-9506779 and CCR-9508745,
 an IBM Cooperative Fellowship, and a gift from Edison Design Group.
 
 
-@node     File formats,  , Details, Top
+@node     File formats, Index, Details, Top
 @appendix File formats
 
 This chapter contains information about the file format of Daikon's data
@@ -3201,147 +3401,251 @@ a program which sums the values in an integer array.
 @node    Example declaration file, Example data trace file, Examples, Examples
 @subsection Example declaration file
 
-This is the file @file{p180-15.1.1.decls}.
+This is part of the file @file{StackAr.decls}, a declaration file for
+the @file{StackAr.java} program (@pxref{Example use of Daikon}).
 
 @example
-VarComparability
-explicit
-
 DECLARE
-P180-15.1.1:::LOOP-389
-B[]
+StackAr.push(Ljava/lang/Object;)V:::ENTER
+x
+Object
+int
+1
+x.class
+Class
+String
+-1
+this.theArray
+Object[]
+int
+-2
+this.theArray.class
+Class
+String
+-1
+this.theArray[]
+Object[]
 int[]
+1
+this.theArray[].class
+Class[]
+String[]
+-1
+this.topOfStack
+int
+int
+0
+
+DECLARE
+StackAr.push(Ljava/lang/Object;)V:::EXIT96
+x
+Object
+int
+1
+x.class
+Class
+String
+-1
+this.theArray
+Object[]
+int
+-2
+this.theArray.class
+Class
+String
+-1
+this.theArray[]
+Object[]
 int[]
-(S B-element)[(B-index1 I N)]
-N
+1
+this.theArray[].class
+Class[]
+String[]
+-1
+this.topOfStack
 int
 int
-(B-index1 I N)
-I
-int
-int
-(B-index1 I N)
-S
-int
-int
-(S B-element)
+0
 
 DECLARE
-P180-15.1.1:::EXIT
-B[]
+StackAr:::OBJECT
+this.theArray
+Object[]
+int
+-2
+this.theArray.class
+Class
+String
+-1
+this.theArray[]
+Object[]
 int[]
-int[]
-(S B-element)[(B-index1 I N)]
-N
+1
+this.theArray[].class
+Class[]
+String[]
+-1
+this.topOfStack
 int
 int
-(B-index1 I N)
-I
-int
-int
-(B-index1 I N)
-S
-int
-int
-(S B-element)
-
-DECLARE
-P180-15.1.1:::ENTER
-B[]
-int[]
-int[]
-(S B-element)[(B-index1 I N)]
-N
-int
-int
-(B-index1 I N)
-
-DECLARE
-TEST-P180-15.1.1:::EXIT
-
-DECLARE
-TEST-P180-15.1.1:::ENTER
-
-DECLARE
-TEST-P180-15.1.1-E:::EXIT
-
-DECLARE
-TEST-P180-15.1.1-E:::ENTER
-
-DECLARE
-TEST-P180-15.1.1-H:::EXIT
-
-DECLARE
-TEST-P180-15.1.1-H:::ENTER
+0
 @end example
 
 
 @node    Example data trace file,  , Example declaration file, Examples
 @subsection Example data trace file
 
-This is the first part of file @file{p180-15.1.1.dtrace}.
+This is part of file @file{StackAr.dtrace}, which you can create by
+running the instrumented @file{StackAr.java} program (@pxref{Example use
+of Daikon}).  This excerpt contains only the first two calls to
+@code{push} and the first return from @code{push}, along with the
+associated object program point records; omitted records are indicated
+by ellipses.
 
 
 @example
-P180-15.1.1:::ENTER
-B[]
-[92 56 -96 -49 76 92 -3 -88]
+...
+
+StackAr.push(Ljava/lang/Object;)V:::ENTER
+this_invocation_nonce
+55
+x
+1217030
 1
-N
-8
+x.class
+"DataStructures.MyInteger"
+1
+this.theArray
+3852104
+1
+this.theArray.class
+"[Ljava.lang.Object;"
+1
+this.theArray[]
+[null]
+1
+this.theArray[].class
+[null]
+1
+this.topOfStack
+-1
 1
 
-P180-15.1.1:::LOOP-389
-B[]
-[92 56 -96 -49 76 92 -3 -88]
+StackAr:::OBJECT
+this.theArray
+3852104
 1
-N
-8
+this.theArray.class
+"[Ljava.lang.Object;"
 1
-I
-0
+this.theArray[]
+[null]
 1
-S
+this.theArray[].class
+[null]
+1
+this.topOfStack
+-1
+1
+
+...
+
+StackAr.push(Ljava/lang/Object;)V:::EXIT96
+this_invocation_nonce
+55
+x
+1217030
+1
+x.class
+"DataStructures.MyInteger"
+1
+this.theArray
+3852104
+1
+this.theArray.class
+"[Ljava.lang.Object;"
+1
+this.theArray[]
+[1217030]
+1
+this.theArray[].class
+["DataStructures.MyInteger"]
+1
+this.topOfStack
 0
 1
 
-P180-15.1.1:::LOOP-389
-B[]
-[92 56 -96 -49 76 92 -3 -88]
-0
-N
-8
-0
-I
+StackAr:::OBJECT
+this.theArray
+3852104
 1
+this.theArray.class
+"[Ljava.lang.Object;"
 1
-S
-92
+this.theArray[]
+[1217030]
+1
+this.theArray[].class
+["DataStructures.MyInteger"]
+1
+this.topOfStack
+0
 1
 
-P180-15.1.1:::LOOP-389
-B[]
-[92 56 -96 -49 76 92 -3 -88]
-0
-N
-8
-0
-I
-2
+...
+
+StackAr.push(Ljava/lang/Object;)V:::ENTER
+this_invocation_nonce
+94
+x
+1482257
 1
-S
-148
+x.class
+"DataStructures.StackAr"
+1
+this.theArray
+350965
+1
+this.theArray.class
+"[Ljava.lang.Object;"
+1
+this.theArray[]
+[null]
+1
+this.theArray[].class
+[null]
+1
+this.topOfStack
+-1
+1
+
+StackAr:::OBJECT
+this.theArray
+350965
+1
+this.theArray.class
+"[Ljava.lang.Object;"
+1
+this.theArray[]
+[null]
+1
+this.theArray[].class
+[null]
+1
+this.topOfStack
+-1
 1
 
 ...
 @end example
 
 
-@c @node    Concept Index,  , Detecting invariants, Top
-@c @comment node-name,    next,  previous,      up
-@c @unnumbered Concept Index
-@c 
-@c @printindex cp
+
+@node     Index,  , File formats, Top
+@unnumbered Index
+
+@printindex cp
+
 
 @bye
 
