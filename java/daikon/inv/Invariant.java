@@ -43,17 +43,17 @@ public abstract class Invariant implements java.io.Serializable {
       private int compareVariables(Invariant inv1, Invariant inv2) {
         VarInfo[] vars1 = inv1.ppt.var_infos;
         VarInfo[] vars2 = inv2.ppt.var_infos;
-        
+
         // due to inv type match already
         Assert.assert(vars1.length == vars2.length);
-        
+
         for (int i=0; i < vars1.length; i++) {
           VarInfo var1 = vars1[i];
           VarInfo var2 = vars2[i];
           int compare = var1.name.compareTo(var2.name);
           if (compare != 0) return compare;
         }
-        
+
         // All the variable names matched
         return 0;
       }
@@ -375,8 +375,9 @@ public abstract class Invariant implements java.io.Serializable {
 
   /**
    * @return true iff the two invariants represent mutually exclusive
-   * mathematical formulas.  Does not consider the context such as
-   * variable names, confidences, sample counts, value counts, or
+   * mathematical formulas -- that is, if one of them is true, then the
+   * other must be false.  This method does not consider the context such
+   * as variable names, confidences, sample counts, value counts, or
    * related quantities.
    **/
   public boolean isExclusiveFormula(Invariant other) {
