@@ -304,7 +304,7 @@ public abstract class PptSlice
   }
 
   // I could make this more efficient, but it's probably fine as it is.
-  public void removeInvariants(Collection to_remove) {
+  public void removeInvariants(List to_remove) {
     for (int i=0; i<to_remove.size(); i++) {
       removeInvariant((Invariant) to_remove.get(i));
     }
