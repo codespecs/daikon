@@ -24,7 +24,10 @@ public class SplitterFactory {
     Logger.getLogger("daikon.split.SplitterFactory");
 
   /** The directory in which the java files for the splitter will be made. */
-  private static String tempdir = createTempDir();
+  // This must not be set in a static block, which happens before the
+  // Configuration object has had a chance to possibly set
+  // dkconfig_delete_splitters_on_exit.
+  private static String tempdir;
 
   /**
    * Boolean. Specifies whether or not the temporary Splitter files
@@ -53,6 +56,9 @@ public class SplitterFactory {
    **/
   public static SplitterObject[][] read_spinfofile(File infofile, PptMap all_ppts)
     throws IOException, FileNotFoundException {
+    if (tempdir == null) {
+      tempdir = createTempDir();
+    }
     SpinfoFileParser fileParser = new SpinfoFileParser(infofile, tempdir);
     SplitterObject[][] splitterObjects = fileParser.getSplitterObjects();
     StatementReplacer statementReplacer = fileParser.getReplacer();
@@ -70,7 +76,11 @@ public class SplitterFactory {
     return splitterObjects;
   }
 
+  // Accessible for the purpose of testing.
   public static String getTempDir() {
+    if (tempdir == null) {
+      tempdir = createTempDir();
+    }
     return tempdir;
   }
 
