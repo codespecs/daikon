@@ -381,7 +381,7 @@ Examples
 @node    Introduction, Installing Daikon, Top, Top
 @chapter Introduction
 
-The @uref{http://pag.csail.mit.edu/daikon, ,Daikon invariant detector}
+The @uref{http://pag.csail.mit.edu/daikon/, ,Daikon invariant detector}
 reports likely program invariants.  An invariant is a property that
 holds a a certain point or points in a program; these are often seen
 in assert statements, documentation, and formal specifications.
@@ -648,7 +648,7 @@ first perform the following installation steps.
 @enumerate
 @item
 Download the dfec distribution from
-@uref{http://pag.csail.mit.edu/daikon/download}; choose the version for
+@uref{http://pag.csail.mit.edu/daikon/download/}; choose the version for
 your architecture and operating system.  The distribution includes
 both the dfec executable and Lackwit.  Lackwit is a variable
 comparability analysis package; its use is optional, but it can make
