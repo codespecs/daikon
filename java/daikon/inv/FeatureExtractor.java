@@ -67,8 +67,8 @@ public final class FeatureExtractor {
     }
 
     // First, parse the arguments
-    Vector usefuls = new Vector();
-    Vector nonusefuls = new Vector();
+    ArrayList usefuls = new ArrayList();
+    ArrayList nonusefuls = new ArrayList();
     String output_file = null;
     String output_words = null;
     String output_type = null;
@@ -116,9 +116,9 @@ public final class FeatureExtractor {
       throw new IOException("Invalid Argumnent List, output and description files " +
                             "cannot be the same");
     // Step 1
-    Vector[] allInvariants = getSimpleUsefulAndNonuseful(usefuls, nonusefuls);
-    Vector useful = allInvariants[0];
-    Vector nonuseful = allInvariants[1];
+    ArrayList[] allInvariants = getSimpleUsefulAndNonuseful(usefuls, nonusefuls);
+    ArrayList useful = allInvariants[0];
+    ArrayList nonuseful = allInvariants[1];
 
     // Step 2
     // Extract the features of each invariant in useful and nonuseful
@@ -127,19 +127,19 @@ public final class FeatureExtractor {
     // Then extract the descriptions of each invariant, also kept in the
     // same order
     // ########## Commented out in order to use reflect functions
-    //    Vector usefulFeatures = getFeatures(useful);
-    //    Vector nonusefulFeatures = getFeatures(nonuseful);
-    Vector usefulStrings = getStrings(useful);
-    Vector nonusefulStrings = getStrings(nonuseful);
+    //    ArrayList usefulFeatures = getFeatures(useful);
+    //    ArrayList nonusefulFeatures = getFeatures(nonuseful);
+    ArrayList usefulStrings = getStrings(useful);
+    ArrayList nonusefulStrings = getStrings(nonuseful);
 
     HashMap lookup = getFullMapping();
-    Vector usefulFeatures = getReflectFeatures(useful, lookup);
-    Vector nonusefulFeatures = getReflectFeatures(nonuseful, lookup);
+    ArrayList usefulFeatures = getReflectFeatures(useful, lookup);
+    ArrayList nonusefulFeatures = getReflectFeatures(nonuseful, lookup);
 
     /* DISABLED FEATURE
     // and create the proper number of repeats;
        while (repeats >= 2) {
-         Vector[] placeholder = createPermutations(usefulFeatures,
+         ArrayList[] placeholder = createPermutations(usefulFeatures,
          nonusefulFeatures,
          usefulStrings,
          nonusefulStrings);
@@ -187,21 +187,21 @@ public final class FeatureExtractor {
   /* Removed because functions not used
 
   // permutes the feature vectors repeats times
-  // returns a Vector array of size 4 such that
+  // returns a ArrayList array of size 4 such that
   // return[0] is usefulFeatures
   // return[1] is nonusefulFeatures,
   // return[2] is usefulStrings,
   // return[3] is nonusefulStrings
   //
-  private static Vector[] createPermutations(Vector usefulFeatures,
-                                       Vector nonusefulFeatures,
-                                       Vector usefulStrings,
-                                       Vector nonusefulStrings) {
-    Vector[] answer = new Vector[4];
+  private static ArrayList[] createPermutations(ArrayList usefulFeatures,
+                                       ArrayList nonusefulFeatures,
+                                       ArrayList usefulStrings,
+                                       ArrayList nonusefulStrings) {
+    ArrayList[] answer = new ArrayList[4];
     for (int i = 0; i < 4; i++)
-      answer[i] = new Vector();
+      answer[i] = new ArrayList();
 
-    Vector[] placeholder;
+    ArrayList[] placeholder;
     // first useful-useful
     placeholder = permute(usefulFeatures, usefulFeatures,
                           usefulStrings, usefulStrings);
@@ -226,14 +226,14 @@ public final class FeatureExtractor {
     return answer;
   }
 
-  // returns two Vectors.  return[0] contain items from oneInput
+  // returns two ArrayLists.  return[0] contain items from oneInput
   // permuted with each item from twoInput.
   // return[1] contains the permuted strings.
-  private static Vector[] permute(Vector oneInput, Vector twoInput,
-                         Vector oneString, Vector twoString) {
-    Vector[] answer = new Vector[2];
-    answer[0] = new Vector();
-    answer[1] = new Vector();
+  private static ArrayList[] permute(ArrayList oneInput, ArrayList twoInput,
+                         ArrayList oneString, ArrayList twoString) {
+    ArrayList[] answer = new ArrayList[2];
+    answer[0] = new ArrayList();
+    answer[1] = new ArrayList();
 
     for (int i = 0; i < oneInput.size(); i++)
       for (int j = 0; j < twoInput.size(); j++) {
@@ -265,8 +265,8 @@ public final class FeatureExtractor {
 
   // Takes a vector of invariants and returns a vector of
   // the string representations of those invariants in the same order
-  private static Vector getStrings(Vector invs) {
-    Vector answer = new Vector();
+  private static ArrayList getStrings(ArrayList invs) {
+    ArrayList answer = new ArrayList();
     for (int i = 0; i < invs.size(); i++) {
       Invariant current = (Invariant) invs.get(i);
       answer.add(current.ppt.parent.name + ":::" + current.format());
@@ -279,18 +279,18 @@ public final class FeatureExtractor {
      Returns the useful invariants in return[0],
      returns the nonuseful invariants in return[1];
   */
-  private static Vector[] getSimpleUsefulAndNonuseful(Vector usefuls,
-                                                      Vector nonusefuls)
+  private static ArrayList[] getSimpleUsefulAndNonuseful(ArrayList usefuls,
+                                                      ArrayList nonusefuls)
     throws IOException, ClassNotFoundException {
 
-    // returns two Vectors (in an array) of Useful invariants and
+    // returns two ArrayLists (in an array) of Useful invariants and
     // Non-Useful invariants
     // return[0] are Useful
     // return[1] are Non-Useful
 
-    Vector[] answer = new Vector[2];
-    answer[0] = new Vector(); // useful
-    answer[1] = new Vector(); // nonuseful
+    ArrayList[] answer = new ArrayList[2];
+    answer[0] = new ArrayList(); // useful
+    answer[1] = new ArrayList(); // nonuseful
     for (int i = 0; i < usefuls.size(); i++)
       for (Iterator invs=readInvMap(new File((String) usefuls.get(i))).invariantIterator(); invs.hasNext(); )
         answer[0].add(invs.next());
@@ -306,7 +306,7 @@ public final class FeatureExtractor {
      Compares invariants within the files to determine if they
      are useful or non-useful.
   */
-  private static Vector[] getUsefulAndNonuseful(String[] args)
+  private static ArrayList[] getUsefulAndNonuseful(String[] args)
     throws IOException{
     // ignore args[0] and args[length-1]
     // the rest of the args are pairs of files such each pair
@@ -314,11 +314,11 @@ public final class FeatureExtractor {
     // Note, Non-Buggy.inv contains invariants present in non-buggy code
     // and Buggy.inv contains invariants present in buggy code
 
-    // returns two Vectors (in an array) of Useful invariants and
+    // returns two ArrayLists (in an array) of Useful invariants and
     // non-useful invariants
-    Vector[] answer = new Vector[2];
-    answer[0] = new Vector();
-    answer[1] = new Vector();
+    ArrayList[] answer = new ArrayList[2];
+    answer[0] = new ArrayList();
+    answer[1] = new ArrayList();
 
     for (int i = 1; i < args.length-1; i+=2) {
       // good contains string reps of invariants in Non-Buggy.inv
@@ -332,7 +332,7 @@ public final class FeatureExtractor {
       }
 
       // bad contains actual invariants in Buggy.inv
-      Vector bad = new Vector();
+      ArrayList bad = new ArrayList();
       for (Iterator badppts =
              FileIO.read_serialized_pptmap(new File(args[i+1]),false).pptIterator();
            badppts.hasNext(); ) {
@@ -353,8 +353,8 @@ public final class FeatureExtractor {
 
   /* Prints the labeling using C5 format
    */
-  private static void printC5Output(Vector usefulFeatures,
-                                    Vector nonusefulFeatures,
+  private static void printC5Output(ArrayList usefulFeatures,
+                                    ArrayList nonusefulFeatures,
                                     File outputFile, File namesFile,
                                     HashMap lookup)
     throws IOException {
@@ -420,7 +420,7 @@ public final class FeatureExtractor {
   /* Prints the partial labeling using C5 format for all feature vectors
      in features.
   */
-  private static void printC5DataOutput (Vector features,
+  private static void printC5DataOutput (ArrayList features,
                                          TreeSet allFeatures,
                                          String label,
                                          FileWriter output) throws IOException{
@@ -469,10 +469,10 @@ public final class FeatureExtractor {
 
   /* Prints the labeling using SVMlight format
    */
-  private static void printSVMOutput(Vector usefulFeatures,
-                                     Vector nonusefulFeatures,
-                                     Vector usefulStrings,
-                                     Vector nonusefulStrings,
+  private static void printSVMOutput(ArrayList usefulFeatures,
+                                     ArrayList nonusefulFeatures,
+                                     ArrayList usefulStrings,
+                                     ArrayList nonusefulStrings,
                                      File outputFile) throws IOException {
     FileWriter output = new FileWriter(outputFile);
     // Now add all the features in SVM-Light format to output
@@ -486,7 +486,7 @@ public final class FeatureExtractor {
   /* Prints a partial labeling using SVMlight format for all the
      feature vectors in features.
    */
-  private static void printSVMDataOutput(Vector features, Vector strings,
+  private static void printSVMDataOutput(ArrayList features, ArrayList strings,
                                          String label,
                                          FileWriter output) throws IOException{
     DecimalFormat df = new DecimalFormat("0.0####");
@@ -505,8 +505,8 @@ public final class FeatureExtractor {
 
   /* Prints the labeling using SVMfu format.
    */
-  private static void printSVMfuOutput(Vector usefulFeatures,
-                                       Vector nonusefulFeatures,
+  private static void printSVMfuOutput(ArrayList usefulFeatures,
+                                       ArrayList nonusefulFeatures,
                                        File outputFile) throws IOException {
     FileWriter output = new FileWriter(outputFile);
     // Now add all the features in SVMfu format to output
@@ -522,7 +522,7 @@ public final class FeatureExtractor {
   /* Prints a partial labeling using SVMfu format for all the
      feature vectors in features.
    */
-  private static void printSVMfuDataOutput(Vector features, String label,
+  private static void printSVMfuDataOutput(ArrayList features, String label,
                                            FileWriter output) throws IOException{
     DecimalFormat df = new DecimalFormat("0.0####");
     for (int i = 0; i < features.size(); i++) {
@@ -539,8 +539,8 @@ public final class FeatureExtractor {
 
   /* Prints the invariant descriptions to a file.
    */
-  private static void writeInvariantDescriptions(Vector usefulStrings,
-                                       Vector nonusefulStrings,
+  private static void writeInvariantDescriptions(ArrayList usefulStrings,
+                                       ArrayList nonusefulStrings,
                                        File outputFile) throws IOException {
     FileWriter output = new FileWriter(outputFile);
     for (int i = 0; i < usefulStrings.size(); i++)
@@ -556,7 +556,7 @@ public final class FeatureExtractor {
     throws IOException {
     BufferedReader br = new BufferedReader(new FileReader(input));
     HashSet vectors = new HashSet();
-    Vector outputData = new Vector();
+    ArrayList outputData = new ArrayList();
     while (br.ready()) {
       String line = br.readLine();
       if (vectors.contains(line))
@@ -698,10 +698,10 @@ public final class FeatureExtractor {
   // Call getAllReflectFeatures on every Invariants in invariants
   // to get all the features of that invariant
   // and store those featues in a new TreeSet.
-  // return a Vector of TreeSets of features.
-  private static Vector getReflectFeatures(Vector invariants, HashMap lookup)
+  // return a ArrayList of TreeSets of features.
+  private static ArrayList getReflectFeatures(ArrayList invariants, HashMap lookup)
     throws IllegalAccessException, InvocationTargetException {
-    Vector answer = new Vector();
+    ArrayList answer = new ArrayList();
     // for each invariant, extract all the features and build a new TreeSet
     for (int i = 0; i < invariants.size(); i++) {
       answer.add(new TreeSet(getReflectFeatures(invariants.get(i), lookup)));
@@ -813,7 +813,7 @@ public final class FeatureExtractor {
         System.out.println(USAGE);
         System.exit(0);
       }
-      Vector inputs = new Vector();
+      ArrayList inputs = new ArrayList();
       boolean normalize = false;
       String output = null;
       String type = null;
@@ -871,8 +871,8 @@ public final class FeatureExtractor {
 
       // Now create two vectors, posvectors and negvectors, of the
       // positive and negative vectors respectively.
-      Vector posvectors = new Vector();
-      Vector negvectors = new Vector();
+      ArrayList posvectors = new ArrayList();
+      ArrayList negvectors = new ArrayList();
 
       for (Iterator i = neg.iterator(); i.hasNext(); ) {
         String vector = (String) i.next();
@@ -940,8 +940,8 @@ public final class FeatureExtractor {
         System.out.println(USAGE);
         System.exit(0);
       }
-      Vector trains = new Vector();
-      Vector tests = new Vector();
+      ArrayList trains = new ArrayList();
+      ArrayList tests = new ArrayList();
       String type = null;
       for (int i = 0; i < args.length; i++) {
         if (args[i].equals("-t"))
@@ -990,8 +990,8 @@ public final class FeatureExtractor {
       }
 
       // Load the test files into two vectors: testBad and testGood
-      Vector testGood = new Vector();
-      Vector testBad = new Vector();
+      ArrayList testGood = new ArrayList();
+      ArrayList testBad = new ArrayList();
 
       for (Iterator i = trains.iterator(); i.hasNext(); ) {
         BufferedReader br=new BufferedReader(new FileReader((String)i.next()));
@@ -1042,7 +1042,7 @@ public final class FeatureExtractor {
       */
   }
 
-  private static void writeVectors(Vector one, Vector two,
+  private static void writeArrayLists(ArrayList one, ArrayList two,
                                      String label, FileWriter fw)
     throws IOException {
 
