@@ -119,7 +119,7 @@ Detecting invariants involves three steps:
 </ol>
 
 
-<h3><a name="front-ends"><a name="instrument">Step 1:  Instrumentation</a></a></h3>
+<h3><a name="front-ends"></a><a name="instrument"></a>Step 1:  Instrumentation</h3>
 
 
 There are three different front ends -- for C, Java, and Lisp.  Each of
@@ -213,7 +213,7 @@ current focus is on the <a href="#java-front-end">Java front end</a>.<p>
      You may wish to perform this operation with a copy of your program,
      to safeguard your original source code.<p>
 
-     If you supply the </tt>-d <i>directory</i></tt> argument (before
+     If you supply the <tt>-d <i>directory</i></tt> argument (before
      the file names), then the instrumented source files are placed in the
      specified directory instead (and no backup files need be made).
  <li>Copy files <tt>dump_trace.c</tt> and <tt>dump_trace.h</tt> to the
@@ -223,7 +223,7 @@ current focus is on the <a href="#java-front-end">Java front end</a>.<p>
      <li>If you have no <tt>Makefile</tt>, copy <tt>Makefile-sample</tt>
          to <tt>Makefile</tt> and add the names of your source files to its
          <tt>OBJS</tt>, and edit its <tt>EXEC</tt> executable name.
-     <li>If you have a </tt>Makefile</tt>, add <tt>dump_trace.o</tt> to the
+     <li>If you have a <tt>Makefile</tt>, add <tt>dump_trace.o</tt> to the
          list of object files that need to be created (and linked to create
          your executable).
    </ul>
