@@ -514,6 +514,8 @@ public final class Daikon {
           show_progress = true;
         } else if (use_dataflow_hierarchy_SWITCH.equals(option_name)) {
           use_dataflow_hierarchy = false;
+          // TODO: make --nohierarchy compatible with equality optimization
+          use_equality_optimization = false;
         } else if (use_suppression_optimization_SWITCH.equals(option_name)) {
           use_suppression_optimization = true;
         } else if (suppress_cont_SWITCH.equals(option_name)) {
