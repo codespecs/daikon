@@ -368,10 +368,10 @@ public final class Daikon {
 	}
         if (! disable_splitting) {
 	  Splitter[] pconds = null;
-	  if (!Global.allSplitters) {
-	    pconds = SplitterList.get(ppt.name);
-	  } else {
+	  if (SplitterList.dkconfig_all_splitters) {
 	    pconds = SplitterList.get_all();
+	  } else {
+	    pconds = SplitterList.get(ppt.name);
 	  }
           if (Global.debugPptSplit)
             System.out.println("Got " + ((pconds == null)

@@ -189,7 +189,7 @@ public final class FileIO {
                       + " line " + file.getLineNumber());
     }
 
-    if (!Global.allSplitters) {
+    if (!daikon.split.SplitterList.dkconfig_all_splitters) {
       //if all the splitters are to be tried at all program points,
       //then we need to create all the program points because the
       //creation of splitters requires information from the program

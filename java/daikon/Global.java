@@ -42,8 +42,6 @@ public final class Global {
 
   public final static Random random = new Random();
 
-  //splitting
-  public final static boolean allSplitters = true;
   ///////////////////////////////////////////////////////////////////////////
   /// Variables
   ///

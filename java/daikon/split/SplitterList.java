@@ -13,6 +13,10 @@ import utilMDE.*;
 
 public abstract class SplitterList {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface.
+  public static boolean dkconfig_all_splitters = true;
+
   // maps from string to Splitter[]
   static HashMap ppt_splitters = new HashMap();
   static PatternMatcher re_matcher = Global.regexp_matcher;
