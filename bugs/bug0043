@@ -1,0 +1,19 @@
+Version:      $Id$
+Owner:        mharder <mharder@lcs.mit.edu>
+Cc:           
+Tool:         dfec
+Summary:      dfec --disambig fails on structs
+Severity:     Vexing
+Status:       New
+Reproducible: Yes
+Description:
+
+If you run "dfec --disambig" on a .c file containing structs, it
+produces an invalid .disambig file.  Look at
+$inv/tests/dfec-tests/lackwit-structs/lackwit-structs.disambig.
+
+--
+$Log$
+Revision 1.1  2002-04-20 20:50:41  mharder
+new bug0043
+
