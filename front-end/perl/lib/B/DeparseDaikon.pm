@@ -743,16 +743,22 @@ sub dq {
     }
 }
 
-# This isn't a method, so we have to replace all the methods that call
-# it.
+# This isn't a method in older versions, so we have to replace all the
+# methods that call it.
 sub const {
-    my $sv = shift;
+    my $self = shift;
+    my($sv, $cx) = @_;
     if (class($sv) eq "SPECIAL") {
         # In the 5.8.0 version of Deparse, the string for sv_no was
-        # '0', rather than '""'. 
-        return ('undef', '1', '""')[$$sv-1]; # sv_undef, sv_yes, sv_no
+        # '0', '""' isn't quite right either, in fact.
+	# sv_undef, sv_yes, sv_no
+	return ('undef', '1', $self->maybe_parens("!1", $cx, 21))[$$sv-1];
     } else {
-        return B::Deparse::const($sv);
+        if ($B::Deparse::VERSION <= 0.63) {
+            return B::Deparse::const($sv);
+        } else {
+            return $self->SUPER::const($sv, $cx);
+        }
     }
 }
 
@@ -768,7 +774,7 @@ sub pp_const {
 #    }
     my $sv = $self->const_sv($op);
 #    return const($sv);
-    my $c = const $sv; 
+    my $c = $self->const($sv, $cx);
     return $c =~ /^-\d/ ? $self->maybe_parens($c, $cx, 21) : $c;
 }
 
@@ -779,7 +785,7 @@ sub pp_rv2av {
     my $kid = $op->first;
     if ($kid->name eq "const") { # constant list
         my $av = $self->const_sv($kid);
-        return "(" . join(", ", map(const($_), $av->ARRAY)) . ")";
+        return "(" . join(", ", map($self->const($_, $cx), $av->ARRAY)) . ")";
     } else {
         return $self->maybe_local($op, $cx, $self->rv2x($op, $cx, "\@"));
     }
