@@ -1,7 +1,26 @@
 Daikon todo list.
-Time-stamp: <2003-11-14 14:12:55 jhp>
+Time-stamp: <2003-11-19 11:56:36 jhp>
 
 Outstanding Issues
+
+  jhp     11/19/03      DynamicConstants.dkconfig_OneOf_only
+
+    If this is set to true, invariants will be missed during the merge
+    if the variable is a constant at one child and not a constant
+    at the other 
+
+  jhp     11/19/03      equality sets and equality invariant don't merge
+
+    If A and B are in an equality set in one child, and A == B are in
+    the other child, neither an equality set not an equality invariant
+    for A and B are created in the parent.
+
+  jhp     11/19/03      A == B && f(A) does not suppress f(B)
+
+    If A and B are in the same equality set, f(B) is not even created.
+    But if A and B are not in the same equality set (perhaps because
+    they have different missing information) the A == B equality doesn't
+    remove any invariants 
 
   jhp     11/11/03      Equality.postProcess creates wrong string equality
 
@@ -44,7 +63,9 @@ Outstanding Issues
     we could apply is_slice_ok here to not bother with uninteresting
     slices.  Note this works ok without it, because nothing is found
     in the unintersting slices in the children.  But it could help
-    efficiency to fix this.     10/30/03      Fix invariant documentation
+    efficiency to fix this.     
+
+  jhp      10/30/03      Fix invariant documentation
 
     The invariant documentation now includes versions for each permutation
     of each FunctionBinary function.   This needs to be changed to not
