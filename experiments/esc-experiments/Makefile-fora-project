@@ -29,7 +29,7 @@
 #
 
 
-DAIKON_OPTS?=--suppress_cont
+DAIKON_OPTS?=--suppress_cont --suppress_post
 
 ## Copied from another makefile; uncomment as needed
 # DAIKON = java -mx128m daikon.Daikon
@@ -67,7 +67,7 @@ help:
 
 all: txt-esc merge esc
 
-SCRATCH_FOR_DAIKON?=/tmp/esc-experiments/${PROJECT}
+SCRATCH_FOR_DAIKON?=/scratch/esc-experiments/${PROJECT}
 
 reset-scratch: reset-scratch-impl
 create-scratch: ${SCRATCH_FOR_DAIKON}/.exists
@@ -176,7 +176,7 @@ merge:
 	@echo \#\#\# merge
 	@echo
 	cd ${PACKAGE} && ls *.java-unannotated | perl -p -e 's/^(.*)-unannotated$$/mv \1-unannotated \1/' | sh
-	cd ${PACKAGE} && merge-esc.pl ${PWD}/${PROJECT}.txt-esc
+	cd ${PACKAGE} && merge-esc.pl ${PWD}/${PROJECT}.txt-esc${EXTRA_MERGE_SUFFIX}
 	cd ${PACKAGE} && ls *.java | perl -p -e 's/^(.*)$$/mv \1 \1-unannotated/' | sh
 	cd ${PACKAGE} && ls *.java-escannotated | perl -p -e 's/^(.*)-escannotated$$/mv \1-escannotated \1/' | sh
 
