@@ -3174,13 +3174,53 @@ automatically, permitting users to edit it for use on subsequent runs,
 rather than having to create it from scratch.)  The disambig file
 lists all the instrumented program points, and under each, a list of
 all the variables in scope at that program point, along with the types
-that the variables are instrumented as.  For pointer variables, there
-are two options:  @samp{A} for array, and @samp{P} for pointer to
-single value.  For variables of type @code{char}, there are two
-options:  @samp{I} for integer (i.e., numerical value), and @samp{C}
-for character.  This allows you to choose whether a @code{char}
-variable refers to an ASCII character or a short numerical value that
-mathematical invariants should be calculated over.
+that the variables are instrumented as.  The list of disambiguation
+options is:
+
+@enumerate
+@item
+For variables of type @code{char}:
+@enumerate
+@item
+'I': an integer.
+@item
+'C': a single character, output as a string.
+@end enumerate
+@item
+For pointers to (or arrays of) @code{char}:
+@enumerate
+@item
+'S': a string, possibly zero-terminated.
+@item
+'C': a single character, output as a string.
+@item
+'A': an array of integers.
+@item
+'P': a single integer.
+@end enumerate
+@item 
+For pointers to (or arrays of) @code{int}:
+@enumerate
+@item
+'A': an array of integers.
+@item
+'P': a single integer.
+@end enumerate
+For pointers to (or arrays of) @code{float}:
+@enumerate
+@item
+'A': an array of integers.
+@item
+'P': a single integer.
+@end enumerate
+For pointers to (or arrays of) @code{struct} or @code{class} types:
+@enumerate
+@item
+'A': an array of structs.  For each scalar field of the type, an array of that field will be output.  Aggregate children (arrays, other structs) will not be output.
+@item
+'P': a pointer to a single struct.  Each field of the type will be instrumented as a single instance, and child aggregate types will be output recursively.
+@end enumerate
+@end enumerate
 
 The disambig file that dfec creates contains an entry for each program
 point in instrumentation scope (@pxref{Instrumentation scope}), which
