@@ -17,6 +17,12 @@ import daikon.inv.ternary.threeScalar.FunctionBinary;
 
 public class PrintInvariants {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface.
+
+  /** Print invariant classsname with invariants in daikon output format */
+  public static boolean dkconfig_print_inv_class = false;
+
   /**
    * Main debug tracer for PrintInvariants (for things unrelated to printing).
    **/
@@ -47,6 +53,9 @@ public class PrintInvariants {
    * Debug tracer for filtering.
    **/
   public static final Logger debugFiltering = Logger.getLogger("daikon.filtering");
+
+  /** debug tracer for variable bound information **/
+  public static final Logger debugBound  = Logger.getLogger ("daikon.bound");
 
   public static final String lineSep = Global.lineSep;
 
@@ -1308,7 +1317,6 @@ public class PrintInvariants {
   }
   */ // ... [INCR]
 
-
   /**
    * Print invariants for a single program point, once we know that
    * this ppt is worth printing.
@@ -1359,6 +1367,9 @@ public class PrintInvariants {
     //     }
     // No longer necessary because we convert them into normal IntEqual, etc.
 
+    if (debugBound.isLoggable (Level.FINE))
+      ppt.debug_unary_info (debugBound);
+
     Invariant[] invs_array = (Invariant[]) invs_vector.toArray(
       new Invariant[invs_vector.size()]);
     Arrays.sort(invs_array, PptTopLevel.icfp);
@@ -1370,6 +1381,7 @@ public class PrintInvariants {
     // System.out.println("print_invariants considering " + invs_array.length + " invariants.");
     for (int i = 0; i < invs_array.length; i++) {
       Invariant inv = invs_array[i];
+
       if (inv.logOn())
         inv.log ("Considering Printing");
       Assert.assertTrue (!(inv instanceof Equality));
