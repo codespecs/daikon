@@ -22,10 +22,12 @@ JAVA ?= java
 # else AUTO_GENERATED_FILES should be appended to it (without duplication).
 # Therefore, this assignment uses "=" instead of ":=".
 # Creates a symlink to ajax if it does not exist, so the ajax .java
-# files get compiled as well.
+# files get compiled as well.  DO NOT USE THESE in dependencies or the
+# find command will get run multiple times.  USE AUTO_GENERATED_FILES instead.
 # "-o -path './jakarta-oro*/src/java/examples'" does not work for non-GNU find.
 JAVA_FILES = $(shell test -d ajax-ship/ajax && test ! -L ajax && ln -s ajax-ship/ajax .; find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name 'ajax-ship' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/')
-TAG_FILES := $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -name ajax \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
+DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -print)
+TAG_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -name ajax \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
 
 # When removing files from this list, add them to OLD_AUTO_GENERATED_FILES.
 AUTO_GENERATED_FILES = \
@@ -62,6 +64,8 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/unary/scalar/NonZeroFloat.java \
 	daikon/inv/unary/scalar/RangeInt.java \
 	daikon/inv/unary/scalar/RangeFloat.java \
+	daikon/inv/unary/sequence/EltRangeInt.java \
+	daikon/inv/unary/sequence/EltRangeFloat.java \
 	daikon/inv/unary/sequence/OneOfSequence.java \
 	daikon/inv/unary/sequence/OneOfFloatSequence.java \
 	daikon/inv/unary/sequence/EltOneOf.java \
@@ -275,11 +279,10 @@ default: all
 compile: all
 
 # "-S" means do not continue after errors.
-all:
-	${MAKE} -S all_directly junit
+all: all_directly junit
 
 ## In general, don't use this; it misses some files
-all_via_daikon: daikon/Daikon.class daikon/Runtime.class daikon/Diff.class
+all_via_daikon: daikon/Daikon.class daikon/Runtime.class daikon/diff/Diff.class
 	$(MAKE) all_pass2
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
@@ -290,9 +293,18 @@ all_directly: ${AUTO_GENERATED_FILES}
 	@chmod -w ${AUTO_GENERATED_FILES}
 	$(MAKE) all_pass2
 
+.PHONY : daikon
+daikon: compile_daikon junit
+compile_daikon : $(AUTO_GENERATED_FILES)
+	@echo $(JAVAC_COMMAND) 'daikon/*.java ...'
+	@$(JAVAC_COMMAND) $(DAIKON_JAVA_FILES)
+	@chmod -w ${AUTO_GENERATED_FILES}
+	# $(MAKE) all_pass2
+
+
 ## Use this when you don't want $inv/tests makefiles to restart
-JAVA_FILES_EXCEPT_DAIKON := $(subst ./daikon/Daikon.java,,${JAVA_FILES})
-all_except_daikon: ${JAVA_FILES_EXCEPT_DAIKON}
+JAVA_FILES_EXCEPT_DAIKON = $(subst ./daikon/Daikon.java,,${JAVA_FILES})
+all_except_daikon: ${AUTO_GENERATED_FILES}
 	@echo ${JAVAC_COMMAND} '*.java ... (except Daikon.java)'
 	@${JAVAC_COMMAND} ${JAVA_FILES_EXCEPT_DAIKON}
 	@chmod -w ${AUTO_GENERATED_FILES}
@@ -391,7 +403,7 @@ findbugs: .findbugs-output
 	rm -f findbugs-output
 	~mernst/tmp/findbugs/bin/findbugs -emacs -textui -exclude .findbugs-exclude.xml -maxHeap 750 ../daikon.jar | tee .findbugs-output
 
-../daikon.jar: ${JAVA_FILES} compile
+../daikon.jar: ${AUTO_GENERATED_FILES} compile
 	cd .. && $(MAKE) daikon.jar
 
 checkstyle: checkstyle-cs checkstyle-sun
@@ -399,7 +411,7 @@ checkstyle-cs: .checkstyle-cschecks-output
 checkstyle-sun: .checkstyle-sunchecks-output
 .PHONY: checkstyle checkstyle-cs checkstyle-sun
 
-.checkstyle-sunchecks-output: ${JAVA_FILES}
+.checkstyle-sunchecks-output: ${AUTO_GENERATED_FILES}
 	  java \
 	    -Dcheckstyle.header.file=/g2/users/mernst/java/checkstyle-3.4/docs/java.header \
 	    -Dcheckstyle.suppressions.file=${inv}/java/.checkstyle-suppressions.xml \
@@ -408,7 +420,7 @@ checkstyle-sun: .checkstyle-sunchecks-output
 	    -c /g2/users/mernst/java/checkstyle-3.4/docs/sun_checks.xml \
 	    -r daikon | tee .checkstyle-sunchecks-output
 
-.checkstyle-cschecks-output: ${JAVA_FILES}
+.checkstyle-cschecks-output: ${AUTO_GENERATED_FILES}
 	  java \
 	    -Dcheckstyle.header.file=/g2/users/mernst/java/checkstyle-3.4/docs/java.header \
 	    -Dcheckstyle.suppressions.file=.checkstyle-suppressions.xml \
@@ -456,6 +468,34 @@ junit:
 	@${JAVA} -server -classpath .:${CLASSPATH}:daikon/test/ daikon.test.MasterUnitTester
 
 ###
+### Clover
+###
+CLOVER := $(HOME)/clover
+CLOVER_CMD := java -cp $(CLOVER)/clover-1.3.1/lib/clover.jar \
+									com.cenqua.clover.CloverInstr -jdk14
+CLOVER_CP := $(subst $(INV)/java,$(CLOVER)/java,$(CLASSPATH))
+CLOVER_CP := $(CLOVER_CP):$(CLOVER)/clover-1.3.1/lib/clover.jar
+
+clover: all_directly
+	/bin/rm -rf $(CLOVER)/java
+	mkdir $(CLOVER)/java
+	cd $(CLOVER)/java; ln -s $(INV)/java/jtb
+	cd $(CLOVER)/java; ln -s $(INV)/java/lib
+	cd $(CLOVER)/java; ln -s $(INV)/java/ajax-ship
+	cd $(CLOVER)/java; ln -s ajax-ship/ajax ajax
+	cp Makefile $(CLOVER)/java
+	mkdir $(CLOVER)/java/daikon
+	(cd daikon; tar cf - .) | (cd $(CLOVER)/java/daikon; tar xfBp -)
+	chmod -R a+w $(CLOVER)/java/daikon
+	mkdir $(CLOVER)/java/utilMDE
+	(cd utilMDE; tar cf - .) | (cd $(CLOVER)/java/utilMDE; tar xfBp -)
+	chmod -R a+w $(CLOVER)/java/utilMDE
+	$(CLOVER_CMD) -i $(CLOVER)/clover.db -s daikon -d $(CLOVER)/java/daikon
+	$(CLOVER_CMD) -i $(CLOVER)/clover.db -s utilMDE -d $(CLOVER)/java/utilMDE
+	cd $(CLOVER)/java; \
+	  javac -classpath $(CLOVER_CP) -g -target 1.1 daikon/Daikon.java
+
+###
 ### Documentation
 ###
 
@@ -472,13 +512,13 @@ JDOC_FILES = `find -follow -name '*.java' | grep -v CVS | grep -v ajax | grep -v
 
 javadoc: doc
 
-doc: $(JAVA_FILES) doc-dkconfig
+doc: $(AUTO_GENERATED_FILES) doc-dkconfig
 	mkdir -p doc
 	# This requires that jdk/lib/tools.jar be on your classpath
 	javadoc $(JAVADOC_FLAGS) $(JDOC_FILES)
 
 ## Make doc with private fields for people working on source code
-doc-private: $(JAVA_FILES)
+doc-private: $(AUTO_GENERATED_FILES)
 	mkdir -p doc
 	javadoc $(JAVADOC_FLAGS) -private $(JDOC_FILES)
 
@@ -487,7 +527,7 @@ doc-jdk-lookup: doc
 	jdk-add-munged-anchor-names `find doc -name '*.html'`
 	echo "Run jdk-index-to-alist > ~/emacs/jdk-index.el"
 
-../doc/invariants-doc.texinfo: $(JAVA_FILES)
+../doc/invariants-doc.texinfo: $(AUTO_GENERATED_FILES)
 	javadoc -doclet daikon.config.InvariantDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
@@ -498,7 +538,7 @@ doc-invariant: ../doc/invariants-doc.texinfo
 # (which occurs only when run from $inv/java) appears to be a result of
 # having both . and pwd on CLASSPATH:  classes are found twice resulting in
 # a duplicate class warning.
-../doc/config-options.texinfo: $(JAVA_FILES)
+../doc/config-options.texinfo: $(AUTO_GENERATED_FILES)
 	javadoc -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
@@ -506,12 +546,12 @@ doc-invariant: ../doc/invariants-doc.texinfo
 doc-dkconfig: ../doc/config-options.texinfo
 
 # This file is no longer used; there's no point in keeping it around.
-# daikon/config/configurable.txt: $(JAVA_FILES)
+# daikon/config/configurable.txt: $(AUTO_GENERATED_FILES)
 # 	javadoc -doclet daikon.config.ParameterDoclet \
 # 		--list $@ \
 # 		$(JDOC_FILES)
 
-../doc/category-options.texinfo: $(JAVA_FILES)
+../doc/category-options.texinfo: $(AUTO_GENERATED_FILES)
 	javadoc -doclet daikon.config.ParameterDocletCategory \
 		--texinfo $@ \
 		$(JDOC_FILES)
@@ -695,6 +735,12 @@ daikon/inv/unary/scalar/OneOfFloat.java: daikon/inv/unary/OneOf.java.jpp
 
 daikon/inv/unary/string/OneOfString.java: daikon/inv/unary/OneOf.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=STRING)
+
+daikon/inv/unary/sequence/EltRangeInt.java: daikon/inv/unary/scalar/Range.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=SCALARSEQ)
+
+daikon/inv/unary/sequence/EltRangeFloat.java: daikon/inv/unary/scalar/Range.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=FLOATSEQ)
 
 daikon/inv/unary/sequence/OneOfSequence.java: daikon/inv/unary/OneOf.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=SEQUENCE)
