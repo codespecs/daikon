@@ -41,11 +41,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 2.3.14
+@center Daikon version 2.3.15
 
 @sp 1
-@c Daikon version 2.3.14 date
-@center August  1, 2002
+@c Daikon version 2.3.15 date
+@center September 12, 2002
 
 @sp 5
 @c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
@@ -64,7 +64,7 @@ Copyright @copyright{} 1998-2002
 <h1>Daikon Invariant Detector User Manual</h1>
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.14, released August  1, 2002.
+It describes Daikon version 2.3.15, released September 12, 2002.
 
 @end html
 
@@ -79,7 +79,7 @@ It describes Daikon version 2.3.14, released August  1, 2002.
 
 @ifnottex
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.14, released August  1, 2002.
+It describes Daikon version 2.3.15, released September 12, 2002.
 @end ifnottex
 
 @menu
@@ -313,6 +313,7 @@ Problems running Daikon
 * Out of memory::               
 * Simplify errors::             
 * Method needs to be implemented::  
+* JVM initialization error::    
 * Daikon runs slowly::          
 
 Other problems
@@ -3086,18 +3087,18 @@ Ensures that each multi-dimensional array in the instrumented program will be
 allocated as a single contiguous block of memory.  A multi-dimensional array
 is a variable declared with multiple sets of square brackets after it, e.g.:
 @example
-  int foo[3][2];
-  char bar[3][8][3];
+  int foo[5][10];
 @end example
 This is necessary if the program under analysis performs operations that
-assume that its
-multi-dimensional array variables are contiguous blocks of memory (e.g.,
-clearing them with memset(), manually calculating addresses of elements
-in the array using memory offsets from the first element, etc.).
-However, this will remove padding at the beginnings and ends of
-subarrays and diminish the ability of the runtime library to report
-array overflow errors, so this option should only be specified if
-necessary.
+assume that its sub-arrays appear in contiguous blocks of memory (that
+is, that @code{foo[3][0]} appears immediately after  @code{foo[2][9]});
+examples of such operations are clearing the entire array with
+@code{memset()}, manually calculating addresses of elements
+in the array using memory offsets from the first element, etc.
+Use of the @option{--flatten-mdas} removes padding at the beginnings
+and ends of subarrays and diminishes the ability of the runtime
+library to report array overflow errors, so this option should only be
+specified if necessary.
 
 @item --help
 Displays a usage message.
@@ -4836,6 +4837,7 @@ understand Daikon's operation; @xref{Command line options}.
 * Out of memory::               
 * Simplify errors::             
 * Method needs to be implemented::  
+* JVM initialization error::    
 * Daikon runs slowly::          
 @end menu
 
@@ -4920,7 +4922,7 @@ invariants may appear in Daikon's output.  The output is otherwise
 correct.
 
 
-@node    Method needs to be implemented, Daikon runs slowly, Simplify errors, Daikon problems
+@node    Method needs to be implemented, JVM initialization error, Simplify errors, Daikon problems
 @subsection Method needs to be implemented
 
 @cindex method needs to be implemented warning
@@ -4945,7 +4947,22 @@ or else use an output formatting that can handle those invariants.
 MergeESC (@pxref{MergeESC}) automatically ignores unformattable invariants.
 
 
-@node    Daikon runs slowly,  , Method needs to be implemented, Daikon problems
+@node    JVM initialization error, Daikon runs slowly, Method needs to be implemented, Daikon problems
+@subsection JVM initialization error
+
+@cindex JVM initialization error
+@cindex initialization error, JVM
+@cindex Vector, dfej cannot instrument
+
+Instrumenting Vector prevents the Java Virtual Machine from initializing
+properly, because instrumented classes attempt to use the JVM's
+facilities when they are loaded, but the JVM loads Vector during its own
+initialization.  The same problem may be true for other classes used
+internally by the JVM.  Users can create a new class MyVector, replace
+uses of Vector by MyVector, and then instrument MyVector.
+
+
+@node    Daikon runs slowly,  , JVM initialization error, Daikon problems
 @subsection Daikon runs slowly
 
 @cindex slow operation, of Daikon
@@ -5193,7 +5210,7 @@ English words "die-con".
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 2.3.14, released August  1, 2002.
+This manual describes Daikon version 2.3.15, released September 12, 2002.
 A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.

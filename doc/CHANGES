@@ -9,6 +9,20 @@ daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
+2.3.15 (12 September 2002):
+
+Discontinued the compiled distribution; now there is only one Daikon
+distribution, the source distribution, which includes both pre-compiled
+files and source files.
+
+Added top-level makefile, which simplifies Daikon installation.
+
+dfec enhancements:
+  added --flatten-mdas option
+  improved documentation of disambiguation file
+
+----------------
+
 2.3.14 (1 August 2002):
 
 CreateSpinfoC program creates splitting conditions via static analysis of C
