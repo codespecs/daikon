@@ -276,6 +276,11 @@ public final class FileIO {
       static_constant_value_string = file_rep_type_string.substring(equals_index+3);
       file_rep_type_string = file_rep_type_string.substring(0, equals_index);
     }
+    // XXX temporary, for compatibility with older .dtrace files.  12/20/2001
+    if ("String".equals(file_rep_type_string)) {
+      file_rep_type_string = "java.lang.String";
+    }
+    /// XXX
     ProglangType prog_type = ProglangType.parse(proglang_type_string);
     ProglangType file_rep_type = ProglangType.rep_parse(file_rep_type_string);
     ProglangType rep_type = file_rep_type.fileTypeToRepType();
