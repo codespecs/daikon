@@ -8,8 +8,11 @@
 
 # USAGE: ./convertcsv.pl [options] filename.csv
 # OUTPUT: filename.dtrace, filename.decls
+#
 
-
+use English;
+use strict;
+$WARNING=1;
 
 my $USAGE =
   "Usage: ./convertcsv.pl [options] <inputfilename>
