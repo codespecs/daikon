@@ -38,6 +38,7 @@ This has a small execution cost -- see Vector values_order.
 package daikon;
 
 import daikon.inv.*;
+import daikon.suppress.*;
 #ifdef ARITY1
 import daikon.inv.unary.*;
 import daikon.inv.unary.scalar.*;
@@ -413,7 +414,8 @@ public final class PPTSLICE1
         for (int j = 0; j < invs.size(); j++) {
           Invariant inv = (Invariant) invs.get(j);
           if (PrintInvariants.print_discarded_invariants)
-            DiscReasonMap.put(inv, DiscardCode.bad_sample, var_infos[i].name.name() + " array index was out of bounds");
+            DiscReasonMap.put(inv, DiscardCode.bad_sample,
+                  var_infos[i].name.name() + " array index was out of bounds");
           if (Daikon.dkconfig_df_bottom_up) {
             inv.falsify();
             result.add (inv);
@@ -1066,7 +1068,10 @@ public final class PPTSLICE1
    */
   public PptSlice copy_new_invs (PptTopLevel ppt, VarInfo[] vis) {
 
-    // sort the varinfos and find the corresponding slice
+    // This should only be called on global slices
+    Assert.assertTrue (parent == PptTopLevel.global);
+
+    // Sort the varinfos and find the corresponding slice
     VarInfo[] vis_sorted = (VarInfo[]) vis.clone();
     Arrays.sort (vis_sorted, VarInfo.IndexComparator.getInstance());
     PPTSLICE1 slice = (PPTSLICE1) ppt.findSlice (vis_sorted);
@@ -1107,14 +1112,20 @@ public final class PPTSLICE1
     }
 
     // Copy each invariant from here to slice.  Don't copy any invariants
-    // that already exist at slice or at slice's global parent slice
+    // that already exist at slice or at slice's global parent slice.
     List new_invs = new ArrayList (invs.size());
     for (Iterator i = invs.iterator(); i.hasNext(); ) {
       Invariant inv = (Invariant) i.next();
       Invariant new_inv = inv.transfer (slice, permute);
-      if (!slice.contains_inv (new_inv) && ((parent_gslice == null) ||
-        !parent_gslice.contains_inv_exact (new_inv)))
-        new_invs.add (new_inv);
+      if (slice.contains_inv (new_inv)) {
+        new_inv.log ("slice already contains inv, not copied");
+        continue;
+      }
+      if ((parent_gslice != null) &&parent_gslice.contains_inv_exact(new_inv)){
+        new_inv.log ("global slice already contains inv, not copied");
+        continue;
+      }
+      new_invs.add (new_inv);
     }
     slice.invs.addAll (new_invs);
 
@@ -1134,7 +1145,7 @@ public final class PPTSLICE1
 
   public void remove_global_invs() {
 
-    // Find the matching gblobal slice.  To match each variable
+    // Find the matching global slice.  To match each variable
     // must have the same transformation (orig/post) from here
     // to the global ppt
     PptSlice gslice = find_global_slice (var_infos);
@@ -1186,7 +1197,7 @@ public final class PPTSLICE1
     List all_invs = new ArrayList();
 
     // Keep count of the number of valid children processed.  An invariant
-    // must be found at each valid child in order to exit at the parent.
+    // must be found at each valid child in order to exist at the parent.
     // A valid child is one that has received samples and has a corresponding
     // variable for each parent variable
     int valid_child_count = 0;
@@ -1277,9 +1288,12 @@ public final class PPTSLICE1
       }
 
       // Add each invariant (permuted to match the parent varinfos)
-      // to our list of invariants
+      // to our list of invariants.  Skip any invariants with ni-suppressions
+      // Invariants with ni-suppressions are handled in ni_merge_invs()
       for (int j = 0; j < cslice.invs.size(); j++) {
         Invariant orig_inv = (Invariant) cslice.invs.get (j);
+        if (orig_inv.get_ni_suppressions() != null)
+          continue;
         Invariant inv = orig_inv.clone_and_permute (permute);
         all_invs.add (inv);
         if (inv.logOn()) {
@@ -1362,6 +1376,136 @@ public final class PPTSLICE1
       }
     }
   }
+
+  /**
+   * Creates invariants at this ppt by merging invariants from each of
+   * its children.  This version handles only those invariant with
+   * ni-suppressions.  An invariant must be valid at each of the
+   * children in order for it to be created here (at the parent).  An
+   * invariant is valid if it exists at the child or if it is
+   * ni-suppressed at the child.
+   *
+   * This is accomplished by first creating all of possible invariants
+   * for this slice with ni-suppressions.  Each possible invariant is then
+   * examined in each child.  If the invariant is valid in the child, it
+   * remains, otherwise it is removed.
+   *
+   * At the end only the valid invariants at the parent remain.
+   *
+   * Its possible that this could be extended to handle all invariants
+   * and not just those with ni-suppressions.  The problem with this is
+   * invariants with state that have to be merged.  The current approach
+   * creates a list of these invariants.  A possible different approach
+   * would be to apply the state from each child invariant to the possible
+   * parent invariant in turn.  This would remove the need to create the
+   * list
+   */
+
+  public void ni_merge_invariants() {
+
+    if (debugMerge.isLoggable (Level.FINE)) {
+      debugMerge.fine ("merging invs for " + name());
+    }
+
+    // Create all of the possible invariants that can be NIS suppressed
+    instantiate_invariants();
+    for (Iterator i = invs.iterator(); i.hasNext(); ) {
+      Invariant inv = (Invariant) i.next();
+      if (inv.get_ni_suppressions() == null)
+        i.remove();
+    }
+
+    // Loop through all of the children of our top level parent
+    child_loop:
+    for (int i = 0; i < parent.children.size(); i++) {
+      PptRelation rel = (PptRelation) parent.children.get(i);
+      PptTopLevel ppt = rel.child;
+
+      // Skip any children that have not seen any samples
+      if (ppt.num_samples() == 0) {
+        if (debugMerge.isLoggable (Level.FINE))
+          debugMerge.fine ("-- slice ignored (no samples) " + ppt.name());
+        continue;
+      }
+
+      // Child variable info
+      VarInfo cvis[] = new VarInfo[var_infos.length];
+      VarInfo cvis_sorted[] = new VarInfo[var_infos.length];
+
+      // Build the corresponding array of VarInfos for the child.  If any
+      // of the vars don't exist in this child, skip the child (since we
+      // won't have data for each variable).
+      for (int j = 0; j < var_infos.length; j++) {
+        VarInfo pv = var_infos[j];
+        VarInfo cv = rel.childVar (pv);
+        if (cv == null)
+          continue child_loop;
+        cvis[j] = cv.canonicalRep();
+        cvis_sorted[j] = cv.canonicalRep();
+      }
+
+      // If any of the child variables have always been missing, this
+      // particular slice in the child received no samples.  If dynamic
+      // constants are enabled, the slice will have never been created.
+      // These slices can be skipped unless they contain a missing out of
+      // bound var.  Out of bounds variables destroy all invariants in
+      // the slice (since the variable is deemed to be nonsensical)
+      if (slice_missing (ppt, cvis)) {
+        if (debugMerge.isLoggable (Level.FINE))
+          debugMerge.fine ("-- slice ignored (missing) " + ppt.name()
+                           + " vars " + Debug.toString (cvis_sorted));
+        continue;
+      }
+
+      // The child variables must be sorted by their index (in the child)
+      Arrays.sort (cvis_sorted, VarInfo.IndexComparator.getInstance());
+
+      // Find the corresponding slice.
+      PPTSLICE1 cslice = (PPTSLICE1) ppt.findSlice (cvis_sorted);
+      if ((cslice == null) || (cslice.invs.size() == 0)) {
+        if (Debug.logOn())
+          this.log ("slice not found " + ppt.name() + " "
+                   + VarInfo.toString (cvis_sorted)
+                   + " num_samples= " + ppt.num_samples()
+                   + " ppt.constants = " + ppt.constants);
+        if (debugMerge.isLoggable (Level.FINE))
+          debugMerge.fine ("-- slice not found " + ppt.name()
+                           + " vars " + Debug.toString (cvis_sorted));
+      }
+
+      // Build the permutation array from parent to child slice
+      int[] permute = PptTopLevel.build_permute (cvis, cvis_sorted);
+
+      // Debug print child vars and permute to parent
+      if (debugMerge.isLoggable (Level.FINE)) {
+        debugMerge.fine ("-- Processing child " + ppt.name() + " ("
+                         + rel.getRelationType() + ")");
+        debugMerge.fine ("-- -- child vars = "
+                         + VarInfo.toString (cvis_sorted));
+        debugMerge.fine ("-- -- parent vars = "
+                         + VarInfo.toString (var_infos));
+        debugMerge.fine ("-- -- permute = " + ArraysMDE.toString (permute));
+      }
+
+      // Process each parent invariant and remove it if it isn't valid in
+      // the child.  To be valid, an invariant must either exist in the
+      // child slice or be ni-suppressed in the child
+      for (Iterator j = invs.iterator(); j.hasNext(); ) {
+        Invariant parent_inv = (Invariant) j.next();
+        Invariant child_inv = parent_inv.clone_and_permute (permute);
+        if ((cslice != null) && (cslice.find_inv_exact (child_inv) != null))
+          continue;
+        NISuppressionSet ss = child_inv.get_ni_suppressions();
+        if (!ss.suppressed (ppt, cvis_sorted))
+          j.remove();
+      }
+
+      // Stop processing if there aren't any invariants left
+      if (invs.size() == 0)
+        return;
+    }
+  }
+
 
   /**
    * Returns whether or not the slice is missing due to having one or more

@@ -1,6 +1,7 @@
 package daikon;
 
 import daikon.inv.*;
+import daikon.suppress.*;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -302,7 +303,7 @@ public abstract class PptSlice
 
   // This can be called with very long lists by the conditionals code.
   // At least until that's fixed, it's important for it not to be
-  // quadratic. 
+  // quadratic.
   public void removeInvariants(List to_remove) {
     if (to_remove.size() < 10) {
       for (int i=0; i<to_remove.size(); i++) {
@@ -556,6 +557,7 @@ public abstract class PptSlice
       Invariant inv = (Invariant) iFalsified.next();
       if (inv.is_false()) {
         iFalsified.remove();
+        NIS.falsified (inv);
       }
     }
   }
@@ -890,6 +892,20 @@ public abstract class PptSlice
     return (null);
   }
 
+  /**
+   * Returns the invariant that matches the specified class if it
+   * exists.  Otherwise returns null.
+   */
+  public Invariant find_inv_by_class (Class cls) {
+
+    for (Iterator i = invs.iterator(); i.hasNext(); ) {
+      Invariant inv = (Invariant) i.next();
+      if ((inv.getClass() == cls))
+        return (inv);
+    }
+    return (null);
+  }
+
 
   public void log (String msg) {
     Debug.log (getClass(), this, msg);
@@ -901,7 +917,7 @@ public abstract class PptSlice
    * Note that each local variable must have the same transform to the
    * global ppt for there to be a matching global slice.
    **/
-  public PptSlice find_global_slice (VarInfo[] local_vis) {
+  public static PptSlice find_global_slice (VarInfo[] local_vis) {
 
     // Each var must have the same global transform in order for there
     // to be a matching global slice
@@ -925,11 +941,11 @@ public abstract class PptSlice
     // As long as the variables are in the same order at the Global ppt,
     // there should be no permutation necessary between the global
     // and local slice (and thus global_vis should already be sorted)
-    for (int i = 0; i < arity() - 1; i++) {
+    for (int i = 0; i < local_vis.length - 1; i++) {
       if (global_vis[i].varinfo_index > global_vis[i+1].varinfo_index) {
         System.out.println ("localvars = " + VarInfo.toString(local_vis));
         System.out.println ("Globalvars = " + VarInfo.toString(global_vis));
-        for (int j = 0; j < arity(); j++)
+        for (int j = 0; j < local_vis.length; j++)
           System.out.print (local_vis[j].varinfo_index + "/"
                             + global_vis[j].varinfo_index + " ");
         System.out.println ();
