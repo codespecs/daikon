@@ -160,14 +160,32 @@ public final class UtilMDE {
    * gzipped files) after the first gzipped file.
    **/
   public static BufferedWriter BufferedFileWriter(String filename) throws IOException {
+
+    return BufferedFileWriter (filename, false);
+  }
+
+  /**
+   * Returns a BufferedWriter for the file, accounting for the possibility
+   * that the file is compressed.  The parameter 'append' if true returns
+   * a file writer that appends to the end of the file instead of the
+   * beginning.
+   * <p>
+   * Warning: The "gzip" program writes and reads files containing
+   * concatenated gzip files.  As of Java 1.4, Java reads
+   * just the first one:  it silently discards all characters (including
+   * gzipped files) after the first gzipped file.
+   **/
+  public static BufferedWriter BufferedFileWriter(String filename, boolean append) throws IOException {
     Writer file_writer;
     if (filename.endsWith(".gz")) {
-      file_writer = new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(filename)));
+      file_writer = new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(filename, append)));
     } else {
-      file_writer = new FileWriter(filename);
+      file_writer = new FileWriter(filename, append);
     }
     return new BufferedWriter(file_writer);
   }
+
+
 
   ///
   /// Class
