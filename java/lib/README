@@ -21,6 +21,11 @@ GNU getopt 1.0.8 (java-getopt.jar)
   6. "jar cf java-getopt.jar gnu/"
 - http://www.urbanophile.com/arenn/coding/download.html
 
+Ajax (ajax.jar)
+- Determines comparability of variables
+- Used by dfej, the Daikon Front End for Java; never need be invoked directly.
+- Unfortunately, the source code not publicly available.
 
-
-To build and run Daikon, each jar file must be in your CLASSPATH.
+The easiest way to build and run Daikon is to put java/ on your classpath.
+If you do not have the Ajax source, you also need to put
+java/ajax-ship/ajax.jaron your classpath.
