@@ -352,6 +352,11 @@ public final class INTEQUAL
 
     if (!dkconfig_enabled) return null;
 
+    // Make sure the null case doesn't crash.  Null is passed when the
+    // invariant is used for non-standard purposes.
+    if (ppt == null)
+      return new INTEQUAL(ppt);
+
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
     VarInfo seqvar1 = var1.isDerivedSequenceMember();
