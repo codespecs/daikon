@@ -65,7 +65,7 @@ help:
 	@echo "Note that 1->6 are a chain, and invoking any of them will invoke"
 	@echo "  previous steps if there is a dirty dependency in the chain"
 
-all: reset-scratch txt-esc merge esc
+all: txt-esc merge esc
 
 SCRATCH_FOR_DAIKON?=/tmp/esc-experiments/${PROJECT}
 
