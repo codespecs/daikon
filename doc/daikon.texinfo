@@ -3048,6 +3048,10 @@ Eclipse} IDE (Integrated Development Environment) for Java.  For
 details, see the @uref{daikonHelp.html, , Daikon Eclipse plug-in
 documentation}.
 
+As of this writing (February 11, 2005), the plug-in only works with 
+Daikon 3 (for instance, version 3.1.7), not with Daikon 4.  Support for
+Daikon 4 is underway.
+
 
 @node    Tree GUI, Context GUI, Eclipse plug-in, GUIs
 @section Tree-structured invariant browser
