@@ -1885,13 +1885,13 @@ class invariant:
             return None
         if inv1.is_unconstrained() ^ inv2.is_unconstrained():
             diff_to_ct[inv_one_cons] = diff_to_ct[inv_one_cons] + 1
-            return "One is unconstrained, the other is not"
+            return "One is unconstrained but the other is not"
         if inv1.one_of and inv2.one_of and inv1.one_of != inv2.one_of:
             diff_to_ct[inv_diff_small_no_vals] = diff_to_ct[inv_diff_small_no_vals] + 1
             return "Different small number of values"
         if inv1.can_be_None ^ inv2.can_be_None:
             diff_to_ct[inv_one_none] = diff_to_ct[inv_one_none] + 1
-            return "One can be None, the other cannot"
+            return "One can be None but the other cannot"
         # return "invariant.diff: no differences"	# debugging
         return None
 
@@ -3704,8 +3704,8 @@ def diff_var_infos(var_infos1, var_infos2):
         if (can1 and not can2) or (can2 and not can1):
             # This is a pretty significant difference, actually...
             print "Equality difference for", vi1.name
-            print vi1.invariant
-            print vi2.invariant
+            print " ", vi1.invariant
+            print " ", vi2.invariant
             continue
         assert can1 and can2
         # Both variables are canonical
