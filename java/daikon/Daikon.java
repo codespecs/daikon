@@ -410,7 +410,7 @@ public final class Daikon {
     Set[] files = read_options(args);
     Assert.assertTrue(files.length == 4);
     Set decls_files = files[0]; // [File]
-    Set dtrace_files = files[1]; // [File]
+    Set dtrace_files = files[1]; // [String]
     Set spinfo_files = files[2]; // [File]
     Set map_files = files[3]; // [File]
     if ((decls_files.size() == 0) && (dtrace_files.size() == 0)) {
@@ -627,10 +627,10 @@ public final class Daikon {
       throw new Daikon.TerminationMessage();
     }
 
-    Set decl_files = new HashSet();
-    Set dtrace_files = new HashSet();
-    Set spinfo_files = new HashSet();
-    Set map_files = new HashSet();
+    Set decl_files = new HashSet(); /* of Files */
+    Set dtrace_files = new HashSet(); /* of Strings, either file names or "-"*/
+    Set spinfo_files = new HashSet(); /* of Files */
+    Set map_files = new HashSet(); /* of Files */
 
     LongOpt[] longopts =
       new LongOpt[] {
@@ -887,21 +887,27 @@ public final class Daikon {
     // First check that all the file names are OK, so we don't do lots of
     // processing only to bail out at the end.
     for (int i = g.getOptind(); i < args.length; i++) {
-      File file = new File(args[i]);
+      String filename = args[i];
+      File file = null;
+      if (!filename.equals("-")) {
+        file = new File(filename);
+        if (!file.exists()) {
+            throw new Error("File " + file + " not found.");
+        }
+        filename = file.toString();
+      }
       // These aren't "endsWith()" because there might be a suffix on the end
       // (eg, a date).
-      if (!file.exists()) {
-        throw new Error("File " + file + " not found.");
-      }
-      String filename = file.toString();
       if (filename.indexOf(".decls") != -1) {
         decl_files.add(file);
       } else if (filename.indexOf(".dtrace") != -1) {
-        dtrace_files.add(file);
+        dtrace_files.add(filename);
       } else if (filename.indexOf(".spinfo") != -1) {
         spinfo_files.add(file);
       } else if (filename.indexOf(".map") != -1) {
         map_files.add(file);
+      } else if (filename.equals("-")) {
+        dtrace_files.add(filename);
       } else {
         throw new Error("Unrecognized argument: " + file);
       }
@@ -1482,8 +1488,8 @@ public final class Daikon {
       }
     }
     private String message() {
-      File file = FileIO.data_trace_filename;
-      if (file == null) {
+      String filename = FileIO.data_trace_filename;
+      if (filename == null) {
         if (Daikon.progress == null) {
           return "[no status]";
         } else {
@@ -1504,7 +1510,7 @@ public final class Daikon {
           line = line + ", " + percent;
         }
       }
-      return "Reading " + file.getName() + " (line " + line + ") ...";
+      return "Reading " + filename + " (line " + line + ") ...";
     }
   }
 

@@ -101,6 +101,14 @@ public final class FileIO {
    **/
   public static boolean dkconfig_continue_after_file_exception = false;
 
+  /**
+   * Long integer. If non-zero, this value will be used as the number
+   * of lines in (each) dtrace file input for the purposes of the
+   * progress display, and the counting of the lines in the file will
+   * be suppressed.
+   */
+  public static long dkconfig_dtrace_line_count = 0;
+
   /// Variables
 
   // This hashmap maps every program point to an array, which contains the
@@ -526,7 +534,7 @@ public final class FileIO {
   static HashMap/*Integer->Invocation*/ call_hashmap = new HashMap();
 
   /** Reads data trace files using the default sample processor. **/
-  public static void read_data_trace_files(Collection /*File*/
+  public static void read_data_trace_files(Collection /*String*/
   files, PptMap all_ppts) throws IOException {
 
     Processor processor = new Processor();
@@ -538,16 +546,16 @@ public final class FileIO {
    * Calls @link{read_data_trace_file(File,PptMap,Pattern)} for each
    * element of filenames.
    **/
-  public static void read_data_trace_files(Collection /*File*/
+  public static void read_data_trace_files(Collection /*String*/
   files, PptMap all_ppts, Processor processor) throws IOException {
     for (Iterator i = files.iterator(); i.hasNext();) {
-      File file = (File) i.next();
+      String filename = (String) i.next();
       try {
-        read_data_trace_file(file, all_ppts, processor);
+        read_data_trace_file(filename, all_ppts, processor);
       } catch (IOException e) {
         if (e.getMessage().equals("Corrupt GZIP trailer")) {
           System.out.println(
-            file.getName()
+            filename
               + " has a corrupt gzip trailer.  "
               + "All possible data was recovered.");
         } else {
@@ -560,8 +568,8 @@ public final class FileIO {
   }
 
   /** Count the number of lines in the specified file **/
-  private static long count_lines(File filename) throws IOException {
-    LineNumberReader reader = UtilMDE.LineNumberFileReader(filename.toString());
+  private static long count_lines(String filename) throws IOException {
+    LineNumberReader reader = UtilMDE.LineNumberFileReader(filename);
     long count = 0;
     while (reader.readLine() != null)
       count++;
@@ -571,7 +579,7 @@ public final class FileIO {
   // We stash values here to be examined/printed later.  Used to be
   // for debugging only, but now also used for Daikon progress output.
   public static LineNumberReader data_trace_reader;
-  public static File data_trace_filename;
+  public static String data_trace_filename;
   public static long data_trace_total_lines;
   public static int data_num_slices = 0;
 
@@ -590,14 +598,14 @@ public final class FileIO {
   }
 
   /** Read data from .dtrace file using standard data processor. **/
-  static void read_data_trace_file(File filename, PptMap all_ppts)
+  static void read_data_trace_file(String filename, PptMap all_ppts)
     throws IOException {
     Processor processor = new Processor();
     read_data_trace_file(filename, all_ppts, processor);
   }
 
   /** Read data from .dtrace file. **/
-  static void read_data_trace_file(File filename, PptMap all_ppts,
+  static void read_data_trace_file(String filename, PptMap all_ppts,
                                    Processor processor) throws IOException {
 
     int pptcount = 1;
@@ -610,15 +618,40 @@ public final class FileIO {
                          ? " " + Daikon.ppt_omit_regexp.pattern() : ""));
     }
 
-    LineNumberReader reader = UtilMDE.LineNumberFileReader(filename.toString());
-    if ((Daikon.dkconfig_progress_delay != -1) && dkconfig_count_lines) {
-      Daikon.progress = "Checking size of " + filename.getName();
-      // avoid divide-by-zero for display while lines are being counted
-      data_trace_total_lines = 1;
+    LineNumberReader reader;
+    if (filename.equals("-")) {
+      // "-" means read from the standard input stream
+      Reader file_reader = new InputStreamReader(System.in, "ISO-8859-1");
+      reader = new LineNumberReader(file_reader);
+    } else {
+      reader = UtilMDE.LineNumberFileReader(filename);
+    }
+
+    boolean count_lines = dkconfig_count_lines;
+    if (dkconfig_dtrace_line_count != 0) {
+      data_trace_total_lines = dkconfig_dtrace_line_count;
+      count_lines = false;
+    } else if (filename.equals("-")) {
+      count_lines = false;
+    } else if (Daikon.dkconfig_progress_delay == -1) {
+      count_lines = false;
+    }
+
+    String nice_filename; /* For use in messages to user */
+    if (filename.equals("-")) {
+      nice_filename = "standard input";
+    } else {
+      // Remove directory parts, to make it shorter
+      File f = new File(filename);
+      nice_filename = f.getName();
+    }
+
+    if (count_lines) {
+      Daikon.progress = "Checking size of " + nice_filename;
       data_trace_total_lines = count_lines(filename);
     }
     data_trace_reader = reader;
-    data_trace_filename = filename;
+    data_trace_filename = nice_filename;
 
     // Used for debugging: write new data trace file.
     if (Global.debugPrintDtrace) {
@@ -710,7 +743,7 @@ public final class FileIO {
       // Read a single record from the trace file;
       // fills up vals and mods arrays by side effect.
       try {
-        read_vals_and_mods_from_trace_file (reader, filename.toString(),
+        read_vals_and_mods_from_trace_file (reader, filename,
                                             ppt, vals, mods);
       } catch (IOException e) {
         String nextLine = reader.readLine();
@@ -762,7 +795,7 @@ public final class FileIO {
       Global.dtraceWriter.close();
     }
 
-    Daikon.progress = "Finished reading " + filename.getName();
+    Daikon.progress = "Finished reading " + nice_filename;
 
     data_trace_filename = null;
     data_trace_reader = null;
@@ -1039,7 +1072,8 @@ public final class FileIO {
             + ppt.name());
       }
       if (!((line.equals("0") || line.equals("1") || line.equals("2")))) {
-        throw new FileIOException("Bad modbit", reader, data_trace_filename);
+        throw new FileIOException("Bad modbit `" + line + "'",
+                                  reader, data_trace_filename);
       }
       int mod = ValueTuple.parseModified(line);
 
