@@ -3,7 +3,7 @@
   if 0;
 # merge-esc.pl -- Merge Daikon output into Java source code as ESC assnotations
 # Michael Ernst <mernst@lcs.mit.edu>
-# Time-stamp: <2001-03-04 01:45:35 mernst>
+# Time-stamp: <2001-03-04 11:42:43 mernst>
 
 # The input is a Daikon output file; files from the current directory are
 # rewritten into -escannotated versions.
@@ -46,7 +46,9 @@ if (/:::/) {
 s/[ \t]+\([0-9]+ values?, [0-9]+ samples?\)$//;
 # %raw contains the invariant text directly from the file.
 # It is indexed by the complete program point name.
-$raw{$methodname} .= $_;
+if (defined($methodname)) {
+  $raw{$methodname} .= $_;
+}
 
 
 sub simplify_args($) {
@@ -135,12 +137,24 @@ END {
   closedir DIR;
 
   for my $javafile (@javafiles) {
+    @fields = ();
+    open(GETFIELDS, "$javafile") or die "Cannot open $javafile: $!";
+    while (defined($line = <GETFIELDS>)) {
+      if ($line =~ /^(\s+)(private[^=]*\b(\w+)\s*[;=].*)$/) {
+	my $fieldname = $3;
+	if (($line =~ /\[\s*\]/)
+	    || ($line !~ /\b(boolean|byte|char|double|float|int|long|short)\b/)) {
+	  push(@fields,$fieldname);
+	}
+      }
+    }
+    close(GETFIELDS);
+
     open(IN, "$javafile") or die "Cannot open $javafile: $!";
     open(OUT, ">$javafile-escannotated") or die "Cannot open $javafile-escannotated: $!";
 
     my $classname = $javafile;
     $classname =~ s/\.java$//;
-    @fields = ();
 
     while (defined($line = <IN>)) {
       if ($line =~ /\bpublic\b.*\b(\w+)\s*(\([^\)]*\))/) {
@@ -152,14 +166,18 @@ END {
 	my $fullmeth = $fullmethname . $simple_args;
 	my $prebrace;
 	my $postbrace;
-	if ($line =~ /^(.*)\{(.*)$/) {
+	if ($line =~ /^(.*)(\{.*)$/) {
 	  $prebrace = $1 . "\n";
 	  $postbrace = $2;
 	} elsif ($line !~ /\)/) {
 	  die "Put all args on same line as declaration of $fullmeth";
 	} else {
+	  my $nextline = <IN>;
+	  if ($nextline !~ /^(.*)\{(.*)$/) {
+	    die "Didn't find open curly brace in first two lines of method definition:\n  $line  $nextline";
+	  }
 	  $prebrace = $line;
-	  $postbrace = "";
+	  $postbrace = $nextline;
 	}
 	print OUT $prebrace;
 	my $found = 0;
@@ -202,6 +220,20 @@ END {
 	}
 
 	print OUT $postbrace;
+	if ($methodname eq $classname) {
+	  if (scalar(@fields) > 0) {
+	    my $nextline = <IN>;
+	    if ($nextline =~ /\bthis\s*\(/) {
+	      print OUT $nextline;
+	      $nextline = "";
+	    }
+	    for my $field (@fields) {
+	      print OUT "/*@ set $field.owner = this */\n";
+	    }
+	    print OUT $nextline;
+	  }
+	}
+
 	next;
       }
 
@@ -229,20 +261,17 @@ END {
       }
 
       if ($line =~ /^(\s+)(private[^=]*\b(\w+)\s*[;=].*)$/) {
-	print OUT "$1/*@ spec_public */ $2\n";
-	print OUT "/*@ invariant $3.owner == this */\n";
-	push(@fields,$3);
+	my ($spaces, $body, $fieldname) = ($1, $2, $3);
+	my $is_object = grep(/^$fieldname$/, @fields);
+	print OUT "$spaces/*@ spec_public */ $body\n";
+	if ($is_object) {
+	  print OUT "/*@ invariant $fieldname.owner == this */\n";
+	}
 	next;
       }
 
       # default
       print OUT $line;
-    }
-    if (scalar(@fields) > 0) {
-      print OUT "// BELONGS IN CONSTRUCTOR(S):\n";
-      for my $field (@fields) {
-	print OUT "/*@ set $field.owner = this */\n";
-      }
     }
 
     close IN;
