@@ -12,7 +12,7 @@ import java.util.*;
  * This compares adjacent elements in the sequence.
  **/
 public class EltwiseIntComparison
-  extends SingleSequence
+  extends SingleScalarSequence
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or

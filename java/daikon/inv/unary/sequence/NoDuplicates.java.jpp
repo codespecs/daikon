@@ -22,7 +22,7 @@ The correct way to build the system is to run 'make'.
 
 #elif (defined(TYPELONG))
 #define CLASSNAME NoDuplicates
-#define SUPERCLASS SingleSequence
+#define SUPERCLASS SingleScalarSequence
 #define PRIMITIVE long
 #define CLASSSTRING "NoDuplicates"
 #define SEQUENCESPREDICATE SequencesPredicate

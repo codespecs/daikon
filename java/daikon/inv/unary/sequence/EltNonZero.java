@@ -19,7 +19,7 @@ import java.util.*;
 // nonetheless?  Probably not, as this will simplify implication and such.
 
 public final class EltNonZero
-  extends SingleSequence
+  extends SingleScalarSequence
 {
   /**
    * Debug tracer.

@@ -16,7 +16,7 @@ The correct way to build the system is to run 'make'.
 #define CLASSSTRING "CommonFloatSequence"
 #elif defined(TYPELONG)
 #define CLASSNAME CommonSequence
-#define SUPERCLASS SingleSequence
+#define SUPERCLASS SingleScalarSequence
 #define PRIMITIVE long
 #define CLASSSTRING "CommonSequence"
 #endif

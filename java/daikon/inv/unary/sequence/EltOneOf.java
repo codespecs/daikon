@@ -22,7 +22,7 @@ import java.io.*;
 // nonetheless?  Probably not, as this will simplify implication and such.
 
 public final class EltOneOf
-  extends SingleSequence
+  extends SingleScalarSequence
   implements OneOf
 {
   // We are Serializable, so we specify a version to allow changes to

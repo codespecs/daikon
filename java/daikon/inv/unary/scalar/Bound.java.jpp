@@ -132,7 +132,7 @@ The correct way to build the system is to run 'make'.
 #  define SCALAR sequence
 #  if defined(ELTLOWER) || defined(ELTUPPER)
 #    define LONG long[]
-#    define SINGLESCALAR SingleSequence
+#    define SINGLESCALAR SingleScalarSequence
 #  elif defined(ELTLOWERFLOAT) || defined(ELTUPPERFLOAT)
 #    define LONG double[]
 #    define SINGLESCALAR SingleFloatSequence

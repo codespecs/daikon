@@ -10,7 +10,7 @@ The correct way to build the system is to run 'make'.
 
 #if defined(TYPELONG)
 #define CLASSNAME EltNonZero
-#define SUPERCLASS SingleSequence
+#define SUPERCLASS SingleScalarSequence
 #define PRIMITIVE long
 #define NUMWRAPPER Long
 #define BASEISTYPE baseIsIntegral()

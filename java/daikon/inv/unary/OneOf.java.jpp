@@ -91,7 +91,7 @@ The correct way to build the system is to run 'make'.
 #  define INT long[]
 #  define ONEOFSCALAR OneOfSequence
 #  define ONEOFSCALAR_STRING "OneOfSequence"
-#  define SINGLESCALAR SingleSequence
+#  define SINGLESCALAR SingleScalarSequence
 #  define TOSTRING(x) ArraysMDE.toString(x)
 #  define NAME var().name.name()
 #  define JAVA_NAME var().name.java_name()
@@ -119,7 +119,7 @@ The correct way to build the system is to run 'make'.
 #  define NUMWRAPPER Long
 #  define ONEOFSCALAR EltOneOf
 #  define ONEOFSCALAR_STRING "EltOneOf"
-#  define SINGLESCALAR SingleSequence
+#  define SINGLESCALAR SingleScalarSequence
 #  define TOSTRING(x) (((x == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= x && x <= Integer.MAX_VALUE) ? String.valueOf(x) : (String.valueOf(x) + "L")))
 #  define NAME var().name.name() + " elements"
 #  define JAVA_NAME var().name.java_name()

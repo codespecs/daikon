@@ -17,7 +17,7 @@ import org.apache.log4j.Category;
 import java.util.*;
 
 public class NoDuplicates
-  extends SingleSequence
+  extends SingleScalarSequence
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or

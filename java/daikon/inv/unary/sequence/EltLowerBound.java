@@ -22,7 +22,7 @@ import java.util.*;
  * justified when the other is not.
  **/
 public class EltLowerBound
-  extends SingleSequence
+  extends SingleScalarSequence
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
