@@ -119,14 +119,31 @@ public final class Invariants
     return result;
   }
 
+  // Remove all the invariants in toRemove. This is faster than
+  // repeatedly calling remove(), if toRemove is long.
+  public int removeMany(List toRemove) {
+    HashSet removeSet = new HashSet(toRemove);
+    ArrayList copy = new ArrayList();
+    Iterator it = this.iterator();
+    while (it.hasNext()) {
+      Object inv = it.next();
+      if (!removeSet.contains(inv))
+        copy.add(inv);
+    }
+    int numRemoved = size() - copy.size();
+    clear();
+    addAll(copy);
+    return numRemoved;
+  }
+  
   // Works for non-negative
   private final static boolean isPowerOfTwo(int x) {
     if (x == 0)
       return true;
-    while (x % 16 == 0) {
-      x = x >> 4;
-    }
-    return ((x == 1) || (x == 2) || (x == 4) || (x == 8));
+    // If x is a power of two, then x - 1 has no bits in common with x
+    // OTOH, if x is not a power of two, then x and x - 1 have the same
+    // most-significant bit set, so they have at least one bit in common.
+    return (x & (x - 1)) == 0;
   }
 
   /// For testing
