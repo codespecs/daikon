@@ -94,7 +94,19 @@ if ($algorithm eq 'hierarchical' || $algorithm eq 'km') {
 }
 
 foreach my $dtrace_file (@dtrace_files) {
-  if ($dtrace_file =~ /\.gz$/) {
+ 
+  # need to run the DtraceNonceDoctor in order in order for
+  # xmeans and possibly other clustering methods to work
+  system_or_die ("java daikon.tools.DtraceNonceDoctor $dtrace_file");
+  if (-e ("$dtrace_file" . "_all_fixed")) {
+    system_or_die ("mv $dtrace_file" . "_all_fixed $dtrace_file");
+  }
+  if (-e "dtrace_file" . "_all_fixed.gz") {
+    system_or_die ("mv $dtrace_file" . "_all_fixed.gz $dtrace_file");
+  }
+
+
+ if ($dtrace_file =~ /\.gz$/) {  
     open (DTRACE_IN, "zcat $dtrace_file |") || &dieusage("couldn't open dtrace file $dtrace_file with zcat");
   } else {
     open (DTRACE_IN, $dtrace_file) || &dieusage("couldn't open dtrace file $dtrace_file");
@@ -141,6 +153,7 @@ sub insert_cluster_info ( $ ) {
   # information
   my $invoc;			# the invocation nonce for this execution.
   my $line = <DTRACE_IN>;
+#  print "$line\n";
   if ($line !~ /this.invocation.nonce/) {
     die "No nonces present, and this program adds them incorrectly.";
     $pptname_to_nonces{$pptname}++;
@@ -149,6 +162,7 @@ sub insert_cluster_info ( $ ) {
     $invoc = <DTRACE_IN>;
     chomp($invoc);
     $line = <DTRACE_IN>;
+
   }
 
   # Find out if this program point was clustered.  If it was, retrieve the
