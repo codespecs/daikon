@@ -30,4 +30,8 @@ public class CmdAssume
 	
   }
 
+  public String toString() {
+    return "CmdAssume: " + proposition;
+  }
+
 }
