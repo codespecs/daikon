@@ -15,6 +15,7 @@ import daikon.split.griesLisp.*;
 import daikon.split.weissDsaaMDE.*;
 
 import java.util.*;
+import java.io.PrintStream;
 import com.oroinc.text.regex.*;
 
 import utilMDE.*;
@@ -55,6 +56,10 @@ public class PptTopLevel extends Ppt {
   int values_num_mod_non_missing_samples;
   int values_num_values;
   String values_tuplemod_samples_summary;
+
+  // Assumption: The "depends on" graph will be acyclic
+  // (the graph edges are: <this, (entry_ppt U controlling_ppts)>)
+  // This is necessary because we search the graph in isWorthPrinting
 
   PptTopLevel entry_ppt;        // null if this isn't an exit point
 
@@ -249,32 +254,17 @@ public class PptTopLevel extends Ppt {
 
   void add_controlling_ppts(PptMap all_ppts)
   {
-    PptTopLevel object_ppt = (PptTopLevel) all_ppts.get(controlling_object_ppt_name());
-    if (object_ppt != null) {
-      controlling_ppts.add(object_ppt);
+    // TODO: also require that this is a public method
+    if (ppt_name.isEnterPoint() || ppt_name.isExitPoint()) {
+      PptTopLevel object_ppt = (PptTopLevel) all_ppts.get(ppt_name.makeObject());
+      if (object_ppt != null) {
+	controlling_ppts.add(object_ppt);
+      }
+      PptTopLevel class_ppt = (PptTopLevel) all_ppts.get(ppt_name.makeClassStatic());
+      if (class_ppt != null) {
+	controlling_ppts.add(class_ppt);      
+      }
     }
-    PptTopLevel class_ppt = (PptTopLevel) all_ppts.get(controlling_class_ppt_name());
-    if (class_ppt != null) {
-      controlling_ppts.add(class_ppt);
-    }
-  }
-
-  String controlling_object_ppt_name() {
-    // e.g. package.Class.method(args)R:::ENTER ->
-    //      package.Class:::OBJECT
-    int dot_posn = name.lastIndexOf('.');
-    if (dot_posn < 0)
-      return null;
-    return name.substring(0, dot_posn) + FileIO.object_tag;
-  }
-
-  String controlling_class_ppt_name() {
-    // e.g. package.Class.method(args)R:::ENTER ->
-    //      package.Class:::CLASS
-    int dot_posn = name.lastIndexOf('.');
-    if (dot_posn < 0)
-      return null;
-    return name.substring(0, dot_posn) + FileIO.class_static_tag;
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -287,27 +277,9 @@ public class PptTopLevel extends Ppt {
   // computation.
 
   void compute_entry_ppt(PptMap all_ppts) {
-    entry_ppt = (PptTopLevel) all_ppts.get(entry_ppt_name());
-  }
-
-  final static PatternMatcher re_matcher = Global.regexp_matcher;
-  public final static Pattern exit_tag_regexp;
-  static {
-    try {
-      exit_tag_regexp = Global.regexp_compiler.compile(FileIO.exit_tag + "[0-9]*$");
-    } catch (Exception e) {
-      throw new Error(e.toString());
+    if (ppt_name.isExitPoint()) {
+      entry_ppt = (PptTopLevel) all_ppts.get(ppt_name.makeEnter());
     }
-  }
-
-  String entry_ppt_name() {
-    if (!re_matcher.contains(name, exit_tag_regexp))
-      return null;
-    MatchResult match = re_matcher.getMatch();
-    int match_begin = match.beginOffset(0);
-    String fn_name = name.substring(0, match_begin);
-
-    return (fn_name + FileIO.enter_tag).intern();
   }
 
   // Add "_orig" variables to the program point.
@@ -1498,82 +1470,100 @@ public class PptTopLevel extends Ppt {
     Iterator controllers = controlling_ppts.iterator();
     while (controllers.hasNext()) {
       PptTopLevel controller = (PptTopLevel) controllers.next();
-      Vector cont_invs = controller.invariants_vector();
-
-      Invariant result = find_same_invariant(cont_invs.iterator(), inv);
-      if (result != null)
-	return result;
+      Iterator candidates = controller.invariants_vector().iterator();
+      while (candidates.hasNext()) {
+	Invariant cand_inv = (Invariant) candidates.next();
+	if (is_same_invariant(cand_inv, inv)) {
+	  return cand_inv;
+	}
+      }
     }
 
     return null;
   }
 
-  // TODO: These next two methods are static and can be move into
-  // another class.  Is there a better place for them?
+  // TODO: This next part, including the is_same_invariant methods, is
+  // static and can be moved into another class.  Is there a better
+  // place for it?
 
-  // Searches through the iterator for an Invariant which is the
-  // same as the goal, as defined by is_same_invariant.
-  public static Invariant find_same_invariant(Iterator candidates, Invariant inv)
+  public static interface IsSameInvariantNameExtractor
   {
-    while (candidates.hasNext()) {
-      Invariant cand_inv = (Invariant) candidates.next();
-      if (is_same_invariant(cand_inv, inv))
-	return cand_inv;
-    }
-    return null;
+    public String getFromFirst(VarInfo var1);
+    public String getFromSecond(VarInfo var2);
   }
+  
+  private static class DefaultIsSameInvariantNameExtractor
+    implements IsSameInvariantNameExtractor
+  {
+    public String getFromFirst(VarInfo var1)  { return var1.name; }
+    public String getFromSecond(VarInfo var2) { return var2.name; }
+  }
+  private static final IsSameInvariantNameExtractor defaultIsSameInvariantNameExtractor = new DefaultIsSameInvariantNameExtractor();
 
   /**
    * @return true iff the two arguments are the "same" invariant.
    * Same, in this case, means a matching type, formula, and variable
    * names.
    **/
-  public static boolean is_same_invariant(Invariant cand_inv, Invariant inv)
+  public static boolean is_same_invariant(Invariant inv1, Invariant inv2)
+  {
+    return is_same_invariant(inv1, inv2, defaultIsSameInvariantNameExtractor);
+  }
+
+  /**
+   * @param name_extractor lambda to extract the variable name from the VarInfos
+   * @return true iff the two arguments are the "same" invariant.
+   * Same, in this case, means a matching type, formula, and variable
+   * names.
+   **/
+  public static boolean is_same_invariant(Invariant inv1, Invariant inv2,
+					  IsSameInvariantNameExtractor name_extractor)
   {
     // Can't be the same if they aren't the same type
-    if (!inv.getClass().equals(cand_inv.getClass())) {
+    if (!inv1.getClass().equals(inv2.getClass())) {
       return false;
     }
 
     // Can't be the same if they aren't the same formula
-    if (!inv.isSameFormula(cand_inv)) {
+    if (!inv1.isSameFormula(inv2)) {
       return false;
     }
 
     // The variable names much match up, in order
-
-    VarInfo[] vars = inv.ppt.var_infos;
-    VarInfo[] cand_vars = cand_inv.ppt.var_infos;
-
-    Assert.assert(vars.length == cand_vars.length); // due to inv type match already
-    for (int i=0; i < vars.length; i++) {
-      VarInfo var = vars[i];
-      VarInfo cand_var = cand_vars[i];
-
+    
+    VarInfo[] vars1 = inv1.ppt.var_infos;
+    VarInfo[] vars2 = inv2.ppt.var_infos;
+    
+    Assert.assert(vars1.length == vars2.length); // due to inv type match already
+    for (int i=0; i < vars1.length; i++) {
+      VarInfo var1 = vars1[i];
+      VarInfo var2 = vars2[i];
+      
       // Do the easy check first
-      if (var.name.equals(cand_var.name)) {
+      if (name_extractor.getFromFirst(var1).equals(name_extractor.getFromSecond(var2))) {
 	continue;
       }
 
-      // Now check while taking account of aliasing
-
       // The names "match" iff there is an intersection of the names
       // of aliased variables
-      Vector all_cand_vars = cand_var.canonicalRep().equalTo();
-      all_cand_vars.add(cand_var.canonicalRep());
-      Vector all_cand_vars_names = new Vector(all_cand_vars.size());
-      for (Iterator iter = all_cand_vars.iterator(); iter.hasNext(); ) {
+      Vector all_vars1 = var1.canonicalRep().equalTo();
+      Vector all_vars2 = var2.canonicalRep().equalTo();
+      all_vars1.add(var1.canonicalRep());
+      all_vars2.add(var2.canonicalRep());
+      Vector all_vars_names1 = new Vector(all_vars1.size());
+      for (Iterator iter = all_vars1.iterator(); iter.hasNext(); ) {
 	VarInfo elt = (VarInfo) iter.next();
-	all_cand_vars_names.add(elt.name);
+	String name = name_extractor.getFromFirst(elt);
+	all_vars_names1.add(name);
       }
-      Vector all_vars = new Vector(var.canonicalRep().equalTo());
-      all_vars.add(var.canonicalRep());
-      boolean name_matched = false;
-      for (Iterator iter = all_vars.iterator(); !name_matched && iter.hasNext(); ) {
+      boolean intersection = false;
+      for (Iterator iter = all_vars2.iterator(); !intersection && iter.hasNext(); ) {
 	VarInfo elt = (VarInfo) iter.next();
-	name_matched = all_cand_vars_names.contains(elt.name);
-	if (!name_matched)
-	  return false;
+	String name = name_extractor.getFromSecond(elt);
+	intersection = all_vars_names1.contains(name);
+      }
+      if (!intersection) {
+	return false;
       }
     }
 
@@ -1610,23 +1600,23 @@ public class PptTopLevel extends Ppt {
    * Print invariants for a single program point.
    * Does no output if no samples or no views.
    **/
-  public void print_invariants_maybe() {
+  public void print_invariants_maybe(PrintStream out) {
     if (num_samples() == 0)
       return;
     if (views.size() == 0) {
       if (! (this instanceof PptConditional)) {
         // Presumably all the views that were originally there were deleted
         // because no invariants remained in any of them.
-        System.out.println("[No views for " + name + "]");
+        out.println("[No views for " + name + "]");
       }
       return;
     }
-    System.out.println("===========================================================================");
-    print_invariants();
+    out.println("===========================================================================");
+    print_invariants(out);
 
     for (int i=0; i<views_cond.size(); i++) {
       PptConditional pcond = (PptConditional) views_cond.elementAt(i);
-      pcond.print_invariants_maybe();
+      pcond.print_invariants_maybe(out);
     }
 
   }
@@ -1654,59 +1644,63 @@ public class PptTopLevel extends Ppt {
   /// Printing invariants
   ///
 
-  static Comparator icfp = new Invariant.InvariantComparatorForPrinting();
+  final static Comparator icfp = new Invariant.InvariantComparatorForPrinting();
+
+  // @return either "n noun" or "n nouns" depending on n
+  private static String nplural(int n, String noun)
+  {
+    if ((n > 1) || (n < -1)) 
+      return n + " " + noun + "s";
+    else 
+      return n + " " + noun;
+  }
 
   /** Print invariants for a single program point. */
-  public void print_invariants() {
+  public void print_invariants(PrintStream out) {
     int num_samps = num_samples();
-    System.out.println(name + "  " + num_samps
-                       + " sample" + ((num_samps == 1) ? "" : "s"));
-    System.out.println("    Samples breakdown: "
-		       + tuplemod_samples_summary());
-    System.out.print("    Variables:");
+    out.println(name + "  " + nplural(num_samps, "sample"));
+    out.println("    Samples breakdown: " + tuplemod_samples_summary());
+    out.print("    Variables:");
     for (int i=0; i<var_infos.length; i++)
-      System.out.print(" " + var_infos[i].name);
-    System.out.println();
+      out.print(" " + var_infos[i].name);
+    out.println();
 
     Assert.assert(check_modbits());
 
+    // Dump some debugging info, if enabled
     if (Global.debugPrintInvariants) {
-      // System.out.println("Views:");
+      // out.println("Views:");
       // for (Iterator itor = views.iterator(); itor.hasNext(); ) {
       //   PptSlice slice = (PptSlice) itor.next();
-      //   System.out.println("  " + slice.name);
+      //   out.println("  " + slice.name);
       //   for (int i=0; i<slice.invs.size(); i++) {
       //     Invariant inv = (Invariant) slice.invs.elementAt(i);
-      //     System.out.println("    " + inv.repr());
+      //     out.println("    " + inv.repr());
       //   }
       // }
 
-      System.out.println("    Variables:");
+      out.println("    Variables:");
       for (int i=0; i<var_infos.length; i++) {
         VarInfo vi = var_infos[i];
         PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;
         PptSlice slice1 = ppt_tl.findSlice(vi);
-        System.out.print("      " + vi.name
-                         + " constant=" + vi.isConstant()
-                         + " canonical=" + vi.isCanonical()
-                         + " equal_to=" + vi.equal_to.name);
+        out.print("      " + vi.name
+		  + " constant=" + vi.isConstant()
+		  + " canonical=" + vi.isCanonical()
+		  + " equal_to=" + vi.equal_to.name);
         if (slice1 == null) {
-          System.out.println(", no slice");
+          out.println(", no slice");
         } else {
-          System.out.println(" slice=" + slice1
-                           + "=" + slice1.name
-                           + " num_values=" + slice1.num_values()
-                           + " num_samples=" + slice1.num_samples());
+          out.println(" slice=" + slice1
+		      + "=" + slice1.name
+		      + " num_values=" + slice1.num_values()
+		      + " num_samples=" + slice1.num_samples());
           // slice1.values_cache.dump();
         }
       }
     }
 
-    // First, do the equality invariants.  They don't show up in the below
-    // because one of the two variables is non-canonical!
-    // This technique is a bit non-orthogonal, but probably fine.
-    // We might do no output if all the other variables are vacuous.
-    // We should have already equal_to for each VarInfo.
+    // Count statistics on variables (canonical, missing, etc.)
     for (int i=0; i<var_infos.length; i++) {
       if (! var_infos[i].isCanonical()) {
         Global.non_canonical_variables++;
@@ -1719,6 +1713,12 @@ public class PptTopLevel extends Ppt {
         Global.derived_variables++;
       }
     }
+
+    // First, do the equality invariants.  They don't show up in the below
+    // because one of the two variables is non-canonical!
+    // This technique is a bit non-orthogonal, but probably fine.
+    // We might do no output if all the other variables are vacuous.
+    // We should have already equal_to for each VarInfo.
     for (int i=0; i<var_infos.length; i++) {
       VarInfo vi = var_infos[i];
       if (vi.isCanonical()) {
@@ -1733,25 +1733,22 @@ public class PptTopLevel extends Ppt {
           PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;
           PptSlice slice1 = ppt_tl.findSlice(vi);
           if (slice1 != null) {
-            int num_values = slice1.num_values();
-            int num_samples = slice1.num_samples();
-            sb.append("\t\t(" + num_values + " value"
-                      + ((num_values == 1) ? "" : "s") + ", "
-                      + num_samples + " sample"
-                      + ((num_samples == 1) ? "" : "s") + ")");
+            sb.append("\t\t(" +
+		      nplural(slice1.num_values(), "value") + ", " +
+                      nplural(slice1.num_samples(), "sample"));
           } else {
             sb.append("\t\t(no slice)");
           }
-          System.out.println(sb.toString());
+          out.println(sb.toString());
         }
       }
     }
 
     // I could instead sort the PptSlice objects, then sort the invariants
-    // in eahc PptSlice.  That would be more efficient, but this is
+    // in each PptSlice.  That would be more efficient, but this is
     // probably not a bottleneck anyway.
     Vector invs_vector = invariants_vector();
-    Invariant[] invs_array = (Invariant[]) invs_vector.toArray(new Invariant[0]);
+    Invariant[] invs_array = (Invariant[]) invs_vector.toArray(new Invariant[invs_vector.size()]);
     Arrays.sort(invs_array, icfp);
 
     Global.non_falsified_invariants += invs_array.length;
@@ -1759,131 +1756,32 @@ public class PptTopLevel extends Ppt {
       Invariant inv = invs_array[ia_index];
       int num_vals = inv.ppt.num_values();
       int inv_num_samps = inv.ppt.num_samples();
-      String num_values_samples =
-        "\t\t(" + num_vals + " value" + ((num_vals == 1) ? "" : "s") + ", "
-        + inv_num_samps + " sample" + ((inv_num_samps == 1) ? "" : "s") + ")";
+      String num_values_samples = "\t\t(" +
+	nplural(num_vals, "value") + ", " +
+        nplural(inv_num_samps, "sample") + ")";
 
       // I could imagine printing information about the PptSlice
       // if it has changed since the last Invariant I examined.
       PptSlice slice = inv.ppt;
       if (Global.debugPrintInvariants) {
-        System.out.println("Slice: " + slice.varNames() + "  "
-                           + slice.num_samples() + " samples");
-        System.out.println("    Samples breakdown: "
-                           + slice.tuplemod_samples_summary());
+        out.println("Slice: " + slice.varNames() + "  "
+		    + slice.num_samples() + " samples");
+        out.println("    Samples breakdown: "
+		    + slice.tuplemod_samples_summary());
         // slice.values_cache.dump();
       }
       Assert.assert(slice.check_modbits());
 
-      // It's hard to know in exactly what order to do these checks that
-      // eliminate some invariants from consideration.  Which is cheapest?
-      // Which is most often successful?
-
-      // Note exception (below) for OneOf invariants.
-      int num_mod_non_missing_samples = inv.ppt.num_mod_non_missing_samples();
-      if ((inv instanceof OneOf) && (((OneOf) inv).num_elts() > num_mod_non_missing_samples)) {
-        System.out.println("Modbit problem:  more values (" + ((OneOf) inv).num_elts() + ") than modified samples (" + num_mod_non_missing_samples + ")");
-      }
-
-      // We print a OneOf invariant even if there are not very many
-      // modified samples.  If the variable takes on only one value, maybe
-      // it is only set once (or a few times).
-      if ((num_mod_non_missing_samples < Invariant.min_mod_non_missing_samples)
-          && (! (inv instanceof OneOf))) {
-        if (Global.debugPrintInvariants) {
-          System.out.println("  [Only " + inv.ppt.num_mod_non_missing_samples() + " modified non-missing samples (" + inv.ppt.num_samples() + " total samples): " + inv.repr() + " ]");
-        }
-        Global.too_few_samples_invariants++;
-        continue;
-      }
-
-      if (IsEquality.it.accept(inv)) {
-        Assert.assert(inv.ppt.var_infos.length == 2);
-        Assert.assert(inv.ppt.var_infos[1].isCanonical() == false);
-        if (inv.ppt.var_infos[0].isCanonical()) {
-          Global.reported_invariants++;
-          continue;
-        } else {
-          Global.non_canonical_invariants++;
-          continue;
-        }
-      } else {
-        boolean all_canonical = true;
-        boolean some_nonconstant = false;
-        VarInfo[] vis = inv.ppt.var_infos;
-        for (int i=0; i<vis.length; i++) {
-          if (! vis[i].isCanonical()) {
-            if (Global.debugPrintInvariants)
-              System.out.println("  [Suppressing " + inv.repr() + " because " + vis[i].name + " is non-canonical]");
-            all_canonical = false;
-            break;
-          }
-          if (! vis[i].isConstant()) {
-            some_nonconstant = true;
-            // Don't break out of the loop; this is computed as a side
-            // effect but isn't the main point of the loop.
-          }
-        }
-        if (! all_canonical) {
-          if (Global.debugPptTopLevel) {
-            System.out.println("  [not all vars canonical:  " + inv.repr() + " ]");
-            System.out.print("    [Canonicalness:");
-            for (int i=0; i<vis.length; i++)
-              System.out.print(" " + vis[i].isCanonical());
-            System.out.println("]");
-            // I'm not sure this can still happen; reinstate the error to check.
-            // // This *does* happen, because we instantiate all invariants
-            // // simultaneously. so we don't yet know which of the new
-            // // variables is canonical.  I should fix this.
-            throw new Error("this shouldn't happen");
-          }
-          Global.non_canonical_invariants++;
-          continue;
-        }
-        if (! some_nonconstant) {
-          Assert.assert((inv instanceof OneOf) || (inv instanceof Comparison)
-                        // , "Unexpected invariant with all vars constant: "
-                        // + inv + "  " + inv.repr() + "  " + inv.format()
-                        );
-          if (inv instanceof Comparison) {
-            Assert.assert(! IsEquality.it.accept(inv));
-            if (Global.debugPrintInvariants) {
-              System.out.println("  [over constants:  " + inv.repr() + " ]");
-            }
-            Global.obvious_invariants++;
-            continue;
-          }
-        }
-      }
-
-      if (inv.isObvious()) {
-        if (Global.debugPrintInvariants) {
-          System.out.println("  [obvious:  " + inv.repr() + " ]");
-        }
-        Global.obvious_invariants++;
-        continue;
-      }
-
-      if (!inv.justified()) {
-        if (Global.debugPrintInvariants) {
-          System.out.println("  [not justified:  " + inv.repr() + " ]");
-        }
-        Global.unjustified_invariants++;
-        continue;
+      // isWorthPrinting checks many conditions for suppression
+      if (!isWorthPrinting(inv, true)) {
+	continue;
       }
 
       String inv_rep = inv.format();
-      Assert.assert(inv_rep != null, "Format was null: " + inv.repr());
-      if (Daikon.suppress_implied_controlled_invariants) {
-	Invariant cont_inv = find_controlling_invariant(inv);
-	if (cont_inv != null) { // TODO: && will_print(cont_inv)
-	  // TODO: Fix global statistics for this?
-	  continue;
-	}
-      }
-      System.out.println(inv_rep + num_values_samples);
+      Assert.assert(inv_rep != null);
+      out.println(inv_rep + num_values_samples);
       if (Global.debugPrintInvariants) {
-	System.out.println("  [" + inv.repr() + "]");
+	out.println("  [" + inv.repr() + "]");
       }
       Global.reported_invariants++;
     }
@@ -1904,8 +1802,7 @@ public class PptTopLevel extends Ppt {
   //                          + slice.num_samples() + " samples");
   //       System.out.println("    Samples breakdown: "
   //                          + slice.values_cache.tuplemod_samples_summary());
-  //     }
-  //     Invariants invs = slice.invs;
+  //     }  //     Invariants invs = slice.invs;
   //     int num_invs = invs.size();
   //     for (int i=0; i<num_invs; i++) {
   //       Invariant inv = invs.elementAt(i);
@@ -1923,6 +1820,226 @@ public class PptTopLevel extends Ppt {
   //     }
   //   }
   // }
+
+  /**
+   * @requires inv is an invariant over this (program point)
+   * @return true iff print_invariants() would print this invariant
+   **/
+  public boolean isWorthPrinting(Invariant inv)
+  {
+    return isWorthPrinting(inv, false);
+  }
+
+
+  private boolean isWorthPrinting(Invariant inv, boolean add_to_stats)
+  {
+    // It's hard to know in exactly what order to do these checks that
+    // eliminate some invariants from consideration.  Which is cheapest?
+    // Which is most often successful?
+    return
+      isWorthPrinting_ModSampleCount(inv, add_to_stats) &&
+      isWorthPrinting_NonCanonicalOrConstant(inv, add_to_stats) &&
+      isWorthPrinting_Obvious(inv, add_to_stats) &&
+      isWorthPrinting_Unjustified(inv, add_to_stats) &&
+      isWorthPrinting_Controlled(inv, add_to_stats) &&
+      isWorthPrinting_PostconditionPrestate(inv, add_to_stats) &&
+      true;
+  }
+
+  private boolean isWorthPrinting_ModSampleCount(Invariant inv, boolean add_to_stats)
+  {
+    Assert.assert(inv.ppt.parent == this);
+
+    int num_mod_non_missing_samples = inv.ppt.num_mod_non_missing_samples();
+    if ((inv instanceof OneOf) && (((OneOf) inv).num_elts() > num_mod_non_missing_samples)) {
+      // TODO: JWN says "Shouldn't this be an assertion or something?"
+      System.out.println("Modbit problem:  more values (" + ((OneOf) inv).num_elts() +
+			 ") than modified samples (" + num_mod_non_missing_samples + ")");
+    }
+ 
+    // We print a OneOf invariant even if there are not very many
+    // modified samples.  If the variable takes on only one value, maybe
+    // it is only set once (or a few times).
+    if ((num_mod_non_missing_samples < Invariant.min_mod_non_missing_samples)
+	&& (! (inv instanceof OneOf))) {
+      if (Global.debugPrintInvariants) {
+	System.out.println("  [Only " + inv.ppt.num_mod_non_missing_samples() +
+			   " modified non-missing samples (" + inv.ppt.num_samples() +
+			   " total samples): " + inv.repr() + " ]");
+      }
+      if (add_to_stats) {
+	Global.too_few_samples_invariants++;
+      }
+      return false;
+    }
+    return true;
+  }
+  
+  private boolean isWorthPrinting_NonCanonicalOrConstant(Invariant inv, boolean add_to_stats)
+  {
+    Assert.assert(inv.ppt.parent == this);
+
+    if (IsEquality.it.accept(inv)) {
+      Assert.assert(inv.ppt.var_infos.length == 2);
+      Assert.assert(inv.ppt.var_infos[1].isCanonical() == false);
+      if (inv.ppt.var_infos[0].isCanonical()) {
+	if (add_to_stats) {
+	  Global.reported_invariants++;
+	}
+	// JWN: This is tricky.  We don't want print_invariants to
+	// print this during the loop since it prints the equality
+	// invariants on its own; therefore we should return false.
+	// However, when other code is simply asking
+	// isWorthPriting(Invariant), maybe we want to return true
+	// here -- maybe even in the else case as well -- since
+	// equality invariants are always printed.  On the other hand,
+	// when other code is wondering if this is worth printing,
+	// it's probably wondering if it should suppress itself, so
+	// returning false here is the safe thing to do (since then
+	// the asking code won't suppress itself).  Gah.
+	return false;
+      } else {
+	if (add_to_stats) {
+	  Global.non_canonical_invariants++;
+	}
+	return false;
+      }
+    } else {
+      boolean all_canonical = true;
+      boolean some_nonconstant = false;
+      VarInfo[] vis = inv.ppt.var_infos;
+      for (int i=0; i<vis.length; i++) {
+	if (! vis[i].isCanonical()) {
+	  if (Global.debugPrintInvariants)
+	    System.out.println("  [Suppressing " + inv.repr() + " because " + vis[i].name + " is non-canonical]");
+	  all_canonical = false;
+	  break;
+	}
+	if (! vis[i].isConstant()) {
+	  some_nonconstant = true;
+	  // Don't break out of the loop; this is computed as a side
+	  // effect but isn't the main point of the loop.
+	}
+      }
+      if (! all_canonical) {
+	if (Global.debugPptTopLevel) {
+	  System.out.println("  [not all vars canonical:  " + inv.repr() + " ]");
+	  System.out.print("    [Canonicalness:");
+	  for (int i=0; i<vis.length; i++)
+	    System.out.print(" " + vis[i].isCanonical());
+	  System.out.println("]");
+	  // I'm not sure this can still happen; reinstate the error to check.
+	  // // This *does* happen, because we instantiate all invariants
+	  // // simultaneously. so we don't yet know which of the new
+	  // // variables is canonical.  I should fix this.
+	  throw new Error("this shouldn't happen");
+	}
+	if (add_to_stats) {
+	  Global.non_canonical_invariants++;
+	}
+	return false;
+      }
+      if (! some_nonconstant) {
+	Assert.assert((inv instanceof OneOf) || (inv instanceof Comparison)
+		      // , "Unexpected invariant with all vars constant: "
+		      // + inv + "  " + inv.repr() + "  " + inv.format()
+		      );
+	if (inv instanceof Comparison) {
+	  Assert.assert(! IsEquality.it.accept(inv));
+	  if (Global.debugPrintInvariants) {
+	    System.out.println("  [over constants:  " + inv.repr() + " ]");
+	  }
+	  if (add_to_stats) {
+	    Global.obvious_invariants++;
+	  }
+	  return false;
+	}
+      }
+    }
+    return true;
+  }
+
+  
+  private boolean isWorthPrinting_Obvious(Invariant inv, boolean add_to_stats)
+  {
+    Assert.assert(inv.ppt.parent == this);
+
+    if (inv.isObvious()) {
+      if (Global.debugPrintInvariants) {
+	System.out.println("  [obvious:  " + inv.repr() + " ]");
+      }
+      if (add_to_stats) {
+	Global.obvious_invariants++;
+      }
+      return false;
+    }
+    return true;
+  }
+
+  private boolean isWorthPrinting_Unjustified(Invariant inv, boolean add_to_stats)
+  {
+    Assert.assert(inv.ppt.parent == this);
+
+    if (!inv.justified()) {
+      if (Global.debugPrintInvariants) {
+	System.out.println("  [not justified:  " + inv.repr() + " ]");
+      }
+      if (add_to_stats) {
+	Global.unjustified_invariants++;
+      }
+      return false;
+    }
+    return true;
+  }
+
+  private boolean isWorthPrinting_Controlled(Invariant inv, boolean add_to_stats)
+  {
+    Assert.assert(inv.ppt.parent == this);
+
+    if (Daikon.suppress_implied_controlled_invariants) {
+      Invariant cont_inv = find_controlling_invariant(inv);
+      if (cont_inv != null) {
+	// TODO: Is this the right parent-finding to do even with conditionals?
+	PptTopLevel top = (PptTopLevel) cont_inv.ppt.parent;
+	if (top.isWorthPrinting(cont_inv)) {
+	  if (add_to_stats) {
+	    // TODO: Fix global statistics for this?
+	  }
+	  return false;
+	}
+      }
+    }
+    return true;
+  }
+
+  private final static IsSameInvariantNameExtractor preToPostIsSameInvariantNameExtractor = new DefaultIsSameInvariantNameExtractor() {
+      public String getFromFirst(VarInfo var)
+      { return "orig(" + super.getFromFirst(var) + ")"; }
+    };
+
+  private boolean isWorthPrinting_PostconditionPrestate(Invariant inv, boolean add_to_stats)
+  {
+    Assert.assert(inv.ppt.parent == this);
+    
+    if (Daikon.suppress_implied_postcondition_over_prestate_invariants) {
+      if (entry_ppt != null) {
+	Iterator entry_invs = entry_ppt.invariants_vector().iterator();
+	while (entry_invs.hasNext()) {
+	  Invariant entry_inv = (Invariant) entry_invs.next();
+	  // If entry_inv with orig() applied to everything matches inv
+	  if (is_same_invariant(entry_inv, inv, preToPostIsSameInvariantNameExtractor)) {
+	    if (entry_ppt.isWorthPrinting(entry_inv)) {
+	      if (add_to_stats) {
+		// TODO: Fix global statistics for this?
+	      }
+	      return false;
+	    }
+	  }
+	}
+      }
+    }
+    return true;
+  }
 
 
   ///////////////////////////////////////////////////////////////////////////
