@@ -484,7 +484,7 @@ doc-jdk-lookup: doc
 	echo "Run jdk-index-to-alist > ~/emacs/jdk-index.el"
 
 ../doc/invariants-doc.texinfo: $(JAVA_FILES)
-	javadoc -quiet -doclet daikon.config.InvariantDoclet \
+	javadoc -doclet daikon.config.InvariantDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 
@@ -495,7 +495,7 @@ doc-invariant: ../doc/invariants-doc.texinfo
 # having both . and pwd on CLASSPATH:  classes are found twice resulting in
 # a duplicate class warning.
 ../doc/config-options.texinfo: $(JAVA_FILES)
-	javadoc -quiet -doclet daikon.config.ParameterDoclet \
+	javadoc -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 
@@ -508,7 +508,7 @@ doc-dkconfig: ../doc/config-options.texinfo
 # 		$(JDOC_FILES)
 
 ../doc/category-options.texinfo: $(JAVA_FILES)
-	javadoc -quiet -doclet daikon.config.ParameterDocletCategory \
+	javadoc -doclet daikon.config.ParameterDocletCategory \
 		--texinfo $@ \
 		$(JDOC_FILES)
 
