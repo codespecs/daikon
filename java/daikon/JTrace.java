@@ -139,15 +139,28 @@ public class JTrace
 	   !Modifier.isStatic(mods))
 	{
 	    println(V_ERROR, "JTrace: target's method `main' has wrong " +
-			       "modifiers.");
+		    "modifiers.");
 	    return null;
 	}
 
-	if(!method.toString().equals("public static void " + target +
-				     ".main(java.lang.String[])"))
+	if(!Void.TYPE.equals(method.getReturnType()))
 	{
-	    println(V_ERROR, "JTrace: target's method `main' has wrong sig: "
-			       + method);
+	    println(V_ERROR, "JTrace: target's method `main' has wrong " +
+		    "return type (" + method.getReturnType() + ")");
+	    return null;
+	}
+
+	if(!(method.getParameterTypes().length == 1))
+	{
+	    println(V_ERROR, "JTrace: target's method `main' has wrong " +
+		    "argument count (" + method.getParameterTypes().length + ")");
+	    return null;
+	}
+
+	if(!String[].class.equals(method.getParameterTypes()[0]))
+	{
+	    println(V_ERROR, "JTrace: target's method `main' has wrong " +
+		    "argument type (" + method.getParameterTypes()[0] + ")");
 	    return null;
 	}
 
