@@ -3,8 +3,9 @@
 # add these object invariants
 @add_to_object =
     (
-     "(\\forall int i; (0 <= i & i <= this.s.length-1) ==> (this.s[i] >= this.ROOT))\n",
-     "(\\forall int i; (0 <= i & i <= this.s.length-1) ==> (this.s[i] != i))\n",
+     ## No longer necessary as of 3/27/2001
+     # "(\\forall int i; (0 <= i && i <= this.s.length-1) ==> (this.s[i] >= this.ROOT))\n",
+     # "(\\forall int i; (0 <= i && i <= this.s.length-1) ==> (this.s[i] != i))\n",
      );
 
 # kill these invariants (test case factors)
@@ -21,7 +22,7 @@
     (
      '  Modified variables: this.s[-1] this.s[0] this.s[set2]' => '  Modified variables: this.s[set2]',
      );
-     
+
 while (<>) {
     chomp;
 
@@ -38,10 +39,10 @@ while (<>) {
     # guard array lookups
     $pred = "";
     if (!/[Vv]ariables/) {
-	$pred = "this.s.length-1 >= 0" if (/this\.s\[0\]/);
-	$pred = "this.s.length-1 >= 1" if (/this\.s\[1\]/);
-	$pred = "this.s.length-1 >= 0" if (/this\.s\[this\.s\.length-1\]/);
-	$pred = "this.s.length-2 >= 0" if (/this\.s\[this\.s\.length-2\]/);
+	$pred = "this.s.length >= 1" if (/this\.s\[0\]/);
+	$pred = "this.s.length >= 2" if (/this\.s\[1\]/);
+	$pred = "this.s.length >= 1" if (/this\.s\[this\.s\.length-1\]/);
+	$pred = "this.s.length >= 2" if (/this\.s\[this\.s\.length-2\]/);
 	if ($pred) {
 	    # print STDERR "GUARDING: $_\n";
 	    print "(", $pred, ") ==> (", $_, ")\n";
