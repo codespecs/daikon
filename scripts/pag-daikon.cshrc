@@ -40,4 +40,4 @@ if (! $?ALTERNATE_EDITOR) setenv ALTERNATE_EDITOR emacs
 if (! $?VISUAL) setenv VISUAL emacsclient
 
 # So that Eclipse is always started from the same directory.
-# alias eclipse 'eclipse -data $HOME/.eclipse''
+alias eclipse 'eclipse -data $HOME/.eclipse'

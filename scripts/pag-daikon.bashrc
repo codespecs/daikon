@@ -43,4 +43,4 @@ export ALTERNATE_EDITOR=${ALTERNATE_EDITOR:-emacs}
 export VISUAL=${VISUAL:-emacsclient}
 
 # So that Eclipse is always started from the same directory.
-# alias eclipse='eclipse -data $HOME/.eclipse'
+alias eclipse='eclipse -data $HOME/.eclipse'
