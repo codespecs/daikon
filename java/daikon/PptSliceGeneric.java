@@ -28,7 +28,12 @@ public class PptSliceGeneric extends PptSlice {
   // This should not be confused with the values slot of a PptTopLevel.
   // In some subclasses of PptSlice, it isn't a VarValues but can be a
   // specialized representation.
-  public VarValues values_cache;
+  VarValues values_cache;
+  // These are used only when the values_cache has been set to null.
+  int num_samples_post_cache = -2222;
+  int num_mod_non_missing_samples_post_cache = -2222;
+  int num_values_post_cache = -2222;
+  String tuplemod_samples_summary_post_cache = "UNINITIALIZED";
 
   // true if we've seen all values and should not add the result of further
   // add() methods to values_cache.
@@ -155,9 +160,45 @@ public class PptSliceGeneric extends PptSlice {
   }
 
   // These accessors are for abstract methods declared in Ppt
-  public int num_samples() { return values_cache.num_samples; }
-  public int num_mod_non_missing_samples() { return values_cache.num_mod_non_missing_samples(); }
-  public int num_values() { return values_cache.num_values; }
+  public int num_samples() {
+    if (values_cache == null) {
+      return num_samples_post_cache;
+    } else {
+      return values_cache.num_samples;
+    }
+  }
+  public int num_mod_non_missing_samples() {
+    if (values_cache == null) {
+      return num_mod_non_missing_samples_post_cache;
+    } else {
+      return values_cache.num_mod_non_missing_samples();
+    }
+  }
+  public int num_values() {
+    if (values_cache == null) {
+      return num_values_post_cache;
+    } else {
+      return values_cache.num_values;
+    }
+  }
+  public String tuplemod_samples_summary() {
+    if (values_cache == null) {
+      return tuplemod_samples_summary_post_cache;
+    } else {
+      return values_cache.tuplemod_samples_summary();
+    }
+  }
+
+  public void clear_cache() {
+    if (values_cache != null) {
+      num_samples_post_cache = num_samples();
+      num_mod_non_missing_samples_post_cache = num_mod_non_missing_samples();
+      num_values_post_cache = num_values();
+      tuplemod_samples_summary_post_cache = tuplemod_samples_summary();
+      values_cache = null;
+    }
+  }
+
   // public int num_missing() { return values_cache.num_missing; }
 
   // Accessing data

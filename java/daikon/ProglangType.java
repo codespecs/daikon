@@ -193,7 +193,7 @@ public final class ProglangType {
           return Zero;
         if (value.equals("true"))
           return One;
-	return Intern.intern(Integer.valueOf(value));
+	return Intern.internedInteger(value);
 	// Old implementation
 	// if type(value) == types.IntType:
 	//     pass
@@ -253,9 +253,18 @@ public final class ProglangType {
       // or at least all the ones that can be rep_types.
       if (base == TYPE_INT) {
         int[] result = new int[len];
-        for (int i=0; i<len; i++)
-          result[i] = Integer.parseInt(value_strings[i]);
+        for (int i=0; i<len; i++) {
+          if (value_strings[i].equals("null"))
+            result[i] = 0;
+          else
+            result[i] = Integer.parseInt(value_strings[i]);
+        }
         return Intern.intern(result);
+      } else if (base == TYPE_STRING) {
+        // First, intern each String in the array ...
+        Intern.internStrings(value_strings);
+        // ... then, intern the entire array, and return it
+        return Intern.intern(value_strings);
       } else {
         throw new Error("Can't deal with array of base type " + base);
       }

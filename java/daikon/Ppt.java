@@ -98,6 +98,13 @@ public abstract class Ppt {
     return null;
   }
 
+  public void clear_view_caches() {
+    for (Iterator itor = views.iterator(); itor.hasNext(); ) {
+      PptSliceGeneric slice = (PptSliceGeneric) itor.next();
+      slice.clear_cache();
+    }
+  }
+
   /** Number of samples, not including missing values. */
   public abstract int num_samples();
 

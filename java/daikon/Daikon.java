@@ -93,6 +93,7 @@ public class Daikon {
           ppt.addConditions(pconds);
         }
         ppt.print_invariants_maybe();
+        ppt.clear_view_caches();
       }
     }
 

@@ -979,6 +979,8 @@ public class PptTopLevel extends Ppt {
             // System.out.println("Constant " + inv.ppt.name + " " + one_of.var().name + " because of " + unary_view.name);
             one_of.var().dynamic_constant = one_of.elt();
           }
+        } else {
+          unary_view.clear_cache();
         }
       }
     }
@@ -1092,6 +1094,8 @@ public class PptTopLevel extends Ppt {
               Assert.assert(var2.equal_to.varinfo_index <= var2.varinfo_index);
             }
           }
+        } else {
+          binary_view.clear_cache();
         }
       }
       for (int i=vi_index_min; i<vi_index_limit; i++) {
@@ -1135,6 +1139,9 @@ public class PptTopLevel extends Ppt {
       unary_views_pass2.add(unary_view);
     }
     addViews(unary_views_pass2);
+    for (int i=0; i<unary_views_pass2.size(); i++) {
+      ((PptSliceGeneric) unary_views_pass2.elementAt(i)).clear_cache();
+    }
 
     // 4. all other binary invariants
     Vector binary_views_pass2 = new Vector(binary_views.size());
@@ -1163,6 +1170,10 @@ public class PptTopLevel extends Ppt {
       binary_views_pass2.add(binary_view);
     }
     addViews(binary_views_pass2);
+    for (int i=0; i<binary_views_pass2.size(); i++) {
+      ((PptSliceGeneric) binary_views_pass2.elementAt(i)).clear_cache();
+    }
+
 
     // 5. ternary invariants
     // (However, arity 3 is not yet implemented.)
@@ -1235,7 +1246,11 @@ public class PptTopLevel extends Ppt {
         }
       }
       addViews(ternary_views);
+      for (int i=0; i<ternary_views.size(); i++) {
+        ((PptSliceGeneric) ternary_views.elementAt(i)).clear_cache();
+      }
     }
+
 
     if (Global.debugPptTopLevel)
       System.out.println(views.size() - old_num_views + " new views for " + name);
@@ -1531,7 +1546,7 @@ public class PptTopLevel extends Ppt {
         System.out.println("Slice: " + slice.varNames() + "  "
                            + slice.num_samples() + " samples");
         System.out.println("    Samples breakdown: "
-                           + slice.values_cache.tuplemod_samples_summary());
+                           + slice.tuplemod_samples_summary());
         // slice.values_cache.dump();
       }
 

@@ -147,7 +147,7 @@ class LowerBound extends SingleScalar {
     //                    + ", uniform_justified=" + uniform_justified);
     // PptSliceGeneric pptsg = (PptSliceGeneric) ppt;
     // System.out.println("  " + ppt.name + " ppt.values_cache.tuplemod_samples_summary()="
-    //                    + pptsg.values_cache.tuplemod_samples_summary());
+    //                    + pptsg.tuplemod_samples_summary());
 
     if (uniform_justified)
       return 0;
