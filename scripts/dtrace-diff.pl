@@ -203,6 +203,7 @@ sub cmp_ppts ( $$$ ) {
       print "  decls:   @decls_varnames\n";
       print "  trace1:  @ppt1_varnames\n";
       print "  trace2:  @ppt2_varnames\n";
+      $errors_found++;
     }
 
     foreach my $varname (@decls_varnames) {
