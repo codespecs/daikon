@@ -122,10 +122,11 @@ Remake it first if it is more than a week old."
 (defun daikon-info ()
   "Browse the Daikon manual, using Info."
   (interactive)
-  (let ((remake (and (file-newer-than-file-p
-                      (substitute-in-file-name "$inv/doc/daikon.texinfo")
-                      (substitute-in-file-name "$inv/doc/daikon.info"))
-                     (y-or-n-p "daikon.info is out of date; re-make it? "))))
+  (let ((remake (or (not (file-exists-p (substitute-in-file-name "$inv/doc/daikon.info")))
+		    (and (file-newer-than-file-p
+			  (substitute-in-file-name "$inv/doc/daikon.texinfo")
+			  (substitute-in-file-name "$inv/doc/daikon.info"))
+			 (y-or-n-p "daikon.info is out of date; re-make it? ")))))
     (if remake
         (let ((default-directory (substitute-in-file-name "$inv/doc/")))
           (call-process "make" nil nil nil "info")
