@@ -1,7 +1,15 @@
 Daikon todo list.
-Time-stamp: <2004-01-26 15:58:33 jhp>
+Time-stamp: <2004-02-04 14:43:02 jhp>
 
 Outstanding Issues
+
+  jhp     02/04/04      add checks for debug settings
+
+    Its very easy to have a typo when adding classes, variables and ppts
+    for --track.  It would be relatively simple to make sure that the
+    class matched some valid daikon class, the ppt matched one of the
+    ppts in the decl file, and that the variables matched one or more
+    variables in the ppts specified.
 
   jhp     01/26/04      fix OneOf.isObviousDynamically == 0 check
 
