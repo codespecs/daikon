@@ -29,7 +29,14 @@ AUTO_GENERATED_FILES = \
 	inv/unary/stringsequence/EltOneOfString.java \
 	inv/unary/stringsequence/OneOfStringSequence.java \
 	inv/binary/sequenceScalar/Member.java \
-	inv/binary/sequenceString/Member.java
+	inv/binary/sequenceString/Member.java \
+	derive/binary/SequenceScalarSubscript.java \
+	derive/binary/SequenceStringSubscript.java \
+	derive/binary/SequenceScalarSubsequence.java \
+	derive/binary/SequenceStringSubsequence.java \
+	derive/binary/SequenceScalarSubscriptFactory.java \
+	derive/binary/SequenceStringSubscriptFactory.java \
+
 
 all:	all_directly
 
@@ -129,6 +136,15 @@ JAVA_CPP = (mv -f $@ $@-bak; set -e; java-cpp.pl -DDEFINEDVAR $< > $@; chmod -w 
 # JAVA_CPP_END = > $@-postproc; mv -f $@-postproc $@; chmod -w $@)
 
 
+PptSlice1.java: PptSlice-cpp.java
+	$(JAVA_CPP:DEFINEDVAR=ARITY1)
+
+PptSlice2.java: PptSlice-cpp.java
+	$(JAVA_CPP:DEFINEDVAR=ARITY2)
+
+PptSlice3.java: PptSlice-cpp.java
+	$(JAVA_CPP:DEFINEDVAR=ARITY3)
+
 inv/unary/scalar/LowerBound.java: inv/unary/scalar/Bound-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=LOWER)
 
@@ -159,14 +175,23 @@ inv/binary/sequenceScalar/Member.java: inv/binary/Member-cpp.java
 inv/binary/sequenceString/Member.java: inv/binary/Member-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=STRING)
 
-PptSlice1.java: PptSlice-cpp.java
-	$(JAVA_CPP:DEFINEDVAR=ARITY1)
+derive/binary/SequenceScalarSubscript.java: derive/binary/SequenceSubscript-cpp.java
+	$(JAVA_CPP:DEFINEDVAR=SCALAR)
 
-PptSlice2.java: PptSlice-cpp.java
-	$(JAVA_CPP:DEFINEDVAR=ARITY2)
+derive/binary/SequenceStringSubscript.java: derive/binary/SequenceSubscript-cpp.java
+	$(JAVA_CPP:DEFINEDVAR=STRING)
 
-PptSlice3.java: PptSlice-cpp.java
-	$(JAVA_CPP:DEFINEDVAR=ARITY3)
+derive/binary/SequenceScalarSubsequence.java: derive/binary/SequenceSubsequence-cpp.java
+	$(JAVA_CPP:DEFINEDVAR=SCALAR)
+
+derive/binary/SequenceStringSubsequence.java: derive/binary/SequenceSubsequence-cpp.java
+	$(JAVA_CPP:DEFINEDVAR=STRING)
+
+derive/binary/SequenceScalarSubscriptFactory.java: derive/binary/SequenceSubscriptFactory-cpp.java
+	$(JAVA_CPP:DEFINEDVAR=SCALAR)
+
+derive/binary/SequenceStringSubscriptFactory.java: derive/binary/SequenceSubscriptFactory-cpp.java
+	$(JAVA_CPP:DEFINEDVAR=STRING)
 
 
 ###########################################################################
