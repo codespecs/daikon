@@ -13,53 +13,125 @@ versions as the user manual.
 
 3.1.5
 
-Fixed a bug in the LinearTernary invariant where the array holding the sample
-points is clobbered by the method that finds the three
-maximum separated points.  The method mutates the array so that sometimes
-conflicting points are overwritten before they can be used to check the
-coefficients calculated.
+Daikon
 
-Fixed a bug in the formatting of LinearTernary and LinearBinary invariants.  
-In order to enforce integer coefficients, the value (a double) was cast to
-to an int which checking whether the two values are equal (problem found
-because the value was too big to fit into an int).
+  User Changes
 
-Use a better algorithm for choosing the canonical variable in an
-equality set for printing purposes: a var that is not
-isDerivedParamAndUninteresting is more canonical than one that is, a
-var that is less derived is more canonical than one that is more
-derived, and other things being equal, choose the var with the least
-complex name.
+    When two or more variables are always equal, any invariant that is
+    true over one variable is true over all of the variables.  Daikon
+    prints invariants only over one variable (the leader) from the
+    equal set.  The algorithm used for choosing the leader has been
+    improved.  A variable that is less derived is chosen ahead of one
+    that is more derived.  Variables derived from parameters are
+    chosen last.  And other things being equal, the variable with the
+    least complex name is chosen first.
 
-Added new script trace-add-nonces.pl, which adds nonces to a .dtrace file.
-Nonces associate a procedure exit with a procedure entry, and some parts of
-Daikon's toolset require .dtrace files to contain nonces.
+#   Use a better algorithm for choosing the canonical variable in an
+#   equality set for printing purposes: a var that is not
+#   isDerivedParamAndUninteresting is more canonical than one that is, a
+#   var that is less derived is more canonical than one that is more
+#   derived, and other things being equal, choose the var with the least
+#   complex name.
 
-Added new Daikon option --list_type, which can be used to add to the
-information in the "ListImplementors" section of the .decls file.
+    Two new options were added.  The --list_type option specifies
+    information to be added to the "ListImplementors" section of the
+    .decls file. The --mem_stat option prints memory usage statistics
+    info a file named "stat.out"  in the current directory.  The
+    "Command line options for Daikon" section of the users manual
+    was also reorganized to be more clear.
 
-Added new Daikon option --mem_stat, which prints memory usage statistics
-into a file named "stat.out" in the current directory.
+#    Added new Daikon option --list_type, which can be used to add to
+#    the information in the "ListImplementors" section of the .decls
+#    file.
 
-An incompatibility between dfepl, the Perl front end, and versions of
-Perl starting with 5.8.1 has been fixed. Dfepl has been verified to
-work with Perl version 5.8.4.
+#    Added new Daikon option --mem_stat, which prints memory usage
+#    statistics into a file named "stat.out" in the current directory.
 
-The incorrect use of "String" in a .decls file, as a representation
-type synonym for "java.lang.String", now gives a warning. The use of
-"String[]" was and continues to be an error, but now gives a more
-specific message. The C front ends dfec (distributed separately) and
-Kvasir have been updated accordingly.
+    The configuration option "Daikon.disable_derived_variables" was
+    added.  Derived variables will not be created if this option is set to
+    true.  See the "List of Configuration Options" section of the user
+    manual for more information.
 
-The dynamic C front end Kvasir has been extensively improved. It is
-now based on the stable 2.2.0 release of Valgrind, fixing failures on
-some Linux distributions. Global variables are now instrumented, and
-there is some support for outputting array values. Changes have been
-made to allow instrumenting C programs compiled with a C++ compiler
-(work to support C++ itself is ongoing). Two incompatibilities should
-be noted: the format of global function names has changed, for
-consistency with the new names for global variables, and Kvasir may
-now produce much more output for a given program run.
+#    Repair output changes.  I don't think we document the repair output
+#    yet (except as a switch).
+
+#    Carlos 'Fixed java-family formatting of .getclass variables'  Not
+#    sure what that means.
+
+  Bug Fixes
+
+    Two bugs were fixed in the LinearTernary invariant.  Under some
+    conditions, LinearTernary invariants were reported when there were
+    samples that did not fit.  Also, coefficients too large for an
+    integer were printed incorrectly.
+
+#    Fixed a bug in the LinearTernary invariant where the array holding
+#    the sample points is clobbered by the method that finds the three
+#    maximum separated points.  The method mutates the array so that
+#    sometimes conflicting points are overwritten before they can be
+#    used to check the coefficients calculated.
+
+#    Fixed a bug in the formatting of LinearTernary and LinearBinary
+#    invariants.  In order to enforce integer coefficients, the value
+#    (a double) was cast to to an int which checking whether the two
+#    values are equal (problem found because the value was too big to
+#    fit into an int).  
+
+  Developer Changes
+
+    The incorrect use of "String" in a .decls file, as a
+    representation type synonym for "java.lang.String", now gives a
+    warning. The use of "String[]" was and continues to be an error,
+    but now gives a more specific message. The C front ends dfec
+    (distributed separately) and Kvasir have been updated accordingly.
+
+Kvasir (C front end)
+
+  User Changes
+
+    The dynamic C front end Kvasir has been extensively improved. It
+    is now based on the stable 2.2.0 release of Valgrind, fixing
+    failures on some Linux distributions. Global variables are now
+    instrumented, and there is some support for outputting array
+    values. Changes have been made to allow instrumenting C programs
+    compiled with a C++ compiler (work to support C++ itself is
+    ongoing). Two incompatibilities should be noted: the format of
+    global function names has changed, for consistency with the new
+    names for global variables, and Kvasir may now produce much more
+    output for a given program run.
+
+  Developer Changes
+
+    Kvasir now uses "java.lang.String" rather than "String" as the
+    representation type for strings in .decls files (see Daikon Developer
+    changes)
+
+Dfec (C font end)
+
+  Developer Changes
+
+    Dfec now uses "java.lang.String" rather than "String" as the
+    representation type for strings in .decls files (see Daikon Developer
+    changes)
+
+#   How do we release this??
+
+Dfepl (Perl front end)
+
+  Bug Fixes
+
+    An incompatibility between dfepl, the Perl front end, and versions
+    of Perl starting with 5.8.1 has been fixed. Dfepl has been
+    verified to work with Perl version 5.8.4.
+
+Scripts
+
+  User Changes
+
+    Added new script trace-add-nonces.pl, which adds nonces to a
+    .dtrace file.  Nonces associate a procedure exit with a procedure
+    entry, and some parts of Daikon's toolset require .dtrace files to
+    contain nonces.
 
 ---------------------------------
 
