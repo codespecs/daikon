@@ -46,6 +46,7 @@ public class EltLowerBound  extends SingleSequence  {
       + core.repr();
   }
 
+  // ELTLOWEr || ELTUPPEr
   public String format() {
     return var().name.name() + " elements >= " + core.min1 ;
   }
@@ -54,11 +55,14 @@ public class EltLowerBound  extends SingleSequence  {
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
 	{ var().name });
-    return "(" + form[0] + "(" + form[1] + " >= " + core.min1  + "))";
+    return form[0] + "(" + form[1] + " >= " + core.min1  + ")" + form[2];
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    String[] form =
+      VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
+	{ var().name });
+    return form[0] + "(>= " + form[1] + " " + core.min1  + ")" + form[2];
   }  
 
   public void add_modified(long[]  value, int count) {

@@ -107,9 +107,9 @@ public final class OneOfString  extends SingleString  implements OneOf {
 
   public String format_esc() {
 
-    String varname = var().name.esc_name() ;
+    String varname = var().name.esc_name();
 
-    String result = "";
+    String result;
 
     // Format   \typeof(theArray) = "[Ljava.lang.Object;"
     //   as     \typeof(theArray) == \type(java.lang.Object[])
@@ -117,24 +117,24 @@ public final class OneOfString  extends SingleString  implements OneOf {
     // format   \typeof(other) = "package.SomeClass;"
     //   as     \typeof(other) == \type(package.SomeClass)
 
-    boolean is_type = varname.startsWith("\\typeof");
+    result = "";
+    boolean is_type = (var().name instanceof VarInfoName.TypeOf);
     for (int i=0; i<num_elts; i++) {
-      if (i>0) result += " || ";
+      if (i != 0) { result += " || "; }
       result += varname + " == ";
+      String str = elts[i];
       if (!is_type) {
-	result += "\"" + UtilMDE.quote( elts[i] ) + "\"";
+	result += "\"" + UtilMDE.quote(str) + "\"";
       } else {
-	if (elts[i].equals("null")) {
+	if ("null".equals(str)) {
 	  result += "\\typeof(null)";
+	} else if (str.startsWith("[")) {
+	  result += "\\type(" + UtilMDE.classnameFromJvm(str) + ")";
 	} else {
-	  if (elts[i].startsWith("[")) {
-	    result += "\\type(" + UtilMDE.classnameFromJvm(elts[i]) + ")";
-	  } else {
-            String str = elts[i];
-            if (str.startsWith("\"") && str.endsWith("\""))
-              str = str.substring(1, str.length()-1);
-	    result += "\\type(" + str + ")";
+	  if (str.startsWith("\"") && str.endsWith("\"")) {
+	    str = str.substring(1, str.length()-1);
 	  }
+	  result += "\\type(" + str + ")";
 	}
       }
     }

@@ -126,10 +126,10 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
 
   public String format_esc() {
 
-    String[] esc_forall = null; // var().esc_forall(); XXX
-    String varname = esc_forall[1];
+    String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+    String varname = form[1];
 
-    String result = "";
+    String result;
 
     if (is_boolean) {
       Assert.assert(num_elts == 1);
@@ -143,13 +143,14 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
         result = varname + " has only one value (hashcode=" + elts[0] + ")";
       }
     } else {
+      result = "";
       for (int i=0; i<num_elts; i++) {
-        if (i>0) result += " || ";
+        if (i != 0) { result += " || "; }
         result += varname + " == " + ((!var().type.elementIsIntegral() && ( elts[i]  == 0)) ? "null" : (Long.toString( elts[i] ))) ;
       }
     }
 
-    result = "(" + esc_forall[0] + "(" + result + "))";
+    result = form[0] + "(" + result + ")" + form[2];
 
     return result;
   }

@@ -16,7 +16,6 @@ The correct way to build the system is to run 'make'.
 #define SINGLESCALAR SingleScalar
 #define TOSTRING(x) x
 #define NAME var().name.name()
-#define ESCNAME var().name.esc_name()
 #elif defined(STRING)
 #define SCALARPKG string
 #define INT String
@@ -25,7 +24,6 @@ The correct way to build the system is to run 'make'.
 #define SINGLESCALAR SingleString
 #define TOSTRING(x) "\"" + UtilMDE.quote(x) + "\""
 #define NAME var().name.name()
-#define ESCNAME var().name.esc_name()
 #elif defined(SEQUENCE)
 #define SCALARPKG sequence
 #define INT long[]
@@ -34,7 +32,6 @@ The correct way to build the system is to run 'make'.
 #define SINGLESCALAR SingleSequence
 #define TOSTRING(x) ArraysMDE.toString(x)
 #define NAME var().name.name()
-#define ESCNAME var().name.esc_name()
 #elif defined(STRINGSEQUENCE)
 #define SCALARPKG stringsequence
 #define INT String[]
@@ -43,7 +40,6 @@ The correct way to build the system is to run 'make'.
 #define SINGLESCALAR SingleStringSequence
 #define TOSTRING(x) ArraysMDE.toString(x)
 #define NAME var().name.name()
-#define ESCNAME var().name.esc_name()
 #elif defined(ELT)
 #define SCALARPKG sequence
 #define INT long
@@ -52,7 +48,6 @@ The correct way to build the system is to run 'make'.
 #define SINGLESCALAR SingleSequence
 #define TOSTRING(x) ((!var().type.elementIsIntegral() && (x == 0)) ? "null" : (Long.toString(x)))
 #define NAME var().name.name() + " elements"
-#define ESCNAME var().name.esc_name() + " elements"
 #elif defined(ELTSTRING)
 #define SCALARPKG stringsequence
 #define INT String
@@ -61,7 +56,6 @@ The correct way to build the system is to run 'make'.
 #define SINGLESCALAR SingleStringSequence
 #define TOSTRING(x) "\"" + UtilMDE.quote(x) + "\""
 #define NAME var().name.name() + " elements"
-#define ESCNAME var().name.esc_name() + " elements"
 #else
 #error "One of SCALAR, STRING, SEQUENCE, STRINGSEQUENCE, ELT, or ELTSTRING should be defined"
 #endif
@@ -219,12 +213,12 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 
   public String format_esc() {
 #if defined(ELT) || defined(ELTSTRING)
-    String[] esc_forall = null; // var().esc_forall(); XXX
-    String varname = esc_forall[1];
-#else
-    String varname = ESCNAME;
+    String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
+    String varname = form[1];
+#elif defined(SCALAR) || defined(STRING)
+    String varname = var().name.esc_name();
 #endif
-    String result = "";
+    String result;
 #if defined(STRING) || defined(ELTSTRING)
     // Format   \typeof(theArray) = "[Ljava.lang.Object;"
     //   as     \typeof(theArray) == \type(java.lang.Object[])
@@ -232,27 +226,30 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     // format   \typeof(other) = "package.SomeClass;"
     //   as     \typeof(other) == \type(package.SomeClass)
 
-    boolean is_type = varname.startsWith("\\typeof");
+    result = "";
+    boolean is_type = (var().name instanceof VarInfoName.TypeOf);
     for (int i=0; i<num_elts; i++) {
-      if (i>0) result += " || ";
+      if (i != 0) { result += " || "; }
       result += varname + " == ";
+      String str = elts[i];
       if (!is_type) {
-	result += "\"" + UtilMDE.quote( elts[i] ) + "\"";
+	result += "\"" + UtilMDE.quote(str) + "\"";
       } else {
-	if (elts[i].equals("null")) {
+	if ("null".equals(str)) {
 	  result += "\\typeof(null)";
+	} else if (str.startsWith("[")) {
+	  result += "\\type(" + UtilMDE.classnameFromJvm(str) + ")";
 	} else {
-	  if (elts[i].startsWith("[")) {
-	    result += "\\type(" + UtilMDE.classnameFromJvm(elts[i]) + ")";
-	  } else {
-            String str = elts[i];
-            if (str.startsWith("\"") && str.endsWith("\""))
-              str = str.substring(1, str.length()-1);
-	    result += "\\type(" + str + ")";
+	  if (str.startsWith("\"") && str.endsWith("\"")) {
+	    str = str.substring(1, str.length()-1);
 	  }
+	  result += "\\type(" + str + ")";
 	}
       }
     }
+#if defined(ELTSTRING)
+    result = form[0] + "(" + result + ")" + form[2];
+#endif
 #elif defined(SCALAR) || defined(ELT)
     if (is_boolean) {
       Assert.assert(num_elts == 1);
@@ -266,16 +263,17 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
         result = varname + " has only one value (hashcode=" + elts[0] + ")";
       }
     } else {
+      result = "";
       for (int i=0; i<num_elts; i++) {
-        if (i>0) result += " || ";
+        if (i != 0) { result += " || "; }
         result += varname + " == " + TOSTRING(elts[i]);
       }
     }
+#if defined(ELT)
+    result = form[0] + "(" + result + ")" + form[2];
+#endif
 #else
     result = "format_esc " + this.getClass() + " needs to be changed: " + format();
-#endif
-#if defined(ELT) || defined(ELTSTRING)
-    result = "(" + esc_forall[0] + "(" + result + "))";
 #endif
     return result;
   }

@@ -110,9 +110,7 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
 
   public String format_esc() {
 
-    String varname = var().name.esc_name() ;
-
-    String result = "";
+    String result;
 
     result = "format_esc " + this.getClass() + " needs to be changed: " + format();
 

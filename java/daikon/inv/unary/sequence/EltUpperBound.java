@@ -46,6 +46,7 @@ public class EltUpperBound  extends SingleSequence  {
       + core.repr();
   }
 
+  // ELTLOWEr || ELTUPPEr
   public String format() {
     return var().name.name() + " elements <= " + core.max1 ;
   }
@@ -54,11 +55,14 @@ public class EltUpperBound  extends SingleSequence  {
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
 	{ var().name });
-    return "(" + form[0] + "(" + form[1] + " <= " + core.max1  + "))";
+    return form[0] + "(" + form[1] + " <= " + core.max1  + ")" + form[2];
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    String[] form =
+      VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
+	{ var().name });
+    return form[0] + "(<= " + form[1] + " " + core.max1  + ")" + form[2];
   }  
 
   public void add_modified(long[]  value, int count) {

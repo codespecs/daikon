@@ -64,7 +64,8 @@ public class Implication extends Invariant {
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    String cmp = (iff ? "IFF" : "IMPLIES");
+    return "(" + cmp + " " + predicate.format_simplify() + " " + consequent.format_simplify() + ")";
   }
 
   /// Completely confused ESC implementation; use better, briefer one.

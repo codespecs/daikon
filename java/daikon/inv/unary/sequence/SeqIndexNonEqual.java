@@ -63,7 +63,7 @@ public final class SeqIndexNonEqual extends SingleSequence {
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
 	{ var().name });
-    return "(" + form[0] + "(" + form[1] + " != i))";
+    return form[0] + "(" + form[1] + " != i)" + form[2];
   }
 
   public String format_simplify() {

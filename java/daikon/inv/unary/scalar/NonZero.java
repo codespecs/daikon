@@ -58,7 +58,7 @@ public class NonZero extends SingleScalar {
   }
 
   public String format_simplify() {
-    return "(NEQ " + var().name + "  " + zero() + ")";
+    return "(NEQ " + var().name + " " + zero() + ")";
   }
 
   public void add_modified(long v, int count) {

@@ -129,10 +129,16 @@ public class LOWERBOUND extends SINGLESCALAR {
   }
 
   public String format_esc() {
-    String esc_name = var().name.esc_name();
-    return esc_name + " " + GTSTR + "= " + MIN1;
+    String varname = var().name.esc_name();
+    return varname + " " + GTSTR + "= " + MIN1;
   }
+
+  public String format_simplify() {
+    String varname = var().name.simplify_name();
+    return "(" + GTSTR + "= " + varname + " " + MIN1 + ")";
+  }  
 #else
+  // ELTLOWEr || ELTUPPEr
   public String format() {
     return var().name.name() + " elements " + GTSTR + "= " + MIN1;
   }
@@ -141,13 +147,16 @@ public class LOWERBOUND extends SINGLESCALAR {
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
 	{ var().name });
-    return "(" + form[0] + "(" + form[1] + " " + GTSTR + "= " + MIN1 + "))";
+    return form[0] + "(" + form[1] + " " + GTSTR + "= " + MIN1 + ")" + form[2];
   }
-#endif
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    String[] form =
+      VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
+	{ var().name });
+    return form[0] + "(" + GTSTR + "= " + form[1] + " " + MIN1 + ")" + form[2];
   }  
+#endif
 
   public void add_modified(LONG value, int count) {
     // System.out.println(LOWERBOUNDSTR + varNames() + ": "

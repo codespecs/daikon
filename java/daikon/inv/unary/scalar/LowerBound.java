@@ -51,12 +51,13 @@ public class LowerBound  extends SingleScalar  {
   }
 
   public String format_esc() {
-    String esc_name = var().name.esc_name();
-    return esc_name + " >= " + core.min1 ;
+    String varname = var().name.esc_name();
+    return varname + " >= " + core.min1 ;
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    String varname = var().name.simplify_name();
+    return "(>= " + varname + " " + core.min1  + ")";
   }  
 
   public void add_modified(long  value, int count) {

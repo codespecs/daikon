@@ -140,7 +140,9 @@ public final class IntComparison extends TwoScalar implements Comparison {
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    String comparator = core.format_comparator();
+    if ("==".equals(comparator)) { comparator = "EQ"; }
+    return "(" + comparator + " " + var1().name.simplify_name() + " " + var2().name.simplify_name() + ")";
   }
 
   public void add_modified(long v1, long v2, int count) {

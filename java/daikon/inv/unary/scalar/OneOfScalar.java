@@ -126,9 +126,9 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
 
   public String format_esc() {
 
-    String varname = var().name.esc_name() ;
+    String varname = var().name.esc_name();
 
-    String result = "";
+    String result;
 
     if (is_boolean) {
       Assert.assert(num_elts == 1);
@@ -142,8 +142,9 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
         result = varname + " has only one value (hashcode=" + elts[0] + ")";
       }
     } else {
+      result = "";
       for (int i=0; i<num_elts; i++) {
-        if (i>0) result += " || ";
+        if (i != 0) { result += " || "; }
         result += varname + " == " +  elts[i]  ;
       }
     }

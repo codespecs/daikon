@@ -97,7 +97,7 @@ public final class SeqIntComparison extends SequenceScalar {
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
 	{ seqvar().name, sclvar().name });
-    return "(" + form[0] + "(" + form[1] + " " + comparator + " " + form[2] + "))";
+    return form[0] + "(" + form[1] + " " + comparator + " " + form[2] + ")" + form[3];
   }
 
   public String format_simplify() {
