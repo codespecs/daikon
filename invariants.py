@@ -396,10 +396,13 @@ def lackwit_type_element_type(lt):
 
 def lackwit_type_element_type_alias(vi):
     assert isinstance(vi, var_info)
+    lt = vi.lackwit_type
     if lackwit_type_format == "implicit":
         return "always"
+    	# The below isn't working as of 4/21 because of a bug in the C front end.
+        assert lt[:3] == "ref"
+        return lt[3:]
     else:
-        lt = vi.lackwit_type
         seq_var_name = lackwit_type_alias_name(lt) or vi.name
         return ("alias", "%s-element" % seq_var_name,
                 lackwit_type_element_type(lt))
@@ -1985,7 +1988,7 @@ def all_numeric_invariants(fn_regexp=None):
                 assert util.sorted(derivation_index, lambda x,y:-cmp(x,y))
                 for i in range(0,derivation_index[1]):
                     vi = var_infos[i]
-                    assert (not is_array_var_type(vi.type)) or vi.derived_len != None or not vi.is_canonical()
+                    assert (not is_array_var_type(vi.type)) or vi.derived_len != None or not vi.is_canonical() or vi.invariant.can_be_None
                 if debug_derive:
                     print "old derivation_index =", derivation_index, "num_vars =", len(var_infos)
 
