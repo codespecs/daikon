@@ -1,9 +1,9 @@
 package daikon;
 
 import daikon.*;
+import daikon.inv.*;
 import java.io.Serializable;
 import java.util.*;
-import daikon.inv.*;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -41,10 +41,10 @@ public class Debug {
 
   public static String[] debugTrackClass
     = {
-      // "IntEqual",
-      //"IntGreaterEqual",
-      //"SequenceScalarSubscriptFactory",
-      "PairwiseIntEqual", "PptSliceEquality"
+      // "PptSliceEquality",
+      // "PairwiseIntLessEqual", "PairwiseIntGreaterEqual",
+      // "SeqSeqIntEqual",
+      "IntEqual",
     };
 
   /**
@@ -61,10 +61,13 @@ public class Debug {
       // "misc.Compar1.main(java.lang.String[]):::ENTER"
       // "DataStructures.DisjSets.find(int):::EXIT"
       // "DataStructures.StackAr.topAndPop():::EXIT",
-      //"DataStructures.StackAr.top():::EXIT75",
-      //"DataStructures.StackAr.pop():::ENTER",
-      "unionCareful(int, int):::EXIT"
-
+      // "DataStructures.StackAr.makeEmpty()V:::ENTER"
+      // "misc.Dataflow.B.m2():::EXIT24"
+      // "unionCareful(int, int):::EXIT"
+      // "MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT",
+      // "MapQuick1.StreetNumberSet:::OBJECT",
+      // "MapQuick1.StreetNumberSet.max():::EXIT",
+      "PolyCalc.RatPoly.sub(PolyCalc.RatPoly):::EXIT379",
     };
 
   /**
@@ -79,18 +82,21 @@ public class Debug {
 
   public static String[][] debugTrackVars
     = {
-      // { "this.topOfStack", "size(this.theArray[])-1" },
-      // { "size(this.s[])-1",  "orig(this.s[post(x-1)])" },
-      // { "size(this.s[])-1",  "orig(this.s[post(x)-1])" },
-      // { "orig(this.s[post(x-1)])", "size(this.s[])-1"  },
-      // { "size(this.s[])-1",  "orig(this.s[post(x)])" },
-      // { "orig(this.s[])",    "x" },
-      // { "x",                 "orig(this.s[])" },
       // {"return", "orig(this.theArray[this.topOfStack])"},
-      { "orig(this.s[post(set1)..])", "this.s[orig(set1)..]" },
-      // { "orig(this.s[post(set1)+1..])", "this.s[orig(set1)+1..]" },
-      { "orig(this.s[post(set1)..])" },
-      { "this.s[orig(set1)..]" },
+      // { "this.topOfStack" },
+      // { "this.x"}
+      // { "orig(this.s[post(set1)..])", "this.s[orig(set1)..]" },
+      // { "this.s[orig(set1)..]", "orig(this.s[post(set1)..])" },
+      // { "orig(this.s[post(set1)..])" },
+      // { "this.s[orig(set1)..]" },
+      // { "other.begins[]", "other.ends[]" },
+      // { "other.ends[]", "other.begins[]" },
+      // { "this.begins[]", "this.ends[]" },
+      // { "this.ends[]", "this.begins[]" },
+      // { "this.begins[return..]", "this.ends[return..]" },
+      // { "this.ends[return..]" , "this.begins[return..]"}
+      { "size(p.terms.wrapped[])", "size(this.terms.wrapped[])-1" },
+      { "size(this.terms.wrapped[])-1" , "size(p.terms.wrapped[])"},
     };
 
   // cached standard parts of the debug print so that multiple calls from
@@ -112,6 +118,47 @@ public class Debug {
 
   public Debug (Class c, Ppt ppt, VarInfo[] vis) {
     set (c, ppt, vis);
+  }
+
+  /**
+   * Sets up the cache for c, ppt, and whatever variable (if any) from
+   * vis that is on the debugTrackVar list.  Essentially this creates
+   * a debug object that will print if any of the variables in vis are
+   * being tracked (and c and ppt match)
+   */
+  public Debug (Class c, Ppt ppt, List vis) {
+
+    VarInfo v = visTracked (vis);
+    if (v != null)
+      set (c, ppt, new VarInfo[] {v});
+    else
+      set (c ,ppt, new VarInfo[] {(VarInfo) vis.get(0)});
+  }
+
+  /**
+   * Looks for each of the variables in vis in the DebugTrackVar list.  If
+   * any match, returns that variable.  Null is returned if there are no
+   * matches.
+   */
+  public VarInfo visTracked (List vis) {
+
+    for (int i = 0; i < vis.size(); i++) {
+      VarInfo v = (VarInfo) vis.get(i);
+      Set evars = null;
+      if (v.equalitySet != null)
+        evars = v.equalitySet.getVars();
+      if (evars != null) {
+        for (Iterator iter = evars.iterator(); iter.hasNext(); ) {
+          VarInfo ev = (VarInfo) iter.next();
+          for (int k = 0; k < debugTrackVars.length; k++) {
+            if (ev.equals (debugTrackVars[k][0]))
+              return (v);
+          }
+        }
+      }
+    }
+
+    return null;
   }
 
   /**
@@ -261,8 +308,15 @@ public class Debug {
     for (int i = vis.length; i < 3; i++)
       vars += ": ";
 
+    // Figure out the sample count if possible
+    String samp_str = "";
+    if (ppt instanceof PptSlice) {
+      PptSlice pslice = (PptSlice) ppt;
+      samp_str = " s" + pslice.num_samples();
+    }
+
     debug.fine (class_str + ": " + ppt.ppt_name.getFullNamePoint()
-                 + ": " + vars + msg);
+                 + samp_str + ": " + vars + msg);
     if (dkconfig_showTraceback) {
       Throwable stack = new Throwable("debug traceback");
       stack.fillInStackTrace();
@@ -382,8 +436,15 @@ public class Debug {
     for (int i = vis.length; i < 3; i++)
       vars += ": ";
 
+    // Figure out the sample count if possible
+    String samp_str = "";
+    if (ppt instanceof PptSlice) {
+      PptSlice pslice = (PptSlice) ppt;
+      samp_str = " s" + pslice.num_samples();
+    }
+
     debugTrack.fine (class_str + ": " + ppt.ppt_name.getFullNamePoint()
-                       + ": " + vars + msg);
+                     + samp_str + ": " + vars + msg);
     if (dkconfig_showTraceback) {
       Throwable stack = new Throwable("debug traceback");
       stack.fillInStackTrace();
@@ -407,8 +468,12 @@ public class Debug {
     return (false);
   }
 
- public static void check (PptMap all_ppts, String msg) {
-   if (all_ppts==null) return;
+  /**
+   * Looks through entire ppt tree and checks for any items we are interested
+   * in.  If found, prints them out.
+   */
+  public static void check (PptMap all_ppts, String msg) {
+
     boolean found = false;
 
     for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
@@ -417,7 +482,7 @@ public class Debug {
         PptSlice slice = (PptSlice) j.next();
         for (int k = 0; k < slice.invs.size(); k++ ) {
           Invariant inv = (Invariant) slice.invs.get(k);
-          if (inv.log (msg + ": found " + inv.format()))
+          if (inv.log (msg + ": found (" + k + ") " + inv.format()))
             found = true;
         }
       }
@@ -426,4 +491,33 @@ public class Debug {
       debugTrack.fine ("Found no points at '" + msg + "'");
   }
 
+  /**
+   * Returns a string containing the variable values for any variables
+   * that are currently being tracked in ppt.  The string is of the
+   * form 'v1 = val1: v2 = val2, etc.
+   */
+  public static String related_vars (PptTopLevel ppt, ValueTuple vt) {
+
+    String out = "";
+
+    for (int i = 0; i < ppt.var_infos.length; i++) {
+      VarInfo v = ppt.var_infos[i];
+      for (int j = 0; j < debugTrackVars.length; j++) {
+        String[] cv = debugTrackVars[j];
+        for (int k = 0; k < cv.length; k++) {
+          if (cv[k].equals (v.name.name())) {
+            Object val = v.getValue (vt);
+            out += v.name.name() + "=";
+            if (val instanceof long[])
+              out += ArraysMDE.toString((long[])val);
+            else
+              out += val;
+            out += ": ";
+          }
+        }
+      }
+    }
+
+    return (out);
+  }
 }
