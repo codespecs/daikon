@@ -108,7 +108,17 @@ public abstract class VarInfoName
     return false;
   }
 
-  // ============================================================
+  public boolean hasNodeOfType(Class type) {
+    Iterator nodes = (new InorderFlattener(this)).nodes().iterator();
+    while (nodes.hasNext()) {
+      if (type.equals(nodes.next().getClass())) {
+	return true;
+      }
+    }
+    return false;
+  }
+
+    // ============================================================
   // The usual Object methods
 
   public boolean equals(Object o) {
@@ -627,8 +637,8 @@ public abstract class VarInfoName
     public abstract Object visitSubscript(Subscript o);
     // leave abstract; traversal order and return values matter
     public abstract Object visitSlice(Slice o);
-  }
-    
+  }    
+
   /**
    * Use to traverse a tree, find the first (elements ...) node, and
    * report whether it's in pre or post-state.
@@ -805,6 +815,9 @@ public abstract class VarInfoName
       return null;
     }
   }
+
+  // ============================================================
+  // Quantification for formatting in ESC or Simplify
 
   /**
    * A quantifier visitor can be used to search a tree and return all
