@@ -183,6 +183,7 @@ Extending Daikon
 
 * New invariants::              
 * New derived variables::       
+* New formatting for invariants::  
 
 Troubleshooting
 
@@ -2346,6 +2347,7 @@ This document is available online at
 @menu
 * New invariants::              
 * New derived variables::       
+* New formatting for invariants::  
 @end menu
 
 @node    New invariants, New derived variables, Extending Daikon, Extending Daikon
@@ -2452,11 +2454,30 @@ factory; for instance, add a line like
 to @samp{SingleScalarFactory.instantiate}.
 
 
-@node    New derived variables,  , New invariants, Extending Daikon
+@node    New derived variables, New formatting for invariants, New invariants, Extending Daikon
 @section New derived variables
 
 (To be written)
 
+
+@node    New formatting for invariants,  , New derived variables, Extending Daikon
+@section New formatting for invariants
+
+Daikon can print invariants in three formats:  its native format, ESC
+format (which is a subset of the JML specification language), and
+Simplify format.
+
+To support a new output format, you need to do two things:
+@itemize
+@item
+Add, to every subclass of @samp{Invariant}, a
+@samp{format_@var{newtype}()} method.  Each subclass of Invariant
+already has three such methods --- @samp{format()}, @samp{format_esc()},
+and @samp{format_simplify()} --- for you to crib from.
+@item
+Edit @samp{PptTopLevel.print_invariants()} to add a call to your new
+method, near the calls to the other formatting methods.
+@end itemize
 
 
 @node    Troubleshooting, Details, Extending Daikon, Top
@@ -2929,71 +2950,87 @@ The format of the program point information is:
 Program point information includes:
 @itemize @bullet
 @item
-   name ("tag") of this program point, an arbitrary string containing no
-   tab or newline characters.  This name contains information such as the
-   class name or method name; what information is contained depends on
-   which instrumenter is being used.  @xref{pptname format}, for a full
-   specification of the naming format.
+name ("tag") of this program point, an arbitrary string containing no
+tab or newline characters.  This name contains information such as the
+class name or method name; what information is contained depends on
+which instrumenter is being used.  @xref{pptname format}, for a full
+specification of the naming format.
 
-   By convention, the entry and exit points for a function have names of
-   a special form so that they can be associated with one another.
-   (Currently, those names end with ":::BEGIN" and ":::END".)  This
-   convention permits instrumenters not to remember the original values of
-   variables and output them at the procedure exit point.
+By convention, the entry and exit points for a function have names of
+a special form so that they can be associated with one another.
+(Currently, those names end with ":::ENTER" and ":::EXIT".)  This
+convention permits instrumenters not to remember the original values of
+variables and output them at the procedure exit point.
+
+Another convention is to have another program point whose name ends
+with ":::OBJECT" for the representation invariant of an object or
+class.  This program point is not created automatically, because
+there isn't a way to know whether a particular method is a private
+helper method or not --- that is, whether the representation
+invariants should hold on entry to and exit from it.
+
 @item
-   for each variable:
+for each variable:
 @itemize @bullet
 @item
-      name: an arbitrary, uninterpreted string containing no tabs or newlines.
+name: an arbitrary, uninterpreted string containing no tabs or
+newlines.  However, the names of array-valued variables must end
+with "[]".  For instance, "a" might stand for the array object itself
+(appearing in the trace file as a unique ID or hashcode), and "a[]" would
+stand for the array contents (appearing in the trace file as a sequence
+of values).
 @item
-      declared type:  this is what the programmer used in the
-      declaration of the variable.  
-      This is currently uninterpreted (that is, the strings are compared
-      for equality but not destructed into their constituent parts).
+declared type:  this is what the programmer used in the
+declaration of the variable.  
+This is currently uninterpreted, except that array types must be
+suffixed by the proper number of "[]" to indicate their dimensionality.
+Names for standard types should use Java's names (e.g., "int",
+"boolean", etc.), but names for user-defined or language-specific types
+can be arbitrary strings.
 @item
-      representation type:  this describes what will appear in the data
-      trace file.  For instance, the declared type might be "char[]" but
-      the representation type might be "String".  Or, the declared type
-      might be "Object" but the representation type might be "int"
-      (because only the object's hashcode, not the object itself, is
-      written to the data trace file).
-      The representation type is currently constrained to be integer,
-      string, or array of integer or string.
-      The representation type may optionally be followed by an equals
-      sign and a value; in that case, the variable is known to have a
-      compile-time constant value and should be omitted from the data
-      trace file.
+representation type:  this describes what will appear in the data
+trace file.  For instance, the declared type might be "char[]" but
+the representation type might be "String".  Or, the declared type
+might be "Object" but the representation type might be "int"
+(because only the object's hashcode, not the object itself, is
+written to the data trace file).
+The representation type is currently constrained to be integer,
+string, or array of integer or string.
+The representation type may optionally be followed by an equals
+sign and a value; in that case, the variable is known to have a
+compile-time constant value and should be omitted from the data
+trace file.
 @end itemize
-      Arrays types are followed by square brackets:  "int[]", "char[][]".
+Arrays types are followed by square brackets:  "int[]", "char[][]".
 @item
-      comparable variables, also known as "Lackwit types".  These indicate
-      which other variables are comparable to this one, which is typically
-      obtained via type-inference based analysis.  There are two formats,
-      "implicit" and "explicit", for this information.  (See below for how
-      to specify which format the information is in.)
+comparable variables, also known as "Lackwit types".  These indicate
+which other variables are comparable to this one, which is typically
+obtained via type-inference based analysis.  There are two formats,
+"implicit" and "explicit", for this information.  (See below for how
+to specify which format the information is in.)
 @itemize @bullet
 @item
-         An implicit lackwit type is an arbitrary string, and comparisons
-	 succeed exactly if the two lackwit types are identical.
+An implicit lackwit type is an arbitrary string, and comparisons
+succeed exactly if the two lackwit types are identical.
 @item
-         An explicit lackwit type is a list of other variables, and
-	 comparisons succeed if each variable is in the list of the other.
-	 It takes the form of
+An explicit lackwit type is a list of other variables, and
+comparisons succeed if each variable is in the list of the other.
+It takes the form of
 @itemize @bullet
 @item
-	    for scalar types:  A space-separated list of all the other
-	    variables mentioned in this record that are comparable to this
-	    one.
+for scalar types:  A space-separated list of all the other
+variables mentioned in this record that are comparable to this
+one.
 @item
-	    for array types:  The lists are surrounded by parentheses, and
-	    variables are given in parentheses for indices, like so:
-            "(a b c)[(d e)][(f g h)]".
-            The elements and indices of an array are named according to 
-            %s-element and %s-index%d, where the indices are numbered
-	    starting with 1.
+for array types:  The lists are surrounded by parentheses, and
+variables are given in parentheses for indices, like so:
+"(a b c)[(d e)][(f g h)]".
+The elements and indices of an array are named according to 
+%s-element and %s-index%d, where the indices are numbered
+starting with 1.
 @item
-            If no information is supplied (i.e.,, this line is blank), then
-	    the variable is compared to all other variables of the same type.
+If no information is supplied (i.e.,, this line is blank), then
+the variable is compared to all other variables of the same type.
 @end itemize
 @end itemize
 @end itemize
