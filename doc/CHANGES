@@ -11,6 +11,13 @@ versions as the user manual.
 
 ===========================================================================
 
+3.2.0 (Feb 1 2005)
+
+Daikon's licensing terms have been liberalized.  Daikon is now distributed
+without restrictions under an MIT/BSD-style license.
+
+---------------------------------
+
 3.1.7 (Jan 1 2005)
 
 Daikon
@@ -31,6 +38,8 @@ Daikon
 
     An incorrect assertion that caused Daikon to fail on some inputs
     was fixed.
+
+---------------------------------
 
 3.1.6 (Dec 1 2004)
 

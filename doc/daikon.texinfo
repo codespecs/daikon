@@ -416,7 +416,7 @@ Perl languages.  Front ends also exist for other applications, such as
 the @uref{http://ase.arc.nasa.gov/visser/jpf/, , Java PathFinder model
 checker}.  It is easy to extend Daikon to other applications.
 
-Daikon is freely available for most uses; for details, see
+Daikon is freely available for all uses; for details, see
 @ref{License}.
 
 More information on Daikon can be found in the Daikon Developer
@@ -653,7 +653,7 @@ LDFLAGS=-L. -lw -o $(EXECUTABLE)
 @cindex installing Kvasir
 @cindex Kvasir installation
 
-Kvasir is the recommended C front end for use on Linux/x86. The source
+Kvasir is the recommended C front end for use on Linux/x86.  The source
 code for Kvasir is included in the main Daikon distribution, but it is
 not compiled by default.
 
@@ -672,7 +672,7 @@ it in the directory @file{kvasir/inst}.
 Once Kvasir has been installed, it can be used via the
 @file{kvasir-dtrace} script in the @file{$DAIKONDIR/bin} directory; if
 you have set up the Daikon environment according to the instructions
-above, it should already be in your @code{PATH}. For instructions on using
+above, it should already be in your @code{PATH}.  For instructions on using
 Kvasir, see @ref{Binary C front end Kvasir}.
 
 @node    Installing dfec, Installing the Context GUI, Installing Kvasir, Installing Daikon
@@ -682,7 +682,7 @@ Kvasir, see @ref{Binary C front end Kvasir}.
 @cindex dfec installation
 
 Daikon's older, source-code based front end for the C language, named
-dfec, is distributed separately. If you wish to use dfec,
+dfec, is distributed separately.  If you wish to use dfec,
 first perform the following installation
 steps.
 
@@ -1239,7 +1239,7 @@ The Daikon distribution comes with several example C programs in the
 @file{examples} directory to enable users to become familiar
 with Daikon.
 There are two sets of examples, corresponding to the two supplied C
-front ends. Examples intended for use with the binary-based front end
+front ends.  Examples intended for use with the binary-based front end
 Kvasir are in a subdirectory @file{kvasir-examples}; examples for the
 older source-based front end dfec are in a subdirectory
 @file{dfec-examples}.  It should be possible to instrument the dfec
@@ -1282,7 +1282,7 @@ kvasir-dtrace ./wordplay -f words.txt daikondynamicinvariantdetector
 @end example
 
 Run the program just as you normally would, but prepend
-@code{kvasir-dtrace} to the front of the command line. Any options to
+@code{kvasir-dtrace} to the front of the command line.  Any options to
 the program can be specified as usual; here, for instance, we give
 commands to look for anagrams of the phrase ``Daikon Dynamic Invariant
 Detector'' using words from the file @code{words.txt}.
@@ -1294,7 +1294,7 @@ Kvasir will not search for a program on your @code{PATH}.
 
 Executing under Kvasir, the program runs normally, but Kvasir will
 executes additional checks and collects trace information (for this
-reason, the program will run more slowly than usual). Kvasir creates a
+reason, the program will run more slowly than usual).  Kvasir creates a
 directory named @file{daikon-output} under the current directory, and
 creates files @file{wordplay.decls} and @file{wordplay.dtrace} describing
 its observations.
@@ -1314,7 +1314,7 @@ java daikon.Daikon -o wordplay.inv \
 @end example
 
 The invariants are printed to standard out, and a binary representation
-of the invariants is written to @file{wordplay.inv}. Note that the
+of the invariants is written to @file{wordplay.inv}.  Note that the
 example uses a configuration option to disable the use of derived
 variables; it can also run without that option, but takes significantly
 longer.
@@ -1463,7 +1463,7 @@ java -Xmx256m daikon.Daikon -o print_tokens.inv \
 @subsection Dealing with large examples
 
 Beware that several of the C example programs require significant
-resources in terms of memory, CPU time, or disk space. Therefore they
+resources in terms of memory, CPU time, or disk space.  Therefore they
 can also serve as examples of techniques for limiting Daikon's
 resource usage.
 
@@ -1472,7 +1472,7 @@ suggest that the examples be run with at least 256 megabytes of
 memory, specified for many JVMs by the option @option{-Xmx256m}.
 The schedule example uses even more space: we suggest specifying
 @option{-Xmx768m}, and avoiding the example altogether unless you
-workstation has at least a gigabyte of physical memory. For more
+workstation has at least a gigabyte of physical memory.  For more
 information about specifying the memory usage for Daikon, see
 @ref{Out of memory}.
 
@@ -1485,19 +1485,19 @@ workstation.
 Most of the C examples require no more than 50 megabytes of disk
 space, but the schedule and schedule2 examples require around 200
 megabytes each, and the Rijndael example requires about 600
-megabytes. This disk usage can be reduced by recompiling the Daikon
+megabytes.  This disk usage can be reduced by recompiling the Daikon
 runtime to compress its output dtrace files; see @ref{Daikon runtime
 customization}.
 
 In some cases, the time and space requirements of the examples can be
-reduced by reducing the length of the program run. For instance, when
+reduced by reducing the length of the program run.  For instance, when
 the test.sh script contains many invocations of the program, some can
-be commented out. The Rijndael example includes preprocessor
+be commented out.  The Rijndael example includes preprocessor
 definitions at the top of the @file{rijndaeltest-ref.c} that control
-how many iterations are performed. However, Daikon's running time
+how many iterations are performed.  However, Daikon's running time
 depends on both the length of the test run and the size of the program
 (especially in its use of global variables and nested data
-structures). For more techniques for using Daikon with large programs
+structures).  For more techniques for using Daikon with large programs
 and long program runs, see @ref{Large dtrace files}.
 
 @node Perl examples,  , C examples, Example use
@@ -1732,7 +1732,7 @@ For more information about dfej, see @ref{Java front end dfej}.
 @node    Instrumenting C programs, Instrumenting Perl programs, Instrumenting Java programs, Instrumentation
 @subsection Instrumenting C programs
 
-There are two ways to instrument C programs. Compiled programs
+There are two ways to instrument C programs.  Compiled programs
 originally written in C can be instrumented on the fly using the
 Kvasir tool, or C programs in source code form can be instrumented
 with the @command{dfec} tool.  We recommend use of Kvasir.
@@ -1749,7 +1749,7 @@ usually easier to use and more reliable.
 
 To use Kvasir with your program, first make sure that your program has
 been compiled with DWARF-2 format debugging information, such as by
-giving the @code{-gdwarf-2} flag to GCC when compiling. Then, run your
+giving the @code{-gdwarf-2} flag to GCC when compiling.  Then, run your
 program as usual, but prepend @code{kvasir-dtrace} to the command line.
 For more information about Kvasir, including more detailed
 documentation on its command-line options, see @ref{Binary C
@@ -2475,26 +2475,26 @@ modeled using I/O automata; for details, see
 @cindex Java output format
 @cindex output format, Java
 @item Java format
-Write output as Java expressions. This means that each invariant would
+Write output as Java expressions.  This means that each invariant would
 (with some exceptions; see next paragraph) be a valid Java expression,
 if inserted at the correct program point: right after method entry
 (for method entry invariants), or right before method exit (for
 method exit invariants), or anywhere in the code (for object
 invariants).
 
-There are two exceptions. Method exit invariants that refer to
+There are two exceptions.  Method exit invariants that refer to
 prestate, such as @code{x == old(x) + 1}, are output with the tag
 @code{\old} surrounding the prestate expression (e.g. @code{x ==
-\old(x) + 1}. Method exit invariants that refer to the return value of
+\old(x) + 1}.  Method exit invariants that refer to the return value of
 the method, such as @code{return == x + y}, are output with the tag
 @code{\result} in place of the return value (e.g. @code{\result == x + y}).
 These expression are obviously not valid Java code.
 
 The Java output format makes extensive use of helper methods defined
 in class @code{daikon.Quant}, which provides methods for
-quantification and set comprehension over Java collections. For
+quantification and set comprehension over Java collections.  For
 example, @code{daikon.Quant.eltsEqual(int[] seq1, int elt)} checks
-whether all elements in @code{seq1} are equal to @code{elt}. For
+whether all elements in @code{seq1} are equal to @code{elt}.  For
 detailed meanings of all methods in the @code{Quant} class, see the
 Javadoc documentation for the class (or look inside
 @file{daikon/QuantBody.java}).
@@ -2755,9 +2755,10 @@ for details.
 
 This filter suppresses invariants at procedure exit points that are
 uninteresting because they refer to prestate variables derived from
-pass-by-value parameters.  E.g, suppose that @code{param} is a parameter to a
-Java method. If @code{param} itself is modified, that change won't be
-visible to a caller, so it's uninteresting to print. If @code{param} points
+pass-by-value parameters.  For example, suppose that @code{param} is a
+parameter to a
+Java method.  If @code{param} itself is modified, that change won't be
+visible to a caller, so it's uninteresting to print.  If @code{param} points
 to an object, and that object is changed, that is visible, but
 only if @code{param} hasn't changed; otherwise, the invariant would report a
 change in some object other than the one that was passed in.
@@ -3616,9 +3617,9 @@ program halts (with exit code 1) when the specified number of records is
 output.
 
 Note that recent version of the JDK do not allow Java programs to
-inspect environment variables. So if you're generating a
+inspect environment variables.  So if you're generating a
 @file{.dtrace} from a Java class, you may need to pass the environment
-variable directly as an argument to Java. For example:
+variable directly as an argument to Java.  For example:
 
 @example
 java -classpath daikon-instrumented:$CLASSPATH -DDTRACELIMIT=10000 -DDTRACELIMITTERMINATE=true Foo
@@ -3759,32 +3760,32 @@ comment immediately before the declared type (but after any modifiers like
 
 Daikon's older C front end, known as dfec (@pxref{Source-based C front
 end dfec}), works by rewriting the
-source code for your C program. To avoid some of the limitations of
+source code for your C program.  To avoid some of the limitations of
 this approach, Daikon's new front end for C, named Kvasir, instead
 works by examining the operation of an unmodified binary at
 runtime.  Kvasir is named after the Norse god of knowledge and beet
 juice.
 
 Kvasir is based on the Valgrind dynamic program supervision framework
-(which is best known for its memory error detection tool). Using
+(which is best known for its memory error detection tool).  Using
 Valgrind allows Kvasir to interrupt your program's execution, read its
 variables, and examine its memory usage, all transparently to the
-program. Also, rather than using your program's source code to find
+program.  Also, rather than using your program's source code to find
 the names and types of functions and variables, Kvasir obtains them
 from debugging information included in the executable in a standard
-format. These differences should make Kvasir both much easier to use and
+format.  These differences should make Kvasir both much easier to use and
 more robust than the source-rewriting-based dfec.
 
-However, Kvasir has some limitations of its own. Because Kvasir uses
+However, Kvasir has some limitations of its own.  Because Kvasir uses
 Valgrind, it shares Valgrind's limitation of working only under the
 Linux operating system, and only on Intel 386-compatible processors
 (the so-called IA-32 architecture) such as the Intel Pentium and the
 AMD Athlon.  Furthermore, requires that your program have debugging
 information available in the DWARF-2 format, as produced by recent
-versions of GCC. Two other limitations are not fundamental, but apply
+versions of GCC@.  Two other limitations are not fundamental, but apply
 to the current version: first, the programs used by Kvasir should be
 compiled without optimization; and second, the programs should be
-written in C. (In the future, Kvasir may support C++ and other
+written in C@.  (In the future, Kvasir may support C++ and other
 languages that follow C calling conventions.)
 
 @menu
@@ -3800,11 +3801,11 @@ The first step in using Kvasir is to compile your program using the
 DWARF-2 format of debugging information, and without optimization.
 In most recent versions of GCC (at least 2.95 and higher), DWARF-2
 debugging information can be produced by supplying the
-@code{-gdwarf-2} command line option. In more recent versions of GCC 3,
+@code{-gdwarf-2} command line option.  In more recent versions of GCC 3,
 DWARF-2 is in fact the default format for debugging information.
 Also, remove any optimization flags, such as @code{-O} or @code{-O2},
 and any flags that affect calling conventions, such as
-@code{-fomit-frame-pointer}. Except for these changes, you should be
+@code{-fomit-frame-pointer}.  Except for these changes, you should be
 able to compile and link your program normally.
 
 In the second step of using Kvasir, run your program as you normally
@@ -3827,7 +3828,7 @@ A number of options to Kvasir may be supplied between
 list.
 
 Note that Kvasir uses a different scheme for naming variables than dfec
-or the Java front end do. Because C does not have classes, the `class'
+or the Java front end do.  Because C does not have classes, the `class'
 portion of a program point name (before the last period) instead holds
 the file in which a function was defined, for file-static functions, or
 is simply a single period for global functions. (Thus, global function
@@ -3845,27 +3846,27 @@ filename (with periods converted into underscores) and then a slash.
 @item --asserts-aborts
 @itemx --no-asserts-aborts
 
-Enable (disable) Kvasir's internal consistency checks. By default, they
+Enable (disable) Kvasir's internal consistency checks.  By default, they
 are disabled. 
 
 @item --debug
 @itemx --no-debug
 
 Enable (disable) progress messages meant for debugging problems with
-Kvasir itself. By default, they are disabled. This option is intended
+Kvasir itself.  By default, they are disabled.  This option is intended
 mainly for Kvasir's developers.
 
 @item --decls-file=@var{filename.decls}
 
 Write the @code{.decls} file listing the names of functions and
-variables to the specified file name. The default is
+variables to the specified file name.  The default is
 @code{daikon-output/@var{programname}.decls}, where @var{programname}
 is the name of the program.
 
 @item --decls-only
 
 Exit after writing the @code{.decls} file; don't run the program or
-generate trace information. Since the @code{.decls} file is the same for
+generate trace information.  Since the @code{.decls} file is the same for
 any run of a program, it can be generated once and then reused on later
 runs, as long as no new program points are added and each program point
 has the same set of variables.
@@ -3873,14 +3874,14 @@ has the same set of variables.
 @item --dtrace-append
 
 Append new trace information to the end of an existing @code{.dtrace}
-file. The default is to overwrite a pre-existing @code{.dtrace} file.
+file.  The default is to overwrite a pre-existing @code{.dtrace} file.
 
 @item --dtrace-file=@var{filename.dtrace}
 
 Write the @code{.dtrace} trace file giving the values of variables to
-the specified file name. The default is
+the specified file name.  The default is
 @code{daikon-output/@var{programname}.dtrace}, where @var{programname}
-is the name of the program. A filename of @code{-} may be used to
+is the name of the program.  A filename of @code{-} may be used to
 specify the standard output; in this case, the regular standard output
 of the program will be redirected back to the terminal, to avoid
 intermixing it with the trace output.
@@ -3888,39 +3889,39 @@ intermixing it with the trace output.
 @item --dtrace-gzip
 
 Compress trace information with the @code{gzip} program before writing
-it to the @code{.dtrace} file. You must have the @code{gzip} program
+it to the @code{.dtrace} file.  You must have the @code{gzip} program
 available.
 
 @item --dump-ppt-file=@var{filename}
 @itemx --dump-var-file=@var{filename}
 
 Print a list of all the program points (respectively all the variables)
-in the program to the specified file. An edited version of this file can
+in the program to the specified file.  An edited version of this file can
 then be used with the @code{--ppt-list-file} (respectively
 @code{--var-list-file}) option.
 
 @item --ignore-globals
 
 Omit any global or static variables from the @code{.decls} and
-@code{.dtrace} files. Leaving these out can significantly improve Kvasir
+@code{.dtrace} files.  Leaving these out can significantly improve Kvasir
 and Daikon's performance, at the expense of missing properties involving
-them. The default is to keep global and static variables.
+them.  The default is to keep global and static variables.
 
 @item --output-fifo
 
 Create the output @code{.decls} and @code{.dtrace} files as FIFOs (also
-known as `named pipes'). Kvasir will then open first the @code{.decls}
+known as `named pipes').  Kvasir will then open first the @code{.decls}
 FIFO and then the @code{.dtrace} FIFO, blocking until another program
-(such as Daikon) reads from them. Using FIFOs for the output of Kvasir
+(such as Daikon) reads from them.  Using FIFOs for the output of Kvasir
 avoids the need for large trace files, but FIFOs are not supported by
-some file systems, including AFS.
+some file systems, including AFS@.
 
 @item --ppt-list-file=@var{filename}
 @itemx --var-list-file=@var{filename}
 
 Trace only the program points (respectively variables) listed in the
-given file. Other program points (respectively variables) will be
-omitted from the @code{.decls} and @code{.dtrace} files. A convenient
+given file.  Other program points (respectively variables) will be
+omitted from the @code{.decls} and @code{.dtrace} files.  A convenient
 way to produce such files is by editing the output produced by the
 @code{--dump-ppt-file} (respectively @code{--dump-var-file}) option
 described above.
@@ -3929,7 +3930,7 @@ described above.
 @itemx --program-stderr=@var{filename}
 
 Redirect the standard output (respectively standard error) stream of the
-program being traced to the specified path. By default, the standard
+program being traced to the specified path.  By default, the standard
 output and standard error streams will be left pointing to the same
 locations specified by the shell, except that if @code{--dtrace-file=-}
 is specified, then the default behavior is as if
@@ -3940,7 +3941,7 @@ interleaved in the same way as if by the Bourne shell construction
 @code{2>&1}.
 
 Also as in the shell, @var{filename} can be an ampersand followed by an
-integer, to redirect to a numbered file descriptor. For instance, to
+integer, to redirect to a numbered file descriptor.  For instance, to
 redirect the program's standard output and error, and Kvasir's standard
 error, to a single file, you can say @code{--program-stdout='&2'
 --program-stderr='&2' 2>@var{filename}}.
@@ -3953,63 +3954,63 @@ error, to a single file, you can say @code{--program-stdout='&2'
 @c Be sure to remove this once it becomes out of date
 @c (This version number should be automatically updated, though.)
 As of Daikon version 3.1.6, Kvasir is still in an active stage of
-development. While it works well on many programs, it does not yet
+development.  While it works well on many programs, it does not yet
 support all of the options that the older dfec did, nor all of its
-features. This subsection lists some of the known limitations of the
+features.  This subsection lists some of the known limitations of the
 current Kvasir release; if you encounter any problems other than listed
-here, please report them as bugs (@pxref{Reporting bugs}). The
+here, please report them as bugs (@pxref{Reporting bugs}).  The
 limitations are listed roughly in decreasing order of severity.
 
 @itemize @bullet
 @item
-Kvasir's support for outputting arrays is not yet complete. Kvasir
+Kvasir's support for outputting arrays is not yet complete.  Kvasir
 attempts to determine the length of arrays either statically from
 debugging information or dynamically by examining which memory locations
-have been used. However, this process is known to not yet work correctly
-in all situations. Also, multidimensional arrays do not yet print with
+have been used.  However, this process is known to not yet work correctly
+in all situations.  Also, multidimensional arrays do not yet print with
 all of their elements.
 
 @item
 Kvasir-traced programs take longer (often a good fraction of a second)
-to start. When tracing short-lived programs, this overhead can
+to start.  When tracing short-lived programs, this overhead can
 dominate Kvasir's per-instruction runtime overhead.
 
 @item
 Kvasir always prints the contents of structures according to their
-compile-time type. Programs that use generic pointers and structural
+compile-time type.  Programs that use generic pointers and structural
 equivalence to simulate object-orientation will have derived-`class'
 fields missing when a structure is passed via a base-`class' pointer.
 
 @item
 Not all of the options of the source-based dfec are supported.
 Pointer type disambiguation is not
-supported. Variable comparability information (as supplied by the
-Lackwit tool) is not supported. The depth to which nested structures
-are explored is fixed. Of the environment variables obeyed by dfec,
+supported.  Variable comparability information (as supplied by the
+Lackwit tool) is not supported.  The depth to which nested structures
+are explored is fixed.  Of the environment variables obeyed by dfec,
 only @code{DTRACEAPPEND} is recognized.
 
 @item
-Kvasir behaves somewhat differently with different versions of GCC.
+Kvasir behaves somewhat differently with different versions of GCC@.
 We have had the best results with versions 3.3 (which we use for
-testing) and 3.4. If feasible, we recommend that you use
-Kvasir with such a relatively recent version of GCC. Incompatibilities
+testing) and 3.4.  If feasible, we recommend that you use
+Kvasir with such a relatively recent version of GCC@.  Incompatibilities
 between Kvasir and the debugging information produced by older GCC
 versions can lead to incorrect output and, in some cases for version
 2.95, can cause Kvasir to crash.
 
 @item
 On some platforms (including, as of this writing, recent versions of
-Debian), Kvasir crashes if run on statically-linked binaries. To avoid
+Debian), Kvasir crashes if run on statically-linked binaries.  To avoid
 this problem, do not use the @code{-static} flag when linking programs
-for use Kvasir. If you want to link statically with a particular
+for use Kvasir.  If you want to link statically with a particular
 library, supply the path to its static version (@code{libfoo.a})
 directly to @code{gcc} instead.
 
 @item
-Kvasir is incompatible with some compiler optimizations. It is
+Kvasir is incompatible with some compiler optimizations.  It is
 definitely incompatible with the @code{-fomit-frame-pointer}
 optimization, and it may have trouble with other optimizations as
-well. We recommend that you compile programs for Kvasir without
+well.  We recommend that you compile programs for Kvasir without
 optimization.
 
 @end itemize
@@ -5083,7 +5084,7 @@ Perl.  For a brief introduction to dfepl, see @ref{Perl examples} and
 dfepl works with Perl versions 5.8 and later. (To be precise, Perl
 programs instrumented with dfepl can also be run with Perl 5.6, but
 the instrumentation engine, which is itself written in Perl, requires
-version 5.8). dfepl reads the source code for Perl modules or
+version 5.8).  dfepl reads the source code for Perl modules or
 programs, and writes out instrumented versions of that code that
 keep track of function parameters, and make calls to routines in the
 @file{daikon_runtime} package whenever an instrumented subroutine is
@@ -6008,7 +6009,7 @@ The options are:
 
 @item -NOCLEAN
 Don't delete the temporary trace samples created by the random
-selection process. This can help for debugging or for using the tool
+selection process.  This can help for debugging or for using the tool
 solely to create trace samples instead of calculating invariants over
 the samples.
 
@@ -6123,12 +6124,12 @@ we break it up here for clarity):
 @end example
 
 Note that the comment will no longer be a legal ESC/JML/DBC
-comment. To make it legal again, you must replace the XML tags with
+comment.  To make it legal again, you must replace the XML tags with
 the string between the <INV> tag.
 
 Also note the extra information printed with the invariant: the number
-of samples from which the invariant was devied, the daikon
-representation (i.e. the daikon output format), the Java class that
+of samples from which the invariant was devied, the Daikon
+representation (i.e., the Daikon output format), the Java class that
 the invariant corresponds to, and the method that the invariant
 belongs to (@code{null} for object invariants).
 
@@ -7153,7 +7154,7 @@ Diff} to combine the resulting @file{.inv} files into one.
 @c the MergeInvariants tool, but it is not yet documented,
 
 Independently from the above techniques, some front ends can generate
-trace data as a stream for Daikon to process on the fly. Using this
+trace data as a stream for Daikon to process on the fly.  Using this
 strategy avoids the problem of disk space consumption, and can reduce
 I/O overhead, but does not reduce Daikon's memory usage.
 
@@ -7314,17 +7315,17 @@ examples using the C front end Kvasir.
 @subsubheading Named pipes
 
 A named pipe, also known as a FIFO, is a special kind of file supported
-by most Unix-compatible systems. When one process tries to open a FIFO
+by most Unix-compatible systems.  When one process tries to open a FIFO
 for reading, it blocks, waiting for another process to open it for
-writing (or vice-versa). When both a reader and a writer are ready, the
-FIFO connects the reader to the writer like a regular Unix pipe. Daikon
+writing (or vice-versa).  When both a reader and a writer are ready, the
+FIFO connects the reader to the writer like a regular Unix pipe.  Daikon
 and a front end can communicate via named pipes as long as each file
 that's a named pipe is written to and read from in the same order by
 both the front end and Daikon in the same order (if this is not the
 case, deadlock will occur).
 
 The @code{--output-fifo} option to Kvasir causes it to create its output
-@code{.dtrace} and @code{.decls} files as named pipes. When Kvasir is
+@code{.dtrace} and @code{.decls} files as named pipes.  When Kvasir is
 run with this option, Daikon needs to be run at the same time to read
 from the FIFOs, such as from another terminal or using the shell's
 @code{&} operator.
@@ -7350,16 +7351,16 @@ $DAIKON daikon-output/bzip2.decls daikon-output/bzip2.dtrace
 @end example
 
 The two commands (before and after the ampersand) could also be run in
-two different terminals. A similar command could also be used to run a
+two different terminals.  A similar command could also be used to run a
 longer execution of bzip2, without using any additional disk space; for
 instance, replace @code{--help} with @code{-vv1 file.txt} to compress a
 text file (but start with a small one first).
 
 @subsubheading Regular pipes
 
-Kvasir can also write trace data to a standard Unix pipe. In this case,
+Kvasir can also write trace data to a standard Unix pipe.  In this case,
 it is easiest to generate the @code{.decls} file on a separate
-execution. Here's a sequence of commands with the same effect as the
+execution.  Here's a sequence of commands with the same effect as the
 example above:
 
 @example
@@ -7369,7 +7370,7 @@ kvasir-dtrace --decls-file=/dev/null --dtrace-file=- ./bzip2 --help \
 @end example
 
 The first command generates a @code{.decls} file, but does not execute
-the program or produce trace data. The second Kvasir command writes
+the program or produce trace data.  The second Kvasir command writes
 trace data to the standard output (being careful not to overwrite the
 @code{.decls} file), which is then piped to Daikon which reads it from
 the standard input.
@@ -7565,19 +7566,41 @@ variables.
 @node    License, Mailing lists reminder, History, Details
 @section License
 
+Copyright @copyright{} 1998-2005 Massachusetts Institute of Technology
 
-Daikon is made available for education, research, and evaluation
-purposes (not for direct commercial gain), and there is no warranty.
-All rights are reserved, and copyright is held by the authors.  If you
-have difficulties with the software, let us know and we will do our best
-to correct the problem.  Unfortunately, we cannot make any guarantees of
-support, or any other guarantees regarding the software.  As a condition
-of use, you agree to promptly communicate any changes, improvements, or
-enhancements to the authors for inclusion in a future release under
-these same conditions, and to promptly report any errors, problems, or bugs.
-If you do not agree to this license, please do
-not use or examine the software.  Other licensing terms are available;
-send mail to @email{mernst@@csail.mit.edu}.
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the
+``Software''), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+The names and trademarks of copyright holders may not be used in
+advertising or publicity pertaining to the software without specific prior
+permission. Title to copyright in this software and any associated
+documentation will at all times remain with the copyright holders.
+
+THE SOFTWARE IS PROVIDED ``AS IS'', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT@.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE@.
+
+
+@c As a condition of use, you agree to promptly communicate any changes,
+@c improvements, or enhancements to the authors for inclusion in a
+@c future release, and to promptly report any errors, problems, or
+@c bugs. 
+@c Other licensing terms are available;
+@c send mail to @email{mernst@@csail.mit.edu}.
+
+@sp
 
 Daikon uses the Java port of the GNU getopt library, which is
 copyright 1998 Aaron M.@: Renn.  The getopt library is free software, and
@@ -7606,10 +7629,12 @@ not by any other party.  The Common Public License is included with the
 Daikon distribution as the file @file{java/junit/cpl-v10.html}.
 
 Note that the front ends discussed in this manual are separate
-programs, and some are made available under different licenses.  All
-of the software in the main Daikon distribution is made available
-under the same license as the Daikon tool proper, or a less
-restrictive license.  However, because the front ends are separate
+programs, and some are made available under different licenses.
+@c All
+@c of the software in the main Daikon distribution is made available
+@c under the same license as the Daikon tool proper, or a less
+@c restrictive license.  However, 
+Because the front ends are separate
 programs not derived from the Daikon invariant detection tool, you are
 neither required nor entitled to use the Daikon invariant detector
 itself under these other licenses.
@@ -7624,18 +7649,18 @@ dynamic program supervision framework, copyright 2000-2004 Julian
 Seward, the Sparrow Valgrind tool, copyright 2002 Nicholas Nethercote,
 the MemCheck Valgrind tool, copyright 2000-2004 Julian Seward, and the
 readelf program of the GNU Binutils, copyright 1998-2003 the Free
-Software Foundation, Inc. Kvasir is free software; you can
+Software Foundation, Inc.  Kvasir is free software; you can
 redistribute it and/or modify it under the terms of the GNU General
 Public License as published by the Free Software Foundation; either
 version 2 of the License, or (at your option) any later version.
 Kvasir is distributed in the hope that it will be useful, but WITHOUT
 ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-for more details. You should have received a copy of the GNU General
+FITNESS FOR A PARTICULAR PURPOSE@.  See the GNU General Public License
+for more details.  You should have received a copy of the GNU General
 Public License along with Kvasir, in a file kvasir/COPYING;
 if not, write to the Free
 Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-02111-1307, USA.
+02111-1307, USA@.
 
 
 @node    Mailing lists reminder, Credits, License, Details
