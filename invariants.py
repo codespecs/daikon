@@ -3,9 +3,13 @@
 # Michael Ernst <mernst@cs.washington.edu>
 
 # For some additional documentation, see invariants.py.doc.
-import glob, operator, os, re, string, types, copy, posix, math, time
 
+# Built-in Python modules
+import glob, math, operator, os, posix, re, string, time, types
+
+# User-defined Python modules
 import util
+
 
 true = (1==1)
 false = (1==0)
@@ -23,7 +27,7 @@ if not locals().has_key("fn_var_infos"):
     no_ternary_invariants = true
     no_invocation_counts = true
     collect_stats = true
-    
+
     ### Debugging
     debug_read = false                  # reading files
     debug_derive = false                # deriving new values
@@ -35,6 +39,7 @@ if not locals().has_key("fn_var_infos"):
 
     fn_samples = {}         # from function name to number of samples
     file_fn_var_infos = {}  # from filename to (function to list of var_infos)
+    # Issue: this does not contain any derived variables, only original ones.
     file_fn_var_values = {} # from filename to (function to (values-tuple to occurrence))
 
     # From function name to invocation count.  Used to add invocation
@@ -67,11 +72,11 @@ def clear_variables():
     ftn_names_to_call_ct = {}
     ftn_to_orig_param_vals = {}
     fn_to_stats = {}
-    
+
 def clear_invariants(fn_regexp=None):
     """Reset the values of invariants, globally."""
     for fn_name in fn_var_infos.keys():
-        if fn_regexp and not fn_regexp.match(fn_name):
+        if fn_regexp and not fn_regexp.search(fn_name):
             continue
         for vi in fn_var_infos[fn_name]:
             vi.invariant = None
@@ -84,6 +89,8 @@ float_re = re.compile(r'^-?[0-9]*\.[0-9]+$|^-?[0-9]+\.[0-9]*$')
 # This should only be used once per variable; after that, read out the
 # type from the var_info object
 sequence_re = re.compile(r'^[^	]+\[(|[^][]+\.\.[^][]+)\]$')
+min_or_max_re = re.compile("^(min|max)\((.*)\)$")
+
 
 class var_info:
     name = None                         # string
@@ -96,11 +103,10 @@ class var_info:
                                         #   one; presently not used.
     is_derived = None                   # boolean (for now)
 
-    invariant = None                    # not sure
+    invariant = None
     # To find the invariant over a pair of variables, do a double-dispatch:
     # first look up the "invariants" field of one of the variables, then
     # look up the other variable in that map.
-
     invariants = None         # map from indices to multiple-arity invariants
     equal_to = None                     # list of indices of equal variables;
                                         #   could be derived from invariants
@@ -406,6 +412,9 @@ def introduce_new_variables_one_pass(var_infos, var_values, indices, functions):
         this_var_info = var_infos[i]
         if not this_var_info.is_canonical():
             continue
+        # It's a constant value, always None
+        if this_var_info.invariant.one_of == [None]:
+	    continue
         if this_var_info.is_sequence():
             intro_from_sequence(var_infos, var_new_values, i)
         else:
@@ -417,9 +426,13 @@ def introduce_new_variables_one_pass(var_infos, var_values, indices, functions):
         vi1 = var_infos[i1]
         if not vi1.is_canonical():
             continue
+        if vi1.invariant.one_of == [None]:
+	    continue
         for i2 in range(i1+1,orig_len_var_infos):
             vi2 = var_infos[i2]
             if not vi2.is_canonical():
+                continue
+            if vi2.invariant.one_of == [None]:
                 continue
             if not (i1 in indices or i2 in indices):
                 # Do nothing if neither of these variables is under consideration.
@@ -512,15 +525,27 @@ def introduce_from_sequence_pass2(var_infos, var_new_values, seqidx):
     seq_var_info = var_infos[seqidx]
     seqvar = seq_var_info.name
 
-    # Add sum (unconditionally)
+    # Add sum, min, and max (unconditionally)
     var_infos.append(var_info("sum(%s)" % (seqvar,), types.IntType, len(var_infos), true))
+    var_infos.append(var_info("min(%s)" % (seqvar,), types.IntType, len(var_infos), true))
+    var_infos.append(var_info("max(%s)" % (seqvar,), types.IntType, len(var_infos), true))
     for new_values in var_new_values.values():
         this_seq = new_values[seqidx]
         if this_seq == None:
             this_seq_sum = None
+            this_seq_min = None
+            this_seq_max = None
+        elif len(this_seq) == 0:
+            this_seq_sum = 0
+            this_seq_min = None
+            this_seq_max = None
         else:
             this_seq_sum = util.sum(this_seq)
+            this_seq_min = min(this_seq)
+            this_seq_max = max(this_seq)
         new_values.append(this_seq_sum)
+        new_values.append(this_seq_min)
+        new_values.append(this_seq_max)
 
     # Add each individual element.
     ## For now, add if not a derived variable; a better test is if
@@ -901,8 +926,13 @@ def read_file_ftns(filename, fn_regexp=None):
         raise "First line should be tag line; saw: " + line
 
     while (line != ""):         # line == "" when we hit end of file
-        if not (fn_regexp and not fn_regexp.match(line)):
-            (tag, leftover) = string.split(line, ":::", 1)
+        if not (fn_regexp and not fn_regexp.search(line)):
+            if line[-1] == "\n":
+                line = line[:-1]        # remove trailing newline
+            colon_separated_parts = string.split(line, ":::", 1)
+            if len(colon_separated_parts) == 1:
+                colon_separated_parts.append("")
+            (tag, leftover) = colon_separated_parts
             ftn_names_to_call_ct[tag] = 0
 
             # Get parameter list and initialize ftn to param vals dict
@@ -913,7 +943,7 @@ def read_file_ftns(filename, fn_regexp=None):
                 param_list = ""
             else:
                 (label, param_list) = label_and_params
-            param_list = param_list[:-2] # remove trailing newline and ')'
+            param_list = param_list[:-1] # remove trailing ')'
             param_list = re.split("[, ]", param_list)
             params_to_orig_val_list = {}
             for param in param_list:
@@ -960,7 +990,7 @@ def read_file(filename, fn_regexp=None):
         # line contains no tab character
         tag = line[:-1]                 # remove trailing newline
 
-        if fn_regexp and not fn_regexp.match(line):
+        if fn_regexp and not fn_regexp.search(line):
             # print "-", line, 	# comma because line ends in newline
             line = file.readline()
             while "\t" in line:
@@ -969,7 +999,10 @@ def read_file(filename, fn_regexp=None):
         # print "+", line, 	# comma because line ends in newline
 
         # Increment function invocation count if ':::BEGIN'
-        (tag_sans_suffix, suffix) = string.split(tag, ":::", 1)
+        colon_separated_parts = string.split(tag, ":::", 1)
+        if len(colon_separated_parts) == 1:
+            colon_separated_parts.append("")
+        (tag_sans_suffix, suffix) = colon_separated_parts
         label = string.split(suffix, "(", 1)[0]
         if label == "BEGIN":
             ftn_names_to_call_ct[tag_sans_suffix] = ftn_names_to_call_ct[tag_sans_suffix] + 1
@@ -985,14 +1018,14 @@ def read_file(filename, fn_regexp=None):
         while "\t" in line:
             (this_var_name,this_value) = string.split(line, "\t", 1)
             this_var_name_orig = this_var_name
+	    if this_value[-1] == "\n":
+	        this_value = this_value[:-1]   # remove trailing newline
             # if sequence_re.match(this_var_name) or re.match("^#\((.*)\)$", this_value):
             if this_var_name[-1] == "]" or this_value[0:1] == "#(":
                 # variable is a sequence
                 this_var_type = types.ListType
                 if this_var_name[-2:] == "[]":
                     this_var_name = this_var_name[:-2]
-                if this_value[-1] == "\n":
-                    this_value = this_value[:-1]   # remove trailing newline
                 ## I'm not sure whether regular expressions are chewing up
                 ## all my time, but just in case...
                 # lisp_delimiters = re.match("^#\((.*)\)$", this_value)
@@ -1007,7 +1040,7 @@ def read_file(filename, fn_regexp=None):
 
                 # If sequence variable is uninit, (as opposed to one
                 # element being uninit), mark as None
-                if len(this_value) > 0 and re.match("^uninit$", this_value[0]):
+		if len(this_value) > 0 and this_value[0] == "uninit":
                         this_value = None
                 else:
                     for seq_elem in range(0, len(this_value)):
@@ -1016,7 +1049,7 @@ def read_file(filename, fn_regexp=None):
                             this_value[seq_elem] = int(this_value[seq_elem])
                         elif float_re.match(this_value[seq_elem]):
                             this_value[seq_elem] = float(this_value[seq_elem])
-                        elif re.match("^uninit$", this_value[seq_elem]):
+                        elif this_value[seq_elem] == "uninit":
                             this_value[seq_elem] = None
                         elif this_value[seq_elem] == "NIL":
                             # HACK
@@ -1030,7 +1063,7 @@ def read_file(filename, fn_regexp=None):
                     this_value = int(this_value)
                 elif float_re.match(this_value):
                     this_value = float(this_value)
-                elif re.match("^uninit$", this_value):
+                elif this_value == "uninit":
                     this_value = None
                 elif this_value == "NIL":
                     # HACK
@@ -1091,7 +1124,7 @@ def print_hashtables():
     function_names = fn_var_infos.keys()
     function_names.sort()
     for fn_name in function_names:
-        print "==========================================================================="
+        print "==============================================================================="
 	print fn_name, map(lambda vi: vi.name, fn_var_infos[fn_name]), fn_samples[fn_name], "samples"
 	vals = fn_var_values[fn_name]
         # Also consider regular sorting, which orders the tuples rather
@@ -1188,11 +1221,11 @@ def all_numeric_invariants(fn_regexp=None):
     fn_names = fn_var_infos.keys()
     fn_names.sort()
     for fn_name in fn_names:
-        if fn_regexp and not fn_regexp.match(fn_name):
+        if fn_regexp and not fn_regexp.search(fn_name):
             continue
         if collect_stats:
             begin_fn_timing(fn_name)
-            
+
         # If we discover that two values are equal, then there is no sense
         # in using both at any later stage; eliminate one of them and so
         # avoid redundant computation.
@@ -1206,7 +1239,7 @@ def all_numeric_invariants(fn_regexp=None):
 
         var_infos = fn_var_infos[fn_name]
         var_values = fn_var_values[fn_name]
-        
+
         derivation_functions = (None, pass1_functions, pass2_functions)
         derivation_passes = len(derivation_functions)-1
         # First number: invariants are computed up to this index, non-inclusive
@@ -1485,7 +1518,7 @@ def print_invariants(fn_regexp=None, print_unconstrained=0):
     function_names = fn_var_infos.keys()
     function_names.sort()
     for fn_name in function_names:
-        if fn_regexp and not fn_regexp.match(fn_name):
+        if fn_regexp and not fn_regexp.search(fn_name):
             # if fn_regexp:  print fn_name, "does not match", fn_regexp.pattern
             continue
         print "==========================================================================="
@@ -1820,6 +1853,7 @@ class two_scalar_numeric_invariant(invariant):
 
     linear = None                       # can be pair (a,b) such that y=ax+b
     comparison = None                   # can be "=", "<", "<=", ">", ">="
+    comparison_obvious = None           # values like comparison slot
     can_be_equal = None
     a_min = a_max = b_min = b_max = None
     difference_invariant = None
@@ -1872,6 +1906,38 @@ class two_scalar_numeric_invariant(invariant):
         self.sum_invariant = single_scalar_numeric_invariant(sum_dict, None)
 
         (self.comparison, self.can_be_equal) = compare_pairs(pairs)
+        (var1, var2) = (var_infos[0].name, var_infos[1].name)
+
+        # These variables are set to the name of the sequence, or None
+        # Avoid regular expressions wherever possible
+        min1 = (var1[0:4] == "min(") and var1[4:-1]
+        max1 = (var1[0:4] == "max(") and var1[4:-1]
+        # I think "find" does a regexp operation, unfortunately
+        aref1 = string.find(var1, "[")
+        if aref1 == -1:
+            aref1 = None
+        else:
+            aref1 = var1[0:aref1]
+        if min1 or max1 or aref1:
+            min2 = (var2[0:4] == "min(") and var2[4:-1]
+            max2 = (var2[0:4] == "max(") and var2[4:-1]
+            aref2 = string.find(var2, "[")
+            if aref2 == -1:
+                aref2 = None
+            else:
+                aref2 = var2[0:aref2]
+            if min1 and max2 and min1 == max2:
+                self.comparison_obvious = "<="
+            elif min1 and aref2 and min1 == aref2:
+                self.comparison_obvious = "<="
+            elif max1 and min2 and max1 == min2:
+                self.comparison_obvious = ">="
+            elif max1 and aref2 and max1 == aref2:
+                self.comparison_obvious = ">="
+            elif aref1 and min2 and aref1 == min2:
+                self.comparison_obvious = ">="
+            elif aref1 and max2 and aref1 == max2:
+                self.comparison_obvious = "<="
 
         if len(pairs) > 1:
             # Could add "int", but only interesting if it isn't always identity
@@ -1984,23 +2050,13 @@ class two_scalar_numeric_invariant(invariant):
                     results.append("%s = %s(%s)" % (x,util.function_rep(fn),y))
             return string.join(results, " and ") + suffix
 
-        if self.comparison:
-            if self.comparison in ["<", "<="]:
-                return "%s %s %s" % (x, self.comparison, y) + suffix
-            if self.comparison == ">":
-                return "%s < %s" % (y, x) + suffix
-            if self.comparison == ">=":
-                return "%s <= %s" % (y, x) + suffix
-            raise "Can't get here"
-
-        # Note that invariant.format(diff_inv, ...) is quite different from
-        # diff_inv.format(...)!
-
         diff_inv = self.difference_invariant
         # Uninteresting differences:
         #  * >= 0 (x >= y), >= 1 (x > y)
         #  * <= 0 (x <= y), <= -1 (x < y)
         #  * nonzero (x != y)
+
+        # invariant.format(diff_inv, ...) differs from diff_inv.format(...)!
         diff_as_base = invariant.format(diff_inv, ("%s - %s" % (x,y),))
 
         if diff_as_base:
@@ -2011,10 +2067,12 @@ class two_scalar_numeric_invariant(invariant):
                 return "%s = %s (mod %d)" % (x,y,b) + suffix
             else:
                 return "%s - %s = %d (mod %d)" % (x,y,a,b) + suffix
-        if diff_inv.min > 1:
-            return "%s >= %s + %d" % (x,y,diff_inv.min) + suffix
-        if diff_inv.max < -1:
-            return "%s >= %s + %d" % (x,y,diff_inv.min) + suffix
+        if diff_inv.min_justified and diff_inv.max_justified:
+            return "%d <= %s - %s <= %d \tjustified" % (diff_inv.min, x, y, diff_inv.max)
+        if diff_inv.min_justified:
+            return "%s <= %s - %d \tjustified" % (y,x,diff_inv.min) + suffix
+        if diff_inv.max_justified:
+            return "%s <= %s - %d \tjustified" % (y,x,diff_inv.min) + suffix
 
         # What can be interesting about a sum?  I'm not sure...
         sum_inv = self.sum_invariant
@@ -2024,6 +2082,19 @@ class two_scalar_numeric_invariant(invariant):
         if sum_inv.modulus:
             (a,b) = sum_inv.modulus
             return "%s + %s = %d (mod %d)" % (x,y,a,b) + suffix
+
+        if self.comparison and self.comparison != self.comparison_obvious:
+            if self.comparison in ["<", "<="]:
+                if diff_inv.max < -1:
+                    suffix = " \t%s <= %s - %d" % (x, y, -diff_inv.max) + suffix
+                return "%s %s %s" % (x, self.comparison, y) + suffix
+            if diff_inv.min > 1:
+                suffix = " \t%s <= %s - %d" % (y, x, diff_inv.min) + suffix
+            if self.comparison == ">":
+                return "%s < %s" % (y, x) + suffix
+            if self.comparison == ">=":
+                return "%s <= %s" % (y, x) + suffix
+            raise "Can't get here"
 
         if (not self.can_be_equal) and self.nonequal_justified():
             return "%s != %s" % (x,y) + suffix
@@ -2037,7 +2108,7 @@ class two_scalar_numeric_invariant(invariant):
 
 
 # No need for add, sub
-symmetric_binary_functions = (min, max, operator.mul, operator.and_, operator.or_)
+symmetric_binary_functions = (min, max, operator.mul, operator.and_, operator.or_, util.gcd)
 non_symmetric_binary_functions = (cmp, pow, round, operator.div, operator.mod, operator.lshift, operator.rshift)
 
 class three_scalar_numeric_invariant(invariant):
@@ -2246,6 +2317,7 @@ def bi_linear_relationship(pair1, pair2):
         b = int(b)
 
     # Should I check the results, as I do for tri_linear_relationship?
+    # Yes, and rationalize if necessary.
 
     return (a,b)
 
@@ -2616,7 +2688,10 @@ class scalar_sequence_numeric_invariant(invariant):
             (sclvar,seqvar) = (var_infos[0].name, var_infos[1].name)
 
         # For each (num, sequence), determine if num is a member of seq
-        self.member_obvious = (seqvar + "[" == sclvar[0:len(seqvar)+1])
+        self.member_obvious = ((seqvar + "[" == sclvar[0:len(seqvar)+1])
+                               or ("min(" + seqvar + ")" == sclvar)
+                               or ("max(" + seqvar + ")" == sclvar))
+
         if not self.member_obvious:
             self.member = true
             for i in range(0, len(pairs)):
@@ -2869,26 +2944,38 @@ def find_violations(condition, fn):
       find_violations("lj <= j", "makepat:::END(arg_0[],start,delim,pat_100[])")
     """
 
+    max_var_idx = -1
+
     # I want to use re.split(r'\b', but that doesn't work.  Why??
-    # This does exactly what I would think that would do...
-    condition_words = re.split('(\W+)', condition)
+    # '(\W+)' does what I would think it would do...
+    ## This isn't quite right, because of how it treats "a*b == c".  Fix later.
+    condition_words = re.split('(\*?\w+)', condition)
     for i in range(0,len(condition_words)):
         var_idx = var_index(condition_words[i], fn)
         if var_idx != None:
             condition_words[i] = "(vals[%s])" % var_idx
+            max_var_idx = max(max_var_idx, var_idx)
     cond = string.join(condition_words, "")
 
-    vis = invariants.fn_var_infos[fn]
-    for (file, fn_var_values) in invariants.file_fn_var_values.items():
+    vis = fn_var_infos[fn]
+    # This implementation tells us the file in which the value occurs, but
+    # file_fn_var_values does not contain derived variables.  So perhaps be
+    # able to select between using file_fn_var_values and fn_var_values.
+    for (file, fn_var_values) in file_fn_var_values.items():
         # print "checking file", file
+        # This function might not appear in this file
+        if not fn_var_values.has_key(fn):
+            continue
         for (vals, count) in fn_var_values[fn].items():
             # This should test the condition
             if not eval(cond, globals(), locals()):
-                assert len(vals) == len(vis)
+                # vals doesn't contain derived variables; vis does
+                # assert len(vals) == len(vis)
+                assert max_var_idx < len(vals)
                 print "==========================================================================="
                 print "file %s, %s samples" % (file, count)
                 for i in range(0,len(vals)):
-                    print mp_vis[i].name, "\t", vals[i]
+                    print vis[i].name, "\t", vals[i]
 
 
 ###########################################################################
@@ -2932,6 +3019,7 @@ def read_invs(files, clear=0, fn_regexp=None):
 
     def env_repl(matchobj):
         return posix.environ[matchobj.group(0)[1:]]
+    files_orig = files
     if type(files) == types.StringType:
         files = re.sub(r'^~/', '$HOME/', files)
         files = re.sub(r'^~', '/homes/fish/', files)
@@ -2993,7 +3081,7 @@ class stats:
     # Note that we aren't keeping track of derived parameters/locals/globals???
     total_num_scl = None
     total_num_seq = None
-    
+
     samples = None
 
     # Collect the values separately for invariants on singles/pairs
@@ -3006,7 +3094,7 @@ class stats:
     fn_end_time = None
     #read_files_begin_time = None
     #read_files_end_time = None
-        
+
     def __init__(self):
         self.orig_num_scl_params = 0
         self.orig_num_scl_locals = 0
@@ -3033,7 +3121,7 @@ class stats:
         hours = int(total_secs / 3600.0)
         minutes = int((total_secs % 3600)/60.0)
         seconds = float(total_secs % 60)
-        print "    CPU time: %s hours, %s minutes, %s seconds" % (hours, minutes, seconds) 
+        print "    CPU time: %s hours, %s minutes, %s seconds" % (hours, minutes, seconds)
         print "    CPU time (secs):                       ", total_secs
         print "    Total number of scalars:               ", self.total_num_scl
         print "    Total number of sequences:             ", self.total_num_seq
@@ -3041,7 +3129,7 @@ class stats:
         print "    Total number of invariants checked:    ", self.total_num_scl + self.total_num_seq + self.total_num_invs_pair
         print "    Total number of samples:               ", self.samples
         print "    Total number of individual values:     ", self.total_num_values_ind
-        if (self.total_num_scl + self.total_num_seq) != 0: 
+        if (self.total_num_scl + self.total_num_seq) != 0:
             print "    Average number of individual values:   ", float(self.total_num_values_ind) / float(self.total_num_scl + self.total_num_seq)
         print "    Total number of pairs of values:       ", self.total_num_values_pair
         if (self.total_num_invs_pair != 0):
@@ -3067,7 +3155,7 @@ def init_collect_stats():
     """ Initialize the function to stats dictionary."""
     for fn_name in fn_var_infos.keys():
         fn_to_stats[fn_name] = stats()
-        
+
 def get_global_var_list():
     """Compile a list of globals for use in stat collection."""
 
@@ -3085,17 +3173,20 @@ def get_global_var_list():
         if is_global_var:
             globals.append(a_var_info.name)
     return globals
-            
+
 def collect_pre_derive_data():
     init_collect_stats()
     globals = get_global_var_list()
 
     for (fn_name,var_info_list) in fn_var_infos.items():
         fn_stats = fn_to_stats[fn_name]
-        (fn_name_sans_suffix, suffix) = string.split(fn_name, ":::", 1)
+        colon_separated_parts = string.split(fn_name, ":::", 1)
+        if len(colon_separated_parts) == 1:
+            colon_separated_parts.append("")
+        (fn_name_sans_suffix, suffix) = colon_separated_parts
         params = (ftn_to_orig_param_vals[fn_name_sans_suffix]).keys()
         for var in var_info_list:
-            # original values of parameters should be considered derived? 
+            # original values of parameters should be considered derived?
             if string.find(var.name, "_orig") == -1:
                 if var.type == types.ListType:
                     if var.name in params:
@@ -3117,8 +3208,12 @@ def collect_post_derive_data():
         fn_stats = fn_to_stats[fn_name]
         fn_stats.samples = fn_samples[fn_name]
         for var in var_info_list:
-            fn_stats.total_num_values_ind = fn_stats.total_num_values_ind + var.invariant.values
-                
+            if var.invariant == None:
+                # When can this happen?  (I know it can.)
+                print "Warning: no invariant for variable", var, "in function", fn_name
+            else:
+                fn_stats.total_num_values_ind = fn_stats.total_num_values_ind + var.invariant.values
+
             # Count all values for pairs of invariants.
             # Be careful not to double count.  For example, if there is a pair invariant for indices (2,7),
             # the invariant will appear in index 2's invariants[7] and in index 7's invariants[2].
@@ -3134,7 +3229,7 @@ def collect_post_derive_data():
                     fn_stats.total_num_seq = fn_stats.total_num_seq + 1
             else:
                     fn_stats.total_num_scl = fn_stats.total_num_scl + 1
-                    
+
 def begin_fn_timing(fn):
     fn_stats = fn_to_stats[fn]
     fn_stats.fn_begin_time = time.clock()
@@ -3142,7 +3237,7 @@ def begin_fn_timing(fn):
 def end_fn_timing(fn):
     fn_stats = fn_to_stats[fn]
     fn_stats.fn_end_time = time.clock()
-    
+
 def print_stats(engine_begin_time, engine_end_time):
     print "Invariant Engine Stats"
     print "Configuration: no_invocation_counts: %s, no_ternary_invariants: %s, no_opts: %s" % (no_invocation_counts, no_ternary_invariants, __debug__)
@@ -3150,26 +3245,16 @@ def print_stats(engine_begin_time, engine_end_time):
     total_secs = engine_end_time - engine_begin_time
     # for (fn_name,fn_stats) in fn_to_stats.items():
     #    total_secs = total_secs + (fn_stats.fn_end_time - fn_stats.fn_begin_time)
-        
     hours = int(total_secs / 3600.0)
     minutes = int((total_secs % 3600)/60.0)
     seconds = int(total_secs % 60)
-    print "CPU time: %s hours, %s minutes, %s seconds" % (hours, minutes, seconds) 
+    print "CPU time: %s hours, %s minutes, %s seconds" % (hours, minutes, seconds)
     print "CPU time in secs: ", total_secs
-    
+
     fn_names = fn_to_stats.keys()
     fn_names.sort()
-    for fn_name in fn_names: 
+    for fn_name in fn_names:
          fn_stats = fn_to_stats[fn_name]
-         print "==================================================================================="
+         print "==============================================================================="
          print fn_name
          fn_stats.format()
-    
-
-
-
-
-
-
-
-
