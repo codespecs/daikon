@@ -1885,7 +1885,12 @@ Suppress display of obvious postconditions on prestate.
 Suppress display of logically redundant invariants, using the Simplify
 automatic theorem prover.  Simplify must be separately obtained (from
 @uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
-order to take advantage of this option.
+order to take advantage of this option. Beware that the process of
+detecting redundant invariants can sometimes be time-consuming; the
+amount of effort Simplify exerts for each invariant can be controlled
+using the @option{daikon.simplify.Session.simplify_max_iterations} and
+@option{daikon.simplify.Session.simplify_timeout} configuration
+options.
                                    
 @item --prob_limit @var{val}
 Set the probability limit for justifying invariants.  @var{pct} must be
