@@ -19,7 +19,7 @@ public class SequenceMin extends UnaryDerivation {
     int[] val_array = (int[])val;
     if (val_array.length == 0)
       return ValueAndModified.MISSING;
-    return new ValueAndModified(new Integer(ArraysMDE.min(val_array)),
+    return new ValueAndModified(Intern.internedInteger(ArraysMDE.min(val_array)),
                                 source_mod);
   }
 

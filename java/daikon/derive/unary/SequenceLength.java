@@ -31,15 +31,15 @@ public class SequenceLength extends UnaryDerivation {
       return ValueAndModified.MISSING;
     else {
       int len;
-      // Can't use "==" because ProglangType objecs are not interned.
       ProglangType rep_type = var_info.rep_type;
 
+      // Can't use "==" because ProglangType objects are not interned.
       if (rep_type.equals(ProglangType.INT_ARRAY)) {
         len = ((int[])val).length;
       } else {
         len = ((Object[])val).length;
       }
-      return new ValueAndModified(new Integer(len), source_mod);
+      return new ValueAndModified(Intern.internedInteger(len), source_mod);
     }
   }
 

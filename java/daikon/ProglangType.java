@@ -42,7 +42,7 @@ public final class ProglangType {
   private ProglangType(String basetype, int dims) {
     Assert.assert(basetype == basetype.intern());
     // Oooh, hack.  Yuck.
-    if (basetype == "boolean")
+    if (basetype == "boolean")  // interned
       basetype = "int";
     base = basetype;
     dimensions = dims;
@@ -164,8 +164,9 @@ public final class ProglangType {
   public final static String TYPE_POINTER = "pointer";
   public final static String TYPE_STRING = "String";
 
-  final static Integer Zero = new Integer(0); // avoid duplicate allocations
-  final static Integer One = new Integer(0); // avoid duplicate allocations
+  // avoid duplicate allocations
+  final static Integer Zero = Intern.internedInteger(0);
+  final static Integer One = Intern.internedInteger(1);
 
   // Given a string representation of a value (of the type represented by
   // this ProglangType), return the interpretation of that value.
@@ -181,7 +182,7 @@ public final class ProglangType {
 	  value = value.substring(1, value.length()-1);
 	return value.intern();
       } else if ((base == TYPE_ADDRESS) || (base == TYPE_POINTER)) {
-	return Integer.valueOf(value, 16);
+	return Intern.intern(Integer.valueOf(value, 16));
       } else if ((base == TYPE_CHAR) || (base == TYPE_INT)) {
         // Is this still necessary?
         // Hack for Java objects, fix later I guess.
@@ -192,7 +193,7 @@ public final class ProglangType {
           return Zero;
         if (value.equals("true"))
           return One;
-	return Integer.valueOf(value);
+	return Intern.intern(Integer.valueOf(value));
 	// Old implementation
 	// if type(value) == types.IntType:
 	//     pass
@@ -204,8 +205,8 @@ public final class ProglangType {
 	// 	value = ord(value)
 	// else:
 	//     raise "Bad character value in data trace file: " + value
-      } else if (base == TYPE_BOOLEAN) {
-	return new Boolean(value);
+      // } else if (base == TYPE_BOOLEAN) {
+      //   return new Boolean(value);
       } else {
 	throw new Error("unrecognized type " + base);
       }
@@ -218,56 +219,56 @@ public final class ProglangType {
       //     && (value == "null"))
       //   value = "\"\"";
 
-      if (base == TYPE_CHAR) {
-	if ((value.length() > 1)
-	    && value.startsWith("\"") && value.endsWith("\"")) {
-	  // variable is a string
-	  // turn it into a tuple of *numbers* instead.
-	  // (Probably I want to retain it as a string; it's obscure
-	  // as a sequence of numbers.  The advantage to a sequence of
-	  // numbers is that already-written tests can work.)
-	  if (value.startsWith("\"") && value.endsWith("\""))
-	    value = value.substring(1, value.length()-1);
+      // if (base == TYPE_CHAR) {
+      //   if ((value.length() > 1)
+      //       && value.startsWith("\"") && value.endsWith("\"")) {
+      //     // variable is a string
+      //     // turn it into a tuple of *numbers* instead.
+      //     // (Probably I want to retain it as a string; it's obscure
+      //     // as a sequence of numbers.  The advantage to a sequence of
+      //     // numbers is that already-written tests can work.)
+      //     if (value.startsWith("\"") && value.endsWith("\""))
+      //       value = value.substring(1, value.length()-1);
+      //     return value.toCharArray();
+      //   } else {
+      //     throw new Error("To be written");
+      //   }
+      // } else {
 
-	  return value.toCharArray();
-	} else {
-	  throw new Error("To be written");
-	}
-      } else {
-	// Deal with [] surrounding Java array output
-	if (value.startsWith("[") && value.endsWith("]")) {
-	  value = value.substring(1, value.length() - 1);
-	}
-
-	// This isn't right if a string contains embedded spaces.
-	// I could instead use StreamTokenizer.
-	Vector value_strings_vector
-          = ((value.length() == 0)
-             ? (new Vector(0))  // parens for Emacs indentation
-             : Util.split(Global.regexp_matcher, Global.ws_regexp, value));
-	String[] value_strings = (String[]) value_strings_vector.toArray(new String[0]);
-	int len = value_strings.length;
-
-	// This big if ... else should deal with all the primitive types --
-	// or at least all the ones that can be rep_types.
-	if (base == TYPE_INT) {
-	  int[] result = new int[len];
-	  for (int i=0; i<len; i++)
-	    result[i] = new Integer(value_strings[i]).intValue();
-	  return ArraysMDE.intern(result);
-	} else {
-	  throw new Error("Can't deal with array of base type " + base);
-	}
-
-	// This is a more general technique; but when will we need
-	// anything general?
-	// // not elementType() because that interns; here, there is no
-	// // need to do the work of interning (I think)
-	// ProglangType elt_type = elementType();
-	// Object[] result = new Object[len];
-	// for (int i=0; i<len; i++)
-	//   result[i] = ***;
+      // Deal with [] surrounding Java array output
+      if (value.startsWith("[") && value.endsWith("]")) {
+        value = value.substring(1, value.length() - 1);
       }
+
+      // This isn't right if a string contains embedded spaces.
+      // I could instead use StreamTokenizer.
+      Vector value_strings_vector
+        = ((value.length() == 0)
+           ? (new Vector(0))  // parens for Emacs indentation
+           : Util.split(Global.regexp_matcher, Global.ws_regexp, value));
+      String[] value_strings = (String[]) value_strings_vector.toArray(new String[0]);
+      int len = value_strings.length;
+
+      // This big if ... else should deal with all the primitive types --
+      // or at least all the ones that can be rep_types.
+      if (base == TYPE_INT) {
+        int[] result = new int[len];
+        for (int i=0; i<len; i++)
+          result[i] = Integer.parseInt(value_strings[i]);
+        return Intern.intern(result);
+      } else {
+        throw new Error("Can't deal with array of base type " + base);
+      }
+
+      // This is a more general technique; but when will we need
+      // anything general?
+      // // not elementType() because that interns; here, there is no
+      // // need to do the work of interning (I think)
+      // ProglangType elt_type = elementType();
+      // Object[] result = new Object[len];
+      // for (int i=0; i<len; i++)
+      //   result[i] = ***;
+
     } else if (dimensions == 2) {
       if (base == TYPE_CHAR) {
 	// Array of strings

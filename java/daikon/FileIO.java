@@ -615,7 +615,8 @@ class FileIO {
           mods[i] = vm.modified;
         }
       }
-
+      vals = Intern.intern(vals);
+      Assert.assert(Intern.isInterned(vals));
 
       // Done adding additional variable values that don't appear directly
       // in the data trace file.

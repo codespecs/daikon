@@ -16,6 +16,10 @@ public abstract class Invariant {
   // Has to be public because of wrappers.
   public boolean no_invariant = false;
 
+  // true if we've seen all values and should ignore further add() methods.
+  // This is rather a hack and should be removed later.
+  public boolean finished = false;
+
   // Subclasses should set these; Invariant never does.
 
   // The probability that this could have happened by chance alone.

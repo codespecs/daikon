@@ -143,7 +143,7 @@ public class VarComparabilityExplicit extends VarComparability {
 
     Vector vec = Util.split(re_matcher, Global.ws_regexp, s);
     String[] result = (String[]) vec.toArray(new String[0]);
-    UtilMDE.internStrings(result);
+    Intern.internStrings(result);
     return result;
   }
 

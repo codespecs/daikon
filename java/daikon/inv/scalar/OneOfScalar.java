@@ -5,6 +5,8 @@ import daikon.inv.*;
 
 import utilMDE.*;
 
+import java.util.*;
+
 // States that the value is one of the specified values.
 
 // This subsumes an "exact" invariant that says the value is always exactly
@@ -36,13 +38,16 @@ public class OneOfScalar extends SingleScalar implements OneOf {
   public Object elt() {
     if (num_elts != 1)
       throw new Error("Represents " + num_elts + " elements");
-    return new Integer(elts[0]);
+    // Not sure whether interning is necessary, but just in case...
+    return Intern.internedInteger(elts[0]);
   }
 
   private String subarray_rep() {
     // Not so efficient an implementation, but simple;
     // and how often will we need to print this anyway?
-    String asarray = ArraysMDE.toString(ArraysMDE.subarray(elts, 0, Math.min(num_elts, LIMIT)));
+    int num_good_elts = Math.min(num_elts, LIMIT);
+    Arrays.sort(elts, 0, num_good_elts);
+    String asarray = ArraysMDE.toString(ArraysMDE.subarray(elts, 0, num_good_elts));
     return "{" + asarray.substring(1, asarray.length()-1) + "}";
   }
 

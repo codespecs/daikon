@@ -22,6 +22,8 @@ public abstract class SingleSequence extends Invariant {
     Assert.assert(! no_invariant);
     Assert.assert((modified == ValueTuple.MODIFIED)
 		  || (modified == ValueTuple.UNMODIFIED));
+    if (finished)
+      return;
     if (modified == ValueTuple.MODIFIED) {
       add_modified(value, count);
     } else {

@@ -55,7 +55,7 @@ class NonModulus extends SingleScalar {
   }
 
   public void add_modified(int value, int count) {
-    if (elements.add(new Integer(value))
+    if (elements.add(Intern.internedInteger(value))
 	&& results_accurate
 	&& (MathMDE.mod_positive(value, modulus) == remainder))
       results_accurate = false;

@@ -55,7 +55,7 @@ public class SequenceExtremum extends UnaryDerivation {
       if (val_array.length < minLength)
         return ValueAndModified.MISSING;
       int real_index = (index<0 ? val_array.length + index : index);
-      return new ValueAndModified(new Integer(val_array[real_index]), source_mod);
+      return new ValueAndModified(Intern.internedInteger(val_array[real_index]), source_mod);
     } else {
       Object[] val_array = (Object[])val;
       if (val_array.length < minLength)

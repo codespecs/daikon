@@ -30,6 +30,11 @@ public class PptSliceGeneric extends PptSlice {
   // specialized representation.
   public VarValues values_cache;
 
+  // true if we've seen all values and should not add the result of further
+  // add() methods to values_cache.
+  // This is rather a hack and should be removed later.
+  public boolean already_seen_all = false;
+
   PptSliceGeneric(Ppt parent_, VarInfo[] var_infos_) {
     // super(parent_, var_infos_);
     super(parent_, var_infos_);
@@ -181,20 +186,22 @@ public class PptSliceGeneric extends PptSlice {
     // Avoid constructing a new Vector every time through this function.
     invs_to_remove_deferred = itrd_cache;
 
-    Object[] vals = new Object[arity];
-    int[] mods = new int[arity];
-    for (int i=0; i<arity; i++) {
-      // The values in parens were incorrectly "i" instead of value_index.
-      // How could anything have possibly worked before?
-      int value_index = var_infos[i].value_index;
-      vals[i] = full_vt.getValue(value_index);
-      mods[i] = full_vt.getModified(value_index);
+    if (! already_seen_all) {
+      Object[] vals = new Object[arity];
+      int[] mods = new int[arity];
+      for (int i=0; i<arity; i++) {
+        // The values in parens were incorrectly "i" instead of value_index.
+        // How could anything have possibly worked before?
+        int value_index = var_infos[i].value_index;
+        vals[i] = full_vt.getValue(value_index);
+        mods[i] = full_vt.getModified(value_index);
+      }
+      ValueTuple vt = new ValueTuple(vals, mods);
+      values_cache.increment(vt, count);
+      // System.out.println(name + " values_cache.increment("
+      //                    + ArraysMDE.toString(vals) + ", "
+      //                    + ArraysMDE.toString(mods) + ")");
     }
-    ValueTuple vt = new ValueTuple(vals, mods);
-    values_cache.increment(vt, count);
-    // System.out.println(name + " values_cache.increment("
-    //                    + ArraysMDE.toString(vals) + ", "
-    //                    + ArraysMDE.toString(mods) + ")");
 
     // System.out.println("PptSliceGeneric " + name + ": add " + full_vt + " = " + vt);
     // System.out.println("PptSliceGeneric " + name + " has " + invs.size() + " invariants.");

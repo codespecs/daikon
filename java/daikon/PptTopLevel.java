@@ -971,10 +971,14 @@ public class PptTopLevel extends Ppt {
           // view wouldn't have been installed.
           Assert.assert(unary_view.invs.size() == 1);
           Invariant inv = (Invariant) unary_view.invs.elementAt(0);
+          inv.finished = true;
+          unary_view.already_seen_all = true;
           Assert.assert(inv instanceof OneOf);
           OneOf one_of = (OneOf) inv;
-          if (one_of.num_elts() == 1)
+          if (one_of.num_elts() == 1) {
+            System.out.println("Constant " + inv.ppt.name + " " + one_of.var().name + " because of " + unary_view.name);
             one_of.var().dynamic_constant = one_of.elt();
+          }
         }
       }
     }
@@ -1058,6 +1062,8 @@ public class PptTopLevel extends Ppt {
           // wouldn't have been installed.
           Assert.assert(binary_view.invs.size() == 1);
           Invariant inv = (Invariant) binary_view.invs.elementAt(0);
+          inv.finished = true;
+          binary_view.already_seen_all = true;
           Assert.assert(inv instanceof Comparison);
           if (IsEquality.it.accept(inv)) {
             VarInfo var1 = binary_view.var_infos[0];
@@ -1274,6 +1280,8 @@ public class PptTopLevel extends Ppt {
   // I guess PptConditional isn't instantiated unless it needs to be, but
   // it doesn't need to be unless GiesLisp has been instantiated already.)
   static {
+    // Would it be enough to say "GriesLisp dummy = null;"?  I'm not sure.
+    // This for does work, thoguh.
     new GriesLisp();
   }
 
@@ -1362,28 +1370,37 @@ public class PptTopLevel extends Ppt {
   ///
 
 
-  public Iterator invariants() {
-    Iterator itorOfItors = new Iterator() {
-        Iterator views_itor = views.iterator();
-        public boolean hasNext() { return views_itor.hasNext(); }
-        public Object next() {
-          PptSliceGeneric slice = (PptSliceGeneric) views_itor.next();
-          Invariants invs = slice.invs;
-          return invs.iterator();
-        }
-        public void remove() { throw new UnsupportedOperationException(); }
-      };
-    return new UtilMDE.MergedIterator(itorOfItors);
-  }
+  // This does not appear to work.
+  // public Iterator invariants() {
+  //   Iterator itorOfItors = new Iterator() {
+  //       Iterator views_itor = views.iterator();
+  //       public boolean hasNext() { return views_itor.hasNext(); }
+  //       public Object next() {
+  //         PptSliceGeneric slice = (PptSliceGeneric) views_itor.next();
+  //         Invariants invs = slice.invs;
+  //         return invs.iterator();
+  //       }
+  //       public void remove() { throw new UnsupportedOperationException(); }
+  //     };
+  //   return new UtilMDE.MergedIterator(itorOfItors);
+  // }
+  // static Comparator icfp = new Invariant.InvariantComparatorForPrinting();
+  // // This is certainly not the most efficient way to do this; fix later.
+  // Iterator invariants_sorted_for_printing() {
+  //   TreeSet ts = new TreeSet(icfp);
+  //   for (Iterator itor = invariants(); itor.hasNext(); )
+  //     ts.add(itor.next());
+  //   return ts.iterator();
+  // }
 
-  static Comparator icfp = new Invariant.InvariantComparatorForPrinting();
-
-  // This is certainly not the most efficient way to do this; fix later.
-  Iterator invariants_sorted_for_printing() {
-    TreeSet ts = new TreeSet(icfp);
-    for (Iterator itor = invariants(); itor.hasNext(); )
-      ts.add(itor.next());
-    return ts.iterator();
+  // So use this instead of the above.
+  public Vector invariants_vector() {
+    Vector result = new Vector();
+    for (Iterator views_itor = views.iterator(); views_itor.hasNext(); ) {
+      PptSliceGeneric slice = (PptSliceGeneric) views_itor.next();
+      result.addAll(slice.invs);
+    }
+    return result;
   }
 
 
@@ -1422,12 +1439,39 @@ public class PptTopLevel extends Ppt {
       System.out.print(" " + var_infos[i].name);
     System.out.println();
 
-    // System.out.println("    Variables:");
-    // for (int i=0; i<var_infos.length; i++) {
-    //   System.out.println("      " + var_infos[i].name
-    //                      + " canonical=" + var_infos[i].isCanonical()
-    //                      + " equal_to=" + var_infos[i].equal_to);
+
+    // System.out.println("Views:");
+    // for (Iterator itor = views.iterator(); itor.hasNext(); ) {
+    //   PptSliceGeneric slice = (PptSliceGeneric) itor.next();
+    //   System.out.println("  " + slice.name);
+    //   for (int i=0; i<slice.invs.size(); i++) {
+    //     Invariant inv = (Invariant) slice.invs.elementAt(i);
+    //     System.out.println("    " + inv.repr());
+    //   }
     // }
+
+
+    if (Global.debugPrintInvariants) {
+      System.out.println("    Variables:");
+      for (int i=0; i<var_infos.length; i++) {
+        VarInfo vi = var_infos[i];
+        PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;
+        PptSliceGeneric slice1 = ppt_tl.findSlice(vi);
+        System.out.print("      " + vi.name
+                         + " constant=" + vi.isConstant()
+                         + " canonical=" + vi.isCanonical()
+                         + " equal_to=" + vi.equal_to.name);
+        if (slice1 == null) {
+          System.out.println(", no slice");
+        } else {
+          System.out.println(" slice=" + slice1
+                           + "=" + slice1.name
+                           + " num_values=" + slice1.num_values()
+                           + " num_samples=" + slice1.num_samples());
+          slice1.values_cache.dump();
+        }
+      }
+    }
 
     // First, do the equality invariants.  They don't show up in the below
     // because one of the two variables is non-canonical!
@@ -1448,45 +1492,71 @@ public class PptTopLevel extends Ppt {
             sb.append(" = ");
             sb.append(other.name);
           }
+          PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;
+          PptSliceGeneric slice1 = ppt_tl.findSlice(vi);
+          if (slice1 != null) {
+            sb.append("\t\t(" + slice1.num_values() + " values, "
+                      + slice1.num_samples() + " samples)");
+          } else {
+            sb.append("\t\t(no slice)");
+          }
           System.out.println(sb.toString());
         }
       }
     }
 
-    for (Iterator inv_itor = invariants_sorted_for_printing() ; inv_itor.hasNext() ; ) {
-      Invariant inv = (Invariant) inv_itor.next();
+    Vector invs_vector = invariants_vector();
+    Invariant[] invs_array = (Invariant[]) invs_vector.toArray(new Invariant[] { });
+    Arrays.sort(invs_array, new Invariant.InvariantComparatorForPrinting());
 
-      // // I could imagine printing information about the PptSliceGeneric
-      // // if it has changed since the last Invariant I examined.
-      // PptSliceGeneric slice = (PptSliceGeneric) itor2.next();
-      // if (Global.debugPptTopLevel) {
-      //   System.out.println("Slice: " + slice.varNames() + "  "
-      //                      + slice.num_samples() + " samples");
-      //   System.out.println("    Samples breakdown: "
-      //                      + slice.values_cache.tuplemod_samples_summary());
-      // }
+    // int ia_index = 0;
+    // for (Iterator inv_itor = invariants_sorted_for_printing() ; inv_itor.hasNext() ; ) {
+    //   Invariant inv = (Invariant) inv_itor.next();
+    //   Assert.assert(inv == invs_array[ia_index]);
+    //   ia_index++;
+    //   ...
+    // }
+    for (int ia_index = 0; ia_index<invs_array.length; ia_index++) {
+      Invariant inv = invs_array[ia_index];
+      String num_values_samples =
+        "\t\t(" + inv.ppt.num_values() + " values, "
+        + inv.ppt.num_samples() + " samples)";
+
+      // I could imagine printing information about the PptSliceGeneric
+      // if it has changed since the last Invariant I examined.
+      PptSliceGeneric slice = (PptSliceGeneric) inv.ppt;
+      if (Global.debugPrintInvariants) {
+        System.out.println("Slice: " + slice.varNames() + "  "
+                           + slice.num_samples() + " samples");
+        System.out.println("    Samples breakdown: "
+                           + slice.values_cache.tuplemod_samples_summary());
+        slice.values_cache.dump();
+      }
 
       // It's hard to know in exactly what order to do these checks that
       // eliminate some invariants from consideration.  Which is cheapest?
       // Which is most often successful?
 
       // This should be a symbolic constant, not an integer literal.
-      if (((PptSliceGeneric)inv.ppt).num_mod_non_missing_samples() < 5)
+      if (((PptSliceGeneric)inv.ppt).num_mod_non_missing_samples() < 5) {
+        System.out.println("  [Only " + ((PptSliceGeneric)inv.ppt).num_mod_non_missing_samples() + " modified non-missing samples (" + ((PptSliceGeneric)inv.ppt).num_samples() + " total samples): " + inv.repr() + " ]");
         continue;
+      }
 
       {
         boolean all_canonical = true;
         VarInfo[] vis = inv.ppt.var_infos;
         for (int i=0; i<vis.length; i++) {
           if (! vis[i].isCanonical()) {
-            // System.out.println("Suppressing " + inv.repr() + " because " + vis[i].name + " is non-canonical");
+            if (Global.debugPrintInvariants)
+              System.out.println("  [Suppressing " + inv.repr() + " because " + vis[i].name + " is non-canonical]");
             all_canonical = false;
             break;
           }
         }
         if (! all_canonical) {
           if (Global.debugPptTopLevel) {
-            System.out.println("[not all vars canonical:  " + inv.repr() + " ]");
+            System.out.println("  [not all vars canonical:  " + inv.repr() + " ]");
             // This *does* happen, because we instantiate all invariants
             // simultaneously. so we don't yet know which of the new
             // variables is canonical.  I should fix this.
@@ -1497,27 +1567,27 @@ public class PptTopLevel extends Ppt {
       }
 
       if (inv.isObvious()) {
-        if (Global.debugPptTopLevel) {
-          System.out.println("[obvious:  " + inv.repr() + " ]");
+        if (Global.debugPrintInvariants) {
+          System.out.println("  [obvious:  " + inv.repr() + " ]");
         }
         continue;
       }
 
       if (!inv.justified()) {
-        if (Global.debugPptTopLevel) {
-          System.out.println("[not justified:  " + inv.repr() + " ]");
+        if (Global.debugPrintInvariants) {
+          System.out.println("  [not justified:  " + inv.repr() + " ]");
         }
         continue;
       }
 
       String inv_rep = inv.format();
       if (inv_rep != null) {
-        System.out.println(inv_rep);
-        if (Global.debugPptTopLevel) {
-          System.out.println("  " + inv.repr());
+        System.out.println(inv_rep + num_values_samples);
+        if (Global.debugPrintInvariants) {
+          System.out.println("  [" + inv.repr() + "]");
         }
       } else {
-        if (Global.debugPptTopLevel) {
+        if (Global.debugPrintInvariants) {
           System.out.println("[format returns null: " + inv.repr() + " ]");
         }
       }
@@ -1525,40 +1595,40 @@ public class PptTopLevel extends Ppt {
   }
 
 
-  // To be deleted (already exists in commented-out form).
-  /** Print invariants for a single program point. */
-  public void print_invariants_old() {
-    System.out.println(name + "  "
-		       + num_samples() + " samples");
-    System.out.println("    Samples breakdown: "
-		       + values.tuplemod_samples_summary());
-    // for (Iterator itor2 = views.keySet().iterator() ; itor2.hasNext() ; ) {
-    for (Iterator itor2 = views.iterator() ; itor2.hasNext() ; ) {
-      PptSliceGeneric slice = (PptSliceGeneric) itor2.next();
-      if (Global.debugPptTopLevel) {
-        System.out.println("Slice: " + slice.varNames() + "  "
-                           + slice.num_samples() + " samples");
-        System.out.println("    Samples breakdown: "
-                           + slice.values_cache.tuplemod_samples_summary());
-      }
-      Invariants invs = slice.invs;
-      int num_invs = invs.size();
-      for (int i=0; i<num_invs; i++) {
-	Invariant inv = (Invariant) invs.elementAt(i);
-	String inv_rep = inv.format();
-	if (inv_rep != null) {
-	  System.out.println(inv_rep);
-          if (Global.debugPptTopLevel) {
-            System.out.println("  " + inv.repr());
-          }
-	} else {
-          if (Global.debugPptTopLevel) {
-            System.out.println("[suppressed: " + inv.repr() + " ]");
-          }
-	}
-      }
-    }
-  }
+  // // To be deleted (already exists in commented-out form).
+  // /** Print invariants for a single program point. */
+  // public void print_invariants_old() {
+  //   System.out.println(name + "  "
+  //                      + num_samples() + " samples");
+  //   System.out.println("    Samples breakdown: "
+  //                      + values.tuplemod_samples_summary());
+  //   // for (Iterator itor2 = views.keySet().iterator() ; itor2.hasNext() ; ) {
+  //   for (Iterator itor2 = views.iterator() ; itor2.hasNext() ; ) {
+  //     PptSliceGeneric slice = (PptSliceGeneric) itor2.next();
+  //     if (Global.debugPrintInvariants) {
+  //       System.out.println("Slice: " + slice.varNames() + "  "
+  //                          + slice.num_samples() + " samples");
+  //       System.out.println("    Samples breakdown: "
+  //                          + slice.values_cache.tuplemod_samples_summary());
+  //     }
+  //     Invariants invs = slice.invs;
+  //     int num_invs = invs.size();
+  //     for (int i=0; i<num_invs; i++) {
+  //       Invariant inv = (Invariant) invs.elementAt(i);
+  //       String inv_rep = inv.format();
+  //       if (inv_rep != null) {
+  //         System.out.println(inv_rep);
+  //         if (Global.debugPrintInvariants) {
+  //           System.out.println("  " + inv.repr());
+  //         }
+  //       } else {
+  //         if (Global.debugPrintInvariants) {
+  //           System.out.println("[suppressed: " + inv.repr() + " ]");
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 
 
   // /** Print invariants for a single program point. */
@@ -1570,7 +1640,7 @@ public class PptTopLevel extends Ppt {
   //   // for (Iterator itor2 = views.keySet().iterator() ; itor2.hasNext() ; ) {
   //   for (Iterator itor2 = views.iterator() ; itor2.hasNext() ; ) {
   //     PptSliceGeneric slice = (PptSliceGeneric) itor2.next();
-  //     if (Global.debugPptTopLevel) {
+  //     if (Global.debugPrintInvariants) {
   //       System.out.println("Slice: " + slice.varNames() + "  "
   //                          + slice.num_samples() + " samples");
   //       System.out.println("    Samples breakdown: "
@@ -1583,11 +1653,11 @@ public class PptTopLevel extends Ppt {
   //       String inv_rep = inv.format();
   //       if (inv_rep != null) {
   //         System.out.println(inv_rep);
-  //         if (Global.debugPptTopLevel) {
+  //         if (Global.debugPrintInvariants) {
   //           System.out.println("  " + inv.repr());
   //         }
   //       } else {
-  //         if (Global.debugPptTopLevel) {
+  //         if (Global.debugPrintInvariants) {
   //           System.out.println("[suppressed: " + inv.repr() + " ]");
   //         }
   //       }

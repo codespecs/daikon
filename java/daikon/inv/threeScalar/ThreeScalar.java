@@ -33,6 +33,8 @@ public abstract class ThreeScalar extends Invariant {
                   || (mod2 == ValueTuple.UNMODIFIED));
     Assert.assert((mod3 == ValueTuple.MODIFIED)
                   || (mod3 == ValueTuple.UNMODIFIED));
+    if (finished)
+      return;
     if ((mod1 == ValueTuple.MODIFIED)
 	|| (mod2 == ValueTuple.MODIFIED)
 	|| (mod3 == ValueTuple.MODIFIED)) {

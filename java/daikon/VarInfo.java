@@ -76,14 +76,15 @@ public class VarInfo implements Cloneable {
   }
 
   public VarInfo(String name_, ProglangType type_, ProglangType rep_type_, VarComparability comparability_, Object static_constant_value_) {
-    // Possibly the call to intern() isn't necessary; but it's safest to
-    // make the call to intern() rather than running the risk that a caller
-    // didn't.
+    // Watch out:  some Lisp .decls files have other (unsupported) types.
     Assert.assert(rep_type_.equals(ProglangType.INT)
                   || rep_type_.equals(ProglangType.STRING)
                   || rep_type_.equals(ProglangType.INT_ARRAY)
                   || rep_type_.equals(ProglangType.STRING_ARRAY));
 
+    // Possibly the call to intern() isn't necessary; but it's safest to
+    // make the call to intern() rather than running the risk that a caller
+    // didn't.
     name = name_.intern();
     type = type_;
     rep_type = rep_type_;
@@ -265,15 +266,15 @@ public class VarInfo implements Cloneable {
     public boolean accept(Object o) { return ((Invariant) o).usesVar(var); }
   }
 
-  Iterator invariants() {
-    // This assertion will need to be relaxed eventually.
-    Assert.assert(ppt instanceof PptTopLevel,
-                  "Ppt " + ppt + " is not instanceof PptTopLevel");
-    // Could alternately have used ppt.invs.lookup(vi).
-    // In fact, that's better, because it doesn't look at so many variables.
-    Iterator all_invs = ((PptTopLevel) ppt).invariants();
-    return new UtilMDE.FilteredIterator(all_invs, new usesVarFilter(this));
-  }
+//   Iterator invariants() {
+//     // This assertion will need to be relaxed eventually.
+//     Assert.assert(ppt instanceof PptTopLevel,
+//                   "Ppt " + ppt + " is not instanceof PptTopLevel");
+//     // Could alternately have used ppt.invs.lookup(vi).
+//     // In fact, that's better, because it doesn't look at so many variables.
+//     Iterator all_invs = ((PptTopLevel) ppt).invariants();
+//     return new UtilMDE.FilteredIterator(all_invs, new usesVarFilter(this));
+//   }
 
   // def canonical_var(self):
   //     """Return index of the canonical variable that is always equal to this one.

@@ -148,7 +148,7 @@ public class ValueTuple implements Cloneable {
   }
 
   static int parseModified(String raw) {
-    int result = new Integer(raw).intValue();
+    int result = Integer.parseInt(raw);
     Assert.assert((result == 0) || (result == 1) || (result == 2));
     return result;
   }
@@ -160,14 +160,16 @@ public class ValueTuple implements Cloneable {
 
   /** Default constructor that interns its argument. */
   ValueTuple(Object[] vals_, int[] mods_) {
-    vals = ArraysMDE.intern(vals_);
-    mods = ArraysMDE.intern(mods_);
+    for (int i=0; i<vals_.length; i++)
+      Assert.assert(Intern.isInterned(vals_[i]));
+    vals = Intern.intern(vals_);
+    mods = Intern.intern(mods_);
   }
 
   // Private constructor that doesn't perform interning.
   private ValueTuple(Object[] vals_, int[] mods_, boolean check) {
-    Assert.assert((!check) || (vals_ == ArraysMDE.intern(vals_)));
-    Assert.assert((!check) || (mods_ == ArraysMDE.intern(mods_)));
+    Assert.assert((!check) || (vals_ == Intern.intern(vals_)));
+    Assert.assert((!check) || (mods_ == Intern.intern(mods_)));
     vals = vals_;
     mods = mods_;
   }
@@ -198,6 +200,19 @@ public class ValueTuple implements Cloneable {
   // public Object clone() {
   //   return ValueTuple.makeFromInterned(vals, mods);
   // }
+
+
+  // These definitions are intended to make different ValueTuples with the
+  // same contents compare identically.
+  public boolean equals(Object obj) {
+    if (! (obj instanceof ValueTuple))
+      return false;
+    ValueTuple other = (ValueTuple) obj;
+    return (vals == other.vals) && (mods == other.mods);
+  }
+  public int hashCode() {
+    return vals.hashCode() * 31 + mods.hashCode();
+  }
 
 
   public int size() {
@@ -233,8 +248,8 @@ public class ValueTuple implements Cloneable {
       if (vm == ValueAndModified.MISSING)
         deriv.getVarInfo().canBeMissing = true;
     }
-    vals = ArraysMDE.intern(new_vals);
-    mods = ArraysMDE.intern(new_mods);
+    vals = Intern.intern(new_vals);
+    mods = Intern.intern(new_mods);
   }
 
   // For debugging

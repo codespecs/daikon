@@ -51,7 +51,9 @@ public class SequenceScalarSubsequence extends BinaryDerivation {
     if (len == val1_array.length)
       return new ValueAndModified(val1, mod);
     // System.out.println(getVarInfo().name + " for " + ArraysMDE.toString(val1_array) + ";" + val2 + " => " + ArraysMDE.toString(ArraysMDE.subarray(val1_array, 0, len)));
-    return new ValueAndModified(ArraysMDE.subarray(val1_array, 0, len), mod);
+    int[] subarr = ArraysMDE.subarray(val1_array, 0, len);
+    subarr = Intern.intern(subarr);
+    return new ValueAndModified(subarr, mod);
   }
 
   protected VarInfo makeVarInfo() {

@@ -3,6 +3,8 @@ package daikon.derive.binary;
 import daikon.*;
 import daikon.derive.*;
 
+import utilMDE.*;
+
 public class SequenceScalarSubscript extends BinaryDerivation {
 
   // var_info1 is the sequence
@@ -39,7 +41,7 @@ public class SequenceScalarSubscript extends BinaryDerivation {
 		&& (mod2 == ValueTuple.UNMODIFIED))
 	       ? ValueTuple.UNMODIFIED
 	       : ValueTuple.MODIFIED);
-    return new ValueAndModified(new Integer(val), mod);
+    return new ValueAndModified(Intern.internedInteger(val), mod);
   }
 
   protected VarInfo makeVarInfo() {

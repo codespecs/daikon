@@ -27,6 +27,8 @@ public abstract class TwoScalar extends Invariant {
                   || (mod1 == ValueTuple.UNMODIFIED));
     Assert.assert((mod2 == ValueTuple.MODIFIED)
                   || (mod2 == ValueTuple.UNMODIFIED));
+    if (finished)
+      return;
     if ((mod1 == ValueTuple.MODIFIED)
 	|| (mod2 == ValueTuple.MODIFIED)) {
       add_modified(v1, v2, count);

@@ -5,6 +5,8 @@ import daikon.inv.*;
 
 import utilMDE.*;
 
+import java.util.*;
+
 // States that the value is one of the specified values.
 
 // This subsumes an "exact" invariant that says the value is always exactly
@@ -55,6 +57,7 @@ public class OneOfString extends SingleString implements OneOf {
   }
 
   public String format() {
+    Arrays.sort(elts, 0, num_elts);
     if (no_invariant || (num_elts == 0) || (! justified()))
       return null;
     if (num_elts == 1)

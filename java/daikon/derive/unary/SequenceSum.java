@@ -1,6 +1,7 @@
 package daikon.derive.unary;
 import daikon.*;
 import daikon.derive.*;
+import utilMDE.*;
 
 public class SequenceSum extends UnaryDerivation {
 
@@ -19,7 +20,8 @@ public class SequenceSum extends UnaryDerivation {
     int result = 0;
     for (int i=0; i<ints.length; i++)
       result += ints[i];
-    return new ValueAndModified(new Integer(result), source_mod);
+    return new ValueAndModified(Intern.internedInteger(result),
+                                source_mod);
   }
 
   protected VarInfo makeVarInfo() {

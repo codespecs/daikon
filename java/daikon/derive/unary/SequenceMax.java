@@ -20,7 +20,7 @@ public class SequenceMax extends UnaryDerivation {
     int[] val_array = (int[])val;
     if (val_array.length == 0)
       return ValueAndModified.MISSING;
-    return new ValueAndModified(new Integer(ArraysMDE.max(val_array)),
+    return new ValueAndModified(Intern.internedInteger(ArraysMDE.max(val_array)),
                                 source_mod);
   }
 

@@ -5,6 +5,8 @@ import daikon.inv.*;
 
 import utilMDE.*;
 
+import java.util.*;
+
 // States that the value is one of the specified values.
 
 // This subsumes an "exact" invariant that says the value is always exactly
@@ -39,7 +41,11 @@ public class OneOfSequence extends SingleSequence implements OneOf {
     return elts[0];
   }
 
+  static Comparator comparator = new ArraysMDE.IntArrayComparatorLexical();
+
   private String subarray_rep() {
+    Arrays.sort(elts, 0, num_elts, comparator);
+
     StringBuffer sb = new StringBuffer();
     sb.append("{ ");
     for (int i=0; i<num_elts; i++) {

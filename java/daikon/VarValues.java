@@ -161,5 +161,17 @@ public class VarValues {
     return ((Integer)prev).intValue();
   }
 
+  ///
+  /// Debugging
+  ///
+
+  public void dump() {
+    for (Iterator itor = entrySet().iterator() ; itor.hasNext() ; ) {
+      Map.Entry entry = (Map.Entry) itor.next();
+      ValueTuple vt = (ValueTuple) entry.getKey();
+      int count = ((Integer) entry.getValue()).intValue();
+      System.out.println(vt.toString() + " : " + count);
+    }
+  }
 
 }
