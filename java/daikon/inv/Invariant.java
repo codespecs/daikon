@@ -1752,15 +1752,21 @@ public abstract class Invariant
 
       int result = inv1.format().compareTo(inv2.format());
 
-      Assert.assertTrue(result != 0
-                        // , "isSameInvariant() returned false "
-                        // + "(isSameFormula returned " + inv1.isSameFormula(inv2) + "),\n"
-                        // + "but format().compareTo() returned 0:\n"
-                        // + "  " + inv1.format() + "\n      "  + inv1.repr() + "\n"
-                        // + "    " + inv1.ppt.parent.name + "\n"
-                        // + "  " + inv2.format() + "\n      "  + inv2.repr() + "\n"
-                        // + "    " + inv1.ppt.parent.name + "\n"
-                        );
+      // The purpose of the assertion below would seem to be to insist that
+      // anything that doesn't return true to isSameInvariant() will not
+      // produce the same written formula.  This can happen, however, if the
+      // variables have a different order (as in function binary), but the
+      // swapped variables are actually the same (since we create invariants
+      // of the form f(a, a, a) because of equality sets.
+      // Assert.assertTrue(result != 0
+      //                   , "isSameInvariant() returned false "
+      //                   + "(isSameFormula returned " + inv1.isSameFormula(inv2) + "),\n"
+      //                   + "but format().compareTo() returned 0:\n"
+      //                   + "  " + inv1.format() + "\n      "  + inv1.repr() + "\n"
+      //                   + "    " + inv1.ppt.parent.name + "\n"
+      //                   + "  " + inv2.format() + "\n      "  + inv2.repr() + "\n"
+      //                   + "    " + inv1.ppt.parent.name + "\n"
+      //                  );
 
       return result;
     }
