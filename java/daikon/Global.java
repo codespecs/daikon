@@ -100,36 +100,47 @@ public class Global {
                           + canonical_variables));
 
     System.out.println("Derivation:");
-    System.out.println("  nonsensical_suppressed_derived_variables = " + nonsensical_suppressed_derived_variables);
-    System.out.println("  tautological_suppressed_derived_variables = " + tautological_suppressed_derived_variables);
     System.out.println("  derived_variables = " + derived_variables);
+    System.out.println("  suppressed derived variables = " +
+                       (nonsensical_suppressed_derived_variables
+                        + tautological_suppressed_derived_variables));
+    System.out.println("    nonsensical_suppressed_derived_variables = " + nonsensical_suppressed_derived_variables);
+    System.out.println("    tautological_suppressed_derived_variables = " + tautological_suppressed_derived_variables);
+
 
     System.out.println("Inference:");
-    System.out.println("Non-instantiated:");
-    System.out.println("  implied_noninstantiated_invariants = " + implied_noninstantiated_invariants);
-    System.out.println("  implied_false_noninstantiated_invariants = " + implied_false_noninstantiated_invariants);
-    System.out.println("  subexact_noninstantiated_invariants = " + subexact_noninstantiated_invariants);
-    System.out.println("  total non instantiated invariants = "
-                       + (implied_noninstantiated_invariants
-                          + implied_false_noninstantiated_invariants
-                          + subexact_noninstantiated_invariants));
-    System.out.println("Instantiated:");
-    System.out.println("    [ partially_implied_invariants = " + partially_implied_invariants + " ]");
-    System.out.println("  instantiated_invariants = " + instantiated_invariants
+    System.out.println("Non-instantiated: "
+                       + ((implied_noninstantiated_invariants
+                           + subexact_noninstantiated_invariants)
+                          + (implied_false_noninstantiated_invariants
+                             + partially_implied_invariants)));
+    System.out.println("  true = " + (implied_noninstantiated_invariants
+                                      + subexact_noninstantiated_invariants));
+    System.out.println("    implied_noninstantiated_invariants = " + implied_noninstantiated_invariants);
+    System.out.println("    subexact_noninstantiated_invariants = " + subexact_noninstantiated_invariants);
+    System.out.println("  false = " + (implied_false_noninstantiated_invariants
+                                       + partially_implied_invariants));
+    System.out.println("    implied_false_noninstantiated_invariants = " + implied_false_noninstantiated_invariants);
+    System.out.println("    partially_implied_invariants = " + partially_implied_invariants);
+    System.out.println("Instantiated:" + instantiated_invariants
                        + " = "
                        + (falsified_invariants + non_falsified_invariants));
     System.out.println("  falsified_invariants = " + falsified_invariants);
     System.out.println("  non_falsified_invariants = " + non_falsified_invariants
                        + " = "
-                       + (too_few_samples_invariants
-                          + non_canonical_invariants
-                          + obvious_invariants
-                          + unjustified_invariants
-                          + reported_invariants));
-    System.out.println("    too_few_samples_invariants = " + too_few_samples_invariants);
-    System.out.println("    non_canonical_invariants = " + non_canonical_invariants);
-    System.out.println("    obvious_invariants = " + obvious_invariants);
-    System.out.println("    unjustified_invariants = " + unjustified_invariants);
+                       + ((too_few_samples_invariants
+                          + unjustified_invariants)
+                       + (non_canonical_invariants
+                          + obvious_invariants)
+                       + reported_invariants));
+    System.out.println("    unjustified = " + (too_few_samples_invariants
+                                               + unjustified_invariants));
+    System.out.println("      too_few_samples_invariants = " + too_few_samples_invariants);
+    System.out.println("      unjustified_invariants = " + unjustified_invariants);
+    System.out.println("    implied = " + (non_canonical_invariants
+                                           + obvious_invariants));
+    System.out.println("      non_canonical_invariants = " + non_canonical_invariants);
+    System.out.println("      obvious_invariants = " + obvious_invariants);
     System.out.println("    reported_invariants = " + reported_invariants);
   }
 
