@@ -306,6 +306,7 @@ www-dist:
 	cd $(WWW_DIR) && chmod -w $(WWW_FILES)
 	update-link-dates $(DIST_DIR)/index.html
 
+# Perhaps daikon.jar shouldn't include JUnit or the test files.
 daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
 	-rm -rf $@ /tmp/daikon-jar
 	mkdir /tmp/daikon-jar
@@ -516,7 +517,7 @@ dist-dfec-linux:
 
 ## Java front end
 
-.phony: $(DFEJ_DIR)/src/dfej
+.PRECIOUS: $(DFEJ_DIR)/src/dfej
 $(DFEJ_DIR)/src/dfej:
 	cd $(DFEJ_DIR) && $(MAKE)
 
@@ -540,7 +541,7 @@ $(DIST_BIN_DIR)/dfej-solaris: $(DFEJ_DIR)/src/dfej-solaris
 	# strip $@
 	chmod +r $@
 	update-link-dates $(DIST_DIR)/index.html
-	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@lcs.mit.edu
+	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@csail.mit.edu
 
 dist-dfej-linux-x86: $(DFEJ_DIR)/src/dfej
 	# First remake
@@ -558,7 +559,7 @@ dist-dfej-linux-x86: $(DFEJ_DIR)/src/dfej
 	update-link-dates $(DIST_DIR)/index.html
 	# # Unstripped, to permit better debugging
 	# cp -pf $(DFEJ_DIR)/src/dfej $(NFS_BIN_DIR)
-	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@lcs.mit.edu
+	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@csail.mit.edu
 
 # Creates the build_mingw_dfej directory.  This probably needs to be redone
 # when dfej is changed to include new object files or other Makefile changes.
