@@ -1233,7 +1233,7 @@ Daikon's output is organized by program points, both in the textual
 output and in the GUI.  A program point is usually associated with a
 specific place in the source code.  For example, @code{foo():::ENTER} is
 the point at the entry to procedure @code{foo()}; the invariants at that
-point are the preconditions upon entry to the <tt>foo()</tt> method.
+point are the preconditions upon entry to the @code{foo()} method.
 
 Likewise, invariants at @code{foo():::EXIT} are postconditions.  When
 there are multiple exit points from a procedure (for instance, because
