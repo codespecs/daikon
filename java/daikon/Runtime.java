@@ -5,7 +5,7 @@
 package daikon;
 
 import java.util.Vector;
-// import java.util.zip.GZIPOutputStream;
+import java.util.zip.GZIPOutputStream;
 import java.io.*;
 
 
@@ -43,15 +43,17 @@ public final class Runtime {
       if (parent != null) parent.mkdirs();
       FileOutputStream fos = new FileOutputStream(file);
       if (filename.endsWith(".gz")) {
-	throw new Error("Cannot guarantee closing a GZIPOutputStream");
-	// dtrace = new PrintStream(new GZIPOutputStream(fos));
+	//throw new Error("Cannot guarantee closing a GZIPOutputStream");
+        dtrace = new PrintStream(new BufferedOutputStream(
+                   new GZIPOutputStream(fos), 8192));
       } else {
-	dtrace = new PrintStream(fos);
+        dtrace = new PrintStream(new BufferedOutputStream(fos, 8192));
       }
     } catch (Exception e) {
       e.printStackTrace();
       throw new Error("" + e);
     }
+    addShutdownHook();
     // System.out.println("...done calling setDtrace(" + filename + ")");
   }
 
@@ -60,6 +62,17 @@ public final class Runtime {
       setDtrace(filename);
   }
 
+  // Add a shutdown hook to close the PrintStream when the program
+  // exits
+  private static void addShutdownHook() {
+    java.lang.Runtime.getRuntime().addShutdownHook(new Thread() {
+        public void run() {
+          if (dtrace != null) {
+            dtrace.close();
+          }
+        }
+      });
+  }
 
   // This is no longer necessary, as it was for Daikon-jtb
   // // This is a dummy method that can be called from Java code instead of
