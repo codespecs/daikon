@@ -15,39 +15,19 @@ class LinearBinary extends TwoScalar {
     return new LinearBinary(ppt);
   }
 
-  // Need to add these two methods for all subclasses of Invariant
-  public String name() {
-    return "LinearBinary" + varNames();
-  }
-  public String long_name() {
-    return name() + "@" + ppt.name;
-  }
-
   public String repr() {
-    int a = core.a;
-    int b = core.b;
-
     double probability = getProbability();
     return "LinearBinary" + varNames() + ": "
       + "no_invariant=" + no_invariant
-      + ",a=" + a
-      + ",b=" + b
-      + "; probability = " + probability;
+      + ",probability = " + probability
+      + "; " + core.repr();
   }
 
   public String format() {
-    int a = core.a;
-    int b = core.b;
-
-    if ((!no_invariant) && justified()) {
-      String x = var1().name;
-      String y = var2().name;
-      String b_rep = (b<0) ? (" - " + -b) : (b>0) ? (" + " + b) : "";
-      String a_rep = (a==1) ? "" : ("" + a + " * ");
-      return y + " = " + a_rep + x + b_rep;
-    } else {
+    if (no_invariant || ! justified()) {
       return null;
     }
+    return core.format(var1().name, var2().name);
   }
 
   public void add_modified(int x, int y, int count) {

@@ -16,38 +16,19 @@ class PairwiseLinearBinary extends TwoSequence {
     return new PairwiseLinearBinary(ppt);
   }
 
-  // Need to add these two methods for all subclasses of Invariant
-  public String name() {
-    return "PairwiseLinearBinary" + varNames();
-  }
-  public String long_name() {
-    return name() + "@" + ppt.name;
-  }
-
   public String repr() {
-    int a = core.a;
-    int b = core.b;
     double probability = getProbability();
     return "PairwiseLinearBinary" + varNames() + ": "
       + "no_invariant=" + no_invariant
-      + ",a=" + core.a
-      + ",b=" + core.b
-      + "; probability = " + probability;
+      + ",probability = " + probability
+      + "; " + core.repr();
   }
 
   public String format() {
-    int a = core.a;
-    int b = core.b;
-
-    if ((!no_invariant) && justified()) {
-      String x = var1().name;
-      String y = var2().name;
-      String b_rep = (b<0) ? (" - " + -b) : (b>0) ? (" + " + b) : "";
-      String a_rep = (a==1) ? "" : ("" + a + " * ");
-      return y + " = " + a_rep + x + b_rep;
-    } else {
+    if (no_invariant || ! justified()) {
       return null;
     }
+    return core.format(var1().name, var2().name);
   }
 
   public void add_modified(int[] x_arr, int[] y_arr, int count) {
@@ -63,8 +44,10 @@ class PairwiseLinearBinary extends TwoSequence {
       int y = y_arr[i];
 
       core.add_modified(x, y, count);
-      if (no_invariant)
+      if (no_invariant) {
+        // destroy() must have already been called
         return;
+      }
     }
   }
 

@@ -7,7 +7,7 @@ import utilMDE.*;
 
 import java.util.*;
 
-public class TwoScalarFactory {
+public final class TwoScalarFactory {
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
@@ -36,12 +36,12 @@ public class TwoScalarFactory {
         VarInfo resultvar = (invert ? var2 : var1);
         // Skip if the argument is a constant (but not if the result
         // is constant, as we might get something like y=abs(x)).
-        // On second though, also skip if the result is constant.
+        // On second thought, also skip if the result is constant.
         if (argvar.isConstant() || resultvar.isConstant()) {
           Global.subexact_noninstantiated_invariants += Functions.unaryFunctions.length;
         } else {
           for (int j=0; j<Functions.unaryFunctions.length; j++) {
-            result.add(FunctionUnary.instantiate(ppt, Functions.unaryFunctions[j], invert));
+            result.add(FunctionUnary.instantiate(ppt, Functions.unaryFunctionNames[j], Functions.unaryFunctions[j], invert));
           }
         }
       }
@@ -49,7 +49,9 @@ public class TwoScalarFactory {
         Global.subexact_noninstantiated_invariants += 2;
       } else {
         result.add(LinearBinary.instantiate(ppt));
-        // new NonAliased(ppt);
+        // Perhaps do not instantiate unless the variables have
+        // the same type; in particular, nonequal for Object variables
+        // is not so likely to be of interest.
         result.add(NonEqual.instantiate(ppt));
       }
     }

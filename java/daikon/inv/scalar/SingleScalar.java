@@ -45,18 +45,6 @@ public abstract class SingleScalar extends Invariant {
   }
 
 
-/// Old version that used VarInfos rather than using a parent which is a
-/// PptSlice.
-//   VarInfo var_info;
-//   public SingleScalar(Ppt ppt_, VarInfo var_info_) {
-//     super(ppt_);
-//     var_info = var_info_;
-//   }
-//   public boolean usesVar(VarInfo vi) {
-//     return (var_info == vi);
-//   }
-//   public abstract void add(ValueTuple vt, int count);
-
 }
 
 
@@ -73,7 +61,6 @@ public abstract class SingleScalar extends Invariant {
 //         as_base = invariant.format(self, arg)
 //         if as_base:
 //             return as_base
-//         self.unconstrained_internal = false
 //
 //         suffix = " \t(%d values" % (self.values,)
 //         if self.can_be_None:
@@ -110,7 +97,6 @@ public abstract class SingleScalar extends Invariant {
 //         if self.one_of and not self.can_be_None:
 //             return "%s in %s" % (arg, util.format_as_set(self.one_of))
 //
-//         self.unconstrained_internal = true
 //         return arg + " unconstrained" + suffix
 //
 //     def diff(self, other):

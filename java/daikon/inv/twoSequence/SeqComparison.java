@@ -52,6 +52,11 @@ class SeqComparison extends TwoSequence implements Comparison {
 
 
   public void add_modified(int[] v1, int[] v2, int count) {
+    // Don't make comparisons with empty arrays.
+    if ((v1.length == 0) || (v2.length == 0)) {
+      return;
+    }
+
     int comparison = comparator.compare(v1, v2);
     // System.out.println("SeqComparison(" + var1().name + "," + var2().name + "): "
     //                    + "compare(" + ArraysMDE.toString(v1)
@@ -74,7 +79,7 @@ class SeqComparison extends TwoSequence implements Comparison {
     } else if (can_be_lt || can_be_gt) {
       return Math.pow(.5, ppt.num_values());
     } else {
-      return 0;
+      return Invariant.PROBABILITY_JUSTIFIED;
     }
   }
 

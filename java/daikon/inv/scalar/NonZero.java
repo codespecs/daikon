@@ -3,9 +3,11 @@ package daikon.inv.scalar;
 import daikon.*;
 import daikon.inv.*;
 
+import java.util.*;
 
-// Similar to NonNull; if I change this, consider changing it, too.
-// Actually, I should just abstract out the common code.
+import utilMDE.*;
+
+// This also serves as NonNull.
 
 class NonZero extends SingleScalar {
   int min = Integer.MAX_VALUE;
@@ -15,6 +17,7 @@ class NonZero extends SingleScalar {
   // This lets one use a specified probability of nonzero (say, 1/10
   // for pointers).
   int override_range = 0;
+  boolean pointer_type = false;
 
   private NonZero(PptSlice ppt_) {
     super(ppt_);
@@ -22,8 +25,10 @@ class NonZero extends SingleScalar {
 
   public static NonZero instantiate(PptSlice ppt) {
     NonZero result = new NonZero(ppt);
-    if (! ppt.var_infos[0].type.isIntegral())
+    if (! ppt.var_infos[0].type.isIntegral()) {
+      result.pointer_type = true;
       result.override_range = 10;
+    }
     return result;
   }
 
@@ -36,7 +41,7 @@ class NonZero extends SingleScalar {
 
   public String format() {
     if ((!no_invariant) && justified())
-      return var().name + " != 0";
+      return var().name + " != " + (pointer_type ? "null" : "0");
     else
       return null;
   }
@@ -55,18 +60,37 @@ class NonZero extends SingleScalar {
   }
 
   protected double computeProbability() {
-    if (no_invariant)
-      return Invariant.PROBABILITY_NEVER;
+    Assert.assert(! no_invariant);
     // Maybe just use 0 as the min or max instead, and see what happens:
-    // see whether the "nonzero" invariant holds anyway.  In that case,
-    // do still check for no values yet received.
-    else if ((override_range == 0) && ((min > 0) || (max < 0)))
+    // see whether the "nonzero" invariant holds anyway.  (Perhaps only
+    // makes sense to do if the {Lower,Upper}Bound invariant doesn't imply
+    // the non-zeroness.)  In that case, do still check for no values yet
+    // received.
+    if ((override_range == 0) && ((min > 0) || (max < 0)))
       return Invariant.PROBABILITY_UNKNOWN;
     else {
-      int range = (override_range == 0) ? max - min + 1 : override_range;
+      int range;
+      if (override_range != 0) {
+        range = override_range;
+      } else {
+        int modulus = 1;
+        {
+          for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+            Invariant inv = (Invariant) itor.next();
+            if ((inv instanceof Modulus) && inv.justified()) {
+              modulus = ((Modulus) inv).modulus;
+              break;
+            }
+          }
+        }
+        // Perhaps I ought to check that it's possible (given the modulus
+        // constraints) for the value to be zero; otherwise, the modulus
+        // constraint implies non-zero.
+        range = (max - min + 1) / modulus;
+      }
       double probability_one_elt_nonzero = 1 - 1.0/range;
       // This could underflow; so consider doing
-      //   double log_confidence = self.samples*math.log(probability);
+      //   double log_probability = self.samples*math.log(probability);
       // then calling Math.exp (if the value is in the range that wouldn't
       // cause underflow).
       return Math.pow(probability_one_elt_nonzero, ppt.num_mod_non_missing_samples());

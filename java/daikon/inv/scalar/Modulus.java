@@ -6,14 +6,15 @@ import utilMDE.*;
 
 class Modulus extends SingleScalar {
 
-  boolean no_values_seen = true;
-
   int modulus = 0;
   int remainder = 0;
 
-  // an arbitrarily-chosen value used for computing the differences among
-  // all the values.
+  // An arbitrarily-chosen value used for computing the differences among
+  // all the values.  Arbitrary initial value 2222 will be replaced by the
+  // first actual value seen.
   int value1 = 2222;
+  // used for initializing value1
+  boolean no_values_seen = true;
 
   private Modulus(PptSlice ppt_) {
     super(ppt_);
@@ -39,8 +40,12 @@ class Modulus extends SingleScalar {
 
   public void add_modified(int value, int count) {
     if (modulus == 1) {
-      // We already know this probability fails
-      return;
+      // We shouldn't ever get to this case; the invariant should have been
+      // destroyed instead.
+      throw new Error("Modulus = 1");
+      // Assert.assert(no_invariant);
+      // // We already know this probability fails
+      // return;
     } else if (no_values_seen) {
       value1 = value;
       return;
@@ -50,6 +55,10 @@ class Modulus extends SingleScalar {
     } else if (modulus == 0) {
       // only one value seen so far
       modulus = value1 - value;
+      if (modulus == 1) {
+        destroy();
+        return;
+      }
       remainder = MathMDE.mod_positive(value, modulus);
     } else {
       int new_modulus = MathMDE.gcd(modulus, value1 - value);
@@ -64,10 +73,7 @@ class Modulus extends SingleScalar {
       }
       // probability_cache_accurate = false;
     }
-    // if (modulus == 1) {
-    //   probability_cache = Invariant.PROBABILITY_NEVER;
-    //   probability_cache_accurate = true;
-    // }
+    Assert.assert(modulus != 1);
   }
 
   protected double computeProbability() {

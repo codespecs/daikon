@@ -7,11 +7,12 @@ import utilMDE.*;
 
 import java.util.*;
 
-public class TwoSequenceFactory {
+public final class TwoSequenceFactory {
 
-  // Adds the appropriate new Invariant objects to the specified Invariants
+  // Add the appropriate new Invariant objects to the specified Invariants
   // collection.
   public static Vector instantiate(PptSlice ppt, int pass) {
+    Assert.assert(ppt.arity == 2);
     // Not really the right place for these tests
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
@@ -55,12 +56,8 @@ public class TwoSequenceFactory {
           // Don't bother to check arg.isConstant():  we really want to
           // know whether the elements of arg are constant.
           for (int j=0; j<Functions.unaryFunctions.length; j++) {
-            result.add(PairwiseFunctionUnary.instantiate(ppt, Functions.unaryFunctions[j], invert));
+            result.add(PairwiseFunctionUnary.instantiate(ppt, Functions.unaryFunctionNames[j], Functions.unaryFunctions[j], invert));
           }
-          // Old version that didn't loop over Functions.unaryFunctions.
-          // result.add(PairwiseFunctionUnary.instantiate(ppt, Functions.Math_abs, invert));
-          // result.add(PairwiseFunctionUnary.instantiate(ppt, Functions.MathMDE_negate, invert));
-          // result.add(PairwiseFunctionUnary.instantiate(ppt, Functions.MathMDE_bitwiseComplement, invert));
         }
       }
     }

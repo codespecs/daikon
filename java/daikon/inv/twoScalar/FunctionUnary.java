@@ -8,34 +8,25 @@ class FunctionUnary extends TwoScalar {
 
   FunctionUnaryCore core;
 
-  protected FunctionUnary(PptSlice ppt_, Method function_, boolean inverse_) {
+  protected FunctionUnary(PptSlice ppt_, String methodname, Method function, boolean inverse) {
     super(ppt_);
-    core = new FunctionUnaryCore(this, function_, inverse_);
+    core = new FunctionUnaryCore(this, methodname, function, inverse);
   }
 
-  public static FunctionUnary instantiate(PptSlice ppt, Method function, boolean inverse) {
-    return new FunctionUnary(ppt, function, inverse);
+  public static FunctionUnary instantiate(PptSlice ppt, String methodname, Method function, boolean inverse) {
+    return new FunctionUnary(ppt, methodname, function, inverse);
   }
 
   public String repr() {
-    Method function = core.function;
-    boolean inverse = core.inverse;
-
     double probability = getProbability();
     return "FunctionUnary" + varNames() + ": "
-      + "function=" + function
-      + ",inverse=" + inverse
-      + "; probability = " + probability;
+      + "probability = " + probability
+      + "; " + core.repr();
   }
 
   public String format() {
-    Method function = core.function;
-    boolean inverse = core.inverse;
-
     if (justified()) {
-      String argname = inverse ? var2().name : var1().name;
-      String resultname = inverse ? var1().name : var2().name;
-      return resultname + " = " + function.getName() + "(" + argname + ")";
+      return core.format(var1().name, var2().name);
     } else {
       return null;
     }

@@ -10,10 +10,15 @@ import utilMDE.*;
 // Intended to be subclassed but not to be directly instantiated.
 // I should probably rename this to "Invariant" and get rid of that interface.o
 
-public abstract class Invariant {
+public abstract class Invariant implements java.io.Serializable {
   public PptSlice ppt;			// includes values, number of samples, VarInfos, etc.
 
-  // Has to be public because of wrappers.
+  // Has to be public so wrappers can read it.
+  /**
+   * True exactly if the invariant is guaranteed never to hold (and should
+   * be either in the process of being destroyed or about to be
+   * destroyed.  This should never be set directly; instead, call destroy().
+   */
   public boolean no_invariant = false;
 
   // True if we've seen all values and should ignore further add() methods.
@@ -24,11 +29,12 @@ public abstract class Invariant {
   // Subclasses should set these; Invariant never does.
 
   // The probability that this could have happened by chance alone.
-  // (The name "confidence" is a bit of a misnomer.)
-  //   0 = could never have happened; that is, we are fully confident that this
-  //       invariant is a real invariant
+  //   0 = could never have happened by chance; that is, we are fully confident
+  //       that this invariant is a real invariant
+  public final static double PROBABILITY_JUSTIFIED = 0;
   //   (0..1) = greater to lesser likelihood of coincidence
   //   1 = must have happened by chance
+  public final static double PROBABILITY_UNJUSTIFIED = 1;
   //   2 = we haven't yet seen enough data to know whether this invariant is
   //       true, much less its justification
   public final static double PROBABILITY_UNKNOWN = 2;
@@ -40,6 +46,10 @@ public abstract class Invariant {
   // user-settable rather than final.
   public final static double probability_limit = .01;
 
+  /**
+   * At least this many samples are required, or else we don't report any
+   * invariant at all.  (Except that OneOf invariants are treated differently.)
+   **/
   public final static int min_mod_non_missing_samples = 5;
 
   // // Do I want to have this cache at all?  It may not be that expensive
@@ -47,8 +57,10 @@ public abstract class Invariant {
   // protected double probability_cache = 0;
   // protected boolean probability_cache_accurate = false;
 
-  // If confidence == 0, then this invariant can be eliminated.
+  // If probability == PROBABILITY_NEVER, then this invariant can be eliminated.
   public double getProbability() {
+    if (no_invariant)
+      return PROBABILITY_NEVER;
     return computeProbability();
     // if (!probability_cache_accurate) {
     //   probability_cache = computeProbability();
@@ -56,13 +68,22 @@ public abstract class Invariant {
     // }
     // return probability_cache;
   }
+  /** No need to check for no_invariant, as caller does that. **/
   protected abstract double computeProbability();
 
   public boolean justified() {
     return (!no_invariant) && (getProbability() <= probability_limit);
   }
 
-  // Subclasses should override.
+  /**
+   * Subclasses should override.  An exact invariant indicates taht given
+   * all but one variable value, the last one can be computed.  (I think
+   * that's correct, anyway.)  Examples are IntComparison (when only
+   * equality is possible), LinearBinary, FunctionUnary.
+   * OneOf is treated differently, as an interface.
+   * The result of this method does not depend on whether the invariant is
+   * justified, destroyed, etc.
+   **/
   public boolean isExact() {
     return false;
   }
@@ -74,8 +95,8 @@ public abstract class Invariant {
     ppt = ppt_;
     // probability_cache_accurate = false;
 
-    // We don't want to add the invariant yet, as we are still in the
-    // constructor for subclasses.
+    // We don't want to add the invariant yet, as this constructor is
+    // called from the constructors for subclasses of Invariant.
     //     if (Global.debugInfer)
     //       System.out.println("Adding invariant " + this + " to Ppt " + ppt.name + " = " + ppt + "; now has " + ppt.invs.size() + " invariants in " + ppt.invs);
     //     ppt.addInvariant(this);
@@ -98,19 +119,20 @@ public abstract class Invariant {
     return ppt.usesVar(vi);
   }
 
-  // For use by subclasses.
-  /** Put a string representation of the variable names in the StringBuffer. */
-  public void varNames(StringBuffer sb) {
-    // sb.append(this.getClass().getName());
-    ppt.varNames(sb);
-  }
+  // Not used as of 1/31/2000.
+  // // For use by subclasses.
+  // /** Put a string representation of the variable names in the StringBuffer. */
+  // public void varNames(StringBuffer sb) {
+  //   // sb.append(this.getClass().getName());
+  //   ppt.varNames(sb);
+  // }
 
   /** Return a string representation of the variable names. */
-  public String varNames() {
+  final public String varNames() {
     return ppt.varNames();
   }
 
-  public String name() {
+  final public String name() {
     return this.getClass().getName() + varNames();
   }
 
@@ -151,36 +173,40 @@ public abstract class Invariant {
 
 
 
+  // Not used as of 1/31/2000.
+  // /**
+  //  * Returns true if this invariant implies the argument invariant.
+  //  * Intended to be overridden by subclasses.
+  //  */
+  // public boolean implies(Invariant inv) {
+  //   return false;
+  // }
+
+
   /**
-   * Returns true if this invariant implies the argument invariant.
-   * Intended to be overridden by subclasses.
-   */
-  public boolean implies(Invariant inv) {
-    return false;
-  }
-
-
-  // For printing invariants, there are two interfaces:
-  //   repr gives a low-level representation
-  //   format gives a high-level representation (eg, for user output)
-
+   * For printing invariants, there are two interfaces:
+   * repr gives a low-level representation, and
+   * format gives a high-level representation for user output.
+   **/
   public abstract String repr();
+  /**
+   * For printing invariants, there are two interfaces:
+   * repr gives a low-level representation, and
+   * format gives a high-level representation for user output.
+   **/
   public abstract String format();
-
-
-  // Different invariants use different arities here.
-  // public abstract void add(ValueTuple vt, int count);
-
-  // public abstract String toString();
 
 
   // This should perhaps be merged with some kind of PptSlice comparator.
   /**
-   * Note: this comparator imposes orderings that are inconsistent with equals.
-   * That is, it may return 0 if the objects are not equal (but do format
-   * identically).
-   */
-  public static class InvariantComparatorForPrinting implements Comparator {
+   * Compare based on arity, then variable index, then printed representation.
+   *
+   * Note: this comparator imposes orderings that are inconsistent with
+   * equals.  That is, it may return 0 if the objects are not equal (but do
+   * format identically).  That can happen if neither invariant is
+   * justified; then both output as null.
+   **/
+  public static final class InvariantComparatorForPrinting implements Comparator {
     public int compare(Object o1, Object o2) {
       if (o1 == o2)
         return 0;
@@ -213,54 +239,33 @@ public abstract class Invariant {
 
 
 
+  String diff(Invariant other) {
+    throw new Error("Unimplemented invariant diff for " + this.getClass() + " and " + other.getClass() + ": " + this.format() + " " + other.format());
+  }
 
-
-  /// Use VarInfo.hasExactInvariant instead.
-  // public static boolean hasExactInvariant(VarInfo var1, VarInfo var2, PptTopLevel ppt) {
-  //   PptSlice slice = ppt.findSlice(var1, var2);
-  //   if (slice == null)
-  //     return false;
-  //   return hasExactInvariant(slice);
-  // }
-  //
-  // public static boolean hasExactInvariant(PptSlice slice) {
-  //   for (Iterator itor = slice.invs.iterator(); itor.hasNext(); ) {
-  //     Invariant inv = (Invariant) itor.next();
-  //     if (inv.isExact() && inv.justified()) {
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
-
-
+//     # Possibly add an optional "args=None" argument, for formatting.
+//     def diff(self, other):
+//         """Returns None or a description of the difference."""
+//         # print "diff(invariant)"
+//         inv1 = self
+//         inv2 = other
+//         assert inv1.__class__ == inv2.__class__
+//         if inv1.is_unconstrained() and inv2.is_unconstrained():
+//             return None
+//         if inv1.is_unconstrained() ^ inv2.is_unconstrained():
+//             return "One is unconstrained but the other is not"
+//         if inv1.one_of and inv2.one_of and inv1.one_of != inv2.one_of:
+//             return "Different small number of values"
+//         if inv1.can_be_None ^ inv2.can_be_None:
+//             return "One can be None but the other cannot"
+//         # return "invariant.diff: no differences"	# debugging
+//         return None
 
 
 }
 
 
-// class invariant:
-//
-//     def is_exact(self):
-//         return self.values == 1
-//
-//     def is_unconstrained(self):
-//         if self.unconstrained_internal == None:
-//             self.format()
-//         return self.unconstrained_internal
-//
 //     def format(self, args=None):
-//         if self.samples == 0:
-//             self.unconstrained_internal = false
-//             return None
-//
-//         self.unconstrained_internal = false
-//
-//         if args == None:
-//             args = map(lambda x: x.name, self.var_infos)
-//         if (type(args) in [types.ListType, types.TupleType]) and (len(args) == 1):
-//             args = args[0]
-//
 //         if self.one_of:
 //             # If it can be None, print it only if it is always None and
 //             # is an invariant over non-derived variable.
@@ -282,23 +287,4 @@ public abstract class Invariant {
 //             # just return the list.
 //             elif (len(self.one_of) <= 3) or (self.samples < 100):
 //                 return "%s in %s" % (args, util.format_as_set(self.one_of))
-//         self.unconstrained_internal = true
-//         return None
-//
-//     # Possibly add an optional "args=None" argument, for formatting.
-//     def diff(self, other):
-//         """Returns None or a description of the difference."""
-//         # print "diff(invariant)"
-//         inv1 = self
-//         inv2 = other
-//         assert inv1.__class__ == inv2.__class__
-//         if inv1.is_unconstrained() and inv2.is_unconstrained():
-//             return None
-//         if inv1.is_unconstrained() ^ inv2.is_unconstrained():
-//             return "One is unconstrained but the other is not"
-//         if inv1.one_of and inv2.one_of and inv1.one_of != inv2.one_of:
-//             return "Different small number of values"
-//         if inv1.can_be_None ^ inv2.can_be_None:
-//             return "One can be None but the other cannot"
-//         # return "invariant.diff: no differences"	# debugging
 //         return None

@@ -5,7 +5,7 @@ import utilMDE.*;
 
 import java.util.*;
 
-public class SingleStringFactory {
+public final class SingleStringFactory {
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
@@ -18,15 +18,7 @@ public class SingleStringFactory {
     if (pass == 1) {
       result.add(OneOfString.instantiate(ppt));
     } else if (pass == 2) {
-      // if (var.isConstant()) {
-      //   Global.subexact_noninstantiated_invariants += 5;
-      // } else {
-      //   LowerBound.instantiate(ppt);
-      //   Modulus.instantiate(ppt);
-      //   NonModulus.instantiate(ppt);
-      //   NonZero.instantiate(ppt);
-      //   UpperBound.instantiate(ppt);
-      // }
+      // nothing currently instantiated here
     }
     return result;
   }

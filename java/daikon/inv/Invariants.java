@@ -3,21 +3,21 @@ package daikon.inv;
 import daikon.*;
 import java.util.*;
 
-// This is essentially a collection of Invariant objects, but with a few
-// convenience methods.
-
 // The downside of this extending Vector is that the operations
 // return Objects rather than Invariants.
-public class Invariants extends Vector {
 
-  // Should this specify a Ppt or PptSlice with which it is associated?
-  // Probably.
+/**
+ * This is essentially a collection of Invariant objects, but with a few
+ * convenience methods.
+ **/
+public final class Invariants extends Vector {
 
   public Invariants() {
     super();
   }
 
-  public class LookupIterator implements Iterator {
+  /** Implementation of lookup_as_iterator. **/
+  public final class LookupIterator implements Iterator {
     Enumeration invs_enum = elements();
     Object next = null;     // the next element that will be returned
     boolean next_valid = false;
@@ -49,15 +49,14 @@ public class Invariants extends Vector {
   }
 
 
-  // These lookup functions should perhaps return Iterators or Enumerations
-  // instead.
-
-
-  // return a list of all the invariants that involve the specified VarInfo
+  // Return an Iterator of all the invariants that involve the specified
+  // VarInfo.
   public Iterator lookup_as_iterator(VarInfo vi) {
     return new LookupIterator(vi);
   }
 
+  // Return an Iterator of all the invariants that involve the specified
+  // VarInfo.
   public Vector lookup_as_vector(VarInfo vi) {
     Vector result = new Vector();
     for (Enumeration e = elements(); e.hasMoreElements() ; ) {

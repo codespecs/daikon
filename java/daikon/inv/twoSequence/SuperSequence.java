@@ -5,6 +5,7 @@ import daikon.inv.*;
 
 import utilMDE.*;
 
+// similar to SubSequence; if I change one, also change the other.
 class SuperSequence extends TwoSequence {
 
   protected SuperSequence(PptSlice ppt_) {
@@ -53,7 +54,7 @@ class SuperSequence extends TwoSequence {
     if (no_invariant)
       return Invariant.PROBABILITY_NEVER;
     else
-      return 0;
+      return Invariant.PROBABILITY_JUSTIFIED;
   }
 
 }

@@ -10,12 +10,12 @@ class FunctionBinary extends ThreeScalar {
 
   FunctionBinaryCore core;
 
-  protected FunctionBinary(PptSlice ppt_, Method function_, int var_order_) {
+  protected FunctionBinary(PptSlice ppt_, String methodname, Method function, int var_order) {
     super(ppt_);
-    core = new FunctionBinaryCore(this, function_, var_order_);
+    core = new FunctionBinaryCore(this, methodname, function, var_order);
   }
 
-  public static FunctionBinary instantiate(PptSlice ppt, Method function, int var_order) {
+  public static FunctionBinary instantiate(PptSlice ppt, String methodname, Method function, int var_order) {
     {
       int[] indices = FunctionBinaryCore.var_indices[var_order];
       VarInfo argresult = ppt.var_infos[indices[0]];
@@ -40,31 +40,18 @@ class FunctionBinary extends ThreeScalar {
       return null;
     }
 
-    return new FunctionBinary(ppt, function, var_order);
+    return new FunctionBinary(ppt, methodname, function, var_order);
   }
 
   public String repr() {
-    Method function = core.function;
-    int var_order = core.var_order;
-
     double probability = getProbability();
     return "FunctionBinary" + varNames() + ": "
-      + "function=" + function
-      + ",var_order=" + var_order
       + "; probability = " + probability;
   }
 
   public String format() {
-    Method function = core.function;
-    int var_order = core.var_order;
-    int[] indices = FunctionBinaryCore.var_indices[var_order];
-    VarInfo argresult = ppt.var_infos[indices[0]];
-    VarInfo arg1 = ppt.var_infos[indices[1]];
-    VarInfo arg2 = ppt.var_infos[indices[2]];
-
     if (justified()) {
-      return argresult.name + " = "
-        + function.getName() + "(" + arg1.name + ", " + arg2.name + ")";
+      return core.format();
     } else {
       // System.out.println("FunctionBinary not justified: "
       //                    + argresult.name + " = "
@@ -83,20 +70,20 @@ class FunctionBinary extends ThreeScalar {
     return core.computeProbability();
   }
 
-  // For testing only; to be commented out
-  public void destroy() {
-    if (debugFunctionBinary) {
-      Method function = core.function;
-      int var_order = core.var_order;
-      int[] indices = FunctionBinaryCore.var_indices[var_order];
-      VarInfo argresult = ppt.var_infos[indices[0]];
-      VarInfo arg1 = ppt.var_infos[indices[1]];
-      VarInfo arg2 = ppt.var_infos[indices[2]];
-      System.out.println("FunctionBinary.destroy: "
-                         + argresult.name + " = "
-                         + function.getName() + "(" + arg1.name + ", " + arg2.name + ")");
-    }
-    super.destroy();
-  }
+  // // For testing only; to be commented out
+  // public void destroy() {
+  //   if (debugFunctionBinary) {
+  //     Method function = core.function;
+  //     int var_order = core.var_order;
+  //     int[] indices = FunctionBinaryCore.var_indices[var_order];
+  //     VarInfo argresult = ppt.var_infos[indices[0]];
+  //     VarInfo arg1 = ppt.var_infos[indices[1]];
+  //     VarInfo arg2 = ppt.var_infos[indices[2]];
+  //     System.out.println("FunctionBinary.destroy: "
+  //                        + argresult.name + " = "
+  //                        + function.getName() + "(" + arg1.name + ", " + arg2.name + ")");
+  //   }
+  //   super.destroy();
+  // }
 
 }

@@ -10,8 +10,8 @@ import utilMDE.*;
 
 import java.util.*;
 
-// Also see NonEqual, NonAliased
-public class IntComparison extends TwoScalar implements Comparison {
+// Also see NonEqual
+public final class IntComparison extends TwoScalar implements Comparison {
 
   final static boolean debugIntComparison = false;
 
@@ -32,27 +32,11 @@ public class IntComparison extends TwoScalar implements Comparison {
     VarInfo seqvar1 = var1.isDerivedSequenceMember();
     VarInfo seqvar2 = var2.isDerivedSequenceMember();
 
-    if (debugIntComparison) {
+    if (debugIntComparison || ppt.debugged) {
       System.out.println("IntComparison.instantiate(" + ppt.name + ")"
                          + ", seqvar1=" + seqvar1
                          + ", seqvar2=" + seqvar2);
     }
-
-    // Yes, this comparison is obvious.  However:
-    //  * we don't know whether it is an equality or a non-strict inequality.
-    //  * we may wish to have the comparison on hand later, when we iterate
-    //    over all IntComparison objects.
-    // I should suppress this on *output*, not on computation.
-    // Better yet:  suppress it as soon as it becomes obvious.
-    // if ((seqvar1 != null) && (seqvar1 == var2.isDerivedSequenceMember())) {
-    //   if ((var1.derived instanceof SequenceMax)
-    //       || (var1.derived instanceof SequenceMin)
-    //       || (var2.derived instanceof SequenceMax)
-    //       || (var2.derived instanceof SequenceMin)) {
-    //     return null;
-    //   }
-    // }
-
 
     boolean only_eq = false;
     boolean obvious_lt = false;
@@ -73,7 +57,7 @@ public class IntComparison extends TwoScalar implements Comparison {
         VarInfo super1 = seqvar1.isDerivedSubSequenceOf();
         VarInfo super2 = seqvar2.isDerivedSubSequenceOf();
 
-        if (debugIntComparison) {
+        if (debugIntComparison || ppt.debugged) {
           System.out.println("IntComparison.instantiate: "
                              + "min1=" + min1
                              + ", max1=" + max1
@@ -112,6 +96,7 @@ public class IntComparison extends TwoScalar implements Comparison {
   }
 
   // Look up a previously instantiated IntComparison relationship.
+  // Should this implementation be made more efficient?
   public static IntComparison find(PptSlice ppt) {
     Assert.assert(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
@@ -123,80 +108,31 @@ public class IntComparison extends TwoScalar implements Comparison {
   }
 
 
-  // public boolean isObviousDerived() {
-  //   boolean can_be_eq = core.can_be_eq;
-  //   boolean can_be_lt = core.can_be_lt;
-  //   boolean can_be_gt = core.can_be_gt;
-
-  //   VarInfo var1 = ppt.var_infos[0];
-  //   VarInfo var2 = ppt.var_infos[1];
-  //   VarInfo seqvar1 = var1.isDerivedSequenceMember();
-  //   if (debugIntComparison)
-  //     System.out.println("IntComparison.isObviousDerived(" + ppt.name + ")"
-  //                        + ", seqvar1=" + seqvar1
-  //                        + ", seqvar2=" + var2.isDerivedSequenceMember());
-  //   if ((seqvar1 != null) && (seqvar1 == var2.isDerivedSequenceMember())) {
-  //     if (((var1.derived instanceof SequenceMin)
-  //          && (var2.derived instanceof SequenceMax))
-  //         || ((var1.derived instanceof SequenceMax)
-  //             && (var2.derived instanceof SequenceMin)))
-  //       return true;
-  //     if ((var1.derived instanceof SequenceMin)
-  //         && can_be_eq && can_be_lt) {
-  //       return true;
-  //     } else if ((var1.derived instanceof SequenceMax)
-  //                && can_be_eq && can_be_gt) {
-  //       return true;
-  //     } else if ((var2.derived instanceof SequenceMin)
-  //                && can_be_eq && can_be_gt) {
-  //       return true;
-  //     } else if ((var2.derived instanceof SequenceMax)
-  //                && can_be_eq && can_be_lt) {
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
-
 
   public String repr() {
-    boolean can_be_eq = core.can_be_eq;
-    boolean can_be_lt = core.can_be_lt;
-    boolean can_be_gt = core.can_be_gt;
-    boolean obvious_can_be_lt = core.can_be_lt;
-    boolean obvious_can_be_gt = core.can_be_gt;
-
     double probability = getProbability();
     return "IntComparison(" + var1().name + "," + var2().name + "): "
-      + "can_be_eq=" + can_be_eq
-      + ",can_be_lt=" + can_be_lt
-      + ",can_be_gt=" + can_be_gt
-      + ",obvious_can_be_lt=" + obvious_can_be_lt
-      + ",obvious_can_be_gt=" + obvious_can_be_gt
-      + "; probability = " + probability;
+      + "probability = " + probability
+      + "; " + core.repr();
   }
 
   public String format() {
-    boolean can_be_eq = core.can_be_eq;
-    boolean can_be_lt = core.can_be_lt;
-    boolean can_be_gt = core.can_be_gt;
-
-    if (justified() && (can_be_eq || can_be_gt || can_be_lt)) {
-      String inequality = (can_be_lt ? "<" : can_be_gt ? ">" : "");
-      String comparison = (can_be_eq ? "=" : "");
-      if (debugIntComparison) {
-        System.out.println(repr()
-                           + "; inequality=\"" + inequality + "\""
-                           + ",comparison=\"" + comparison + "\"");
-      }
-      return var1().name + " " + inequality + comparison + " " + var2().name;
-    } else {
+    if (! justified()) {
       return null;
     }
+    String comparator = core.format_comparator();
+    if (comparator == null) {
+      return null;
+    }
+    return var1().name + " " + comparator + " " + var2().name;
   }
 
 
   public void add_modified(int v1, int v2, int count) {
+    if (ppt.debugged) {
+      System.out.println("IntComparison" + ppt.varNames() + ".add_modified("
+                         + v1 + "," + v2 + ", count=" + count + ")");
+    }
     core.add_modified(v1, v2, count);
   }
 
@@ -213,21 +149,27 @@ public class IntComparison extends TwoScalar implements Comparison {
   }
 
   public boolean isExact() {
-    boolean can_be_eq = core.can_be_eq;
-    boolean can_be_lt = core.can_be_lt;
-    boolean can_be_gt = core.can_be_gt;
-
-    return (can_be_eq && (!can_be_lt) && (!can_be_gt));
+    return core.isExact();
   }
 
   // Temporary, for debugging
   public void destroy() {
-    if (debugIntComparison) {
+    if (debugIntComparison || ppt.debugged) {
       System.out.println("IntComparison.destroy(" + ppt.name + ")");
     }
+
     super.destroy();
   }
 
+  public void add(int v1, int v2, int mod_index, int count) {
+    if (ppt.debugged) {
+      System.out.println("IntComparison" + ppt.varNames() + ".add("
+                         + v1 + "," + v2
+                         + ", mod_index=" + mod_index + ")"
+                         + ", count=" + count + ")");
+    }
+    super.add(v1, v2, mod_index, count);
+  }
 
 
 }
