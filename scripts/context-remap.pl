@@ -3,23 +3,42 @@
   if 0;
 # context.pl -- Read dfej's context-sensitivity .map files and produce various things from them.
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2001-11-15 16:18:56 mistere>
+# Time-stamp: <2001-11-15 18:42:51 mistere>
 
-# The input is ...
+# The input is ... TODO
 
 use Carp;
 use File::Find;
 
-#  if (($#ARGV >= 0) && ($ARGV[0] eq "-d")) {
-#    print STDERR "Debugging on\n";
-#    $debug = 1;
-#    shift @ARGV;
-#  }
+my $debug = 0;
 
-unless ($#ARGV >= 0) {
-  print STDERR "Usage: context.pl file1.map [file2.map ...]\n";
+# ********** Read command line options **********
+
+sub usagedie {
+  print STDERR "Usage: context.pl {--spinfo | --remap invs.txt} {--grain line | meth | class} file1.map [file2.map ...] (", @_, ")\n";
+  exit 1;
 }
 
+if (($#ARGV >= 0) && ($ARGV[0] eq "-d")) {
+  print STDERR "Debugging on\n";
+  $debug = 1;
+  shift @ARGV;
+}
+
+usagedie("Expecting mode") unless ($ARGV[0] =~ /^--(.*)/);
+my $mode = $1;
+shift @ARGV; # --$mode
+usagedie("Unknown mode") unless ($mode =~ /^(spinfo|remap)$/);
+if ($mode eq "remap") {
+  $remap_file = shift @ARGV;
+}
+
+usagedie("Expecting grain") unless ($ARGV[0] eq '--grain');
+shift @ARGV; # --grain
+my $grain = shift @ARGV;
+usagedie("Unknown grain") unless ($grain =~ /^(line|method|class)$/);
+
+# ********** Helpers **********
 
 sub slurpfile {
   # returns the contents of the first argument (filename) as a list
@@ -30,6 +49,9 @@ sub slurpfile {
   return @result;
 }
 
+# ********** For each map entry **********
+
+my @records = ();
 for my $filename (@ARGV) {
   my @lines = slurpfile($filename);
   for my $line (@lines) {
@@ -39,19 +61,120 @@ for my $filename (@ARGV) {
     # lines e.g.
     # 0x85a6a24 RandomMean main [RandomMean.java:6:13] -> compute [()V] RandomMean
 
-    if ($line =~ /^(0x[0-9a-f]+)\s+([\w\.]+)\s+([\w\.]+)\s+\[(.*?)\]\s+->\s+([\w\.]+)\s+\[(.*?)\]\s+([\w\.]+)$/) {
-      my ($id, $fromclass, $frommeth, $fromline, $toexpr, $toargs, $toclass) = ($1, $2, $3, $4, $5, $6, $7);
-      ($toexpr =~ /^.*\.(.+?)$/); # after the dot
-      my $tometh = $1;
-
-      # PPT_NAME SomeClass.someMethod
-      # daikon_callsite_id == 222222
-      print "PPT_NAME " . $toclass . "." . $tometh . "\n";
-      print "daikon_callsite_id == " . hex($id) . "\n";
-
+    my @rec;
+    if (@rec = ($line =~ /^(0x[0-9a-f]+)\s+([\w\.]+)\s+([\w\.]+)\s+\[(.*?):(\d+):(\d+)\]\s+->\s+([\w\.]+)\s+\[(.*?)\]\s+([\w\.]+)$/)) {
+      # id, fromclass, frommeth, fromfile, fromline, fromcol, toexpr, toargs, toclass
+      push @records, \@rec;
     } else {
       print STDERR "Unknown line format: $line";
     }
   }
 
 }
+
+# ********** Post-processing **********
+
+my %remap = ();
+
+if ("line" eq $grain) {
+  foreach (@records) {
+    my ($id, $fromclass, $frommeth, $fromfile, $fromline, $fromcol, $toexpr, $toargs, $toclass) = @{$_};
+    my $tometh = $toexpr;
+    $tometh =~ s/.*\.//;
+    $id = hex($id);
+
+    if ("spinfo" eq $mode) {
+      # PPT_NAME Class.method
+      # daikon_callsite_id == 222222
+      print "PPT_NAME ", $toclass, ".", $tometh, "\n";
+      print "daikon_callsite_id == ", $id, "\n";
+      print "\n";
+    } elsif ("remap" eq $mode) {
+      # "daikon_callsite_id == 222222" ==> "<Called from Class.method:#:#>"
+      my $from = "daikon_callsite_id == " . $id;
+      my $to = "<Called from " . $fromclass . "." . $frommeth . ":" . $fromline . ":" . $fromcol . ">";
+      $remap{$from} = $to;
+    }
+  }
+} elsif("method" eq $grain) {
+  my %method2num = ();
+  foreach (@records) {
+    my ($id, $fromclass, $frommeth, $fromfile, $fromline, $fromcol, $toexpr, $toargs, $toclass) = @{$_};
+    my $tometh = $toexpr;
+    $tometh =~ s/.*\.//;
+    $id = hex($id);
+
+    my $method = $fromclass . "." . $frommeth . "*" . $toclass . "." . $tometh;
+    if ($method2num{$method}) {
+      $method2num{$method} .= " || "
+    }
+    $method2num{$method} .= "daikon_callsite_id == " . $id;
+  }
+
+  for my $method (keys %method2num) {
+    my $num = $method2num{$method};
+    ($method =~ /(.*)\*(.*)/);
+    my ($caller, $callee) = ($1, $2);
+    if ("spinfo" eq $mode) {
+      # PPT_NAME Class.method
+      # daikon_callsite_id == 222222 || daikon_callsite_id == 333333 || ..
+      print "PPT_NAME ", $callee, "\n";
+      print $num, "\n";
+      print "\n";
+    } elsif ("remap" eq $mode) {
+      # "daikon_callsite_id == 222222 || daikon_callsite_id == 333333 || .." ==> "<Called from Class.method>"
+      my $from = $method;
+      my $to = "<Called from " . $caller . ">";
+      $remap{$from} = $to;
+    }
+  }
+
+} elsif("class" eq $grain) {
+  my %class2num = ();
+  foreach (@records) {
+    my ($id, $fromclass, $frommeth, $fromfile, $fromline, $fromcol, $toexpr, $toargs, $toclass) = @{$_};
+    my $tometh = $toexpr;
+    $tometh =~ s/.*\.//;
+    $id = hex($id);
+
+    my $class = $fromclass . "*" . $toclass . "." . $tometh;
+    if ($class2num{$class}) {
+      $class2num{$class} .= " || "
+    }
+    $class2num{$class} .= "daikon_callsite_id == " . $id;
+  }
+
+  for my $class (keys %class2num) {
+    my $num = $class2num{$class};
+    ($class =~ /(.*)\*(.*)/);
+    my ($caller, $callee) = ($1, $2);
+    if ("spinfo" eq $mode) {
+      # PPT_NAME Class.method
+      # daikon_callsite_id == 222222 || daikon_callsite_id == 333333 || ..
+      print "PPT_NAME ", $callee, "\n";
+      print $num, "\n";
+      print "\n";
+    } elsif ("remap" eq $mode) {
+      # "daikon_callsite_id == 222222 || daikon_callsite_id == 333333 || .." ==> "<Called from Class>"
+      my $from = $method;
+      my $to = "<Called from " . $caller . ">";
+      $remap{$from} = $to;
+    }
+  }
+}
+
+if ("remap" eq $mode) {
+  my @lines = slurpfile($remap_file);
+  for my $line (@lines) {
+    for my $from (keys %remap) {
+      my $to = $remap{$from};
+      # XXX Quote to,from?
+      $line =~ s/$from/$to/g;
+    }
+    print $line;
+  }
+}
+
+# Local Variables:
+# mode: cperl
+# End:
