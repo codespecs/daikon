@@ -1,0 +1,32 @@
+digraph dfepl {
+size="7,6"
+"dfepl" [shape=box]
+"dfepl -T" [shape=box]
+"dtype-perl" [shape=box]
+"dtrace-perl" [shape=box]
+"Daikon" [shape=box]
+node [shape=plaintext]
+source [label="source code to instrument\nModule.pm, program.pl"]
+tests [label="other source code, test cases\nprogram.pl, test.t"]
+untyped [label="untyped instrumented code\ndaikon-untyped/Module.pm"]
+typed [label="type-aware instrumented code\ndaikon-instrumented/Module.pm"]
+decls [label="program point declarations\ndaikon-output/package.decls"]
+types [label="type information\ndaikon-instrumented/package.types"]
+dtrace [label="trace files\ndaikon-output/program-combined.dtrace"]
+
+source -> "dfepl"
+tests -> "dtype-perl"
+tests -> "dtrace-perl"
+"dfepl" -> untyped
+untyped -> "dtype-perl"
+"dtype-perl" -> types
+types -> "dfepl -T"
+source -> "dfepl -T"
+"dfepl -T" -> typed
+typed -> "dtrace-perl"
+"dfepl -T" -> decls
+"dtrace-perl" -> dtrace
+decls -> "Daikon"
+dtrace -> "Daikon"
+"Daikon" -> "invariants"
+}

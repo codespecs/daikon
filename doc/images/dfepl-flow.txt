@@ -1,0 +1,56 @@
+
+  source code to instrument
+   Module.pm, program.pl   
+     |	     --
+     | 	       \--
+     | 		  \V
+      \ 	+-------+
+      | 	| dfepl |
+      |  	+----\--+
+      |	 	      \
+       \               \
+       |     untyped instrumented code
+       |     daikon-untyped/Module.pm	      other source code, test cases
+       |                   \		          program.pl, test.t
+        \                   \		       -------------|
+        |		     V 	  V-----------/		    |
+        |	       +------------+			    |
+        |	       | dtype-perl |			    |
+        |      	       +-----+------+  			    |
+         \	       	     |	       			    |
+         |     	       	     V 	      			    |
+         |     	    type information			    |
+         | daikon-instrumented/package.types		    |
+          \    	  	 ---- 				    |
+          |	 -------/     				    |
+	  V  V--/	      				    |
+       +----------+	      				    |
+       | dfepl -T |	      			     	    |
+       +----+-----+-	      			     	    |
+	    |       \--------- 			     	    |
+	    |		      \----V		     	    |
+            |           type-aware instrumented code 	    /
+	    | 	      daikon-instrumented/Module.pm  	   /
+	     \			    	  |	     	 -/
+	     |			    	  |	        /
+	     |			       	   V	       /
+	     V			     +-----+-------+ -/
+    program point declarations       | dtrace-perl |< 
+   daikon-output/package.decls	     +-----+-------+
+	       \       	    		   |
+	      	\ 	     		   |
+	      	 \  	     		   |
+	      	  \   	       	       	   V
+                   \-                trace files
+	      	     \      daikon-output/program-combined.dtrace
+	      	      \		       ---
+	       	       \	   ---/
+		        \      ---/
+			 V  V-/
+		       +--------+
+                       | Daikon |
+		       +----+---+
+			    |
+			    |
+                       invariants
+                           
