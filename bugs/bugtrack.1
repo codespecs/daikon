@@ -2,7 +2,7 @@
 .SH NAME
 bugtrack \- simple bug-tracking database
 .SH SYNOPSIS
-\fBbugtrack\fR [\fB-new\fR] [\fB-list \fIn\fR] [\fB-edit \fIn\fR] [\fB-del \fIn\fR]
+\fBbugtrack\fR <\fBmethod\fR> [\fBoptions\fR] ...
 .SH DESCRIPTION
 .PP
 Bugtrack is a simple bug-tracking database.  It is a veneer over CVS, and 
@@ -12,37 +12,46 @@ uses one file per report, named
 .I XXXX
 is the bug-report's numeric ID). 
 .TP
-.B -new
+.B new
 Create a new report. The program will prompt for various required fields,
 then invoke the user's editor for the description field.
 The owner(s) of the bug-report are sent notification by email.
 .TP
-.B -list
+.B list
 List a brief summary of all live bug reports.
+.PP
+.B owned
+List a brief summary of all bugs owned by the current user,
+.BR $USER .
 .TP
-.B -show
+\fBshow \fIn\fR
 Show in full the bug report whose ID is
 .IR n ;
 (equivalent to \fIcvs up; more bug<n>\fR).
 .TP
-.B -edit
+.B edit \fIn\fR
 Edit the bug report whose ID is 
 .IR n .
 The owner(s) of the bug-report are sent notification by email.
 .TP
-.B -del
+.B del \fIn\fR
 Delete the bug report whose ID is
 .IR n ;
 Do not use this for closing a bug report; use
-.B -edit
+.B edit
 instead, and change the status to
 .IR closed .
 .SS Usage Tips
 The
 .I owner
-of a report defaults to the user that created it, but any number of 
-people can be named as owner; this allows the person reporting the bug
-to "share" it with other users or someone who can fix it.
+of a report defaults to the user that created it, but any number of
+people can be named as owners; this allows the person reporting the
+bug to "share" it with other users who have responsibility for it.
+Users that simply want to know about progress fixing the bug should be
+added to the 
+.I Cc 
+list.  The creator of a bug report should usually be one of
+the owners.
 .PP
 When a mod is made to fix a bug, the person applying the fix should
 not close the bug report but mark it as
@@ -50,13 +59,15 @@ not close the bug report but mark it as
 the original creator should close the report once they have verified the
 fix.
 .PP
-When making changes to a bug entry, unless you are the owner and sole
+When making changes to a bug report, unless you are the owner and sole
 editor, put your username at the end of the new description, and use a
 bullet point to start your text.
 .SS Fields
 \fBStatus ::= New | Open | Fixed | Notabug | Closed\fR
 .br
 \fBOwner ::= <email-addr> [ , <email-addr> ] ...\fR
+.br
+\fBCc ::= <email-addr> [ , <email-addr> ] ...\fR
 .br
 \fBSeverity ::= Lethal | Vexing | Boneheaded | RFE\fR
 .br
