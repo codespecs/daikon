@@ -261,7 +261,7 @@ public class PptRelation implements Serializable {
    * Relates parent_var to a variable in child that matches name.
    *
    * @param parent_var      The parent variable being matched
-   * @param name            The name to look for in child variables.
+   * @param viname          The name to look for in child variables.
    *
    * @return true if there was a matching variable, false otherwise.
    */
@@ -540,14 +540,14 @@ public class PptRelation implements Serializable {
    * ppts.  The new ppts must have the same variables in the same
    * order as do the original ones.
    */
-  public PptRelation copy (PptTopLevel parent, PptTopLevel child) {
+  public PptRelation copy (PptTopLevel new_parent, PptTopLevel new_child) {
 
-    PptRelation rel = new PptRelation (parent, child, relationship);
-    for (Iterator ii = child_to_parent_map.keySet().iterator(); ii.hasNext();) {
+    PptRelation rel = new PptRelation (new_parent, new_child, relationship);
+    for (Iterator ii = child_to_parent_map.keySet().iterator(); ii.hasNext();){
       VarInfo vc = (VarInfo) ii.next();
       VarInfo vp = (VarInfo) child_to_parent_map.get (vc);
-      VarInfo new_vc = child.var_infos[vc.varinfo_index];
-      VarInfo new_vp = parent.var_infos[vp.varinfo_index];
+      VarInfo new_vc = new_child.var_infos[vc.varinfo_index];
+      VarInfo new_vp = new_parent.var_infos[vp.varinfo_index];
       Assert.assertTrue (new_vc.name.equals (vc.name));
       Assert.assertTrue (new_vp.name.equals (vp.name));
       rel.child_to_parent_map.put (new_vc, new_vp);
