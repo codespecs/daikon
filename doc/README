@@ -1,7 +1,7 @@
 Contents of this file:
  * Manifest of this directory
 
-Users of the system should see invariants.tar.gz file or the dist/
+Users of the system should see daikon.tar.gz file or the dist/
 directory (they contain the same information).  The README file there
 contains user documentation for the invariant detection engine.
 
@@ -19,8 +19,8 @@ In this directory (~mernst/research/notkin/invariants/):
  * examples-notes: notes about test inputs (separated from notes file above)
  * invariants.bib: notes on related work
  * cubist/ and foil/:  experiments with machine learning programs
- * invariants.py, util.py: the invariant detector, implemented in Python
- * invariants.py.doc: implementation documentation for invariants.py
+ * daikon.py, util.py: the invariant detector, implemented in Python
+ * daikon.py.doc: implementation documentation for daikon.py
  * gries.lisp:  the programs from David Gries' book (in Lisp syntax)
  * gries-helper.lisp, data-trace.lisp:  Gries Lisp syntax; output data to file
  * p*.dtrace: files created by running instrumented Gries programs

@@ -6,12 +6,12 @@
 LISP_FILES := gries-helper.lisp instrument.lisp data-trace.lisp \
 	load-all.lisp \
 	gries.lisp gries-instrumented.lisp inv-medic.lisp
-PYTHON_FILES := invariants.py util.py TextFile.py
-DOC_FILES := invariants.py.doc Makefile TextFile.README daikon.html
+PYTHON_FILES := daikon.py util.py TextFile.py
+DOC_FILES := daikon.py.doc Makefile TextFile.README daikon.html
 EDG_DIR := /projects/se/people/jake/invariants/vortex/C++/front-end/release/dist
 # $(EDG_DIR)/edgcpfe is distributed separately (not in the main tar file)
 EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/instrumentor
-DIST_DIR := /homes/gws/mernst/www/invariants-dist
+DIST_DIR := /homes/gws/mernst/www/daikon/dist
 # For really big files
 DIST_DIR_2 := /projects/se/people/mernst/www
 
@@ -33,7 +33,7 @@ DIST_DIR_2 := /projects/se/people/mernst/www
 help:
 	@echo "Targets:"
 	@echo " tags TAGS"
-	@echo " dist invariants.tar"
+	@echo " dist daikon.tar"
 	@echo " dist-edg dist-edg-solaris"
 	@echo " examples examples-gries"
 
@@ -54,39 +54,41 @@ TAGS:  $(LISP_FILES) $(PYTHON_FILES)
 
 # Main distribution
 
-dist: $(DIST_DIR)/invariants.tar.gz
+dist: $(DIST_DIR)/daikon.tar.gz
 
-$(DIST_DIR)/invariants.tar.gz: invariants.tar.gz
-	cp -pf invariants.tar.gz dist/README dist/VERSION $(DIST_DIR)
+$(DIST_DIR)/daikon.tar.gz: daikon.tar.gz
+	cp -pf daikon.tar.gz dist/daikon.html $(DIST_DIR)
+	# Don't edit the copy of daikon.html in the distribution directory
+	chmod ogu-w $(DIST_DIR) daikon.tar.gz dist/daikon.html
 	update-link-dates $(DIST_DIR)/index.html
 
 # Also creates a directory called "dist"
-invariants.tar: $(LISP_FILES) $(PYTHON_FILES) $(DOC_FILES) $(EDG_FILES) README-dist
-	mkdir invariants
-	cp -p $(LISP_FILES) $(PYTHON_FILES) $(DOC_FILES) invariants
-	cp -p README-dist invariants/README
+daikon.tar: $(LISP_FILES) $(PYTHON_FILES) $(DOC_FILES) $(EDG_FILES) README-dist
+	mkdir daikon
+	cp -p $(LISP_FILES) $(PYTHON_FILES) $(DOC_FILES) daikon
+	cp -p README-dist daikon/README
 
 	# C/C++ instrumenter
-	cp -p $(EDG_FILES) invariants
-	cp -p $(EDG_DIR)/Makefile invariants/Makefile-sample
-	echo "0" > invariants/label.txt
+	cp -p $(EDG_FILES) daikon
+	cp -p $(EDG_DIR)/Makefile daikon/Makefile-sample
+	echo "0" > daikon/label.txt
 	# Fix permission problems with C/C++ instrumenter (due to Jake's directory)
-	(cd invariants; chmod +r *; chmod -x Makefile-sample dump_trace.c dump_trace.h; chmod +x instrumentor)
+	(cd daikon; chmod +r *; chmod -x Makefile-sample dump_trace.c dump_trace.h; chmod +x instrumentor)
 
-	date > invariants/VERSION
-	chgrp -R invariants invariants
-	rm -rf invariants.tar
-	tar cf invariants.tar invariants
+	date > daikon/VERSION
+	chgrp -R invariants daikon
+	rm -rf daikon.tar
+	tar cf daikon.tar daikon
 	# After making the tar file, don't edit the (historical) distribution
-	chmod -R uog-w invariants/*
+	chmod -R uog-w daikon/*
 	if (test -d dist-`date +'%y%m%d'`); then rm -rf dist-`date +'%y%m%d'`; fi
-	mv invariants dist-`date +'%y%m%d'`
+	mv daikon dist-`date +'%y%m%d'`
 	rm dist
 	ln -s dist-`date +'%y%m%d'` dist
 
-invariants.tar.gz: invariants.tar
-	rm -rf invariants.tar.gz
-	gzip -c invariants.tar > invariants.tar.gz
+daikon.tar.gz: daikon.tar
+	rm -rf daikon.tar.gz
+	gzip -c daikon.tar > daikon.tar.gz
 
 ### C front end
 

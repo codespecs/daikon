@@ -1,12 +1,12 @@
 #!/uns/bin/python1.5
-# invariants.py -- detect patterns in collections of data
+# daikon.py -- detect patterns in collections of data
 # Michael Ernst <mernst@cs.washington.edu>
 
-# For some additional documentation, see invariants.py.doc.
+# For some additional documentation, see daikon.py.doc.
 
 # To run optimized, run Python with -O flag, and optionally do:
-#   invariants.no_ternary_invariants = 1
-#   invariants.no_invocation_counts = 1
+#   daikon.no_ternary_invariants = 1
+#   daikon.no_invocation_counts = 1
 
 
 ###########################################################################
@@ -876,7 +876,7 @@ def dict_of_tuples_modinkey_to_tuple_of_dicts(dot, tuple_len=None):
                 this_dict_elt[1] = this_dict_elt[1] + count
     return result
 # dict_of_tuples_modinkey_to_tuple_of_dicts(fn_var_values["PUSH-ACTION"])
-# dict_of_tuples_modinkey_to_tuple_of_dicts(invariants.fn_var_values['P180-15.1.1:::END'])
+# dict_of_tuples_modinkey_to_tuple_of_dicts(daikon.fn_var_values['P180-15.1.1:::END'])
 
 def dict_of_sequences_to_element_dict(dot):
     """Input: a dictionary mapping instances of a sequence (tuples) to a count.
@@ -1569,7 +1569,7 @@ pass2_functions = (introduce_from_sequence_pass2,
 # To detect invariants in a particular program, it is enough to insert code
 # in the application which creates a trace file.  In Lisp, the
 # `write-to-data-trace' macro and `instrument' function perform this task.
-# For documentation of the data trace file format, see invariants.py.doc.
+# For documentation of the data trace file format, see daikon.py.doc.
 
 
 
@@ -4567,12 +4567,12 @@ def diffs_same_format(inv1, inv2):
 
 
 # Example calls:
-#   invariants.all_fns_diff('/projects/se/people/mernst/replace_outputs/', '2500', '/projects/se/people/mernst/replace_outputs/', '3000')
-#   invariants.all_fns_diff('/projects/se/people/jake/rollbk_for_plclose/', '1000', '/projects/se/people/jake/replace_plclose/', '1000')
+#   daikon.all_fns_diff('/projects/se/people/mernst/replace_outputs/', '2500', '/projects/se/people/mernst/replace_outputs/', '3000')
+#   daikon.all_fns_diff('/projects/se/people/jake/rollbk_for_plclose/', '1000', '/projects/se/people/jake/replace_plclose/', '1000')
 
 # Or:
-#   python -c "import invariants; invariants.all_fns_diff('/projects/se/people/mernst/replace_outputs/', '2500', '/projects/se/people/mernst/replace_outputs/', '3000')" > all_2500_3000.diff
-#   python -c "import invariants; invariants.all_fns_diff('/projects/se/people/jake/rollbk_for_plclose/', '1000', '/projects/se/people/jake/replace_plclose/', '1000')" > all_plclose_1000.diff
+#   python -c "import daikon; daikon.all_fns_diff('/projects/se/people/mernst/replace_outputs/', '2500', '/projects/se/people/mernst/replace_outputs/', '3000')" > all_2500_3000.diff
+#   python -c "import daikon; daikon.all_fns_diff('/projects/se/people/jake/rollbk_for_plclose/', '1000', '/projects/se/people/jake/replace_plclose/', '1000')" > all_plclose_1000.diff
 
 
 def all_fns_diff(dir1, size1, dir2, size2):
@@ -4598,8 +4598,8 @@ def var_index(varname, fnname):
     except ValueError:
         return None
 ## Testing
-# invariants.var_index("lj", 'makepat:::END(arg_0[],start,delim,pat_100[])')
-# invariants.var_index("lj", 'makepat:::END(arg_0[],start,delim,pat_100[])')
+# daikon.var_index("lj", 'makepat:::END(arg_0[],start,delim,pat_100[])')
+# daikon.var_index("lj", 'makepat:::END(arg_0[],start,delim,pat_100[])')
 
 
 def replace_vars_by_vals_indexed(condition, function):
@@ -4716,17 +4716,17 @@ def prune_database(condition, fn_regexp=None):
 
 
 # Run python from $inv/medic/data
-# import invariants
-# reload(invariants)
+# import daikon
+# reload(daikon)
 
-# invariants.clear_variables()
-# invariants.read_invs('*.inv')
-# invariants.read_invs('T*.inv', "clear first")
-# invariants.read_invs('[TPD]*.inv', "clear first")
-# invariants.all_numeric_invariants()
+# daikon.clear_variables()
+# daikon.read_invs('*.inv')
+# daikon.read_invs('T*.inv', "clear first")
+# daikon.read_invs('[TPD]*.inv', "clear first")
+# daikon.all_numeric_invariants()
 
 # As of 5/16/98, this took half an hour or more
-# invariants.read_invs('*.inv', "clear first")
+# daikon.read_invs('*.inv', "clear first")
 
 def read_merge_data_trace_file_declarations(filename, fn_regexp=None):
     if debug_read:

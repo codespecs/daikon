@@ -176,7 +176,7 @@ result
 Data structures: mapping tuples of values to occurrence counts
 ==============================================================
 
-The primary datastructure used in invariants.py is a dictionary (a
+The primary datastructure used in daikon.py is a dictionary (a
 hashtable; "dictionary" is the Python term) from tuples of values to the
 number of occurrences of those tuples in the input.
 

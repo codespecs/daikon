@@ -12,6 +12,8 @@
 ;; Should already have loaded gries-helper.lisp, which defines macros for
 ;; Gries synax.
 
+;;; Here are some commands you're likely to find helpful; but rather than
+;;; looking here, it's better to read the documentation in daikon.html.
 
 ;; (load "data-trace.lisp")
 ;; (load "instrument.lisp")
@@ -38,10 +40,10 @@
 ;; (test-p177-14.8)
 
 ;; Python:
-;; import invariants
-;; reload(invariants)
-;; invariants.read_invs('p173-14.3.inv')
-;; invariants.all_numeric_invariants()
+;; import daikon
+;; reload(daikon)
+;; daikon.read_invs('p173-14.3.inv')
+;; daikon.all_numeric_invariants()
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

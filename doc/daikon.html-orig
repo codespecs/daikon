@@ -48,39 +48,41 @@ Table of contents:
 <h2><a name="install">Installing Daikon</a></h2>
 
 <ol>
-  <li>Download the <tt>invariants.tar.gz</tt> file.
+  <li>Download the <tt><a href="http://www.cs.washington.edu/homes/mernst/daikon/download/daikon.tar.gz">daikon.tar.gz</a></tt> file.
   <li>In the directory where you want to install Daikon, unpack the tarfile:
 <pre>
-       tar zxvf invariants.tar.gz
+       tar zxvf daikon.tar.gz
 </pre>
-     This creates an <tt>invariants/</tt> subdirectory.
-  <li>Set the environment variable <tt>INVARIANTS_HOME</tt> to point the directory.<p>
+     This creates a <tt>daikon/</tt> subdirectory.
+  <li>Set the environment variable <tt>DAIKON_HOME</tt> to point the directory.<p>
      In csh:
 <pre>
-       setenv INVARIANTS_HOME <i>/directory/goes/here</i>
+       setenv DAIKON_HOME <i>/directory/goes/here</i>
 </pre>
      In sh:
 <pre>
-       INVARIANTS_HOME=<i>/directory/goes/here</i>
-       export INVARIANTS_HOME
+       DAIKON_HOME=<i>/directory/goes/here</i>
+       export DAIKON_HOME
 </pre>
   <li>Adjust the path to Perl in the first line of the
       <tt>instrumentor</tt> script.
   <li>If you want to detect invariants in C code, download the appropriate
-     version of the Daikon C front end (from the same place that you obtained
-     Daikon itself) and rename it to <tt>edgcpfe</tt> in a directory on
-     your path.  (You will not run the <tt>edgcpfe</tt> program directly,
-     but only via the <tt>instrumentor</tt> script.)
-     The Lisp and Java front ends are distributed with Daikon
-     itself.
+      version of the Daikon C front end (from the same place that you obtained
+      Daikon itself:  <a
+      href="http://www.cs.washington.edu/homes/mernst/daikon/download/">http://www.cs.washington.edu/homes/mernst/daikon/download/</a>)
+      and rename it to <tt>edgcpfe</tt> in a directory on
+      your path.  (You will not run the <tt>edgcpfe</tt> program directly,
+      but only via the <tt>instrumentor</tt> script.)
+      The Lisp and Java front ends, and supporting files for
+      the C front end, are distributed with Daikon itself.
   <li>If you don't already have the Python programming language installed,
-     download it from <a
-     href="http://www.python.org/">http://www.python.org</a>.  If you
-     intend to use 
-     compressed data files, you will need Python 1.5.2 or later.
-     There is a second implementation of Python, called JPython, which you
-     can consider using instead; see <a
-     href="http://www.jpython.org/">http://www.jpython.org/</a>.
+      download it from <a
+      href="http://www.python.org/">http://www.python.org</a>.  If you
+      intend to use 
+      compressed data files, you will need Python 1.5.2 or later.
+      There is a second implementation of Python, called JPython, which you
+      can consider using instead; see <a
+      href="http://www.jpython.org/">http://www.jpython.org/</a>.
 </ol>
 
 
@@ -125,15 +127,17 @@ its original task, it also writes variable values to a data trace file.
     to safeguard your original source code.
  <li>Copy files <tt>dump_trace.c</tt> and <tt>dump_trace.h</tt> to your
      directory.
- <li>Create or modify a <tt>Makefile</tt>.
+ <li>Create or modify a <tt>Makefile</tt>.  Either:
    <ul>
      <li>If you have no <tt>Makefile</tt>, copy <tt>Makefile-sample</tt>
-         to <tt>Makefile</tt> and, add the names of your source files to its
+         to <tt>Makefile</tt> and add the names of your source files to its
          <tt>OBJS</tt>, and edit its <tt>EXEC</tt> executable name.
      <li>If you have a </tt>Makefile</tt>, add <tt>dump_trace.o</tt> to the
          list of object files that need to be created (and linked to create
          your executable).
    </ul>
+ <li>Copy the appropriate files to your directory, including
+    <tt>dump_trace.c</tt> and <tt>dump_trace.h</tt>.
  <li>Create an instrumented executable by building your program in the
      usual way (perhaps by running <tt>make</tt>).
 </ol>
@@ -193,8 +197,9 @@ data trace files.<p>
 <h4><a name="run-program-examples">Examples</a></h4>
 
 For C programs, if you do not supply a file <tt>label.txt</tt> which
-contains a single integer, one will be created for you.  This determines
-the name of the data trace file.<p>
+contains a single integer (a sample is provided in the distribution), one
+will be created for you.  This determines the name of the data trace
+file.<p>
 
 In Lisp, here is how you would run the Gries example programs, after having
 done <tt>(load "load-all")</tt>:
@@ -211,30 +216,30 @@ done <tt>(load "load-all")</tt>:
 
 Run the Python interpreter using the shell command <tt>python</tt> or the
 Emacs command <tt>M-x run-python</tt>.  It is convenient to run Python in
-the directory containing <tt>invariants.py</tt> and the other Python source
+the directory containing <tt>daikon.py</tt> and the other Python source
 files, so that you don't have to set the <tt>PYTHONPATH</tt> environment
 variable.  You can download Python from <a
 href="http://www.python.org/">http://www.python.org/</a>.<p>
 
 In Python, issue the following commands:
 <pre>
-  import invariants			      # load the invariants.py file
-  invariants.read_declarations('*.decls',1)   # read the function declarations
-  invariants.read_data_traces('p*.dtrace')    # read the trace files
-  invariants.all_numeric_invariants()	      # compute and print invariants
+  import daikon 			  # load the daikon.py file
+  daikon.read_declarations('*.decls',1)   # read the function declarations
+  daikon.read_data_traces('p*.dtrace')    # read the trace files
+  daikon.all_numeric_invariants()	  # compute and print invariants
 </pre>
 
 The three functions above each take an optional regular expression for
 program point, so that only certain program points are processed.  (This
 can make the invariant detection engine run faster.)  For details, see
-the documentation strings in their definitions in <tt>invariants.py</tt>.<p>
+the documentation strings in their definitions in <tt>daikon.py</tt>.<p>
 
 To do all this from a single shell command, do the following:
 <pre>
-  python -O -c "__debug__ = 0; import invariants; \
-    invariants.read_declarations('*.decls',1); \
-    invariants.read_data_traces('p*.dtrace'); \
-    invariants.all_numeric_invariants()"
+  python -O -c "__debug__ = 0; import daikon; \
+    daikon.read_declarations('*.decls',1); \
+    daikon.read_data_traces('p*.dtrace'); \
+    daikon.all_numeric_invariants()"
 </pre>
 
 <h4><a name="interpret-output">Interpreting the output</a></h4>
@@ -273,9 +278,9 @@ Lisp example files
   inv-medic.lisp	Support for finding invariants in the Medic program
 
 Invariant detection engine
-  invariants.py		The invariant detector itself
+  daikon.py		The invariant detector itself
   util.py		Utility functions used by the invariant detector
-  invariants.py.doc	Internal documentation on data structures and design
+  daikon.py.doc		Internal documentation on data structures and design
 
 Miscellaneous files
   Makefile		Makefile for the invariant detection system
@@ -293,7 +298,15 @@ we cannot make any guarantees of support, or any other guarantees regarding
 the software.  As a condition of use, you agree to promptly communicate any
 changes, improvements, or enhancements to the authors for inclusion in a
 future release under these same conditions.  If you do not agree to this
-license, please do not use or examine the software.
+license, please do not use or examine the software.<p>
+
+If you use Daikon, please <a href="mailto:mernst@cs.washington.edu">send
+email to Michael Ernst &lt;mernst@cs.washington.edu&gt;</a>, so that you
+can be informed of new versions, enhancements, and bug fixes.  I would also
+appreciate a brief description of how you are using Daikon, because I am
+curious about how users exploit it (and am eager for anecdotes about its
+successes and failures), and I want to make it more effective for its
+users.<p>
 
 
 <h2><a name="help">Getting more help</a></h2>
@@ -307,7 +320,8 @@ problems, so please don't hesitate to ask for help or report difficulties.
 And don't let any shortcomings of this implementation dissuade you about
 the promise of the research!<p>
 
-The invariant detector is further described in the paper <a href="http://www.cs.washington.edu/homes/mernst/pubs/invariants-icse99-abstract.html">``Dynamically
+The invariant detector is further described in the paper <a
+href="http://www.cs.washington.edu/homes/mernst/pubs/invariants-icse99-abstract.html">``Dynamically
 Discovering Likely Program Invariants to Support Program Evolution''</a> by
 Michael D. Ernst, Jake Cockrell, William G. Griswold, and David Notkin, in
 Proceedings of the 19th International Conference on Software Engineering
