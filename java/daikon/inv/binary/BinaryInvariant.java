@@ -24,7 +24,7 @@ public abstract class BinaryInvariant extends Invariant {
                                       int count);
 
   /**
-   * applies the variables in the correct order.  If the second variable
+   * Applies the variables in the correct order.  If the second variable
    * is an array and the first variable is not, the order of the values
    * is reversed (so that the array is always the first argument).
    */
@@ -38,6 +38,28 @@ public abstract class BinaryInvariant extends Invariant {
       return (add (val2, val1, mod_index, count));
     else
       return (add (val1, val2, mod_index, count));
+
+  }
+
+  /**
+   * Checks the specified values in the correct order.  If the second value
+   * is an array and the first value is not, the order of the values
+   * is reversed (so that the array is always the first argument).
+   *
+   * The values are checked rather than the variables because this is
+   * sometimes called on prototype invariants.
+   */
+  public InvariantStatus check_unordered (Object val1, Object val2,
+                                          int mod_index, int count) {
+
+
+    if (((val2 instanceof long[]) || (val2 instanceof double[])
+         || (val2 instanceof String[]))
+        && !((val1 instanceof long[]) || (val1 instanceof String[])
+              || (val1 instanceof double[])))
+      return (check (val2, val1, mod_index, count));
+    else
+      return (check (val1, val2, mod_index, count));
 
   }
 
