@@ -1735,6 +1735,19 @@ public abstract class Invariant
       sl.repCheck();
     }
   }
+
+  /**
+   * Returns whether or not the invariant is currently active.  This is
+   * used to identify those invariants that require a certain number
+   * of points before they actually do computation (eg, LinearBinary)
+   *
+   * This is used during suppresion.  Any invariant that is not active
+   * cannot suppress another invariant
+   */
+  public boolean isActive() {
+    return (true);
+  }
+
 }
 
 
