@@ -21,9 +21,12 @@ use File::Path 'mkpath';
 use File::Basename;
 use File::Spec::Functions 'rel2abs';
 
-my @types_files = ();
 my $verbose = 0;
 my $perl = $^X;
+
+my @types_files = ();
+my $types_search = undef;
+my $accessors_search = undef;
 
 my $instr_basedir = "daikon-instrumented";
 my $types_basedir = undef;
@@ -85,7 +88,9 @@ my $parsed =
 			 "types-append!" => \$types_append,
 			 "decls-append!" => \$decls_append,
 			 "dtrace-append!" => \$dtrace_append,
-			 "types|t=s" => \@types_files,
+			 "types-files|t=s" => \@types_files,
+			 "types-dir|T:s" => \$types_search,
+			 "accessors-dir|A:s" => \$accessors_search,
 			 "verbose|v+" => \$verbose,
 			 "absolute!" => \$absolute,
 # This is probably more control than anyone needs
@@ -137,6 +142,14 @@ unless ($dtrace_style =~ /^tree|flat|combined\z/) {
     die "dtrace-style should be one of tree, flat, or combined\n";
 }
 
+if (defined($types_search) and $types_search eq "") {
+    $types_search = $types_basedir;
+}
+
+if (defined($accessors_search) and $accessors_search eq "") {
+    $accessors_search = ".";
+}
+
 if (! -d $instr_basedir) {
     mkdir($instr_basedir) or die "Can't create directory $instr_basedir: $!\n";
 }
@@ -148,6 +161,9 @@ if ($verbose) {
     print STDERR "Instrumented sources in $instr_basedir\n";
     print STDERR "Reading types from @types_files\n" if @types_files;
     print STDERR "Annotating in place? ", $inplace ? "yes" : "no", "\n";
+    print STDERR "Looking for types in $types_search\n" if $types_search;
+    print STDERR "Looking for accessors in $accessors_search\n"
+      if $accessors_search;
 }
 
 my $types = "";
@@ -177,6 +193,37 @@ for my $prog (@ARGV) {
     } else {
 	$from = $prog;
     }
+    my $more_opts = "";
+    my $bprog = dirname($prog) . "/" . basename($prog, ".pm");
+    (my $pack = $bprog) =~ s[/][::]g;
+    if (defined $types_search) {
+	print STDERR "Looking at $types_search/combined.types\n" if $verbose;
+	if (-e "$types_search/combined.types") {
+	    $more_opts .= ",-t,$types_search/combined.types";
+	}
+	print STDERR "Looking at $types_search/$bprog.types\n" if $verbose;
+	if (-e "$types_search/$bprog.types") {
+	    $more_opts .= ",-t,$types_search/$bprog.types";
+	}
+	$pack =~ s[\.::][]g;
+	print STDERR "Looking at $types_search/$pack.types\n" if $verbose;
+	if (-e "$types_search/$pack.types") {
+	    $more_opts .= ",-t,$types_search/$pack.types";
+	}
+    }
+    if (defined $accessors_search) {
+	print STDERR "Looking at $accessors_search/$bprog.accessors\n"
+	  if $verbose;
+	if (-e "$accessors_search/$bprog.accessors") {
+	    $more_opts .= ",-a,$accessors_search/$bprog.accessors";
+	}
+	$pack =~ s[\.::][]g;
+	print STDERR "Looking at $accessors_search/$pack.accessors\n"
+	  if $verbose;
+	if (-e "$accessors_search/$pack.accessors") {
+	    $more_opts .= ",-a,$accessors_search/$pack.accessors";
+	}
+    }
     my $outfile = "$instr_basedir/$prog";
     my $outpath = dirname($outfile);
     if (not -d $outpath) {
@@ -185,6 +232,6 @@ for my $prog (@ARGV) {
     } else {
 	print STDERR "$outpath exists\n" if $verbose;
     }
-    careful_system($perl, $perl_lib, "$deparse_opt,-o,$outfile",
+    careful_system($perl, $perl_lib, "$deparse_opt,-o,$outfile$more_opts",
 		   $from);
 }
