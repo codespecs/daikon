@@ -140,12 +140,12 @@ public final class FunctionBinaryCore implements java.io.Serializable {
     VarInfo arg2 = ppt.var_infos[var_indices[var_order][2]];
 
     return argresult.name + " = "
-      + function.getName() + "(" + arg1.name + ", " + arg2.name + ")";
+      + methodname + "(" + arg1.name + ", " + arg2.name + ")";
   }
 
   public boolean isSameFormula(FunctionBinaryCore other)
   {
     return methodname.equals(other.methodname);
   }
-  
+
 }
