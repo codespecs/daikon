@@ -292,7 +292,7 @@ Tools
 
 * Annotate::                    
 * MergeESC::                    
-* MakeInvariantChecker::        
+* InvariantChecker::            
 * LogicalCompare::              
 
 Troubleshooting
@@ -5497,7 +5497,7 @@ distribution and are not described elsewhere in the manual.
 @menu
 * Annotate::                    
 * MergeESC::                    
-* MakeInvariantChecker::        
+* InvariantChecker::            
 * LogicalCompare::              
 @end menu
 
@@ -5587,7 +5587,7 @@ belongs to (@code{null} for object invariants).
 
 @end table
 
-@node    MergeESC, MakeInvariantChecker, Annotate, Tools
+@node    MergeESC, InvariantChecker, Annotate, Tools
 @section MergeESC
 
 @cindex MergeESC tool
@@ -5598,44 +5598,46 @@ The MergeESC program is no longer supported: it has been replaced
 with the Annotate program, which augments MergeESC's functionality to
 handle Jtest's DBC annotations. @xref{Annotate}.
 
-@node    MakeInvariantChecker, LogicalCompare, MergeESC, Tools
-@section MakeInvariantChecker
+@node    InvariantChecker, LogicalCompare, MergeESC, Tools
+@section InvariantChecker
 
-@cindex MakeInvariantChecker tool
+@cindex InvariantChecker tool
 
-The MakeInvariantChecker program takes a set of invariants found by Daikon
-and creates a specialized checking program that checks (only) those
-invariants.  The checking program can be run on new data trace files
-to determine whether the new trace files exhibit all the behavior that
-the old ones (that Daikon originally used to create the set of
-invariants) did.
+The InvariantChecker program takes a set of invariants found by Daikon
+and a set of data trace files.  It checks each sample in the data trace
+files against each of the invariants.  Any sample that violates an invariant
+is noted.  
 
-Invoke MakeInvariantChecker like this:
+InvariantChecker is invoked as follows:
 @example
-java daikon.Daikon myProgram.decls myProgram.dtrace -o myProgram.inv
-java daikon.tools.MakeInvariantChecker myProgram.inv TestMyProgram.java
-javac TestMyProgram.java
-java TestMyProgram myProgram_new.dtrace
+java daikon.tools.InvariantChecker [@var{options}] <@var{invariant-file}> <@var{dtrace-files}> 
 @end example
 
-The first argument to MakeInvariantChecker is a Daikon output file name
-(which must contain a @file{.inv} extension) and the second argument
-is a Java file name into which Java source for the specialized checker
-will be generated.
-  
-Command line options to the generated program:
- - h prints the usage line
- - o filename writes all the invariant violations in the file called filename
+The @var{invariant-files} are invariant files (@file{.inv}) created by
+running Daikon.  The @var{dtrace-files} are data trace (@file{.dtrace})
+files created by running the instrumented program.  The files may appear
+in any order; the file type is determined by whether the file name
+contains @file{.dtrace}, or @file{.inv}.
 
-The specialized checker program takes one argument, a data trace file.
-(It is typically a different file than the one used for generating the
-".inv" file that was provided to MakeInvariantChecker.)
+The options are:
+@table @option
 
-If the new trace violates any invariants in the set provided to
-MakeInvariantChecker, then MakeInvariantChecker prints a message that
-indicates the invariant and the variable values that violate it. 
+@item -h
+@item --help
+Print usage message.
 
-@node LogicalCompare,  , MakeInvariantChecker, Tools
+@item --output @var{output-file}
+Write any violations to the specified file.
+
+@item --config_option @var{name}=@var{value}
+@item --dbg @var{category}
+@item --track @var{class}<@var{var1},@var{var2},@var{var3}>@@@var{ppt}
+These switches are the same as for Daikon.  They are described in
+@ref{Command line options}.
+
+@end table
+
+@node LogicalCompare,  , InvariantChecker, Tools
 @section LogicalCompare
 
 @cindex LogicalCompare tool
