@@ -15,7 +15,7 @@ use util_daikon;
 
 sub usage() {
   print STDERR
-    "Usage: write_dtrace.pl [OPTIONS] DTRACE_FILES",
+    "Usage: write_dtrace.pl [OPTIONS] CLUSTER_FILES DTRACE_FILES",
     "\n",
     "Options:\n",
     " -a, --algorithm ALG      ALG specifies a clustering algorithm:\n",
