@@ -132,16 +132,16 @@ tags: TAGS
 TAGS:
 	cd java && $(MAKE) tags
 
-kvasir/Makefile.am:
+kvasir/Makefile.in:
 	cvs -d $(CVS_REPOSITORY) co -P valgrind-kvasir
 	ln -s valgrind-kvasir kvasir
 	touch $@
 
-kvasir/dfec-v2/Makefile.am: kvasir/Makefile.am
-	cd kvasir && cvs -d $(CVS_REPOSITORY) co -P dfec-v2
+kvasir/kvasir/Makefile.in: kvasir/Makefile.in
+	cd kvasir && cvs -d $(CVS_REPOSITORY) co -P kvasir
 	touch $@
 
-build-kvasir: kvasir/dfec-v2/Makefile.am
+build-kvasir: kvasir/kvasir/Makefile.in
 	cd kvasir && ./configure --prefix=`pwd`/inst && make && make install
 
 ###########################################################################
