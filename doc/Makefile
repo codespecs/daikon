@@ -37,7 +37,7 @@ daikon.dvi: daikon.texinfo
 ps: daikon.ps
 
 daikon.ps: daikon.dvi
-	dvips -o $@ $<
+	dvips -t letter -o $@ $<
 
 pdf: daikon.pdf
 
