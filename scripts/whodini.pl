@@ -1,13 +1,14 @@
 : # Use -*- Perl -*- without knowing its path
   eval 'exec perl -S -w $0 "$@"'
   if 0;
-# houdini.pl -- Iteratively invoke ESC/Java on a source file until a fixed point is reached
+# whodini.pl -- Iteratively invoke ESC/Java on a source file until a fixed point is reached
 # Jeremy Nimmer <jnimmer@lcs.mit.edu>
 
 # Given a (possibly-annotated) source file, and some associated
 # txt-esc file, produces ESC/Java output from processing the original
 # source file, except uses as many of the annotations from the txt-esc
-# file as possible to aid the verfication.
+# file as possible to aid the verfication.  This script attempts to
+# mimic the behavior of the Houdini tool from Compaq SRC
 
 use Carp;
 use File::Copy;
@@ -173,7 +174,7 @@ while (1) {
     unless ($txtesc_changed) {
 	print "\n";
 	# Create a mapping from line number of the checked source to
-	# the pre-houdini line number.
+	# the pre-whodini line number.
 	my @map = ("MAPPING ERROR");
 	my ($line_no, $orig_no);
 	for my $line (@checked_source) {
