@@ -218,6 +218,8 @@ public final class Intern {
   private static WeakHasherMap internedIntArrays;
   private static WeakHasherMap internedLongArrays;
   private static WeakHasherMap internedDoubles;
+  private static Double internedDoubleNaN;
+  private static Double internedDoubleZero;
   private static WeakHasherMap internedDoubleArrays;
   private static WeakHasherMap internedStringArrays;
   private static WeakHasherMap internedObjectArrays;
@@ -228,6 +230,8 @@ public final class Intern {
     internedIntArrays = new WeakHasherMap(new IntArrayHasher());
     internedLongArrays = new WeakHasherMap(new LongArrayHasher());
     internedDoubles = new WeakHasherMap(new DoubleHasher());
+    internedDoubleNaN = new Double(Double.NaN);
+    internedDoubleZero = new Double(0);
     internedDoubleArrays = new WeakHasherMap(new DoubleArrayHasher());
     internedStringArrays = new WeakHasherMap(new StringArrayHasher());
     internedObjectArrays = new WeakHasherMap(new ObjectArrayHasher());
@@ -370,6 +374,12 @@ public final class Intern {
    * Returns a canonical representation for the Double.
    **/
   public static Double intern(Double a) {
+    // Double.NaN == Double.Nan  always evaluates to false.
+    if (a.isNaN())
+      return internedDoubleNaN;
+    // Double.+0 == Double.-0,  but they compare true via equals()
+    if (a.doubleValue() == 0)   // catches both positive and negative zero
+      return internedDoubleZero;
     Object lookup = internedDoubles.get(a);
     if (lookup != null) {
       WeakReference ref = (WeakReference)lookup;
