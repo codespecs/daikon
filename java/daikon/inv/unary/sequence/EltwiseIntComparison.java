@@ -10,6 +10,10 @@ import java.util.*;
 // This compares adjacent elements in the sequence.
 public class EltwiseIntComparison extends SingleSequence {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+
   final static boolean debugEltwiseIntComparison = false;
 
   public IntComparisonCore core;
@@ -20,6 +24,7 @@ public class EltwiseIntComparison extends SingleSequence {
   }
 
   public static EltwiseIntComparison instantiate(PptSlice ppt) {
+    if (!dkconfig_enabled) return null;
     // Don't compute ordering relationships over object addresses for
     // elements of a Vector.  (But do compute equality/constant!)
     boolean only_eq = ! ppt.var_infos[0].type.baseIsIntegral();

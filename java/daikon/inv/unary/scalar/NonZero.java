@@ -14,6 +14,10 @@ import utilMDE.*;
 
 public class NonZero extends SingleScalar {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+
   private static boolean debugNonZero = false;
 
   long min = Long.MAX_VALUE;
@@ -30,6 +34,9 @@ public class NonZero extends SingleScalar {
   }
 
   public static NonZero instantiate(PptSlice ppt) {
+    if (!dkconfig_enabled)
+      return null;
+
     if (debugNonZero || ppt.debugged) {
       System.out.println("NonZero.instantiate(" + ppt.name + ")");
     }

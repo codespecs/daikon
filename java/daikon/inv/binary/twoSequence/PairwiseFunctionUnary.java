@@ -8,6 +8,10 @@ import java.lang.reflect.*;
 
 public class PairwiseFunctionUnary extends TwoSequence {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+
   FunctionUnaryCore core;
 
   protected PairwiseFunctionUnary(PptSlice ppt, String methodname, Method function, boolean inverse) {
@@ -16,6 +20,7 @@ public class PairwiseFunctionUnary extends TwoSequence {
   }
 
   public static PairwiseFunctionUnary instantiate(PptSlice ppt, String methodname, Method function, boolean inverse) {
+    if (!dkconfig_enabled) return null;
     return new PairwiseFunctionUnary(ppt, methodname, function, inverse);
   }
 

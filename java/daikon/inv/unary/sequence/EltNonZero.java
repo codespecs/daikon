@@ -15,6 +15,11 @@ import java.util.*;
 // nonetheless?  Probably not, as this will simplify implication and such.
 
 public final class EltNonZero extends SingleSequence {
+
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+
   long min = Long.MAX_VALUE;
   long max = Long.MIN_VALUE;
 
@@ -29,6 +34,7 @@ public final class EltNonZero extends SingleSequence {
   }
 
   public static EltNonZero instantiate(PptSlice ppt) {
+    if (!dkconfig_enabled) return null;
     EltNonZero result = new EltNonZero(ppt);
     if (! ppt.var_infos[0].type.baseIsIntegral()) {
       result.pointer_type = true;

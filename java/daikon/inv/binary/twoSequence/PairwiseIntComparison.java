@@ -13,6 +13,10 @@ import java.util.Iterator;
 // Also see NonEqual
 public class PairwiseIntComparison extends TwoSequence {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+
   final static boolean debugPairwiseIntComparison = false;
 
   IntComparisonCore core;
@@ -28,6 +32,8 @@ public class PairwiseIntComparison extends TwoSequence {
   }
 
   public static PairwiseIntComparison instantiate(PptSlice ppt) {
+    if (!dkconfig_enabled) return null;
+
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
 

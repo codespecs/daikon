@@ -24,7 +24,12 @@ import java.io.*;
 // nonetheless?  Probably not, as this will simplify implication and such.
 
 public final class OneOfStringSequence  extends SingleStringSequence  implements OneOf {
-  final static int LIMIT = 2 ;	// maximum size for the one_of list
+
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+  public static int dkconfig_size = 3;
+
   // Probably needs to keep its own list of the values, and number of each seen.
   // (That depends on the slice; maybe not until the slice is cleared out.
   // But so few values is cheap, so this is quite fine for now and long-term.)
@@ -35,7 +40,7 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
   OneOfStringSequence (PptSlice ppt) {
     super(ppt);
 
-    elts = new String[LIMIT][];    // elements are interned, so can test with ==
+    elts = new String[dkconfig_size][];    // elements are interned, so can test with ==
                                 // (in the general online case, not worth interning)
 
     num_elts = 0;
@@ -43,6 +48,7 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
   }
 
   public static OneOfStringSequence  instantiate(PptSlice ppt) {
+    if (!dkconfig_enabled) return null;
     return new OneOfStringSequence (ppt);
   }
 
@@ -150,7 +156,7 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
         return;
 
       }
-    if (num_elts == LIMIT) {
+    if (num_elts == dkconfig_size) {
       destroy();
       return;
     }

@@ -11,6 +11,10 @@ import java.util.*;
 
 public class CommonSequence extends SingleSequence {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+
   final static boolean debugCommonSequence = false;
 
   private int elts;
@@ -21,6 +25,7 @@ public class CommonSequence extends SingleSequence {
   }
   
   public static CommonSequence instantiate(PptSlice ppt) {
+    if (!dkconfig_enabled) return null;
     return new CommonSequence(ppt);
   }
 

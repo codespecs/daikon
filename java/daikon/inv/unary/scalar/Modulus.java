@@ -8,6 +8,10 @@ import daikon.derive.unary.SequenceLength;
 
 public class Modulus extends SingleScalar {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+
   long modulus = 0;
   long remainder = 0;
 
@@ -23,6 +27,7 @@ public class Modulus extends SingleScalar {
   }
 
   public static Modulus instantiate(PptSlice ppt) {
+    if (!dkconfig_enabled) return null;
     VarInfo x = ppt.var_infos[0];
     if ((x.derived instanceof SequenceLength)
          && (((SequenceLength) x.derived).shift != 0)) {

@@ -10,6 +10,10 @@ import utilMDE.*;
 
 public final class SeqIndexNonEqual extends SingleSequence {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+
   public NonEqualCore core;
 
   static boolean debugSeqIndexNonEqual = false;
@@ -28,6 +32,8 @@ public final class SeqIndexNonEqual extends SingleSequence {
   }
 
   public static SeqIndexNonEqual instantiate(PptSlice ppt) {
+    if (!dkconfig_enabled) return null;
+
     VarInfo seqvar = ppt.var_infos[0];
 
     if (debugSeqIndexNonEqual) {

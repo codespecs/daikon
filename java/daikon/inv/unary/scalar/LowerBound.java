@@ -30,6 +30,12 @@ import java.util.*;
 
 public class LowerBound  extends SingleScalar  {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+  public static long dkconfig_minimal_interesting = Long.MIN_VALUE;
+  public static long dkconfig_maximal_interesting = Long.MAX_VALUE;
+
   public LowerBoundCore  core;
 
   private LowerBound (PptSlice ppt) {
@@ -38,6 +44,7 @@ public class LowerBound  extends SingleScalar  {
   }
 
   public static LowerBound  instantiate(PptSlice ppt) {
+    if (!dkconfig_enabled) return null;
     return new LowerBound (ppt);
   }
 
@@ -95,11 +102,10 @@ public class LowerBound  extends SingleScalar  {
   }
 
   public boolean isObviousImplied() {
-    if (Global.EXPERIMENTS) {
-      // if the value is not -1,0,1,2 then say that it is obvious
-      if ((core.min1  < -1) || (core.min1  > 2)) {
-	return true;
-      }
+    // if the value is not in some range (like -1,0,1,2) then say that it is obvious
+    if ((core.min1  < dkconfig_minimal_interesting) ||
+	(core.min1  > dkconfig_maximal_interesting)) {
+      return true;
     }
     return super.isObviousImplied();
   }

@@ -7,6 +7,10 @@ import utilMDE.*;
 
 public class CommonStringSequence extends SingleStringSequence {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+
   final static boolean debugCommonStringSequence = false;
 
   private int elts;
@@ -17,6 +21,7 @@ public class CommonStringSequence extends SingleStringSequence {
   }
   
   public static CommonStringSequence instantiate(PptSlice ppt) {
+    if (!dkconfig_enabled) return null;
     return new CommonStringSequence(ppt);
   }
 

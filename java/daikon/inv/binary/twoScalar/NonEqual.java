@@ -13,6 +13,11 @@ import utilMDE.*;
 // Also serves as NonAliased.
 public final class NonEqual extends TwoScalar {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+  public static boolean dkconfig_integral_only = false;
+
   public NonEqualCore core;
 
   protected NonEqual(PptSlice ppt) {
@@ -25,6 +30,16 @@ public final class NonEqual extends TwoScalar {
   }
 
   public static NonEqual instantiate(PptSlice ppt) {
+    if (!dkconfig_enabled) return null;
+
+    // Perhaps do not instantiate unless the variables have the same
+    // type; in particular, nonequal for Object variables is not so
+    // likely to be of interest.
+    boolean integral = ppt.var_infos[0].type.isIntegral() && ppt.var_infos[1].type.isIntegral();
+    if (dkconfig_integral_only && !integral) {
+      return null;
+    }
+
     NonEqual result = new NonEqual(ppt);
     // System.out.println("NonEqual override_range = " + result.core.override_range + " for " + ppt.name);
     return result;

@@ -6,11 +6,16 @@ import utilMDE.Assert;
 
 public class Reverse extends TwoSequence {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+
   protected Reverse(PptSlice ppt) {
     super(ppt);
   }
 
   public static Reverse instantiate(PptSlice ppt) {
+    if (!dkconfig_enabled) return null;
     return new Reverse(ppt);
   }
 

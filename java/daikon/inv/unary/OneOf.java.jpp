@@ -19,7 +19,6 @@ No cleverness needed for hashcode TOSTRING: never print actual values.
 #endif
 #define TOSTRING(x) x
 #define NAME var().name.name()
-#define DEFLIMIT (Global.EXPERIMENTS ? 3 : 5);
 #elif defined(STRING)
 #define SCALARPKG string
 #define INT String
@@ -28,7 +27,6 @@ No cleverness needed for hashcode TOSTRING: never print actual values.
 #define SINGLESCALAR SingleString
 #define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.quote(x) + "\"")
 #define NAME var().name.name()
-#define DEFLIMIT 3
 #elif defined(SEQUENCE)
 #define SCALARPKG sequence
 #define INT long[]
@@ -37,7 +35,6 @@ No cleverness needed for hashcode TOSTRING: never print actual values.
 #define SINGLESCALAR SingleSequence
 #define TOSTRING(x) ArraysMDE.toString(x)
 #define NAME var().name.name()
-#define DEFLIMIT 3
 #elif defined(STRINGSEQUENCE)
 #define SCALARPKG stringsequence
 #define INT String[]
@@ -46,7 +43,6 @@ No cleverness needed for hashcode TOSTRING: never print actual values.
 #define SINGLESCALAR SingleStringSequence
 #define TOSTRING(x) ArraysMDE.toString(x)
 #define NAME var().name.name()
-#define DEFLIMIT 2
 #elif defined(ELT)
 #define SCALARPKG sequence
 #define INT long
@@ -55,7 +51,6 @@ No cleverness needed for hashcode TOSTRING: never print actual values.
 #define SINGLESCALAR SingleSequence
 #define TOSTRING(x) (((x == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : (Long.toString(x)))
 #define NAME var().name.name() + " elements"
-#define DEFLIMIT 5
 #elif defined(ELTSTRING)
 #define SCALARPKG stringsequence
 #define INT String
@@ -64,7 +59,6 @@ No cleverness needed for hashcode TOSTRING: never print actual values.
 #define SINGLESCALAR SingleStringSequence
 #define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.quote(x) + "\"")
 #define NAME var().name.name() + " elements"
-#define DEFLIMIT 3
 #else
 #error "One of SCALAR, STRING, SEQUENCE, STRINGSEQUENCE, ELT, or ELTSTRING should be defined"
 #endif
@@ -95,7 +89,12 @@ import java.io.*;
 // nonetheless?  Probably not, as this will simplify implication and such.
 
 public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
-  final static int LIMIT = DEFLIMIT;	// maximum size for the one_of list
+
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+  public static int dkconfig_size = 3;
+
   // Probably needs to keep its own list of the values, and number of each seen.
   // (That depends on the slice; maybe not until the slice is cleared out.
   // But so few values is cheap, so this is quite fine for now and long-term.)
@@ -110,13 +109,13 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   ONEOFSCALAR(PptSlice ppt) {
     super(ppt);
 #if defined(SEQUENCE)
-    elts = new long[LIMIT][];    // elements are interned, so can test with ==
+    elts = new long[dkconfig_size][];    // elements are interned, so can test with ==
                                 // (in the general online case, not worth interning)
 #elif defined(STRINGSEQUENCE)
-    elts = new String[LIMIT][];    // elements are interned, so can test with ==
+    elts = new String[dkconfig_size][];    // elements are interned, so can test with ==
                                 // (in the general online case, not worth interning)
 #else
-    elts = new INT[LIMIT];
+    elts = new INT[dkconfig_size];
 #endif
     num_elts = 0;
 #if defined(SCALAR)
@@ -133,6 +132,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   }
 
   public static ONEOFSCALAR instantiate(PptSlice ppt) {
+    if (!dkconfig_enabled) return null;
     return new ONEOFSCALAR(ppt);
   }
 
@@ -560,7 +560,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
         return;
 #endif
       }
-    if (num_elts == LIMIT) {
+    if (num_elts == dkconfig_size) {
       destroy();
       return;
     }

@@ -40,15 +40,8 @@ public final class TwoScalarFactory {
 	  // System.out.println("Torpedoing NonEqual on the basis of " + ic.format());
 	  Global.subexact_noninstantiated_invariants += 1;
 	} else {
-	  // Perhaps do not instantiate unless the variables have the
-	  // same type; in particular, nonequal for Object variables
-	  // is not so likely to be of interest.
-	  if (Global.EXPERIMENTS && !integral) {
-	    // When generating specifications, we very often don't
-	    // care that pointers are not the same.
-	  } else {
-	    result.add(NonEqual.instantiate(ppt));
-	  }
+	  NonEqual maybe = NonEqual.instantiate(ppt);
+	  if (maybe != null) result.add(maybe);
 	}
 	// Skip LineayBinary and FunctionUnary unless vars are integral
 	if (!integral) {

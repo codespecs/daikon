@@ -13,6 +13,10 @@ import utilMDE.*;
 
 public class SubSequence extends TwoSequence {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+
   public boolean var1_in_var2 = true;
   public boolean var2_in_var1 = true;
 
@@ -21,6 +25,8 @@ public class SubSequence extends TwoSequence {
   }
 
   public static SubSequence instantiate(PptSlice ppt) {
+    if (!dkconfig_enabled) return null;
+
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
     // System.out.println("SubSequence.isObviousDerived(" + format() + ") = "

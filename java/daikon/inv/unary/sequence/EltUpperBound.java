@@ -30,6 +30,12 @@ import java.util.*;
 
 public class EltUpperBound  extends SingleSequence  {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+  public static long dkconfig_minimal_interesting = Long.MIN_VALUE;
+  public static long dkconfig_maximal_interesting = Long.MAX_VALUE;
+
   public UpperBoundCore  core;
 
   private EltUpperBound (PptSlice ppt) {
@@ -38,6 +44,7 @@ public class EltUpperBound  extends SingleSequence  {
   }
 
   public static EltUpperBound  instantiate(PptSlice ppt) {
+    if (!dkconfig_enabled) return null;
     return new EltUpperBound (ppt);
   }
 
@@ -103,11 +110,10 @@ public class EltUpperBound  extends SingleSequence  {
   }
 
   public boolean isObviousImplied() {
-    if (Global.EXPERIMENTS) {
-      // if the value is not -1,0,1,2 then say that it is obvious
-      if ((core.max1  < -1) || (core.max1  > 2)) {
-	return true;
-      }
+    // if the value is not in some range (like -1,0,1,2) then say that it is obvious
+    if ((core.max1  < dkconfig_minimal_interesting) ||
+	(core.max1  > dkconfig_maximal_interesting)) {
+      return true;
     }
     return super.isObviousImplied();
   }

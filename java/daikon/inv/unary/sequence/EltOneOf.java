@@ -24,7 +24,12 @@ import java.io.*;
 // nonetheless?  Probably not, as this will simplify implication and such.
 
 public final class EltOneOf  extends SingleSequence  implements OneOf {
-  final static int LIMIT = 5 ;	// maximum size for the one_of list
+
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+  public static int dkconfig_size = 3;
+
   // Probably needs to keep its own list of the values, and number of each seen.
   // (That depends on the slice; maybe not until the slice is cleared out.
   // But so few values is cheap, so this is quite fine for now and long-term.)
@@ -38,7 +43,7 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
   EltOneOf (PptSlice ppt) {
     super(ppt);
 
-    elts = new long [LIMIT];
+    elts = new long [dkconfig_size];
 
     num_elts = 0;
 
@@ -52,6 +57,7 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
   }
 
   public static EltOneOf  instantiate(PptSlice ppt) {
+    if (!dkconfig_enabled) return null;
     return new EltOneOf (ppt);
   }
 
@@ -239,7 +245,7 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
         continue OUTER;
 
       }
-    if (num_elts == LIMIT) {
+    if (num_elts == dkconfig_size) {
       destroy();
       return;
     }

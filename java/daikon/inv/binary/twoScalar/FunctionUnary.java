@@ -7,6 +7,10 @@ import java.lang.reflect.*;
 
 public class FunctionUnary extends TwoScalar {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+
   FunctionUnaryCore core;
 
   protected FunctionUnary(PptSlice ppt, String methodname, Method function, boolean inverse) {
@@ -15,6 +19,7 @@ public class FunctionUnary extends TwoScalar {
   }
 
   public static FunctionUnary instantiate(PptSlice ppt, String methodname, Method function, boolean inverse) {
+    if (!dkconfig_enabled) return null;
     return new FunctionUnary(ppt, methodname, function, inverse);
   }
 

@@ -11,6 +11,10 @@ import utilMDE.*;
 
 public final class SeqIntComparison extends SequenceScalar {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+
   public IntComparisonCore core;
 
   static boolean debugSeqIntComparison = false;
@@ -23,6 +27,8 @@ public final class SeqIntComparison extends SequenceScalar {
   }
 
   public static SeqIntComparison instantiate(PptSlice ppt, boolean seq_first) {
+    if (!dkconfig_enabled) return null;
+
     VarInfo seqvar = ppt.var_infos[seq_first ? 0 : 1];
     VarInfo sclvar = ppt.var_infos[seq_first ? 1 : 0];
 

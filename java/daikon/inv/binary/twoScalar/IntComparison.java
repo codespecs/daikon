@@ -16,6 +16,10 @@ import java.util.*;
 // Also see NonEqual
 public final class IntComparison extends TwoScalar implements Comparison {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+
   final static boolean debugIntComparison = false;
 
   public IntComparisonCore core;
@@ -30,6 +34,8 @@ public final class IntComparison extends TwoScalar implements Comparison {
   }
 
   public static IntComparison instantiate(PptSlice ppt) {
+    if (!dkconfig_enabled) return null;
+
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
     VarInfo seqvar1 = var1.isDerivedSequenceMember();

@@ -7,6 +7,10 @@ import java.lang.reflect.*;
 
 public class FunctionBinary extends ThreeScalar {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+
   final static boolean debugFunctionBinary = false;
 
   FunctionBinaryCore core;
@@ -17,6 +21,8 @@ public class FunctionBinary extends ThreeScalar {
   }
 
   public static FunctionBinary instantiate(PptSlice ppt, String methodname, Method function, int var_order) {
+    if (!dkconfig_enabled) return null;
+
     {
       int[] indices = FunctionBinaryCore.var_indices[var_order];
       VarInfo argresult = ppt.var_infos[indices[0]];

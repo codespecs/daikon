@@ -6,6 +6,10 @@ import daikon.inv.binary.twoScalar.*;
 
 public class PairwiseLinearBinary extends TwoSequence {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+
   LinearBinaryCore core;
 
   protected PairwiseLinearBinary(PptSlice ppt) {
@@ -14,6 +18,7 @@ public class PairwiseLinearBinary extends TwoSequence {
   }
 
   public static PairwiseLinearBinary instantiate(PptSlice ppt) {
+    if (!dkconfig_enabled) return null;
     return new PairwiseLinearBinary(ppt);
   }
 

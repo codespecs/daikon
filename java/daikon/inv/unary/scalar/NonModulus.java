@@ -6,6 +6,11 @@ import utilMDE.*;
 import java.util.*;
 
 public class NonModulus extends SingleScalar {
+
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+
   // Set elements = new HashSet();
   SortedSet elements = new TreeSet();
 
@@ -25,6 +30,7 @@ public class NonModulus extends SingleScalar {
   }
 
   public static NonModulus instantiate(PptSlice ppt) {
+    if (!dkconfig_enabled) return null;
     return new NonModulus(ppt);
   }
 

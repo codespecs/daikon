@@ -8,6 +8,10 @@ import utilMDE.*;
 
 public class LinearBinary extends TwoScalar {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+
   public LinearBinaryCore core;
 
   protected LinearBinary(PptSlice ppt) {
@@ -16,6 +20,7 @@ public class LinearBinary extends TwoScalar {
   }
 
   public static LinearBinary instantiate(PptSlice ppt) {
+    if (!dkconfig_enabled) return null;
     if (ppt.debugged) {
       System.out.println("LinearBinary.instantiate(" + ppt.name + ")");
     }

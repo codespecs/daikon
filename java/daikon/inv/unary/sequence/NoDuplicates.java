@@ -11,6 +11,10 @@ import java.util.*;
 
 public class NoDuplicates extends SingleSequence {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+
   final static boolean debugNoDuplicates = false;
 
   int elts = 0;
@@ -20,6 +24,7 @@ public class NoDuplicates extends SingleSequence {
   }
 
   public static NoDuplicates instantiate(PptSlice ppt) {
+    if (!dkconfig_enabled) return null;
     return new NoDuplicates(ppt);
   }
 

@@ -11,6 +11,10 @@ import java.util.*;
 // Lexically compares the two sequences.
 public class SeqComparison extends TwoSequence implements Comparison {
 
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface
+  public static boolean dkconfig_enabled = true;
+
   static Comparator comparator = new ArraysMDE.LongArrayComparatorLexical();
 
   public final boolean only_check_eq;
@@ -27,6 +31,8 @@ public class SeqComparison extends TwoSequence implements Comparison {
   }
 
   public static SeqComparison instantiate(PptSlice ppt) {
+    if (!dkconfig_enabled) return null;
+
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
 
