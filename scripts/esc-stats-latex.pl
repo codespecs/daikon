@@ -15,6 +15,22 @@ use Carp;
 use POSIX;
 
 my @types = ("invariant","set","requires","modifies","ensures","exsures","also_requires","also_modifies","also_ensures","also_exsures","axiom");
+
+my %types_map = (
+		 "invariant" => "Object",
+		 "set" => "Set",
+		 "requires" => "Requires",
+		 "modifies" => "Modifies",
+		 "ensures" => "Ensures",
+		 "exsures" => "Ensures",
+		 "also_requires" => "Requires",
+		 "also_modifies" => "Modifies",
+		 "also_ensures" => "Ensures",
+		 "also_exsures" => "Ensures",
+		 "axiom" => "Axiom",
+		 );
+my @printed_types = ("Object", "Requires", "Modifies", "Ensures");
+
 my @categories = ("EVU","EVR","ENU","ENR","IU","IR","A");
 my %prefixes =
     (EVU => "/*@",   # Expressible Verified Unique
@@ -69,6 +85,12 @@ my $maxredundant = 0;
 my $maxreported = 0;
 my $maxmissing = 0;
 
+my $single = 0;
+
+if ($ARGV[0] eq '-s') {
+  $single = 1;
+  shift @ARGV;
+}
 
 for my $file (@ARGV) {
   # print "# $file\n";
@@ -94,6 +116,15 @@ for my $file (@ARGV) {
   $ncnbloc =~ s/^ *//;
 
   my ($verified, $unverified, $inexpressible, $redundant, $missing) = (0, 0, 0, 0, 0);
+  for my $typ (@printed_types) {
+    $ver{$typ} = 0;
+    $unver{$typ} = 0;
+    $inexp{$typ} = 0;
+    $redun{$typ} = 0;
+    $miss{$typ} = 0;
+  }
+
+
   my $line = <SOURCE>;		# header line
   my $gotlines = 0;
   while (defined($line = <SOURCE>)) {
@@ -102,16 +133,27 @@ for my $file (@ARGV) {
 	|| ($line =~ /^TYPE/)) {
       next;
     }
+    $gotlines = 1;
     # print "line: $line";
     # See esc-stats.pl for definitions of the abbreviations.
-    my ($category, $evu, $evr, $enu, $enr, $iu, $ir, $a) = split(/[ \t]+/, $line);
-    # ignore $category
-    $verified += $evu;
-    $unverified += $enu;
-    $inexpressible += $iu;
-    $redundant += $evr + $enr + $ir;
-    $missing += $a;
-    $gotlines = 1;
+    my ($type, $evu, $evr, $enu, $enr, $iu, $ir, $a) = split(/[ \t]+/, $line);
+    if ($single) {
+      # Columns:  Verified, Unverified, Inexpressible, Redundant, Missing
+      # Rows: Object, Requires, Modifies, Ensures
+      $type = $types_map{$type};
+      $ver{$type} += $evu;
+      $unver{$type} += $enu;
+      $inexp{$type} += $iu;
+      $redun{$type} += $evr + $enr + $ir;
+      $miss{$type} += $a;
+    } else {
+      # ignore $type
+      $verified += $evu;
+      $unverified += $enu;
+      $inexpressible += $iu;
+      $redundant += $evr + $enr + $ir;
+      $missing += $a;
+    }
   }
   close(SOURCE);
   if ($gotlines == 0) {
@@ -145,58 +187,80 @@ my $total_redundant = 0;
 my $total_reported = 0;
 my $total_missing = 0;
 my $total_precision = 0;
-my $total_recall = 0;
+my $total_recall = 0;		# not a movie
 
-print "% Class         & LOC     & NCNB    & Verif.  & Unverif & Inexpr.    & Redund. & TotRept & Missing & Prec & Rec. \\\\\n";
-for my $class (sort {$ {$classdata{$a}}[1] <=> $ {$classdata{$b}}[1]} keys %classdata) {
-  ## This doesn't work; not sure why.
-  # my ($loc, $ncnbloc, $verified, $unverified, $inexpressible, $redundant, $reported, $missing) = $ $classdata{$class};
-  # print "($loc, $ncnbloc, $verified, $unverified, $inexpressible, $redundant, $reported, $missing)\n";
-  ## This is a craven admission of defeat:
-  my ($loc, $ncnbloc, $verified, $unverified, $inexpressible, $redundant, $reported, $missing) =
-    ($ {$classdata{$class}}[0], $ {$classdata{$class}}[1], $ {$classdata{$class}}[2], $ {$classdata{$class}}[3], $ {$classdata{$class}}[4], $ {$classdata{$class}}[5], $ {$classdata{$class}}[6], $ {$classdata{$class}}[7]);
-  # print "($loc, $ncnbloc, $verified, $unverified, $inexpressible, $redundant, $reported, $missing)\n";
-
-  my $precision = (1.0 * $verified) / ($verified + $unverified);
-  my $recall = (1.0 * $verified) / ($verified + $missing);
-
-  printf("%-15s & %s & %s & %s & %s & %s & %s & %s & %s & %.2f & %.2f \\\\\n",
-	 $class,
-	 pad_left(7, pad_zph(length($maxloc), $loc)),
-	 pad_left(7, pad_zph(length($maxncnbloc), $ncnbloc)),
-	 pad_left(7, pad_zph(length($maxverified), $verified)),
-	 pad_left(7, pad_zph(length($maxunverified), $unverified)),
-	 pad_left(10, pad_zph(length($maxinexpressible), $inexpressible)),
-	 pad_left(7, pad_zph(length($maxredundant), $redundant)),
-	 pad_left(7, pad_zph(length($maxreported), $reported)),
-	 pad_left(7, pad_zph(length($maxmissing), $missing)),
-	 $precision,
-	 $recall);
-
-  $total_loc += $loc;
-  $total_ncnbloc += $ncnbloc;
-  $total_verified += $verified;
-  $total_unverified += $unverified;
-  $total_inexpressible += $inexpressible;
-  $total_redundant += $redundant;
-  $total_reported += $reported;
-  $total_missing += $missing;
-  $total_precision += $precision;
-  $total_recall += $recall;
-}
-
-print "\\hline\n";
 $num_samples = 1.0 * scalar(keys %classdata);
 # print "\# $num_samples samples\n";
-
 sub avg ( $ ) {
   my ($x) = @_;
   return round($x / $num_samples);
 }
 
+if ($single) {
+  # print "% Type ... \n";
+  for my $typ (@printed_types) {
+    my $ver = $ver{$typ};
+    my $unver = $unver{$typ};
+    my $inexp = $inexp{$typ};
+    my $redun = $redun{$typ};
+    my $miss = $miss{$typ};
+    my $reported = $ver + $unver + $inexp + $redun;
 
+
+    printf("%-10s & %s & %s & %s & %s & %s & %s \\\\\n",
+	   $typ, $ver, $unver, $inexp, $redun, $reported, $miss);
+    $total_verified += $ver;
+    $total_unverified += $unver;
+    $total_inexpressible += $inexp;
+    $total_redundant += $redun;
+    $total_reported += $reported;
+    $total_missing += $miss;
+  }
+  printf("%-10s & %s & %s & %s & %s & %s & %s \\\\\n",
+	 "Total", $total_verified, $total_unverified, $total_inexpressible,
+	 $total_redundant, $total_reported, $total_missing);
+} else {
+  print "% Class         & LOC     & NCNB    & Verif.  & Unverif & Inexpr.    & Redund. & TotRept & Missing & Prec & Rec. \\\\\n";
+  for my $class (sort {$ {$classdata{$a}}[1] <=> $ {$classdata{$b}}[1]} keys %classdata) {
+    ## This doesn't work; not sure why.
+    # my ($loc, $ncnbloc, $verified, $unverified, $inexpressible, $redundant, $reported, $missing) = $ $classdata{$class};
+    # print "($loc, $ncnbloc, $verified, $unverified, $inexpressible, $redundant, $reported, $missing)\n";
+    ## This is a craven admission of defeat:
+    my ($loc, $ncnbloc, $verified, $unverified, $inexpressible, $redundant, $reported, $missing) =
+      ($ {$classdata{$class}}[0], $ {$classdata{$class}}[1], $ {$classdata{$class}}[2], $ {$classdata{$class}}[3], $ {$classdata{$class}}[4], $ {$classdata{$class}}[5], $ {$classdata{$class}}[6], $ {$classdata{$class}}[7]);
+    # print "($loc, $ncnbloc, $verified, $unverified, $inexpressible, $redundant, $reported, $missing)\n";
+
+    my $precision = (1.0 * $verified) / ($verified + $unverified);
+    my $recall = (1.0 * $verified) / ($verified + $missing);
+
+    printf("%-15s & %s & %s & %s & %s & %s & %s & %s & %s & %.2f & %.2f \\\\\n",
+	   $class,
+	   pad_left(7, pad_zph(length($maxloc), $loc)),
+	   pad_left(7, pad_zph(length($maxncnbloc), $ncnbloc)),
+	   pad_left(7, pad_zph(length($maxverified), $verified)),
+	   pad_left(7, pad_zph(length($maxunverified), $unverified)),
+	   pad_left(10, pad_zph(length($maxinexpressible), $inexpressible)),
+	   pad_left(7, pad_zph(length($maxredundant), $redundant)),
+	   pad_left(7, pad_zph(length($maxreported), $reported)),
+	   pad_left(7, pad_zph(length($maxmissing), $missing)),
+	   $precision,
+	   $recall);
+
+    $total_loc += $loc;
+    $total_ncnbloc += $ncnbloc;
+    $total_verified += $verified;
+    $total_unverified += $unverified;
+    $total_inexpressible += $inexpressible;
+    $total_redundant += $redundant;
+    $total_reported += $reported;
+    $total_missing += $missing;
+    $total_precision += $precision;
+    $total_recall += $recall;
+  }
+
+  print "\\hline\n";
 # Copied from above.
-printf("%-15s & %s & %s & %s & %s & %s & %s & %s & %s & %.2f & %.2f \\\\\n",
+  printf("%-15s & %s & %s & %s & %s & %s & %s & %s & %s & %.2f & %.2f \\\\\n",
 	 "Average",
 	 pad_left(7, pad_zph(length($maxloc), avg($total_loc))),
 	 pad_left(7, pad_zph(length($maxncnbloc), avg($total_ncnbloc))),
@@ -208,4 +272,5 @@ printf("%-15s & %s & %s & %s & %s & %s & %s & %s & %s & %.2f & %.2f \\\\\n",
 	 pad_left(7, pad_zph(length($maxmissing), avg($total_missing))),
 	 $total_precision/$num_samples,
 	 $total_recall/$num_samples);
-print "\\hline\n";
+  print "\\hline\n";
+}
