@@ -63,7 +63,38 @@ public class Reverse
   }
 
   public String format_jml() {
-    return "(new StringBuffer(" + var1().name.name() + ")).reverse().toString().equals(" + var2().name.name() + ")";
+    // The following line of code does not correctly indicate that one array is the reverse of the other
+    // return "(new StringBuffer(" + var1().name.name() + ")).reverse().toString().equals(" + var2().name.name() + ")";
+
+    VarInfoName name1,name2;
+    name1 = var1().name;
+    name2 = var2().name;
+
+    String upperExtent = ""; // Pacify javac with the initialization
+
+    VarInfoName seq;
+
+    if (name2 instanceof VarInfoName.Elements) {
+      seq = name2;
+    } else if (name2 instanceof VarInfoName.Slice) {
+      seq = ((VarInfoName.Slice)name2).sequence;
+    } else { // Should never happen
+      throw new IllegalStateException();
+    }
+
+    if (name2 instanceof VarInfoName.Slice && ((VarInfoName.Slice)name2).j != null)
+      upperExtent = ((VarInfoName.Slice)name2).j.jml_name();
+    else
+      upperExtent = seq.applySize().jml_name();
+
+    VarInfoName.QuantHelper.QuantifyReturn qret = VarInfoName.QuantHelper.quantify(new VarInfoName [] {name1});
+    String results[] = VarInfoName.QuantHelper.format_jml(qret,true);
+
+    VarInfoName index = ((VarInfoName [])qret.bound_vars.get(0))[0];
+
+    // Would normally create a new VarInfoName for the subscript and then use applySubscript, but
+    // parse appears to choke on that output... until it works, using this
+    return results[0] + results[1] + " == " + ((VarInfoName.Elements)seq).term.jml_name() + "[" + upperExtent + "-1-" + index.jml_name() + "]" + results[2];
   }
 
   public void add_modified(long[] a1, long[] a2, int count) {

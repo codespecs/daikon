@@ -179,8 +179,15 @@ public class SubSequence
   }
 
   public String format_jml() {
-    VarInfo subvar = (var1_in_var2 ? var1() : var2());
-    VarInfo supervar = (var2_in_var1 ? var1() : var2());
+    // This appears to be right, but returns the wrong results... swapping these vars
+    // VarInfo subvar = (var1_in_var2 ? var1() : var2());
+    // VarInfo supervar = (var2_in_var1 ? var1() : var2());
+
+    VarInfo supervar = (var1_in_var2 ? var1() : var2());
+    VarInfo subvar = (var2_in_var1 ? var1() : var2());
+
+    // System.out.println("subvar: "+subvar.name.name());
+    // System.out.println("supervar: "+supervar.name.name());
 
     // Bound the following quantification
     QuantifyReturn superQuantifyReturn = QuantHelper.quantify(new VarInfoName[] {supervar.name});
@@ -191,13 +198,25 @@ public class SubSequence
     VarInfoName subIndexName = ((VarInfoName [])subQuantifyReturn.bound_vars.get(0))[0];
 
     // If indicies have same name modify the quantify return before forming string
-    if (superIndexName.equals(subIndexName)) { // could cause name conflict... unsure of what to do
-      // do something
+    if (superIndexName.equals(subIndexName)) {
+      subIndexName = VarInfoName.parse(new String(new char [] {(char)((int)superIndexName.name().charAt(0)+1)})); // could cause name conflict... unsure of what to do
+      // Must correctly set the name within the QuantifyReturn
     }
 
     String subQuantifyResults[] = QuantHelper.format_jml(subQuantifyReturn);
 
-    return superQuantifyResults[0] + subQuantifyResults[0] + superQuantifyResults[1] + " == " +
+    VarInfoName superName = supervar.name;
+    String superTermName = "";
+
+    if (superName instanceof VarInfoName.Elements) {
+      VarInfoName.Elements el = (VarInfoName.Elements)superName;
+      superTermName = el.term.jml_name();
+    } else if (superName instanceof VarInfoName.Slice) {
+      VarInfoName.Slice sl = (VarInfoName.Slice)superName;
+      superTermName = sl.sequence.term.jml_name();
+    }
+
+    return superQuantifyResults[0] + subQuantifyResults[0] + superTermName + "[" + superIndexName.jml_name() + "+" + subIndexName.jml_name() + "] == " +
       subQuantifyResults[1] + subQuantifyResults[2] + superQuantifyResults[2];
   }
 
