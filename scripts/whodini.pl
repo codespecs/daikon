@@ -17,6 +17,8 @@ use File::Copy;
 use File::Path;
 use POSIX qw(tmpnam);
 
+my $escjava_executable = "/g2/users/mernst/bin/Linux-i686/escjava";
+
 # Algorithm for this script:
 # 0 We are given a txt-esc file and some (possibly-annotated) source files
 # 1 Read the txt file into memory, adding a nonce to the beginning of each invariant
@@ -172,7 +174,7 @@ while (1) {
     print ".";
     my $notdir_sourcetmp = join(" ", notdir(@sourcetmps));
     my @checked_sources = slurpfiles(@sourcetmps);
-    my @escoutput = `cd $tmpdir && escjava $notdir_sourcetmp`;
+    my @escoutput = `cd $tmpdir && $escjava_executable $notdir_sourcetmp`;
 
     # 6 Remove the two temporary files
     unlink($txtesctmp);
