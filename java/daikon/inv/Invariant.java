@@ -64,6 +64,11 @@ public abstract class Invariant
   public static final Logger debugGuarding = Logger.getLogger("daikon.guard");
 
   /**
+   * Debug tracer for isObvious checks.
+   **/
+  public static final Logger debugIsObvious = Logger.getLogger("daikon.inv.Invariant.isObvious");
+
+  /**
    * Real number between 0 and 1.  The invariant is displayed only if
    * the probability that the invariant occurred by chance is
    * less than this.  (May also be set
@@ -1070,6 +1075,15 @@ public abstract class Invariant
                                                              VarInfo[] assigned,
                                                              int position) {
     if (position == vis.length) {
+      if (debugIsObvious.isDebugEnabled()) {
+        StringBuffer sb = new StringBuffer();
+        sb.append ("  isObviousStatically_SomeInEquality: ");
+        for (int i = 0; i < vis.length; i++) {
+          sb.append (assigned[i].name.name() + " ");
+        }
+        debugIsObvious.debug (sb.toString());
+      }
+
       if (isObviousStatically (assigned)) {
         return assigned;
       } else {
@@ -1172,6 +1186,14 @@ public abstract class Invariant
                                                              VarInfo[] assigned,
                                                              int position) {
     if (position == vis.length) {
+      if (debugIsObvious.isDebugEnabled()) {
+        StringBuffer sb = new StringBuffer();
+        sb.append ("  isObviousDynamically_SomeInEquality: ");
+        for (int i = 0; i < vis.length; i++) {
+          sb.append (assigned[i].name.name() + " ");
+        }
+        debugIsObvious.debug (sb.toString());
+      }
       if (isObviousDynamically (assigned)) {
         return assigned;
       } else {
