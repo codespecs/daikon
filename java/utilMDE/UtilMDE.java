@@ -51,6 +51,16 @@ public final class UtilMDE {
     return new LineNumberReader(file_reader);
   }
 
+  /**
+   * Returns a BufferedWriter which can be used to write to files.
+   *
+   **/
+  public static BufferedWriter BufferedFileWriter(String filename) throws IOException{
+    Writer file_writer;
+    file_writer = new FileWriter(filename);
+    return new BufferedWriter(file_writer);
+  }
+  
   ///
   /// Class
   ///
