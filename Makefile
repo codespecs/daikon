@@ -138,14 +138,12 @@ kvasir/kvasir/Makefile.in:
 	touch $@
 
 kvasir/config.status: kvasir/kvasir/Makefile.in
-	cd kvasir && ./auto-everything.sh
-# I cut the next line out and replaced it with the previous line - P. Guo
-#	cd kvasir && ./configure --prefix=`pwd`/inst
+	cd kvasir && ./configure --prefix=`pwd`/inst
 
-kvasir/coregrind/valgrind: kvasir/config.status kvasir/coregrind/*.[ch]
+kvasir/coregrind/valgrind: kvasir/config.status $(wildcard kvasir/coregrind/*.[ch])
 	cd kvasir && $(MAKE)
 
-kvasir/kvasir/vgskin_kvasir.so: kvasir/coregrind/valgrind kvasir/kvasir/*.[ch] kvasir/kvasir/memcheck/*.[ch]
+kvasir/kvasir/vgskin_kvasir.so: kvasir/coregrind/valgrind $(wildcard kvasir/kvasir/*.[ch]) $(wildcard kvasir/kvasir/memcheck/*.[ch])
 	cd kvasir/kvasir && $(MAKE)
 
 kvasir/inst/bin/valgrind: kvasir/coregrind/valgrind
