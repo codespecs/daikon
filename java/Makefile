@@ -245,14 +245,14 @@ OLD_AUTO_GENERATED_FILES = \
 	daikon/inv/unary/sequence/SeqIndexNonEqualFloat.java \
 	daikon/inv/binary/twoScalar/NonEqualCore.java \
 	daikon/inv/binary/twoScalar/NonEqualCoreFloat.java \
-	daikon/binary/sequenceScalar/SequenceScalarFactory.java \
-	daikon/binary/sequenceScalar/SequenceFloatFactory.java \
-	daikon/binary/twoScalar/TwoScalarFactory.java \
-	daikon/binary/twoScalar/TwoFloatFactory.java \
-	daikon/binary/twoSequence/TwoSequenceFactory.java \
-	daikon/binary/twoSequence/TwoSequenceFactoryFloat.java \
-	daikon/unary/sequence/SingleScalarSequenceFactory.java \
-	daikon/unary/sequence/SingleFloatSequenceFactory.java
+	daikon/inv/binary/sequenceScalar/SequenceScalarFactory.java \
+	daikon/inv/binary/sequenceScalar/SequenceFloatFactory.java \
+	daikon/inv/binary/twoScalar/TwoScalarFactory.java \
+	daikon/inv/binary/twoScalar/TwoFloatFactory.java \
+	daikon/inv/binary/twoSequence/TwoSequenceFactory.java \
+	daikon/inv/binary/twoSequence/TwoSequenceFactoryFloat.java \
+	daikon/inv/unary/sequence/SingleScalarSequenceFactory.java \
+	daikon/inv/unary/sequence/SingleFloatSequenceFactory.java
 
 
 OLD_AUTO_GENERATED_CLASSES = $(subst .java,.class,${OLD_AUTO_GENERATED_FILES})
