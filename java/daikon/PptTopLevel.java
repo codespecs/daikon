@@ -1440,6 +1440,77 @@ public class PptTopLevel extends Ppt {
 
 
   ///////////////////////////////////////////////////////////////////////////
+  /// Hiding object invariants
+  ///
+
+  public boolean isObjectInvariant(Invariant inv, PptMap all_ppts)
+  {
+    Assert.assert(inv.ppt.parent == this);
+
+    // e.g. package.Class.method(args)R:::ENTER ->
+    //      package.Class:::CLASS
+    String object_ppt_name =
+      name.substring(0, name.lastIndexOf('.')) +
+      FileIO.ppt_tag_separator + "CLASS"; // TODO: Global for "CLASS"
+
+    PptTopLevel object_ppt = (PptTopLevel) all_ppts.get(object_ppt_name);
+    Assert.assert(object_ppt != null);
+
+    // Try to match inv against all object invariants
+    Iterator object_invs = object_ppt.invariants_vector().iterator();
+  IS_OBJ_INV_OUTER:
+    while (object_invs.hasNext()) {
+      Invariant obj_inv = (Invariant) object_invs.next();
+
+      // Can't be the same if they aren't the same type
+      if (!inv.getClass().equals(obj_inv.getClass())) {
+	continue;
+      }
+
+      // Can't be the same if they aren't the same formula
+      if (!inv.isSameFormula(obj_inv)) {
+	continue;
+      }
+
+      // The variable names much match up, in order
+
+      VarInfo[] vars = inv.ppt.var_infos;
+      VarInfo[] obj_vars = obj_inv.ppt.var_infos;
+
+      Assert.assert(vars.length == obj_vars.length); // due to inv type match already
+      for (int i=0; i < vars.length; i++) {
+	VarInfo var = vars[i];
+	VarInfo obj_var = obj_vars[i];
+
+	// This can be a match iff there is an intersection of the
+	// names of aliased variables
+	Vector all_obj_vars = obj_var.canonicalRep().equalTo();
+	Vector all_obj_vars_names = new Vector(all_obj_vars.size());
+	for (Iterator iter = all_obj_vars.iterator(); iter.hasNext(); ) {
+	  VarInfo elt = (VarInfo) iter.next();
+	  all_obj_vars_names.add(elt.name);
+	}
+	Vector all_vars = new Vector(var.canonicalRep().equalTo());
+	boolean name_matched = false;
+	for (Iterator iter = all_vars.iterator(); !name_matched && iter.hasNext(); ) {
+	  VarInfo elt = (VarInfo) iter.next();
+	  name_matched = all_obj_vars_names.contains(elt.name);
+	}
+	if (!name_matched) {
+	  continue IS_OBJ_INV_OUTER;
+	}
+      }
+
+      // the type, formula, and vars all matched
+      return true;
+    }
+
+    // no more candidates in set of object invs
+    return false;
+  }
+
+
+  ///////////////////////////////////////////////////////////////////////////
   /// Printing invariants
   ///
 
