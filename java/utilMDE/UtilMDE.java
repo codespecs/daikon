@@ -822,13 +822,13 @@ public final class UtilMDE {
     char c = ch.charValue();
     switch (c) {
     case '\"':
-      return("\\\"");
+      return "\\\"";
     case '\\':
-      return("\\\\");
+      return "\\\\";
     case '\n':
-      return("\\n");
+      return "\\n";
     case '\r':
-      return("\\r");
+      return "\\r";
     default:
       return new String(new char[] { c });
     }
