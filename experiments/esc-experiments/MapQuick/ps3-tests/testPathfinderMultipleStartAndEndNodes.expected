@@ -1,0 +1,59 @@
+#test PathFinder when passed multiple starting or ending nodes
+created node n1 with cost 2
+created node n2 with cost 20
+created node n3 with cost 4
+created node n4 with cost 4
+created node n5 with cost 12
+created node n6 with cost 1
+created node n7 with cost 3
+created node n8 with cost 9
+created node n9 with cost 5
+created node n10 with cost 3
+created node n11 with cost 11
+created graph A
+added node n1 to A
+added node n2 to A
+added node n3 to A
+added node n4 to A
+added node n5 to A
+added node n6 to A
+added node n7 to A
+added node n8 to A
+added node n9 to A
+added node n10 to A
+added node n11 to A
+added edge from n1 to n2 in A
+added edge from n1 to n5 in A
+added edge from n1 to n8 in A
+added edge from n2 to n3 in A
+added edge from n2 to n7 in A
+added edge from n3 to n4 in A
+added edge from n4 to n3 in A
+added edge from n4 to n7 in A
+added edge from n4 to n11 in A
+added edge from n5 to n1 in A
+added edge from n5 to n2 in A
+added edge from n5 to n6 in A
+added edge from n6 to n9 in A
+added edge from n6 to n10 in A
+added edge from n7 to n11 in A
+added edge from n8 to n5 in A
+added edge from n8 to n9 in A
+added edge from n9 to n5 in A
+added edge from n9 to n6 in A
+added edge from n9 to n10 in A
+added edge from n10 to n7 in A
+added edge from n11 to n10 in A
+added edge from n1 to n1 in A
+
+shortest path in A: n1 n8 n9
+shortest path in A: n3 n4 n11
+shortest path in A: n5
+shortest path in A: n4
+shortest path in A: n6
+shortest path in A: n1
+shortest path in A: n2
+shortest path in A: n3
+shortest path in A: n3
+shortest path in A: n6
+shortest path in A: n9

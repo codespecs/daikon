@@ -1,0 +1,9 @@
+#Test listing the children of a node
+created node n1 with cost 2
+created node n2 with cost 20
+created graph A
+added node n1 to A
+added node n2 to A
+added edge from n1 to n2 in A
+added edge from n1 to n1 in A
+the children of n1 in A are: n1 n2 

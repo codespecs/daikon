@@ -1,0 +1,24 @@
+#test listing the nodes
+created node n1 with cost 2
+created node n2 with cost 20
+created node n3 with cost 4
+created node n4 with cost 4
+created node n5 with cost 12
+created node n6 with cost 1
+created node n7 with cost 3
+created node n8 with cost 9
+created node n9 with cost 5
+created node n10 with cost 3
+created node n11 with cost 11
+created graph A
+A contains: 
+added node n1 to A
+added node n2 to A
+added node n3 to A
+added node n4 to A
+added node n5 to A
+added node n6 to A
+added node n7 to A
+added node n8 to A
+added node n9 to A
+A contains: n1 n2 n3 n4 n5 n6 n7 n8 n9 

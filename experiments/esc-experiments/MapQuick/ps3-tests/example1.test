@@ -1,0 +1,22 @@
+# Sample Testing file
+
+# Create a graph
+CreateGraph graph1
+
+# Add a pair of nodes
+CreateNode n1 5
+CreateNode n2 5
+AddNode graph1 n1
+AddNode graph1 n2
+
+# Add an edge
+AddEdge graph1 n1 n2
+
+# Print some stuff
+ListNodes graph1
+ListChildren graph1 n1
+ListChildren graph1 n2
+
+# Find a path
+FindPath graph1 n1 -> n2
+

@@ -1,0 +1,9 @@
+#Test listing the children of a node
+CreateNode n1 2
+CreateNode n2 20
+CreateGraph A
+AddNode A n1
+AddNode A n2
+AddEdge A n1 n2
+AddEdge A n1 n1
+ListChildren A n1

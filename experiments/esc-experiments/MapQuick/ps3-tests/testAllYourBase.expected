@@ -1,0 +1,53 @@
+#Test the All Your Base graph
+created graph fun
+
+created node You with cost 1
+created node All with cost 1
+created node belong with cost 1
+created node to with cost 1
+created node us with cost 1
+created node chance with cost 1
+created node make with cost 1
+created node your with cost 1
+created node base with cost 1
+created node are with cost 1
+created node have with cost 1
+created node no with cost 1
+created node time with cost 1
+created node survive with cost 1
+
+added node You to fun
+added node All to fun
+added node belong to fun
+added node to to fun
+added node us to fun
+added node chance to fun
+added node make to fun
+added node your to fun
+added node base to fun
+added node are to fun
+added node have to fun
+added node no to fun
+added node time to fun
+added node survive to fun
+
+added edge from chance to base in fun
+added edge from your to base in fun
+added edge from are to belong in fun
+added edge from make to your in fun
+added edge from to to us in fun
+added edge from You to have in fun
+added edge from your to time in fun
+added edge from have to no in fun
+added edge from no to chance in fun
+added edge from chance to to in fun
+added edge from base to are in fun
+added edge from to to survive in fun
+added edge from All to your in fun
+added edge from survive to make in fun
+added edge from belong to to in fun
+
+shortest path in fun: All your base are belong to us
+shortest path in fun: You have no chance to survive make your time
+
+
