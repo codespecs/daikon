@@ -245,9 +245,7 @@ public final class OneOfScalar
           // + " (hashcode=" + elts[0] + ")"
           ;
       }
-    } else
-
-    {
+    } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
@@ -276,9 +274,7 @@ public final class OneOfScalar
       } else {
         result = varname + " = {one value}";
       }
-    } else
-
-    {
+    } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " \\/ "; }
@@ -316,9 +312,7 @@ public final class OneOfScalar
         Assert.assertTrue(elts[1] != 0);
         return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
       }
-    } else
-
-    {
+    } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
@@ -350,9 +344,7 @@ public final class OneOfScalar
           // + " (hashcode=" + elts[0] + ")"
           ;
       }
-    } else
-
-    {
+    } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
@@ -383,9 +375,7 @@ public final class OneOfScalar
         Assert.assertTrue(elts[1] != 0);
         result = "(OR (EQ " + varname + " null) (EQ " + varname + "|hash_" + elts[1] + "|))";
       }
-    } else
-
-    {
+    } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
         result += " (EQ " + varname + " " + ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))  + ")";

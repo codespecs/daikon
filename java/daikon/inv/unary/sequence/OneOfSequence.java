@@ -255,10 +255,10 @@ public final class OneOfSequence
           length = var().name.applySize().java_name() + " == " + value.length;
         }
         if (no_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name });
+          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
           forall = form[0] + "(" + form[1] + " != null)" + form[2];
         } else if (all_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name });
+          String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
           forall = form[0] + "(" + form[1] + " == null)" + form[2];
         }
       }
@@ -331,10 +331,10 @@ public final class OneOfSequence
           length = var().name.applySize().esc_name() + " == " + value.length;
         }
         if (no_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name });
+          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
           forall = form[0] + "(" + form[1] + " != null)" + form[2];
         } else if (all_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name });
+          String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
           forall = form[0] + "(" + form[1] + " == null)" + form[2];
         }
       }
@@ -372,10 +372,10 @@ public final class OneOfSequence
           length = var().name.applySize().jml_name() + " == " + value.length;
         }
         if (no_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name });
+          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
           forall = form[0] + form[1] + " != null" + form[2];
         } else if (all_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name });
+          String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
           forall = form[0] + form[1] + " == null" + form[2];
         }
       }
@@ -409,10 +409,10 @@ public final class OneOfSequence
         length = "(EQ " + var().name.applySize().simplify_name() + " " + value.length + ")";
       }
       if (no_nulls(0)) {
-        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name });
+        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
         forall = form[0] + "(NEQ " + form[1] + "  null)" + form[2];
       } else if (all_nulls(0)) {
-        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name });
+        String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
         forall = form[0] + "(EQ " + form[1] + "  null)" + form[2];
       }
     }

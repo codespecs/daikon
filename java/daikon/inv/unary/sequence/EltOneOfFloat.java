@@ -198,7 +198,7 @@ public final class EltOneOfFloat
   public String format_java() {
     //have to take a closer look at this!
 
-    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name });
+    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
     String varname = form[1];
 
     String result;
@@ -240,7 +240,7 @@ public final class EltOneOfFloat
 
   public String format_esc() {
 
-    String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name });
+    String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
     String varname = form[1];
 
     String result;
@@ -260,7 +260,7 @@ public final class EltOneOfFloat
 
   public String format_jml() {
 
-    String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name });
+    String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
     String varname = form[1];
 
     String result;
@@ -280,7 +280,7 @@ public final class EltOneOfFloat
 
   public String format_simplify() {
 
-    String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name });
+    String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
     String varname = form[1];
 
     String result;

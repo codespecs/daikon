@@ -162,12 +162,14 @@ public final class Member
         VarInfo scl_index = sclsss.sclvar(); // "I" in "B[I]"
         int scl_shift = sclsss.index_shift;
         // System.out.println("scl_shift = " + scl_shift + ", seq_shift = " + seq_shift);
-        // This test returns true if scl+scl_shift<=seq+seq_shift
-        // isObviousImplied: when i<=j, b[i] in b[0..j]
-        // isObviousImplied: when i>=j, b[i] in b[j..]
+        // when b[i] in b[0..i] or b[i] in b[i..]
         if (scl_index == sclvar_seq) {
           return true;
         }
+
+        // This test returns true if scl+scl_shift<=seq+seq_shift
+        // isObviousImplied: when i<=j, b[i] in b[0..j]
+        // isObviousImplied: when i>=j, b[i] in b[j..]
         if (VarInfo.compare_vars(scl_index, scl_shift, seq_index, seq_shift,
                                  seq_from_start)) {
           return true;

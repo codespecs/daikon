@@ -84,9 +84,7 @@ public class NonZero
         return "nil";
       else
         return "null";
-    } else
-
-    {
+    } else {
       return "0";
     }
   }
