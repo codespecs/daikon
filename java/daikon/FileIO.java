@@ -921,7 +921,7 @@ public final class FileIO {
 
     String blank_line = reader.readLine();
     // Expecting the end of a block of values.
-    Assert.assert((blank_line == null) || (blank_line.equals("")));
+    Assert.assert((blank_line == null) || (blank_line.equals("")), blank_line);
   }
 
 
