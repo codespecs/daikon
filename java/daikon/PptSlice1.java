@@ -64,6 +64,10 @@ public final class PptSlice1  extends PptSlice {
       new_invs = SingleScalarFactory.instantiate(this, pass);
     } else if (rep_type == ProglangType.INT_ARRAY) {
       new_invs = SingleSequenceFactory.instantiate(this, pass);
+    } else if (rep_type == ProglangType.DOUBLE) {
+      new_invs = SingleFloatFactory.instantiate(this, pass);
+    } else if (rep_type == ProglangType.DOUBLE_ARRAY) {
+      new_invs = SingleFloatSequenceFactory.instantiate(this, pass);
     } else if (rep_type == ProglangType.STRING) {
       new_invs = SingleStringFactory.instantiate(this, pass);
     } else if (rep_type == ProglangType.STRING_ARRAY) {
@@ -203,12 +207,26 @@ public final class PptSlice1  extends PptSlice {
         SingleScalar inv = (SingleScalar)invs.elementAt(i);
         inv.add(value, mod1, count);
       }
+    } else if (rep == ProglangType.DOUBLE) {
+      // int value = vi1.getDoubleValue(full_vt);
+      double value = ((Double) val1).doubleValue();
+      for (int i=0; i<num_invs; i++) {
+        SingleFloat inv = (SingleFloat)invs.elementAt(i);
+        inv.add(value, mod1, count);
+      }
     } else if (rep == ProglangType.STRING) {
       // String value = vi1.getStringValue(full_vt);
       String value = (String) val1;
       for (int i=0; i<num_invs; i++) {
         // System.out.println("Trying " + invs.elementAt(i));
         SingleString inv = (SingleString) invs.elementAt(i);
+        inv.add(value, mod1, count);
+      }
+    } else if (rep == ProglangType.DOUBLE_ARRAY) {
+      // int[] value = vi1.getDoubleArrayValue(full_vt);
+      double[] value = (double[]) val1;
+      for (int i=0; i<num_invs; i++) {
+        SingleFloatSequence inv = (SingleFloatSequence)invs.elementAt(i);
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.INT_ARRAY) {
@@ -267,6 +285,17 @@ public final class PptSlice1  extends PptSlice {
           if (inv.no_invariant)
             break;
         }
+      } else if (rep == ProglangType.DOUBLE) {
+        SingleFloat inv = (SingleFloat) invariant;
+        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
+          Map.Entry entry = (Map.Entry) itor.next();
+          double val = ((Double) entry.getKey()).doubleValue();
+          int[] tm_array = (int[]) entry.getValue();
+          inv.add(val, 0, tm_array[0]);
+          inv.add(val, 1, tm_array[1]);
+          if (inv.no_invariant)
+            break;
+        }
       } else if (rep == ProglangType.STRING) {
         SingleString inv = (SingleString) invariant;
         for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
@@ -283,6 +312,17 @@ public final class PptSlice1  extends PptSlice {
         for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
           Map.Entry entry = (Map.Entry) itor.next();
           int[] val = (int[]) entry.getKey();
+          int[] tm_array = (int[]) entry.getValue();
+          inv.add(val, 0, tm_array[0]);
+          inv.add(val, 1, tm_array[1]);
+          if (inv.no_invariant)
+            break;
+        }
+      } else if (rep == ProglangType.DOUBLE_ARRAY) {
+        SingleFloatSequence inv = (SingleFloatSequence) invariant;
+        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
+          Map.Entry entry = (Map.Entry) itor.next();
+          double[] val = (double[]) entry.getKey();
           int[] tm_array = (int[]) entry.getValue();
           inv.add(val, 0, tm_array[0]);
           inv.add(val, 1, tm_array[1]);

@@ -55,8 +55,10 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     // Watch out:  some Lisp and C .decls files have other (unsupported) types.
     Assert.assert(rep_type_ != null);
     Assert.assert((rep_type_ == ProglangType.INT)
+                  || (rep_type_ == ProglangType.DOUBLE)
                   || (rep_type_ == ProglangType.STRING)
                   || (rep_type_ == ProglangType.INT_ARRAY)
+                  || (rep_type_ == ProglangType.DOUBLE_ARRAY)
                   || (rep_type_ == ProglangType.STRING_ARRAY),
                   "Unsupported representation type " + rep_type_.format() + " for variable " + name_);
 

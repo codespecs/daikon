@@ -35,8 +35,10 @@ public final class ProglangType implements java.io.Serializable {
 
   // Use == to compare, because ProglangType objects are interned.
   public final static ProglangType INT = ProglangType.intern("int", 0);
+  public final static ProglangType DOUBLE = ProglangType.intern("double", 0);
   public final static ProglangType STRING = ProglangType.intern("String", 0);
   public final static ProglangType INT_ARRAY = ProglangType.intern("int", 1);
+  public final static ProglangType DOUBLE_ARRAY = ProglangType.intern("double", 1);
   public final static ProglangType STRING_ARRAY = ProglangType.intern("String", 1);
 
   public final static ProglangType BOOLEAN = ProglangType.intern("boolean", 0);
@@ -97,9 +99,12 @@ public final class ProglangType implements java.io.Serializable {
   private static ProglangType find(String t_base_, int t_dims) {
     String t_base = t_base_;
     Assert.assert(t_base == t_base.intern());
-    if (t_base == "boolean") { // interned
+    if (t_base == "boolean") {  // interned
       t_base = "int";
+    } else if (t_base == "float") { // interned
+      t_base = "double";
     }
+
     // System.out.println("ProglangType.find(" + t_base + ", " + t_dims + ")");
     // System.out.println("All known types:");
     // for (int i=0; i<all_known_types.size(); i++) {
@@ -190,8 +195,9 @@ public final class ProglangType implements java.io.Serializable {
   final static String BASE_INTEGER = "Integer";
 
   // avoid duplicate allocations
-  final static Integer Zero = Intern.internedInteger(0);
-  final static Integer One = Intern.internedInteger(1);
+  final static Integer IntegerZero = Intern.internedInteger(0);
+  final static Integer IntegerOne = Intern.internedInteger(1);
+  final static Double DoubleZero = Intern.internedDouble(0);
 
   // Given a string representation of a value (of the type represented by
   // this ProglangType), return the interpretation of that value.
@@ -224,13 +230,21 @@ public final class ProglangType implements java.io.Serializable {
         // Is this still necessary?
         // Hack for Java objects, fix later I guess.
         if (value.equals("null"))
-          return Zero;
+          return IntegerZero;
         // Hack for booleans
         if (value.equals("false"))
-          return Zero;
+          return IntegerZero;
         if (value.equals("true"))
-          return One;
+          return IntegerOne;
 	return Intern.internedInteger(value);
+      // } else if (base == BASE_BOOLEAN) {
+      //   return new Boolean(value);
+      } else if (base == BASE_DOUBLE) {
+        // Is this still necessary?
+        // Hack for Java objects, fix later I guess.
+        if (value.equals("null"))
+          return DoubleZero;
+	return Intern.internedDouble(value);
       // } else if (base == BASE_BOOLEAN) {
       //   return new Boolean(value);
       } else {
@@ -263,6 +277,15 @@ public final class ProglangType implements java.io.Serializable {
             result[i] = 0;
           else
             result[i] = Integer.parseInt(value_strings[i]);
+        }
+        return Intern.intern(result);
+      } else if (base == BASE_DOUBLE) {
+        double[] result = new double[len];
+        for (int i=0; i<len; i++) {
+          if (value_strings[i].equals("null"))
+            result[i] = 0;
+          else
+            result[i] = Double.parseDouble(value_strings[i]);
         }
         return Intern.intern(result);
       } else if (base == BASE_STRING) {
