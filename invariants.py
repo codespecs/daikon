@@ -1183,7 +1183,8 @@ def all_numeric_invariants(fn_regexp=None):
 
     if collect_stats:
         collect_pre_derive_data()
-        
+        engine_begin_time = time.clock()
+
     fn_names = fn_var_infos.keys()
     fn_names.sort()
     for fn_name in fn_names:
@@ -1259,8 +1260,9 @@ def all_numeric_invariants(fn_regexp=None):
             end_fn_timing(fn_name)
 
     if collect_stats:
+        engine_end_time = time.clock()
         collect_post_derive_data()
-        print_stats()
+        print_stats(engine_begin_time, engine_end_time)
     # print_invariants(fn_regexp)
 
 ## Testing:
@@ -3141,13 +3143,13 @@ def end_fn_timing(fn):
     fn_stats = fn_to_stats[fn]
     fn_stats.fn_end_time = time.clock()
     
-def print_stats():
+def print_stats(engine_begin_time, engine_end_time):
     print "Invariant Engine Stats"
     print "Configuration: no_invocation_counts: %s, no_ternary_invariants: %s, no_opts: %s" % (no_invocation_counts, no_ternary_invariants, __debug__)
 
-    total_secs = 0
-    for (fn_name,fn_stats) in fn_to_stats.items():
-        total_secs = total_secs + (fn_stats.fn_end_time - fn_stats.fn_begin_time)
+    total_secs = engine_end_time - engine_begin_time
+    # for (fn_name,fn_stats) in fn_to_stats.items():
+    #    total_secs = total_secs + (fn_stats.fn_end_time - fn_stats.fn_begin_time)
         
     hours = int(total_secs / 3600.0)
     minutes = int((total_secs % 3600)/60.0)
