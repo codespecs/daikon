@@ -334,7 +334,7 @@ public final class LinearTernaryCore
 	return zname + eq + "(? * " + xname + ") + (? * " + yname + ") + ?";
       }
 
-      return z + " == "
+      return zname + " == "
 	+ LinearBinaryCore.formatTerm(format, a, x, true)
 	+ LinearBinaryCore.formatTerm(format, b, y, false)
 	+ LinearBinaryCore.formatTerm(format, c, null, false);
