@@ -74,13 +74,13 @@ DISTTESTDIR := $(HOME)/tmp/daikon.dist
 dist-test: dist dist-test-no-update-dist
 
 dist-test-no-update-dist:
-	rm -rf $(DISTTESTDIR)
+	-rm -rf $(DISTTESTDIR)
 	mkdir $(DISTTESTDIR)
 	(cd $(DISTTESTDIR); tar xzf $(DIST_DIR)/daikon.tar.gz)
 	(cd $(DISTTESTDIR)/daikon/java/daikon; CLASSPATH=$(DISTTESTDIR)/daikon/java:/g2/users/mernst/java/jdk/jre/lib/rt.jar; make)
 
 cvs-test:
-	rm -rf $(HOME)/tmp/daikon.cvs
+	-rm -rf $(HOME)/tmp/daikon.cvs
 	mkdir $(HOME)/tmp/daikon.cvs
 	(cd $(HOME)/tmp/daikon.cvs; cvs -Q -d $(HOME)/research/.CVS-research co invariants; cvs -Q -d $(HOME)/research/.CVS-research co utilMDE)
 	(cd $(HOME)/tmp/daikon.cvs/invariants/daikon; CLASSPATH=/g2/users/mernst/tmp/daikon.cvs:/g2/users/mernst/tmp/daikon.cvs/invariants:/g2/users/mernst/java/OROMatcher-1.1:/g2/users/mernst/java/getopt-1.0.8:.:/g2/users/mernst/java/jdk/jre/lib/rt.jar; make)
@@ -99,14 +99,14 @@ dist: $(DIST_DIR)/daikon.tar.gz
 
 # Is this the right way to do this?
 dist-force:
-	rm -f daikon.tar.gz
+	-rm -f daikon.tar.gz
 	$(MAKE) dist
 
 $(DIST_DIR)/daikon.tar.gz: daikon.tar.gz
 	html-update-toc daikon.html
 	# This isn't quite right:  $(DIST_DIR) should hold the
 	# daikon.html from daikon.tar.gz, not the current version.
-	rm -rf $(DIST_DIR)/daikon.tar.gz $(DIST_DIR)/daikon.html
+	-rm -rf $(DIST_DIR)/daikon.tar.gz $(DIST_DIR)/daikon.html
 	cp -pf daikon.tar.gz daikon.html $(DIST_DIR)
 	# Don't edit the copy of daikon.html in the distribution directory
 	chmod ogu-w $(DIST_DIR)/daikon.tar.gz $(DIST_DIR)/daikon.html
@@ -115,7 +115,7 @@ $(DIST_DIR)/daikon.tar.gz: daikon.tar.gz
 daikon.tar: $(LISP_PATHS) $(DOC_FILES) $(PY_DOC_FILES) $(EDG_FILES) $(README_files) examples-gries.tar.gz
 	html-update-toc daikon.html
 
-	rm -rf /tmp/daikon
+	-rm -rf /tmp/daikon
 	mkdir /tmp/daikon
 
 	# # Old Python implementation
@@ -188,7 +188,7 @@ daikon.tar: $(LISP_PATHS) $(DOC_FILES) $(PY_DOC_FILES) $(EDG_FILES) $(README_fil
 	# ln -s dist-`date +'%y%m%d'` dist
 
 daikon.tar.gz: daikon.tar
-	rm -rf daikon.tar.gz
+	-rm -rf daikon.tar.gz
 	gzip -c daikon.tar > daikon.tar.gz
 
 ### Front end binaries
@@ -262,4 +262,4 @@ examples-gries.tar.gz: $(GRIES_FILE_PATHS) $(GRIES_DIR)/README-examples-gries
 	cp -pf $(GRIES_FILE_PATHS) examples-gries
 	cp -pf $(GRIES_DIR)/README-examples-gries examples-gries/README
 	tar czf examples-gries.tar.gz examples-gries
-	rm -rf examples-gries
+	-rm -rf examples-gries
