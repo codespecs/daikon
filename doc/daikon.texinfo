@@ -128,6 +128,10 @@ Details on running instrumented Java programs
 
 * Java applets::                
 
+Detect invariants in the data trace files
+
+* Command line options for daikon
+
 All-in-one script daikon.pl
 
 * daikon.pl arguments::         
@@ -1052,6 +1056,44 @@ running the instrumented program.
 Be sure to include all declaration files that are needed for the particular
 data trace file; the simplest way is to include every the declaration file
 created when instrumenting the program that is read.
+
+@menu
+* Command line options for daikon::
+@end menu
+
+
+@node    Command line options for daikon, , Detect invariants, Detect invariants
+@subsection Command line options for daikon
+
+@table @b
+@item @option{-h}
+Print usage message.
+
+@item @option{-r} @var{ppt_regexp}
+Only process program points matching the regexp.
+
+@item @option{-o} @var{inv_file}
+Serialize invariants to the specified file; they can later be
+postprocessed, compared, etc.
+
+@item @option{--suppress_cont}
+Suppress display of implied invariants (by controlling ppt).
+
+@item @option{--suppress_post}
+Suppress display of obvious postconditions on prestate.
+
+@item @option{--prob_limit} @var{pct}
+Sets the probability limit for justifying invariants.  The default is
+1%.  Smaller values yield stronger filtering.
+
+@item @option{esc_output}
+Write output in ESC-like format.
+
+@item @option{--output_num_samples}
+Output numbers of values and samples for invariants and program points;
+for debugging.
+@end table
+
 
 
 @node    All-in-one script,  , Detect invariants, Detecting invariants
