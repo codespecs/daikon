@@ -4,8 +4,8 @@ import daikon.inv.*;
 import daikon.inv.filter.*;
 
 class VariableFilter extends InvariantFilter {
-  // This method is more for the property filters, but we need to implement it cause it's
-  // abstract.
+  // This method is more for the property filters, but we need to implement
+  // it because it's abstract.
   public String getDescription() {
     return "Variable filter on '" + variable + "'";
   }
