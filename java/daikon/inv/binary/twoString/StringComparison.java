@@ -101,6 +101,11 @@ public final class StringComparison extends TwoString implements Comparison {
 
   }
 
+  protected Invariant resurrect_done(int[] permutation) {
+    core.permute(permutation);
+    return this;
+  }
+
   // Look up a previously instantiated StringComparison relationship.
   // Should this implementation be made more efficient?
   public static StringComparison find(PptSlice ppt) {

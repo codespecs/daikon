@@ -2,9 +2,10 @@ package daikon.inv.unary.stringsequence;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.unary.*;
 import utilMDE.*;
 
-public abstract class SingleStringSequence extends Invariant {
+public abstract class SingleStringSequence extends UnaryInvariant {
 
   protected SingleStringSequence(PptSlice ppt) {
     super(ppt);

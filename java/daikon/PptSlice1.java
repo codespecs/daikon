@@ -46,6 +46,8 @@ public final class PptSlice1  extends PptSlice {
 
     var_info = var_infos[0];
 
+    init_po();
+
     // values_cache = new HashMap(); // [INCR]
     if (this.debugged || debug.isDebugEnabled())
       debug.info("Created PptSlice1 " + this.name);
@@ -60,8 +62,38 @@ public final class PptSlice1  extends PptSlice {
     this(parent, new VarInfo[] { var_info });
   }
 
+  /** Implements specification as defined in superclass PptSlice */
+  void init_po() {
+  outer:
+    for (Iterator i = var_infos[0].closurePO(false); i.hasNext(); ) {
+      VarInfo vi0_higher = (VarInfo) i.next();
+      PptTopLevel ppt_higher = vi0_higher.ppt;
+
+	  // (slice_higher == null) can happen if a view was skipped
+	  // due to no invariants (which means we will probably skip
+	  // this view too; oh well).
+	  // Assert.assert(slice_higher != null);
+
+	  PptSlice slice_higher = ppt_higher.findSlice(vi0_higher);
+
+	  if (slice_higher == null) continue;
+	  int[] permute = new int[] {
+	    ArraysMDE.indexOf(slice_higher.var_infos, vi0_higher),
+
+	  };
+	  addHigherPO(slice_higher, permute);
+	  continue outer;
+
+    } // i (outer)
+  }
+
   void instantiate_invariants() {
     Assert.assert(!no_invariants);
+
+    if (po_higher.size() > 0) {
+      if (this.debugged || debug.isDebugEnabled())
+	debug.info("instantiate_invariants for " + name + " skipped because controlled");
+    }
 
     // Instantiate invariants
     if (this.debugged || debug.isDebugEnabled())
@@ -111,18 +143,30 @@ public final class PptSlice1  extends PptSlice {
   }
 
   // These accessors are for abstract methods declared in Ppt
-
   public int num_samples() {
-    return tm_total[0] + tm_total[1];
-  }
-  public int num_mod_non_missing_samples() {
-    return tm_total[1];
+
+    int result =  tm_total[0] + tm_total[1];
+
+    Assert.assert(result >= 0);
+    return result;
   }
 
+  public int num_mod_non_missing_samples() {
+
+    int result =  tm_total[1];
+
+    Assert.assert(result >= 0);
+    return result;
+  }
+
+  // [INCR] XXX; maintaining this would require storing a set of all
+  // the different values we see.  That seems like a very bad idea.
+  // We should deprecated this method, right?
   public int num_values() {
     Assert.assert(! no_invariants);
+    return num_samples(); // XXX
     // if (values_cache == null) { [INCR]
-      return num_values_post_cache;
+    //   return num_values_post_cache;
     // } else {
     //   return values_cache.size();
     // }
@@ -203,7 +247,7 @@ public final class PptSlice1  extends PptSlice {
     // System.out.println("PptSlice1 " + name + ": add " + full_vt + " = " + vt);
     // System.out.println("PptSlice1 " + name + " has " + invs.size() + " invariants.");
 
-    defer_invariant_removal();
+    // defer_invariant_removal(); [INCR]
 
     // Supply the new values to all the invariant objects.
     int num_invs = invs.size();
@@ -262,7 +306,7 @@ public final class PptSlice1  extends PptSlice {
       throw new Error("unrecognized representation " + rep.format());
     }
 
-    undefer_invariant_removal();
+    // undefer_invariant_removal(); [INCR]
   }
 
   // void process() {

@@ -2,7 +2,7 @@ package daikon.inv.binary.twoString;
 
 import daikon.*;
 import daikon.inv.*;
-import utilMDE.Assert;
+import utilMDE.*;
 
 // Also see NonEqual
 public final class StringComparisonCore implements java.io.Serializable {
@@ -20,12 +20,11 @@ public final class StringComparisonCore implements java.io.Serializable {
   // In other words, if the thing that's obviously possible hsn't yet
   // happened, then the invariant is interesting.
 
-  // These are final for efficiency's sake.
-  public final boolean only_check_eq;
-  public final boolean obvious_can_be_lt;
-  public final boolean obvious_can_be_gt;
-  public final boolean obvious_can_be_le;
-  public final boolean obvious_can_be_ge;
+  public boolean only_check_eq;
+  public boolean obvious_can_be_lt;
+  public boolean obvious_can_be_gt;
+  public boolean obvious_can_be_le;
+  public boolean obvious_can_be_ge;
 
   Invariant wrapper;
 
@@ -46,6 +45,27 @@ public final class StringComparisonCore implements java.io.Serializable {
     obvious_can_be_ge = obvious_ge;
     if (only_eq || obvious_lt || obvious_gt || obvious_le || obvious_ge) {
       Global.partially_implied_invariants++;
+    }
+  }
+
+  protected void permute(int[] permutation) {
+    Assert.assert(permutation.length == 2);
+    Assert.assert(ArraysMDE.is_permutation(permutation));
+    if (permutation[0] == 1) {
+      // was a swap
+      boolean tmp;
+
+      tmp = can_be_lt;
+      can_be_gt = can_be_lt;
+      can_be_gt = tmp;
+
+      tmp = obvious_can_be_lt;
+      obvious_can_be_lt = obvious_can_be_gt;
+      obvious_can_be_gt = tmp;
+
+      tmp = obvious_can_be_le;
+      obvious_can_be_le = obvious_can_be_ge;
+      obvious_can_be_ge = tmp;
     }
   }
 

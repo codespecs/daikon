@@ -57,6 +57,18 @@ public class SeqComparison extends TwoSequence implements Comparison {
     return new SeqComparison(ppt, only_eq);
   }
 
+  protected Invariant resurrect_done(int[] permutation) {
+    Assert.assert(permutation.length == 2);
+    Assert.assert(ArraysMDE.is_permutation(permutation));
+    if (permutation[0] == 1) {
+      // was a swap
+      boolean tmp = can_be_lt;
+      can_be_gt = can_be_lt;
+      can_be_gt = tmp;
+    }
+    return this;
+  }
+
   public String repr() {
     return "SeqComparison" + varNames() + ": "
       + "can_be_eq=" + can_be_eq

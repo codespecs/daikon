@@ -133,6 +133,11 @@ public final class IntComparison extends TwoScalar implements Comparison {
 
   }
 
+  protected Invariant resurrect_done(int[] permutation) {
+    core.permute(permutation);
+    return this;
+  }
+
   // Look up a previously instantiated IntComparison relationship.
   // Should this implementation be made more efficient?
   public static IntComparison find(PptSlice ppt) {

@@ -75,7 +75,7 @@ public final class VarInfo
 
   // Partial ordering relationships between variables
 
-  // Keep private, modifiable copies and public read-onlny copies
+  // Keep private, modifiable copies and public read-only views
   private final Collection _po_higher = new ArrayList(2);
   private final Collection _po_lower = new ArrayList(2);
 
@@ -296,6 +296,12 @@ public final class VarInfo
    * Ensures that parent is in this.po_higher and this in in parent.po_lower.
    **/
   public void addHigherPO(VarInfo parent) {
+    // Code copied in PptSlice; edit both copies.
+    Assert.assert(this != parent);
+    Assert.assert(this.ppt != parent.ppt);
+    Assert.assert(this.type == parent.type);
+    Assert.assert(this.rep_type == parent.rep_type);
+    Assert.assert(this.file_rep_type == parent.file_rep_type);
     if (this._po_higher.contains(parent)) {
       Assert.assert(parent._po_lower.contains(this));
       return;
@@ -304,6 +310,25 @@ public final class VarInfo
     this._po_higher.add(parent);
     parent._po_lower.add(this);
   }
+
+  /**
+   * Result is a stable BFS iterator.
+   **/
+  public Iterator closurePO(boolean lower) {
+    List result = new ArrayList();
+    LinkedList worklist = new LinkedList(lower ? _po_lower : _po_higher);
+    while (! worklist.isEmpty()) {
+      VarInfo head = (VarInfo) worklist.removeFirst();
+      if (! result.contains(head)) {
+	result.add(head);
+	worklist.addAll(lower ? head._po_lower : head._po_higher);
+      }
+    }
+    Assert.assert(! result.contains(this));
+    return Collections.unmodifiableList(result).iterator();
+  }
+
+  public String toString() { return repr(); }
 
   public String repr() {
     return "<VarInfo " + name + ": "
@@ -317,7 +342,7 @@ public final class VarInfo
       + ",static_constant_value=" + static_constant_value
       + ",derived=" + derived
       + ",derivees=" + derivees
-      + ",ppt=" + ppt
+      + ",ppt=" + ppt.name
       // + ",equal_to=" + equal_to // [INCR]
       + ">";
   }

@@ -2,9 +2,10 @@ package daikon.inv.unary.sequence;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.unary.*;
 import utilMDE.*;
 
-public abstract class SingleFloatSequence extends Invariant {
+public abstract class SingleFloatSequence extends UnaryInvariant {
 
   protected SingleFloatSequence(PptSlice ppt) {
     super(ppt);
@@ -46,7 +47,6 @@ public abstract class SingleFloatSequence extends Invariant {
   public void add_unmodified(double[] value, int count) {
     return;
   }
-
 
 }
 

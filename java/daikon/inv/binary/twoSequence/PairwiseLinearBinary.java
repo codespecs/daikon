@@ -22,6 +22,11 @@ public class PairwiseLinearBinary extends TwoSequence {
     return new PairwiseLinearBinary(ppt);
   }
 
+  protected Invariant resurrect_done(int[] permutation) {
+    core.permute(permutation);
+    return this;
+  }
+
   public String repr() {
     return "PairwiseLinearBinary" + varNames() + ": "
       + "no_invariant=" + no_invariant

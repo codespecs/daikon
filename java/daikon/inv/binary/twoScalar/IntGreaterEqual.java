@@ -84,7 +84,7 @@ public final class IntGreaterEqual  extends TwoScalar   {
       VarInfo super2 = seqvar2.isDerivedSubSequenceOf();
 
       if (debugIntGreaterEqual  || ppt.debugged) {
-        System.out.println("INTEQUAL.instantiate: "
+        System.out.println("IntGreaterEqual.instantiate: "
                            + "min1=" + min1
                            + ", max1=" + max1
                            + ", min2=" + min2
@@ -133,6 +133,11 @@ public final class IntGreaterEqual  extends TwoScalar   {
 
   }
 
+  // Still TODO
+  protected Invariant resurrect_done(int[] permutation) {
+    throw new UnsupportedOperationException();
+  }
+
   // Look up a previously instantiated IntGreaterEqual  relationship.
   // Should this implementation be made more efficient?
   public static IntGreaterEqual  find(PptSlice ppt) {
@@ -146,7 +151,7 @@ public final class IntGreaterEqual  extends TwoScalar   {
   }
 
   public String repr() {
-    return "INTEQUAL" + varNames();
+    return "IntGreaterEqual"  + varNames();
   }
 
   public String format() {
@@ -174,7 +179,7 @@ public final class IntGreaterEqual  extends TwoScalar   {
 
   public void add_modified(long v1, long v2, int count) {
     // if (ppt.debugged) {
-    //   System.out.println("INTEQUAL" + ppt.varNames() + ".add_modified("
+    //   System.out.println("IntGreaterEqual"  + ppt.varNames() + ".add_modified("
     //                      + v1 + "," + v2 + ", count=" + count + ")");
     // }
     if (!(v1 >=  v2)) {
@@ -198,7 +203,7 @@ public final class IntGreaterEqual  extends TwoScalar   {
     // very few possible values.  Example:  towers of hanoi has only 6
     // possible (pegA, pegB) pairs.
     return (Math.pow(.5, ppt.num_values())
-            * Math.pow(.99, ppt.num_mod_non_missing_samples()));
+	    * Math.pow(.99, ppt.num_mod_non_missing_samples()));
 
   }
 
@@ -219,7 +224,7 @@ public final class IntGreaterEqual  extends TwoScalar   {
   // // Temporary, for debugging
   // public void destroy() {
   //   if (debugIntGreaterEqual  || ppt.debugged) {
-  //     System.out.println("INTEQUAL.destroy(" + ppt.name + ")");
+  //     System.out.println("IntGreaterEqual.destroy(" + ppt.name + ")");
   //     System.out.println(repr());
   //     (new Error()).printStackTrace();
   //   }
@@ -228,7 +233,7 @@ public final class IntGreaterEqual  extends TwoScalar   {
 
   public void add(long v1, long v2, int mod_index, int count) {
     if (ppt.debugged) {
-      System.out.println("INTEQUAL" + ppt.varNames() + ".add("
+      System.out.println("IntGreaterEqual"  + ppt.varNames() + ".add("
                          + v1 + "," + v2
                          + ", mod_index=" + mod_index + ")"
                          + ", count=" + count + ")");
@@ -412,7 +417,7 @@ public final class IntGreaterEqual  extends TwoScalar   {
 //             if ((sic != null)
 //                 && sic.enoughSamples()) {
 //               // This DOES happen
-//               // System.out.println("Surprise:  this can happen (var2 in INTEQUAL).");
+//               // System.out.println("Surprise:  this can happen (var2 in IntGreaterEqual).");
 //               // new Error().printStackTrace();
 //               return true;
 //             }

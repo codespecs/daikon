@@ -24,6 +24,11 @@ public class PairwiseFunctionUnary extends TwoSequence {
     return new PairwiseFunctionUnary(ppt, methodname, function, inverse);
   }
 
+  protected Invariant resurrect_done(int[] permutation) {
+    core.permute(permutation);
+    return this;
+  }
+
   public String repr() {
     return "PairwiseFunctionUnary" + varNames() + ": " + core.repr();
   }

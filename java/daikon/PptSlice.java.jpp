@@ -92,6 +92,8 @@ public final class PPTSLICE1 extends PptSlice {
 #if defined(ARITY1)
     var_info = var_infos[0];
 #endif
+    init_po();
+
     // values_cache = new HashMap(); // [INCR]
     if (this.debugged || debug.isDebugEnabled())
       debug.info("Created " + PPTSLICE1STRING + " " + this.name);
@@ -116,8 +118,64 @@ public final class PPTSLICE1 extends PptSlice {
   }
 #endif
 
+  /** Implements specification as defined in superclass PptSlice */
+  void init_po() {
+  outer:
+    for (Iterator i = var_infos[0].closurePO(false); i.hasNext(); ) {
+      VarInfo vi0_higher = (VarInfo) i.next();
+      PptTopLevel ppt_higher = vi0_higher.ppt;
+#if defined(ARITY2) || defined(ARITY3)
+      for (Iterator j = var_infos[1].closurePO(false); j.hasNext(); ) {
+	VarInfo vi1_higher = (VarInfo) j.next();
+	if (vi1_higher.ppt != ppt_higher) continue;
+	if (vi1_higher == vi0_higher) continue;
+#endif	  
+#if defined(ARITY3)
+	for (Iterator k = var_infos[2].closurePO(false); k.hasNext(); ) {
+	  VarInfo vi2_higher = (VarInfo) k.next();
+	  if (vi2_higher.ppt != ppt_higher) continue;
+	  if (vi2_higher == vi0_higher) continue;
+	  if (vi2_higher == vi1_higher) continue;
+#endif	  
+	  // (slice_higher == null) can happen if a view was skipped
+	  // due to no invariants (which means we will probably skip
+	  // this view too; oh well).
+	  // Assert.assert(slice_higher != null);
+#if defined(ARITY1)
+	  PptSlice slice_higher = ppt_higher.findSlice(vi0_higher);
+#elif defined(ARITY2)
+	  PptSlice slice_higher = ppt_higher.findSlice_unordered(vi0_higher, vi1_higher);
+#elif defined(ARITY3)
+	  PptSlice slice_higher = ppt_higher.findSlice_unordered(vi0_higher, vi1_higher, vi2_higher);
+#endif
+	  if (slice_higher == null) continue;
+	  int[] permute = new int[] {
+	    ArraysMDE.indexOf(slice_higher.var_infos, vi0_higher),
+#if defined(ARITY2) || defined(ARITY3)
+	    ArraysMDE.indexOf(slice_higher.var_infos, vi1_higher),
+#endif
+#if defined(ARITY3)
+	    ArraysMDE.indexOf(slice_higher.var_infos, vi2_higher)
+#endif
+	  };
+	  addHigherPO(slice_higher, permute);
+	  continue outer;
+#if defined(ARITY3)
+	} // k
+#endif	  
+#if defined(ARITY2) || defined(ARITY3)
+      } // j
+#endif
+    } // i (outer)
+  }
+
   void instantiate_invariants() {
     Assert.assert(!no_invariants);
+
+    if (po_higher.size() > 0) {
+      if (this.debugged || debug.isDebugEnabled())
+	debug.info("instantiate_invariants for " + name + " skipped because controlled");
+    }
 
     // Instantiate invariants
     if (this.debugged || debug.isDebugEnabled())
@@ -202,35 +260,40 @@ public final class PPTSLICE1 extends PptSlice {
 
 
   // These accessors are for abstract methods declared in Ppt
+  public int num_samples() {
 #if defined(ARITY1)
-  public int num_samples() {
-    return tm_total[0] + tm_total[1];
-  }
-  public int num_mod_non_missing_samples() {
-    return tm_total[1];
-  }
+    int result =  tm_total[0] + tm_total[1];
 #elif defined(ARITY2)
-  public int num_samples() {
-    return tm_total[0] + tm_total[1] + tm_total[2] + tm_total[3];
-  }
-  public int num_mod_non_missing_samples() {
-    return tm_total[1] + tm_total[2] + tm_total[3];
-  }
+    int result =  tm_total[0] + tm_total[1] + tm_total[2] + tm_total[3];
 #elif defined(ARITY3)
-   public int num_samples() {
-    return tm_total[0] + tm_total[1] + tm_total[2] + tm_total[3]
+    int result =  tm_total[0] + tm_total[1] + tm_total[2] + tm_total[3]
       + tm_total[4] + tm_total[5] + tm_total[6] + tm_total[7];
-   }
-   public int num_mod_non_missing_samples() {
-     return tm_total[1] + tm_total[2] + tm_total[3]
-       + tm_total[4] + tm_total[5] + tm_total[6] + tm_total[7];
-   }
 #endif
+    Assert.assert(result >= 0);
+    return result;
+  }
 
+  public int num_mod_non_missing_samples() {
+#if defined(ARITY1)
+    int result =  tm_total[1];
+#elif defined(ARITY2)
+    int result =  tm_total[1] + tm_total[2] + tm_total[3];
+#elif defined(ARITY3)
+     int result =  tm_total[1] + tm_total[2] + tm_total[3]
+       + tm_total[4] + tm_total[5] + tm_total[6] + tm_total[7];
+#endif
+    Assert.assert(result >= 0);
+    return result;
+  }
+
+  // [INCR] XXX; maintaining this would require storing a set of all
+  // the different values we see.  That seems like a very bad idea.
+  // We should deprecated this method, right?
   public int num_values() {
     Assert.assert(! no_invariants);
+    return num_samples(); // XXX
     // if (values_cache == null) { [INCR]
-      return num_values_post_cache;
+    //   return num_values_post_cache;
     // } else {
     //   return values_cache.size();
     // }
@@ -344,10 +407,10 @@ public final class PPTSLICE1 extends PptSlice {
     }
 #endif
     Object val1 = full_vt.getValue(vi1);
-#if defined(ARITY2)
+#if defined(ARITY2) || defined(ARITY3)
     Object val2 = full_vt.getValue(vi2);
-#elif defined(ARITY3)
-    Object val2 = full_vt.getValue(vi2);
+#endif
+#if defined(ARITY3)
     Object val3 = full_vt.getValue(vi3);
 #endif
 
@@ -381,7 +444,7 @@ public final class PPTSLICE1 extends PptSlice {
     // System.out.println(PPTSLICE1STRING + " " + name + ": add " + full_vt + " = " + vt);
     // System.out.println(PPTSLICE1STRING + " " + name + " has " + invs.size() + " invariants.");
 
-    defer_invariant_removal();
+    // defer_invariant_removal(); [INCR]
 
     // Supply the new values to all the invariant objects.
     int num_invs = invs.size();
@@ -514,7 +577,7 @@ public final class PPTSLICE1 extends PptSlice {
     }
 #endif
 
-    undefer_invariant_removal();
+    // undefer_invariant_removal(); [INCR]
   }
 
   // void process() {

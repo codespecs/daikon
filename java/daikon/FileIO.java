@@ -93,13 +93,15 @@ public final class FileIO
   public static void main(String[] args)
     throws Exception
   {
-    String inf = "daikon/test/fileIOTest.testStackAr";
-    String outf = "daikon/test/fileIOTest.testStackAr.goal";
-    if (args.length > 0) {
-      inf = args[0];
-      outf = inf + ".parsed";
+    String outf = "fileio.txt";
+    if (args.length == 0) {
+      args = new String[] { "daikon/test/fileIOTest.testStackAr" };
     }
-    PptMap map = read_declaration_files(Arrays.asList(new File[] { new File(inf) } ));
+    File[] files = new File[args.length];
+    for (int i=0; i < args.length; i++) {
+      files[i] = new File(args[i]);
+    }
+    PptMap map = read_declaration_files(Arrays.asList(files));
     dump_ppts(new FileOutputStream(new File(outf)), map);
   }
 
@@ -780,7 +782,8 @@ public final class FileIO
         // And for the time being (and possibly forever), for derived variables.
         int num_tracevars = ppt.num_tracevars;
         int vals_array_size = ppt.var_infos.length - ppt.num_static_constant_vars;
-        Assert.assert(vals_array_size == num_tracevars + ppt.num_orig_vars);
+	// This is no longer true; we now derive variables before reading dtrace!
+        // Assert.assert(vals_array_size == num_tracevars + ppt.num_orig_vars);
 
         Object[] vals = new Object[vals_array_size];
         int[] mods = new int[vals_array_size];
@@ -1145,36 +1148,42 @@ public final class FileIO
           }
         } else {
 	  // nonce != null
-          if (! call_hashmap.containsKey(nonce)) {
+          invoc = (Invocation) call_hashmap.get(nonce);
+          if (invoc == null) {
             throw new Error("Didn't find call to " + ppt.name + " with nonce " + nonce);
           }
-          invoc = (Invocation) call_hashmap.get(nonce);
           call_hashmap.remove(nonce);
         }
       }
-      /* [INCR] ... punting cumulative modbits
+      Assert.assert(invoc != null);
+      {
+	/* [INCR] punt cumulative modbits
         Assert.assert(ppt.num_orig_vars == entry_ppt.num_tracevars
                       // , ppt.name + " has " + ppt.num_orig_vars + " orig_vars, but " + entry_ppt.name + " has " + entry_ppt.num_tracevars + " tracevars"
                       );
         int[] entrymods = (int[]) ((HashMap)cumulative_modbits.get(entry_ppt)).get(ppt);
+	*/
         for (int i=0; i<ppt.num_orig_vars; i++) {
           vals[ppt.num_tracevars+i] = invoc.vals[i];
           int mod = invoc.mods[i];
+	  /* [INCR] punt again
           if ((mod == ValueTuple.UNMODIFIED)
               && (entrymods[i] == ValueTuple.MODIFIED)) {
             // System.out.println("Entrymods made a difference.");
             mod = ValueTuple.MODIFIED;
           }
+	  */
           mods[ppt.num_tracevars+i] = mod;
           // Possibly more efficient to set this all at once, late in
           // the game; but this gets it done.
           if (ValueTuple.modIsMissing(mods[ppt.num_tracevars+i])) {
-            // vis[ppt.num_tracevars+i].canBeMissing = true; // [[INCR]]
             Assert.assert(vals[ppt.num_tracevars+i] == null);
           }
         }
+	/* [INCR] punt again
         Arrays.fill(entrymods, 0);
-      */ // ... [INCR]
+	*/
+      }
     }
 
   }

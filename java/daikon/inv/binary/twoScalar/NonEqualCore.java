@@ -29,6 +29,22 @@ public final class NonEqualCore implements java.io.Serializable {
     this.override_range = override_range;
   }
 
+  protected void permute(int[] permutation) {
+    Assert.assert(permutation.length == 2);
+    Assert.assert(ArraysMDE.is_permutation(permutation));
+    if (permutation[0] == 1) {
+      // was a swap
+      long tmp;
+
+      tmp = min1;
+      min1 = min2;
+      min2 = min1;
+
+      tmp = max1;
+      max1 = max2;
+      max2 = tmp;
+    }
+  }
 
   public void add_modified(long v1, long v2, int count) {
     if (wrapper.ppt.debugged) {

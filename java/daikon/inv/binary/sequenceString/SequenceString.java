@@ -9,8 +9,8 @@ public abstract class SequenceString extends Invariant {
 
   // By convention, the sequence is always passed in first
   public boolean seq_first;  // true if seq_index == 0 and scl_index == 1
-  public final int seq_index;                // 0 or 1
-  public final int scl_index;                // 0 or 1
+  public int seq_index;                // 0 or 1
+  public int scl_index;                // 0 or 1
 
   protected SequenceString(PptSlice ppt, boolean seq_first) {
     super(ppt);
@@ -22,6 +22,18 @@ public abstract class SequenceString extends Invariant {
       seq_index = 1;
       scl_index = 0;
     }
+  }
+
+  protected Invariant resurrect_done(int[] permutation) {
+    Assert.assert(permutation.length == 2);
+    Assert.assert(ArraysMDE.is_permutation(permutation));
+    if (permutation[0] == 1) {
+      // was a swap
+      seq_first = !seq_first;
+      seq_index = seq_first ? 0 : 1;
+      scl_index = seq_first ? 1 : 0;
+    }
+    return this;
   }
 
   public VarInfo seqvar() {

@@ -28,6 +28,32 @@ public final class LinearTernaryCore implements java.io.Serializable {
     this.wrapper = wrapper;
   }
 
+  /**
+   * Reorganize our already-seen state as if the variables had shifted
+   * order underneath us (rearrangement given by the permutation).
+   **/
+  public void permute(int[] permutation) {
+    Assert.assert(permutation.length == 3);
+    Assert.assert(ArraysMDE.is_permutation(permutation));
+    // Fix a, b, c
+    // clever because a*v0 + b*v1 - v2 = -c
+    double[] clever = new double[] { a, b, -1.0 };
+    double[] pclever = new double[3];
+    pclever[permutation[0]] = clever[0];
+    pclever[permutation[1]] = clever[1];
+    pclever[permutation[2]] = clever[2];
+    double d = -1.0 / pclever[2];
+    a = pclever[0] * d;
+    b = pclever[1] * d;
+    c = c * d;
+    // Fix caches
+    long[][] caches = { x_cache, y_cache, z_cache };
+    x_cache = caches[permutation[0]];
+    y_cache = caches[permutation[1]];
+    z_cache = caches[permutation[2]];
+    // Could assert that caches sync with a,b,c (?)
+  }
+
   public void add_modified(long x, long y, long z, int count) {
     if (values_seen < MINTRIPLES) {
       // We delay computation of a and b until we have seen several triples

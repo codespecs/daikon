@@ -171,7 +171,7 @@ public final class Daikon {
     load_spinfo_files(all_ppts, spinfo_files);
 
     // Create candidate invariants
-    setup_invariants(all_ppts);
+    generate_invariants(all_ppts);
 
     // Infer invariants
     process_data(all_ppts, dtrace_files);
@@ -422,14 +422,14 @@ public final class Daikon {
     }
   }
 
-  private static void setup_invariants(PptMap all_ppts)
+  private static void generate_invariants(PptMap all_ppts)
   {
     elapsedTime(); // reset timer
-    System.out.print("Instantiating candidate invariants ");
+    System.out.print("Creating candidate invariants ");
     for (Iterator itor = all_ppts.iterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       System.out.print('.');
-      ppt.setup_invariants();
+      ppt.generate_invariants();
     }
     System.out.print(" (processed ");
     System.out.print(UtilMDE.nplural(all_ppts.asCollection().size(), "program point"));

@@ -2,9 +2,10 @@ package daikon.inv.unary.scalar;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.unary.*;
 import utilMDE.*;
 
-public abstract class SingleFloat extends Invariant {
+public abstract class SingleFloat extends UnaryInvariant {
 
   protected SingleFloat(PptSlice ppt) {
     super(ppt);
@@ -43,7 +44,6 @@ public abstract class SingleFloat extends Invariant {
     // System.out.println("SingleFloat.add_unmodified " + ppt.name + ": parent=" + ppt.parent);
     return;
   }
-
 
 }
 

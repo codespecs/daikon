@@ -17,8 +17,12 @@ public class Reverse extends TwoSequence {
   public static Reverse instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new Reverse(ppt);
-  }
+  }  
 
+  protected Invariant resurrect_done(int[] permutation) {
+    // "reverse of" is symmetric
+    return this;
+  }
 
   public String repr() {
     return "Reverse" + varNames() + ": "

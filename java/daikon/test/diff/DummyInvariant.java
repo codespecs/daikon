@@ -23,6 +23,9 @@ public class DummyInvariant extends Invariant {
     this.interesting = interesting;
   }
 
+  protected Invariant resurrect_done(int[] permutation) {
+    throw new UnsupportedOperationException();
+  }
 
   public boolean justified() {
     return justified;

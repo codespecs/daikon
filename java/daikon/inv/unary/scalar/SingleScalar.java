@@ -2,9 +2,10 @@ package daikon.inv.unary.scalar;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.unary.*;
 import utilMDE.*;
 
-public abstract class SingleScalar extends Invariant {
+public abstract class SingleScalar extends UnaryInvariant {
 
   protected SingleScalar(PptSlice ppt) {
     super(ppt);
@@ -43,7 +44,6 @@ public abstract class SingleScalar extends Invariant {
     // System.out.println("SingleScalar.add_unmodified " + ppt.name + ": parent=" + ppt.parent);
     return;
   }
-
 
 }
 

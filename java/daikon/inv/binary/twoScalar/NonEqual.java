@@ -45,6 +45,11 @@ public final class NonEqual extends TwoScalar {
     return result;
   }
 
+  protected Invariant resurrect_done(int[] permutation) {
+    core.permute(permutation);
+    return this;
+  }
+
   public String repr() {
     return "NonEqual" + varNames() + ": "
       + core.repr()

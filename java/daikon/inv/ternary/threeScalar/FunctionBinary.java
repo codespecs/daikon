@@ -53,6 +53,11 @@ public class FunctionBinary extends ThreeScalar {
     return new FunctionBinary(ppt, methodname, function, var_order);
   }
 
+  protected Invariant resurrect_done(int[] permutation) {
+    core.permute(permutation);
+    return this;
+  }
+
   public String repr() {
     return "FunctionBinary" + varNames() + ": ";
   }

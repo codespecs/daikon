@@ -51,6 +51,11 @@ public class PairwiseIntComparison extends TwoSequence {
     return new PairwiseIntComparison(ppt, only_eq);
   }
 
+  protected Invariant resurrect_done(int[] permutation) {
+    core.permute(permutation);
+    return this;
+  }
+
   public String repr() {
     return "PairwiseIntComparison" + varNames() + ": "
       + core.repr();

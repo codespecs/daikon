@@ -1,18 +1,21 @@
 package daikon.inv;
 
-import daikon.*;
-
 import java.util.*;
+import java.io.Serializable;
 
 import org.apache.log4j.Category;
 
-import utilMDE.*;
+import utilMDE.Assert;
+import utilMDE.MathMDE;
+import daikon.*;
 
 // Base implementation for Invariant objects.
 // Intended to be subclassed but not to be directly instantiated.
 // I should probably rename this to "Invariant" and get rid of that interface.o
 
-public abstract class Invariant implements java.io.Serializable {
+public abstract class Invariant
+  implements Serializable, Cloneable // but don't YOU clone it
+{
 
   /**
    * General logging Category.
@@ -33,7 +36,6 @@ public abstract class Invariant implements java.io.Serializable {
    * The program point for this invariant, includes values, number of
    * samples, VarInfos, etc.
    **/
-
   public PptSlice ppt;
 
   // Has to be public so wrappers can read it.
@@ -215,8 +217,55 @@ public abstract class Invariant implements java.io.Serializable {
   // Has to be public because of wrappers.
   public void destroy() {
     no_invariant = true;
-    ppt.removeInvariant(this);
+    // Don't do this here; we leave it to the ppt to detect this and
+    // flow the invariant to the right places.
+    // ppt.removeInvariant(this);
   }
+
+  /**
+   * Take a falsified invariant and resurrect it in a new PptSlice.
+   * @param new_ppt must have the same arity and types
+   * @param permutation gives the varinfo array index mapping
+   **/
+  public Invariant resurrect(PptSlice new_ppt,
+			     int[] permutation
+			     )
+  {
+    // Check some sanity conditions
+    Assert.assert(no_invariant);
+    Assert.assert(new_ppt.arity == ppt.arity);
+    Assert.assert(permutation.length == ppt.arity);
+    for (int i=0; i < ppt.arity; i++) {
+      VarInfo oldvi = ppt.var_infos[i];
+      VarInfo newvi = new_ppt.var_infos[permutation[i]];
+      Assert.assert(oldvi.type == newvi.type);
+      Assert.assert(oldvi.rep_type == newvi.rep_type);
+      Assert.assert(oldvi.file_rep_type == newvi.file_rep_type);
+    }
+
+    Invariant result;
+    // Clone it
+    try {
+      result = (Invariant) this.clone();
+    } catch (CloneNotSupportedException e) {
+      // can never happen
+      throw new Error();
+    }
+    // Fix up the fields
+    result.no_invariant = false;
+    result.ppt = new_ppt;
+    // Let subclasses fix what they need to
+    result = result.resurrect_done(permutation);
+
+    return result;
+  }
+
+  /**
+   * Called on the new invariant just before resurrect() returns it to
+   * allow subclasses to fix any information they might have cached
+   * from the old Ppt and VarInfos.
+   **/
+  protected abstract Invariant resurrect_done(int[] permutation);
 
   // Regrettably, I can't declare a static abstract method.
   // // The return value is probably ignored.  The new Invariant installs

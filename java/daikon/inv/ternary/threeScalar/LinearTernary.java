@@ -183,6 +183,11 @@ public class LinearTernary extends ThreeScalar {
     return result;
   }
 
+  protected Invariant resurrect_done(int[] permutation) {
+    core.permute(permutation);
+    return this;
+  }
+
   public String repr() {
     return "LinearTernary" + varNames() + ": "
       + "no_invariant=" + no_invariant

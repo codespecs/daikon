@@ -80,7 +80,7 @@ public final class IntEqual  extends TwoScalar implements Comparison  {
       VarInfo super2 = seqvar2.isDerivedSubSequenceOf();
 
       if (debugIntEqual  || ppt.debugged) {
-        System.out.println("INTEQUAL.instantiate: "
+        System.out.println("IntEqual.instantiate: "
                            + "min1=" + min1
                            + ", max1=" + max1
                            + ", min2=" + min2
@@ -129,6 +129,11 @@ public final class IntEqual  extends TwoScalar implements Comparison  {
 
   }
 
+  // Still TODO
+  protected Invariant resurrect_done(int[] permutation) {
+    throw new UnsupportedOperationException();
+  }
+
   // Look up a previously instantiated IntEqual  relationship.
   // Should this implementation be made more efficient?
   public static IntEqual  find(PptSlice ppt) {
@@ -142,7 +147,7 @@ public final class IntEqual  extends TwoScalar implements Comparison  {
   }
 
   public String repr() {
-    return "INTEQUAL" + varNames();
+    return "IntEqual"  + varNames();
   }
 
   public String format() {
@@ -170,7 +175,7 @@ public final class IntEqual  extends TwoScalar implements Comparison  {
 
   public void add_modified(long v1, long v2, int count) {
     // if (ppt.debugged) {
-    //   System.out.println("INTEQUAL" + ppt.varNames() + ".add_modified("
+    //   System.out.println("IntEqual"  + ppt.varNames() + ".add_modified("
     //                      + v1 + "," + v2 + ", count=" + count + ")");
     // }
     if (!(v1 ==  v2)) {
@@ -215,7 +220,7 @@ public final class IntEqual  extends TwoScalar implements Comparison  {
   // // Temporary, for debugging
   // public void destroy() {
   //   if (debugIntEqual  || ppt.debugged) {
-  //     System.out.println("INTEQUAL.destroy(" + ppt.name + ")");
+  //     System.out.println("IntEqual.destroy(" + ppt.name + ")");
   //     System.out.println(repr());
   //     (new Error()).printStackTrace();
   //   }
@@ -224,7 +229,7 @@ public final class IntEqual  extends TwoScalar implements Comparison  {
 
   public void add(long v1, long v2, int mod_index, int count) {
     if (ppt.debugged) {
-      System.out.println("INTEQUAL" + ppt.varNames() + ".add("
+      System.out.println("IntEqual"  + ppt.varNames() + ".add("
                          + v1 + "," + v2
                          + ", mod_index=" + mod_index + ")"
                          + ", count=" + count + ")");

@@ -20,44 +20,82 @@ public abstract class PptSlice extends Ppt {
   public static final String lineSep = Global.lineSep;
 
   /**
-   * Whether this particular program point is debugged
+   * Whether this particular program point is debugged.
+   * Set via editing Globals.debuggedPptSliceSpecific
    **/
-
   public boolean debugged;
 
   /**
    * Logging Category.
    **/
-
   public static final Category debug = Category.getInstance(PptSlice.class.getName());
-
   public static final Category debugGeneral = Category.getInstance(PptSlice.class.getName() + ".general");
 
+  /** This is a slice of the 'parent' ppt */
   public Ppt parent;
   public int arity;
-  // var_infos appears in Ppt; don't repeat it here!!
-  // public VarInfo[] var_infos;
-  // Cache of values from var_infos, to avoid repeated lookups.
-  // value_indices[i] == var_infos[i].value_index, but looking up in
-  // this array should be cheaper than looking up in var_infos.
+
+  /**
+   * Cache of values from var_infos, to avoid repeated lookups.
+   * value_indices[i] == var_infos[i].value_index, but looking up in
+   * this array should be cheaper than looking up in var_infos.
+   * Has exactly this.arity elements.
+   **/
   public int[] value_indices;
 
-  // If true, then we are in the process of deleting this invariant.
-  // It should only be on a list of deferred to-be-deleted invariants.
-  // Thus, we should never see this non-false.
+  /**
+   * If true, then we are in the process of deleting this slice.
+   * It should only be on a list of deferred to-be-deleted slices.
+   * Thus, we should never see this non-false.
+   **/
   public boolean no_invariants = false;
 
+  /**
+   * The invariants contained in this slice.
+   **/
   public Invariants invs;
+
+  // Keep private, modifiable copies and public read-only views
+  private final Collection _po_higher = new ArrayList(2);
+  private final Collection _po_lower = new ArrayList(2);
+  // Map[PptSlice -> int[arity]]; store as the key a permutation array
+  // where this.var_infos[i] corresponds to key.var_infos[value[i]].
+  private final Map higher_permute = new HashMap();
+  private final Map lower_permute = new HashMap();
+
+  /**
+   * Slices immediately higher in the partial order (compared to this).
+   * If A is higher than B then every value seen at B is seen at A.
+   * Elements are PptSlices.  Contains no duplicates.
+   * PptSlice partial ordering is a direct function of VarInfo partial
+   * ordering, and is the minimal nearest set of slices which are
+   * higher for all VarInfos.
+   * @see po_lower
+   **/
+  public final Collection po_higher = Collections.unmodifiableCollection(_po_higher);
+
+  /**
+   * Slices immediately lower in the partial order (compared to this).
+   * If A is higher than B then every value seen at B is seen at A.
+   * Elements are VarInfos.  Contains no duplicates.
+   * PptSlice partial ordering is a direct function of VarInfo partial
+   * ordering, and is the minimal nearest set of slices which are
+   * higher for all VarInfos.
+   * @see po_higher
+   **/
+  public final Collection po_lower = Collections.unmodifiableCollection(_po_lower);
 
   // This holds keys and elements of different types, depending on
   // he concrete child of PptSlice.
   // HashMap values_cache; // [INCR]
 
+  /* [INCR]
   // These are used only when the values_cache has been set to null.
   int num_samples_post_cache = -2222;
   int num_mod_non_missing_samples_post_cache = -2222;
   int num_values_post_cache = -2222;
   String tuplemod_samples_summary_post_cache = "UNINITIALIZED";
+  */
 
   /* [INCR] ...
   // This is rather a hack and should be removed later.
@@ -72,33 +110,22 @@ public abstract class PptSlice extends Ppt {
     super(parent.name + varNames(var_infos));
     this.parent = parent;
     this.var_infos = var_infos;
-    // System.out.println("in PptSlice(): this=" + this);
-    // System.out.println("var_infos = " + var_infos + " = " + this.var_infos);
-    // for (int i=0; i<var_infos.length; i++) {
-    //   System.out.println("  var_infos[" + i + "] = " + var_infos[i]);
-    // }
     // Ensure that the VarInfo objects are in order (and not duplicated).
-    for (int i=0; i<var_infos.length-1; i++)
+    for (int i=0; i<var_infos.length-1; i++) {
       Assert.assert(var_infos[i].varinfo_index < var_infos[i+1].varinfo_index);
+    }
     arity = var_infos.length;
     value_indices = new int[arity];
-    for (int i=0; i<arity; i++)
+    for (int i=0; i<arity; i++) {
       value_indices[i] = var_infos[i].value_index;
-    // This is now done in the child classes (PptSlice1, etc.)
-    // values_cache = new HashMap();
+    }
     invs = new Invariants();
-    // Don't do this; make someone else do it.
-    // In particular, I want the subclass constructor to get called
-    // before this is.
-    // parent.addView(this);
 
     // This comes after setting all other variables, as the function call may use name, arity, var_infos, etc.
-    debugged = (Global.isDebuggedPptSlice(this)); 
-
+    debugged = (Global.isDebuggedPptSlice(this));
     if (debugGeneral.isDebugEnabled()) {
-      debugGeneral.debug (Arrays.asList(var_infos));
-    }
-    
+      debugGeneral.debug(Arrays.asList(var_infos));
+    }    
   }
 
   public boolean usesVar(VarInfo vi) {
@@ -117,7 +144,35 @@ public abstract class PptSlice extends Ppt {
     return false;
   }
 
+  /**
+   * Ensures that parent is in this.po_higher and this in in parent.po_lower.
+   * Parent must be of the same arity.
+   **/
+  protected void addHigherPO(PptSlice parent,
+			     int permutation[])
+  {
+    // Code copied in VarInfo; edit both copies.
+    Assert.assert(this.arity == parent.arity);
+    Assert.assert(permutation.length == arity);
+    Assert.assert(ArraysMDE.is_permutation(permutation));
 
+    if (this._po_higher.contains(parent)) {
+      Assert.assert(parent._po_lower.contains(this));
+      return;
+    }
+    Assert.assert(! parent._po_lower.contains(this));
+
+    // clone for safety; intern for space
+    int[] forward = Intern.intern((int[]) permutation.clone());
+    int[] reverse = Intern.intern(ArraysMDE.inverse(forward));
+
+    this._po_higher.add(parent);
+    this.higher_permute.put(parent, forward);
+    parent._po_lower.add(this);
+    parent.lower_permute.put(this, reverse);
+  }
+
+  /* [INCR]
   // When non-null, removeInvariants adds to this list instead of actually
   // removing.  (We might need to defer removal because we're currently
   // iterating over the invariants by index rather than using an Iterator.)
@@ -142,46 +197,67 @@ public abstract class PptSlice extends Ppt {
       itrd_cache.clear();
     }
   }
-
+  */
 
   public abstract void addInvariant(Invariant inv);
-
 
   // I don't just use ppt.invs.remove because I want to be able to defer
   // and to take action if the vector becomes void.
   public void removeInvariant(Invariant inv) {
     Assert.assert(! no_invariants);
-    if (this.debugged || debug.isDebugEnabled())
-      debug.debug("PptSlice.removeInvariant(" + inv.name() + ")" +
-		  ((invs_to_remove_deferred != null)
-		   ? " will be deferred"
-		   : ""));
     Assert.assert(invs.contains(inv));
-    if (invs_to_remove_deferred != null) {
-      Assert.assert(! invs_to_remove_deferred.contains(inv));
-      invs_to_remove_deferred.add(inv);
-    } else {
-      if (Global.debugInfer.isDebugEnabled())
-        Global.debugInfer.debug("PptSlice.removeInvariant(" + inv.name() + ")");
-      boolean removed = invs.remove(inv);
-      Assert.assert(removed);
-      // This increment could also have been in Invariant.destroy().
-      Global.falsified_invariants++;
-      if (invs.size() == 0) {
-        no_invariants = true;
-        parent.removeView(this);
-        // for good measure; shouldn't be necessary, but just in case there
-        // is some other pointer to this.
-        // clear_cache(); // [INCR]
-      }
+    boolean removed = invs.remove(inv);
+    Assert.assert(removed);
+    // This increment could also have been in Invariant.destroy().
+    Global.falsified_invariants++;
+    if (invs.size() == 0) {
+      no_invariants = true;
     }
   }
 
   // I could make this more efficient, but it's probably fine as it is.
-  public void removeInvariants(Vector to_remove) {
+  public void removeInvariants(List to_remove) {
     for (int i=0; i<to_remove.size(); i++) {
-      removeInvariant((Invariant) to_remove.elementAt(i));
+      removeInvariant((Invariant) to_remove.get(i));
     }
+  }
+
+  /**
+   * Use var_infos[].po_{higher,lower} to initialize this.po_{higher.lower}.
+   * Discover the set of slices H such that:
+   * <li> H.arity == this.arity
+   * <li> exist i,j s.t. H.var_infos[i] :[ this.var_infos[j]  (higher in po)
+   * <li> Not exist h1 in H, h2 in H s.t. path to h1 is prefix of path to h2  (minimality)
+   **/
+  abstract void init_po();
+
+  /**
+   * Flow falsified invariants to lower ppts, and remove them from
+   * this ppt.
+   **/
+  void flow_and_remove_falsified() {
+    // Build a worklist of invariants to flow
+    List worklist = new ArrayList();
+    for (Iterator i = invs.iterator(); i.hasNext(); ) {
+      Invariant inv = (Invariant) i.next();
+      if (inv.no_invariant)
+	worklist.add(inv);
+    }
+    // For each lower PptSlice
+    for (Iterator j = _po_lower.iterator(); j.hasNext(); ) {
+      PptSlice lower = (PptSlice) j.next();
+      int[] permute = (int[]) lower_permute.get(lower);
+      Assert.assert(permute != null);
+      // For each invariant
+      for (Iterator i = worklist.iterator(); i.hasNext(); ) {
+	Invariant inv = (Invariant) i.next();
+	Assert.assert(inv.no_invariant);
+	// Let it be reborn
+	Invariant reborn = inv.resurrect(lower, permute);
+	lower.addInvariant(reborn);
+      }
+    }
+    removeInvariants(worklist);
   }
 
   void addView(Ppt slice) {
@@ -195,7 +271,6 @@ public abstract class PptSlice extends Ppt {
   void removeView(Ppt slice) {
     throw new Error("Don't remove view from a slice.");
   }
-
 
   /* [INCR]
   public void clear_cache() {

@@ -27,6 +27,11 @@ public class LinearBinary extends TwoScalar {
     return new LinearBinary(ppt);
   }
 
+  protected Invariant resurrect_done(int[] permutation) {
+    core.permute(permutation);
+    return this;
+  }
+
   public String repr() {
     return "LinearBinary" + varNames() + ": "
       + "no_invariant=" + no_invariant

@@ -38,6 +38,8 @@ public final class PptSlice3  extends PptSlice {
     super(parent, var_infos);
     Assert.assert(var_infos.length == 3 );
 
+    init_po();
+
     // values_cache = new HashMap(); // [INCR]
     if (this.debugged || debug.isDebugEnabled())
       debug.info("Created PptSlice3 " + this.name);
@@ -52,8 +54,57 @@ public final class PptSlice3  extends PptSlice {
     this(parent, new VarInfo[] { var_info1, var_info2, var_info3 });
   }
 
+  /** Implements specification as defined in superclass PptSlice */
+  void init_po() {
+  outer:
+    for (Iterator i = var_infos[0].closurePO(false); i.hasNext(); ) {
+      VarInfo vi0_higher = (VarInfo) i.next();
+      PptTopLevel ppt_higher = vi0_higher.ppt;
+
+      for (Iterator j = var_infos[1].closurePO(false); j.hasNext(); ) {
+	VarInfo vi1_higher = (VarInfo) j.next();
+	if (vi1_higher.ppt != ppt_higher) continue;
+	if (vi1_higher == vi0_higher) continue;
+
+	for (Iterator k = var_infos[2].closurePO(false); k.hasNext(); ) {
+	  VarInfo vi2_higher = (VarInfo) k.next();
+	  if (vi2_higher.ppt != ppt_higher) continue;
+	  if (vi2_higher == vi0_higher) continue;
+	  if (vi2_higher == vi1_higher) continue;
+
+	  // (slice_higher == null) can happen if a view was skipped
+	  // due to no invariants (which means we will probably skip
+	  // this view too; oh well).
+	  // Assert.assert(slice_higher != null);
+
+	  PptSlice slice_higher = ppt_higher.findSlice_unordered(vi0_higher, vi1_higher, vi2_higher);
+
+	  if (slice_higher == null) continue;
+	  int[] permute = new int[] {
+	    ArraysMDE.indexOf(slice_higher.var_infos, vi0_higher),
+
+	    ArraysMDE.indexOf(slice_higher.var_infos, vi1_higher),
+
+	    ArraysMDE.indexOf(slice_higher.var_infos, vi2_higher)
+
+	  };
+	  addHigherPO(slice_higher, permute);
+	  continue outer;
+
+	} // k
+
+      } // j
+
+    } // i (outer)
+  }
+
   void instantiate_invariants() {
     Assert.assert(!no_invariants);
+
+    if (po_higher.size() > 0) {
+      if (this.debugged || debug.isDebugEnabled())
+	debug.info("instantiate_invariants for " + name + " skipped because controlled");
+    }
 
     // Instantiate invariants
     if (this.debugged || debug.isDebugEnabled())
@@ -96,20 +147,32 @@ public final class PptSlice3  extends PptSlice {
   }
 
   // These accessors are for abstract methods declared in Ppt
+  public int num_samples() {
 
-   public int num_samples() {
-    return tm_total[0] + tm_total[1] + tm_total[2] + tm_total[3]
+    int result =  tm_total[0] + tm_total[1] + tm_total[2] + tm_total[3]
       + tm_total[4] + tm_total[5] + tm_total[6] + tm_total[7];
-   }
-   public int num_mod_non_missing_samples() {
-     return tm_total[1] + tm_total[2] + tm_total[3]
-       + tm_total[4] + tm_total[5] + tm_total[6] + tm_total[7];
-   }
 
+    Assert.assert(result >= 0);
+    return result;
+  }
+
+  public int num_mod_non_missing_samples() {
+
+     int result =  tm_total[1] + tm_total[2] + tm_total[3]
+       + tm_total[4] + tm_total[5] + tm_total[6] + tm_total[7];
+
+    Assert.assert(result >= 0);
+    return result;
+  }
+
+  // [INCR] XXX; maintaining this would require storing a set of all
+  // the different values we see.  That seems like a very bad idea.
+  // We should deprecated this method, right?
   public int num_values() {
     Assert.assert(! no_invariants);
+    return num_samples(); // XXX
     // if (values_cache == null) { [INCR]
-      return num_values_post_cache;
+    //   return num_values_post_cache;
     // } else {
     //   return values_cache.size();
     // }
@@ -199,6 +262,7 @@ public final class PptSlice3  extends PptSlice {
     Object val1 = full_vt.getValue(vi1);
 
     Object val2 = full_vt.getValue(vi2);
+
     Object val3 = full_vt.getValue(vi3);
 
     // if (! already_seen_all) // [INCR]
@@ -223,7 +287,7 @@ public final class PptSlice3  extends PptSlice {
     // System.out.println("PptSlice3 " + name + ": add " + full_vt + " = " + vt);
     // System.out.println("PptSlice3 " + name + " has " + invs.size() + " invariants.");
 
-    defer_invariant_removal();
+    // defer_invariant_removal(); [INCR]
 
     // Supply the new values to all the invariant objects.
     int num_invs = invs.size();
@@ -255,7 +319,7 @@ public final class PptSlice3  extends PptSlice {
       // no ternary invariants over non-scalars
     }
 
-    undefer_invariant_removal();
+    // undefer_invariant_removal(); [INCR]
   }
 
   // void process() {

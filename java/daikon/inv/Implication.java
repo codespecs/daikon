@@ -48,6 +48,11 @@ public class Implication extends Invariant {
     return prob_and(pred_prob, cons_prob);
   }
 
+  // We don't resurrect implications, right?
+  protected Invariant resurrect_done(int[] permutation) {
+    throw new UnsupportedOperationException();
+  }
+
   public String repr() {
     return "[Implication: " + predicate.repr()
       + " => " + consequent.repr() + "]";

@@ -12,6 +12,10 @@ public class PptSlice0 extends PptSlice {
      super(parent, new VarInfo[0]);
   }
 
+  void init_po() {
+    throw new Error("Shouldn't get called");
+  }
+
   public void addInvariant(Invariant inv) {
     Assert.assert(inv != null);
     // Assert.assert(inv instanceof Implication);

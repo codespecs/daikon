@@ -3,6 +3,7 @@ package daikon.inv.ternary.threeScalar;
 import daikon.*;
 import daikon.inv.*;
 import java.io.*;
+import java.util.Arrays;
 import java.lang.reflect.*;
 import utilMDE.*;
 
@@ -30,6 +31,27 @@ public final class FunctionBinaryCore implements java.io.Serializable {
 
   public FunctionBinaryCore(Invariant wrapper, String methodname, int var_order) throws ClassNotFoundException, NoSuchMethodException {
     this(wrapper, methodname, UtilMDE.methodForName(methodname), var_order);
+  }
+
+
+  /**
+   * Reorganize our already-seen state as if the variables had shifted
+   * order underneath us (rearrangement given by the permutation).
+   **/
+  public void permute(int[] permutation) {
+    Assert.assert(permutation.length == 3);
+    Assert.assert(ArraysMDE.is_permutation(permutation));
+    int[] new_order = new int[3];
+    new_order[permutation[0]] = var_indices[var_order][0];
+    new_order[permutation[1]] = var_indices[var_order][1];
+    new_order[permutation[2]] = var_indices[var_order][2];
+    for (int i=0; i < var_indices.length; i++) {
+      if (Arrays.equals(new_order, var_indices[i])) {
+	var_order = i;
+	return;
+      }
+    }
+    Assert.assert(false, "Could not find new ordering");
   }
 
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException, NoSuchMethodException {

@@ -478,16 +478,20 @@ public class PptTopLevel
     // System.out.println("PptTopLevel " + name + ": add " + vt);
     Assert.assert(vt.size() == var_infos.length - num_static_constant_vars);
 
-    // values.add(vt, count); // [[INCR]]
-    // XXXXX
+    // XXX (for now, until front ends are changed)
+    {
+      if (ppt_name.isObjectInstanceSynthetic()) return;
+      if (ppt_name.isEnterPoint()) return;
+    }
 
     // Add to all the views
-    // for (Iterator itor = views.keySet().iterator() ; itor.hasNext() ; ) {
     for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
       PptSlice view = (PptSlice) itor.next();
       view.add(vt, count);
-      if (view.invs.size() == 0)
+      view.flow_and_remove_falsified();
+      if (view.invs.size() == 0) {
         itor.remove();
+      }
     }
 
   }
@@ -497,7 +501,7 @@ public class PptTopLevel
    * the derived variables and views (and thus candidate invariants).
    * This method does not check those invariants.
    **/
-  public void setup_invariants() {
+  public void generate_invariants() {
     if (debug.isDebugEnabled())
       debug.debug("setup_invariants for " + name);
 
@@ -552,9 +556,13 @@ public class PptTopLevel
     // pass might not have come up with any invariants.
     for (Iterator itor = slices_vector.iterator(); itor.hasNext(); ) {
       PptSlice slice = (PptSlice) itor.next();
-      if (slice.invs.size() == 0)
+      if (slice.invs.size() == 0) {
         // removes the element from slices_vector
         itor.remove();
+	if (Global.debugInfer.isDebugEnabled()) {
+	  Global.debugInfer.debug("addViews: not adding " + slice + " due to no invariants");
+	}
+      }
     }
 
     views.addAll(slices_vector);
@@ -634,6 +642,7 @@ public class PptTopLevel
   }
 
   public PptSlice2 findSlice_unordered(VarInfo v1, VarInfo v2) {
+    Assert.assert(v1.varinfo_index != v2.varinfo_index);
     if (v1.varinfo_index < v2.varinfo_index) {
       return findSlice(v1, v2);
     } else {
@@ -653,6 +662,15 @@ public class PptTopLevel
         return (PptSlice3) view;
     }
     return null;
+  }
+
+  public PptSlice3 findSlice_unordered(VarInfo v1, VarInfo v2, VarInfo v3) {
+    // bubble sort is easier than 3 levels of if-else
+    VarInfo tmp;
+    if (v1.varinfo_index > v2.varinfo_index) { tmp = v2; v2 = v1; v1 = tmp; }
+    if (v2.varinfo_index > v3.varinfo_index) { tmp = v3; v3 = v2; v2 = tmp; }
+    if (v1.varinfo_index > v2.varinfo_index) { tmp = v2; v2 = v1; v1 = tmp; }
+    return findSlice(v1, v2, v3);
   }
 
   public int indexOf(String varname) {
@@ -736,6 +754,7 @@ public class PptTopLevel
       }
     }
     addViews(binary_views);
+    binary_views = null;
 
     // 3. all ternary views
     if (! Daikon.disable_ternary_invariants) {
@@ -779,8 +798,8 @@ public class PptTopLevel
       addViews(ternary_views);
     }
 
-    if (debug.isDebugEnabled())
-      debug.debug(views.size() - old_num_views + " new views for " + name);
+    if (Global.debugInfer.isDebugEnabled())
+      Global.debugInfer.debug(views.size() - old_num_views + " new views for " + name);
 
     // This method didn't add any new variables.
     Assert.assert(old_num_vars == var_infos.length);

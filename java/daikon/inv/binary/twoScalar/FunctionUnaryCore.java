@@ -44,6 +44,15 @@ public final class FunctionUnaryCore implements java.io.Serializable {
     this(wrapper, methodname, UtilMDE.methodForName(methodname), inverse);
   }
 
+  public void permute(int[] permutation) {
+    Assert.assert(permutation.length == 2);
+    Assert.assert(ArraysMDE.is_permutation(permutation));
+    if (permutation[0] == 1) {
+      // was a swap
+      inverse = !inverse;
+    }
+  }
+
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException, NoSuchMethodException {
     in.defaultReadObject();
     this.set_function();

@@ -23,6 +23,11 @@ public class FunctionUnary extends TwoScalar {
     return new FunctionUnary(ppt, methodname, function, inverse);
   }
 
+  protected Invariant resurrect_done(int[] permutation) {
+    core.permute(permutation);
+    return this;
+  }
+
   public String repr() {
     return "FunctionUnary" + varNames() + ": " + core.repr();
   }

@@ -163,6 +163,11 @@ public final class Equality extends Invariant {
   }
 
   //  This method isn't going to be called, but it's declared abstract in Invariant.
+  protected Invariant resurrect_done(int[] permutation) {
+    throw new UnsupportedOperationException();
+  }
+
+  //  This method isn't going to be called, but it's declared abstract in Invariant.
   public boolean isSameFormula( Invariant other ) {
     throw new UnsupportedOperationException( "Equality.isSameFormula(): this method should not be called" );
   }
