@@ -1082,7 +1082,7 @@ public abstract class VarInfoName
   }
 
   /**
-   * Returns a name for the union of with another sequence, like
+   * Returns a name for the union of this with another sequence, like
    * "union(a[], b[])"
    **/
   public VarInfoName applyUnion(VarInfoName seq2) {
@@ -2180,7 +2180,7 @@ public abstract class VarInfoName
   {
     public ElementsFinder (VarInfoName name) {
       elems = (Elements) name.accept(this);
-   }
+    }
 
     // state and accessors
     private boolean pre = false;
