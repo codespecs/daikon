@@ -1,7 +1,65 @@
 Daikon todo list.
-Time-stamp: <2004-03-25 12:16:40 jhp>
+Time-stamp: <2004-04-05 17:09:53 jhp>
 
-Outstanding Issues
+Projects
+
+  - Comparability
+      - Static
+      - Dynamic
+
+  - NIS enhancements
+      - Optimize merging and checking falsified antecedents
+      - support multiple levels (and binary suppressees)
+      - support sample-dependent antecedents
+      - Gather statistics on the power of the new invariants as antecedents.
+        Remove invariants that are not justified
+      - Support some subset of derived variable suppressions.  
+      - Merge data from antecedents
+
+  - Testing
+      - Build better tests for NIS.  There's a number of internal
+        consistency checks that would probably find additional errors
+      - Better test the global ppt.  Again, there are consistency checks
+        that would probably find errors.
+      - We could possibly test our suppressions and obvious checks against
+        simplify
+      - Perhaps an overall testing strategy that uses the simple 
+        incremental algorithm + simplify to create known correct output
+        that we could test against.  
+
+  - Analyze Daikon over a reasonable set of programs for memory use,
+    execution speed, and other interesting statistics (invariants by
+    class, percent invariants obvious by class, etc).  Make this easier
+    to do in the future
+
+  - Add suppressions/obvious checks to match v2/simplify.  Also, better
+    organize the various filters for consistency
+
+  - Remove instantiated suppressions
+
+  - Remove top-down processing
+
+  - Fully support top-down processing
+
+  - Replace dfej with special version of jvm to simplify user experience
+    Also processing class files might be more resilient to language
+    changes.
+
+  - Online processing
+
+  - Optimize derived variables
+      - apply equality sets, constants, etc to the creation of derived
+        variables
+      - reduce the size of variables
+
+  - Process daikon itself (at least the main directory) over a real test
+    case.  Fix problems encountered.
+
+  - Use ourselves as test case.  This requires daikon to work on
+    itself, but also will require other usability work.  In
+    particular, a good way to include results as asserts.
+
+Issues/Bugs
 
   jhp     03/25/04      LinearTernary ignores some initial points
 
@@ -76,12 +134,6 @@ Outstanding Issues
     It should be possible to make flex run in a reasonable amount of time
     by limiting both the number of program points and the the size of
     the trace file.
-
-  jhp     12/15/03      remove all stateful invariants
-
-    There are still a number of invariants (eg, subset/superset) that
-    keep an internal state.  With the exception of bounds, oneof,
-    linearbinary, and linearternary these should all be changed.
 
   jhp     11/20/03      compare no-hierarchy to bottom up
 
@@ -244,4 +296,10 @@ Completed Issues
     one child, then A and B are in separate equality sets in the parent.
     When we merge, we will find the A == B invariant in one child and 
     once we permute to the leader, we should find A == A in the other.
+
+  jhp     12/15/03      remove all stateful invariants
+
+    There are still a number of invariants (eg, subset/superset) that
+    keep an internal state.  With the exception of bounds, oneof,
+    linearbinary, and linearternary these should all be changed.
 
