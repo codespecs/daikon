@@ -1,0 +1,26 @@
+Version:      $Id$
+Owner:        Alan <adonovan>
+Cc:           Jeremy <mistere>, Mike <mernst>
+Tool:         dfej
+Summary:      Inner classes do not output OBJECT data upon constructor exit (or maybe not at all)
+Severity:     Vexing
+Status:       New
+Reproducible: Yes
+Description:
+
+[mistere]
+I have evidence that non-static inner classes do not output an OBJECT
+sample upon constructor exit.  This may also hold true for static
+inner classes, or for other methods besides the constructor.
+
+The test case is $inv/tests/daikon-tests/MapQuick in the class
+MapQuick2.CompositeRoute$Cons.  You can change the Makefile to only
+instrument the one class if you like.  Just reading the instrumented
+source shows that, upon exit of the Cons constructor, no OBJECT sample
+is written to the dtrace file.
+
+--
+$Log$
+Revision 1.1  2002-04-28 13:15:01  mistere
+new bug0046
+
