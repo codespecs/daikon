@@ -208,6 +208,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
       String prefix;
       if (ppt.ppt_name.isEnterPoint()) {
         requires_invs = Ast.invariants_for(ppt, ppts);
+        requires_invs = add_main_requires(requires_invs, n);
       } else if (ppt.ppt_name.isExitPoint()) {
         if (! ppt.ppt_name.isCombinedExitPoint()) {
           continue;
@@ -218,6 +219,71 @@ class MergeESCVisitor extends DepthFirstVisitor {
 
     return new String[][] { requires_invs, ensures_invs };
   }
+
+  // Special case for main method:  add "arg != null" and
+  // "\nonnullelements(arg)".
+  String[] add_main_requires(String[] requires_invs, Node n) {
+    if (! (n instanceof MethodDeclaration)) {
+      return requires_invs;
+    }
+
+    MethodDeclaration md = (MethodDeclaration) n;
+    if (!Ast.isMain(md)) {
+      return requires_invs;
+    }
+    FormalParameter fp = (FormalParameter) Ast.getParameters(md).get(0);
+    String param = Ast.getName(fp);
+    String nonnull_inv = param + " != null";
+    String nonnullelements_inv = "\\nonnullelements(" + param + ")";
+    int num_invs = 2;
+
+    // Null out the invariants if they already exist
+    if (requires_invs == null) {
+      requires_invs = new String[0];
+    } else {
+      if (ArraysMDE.indexOf(requires_invs, nonnull_inv) != -1) {
+        nonnull_inv = null;
+        num_invs--;
+      }
+      if (ArraysMDE.indexOf(requires_invs, nonnullelements_inv) != -1) {
+        nonnullelements_inv = null;
+        num_invs--;
+      }
+      if (num_invs == 0) {
+        return requires_invs;
+      }
+    }
+    Assert.assertTrue(requires_invs != null);
+
+    // Allocate space
+    int old_size = requires_invs.length;
+    String[] new_requires_invs = new String[old_size+num_invs];
+    System.arraycopy(requires_invs, 0, new_requires_invs, 0, old_size);
+    requires_invs = new_requires_invs;
+
+    // Add the invariants
+    if (nonnull_inv != null) {
+      num_invs--;
+      requires_invs[old_size + num_invs] = nonnull_inv;
+      System.out.println("Filled in " + (old_size + num_invs));
+    }
+    if (nonnullelements_inv != null) {
+      num_invs--;
+      requires_invs[old_size + num_invs] = nonnullelements_inv;
+      System.out.println("Filled in " + (old_size + num_invs));
+    }
+    Assert.assertTrue(num_invs == 0);
+    for (int i=0; i<requires_invs.length; i++) {
+      if (requires_invs[i] == null) {
+        System.out.println("Null invariant at index " + i + "/" + requires_invs.length);
+        System.exit(1);
+      }
+    }
+    Assert.assertTrue(ArraysMDE.indexOfEq(requires_invs, (Object)null) == -1);
+
+    return requires_invs;
+  }
+
 
   HashMap get_exceptions(PptMap ppts, Node n) {
     HashMap result = new HashMap();
@@ -330,23 +396,6 @@ class MergeESCVisitor extends DepthFirstVisitor {
     String[] ensures_invs = requires_and_ensures[1];
 
     HashMap exceptions = get_exceptions(ppts, n);
-
-    // Special case for main method:  add "arg != null" and
-    // "\nonnullelements(arg)".
-    if (Ast.isMain(n)) {
-      if (requires_invs == null) {
-        requires_invs = new String[0];
-      }
-      int old_size = requires_invs.length;
-      String[] new_requires_invs = new String[old_size+2];
-      System.arraycopy(requires_invs, 0, new_requires_invs, 0, old_size);
-      requires_invs = new_requires_invs;
-      // should really only add these if they aren't already present
-      FormalParameter fp = (FormalParameter) Ast.getParameters(n).get(0);
-      String param = Ast.getName(fp);
-      requires_invs[old_size] = param + " != null";
-      requires_invs[old_size+1] = "\\nonnullelements(" + param + ")";
-    }
 
     String ensures_tag = "ensures";
     String requires_tag = "requires";
@@ -804,10 +853,18 @@ class MergeESCVisitor extends DepthFirstVisitor {
     return result;
   }
 
-  public String format(Invariant i) {
-    if (lightweight)
-      return i.format_using(Invariant.OutputFormat.ESCJAVA);
-    return i.format_using(Invariant.OutputFormat.JML);
+  public String format(Invariant inv) {
+    String inv_string;
+    if (lightweight) {
+      inv_string = inv.format_using(Invariant.OutputFormat.ESCJAVA);
+    } else {
+      inv_string = inv.format_using(Invariant.OutputFormat.JML);
+    }
+    // Debugging
+    // if (true) {
+    //   inv_string = inv_string + "  REPR: " + inv.repr();
+    // }
+    return inv_string;
   }
 }
 
