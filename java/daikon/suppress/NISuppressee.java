@@ -21,9 +21,9 @@ import java.util.*;
  */
 public class NISuppressee {
 
-  Class sup_class;
-  int var_count;
-  Invariant sample_inv;
+  public Class sup_class;
+  public int var_count;
+  public Invariant sample_inv;
 
   public NISuppressee (Class cls, int var_count) {
     sup_class = cls;
@@ -41,11 +41,31 @@ public class NISuppressee {
   }
 
   /**
+   * Define a binary suppressee on the specified class with the
+   * specified variable order
+   */
+  public NISuppressee (Class cls, boolean swap) {
+    sup_class = cls;
+    this.var_count = 2;
+
+    try {
+      Method get_proto = cls.getMethod ("get_proto",
+                                        new Class[] {boolean.class});
+      sample_inv = (Invariant)get_proto.invoke (null,
+                                    new Object[] {Boolean.valueOf(swap)});
+      Assert.assertTrue (sample_inv != null, cls.getName());
+    } catch (Exception e) {
+      throw new RuntimeException ("error instantiating binary invariant "
+                                  + cls.getName() + ": " + e);
+    }
+  }
+
+  /**
    * Instantiates the suppressee invariant on the specified slice.
    */
   public Invariant instantiate (PptSlice slice) {
 
-    Invariant inv = sample_inv.instantiate_dyn (slice);
+    Invariant inv = sample_inv.instantiate (slice);
     if (Debug.logOn()) {
       if (inv != null)
         inv.log ("Created " + inv.format());
@@ -76,7 +96,11 @@ public class NISuppressee {
       if (!(sample_inv instanceof BinaryInvariant))
         Assert.assertTrue (false, "not binary: " + sample_inv.getClass());
       BinaryInvariant binary_inv = (BinaryInvariant) sample_inv;
-      return binary_inv.check (vt.getValue(vis[0]), vt.getValue(vis[1]), 1, 1);
+      // Fmt.pf ("checking %s over %s=%s and %s=%s", sample_inv.getClass(),
+      //        vis[0].name.name(), vt.getValue(vis[0]),
+      //        vis[1].name.name(), vt.getValue(vis[1]));
+      return binary_inv.check_unordered (vt.getValue(vis[0]),
+                                         vt.getValue(vis[1]), 1, 1);
     } else /* must be unary */ {
       UnaryInvariant unary_inv = (UnaryInvariant) sample_inv;
       return unary_inv.check (vt.getValue(vis[0]), 1, 1);
@@ -163,7 +187,9 @@ public class NISuppressee {
 
     // If all of the slots were full, specify the invariant
     if (missing_index == -1) {
-      if (ppt.is_slice_ok (vis, vis.length))
+      if (ppt.is_slice_ok (vis, vis.length)
+          && NISuppression.vis_compatible (vis)
+          && sample_inv.valid_types (vis))
         created_list.add (new NIS.SupInv (this, vis, ppt));
       return (created_list);
     }
@@ -178,6 +204,10 @@ public class NISuppressee {
         continue;
       if (!ppt.is_slice_ok (vis, vis.length))
         continue;
+      if (!NISuppression.vis_compatible (vis))
+        continue;
+      if (!sample_inv.valid_types (vis))
+        continue;
       NIS.SupInv sinv = new NIS.SupInv (this, (VarInfo[]) vis.clone(), ppt);
       sinv.log ("Unspecified variable = " + v.name.name());
       created_list.add (sinv);
@@ -186,9 +216,50 @@ public class NISuppressee {
     return (created_list);
   }
 
+  /**
+   * Returns the swap variable setting  for the suppressee.  Returns false
+   * if the suppressee is not a binary invariant, is symmetric, or permutes
+   * by changing classes
+   */
+  public boolean get_swap() {
+
+    if (var_count != 2)
+      return (false);
+
+    BinaryInvariant binv = (BinaryInvariant) sample_inv;
+    if (binv.is_symmetric())
+      return (false);
+    return (binv.get_swap());
+  }
+
+  /**
+   * Returns a new suppressee that is the same as this one except that
+   * its variables are swapped.
+   */
+  public NISuppressee swap() {
+    Assert.assertTrue (var_count == 2);
+    BinaryInvariant binv = (BinaryInvariant) sample_inv;
+    if (binv != null)
+      Assert.assertTrue (!binv.is_symmetric());
+    if ((binv == null) || binv.get_swap())
+      return (new NISuppressee (sup_class, false));
+    else
+      return (new NISuppressee (sup_class, true));
+  }
+
   public String toString() {
 
-    return (UtilMDE.unqualified_name (sup_class));
+    String extra = "";
+    if (var_count == 2) {
+      BinaryInvariant binv = (BinaryInvariant) sample_inv;
+      if (binv == null)
+        extra = " [null sample inv]";
+      else if (binv.is_symmetric())
+        extra = " [sym]";
+      else if (binv.get_swap())
+        extra = " [swap]";
+    }
+    return (UtilMDE.unqualified_name (sup_class) + extra);
   }
 
 }
