@@ -2067,9 +2067,9 @@ turn out to be different.
 
 @item s
 Omit invariants that are suppressed by other invariants.
-`Suppression' refers to a particular optimization, introduced in
-version 3 of Daikon, in which the processing of an invariant is
-postponed as long as certain other invariants which logically imply it
+`Suppression' refers to a particular optimization
+in which the processing of an invariant is
+postponed as long as certain other invariants that logically imply it
 hold.
 @end table
 
