@@ -15,12 +15,12 @@
 
 ## Built-in Python modules
 import glob, gzip, math, operator, os, pickle, posix, re, resource, string, time, types, whrandom
-# Do NOT use cPickle.  It is buggy!  (Or so it seems.)
+# Do NOT use cPickle.  It is buggy!  (Or so it seems, as of 1.5.1.)
+# As of 1.5.1, gzip's readline() result omits trailing "\n"; fixed in 1.5.2.
 
 ## Third-party Python modules
 # In lieu of something built-in like gzip.py for "compress" files.
 import TextFile
-
 
 ## User-defined Python modules
 import util
@@ -1554,7 +1554,7 @@ def read_data_trace_file_declarations(filename, fn_regexp=None):
     if debug_read:
         print "read_data_trace_file_declarations", filename, (fn_regexp and fn_regexp.pattern) or ""
 
-    # if (filename[:-3] == ".gz"):
+    # if (filename[-3:] == ".gz"):
     #     file = gzip.open(filename, "r")
     # else:
     #     file = open(filename, "r")
@@ -1689,7 +1689,7 @@ def read_data_trace_file(filename, fn_regexp=None):
     if debug_read:
         print "read_data_trace_file", filename, fn_regexp and fn_regexp.pattern
 
-    # if (filename[:-3] == ".gz"):
+    # if (filename[-3:] == ".gz"):
     #     file = gzip.open(filename, "r")
     # else:
     #     file = open(filename, "r")
@@ -4080,7 +4080,7 @@ class two_sequence_numeric_invariant(invariant):
 def write_state(filename):
     """Write global invariants variables to FILENAME."""
     filename = util.expand_file_name(filename)
-    # if (filename[:-3] == ".gz"):
+    # if (filename[-3:] == ".gz"):
     #     file = gzip.open(filename, "w")
     # else:
     #     file = open(filename, "w")
@@ -4093,9 +4093,9 @@ def read_state(filename):
     """Read global invariants variables from FILENAME,
     and return the values rather than setting the globals."""
     filename = util.expand_file_name(filename)
-    if (filename[:-3] == ".gz"):
+    if (filename[-3:] == ".gz"):
         file = gzip.open(filename, "r")
-    elif (filename[:-2] == ".Z"):
+    elif (filename[-2:] == ".Z"):
         raise "Can't read from .Z state files; uncompress or convert to .gz"
     else:
         file = open(filename, "r")

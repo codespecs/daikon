@@ -35,7 +35,8 @@ Installing the invariant detection engine
    version of the C front end and rename it to edgcpfe in a directory on
    your path.
 6. If you don't already have the Python programming language installed,
-   download it from http://www.python.org/.
+   download it from http://www.python.org/.  If you intend to use
+   compressed data files, you will need Python 1.5.2.
 
 
 Using the invariant detection engine
