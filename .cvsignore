@@ -6,6 +6,7 @@ daikon.tar.gz
 daikon.jar
 dfec-src
 dfej-src
+dist
 mail
 notes
 papers
@@ -16,4 +17,3 @@ daikon.ver3.tar.gz
 tests.ver2
 tests.ver3
 tests.speccov
-prev-release-contents
