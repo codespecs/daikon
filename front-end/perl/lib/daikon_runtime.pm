@@ -169,6 +169,10 @@ sub end_trace_all {
 	close $output_style{types}{combined_fh};
 	delete $output_style{types}{combined_fh};
     }
+    if (exists $output_style{dtrace}{combined_fh}) {
+	close $output_style{dtrace}{combined_fh};
+	delete $output_style{dtrace}{combined_fh};
+    }
 }
 
 # At the end of regular execution, finish any unfinished tracing.
