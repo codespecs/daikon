@@ -52,8 +52,8 @@ public final class Daikon {
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  Controls whether conditional program points (see Daikon
-   * manual) are displayed.
+   * Boolean.  Controls whether conditional program points
+   * are displayed.
    **/
   public static boolean dkconfig_output_conditionals = true;
 
@@ -72,14 +72,15 @@ public final class Daikon {
   public static boolean dkconfig_calc_possible_invs;
 
   /**
-   * Integer. Percentage of ppts to process.  All ppts are sorted and
-   * the first dkconfig_ppt_perc ppts are included.  A percentage of
-   * 100 (default) matches all ppts.
+   * Integer. Percentage of program points to process.  All program points
+   * are sorted and
+   * the first <code>ppt_perc</code> program points are processed.
+   * A percentage of 100 matches all program points.
    */
   public static int dkconfig_ppt_perc = 100;
 
   /**
-   * Boolean.  Controls whether or not total samples read and processed
+   * Boolean.  Controls whether or not the total samples read and processed
    * are printed at the end of processing.
    */
   public static boolean dkconfig_print_sample_totals = false;
@@ -99,19 +100,20 @@ public final class Daikon {
   /**
    * Boolean.  If true, Daikon will not create any derived variables.
    * Derived variables, which are combinations of variables that appeared in
-   * the program, like "ary[index]" if "ary" and "index" appeared, can
+   * the program, like <code>ary[index]</code> if <code>ary</code> and
+   * <code>index</code> appeared, can
    * increase the number of properties Daikon finds, especially over
    * sequences. However, derived variables increase Daikon's time and
    * memory usage, sometimes dramatically. If false, individual kinds of
    * derived variables can be enabled or disabled individually using
-   * configuration options under daikon.derive.
+   * configuration options under <samp>daikon.derive</samp>.
    **/
   public static boolean  dkconfig_disable_derived_variables = false;
 
   /**
    * Boolean.  Controls whether or not processing information is printed out.
-   * Setting variable to true also automatically sets dkconfig_progress_delay
-     * to -1.
+   * Setting this variable to true also automatically sets
+   * <code>progress_delay</code> to -1.
    **/
   public static boolean dkconfig_quiet = false;
 
@@ -175,11 +177,12 @@ public final class Daikon {
   public static boolean using_DaikonSimple = false;
   /**
    * If true, no invariants will be guarded.  Guarding means that
-   * if a variable "can be missing" in a dtrace file, predicates
+   * if a variable ``can be missing'' in a dtrace file, predicates
    * are attached to invariants ensuring their values can be dereferenced.
-   * For instance, if a.b "can be missing", and a.b == 5 is an
-   * invariant, then it is more properly declared as (a != null) ==>
-   * (a.b == 5).
+   * For instance, if <code>a.b</code> can be missing, and
+   * <samp>a.b == 5</samp> is an
+   * invariant, then it is more properly declared as
+   * <samp>(a != null) ==> (a.b == 5)</samp>.
    **/
   public static boolean dkconfig_noInvariantGuarding = false;
 
@@ -1444,8 +1447,7 @@ public final class Daikon {
   /**
    * The number of columns of progress information to display. In many
    * Unix shells, this can be set to an appropriate value by
-   * --config_option daikon.Daikon.progress_display_width=$COLUMNS
-   * .
+   * <samp>--config_option daikon.Daikon.progress_display_width=$COLUMNS</samp>.
    **/
   public static int dkconfig_progress_display_width = 80;
 

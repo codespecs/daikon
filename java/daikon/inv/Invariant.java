@@ -72,34 +72,37 @@ public abstract class Invariant
   public static final Logger debugIsObvious = Logger.getLogger("daikon.inv.Invariant.isObvious");
 
   /**
-   * Real number between 0 and 1.  The invariant is displayed only if
+   * Floating-point number between 0 and 1.  Invariants are displayed only if
    * the confidence that the invariant did not occur by chance is
    * greater than this.  (May also be set
-   * via --conf_limit switch to Daikon; refer to manual.)
+   * via <samp>--conf_limit</samp> switch to Daikon; refer to manual.)
    **/
   public static double dkconfig_confidence_limit = .99;
 
   /**
-   * A boolean value. If true, Daikon's Simplify output (printed when
-   * the "--format simplify" flag is enabled, and used internally by
-   * --suppress_redundant) will include new predicates representing
+   * A boolean value.  If true, Daikon's Simplify output (printed when
+   * the <samp>--format simplify</samp> flag is enabled, and used internally by
+   * <samp>--suppress_redundant</samp>) 
+   * will include new predicates representing
    * some complex relationships in invariants, such as lexical
-   * ordering among sequences. If false, some complex relationships
+   * ordering among sequences.  If false, some complex relationships
    * will appear in the output as complex quantified formulas, while
-   * others will not appear at all. When enabled, Simplify may be able
-   * to make more inferences, allowing --suppress_redundant to
+   * others will not appear at all.  When enabled, Simplify may be able
+   * to make more inferences, allowing <samp>--suppress_redundant</samp> to
    * suppress more redundant invariants, but Simplify may also run
    * more slowly.
    **/
   public static boolean dkconfig_simplify_define_predicates = false;
 
   /**
-   * Real number between 0 and 0.1.  The maximum relative difference
+   * Floating-point number between 0 and 0.1, representing the maximum
+   * relative difference
    * between two floats for fuzzy comparisons.  Larger values will
    * result in floats that are relatively farther apart being treated
    * as equal.  A value of 0 essentially disables fuzzy comparisons.
-   * Specifically, if the equation 'abs (1 - f1/f2) <= perc' is true,
-   * then the two doubles (f1 and f2) will be treated as equal by
+   * Specifically, if <code>abs (1 - f1/f2)</code> is less than or equal
+   * to this value, then the two doubles (<code>f1</code> and <code>f2</code>) 
+   * will be treated as equal by
    * Daikon.
    */
   public static double dkconfig_fuzzy_ratio = 0.0001;

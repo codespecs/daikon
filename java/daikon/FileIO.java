@@ -81,13 +81,13 @@ public final class FileIO {
 
   /**
    * Boolean. When false, don't count the number of lines in the dtrace file
-   * before reading.  This will disable the percentage progress printout
+   * before reading.  This will disable the percentage progress printout.
    */
   public static boolean dkconfig_count_lines = true;
 
   /**
    * Boolean.  When true, only read the samples, but don't process them.
-   * used to gather timing information
+   * Used to gather timing information.
    */
   public static boolean dkconfig_read_samples_only = false;
 
@@ -95,7 +95,7 @@ public final class FileIO {
   public static boolean dkconfig_unmatched_procedure_entries_quiet = true;
 
   /**
-   * Boolean.  When true, suppress Exceptions related to file reading.
+   * Boolean.  When true, suppress exceptions related to file reading.
    * This permits Daikon to continue even if there is a malformed trace
    * file.  Use this with care:  in general, it is better to fix the
    * problem that caused a bad trace file, rather than to suppress the

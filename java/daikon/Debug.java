@@ -285,8 +285,8 @@ public class Debug {
   public static boolean dkconfig_showTraceback = false;
 
   /**
-   * Determines whether or not detailed info (such as from add_modified)
-   * is printed.
+   * Determines whether or not detailed info (such as from
+   * <code>add_modified</code>) is printed.
    *
    * @see #log(Logger, Class, Ppt, String)
    * @see #logDetail()

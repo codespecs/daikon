@@ -15,27 +15,28 @@ public class Session
   /**
    * A non-negative integer, representing the largest number of
    * iterations for which Simplify should be allowed to run on any
-   * single conjecture before giving up. Larger values may cause
-   * --simplify_redundant to run longer, but will increase the number
+   * single conjecture before giving up.  Larger values may cause
+   * Simplify to run longer, but will increase the number
    * of invariants that can be recognized as redundant. The default
    * value is small enough to keep Simplify from running for more than
    * a few seconds on any one conjecture, allowing it to verify most
    * simple facts without getting bogged down in long searches. A
    * value of 0 means not to bound the number of iterations at all,
-   * though see also simplify_timeout.
+   * though see also the <code>simplify_timeout</code> parameter..
    **/
   public static int dkconfig_simplify_max_iterations = 1000;
 
   /**
    * A non-negative integer, representing the longest time period (in
    * seconds) Simplify should be allowed to run on any single
-   * conjecture before giving up. Larger values may cause
-   * --simplify_redundant to run longer, but will increase the number
-   * of invariants that can be recognized as redundant. Roughly
-   * speaking, the time spent in --simplify_redundant will be bounded
+   * conjecture before giving up.  Larger values may cause
+   * Simplify to run longer, but will increase the number
+   * of invariants that can be recognized as redundant.  Roughly
+   * speaking, the time spent in Simplify will be bounded
    * by this value, times the number of invariants generated, though
    * it can be much less. A value of 0 means to not bound Simplify at
-   * all by time, though also see the option simplify_max_iterations.
+   * all by time, though also see the option
+   * <code>simplify_max_iterations</code>.
    * Beware that using this option might make Daikon's output depend
    * on the speed of the machine it's run on.
    **/
@@ -43,12 +44,17 @@ public class Session
 
   /**
    * Positive values mean to print extra indications as each candidate
-   * invariant is passed to Simplify during the --suppress_redundant
-   * check. If the value is 1 or higher, a hyphen will be printed when
-   * each invariant is passed to Simplify, and then replaced by a "T"
-   * if the invariant was redundant, "F" if it was not found to be,
-   * and "?" if Simplify gave up because of a time limit. If the value
-   * is 2 or higher, a "<" or ">" will also be printed for each
+   * invariant is passed to Simplify during the
+   * <code>--suppress_redundant</code>
+   * check.  If the value is 1 or higher, a hyphen will be printed when
+   * each invariant is passed to Simplify, and then replaced by a
+   * <samp>T</samp>
+   * if the invariant was redundant,
+   * <samp>F</samp> if it was not found to be,
+   * and <samp>?</samp> if Simplify gave up because of a time limit.
+   * If the value 
+   * is 2 or higher, a <samp><</samp> or <samp>></samp> 
+   * will also be printed for each
    * invariant that is pushed onto or popped from from Simplify's
    * assumption stack. This option is mainly intended for debugging
    * purposes, but can also provide something to watch when Simplify
@@ -60,8 +66,9 @@ public class Session
    * Boolean. If true, the input to the Simplify theorem prover will
    * also be directed to a file named simplifyN.in (where N is a
    * number starting from 0) in the current directory. Simplify's
-   * operation can then be reproduced with a command like "Simplify
-   * -nosc <simplify0.in". This is intended primarily for debugging
+   * operation can then be reproduced with a command like
+   * <samp>Simplify -nosc <simplify0.in</samp>.
+   * This is intended primarily for debugging
    * when Simplify fails.
    **/
 

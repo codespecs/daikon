@@ -23,15 +23,13 @@ public final class PrintInvariants {
   // daikon.config.Configuration interface.
 
   /**
-   * Print invariant classname with invariants in output of format()
-   * method.  Note that this only works with the Invariant.format() method;
-   * it doesn't have any effect on calls to format_using().  format() is
-   * used in debugging statements, and format_using() is used in typical
-   * output.
+   * Print invariant classname with invariants in output of
+   * <code>format()</code> method, normally used only for debugging output
+   * rather than ordinary printing of invariants.
    **/
   public static boolean dkconfig_print_inv_class = false;
 
-  /** print all invariants without any filtering **/
+  /** If true, print all invariants without any filtering.  **/
   public static boolean dkconfig_print_all = false;
 
   /**

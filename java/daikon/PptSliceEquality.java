@@ -24,9 +24,10 @@ public class PptSliceEquality
   // daikon.config.Configuration interface.
 
   /**
-   * Create one set for each variable.  This has the effect of turning
+   * If true, create one equality set for each variable.
+   * This has the effect of turning
    * the equality optimization off, without actually removing the sets
-   * themselves (which are presumed to exist in many parts of the code)
+   * themselves (which are presumed to exist in many parts of the code).
    */
   public static boolean dkconfig_set_per_var = false;
 

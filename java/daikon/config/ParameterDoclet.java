@@ -78,15 +78,17 @@ public class ParameterDoclet
     public String prefixPattern;
     public String fieldName;
     public String description;
+    public String longBlurb;
     public Map fields;  // field -> description
 
-    public DocCategory (String prefix, String name, String desc) {
+    public DocCategory (String prefix, String name, String desc, String blurb) {
       prefixPattern = prefix;
       if (name == null)
 	fieldName = null;
       else
 	fieldName = Configuration.PREFIX + name;
       description = desc;
+      longBlurb = blurb;
       fields = new HashMap ();
     }
   }
@@ -101,17 +103,23 @@ public class ParameterDoclet
       // to the order and the parent document knows the filter option comes
       // first (for node linking).
       new DocCategory("daikon.inv.filter.", "enabled",
-		      "Options to enable/disable filters"),
+		      "Options to enable/disable filters",
+		      "These configuration options enable or disable filters which suppress printing of invariants which are found to be true but which are considered uninteresting or redundant.  See @ref{Invariant filters}, for more information."),
       new DocCategory("daikon.inv.", "enabled",
-		      "Options to enable/disable specific invariants"),
+		      "Options to enable/disable specific invariants",
+		      "These options control whether Daikon looks for specific kinds of invariants.  See @ref{Invariant list}, for more information about the corresponding invariants."),
       new DocCategory("daikon.inv.", null,
-		      "Other invariant configuration parameters"),
+		      "Other invariant configuration parameters",
+		      "The configuration options listed in this section parameterize the behavior of certain invariants.  See @ref{Invariant list}, for more information about the invariants."),
       new DocCategory("daikon.derive.", null,
-		      "Options to enable/disable derived variables"),
+		      "Options to enable/disable derived variables",
+		      "These options control whether Daikon looks for invariants involving certain forms of derived variables.  See @ref{Variable names}, for more about derived variables."),
       new DocCategory("daikon.simplify.", null,
-		      "Simplify interface configuration options"),
+		      "Simplify interface configuration options",
+		      "The configuration options in this section are used to customize the interface to the Simplify theorem prover.  See the description of the @option{--suppress_redundant} command-line option in @ref{Command line options}."),
       new DocCategory(null, null,
-		      "General configuration options") };
+		      "General configuration options",
+		      "This section lists miscellaneous configuration options for Daikon.") };
   }
 
   /**
@@ -201,7 +209,9 @@ public class ParameterDoclet
       out.println("@node " + node + ", " + next + ", " + prev + ", " + up);
       out.println("@subsubsection " + node);
       out.println();
-      out.println("@table @asis");
+      out.println(categories[c].longBlurb);
+      out.println();
+      out.println("@table @option");
       out.println();
 
       List keys = new ArrayList(categories[c].fields.keySet());
@@ -216,6 +226,15 @@ public class ParameterDoclet
 	out.println("@item " + field);
 	// Remove leading spaces, which throw off Info.
 	desc = UtilMDE.replaceString (desc, lineSep + " ", lineSep);
+	// Hmmm, causes trouble with embedded @refs!
+	//desc = UtilMDE.replaceString (desc, "{", "@{");
+	//desc = UtilMDE.replaceString (desc, "}", "@}");
+	desc = UtilMDE.replaceString (desc, "<br>", "@*");
+	desc = UtilMDE.replaceString (desc, "<p>", "@*@*");
+	desc = UtilMDE.replaceString (desc, "<samp>", "@samp{");
+	desc = UtilMDE.replaceString (desc, "</samp>", "}");
+	desc = UtilMDE.replaceString (desc, "<code>", "@code{");
+	desc = UtilMDE.replaceString (desc, "</code>", "}");
 	out.println(desc);
 	out.println(defstr);
 	out.println();

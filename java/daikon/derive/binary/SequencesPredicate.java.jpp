@@ -58,13 +58,13 @@ public final class CLASSNAME
   public static boolean dkconfig_enabled = false;
 
   /**
-   * Boolean.  True if we should only generate derivations on fields
+   * Boolean.  True if Daikon should only generate derivations on fields
    * of the same data structure.
    **/
   public static boolean dkconfig_fieldOnly = true;
 
   /**
-   * Boolean.  True if we should only generate derivations on boolean
+   * Boolean.  True if Daikon should only generate derivations on boolean
    * predicates.
    **/
   public static boolean dkconfig_boolOnly = true;

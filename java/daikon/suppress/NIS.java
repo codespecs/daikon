@@ -38,10 +38,12 @@ public class NIS {
   public static final Logger debugAnt = Logger.getLogger
                                                 ("daikon.suppress.NIS.Ant");
 
-  /** Boolean.  If true, enabled non-instantiating supressions. **/
+  /** Boolean.  If true, enable non-instantiating supressions. **/
   public static boolean dkconfig_enabled = true;
 
-  /** Boolean. If true, use antecedent method for creating unsuppressed invs.*/
+  /** Boolean. If true, use antecedent method for creating unsuppressed
+   *  invariants.
+   */
   public static boolean dkconfig_antecedent_method = true;
 
   // Possible states for suppressors and suppressions.  When a suppression

@@ -264,7 +264,7 @@ public final class ONEOFSCALAR
 
   /**
    * Positive integer.  Specifies the maximum set size for this type
-   * of invariant (x is one of 'n' items).
+   * of invariant (x is one of <code>size</code> items).
    **/
 #if defined(STRINGSEQUENCE)
   public static int dkconfig_size = 2;
@@ -274,15 +274,15 @@ public final class ONEOFSCALAR
 
 #ifdef BASE_INT
   /**
-   * Boolean. If true, invariants describing hashcode-typed variables
+   * Boolean.  If true, invariants describing hashcode-typed variables
    * as having any particular value will be completely omitted from
-   * Simplify-format output. If false, hashcodes will be formatted as
-   * the application of a "hashcode" uninterpreted function to an
-   * integer representing the bit pattern of the hashcode. One might
+   * Simplify-format output.  If false, hashcodes will be formatted as
+   * the application of a hashcode uninterpreted function to an
+   * integer representing the bit pattern of the hashcode.  One might
    * wish to omit such invariants because the exact values of the
    * hashcodes are usually uninteresting; this is the same reason they
-   * print in the native Daikon format, for instance, as "var has only
-   * one value" rather than "var == 150924732".
+   * print in the native Daikon format, for instance, as <samp>var has only
+   * one value</samp> rather than <samp>var == 150924732</samp>.
    **/
   public static boolean dkconfig_omit_hashcode_values_Simplify = false;
 #endif
