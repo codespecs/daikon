@@ -184,7 +184,11 @@ public abstract class Invariant implements java.io.Serializable {
    * (repr_prop also prints the probability), and
    * format gives a high-level representation for user output.
    **/
-  public abstract String repr();
+  public String repr() {
+    // A better default would be to use reflection and print out all
+    // the variable names.
+    return getClass() + varNames() + ": " + format();
+  }
 
   /**
    * For printing invariants, there are two interfaces:
@@ -207,17 +211,23 @@ public abstract class Invariant implements java.io.Serializable {
   /**
    * ESC-like representation.
    **/
-  public abstract String format_esc();
+  public String format_esc() {
+    return "format_esc needs to be changed: " + format();
+  }
 
   /**
    * Representation for the Simplify theorem prover.
    **/
-  public abstract String format_simplify();
+  public String format_simplify() {
+    return "format_simplify needs to be changed: " + format();
+  }
 
   /**
    * IOA Representation
    **/
-  public abstract String format_ioa(String classname);
+  public String format_ioa(String classname) {
+    return "format_ioa needs to be changed: " + format();
+  }
 
   // This should perhaps be merged with some kind of PptSlice comparator.
   /**
@@ -292,8 +302,9 @@ public abstract class Invariant implements java.io.Serializable {
    *
    * @exception RuntimeException if other.class != this.class
    **/
-  public abstract boolean isSameFormula(Invariant other);
-
+  public boolean isSameFormula(Invariant other) {
+    return false;
+  }
 
   public static interface IsSameInvariantNameExtractor
   {
