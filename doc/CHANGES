@@ -11,6 +11,21 @@ versions as the user manual.
 
 ===========================================================================
 
+3.1.4 (01 Oct 2004)
+
+Changed the way that output formats are specified to the Daikon,
+PrintInvariants, and Annotate tools.  Previously, one supplied
+arguments such as --java_output, --jml_output, etc.  Now, one uses
+--format NAME, where name is the name of the output format.  The
+formats are Daikon, DBC, ESC, IOA, Java, JML, Simplify, and repair.
+See the "Invariant syntax" section of the user manual for more
+information.  The user manual was also updated with improved
+descriptions of the output formats.
+
+LinearBinary invariants are now printed in standard form (ax + by + c = 0) 
+rather than slope intercept form, (y = ax + b).  They also now have
+integer coefficients and like LinearTernary invariants, the
+coefficient of the x variable is positive.
 
 Improved portability to Windows systems by changing instances of the
 literal "\n" in code to System.getProperty("line.separator"), or using
@@ -19,58 +34,35 @@ println().
 Removed most calls to System.exit in Daikon.  This makes it easier to call
 methods (including main) defined by Daikon programmatically.
 
-Changed the way that output formats are specified to the Daikon,
-PrintInvariants, and Annotate tools.  Previously, one supplied arguments
-such as --java_output, --jml_output, etc.  Now, one uses --format NAME,
-where name is the name of the output format.
+The "--no_reflection" and "--max_invariants_pp N" options were
+added to Annotate tool.  See the "Annotate tool" section of the 
+user manual for more information.  
 
-Improved the manual's description of the output formats that Daikon can use
-when printing invariants; the formats are Daikon, DBC, ESC, IOA, Java, JML,
-Simplify, and repair.
+The Annotate class was made public so that it could be accessed
+programmatically from other Java applications.  State-holding static
+variables were removed from Annotate, so that multiple calls of main()
+from within another application always yield the same initial Annotate
+state.
 
-Added the "--no_reflection" option to Annotate. If given, Daikon does
-not use reflection to find information about the classes being
-instrumented. The downside is that no "also" tags are output under the
-JML or ESC formats (David Cok requested this behavior).
+Support for a number of deprecated optimizations was removed.
+The global program point hierarchy optimization, the top-down approach
+to optimizing the program point / variable hierarchy, and
+linked suppressions were removed along with their corresponding 
+configuration options.
 
-Added the "--max_invariants_pp N" option to Annotate. If given, then
-Annotate will output at most N invariants per program point (which
-ones are output is not specified).
+The Range invariants (EqualMinusOne, EqualOne, EqualZero, GreaterEqual64,
+GreaterEqualZero, BooleanVal, Bound0_63, Even, amd PowerOfTwo) are now
+checked on elements of arrays in addition to scalar variables.
+These are not normally visible (since they are implied by the Bound and
+OneOf invariants), but are used internally to suppress other invariants.
 
-Made Annotate public so it can be accessed programatically from other
-Java applications.
+Added the configuration option daikon.PptRelation.enable_object_user.
+"See the "List of Configuration Options" section
+of the user manual for more information.
 
-Removed state-holding static variables from Annotate, so that multiple
-calls of main() from within another application always yield the same
-initial Annotate state.
-
-
-Changed the way that Linear* invariants are printed.
-[Perhaps change their names as well?]
-
-LinearBinary invariants are not printed in standard form rather than 
-slope intercept form, i.e. ax + by + c == 0 rather than y = ax + b.
-LinearBinary invariants now have integer coefficients and like 
-LinearTernary invariants, the coefficient of the x variable is positive.
-
-
-Removed old V2 code and support for top-down and the global ppt
-
-Changed the way that invariants are instantiated.  The get_proto()
-method now always returns a prototype invariant (even if the invariant
-is not enabled).  The enabled() method was added to return whether or
-not an invariant is enabled.  The instantiate_dyn() method directly
-instantiates an invariant (replacing the static instantiate call).  It
-is called by instantiate() in Invariant.  Use
-CLASS.get_proto().instantiate(slice) to create a specific invariant.
-Do not call instantiate_dyn() directly (which should not be possible
-as it is protected).
-
-The valid_types() routine is implemented in the base classes (OneScalar,
-TwoSequence, ThreeFloat, etc) and checks for the correct number and basic
-types of the arguments.  A new method (instantiate_ok()) does more refined
-checking for specific types (such as avoiding hashcodes and booleans on
-numeric invariants, special comparability checks, and the like).
+The mechanism by which invariants are instantiated was simplified.
+See the "New Invariants" section of the developer manual for
+more information.
 
 The Kvasir dynamic C front-end has undergone a number of internal
 improvements, in preparation for adding support for global variables
