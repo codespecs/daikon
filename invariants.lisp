@@ -93,7 +93,7 @@
     (alist length)
     (hash-table hash-table-count)
     ;; I should be able to do much better than this.
-    ((array integer 1) array-dim-1)
+    ((array integer 1) array-dim-1 (identity . "[]"))
     ((array integer 2) array-dim-1 array-dim-2)
     ((array integer 3) array-dim-1 array-dim-2 array-dim-3)
     ((array character 1) array-dim-1)
@@ -101,7 +101,8 @@
     ((array character 3) array-dim-1 array-dim-2 array-dim-3)
     ))
 
-;; Returns either a symbol or a (funcallable-function . print-repr) pair.
+;; Returns either a symbol or a (funcallable-function . print-repr) pair,
+;; where PRINT-REPR often starts with a period, as in ".size".
 ;; Ought to be able to cope with recursive calls (eg a list of elements,
 ;; each of which requires some special accessor).
 (defun accessors-for-type (type)
@@ -139,6 +140,7 @@
 ;; (accessors-for-type 'integer)
 ;; (accessors-for-type '(list integer 3))
 ;; (accessors-for-type '(list-elements foo integer integer bar integer))
+;; (accessors-for-type '(array integer 1))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -180,8 +182,10 @@
 						  ((and (consp function)
 							(atom (cdr function)))
 						   `(format *inv-output-stream*
-							    ,(format nil "~a.~a~c~~s~~%" var-sans-spaces (cdr function) #\tab)
-							    (funcall ,(car function) ,var)))
+							    ,(format nil "~a~a~c~~s~~%" var-sans-spaces (cdr function) #\tab)
+							    ,(if (eq (car function) 'identity)
+								 var
+							       `(funcall ,(car function) ,var))))
 						  (t
 						   `(format *inv-output-stream*
 							    ,(format nil "~a.~a~c~~s~~%" var-sans-spaces function #\tab)

@@ -1,7 +1,7 @@
 In this directory (~mernst/research/notkin/invariants/):
 
  * notes: my (organized and disorganized) notes
- * examples: notes about test inputs (separated from notes file above)
+ * examples-notes: notes about test inputs (separated from notes file above)
  * invariants.bib: notes on related work
  * cubist/ and foil/:  experiments with machine learning programs
  * invariants.py, util.py: the invariant detector, implemented in Python

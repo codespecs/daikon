@@ -27,7 +27,7 @@ if not locals().has_key("var_names"):
 
 integer_re = re.compile(r'^-?[0-9]+$')
 float_re = re.compile(r'^-?[0-9]*\.[0-9]+$|^-?[0-9]+\.[0-9]*$')
-sequence_re = re.compile(r'^.*\[\]$')
+sequence_re = re.compile(r'^[^	]+\[\]$') # variable name for a sequence
 unconstrained_re = re.compile(r'unconstrained$')
 
 def clear_variables():
@@ -61,12 +61,15 @@ dictionaries mapping from a function name to information about the function."""
         util.mapping_increment(samples, fname, sub_samples[fname])
     file_vars[filename] = (sub_var_names, sub_var_values, sub_samples)
 
-def dict_of_tuples_to_tuple_of_dicts(dot):
+def dict_of_tuples_to_tuple_of_dicts(dot, tuple_len=None):
     """Input: a dictionary mapping a tuple of elements to a count.
+All the key tuples in the input have the same length unless optional argument
+TUPLE_LEN is provided, in which case all tuples have at least that length.
 Output: a tuple of dictionaries, each mapping a single element to a count.
 The first output dictionary concerns the first element of the original keys,
 the second output the second element of the original keys, and so forth."""
-    tuple_len = len(dot.keys()[0])
+    if tuple_len == None:
+        tuple_len = len(dot.keys()[0])
     tuple_indices = range(0, tuple_len)
     # Next four lines accomplish "result = ({},) * tuple_len", but with
     # distinct rather than identical dictionaries in the tuple.
@@ -84,19 +87,16 @@ the second output the second element of the original keys, and so forth."""
 
 
 def dict_of_sequences_to_element_dict(dot):
-        """Input: a dictionary mapping instances of a sequence (tuples) to
-        a count.
-        Output: a dictionary, mapping elements of all of the sequence
-        instances to a count."""
-        tuple_len = len(dot.keys()[0])
-        tuple_indices = range(0, tuple_len)
-        result = {}
-        for (key_tuple, count) in dot.items():
-            for i in tuple_indices:
-                this_key = key_tuple[i]
-                util.mapping_increment(result, this_key, count)
-        return result
+    """Input: a dictionary mapping instances of a sequence (tuples) to a count.
+Output: a dictionary, mapping elements of all of the sequence instances
+to a count."""
+    result = {}
+    for (key_tuple, count) in dot.items():
+        for this_key in key_tuple:
+            util.mapping_increment(result, this_key, count)
+    return result
 # dict_of_sequences_to_element_dict(dot)
+
 
 def dict_of_tuples_slice(dot, indices):
     """Input: a dictionary mapping a tuple of elements to a count, and a
@@ -174,6 +174,9 @@ def read_file(filename):
             (this_var_name,this_value) = string.split(line, "\t", 1)
             if sequence_re.match(this_var_name):
                 # variable is a sequence
+                lisp_delimiters = re.match("^#\((.*)\)$", this_value)
+                if lisp_delimiters:
+                    this_value = lisp_delimiters.group(1)
                 this_value = string.split(this_value, " ")
                 this_value = this_value[:-1]   # remove trailing newline
                 for seq_elem in range(0, len(this_value)):
@@ -186,7 +189,7 @@ def read_file(filename):
                         # HACK
                         this_value[seq_elem] = 0
                     else:
-                        raise "What value?"
+                        raise "What value? " + `this_value[seq_elem]`
                 this_value = tuple(this_value)
             else:
                 if integer_re.match(this_value):
@@ -1202,9 +1205,10 @@ class single_sequence_numeric_invariant(invariant):
     non_increasing = None   #
 
     # Invariants over elements of sequence
-    all_index_sfi = None    # sfi for all elements of the sequence
-    per_index_sfi = None    # tuple of element sfi's for each index
+    all_index_sni = None    # sni for all elements of the sequence
+    per_index_sni = None    # tuple of element sni's for each index
                             #   across sequence instances
+    reversed_per_index_sni = None
 
     def __init__(self, dict):
         """dict maps from tuples of values to number of occurrences"""
@@ -1240,21 +1244,33 @@ class single_sequence_numeric_invariant(invariant):
                 break
 
         # Invariant check over elements of all sequence instances
-        element_to_count = []
         element_to_count = dict_of_sequences_to_element_dict(dict)
-        self.all_index_sfi = \
-            single_scalar_numeric_invariant(element_to_count)
+        self.all_index_sni = single_scalar_numeric_invariant(element_to_count)
 
         # Invariant check for each index over all sequence instances
-        # Use 'dict_of_tuples_to_tuple_of_dicts' in slightly different
-        #  way than before.  Splits up sequence elements into dicts
-        #  for each index.  Then do invariant check on per_index basis.
-        per_index_elems_to_count = dict_of_tuples_to_tuple_of_dicts(dict)
-        self.per_index_sfi = []
-        indices = range(0, len(per_index_elems_to_count))
-        for i in indices:
-            self.per_index_sfi.append(\
-                single_scalar_numeric_invariant(per_index_elems_to_count[i]))
+        def per_index_invariants(dict, tuple_len):
+            "Return a list of TUPLE_LEN single_scalar_numeric_invariant objects."
+            # Use 'dict_of_tuples_to_tuple_of_dicts' in slightly different
+            #  way than before.  Splits up sequence elements into dicts
+            #  for each index.  Then do invariant check on per_index basis.
+            per_index_elems_to_count = \
+                    dict_of_tuples_to_tuple_of_dicts(dict, tuple_len)
+            result = []
+            for i in range(0, tuple_len):
+                result.append(\
+                    single_scalar_numeric_invariant(per_index_elems_to_count[i]))
+            return result
+
+        tuple_len = min(map(len, dict.keys())) # min length of a tuple
+        self.per_index_sni = per_index_invariants(dict, tuple_len)
+
+        reversed_dict = {}
+        for (key, value) in dict.items():
+            reversed_key = list(key)
+            reversed_key.reverse()
+            reversed_dict[tuple(reversed_key)] = value
+        self.reversed_per_index_sni = per_index_invariants(reversed_dict, tuple_len)
+
 
     def __repr__(self):
         result = "<invariant-1 []: "
@@ -1293,11 +1309,11 @@ class single_sequence_numeric_invariant(invariant):
             result = result + "\n" + "\tPer sequence elements non-increasing"
 
         result = result + "\n" + "\tAll sequence elements: " \
-                 + self.all_index_sfi.format(("*every*element*",))
+                 + self.all_index_sni.format(("*every*element*",))
         result = result + "\n" + "\tFirst sequence element: " \
-                 + self.per_index_sfi[0].format(("*first*element*",))
+                 + self.per_index_sni[0].format(("*first*element*",))
         result = result + "\n" + "\tLast sequence element: " \
-                 + self.per_index_sfi[-1].format(("*last*element*",))
+                 + self.reversed_per_index_sni[0].format(("*last*element*",))
 
         # How to note that unconstrained???
         return result
