@@ -84,14 +84,15 @@ public final class Daikon {
 
   // When true, output numbers of values and samples (also names of variables)
   public static boolean output_num_samples = false;
-  // public static boolean output_num_samples = true;
+
+  public static boolean ignore_comparability = false;
 
   // Controls which program points/variables are used/ignored.
   public static Pattern ppt_regexp;
   public static Pattern ppt_omit_regexp;
   public static Pattern var_omit_regexp;
 
-  // I appear to need both of these variables.  Or do I?  I don't know.
+  // I appear to need both of these variables.  (Or do I?)
   public static FileOutputStream inv_ostream;
   public static ObjectOutputStream inv_oostream;
 

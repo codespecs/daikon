@@ -665,7 +665,9 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     throw new Error("Couldn't find size of " + name);
   }
 
-  // Returns true if the type in the original program is integer
+  // Returns true if the type in the original program is integer.
+  // Should perhaps check Daikon.check_program_types and behave differently
+  // depending on that.
   public boolean isIndex() {
     return ((rep_type == ProglangType.INT)
             && type.isIndex());

@@ -38,16 +38,25 @@ public final class SequenceScalarFactory {
       }
     }
 
-    if (Daikon.check_program_types
-        && (! seqvar.type.elementType().comparable(sclvar.type))) {
-      if (debugSequenceScalarFactory) {
-        System.out.println("Incompatible types: " + sclvar.name + " of type " + sclvar.type.format() + " vs. element of " + seqvar.name + " whose type is " + seqvar.type.format());
+    if (Daikon.check_program_types) {
+      if (! seqvar.type.elementType().comparable(sclvar.type)) {
+        if (debugSequenceScalarFactory) {
+          System.out.println("Incompatible types: " + sclvar.name + " of type " + sclvar.type.format() + " vs. element of " + seqvar.name + " whose type is " + seqvar.type.format());
+        }
+        return null;
       }
-      return null;
+    }
+    if (! Daikon.ignore_comparability) {
+      if (! VarComparability.compatible(VarInfoName.parse("seqvar.name.elementName()"), seqvar.comparability.elementType(),
+                                        sclvar.name, sclvar.comparability)) {
+        return null;
+      }
     }
 
     Vector result = new Vector();
-    if (pass == 2) {
+    if (pass == 1) {
+      // nothing to do
+    } else {
       // I could check that the length of the sequence isn't always 0.
       result.add(Member.instantiate(ppt, seq_first));
       result.add(SeqIntComparison.instantiate(ppt, seq_first));

@@ -69,10 +69,22 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
       return null;
     }
 
-    if (! sclvar.isIndex())
-      return null;
-    // Could also do a Lackwit/Ajax comparability test here.
+    Assert.assert(sclvar.isCanonical());
+    Assert.assert(seqvar.isCanonical());
 
+    // Comparability test
+    if (Daikon.check_program_types) {
+      if (! sclvar.isIndex())
+        return null;
+    }
+    if (! Daikon.ignore_comparability) {
+      VarComparability sclcompar = sclvar.comparability;
+      VarComparability seqindexcompar = seqvar.comparability.indexType(0);
+      if (! VarComparability.compatible(sclvar.name, sclcompar,
+                                        VarInfoName.parse("seqvar.name.indexName(0)"), seqindexcompar)) {
+        return null;
+      }
+    }
 
     // For now, do nothing if the sequence is itself derived.
     if (seqvar.derived != null)
@@ -80,8 +92,6 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
     // For now, do nothing if the scalar is itself derived.
     if (sclvar.derived != null)
       return null;
-
-    Assert.assert(sclvar.isCanonical());
 
     VarInfo seqsize = seqvar.sequenceSize().canonicalRep();
     // System.out.println("BinaryDerivation.instantiate: sclvar=" + sclvar.name

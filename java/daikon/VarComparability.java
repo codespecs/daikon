@@ -44,8 +44,12 @@ public abstract class VarComparability {
   public abstract VarComparability elementType();
   public abstract VarComparability indexType(int dim);
 
-  static boolean compatible(VarInfoName name1, VarComparability type1,
-                            VarInfoName name2, VarComparability type2) {
+  public static boolean compatible(VarInfo v1, VarInfo v2) {
+    return compatible(v1.name, v1.comparability, v2.name, v2.comparability);
+  }
+
+  public static boolean compatible(VarInfoName name1, VarComparability type1,
+                                   VarInfoName name2, VarComparability type2) {
 
     if (type1.getClass() != type2.getClass())
       throw new Error("Trying to compare VarComparabilities " +

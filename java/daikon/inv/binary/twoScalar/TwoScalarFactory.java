@@ -22,12 +22,17 @@ public final class TwoScalarFactory {
 
     if (Daikon.check_program_types
         && (! var1.type.comparable(var2.type))) {
-      // System.out.println("These have different types: :  "
+      // System.out.println("These have different program types: :  "
       //                    + var1.name + " (" + var1.type.format() + ") " + var2.name +  " (" + var2.type.format() + ") ");
       return null;
     }
-    // System.out.println("These have comparable types: :  "
+    // System.out.println("These have comparable program types: :  "
     //                    + var1.name + " (" + var1.type.format() + ") " + var2.name +  " (" + var2.type.format() + ") ");
+    if (! Daikon.ignore_comparability) {
+      if (! VarComparability.compatible(var1, var2)) {
+        return null;
+      }
+    }
 
     Vector result = new Vector();
     if (pass == 1) {

@@ -34,6 +34,14 @@ public final class ThreeScalarFactory {
     // Check transitivity of "comparable" relationship.
     Assert.assert((!Daikon.check_program_types)
                   || var1.type.comparable(var3.type));
+    if (! Daikon.ignore_comparability) {
+      if (! (VarComparability.compatible(var1, var2)
+             && VarComparability.compatible(var2, var3))) {
+        return null;
+      }
+    }
+    // Check transitivity of "compatible" relationship.
+    Assert.assert(VarComparability.compatible(var1, var3));
 
     if (pass == 1) {
       // nothing to do

@@ -21,10 +21,18 @@ public final class TwoStringFactory {
                   && (var2.rep_type == ProglangType.STRING));
 
     if (Daikon.check_program_types
-        && (! var1.type.comparable(var2.type)))
+        && (! var1.type.comparable(var2.type))) {
+      // System.out.println("These have different program types: :  "
+      //                    + var1.name + " (" + var1.type.format() + ") " + var2.name +  " (" + var2.type.format() + ") ");
       return null;
-    // System.out.println("These have the same type (" + var1.type.format() + "):  "
-    //                    + var1.name + " " + var2.name);
+    }
+    // System.out.println("These have comparable program types: :  "
+    //                    + var1.name + " (" + var1.type.format() + ") " + var2.name +  " (" + var2.type.format() + ") ");
+    if (! Daikon.ignore_comparability) {
+      if (! VarComparability.compatible(var1, var2)) {
+        return null;
+      }
+    }
 
     Vector result = new Vector();
     if (pass == 1) {

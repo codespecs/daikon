@@ -21,16 +21,29 @@ public final class TwoSequenceFactory {
     Assert.assert((var1.rep_type == ProglangType.INT_ARRAY)
                   && (var2.rep_type == ProglangType.INT_ARRAY));
 
+    if (Daikon.check_program_types
+        && (! var1.type.elementType().comparable(var2.type.elementType()))) {
+      // System.out.println("These have different program types: :  "
+      //                    + var1.name + " (" + var1.type.format() + ") " + var2.name +  " (" + var2.type.format() + ") ");
+      return null;
+    }
+    // System.out.println("These have comparable program types: :  "
+    //                    + var1.name + " (" + var1.type.format() + ") " + var2.name +  " (" + var2.type.format() + ") ");
+    if (! Daikon.ignore_comparability) {
+      VarComparability compar1 = var1.comparability.elementType();
+      VarComparability compar2 = var2.comparability.elementType();
+      // The "name" arguments here are wrong.
+      if (! VarComparability.compatible(var1.name, compar1, var2.name, compar2)) {
+        return null;
+      }
+    }
+
     VarInfo super1 = var1.isDerivedSubSequenceOf();
     if (super1 == null)
       super1 = var1;
     VarInfo super2 = var2.isDerivedSubSequenceOf();
     if (super2 == null)
       super2 = var2;
-
-    if (Daikon.check_program_types
-        && (! var1.type.comparable(var2.type)))
-      return null;
 
     // System.out.println("TwoSequenceFactory(pass " + pass + ") " + ppt.name
     //                    + "      super1 = " + super1.name + ", super2 = " + super2.name);

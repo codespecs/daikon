@@ -46,6 +46,12 @@ public final class SeqIndexComparison extends SingleSequence {
     if (! elt_type.baseIsIntegral()) {
       return null;
     }
+    VarComparability elt_compar = seqvar.comparability.elementType();
+    VarComparability index_compar = seqvar.comparability.indexType(0);
+    if (! VarComparability.compatible(VarInfoName.parse("seqvar.name.elementName()"), elt_compar,
+                                      VarInfoName.parse("seqvar.name.indexName(0)"), index_compar)) {
+      return null;
+    }
 
     return new SeqIndexComparison(ppt);
   }
