@@ -9,6 +9,8 @@ export DAIKONBIN=${DAIKONDIR}/scripts
 export INV=${DAIKONDIR}
 export inv=${INV}
 export DAIKONCLASS_SOURCES=1
+export PAG=/afs/csail.mit.edu/group/pag
+export pag=${PAG}
 
 ## Set this directory to the directory containing the JDK.
 # Simplify to just the first branch after the AFS move is done.

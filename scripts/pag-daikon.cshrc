@@ -9,6 +9,8 @@ setenv DAIKONBIN ${DAIKONDIR}/scripts
 setenv INV ${DAIKONDIR}
 setenv inv ${INV}
 setenv DAIKONCLASS_SOURCES 1
+setenv PAG /afs/csail.mit.edu/group/pag
+setenv pag ${PAG}
 
 ## Set this directory to the directory containing the JDK.
 # Simplify to just the first branch after the AFS move is done.
