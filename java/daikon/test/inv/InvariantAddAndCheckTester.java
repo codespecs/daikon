@@ -894,34 +894,6 @@ public class InvariantAddAndCheckTester extends TestCase {
 
 
     /**
-     * This function determines the corresponding OutputFormat variable
-     * given a format string such that the format_using function can be
-     * used.
-     *
-     * @param format a string representing the format
-     * @return an OutputFormat object representing the output type if
-     *         format corresponds to any known formats
-     *         otherwise throws a RuntimeException
-     **/
-    private static OutputFormat getOutputFormat(String format) {
-      if (format.equalsIgnoreCase("daikon"))
-        return OutputFormat.DAIKON;
-      else if (format.equalsIgnoreCase("java"))
-        return OutputFormat.JAVA;
-      else if (format.equalsIgnoreCase("esc"))
-        return OutputFormat.ESCJAVA;
-      else if (format.equalsIgnoreCase("ioa"))
-        return OutputFormat.IOA;
-      else if (format.equalsIgnoreCase("simplify"))
-        return OutputFormat.SIMPLIFY;
-      else if (format.equalsIgnoreCase("jml"))
-        return OutputFormat.JML;
-      else if (format.equalsIgnoreCase("dbc"))
-        return OutputFormat.DBCJAVA;
-      throw new RuntimeException("Invalid output format passed to getOutputFormat(String)");
-    }
-
-    /**
      * This function creates an appropriate PptSlice for a given set of
      * VarInfos and a PptTopLevel.
      *

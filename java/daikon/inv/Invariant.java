@@ -80,7 +80,7 @@ public abstract class Invariant
 
   /**
    * A boolean value. If true, Daikon's Simplify output (printed when
-   * the --simplify_output flag is enabled, and used internally by
+   * the "--format simplify" flag is enabled, and used internally by
    * --suppress_redundant) will include new predicates representing
    * some complex relationships in invariants, such as lexical
    * ordering among sequences. If false, some complex relationships
@@ -676,10 +676,10 @@ public abstract class Invariant
   {
     /** The standard, concise Daikon output format */
     public static final OutputFormat DAIKON = new OutputFormat("Daikon");
+    /** Design-By-Contract for Java (used by Parasoft JContract) */
+    public static final OutputFormat DBCJAVA = new OutputFormat("DBC");
     /** ESC/Java's annotation language */
     public static final OutputFormat ESCJAVA = new OutputFormat("ESC/Java");
-    /** Simplify theorem prover */
-    public static final OutputFormat SIMPLIFY = new OutputFormat("Simplify");
     /** IOA language */
     public static final OutputFormat IOA = new OutputFormat("IOA");
     /** IOA language, sans invariant numbering */
@@ -688,14 +688,14 @@ public abstract class Invariant
     public static final OutputFormat JAVA = new OutputFormat("Java");
     /** Java Modeling Language */
     public static final OutputFormat JML = new OutputFormat("JML");
-    /** Design-By-Contract for Java (used by Parasoft JContract) */
-    public static final OutputFormat DBCJAVA = new OutputFormat("DBC/Java");
+    /** Simplify theorem prover */
+    public static final OutputFormat SIMPLIFY = new OutputFormat("Simplify");
     /** Data Structure Repair Format */
     public static final OutputFormat REPAIR = new OutputFormat("Repair");
+
     /** Whole names as single C/Java style indentifiers (currently just
      * for single VarInfoNames) */
-    public static final OutputFormat IDENTIFIER
-      = new OutputFormat("Identifier");
+    public static final OutputFormat IDENTIFIER = new OutputFormat("Identifier");
 
     private final String name;
     public final String toString() { return "OutputFormat:" + name; }
@@ -707,6 +707,26 @@ public abstract class Invariant
     // Nobody should ever construct these
     private OutputFormat(String name) {
       this.name = name;
+    }
+
+    /**
+     * Return the appropriate OutputFormat for the given name, or null
+     * if no such OutputFormat exists.
+     **/
+    public static OutputFormat get(String name) {
+      if (name == null) { return null; }
+      if (name.compareToIgnoreCase(DAIKON.name) == 0) { return DAIKON; }
+      if (name.compareToIgnoreCase(DBCJAVA.name) == 0) { return DBCJAVA; }
+      if (name.compareToIgnoreCase(ESCJAVA.name) == 0) { return ESCJAVA; }
+      if (name.compareToIgnoreCase("ESC") == 0) { return ESCJAVA; }
+      if (name.compareToIgnoreCase(IOA.name) == 0) { return IOA; }
+      if (name.compareToIgnoreCase(IOATEST.name) == 0) { return IOATEST; }
+      if (name.compareToIgnoreCase(JAVA.name) == 0) { return JAVA; }
+      if (name.compareToIgnoreCase(JML.name) == 0) { return JML; }
+      if (name.compareToIgnoreCase(SIMPLIFY.name) == 0) { return SIMPLIFY; }
+      if (name.compareToIgnoreCase(REPAIR.name) == 0) { return REPAIR; }
+      if (name.compareToIgnoreCase(IDENTIFIER.name) == 0) { return IDENTIFIER; }
+      return null;
     }
   }
 

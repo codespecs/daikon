@@ -437,7 +437,7 @@ Goal (java): warning: method daikon.inv.binary.twoSequence.SubSequence.format(Ou
 Goal (esc): warning: method daikon.inv.binary.twoSequence.SubSequence.format(OutputFormat:ESC/Java) needs to be implemented: a[] is a subsequence of b[]
 Goal (ioa): a \subseteq b
 Goal (jml): warning: method daikon.inv.binary.twoSequence.SubSequence.format(OutputFormat:JML) needs to be implemented: a[] is a subsequence of b[]
-Goal (dbc): warning: method daikon.inv.binary.twoSequence.SubSequence.format(OutputFormat:DBC/Java) needs to be implemented: a[] is a subsequence of b[]
+Goal (dbc): warning: method daikon.inv.binary.twoSequence.SubSequence.format(OutputFormat:DBC) needs to be implemented: a[] is a subsequence of b[]
 Goal (simplify): format_simplify disabled
 ; Goal (simplify): (IMPLIES (AND (>= (+ (- (- (arrayLength |a|) 1) 0) 1) 0) (>= (+ (- (- (arrayLength |b|) 1) 0) 1) 0)) (AND (AND (NEQ (+ (- (- (arrayLength |a|) 1) 0) 1) 0) (>= (+ (- (- (arrayLength |b|) 1) 0) 1) (+ (- (- (arrayLength |a|) 1) 0) 1))) (EXISTS (|__shift|) (AND (<= 0 |__shift|) (<= (+ |__shift| (+ (- (- (arrayLength |a|) 1) 0) 1)) (+ (- (- (arrayLength |b|) 1) 0) 1)) (FORALL (|__index|) (IMPLIES (AND (<= 0 |__index|) (< |__index| (+ (- (- (arrayLength |a|) 1) 0) 1))) (EQ (select (select elems |a|) (+ 0 |__index|)) (select (select elems |b|) (+ (+ 0 |__index|) |__shift|)))))))))
 [1 2 3 4 5 6]

@@ -73,9 +73,6 @@ public class Annotate {
 
   public static final Logger debug = Logger.getLogger("daikon.tools.jtb.Annotate");
 
-  public static final String useJML_SWITCH = "jml_output";
-  public static final String useJAVA_SWITCH = "java_output";
-  public static final String useDBC_SWITCH = "dbc_output";
   public static final String wrapXML_SWITCH = "wrap_xml";
   public static final String max_invariants_pp_SWITCH = "max_invariants_pp";
   public static final String no_reflection_SWITCH = "no_reflection";
@@ -88,9 +85,7 @@ public class Annotate {
       "       by default these \"inexpressible\" invariants are simply omitted",
       "  -r   Use all .java files under the current directory as arguments",
       "  -s   Use // comments rather than /* comments",
-      "  --jml_output   Insert JML specifications instead of ESC specifications",
-      "  --dbc_output   Insert Jtest DBC specifications instead of ESC specifications",
-      "  --java_output   Insert Java format specifications instead of ESC specifications",
+      "  --format name  Insert specifications in the given format: DBC, ESC, JML, Java",
       "  --wrap_xml     Wrap each annotation and auxiliary information in XML tags",
       "  --max_invariants_pp N",
       "                 Annotate the sources with at most N invariants per program point",
@@ -132,14 +127,12 @@ public class Annotate {
     boolean useReflection = true;
     int maxInvariantsPP = -1;
 
-    Daikon.output_style = OutputFormat.ESCJAVA;
+    Daikon.output_format = OutputFormat.ESCJAVA;
     daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt(useJML_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(useJAVA_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(useDBC_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(Daikon.format_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(wrapXML_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(max_invariants_pp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(no_reflection_SWITCH, LongOpt.NO_ARGUMENT, null, 0)
@@ -169,20 +162,21 @@ public class Annotate {
           Global.debugAll = true;
         } else if (Daikon.debug_SWITCH.equals(option_name)) {
           LogHelper.setLevel (g.getOptarg(), LogHelper.FINE);
-        } else if (useJML_SWITCH.equals(option_name)) {
-          Daikon.output_style = OutputFormat.JML;
-          setLightweight = false;
-          JMLCompilerWorkaroundFilter.createNextFilterOn = true;
-        } else if (useJAVA_SWITCH.equals(option_name)) {
-          Daikon.output_style = OutputFormat.JAVA;
-          setLightweight = true;
-          JMLCompilerWorkaroundFilter.createNextFilterOn = true;
-        } else if (useDBC_SWITCH.equals(option_name)) {
-          Daikon.output_style = OutputFormat.DBCJAVA;
-          setLightweight = true;
+        } else if (Daikon.format_SWITCH.equals(option_name)) {
+          String format_name = g.getOptarg();
+          Daikon.output_format = OutputFormat.get(format_name);
+          if (Daikon.output_format == null) {
+            throw new Daikon.TerminationMessage("Bad argument:  --format "
+                                         + format_name);
+          }
+          if (Daikon.output_format == OutputFormat.JML) {
+            setLightweight = false;
+          } else {
+            setLightweight = true;
+          }
         } else {
-          throw new RuntimeException("Unknown long option received: " +
-                                     option_name);
+          throw new Daikon.TerminationMessage("Unknown long option received: " +
+                                       option_name);
         }
         break;
       case 'h':
@@ -233,13 +227,13 @@ public class Annotate {
       }
       Reader input = new FileReader(javafile);
       File outputFile = null;
-      if (Daikon.output_style == OutputFormat.ESCJAVA) {
+      if (Daikon.output_format == OutputFormat.ESCJAVA) {
         outputFile = new File(javafile + "-escannotated");
-      } else if (Daikon.output_style == OutputFormat.JML) {
+      } else if (Daikon.output_format == OutputFormat.JML) {
         outputFile = new File(javafile + "-jmlannotated");
-      } else if (Daikon.output_style == OutputFormat.JAVA) {
+      } else if (Daikon.output_format == OutputFormat.JAVA) {
         outputFile = new File(javafile + "-javaannotated");
-      } else if (Daikon.output_style == OutputFormat.DBCJAVA) {
+      } else if (Daikon.output_format == OutputFormat.DBCJAVA) {
         outputFile = new File(javafile + "-dbcannotated");
       }
       // outputFile.getParentFile().mkdirs();

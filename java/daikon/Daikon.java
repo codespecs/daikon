@@ -207,10 +207,10 @@ public final class Daikon {
   // Set what output style to use.  DAIKON is the default; ESC style
   // is based on JML; SIMPLIFY style uses first order logical
   // expressions with lots of parens
-  public static OutputFormat output_style = OutputFormat.DAIKON;
-  // public static OutputFormat output_style = OutputFormat.ESCJAVA;
-  // public static OutputFormat output_style = OutputFormat.DBCJAVA;
-  // public static OutputFormat output_style = OutputFormat.SIMPLIFY;
+  public static OutputFormat output_format = OutputFormat.DAIKON;
+  // public static OutputFormat output_format = OutputFormat.ESCJAVA;
+  // public static OutputFormat output_format = OutputFormat.DBCJAVA;
+  // public static OutputFormat output_format = OutputFormat.SIMPLIFY;
 
   // When true, output numbers of values and samples (also names of variables)
   public static boolean output_num_samples = false;
@@ -284,15 +284,7 @@ public final class Daikon {
   public static final String no_dataflow_hierarchy_SWITCH = "nohierarchy";
   public static final String suppress_redundant_SWITCH = "suppress_redundant";
   public static final String conf_limit_SWITCH = "conf_limit";
-  public static final String esc_output_SWITCH = "esc_output";
-  public static final String ioa_output_SWITCH = "ioa_output";
-  public static final String test_ioa_output_SWITCH = "test_ioa_output";
-  public static final String java_output_SWITCH = "java_output";
-  public static final String jml_output_SWITCH = "jml_output";
-  public static final String dbc_output_SWITCH = "dbc_output";
   public static final String mem_stat_SWITCH = "mem_stat";
-  public static final String simplify_output_SWITCH = "simplify_output";
-  public static final String repair_output_SWITCH = "repair_output";
   public static final String output_num_samples_SWITCH = "output_num_samples";
   public static final String config_SWITCH = "config";
   public static final String config_option_SWITCH = "config_option";
@@ -303,6 +295,7 @@ public final class Daikon {
   public static final String disc_reason_SWITCH = "disc_reason";
   public static final String track_SWITCH = "track";
   public static final String omit_from_output_SWITCH = "omit_from_output";
+  public static final String format_SWITCH = "format";
 
   // A pptMap which contains all the Program Points
   public static PptMap all_ppts;
@@ -504,8 +497,8 @@ public final class Daikon {
     }
 
     // Guard invariants
-    if ((Daikon.output_style == OutputFormat.JML
-      || Daikon.output_style == OutputFormat.ESCJAVA)
+    if ((Daikon.output_format == OutputFormat.JML
+      || Daikon.output_format == OutputFormat.ESCJAVA)
       && !dkconfig_noInvariantGuarding)
       guardInvariants(all_ppts);
     // print out the invariants for each program point
@@ -618,103 +611,28 @@ public final class Daikon {
     LongOpt[] longopts =
       new LongOpt[] {
         new LongOpt(help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-        new LongOpt(
-          repair_output_SWITCH,
-          LongOpt.NO_ARGUMENT,
-          null,
-          0),
-        new LongOpt(
-          ppt_regexp_SWITCH,
-          LongOpt.REQUIRED_ARGUMENT,
-          null,
-          0),
-        new LongOpt(
-          ppt_omit_regexp_SWITCH,
-          LongOpt.REQUIRED_ARGUMENT,
-          null,
-          0),
-        new LongOpt(
-          list_type_SWITCH,
-          LongOpt.REQUIRED_ARGUMENT,
-          null,
-          0),
-        new LongOpt(
-          var_omit_regexp_SWITCH,
-          LongOpt.REQUIRED_ARGUMENT,
-          null,
-          0),
-        new LongOpt(
-          no_text_output_SWITCH,
-          LongOpt.NO_ARGUMENT,
-          null,
-          0),
+        new LongOpt(format_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+        new LongOpt(ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+        new LongOpt(ppt_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+        new LongOpt(list_type_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+        new LongOpt(var_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+        new LongOpt(no_text_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
         new LongOpt(show_progress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-        new LongOpt(
-          no_show_progress_SWITCH,
-          LongOpt.NO_ARGUMENT,
-          null,
-          0),
-        new LongOpt(
-          no_dataflow_hierarchy_SWITCH,
-          LongOpt.NO_ARGUMENT,
-          null,
-          0),
-        new LongOpt(
-          suppress_redundant_SWITCH,
-          LongOpt.NO_ARGUMENT,
-          null,
-          0),
-        new LongOpt(
-          conf_limit_SWITCH,
-          LongOpt.REQUIRED_ARGUMENT,
-          null,
-          0),
-        new LongOpt(esc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-        new LongOpt(
-          simplify_output_SWITCH,
-          LongOpt.NO_ARGUMENT,
-          null,
-          0),
-        new LongOpt(dbc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-        new LongOpt(ioa_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-        new LongOpt(
-          test_ioa_output_SWITCH,
-          LongOpt.NO_ARGUMENT,
-          null,
-          0),
-        new LongOpt(java_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-        new LongOpt(jml_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+        new LongOpt(no_show_progress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+        new LongOpt(no_dataflow_hierarchy_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+        new LongOpt(suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+        new LongOpt(conf_limit_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         new LongOpt(mem_stat_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-        new LongOpt(
-          output_num_samples_SWITCH,
-          LongOpt.NO_ARGUMENT,
-          null,
-          0),
+        new LongOpt(output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
         new LongOpt(config_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-        new LongOpt(
-          config_option_SWITCH,
-          LongOpt.REQUIRED_ARGUMENT,
-          null,
-          0),
+        new LongOpt(config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         new LongOpt(debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
         new LongOpt(debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-        new LongOpt(
-          files_from_SWITCH,
-          LongOpt.REQUIRED_ARGUMENT,
-          null,
-          0),
+        new LongOpt(files_from_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         new LongOpt(noversion_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-        new LongOpt(
-          disc_reason_SWITCH,
-          LongOpt.REQUIRED_ARGUMENT,
-          null,
-          0),
+        new LongOpt(disc_reason_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         new LongOpt(track_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-        new LongOpt(
-          omit_from_output_SWITCH,
-          LongOpt.REQUIRED_ARGUMENT,
-          null,
-          0),
+        new LongOpt(omit_from_output_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:", longopts);
     int c;
@@ -822,23 +740,6 @@ public final class Daikon {
             Configuration.getInstance().apply(
               "daikon.inv.Invariant.confidence_limit",
               String.valueOf(limit));
-          } else if (esc_output_SWITCH.equals(option_name)) {
-            output_style = OutputFormat.ESCJAVA;
-          } else if (simplify_output_SWITCH.equals(option_name)) {
-            output_style = OutputFormat.SIMPLIFY;
-          } else if (repair_output_SWITCH.equals(option_name)) {
-            output_style = OutputFormat.REPAIR;
-          } else if (ioa_output_SWITCH.equals(option_name)) {
-            output_style = OutputFormat.IOA;
-          } else if (test_ioa_output_SWITCH.equals(option_name)) {
-            output_style = OutputFormat.IOA;
-            PrintInvariants.test_output = true;
-          } else if (java_output_SWITCH.equals(option_name)) {
-            output_style = OutputFormat.JAVA;
-          } else if (jml_output_SWITCH.equals(option_name)) {
-            output_style = OutputFormat.JML;
-          } else if (dbc_output_SWITCH.equals(option_name)) {
-            output_style = OutputFormat.DBCJAVA;
           } else if (mem_stat_SWITCH.equals(option_name)) {
             use_mem_monitor = true;
           } else if (output_num_samples_SWITCH.equals(option_name)) {
@@ -908,8 +809,15 @@ public final class Daikon {
               omit_types[f.charAt(i)] = true;
             }
             omit_from_output = true;
+          } else if (format_SWITCH.equals(option_name)) {
+            String format_name = g.getOptarg();
+            Daikon.output_format = OutputFormat.get(format_name);
+            if (output_format == null) {
+              throw new Daikon.TerminationMessage(
+                "Unknown output format:  --format " + format_name);
+            }
           } else {
-            throw new RuntimeException(
+            throw new TerminationMessage(
               "Unknown long option received: " + option_name);
           }
           break;
@@ -2022,8 +1930,8 @@ public final class Daikon {
       Iterator sets = sliceEquality.invs.iterator();
       List /*[Equality]*/
       allNewInvs = new ArrayList();
-    
-      // get the new leaders       
+
+      // get the new leaders
       while (sets.hasNext()) {
         Equality eq = (Equality) sets.next();
         VarInfo leader = eq.leader();

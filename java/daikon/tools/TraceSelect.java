@@ -110,7 +110,7 @@ public class TraceSelect {
           // or dtrace file will be the first of the Daikon arguments,
           // marking the end of the TraceSelect arguments.  That is
           // not necessarily true, especially in cases when someone
-          // uses a Daikon argument such as --noheirarchy or --java_output
+          // uses a Daikon argument such as "--noheirarchy" or "--format java"
           // and the manual examples place the arguments before any dtrace
           // or decls arguments.
 

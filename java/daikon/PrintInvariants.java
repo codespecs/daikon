@@ -113,22 +113,10 @@ public final class PrintInvariants {
       "Usage: java daikon.PrintInvariants [OPTION]... FILE",
       "  -h, --" + Daikon.help_SWITCH,
       "      Display this usage message",
+      "  --" + Daikon.format_SWITCH + " format_name",
+      "      Write output in the given format.",
       "  --" + Daikon.suppress_redundant_SWITCH,
       "      Suppress display of logically redundant invariants.",
-      "  --" + Daikon.esc_output_SWITCH,
-      "      Write output in ESC format.",
-      "  --" + Daikon.repair_output_SWITCH,
-      "      Write output in REPAIR format.",
-      "  --" + Daikon.simplify_output_SWITCH,
-      "      Write output in Simplify format.",
-      "  --" + Daikon.ioa_output_SWITCH,
-      "      Write output in IOA format.",
-      "  --" + Daikon.java_output_SWITCH,
-      "      Write output as java expressions.",
-      "  --" + Daikon.jml_output_SWITCH,
-      "      Write output in JML format.",
-      "  --" + Daikon.dbc_output_SWITCH,
-      "      Write output as Design-By-Contract format.",
       "  --" + Daikon.output_num_samples_SWITCH,
       "      Output numbers of values and samples for invariants and " +
       "program points; for debugging.",
@@ -169,15 +157,9 @@ public final class PrintInvariants {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
 
     LongOpt[] longopts = new LongOpt[] {
+      new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(Daikon.format_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(Daikon.suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(Daikon.esc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(Daikon.repair_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(Daikon.simplify_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(Daikon.ioa_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(Daikon.test_ioa_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(Daikon.java_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(Daikon.jml_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(Daikon.dbc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.config_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -203,23 +185,13 @@ public final class PrintInvariants {
           }
         } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
           Daikon.suppress_redundant_invariants_with_simplify = true;
-        } else if (Daikon.esc_output_SWITCH.equals(option_name)) {
-          Daikon.output_style = OutputFormat.ESCJAVA;
-        } else if (Daikon.simplify_output_SWITCH.equals(option_name)) {
-          Daikon.output_style = OutputFormat.SIMPLIFY;
-        } else if (Daikon.repair_output_SWITCH.equals(option_name)) {
-          Daikon.output_style = OutputFormat.REPAIR;
-        } else if (Daikon.java_output_SWITCH.equals(option_name)) {
-          Daikon.output_style = OutputFormat.JAVA;
-        } else if (Daikon.ioa_output_SWITCH.equals(option_name)) {
-          Daikon.output_style = OutputFormat.IOA;
-        } else if (Daikon.test_ioa_output_SWITCH.equals(option_name)) {
-          Daikon.output_style = OutputFormat.IOATEST;
-          test_output = true;
-        } else if (Daikon.jml_output_SWITCH.equals(option_name)) {
-          Daikon.output_style = OutputFormat.JML;
-        } else if (Daikon.dbc_output_SWITCH.equals(option_name)) {
-          Daikon.output_style = OutputFormat.DBCJAVA;
+        } else if (Daikon.format_SWITCH.equals(option_name)) {
+          String format_name = g.getOptarg();
+          Daikon.output_format = OutputFormat.get(format_name);
+          if (Daikon.output_format == null) {
+            throw new Daikon.TerminationMessage(
+              "Unknown output format:  --format " + format_name);
+          }
         } else if (Daikon.output_num_samples_SWITCH.equals(option_name)) {
           Daikon.output_num_samples = true;
         } else if (Daikon.config_SWITCH.equals(option_name)) {
@@ -282,8 +254,8 @@ public final class PrintInvariants {
     // Make sure ppts' rep invariants hold
     ppts.repCheck();
 
-    if ((Daikon.output_style == OutputFormat.ESCJAVA ||
-         Daikon.output_style == OutputFormat.JML) &&
+    if ((Daikon.output_format == OutputFormat.ESCJAVA ||
+         Daikon.output_format == OutputFormat.JML) &&
         !Daikon.dkconfig_noInvariantGuarding)
       Daikon.guardInvariants(ppts);
 
@@ -425,7 +397,7 @@ public final class PrintInvariants {
 
     // In case the user is interested in conditional ppt's
     if (Daikon.dkconfig_output_conditionals
-          && Daikon.output_style == OutputFormat.DAIKON) {
+          && Daikon.output_format == OutputFormat.DAIKON) {
       for (Iterator i = ppt.cond_iterator(); i.hasNext() ; ) {
         PptConditional pcond = (PptConditional) i.next();
         sb.append(print_reasons_from_ppt(pcond,ppts));
@@ -567,7 +539,7 @@ public final class PrintInvariants {
         if (ppts[i-1].ppt_name.isCombinedExitPoint()) {
           if (((i + 1) >= ppts.length) || !ppts[i+1].ppt_name.isExitPoint()) {
 //             if (Daikon.dkconfig_output_conditionals
-//                 && Daikon.output_style == OutputFormat.DAIKON) {
+//                 && Daikon.output_format == OutputFormat.DAIKON) {
 //               for (Iterator j = ppt.cond_iterator(); j.hasNext() ; ) {
 //                 PptConditional pcond = (PptConditional) j.next();
 //                 print_invariants_maybe(pcond, pw, all_ppts);
@@ -625,7 +597,7 @@ public final class PrintInvariants {
 
     // out.println("This = " + this + ", Name = " + name + " = " + ppt_name);
 
-    if (Daikon.output_style != OutputFormat.IOA) {
+    if (Daikon.output_format != OutputFormat.IOA) {
       out.println("==========================================="
                   + "================================");
     } else {
@@ -635,7 +607,7 @@ public final class PrintInvariants {
     print_invariants(ppt, out, all_ppts);
 
     if (Daikon.dkconfig_output_conditionals
-        && Daikon.output_style == OutputFormat.DAIKON) {
+        && Daikon.output_format == OutputFormat.DAIKON) {
       for (Iterator j = ppt.cond_iterator(); j.hasNext() ; ) {
         PptConditional pcond = (PptConditional) j.next();
         print_invariants_maybe(pcond, out, all_ppts);
@@ -655,15 +627,15 @@ public final class PrintInvariants {
     if (Daikon.output_num_samples) {
       out.println(ppt.name() + "  " + nplural(ppt.num_samples(), "sample"));
     } else {
-      if (Daikon.output_style == OutputFormat.IOA) {
+      if (Daikon.output_format == OutputFormat.IOA) {
         out.print("% ");  // IOA comment style
       }
       out.println(ppt.name());
     }
     if (Daikon.output_num_samples
-        || (Daikon.output_style == OutputFormat.ESCJAVA)
-        || (Daikon.output_style == OutputFormat.JML)
-        || (Daikon.output_style == OutputFormat.DBCJAVA )) {
+        || (Daikon.output_format == OutputFormat.ESCJAVA)
+        || (Daikon.output_format == OutputFormat.JML)
+        || (Daikon.output_format == OutputFormat.DBCJAVA )) {
       out.print("    Variables:");
       for (int i=0; i<ppt.var_infos.length; i++) {
         out.print(" " + ppt.var_infos[i].name.name());
@@ -755,8 +727,8 @@ public final class PrintInvariants {
       }
     }
     if (Daikon.output_num_samples
-        || (Daikon.output_style == OutputFormat.ESCJAVA)
-        || (Daikon.output_style == OutputFormat.DBCJAVA)) {
+        || (Daikon.output_format == OutputFormat.ESCJAVA)
+        || (Daikon.output_format == OutputFormat.DBCJAVA)) {
       if (modified_vars.size() > 0) {
         out.print("      Modified variables:");
         for (int i=0; i<modified_vars.size(); i++) {
@@ -782,8 +754,8 @@ public final class PrintInvariants {
     }
     // It would be nice to collect the list of indices that are modified,
     // and create a \forall to specify that the rest aren't.
-    if (Daikon.output_style == OutputFormat.ESCJAVA
-        || Daikon.output_style == OutputFormat.JML
+    if (Daikon.output_format == OutputFormat.ESCJAVA
+        || Daikon.output_format == OutputFormat.JML
         ) {
       Vector mods = new Vector();
       for (int i=0; i<modified_vars.size(); i++) {
@@ -842,7 +814,7 @@ public final class PrintInvariants {
         }
       }
       if (mods.size() > 0) {
-        if (Daikon.output_style == OutputFormat.ESCJAVA)
+        if (Daikon.output_format == OutputFormat.ESCJAVA)
           out.print("modifies ");
         else
           out.print("assignable ");
@@ -889,11 +861,11 @@ public final class PrintInvariants {
 
     String inv_rep;
     // All this should turn into simply a call to format_using.
-    if (Daikon.output_style == OutputFormat.DAIKON) {
-      inv_rep = inv.format_using(Daikon.output_style);
-    } else if (Daikon.output_style == OutputFormat.ESCJAVA) {
+    if (Daikon.output_format == OutputFormat.DAIKON) {
+      inv_rep = inv.format_using(Daikon.output_format);
+    } else if (Daikon.output_format == OutputFormat.ESCJAVA) {
       if (inv.isValidEscExpression()) {
-        inv_rep = inv.format_using(Daikon.output_style);
+        inv_rep = inv.format_using(Daikon.output_format);
       } else {
         if (inv instanceof Equality) {
           inv_rep = "warning: method 'equality'.format(OutputFormat:ESC/Java) needs to be implemented: " + inv.format();
@@ -901,9 +873,9 @@ public final class PrintInvariants {
           inv_rep = "warning: method " + inv.getClass().getName() + ".format(OutputFormat:ESC/Java) needs to be implemented: " + inv.format();
         }
       }
-    } else if (Daikon.output_style == OutputFormat.SIMPLIFY) {
-      inv_rep = inv.format_using(Daikon.output_style);
-    } else if (Daikon.output_style == OutputFormat.IOA) {
+    } else if (Daikon.output_format == OutputFormat.SIMPLIFY) {
+      inv_rep = inv.format_using(Daikon.output_format);
+    } else if (Daikon.output_format == OutputFormat.IOA) {
 
       String invName = get_ioa_invname (invCounter, ppt);
       if (debugPrint.isLoggable(Level.FINE)) {
@@ -918,7 +890,7 @@ public final class PrintInvariants {
       // the left.  Should we be doing this with visitors and the
       // quantification engine?  Maybe, but then again, Daikon
       // doesn't really know what it means to sample.
-      String rawOutput = inv.format_using(Daikon.output_style);
+      String rawOutput = inv.format_using(Daikon.output_format);
       int startPos = rawOutput.indexOf("anIndex");
       if (startPos != -1) {
         int endPos = rawOutput.indexOf ("]", startPos);
@@ -929,14 +901,14 @@ public final class PrintInvariants {
       if (PptTopLevel.debug.isLoggable(Level.FINE)) {
         PptTopLevel.debug.fine (inv.repr());
       }
-    } else if (Daikon.output_style == OutputFormat.JAVA
-               || Daikon.output_style == OutputFormat.JML
-               || Daikon.output_style == OutputFormat.DBCJAVA) {
+    } else if (Daikon.output_format == OutputFormat.JAVA
+               || Daikon.output_format == OutputFormat.JML
+               || Daikon.output_format == OutputFormat.DBCJAVA) {
 
-      inv_rep = inv.format_using(Daikon.output_style);
+      inv_rep = inv.format_using(Daikon.output_format);
 
       // TODO: Remove once we revise OutputFormat
-      if (Daikon.output_style == OutputFormat.JAVA) {
+      if (Daikon.output_format == OutputFormat.JAVA) {
         inv_rep = inv.format_using (OutputFormat.JAVA);
         // if there is a $pre string in the format, then it contains
         // the orig variable and should not be printed.
@@ -945,9 +917,9 @@ public final class PrintInvariants {
         }
       }
 
-    } else if (Daikon.output_style==OutputFormat.REPAIR) {
+    } else if (Daikon.output_format==OutputFormat.REPAIR) {
       Repair oldstate=Repair.getRepair().createCopy(ppt);//Store copy of current repair state;
-      inv_rep = inv.format_using(Daikon.output_style);
+      inv_rep = inv.format_using(Daikon.output_format);
       if (inv_rep.indexOf ("$noprint") != -1) {
         Repair.changeRepairObject(oldstate); //revert state
         return;
@@ -976,7 +948,7 @@ public final class PrintInvariants {
       out.print(" <DAIKONCLASS> " + inv.getClass().toString() + " </DAIKONCLASS> ");
       out.print(" <METHOD> " + inv.ppt.parent.ppt_name.getSignature() + " </METHOD> ");
       out.println("</INVINFO>");
-    } else if (Daikon.output_style == OutputFormat.REPAIR) {
+    } else if (Daikon.output_format == OutputFormat.REPAIR) {
 	String quantifiers=Repair.getRepair().getQuantifiers();
 	Repair.getRepair().reset();
 	out.println("["+quantifiers+"],"+inv_rep+";");
@@ -1148,7 +1120,7 @@ public final class PrintInvariants {
       print_invariant(inv, out, index, ppt);
 
     }
-    if (Daikon.output_style == OutputFormat.REPAIR) {
+    if (Daikon.output_format == OutputFormat.REPAIR) {
 	if (Repair.getRepair().getRules(ppt)!=null) {
 	    out.println("-----------------------------------------------------------------------------");
 	    out.print(Repair.getRepair().getRules(ppt));
