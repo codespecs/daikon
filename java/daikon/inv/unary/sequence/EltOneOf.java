@@ -318,12 +318,16 @@ public final class EltOneOf
           // + " (hashcode=" + elts[0] + ")"
           ;
         }
-      } else {
+      } else if (num_elts == 2) {
         // add_modified allows two elements iff one is null
-        Assert.assertTrue(num_elts == 2);
         Assert.assertTrue(elts[0] == 0);
         Assert.assertTrue(elts[1] != 0);
         return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
+      } else if (num_elts == 0) {
+        // Do nothing
+        return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
+      } else {
+        throw new Error ("Contains more than 2 elements");
       }
     } else {
       result = "";
@@ -387,12 +391,15 @@ public final class EltOneOf
     } else if (is_hashcode) {
       if (num_elts == 1) {
         result = "(EQ " + varname + " " + ((elts[0] == 0) ? "null" : ("|hash_" + elts[0] + "|")) + ")";
-      } else {
+      } else if (num_elts == 2) {
         // add_modified allows two elements iff one is null
-        Assert.assertTrue(num_elts == 2);
         Assert.assertTrue(elts[0] == 0);
         Assert.assertTrue(elts[1] != 0);
         result = "(OR (EQ " + varname + " null) (EQ " + varname + "|hash_" + elts[1] + "|))";
+      } else if (num_elts == 0) {
+        return format_unimplemented(OutputFormat.SIMPLIFY); // "needs to be implemented"
+      } else {
+        throw new Error ("Contains more than 2 elements");
       }
     } else {
       result = "";
