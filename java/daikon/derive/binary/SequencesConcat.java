@@ -90,7 +90,7 @@ public final class SequencesConcat
   }
 
   public String toString() {
-    return "[SequencesConcat of " + var1().toString() + " " + var2().toString() + "]";
+    return "[SequencesConcat of " + var1().name + " " + var2().name + "]";
 
   }
 
