@@ -267,12 +267,12 @@ update-doc-dist-version:
 update-dist-version-file:
 	perl -wpi -e 's/\.(-?[0-9]+)$$/"." . ($$1+1)/e' doc/VERSION
 
-www:
-	html-update-toc doc/www/index.html doc/www/mit/index.html
+www-dist:
+	/g2/users/mernst/bin/share/html-update-toc doc/www/index.html doc/www/mit/index.html
 	# "-P" keeps the directory structure in place
 	cd doc/www && cp -pfP $(WWW_FILES) $(WWW_DIR)
 	cd $(WWW_DIR) && chmod -w $(WWW_FILES)
-	update-link-dates $(DIST_DIR)/index.html
+	/g2/users/mernst/bin/share/update-link-dates $(DIST_DIR)/index.html
 
 .PHONY: www
 
