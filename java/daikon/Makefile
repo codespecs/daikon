@@ -81,6 +81,9 @@ very_clean: dist_clean
 run:	all
 	java daikon.Daikon
 
+run_gui:	all
+	java daikon.gui.InvariantsGUI /g1/users/mhao/daikon/inv_files/dsaa.inv 2>&1 | grep -v Font
+
 TAGS:	tags
 
 # Used to include "*.py", but no such in daikon/ directory.

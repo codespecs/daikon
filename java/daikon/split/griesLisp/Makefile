@@ -12,3 +12,6 @@ clean:
 
 audit:
 	cd ../.. && $(MAKE) audit
+
+run_gui:
+	cd ../.. && $(MAKE) run_gui
