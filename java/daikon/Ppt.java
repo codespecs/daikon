@@ -32,33 +32,6 @@ public abstract class Ppt implements java.io.Serializable {
   public final String name;
   public final PptName ppt_name;
 
-  // It might make more sense to put the sorting into
-  // PptMap.sortedIterator(), for example, but it's in here for now
-
-  // Orders ppts by the name, except . and : are swapped
-  //   so that Foo:::OBJECT and Foo:::CLASS are processed before Foo.method.
-  // Also suffix "~" to ":::EXIT" to put it after the line-numbered exits.
-  public static final Comparator NAME_COMPARATOR = new Comparator() {
-      public int compare(Object o1, Object o2) {
-	String name1 = ((Ppt) o1).name;
-	String name2 = ((Ppt) o2).name;
-	if (name1.endsWith(FileIO.exit_suffix))
-	  name1 += "~";
-	if (name2.endsWith(FileIO.exit_suffix))
-	  name2 += "~";
-	
-	String swapped1 = swap(name1, '.', ':');
-	String swapped2 = swap(name2, '.', ':');
-	
-	return swapped1.compareTo(swapped2);
-      }
-      
-      static String swap(String s, char a, char b) {
-	final char magic = '\255';
-	return s.replace(a, magic).replace(b, a).replace(magic, b);
-      }
-    };
-
   protected Ppt(String name) {
     this.name = name;
     ppt_name = new PptName(name);
@@ -307,5 +280,31 @@ public abstract class Ppt implements java.io.Serializable {
   }
   */
 
+  // It might make more sense to put the sorting into
+  // PptMap.sortedIterator(), for example, but it's in here for now
+
+  // Orders ppts by the name, except . and : are swapped
+  //   so that Foo:::OBJECT and Foo:::CLASS are processed before Foo.method.
+  // Also suffix "~" to ":::EXIT" to put it after the line-numbered exits.
+  public static final class NameComparator implements Comparator {
+    public int compare(Object o1, Object o2) {
+      String name1 = ((Ppt) o1).name;
+      String name2 = ((Ppt) o2).name;
+      if (name1.endsWith(FileIO.exit_suffix))
+        name1 += "~";
+      if (name2.endsWith(FileIO.exit_suffix))
+        name2 += "~";
+      
+      String swapped1 = swap(name1, '.', ':');
+      String swapped2 = swap(name2, '.', ':');
+      
+      return swapped1.compareTo(swapped2);
+    }
+    
+    static String swap(String s, char a, char b) {
+      final char magic = '\255';
+      return s.replace(a, magic).replace(b, a).replace(magic, b);
+    }
+  }
 
 }
