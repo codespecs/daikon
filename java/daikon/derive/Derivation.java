@@ -62,6 +62,7 @@ public abstract class Derivation
     if (this_var_info == null) {
       this_var_info = makeVarInfo();
       this_var_info.derived = this;
+      this_var_info.canBeMissing = canBeMissing();
       getBases();
     }
     return this_var_info;
@@ -95,4 +96,5 @@ public abstract class Derivation
    **/
   public abstract boolean isSameFormula(Derivation other);
 
+  public abstract boolean canBeMissing();
 }
