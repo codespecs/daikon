@@ -135,7 +135,7 @@ public final class Daikon {
       "  Each file is a declaration file or a data trace file; the file type",
       "  is determined by the file name (containing \".decls\" or \".dtrace\").",
       "  For a list of flags, see the Daikon manual, which appears in the ",
-      "  Daikon distribution and also at http://sdg.lcs.mit.edu/daikon/."},
+      "  Daikon distribution and also at http://pag.lcs.mit.edu/daikon/."},
                  lineSep);
 
   /**
@@ -151,7 +151,7 @@ public final class Daikon {
     // Set up debug traces
     Logger.setupLogs (Global.debugAll ? Logger.DEBUG : Logger.INFO);
 
-    
+
     // Load all data
     PptMap all_ppts = load_files(files[0], files[1], files[2]);
 

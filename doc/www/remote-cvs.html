@@ -18,7 +18,7 @@ and SSH installed on your machine.
 
 <li>Test the SSH installation.  Run:
 
-<pre>ssh -l username sdg.lcs.mit.edu</pre>
+<pre>ssh -l username pag.lcs.mit.edu</pre>
 
 You should be prompted for your password, and then logged in.  If not,
 your SSH is setup incorrectly.
@@ -39,11 +39,11 @@ don't want a passphrase.
 Now you need to set up the server to accept your keys.  Run the secure
 copy command to send the identity.pub key to the server:
 
-<pre>scp ~/.ssh/identity.pub username@sdg.lcs.mit.edu:identity.pub</pre>
+<pre>scp ~/.ssh/identity.pub username@pag.lcs.mit.edu:identity.pub</pre>
 
 Then login to the server using the ssh command:
 
-<pre>ssh -l username sdg.lcs.mit.edu</pre>
+<pre>ssh -l username pag.lcs.mit.edu</pre>
 
 Now type the following commands into the SSH session (it's OK if the
 first command complains that .ssh exists):
@@ -74,13 +74,13 @@ set every time you log in.
 <li>To obtain the invariants module, use:
 
 <pre>
-cvs -d :ext:username@sdg.lcs.mit.edu:/g4/projects/invariants/.CVS co invariants
+cvs -d :ext:username@pag.lcs.mit.edu:/g4/projects/invariants/.CVS co invariants
 </pre>
 
 To obtain the dfej module, use:
 
 <pre>
-cvs -d :ext:username@sdg.lcs.mit.edu:/g4/projects/invariants/.CVS co dfej
+cvs -d :ext:username@pag.lcs.mit.edu:/g4/projects/invariants/.CVS co dfej
 </pre>
 
 After executing these commands, you should be able to issue CVS
