@@ -232,7 +232,7 @@ from @uref{http://sdg.lcs.mit.edu/daikon/download/}.
 
 There are two distributions to choose from.  The pre-compiled
 distribution,
-@uref{http://sdg.lcs.mit.edu/daikon/download/daikon-source.tar.gz,,@file{daikon-source.tar.gz}},
+@uref{http://sdg.lcs.mit.edu/daikon/download/daikon-jar.tar.gz,,@file{daikon-jar.tar.gz}},
 permits you to run Daikon and to detect invariants, but does not permit
 you to modify Daikon or to rebuild it.  The source distribution,
 @uref{http://sdg.lcs.mit.edu/daikon/download/daikon-source.tar.gz,,@file{daikon-source.tar.gz}},
