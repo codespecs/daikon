@@ -608,9 +608,6 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return true;
   }
 
-  /** A "\type(...)" construct where the "..." contains a "$". **/
-  private static Pattern anontype_pat = Pattern.compile("\\\\type\\([^\\)]*\\$");
-
   // The "invs" argument may be null, in which case no work is done.
   public boolean insertInvariants(Node n, String prefix, InvariantsAndModifiedVars invs,
                                   boolean useJavaComment) {
@@ -627,24 +624,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     }
 
     for (int i = maxIndex-1 ; i >= 0 ; i--) {
-      String inv = ((Invariant)invs.invariants.get(i)).format_using(Daikon.output_format);
-
-      if (inv.startsWith("      Unmodified variables: ")
-          || inv.startsWith("      Modified variables: ")
-          || inv.startsWith("      Modified primitive arguments: ")) {
-        // not an invariant
-        continue;
-      } else if ((inv.indexOf(".format_esc() needs to be implemented: ") != -1)
-                 || (inv.indexOf("warning: ") != -1)
-                 || (inv.indexOf('~') != -1)
-                 || (inv.indexOf("\\new") != -1)
-                 || (inv.indexOf(".toString ") != -1)
-                 || (inv.endsWith(".toString"))
-                 || (inv.indexOf(".getClass") != -1)
-                 || (inv.indexOf("warning: method") != -1)
-                 || (inv.indexOf("inexpressible") != -1)
-                 || (inv.indexOf("unimplemented") != -1)
-                 || anontype_pat.matcher(inv).find()) {
+      Invariant inv = (Invariant)invs.invariants.get(i);
+      if (! inv.isValidExpression(Daikon.output_format)) {
         // inexpressible invariant
         if (insert_inexpressible) {
           addComment(n, javaLineComment("! " + inv + ";"), true);
@@ -652,7 +633,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
         continue;
       } else {
         String commentContents = (Daikon.output_format == OutputFormat.DBCJAVA ? "  " : "@ ")
-          + prefix + " " + inv
+          + prefix + " " + inv.format_using(Daikon.output_format)
           + (Daikon.output_format == OutputFormat.DBCJAVA ? "  " : ";");
         if (useJavaComment)
           commentContents = javaLineComment(commentContents);
