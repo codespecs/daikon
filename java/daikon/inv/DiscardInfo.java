@@ -39,6 +39,7 @@ public final class DiscardInfo {
 
   public DiscardInfo(Invariant inv, DiscardCode discardCode, String discardString) {
     this(inv.getClass().getName(), inv.format(), discardCode, discardString);
+    inv.log (discardString);
   }
 
   public String discardFormat() {
