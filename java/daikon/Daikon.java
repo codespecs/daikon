@@ -60,7 +60,7 @@ public final class Daikon {
 
   public final static String lineSep = Global.lineSep;
 
-  public final static boolean disable_splitting = false;
+  public static boolean dkconfig_disable_splitting = false;
 
   public static boolean disable_ternary_invariants = false;
 
@@ -341,7 +341,14 @@ public final class Daikon {
     PptMap all_ppts = load_decls_files(decls_files);
     load_spinfo_files(all_ppts, spinfo_files);
     load_map_files(all_ppts, map_files);
-    // setup_splitters(all_ppts); // XXX splitters are not implemented yet
+
+    Dataflow.init_partial_order(all_ppts);
+    if (debugTrace.isLoggable(Level.FINE)) {
+      debugTrace.fine ("Partial order initialized");
+    }
+    PptTopLevel.init (all_ppts);
+    all_ppts.trimToSize();
+
 
     // Only for assertion checks
     isInferencing = true;
@@ -400,7 +407,7 @@ public final class Daikon {
 
     // print statistics concerning what invariants are printed
     if (debugStats.isLoggable (Level.FINE)) {
-      for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
+      for (Iterator itor = all_ppts.ppt_all_iterator() ; itor.hasNext() ; ) {
         PptTopLevel ppt = (PptTopLevel) itor.next();
         PrintInvariants.print_filter_stats (debugStats, ppt, all_ppts);
       }
@@ -727,12 +734,6 @@ public final class Daikon {
       if (debugTrace.isLoggable(Level.FINE)) {
         debugTrace.fine ("Initializing partial order");
       }
-      Dataflow.init_partial_order(all_ppts);
-      if (debugTrace.isLoggable(Level.FINE)) {
-        debugTrace.fine ("Partial order initialized");
-      }
-      PptTopLevel.init (all_ppts);
-      all_ppts.trimToSize();
       System.out.print(" (read ");
       System.out.print(UtilMDE.nplural(decl_files.size(), "file"));
       System.out.println(")");
@@ -751,7 +752,7 @@ public final class Daikon {
                                         )
   {
     elapsedTime(); // reset timer
-    if (!disable_splitting && spinfo_files.size() > 0) {
+    if (!dkconfig_disable_splitting && spinfo_files.size() > 0) {
       try {
         System.out.print("Reading splitter info files ");
         create_splitters(all_ppts, spinfo_files);
@@ -773,7 +774,7 @@ public final class Daikon {
                                      )
   {
     elapsedTime(); // reset timer
-    if (!disable_splitting && map_files.size() > 0) {
+    if (!dkconfig_disable_splitting && map_files.size() > 0) {
       System.out.print("Reading map (context) files ");
       ContextSplitterFactory.load_mapfiles_into_splitterlist
         (map_files, ContextSplitterFactory.dkconfig_granularity);
@@ -784,10 +785,9 @@ public final class Daikon {
     }
   }
 
-  // XXX untested code
-  private static void setup_splitters(PptMap all_ppts)
+  public static void setup_splitters(PptMap all_ppts)
   {
-    if (disable_splitting) {
+    if (dkconfig_disable_splitting) {
       return;
     }
 
@@ -947,7 +947,7 @@ public final class Daikon {
 
     // Post process dynamic constants
     if (use_dynamic_constant_optimization) {
-      for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
+      for (Iterator itor = all_ppts.ppt_all_iterator() ; itor.hasNext() ; ) {
         PptTopLevel ppt = (PptTopLevel) itor.next();
         if (ppt.constants != null)
           ppt.constants.post_process();
@@ -969,14 +969,14 @@ public final class Daikon {
     // Equality data for each PptTopLevel.
     if (Daikon.use_equality_optimization) {
       debugProgress.fine ("Equality Post Process");
-      for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
+      for (Iterator itor = all_ppts.ppt_all_iterator() ; itor.hasNext() ; ) {
         PptTopLevel ppt = (PptTopLevel) itor.next();
         ppt.postProcessEquality();
       }
     }
 
     if (debugEquality.isLoggable (Level.FINE)) {
-      for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
+      for (Iterator itor = all_ppts.ppt_all_iterator() ; itor.hasNext() ; ) {
         PptTopLevel ppt = (PptTopLevel) itor.next();
         debugEquality.fine (ppt.name() +": " + ppt.equality_sets_txt());
       }
@@ -984,14 +984,22 @@ public final class Daikon {
 
     // One more round of suppression for printing
     debugProgress.fine ("Suppress for printing");
-    for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
+    for (Iterator itor = all_ppts.ppt_all_iterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       ppt.suppressAll (false);
     }
 
+    // Add implications
+    debugProgress.fine ("Adding Implications");
+    for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
+      PptTopLevel ppt = (PptTopLevel) itor.next();
+      ppt.addImplications();
+    }
+
+
     // debug print suppressed invariants
     if (false && debugStats.isLoggable (Level.FINE)) {
-      for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+      for (Iterator i = all_ppts.ppt_all_iterator(); i.hasNext(); ) {
         PptTopLevel ppt = (PptTopLevel) i.next();
         if (ppt.name().indexOf ("EXIT42") >= 0) {
           System.out.println (ppt.name() + " After final suppression");
@@ -1005,7 +1013,7 @@ public final class Daikon {
     System.out.print("Invoking Simplify to identify redundant invariants");
     System.out.flush();
     elapsedTime(); // reset timer
-    for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
+    for (Iterator itor = all_ppts.ppt_all_iterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       ppt.mark_implied_via_simplify(all_ppts);
       System.out.print(".");
@@ -1024,11 +1032,21 @@ public final class Daikon {
         PptTopLevel ppt = (PptTopLevel) i.next();
 
         if (dkconfig_df_bottom_up) {
-          // Skip points that are not leaves (anything not a numbered exit point)
+          // Skip points that are not leaves
           if (use_dataflow_hierarchy) {
-            if (!ppt.ppt_name.isGlobalPoint() && !(ppt.ppt_name.isExitPoint()
-                && !ppt.ppt_name.isCombinedExitPoint()))
+            if (!ppt.ppt_name.isGlobalPoint()
+                && !ppt.ppt_name.isNumberedExitPoint())
               continue;
+          }
+
+          // setup equality on the splitters of a point with splitters
+          if (ppt.has_splitters()) {
+            for (Iterator ii = ppt.cond_iterator(); ii.hasNext(); ) {
+              PptConditional ppt_cond = (PptConditional) ii.next();
+              ppt_cond.equality_view = new PptSliceEquality(ppt_cond);
+              ppt_cond.equality_view.instantiate_invariants();
+            }
+            continue;
           }
         }
 
