@@ -37,6 +37,8 @@ if not locals().has_key("fn_var_infos"):
     no_ternary_invariants = true
     no_invocation_counts = true
     collect_stats = true                # performance statistics
+    lackwit_type_format = "explicit"    # types list the comparable values
+    # lackwit_type_format = "implicit"  # types name a symbol
 
     ### Debugging
     debug_read = false                  # reading files
@@ -328,6 +330,9 @@ def parse_vartype(str):
     while str[-2:] == "[]":
         dimensions = dimensions+1
         str = str[:-2]
+    while str[:9] == "array of ":
+        dimensions = dimensions+1
+        str = str[9:]
     if dimensions == 0:
         return str
     else:
@@ -335,7 +340,13 @@ def parse_vartype(str):
 
 ws_regexp = re.compile(r'[ \t]+')
 
-# A Lackwit type is:
+# Lackwit types have two formats.
+#  * An implicit lackwit type is an arbitrary string, and
+#    comparisons succeed exactly if the two lackwit types are identical.
+#  * An explicit lackwit type is a list of other variables, and comparisons
+#    succeed if each variable is in the list of the other.
+
+# A (explicit) Lackwit type is:
 #  * for scalar types:  a tuple of comparable variables
 #  * for array types:  a tuple of 'array', a list of variables comparable to
 #    the element type, and some number of lists variables comparable to the
@@ -345,15 +356,18 @@ ws_regexp = re.compile(r'[ \t]+')
 #  * special:  the string "always" means always comparable
 
 def is_lackwit_type(lt):
-    return ((lt == "always")
-            or ((type(lt) == types.TupleType)
-                and (((lt[0] == "array")
-                      and (len(lt) >= 3))
-                     or ((lt[0] == "alias")
-                         and (len(lt) == 3)
-                         and (type(lt[1]) == types.StringType)
-                         and is_lackwit_type(lt[2]))
-                     or true)))
+    if lackwit_type_format == "implicit":
+        return type(lt) == types.StringType
+    else:
+        return ((lt == "always")
+                or ((type(lt) == types.TupleType)
+                    and (((lt[0] == "array")
+                          and (len(lt) >= 3))
+                         or ((lt[0] == "alias")
+                             and (len(lt) == 3)
+                             and (type(lt[1]) == types.StringType)
+                             and is_lackwit_type(lt[2]))
+                         or true)))
 
 
 def lackwit_type_alias_name(lt):
@@ -363,6 +377,12 @@ def lackwit_type_alias_name(lt):
         return lackwit_type_alias_name(lt[2]) or lt[1]
     else:
         return None
+
+def lackwit_make_alias(name, type):
+    if lackwit_type_format == "implicit":
+        return type
+    else:
+        return ("alias", name, type)
 
 
 def lackwit_type_element_type(lt):
@@ -376,10 +396,13 @@ def lackwit_type_element_type(lt):
 
 def lackwit_type_element_type_alias(vi):
     assert isinstance(vi, var_info)
-    lt = vi.lackwit_type
-    seq_var_name = lackwit_type_alias_name(lt) or vi.name
-    return ("alias", "%s-element" % seq_var_name,
-            lackwit_type_element_type(lt))
+    if lackwit_type_format == "implicit":
+        return "always"
+    else:
+        lt = vi.lackwit_type
+        seq_var_name = lackwit_type_alias_name(lt) or vi.name
+        return ("alias", "%s-element" % seq_var_name,
+                lackwit_type_element_type(lt))
 
 def lackwit_type_index_type(lt, dim):
     head = lt[0]
@@ -392,14 +415,19 @@ def lackwit_type_index_type(lt, dim):
 
 def lackwit_type_index_type_alias(vi, dim):
     assert isinstance(vi, var_info)
-    lt = vi.lackwit_type
-    seq_var_name = lackwit_type_alias_name(lt) or vi.name
-    return ("alias", "%s-index%d" % (seq_var_name, dim),
-            lackwit_type_index_type(lt, dim))
+    if lackwit_type_format == "implicit":
+        return "always"
+    else:
+        lt = vi.lackwit_type
+        seq_var_name = lackwit_type_alias_name(lt) or vi.name
+        return ("alias", "%s-index%d" % (seq_var_name, dim),
+                lackwit_type_index_type(lt, dim))
 
 
 def parse_lackwit_vartype(raw_str, vartype):
-    if is_array_var_type(vartype):
+    if lackwit_type_format == "implicit":
+        return raw_str
+    elif is_array_var_type(vartype):
         # The lackwit type is of the form
         #  (var1 var2 var3)[var1 var2 var3][var1 var2 var3]
         dims = vartype[1]
@@ -427,6 +455,8 @@ def lackwit_types_compatible(name1, type1, name2, type2):
     assert type(name2) == types.StringType
     if (type1 == "always") or (type2 == "always"):
         return true
+    if lackwit_type_format == "implicit":
+        return (type1 == type2)
 
     assert type(type1) == types.TupleType
     assert type(type2) == types.TupleType
@@ -1242,7 +1272,7 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
 
     # Add subsequences
     if not seq_info.invariant.can_be_None and not seq_info.is_derived and not scl_info.invariant.can_be_None:
-        lackwit_seq_type = ("alias", seq_name, seq_info.lackwit_type)
+        lackwit_seq_type = lackwit_make_alias(seq_name, seq_info.lackwit_type)
         full_var_info = var_info("%s[0..%s]" % (seq_name, scl_name), seq_info.type, lackwit_seq_type, len(var_infos), true)
         # 'known_var' means there is a known value, but no variable
         # holds that particular value.
@@ -1540,7 +1570,7 @@ def read_data_trace_file_declarations(filename, fn_regexp=None):
             print "rdtfd line", line
         if (line == "\n") or (line[0] == '#'):
             line = file.readline()
-        elif (line == "DECLARE\n"):
+        elif (line == "DECLARE\n") or (line == "Declare\n"):
             process_declaration(file, this_fn_var_infos, fn_regexp)
             line = file.readline()
         else:
@@ -1643,7 +1673,7 @@ def after_processing_all_declarations():
         these_var_infos = fn_var_infos[ppt]
         begin_ppt = ppt_sans_suffix + ":::BEGIN"
         for vi in fn_var_infos[begin_ppt][0:fn_truevars[begin_ppt]]:
-            these_var_infos.append(var_info(vi.name + "_orig", vi.type, ("alias", vi.name, vi.lackwit_type), len(these_var_infos)))
+            these_var_infos.append(var_info(vi.name + "_orig", vi.type, lackwit_make_alias(vi.name, vi.lackwit_type), len(these_var_infos)))
 
 
 
@@ -1756,7 +1786,7 @@ def read_data_trace_file(filename, fn_regexp=None):
                             this_value[seq_elem] = int(this_value[seq_elem])
                     this_value = tuple(this_value)
             else:
-                assert this_var_type == "int"
+                assert (this_var_type in integral_types) or (this_var_type == "pointer")
                 if this_value == "uninit":
                     this_value = None
                 elif this_value == "NIL":
