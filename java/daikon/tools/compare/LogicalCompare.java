@@ -38,6 +38,7 @@ public class LogicalCompare {
   private static boolean opt_post_after_pre = true;
   private static boolean opt_timing         = false;
   private static boolean opt_show_sets      = false;
+  private static boolean opt_minimize_classes = false;
 
   private static Map extra_assumptions;
 
@@ -220,6 +221,11 @@ public class LogicalCompare {
 //     }
 //   }
 
+  private static String shortName(Class c) {
+    String name = c.getName();
+    return name.substring(name.lastIndexOf('.') + 1);
+  }
+
   private static int checkConsequences(Vector assumptions, Vector consequences)
   {
     Set assumption_formulas = new HashSet();
@@ -238,6 +244,33 @@ public class LogicalCompare {
         identical = true;
       } else {
         result = lemmas.checkLemma(inv);
+      }
+
+      if (opt_minimize_classes) {
+        if (result == 'T' && !identical) {
+          Vector sets = lemmas.minimizeClasses(inv.formula);
+          for (int j = 0; j < sets.size(); j++) {
+            Set classes = (Set)sets.elementAt(j);
+            Class inv_class = inv.invClass();
+            System.out.print(shortName(inv_class) + ": ");
+            if (classes.contains(inv_class)) {
+              System.out.print(shortName(inv_class) + " ");
+              classes.remove(inv_class);
+            }
+            Iterator class_it = classes.iterator();
+            while (class_it.hasNext()) {
+              Class c = (Class)class_it.next();
+              System.out.print(shortName(c));
+              if (class_it.hasNext())
+                System.out.print(" ");
+            }
+            System.out.println();
+          }
+          System.out.println(inv.summarize());
+          System.out.println();
+        }
+        if (true)
+          continue;
       }
 
       if (result == 'T') {
@@ -542,8 +575,9 @@ public class LogicalCompare {
       new LongOpt("debug-all",                 LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt("filters",             LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt("help",                      LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt("post-after-pre-failure",    LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt("minimize-classes"      ,    LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt("no-post-after-pre-failure", LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt("post-after-pre-failure",    LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt("proofs",                    LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt("show-count",                LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt("show-formulas",             LongOpt.NO_ARGUMENT, null, 0),
@@ -611,6 +645,8 @@ public class LogicalCompare {
           user_filters = true;
         } else if (option_name.equals("assume")) {
           readExtraAssumptions(g.getOptarg());
+        } else if (option_name.equals("minimize-classes")) {
+          opt_minimize_classes = true;
         } else {
           Assert.assertTrue(false);
         }
