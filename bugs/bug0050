@@ -1,0 +1,20 @@
+Version:      $Id$
+Owner:        Alan <adonovan@lcs.mit.edu>
+Cc:           Jeremy <mistere@lcs.mit.edu>
+Tool:         bugtrack
+Summary:      bugtrack's not documented
+Severity:     RFE
+Status:       New
+Reproducible: Yes
+Description:
+
+When you have a change, it'd be worthwhile to add into to the "new to
+PAG" instructions telling people to checkout the bugs module.  (Also
+add how to read the manpage, too?). The doc is here: 
+$inv/doc/www/mit/index.html				[mistere]
+
+--
+$Log$
+Revision 1.1  2002-05-08 22:59:02  adonovan
+new bug0050
+
