@@ -1,10 +1,11 @@
 #!/usr/bin/env perl
 
-# Creates the lackwit databases
-# Requires that LACKWIT_HOME is set correctly
+# Creates the lackwit databases.
+# Requires that LACKWIT_HOME is set correctly.
 
+use English;
 use strict;
-$^W = 1; #enable warnings
+$WARNING = 1;
 
 if (@ARGV < 1) {
   die "Usage: lwpp-init.pl <lackwitdb> [filename.c] ...\n";
