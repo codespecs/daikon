@@ -10,6 +10,7 @@ import daikon.config.Configuration;
 
 import java.util.*;
 import java.io.*;
+import java.text.DateFormat;
 import java.lang.Thread;
 
 import org.apache.oro.text.regex.*;
@@ -444,8 +445,9 @@ public final class Daikon {
   private final static Thread fileio_progress = new FileIOProgress();
   static class FileIOProgress extends Thread {
     public void run() {
+      DateFormat df = DateFormat.getTimeInstance(/*DateFormat.LONG*/);
       while (true) {
-	System.out.print("\r[" + (new Date()) + "]: " + message());
+	System.out.print("\r[" + (df.format(new Date())) + "]: " + message());
 	try {
 	  sleep(1000);
 	} catch (InterruptedException e) {
