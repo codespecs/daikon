@@ -3,7 +3,7 @@
   if 0;
 # merge-esc.pl -- Merge Daikon output into Java source code as ESC assnotations
 # Michael Ernst <mernst@lcs.mit.edu>
-# Time-stamp: <2001-03-13 20:51:05 mernst>
+# Time-stamp: <2001-03-13 21:56:54 mernst>
 
 # The input is a Daikon output file; files from the current directory are
 # rewritten into -escannotated versions.
@@ -24,6 +24,7 @@ if ((/^Inv filename = /)
     || (/^    Samples breakdown: /)
     || (/^    Variables:/)
     || (/^      Unmodified variables: /)
+    || (/^      Modified primitive variables: /)
     || (/^\[No views for /)
     || (/^esc_name =/)
     || (/^Variables not equal: /)
@@ -172,12 +173,13 @@ END {
     $classname =~ s/\.java$//;
 
     while (defined($line = <IN>)) {
-      if ($line =~ /\b(?:public|private|protected)\b[^=\n]*\b(\w+)\s*(\([^\)]*\))/) {
+      if ($line =~ /\b(?:public|private|protected)\b[^=()\n]*\b(\w+)\s*(\([^\)]*\))/) {
 	# This looks like a declaration of method $methodname.
 	# (Requires public or private or protected to avoid false alarms.)
 	my $methodname = $1;
 	my $args = $2;
 	my $fullmethname = "$classname.$methodname";
+	# print "Found $fullmethname in $line";
 	my $simple_args = simplify_args($args);
 	my $fullmeth = $fullmethname . $simple_args;
 	my $prebrace;
@@ -220,9 +222,13 @@ END {
 	  if (($fullmeth eq $ppt_fullmeth)
 	      || (($fullmethname eq $ppt_methname)
 		  && approx_argsmatch($simple_args, $ppt_args))) {
-	    my $equals = ($ppt =~ /\.equals\s*\(\s*java\.lang\.Object\b/);
+	    # Skip @requires clauses for overridden methods which already
+	    # have them; ESC doesn't allow them and they perhaps shouldn't hold.
+	    my $no_requires = (($ppt =~ /\.equals\s*\(\s*java\.lang\.Object\b/)
+			       || ($ppt =~ /\.toString\s*\(\s*\)/));
 	    # add more tests here
-	    my $overriding = ($equals || 0);
+	    my $overriding = ($no_requires || 0);
+	    # print "overriding=$overriding for $ppt\n";
 	    my $requires = ($overriding ? "also_requires" : "requires");
 	    my $ensures = ($overriding ? "also_ensures" : "ensures");
 	    my $modifies = ($overriding ? "also_modifies" : "modifies");
@@ -235,8 +241,7 @@ END {
 	    }
 	    $found .= "  $ppt=$ppt_fullmeth";
 	    if ($ppt =~ /:::ENTER/) {
-	      # Skip @requires clauses for equals; they shouldn't hold
-	      if (! $equals) {
+	      if (! $no_requires) {
 		for my $inv (split("\n", $raw{$ppt})) {
 		  if (is_non_supported_invariant($inv)) {
 		    print OUT "/*! $requires " . $inv . " */\n";
@@ -300,7 +305,9 @@ END {
 	    my $nextline;
 	    while ((defined($nextline = <IN>))
 		   && (! (($nextline =~ /\b(if|while|for)\b|\}/)
-			  || (($nextline =~ /\/\*(.*)/) && (! $1 =~ /\*\//))))) {
+			  || (($nextline =~ /\/\*(.*)/) && (! $1 =~ /\*\//))
+			  # method call, but not an assignment
+			  || ($nextline =~ /^[^=]*\(/)))) {
 	      print OUT $nextline;
 	    }
 	    for my $field (@fields) {
@@ -311,6 +318,8 @@ END {
 	}
 
 	next;
+      } elsif ($line =~ /(private|public|protected)/) {
+	# print "No match on $line";
       }
 
       # This puts object invariants at the beginning.
