@@ -35,6 +35,7 @@ public class SeqComparison extends TwoSequence implements Comparison {
                           && type1.baseIsIntegral()
                           && (type2.dimensions() == 1)
                           && type2.baseIsIntegral()));
+    // System.out.println("only_eq: " + only_eq);
     return new SeqComparison(ppt, only_eq);
   }
 
@@ -58,7 +59,7 @@ public class SeqComparison extends TwoSequence implements Comparison {
   }
 
   public String format_simplify() {
-    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();
   }
 
   public void add_modified(long[] v1, long[] v2, int count) {
@@ -91,6 +92,7 @@ public class SeqComparison extends TwoSequence implements Comparison {
     if (no_invariant) {
       return Invariant.PROBABILITY_NEVER;
     } else if (can_be_lt || can_be_gt) {
+      // System.out.println("prob = " + Math.pow(.5, ppt.num_values()) + " for " + format());
       return Math.pow(.5, ppt.num_values());
     } else if (num_sc_samples == 0) {
       return Invariant.PROBABILITY_UNKNOWN;
