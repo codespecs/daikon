@@ -39,15 +39,15 @@ public final class Global {
 
   /* Expected behavior when changing modbits:
     -changed       Set modbits to 1 iff the printed representation has changed.
-    
+
     -addchanged    Set modbits to 1 if the printed representation has changed.
                    Leave other modbits as is.  This is the default.
-		   
-    Set this boolean to true if you want the "addchanged" behavior. Set to 
+
+    Set this boolean to true if you want the "addchanged" behavior. Set to
     False if you want the "changed" behavior
   */
   public final static boolean addChanged = true;
-  
+
 
   ///////////////////////////////////////////////////////////////////////////
   /// Variables
@@ -174,9 +174,9 @@ public final class Global {
   public final static boolean debugPptSliceSpecific = false;
   //print out a new dtrace file with changed modbits
   public final static boolean debugPrintDtrace = false;
-  
- 
-  
+
+
+
   // public final static boolean debugRead = true;
   // public final static boolean debugPptTopLevel = true;
   // public final static boolean debugDerive = true;
@@ -202,7 +202,9 @@ public final class Global {
       // { "orig(other.begins)", "other.begins" },
       // { "return" },
       // { "return.class" },
-      { "root1", "root2" },
+      // { "root1", "root2" },
+      { "min(this.diskLocation[0..toPeg])", "min(this.diskLocation[])" },
+      { "min(this.diskLocation[])", "min(this.diskLocation[0..toPeg])" },
     };
 
   // This may be expensive and so should only be called infrequently.
