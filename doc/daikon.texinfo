@@ -2923,6 +2923,9 @@ be recorded and hence the may yield sparse output.
 @node    Configuration options, Conditional invariants, Enhancing Daikon output, Enhancing Daikon output
 @section Configuration options
 
+@cindex configuration options
+@cindex dkconfig_ variables
+
 Many aspects of Daikon's behavior can be controlled by setting various
 configuration parameters.  These configuration parameters control which
 invariants are checked and reported, the statistical tests for
@@ -2945,15 +2948,15 @@ output, but do not affect the invariants that it computes.
 * List of configuration options::  
 @end menu
 
+@node    List of configuration options,  , Configuration options, Configuration options
+@subsection List of configuration options
+
 This is a list of all Daikon configuration options; you may want to see
 the source code for the specific invariants and derived variables to
 learn more.  The configuration option name contains the
 Java classes in which it is defined.  (In the Daikon source code, the
 configuration value is stored in a variable which contains a
-@code{dkconfig_} prefix, but that should not be of concern to users.)
-
-@node    List of configuration options,  , Configuration options, Configuration options
-@subsection List of configuration options
+@code{dkconfig_} prefix, but that should be irrelevant to users.)
 
 @table @asis
 @include config-options.texinfo
