@@ -60,7 +60,18 @@ public abstract class Invariant implements java.io.Serializable {
   public double getProbability() {
     if (no_invariant)
       return PROBABILITY_NEVER;
-    return computeProbability();
+    double result = computeProbability();
+    if (result > PROBABILITY_NEVER) {
+      // Can't print this.repr(), as it may compute the probability!
+      System.out.println("Bad invariant probability " + result + ": \n" + this.getClass() + "\n" +
+                         this.format() + "\n");
+    }
+    Assert.assert((result == PROBABILITY_JUSTIFIED)
+                  || (result == PROBABILITY_UNJUSTIFIED)
+                  || (result == PROBABILITY_UNKNOWN)
+                  || (result == PROBABILITY_NEVER)
+                  || ((0 <= result) && (result <= 1)));
+    return result;
     // if (!probability_cache_accurate) {
     //   probability_cache = computeProbability();
     //   probability_cache_accurate = true;

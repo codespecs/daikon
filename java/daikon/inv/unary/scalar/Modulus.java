@@ -59,13 +59,14 @@ class Modulus extends SingleScalar {
       }
       remainder = MathMDE.mod_positive(value, modulus);
     } else {
-      long new_modulus_long = MathMDE.gcd(modulus, value1 - value);
+      long new_modulus_long = Math.abs(MathMDE.gcd(modulus, value1 - value));
       int new_modulus;
       if (new_modulus_long > Integer.MAX_VALUE
           || (new_modulus_long < Integer.MIN_VALUE)) {
         new_modulus = 1;
       } else {
         new_modulus = (int) new_modulus_long;
+        Assert.assert(new_modulus > 0);
       }
       if (new_modulus != modulus) {
         if (new_modulus == 1) {
@@ -98,5 +99,5 @@ class Modulus extends SingleScalar {
       (modulus == ((Modulus) other).modulus) &&
       (remainder == ((Modulus) other).remainder);
   }
-  
+
 }
