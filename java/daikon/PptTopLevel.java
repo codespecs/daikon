@@ -1567,8 +1567,27 @@ public class PptTopLevel
     for (Iterator j = views_iterator(); j.hasNext(); ) {
       PptSlice slice = (PptSlice) j.next();
       for (int i = 0; i < slice.arity; i++) {
-        if ((constants != null) && constants.is_constant (slice.var_infos[i]))
+        if ((constants != null) && constants.is_constant (slice.var_infos[i])){
           const_cnt++;
+          break;
+        }
+      }
+    }
+    return (const_cnt);
+  }
+
+  /** returns the number of invariants that contain one or more constants **/
+  public int const_inv_cnt() {
+
+    int const_cnt = 0;
+
+    for (Iterator j = views_iterator(); j.hasNext(); ) {
+      PptSlice slice = (PptSlice) j.next();
+      for (int i = 0; i < slice.arity; i++) {
+        if ((constants != null) && constants.is_constant (slice.var_infos[i])){
+          const_cnt += slice.invs.size();
+          break;
+        }
       }
     }
     return (const_cnt);
@@ -1718,6 +1737,22 @@ public class PptTopLevel
    * Add a single slice to the views variable
    **/
   public void addSlice(PptSlice slice) {
+
+    // System.out.println ("Adding slice " + slice);
+    // Throwable stack = new Throwable("debug traceback");
+    // stack.fillInStackTrace();
+    // stack.printStackTrace();
+
+    // Make sure the slice doesn't already exist (should never happen)
+    // Note that this can happen in top down due to flowing.  This is
+    // probabably not correct, but not worth fixing
+    PptSlice cslice = findSlice (slice.var_infos);
+    if (Daikon.dkconfig_df_bottom_up && cslice != null) {
+      System.out.println ("Trying to add slice " + slice);
+      System.out.println ("but, slice " + cslice + " already exists");
+      Assert.assertTrue (cslice == null);
+    }
+
     views.put(sliceIndex(slice.var_infos),slice);
   }
 
@@ -2846,7 +2881,7 @@ public class PptTopLevel
       //       if (debugSuppressFill.isLoggable(Level.FINE)) {
       //         debugSuppressFill.fine ("  InvType: " + clazz);
       //       }
-      if (Daikon.df_bottom_up || dataflow_ppts == null) {
+      if (Daikon.dkconfig_df_bottom_up || dataflow_ppts == null) {
         // debugSuppressFill.fine ("  No dataflow_ppts");
         break;
       }
@@ -4727,6 +4762,7 @@ public class PptTopLevel
     public PptTopLevel ppt;
 
     int const_slice_cnt = 0;
+    int const_inv_cnt = 0;
     int constant_leader_cnt = 0;
     public static boolean cnt_inv_classes = false;
     Map inv_map = null;
@@ -4752,6 +4788,7 @@ public class PptTopLevel
       sample_cnt = ppt.num_samples();
       slice_cnt = ppt.slice_cnt();
       const_slice_cnt = ppt.const_slice_cnt();
+      const_inv_cnt = ppt.const_inv_cnt();
       inv_cnt = ppt.invariant_cnt();
       instantiated_slice_cnt = ppt.instantiated_slice_cnt;
       instantiated_inv_cnt = ppt.instantiated_inv_cnt;
@@ -4789,7 +4826,7 @@ public class PptTopLevel
                         + set_cnt + " (" + constant_leader_cnt + " con) : "
                         + var_cnt + " : "
                         + dfmt.format (vars_per_eq) + " : "
-                        + const_slice_cnt + " : "
+                        + const_slice_cnt + "/" + const_inv_cnt + " : "
                         + slice_cnt + "/"
                         + inv_cnt + " : "
                         + instantiated_slice_cnt + "/"
