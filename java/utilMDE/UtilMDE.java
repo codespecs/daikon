@@ -48,9 +48,7 @@ public final class UtilMDE {
         return true;
       }
     }
-    BitSet intersection = (BitSet) a.clone();
-    intersection.and(b);
-    return (intersection.cardinality() >= i);
+    return (intersectionCardinality(a, b) >= i);
   }
 
   /**
@@ -73,10 +71,22 @@ public final class UtilMDE {
         return true;
       }
     }
+    return (intersectionCardinality(a, b, c) >= i);
+  }
+
+  /** Returns the cardinality of the intersection of the two BitSets. **/
+  public static int intersectionCardinality(BitSet a, BitSet b) {
+    BitSet intersection = (BitSet) a.clone();
+    intersection.and(b);
+    return intersection.cardinality();
+  }
+
+  /** Returns the cardinality of the intersection of the three BitSets. **/
+  public static int intersectionCardinality(BitSet a, BitSet b, BitSet c) {
     BitSet intersection = (BitSet) a.clone();
     intersection.and(b);
     intersection.and(c);
-    return (intersection.cardinality() >= i);
+    return intersection.cardinality();
   }
 
 
