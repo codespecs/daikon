@@ -386,6 +386,7 @@ public final class Daikon {
 		LogHelper.setupLogs(Global.debugAll ? LogHelper.FINE : LogHelper.INFO);
 
 		if (!noversion_output) {
+			if(!DaikonSimple.dkconfig_empty_diff)
 			System.out.println(release_string);
 		}
 
@@ -443,7 +444,7 @@ public final class Daikon {
 
 		// Only for assertion checks
 		isInferencing = true;
-
+		
 		// Infer invariants
 		process_data(all_ppts, dtrace_files);
 		isInferencing = false;
@@ -565,7 +566,9 @@ public final class Daikon {
 		}
 
 		// Done
+		if(!DaikonSimple.dkconfig_empty_diff) {
 		System.out.println("Exiting");
+		}
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -1163,15 +1166,19 @@ public final class Daikon {
 	private static PptMap load_decls_files(Set decl_files) {
 		stopwatch.reset();
 		try {
+			if(!DaikonSimple.dkconfig_empty_diff) {
 			System.out.print("Reading declaration files ");
+			}
 			PptMap all_ppts = FileIO.read_declaration_files(decl_files);
 			if (debugTrace.isLoggable(Level.FINE)) {
 				debugTrace.fine("Initializing partial order");
 			}
 			fileio_progress.clear();
+			if(!DaikonSimple.dkconfig_empty_diff) {
 			System.out.print(" (read ");
 			System.out.print(UtilMDE.nplural(decl_files.size(), "decls file"));
 			System.out.println(")");
+			}
 			return all_ppts;
 		} catch (IOException e) {
 			System.out.println();
@@ -1398,15 +1405,19 @@ public final class Daikon {
 		// Processing (actually using dtrace files)
 		try {
 			fileio_progress.clear();
+			if(!DaikonSimple.dkconfig_empty_diff) {
 			System.out.println(
 				"Processing trace data; reading "
 					+ UtilMDE.nplural(dtrace_files.size(), "dtrace file")
 					+ ":");
+			}
 			FileIO.read_data_trace_files(dtrace_files, all_ppts);
 			fileio_progress.shouldStop = true;
 			// Final update, so "100%", not "99.70%", is the last thing printed.
 			fileio_progress.display();
+			if(!DaikonSimple.dkconfig_empty_diff) {
 			System.out.println();
+			}
 			// System.out.print("Creating implications "); // XXX untested code
 			// for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
 			//   PptTopLevel ppt = (PptTopLevel) itor.next();
@@ -1536,7 +1547,9 @@ public final class Daikon {
 		// Add implications
 		stopwatch.reset();
 		fileio_progress.clear();
+		if(!DaikonSimple.dkconfig_empty_diff) {
 		System.out.println("Creating implications ");
+		}
 		debugProgress.fine("Adding Implications ... ");
 		for (Iterator itor = all_ppts.pptIterator(); itor.hasNext();) {
 			PptTopLevel ppt = (PptTopLevel) itor.next();
@@ -1785,6 +1798,14 @@ public final class Daikon {
 
 			PptTopLevel ppt = (PptTopLevel) equality_it.next();
 			PptSliceEquality sliceEquality = ppt.equality_view;
+			
+			//some program points have no equality sets?
+		//	if(sliceEquality == null) {
+				//System.out.println(ppt.name);
+		//		continue;
+		//	}	
+				
+			
 			Iterator sets = sliceEquality.invs.iterator();
 			List /*[Equality]*/
 			allNewInvs = new ArrayList();
