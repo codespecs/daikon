@@ -1,5 +1,5 @@
 Daikon todo list.
-Time-stamp: <2004-04-17 15:52:27 mernst>
+Time-stamp: <2004-05-06 18:40:07 mernst>
 
 Projects
 
@@ -60,6 +60,16 @@ Projects
     particular, a good way to include results as asserts.
 
 Issues/Bugs
+
+  mernst	5/6/04	Avoid loading of analyzed class files
+
+    Some analysis code loads classfiles containing target code, in order to
+    perform queries on its reflection structures (rather than parsing the
+    target classfiles).  This leads to unpredictable -- and potentially
+    dangerous -- side-effects, since it causes arbitrary code from the
+    static initialisers of the target application to be run within the
+    analysis thread.  These uses of Reflection structures need to be
+    replaced by classfile parsing (say, via BCEL).
 
   cpacheco	04/12/04	jmlc and ESC/Java2 regression tests
 
