@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # java-cpp -- C preprocessor specialized for Java
 # Michael Ernst
-# Time-stamp: <2003-01-08 23:19:07 mernst>
+# Time-stamp: <2003-01-08 23:45:41 mernst>
 
 # This acts like the C preprocessor, but
 #  * it does not remove comments
@@ -148,12 +148,12 @@ sub unescape_comments ( $ ) {
     s/^\# [0-9]+ ".*"($|\n)//g;	# don't leave blank line at start of file
     s/(\n)\# [0-9]+ ".*"($|\n)/$1$2/g;
 
-    # # print STDERR "pre-horizontal: $_";
 
-    ## This is no longer necessary, because I use "-traditional" cpp flag
+    ## This is no longer necessary, because I use "-traditional" cpp flag.
     # ## Remove extra horizontal space
     # ## (Some of these are cosmetic; others are necessary to get identical
     # ## output under all versions of cpp.)
+    # # print STDERR "pre-horizontal: $_";
     # # Remove all trailing space
     # s/[ \t]+\n/\n/g;
     # # Remove space before trailing semicolon
@@ -192,7 +192,6 @@ sub unescape_comments ( $ ) {
     # # and this is not a "for" loop.
     # # old version: s/(\(\S.*) (\)(;|\)| {|$))/$1$2/gm;
     # s/(^ *(?!(?:\/\/ *)?for\b)[^ ].*\(\S.*) (\)(;|\)| {|$))/$1$2/gm;
-
     # # print STDERR "post-horizontal: $_";
 
     # print STDERR "pre-vertical: $_";
