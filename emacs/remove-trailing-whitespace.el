@@ -8,23 +8,36 @@
 (add-hook 'java-mode-hook 'add-whitespace-hooks)
 (add-hook 'makefile-mode-hook 'add-whitespace-hooks)
 
-;; Customize the tests if desired.
+;; Customize if desired.
+(defvar remove-trailing-whitespace-ignore-regexps
+  (list
+   ;; Emacs source files
+   "mernst/emacs/x?lisp/"
+   "emacs[-/][0-9]+\.[0-9]+\\(\.[0-9]+\\)?/\\(lisp\\|src\\)/"
+   )
+  "List of regular expressions.  If any of them match a file name, then
+trailing whitespace is not removed from the file.")
+
+(defun remove-trailing-whitespace-ignored-filename (filename)
+  "Return t if FILENAME should not have trailing whitespace removed."
+  (let ((match nil)
+	(regexps remove-trailing-whitespace-ignore-regexps))
+    (while regexps
+      (let ((regexp (car regexps)))
+	(setq regexps (cdr regexps))
+	(if (string-match regexp filename)
+	    (setq match t
+		  regexps nil))))
+    match))
+
 (defun maybe-remove-trailing-whitespace ()
   "Remove trailing whitespace and newlines from all lines in the file,
 unless the file is maintained by someone else."
   (if (not (and (buffer-file-name)
-		(emacs-source-file-p (buffer-file-name))))
+		(remove-trailing-whitespace-ignored-filename (buffer-file-name))))
       (progn
 	(remove-trailing-whitespace)
 	(remove-trailing-newlines))))
-
-(defun emacs-source-file-p (filename)
-  "Return t if FILENAME is an Emacs source file."
-  (or (string-match "mernst/emacs/x?lisp/" filename)
-      (string-match "emacs[-/][0-9]+\.[0-9]+\\(\.[0-9]+\\)?/\\(lisp\\|src\\)/" filename)
-      ;; (string-match "local/src/emacs-19" (buffer-file-name))
-      ;; (string-match "lib/emacs/local-lisp/w3" (buffer-file-name)))
-      ))
 
 (defun remove-trailing-whitespace ()
   "Remove trailing whitespace from all lines in the file.  Does not modify point."
