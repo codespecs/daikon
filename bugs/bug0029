@@ -1,0 +1,25 @@
+Version:      $Id$
+Owner:        Jeremy <mistere>
+Tool:         Daikon engine
+Summary:      Daikon is not consistent in eliminating a redundant invariant from QueueAr
+Severity:     Vexing
+Status:       New
+Reproducible: Yes
+Description:
+
+In the QueueAr regression test, the following invariant is not
+consistently produced in output.  I suspect that Simplify is not
+consistently flagging it for supression, but there may be other
+reasons.
+
+===========================================================================
+DataStructures.QueueAr.dequeue():::EXIT
+...
+this.theArray[this.front..] == orig(this.theArray[this.front+1..])
+...
+
+--
+$Log$
+Revision 1.1  2002-03-26 21:19:18  mistere
+Added bug0029.
+
