@@ -1,0 +1,19 @@
+Packages in this directory:
+
+JUnit 3.7 (junit.jar)
+- Automated unit testing framework
+- http://www.junit.org
+
+Jakarta ORO 2.0.3 (jakarta-oro.jar)
+- Text processing including Perl5 regular expressions
+- http://jakarta.apache.org/oro/
+
+GNU getopt 1.0.8 (java-getopt.jar)
+- Command line option parser
+- Distributed with java files alongside class files in the jar file.
+  The java files must be stripped from the jar, otherwise jikes tries
+  to compile the java files inside the jar.
+- http://www.urbanophile.com/arenn/hacking/download.html
+
+
+To build and run Daikon, each jar file must be in your CLASSPATH.
