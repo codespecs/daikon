@@ -26,14 +26,14 @@
 #       status=new|open|fixed|closed	# verify after edits
 #       tool=<select from a list>
 #       reproducible=yes|no
-#   - Produce more sophisticated listings reports;
-#       include tool name in summary.
+#   - Produce more sophisticated listings reports
 #   - cvs up doesn't clean out the crap (ie local mods to bugfiles)
 #   - add trap handlers (input is already written for one)
 
 BUGFILE=""
 progname=`basename $0`
 in=""
+bug_summary=""
 
 warn()
 {
@@ -55,6 +55,18 @@ readline()
     do
         read in
     done
+}
+
+# ussage: bug_summary <bugfile>
+# leaves the result in $bug_summary
+bug_summary()
+{
+    bugfile="$1";
+    summary=`grep "^Summary: *" $bugfile | sed -e 's/^Summary: *//'`
+    tool=`   grep "^Tool: *"    $bugfile | sed -e 's/^Tool: *//'`
+    # Do not place a space after "bug_summary", lest it be interpreted
+    # as a recursive call rather than a variable assignment
+    bug_summary="$bugfile: $tool: $summary"
 }
 
 # usage: checkin <"new"|"changed"> <bugfile> 
@@ -88,13 +100,13 @@ notify()
        warn "'Owner' field missing for \`$bugfile'."
        return
    }
-   summary=`grep "^Summary: *" $bugfile | sed -e 's/^Summary: *//'`
    owner=`  grep "^Owner: *"   $bugfile | sed -e 's/^Owner: *//' `
    cc=`     grep "^Cc: *"      $bugfile | sed -e 's/^Cc: *//' `
 
    header $bugfile >.header   
+   bug_summary $bugfile
    cat .header $report |
-       mail "$owner" "$cc" -s "Bugtrack update: $bugfile: $summary"
+       mail "$owner" "$cc" -s "Bugtrack update: $bug_summary"
 
    rm -f .header $report
 }
@@ -145,6 +157,7 @@ usage()
     echo "usage: $progname <command> [options]"
     echo " new:         add a new bug to the database"
     echo " del <n>:     remove a bug from the database"
+    echo "                (typically change status to Closed instead)"
     echo " edit <n>:    edit a bug in the database"
     echo " list:        show summary of bugs"
     echo " owned:       show summary of owned bugs"
@@ -333,22 +346,20 @@ case "$1" in
         ;;
     list)
         echo "$progname: List bug reports."
-        for i in bug[0-9][0-9][0-9][0-9]
+        for bugfile in bug[0-9][0-9][0-9][0-9]
         do
-            grep -sq "Status: *Closed" $i && continue
-            # use /dev/null so it always has >1 file and thus reports filenames
-            grep "^Summary:" $i /dev/null | sed -e 's/Summary: */ /'
+            grep -sq "Status: *Closed" $bugfile && continue
+	    bug_summary $bugfile; echo $bug_summary
         done
         ;;
     owned)
         echo "$progname: List owned bug reports."
-        for i in bug[0-9][0-9][0-9][0-9]
+        for bugfile in bug[0-9][0-9][0-9][0-9]
         do
-            [ -e $i ] || continue
-	    header $i | grep -sq "Status: *Closed" && continue
-            header $i | grep -sq "Owner:.*\\b${USER}\\b" || continue
-            # use /dev/null so it always has >1 file and thus reports filenames
-            grep "^Summary:" $i /dev/null | sed -e 's/Summary: */ /'
+            [ -e $bugfile ] || continue
+	    header $bugfile | grep -sq "Status: *Closed" && continue
+            header $bugfile | grep -sq "Owner:.*\\b${USER}\\b" || continue
+	    bug_summary $bugfile; echo $bug_summary
         done
         ;;
     *)
