@@ -1,0 +1,68 @@
+Version:      $Id$
+Owner:        Toh <tohn>
+Cc:           emarcus
+Tool:         treeGUI
+Summary:      Filtering on variables doesn't work sometimes
+Severity:     Boneheaded
+Status:       Ongoing
+Reproducible: Yes
+Description:
+
+[tohn 02 Aug 2002] 
+From what I can tell with tests (try StackAr.OBJECT: add top 3 vars as
+filter, then add top 2.  Then try to remove them all) it's still
+there.  The exception I get is:
+
+Exception occurred during event dispatching:
+java.lang.Error: InvariantFilters.removeVariableFilter():  filter for variable 'this' not found
+	at daikon.inv.filter.InvariantFilters.removeVariableFilter(InvariantFilters.java:169)
+	at daikon.gui.treeGUI.InvariantsGUI$2.actionPerformed(InvariantsGUI.java:363)
+	at javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:1450)
+	at javax.swing.AbstractButton$ForwardActionEvents.actionPerformed(AbstractButton.java:1504)
+	at javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:378)
+	at javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:250)
+	at javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:216)
+	at java.awt.Component.processMouseEvent(Component.java:3715)
+	at java.awt.Component.processEvent(Component.java:3544)
+	at java.awt.Container.processEvent(Container.java:1164)
+	at java.awt.Component.dispatchEventImpl(Component.java:2593)
+	at java.awt.Container.dispatchEventImpl(Container.java:1213)
+	at java.awt.Component.dispatchEvent(Component.java:2497)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:2451)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:2216)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:2125)
+	at java.awt.Container.dispatchEventImpl(Container.java:1200)
+	at java.awt.Window.dispatchEventImpl(Window.java:926)
+	at java.awt.Component.dispatchEvent(Component.java:2497)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:339)
+	at java.awt.EventDispatchThread.pumpOneEventForHierarchy(EventDispatchThread.java:131)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:98)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:93)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:85)
+
+The bug isn't really catastrophic - the GUI can always be restarted.
+It'll just bug some users who are picky.
+
+[emarcus 31 Jul 2002]
+I think this is fixed now and the appropriate changes are committed.
+If you're feeling inspired to further test it, that would be good - I
+wasn't extremely thorough about it.
+
+
+[tohn 30 Jul 2002]
+Say we can filter on variables {a, b, c}.  In the TreeGUI, select to
+filter on them.  Then on top of that, select to filter on {a, b}.
+This adds a total of 5 variable filters.  Then remove {a} from the
+filtered var list.  Then try to remove {a} again and we get an
+exception and {a} doesn't go away.
+
+
+
+--
+$Log$
+Revision 1.3  2002-08-02 05:04:15  tohn
+Readded bug0053.
+
+Revision 1.1  2002/07/30 18:26:00  tohn
+new bug0053
+
