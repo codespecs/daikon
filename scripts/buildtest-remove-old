@@ -4,6 +4,6 @@
 # Removes all build subdirectories older than 7 days
 
 cd $HOME/build
-exec find . -name "[[:digit:]]*" -type d -maxdepth 1 -mtime +7 -exec rm -r {} \;
+find . -name "[[:digit:]]*" -type d -maxdepth 1 -mtime +7 -exec rm -r {} \;
 
 
