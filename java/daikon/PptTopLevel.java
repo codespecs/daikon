@@ -571,6 +571,8 @@ public class PptTopLevel extends Ppt {
 
     Collection result = new ArrayList();
 
+    Daikon.progress = "Creating derived variables for: "
+      + ppt_name.toString() + " (unary)";
     for (int i = vi_index_min; i < vi_index_limit; i++) {
       VarInfo vi = var_infos[i];
       if (Global.debugDerive.isLoggable(Level.FINE)) {
@@ -632,6 +634,8 @@ public class PptTopLevel extends Ppt {
       //   Global.debugDerive.fine ("i1=" + i1
       //                      + ", i2_min=" + i2_min
       //                      + ", i2_limit=" + i2_limit);
+      Daikon.progress = "Creating derived variables for: "
+        + ppt_name.toString() + " (binary, " + vi1.name.name() + ")";
       for (int i2 = i2_min; i2 < i2_limit; i2++) {
         VarInfo vi2 = var_infos[i2];
         if (!worthDerivingFrom(vi2)) {
@@ -705,6 +709,8 @@ public class PptTopLevel extends Ppt {
       //   Global.debugDerive.fine ("i1=" + i1
       //                      + ", i2_min=" + i2_min
       //                      + ", i2_limit=" + i2_limit);
+      Daikon.progress = "Creating derived variables for: "
+        + ppt_name.toString() + " (ternary, " + vi1.name.name() + ")";
       for (int i2 = i2_min; i2 < i2_limit; i2++) {
         VarInfo vi2 = var_infos[i2];
         if (vi2.isDerived()
