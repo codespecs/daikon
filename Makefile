@@ -307,8 +307,8 @@ update-doc-dist-date:
 update-doc-dist-version:
 	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(Daikon version )[0-9]+(\.[0-9]+)*/$$1 . "$(shell cat doc/VERSION)"/e;' doc/daikon.texinfo doc/README-dist doc/README-dist-doc doc/www/download/index.html doc/developer.texinfo
 	perl -wpi -e 's/(public final static String release_version = ")[0-9]+(\.[0-9]+)*(";)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e;' java/daikon/Daikon.java
-	perl -wpi -e 's/(VG_\(details_version\)\s*\(")[0-9]+(\.[0-9]+)*("\);)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e' kvasir/dfec-v2/memcheck/mc_main.c
-	cvs ci -m "Update version number for new Daikon distribution" kvasir/dfec-v2/memcheck/mc_main.c
+	perl -wpi -e 's/(VG_\(details_version\)\s*\(")[0-9]+(\.[0-9]+)*("\);)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e' kvasir/kvasir/memcheck/mc_main.c
+	cvs ci -m "Update version number for new Daikon distribution" kvasir/kvasir/memcheck/mc_main.c
 	touch doc/CHANGES
 
 # Update the version number.
@@ -507,10 +507,10 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	# Kvasir C front end
 	cd /tmp/daikon; cvs -d $(CVS_REPOSITORY) co -P valgrind-kvasir
 	mv /tmp/daikon/valgrind-kvasir /tmp/daikon/kvasir
-	cd /tmp/daikon/kvasir; cvs -d $(CVS_REPOSITORY) co -P dfec-v2
+	cd /tmp/daikon/kvasir; cvs -d $(CVS_REPOSITORY) co -P kvasir
 	find /tmp/daikon/kvasir -name '.cvsignore' | xargs rm
 	find /tmp/daikon/kvasir -name 'CVS' -type d | xargs rm -rf
-	find /tmp/daikon/kvasir/dfec-v2 -name '*.txt' -type f | xargs rm
+	find /tmp/daikon/kvasir/kvasir -name '*.txt' -type f | xargs rm
 
 	## Tools
 	cp -pR tools /tmp/daikon
@@ -520,6 +520,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	rm -rf `find /tmp/daikon -name CVS`
 	(cd /tmp; tar cf daikon.tar daikon)
 	cp -pf /tmp/daikon.tar .
+	rm /tmp/daikon.zip
 	(cd /tmp; zip -r daikon daikon)
 	cp -pf /tmp/daikon.zip .
 
