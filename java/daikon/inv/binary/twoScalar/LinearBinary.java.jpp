@@ -93,6 +93,35 @@ public class CLASSNAME
     return core.isActive();
   }
 
+  public boolean mergeFormulasOk() {
+    return (core.mergeFormulasOk());
+  }
+
+  /**
+   * Merge the invariants in invs to form a new invariant.  Each must be
+   * a CLASSNAME invariant.  The work is done by the LinearBinary core
+   *
+   * @param invs    List of invariants to merge.  They should all be
+   *                permuted to match the variable order in ppt.
+   * @param ppt     program point that will contain the new invariant
+   */
+  public Invariant merge (List invs, PptSlice ppt) {
+
+    // Create a matching list of cores
+    List cores = new ArrayList();
+    for (int i = 0; i < invs.size(); i++) {
+      cores.add (((CLASSNAME) invs.get(i)).core);
+    }
+
+    // Merge the cores and build a new invariant containing the merged core
+    CLASSNAME result = new CLASSNAME (ppt);
+    result.core = core.merge (cores, result);
+    if (result.core == null)
+      return (null);
+    else
+      return (result);
+  }
+
   // XXX core needs to change to do flow
   public void add_modified(PRIMITIVE x, PRIMITIVE y, int count) {
     core.add_modified(x, y, count);
