@@ -91,6 +91,8 @@ TAGS:
 
 DISTTESTDIR := /tmp/daikon.dist
 
+# Both make and test the distribution.
+# (Must make it first in order to test it!)
 dist-test: dist-notest dist-test-no-update-dist
 
 # A very simple test:  just verify that the distributed system compiles.
@@ -99,6 +101,7 @@ dist-test-no-update-dist: dist-ensure-directory-exists
 	mkdir $(DISTTESTDIR)
 	(cd $(DISTTESTDIR); tar xzf $(DIST_DIR)/daikon-source.tar.gz)
 	(cd $(DISTTESTDIR)/daikon/java/daikon; CLASSPATH=$(DISTTESTDIR)/daikon/java:$(RTJAR); rm `find . -name '*.class'`; make)
+	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) junit)
 
 # I would rather define this inside the cvs-test rule.  (In that case I
 # must use "$$FOO", not $(FOO), to refer to it.)
@@ -134,6 +137,8 @@ dist-force:
 	$(MAKE) dist
 
 update-dist-dir: dist-ensure-directory-exists
+	# Would be clever to call "cvs examine" and warn if not up-to-date.
+	cd java/daikon && $(MAKE) junit
 	cd doc && $(MAKE) html html-chap
 	# html-update-toc daikon.html
 	-cd $(DIST_DIR) && rm -rf $(DIST_DIR_FILES) doc daikon_manual_html
