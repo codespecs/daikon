@@ -10,6 +10,26 @@ import java.util.*;
  */
 public final class ArraysMDE {
 
+  /**
+   * Returns a compare result integer based on v.  It tries to return
+   * an integer representation of v except when v is too large to fit
+   * in an integer or is between -1 and +1 (since 0 is a bad approximation
+   * in this case for a small number)
+   */
+  static int compare_result (double v) {
+    if (v < Integer.MIN_VALUE) {
+      return Integer.MIN_VALUE;
+    } else if (v > Integer.MAX_VALUE) {
+      return Integer.MAX_VALUE;
+    } else if ((v < 1) && (v > 0)) {
+      return (1);
+    } else if ((v > -1) && (v < 0)) {
+      return (-1);
+    } else {
+      return (int) v;
+    }
+  }
+
   ///////////////////////////////////////////////////////////////////////////
   /// min, max
   ///
@@ -529,6 +549,7 @@ public final class ArraysMDE {
         return i;
     return -1;
   }
+
 
   /**
    * Searches for the first subsequence of the array that matches the given array elementwise.
@@ -1155,6 +1176,7 @@ public final class ArraysMDE {
     return true;
   }
 
+
   // This implementation is O(n^2) when the smaller really is a subset, but
   // might be quicker when it is not.  Sorting both sets has (minimum
   // and maximum) running time of Theta(n log n).
@@ -1241,13 +1263,7 @@ public final class ArraysMDE {
       for (int i=0; i<len; i++) {
         double tmp = a1[i] - a2[i];
         if (tmp != 0) {
-          if (tmp < Integer.MIN_VALUE) {
-            return Integer.MIN_VALUE;
-          } else if (tmp > Integer.MAX_VALUE) {
-            return Integer.MAX_VALUE;
-          } else {
-            return (int) tmp;
-          }
+          return (compare_result (tmp));
         }
       }
       return a1.length - a2.length;
