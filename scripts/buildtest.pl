@@ -8,7 +8,7 @@
 # This script ordinarily runs overnight; to invoke it by hand, execute the
 # followng commands as user daikonbuildtest:
 #   cd $HOME/build
-#   usr/bin/env perl $HOME/research/invariants/scripts/buildtest.pl --skip_dfec --skip_dfej --nocleanup
+#   /usr/bin/env perl $HOME/research/invariants/scripts/buildtest.pl --skip_dfec --skip_dfej --nocleanup
 # You can also run this script as any other user.
 
 use strict;
@@ -279,7 +279,7 @@ sub dfej_configure {
 # Compile daikon using javac
 sub daikon_compile {
   print_log("Compiling Daikon...");
-  `make -C $INV/java all_directly &> daikon_compile.out`;
+  `make -C $INV/java clean all_directly &> daikon_compile.out`;
   if ($CHILD_ERROR) {
     print_log("FAILED\n");
     return 0;
