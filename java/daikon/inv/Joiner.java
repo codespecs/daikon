@@ -66,6 +66,24 @@ public abstract class Joiner
       right.isSameInvariant(otherAsJoiner.right);
   }
 
+  public boolean isSameFormula(Invariant other) {
+    if (! getClass().equals(other.getClass()))
+      return false;
+    Joiner other_joiner = (Joiner) other;
+    // Guards are necessary because the contract of isSameFormula states
+    // that the argument is of the same class as the receiver.
+    // Also use isSameInvariant because the joined parts might be over
+    // distinct slices; don't make "a=b => c=d" be isSameFormula as
+    // "e=f => g=h".
+    return ((left.getClass() == other_joiner.left.getClass())
+            // && left.isSameFormula(other_joiner.left)
+            && left.isSameInvariant(other_joiner.left)
+            && (right.getClass() == other_joiner.right.getClass())
+            // && right.isSameFormula(other_joiner.right)
+            && right.isSameInvariant(other_joiner.right)
+            );
+  }
+
   public boolean isInteresting() {
     return (left.isInteresting() && right.isInteresting());
   }

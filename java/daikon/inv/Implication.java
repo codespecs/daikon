@@ -197,13 +197,20 @@ public class Implication
 
   public boolean isSameFormula(Invariant other) {
     Implication other_implic = (Implication)other;
-    // Guards are necessary because the contract of isSameFormula states
-    // that the argument is of the same class as the receiver.
-    return (((predicate().getClass() == other_implic.predicate().getClass())
-            && predicate().isSameFormula(other_implic.predicate()))
-            && ((consequent().getClass() == other_implic.consequent().getClass())
-            && consequent().isSameFormula(other_implic.consequent())));
+    return ((iff == other_implic.iff)
+            && super.isSameFormula(other_implic));
   }
+
+  public boolean isSameInvariant(Invariant other) {
+    if (other == null)
+      return false;
+    if (! (other instanceof Implication))
+      return false;
+    if (iff != ((Implication)other).iff)
+      return false;
+    return super.isSameInvariant(other);
+  }
+
 
   /* [INCR]
   public boolean hasOnlyConstantVariables() {
