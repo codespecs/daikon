@@ -6,7 +6,7 @@ import daikon.inv.filter.*;
 import utilMDE.*;
 
 import java.util.*;
-import java.awt.BorderLayout;
+import java.awt.BorderLayout;	// not java.awt.* to avoid java.awt.List
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -45,7 +45,8 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
       showErrorMessage( "The GUI must be invoked with only one argument, a .inv or .inv.gz file.\nPlease try running the gui again." );
       System.exit( 0 );
     }
-    else if (args.length == 1)
+
+    if (args.length == 1)
       gui = new InvariantsGUI( args[0] );
     else
       gui = new InvariantsGUI();
@@ -243,7 +244,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     setTitle( "Invariants Display" );
     getContentPane().add( splitPane );
     pack();
-    setSize( 800, 900 );
+    setSize( 550, 700 );
     setVisible( true );
     setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 
@@ -270,7 +271,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     contentPane.add( createPropertyFilterSection());
     contentPane.add( createVariableFilterSection());
     controlPanel.pack();
-    controlPanel.setSize( 400, 400 );
+    controlPanel.setSize( 400, 500 );
     controlPanel.setVisible( true );
   }
 
@@ -399,6 +400,14 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     checkBox.addActionListener( this );
     checkBox.setAlignmentX( Component.LEFT_ALIGNMENT );
     filterCheckBoxes.add( checkBox );
+
+    // Turn off Simplify filter by default since it's slow.
+    String simplifyFilterId = daikon.inv.filter.SimplifyFilter.description;
+    if (invariantFilter.getDescription().equals( simplifyFilterId )) {
+      invariantFilters.changeFilterSetting( simplifyFilterId, false );
+      checkBox.setSelected( false );
+    }
+
     return checkBox;
   }
 
