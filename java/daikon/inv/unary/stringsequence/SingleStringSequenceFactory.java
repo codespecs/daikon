@@ -21,7 +21,7 @@ public final class SingleStringSequenceFactory {
       result.add(OneOfStringSequence.instantiate(ppt));
     } else if (pass == 2) {
       // // I'm not checking var.isConstant() for now
-      // result.add(EltIntComparison.instantiate(ppt));
+      // result.add(EltwiseIntComparison.instantiate(ppt));
       result.add(EltOneOfString.instantiate(ppt));
       // // result.add(EltNonZero.instantiate(ppt));
       // // result.add(NoDuplicates.instantiate(ppt));

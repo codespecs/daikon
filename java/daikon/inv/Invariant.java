@@ -600,6 +600,7 @@ public abstract class Invariant implements java.io.Serializable {
 
   public Invariant find_controlling_invariant()
   {
+    // System.out.println("find_controlling_invariant: " + format());
     PptTopLevel pptt = (PptTopLevel) ppt.parent;
 
     // Try to match inv against all controlling invariants
@@ -614,6 +615,7 @@ public abstract class Invariant implements java.io.Serializable {
           // System.out.println("Controller found: " + cand_inv.format() + "  [worth printing: " + ((PptTopLevel)cand_inv.ppt.parent).isWorthPrinting(cand_inv) + "]");
 	  return cand_inv;
 	}
+        // System.out.println("Failed candidate: " + cand_inv.format());
       }
     }
 
