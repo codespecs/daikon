@@ -258,10 +258,9 @@ public final class OneOfScalar
     } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
-        if (i != 0) { result += " \\/ ("; }
-        result += varname + " = " + ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))  + ")";
+        if (i != 0) { result += " \\/ "; }
+        result += "(" + varname + " = " + ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))  + ")";
       }
-      result += ")";
     }
 
     return result;

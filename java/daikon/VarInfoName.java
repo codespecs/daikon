@@ -14,12 +14,12 @@ import java.util.*;
 import java.lang.reflect.*;
 
 /**
- * VarInfoName is an type which represents the "name" of a variable.
+ * VarInfoName is an type that represents the "name" of a variable.
  * Calling it a "name", however, is somewhat misleading.  It can be
- * some expression which includes more than one variable, term, etc.
+ * some expression that includes more than one variable, term, etc.
  * We separate this from the VarInfo itself because clients wish to
  * manipulate names into new expressions independent of the VarInfo
- * which they might be associated with.  VarInfoName's child classes
+ * that they might be associated with.  VarInfoName's child classes
  * are specific types of names, like applying a function to something.
  * For example, "a" is a name, and "sin(a)" is a name that is the name
  * "a" with the function "sin" applied to it.
@@ -31,7 +31,6 @@ public abstract class VarInfoName
   /**
    * Debugging Category
    **/
-
   public static Category debug = Category.getInstance("daikon.VarInfoName");
 
   // We are Serializable, so we specify a version to allow changes to
@@ -91,10 +90,12 @@ public abstract class VarInfoName
 	return parse(first).applyField(field);
       }
     }
-    
+
     if (name.startsWith("orig(")) {
+      Assert.assert(name.endsWith(")"));
       return parse(name.substring(5, name.length() - 1)).applyPrestate();
     }
+
     // ??
     throw new UnsupportedOperationException("parse error: '" + name + "'");
   }
@@ -273,6 +274,8 @@ public abstract class VarInfoName
   // Helpful constants
 
   public static final VarInfoName ZERO = parse("0");
+  public static final VarInfoName THIS = parse("this");
+  public static final VarInfoName ORIG_THIS = parse("orig(this)");
 
   // ============================================================
   // Interesting observers
@@ -322,6 +325,13 @@ public abstract class VarInfoName
 
   // ============================================================
   // Special producers, or other helpers
+
+  public VarInfoName replace(VarInfoName node, VarInfoName replacement) {
+    if (node == replacement)
+      return this;
+    Replacer r = new Replacer(node, replacement);
+    return r.replace(this).intern();
+  }
 
   public VarInfoName replaceAll(VarInfoName node, VarInfoName replacement) {
     if (node == replacement)
@@ -420,7 +430,7 @@ public abstract class VarInfoName
 
 
   // ============================================================
-  // Static inner classes which form the expression langugage
+  // Static inner classes that form the expression langugage
 
   /**
    * A simple identifier like "a", "this.foo", etc.
@@ -1439,7 +1449,7 @@ public abstract class VarInfoName
   }
 
   /**
-   * Traverse the tree elements which have exactly one branch (so the
+   * Traverse the tree elements that have exactly one branch (so the
    * traversal order doesn't matter).  Visitors need to implement
    * methods for traversing elements (e.g. FunctionOfTwo) with more
    * than one branch.
@@ -1520,7 +1530,7 @@ public abstract class VarInfoName
     public boolean inPre() {
       return pre;
     }
-    // visitor methods which get the job done
+    // visitor methods that get the job done
     public Object visitSimple(Simple o) {
       return (o == goal) ? goal : null;
     }
@@ -1596,7 +1606,7 @@ public abstract class VarInfoName
       return elems;
     }
 
-    // visitor methods which get the job done
+    // visitor methods that get the job done
     public Object visitFunctionOfN(FunctionOfN o) {
       Object retval = null;
       for (Iterator i = o.args.iterator(); i.hasNext();) {
@@ -1728,7 +1738,7 @@ public abstract class VarInfoName
       return Collections.unmodifiableList(result);
     }
 
-    // visitor methods which get the job done
+    // visitor methods that get the job done
     public Object visitSimple(Simple o) {
       result.add(o);
       return super.visitSimple(o);
@@ -1820,7 +1830,7 @@ public abstract class VarInfoName
       return Collections.unmodifiableSet(simples);
     }
     /**
-     * @return Collection of the nodes under the root which need
+     * @return Collection of the nodes under the root that need
      * quantification.  (The values are either of type Elements or
      * Slice).
      **/
@@ -1831,7 +1841,7 @@ public abstract class VarInfoName
       return Collections.unmodifiableSet(unquant);
     }
 
-    // visitor methods which get the job done
+    // visitor methods that get the job done
     public Object visitSimple(Simple o) {
       simples.add(o);
       return super.visitSimple(o);
@@ -2013,7 +2023,7 @@ public abstract class VarInfoName
 	simples.addAll(helper[i].simples());
       }
 
-      // choose names for the indicies which don't conflict, and then
+      // choose names for the indicies that don't conflict, and then
       // replace the right stuff in the term
       char tmp = 'i';
       for (int i=0; i < roots.length; i++) {
@@ -2349,7 +2359,7 @@ public abstract class VarInfoName
       }
       //if (forall)
 	result[0] = "(\\forall int " + int_list + "; (" + conditions + ") ==> ";
-	//else 
+	//else
 	//result[0] = "(\\exists int " + int_list + "; (" + conditions + ") && ";
       result[result.length-1] = ")";
 

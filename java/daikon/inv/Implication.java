@@ -49,8 +49,7 @@ public class Implication
 					     Invariant consequent,
 					     boolean iff)
   {
-    if ((predicate.getClass() == consequent.getClass())
-        && predicate.isSameFormula(consequent)) {
+    if (predicate.isSameInvariant(consequent)) {
       return null;
     }
     //eliminate some "uninteresting" implications, like OneOf predicates and

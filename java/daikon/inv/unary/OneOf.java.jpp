@@ -521,10 +521,9 @@ public final class ONEOFSCALAR
     } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
-        if (i != 0) { result += " \\/ ("; }
-        result += varname + " = " + TOSTRING(elts[i]) + ")";
+        if (i != 0) { result += " \\/ "; }
+        result += "(" + varname + " = " + TOSTRING(elts[i]) + ")";
       }
-      result += ")";
     }
 #elif defined(SEQUENCE)
     String length = "";

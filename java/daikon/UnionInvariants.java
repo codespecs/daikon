@@ -122,7 +122,7 @@ public class UnionInvariants {
       long start = System.currentTimeMillis();
       for (Iterator i = result.iterator() ; i.hasNext() ; ) {
 	PptTopLevel ppt = (PptTopLevel) i.next();
-	ppt.mark_implied_via_simplify();
+	ppt.mark_implied_via_simplify(result);
       }
       long end = System.currentTimeMillis();
       double elapsed = (end - start) / 1000.0;

@@ -48,16 +48,14 @@ public final class Equality
     return false;
   }
 
-  //  Here is my rationale for always returning 0.  This Equality invariant
-  //  aggregates several Comparison invariants who passed the
-  //  IsEqualityComparison.it.accept() test.
-  //  IsEqualityComparison.it.accept() checks if getProbability() returns
-  //  less than Invariant.probability_limit, which is currently .01.  That
-  //  means the probability for any of the involved Comparison invariants
-  //  is at most .01.  In practice, the probability is always almost 0, and
-  //  .01 is close to 0, so just report 0.
-
-  public double computeProbability() { return 0; }
+  /**
+   * Always return JUSTIFIED because we aggregate Comparison
+   * invariants that are all justified to the probability_limit
+   * threshold.
+   **/
+  public double computeProbability() {
+    return Invariant.PROBABILITY_JUSTIFIED;
+  }
 
   public String repr() {
     return "Equality" + varNames();
@@ -94,11 +92,12 @@ public final class Equality
     }
     return result.toString().substring(4); // trims the " && "
   }
-  
+
   /* IOA */
   public String format_ioa() {
     StringBuffer result = new StringBuffer();
     // There are always at least two vars
+    Assert.assert(vars.length >= 2);
     for (int i = 0; i < vars.length - 1; i++) {
       result.append (vars[i].name.ioa_name());
       result.append (" = ");
@@ -107,7 +106,7 @@ public final class Equality
 	result.append (" /\\ ");
       }
     }
-    
+
     return result.toString();
   }
 

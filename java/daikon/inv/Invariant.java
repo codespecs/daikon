@@ -580,10 +580,10 @@ public abstract class Invariant
 
       // The names "match" iff there is an intersection of the names
       // of equal variables.
-      Vector all_vars1 = null; // var1.canonicalRep().equalTo(); // [INCR]
-      Vector all_vars2 = null; // var2.canonicalRep().equalTo(); // [INCR]
-      // all_vars1.add(var1.canonicalRep()); // [INCR]
-      // all_vars2.add(var2.canonicalRep()); // [INCR]
+      Vector all_vars1 = new Vector(); // var1.canonicalRep().equalTo(); // [INCR]
+      Vector all_vars2 = new Vector(); // var2.canonicalRep().equalTo(); // [INCR]
+      all_vars1.add(var1); // all_vars1.add(var1.canonicalRep()); // [INCR]
+      all_vars1.add(var2); // all_vars2.add(var2.canonicalRep()); // [INCR]
       Vector all_vars_names1 = new Vector(all_vars1.size());
       for (Iterator iter = all_vars1.iterator(); iter.hasNext(); ) {
 	VarInfo elt = (VarInfo) iter.next();

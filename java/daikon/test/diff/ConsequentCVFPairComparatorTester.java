@@ -32,10 +32,10 @@ public class ConsequentCVFPairComparatorTester extends TestCase {
     PptSlice sliceb = new PptSlice1(P, new VarInfo[] {vars[1]});
     PptSlice slicec = new PptSlice1(P, new VarInfo[] {vars[2]});
     PptSlice sliced = new PptSlice1(P, new VarInfo[] {vars[3]});
-    Invariant A = LowerBound.instantiate(slicea);
+    Invariant A = NonZero.instantiate(slicea);
     Invariant B = NonZero.instantiate(sliceb);
-    Invariant C = UpperBound.instantiate(slicec);
-    Invariant D = UpperBound.instantiate(sliced);
+    Invariant C = NonZero.instantiate(slicec);
+    Invariant D = NonZero.instantiate(sliced);
     Invariant A_B = Implication.makeImplication(P,A,B,false);
     Invariant A_C = Implication.makeImplication(P,A,C,false);
     Invariant B_C = Implication.makeImplication(P,B,C,false);
@@ -70,8 +70,7 @@ public class ConsequentCVFPairComparatorTester extends TestCase {
 
     // These are all < 0, because the LHS invariant is compared to the
     // RHS consequent.  The LHS has class Implication, while the RHS
-    // has NonZero or UpperBound.  "Implication" < "NonZero" <
-    // "UpperBound".
+    // has NonZero.  "Implication" < "NonZero"
     assertTrue(c.compare(A_B,A_B) < 0);
     assertTrue(c.compare(A_B,A_C) < 0);
     assertTrue(c.compare(A_B,B_C) < 0);

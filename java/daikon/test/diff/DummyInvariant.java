@@ -14,26 +14,41 @@ public class DummyInvariant
   static final long serialVersionUID = 20020122L;
 
   public String formula;
-  public boolean justified;
+  public double probability;
   public boolean interesting;
   public boolean isWorthPrinting;
 
   public DummyInvariant(PptSlice ppt, String formula, boolean justified) {
-    this(ppt, formula, justified, true, true);
+    this(ppt, formula, (justified ? .001 : 1), true, true);
   }
 
   public DummyInvariant(PptSlice ppt, String formula,
                         boolean justified, boolean interesting) {
-    this(ppt, formula, justified, interesting, true);
+    this(ppt, formula, (justified ? .001 : 1), interesting, true);
   }
 
 
   public DummyInvariant(PptSlice ppt, String formula,
                         boolean justified, boolean interesting,
                         boolean isWorthPrinting) {
+    this(ppt, formula, (justified ? .001 : 1), interesting, isWorthPrinting);
+  }
+
+  public DummyInvariant(PptSlice ppt, String formula, double probability) {
+    this(ppt, formula, probability, true, true);
+  }
+
+  public DummyInvariant(PptSlice ppt, String formula,
+                        double probability, boolean interesting) {
+    this(ppt, formula, probability, interesting, true);
+  }
+
+  public DummyInvariant(PptSlice ppt, String formula,
+                        double probability, boolean interesting,
+                        boolean isWorthPrinting) {
     super(ppt);
     this.formula = formula;
-    this.justified = justified;
+    this.probability = probability;
     this.interesting = interesting;
     this.isWorthPrinting = isWorthPrinting;
   }
@@ -43,7 +58,7 @@ public class DummyInvariant
   }
 
   public boolean justified() {
-    return justified;
+    return (probability <= .01);
   }
 
   public boolean isInteresting() {
@@ -64,11 +79,11 @@ public class DummyInvariant
   }
 
   public double computeProbability() {
-    return 0;
+    return probability;
   }
 
   public String repr() {
-    return "DummyInvariant(" + ppt.arity + "," + formula + "," + justified + ")";
+    return "DummyInvariant(" + ppt.arity + "," + formula + "," + probability + ")";
   }
 
   public String format_using(OutputFormat format) {

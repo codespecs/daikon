@@ -94,13 +94,13 @@ public final class LinearBinaryCore
 	int max_i = -1;
 	int max_j = -1;
         // (square of the) distance between the most separated pair
-	long max_separation = 0;
+	double max_separation = 0;
 	for (int i=0; i<MINPAIRS-1; i++) {
 	  for (int j=i+1; j<MINPAIRS; j++) {
-            // not int, lest we get wraparound
-	    long xsep = (x_cache[i] - x_cache[j]);
-	    long ysep = (y_cache[i] - y_cache[j]);
-	    long separation = xsep*xsep + ysep*ysep;
+            // not long, lest we get wraparound
+	    double xsep = ((double)x_cache[i] - x_cache[j]);
+	    double ysep = ((double)y_cache[i] - y_cache[j]);
+	    double separation = xsep*xsep + ysep*ysep;
             // Assert.assert(separation > 0);
 	    if (separation > max_separation) {
 	      max_separation = separation;

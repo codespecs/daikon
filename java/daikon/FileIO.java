@@ -35,7 +35,7 @@ public final class FileIO
 
   /** Nobody should ever instantiate a FileIO. **/
   private FileIO() { throw new Error(); }
-  
+
 /// Constants
 
   final static String comment_prefix = "//";
@@ -100,7 +100,7 @@ public final class FileIO
   public static final Category debugPrint =
     Category.getInstance ("daikon.FileIO.printDtrace");
 
-  
+
 ///////////////////////////////////////////////////////////////////////////
 /// Declaration files
 ///
@@ -331,7 +331,7 @@ public final class FileIO
     if (! VarInfo.legalFileRepType(file_rep_type)) {
       throw new IOException("Unsupported (file) representation type " +
 			    file_rep_type.format() +
-			    " (parsed as " + rep_type + ")" + 
+			    " (parsed as " + rep_type + ")" +
 			    " for variable " +
 			    varname + " at line " + file.getLineNumber() +
 			    " of file " + filename);
@@ -454,6 +454,8 @@ public final class FileIO
 					  PptMap all_ppts)
     throws IOException
   {
+    int pptcount = 1;
+
     if (debugRead.isDebugEnabled()) {
       debugRead.debug("read_data_trace_file " + filename
 		      + ((Daikon.ppt_regexp != null) ? " " + Daikon.ppt_regexp.getPattern() : "")
@@ -518,6 +520,9 @@ public final class FileIO
 
         String ppt_name = line; // already interned
 
+	if(pptcount++ % 10000 == 0)
+	    System.out.print(":");
+
         PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
         Assert.assert(ppt != null, "Program point " + ppt_name + " appears in dtrace file but not in any decl file");
 
@@ -561,7 +566,7 @@ public final class FileIO
         }
 
         // Fills up vals and mods arrays by side effect.
-        read_vals_and_mods_from_trace_file(reader, ppt, vals, mods);    
+        read_vals_and_mods_from_trace_file(reader, ppt, vals, mods);
 
         // Now add some additional variable values that don't appear directly
         // in the data trace file but aren't traditional derived variables.

@@ -98,6 +98,7 @@ public class Ast {
       Method m = JavaParser.class.getMethod(type, null);
       n = (Node) m.invoke(parser, null);
     } catch (Exception e) {
+      System.err.println("create(" + type + ", \"" + stringRep + "\")");
       e.printStackTrace();
       System.exit(1);
     }

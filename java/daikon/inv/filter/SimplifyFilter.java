@@ -32,7 +32,7 @@ class SimplifyFilter extends InvariantFilter {
     // Ppt rather than once per invariant.
     if (topLevel != previousTopLevel) {	// run Simplify on this Ppt
       topLevel.redundant_invs = new HashSet();
-      topLevel.mark_implied_via_simplify( new MyTester());
+      topLevel.mark_implied_via_simplify(filters.getPptMap(), new MyTester());
     }
     previousTopLevel = topLevel;
     Set redundantInvariants = topLevel.redundant_invs;

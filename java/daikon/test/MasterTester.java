@@ -44,15 +44,14 @@ public class MasterTester extends TestCase {
     result.addTest(new TestSuite(daikon.test.inv.InvariantTester.class));
     result.addTest(new TestSuite(daikon.test.diff.InvMapTester.class));
     result.addTest(new TestSuite(daikon.test.LinearTernaryCoreTest.class));
-    result.addTest(new TestSuite
-     (daikon.test.diff.MinusVisitorTester.class));
+    result.addTest(new TestSuite(daikon.test.diff.MinusVisitorTester.class));
     result.addTest(new TestSuite
      (daikon.test.diff.PrintDifferingInvariantsVisitorTester.class));
     result.addTest(new TestSuite(daikon.test.ProglangTypeTest.class));
+    result.addTest(new TestSuite(daikon.test.diff.UnionVisitorTester.class));
     result.addTest(new TestSuite(daikon.test.VarComparabilityTest.class));
     result.addTest(new TestSuite(daikon.test.VarInfoNameTest.class));
-    result.addTest(new TestSuite
-     (daikon.test.diff.XorVisitorTester.class));
+    result.addTest(new TestSuite(daikon.test.diff.XorVisitorTester.class));
     return result;
   }
 

@@ -101,12 +101,13 @@ public final class Diff {
     boolean tabSeparatedStats = false;
     boolean minus = false;
     boolean xor = false;
+    boolean union = false;
     boolean examineAllPpts = false;
     boolean printEmptyPpts = false;
     boolean verbose = false;
     boolean continuousJustification = false;
     boolean logging = false;
-    File mapFile = null;
+    File outputFile = null;
     String invSortComparator1Classname = null;
     String invSortComparator2Classname = null;
     String invPairComparatorClassname = null;
@@ -125,7 +126,7 @@ public final class Diff {
     };
 
     Getopt g = new Getopt("daikon.diff.Diff", args,
-                          "hduastmxo:jzpevl", longOpts);
+                          "hduastmxno:jzpevl", longOpts);
     int c;
     while ((c = g.getopt()) !=-1) {
       switch (c) {
@@ -187,15 +188,19 @@ public final class Diff {
         optionSelected = true;
         xor = true;
         break;        
+      case 'n':
+        optionSelected = true;
+        union = true;
+        break;        
       case 'o':
-        if (mapFile != null) {
+        if (outputFile != null) {
           throw new Error
             ("multiple output files supplied on command line");
         }
-        String mapFilename = g.getOptarg();
-        mapFile = new File(mapFilename);
-        if (! UtilMDE.canCreateAndWrite(mapFile)) {
-          throw new Error("Cannot write to file " + mapFile);
+        String outputFilename = g.getOptarg();
+        outputFile = new File(outputFilename);
+        if (! UtilMDE.canCreateAndWrite(outputFile)) {
+          throw new Error("Cannot write to file " + outputFile);
         }        
         break;
       case 'j':
@@ -242,13 +247,18 @@ public final class Diff {
     Diff diff = new Diff(examineAllPpts);
 
     // Set the comparators based on the command-line options
-    Comparator cmp;
-    cmp = selectComparator(invSortComparator1Classname, minus, xor);
-    diff.setInvSortComparator1(cmp);
-    cmp = selectComparator(invSortComparator2Classname, minus, xor);
-    diff.setInvSortComparator2(cmp);
-    cmp = selectComparator(invPairComparatorClassname, minus, xor);
-    diff.setInvPairComparator(cmp);
+    Comparator defaultComparator;
+    if (minus || xor || union) {
+      defaultComparator = new Invariant.ClassVarnameFormulaComparator();
+    } else {
+      defaultComparator = new Invariant.ClassVarnameComparator();
+    }
+    diff.setInvSortComparator1
+      (selectComparator(invSortComparator1Classname, defaultComparator));
+    diff.setInvSortComparator2
+      (selectComparator(invSortComparator2Classname, defaultComparator));
+    diff.setInvPairComparator
+      (selectComparator(invPairComparatorClassname, defaultComparator));
 
     // The index of the first non-option argument -- the name of the
     // first file
@@ -390,26 +400,38 @@ public final class Diff {
     }
 
     if (minus) {
-      if (mapFile != null) {
+      if (outputFile != null) {
         MinusVisitor v = new MinusVisitor();
         root.accept(v);
-        UtilMDE.writeObject(v.getResult(), mapFile);
-        System.out.println("Output written to: " + mapFile);
+        UtilMDE.writeObject(v.getResult(), outputFile);
+        System.out.println("Output written to: " + outputFile);
       } else {
         throw new Error("no output file specified on command line");
       }
     }
 
     if (xor) {
-      if (mapFile != null) {
+      if (outputFile != null) {
         XorVisitor v = new XorVisitor();
         root.accept(v);
-        UtilMDE.writeObject(v.getResult(), mapFile);
-        System.out.println("Output written to: " + mapFile);
+        UtilMDE.writeObject(v.getResult(), outputFile);
+        System.out.println("Output written to: " + outputFile);
       } else {
         throw new Error("no output file specified on command line");
       }
     }
+
+    if (union) {
+      if (outputFile != null) {
+        UnionVisitor v = new UnionVisitor();
+        root.accept(v);
+        UtilMDE.writeObject(v.getResult(), outputFile);
+        System.out.println("Output written to: " + outputFile);
+      } else {
+        throw new Error("no output file specified on command line");
+      }
+    }
+
 
     if (logging)
       System.err.println("Invariant Diff: Ending Log");
@@ -606,6 +628,23 @@ public final class Diff {
   }
 
   /**
+   * If the classname is non-null, returns the comparator named by the
+   * classname.  Else, returns the default.
+   **/
+  private static Comparator selectComparator
+    (String classname, Comparator defaultComparator) throws
+    ClassNotFoundException, InstantiationException, IllegalAccessException {
+
+    if (classname != null) {
+      Class cls = Class.forName(classname);
+      Comparator cmp = (Comparator) cls.newInstance();
+      return cmp;
+    } else {
+      return defaultComparator;
+    }    
+  }
+
+  /**
    * Use the comparator for sorting the first set.
    **/
   public void setInvSortComparator1(Comparator c) {
@@ -624,26 +663,6 @@ public final class Diff {
    **/
   public void setInvPairComparator(Comparator c) {
     invPairComparator = c;
-  }
-
-  /**
-   * Selects the comparator to be used, based on the classname
-   * specified on the command line (if any), and whether this diff is
-   * computing the minus or xor operation.
-   **/
-  public static Comparator selectComparator(String customClassname,
-                                            boolean minus, boolean xor)
-    throws ClassNotFoundException, InstantiationException,
-           IllegalAccessException {
-    if (customClassname != null) {
-      Class cls = Class.forName(customClassname);
-      Comparator cmp = (Comparator) cls.newInstance();
-      return cmp;
-    } else if (minus || xor) {
-      return new Invariant.ClassVarnameFormulaComparator();
-    } else {
-      return new Invariant.ClassVarnameComparator();
-    }
   }
 
 }

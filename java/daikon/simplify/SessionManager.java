@@ -2,7 +2,7 @@ package daikon.simplify;
 
 import java.io.*;
 import java.util.*;
-
+import org.apache.log4j.Category;
 import utilMDE.Assert;
 
 /**
@@ -23,21 +23,20 @@ public class SessionManager
   // The error message returned by the worked thread, or null
   private String error = null;
 
-  // Enable to dump input and output to the console
-  // Use "java -DDEBUG_SIMPLIFY=1 daikon.Daikon ..." or
-  //     "make USER_JAVA_FLAGS=-DDEBUG_SIMPLIFY=1 ..."
-  private static final boolean debug_mgr;
-  static {
-    debug_mgr = (System.getProperty("DEBUG_SIMPLIFY") != null);
-    // debug_mgr = true;
-    if (debug_mgr) {
-      System.err.println("DEBUG_SIMPLIFY is on");
-    }
-  }
+  /**
+   * Debug tracer common to all Simplify classes
+   **/
+  public static final Category debug = Category.getInstance ("daikon.simplify");
+
+  // Deprecated method for setting the debug flag.
+  //    // Enable to dump input and output to the console
+  //    // Use "java -DDEBUG_SIMPLIFY=1 daikon.Daikon ..." or
+  //    //     "make USER_JAVA_FLAGS=-DDEBUG_SIMPLIFY=1 ..."
+
+  private static final boolean debug_mgr = debug.isDebugEnabled();
   public static void debugln(String s) {
-    if (!debug_mgr) return;
-    System.err.println(s);
-    System.err.flush();
+    if (! debug_mgr) return;
+    debug.debug(s);
   }
 
   public SessionManager() {

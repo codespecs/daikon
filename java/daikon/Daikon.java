@@ -620,7 +620,7 @@ public final class Daikon {
       elapsedTime(); // reset timer
       for (Iterator itor = all_ppts.iterator() ; itor.hasNext() ; ) {
 	PptTopLevel ppt = (PptTopLevel) itor.next();
-	ppt.mark_implied_via_simplify();
+	ppt.mark_implied_via_simplify(all_ppts);
         System.out.print(".");
         System.out.flush();
       }

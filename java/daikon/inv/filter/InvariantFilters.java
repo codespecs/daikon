@@ -4,7 +4,8 @@ import utilMDE.Assert;
 import java.util.*;
 import daikon.inv.*;
 import daikon.inv.IsEqualityComparison;	       // For equality invariants work-around
-import daikon.PptSlice;			       // For equality invariants work-around
+import daikon.PptMap;
+import daikon.PptSlice;
 import daikon.PptTopLevel;
 import daikon.VarInfo;
 
@@ -35,21 +36,32 @@ public class InvariantFilters {
   Map propertyFilters = new TreeMap();
   List variableFilters = new ArrayList();
 
+  // Making it public is gross, but is ok for now.  If we use filters,
+  // in the redesign we can make it cleaner.
+  public PptMap ppt_map = null;
+
   public InvariantFilters() {
-    addPropertyFilter( (InvariantFilter) new NonCanonicalVariablesFilter());
-    addPropertyFilter( (InvariantFilter) new UnjustifiedFilter());
-    addPropertyFilter( (InvariantFilter) new ObviousFilter());
-    addPropertyFilter( (InvariantFilter) new FewModifiedSamplesFilter());
-    addPropertyFilter( (InvariantFilter) new OnlyConstantVariablesFilter());
-    addPropertyFilter( (InvariantFilter) new ImpliedPostconditionFilter());
-    //    addPropertyFilter( (InvariantFilter) new RedundantFilter());
-    addPropertyFilter( (InvariantFilter) new SimplifyFilter( this ));
-    addPropertyFilter( (InvariantFilter) new ObviousEqualityFilter());
+    addPropertyFilter( new NonCanonicalVariablesFilter());
+    addPropertyFilter( new UnjustifiedFilter());
+    addPropertyFilter( new ObviousFilter());
+    addPropertyFilter( new FewModifiedSamplesFilter());
+    addPropertyFilter( new OnlyConstantVariablesFilter());
+    addPropertyFilter( new ImpliedPostconditionFilter());
+    //    addPropertyFilter( new RedundantFilter());
+    addPropertyFilter( new SimplifyFilter( this ));
+    addPropertyFilter( new ObviousEqualityFilter());
 
     // This filter should be added last for speed, because its shouldDiscard()
     // is more complicated in that it evaluates shouldDiscard() for other
     // invariants.
-    addPropertyFilter( (InvariantFilter) new ControlledInvariantFilter( this ));
+    addPropertyFilter( new ControlledInvariantFilter( this ));
+  }
+
+  /**
+   * @return the PptMap that the filters are being applied to.
+   **/
+  public PptMap getPptMap() {
+    return ppt_map;
   }
 
   void addPropertyFilter( InvariantFilter filter ) {
