@@ -38,7 +38,8 @@ class JTraceInference extends Thread
 	start(); // execute run() in a new thread
     }
 
-    private PptMap all_ppts = new PptMap();
+    // Public so that others can read out the invariants!
+    public PptMap all_ppts = new PptMap();
 
     public void	run()
     {
@@ -137,8 +138,6 @@ class JTraceInference extends Thread
 	//
 
 	JTrace.println(JTrace.V_INFO,"JTrace: Inference thread stop.");
-
-	PrintInvariants.print_invariants(all_ppts);
     }
 
     // Read all data for a certain ppt, create and fill a sample with it
