@@ -564,7 +564,7 @@ public final class ArraysMDE {
     long[] result = new long[a.length + b.length];
 
 
-    System.arraycopy(a, 0, result, 0, a.length);	  
+    System.arraycopy(a, 0, result, 0, a.length);
     System.arraycopy(b, 0, result, a.length, b.length);
 
 
@@ -577,7 +577,7 @@ public final class ArraysMDE {
     if (b == null) return a;
     String[] result = new String[a.length + b.length];
 
-    System.arraycopy(a, 0, result, 0, a.length);	  
+    System.arraycopy(a, 0, result, 0, a.length);
     System.arraycopy(b, 0, result, a.length, b.length);
     return result;
   }
@@ -869,10 +869,10 @@ public final class ArraysMDE {
   }
 
   /**
-   * @requires is_permutation(a)
+   * @requires fn_is_permutation(a)
    * @param a the input permutation
    * @return fresh array which is the inverse of the given perutation.
-   * @see is_permutation(int[])
+   * @see #fn_is_permutation(int[])
    **/
   public static int[] fn_inverse_permutation(int[] a) {
     return fn_inverse(a, a.length);
@@ -922,12 +922,14 @@ public final class ArraysMDE {
   /// Set operations, like subset, unions and intersections
   ///
 
+  // This implementation is O(n^2) when the smaller really is a subset, but
+  // might be quicker when it is not.  Sorting both sets has (minimum
+  // and maximum) running time of Theta(n log n).
   /**
    * Whether smaller is a subset of bigger.  The implmentation is to
-   * use collections because we want to take advantage of hashSet's
+   * use collections because we want to take advantage of HashSet's
    * constant time membership tests.
    **/
-
   public static boolean isSubset(long[] smaller, long[] bigger) {
     Set setBigger = new HashSet();
 
@@ -939,13 +941,9 @@ public final class ArraysMDE {
       Long elt = new Long(smaller[i]);
       if (!setBigger.contains(elt)) return false;
     }
-    
+
     return true;
-
   }
-
-
-
 
 
   ///////////////////////////////////////////////////////////////////////////
