@@ -28,6 +28,8 @@ AJAX_JAVA_FILES := $(shell find java/ajax-ship/ajax \( -name '*daikon-java*' -o 
 # WWW_FILES := $(shell cd doc/www; find . \( \( -name '*~' -o -name '.*~' -o -name CVS -o -name .cvsignore -o -name '.\#*' -o -name '*.bak' -o -name uw \) -prune -a -type f \) -o -print | grep -v '^.$$')
 WWW_FILES := $(shell cd doc/www; find . -type f -print | egrep -v '~$$|CVS|.cvsignore|/.\#|.bak$$|uw/')
 WWW_DIR := /home/httpd/html/daikon/
+# build the windows version of dfej here
+MINGW_DFEJ_LOC := /tmp
 
 # This needs not to be hardcoded to a particular users directory if
 # anyone else is going to use it.
@@ -254,8 +256,7 @@ update-dist-doc: doc-all
 	# Don't modify files in the distribution directory
 	cd $(DIST_DIR) && chmod -R ogu-w $(DIST_DIR_FILES)
 	update-link-dates $(DIST_DIR)/index.html
-	cd $(DIST_DIR) && chgrp -R invariants $(DIST_DIR_FILES) doc \
-		daikon_manual_html
+	cd $(DIST_DIR) && chgrp -R invariants $(DIST_DIR_FILES) doc
 
 # Perl command compresses multiple spaces to one, for first 9 days of month.
 TODAY := $(shell date "+%B %e, %Y" | perl -p -e 's/  / /')
@@ -509,6 +510,7 @@ dist-dfec-linux:
 
 ## Java front end
 
+.phony: $(DFEJ_DIR)/src/dfej
 $(DFEJ_DIR)/src/dfej:
 	cd $(DFEJ_DIR) && $(MAKE)
 
@@ -555,28 +557,37 @@ dist-dfej-linux-x86: $(DFEJ_DIR)/src/dfej
 # Creates the build_mingw_dfej directory.  This probably needs to be redone
 # when dfej is changed to include new object files or other Makefile changes.
 # Path must include /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin
-dfej-src/build_mingw_dfej:
+$(MINGW_DFEJ_LOC)/build_mingw_dfej:
 	cd dfej && $(MAKE) distclean
-	mkdir dfej-src/build_mingw_dfej
-	(setenv PATH /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:$PATH; cd dfej-src/build_mingw_dfej; ~mernst/research/invariants/dfej/configure --prefix=/tmp/dfej_Xmingw --host=i386-mingw32msvc)
+	mkdir $(MINGW_DFEJ_LOC)/build_mingw_dfej
+	# Bad hacks to fix problems in mingw32.  Need to be resolved
+	#cp /g6/users/jhp/mingw32/crt2.o $(MINGW_DFEJ_LOC)/build_mingw_dfej
+	#mkdir $(MINGW_DFEJ_LOC)/build_mingw_dfej/src
+	#cp /g6/users/jhp/mingw32/crt2.o $(MINGW_DFEJ_LOC)/build_mingw_dfej/src
+	#cp /usr/i386-glibc21-linux/include/regex.h $(MINGW_DFEJ_LOC)/build_mingw_dfej/src
+	# Configure mingw version
+	(PATH=/g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:$$PATH; cd $(MINGW_DFEJ_LOC)/build_mingw_dfej &&  ~/research/invariants/dfej/configure --prefix=/tmp/dfej_Xmingw --host=i386-mingw32msvc)
 	cd dfej && ./configure
 
 # dfej-src/build_mingw_dfej/src/dfej.exe:
 # 	cd dfej-src/build_mingw_dfej; setenv PATH /g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:$(PATH); $(MAKE)
 
-mingw_exe: dfej-src/build_mingw_dfej/src/dfej.exe
+mingw_exe: $(MINGW_DFEJ_LOC)/build_mingw_dfej $(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe
 
 ## Problem:  I seem to need to move away the .o files in the source
 ## directory.  If they exist, then no attempt is made to build locally.
 ## So as a hack, move them aside and then replace them.
 
-dfej-src/build_mingw_dfej/src/dfej.exe: dfej-src/dfej/src/*.cpp dfej-src/dfej/src/*.h
-	-rename .o .mingw-saved.o dfej-src/dfej/src/*.o
-	(cd dfej-src/build_mingw_dfej; export PATH=/g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:${PATH}; $(MAKE))
-	-rename .mingw-saved.o .o dfej-src/dfej/src/*.mingw-saved.o
+## JHP 5/1/03 - The renames don't seem necessary since the build is in a
+## separate directory.
 
-dist-dfej-windows: dfej-src/build_mingw_dfej/src/dfej.exe
-	cp -pf dfej-src/build_mingw_dfej/src/dfej.exe $(DIST_BIN_DIR)/dfej.exe
+$(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe: dfej/src/*.cpp dfej/src/*.h
+	# -rename .o .mingw-saved.o dfej/src/*.o
+	(cd $(MINGW_DFEJ_LOC)/build_mingw_dfej && export PATH=/g2/users/mernst/bin/src/mingw32-linux-x86-glibc-2.1/cross-tools/bin:${PATH} && $(MAKE))
+	# -rename .mingw-saved.o .o dfej/src/*.mingw-saved.o
+
+dist-dfej-windows: $(MINGW_DFEJ_LOC)/build_mingw_dfej $(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe
+	cp -pf $(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe $(DIST_BIN_DIR)/dfej.exe
 	chmod +r $(DIST_BIN_DIR)/dfej.exe
 	update-link-dates $(DIST_DIR)/index.html
 
