@@ -526,7 +526,6 @@ public final class PrintInvariants {
         }
       }
 
-      // if (ppt.has_samples() &&  // [[INCR]]
       print_invariants_maybe(ppt, pw, all_ppts);
     }
 
@@ -571,15 +570,6 @@ public final class PrintInvariants {
         return;
       }
     }
-
-    /* [INCR]
-    if ((ppt.combined_exit != null) && (Daikon.output_style != OutputFormat.DAIKON)) {
-      if (Daikon.output_num_samples) {
-        out.println("[Is combined exit, output style " + Daikon.output_style + ": " + ppt.name() + "]");
-      }
-      return;
-    }
-    */
 
     // out.println("This = " + this + ", Name = " + name + " = " + ppt_name);
 
@@ -641,7 +631,6 @@ public final class PrintInvariants {
     // System.out.println("entering print_sample_data");
 
     if (Daikon.output_num_samples) {
-      // int num_samps = -111; // [[INCR]]
       out.println(ppt.name() + "  " + nplural(ppt.num_samples(), "sample"));
     } else {
       if (Daikon.output_style == OutputFormat.IOA) {
@@ -685,7 +674,7 @@ public final class PrintInvariants {
           debugPrintModified.fine ("  has orig var");
           // Assert.assertTrue(vi_orig.postState.name == vi.name, "vi_orig="+vi_orig.name+", vi_orig.postState="+vi_orig.postState+((vi_orig.postState!=null)?"="+vi_orig.postState.name:"")+", vi="+vi+"="+vi.name);
           // Assert.assertTrue(vi_orig.postState == vi, "vi_orig="+vi_orig.name+", vi_orig.postState="+vi_orig.postState+((vi_orig.postState!=null)?"="+vi_orig.postState.name:"")+", vi="+vi+"="+vi.name);
-          boolean is_unmodified = false; // vi.equal_to == vi_orig.equal_to // [INCR] XXX
+          boolean is_unmodified = false;
           if (! is_unmodified) {
             java.lang.reflect.Field f = vi.name.resolveField(ppt);
             // System.out.println("Field for " + vi.name.name() + ": " + f);
@@ -859,89 +848,16 @@ public final class PrintInvariants {
   // Count statistics (via Global) on variables (canonical, missing, etc.)
   public static void count_global_stats(PptTopLevel ppt) {
     for (int i=0; i<ppt.var_infos.length; i++) {
-      /* [INCR]
-      if (! ppt.var_infos[i].isCanonical()) {
-        Global.non_canonical_variables++;
-      } else if (ppt.var_infos[i].canBeMissingCheck()) {
-        Global.can_be_missing_variables++;
-      } else {
-        Global.canonical_variables++;
-      }
-      */ // [INCR]
       if (ppt.var_infos[i].isDerived()) {
         Global.derived_variables++;
       }
     }
   }
 
-  /* [INCR]
-  / **
-   * Get all varInfos that are equal to vi.  The result also includes
-   * vi, because it may be that vi shouldn't get printed.  Obviously
-   * equal vars are included based on the value of
-   * PrintInvariants.includeObviouslyEqual.
-   ** /
-  public static Vector get_equal_vars(VarInfo vi) {
-    return get_equal_vars(vi, includeObviouslyEqual);
-  }
-
-  / **
-   * Get all varInfos that are equal to vi.  The result also includes
-   * vi, because it may be that vi shouldn't get printed.  Obviously
-   * equal vars are included based on the value of
-   * the parameter includeObviouslyEqual.
-   ** /
-  public static Vector get_equal_vars(VarInfo vi, boolean includeObviouslyEqual) {
-    Vector equal_vars = new Vector();
-    equal_vars.add(vi);
-
-    if (debugPrintEquality.isLoggable(Level.FINE)) {
-      debugPrintEquality.fine ("Testing equality for " + vi.name.name());
-    }
-
-
-    if (includeObviouslyEqual) {
-      equal_vars.addAll(vi.equalTo());
-    } else {
-      equal_vars.addAll(vi.equalToNonobvious());
-    }
-
-    // // Filter for parameters here
-    // if (vi.ppt.ppt_name.isExitPoint()) {
-    //  for (Iterator i = equal_vars.iterator(); i.hasNext(); ) {
-    //   VarInfo var = (VarInfo) i.next();
-    //   if (debugPrintEquality.isLoggable(Level.FINE)) {
-    //    debugPrintEquality.fine (" testing derivedParamAndUnint " + var.name.name());
-    //   }
-    //   if (var.isDerivedParamAndUninteresting()) {
-    //    i.remove();
-    //   }
-    //  }
-    // }
-    return equal_vars;
-  }
-  */ // ... [INCR]
-
   public static Vector get_obviously_equal(VarInfo vi) {
     Vector obviously_equal = null;
 
-    /* [INCR]
-    if (includeObviouslyEqual)
-      {
-        obviously_equal = new Vector(vi.equalTo());
-        obviously_equal.removeAll(vi.equalToNonobvious());
-
-        // System.out.println("equal_vars.size() = " + equal_vars.size());
-        // System.out.println("Redundant due to simplify = "
-        //                    + (Daikon.suppress_redundant_invariants_with_simplify
-        //                       && redundant_invs.contains(vi)));
-      }
-    else
-      {
-        obviously_equal = new Vector();
-      }
-    */ // ... [INCR]
-    obviously_equal = new Vector(); // [INCR]
+    obviously_equal = new Vector();
 
     return obviously_equal;
   }
@@ -954,7 +870,7 @@ public final class PrintInvariants {
     }
 
     // switch commented lines to include obviously equal in output
-    Vector equal_vars = new Vector(); // get_equal_vars(); // [INCR] XXX
+    Vector equal_vars = new Vector();
     Vector obviously_equal = get_obviously_equal(vi);
 
     if (debugPrintEquality.isLoggable(Level.FINE)) {
@@ -966,7 +882,6 @@ public final class PrintInvariants {
       debugPrintEquality.fine (sb.toString());
     }
 
-    // Necessary for [INCR].
     if (equal_vars.size() <= 1)
       return;
 
@@ -987,7 +902,6 @@ public final class PrintInvariants {
       if (Daikon.output_num_samples) {
         if (slice1 != null) {
           sb.append("\t\t(" +
-                    // [INCR] nplural(slice1.num_values(), "value") + ", " +
                     nplural(slice1.num_samples(), "sample") + ")");
         } else {
           // sb.append("\t\t(no slice)");
@@ -1173,10 +1087,8 @@ public final class PrintInvariants {
   // ppt should only be used for obtaining the number of values and
   // samples, but not for any other purpose.
   public static void print_invariant(Invariant inv, PrintWriter out, int invCounter, PptTopLevel ppt) {
-    // [INCR] int num_vals = inv.ppt.num_values();
     int inv_num_samps = inv.ppt.num_samples();
     String num_values_samples = "\t\t(" +
-      // [INCR] nplural(num_vals, "value") + ", " +
       nplural(inv_num_samps, "sample") + ")";
 
     String inv_rep;
@@ -1334,20 +1246,6 @@ public final class PrintInvariants {
 
   public static boolean includeObviouslyEqual = false;
 
-  /* [INCR]
-  private static boolean accept_varinfo(PptTopLevel ppt, VarInfo vi) {
-    // This needs to be a separate if statement because if vi is not
-    // canonical, it will fail assert statements in some of the things
-    // that are invoked in the return clause.
-    if (vi.isCanonical()) {
-      return ((get_equal_vars(vi).size() > 1)  &&
-              (! (Daikon.suppress_redundant_invariants_with_simplify &&
-                  ppt.redundant_invs.contains(vi))));
-    } else {
-      return false;
-    }
-  }
-  */ // ... [INCR]
 
   /**
    * Print invariants for a single program point, once we know that
@@ -1369,11 +1267,7 @@ public final class PrintInvariants {
         VarInfo vi = ppt.var_infos[i];
         PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;
         PptSlice slice1 = ppt_tl.findSlice(vi);
-        debugPrint.fine ("      " + vi.name.name()
-                         // + " constant=" + vi.isConstant() // [INCR]
-                         // + " canonical=" + vi.isCanonical() // [INCR]
-                         // + " equal_to=" + vi.equal_to.name.name() // [INCR]
-                         );
+        debugPrint.fine ("      " + vi.name.name());
       }
       debugPrint.fine ("Equality set: ");
       debugPrint.fine (ppt.equality_view.toString());
@@ -1474,19 +1368,6 @@ public final class PrintInvariants {
     if (debugFiltering.isLoggable(Level.FINE)) {
       for (int i=0; i<ppt.var_infos.length; i++) {
         VarInfo vi = ppt.var_infos[i];
-
-        // if (accept_varinfo(ppt, vi)) { // [INCR] XXX
-          /* [INCR]
-          StringBuffer sb = new StringBuffer();
-          for (Iterator j = vi.equalTo().iterator(); j.hasNext(); ) {
-            sb.append (" ==  " + ((VarInfo) j.next()).name.name());
-          }
-          StringWriter eq_invs = new StringWriter();
-          PrintWriter pw = new PrintWriter(eq_invs);
-          print_equality_invariants(vi, pw, invCounter, ppt);
-          debugFiltering.fine ("Found VarInfo that says " + eq_invs.toString());
-        }
-          */ // [INCR]
       }
     }
     finally_print_the_invariants(accepted_invariants, out, ppt);
@@ -1733,7 +1614,7 @@ public final class PrintInvariants {
 
   }
 
-  public static void print_filter_stats (Logger debug, PptTopLevel ppt,
+  public static void print_filter_stats (Logger log, PptTopLevel ppt,
                                          PptMap ppt_map) {
 
     boolean print_invs = false;
@@ -1769,10 +1650,10 @@ public final class PrintInvariants {
       inv_map.put (inv.getClass(), cnt);
 
       if (print_invs)
-        debug.fine (" : " + filter_class + " : " + inv.format());
+        log.fine (" : " + filter_class + " : " + inv.format());
     }
 
-    debug.fine (ppt.name() + ": " + invs_array.length);
+    log.fine (ppt.name() + ": " + invs_array.length);
 
     for (Iterator i = filter_map.keySet().iterator(); i.hasNext(); ) {
       Class filter_class = (Class) i.next();
@@ -1783,13 +1664,13 @@ public final class PrintInvariants {
         total += cnt.intValue();
       }
       if (filter_class == null)
-        debug.fine (" : Accepted Invariants : " + total);
+        log.fine (" : Accepted Invariants : " + total);
       else
-        debug.fine (" : " + filter_class.getName() + ": " + total);
+        log.fine (" : " + filter_class.getName() + ": " + total);
       for (Iterator j = inv_map.keySet().iterator(); j.hasNext(); ) {
         Class inv_class = (Class) j.next();
         Integer cnt = (Integer) inv_map.get (inv_class);
-        debug.fine (" : : " + inv_class.getName() + ": " + cnt.intValue());
+        log.fine (" : : " + inv_class.getName() + ": " + cnt.intValue());
       }
     }
   }

@@ -204,20 +204,6 @@ public class Implication
     return super.isSameInvariant(other);
   }
 
-
-  /* [INCR]
-  public boolean hasOnlyConstantVariables() {
-    // The old version of this code only looked at the predicate, but
-    // it was almost never used, since the OnlyConstantVariablesFilter
-    // had a separate check for "inv instanceof Implication" that
-    // looked at both the predicate and the consequent. I also can't
-    // think of a reason why it would make sense to only check the
-    // predicate. -SMcC
-    return consequent.hasOnlyConstantVariables()
-      || predicate.hasOnlyConstantVariables();
-  }
-  */ // ... [INCR]
-
   // An implication is only interesting if both the predicate and
   // consequent are interesting
   public boolean isInteresting() {
@@ -252,9 +238,9 @@ public class Implication
    * VarInfo[], String)}.  Uses the consequent as the logger
    */
 
-  public void log (Logger debug, String msg) {
+  public void log (Logger log, String msg) {
 
-    right.log (debug, msg + "[for implication " + format() + " ("
+    right.log (log, msg + "[for implication " + format() + " ("
                + orig_right.format() + ")]");
   }
 
