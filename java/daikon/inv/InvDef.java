@@ -26,6 +26,13 @@ public class InvDef {
   VarInfo v1;
   VarInfo v2;
 
+  /**
+   * Argument indices used by the invariant.
+   */
+  int v1_index = -1;
+  int v2_index = -1;
+  int v3_index = -1;
+
   /** invariant class **/
   Class inv_class;
 
@@ -85,6 +92,25 @@ public class InvDef {
 
     debug.fine ("Created " + this);
   }
+
+  /**
+   * Defines a ternary invariant independent of specific variables by
+   * using the var_info instead.  The class must be correctly permutted
+   * to match the variable order (ie, the indices must be 0, 1, 2).
+   * This is ok for now, since we are only using these do define
+   * suppressees and we always know the correct permuation in that
+   * instance
+   */
+  public InvDef (int v1_index, int v2_index, int v3_index, Class cls) {
+
+    Assert.assertTrue (v1_index < v2_index);
+    Assert.assertTrue (v2_index < v3_index);
+    this.v1_index = v1_index;
+    this.v2_index = v2_index;
+    this.v3_index = v3_index;
+    this.inv_class = cls;
+  }
+
 
   public String toString() {
     String out = "v1=" + v1.name.name();
