@@ -34,9 +34,10 @@ foreach $filename (@ARGV){
 	    }
 	}
 	if ($brace == 1) {
-	    if ($line =~ /\s+(\S+)\s*\(/) {
+	    if ($line =~ /\s+(\S+)\s*(\(.*\))/) {
 		#we've matched a function name. 
 		$method = $1;
+		$args = $2; 
 		print CONDFILE "\nIn function $method:\n";
 		#if ($line =~ /(^|\s)boolean\s/) {
 		#see if it returns a boolean
@@ -64,6 +65,7 @@ foreach $filename (@ARGV){
 			$cond = $1;
 		    }
 		    $replace{$method} = $repl;
+		    $arguments{$method} = $args;
 		}
 	    }elsif ($cond =~ /(==|\!=|\<=|=\>|=\<|\>=|\<|\>)/) {
 		print CONDFILE $cond."\n";
@@ -73,6 +75,7 @@ foreach $filename (@ARGV){
 			$cond = $1;
 		    }
 		    $replace{$method} = $cond;
+		    $arguments{$method} = $args;
 		}
 	    }
 	} 
@@ -180,7 +183,7 @@ foreach $filename (@ARGV){
     
     print CONDFILE "\nreplace:\n";
     foreach $method (keys %replace) {
-	print CONDFILE "$method : $replace{$method}\n";
+	print CONDFILE "$method$arguments{$method} : $replace{$method}\n";
     }
     
     close(CONDFILE);
@@ -217,8 +220,8 @@ foreach $filename (@ARGV){
 	    # of the file, read till the end.
 	    while($line = <CONDFILE>){
 		if($line =~ /(\S.*) : (\S*.*)/){
-		    $key = $class;
-		    push @{$HashOfSubs{$key}}, ($1, $2);
+		    push (@subs, $1);
+		    push (@subs, $2);
 		}
 	    }
 	}
@@ -237,38 +240,35 @@ foreach $filename (@ARGV){
     @functions = (keys %HashOfConds);
     $numfuncs = scalar(@functions);
     
-    
+    $replace = "REPLACE";
+    for($i = 0; $i < scalar(@subs); $i = $i + 2){
+	$sub = @subs[$i];
+	$sub =~ s/(\(|\?|\))/$1/;
+	$temp = @subs[$i+1];
+	$temp =~ s/\s*return(.*)\s*;\s*$/$1/;
+	$replace = $replace." # ".$sub." # ".$temp;
+    }
+
+    if(scalar(@subs)> 0){
+	print SPINFOFILE $replace."\n\n";
+    }
     
     foreach $function (keys %HashOfConds){
-	$rep = 0;
-	print SPINFOFILE "PPT_NAME, $function";
+	print SPINFOFILE "PPT_NAME# $function";
 	$conditions = "\nCONDITIONS";
 	$replace = "REPLACE";
 	@conds = @{$HashOfConds{$function}};
 	$function =~ /^(\S*)\./;
 	$class = $1;
-	@subs = @{$HashOfSubs{$class}};
 	foreach $cond (@conds){
 	    if($cond !~ /^\s*true\s*$/){
 		$cond =~ s/^\s*(.*)\s*$/$1/; #strip whitespace from ends 
 		$cond =~ s/^\s*(\S*\s*)\!=(\s*\S*)\s*$/$1==$2/;
-		$conditions = $conditions.", $cond";
+		$conditions = $conditions."# $cond";
 	    }else{ next; }
-	    for($i = 0; $i < scalar(@subs); $i = $i + 2){
-		$sub = @subs[$i]; 
-		$sub =~ s/(\(|\?|\))/\\$1/; 
-		if($cond =~ /$sub/){
-		    $temp = @subs[$i+1];
-		    $temp =~ s/\s*return(.*)\s*;\s*$/$1/;
-		    $replace = $replace.",".$sub."( ),".$temp;
-		    $rep++;
-		}
-	    }
 	}
+	
 	print SPINFOFILE $conditions."\n";
-	if($rep > 0){
-	    print SPINFOFILE $replace."\n";
-	}
 	print SPINFOFILE "\n";
 	#unlink <$filename.conds>;
     }    
