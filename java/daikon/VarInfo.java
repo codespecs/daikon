@@ -606,11 +606,6 @@ public final class VarInfo
   public VarInfo derivedParamCached = null;
 
   /**
-   * Cached value for getDerivedParam()
-   **/
-  public VarInfo derivedParamCached = null;
-
-  /**
    * Cached value for isDerivedParam()
    **/
   // Boolean rather than boolean so we can use "null" to indicate "not yet set".
