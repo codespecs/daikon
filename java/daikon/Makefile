@@ -140,7 +140,7 @@ audit:
 
 test: tests
 
-tests:
+tests: junit
 	cd ../../tests && $(MAKE) all
 
 showvars:
