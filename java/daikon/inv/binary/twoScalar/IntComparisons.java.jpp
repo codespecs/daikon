@@ -515,6 +515,23 @@ invariants.
     #endif
   }
 
+#if (defined(EQUAL_OP) || defined(NONEQUAL_OP))
+  public boolean is_symmetric() {
+    return (true);
+  }
+
+#else
+
+  /**
+   * Returns the class that corresponds to this class with its variable
+   * order swapped
+   */
+  public static Class swap_class () {
+    return INTEQUAL_SWAP.class;
+  }
+#endif
+
+
   // Look up a previously instantiated INTEQUAL relationship.
   // Should this implementation be made more efficient?
   public static INTEQUAL find(PptSlice ppt) {
