@@ -41,8 +41,6 @@ public class MergeInvariants {
   public static void main(String[] args) throws FileNotFoundException,
   StreamCorruptedException, OptionalDataException, IOException,
   ClassNotFoundException {
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
-
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT,
                   null, 0),
@@ -104,6 +102,9 @@ public class MergeInvariants {
         break;
       }
     }
+
+    daikon.LogHelper.setupLogs(Global.debugAll ? LogHelper.FINE
+                               : LogHelper.INFO);
 
     List inv_files = new ArrayList();
     File decl_file = null;
