@@ -46,6 +46,7 @@ public class ConvertInvToDci
 
 	public static void main(String args[])
 	{
+	        daikon.Logger.setupLogs (daikon.Logger.INFO);
 		String return_val = converting(args);
 		if (return_val == null)
 			System.err.println(error_msg);

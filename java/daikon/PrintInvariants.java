@@ -30,6 +30,7 @@ public class PrintInvariants {
   public static void main(String[] args) throws FileNotFoundException,
   StreamCorruptedException, OptionalDataException, IOException,
   ClassNotFoundException {
+    daikon.Logger.setupLogs (daikon.Logger.INFO);
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(Daikon.suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),

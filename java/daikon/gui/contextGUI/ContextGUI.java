@@ -442,6 +442,7 @@ public final class ContextGUI extends JApplet implements ActionListener
 	// and then start the GUI.
 	public static void main(String args[])
 	{
+  	        daikon.Logger.setupLogs (daikon.Logger.INFO);
 		ContextGUI dgui = new ContextGUI();
 
 		dgui.startGui();
