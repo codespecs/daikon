@@ -71,6 +71,9 @@ class Annotate {
   public static final String useNEGATE_IS_SWITCH = "negateIS";
   public static final String useNEGATE_OS_SWITCH = "negateOS";
   public static final String useNEGATE_IO_SWITCH = "negateIO";
+  public static final String useOMIT_IS_SWITCH = "omitIS";
+  public static final String useOMIT_OS_SWITCH = "omitOS";
+  public static final String useOMIT_IO_SWITCH = "omitIO";
 
   private static String usage =
     UtilMDE.join(new String[] {
@@ -87,11 +90,17 @@ class Annotate {
       "  --esc_output Insert ESC annotations",
       "  --dbc_output Insert DBC annotations",
       "               This output format has the following further options:",
+      "",
       "               --negateIS   negate input space conditions ( @pre )",
       "               --negateOS   negate output space conditions",
       "                            (@post containing no $pre expressions)",
       "               --negateIO   negate input-output space conditions",
       "                            (@post containing some $pre expression(s))",
+      "",
+      "               --omitIS     do not print input space conditions",
+      "               --omitOS     do not print output space conditions",
+      "               --omitIO     do not print input-output space conditions",
+      "",
       "               --noclassify do not print annotations classified into",
       "                            input, output, i/o, and inexpressible",
       "                            (useful for comparing with other formats)",
@@ -108,6 +117,9 @@ class Annotate {
     boolean negateIS = false;
     boolean negateOS = false;
     boolean negateIO = false;
+    boolean omitIS = false;
+    boolean omitOS = false;
+    boolean omitIO = false;
 
 
     Daikon.output_style = OutputFormat.ESCJAVA;
@@ -120,7 +132,10 @@ class Annotate {
       new LongOpt(useDBC_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(useNEGATE_IS_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(useNEGATE_OS_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(useNEGATE_IO_SWITCH, LongOpt.NO_ARGUMENT, null, 0)
+      new LongOpt(useNEGATE_IO_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(useOMIT_IS_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(useOMIT_OS_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(useOMIT_IO_SWITCH, LongOpt.NO_ARGUMENT, null, 0)
     };
     Getopt g = new Getopt("daikon.tools.jtb.Annotate", args, "hs", longopts);
     int c;
@@ -154,6 +169,12 @@ class Annotate {
           negateOS = true;
         } else if (useNEGATE_IO_SWITCH.equals(option_name)) {
           negateIO = true;
+        } else if (useOMIT_IS_SWITCH.equals(option_name)) {
+          omitIS = true;
+        } else if (useOMIT_OS_SWITCH.equals(option_name)) {
+          omitOS = true;
+        } else if (useOMIT_IO_SWITCH.equals(option_name)) {
+          omitIO = true;
         } else {
           throw new RuntimeException("Unknown long option received: " +
                                      option_name);
@@ -212,21 +233,24 @@ class Annotate {
         System.exit(1);
       }
       Reader input = new FileReader(javafile);
-      File outputFile;
+      File outputFile = null;
       if (Daikon.output_style == OutputFormat.ESCJAVA)
         outputFile = new File(javafile + "-escannotated");
-      else if (Daikon.output_style == OutputFormat.DBCJAVA)
+      else if (Daikon.output_style == OutputFormat.DBCJAVA) {
         outputFile = new File(javafile + "-dbcannotated");
-      else
-        outputFile = new File(javafile + "-jmlannotated");
-      // outputFile.getParentFile().mkdirs();
+      }
       Writer output = new FileWriter(outputFile);
 
       debug.fine ("Processing file " + javafile);
 
       // Annotate the file
-      Ast.applyVisitorInsertComments(input, output,
-                   new AnnotateVisitor(ppts, slashslash, insert_inexpressible, setEsc, dbc, noclassify, negateIS, negateOS, negateIO));
+      Ast.applyVisitorInsertComments(input,
+                                     output,
+                                     new AnnotateVisitor(ppts, slashslash, insert_inexpressible,
+                                                         setEsc, dbc,
+                                                         noclassify,
+                                                         negateIS, negateOS, negateIO,
+                                                         omitIS, omitOS, omitIO));
     }
   }
 

@@ -34,7 +34,7 @@ import daikon.inv.unary.stringsequence.OneOfStringSequence;
 
 
 
-class AnnotateVisitor extends DepthFirstVisitor {
+public class AnnotateVisitor extends DepthFirstVisitor {
 
   public final static String lineSep = System.getProperty("line.separator");
 
@@ -55,6 +55,9 @@ class AnnotateVisitor extends DepthFirstVisitor {
   public boolean negateIS;
   public boolean negateOS;
   public boolean negateIO;
+  public boolean omitIS;
+  public boolean omitOS;
+  public boolean omitIO;
 
   public Vector addedComments = new Vector(); // elements are NodeTokens
 
@@ -67,29 +70,35 @@ class AnnotateVisitor extends DepthFirstVisitor {
   public AnnotateVisitor(PptMap ppts, boolean slashslash, boolean insert_inexpressible) {
     super();
     initialize(ppts, slashslash, insert_inexpressible, false/*esc*/, false/*dbc*/,
-               false/*noclassify*/, false/*negateIS*/, false/*negateOS*/, false/*negateIO*/);
+               false/*noclassify*/, false/*negateIS*/, false/*negateOS*/, false/*negateIO*/,
+               false/*omitIS*/, false/*omitOS*/, false/*omitIO*/);
   }
 
   public AnnotateVisitor(PptMap ppts, boolean slashslash, boolean insert_inexpressible, boolean esc, boolean dbc,
-                         boolean noclassify, boolean negateIS, boolean negateOS,
-                         boolean negateIO) {
+                         boolean noclassify, boolean negateIS, boolean negateOS, boolean negateIO,
+                         boolean omitIS, boolean omitOS, boolean omitIO) {
     initialize(ppts, slashslash, insert_inexpressible, esc, dbc,
-               noclassify, negateIS, negateOS, negateIO);
+               noclassify, negateIS, negateOS, negateIO,
+               omitIS, omitOS, omitIO);
   }
 
   private void initialize(PptMap ppts, boolean slashslash, boolean insert_inexpressible, boolean esc, boolean dbc,
-                          boolean noclassify, boolean negateIS, boolean negateOS,
-                          boolean negateIO) {
+                          boolean noclassify, boolean negateIS, boolean negateOS, boolean negateIO,
+                         boolean omitIS, boolean omitOS, boolean omitIO) {
     this.ppts = ppts;
     this.slashslash = slashslash;
     this.insert_inexpressible = insert_inexpressible;
-    // only one of the next two should be true; should do something other than one flag
+    // only one of the next two should be true; should do something
+    // other than one flag. Change to use OutputFormat
     this.esc = esc;
-    this.dbc = dbc; // cp: change to use OutputFormat
+    this.dbc = dbc;
     this.noclassify = noclassify;
     this.negateIS = negateIS;
     this.negateOS = negateOS;
     this.negateIO = negateIO;
+    this.omitIS = omitIS;
+    this.omitOS = omitOS;
+    this.omitIO = omitIO;
   }
 
   // Like Ast.addComment, but also keeps a list of what comments were added.
@@ -221,10 +230,17 @@ class AnnotateVisitor extends DepthFirstVisitor {
     super.visit(n);             // call "accept(this)" on each field
 
     if (! Ast.contains(n.f0, "public")) {
-	if(!dbc) { // CP: is this also for jml, or only for esc?
+      //	if(!dbc) {
 	    addComment(n, "/*@ spec_public */ ");
-	}
+            //	}
     }
+  }
+
+  // CP: is there a better way?
+  String signature(PptMap ppts, Node n) {
+    Vector matching_ppts = Ast.getMatches(ppts, n);
+    Assert.assertTrue(!matching_ppts.isEmpty());
+    return ((PptTopLevel)matching_ppts.firstElement()).ppt_name.getSignature();
   }
 
   // Node n is a MethodDeclaration or a ConstructorDeclaration
@@ -541,6 +557,8 @@ class AnnotateVisitor extends DepthFirstVisitor {
         || (inv.endsWith(".toString"))
         || (inv.indexOf("warning: method") != -1)
         || (inv.indexOf("inexpressible") != -1)
+        || (inv.indexOf("NaN") != -1) // ask mike about this
+        || (inv.indexOf("Infinity") != -1) // ask mike about this
         || (dbc && (inv.indexOf("getClass()") != -1))  // Jtest doesn't allow
         ) {
       return false;
@@ -554,13 +572,11 @@ class AnnotateVisitor extends DepthFirstVisitor {
   public HashMap nodeToInvs = new HashMap();
 
   /**
-   * Stores the different types of invariants for a given node of the AST.
-   * Note that "invariant" type invariants (as opposed to pres or posts)
-   * are not stored here, because they belong to the whole class and not
-   * only to a method. NOTE: the whole scheme currently only works for
-   * ASTs that contain only one class delcaration. I am not sure if this
-   * is always the case for the types of ASTs that AnnotateVisitor works
-   * on, but that is what I assume presently.
+   * Stores the different types of invariants for a given node of the
+   * AST.  the whole scheme currently only works for ASTs that contain
+   * only one class declaration. I am not sure if this is always the
+   * case for the types of ASTs that AnnotateVisitor works on, but
+   * that is what I assume presently.
    *
    * Invariants are classified into the following categories:
    *   input space
@@ -587,6 +603,8 @@ class AnnotateVisitor extends DepthFirstVisitor {
       this.osne = new Vector();
       this.io = new Vector();
       this.ione = new Vector();
+      this.inv = new Vector();
+      this.invne = new Vector();
     }
   }
 
@@ -635,9 +653,36 @@ class AnnotateVisitor extends DepthFirstVisitor {
     // CASE: Invariant
     } else {
       Assert.assertTrue(type.indexOf("invariant") != -1, inv + " " + type );
-      if ( expressible(inv) ) { classInvs.add(inv);
-      } else { classInvsNe.add(inv); }
+      if ( expressible(inv) ) { invs.inv.add(inv); classInvs.add(inv); //CP not entirely satisfactory
+      } else { invs.invne.add(inv); classInvsNe.add(inv); }
     }
+  }
+
+  public class InvInfo {
+    public String dbc = "";
+    public String daikon = "";
+    public String samples = "";
+    public String invclass = "";
+    public String method = "";
+  }
+
+  public InvInfo getInfo(String inv) {
+    InvInfo ii = new InvInfo();
+    ii.dbc = inv.replaceFirst(".*<DBC>(.*)</DBC>.*", "$1");
+    ii.daikon = inv.replaceFirst(".*<DAIKON>(.*)</DAIKON>.*", "$1");
+    ii.samples = inv.replaceFirst(".*<SAMPLES>(.*)</SAMPLES>.*", "$1");
+    ii.invclass = inv.replaceFirst(".*<DAIKONCLASS>(.*)</DAIKONCLASS>.*", "$1");
+    ii.method = inv.replaceFirst(".*<METHOD>(.*)</METHOD>.*", "$1");
+    return ii;
+  }
+
+  public String annotationDBC(InvInfo ii) {
+    return
+      " <DBC> " + ii.dbc + " </DBC> "
+      + " <DAIKON> " + ii.daikon + " </DAIKON> "
+      + " <SAMPLES> " + ii.samples + " </SAMPLES> "
+      + " <DAIKONCLASS> " + ii.invclass  + " </DAIKONCLASS> "
+      + " <METHOD> " + ii.method  + " </METHOD> ";
   }
 
   public void addInvariantsToNodes() {
@@ -659,129 +704,281 @@ class AnnotateVisitor extends DepthFirstVisitor {
         // If negateIS or negateOS, invariants are no longer included
         // because we are negating them at entry or exit.
 
+        // ------------------ Class Invariant ----------------------------
+        // These are printed for reference, but notice they're not
+        // actual annotations.
+
+        boolean atLeastOne = false;
+        int invnum = 0;
+
+        for(Iterator it = invs.invne.iterator() ; it.hasNext() ; ) {
+          String inv = (String)it.next();
+          addComment(node, javaLineComment("! (inexpressible) " + inv), true);
+        }
+        for(Iterator it = invs.inv.iterator() ; it.hasNext() ; ) {
+          String inv = (String)it.next();
+          addComment(node, javaLineComment("!" + inv), true);
+        }
+
+        if(atLeastOne) {
+          addComment(node, javaLineComment(" ---------------- "), true);
+          addComment(node, javaLineComment(" Class invariants "), true);
+        }
+
+        // ------------------ Inexpressible D,F,R ------------------------
+        // Printed for reference.
+
+        atLeastOne = false;
         addComment(node, lineSep, true);
 
+        if(!omitIO) {
           for(Iterator it = invs.ione.iterator() ; it.hasNext() ; ) {
             String inv = (String)it.next();
-            addComment(node, ("/*! @post " + inv + " */\n"), true);
+            addComment(node, ("/*! post " + inv + " */\n"), true);
+            atLeastOne = true;
           }
-
+        }
+        if(!omitOS) {
           for(Iterator it = invs.osne.iterator() ; it.hasNext() ; ) {
             String inv = (String)it.next();
-            addComment(node, ("/*! @post " + inv + " */\n"), true);
+            addComment(node, ("/*! post " + inv + " */\n"), true);
+            atLeastOne = true;
           }
-
+        }
+        if(!omitIS) {
           for(Iterator it = invs.isne.iterator() ; it.hasNext() ; ) {
             String inv = (String)it.next();
-            addComment(node, ("/*! @pre " + inv + " */\n"), true);
+            addComment(node, ("/*! pre " + inv + " */\n"), true);
+            atLeastOne = true;
           }
-
-        addComment(node, javaLineComment(" ------------- "), true);
-        addComment(node, javaLineComment(" Inexpressible "), true);
-        addComment(node, lineSep, true);
-
+        }
+        if(atLeastOne) {
+          addComment(node, javaLineComment(" ------------- "), true);
+          addComment(node, javaLineComment(" Inexpressible "), true);
+          addComment(node, lineSep, true);
+        }
 
         // ------------------ IO Space ----------------------------
 
-        if(negateIO) {
-          String negated = "";
-          for(Iterator it = invs.io.iterator() ; it.hasNext() ; ) {
-            String inv = (String)it.next();
-            negated += "!( " + inv + " )";
-            if (it.hasNext()) { negated += " || "; }
-          }
-          if (! "".equals(negated)) {
-            addComment(node, javaLineComment("* @post " + negated), true);
-          }
+        atLeastOne = false;
+        if(!omitIO) {
+          if(negateIO) {
+            // WARNING!!! CP: need to fix (make it look like IS below)
+            //             String negated = "";
+            //             for(Iterator it = invs.io.iterator() ; it.hasNext() ; ) {
+            //               String inv = (String)it.next();
+            //               negated += "!( " + inv + " )";
+            //               if (it.hasNext()) { negated += " || "; }
+            //             }
+            //             if (! "".equals(negated)) {
+            //               addComment(node, javaLineComment("* @post " + negated), true);
+            //               atLeastOne = true;
+            //             }
 
-        } else {
-          for(Iterator it = invs.io.iterator() ; it.hasNext() ; ) {
-            String inv = (String)it.next();
-            addComment(node, javaLineComment("* @post " + inv), true);
+          } else {
+            for(Iterator it = invs.io.iterator() ; it.hasNext() ; ) {
+              String inv = (String)it.next();
+              addComment(node, javaLineComment("*" + inv + "<FUNCTIONAL></FUNCTIONAL>"), true);
+              atLeastOne = true;
+            }
+          }
+          if(atLeastOne) {
+            addComment(node, javaLineComment("* ---------------- "), true);
+            addComment(node, javaLineComment("* Functional Space "), true);
+            addComment(node, lineSep, true);
           }
         }
-
-        addComment(node, javaLineComment("* -----------   "), true);
-        addComment(node, javaLineComment("* IO Relation   "), true);
-        addComment(node, lineSep, true);
-
 
         // -------------- Output Space ----------------------------
 
-        // CASE 1: We want the output space negated
-        if(negateOS) {
-          String negated = "";
-          for(Iterator it = invs.os.iterator() ; it.hasNext() ; ) {
-            String inv = (String)it.next();
-            negated += "!( " + inv + " )";
-            if (it.hasNext()) { negated += " || "; }
-          }
-          if(!classInvs.isEmpty()) {
-            // we also need to add negations of the invariants
-            if(!invs.os.isEmpty()) { negated += " || "; }
-            for(Iterator it = classInvs.iterator() ; it.hasNext() ; ) {
-              String inv = (String)it.next();
-              negated += "!( " + inv + " )";
-              if (it.hasNext()) { negated += " || "; }
+        atLeastOne = false;
+
+        // invs.inv will be empty if this node is not one containing
+        // invariant nodes (which is the case for method declaration
+        // nodes). Thus the following "if" clause has the effect of
+        // inserting invariants as postconditions on method calls, but
+        // not on class declarations.
+        if(invs.inv.isEmpty()) {
+
+          boolean isStatic = false;
+          if (node instanceof jtb.syntaxtree.MethodDeclaration) {
+            NodeListOptional nodeList = ((jtb.syntaxtree.MethodDeclaration)node).f0;
+            for (Enumeration i = nodeList.elements() ; i.hasMoreElements() ; ) {
+              String modifier = ((NodeChoice)i.nextElement()).choice.toString();
+              if (modifier.equals("static")) {
+                isStatic = true;
+              }
             }
           }
 
-          if (! "".equals(negated)) {
-            addComment(node, javaLineComment("* @post " + negated), true);
+          if (!isStatic) {
+            // Include class invariants
+            invnum = 0; // CP: have a more robust way of naming
+            // invariants (this one is sensitive to their
+            // order in classInvs container)
+            for(Iterator it = classInvs.iterator() ; it.hasNext() ; ) {
+              String inv = (String)it.next();
+              Assert.assertTrue(inv.matches(".*<METHOD>\\s*null\\s*</METHOD>.*"));
+              inv = inv.replaceFirst("(.*<METHOD>\\s*)(null)(\\s*</METHOD>.*)", "$1" + signature(ppts,node) + "$3");
+              if (node instanceof jtb.syntaxtree.ConstructorDeclaration) {
+                addComment(node, javaLineComment("*" + inv + "<CLASS_INV></CLASS_INV><RANGE></RANGE><CONSTRUCTOR></CONSTRUCTOR>"), true);
+              } else {
+                addComment(node, javaLineComment("*" + inv + "<CLASS_INV></CLASS_INV><RANGE></RANGE>"), true);
+              }
+              atLeastOne = true;
+            }
           }
 
-        // CASE 2: We do NOT want the output space negated
-        } else {
-          for(Iterator it = invs.os.iterator() ; it.hasNext() ; ) {
-            String inv = (String)it.next();
-            addComment(node, javaLineComment("* @post " + inv), true);
-          }
         }
 
-        addComment(node, javaLineComment("* ------------  "), true);
-        addComment(node, javaLineComment("* Output Space  "), true);
-        addComment(node, lineSep, true);
+        if(!omitOS) {
+          // CASE 1: We want the output space negated
+          if(negateOS) {
+            // WARNING!!! CP: need to fix (make it look like IS below)
+            //             String negated = "";
+            //             for(Iterator it = invs.os.iterator() ; it.hasNext() ; ) {
+            //               String inv = (String)it.next();
+            //               negated += "!( " + inv + " )";
+            //               if (it.hasNext()) { negated += " || "; }
+            //             }
+            //             if(!classInvs.isEmpty()) {
+
+            //               // we also need to add negations of the invariants
+            //               if(!invs.os.isEmpty()) { negated += " || "; }
+            //               for(Iterator it = classInvs.iterator() ; it.hasNext() ; ) {
+            //                 String inv = (String)it.next();
+            //                 negated += "!( " + inv + " )";
+            //                 if (it.hasNext()) { negated += " || "; }
+            //               }
+            //             }
+
+            //             if (! "".equals(negated)) {
+            //               addComment(node, javaLineComment("* @post " + negated), true);
+            //               atLeastOne = true;
+            //             }
+
+            // CASE 2: We do NOT want the output space negated
+          } else {
+            for(Iterator it = invs.os.iterator() ; it.hasNext() ; ) {
+              String inv = (String)it.next();
+              addComment(node, javaLineComment("*" + inv + "<RANGE></RANGE>"), true);
+              atLeastOne = true;
+            }
+          }
+          if(atLeastOne) {
+            addComment(node, javaLineComment("* ------------  "), true);
+            addComment(node, javaLineComment("* Output Space  "), true);
+            addComment(node, lineSep, true);
+          }
+        }
 
         // -------------- Input Space -----------------------------
 
-        // CASE 1: We want the input space negated
-        if(negateIS) {
-          String negated = "";
-          for(Iterator it = invs.is.iterator() ; it.hasNext() ; ) {
-            String inv = (String)it.next();
-            negated += "!( " + inv + " )";
-            if (it.hasNext()) { negated += " || "; }
-          }
+        atLeastOne = false;
+        if(!omitIS) {
 
-          if(!classInvs.isEmpty()) {
-            // we also need to add negations of the invariants
-            if(!invs.is.isEmpty()) { negated += " || "; }
-            for(Iterator it = classInvs.iterator() ; it.hasNext() ; ) {
-              String inv = (String)it.next();
-              negated += "!( " + inv + " )";
-              if (it.hasNext()) { negated += " || "; }
+          // invs.inv will be empty if this node is not one containing
+          // invariant nodes (which is the case for method declaration
+          // nodes). Thus the following "if" clause has the effect of
+          // inserting invariants as preconditions on method calls, but
+          // not on class declarations.
+          if(invs.inv.isEmpty()) {
+
+            //  Invariants as preconditions makes no sense for a constructor. The only
+            // reason they might be added here is because class
+            // invariants are also inserted as preconditions.
+            if(!(node instanceof jtb.syntaxtree.ConstructorDeclaration)) {
+
+              // Include class invariants
+
+              boolean isStatic = false;
+              if (node instanceof jtb.syntaxtree.MethodDeclaration) {
+                NodeListOptional nodeList = ((jtb.syntaxtree.MethodDeclaration)node).f0;
+                for (Enumeration i = nodeList.elements() ; i.hasMoreElements() ; ) {
+                  String modifier = ((NodeChoice)i.nextElement()).choice.toString();
+                  if (modifier.equals("static")) {
+                    isStatic = true;
+                  }
+                }
+              }
+
+              if (!isStatic) {
+                invnum = 0;
+                for(Iterator it = classInvs.iterator() ; it.hasNext() ; ) {
+                  String inv = (String)it.next();
+                  Assert.assertTrue(inv.matches(".*<METHOD>\\s*null\\s*</METHOD>.*"));
+                  inv = inv.replaceFirst("(.*<METHOD>\\s*)(null)(\\s*</METHOD>.*)", "$1" + signature(ppts,node) + "$3");
+                  addComment(node, javaLineComment("*" + inv + "<CLASS_INV></CLASS_INV><DOMAIN></DOMAIN>"), true);
+                  atLeastOne = true;
+                }
+              }
             }
           }
+          // CASE 1: We want the input space negated
+          if(negateIS) {
+            InvInfo negatedii = new InvInfo();
+            negatedii.dbc = " ( ";
+            boolean first = true;
+            for(Iterator it = invs.is.iterator() ; it.hasNext() ; ) {
+              String inv = (String)it.next();
+              // Invariant now has other stuff appended to it. Maybe this stuff
+              // should be included as a different comment, not as part of the
+              // invariant comment.
+              InvInfo ii = getInfo(inv);
+              if (first) { negatedii.method = ii.method; first = false; }
+              Assert.assertTrue(ii.method.equals(negatedii.method));
+              negatedii.samples +=  " " + ii.samples;
+              negatedii.daikon += " " +  ii.daikon;
+              negatedii.invclass += " " + ii.invclass;
+              negatedii.dbc +=  "!( " + ii.dbc + " )";
+              if (it.hasNext()) { negatedii.dbc += " || "; }
+            }
+            negatedii.dbc += " )";
 
-          if (! "".equals(negated)) {
-            addComment(node, javaLineComment("* @pre " + negated), true);
+            // CP: current thought is NOT to add negation of invariants
+            //             if(!classInvs.isEmpty()) {
+            //               // we also need to add negations of the invariants
+            //               if(!invs.is.isEmpty()) { negated += " || "; }
+            //               for(Iterator it = classInvs.iterator() ; it.hasNext() ; ) {
+            //                 String inv = (String)it.next();
+            //                 negated += "!( " + inv + " )";
+            //                 if (it.hasNext()) { negated += " || "; }
+            //               }
+            //             }
+
+            // Currently the samples value of a <NEGATED_PRE> is the min of its pres.
+            if (! " (  )".equals(negatedii.dbc)) { // CP: need the " " before "(" -- fragile, fix
+              System.out.println("SAMPLES=" + negatedii.samples);
+              String sa[] = negatedii.samples.trim().split("\\s+");
+              long minSamples = 1;
+              for(int i = 0 ; i < sa.length ; i++) {
+                long l = (new Long(sa[i])).longValue();
+                if (l < minSamples) { minSamples = l; }
+              }
+              negatedii.samples = Long.toString(minSamples);
+              addComment(node, javaLineComment("*" + annotationDBC(negatedii) + "<NEGATED_PRE></NEGATED_PRE><DOMAIN></DOMAIN>"), true);
+              atLeastOne = true;
+            }
+
+            // CASE 2: We do NOT want the input space negated
+          } else {
+            for(Iterator it = invs.is.iterator() ; it.hasNext() ; ) {
+              String inv = (String)it.next();
+              addComment(node, javaLineComment("*" + inv + "<DOMAIN></DOMAIN>"), true);
+              atLeastOne = true;
+            }
           }
+          if(atLeastOne) {
+            addComment(node, javaLineComment("* -----------   "), true);
+            addComment(node, javaLineComment("* Input Space   "), true);
+            addComment(node, lineSep, true);
 
-        // CASE 2: We do NOT want the input space negated
-        } else {
-          for(Iterator it = invs.is.iterator() ; it.hasNext() ; ) {
-            String inv = (String)it.next();
-            addComment(node, javaLineComment(" @pre " + inv), true);
           }
         }
-
-        addComment(node, javaLineComment("* -----------   "), true);
-        addComment(node, javaLineComment("* Input Space   "), true);
-        addComment(node, lineSep, true);
-
       }
     }
   }
+
 
 
 
