@@ -107,6 +107,24 @@ public final class TestQuant extends TestCase {
     assertTrue(Quant.setEqual(new int[] { -1, 2, 3, 4 }, new int[] { 5 }) == false);
   }
 
+  public static void test_subsetOf() {
+    assertTrue(Quant.subsetOf(new int[] {}, new int[] {}) == true);
+    assertTrue(Quant.subsetOf(new int[] { 1 }, new int[] {}) == false);
+    assertTrue(Quant.subsetOf(new int[] { }, new int[] { 1 }) == true);
+    assertTrue(Quant.subsetOf(new int[] { 1 }, new int[] { 1 }) == true);
+    assertTrue(Quant.subsetOf(new int[] { 1, 2, 3 }, new int[] { 1, 2, 3 }) == true);
+    assertTrue(Quant.subsetOf(new int[] { 1 }, new int[] { 1, 2, 3 }) == true);
+    assertTrue(Quant.subsetOf(new int[] { 2, 1 }, new int[] { 1, 2, 3 }) == true);
+    assertTrue(Quant.subsetOf(new int[] { 3, 1 }, new int[] { 1, 2, 3 }) == true);
+    assertTrue(Quant.subsetOf(new int[] { 1, 2, 3 }, new int[] { 2, 3, 1 }) == true);
+    assertTrue(Quant.subsetOf(new int[] { 1, 2, 3 }, new int[] { 2, 3 }) == false);
+    assertTrue(Quant.subsetOf(new int[] { 1, 2, 3 }, new int[] { 2 }) == false);
+    assertTrue(Quant.subsetOf(new int[] { 1, 2, 3 }, new int[] { 3, 2, 1 }) == true);
+    assertTrue(Quant.subsetOf(new int[] { 1, 2, 3 }, new int[] { 3, 4, 5 }) == false);
+    assertTrue(Quant.subsetOf(new int[] { -1, }, new int[] { 2, 3, 4, 5 }) == false);
+    assertTrue(Quant.subsetOf(new int[] { -1, 2, 3, 4 }, new int[] { 5 }) == false);
+  }
+
   public static void test_isReverse() {
     assertTrue(Quant.isReverse(new int[] {}, new int[] {}) == true);
     assertTrue(Quant.isReverse(new int[] { 1 }, new int[] {}) == false);

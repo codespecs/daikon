@@ -520,6 +520,7 @@ The correct way to build the system is to run 'make'.
   }
 #endif
 
+
 /** True iff seq1 is the reverse of seq2.
  *
  * Meaning (in pseudo-FOL):
@@ -563,6 +564,44 @@ The correct way to build the system is to run 'make'.
   return true;
 }
 #endif
+
+
+/**
+ * True iff seq1 is a subset of seq2, when the sequences are
+ * considered as sets.
+ */
+/*@ pure */ public static boolean subsetOf(_TYPE[] seq1, _TYPE[] seq2) {
+  for (int i = 0 ; i < seq1.length ; i++) {
+      if (!memberOf(seq1[i], seq2)) {
+          return false;
+      }
+  }
+  return true;
+}
+
+#if (defined(OBJECT))
+/*@ pure */ public static boolean subsetOf(Collection seq1, _TYPE[] seq2) {
+  return subsetOf(seq1.toArray(new _TYPE[]{}), seq2);
+}
+#endif
+
+#if (defined(OBJECT))
+/*@ pure */ public static boolean subsetOf(_TYPE[] seq1, Collection seq2) {
+    return subsetOf(seq1, seq2.toArray(new _TYPE[]{}));
+}
+#endif
+
+#if (defined(BYTE) || defined(INT) || defined(LONG) || defined(FLOAT) || defined(DOUBLE))
+/*@ pure */ public static boolean subsetOf(_TYPE[] seq1, COMPATIBLE[] seq2) {
+    for (int i = 0 ; i < seq1.length ; i++) {
+        if (!memberOf(seq1[i], seq2)) {
+            return false;
+        }
+    }
+    return true;
+}
+#endif
+
 
 /**
  * Returns true iff seq contains no duplicate elements.
