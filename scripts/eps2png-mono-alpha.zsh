@@ -18,7 +18,6 @@ width=$2
 temp=/tmp/eps2png$$.pgm
 # Default to whatever's on our path
 pnmtopng=`which pnmtopng`
-PATH=/afs/csail/group/pag/software/bin:$PATH
 if [ -x /g6/users/smcc/bin/pnmtopng ]; then
     # We need at least version 2.38, not 2.37.5 as in Red Hat.
     pnmtopng=/g6/users/smcc/bin/pnmtopng
