@@ -152,7 +152,7 @@ public final class Daikon {
 	 * partially reflexive invariants.
 	 * Default is false.
 	 **/
-	public static boolean dkconfig_undo_opts = true;
+	public static boolean dkconfig_undo_opts = false;
 
 	/**
 	 * If true, no invariants will be guarded.  Guarding means that
