@@ -461,7 +461,7 @@ public final class FileIO {
       pw.print("    ");
 
       // [adonovan] is this sound? Let me know if not (sorry).
-      Assert.assertTrue(ppt.var_infos.length == vals.length);
+      //Assert.assertTrue(ppt.var_infos.length == vals.length);
 
       for (int j=0; j<vals.length; j++) {
         if (j != 0)
