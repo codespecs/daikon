@@ -1663,8 +1663,12 @@ public abstract class VarInfoName
     protected String dbc_name_impl(VarInfo v) {
       return term.dbc_name(v);
     }
+    // XXX temporary fix: sometimes long is passed as index (utilMDE.StopWatch).
+    // I can't find where the VarInfo for "index" is found. Wherever that is,
+    // we should check if its type is long, and do the casting only for that
+    // case.
     protected String dbc_name_impl(String index, VarInfo v) {
-      return term.dbc_name(v) + "[" + index + "]";
+      return term.dbc_name(v) + "[(int)" + index + "]";
     }
     protected String identifier_name_impl(String index) {
       if (index.equals(""))
