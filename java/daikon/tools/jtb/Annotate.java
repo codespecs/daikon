@@ -73,15 +73,12 @@ public class Annotate {
 
   public static final Logger debug = Logger.getLogger("daikon.tools.jtb.Annotate");
 
-  // If the --max_invariants_pp option is given, this variable is set
-  // to the maximum number of invariants out annotate per program point.
-  protected static int maxInvariantsPP = -1;
-
   public static final String useJML_SWITCH = "jml_output";
   public static final String useJAVA_SWITCH = "java_output";
   public static final String useDBC_SWITCH = "dbc_output";
   public static final String wrapXML_SWITCH = "wrap_xml";
   public static final String max_invariants_pp_SWITCH = "max_invariants_pp";
+  public static final String no_reflection_SWITCH = "no_reflection";
 
   private static String usage =
     UtilMDE.join(new String[] {
@@ -98,7 +95,14 @@ public class Annotate {
       "  --max_invariants_pp N",
       "                 Annotate the sources with at most N invariants per program point",
       "                 (the annotated invariants will be an arbitrary subset of the",
-      "                  total number of invariants for the program point)."
+      "                 total number of invariants for the program point).",
+      "  --no_reflection",
+      "                  (This is an experimental option.) Annotate uses reflection",
+      "                  to determine whether a method overrides/implements another",
+      "                  method. If this flag is given, Annotate will not use reflection",
+      "                  to access information about an instrumented class. This means",
+      "                  that in the JML and ESC formats, no \"also\" annotations",
+      "                  will be inserted."
     },
                  lineSep);
 
@@ -125,6 +129,8 @@ public class Annotate {
     boolean slashslash = false;
     boolean insert_inexpressible = false;
     boolean setLightweight = true;
+    boolean useReflection = true;
+    int maxInvariantsPP = -1;
 
     Daikon.output_style = OutputFormat.ESCJAVA;
     daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
@@ -135,7 +141,8 @@ public class Annotate {
       new LongOpt(useJAVA_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(useDBC_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(wrapXML_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(max_invariants_pp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0)
+      new LongOpt(max_invariants_pp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(no_reflection_SWITCH, LongOpt.NO_ARGUMENT, null, 0)
     };
     Getopt g = new Getopt("daikon.tools.jtb.Annotate", args, "hs", longopts);
     int c;
@@ -145,7 +152,9 @@ public class Annotate {
         // got a long option
         String option_name = longopts[g.getLongind()].getName();
 
-        if (max_invariants_pp_SWITCH.equals(option_name)) {
+        if (no_reflection_SWITCH.equals(option_name)) {
+          useReflection = false;
+        } else if (max_invariants_pp_SWITCH.equals(option_name)) {
           try {
             maxInvariantsPP = Integer.parseInt(g.getOptarg());
           } catch (NumberFormatException e) {
@@ -241,7 +250,8 @@ public class Annotate {
       // Annotate the file
       try {
       Ast.applyVisitorInsertComments(input, output,
-                   new AnnotateVisitor(ppts, slashslash, insert_inexpressible, setLightweight));
+                   new AnnotateVisitor(ppts, slashslash, insert_inexpressible, setLightweight, useReflection,
+                                       maxInvariantsPP));
       } catch (Error e) {
         if (e.getMessage().startsWith("Didn't find class ")) {
           throw new Daikon.TerminationMessage(e.getMessage() + "." + lineSep
