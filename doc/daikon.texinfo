@@ -2033,6 +2033,9 @@ invariants must be justified.  Does not print "uninteresting" invariants
 @item -u
 Include "uninteresting" invariants in the tree of differing invariants.
 
+@item -y
+Include "unjustified" invariants. 
+
 @item -a
 Display the tree of all invariants.  Includes invariants that are the
 same in file1 and file2, and unjustified invariants.
