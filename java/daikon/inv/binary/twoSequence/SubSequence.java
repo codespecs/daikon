@@ -42,15 +42,11 @@ public class SubSequence extends TwoSequence {
     return new SubSequence(ppt);
   }
 
-  protected Invariant resurrect_done(int[] permutation) {
-    Assert.assert(permutation.length == 2);
-    Assert.assert(ArraysMDE.fn_is_permutation(permutation));
-    if (permutation[0] == 1) {
-      // was a swap
-      boolean tmp = var1_in_var2;
-      var1_in_var2 = var2_in_var1;
-      var2_in_var1 = tmp;
-    }
+  protected Invariant resurrect_done_swapped() {
+    // was a swap
+    boolean tmp = var1_in_var2;
+    var1_in_var2 = var2_in_var1;
+    var2_in_var1 = tmp;
     return this;
   }
 
@@ -167,25 +163,32 @@ public class SubSequence extends TwoSequence {
 
   public void add_modified(long[] a1, long[] a2, int count) {
     Assert.assert(var1_in_var2 || var2_in_var1);
-    // XXXXX We need to be able to "half-falsify" to flow correctly
-    // We should be broken up into two invariants
+
+    boolean new_var1_in_var2 = var1_in_var2;
+    boolean new_var2_in_var1 = var2_in_var1;
+    boolean changed = false;
     if (var1_in_var2 && (ArraysMDE.indexOf(a2, a1) == -1)) {
-      if (!var2_in_var1) {
-	destroy();
-	return;
-      }
-      // Set later so that resurrected invariant has old state
-      var1_in_var2 = false;
+      new_var1_in_var2 = false;
+      changed = true;
     }
     if (var2_in_var1 && (ArraysMDE.indexOf(a1, a2) == -1)) {
-      if (!var1_in_var2) {
-	destroy();
-	return;
-      }
-      // Set later so that resurrected invariant has old state
-      var2_in_var1 = false;
+      new_var1_in_var2 = false;
+      changed = true;
     }
-    Assert.assert(var1_in_var2 || var2_in_var1);
+
+    if (! changed)
+      return;
+
+    if (! (new_var1_in_var2 || new_var2_in_var1)) {
+      flowThis();
+      destroy();
+      return;
+    }
+
+    // changed == true but not dead yet
+    flowClone();
+    var1_in_var2 = new_var1_in_var2;
+    var2_in_var1 = new_var2_in_var1;
   }
 
 

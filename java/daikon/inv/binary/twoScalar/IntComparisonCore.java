@@ -18,7 +18,7 @@ public final class IntComparisonCore
   // specified flag is set.  For instance, we might set obvious_can_be_lt
   // for "b[0] cmp max(b)".  It would be interesting and relevant if we
   // found those quantities equal, but if the relationship can be "<", then
-  // it is "<=" (because we know they can be "="), so it's obvious and
+  // it is "<=" (because we know they can be "=="), so it's obvious and
   // uninteresting.
   // In other words, if the thing that's obviously possible hsn't yet
   // happened, then the invariant is interesting.
@@ -59,43 +59,65 @@ public final class IntComparisonCore
     }
   }
 
-  public void permute(int[] permutation) {
-    Assert.assert(permutation.length == 2);
-    Assert.assert(ArraysMDE.fn_is_permutation(permutation));
-    if (permutation[0] == 1) {
-      // was a swap
-      boolean tmp;
+  // for resurrection
+  public void swap() {
+    boolean tmp;
 
-      tmp = can_be_lt;
-      can_be_gt = can_be_lt;
-      can_be_gt = tmp;
+    tmp = can_be_lt;
+    can_be_gt = can_be_lt;
+    can_be_gt = tmp;
 
-      tmp = obvious_can_be_lt;
-      obvious_can_be_lt = obvious_can_be_gt;
-      obvious_can_be_gt = tmp;
+    tmp = obvious_can_be_lt;
+    obvious_can_be_lt = obvious_can_be_gt;
+    obvious_can_be_gt = tmp;
 
-      tmp = obvious_can_be_le;
-      obvious_can_be_le = obvious_can_be_ge;
-      obvious_can_be_ge = tmp;
-    }
+    tmp = obvious_can_be_le;
+    obvious_can_be_le = obvious_can_be_ge;
+    obvious_can_be_ge = tmp;
   }
 
   public void add_modified(long v1, long v2, int count) {
-    if (v1 == v2)
-      can_be_eq = true;
-    else if (v1 < v2)
-      can_be_lt = true;
-    else
-      can_be_gt = true;
-    if ((can_be_lt && can_be_gt)
-        || (only_check_eq && (can_be_lt || can_be_gt))
-        || (obvious_can_be_lt && can_be_lt)
-        || (obvious_can_be_gt && can_be_gt)
-        || (obvious_can_be_le && can_be_lt && can_be_eq)
-        || (obvious_can_be_ge && can_be_gt && can_be_eq)) {
+
+    boolean new_can_be_eq = can_be_eq;
+    boolean new_can_be_lt = can_be_lt;
+    boolean new_can_be_gt = can_be_gt;
+    boolean changed = false;
+
+    if (v1 == v2) {
+      if (! can_be_eq) {
+	new_can_be_eq = true;
+	changed = true;
+      }
+    } else if (v1 < v2) {
+      if (! can_be_lt) {
+	new_can_be_lt = true;
+	changed = true;
+      }
+    } else {
+      if (! can_be_gt) {
+	new_can_be_gt = true;
+	changed = true;
+      }
+    }
+
+    if (! changed)
+      return;
+
+    if ((new_can_be_lt && new_can_be_gt)
+        || (only_check_eq && (new_can_be_lt || new_can_be_gt))
+        || (obvious_can_be_lt && new_can_be_lt)
+        || (obvious_can_be_gt && new_can_be_gt)
+        || (obvious_can_be_le && new_can_be_lt && new_can_be_eq)
+        || (obvious_can_be_ge && new_can_be_gt && new_can_be_eq)) {
+      wrapper.flowThis();
       wrapper.destroy();
       return;
     }
+
+    wrapper.flowClone();
+    can_be_eq = new_can_be_eq;
+    can_be_lt = new_can_be_lt;
+    can_be_gt = new_can_be_gt;
   }
 
   // This is very tricky, because whether two variables are equal should
@@ -145,7 +167,7 @@ public final class IntComparisonCore
     if (eq && (! lt) && (! gt)) {
       return "==";
     } else if (lt || eq || gt) {
-      // TODO: renable after making distribution.
+      // TODO: reenable after making distribution.
       // Assert.assert(lt || gt);
       String inequality = (lt ? "<" : gt ? ">" : "");
       String comparison = (eq ? "=" : "");

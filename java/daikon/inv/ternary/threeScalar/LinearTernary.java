@@ -26,6 +26,9 @@ public class LinearTernary extends ThreeScalar {
   public static LinearTernary instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
 
+    // temporarily
+    if (true) return null;
+
     VarInfo x = ppt.var_infos[0];
     VarInfo y = ppt.var_infos[1];
     VarInfo z = ppt.var_infos[2];

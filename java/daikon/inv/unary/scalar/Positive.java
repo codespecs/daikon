@@ -27,6 +27,7 @@ public class Positive extends SingleScalar {
   // This is called when a new sample is encountered
   public void add_modified(long v, int count) {
     if (v <= 0) {
+      flowThis();
       destroy();
       return;
     }

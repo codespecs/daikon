@@ -19,6 +19,8 @@ public final class LinearBinaryCore
 
   public int values_seen = 0;
 
+  // XXX Why do we have to wait for 4 datapoints?  Aren't two points
+  // enough to form a line?  Code would be much simpler without this.
   final static int MINPAIRS = 4;
 
   long[] x_cache = new long[MINPAIRS];
@@ -31,30 +33,28 @@ public final class LinearBinaryCore
   public Object clone() {
     try {
       LinearBinaryCore result = (LinearBinaryCore) super.clone();
-      result.x_cache = (long[]) x_cache.clone();
-      result.y_cache = (long[]) y_cache.clone();
+      if (x_cache != null)
+	result.x_cache = (long[]) x_cache.clone();
+      if (y_cache != null)
+	result.y_cache = (long[]) y_cache.clone();
       return result;
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can't happen
     }
   }
 
-  public void permute(int[] permutation) {
-    Assert.assert(permutation.length == 2);
-    Assert.assert(ArraysMDE.fn_is_permutation(permutation));
-    if (permutation[0] == 1) {
-      // was a swap
-      if (a == 0) {
-	Assert.assert(b == 0);
-      } else {
-	a = 1 / a;   // a' =  1/a
-	b = -b * a;  // b' = -b/a
-      }
-
-      long[] tmp = x_cache;
-      x_cache = y_cache;
-      y_cache = tmp;
+  public void swap() {
+    // was a swap
+    if (a == 0) {
+      Assert.assert(b == 0);
+    } else {
+      a = 1 / a;   // a' =  1/a
+      b = -b * a;  // b' = -b/a
     }
+
+    long[] tmp = x_cache;
+    x_cache = y_cache;
+    y_cache = tmp;
   }
 
   public void add_modified(long x, long y, int count) {
@@ -93,26 +93,30 @@ public final class LinearBinaryCore
 	  }
 	}
 	// Set a and b based on that pair
-	set_bi_linear(x_cache[max_i], x_cache[max_j], y_cache[max_i], y_cache[max_j]);
+	boolean ok =
+	  set_bi_linear(x_cache[max_i], x_cache[max_j], y_cache[max_i], y_cache[max_j]);
+	if (a == 0) { ok = false; }
 	// Check all values against a and b.
-        if (!wrapper.no_invariant) {
-          if (a == 0) {
-              wrapper.destroy();
-              return;
-          }
-          for (int i=0; i<MINPAIRS; i++) {
-            // I should permit a fudge factor here.
-            if (y_cache[i] != a*x_cache[i]+b) {
-              if (debugLinearBinaryCore) {
-                System.out.println("Suppressing " + "LinearBinaryCore (" + wrapper.format() + ") at index " + i + ": "
-                                   + y_cache[i] + " != " + a + "*" + x_cache[i] + "+" + b);
-                System.out.println("    ");
-              }
-              wrapper.destroy();
-              return;
-            }
+	for (int i=0; ok && i<MINPAIRS; i++) {
+	  // I should permit a fudge factor here.
+	  if (y_cache[i] != a*x_cache[i]+b) {
+	    if (debugLinearBinaryCore) {
+	      System.out.println("Suppressing " + "LinearBinaryCore (" + wrapper.format() + ") at index " + i + ": "
+				 + y_cache[i] + " != " + a + "*" + x_cache[i] + "+" + b);
+	      System.out.println("    ");
+	    }
+	    ok = false;
           }
         }
+        if (! ok) {
+	  values_seen--;
+	  wrapper.flowClone();
+	  wrapper.destroy();
+	  return;
+	} else {
+	  x_cache = null;
+	  y_cache = null;
+	}
       }
     } else {
       // Check the new value against a and b.
@@ -121,6 +125,7 @@ public final class LinearBinaryCore
           System.out.println("Suppressing " + "LinearBinaryCore (" + wrapper.format() + ") at new value: "
                              + y + " != " + a + "*" + x + "+" + b);
         }
+	wrapper.flowThis();
         wrapper.destroy();
         return;
       }
@@ -128,22 +133,20 @@ public final class LinearBinaryCore
   }
 
   // Given ((x0,y0),(x1,y1)), set a and b such that y = ax + b.
-  // If no such (a,b) exists, then destroy self.
-
-  void set_bi_linear(long x0, long x1, long y0, long y1) {
+  // @return true if such an (a,b) exists
+  boolean set_bi_linear(long x0, long x1, long y0, long y1) {
     if (x0 == x1) {
       // x being constant would have been discovered elsewhere (and this
       // invariant would not have been instantiated).
       if (debugLinearBinaryCore) {
         System.out.println("Suppressing " + "LinearBinaryCore" + " due to equal x values: (" + x0 + "," + y0 + "), (" + x1 + "," + y1 + ")");
       }
-      wrapper.destroy();
-      return;
+      return false;
     }
 
     a = (y1-y0)/(x1-x0);
     b = (y0*x1-x0*y1)/(x1-x0);
-
+    return true;
   }
 
   public boolean enoughSamples() {

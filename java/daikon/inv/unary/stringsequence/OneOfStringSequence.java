@@ -186,6 +186,7 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
 
       }
     if (num_elts == dkconfig_size) {
+      flowThis();
       destroy();
       return;
     }

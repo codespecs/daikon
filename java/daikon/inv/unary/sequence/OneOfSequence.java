@@ -295,11 +295,13 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
 
       }
     if (num_elts == dkconfig_size) {
+      flowThis();
       destroy();
       return;
     }
 
     if (is_hashcode && (num_elts == 1)) {
+      flowThis();
       destroy();
       return;
     }

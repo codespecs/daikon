@@ -83,6 +83,7 @@ public class NonZero extends SingleScalar {
       if (debugNonZero || ppt.debugged) {
         System.out.println("NonZero.destroy(" + ppt.name + ")");
       }
+      flowThis();
       destroy();
       return;
     }

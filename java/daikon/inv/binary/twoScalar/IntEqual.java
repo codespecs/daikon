@@ -129,7 +129,7 @@ public final class IntEqual  extends TwoScalar implements Comparison  {
 
   }
 
-  protected Invariant resurrect_done(int[] permutation) {
+  protected Invariant resurrect_done_swapped() {
 
     // we don't care if things swap; we have symmetry
     return this;
@@ -181,6 +181,7 @@ public final class IntEqual  extends TwoScalar implements Comparison  {
     //                      + v1 + "," + v2 + ", count=" + count + ")");
     // }
     if (!(v1 ==  v2)) {
+      flowThis();
       destroy();
       return;
     }

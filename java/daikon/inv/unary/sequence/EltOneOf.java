@@ -275,18 +275,21 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
 
       }
     if (num_elts == dkconfig_size) {
+      flowThis();
       destroy();
       return;
     }
 
     if ((is_boolean && (num_elts == 1))
         || (is_hashcode && (num_elts == 2))) {
+      flowThis();
       destroy();
       return;
     }
     if (is_hashcode && (num_elts == 1)) {
       // Permit two object values only if one of them is null
       if ((elts[0] != 0) && (v != 0)) {
+	flowThis();
         destroy();
         return;
       }

@@ -133,19 +133,12 @@ public final class IntGreaterThan  extends TwoScalar   {
 
   }
 
-  protected Invariant resurrect_done(int[] permutation) {
+  protected Invariant resurrect_done_swapped() {
 
     // we have no non-static member data, so we only need care about our type
-    Assert.assert(permutation.length == 2);
-    Assert.assert(ArraysMDE.fn_is_permutation(permutation));
-    if (permutation[0] == 0) {
-      // no swap
-      return this;
-    } else {
-      // As of now, the constructor chain is side-effect free;
-      // let's hope it stays that way.
-      return new IntLessThan (ppt);
-    }
+    // As of now, the constructor chain is side-effect free;
+    // let's hope it stays that way.
+    return new IntLessThan (ppt);
 
   }
 
@@ -194,6 +187,7 @@ public final class IntGreaterThan  extends TwoScalar   {
     //                      + v1 + "," + v2 + ", count=" + count + ")");
     // }
     if (!(v1 >  v2)) {
+      flowThis();
       destroy();
       return;
     }

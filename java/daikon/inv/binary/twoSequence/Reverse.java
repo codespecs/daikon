@@ -19,7 +19,7 @@ public class Reverse extends TwoSequence {
     return new Reverse(ppt);
   }  
 
-  protected Invariant resurrect_done(int[] permutation) {
+  protected Invariant resurrect_done_swapped() {
     // "reverse of" is symmetric
     return this;
   }
@@ -49,12 +49,14 @@ public class Reverse extends TwoSequence {
 
   public void add_modified(long[] a1, long[] a2, int count) {
     if (a1.length != a2.length) {
+      flowThis();
       destroy();
       return;
     }
     int len = a1.length;
     for (int i=0, j=len-1; i<len; i++, j--)
       if (a1[i] != a2[j]) {
+	flowThis();
         destroy();
         return;
       }

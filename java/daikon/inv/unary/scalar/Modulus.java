@@ -79,11 +79,13 @@ public class Modulus extends SingleScalar {
       return;
     } else if (modulus == 0) {
       // only one value seen so far
-      modulus = Math.abs(value1 - value);
+      long new_modulus = Math.abs(value1 - value);
       if (modulus == 1) {
+	flowThis();
         destroy();
         return;
       }
+      modulus = new_modulus;
       remainder = MathMDE.mod_positive(value, modulus);
     } else {
       long new_modulus_long = Math.abs(MathMDE.gcd(modulus, value1 - value));
@@ -97,6 +99,7 @@ public class Modulus extends SingleScalar {
       }
       if (new_modulus != modulus) {
         if (new_modulus == 1) {
+	  flowThis();
           destroy();
           return;
         } else {

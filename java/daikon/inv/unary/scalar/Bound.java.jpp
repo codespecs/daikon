@@ -195,6 +195,7 @@ public class LOWERBOUND extends SINGLESCALAR {
   }
 #endif
 
+  // XXX need to flow invariant if bound changed
   public void add_modified(LONG value, int count) {
     // System.out.println(LOWERBOUNDSTR + varNames() + ": "
     //                    + "add(" + value + ", " + modified + ", " + count + ")");

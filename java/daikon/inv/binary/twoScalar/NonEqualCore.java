@@ -39,21 +39,18 @@ public final class NonEqualCore
     }
   }
 
-  protected void permute(int[] permutation) {
-    Assert.assert(permutation.length == 2);
-    Assert.assert(ArraysMDE.fn_is_permutation(permutation));
-    if (permutation[0] == 1) {
-      // was a swap
-      long tmp;
+  // for resurrection
+  protected void swap() {
+    // was a swap
+    long tmp;
 
-      tmp = min1;
-      min1 = min2;
-      min2 = min1;
+    tmp = min1;
+    min1 = min2;
+    min2 = min1;
 
-      tmp = max1;
-      max1 = max2;
-      max2 = tmp;
-    }
+    tmp = max1;
+    max1 = max2;
+    max2 = tmp;
   }
 
   public void add_modified(long v1, long v2, int count) {
@@ -65,6 +62,7 @@ public final class NonEqualCore
       if (wrapper.ppt.debugged) {
         System.out.println("NonEqual.destroy()");
       }
+      wrapper.flowThis();
       wrapper.destroy();
       return;
     }

@@ -54,13 +54,9 @@ public final class FunctionUnaryCore
     }
   }
 
-  public void permute(int[] permutation) {
-    Assert.assert(permutation.length == 2);
-    Assert.assert(ArraysMDE.fn_is_permutation(permutation));
-    if (permutation[0] == 1) {
-      // was a swap
-      inverse = !inverse;
-    }
+  // swapping during resurrection
+  public void swap() {
+    inverse = !inverse;
   }
 
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException, NoSuchMethodException {
@@ -78,21 +74,18 @@ public final class FunctionUnaryCore
     Long x = new Long(x_int);
     Long y = new Long(y_int);
 
+    boolean ok = false;
     try {
-      if (inverse) {
-	if (! x.equals(function.invoke(null, new Object[] { y }))) {
-	  wrapper.destroy();
-          return;
-        }
-      } else {
-	if (! y.equals(function.invoke(null, new Object[] { x }))) {
-	  wrapper.destroy();
-          return;
-        }
-      }
+      ok = inverse ?
+	x.equals(function.invoke(null, new Object[] { y })) :
+	y.equals(function.invoke(null, new Object[] { x }));
     } catch (Exception e) {
+      // ok == false
+    }
+
+    if (! ok) {
+      wrapper.flowThis();
       wrapper.destroy();
-      return;
     }
   }
 

@@ -34,8 +34,8 @@ public class LinearBinary extends TwoScalar {
     return result;
   }
 
-  protected Invariant resurrect_done(int[] permutation) {
-    core.permute(permutation);
+  protected Invariant resurrect_done_swapped() {
+    core.swap();
     return this;
   }
 
@@ -70,6 +70,7 @@ public class LinearBinary extends TwoScalar {
     return core.format_simplify(var1().name, var2().name);
   }
 
+  // XXX core needs to change to do flow
   public void add_modified(long x, long y, int count) {
     core.add_modified(x, y, count);
   }

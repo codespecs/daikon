@@ -256,11 +256,13 @@ public final class OneOfString  extends SingleString  implements OneOf {
 
       }
     if (num_elts == dkconfig_size) {
+      flowThis();
       destroy();
       return;
     }
 
     if (is_type() && (num_elts == 1)) {
+      flowThis();
       destroy();
       return;
     }

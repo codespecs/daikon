@@ -36,6 +36,9 @@ public final class IntComparison extends TwoScalar implements Comparison {
   public static IntComparison instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
 
+    class DeadCodeException extends RuntimeException {}
+    if (true) throw new DeadCodeException();
+
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
     VarInfo seqvar1 = var1.isDerivedSequenceMember();
@@ -140,8 +143,8 @@ public final class IntComparison extends TwoScalar implements Comparison {
     return result;
   }
 
-  protected Invariant resurrect_done(int[] permutation) {
-    core.permute(permutation);
+  protected Invariant resurrect_done_swapped() {
+    core.swap();
     return this;
   }
 

@@ -29,8 +29,8 @@ public class PairwiseLinearBinary extends TwoSequence {
     return result;
   }
 
-  protected Invariant resurrect_done(int[] permutation) {
-    core.permute(permutation);
+  protected Invariant resurrect_done_swapped() {
+    core.swap();
     return this;
   }
 
@@ -63,6 +63,7 @@ public class PairwiseLinearBinary extends TwoSequence {
 
   public void add_modified(long[] x_arr, long[] y_arr, int count) {
     if (x_arr.length != y_arr.length) {
+      flowThis();
       destroy();
       return;
     }

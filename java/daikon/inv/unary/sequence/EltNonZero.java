@@ -81,9 +81,12 @@ public final class EltNonZero extends SingleSequence {
       // The min and max tests will simultaneoulsy succeed exactly once (for
       // the first value).
       if (v == 0) {
+	flowThis();
         destroy();
         return;
       }
+      // XXX; uh oh -- flowing these is bad stuff; maybe search for
+      // upper / lower bound instead when computing probability
       if (v < min) min = v;
       if (v > max) max = v;
     }

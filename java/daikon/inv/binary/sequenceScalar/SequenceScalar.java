@@ -2,10 +2,13 @@ package daikon.inv.binary.sequenceScalar;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.binary.*;
 
 import utilMDE.*;
 
-public abstract class SequenceScalar extends Invariant {
+public abstract class SequenceScalar
+  extends BinaryInvariant
+{
 
   // By convention, the sequence is always passed in first
   public boolean seq_first;  // true if seq_index == 0 and scl_index == 1
@@ -24,15 +27,10 @@ public abstract class SequenceScalar extends Invariant {
     }
   }
 
-  protected Invariant resurrect_done(int[] permutation) {
-    Assert.assert(permutation.length == 2);
-    Assert.assert(ArraysMDE.fn_is_permutation(permutation));
-    if (permutation[0] == 1) {
-      // was a swap
-      seq_first = !seq_first;
-      seq_index = seq_first ? 0 : 1;
-      scl_index = seq_first ? 1 : 0;
-    }
+  protected Invariant resurrect_done_swapped() {
+    seq_first = !seq_first;
+    seq_index = seq_first ? 0 : 1;
+    scl_index = seq_first ? 1 : 0;
     return this;
   }
 

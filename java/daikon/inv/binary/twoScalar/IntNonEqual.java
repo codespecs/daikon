@@ -133,7 +133,7 @@ public final class IntNonEqual  extends TwoScalar   {
 
   }
 
-  protected Invariant resurrect_done(int[] permutation) {
+  protected Invariant resurrect_done_swapped() {
 
     // we don't care if things swap; we have symmetry
     return this;
@@ -185,6 +185,7 @@ public final class IntNonEqual  extends TwoScalar   {
     //                      + v1 + "," + v2 + ", count=" + count + ")");
     // }
     if (!(v1 !=  v2)) {
+      flowThis();
       destroy();
       return;
     }

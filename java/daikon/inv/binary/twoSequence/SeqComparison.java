@@ -57,15 +57,10 @@ public class SeqComparison extends TwoSequence implements Comparison {
     return new SeqComparison(ppt, only_eq);
   }
 
-  protected Invariant resurrect_done(int[] permutation) {
-    Assert.assert(permutation.length == 2);
-    Assert.assert(ArraysMDE.fn_is_permutation(permutation));
-    if (permutation[0] == 1) {
-      // was a swap
-      boolean tmp = can_be_lt;
-      can_be_gt = can_be_lt;
-      can_be_gt = tmp;
-    }
+  protected Invariant resurrect_done_swapped() {
+    boolean tmp = can_be_lt;
+    can_be_gt = can_be_lt;
+    can_be_gt = tmp;
     return this;
   }
 
@@ -116,17 +111,37 @@ public class SeqComparison extends TwoSequence implements Comparison {
     // System.out.println("SeqComparison" + varNames() + ": "
     //                    + "compare(" + ArraysMDE.toString(v1)
     //                    + ", " + ArraysMDE.toString(v2) + ") = " + comparison);
-    if (comparison == 0)
-      can_be_eq = true;
-    else if (comparison < 0)
-      can_be_lt = true;
-    else
-      can_be_gt = true;
-    if ((can_be_lt && can_be_gt)
-        || (only_check_eq && (can_be_lt || can_be_gt))) {
+
+    boolean new_can_be_eq = can_be_eq;
+    boolean new_can_be_lt = can_be_lt;
+    boolean new_can_be_gt = can_be_gt;
+    boolean changed = false;
+    if (comparison == 0) {
+      new_can_be_eq = true;
+      changed = true;
+    } else if (comparison < 0) {
+      new_can_be_lt = true;
+      changed = true;
+    } else {
+      new_can_be_gt = true;
+      changed = true;
+    }
+
+    if (! changed)
+      return;
+
+    if ((new_can_be_lt && new_can_be_gt)
+        || (only_check_eq && (new_can_be_lt || new_can_be_gt))) {
+      flowThis();
       destroy();
       return;
     }
+
+    // changed but didn't die
+    flowClone();
+    can_be_eq = new_can_be_eq;
+    can_be_lt = new_can_be_lt;
+    can_be_gt = new_can_be_gt;
   }
 
   protected double computeProbability() {

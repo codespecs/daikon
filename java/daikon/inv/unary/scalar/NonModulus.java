@@ -94,6 +94,7 @@ public class NonModulus extends SingleScalar {
     results_accurate = true;
   }
 
+  // XXX have to deal with flowing this; maybe it should live at all ppts?
   public void add_modified(long value, int count) {
     if (elements.add(Intern.internedLong(value))
 	&& results_accurate

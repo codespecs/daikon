@@ -82,6 +82,7 @@ public class LowerBound  extends SingleScalar  {
     return "(>= " + varname + " " + core.min1  + ")";
   }
 
+  // XXX need to flow invariant if bound changed
   public void add_modified(long  value, int count) {
     // System.out.println("LowerBound"  + varNames() + ": "
     //                    + "add(" + value + ", " + modified + ", " + count + ")");

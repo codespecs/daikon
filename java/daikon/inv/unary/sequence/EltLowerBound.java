@@ -89,6 +89,7 @@ public class EltLowerBound  extends SingleSequence  {
     return form[0] + "(>= " + form[1] + " " + core.min1  + ")" + form[2];
   }
 
+  // XXX need to flow invariant if bound changed
   public void add_modified(long[]  value, int count) {
     // System.out.println("EltLowerBound"  + varNames() + ": "
     //                    + "add(" + value + ", " + modified + ", " + count + ")");

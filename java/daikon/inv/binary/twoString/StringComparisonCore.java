@@ -59,47 +59,70 @@ public final class StringComparisonCore
     }
   }
 
-  protected void permute(int[] permutation) {
-    Assert.assert(permutation.length == 2);
-    Assert.assert(ArraysMDE.fn_is_permutation(permutation));
-    if (permutation[0] == 1) {
-      // was a swap
-      boolean tmp;
+  // for resurrection
+  public void swap() {
+    boolean tmp;
 
-      tmp = can_be_lt;
-      can_be_gt = can_be_lt;
-      can_be_gt = tmp;
+    tmp = can_be_lt;
+    can_be_gt = can_be_lt;
+    can_be_gt = tmp;
 
-      tmp = obvious_can_be_lt;
-      obvious_can_be_lt = obvious_can_be_gt;
-      obvious_can_be_gt = tmp;
+    tmp = obvious_can_be_lt;
+    obvious_can_be_lt = obvious_can_be_gt;
+    obvious_can_be_gt = tmp;
 
-      tmp = obvious_can_be_le;
-      obvious_can_be_le = obvious_can_be_ge;
-      obvious_can_be_ge = tmp;
-    }
+    tmp = obvious_can_be_le;
+    obvious_can_be_le = obvious_can_be_ge;
+    obvious_can_be_ge = tmp;
   }
 
   public void add_modified(String v1, String v2, int count) {
     if ((v1 == null) || (v2 == null)) {
+      wrapper.flowThis();
       wrapper.destroy();
       return;
     }
-    if (v1 == v2)
-      can_be_eq = true;
-    else if (v1.compareTo(v2) < 0)
-      can_be_lt = true;
-    else
-      can_be_gt = true;
-    if ((can_be_lt && can_be_gt)
-        || (only_check_eq && (can_be_lt || can_be_gt))
-        || (obvious_can_be_lt && can_be_lt)
-        || (obvious_can_be_gt && can_be_gt)
-        || (obvious_can_be_le && can_be_lt && can_be_eq)
-        || (obvious_can_be_ge && can_be_gt && can_be_eq)) {
+
+    boolean new_can_be_eq = can_be_eq;
+    boolean new_can_be_lt = can_be_lt;
+    boolean new_can_be_gt = can_be_gt;
+    boolean changed = false;
+
+    if (v1 == v2) {
+      if (! can_be_eq) {
+	new_can_be_eq = true;
+	changed = true;
+      }
+    } else if (v1.compareTo(v2) < 0) {
+      if (! can_be_lt) {
+	new_can_be_lt = true;
+	changed = true;
+      }
+    } else {
+      if (! can_be_gt) {
+	new_can_be_gt = true;
+	changed = true;
+      }
+    }
+
+    if (! changed)
+      return;
+
+    if ((new_can_be_lt && new_can_be_gt)
+        || (only_check_eq && (new_can_be_lt || new_can_be_gt))
+        || (obvious_can_be_lt && new_can_be_lt)
+        || (obvious_can_be_gt && new_can_be_gt)
+        || (obvious_can_be_le && new_can_be_lt && new_can_be_eq)
+        || (obvious_can_be_ge && new_can_be_gt && new_can_be_eq)) {
+      wrapper.flowThis();
       wrapper.destroy();
       return;
     }
+
+    wrapper.flowClone();
+    can_be_eq = new_can_be_eq;
+    can_be_lt = new_can_be_lt;
+    can_be_gt = new_can_be_gt;
   }
 
   // This is very tricky, because whether two variables are equal should
@@ -119,8 +142,8 @@ public final class StringComparisonCore
 	// return Math.pow(.5, wrapper.ppt.num_values());
 	return Invariant.PROBABILITY_JUSTIFIED;
       } else {
-	// None of the can_be_X's are true.
-	// (We haven't seen any values yet.)
+	// None of the can_be_X's are set.
+	// (We haven't seen any samples.)
 	return Invariant.PROBABILITY_UNJUSTIFIED;
       }
     }
@@ -175,8 +198,8 @@ public final class StringComparisonCore
   public boolean isExclusiveFormula(StringComparisonCore other)
   {
     return (! ((can_be_eq && other.can_be_eq)
-               || (can_be_lt && other.can_be_lt)
-               || (can_be_gt && other.can_be_gt)));
+               || (can_be_gt && other.can_be_gt)
+               || (can_be_lt && other.can_be_lt)));
   }
 
 }

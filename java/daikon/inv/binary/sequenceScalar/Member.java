@@ -249,6 +249,7 @@ public final class Member extends SequenceScalar  {
       if (debugMember) {
         System.out.println("Member destroyed:  " + format() + " because " + i + " not in " + ArraysMDE.toString(a));
       }
+      flowThis();
       destroy();
       return;
     }

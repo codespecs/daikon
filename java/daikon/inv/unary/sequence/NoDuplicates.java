@@ -60,6 +60,7 @@ public class NoDuplicates extends SingleSequence {
   public void add_modified(long[] a, int count) {
     for (int i=1; i<a.length; i++) {
       if (ArraysMDE.indexOf(a, a[i]) < i) {
+	flowThis();
         destroy();
         return;
       }

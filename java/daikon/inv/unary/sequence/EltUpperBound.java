@@ -89,6 +89,7 @@ public class EltUpperBound  extends SingleSequence  {
     return form[0] + "(<= " + form[1] + " " + core.max1  + ")" + form[2];
   }
 
+  // XXX need to flow invariant if bound changed
   public void add_modified(long[]  value, int count) {
     // System.out.println("EltUpperBound"  + varNames() + ": "
     //                    + "add(" + value + ", " + modified + ", " + count + ")");

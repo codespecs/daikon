@@ -58,8 +58,8 @@ public class PairwiseIntComparison extends TwoSequence {
     return result;
   }
 
-  protected Invariant resurrect_done(int[] permutation) {
-    core.permute(permutation);
+  protected Invariant resurrect_done_swapped() {
+    core.swap();
     return this;
   }
 
@@ -106,6 +106,7 @@ public class PairwiseIntComparison extends TwoSequence {
 
   public void add_modified(long[] a1, long[] a2, int count) {
     if (a1.length != a2.length) {
+      flowThis();
       destroy();
       return;
     }

@@ -2,10 +2,13 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.binary.*;
 
 import utilMDE.*;
 
-public abstract class TwoSequence extends Invariant {
+public abstract class TwoSequence
+  extends BinaryInvariant
+{
 
   protected TwoSequence(PptSlice ppt) {
     super(ppt);

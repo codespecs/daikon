@@ -2,10 +2,13 @@ package daikon.inv.binary.twoScalar;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.binary.*;
 
 import utilMDE.*;
 
-public abstract class TwoScalar extends Invariant {
+public abstract class TwoScalar
+  extends BinaryInvariant
+{
 
   protected TwoScalar(PptSlice ppt) {
     super(ppt);

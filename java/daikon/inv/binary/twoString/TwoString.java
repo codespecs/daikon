@@ -2,10 +2,13 @@ package daikon.inv.binary.twoString;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.binary.*;
 
 import utilMDE.*;
 
-public abstract class TwoString extends Invariant {
+public abstract class TwoString
+  extends BinaryInvariant
+{
 
   protected TwoString(PptSlice ppt) {
     super(ppt);
