@@ -273,11 +273,27 @@ public class PAIRWISEINTEQUAL
 
   protected Invariant resurrect_done_swapped() {
     #if (defined(EQUAL) || defined(EQUALFLOAT))
-    return this;
+      return this;
     #else
-    return new PAIRWISEINTEQUAL_SWAP(this);
+      return new PAIRWISEINTEQUAL_SWAP(this);
     #endif
   }
+
+#if (defined(EQUAL) || defined(EQUALFLOAT))
+  public boolean is_symmetric() {
+    return (true);
+  }
+
+#else
+
+  /**
+   * Returns the class that corresponds to this class with its variable
+   * order swapped
+   */
+  public static Class swap_class () {
+    return PAIRWISEINTEQUAL_SWAP.class;
+  }
+#endif
 
   public String repr() {
     return PAIRWISEINTEQUALstring + varNames() + ": ";
@@ -360,11 +376,12 @@ public class PAIRWISEINTEQUAL
     return InvariantStatus.NO_CHANGE;
   }
 
-    public InvariantStatus add_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {    if (logDetail() || debug.isLoggable(Level.FINE))
-      log (debug, "saw add_modified (" + ArraysMDE.toString(a1) + ", " + ArraysMDE.toString(a2) + ")" +
-           " ppt.num_values()==" + ppt.num_values() + ", ppt.num_values()==" + ppt.num_values() +
-           ", ppt.num_elt_values==" + ((PptSlice2) ppt).num_elt_values());
-    return check_modified(a1, a2, count);
+    public InvariantStatus add_modified(PRIMITIVE[] a1, PRIMITIVE[] a2,
+                                        int count) {
+      if (logDetail())
+        log (debug, "saw add_modified (" + ArraysMDE.toString(a1) +
+             ", " + ArraysMDE.toString(a2) + ")");
+      return check_modified(a1, a2, count);
     }
 
 
