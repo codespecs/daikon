@@ -486,6 +486,8 @@ public class SEQSEQINTEQUAL
    *  relations.
    **/
   public DiscardInfo isObviousDynamically_SomeInEquality() {
+    if (logOn())
+      log ("Considering dynamically_someInEquality");
     if (var1().equalitySet == var2().equalitySet) {
       return isObviousDynamically (this.ppt.var_infos);
     } else {
