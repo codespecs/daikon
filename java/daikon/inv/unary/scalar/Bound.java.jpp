@@ -351,27 +351,24 @@ public class LOWERBOUND
   }
 #endif
 
-  // XXX need to flow invariant if bound changed
   public void add_modified(LONG value, int count) {
     // System.out.println(LOWERBOUNDSTR + varNames() + ": "
-    //                    + "add(" + value + ", " + modified + ", " + count + ")");
+    //              + "add(" + value + ", " + modified + ", " + count + ")");
 
-    // I must always clone myself because the cores keep track of many
-    // statistics, not just the bounds.
-    cloneAndFlow();
     core.changed = false;
-#if 0
-   // Test was: #if (defined(LOWER) || defined(UPPER) || defined(LOWERFLOAT) || defined(UPPERFLOAT))
-#endif
-#ifndef IS_ELT
-    core.add_modified(value, count);
-#else
-    for (int i=0; i<value.length; i++) {
-      core.add_modified(value[i], count);
-      if (falsified)
-        return;
-    }
-#endif
+
+    #ifndef IS_ELT
+      core.add_modified(value, count);
+    #else
+      for (int i=0; i<value.length; i++) {
+        core.add_modified(value[i], count);
+        if (falsified)
+          return;
+      }
+    #endif
+
+    if (core.changed)
+      cloneAndFlow();
   }
 
   public boolean enoughSamples() {
@@ -464,7 +461,7 @@ public class LOWERBOUND
       if (inv instanceof LOWERBOUND) {
         LOWERBOUND other = (LOWERBOUND) inv;
         if (isSameFormula(other)
-            && SUBSEQUENCE.isObviousSubSequenceDynamically(v, other.var())) {
+            && SUBSEQUENCE.isObviousSubSequenceDynamically(this, v, other.var())) {
           return true;
         }
       }
@@ -493,7 +490,7 @@ public class LOWERBOUND
 #ifndef IS_ELT
       if (MEMBER.isObviousMember(v, vi))
 #else
-      if (SUBSEQUENCE.isObviousSubSequenceDynamically(v, vi))
+      if (SUBSEQUENCE.isObviousSubSequenceDynamically(this, v, vi))
 #endif
       {
         PptSlice1 other_slice = pptt.findSlice(vi);
