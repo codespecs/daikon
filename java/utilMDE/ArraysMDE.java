@@ -1001,6 +1001,28 @@ public final class ArraysMDE {
    * The representation is patterned after that of java.util.Vector.
    * @see java.util.Vector#toString
    **/
+  public static String toString(float[] a) {
+    if (a == null) {
+      return "null";
+    }
+    StringBuffer sb = new StringBuffer();
+    sb.append("[");
+    if (a.length > 0) {
+      sb.append(a[0]);
+      for (int i=1; i<a.length; i++) {
+        sb.append(", ");
+        sb.append(a[i]);
+      }
+    }
+    sb.append("]");
+    return sb.toString();
+  }
+
+  /**
+   * Return a string representation of the array.
+   * The representation is patterned after that of java.util.Vector.
+   * @see java.util.Vector#toString
+   **/
   public static String toString(boolean[] a) {
     if (a == null) {
       return "null";
@@ -1029,6 +1051,8 @@ public final class ArraysMDE {
       return toString((boolean[]) obj);
     } else if (obj instanceof double[]) {
       return toString((double[]) obj);
+    } else if (obj instanceof float[]) {
+      return toString((float[]) obj);
     } else if (obj instanceof int[]) {
       return toString((int[]) obj);
     } else if (obj instanceof long[]) {
