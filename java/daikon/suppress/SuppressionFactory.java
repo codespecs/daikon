@@ -68,11 +68,12 @@ public abstract class SuppressionFactory implements Serializable {
     if (inv.logOn())
       inv.log ("Suppression Template - " + supt.searchString());
     SuppressionLink sl = byTemplate (supt, inv);
-    if (inv.logOn())
+    if (inv.logOn()) {
       if (sl != null)
         inv.log ("Found Template Match " + supt.results[0].format());
       else
         inv.log ("No Template Match found");
+    }
     return (sl);
   }
 
@@ -88,7 +89,7 @@ public abstract class SuppressionFactory implements Serializable {
     if (inv.ppt.parent.fillSuppressionTemplate(supTemplate)) {
       return linkFromTemplate (supTemplate, inv);
     } else {
-        return null;
+      return null;
     }
   }
 
