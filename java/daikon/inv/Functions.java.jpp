@@ -109,13 +109,13 @@ public final class CLASSNAME {
 
   public static PRIM invokeUnary(int methodnumber, PRIM arg) {
 #if defined(LONG)
-    switch(methodnumber) {
+    switch (methodnumber) {
     case 0: return MathMDE.bitwiseComplement(arg);
     case 1: return MathMDE.negate(arg);
     case 2: return Math.abs(arg);
     }
 #else
-    switch(methodnumber) {
+    switch (methodnumber) {
     case 0: return MathMDE.negate(arg);
     // case 1: return Math.abs(arg);
     }
@@ -127,7 +127,7 @@ public final class CLASSNAME {
   public static PRIM invokeBinary(int methodnumber, PRIM arg, PRIM arg2) {
 
 #if defined(FLOAT)
-    switch(methodnumber) {
+    switch (methodnumber) {
     case 0: return MathMDE.mul(arg, arg2);
     case 1: return Math.min(arg, arg2);
     case 2: return Math.max(arg, arg2);
@@ -135,7 +135,7 @@ public final class CLASSNAME {
     case 4: return Math.pow(arg, arg2);
     }
 #elif defined(LONG)
-    switch(methodnumber) {
+    switch (methodnumber) {
     case 0:  return MathMDE.mul(arg, arg2);
     case 1:  return MathMDE.bitwiseAnd(arg, arg2);
     case 2:  return MathMDE.logicalAnd(arg, arg2);
