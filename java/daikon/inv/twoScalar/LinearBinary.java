@@ -1,25 +1,24 @@
-package daikon.inv.twoSequence;
+package daikon.inv.twoScalar;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.twoScalar.*;
 
-class PairwiseLinear extends TwoSequence {
+class LinearBinary extends TwoScalar {
 
-  LinearCore core;
+  LinearBinaryCore core;
 
-  protected PairwiseLinear(PptSlice ppt_) {
+  protected LinearBinary(PptSlice ppt_) {
     super(ppt_);
-    core = new LinearCore(this);
+    core = new LinearBinaryCore(this);
   }
 
-  public static PairwiseLinear instantiate(PptSlice ppt) {
-    return new PairwiseLinear(ppt);
+  public static LinearBinary instantiate(PptSlice ppt) {
+    return new LinearBinary(ppt);
   }
 
   // Need to add these two methods for all subclasses of Invariant
   public String name() {
-    return "PairwiseLinear" + varNames();
+    return "LinearBinary" + varNames();
   }
   public String long_name() {
     return name() + "@" + ppt.name;
@@ -28,11 +27,12 @@ class PairwiseLinear extends TwoSequence {
   public String repr() {
     int a = core.a;
     int b = core.b;
+
     double probability = getProbability();
-    return "PairwiseLinear" + varNames() + ": "
+    return "LinearBinary" + varNames() + ": "
       + "no_invariant=" + no_invariant
-      + ",a=" + core.a
-      + ",b=" + core.b
+      + ",a=" + a
+      + ",b=" + b
       + "; probability = " + probability;
   }
 
@@ -51,19 +51,16 @@ class PairwiseLinear extends TwoSequence {
     }
   }
 
-  public void add_modified(int[] x_arr, int[] y_arr, int count) {
-    int len = Math.min(x_arr.length, y_arr.length);
-
-    for (int i=0; i<len; i++) {
-      int x = x_arr[i];
-      int y = y_arr[i];
-
-      core.add_modified(x, y, count);
-    }
+  public void add_modified(int x, int y, int count) {
+    core.add_modified(x, y, count);
   }
 
   protected double computeProbability() {
     return core.computeProbability();
+  }
+
+  public boolean isExact() {
+    return true;
   }
 
 }

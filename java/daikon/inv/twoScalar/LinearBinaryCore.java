@@ -3,9 +3,9 @@ package daikon.inv.twoScalar;
 import daikon.*;
 import daikon.inv.*;
 
-public class LinearCore {
+public class LinearBinaryCore {
 
-  final static boolean debugLinearCore = false;
+  final static boolean debugLinearBinaryCore = false;
 
   // y == ax + b;
   public int a, b;
@@ -19,7 +19,7 @@ public class LinearCore {
   int[] x_cache = new int[MINPAIRS];
   int[] y_cache = new int[MINPAIRS];
 
-  public LinearCore(Invariant wrapper_) {
+  public LinearBinaryCore(Invariant wrapper_) {
     wrapper = wrapper_;
   }
 
@@ -55,8 +55,8 @@ public class LinearCore {
           for (int i=0; i<MINPAIRS; i++) {
             // I should permit a fudge factor here.
             if (y_cache[i] != a*x_cache[i]+b) {
-              if (debugLinearCore) {
-                System.out.println("Suppressing " + "LinearCore" + " at index " + i + ": "
+              if (debugLinearBinaryCore) {
+                System.out.println("Suppressing " + "LinearBinaryCore" + " at index " + i + ": "
                                    + y_cache[i] + " != " + a + "*" + x_cache[i] + "+" + b);
               }
               wrapper.destroy();
@@ -68,8 +68,8 @@ public class LinearCore {
     } else {
       // Check the new value against a and b.
       if (y != a*x+b) {
-        if (debugLinearCore) {
-          System.out.println("Suppressing " + "LinearCore" + " at new value: "
+        if (debugLinearBinaryCore) {
+          System.out.println("Suppressing " + "LinearBinaryCore" + " at new value: "
                              + y + " != " + a + "*" + x + "+" + b);
         }
         wrapper.destroy();
@@ -83,8 +83,8 @@ public class LinearCore {
 
   void set_bi_linear(int x0, int x1, int y0, int y1) {
     if (x0 == x1) {
-      if (debugLinearCore) {
-        System.out.println("Suppressing " + "LinearCore" + " due to equal x values: (" + x0 + "," + y0 + "), (" + x1 + "," + y1 + ")");
+      if (debugLinearBinaryCore) {
+        System.out.println("Suppressing " + "LinearBinaryCore" + " due to equal x values: (" + x0 + "," + y0 + "), (" + x1 + "," + y1 + ")");
       }
       wrapper.destroy();
       return;
