@@ -6,11 +6,12 @@
 LISP_FILES := gries-helper.lisp instrument.lisp data-trace.lisp \
 	load-all.lisp \
 	gries.lisp gries-instrumented.lisp inv-medic.lisp
-PYTHON_FILES := invariants.py util.py
-DOC_FILES := invariants.py.doc Makefile
+PYTHON_FILES := invariants.py util.py TextFile.py
+DOC_FILES := invariants.py.doc Makefile TextFile.README
 EDG_DIR := /projects/se/people/jake/invariants/vortex/C++/front-end/release/dist
 # $(EDG_DIR)/edgcpfe is distributed separately (not in the main tar file)
 EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/instrumentor
+DIST_DIR := /homes/gws/mernst/www/invariants-dist
 
 ## Examples of better ways to get the lists:
 # PERL_MODULES := $(wildcard *.pm)
@@ -28,8 +29,19 @@ EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/instrume
 
 ### Distribution
 
-dist: invariants.tar.gz
-	cp -pf invariants.tar.gz dist/README dist/VERSION /homes/gws/mernst/www/invariants-dist/
+dist: $(DIST_DIR)/invariants.tar.gz
+
+$(DIST_DIR)/invariants.tar.gz: invariants.tar.gz
+	cp -pf invariants.tar.gz dist/README dist/VERSION $(DIST_DIR)
+	update-link-dates $(DIST_DIR)/index.html
+
+dist-edg: dist-edg-solaris
+
+dist-edg-solaris: $(DIST_DIR)/edgcpfe-solaris
+
+$(DIST_DIR)/edgcpfe-solaris: $(EDG_DIR)/edgcpfe
+	cp -pf $< $@
+	update-link-dates $(DIST_DIR)/index.html
 
 # Also creates a directory called "dist"
 invariants.tar: $(LISP_FILES) $(PYTHON_FILES) $(DOC_FILES) $(EDG_FILES) README-dist

@@ -92,6 +92,7 @@ format takes up too many lines in the file.
 
 
 Here is an example of the file format:
+[It is slightly out of date as of 4/22/99.]
 
 # Program: sub.c
 # Instrumented by: EDG front end version 3.14, 2/22/99

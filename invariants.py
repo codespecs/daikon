@@ -13,11 +13,16 @@
 ### Packages, constants
 ###
 
-# Built-in Python modules
-import glob, math, operator, os, pickle, posix, re, resource, string, time, types, whrandom
+## Built-in Python modules
+import glob, gzip, math, operator, os, pickle, posix, re, resource, string, time, types, whrandom
 # Do NOT use cPickle.  It is buggy!  (Or so it seems.)
 
-# User-defined Python modules
+## Third-party Python modules
+# In lieu of something built-in like gzip.py for "compress" files.
+import TextFile
+
+
+## User-defined Python modules
 import util
 
 
@@ -1549,7 +1554,11 @@ def read_data_trace_file_declarations(filename, fn_regexp=None):
     if debug_read:
         print "read_data_trace_file_declarations", filename, (fn_regexp and fn_regexp.pattern) or ""
 
-    file = open(filename, "r")
+    # if (filename[:-3] == ".gz"):
+    #     file = gzip.open(filename, "r")
+    # else:
+    #     file = open(filename, "r")
+    file = TextFile.TextFile(filename, "r")
     line = file.readline()
     if "\t" in line:
         raise "First line should be tag line; saw: " + line
@@ -1680,7 +1689,11 @@ def read_data_trace_file(filename, fn_regexp=None):
     if debug_read:
         print "read_data_trace_file", filename, fn_regexp and fn_regexp.pattern
 
-    file = open(filename, "r")
+    # if (filename[:-3] == ".gz"):
+    #     file = gzip.open(filename, "r")
+    # else:
+    #     file = open(filename, "r")
+    file = TextFile.TextFile(filename, "r")
 
     this_fn_var_values = {}	# from function name to (tuple of values to occurrence count)
     this_fn_samples = {}        # from function name to number of samples
@@ -4066,7 +4079,12 @@ class two_sequence_numeric_invariant(invariant):
 
 def write_state(filename):
     """Write global invariants variables to FILENAME."""
-    file = open(util.expand_file_name(filename), "w")
+    filename = util.expand_file_name(filename)
+    # if (filename[:-3] == ".gz"):
+    #     file = gzip.open(filename, "w")
+    # else:
+    #     file = open(filename, "w")
+    file = TextFile.TextFile(filename, "w")
     pickle.dump(fn_samples, file)
     pickle.dump(fn_var_infos, file)
     file.close()
@@ -4074,7 +4092,15 @@ def write_state(filename):
 def read_state(filename):
     """Read global invariants variables from FILENAME,
     and return the values rather than setting the globals."""
-    file = open(util.expand_file_name(filename), "r")
+    filename = util.expand_file_name(filename)
+    if (filename[:-3] == ".gz"):
+        file = gzip.open(filename, "r")
+    elif (filename[:-2] == ".Z"):
+        raise "Can't read from .Z state files; uncompress or convert to .gz"
+    else:
+        file = open(filename, "r")
+    ## This doesn't work because TextFile doesn't support the read() operation.
+    # file = TextFile.TextFile(filename, "r")
     result_fn_samples = pickle.load(file)
     result_fn_var_infos = pickle.load(file)
     file.close()
@@ -4136,49 +4162,47 @@ def diff_var_infos(var_infos1, var_infos2):
     # set.  As an example, consider
     #   invariants.diff_files('/projects/se/people/mernst/replace_outputs/replace.main.4000.19981220.pkl','/projects/se/people/mernst/replace_outputs/replace.main.4500.19990103.pkl')
     # In that case, we must eliminate the extra var_infos.
+    # There ae two basic strategies we could follow:
+    #  * For each var_info, find the corresponding one in the other list.
+    #  * Step through the lists together finding corresponding var_infos.
+    #    If the lists aren't sorted, we can't know whether, in the case of
+    #    a mismatch, we should look further forward in one list or in the
+    #    other (or maybe neither of the current ones has a match).
 
-    indices1 = range(0, len(var_infos1))
-    indices2 = range(0, len(var_infos2))
-    if not var_infos_compatible(var_infos1, var_infos2):
-        print "RATIONALIZING INCOMPATIBLE VAR_INFOS"
-        ii = 0
-        while ii < len(indices1) and ii < len(indices2):
-            vi1 = var_infos1[indices1[ii]]
-            vi2 = var_infos2[indices2[ii]]
+    # This is quite inefficient.  Maybe it's good enough.
+    indices1 = []
+    indices2 = []
+    for i1 in range(0, len(var_infos1)):
+        vi1 = var_infos1[i1]
+        i2 = None                 # index in var_infos2 corresponding to i2
+        for i2 in range(0, len(var_infos2)):
+            vi2 = var_infos2[i2]
             if not var_info_name_compare(vi1, vi2):
-                # same name
-                ii = ii + 1
-                continue
-            # different name
-            if ii+1 < len(indices2) and not var_info_name_compare(vi1, var_infos2[indices2[ii+1]]):
-                del indices2[ii]
-                continue
-            if ii+1 < len(indices1) and not var_info_name_compare(vi2, var_infos1[indices1[ii+1]]):
-                del indices1[ii]
-                continue
-            raise "What is going on here?"
+                indices1.append(i1)
+                indices2.append(i2)
+                break
 
-#         if len(var_infos1) > len(var_infos2):
-#             # Guess that var_infos1 only contains extra var_infos
-#             var_infos1 = list(var_infos1)
-#             for i in range(0, len(var_infos2)):
-#                 while var_info_name_compare(var_infos1[i], var_infos2[i]):
-#                     del var_infos1[i:i+1]
-#             if ((len(var_infos1) != len(var_infos2))
-#                 or not var_infos_compatible(var_infos1, var_infos2)):
-#                 raise "var_infos still incompatible"
-#         elif len(var_infos2) > len(var_infos2):
-#             # Guess that var_infos1 only contains extra var_infos
-#             var_infos2 = list(var_infos2)
-#             for i in range(0, len(var_infos1)):
-#                 while var_info_name_compare(var_infos2[i], var_infos1[i]):
-#                     del var_infos2[i:i+1]
-#             if ((len(var_infos2) != len(var_infos1))
-#                 or not var_infos_compatible(var_infos2, var_infos1)):
-#                 raise "var_infos still incompatible"
-#         else:
-#             # Should really generalize the above
-#             raise "var_infos incompatible"
+
+    # indices1 = range(0, len(var_infos1))
+    # indices2 = range(0, len(var_infos2))
+    # if not var_infos_compatible(var_infos1, var_infos2):
+    #     print "RATIONALIZING INCOMPATIBLE VAR_INFOS"
+    #     ii = 0
+    #     while ii < len(indices1) and ii < len(indices2):
+    #         vi1 = var_infos1[indices1[ii]]
+    #         vi2 = var_infos2[indices2[ii]]
+    #         if not var_info_name_compare(vi1, vi2):
+    #             # same name
+    #             ii = ii + 1
+    #             continue
+    #         # different name
+    #         if ii+1 < len(indices2) and not var_info_name_compare(vi1, var_infos2[indices2[ii+1]]):
+    #             del indices2[ii]
+    #             continue
+    #         if ii+1 < len(indices1) and not var_info_name_compare(vi2, var_infos1[indices1[ii+1]]):
+    #             del indices1[ii]
+    #             continue
+    #         raise "What is going on here?"
 
     assert len(indices1) == len(indices2)
     assert (map(lambda i, vis=var_infos1: vis[i].name, indices1)
@@ -4196,6 +4220,14 @@ def diff_var_infos(var_infos1, var_infos2):
         assert vi1.name == vi2.name
         inv1 = vi1.invariant
         inv2 = vi2.invariant
+        if (inv1 == None) and (inv2 == None):
+            # Function never called in either set of tests
+            continue
+        if (inv1 == None) or (inv2 == None):
+            print "unary:", "Executions in only one run for", vi1.name
+            print " ", inv1
+            print " ", inv2
+            continue
         assert inv1.__class__ == inv2.__class__
         can1 = vi1.is_canonical()
         can2 = vi2.is_canonical()
@@ -4204,8 +4236,8 @@ def diff_var_infos(var_infos1, var_infos2):
         if (can1 and not can2) or (can2 and not can1):
             # This is a pretty significant difference, actually...
             print "unary:", "Equality difference for", vi1.name
-            print " ", vi1.invariant
-            print " ", vi2.invariant
+            print " ", inv1
+            print " ", inv2
             continue
         assert can1 and can2
         # Both variables are canonical
@@ -4217,6 +4249,8 @@ def diff_var_infos(var_infos1, var_infos2):
             unary_different = unary_different + 1
         else:
             unary_same = unary_same + 1
+        # This isn't guaranteed to be called due to "continue" statements
+        # above.  Is that OK?  -MDE 4/22/1999
         add_to_unary()
         clear_diff_to_ct()
 
