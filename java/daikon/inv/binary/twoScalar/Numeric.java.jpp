@@ -78,13 +78,13 @@ import daikon.*;
 import daikon.inv.*;
 #ifdef SEQ
 import daikon.inv.unary.sequence.*;
-import utilMDE.*;
 #else
 import daikon.inv.unary.scalar.*;
 #endif
 import daikon.derive.binary.*;
 import daikon.suppress.*;
 
+import utilMDE.*;
 import java.util.*;
 
 /**
@@ -178,8 +178,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
     if (v2 == null)
       v2 = var2().name.name_using(format, var2());
 
-    fmt_str = fmt_str.replaceAll ("%var1%", v1);
-    fmt_str = fmt_str.replaceAll ("%var2%", v2);
+    // Note that we do not use String.replaceAll here, because that's
+    // inseparable from the regex library, and we don't want to have to
+    // escape v1 with something like
+    // v1.replaceAll("([\\$\\\\])", "\\\\$1")
+    fmt_str = UtilMDE.replaceString(fmt_str, "%var1%", v1);
+    fmt_str = UtilMDE.replaceString(fmt_str, "%var2%", v2);
+
     if (format == OutputFormat.IOA)
       fmt_str = fmt_str.replaceAll ("==", "=");
     else if (false && (format == OutputFormat.DAIKON)) {
