@@ -27,6 +27,7 @@ C_RUNTIME_PATHS := front-end/c/daikon_runtime.h front-end/c/daikon_runtime.c
 # EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/dfec $(EDG_DIR)/dfec.sh
 
 DIST_DIR := $(MERNST_DIR)/www/daikon/dist
+DIST_BIN_DIR := $(DIST_DIR)/binaries
 # Files that appear in the top level of the distribution directory
 DIST_DIR_FILES := daikon-source.tar.gz daikon-jar.tar.gz daikon-logo.gif daikon.jar
 DIST_DIR_PATHS := daikon-source.tar.gz daikon-jar.tar.gz doc/images/daikon-logo.gif daikon.jar
@@ -239,8 +240,8 @@ dist-dfec: dist-dfec-linux
 
 dist-dfec-linux:
 	cd $(DFEC_DIR) && $(MAKE) dfec-static
-	cp -pf $(DFEC_DIR)/bin/dfec-static $(DIST_DIR)/dfec-linux
-	cp -pf $(DFEC_DIR)/src/dfec $(DIST_DIR)/dfec-linux-dynamic
+	cp -pf $(DFEC_DIR)/bin/dfec-static $(DIST_BIN_DIR)/dfec-linux-x86
+	cp -pf $(DFEC_DIR)/src/dfec $(DIST_BIN_DIR)/dfec-linux-x86-dynamic
 
 ## Old version
 # dist-edg: dist-edg-solaris
@@ -262,14 +263,14 @@ dist-dfec-linux:
 ## Don't distribute executables for now
 dist-dfej: dist-dfej-linux-x86 dist-dfej-windows
 
-dist-dfej-solaris: $(DIST_DIR)/dfej-solaris
+dist-dfej-solaris: $(DIST_BIN_DIR)/dfej-solaris
 
-$(DIST_DIR)/dfej-solaris: $(DFEJ_DIR)/src/dfej-solaris
+$(DIST_BIN_DIR)/dfej-solaris: $(DFEJ_DIR)/src/dfej-solaris
 	cp -pf $< $@
 	update-link-dates $(DIST_DIR)/index.html
 	cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@lcs.mit.edu
 
-dist-dfej-linux-x86: $(DIST_DIR)/binaries/dfej-linux-x86
+dist-dfej-linux-x86: $(DIST_BIN_DIR)/dfej-linux-x86
 	# First remake
 	-mv -f $(DFEJ_DIR)/src/dfej $(DFEJ_DIR)/src/dfej-dynamic
 	-mv -f $(DFEJ_DIR)/src/dfej-linux-x86 $(DFEJ_DIR)/src/dfej
@@ -278,8 +279,8 @@ dist-dfej-linux-x86: $(DIST_DIR)/binaries/dfej-linux-x86
 	mv -f $(DFEJ_DIR)/src/dfej-dynamic $(DFEJ_DIR)/src/dfej
 
 	# Now copy it over
-	cp -pf $(DFEJ_DIR)/src/dfej-linux-x86 $(DIST_DIR)/dfej-linux-x86
-	cp -pf $(DFEJ_DIR)/src/dfej $(DIST_DIR)/dfej-linux-dynamic-x86
+	cp -pf $(DFEJ_DIR)/src/dfej-linux-x86 $(DIST_BIN_DIR)/dfej-linux-x86
+	cp -pf $(DFEJ_DIR)/src/dfej $(DIST_BIN_DIR)/dfej-linux-x86-dynamic
 	update-link-dates $(DIST_DIR)/index.html
 	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@lcs.mit.edu
 
@@ -305,7 +306,7 @@ dfej-src/build_mingw_dfej/src/dfej.exe: dfej-src/dfej/src/*.cpp dfej-src/dfej/sr
 	rename .mingw-saved.o .o dfej-src/dfej/src/*.mingw-saved.o
 
 dist-dfej-windows: dfej-src/build_mingw_dfej/src/dfej.exe
-	cp dfej-src/build_mingw_dfej/src/dfej.exe $(DIST_DIR)/dfej.exe
+	cp dfej-src/build_mingw_dfej/src/dfej.exe $(DIST_BIN_DIR)/dfej.exe
 	update-link-dates $(DIST_DIR)/index.html
 
 ## Cross-compiling DFEJ to create a Windows executable (instructions by
