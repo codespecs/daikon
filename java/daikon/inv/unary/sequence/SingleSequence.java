@@ -177,12 +177,10 @@ public abstract class SingleSequence
 
               VarInfo transThisVar = subseqTemplate.transforms[0][0];
               // Second transformed var in first invariant
-              if ((subSeqInv.var1_in_var2 && subSeqInv.var1() == transThisVar) ||
-                  (subSeqInv.var2_in_var1 && subSeqInv.var2() == transThisVar)) {
                 Invariant[] suppressors = new Invariant[] { similarTemplate.results[0],
                                                             subseqTemplate.results[0] };
                 return new SuppressionLink (inv, suppressors);
-              }
+                // }
             }
 
             subseqTemplate.resetResults();
@@ -194,8 +192,6 @@ public abstract class SingleSequence
 
               VarInfo transThisVar = subseqTemplate.transforms[0][0];
               // Second transformed var in first invariant
-              if ((subSeqInv.var1_in_var2 && subSeqInv.var1() == transThisVar) ||
-                  (subSeqInv.var2_in_var1 && subSeqInv.var2() == transThisVar)) {
                 Invariant[] suppressors = new Invariant[] {
                   similarTemplate.results[0],
                   subseqTemplate.results[0] };
@@ -205,7 +201,7 @@ public abstract class SingleSequence
                 }
 
                 return new SuppressionLink (inv, suppressors);
-              }
+                // }
             }
           }
         }
