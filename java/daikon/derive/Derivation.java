@@ -64,13 +64,31 @@ public abstract class Derivation
   public VarInfo getVarInfo() {
     if (this_var_info == null) {
       this_var_info = makeVarInfo();
-      this_var_info.derived = this;
-      this_var_info.canBeMissing = canBeMissing();
-      getBases();
+      makeVarInfo_common_setup(this_var_info);
     }
     return this_var_info;
   }
   private VarInfo this_var_info;
+
+  /**
+   * Used by all child classes to actually create the VarInfo this
+   * represents, after which it is interned for getVarInfo().
+   **/
+  // This is in each class, but I can't have a private abstract method.
+  protected abstract VarInfo makeVarInfo();
+
+  protected void makeVarInfo_common_setup(VarInfo vi) {
+    // Common tasks that are abstracted into here.
+    vi.derived = this;
+    vi.canBeMissing = canBeMissing();
+    if (isParam()) {
+      this_var_info.aux = vi.aux.setValue(VarInfoAux.IS_PARAM,
+                                          VarInfoAux.TRUE);
+    }
+  }
+
+  // Set whether the derivation is a param according to aux info
+  protected abstract boolean isParam();
 
   public boolean missing_array_bounds = false;
   /**
@@ -83,9 +101,6 @@ public abstract class Derivation
   public boolean missingOutOfBounds() {
     return (missing_array_bounds);
   }
-
-  // This is in each class, but I can't have a private abstract method.
-  protected abstract VarInfo makeVarInfo();
 
   /* *
    * For debugging only; returns true if the variables from which this

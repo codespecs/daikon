@@ -51,6 +51,10 @@ public abstract class UnaryDerivation
     return new VarInfo[] { base() };
   }
 
+  protected boolean isParam() {
+    return base.aux.getFlag(VarInfoAux.IS_PARAM);
+  }
+
   public boolean isDerivedFromNonCanonical() {
     return ! base.isCanonical();
   }

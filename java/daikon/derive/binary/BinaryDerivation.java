@@ -73,35 +73,11 @@ public abstract class BinaryDerivation
   protected abstract ValueAndModified computeValueAndModifiedImpl(ValueTuple vt);
 
 
-  /**
-   * Return value for for getVarInfo().
-   **/
-  private VarInfo this_var_info;
-  public VarInfo getVarInfo() {
-    if (this_var_info == null) {
-      this_var_info = this.makeVarInfo();
-      this_var_info.derived = this;
-
-      // Set whether the derivation is a param according to aux info
-      boolean isParam =
-        base1.aux.getFlag(VarInfoAux.IS_PARAM) ||
-        base2.aux.getFlag(VarInfoAux.IS_PARAM);
-      if (isParam) {
-        this_var_info.aux = this_var_info.aux.setValue(VarInfoAux.IS_PARAM,
-                                                       VarInfoAux.TRUE);
-      }
-      // [INCR] base1.derivees.add(this);
-      // [INCR] base2.derivees.add(this);
-    }
-    return this_var_info;
+  protected boolean isParam() {
+    return (base1.aux.getFlag(VarInfoAux.IS_PARAM)
+            || base2.aux.getFlag(VarInfoAux.IS_PARAM));
   }
 
-  /**
-   * Used by all child classes to actually create the VarInfo this
-   * represents, after which it is interned for getVarInfo().
-   **/
-  // This is in each class, but I can't have a private abstract method.
-  protected abstract VarInfo makeVarInfo();
 
   public int derivedDepth() {
     return 1 + Math.max(base1.derivedDepth(), base2.derivedDepth());
