@@ -138,7 +138,10 @@ public final class UtilMDE {
     primitiveClassesFromJvm.put("S", "short");
   }
 
-  /** Convert a string of the form "[Ljava/lang/Object;" to "java.lang.Object[]" **/
+  /**
+   * Convert a classname from JVML format to Java format.
+   * For instance, convert "[Ljava/lang/Object;" to "java.lang.Object[]".
+   **/
   public static String classnameFromJvm(String classname) {
     int dims = 0;
     while (classname.startsWith("[")) {
@@ -164,11 +167,16 @@ public final class UtilMDE {
     return result.replace('/', '.');
   }
 
+  /**
+   * Convert an argument list from JVML format to Java format.
+   * For instance, convert "([Ljava/lang/Integer;I[[Ljava/lang/Integer;)"
+   * to "(java.lang.Integer[], int, java.lang.Integer[][])".
+   **/
   public static String arglistFromJvm(String arglist) {
-    String result = "(";
     if (! (arglist.startsWith("(") && arglist.endsWith(")"))) {
       throw new Error("Malformed arglist");
     }
+    String result = "(";
     int pos = 1;
     while (pos < arglist.length()-1) {
       if (pos > 1)
