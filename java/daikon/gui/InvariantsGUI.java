@@ -3,6 +3,7 @@ package daikon.gui;
 import java.io.*;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -20,7 +21,7 @@ public class InvariantsGUI extends JFrame implements KeyListener {
     InvariantTablesPanel invariantsTablesPanel;
 
     public static void main( String args[] ) {
-	String invFileName = "/g1/users/mhao/daikon/inv_files/jnl.inv"; // use this by default, for now
+	String invFileName = "/g1/users/mhao/daikon/inv_files/dsaa.inv"; // use this by default, for now
 	if (args.length > 0)
 	    invFileName = args[0];
 	InvariantsGUI gui = new InvariantsGUI( invFileName );
@@ -30,32 +31,12 @@ public class InvariantsGUI extends JFrame implements KeyListener {
 	DefaultTreeModel treeModel = constructTreeModel( invFileName );
 	JTree tree = new JTree( treeModel );
 	JScrollPane invariantTablesScrollPane = new JScrollPane();
-	setupGUI( tree, invariantTablesScrollPane );
 	
 	TreeSelectionModel treeSelectionModel = tree.getSelectionModel();
 	invariantsTablesPanel = new InvariantTablesPanel( invariantTablesScrollPane, treeSelectionModel );
 	treeSelectionModel.addTreeSelectionListener( invariantsTablesPanel );
-    }
 
-    public PptMap getPptMapFromFile( String fileName ) {
-	try {
-	    InputStream istream = new FileInputStream( fileName );
-	    if (fileName.endsWith(".gz")) {
-	        istream = new GZIPInputStream(istream);
-	    }
-	    ObjectInputStream o = new ObjectInputStream( istream );
-	    PptMap pptMap = (PptMap) o.readObject();
-	    istream.close();
-	    return pptMap;
-	} catch (Exception e) {
-	    if (e.getClass().getName().equals( "java.io.FileNotFoundException" ))
-		System.out.println( "Error: invariants object file not found." );
-	    else if (e.getClass().getName().equals( "java.io.StreamCorruptedException" ))
-		System.out.println( "Error: invariants object file is corrupted." );
-	    else
-		System.out.println( "Error: " + e.getMessage() );
-	    throw new Error( "InvariantsGUI.getPptMapFromFile():  error reading pptMap from '" + fileName + "'" );
-	}
+	setupGUI( tree, invariantTablesScrollPane );
     }
 
     public DefaultTreeModel constructTreeModel( String fileName ) {
@@ -132,6 +113,26 @@ public class InvariantsGUI extends JFrame implements KeyListener {
 	return new DefaultTreeModel( root );
     }
 
+    public PptMap getPptMapFromFile( String fileName ) {
+	try {
+	    InputStream istream = new FileInputStream( fileName );
+	    if (fileName.endsWith( ".gz" ))
+	        istream = new GZIPInputStream( istream );
+	    ObjectInputStream o = new ObjectInputStream( istream );
+	    PptMap pptMap = (PptMap) o.readObject();
+	    istream.close();
+	    return pptMap;
+	} catch (Exception e) {
+	    if (e.getClass().getName().equals( "java.io.FileNotFoundException" ))
+		System.out.println( "Error: invariants object file not found." );
+	    else if (e.getClass().getName().equals( "java.io.StreamCorruptedException" ))
+		System.out.println( "Error: invariants object file is corrupted." );
+	    else
+		System.out.println( "Error: " + e.getMessage() );
+	    throw new Error( "InvariantsGUI.getPptMapFromFile():  error reading pptMap from '" + fileName + "'" );
+	}
+    }
+
     //  Returns child with name <code>name</code> if there is one; otherwise return <code>null</code>.
     //  Used by constructTreeModel().
     protected DefaultMutableTreeNode getChildByName( DefaultMutableTreeNode node, String name ) {
@@ -149,11 +150,21 @@ public class InvariantsGUI extends JFrame implements KeyListener {
 	//  If the user clicks on a method, the method's ppt's will be selected
 	//  but we don't want the method node to expand.
 	tree.setExpandsSelectedPaths( false );
+ 
+	JCheckBox showUnjustifiedCheckBox = new JCheckBox( "Show unjustified invariants" );
+	showUnjustifiedCheckBox.addItemListener( invariantsTablesPanel );
 
-	invariantTablesScrollPane.setViewportView( new JPanel());
+	JPanel controlPanel = new JPanel();
+	controlPanel.add( showUnjustifiedCheckBox );
+
+	JPanel topPanel = new JPanel();	// includes control panel and tree
+	topPanel.setLayout( new BorderLayout());
+	topPanel.add( controlPanel, BorderLayout.NORTH );
+	topPanel.add( new JScrollPane( tree ), BorderLayout.CENTER );
+
+	//	invariantTablesScrollPane.setViewportView( new JPanel());
 	JSplitPane splitPane = new JSplitPane( JSplitPane.VERTICAL_SPLIT,
-					       new JScrollPane( tree ),
-					       invariantTablesScrollPane );
+					       topPanel, invariantTablesScrollPane );
 	splitPane.setOneTouchExpandable( true );
 	splitPane.setDividerSize( 2 );
 
@@ -177,19 +188,22 @@ public class InvariantsGUI extends JFrame implements KeyListener {
 }
 
 
-class InvariantTablesPanel implements TreeSelectionListener {
+class InvariantTablesPanel implements TreeSelectionListener, ItemListener {
     JScrollPane scrollPane;	// the main scrollPane, which contains the main panel
     JPanel panel;		// the main panel
     TreeSelectionModel treeSelectionModel;
+
     List tables = new ArrayList();
     List tableNames = new ArrayList();
     List tableHeights = new ArrayList();
+    List tableModels = new ArrayList();
     int currentTableIndex;	// used by scrollToTable methods
     
     public InvariantTablesPanel( JScrollPane scrollPane, TreeSelectionModel treeSelectionModel ) {
 	this.scrollPane = scrollPane;
-	this.panel = (JPanel) scrollPane.getViewport().getView();
+	this.panel = new JPanel();
 	this.panel.setLayout( new BoxLayout( panel, BoxLayout.Y_AXIS ));
+	this.scrollPane.setViewportView( panel );
 	this.treeSelectionModel = treeSelectionModel;
     }
 
@@ -268,7 +282,9 @@ class InvariantTablesPanel implements TreeSelectionListener {
 
     private JComponent setupTable( PptTopLevel topLevel ) {
 	Vector invariants = topLevel.invariants_vector();
-	TableSorter sorter = new TableSorter( new InvariantTableModel( invariants ));
+	InvariantTableModel tableModel = new InvariantTableModel( invariants );
+	tableModels.add( tableModel );
+	TableSorter sorter = new TableSorter( tableModel );
 	JTable table = new JTable( sorter );
 	sorter.addMouseListenerToHeaderInTable( table );
 
@@ -310,6 +326,17 @@ class InvariantTablesPanel implements TreeSelectionListener {
 	return tablePanel;
     }
 
+    public void itemStateChanged( ItemEvent e ) {
+	if (e.getStateChange() == ItemEvent.SELECTED)
+	    for (Iterator iter = tableModels.iterator(); iter.hasNext(); )
+		((InvariantTableModel) iter.next()).showUnjustifiedInvariants( true );
+	else
+	    for (Iterator iter = tableModels.iterator(); iter.hasNext(); )
+		((InvariantTableModel) iter.next()).showUnjustifiedInvariants( false );
+	panel.repaint();
+	panel.revalidate();
+    }
+
     void scrollToCurrentTable() {
 	int height = 0;
 	for (int i=0; i < currentTableIndex; i++)
@@ -332,15 +359,20 @@ class InvariantTablesPanel implements TreeSelectionListener {
     
 
 class InvariantTableModel extends AbstractTableModel {
-    Vector invariants;
-    final String[] columnNames = { "invariant", "# values", "# samples", "probability", "justified" };
-    DecimalFormat format = new DecimalFormat( "0.##E0" ); // for displaying probabilities
+    static final String[] columnNames = { "invariant", "# values", "# samples", "probability", "justified" };
+    static final DecimalFormat format = new DecimalFormat( "0.##E0" ); // for displaying probabilities
+
+    Vector allInvariants;
+    Vector filteredInvariants = new Vector();	// only filtered invariants are displayed
+
+    static boolean isShowingUnjustifiedInvariants = false;
 
     public InvariantTableModel( Vector invariants ) {
-	this.invariants = invariants;
+	allInvariants = invariants;
+	showUnjustifiedInvariants( isShowingUnjustifiedInvariants );
     }
 
-    public int getRowCount() { return invariants.size(); }
+    public int getRowCount() { return filteredInvariants.size(); }
 
     public int getColumnCount() { return columnNames.length; }
 
@@ -349,7 +381,7 @@ class InvariantTableModel extends AbstractTableModel {
     }
 
     public Object getValueAt( int row, int column ) {
-	Invariant invariant = (Invariant) invariants.get( row );
+	Invariant invariant = (Invariant) filteredInvariants.get( row );
 	if (column == 0)	    return invariant.format();
 	else if (column == 1)	    return new Integer( invariant.ppt.num_values());
 	else if (column == 2)	    return new Integer( invariant.ppt.num_samples());
@@ -357,5 +389,25 @@ class InvariantTableModel extends AbstractTableModel {
 	else if (column == 4)	    return new Boolean( invariant.justified());
 	return null;
     }
+
+    //  Methods called by InvariantsGUI to control/filter what invariants are being displayed.
+
+    public void showUnjustifiedInvariants( boolean showUnjustifiedInvariants ) {
+	//  Assume this method is called only when showUnjustifiedInvariants changes.
+	if (showUnjustifiedInvariants)
+	    filteredInvariants = allInvariants;
+	else {
+	    filteredInvariants = new Vector();
+	    Invariant invariant;
+	    for (Iterator iter = allInvariants.iterator(); iter.hasNext(); ) {
+		invariant = (Invariant) iter.next();
+		if (invariant.justified())
+		    filteredInvariants.add( invariant );
+	    }
+	}
+	this.isShowingUnjustifiedInvariants = showUnjustifiedInvariants;
+	fireTableDataChanged();
+    }
 }
+
 
