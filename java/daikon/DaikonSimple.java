@@ -124,9 +124,11 @@ public class DaikonSimple {
 								|| vars[1] == vars[2]
 								|| vars[0] == vars[2]))) {
 							if (x.ppt.num_values() != 0) {
-
+								if(x.isActive()) {
+								
 								System.out.println(x.getClass());
 								System.out.println(x);
+								}
 							}
 						}
 					}
