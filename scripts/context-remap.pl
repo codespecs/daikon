@@ -3,7 +3,7 @@
   if 0;
 # context.pl -- Read dfej's context-sensitivity .map files and produce various things from them.
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2001-12-09 14:20:16 mistere>
+# Time-stamp: <2001-12-09 18:44:31 mistere>
 
 # The input is ... TODO
 
@@ -23,6 +23,11 @@ if (($#ARGV >= 0) && ($ARGV[0] eq "-d")) {
   print STDERR "Debugging on\n";
   $debug = 1;
   shift @ARGV;
+}
+
+sub debugln ( $ ) {
+  return unless $debug;
+  print STDERR @_, "\n";
 }
 
 usagedie("Expecting mode") unless ($ARGV[0] =~ /^--(.*)/);
@@ -53,6 +58,7 @@ sub slurpfile {
 
 my @records = ();
 for my $filename (@ARGV) {
+  debugln("Reading $filename ...");
   my @lines = slurpfile($filename);
   for my $line (@lines) {
     $line =~ s/\#.*//;           # strip hash comments
@@ -64,6 +70,8 @@ for my $filename (@ARGV) {
     my @rec;
     if (@rec = ($line =~ /^(0x[0-9a-f]+)\s+([\w\$\.]+)\s+([\w\$\<\>]+)\s+\[(.*?):(\d+):(\d+)\]\s+->\s+"([^\"]*?)"\s+\[(.*?)\]\s+([\w\$\.]+)\s+([\w\$\<\>]+)$/)) {
       # id, fromclass, frommeth, fromfile, fromline, fromcol, toexpr, toargs, toclass, tometh
+      $rec[1] =~ s/.*\.//; # remove package from fromclass
+      $rec[8] =~ s/.*\.//; # remove package from toclass
       push @records, \@rec;
     } else {
       die("Unknown line format: $line");
@@ -77,11 +85,13 @@ for my $filename (@ARGV) {
   # id, fromclass, frommeth, fromfile, fromline, fromcol, toexpr, toargs, toclass
   my @rec = (0,
 	     "UnknownClass", "unknownMethod", "UnknownClass.java", -1, -1,
-	     "unknownCallingExpression", "(??)", "UnknownClass");
+	     "unknownCallingExpression", "(??)", "UnknownClass", "unknownMethod");
   push @records, \@rec;
 }
 
 # ********** Post-processing **********
+
+debugln("Building maps (" . scalar(@records) . " records) ...");
 
 my %spinfos = ();  # in creating spinfo file, just dump this out (key -> header, values -> list of splits)
 my %remap = ();   # in processing daikon output, remap these keys to the values
@@ -131,7 +141,7 @@ if ("line" eq $grain) {
     $method2num{$method} .= "daikon_callsite_id == " . $id;
   }
 
-  for my $method (keys %method2num) {
+  for my $method (sort keys %method2num) {
     my $num = $method2num{$method};
     ($method =~ /(.*)\*(.*)/);
     my ($caller, $callee) = ($1, $2);
@@ -162,7 +172,7 @@ if ("line" eq $grain) {
     $class2num{$class} .= "daikon_callsite_id == " . $id;
   }
 
-  for my $class (keys %class2num) {
+  for my $class (sort keys %class2num) {
     my $num = $class2num{$class};
     ($class =~ /(.*)\*(.*)/);
     my ($caller, $callee) = ($1, $2);
@@ -181,8 +191,10 @@ if ("line" eq $grain) {
   }
 }
 
+debugln("Final pass ...");
+
 if ("spinfo" eq $mode) {
-  for my $header (keys %spinfos) {
+  for my $header (sort keys %spinfos) {
     my $lines = $spinfos{$header};
     print $header;
     print $lines;
