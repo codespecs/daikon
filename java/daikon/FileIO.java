@@ -125,7 +125,7 @@ public final class FileIO {
 	continue;
       if (line.equals(declaration_header)) {
 	PptTopLevel ppt = read_declaration(reader, all_ppts, varcomp_format, filename);
-        // ppt can be null if this declaration was skipped because of --ppt or --ppt_omit.
+	// ppt can be null if this declaration was skipped because of --ppt or --ppt_omit.
         if (ppt != null) {
           new_ppts.add(ppt);
         }
@@ -178,21 +178,28 @@ public final class FileIO {
                       + " found at file " + filename
                       + " line " + file.getLineNumber());
     }
-
-    if (((Daikon.ppt_omit_regexp != null)
-         && Global.regexp_matcher.contains(ppt_name, Daikon.ppt_omit_regexp))
-        || ((Daikon.ppt_regexp != null)
-            && ! Global.regexp_matcher.contains(ppt_name, Daikon.ppt_regexp))) {
-      // Discard this declaration
-      // System.out.println("Discarding non-matching program point declaration " + ppt_name);
-      String line = file.readLine();
-      // This fails if some lines of a declaration (e.g., the comparability
-      // field) are empty.
-      while ((line != null) && !line.equals("")) {
-        line = file.readLine();
+    
+    if(!Global.allSplitters){
+      //if all the splitters are to be tried at all program points,
+      //then we need to create all the program points because the
+      //creation of splitters requires information from the program
+      //points
+      if (((Daikon.ppt_omit_regexp != null)
+	   && Global.regexp_matcher.contains(ppt_name, Daikon.ppt_omit_regexp))
+	  || ((Daikon.ppt_regexp != null)
+	      && ! Global.regexp_matcher.contains(ppt_name, Daikon.ppt_regexp))) {
+	// Discard this declaration
+	// System.out.println("Discarding non-matching program point declaration " + ppt_name);
+	String line = file.readLine();
+	// This fails if some lines of a declaration (e.g., the comparability
+	// field) are empty.
+	while ((line != null) && !line.equals("")) {
+	  line = file.readLine();
+	}
+	return null;
       }
-      return null;
     }
+    
 
     // if (ppt_name.endsWith(":::ENTER"))
     //   functions.add(ppt_name.substring(0, ppt_name.length() - 8));
@@ -871,6 +878,7 @@ public final class FileIO {
       }
       String mod_string = line;
       int mod = ValueTuple.parseModified(line);
+      
       // System.out.println("Mod is " + mod + " at " + data_trace_filename + " line " + reader.getLineNumber()
       //                   + "\n  for variable " + vi.name
       //                   + " for program point " + ppt.name);
