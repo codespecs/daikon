@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 
-# Automatically builds and tests the software in the Daikon
-# Distribution.  If the --quiet option is selected, only generates
+# Automatically builds and tests the software in the Daikon CVS
+# Repository.  If the --quiet option is selected, only generates
 # output if a task fails (useful for cron job).
 
 use strict;
