@@ -2116,6 +2116,60 @@ public class PptTopLevel extends Ppt {
       }
       all_cont.append(")");
     }
+
+    // Restate OBJECT invariants on incoming arguments of our same type
+    if (ppt_name.isEnterPoint() && controlling_ppts.size() == 1) {
+      // Guess the OBJECT ppt; usually right
+      PptTopLevel OBJ = (PptTopLevel) controlling_ppts.iterator().next();
+      if (OBJ.ppt_name.isObjectInstanceSynthetic()) {
+	// Find variables here of the same type as us
+	String clsname = ppt_name.getFullClassName();
+	for (int i=0; i < var_infos.length; i++) {
+	  VarInfo vi = var_infos[i];
+	  String progtype = vi.type.base();
+	  // System.out.println("base = " + progtype + "; cls = " + clsname);
+	  if (progtype.equals(clsname)) {
+	    // Only process primitive names like 'x'; not 'x.foo' or 'a[x..]'
+	    if (vi.name.inOrderTraversal().size() != 1) {
+	      System.err.println("Object invarints on argument: skipping " + vi.name.name());
+	      continue;
+	    }
+	    // State the object invariant on the incoming argument
+	    all_cont.append("\t(AND \n");
+	    Iterator _invs = InvariantFilters.addEqualityInvariants(OBJ.invariants_vector()).iterator();
+	    while(_invs.hasNext()) {
+	      Invariant inv = (Invariant) _invs.next();
+	      if (!inv.isWorthPrinting()) {
+		continue;
+	      }
+	      String fmt = inv.format_simplify();
+	      if (fmt.indexOf("format_simplify") >= 0) {
+		continue;
+	      }
+	      // XXX This isn't such a hot thing to do, but it isn't that
+	      // hard, and seems to work.
+	      PptSlice saved = inv.ppt;
+	      PptSlice rewritten = new PptSlice0(saved.parent);
+	      rewritten.var_infos = new VarInfo[saved.var_infos.length];
+	      for (int x=0; x<rewritten.var_infos.length; x++) {
+		VarInfo svi = saved.var_infos[x];
+		rewritten.var_infos[x] =
+		  new VarInfo(svi.name.replaceAll(VarInfoName.parse("this"), vi.name),
+			      svi.type, svi.rep_type,
+			      svi.comparability.makeAlias(svi.name));
+	      }
+	      inv.ppt = rewritten;
+	      all_cont.append("\t\t");
+	      all_cont.append(inv.format_simplify());
+	      all_cont.append("\n");
+	      inv.ppt = saved;
+	    }
+	    all_cont.append(")");	    
+	  }
+	}
+      }
+    }
+
     all_cont.append(")");
     CmdAssume background = new CmdAssume(all_cont.toString());
 
