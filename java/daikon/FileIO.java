@@ -117,7 +117,7 @@ public final class FileIO {
   // The Daikon manual states that "#" is the comment starter, but
   // some code assumes "//", so permit both (at least temporarily).
   // final static String comment_prefix = "//";
-  private static final boolean isComment(String s) {
+  public static final boolean isComment(String s) {
     return s.startsWith("//") || s.startsWith("#");
   }
 
@@ -265,10 +265,7 @@ public final class FileIO {
       // they create all derived variables and possible invariants.
       // I am turning off all_splitters by default.
 
-      if (((Daikon.ppt_omit_regexp != null)
-           && Global.regexp_matcher.contains(ppt_name, Daikon.ppt_omit_regexp))
-          || ((Daikon.ppt_regexp != null)
-              && ! Global.regexp_matcher.contains(ppt_name, Daikon.ppt_regexp))) {
+      if (!ppt_included (ppt_name)) {
         // Discard this declaration
         // System.out.println("Discarding non-matching program point declaration " + name());
         String line = file.readLine();
@@ -624,11 +621,7 @@ public final class FileIO {
 
         String line = line_.intern();
 
-        if ((line == declaration_header)
-            || ((Daikon.ppt_omit_regexp != null)
-                && Global.regexp_matcher.contains(line, Daikon.ppt_omit_regexp))
-            || ((Daikon.ppt_regexp != null)
-                && ! Global.regexp_matcher.contains(line, Daikon.ppt_regexp))) {
+        if ((line == declaration_header) || !ppt_included (line)) {
           // Discard this entire program point information
           // System.out.println("Discarding non-matching dtrace program point " + line);
           while ((line != null) && !line.equals(""))
@@ -742,6 +735,8 @@ public final class FileIO {
   static PptTopLevel.Stats stats = new PptTopLevel.Stats();
   static PptTopLevel.Stats gstats = new PptTopLevel.Stats();
   static boolean store_stats = false;
+  public static int samples_considered = 0;
+  public static int samples_processed = 0;
 
   /**
    * Add orig() and derived variables to vt (by side effect), then
@@ -750,6 +745,8 @@ public final class FileIO {
    **/
   public static void process_sample(PptMap all_ppts, PptTopLevel ppt,
                                     ValueTuple vt, Integer nonce)  {
+    samples_considered++;
+
     { // For now, keep indentation the same
       {
         // Now add some additional variable values that don't appear directly
@@ -794,6 +791,7 @@ public final class FileIO {
           debugRead.fine ("  length is " + vt.vals.length);
         }
 
+        samples_processed++;
         long start = 0;
         long start_mem = 0;
         if (Daikon.debugStats.isLoggable (Level.FINE)) {
@@ -1353,11 +1351,7 @@ public final class FileIO {
 
         String line = line_.intern();
 
-        if ((line == declaration_header)
-            || ((Daikon.ppt_omit_regexp != null)
-                && Global.regexp_matcher.contains(line, Daikon.ppt_omit_regexp))
-            || ((Daikon.ppt_regexp != null)
-                && ! Global.regexp_matcher.contains(line, Daikon.ppt_regexp))) {
+        if ((line == declaration_header) || !ppt_included (line)) {
           // Discard this entire program point information
           // System.out.println("Discarding non-matching dtrace program point " + line);
           while ((line != null) && !line.equals(""))
@@ -1440,4 +1434,21 @@ public final class FileIO {
     data_trace_reader = null;
   }
 
+  /**
+   * Returns whether or not the specified ppt name should be included
+   * in processing.  Ppts can be excluded because they match the omit_regexp,
+   * don't match ppt_regexp, or are greater than ppt_max_name
+   */
+  public static boolean ppt_included (String ppt_name) {
+
+    if (((Daikon.ppt_omit_regexp != null)
+          && Global.regexp_matcher.contains(ppt_name, Daikon.ppt_omit_regexp))
+        || ((Daikon.ppt_regexp != null)
+          && ! Global.regexp_matcher.contains(ppt_name, Daikon.ppt_regexp))
+        || ((Daikon.ppt_max_name != null)
+           && (Daikon.ppt_max_name.compareTo (ppt_name) < 0)))
+      return (false);
+    else
+      return (true);
+    }
 }
