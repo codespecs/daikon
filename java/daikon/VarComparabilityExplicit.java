@@ -111,6 +111,7 @@ public final class VarComparabilityExplicit
     }
     protected String name_impl() { throw new UnsupportedOperationException(); }
     protected String esc_name_impl() { throw new UnsupportedOperationException(); }
+    protected String jml_name_impl() { throw new UnsupportedOperationException(); }
     protected String ioa_name_impl() { throw new UnsupportedOperationException(); }
     protected String java_name_impl() { throw new UnsupportedOperationException(); }
     protected String java_name_impl(String classname) { throw new UnsupportedOperationException(); }

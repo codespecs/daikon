@@ -27,7 +27,6 @@ import java.lang.reflect.*;
 public abstract class VarInfoName
   implements Serializable, Comparable
 {
-
   /**
    * Debugging Category
    **/
@@ -36,7 +35,7 @@ public abstract class VarInfoName
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20020614L;
 
   /**
    * Given the standard String representation of a variable name (from
@@ -103,7 +102,7 @@ public abstract class VarInfoName
       String field = name.substring(dot+1);
       return parse(first).applyField(field);
     }
-    
+
 
 
     // ??
@@ -150,7 +149,22 @@ public abstract class VarInfoName
   }
   private String esc_name_cached = null; // interned
   protected abstract String esc_name_impl();
-  
+
+  public String jml_name() {
+    if (jml_name_cached == null) {
+      try {
+	jml_name_cached = jml_name_impl().intern();
+      } catch (RuntimeException e) {
+	System.err.println("repr = " + repr());
+	throw e;
+      }
+    }
+    // System.out.println("jml_name = " + jml_name_cached + " for " + name() + " of class " + this.getClass().getName());
+    return jml_name_cached;
+  }
+  private String jml_name_cached = null; // interned
+  protected abstract String jml_name_impl();
+
   /**
    * @return the string representation (interned) of this name, in the
    * Simplify tool output format
@@ -241,6 +255,7 @@ public abstract class VarInfoName
     if (format == OutputFormat.ESCJAVA) return esc_name();
     if (format == OutputFormat.JAVA) return java_name();
     if (format == OutputFormat.IOA) return ioa_name();
+    if (format == OutputFormat.JML) return jml_name();
     throw new UnsupportedOperationException
       ("Unknown format requested: " + format);
   }
@@ -436,6 +451,8 @@ public abstract class VarInfoName
       ioa_name_cached = ioa_name_cached.intern();
     if (java_name_cached != null)
       java_name_cached = java_name_cached.intern();
+    if (jml_name_cached != null)
+      jml_name_cached = jml_name_cached.intern();
   }
 
 
@@ -471,6 +488,10 @@ public abstract class VarInfoName
       return name;
     }
     protected String esc_name_impl() {
+      return "return".equals(name) ? "\\result" : name;
+    }
+
+    protected String jml_name_impl() {
       return "return".equals(name) ? "\\result" : name;
     }
 
@@ -582,6 +603,10 @@ public abstract class VarInfoName
       return sequence.term.esc_name() + ".length";
     }
 
+    protected String jml_name_impl() {
+      return sequence.term.jml_name() + ".length";
+    }
+
     protected String simplify_name_impl(boolean prestate) {
       return "(arrayLength " + sequence.term.simplify_name(prestate) + ")";
     }
@@ -662,6 +687,10 @@ public abstract class VarInfoName
       return "(warning: format_esc() needs to be implemented: " +
 	function + " on " + argument.repr() + ")";
     }
+    protected String jml_name_impl() {
+      return "(warning: format_jml() needs to be implemented: " +
+	function + " on " + argument.repr() + ")";
+    }
     protected String simplify_name_impl(boolean prestate) {
       return "(warning: format_simplify() needs to be implemented: " +
 	function + " on " + argument.repr() + ")";
@@ -733,6 +762,15 @@ public abstract class VarInfoName
 	if (i.hasNext()) sb.append (", ");
       }
       return "(warning: format_esc() needs to be implemented: " +
+	function + " on " + sb.toString() + ")";
+    }
+    protected String jml_name_impl() {
+      StringBuffer sb = new StringBuffer();
+      for (Iterator i = args.iterator(); i.hasNext();) {
+	sb.append (((VarInfoName) i.next()).repr());
+	if (i.hasNext()) sb.append (", ");
+      }
+      return "(warning: format_jml() needs to be implemented: " +
 	function + " on " + sb.toString() + ")";
     }
     protected String simplify_name_impl(boolean prestate) {
@@ -875,6 +913,9 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return term.esc_name() + "." + field;
     }
+    protected String jml_name_impl() {
+      return term.jml_name() + "." + field;
+    }
     protected String simplify_name_impl(boolean prestate) {
       return "(select " + Simple.simplify_name_impl(field, prestate) + " " + term.simplify_name(prestate) + ")";
     }
@@ -941,6 +982,9 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return "\\typeof(" + term.esc_name() + ")";
     }
+    protected String jml_name_impl() {
+      return "\\typeof(" + term.jml_name() + ")";
+    }
     protected String simplify_name_impl(boolean prestate) {
       return "(typeof " + term.simplify_name(prestate) + ")";
     }
@@ -999,6 +1043,9 @@ public abstract class VarInfoName
     }
     protected String esc_name_impl() {
       return "\\old(" + term.esc_name() + ")";
+    }
+    protected String jml_name_impl() {
+      return "\\old(" + term.jml_name() + ")";
     }
     protected String simplify_name_impl(boolean prestate) {
       return term.simplify_name(true);
@@ -1067,6 +1114,10 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return "\\new(" + term.esc_name() + ")";
     }
+    protected String jml_name_impl() {
+      throw new UnsupportedOperationException("JML cannot format a Poststate" +
+					      " [repr=" + repr() + "]");
+    }
     protected String simplify_name_impl(boolean prestate) {
       return term.simplify_name(false);
     }
@@ -1122,6 +1173,9 @@ public abstract class VarInfoName
     }
     protected String esc_name_impl() {
       return term.esc_name() + amount();
+    }
+    protected String jml_name_impl() {
+      return term.jml_name() + amount();
     }
     protected String simplify_name_impl(boolean prestate) {
       return (amount < 0) ?
@@ -1201,6 +1255,13 @@ public abstract class VarInfoName
     }
     protected String esc_name_impl(String index) {
       return term.esc_name() + "[" + index + "]";
+    }
+    protected String jml_name_impl() {
+      throw new UnsupportedOperationException("JML cannot format an unquantified sequence of elements" +
+					      " [repr=" + repr() + "]");
+    }
+    protected String jml_name_impl(String index) {
+      return term.jml_name() + "[" + index + "]";
     }
     protected String simplify_name_impl(boolean prestate) {
       return "(select elems " + term.simplify_name(prestate) + ")";
@@ -1317,6 +1378,9 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return sequence.esc_name_impl(indexExplicit(sequence, index).esc_name());
     }
+    protected String jml_name_impl() {
+      return sequence.jml_name_impl(indexExplicit(sequence, index).jml_name());
+    }
     protected String simplify_name_impl(boolean prestate) {
       return "(select " + sequence.simplify_name(prestate) + " " +
 	indexExplicit(sequence, index).simplify_name(prestate) + ")";
@@ -1401,6 +1465,9 @@ public abstract class VarInfoName
       //return the default implementation for now.
       //return name_impl();
       throw new UnsupportedOperationException("ESC cannot format an unquantified slice of elements");
+    }
+    protected String jml_name_impl() {
+      throw new UnsupportedOperationException("JML cannot format an unquantified slice of elements");
     }
     protected String simplify_name_impl(boolean prestate) {
       throw new UnsupportedOperationException("Simplify cannot format an unquantified slice of elements");
@@ -2313,19 +2380,190 @@ public abstract class VarInfoName
       return format_esc(roots, false);
     }
     public static String[] format_esc(VarInfoName[] roots, boolean elementwise) {
+       return format_java_style(roots,elementwise,true,OutputFormat.ESCJAVA);
+       // Assert.assert(roots != null);
+       //
+       //QuantifyReturn qret = quantify(roots);
+       //
+      // build the "\forall ..." predicate
+       //String[] result = new String[roots.length+2];
+       //StringBuffer int_list, conditions;
+       //{
+	// "i, j, ..."
+       //int_list = new StringBuffer();
+	// "ai <= i && i <= bi && aj <= j && j <= bj && ..."
+	// if elementwise, also do "(i-ai) == (b-bi) && ..."
+       //conditions = new StringBuffer();
+       //for (int i=0; i < qret.bound_vars.size(); i++) {
+       // VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
+       // VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
+       // if (i != 0) {
+       //   int_list.append(", ");
+       //   conditions.append(" && ");
+       // }
+       // int_list.append(idx.esc_name());
+       // conditions.append(low.esc_name());
+       // conditions.append(" <= ");
+       // conditions.append(idx.esc_name());
+       // conditions.append(" && ");
+       // conditions.append(idx.esc_name());
+       // conditions.append(" <= ");
+       // conditions.append(high.esc_name());
+       // if (elementwise && (i >= 1)) {
+       //   VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
+       //   VarInfoName _idx = _boundv[0], _low = _boundv[1];
+       //   conditions.append(" && ");
+       //   if (ZERO.equals(_low)) {
+       //     conditions.append(_idx);
+       //   } else {
+       //     conditions.append("(");
+       //     conditions.append(_idx.esc_name());
+       //     conditions.append("-(");
+       //     conditions.append(_low.esc_name());
+       //     conditions.append("))");
+       //   }
+       //   conditions.append(" == ");
+       //   if (ZERO.equals(low)) {
+       //     conditions.append(idx.esc_name());
+       //   } else {
+       //     conditions.append("(");
+       //     conditions.append(idx.esc_name());
+       //     conditions.append("-(");
+       //     conditions.append(low.esc_name());
+       //     conditions.append("))");
+       //   }
+       // }
+       //}
+       //}
+      //if (forall)
+       //result[0] = "(\\forall int " + int_list + "; (" + conditions + ") ==> ";
+	//else
+	//result[0] = "(\\exists int " + int_list + "; (" + conditions + ") && ";
+       //result[result.length-1] = ")";
+
+      // stringify the terms
+       //for (int i=0; i < roots.length; i++) {
+       //result[i+1] = qret.root_primes[i].esc_name();
+       //}
+
+       //return result;
+    }
+
+    // <root*> -> <string string*>
+    /**
+     * Given a list of roots, return a String array where the first
+     * element is a JML-style quantification over newly-introduced
+     * bound variables, the last element is a closer, and the other
+     * elements are jml-named strings for the provided roots (with
+     * sequenced subscripted by one of the new bound variables).
+     **/
+    public static String[] format_jml(VarInfoName[] roots) {
+      return format_jml(roots, false);
+    }
+    public static String[] format_jml(VarInfoName[] roots, boolean elementwise) {
+      return format_jml(roots, elementwise, true);
+    }
+    public static String[] format_jml(VarInfoName[] roots, boolean elementwise,boolean forall) {
+       return format_java_style(roots,elementwise,forall,OutputFormat.JML);
+
+       //Assert.assert(roots != null);
+       //
+       //QuantifyReturn qret = quantify(roots);
+
+      // build the "\forall ..." predicate
+       //String[] result = new String[roots.length+2];
+       //StringBuffer int_list, conditions;
+       //{
+	// "i, j, ..."
+       //int_list = new StringBuffer();
+	// "ai <= i && i <= bi && aj <= j && j <= bj && ..."
+	// if elementwise, also do "(i-ai) == (b-bi) && ..."
+       //conditions = new StringBuffer();
+       //for (int i=0; i < qret.bound_vars.size(); i++) {
+       //	  VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
+       //	  VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
+       //	  if (i != 0) {
+       //	    int_list.append(", ");
+       //	    conditions.append(" && ");
+       //	  }
+       //	  int_list.append(idx.jml_name());
+       //	  conditions.append(low.jml_name());
+       //	  conditions.append(" <= ");
+       //	  conditions.append(idx.jml_name());
+       //	  conditions.append(" && ");
+       //	  conditions.append(idx.jml_name());
+       //	  conditions.append(" <= ");
+       //	  conditions.append(high.jml_name());
+       //	  if (elementwise && (i >= 1)) {
+       //	    VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
+       //	    VarInfoName _idx = _boundv[0], _low = _boundv[1];
+       //	    conditions.append(" && ");
+       //	    if (ZERO.equals(_low)) {
+       //	      conditions.append(_idx);
+       //	    } else {
+       //	      conditions.append("(");
+       //	      conditions.append(_idx.jml_name());
+       //	      conditions.append("-(");
+       //	      conditions.append(_low.jml_name());
+       //	      conditions.append("))");
+       //	    }
+       //	    conditions.append(" == ");
+       //	    if (ZERO.equals(low)) {
+       //	      conditions.append(idx.jml_name());
+       //	    } else {
+       //      conditions.append("(");
+       //	      conditions.append(idx.jml_name());
+       //      conditions.append("-(");
+       //	      conditions.append(low.jml_name());
+       //      conditions.append("))");
+       //	    }
+       //	  }
+       //	}
+       //      }
+       //      if (forall)
+       //	result[0] = "\\forall int " + int_list + "; " + conditions + "; ";
+       //      else
+       //	result[0] = "\\exists int " + int_list + "; " + conditions + "; ";
+
+      // stringify the terms
+       //      for (int i=0; i < roots.length; i++) {
+       //	result[i+1] = qret.root_primes[i].jml_name();
+       //      }
+
+       //      return result;
+    }
+
+    //////////////////////////
+
+     // This set of functions assists in quantification for all of the java style
+     // output formats, that is, java, ESC, and JML. It does the actual work behind
+     // those formatting functions. This function was meant to be called only through
+     // the other public formatting functions.
+     //
+     // The OutputFormat muse be one of those three previously mentioned.
+     // Also, if the java format is selected, forall must be true.
+
+    protected static String[] format_java_style(VarInfoName[] roots,OutputFormat format) {
+      return format_java_style(roots, false, format);
+    }
+    protected static String[] format_java_style(VarInfoName[] roots, boolean elementwise,OutputFormat format) {
+      return format_java_style(roots, elementwise, true, format);
+    }
+    protected static String[] format_java_style(VarInfoName[] roots, boolean elementwise,boolean forall,OutputFormat format) {
       Assert.assert(roots != null);
 
       QuantifyReturn qret = quantify(roots);
 
       // build the "\forall ..." predicate
       String[] result = new String[roots.length+2];
-      StringBuffer int_list, conditions;
+      StringBuffer int_list, conditions,closing;
       {
 	// "i, j, ..."
 	int_list = new StringBuffer();
 	// "ai <= i && i <= bi && aj <= j && j <= bj && ..."
 	// if elementwise, also do "(i-ai) == (b-bi) && ..."
 	conditions = new StringBuffer();
+	closing = new StringBuffer();
 	for (int i=0; i < qret.bound_vars.size(); i++) {
 	  VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
 	  VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
@@ -2333,53 +2571,141 @@ public abstract class VarInfoName
 	    int_list.append(", ");
 	    conditions.append(" && ");
 	  }
-	  int_list.append(idx.esc_name());
-	  conditions.append(low.esc_name());
-	  conditions.append(" <= ");
-	  conditions.append(idx.esc_name());
-	  conditions.append(" && ");
-	  conditions.append(idx.esc_name());
-	  conditions.append(" <= ");
-	  conditions.append(high.esc_name());
+	  closing.append(quant_increment(idx,i,format));
+
+	  int_list.append(quant_var_initial_state(idx,low,format));
+	  conditions.append(quant_termintion_condition(low,idx,high,format));
+
 	  if (elementwise && (i >= 1)) {
 	    VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
 	    VarInfoName _idx = _boundv[0], _low = _boundv[1];
-	    conditions.append(" && ");
-	    if (ZERO.equals(_low)) {
-	      conditions.append(_idx);
-	    } else {
-	      conditions.append("(");
-	      conditions.append(_idx.esc_name());
-	      conditions.append("-(");
-	      conditions.append(_low.esc_name());
-	      conditions.append("))");
-	    }
-	    conditions.append(" == ");
-	    if (ZERO.equals(low)) {
-	      conditions.append(idx.esc_name());
-	    } else {
-	      conditions.append("(");
-	      conditions.append(idx.esc_name());
-	      conditions.append("-(");
-	      conditions.append(low.esc_name());
-	      conditions.append("))");
-	    }
+	    if (format == OutputFormat.JAVA)
+	       conditions.append(" || ");
+	    else
+	       conditions.append(" && ");
+
+	    conditions.append(quant_element_conditions(_idx,_low,idx,low,format));
 	  }
 	}
       }
-      //if (forall)
-	result[0] = "(\\forall int " + int_list + "; (" + conditions + ") ==> ";
-	//else
-	//result[0] = "(\\exists int " + int_list + "; (" + conditions + ") && ";
+
+      if (forall)
+	 result[0] = quant_format_forall(format);
+      else
+	 result[0] = quant_format_exists(format);
+
+      result[0] += (int_list + quant_seperator1(format) +
+                    conditions + quant_seperator2(format) +
+		    closing + quant_step_terminator(format));
       result[result.length-1] = ")";
+
+      // if (forall)
+      // result[0] = "\\forall int " + int_list + "; " + conditions + "; ";
+      // else
+      // result[0] = "\\exists int " + int_list + "; " + conditions + "; ";
 
       // stringify the terms
       for (int i=0; i < roots.length; i++) {
-	result[i+1] = qret.root_primes[i].esc_name();
+	result[i+1] = qret.root_primes[i].name_using(format);
       }
 
       return result;
     }
+
+     // This set of functions are helper functions to the quantification function.
+     //
+
+     protected static String quant_increment(VarInfoName idx,int i,OutputFormat format) {
+	if (format != OutputFormat.JAVA) {
+	   return "";
+	} else {
+	   if (i != 0) {
+	      return (", " + idx.java_name() + " ++");
+	   }
+	   else {
+	      return (idx.java_name() + "++");
+	   }
+	}
+     }
+     protected static String quant_var_initial_state(VarInfoName idx,
+						     VarInfoName low,
+						     OutputFormat format) {
+	if (format == OutputFormat.JAVA) {
+	   return idx.java_name() + " == " + low.java_name();
+	} else {
+	   return idx.name_using(format);
+	}
+     }
+     protected static String quant_termintion_condition(VarInfoName low,
+							VarInfoName idx,
+							VarInfoName high,
+							OutputFormat format) {
+	if (format == OutputFormat.JAVA) {
+	   return idx.java_name() + " <= " + high.java_name();
+	} else {
+	   return low.name_using(format) + " <= " + idx.name_using(format) + " && " +
+	          idx.name_using(format) + " <= " + high.name_using(format);
+	}
+     }
+     protected static String quant_element_conditions(VarInfoName _idx,
+						      VarInfoName _low,
+						      VarInfoName idx,
+						      VarInfoName low,
+						      OutputFormat format) {
+	StringBuffer conditions = new StringBuffer();
+
+	if (ZERO.equals(_low)) {
+	   conditions.append(_idx);
+	} else {
+	   conditions.append("(");
+	   conditions.append(_idx.name_using(format));
+	   conditions.append("-(");
+	   conditions.append(_low.name_using(format));
+	   conditions.append("))");
+	}
+	conditions.append(" == ");
+	if (ZERO.equals(low)) {
+	   conditions.append(idx.name_using(format));
+	} else {
+	   conditions.append("(");
+	   conditions.append(idx.name_using(format));
+	   conditions.append("-(");
+	   conditions.append(low.name_using(format));
+	   conditions.append("))");
+	}
+
+	return conditions.toString();
+     }
+     protected static String quant_format_forall(OutputFormat format) {
+	if (format == OutputFormat.JAVA) {
+	   return "(for (int ";
+	} else {
+	   return "(\\forall int ";
+	}
+     }
+     protected static String quant_format_exists(OutputFormat format) {
+	return "(\\exists int ";
+     }
+     protected static String quant_seperator1(OutputFormat format) {
+	if (format == OutputFormat.JML) {
+	   return "; ";
+	} else {
+	   return "; (";
+	}
+     }
+     protected static String quant_seperator2(OutputFormat format) {
+	if (format == OutputFormat.ESCJAVA) {
+	   return ") ==> ";
+	} else {
+	   return "; ";
+	}
+     }
+     protected static String quant_step_terminator(OutputFormat format) {
+	if (format == OutputFormat.JAVA) {
+	   return ")";
+	}
+	return "";
+     }
 
     // <root*> -> <string string*>
     /**
@@ -2449,77 +2775,79 @@ public abstract class VarInfoName
       return format_java(roots, false);
     }
     public static String[] format_java(VarInfoName[] roots, boolean elementwise) {
-      Assert.assert(roots != null);
-      QuantifyReturn qret = quantify(roots);
+      return format_java_style(roots, false, true, OutputFormat.JAVA);
+
+      //Assert.assert(roots != null);
+      //QuantifyReturn qret = quantify(roots);
 
       // build the "\forall ..." predicate
-      String[] result = new String[roots.length+2];
-      StringBuffer int_list, conditions, closing;
-      {
+      //String[] result = new String[roots.length+2];
+      //StringBuffer int_list, conditions, closing;
+      //{
 	// "i, j, ..."
-	int_list = new StringBuffer();
+      //int_list = new StringBuffer();
 	// "ai <= i && i <= bi && aj <= j && j <= bj && ..."
 	// if elementwise, also do "(i-ai) == (b-bi) && ..."
-	conditions = new StringBuffer();
-	closing = new StringBuffer();
-	for (int i=0; i < qret.bound_vars.size(); i++) {
-	  VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
-	  VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
-	  if (i != 0) {
-	    int_list.append(", ");
-	    conditions.append(" && ");
-	    closing.append(", ");
-	    closing.append(idx.java_name());
-	    closing.append(" ++");
-	  } else {
-	    closing.append(idx.java_name());
-	    closing.append("++");
-	  }
-	  int_list.append(idx.java_name());
-	  int_list.append(" == ");
-	  int_list.append(low.java_name());
-
-	  conditions.append(idx.java_name());
-	  conditions.append(" <= ");
-	  conditions.append(high.java_name());
-
-	  if (elementwise && (i >= 1)) {
-	    VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
-	    VarInfoName _idx = _boundv[0], _low = _boundv[1];
-	    conditions.append(" || ");
-	    if (ZERO.equals(_low)) {
-	      conditions.append(_idx);
-	    } else {
-	      conditions.append("(");
-	      conditions.append(_idx.java_name());
-	      conditions.append("-(");
-	      conditions.append(_low.java_name());
-	      conditions.append("))");
-	    }
-	    conditions.append(" == ");
-	    if (ZERO.equals(low)) {
-	      conditions.append(idx.java_name());
-	    } else {
-	      conditions.append("(");
-	      conditions.append(idx.java_name());
-	      conditions.append("-(");
-	      conditions.append(low.java_name());
-	      conditions.append("))");
-	    }
-	  }
-	}
-      }
-      result[0] = "(for (int " + int_list + " ; (" + conditions + "; " + closing + ")";
-      result[result.length-1] = ")";
+      //conditions = new StringBuffer();
+      //closing = new StringBuffer();
+      //for (int i=0; i < qret.bound_vars.size(); i++) {
+      //  VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
+      //  VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
+      //  if (i != 0) {
+      //    int_list.append(", ");
+      //    conditions.append(" && ");
+      //    closing.append(", ");
+      //    closing.append(idx.java_name());
+      //    closing.append(" ++");
+      //  } else {
+      //    closing.append(idx.java_name());
+      //    closing.append("++");
+      //	  }
+      //	  int_list.append(idx.java_name());
+      //	  int_list.append(" == ");
+      //	  int_list.append(low.java_name());
+      //
+      //	  conditions.append(idx.java_name());
+      //	  conditions.append(" <= ");
+      //	  conditions.append(high.java_name());
+      //
+      //	  if (elementwise && (i >= 1)) {
+      //	    VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
+      //	    VarInfoName _idx = _boundv[0], _low = _boundv[1];
+      //	    conditions.append(" || ");
+      //	    if (ZERO.equals(_low)) {
+      //	      conditions.append(_idx);
+      //	    } else {
+      //	      conditions.append("(");
+      //	      conditions.append(_idx.java_name());
+      //	      conditions.append("-(");
+      //	      conditions.append(_low.java_name());
+      //	      conditions.append("))");
+      //	    }
+      //	    conditions.append(" == ");
+      //	    if (ZERO.equals(low)) {
+      //	      conditions.append(idx.java_name());
+      //	    } else {
+      //	      conditions.append("(");
+      //	      conditions.append(idx.java_name());
+      //	      conditions.append("-(");
+      //	      conditions.append(low.java_name());
+      //	      conditions.append("))");
+      //	    }
+      //	  }
+      //	}
+      //}
+      //result[0] = "(for (int " + int_list + " ; (" + conditions + "; " + closing + ")";
+      //result[result.length-1] = ")";
 
       // stringify the terms
-      for (int i=0; i < roots.length; i++) {
-	result[i+1] = qret.root_primes[i].java_name();
-      }
+      //for (int i=0; i < roots.length; i++) {
+      //	result[i+1] = qret.root_primes[i].java_name();
+      //}
 
-      return result;
+      //return result;
     }
-    
+
   } // QuantHelper
 
 
