@@ -6,7 +6,7 @@ Files should be formatted in the following manner:
 
 InvariantFormatTest.commands:
 
-<fully qualified class name>
+<fully qualified class name> [<instantiate args>]
 <type string>
 <goal string>+ <- 1 or more goal strings
 <sample>* <- 0 or more samples
@@ -16,6 +16,13 @@ lines except in the samples area. No blank lines or comments should
 appear after the goal string before the first sample or between parts
 of samples (these lines are used currently to determine where samples
 lists end). This will be remedied in a future version of the tester.
+
+Instantiate args: these are optional additional arguments to the static
+instantiate method of the class.  Each arg consists of the type (boolean
+or int) followed by the value.  For example:
+
+    boolean true
+    int 37 boolean false
 
 Type string: A type string must consist of one or more of the
 following:
