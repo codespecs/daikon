@@ -74,16 +74,16 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
       daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
       gui = new InvariantsGUI( 1, dirName );
     } else {
-      gui.show();
-      ctrlPanel.show();
+      gui.setVisible(true);
+      ctrlPanel.setVisible(true);
     }
   }
 
   public static void stop() {
 //    gui.dispose();
-    gui.hide();
+    gui.setVisible(false);
 //    ctrlPanel.dispose();
-    ctrlPanel.hide();
+    ctrlPanel.setVisible(false);
   }
   public InvariantsGUI( String invFileName ) {
     displayInvariantsFromFile( invFileName );

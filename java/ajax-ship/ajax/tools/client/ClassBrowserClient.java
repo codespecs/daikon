@@ -22,10 +22,10 @@ public class ClassBrowserClient
     private DefaultListModel listModel;
     private SourceSet sourceSet;
     private Hashtable classNameMap = new Hashtable();
-    
+
     public ClassBrowserClient() {
     }
-    
+
     private void showDeath(String s) {
         window.getContentPane().removeAll();
         window.getContentPane().setLayout(new BorderLayout());
@@ -40,26 +40,26 @@ public class ClassBrowserClient
 
         window.getContentPane().add("South", holder);
         window.pack();
-        window.show();
+        window.setVisible(true);
     }
-        
+
     public void init(Client client, String serverName, MessagePort port) {
         this.client = client;
         this.port = port;
-        
+
         sourceSet = new SourceSet(port);
         window = new JFrame("Classes in " + serverName);
         window.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-            
+
         port.sendMessage(new AnalysisRequest("ajax.tools.server.ClassBrowserServer"));
-            
+
         listModel = new DefaultListModel();
         list = new JList(listModel);
         list.addMouseListener(this);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         showList();
     }
-    
+
     private void showList() {
         window.getContentPane().removeAll();
         window.getContentPane().setLayout(new BorderLayout());
@@ -67,13 +67,13 @@ public class ClassBrowserClient
         scroller.setPreferredSize(new Dimension(400, 300));
         window.getContentPane().add("Center", scroller);
         window.pack();
-        window.show();
+        window.setVisible(true);
     }
-    
+
     private static int compareClasses(String p1, String p2) {
         int p1Dot = p1.indexOf('.');
         int p2Dot = p2.indexOf('.');
-        
+
         if (p1Dot < 0) {
             if (p2Dot < 0) {
                 return p1.compareTo(p2);
@@ -84,7 +84,7 @@ public class ClassBrowserClient
             return 1;
         } else {
             int preCmp = p1.substring(0, p1Dot).compareTo(p2.substring(0, p2Dot));
-            
+
             if (preCmp != 0) {
                 return preCmp;
             } else {
@@ -92,19 +92,19 @@ public class ClassBrowserClient
             }
         }
     }
-    
+
     public void handleMessage(final MessagePort port, final Object o) {
         SwingUtilities.invokeLater(new Runnable() {
                 public void run() { handleMessageEvent(port, o); }
             });
     }
-    
+
     private void handleMessageEvent(MessagePort port, Object o) {
         if (o instanceof ClassDescriptor) {
             handleUpdate((ClassDescriptor)o);
         } else if (o instanceof SourceResponse) {
             SourceResponse r = (SourceResponse)o;
-            
+
             sourceSet.setText(r.getForClass(), r.getText());
         } else if (o instanceof PortStatusMsg) {
         } else if (o instanceof PortErrorMsg) {
@@ -113,12 +113,12 @@ public class ClassBrowserClient
             showDeath("Unknown message: o");
         }
     }
-    
+
     private void handleUpdate(ClassDescriptor c) {
         String cName = c.getClassName();
         String sourceName = c.getSourceFileName();
         String n = sourceName != null ? cName + " (" + sourceName + ")" : cName;
-        
+
         classNameMap.put(n, c);
 
         int insertAt = listModel.getSize();
@@ -135,7 +135,7 @@ public class ClassBrowserClient
 	}
         listModel.insertElementAt(n, insertAt);
     }
-    
+
     public void mouseClicked(MouseEvent e) {
         if (e.getClickCount() == 2) {
             Object selection = list.getSelectedValue();

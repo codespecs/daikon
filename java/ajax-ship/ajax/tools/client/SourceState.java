@@ -26,7 +26,7 @@ class SourceState {
     private Color selectionColor = null;
     private boolean textIsSource = false;
     private String text = "Loading...";
-    
+
 /**
 Runs in UI thread.
 */
@@ -51,7 +51,7 @@ Runs in UI thread.
             frame.setContentPane(new JScrollPane(widget));
             frame.pack();
             frame.setSize(600, 400);
-            frame.show();
+            frame.setVisible(true);
 	}
 
         widget.setText(text);
@@ -80,20 +80,20 @@ Runs in UI thread.
                     widget.moveCaretPosition(end);
                     widget.setSelectionColor(selectionColor);
 		}
-                
+
                 Rectangle r = widget.modelToView(start);
-                
+
                 if (r != null) {
                     widget.scrollRectToVisible(r);
                 }
             } catch (BadLocationException ex) {
             }
 
-            frame.show();
+            frame.setVisible(true);
             frame.toFront();
         }
     }
-    
+
 /**
 Runs in UI thread.
 */
@@ -101,17 +101,17 @@ Runs in UI thread.
         this.lineToSelect = lineToSelect;
         this.textToSelect = textToSelect;
         this.selectionColor = selectionColor;
-        
+
         updateWidget();
     }
-    
+
 /**
 Runs in UI thread.
 */
     void loadText(String text, boolean textIsSource) {
         this.textIsSource = textIsSource;
         this.text = text;
-        
+
         updateWidget();
     }
 }
