@@ -246,8 +246,8 @@ update-dist-version-file:
 
 www:
 	html-update-toc doc/www/index.html doc/www/mit/index.html
-	# This "cp" used to use "-R".  Why?
-	cd doc/www && cp -pf $(WWW_FILES) $(WWW_DIR)
+	# "-P" keeps the directory structure in place
+	cd doc/www && cp -pfP $(WWW_FILES) $(WWW_DIR)
 	cd $(WWW_DIR) && chmod -w $(WWW_FILES)
 	update-link-dates $(DIST_DIR)/index.html
 
