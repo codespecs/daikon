@@ -59,7 +59,7 @@ public class SeqComparison extends TwoSequence implements Comparison {
 
   protected Invariant resurrect_done(int[] permutation) {
     Assert.assert(permutation.length == 2);
-    Assert.assert(ArraysMDE.is_permutation(permutation));
+    Assert.assert(ArraysMDE.fn_is_permutation(permutation));
     if (permutation[0] == 1) {
       // was a swap
       boolean tmp = can_be_lt;

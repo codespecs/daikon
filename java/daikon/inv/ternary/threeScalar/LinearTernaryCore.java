@@ -49,7 +49,7 @@ public final class LinearTernaryCore
    **/
   public void permute(int[] permutation) {
     Assert.assert(permutation.length == 3);
-    Assert.assert(ArraysMDE.is_permutation(permutation));
+    Assert.assert(ArraysMDE.fn_is_permutation(permutation));
     // Fix a, b, c
     // clever because a*v0 + b*v1 - v2 = -c
     double[] clever = new double[] { a, b, -1.0 };

@@ -41,7 +41,7 @@ public final class LinearBinaryCore
 
   public void permute(int[] permutation) {
     Assert.assert(permutation.length == 2);
-    Assert.assert(ArraysMDE.is_permutation(permutation));
+    Assert.assert(ArraysMDE.fn_is_permutation(permutation));
     if (permutation[0] == 1) {
       // was a swap
       a = 1 / a;   // a' =  1/a

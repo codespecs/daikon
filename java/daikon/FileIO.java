@@ -577,7 +577,7 @@ public final class FileIO
   private static void setup_dataflow(PptMap all_ppts)
   {
     // Compute topological sort of all_ppts based on VarInfo partial order
-    List rev_topol = new ArayList(all_ppts.size()); // [PptTopLevel]
+    List rev_topol = new ArrayList(all_ppts.asCollection().size()); // [PptTopLevel]
     {
       // Keep a redundant set for lookup efficiency
       Set rev_topol_set = new HashSet(); // [PptTopLevel]
@@ -586,20 +586,20 @@ public final class FileIO
       for (Iterator i = all_ppts.iterator(); i.hasNext(); ) {
 	PptTopLevel ppt = (PptTopLevel) i.next();
 	for (int j=0; j < ppt.var_infos.length; j++) {
-	  if (ppt.var_infos[j].po_lower() != 0)
+	  if (ppt.var_infos[j].po_lower.size() != 0)
 	    continue outer;
 	}
 	rev_topol.add(ppt);
-	rev_topol_sort.add(ppt);
+	rev_topol_set.add(ppt);
       }
       // Then work up through those, appending as new ones are found
       for (int i=0; i < rev_topol.size(); i++) {
 	PptTopLevel ppt = (PptTopLevel) rev_topol.get(i);
 	for (int j=0; j < ppt.var_infos.length; j++) {
 	  VarInfo vi = ppt.var_infos[j];
-	  for (Iterator k = vi.po_higher().iterator(); k.hasNext(); ) {
+	  for (Iterator k = vi.po_higher.iterator(); k.hasNext(); ) {
 	    VarInfo vi_higher = (VarInfo) k.next();
-	    PptTopLevell ppt_higher = vi_higher.ppt;
+	    PptTopLevel ppt_higher = vi_higher.ppt;
 	    if (! rev_topol_set.contains(ppt_higher)) {
 	      rev_topol.add(ppt_higher);
 	      rev_topol_set.add(ppt_higher);

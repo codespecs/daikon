@@ -43,7 +43,7 @@ public class SubSequence extends TwoSequence {
 
   protected Invariant resurrect_done(int[] permutation) {
     Assert.assert(permutation.length == 2);
-    Assert.assert(ArraysMDE.is_permutation(permutation));
+    Assert.assert(ArraysMDE.fn_is_permutation(permutation));
     if (permutation[0] == 1) {
       // was a swap
       boolean tmp = var1_in_var2;

@@ -52,7 +52,7 @@ public final class FunctionBinaryCore
    **/
   public void permute(int[] permutation) {
     Assert.assert(permutation.length == 3);
-    Assert.assert(ArraysMDE.is_permutation(permutation));
+    Assert.assert(ArraysMDE.fn_is_permutation(permutation));
     int[] new_order = new int[3];
     new_order[permutation[0]] = var_indices[var_order][0];
     new_order[permutation[1]] = var_indices[var_order][1];
