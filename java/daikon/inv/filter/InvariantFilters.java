@@ -156,22 +156,23 @@ public class InvariantFilters {
 
     // Performing this operation using the following struture would
     // make more sense to me: Map[Canonical -> Set[Non-Canonicals]],
-    // instead of HashSet[List[Canonical, Non-Canonicals]].
+    // instead of HashSet[List[Canonical, Non-Canonicals]].  -JWN 7/9/01
 
     // A set of groups of equivalent variables.  The "groups" are actually
     // List's.  We use List's instead of Set's because we need to preserve
     // order, so that canonical variables remain first.
     Set equivalentGroups = new HashSet();
 
+    // Map from canonical variable to PptSlice.
     // A PptSlice for each set.  Equality needs a PptSlice so it can report
     // num_values() and num_samples().
-    List ppts = new ArrayList();
+    Map ppts = new HashMap();
 
     // This method makes two passes through the list of invariants.  The
     // first pass is to set up a group for each canonical variable.  The
     // second pass fills up each group with equivalent variables.  The main
     // advantage of doing the initial first pass is that canonical
-    // variables will at the beginning of the List, and thus will be
+    // variables will be at the beginning of the List, and thus will be
     // displayed first in the output "x==y==z".  A secondary advantage is
     // that we don't run into the following problem:  Say we have "a == b",
     // "b == c", "c == d".  If we encounter the first and the third
@@ -189,11 +190,16 @@ public class InvariantFilters {
       if (IsEqualityComparison.it.accept( invariant )) {
 	VarInfo[] variables = invariant.ppt.var_infos;
 	Assert.assert( variables.length == 2 );
-	for (int i = 0; i < variables.length; i++)
-	  if (variables[i].isCanonical()) {
-	    canonicalVariables.add( variables[i] );
-	    ppts.add( invariant.ppt );
+	for (int i = 0; i < variables.length; i++) {
+          VarInfo vi = variables[i];
+	  if (vi.isCanonical()) {
+            if (! canonicalVariables.contains( vi )) {
+              Assert.assert(! ppts.containsKey(vi));
+              canonicalVariables.add( vi );
+              ppts.put( vi, invariant.ppt );
+            }
 	  }
+        }
       }
     }
     for (Iterator iter = canonicalVariables.iterator(); iter.hasNext(); ) {
@@ -208,26 +214,32 @@ public class InvariantFilters {
       if (IsEqualityComparison.it.accept( invariant )) {
 	// We don't need this invariant, since it will be included in
 	// the equality invariant.
-	iter.remove();		
+	iter.remove();
 
 	VarInfo variable1 = ((Comparison) invariant).var1();
 	VarInfo variable2 = ((Comparison) invariant).var2();
 	for (Iterator iter2 = equivalentGroups.iterator(); iter2.hasNext(); ) {
 	  List equivalentGroup = (List) iter2.next();
 	  if (equivalentGroup.contains( variable1 )
-              &&  ! equivalentGroup.contains( variable2 ))
+              &&  ! equivalentGroup.contains( variable2 )) {
 	    equivalentGroup.add( variable2 );
-	  else if (equivalentGroup.contains( variable2 )
-                   &&  ! equivalentGroup.contains( variable1 ))
+	  } else if (equivalentGroup.contains( variable2 )
+                     &&  ! equivalentGroup.contains( variable1 )) {
 	    equivalentGroup.add( variable1 );
+          }
 	}
       }
     }
 
+    Assert.assert(ppts.size() == equivalentGroups.size());
+
     // Add equivalent groups as equality invariants.
-    Iterator pptIter = ppts.iterator();
-    for (Iterator iter = equivalentGroups.iterator(); iter.hasNext(); )
-      invariants.add( 0, new Equality( (List) iter.next(), (PptSlice) pptIter.next()));
+    for ( Iterator egIter = equivalentGroups.iterator(); egIter.hasNext(); ) {
+      List equivalentGroup = (List) egIter.next();
+      VarInfo canonicalVar = (VarInfo) equivalentGroup.get(0);
+      PptSlice ppt = (PptSlice) ppts.get(canonicalVar);
+      invariants.add( 0, new Equality(equivalentGroup, ppt));
+    }
 
     return invariants;
   }
