@@ -34,8 +34,8 @@ public final class VarComparabilityImplicit extends VarComparability implements 
     return unknown;
   }
 
-  static boolean compatible(String name1_, VarComparabilityImplicit type1,
-			    String name2_, VarComparabilityImplicit type2) {
+  static boolean compatible(VarInfoName name1, VarComparabilityImplicit type1,
+			    VarInfoName name2, VarComparabilityImplicit type2) {
     return type1.index < 0 || type2.index < 0 || type1.index == type2.index;
   }
 }
