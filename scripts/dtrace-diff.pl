@@ -23,9 +23,11 @@ sub getline {
 #gets a line from the filehandle $1
     my $fh = shift;
     my $l = <$fh>;
-    chomp $l;
-    if ($l =~ m|^\#|) {
+    if ($l) {
+      chomp $l;
+      if ($l =~ m|^\#|) {
 	return getline($fh);
+      }
     }
     return $l;
 }
