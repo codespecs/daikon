@@ -433,10 +433,19 @@ Every non-trivial procedure should also contain a brief comment saying what
 it does.
 <p>
 
-All perl scripts must always use the <tt>-w</tt> command-line switch (on
-the <tt>#!</tt> line, which should ordinarily be <tt>#!/usr/bin/env perl
--w</tt>).  All perl scripts should also include the <tt>use strict;</tt>
-pragma.
+All perl scripts should
+<ol>
+  <li>use <tt>#!/usr/bin/env perl</tt> as their first line, to permit
+      independence from the specific location where perl is installed.
+  <li>include the following code, which enables checking for common perl
+      errors, near the top of the file (but usually after the brief
+      description of the script's purpose and how to use it):
+<pre>
+  use English;
+  use strict;
+  $WARNING = 1;
+<pre>
+</ol>
 <p>
 
 When code has a consistent style, particularly within a single file but
