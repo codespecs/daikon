@@ -19,8 +19,6 @@ Further documentation can be found in:
 
 4.0.1 (Feb 13 2005)
 
-This is a bugfix release.
-
 Daikon
 
   The manual has been restructured and simplified, in order to clarify that
@@ -31,6 +29,11 @@ Daikon
 
   Configuration option daikon.FileIO.unmatched_procedure_entries_quiet is
   now true by default.
+
+Eclipse plug-in
+
+  Version 3.1.10 of the Daikon plug-in for Eclipse (written by David Cok)
+  has been released.  It is compatible with Daikon version 4.
       
 ---------------------------------
 
