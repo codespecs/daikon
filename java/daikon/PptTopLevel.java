@@ -1978,7 +1978,7 @@ public class PptTopLevel extends Ppt {
       try {
 	prover.request(new CmdAssume("(EQ (typeof null) |T_null|)"));
       } catch (TimeoutException e) {
-	throw new RuntimeException("Timeout on Univerval background " + e);
+	throw new RuntimeException("Timeout on universal background " + e);
       }
     }
   }
@@ -2002,9 +2002,8 @@ public class PptTopLevel extends Ppt {
       }
     }
     
-    // Send the conjunction of the closures' invariants as a
-    // background to simplify
-    
+    // Create the conjunction of the closures' invariants to form a
+    // background environment for the prover
     StringBuffer all_cont = new StringBuffer();
     all_cont.append("(AND true \n");
     for (Iterator ppts = closure.iterator(); ppts.hasNext(); ) {
@@ -2026,15 +2025,19 @@ public class PptTopLevel extends Ppt {
       all_cont.append(")");
     }    
     all_cont.append(")");
-    try {    
-      ensure_prover_started();    
-      prover.request(new CmdAssume(all_cont.toString()));
+    CmdAssume background = new CmdAssume(all_cont.toString());
+
+    // Send the background to the prover
+    try {
+      ensure_prover_started();
+      prover.request(background);
     } catch (TimeoutException e) {
       prover = null;
       return;
     }
     
-    // Create the list of invariants which are expressible in Simplify
+    // Create the list of invariants from this ppt which are
+    // expressible in Simplify
     Invariant[] invs;
     {
       Vector printing = new Vector(); // [Invariant]
@@ -2054,7 +2057,7 @@ public class PptTopLevel extends Ppt {
     // expressible invariants, so that we can remove the least
     // desirable first.  For now just use the ICFP.
     Arrays.sort(invs, icfp);
-    
+
     // Work from back to front, and flag things which are redundant
     boolean[] present = new boolean[invs.length];
     Arrays.fill(present, 0, present.length, true);
@@ -2071,20 +2074,27 @@ public class PptTopLevel extends Ppt {
       String ask = "(IMPLIES " + bg + " " + inv.format_simplify() + ")";
       CmdCheck cc = new CmdCheck(ask); // result is initialized to false
       try {
-	ensure_prover_started();    
+	ensure_prover_started();
 	prover.request(cc);
+	if (cc.valid) {
+	  redundant_invs.add(inv);
+	  present[checking] = false;
+	}
       } catch (TimeoutException e) {
+	// Reset the prover with the controlling invariant background
 	prover = null;
-      }
-      if (cc.valid) {
-	redundant_invs.add(inv);
-	present[checking] = false;
+	ensure_prover_started();
+	try {
+	  prover.request(background);
+	} catch (TimeoutException f) {
+	  prover = null;
+	  return;
+	}
       }
     }
 
     // Remove the controlling invariant background
     try {
-      ensure_prover_started();    
       prover.request(CmdUndoAssume.single);
     } catch (TimeoutException e) {
       prover = null;
