@@ -145,7 +145,7 @@ public class CLASSNAME
   protected Invariant resurrect_done_swapped() {
     boolean tmp = can_be_lt;
     can_be_gt = can_be_lt;
-    can_be_gt = tmp;
+    can_be_lt = tmp;
     return this;
   }
 
@@ -219,13 +219,13 @@ public class CLASSNAME
     boolean changed = false;
     if (comparison == 0) {
       new_can_be_eq = true;
-      changed = true;
+      if (!can_be_eq) changed = true;
     } else if (comparison < 0) {
       new_can_be_lt = true;
-      changed = true;
+      if (!can_be_lt) changed = true;
     } else {
       new_can_be_gt = true;
-      changed = true;
+      if (!can_be_gt) changed = true;
     }
 
     if (! changed) {
@@ -246,6 +246,8 @@ public class CLASSNAME
     can_be_gt = new_can_be_gt;
 
     values_cache.add(v1, v2);
+    Assert.assertTrue (!(can_be_lt && can_be_gt));
+    Assert.assertTrue (can_be_gt || can_be_lt || can_be_eq);
   }
 
   protected double computeProbability() {
