@@ -660,7 +660,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
   public class InvInfo {
     public String dbc = "";
-    public String daikon = "";
+    public String daikonStr = "";
     public String samples = "";
     public String invclass = "";
     public String method = "";
@@ -669,7 +669,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   public InvInfo getInfo(String inv) {
     InvInfo ii = new InvInfo();
     ii.dbc = inv.replaceFirst(".*<DBC>(.*)</DBC>.*", "$1");
-    ii.daikon = inv.replaceFirst(".*<DAIKON>(.*)</DAIKON>.*", "$1");
+    ii.daikonStr = inv.replaceFirst(".*<DAIKON>(.*)</DAIKON>.*", "$1");
     ii.samples = inv.replaceFirst(".*<SAMPLES>(.*)</SAMPLES>.*", "$1");
     ii.invclass = inv.replaceFirst(".*<DAIKONCLASS>(.*)</DAIKONCLASS>.*", "$1");
     ii.method = inv.replaceFirst(".*<METHOD>(.*)</METHOD>.*", "$1");
@@ -679,7 +679,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   public String annotationDBC(InvInfo ii) {
     return
       " <DBC> " + ii.dbc + " </DBC> "
-      + " <DAIKON> " + ii.daikon + " </DAIKON> "
+      + " <DAIKON> " + ii.daikonStr + " </DAIKON> "
       + " <SAMPLES> " + ii.samples + " </SAMPLES> "
       + " <DAIKONCLASS> " + ii.invclass  + " </DAIKONCLASS> "
       + " <METHOD> " + ii.method  + " </METHOD> ";
@@ -928,7 +928,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
               if (first) { negatedii.method = ii.method; first = false; }
               Assert.assertTrue(ii.method.equals(negatedii.method));
               negatedii.samples +=  " " + ii.samples;
-              negatedii.daikon += " " +  ii.daikon;
+              negatedii.daikonStr += " " +  ii.daikonStr;
               negatedii.invclass += " " + ii.invclass;
               negatedii.dbc +=  "!( " + ii.dbc + " )";
               if (it.hasNext()) { negatedii.dbc += " || "; }

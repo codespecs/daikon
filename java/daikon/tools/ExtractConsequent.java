@@ -218,11 +218,11 @@ public class ExtractConsequent {
     pw.flush();
   }
 
-  static String combineDummy(String inv, String daikon, String ioa, String esc,
+  static String combineDummy(String inv, String daikonStr, String ioa, String esc,
                              String simplify) {
     StringBuffer combined = new StringBuffer(inv);
     combined.append("\n\tDAIKON_FORMAT ");
-    combined.append(daikon);
+    combined.append(daikonStr);
     combined.append("\n\tIOA_FORMAT ");
     combined.append(ioa);
     combined.append("\n\tESC_FORMAT ");

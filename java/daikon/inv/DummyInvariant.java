@@ -48,10 +48,11 @@ public class DummyInvariant
     dbcFormat = "format_dbc not implemented for dummy invariant";
   }
 
-  public void setFormats(String daikon, String java, String esc,
-                         String simplify, String ioa, String jml, String dbc) {
-    if (daikon != null)
-      daikonFormat = daikon;
+  public void setFormats(String daikonStr, String java, String esc,
+                         String simplify, String ioa, String jml,
+                         String dbc) {
+    if (daikonStr != null)
+      daikonFormat = daikonStr;
     if (java != null)
       javaFormat = java;
     if (esc != null)
@@ -66,7 +67,10 @@ public class DummyInvariant
       dbcFormat = jml;
 
     // Note that java is missing from this disjuction on purpose
-    if (daikon != null || esc != null || simplify != null || ioa != null)
+    // [What is the reason?  And why are jml and dbc also missing?
+    // and why is the check against daikonStr and such, rather than
+    // daikonFormat and such?  -MDE 1/31/2004]
+    if (daikonStr != null || esc != null || simplify != null || ioa != null)
       valid = true;
   }
 
