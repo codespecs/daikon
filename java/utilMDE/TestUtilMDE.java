@@ -653,20 +653,31 @@ public final class TestUtilMDE extends TestCase {
     // class MissingNumbersIteratorInt
     class TestMissingNumbersIteratorInt {
       // javadoc won't let this be static
-      void test(int[] orig, int[] goal_missing) {
+      void test(int[] orig, boolean add_ends, int[] goal_missing) {
 	Iterator orig_iterator = int_array_iterator(orig);
-	Iterator missing_iterator = new MathMDE.MissingNumbersIteratorInt(orig_iterator);
+	Iterator missing_iterator = new MathMDE.MissingNumbersIteratorInt(orig_iterator, add_ends);
 	int[] missing = TestUtilMDE.int_iterator_array(missing_iterator);
 	assert_arrays_equals(missing, goal_missing);
       }
     }
 
     TestMissingNumbersIteratorInt tmni = new TestMissingNumbersIteratorInt();
-    tmni.test(new int[] { 3,4,5,6,7,8 }, new int[] {});
-    tmni.test(new int[] { 3,4,6,7,8 }, new int[] { 5 });
-    tmni.test(new int[] { 3,4,8 }, new int[] { 5,6,7 });
-    tmni.test(new int[] { 3,5,6,8 }, new int[] { 4,7 });
-    tmni.test(new int[] { 3,6,8 }, new int[] { 4,5,7 });
+    tmni.test(new int[] { 3,4,5,6,7,8 }, false, new int[] {});
+    tmni.test(new int[] { 3,4,6,7,8 }, false, new int[] { 5 });
+    tmni.test(new int[] { 3,4,8 }, false, new int[] { 5,6,7 });
+    tmni.test(new int[] { 3,5,6,8 }, false, new int[] { 4,7 });
+    tmni.test(new int[] { 3,6,8 }, false, new int[] { 4,5,7 });
+    tmni.test(new int[] { 3 }, false, new int[] { });
+    tmni.test(new int[] { 3,4,5 }, false, new int[] { });
+    tmni.test(new int[] { 3,4,5,6,7,8 }, true, new int[] { 2,9 });
+    tmni.test(new int[] { 3,4,6,7,8 }, true, new int[] { 2,5,9 });
+    tmni.test(new int[] { 3,4,8 }, true, new int[] { 2,5,6,7,9 });
+    tmni.test(new int[] { 3,5,6,8 }, true, new int[] { 2,4,7,9 });
+    tmni.test(new int[] { 3,6,8 }, true, new int[] { 2,4,5,7,9 });
+    tmni.test(new int[] { 3,4,5 }, true, new int[] { 2,6 });
+
+    tmni.test(new int[] { -1,1,2,3,5,6,7,9 }, true, new int[] { -2,0,4,8,10 });
+
 
     // int[] modulus(int[] nums)
     // int[] modulus(Iterator itor)
@@ -961,6 +972,21 @@ public final class TestUtilMDE extends TestCase {
           iota10_odd.add(new Integer(i));
       Assert.assert(iota10_odd.equals(toVector(new UtilMDE.FilteredIterator(iota10.iterator(), new OddFilter()))));
 
+    }
+
+    // public static final class RemoveFirstAndLastIterator implements Iterator
+    {
+      Vector iota5 = new Vector();
+      for (int i=0; i<5; i++)
+        iota5.add(new Integer(i));
+      Vector iota5middle = new Vector();
+      for (int i=1; i<4; i++)
+        iota5middle.add(new Integer(i));
+      UtilMDE.RemoveFirstAndLastIterator rfali = new UtilMDE.RemoveFirstAndLastIterator(iota5.iterator());
+      Vector rfali_vector = toVector(rfali);
+      Assert.assert(iota5middle.equals(rfali_vector));
+      Assert.assert(rfali.getFirst().equals(new Integer(0)));
+      Assert.assert(rfali.getLast().equals(new Integer(4)));
     }
 
     // public static Method methodForName(String methodname) throws ClassNotFoundException {
