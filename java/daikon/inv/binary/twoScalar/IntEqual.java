@@ -129,9 +129,11 @@ public final class IntEqual  extends TwoScalar implements Comparison  {
 
   }
 
-  // Still TODO
   protected Invariant resurrect_done(int[] permutation) {
-    throw new UnsupportedOperationException();
+
+    // we don't care if things swap; we have symmetry
+    return this;
+
   }
 
   // Look up a previously instantiated IntEqual  relationship.

@@ -133,9 +133,11 @@ public final class IntNonEqual  extends TwoScalar   {
 
   }
 
-  // Still TODO
   protected Invariant resurrect_done(int[] permutation) {
-    throw new UnsupportedOperationException();
+
+    // we don't care if things swap; we have symmetry
+    return this;
+
   }
 
   // Look up a previously instantiated IntNonEqual  relationship.

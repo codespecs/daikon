@@ -133,9 +133,20 @@ public final class IntLessEqual  extends TwoScalar   {
 
   }
 
-  // Still TODO
   protected Invariant resurrect_done(int[] permutation) {
-    throw new UnsupportedOperationException();
+
+    // we have no non-static member data, so we only need care about our type
+    Assert.assert(permutation.length == 2);
+    Assert.assert(ArraysMDE.fn_is_permutation(permutation));
+    if (permutation[0] == 0) {
+      // no swap
+      return this;
+    } else {
+      // As of now, the constructor chain is side-effect free;
+      // let's hope it stays that way.
+      return new IntGreaterEqual (ppt);
+    }
+
   }
 
   // Look up a previously instantiated IntLessEqual  relationship.
