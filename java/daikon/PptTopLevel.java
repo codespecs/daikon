@@ -78,7 +78,7 @@ public class PptTopLevel extends Ppt {
   public PptSlice0 implication_view = new PptSlice0(this);
 
 
-  PptTopLevel(String name, VarInfo[] var_infos) {
+  public PptTopLevel(String name, VarInfo[] var_infos) {
     super(name);
     this.var_infos = var_infos;
     int val_idx = 0;
