@@ -250,20 +250,6 @@ public class NISuppressor {
             return (state = NIS.VALID);
         }
       }
-      if (ppt.global != null) {
-        PptSlice gslice = PptSlice.find_global_slice (new VarInfo[] {v1});
-        if (gslice != null) {
-          for (Iterator i = gslice.invs.iterator(); i.hasNext(); ) {
-            Invariant gslice_inv = (Invariant) i.next();
-            if (match_true (gslice_inv)) {
-              if (NIS.debug.isLoggable (Level.FINE))
-                NIS.debug.fine ("suppressor matches global inv "
-                          + gslice_inv.format() + " "+ !gslice_inv.is_false());
-              return (state = NIS.VALID);
-            }
-          }
-        }
-      }
       return (state = NIS.INVALID);
 
     } else /* must be binary */ {
@@ -324,20 +310,6 @@ public class NISuppressor {
               NIS.debug.fine ("suppressor matches inv " + slice_inv.format()
                            + " " + !slice_inv.is_false());
             return (state = NIS.VALID);
-          }
-        }
-      }
-      if (ppt.global != null) {
-        PptSlice gslice = PptSlice.find_global_slice (new VarInfo[] {v1, v2});
-        if (gslice != null) {
-          for (Iterator i = gslice.invs.iterator(); i.hasNext(); ) {
-            Invariant gslice_inv = (Invariant) i.next();
-            if (match_true (gslice_inv)) {
-              if (NIS.debug.isLoggable (Level.FINE))
-                NIS.debug.fine ("suppressor matches global inv "
-                          + gslice_inv.format() + " "+ !gslice_inv.is_false());
-              return (state = NIS.VALID);
-            }
           }
         }
       }

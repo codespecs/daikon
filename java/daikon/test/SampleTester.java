@@ -208,7 +208,6 @@ public class SampleTester extends TestCase {
     debug_progress.fine ("Processing " + decl_file);
 
     // Read in the specified file
-    PptTopLevel.global = null;
     Set decl_files = new HashSet(1);
     String absolute_decl_file = find_file (decl_file);
     if (absolute_decl_file == null)
@@ -218,7 +217,7 @@ public class SampleTester extends TestCase {
     all_ppts = FileIO.read_declaration_files (decl_files);
 
     // Setup everything to run
-    Dataflow.init_partial_order (all_ppts);
+    Daikon.init_ppts (all_ppts);
     PptTopLevel.init (all_ppts);
     Daikon.setupEquality (all_ppts);
     if (first_decl) {
@@ -325,7 +324,7 @@ public class SampleTester extends TestCase {
     // Causes interning
     vt = new ValueTuple (vt.vals, vt.mods);
 
-    ppt.add_global_bottom_up (vt, 1);
+    ppt.add_bottom_up (vt, 1);
   }
 
   /**

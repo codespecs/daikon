@@ -336,16 +336,6 @@ public class NISuppressionSet {
       }
     }
 
-    // If the invariant is in the global slice, don't create it (since
-    // invariants true at the global ppt are known to be true here as well)
-    PptSlice gslice = PptSlice.find_global_slice (vis);
-    if ((gslice != null) && gslice.contains_inv_exact(inv) &&inv.isFlowable()) {
-      if (Debug.logOn() || NIS.debug.isLoggable (Level.FINE))
-        inv.log (NIS.debug, "Ignoring  " + inv.format()
-                 + " - it is in the global ppt");
-        return;
-    }
-
     // Add the invariant to the new invariant list
     new_invs.add (inv);
 

@@ -26,14 +26,13 @@ public class InvMatch {
   public static void main (String[] args) throws IOException {
 
     // Read in the sample decls file
-    PptTopLevel.global = null;
     Set decl_files = new HashSet(1);
     decl_files.add (new File("daikon/test/SampleTester.decls"));
     PptMap all_ppts = FileIO.read_declaration_files (decl_files);
 
     // Setup everything to run
     PptSliceEquality.dkconfig_set_per_var = true;
-    Dataflow.init_partial_order (all_ppts);
+    Daikon.init_ppts (all_ppts);
     PptTopLevel.init (all_ppts);
     Daikon.setupEquality (all_ppts);
     Daikon.setup_NISuppression();
