@@ -356,6 +356,7 @@ daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_
 	# (cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
 	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/ajax.jar)
 	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar)
+	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/bcel.jar)
 	(cd java; cp -f --parents --target-directory=/tmp/${USER}/daikon-jar $(DAIKON_RESOURCE_FILES))
 	cd /tmp/${USER}/daikon-jar && jar cf $@ *
 	mv /tmp/${USER}/daikon-jar/$@ $@
@@ -458,9 +459,6 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	cp -pR java/ajax-ship /tmp/daikon/java
 	rm -rf /tmp/daikon/java/ajax-ship/ajax
 	cp -pf java/lib/ajax.jar /tmp/daikon/java/ajax-ship/
-	## BCEL (dependence on jhp directory should be fixed)
-	cd /afs/csail/u/j/jhp/research/jakarta-bcel/bin/java && \
-	  cp -pR --parents org /tmp/daikon/java/
 
 	## JUnit
 	# This is wrong:
