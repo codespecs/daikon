@@ -55,6 +55,9 @@ class WriteViolationFile {
     // Cross our fingers and hope the program under test does not call
     // System.exit(1), because this will produce no output if it doesn't.
     try {
+      // Permit access to method in default-access classes inside a package.
+      main_method.setAccessible(true);
+
       main_method.invoke(null, new Object[] { main_args });
     }
     catch (IllegalAccessException e) {
