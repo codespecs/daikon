@@ -1324,9 +1324,9 @@ public class PptTopLevel extends Ppt {
   public Splitter[] getSplitters() {
     Splitter[] from_fullname = SplitterList.get(name);
     if (Global.debugPptSplit)
-      System.out.println("getSplitters "
-                         + ((from_fullname != null) ? "succeeded" : "failed")
-                         + " with " + name);
+      System.out.println("getSplitters found "
+                         + ((from_fullname == null) ? "no" : "" + from_fullname.length)
+                         + " splitters for " + name);
     if (from_fullname != null)
       return from_fullname;
     int tag_index = name.indexOf(FileIO.ppt_tag_separator);
@@ -1334,9 +1334,9 @@ public class PptTopLevel extends Ppt {
       String untagged_name = name.substring(0, tag_index);
       Splitter[] from_untagged_name = SplitterList.get(untagged_name);
       if (Global.debugPptSplit)
-        System.out.println("getSplitters "
-                           + ((from_untagged_name != null) ? "succeeded" : "failed")
-                           + " with " + untagged_name);
+        System.out.println("getSplitters found "
+                           + ((from_fullname == null) ? "no" : "" + from_untagged_name.length)
+                           + " splitters for " + name);
       if (from_untagged_name != null)
         return from_untagged_name;
     }

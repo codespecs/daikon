@@ -231,14 +231,15 @@ public class PptSliceGeneric extends PptSlice {
     // the cache.  Do this at call sites where appropriate.
     // Assert.assert(check_modbits());
 
-    // Commented out for debugging[
-    // if (values_cache != null) {
-    //   num_samples_post_cache = num_samples();
-    //   num_mod_non_missing_samples_post_cache = num_mod_non_missing_samples();
-    //   num_values_post_cache = num_values();
-    //   tuplemod_samples_summary_post_cache = tuplemod_samples_summary();
-    //   values_cache = null;
-    // }
+    if (values_cache != null) {
+      if (! no_invariants) {
+        num_samples_post_cache = num_samples();
+        num_mod_non_missing_samples_post_cache = num_mod_non_missing_samples();
+        num_values_post_cache = num_values();
+        tuplemod_samples_summary_post_cache = tuplemod_samples_summary();
+      }
+      values_cache = null;
+    }
   }
 
   // public int num_missing() { return values_cache.num_missing; }
