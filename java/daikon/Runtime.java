@@ -11,6 +11,12 @@ import java.io.*;
 
 public final class Runtime {
 
+  // Contructor
+  private Runtime() {
+    throw new Error("Do not create instances of Runtime");
+  }
+
+
   ///////////////////////////////////////////////////////////////////////////
   /// Timestamps
   ///
