@@ -72,18 +72,14 @@ public final class Diff {
     String filename1 = args[firstFileIndex];
     String filename2 = args[firstFileIndex + 1];
 
-    InputStream istream1;
+    InputStream istream1 = new FileInputStream(filename1);
     if (filename1.endsWith(".gz")) {
-      istream1 = new GZIPInputStream(new FileInputStream(filename1));
-    } else {
-      istream1 = new FileInputStream(filename1);
+      istream1 = new GZIPInputStream(istream1);
     }
     ObjectInputStream oistream1 = new ObjectInputStream(istream1);
-    InputStream istream2;
+    InputStream istream2 = new FileInputStream(filename2);
     if (filename2.endsWith(".gz")) {
-      istream2 = new GZIPInputStream(new FileInputStream(filename2));
-    } else {
-      istream2 = new FileInputStream(filename2);
+      istream2 = new GZIPInputStream(istream2);
     }
     ObjectInputStream oistream2 = new ObjectInputStream(istream2);
 
