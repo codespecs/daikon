@@ -1,11 +1,7 @@
-#!/bin/csh
-# java-cpp -- C preprocessor specialized for Java
-# Michael Ernst
-# Time-stamp: <2000-5-1 mernst>
-
-# This acts like the C preprocessor, but
-#  * it does not remove comments
-#  * it cleans up spacing in the processed file
+#!/bin/sh
+# sh version of java-cpp (which see)
+# Josh Kataoka
+# Time-stamp: <2000-5-2 mernst>
 
 # If first argument is a file, it is used as input.  Otherwise, input comes
 # from standard in.  Output goes to standard out.
@@ -24,20 +20,23 @@
 # I do want substitution to occur in comments.
 # Workaround:  don't have single quotes in comments.
 
-if (-e $1) then
-  # Last argument is a file
-  set filearg = $1
-  shift
+if [ -f $1 ]
+then
+    filearg=$1
+    shift
 else
-  set filearg =
-endif
+    filearg=""
+fi
+
+for arg do
+    argv="${argv} ${arg}"
+done
 
 # echo filearg $filearg
 # echo argv $argv
 
-perl -p -e 's/\/\//DOUBLESLASHCOMMENT/g;' -e 's/\/\*/SLASHSTARCOMMENT/g;' $filearg > /tmp/java-cpp-$$-input
+perl -p -e 's/\/\//DOUBLESLASHCOMMENT/g;' -e 's/\/\*/SLASHSTARCOMMENT/g;' -e 's/\'/SINGLEQUOTE/g;' $filearg > /tmp/java-cpp-$$-input
 cpp $argv /tmp/java-cpp-$$-input > /tmp/java-cpp-$$-output
-cat /tmp/java-cpp-$$-output | perl -p -e 's/DOUBLESLASHCOMMENT/\/\//g;' -e 's/SLASHSTARCOMMENT/\/\*/g;' -e 's/"  ?\+ "//g;' -e 's/^(package .*\.) ([^ ]*) ?;/\1\2;/;' -e 's/^# [0-9]+ ".*$//;' | perl -p -e 'use English; $INPUT_RECORD_SEPARATOR = "";' | lines-from "package"
+cat /tmp/java-cpp-$$-output | perl -p -e 's/DOUBLESLASHCOMMENT/\/\//g;' -e 's/SLASHSTARCOMMENT/\/\*/g;' -e 's/SINGLEQUOTE/\'/g;' -e 's/"  ?\+ "//g;' -e 's/^(package .*\.) ([^ ]*) ?;/\1\2;/;' -e 's/^# [0-9]+ ".*$//;' | perl -p -e 'use English; $INPUT_RECORD_SEPARATOR = "";' | lines-from "package"
 # Problem:  doesn't propagate error codes correctly
 rm /tmp/java-cpp-$$-input /tmp/java-cpp-$$-output
-
