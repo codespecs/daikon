@@ -1066,10 +1066,12 @@ public class PrintInvariants {
 	 if (other.isDerivedSequenceMinMaxSum())
 	   break;
 	 if (leader.rep_type.isArray()) {
-	   String[] form =
-	     VarInfoName.QuantHelper.format_dbc(new VarInfoName[]
-	       { leader.name, other.name }, true); // elementwise
-	   out.println(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
+           out.println((new DummyInvariant(null)).format_unimplemented(OutputFormat.DBCJAVA));
+           // CP: commented out, see comment near QuantHelper.format_dbc()
+           // 	   String[] form =
+           // 	     VarInfoName.QuantHelper.format_dbc(new VarInfoName[]
+           // 	       { leader.name, other.name }, true); // elementwise
+           // 	   out.println(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
 	 } else {
 	   out.println(leader.name.dbc_name(leader) + " == " + other.name.dbc_name(other));
 	 }
