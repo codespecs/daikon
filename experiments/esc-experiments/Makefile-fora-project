@@ -169,6 +169,7 @@ merge:
 	@echo
 	@echo \#\#\# merge
 	@echo
+	cd ${PACKAGE} && ls *.java-unannotated | perl -p -e 's/^(.*)-unannotated$$/mv \1-unannotated \1/' | sh
 	cd ${PACKAGE} && merge-esc.pl ${PWD}/${PROJECT}.txt-esc
 	cd ${PACKAGE} && ls *.java | perl -p -e 's/^(.*)$$/mv \1 \1-unannotated/' | sh
 	cd ${PACKAGE} && ls *.java-escannotated | perl -p -e 's/^(.*)-escannotated$$/mv \1-escannotated \1/' | sh
