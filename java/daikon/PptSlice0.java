@@ -193,8 +193,8 @@ public class PptSlice0
     // Abstracted out to permit use of a cached value
     private String format() {
       // return format;
-      // return theImp.format();
-      return theImp.repr();
+      return theImp.format();
+      // return theImp.repr();
     }
 
     public int hashCode() {
@@ -215,8 +215,27 @@ public class PptSlice0
       if (hashCode() != other.hashCode()) {
         return false;
       }
-      // return format().equals(other.format());
-      return theImp.isSameInvariant(other.theImp);
+      boolean same_eq = theImp.isSameInvariant(other.theImp);
+
+      // Look for  differences between the format based check and the
+      // isSameInvariant check.
+      if (false) {
+        boolean fmt_eq = format().equals(other.format());
+        if (fmt_eq != same_eq) {
+          System.out.println ("imp1 = " + theImp.format());
+          System.out.println ("imp2 = " + other.theImp.format());
+          System.out.println ("fmt_eq = " + fmt_eq + " same_eq = " + same_eq);
+          System.out.println ("lefteq = "
+                             + theImp.left.isSameInvariant(other.theImp.left));
+          System.out.println ("righteq = "
+                           + theImp.right.isSameInvariant(other.theImp.right));
+          System.out.println ("right class = "
+                              + theImp.right.getClass() + "/"
+                              + other.theImp.right.getClass());
+          // Assert.assertTrue (false);
+        }
+      }
+      return same_eq;
     }
 
   }
