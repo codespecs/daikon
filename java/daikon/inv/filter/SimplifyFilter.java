@@ -7,24 +7,34 @@ import daikon.inv.filter.*;
 
 import java.util.*;
 
-public class SimplifyFilter extends InvariantFilter {
-  public static String description = "Eliminate invariants based on Simplify (slow)";
+class SimplifyFilter extends InvariantFilter {
+  static String description = "Eliminate invariants based on Simplify (slow)";
+  InvariantFilters filters;	// need this reference for MyTester
+  PptTopLevel previousTopLevel; // hack for speed, used in shouldDiscardInvariant()
 
   public String getDescription() {
     return description;
   }
 
-  InvariantFilters filters;	// need this reference for MyTester
-
   public SimplifyFilter( InvariantFilters filters ) {
     this.filters = filters;
+    previousTopLevel = null;
   }
 
   boolean shouldDiscardInvariant( Invariant invariant ) {
-    // Rerun simplify on this Ppt
     PptTopLevel topLevel = (PptTopLevel) invariant.ppt.parent;
-    topLevel.redundant_invs = new HashSet();
-    topLevel.mark_implied_via_simplify( new MyTester());
+
+    // Using previousTopLevel is a hack for speed.  If the current topLevel is
+    // the same as previousTopLevel, then we are looking at an invariant from
+    // the same Ppt as last time.  We assume that the filters haven't changed
+    // since the last time we ran Simplify, so we'll use the results (ie,
+    // redundant_invs) from last time.  This way, Simplify is only run once per
+    // Ppt rather than once per invariant.
+    if (topLevel != previousTopLevel) {	// run Simplify on this Ppt
+      topLevel.redundant_invs = new HashSet();
+      topLevel.mark_implied_via_simplify( new MyTester());
+    }
+    previousTopLevel = topLevel;
     Set redundantInvariants = topLevel.redundant_invs;
 
     // See if this invariant appears in redundant_invs:
