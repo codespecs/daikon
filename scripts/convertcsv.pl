@@ -16,6 +16,11 @@ use Text::CSV;
 use Getopt::Long;
 use checkargs;
 
+# TODO:
+#   If using "-m interpolate", then what about missing values before the
+#   first non-missing value?  Need to permit a second argument to specify
+#   what to do in that case (?).
+
 my $USAGE =
   "Usage: convertcsv.pl [options] <inputfilename>
   Options:
@@ -135,11 +140,6 @@ my @isNumber;                   # type:  true if numeric, false if string
 # @variableArray[i] is all the values of the ith column in the CSV file.
 my %variableArray;
 
-
-# These are just variables used to store
-# strings that will be written to the output file.
-my $dtraceline;
-my $decls;
 
 # Now parse the input file and create the declartions and dtrace files.
 my $csv = Text::CSV->new();
@@ -372,7 +372,7 @@ sub getVariableNames ( $ ) {
 
   my $csvstatus = $csv->parse($line); # parse a CSV string into fields
   if (!$csvstatus) {
-    die("Corrupted csv file. Exiting...");
+    die("Corrupted csv file; cannot parse variable names: $line");
   }
 
   @csv_varnames = $csv->fields(); # get the parsed fields
