@@ -216,7 +216,7 @@ public final class ProglangType implements java.io.Serializable {
   // this ProglangType), return the interpretation of that value.
   // Canonicalize where possible.
   final Object parse_value(String value) {
-    System.out.println(format() + ".parse(\"" + value + "\")");
+    // System.out.println(format() + ".parse(\"" + value + "\")");
 
     String value_ = value;      // for debugging, I suppose
     // This only needs to deal with representation types, not with all
