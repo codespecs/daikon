@@ -16,12 +16,12 @@ public abstract class BinaryDerivation implements Derivation, Cloneable {
   /**
    * Original variable 1
    **/
-  VarInfo base1;
+  public VarInfo base1;
 
   /**
    * Original variable 2
    **/
-  VarInfo base2;
+  public VarInfo base2;
 
   /**
    * Create a new BinaryDerivation from two varinfos.
@@ -56,8 +56,8 @@ public abstract class BinaryDerivation implements Derivation, Cloneable {
     if (this_var_info == null) {
       this_var_info = this.makeVarInfo();
       this_var_info.derived = this;
-      base1.derivees.add(this);
-      base2.derivees.add(this);
+      // base1.derivees.add(this); // [INCR]
+      // base2.derivees.add(this); // [INCR]
     }
     return this_var_info;
   }

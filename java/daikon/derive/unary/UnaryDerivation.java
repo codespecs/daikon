@@ -29,7 +29,7 @@ public abstract class UnaryDerivation implements Derivation, Cloneable {
     if (this_var_info == null) {
       this_var_info = makeVarInfo();
       this_var_info.derived = this;
-      base.derivees.add(this);
+      // base.derivees.add(this); // [INCR]
     }
     return this_var_info;
   }
