@@ -84,7 +84,7 @@ It describes Daikon version 2.3.14, released August  1, 2002.
 
 @menu
 * Introduction::                
-* Installing::                  
+* Installing Daikon::           
 * Example use::                 
 * Detecting invariants::        
 * Daikon output::               
@@ -299,6 +299,12 @@ Problems running dfej
 
 Problems with dfec
 
+* dfec instrumentation problems::  
+* Compilation and linking of instrumented code problems::  
+* Instrumented code problems::  
+
+Problems compiling and linking instrumented programs
+
 * Linker problems::             
 
 Problems running Daikon
@@ -345,7 +351,7 @@ Examples
 @end ifnothtml
 @end menu
 
-@node    Introduction, Installing, Top, Top
+@node    Introduction, Installing Daikon, Top, Top
 @chapter Introduction
 
 The @uref{http://pag.lcs.mit.edu/daikon, ,Daikon invariant detector}
@@ -365,7 +371,7 @@ values.  Front ends (@pxref{Instrumentation}) exist for the Java, C, and
 IOA languages; it is easy to extend Daikon to other applications.
 
 
-@node    Installing, Example use, Introduction, Top
+@node    Installing Daikon, Example use, Introduction, Top
 @chapter Installing Daikon
 @cindex installing Daikon
 
@@ -378,19 +384,11 @@ in the file @file{doc/CHANGES} in the distribution.
 @enumerate
 @item
 Download Daikon from
-from @uref{http://pag.lcs.mit.edu/daikon/download/}.
-
-@cindex pre-compiled distribution
-@cindex source distribution
-
-There are two distributions to choose from.  The pre-compiled
-distribution,
-@uref{http://pag.lcs.mit.edu/daikon/download/daikon-compiled.tar.gz,,@file{daikon-compiled.tar.gz}},
-permits you to run Daikon and to detect invariants, but does not permit
-you to modify Daikon or to rebuild it.  The source distribution,
-@uref{http://pag.lcs.mit.edu/daikon/download/daikon-source.tar.gz,,@file{daikon-source.tar.gz}},
-includes everything from the pre-compiled distribution
-plus sources for Daikon and for dfej.
+from @uref{http://pag.lcs.mit.edu/daikon/download/daikon.tar.gz}.
+One way to do this is
+@example
+wget http://pag.lcs.mit.edu/daikon/download/daikon.tar.gz
+@end example
 
 @cindex anonymous CVS access to Daikon sources
 Daikon is also available via anonymous CVS.  Send email to
@@ -407,15 +405,22 @@ tar zxvf daikon-source.tar.gz
 This creates a @file{@var{daikonparent}/daikon/} subdirectory.
 
 @item
+Set up your environment.
+@enumerate
+@item Make your shell initialization file source the appropriate
+Daikon environment file.
+@itemize 
+@item
 @cindex C shell
 @cindex csh shell
 @cindex tcsh shell
-Set a few environment variables.  If you use the csh or tcsh shell, add the
+If you use the csh or tcsh shell, add the
 following to your @file{.cshrc} file:
 @example
 source @var{daikonparent}/daikon/bin/daikon.cshrc
 @end example
 @noindent
+@item
 @cindex Bourne shell
 @cindex bash shell
 If you use the bash shell, add the following to your
@@ -423,83 +428,39 @@ If you use the bash shell, add the following to your
 @example
 source @var{daikonparent}/daikon/bin/daikon.bashrc
 @end example
+@end itemize
 
+@item
 Also, you must edit the @file{daikon.cshrc} or @file{daikon.bashrc} file
 to indicate the @var{daikonparent} directory and to perform any desired
 customizations.  (Alternately, you may place such customizations in your
-own @file{.cshrc} or @file{.bash_profile} file.)
-
-Before proceeding, you should execute the @command{source} command you
-placed in your shell initialization file, or else log out and log back
-in to achieve the same effect.
+own @file{.cshrc} or @file{.bash_profile} file, just before and/or
+after the @samp{source ... daikon.@{ba,c@}shrc} line.)
+@end enumerate
 
 @item
-If you wish to use clustering to help produce implications
-(@pxref{Cluster analysis for splitters}), then compile the clustering
-algorihtms.
-@example
-cd $DAIKONDIR/bin
-make
-@end example
+Execute the @command{source} command you placed in your shell
+initialization file, or else log out and log back in to achieve the
+same effect.
 
 @item
-@cindex DAIKONCLASS_SOURCES environment variable
-@cindex environment variable DAIKONCLASS_SOURCES
-@cindex @file{daikon.jar}, running from
-@cindex @file{.class} files, running from
-If you set the environment variable DAIKONCLASS_SOURCES in
-@file{daikon.cshrc} or @file{daikon.bashrc}, indicating that you wish to
-compile the Daikon sources yourself, then you must now compile them.
+Build various executables used by Daikon.
 @example
-cd $DAIKONDIR/java
+cd $DAIKONDIR
 make
 @end example
 
 @c @item
-@c Add the Daikon Java files to your Java class path.  There are two
-@c different ways to do this; you should choose one or the other.
-@c 
-@c @itemize @bullet
-@c @item
-@c The first technique is to run Daikon from the precompiled bytecode files
-@c in @file{daikon.jar}.  This is the easiest way to proceed, and it must
-@c be used if you downloaded the pre-compiled Daikon distribution.
-@c 
-@c Add the supplied @file{daikon.jar}
-@c file to your classpath.
-@c For instance, if your shell is @command{csh}, add the following to your
-@c @file{.cshrc} file: 
+@c @cindex DAIKONCLASS_SOURCES environment variable
+@c @cindex environment variable DAIKONCLASS_SOURCES
+@c @cindex @file{daikon.jar}, running from
+@c @cindex @file{.class} files, running from
+@c If you set the environment variable DAIKONCLASS_SOURCES in
+@c @file{daikon.cshrc} or @file{daikon.bashrc}, indicating that you wish to
+@c compile the Daikon sources yourself, then you must now compile them.
 @c @example
-@c setenv CLASSPATH @var{daikonparent}/daikon/daikon.jar:$@{CLASSPATH@}
-@c @end example
-@c 
-@c @item
-@c Alternately, you may run run Daikon from @file{.class} files that you
-@c compile yourself.  This permits you to modify Daikon (most users will
-@c not need to do so), and may be used if you downloaded the source
-@c distribution.
-@c 
-@c Add the @file{@var{daikonparent}/daikon/java/} directory to
-@c your classpath.  If your shell is @command{csh}, add the
-@c following to your @file{.cshrc} file.
-@c @example
-@c setenv CLASSPATH @var{daikonparent}/daikon/java:$@{CLASSPATH@}
-@c @end example
-@c 
-@c The distribution includes compiled @file{.class} files, so you do not
-@c need to compile them yourself unless you make changes; @xref{Compiling
-@c Daikon}.
-@c 
-@c @end itemize
-@c 
-@c @item
-@c Add the @file{@var{daikonparent}/daikon/bin/} directory to your path.  (Your
-@c path is a list of directories in which the shell searches for
-@c commands; this permits you to type just the program name rather than
-@c supplying a full pathname.)  In csh, add the following to your
-@c @file{.cshrc} file:
-@c @example
-@c set path = (@var{daikonparent}/daikon/bin $path)
+@c cd $DAIKONDIR/java
+@c make
 @c @end example
 
 @end enumerate
@@ -511,35 +472,29 @@ make
 * Requirements::                
 @end menu
 
-@node    Installing dfej, Installing dfec, Installing, Installing
+@node    Installing dfej, Installing dfec, Installing Daikon, Installing Daikon
 @section Installing dfej, the Daikon front end for Java
 
 @cindex installing dfej
 @cindex dfej installation
 
-If you wish to detect invariants in Java programs, perform the following
-steps.
+This manual section is optional; if you ran @command{make} from
+$DAIKONDIR (@pxref{Installing Daikon}), you can skip it.
 
-@enumerate
-@c @item
-@c Ensure that @file{rt.jar} is on your Java class path.  For instance, if
-@c your shell is @command{csh}, place something like the following in your
-@c @file{.cshrc} file:
-@c @example
-@c setenv CLASSPATH $@{CLASSPATH@}:$HOME/java/jdk/jre/lib/rt.jar
-@c @end example
-@c (Don't use @samp{~username}; use @samp{$HOME}, as in the example.)
+If you wish to detect invariants in Java programs, you need to obtain
+or build an executable for dfej, the Daikon front end for Java.
 
-@item
-Obtain or build an executable for dfej, the Daikon front end for Java.
 
 @itemize @bullet
 @item
-The easiest approach is to download a precompiled version of @command{dfej}
-from @url{http://pag.lcs.mit.edu/daikon/download/}.  Place that
-executable somewhere on your path, and you are ready to run dfej.  (If
-no executable is available for your architecture, send mail to
-@email{daikon@@pag.lcs.mit.edu} and we may be able to produce an executable for you.)
+The easiest approach is to download a precompiled version of
+@command{dfej} from @url{http://pag.lcs.mit.edu/daikon/download/}.
+Place that executable in directory
+@file{$DAIKONDIR/front-end/java/src} (or, alternately, elsewhere on
+your path), then run @command{rehash}.  Now you are ready to run dfej.
+(If no executable is available for your architecture, send mail to
+@email{daikon@@pag.lcs.mit.edu} and we may be able to produce an
+executable for you.)
 
 @item
 Alternately, you can build dfej from the sources, which are included in
@@ -551,6 +506,7 @@ commands:
 cd daikon/front-end/java
 ./configure
 make
+rehash
 @end example
 @noindent
 after which file @file{src/dfej} (on Windows, @file{src/dfej.exe}) is
@@ -585,9 +541,8 @@ unless you know what you are doing), just run @command{make} again to
 build a new binary.
 
 @end itemize
-@end enumerate
 
-@node    Installing dfec, Installing the Context GUI, Installing dfej, Installing
+@node    Installing dfec, Installing the Context GUI, Installing dfej, Installing Daikon
 @section Installing dfec, the Daikon front end for C/C++
 
 @cindex installing dfec
@@ -599,11 +554,11 @@ steps.
 @enumerate
 @item
 Download the dfec distribution from
-@uref{http://pag.lcs.mit.edu/daikon/download};
-choose the version for your architecture and operating system.  The
-distribution includes both the dfec executable and
-Lackwit.  Lackwit is a variable comparability analysis package that
-makes invariant detection more accurate and efficient.
+@uref{http://pag.lcs.mit.edu/daikon/download}; choose the version for
+your architecture and operating system.  The distribution includes
+both the dfec executable and Lackwit.  Lackwit is a variable
+comparability analysis package; its use is optional, but it can make
+invariant detection more accurate and efficient.
 @item
 Unpack the tarfile.
 @example
@@ -655,7 +610,7 @@ This creates the dfec executable,  @file{release_2.45/bin/dfec}.
 @c 		  @file{.cshrc} file:<br>
 @c 		  <tt>set path = (<em>daikonparent</em>/daikon/java-front-end/src $path)</tt><br>
 
-@node    Installing the Context GUI, Requirements, Installing dfec, Installing
+@node    Installing the Context GUI, Requirements, Installing dfec, Installing Daikon
 @section Installing the Context GUI
 
 If you wish to run the Daikon Context GUI (@pxref{Context GUI}), perform
@@ -678,7 +633,7 @@ path.  Add the following to your @file{.emacs} or @file{prj.el} file:
 @end example
 @end enumerate
 
-@node    Requirements,  , Installing the Context GUI, Installing
+@node    Requirements,  , Installing the Context GUI, Installing Daikon
 @section Requirements for running Daikon
 
 In order to run Daikon, you must have a Java 1.3 (or later) JVM
@@ -719,6 +674,12 @@ which contains everything you need to compile and run Unix programs
 under Windows.  You can install Cygwin by simply running the program
 found at @uref{http://sources.redhat.com/cygwin/setup.exe}.
 
+Note that Daikon and most of its related programs (such as dfej) run
+under Windows as command-line applications:  you should invoke
+them from a command shell rather than (for instance) simply by
+double-clicking their icons.  (In any event, double-clicking would not
+supply the proper arguments to the program.)
+
 @c ** Commented out with the elimination of the need for modbit-munge
 @c You may also need to install
 @c @uref{http://www.activestate.com/ASPN,ActiveState Perl} in order to run
@@ -731,7 +692,7 @@ found at @uref{http://sources.redhat.com/cygwin/setup.exe}.
 @c @uref{http://www.activestate.com/ASPN/Downloads/ActivePerl/index/}.
 
 
-@node    Example use, Detecting invariants, Installing, Top
+@node    Example use, Detecting invariants, Installing Daikon, Top
 @chapter Example use of Daikon
 @cindex example use of Daikon
 
@@ -762,7 +723,7 @@ You need to perform three basic tasks:  instrument the target program
 invariants (steps 8-9).
 
 You must first install Daikon if you haven't done so already; see
-@ref{Installing}.
+@ref{Installing Daikon}.
 
 
 @enumerate
@@ -2220,6 +2181,7 @@ be updated.)
 
 @node    Property filters, Variable filters, Control panel, Control panel
 @subsubsection Property filters
+@cindex property filters
 
 Property filters narrow down the list of invariants that are displayed.
 You can adjust which Property filters are being applied.  By default,
@@ -2315,6 +2277,7 @@ with probabilities of less than .01% are shown.
 
 @node    Variable filters,  , Property filters, Control panel
 @subsubsection Variable filters
+@cindex variable filters
 
 Variable filters let you display only the invariants that contain
 certain variables.  The left-hand box displays the variables that you
@@ -3569,6 +3532,13 @@ programs.  Programs that define symbols that are C++ keywords, such as
 @samp{bool}, require that these symbols be changed to another name
 that does not conflict with the C++ namespace (for example,
 @samp{bool} can be changed to @samp{boolean}).
+
+If g++ gives an error message while compiling the instrumented code,
+then first try compiling the uninstrumented code with 
+@command{g++}, and remove any errors that g++ issues.  For instance,
+C++ requires declaration of prototypes, whereas C can sometimes guess
+the types for missing prototypes.
+
 @item 
 Instrumented programs must not redeclare functions defined in system
 headers; for instance, do not do the following:
@@ -3649,13 +3619,16 @@ other problems.
 
 
 @cindex gcc version for use with dfec
-@cindex gcc 3
-@cindex gcc 2.96
+@cindex gcc 3, does not work with dfec
+@cindex gcc 2.96, does not work with dfec
+@cindex gcc 2.95.3, installing
+@cindex installing gcc 2.95.3
 
-@command{dfec} works with gcc 2.95.3.  It is not known to work with other
+@command{dfec} works with gcc 2.95.3 or 2.95.2.
+dfec does not work with other
 compilers or other versions of gcc.  In particular, gcc 3 does not
-work, nor does ``gcc 2.96'' (which is not an official gcc release but
-appears in some Linux distributions).
+work, nor does ``gcc 2.96'' or ``gcc 2.95.4'' (neither of which is
+an official gcc release but which appear in some Linux distributions).
 You can download gcc 2.95.3 from @url{http://gcc.gnu.org/releases.html}.
 
 gcc is easy to install; see the @uref{http://gcc.gnu.org/install/, ,
@@ -4647,39 +4620,20 @@ should solve the problem.
 @node    dfec problems, Daikon problems, dfej problems, Troubleshooting
 @section Problems with dfec
 
-@cindex daikon_runtime error
-@cindex error, daikon_runtime
-@cindex attempted to access index error
-@cindex error, attempted to access index
+@menu
+* dfec instrumentation problems::  
+* Compilation and linking of instrumented code problems::  
+* Instrumented code problems::  
+@end menu
 
-A program instrumented by dfec may produce a message such as
-@example
-daikon_runtime: attempted to access index 5 of a 4-length array!
-@end example
-Such a message indicates that there is an error in your program.  Your
-program attempts to read or write memory beyond the end of an array.
-You should fix this error before proceeding to try to detect
-invariants.  If you do not do so, then the program's results cannot be
-relied on, because the erroneous array access might corrupt (or access
-meaningless values from) other variables, the Daikon runtime data
-structures, or your program's stack.  When this occurs, the Daikon
-runtime immediately halts your program to let you know where the error
-occurred and to prevent memory corruption.  The Daikon runtime's
-discovery of these errors, while not directly related to invariant
-detection, is a pleasant side effect of using Daikon.
+@node    dfec instrumentation problems, Compilation and linking of instrumented code problems, dfec problems, dfec problems
+@subsection Problems running dfec
 
-@cindex daikon_runtime.h file
-@cindex customizing the Daikon C runtime
+If you have trouble while instrumenting a C program, or while
+compiling the instrumented program, @xref{C program requirements}.
 
-The Daikon runtime has a variety of possible behaviors when a program
-contains a memory error.  For instance, it can halt immediately; it
-can allocate extra buffer space around arrays (but cannot do so around
-dynamically allocated (malloced) blocks, because the type is not known
-at the type of the malloc call) and only halt if the program goes
-beyond those bounds; or the checking can be turned off entirely, which
-is extremely dangerous.  These and many other customizations for the
-Daikon C runtime library are described in the @file{daikon_runtime.h}
-file.
+@node    Compilation and linking of instrumented code problems, Instrumented code problems, dfec instrumentation problems, dfec problems
+@subsection Problems compiling and linking instrumented programs
 
 @cindex Lackwit error, identifier undefined
 @cindex identifier undefined, Lackwit error
@@ -4708,8 +4662,8 @@ directory is placed on your path by the standard
 * Linker problems::             
 @end menu
 
-@node    Linker problems,  , dfec problems, dfec problems
-@subsection Linker problems
+@node    Linker problems,  , Compilation and linking of instrumented code problems, Compilation and linking of instrumented code problems
+@subsubsection Linker problems
 
 This section discusses problems that may occur when linking files that
 have been instrumented by dfec.  For more details,
@@ -4765,8 +4719,46 @@ g++.
 @end itemize
 
 
-@c @node    Instrumented code problems, Daikon problems, dfej problems, Troubleshooting
-@c @section Problems running instrumented code
+@node    Instrumented code problems,  , Compilation and linking of instrumented code problems, dfec problems
+@subsection Problems running instrumented code
+
+@cindex daikon_runtime error
+@cindex error, daikon_runtime
+@cindex attempted to access index error
+@cindex error, attempted to access index
+
+A program instrumented by dfec may produce a message such as
+@example
+daikon_runtime: attempted to access index 5 of a 4-length array!
+@end example
+Such a message indicates that there is an error in your program.  Your
+program attempts to read or write memory beyond the end of an array.
+You should fix this error before proceeding to try to detect
+invariants.  If you do not do so, then the program's results cannot be
+relied on, because the erroneous array access might corrupt (or access
+meaningless values from) other variables, the Daikon runtime data
+structures, or your program's stack.  When this occurs, the Daikon
+runtime immediately halts your program to let you know where the error
+occurred and to prevent memory corruption.  The Daikon runtime's
+discovery of these errors, while not directly related to invariant
+detection, is a pleasant side effect of using Daikon.  You also might
+want to consider using the Valgrind tool for Linux on x86 processors
+(@url{http://developer.kde.org/~sewardj/}), which can help you correct
+memory errors; this reduces the number of warnings/errors produced by
+the Daikon runtime, and it also improves your code.
+
+@cindex daikon_runtime.h file
+@cindex customizing the Daikon C runtime
+
+The Daikon runtime has a variety of possible behaviors when a program
+contains a memory error.  For instance, it can halt immediately; it
+can allocate extra buffer space around arrays (but cannot do so around
+dynamically allocated (malloced) blocks, because the type is not known
+at the type of the malloc call) and only halt if the program goes
+beyond those bounds; or the checking can be turned off entirely, which
+is extremely dangerous.  These and many other customizations for the
+Daikon C runtime library are described in the @file{daikon_runtime.h}
+file.
 
 
 @node    Daikon problems, Other problems, dfec problems, Troubleshooting

@@ -1,9 +1,11 @@
 History of Daikon changes
 
-This file lists significant user-visible changes to Daikon.  (Many other
-changes are not noted here.)  For documentation of Daikon, see the Daikon
-manual.  Its source is file daikon.texinfo; formatted, it appears as
-daikon.html, daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.
+This file lists significant user-visible changes to Daikon.
+(Many other changes, including most bug fixes, are not noted here.)
+
+For documentation of Daikon, see the Daikon manual.  Its source is file
+daikon.texinfo; formatted, it appears as daikon.html, daikon.info,
+daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
