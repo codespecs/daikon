@@ -519,7 +519,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       else if (format == OutputFormat.DAIKON)
         return ("%var2% is a bitwise subset of %var1%");
       else
-        return ("%var1% == %var2% | %var1%");
+        return ("%var1% == (%var2% | %var1%)");
     }
 
     public boolean eq_check (PRIMITIVE x, PRIMITIVE y) {
