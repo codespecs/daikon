@@ -679,14 +679,6 @@ public final class CLASSNAME
     int b = (int) v;
     int c = (int) w;
 
-    //make y coeff positive
-    if (b < 0) {
-      a = -a;
-      b = -b;
-      c = -c;
-    }
-
-
     if (a == 0 && b == 0 && c == 0) {
       return wrapper.format_too_few_samples(format, "0 * " + x + "+ 0 * " + y + " + 0 == 0");
     }
