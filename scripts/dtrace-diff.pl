@@ -31,6 +31,7 @@ sub load_decls {
     my $decls = shift;
     open DECLS, $decls or die "couldn't open decls \"$decls\"\n";
     my $declshash = {};
+    my $firstppt = 1;
     while (defined (my $l = getline(DECLS))) {
 	if ($l eq "DECLARE") {
 	    my $currppt = getline(DECLS);
@@ -45,9 +46,15 @@ sub load_decls {
 		$$lhashref{$varname} = [$dtype, $rtype, $ltype];
 	    }
 	    $$declshash{$currppt} = $lhashref;
+	} elsif (($l eq "VarComparability") && $firstppt) {
+	    #it's ok to have a VarComparability as the first thing
+	    #in the decls file.  Read the type of comparability,
+	    #then move on.
+	    $l = getline(DECLS);
 	} elsif ($l) {
 	    die "malformed decls file\n";
 	}
+	$firstppt = 0;
     }
     close DECLS;
     return $declshash;
