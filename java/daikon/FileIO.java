@@ -1036,7 +1036,11 @@ public final class FileIO {
       istream = new GZIPInputStream(istream);
     }
     ObjectInputStream oistream = new ObjectInputStream(istream);
-    return (PptMap) oistream.readObject();
+    try {
+      return (PptMap) oistream.readObject();
+    } catch (Exception e) {
+      throw new Error("Trouble reading from .inv file " + filename);
+    }
   }
 
 }
