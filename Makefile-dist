@@ -1,16 +1,23 @@
 # Main Makefile for Daikon
 
 all:
-	cd bin && make
+	$(MAKE) -C bin
 ifdef $DAIKONCLASS_SOURCES
-	cd java && make
+	$(MAKE) -C java
 endif
 	# This comes last because it might fail
-	make java-front-end
+	$(MAKE) java-front-end
+
+clean:
+	$(MAKE) -C bin clean
+ifdef $DAIKONCLASS_SOURCES
+	$(MAKE) -C java clean
+endif
+	$(MAKE) -C clean
 
 java-front-end: front-end/java/config.status
 	@echo "If this command fails, see 'Installing dfej' section in manual"
-	cd front-end/java && make
+	$(MAKE) -C front-end/java
 
 front-end/java/config.status:
 	@echo "If this command fails, see 'Installing dfej' section in manual"
