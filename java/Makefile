@@ -209,6 +209,13 @@ doc-jdk-lookup: doc
 
 doc-dkconfig: ../doc/config-options.texinfo
 
+../doc/category-options.texinfo: $(JAVA_FILES)
+	javadoc -doclet daikon.config.ParameterDocletCategory \
+		--texinfo ../doc/category-options.texinfo \
+		$(JAVADOC_PACKAGES)
+
+doc-category: ../doc/category-options.texinfo
+
 ## For debugging the Makefile.
 showvars:
 	@echo JAVA_FILES = $(JAVA_FILES)
