@@ -329,7 +329,7 @@ public abstract class Invariant
   // Configuration variable dkconfig_use_confidence controls which of the
   // two techniques is used.
 
-  // There are three probability routines:
+  // There are three probability/confidence routines:
   //  justified() is what most clients should call
   //  getProbability() gives the actual probability.  (Likewise for
   //    getConfidence().)  It used to cache results, but it does not
