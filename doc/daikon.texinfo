@@ -310,7 +310,6 @@ Tools
 
 Troubleshooting
 
-* Installation problems::       
 * dfej problems::               
 * dfec problems::               
 * Daikon problems::             
@@ -1989,6 +1988,8 @@ automatically or by hand.
 The files may appear in any order;
 the file type is determined by whether the file name contains
 @file{.decls}, @file{.dtrace}, or @file{.spinfo}.
+As a special case, a file name of @code{-} means to read data trace
+information from the standard input.
 
 Be sure to include all declaration files that are needed for the particular
 data trace file; the simplest way is to include every the declaration file
@@ -6273,7 +6274,6 @@ Daikon; it also tells you how to report bugs in a useful manner.
 
 
 @menu
-* Installation problems::       
 * dfej problems::               
 * dfec problems::               
 * Daikon problems::             
@@ -6285,7 +6285,7 @@ Daikon; it also tells you how to report bugs in a useful manner.
 @end menu
 
 
-@node    dfej problems, dfec problems, Installation problems, Troubleshooting
+@node    dfej problems, dfec problems, Troubleshooting, Troubleshooting
 @section Problems with dfej
 
 @menu
