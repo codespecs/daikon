@@ -11,7 +11,8 @@ public class PrintInvariants {
   private static String usage =
     UtilMDE.join(new String[] {
       "Usage: java daikon.PrintInvariants [OPTION]... FILE",
-      "  -h  Display this usage message",
+      "  -h, --" + Daikon.help_SWITCH,
+      "      Display this usage message",
       "  --" + Daikon.suppress_cont_SWITCH,
       "      Suppress display of implied invariants (by controlling ppt).",
       "  --" + Daikon.suppress_post_SWITCH,
@@ -42,7 +43,10 @@ public class PrintInvariants {
       case 0:
         // got a long option
         String option_name = longopts[g.getLongind()].getName();
-	if (Daikon.suppress_cont_SWITCH.equals(option_name)) {
+        if (Daikon.help_SWITCH.equals(option_name)) {
+          System.out.println(usage);
+          System.exit(1);
+        } else if (Daikon.suppress_cont_SWITCH.equals(option_name)) {
 	  Daikon.suppress_implied_controlled_invariants = true;
 	} else if (Daikon.suppress_post_SWITCH.equals(option_name)) {
 	  Daikon.suppress_implied_postcondition_over_prestate_invariants = true;
