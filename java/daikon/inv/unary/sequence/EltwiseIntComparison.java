@@ -77,7 +77,10 @@ public class EltwiseIntComparison extends SingleSequence {
 
   public boolean isExclusiveFormula(Invariant other)
   {
-    return core.isExclusiveFormula(((EltwiseIntComparison) other).core);
+    if (other instanceof EltwiseIntComparison) {
+      return core.isExclusiveFormula(((EltwiseIntComparison) other).core);
+    }
+    return false;
   }
 
   // Look up a previously instantiated invariant.
