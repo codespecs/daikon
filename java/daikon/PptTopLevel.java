@@ -2176,7 +2176,7 @@ public class PptTopLevel extends Ppt {
 	  if (progtype.equals(clsname)) {
 	    // Only process primitive names like 'x'; not 'x.foo' or 'a[x..]'
 	    if (vi.name.inOrderTraversal().size() != 1) {
-	      System.err.println("Object invarints on argument: skipping " + vi.name.name());
+	      System.err.println("Object invariants on argument: skipping " + vi.name.name());
 	      continue;
 	    }
 	    // State the object invariant on the incoming argument
