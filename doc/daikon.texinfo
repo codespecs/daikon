@@ -3319,11 +3319,13 @@ enabled (the @option{-g} command-line switch to @command{javac});
 otherwise, Chicory uses the names @code{arg0}, @code{arg1}, @dots{} as
 the names of method arguments.
 
-Chicory supports all versions of Java, including Java 5.0.  Chicory's
-functionality is very similar to that of the @command{dfej} tool, and
-Chicory supports most of the same command-line options.  However,
-Chicory has two substantial advantages over dfej:  Chicory is much
-easier to use, and dfej only supports Java 1.4 and earlier.
+Chicory supports all versions of Java, including Java 5.0 (it must
+be run in a 5.0 JVM).  Chicory's functionality is very similar to that
+of the @command{dfej} tool, and Chicory supports most of the same
+command-line options.  However, Chicory has two substantial advantages
+over dfej: Chicory is much easier to use, and dfej only supports Java
+1.4 and earlier.  Chicory should also run on any platform that supports
+Java 5.0.
 
 @menu
 * Chicory options::             
@@ -3394,15 +3396,18 @@ is @code{null} on a particular execution of a program point, then
 parameter.
 
 @item --linked-lists
-Render linked lists as vectors (default).
+Render linked lists as vectors (default) [not yet fully implemented].
 
 @item --no-linked-lists
 Do not render linked lists as vectors.
 
 @item --ppt-select-pattern=@var{ppt_regexp}
 Only produce trace output for matching classes/procedures.  Cannot be used
-in conjunction with @option{--ppt-omit-pattern}.  May only be supplied once.
-The argument provided must be a regex.
+in conjunction with @option{--ppt-omit-pattern}.  May be supplied multiple
+times.  The argument provided must be a regex.  It will match if matches any
+portion of the program point name.  Note that currently only classes are
+matched, not each full ppt name.  Thus, either all of a classes methods are
+traced or none of  them are.
 
 If the the regular expression does not match the name of a particular
 class, then that class is omitted entirely, along with all procedures
@@ -3415,10 +3420,10 @@ would cause nothing to be instrumented, because regular
 expression``bar'' does not match the class name C, so no part of C
 would be further considered.
 
-To instrument only method bar of class C, one possible command is:
+To trace only method bar of class C, one possible command is:
 
 @example
-dfej --ppt-select-pattern='C$|C.bar' Foo.java
+java daikon.Chicory --ppt-select-pattern='C$|C.bar' ...
 @end example
 
 
@@ -3431,25 +3436,29 @@ The @option{--ppt-omit-pattern} argument may be supplied multiple times, in
 order to specify multiple omitting criteria.  A program point is omitted
 if its fully qualified class, fully qualified procedure name, or
 complete program point name exactly matches one of the omitting criteria.
+A regular expression matches if it matches any portion of the program
+point name.  Note that currently only classes are matched, not each full
+ppt name.  Thus, either all of a classes methods are traced or none of
+them are.
 
 For example, to avoid detecting invariants over an iterator class, you
-can call dfej like so:
+can call Chicory like so:
+
 @example
-dfej '--ppt-omit-pattern=HashSetLinear$HslIterator' \
-     HashSetLinear.java
+java daikon.Chicory '--ppt-omit-pattern=HashSetLinear$HslIterator' ... \
 @end example
 
 As another example, to avoid detecting invariants over a particular
 method, you could use:
 @example
-dfej '--ppt-omit-pattern=StackAr.topAndPop()Ljava/lang/Object;' \
-     StackAr.java
+java daikon.Chicory '--ppt-omit-pattern=StackAr.topAndPop()Ljava/lang/Object;' \
+     ...
 @end example
 
 Finally, to avoid detecting invariants at a particular program point,
 try:
 @example
-dfej '--ppt-omit-pattern=StackAr.<init>(I)V:::EXIT33' StackAr.java
+java daikon.Chicory '--ppt-omit-pattern=StackAr.<init>(I)V:::EXIT33' ...
 @end example
 
 The argument is treated as a regular expression.
@@ -3457,7 +3466,7 @@ The argument is treated as a regular expression.
 For example, to avoid detecting invariants over all classes in package
 daikon.util, you can call dfej like so:
 @example
-  dfej '--ppt-omit-pattern=^daikon\.util\..*' *.java
+  java daikon.Chicory '--ppt-omit-pattern=^daikon\.util\..*' ...
 @end example
 
 
