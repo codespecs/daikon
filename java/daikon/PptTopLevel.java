@@ -369,7 +369,8 @@ public class PptTopLevel extends Ppt {
       // pass1
       { },
       // pass2
-      { new SequenceScalarSubscriptFactory() }
+      { new SequenceScalarSubscriptFactory(),
+        new SequenceStringSubscriptFactory(), }
     };
 
 
