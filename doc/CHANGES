@@ -61,6 +61,10 @@ Kvasir
     more useful invariants. Added the pointer-type disambiguation feature
     (--disambig and --disambig-file options) so that users can exert finer 
     control of whether pointers are printed as single elements or arrays.
+    Note: The next feature that we plan to implement for Kvasir is 
+    support for C++, but we want to first gauge the demand for this feature.
+    Please send email to daikon-developers@lists.csail.mit.edu if you
+    feel that this addition will benefit your experience with Daikon.
 
   Bug Fixes
 

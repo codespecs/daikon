@@ -4007,6 +4007,13 @@ to start.  When tracing short-lived programs, this overhead can
 dominate Kvasir's per-instruction runtime overhead.
 
 @item
+Kvasir does not support C++ (dfec had small but unreliable C++ support).
+The next feature that we plan to implement for Kvasir is
+support for C++, but we want to first gauge the demand for this feature.
+Please send email to @email{daikon-developers@@lists.csail.mit.edu} if you
+feel that this addition will benefit your experience with Daikon.
+
+@item
 Kvasir always prints the contents of structures according to their
 compile-time type.  Programs that use generic pointers and structural
 equivalence to simulate object-orientation will have derived-`class'
