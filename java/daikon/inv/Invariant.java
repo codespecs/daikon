@@ -89,7 +89,7 @@ public abstract class Invariant
   /**
    * Set of SuppressionLinks this suppresses (perhaps in conjunction
    * with some other invariants).  Each link holds a suppressed
-   * invariant.  Never null, but can be empty.  Clones of this 
+   * invariant.  Never null, but can be empty.  Clones of this
    * have this field set to an empty set.
    **/
   private Set/*[SuppressionLink]*/ suppressees;
@@ -543,6 +543,15 @@ public abstract class Invariant
         return 0;
       Invariant inv1 = (Invariant)o1;
       Invariant inv2 = (Invariant)o2;
+
+      // Guarding implications should compare as if they were without the
+      // guarding predicate
+
+      if (inv1 instanceof GuardingImplication)
+        inv1 = ((GuardingImplication)inv1).right;
+      if (inv2 instanceof GuardingImplication)
+        inv2 = ((GuardingImplication)inv2).right;
+
       // Assert.assertTrue(inv1.ppt.parent == inv2.ppt.parent);
       VarInfo[] vis1 = inv1.ppt.var_infos;
       VarInfo[] vis2 = inv2.ppt.var_infos;
