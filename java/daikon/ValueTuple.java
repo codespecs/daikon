@@ -332,6 +332,34 @@ public final class ValueTuple implements Cloneable {
     return sb.toString();
   }
 
+  /**
+   * Return the values of this tuple, annotated with the VarInfo that
+   * would be associated with the value.
+   **/
+  public String toString(VarInfo[] vis) {
+    StringBuffer sb = new StringBuffer("[");
+    Assert.assertTrue(vals.length == mods.length);
+    Assert.assertTrue(vals.length == vis.length);
+    for (int i=0; i<vals.length; i++) {
+      if (i>0)
+        sb.append("; ");
+      sb.append (vis[i].name.name() + ": ");
+      if (vals[i] instanceof String)
+        sb.append("\"" + vals[i] + "\"");
+      else if (vals[i] instanceof long[])
+        sb.append(ArraysMDE.toString((long[])vals[i]));
+      else if (vals[i] instanceof int[])
+        // shouldn't reach this case -- should be long[], not int[]
+        sb.append(ArraysMDE.toString((int[])vals[i]));
+      else
+        sb.append(vals[i]);
+      sb.append(",");
+      sb.append(mods[i]);
+    }
+    sb.append("]");
+    return sb.toString();
+  }
+
   public static String valsToString(Object[] vals) {
     StringBuffer sb = new StringBuffer("[");
     for (int i=0; i<vals.length; i++) {

@@ -968,7 +968,7 @@ public class PptTopLevel
 
     if (debugFlow.isDebugEnabled()) {
       debugFlow.debug ("<<< Doing add for " + name);
-      debugFlow.debug ("    with vt " + vt);
+      debugFlow.debug ("    with vt " + vt.toString(this.var_infos));
     }
 
     if (values_num_samples == 0) {
