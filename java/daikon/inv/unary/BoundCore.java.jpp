@@ -175,7 +175,7 @@ public class LOWERBOUNDCORE
 
   private double calc_avg_samples_per_val(PRIMITIVE modulus, double range) {
     double avg_samples_per_val =
-      ((double) wrapper.ppt.num_mod_non_missing_samples()) * modulus / range;
+      ((double) wrapper.ppt.num_mod_samples()) * modulus / range;
     avg_samples_per_val = Math.min(avg_samples_per_val, 100);
 #ifdef LOWER
     if (MIN1 == 0) {
@@ -320,8 +320,8 @@ public class LOWERBOUNDCORE
     // System.out.println(LOWERBOUNDCORESTR + ".computeProbability(): ");
     // System.out.println("  " + repr());
     // System.out.println("  ppt=" + wrapper.ppt.name()
-    //                    + ", wrapper.ppt.num_mod_non_missing_samples()="
-    //                    + wrapper.ppt.num_mod_non_missing_samples()
+    //                    + ", wrapper.ppt.num_mod_samples()="
+    //                    + wrapper.ppt.num_mod_samples()
     //                    // + ", values=" + values
     //                    + ", avg_samples_per_val=" + avg_samples_per_val
     //                    + ", result = " + result

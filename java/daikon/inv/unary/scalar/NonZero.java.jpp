@@ -228,7 +228,7 @@ public class NONZERO
       //   double log_probability = self.samples*math.log(probability);
       // then calling Math.exp (if the value is in the range that wouldn't
       // cause underflow).
-      return Math.pow(probability_one_elt_nonzero, ppt.num_mod_non_missing_samples());
+      return Math.pow(probability_one_elt_nonzero, ppt.num_mod_samples());
     }
   }
 

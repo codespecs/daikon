@@ -52,14 +52,14 @@ public class Positive
     // Assume that every variable has a .5 chance of being positive by
     // chance.  Then a set of n values have a have (.5)^n chance of all
     // being positive by chance.
-    return 1 - Math.pow(.5, ppt.num_mod_non_missing_samples());
+    return 1 - Math.pow(.5, ppt.num_mod_samples());
   }
 
   protected double computeProbability() {
     // Assume that every variable has a .5 chance of being positive by
     // chance.  Then a set of n values have a have (.5)^n chance of all
     // being positive by chance.
-    return Math.pow(.5, ppt.num_mod_non_missing_samples());
+    return Math.pow(.5, ppt.num_mod_samples());
   }
 
 }

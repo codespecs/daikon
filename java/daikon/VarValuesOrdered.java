@@ -51,7 +51,7 @@ public final class VarValuesOrdered {
 
   public int num_samples() { return num_samples; }
   public int num_values() { return values_set.size(); }
-  public int num_mod_non_missing_samples() {
+  public int num_mod_samples() {
     int[] tm_indices = ValueTuple.tuplemod_modified_not_missing;
     int result = 0;
     for (int i=0; i<tm_indices.length; i++)

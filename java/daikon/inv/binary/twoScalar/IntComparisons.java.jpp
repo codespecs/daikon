@@ -477,7 +477,7 @@ invariants.
     // very few possible values.  Example:  towers of hanoi has only 6
     // possible (pegA, pegB) pairs.
     return 1 - (Math.pow(.5, ppt.num_values())
-                * Math.pow(.99, ppt.num_mod_non_missing_samples()));
+                * Math.pow(.99, ppt.num_mod_samples()));
 #endif
   }
 
@@ -506,7 +506,7 @@ invariants.
     // very few possible values.  Example:  towers of hanoi has only 6
     // possible (pegA, pegB) pairs.
     return (Math.pow(.5, ppt.num_values())
-              * Math.pow(.99, ppt.num_mod_non_missing_samples()));
+              * Math.pow(.99, ppt.num_mod_samples()));
 #endif
   }
 

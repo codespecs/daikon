@@ -119,7 +119,7 @@ public final class ValueTuple implements Cloneable {
   // Various slices of the 8 (=TUPLEMOD_VALUES) possible tuplemod values.
   // The arrays are filled up in a static block below.
   // (As of 1/9/2000, tuplemod_modified_not_missing is used only in
-  // num_mod_non_missing_samples(), and tuplemod_not_missing is not used.)
+  // num_mod_samples(), and tuplemod_not_missing is not used.)
   public final static int[] tuplemod_not_missing = new int[TUPLEMOD_VALUES/2];
   public final static int[] tuplemod_modified_not_missing = new int[TUPLEMOD_VALUES/4];
 

@@ -122,7 +122,7 @@ public abstract class PptSlice
   /* [INCR]
   // These are used only when the values_cache has been set to null.
   int num_samples_post_cache = -2222;
-  int num_mod_non_missing_samples_post_cache = -2222;
+  int num_mod_samples_post_cache = -2222;
   int num_values_post_cache = -2222;
   String tuplemod_samples_summary_post_cache = "UNINITIALIZED";
   */
@@ -673,7 +673,7 @@ public abstract class PptSlice
     if (values_cache != null) {
       if (! no_invariants) {
         num_samples_post_cache = num_samples();
-        num_mod_non_missing_samples_post_cache = num_mod_non_missing_samples();
+        num_mod_samples_post_cache = num_mod_samples();
         num_values_post_cache = num_values();
         tuplemod_samples_summary_post_cache = tuplemod_samples_summary();
       }
@@ -692,16 +692,16 @@ public abstract class PptSlice
 
   // These accessors are for abstract methods declared in Ppt
   public abstract int num_samples();
-  public abstract int num_mod_non_missing_samples();
+  public abstract int num_mod_samples();
   public abstract int num_values();
   public abstract String tuplemod_samples_summary();
 
   boolean check_modbits () {
     Assert.assertTrue(! no_invariants);
     /* [INCR] (we no longer track num_values)
-    if (num_mod_non_missing_samples() < num_values()) {
+    if (num_mod_samples() < num_values()) {
       String message = "Bad mod bits in dtrace file:" + lineSep
-        + "num_mod_non_missing_samples()=" + num_mod_non_missing_samples()
+        + "num_mod_samples()=" + num_mod_samples()
         + ", num_samples()=" + num_samples()
         + ", num_values()=" + num_values() + lineSep
         + "for " + name() + lineSep

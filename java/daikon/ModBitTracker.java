@@ -65,7 +65,9 @@ public class ModBitTracker
     Assert.assertTrue(num_vars >= 0);
     this.num_vars = num_vars;
     modbits_arrays = new BitSet[num_vars];
+    if (num_vars > 0) {
     modbits_arrays[0] = new BitSet();
+    }
     num_samples = 0;
     index = new int[num_vars];
     num_sets = 1;
@@ -145,7 +147,9 @@ public class ModBitTracker
   /** Add to this the modbits for the given ValueTuple. **/
   public void add(ValueTuple vt) {
     if (debug) checkRep();
-    Assert.assertTrue(vt.size() == num_vars);
+    Assert.assertTrue(vt.size() == num_vars
+                      , "vt.size()=" + vt.size() + ", num_vars = " + num_vars
+                      );
     Arrays.fill(this_bits_valid, false);
     Arrays.fill(this_bits_exception_index, -1);
     for (int i=0; i<num_vars; i++) {

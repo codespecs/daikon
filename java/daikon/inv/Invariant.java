@@ -368,8 +368,8 @@ public abstract class Invariant
         log ("justified = " + just + ", enoughSamples = " + enoughSamples()
              + ", probability = " + getProbability() + ", repr = " + repr() +
              ", ppt.num_values() = " + ppt.num_values()
-             +", num_mod_non_missing_samples = "
-             + ppt.num_mod_non_missing_samples());
+             +", num_mod_samples = "
+             + ppt.num_mod_samples());
       return (just);
     }
   }

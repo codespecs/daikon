@@ -125,7 +125,7 @@ public class NonModulus
     if (no_result_yet)
       return Invariant.CONFIDENCE_UNJUSTIFIED;
     double probability_one_elt_nonmodulus = 1 - 1.0/modulus;
-    return 1 - Math.pow(probability_one_elt_nonmodulus, ppt.num_mod_non_missing_samples());
+    return 1 - Math.pow(probability_one_elt_nonmodulus, ppt.num_mod_samples());
   }
 
   protected double computeProbability() {
@@ -133,7 +133,7 @@ public class NonModulus
     if (no_result_yet)
       return Invariant.PROBABILITY_UNJUSTIFIED;
     double probability_one_elt_nonmodulus = 1 - 1.0/modulus;
-    return Math.pow(probability_one_elt_nonmodulus, ppt.num_mod_non_missing_samples());
+    return Math.pow(probability_one_elt_nonmodulus, ppt.num_mod_samples());
   }
 
   public boolean isSameFormula(Invariant o)

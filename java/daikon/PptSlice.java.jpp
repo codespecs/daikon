@@ -89,7 +89,7 @@ public final class PPTSLICE1
 #endif
 
 #if 0
-  THESE ARE OLD COMMENTS, referring to a previous implementation.
+  // THESE ARE OLD COMMENTS, referring to a previous implementation.
 #if defined(ARITY1)
   // values_cache maps (interned) values to 2-element arrays of
   // [num_unmodified, num_modified].
@@ -104,6 +104,9 @@ public final class PPTSLICE1
 #endif
 #endif
 
+  // These two fields are not valid when top-down processing is in effect.
+  // In other words, they are valid for V2; and in in V3, they are valid if
+  // dkconfig_df_bottom_up is set and no global program point exists.
   VALUETRACKER1 values_cache;
   int[] tm_total = new int[NUM_TM];  // "tm" stands for "tuplemod"
 
@@ -420,7 +423,8 @@ public final class PPTSLICE1
   }
 #endif
 
-  public int num_mod_non_missing_samples() {
+  // The number of modified, non-missing samples.
+  public int num_mod_samples() {
 #if defined(ARITY1)
     int result = tm_total[1];
 #elif defined(ARITY2)
@@ -558,7 +562,7 @@ public final class PPTSLICE1
     }
     if (mod1 == ValueTuple.STATIC_CONSTANT) {
       Assert.assertTrue(vi1.is_static_constant);
-      mod1 = ((num_mod_non_missing_samples() == 0)
+      mod1 = ((num_mod_samples() == 0)
               ? ValueTuple.MODIFIED : ValueTuple.UNMODIFIED);
     }
 #if defined(ARITY2) || defined(ARITY3)
@@ -569,7 +573,7 @@ public final class PPTSLICE1
     }
     if (mod2 == ValueTuple.STATIC_CONSTANT) {
       Assert.assertTrue(vi2.is_static_constant);
-      mod2 = ((num_mod_non_missing_samples() == 0)
+      mod2 = ((num_mod_samples() == 0)
               ? ValueTuple.MODIFIED : ValueTuple.UNMODIFIED);
     }
 #endif
@@ -581,7 +585,7 @@ public final class PPTSLICE1
     }
     if (mod3 == ValueTuple.STATIC_CONSTANT) {
       Assert.assertTrue(vi3.is_static_constant);
-      mod3 = ((num_mod_non_missing_samples() == 0)
+      mod3 = ((num_mod_samples() == 0)
               ? ValueTuple.MODIFIED : ValueTuple.UNMODIFIED);
     }
 #endif

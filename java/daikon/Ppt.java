@@ -66,7 +66,7 @@ public abstract class Ppt
    * other words, this is recording tuplemod information, not regular mod
    * information.
    **/
-  // public abstract int num_mod_non_missing_samples(); // [[INCR]]
+  // public abstract int num_mod_samples(); // [[INCR]]
   // public abstract int num_values(); // [[INCR]]
   // public abstract int num_missing
 

@@ -688,7 +688,7 @@ public class PrintInvariants {
               is_unmodified = false;
             } else {
               // If a slice is present, though, we can try to make some judgements
-              is_unmodified = (view.num_mod_non_missing_samples() == 0);
+              is_unmodified = (view.num_mod_samples() == 0);
             }
             if (!is_unmodified) {
               if (vi.type.isPrimitive() && (vi.name.name().indexOf(".") == -1)) {

@@ -116,7 +116,7 @@ public class PptSlice0
 
   // I need to figure out how to set these.
   public int num_samples() { return 2222; }
-  public int num_mod_non_missing_samples() { return 2222; }
+  public int num_mod_samples() { return 2222; }
   public int num_values() { return 2222; }
   public String tuplemod_samples_summary() { return "tuplemod_samples_summary for PptSlice0 " + name(); }
 

@@ -156,7 +156,7 @@ public class PptMap
     Iterator iter = nameToPpt.values().iterator();
     while (iter.hasNext()) {
       PptTopLevel ppt = (PptTopLevel)iter.next();
-      if (ppt.getSamplesSeen() == 0)
+      if (ppt.num_samples() == 0)
         iter.remove();
     }
   }

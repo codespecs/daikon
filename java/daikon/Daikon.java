@@ -142,6 +142,16 @@ public final class Daikon {
    **/
   public static boolean dkconfig_df_bottom_up = true;
 
+  /**
+   * Whether any top-down processing is in effect.  If so, then an
+   * invariant may not see every sample, and certain statistics such as
+   * ValueTracker and tm_total are not valid.
+   * TODO: When Jeff checks in his code with PptMap.global, then this
+   * variable's setting needs to be updated.
+   **/
+  public static boolean slices_see_all_points = true;
+
+
   // When true, don't print invariants when their controlling ppt
   // already has them.  For example, this is the case for invariants
   // in public methods which are already given as part of the object

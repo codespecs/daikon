@@ -150,13 +150,9 @@ public class PptTopLevel
 
   // private transient VarValuesOrdered values; // [[INCR]]
   private int values_num_samples;
-  // [INCR] private int values_num_mod_non_missing_samples;
+  // [INCR] private int values_num_mod_samples;
   // [INCR] private int values_num_values;
   // [INCR] private String values_tuplemod_samples_summary;
-
-  public int getSamplesSeen() {
-    return values_num_samples;
-  }
 
   /**
    * All the Views (that is, slices) on this are stored as values in
@@ -325,6 +321,7 @@ public class PptTopLevel
     //                    + ",num_tracevars=" + num_tracevars);
 
     if (Invariant.dkconfig_use_confidence) {
+      Assert.assertTrue(num_tracevars == var_infos.length - num_static_constant_vars);
       mbtracker = new ModBitTracker(num_tracevars);
     }
   }
@@ -420,6 +417,10 @@ public class PptTopLevel
       return;
     int old_length = var_infos.length;
     VarInfo[] new_var_infos = new VarInfo[var_infos.length + vis.length];
+    if (Invariant.dkconfig_use_confidence) {
+      Assert.assertTrue(mbtracker.num_samples() == 0);
+      mbtracker = new ModBitTracker(mbtracker.num_vars() + vis.length);
+    }
     System.arraycopy(var_infos, 0, new_var_infos, 0, old_length);
     System.arraycopy(vis, 0, new_var_infos, old_length, vis.length);
     for (int i=old_length; i<new_var_infos.length; i++) {
@@ -1014,6 +1015,7 @@ public class PptTopLevel
 
       // Map vt into the transformed tuple
       int ppt_num_vals = ppt.var_infos.length - ppt.num_static_constant_vars;
+      Assert.assertTrue(ppt.mbtracker == null || ppt_num_vals == ppt.mbtracker.num_vars());
       Object[] vals = new Object[ppt_num_vals];
       int[] mods = new int[ppt_num_vals];
       Arrays.fill(mods, ValueTuple.MISSING_FLOW);

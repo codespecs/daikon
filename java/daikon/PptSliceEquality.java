@@ -38,7 +38,7 @@ public class PptSliceEquality
 
   // Not valid for this type of slice.  Always pretend there are enough.
   public int num_samples() { if (true) throw new Error(); return Integer.MAX_VALUE; }
-  public int num_mod_non_missing_samples() { if (true) throw new Error(); return Integer.MAX_VALUE; }
+  public int num_mod_samples() { if (true) throw new Error(); return Integer.MAX_VALUE; }
   public int num_values() { if (true) throw new Error(); return Integer.MAX_VALUE; }
   public String tuplemod_samples_summary() {
     throw new Error();

@@ -107,7 +107,7 @@ public class LogicalCompare {
         if (filters['O'])
           continue;
       }
-      if (filters['m'] && inv.ppt.num_mod_non_missing_samples() == 0)
+      if (filters['m'] && inv.ppt.num_mod_samples() == 0)
         continue;
       if (filters['j'] && !inv.justified())
         continue;
@@ -494,9 +494,9 @@ public class LogicalCompare {
           // an exit point, and we only want entries
           continue;
         }
-        if (app_ppt.getSamplesSeen() > 0) {
+        if (app_ppt.num_samples() > 0) {
           if (test_ppt_names.contains(name)
-              && test_ppts.get(name).getSamplesSeen() > 0) {
+              && test_ppts.get(name).num_samples() > 0) {
             common_names.add(name);
           } else {
             System.out.println(name + " was used but not tested");
