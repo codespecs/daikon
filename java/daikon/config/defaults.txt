@@ -3,7 +3,11 @@
 ### INVARIANT CONFIGURATION
 
 daikon.inv.unary.scalar.UpperBound.enabled = 1
+daikon.inv.unary.scalar.UpperBound.minimal_interesting = -1
+daikon.inv.unary.scalar.UpperBound.maximal_interesting = 2
 daikon.inv.unary.scalar.LowerBound.enabled = 1
+daikon.inv.unary.scalar.LowerBound.minimal_interesting = -1
+daikon.inv.unary.scalar.LowerBound.maximal_interesting = 2
 daikon.inv.unary.scalar.OneOfScalar.enabled = 1
 daikon.inv.unary.scalar.OneOfScalar.size = 3
 daikon.inv.unary.scalar.NonZero.enabled = 1
@@ -11,11 +15,18 @@ daikon.inv.unary.scalar.Modulus.enabled = 0
 daikon.inv.unary.scalar.NonModulus.enabled = 0
 
 daikon.inv.unary.string.OneOfString.enabled = 1
+daikon.inv.unary.string.OneOfString.size = 3
 
 daikon.inv.unary.sequence.EltOneOf.enabled = 1
+daikon.inv.unary.sequence.EltOneOf.size = 5
 daikon.inv.unary.sequence.EltLowerBound.enabled = 1
+daikon.inv.unary.sequence.EltLowerBound.minimal_interesting = -1
+daikon.inv.unary.sequence.EltLowerBound.maximal_interesting = 2
 daikon.inv.unary.sequence.EltUpperBound.enabled = 1
+daikon.inv.unary.sequence.EltUpperBound.minimal_interesting = -1
+daikon.inv.unary.sequence.EltUpperBound.maximal_interesting = 2
 daikon.inv.unary.sequence.OneOfSequence.enabled = 1
+daikon.inv.unary.sequence.OneOfSequence.size = 3
 daikon.inv.unary.sequence.EltNonZero.enabled = 1
 daikon.inv.unary.sequence.NoDuplicates.enabled = 1
 daikon.inv.unary.sequence.EltwiseIntComparison.enabled = 1
@@ -24,13 +35,15 @@ daikon.inv.unary.sequence.SeqIndexNonEqual.enabled = 1
 daikon.inv.unary.sequence.CommonSequence.enabled = 0
 
 daikon.inv.unary.stringsequence.EltOneOfString.enabled = 1
+daikon.inv.unary.stringsequence.EltOneOfString.size = 3
 daikon.inv.unary.stringsequence.OneOfStringSequence.enabled = 1
+daikon.inv.unary.stringsequence.OneOfStringSequence.size = 2
 daikon.inv.unary.stringsequence.CommonStringSequence.enabled = 0
 
 daikon.inv.binary.twoScalar.LinearBinary.enabled = 1
 daikon.inv.binary.twoScalar.IntComparison.enabled = 1
 daikon.inv.binary.twoScalar.NonEqual.enabled = 1
-daikon.inv.binary.twoScalar.NonEqual.integral-only = 1
+daikon.inv.binary.twoScalar.NonEqual.integral_only = 1
 daikon.inv.binary.twoScalar.FunctionUnary.enabled = 1
 
 daikon.inv.binary.twoString.StringComparison.enabled = 1
