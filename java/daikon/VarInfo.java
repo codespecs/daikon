@@ -1053,8 +1053,10 @@ public final class VarInfo
    **/
   public boolean isCanonical() {
     if (!Daikon.use_equality_optimization) return true;
+    if (equalitySet == null)
+      System.out.println ("var " + name.name() + " in ppt " + ppt.name());
     return (equalitySet.leader() == this);
-  }
+    }
 
   /**
    * Canonical representative that's equal to this variable.
