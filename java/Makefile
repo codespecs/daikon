@@ -6,7 +6,7 @@
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
-JAVAC ?= javac -g
+JAVAC ?= javac -g -target 1.1
 JAVA ?= java
 
 ### end of user customizations
@@ -333,10 +333,13 @@ junit:
 
 .PHONY: doc
 
-JAVADOC_FLAGS = -d doc \
+JAVADOC_DEST  = doc
+JAVADOC_FLAGS = -breakiterator -quiet -linksource -noqualifier all \
+				-d $(JAVADOC_DEST) \
                 -linkoffline http://java.sun.com/j2se/1.3/docs/api/ http://java.sun.com/j2se/1.3/docs/api/
 # javadoc 1.4 doesn't like being given package names; give all filenames explicitly instead
 # Note that this excludes Ajax
+JDOC_FILES = $(shell find -follow -name '*.java' | grep -v CVS | grep -v ajax | grep -v '\#')
 JAVADOC_PACKAGES = `find -follow -name '*.java' -exec dirname {} \; | grep -v CVS | grep -v ajax | grep -v '\#' | sort | uniq | perl -p -e 's:^./::g; s:/:.:g;'`
 
 javadoc: doc
@@ -344,7 +347,7 @@ javadoc: doc
 doc: $(JAVA_FILES) doc-dkconfig
 	mkdir -p doc
 	# This requires that jdk/lib/tools.jar be on your classpath
-	javadoc $(JAVADOC_FLAGS) $(JAVADOC_PACKAGES)
+	javadoc $(JAVADOC_FLAGS) $(JDOC_FILES)
 
 ## Make doc with private fields for people working on source code
 doc-private: $(JAVA_FILES)
