@@ -75,40 +75,41 @@ $(DIST_DIR)/daikon.tar.gz: daikon.tar.gz
 	update-link-dates $(DIST_DIR)/index.html
 
 daikon.tar: $(LISP_FILES) $(PYTHON_FILES) $(DOC_FILES) $(EDG_FILES) README-dist
-	mkdir daikon
-	cp -p $(PYTHON_FILES) $(DOC_FILES) daikon
-	cp -p README-dist daikon/README
+	mkdir /tmp/daikon
+	cp -p $(PYTHON_FILES) $(DOC_FILES) /tmp/daikon
+	cp -p README-dist /tmp/daikon/README
 
 	# Lisp instrumenter
-	mkdir daikon/lisp-front-end
-	cp -p $(LISP_FILES) daikon/lisp-front-end
+	mkdir /tmp/daikon/lisp-front-end
+	cp -p $(LISP_FILES) /tmp/daikon/lisp-front-end
 
 	# C/C++ instrumenter
-	mkdir daikon/c-front-end
-	cp -p $(EDG_FILES) daikon/c-front-end
-	cp -p $(EDG_DIR)/Makefile daikon/c-front-end/Makefile-sample
-	echo "0" > daikon/c-front-end/label.txt
+	mkdir /tmp/daikon/c-front-end
+	cp -p $(EDG_FILES) /tmp/daikon/c-front-end
+	cp -p $(EDG_DIR)/Makefile /tmp/daikon/c-front-end/Makefile-sample
+	echo "0" > /tmp/daikon/c-front-end/label.txt
 	# Fix permission problems (does this fully do the trick?)
-	chmod +rw daikon/c-front-end/*
+	chmod +rw /tmp/daikon/c-front-end/*
 
 	# Java instrumenter
 	# The -h option saves symbolic links as real files, to avoid problem 
 	# with the fact that I've made dfej into a symbolic link.
 	(cd $(DFEJ_DIR)/..; tar chf /tmp/dfej.tar dfej)
-	(cd daikon; tar xf /tmp/dfej.tar; mv dfej java-front-end; rm /tmp/dfej.tar)
-	# delete src/Makefile, which is created by "./configure".
-	(cd daikon/java-front-end; rm -f src/Makefile; rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name jikes -o -name dfej -o -name '*.o' -o -name '*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' \) -print`)
+	(cd /tmp/daikon; tar xf /tmp/dfej.tar; mv dfej java-front-end; rm /tmp/dfej.tar)
+	# the subsequence rm -rf shouldn't be necessary one day, 
+	# but for the time being (and just in case)...
+	(cd /tmp/daikon/java-front-end/src; $(MAKE) distclean; rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name jikes -o -name dfej -o -name '*.o' -o -name '*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' \) -print`)
 
-	date > daikon/VERSION
-	chgrp -R invariants daikon
-	rm -rf daikon.tar
-	tar cf daikon.tar daikon
+	date > /tmp/daikon/VERSION
+	chgrp -R invariants /tmp/daikon
+	(cd /tmp; tar cf daikon.tar daikon)
+	cp -pf /tmp/daikon.tar .
 
-	## Better yet, just blow it away.
-	rm -rf daikon
+	## Better than the below dist-* directory, just blow it away.
+	rm -rf /tmp/daikon /tmp/daikon.tar
+
 	# # After making the tar file, don't edit the (historical) distribution
 	# chmod -R uog-w daikon/*
-
 	# Don't bother making a "dist-*" backup directory.
 	# if (test -d dist-`date +'%y%m%d'`); then rm -rf dist-`date +'%y%m%d'`; fi
 	# mv daikon dist-`date +'%y%m%d'`
