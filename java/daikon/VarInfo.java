@@ -111,6 +111,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     postState = vi.postState;
   }
 
+  // Create the prestate, or "orig()", version of the variable.
   public static VarInfo origVarInfo(VarInfo vi) {
     VarInfo result = new VarInfo(vi.name.applyPrestate(),
                                  vi.type, vi.rep_type,
@@ -119,8 +120,8 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     return result;
   }
 
-  // I *think* I don't need to implement VarInfo.clone(), as the java.lang.Object
-  // version is sufficient.
+  // I *think* I don't need to implement VarInfo.clone(), as the
+  // java.lang.Object version is sufficient.
   // protected Object clone() { ... }
 
   // I'm not currently using this because doing this would prevent any new
@@ -240,7 +241,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     }
   }
 
-  // Returns true if this in an "orig()" variable
+  // Returns true if this is an "orig()" variable
   public boolean isOrigVar() {
     return postState != null;
   }
