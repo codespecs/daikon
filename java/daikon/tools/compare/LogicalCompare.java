@@ -319,10 +319,6 @@ public class LogicalCompare {
 
     PptTopLevel app_exit_ppt = app_ppts.get(exit_ppt_name);
     PptTopLevel test_exit_ppt = test_ppts.get(exit_ppt_name);
-    if (app_exit_ppt == null)
-      app_exit_ppt = (PptTopLevel)app_enter_ppt.exit_ppts.lastElement();
-    if (test_exit_ppt == null)
-      test_exit_ppt = (PptTopLevel)test_enter_ppt.exit_ppts.lastElement();
     Assert.assertTrue(app_exit_ppt != null);
     Assert.assertTrue(test_exit_ppt != null);
 
