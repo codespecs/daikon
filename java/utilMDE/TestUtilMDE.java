@@ -3,6 +3,7 @@ package utilMDE;
 import junit.framework.*;
 import java.util.*;
 import java.io.*;
+import java.lang.*;
 
 // run like this:
 //   java utilMDE.TestUtilMDE
@@ -12,6 +13,7 @@ import java.io.*;
 // Assert.java
 // Digest.java
 // EqHashMap.java
+// FuzzyFloat.java
 // Hasher.java
 // Intern.java
 // MathMDE.java
@@ -19,7 +21,6 @@ import java.io.*;
 // TestUtilMDE.java
 // UtilMDE.java
 // WeakHasherMap.java
-
 
 /** Test code for the utilMDE package. */
 public final class TestUtilMDE extends TestCase {
@@ -57,6 +58,13 @@ public final class TestUtilMDE extends TestCase {
      assertTrue(result);
 //      assert(Arrays.equals(a1, a2),
 //         "Arrays differ: " + ArraysMDE.toString(a1) + ", " + ArraysMDE.toString(a2));
+   }
+   private static final void assert_arrays_equals(double[] a1, double[] a2) {
+     boolean result = Arrays.equals(a1, a2);
+     if (! result)
+       System.out.println("Arrays differ: " + ArraysMDE.toString(a1)
+                          + ", " + ArraysMDE.toString(a2));
+     assertTrue(result);
    }
 
 
@@ -1378,6 +1386,304 @@ public final class TestUtilMDE extends TestCase {
 
     long[] l1 = Intern.intern(new long[] {1, 2, 3, 4, 5, 6});
     Assert.assertTrue (l1 == Intern.internSubsequence (l1, 0, l1.length));
+  }
+
+  /**
+   * Test the comparison, indexof, and set equivalence calls in fuzzy
+   * float.
+   */
+  public static void testFuzzyFloat() {
+
+    FuzzyFloat  ff = new FuzzyFloat (0.0001);
+    double      offset   = 0.00007;
+    double      offhigh  = 1 + offset;
+    double      offlow   = 1 - offset;
+    double      offhigh2 = 1 + 2*offset;
+    double      offlow2  = 1 - 2*offset;
+
+    //test equality for a variety of postive and negative numbers
+    for (double d = -20000; d < 20000; d += 1000.36) {
+      assertTrue (ff.eq (d, d * offhigh));
+      assertTrue (ff.eq (d, d * offlow));
+      assertTrue (!ff.eq (d, d * offhigh2));
+      assertTrue (!ff.eq (d, d * offlow2));
+      assertTrue (!ff.ne (d, d * offhigh));
+      assertTrue (!ff.ne (d, d * offlow));
+      assertTrue (ff.ne (d, d * offhigh2));
+      assertTrue (ff.ne (d, d * offlow2));
+    }
+
+    //make sure nothing is equal to zero
+    assertTrue (!ff.eq (0, Double.MIN_VALUE));
+    assertTrue (!ff.eq (0, -Double.MIN_VALUE));
+    assertTrue (ff.ne (0, Double.MIN_VALUE));
+    assertTrue (ff.ne (0, -Double.MIN_VALUE));;
+
+    //make sure that 0 equals 0
+    assertTrue (ff.eq (0, 0));
+    assertTrue (!ff.ne (0, 0));
+
+    //make sure that various unusual values are equal
+    assertTrue (ff.eq (Double.NaN, Double.NaN));
+    assertTrue (ff.eq (Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));
+    assertTrue (ff.eq (Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY));
+
+    //rudimentary checks on the comparison operators (since they all just
+    //use eq and ne anyway)
+    {
+      double d = 2563.789;
+      assertTrue (!ff.gt (d, d * offlow));
+      assertTrue (!ff.lt (d, d * offhigh));
+      assertTrue (ff.gt (d, d * offlow2));
+      assertTrue (ff.lt (d, d * offhigh2));
+      assertTrue (ff.gte (d, d * offhigh));
+      assertTrue (ff.lte (d, d * offlow));
+      assertTrue (!ff.gte (d, d * offhigh2));
+      assertTrue (!ff.lte (d, d * offlow2));
+    }
+
+    // public int indexOf (double[] a, double elt)
+    {
+      double[] a = new double[10];
+      for (int i=0; i<a.length; i++)
+        a[i] = i;
+      double[] a_copy = (double[]) a.clone();
+      assertTrue(ff.indexOf(a, -1) == -1);
+      assertTrue(ff.indexOf(a, 0) == 0);
+      assertTrue(ff.indexOf(a, 7) == 7);
+      assertTrue(ff.indexOf(a, 9) == 9);
+      assertTrue(ff.indexOf(a, 10) == -1);
+      assertTrue(ff.indexOf(a, 20) == -1);
+      assertTrue(ff.indexOf(a, Double.MIN_VALUE) == -1);
+      assertTrue(ff.indexOf(a, 7 * offhigh) == 7);
+      assertTrue(ff.indexOf(a, 9 * offlow) == 9);
+      assertTrue(ff.indexOf(a, 7 * offhigh2) == -1);
+      assertTrue(ff.indexOf(a, 9 * offlow2) == -1);
+      assert_arrays_equals (a, a_copy);
+    }
+
+    // public int indexOf (double[] a, double[] sub)
+    {
+      double[] a = new double[10];
+      for (int i=0; i<a.length; i++)
+        a[i] = i;
+      double[] b = new double[] { };
+      double[] c = new double[] { a[0], a[1], a[2] };
+      double[] d = new double[] { a[1], a[2] };
+      double[] e = new double[] { a[2], a[3], a[4], a[5] };
+      double[] f = new double[] { a[7], a[8], a[9] };
+      double[] g = new double[] { a[7], 22, a[9] };
+      double[] h = new double[] { a[7], a[8], a[9], 10 };
+
+      assertTrue(ff.indexOf(a, b) == 0);
+      assertTrue(ff.indexOf(a, c) == 0);
+      assertTrue(ff.indexOf(a, d) == 1);
+      assertTrue(ff.indexOf(a, e) == 2);
+      assertTrue(ff.indexOf(a, f) == 7);
+      assertTrue(ff.indexOf(a, g) == -1);
+      assertTrue(ff.indexOf(a, h) == -1);
+    }
+    {
+      double[] a = new double[10];
+      for (int i=0; i<a.length; i++)
+        a[i] = i;
+      double[] b = new double[] { };
+      double[] c = new double[] { a[0] *offlow, a[1]*offhigh, a[2]*offlow };
+      double[] d = new double[] { a[1]*offhigh, a[2]*offlow };
+      double[] e = new double[] { a[2], a[3], a[4]*offlow, a[5]*offhigh };
+      double[] f = new double[] { a[7], a[8]*offlow, a[9]*offhigh };
+      double[] g = new double[] { a[7], 22, a[9] };
+      double[] h = new double[] { a[7], a[8], a[9], 10 };
+      double[] a_copy = (double[]) a.clone();
+      double[] b_copy = (double[]) b.clone();
+      double[] c_copy = (double[]) c.clone();
+      double[] d_copy = (double[]) d.clone();
+      double[] e_copy = (double[]) e.clone();
+      double[] f_copy = (double[]) f.clone();
+      double[] g_copy = (double[]) g.clone();
+      double[] h_copy = (double[]) h.clone();
+
+      assertTrue(ff.indexOf(a, b) == 0);
+      assertTrue(ff.indexOf(a, c) == 0);
+      assertTrue(ff.indexOf(a, d) == 1);
+      assertTrue(ff.indexOf(a, e) == 2);
+      assertTrue(ff.indexOf(a, f) == 7);
+      assertTrue(ff.indexOf(a, g) == -1);
+      assertTrue(ff.indexOf(a, h) == -1);
+
+      assert_arrays_equals (a, a_copy);
+      assert_arrays_equals (b, b_copy);
+      assert_arrays_equals (c, c_copy);
+      assert_arrays_equals (d, d_copy);
+      assert_arrays_equals (e, e_copy);
+      assert_arrays_equals (f, f_copy);
+      assert_arrays_equals (g, g_copy);
+      assert_arrays_equals (h, h_copy);
+    }
+
+    // public boolean isElemMatch (double[] a1, double[] a2) {
+    {
+      double f1[] = new double[10];
+      double f2[] = new double[20];
+
+      for (int j = 0; j < 10; j++) {
+
+        //start two arrays out exactly equal
+        for (int i = 0; i < f1.length; i++) {
+          f1[i] = j + i * 10;
+          f2[i] = j + i * 10;
+          }
+
+        //fill out the second half of f2 with dup of f1
+        for (int i = 10; i < f2.length; i++) {
+          f2[i] = j + (i - 10) * 10;
+        }
+
+        //make two elements off just a little
+        f2[7] = f2[7] * (1 + offset);
+        f2[8] = f2[8] * (1 - offset);
+
+        //test with each array the bigger one
+        if ((j % 2) == 0) {
+          assertTrue (ff.isElemMatch (f1, f2));
+        } else {
+          assertTrue (ff.isElemMatch (f2, f1));
+        }
+      }
+      for (int j = 0; j < 200; j++) {
+
+        //start two arrays out exactly equal
+        for (int i = 0; i < f1.length; i++) {
+          f1[i] = j + i * 10;
+          f2[i] = j + i * 10;
+          }
+
+        //fill out the second half of f2 with dup of f1
+        for (int i = 10; i < f2.length; i++) {
+          f2[i] = j + (i - 10) * 10;
+        }
+
+        //make two elements off just a little
+        f2[7] = f2[7] * (1 + 2*offset);
+        f2[8] = f2[8] * (1 - 2*offset);
+
+        //test with each array the bigger one
+        double[] f1_copy = (double[]) f1.clone();
+        double[] f2_copy = (double[]) f2.clone();
+        if ((j % 2) == 0) {
+          assertTrue (!ff.isElemMatch (f1, f2));
+        } else {
+          assertTrue (!ff.isElemMatch (f2, f1));
+        }
+        assert_arrays_equals (f1, f1_copy);
+        assert_arrays_equals (f2, f2_copy);
+      }
+    }
+    {
+      double[] a = new double[] {2, 1, 0};
+      double[] b = new double[] { };
+      double[] c = new double[] {1, 1, 1, 1};
+      double[] d = new double[] {1};
+      assertTrue (!ff.isElemMatch (a, b));
+      assertTrue (!ff.isElemMatch (b, a));
+      assertTrue (ff.isElemMatch (c, d));
+      assertTrue (ff.isElemMatch (d, c));
+      assertTrue (ff.isElemMatch (b, b));
+    }
+
+    // public class DoubleArrayComparatorLexical implements Comparator
+    // public int compare(Object o1, Object o2)
+    {
+      Comparator comparator = ff.new DoubleArrayComparatorLexical();
+      double[] a0 = new double[] { };
+      double[] a1 = new double[] { };
+      double[] a2 = new double[] { 0,1,2,3 };
+      double[] a3 = new double[] { 0,1,2,3,0 };
+      double[] a4 = new double[] { 0,1,2,3,4 };
+      double[] a5 = new double[] { 0,1,2,3,4 };
+      double[] a6 = new double[] { 0,1,5,3,4 };
+      double[] a7 = new double[] { 1,2,3,4 };
+      double[] a0_copy = (double[]) a0.clone();
+      double[] a1_copy = (double[]) a1.clone();
+      double[] a2_copy = (double[]) a2.clone();
+      double[] a3_copy = (double[]) a3.clone();
+      double[] a4_copy = (double[]) a4.clone();
+      double[] a5_copy = (double[]) a5.clone();
+      double[] a6_copy = (double[]) a6.clone();
+      double[] a7_copy = (double[]) a7.clone();
+
+      assertTrue(comparator.compare(a0, a1) == 0);
+      assertTrue(comparator.compare(a1, a0) == 0);
+      assertTrue(comparator.compare(a1, a2) < 0);
+      assertTrue(comparator.compare(a2, a1) > 0);
+      assertTrue(comparator.compare(a2, a3) < 0);
+      assertTrue(comparator.compare(a3, a2) > 0);
+      assertTrue(comparator.compare(a3, a4) < 0);
+      assertTrue(comparator.compare(a4, a3) > 0);
+      assertTrue(comparator.compare(a4, a5) == 0);
+      assertTrue(comparator.compare(a5, a4) == 0);
+      assertTrue(comparator.compare(a5, a6) < 0);
+      assertTrue(comparator.compare(a6, a5) > 0);
+      assertTrue(comparator.compare(a6, a7) < 0);
+      assertTrue(comparator.compare(a7, a6) > 0);
+      assertTrue(comparator.compare(a1, a4) < 0);
+      assertTrue(comparator.compare(a4, a1) > 0);
+      assertTrue(comparator.compare(a2, a4) < 0);
+      assertTrue(comparator.compare(a4, a2) > 0);
+      assertTrue(comparator.compare(a6, a4) > 0);
+      assertTrue(comparator.compare(a4, a6) < 0);
+      assertTrue(comparator.compare(a7, a4) > 0);
+      assertTrue(comparator.compare(a4, a7) < 0);
+
+      assert_arrays_equals (a0, a0_copy);
+      assert_arrays_equals (a1, a1_copy);
+      assert_arrays_equals (a2, a2_copy);
+      assert_arrays_equals (a3, a3_copy);
+      assert_arrays_equals (a4, a4_copy);
+      assert_arrays_equals (a5, a5_copy);
+      assert_arrays_equals (a6, a6_copy);
+      assert_arrays_equals (a7, a7_copy);
+    }
+
+    // public boolean isSubset (double[] a1, double[] a2)
+    {
+      double f1[] = new double[10];
+      double f2[] = new double[20];
+
+      for (int j = 0; j < f2.length; j++)
+        f2[j] = j;
+      for (int i = 0; i < f2.length - f1.length; i++) {
+
+        //fill up f1 with elements of f2
+        for (int j = 0; j < f1.length; j++)
+          f1[j] = f2[i+j];
+
+        f1[5] = f2[i] * offhigh;
+
+        double[] f1_copy = (double []) f1.clone();
+        double[] f2_copy = (double []) f2.clone();
+
+        assertTrue (ff.isSubset (f1, f2));
+        assert_arrays_equals (f1, f1_copy);
+        assert_arrays_equals (f2, f2_copy);
+      }
+
+      double [] a1 = new double [] {1, 5, 10};
+      double [] a2 = new double [] {};
+      double [] a3 = new double [] {1};
+      double [] a4 = new double [] {10};
+      double [] a5 = new double [] {1, 10, 15, 20};
+      double [] a6 = new double [] {10, 10, 10, 10, 10, 1};
+
+      assertTrue (ff.isSubset (a2, a1));
+      assertTrue (!ff.isSubset (a1, a2));
+      assertTrue (!ff.isSubset (a1, a5));
+      assertTrue (ff.isSubset (a3, a1));
+      assertTrue (ff.isSubset (a4, a1));
+      assertTrue (ff.isSubset (a6, a1));
+      assertTrue (!ff.isSubset (a1, a6));
+    }
+
   }
 
 }
