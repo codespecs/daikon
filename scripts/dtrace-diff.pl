@@ -10,6 +10,9 @@ $WARNING = 1;
 
 ($declsname, $dtaname, $dtbname) = @ARGV;
 
+($declsname && $dtaname && $dtbname) or die
+    "Usage: $0 <declsname> <dtrace1> <dtrace2>\n";
+
 #load decls file
 $gdeclshash = load_decls($declsname);
 
@@ -31,11 +34,27 @@ sub getline {
     return $l;
 }
 
+sub gzopen {
+#takes a fh/filename, opens it (using zcat if necessary), and returns
+#a reference to a filehandle/linenumber object.
+#    my $args = shift;
+#    my $fh = $$args[0];
+#    my $fn = $$args[1];
+    my $fh = shift;
+    my $fn = shift;
+    if ($fn =~ /\.gz$/) {
+	$fn = "zcat " . $fn . "|";
+    }
+    open ($fh, $fn) or die "couldn't open \"" . $$args[1] . "\"\n";
+    return [$fh, 0];
+}
+
+
 sub load_decls {
 #loads the decls file given by $1 into a hash, returns a ref
     my $declsname = shift;
-    open DECLS, $declsname or die "couldn't open decls \"$decls\"\n";
-    my $decls = [DECLS, 0];
+#    open DECLS, $declsname or die "couldn't open decls \"$decls\"\n";
+    my $decls = gzopen(DECLS, $declsname);
     my $declshash = {};
     my $ppt_seen = 0;
     while (defined (my $l = getline($decls))) {
@@ -188,11 +207,10 @@ sub cmp_dtracen {
     my $declshash = shift;
     my $dtaname = shift;
     my $dtbname = shift;
-    open DTA, $dtaname or die "couldn't open dtrace \"$dtaname\"\n";
-    open DTB, $dtbname or die "couldn't open dtrace \"$dtbname\"\n";
-
-    $dta = [DTA, 0];
-    $dtb = [DTB, 0];
+#    open DTA, $dtaname or die "couldn't open dtrace \"$dtaname\"\n";
+#    open DTB, $dtbname or die "couldn't open dtrace \"$dtbname\"\n";
+    $dta = gzopen(DTA, $dtaname);
+    $dtb = gzopen(DTB, $dtbname);
 
   PPT: while (1) {
       my $ppta = load_ppt($dta); my $pptb = load_ppt($dtb);
