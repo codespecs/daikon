@@ -2266,14 +2266,14 @@ array of int, keeping track of how many ints bar addressed, and outputting
 bar[] to the decls and dtrace as a sequence, which yields these invariants:
 
 @example
-===========================================================================
+======================================================================
 std.foo(int *;):::ENTER
 bar[0] == min(bar[]) == max(bar[]) == sum(bar[])
 bar has only one value
 bar[] == [6]
 bar[] elements == 6
 size(bar[]) == 1
-===========================================================================
+======================================================================
 std.foo(int *;):::EXIT1
 bar == orig(bar)
 bar[0] == min(bar[]) == max(bar[]) == sum(bar[])
@@ -2333,11 +2333,11 @@ This means that bar will be instrumented as a 'P'ointer to a single element.
 If you compile and run the program, then run Daikon on the output, you'll
 see much cleaner invariants:
 @example
-===========================================================================
+======================================================================
 std.foo(int *;):::ENTER
 bar has only one value
 *bar == 6
-===========================================================================
+======================================================================
 std.foo(int *;):::EXIT1
 bar == orig(bar)
 bar has only one value
@@ -3418,7 +3418,7 @@ a program which sums the values in an integer array.
 @subsection Example declaration file
 
 This is part of the file @file{StackAr.decls}, a declaration file for
-the @file{StackAr.java} program (@pxref{Example use of Daikon}).
+the @file{StackAr.java} program (@pxref{Example use}).
 
 @example
 DECLARE
@@ -3512,11 +3512,10 @@ int
 @subsection Example data trace file
 
 This is part of file @file{StackAr.dtrace}, which you can create by
-running the instrumented @file{StackAr.java} program (@pxref{Example use
-of Daikon}).  This excerpt contains only the first two calls to
-@code{push} and the first return from @code{push}, along with the
-associated object program point records; omitted records are indicated
-by ellipses.
+running the instrumented @file{StackAr.java} program (@pxref{Example
+use}).  This excerpt contains only the first two calls to @code{push}
+and the first return from @code{push}, along with the associated object
+program point records; omitted records are indicated by ellipses.
 
 
 @example
