@@ -130,8 +130,32 @@ public class PptName
    * semantics of this method are not yet decided, so don't try to do
    * aynthing useful with this result.
    **/
-  public String getPoint() {
+  public String getPoint()
+  {
     return point;
+  }
+
+  /**
+   * @return a numberical subscript of the given point, or
+   * Integer.MIN_VALUE if none exists.
+   **/
+  public int getPointSubscript()
+  {
+    int result = Integer.MIN_VALUE;
+    if (point != null) {
+      // returns the largest substring [i..] which parses to an integer
+      for (int i = 0; i < point.length(); i++) {
+	char c = point.charAt(i);
+	if (('0' <= c) && (c <= '9')) {
+	  try {
+	    result = Integer.parseInt(point.substring(i));
+	    break;
+	  } catch (NumberFormatException e) {
+	  }
+	}
+      }
+    }
+    return result;
   }
 
   public boolean equals(Object o)
