@@ -40,6 +40,7 @@ function process_line ($line, $tb) {
 
   global $start_table;
   global $stop_table;
+  global $table_line_cnt;
   global $log_cnt;
   global $tb_open;
   global $all_open;
@@ -64,7 +65,13 @@ function process_line ($line, $tb) {
       echo "</pre>\n";
       echo "<table border cellspacing=0 cellpadding=2>\n";
       $start_table = 1;
+      $table_line_cnt = 0;
+    } else if ($start_table && !$end_table && ($table_line_cnt > 1000)) {
+      echo "</table>\n";
+      echo "<table border cellspacing=0 cellpadding=2>\n";
+      $table_line_cnt = 0;
     }
+    $table_line_cnt++;
 
     $out = str_replace ("<", "&lt;", $line);
     $out = str_replace (": ", "<td>", $out);
