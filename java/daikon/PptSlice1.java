@@ -166,8 +166,10 @@ public final class PptSlice1
    * from it, casts them to the proper types, and passes them along to the
    * invariants proper.  (The invariants accept typed values rather than a
    * ValueTuple that encapsulates objects of any type whatever.)
+   * @param invsFlowed after this method, holds the Invariants that
+   * flowed.
    **/
-  void add(ValueTuple full_vt, int count) {
+  void add(ValueTuple full_vt, int count, Invariants invsFlowed) {
     Assert.assertTrue(! no_invariants);
     Assert.assertTrue(invs.size() > 0);
     // Assert.assertTrue(! already_seen_all); // [INCR]
@@ -237,6 +239,8 @@ public final class PptSlice1
       for (int i=0; i<num_invs; i++) {
         SingleScalar inv = (SingleScalar)invs.get(i);
         if (inv.falsified) continue;
+        // Should the suppressed invariants be put in their own list?
+        if (inv.getSuppressor() != null) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.DOUBLE) {
@@ -245,6 +249,7 @@ public final class PptSlice1
       for (int i=0; i<num_invs; i++) {
         SingleFloat inv = (SingleFloat)invs.get(i);
         if (inv.falsified) continue;
+        if (inv.getSuppressor() != null) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.STRING) {
@@ -254,6 +259,7 @@ public final class PptSlice1
         // System.out.println("Trying " + invs.get(i));
         SingleString inv = (SingleString) invs.get(i);
         if (inv.falsified) continue;
+        if (inv.getSuppressor() != null) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.DOUBLE_ARRAY) {
@@ -262,6 +268,7 @@ public final class PptSlice1
       for (int i=0; i<num_invs; i++) {
         SingleFloatSequence inv = (SingleFloatSequence)invs.get(i);
         if (inv.falsified) continue;
+        if (inv.getSuppressor() != null) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.INT_ARRAY) {
@@ -270,6 +277,7 @@ public final class PptSlice1
       for (int i=0; i<num_invs; i++) {
         SingleSequence inv = (SingleSequence)invs.get(i);
         if (inv.falsified) continue;
+        if (inv.getSuppressor() != null) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.STRING_ARRAY) {
@@ -277,6 +285,7 @@ public final class PptSlice1
       for (int i=0; i<num_invs; i++) {
         SingleStringSequence inv = (SingleStringSequence)invs.get(i);
         if (inv.falsified) continue;
+        if (inv.getSuppressor() != null) continue;
         inv.add(value, mod1, count);
       }
     } else {
@@ -284,7 +293,7 @@ public final class PptSlice1
     }
 
     // undefer_invariant_removal(); [INCR]
-    flow_and_remove_falsified();
+    flow_and_remove_falsified(invsFlowed);
   }
 
   public void addInvariant(Invariant invariant) {

@@ -42,4 +42,8 @@ public class PptSlice0
     throw new Error("Shouldn't get called");
   }
 
+  void add(ValueTuple vt, int count, Invariants invsFlowed) {
+    throw new Error("Shouldn't get called");
+  }
+
 }

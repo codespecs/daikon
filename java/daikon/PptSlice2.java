@@ -183,8 +183,10 @@ public final class PptSlice2
    * from it, casts them to the proper types, and passes them along to the
    * invariants proper.  (The invariants accept typed values rather than a
    * ValueTuple that encapsulates objects of any type whatever.)
+   * @param invsFlowed after this method, holds the Invariants that
+   * flowed.
    **/
-  void add(ValueTuple full_vt, int count) {
+  void add(ValueTuple full_vt, int count, Invariants invsFlowed) {
     Assert.assertTrue(! no_invariants);
     Assert.assertTrue(invs.size() > 0);
     // Assert.assertTrue(! already_seen_all); // [INCR]
@@ -272,6 +274,7 @@ public final class PptSlice2
       for (int i=0; i<num_invs; i++) {
         TwoString inv = (TwoString)invs.get(i);
         if (inv.falsified) continue;
+        if (inv.getSuppressor() != null) continue;
         inv.add(value1, value2, mod_index, count);
       }
     } else if (string1 || string2) {
@@ -284,6 +287,7 @@ public final class PptSlice2
       for (int i=0; i<num_invs; i++) {
         TwoScalar inv = (TwoScalar)invs.get(i);
         if (inv.falsified) continue;
+        if (inv.getSuppressor() != null) continue;
         inv.add(value1, value2, mod_index, count);
       }
     } else if (vi1.rep_type==ProglangType.DOUBLE && vi2.rep_type==ProglangType.DOUBLE) {
@@ -321,6 +325,7 @@ public final class PptSlice2
       for (int i=0; i<num_invs; i++) {
         SequenceScalar inv = (SequenceScalar)invs.get(i);
         if (inv.falsified) continue;
+        if (inv.getSuppressor() != null) continue;
         inv.add(seqval, sclval, mod_index, count);
       }
     } else if ((!array1) && (array2)) {
@@ -329,6 +334,7 @@ public final class PptSlice2
       for (int i=0; i<num_invs; i++) {
         SequenceScalar inv = (SequenceScalar)invs.get(i);
         if (inv.falsified) continue;
+        if (inv.getSuppressor() != null) continue;
         inv.add(seqval, sclval, mod_index, count);
       }
     } else if (array1 && array2) {
@@ -337,6 +343,7 @@ public final class PptSlice2
       for (int i=0; i<num_invs; i++) {
         TwoSequence inv = (TwoSequence)invs.get(i);
         if (inv.falsified) continue;
+        if (inv.getSuppressor() != null) continue;
         inv.add(value1, value2, mod_index, count);
       }
     } else {
@@ -344,7 +351,7 @@ public final class PptSlice2
     }
 
     // undefer_invariant_removal(); [INCR]
-    flow_and_remove_falsified();
+    flow_and_remove_falsified(invsFlowed);
   }
 
   public void addInvariant(Invariant invariant) {

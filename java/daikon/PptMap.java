@@ -111,4 +111,14 @@ public class PptMap
     }
   }
 
+  /**
+   * Check the rep invariant of this.  Throws an Error if incorrect.
+   **/
+  public void repCheck() {
+    for (Iterator i = this.iterator(); i.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) i.next();
+      ppt.repCheck();
+    }
+  }
+
 }

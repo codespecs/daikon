@@ -165,8 +165,10 @@ public final class PptSlice3
    * from it, casts them to the proper types, and passes them along to the
    * invariants proper.  (The invariants accept typed values rather than a
    * ValueTuple that encapsulates objects of any type whatever.)
+   * @param invsFlowed after this method, holds the Invariants that
+   * flowed.
    **/
-  void add(ValueTuple full_vt, int count) {
+  void add(ValueTuple full_vt, int count, Invariants invsFlowed) {
     Assert.assertTrue(! no_invariants);
     Assert.assertTrue(invs.size() > 0);
     // Assert.assertTrue(! already_seen_all); // [INCR]
@@ -271,6 +273,7 @@ public final class PptSlice3
       for (int i=0; i<invs.size(); i++) {
         ThreeScalar inv = (ThreeScalar) invs.get(i);
         if (inv.falsified) continue;
+        if (inv.getSuppressor() != null) continue;
         inv.add(value1, value2, value3, mod_index, count);
       }
     } else if ((rep1 == ProglangType.DOUBLE)
@@ -289,7 +292,7 @@ public final class PptSlice3
     }
 
     // undefer_invariant_removal(); [INCR]
-    flow_and_remove_falsified();
+    flow_and_remove_falsified(invsFlowed);
   }
 
   public void addInvariant(Invariant invariant) {

@@ -178,41 +178,21 @@ public final class Global {
   /** Debug tracer for debugging splitting **/
   public static Category debugSplit = Category.getInstance("daikon.split");
 
-  /** Debug tracer for debugging inferences **/
+  /** Debug tracer for debugging general invariant inference **/
   public static Category debugInfer = Category.getInstance("daikon.infer");
 
   /** Debug tracer for debugging invariant suppression **/
   public static Category debugSuppress = Category.getInstance("daikon.suppress");
 
+  /** Debug tracer for debugging invariant suppression by using parameters **/
+  public static Category debugSuppressParam = Category.getInstance("daikon.suppress.param");
+
   /** Debug tracer for debugging invariant printing **/
   public static Category debugPrint = Category.getInstance("daikon.print");
 
 
-  //public final static boolean debugStatistics = false;             Use Global.debugStatistics
-  //public final static boolean debugRead = false;                   Use FileIO.debugRead
-  //public final static boolean debugPptTopLevel = false;            Use PptTopLevel.debug
-  //public final static boolean debugDerive = false;                 Use Global.debugDerive
-  //public final static boolean debugInfer = false;                  Use Global.debugInfer
-  //public final static boolean debugPptSplit = false;               Use Global.debugSplit
-  //public final static boolean debugPrintInvariants = false;        Use inv.Invariant.debugPrint
-
-  //public final static boolean debugPptSlice = false;               Use PptSlice.debug
-  //public final static boolean debugPptSliceGeneric = false;        Not used anywhere in code
-  //public final static boolean debugPptSliceSpecific = false;       Not used anywhere in code
-  //public final static boolean debugSimplify = false;               Use Global.debugSimplify
-  //print out a new dtrace file with changed modbits
-  public final static boolean debugPrintDtrace = false;              // Can't change; uses special outputter
-
-  // public final static boolean debugRead = true;
-  // public final static boolean debugPptTopLevel = true;
-  // public final static boolean debugDerive = true;
-  // public final static boolean debugInfer = true;
-  // public final static boolean debugPptSplit = true;
-  // public final static boolean debugPrintInvariants = true;
-  // public final static boolean debugPptSlice = true;
-  // public final static boolean debugPptSliceGeneric = true;
-  // public final static boolean debugPptSliceSpecific = true;
-  // public final static boolean debugSimplify = true;
+  // Can't change to log4j; uses special outputter
+  public final static boolean debugPrintDtrace = false;
 
   // (Earlier, this variable was used only if debugPptSliceSpecific is set.)
   // Variables must appear in the correct order.

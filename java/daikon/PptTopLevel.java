@@ -14,6 +14,7 @@ import daikon.inv.ternary.threeScalar.*;
 import daikon.simplify.*;
 import daikon.split.*;
 import daikon.split.misc.*;
+import daikon.suppress.*;
 import utilMDE.Assert;
 
 import java.io.*;
@@ -81,6 +82,14 @@ public class PptTopLevel
   public static final Category debugFlow =
     Category.getInstance ("daikon.flow.flow");
 
+  /** Debug tracer for start of suppression. **/
+  public static final Category debugSuppressInit =
+    Category.getInstance ("daikon.suppress.init");
+
+  /** Debug tracer for suppression. **/
+  public static final Category debugSuppress =
+    Category.getInstance ("daikon.suppress");
+
   // Do we need both a num_tracevars for the number of variables in the
   // tracefile and a num_non_derived_vars for the number of variables
   // actually passed off to this Ppt?  The ppt wouldn't use num_tracevars,
@@ -126,7 +135,9 @@ public class PptTopLevel
    *
    * <li>dataflow_ppts includes this (as its last element);
    *
-   * <li>dataflow_ppts is ordered by the way samples will flow;
+   * <li>dataflow_ppts is ordered by the way samples will flow.  It is
+   * a topological sort of the ancestors of this ppt, not just immediate
+   * parents.
    *
    * <li>dataflow_transforms contains functions from this to
    * dataflow_ppts; each function is an int[] whose domain is
@@ -577,13 +588,9 @@ public class PptTopLevel
     }
 
     if (Global.debugDerive.isDebugEnabled()) {
-
       Global.debugDerive.debug ("Number of derived variables at program point " + this.name + ": " + result.size());
-    }
-
-    if (Global.debugDerive.isDebugEnabled()) {
       Global.debugDerive.debug("Derived: " + result);
-      }
+    }
     Derivation[] result_array =
       (Derivation[]) result.toArray(new Derivation[result.size()]);
     return result_array;
@@ -629,11 +636,13 @@ public class PptTopLevel
    * Given a sample that was observed at this ppt, flow it up to
    * any higher ppts and lastly to this ppt.  Hit conditional
    * ppts along the way (via the add method).
+   * @param vt the set of values for this and higher ppts to see
+   * @param count the number of samples that vt represents
    *
    * Contract: since we hit higher ppts first and check this last,
    * invariants that have flown down from the higher ppt are also
-   * checked by this vt.  If we hit this before parents, then this
-   * wouldn't be the case.
+   * checked by this vt.  If we hit this before parents, then the
+   * flow wouldn't work.
    **/
   public void add_and_flow(ValueTuple vt, int count) {
     //     if (debugFlow.isDebugEnabled()) {
@@ -688,6 +697,9 @@ public class PptTopLevel
    * Add the sample to the invariants at this program point and any
    * child conditional program points, but do no flow the sample to
    * other related ppts.
+   *
+   * @param vt the set of values for this to see
+   * @param count the number of samples that vt represents
    **/
   void add(ValueTuple vt, int count) {
     // System.out.println("PptTopLevel " + name + ": add " + vt);
@@ -701,32 +713,90 @@ public class PptTopLevel
     if (values_num_samples == 0) {
       //       debugFlow.debug ("  Instantiating views for the first time");
       instantiate_views_and_invariants();
+      
       if (Global.debugInfer.isDebugEnabled()) {
         Global.debugInfer.debug ("Instantiated views first time for " + this);
       }
     }
+
+    if (values_num_samples == Daikon.suppress_samples_min) {
+      initiateSuppression();
+    }
+
     values_num_samples += count;
 
 
-    Set viewsCopy = new HashSet(views);
-    // Why?  Because flow modifies a ppt's views, so we want to prevent
-    // concurrent modification.  This code just reads the views first, so
-    // this is possible.
+    Set viewsToCheck = new HashSet(views);
+    
+    if (debugSuppress.isDebugEnabled()) {
+      debugSuppress.debug ("<<< Doing add() for " + name);
+      debugSuppress.debug ("    with vt " + vt);
+    }
 
-    // Add to all the views
-    for (Iterator itor = viewsCopy.iterator() ; itor.hasNext() ; ) {
-      PptSlice view = (PptSlice) itor.next();
-      if (view.invs.size() == 0) {
-        System.err.println("No invs for " + view.name);
-        continue;
+    int checkCount = 0;
+    Invariants invsFlowed = new Invariants();
+
+    while (viewsToCheck.size() > 0) {
+      checkCount++;
+
+      if (debugSuppress.isDebugEnabled()) {
+        debugSuppress.debug ("  Checkcount: "+ checkCount);
       }
-      if (Global.debugInfer.isDebugEnabled()) {
-        Global.debugInfer.debug ("Giving value to " + view);
+
+      Set falsifiedInvs = new HashSet();
+      // Add to all the views
+      for (Iterator itor = viewsToCheck.iterator() ; itor.hasNext() ; ) {
+        PptSlice view = (PptSlice) itor.next();
+        if (view.invs.size() == 0) {
+          System.err.println("No invs for " + view.name);
+          continue;
+        }
+        if (!view.no_invariants) {
+          view.add(vt, count, invsFlowed);
+          falsifiedInvs.addAll (invsFlowed);
+        }
       }
-      if (!view.no_invariants) {
-        // We have to check here now because there may be some views
-        // we go over before removal in the loop below.
-        view.add(vt, count);
+
+      viewsToCheck = new HashSet();
+      // Checking of recently unsuppressed invariants done here.  For
+      // every invariant that got unsuppressed: 1) Check if other
+      // invariants still suppress it; 2) Check if the current vt
+      // falsifies it (by placing it in viewsToCheck, which is checked
+      // on the subsequent loop).  Remember that this.invariants can
+      // suppress invariants in lower ppts, so we only do (2) for
+      // unsuppressed invariants in this.invariants.
+
+      for (Iterator itor = falsifiedInvs.iterator(); itor.hasNext(); ) {
+        Invariant inv = (Invariant) itor.next();
+        Set suppresses = new HashSet(inv.getSuppressees());
+        // Why copy?  Because we want to keep unlink() as an atomic operation that
+        // removes the SuppressionLink from the suppressor's list of suppressed
+        if (debugSuppress.isDebugEnabled() && suppresses.size() > 0) {
+          debugSuppress.debug (" Inv " + inv.repr() + " was falsified with suppresses");
+        }
+        for (Iterator iSuppresses = suppresses.iterator();
+             iSuppresses.hasNext(); ) {
+        SuppressionLink sl = (SuppressionLink) iSuppresses.next();
+        Invariant invSuppressed = sl.getSuppressee();
+        sl.unlink();
+        Assert.assertTrue (invSuppressed.getSuppressor() == null);
+        if (debugSuppress.isDebugEnabled()) {
+          debugSuppress.debug ("  Attempting re-suppression of: " + invSuppressed.repr());
+        }
+        PptTopLevel suppressedPpt = invSuppressed.ppt.parent;
+        if (attemptSuppression (invSuppressed)) {
+          if (debugSuppress.isDebugEnabled()) {
+            debugSuppress.debug ("  Re-suppressed by " + invSuppressed.getSuppressor());
+          }
+        } else if (suppressedPpt == this) {
+          // If invSuppressed didn't get resuppressed, we have to check values
+          debugSuppress.debug ("  Will re-check because in same ppt");
+          viewsToCheck.add (invSuppressed.ppt);
+        } else {
+          // Do nothing because suppressedParent is a child of this,
+          // and will be checked in good time.
+        }
+        }
       }
     }
 
@@ -746,6 +816,11 @@ public class PptTopLevel
       pptcond.add(vt, count);
       // TODO: Check for no more invariants on pptcond?
     }
+
+    if (debugSuppress.isDebugEnabled()) {
+      debugSuppress.debug (">>> End of add for " + name);
+    }
+
   }
 
   /**
@@ -769,10 +844,13 @@ public class PptTopLevel
       VarInfo[] vis = new VarInfo[ders.length];
       for (int i=0; i < ders.length; i++) {
         vis[i] = ders[i].getVarInfo();
-        if (Global.debugDerive.isDebugEnabled()) {
-          Global.debugDerive.debug("Derived " + vis[i].name);
+      }
+      if (Global.debugDerive.isDebugEnabled()) {
+        for (int i=0; i < ders.length; i++) {
+          Global.debugDerive.debug("Derived " + vis[i].name.name());
         }
       }
+
       // Using addDerivedVariables(derivations) would add data too
       addVarInfos(vis);
     }
@@ -994,11 +1072,27 @@ public class PptTopLevel
     return findSlice(v1, v2, v3);
   }
 
+  /**
+   * Find a pptSlice without an assumed ordering.
+   **/
   public PptSlice findSlice_unordered(VarInfo[] vis) {
     switch (vis.length) {
     case 1: return findSlice(vis[0]);
     case 2: return findSlice_unordered(vis[0], vis[1]);
     case 3: return findSlice_unordered(vis[0], vis[1], vis[2]);
+    default:
+      throw new RuntimeException("Bad length " + vis.length);
+    }
+  }
+
+  /**
+   * Find a pptSlice with an assumed ordering.
+   **/
+  public PptSlice findSlice(VarInfo[] vis) {
+    switch (vis.length) {
+    case 1: return findSlice(vis[0]);
+    case 2: return findSlice(vis[0], vis[1]);
+    case 3: return findSlice(vis[0], vis[1], vis[2]);
     default:
       throw new RuntimeException("Bad length " + vis.length);
     }
@@ -1022,13 +1116,14 @@ public class PptTopLevel
 
 
   /**
-   * Install views (and thus invariants).
-   * We create NO views over static constant variables, but everything else is fair game.
-   * We don't create views over variables which have a higher (controlling) view
-   * This function does NOT cause invariants over the new views to be checked.
-   * The installed views and invariants will all have at least one element with
-   * index i such that vi_index_min <= i < vi_index_limit.
-   * (However, we also assume that vi_index_limit == var_infos.length.)
+   * Install views and the invariants.  We create NO views over static
+   * constant variables, but everything else is fair game.  We don't
+   * create views over variables which have a higher (controlling)
+   * view.  This function does NOT cause invariants over the new views
+   * to be checked (but it does create invariants).  The installed
+   * views and invariants will all have at least one element with
+   * index i such that vi_index_min <= i < vi_index_limit.  (However,
+   * we also assume that vi_index_limit == var_infos.length.)
    **/
   private void instantiate_views(int vi_index_min,
                                  int vi_index_limit)
@@ -1447,6 +1542,161 @@ public class PptTopLevel
     }
   }
   */ // ... [INCR]
+
+  ///////////////////////////////////////////////////////////////////////////
+  /// Manipulating invariants and suppression
+  ///
+
+  /**
+   * Starts suppression by 1) unsuppressing all invariants. 2) running
+   * full suppression check.  Called at the start of inferencing.  Can
+   * be called repeatedly to refresh suppression, but this is an
+   * expensive operation.  Requires that this and its parents have
+   * already has instantiated invariants.
+   *
+   * @see daikon.suppress.SuppressionFactory
+   * @pre Invariants already instantiated
+   **/
+
+  public void initiateSuppression() {
+    if (Daikon.suppress_invariants) {
+      if (debugSuppressInit.isDebugEnabled()) {
+        debugSuppressInit.debug ("Initiating suppression for: " + name);
+      }
+      List invs = getInvariants();
+      for (Iterator i = invs.iterator(); i.hasNext(); ) {
+        Invariant inv = (Invariant) i.next();
+        if (inv.getSuppressor() == null) {
+          attemptSuppression (inv);
+        }
+      }
+    }
+  }
+
+
+  /**
+   * Try to suppress one invariant.  Links the invariant to a
+   * SuppressionLink if suppression succeeds.
+   * @param inv the Invariant to attempt suppression on, which has to
+   * be a member of this.
+   * @return true if invariant was suppressed
+   * @see daikon.suppress.SuppressionFactory
+   * @pre Invariants already instantiated.  inv not already suppressed.
+   **/
+
+  public boolean attemptSuppression (Invariant inv) {
+    if (Daikon.suppress_invariants) {
+      Assert.assertTrue (inv.getSuppressor() == null);
+      SuppressionFactory[] factories = inv.getSuppressionFactories();
+      for (int i = 0; i < factories.length; i++) {
+        SuppressionLink sl = factories[i].generateSuppressionLink (inv);
+        if (sl != null) {
+          sl.link();
+          if (debugSuppress.isDebugEnabled()) {
+            debugSuppress.debug ("Generated link with: " + sl + " at ppt " + name);
+          }
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+
+  /**
+   * Attempt to fill a given SuppressionTemplate with invariants.  If
+   * successful, returns true.  Called by SuppressionFactory's.
+   * @param template Template to fill.  Modified by this method.
+   **/
+  public boolean fillSuppressionTemplate (SuppressionTemplate template) {
+    // We do two loops for performance: attempt to fill locally, then
+    // attempt to fill using upper ppts.  If the local fill loop
+    // doesn't generate at least one item, then we can stop, because
+    // of the suppression ordering property.
+
+    Assert.assertTrue (template.invTypes.length == template.varInfos.length,
+                       "Template varInfos and invariant slots must be equal");
+    
+    boolean firstLoopFilled = false;
+    template.filled = false;
+    template.results = new Invariant[template.invTypes.length];
+    template.transforms = new VarInfo[template.invTypes.length][];
+
+    firstloop:
+    for (int iInvs = 0; iInvs < template.invTypes.length; iInvs++) {
+      template.results[iInvs] = null;
+      Class clazz = template.invTypes[iInvs];
+      VarInfo[] varInfos = template.varInfos[iInvs];
+      PptSlice slice = this.findSlice_unordered (varInfos);
+      if (slice != null) {
+        // Here's where we actually find the potential invariant.  There are
+        // two choices here: suppressed invariants can do more suppression, or
+        // they can be forbidden to suppress others.
+        Invariant inv =
+          Daikon.suppress_with_suppressed ?
+          Invariant.find (clazz, slice) :
+          Invariant.findUnsuppressed (clazz, slice);
+        if (inv != null) {
+          firstLoopFilled = true;
+          template.results[iInvs] = inv;
+          template.transforms[iInvs] = template.varInfos[iInvs];
+        }
+      }      
+    }
+    if (!firstLoopFilled) return false;
+
+    secondloop:
+    for (int iInvs = 0; iInvs < template.invTypes.length; iInvs++) {
+      if (dataflow_ppts == null) break;
+      if (template.results[iInvs] != null) continue secondloop;
+      
+      Class clazz = template.invTypes[iInvs];
+      VarInfo[] varInfos = template.varInfos[iInvs];
+
+      
+
+      // Transform the VarInfos for each upper ppt
+      // We go backwards so that we get the strongest invariants first.
+      for (int iPpts = dataflow_ppts.length - 1;
+           iPpts >= 0; iPpts--) {
+        PptTopLevel dataflowPpt = dataflow_ppts[iPpts];
+        int[] dataflowTransform = dataflow_transforms[iPpts];
+        VarInfo[] newVarInfos = new VarInfo[varInfos.length];
+        for (int iVarInfos = 0; iVarInfos < varInfos.length; iVarInfos++) {
+          int newIndex = dataflowTransform[varInfos[iVarInfos].varinfo_index];
+          if (newIndex >= 0) {
+            newVarInfos[iVarInfos] = dataflowPpt.var_infos[newIndex];
+          } else {
+            newVarInfos[iVarInfos] = null;
+          }
+        }
+        
+        PptSlice slice = dataflowPpt.findSlice_unordered (newVarInfos);
+        if (slice != null) {
+          Invariant inv =
+            Daikon.suppress_with_suppressed ?
+            Invariant.find (clazz, slice) :
+            Invariant.findUnsuppressed (clazz, slice);
+          if (inv != null) {
+            template.results[iInvs] = inv;
+            template.transforms[iInvs] = newVarInfos;
+          }
+        }      
+      }
+    }
+    
+    // Only for checking if template got filled
+    thirdloop: 
+    for (int iInvs = 0; iInvs < template.invTypes.length; iInvs++) {
+      if (template.results[iInvs] == null) return false;
+    }
+
+    template.filled = true;
+    return true;
+  }
+
+
+
 
   ///////////////////////////////////////////////////////////////////////////
   /// Creating conditioned views
@@ -2094,7 +2344,7 @@ public class PptTopLevel
     Invariant[] invs;
     {
       // Replace parwise equality with an equivalence set
-      Collection all = InvariantFilters.addEqualityInvariants(invariants_vector());
+      Collection all = InvariantFilters.addEqualityInvariants(getInvariants());
       Vector printing = new Vector(); // [Invariant]
       for (Iterator _invs = all.iterator(); _invs.hasNext(); ) {
         Invariant inv = (Invariant) _invs.next();
@@ -2165,7 +2415,7 @@ public class PptTopLevel
     for (Iterator ppts = closure.iterator(); ppts.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) ppts.next();
       all_cont.append("\t(AND \n");
-      Iterator _invs = InvariantFilters.addEqualityInvariants(ppt.invariants_vector()).iterator();
+      Iterator _invs = InvariantFilters.addEqualityInvariants(ppt.getInvariants()).iterator();
       while (_invs.hasNext()) {
         Invariant inv = (Invariant) _invs.next();
         if (inv instanceof Implication) {
@@ -2253,7 +2503,7 @@ public class PptTopLevel
     //
     //   // State the object invariant on the incoming argument
     //   all_cont.append("\t(AND \n");
-    //   Iterator _invs = InvariantFilters.addEqualityInvariants(obj_ppt.invariants_vector()).iterator();
+    //   Iterator _invs = InvariantFilters.addEqualityInvariants(obj_ppt.getInvariants()).iterator();
     //   while (_invs.hasNext()) {
     //     Invariant inv = (Invariant) _invs.next();
     //     if (!test.include(inv)) { // think: !inv.isWorthPrinting()
@@ -2424,11 +2674,13 @@ public class PptTopLevel
   // This is a fairly inefficient method, as it does a lot of copying.
   // As of 1/9/2000, this is only used in print_invariants.
   /**
-   * Return a vector of all the invariants for the program point.
-   * Also consider using views_iterator() instead.
+   * Return a List of all the invariants for the program point.
+   * Also consider using views_iterator() instead. 
    **/
-  public Vector invariants_vector() {
-    Vector result = new Vector();
+  // Used to be known as invariants_vector, but changed to return a
+  // List.
+  public List getInvariants() {
+    List result = new ArrayList();
     for (Iterator itor = new ViewsIteratorIterator(this); itor.hasNext(); ) {
       for (Iterator itor2 = (Iterator) itor.next(); itor2.hasNext(); ) {
         result.add(itor2.next());
@@ -2446,7 +2698,7 @@ public class PptTopLevel
   }
 
   /**
-   * For some clients, this method may be more efficient than invariants_vector.
+   * For some clients, this method may be more efficient than getInvariants.
    **/
   public Iterator views_iterator() {
     return views.iterator();
@@ -2486,10 +2738,6 @@ public class PptTopLevel
   }
 
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Printing invariants
-  ///
-
   /**
    * Simplify the names of variables before printing them.  For
    * example, "orig(a[post(i)])" might change into "orig(a[i+1])".  We
@@ -2510,4 +2758,18 @@ public class PptTopLevel
 
   static Comparator arityVarnameComparator = new PptSlice.ArityVarnameComparator();
 
+  /**
+   * Check the rep invariants of this.  Throw an Error if not okay.
+   **/
+  public void repCheck() {
+    // We could check a lot more than just that slices are okay.  For
+    // example, we could ensure that flow graph is correct.
+    for (Iterator i = views.iterator(); i.hasNext(); ) {
+      PptSlice slice = (PptSlice) i.next();
+      slice.repCheck();
+    }
+    if (dataflow_ppts != null) {
+      Assert.assertTrue (dataflow_ppts[dataflow_ppts.length - 1] == this);
+    }
+  }
 }

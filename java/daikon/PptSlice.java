@@ -1,6 +1,7 @@
 package daikon;
 
 import daikon.inv.*;
+import daikon.suppress.*;
 
 import org.apache.log4j.Category;
 
@@ -69,11 +70,21 @@ public abstract class PptSlice
    **/
   public Invariants invs;
 
-  // Invariants that have been falsified, and need to be flowed down
-  // to lower ppts.  May not actually be a subset of invs, if certain
-  // invariants fracture in two, for instance, or if an untainted
-  // clone is flowed instead of the falsified invariant itself.
+
+  /**
+   * Invariants that have been falsified, and need to be flowed down
+   * to lower ppts.  May not actually be a subset of invs, if certain
+   * invariants fracture in two, for instance, or if an untainted
+   * clone is flowed instead of the falsified invariant itself.
+   **/
   private Invariants invs_to_flow;
+
+
+  /**
+   * Union of falsified and weakened invariants.  Cleared after every
+   * call to flow_and_remove_falsified.
+   **/
+  private Invariants invs_changed;
 
   // Keep private, modifiable copies and public read-only views
   private final Collection private_po_lower = new ArrayList(2);  // [PptTopLevel]
@@ -129,6 +140,7 @@ public abstract class PptSlice
     }
     invs = new Invariants();
     invs_to_flow = new Invariants();
+    invs_changed = new Invariants();
 
     // This comes after setting all other variables, as the function call may use name, arity, var_infos, etc.
     debugged = (Global.isDebuggedPptSlice(this));
@@ -299,18 +311,56 @@ public abstract class PptSlice
   }
 
   /**
+   * Place argument on worklist of invariants to flow when
+   * flow_and_remove_falsified is called.  Should only be called from
+   * Invariant objects as they are falsified.
+   **/
+  public void addToChanged(Invariant inv) {
+    invs_changed.add(inv);
+  }
+
+  /**
+   * This procedure accepts a sample (a ValueTuple), extracts the values
+   * from it, casts them to the proper types, and passes them along to the
+   * invariants proper.  (The invariants accept typed values rather than a
+   * ValueTuple that encapsulates objects of any type whatever.)
+   * @param invsFlowed after this method, holds the Invariants that
+   * flowed.
+   **/
+  abstract void add (ValueTuple full_vt, int count, Invariants infsFlowed);
+
+
+  /**
+   * This procedure accepts a sample (a ValueTuple), extracts the values
+   * from it, casts them to the proper types, and passes them along to the
+   * invariants proper.
+   **/
+  void add (ValueTuple full_vt, int count) {
+    add (full_vt, count, new Invariants());
+  }
+
+  /**
    * Flow falsified invariants to lower ppts, and remove them from
    * this ppt.
+   * @param invsFlowed After this method, holds the Invariants that
+   * flowed.  Never null.
    **/
-  protected void flow_and_remove_falsified() {
+  protected void flow_and_remove_falsified(Invariants invsFlowed) {
     // Remove the dead invariants
     ArrayList to_remove = new ArrayList();
+    invsFlowed.clear();
     for (Iterator i = invs.iterator(); i.hasNext(); ) {
       Invariant inv = (Invariant) i.next();
       if (inv.falsified) {
         to_remove.add(inv);
       }
     }
+
+    if (debugFlow.isDebugEnabled() && to_remove.size() > 0 ) {
+      debugFlow.debug ("Flowing and removing falsified for: " + this);
+      debugFlow.debug ("To remove: " + to_remove);
+    }
+
     // Could also assert that classes of invariants killed are all
     // represented in invs_to_flow, but a size check should be enough,
     // since most invariants only generate one flowed copy when they
@@ -328,10 +378,20 @@ public abstract class PptSlice
       throw new RuntimeException
         ("Class(es) did not call addToFlow after calling destroy: " + naughty);
     }
+    if (invs_changed.size() != invs_to_flow.size()) {
+      throw new RuntimeException
+        ("Changed Invariants count must equal flowed invariants count");      
+    }
+
     removeInvariants(to_remove);
 
     // Flow newly-generated stuff
-    if (invs_to_flow.size() == 0) return;
+    if (invs_to_flow.size() == 0) {
+      if (debugFlow.isDebugEnabled()) {
+        debugFlow.debug ("No invariants to flow");
+      }
+      return;
+    }
 
     // XXXX Currently, we flow invariants to all immediately-lower
     // PptSlices.  If the same sample happens to follow them there,
@@ -403,10 +463,14 @@ public abstract class PptSlice
           }
 
           slice.addInvariant(reborn);
+          // Attempt to suppress the new invariant in lower levels
+          slice.parent.attemptSuppression(reborn);
         }
       }
     }
+    invsFlowed.addAll  (invs_changed);
     invs_to_flow.clear();
+    invs_changed.clear();
   }
 
   void addView(Ppt slice) {
@@ -523,5 +587,17 @@ public abstract class PptSlice
       }
     }
   }
+
+
+  /////////////////////////////////////////////////////////////////
+  /// Miscellaneous
+
+  public void repCheck() {
+    for (Iterator i = invs.iterator(); i.hasNext(); ) {
+      Invariant inv = (Invariant) i.next();
+      inv.repCheck();
+    }
+  }
+
 
 }

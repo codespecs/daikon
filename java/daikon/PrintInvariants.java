@@ -74,8 +74,6 @@ public class PrintInvariants {
       "Usage: java daikon.PrintInvariants [OPTION]... FILE",
       "  -h, --" + Daikon.help_SWITCH,
       "      Display this usage message",
-      "  --" + Daikon.suppress_cont_SWITCH,
-      "      Suppress display of implied invariants (by controlling ppt).",
       "  --" + Daikon.suppress_post_SWITCH,
       "      Suppress display of obvious postconditions on prestate.",
       "  --" + Daikon.suppress_redundant_SWITCH,
@@ -100,6 +98,7 @@ public class PrintInvariants {
     daikon.Logger.setupLogs(daikon.Logger.INFO);
 
     LongOpt[] longopts = new LongOpt[] {
+      new LongOpt(Daikon.suppress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -124,6 +123,8 @@ public class PrintInvariants {
         if (Daikon.help_SWITCH.equals(option_name)) {
           System.out.println(usage);
           System.exit(1);
+        } else if (Daikon.suppress_SWITCH.equals(option_name)) {
+          Daikon.suppress_invariants = true;
         } else if (Daikon.suppress_cont_SWITCH.equals(option_name)) {
           Daikon.suppress_implied_controlled_invariants = true;
         } else if (Daikon.suppress_post_SWITCH.equals(option_name)) {
@@ -179,6 +180,8 @@ public class PrintInvariants {
     PptMap ppts = FileIO.read_serialized_pptmap(new File(filename),
                                                true // use saved config
                                                );
+    // Make sure ppts' rep invariants hold
+    ppts.repCheck();
     ppt_map = ppts;
     print_invariants(ppts);
   }
@@ -755,6 +758,7 @@ public class PrintInvariants {
     if (IsEqualityComparison.it.accept(inv)) {
       reason = "is an equality invariant";
       return(false);
+      // Commented out for implementation of equality
     }
 
     if (!inv.isWorthPrinting())
@@ -762,6 +766,9 @@ public class PrintInvariants {
         reason = "isn't worth printing";
         return(false);
       }
+
+    // Suppressed, not interesting to print
+    if (Daikon.suppress_invariants && inv.getSuppressor() != null) return false;
 
     if (Daikon.suppress_redundant_invariants_with_simplify &&
         inv.ppt.parent.redundant_invs.contains(inv))
@@ -955,7 +962,8 @@ public class PrintInvariants {
     // I could instead sort the PptSlice objects, then sort the invariants
     // in each PptSlice.  That would be more efficient, but this is
     // probably not a bottleneck anyway.
-    Vector invs_vector = ppt.invariants_vector();
+    List invs_vector = ppt.getInvariants();
+
     Invariant[] invs_array = (Invariant[]) invs_vector.toArray(new Invariant[invs_vector.size()]);
     Arrays.sort(invs_array, PptTopLevel.icfp);
 
