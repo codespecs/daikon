@@ -982,6 +982,15 @@ public final class TestUtilMDE extends TestCase {
     Assert.assertTrue(UtilMDE.classnameToJvm("Java.lang.Integer[][][]").equals("[[[LJava/lang/Integer;"));
 
     // public static String arglistToJvm(String arglist)
+    Assert.assertTrue(UtilMDE.arglistToJvm("()").equals("()"));
+    Assert.assertTrue(UtilMDE.arglistToJvm("(int)").equals("(I)"));
+    Assert.assertTrue(UtilMDE.arglistToJvm("(int, int)").equals("(II)"));
+    Assert.assertTrue(UtilMDE.arglistToJvm("(int, long, short)").equals("(IJS)"));
+    Assert.assertTrue(UtilMDE.arglistToJvm("(java.lang.Integer, int, java.lang.Integer)").equals("(Ljava/lang/Integer;ILjava/lang/Integer;)"));
+    Assert.assertTrue(UtilMDE.arglistToJvm("(int[])").equals("([I)"));
+    Assert.assertTrue(UtilMDE.arglistToJvm("(int[], int, int)").equals("([III)"));
+    Assert.assertTrue(UtilMDE.arglistToJvm("(int, int[][], int)").equals("(I[[II)"));
+    Assert.assertTrue(UtilMDE.arglistToJvm("(java.lang.Integer[], int, java.lang.Integer[][])").equals("([Ljava/lang/Integer;I[[Ljava/lang/Integer;)"));
 
     // public static String classnameFromJvm(String classname)
     Assert.assertTrue(UtilMDE.classnameFromJvm("Z").equals("boolean"));

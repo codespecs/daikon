@@ -121,7 +121,7 @@ public final class UtilMDE {
   }
 
   /*
-   * Convert a classname from Java format to JVML format.
+   * Convert a fully-qualified classname from Java format to JVML format.
    * For example, convert "java.lang.Object[]" to "[Ljava/lang/Object;".
    **/
   public static String classnameToJvm(String classname) {
@@ -140,8 +140,26 @@ public final class UtilMDE {
     return result.replace('.', '/');
   }
 
+  /*
+   * Convert a fully-qualified argument list from Java format to JVML format.
+   * For example, convert "(java.lang.Integer[], int, java.lang.Integer[][])"
+   * to "([Ljava/lang/Integer;I[[Ljava/lang/Integer;)".
+   **/
   public static String arglistToJvm(String arglist) {
-    throw new Error("Not yet implemented");
+    if (! (arglist.startsWith("(") && arglist.endsWith(")"))) {
+      throw new Error("Malformed arglist: " + arglist);
+    }
+    String result = "(";
+    String comma_sep_args = arglist.substring(1, arglist.length()-1);
+    StringTokenizer args_tokenizer
+      = new StringTokenizer(comma_sep_args, ",", false);
+    for ( ; args_tokenizer.hasMoreTokens(); ) {
+      String arg = args_tokenizer.nextToken().trim();
+      result += classnameToJvm(arg);
+    }
+    result += ")";
+    // System.out.println("arglistToJvm: " + arglist + " => " + result);
+    return result;
   }
 
   private static HashMap primitiveClassesFromJvm = new HashMap(8);
@@ -188,7 +206,7 @@ public final class UtilMDE {
    **/
   public static String arglistFromJvm(String arglist) {
     if (! (arglist.startsWith("(") && arglist.endsWith(")"))) {
-      throw new Error("Malformed arglist");
+      throw new Error("Malformed arglist: " + arglist);
     }
     String result = "(";
     int pos = 1;
