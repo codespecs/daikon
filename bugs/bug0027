@@ -3,7 +3,7 @@ Owner:        mharder <mharder@lcs.mit.edu>, scruffy@lcs.mit.edu
 Tool:         dtrace-diff.pl
 Summary:      Two warnings running dtrace-diff.pl on Space test
 Severity:     Boneheaded
-Status:       New
+Status:       Closed
 Reproducible: Yes
 Description:
 
@@ -18,8 +18,14 @@ As with bug0026, these warnings appear since Mike E. turned on
 warnings in the script.  The code should be changed to eliminate these
 warnings.
 
+[mharder]
+This appears to be fixed.  Closing.
+
 --
 $Log$
-Revision 1.1  2002-03-21 17:57:03  mharder
+Revision 1.2  2002-04-30 22:17:01  mharder
+changed bug0027
+
+Revision 1.1  2002/03/21 17:57:03  mharder
 new bug0027
 
