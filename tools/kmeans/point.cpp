@@ -22,11 +22,11 @@ Point::~Point () {
 /**
  * constructor
  */
-void Point::init (float *x) {
+void Point::init (float ID, float *x) {
   //the first value in the array 'x' is the point name/id
-  id = (int) x[0];
-  for (int i = 1; i < dimensions + 1; i++ ) {
-    data[i-1] = x[i];
+  id = (int) ID;
+  for (int i = 0; i < dimensions; i++ ) {
+    data[i] = x[i];
   }
 }
 

@@ -45,7 +45,7 @@ KMeans::KMeans(char* s ) : s(s) {
   
   fscanf(DataFp, "%i", &dimensions);
   //the first thing in data is the point's unique id or name
-  data = new float[dimensions + 1];
+  data = new float[dimensions];
   means = new float[dimensions];
   stdev = new float[dimensions];
  
@@ -106,25 +106,26 @@ void KMeans::readPoints (void) {
  */
 Point* KMeans::getPoint(void) {
   float tmp;
-    
+  float ID;
+
   //the point identifier
   if ((fscanf(DataFp, "%f", &tmp) != 1)) {
     return NULL;
   } else {
-    data[0] = tmp;
+    ID = tmp;
   }
-  
+
   for (int i = 0; i < dimensions; i++) {
     if ((fscanf(DataFp, "%f", &tmp) != 1)) {
       return NULL;
     } else {
       means[i] += tmp;
-      data[i+1] = tmp;
+      data[i] = tmp;
     }
   }
 
   Point *p = new Point(dimensions);
-  p->init(data);
+  p->init(ID, data);
   return p;
 }
 
@@ -142,7 +143,7 @@ int KMeans::getNumPoints(void) {
 int KMeans::closestCluster(Point *p) {
   float lowestDist = -1;
   int closestCluster = 0;
-  
+
   for (int i = 0; i < numClusters; i++) {
     Cluster *c = clusters[i];
     float dist = c->distanceSquared(p);
@@ -176,7 +177,7 @@ vector<Point*> KMeans::getPoints(void) {
  */
 int KMeans::iterate (void) {
   numChanges = 0; //the number of cluster membership changes in this iteration
-    
+  
   for(int i = 0; i < numClusters; i++) {
     clusters[i]->refresh();
   }
@@ -272,7 +273,7 @@ void KMeans::doCluster(int k) {
   
   for( int i = 0; i < numClusters; i++) {
     clusters[i]->print();
-    printf("\n");
+    printf ("\n");
   }
 }
   
@@ -314,7 +315,7 @@ void KMeans::standardizePoints() {
       /* stdev[j] += pow((tmpdata[j] - means[j]), 2); //standard deviation */
     }
   }
-  
+
   //calculate the deviation
   for (int i = 0; i < dimensions; i++) {
     stdev[i] = stdev[i]/numPoints; //mean absolute deviation
@@ -325,9 +326,15 @@ void KMeans::standardizePoints() {
   for(int i = 0; i < numPoints; i++) {
     tmpdata = points[i]->getData();
     for(int j = 0; j < dimensions; j++) {
-      tmpdata[j]  = (tmpdata[j] - means[j]) / stdev[j];   
+      if (stdev[j] == 0) {
+	//no variation in this dimension. zero out.
+	tmpdata[j] = 0;
+      } else {
+	tmpdata[j]  = (tmpdata[j] - means[j]) / stdev[j];
+      }
     }
   }
+
+  
 }
 /* End of file kmeans.cpp */
-
