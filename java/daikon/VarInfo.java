@@ -74,7 +74,7 @@ public final class VarInfo
    * ValueTuple
    **/
   public int value_index;	// index in lists of values, VarTuple objects
-                                // (-1 iff is_static_constant)
+                                // (-1 iff is_static_constant or not yet set)
 
   public boolean is_static_constant;  // required if static_constant_value==null
 				//   (is_static_constant
@@ -165,11 +165,12 @@ public final class VarInfo
       Assert.assert(po_higher_nonce.length == ary.length);
     }
     if (po_lower == null) {
-      Assert.assert(po_higher_nonce == null);
-    } else if (po_higher instanceof VarInfo) {
+      Assert.assert(po_lower_nonce == null);
+    } else if (po_lower instanceof VarInfo) {
+      // nothing to do
     } else {
-      Assert.assert(po_higher instanceof VarInfo[]);
-      VarInfo[] ary = (VarInfo[]) po_higher;
+      Assert.assert(po_lower instanceof VarInfo[]);
+      VarInfo[] ary = (VarInfo[]) po_lower;
       Assert.assert(! ArraysMDE.any_null(ary));
     }
     // check lower/higher rep types matching, too ??
@@ -385,8 +386,8 @@ public final class VarInfo
   }
 
   /**
-   * @return read-only int[] giving the nonces for po_higher()
-   * @see po_higher()
+   * @return read-only int[] giving the nonces for po_lower()
+   * @see po_lower()
    **/
   public int[] po_lower_nonce() {
     List lo = po_lower();
@@ -540,7 +541,9 @@ public final class VarInfo
     }
     return false;
   }
+  */ // ... [INCR]
 
+  /* [INCR] ...
   public boolean hasExactInvariant(VarInfo other1, VarInfo other2) {
     Assert.assert(this.varinfo_index < other1.varinfo_index);
     Assert.assert(other1.varinfo_index < other2.varinfo_index);
@@ -570,6 +573,7 @@ public final class VarInfo
       return derived.derivedDepth();
   }
 
+  /** Return all derived variables that build off this one **/
   public List derivees() {
     ArrayList result = new ArrayList();
     VarInfo[] vis = ppt.var_infos;

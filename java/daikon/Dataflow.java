@@ -14,7 +14,7 @@ public class Dataflow
 
   public static final Category debug = Category.getInstance("daikon.DataFlow");
 
-  // Tempoary routine, for debugging
+  // Temporary routine, for debugging
   // Will eventually move into daikon.test.DataflowTest
   //
   // java daikon.Dataflow `find /scratch/$USER/tests/esc-experiments/StackAr/ -name '*.decls'`
@@ -124,7 +124,7 @@ public class Dataflow
     static_po_group_nonce++;
   }
 
-  // Used by setup_po_same name and related to group variables that flow together
+  // Used by setup_po_same_name and related to group variables that flow together
   private static int static_po_group_nonce = 0;
 
   /**
@@ -163,8 +163,8 @@ public class Dataflow
   private static void relate_object_procedure_ppts(PptTopLevel ppt, PptMap ppts)
   {
     PptName ppt_name = ppt.ppt_name;
-    // Find the ppt which controlls this one.
-    // CLASS controls OBJECT controls ENTER/EXIT.
+    // Find the ppt that controls this one.
+    // CLASS controls OBJECT, and OBJECT controls ENTER/EXIT.
     PptTopLevel controlling_ppt = null;
     if (ppt_name.isObjectInstanceSynthetic()) {
       controlling_ppt = ppts.get(ppt_name.makeClassStatic());
@@ -189,7 +189,7 @@ public class Dataflow
 
   /**
    * Add orig() variables to the given EXIT point, and relate them to
-   * the corresponding ENTER point.  Does nothing is exit_ppt is not
+   * the corresponding ENTER point.  Does nothing if exit_ppt is not
    * an EXIT.
    **/
   private static void create_and_relate_orig_vars(PptTopLevel exit_ppt, PptMap ppts)
@@ -268,7 +268,7 @@ public class Dataflow
 	}
       }
     }
-    // For each known-type variable, substitute its name in for
+    // For each known-type variable, substitute its name for
     // 'this' in the OBJECT ppt and see if we get any expression
     // matches with other orphaned variables.
     VarInfo[] orphans_array = (VarInfo[]) orphans.toArray(new VarInfo[orphans.size()]);
@@ -301,7 +301,7 @@ public class Dataflow
   /**
    * Modify ppt.var_infos in the range [lower..upper) to have the
    * proper partial ordering (drawn from the partial ordering of their
-   * base(s).
+   * base(s)).
    **/
   public static void relate_derived_variables(PptTopLevel ppt,
 					      int lower,
@@ -409,7 +409,7 @@ public class Dataflow
     }
     /**
      * @return new records containing the first length pairs in this
-     * (with aliasing!)
+     * (elements of the result are aliased with elements of the arguments!)
      **/
     public PptsAndInts makeSubArray(int length) {
       PptTopLevel[] _ppts = new PptTopLevel[length];

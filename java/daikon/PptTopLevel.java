@@ -82,21 +82,12 @@ public class PptTopLevel
 
   // private transient VarValuesOrdered values; // [[INCR]]
   private int values_num_samples;
-  // private int values_num_mod_non_missing_samples;
-  // private int values_num_values;
-  // private String values_tuplemod_samples_summary;
+  // [INCR] private int values_num_mod_non_missing_samples;
+  // [INCR] private int values_num_values;
+  // [INCR] private String values_tuplemod_samples_summary;
 
-  // Do I want two collections here (one for slices and one for conditional?
-  // This used to be a WeakHashMap; now it is a HashSet, because I'm not sure
-  // where else these would be referred to.
-  // // old comment:
-  // //   This is actually a set, but is implemented as a WeakHashMap because
-  // //   that is the only weak collection and I want the objects weakly held.
-  // I'm not sure why this was originally a HashSet, but that fact is now
-  // taken advantage of in instantiate_views, for fast checking of whether
-  // an element is in the set.  (Simple ordering might have been enough there.)
   /**
-   * All the Views on this.
+   * All the Views (that is, slices) on this.
    * Provided so that this Ppt can notify them when significant events
    * occur, such as receiving a new value, deriving variables, or
    * discarding data.
@@ -106,6 +97,7 @@ public class PptTopLevel
   // Temporarily have a separate collection for PptConditional views.
   // In the long run, I'm not sure whether the two collections will be
   // separate or not.
+  // [I'm not sure whether the following is still true in version 3. -MDE]
   // Right now, these are created only after all the values have been seen,
   // so I don't have to get too tense about installing them correctly and
   // iterating over them.  That should be fixed later.  For now, maybe have
@@ -116,23 +108,27 @@ public class PptTopLevel
    * Together, dataflow_ppts and dataflow_tranforms describe how
    * samples that are received at this program point flow to other
    * points.  If samples are not received at this point, both are
-   * null.  If samples are received at this point, then:
+   * null.  If samples are received at this point, then both have
+   * the same length and:
    *
-   * <li>dataflow_ppts includes this;
+   * <li>dataflow_ppts includes this (as its last element);
    *
    * <li>dataflow_ppts is ordered by the way samples will flow;
    *
    * <li>dataflow_transforms contains functions from this to
-   * dataflow_ppts; elements are int[]-style functions whose domain is
-   * the number of var_infos in this, and whose range is number of
+   * dataflow_ppts; each function is an int[] whose domain is
+   * indices of var_infos in this, and whose range is indices of
    * var_infos in the corresponding element of dataflow_ppts;
    *
    * <li>dataflow_transforms describes the function from the var_infos
-   * of this ppt to same in dataflow_ppts, so its inner length equals
-   * this.var_infos.length);
+   * of this ppt to the same variable in dataflow_ppts, so its inner
+   * length equals this.var_infos.length;
    *
    * <li>program points in dataflow_ppts may be repeated if a sample
-   * at this point induces more than one sample another point.
+   * at this point induces more than one sample at another point.
+   * (For example, if a method has two arguments of type Foo, then a
+   * sample for the method induces two different samples at
+   * Foo:::OBJECT.)
    **/
   public PptTopLevel[] dataflow_ppts;
   /** @see dataflow_ppts */
@@ -146,16 +142,19 @@ public class PptTopLevel
    * invariants:
    *
    * <li>invflow_transforms contains functions from this to
-   * invflow_ppts; elements are int[]-style functions whose domain is
-   * the number of var_infos in this, and whose range is number of
+   * invflow_ppts; each function is an int[] whose domain is
+   * indices of var_infos in this, and whose range is indices of
    * var_infos in the corresponding element of invflow_ppts;
    *
    * <li>invflow_transforms describes the function from the var_infos
-   * of this ppt to same in invflow_ppts, so its inner length equals
-   * this.var_infos.length);
+   * of this ppt to the same variable in invflow_ppts, so its inner
+   * length equals this.var_infos.length;
    *
    * <li>program points in invflow_ppts may be repeated if a sample
    * at this point induces more than one sample another point.
+   * (For example, if a method has two arguments of type Foo, then a
+   * sample for the method induces two different samples at
+   * Foo:::OBJECT.)
    **/
   public PptTopLevel[] invflow_ppts;
   /** @see invflow_ppts */
@@ -252,12 +251,13 @@ public class PptTopLevel
       return ppt_name.getPoint();
   }
 
-  /** Trim the collections used in this PptTopLevel */
+  /** Trim the collections used in this PptTopLevel, in hopes of saving space. **/
   public void trimToSize() {
     super.trimToSize();
     if (views_cond != null) { views_cond.trimToSize(); }
   }
 
+  /** The number of samples processed by this program point so far. **/
   public int num_samples() {
     return values_num_samples;
   }
@@ -270,9 +270,9 @@ public class PptTopLevel
 
   /**
    * Appends vi to the var_infos array of this ppt.  Also sets vi's
-   * varinfo_index, value_index, and ppt fields.  Method is not
-   * private so that FileIO can access it; should not be called by
-   * other classes.  vi must not be a static constant VarInfo.
+   * varinfo_index, value_index, and ppt fields.  Method is
+   * non-private so that FileIO can access it; it should not be called
+   * by other classes.
    * @param vi must not be a static constant VarInfo
    **/
   void addVarInfo(VarInfo vi) {
@@ -395,7 +395,7 @@ public class PptTopLevel
    *   does pass2 introduction for c..b
    * <br>
    * and afterward, derivation_index == (n, a, b).
-   * @return A Vector of of VarInfo
+   * @return Vector of VarInfo
    **/
   /* [INCR] ... we longer need to do this in stages
   public Vector __derive() {
@@ -433,12 +433,12 @@ public class PptTopLevel
     }
     return result;
   }
-  */
+  */ // ... [INCR]
 
   /**
    * This routine creates derivations for one "pass"; that is, it adds
-   * some set of derived variables, according to the functions that
-   * are passed in.  All the results involve VarInfo objects at
+   * some set of derived variables.
+   * All the results involve VarInfo objects at
    * indices i such that vi_index_min <= i < vi_index_limit (and
    * possibly also involve other VarInfos).
    * @return a Vector of VarInfo
@@ -633,7 +633,7 @@ public class PptTopLevel
     Assert.assert(vt.size() == var_infos.length - num_static_constant_vars, name);
 
     if (values_num_samples == 0) {
-      generate_invariants();
+      instantiate_views_and_invariants();
     }
     values_num_samples += count;
 
@@ -701,15 +701,15 @@ public class PptTopLevel
    * the views (and thus candidate invariants), but does not check
    * those invariants.
    **/
-  public void generate_invariants() {
+  public void instantiate_views_and_invariants() {
     if (debug.isDebugEnabled())
-      debug.debug("generate_invariants for " + name);
+      debug.debug("instantiate_views_and_invariants for " + name);
 
     // Now make all of the views (and thus candidate invariants)
     instantiate_views(0, var_infos.length);
 
     if (debug.isDebugEnabled())
-      debug.debug("Done with generate_invariants");
+      debug.debug("Done with instantiate_views_and_invariants");
   }
 
 
@@ -795,7 +795,7 @@ public class PptTopLevel
   }
 
 
-  // The nouns "view" and "slice: are putatively different.  Slices
+  // The nouns "view" and "slice": are putatively different.  Slices
   // limit the variables but examine all data.  Views may ignore data,
   // etc.  In practive, getView always returns a slice anyway (see
   // comments on class daikon.Ppt).
@@ -873,7 +873,7 @@ public class PptTopLevel
   }
 
   public PptSlice3 findSlice_unordered(VarInfo v1, VarInfo v2, VarInfo v3) {
-    // bubble sort is easier than 3 levels of if-else
+    // bubble sort is easier than 3 levels of if-then-else
     VarInfo tmp;
     if (v1.varinfo_index > v2.varinfo_index) { tmp = v2; v2 = v1; v1 = tmp; }
     if (v2.varinfo_index > v3.varinfo_index) { tmp = v3; v3 = v2; v2 = tmp; }
@@ -1239,7 +1239,7 @@ public class PptTopLevel
       }
     }
   }
-  */
+  */ // ... [INCR]
 
   /* [INCR] ... don't think we still need this?
   // Compute exact_nonunary_invariants
@@ -1255,14 +1255,14 @@ public class PptTopLevel
       nonunary_view.clear_cache();
     }
   }
-  */
+  */ // ... [INCR]
 
   ///////////////////////////////////////////////////////////////////////////
   /// Creating conditioned views
   ///
 
-  // This apparently can't appear in PptConditional, lest it never get called.
-  // I guess PptConditional isn't instantiated unless it needs to be, but
+  // This static region can't appear in PptConditional, lest it never get
+  // called.  PptConditional isn't instantiated unless it needs to be, but
   // it doesn't need to be unless we run this static region!
 
   static {
@@ -1272,11 +1272,6 @@ public class PptTopLevel
       SplitterList.put(".*", new Splitter[] {
 	new ReturnTrueSplitter(),
       });
-
-      // new GriesLisp();
-      // new WeissDsaaMDE();
-      // These are outdated; they look for "field" instead of "this.field".
-      // new SplitterList4Dsaa();
     }
   }
 
@@ -1312,65 +1307,26 @@ public class PptTopLevel
     views_cond.addAll(pconds);
   }
 
+  /**
+   * Given conditional program points (and invariants detected over them),
+   * create implications.  Configuration variable "pairwise_implications"
+   * controls whether all or only the first two conditional program points
+   * are considered.
+   **/
   public void addImplications() {
-    if (dkconfig_pairwise_implications) {
-      addImplicationsPairwise();
-    } else {
-      addImplicationsOnlyTwo();
-    }
-  }
-
-  // (Where did I intend this to be called?  Near add-ppt-conditional,
-  // presumably.)
-  public void addImplicationsOnlyTwo() {
     int num_conds = views_cond.size();
     if (num_conds > 0) {
-      // System.out.println("num_conds = " + num_conds);
-      // for (int i=0; i<num_conds; i++) {
-      //   System.out.println(((PptConditional)views_cond.elementAt(i)).name);
-      // }
-      // Assert.assert(num_conds == 2);
-      PptConditional cond1 = (PptConditional) views_cond.elementAt(0);
-      PptConditional cond2 = (PptConditional) views_cond.elementAt(1);
-      addImplications_internal(cond1, cond2, false);
-    }
-
-    // [INCR] ...
-    /*
-    if (this.ppt_name.isCombinedExitPoint()) {
-      Vector exits = this.entry_ppt.exit_ppts;
-      if (exits.size() == 2) {
-        // Eventually I ought to make this applicable when the number of
-        // individual exits is not 2.
-
-        // System.out.println("num exits = " + exits.size());
-        // for (int i=0; i<exits.size(); i++) {
-        //   System.out.println(((PptTopLevel)exits.elementAt(i)).name);
-        // }
-        Assert.assert(exits.size() == 2, "Bad number of exits: " + exits.size());
-        PptTopLevel ppt1 = (PptTopLevel) exits.elementAt(0);
-        PptTopLevel ppt2 = (PptTopLevel) exits.elementAt(1);
-        // No longer necessary to use add_implications, as we are now
-        // adding combined prgram points early.
-        // addImplications_internal(ppt1, ppt2, true);
-        addImplications_internal(ppt1, ppt2, false);
+      // if dkconfig_pairwise_implications is not set, then only create
+      // implications from the first two conditional program points.
+      if (! dkconfig_pairwise_implications) {
+        num_conds = Math.min(num_conds, 2);
       }
-    */ // ... [INCR]
-  }
-
-
-  // (Where did I intend this to be called?  Near add-ppt-conditional,
-  // presumably.)
-  public void addImplicationsPairwise() {
-    int num_conds = views_cond.size();
-    if (num_conds > 0) {
-      //take each conditional program point and its opposite and make
-      //implications. We can't assume that the number or conditional
-      //program points is even, because conditional program points
-      //with no samples are discarded. Otherwise, a conditional
-      //program point is usually next to its opposite pair in the
-      //vector view_conds
-      for (int i = 0; i < num_conds; i++) {
+      // Take each conditional program point and its opposite and make
+      // implications. We can't assume that the number or conditional
+      // program points is even, because conditional program points with no
+      // samples are discarded. Otherwise, a conditional program point is
+      // next to its opposite pair in the vector view_conds.
+      for (int i = 0; i < num_conds; i++) { // note increment is NOT "i+=2".
       	PptConditional cond1 = (PptConditional) views_cond.elementAt(i);
   	if ( i+1 >= num_conds )
 	  continue;
@@ -1411,8 +1367,23 @@ public class PptTopLevel
   }
 
 
-  // This method is correct only if the two conditional program points fully
-  // partition the input space (their conditions are negations of one another).
+  // Given a pair of conditional program points, form implications from the
+  // invariants true at each one.  The algorithm divides the invariants
+  // into three groups:  those that are true at both program points (the
+  // "same" invariants), those that are true at one program point and whose
+  // negation is true at the other program point (the "exclusive"
+  // invariants), and all others (the "different" invariants).  At the
+  // first program point, for each exclusive invariant and each different
+  // invariant, create a conditional of the form "exclusive => different".
+  // Do the same at the second program point.
+
+  // This method is correct only if the two conditional program points
+  // fully partition the input space (their conditions are negations of one
+  // another).  For instance, suppose there is a three-way split with the
+  // following invariants detected at each:
+  //   {A,B}  {!A,!B}  {A,!B}
+  // Examining just the first two would suggest that "A <=> B" is valid,
+  // but in fact that is a false inference.
   private void addImplications_internal(PptTopLevel ppt1,
 					PptTopLevel ppt2,
 					boolean add_nonimplications)
@@ -1705,11 +1676,13 @@ public class PptTopLevel
   public PptSlice[][] match_views(PptTopLevel ppt1, PptTopLevel ppt2) {
     Vector result = new Vector();
 
+    // First, sort
     SortedSet ss1 = new TreeSet(arityVarnameComparator);
     ss1.addAll(ppt1.views);
     SortedSet ss2 = new TreeSet(arityVarnameComparator);
     ss2.addAll(ppt2.views);
 
+    // Then, pair up elements from the sorted collections.
     for (OrderedPairIterator opi = new OrderedPairIterator(ss1.iterator(), ss2.iterator(), arityVarnameComparator); opi.hasNext(); ) {
       Pair pair = (Pair) opi.next();
       result.add(new PptSlice[] { (PptSlice) pair.a, (PptSlice) pair.b });
@@ -1730,7 +1703,8 @@ public class PptTopLevel
         // This is a debugging tool, to make sure that various versions
         // of isExclusiveFormula remain coordinated.  (That's also one
         // reason we don't break out of the loop early:  also, there will
-        // be few invariants in a slice.)
+        // be few invariants in a slice, to breaking out is of minimal
+        // benefit.)
         Assert.assert(inv1.isExclusiveFormula(inv2)
                       == inv2.isExclusiveFormula(inv1),
                       "Bad exclusivity: " + inv1.isExclusiveFormula(inv2) + " " + inv2.isExclusiveFormula(inv1)
@@ -1943,19 +1917,6 @@ public class PptTopLevel
     // desirable first.  For now just use the ICFP.
     Arrays.sort(invs, icfp);
 
-    // // Debugging
-    // System.out.println("Sorted invs:");
-    // for (int i=0; i<invs.length; i++) {
-    //   System.out.println("    " + invs[i].format());
-    // }
-    // for (int i=0; i<invs.length-1; i++) {
-    //   int cmp = icfp.compare(invs[i], invs[i+1]);
-    //   System.out.println("cmp(" + i + "," + (i+1) + ") = " + cmp);
-    //   int rev_cmp = icfp.compare(invs[i+1], invs[i]);
-    //   System.out.println("cmp(" + (i+1) + "," + i + ") = " + rev_cmp);
-    //   Assert.assert(rev_cmp >= 0);
-    // }
-
     // Debugging
     if (Global.debugSimplify.isDebugEnabled()) {
       Global.debugSimplify.debug("Sorted invs:");
@@ -1990,7 +1951,7 @@ public class PptTopLevel
     // background environment for the prover.  Ignore implications,
     // since in the current scheme, implications came from controlled
     // program points, and we don't necessarily want to lose the
-    // unconditoinal version of the invariant at the conditional ppt.
+    // unconditional version of the invariant at the conditional ppt.
     StringBuffer all_cont = new StringBuffer();
     all_cont.append("(AND \n");
     for (Iterator ppts = closure.iterator(); ppts.hasNext(); ) {
@@ -2127,8 +2088,8 @@ public class PptTopLevel
       for (int i=0; i < present.length; i++) {
 	if (present[i] && (i != checking)) {
 	  bg.append(" ");
-          // format_using(OutputFormat.SIMPLIFY) is guaranteed to return a sensible result
-          // for invariants in invs[].
+          // format_using(OutputFormat.SIMPLIFY) is guaranteed to return
+          // a sensible result xfor invariants in invs[].
 	  bg.append(invs[i].format_using(OutputFormat.SIMPLIFY));
 	}
       }
