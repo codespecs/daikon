@@ -3,7 +3,7 @@
   if 0;
 # merge-esc.pl -- Merge Daikon output into Java source code as ESC assnotations
 # Michael Ernst <mernst@lcs.mit.edu>
-# Time-stamp: <2001-03-11 02:20:51 mernst>
+# Time-stamp: <2001-03-13 01:43:02 mernst>
 
 # The input is a Daikon output file; files from the current directory are
 # rewritten into -escannotated versions.
@@ -26,6 +26,9 @@ if ((/^Inv filename = /)
     || (/^      Unmodified variables: /)
     || (/^\[No views for /)
     || (/^esc_name =/)
+    || (/^Variables not equal: /)
+    || (/^Condition always satisfied: /)
+    || (/^OneOf problem: /)
     || (/^Exiting$/)) {
   next;
 }
@@ -109,11 +112,15 @@ sub approx_argmatch($$) {
 }
 
 
-sub is_bogus_invariant( $ ) {
+sub is_non_supported_invariant( $ ) {
   my ($inv) = @_;
   return (($inv =~ /format_esc class .* needs to be changed/)
 	  || ($inv =~ /"null"/)
 	  || ($inv =~ /\[\] ==/)
+	  || ($inv =~ /\bmax\(/)
+	  || ($inv =~ /\bmin\(/)
+	  || ($inv =~ /\bsum\(/)
+	  || ($inv =~ / has only one value/)
 	  || ($inv =~ /\\typeof\([^ ]*\.length/));
 }
 
@@ -142,6 +149,7 @@ END {
 
   for my $javafile (@javafiles) {
     @fields = ();
+    @final_fields = ();
     open(GETFIELDS, "$javafile") or die "Cannot open $javafile: $!";
     while (defined($line = <GETFIELDS>)) {
       if ($line =~ /^(\s+)(private[^=]*\b(\w+)\s*[;=].*)$/) {
@@ -149,6 +157,9 @@ END {
 	if (($line =~ /\[\s*\]/)
 	    || ($line !~ /\b(boolean|byte|char|double|float|int|long|short)\b/)) {
 	  push(@fields,$fieldname);
+	  if ($line =~ /\bfinal\b/) {
+	    push(@final_fields, $fieldname);
+	  }
 	}
       }
     }
@@ -208,33 +219,54 @@ END {
 	  if (($fullmeth eq $ppt_fullmeth)
 	      || (($fullmethname eq $ppt_methname)
 		  && approx_argsmatch($simple_args, $ppt_args))) {
+	    my $equals = ($ppt =~ /\.equals\s*\(\s*java\.lang\.Object\b/);
+	    # add more tests here
+	    my $overriding = ($equals || 0);
+	    my $requires = ($overriding ? "also_requires" : "requires");
+	    my $ensures = ($overriding ? "also_ensures" : "ensures");
+	    my $modifies = ($overriding ? "also_modifies" : "modifies");
 	    $found = 1;
 	    if ($need_newline) {
 	      print OUT "\n";
 	    }
 	    if ($ppt =~ /:::ENTER/) {
-	      for my $inv (split("\n", $raw{$ppt})) {
-		if (is_bogus_invariant($inv)) {
-		  print OUT "/*! requires " . $inv . " */\n";
-		} else {
-		  print OUT "/*@ requires " . $inv . " */\n";
+	      # Skip @requires clauses for equals; they shouldn't hold
+	      if (! $equals) {
+		for my $inv (split("\n", $raw{$ppt})) {
+		  if (is_non_supported_invariant($inv)) {
+		    print OUT "/*! $requires " . $inv . " */\n";
+		  } else {
+		    print OUT "/*@ $requires " . $inv . " */\n";
+		  }
 		}
 	      }
 	    } elsif ($ppt =~ /:::EXIT/) {
-	      for my $inv (split("\n", $raw{$ppt})) {
-		if ($inv =~ s/^      Modified variables: //) {
-		  $inv =~ s/\[\]/[*]/g;
-		  my @mods = split(/ /, $inv);
-		  @mods = grep(!/\.class$/, @mods);
-		  @mods = grep(!/\[[^*]+\]/, @mods);
-		  if (scalar(@mods) > 0) {
-		    print OUT "/*@ modifies " . join(', ', @mods) . " */\n";
+	      my $ppt_combined = $ppt;
+	      $ppt_combined =~ s/(:::EXIT)[0-9]+$/$1/;
+	      # If this is :::EXIT22 but :::EXIT exists, suppress this.
+	      if (($ppt eq $ppt_combined)
+		  || (! exists($raw{$ppt_combined}))) {
+		for my $inv (split("\n", $raw{$ppt})) {
+		  if ($inv =~ s/^      Modified variables: //) {
+		    $inv =~ s/\[\]/[*]/g;
+		    $inv =~ s/\[[^][]+\.\.[^][]+\]/[*]/g;
+		    my @mods = split(/ /, $inv);
+		    @mods = grep(!/\.class$/, @mods);
+		    @mods = grep(!/\[[^*]+\]/, @mods);
+		    for my $field (@final_fields) {
+		      @mods = grep(!/^this.$field$/, @mods);
+		    }
+		    if (scalar(@mods) > 0) {
+		      print OUT "/*@ $modifies " . join(', ', @mods) . " */\n";
+		    }
+		  } elsif (is_non_supported_invariant($inv)) {
+		    print OUT "/*! $ensures " . $inv . " */\n";
+		  } else {
+		    print OUT "/*@ $ensures " . $inv . " */\n";
 		  }
-		} elsif (is_bogus_invariant($inv)) {
-		  print OUT "/*! ensures " . $inv . " */\n";
-		} else {
-		  print OUT "/*@ ensures " . $inv . " */\n";
 		}
+	      } else {
+		# print OUT "Suppressing $ppt because of $ppt_combined\n";
 	      }
 	    } else {
 	      die "What ppt? $ppt";
@@ -282,7 +314,7 @@ END {
 	my $fullmeth = "$classname" . ":::OBJECT";
 	if (defined($raw{$fullmeth})) {
 	  for my $inv (split("\n", $raw{$fullmeth})) {
-	    if (is_bogus_invariant($inv)) {
+	    if (is_non_supported_invariant($inv)) {
 	      print OUT "/*! invariant " . $inv . " */\n";
 	    } else {
 	      print OUT "/*@ invariant " . $inv . " */\n";
