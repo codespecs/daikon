@@ -92,8 +92,10 @@ public final class PptConditional
     } catch (Exception e) {
       // If an exception is thrown, don't put the data on either side
       // of the split.
-      System.out.println ("Exception thrown in add for " + name());
-      System.out.println ("Vars = " + Debug.related_vars (this, vt));
+      if (false) {              // need to add a debugging flag for this
+        System.out.println ("Exception thrown in add for " + name());
+        System.out.println ("Vars = " + Debug.related_vars (this, vt));
+      }
     }
     return emptyList;
   }
