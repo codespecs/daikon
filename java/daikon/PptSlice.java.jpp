@@ -179,46 +179,35 @@ public final class PPTSLICE1
       #error "Bad Arity"
     #endif
 
-    // Get the types of the arguments
-    ProglangType[] rep_types = new ProglangType[var_infos.length];
-    for (int i = 0; i < rep_types.length; i++)
-      rep_types[i] = var_infos[i].file_rep_type;
-
     // Instantiate each invariant that is valid over those types
     for (Iterator i = Daikon.proto_invs.iterator(); i.hasNext(); ) {
       Invariant proto = (Invariant) i.next();
 
       // Skip invariant if the types are not appropriate
-      if (!proto.valid_types (rep_types)) {
+      if (!proto.valid_types (var_infos) || !proto.instantiate_ok(var_infos)){
         // Debug.log (proto.getClass(), this, "not created-types not valid");
         continue;
       }
 
-      // Skip invariant if it is suppressed
+      // Skip invariant if it is suppressed.  Note that this will work
+      // even though we haven't instantiated all of the invariants for this
+      // slice yet because it will check constant values
       NISuppressionSet ss = proto.get_ni_suppressions();
-      if ((ss != null) && !ss.is_instantiate_ok (this)) {
-        Debug.log (proto.getClass(), this, "not created - suppressed");
+      if (NIS.dkconfig_enabled && (ss != null) && !ss.is_instantiate_ok (this)){
+        Debug.log (proto.getClass(), this, "not created - suppressed " + ss);
         continue;
       }
 
-      // Instantiate the invariant and add it to the list. Null returns
-      // are possible because there are additional checks in instantiate
-      // for particular variables and types beyond what is in valid_types
-      Invariant inv = proto.instantiate_dyn (this);
-      if (inv != null) {
-        addInvariant(inv);
-        inv.log ("Created invariant " + inv.format() + " over types " +
-                 ProglangType.toString (rep_types));
-      } else {
-        Debug.log (proto.getClass(), this, "not created - no instantation");
-      }
+      // Instantiate the invariant and add it to the list.  Null should
+      // never be returned because we check instantiate_ok() above and
+      // only enabled invariants are in this list.
+      Invariant inv = proto.instantiate (this);
+      Assert.assertTrue (inv != null);
+      addInvariant(inv);
+      if (Debug.logOn())
+        inv.log ("Created invariant " + inv.format() + " ss = " + ss);
     }
   }
-
-
-  // I could introduce another accessor that uses
-  // UtilMDE.intersectionCardinalityAtLeast(), which might be more
-  // efficient.
 
   // These accessors are for abstract methods declared in Ppt
   /** Returns the number of (non-missing) samples observed at this slice. **/
@@ -470,7 +459,6 @@ public final class PPTSLICE1
     for (int i=0; i < invs.size(); i++) {
       UnaryInvariant inv = (UnaryInvariant) invs.get(i);
       if (inv.is_false()) continue;
-      if (inv.getSuppressor() != null) continue;
       Invariant clone = (Invariant) inv.clone();
       InvariantStatus status = inv.add(val1, mod1, count);
       if (status == InvariantStatus.FALSIFIED) {
@@ -508,7 +496,6 @@ public final class PPTSLICE1
       for (int i=0; i < invs.size(); i++) {
         BinaryInvariant inv = (BinaryInvariant) invs.get(i);
         if (inv.is_false()) continue;
-        if (inv.getSuppressor() != null) continue;
         Invariant clone = (Invariant) inv.clone();
         InvariantStatus status = inv.add(val2, val1, mod1, count);
         if (status == InvariantStatus.FALSIFIED) {
@@ -528,7 +515,6 @@ public final class PPTSLICE1
       for (int i=0; i < invs.size(); i++) {
         BinaryInvariant inv = (BinaryInvariant) invs.get(i);
         if (inv.is_false()) continue;
-        if (inv.getSuppressor() != null) continue;
         Invariant clone = (Invariant) inv.clone();
         InvariantStatus status = inv.add(val1, val2, mod1, count);
         if (status == InvariantStatus.FALSIFIED) {
@@ -580,7 +566,6 @@ public final class PPTSLICE1
     for (int i=0; i < invs.size(); i++) {
       TernaryInvariant inv = (TernaryInvariant) invs.get(i);
       if (inv.is_false()) continue;
-      if (inv.getSuppressor() != null) continue;
       Invariant clone = (Invariant) inv.clone();
       InvariantStatus status = inv.add(val1, val2, val3, mod1, count);
       if (status == InvariantStatus.FALSIFIED) {
@@ -615,7 +600,6 @@ public final class PPTSLICE1
     for (int i=0; i < invs.size(); i++) {
       UnaryInvariant inv = (UnaryInvariant) invs.get(i);
       if (inv.is_false()) continue;
-      if (inv.getSuppressor() != null) continue;
       InvariantStatus status = inv.add(val1, mod1, count);
       if (status == InvariantStatus.FALSIFIED) {
         inv.falsify();
@@ -648,7 +632,6 @@ public final class PPTSLICE1
       for (int i=0; i < invs.size(); i++) {
         BinaryInvariant inv = (BinaryInvariant) invs.get(i);
         if (inv.is_false()) continue;
-        if (inv.getSuppressor() != null) continue;
         InvariantStatus status = inv.add(val2, val1, mod1, count);
         if (status == InvariantStatus.FALSIFIED) {
           inv.falsify();
@@ -668,7 +651,6 @@ public final class PPTSLICE1
       for (int i=0; i < invs.size(); i++) {
         BinaryInvariant inv = (BinaryInvariant) invs.get(i);
         if (inv.is_false()) continue;
-        if (inv.getSuppressor() != null) continue;
         Invariant clone = (Invariant) inv.clone();
         InvariantStatus status = inv.add(val1, val2, mod1, count);
         if (status == InvariantStatus.FALSIFIED) {
@@ -713,7 +695,6 @@ public final class PPTSLICE1
     for (int i=0; i < invs.size(); i++) {
       TernaryInvariant inv = (TernaryInvariant) invs.get(i);
       if (inv.is_false()) continue;
-      if (inv.getSuppressor() != null) continue;
       Invariant clone = (Invariant) inv.clone();
       InvariantStatus status = inv.add(val1, val2, val3, mod1, count);
       if (status == InvariantStatus.FALSIFIED) {
@@ -814,7 +795,6 @@ public final class PPTSLICE1
       Invariant newInv = inv.transfer (result, permutation);
       if ((gslice == null) || !gslice.contains_inv_exact (newInv)) {
         newInvs.add (newInv);
-        parent.attemptSuppression (newInv, true);
         Assert.assertTrue (newInv != inv);
         Assert.assertTrue (newInv.ppt == result);
         Assert.assertTrue (inv.ppt == this);
