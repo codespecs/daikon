@@ -6989,6 +6989,10 @@ number of invariants to check is cubic in the number of variables at a
 single program point.  Derived variables (such as @samp{a[i]},
 introduced whenever there is both an array @samp{a} and an integer
 @samp{i}) can increase the number of variables substantially.
+The @option{daikon.Daikon.disable_derived_variables} and individual
+@option{daikon.derive.*.*.enabled} configuration variables may be used
+to disable derived variables altogether or selectively, at the cost of
+detecting fewer invariants, especially over sequences.
 
 For details on improving Daikon's performance, see @ref{Out of
 memory}, and @ref{Large dtrace files}.
