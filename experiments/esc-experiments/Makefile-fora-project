@@ -153,14 +153,14 @@ ${PROJECT}.txt-daikon: ${SCRATCH_FOR_DAIKON}/.run-timestamp $(DAIKON_CLASS)
 	@echo
 	@echo \#\#\# txt-daikon
 	@echo
-	java daikon.Daikon ${DAIKON_OPTS} `find ${SCRATCH_FOR_DAIKON} -name '*.decls' -o -name '*.dtrace'` >& $@ || rm $@
+	java daikon.Daikon ${DAIKON_OPTS} `find ${SCRATCH_FOR_DAIKON} -name '*.decls' -o -name '*.dtrace'` >& $@ || mv $@ $@-failed && false
 	../remove-conditional-ppts.pl $@
 
 ${PROJECT}.txt-esc: ${SCRATCH_FOR_DAIKON}/.run-timestamp $(DAIKON_CLASS)
 	@echo
 	@echo \#\#\# txt-esc
 	@echo
-	java daikon.Daikon --esc_output ${DAIKON_OPTS} `find ${SCRATCH_FOR_DAIKON} -name '*.decls' -o -name '*.dtrace'` >& $@ || rm $@
+	java daikon.Daikon --esc_output ${DAIKON_OPTS} `find ${SCRATCH_FOR_DAIKON} -name '*.decls' -o -name '*.dtrace'` >& $@ || mv $@ $@-failed && false
 	../remove-conditional-ppts.pl $@
 
 #../DataStructures/StackAr.java-escannotated: txt-esc
