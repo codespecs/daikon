@@ -1,4 +1,5 @@
 daikon.Daikon.output_conditionals
+daikon.Daikon.enable_floats
 daikon.FileIO.add_changed
 daikon.PptTopLevel.pairwise_implications
 daikon.derive.binary.SequenceScalarIntersection.enabled
