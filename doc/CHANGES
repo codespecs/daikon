@@ -39,9 +39,17 @@ dynamic linking.  As part of this change, it is now required that
 program points so that the set of original variables are available
 when processing exit point declarations.
 
+*****
+
+  Remember that, in general, changes are not permitted to be listed in this
+  file unless they appear in the manual (daikon.texinfo or
+  developer.texinfo).  So edit the manual first, then add a brief description
+  here (with a pointer to the appropriate manual section).
+
+[Unified flags for dfej, Daikon, Kvasir, trace2.]
+
 [Carlos should write up this change.]
 Annotate respects whitespace
-
 
 Hopefully, this release will include:
  * Daikon supports Java 5 (also known as Java 1.5) [requires fixed JTB]
