@@ -1874,6 +1874,50 @@ match the regular expression, which uses Perl syntax.
 Serialize invariants to the specified file; they can later be
 postprocessed, compared, etc.
 
+@item --omit_from_output [0rs]
+Omit some potentially redundant information from the serialized output
+file produced with @code{-o}.
+By default, the serialized output contains all of the data structures
+produced by Daikon while inferring invariants.
+Depending on the use to which the serialized output will later be put,
+the file can sometimes be significantly shortened by omitting
+information that is no longer needed.
+The flag should be followed by one or more characters each representing
+a kind of structures the can be omitted.
+The following characters are recognized:
+
+@table @code
+@item 0 (zero)
+Omit information about program points that appeared in the
+@file{.decls} file, but not in any @file{.dtrace} file. (In Daikon's
+terminology, such program points have ``seen zero samples''.)
+
+@item r
+Omit `reflexive' invariants, those in which a variable appears more
+than once.
+Usually, such invariants are not interesting, because their meaning is
+duplicated by invariants with fewer variables: for instance, @code{x =
+x + x} and @code{y = z + z} can be expressed as @code{x = 0} and
+@code{y = 2 * z} instead.
+However, Daikon generates and uses such invariants internally to
+decide what invariants to create when two previously equal variables
+turn out to be different.
+
+@item s
+Omit invariants that are suppressed by other invariants.
+`Suppression' refers to a particular optimization, introduced in
+version 3 of Daikon, in which the processing of an invariant is
+postponed as long as certain other invariants which logically imply it
+hold.
+@end table
+
+For most uses of serialized output in the current version, it is safe
+to use the @code{0} and @code{r} omissions, but the @code{s} omission
+will cause subtle output changes.
+In many cases, the amount of space saved is modest (typically around
+10%), but the savings can be more substantial for programs with many
+unused program points, or program points with many variables.
+
 @item --config @var{filename}
 Load the configuration settings specified in the given file.
 @xref{Configuration options}, for details.
@@ -6314,6 +6358,8 @@ techniques below (@pxref{Reducing program points}) to split your
 @file{.dtrace} file into parts.  Next, run Daikon on each resulting
 @file{.dtrace} file. Finally, use the union function of @ref{Invariant
 Diff} to combine the resulting @file{.inv} files into one.
+@c A more correct way to merge the resulting .inv files would be with
+@c the MergeInvariants tool, but it is not yet documented,
 
 @menu
 * Reducing program points::     
