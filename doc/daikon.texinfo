@@ -1016,7 +1016,7 @@ this.theArray[this.topOfStack+1..] elements == this.theArray[-1]
 The return value is never null, and is equal to the array element at
 index @code{topOfStack}.  The top of the stack is at least 0.  The
 array, the elements of the array, and @code{topOfStack} are not
-modified by this method - this method is an "observer".  The
+modified by this method --- this method is an "observer".  The
 last invariant is not particularly interesting.
 
 @node    Second Java example, C examples, Understanding the invariants, Example use
@@ -5756,15 +5756,21 @@ of the array itself.)
 The value may also be the string "nonsensical" (without the
 quotes).  That means that the variable does not have a value because
 the expression that computes it cannot be evaluated.  For instance, if
-variable @samp{a} has value @samp{null}, then variable @samp{b} would
-have value @samp{nonsensical}.
+variable @samp{a} has value @samp{null}, then variable @samp{a.b} would
+have value @samp{nonsensical}.  When the value is "nonsensical", the
+modified field should be 2.
 
-@item modified? (0 or 1).
+@item modified? (0, 1, or 2).
+@cindex modified bit
 This value is 0 if the variable has not been assigned to since the
 last time this program point was executed, and 1 if the variable has
 been assigned to since then.  It is safe for an implementation to
-always set it to 1.  It is also safe to always set it to 0, as daikon
-fixes up the modbits.
+always set it to 1.  It is also safe to always set it to 0, because
+Daikon corrects obviously incorrect modification bits (such as 0 for a
+never-before-seen value).
+
+The special value 2 should be used only (and always) when the value
+field is "nonsensical".
 
 @c if the
 @c modbit-munge.pl script is run on the resulting @file{.dtrace} file to fix up
