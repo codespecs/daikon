@@ -380,7 +380,10 @@ Invariants can be useful in program understanding and a host of other
 applications.  Daikon operates by running the program and examining the
 values it computes, looking for patterns and relationships among those
 values.  Front ends (@pxref{Instrumentation}) exist for the Java, C,
-C++, and IOA languages; it is easy to extend Daikon to other applications.
+C++, @uref{IOA, , http://theory.lcs.mit.edu/tds/ioa/}, and Perl
+languages.  Front ends also exist for other applications, such as the
+@uref{http://ase.arc.nasa.gov/visser/jpf/, , Java PathFinder model
+checker}.  It is easy to extend Daikon to other applications.
 
 Daikon is freely available for most uses; for details, see
 @ref{License}.
@@ -401,12 +404,12 @@ The following mailing lists (and their archives) are available:
 @item daikon-announce@@pag.lcs.mit.edu
 A low-volume, announcement-only list.  For example,
 announcements of new releases are sent to this list.
-To subscribe, visit @url{http://pag.lcs.mit.edu/daikon/download/}.
+To subscribe, visit @uref{http://pag.lcs.mit.edu/daikon/download/}.
 @item daikon-discuss@@pag.lcs.mit.edu
 A moderated list for the community of Daikon users.  Use it to share
 tips and successes, and to get help with questions or problems (after
 checking the documentation).  To subscribe, visit
-@url{http://pag.lcs.mit.edu/daikon/download/}.
+@uref{http://pag.lcs.mit.edu/daikon/download/}.
 @item daikon-developers@@pag.lcs.mit.edu
 This list goes to the Daikon maintainers.  Use it for bug reports,
 suggestions, and the like.
@@ -536,7 +539,7 @@ or build an executable for dfej, the Daikon front end for Java.
 @itemize @bullet
 @item
 The easiest approach is to download a precompiled version of
-@command{dfej} from @url{http://pag.lcs.mit.edu/daikon/download/}.
+@command{dfej} from @uref{http://pag.lcs.mit.edu/daikon/download/}.
 Place that executable in directory
 @file{$DAIKONDIR/front-end/java/src} (or, alternately, elsewhere on
 your path), then run @command{rehash}.  Now you are ready to run dfej.
@@ -1447,7 +1450,7 @@ letters @command{dfe} in the names stand for ``Daikon front-end'', and
 is moderately robust, and the C++ and Perl front ends are experimental.
 
 A front end for the IOA programming language is distributed separately
-(see @url{http://theory.lcs.mit.edu/tds/ioa.html}).
+(see @uref{http://theory.lcs.mit.edu/tds/ioa.html}).
 An earlier version of Daikon included a Lisp front end, but it is no
 longer supported.
 
@@ -1795,7 +1798,7 @@ Suppress display of obvious postconditions on prestate.
 @item --suppress_redundant
 Suppress display of logically redundant invariants, using Simplify.
 Simplify must be separately obtained (from
-@url{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
+@uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
 order to take advantage of this option.
 
 @item --prob_limit @var{pct}
@@ -2233,7 +2236,7 @@ Suppress display of obvious postconditions on prestate.
 @item --suppress_redundant
 Suppress display of logically redundant invariants, using Simplify.
 Simplify must be separately obtained (from
-@url{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
+@uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
 order to take advantage of this option.
 
 @item --esc_output
@@ -2583,7 +2586,7 @@ default.
 Daikon can use the Simplify theorem-prover to eliminate even more
 implied invariants than Daikon's built-in tests are able to eliminate.
 Simplify must be separately obtained (from
-@url{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
+@uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
 order to take advantage of this filter.
 
 @item Suppress obvious equality invariants
@@ -3877,7 +3880,7 @@ To convert K&R prototypes to ANSI/ISO prototypes, use the
 ANSI/ISO C, you may wish to check that @command{protoize} has no
 effect.  Protoize is
 distributed with gcc, among other places; you can find documentation
-at @url{http://gcc.gnu.org/onlinedocs/gcc/Running-Protoize.html}.
+at @uref{http://gcc.gnu.org/onlinedocs/gcc/Running-Protoize.html}.
 Even after running @command{protoize}, you may need to perform further
 fixups by hand.  A common problem is function prototypes with no
 arguments; in K&R C, the function definition may have any number of
@@ -3942,8 +3945,8 @@ legal C++ (@pxref{C program requirements}).  This section shows how to
 work around such problems by modifying the header files.
 
 For example, the GNU @command{wc} program
-(@url{http://www.gnu.org/software/textutils/}; download from
-@url{ftp://ftp.gnu.org/pub/gnu/textutils/textutils-2.0.tar.gz})
+(@uref{http://www.gnu.org/software/textutils/}; download from
+@uref{ftp://ftp.gnu.org/pub/gnu/textutils/textutils-2.0.tar.gz})
 contains the following test on line 179 (in textutils version 2.0):
 @example
   (current_pos = lseek (fd, (off_t) 0, SEEK_CUR)) != -1
@@ -4003,7 +4006,7 @@ dfec does not work with other
 compilers or other versions of gcc.  In particular, gcc 3 does not
 work, nor does ``gcc 2.96'' or ``gcc 2.95.4'' (neither of which is
 an official gcc release but which appear in some Linux distributions).
-You can download gcc 2.95.3 from @url{http://gcc.gnu.org/releases.html}.
+You can download gcc 2.95.3 from @uref{http://gcc.gnu.org/releases.html}.
 
 gcc is easy to install; see the @uref{http://gcc.gnu.org/install/, ,
 GCC installations instructions}.  If you do not wish to read them,
@@ -4769,7 +4772,7 @@ hierarchical clustering and the xmeans algorithm (kmeans algorithm
 with efficient discovery of the number of clusters). The kmeans and
 hierarchical clustering tools are provided in the daikon
 distribution. The xmeans code and executable are publicly available at
-@url{http://www.cs.cmu.edu/~dpelleg/kmeans.html} (fill in the license
+@uref{http://www.cs.cmu.edu/~dpelleg/kmeans.html} (fill in the license
 form and mail it in).
 
 @node    Tools, Extending Daikon, Enhancing Daikon output, Top
@@ -4819,14 +4822,14 @@ Readers are also referred to Chapter 7, ``Implementation'', of
 D. Ernst, PhD dissertation, University of Washington Department of
 Computer Science and Engineering, Seattle, Washington, USA, August 2000.
 This document is available online at
-@url{http://pag.lcs.mit.edu/~mernst/pubs/invariants-thesis-abstract.html}.
+@uref{http://pag.lcs.mit.edu/~mernst/pubs/invariants-thesis-abstract.html}.
 
 For Daikon version 2.4.1, also see 
 Chapter 7, ``Scalability'', of @cite{Automatic Generation and Checking
 of Program Specifications}, by Jeremy W. Nimmer, Master's thesis.  
 This document is available, as 
 technical report MIT-LCS-TR-852, at
-@url{http://pag.lcs.mit.edu/~mistere/pubs/thesis-abstract.html}.
+@uref{http://pag.lcs.mit.edu/~mistere/pubs/thesis-abstract.html}.
 
 
 @menu
@@ -5451,7 +5454,7 @@ occurred and to prevent memory corruption.  The Daikon runtime's
 discovery of these errors, while not directly related to invariant
 detection, is a pleasant side effect of using Daikon.  You also might
 want to consider using the Valgrind tool for Linux on x86 processors
-(@url{http://developer.kde.org/~sewardj/}), which can help you correct
+(@uref{http://developer.kde.org/~sewardj/}), which can help you correct
 memory errors; this reduces the number of warnings/errors produced by
 the Daikon runtime, and it also improves your code.
 
@@ -5577,7 +5580,7 @@ The warning ``Could not utilize Simplify'' indicates that the Simplify
 theorem-prover could not be run; this usually indicates that the
 @command{Simplify} binary was not found on the user's path.
 Simplify must be separately obtained (from
-@url{http://research.compaq.com/SRC/esc/Simplify.html}) and installed.
+@uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed.
 
 If Simplify is not used, certain redundant (logically implied)
 invariants may appear in Daikon's output.  The output is
@@ -5798,17 +5801,24 @@ If you have multiple @file{.dtrace} files (perhaps resulting from
 multiple program runs), you can run Daikon on just some of them.
 
 @item 
+@cindex trace-untruncate program
 You can terminate the instrumented program when it has created a
 sufficiently large @file{.dtrace} file.  If you interrupt the program
 while it is in the middle of writing a record to the @file{.dtrace}
 file, the last record may be only partially written.  Use the
-@command{daikon/bin/trace-untruncate} script to remove the last,
+@command{daikon/bin/trace-untruncate} program to remove the last,
 possibly partial, record from the file:
 @example
   trace-untruncate @var{myfile}.dtrace
 @end example
 @noindent
 modifies @file{myfile.dtrace} in place to remove the last record.
+
+Alternately, you can use the
+@command{daikon/bin/trace-untruncate-fast} program.  It operates much
+faster on very large files.  In order to use
+@command{trace-untruncate-fast}, you must have already compiled it
+(@pxref{Installing Daikon}).
 
 @end enumerate
 
@@ -5928,7 +5938,7 @@ information (we strive to incorporate that information in this
 manual), or you may find discussions on those lists helpful to you.
 
 For further reading, see the list of publications at the 
-Daikon homepage, @url{http://pag.lcs.mit.edu/daikon/}.
+Daikon homepage, @uref{http://pag.lcs.mit.edu/daikon/}.
 
 
 @node    Details, File formats, Troubleshooting, Top
