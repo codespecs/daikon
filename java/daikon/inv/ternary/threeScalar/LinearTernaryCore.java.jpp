@@ -185,6 +185,15 @@ public final class CLASSNAME
   }
 
   /**
+   * LinearTernay can't be flowed because it keeps samples to build the
+   * plane.  These sample can't be flowed from ppt to ppt (since they probably
+   * didn't occur at the lower ppt).
+   */
+  public boolean isFlowable() {
+    return (false);
+  }
+
+  /**
    * Looks for points that define a plane (ax + by + cz + d = 0).  Collects
    * MINTRIPLE points before attempting to define the plane (to
    * hopefully get at least some spread between the points, so that
@@ -256,15 +265,16 @@ public final class CLASSNAME
         // Check all values against a, b, and c.
         if (!wrapper.falsified) {
           for (int i=0; i<MINTRIPLES; i++) { // values_seen == MINTRIPLES
-            // Global.fuzzy.eq works by comparing ratios between numbers, so comparing
-            // the sum of everything to 0 won't work.
+            // Global.fuzzy.eq works by comparing ratios between numbers,
+            // so comparing the sum of everything to 0 won't work.
             if (!EQUAL (-c * def_points[i].z,
                         a*def_points[i].x + b*def_points[i].y + d)) {
               if (debug.isLoggable(Level.FINE)) {
-                debug.fine ("Suppressing " + CLASSSTRING + " at index " + i + ": "
+                debug.fine ("Destroying at index " + i + ": "
                             + "0 != "
                             + a + "*" + def_points[i].x
-                            + "+" + b + "*" + def_points[i].y + "+" + c + "*" + def_points[i].z
+                            + "+" + b + "*" + def_points[i].y + "+" + c
+                            + "*" + def_points[i].z
                             + "+" + d);
               }
               return InvariantStatus.FALSIFIED;
@@ -274,6 +284,17 @@ public final class CLASSNAME
           // Discard the points not used to define the coefficients.
           for (int ii = 3; ii < MINTRIPLES; ii++)
             def_points[ii] = null;
+
+          // check to see if this alread exists at the global ppt, it it
+          // does, falsify it here to eliminate the duplicate copy.  This
+          // is not the best place to do this, but easy for now
+          PptSlice gslice = wrapper.ppt.find_global_slice
+                                                    (wrapper.ppt.var_infos);
+          if (gslice != null) {
+            if (gslice.contains_inv_exact (wrapper))
+              return InvariantStatus.FALSIFIED;
+          }
+
         }
       }
     } else {
@@ -678,32 +699,60 @@ public final class CLASSNAME
 
   public boolean isSameFormula(CLASSNAME other)
   {
-    boolean thisMeaningless =
-      values_seen < MINTRIPLES ||
-      (a == 0 && b == 0 && c == 0 && d == 0) ||
-      Math.abs(a) >= Double.MAX_VALUE ||
-      Math.abs(b) >= Double.MAX_VALUE ||
-      Math.abs(c) >= Double.MAX_VALUE ||
-      Math.abs(d) >= Double.MAX_VALUE
-      ;
-    boolean otherMeaningless =
-      other.values_seen < MINTRIPLES ||
-      (other.a == 0 && other.b == 0 && other.c == 0 || other.d == 0) ||
-      Math.abs(other.a) >= Double.MAX_VALUE ||
-      Math.abs(other.b) >= Double.MAX_VALUE ||
-      Math.abs(other.c) >= Double.MAX_VALUE ||
-      Math.abs(other.d) >= Double.MAX_VALUE
-      ;
+    boolean inactive_can_match = true;
 
-    if (thisMeaningless && otherMeaningless) {
-      return true;
+    // If we are matching up those that have not seen enough values yet
+    if (inactive_can_match) {
+
+      // If both have yet to see enough valus
+      if ((values_seen < MINTRIPLES) && (other.values_seen < MINTRIPLES)) {
+
+        // Same formula if all of the points match
+        if (values_seen != other.values_seen)
+          return (false);
+        for (int ii = 0; ii < values_seen; ii++) {
+          if (def_points[ii] != other.def_points[ii])
+            return (false);
+        }
+        return (true);
+
+      } else {
+        return ((values_seen >= MINTRIPLES)
+                && (other.values_seen >= MINTRIPLES)
+                && (a == other.a)
+                && (b == other.b)
+                && (c == other.c)
+                && (d == other.d));
+      }
     } else {
-      return ((values_seen >= MINTRIPLES)
-              && (other.values_seen >= MINTRIPLES)
-              && (a == other.a)
-              && (b == other.b)
-              && (c == other.c)
-              && (d == other.d));
+
+      boolean thisMeaningless =
+        values_seen < MINTRIPLES ||
+        (a == 0 && b == 0 && c == 0 && d == 0) ||
+        Math.abs(a) >= Double.MAX_VALUE ||
+        Math.abs(b) >= Double.MAX_VALUE ||
+        Math.abs(c) >= Double.MAX_VALUE ||
+        Math.abs(d) >= Double.MAX_VALUE
+        ;
+      boolean otherMeaningless =
+        other.values_seen < MINTRIPLES ||
+        (other.a == 0 && other.b == 0 && other.c == 0 || other.d == 0) ||
+        Math.abs(other.a) >= Double.MAX_VALUE ||
+        Math.abs(other.b) >= Double.MAX_VALUE ||
+        Math.abs(other.c) >= Double.MAX_VALUE ||
+        Math.abs(other.d) >= Double.MAX_VALUE
+        ;
+
+      if (thisMeaningless && otherMeaningless) {
+        return true;
+      } else {
+        return ((values_seen >= MINTRIPLES)
+                && (other.values_seen >= MINTRIPLES)
+                && (a == other.a)
+                && (b == other.b)
+                && (c == other.c)
+                && (d == other.d));
+      }
     }
   }
 
@@ -720,12 +769,12 @@ public final class CLASSNAME
             && (d != other.d));
   }
 
+
   /**
    * In general, we can't merge formulas, but we can merge invariants with
    * too few samples to have formed a plane with invariants with enough
    * samples.  And those will appear to have different formulas.
    */
-
   public boolean mergeFormulasOk() {
     return (true);
   }
