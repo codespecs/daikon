@@ -25,7 +25,7 @@ public final class SeqIndexNonEqual
    **/
   public static boolean dkconfig_enabled = true;
 
-  public NonEqualCore  core;
+  public NonEqualCore core;
 
   static boolean debugSeqIndexNonEqual = false;
 
@@ -42,7 +42,7 @@ public final class SeqIndexNonEqual
     }
   }
 
-  public static SeqIndexNonEqual  instantiate(PptSlice ppt) {
+  public static SeqIndexNonEqual instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
 
     VarInfo seqvar = ppt.var_infos[0];
@@ -60,14 +60,14 @@ public final class SeqIndexNonEqual
   }
 
   protected Object clone() {
-    SeqIndexNonEqual  result = (SeqIndexNonEqual) super.clone();
+    SeqIndexNonEqual result = (SeqIndexNonEqual) super.clone();
     result.core = (NonEqualCore) core.clone();
     result.core.wrapper = result;
     return result;
   }
 
   public String repr() {
-    return "SeqIndexNonEqual"  + varNames() + ": "
+    return "SeqIndexNonEqual" + varNames() + ": "
       + core.repr()
       + ",falsified=" + falsified;
   }
@@ -128,7 +128,7 @@ public final class SeqIndexNonEqual
     return form[0] + "(NEQ " + form[1] + " |i|)" + form[2];
   }
 
-  public void add_modified(long  [] a, int count) {
+  public void add_modified(long [] a, int count) {
     for (int i=0; i<a.length; i++) {
       core.add_modified(a[i], i, count);
       if (falsified)
@@ -160,7 +160,7 @@ public final class SeqIndexNonEqual
   }
 
   // Look up a previously instantiated invariant.
-  public static SeqIndexNonEqual  find(PptSlice ppt) {
+  public static SeqIndexNonEqual find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
@@ -199,7 +199,7 @@ public final class SeqIndexNonEqual
         PptSlice1 other_slice = pptt.findSlice(vi);
         // I'm not sure exactly how this can be null, but it can.
         if (other_slice != null) {
-          SeqIndexNonEqual  other_sine = SeqIndexNonEqual.find(other_slice);
+          SeqIndexNonEqual other_sine = SeqIndexNonEqual.find(other_slice);
           if ((other_sine != null) && other_sine.enoughSamples()) {
             return true;
           }

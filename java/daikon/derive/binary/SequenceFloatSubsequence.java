@@ -18,7 +18,7 @@ public final class SequenceFloatSubsequence
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff SequenceFloatSubsequence  invariants should be considered.
+   * Boolean.  True iff SequenceFloatSubsequence invariants should be considered.
    **/
   public static boolean dkconfig_enabled = true;
 

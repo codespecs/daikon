@@ -35,7 +35,7 @@ public final class IntComparisonCore
   public boolean obvious_can_be_le;
   public boolean obvious_can_be_ge;
 
-  public ValueTracker  values_cache = new ValueTracker(8);
+  public ValueTracker values_cache = new ValueTracker(8);
 
   public Invariant wrapper;
 
@@ -61,7 +61,7 @@ public final class IntComparisonCore
 
   public Object clone() {
     try {
-      IntComparisonCore  result = (IntComparisonCore) super.clone();
+      IntComparisonCore result = (IntComparisonCore) super.clone();
       result.values_cache = (ValueTracker) values_cache.clone();
       return result;
     } catch (CloneNotSupportedException e) {
@@ -86,7 +86,7 @@ public final class IntComparisonCore
     obvious_can_be_ge = tmp;
   }
 
-  public void add_modified(long  v1, long  v2, int count) {
+  public void add_modified(long v1, long v2, int count) {
 
     boolean new_can_be_eq = can_be_eq;
     boolean new_can_be_lt = can_be_lt;
@@ -215,7 +215,7 @@ public final class IntComparisonCore
     return (can_be_eq && (!can_be_lt) && (!can_be_gt));
   }
 
-  public boolean isSameFormula(IntComparisonCore  other)
+  public boolean isSameFormula(IntComparisonCore other)
   {
     return
       (can_be_eq == other.can_be_eq) &&
@@ -223,7 +223,7 @@ public final class IntComparisonCore
       (can_be_gt == other.can_be_gt);
   }
 
-  public boolean isExclusiveFormula(IntComparisonCore  other)
+  public boolean isExclusiveFormula(IntComparisonCore other)
   {
     return (! ((can_be_eq && other.can_be_eq)
                || (can_be_gt && other.can_be_gt)

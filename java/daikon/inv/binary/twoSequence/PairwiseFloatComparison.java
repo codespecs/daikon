@@ -34,7 +34,7 @@ public class PairwiseFloatComparison
 
   final static boolean debugPairwiseIntComparison = false;
 
-  public FloatComparisonCore  core;
+  public FloatComparisonCore core;
 
   protected PairwiseFloatComparison (PptSlice ppt) {
     super(ppt);
@@ -46,7 +46,7 @@ public class PairwiseFloatComparison
     core = new FloatComparisonCore(this, only_eq);
   }
 
-  public static PairwiseFloatComparison  instantiate(PptSlice ppt) {
+  public static PairwiseFloatComparison instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
@@ -59,10 +59,10 @@ public class PairwiseFloatComparison
     }
 
     boolean only_eq = false;
-    if (! (var1.type. elementIsFloat()  && var2.type. elementIsFloat())) {
+    if (! (var1.type. elementIsFloat() && var2.type. elementIsFloat())) {
       only_eq = true;
     }
-     PairwiseFloatComparison  result = new PairwiseFloatComparison(ppt, only_eq);
+     PairwiseFloatComparison result = new PairwiseFloatComparison(ppt, only_eq);
     // Don't instantiate if the variables can't have order
     if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
         !result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {
@@ -76,7 +76,7 @@ public class PairwiseFloatComparison
   }
 
   protected Object clone() {
-    PairwiseFloatComparison  result = (PairwiseFloatComparison) super.clone();
+    PairwiseFloatComparison result = (PairwiseFloatComparison) super.clone();
     result.core = (FloatComparisonCore) core.clone();
     result.core.wrapper = result;
     return result;
@@ -88,7 +88,7 @@ public class PairwiseFloatComparison
   }
 
   public String repr() {
-    return "PairwiseFloatComparison"  + varNames() + ": "
+    return "PairwiseFloatComparison" + varNames() + ": "
       + core.repr();
   }
 
@@ -160,8 +160,8 @@ public class PairwiseFloatComparison
     // int len = Math.min(a1.length, a2.length);
 
     for (int i=0; i<len; i++) {
-      double  v1 = a1[i];
-      double  v2 = a2[i];
+      double v1 = a1[i];
+      double v2 = a2[i];
       core.add_modified(v1, v2, count);
       if (falsified)
         return;
@@ -186,7 +186,7 @@ public class PairwiseFloatComparison
   }
 
   // Look up a previously instantiated invariant.
-  public static PairwiseFloatComparison  find(PptSlice ppt) {
+  public static PairwiseFloatComparison find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();

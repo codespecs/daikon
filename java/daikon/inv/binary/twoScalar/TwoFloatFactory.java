@@ -12,7 +12,7 @@ import org.apache.log4j.Category;
 
 import java.util.*;
 
-public final class TwoFloatFactory  {
+public final class TwoFloatFactory {
 
   /** Debugging tracer. **/
   public static final Category debug
@@ -45,7 +45,7 @@ public final class TwoFloatFactory  {
     //   return null;
     // }
 
-    boolean integral = var1.file_rep_type. isFloat()  && var2.file_rep_type. isFloat() ;
+    boolean integral = var1.file_rep_type. isFloat() && var2.file_rep_type. isFloat() ;
 
     Vector result = new Vector();
 

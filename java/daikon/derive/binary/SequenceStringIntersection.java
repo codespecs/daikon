@@ -24,7 +24,7 @@ public final class SequenceStringIntersection
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff SequenceStringIntersection  derived variables should be generated.
+   * Boolean.  True iff SequenceStringIntersection derived variables should be generated.
    **/
   public static boolean dkconfig_enabled = false;
 
@@ -53,14 +53,14 @@ public final class SequenceStringIntersection
     String[] tmp = new String [val1_array.length + val2_array.length];
     int size = 0;
     for (int i=0; i<val1_array.length; i++) {
-      String  v = val1_array[i];
+      String v = val1_array[i];
       if ((ArraysMDE.indexOf(val2_array, v)!=-1) &&
           (size==0 || (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), v)==-1)))
         tmp[size++] = v;
     }
 
     String[] intersect = ArraysMDE.subarray(tmp, 0, size);
-    intersect = (String  []) Intern.intern(intersect);
+    intersect = (String[]) Intern.intern(intersect);
 
     int mod = (((mod1 == ValueTuple.UNMODIFIED)
                 && (mod2 == ValueTuple.UNMODIFIED))

@@ -18,7 +18,7 @@ public final class SequenceStringSubscript
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff SequenceStringSubscript  invariants should be considered.
+   * Boolean.  True iff SequenceStringSubscript invariants should be considered.
    **/
   public static boolean dkconfig_enabled = true;
 
@@ -54,12 +54,12 @@ public final class SequenceStringSubscript
     int val2 = base2.getIndexValue(full_vt) + index_shift;
     if ((val2 < 0) || (val2 >= val1_array.length))
       return ValueAndModified.MISSING_NONSENSICAL;
-    String  val = val1_array[val2];
+    String val = val1_array[val2];
     int mod = (((mod1 == ValueTuple.UNMODIFIED)
                 && (mod2 == ValueTuple.UNMODIFIED))
                ? ValueTuple.UNMODIFIED
                : ValueTuple.MODIFIED);
-    return new ValueAndModified( val  , mod);
+    return new ValueAndModified( val , mod);
   }
 
   protected VarInfo makeVarInfo() {

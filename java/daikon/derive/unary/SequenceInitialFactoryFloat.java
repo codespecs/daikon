@@ -6,7 +6,7 @@ import daikon.*;
 import utilMDE.*;
 import org.apache.log4j.Category;
 
-public final class SequenceInitialFactoryFloat  extends UnaryDerivationFactory {
+public final class SequenceInitialFactoryFloat extends UnaryDerivationFactory {
 
   public static final Category debug =
     Category.getInstance("daikon.derive.binary.SequenceInitialFactory");

@@ -13,7 +13,7 @@ import java.util.*;
 // sequence, such as getting the element at that index or a subsequence up
 // to that index.
 
-public final class SequenceStringUnionFactory  extends BinaryDerivationFactory {
+public final class SequenceStringUnionFactory extends BinaryDerivationFactory {
 
   public BinaryDerivation[] instantiate(VarInfo seq1, VarInfo seq2) {
     if (! SequenceStringUnion.dkconfig_enabled) {

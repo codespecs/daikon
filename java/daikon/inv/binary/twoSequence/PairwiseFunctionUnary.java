@@ -26,16 +26,16 @@ public class PairwiseFunctionUnary
    **/
   public static boolean dkconfig_enabled = true;
 
-  public FunctionUnaryCore  core;
+  public FunctionUnaryCore core;
 
   protected PairwiseFunctionUnary (PptSlice ppt, String[] methodname, int function, boolean inverse) {
     super(ppt);
     core = new FunctionUnaryCore(this, methodname, function, inverse);
   }
 
-  public static PairwiseFunctionUnary  instantiate(PptSlice ppt, String[] methodname, int methodnumber, boolean inverse) {
+  public static PairwiseFunctionUnary instantiate(PptSlice ppt, String[] methodname, int methodnumber, boolean inverse) {
     if (!dkconfig_enabled) return null;
-     PairwiseFunctionUnary  result =
+     PairwiseFunctionUnary result =
       new PairwiseFunctionUnary(ppt, methodname, methodnumber, inverse);
     // Don't instantiate if the variables can't have order
     if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
@@ -50,7 +50,7 @@ public class PairwiseFunctionUnary
   }
 
   protected Object clone() {
-    PairwiseFunctionUnary  result = (PairwiseFunctionUnary) super.clone();
+    PairwiseFunctionUnary result = (PairwiseFunctionUnary) super.clone();
     result.core = (FunctionUnaryCore) core.clone();
     result.core.wrapper = result;
     return result;
@@ -62,7 +62,7 @@ public class PairwiseFunctionUnary
   }
 
   public String repr() {
-    return "PairwiseFunctionUnary"  + varNames() + ": " + core.repr();
+    return "PairwiseFunctionUnary" + varNames() + ": " + core.repr();
   }
 
   public String format_using(OutputFormat format) {
@@ -96,8 +96,8 @@ public class PairwiseFunctionUnary
     // int len = Math.min(x_arr.length, y_arr.length);
 
     for (int i=0; i<len; i++) {
-      long  x  = x_arr[i];
-      long  y = y_arr[i];
+      long x  = x_arr[i];
+      long y = y_arr[i];
 
       core.add_modified(x, y, count);
       if (falsified)

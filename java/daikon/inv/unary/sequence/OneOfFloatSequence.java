@@ -65,13 +65,13 @@ public final class OneOfFloatSequence
 
   }
 
-  public static OneOfFloatSequence  instantiate(PptSlice ppt) {
+  public static OneOfFloatSequence instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new OneOfFloatSequence(ppt);
   }
 
   protected Object clone() {
-    OneOfFloatSequence  result = (OneOfFloatSequence) super.clone();
+    OneOfFloatSequence result = (OneOfFloatSequence) super.clone();
     result.elts = (double[] []) elts.clone();
 
     for (int i=0; i < num_elts; i++) {
@@ -100,14 +100,14 @@ public final class OneOfFloatSequence
     Arrays.sort(elts, 0, num_elts , comparator);
   }
 
-  public double[]  min_elt() {
+  public double[] min_elt() {
     if (num_elts == 0)
       throw new Error("Represents no elements");
     sort_rep();
     return elts[0];
   }
 
-  public double[]  max_elt() {
+  public double[] max_elt() {
     if (num_elts == 0)
       throw new Error("Represents no elements");
     sort_rep();
@@ -120,7 +120,7 @@ public final class OneOfFloatSequence
       return false;
     sort_rep();
     for (int i=0; i < num_elts; i++)
-      if (! ( elts[i]  ==  other_elts[i] ) ) // elements are interned
+      if (! ( elts[i] == other_elts[i] ) ) // elements are interned
         return false;
     return true;
   }
@@ -141,21 +141,21 @@ public final class OneOfFloatSequence
   }
 
   public String repr() {
-    return "OneOfSequenceFloat"  + varNames() + ": "
+    return "OneOfSequenceFloat" + varNames() + ": "
       + "falsified=" + falsified
       + ", num_elts=" + num_elts
       + ", elts=" + subarray_rep();
   }
 
   private boolean all_nulls(int value_no) {
-    double[]  seq = elts[value_no];
+    double[] seq = elts[value_no];
     for (int i=0; i<seq.length; i++) {
       if (seq[i] != 0) return false;
     }
     return true;
   }
   private boolean no_nulls(int value_no) {
-    double[]  seq = elts[value_no];
+    double[] seq = elts[value_no];
     for (int i=0; i<seq.length; i++) {
       if (seq[i] == 0) return false;
     }
@@ -195,7 +195,7 @@ public final class OneOfFloatSequence
     public String format_java() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + var().name.java_name()  + " == " +  ArraysMDE.toString( elts[i] )  );
+    sb.append (" || (" + var().name.java_name() + " == " + ArraysMDE.toString( elts[i]));
     sb.append (")");
     }
     // trim off the && at the beginning for the first case
@@ -302,7 +302,7 @@ public final class OneOfFloatSequence
     return result;
   }
 
-  public void add_modified(double[]  v, int count) {
+  public void add_modified(double[] v, int count) {
 
     Assert.assertTrue(Intern.isInterned(v));
 
@@ -352,7 +352,7 @@ public final class OneOfFloatSequence
 
   public boolean isSameFormula(Invariant o)
   {
-    OneOfFloatSequence  other = (OneOfFloatSequence) o;
+    OneOfFloatSequence other = (OneOfFloatSequence) o;
     if (num_elts != other.num_elts)
       return false;
     if (num_elts == 0 && other.num_elts == 0)
@@ -362,7 +362,7 @@ public final class OneOfFloatSequence
     other.sort_rep();
 
     for (int i=0; i < num_elts; i++) {
-      if (! ( elts[i]  ==  other.elts[i] ))
+      if (! ( elts[i] == other.elts[i] ))
         return false;
     }
 
@@ -372,11 +372,11 @@ public final class OneOfFloatSequence
   public boolean isExclusiveFormula(Invariant o)
   {
     if (o instanceof OneOfFloatSequence) {
-      OneOfFloatSequence  other = (OneOfFloatSequence) o;
+      OneOfFloatSequence other = (OneOfFloatSequence) o;
 
       for (int i=0; i < num_elts; i++) {
         for (int j=0; j < other.num_elts; j++) {
-          if (( elts[i]  ==  other.elts[j] ) ) // elements are interned
+          if (( elts[i] == other.elts[j] ) ) // elements are interned
             return false;
         }
       }
@@ -398,7 +398,7 @@ public final class OneOfFloatSequence
   }
 
   // Look up a previously instantiated invariant.
-  public static OneOfFloatSequence  find(PptSlice ppt) {
+  public static OneOfFloatSequence find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();

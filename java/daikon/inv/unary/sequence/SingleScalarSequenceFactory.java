@@ -8,7 +8,7 @@ import utilMDE.*;
 
 import java.util.*;
 
-public final class SingleScalarSequenceFactory  {
+public final class SingleScalarSequenceFactory {
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
@@ -24,7 +24,7 @@ public final class SingleScalarSequenceFactory  {
       result.add(EltOneOf.instantiate(ppt));
     }
     { // previously (pass == 2)
-      // EltOneOf  eoo = EltOneOf.find(ppt);
+      // EltOneOf eoo = EltOneOf.find(ppt);
       // if (!((eoo != null) && (eoo.num_elts() == 1)))
       {
         result.add(EltNonZero.instantiate(ppt));

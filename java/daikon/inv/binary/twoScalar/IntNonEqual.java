@@ -26,7 +26,7 @@ public final class IntNonEqual
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff IntNonEqual  invariants should be considered.
+   * Boolean.  True iff IntNonEqual invariants should be considered.
    **/
   public static boolean dkconfig_enabled = true;
 
@@ -34,14 +34,14 @@ public final class IntNonEqual
     = Category.getInstance("daikon.inv.binary.twoScalar.IntNonEqual");
 
   /**
-   * Boolean.  True iff IntNonEqual  invariants should be considered.
+   * Boolean.  True iff IntNonEqual invariants should be considered.
    **/
   public static boolean dkconfig_integral_only = true;
 
-  private ValueTracker  values_cache = new ValueTracker(8);
+  private ValueTracker values_cache = new ValueTracker(8);
 
   protected Object clone() {
-    IntNonEqual  result = (IntNonEqual) super.clone();
+    IntNonEqual result = (IntNonEqual) super.clone();
     result.values_cache = (ValueTracker) values_cache.clone();
     return result;
   }
@@ -50,7 +50,7 @@ public final class IntNonEqual
     super(ppt);
   }
 
-  public static IntNonEqual  instantiate(PptSlice ppt) {
+  public static IntNonEqual instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
@@ -59,7 +59,7 @@ public final class IntNonEqual
     VarInfo seqvar2 = var2.isDerivedSequenceMember();
 
     if (dkconfig_integral_only == true) {
-      if (! (var1.file_rep_type. isIntegral()  && var2.file_rep_type. isIntegral())) {
+      if (! (var1.file_rep_type. isIntegral() && var2.file_rep_type. isIntegral())) {
         return null;
       }
     }
@@ -96,9 +96,9 @@ public final class IntNonEqual
     return this;
   }
 
-  // Look up a previously instantiated IntNonEqual  relationship.
+  // Look up a previously instantiated IntNonEqual relationship.
   // Should this implementation be made more efficient?
-  public static IntNonEqual  find(PptSlice ppt) {
+  public static IntNonEqual find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
@@ -109,7 +109,7 @@ public final class IntNonEqual
   }
 
   public String repr() {
-    return "IntNonEqual"  + varNames();
+    return "IntNonEqual" + varNames();
   }
 
   public String format_using(OutputFormat format) {
@@ -139,12 +139,12 @@ public final class IntNonEqual
     return format_unimplemented(format);
   }
 
-  public void add_modified(long  v1, long  v2, int count) {
+  public void add_modified(long v1, long v2, int count) {
     // if (ppt.debugged) {
-    //   System.out.println("IntNonEqual"  + ppt.varNames() + ".add_modified("
+    //   System.out.println("IntNonEqual" + ppt.varNames() + ".add_modified("
     //                      + v1 + "," + v2 + ", count=" + count + ")");
     // }
-    if (!(v1 !=  v2)) {
+    if (!(v1 != v2)) {
       destroyAndFlow();
       return;
     }
@@ -195,9 +195,9 @@ public final class IntNonEqual
   //   super.destroy();
   // }
 
-  public void add(long  v1, long  v2, int mod_index, int count) {
+  public void add(long v1, long v2, int mod_index, int count) {
     if (ppt.debugged) {
-      System.out.println("IntNonEqual"  + ppt.varNames() + ".add("
+      System.out.println("IntNonEqual" + ppt.varNames() + ".add("
                          + v1 + "," + v2
                          + ", mod_index=" + mod_index + ")"
                          + ", count=" + count + ")");
@@ -347,7 +347,7 @@ public final class IntNonEqual
 
 //     {
 //       // (Is this test ever true?  Aren't SeqINTEQUAL and
-//       // IntNonEqual  instantiated at the same time?  Apparently not:  see
+//       // IntNonEqual instantiated at the same time?  Apparently not:  see
 //       // the printStackTrace below.
 //
 //       // For each sequence variable, if this is an obvious member, and

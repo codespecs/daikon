@@ -30,7 +30,7 @@ public final class FunctionBinaryCore
   int values_seen = 0;
   int equal_values = 0;
 
-  private ValueTracker  values_cache = new ValueTracker(8);
+  private ValueTracker values_cache = new ValueTracker(8);
 
   public Invariant wrapper;
 
@@ -48,7 +48,7 @@ public final class FunctionBinaryCore
 
   public Object clone() {
     try {
-      FunctionBinaryCore  result = (FunctionBinaryCore) super.clone();
+      FunctionBinaryCore result = (FunctionBinaryCore) super.clone();
       result.values_cache = (ValueTracker) values_cache.clone();
       return result;
     } catch (CloneNotSupportedException e) {
@@ -76,16 +76,16 @@ public final class FunctionBinaryCore
     Assert.assertTrue(false, "Could not find new ordering");
   }
 
-  public void add_modified(long  x, long  y, long  z, int count) {
+  public void add_modified(long x, long y, long z, int count) {
 
     values_seen++;
     if (x == y && y == z) {
       equal_values++;
     }
 
-    long  result;
-    long  arg1;
-    long  arg2;
+    long result;
+    long arg1;
+    long arg2;
 
     if (var_order == order_xyz) {
       result = x; arg1 = y; arg2 = z;
@@ -104,7 +104,7 @@ public final class FunctionBinaryCore
     }
     try {
         if (!( result == (Functions.invokeBinary(methodNumber, arg1, arg2)))) {
-          // System.out.println("FunctionBinaryCore"  +  " failed: "
+          // System.out.println("FunctionBinaryCore" +  " failed: "
           //                    + result + " != " + function + "(" + arg1 + ", " + arg2 + ")"
           //                    + " ; " + var_order_string[var_order]);
           wrapper.destroyAndFlow();
@@ -162,7 +162,7 @@ public final class FunctionBinaryCore
                                              "z=f(y,x)" };
 
   public String repr() {
-    return "FunctionBinaryCore"  + wrapper.varNames() + ": "
+    return "FunctionBinaryCore" + wrapper.varNames() + ": "
       + "methodname=(" + methodname[0] + "," + methodname[1] + "," + methodname[2] + ")"
       + ";var_order=" + var_order;
   }
@@ -189,7 +189,7 @@ public final class FunctionBinaryCore
     return wrapper.format_unimplemented(format);
   }
 
-  public boolean isSameFormula(FunctionBinaryCore  other) {
+  public boolean isSameFormula(FunctionBinaryCore other) {
     for (int i=0; i<3; i++) {
       if (! methodname[i].equals(other.methodname[i])) {
         return false;

@@ -39,8 +39,8 @@ public final class EltNonZeroFloat
    **/
   public static boolean dkconfig_enabled = true;
 
-  double  min = Double.MAX_VALUE;
-  double  max = Double.MIN_VALUE;
+  double min = Double.MAX_VALUE;
+  double max = Double.MIN_VALUE;
 
   // If nonzero, use this as the range instead of the actual range.
   // This lets one use a specified probability of nonzero (say, 1/10
@@ -52,9 +52,9 @@ public final class EltNonZeroFloat
     super(ppt);
   }
 
-  public static EltNonZeroFloat  instantiate(PptSlice ppt) {
+  public static EltNonZeroFloat instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    EltNonZeroFloat  result = new EltNonZeroFloat(ppt);
+    EltNonZeroFloat result = new EltNonZeroFloat(ppt);
     if (! ppt.var_infos[0].type. baseIsFloat()) {
       result.pointer_type = true;
       result.override_range = 3;
@@ -72,7 +72,7 @@ public final class EltNonZeroFloat
   }
 
   public String repr() {
-    return "EltNonZeroFloat"  + varNames() + ": "
+    return "EltNonZeroFloat" + varNames() + ": "
       + !falsified + ",min=" + min + ",max=" + max;
   }
 
@@ -171,7 +171,7 @@ public final class EltNonZeroFloat
 
   public void add_modified(double [] a, int count) {
     for (int ai=0; ai<a.length; ai++) {
-      double  v = a[ai];
+      double v = a[ai];
 
       // The min and max tests will simultaneoulsy succeed exactly once (for
       // the first value).
@@ -196,7 +196,7 @@ public final class EltNonZeroFloat
     if ((override_range == 0) && ((min > 0) || (max < 0)))
       return Invariant.PROBABILITY_UNJUSTIFIED;
     else {
-      double  range;
+      double range;
       if (override_range != 0) {
         range = override_range;
       } else {
@@ -236,8 +236,8 @@ public final class EltNonZeroFloat
   public boolean isExclusiveFormula(Invariant other)
   {
     if (other instanceof EltOneOfFloat) {
-      EltOneOfFloat  eoo = (EltOneOfFloat) other;
-      if ((eoo.num_elts() == 1) && (((Double)eoo.elt()). doubleValue()  == 0)) {
+      EltOneOfFloat eoo = (EltOneOfFloat) other;
+      if ((eoo.num_elts() == 1) && (((Double)eoo.elt()). doubleValue() == 0)) {
         return true;
       }
     }
@@ -286,7 +286,7 @@ public final class EltNonZeroFloat
   }
 
   // Look up a previously instantiated invariant.
-  public static EltNonZeroFloat  find(PptSlice ppt) {
+  public static EltNonZeroFloat find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();

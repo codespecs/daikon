@@ -21,20 +21,20 @@ public class FunctionUnaryFloat
    **/
   public static boolean dkconfig_enabled = true;
 
-  public FunctionUnaryCoreFloat  core;
+  public FunctionUnaryCoreFloat core;
 
   protected FunctionUnaryFloat (PptSlice ppt, String[] methodname, int methodNumber, boolean inverse) {
     super(ppt);
     core = new FunctionUnaryCoreFloat(this, methodname, methodNumber, inverse);
   }
 
-  public static FunctionUnaryFloat  instantiate(PptSlice ppt, String[] methodname, int methodNumber, boolean inverse) {
+  public static FunctionUnaryFloat instantiate(PptSlice ppt, String[] methodname, int methodNumber, boolean inverse) {
     if (!dkconfig_enabled) return null;
     return new FunctionUnaryFloat(ppt, methodname, methodNumber, inverse);
   }
 
   protected Object clone() {
-    FunctionUnaryFloat  result = (FunctionUnaryFloat) super.clone();
+    FunctionUnaryFloat result = (FunctionUnaryFloat) super.clone();
     result.core = (FunctionUnaryCoreFloat) core.clone();
     result.core.wrapper = result;
     return result;
@@ -46,14 +46,14 @@ public class FunctionUnaryFloat
   }
 
   public String repr() {
-    return "FunctionUnaryFloat"  + varNames() + ": " + core.repr();
+    return "FunctionUnaryFloat" + varNames() + ": " + core.repr();
   }
 
   public String format_using(OutputFormat format) {
     return core.format_using(format, var1().name, var2().name);
   }
 
-  public void add_modified(double  x, double  y, int count) {
+  public void add_modified(double x, double y, int count) {
     core.add_modified(x, y, count);
   }
 

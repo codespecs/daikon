@@ -25,11 +25,11 @@ public final class SeqIndexComparisonFloat
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff SeqIndexComparisonFloat  invariants should be considered.
+   * Boolean.  True iff SeqIndexComparisonFloat invariants should be considered.
    **/
   public static boolean dkconfig_enabled = true;
 
-  public FloatComparisonCore  core;
+  public FloatComparisonCore core;
 
   static boolean debugSeqIndexComparison = false;
 
@@ -42,7 +42,7 @@ public final class SeqIndexComparisonFloat
     }
   }
 
-  public static SeqIndexComparisonFloat  instantiate(PptSlice ppt) {
+  public static SeqIndexComparisonFloat instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
 
     VarInfo seqvar = ppt.var_infos[0];
@@ -85,7 +85,7 @@ public final class SeqIndexComparisonFloat
   }
 
   protected Object clone() {
-    SeqIndexComparisonFloat  result = (SeqIndexComparisonFloat) super.clone();
+    SeqIndexComparisonFloat result = (SeqIndexComparisonFloat) super.clone();
     result.core = (FloatComparisonCore) core.clone();
     result.core.wrapper = result;
     return result;
@@ -96,7 +96,7 @@ public final class SeqIndexComparisonFloat
   // }
 
   public String repr() {
-    return "SeqIndexComparisonFloat"  + varNames() + ": "
+    return "SeqIndexComparisonFloat" + varNames() + ": "
       + core.repr()
       + ",falsified=" + falsified;
   }
@@ -169,7 +169,7 @@ public final class SeqIndexComparisonFloat
     return form[0] + "(" + comparator + " " + form[1] + " |i|)" + form[2];
   }
 
-  public void add_modified(double  [] a, int count) {
+  public void add_modified(double [] a, int count) {
     for (int i=0; i<a.length; i++) {
       core.add_modified(a[i], i, count);
       if (falsified)
@@ -196,7 +196,7 @@ public final class SeqIndexComparisonFloat
   }
 
   // Look up a previously instantiated invariant.
-  public static SeqIndexComparisonFloat  find(PptSlice ppt) {
+  public static SeqIndexComparisonFloat find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();

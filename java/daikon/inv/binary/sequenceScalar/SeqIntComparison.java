@@ -29,7 +29,7 @@ public final class SeqIntComparison
    **/
   public static boolean dkconfig_enabled = true;
 
-  public IntComparisonCore  core;
+  public IntComparisonCore core;
 
   static boolean debugSeqIntComparison = false;
 
@@ -41,11 +41,11 @@ public final class SeqIntComparison
   }
 
   // This constructor enables testing with InvariantFormatTester.
-  public static SeqIntComparison  instantiate(PptSlice ppt) {
+  public static SeqIntComparison instantiate(PptSlice ppt) {
     return instantiate(ppt,true);
   }
 
-  public static SeqIntComparison  instantiate(PptSlice ppt, boolean seq_first) {
+  public static SeqIntComparison instantiate(PptSlice ppt, boolean seq_first) {
     if (!dkconfig_enabled) return null;
 
     VarInfo seqvar = ppt.var_infos[seq_first ? 0 : 1];
@@ -98,7 +98,7 @@ public final class SeqIntComparison
   }
 
   protected Object clone() {
-    SeqIntComparison  result = (SeqIntComparison) super.clone();
+    SeqIntComparison result = (SeqIntComparison) super.clone();
     result.core = (IntComparisonCore) core.clone();
     result.core.wrapper = result;
     return result;
@@ -109,7 +109,7 @@ public final class SeqIntComparison
   // }
 
   public String repr() {
-    return "SeqIntComparison"  + varNames() + ": "
+    return "SeqIntComparison" + varNames() + ": "
       + core.repr()
       + ",falsified=" + falsified;
   }
@@ -165,7 +165,7 @@ public final class SeqIntComparison
     return form[0] + form[1] + " " + comparator + " " + form[2] + form[3];
   }
 
-  public void add_modified(long [] a, long  x, int count) {
+  public void add_modified(long [] a, long x, int count) {
     for (int i=0; i<a.length; i++) {
       core.add_modified(a[i], x, count);
       if (falsified)
@@ -192,7 +192,7 @@ public final class SeqIntComparison
   }
 
   // Look up a previously instantiated invariant.
-  public static SeqIntComparison  find(PptSlice ppt) {
+  public static SeqIntComparison find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
@@ -226,7 +226,7 @@ public final class SeqIntComparison
         continue;
       }
       if (inv instanceof SeqIntComparison) {
-        SeqIntComparison  other = (SeqIntComparison) inv;
+        SeqIntComparison other = (SeqIntComparison) inv;
         if (isSameFormula(other)
             && (sclvar() == other.sclvar())
             && SubSequence.isObviousDerived(seqvar(), other.seqvar())) {
@@ -261,7 +261,7 @@ public final class SeqIntComparison
     {
       PptSlice1 seqslice = pptt.findSlice(seqvar);
       if (seqslice != null) {
-        EltOneOf  eoo = EltOneOf.find(seqslice);
+        EltOneOf eoo = EltOneOf.find(seqslice);
         if ((eoo != null) && eoo.enoughSamples() && (eoo.num_elts() == 1)) {
           return true;
         }
@@ -275,7 +275,7 @@ public final class SeqIntComparison
       if (SubSequence.isObviousDerived(seqvar, vi)) {
         PptSlice2 other_slice = pptt.findSlice_unordered(vi, sclvar());
         if (other_slice != null) {
-          SeqIntComparison  other_sic = SeqIntComparison.find(other_slice);
+          SeqIntComparison other_sic = SeqIntComparison.find(other_slice);
           if ((other_sic != null) && other_sic.enoughSamples()) {
             return true;
           }

@@ -8,7 +8,7 @@ import utilMDE.*;
 
 import java.util.*;
 
-public final class SingleFloatSequenceFactory  {
+public final class SingleFloatSequenceFactory {
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
@@ -24,7 +24,7 @@ public final class SingleFloatSequenceFactory  {
       result.add(EltOneOfFloat.instantiate(ppt));
     }
     { // previously (pass == 2)
-      // EltOneOfFloat  eoo = EltOneOfFloat.find(ppt);
+      // EltOneOfFloat eoo = EltOneOfFloat.find(ppt);
       // if (!((eoo != null) && (eoo.num_elts() == 1)))
       {
         result.add(EltNonZeroFloat.instantiate(ppt));

@@ -15,7 +15,7 @@ import java.util.*;
 // sequence, such as getting the element at that index or a subsequence up
 // to that index.
 
-public final class SequenceScalarIntersectionFactory  extends BinaryDerivationFactory {
+public final class SequenceScalarIntersectionFactory extends BinaryDerivationFactory {
 
   /** Debug tracer **/
   private static final Category debug =

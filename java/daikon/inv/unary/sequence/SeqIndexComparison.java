@@ -25,11 +25,11 @@ public final class SeqIndexComparison
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff SeqIndexComparison  invariants should be considered.
+   * Boolean.  True iff SeqIndexComparison invariants should be considered.
    **/
   public static boolean dkconfig_enabled = true;
 
-  public IntComparisonCore  core;
+  public IntComparisonCore core;
 
   static boolean debugSeqIndexComparison = false;
 
@@ -42,7 +42,7 @@ public final class SeqIndexComparison
     }
   }
 
-  public static SeqIndexComparison  instantiate(PptSlice ppt) {
+  public static SeqIndexComparison instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
 
     VarInfo seqvar = ppt.var_infos[0];
@@ -85,7 +85,7 @@ public final class SeqIndexComparison
   }
 
   protected Object clone() {
-    SeqIndexComparison  result = (SeqIndexComparison) super.clone();
+    SeqIndexComparison result = (SeqIndexComparison) super.clone();
     result.core = (IntComparisonCore) core.clone();
     result.core.wrapper = result;
     return result;
@@ -96,7 +96,7 @@ public final class SeqIndexComparison
   // }
 
   public String repr() {
-    return "SeqIndexComparison"  + varNames() + ": "
+    return "SeqIndexComparison" + varNames() + ": "
       + core.repr()
       + ",falsified=" + falsified;
   }
@@ -169,7 +169,7 @@ public final class SeqIndexComparison
     return form[0] + "(" + comparator + " " + form[1] + " |i|)" + form[2];
   }
 
-  public void add_modified(long  [] a, int count) {
+  public void add_modified(long [] a, int count) {
     for (int i=0; i<a.length; i++) {
       core.add_modified(a[i], i, count);
       if (falsified)
@@ -196,7 +196,7 @@ public final class SeqIndexComparison
   }
 
   // Look up a previously instantiated invariant.
-  public static SeqIndexComparison  find(PptSlice ppt) {
+  public static SeqIndexComparison find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();

@@ -39,9 +39,9 @@ public class NoDuplicatesFloat
     super(ppt);
   }
 
-  public static NoDuplicatesFloat  instantiate(PptSlice ppt) {
+  public static NoDuplicatesFloat instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    NoDuplicatesFloat  result = new NoDuplicatesFloat(ppt);
+    NoDuplicatesFloat result = new NoDuplicatesFloat(ppt);
     // Don't instantiate if the variable can't have dupliates
     if (!result.var().aux.getFlag(VarInfoAux.HAS_DUPLICATES)) {
       if (debug.isDebugEnabled()) {
@@ -54,7 +54,7 @@ public class NoDuplicatesFloat
   }
 
   public String repr() {
-    return "NoDuplicatesFloat"  + varNames() + ": "
+    return "NoDuplicatesFloat" + varNames() + ": "
       + "elts=\"" + elts;
   }
 
@@ -97,7 +97,7 @@ public class NoDuplicatesFloat
         (VarInfoName.FunctionOfN) ((VarInfoName.Elements) var().name).term;
       String predicateValue = myName.getArg(2).ioa_name();
 
-      SequencesPredicate  derivation = (SequencesPredicate) var().derived;
+      SequencesPredicate derivation = (SequencesPredicate) var().derived;
       VarInfo varField = derivation.var1();
       VarInfoName.Field varFieldName = (VarInfoName.Field) varField.name;
       String fieldName = varFieldName.field;
@@ -129,7 +129,7 @@ public class NoDuplicatesFloat
         ") => " + quant.getVarName(0).ioa_name() + " = " + quant.getVarName(1).ioa_name() + quant.getClosingExp();
 
     } else if (var().isDerived() && var().derived instanceof SequencesJoinFloat) {
-      SequencesJoinFloat  derivation = (SequencesJoinFloat) var().derived;
+      SequencesJoinFloat derivation = (SequencesJoinFloat) var().derived;
       VarInfo varField1 = derivation.var1();
       VarInfoName.Field varFieldName1 = (VarInfoName.Field) varField1.name;
       String fieldName1 = varFieldName1.field;
@@ -220,7 +220,7 @@ public class NoDuplicatesFloat
           // System.out.println("NoDuplicates.isObviousImplied: no slice for " + v1.name + ", " + v2.name);
         } else  {
           // slice_2seq != null
-          SubSequenceFloat  ss = SubSequenceFloat.find(slice_2seq);
+          SubSequenceFloat ss = SubSequenceFloat.find(slice_2seq);
           if (ss == null) {
             // System.out.println("NoDuplicates.isObviousImplied: no SubSequence for " + v1.name + ", " + v2.name);
           } else {

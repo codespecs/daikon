@@ -40,7 +40,7 @@ public class SubSetFloat
     super(ppt);
   }
 
-  public static SubSetFloat  instantiate(PptSlice ppt) {
+  public static SubSetFloat instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
@@ -74,7 +74,7 @@ public class SubSetFloat
   }
 
   public String repr() {
-    return "SubSetFloat"  + varNames() + ": "
+    return "SubSetFloat" + varNames() + ": "
       + "1in2=" + var1_in_var2
       + ",2in1=" + var2_in_var1
       + ",falsified=" + falsified;
@@ -199,7 +199,7 @@ public class SubSetFloat
   }
 
   // Look up a previously instantiated SubSet relationship.
-  public static SubSetFloat  find(PptSlice ppt) {
+  public static SubSetFloat find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();

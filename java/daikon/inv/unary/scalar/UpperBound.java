@@ -16,7 +16,7 @@ import org.apache.log4j.Category;
 import java.util.*;
 
 /**
- * UpperBound  represents the invariant 'x <  c', where c is a constant.
+ * UpperBound represents the invariant 'x < c', where c is a constant.
  * <p>
  * One reason not to combine LowerBound and UpperBound into a single range
  * invariant is that they have separate justifications:  one may be
@@ -33,7 +33,7 @@ public class UpperBound
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff UpperBound  invariants should be considered.
+   * Boolean.  True iff UpperBound invariants should be considered.
    **/
   public static boolean dkconfig_enabled = true;
   /**
@@ -41,7 +41,7 @@ public class UpperBound
    * range of the computed constant that is "intersting" --- the range
    * that should be reported.  For instance, setting minimal_interesting
    * to -1 and maximal_interesting to 2 would only permit output of
-   * UpperBound  invariants whose cutoff was one of (-1,0,1,2).
+   * UpperBound invariants whose cutoff was one of (-1,0,1,2).
    **/
   public static long dkconfig_minimal_interesting = -1;
   /**
@@ -49,31 +49,31 @@ public class UpperBound
    * range of the computed constant that is "intersting" --- the range
    * that should be reported.  For instance, setting minimal_interesting
    * to -1 and maximal_interesting to 2 would only permit output of
-   * UpperBound  invariants whose cutoff was one of (-1,0,1,2).
+   * UpperBound invariants whose cutoff was one of (-1,0,1,2).
    **/
   public static long dkconfig_maximal_interesting = 2;
 
-  public  UpperBoundCore    core;
+  public UpperBoundCore core;
 
   private UpperBound (PptSlice ppt) {
     super(ppt);
-    core = new  UpperBoundCore   (this);
+    core = new UpperBoundCore(this);
   }
 
   protected Object clone() {
-    UpperBound  result = (UpperBound) super.clone();
-    result.core = ( UpperBoundCore   ) core.clone();
+    UpperBound result = (UpperBound) super.clone();
+    result.core = ( UpperBoundCore ) core.clone();
     result.core.wrapper = result;
     return result;
   }
 
-  public static UpperBound  instantiate(PptSlice ppt) {
+  public static UpperBound instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new UpperBound(ppt);
   }
 
   public String repr() {
-    return "UpperBound"  + varNames() + ": "
+    return "UpperBound" + varNames() + ": "
       + core.repr();
   }
 
@@ -90,15 +90,15 @@ public class UpperBound
     }
 
     if (format == OutputFormat.SIMPLIFY) {
-      return "(<= " + name + " " + core.max1  + ")";
+      return "(<= " + name + " " + core.max1 + ")";
     }
 
     return format_unimplemented(format);
   }
 
   // XXX need to flow invariant if bound changed
-  public void add_modified(long  value, int count) {
-    // System.out.println("UpperBound"  + varNames() + ": "
+  public void add_modified(long value, int count) {
+    // System.out.println("UpperBound" + varNames() + ": "
     //                    + "add(" + value + ", " + modified + ", " + count + ")");
     core.changed = false;
 
@@ -128,20 +128,20 @@ public class UpperBound
 
   // XXX FIXME This looks like a hack that should be removed.  -MDE 6/13/2002
   public boolean isInteresting() {
-    return (-1 < core.max1  && core.max1  < 2);
+    return (-1 < core.max1 && core.max1 < 2);
   }
 
   public boolean isObviousImplied() {
     // if the value is not in some range (like -1,0,1,2) then say that it is obvious
-    if ((core.max1  < dkconfig_minimal_interesting) ||
-        (core.max1  > dkconfig_maximal_interesting)) {
+    if ((core.max1 < dkconfig_minimal_interesting) ||
+        (core.max1 > dkconfig_maximal_interesting)) {
       return true;
     }
-    OneOfScalar  oo = OneOfScalar.find(ppt);
+    OneOfScalar oo = OneOfScalar.find(ppt);
     if ((oo != null) && oo.enoughSamples()) {
-      // We could also use core.max1  == oo.max_elt(), since the LowerBound
-      // will never have a core.max1  that does not appear in the OneOf.
-      if (core.max1  >=  oo.max_elt()) {
+      // We could also use core.max1 == oo.max_elt(), since the LowerBound
+      // will never have a core.max1 that does not appear in the OneOf.
+      if (core.max1 >= oo.max_elt()) {
         return true;
       }
     }
@@ -168,10 +168,10 @@ public class UpperBound
       {
         PptSlice1 other_slice = pptt.findSlice(vi);
         if (other_slice != null) {
-           EltUpperBound    eb =  EltUpperBound   .find(other_slice);
+           EltUpperBound eb = EltUpperBound.find(other_slice);
           if ((eb != null)
               && eb.enoughSamples()
-              && eb. core.max1  == core.max1 ) {
+              && eb. core.max1 == core.max1 ) {
             return true;
           }
         }
@@ -183,7 +183,7 @@ public class UpperBound
 
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof LowerBound) {
-      if (core.max1  <  ((LowerBound) other). core.min1)
+      if (core.max1 < ((LowerBound) other). core.min1)
         return true;
     }
     if (other instanceof OneOfScalar) {
@@ -193,7 +193,7 @@ public class UpperBound
   }
 
   // Look up a previously instantiated invariant.
-  public static UpperBound  find(PptSlice ppt) {
+  public static UpperBound find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();

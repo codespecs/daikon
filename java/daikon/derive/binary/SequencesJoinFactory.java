@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * Factory for SequencesJoin derived variables.
  **/
-public final class SequencesJoinFactory   extends BinaryDerivationFactory {
+public final class SequencesJoinFactory extends BinaryDerivationFactory {
 
   /** Debug tracer **/
   public static final Category debug =
@@ -65,7 +65,7 @@ public final class SequencesJoinFactory   extends BinaryDerivationFactory {
     }
 
     return new BinaryDerivation[] {
-      new SequencesJoin  (var1, var2),
+      new SequencesJoin(var1, var2),
     };
   }
 

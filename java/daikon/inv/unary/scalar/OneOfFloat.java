@@ -60,13 +60,13 @@ public final class OneOfFloat
 
   }
 
-  public static OneOfFloat  instantiate(PptSlice ppt) {
+  public static OneOfFloat instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new OneOfFloat(ppt);
   }
 
   protected Object clone() {
-    OneOfFloat  result = (OneOfFloat) super.clone();
+    OneOfFloat result = (OneOfFloat) super.clone();
     result.elts = (double[]) elts.clone();
 
     result.num_elts = this.num_elts;
@@ -86,17 +86,17 @@ public final class OneOfFloat
   }
 
   private void sort_rep() {
-    Arrays.sort(elts, 0, num_elts );
+    Arrays.sort(elts, 0, num_elts);
   }
 
-  public double  min_elt() {
+  public double min_elt() {
     if (num_elts == 0)
       throw new Error("Represents no elements");
     sort_rep();
     return elts[0];
   }
 
-  public double  max_elt() {
+  public double max_elt() {
     if (num_elts == 0)
       throw new Error("Represents no elements");
     sort_rep();
@@ -109,7 +109,7 @@ public final class OneOfFloat
       return false;
     sort_rep();
     for (int i=0; i < num_elts; i++)
-      if (! (( elts[i]  ==  other_elts[i] ) || (Double.isNaN( elts[i] ) && Double.isNaN( other_elts[i]))) ) // elements are interned
+      if (! (( elts[i] == other_elts[i] ) || (Double.isNaN( elts[i] ) && Double.isNaN( other_elts[i]))) ) // elements are interned
         return false;
     return true;
   }
@@ -130,7 +130,7 @@ public final class OneOfFloat
   }
 
   public String repr() {
-    return "OneOfFloat"  + varNames() + ": "
+    return "OneOfFloat" + varNames() + ": "
       + "falsified=" + falsified
       + ", num_elts=" + num_elts
       + ", elts=" + subarray_rep();
@@ -169,7 +169,7 @@ public final class OneOfFloat
     public String format_java() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + var().name.java_name()  + ".equals(" +  String.valueOf( elts[i] )   + ")");
+    sb.append (" || (" + var().name.java_name() + ".equals(" + String.valueOf( elts[i] ) + ")");
     sb.append (")");
     }
     // trim off the && at the beginning for the first case
@@ -209,7 +209,7 @@ public final class OneOfFloat
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " \\/ "; }
-        result += "(" + varname + " = " + String.valueOf( elts[i] )  + ")";
+        result += "(" + varname + " = " + String.valueOf( elts[i] ) + ")";
       }
     }
 
@@ -261,7 +261,7 @@ public final class OneOfFloat
     {
       result = "";
       for (int i=0; i<num_elts; i++) {
-        result += " (EQ " + varname + " " + String.valueOf( elts[i] )  + ")";
+        result += " (EQ " + varname + " " + String.valueOf( elts[i] ) + ")";
       }
       if (num_elts > 1) {
         result = "(OR" + result + ")";
@@ -274,7 +274,7 @@ public final class OneOfFloat
     return result;
   }
 
-  public void add_modified(double  v, int count) {
+  public void add_modified(double v, int count) {
 
     for (int i=0; i<num_elts; i++)
       if (elts[i] == v) {
@@ -329,7 +329,7 @@ public final class OneOfFloat
       }
     }
 
-    // For every EltOneOfFloat  at this program point, see if this variable is
+    // For every EltOneOfFloat at this program point, see if this variable is
     // an obvious member of that sequence.
     PptTopLevel parent = ppt.parent;
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
@@ -341,7 +341,7 @@ public final class OneOfFloat
         // Don't use isEqualToObviousMember:  that is too subtle
         // and eliminates desirable invariants such as "return == null".
         if (Member.isObviousMember(v1, v2)) {
-          EltOneOfFloat  other = (EltOneOfFloat) inv;
+          EltOneOfFloat other = (EltOneOfFloat) inv;
           if (num_elts == other.num_elts()) {
             sort_rep();
             if (other.compare_rep(num_elts, elts)) {
@@ -358,7 +358,7 @@ public final class OneOfFloat
 
   public boolean isSameFormula(Invariant o)
   {
-    OneOfFloat  other = (OneOfFloat) o;
+    OneOfFloat other = (OneOfFloat) o;
     if (num_elts != other.num_elts)
       return false;
     if (num_elts == 0 && other.num_elts == 0)
@@ -368,7 +368,7 @@ public final class OneOfFloat
     other.sort_rep();
 
     for (int i=0; i < num_elts; i++) {
-      if (! (( elts[i]  ==  other.elts[i] ) || (Double.isNaN( elts[i] ) && Double.isNaN( other.elts[i] ))))
+      if (! (( elts[i] == other.elts[i] ) || (Double.isNaN( elts[i] ) && Double.isNaN( other.elts[i] ))))
         return false;
     }
 
@@ -378,11 +378,11 @@ public final class OneOfFloat
   public boolean isExclusiveFormula(Invariant o)
   {
     if (o instanceof OneOfFloat) {
-      OneOfFloat  other = (OneOfFloat) o;
+      OneOfFloat other = (OneOfFloat) o;
 
       for (int i=0; i < num_elts; i++) {
         for (int j=0; j < other.num_elts; j++) {
-          if ((( elts[i]  ==  other.elts[j] ) || (Double.isNaN( elts[i] ) && Double.isNaN( other.elts[j]))) ) // elements are interned
+          if ((( elts[i] == other.elts[j] ) || (Double.isNaN( elts[i] ) && Double.isNaN( other.elts[j]))) ) // elements are interned
             return false;
         }
       }
@@ -393,8 +393,8 @@ public final class OneOfFloat
     if ((o instanceof NonZeroFloat) && (num_elts == 1) && (elts[0] == 0)) {
       return true;
     }
-    double  elts_min = Double.MAX_VALUE;
-    double  elts_max = Double.MIN_VALUE;
+    double elts_min = Double.MAX_VALUE;
+    double elts_max = Double.MIN_VALUE;
     for (int i=0; i < num_elts; i++) {
       elts_min = Math.min(elts_min, elts[i]);
       elts_max = Math.max(elts_max, elts[i]);
@@ -419,7 +419,7 @@ public final class OneOfFloat
   }
 
   // Look up a previously instantiated invariant.
-  public static OneOfFloat  find(PptSlice ppt) {
+  public static OneOfFloat find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();

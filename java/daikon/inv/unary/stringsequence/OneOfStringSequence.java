@@ -65,13 +65,13 @@ public final class OneOfStringSequence
 
   }
 
-  public static OneOfStringSequence  instantiate(PptSlice ppt) {
+  public static OneOfStringSequence instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new OneOfStringSequence(ppt);
   }
 
   protected Object clone() {
-    OneOfStringSequence  result = (OneOfStringSequence) super.clone();
+    OneOfStringSequence result = (OneOfStringSequence) super.clone();
     result.elts = (String[] []) elts.clone();
 
     for (int i=0; i < num_elts; i++) {
@@ -100,14 +100,14 @@ public final class OneOfStringSequence
     Arrays.sort(elts, 0, num_elts , comparator);
   }
 
-  public String[]  min_elt() {
+  public String[] min_elt() {
     if (num_elts == 0)
       throw new Error("Represents no elements");
     sort_rep();
     return elts[0];
   }
 
-  public String[]  max_elt() {
+  public String[] max_elt() {
     if (num_elts == 0)
       throw new Error("Represents no elements");
     sort_rep();
@@ -120,7 +120,7 @@ public final class OneOfStringSequence
       return false;
     sort_rep();
     for (int i=0; i < num_elts; i++)
-      if (! ( elts[i]  ==  other_elts[i] ) ) // elements are interned
+      if (! ( elts[i] == other_elts[i] ) ) // elements are interned
         return false;
     return true;
   }
@@ -141,7 +141,7 @@ public final class OneOfStringSequence
   }
 
   public String repr() {
-    return "OneOfStringSequence"  + varNames() + ": "
+    return "OneOfStringSequence" + varNames() + ": "
       + "falsified=" + falsified
       + ", num_elts=" + num_elts
       + ", elts=" + subarray_rep();
@@ -180,7 +180,7 @@ public final class OneOfStringSequence
     public String format_java() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + var().name.java_name()  + " == " +  ArraysMDE.toString( elts[i] )  );
+    sb.append (" || (" + var().name.java_name() + " == " + ArraysMDE.toString( elts[i]));
     sb.append (")");
     }
     // trim off the && at the beginning for the first case
@@ -206,7 +206,7 @@ public final class OneOfStringSequence
 
     String result;
 
-    String[]  value = elts[0];
+    String[] value = elts[0];
     if (var().name.isApplySizeSafe())
       result = "size("+var().name.ioa_name() + ") = " + value.length;
     else {
@@ -297,7 +297,7 @@ public final class OneOfStringSequence
     return result;
   }
 
-  public void add_modified(String[]  v, int count) {
+  public void add_modified(String[] v, int count) {
 
     Assert.assertTrue(Intern.isInterned(v));
 
@@ -347,7 +347,7 @@ public final class OneOfStringSequence
 
   public boolean isSameFormula(Invariant o)
   {
-    OneOfStringSequence  other = (OneOfStringSequence) o;
+    OneOfStringSequence other = (OneOfStringSequence) o;
     if (num_elts != other.num_elts)
       return false;
     if (num_elts == 0 && other.num_elts == 0)
@@ -357,7 +357,7 @@ public final class OneOfStringSequence
     other.sort_rep();
 
     for (int i=0; i < num_elts; i++) {
-      if (! ( elts[i]  ==  other.elts[i] ))
+      if (! ( elts[i] == other.elts[i] ))
         return false;
     }
 
@@ -367,11 +367,11 @@ public final class OneOfStringSequence
   public boolean isExclusiveFormula(Invariant o)
   {
     if (o instanceof OneOfStringSequence) {
-      OneOfStringSequence  other = (OneOfStringSequence) o;
+      OneOfStringSequence other = (OneOfStringSequence) o;
 
       for (int i=0; i < num_elts; i++) {
         for (int j=0; j < other.num_elts; j++) {
-          if (( elts[i]  ==  other.elts[j] ) ) // elements are interned
+          if (( elts[i] == other.elts[j] ) ) // elements are interned
             return false;
         }
       }
@@ -393,7 +393,7 @@ public final class OneOfStringSequence
   }
 
   // Look up a previously instantiated invariant.
-  public static OneOfStringSequence  find(PptSlice ppt) {
+  public static OneOfStringSequence find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();

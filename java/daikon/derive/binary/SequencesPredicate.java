@@ -58,7 +58,7 @@ public final class SequencesPredicate
   /**
    * What value to predicate on.
    **/
-  private long  choose;
+  private long choose;
 
   /**
    * Whether we keep or discard values that match this.choose.
@@ -76,7 +76,7 @@ public final class SequencesPredicate
    * @param vi1
    * @param vi2 The two variables this is based on
    **/
-  public SequencesPredicate(VarInfo vi1, VarInfo vi2, long  argChoose, String argName) {
+  public SequencesPredicate(VarInfo vi1, VarInfo vi2, long argChoose, String argName) {
     this (vi1, vi2, argChoose, argName, true);
   }
 
@@ -85,7 +85,7 @@ public final class SequencesPredicate
    * @param vi1
    * @param vi2 The two variables this is based on
    **/
-  public SequencesPredicate(VarInfo vi1, VarInfo vi2, long  argChoose, String argName, boolean argKeep) {
+  public SequencesPredicate(VarInfo vi1, VarInfo vi2, long argChoose, String argName, boolean argKeep) {
     super(vi1, vi2);
     choose = argChoose;
     name = argName;
@@ -211,7 +211,7 @@ public final class SequencesPredicate
   public boolean isSameFormula(Derivation other) {
     // For Toh (tohn) to do.
     if (other instanceof SequencesPredicate) {
-      SequencesPredicate  o = (SequencesPredicate) other;
+      SequencesPredicate o = (SequencesPredicate) other;
       return o.var1().equals(var1())
         && o.var2().equals(var2())
         && choose == o.choose;

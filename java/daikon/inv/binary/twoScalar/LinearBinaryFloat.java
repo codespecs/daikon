@@ -26,14 +26,14 @@ public class LinearBinaryFloat
    **/
   public static boolean dkconfig_enabled = true;
 
-  public LinearBinaryCoreFloat  core;
+  public LinearBinaryCoreFloat core;
 
   protected LinearBinaryFloat (PptSlice ppt) {
     super(ppt);
     core = new LinearBinaryCoreFloat(this);
   }
 
-  public static LinearBinaryFloat  instantiate(PptSlice ppt) {
+  public static LinearBinaryFloat instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     if (ppt.debugged) {
       ppt.debug.debug("LinearBinaryFloat.instantiate(" + ppt.name + ")");
@@ -42,7 +42,7 @@ public class LinearBinaryFloat
   }
 
   protected Object clone() {
-    LinearBinaryFloat  result = (LinearBinaryFloat) super.clone();
+    LinearBinaryFloat result = (LinearBinaryFloat) super.clone();
     result.core = (LinearBinaryCoreFloat) core.clone();
     result.core.wrapper = result;
     return result;
@@ -54,7 +54,7 @@ public class LinearBinaryFloat
   }
 
   public String repr() {
-    return "LinearBinaryFloat"  + varNames() + ": "
+    return "LinearBinaryFloat" + varNames() + ": "
       + "falsified=" + falsified
       + "; " + core.repr();
   }
@@ -64,7 +64,7 @@ public class LinearBinaryFloat
   }
 
   // XXX core needs to change to do flow
-  public void add_modified(double  x, double  y, int count) {
+  public void add_modified(double x, double y, int count) {
     core.add_modified(x, y, count);
   }
 
@@ -125,7 +125,7 @@ public class LinearBinaryFloat
   }
 
   // Look up a previously instantiated invariant.
-  public static LinearBinaryFloat  find(PptSlice ppt) {
+  public static LinearBinaryFloat find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
@@ -142,7 +142,7 @@ public class LinearBinaryFloat
     for (Iterator itor = vi.ppt.views_iterator() ; itor.hasNext() ; ) {
       PptSlice view = (PptSlice) itor.next();
       if ((view.arity == 2) && view.usesVar(vi)) {
-        LinearBinaryFloat  lb = LinearBinaryFloat.find(view);
+        LinearBinaryFloat lb = LinearBinaryFloat.find(view);
         if (lb != null) {
           result.add(lb);
         }

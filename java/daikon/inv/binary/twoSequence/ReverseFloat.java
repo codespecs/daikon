@@ -32,9 +32,9 @@ public class ReverseFloat
     super(ppt);
   }
 
-  public static ReverseFloat  instantiate(PptSlice ppt) {
+  public static ReverseFloat instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    ReverseFloat  result = new ReverseFloat(ppt);
+    ReverseFloat result = new ReverseFloat(ppt);
     // Don't instantiate if the variables can't have order
     if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
         !result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {
@@ -53,7 +53,7 @@ public class ReverseFloat
   }
 
   public String repr() {
-    return "ReverseFloat"  + varNames() + ": "
+    return "ReverseFloat" + varNames() + ": "
       + "falsified=" + falsified;
   }
 

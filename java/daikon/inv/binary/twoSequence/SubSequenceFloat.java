@@ -41,7 +41,7 @@ public class SubSequenceFloat
     super(ppt);
   }
 
-  public static SubSequenceFloat  instantiate(PptSlice ppt) {
+  public static SubSequenceFloat instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
@@ -77,7 +77,7 @@ public class SubSequenceFloat
   }
 
   public String repr() {
-    return "SubSequenceFloat"  + varNames() + ": "
+    return "SubSequenceFloat" + varNames() + ": "
       + "1in2=" + var1_in_var2
       + ",2in1=" + var2_in_var1
       + ",falsified=" + falsified;
@@ -308,10 +308,10 @@ public class SubSequenceFloat
     // we also miss those of the form (z subset of union(x,y)) which
     // might be useful.  Subsequence, however, seems totally useless
     // on unions and intersections.
-    if (supervar.derived instanceof  SequenceFloatIntersection  ||
-        supervar.derived instanceof SequenceFloatUnion  ||
-        subvar.derived instanceof SequenceFloatIntersection  ||
-        subvar.derived instanceof SequenceFloatUnion  ) {
+    if (supervar.derived instanceof  SequenceFloatIntersection ||
+        supervar.derived instanceof SequenceFloatUnion ||
+        subvar.derived instanceof SequenceFloatIntersection ||
+        subvar.derived instanceof SequenceFloatUnion) {
       debug.debug ("Returning true because of union or intersection");
       return true;
     }
@@ -319,7 +319,7 @@ public class SubSequenceFloat
     if (subvar.derived instanceof SequencesPredicateFloat) {
       // It's not useful that predicate(x[], b[]) is a subsequence or subset
       // of x[]
-      SequencesPredicateFloat  derived = (SequencesPredicateFloat) subvar.derived;
+      SequencesPredicateFloat derived = (SequencesPredicateFloat) subvar.derived;
       if (derived.var1().equals(supervar)) {
         debug.debug ("Returning true because of predicate slicing");
         return true;
@@ -342,8 +342,8 @@ public class SubSequenceFloat
       // both sequences are derived from the same supersequence
       if ((subvar.derived instanceof SequenceFloatSubsequence)
           && (supervar.derived instanceof SequenceFloatSubsequence)) {
-        SequenceFloatSubsequence  sss1 = (SequenceFloatSubsequence) subvar.derived;
-        SequenceFloatSubsequence  sss2 = (SequenceFloatSubsequence) supervar.derived;
+        SequenceFloatSubsequence sss1 = (SequenceFloatSubsequence) subvar.derived;
+        SequenceFloatSubsequence sss2 = (SequenceFloatSubsequence) supervar.derived;
         VarInfo index1 = sss1.sclvar();
         int shift1 = sss1.index_shift;
         boolean start1 = sss1.from_start;
@@ -358,8 +358,8 @@ public class SubSequenceFloat
       } else if ((subvar.derived instanceof SequenceStringSubsequence)
                  && (supervar.derived instanceof SequenceStringSubsequence)) {
         // Copied from just above
-        SequenceStringSubsequence  sss1 = (SequenceStringSubsequence) subvar.derived;
-        SequenceStringSubsequence  sss2 = (SequenceStringSubsequence) supervar.derived;
+        SequenceStringSubsequence sss1 = (SequenceStringSubsequence) subvar.derived;
+        SequenceStringSubsequence sss2 = (SequenceStringSubsequence) supervar.derived;
         VarInfo index1 = sss1.sclvar();
         int shift1 = sss1.index_shift;
         boolean start1 = sss1.from_start;
@@ -390,7 +390,7 @@ public class SubSequenceFloat
   }
 
   // Look up a previously instantiated SubSequence relationship.
-  public static SubSequenceFloat  find(PptSlice ppt) {
+  public static SubSequenceFloat find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
@@ -436,7 +436,7 @@ public class SubSequenceFloat
             Object superinv = superinvs.next();
             System.out.println("Inv = " + superinv);
             if (superinv instanceof EltOneOfFloat) {
-              EltOneOfFloat  eltinv = (EltOneOfFloat) superinv;
+              EltOneOfFloat eltinv = (EltOneOfFloat) superinv;
               if (eltinv.num_elts() > 0) {
                 System.out.println(format() + " obvious because of " + eltinv.format());
                 return true;
@@ -475,7 +475,7 @@ public class SubSequenceFloat
             //   Assert.assertTrue(ppt.parent.findSlice_unordered(supervar_part, subvar) == null);
             // }
             if (ss_ppt != null) {
-              SubSequenceFloat  ss = SubSequenceFloat.find(ss_ppt);
+              SubSequenceFloat ss = SubSequenceFloat.find(ss_ppt);
               if ((ss != null) && ss.enoughSamples()) {
                 return true;
               }

@@ -12,7 +12,7 @@ import org.apache.log4j.Category;
 
 import java.util.*;
 
-public final class TwoScalarFactory  {
+public final class TwoScalarFactory {
 
   /** Debugging tracer. **/
   public static final Category debug
@@ -45,7 +45,7 @@ public final class TwoScalarFactory  {
     //   return null;
     // }
 
-    boolean integral = var1.file_rep_type. isIntegral()  && var2.file_rep_type. isIntegral() ;
+    boolean integral = var1.file_rep_type. isIntegral() && var2.file_rep_type. isIntegral() ;
 
     Vector result = new Vector();
 

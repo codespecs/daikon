@@ -26,14 +26,14 @@ public class LinearBinary
    **/
   public static boolean dkconfig_enabled = true;
 
-  public LinearBinaryCore  core;
+  public LinearBinaryCore core;
 
   protected LinearBinary (PptSlice ppt) {
     super(ppt);
     core = new LinearBinaryCore(this);
   }
 
-  public static LinearBinary  instantiate(PptSlice ppt) {
+  public static LinearBinary instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     if (ppt.debugged) {
       ppt.debug.debug("LinearBinary.instantiate(" + ppt.name + ")");
@@ -42,7 +42,7 @@ public class LinearBinary
   }
 
   protected Object clone() {
-    LinearBinary  result = (LinearBinary) super.clone();
+    LinearBinary result = (LinearBinary) super.clone();
     result.core = (LinearBinaryCore) core.clone();
     result.core.wrapper = result;
     return result;
@@ -54,7 +54,7 @@ public class LinearBinary
   }
 
   public String repr() {
-    return "LinearBinary"  + varNames() + ": "
+    return "LinearBinary" + varNames() + ": "
       + "falsified=" + falsified
       + "; " + core.repr();
   }
@@ -64,7 +64,7 @@ public class LinearBinary
   }
 
   // XXX core needs to change to do flow
-  public void add_modified(long  x, long  y, int count) {
+  public void add_modified(long x, long y, int count) {
     core.add_modified(x, y, count);
   }
 
@@ -125,7 +125,7 @@ public class LinearBinary
   }
 
   // Look up a previously instantiated invariant.
-  public static LinearBinary  find(PptSlice ppt) {
+  public static LinearBinary find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
@@ -142,7 +142,7 @@ public class LinearBinary
     for (Iterator itor = vi.ppt.views_iterator() ; itor.hasNext() ; ) {
       PptSlice view = (PptSlice) itor.next();
       if ((view.arity == 2) && view.usesVar(vi)) {
-        LinearBinary  lb = LinearBinary.find(view);
+        LinearBinary lb = LinearBinary.find(view);
         if (lb != null) {
           result.add(lb);
         }

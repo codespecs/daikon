@@ -16,7 +16,7 @@ import org.apache.log4j.Category;
 import java.util.*;
 
 /**
- * LowerBound  represents the invariant 'x >  c', where c is a constant.
+ * LowerBound represents the invariant 'x > c', where c is a constant.
  * <p>
  * One reason not to combine LowerBound and UpperBound into a single range
  * invariant is that they have separate justifications:  one may be
@@ -33,7 +33,7 @@ public class LowerBound
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff LowerBound  invariants should be considered.
+   * Boolean.  True iff LowerBound invariants should be considered.
    **/
   public static boolean dkconfig_enabled = true;
   /**
@@ -41,7 +41,7 @@ public class LowerBound
    * range of the computed constant that is "intersting" --- the range
    * that should be reported.  For instance, setting minimal_interesting
    * to -1 and maximal_interesting to 2 would only permit output of
-   * LowerBound  invariants whose cutoff was one of (-1,0,1,2).
+   * LowerBound invariants whose cutoff was one of (-1,0,1,2).
    **/
   public static long dkconfig_minimal_interesting = -1;
   /**
@@ -49,31 +49,31 @@ public class LowerBound
    * range of the computed constant that is "intersting" --- the range
    * that should be reported.  For instance, setting minimal_interesting
    * to -1 and maximal_interesting to 2 would only permit output of
-   * LowerBound  invariants whose cutoff was one of (-1,0,1,2).
+   * LowerBound invariants whose cutoff was one of (-1,0,1,2).
    **/
   public static long dkconfig_maximal_interesting = 2;
 
-  public  LowerBoundCore    core;
+  public LowerBoundCore core;
 
   private LowerBound (PptSlice ppt) {
     super(ppt);
-    core = new  LowerBoundCore   (this);
+    core = new LowerBoundCore(this);
   }
 
   protected Object clone() {
-    LowerBound  result = (LowerBound) super.clone();
-    result.core = ( LowerBoundCore   ) core.clone();
+    LowerBound result = (LowerBound) super.clone();
+    result.core = ( LowerBoundCore ) core.clone();
     result.core.wrapper = result;
     return result;
   }
 
-  public static LowerBound  instantiate(PptSlice ppt) {
+  public static LowerBound instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new LowerBound(ppt);
   }
 
   public String repr() {
-    return "LowerBound"  + varNames() + ": "
+    return "LowerBound" + varNames() + ": "
       + core.repr();
   }
 
@@ -90,15 +90,15 @@ public class LowerBound
     }
 
     if (format == OutputFormat.SIMPLIFY) {
-      return "(>= " + name + " " + core.min1  + ")";
+      return "(>= " + name + " " + core.min1 + ")";
     }
 
     return format_unimplemented(format);
   }
 
   // XXX need to flow invariant if bound changed
-  public void add_modified(long  value, int count) {
-    // System.out.println("LowerBound"  + varNames() + ": "
+  public void add_modified(long value, int count) {
+    // System.out.println("LowerBound" + varNames() + ": "
     //                    + "add(" + value + ", " + modified + ", " + count + ")");
     core.changed = false;
 
@@ -128,20 +128,20 @@ public class LowerBound
 
   // XXX FIXME This looks like a hack that should be removed.  -MDE 6/13/2002
   public boolean isInteresting() {
-    return (-1 < core.min1  && core.min1  < 2);
+    return (-1 < core.min1 && core.min1 < 2);
   }
 
   public boolean isObviousImplied() {
     // if the value is not in some range (like -1,0,1,2) then say that it is obvious
-    if ((core.min1  < dkconfig_minimal_interesting) ||
-        (core.min1  > dkconfig_maximal_interesting)) {
+    if ((core.min1 < dkconfig_minimal_interesting) ||
+        (core.min1 > dkconfig_maximal_interesting)) {
       return true;
     }
-    OneOfScalar  oo = OneOfScalar.find(ppt);
+    OneOfScalar oo = OneOfScalar.find(ppt);
     if ((oo != null) && oo.enoughSamples()) {
-      // We could also use core.min1  == oo.min_elt(), since the LowerBound
-      // will never have a core.min1  that does not appear in the OneOf.
-      if (core.min1  <=  oo.min_elt()) {
+      // We could also use core.min1 == oo.min_elt(), since the LowerBound
+      // will never have a core.min1 that does not appear in the OneOf.
+      if (core.min1 <= oo.min_elt()) {
         return true;
       }
     }
@@ -155,7 +155,7 @@ public class LowerBound
       int vshift = ((SequenceLength) v.derived).shift;
       if (vshift != 0) {
         return true;
-      } else if (core.min1  == 0) {
+      } else if (core.min1 == 0) {
         // vshift == 0
         return true;
       }
@@ -171,10 +171,10 @@ public class LowerBound
       {
         PptSlice1 other_slice = pptt.findSlice(vi);
         if (other_slice != null) {
-           EltLowerBound    eb =  EltLowerBound   .find(other_slice);
+           EltLowerBound eb = EltLowerBound.find(other_slice);
           if ((eb != null)
               && eb.enoughSamples()
-              && eb. core.min1  == core.min1 ) {
+              && eb. core.min1 == core.min1 ) {
             return true;
           }
         }
@@ -186,7 +186,7 @@ public class LowerBound
 
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof UpperBound) {
-      if (core.min1  >  ((UpperBound) other). core.max1)
+      if (core.min1 > ((UpperBound) other). core.max1)
         return true;
     }
     if (other instanceof OneOfScalar) {
@@ -196,7 +196,7 @@ public class LowerBound
   }
 
   // Look up a previously instantiated invariant.
-  public static LowerBound  find(PptSlice ppt) {
+  public static LowerBound find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();

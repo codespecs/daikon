@@ -21,20 +21,20 @@ public class FunctionUnary
    **/
   public static boolean dkconfig_enabled = true;
 
-  public FunctionUnaryCore  core;
+  public FunctionUnaryCore core;
 
   protected FunctionUnary (PptSlice ppt, String[] methodname, int methodNumber, boolean inverse) {
     super(ppt);
     core = new FunctionUnaryCore(this, methodname, methodNumber, inverse);
   }
 
-  public static FunctionUnary  instantiate(PptSlice ppt, String[] methodname, int methodNumber, boolean inverse) {
+  public static FunctionUnary instantiate(PptSlice ppt, String[] methodname, int methodNumber, boolean inverse) {
     if (!dkconfig_enabled) return null;
     return new FunctionUnary(ppt, methodname, methodNumber, inverse);
   }
 
   protected Object clone() {
-    FunctionUnary  result = (FunctionUnary) super.clone();
+    FunctionUnary result = (FunctionUnary) super.clone();
     result.core = (FunctionUnaryCore) core.clone();
     result.core.wrapper = result;
     return result;
@@ -46,14 +46,14 @@ public class FunctionUnary
   }
 
   public String repr() {
-    return "FunctionUnary"  + varNames() + ": " + core.repr();
+    return "FunctionUnary" + varNames() + ": " + core.repr();
   }
 
   public String format_using(OutputFormat format) {
     return core.format_using(format, var1().name, var2().name);
   }
 
-  public void add_modified(long  x, long  y, int count) {
+  public void add_modified(long x, long y, int count) {
     core.add_modified(x, y, count);
   }
 

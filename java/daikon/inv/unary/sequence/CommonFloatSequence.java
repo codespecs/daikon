@@ -34,7 +34,7 @@ public class CommonFloatSequence
     super(ppt);
   }
 
-  public static CommonFloatSequence  instantiate(PptSlice ppt) {
+  public static CommonFloatSequence instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new CommonFloatSequence(ppt);
   }
@@ -101,7 +101,7 @@ public class CommonFloatSequence
       intersect = ArraysMDE.subarray(tmp, 0, size);
     }
 
-    intersect = (double  []) Intern.intern(intersect);
+    intersect = (double[]) Intern.intern(intersect);
     elts++;
   }
 

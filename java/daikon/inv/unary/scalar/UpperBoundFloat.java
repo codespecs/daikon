@@ -16,7 +16,7 @@ import org.apache.log4j.Category;
 import java.util.*;
 
 /**
- * UpperBoundFloat  represents the invariant 'x <  c', where c is a constant.
+ * UpperBoundFloat represents the invariant 'x < c', where c is a constant.
  * <p>
  * One reason not to combine LowerBound and UpperBound into a single range
  * invariant is that they have separate justifications:  one may be
@@ -33,7 +33,7 @@ public class UpperBoundFloat
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff UpperBoundFloat  invariants should be considered.
+   * Boolean.  True iff UpperBoundFloat invariants should be considered.
    **/
   public static boolean dkconfig_enabled = true;
   /**
@@ -41,7 +41,7 @@ public class UpperBoundFloat
    * range of the computed constant that is "intersting" --- the range
    * that should be reported.  For instance, setting minimal_interesting
    * to -1 and maximal_interesting to 2 would only permit output of
-   * UpperBoundFloat  invariants whose cutoff was one of (-1,0,1,2).
+   * UpperBoundFloat invariants whose cutoff was one of (-1,0,1,2).
    **/
   public static long dkconfig_minimal_interesting = -1;
   /**
@@ -49,31 +49,31 @@ public class UpperBoundFloat
    * range of the computed constant that is "intersting" --- the range
    * that should be reported.  For instance, setting minimal_interesting
    * to -1 and maximal_interesting to 2 would only permit output of
-   * UpperBoundFloat  invariants whose cutoff was one of (-1,0,1,2).
+   * UpperBoundFloat invariants whose cutoff was one of (-1,0,1,2).
    **/
   public static long dkconfig_maximal_interesting = 2;
 
-  public  UpperBoundCoreFloat   core;
+  public UpperBoundCoreFloat core;
 
   private UpperBoundFloat (PptSlice ppt) {
     super(ppt);
-    core = new  UpperBoundCoreFloat  (this);
+    core = new UpperBoundCoreFloat(this);
   }
 
   protected Object clone() {
-    UpperBoundFloat  result = (UpperBoundFloat) super.clone();
-    result.core = ( UpperBoundCoreFloat  ) core.clone();
+    UpperBoundFloat result = (UpperBoundFloat) super.clone();
+    result.core = ( UpperBoundCoreFloat ) core.clone();
     result.core.wrapper = result;
     return result;
   }
 
-  public static UpperBoundFloat  instantiate(PptSlice ppt) {
+  public static UpperBoundFloat instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new UpperBoundFloat(ppt);
   }
 
   public String repr() {
-    return "UpperBoundFloat"  + varNames() + ": "
+    return "UpperBoundFloat" + varNames() + ": "
       + core.repr();
   }
 
@@ -90,15 +90,15 @@ public class UpperBoundFloat
     }
 
     if (format == OutputFormat.SIMPLIFY) {
-      return "(<= " + name + " " + core.max1  + ")";
+      return "(<= " + name + " " + core.max1 + ")";
     }
 
     return format_unimplemented(format);
   }
 
   // XXX need to flow invariant if bound changed
-  public void add_modified(double  value, int count) {
-    // System.out.println("UpperBoundFloat"  + varNames() + ": "
+  public void add_modified(double value, int count) {
+    // System.out.println("UpperBoundFloat" + varNames() + ": "
     //                    + "add(" + value + ", " + modified + ", " + count + ")");
     core.changed = false;
 
@@ -128,20 +128,20 @@ public class UpperBoundFloat
 
   // XXX FIXME This looks like a hack that should be removed.  -MDE 6/13/2002
   public boolean isInteresting() {
-    return (-1 < core.max1  && core.max1  < 2);
+    return (-1 < core.max1 && core.max1 < 2);
   }
 
   public boolean isObviousImplied() {
     // if the value is not in some range (like -1,0,1,2) then say that it is obvious
-    if ((core.max1  < dkconfig_minimal_interesting) ||
-        (core.max1  > dkconfig_maximal_interesting)) {
+    if ((core.max1 < dkconfig_minimal_interesting) ||
+        (core.max1 > dkconfig_maximal_interesting)) {
       return true;
     }
-    OneOfFloat  oo = OneOfFloat.find(ppt);
+    OneOfFloat oo = OneOfFloat.find(ppt);
     if ((oo != null) && oo.enoughSamples()) {
-      // We could also use core.max1  == oo.max_elt(), since the LowerBound
-      // will never have a core.max1  that does not appear in the OneOf.
-      if (core.max1  >=  oo.max_elt()) {
+      // We could also use core.max1 == oo.max_elt(), since the LowerBound
+      // will never have a core.max1 that does not appear in the OneOf.
+      if (core.max1 >= oo.max_elt()) {
         return true;
       }
     }
@@ -168,10 +168,10 @@ public class UpperBoundFloat
       {
         PptSlice1 other_slice = pptt.findSlice(vi);
         if (other_slice != null) {
-           EltUpperBoundFloat   eb =  EltUpperBoundFloat  .find(other_slice);
+           EltUpperBoundFloat eb = EltUpperBoundFloat.find(other_slice);
           if ((eb != null)
               && eb.enoughSamples()
-              && eb. core.max1  == core.max1 ) {
+              && eb. core.max1 == core.max1 ) {
             return true;
           }
         }
@@ -183,7 +183,7 @@ public class UpperBoundFloat
 
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof LowerBoundFloat) {
-      if (core.max1  <  ((LowerBoundFloat) other). core.min1)
+      if (core.max1 < ((LowerBoundFloat) other). core.min1)
         return true;
     }
     if (other instanceof OneOfFloat) {
@@ -193,7 +193,7 @@ public class UpperBoundFloat
   }
 
   // Look up a previously instantiated invariant.
-  public static UpperBoundFloat  find(PptSlice ppt) {
+  public static UpperBoundFloat find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();

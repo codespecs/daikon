@@ -30,11 +30,11 @@ public class SeqComparison
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff SeqComparison  invariants should be considered.
+   * Boolean.  True iff SeqComparison invariants should be considered.
    **/
   public static boolean dkconfig_enabled = true;
 
-  static Comparator comparator = new ArraysMDE. LongArrayComparatorLexical()  ;
+  static Comparator comparator = new ArraysMDE. LongArrayComparatorLexical() ;
 
   public final boolean only_check_eq;
 
@@ -45,7 +45,7 @@ public class SeqComparison
   boolean orderMatters;
 
   int num_sc_samples = 0;
-  private ValueTracker  values_cache = new ValueTracker(8);
+  private ValueTracker values_cache = new ValueTracker(8);
 
   protected SeqComparison (PptSlice ppt, boolean only_eq, boolean order) {
     super(ppt);
@@ -53,7 +53,7 @@ public class SeqComparison
     orderMatters = order;
   }
 
-  public static SeqComparison  instantiate(PptSlice ppt) {
+  public static SeqComparison instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
@@ -90,7 +90,7 @@ public class SeqComparison
   }
 
   protected Object clone() {
-    SeqComparison  result = (SeqComparison) super.clone();
+    SeqComparison result = (SeqComparison) super.clone();
     result.values_cache = (ValueTracker) values_cache.clone();
     return result;
   }
@@ -103,7 +103,7 @@ public class SeqComparison
   }
 
   public String repr() {
-    return "SeqComparison"  + varNames() + ": "
+    return "SeqComparison" + varNames() + ": "
       + "can_be_eq=" + can_be_eq
       + ",can_be_lt=" + can_be_lt
       + ",can_be_gt=" + can_be_gt
@@ -163,7 +163,7 @@ public class SeqComparison
       comparison = ArraysMDE.isSubset (v1, v2) && ArraysMDE.isSubset (v2, v1) ? 0 : -1;
     }
 
-    // System.out.println("SeqComparison"  + varNames() + ": "
+    // System.out.println("SeqComparison" + varNames() + ": "
     //                    + "compare(" + ArraysMDE.toString(v1)
     //                    + ", " + ArraysMDE.toString(v2) + ") = " + comparison);
 
@@ -225,7 +225,7 @@ public class SeqComparison
 
   public boolean isSameFormula(Invariant o)
   {
-    SeqComparison  other = (SeqComparison) o;
+    SeqComparison other = (SeqComparison) o;
     return
       (can_be_eq == other.can_be_eq) &&
       (can_be_lt == other.can_be_lt) &&
@@ -235,7 +235,7 @@ public class SeqComparison
   public boolean isExclusiveFormula(Invariant o)
   {
     if (o instanceof SeqComparison) {
-      SeqComparison  other = (SeqComparison) o;
+      SeqComparison other = (SeqComparison) o;
       return (! ((can_be_eq && other.can_be_eq)
                  || (can_be_lt && other.can_be_lt)
                  || (can_be_gt && other.can_be_gt)));
@@ -245,7 +245,7 @@ public class SeqComparison
 
   // Copied from IntComparison.
   public boolean isObviousImplied() {
-    PairwiseIntComparison  pic = PairwiseIntComparison.find(ppt);
+    PairwiseIntComparison pic = PairwiseIntComparison.find(ppt);
     if ((pic != null)
         && (pic.core.can_be_eq == can_be_eq)
         && (pic.core.can_be_lt == can_be_lt)

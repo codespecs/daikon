@@ -24,20 +24,20 @@ public class FunctionBinary
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff FunctionBinary  invariants should be considered.
+   * Boolean.  True iff FunctionBinary invariants should be considered.
    **/
   public static boolean dkconfig_enabled = true;
 
   public static Category debug = Category.getInstance("daikon.inv.ternary.threeScalar.FunctionBinary");
 
-  public FunctionBinaryCore  core;
+  public FunctionBinaryCore core;
 
   protected FunctionBinary (PptSlice ppt, String[] methodname, int methodNumber, int var_order) {
     super(ppt);
     core = new FunctionBinaryCore(this, methodname, methodNumber, var_order);
   }
 
-  public static FunctionBinary  instantiate(PptSlice ppt, String[] methodname, int methodNumber, int var_order) {
+  public static FunctionBinary instantiate(PptSlice ppt, String[] methodname, int methodNumber, int var_order) {
     if (!dkconfig_enabled)
       return null;
 
@@ -74,7 +74,7 @@ public class FunctionBinary
   }
 
   protected Object clone() {
-    FunctionBinary  result = (FunctionBinary) super.clone();
+    FunctionBinary result = (FunctionBinary) super.clone();
     result.core = (FunctionBinaryCore) core.clone();
     result.core.wrapper = result;
     return result;
@@ -86,14 +86,14 @@ public class FunctionBinary
   }
 
   public String repr() {
-    return "FunctionBinary"   + varNames() + ": " + core.repr();
+    return "FunctionBinary"  + varNames() + ": " + core.repr();
   }
 
   public String format_using(OutputFormat format) {
     return core.format_using(format);
   }
 
-  public void add_modified(long  x_int, long  y_int, long  z_int, int count) {
+  public void add_modified(long x_int, long y_int, long z_int, int count) {
     core.add_modified(x_int, y_int, z_int, count);
   }
 

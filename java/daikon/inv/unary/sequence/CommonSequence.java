@@ -34,7 +34,7 @@ public class CommonSequence
     super(ppt);
   }
 
-  public static CommonSequence  instantiate(PptSlice ppt) {
+  public static CommonSequence instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new CommonSequence(ppt);
   }
@@ -101,7 +101,7 @@ public class CommonSequence
       intersect = ArraysMDE.subarray(tmp, 0, size);
     }
 
-    intersect = (long  []) Intern.intern(intersect);
+    intersect = (long[]) Intern.intern(intersect);
     elts++;
   }
 

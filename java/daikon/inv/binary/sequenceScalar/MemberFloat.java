@@ -43,11 +43,11 @@ public final class MemberFloat
   }
 
   // This constructor enables testing with InvariantFormatTester.
-  public static MemberFloat  instantiate(PptSlice ppt) {
+  public static MemberFloat instantiate(PptSlice ppt) {
     return instantiate(ppt,true);
   }
 
-  public static MemberFloat  instantiate(PptSlice ppt, boolean seq_first) {
+  public static MemberFloat instantiate(PptSlice ppt, boolean seq_first) {
     if (!dkconfig_enabled) return null;
 
     VarInfo seqvar = ppt.var_infos[seq_first ? 0 : 1];
@@ -149,7 +149,7 @@ public final class MemberFloat
 
     if (seqvar.derived instanceof SequenceFloatSubsequence) {
       // the sequence is B[0..J-1] or similar.  Get information about it.
-      SequenceFloatSubsequence  seqsss = (SequenceFloatSubsequence) seqvar.derived;
+      SequenceFloatSubsequence seqsss = (SequenceFloatSubsequence) seqvar.derived;
       // System.out.println("seqvar: " + seqvar.name);
       VarInfo seq_index = seqsss.sclvar();
       int seq_shift = seqsss.index_shift;
@@ -158,7 +158,7 @@ public final class MemberFloat
       if (sclvar.derived instanceof SequenceFloatSubscript) {
         // B[I] in B[0..J]
 
-        SequenceFloatSubscript  sclsss = (SequenceFloatSubscript) sclvar.derived;
+        SequenceFloatSubscript sclsss = (SequenceFloatSubscript) sclvar.derived;
         VarInfo scl_index = sclsss.sclvar(); // "I" in "B[I]"
         int scl_shift = sclsss.index_shift;
         // System.out.println("scl_shift = " + scl_shift + ", seq_shift = " + seq_shift);
@@ -189,7 +189,7 @@ public final class MemberFloat
         // System.out.println("sclvar derived from SequenceInitial: " + sclvar.name);
 
         // isObviousImplied: B[0] in B[0..J]; also B[-1] in B[J..]
-        SequenceInitialFloat  sclse = (SequenceInitialFloat) sclvar.derived;
+        SequenceInitialFloat sclse = (SequenceInitialFloat) sclvar.derived;
         int scl_index = sclse.index;
         if (((scl_index == 0) && seq_from_start)
             || ((scl_index == -1) && !seq_from_start))
@@ -203,7 +203,7 @@ public final class MemberFloat
           // System.out.println("seqvar_super = " + seqvar_super + ", sclseqsuper = " + sclseqsuper);
           // System.out.println("seqvar_super = " + seqvar_super.name + ", sclseqsuper = " + sclseqsuper.name);
           Assert.assertTrue(seqvar_super == sclseqsuper);
-          SequenceFloatSubsequence  sclsss = (SequenceFloatSubsequence) sclvar_seq.derived;
+          SequenceFloatSubsequence sclsss = (SequenceFloatSubsequence) sclvar_seq.derived;
           boolean scl_from_start = sclsss.from_start;
           if (scl_from_start == seq_from_start) {
             VarInfo scl_index = sclsss.sclvar();
@@ -316,7 +316,7 @@ public final class MemberFloat
     return "(NOT " + form[0] + "(NEQ " + form[1] + " " + form[2] + ")" + form[3] + ")";
   }
 
-  public void add_modified(double [] a, double  i, int count) {
+  public void add_modified(double [] a, double i, int count) {
     if (ArraysMDE.indexOf(a, i) == -1) {
       if (debug.isDebugEnabled()) {
         debug.debug ("Member destroyed:  " + format() + " because " + i +
@@ -472,7 +472,7 @@ public final class MemberFloat
      **/
     public SuppressionLink generateSuppressionLink (Invariant arg) {
       Assert.assertTrue (arg instanceof MemberFloat);
-      MemberFloat  inv = (MemberFloat) arg;
+      MemberFloat inv = (MemberFloat) arg;
       VarInfo sclvar = inv.sclvar();
       VarInfo sclSequence = sclvar.isDerivedSequenceMember();
       if (debug.isDebugEnabled()) {
@@ -483,7 +483,7 @@ public final class MemberFloat
         debug.debug ("  Sclvar is not from a sequence");
         return null;
       }
-      SequenceFloatSubscript  sssc = (SequenceFloatSubscript) inv.sclvar().derived;
+      SequenceFloatSubscript sssc = (SequenceFloatSubscript) inv.sclvar().derived;
       VarInfo leftIndex = sssc.sclvar();
       VarInfo seqvar = inv.seqvar();
       VarInfo origSeqvar = seqvar.isDerivedSubSequenceOf();
@@ -495,7 +495,7 @@ public final class MemberFloat
         debug.debug ("  Not from the same sequences");
         return null;
       }
-      SequenceFloatSubsequence  ssss = (SequenceFloatSubsequence) seqvar.derived;
+      SequenceFloatSubsequence ssss = (SequenceFloatSubsequence) seqvar.derived;
       VarInfo rightIndex = ssss.sclvar();
       if (debug.isDebugEnabled()) {
         debug.debug ("  Attempting to find <= template for: ");

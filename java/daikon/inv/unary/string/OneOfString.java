@@ -60,13 +60,13 @@ public final class OneOfString
 
   }
 
-  public static OneOfString  instantiate(PptSlice ppt) {
+  public static OneOfString instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new OneOfString(ppt);
   }
 
   protected Object clone() {
-    OneOfString  result = (OneOfString) super.clone();
+    OneOfString result = (OneOfString) super.clone();
     result.elts = (String[]) elts.clone();
 
     result.num_elts = this.num_elts;
@@ -91,14 +91,14 @@ public final class OneOfString
     Arrays.sort(elts, 0, num_elts , comparator);
   }
 
-  public String  min_elt() {
+  public String min_elt() {
     if (num_elts == 0)
       throw new Error("Represents no elements");
     sort_rep();
     return elts[0];
   }
 
-  public String  max_elt() {
+  public String max_elt() {
     if (num_elts == 0)
       throw new Error("Represents no elements");
     sort_rep();
@@ -111,7 +111,7 @@ public final class OneOfString
       return false;
     sort_rep();
     for (int i=0; i < num_elts; i++)
-      if (! ( elts[i]  ==  other_elts[i] ) ) // elements are interned
+      if (! ( elts[i] == other_elts[i] ) ) // elements are interned
         return false;
     return true;
   }
@@ -132,7 +132,7 @@ public final class OneOfString
   }
 
   public String repr() {
-    return "OneOfString"  + varNames() + ": "
+    return "OneOfString" + varNames() + ": "
       + "falsified=" + falsified
       + ", num_elts=" + num_elts
       + ", elts=" + subarray_rep();
@@ -175,7 +175,7 @@ public final class OneOfString
     public String format_java() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + var().name.java_name()  + ".equals(" +  (( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"")   + ")");
+    sb.append (" || (" + var().name.java_name() + ".equals(" + (( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"") + ")");
     sb.append (")");
     }
     // trim off the && at the beginning for the first case
@@ -198,7 +198,7 @@ public final class OneOfString
       result += varname;
       String str = elts[i];
       if (!is_type) {
-        result += ".equals(" +  (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"")   + ")" ;
+        result += ".equals(" + (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"") + ")" ;
       } else {
         result += " == ";
         if ((str == null) || "null".equals(str)) {
@@ -228,7 +228,7 @@ public final class OneOfString
     result = "";
     for (int i=0; i<num_elts; i++) {
       if (i != 0) { result += " \\/ ("; }
-      result += varname + " = " + (( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"")  + ")";
+      result += varname + " = " + (( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"") + ")";
     }
     result += ")";
 
@@ -317,7 +317,7 @@ public final class OneOfString
       result += varname;
       String str = elts[i];
       if (!is_type) {
-        result += ".equals(" +  (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"")   + ")" ;
+        result += ".equals(" + (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"") + ")" ;
       } else {
 	result += " == \\type";
 	if ((str == null) || "null".equals(str)) {
@@ -371,7 +371,7 @@ public final class OneOfString
     return result;
   }
 
-  public void add_modified(String  v, int count) {
+  public void add_modified(String v, int count) {
 
     Assert.assertTrue(Intern.isInterned(v));
 
@@ -426,7 +426,7 @@ public final class OneOfString
 
   public boolean isSameFormula(Invariant o)
   {
-    OneOfString  other = (OneOfString) o;
+    OneOfString other = (OneOfString) o;
     if (num_elts != other.num_elts)
       return false;
     if (num_elts == 0 && other.num_elts == 0)
@@ -436,7 +436,7 @@ public final class OneOfString
     other.sort_rep();
 
     for (int i=0; i < num_elts; i++) {
-      if (! ( elts[i]  ==  other.elts[i] ))
+      if (! ( elts[i] == other.elts[i] ))
         return false;
     }
 
@@ -446,11 +446,11 @@ public final class OneOfString
   public boolean isExclusiveFormula(Invariant o)
   {
     if (o instanceof OneOfString) {
-      OneOfString  other = (OneOfString) o;
+      OneOfString other = (OneOfString) o;
 
       for (int i=0; i < num_elts; i++) {
         for (int j=0; j < other.num_elts; j++) {
-          if (( elts[i]  ==  other.elts[j] ) ) // elements are interned
+          if (( elts[i] == other.elts[j] ) ) // elements are interned
             return false;
         }
       }
@@ -472,7 +472,7 @@ public final class OneOfString
   }
 
   // Look up a previously instantiated invariant.
-  public static OneOfString  find(PptSlice ppt) {
+  public static OneOfString find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();

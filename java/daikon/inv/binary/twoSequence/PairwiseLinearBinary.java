@@ -21,20 +21,20 @@ public class PairwiseLinearBinary
    **/
   public static boolean dkconfig_enabled = true;
 
-  public LinearBinaryCore  core;
+  public LinearBinaryCore core;
 
   protected PairwiseLinearBinary (PptSlice ppt) {
     super(ppt);
     core = new LinearBinaryCore(this);
   }
 
-  public static PairwiseLinearBinary  instantiate(PptSlice ppt) {
+  public static PairwiseLinearBinary instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new PairwiseLinearBinary(ppt);
   }
 
   protected Object clone() {
-    PairwiseLinearBinary  result = (PairwiseLinearBinary) super.clone();
+    PairwiseLinearBinary result = (PairwiseLinearBinary) super.clone();
     result.core = (LinearBinaryCore) core.clone();
     result.core.wrapper = result;
     return result;
@@ -46,7 +46,7 @@ public class PairwiseLinearBinary
   }
 
   public String repr() {
-    return "PairwiseLinearBinary"  + varNames() + ": "
+    return "PairwiseLinearBinary" + varNames() + ": "
       + "falsified=" + falsified
       + "; " + core.repr();
   }
@@ -133,8 +133,8 @@ public class PairwiseLinearBinary
     // int len = Math.min(x_arr.length, y_arr.length);
 
     for (int i=0; i<len; i++) {
-      long  x = x_arr[i];
-      long  y = y_arr[i];
+      long x = x_arr[i];
+      long y = y_arr[i];
 
       core.add_modified(x, y, count);
       if (falsified) {

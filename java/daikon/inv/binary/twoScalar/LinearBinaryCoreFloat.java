@@ -50,7 +50,7 @@ public final class LinearBinaryCoreFloat
 
   public Object clone() {
     try {
-      LinearBinaryCoreFloat  result = (LinearBinaryCoreFloat) super.clone();
+      LinearBinaryCoreFloat result = (LinearBinaryCoreFloat) super.clone();
       if (x_cache != null)
         result.x_cache = (double[]) x_cache.clone();
       if (y_cache != null)
@@ -76,7 +76,7 @@ public final class LinearBinaryCoreFloat
     y_cache = tmp;
   }
 
-  public void add_modified(double  x, double  y, int count) {
+  public void add_modified(double x, double y, int count) {
     if (values_seen < MINPAIRS) {
 
       for (int i=0; i<values_seen; i++)
@@ -158,7 +158,7 @@ public final class LinearBinaryCoreFloat
 
   // Given ((x0,y0),(x1,y1)), set a and b such that y = ax + b.
   // @return true if such an (a,b) exists
-  boolean set_bi_linear(double  x0, double  x1, double  y0, double  y1) {
+  boolean set_bi_linear(double x0, double x1, double y0, double y1) {
     if (x1 - x0 == 0) {         // not "x0 == x1", due to roundoff
       // x being constant would have been discovered elsewhere (and this
       // invariant would not have been instantiated).
@@ -183,7 +183,7 @@ public final class LinearBinaryCoreFloat
   }
 
   public String repr() {
-    return "LinearBinaryCoreFloat"  + wrapper.varNames() + ": "
+    return "LinearBinaryCoreFloat" + wrapper.varNames() + ": "
       + "a=" + a
       + ",b=" + b
       + ",values_seen=" + values_seen;
@@ -287,7 +287,7 @@ public final class LinearBinaryCoreFloat
     return format_using(format, y, x, a, -b/a);
   }
 
-  public boolean isSameFormula(LinearBinaryCoreFloat  other)
+  public boolean isSameFormula(LinearBinaryCoreFloat other)
   {
     boolean thisMeaningless = values_seen < MINPAIRS;
     boolean otherMeaningless = other.values_seen < MINPAIRS;
@@ -303,7 +303,7 @@ public final class LinearBinaryCoreFloat
     }
   }
 
-  public boolean isExclusiveFormula(LinearBinaryCoreFloat  other)
+  public boolean isExclusiveFormula(LinearBinaryCoreFloat other)
   {
     if ((values_seen < MINPAIRS) ||
         (other.values_seen < MINPAIRS)) {

@@ -43,11 +43,11 @@ public final class Member
   }
 
   // This constructor enables testing with InvariantFormatTester.
-  public static Member  instantiate(PptSlice ppt) {
+  public static Member instantiate(PptSlice ppt) {
     return instantiate(ppt,true);
   }
 
-  public static Member  instantiate(PptSlice ppt, boolean seq_first) {
+  public static Member instantiate(PptSlice ppt, boolean seq_first) {
     if (!dkconfig_enabled) return null;
 
     VarInfo seqvar = ppt.var_infos[seq_first ? 0 : 1];
@@ -149,7 +149,7 @@ public final class Member
 
     if (seqvar.derived instanceof SequenceStringSubsequence) {
       // the sequence is B[0..J-1] or similar.  Get information about it.
-      SequenceStringSubsequence  seqsss = (SequenceStringSubsequence) seqvar.derived;
+      SequenceStringSubsequence seqsss = (SequenceStringSubsequence) seqvar.derived;
       // System.out.println("seqvar: " + seqvar.name);
       VarInfo seq_index = seqsss.sclvar();
       int seq_shift = seqsss.index_shift;
@@ -158,7 +158,7 @@ public final class Member
       if (sclvar.derived instanceof SequenceStringSubscript) {
         // B[I] in B[0..J]
 
-        SequenceStringSubscript  sclsss = (SequenceStringSubscript) sclvar.derived;
+        SequenceStringSubscript sclsss = (SequenceStringSubscript) sclvar.derived;
         VarInfo scl_index = sclsss.sclvar(); // "I" in "B[I]"
         int scl_shift = sclsss.index_shift;
         // System.out.println("scl_shift = " + scl_shift + ", seq_shift = " + seq_shift);
@@ -189,7 +189,7 @@ public final class Member
         // System.out.println("sclvar derived from SequenceInitial: " + sclvar.name);
 
         // isObviousImplied: B[0] in B[0..J]; also B[-1] in B[J..]
-        SequenceInitial  sclse = (SequenceInitial) sclvar.derived;
+        SequenceInitial sclse = (SequenceInitial) sclvar.derived;
         int scl_index = sclse.index;
         if (((scl_index == 0) && seq_from_start)
             || ((scl_index == -1) && !seq_from_start))
@@ -203,7 +203,7 @@ public final class Member
           // System.out.println("seqvar_super = " + seqvar_super + ", sclseqsuper = " + sclseqsuper);
           // System.out.println("seqvar_super = " + seqvar_super.name + ", sclseqsuper = " + sclseqsuper.name);
           Assert.assertTrue(seqvar_super == sclseqsuper);
-          SequenceStringSubsequence  sclsss = (SequenceStringSubsequence) sclvar_seq.derived;
+          SequenceStringSubsequence sclsss = (SequenceStringSubsequence) sclvar_seq.derived;
           boolean scl_from_start = sclsss.from_start;
           if (scl_from_start == seq_from_start) {
             VarInfo scl_index = sclsss.sclvar();
@@ -316,7 +316,7 @@ public final class Member
     return "(NOT " + form[0] + "(NEQ " + form[1] + " " + form[2] + ")" + form[3] + ")";
   }
 
-  public void add_modified(String [] a, String  i, int count) {
+  public void add_modified(String [] a, String i, int count) {
     if (ArraysMDE.indexOf(a, i) == -1) {
       if (debug.isDebugEnabled()) {
         debug.debug ("Member destroyed:  " + format() + " because " + i +
@@ -472,7 +472,7 @@ public final class Member
      **/
     public SuppressionLink generateSuppressionLink (Invariant arg) {
       Assert.assertTrue (arg instanceof Member);
-      Member  inv = (Member) arg;
+      Member inv = (Member) arg;
       VarInfo sclvar = inv.sclvar();
       VarInfo sclSequence = sclvar.isDerivedSequenceMember();
       if (debug.isDebugEnabled()) {
@@ -483,7 +483,7 @@ public final class Member
         debug.debug ("  Sclvar is not from a sequence");
         return null;
       }
-      SequenceStringSubscript  sssc = (SequenceStringSubscript) inv.sclvar().derived;
+      SequenceStringSubscript sssc = (SequenceStringSubscript) inv.sclvar().derived;
       VarInfo leftIndex = sssc.sclvar();
       VarInfo seqvar = inv.seqvar();
       VarInfo origSeqvar = seqvar.isDerivedSubSequenceOf();
@@ -495,7 +495,7 @@ public final class Member
         debug.debug ("  Not from the same sequences");
         return null;
       }
-      SequenceStringSubsequence  ssss = (SequenceStringSubsequence) seqvar.derived;
+      SequenceStringSubsequence ssss = (SequenceStringSubsequence) seqvar.derived;
       VarInfo rightIndex = ssss.sclvar();
       if (debug.isDebugEnabled()) {
         debug.debug ("  Attempting to find <= template for: ");

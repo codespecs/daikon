@@ -41,7 +41,7 @@ public class SubSequence
     super(ppt);
   }
 
-  public static SubSequence  instantiate(PptSlice ppt) {
+  public static SubSequence instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
@@ -77,7 +77,7 @@ public class SubSequence
   }
 
   public String repr() {
-    return "SubSequence"  + varNames() + ": "
+    return "SubSequence" + varNames() + ": "
       + "1in2=" + var1_in_var2
       + ",2in1=" + var2_in_var1
       + ",falsified=" + falsified;
@@ -308,10 +308,10 @@ public class SubSequence
     // we also miss those of the form (z subset of union(x,y)) which
     // might be useful.  Subsequence, however, seems totally useless
     // on unions and intersections.
-    if (supervar.derived instanceof  SequenceScalarIntersection  ||
-        supervar.derived instanceof SequenceScalarUnion  ||
-        subvar.derived instanceof SequenceScalarIntersection  ||
-        subvar.derived instanceof SequenceScalarUnion  ) {
+    if (supervar.derived instanceof  SequenceScalarIntersection ||
+        supervar.derived instanceof SequenceScalarUnion ||
+        subvar.derived instanceof SequenceScalarIntersection ||
+        subvar.derived instanceof SequenceScalarUnion) {
       debug.debug ("Returning true because of union or intersection");
       return true;
     }
@@ -319,7 +319,7 @@ public class SubSequence
     if (subvar.derived instanceof SequencesPredicate) {
       // It's not useful that predicate(x[], b[]) is a subsequence or subset
       // of x[]
-      SequencesPredicate  derived = (SequencesPredicate) subvar.derived;
+      SequencesPredicate derived = (SequencesPredicate) subvar.derived;
       if (derived.var1().equals(supervar)) {
         debug.debug ("Returning true because of predicate slicing");
         return true;
@@ -342,8 +342,8 @@ public class SubSequence
       // both sequences are derived from the same supersequence
       if ((subvar.derived instanceof SequenceScalarSubsequence)
           && (supervar.derived instanceof SequenceScalarSubsequence)) {
-        SequenceScalarSubsequence  sss1 = (SequenceScalarSubsequence) subvar.derived;
-        SequenceScalarSubsequence  sss2 = (SequenceScalarSubsequence) supervar.derived;
+        SequenceScalarSubsequence sss1 = (SequenceScalarSubsequence) subvar.derived;
+        SequenceScalarSubsequence sss2 = (SequenceScalarSubsequence) supervar.derived;
         VarInfo index1 = sss1.sclvar();
         int shift1 = sss1.index_shift;
         boolean start1 = sss1.from_start;
@@ -358,8 +358,8 @@ public class SubSequence
       } else if ((subvar.derived instanceof SequenceStringSubsequence)
                  && (supervar.derived instanceof SequenceStringSubsequence)) {
         // Copied from just above
-        SequenceStringSubsequence  sss1 = (SequenceStringSubsequence) subvar.derived;
-        SequenceStringSubsequence  sss2 = (SequenceStringSubsequence) supervar.derived;
+        SequenceStringSubsequence sss1 = (SequenceStringSubsequence) subvar.derived;
+        SequenceStringSubsequence sss2 = (SequenceStringSubsequence) supervar.derived;
         VarInfo index1 = sss1.sclvar();
         int shift1 = sss1.index_shift;
         boolean start1 = sss1.from_start;
@@ -390,7 +390,7 @@ public class SubSequence
   }
 
   // Look up a previously instantiated SubSequence relationship.
-  public static SubSequence  find(PptSlice ppt) {
+  public static SubSequence find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
@@ -436,7 +436,7 @@ public class SubSequence
             Object superinv = superinvs.next();
             System.out.println("Inv = " + superinv);
             if (superinv instanceof EltOneOf) {
-              EltOneOf  eltinv = (EltOneOf) superinv;
+              EltOneOf eltinv = (EltOneOf) superinv;
               if (eltinv.num_elts() > 0) {
                 System.out.println(format() + " obvious because of " + eltinv.format());
                 return true;
@@ -475,7 +475,7 @@ public class SubSequence
             //   Assert.assertTrue(ppt.parent.findSlice_unordered(supervar_part, subvar) == null);
             // }
             if (ss_ppt != null) {
-              SubSequence  ss = SubSequence.find(ss_ppt);
+              SubSequence ss = SubSequence.find(ss_ppt);
               if ((ss != null) && ss.enoughSamples()) {
                 return true;
               }

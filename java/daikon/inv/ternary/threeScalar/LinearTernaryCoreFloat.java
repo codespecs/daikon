@@ -42,7 +42,7 @@ public final class LinearTernaryCoreFloat
 
   public Object clone() {
     try {
-      LinearTernaryCoreFloat  result = (LinearTernaryCoreFloat) super.clone();
+      LinearTernaryCoreFloat result = (LinearTernaryCoreFloat) super.clone();
       result.x_cache = (double[]) x_cache.clone();
       result.y_cache = (double[]) y_cache.clone();
       result.z_cache = (double[]) z_cache.clone();
@@ -90,7 +90,7 @@ public final class LinearTernaryCoreFloat
     // Could assert that caches sync with a,b,c (?)
   }
 
-  public void add_modified(double  x, double  y, double  z, int count) {
+  public void add_modified(double x, double y, double z, int count) {
     // XXX TODO FIXME: This method does not correctly deal with
     // calling addToFlow.  A proper clone, etc. should be created and
     // dealt with.  This will complicate the logic below, I'll bet.
@@ -263,9 +263,9 @@ public final class LinearTernaryCoreFloat
     int i0 = indices[0];
     int i1 = indices[1];
     int i2 = indices[2];
-    double  x0 = x_cache[i0]; double  y0 = y_cache[i0]; double  z0 = z_cache[i0];
-    double  x1 = x_cache[i1]; double  y1 = y_cache[i1]; double  z1 = z_cache[i1];
-    double  x2 = x_cache[i2]; double  y2 = y_cache[i2]; double  z2 = z_cache[i2];
+    double x0 = x_cache[i0]; double y0 = y_cache[i0]; double z0 = z_cache[i0];
+    double x1 = x_cache[i1]; double y1 = y_cache[i1]; double z1 = z_cache[i1];
+    double x2 = x_cache[i2]; double y2 = y_cache[i2]; double z2 = z_cache[i2];
     float denominator = (float) ((x1 * y2 - x2 * y1)
                        - (x0 * y2 - x2 * y0)
                        + (x0 * y1 - x1 * y0));
@@ -332,7 +332,7 @@ public final class LinearTernaryCoreFloat
   }
 
   public String repr() {
-    return "LinearTernaryCoreFloat"  + wrapper.varNames() + ": "
+    return "LinearTernaryCoreFloat" + wrapper.varNames() + ": "
       + "a=" + a
       + ",b=" + b
       + ",c=" + c
@@ -404,7 +404,7 @@ public final class LinearTernaryCoreFloat
   //   return format(y, x, a, -b/a);
   // }
 
-  public boolean isSameFormula(LinearTernaryCoreFloat  other)
+  public boolean isSameFormula(LinearTernaryCoreFloat other)
   {
     boolean thisMeaningless = values_seen < MINTRIPLES;
     boolean otherMeaningless = other.values_seen < MINTRIPLES;
@@ -420,7 +420,7 @@ public final class LinearTernaryCoreFloat
     }
   }
 
-  public boolean isExclusiveFormula(LinearTernaryCoreFloat  other)
+  public boolean isExclusiveFormula(LinearTernaryCoreFloat other)
   {
     if ((values_seen < MINTRIPLES) ||
         (other.values_seen < MINTRIPLES)) {

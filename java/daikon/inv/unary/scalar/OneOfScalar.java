@@ -68,13 +68,13 @@ public final class OneOfScalar
 
   }
 
-  public static OneOfScalar  instantiate(PptSlice ppt) {
+  public static OneOfScalar instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new OneOfScalar(ppt);
   }
 
   protected Object clone() {
-    OneOfScalar  result = (OneOfScalar) super.clone();
+    OneOfScalar result = (OneOfScalar) super.clone();
     result.elts = (long[]) elts.clone();
 
     result.num_elts = this.num_elts;
@@ -99,17 +99,17 @@ public final class OneOfScalar
   }
 
   private void sort_rep() {
-    Arrays.sort(elts, 0, num_elts );
+    Arrays.sort(elts, 0, num_elts);
   }
 
-  public long  min_elt() {
+  public long min_elt() {
     if (num_elts == 0)
       throw new Error("Represents no elements");
     sort_rep();
     return elts[0];
   }
 
-  public long  max_elt() {
+  public long max_elt() {
     if (num_elts == 0)
       throw new Error("Represents no elements");
     sort_rep();
@@ -122,7 +122,7 @@ public final class OneOfScalar
       return false;
     sort_rep();
     for (int i=0; i < num_elts; i++)
-      if (! ( elts[i]  ==  other_elts[i] ) ) // elements are interned
+      if (! ( elts[i] == other_elts[i] ) ) // elements are interned
         return false;
     return true;
   }
@@ -136,14 +136,14 @@ public final class OneOfScalar
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
-      sb.append(((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")));
+      sb.append(((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")));
     }
     sb.append(" }");
     return sb.toString();
   }
 
   public String repr() {
-    return "OneOfScalar"  + varNames() + ": "
+    return "OneOfScalar" + varNames() + ": "
       + "falsified=" + falsified
       + ", num_elts=" + num_elts
       + ", elts=" + subarray_rep();
@@ -184,7 +184,7 @@ public final class OneOfScalar
             ;
         }
       } else {
-        return varname + " == " + ((Integer.MIN_VALUE <=  elts[0]  &&  elts[0]  <= Integer.MAX_VALUE) ? String.valueOf( elts[0] ) : (String.valueOf( elts[0] ) + "L")) ;
+        return varname + " == " + ((Integer.MIN_VALUE <= elts[0] && elts[0] <= Integer.MAX_VALUE) ? String.valueOf( elts[0] ) : (String.valueOf( elts[0] ) + "L")) ;
       }
 
     } else {
@@ -196,7 +196,7 @@ public final class OneOfScalar
     public String format_java() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + var().name.java_name()  + " == " +  ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))  );
+    sb.append (" || (" + var().name.java_name() + " == " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")));
     sb.append (")");
     }
     // trim off the && at the beginning for the first case
@@ -232,7 +232,7 @@ public final class OneOfScalar
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
         // Not quite right for the case of NaN, I think.
-        result += varname + " == " + ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")) ;
+        result += varname + " == " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")) ;
       }
     }
 
@@ -262,7 +262,7 @@ public final class OneOfScalar
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " \\/ "; }
-        result += "(" + varname + " = " + ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))  + ")";
+        result += "(" + varname + " = " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")) + ")";
       }
     }
 
@@ -305,7 +305,7 @@ public final class OneOfScalar
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
-        result += varname + " == " + ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")) ;
+        result += varname + " == " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")) ;
       }
     }
 
@@ -337,7 +337,7 @@ public final class OneOfScalar
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
-        result += varname + " == " + ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")) ;
+        result += varname + " == " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")) ;
       }
     }
 
@@ -371,7 +371,7 @@ public final class OneOfScalar
     } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
-        result += " (EQ " + varname + " " + ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))  + ")";
+        result += " (EQ " + varname + " " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")) + ")";
       }
       if (num_elts > 1) {
         result = "(OR" + result + ")";
@@ -384,7 +384,7 @@ public final class OneOfScalar
     return result;
   }
 
-  public void add_modified(long  v, int count) {
+  public void add_modified(long v, int count) {
 
     for (int i=0; i<num_elts; i++)
       if (elts[i] == v) {
@@ -455,7 +455,7 @@ public final class OneOfScalar
       }
     }
 
-    // For every EltOneOf  at this program point, see if this variable is
+    // For every EltOneOf at this program point, see if this variable is
     // an obvious member of that sequence.
     PptTopLevel parent = ppt.parent;
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
@@ -467,7 +467,7 @@ public final class OneOfScalar
         // Don't use isEqualToObviousMember:  that is too subtle
         // and eliminates desirable invariants such as "return == null".
         if (Member.isObviousMember(v1, v2)) {
-          EltOneOf  other = (EltOneOf) inv;
+          EltOneOf other = (EltOneOf) inv;
           if (num_elts == other.num_elts()) {
             sort_rep();
             if (other.compare_rep(num_elts, elts)) {
@@ -484,7 +484,7 @@ public final class OneOfScalar
 
   public boolean isSameFormula(Invariant o)
   {
-    OneOfScalar  other = (OneOfScalar) o;
+    OneOfScalar other = (OneOfScalar) o;
     if (num_elts != other.num_elts)
       return false;
     if (num_elts == 0 && other.num_elts == 0)
@@ -523,7 +523,7 @@ public final class OneOfScalar
     }
 
     for (int i=0; i < num_elts; i++) {
-      if (! ( elts[i]  ==  other.elts[i] ))
+      if (! ( elts[i] == other.elts[i] ))
         return false;
     }
 
@@ -533,11 +533,11 @@ public final class OneOfScalar
   public boolean isExclusiveFormula(Invariant o)
   {
     if (o instanceof OneOfScalar) {
-      OneOfScalar  other = (OneOfScalar) o;
+      OneOfScalar other = (OneOfScalar) o;
 
       for (int i=0; i < num_elts; i++) {
         for (int j=0; j < other.num_elts; j++) {
-          if (( elts[i]  ==  other.elts[j] ) ) // elements are interned
+          if (( elts[i] == other.elts[j] ) ) // elements are interned
             return false;
         }
       }
@@ -548,8 +548,8 @@ public final class OneOfScalar
     if ((o instanceof NonZero) && (num_elts == 1) && (elts[0] == 0)) {
       return true;
     }
-    long  elts_min = Long.MAX_VALUE;
-    long  elts_max = Long.MIN_VALUE;
+    long elts_min = Long.MAX_VALUE;
+    long elts_max = Long.MIN_VALUE;
     for (int i=0; i < num_elts; i++) {
       elts_min = Math.min(elts_min, elts[i]);
       elts_max = Math.max(elts_max, elts[i]);
@@ -574,7 +574,7 @@ public final class OneOfScalar
   }
 
   // Look up a previously instantiated invariant.
-  public static OneOfScalar  find(PptSlice ppt) {
+  public static OneOfScalar find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();

@@ -25,7 +25,7 @@ public class NonZeroFloat
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff NonZeroFloat  invariants should be considered.
+   * Boolean.  True iff NonZeroFloat invariants should be considered.
    **/
   public static boolean dkconfig_enabled = true;
 
@@ -33,9 +33,9 @@ public class NonZeroFloat
   public static final Category debug = Category.getInstance("daikon.inv.unary.scalar.NonZeroFloat");
 
   /** Smallest value seen so far. **/
-  double  min = Long.MAX_VALUE;
+  double min = Long.MAX_VALUE;
   /** Largest value seen so far. **/
-  double  max = Long.MIN_VALUE;
+  double max = Long.MIN_VALUE;
   /** Maximum value ever used for max-min in probability calculation. **/
   long range_max = 50;
 
@@ -48,7 +48,7 @@ public class NonZeroFloat
     super(ppt);
   }
 
-  public static NonZeroFloat  instantiate(PptSlice ppt) {
+  public static NonZeroFloat instantiate(PptSlice ppt) {
     if (!dkconfig_enabled)
       return null;
 
@@ -56,13 +56,13 @@ public class NonZeroFloat
       debug.debug("NonZeroFloat.instantiate(" + ppt.name + ")");
     }
 
-    NonZeroFloat  result = new NonZeroFloat(ppt);
+    NonZeroFloat result = new NonZeroFloat(ppt);
 
     return result;
   }
 
   public String repr() {
-    return "NonZeroFloat"  + varNames() + ": "
+    return "NonZeroFloat" + varNames() + ": "
       + !falsified + ",min=" + min + ",max=" + max;
   }
 
@@ -95,7 +95,7 @@ public class NonZeroFloat
     return format_unimplemented(format);
   }
 
-  public void add_modified(double  v, int count) {
+  public void add_modified(double v, int count) {
     if (v == 0) {
       if (debug.isDebugEnabled() || ppt.debugged) {
         System.out.println("NonZeroFloat.destroy(" + ppt.name + ")");
@@ -119,7 +119,7 @@ public class NonZeroFloat
       // received.
       return Invariant.PROBABILITY_UNJUSTIFIED;
     } else {
-      double  range;
+      double range;
       if (override_range != 0) {
         range = override_range;
       } else {
@@ -162,7 +162,7 @@ public class NonZeroFloat
 
     // System.out.println("isObviousImplied: " + format());
 
-    // For every EltNonZeroFloat  at this program point, see if this variable is
+    // For every EltNonZeroFloat at this program point, see if this variable is
     // an obvious member of that sequence.
     PptTopLevel parent = ppt.parent;
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
@@ -170,11 +170,11 @@ public class NonZeroFloat
       if ((inv instanceof EltNonZeroFloat) && inv.enoughSamples()) {
         VarInfo v1 = var();
         VarInfo v2 = inv.ppt.var_infos[0];
-        // System.out.println("NonZeroFloat.isObviousImplied: calling " + MemberFloat  + ".isObviousMember(" + v1.name + ", " + v2.name + ")");
+        // System.out.println("NonZeroFloat.isObviousImplied: calling " + MemberFloat + ".isObviousMember(" + v1.name + ", " + v2.name + ")");
         // Don't use isEqualToObviousMember:  that is too subtle
         // and eliminates desirable invariants such as "return != null".
         if (MemberFloat.isObviousMember(v1, v2)) {
-          // System.out.println("NonZeroFloat.isObviousImplied: " + MemberFloat  + ".isObviousMember(" + v1.name + ", " + v2.name + ") = true");
+          // System.out.println("NonZeroFloat.isObviousImplied: " + MemberFloat + ".isObviousMember(" + v1.name + ", " + v2.name + ") = true");
           return true;
         }
       }
@@ -182,7 +182,7 @@ public class NonZeroFloat
 
     if ((var.derived != null)
         && (var.derived instanceof SequenceInitialFloat)) {
-      SequenceInitialFloat  si = (SequenceInitialFloat) var.derived;
+      SequenceInitialFloat si = (SequenceInitialFloat) var.derived;
       if (si.index == 0) {
 
         // For each sequence variable, if var is an obvious member, and
@@ -193,7 +193,7 @@ public class NonZeroFloat
           if (MemberFloat.isObviousMember(var, vi)) {
             PptSlice1 other_slice = pptt.findSlice(vi);
             if (other_slice != null) {
-              SeqIndexNonEqualFloat  sine = SeqIndexNonEqualFloat.find(other_slice);
+              SeqIndexNonEqualFloat sine = SeqIndexNonEqualFloat.find(other_slice);
               if ((sine != null) && sine.enoughSamples()) {
                 // System.out.println("NonZeroFloat.isObviousImplied true due to: " + sine.format());
                 return true;

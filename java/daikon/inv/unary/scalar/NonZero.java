@@ -25,7 +25,7 @@ public class NonZero
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff NonZero  invariants should be considered.
+   * Boolean.  True iff NonZero invariants should be considered.
    **/
   public static boolean dkconfig_enabled = true;
 
@@ -33,9 +33,9 @@ public class NonZero
   public static final Category debug = Category.getInstance("daikon.inv.unary.scalar.NonZero");
 
   /** Smallest value seen so far. **/
-  long  min = Long.MAX_VALUE;
+  long min = Long.MAX_VALUE;
   /** Largest value seen so far. **/
-  long  max = Long.MIN_VALUE;
+  long max = Long.MIN_VALUE;
   /** Maximum value ever used for max-min in probability calculation. **/
   long range_max = 50;
 
@@ -50,7 +50,7 @@ public class NonZero
     super(ppt);
   }
 
-  public static NonZero  instantiate(PptSlice ppt) {
+  public static NonZero instantiate(PptSlice ppt) {
     if (!dkconfig_enabled)
       return null;
 
@@ -58,7 +58,7 @@ public class NonZero
       debug.debug("NonZero.instantiate(" + ppt.name + ")");
     }
 
-    NonZero  result = new NonZero(ppt);
+    NonZero result = new NonZero(ppt);
 
     if (ppt.var_infos[0].file_rep_type == ProglangType.HASHCODE) {
       result.pointer_type = true;
@@ -73,7 +73,7 @@ public class NonZero
   }
 
   public String repr() {
-    return "NonZero"  + varNames() + ": "
+    return "NonZero" + varNames() + ": "
       + !falsified + ",min=" + min + ",max=" + max;
   }
 
@@ -111,7 +111,7 @@ public class NonZero
     return format_unimplemented(format);
   }
 
-  public void add_modified(long  v, int count) {
+  public void add_modified(long v, int count) {
     if (v == 0) {
       if (debug.isDebugEnabled() || ppt.debugged) {
         System.out.println("NonZero.destroy(" + ppt.name + ")");
@@ -135,7 +135,7 @@ public class NonZero
       // received.
       return Invariant.PROBABILITY_UNJUSTIFIED;
     } else {
-      long  range;
+      long range;
       if (override_range != 0) {
         range = override_range;
       } else {
@@ -178,7 +178,7 @@ public class NonZero
 
     // System.out.println("isObviousImplied: " + format());
 
-    // For every EltNonZero  at this program point, see if this variable is
+    // For every EltNonZero at this program point, see if this variable is
     // an obvious member of that sequence.
     PptTopLevel parent = ppt.parent;
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
@@ -198,7 +198,7 @@ public class NonZero
 
     if ((var.derived != null)
         && (var.derived instanceof SequenceInitial)) {
-      SequenceInitial  si = (SequenceInitial) var.derived;
+      SequenceInitial si = (SequenceInitial) var.derived;
       if (si.index == 0) {
 
         // For each sequence variable, if var is an obvious member, and
@@ -209,7 +209,7 @@ public class NonZero
           if (Member.isObviousMember(var, vi)) {
             PptSlice1 other_slice = pptt.findSlice(vi);
             if (other_slice != null) {
-              SeqIndexNonEqual  sine = SeqIndexNonEqual.find(other_slice);
+              SeqIndexNonEqual sine = SeqIndexNonEqual.find(other_slice);
               if ((sine != null) && sine.enoughSamples()) {
                 // System.out.println("NonZero.isObviousImplied true due to: " + sine.format());
                 return true;

@@ -39,8 +39,8 @@ public final class EltNonZero
    **/
   public static boolean dkconfig_enabled = true;
 
-  long  min = Long.MAX_VALUE;
-  long  max = Long.MIN_VALUE;
+  long min = Long.MAX_VALUE;
+  long max = Long.MIN_VALUE;
 
   // If nonzero, use this as the range instead of the actual range.
   // This lets one use a specified probability of nonzero (say, 1/10
@@ -52,9 +52,9 @@ public final class EltNonZero
     super(ppt);
   }
 
-  public static EltNonZero  instantiate(PptSlice ppt) {
+  public static EltNonZero instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    EltNonZero  result = new EltNonZero(ppt);
+    EltNonZero result = new EltNonZero(ppt);
     if (! ppt.var_infos[0].type. baseIsIntegral()) {
       result.pointer_type = true;
       result.override_range = 3;
@@ -72,7 +72,7 @@ public final class EltNonZero
   }
 
   public String repr() {
-    return "EltNonZero"  + varNames() + ": "
+    return "EltNonZero" + varNames() + ": "
       + !falsified + ",min=" + min + ",max=" + max;
   }
 
@@ -171,7 +171,7 @@ public final class EltNonZero
 
   public void add_modified(long [] a, int count) {
     for (int ai=0; ai<a.length; ai++) {
-      long  v = a[ai];
+      long v = a[ai];
 
       // The min and max tests will simultaneoulsy succeed exactly once (for
       // the first value).
@@ -196,7 +196,7 @@ public final class EltNonZero
     if ((override_range == 0) && ((min > 0) || (max < 0)))
       return Invariant.PROBABILITY_UNJUSTIFIED;
     else {
-      long  range;
+      long range;
       if (override_range != 0) {
         range = override_range;
       } else {
@@ -236,8 +236,8 @@ public final class EltNonZero
   public boolean isExclusiveFormula(Invariant other)
   {
     if (other instanceof EltOneOf) {
-      EltOneOf  eoo = (EltOneOf) other;
-      if ((eoo.num_elts() == 1) && (((Long)eoo.elt()). longValue()  == 0)) {
+      EltOneOf eoo = (EltOneOf) other;
+      if ((eoo.num_elts() == 1) && (((Long)eoo.elt()). longValue() == 0)) {
         return true;
       }
     }
@@ -286,7 +286,7 @@ public final class EltNonZero
   }
 
   // Look up a previously instantiated invariant.
-  public static EltNonZero  find(PptSlice ppt) {
+  public static EltNonZero find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();

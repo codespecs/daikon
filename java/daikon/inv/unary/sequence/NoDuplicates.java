@@ -39,9 +39,9 @@ public class NoDuplicates
     super(ppt);
   }
 
-  public static NoDuplicates  instantiate(PptSlice ppt) {
+  public static NoDuplicates instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    NoDuplicates  result = new NoDuplicates(ppt);
+    NoDuplicates result = new NoDuplicates(ppt);
     // Don't instantiate if the variable can't have dupliates
     if (!result.var().aux.getFlag(VarInfoAux.HAS_DUPLICATES)) {
       if (debug.isDebugEnabled()) {
@@ -54,7 +54,7 @@ public class NoDuplicates
   }
 
   public String repr() {
-    return "NoDuplicates"  + varNames() + ": "
+    return "NoDuplicates" + varNames() + ": "
       + "elts=\"" + elts;
   }
 
@@ -97,7 +97,7 @@ public class NoDuplicates
         (VarInfoName.FunctionOfN) ((VarInfoName.Elements) var().name).term;
       String predicateValue = myName.getArg(2).ioa_name();
 
-      SequencesPredicate  derivation = (SequencesPredicate) var().derived;
+      SequencesPredicate derivation = (SequencesPredicate) var().derived;
       VarInfo varField = derivation.var1();
       VarInfoName.Field varFieldName = (VarInfoName.Field) varField.name;
       String fieldName = varFieldName.field;
@@ -129,7 +129,7 @@ public class NoDuplicates
         ") => " + quant.getVarName(0).ioa_name() + " = " + quant.getVarName(1).ioa_name() + quant.getClosingExp();
 
     } else if (var().isDerived() && var().derived instanceof SequencesJoin) {
-      SequencesJoin  derivation = (SequencesJoin) var().derived;
+      SequencesJoin derivation = (SequencesJoin) var().derived;
       VarInfo varField1 = derivation.var1();
       VarInfoName.Field varFieldName1 = (VarInfoName.Field) varField1.name;
       String fieldName1 = varFieldName1.field;
@@ -220,7 +220,7 @@ public class NoDuplicates
           // System.out.println("NoDuplicates.isObviousImplied: no slice for " + v1.name + ", " + v2.name);
         } else  {
           // slice_2seq != null
-          SubSequence  ss = SubSequence.find(slice_2seq);
+          SubSequence ss = SubSequence.find(slice_2seq);
           if (ss == null) {
             // System.out.println("NoDuplicates.isObviousImplied: no SubSequence for " + v1.name + ", " + v2.name);
           } else {

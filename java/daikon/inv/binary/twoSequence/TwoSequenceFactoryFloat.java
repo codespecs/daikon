@@ -12,7 +12,7 @@ import org.apache.log4j.Category;
 
 import java.util.*;
 
-public final class TwoSequenceFactoryFloat  {
+public final class TwoSequenceFactoryFloat {
 
   /**
    * Debug tracer
@@ -62,7 +62,7 @@ public final class TwoSequenceFactoryFloat  {
         // a[j..], which should be obvious from knowledge about i and j.
         Global.implied_false_noninstantiated_invariants++;
         // System.out.println("No SeqComparison because same super for " + ppt.name);
-        LinearBinaryFloat  lb = LinearBinaryFloat.find(ppt);
+        LinearBinaryFloat lb = LinearBinaryFloat.find(ppt);
         if (lb != null)
           System.out.println("  " + lb.format());
       } else {

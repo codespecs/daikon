@@ -79,7 +79,7 @@ showvars:
 JAVA_CPP = java-cpp.pl $< -DDEFINEDVAR > $@
 
 MathMDE.java: MathMDE.java.jpp MathMDE-gcd.java.jpp MathMDE-modulus.java.jpp MathMDE-nonmodulus.java.jpp MathMDE-help.java.jpp MathMDE-helpend.java.jpp
-	-mv -f $@ $@-bak
+	# -mv -f $@ $@-bak
 	java-cpp.pl $< > $@
 	chmod -w $@
 

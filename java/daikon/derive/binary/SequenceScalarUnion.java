@@ -18,7 +18,7 @@ public final class SequenceScalarUnion
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff SequenceScalarUnion  derived variables should be generated.
+   * Boolean.  True iff SequenceScalarUnion derived variables should be generated.
    **/
   public static boolean dkconfig_enabled = false;
 
@@ -45,20 +45,20 @@ public final class SequenceScalarUnion
     long[] tmp = new long [val1_array.length+val2_array.length];
     int size = 0;
     for (int i=0; i<val1_array.length; i++) {
-      long  v = val1_array[i];
+      long v = val1_array[i];
       if ((size==0) ||
           (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), v)==-1))
         tmp[size++] = v;
     }
     for (int i=0; i<val2_array.length; i++) {
-      long  v = val2_array[i];
+      long v = val2_array[i];
       if ((size==0) ||
           (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), v)==-1))
         tmp[size++] = v;
     }
 
     long[] union = ArraysMDE.subarray(tmp, 0, size);
-    union = (long  []) Intern.intern(union);
+    union = (long[]) Intern.intern(union);
 
     int mod = (((mod1 == ValueTuple.UNMODIFIED)
                 && (mod2 == ValueTuple.UNMODIFIED))

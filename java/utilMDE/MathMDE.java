@@ -209,25 +209,25 @@ public final class MathMDE {
   ///
 
   /** Return the greatest common divisor of the two arguments. */
-  public static int  gcd(int  a, int  b) {
+  public static int gcd(int a, int b) {
     // Euclid's method
     if (b == 0)
       return 0;
     while (b != 0) {
-      int  tmp = b;
+      int tmp = b;
       b = a % b;
       a = tmp;
     }
     return a;
   }
 
-  /** Return the greatest common divisor of the elements of int  array a. */
-  public static int  gcd(int [] a) {
+  /** Return the greatest common divisor of the elements of int array a. */
+  public static int gcd(int [] a) {
     // Euclid's method
     if (a.length == 0) {
       return 0;
     }
-    int  result = a[0];
+    int result = a[0];
     for (int i=1; i<a.length; i++) {
       result = gcd(a[i], result);
       if ((result == 1) || (result == 0))
@@ -238,14 +238,14 @@ public final class MathMDE {
 
   /**
    * Return the gcd (greatest common divisor) of the differences
-   * between the elements of int  array a.
+   * between the elements of int array a.
    **/
-  public static int  gcd_differences(int [] a) {
+  public static int gcd_differences(int [] a) {
     // Euclid's method
     if (a.length < 2) {
       return 0;
     }
-    int  result = a[1] - a[0];
+    int result = a[1] - a[0];
     for (int i=2; i<a.length; i++) {
       result = gcd(a[i] - a[i-1], result);
       if ((result == 1) || (result == 0))
@@ -257,25 +257,25 @@ public final class MathMDE {
   /// gcd -- version for manipulating long (rather than int) values
 
   /** Return the greatest common divisor of the two arguments. */
-  public static long  gcd(long  a, long  b) {
+  public static long gcd(long a, long b) {
     // Euclid's method
     if (b == 0)
       return 0;
     while (b != 0) {
-      long  tmp = b;
+      long tmp = b;
       b = a % b;
       a = tmp;
     }
     return a;
   }
 
-  /** Return the greatest common divisor of the elements of long  array a. */
-  public static long  gcd(long [] a) {
+  /** Return the greatest common divisor of the elements of long array a. */
+  public static long gcd(long [] a) {
     // Euclid's method
     if (a.length == 0) {
       return 0;
     }
-    long  result = a[0];
+    long result = a[0];
     for (int i=1; i<a.length; i++) {
       result = gcd(a[i], result);
       if ((result == 1) || (result == 0))
@@ -286,14 +286,14 @@ public final class MathMDE {
 
   /**
    * Return the gcd (greatest common divisor) of the differences
-   * between the elements of long  array a.
+   * between the elements of long array a.
    **/
-  public static long  gcd_differences(long [] a) {
+  public static long gcd_differences(long [] a) {
     // Euclid's method
     if (a.length < 2) {
       return 0;
     }
-    long  result = a[1] - a[0];
+    long result = a[1] - a[0];
     for (int i=2; i<a.length; i++) {
       result = gcd(a[i] - a[i-1], result);
       if ((result == 1) || (result == 0))
@@ -307,8 +307,8 @@ public final class MathMDE {
   ///
 
   /** Return z such that (z == x mod y) and (0 <= z < abs(y)). */
-  public static final int  mod_positive(int  x, int  y) {
-    int  result = x % y;
+  public static final int mod_positive(int x, int y) {
+    int result = x % y;
     if (result < 0)
       result += Math.abs(y);
     return result;
@@ -323,11 +323,11 @@ public final class MathMDE {
     if (nums.length < 3)
     return null;
 
-    int  modulus = Math.abs(gcd_differences(nums));
+    int modulus = Math.abs(gcd_differences(nums));
     if (modulus == 1)
       return null;
 
-    int  remainder = nums[0] % modulus;
+    int remainder = nums[0] % modulus;
     if (remainder < 0)
       remainder += modulus;
 
@@ -335,7 +335,7 @@ public final class MathMDE {
   }
 
   /**
-   * The iterator produces Integer  values.
+   * The iterator produces Integer values.
    * This can be more efficient than modulus(int[]) if the int [] doesn't already
    * exist, because this does not necessarily examine every value produced by
    * its iterator.
@@ -343,15 +343,15 @@ public final class MathMDE {
   public static int [] modulus_int (Iterator itor) {
     if (!itor.hasNext())
       return null;
-    int  avalue = ((Integer)itor.next()). intValue ();
+    int avalue = ((Integer)itor.next()). intValue ();
     if (!itor.hasNext())
       return null;
-    int  modulus = Math.abs(avalue - ((Integer)itor.next()). intValue ());
+    int modulus = Math.abs(avalue - ((Integer)itor.next()). intValue ());
     if (modulus == 1)
       return null;
     int count = 2;
     while (itor.hasNext()) {
-      int  i = ((Integer)itor.next()). intValue ();
+      int i = ((Integer)itor.next()). intValue ();
       if (i == avalue)
 	continue;
       modulus = MathMDE.gcd(modulus, Math.abs(avalue - i));
@@ -386,8 +386,8 @@ public final class MathMDE {
   public static int [] modulus_strict(int [] nums, boolean nonstrict_ends) {
     int first_index = 0;
     int last_index = nums.length-1;
-    int  first_nonstrict = 0; // arbitrary initial value
-    int  last_nonstrict = 0; // arbitrary initial value
+    int first_nonstrict = 0; // arbitrary initial value
+    int last_nonstrict = 0; // arbitrary initial value
     if (nonstrict_ends) {
       first_nonstrict = nums[first_index];
       first_index++;
@@ -397,14 +397,14 @@ public final class MathMDE {
     if (last_index - first_index < 2)
       return null;
 
-    int  modulus = nums[first_index+1] - nums[first_index];
+    int modulus = nums[first_index+1] - nums[first_index];
     if (modulus == 1)
       return null;
     for (int i=first_index+2; i<=last_index; i++)
       if (nums[i] - nums[i-1] != modulus)
 	return null;
 
-    int  r = mod_positive(nums[first_index], modulus);
+    int r = mod_positive(nums[first_index], modulus);
     if (nonstrict_ends) {
       if ((r != mod_positive(first_nonstrict, modulus))
           || (r != mod_positive(last_nonstrict, modulus)))
@@ -415,7 +415,7 @@ public final class MathMDE {
   }
 
   /**
-   * The iterator produces Integer  values.
+   * The iterator produces Integer values.
    * This can be more efficient than modulus(int[]) if the int [] doesn't
    * already exist, because this does not necessarily examine every value
    * produced by its iterator.
@@ -427,17 +427,17 @@ public final class MathMDE {
     if (!itor.hasNext())
       return null;
 
-    int  first_nonstrict = 0;    // arbitrary initial value
-    int  last_nonstrict = 0;     // arbitrary initial value
+    int first_nonstrict = 0;    // arbitrary initial value
+    int last_nonstrict = 0;     // arbitrary initial value
     if (nonstrict_ends) {
       first_nonstrict = ((Integer)itor.next()). intValue ();
     }
 
-    int  prev = ((Integer)itor.next()). intValue ();
+    int prev = ((Integer)itor.next()). intValue ();
     if (!itor.hasNext())
       return null;
-    int  next = ((Integer)itor.next()). intValue ();
-    int  modulus = next-prev;
+    int next = ((Integer)itor.next()). intValue ();
+    int modulus = next-prev;
     if (modulus == 1)
       return null;
     int count = 2;
@@ -456,7 +456,7 @@ public final class MathMDE {
     if (count < 3)
       return null;
 
-    int  r = MathMDE.mod_positive(next, modulus);
+    int r = MathMDE.mod_positive(next, modulus);
     if (nonstrict_ends) {
       if ((r != mod_positive(first_nonstrict, modulus))
           || (r != mod_positive(last_nonstrict, modulus)))
@@ -469,8 +469,8 @@ public final class MathMDE {
   /// modulus for long (as opposed to int) values
 
   /** Return z such that (z == x mod y) and (0 <= z < abs(y)). */
-  public static final long  mod_positive(long  x, long  y) {
-    long  result = x % y;
+  public static final long mod_positive(long x, long y) {
+    long result = x % y;
     if (result < 0)
       result += Math.abs(y);
     return result;
@@ -485,11 +485,11 @@ public final class MathMDE {
     if (nums.length < 3)
     return null;
 
-    long  modulus = Math.abs(gcd_differences(nums));
+    long modulus = Math.abs(gcd_differences(nums));
     if (modulus == 1)
       return null;
 
-    long  remainder = nums[0] % modulus;
+    long remainder = nums[0] % modulus;
     if (remainder < 0)
       remainder += modulus;
 
@@ -497,7 +497,7 @@ public final class MathMDE {
   }
 
   /**
-   * The iterator produces Long  values.
+   * The iterator produces Long values.
    * This can be more efficient than modulus(long[]) if the long [] doesn't already
    * exist, because this does not necessarily examine every value produced by
    * its iterator.
@@ -505,15 +505,15 @@ public final class MathMDE {
   public static long [] modulus_long (Iterator itor) {
     if (!itor.hasNext())
       return null;
-    long  avalue = ((Long)itor.next()). longValue ();
+    long avalue = ((Long)itor.next()). longValue ();
     if (!itor.hasNext())
       return null;
-    long  modulus = Math.abs(avalue - ((Long)itor.next()). longValue ());
+    long modulus = Math.abs(avalue - ((Long)itor.next()). longValue ());
     if (modulus == 1)
       return null;
     int count = 2;
     while (itor.hasNext()) {
-      long  i = ((Long)itor.next()). longValue ();
+      long i = ((Long)itor.next()). longValue ();
       if (i == avalue)
 	continue;
       modulus = MathMDE.gcd(modulus, Math.abs(avalue - i));
@@ -548,8 +548,8 @@ public final class MathMDE {
   public static long [] modulus_strict(long [] nums, boolean nonstrict_ends) {
     int first_index = 0;
     int last_index = nums.length-1;
-    long  first_nonstrict = 0; // arbitrary initial value
-    long  last_nonstrict = 0; // arbitrary initial value
+    long first_nonstrict = 0; // arbitrary initial value
+    long last_nonstrict = 0; // arbitrary initial value
     if (nonstrict_ends) {
       first_nonstrict = nums[first_index];
       first_index++;
@@ -559,14 +559,14 @@ public final class MathMDE {
     if (last_index - first_index < 2)
       return null;
 
-    long  modulus = nums[first_index+1] - nums[first_index];
+    long modulus = nums[first_index+1] - nums[first_index];
     if (modulus == 1)
       return null;
     for (int i=first_index+2; i<=last_index; i++)
       if (nums[i] - nums[i-1] != modulus)
 	return null;
 
-    long  r = mod_positive(nums[first_index], modulus);
+    long r = mod_positive(nums[first_index], modulus);
     if (nonstrict_ends) {
       if ((r != mod_positive(first_nonstrict, modulus))
           || (r != mod_positive(last_nonstrict, modulus)))
@@ -577,7 +577,7 @@ public final class MathMDE {
   }
 
   /**
-   * The iterator produces Long  values.
+   * The iterator produces Long values.
    * This can be more efficient than modulus(long[]) if the long [] doesn't
    * already exist, because this does not necessarily examine every value
    * produced by its iterator.
@@ -589,17 +589,17 @@ public final class MathMDE {
     if (!itor.hasNext())
       return null;
 
-    long  first_nonstrict = 0;    // arbitrary initial value
-    long  last_nonstrict = 0;     // arbitrary initial value
+    long first_nonstrict = 0;    // arbitrary initial value
+    long last_nonstrict = 0;     // arbitrary initial value
     if (nonstrict_ends) {
       first_nonstrict = ((Long)itor.next()). longValue ();
     }
 
-    long  prev = ((Long)itor.next()). longValue ();
+    long prev = ((Long)itor.next()). longValue ();
     if (!itor.hasNext())
       return null;
-    long  next = ((Long)itor.next()). longValue ();
-    long  modulus = next-prev;
+    long next = ((Long)itor.next()). longValue ();
+    long modulus = next-prev;
     if (modulus == 1)
       return null;
     int count = 2;
@@ -618,7 +618,7 @@ public final class MathMDE {
     if (count < 3)
       return null;
 
-    long  r = MathMDE.mod_positive(next, modulus);
+    long r = MathMDE.mod_positive(next, modulus);
     if (nonstrict_ends) {
       if ((r != mod_positive(first_nonstrict, modulus))
           || (r != mod_positive(last_nonstrict, modulus)))
@@ -640,11 +640,11 @@ public final class MathMDE {
    **/
   public static int [] missing_numbers(int [] nums) {
     Arrays.sort(nums);
-    int  min = nums[0];
-    int  max = nums[nums.length-1];
-    int[] result = new int [ max - min + 1 - nums.length  ];
+    int min = nums[0];
+    int max = nums[nums.length-1];
+    int[] result = new int [ max - min + 1 - nums.length ];
     int result_index = 0;
-    int  val = min;
+    int val = min;
     for (int i=0; i<nums.length; i++) {
       while (val < nums[i]) {
 	result[result_index] = val;
@@ -675,11 +675,11 @@ public final class MathMDE {
    * returned; otherwise, all returned values are between the minimum and
    * maximum of the original values.
    **/
-  static final class MissingNumbersIteratorInt  implements Iterator {
+  static final class MissingNumbersIteratorInt implements Iterator {
     int[] nums;
     Iterator nums_itor;
-    int  current_nonmissing;
-    int  current_missing;
+    int current_nonmissing;
+    int current_missing;
     int current_index;
     boolean add_ends;
 
@@ -736,7 +736,7 @@ public final class MathMDE {
             }
           }
 	  // prev_nonmissing is for testing only
-	  int  prev_nonmissing = current_nonmissing;
+	  int prev_nonmissing = current_nonmissing;
 	  current_nonmissing = ((Integer)nums_itor.next()). intValue ();
 	  if (! (prev_nonmissing < current_nonmissing))
 	    throw new Error("Non-sorted Iterator supplied to MissingNumbersIteratorINT: prev_nonmissing = " + prev_nonmissing + ", current_nonmissing = " + current_nonmissing);
@@ -756,7 +756,7 @@ public final class MathMDE {
     public Object next() {
       if (!hasNext())
 	throw new NoSuchElementException();
-      Integer  result = new Integer(current_missing);
+      Integer result = new Integer(current_missing);
       current_missing++;
       return result;
     }
@@ -776,7 +776,7 @@ public final class MathMDE {
     // instead of all at once.
     if (nums.length == 0)
       return null;
-    int  range = ArraysMDE.element_range(nums);
+    int range = ArraysMDE.element_range(nums);
     if (range > 65536)
       return null;
     return nonmodulus_strict_int_internal (new MissingNumbersIteratorInt(nums, true));
@@ -798,10 +798,10 @@ public final class MathMDE {
   }
 
   private static boolean check_first_and_last_nonmodulus(int [] rm, UtilMDE.RemoveFirstAndLastIterator rfali) {
-    int  r = rm[0];
-    int  m = rm[1];
-    int  first = ((Integer)rfali.getFirst()). intValue ();
-    int  last = ((Integer)rfali.getLast()). intValue ();
+    int r = rm[0];
+    int m = rm[1];
+    int first = ((Integer)rfali.getFirst()). intValue ();
+    int last = ((Integer)rfali.getLast()). intValue ();
     return ((r != mod_positive(first, m))
             && (r != mod_positive(last, m)));
   }
@@ -826,7 +826,7 @@ public final class MathMDE {
   //   // instead of all at once.
   //   if (nums.length == 0)
   //     return null;
-  //   int  range = ArraysMDE.element_range(nums);
+  //   int range = ArraysMDE.element_range(nums);
   //   if (range > 65536)
   //     return null;
   //   return modulus(missing_numbers(nums));
@@ -843,7 +843,7 @@ public final class MathMDE {
   public static int [] nonmodulus_nonstrict(int [] nums) {
     if (nums.length < 4)
       return null;
-    int max_modulus =  Math.min(nums.length/2, ArraysMDE.element_range(nums)/2)  ;
+    int max_modulus = Math.min(nums.length/2, ArraysMDE.element_range(nums)/2) ;
 
     // System.out.println("nums.length=" + nums.length + ", range=" + ArraysMDE.element_range(nums) + ", max_modulus=" + max_modulus);
 
@@ -854,7 +854,7 @@ public final class MathMDE {
       boolean[] has_modulus = new boolean[m]; // initialized to false?
       int num_nonmodulus = m;
       for (int i=0; i<nums.length; i++) {
-	int rem =  mod_positive(nums[i], m)  ;
+	int rem = mod_positive(nums[i], m) ;
 	if (!has_modulus[rem]) {
 	  has_modulus[rem] = true;
 	  num_nonmodulus--;
@@ -883,11 +883,11 @@ public final class MathMDE {
    **/
   public static long [] missing_numbers(long [] nums) {
     Arrays.sort(nums);
-    long  min = nums[0];
-    long  max = nums[nums.length-1];
+    long min = nums[0];
+    long max = nums[nums.length-1];
     long[] result = new long [new Long( max - min + 1 - nums.length ).intValue() ];
     int result_index = 0;
-    long  val = min;
+    long val = min;
     for (int i=0; i<nums.length; i++) {
       while (val < nums[i]) {
 	result[result_index] = val;
@@ -918,11 +918,11 @@ public final class MathMDE {
    * returned; otherwise, all returned values are between the minimum and
    * maximum of the original values.
    **/
-  static final class MissingNumbersIteratorLong  implements Iterator {
+  static final class MissingNumbersIteratorLong implements Iterator {
     long[] nums;
     Iterator nums_itor;
-    long  current_nonmissing;
-    long  current_missing;
+    long current_nonmissing;
+    long current_missing;
     int current_index;
     boolean add_ends;
 
@@ -979,7 +979,7 @@ public final class MathMDE {
             }
           }
 	  // prev_nonmissing is for testing only
-	  long  prev_nonmissing = current_nonmissing;
+	  long prev_nonmissing = current_nonmissing;
 	  current_nonmissing = ((Long)nums_itor.next()). longValue ();
 	  if (! (prev_nonmissing < current_nonmissing))
 	    throw new Error("Non-sorted Iterator supplied to MissingNumbersIteratorINT: prev_nonmissing = " + prev_nonmissing + ", current_nonmissing = " + current_nonmissing);
@@ -999,7 +999,7 @@ public final class MathMDE {
     public Object next() {
       if (!hasNext())
 	throw new NoSuchElementException();
-      Long  result = new Long(current_missing);
+      Long result = new Long(current_missing);
       current_missing++;
       return result;
     }
@@ -1019,7 +1019,7 @@ public final class MathMDE {
     // instead of all at once.
     if (nums.length == 0)
       return null;
-    long  range = ArraysMDE.element_range(nums);
+    long range = ArraysMDE.element_range(nums);
     if (range > 65536)
       return null;
     return nonmodulus_strict_long_internal (new MissingNumbersIteratorLong(nums, true));
@@ -1041,10 +1041,10 @@ public final class MathMDE {
   }
 
   private static boolean check_first_and_last_nonmodulus(long [] rm, UtilMDE.RemoveFirstAndLastIterator rfali) {
-    long  r = rm[0];
-    long  m = rm[1];
-    long  first = ((Long)rfali.getFirst()). longValue ();
-    long  last = ((Long)rfali.getLast()). longValue ();
+    long r = rm[0];
+    long m = rm[1];
+    long first = ((Long)rfali.getFirst()). longValue ();
+    long last = ((Long)rfali.getLast()). longValue ();
     return ((r != mod_positive(first, m))
             && (r != mod_positive(last, m)));
   }
@@ -1069,7 +1069,7 @@ public final class MathMDE {
   //   // instead of all at once.
   //   if (nums.length == 0)
   //     return null;
-  //   long  range = ArraysMDE.element_range(nums);
+  //   long range = ArraysMDE.element_range(nums);
   //   if (range > 65536)
   //     return null;
   //   return modulus(missing_numbers(nums));

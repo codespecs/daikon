@@ -37,7 +37,7 @@ public final class FunctionUnaryCoreFloat
   // false if we're looking for y=fn(x), true if we're looking for x=fn(y)
   public boolean inverse;
 
-  private FloatValueTracker  values_cache = new FloatValueTracker(8);
+  private FloatValueTracker values_cache = new FloatValueTracker(8);
 
   public Invariant wrapper;
 
@@ -54,7 +54,7 @@ public final class FunctionUnaryCoreFloat
 
   public Object clone() {
     try {
-      FunctionUnaryCoreFloat  result = (FunctionUnaryCoreFloat) super.clone();
+      FunctionUnaryCoreFloat result = (FunctionUnaryCoreFloat) super.clone();
       result.values_cache = (FloatValueTracker) values_cache.clone();
       return result;
     } catch (CloneNotSupportedException e) {
@@ -75,7 +75,7 @@ public final class FunctionUnaryCoreFloat
   private void set_function() throws ClassNotFoundException, NoSuchMethodException {
   }
 
-  public void add_modified(double  x, double  y, long count) {
+  public void add_modified(double x, double y, long count) {
     boolean ok = false;
     ok = (inverse
           ? (x == (FunctionsFloat.invokeUnary(methodNumber, y)))
@@ -117,12 +117,12 @@ public final class FunctionUnaryCoreFloat
   }
 
   public String repr() {
-    return "FunctionUnaryCoreFloat"  + wrapper.varNames() + ": "
+    return "FunctionUnaryCoreFloat" + wrapper.varNames() + ": "
       + "function=" + methodname[0]
       + ",inverse=" + inverse;
   }
 
-  public boolean isSameFormula(FunctionUnaryCoreFloat  other)
+  public boolean isSameFormula(FunctionUnaryCoreFloat other)
   {
     return methodname[0].equals(other.methodname[0]) &&
       methodname[1].equals(other.methodname[1]);

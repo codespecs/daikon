@@ -75,13 +75,13 @@ public final class OneOfSequence
 
   }
 
-  public static OneOfSequence  instantiate(PptSlice ppt) {
+  public static OneOfSequence instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new OneOfSequence(ppt);
   }
 
   protected Object clone() {
-    OneOfSequence  result = (OneOfSequence) super.clone();
+    OneOfSequence result = (OneOfSequence) super.clone();
     result.elts = (long[] []) elts.clone();
 
     for (int i=0; i < num_elts; i++) {
@@ -113,14 +113,14 @@ public final class OneOfSequence
     Arrays.sort(elts, 0, num_elts , comparator);
   }
 
-  public long[]  min_elt() {
+  public long[] min_elt() {
     if (num_elts == 0)
       throw new Error("Represents no elements");
     sort_rep();
     return elts[0];
   }
 
-  public long[]  max_elt() {
+  public long[] max_elt() {
     if (num_elts == 0)
       throw new Error("Represents no elements");
     sort_rep();
@@ -133,7 +133,7 @@ public final class OneOfSequence
       return false;
     sort_rep();
     for (int i=0; i < num_elts; i++)
-      if (! ( elts[i]  ==  other_elts[i] ) ) // elements are interned
+      if (! ( elts[i] == other_elts[i] ) ) // elements are interned
         return false;
     return true;
   }
@@ -154,21 +154,21 @@ public final class OneOfSequence
   }
 
   public String repr() {
-    return "OneOfSequence"  + varNames() + ": "
+    return "OneOfSequence" + varNames() + ": "
       + "falsified=" + falsified
       + ", num_elts=" + num_elts
       + ", elts=" + subarray_rep();
   }
 
   private boolean all_nulls(int value_no) {
-    long[]  seq = elts[value_no];
+    long[] seq = elts[value_no];
     for (int i=0; i<seq.length; i++) {
       if (seq[i] != 0) return false;
     }
     return true;
   }
   private boolean no_nulls(int value_no) {
-    long[]  seq = elts[value_no];
+    long[] seq = elts[value_no];
     for (int i=0; i<seq.length; i++) {
       if (seq[i] == 0) return false;
     }
@@ -201,7 +201,7 @@ public final class OneOfSequence
       if (is_hashcode) {
         // we only have one value, because add_modified dies if more
         Assert.assertTrue(num_elts == 1);
-        long[]  value = elts[0];
+        long[] value = elts[0];
         if (value.length == 0) {
           return varname + " == []";
         } else if ((value.length == 1) && (value[0] == 0)) {
@@ -226,7 +226,7 @@ public final class OneOfSequence
     public String format_java() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + var().name.java_name()  + " == " +  ArraysMDE.toString( elts[i] )  );
+    sb.append (" || (" + var().name.java_name() + " == " + ArraysMDE.toString( elts[i]));
     sb.append (")");
     }
     // trim off the && at the beginning for the first case
@@ -250,7 +250,7 @@ public final class OneOfSequence
       } else {
         Assert.assertTrue(num_elts == 1);
         // we only have one value, because add_modified dies if more
-        long[]  value = elts[0];
+        long[] value = elts[0];
         if (var().name.isApplySizeSafe()) {
           length = var().name.applySize().java_name() + " == " + value.length;
         }
@@ -290,7 +290,7 @@ public final class OneOfSequence
     if (is_hashcode) {
       // we only have one value, because add_modified dies if more
       Assert.assertTrue(num_elts == 1);
-      long[]  value = elts[0];
+      long[] value = elts[0];
       if (var().name.isApplySizeSafe()) {
         length = "size("+var().name.ioa_name() + ") = " + value.length;
       }
@@ -327,7 +327,7 @@ public final class OneOfSequence
     if (is_hashcode) {
       // we only have one value, because add_modified dies if more
       Assert.assertTrue(num_elts == 1);
-      long[]  value = elts[0];
+      long[] value = elts[0];
       if (var().type.isArray()) {
         if (var().name.isApplySizeSafe()) {
           length = var().name.applySize().esc_name() + " == " + value.length;
@@ -369,7 +369,7 @@ public final class OneOfSequence
       } else {
         Assert.assertTrue(num_elts == 1);
         // we only have one value, because add_modified dies if more
-        long[]  value = elts[0];
+        long[] value = elts[0];
         if (var().name.isApplySizeSafe()) {
           length = var().name.applySize().jml_name() + " == " + value.length;
         }
@@ -407,7 +407,7 @@ public final class OneOfSequence
     if (is_hashcode) {
       // we only have one value, because add_modified dies if more
       Assert.assertTrue(num_elts == 1);
-      long[]  value = elts[0];
+      long[] value = elts[0];
       if (var().name.isApplySizeSafe()) {
         length = "(EQ " + var().name.applySize().simplify_name() + " " + value.length + ")";
       }
@@ -433,7 +433,7 @@ public final class OneOfSequence
     return result;
   }
 
-  public void add_modified(long[]  v, int count) {
+  public void add_modified(long[] v, int count) {
 
     Assert.assertTrue(Intern.isInterned(v));
 
@@ -488,7 +488,7 @@ public final class OneOfSequence
 
   public boolean isSameFormula(Invariant o)
   {
-    OneOfSequence  other = (OneOfSequence) o;
+    OneOfSequence other = (OneOfSequence) o;
     if (num_elts != other.num_elts)
       return false;
     if (num_elts == 0 && other.num_elts == 0)
@@ -511,8 +511,8 @@ public final class OneOfSequence
       // we only have one value, because add_modified dies if more
       Assert.assertTrue(num_elts == 1 && other.num_elts == 1);
 
-      long[]  thisSeq = elts[0];
-      long[]  otherSeq = other.elts[0];
+      long[] thisSeq = elts[0];
+      long[] otherSeq = other.elts[0];
       if (thisSeq.length != otherSeq.length) {
         return false;
       }
@@ -528,7 +528,7 @@ public final class OneOfSequence
     }
 
     for (int i=0; i < num_elts; i++) {
-      if (! ( elts[i]  ==  other.elts[i] ))
+      if (! ( elts[i] == other.elts[i] ))
         return false;
     }
 
@@ -538,11 +538,11 @@ public final class OneOfSequence
   public boolean isExclusiveFormula(Invariant o)
   {
     if (o instanceof OneOfSequence) {
-      OneOfSequence  other = (OneOfSequence) o;
+      OneOfSequence other = (OneOfSequence) o;
 
       for (int i=0; i < num_elts; i++) {
         for (int j=0; j < other.num_elts; j++) {
-          if (( elts[i]  ==  other.elts[j] ) ) // elements are interned
+          if (( elts[i] == other.elts[j] ) ) // elements are interned
             return false;
         }
       }
@@ -564,7 +564,7 @@ public final class OneOfSequence
   }
 
   // Look up a previously instantiated invariant.
-  public static OneOfSequence  find(PptSlice ppt) {
+  public static OneOfSequence find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();

@@ -25,7 +25,7 @@ public final class SeqIndexNonEqualFloat
    **/
   public static boolean dkconfig_enabled = true;
 
-  public NonEqualCoreFloat  core;
+  public NonEqualCoreFloat core;
 
   static boolean debugSeqIndexNonEqual = false;
 
@@ -42,7 +42,7 @@ public final class SeqIndexNonEqualFloat
     }
   }
 
-  public static SeqIndexNonEqualFloat  instantiate(PptSlice ppt) {
+  public static SeqIndexNonEqualFloat instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
 
     VarInfo seqvar = ppt.var_infos[0];
@@ -60,14 +60,14 @@ public final class SeqIndexNonEqualFloat
   }
 
   protected Object clone() {
-    SeqIndexNonEqualFloat  result = (SeqIndexNonEqualFloat) super.clone();
+    SeqIndexNonEqualFloat result = (SeqIndexNonEqualFloat) super.clone();
     result.core = (NonEqualCoreFloat) core.clone();
     result.core.wrapper = result;
     return result;
   }
 
   public String repr() {
-    return "SeqIndexNonEqualFloat"  + varNames() + ": "
+    return "SeqIndexNonEqualFloat" + varNames() + ": "
       + core.repr()
       + ",falsified=" + falsified;
   }
@@ -128,7 +128,7 @@ public final class SeqIndexNonEqualFloat
     return form[0] + "(NEQ " + form[1] + " |i|)" + form[2];
   }
 
-  public void add_modified(double  [] a, int count) {
+  public void add_modified(double [] a, int count) {
     for (int i=0; i<a.length; i++) {
       core.add_modified(a[i], i, count);
       if (falsified)
@@ -160,7 +160,7 @@ public final class SeqIndexNonEqualFloat
   }
 
   // Look up a previously instantiated invariant.
-  public static SeqIndexNonEqualFloat  find(PptSlice ppt) {
+  public static SeqIndexNonEqualFloat find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
@@ -199,7 +199,7 @@ public final class SeqIndexNonEqualFloat
         PptSlice1 other_slice = pptt.findSlice(vi);
         // I'm not sure exactly how this can be null, but it can.
         if (other_slice != null) {
-          SeqIndexNonEqualFloat  other_sine = SeqIndexNonEqualFloat.find(other_slice);
+          SeqIndexNonEqualFloat other_sine = SeqIndexNonEqualFloat.find(other_slice);
           if ((other_sine != null) && other_sine.enoughSamples()) {
             return true;
           }

@@ -73,13 +73,13 @@ public final class EltOneOf
 
   }
 
-  public static EltOneOf  instantiate(PptSlice ppt) {
+  public static EltOneOf instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new EltOneOf(ppt);
   }
 
   protected Object clone() {
-    EltOneOf  result = (EltOneOf) super.clone();
+    EltOneOf result = (EltOneOf) super.clone();
     result.elts = (long[]) elts.clone();
 
     result.num_elts = this.num_elts;
@@ -104,17 +104,17 @@ public final class EltOneOf
   }
 
   private void sort_rep() {
-    Arrays.sort(elts, 0, num_elts );
+    Arrays.sort(elts, 0, num_elts);
   }
 
-  public long  min_elt() {
+  public long min_elt() {
     if (num_elts == 0)
       throw new Error("Represents no elements");
     sort_rep();
     return elts[0];
   }
 
-  public long  max_elt() {
+  public long max_elt() {
     if (num_elts == 0)
       throw new Error("Represents no elements");
     sort_rep();
@@ -127,7 +127,7 @@ public final class EltOneOf
       return false;
     sort_rep();
     for (int i=0; i < num_elts; i++)
-      if (! ( elts[i]  ==  other_elts[i] ) ) // elements are interned
+      if (! ( elts[i] == other_elts[i] ) ) // elements are interned
         return false;
     return true;
   }
@@ -141,14 +141,14 @@ public final class EltOneOf
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
-      sb.append(((( elts[i]  == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))));
+      sb.append(((( elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))));
     }
     sb.append(" }");
     return sb.toString();
   }
 
   public String repr() {
-    return "EltOneOf"  + varNames() + ": "
+    return "EltOneOf" + varNames() + ": "
       + "falsified=" + falsified
       + ", num_elts=" + num_elts
       + ", elts=" + subarray_rep();
@@ -189,7 +189,7 @@ public final class EltOneOf
             ;
         }
       } else {
-        return varname + " == " + ((( elts[0]  == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <=  elts[0]  &&  elts[0]  <= Integer.MAX_VALUE) ? String.valueOf( elts[0] ) : (String.valueOf( elts[0] ) + "L"))) ;
+        return varname + " == " + ((( elts[0] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[0] && elts[0] <= Integer.MAX_VALUE) ? String.valueOf( elts[0] ) : (String.valueOf( elts[0] ) + "L"))) ;
       }
 
     } else {
@@ -201,7 +201,7 @@ public final class EltOneOf
     public String format_java() {
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < num_elts; i++) {
-    sb.append (" || (" + var().name.java_name()  + " == " +  ((( elts[i]  == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")))  );
+    sb.append (" || (" + var().name.java_name() + " == " + ((( elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))));
     sb.append (")");
     }
     // trim off the && at the beginning for the first case
@@ -238,7 +238,7 @@ public final class EltOneOf
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
         // Not quite right for the case of NaN, I think.
-        result += varname + " == " + ((( elts[i]  == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))) ;
+        result += varname + " == " + ((( elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))) ;
       }
     }
 
@@ -272,7 +272,7 @@ public final class EltOneOf
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " \\/ "; }
-        result += "(" + varname + " = " + ((( elts[i]  == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")))  + ")";
+        result += "(" + varname + " = " + ((( elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))) + ")";
       }
     }
 
@@ -318,7 +318,7 @@ public final class EltOneOf
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
-        result += varname + " == " + ((( elts[i]  == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))) ;
+        result += varname + " == " + ((( elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))) ;
       }
     }
 
@@ -353,7 +353,7 @@ public final class EltOneOf
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
-        result += varname + " == " + ((( elts[i]  == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))) ;
+        result += varname + " == " + ((( elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))) ;
       }
     }
 
@@ -390,7 +390,7 @@ public final class EltOneOf
     } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
-        result += " (EQ " + varname + " " + ((( elts[i]  == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")))  + ")";
+        result += " (EQ " + varname + " " + ((( elts[i] == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))) + ")";
       }
       if (num_elts > 1) {
         result = "(OR" + result + ")";
@@ -408,7 +408,7 @@ public final class EltOneOf
   public void add_modified(long [] a, int count) {
   OUTER:
    for (int ai=0; ai<a.length; ai++) {
-    long  v = a[ai];
+    long v = a[ai];
 
     for (int i=0; i<num_elts; i++)
       if (elts[i] == v) {
@@ -487,7 +487,7 @@ public final class EltOneOf
         continue;
       }
       if (inv instanceof EltOneOf) {
-        EltOneOf  other = (EltOneOf) inv;
+        EltOneOf other = (EltOneOf) inv;
         if (isSameFormula(other)
             && SubSequence.isObviousDerived(v, other.var())) {
           return true;
@@ -500,7 +500,7 @@ public final class EltOneOf
 
   public boolean isSameFormula(Invariant o)
   {
-    EltOneOf  other = (EltOneOf) o;
+    EltOneOf other = (EltOneOf) o;
     if (num_elts != other.num_elts)
       return false;
     if (num_elts == 0 && other.num_elts == 0)
@@ -539,7 +539,7 @@ public final class EltOneOf
     }
 
     for (int i=0; i < num_elts; i++) {
-      if (! ( elts[i]  ==  other.elts[i] ))
+      if (! ( elts[i] == other.elts[i] ))
         return false;
     }
 
@@ -549,11 +549,11 @@ public final class EltOneOf
   public boolean isExclusiveFormula(Invariant o)
   {
     if (o instanceof EltOneOf) {
-      EltOneOf  other = (EltOneOf) o;
+      EltOneOf other = (EltOneOf) o;
 
       for (int i=0; i < num_elts; i++) {
         for (int j=0; j < other.num_elts; j++) {
-          if (( elts[i]  ==  other.elts[j] ) ) // elements are interned
+          if (( elts[i] == other.elts[j] ) ) // elements are interned
             return false;
         }
       }
@@ -564,8 +564,8 @@ public final class EltOneOf
     if ((o instanceof EltNonZero) && (num_elts == 1) && (elts[0] == 0)) {
       return true;
     }
-    long  elts_min = Long.MAX_VALUE;
-    long  elts_max = Long.MIN_VALUE;
+    long elts_min = Long.MAX_VALUE;
+    long elts_max = Long.MIN_VALUE;
     for (int i=0; i < num_elts; i++) {
       elts_min = Math.min(elts_min, elts[i]);
       elts_max = Math.max(elts_max, elts[i]);
@@ -590,7 +590,7 @@ public final class EltOneOf
   }
 
   // Look up a previously instantiated invariant.
-  public static EltOneOf  find(PptSlice ppt) {
+  public static EltOneOf find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();

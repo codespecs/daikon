@@ -32,14 +32,14 @@ public class LowerBoundCore
   final static int required_samples = 5; // for enoughSamples
   final static int required_samples_at_bound = 3; // for justification
 
-  // min1  <  min2  <  min3
-  public long  min1  = Long.MAX_VALUE ;
-  int num_min1  = 0;
-  long  min2  = Long.MAX_VALUE ;
-  int num_min2  = 0;
-  long  min3  = Long.MAX_VALUE ;
-  int num_min3  = 0;
-  long  max  = Long.MIN_VALUE ;
+  // min1 < min2 < min3
+  public long min1 = Long.MAX_VALUE ;
+  int num_min1 = 0;
+  long min2 = Long.MAX_VALUE ;
+  int num_min2 = 0;
+  long min3 = Long.MAX_VALUE ;
+  int num_min3 = 0;
+  long max = Long.MIN_VALUE ;
 
   int samples = 0;
 
@@ -65,8 +65,8 @@ public class LowerBoundCore
   private static DecimalFormat two_decimals = new java.text.DecimalFormat("#.##");
 
   public String repr() {
-    long  modulus = calc_modulus();
-    long  range = calc_range();
+    long modulus = calc_modulus();
+    long range = calc_range();
     double avg_samples_per_val = calc_avg_samples_per_val(modulus, range);
     return "min1=" + min1
       + ", num_min1=" + num_min1
@@ -74,28 +74,28 @@ public class LowerBoundCore
       + ", num_min2=" + num_min2
       + ", min3=" + min3
       + ", num_min3=" + num_min3
-      + ", max=" + max  + ", range=" + range + ", " +
+      + ", max=" + max + ", range=" + range + ", " +
       "avg_samp=" + two_decimals.format(avg_samples_per_val);
   }
 
-  private double calc_avg_samples_per_val(long  modulus, double range) {
+  private double calc_avg_samples_per_val(long modulus, double range) {
     double avg_samples_per_val =
       ((double) wrapper.ppt.num_mod_non_missing_samples()) * modulus / range;
     avg_samples_per_val = Math.min(avg_samples_per_val, 100);
 
-    if (min1  == 0) {
+    if (min1 == 0) {
       avg_samples_per_val /= 5;
     }
 
     return avg_samples_per_val;
   }
 
-  private long  calc_range() {
+  private long calc_range() {
     // If I used Math.abs, the order of arguments to minus would not matter.
-    return  (max  - min1 ) + 1;
+    return (max - min1 ) + 1;
   }
 
-  private long  calc_modulus() {
+  private long calc_modulus() {
     // Need to reinstate this at some point.
     // {
     //   for (Iterator itor = wrapper.ppt.invs.iterator(); itor.hasNext();) {
@@ -109,43 +109,43 @@ public class LowerBoundCore
     return 1;
   }
 
-  public void add_modified(long  value, int count) {
+  public void add_modified(long value, int count) {
     samples += count;
 
-    // System.out.println("LowerBoundCore"  + varNames() + ": "
+    // System.out.println("LowerBoundCore" + varNames() + ": "
     //                    + "add(" + value + ", " + modified + ", " + count + ")");
 
-    long  v = value;
+    long v = value;
 
-    if (v >  max) {
-      max  = v;
+    if (v > max) {
+      max = v;
     }
 
     if (v == min1) {
-      num_min1  += count;
-    } else if (v <  min1) {
+      num_min1 += count;
+    } else if (v < min1) {
       // wrapper.cloneAndFlow();
       // Disabled because array bounds could call this twice
       changed = true;
 
-      min3  = min2 ;
-      num_min3  = num_min2 ;
-      min2  = min1 ;
-      num_min2  = num_min1 ;
-      min1  = v;
-      num_min1  = count;
+      min3 = min2 ;
+      num_min3 = num_min2 ;
+      min2 = min1 ;
+      num_min2 = num_min1 ;
+      min1 = v;
+      num_min1 = count;
     } else if (v == min2) {
-      num_min2  += count;
-    } else if (v <  min2) {
-      min3  = min2 ;
-      num_min3  = num_min2 ;
-      min2  = v;
-      num_min2  = count;
+      num_min2 += count;
+    } else if (v < min2) {
+      min3 = min2 ;
+      num_min3 = num_min2 ;
+      min2 = v;
+      num_min2 = count;
     } else if (v == min3) {
-      num_min3  += count;
-    } else if (v <  min3) {
-      min3  = v;
-      num_min3  = count;
+      num_min3 += count;
+    } else if (v < min3) {
+      min3 = v;
+      num_min3 = count;
     }
   }
 
@@ -187,7 +187,7 @@ public class LowerBoundCore
     double bound_samples_prob = prob_is_ge(num_min1 , required_samples_at_bound);
     utilMDE.Assert.assertTrue(0 <= bound_samples_prob && bound_samples_prob <= 1, "bad bound_samples_prob = " + bound_samples_prob);
 
-    long  modulus = calc_modulus();
+    long modulus = calc_modulus();
 
     // Accept a bound if:
     //  * it contains more than twice as many elements as it ought to by
@@ -203,8 +203,8 @@ public class LowerBoundCore
     double trunc_prob = prob_is_ge(num_min1 , 5*avg_samples_per_val);
 
     // Value "d" from above
-    boolean unif_mod_OK = (( (min3  - min2 ) == modulus)
-                           && ( (min2  - min1 ) == modulus));
+    boolean unif_mod_OK = (( (min3 - min2 ) == modulus)
+                           && ( (min2 - min1 ) == modulus));
     double unif_prob = 1;
     if (unif_mod_OK) {
       double half_avg_samp = avg_samples_per_val/2;
@@ -240,9 +240,9 @@ public class LowerBoundCore
     return result;
   }
 
-  public boolean isSameFormula(LowerBoundCore  other)
+  public boolean isSameFormula(LowerBoundCore other)
   {
-    return min1  == other. min1 ;
+    return min1 == other. min1 ;
   }
 
   public boolean isExact() {

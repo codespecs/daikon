@@ -29,7 +29,7 @@ public final class SeqFloatComparison
    **/
   public static boolean dkconfig_enabled = true;
 
-  public FloatComparisonCore  core;
+  public FloatComparisonCore core;
 
   static boolean debugSeqIntComparison = false;
 
@@ -41,11 +41,11 @@ public final class SeqFloatComparison
   }
 
   // This constructor enables testing with InvariantFormatTester.
-  public static SeqFloatComparison  instantiate(PptSlice ppt) {
+  public static SeqFloatComparison instantiate(PptSlice ppt) {
     return instantiate(ppt,true);
   }
 
-  public static SeqFloatComparison  instantiate(PptSlice ppt, boolean seq_first) {
+  public static SeqFloatComparison instantiate(PptSlice ppt, boolean seq_first) {
     if (!dkconfig_enabled) return null;
 
     VarInfo seqvar = ppt.var_infos[seq_first ? 0 : 1];
@@ -98,7 +98,7 @@ public final class SeqFloatComparison
   }
 
   protected Object clone() {
-    SeqFloatComparison  result = (SeqFloatComparison) super.clone();
+    SeqFloatComparison result = (SeqFloatComparison) super.clone();
     result.core = (FloatComparisonCore) core.clone();
     result.core.wrapper = result;
     return result;
@@ -109,7 +109,7 @@ public final class SeqFloatComparison
   // }
 
   public String repr() {
-    return "SeqFloatComparison"  + varNames() + ": "
+    return "SeqFloatComparison" + varNames() + ": "
       + core.repr()
       + ",falsified=" + falsified;
   }
@@ -165,7 +165,7 @@ public final class SeqFloatComparison
     return form[0] + form[1] + " " + comparator + " " + form[2] + form[3];
   }
 
-  public void add_modified(double [] a, double  x, int count) {
+  public void add_modified(double [] a, double x, int count) {
     for (int i=0; i<a.length; i++) {
       core.add_modified(a[i], x, count);
       if (falsified)
@@ -192,7 +192,7 @@ public final class SeqFloatComparison
   }
 
   // Look up a previously instantiated invariant.
-  public static SeqFloatComparison  find(PptSlice ppt) {
+  public static SeqFloatComparison find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
@@ -226,7 +226,7 @@ public final class SeqFloatComparison
         continue;
       }
       if (inv instanceof SeqFloatComparison) {
-        SeqFloatComparison  other = (SeqFloatComparison) inv;
+        SeqFloatComparison other = (SeqFloatComparison) inv;
         if (isSameFormula(other)
             && (sclvar() == other.sclvar())
             && SubSequenceFloat.isObviousDerived(seqvar(), other.seqvar())) {
@@ -261,7 +261,7 @@ public final class SeqFloatComparison
     {
       PptSlice1 seqslice = pptt.findSlice(seqvar);
       if (seqslice != null) {
-        EltOneOfFloat  eoo = EltOneOfFloat.find(seqslice);
+        EltOneOfFloat eoo = EltOneOfFloat.find(seqslice);
         if ((eoo != null) && eoo.enoughSamples() && (eoo.num_elts() == 1)) {
           return true;
         }
@@ -275,7 +275,7 @@ public final class SeqFloatComparison
       if (SubSequenceFloat.isObviousDerived(seqvar, vi)) {
         PptSlice2 other_slice = pptt.findSlice_unordered(vi, sclvar());
         if (other_slice != null) {
-          SeqFloatComparison  other_sic = SeqFloatComparison.find(other_slice);
+          SeqFloatComparison other_sic = SeqFloatComparison.find(other_slice);
           if ((other_sic != null) && other_sic.enoughSamples()) {
             return true;
           }

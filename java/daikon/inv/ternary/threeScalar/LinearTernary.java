@@ -27,14 +27,14 @@ public class LinearTernary
   public final static boolean debugLinearTernary = false;
   // public final static boolean debugLinearTernary = true;
 
-  public LinearTernaryCore  core;
+  public LinearTernaryCore core;
 
   protected LinearTernary (PptSlice ppt) {
     super(ppt);
     core = new LinearTernaryCore(this);
   }
 
-  public static LinearTernary  instantiate(PptSlice ppt) {
+  public static LinearTernary instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
 
     VarInfo x = ppt.var_infos[0];
@@ -86,8 +86,8 @@ public class LinearTernary
           System.out.println(ppt.varNames() + " 3 sequences match");
         }
 
-        SequenceScalarSubsequence  part1 = null;
-        SequenceScalarSubsequence  part2 = null;
+        SequenceScalarSubsequence part1 = null;
+        SequenceScalarSubsequence part2 = null;
         for (int i=0; i<3; i++) {
           VarInfo vi = ppt.var_infos[i];
           VarInfo summand = ((SequenceSum) vi.derived).base;
@@ -95,7 +95,7 @@ public class LinearTernary
             System.out.println("considering: " + summand.name + " " + vi.name);
           }
           if (summand.derived instanceof SequenceScalarSubsequence) {
-            SequenceScalarSubsequence  sss = (SequenceScalarSubsequence) summand.derived;
+            SequenceScalarSubsequence sss = (SequenceScalarSubsequence) summand.derived;
             if (sss.from_start) {
               part1 = sss;
             } else {
@@ -157,7 +157,7 @@ public class LinearTernary
       VarInfo seq = null;
       VarInfo eltindex = null;
       if (notpart.derived instanceof SequenceScalarSubscript) {
-        SequenceScalarSubscript  sss = (SequenceScalarSubscript) notpart.derived;
+        SequenceScalarSubscript sss = (SequenceScalarSubscript) notpart.derived;
         seq = sss.seqvar();
         eltindex = sss.sclvar();
       }
@@ -167,8 +167,8 @@ public class LinearTernary
         // For now, don't deal with case where one variable is the entire
         // sequence.
         if (! ((parta == seq) || (partb == seq))) {
-          SequenceScalarSubsequence  a_sss = (SequenceScalarSubsequence) parta.derived;
-          SequenceScalarSubsequence  b_sss = (SequenceScalarSubsequence) partb.derived;
+          SequenceScalarSubsequence a_sss = (SequenceScalarSubsequence) parta.derived;
+          SequenceScalarSubsequence b_sss = (SequenceScalarSubsequence) partb.derived;
           if ((a_sss.sclvar() == eltindex)
               && (b_sss.sclvar() == eltindex)) {
             if ((a_sss.from_start
@@ -187,7 +187,7 @@ public class LinearTernary
       }
     }
 
-    LinearTernary  result = new LinearTernary(ppt);
+    LinearTernary result = new LinearTernary(ppt);
     if (debugLinearTernary) {
       System.out.println("LinearTernary.instantiate: " + result.repr());
     }
@@ -195,7 +195,7 @@ public class LinearTernary
   }
 
   protected Object clone() {
-    LinearTernary  result = (LinearTernary) super.clone();
+    LinearTernary result = (LinearTernary) super.clone();
     result.core = (LinearTernaryCore) core.clone();
     result.core.wrapper = result;
     return result;
@@ -207,7 +207,7 @@ public class LinearTernary
   }
 
   public String repr() {
-    return "LinearTernary"  + varNames() + ": "
+    return "LinearTernary" + varNames() + ": "
       + "falsified=" + falsified
       + "; " + core.repr();
   }
@@ -220,7 +220,7 @@ public class LinearTernary
   //   return core.format_reversed(var1().name.name(), var2().name.name(), var3().name.name());
   // }
 
-  public void add_modified(long  x, long  y, long  z, int count) {
+  public void add_modified(long x, long y, long z, int count) {
     core.add_modified(x, y, z, count);
   }
 
@@ -265,7 +265,7 @@ public class LinearTernary
   }
 
   // Look up a previously instantiated invariant.
-  public static LinearTernary  find(PptSlice ppt) {
+  public static LinearTernary find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 3);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
@@ -275,14 +275,14 @@ public class LinearTernary
     return null;
   }
 
-  // Returns a vector of LinearTernary  objects.
+  // Returns a vector of LinearTernary objects.
   // This ought to produce an iterator instead.
   public static Vector findAll(VarInfo vi) {
     Vector result = new Vector();
     for (Iterator itor = vi.ppt.views_iterator() ; itor.hasNext() ; ) {
       PptSlice view = (PptSlice) itor.next();
       if ((view.arity == 3) && view.usesVar(vi)) {
-        LinearTernary  lt = LinearTernary.find(view);
+        LinearTernary lt = LinearTernary.find(view);
         if (lt != null) {
           result.add(lt);
         }

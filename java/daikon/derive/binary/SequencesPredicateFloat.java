@@ -58,7 +58,7 @@ public final class SequencesPredicateFloat
   /**
    * What value to predicate on.
    **/
-  private double  choose;
+  private double choose;
 
   /**
    * Whether we keep or discard values that match this.choose.
@@ -76,7 +76,7 @@ public final class SequencesPredicateFloat
    * @param vi1
    * @param vi2 The two variables this is based on
    **/
-  public SequencesPredicateFloat(VarInfo vi1, VarInfo vi2, double  argChoose, String argName) {
+  public SequencesPredicateFloat(VarInfo vi1, VarInfo vi2, double argChoose, String argName) {
     this (vi1, vi2, argChoose, argName, true);
   }
 
@@ -85,7 +85,7 @@ public final class SequencesPredicateFloat
    * @param vi1
    * @param vi2 The two variables this is based on
    **/
-  public SequencesPredicateFloat(VarInfo vi1, VarInfo vi2, double  argChoose, String argName, boolean argKeep) {
+  public SequencesPredicateFloat(VarInfo vi1, VarInfo vi2, double argChoose, String argName, boolean argKeep) {
     super(vi1, vi2);
     choose = argChoose;
     name = argName;
@@ -211,7 +211,7 @@ public final class SequencesPredicateFloat
   public boolean isSameFormula(Derivation other) {
     // For Toh (tohn) to do.
     if (other instanceof SequencesPredicateFloat) {
-      SequencesPredicateFloat  o = (SequencesPredicateFloat) other;
+      SequencesPredicateFloat o = (SequencesPredicateFloat) other;
       return o.var1().equals(var1())
         && o.var2().equals(var2())
         && choose == o.choose;

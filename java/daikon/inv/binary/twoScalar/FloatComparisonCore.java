@@ -35,7 +35,7 @@ public final class FloatComparisonCore
   public boolean obvious_can_be_le;
   public boolean obvious_can_be_ge;
 
-  public FloatValueTracker  values_cache = new FloatValueTracker(8);
+  public FloatValueTracker values_cache = new FloatValueTracker(8);
 
   public Invariant wrapper;
 
@@ -61,7 +61,7 @@ public final class FloatComparisonCore
 
   public Object clone() {
     try {
-      FloatComparisonCore  result = (FloatComparisonCore) super.clone();
+      FloatComparisonCore result = (FloatComparisonCore) super.clone();
       result.values_cache = (FloatValueTracker) values_cache.clone();
       return result;
     } catch (CloneNotSupportedException e) {
@@ -86,7 +86,7 @@ public final class FloatComparisonCore
     obvious_can_be_ge = tmp;
   }
 
-  public void add_modified(double  v1, double  v2, int count) {
+  public void add_modified(double v1, double v2, int count) {
 
     boolean new_can_be_eq = can_be_eq;
     boolean new_can_be_lt = can_be_lt;
@@ -215,7 +215,7 @@ public final class FloatComparisonCore
     return (can_be_eq && (!can_be_lt) && (!can_be_gt));
   }
 
-  public boolean isSameFormula(FloatComparisonCore  other)
+  public boolean isSameFormula(FloatComparisonCore other)
   {
     return
       (can_be_eq == other.can_be_eq) &&
@@ -223,7 +223,7 @@ public final class FloatComparisonCore
       (can_be_gt == other.can_be_gt);
   }
 
-  public boolean isExclusiveFormula(FloatComparisonCore  other)
+  public boolean isExclusiveFormula(FloatComparisonCore other)
   {
     return (! ((can_be_eq && other.can_be_eq)
                || (can_be_gt && other.can_be_gt)

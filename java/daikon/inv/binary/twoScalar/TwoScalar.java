@@ -28,7 +28,7 @@ public abstract class TwoScalar
     return ppt.var_infos[1];
   }
 
-  public void add(long  v1, long  v2, int mod_index, int count) {
+  public void add(long v1, long v2, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
     Assert.assertTrue(! falsified);
@@ -45,13 +45,13 @@ public abstract class TwoScalar
    * This method need not check for falsified;
    * that is done by the caller.
    **/
-  public abstract void add_modified(long  v1, long  v2, int count);
+  public abstract void add_modified(long v1, long v2, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
    **/
-  public void add_unmodified(long  v1, long  v2, int count) {
+  public void add_unmodified(long v1, long v2, int count) {
     return;
   }
 

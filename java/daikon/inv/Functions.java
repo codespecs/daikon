@@ -4,7 +4,7 @@ package daikon.inv;
 
 import utilMDE.*;
 
-public final class Functions  {
+public final class Functions {
 
   public final static String[][] unaryFunctionNames;
 //  public final static Method[] unaryFunctions;
@@ -87,7 +87,7 @@ public final class Functions  {
 
   }
 
-  public static long  invokeUnary(int methodnumber, long  arg) {
+  public static long invokeUnary(int methodnumber, long arg) {
 
     switch(methodnumber) {
     case 0: return MathMDE.bitwiseComplement(arg);
@@ -99,7 +99,7 @@ public final class Functions  {
     return 0;
   }
 
-  public static long  invokeBinary(int methodnumber, long  arg, long  arg2) {
+  public static long invokeBinary(int methodnumber, long arg, long arg2) {
 
     switch(methodnumber) {
     case 0:  return MathMDE.mul(arg, arg2);

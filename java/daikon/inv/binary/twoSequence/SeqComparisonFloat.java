@@ -30,11 +30,11 @@ public class SeqComparisonFloat
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff SeqComparisonFloat  invariants should be considered.
+   * Boolean.  True iff SeqComparisonFloat invariants should be considered.
    **/
   public static boolean dkconfig_enabled = true;
 
-  static Comparator comparator = new ArraysMDE. DoubleArrayComparatorLexical()  ;
+  static Comparator comparator = new ArraysMDE. DoubleArrayComparatorLexical() ;
 
   public final boolean only_check_eq;
 
@@ -45,7 +45,7 @@ public class SeqComparisonFloat
   boolean orderMatters;
 
   int num_sc_samples = 0;
-  private FloatValueTracker  values_cache = new FloatValueTracker(8);
+  private FloatValueTracker values_cache = new FloatValueTracker(8);
 
   protected SeqComparisonFloat (PptSlice ppt, boolean only_eq, boolean order) {
     super(ppt);
@@ -53,7 +53,7 @@ public class SeqComparisonFloat
     orderMatters = order;
   }
 
-  public static SeqComparisonFloat  instantiate(PptSlice ppt) {
+  public static SeqComparisonFloat instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
@@ -90,7 +90,7 @@ public class SeqComparisonFloat
   }
 
   protected Object clone() {
-    SeqComparisonFloat  result = (SeqComparisonFloat) super.clone();
+    SeqComparisonFloat result = (SeqComparisonFloat) super.clone();
     result.values_cache = (FloatValueTracker) values_cache.clone();
     return result;
   }
@@ -103,7 +103,7 @@ public class SeqComparisonFloat
   }
 
   public String repr() {
-    return "SeqComparisonFloat"  + varNames() + ": "
+    return "SeqComparisonFloat" + varNames() + ": "
       + "can_be_eq=" + can_be_eq
       + ",can_be_lt=" + can_be_lt
       + ",can_be_gt=" + can_be_gt
@@ -163,7 +163,7 @@ public class SeqComparisonFloat
       comparison = ArraysMDE.isSubset (v1, v2) && ArraysMDE.isSubset (v2, v1) ? 0 : -1;
     }
 
-    // System.out.println("SeqComparisonFloat"  + varNames() + ": "
+    // System.out.println("SeqComparisonFloat" + varNames() + ": "
     //                    + "compare(" + ArraysMDE.toString(v1)
     //                    + ", " + ArraysMDE.toString(v2) + ") = " + comparison);
 
@@ -225,7 +225,7 @@ public class SeqComparisonFloat
 
   public boolean isSameFormula(Invariant o)
   {
-    SeqComparisonFloat  other = (SeqComparisonFloat) o;
+    SeqComparisonFloat other = (SeqComparisonFloat) o;
     return
       (can_be_eq == other.can_be_eq) &&
       (can_be_lt == other.can_be_lt) &&
@@ -235,7 +235,7 @@ public class SeqComparisonFloat
   public boolean isExclusiveFormula(Invariant o)
   {
     if (o instanceof SeqComparisonFloat) {
-      SeqComparisonFloat  other = (SeqComparisonFloat) o;
+      SeqComparisonFloat other = (SeqComparisonFloat) o;
       return (! ((can_be_eq && other.can_be_eq)
                  || (can_be_lt && other.can_be_lt)
                  || (can_be_gt && other.can_be_gt)));
@@ -245,7 +245,7 @@ public class SeqComparisonFloat
 
   // Copied from IntComparison.
   public boolean isObviousImplied() {
-    PairwiseFloatComparison  pic = PairwiseFloatComparison.find(ppt);
+    PairwiseFloatComparison pic = PairwiseFloatComparison.find(ppt);
     if ((pic != null)
         && (pic.core.can_be_eq == can_be_eq)
         && (pic.core.can_be_lt == can_be_lt)

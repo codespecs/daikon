@@ -24,20 +24,20 @@ public class FunctionBinaryFloat
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff FunctionBinaryFloat  invariants should be considered.
+   * Boolean.  True iff FunctionBinaryFloat invariants should be considered.
    **/
   public static boolean dkconfig_enabled = true;
 
   public static Category debug = Category.getInstance("daikon.inv.ternary.threeScalar.FunctionBinaryFloat");
 
-  public FunctionBinaryCoreFloat  core;
+  public FunctionBinaryCoreFloat core;
 
   protected FunctionBinaryFloat (PptSlice ppt, String[] methodname, int methodNumber, int var_order) {
     super(ppt);
     core = new FunctionBinaryCoreFloat(this, methodname, methodNumber, var_order);
   }
 
-  public static FunctionBinaryFloat  instantiate(PptSlice ppt, String[] methodname, int methodNumber, int var_order) {
+  public static FunctionBinaryFloat instantiate(PptSlice ppt, String[] methodname, int methodNumber, int var_order) {
     if (!dkconfig_enabled)
       return null;
 
@@ -74,7 +74,7 @@ public class FunctionBinaryFloat
   }
 
   protected Object clone() {
-    FunctionBinaryFloat  result = (FunctionBinaryFloat) super.clone();
+    FunctionBinaryFloat result = (FunctionBinaryFloat) super.clone();
     result.core = (FunctionBinaryCoreFloat) core.clone();
     result.core.wrapper = result;
     return result;
@@ -86,14 +86,14 @@ public class FunctionBinaryFloat
   }
 
   public String repr() {
-    return "FunctionBinaryFloat"   + varNames() + ": " + core.repr();
+    return "FunctionBinaryFloat"  + varNames() + ": " + core.repr();
   }
 
   public String format_using(OutputFormat format) {
     return core.format_using(format);
   }
 
-  public void add_modified(double  x_int, double  y_int, double  z_int, int count) {
+  public void add_modified(double x_int, double y_int, double z_int, int count) {
     core.add_modified(x_int, y_int, z_int, count);
   }
 

@@ -26,17 +26,17 @@ public final class IntGreaterThan
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff IntGreaterThan  invariants should be considered.
+   * Boolean.  True iff IntGreaterThan invariants should be considered.
    **/
   public static boolean dkconfig_enabled = true;
 
   public static final Category debug
     = Category.getInstance("daikon.inv.binary.twoScalar.IntGreaterThan");
 
-  private ValueTracker  values_cache = new ValueTracker(8);
+  private ValueTracker values_cache = new ValueTracker(8);
 
   protected Object clone() {
-    IntGreaterThan  result = (IntGreaterThan) super.clone();
+    IntGreaterThan result = (IntGreaterThan) super.clone();
     result.values_cache = (ValueTracker) values_cache.clone();
     return result;
   }
@@ -45,7 +45,7 @@ public final class IntGreaterThan
     super(ppt);
   }
 
-  public static IntGreaterThan  instantiate(PptSlice ppt) {
+  public static IntGreaterThan instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
@@ -53,7 +53,7 @@ public final class IntGreaterThan
     VarInfo seqvar1 = var1.isDerivedSequenceMember();
     VarInfo seqvar2 = var2.isDerivedSequenceMember();
 
-    if (! (var1.file_rep_type. isIntegral()  && var2.file_rep_type. isIntegral())) {
+    if (! (var1.file_rep_type. isIntegral() && var2.file_rep_type. isIntegral())) {
       return null;
     }
 
@@ -91,9 +91,9 @@ public final class IntGreaterThan
     return new IntLessThan(ppt);
   }
 
-  // Look up a previously instantiated IntGreaterThan  relationship.
+  // Look up a previously instantiated IntGreaterThan relationship.
   // Should this implementation be made more efficient?
-  public static IntGreaterThan  find(PptSlice ppt) {
+  public static IntGreaterThan find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
@@ -104,7 +104,7 @@ public final class IntGreaterThan
   }
 
   public String repr() {
-    return "IntGreaterThan"  + varNames();
+    return "IntGreaterThan" + varNames();
   }
 
   public String format_using(OutputFormat format) {
@@ -132,12 +132,12 @@ public final class IntGreaterThan
     return format_unimplemented(format);
   }
 
-  public void add_modified(long  v1, long  v2, int count) {
+  public void add_modified(long v1, long v2, int count) {
     // if (ppt.debugged) {
-    //   System.out.println("IntGreaterThan"  + ppt.varNames() + ".add_modified("
+    //   System.out.println("IntGreaterThan" + ppt.varNames() + ".add_modified("
     //                      + v1 + "," + v2 + ", count=" + count + ")");
     // }
-    if (!(v1 >  v2)) {
+    if (!(v1 > v2)) {
       destroyAndFlow();
       return;
     }
@@ -188,9 +188,9 @@ public final class IntGreaterThan
   //   super.destroy();
   // }
 
-  public void add(long  v1, long  v2, int mod_index, int count) {
+  public void add(long v1, long v2, int mod_index, int count) {
     if (ppt.debugged) {
-      System.out.println("IntGreaterThan"  + ppt.varNames() + ".add("
+      System.out.println("IntGreaterThan" + ppt.varNames() + ".add("
                          + v1 + "," + v2
                          + ", mod_index=" + mod_index + ")"
                          + ", count=" + count + ")");
@@ -207,7 +207,7 @@ public final class IntGreaterThan
   {
     // Also ought to check against LinearBinary, etc.
 
-    if ((other instanceof IntLessThan  ) || (other instanceof IntLessEqual  ) || (other instanceof IntEqual ))
+    if ((other instanceof IntLessThan) || (other instanceof IntLessEqual) || (other instanceof IntEqual))
       return true;
 
     return false;
@@ -340,7 +340,7 @@ public final class IntGreaterThan
 
 //     {
 //       // (Is this test ever true?  Aren't SeqINTEQUAL and
-//       // IntGreaterThan  instantiated at the same time?  Apparently not:  see
+//       // IntGreaterThan instantiated at the same time?  Apparently not:  see
 //       // the printStackTrace below.
 //
 //       // For each sequence variable, if this is an obvious member, and

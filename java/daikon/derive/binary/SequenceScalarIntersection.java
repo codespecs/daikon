@@ -24,7 +24,7 @@ public final class SequenceScalarIntersection
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff SequenceScalarIntersection  derived variables should be generated.
+   * Boolean.  True iff SequenceScalarIntersection derived variables should be generated.
    **/
   public static boolean dkconfig_enabled = false;
 
@@ -53,14 +53,14 @@ public final class SequenceScalarIntersection
     long[] tmp = new long [val1_array.length + val2_array.length];
     int size = 0;
     for (int i=0; i<val1_array.length; i++) {
-      long  v = val1_array[i];
+      long v = val1_array[i];
       if ((ArraysMDE.indexOf(val2_array, v)!=-1) &&
           (size==0 || (ArraysMDE.indexOf(ArraysMDE.subarray(tmp, 0, size), v)==-1)))
         tmp[size++] = v;
     }
 
     long[] intersect = ArraysMDE.subarray(tmp, 0, size);
-    intersect = (long  []) Intern.intern(intersect);
+    intersect = (long[]) Intern.intern(intersect);
 
     int mod = (((mod1 == ValueTuple.UNMODIFIED)
                 && (mod2 == ValueTuple.UNMODIFIED))

@@ -13,7 +13,7 @@ import java.util.*;
 // sequence, such as getting the element at that index or a subsequence up
 // to that index.
 
-public final class SequenceStringSubscriptFactory  extends BinaryDerivationFactory {
+public final class SequenceStringSubscriptFactory extends BinaryDerivationFactory {
 
   // When calling/creating the derivations, arrange that:
   //   base1 is the sequence
@@ -240,7 +240,7 @@ public final class SequenceStringSubscriptFactory  extends BinaryDerivationFacto
       Vector lbs = LinearBinary.findAll(sclvar);
       // System.out.println("For " + sclvar.name + ", " + lbs.size() + " LinearBinary invariants");
       for (int i=0; i<lbs.size(); i++) {
-        LinearBinary  lb = (LinearBinary) lbs.elementAt(i);
+        LinearBinary lb = (LinearBinary) lbs.elementAt(i);
         if (lb.core.a == 1) {
           // Don't set unconditionally, and don't break:  we want to check
           // other variables as well.

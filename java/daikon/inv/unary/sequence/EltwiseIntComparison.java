@@ -28,14 +28,14 @@ public class EltwiseIntComparison
 
   final static boolean debugEltwiseIntComparison = false;
 
-  public IntComparisonCore  core;
+  public IntComparisonCore core;
 
   protected EltwiseIntComparison (PptSlice ppt, boolean only_eq) {
     super(ppt);
     core = new IntComparisonCore(this, only_eq);
   }
 
-  public static EltwiseIntComparison  instantiate(PptSlice ppt) {
+  public static EltwiseIntComparison instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     // Don't compute ordering relationships over object addresses for
     // elements of a Vector.  (But do compute equality/constant!)
@@ -44,14 +44,14 @@ public class EltwiseIntComparison
   }
 
   protected Object clone() {
-    EltwiseIntComparison  result = (EltwiseIntComparison) super.clone();
+    EltwiseIntComparison result = (EltwiseIntComparison) super.clone();
     result.core = (IntComparisonCore) core.clone();
     result.core.wrapper = result;
     return result;
   }
 
   public String repr() {
-    return "EltwiseIntComparison"  + varNames() + ": "
+    return "EltwiseIntComparison" + varNames() + ": "
       + core.repr()
       + ",falsified=" + falsified;
   }
@@ -133,7 +133,7 @@ public class EltwiseIntComparison
     }
   }
 
-  public void add_modified(long  [] a, int count) {
+  public void add_modified(long [] a, int count) {
     for (int i=1; i<a.length; i++) {
       core.add_modified(a[i-1], a[i], count);
       if (falsified)
@@ -165,7 +165,7 @@ public class EltwiseIntComparison
   }
 
   // Look up a previously instantiated invariant.
-  public static EltwiseIntComparison  find(PptSlice ppt) {
+  public static EltwiseIntComparison find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
@@ -188,7 +188,7 @@ public class EltwiseIntComparison
   // }
 
   public boolean isObviousImplied() {
-    EltOneOf  eoo = EltOneOf.find(ppt);
+    EltOneOf eoo = EltOneOf.find(ppt);
     if ((eoo != null) && eoo.enoughSamples() && (eoo.num_elts() == 1)) {
       return true;
     }

@@ -16,7 +16,7 @@ import org.apache.log4j.Category;
 import java.util.*;
 
 public final class FloatEqual
-  extends TwoFloat  implements Comparison
+  extends TwoFloat implements Comparison
 {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -26,7 +26,7 @@ public final class FloatEqual
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff FloatEqual  invariants should be considered.
+   * Boolean.  True iff FloatEqual invariants should be considered.
    **/
   public static boolean dkconfig_enabled = true;
 
@@ -37,7 +37,7 @@ public final class FloatEqual
     super(ppt);
   }
 
-  public static FloatEqual  instantiate(PptSlice ppt) {
+  public static FloatEqual instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
@@ -77,9 +77,9 @@ public final class FloatEqual
     return this;
   }
 
-  // Look up a previously instantiated FloatEqual  relationship.
+  // Look up a previously instantiated FloatEqual relationship.
   // Should this implementation be made more efficient?
-  public static FloatEqual  find(PptSlice ppt) {
+  public static FloatEqual find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
@@ -90,7 +90,7 @@ public final class FloatEqual
   }
 
   public String repr() {
-    return "FloatEqual"  + varNames();
+    return "FloatEqual" + varNames();
   }
 
   public String format_using(OutputFormat format) {
@@ -120,12 +120,12 @@ public final class FloatEqual
     return format_unimplemented(format);
   }
 
-  public void add_modified(double  v1, double  v2, int count) {
+  public void add_modified(double v1, double v2, int count) {
     // if (ppt.debugged) {
-    //   System.out.println("FloatEqual"  + ppt.varNames() + ".add_modified("
+    //   System.out.println("FloatEqual" + ppt.varNames() + ".add_modified("
     //                      + v1 + "," + v2 + ", count=" + count + ")");
     // }
-    if (!(v1 ==  v2)) {
+    if (!(v1 == v2)) {
       destroyAndFlow();
       return;
     }
@@ -183,9 +183,9 @@ public final class FloatEqual
   //   super.destroy();
   // }
 
-  public void add(double  v1, double  v2, int mod_index, int count) {
+  public void add(double v1, double v2, int mod_index, int count) {
     if (ppt.debugged) {
-      System.out.println("FloatEqual"  + ppt.varNames() + ".add("
+      System.out.println("FloatEqual" + ppt.varNames() + ".add("
                          + v1 + "," + v2
                          + ", mod_index=" + mod_index + ")"
                          + ", count=" + count + ")");
@@ -202,7 +202,7 @@ public final class FloatEqual
   {
     // Also ought to check against LinearBinary, etc.
 
-    if ((other instanceof FloatLessThan  ) || (other instanceof FloatGreaterThan ))
+    if ((other instanceof FloatLessThan) || (other instanceof FloatGreaterThan))
       return true;
 
     return false;

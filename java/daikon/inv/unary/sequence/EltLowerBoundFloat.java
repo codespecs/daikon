@@ -16,7 +16,7 @@ import org.apache.log4j.Category;
 import java.util.*;
 
 /**
- * EltLowerBoundFloat  represents the invariant 'x >  c', where c is a constant.
+ * EltLowerBoundFloat represents the invariant 'x > c', where c is a constant.
  * <p>
  * One reason not to combine LowerBound and UpperBound into a single range
  * invariant is that they have separate justifications:  one may be
@@ -33,7 +33,7 @@ public class EltLowerBoundFloat
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff EltLowerBoundFloat  invariants should be considered.
+   * Boolean.  True iff EltLowerBoundFloat invariants should be considered.
    **/
   public static boolean dkconfig_enabled = true;
   /**
@@ -41,7 +41,7 @@ public class EltLowerBoundFloat
    * range of the computed constant that is "intersting" --- the range
    * that should be reported.  For instance, setting minimal_interesting
    * to -1 and maximal_interesting to 2 would only permit output of
-   * EltLowerBoundFloat  invariants whose cutoff was one of (-1,0,1,2).
+   * EltLowerBoundFloat invariants whose cutoff was one of (-1,0,1,2).
    **/
   public static long dkconfig_minimal_interesting = -1;
   /**
@@ -49,31 +49,31 @@ public class EltLowerBoundFloat
    * range of the computed constant that is "intersting" --- the range
    * that should be reported.  For instance, setting minimal_interesting
    * to -1 and maximal_interesting to 2 would only permit output of
-   * EltLowerBoundFloat  invariants whose cutoff was one of (-1,0,1,2).
+   * EltLowerBoundFloat invariants whose cutoff was one of (-1,0,1,2).
    **/
   public static long dkconfig_maximal_interesting = 2;
 
-  public  LowerBoundCoreFloat   core;
+  public LowerBoundCoreFloat core;
 
   private EltLowerBoundFloat (PptSlice ppt) {
     super(ppt);
-    core = new  LowerBoundCoreFloat  (this);
+    core = new LowerBoundCoreFloat(this);
   }
 
   protected Object clone() {
-    EltLowerBoundFloat  result = (EltLowerBoundFloat) super.clone();
-    result.core = ( LowerBoundCoreFloat  ) core.clone();
+    EltLowerBoundFloat result = (EltLowerBoundFloat) super.clone();
+    result.core = ( LowerBoundCoreFloat ) core.clone();
     result.core.wrapper = result;
     return result;
   }
 
-  public static EltLowerBoundFloat  instantiate(PptSlice ppt) {
+  public static EltLowerBoundFloat instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new EltLowerBoundFloat(ppt);
   }
 
   public String repr() {
-    return "EltLowerBoundFloat"  + varNames() + ": "
+    return "EltLowerBoundFloat" + varNames() + ": "
       + core.repr();
   }
 
@@ -103,20 +103,20 @@ public class EltLowerBoundFloat
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
         { var().name });
-    return form[0] + "(" + form[1] + " >= " + core.min1  + ")" + form[2];
+    return form[0] + "(" + form[1] + " >= " + core.min1 + ")" + form[2];
   }
 
   public String format_jml() {
     String[] form =
       VarInfoName.QuantHelper.format_jml(new VarInfoName[]
         { var().name });
-    return form[0] + "(" + form[1] + " >= " + core.min1  + ")" + form[2];
+    return form[0] + "(" + form[1] + " >= " + core.min1 + ")" + form[2];
   }
 
   public String format_ioa() {
     VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var());
     String result = quant.getQuantifierExp() + quant.getMembershipRestriction(0) +
-      " => " + quant.getVarIndexed(0) + " >" +"= " + core.min1  + quant.getClosingExp();
+      " => " + quant.getVarIndexed(0) + " >" +"= " + core.min1 + quant.getClosingExp();
     return result;
   }
 
@@ -124,18 +124,18 @@ public class EltLowerBoundFloat
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
         { var().name });
-    return form[0] + "(>= " + form[1] + " " + core.min1  + ")" + form[2];
+    return form[0] + "(>= " + form[1] + " " + core.min1 + ")" + form[2];
   }
 
   public String format_java() {
     String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[]
       { var().name });
-    return form[0] + "(" + form[1] + " >= " + core.min1  + ")" + form[2];
+    return form[0] + "(" + form[1] + " >= " + core.min1 + ")" + form[2];
   }
 
   // XXX need to flow invariant if bound changed
-  public void add_modified(double[]  value, int count) {
-    // System.out.println("EltLowerBoundFloat"  + varNames() + ": "
+  public void add_modified(double[] value, int count) {
+    // System.out.println("EltLowerBoundFloat" + varNames() + ": "
     //                    + "add(" + value + ", " + modified + ", " + count + ")");
     core.changed = false;
 
@@ -169,15 +169,15 @@ public class EltLowerBoundFloat
 
   public boolean isObviousImplied() {
     // if the value is not in some range (like -1,0,1,2) then say that it is obvious
-    if ((core.min1  < dkconfig_minimal_interesting) ||
-        (core.min1  > dkconfig_maximal_interesting)) {
+    if ((core.min1 < dkconfig_minimal_interesting) ||
+        (core.min1 > dkconfig_maximal_interesting)) {
       return true;
     }
-    EltOneOfFloat  oo = EltOneOfFloat.find(ppt);
+    EltOneOfFloat oo = EltOneOfFloat.find(ppt);
     if ((oo != null) && oo.enoughSamples()) {
-      // We could also use core.min1  == oo.min_elt(), since the LowerBound
-      // will never have a core.min1  that does not appear in the OneOf.
-      if (core.min1  <=  oo.min_elt()) {
+      // We could also use core.min1 == oo.min_elt(), since the LowerBound
+      // will never have a core.min1 that does not appear in the OneOf.
+      if (core.min1 <= oo.min_elt()) {
         return true;
       }
     }
@@ -191,7 +191,7 @@ public class EltLowerBoundFloat
         continue;
       }
       if (inv instanceof EltLowerBoundFloat) {
-        EltLowerBoundFloat  other = (EltLowerBoundFloat) inv;
+        EltLowerBoundFloat other = (EltLowerBoundFloat) inv;
         if (isSameFormula(other)
             && SubSequenceFloat.isObviousDerived(v, other.var())) {
           return true;
@@ -221,10 +221,10 @@ public class EltLowerBoundFloat
       {
         PptSlice1 other_slice = pptt.findSlice(vi);
         if (other_slice != null) {
-           EltLowerBoundFloat   eb =  EltLowerBoundFloat  .find(other_slice);
+           EltLowerBoundFloat eb = EltLowerBoundFloat.find(other_slice);
           if ((eb != null)
               && eb.enoughSamples()
-              && eb. core.min1  == core.min1 ) {
+              && eb. core.min1 == core.min1 ) {
             return true;
           }
         }
@@ -236,7 +236,7 @@ public class EltLowerBoundFloat
 
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof EltUpperBoundFloat) {
-      if (core.min1  >  ((EltUpperBoundFloat) other). core.max1)
+      if (core.min1 > ((EltUpperBoundFloat) other). core.max1)
         return true;
     }
     if (other instanceof OneOfFloat) {
@@ -246,7 +246,7 @@ public class EltLowerBoundFloat
   }
 
   // Look up a previously instantiated invariant.
-  public static EltLowerBoundFloat  find(PptSlice ppt) {
+  public static EltLowerBoundFloat find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();

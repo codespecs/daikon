@@ -26,16 +26,16 @@ public class PairwiseFunctionUnaryFloat
    **/
   public static boolean dkconfig_enabled = true;
 
-  public FunctionUnaryCoreFloat  core;
+  public FunctionUnaryCoreFloat core;
 
   protected PairwiseFunctionUnaryFloat (PptSlice ppt, String[] methodname, int function, boolean inverse) {
     super(ppt);
     core = new FunctionUnaryCoreFloat(this, methodname, function, inverse);
   }
 
-  public static PairwiseFunctionUnaryFloat  instantiate(PptSlice ppt, String[] methodname, int methodnumber, boolean inverse) {
+  public static PairwiseFunctionUnaryFloat instantiate(PptSlice ppt, String[] methodname, int methodnumber, boolean inverse) {
     if (!dkconfig_enabled) return null;
-     PairwiseFunctionUnaryFloat  result =
+     PairwiseFunctionUnaryFloat result =
       new PairwiseFunctionUnaryFloat(ppt, methodname, methodnumber, inverse);
     // Don't instantiate if the variables can't have order
     if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
@@ -50,7 +50,7 @@ public class PairwiseFunctionUnaryFloat
   }
 
   protected Object clone() {
-    PairwiseFunctionUnaryFloat  result = (PairwiseFunctionUnaryFloat) super.clone();
+    PairwiseFunctionUnaryFloat result = (PairwiseFunctionUnaryFloat) super.clone();
     result.core = (FunctionUnaryCoreFloat) core.clone();
     result.core.wrapper = result;
     return result;
@@ -62,7 +62,7 @@ public class PairwiseFunctionUnaryFloat
   }
 
   public String repr() {
-    return "PairwiseFunctionUnaryFloat"  + varNames() + ": " + core.repr();
+    return "PairwiseFunctionUnaryFloat" + varNames() + ": " + core.repr();
   }
 
   public String format_using(OutputFormat format) {
@@ -96,8 +96,8 @@ public class PairwiseFunctionUnaryFloat
     // int len = Math.min(x_arr.length, y_arr.length);
 
     for (int i=0; i<len; i++) {
-      double  x  = x_arr[i];
-      double  y = y_arr[i];
+      double x  = x_arr[i];
+      double y = y_arr[i];
 
       core.add_modified(x, y, count);
       if (falsified)

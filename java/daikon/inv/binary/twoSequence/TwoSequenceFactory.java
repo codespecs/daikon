@@ -12,7 +12,7 @@ import org.apache.log4j.Category;
 
 import java.util.*;
 
-public final class TwoSequenceFactory  {
+public final class TwoSequenceFactory {
 
   /**
    * Debug tracer
@@ -62,7 +62,7 @@ public final class TwoSequenceFactory  {
         // a[j..], which should be obvious from knowledge about i and j.
         Global.implied_false_noninstantiated_invariants++;
         // System.out.println("No SeqComparison because same super for " + ppt.name);
-        LinearBinary  lb = LinearBinary.find(ppt);
+        LinearBinary lb = LinearBinary.find(ppt);
         if (lb != null)
           System.out.println("  " + lb.format());
       } else {

@@ -21,20 +21,20 @@ public class PairwiseLinearBinaryFloat
    **/
   public static boolean dkconfig_enabled = true;
 
-  public LinearBinaryCoreFloat  core;
+  public LinearBinaryCoreFloat core;
 
   protected PairwiseLinearBinaryFloat (PptSlice ppt) {
     super(ppt);
     core = new LinearBinaryCoreFloat(this);
   }
 
-  public static PairwiseLinearBinaryFloat  instantiate(PptSlice ppt) {
+  public static PairwiseLinearBinaryFloat instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new PairwiseLinearBinaryFloat(ppt);
   }
 
   protected Object clone() {
-    PairwiseLinearBinaryFloat  result = (PairwiseLinearBinaryFloat) super.clone();
+    PairwiseLinearBinaryFloat result = (PairwiseLinearBinaryFloat) super.clone();
     result.core = (LinearBinaryCoreFloat) core.clone();
     result.core.wrapper = result;
     return result;
@@ -46,7 +46,7 @@ public class PairwiseLinearBinaryFloat
   }
 
   public String repr() {
-    return "PairwiseLinearBinaryFloat"  + varNames() + ": "
+    return "PairwiseLinearBinaryFloat" + varNames() + ": "
       + "falsified=" + falsified
       + "; " + core.repr();
   }
@@ -133,8 +133,8 @@ public class PairwiseLinearBinaryFloat
     // int len = Math.min(x_arr.length, y_arr.length);
 
     for (int i=0; i<len; i++) {
-      double  x = x_arr[i];
-      double  y = y_arr[i];
+      double x = x_arr[i];
+      double y = y_arr[i];
 
       core.add_modified(x, y, count);
       if (falsified) {

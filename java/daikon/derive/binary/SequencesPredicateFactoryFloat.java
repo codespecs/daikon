@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * Factory for SequencesPredicate derived variables.
  **/
-public final class SequencesPredicateFactoryFloat   extends BinaryDerivationFactory {
+public final class SequencesPredicateFactoryFloat extends BinaryDerivationFactory {
 
   /**
    * Debug tracer
@@ -78,8 +78,8 @@ public final class SequencesPredicateFactoryFloat   extends BinaryDerivationFact
     }
 
     return new BinaryDerivation[] {
-      new SequencesPredicateFloat  (var1, var2, 0, "false"),
-      new SequencesPredicateFloat  (var1, var2, 1, "true"),
+      new SequencesPredicateFloat(var1, var2, 0, "false"),
+      new SequencesPredicateFloat(var1, var2, 1, "true"),
       //new SequencesPredicate(var1, var2, 0, "nonNull", false),
     };
 

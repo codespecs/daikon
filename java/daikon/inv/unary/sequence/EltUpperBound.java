@@ -16,7 +16,7 @@ import org.apache.log4j.Category;
 import java.util.*;
 
 /**
- * EltUpperBound  represents the invariant 'x <  c', where c is a constant.
+ * EltUpperBound represents the invariant 'x < c', where c is a constant.
  * <p>
  * One reason not to combine LowerBound and UpperBound into a single range
  * invariant is that they have separate justifications:  one may be
@@ -33,7 +33,7 @@ public class EltUpperBound
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff EltUpperBound  invariants should be considered.
+   * Boolean.  True iff EltUpperBound invariants should be considered.
    **/
   public static boolean dkconfig_enabled = true;
   /**
@@ -41,7 +41,7 @@ public class EltUpperBound
    * range of the computed constant that is "intersting" --- the range
    * that should be reported.  For instance, setting minimal_interesting
    * to -1 and maximal_interesting to 2 would only permit output of
-   * EltUpperBound  invariants whose cutoff was one of (-1,0,1,2).
+   * EltUpperBound invariants whose cutoff was one of (-1,0,1,2).
    **/
   public static long dkconfig_minimal_interesting = -1;
   /**
@@ -49,31 +49,31 @@ public class EltUpperBound
    * range of the computed constant that is "intersting" --- the range
    * that should be reported.  For instance, setting minimal_interesting
    * to -1 and maximal_interesting to 2 would only permit output of
-   * EltUpperBound  invariants whose cutoff was one of (-1,0,1,2).
+   * EltUpperBound invariants whose cutoff was one of (-1,0,1,2).
    **/
   public static long dkconfig_maximal_interesting = 2;
 
-  public  UpperBoundCore    core;
+  public UpperBoundCore core;
 
   private EltUpperBound (PptSlice ppt) {
     super(ppt);
-    core = new  UpperBoundCore   (this);
+    core = new UpperBoundCore(this);
   }
 
   protected Object clone() {
-    EltUpperBound  result = (EltUpperBound) super.clone();
-    result.core = ( UpperBoundCore   ) core.clone();
+    EltUpperBound result = (EltUpperBound) super.clone();
+    result.core = ( UpperBoundCore ) core.clone();
     result.core.wrapper = result;
     return result;
   }
 
-  public static EltUpperBound  instantiate(PptSlice ppt) {
+  public static EltUpperBound instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
     return new EltUpperBound(ppt);
   }
 
   public String repr() {
-    return "EltUpperBound"  + varNames() + ": "
+    return "EltUpperBound" + varNames() + ": "
       + core.repr();
   }
 
@@ -103,20 +103,20 @@ public class EltUpperBound
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
         { var().name });
-    return form[0] + "(" + form[1] + " <= " + core.max1  + ")" + form[2];
+    return form[0] + "(" + form[1] + " <= " + core.max1 + ")" + form[2];
   }
 
   public String format_jml() {
     String[] form =
       VarInfoName.QuantHelper.format_jml(new VarInfoName[]
         { var().name });
-    return form[0] + "(" + form[1] + " <= " + core.max1  + ")" + form[2];
+    return form[0] + "(" + form[1] + " <= " + core.max1 + ")" + form[2];
   }
 
   public String format_ioa() {
     VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var());
     String result = quant.getQuantifierExp() + quant.getMembershipRestriction(0) +
-      " => " + quant.getVarIndexed(0) + " <" +"= " + core.max1  + quant.getClosingExp();
+      " => " + quant.getVarIndexed(0) + " <" +"= " + core.max1 + quant.getClosingExp();
     return result;
   }
 
@@ -124,18 +124,18 @@ public class EltUpperBound
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
         { var().name });
-    return form[0] + "(<= " + form[1] + " " + core.max1  + ")" + form[2];
+    return form[0] + "(<= " + form[1] + " " + core.max1 + ")" + form[2];
   }
 
   public String format_java() {
     String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[]
       { var().name });
-    return form[0] + "(" + form[1] + " <= " + core.max1  + ")" + form[2];
+    return form[0] + "(" + form[1] + " <= " + core.max1 + ")" + form[2];
   }
 
   // XXX need to flow invariant if bound changed
-  public void add_modified(long[]  value, int count) {
-    // System.out.println("EltUpperBound"  + varNames() + ": "
+  public void add_modified(long[] value, int count) {
+    // System.out.println("EltUpperBound" + varNames() + ": "
     //                    + "add(" + value + ", " + modified + ", " + count + ")");
     core.changed = false;
 
@@ -169,15 +169,15 @@ public class EltUpperBound
 
   public boolean isObviousImplied() {
     // if the value is not in some range (like -1,0,1,2) then say that it is obvious
-    if ((core.max1  < dkconfig_minimal_interesting) ||
-        (core.max1  > dkconfig_maximal_interesting)) {
+    if ((core.max1 < dkconfig_minimal_interesting) ||
+        (core.max1 > dkconfig_maximal_interesting)) {
       return true;
     }
-    EltOneOf  oo = EltOneOf.find(ppt);
+    EltOneOf oo = EltOneOf.find(ppt);
     if ((oo != null) && oo.enoughSamples()) {
-      // We could also use core.max1  == oo.max_elt(), since the LowerBound
-      // will never have a core.max1  that does not appear in the OneOf.
-      if (core.max1  >=  oo.max_elt()) {
+      // We could also use core.max1 == oo.max_elt(), since the LowerBound
+      // will never have a core.max1 that does not appear in the OneOf.
+      if (core.max1 >= oo.max_elt()) {
         return true;
       }
     }
@@ -191,7 +191,7 @@ public class EltUpperBound
         continue;
       }
       if (inv instanceof EltUpperBound) {
-        EltUpperBound  other = (EltUpperBound) inv;
+        EltUpperBound other = (EltUpperBound) inv;
         if (isSameFormula(other)
             && SubSequence.isObviousDerived(v, other.var())) {
           return true;
@@ -221,10 +221,10 @@ public class EltUpperBound
       {
         PptSlice1 other_slice = pptt.findSlice(vi);
         if (other_slice != null) {
-           EltUpperBound    eb =  EltUpperBound   .find(other_slice);
+           EltUpperBound eb = EltUpperBound.find(other_slice);
           if ((eb != null)
               && eb.enoughSamples()
-              && eb. core.max1  == core.max1 ) {
+              && eb. core.max1 == core.max1 ) {
             return true;
           }
         }
@@ -236,7 +236,7 @@ public class EltUpperBound
 
   public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof EltLowerBound) {
-      if (core.max1  <  ((EltLowerBound) other). core.min1)
+      if (core.max1 < ((EltLowerBound) other). core.min1)
         return true;
     }
     if (other instanceof OneOfScalar) {
@@ -246,7 +246,7 @@ public class EltUpperBound
   }
 
   // Look up a previously instantiated invariant.
-  public static EltUpperBound  find(PptSlice ppt) {
+  public static EltUpperBound find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();

@@ -26,17 +26,17 @@ public final class FloatGreaterThan
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
-   * Boolean.  True iff FloatGreaterThan  invariants should be considered.
+   * Boolean.  True iff FloatGreaterThan invariants should be considered.
    **/
   public static boolean dkconfig_enabled = true;
 
   public static final Category debug
     = Category.getInstance("daikon.inv.binary.twoScalar.FloatGreaterThan");
 
-  private FloatValueTracker  values_cache = new FloatValueTracker(8);
+  private FloatValueTracker values_cache = new FloatValueTracker(8);
 
   protected Object clone() {
-    FloatGreaterThan  result = (FloatGreaterThan) super.clone();
+    FloatGreaterThan result = (FloatGreaterThan) super.clone();
     result.values_cache = (FloatValueTracker) values_cache.clone();
     return result;
   }
@@ -45,7 +45,7 @@ public final class FloatGreaterThan
     super(ppt);
   }
 
-  public static FloatGreaterThan  instantiate(PptSlice ppt) {
+  public static FloatGreaterThan instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
@@ -53,7 +53,7 @@ public final class FloatGreaterThan
     VarInfo seqvar1 = var1.isDerivedSequenceMember();
     VarInfo seqvar2 = var2.isDerivedSequenceMember();
 
-    if (! (var1.file_rep_type. isFloat()  && var2.file_rep_type. isFloat())) {
+    if (! (var1.file_rep_type. isFloat() && var2.file_rep_type. isFloat())) {
       return null;
     }
 
@@ -91,9 +91,9 @@ public final class FloatGreaterThan
     return new FloatLessThan(ppt);
   }
 
-  // Look up a previously instantiated FloatGreaterThan  relationship.
+  // Look up a previously instantiated FloatGreaterThan relationship.
   // Should this implementation be made more efficient?
-  public static FloatGreaterThan  find(PptSlice ppt) {
+  public static FloatGreaterThan find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
@@ -104,7 +104,7 @@ public final class FloatGreaterThan
   }
 
   public String repr() {
-    return "FloatGreaterThan"  + varNames();
+    return "FloatGreaterThan" + varNames();
   }
 
   public String format_using(OutputFormat format) {
@@ -132,12 +132,12 @@ public final class FloatGreaterThan
     return format_unimplemented(format);
   }
 
-  public void add_modified(double  v1, double  v2, int count) {
+  public void add_modified(double v1, double v2, int count) {
     // if (ppt.debugged) {
-    //   System.out.println("FloatGreaterThan"  + ppt.varNames() + ".add_modified("
+    //   System.out.println("FloatGreaterThan" + ppt.varNames() + ".add_modified("
     //                      + v1 + "," + v2 + ", count=" + count + ")");
     // }
-    if (!(v1 >  v2)) {
+    if (!(v1 > v2)) {
       destroyAndFlow();
       return;
     }
@@ -188,9 +188,9 @@ public final class FloatGreaterThan
   //   super.destroy();
   // }
 
-  public void add(double  v1, double  v2, int mod_index, int count) {
+  public void add(double v1, double v2, int mod_index, int count) {
     if (ppt.debugged) {
-      System.out.println("FloatGreaterThan"  + ppt.varNames() + ".add("
+      System.out.println("FloatGreaterThan" + ppt.varNames() + ".add("
                          + v1 + "," + v2
                          + ", mod_index=" + mod_index + ")"
                          + ", count=" + count + ")");
@@ -207,7 +207,7 @@ public final class FloatGreaterThan
   {
     // Also ought to check against LinearBinary, etc.
 
-    if ((other instanceof FloatLessThan  ) || (other instanceof FloatLessEqual  ) || (other instanceof FloatEqual ))
+    if ((other instanceof FloatLessThan) || (other instanceof FloatLessEqual) || (other instanceof FloatEqual))
       return true;
 
     return false;
@@ -340,7 +340,7 @@ public final class FloatGreaterThan
 
 //     {
 //       // (Is this test ever true?  Aren't SeqINTEQUAL and
-//       // FloatGreaterThan  instantiated at the same time?  Apparently not:  see
+//       // FloatGreaterThan instantiated at the same time?  Apparently not:  see
 //       // the printStackTrace below.
 //
 //       // For each sequence variable, if this is an obvious member, and

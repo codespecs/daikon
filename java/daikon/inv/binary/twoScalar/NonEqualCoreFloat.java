@@ -15,10 +15,10 @@ public final class NonEqualCoreFloat
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  double  min1 = Double.MAX_VALUE;
-  double  min2 = Double.MAX_VALUE;
-  double  max1 = Double.MIN_VALUE;
-  double  max2 = Double.MIN_VALUE;
+  double min1 = Double.MAX_VALUE;
+  double min2 = Double.MAX_VALUE;
+  double max1 = Double.MIN_VALUE;
+  double max2 = Double.MIN_VALUE;
 
   // If nonzero, use this as the range instead of the actual range.
   // This lets one use a specified probability of nonzero (say, 1/10
@@ -49,7 +49,7 @@ public final class NonEqualCoreFloat
   // for resurrection
   protected void swap() {
     // was a swap
-    double  tmp;
+    double tmp;
 
     tmp = min1;
     min1 = min2;
@@ -60,9 +60,9 @@ public final class NonEqualCoreFloat
     max2 = tmp;
   }
 
-  public void add_modified(double  v1, double  v2, int count) {
+  public void add_modified(double v1, double v2, int count) {
     if (wrapper.ppt.debugged) {
-      System.out.println("NonEqualCoreFloat"  + wrapper.ppt.varNames() + ".add_modified("
+      System.out.println("NonEqualCoreFloat" + wrapper.ppt.varNames() + ".add_modified("
                          + v1 + "," + v2 + ", count=" + count + ")");
     }
     if (v1 == v2) {
@@ -89,7 +89,7 @@ public final class NonEqualCoreFloat
       if (override_range != 0) {
         probability_one_nonequal = 1 - 1/(double)override_range;
       } else {
-        double  overlap = Math.min(max1, max2) - Math.max(min1, min2);
+        double overlap = Math.min(max1, max2) - Math.max(min1, min2);
         // Looks like we're comparing pointers.  Fix this later.
         if (overlap < 0)
           return Invariant.PROBABILITY_JUSTIFIED;
@@ -121,7 +121,7 @@ public final class NonEqualCoreFloat
       + ",max2=" + max2;
   }
 
-  public boolean isSameFormula(NonEqualCoreFloat  other)
+  public boolean isSameFormula(NonEqualCoreFloat other)
   {
     return true;
   }

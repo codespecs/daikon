@@ -32,9 +32,9 @@ public class Reverse
     super(ppt);
   }
 
-  public static Reverse  instantiate(PptSlice ppt) {
+  public static Reverse instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    Reverse  result = new Reverse(ppt);
+    Reverse result = new Reverse(ppt);
     // Don't instantiate if the variables can't have order
     if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
         !result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {
@@ -53,7 +53,7 @@ public class Reverse
   }
 
   public String repr() {
-    return "Reverse"  + varNames() + ": "
+    return "Reverse" + varNames() + ": "
       + "falsified=" + falsified;
   }
 

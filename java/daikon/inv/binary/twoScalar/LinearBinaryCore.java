@@ -50,7 +50,7 @@ public final class LinearBinaryCore
 
   public Object clone() {
     try {
-      LinearBinaryCore  result = (LinearBinaryCore) super.clone();
+      LinearBinaryCore result = (LinearBinaryCore) super.clone();
       if (x_cache != null)
         result.x_cache = (long[]) x_cache.clone();
       if (y_cache != null)
@@ -76,7 +76,7 @@ public final class LinearBinaryCore
     y_cache = tmp;
   }
 
-  public void add_modified(long  x, long  y, int count) {
+  public void add_modified(long x, long y, int count) {
     if (values_seen < MINPAIRS) {
 
       for (int i=0; i<values_seen; i++)
@@ -155,7 +155,7 @@ public final class LinearBinaryCore
 
   // Given ((x0,y0),(x1,y1)), set a and b such that y = ax + b.
   // @return true if such an (a,b) exists
-  boolean set_bi_linear(long  x0, long  x1, long  y0, long  y1) {
+  boolean set_bi_linear(long x0, long x1, long y0, long y1) {
     if (x1 - x0 == 0) {         // not "x0 == x1", due to roundoff
       // x being constant would have been discovered elsewhere (and this
       // invariant would not have been instantiated).
@@ -180,7 +180,7 @@ public final class LinearBinaryCore
   }
 
   public String repr() {
-    return "LinearBinaryCore"  + wrapper.varNames() + ": "
+    return "LinearBinaryCore" + wrapper.varNames() + ": "
       + "a=" + a
       + ",b=" + b
       + ",values_seen=" + values_seen;
@@ -284,7 +284,7 @@ public final class LinearBinaryCore
     return format_using(format, y, x, a, -b/a);
   }
 
-  public boolean isSameFormula(LinearBinaryCore  other)
+  public boolean isSameFormula(LinearBinaryCore other)
   {
     boolean thisMeaningless = values_seen < MINPAIRS;
     boolean otherMeaningless = other.values_seen < MINPAIRS;
@@ -300,7 +300,7 @@ public final class LinearBinaryCore
     }
   }
 
-  public boolean isExclusiveFormula(LinearBinaryCore  other)
+  public boolean isExclusiveFormula(LinearBinaryCore other)
   {
     if ((values_seen < MINPAIRS) ||
         (other.values_seen < MINPAIRS)) {

@@ -7,7 +7,7 @@ import daikon.*;
 import java.util.*;
 import org.apache.log4j.Category;
 
-public final class SequenceScalarFactory  {
+public final class SequenceScalarFactory {
 
   /** Main debug tracer **/
   public static final Category debug =

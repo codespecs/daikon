@@ -37,7 +37,7 @@ public final class FunctionUnaryCore
   // false if we're looking for y=fn(x), true if we're looking for x=fn(y)
   public boolean inverse;
 
-  private ValueTracker  values_cache = new ValueTracker(8);
+  private ValueTracker values_cache = new ValueTracker(8);
 
   public Invariant wrapper;
 
@@ -54,7 +54,7 @@ public final class FunctionUnaryCore
 
   public Object clone() {
     try {
-      FunctionUnaryCore  result = (FunctionUnaryCore) super.clone();
+      FunctionUnaryCore result = (FunctionUnaryCore) super.clone();
       result.values_cache = (ValueTracker) values_cache.clone();
       return result;
     } catch (CloneNotSupportedException e) {
@@ -75,7 +75,7 @@ public final class FunctionUnaryCore
   private void set_function() throws ClassNotFoundException, NoSuchMethodException {
   }
 
-  public void add_modified(long  x, long  y, long count) {
+  public void add_modified(long x, long y, long count) {
     boolean ok = false;
     ok = (inverse
           ? (x == (Functions.invokeUnary(methodNumber, y)))
@@ -117,12 +117,12 @@ public final class FunctionUnaryCore
   }
 
   public String repr() {
-    return "FunctionUnaryCore"  + wrapper.varNames() + ": "
+    return "FunctionUnaryCore" + wrapper.varNames() + ": "
       + "function=" + methodname[0]
       + ",inverse=" + inverse;
   }
 
-  public boolean isSameFormula(FunctionUnaryCore  other)
+  public boolean isSameFormula(FunctionUnaryCore other)
   {
     return methodname[0].equals(other.methodname[0]) &&
       methodname[1].equals(other.methodname[1]);
