@@ -4802,9 +4802,9 @@ public class PptTopLevel
     if (rep_is_scalar) {
       invEquals = IntEqual.instantiate (newSlice);
     } else if ((rep == ProglangType.STRING)) {
-      // invEquals = StringEqual.instantiate (newSlice);
-      invEquals = StringComparison.instantiate (newSlice, true);
-      ((StringComparison) invEquals).core.can_be_eq = true;
+      invEquals = StringEqual.instantiate (newSlice);
+      //invEquals = StringComparison.instantiate (newSlice, true);
+      //((StringComparison) invEquals).core.can_be_eq = true;
     } else if ((rep == ProglangType.INT_ARRAY)) {
       invEquals = SeqSeqIntEqual.instantiate (newSlice, true);
     } else if ((rep == ProglangType.STRING_ARRAY)) {
