@@ -126,6 +126,8 @@ showvars:
 list_java_files:
 	@echo $(JAVA_FILES)
 
+junit:
+	java daikon.test.MasterTester
 
 ###########################################################################
 
