@@ -62,6 +62,7 @@ public class EltwiseIntComparison
     if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.ESCJAVA) return format_esc();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
+    if (format == OutputFormat.JML) return format_jml();
 
     return format_unimplemented(format);
   }
@@ -107,6 +108,18 @@ public class EltwiseIntComparison
       return form[0] + "(" + form[1] + " == " + form[2] + ")" + form[3];
     } else {
       return form[0] + "((i+1 == j) ==> (" + form[1] + " " + comparator + " " + form[2] + "))" + form[3];
+    }
+  }
+
+  public String format_jml() {
+    String[] form =
+      VarInfoName.QuantHelper.format_jml(new VarInfoName[]
+	{ var().name, var().name });
+    String comparator = core.format_comparator();
+    if ("==".equals(comparator)) {
+      return form[0] + "(" + form[1] + " == " + form[2] + ")" + form[3];
+    } else {
+      return form[0] + "((i+1 == j) ==> (" + form[1] + " " + comparator + " " + form[2] + ")" + form[3];
     }
   }
 

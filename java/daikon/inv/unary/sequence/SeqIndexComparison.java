@@ -96,6 +96,7 @@ public final class SeqIndexComparison
     if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.ESCJAVA) return format_esc();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
+    if (format == OutputFormat.JML) return format_jml();
 
     return format_unimplemented(format);
   }
@@ -125,12 +126,26 @@ public final class SeqIndexComparison
       quant.getVarIndexed(0) + quant.getClosingExp();
   }
 
+  // Bad code here: if the first index is changed from i this breaks
   public String format_esc() {
     String comparator = core.format_comparator();
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
 	{ var().name });
     return form[0] + "(" + form[1] + " " + comparator + " i)" + form[2];
+  }
+
+  public String format_jml() {
+    String comparator = core.format_comparator();
+
+    VarInfoName.QuantHelper.QuantifyReturn qret = VarInfoName.QuantHelper.quantify(new VarInfoName[] { var().name });
+
+    String[] form =
+      VarInfoName.QuantHelper.format_jml(qret);
+
+    VarInfoName index1 = ((VarInfoName [])qret.bound_vars.get(0))[0];
+
+    return form[0] + form[1] + " " + comparator + index1.name() + form[2];
   }
 
   public String format_simplify() {

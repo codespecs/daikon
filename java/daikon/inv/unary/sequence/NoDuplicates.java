@@ -64,6 +64,17 @@ public class NoDuplicates
       return format_ioa();
     }
 
+    if (format == OutputFormat.JML) {
+      VarInfoName.QuantHelper.QuantifyReturn qret = VarInfoName.QuantHelper.quantify(new VarInfoName[] {var().name,var().name});
+      String quantResult[] = VarInfoName.QuantHelper.format_jml(qret,true);
+
+      VarInfoName index1 = ((VarInfoName [])qret.bound_vars.get(0))[0];
+      VarInfoName index2 = ((VarInfoName [])qret.bound_vars.get(1))[0];
+
+      return quantResult[0] + "(" + index1 + " != " + index2 + ") ==> (" + quantResult[1] + " != " +
+	quantResult[2] + ")" + quantResult[3];
+    }
+
     return format_unimplemented(format);
   }
 

@@ -63,6 +63,7 @@ public final class EltNonZero
     if (format == OutputFormat.ESCJAVA) return format_esc();
     if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
+    if (format == OutputFormat.JML) return format_jml();
 
     return format_unimplemented(format);
   }
@@ -102,6 +103,33 @@ public final class EltNonZero
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
 	{ var().name });
     return form[0] + "(" + form[1] + " != " + (pointer_type ? "null" : "0") + ")" + form[2];
+  }
+
+  public String format_jml() {
+    // If this is an entire array or Collection (not VarInfoName.Slice), then
+    //  * for arrays: use \nonnullelements(A)
+    //  * for Collections: use collection.containsNull == false
+    //    (the latter also requires that ghost field to get set)
+
+    VarInfoName name = var().name;
+    if (name instanceof VarInfoName.Elements) {
+      VarInfoName term = ((VarInfoName.Elements) name).term;
+      if (var().type.isArray()) {
+        return "\\nonnullelements(" + term.jml_name() + ")";
+      } else {
+        return term.jml_name() + ".containsNull == false";
+      }
+    }
+
+    // If this is just part of an array or Collection (name instanceof
+    // VarInfoName.Slice), then calling name.jml_name() will always throw
+    // an exception, since var() is certainly a sequence.  So use the
+    // standard quantification.
+
+    String[] form =
+      VarInfoName.QuantHelper.format_jml(new VarInfoName[]
+	{ var().name });
+    return form[0] + form[1] + " != " + (pointer_type ? "null" : "0") + form[2];
   }
 
   /* IOA */
