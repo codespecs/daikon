@@ -54,6 +54,7 @@ public class ProglangTypeTest extends TestCase {
     assertEquals(pstring.parse_value("\"\""), "");
     assertEquals(pstring.parse_value("\"\"foo\"\""), "\"foo\"");
     assertEquals(pstring.parse_value("\"foo bar\""), "foo bar");
+    assertEquals(pstring.parse_value("null"), null);
 
     ProglangType pinta = ProglangType.INT_ARRAY;
     assertTrue(longarrcomp(pinta.parse_value("[]"), new long[] {}));
@@ -64,10 +65,11 @@ public class ProglangTypeTest extends TestCase {
     ProglangType pstringa = ProglangType.STRING_ARRAY;
     assertTrue(comparrcomp(pstringa.parse_value("[]"), new String[] {}));
     assertTrue(comparrcomp(pstringa.parse_value("[\"foo\"]"), new String[] { "foo" }));
-    assertTrue(comparrcomp(pstringa.parse_value("[\"foo\" \"bar\"]"), new String[] { "foo", "bar" }));
-    assertTrue(comparrcomp(pstringa.parse_value("[\"foo bar\" \"baz\"]"), new String[] { "foo bar", "baz" }));
     assertTrue(comparrcomp(pstringa.parse_value("[\"f\\\"oo\"]"), new String[] { "f\"oo" }));
     assertTrue(comparrcomp(pstringa.parse_value("[\"f\\noo\"]"), new String[] { "f\noo" }));
+    assertTrue(comparrcomp(pstringa.parse_value("[\"foo\" \"bar\"]"), new String[] { "foo", "bar" }));
+    assertTrue(comparrcomp(pstringa.parse_value("[\"foo bar\" \"baz\"]"), new String[] { "foo bar", "baz" }));
+    assertTrue(comparrcomp(pstringa.parse_value("[\"foo\" null \"baz\"]"), new String[] { "foo", null, "baz" }));
   }
 
 }

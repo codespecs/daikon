@@ -247,7 +247,12 @@ public final class ProglangType implements java.io.Serializable {
 
     if (dimensions == 0) {
       if (base == BASE_STRING) {
-        Assert.assert(value.startsWith("\"") && value.endsWith("\""));
+        if (value.equals("null"))
+          return null;
+        if (! (value.startsWith("\"") && value.endsWith("\""))) {
+          System.out.println("Unquoted string value: " + value);
+        }
+        // Assert.assert(value.startsWith("\"") && value.endsWith("\""));
 	if (value.startsWith("\"") && value.endsWith("\""))
 	  value = value.substring(1, value.length()-1);
 	return value.intern();
@@ -319,11 +324,15 @@ public final class ProglangType implements java.io.Serializable {
         parser.quoteChar('\"');
         try {
           while ( parser.nextToken() != StreamTokenizer.TT_EOF ) {
-            if (parser.ttype != '\"') {
-              System.out.println("Bad ttype " + (char)parser.ttype);
+            if (parser.ttype == '\"') {
+              v.add(parser.sval);
+            } else if (parser.ttype == StreamTokenizer.TT_WORD) {
+              Assert.assert(parser.sval.equals("null"));
+              v.add(null);
+            } else {
+              System.out.println("Bad ttype " + (char)parser.ttype + " while parsing " + value_);
+              v.add(null);
             }
-            Assert.assert(parser.ttype == '\"');
-            v.add(parser.sval);
           }
         } catch (Exception e) {
           throw new Error(e.toString());
