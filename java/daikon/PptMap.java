@@ -19,6 +19,11 @@ public class PptMap
     return (Ppt) nameToPpt.get(name);
   }
 
+  public Ppt get(PptName name)
+  {
+    return get(name.toString());
+  }
+
   public boolean containsName(String name)
   {
     return nameToPpt.containsKey(name);
