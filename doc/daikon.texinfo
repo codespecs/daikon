@@ -73,6 +73,7 @@ This is the manual for the Daikon invariant detector.
 * Example use::                 
 * Detecting invariants::        
 * Daikon output::               
+* Front ends::                  
 * Troubleshooting::             
 * Details::                     
 * File formats::
@@ -81,6 +82,7 @@ This is the manual for the Daikon invariant detector.
 @contents
 @end ifhtml
 @ifnothtml
+
 @detailmenu
  --- The Detailed Node Listing ---
 
@@ -88,10 +90,6 @@ Installing Daikon
 
 * Installing dfej::             
 * Installing dfec::             
-* Requirements::                
-
-Installing dfec, the Daikon front end for C/C++
-
 * Requirements::                
 
 Requirements for running Daikon
@@ -115,14 +113,10 @@ Using Daikon to detect invariants
 
 Instrumentation
 
-* Java programs::               
-* C programs::                  
+* Instrumenting Java programs::  
+* Instrumenting C programs::    
 
-Java programs
-
-* Scope of instrumentation::    
-
-C programs
+Instrumenting C programs
 
 * Limitations::                 
 
@@ -157,6 +151,19 @@ Using the invariant browser
 
 * Invariants Display::          
 * Control panel::               
+
+Front ends
+
+* Java front end dfej::         
+
+Java front end dfej
+
+* dfej options::                
+* Scope of instrumentation::    
+
+dfej options
+
+* Scope of instrumentation::    
 
 Troubleshooting
 
@@ -791,12 +798,12 @@ for "Daikon front end for Java" and "Daikon front end for C/C++".  The
 Java front end is more complete and robust than the C/C++ front end.
 
 @menu
-* Java programs::               
-* C programs::                  
+* Instrumenting Java programs::  
+* Instrumenting C programs::    
 @end menu
 
-@node    Java programs, C programs, Instrumentation, Instrumentation
-@subsection Java programs
+@node    Instrumenting Java programs, Instrumenting C programs, Instrumentation, Instrumentation
+@subsection Instrumenting Java programs
 
 To instrument Java source programs, simply invoke @file{dfej}, the
 Daikon front end for Java, on them:
@@ -804,8 +811,8 @@ Daikon front end for Java, on them:
       dfej @var{filename1}.java @var{filename2}.java @var{...}
 @end example
 
-After running dfej, compile the version of the code in the
-@file{daikon-java/} directory.
+After running dfej, compile the instrumented version of the code, which
+by default appears in the @file{daikon-java/} directory.
 
 The Daikon front end for Java has two effects:
 @itemize @bullet
@@ -818,82 +825,17 @@ The Daikon front end for Java has two effects:
   @file{daikon-output/} directory.
 @end itemize
 
-See the @file{dfej} usage message for more information.  See
-@ref{Installing dfej} for information on installing dfej.
-
-@command{dfej} works on Java code which
-corresponds to any version of the Java language, from 1.0 to 1.3.
-
-You should run @command{dfej} from a directory in your classpath.  For
-example, if directory @file{parent/} is in your classpath and you want
-to instrument @file{parent/foo/Bar.java}, you should run @samp{dfej
-foo/Bar.java} from directory @file{parent/}.  This will create a file
-@file{parent/daikon-java/foo/Bar.java}.  You must add directory
-@file{parent/daikon-java} to your classpath.
-
-(The reason for running @command{dfej} from a directory in your
-classpath is that it allows the directory structure to remain consistent
-with the package structure. If @file{Bar.java} specifies its package, it
-does so with a line like @samp{package foo;}.  If you run @command{dfej}
-from the @file{parent/foo} directory, the instrumented version of
-@file{Bar.java} will go in @file{parent/foo/daikon-java/Bar.java}; this is not
-consistent with the package structure.)
+For more information about dfej, see @ref{Java front end dfej}
+or the @file{dfej} usage message for more information.
 
 
-@menu
-* Scope of instrumentation::    
-@end menu
-
-@node    Scope of instrumentation,  , Java programs, Java programs
-@subsubsection Controlling what classes are instrumented
-
-Only the specified Java files are instrumented; other files are
-run uninstrumented.  This permits you to control the scope of invariant
-detection.
-
-In any of the specified files, all classes defined in any of those
-files are instrumented.  For instance, after
-@example
-dfej Foo.java Bar.java
-@end example
-@noindent
-the instrumented versions of @file{Foo.java} and @file{Bar.java} output
-information about all Foo objects (including Foo objects that are
-components of Bar objects, that are arguments to Bar functions, etc.),
-and likewise for Bar objects.
-
-After
-@example
-dfej Foo.java
-dfej Bar.java
-@end example
-@noindent
-the same functions (all those in the @file{Foo} and @file{Bar} classes)
-are instrumented, but in Foo functions, no detail is provided
-about the structure of any Bar objects that might appear.  In other
-words, the instrumenter assumes that the only classes instrumented (and
-about which information is desired) are those presented to it on the
-command line.  One way to determine all the @file{.java} files that are
-included in a specified program is to run the following commands:
-@example
-find . -name '*.class' -print | xargs rm -f
-javac MyProgram.java
-find . -name '*.class' -print
-@end example
-
-@command{dfej} tracks all modifications of instrumented classes; if you
-do not instrument all users of a class, then modifications in
-un8instrumented classes may not be detected.  This can affect Daikon's
-statistical tests, but in practice usually has little impact.  (The
-@command{modbit-munge.pl} script makes approximations to the missing
-modification information.
-
-
-@node    C programs,  , Java programs, Instrumentation
-@subsection C programs
+@node    Instrumenting C programs,  , Instrumenting Java programs, Instrumentation
+@subsection Instrumenting C programs
 
 dfec works only on ANSI/ISO C, not on K&R C.  If you wish to instrument
-K&R C, first convert it to ISO C.
+K&R C, first convert it to ISO C.  One way to do this is to use the
+@command{protoize} program distributed with many versions of Unix and
+also widely available online.
 
 The three crucial files are @file{dfec}, 
 @file{daikon_runtime.h}, and 
@@ -952,7 +894,7 @@ you can run Daikon:
 * Limitations::                 
 @end menu
 
-@node    Limitations,  , C programs, C programs
+@node    Limitations,  , Instrumenting C programs, Instrumenting C programs
 @subsubsection Limitations
 
 @c 4/10/2001
@@ -1182,7 +1124,7 @@ if @option{-t} is given), but do not start the GUI.
 
 
 
-@node    Daikon output, Troubleshooting, Detecting invariants, Top
+@node    Daikon output, Front ends, Detecting invariants, Top
 @chapter Daikon output
 
 
@@ -1421,6 +1363,226 @@ of the variables in the variables list.
 @end table
 
 
+@node    Front ends, Troubleshooting, Daikon output, Top
+@chapter Front ends
+
+
+@menu
+* Java front end dfej::         
+@end menu
+
+@node    Java front end dfej,  , Front ends, Front ends
+@section Java front end dfej
+
+This section contains details about dfej, the Daikon front end for Java.
+
+For brief information about running dfej, see @ref{Instrumenting Java programs}.
+For information about installing dfej, see @ref{Installing dfej}.
+The @file{dfej} usage message also contains some information.
+
+@command{dfej} works on Java code which corresponds to any version of
+the Java language, from 1.0 to 1.3.
+
+The Daikon front end for Java has two effects:
+@itemize @bullet
+@item
+  dfej writes instrumented versions of the files, by default in directory
+  @file{daikon-java/}
+@item
+  dfej creates declaration files named
+  @file{@var{filename1}.decls}, etc., by default in directory
+  @file{daikon-output/}
+@end itemize
+
+
+@menu
+* dfej options::                
+* Scope of instrumentation::    
+@end menu
+
+@node    dfej options, Scope of instrumentation, Java front end dfej, Java front end dfej
+@subsection dfej options
+
+The simplest way to invoke dfej is simply to supply it a list of Java files:
+@example
+      dfej @var{filename1}.java @var{filename2}.java @var{...}
+@end example
+
+dfej also accepts the following options, which should be provided before
+the first Java file name.  The options can be divided into the following
+categories:
+@table @b
+@item where (in what directory) to produce output
+
+@end table
+
+Details of the options are as follows:
+
+@table @b
+@item @option{-daikon_debug}
+Produce debugging information.
+
+@item @option{-daikon_depth=}@var{n}
+Depth to which to examine structure components (default 2).
+This parameter determines which variables dfej causes to be output at
+runtime.  For instance, suppose that a program contained the following
+data structures and variables:
+@example
+  class A @{
+    int x;
+    B b;
+  @}
+  class B @{
+    int y;
+    int z;
+  @}
+  A myA;
+
+  class Link @{
+    int val;
+    Link next;
+  @}
+  Link myList;
+@end example
+@itemize @bullet
+@item If depth=0, only the hashcodes of @code{myA} and @code{myList}
+would be examined; those variables could be determined to be equal
+or not equal to other variables.
+@item If depth=1, then also @code{MyA.b}, @code{myList.next}, and the integers
+@code{myA.x} and @code{myList.val} would be examined.
+@item If depth=2, then also @code{MyA.b.y}, @code{MyA.b.y},
+@code{myList.next.next}, and @code{myList.next.val} would be examined.
+@end itemize
+
+Values that do not exist are not examined.  For instance, if @code{myA}
+is @code{null} on a particular execution of a program point, then
+@code{myA.b} is not accessed on that execution regardless of the depth
+parameter.
+
+@item @option{+daikon_functions}
+Produce data trace output at function entry/exit (default).
+
+@item @option{-daikon_functions}
+Do not produce data trace output at function entry/exit.
+
+@item @option{+daikon_classes}
+Produce data trace output for class invariants (default).
+
+@item @option{-daikon_classes}
+Do not produce data trace output for class invariants.
+
+@item @option{+daikon_loops}
+Produce data trace output for loop invariants.
+
+@item @option{-daikon_loops}
+Do not produce data trace output for loop invariants (default).
+
+@item @option{-daikon_omit=@var{string}}
+Do not produce data trace output for matching classes/functions.
+If a class, method, or program point name contains the @var{string}
+argument, then no trace output is produced for that entity.
+
+
+@item @option{-tracefilename=@var{filename}}
+Specifies the default name for the @file{.dtrace} file (default
+@file{daikon-output/@var{CLASSNAME}.dtrace}).  The filename is relative
+to the current directory at runtime, or is absolute.  If the DTRACEFILE
+environment variable is set when the instrumented program is run, it
+overrides this default.
+
+@item @option{-declsfiledir=@var{decldir}}
+Specifies the directory in which to create
+@file{@var{PACKAGES}/@var{CLASSNAME}.decls} (default
+@file{daikon-output}, unless @option{-declsfiledirflat} is
+specified).  @var{PACKAGES} is the relative path from the current
+directory to the @file{.java} file; that is, the relative path from
+@var{decldir} to the @file{.dtrace} file is the same as the relative
+path from the current directory to the @file{.java} file.  The directory
+structure of the @file{.dtrace} files mirrors the directory structure of
+the @file{.java} files.
+
+@item @option{-declsfiledirflat=@var{decldir}}
+Specifies the directory in which to create @file{@var{CLASSNAME}.dtrace}
+(no default).  All @file{.dtrace} files appear in the same directory.
+
+@item @option{-instrsourcedir=@var{instrdir}}
+Specifies the directory in which to write instrumented java files
+(default @file{daikon-java/}).  The instrumented files have the same
+names and directory structure as the original input files.
+
+If you do not override the default value of this variable (and possibly
+even if you do), then you should run @command{dfej} from a directory in
+your classpath.  For example, if directory @file{parent/} is in your
+classpath and you want to instrument @file{parent/foo/Bar.java}, you
+should run @samp{dfej foo/Bar.java} from directory @file{parent/}.  This
+will create a file @file{parent/daikon-java/foo/Bar.java}.  You must add
+directory @file{parent/daikon-java} to your classpath.
+
+(The reason for running @command{dfej} from a directory in your
+classpath is that it allows the directory structure to remain consistent
+with the package structure. If @file{Bar.java} specifies its package, it
+does so with a line like @samp{package foo;}.  If you run @command{dfej}
+from the @file{parent/foo} directory, the instrumented version of
+@file{Bar.java} will go in @file{parent/foo/daikon-java/Bar.java}; this
+is not consistent with the package structure.)
+
+@end table
+
+When conflicting options are specified (for instance, both
+@option{+daikon_functions} and @option{-daikon_functions}, or both
+@option{-declsfiledir} and @option{-declsfiledirflat}), the last one
+takes precedence.
+
+
+@menu
+* Scope of instrumentation::    
+@end menu
+
+@node    Scope of instrumentation,  , dfej options, Java front end dfej
+@subsection Controlling what classes are instrumented
+
+Only the specified Java files are instrumented; other files are
+run uninstrumented.  This permits you to control the scope of invariant
+detection.
+
+In any of the specified files, all classes defined in any of those
+files are instrumented.  For instance, after
+@example
+dfej Foo.java Bar.java
+@end example
+@noindent
+the instrumented versions of @file{Foo.java} and @file{Bar.java} output
+information about all Foo objects (including Foo objects that are
+components of Bar objects, that are arguments to Bar functions, etc.),
+and likewise for Bar objects.
+
+After
+@example
+dfej Foo.java
+dfej Bar.java
+@end example
+@noindent
+the same functions (all those in the @file{Foo} and @file{Bar} classes)
+are instrumented, but in Foo functions, no detail is provided
+about the structure of any Bar objects that might appear.  In other
+words, the instrumenter assumes that the only classes instrumented (and
+about which information is desired) are those presented to it on the
+command line.  One way to determine all the @file{.java} files that are
+included in a specified program is to run the following commands:
+@example
+find . -name '*.class' -print | xargs rm -f
+javac MyProgram.java
+find . -name '*.class' -print
+@end example
+
+@command{dfej} tracks all modifications of instrumented classes; if you
+do not instrument all users of a class, then modifications in
+un8instrumented classes may not be detected.  This can affect Daikon's
+statistical tests, but in practice usually has little impact.  (The
+@command{modbit-munge.pl} script makes approximations to the missing
+modification information.
+
+
 
 
 
@@ -1468,7 +1630,7 @@ of the variables in the variables list.
 
 
 
-@node    Troubleshooting, Details, Daikon output, Top
+@node    Troubleshooting, Details, Front ends, Top
 @chapter Troubleshooting
 
 This chapter gives solutions for certain problems you might have with
@@ -1991,11 +2153,11 @@ This controls how the comparability field in the declarations is interpreted.
 
 
 @menu
-* pptname format::
+* pptname format::              
 @end menu
 
 
-@node    pptname format, , Declaration files, Declaration files
+@node    pptname format,  , Declaration files, Declaration files
 @subsection Program point name format specification
 
 Instrumenting code creates a .decls file that contains program point names
