@@ -20,6 +20,16 @@ var that is less derived is more canonical than one that is more
 derived, and other things being equal, choose the var with the least
 complex name.
 
+Added new script trace-add-nonces.pl, which adds nonces to a .dtrace file.
+Nonces associate a procedure exit with a procedure entry, and some parts of
+Daikon's toolset require .dtrace files to contain nonces.
+
+Added new Daikon option --list_type, which can be used to add to the
+information in the "ListImplementors" section of the .decls file.
+
+Added new Daikon option --mem_stat, which prints memory usage statistics
+into a file named "stat.out" in the current directory.
+
 ---------------------------------
 
 3.1.4 (01 Oct 2004)

@@ -2007,6 +2007,41 @@ The Daikon invariant detector is invoked as follows:
 
 This section describes the optional flags.
 
+They can be divided into the following categories:
+
+@table @asis
+@item Control output of the Daikon tool
+-h
+--help
+-o
+--no_text_output
+--format
+--show_progress
+--no_show_progress
+--noversion
+--output_num_samples
+--files_from
+--omit_from_output
+@item Control invariant detection
+--conf_limit
+--list_type
+--nohierarchy
+--suppress_redundant
+@item Process only part of the trace file
+--ppt
+--ppt_omit
+--var_omit
+@item Configuration options
+--config
+--config_option
+@item Debugging
+--debug
+--dbg
+--track
+--disc_reason
+--mem_stat
+@end table
+
 
 @c Unfortunately, @option{} adds quotes in the Info and printed output
 @c which is not necessary in a table.  However, @t and @code compress
@@ -2016,25 +2051,49 @@ This section describes the optional flags.
 @item --help
 Print usage message.
 
-@item --format @var{name}
-Produce output in the given format.  See @ref{Invariant syntax}.
-
-@item --ppt @var{ppt_regexp}
-Only process program points whose names match the regular expression,
-which uses Perl syntax.
-
-@item --ppt_omit @var{ppt_regexp}
-Do not process program points whose names match the regular expression,
-which uses Perl syntax.  This takes priority over the
-@option{--ppt} argument.
-
-@item --var_omit @var{var_regexp}
-Ignore variables (whether in the trace file or derived) whose names
-match the regular expression, which uses Perl syntax.
-
 @item -o @var{inv_file}
 Serialize invariants to the specified file; they can later be
 postprocessed, compared, etc.
+
+@item --no_text_output
+Don't print invariants as text output.  This option may be used in
+conjunction with the @option{-o} option.
+
+@item --format @var{name}
+Produce output in the given format.  See @ref{Invariant syntax}.
+
+@item --show_progress
+@item --no_show_progress
+Prints (respectively, suppresses) timing information as major portions of Daikon are executed.
+
+@item --noversion
+Suppress the printing of version information
+
+@item --output_num_samples
+@cindex samples breakdown output
+@cindex mux output
+Output numbers of values and samples for invariants and program points;
+this is a debugging flag.  (That is, it helps you understand why Daikon
+produced the output that it did.)
+
+The ``Samples breakdown'' output indicates how many samples in the
+@file{.dtrace} file had a modified value (``m''), had an unmodified
+value (``u''), and had a missing value (``x'').  The summary uses a
+capital letter if the sample had any of the corresponding type of
+variable, and a lower-case letter if it had none.  These types affect
+statistical tests that determine whether a particular invariant (that
+was true over all the test runs) is printed.
+
+Only variables that appear in both the pre-state and the post-state
+(variables that are in scope at both procedure exit and entry) are
+eligible to be listed as modified or unmodified.  This is why the list
+of all variables is not the union of the modified and unmodified
+variables.
+
+@item --files_from @var{filename}
+Read a list of @var{decl}, @var{dtrace}, or @var{spinfo} files from the
+given text file, one filename per line, as an alternative to providing
+them on the command line.
 
 @item --omit_from_output [0rs]
 Omit some potentially redundant information from the serialized output
@@ -2080,22 +2139,30 @@ In many cases, the amount of space saved is modest (typically around
 10%), but the savings can be more substantial for programs with many
 unused program points, or program points with many variables.
 
-@item --config @var{filename}
-Load the configuration settings specified in the given file.
-@xref{Configuration options}, for details.
+@item --conf_limit @var{val}
+Set the confidence limit for justifying invariants.  @var{val} must be
+between 0 and 1; the default is .99 (1%).  Larger values yield stronger
+filtering.
 
-@item --config_option @var{name}=@var{value}
-Specify a single configuration setting.
-@xref{Configuration options}, for details.
+@item --list_type @var{classname}
+Indicate that the given class implements the @samp{java.util.List}
+interface.  The preferred mechanism for indicating such information is
+the ``ListImplementors'' section of the @file{.decls} file.
 
-@item --files_from @var{filename}
-Read a list of @var{decl}, @var{dtrace}, or @var{spinfo} files from the
-given text file, one filename per line, as an alternative to providing
-them on the command line.
+@item --nohierarchy
+Avoid connecting program points in a dataflow hierarchy.  For example,
+Daikon normally connects the ENTER program points of a class with the
+class's CLASS program point, so that any invariant that holds on the
+CLASS program point is considered to hold true on the ENTER program
+point.  With no hierarchy, each program point is treated
+independently.  This is for using Daikon on applications that do not
+have a concept of hierarchy.  
 
-@item --no_text_output
-Don't print invariants as text output.  This option may be used in
-conjunction with the @option{-o} option.
+@item --suppress_redundant
+Suppress display of logically redundant invariants, using the Simplify
+automatic theorem prover.  Simplify must be separately obtained (from
+@uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
+order to take advantage of this option.
 
 @item --suppress_redundant
 Suppress display of logically redundant invariants, using the Simplify
@@ -2108,54 +2175,26 @@ using the @option{daikon.simplify.Session.simplify_max_iterations} and
 @option{daikon.simplify.Session.simplify_timeout} configuration
 options.
 
-@item --disc_reason @var{inv_class}<@var{var1},@var{var2},...>@@@var{ppt}
-Prints all discarded invariants of class @var{inv_class} at the ppt
-specified that involve exactly the vars given, as well as a short reason
-and discard code explaining why they were not worthy of print.  Any of 
-the three parts of the optarg may be made a wildcard by excluding it.
-For example, @samp{@var{inv_class}} and
-@samp{<@var{var1},@var{var2},...>@@@var{ppt}} are valid arguments.
-Concrete examples are @samp{Implication<x,y>@@foo():::EXIT},
-@samp{Implication<x,y>}, and @samp{<x,y>@@foo():::EXIT}.
-To print all discarded invariants, use the argument "all".
+@item --ppt @var{ppt_regexp}
+Only process program points whose names match the regular expression,
+which uses Perl syntax.
 
-@item --conf_limit @var{val}
-Set the confidence limit for justifying invariants.  @var{val} must be
-between 0 and 1; the default is .99 (1%).  Larger values yield stronger
-filtering.
+@item --ppt_omit @var{ppt_regexp}
+Do not process program points whose names match the regular expression,
+which uses Perl syntax.  This takes priority over the
+@option{--ppt} argument.
 
-@item --nohierarchy
-Avoid connecting program points in a dataflow hierarchy.  For example,
-Daikon normally connects the ENTER program points of a class with the
-class's CLASS program point, so that any invariant that holds on the
-CLASS program point is considered to hold true on the ENTER program
-point.  With no hierarchy, each program point is treated
-independently.  This is for using Daikon on applications that do not
-have a concept of hierarchy.  
+@item --var_omit @var{var_regexp}
+Ignore variables (whether in the trace file or derived) whose names
+match the regular expression, which uses Perl syntax.
 
-@item --output_num_samples
-@cindex samples breakdown output
-@cindex mux output
-Output numbers of values and samples for invariants and program points;
-this is a debugging flag.  (That is, it helps you understand why Daikon
-produced the output that it did.)
+@item --config @var{filename}
+Load the configuration settings specified in the given file.
+@xref{Configuration options}, for details.
 
-The ``Samples breakdown'' output indicates how many samples in the
-@file{.dtrace} file had a modified value (``m''), had an unmodified
-value (``u''), and had a missing value (``x'').  The summary uses a
-capital letter if the sample had any of the corresponding type of
-variable, and a lower-case letter if it had none.  These types affect
-statistical tests that determine whether a particular invariant (that
-was true over all the test runs) is printed.
-
-Only variables that appear in both the pre-state and the post-state
-(variables that are in scope at both procedure exit and entry) are
-eligible to be listed as modified or unmodified.  This is why the list
-of all variables is not the union of the modified and unmodified
-variables.
-
-@item --show_progress
-Prints timing information as major portions of Daikon are executed.
+@item --config_option @var{name}=@var{value}
+Specify a single configuration setting.
+@xref{Configuration options}, for details.
 
 @item --dbg @var{category}
 @item --debug
@@ -2190,8 +2229,20 @@ is a simple substring (not a regular expression) comparison.  Each item
 must match in order for a printout to occur.  See the Daikon Developer
 Manual for more information.
 
-@item --noversion
-Suppress the printing of version information
+@item --disc_reason @var{inv_class}<@var{var1},@var{var2},...>@@@var{ppt}
+Prints all discarded invariants of class @var{inv_class} at the ppt
+specified that involve exactly the vars given, as well as a short reason
+and discard code explaining why they were not worthy of print.  Any of 
+the three parts of the optarg may be made a wildcard by excluding it.
+For example, @samp{@var{inv_class}} and
+@samp{<@var{var1},@var{var2},...>@@@var{ppt}} are valid arguments.
+Concrete examples are @samp{Implication<x,y>@@foo():::EXIT},
+@samp{Implication<x,y>}, and @samp{<x,y>@@foo():::EXIT}.
+To print all discarded invariants, use the argument "all".
+
+@item --mem_stat
+Prints memory usage statistics into a file named @file{stat.out} in the
+current directory.
 
 @end table
 
@@ -2704,12 +2755,6 @@ Print usage message.
 
 @item --format @var{name}
 Produce output in the given format.  See @ref{Invariant syntax}.
-
-@item --suppress_redundant
-Suppress display of logically redundant invariants, using the Simplify
-automatic theorem prover.  Simplify must be separately obtained (from
-@uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
-order to take advantage of this option.
 
 @item --output_num_samples
 Output numbers of values and samples for invariants and program points;
