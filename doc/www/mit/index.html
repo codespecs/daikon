@@ -645,6 +645,17 @@ buffer-file-coding-system nil)</tt> in Emacs, then save the file.
       procedures, which tend to be more portable, more efficient, and
       usually clearer.  For instance, don't do <tt>@files = split('\n', `ls
       *.c`);</tt>; instead, use <tt>@files = glob("*.c");</tt>.
+  <li>When writing a subroutine that takes arguments, use the
+      <tt>checkargs</tt> facility to ensure that you have passed the
+      correct number of them.  Put <tt>use checkargs;</tt> near the top of
+      your Perl script, then, as the first line of user-written subroutine
+      foo, do one of the following:
+<pre>
+  my ($arg1, $arg2) = check_args(2, @_);
+  my ($arg1, @rest) = check_args_range(1, 4, @_);
+  my ($arg1, @rest) = check_args_at_least(1, @_);
+  my @args = check_args_at_least(0, @_);
+</pre>
 </ol>
 <p>
 
