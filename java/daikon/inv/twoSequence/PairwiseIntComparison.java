@@ -59,7 +59,8 @@ class PairwiseIntComparison extends TwoSequence {
                            + "; inequality=\"" + inequality + "\""
                            + ",comparison=\"" + comparison + "\"");
       }
-      return var1().name + " " + inequality + comparison + " " + var2().name;
+      return var1().name + " " + inequality + comparison + " " + var2().name
+        + " (elementwise)";
     } else {
       return null;
     }

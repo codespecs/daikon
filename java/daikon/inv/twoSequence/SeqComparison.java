@@ -43,7 +43,8 @@ class SeqComparison extends TwoSequence implements Comparison {
                            + "; inequality=\"" + inequality + "\""
                            + ",comparison=\"" + comparison + "\"");
       }
-      return var1().name + " " + inequality + comparison + " " + var2().name;
+      return var1().name + " " + inequality + comparison + " " + var2().name
+        + " (lexically)";
     } else {
       return null;
     }
@@ -70,8 +71,9 @@ class SeqComparison extends TwoSequence implements Comparison {
   protected double computeProbability() {
     if (no_invariant) {
       return Invariant.PROBABILITY_NEVER;
+    } else if (can_be_lt || can_be_gt) {
+      return Math.pow(.5, ppt.num_values());
     } else {
-      // I don't know how to compute a better probability for this.
       return 0;
     }
   }
