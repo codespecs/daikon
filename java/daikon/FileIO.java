@@ -1014,7 +1014,7 @@ public final class FileIO {
       }
 
       if (!VarInfoName.parse(line).equals(vi.name)) {
-        throw new FileIOException("Expected variable " + vi.name.name()
+        throw new FileIOException("Mismatch between .dtrace file and .decls file.  Expected variable " + vi.name.name()
                                   + ", got " + line
                                   + " for program point " + ppt.name(),
                                   reader, data_trace_filename);
