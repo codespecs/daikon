@@ -3,7 +3,13 @@ package daikon.inv.unary.scalar;
 import daikon.*;
 
 // This invariant is true if the variable is always positive (greater than 0).
-// This invariant is provided for pedagogical reasons only -- in reality,
+// This invariant is provided for pedagogical reasons only.
+
+/**
+ * Represents the invariant 'x > 0' where x is a long scalar.  This exists
+ * only as an example for the purposes of the manual.  It isn't actually
+ * used (it is replaced by the more general invariant LowerBound).
+ **/
 
 public class Positive
   extends SingleScalar

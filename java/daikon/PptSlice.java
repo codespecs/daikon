@@ -111,6 +111,7 @@ public abstract class PptSlice
   // This holds keys (interned) and elements of different types, depending on
   // the concrete child of PptSlice.
   // HashMap values_cache; // [INCR]
+  // Vector  values_order; // [INCR]
 
   /* [INCR]
   // These are used only when the values_cache has been set to null.
@@ -176,6 +177,19 @@ public abstract class PptSlice
     return false;
   }
 
+  /**
+   * @return true if any of our variables is named NAME, or is derived
+   * from a variable named NAME.
+   **/
+  // Only called right now from tools/ExtractConsequent
+  public boolean usesVarDerived(String name) {
+    for (int i=0; i<var_infos.length; i++) {
+      if (var_infos[i].name.includesSimpleName(name))
+        return true;
+    }
+    return false;
+  }
+
   private transient Dataflow.PptsAndInts controlling_cached = null;
 
   /**
@@ -237,7 +251,6 @@ public abstract class PptSlice
                                 (int[][]) resultFlows.toArray (new int[0][]));
     return controlling_cached;
   }
-
 
   /** @return true if all of this slice's variables are orig() variables. */
   public boolean allPrestate() {
@@ -594,6 +607,7 @@ public abstract class PptSlice
         tuplemod_samples_summary_post_cache = tuplemod_samples_summary();
       }
       values_cache = null;
+      values_order = null;
     }
   }
   */

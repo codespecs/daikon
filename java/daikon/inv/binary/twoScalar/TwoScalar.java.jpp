@@ -27,6 +27,9 @@ import daikon.inv.binary.*;
 
 import utilMDE.*;
 
+/**
+ * Abstract base class for comparing two PRIMITIVE scalars
+ **/
 public abstract class CLASSNAME
   extends BinaryInvariant
 {

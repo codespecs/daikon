@@ -74,8 +74,6 @@ public final class Diff {
   private Comparator invSortComparator2;
   private Comparator invPairComparator;
 
-  int nonce = 0;
-
   private boolean examineAllPpts;
 
   public Diff() {
@@ -117,7 +115,7 @@ public final class Diff {
 
     boolean optionSelected = false;
 
-    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
+    //    daikon.LogHelper.setupLogs (daikon.LogHelper.INFO);
 
     LongOpt[] longOpts = new LongOpt[] {
       new LongOpt(INV_SORT_COMPARATOR1_SWITCH,
@@ -172,7 +170,7 @@ public final class Diff {
       case 'H':
         PrintAllVisitor.HUMAN_OUTPUT = true;
         break;
-      case 'y':  //included for legacy code
+      case 'y':  // included for legacy code
         optionSelected = true;
         includeUnjustified = false;
         break;
@@ -332,13 +330,27 @@ public final class Diff {
 
       // get the xor from these two manips
       treeManip = false;
-      RootNode manipRoot = diff.diffPptMap (manip1, manip2, includeUnjustified);
+
+
+      // RootNode pass_and_both = diff.diffPptMap (manip1, map2, includeUnjustified);
+      // RootNode fail_and_both = diff.diffPptMap (manip2, map2, includeUnjustified);
+
+
+      // get rid of the "both" invariants
+      // MinusVisitor2 aMinusB = new MinusVisitor2();
+      //      pass_and_both.accept (aMinusB);
+      // fail_and_both.accept (aMinusB);
+
+
+      RootNode pass_and_fail = diff.diffPptMap (manip1, manip2, includeUnjustified);
+
+
 
       XorInvariantsVisitor xiv = new XorInvariantsVisitor(System.out,
                                                           false,
                                                           false,
                                                           false);
-      manipRoot.accept (xiv);
+      pass_and_fail.accept (xiv);
 
       // remove for the latest version
       treeManip = true;
@@ -347,14 +359,10 @@ public final class Diff {
       RootNode root = diff.diffPptMap (map1, map2, includeUnjustified);
 
 
-      // Extract consequents
-      //ConsequentExtractorVisitor cev = new ConsequentExtractorVisitor();
-      //root.accept (cev);
-
       // now run the stats visitor for checking matches
       //      MatchCountVisitor2 mcv = new MatchCountVisitor2
       //  (System.out, verbose, false);
-
+      /*
       PptCountVisitor mcv = new PptCountVisitor
         (System.out, verbose, false);
 
@@ -364,13 +372,22 @@ public final class Diff {
       System.out.println ("Recall: " + mcv.calcRecall());
       System.out.println ("Success");
       //      System.exit(0);
+      */
+
+
 
 
       MatchCountVisitor2 mcv2 = new MatchCountVisitor2
         (System.out, verbose, false);
 
       root.accept (mcv2);
+      // print final is simply for debugging, remove
+      // when experiments are over.
       mcv2.printFinal();
+
+      // Most of the bug-experiments expect the final output
+      // of the Diff to be these three lines.  It is best
+      // not to change it.
       System.out.println ("Precison: " + mcv2.calcPrecision());
       System.out.println ("Recall: " + mcv2.calcRecall());
       System.out.println ("Success");
@@ -642,10 +659,9 @@ public final class Diff {
       HashSet repeatFilter = new HashSet();
       ArrayList ret = new ArrayList ();
       invs1 = (List) map1.get(ppt1);
-      for (Iterator j = invs1.iterator(); j.hasNext();) {
+      for (Iterator j = invs1.iterator(); j.hasNext(); ) {
         Invariant inv = (Invariant)  j.next();
-        if (inv.justified() && inv instanceof Implication) {
-          nonce++;
+        if (/*inv.justified() && */inv instanceof Implication) {
           Implication imp = (Implication) inv;
           if (!repeatFilter.contains (imp.consequent().format_using(OutputFormat.JAVA))) {
             repeatFilter.add (imp.consequent().format_using(OutputFormat.JAVA));
@@ -658,6 +674,11 @@ public final class Diff {
               ret.add (imp.predicate());
             }
           }
+        }
+        // Report invariants that are not part of implications
+        // "as is".
+        else {
+          ret.add (inv);
         }
       }
       invs1 = ret;
@@ -716,7 +737,7 @@ public final class Diff {
         pptNode.add(invNode);
       }
     }
-    //    System.out.println ("NONCE: " + nonce);
+
 
     return pptNode;
   }
@@ -753,7 +774,7 @@ public final class Diff {
 
     //    String targ = targetName.substring (0, targetName.lastIndexOf(";condition"));
 
-    for ( Iterator i = manip.nameStringSet().iterator(); i.hasNext();) {
+    for ( Iterator i = manip.nameStringSet().iterator(); i.hasNext(); ) {
       String somePptName = (String) i.next();
       // A conditional Ppt always contains the normal Ppt
       if (targetName.equals (somePptName)) {

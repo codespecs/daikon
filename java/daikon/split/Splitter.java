@@ -1,6 +1,7 @@
 package daikon.split;
 
 import daikon.*;
+import daikon.inv.DummyInvariant;
 import java.io.Serializable;
 
 /**
@@ -9,7 +10,15 @@ import java.io.Serializable;
  * "x > 0".  The Splitter is used to divide a collection of variable values
  * into sub-sets.  Invariant detection can then occur for the two subsets
  * independently.
- */
+ *
+ * This class Splitter is the superclass for all the classes we
+ * dynamically compile; there will be one subclass for each condition
+ * that's checked. Other information about the splitting condition is
+ * kept in a SplitterObject object, which keeps reference to the
+ * corresponding Splitter. One instance of each Splitter subclass is
+ * then created for each program point at which the splitting
+ * condition is applicable.
+ **/
 
 public abstract class Splitter
   implements Serializable
@@ -65,4 +74,16 @@ public abstract class Splitter
   /** Returns the condition being tested, as a String. */
   public abstract String condition();
 
+  /** Set up the static ('factory') DummyInvariant for this kind of
+   * splitter. This only modifies static data, but it can't be static
+   * because subclasses must override it. */
+  public void makeDummyInvariant(DummyInvariant inv) { }
+
+  /** Make an instance DummyInvariant for this instance of the
+   * splitter, if possible on an appropriate slice from ppt. */
+  public void instantiateDummy(PptTopLevel ppt) { }
+
+  /** On an instantiated Splitter, give back an appropriate instantiated
+   * DummyInvariant */
+  public abstract DummyInvariant getDummyInvariant();
 }

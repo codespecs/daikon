@@ -143,8 +143,8 @@ public class PptCountVisitor extends PrintAllVisitor {
         //        System.out.println ("K2: " + key2);
 
         String thisPptName1 = inv1.ppt.name;
-        //System.out.println ("NAME1: " + tmpStr1);
-	//Contest.smallestRoom(II)I:::EXIT;condition="not(max <= num)"
+        // System.out.println ("NAME1: " + tmpStr1);
+	// Contest.smallestRoom(II)I:::EXIT;condition="not(max <= num)"
         String bucketKey = thisPptName1.substring (0,
         	       			thisPptName1.lastIndexOf (";condition"));
 
@@ -310,7 +310,7 @@ public class PptCountVisitor extends PrintAllVisitor {
     public void printFinal () {
 
         System.out.println ("CORRECT_FOUND: ");
-        for (Iterator i = targSet.iterator(); i.hasNext();) {
+        for (Iterator i = targSet.iterator(); i.hasNext(); ) {
             String str = (String) i.next();
             if (correctSet.contains (str)) {
                 System.out.println (str);
@@ -318,7 +318,7 @@ public class PptCountVisitor extends PrintAllVisitor {
         }
 
         System.out.println ("\n\n\nNOT_FOUND: ");
-        for (Iterator i = targSet.iterator(); i.hasNext();) {
+        for (Iterator i = targSet.iterator(); i.hasNext(); ) {
             String str = (String) i.next();
             if (!correctSet.contains (str)) {
                 System.out.println (str);
@@ -326,7 +326,7 @@ public class PptCountVisitor extends PrintAllVisitor {
         }
 
         System.out.println ("\n\n\nWRONG_REPORTS: ");
-        for (Iterator i = incorrectSet.iterator(); i.hasNext();) {
+        for (Iterator i = incorrectSet.iterator(); i.hasNext(); ) {
             String str = (String) i.next();
             System.out.println (str);
         }

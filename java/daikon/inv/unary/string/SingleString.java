@@ -5,6 +5,10 @@ import daikon.inv.*;
 import daikon.inv.unary.*;
 import utilMDE.*;
 
+/**
+ * Abstract base class used to evaluate single strings.
+ **/
+
 public abstract class SingleString
   extends UnaryInvariant
 {

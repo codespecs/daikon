@@ -5,6 +5,10 @@ import daikon.inv.*;
 import utilMDE.*;
 
 
+/**
+ * Represents string sequences that contain a common subset.  Prints as
+ * "{s1, s2, s3, ...} subset of x[]"
+ **/
 public class CommonStringSequence
   extends SingleStringSequence
 {

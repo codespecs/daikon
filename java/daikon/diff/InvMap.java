@@ -9,6 +9,10 @@ import utilMDE.Assert;
 /**
  * Maps ppts to lists of invariants.  Has an iterator to return the
  * ppts in the order they were inserted.
+ * <p>
+ * The ppts are used only as keys in this data structure.  Do not attempt
+ * to look up invariants stored in the ppts; instead, obtain invariants via
+ * the put() method.
  **/
 public class InvMap implements Serializable {
   // We are Serializable, so we specify a version to allow changes to

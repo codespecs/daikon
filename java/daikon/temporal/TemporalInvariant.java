@@ -24,8 +24,8 @@ class InvariantState
 // for dynamically instantiated invariants
 public abstract class TemporalInvariant extends EventReceptor
 {
-    public boolean isFalsified; //Has the invariant been falsified
-    public int numConfirmingSequences; //The number of sequences of events which satisfied the invariant
+    public boolean isFalsified; // Has the invariant been falsified
+    public int numConfirmingSequences; // The number of sequences of events which satisfied the invariant
 
     TemporalInvariant()
     {
@@ -50,8 +50,8 @@ public abstract class TemporalInvariant extends EventReceptor
 	isFalsified = true;
     }
 
-    //Produce an output-worthy string rep of the invariant
-    //which captures its position in the scope hierarchy in one line
+    // Produce an output-worthy string rep of the invariant
+    // which captures its position in the scope hierarchy in one line
     public String outputString()
     {
 	Scope parent = mParent;
@@ -78,7 +78,7 @@ public abstract class TemporalInvariant extends EventReceptor
     }
 
 
-    //Produce a string rep of just the invariant itself
+    // Produce a string rep of just the invariant itself
     public String toString()
     {
 	StringBuffer res = new StringBuffer();
@@ -99,7 +99,7 @@ public abstract class TemporalInvariant extends EventReceptor
 	return res.toString();
     }
 
-    //The next two methods generate and restore TemporalInvariant state
+    // The next two methods generate and restore TemporalInvariant state
     Object generateStateSnapshot()
     {
 	InvariantState is = new InvariantState();
@@ -125,8 +125,8 @@ public abstract class TemporalInvariant extends EventReceptor
 	    }
     }
 
-    //If the invariant has not yet been falsified when the parent scope exits,
-    //a "confirming sequence" was just observed
+    // If the invariant has not yet been falsified when the parent scope exits,
+    // a "confirming sequence" was just observed
     void parentScopeExiting()
     {
 	if (!isFalsified)
@@ -142,8 +142,8 @@ public abstract class TemporalInvariant extends EventReceptor
      * Inner classes
      */
 
-    //This invariant (not instantiated yet) captures the notion that the given
-    //event does not occur in scope
+    // This invariant (not instantiated yet) captures the notion that the given
+    // event does not occur in scope
     public static class NeverInvariant extends TemporalInvariant
     {
         Event mEvent;
@@ -198,7 +198,7 @@ public abstract class TemporalInvariant extends EventReceptor
         }
     }
 
-    //This class captures the invariant "event foo is present in every sample in scope"
+    // This class captures the invariant "event foo is present in every sample in scope"
     public static class AlwaysInvariant extends TemporalInvariant
     {
         Event mEvent;
@@ -251,12 +251,12 @@ public abstract class TemporalInvariant extends EventReceptor
         }
     }
 
-    //This invariant captures the invariant "event foo happens at least once in scope"
+    // This invariant captures the invariant "event foo happens at least once in scope"
     public static class EventuallyInvariant extends TemporalInvariant
     {
         Event mEvent;
-        public boolean happenedOnceInScope; //Has the event happened once since our parent
-	//scope was last entered?
+        public boolean happenedOnceInScope; // Has the event happened once since our parent
+	// scope was last entered?
 
         void init(Event e)
         {

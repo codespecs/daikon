@@ -12,11 +12,13 @@ branch of the $inv/java/daikon part of the repository into the trunk
   make
   cvs -q diff --brief
 
-(2) Ensure that your V2 checkout passes tests.  Fix problems if there are
-    any non-zero-size diffs, and start over.
+(2) Ensure that your V2 checkout passes tests.
+    Fix problems if there are any non-zero-size diffs, and start over.
+    Commit if the "cvs diff" command shows any diffs.
 
   cd $inv/tests
   cvs -q update
+  cvs -q diff --brief
   make diffs
 
 (3) Ensure that your V3 checkout is up to date, and builds.
@@ -28,11 +30,13 @@ branch of the $inv/java/daikon part of the repository into the trunk
   make
   cvs -q diff --brief
 
-(4) Ensure that your V3 checkout passes tests.  Fix problems if there are
-    any non-zero-size diffs, and start over.
+(4) Ensure that your V3 checkout passes tests.
+    Fix problems if there are any non-zero-size diffs, and start over.
+    Commit if the "cvs diff" command shows any diffs.
 
   cd $inv/tests
   cvs -q update
+  cvs -q diff --brief
   make diffs
 
 (5) Make a backup of your current version of the trunk.
@@ -60,6 +64,7 @@ branch of the $inv/java/daikon part of the repository into the trunk
      * "d E" (uses imerge)
      * "d e" (uses ediff)
      * or edit new version (containing conflict markers) directly
+    In imerge/ediff, "MINE" is V3, and "OTHER" is V2.
 
 (9) Examine any modified files you think are deserving before you run tests
     or commit.
@@ -83,6 +88,7 @@ branch of the $inv/java/daikon part of the repository into the trunk
 **** Merge history ****
 (Add entries at the top of the list)
 
+20-Apr-2003 08:05:46 by MDE
 23-Jan-2003 01:29:52 by SMcC
 20-Jan-2003 19:38:39 by AMD
 18-Jan-2003 12:32:43 by MDE

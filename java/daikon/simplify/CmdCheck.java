@@ -18,6 +18,7 @@ public class CmdCheck
 
   public final String proposition;
   public boolean valid = false;
+  public boolean unknown = false;
   public String counterexample = "";
 
   public CmdCheck(String proposition) {
@@ -44,9 +45,10 @@ public class CmdCheck
         if (result == null) {
           throw new SimplifyError("Probable core dump");
         }
-        if (result.startsWith("Bad input:")) {
-          throw new SimplifyError(result + "\n" + proposition);
-        }
+        Assert.assertTrue(!result.startsWith("Bad input:"),
+                      result + "\n" + proposition);
+        Assert.assertTrue(!result.startsWith("Sx.ReadError in file."),
+                      result + "\n" + proposition);
         if (result.equals("Abort (core dumped)")) {
           throw new SimplifyError(result);
         }
@@ -76,13 +78,18 @@ public class CmdCheck
       try {
         int junk = Integer.parseInt(result.substring(0, colon));
       } catch (NumberFormatException e) {
-        Assert.assertTrue(false, "Expected number to prefix result '" + result + "'");
+        Assert.assertTrue(false, "Expected number to prefix result '"
+                          + result + "' while checking: " + proposition);
       }
       result = result.substring(colon + 2);
       if ("Valid.".equals(result)) {
         valid = true;
+      } else if (result.equals("Unknown.")) {
+        valid = false;
+        unknown = true;
       } else {
-        Assert.assertTrue("Invalid.".equals(result));
+        Assert.assertTrue("Invalid.".equals(result),
+                          "unexpected reply " + result);
         valid = false;
       }
 

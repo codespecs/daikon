@@ -48,10 +48,12 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
     }
 
 
-    /** Anytime something matches, we should score it has correct */
+    /** Anytime a consequent matches a target, we should score it as correct */
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
+
+    if (inv1 != null && !(inv1.ppt.parent instanceof PptConditional)) { return; }
 
     String key1 = "";
     String key2 = "";
@@ -59,29 +61,43 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
     if (inv1 != null && inv1.justified() && !filterOut (inv1)) {
 	String thisPptName1 = inv1.ppt.name;
 
-	key1 = thisPptName1 + "$" + inv1.format();
-        cnt.add (key1);
+        key1 = thisPptName1 + "$" + inv1.format();
+        //        cnt.add (key1);
+         cnt.add (inv1.format());
     }
 
-    if (inv2 != null && inv2.justified() && !filterOut (inv2)) {
+    if (inv2 != null /*&& inv2.justified()*/ && !filterOut (inv2)) {
         String thisPptName2 = inv2.ppt.name;
         key2 = thisPptName2 + "$" + inv2.format();
-        targSet.add (key2);
+
+
+        // Looks like implications work on EXIT points, do they work
+        // on ENTER points?
+        //        if (key2.indexOf ("ENTER") == -1)
+            // targSet.add (key2);
+
+        // Don't allow implications in goal, as suggested by
+        // Iuliu
+        if (! (inv2 instanceof daikon.inv.Implication))
+          targSet.add (inv2.format());
     }
 
     if (shouldPrint(inv1, inv2)) {
         // inv1 and inv2 should be the same, so it doesn't matter
         // which one we choose when adding to recall -LL
-        correctSet.add (key2);
+        correctSet.add (key1);
 
         //	System.out.println("K1: " + key1);
         //        System.out.println ("K2: " + key2);
 
         String thisPptName1 = inv1.ppt.name;
-        //System.out.println ("NAME1: " + tmpStr1);
-	//Contest.smallestRoom(II)I:::EXIT;condition="not(max <= num)"
-        String bucketKey = thisPptName1.substring (0,
-        	       			thisPptName1.lastIndexOf (";condition"));
+        // System.out.println ("NAME1: " + tmpStr1);
+	// Contest.smallestRoom(II)I:::EXIT;condition="not(max <= num)"
+        String bucketKey =  thisPptName1.indexOf (";condition") > -1 ?
+
+            thisPptName1.substring (0,
+                                    thisPptName1.lastIndexOf (";condition"))
+            : thisPptName1;
 
 
         /** this is all for printing purposes */
@@ -104,6 +120,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
     /** grabs the splitting condition from a pptname */
     private String extractPredicate (String s) {
         int cut = s.indexOf (";condition=");
+        if (cut == -1) return "NO_PREDICATE: ";
         return s.substring (cut + 12, s.lastIndexOf('"'));
     }
 
@@ -133,13 +150,14 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
     }
 
   /** Returns true if the pair of invariants should be printed **/
-  protected static boolean shouldPrint(Invariant inv1, Invariant inv2) {
+  protected boolean shouldPrint(Invariant inv1, Invariant inv2) {
 
       if (5 == 5) {
           if (inv1 == null || inv2 == null) {
               return false;
           }
-          return  inv1.format().equals (inv2.format());
+          return  inv1.format().equals (inv2.format()) ||
+              targSet.contains (inv1.format());
       }
 
     int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
@@ -169,6 +187,9 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
     /** returns true iff any token of inv.format_java() contains
      *  a number other than -1, 0, 1 or is null. */
     private static boolean filterOut (Invariant inv) {
+
+        if (5 == 5) return false;
+
 
         if (inv == null) return true;
         String str = inv.format_using(OutputFormat.JAVA);
@@ -234,8 +255,17 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
 
     }
 
-    public double calcPrecision() {
+    private void finish() {
+            correctSet.clear();
+        for (Iterator i = cnt.iterator(); i.hasNext(); ) {
+            Object elem = i.next();
+            if (targSet.contains (elem))
+                correctSet.add (elem);
+        }
+    }
 
+    public double calcPrecision() {
+        finish();
         System.out.println ("Prec: " + correctSet.size() + " / " + cnt.size());
         if (cnt.size() == 0) return -1; // to avoid a divide by zero -LL
         return (double) correctSet.size() / cnt.size();
@@ -244,9 +274,10 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
 
     /** Prints the results of the correct set in a human-readable format */
     public void printFinal () {
-
+        finish();
         System.out.println ("CORRECT_FOUND: ");
-        for (Iterator i = targSet.iterator(); i.hasNext();) {
+        for (Iterator i = targSet.iterator(); i.hasNext(); ) {
+                   // for (Iterator i = correctSet.iterator(); i.hasNext(); ) {
             String str = (String) i.next();
             if (correctSet.contains (str)) {
                 System.out.println (str);
@@ -254,7 +285,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
         }
 
         System.out.println ("\n\n\nNOT FOUND: ");
-        for (Iterator i = targSet.iterator(); i.hasNext();) {
+        for (Iterator i = targSet.iterator(); i.hasNext(); ) {
             String str = (String) i.next();
             if (!correctSet.contains (str)) {
                 System.out.println (str);
@@ -262,9 +293,12 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
         }
 
         System.out.println ("\n\n\nWRONG_REPORTS: ");
-        for (Iterator i = incorrectSet.iterator(); i.hasNext();) {
+        //        for (Iterator i = incorrectSet.iterator(); i.hasNext(); ) {
+        for (Iterator i = cnt.iterator(); i.hasNext(); ) {
             String str = (String) i.next();
-            System.out.println (str);
+            if (!correctSet.contains (str)) {
+                System.out.println (str);
+            }
         }
 
 

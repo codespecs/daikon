@@ -17,9 +17,6 @@ public class SessionManager
   /** Our worker thread; hold onto it so that we can stop it. */
   private Worker worker;
 
-  /** How long to wait for a reply for each command. */
-  private int msec = 500;
-
   // The error message returned by the worked thread, or null
   private String error = null;
 
@@ -44,21 +41,13 @@ public class SessionManager
     worker = new Worker();
     worker.setDaemon(true);
     debugln("Manager: starting worker");
-    worker.start();
-    // We need to pause until the worked thread is blocked on the wait
-    // call.  The next line does this, but is a really bad approach.
-    // We need to figure out something better.
-    try { Thread.currentThread().sleep(50); } catch (InterruptedException e) { }
+    synchronized (this) {
+      worker.start();
+      // We won't wake up from this until the worker thread is ready
+      // and wait()ing to accept requests.
+      try { this.wait(); } catch (InterruptedException e) { }
+    }
     debugln("SessionManager created");
-  }
-
-  /**
-   * Set the timeout (used when Simplify gets bogged down) to the
-   * given period, measured in milliseconds. Note the timeout feature
-   * may not actually work at the moment.
-   **/
-  public void setTimeout(int millisecs) {
-    msec = millisecs;
   }
 
   /**
@@ -78,11 +67,12 @@ public class SessionManager
     }
     synchronized (this) {
       // place the command in the slot
+      Assert.assertTrue(pending == null);
       pending = command;
       // tell the worker to wake up
       this.notify();
       // wait for worker to finish
-      try { this.wait(msec); } catch (InterruptedException e) { }
+      try { this.wait(); } catch (InterruptedException e) { }
       // command finished iff the command was nulled out
       if (pending != null) {
         session_done();
@@ -109,8 +99,13 @@ public class SessionManager
     if (prover_background == null) {
       try {
         StringBuffer result = new StringBuffer("");
+        String fileName;
+        if (daikon.inv.Invariant.dkconfig_simplify_define_predicates)
+          fileName = "daikon-background-defined.txt";
+        else
+          fileName = "daikon-background.txt";
         InputStream bg_stream =
-          SessionManager.class.getResourceAsStream("daikon-background.txt");
+          SessionManager.class.getResourceAsStream(fileName);
         Assert.assertTrue(bg_stream != null,
                           "Could not find simplify/daikon-background.txt");
         BufferedReader lines =
@@ -177,38 +172,35 @@ public class SessionManager
     /** The associated session, or null if the thread should shutdown */
     private Session session = new Session();
 
+    private boolean finished = false;
+
     public void run() {
       debugln("Worker: run");
-      synchronized (mgr) {
-        while (session != null) {
-          try { mgr.wait(); } catch (InterruptedException e) { }
-          if (session != null && mgr.pending != null) {
-            error = null;
-            try {
-              mgr.pending.apply(session);
-            } catch (SimplifyError e) {
-              System.err.println(e.toString());
-              // Cause a timeout exception by not setting pending to
-              // null.  This might not be exactly the right thing to
-              // do, but a core dump from Simplify is arguably the
-              // same as a timeout.
-              mgr.notify();
-              continue;
-            } catch (Throwable e) {
-              error = e.toString();
-              e.printStackTrace();
-            }
-            mgr.pending = null;
-            mgr.notify();
-          }
+      while (session != null) {
+        synchronized (mgr) {
+          mgr.pending = null;
+          mgr.notify();
+          try { mgr.wait(0); } catch (InterruptedException e) { }
+          Assert.assertTrue(mgr.pending != null);
+          // session != null && mgr.pending != null;
+        }
+        error = null;
+        try {
+          mgr.pending.apply(session);
+        } catch (Throwable e) {
+          if (finished)
+            return;
+          error = e.toString();
+          e.printStackTrace();
         }
       }
     }
 
     private void session_done() {
+      finished = true;
       Session tmp = session;
       session = null;
-      tmp.process.destroy();
+      tmp.kill();
     }
   }
 
@@ -242,6 +234,24 @@ public class SessionManager
     m.request(cc);
     Assert.assertTrue(false == cc.valid);
 
+    StringBuffer buf = new StringBuffer();
+
+    for (int i = 0; i < 20000; i++) {
+      buf.append("(EQ (select a " + i + ") " +
+                 (int)(200000 * Math.random()) + ")");
+    }
+    m.request(new CmdAssume(buf.toString()));
+
+    for (int i = 0; i < 10; i++) {
+      try {
+        m.request(new CmdCheck("(NOT (EXISTS (x) (EQ (select a x) (+ x " + i
+                               + "))))"));
+      } catch (TimeoutException e) {
+        System.out.println("Timeout, retrying");
+        m = new SessionManager();
+        m.request(new CmdAssume(buf.toString()));
+      }
+    }
   }
 
 }

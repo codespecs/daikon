@@ -36,7 +36,7 @@ public abstract class Event
 	return sharesTypeWith(e) && (forwardMatches(e) || e.forwardMatches(this));
     }
 
-    //These actually provide the meat of the match-checking (see class documentation)
+    // These actually provide the meat of the match-checking (see class documentation)
     public abstract boolean forwardSharesTypeWith(Event e);
     public abstract boolean forwardMatches(Event e);
 

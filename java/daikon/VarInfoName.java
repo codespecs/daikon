@@ -378,6 +378,14 @@ public abstract class VarInfoName
     return new IsAllPrestateVisitor(this).result();
   }
 
+  /**
+   * @return true if this VarInfoName contains a simple variable whose
+   * name is NAME.
+   **/
+  public boolean includesSimpleName(String name) {
+    return new SimpleNamesVisitor(this).simples().contains(name);
+  }
+
   // ============================================================
   // Special producers, or other helpers
 
@@ -652,6 +660,39 @@ public abstract class VarInfoName
     return r.replace(this).intern();
   }
 
+  /**
+   * If this is a slice, (potentially in pre-state), return its lower
+   * and upper bounds, which can be subtracted to get one less than
+   * its size.
+   */
+  public VarInfoName[] getSliceBounds() {
+    VarInfoName vin = this;
+    boolean inPrestate = false;
+    if (vin instanceof Prestate) {
+      inPrestate = true;
+      vin = ((Prestate)vin).term;
+    }
+    while (vin instanceof Field) {
+      vin = ((Field)vin).term;
+    }
+    if (!(vin instanceof Slice))
+      return null;
+    Slice slice = (Slice)vin;
+    VarInfoName[] ret = new VarInfoName[2];
+    if (slice.i != null)
+      ret[0] = slice.i;
+    else
+      ret[0] = ZERO;
+    if (slice.j != null)
+      ret[1] = slice.j;
+    else
+      ret[1] = slice.sequence.applySize().applyAdd(-1);
+    if (inPrestate) {
+      ret[0] = ret[0].applyPrestate();
+      ret[1] = ret[1].applyPrestate();
+    }
+    return ret;
+  }
 
   /**
    * The size of a contained sequence; form is like "size(sequence)"
@@ -990,7 +1031,8 @@ public abstract class VarInfoName
       return term.esc_name() + "." + field;
     }
     protected String simplify_name_impl(boolean prestate) {
-      return "(select " + Simple.simplify_name_impl(field, prestate) + " " + term.simplify_name(prestate) + ")";
+      return "(select " + Simple.simplify_name_impl(field, false) + " "
+        + term.simplify_name(prestate) + ")";
     }
     protected String ioa_name_impl() {
       return term.ioa_name() + "." + field;
@@ -2221,8 +2263,8 @@ public abstract class VarInfoName
 
     /**
      * @return Collection of simple identifiers used in this
-     * expression, as Strings. (They can be checked for conflict with
-     * the quantifier variable name).
+     * expression, as Strings. (Used, for instance, to check for
+     * conflict with a quantifier variable name).
      **/
     public Set simples() {
       return Collections.unmodifiableSet(simples);
@@ -2451,6 +2493,52 @@ public abstract class VarInfoName
       Assert.assertTrue(upper != null);
 
       return new VarInfoName[] { root_prime, lower, upper };
+    }
+
+    /**
+     * Assuming that root is a sequence, return a VarInfoName
+     * representing the (index_base+index_off)-th element of that
+     * sequence. index_base may be null, to represent 0.
+     **/
+    public static VarInfoName selectNth(VarInfoName root,
+                                        VarInfoName index_base,
+                                        int index_off) {
+      QuantifierVisitor qv = new QuantifierVisitor(root);
+      List unquants = new ArrayList(qv.unquants());
+      if (unquants.size() == 0) {
+        // Nothing to do?
+        return null;
+      } else if (unquants.size() == 1) {
+        VarInfoName index_vin;
+        if (index_base != null) {
+          index_vin = index_base;
+          if (index_off != 0)
+            index_vin = index_vin.applyAdd(index_off);
+        } else {
+          index_vin = new Simple(index_off + "");
+        }
+        VarInfoName to_replace = (VarInfoName)unquants.get(0);
+        VarInfoName[] replace_result = replace(root, to_replace, index_vin);
+        return replace_result[0];
+      } else {
+        Assert.assertTrue(false, "Can't handle multi-dim array in " +
+                          "VarInfoName.QuantHelper.select_nth()");
+        return null;
+      }
+    }
+
+    /**
+     * Return a variable name that doesn't appear in the given
+     * variable name.
+     **/
+    public static VarInfoName getFreeIndex(VarInfoName vin) {
+      Set simples = new SimpleNamesVisitor(vin).simples();
+      char c = 'a';
+      String idx_name;
+      do {
+        idx_name = String.valueOf(c++);
+      } while (simples.contains(idx_name));
+      return new FreeVar(idx_name);
     }
 
     /**
@@ -2839,10 +2927,25 @@ public abstract class VarInfoName
      * bound variables).
      **/
     public static String[] format_simplify(VarInfoName[] roots) {
-      return format_simplify(roots, false);
+      return format_simplify(roots, false, false, false);
     }
-    public static String[] format_simplify(VarInfoName[] roots, boolean elementwise) {
+    public static String[] format_simplify(VarInfoName[] roots,
+                                           boolean eltwise) {
+      return format_simplify(roots, eltwise, false, false);
+    }
+    public static String[] format_simplify(VarInfoName[] roots,
+                                           boolean eltwise,
+                                           boolean adjacent) {
+      return format_simplify(roots, eltwise, adjacent, false);
+    }
+    public static String[] format_simplify(VarInfoName[] roots,
+                                           boolean elementwise,
+                                           boolean adjacent,
+                                           boolean distinct) {
       Assert.assertTrue(roots != null);
+
+      if (adjacent || distinct)
+        Assert.assertTrue(roots.length == 2);
 
       QuantifyReturn qret = quantify(roots);
 
@@ -2870,6 +2973,16 @@ public abstract class VarInfoName
             VarInfoName _idx = _boundv[0], _low = _boundv[1];
             conditions.append(" (EQ (- " + _idx.simplify_name() + " " + _low.simplify_name() + ")");
             conditions.append(    " (- " + idx.simplify_name() + " " + low.simplify_name() + "))");
+          }
+          if (i == 1 && (adjacent || distinct)) {
+            VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
+            VarInfoName prev_idx = _boundv[0];
+            if (adjacent)
+              conditions.append(" (EQ (+ " + prev_idx.simplify_name() + " 1) "
+                                + idx.simplify_name() + ")");
+            if (distinct)
+              conditions.append(" (NEQ " + prev_idx.simplify_name() + " "
+                                + idx.simplify_name() + ")");
           }
         }
       }

@@ -11,7 +11,7 @@ import java.util.*;
  * waitFor(long waitTime) method re-executes the command-line for a
  * fixed length of time, after which it terminates the process if it's
  * still running.
- */
+ **/
 
 public class TimedProcess {
 

@@ -34,12 +34,8 @@ public final class Daikon {
     System.err.flush();
   }
 
-  // Don't know which one we want in the version 3
-  // public final static String release_version = "2.4.1";
-  // public final static String release_date = "January 1, 2003";
-
-  public final static String release_version = "2.4.2";
-  public final static String release_date = "January 20, 2003";
+  public final static String release_version = "3.0.0";
+  public final static String release_date = "January 1, 1970";
   public final static String release_string
     = "Daikon version " + release_version
     + ", released " + release_date
@@ -420,7 +416,7 @@ public final class Daikon {
         } else if (debugAll_SWITCH.equals(option_name)) {
           Global.debugAll = true;
         } else if (debug_SWITCH.equals(option_name)) {
-          LogHelper.setPriority(g.getOptarg(), LogHelper.DEBUG);
+          LogHelper.setLevel(g.getOptarg(), LogHelper.DEBUG);
         } else if (no_text_output_SWITCH.equals(option_name)) {
           no_text_output = true;
         } else if (show_progress_SWITCH.equals(option_name)) {
@@ -564,6 +560,10 @@ public final class Daikon {
         throw new Error("Unrecognized argument: " + file);
       }
     }
+
+    //Set the fuzzy float comparison ratio.  This needs to be done after
+    //any configuration options (which may set the ratio) are processed.
+    Global.fuzzy.set_rel_diff (Invariant.dkconfig_fuzzy_ratio);
 
     return new Set[] {
       decl_files,

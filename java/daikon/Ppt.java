@@ -186,6 +186,15 @@ public abstract class Ppt
     return null;
   }
 
+  public VarInfo findVarByRepr(String repr) {
+    for (int i=0; i<var_infos.length; i++) {
+      if (repr.equals(var_infos[i].name.repr())) {
+        return var_infos[i];
+      }
+    }
+    return null;
+  }
+
   /**
    * This should never be used if the VarInfoName is available; it is a
    * convenience method used when parsing from programs or user input.

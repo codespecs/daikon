@@ -1,6 +1,7 @@
 package daikon;
 
 import daikon.split.*;
+import daikon.inv.DummyInvariant;
 import utilMDE.Assert;
 import java.util.*;
 
@@ -68,6 +69,9 @@ public final class PptConditional
     return splitter.valid();
   }
 
+  public DummyInvariant dummyInvariant() {
+    return splitter.getDummyInvariant();
+  }
 
   // Call this for tuples that are guaranteed to pass the test.
   void add_nocheck(ValueTuple vt, int count) {

@@ -14,7 +14,7 @@ The correct way to build the system is to run 'make'.
 #define ELTONEOF EltOneOf
 #define ELTNONZERO EltNonZero
 #define NODUPLICATES NoDuplicates
-//#define ELTWISEINTCOMPARISON EltwiseIntComparison
+// #define ELTWISEINTCOMPARISON EltwiseIntComparison
 #define ELTLOWERBOUND EltLowerBound
 #define ELTUPPERBOUND EltUpperBound
 #define SEQINDEXCOMPARISON SeqIndexComparison

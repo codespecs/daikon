@@ -34,7 +34,7 @@ public class Dataflow
   public static void main(String[] args)
     throws Exception
   {
-    debug.setPriority(LogHelper.DEBUG);
+    debug.setLevel(LogHelper.DEBUG);
 
     String outf = "Dataflow_testing.txt";
     File[] files = new File[args.length];

@@ -5,6 +5,10 @@ import daikon.inv.*;
 import daikon.inv.unary.*;
 import utilMDE.*;
 
+/**
+ * Abstract base class used to evaluate single double sequences
+ **/
+
 public abstract class SingleFloatSequence
   extends SingleSequence
 {

@@ -6,6 +6,9 @@ import daikon.inv.binary.*;
 
 import utilMDE.*;
 
+/**
+ * Abstract base class for comparing string scalars with string sequences
+ **/
 public abstract class SequenceString
   extends BinaryInvariant
 {

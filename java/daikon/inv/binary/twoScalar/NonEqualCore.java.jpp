@@ -9,19 +9,19 @@ The correct way to build the system is to run 'make'.
 #endif
 
 #if (defined(TYPELONG))
-#define CLASSNAME NonEqualCore
-#define PRIMITIVE long
-#define NUMWRAPPER Long
-#define CLASSSTRING "NonEqualCore"
-#define NONEQUALSTRING "NonEqual"
-
+  #define CLASSNAME NonEqualCore
+  #define PRIMITIVE long
+  #define NUMWRAPPER Long
+  #define CLASSSTRING "NonEqualCore"
+  #define NONEQUALSTRING "NonEqual"
+  #define EQUAL(a,b) ((a) == (b))
 #elif (defined(TYPEDOUBLE))
-#define CLASSNAME NonEqualCoreFloat
-#define PRIMITIVE double
-#define NUMWRAPPER Double
-#define CLASSSTRING "NonEqualCoreFloat"
-#define NONEQUALSTRING "NonEqualFloat"
-
+  #define CLASSNAME NonEqualCoreFloat
+  #define PRIMITIVE double
+  #define NUMWRAPPER Double
+  #define CLASSSTRING "NonEqualCoreFloat"
+  #define NONEQUALSTRING "NonEqualFloat"
+  #define EQUAL(a,b) (Global.fuzzy.eq (a, b))
 #endif
 
 
@@ -93,7 +93,7 @@ public final class CLASSNAME
       System.out.println(CLASSSTRING + wrapper.ppt.varNames() + ".add_modified("
                          + v1 + "," + v2 + ", count=" + count + ")");
     }
-    if (v1 == v2) {
+    if (EQUAL (v1, v2)) {
       if (wrapper.ppt.debugged) {
         System.out.println(CLASSSTRING + ".destroy()");
       }

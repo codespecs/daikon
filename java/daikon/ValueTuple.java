@@ -323,6 +323,8 @@ public final class ValueTuple implements Cloneable {
       else if (vals[i] instanceof int[])
         // shouldn't reach this case -- should be long[], not int[]
         sb.append(ArraysMDE.toString((int[])vals[i]));
+      else if (vals[i] instanceof double[])
+        sb.append(ArraysMDE.toString ((double[])vals[i]));
       else
         sb.append(vals[i]);
       sb.append(",");

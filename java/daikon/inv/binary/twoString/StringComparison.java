@@ -10,6 +10,11 @@ import utilMDE.*;
 
 import java.util.*;
 
+/**
+ * Represents lexical invariants between two strings.  Prints as
+ * "s1 [cmp] s2" where [cmp] is one of == > >= < <=
+ **/
+
 public final class StringComparison
   extends TwoString
   implements Comparison

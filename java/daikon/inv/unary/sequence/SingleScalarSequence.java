@@ -5,6 +5,10 @@ import daikon.inv.*;
 import daikon.inv.unary.*;
 import utilMDE.*;
 
+/**
+ * Abstract base class used to evaluate single long sequences
+ **/
+
 public abstract class SingleScalarSequence
   extends SingleSequence
 {

@@ -197,7 +197,7 @@ public final class VarInfoAux
   }
 
   /**
-   * Create a new VarInfoAux with default optiosn.
+   * Create a new VarInfoAux with default options.
    **/
   private VarInfoAux (Map map) {
     this.map = map;

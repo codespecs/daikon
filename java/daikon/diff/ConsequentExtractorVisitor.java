@@ -43,7 +43,7 @@ public class ConsequentExtractorVisitor extends DepthFirstVisitor  {
         super.visit(node);
         // clear all of the old ppts
 
-        for (Iterator i = node.children(); i.hasNext();) {
+        for (Iterator i = node.children(); i.hasNext(); ) {
             InvNode child = (InvNode) i.next();
             if (child.getInv1() != null) {
                 child.getInv1().ppt.invs.clear();
@@ -76,14 +76,14 @@ public class ConsequentExtractorVisitor extends DepthFirstVisitor  {
              Implication imp = (Implication) inv1;
              if (!repeatFilter.contains((imp.consequent().format()))) {
                  repeatFilter.add (imp.consequent().format());
-                 //inv1.ppt.invs.add (imp.consequent());
+                 // inv1.ppt.invs.add (imp.consequent());
                  accum.add (imp.consequent());
              }
            // add both sides of a biimplication
            if (imp.iff == true) {
                if (!repeatFilter.contains(imp.predicate().format())) {
                    repeatFilter.add (imp.predicate().format());
-                   //inv1.ppt.invs.add (imp.predicate());
+                   // inv1.ppt.invs.add (imp.predicate());
                    accum.add (imp.predicate());
                }
            }

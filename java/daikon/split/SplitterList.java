@@ -185,13 +185,6 @@ public abstract class SplitterList
     Iterator itor = ppt_splitters.keySet().iterator();
     Vector splitterArrays = new Vector();
 
-    Pattern opat;
-    try {
-      opat = re_compiler.compile("OBJECT");
-    } catch (Exception e) {
-      throw new Error("This can't happen: " + e.toString());
-    }
-
     while (itor.hasNext()) {
       // a PptName, assumed to begin with "ClassName.functionName"
       String name = (String)itor.next();
@@ -202,8 +195,9 @@ public abstract class SplitterList
           if (result != null) {
             splitterArrays.addElement(result);
           }
-          // For the OBJECT program point, we want to use all the splitter.
-        } else if (re_matcher.contains(pptName, opat) && re_matcher.contains(name, opat)) {
+          // For the OBJECT program point, we want to use all the splitters.
+        } else if ((pptName.indexOf("OBJECT") != -1)
+                   && (name.indexOf("OBJECT") != -1)) {
           Iterator all = ppt_splitters.values().iterator();
           while (all.hasNext()) {
             splitterArrays.addElement((Splitter[])all.next());

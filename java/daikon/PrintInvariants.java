@@ -152,7 +152,7 @@ public class PrintInvariants {
         } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
           Global.debugAll = true;
         } else if (Daikon.debug_SWITCH.equals(option_name)) {
-          LogHelper.setPriority(g.getOptarg(), LogHelper.DEBUG);
+          LogHelper.setLevel(g.getOptarg(), LogHelper.DEBUG);
         } else if (Daikon.noinvariantguarding_SWITCH.equals(option_name)) {
           Daikon.noInvariantGuarding = true;
         } else {

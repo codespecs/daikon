@@ -1,14 +1,16 @@
 package daikon.split;
 
 import daikon.*;
+import daikon.inv.*;
 import daikon.split.*;
 import java.io.*;
 import java.util.*;
 
-
 /**
- * A SplitterObject is a representation of a Splitter.
- * It holds all the information about a splitter.
+ * A SplitterObject is the starting point for all the information we
+ * have about a splitting condition. It is created immediately when
+ * the condition is read from the .spinfo file, and later contains a
+ * reference to the compiled "Splitter" object.
  **/
 public class SplitterObject implements Comparable{
 
@@ -21,7 +23,14 @@ public class SplitterObject implements Comparable{
   private String testString = "Unassigned";
   private String errorMessage = "Splitter for " + this.condition + " valid";
   private int guid = -999;
-  private File f;
+  private File f; // The class file containing the compiled code for
+                  // this splitter
+
+  public String daikonFormat   = null;
+  public String javaFormat     = null;
+  public String escFormat      = null;
+  public String simplifyFormat = null;
+  public String ioaFormat      = null;
 
   /**
    * @param condition The splitting condition of this splitter
@@ -31,6 +40,7 @@ public class SplitterObject implements Comparable{
     this.condition = condition;
     this.pptName = pptName;
     this.directory = directory;
+    this.javaFormat = condition;
   }
 
   /**
@@ -43,12 +53,16 @@ public class SplitterObject implements Comparable{
       try {
         splitter = (Splitter) tempClass.newInstance();
       } catch (ClassFormatError ce) {
-        debugPrint(ce.toString());
+        ce.printStackTrace(System.out);
       } catch (InstantiationException ie) {
-        debugPrint(ie.toString());
+        ie.printStackTrace(System.out);
       } catch (IllegalAccessException iae) {
-        debugPrint(iae.toString());
+        iae.printStackTrace(System.out);
       }
+      DummyInvariant dummy = new DummyInvariant(null);
+      dummy.setFormats(daikonFormat, javaFormat, escFormat, simplifyFormat,
+                       ioaFormat);
+      splitter.makeDummyInvariant(dummy);
       errorMessage = "Splitter exists " + this.toString();
       exists = true;
     } else {
@@ -58,8 +72,8 @@ public class SplitterObject implements Comparable{
   }
 
   /**
-   * @return true if the Splitter Object exists for this Splitter.
-   * this means that it successfully loaded
+   * @return true if the Splitter object exists for this
+   * SplitterObject, i.e. whether it successfully loaded.
    */
   public boolean splitterExists() {
     return exists;
@@ -89,8 +103,15 @@ public class SplitterObject implements Comparable{
    * set the error message of this this SplitterObject. This indicates the status of
    * the Splitter.
    */
-  public void setError(String errorString) {
-    this.errorMessage = errorString;
+  public void setError(String errorMessage) {
+    this.errorMessage = errorMessage;
+  }
+
+  /**
+   * get the error message of this SplitterObject.
+   */
+  public String getError () {
+    return this.errorMessage;
   }
 
   /**
@@ -108,13 +129,6 @@ public class SplitterObject implements Comparable{
   }
 
   /**
-   * get the error message of this SplitterObject.
-   */
-  public String getError () {
-    return this.errorMessage;
-  }
-
-  /**
    * @return the full source of the Splitter.
    */
   public String getFullSourcePath () {
@@ -129,18 +143,18 @@ public class SplitterObject implements Comparable{
   }
 
   /**
-   * @return the className of the Splitter
-   */
-  public String getClassName() {
-    return this.className;
-  }
-
-  /**
    * set the className of this Splitter
    */
   public void setClassName(String className) {
     this.className = className;
     f = new File(directory + className + ".class");
+  }
+
+  /**
+   * @return the className of the Splitter
+   */
+  public String getClassName() {
+    return this.className;
   }
 
   public void setDirectory (String directory) {

@@ -5,6 +5,14 @@ import daikon.inv.*;
 import utilMDE.*;
 import java.util.*;
 
+/**
+ * Represents long scalars that are never equal to r (mod m) (for all
+ * reasonable values of r and m) but all other numbers in the same
+ * range (ie, all the values that x doesn't take from min(x) to
+ * max(x)) are equal to r (mod m).  Prints as "x != r (mod m)" where r
+ * is the remainder and m is the modulus.
+ **/
+
 public class NonModulus
   extends SingleScalar
 {

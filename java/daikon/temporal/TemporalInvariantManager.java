@@ -36,10 +36,10 @@ import daikon.*;
 
 public class TemporalInvariantManager
 {
-    public Scope.ScopeGlobal global_scope; //Only one global scope should exist per manager.
+    public Scope.ScopeGlobal global_scope; // Only one global scope should exist per manager.
     public static boolean active = false;
-    public static TemporalInvariantManager Manager = null; //Only one manager should be instantiated at a
-    //time
+    public static TemporalInvariantManager Manager = null; // Only one manager should be instantiated at a
+    // time
 
     public TemporalInvariantManager()
     {
@@ -47,9 +47,9 @@ public class TemporalInvariantManager
 	Manager = this;
     }
 
-    
-    //This method takes a sample from the tracefile (stored as a ppt and valuetuple)
-    //and produces an event which captures all of its properties.
+
+    // This method takes a sample from the tracefile (stored as a ppt and valuetuple)
+    // and produces an event which captures all of its properties.
     // FIXME: Revise this!
     public Event generateSampleEvent(Ppt ppt, ValueTuple vt)
     {
@@ -57,9 +57,9 @@ public class TemporalInvariantManager
         return new ErdosSampleEvent(ppt, vt);
     }
 
-    //This method takes a sampleEvent (that is, an event capturing all properties of a
-    //given sample) and produces a list of the primitive events it consists of (all the
-    //things which happened since the last sample).
+    // This method takes a sampleEvent (that is, an event capturing all properties of a
+    // given sample) and produces a list of the primitive events it consists of (all the
+    // things which happened since the last sample).
     public Vector generateBasicEventsFromSample(Event e)
     {
         // Fill this in to produce basic events from a sample
@@ -71,20 +71,20 @@ public class TemporalInvariantManager
 	}
     }
 
-    //Signal the start of an execution.
+    // Signal the start of an execution.
     public void beginExecution()
     {
 	global_scope.enter();
     }
 
-    //Signal the end of an execution.
+    // Signal the end of an execution.
     public void endExecution()
     {
 	global_scope.exit();
     }
 
-    //Process a sample event (convert it to basic events and send it to all invariants in the
-    //hierarchy).
+    // Process a sample event (convert it to basic events and send it to all invariants in the
+    // hierarchy).
     public void processEvent(Event e)
     {
 	if (!active)
@@ -102,7 +102,7 @@ public class TemporalInvariantManager
 
     }
 
-    //Output the scope/invariant tree.
+    // Output the scope/invariant tree.
     public void reportTemporalInvariants()
     {
 	if (!active)

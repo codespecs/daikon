@@ -9,9 +9,7 @@ import java.io.*;
  * invariant as different when its existence in one set is not in another
  * set.  This avoids reported differences simply in probability changes
  * and other extra-sensitive reports.
- *
- * @author Lee Lin 11/10/2001
- */
+ **/
 
 public class PrintNullDiffVisitor extends PrintDifferingInvariantsVisitor {
 

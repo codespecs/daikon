@@ -14,9 +14,12 @@ public class SimpUtil
     }
 
     Assert.assertTrue(s != null);
-    Assert.assertTrue(s.indexOf("((") == -1, "'((' may not appear, '" + s + "'");
-    Assert.assertTrue(s.charAt(0) == '(', "starts with lparen, '" + s + "'");
-    Assert.assertTrue(s.charAt(s.length()-1) == ')', "ends with rparen, '" + s + "'");
+    if (s.indexOf("((") != -1)
+      Assert.assertTrue(false, "'((' may not appear, '" + s + "'");
+    if (s.charAt(0) != '(')
+      Assert.assertTrue(false, "starts with lparen, '" + s + "'");
+    if (s.charAt(s.length()-1) != ')')
+      Assert.assertTrue(false, "ends with rparen, '" + s + "'");
 
     int paren = 0;
     char[] cs = s.toCharArray();
@@ -25,11 +28,17 @@ public class SimpUtil
       if (c == '(') {
         paren++;
       } else if (c == ')') {
-        Assert.assertTrue(paren > 0, "too deep at char " + i + " in '" + s + "'");
+        if (paren <= 0)
+          Assert.assertTrue(paren > 0,
+                            "too deep at char " + i + " in '" + s + "'");
         paren--;
+        // This check is only sensible for some callers; it needs a flag.
+//         if (paren == 0 && i < cs.length -1)
+//           Assert.assertTrue(false, "multiple SEXPs in " + s);
       }
     }
-    Assert.assertTrue(paren == 0, "unbalanced parens in '" + s + "'");
+    if (paren != 0)
+      Assert.assertTrue(paren == 0, "unbalanced parens in '" + s + "'");
   }
 
 }

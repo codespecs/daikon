@@ -233,8 +233,8 @@ public final class ProglangType
     return ProglangType.intern(base, dimensions-1);
   }
 
-  // These used to all be private.  Why??
-  // (Actually, why are they public?  Is that necessary?)
+  // All these variables are public because the way to check the base of an
+  // array is type.base() == ProglangType.BASE_CHAR.
 
   // Primitive types
   final static String BASE_BOOLEAN = "boolean";
@@ -277,11 +277,14 @@ public final class ProglangType
   public final static ProglangType INT = ProglangType.intern("int", 0);
   public final static ProglangType LONG_PRIMITIVE = ProglangType.intern("long", 0);
   public final static ProglangType DOUBLE = ProglangType.intern("double", 0);
+  public final static ProglangType CHAR = ProglangType.intern("char", 0);
   public final static ProglangType STRING = ProglangType.intern("java.lang.String", 0);
   public final static ProglangType INT_ARRAY = ProglangType.intern("int", 1);
   public final static ProglangType LONG_PRIMITIVE_ARRAY = ProglangType.intern("long", 1);
   public final static ProglangType DOUBLE_ARRAY = ProglangType.intern("double", 1);
+  public final static ProglangType CHAR_ARRAY = ProglangType.intern("char", 1);
   public final static ProglangType STRING_ARRAY = ProglangType.intern("java.lang.String", 1);
+  public final static ProglangType CHAR_ARRAY_ARRAY = ProglangType.intern("char", 2);
 
   public final static ProglangType INTEGER = ProglangType.intern("java.lang.Integer", 0);
   public final static ProglangType LONG_OBJECT = ProglangType.intern("java.lang.Long", 0);

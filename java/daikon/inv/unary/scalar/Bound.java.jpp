@@ -5,140 +5,145 @@ The correct way to build the system is to run 'make'.
 #endif
 
 #if !(defined(LOWER) || defined(UPPER) || defined(ELTLOWER) || defined(ELTUPPER) || defined(LOWERFLOAT) || defined(UPPERFLOAT) || defined(ELTUPPERFLOAT) || defined(ELTLOWERFLOAT))
-#  error "LOWER, UPPER, ELTLOWER, or ELTUPPER should be defined"
+  #error "LOWER, UPPER, ELTLOWER, or ELTUPPER must be defined"
 #endif
 
 #if (defined(LOWERFLOAT) || defined(UPPERFLOAT) || defined(ELTUPPERFLOAT) || defined(ELTLOWERFLOAT))
-#  define BASE_FLOAT
-#  define ONEOFSCALAR OneOfFloat
-#  define MEMBER MemberFloat
-#  define SUBSEQUENCE SubSequenceFloat
-#  define INT(x) x ## Float
-#  define PRIMITIVE Double
-#  define LONGVALUE doubleValue()
+  #define BASE_FLOAT
+  #define ONEOFSCALAR OneOfFloat
+  #define MEMBER MemberFloat
+  #define SUBSEQUENCE SubSequenceFloat
+  #define INT(x) x ## Float
+  #define PRIMITIVE Double
+  #define LONGVALUE doubleValue()
 #else
-#  define BASE_INT
-#  define ONEOFSCALAR OneOfScalar
-#  define MEMBER Member
-#  define SUBSEQUENCE SubSequence
-#  define INT(x) x
-#  define PRIMITIVE Long
-#  define LONGVALUE longValue()
+  #define BASE_INT
+  #define ONEOFSCALAR OneOfScalar
+  #define MEMBER Member
+  #define SUBSEQUENCE SubSequence
+  #define INT(x) x
+  #define PRIMITIVE Long
+  #define LONGVALUE longValue()
 #endif
 
 #if defined(LOWER) || defined(ELTLOWER) || defined(LOWERFLOAT) || defined(ELTLOWERFLOAT)
-#  define LT <
-#  define LTE <=
-#  define GT >
-#  define GTE >=
-#  define MIN1 core.min1
-#  define MAX max
-#  if defined(BASE_INT)
-#    define LONGMAX Long.MAX_VALUE
-#    define LONGMIN Long.MIN_VALUE
-#    define LOWERBOUNDCORE LowerBoundCore
-#    define ELTLOWERBOUND EltLowerBound
-#  else
-#    define LONGMAX Double.MAX_VALUE
-#    define LONGMIN Double.MIN_VALUE
-#    define LOWERBOUNDCORE LowerBoundCoreFloat
-#    define ELTLOWERBOUND EltLowerBoundFloat
-#  endif
-#  define SIGNADJUST
-#  define MINSTR "min"
-#  define MAXSTR "max"
-#  define GTSTR ">"
-#  define MAX1 core.max1
-#  define MINELT min_elt
-#  define MAXELT max_elt
-#  if defined(LOWER)
-#    define LOWERBOUND LowerBound
-#    define LOWERBOUNDSTR "LowerBound"
-#    define UPPERBOUND UpperBound
-#    define ONEOF OneOfScalar
-#  elif defined(LOWERFLOAT)
-#    define LOWERBOUND LowerBoundFloat
-#    define LOWERBOUNDSTR "LowerBoundFloat"
-#    define UPPERBOUND UpperBoundFloat
-#    define ONEOF OneOfFloat
-#  elif defined(ELTLOWERFLOAT)
-#    define LOWERBOUND EltLowerBoundFloat
-#    define LOWERBOUNDSTR "EltLowerBoundFloat"
-#    define UPPERBOUND EltUpperBoundFloat
-#    define ONEOF EltOneOfFloat
-#  else
-#    define LOWERBOUND EltLowerBound
-#    define LOWERBOUNDSTR "EltLowerBound"
-#    define UPPERBOUND EltUpperBound
-#    define ONEOF EltOneOf
-#  endif
+  #define LT <
+  #define LTE <=
+  #define GREATER greater
+  #define GT >
+  #define GTE >=
+  #define MIN1 core.min1
+  #define MAX max
+  #if defined(BASE_INT)
+    #define LONGMAX Long.MAX_VALUE
+    #define LONGMIN Long.MIN_VALUE
+  #else
+    #define LONGMAX Double.MAX_VALUE
+    #define LONGMIN Double.MIN_VALUE
+  #endif
+  #define SIGNADJUST
+  #define MINSTR "min"
+  #define MAXSTR "max"
+  #define GTESTR ">="
+  #define MAX1 core.max1
+  #define LOWERBOUNDCORE INT(LowerBoundCore)
+  #define ELTLOWERBOUND INT(EltLowerBound)
+  #define MINELT min_elt
+  #define MAXELT max_elt
+  #if defined(LOWER)
+    #define LOWERBOUND LowerBound
+    #define LOWERBOUNDSTR "LowerBound"
+    #define UPPERBOUND UpperBound
+    #define ONEOF OneOfScalar
+  #elif defined(LOWERFLOAT)
+    #define LOWERBOUND LowerBoundFloat
+    #define LOWERBOUNDSTR "LowerBoundFloat"
+    #define UPPERBOUND UpperBoundFloat
+    #define ONEOF OneOfFloat
+  #elif defined(ELTLOWERFLOAT)
+    #define LOWERBOUND EltLowerBoundFloat
+    #define LOWERBOUNDSTR "EltLowerBoundFloat"
+    #define UPPERBOUND EltUpperBoundFloat
+    #define ONEOF EltOneOfFloat
+  #else
+    #define LOWERBOUND EltLowerBound
+    #define LOWERBOUNDSTR "EltLowerBound"
+    #define UPPERBOUND EltUpperBound
+    #define ONEOF EltOneOf
+  #endif
 #elif defined(UPPER) || defined(ELTUPPER) || defined(UPPERFLOAT) || defined(ELTUPPERFLOAT)
-#  define LT >
-#  define LTE >=
-#  define GT <
-#  define GTE <=
-#  define MIN1 core.max1
-#  define MAX min
-#  if defined(UPPER) || defined(ELTUPPER)
-#    define LONGMAX Long.MIN_VALUE
-#    define LONGMIN Long.MAX_VALUE
-#    define LOWERBOUNDCORE UpperBoundCore
-#    define ELTLOWERBOUND EltUpperBound
-#  elif defined(UPPERFLOAT) || defined(ELTUPPERFLOAT)
-#    define LONGMAX Double.MIN_VALUE
-#    define LONGMIN Double.MAX_VALUE
-#    define LOWERBOUNDCORE UpperBoundCoreFloat
-#    define ELTLOWERBOUND EltUpperBoundFloat
-#  endif
-#  define SIGNADJUST -
-#  define MINSTR "max"
-#  define MAXSTR "min"
-#  define GTSTR "<"
-#  define MAX1 core.min1
-#  define MINELT max_elt
-#  define MAXELT min_elt
-#  if defined(UPPER)
-#    define LOWERBOUND UpperBound
-#    define LOWERBOUNDSTR "UpperBound"
-#    define UPPERBOUND LowerBound
-#    define ONEOF OneOfScalar
-#  elif defined(UPPERFLOAT)
-#    define LOWERBOUND UpperBoundFloat
-#    define LOWERBOUNDSTR "UpperBoundFloat"
-#    define UPPERBOUND LowerBoundFloat
-#    define ONEOF OneOfFloat
-#  elif defined(ELTUPPERFLOAT)
-#    define LOWERBOUND EltUpperBoundFloat
-#    define LOWERBOUNDSTR "EltUpperBoundFloat"
-#    define ONEOF EltOneOfFloat
-#    define UPPERBOUND EltLowerBound
-#  else
-#    define LOWERBOUND EltUpperBound
-#    define LOWERBOUNDSTR "EltUpperBound"
-#    define UPPERBOUND EltLowerBound
-#    define ONEOF EltOneOf
-#  endif
+  #define LT >
+  #define LTE >=
+  #define GREATER less
+  #define GT <
+  #define GTE <=
+  #define MIN1 core.max1
+  #define MAX min
+  #if defined(UPPER) || defined(ELTUPPER)
+    #define LONGMAX Long.MIN_VALUE
+    #define LONGMIN Long.MAX_VALUE
+    #define LOWERBOUNDCORE UpperBoundCore
+    #define ELTLOWERBOUND EltUpperBound
+  #elif defined(UPPERFLOAT) || defined(ELTUPPERFLOAT)
+  #define LONGMAX Double.MIN_VALUE
+    #define LONGMIN Double.MAX_VALUE
+    #define LOWERBOUNDCORE UpperBoundCoreFloat
+    #define ELTLOWERBOUND EltUpperBoundFloat
+  #endif
+  #define SIGNADJUST -
+  #define MINSTR "max"
+  #define MAXSTR "min"
+  #define GTESTR "<="
+  #define MAX1 core.min1
+  #define LOWERBOUNDCORE INT(UpperBoundCore)
+  #define ELTLOWERBOUND INT(EltUpperBound)
+  #define MINELT max_elt
+  #define MAXELT min_elt
+  #if defined(UPPER)
+    #define LOWERBOUND UpperBound
+    #define LOWERBOUNDSTR "UpperBound"
+    #define UPPERBOUND LowerBound
+    #define ONEOF OneOfScalar
+  #elif defined(UPPERFLOAT)
+    #define LOWERBOUND UpperBoundFloat
+    #define LOWERBOUNDSTR "UpperBoundFloat"
+    #define UPPERBOUND LowerBoundFloat
+    #define ONEOF OneOfFloat
+  #elif defined(ELTUPPERFLOAT)
+    #define LOWERBOUND EltUpperBoundFloat
+    #define LOWERBOUNDSTR "EltUpperBoundFloat"
+    #define ONEOF EltOneOfFloat
+    #define UPPERBOUND EltLowerBound
+  #else
+    #define LOWERBOUND EltUpperBound
+    #define LOWERBOUNDSTR "EltUpperBound"
+    #define UPPERBOUND EltLowerBound
+    #define ONEOF EltOneOf
+  #endif
 #else
-#  error "LOWER, UPPER, ELTLOWER, or ELTUPPER should be defined"
+  #error "LOWER, UPPER, ELTLOWER, or ELTUPPER must be defined"
 #endif
+
 #if defined(LOWER) || defined(UPPER) || defined(LOWERFLOAT) || defined(UPPERFLOAT)
-#  define SCALAR scalar
-#  if defined(LOWER) || defined(UPPER)
-#    define LONG long
-#    define SINGLESCALAR SingleScalar
-#  else
-#    define LONG double
-#    define SINGLESCALAR SingleFloat
-#  endif
+  #define IS_SCALAR
+  #define SCALAR scalar
+  #if defined(LOWER) || defined(UPPER)
+    #define LONG long
+    #define SINGLESCALAR SingleScalar
+  #else
+    #define LONG double
+    #define SINGLESCALAR SingleFloat
+  #endif
 #else
-#  define SCALAR sequence
-#  if defined(ELTLOWER) || defined(ELTUPPER)
-#    define LONG long[]
-#    define SINGLESCALAR SingleScalarSequence
-#  elif defined(ELTLOWERFLOAT) || defined(ELTUPPERFLOAT)
-#    define LONG double[]
-#    define SINGLESCALAR SingleFloatSequence
-#  endif
+  #define IS_ELT
+  #define SCALAR sequence
+  #if defined(ELTLOWER) || defined(ELTUPPER)
+    #define LONG long[]
+    #define SINGLESCALAR SingleScalarSequence
+  #elif defined(ELTLOWERFLOAT) || defined(ELTUPPERFLOAT)
+    #define LONG double[]
+    #define SINGLESCALAR SingleFloatSequence
+  #endif
 #endif
 
 
@@ -163,13 +168,21 @@ import java.util.*;
 I cannot use "x LT c" in the comment below, because substitution
 would not happen in the string "x LT c"!
 #endif
-/**
- * LOWERBOUND represents the invariant 'x GT c', where c is a constant.
- * <p>
- * One reason not to combine LowerBound and UpperBound into a single range
- * invariant is that they have separate justifications:  one may be
- * justified when the other is not.
- **/
+#if defined (IS_SCALAR)
+  /**
+   * Represents the invariant 'x GTE c', where c is a constant and x is
+   * a LONG scalar.
+   **/
+#else
+  /**
+   * Represents the invariant that each element of a LONG sequence is
+   * GREATER than or equal to a constant. Prints as 'x[] elements GTE
+   * c'
+   */
+#endif
+// One reason not to combine LowerBound and UpperBound into a single range
+// invariant is that they have separate justifications:  one may be
+// justified when the other is not.
 public class LOWERBOUND
   extends SINGLESCALAR
 {
@@ -235,11 +248,11 @@ public class LOWERBOUND
         || (format == OutputFormat.JAVA)
         || (format == OutputFormat.JML))
     {
-      return name + " " + GTSTR + "= " + MIN1;
+      return name + " " + GTESTR + " " + MIN1;
     }
 
     if (format == OutputFormat.SIMPLIFY) {
-      return "(" + GTSTR + "= " + name + " " + MIN1 + ")";
+      return "(" + GTESTR + " " + name + " " + MIN1 + ")";
     }
 
     return format_unimplemented(format);
@@ -265,42 +278,70 @@ public class LOWERBOUND
   }
   // ELTLOWEr || ELTUPPEr
   public String format_daikon() {
-    return var().name.name() + " elements " + GTSTR + "= " + MIN1;
+    return var().name.name() + " elements " + GTESTR + " " + MIN1;
   }
 
   public String format_esc() {
+#ifdef IS_ELT
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
         { var().name });
-    return form[0] + "(" + form[1] + " " + GTSTR + "= " + MIN1 + ")" + form[2];
+    return form[0] + "(" + form[1] + " " + GTESTR + " " + MIN1 + ")" + form[2];
+#else
+    String varname = var().name.esc_name();
+    return varname + " " + GTESTR + " " + MIN1;
+#endif
   }
 
   public String format_jml() {
     String[] form =
       VarInfoName.QuantHelper.format_jml(new VarInfoName[]
         { var().name });
-    return form[0] + "(" + form[1] + " " + GTSTR + "= " + MIN1 + ")" + form[2];
+    return form[0] + "(" + form[1] + " " + GTESTR + " " + MIN1 + ")" + form[2];
   }
 
   public String format_ioa() {
-    VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var());
-    String result = quant.getQuantifierExp() + quant.getMembershipRestriction(0) +
-      " => " + quant.getVarIndexed(0) + " " + GTSTR + "= " + MIN1 + quant.getClosingExp();
+#ifdef IS_ELT
+    VarInfoName.QuantHelper.IOAQuantification quant =
+      new VarInfoName.QuantHelper.IOAQuantification (var());
+    String result = quant.getQuantifierExp()
+      + quant.getMembershipRestriction(0)
+      + " => " + quant.getVarIndexed(0) + " " + GTESTR + " " + MIN1
+      + quant.getClosingExp();
     return result;
+#else
+    String varname = var().name.ioa_name();
+    return varname + " " + GTESTR + " " + MIN1;
+#endif
   }
 
-
   public String format_simplify() {
+#ifdef BASE_FLOAT
+    String value = simplify_format_double(MIN1);
+#else
+    String value = MIN1 + "";
+#endif
+#ifdef IS_ELT
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
         { var().name });
-    return form[0] + "(" + GTSTR + "= " + form[1] + " " + MIN1 + ")" + form[2];
+    return form[0] + "(" + GTESTR + " " + form[1] + " " + value + ")"
+      + form[2];
+#else
+    String varname = var().simplify_name();
+    return "(" + GTESTR + " " + varname + " " + value + ")";
+#endif
   }
 
   public String format_java() {
+#ifdef IS_ELT
     String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[]
       { var().name });
-    return form[0] + "(" + form[1] + " " + GTSTR + "= " + MIN1 + ")" + form[2];
+    return form[0] + "(" + form[1] + " " + GTESTR + " " + MIN1 + ")" + form[2];
+#else
+    String varname = var().name.java_name();
+    return varname + " " + GTESTR + " " + MIN1;
+#endif
   }
 #endif
 
@@ -313,9 +354,12 @@ public class LOWERBOUND
     // statistics, not just the bounds.
     cloneAndFlow();
     core.changed = false;
-#if (defined(LOWER) || defined(UPPER) || defined(LOWERFLOAT) || defined(UPPERFLOAT))
+#if 0
+   // Test was: #if (defined(LOWER) || defined(UPPER) || defined(LOWERFLOAT) || defined(UPPERFLOAT))
+#endif
+#ifndef IS_ELT
     core.add_modified(value, count);
-#elif (defined(ELTLOWER) || defined(ELTUPPER) || defined(ELTUPPERFLOAT) || defined(ELTLOWERFLOAT))
+#else
     for (int i=0; i<value.length; i++) {
       core.add_modified(value[i], count);
       if (falsified)
@@ -342,13 +386,29 @@ public class LOWERBOUND
   }
 
 
-#if (defined(LOWER) || defined(UPPER) || defined(LOWERFLOAT) || defined(UPPERFLOAT))
-
+#ifndef IS_ELT
   // XXX FIXME This looks like a hack that should be removed.  -MDE 6/13/2002
+  // Use hasUninterestingConstant() instead. -SMcC 2/26/2003
   public boolean isInteresting() {
     return (-1 < MIN1 && MIN1 < 2);
   }
 #endif
+
+  public boolean hasUninterestingConstant() {
+    // If the constant bound is not in some small range of interesting
+    // values (by default {-1, 0, 1, 2}), call it uninteresting.
+    if ((MIN1 < dkconfig_minimal_interesting) ||
+        (MIN1 > dkconfig_maximal_interesting)) {
+      return true;
+    }
+#if defined(BASE_FLOAT)
+    else if (MIN1 != (int)MIN1) {
+      // Non-integer bounds are uninteresting even if small.
+      return true;
+    }
+#endif
+    return false;
+  }
 
   public boolean isObviousStatically (VarInfo[] vis) {
     VarInfo var = vis[0];
@@ -361,11 +421,15 @@ public class LOWERBOUND
 
   public boolean isObviousDynamically(VarInfo[] vis) {
     PptTopLevel pptt = ppt.parent;
-    VarInfo v = vis[0];
-    
+
     // if the value is not in some range (like -1,0,1,2) then say that it is obvious
     if ((MIN1 < dkconfig_minimal_interesting) ||
         (MIN1 > dkconfig_maximal_interesting)) {
+      // XXX This check doesn't really belong here. However It
+      // shouldn't get removed until hasUninterestingConstant() is
+      // suitable to be turned on everywhere by default. -SMcC
+      // if the value is not in some range (like -1,0,1,2) then say that
+      // it is obvious
       return true;
     }
     ONEOF oo = ONEOF.find(ppt);
@@ -378,7 +442,13 @@ public class LOWERBOUND
       }
     }
 
-#if (defined(ELTLOWER) || defined(ELTUPPER) || defined(ELTLOWERFLOAT) || defined(ELTUPPERFLOAT))
+    // NOT: "VarInfo v = var();" because we want to operate not on this
+    // object's own variables, but on the variables that were passed in.
+    VarInfo v = vis[0];
+#if 0
+    Test was: #if (defined(ELTLOWER) || defined(ELTUPPER) || defined(ELTLOWERFLOAT) || defined(ELTUPPERFLOAT))
+#endif
+#ifdef IS_ELT
     // Look for the same property over a supersequence of this one.
     for (Iterator inv_itor = pptt.invariants_iterator(); inv_itor.hasNext(); ) {
       Invariant inv = (Invariant) inv_itor.next();
@@ -414,7 +484,7 @@ public class LOWERBOUND
     // it has the same invariant, then this one is obvious.
     for (int i=0; i<pptt.var_infos.length; i++) {
       VarInfo vi = pptt.var_infos[i];
-#if (defined(LOWER) || defined(UPPER) || defined(LOWERFLOAT) || defined(UPPERFLOAT))
+#ifndef IS_ELT
       if (MEMBER.isObviousMember(v, vi))
 #else
       if (SUBSEQUENCE.isObviousSubSequenceDynamically(v, vi))

@@ -1,6 +1,7 @@
 package daikon.split;
 
 import daikon.*;
+import daikon.inv.*;
 
 // This splitter tests the condition "X>0".
 public final class SplitterExample
@@ -9,7 +10,10 @@ public final class SplitterExample
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+  static final long serialVersionUID = 20030218L;
+
+  static DummyInvariant dummyInvFactory;
+  DummyInvariant dummyInv;
 
   VarInfo x_varinfo;
 
@@ -39,4 +43,19 @@ public final class SplitterExample
     return "X > 0";
   }
 
+  public void makeDummyInvariant(DummyInvariant inv) {
+    dummyInvFactory = inv;
+  }
+
+  public void instantiateDummy(PptTopLevel ppt) {
+    dummyInv = null;
+    VarInfo x_vi = ppt.findVar("X");
+    if (x_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] { x_vi });
+    }
+  }
+
+  public DummyInvariant getDummyInvariant() {
+    return dummyInv;
+  }
 }

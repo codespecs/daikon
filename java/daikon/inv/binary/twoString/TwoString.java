@@ -6,6 +6,10 @@ import daikon.inv.binary.*;
 
 import utilMDE.*;
 
+/**
+ * Abstract base class used for comparing two strings
+ **/
+
 public abstract class TwoString
   extends BinaryInvariant
 {

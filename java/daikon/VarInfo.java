@@ -223,6 +223,10 @@ public final class VarInfo
     this.static_constant_value = static_constant_value;
     this.aux = aux;
 
+    if (debug.isDebugEnabled()) {
+      debug.debug ("Var " + name + " aux: " + aux);
+    }
+
     // Indicates that these haven't yet been set to reasonable values.
     value_index = -1;
     varinfo_index = -1;
@@ -679,7 +683,7 @@ public final class VarInfo
     if (isDerivedParamCached != null) return isDerivedParamCached.booleanValue();
 
     boolean result = false;
-    if (aux.getFlag(VarInfoAux.IS_PARAM))
+    if (aux.getFlag(VarInfoAux.IS_PARAM) && !isPrestate())
       result = true;
 
     Set paramVars/*VarInfoName*/ = ppt.getParamVars();
@@ -822,6 +826,7 @@ public final class VarInfo
 
       // Henceforth only interesting if it's true that base = orig(base)
       if (base.name.name().equals("this")) return false;
+      Global.debugSuppressParam.debug("Base is " + base.name.name());
       VarInfo origBase = ppt.findVar(base.name.applyPrestate());
       if (origBase == null) {
         Global.debugSuppressParam.debug ("No orig variable for base, returning true ");
@@ -912,7 +917,7 @@ public final class VarInfo
   public int getIndexValue(ValueTuple vt) {
     Object raw = getValue(vt);
     if (raw == null) {
-      throw new Error(this + ".getIndexValue(" + vt + ")");
+      throw new Error("getIndexValue: getValue returned null " + this.name.name() + " index=" + this.varinfo_index + " vt=" + vt);
     }
     return ((Long)raw).intValue();
   }
@@ -920,15 +925,16 @@ public final class VarInfo
   public long getIntValue(ValueTuple vt) {
     Object raw = getValue(vt);
     if (raw == null) {
-      throw new Error(this + ".getIntValue(" + vt + ")");
+      throw new Error("getIntValue: getValue returned null " + this.name.name() + " index=" + this.varinfo_index + " vt=" + vt);
     }
     return ((Long)raw).longValue();
   }
 
+  // Retrieve a non-null array.
   public long[] getIntArrayValue(ValueTuple vt) {
     Object raw = getValue(vt);
     if (raw == null) {
-      throw new Error(this + ".getIntArrayValue(" + vt + ")");
+      throw new Error("getIntArrayValue: getValue returned null " + this.name.name() + " index=" + this.varinfo_index + " vt=" + vt);
     }
     return (long[])raw;
   }
@@ -936,15 +942,16 @@ public final class VarInfo
   public double getDoubleValue(ValueTuple vt) {
     Object raw = getValue(vt);
     if (raw == null) {
-      throw new Error(this + ".getDoubleValue(" + vt + ")");
+      throw new Error("getDoubleValue: getValue returned null " + this.name.name() + " index=" + this.varinfo_index + " vt=" + vt);
     }
     return ((Double)raw).doubleValue();
   }
 
+  // Retrieve a non-null array.
   public double[] getDoubleArrayValue(ValueTuple vt) {
     Object raw = getValue(vt);
     if (raw == null) {
-      throw new Error(this + ".getDoubleArrayValue(" + vt + ")");
+      throw new Error("getDoubleArrayValue: getValue returned null " + this.name.name() + " index=" + this.varinfo_index + " vt=" + vt);
     }
     return (double[])raw;
   }
@@ -1448,6 +1455,10 @@ public final class VarInfo
     return str;
   }
 
+  public String simplifyFixedupName() {
+    return simplifyFixup(name.simplify_name());
+  }
+
   /* [INCR]
   // Debugging
   public boolean isDerivedFromNonCanonical() {
@@ -1512,7 +1523,7 @@ public final class VarInfo
    *  case that i<=j or i>=j.  The variables also each have a shift, so the
    *  test can really be something like (i+1)<=(j-1).
    *  The test is either:  i + i_shift <= j + j_shift (if test_lessequal)
-   *                   i + i_shift >= j + j_shift (if !test_lessequal)
+   *                       i + i_shift >= j + j_shift (if !test_lessequal)
    *  This is a dynamic check, and so must not be called while Daikon is
    *  inferencing.
    **/
@@ -1627,7 +1638,7 @@ public final class VarInfo
     }
   }
 
- 
+
   /* // [INCR] Use isObviousSubSequence or find SubSequence invariants
   public static boolean seqs_overlap(VarInfo seq1, VarInfo seq2) {
     // Very limited implementation as of now.

@@ -1,6 +1,7 @@
 package daikon.split.misc;
 
 import daikon.*;
+import daikon.inv.DummyInvariant;
 import daikon.split.*;
 
 // This splitter tests the condition "return == true".
@@ -39,4 +40,7 @@ public final class ReturnTrueSplitter
     return "return == true";
   }
 
+  public DummyInvariant getDummyInvariant() {
+    return null;
+  }
 }

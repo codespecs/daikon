@@ -1,6 +1,7 @@
 package daikon.split.misc;
 
 import daikon.*;
+import daikon.inv.DummyInvariant;
 import daikon.split.*;
 import utilMDE.ArraysMDE;
 
@@ -32,7 +33,8 @@ public final class CallerContextSplitter
   private final long[] ids;
   private final String condition;
 
-  protected CallerContextSplitter(Ppt ppt, long[] ids, String condition) {
+  protected CallerContextSplitter(Ppt ppt, long[] ids,
+                                  String condition) {
     caller_varinfo = ppt.findVar(CALLER_INDICATOR_NAME);
     this.ids = ids;
     this.condition = condition;
@@ -70,4 +72,7 @@ public final class CallerContextSplitter
       + ", " + attach + ">";
   }
 
+  public DummyInvariant getDummyInvariant() {
+    return null;
+  }
 }

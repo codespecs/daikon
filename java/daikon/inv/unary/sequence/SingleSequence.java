@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 import java.util.*;
 
 /**
- * Invariants on a single sequence (integer or floating point).
+ * Invariants on a single sequence.
  **/
 public abstract class SingleSequence
   extends UnaryInvariant

@@ -68,6 +68,15 @@ public class PptTopLevel
    **/
   public static boolean dkconfig_pairwise_implications = false;
 
+  /**
+   * Integer. A value of zero indicates that dummy invariants should
+   * not be created. A value of one indicates that dummy invariants
+   * should be created only when no suitable condition was found in
+   * the regular output. A value of two indicates that dummy
+   * invariants should be created for each splitting condition.
+   **/
+  public static int dkconfig_dummy_invariant_level = 0;
+
   /** Main debug tracer **/
   public static final Logger debug =
     Logger.getLogger("daikon.PptTopLevel");
@@ -1198,7 +1207,7 @@ public class PptTopLevel
   /**
    * Add a single slice to the views variable
    **/
-  void addSlice(PptSlice slice) {
+  public void addSlice(PptSlice slice) {
     views.put(Arrays.asList(slice.var_infos),slice);
   }
 
@@ -1864,7 +1873,10 @@ public class PptTopLevel
     // to be a problem.
 
     if (ppt_name.isExitPoint()) {
-      Map equalMap = new HashMap();  // Map of canonicals to lists of non canonicals
+      // Map of canonicals to lists of non canonicals
+      // This needs to be deterministic, since its order can affect
+      // which variables are chosen as canonical.
+      Map equalMap = new TreeMap(new VarInfo.LexicalComparator());
       for (int i = 0; i < var_infos.length; i++) {
         VarInfo vi = var_infos[i];
         if (vi.isCanonical()) {
@@ -1895,7 +1907,6 @@ public class PptTopLevel
       if (debugEqualTo.isDebugEnabled()) {
         debugEqualTo.debug ("Doing equality mapping for " + this.name);
         debugEqualTo.debug ("mapping: " + equalMap);
-
       }
 
       for (Iterator i = equalMap.keySet().iterator(); i.hasNext(); ) {
@@ -2204,7 +2215,8 @@ public class PptTopLevel
       PptConditional cond1 = new PptConditional(this, splits[i], false);
       if (! cond1.splitter_valid()) {
         if (Global.debugSplit.isDebugEnabled())
-          Global.debugSplit.debug("Splitter not valid: " + cond1.name);
+          Global.debugSplit.debug("Splitter (" + cond1.splitter.getClass()
+                                  + ") not valid: " + cond1.name);
         continue;
       }
       pconds.add(cond1);
@@ -2258,6 +2270,15 @@ public class PptTopLevel
         try {
           splitter_test = pconds[i].splitter.test(vt);
         } catch (Exception e) {
+          split_exception = true;
+          splitter_test = false; // to pacify the Java compiler
+        } catch (Error e) {
+          split_exception = true;
+          splitter_test = false; // to pacify the Java compiler
+        }
+        if (split_exception) {
+          // Debugging only.
+
           // System.out.println("----------------");
           // System.out.println("splitter condition: " + pconds[i].splitter.condition() + " " + pconds[i].splitter.getClass().getName());
           // System.out.println("ppt: " + name);
@@ -2284,12 +2305,9 @@ public class PptTopLevel
           // //   }
           // // }
           // e.printStackTrace();
-
-          // If an exception is thrown, don't put the data on either side
-          // of the split.
-          split_exception = true;
-          splitter_test = false; // to pacify the Java compiler
         }
+        // If an exception is thrown, don't put the data on either side
+        // of the split.
         if (! split_exception) {
           // System.out.println("Result = " + splitter_test);
           int index = (splitter_test ? i : i+1);
@@ -2389,7 +2407,7 @@ public class PptTopLevel
         num_conds = Math.min(num_conds, 2);
       }
       // Take each conditional program point and its opposite and make
-      // implications. We can't assume that the number or conditional
+      // implications. We can't assume that the number of conditional
       // program points is even, because conditional program points
       // with no samples are discarded. Otherwise, a conditional
       // program point is usually next to its opposite pair in the
@@ -2529,6 +2547,29 @@ public class PptTopLevel
       }
     }
 
+    Vector dummies = new Vector();
+
+    if (dkconfig_dummy_invariant_level > 0 && ppt1 instanceof PptConditional) {
+      if (exclusive_conditions_vec.size() == 0
+          || dkconfig_dummy_invariant_level >= 2) {
+        // As a last resort, try using the user's supplied DummyInvariant
+        debugAddImplications.debug("addImplications: resorting to dummy");
+        PptConditional cond1 = (PptConditional)ppt1;
+        PptConditional cond2 = (PptConditional)ppt2;
+        cond1.splitter.instantiateDummy(ppt1);
+        cond2.splitter.instantiateDummy(ppt2);
+        DummyInvariant dummy1 = cond1.dummyInvariant();
+        DummyInvariant dummy2 = cond2.dummyInvariant();
+        if (dummy1 != null && dummy1.valid && dummy2 != null && dummy2.valid) {
+          Assert.assertTrue(!cond1.splitter_inverse);
+          Assert.assertTrue(cond2.splitter_inverse);
+          dummy2.negate();
+          exclusive_conditions_vec.add(new Invariant[] {dummy1, dummy2});
+          dummies.add(new Invariant[] {dummy1, dummy2});
+        }
+      }
+    }
+
     if (exclusive_conditions_vec.size() == 0) {
       if (debugAddImplications.isDebugEnabled()) {
         debugAddImplications.debug("addImplications: no exclusive conditions");
@@ -2540,8 +2581,11 @@ public class PptTopLevel
 
     Invariant[][] exclusive_conditions
       = (Invariant[][])exclusive_conditions_vec.toArray(new Invariant[0][0]);
+    Vector differ_vec = different_invariants(matched_views);
+    differ_vec.addAll(dummies);
+
     Invariant[][] different_invariants
-      = (Invariant[][])different_invariants(matched_views).toArray(new Invariant[0][0]);
+      = (Invariant[][])differ_vec.toArray(new Invariant[0][0]);
 
     if (debugAddImplications.isDebugEnabled()) {
       debugAddImplications.debug("addImplications: "
@@ -2746,7 +2790,8 @@ public class PptTopLevel
 
 
   // Match up the slices in the two program points.
-  // Each element is a PptSlice[2].
+  // Each element is a PptSlice[2].  For instance, the result might be
+  // [[Xslice,Xslice],[Yslice,Yslice],[XYslice,XYslice]].
   // (Perhaps I need to do something special in the case of differing canonical
   // variables; deal with that later.)
   public PptSlice[][] match_views(PptTopLevel ppt1, PptTopLevel ppt2) {
@@ -2950,7 +2995,7 @@ public class PptTopLevel
   ///
 
   // Created upon first use, then saved
-  private static SessionManager prover = null;
+  private static LemmaStack proverStack = null;
 
   /**
    * Interface used by mark_implied_via_simplify to determine what
@@ -2967,13 +3012,19 @@ public class PptTopLevel
    * pass isWorthPrinting.
    **/
   public void mark_implied_via_simplify(PptMap all_ppts) {
-    mark_implied_via_simplify
-      (all_ppts,
-       new SimplifyInclusionTester() {
+    try {
+      if (proverStack == null)
+        proverStack = new LemmaStack();
+      markImpliedViaSimplify_int
+        (all_ppts,
+         new SimplifyInclusionTester() {
            public boolean include(Invariant inv) {
              return InvariantFilters.isWorthPrintingFilter().shouldKeep(inv);
            }
          });
+    } catch (SimplifyError e) {
+      proverStack = null;
+    }
   }
 
   /**
@@ -2981,7 +3032,10 @@ public class PptTopLevel
    * logically implied by others.  Uses the provided test interface to
    * determine if an invariant is within the domain of inspection.
    **/
-  public void mark_implied_via_simplify(PptMap all_ppts, SimplifyInclusionTester test) {
+  private void markImpliedViaSimplify_int(PptMap all_ppts,
+                                          SimplifyInclusionTester test)
+    throws SimplifyError
+  {
     SessionManager.debugln("Simplify checking " + ppt_name);
 
     // Create the list of invariants from this ppt which are
@@ -3055,11 +3109,8 @@ public class PptTopLevel
     // since in the current scheme, implications came from controlled
     // program points, and we don't necessarily want to lose the
     // unconditional version of the invariant at the conditional ppt.
-    StringBuffer all_cont = new StringBuffer();
-    all_cont.append("(AND \n");
     for (Iterator ppts = closure.iterator(); ppts.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) ppts.next();
-      all_cont.append("\t(AND \n");
       Iterator _invs = InvariantFilters.addEqualityInvariants(ppt.getInvariants()).iterator();
       while (_invs.hasNext()) {
         Invariant inv = (Invariant) _invs.next();
@@ -3078,30 +3129,13 @@ public class PptTopLevel
         // We could also consider testing if the controlling invariant
         // was removed by Simplify, but what would the point be?  Also,
         // these "intermediate goals" might help out Simplify.
-        all_cont.append("\t\t");
-        all_cont.append(fmt);
-        all_cont.append("\n");
+        proverStack.pushLemma(new InvariantLemma(inv));
+
         // If this is the :::OBJECT ppt, also restate all of them in
-        // orig terms, since we the conditions also held upon entry.
-        if (ppt.ppt_name.isObjectInstanceSynthetic()) {
-          // XXX Side-effecting the invariant to change its ppt (and then
-          // to change it back afterward) isn't such a hot thing to do, but
-          // it isn't that hard, and seems to work.
-          PptSlice saved = inv.ppt;
-          PptSlice orig = new PptSlice0(saved.parent);
-          orig.var_infos = new VarInfo[saved.var_infos.length];
-          for (int i=0; i<orig.var_infos.length; i++) {
-            orig.var_infos[i] = VarInfo.origVarInfo(saved.var_infos[i]);
-          }
-          // [INCR] PptSlice orig = PptSlice0.makeFakePrestate(saved);
-          inv.ppt = orig;
-          all_cont.append("\t\t");
-          all_cont.append(inv.format_using(OutputFormat.SIMPLIFY));
-          all_cont.append("\n");
-          inv.ppt = saved;
-        }
+        // orig terms, since the conditions also held upon entry.
+        if (ppt.ppt_name.isObjectInstanceSynthetic())
+          proverStack.pushLemma(InvariantLemma.makeLemmaAddOrig(inv));
       }
-      all_cont.append(")");
     }
 
     // FIXME XXXXX:  Commented out by MDE, 6/26/2002, due to merging problems.
@@ -3180,23 +3214,25 @@ public class PptTopLevel
     //   all_cont.append(")");
     // }
 
-    all_cont.append(")");
-    CmdAssume background = new CmdAssume(all_cont.toString());
-
-    // Send the background to the prover
-    try {
-      if (prover == null)
-        prover = SessionManager.attemptProverStartup();
-      if (prover == null)
+    if (proverStack.checkForContradiction() == 'T') {
+      if (LemmaStack.dkconfig_remove_contradictions) {
+        System.err.println("Warning: " + ppt_name +
+                           " background is contradictory, " +
+                           "removing some parts");
+        proverStack.removeContradiction();
+      } else {
+        System.err.println("Warning: " + ppt_name +
+                           " background is contradictory, giving up");
         return;
-      prover.request(background);
-    } catch (TimeoutException e) {
-      prover = null;
-      return;
+      }
     }
 
-    // Work from back to front, and flag things that are redundant
-    boolean[] present = new boolean[invs.length];
+    int backgroundMark = proverStack.markLevel();
+
+    InvariantLemma[] lemmas = new InvariantLemma[invs.length];
+    for (int i = 0; i < invs.length; i++)
+      lemmas[i] = new InvariantLemma(invs[i]);
+    boolean[] present = new boolean[lemmas.length];
     Arrays.fill(present, 0, present.length, true);
     for (int checking = invs.length-1; checking >= 0; checking--) {
       Invariant inv = invs[checking];
@@ -3213,82 +3249,156 @@ public class PptTopLevel
 
       // Debugging
       if (Global.debugSimplify.isDebugEnabled()) {
-      SessionManager.debugln("Background:");
-      for (int i=0; i < present.length; i++) {
-        if (present[i] && (i != checking)) {
-          SessionManager.debugln("    " + invs[i].format());
-        }
-      }
-      }
-
-      try {
-        // If the background is necessarily false, we are in big trouble
-        CmdCheck bad = new CmdCheck("(NOT " + bg + ")");
-        if (prover == null)
-          SessionManager.attemptProverStartup();
-        if (prover == null) return;
-        prover.request(bad);
-        if (bad.valid) {
-          // BAD!!
-          System.err.println("Warning: " + ppt_name + " invariants are contradictory; punting!");
-          return;
-        }
-
-        // The background wasn't necessarily false; see if it implies
-        // the invariant under test.
-        String ask = "(IMPLIES " + bg + " " + inv.format_using(OutputFormat.SIMPLIFY) + ")";
-        CmdCheck cc = new CmdCheck(ask); // result is initialized to false
-        prover.request(cc);
-        if (cc.valid) {
-          // ick ick ick
-          if (inv instanceof Equality) {
-            // Equality is not represented with a permanent invariant
-            // object, so store the canonical variable instead.
-
-            // // Debugging
-            // System.out.println("Adding redundant var " + ((Equality) inv).leader().name.name() + " due to " + inv.format());
-            // System.out.println("Background = ");
-            // for (int i=0; i < present.length; i++) {
-            //   if (i == checking) {
-            //     System.out.println("  <<this invariant not in its own background>>");
-            //   }
-            //   if (present[i] && (i != checking)) {
-            //     System.out.println("  " + invs[i].format() + "\t" + invs[i].getClass().getName());
-            //   }
-            // }
-
-            redundant_invs.add(((Equality) inv).leader());
-          } else {
-            redundant_invs.add(inv);
+        SessionManager.debugln("Background:");
+        for (int i=0; i < present.length; i++) {
+          if (present[i] && (i != checking)) {
+            SessionManager.debugln("    " + invs[i].format());
           }
-          present[checking] = false;
-        }
-        SessionManager.debugln((present[checking] ? "UNIQUE" : "REDUNDANT") + " " + invs[checking].format());
-      } catch (SimplifyError e) {
-        prover = null;
-        return;
-      } catch (TimeoutException e) {
-        // Reset the prover with the controlling invariant background
-        prover = null;
-        prover = SessionManager.attemptProverStartup();
-        if (prover == null) return;
-        try {
-          prover.request(background);
-        } catch (TimeoutException f) {
-          prover = null;
-          return;
         }
       }
     }
 
-    // Remove the controlling invariant background
-    try {
-      prover.request(CmdUndoAssume.single);
-    } catch (TimeoutException e) {
-      prover = null;
+    for (int i = 0; i < invs.length; i++)
+      proverStack.pushLemma(lemmas[i]);
+
+    // If the background is necessarily false, we are in big trouble
+    if (proverStack.checkForContradiction() == 'T') {
+      // Uncomment to punt on contradictions
+      if (!LemmaStack.dkconfig_remove_contradictions) {
+        System.err.println("Warning: " + ppt_name +
+                           " invariants are contradictory, giving up");
+        if (LemmaStack.dkconfig_print_contradictions) {
+          LemmaStack.printLemmas(System.err,
+                                 proverStack.minimizeContradiction());
+        }
+      }
+      System.err.println("Warning: " + ppt_name +
+                         " invariants are contradictory, axing some");
+      Map demerits = new TreeMap();
+      int worstWheel = 0;
+      do {
+        // But try to recover anyway
+        Vector problems = proverStack.minimizeContradiction();
+        if (LemmaStack.dkconfig_print_contradictions) {
+          System.err.println("Minimal set:");
+          LemmaStack.printLemmas(System.err,
+                                 proverStack.minimizeContradiction());
+          System.err.println();
+        }
+        if (problems.size() == 0) {
+          System.err.println("Warning: removal failed, punting");
+          return;
+        }
+        for (int j = 0; j < problems.size(); j++) {
+          Lemma problem = (Lemma)problems.elementAt(j);
+          if (demerits.containsKey(problem))
+            demerits.put(problem,
+                         new Integer(((Integer)demerits.get(problem))
+                                     .intValue() + 1));
+          else
+            demerits.put(problem, new Integer(1));
+        }
+        int max_demerits = -1;
+        Vector worst = new Vector();
+        Iterator it = demerits.entrySet().iterator();
+        while (it.hasNext()) {
+          Map.Entry ent = (Map.Entry)it.next();
+          int value = ((Integer)ent.getValue()).intValue();
+          if (value == max_demerits) {
+            worst.add(ent.getKey());
+          } else if (value > max_demerits) {
+            max_demerits = value;
+            worst = new Vector();
+            worst.add(ent.getKey());
+          }
+        }
+        int offsetFromEnd = worstWheel % worst.size();
+        worstWheel = (3*worstWheel + 1) % 10000019;
+        int index = worst.size() - 1 - offsetFromEnd;
+        Lemma bad = (Lemma)worst.elementAt(index);
+        demerits.remove(bad);
+        proverStack.popToMark(backgroundMark);
+        boolean isInvariant = false;
+        for (int i = 0; i < lemmas.length; i++) {
+          if (lemmas[i] == bad) {
+            present[i] = false;
+            isInvariant = true;
+          } else if (present[i]) {
+            proverStack.pushLemma(lemmas[i]);
+          }
+        }
+        if (!isInvariant)
+          proverStack.removeLemma(bad);
+        if (LemmaStack.dkconfig_print_contradictions) {
+          System.err.println("Removing " + bad.summarize());
+        } else if (Daikon.no_text_output && Daikon.show_progress) {
+          System.err.print("x");
+        }
+      } while (proverStack.checkForContradiction() == 'T');
+    }
+
+    proverStack.popToMark(backgroundMark);
+
+    flagRedundantRecursive(lemmas, present, 0, lemmas.length - 1);
+
+    proverStack.clear();
+  }
+
+  /** Go though an array of invariants, marking those that can be
+   * proved as consequences of others as redundant. */
+  private void flagRedundantRecursive(InvariantLemma[] lemmas,
+                                      boolean[] present, int start, int end)
+    throws SimplifyError
+  {
+    Assert.assertTrue(start <= end);
+    if (start == end) {
+      // Base case: check a single invariant
+      int checking = start;
+      if (proverStack.checkLemma(lemmas[checking]) == 'T') {
+//         System.err.println("-------------------------");
+//         System.err.println(lemmas[checking].summarize() +
+//                            " is redundant because of");
+//         LemmaStack.printLemmas(System.err,
+//                                proverStack.minimizeProof(lemmas[checking]));
+        flagRedundant(lemmas[checking].invariant);
+        present[checking] = false;
+      }
+      SessionManager.debugln((present[checking] ? "UNIQUE" : "REDUNDANT")
+                             + " " + lemmas[checking].summarize());
+    } else {
+      // Recursive case: divide and conquer
+      int first_half_end = (start + end) / 2;
+      int second_half_start = first_half_end + 1;
+      int mark = proverStack.markLevel();
+      // First, assume the first half and check the second half
+      for (int i = start; i <= first_half_end; i++) {
+        if (present[i])
+          proverStack.pushLemma(lemmas[i]);
+      }
+      flagRedundantRecursive(lemmas, present, second_half_start, end);
+      proverStack.popToMark(mark);
+      // Now, assume what's left of the second half, and check the
+      // first half.
+      for (int i = second_half_start; i <= end; i++) {
+        if (present[i])
+          proverStack.pushLemma(lemmas[i]);
+      }
+      flagRedundantRecursive(lemmas, present, start, first_half_end);
+      proverStack.popToMark(mark);
     }
   }
 
+  /** Mark an invariant as redundant */
+  private void flagRedundant(Invariant inv) {
+    if (inv instanceof Equality) {
+      // ick ick ick
+      // Equality is not represented with a permanent invariant
+      // object, so store the canonical variable instead.
+      redundant_invs.add(((Equality) inv).leader());
+    } else {
+      redundant_invs.add(inv);
+    }
+  }
 
   ///////////////////////////////////////////////////////////////////////////
   /// Parameter VarInfo processing
@@ -3308,7 +3418,7 @@ public class PptTopLevel
     paramVars = new HashSet();
     for (int i = 0; i < var_infos.length; i++) {
       VarInfo var = var_infos[i];
-      if (var.aux.getFlag(VarInfoAux.IS_PARAM)) {
+      if (var.aux.getFlag(VarInfoAux.IS_PARAM) && !var.isPrestate()) {
         paramVars.add(var.name);
       }
     } // We should cache paramedVars in PptToplevel

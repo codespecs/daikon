@@ -1,36 +1,28 @@
-package daikon.inv.unary.sequence;
-
 #if 0
 Do not attempt to compile this file with a Java compiler such as javac.
 You first need to preprocess it with cpp, the C preprocessor.
 The correct way to build the system is to run 'make'.
 #endif
 
-// New jpp logic (one class for each type of comparison, eg. <, >, =, etc.)
-
 #if !(defined(EQUAL) || defined(LESSTHAN) || defined(LESSEQUAL) || defined(GREATERTHAN) || defined(GREATEREQUAL) || defined(EQUALFLOAT) || defined(LESSTHANFLOAT) || defined(LESSEQUALFLOAT) || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT))
-#error "EQUAL, LESSTHAN, LESSEQUAL, GREATERTHAN, GREATEREQUAL, EQUALFLOAT, LESSTHANFLOAT, LESSEQUALFLOAT, GREATERTHANFLOAT, or GREATEREQUALFLOAT should be defined"
+#error "EQUAL, LESSTHAN, LESSEQUAL, GREATERTHAN, GREATEREQUAL, EQUALFLOAT, LESSTHANFLOAT, LESSEQUALFLOAT, GREATERTHANFLOAT, or GREATEREQUALFLOAT must be defined"
 #endif
 
 #if defined(EQUAL) || defined(LESSTHAN) || defined(LESSEQUAL) || defined(GREATERTHAN) || defined(GREATEREQUAL)
-#define TYPELONG
+  #define TYPELONG
 #else
-#define TYPEDOUBLE
+  #define TYPEDOUBLE
 #endif
 
-#if defined(TYPEDOUBLE)
-#define SUPERCLASS EltwiseFloatComparison
-#define PRIMITIVE double
-#define ELTONEOF EltOneOfFloat
-#elif defined(TYPELONG)
-#define SUPERCLASS EltwiseIntComparison
-#define PRIMITIVE long
-#define ELTONEOF EltOneOf
+#if defined(TYPELONG)
+  #define SUPERCLASS EltwiseIntComparison
+  #define PRIMITIVE long
+  #define ELTONEOF EltOneOf
+#elif defined(TYPEDOUBLE)
+  #define SUPERCLASS EltwiseFloatComparison
+  #define PRIMITIVE double
+  #define ELTONEOF EltOneOfFloat
 #endif
-
-  // These definitions are included such that the class names can be changed
-  // easily and furthermore such that segments of this code can be easily
-  // modified to work elsewhere.
 
 #define EQUALCLASS EltwiseIntEqual
 #define LESSTHANCLASS EltwiseIntLessThan
@@ -45,80 +37,60 @@ The correct way to build the system is to run 'make'.
 #define GREATEREQUALFLOATCLASS EltwiseFloatGreaterEqual
 
 #if defined(EQUAL)
-#define CLASSNAME EQUALCLASS
-#define CLASSSTRING "EltwiseIntEqual"
-#define COMPARATOR ==
-#define COMPARATORSTRING "=="
+  #define CLASSNAME EQUALCLASS
+  #define CLASSSTRING "EltwiseIntEqual"
+  #define COMPARATOR(a,b) ((a) == (b))
+  #define COMPARATORSTRING "=="
 #elif defined(LESSTHAN)
-#define CLASSNAME LESSTHANCLASS
-#define CLASSSTRING "EltwiseIntLessThan"
-#define COMPARATOR <
-#define COMPARATORSTRING "<"
+  #define CLASSNAME LESSTHANCLASS
+  #define CLASSSTRING "EltwiseIntLessThan"
+  #define COMPARATOR(a,b) ((a) < (b))
+  #define COMPARATORSTRING "<"
 #elif defined(LESSEQUAL)
-#define CLASSNAME LESSEQUALCLASS
-#define CLASSSTRING "EltwiseIntLessEqual"
-#define COMPARATOR <=
-#define COMPARATORSTRING "<="
-#elif defined(GREATERTHAN)
-#define CLASSNAME GREATERTHANCLASS
-#define CLASSSTRING "EltwiseIntGreaterThan"
-#define COMPARATOR >
-#define COMPARATORSTRING ">"
+  #define CLASSNAME LESSEQUALCLASS
+  #define CLASSSTRING "EltwiseIntLessEqual"
+  #define COMPARATOR(a,b) ((a) <= (b))
+  #define COMPARATORSTRING "<="
+  #elif defined(GREATERTHAN)
+  #define CLASSNAME GREATERTHANCLASS
+  #define CLASSSTRING "EltwiseIntGreaterThan"
+  #define COMPARATOR(a,b) ((a) > (b))
+  #define COMPARATORSTRING ">"
 #elif defined(GREATEREQUAL)
-#define CLASSNAME GREATEREQUALCLASS
-#define CLASSSTRING "EltwiseIntGreaterEqual"
-#define COMPARATOR >=
-#define COMPARATORSTRING ">="
+  #define CLASSNAME GREATEREQUALCLASS
+  #define CLASSSTRING "EltwiseIntGreaterEqual"
+  #define COMPARATOR(a,b) ((a) >= (b))
+  #define COMPARATORSTRING ">="
 #elif defined(EQUALFLOAT)
-#define CLASSNAME EQUALFLOATCLASS
-#define CLASSSTRING "EltwiseFloatEqual"
-#define COMPARATOR ==
-#define COMPARATORSTRING "=="
+  #define CLASSNAME EQUALFLOATCLASS
+  #define CLASSSTRING "EltwiseFloatEqual"
+  #define COMPARATOR(a,b) (Global.fuzzy.eq (a,b))
+  #define COMPARATORSTRING "=="
 #elif defined(LESSTHANFLOAT)
-#define CLASSNAME LESSTHANFLOATCLASS
-#define CLASSSTRING "EltwiseFloatLessThan"
-#define COMPARATOR <
-#define COMPARATORSTRING "<"
+  #define CLASSNAME LESSTHANFLOATCLASS
+  #define CLASSSTRING "EltwiseFloatLessThan"
+  #define COMPARATOR(a,b) (Global.fuzzy.lt (a,b))
+  #define COMPARATORSTRING "<"
 #elif defined(LESSEQUALFLOAT)
-#define CLASSNAME LESSEQUALFLOATCLASS
-#define CLASSSTRING "EltwiseFloatLessEqual"
-#define COMPARATOR <=
-#define COMPARATORSTRING "<="
+  #define CLASSNAME LESSEQUALFLOATCLASS
+  #define CLASSSTRING "EltwiseFloatLessEqual"
+  #define COMPARATOR(a,b) (Global.fuzzy.lte (a,b))
+  #define COMPARATORSTRING "<="
 #elif defined(GREATERTHANFLOAT)
-#define CLASSNAME GREATERTHANFLOATCLASS
-#define CLASSSTRING "EltwiseFloatGreaterThan"
-#define COMPARATOR >
-#define COMPARATORSTRING ">"
+  #define CLASSNAME GREATERTHANFLOATCLASS
+  #define CLASSSTRING "EltwiseFloatGreaterThan"
+  #define COMPARATOR(a,b) (Global.fuzzy.gt (a,b))
+  #define COMPARATORSTRING ">"
 #elif defined(GREATEREQUALFLOAT)
-#define CLASSNAME GREATEREQUALFLOATCLASS
-#define CLASSSTRING "EltwiseFloatGreaterEqual"
-#define COMPARATOR >=
-#define COMPARATORSTRING ">="
+  #define CLASSNAME GREATEREQUALFLOATCLASS
+  #define CLASSSTRING "EltwiseFloatGreaterEqual"
+  #define COMPARATOR(a,b) (Global.fuzzy.gte (a,b))
+  #define COMPARATORSTRING ">="
 #endif
 
-// Old jpp logic (one comparison type)
-
-// #if !(defined(TYPELONG) || defined(TYPEDOUBLE))
-// #error "ONE MUST BE DEFINED"
-// #endif
-
-// #if defined(TYPEDOUBLE)
-// #define CLASSNAME EltwiseFloatComparison
-// #define SUPERCLASS SingleFloatSequence
-// #define PRIMITIVE double
-// #define CORECLASS FloatComparisonCore
-// #define CLASSSTRING "EltwiseFloatComparison"
-// #define ELTONEOF EltOneOfFloat
-// #elif defined(TYPELONG)
-// #define CLASSNAME EltwiseIntComparison
-// #define SUPERCLASS SingleScalarSequence
-// #define PRIMITIVE long
-// #define CORECLASS IntComparisonCore
-// #define CLASSSTRING "EltwiseIntComparison"
-// #define ELTONEOF EltOneOf
-// #endif
-
 // ***** This file is automatically generated from EltwiseIntComparisons.java.jpp
+
+package daikon.inv.unary.sequence;
 
 import daikon.*;
 import daikon.derive.*;
@@ -128,10 +100,18 @@ import daikon.inv.*;
 import utilMDE.*;
 import java.util.*;
 
-
-/**
- * This compares adjacent elements in the sequence.
- **/
+#if defined(EQUAL) || defined(EQUALFLOAT)
+  /**
+   * Represents equality between adjacent elements (x[i], x[i+1]) of a
+   * PRIMITIVE sequence.  Prints as 'x[] elements are equal'
+   **/
+#else
+  /**
+   * Represents the invariant COMPARATORSTRING between adjacent elements
+   * (x[i], x[i+1]) of a PRIMITIVE sequence.  Prints as 'x[] sorted by
+   * COMPARATORSTRING '
+   **/
+#endif
 public class CLASSNAME
   extends SUPERCLASS
 {
@@ -169,9 +149,13 @@ public class CLASSNAME
 
     // This check was before contained in the core
 #if !(defined(EQUAL) || defined(EQUALFLOAT))
-    if (!ppt.var_infos[0].type.baseIsIntegral())
+    if (!ppt.var_infos[0].type.baseIsIntegral()) {
+      // System.out.println ("Didn't instantiate " + COMPARATORSTRING);
+      Global.partially_implied_invariants++;
       return null;
+    }
 #endif
+    // System.out.println ("Instantiate " + COMPARATORSTRING);
     return new CLASSNAME(ppt);
   }
 
@@ -253,20 +237,23 @@ public class CLASSNAME
   public String format_simplify() {
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-        { var().name, var().name });
+        { var().name, var().name }, false, true);
+#if defined(EQUAL) || defined(EQUALFLOAT)
+    String comparator = "EQ";
+#else
     String comparator = COMPARATORSTRING;
-    if ("==".equals(comparator)) {
-      return form[0] + "(EQ " + form[1] + " " + form[2] + ")" + form[3];
-    } else {
-      return form[0] + "(IMPLIES (EQ (+ i 1) j) (" + comparator + " " + form[1] + " " + form[2] + "))" + form[3];
-    }
+#endif
+    return form[0] + "(" + comparator + " " + form[1] + " " + form[2] + ")"
+      + form[3];
   }
 
   public void add_modified(PRIMITIVE[] a, int count) {
     if (a.length >= 2)
       seenNonTrivialSample = true;
     for (int i=1; i<a.length; i++) {
-      if (!(a[i-1] COMPARATOR a[i])) {
+      if (!COMPARATOR (a[i-1], a[i])) {
+        // System.out.println ("destroy " + i + COMPARATORSTRING
+        //                    + ArraysMDE.toString (a));
         destroyAndFlow();
         return;
       }
@@ -308,6 +295,12 @@ public class CLASSNAME
 
   public boolean isExclusiveFormula(Invariant other)
   {
+    // This whole approach is wrong in the case when the sequence can
+    // ever consist of only one element.  For now, just forget
+    // it. -SMcC
+    if (true)
+      return false;
+
     if (other instanceof SUPERCLASS) {
 #if defined(EQUAL) || defined(EQUALFLOAT)
       return !((other instanceof EQUALCLASS) || (other instanceof EQUALFLOATCLASS)
@@ -403,6 +396,7 @@ public class CLASSNAME
           return true;
 #endif
       }
+
     }
 
     // sorted by (any operation) for an entire sequence -> sorted by that same

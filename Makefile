@@ -636,7 +636,7 @@ use-%: daikon-is-symlink
 	[ -e tests.$* ]
 	rm -f java/daikon
 	ln -s ../daikon.$* java/daikon
-	$(MAKE) tags >& /dev/null &
+	$(MAKE) compile tags >& /dev/null &
 	rm -f tests
 	ln -s tests.$* tests
 

@@ -13,7 +13,8 @@ import java.util.*;
 // single PptSlice0 with no variables
 
 // - In order to output pre-state invariants as if they were
-// post-state, we construct a PptSlice0 whose VarInfos have had their
+// post-state, or OBJECT invariants as if they applied to a particular
+// parameter, we construct a PptSlice0 whose VarInfos have had their
 // names tweaked, and temporarily use that as the invariant's ppt.
 
 public class PptSlice0
@@ -35,6 +36,22 @@ public class PptSlice0
     fake.var_infos = new VarInfo[sliceTemplate.var_infos.length];
     for (int i=0; i < fake.var_infos.length; i++) {
       fake.var_infos[i] = VarInfo.origVarInfo(sliceTemplate.var_infos[i]);
+    }
+    return fake;
+  }
+
+  // Make a fake slice whose variables are the same as the ones in
+  // sliceTemplate, but with "this" replaced by newName.
+  public static PptSlice makeFakeReplaceThis(PptSlice template,
+                                             VarInfoName newName) {
+    PptSlice0 fake = new PptSlice0(template.parent);
+    fake.var_infos = new VarInfo[template.var_infos.length];
+    for (int i=0; i < fake.var_infos.length; i++) {
+      VarInfo svi = template.var_infos[i];
+      fake.var_infos[i] =
+        new VarInfo(svi.name.replace(VarInfoName.THIS, newName),
+                    svi.type, svi.file_rep_type,
+                    svi.comparability.makeAlias(svi.name), svi.aux);
     }
     return fake;
   }

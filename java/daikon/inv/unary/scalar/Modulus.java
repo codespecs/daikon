@@ -6,6 +6,11 @@ import daikon.derive.unary.SequenceLength;
 import utilMDE.*;
 import java.util.Iterator;
 
+/**
+ * Represents the invariant "x == r (mod m)" where x is a long scalar, r is
+ * the remainder, and m is the modulus
+ **/
+
 public class Modulus
   extends SingleScalar
 {

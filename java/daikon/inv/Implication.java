@@ -9,6 +9,11 @@ import utilMDE.*;
 // Here Implication is reimplemented as an extension of the new general
 // Joiner class
 
+/**
+ * The Implication invariant class is used internally within Daikon to
+ * handle invariants that are only true when certain other conditions are
+ * also true (splitting).
+ **/
 public class Implication
   extends Joiner
 {
@@ -41,18 +46,6 @@ public class Implication
   {
     if (predicate.isSameInvariant(consequent)) {
       return null;
-    }
-    // eliminate some "uninteresting" implications, like OneOf predicates and
-    // consequents, which are usually not interesting.
-    // JWN adds: Why not use the isInteresting method?  Is it because
-    // you still want Bound invariants?
-    if (predicate instanceof OneOf) {
-      if ( ((OneOf) predicate).num_elts() > 1)
-        return null;
-    }
-    if (consequent instanceof OneOf) {
-      if ( ((OneOf) consequent).num_elts() > 1)
-        return null;
     }
 
     // Don't add this Implication to the program point if the program
@@ -123,7 +116,30 @@ public class Implication
   /* [INCR]
 
   public boolean hasOnlyConstantVariables() {
-    return predicate.hasOnlyConstantVariables();
+    // The old version of this code only looked at the predicate, but
+    // it was almost never used, since the OnlyConstantVariablesFilter
+    // had a separate check for "inv instanceof Implication" that
+    // looked at both the predicate and the consequent. I also can't
+    // think of a reason why it would make sense to only check the
+    // predicate. -SMcC
+    return consequent.hasOnlyConstantVariables()
+      || predicate.hasOnlyConstantVariables();
   }
   */
+
+  // An implication is only interesting if both the predicate and
+  // consequent are interesting
+  public boolean isInteresting() {
+    return (predicate().isInteresting() && consequent().isInteresting());
+  }
+
+  // If a constant managed to appear in a predicate, that's
+  // interesting enough for us.
+  public boolean hasUninterestingConstant() {
+    return consequent().hasUninterestingConstant();
+  }
+
+  public boolean isAllPrestate() {
+    return predicate().isAllPrestate() && consequent().isAllPrestate();
+  }
 }

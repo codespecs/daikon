@@ -1,118 +1,137 @@
+
 #if 0
 Do not attempt to compile this file with a Java compiler such as javac.
 You first need to preprocess it with cpp, the C preprocessor.
 The correct way to build the system is to run 'make'.
+
+This file is the source for all scalar (integer) and float simple two
+variable  comparisons.  One of the defines immediately below must be
+defined in the Makefile to specify which version should be built.
+For example:  scalar equals, float equals, scalar less than, etc.
 #endif
 
 #if !(defined(EQUAL) || defined(NONEQUAL) || defined(LESSTHAN) || defined(LESSEQUAL) || defined(GREATERTHAN) || defined(GREATEREQUAL) || defined(EQUALFLOAT) || defined(NONEQUALFLOAT) || defined(LESSTHANFLOAT) || defined(LESSEQUALFLOAT) || defined(GREATERTHANFLOAT) || defined(GREATEREQUALFLOAT))
-#error "EQUAL, NONEQUAL, LESSTHAN, LESSEQUAL, GREATERTHAN, GREATEREQUAL, EQUALFLOAT, NONEQUALFLOAT, LESSTHANFLOAT, LESSEQUALFLOAT, GREATERTHANFLOAT, or GREATEREQUALFLOAT should be defined"
+#error "EQUAL, NONEQUAL, LESSTHAN, LESSEQUAL, GREATERTHAN, GREATEREQUAL, EQUALFLOAT, NONEQUALFLOAT, LESSTHANFLOAT, LESSEQUALFLOAT, GREATERTHANFLOAT, or GREATEREQUALFLOAT must be defined"
 #endif
 
-#if (defined(EQUAL) || defined(NONEQUAL) || defined(LESSTHAN) || defined(LESSEQUAL) || defined(GREATERTHAN) |\
-| defined(GREATEREQUAL))
-#  define PRIMITIVE long
-#  define ISTYPE isIntegral()
-#  define SUPERCLASS TwoScalar
-#  define MEMBER Member
-#  define VALUETRACKER ValueTracker
-#  define INT(x) Int ## x
+#if (defined(EQUAL) || defined(NONEQUAL) || defined(LESSTHAN) \
+    || defined(LESSEQUAL) || defined(GREATERTHAN) || defined(GREATEREQUAL))
+  #define PRIMITIVE long
+  #define ISTYPE isIntegral()
+  #define SUPERCLASS TwoScalar
+  #define MEMBER Member
+  #define VALUETRACKER ValueTracker
+  #define INT(x) Int ## x
 #else
-#  define PRIMITIVE double
-#  define ISTYPE isFloat()
-#  define SUPERCLASS TwoFloat
-#  define MEMBER Member
-#  define VALUETRACKER FloatValueTracker
-#  define INT(x) Float ## x
+  #define PRIMITIVE double
+  #define ISTYPE isFloat()
+  #define SUPERCLASS TwoFloat
+  #define MEMBER Member
+  #define VALUETRACKER FloatValueTracker
+  #define INT(x) Float ## x
 #endif
 
 #if defined(EQUAL)
-#  define INTEQUAL IntEqual
-#  define INTEQUALstring "IntEqual"
-#  define EQUALS ==
-#  define EQUALSstring "=="
-#  define SEQINTEQUAL seqIntEqual
+  #define INTEQUAL IntEqual
+  #define INTEQUALstring "IntEqual"
+  #define EQUALS(a,b) (a == b)
+  #define EQUALSstring "=="
+  #define DEBUGINTEQUAL debugIntEqual
+  #define SEQINTEQUAL seqIntEqual
 #elif defined(EQUALFLOAT)
-#  define INTEQUAL FloatEqual
-#  define INTEQUALstring "FloatEqual"
-#  define EQUALS ==
-#  define EQUALSstring "=="
-#  define SEQINTEQUAL seqIntEqual
+  #define INTEQUAL FloatEqual
+  #define INTEQUALstring "FloatEqual"
+  #define EQUALS(a,b) (Global.fuzzy.eq (a, b))
+  #define EQUALSstring "=="
+  #define DEBUGINTEQUAL debugIntEqual
+  #define SEQINTEQUAL seqIntEqual
 #elif defined(NONEQUAL)
-#  define INTEQUAL IntNonEqual
-#  define INTEQUALstring "IntNonEqual"
-#  define EQUALS !=
-#  define EQUALSstring "!="
-#  define SEQINTEQUAL seqIntNonEqual
+  #define INTEQUAL IntNonEqual
+  #define INTEQUALstring "IntNonEqual"
+  #define EQUALS(a,b) (a != b)
+  #define EQUALSstring "!="
+  #define DEBUGINTEQUAL debugIntNonEqual
+  #define SEQINTEQUAL seqIntNonEqual
 #elif defined(NONEQUALFLOAT)
-#  define INTEQUAL FloatNonEqual
-#  define INTEQUALstring "FloatNonEqual"
-#  define EQUALS !=
-#  define EQUALSstring "!="
-#  define SEQINTEQUAL seqIntNonEqual
+  #define INTEQUAL FloatNonEqual
+  #define INTEQUALstring "FloatNonEqual"
+  #define EQUALS(a,b) (Global.fuzzy.ne (a, b))
+  #define EQUALSstring "!="
+  #define DEBUGINTEQUAL debugIntNonEqual
+  #define SEQINTEQUAL seqIntNonEqual
 #elif defined(LESSTHAN)
-#  define INTEQUAL IntLessThan
-#  define INTEQUAL_SWAP IntGreaterThan
-#  define INTEQUALstring "IntLessThan"
-#  define EQUALS <
-#  define EQUALSstring "<"
-#  define SEQINTEQUAL seqIntLessThan
+  #define INTEQUAL IntLessThan
+  #define INTEQUAL_SWAP IntGreaterThan
+  #define INTEQUALstring "IntLessThan"
+  #define EQUALS(a,b) (a < b)
+  #define EQUALSstring "<"
+  #define DEBUGINTEQUAL debugIntLessThan
+  #define SEQINTEQUAL seqIntLessThan
 #elif defined(LESSTHANFLOAT)
-#  define INTEQUAL FloatLessThan
-#  define INTEQUAL_SWAP FloatGreaterThan
-#  define INTEQUALstring "FloatLessThan"
-#  define EQUALS <
-#  define EQUALSstring "<"
-#  define SEQINTEQUAL seqIntLessThan
+  #define INTEQUAL FloatLessThan
+  #define INTEQUAL_SWAP FloatGreaterThan
+  #define INTEQUALstring "FloatLessThan"
+  #define EQUALS(a,b) (Global.fuzzy.lt (a, b))
+  #define EQUALSstring "<"
+  #define DEBUGINTEQUAL debugIntLessThan
+  #define SEQINTEQUAL seqIntLessThan
 #elif defined(LESSEQUAL)
-#  define INTEQUAL IntLessEqual
-#  define INTEQUAL_SWAP IntGreaterEqual
-#  define INTEQUALstring "IntLessEqual"
-#  define EQUALS <=
-#  define EQUALSstring "<="
-#  define SEQINTEQUAL seqIntLessEqual
+  #define INTEQUAL IntLessEqual
+  #define INTEQUAL_SWAP IntGreaterEqual
+  #define INTEQUALstring "IntLessEqual"
+  #define EQUALS(a,b) (a <= b)
+  #define EQUALSstring "<="
+  #define DEBUGINTEQUAL debugIntLessEqual
+  #define SEQINTEQUAL seqIntLessEqual
 #elif defined(LESSEQUALFLOAT)
-#  define INTEQUAL FloatLessEqual
-#  define INTEQUAL_SWAP FloatGreaterEqual
-#  define INTEQUALstring "FloatLessEqual"
-#  define EQUALS <=
-#  define EQUALSstring "<="
-#  define SEQINTEQUAL seqIntLessEqual
+  #define INTEQUAL FloatLessEqual
+  #define INTEQUAL_SWAP FloatGreaterEqual
+  #define INTEQUALstring "FloatLessEqual"
+  #define EQUALS(a,b) (Global.fuzzy.lte (a, b))
+  #define EQUALSstring "<="
+  #define DEBUGINTEQUAL debugIntLessEqual
+  #define SEQINTEQUAL seqIntLessEqual
 #elif defined(GREATERTHAN)
-#  define INTEQUAL IntGreaterThan
-#  define INTEQUAL_SWAP IntLessThan
-#  define INTEQUALstring "IntGreaterThan"
-#  define EQUALS >
-#  define EQUALSstring ">"
-#  define SEQINTEQUAL seqIntGreaterThan
+  #define INTEQUAL IntGreaterThan
+  #define INTEQUAL_SWAP IntLessThan
+  #define INTEQUALstring "IntGreaterThan"
+  #define EQUALS(a,b) (a > b)
+  #define EQUALSstring ">"
+  #define DEBUGINTEQUAL debugIntGreaterThan
+  #define SEQINTEQUAL seqIntGreaterThan
 #elif defined(GREATERTHANFLOAT)
-#  define INTEQUAL FloatGreaterThan
-#  define INTEQUAL_SWAP FloatLessThan
-#  define INTEQUALstring "FloatGreaterThan"
-#  define EQUALS >
-#  define EQUALSstring ">"
-#  define SEQINTEQUAL seqIntGreaterThan
+  #define INTEQUAL FloatGreaterThan
+  #define INTEQUAL_SWAP FloatLessThan
+  #define INTEQUALstring "FloatGreaterThan"
+  #define EQUALS(a,b) (Global.fuzzy.gt (a, b))
+  #define EQUALSstring ">"
+  #define DEBUGINTEQUAL debugIntGreaterThan
+  #define SEQINTEQUAL seqIntGreaterThan
 #elif defined(GREATEREQUAL)
-#  define INTEQUAL IntGreaterEqual
-#  define INTEQUAL_SWAP IntLessEqual
-#  define INTEQUALstring "IntGreaterEqual"
-#  define EQUALS >=
-#  define EQUALSstring ">="
-#  define SEQINTEQUAL seqIntGreaterEqual
+  #define INTEQUAL IntGreaterEqual
+  #define INTEQUAL_SWAP IntLessEqual
+  #define INTEQUALstring "IntGreaterEqual"
+  #define EQUALS(a,b) (a >= b)
+  #define EQUALSstring ">="
+  #define DEBUGINTEQUAL debugIntGreaterEqual
+  #define SEQINTEQUAL seqIntGreaterEqual
 #elif defined(GREATEREQUALFLOAT)
-#  define INTEQUAL FloatGreaterEqual
-#  define INTEQUAL_SWAP FloatLessEqual
-#  define INTEQUALstring "FloatGreaterEqual"
-#  define EQUALS >=
-#  define EQUALSstring ">="
-#  define SEQINTEQUAL seqIntGreaterEqual
+  #define INTEQUAL FloatGreaterEqual
+  #define INTEQUAL_SWAP FloatLessEqual
+  #define INTEQUALstring "FloatGreaterEqual"
+  #define EQUALS(a,b) (Global.fuzzy.gte (a, b))
+  #define EQUALSstring ">="
+  #define DEBUGINTEQUAL debugIntGreaterEqual
+  #define SEQINTEQUAL seqIntGreaterEqual
 #else
-#  error "Impossible"
+  #error "EQUAL, NONEQUAL, LESSTHAN, LESSEQUAL, GREATERTHAN, or GREATEREQUAL must be defined"
 #endif
+
 #if (defined(EQUAL) || defined(EQUALFLOAT))
-#define IMPLEMENTSCOMPARISON implements Comparison
+  #define IMPLEMENTSCOMPARISON implements Comparison
 #else
-#  define IMPLEMENTSCOMPARISON
-#  define TRACK_NUM_VALUES
+  #define IMPLEMENTSCOMPARISON
+  #define TRACK_NUM_VALUES
 #endif
 
 // ***** This file is automatically generated from IntComparisons.java.jpp
@@ -132,6 +151,10 @@ import utilMDE.*;
 import org.apache.log4j.Logger;
 import java.util.*;
 
+/**
+ * Represents an invariant of EQUALSstring between two
+ * PRIMITIVE scalars.
+ **/
 public final class INTEQUAL
   extends SUPERCLASS IMPLEMENTSCOMPARISON
 {
@@ -173,7 +196,7 @@ public final class INTEQUAL
 
   public static INTEQUAL instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-    
+
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
     VarInfo seqvar1 = var1.isDerivedSequenceMember();
@@ -370,7 +393,7 @@ invariants.
     //   System.out.println(INTEQUALstring + ppt.varNames() + ".add_modified("
     //                      + v1 + "," + v2 + ", count=" + count + ")");
     // }
-    if (!(v1 EQUALS v2)) {
+    if (!(EQUALS(v1, v2))) {
       destroyAndFlow();
       return;
     }
@@ -533,7 +556,7 @@ invariants.
   public boolean isObviousDynamically(VarInfo[] vis) {
     VarInfo var1 = vis[0];
     VarInfo var2 = vis[1];
-    
+
 #if (defined(EQUAL) || defined(EQUALFLOAT))
     // a+c=b+c is implied, because a=b must have also been reported.
     if ((var1.name instanceof VarInfoName.Add) && (var2.name instanceof VarInfoName.Add) &&

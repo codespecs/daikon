@@ -52,8 +52,8 @@ public class MatchCountVisitor extends PrintAllVisitor {
 
     if (inv1 != null && inv1.justified() && !filterOut (inv1)) {
 	String tmpStr1 = inv1.ppt.name;
-        //System.out.println ("NAME1: " + tmpStr1);
-	//Contest.smallestRoom(II)I:::EXIT;condition="not(max <= num)"
+        // System.out.println ("NAME1: " + tmpStr1);
+	// Contest.smallestRoom(II)I:::EXIT;condition="not(max <= num)"
 	String thisPptName1 = tmpStr1.substring (0,
 						tmpStr1.lastIndexOf (";condition"));
 	key1 = thisPptName1 + "$" + inv1.format_using(OutputFormat.JAVA);
@@ -81,8 +81,8 @@ public class MatchCountVisitor extends PrintAllVisitor {
         //        System.out.println ("K2: " + key2);
 
         String tmpStr1 = inv1.ppt.name;
-        //System.out.println ("NAME1: " + tmpStr1);
-	//Contest.smallestRoom(II)I:::EXIT;condition="not(max <= num)"
+        // System.out.println ("NAME1: " + tmpStr1);
+	// Contest.smallestRoom(II)I:::EXIT;condition="not(max <= num)"
 	String thisPptName1 = tmpStr1.substring (0,
 						tmpStr1.lastIndexOf (";condition"));
         String predicate = extractPredicate (tmpStr1);

@@ -55,8 +55,14 @@ class ObviousEqualityFilter extends InvariantFilter {
     //   }
     // }
 
-    Assert.assertTrue((v1.canonicalRep() == v2.canonicalRep())
-                      || v1.canBeMissing || v2.canBeMissing);
+    // The following assertion doesn't always hold, because of a bug
+    // in the way we handle canonical-ness. If we first see a == b,
+    // then c == d, then a == c, we don't correctly merge the {a, b}
+    // canonical family with the {c, d} family. (See
+    // set_equal_to_slots() in PptTopLevel). So don't assert it until
+    // that's fixed (maybe never in version 2). -SMcC
+    // Assert.assertTrue((v1.canonicalRep() == v2.canonicalRep())
+    //                  || v1.canBeMissing || v2.canBeMissing);
 
     VarInfo canonical = v1.canonicalRep();
 

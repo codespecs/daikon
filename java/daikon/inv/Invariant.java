@@ -77,6 +77,32 @@ public abstract class Invariant
   public static double dkconfig_probability_limit = .01;
 
   /**
+   * A boolean value. If true, Daikon's Simplify output (printed when
+   * the --simplify_output flag is enabled, and used internally by
+   * --suppress_redundant) will include new predicates representing
+   * some complex relationships in invariants, such as lexical
+   * ordering among sequences. If false, some complex relationships
+   * will appear in the output as complex quantified formulas, while
+   * others will not appear at all. When enabled, Simplify may be able
+   * to make more inferences, allowing --suppress_redundant to
+   * suppress more redundant invariants, but Simplify may also run
+   * more slowly.
+   **/
+  public static boolean dkconfig_simplify_define_predicates = false;
+
+  /**
+   * Real number between 0 and 0.1.  The maximum percentage difference
+   * between two floats for fuzzy comparisons.  Larger values will
+   * result in floats that are relatively farther apart being treated
+   * as equal.  A value of 0 essentially disables fuzzy comparisons.
+   * Specifically, if the equation 'abs (1 - f1/f2) <= perc' is true,
+   * then the two doubles (f1 and f2) will be treated as equal by
+   * daikon.
+   */
+  public static double dkconfig_fuzzy_ratio = 0.0001;
+
+
+  /**
    * The program point for this invariant, includes values, number of
    * samples, VarInfos, etc.
    **/
@@ -468,6 +494,10 @@ public abstract class Invariant
     return ppt.usesVar(name);
   }
 
+  public boolean usesVarDerived(String name) {
+    return ppt.usesVarDerived(name);
+  }
+
   // Not used as of 1/31/2000.
   // // For use by subclasses.
   // /** Put a string representation of the variable names in the StringBuffer. */
@@ -583,6 +613,63 @@ public abstract class Invariant
     String classname = this.getClass().getName();
     return "warning: method " + classname + ".format(" + request + ")"
       + " needs to be implemented: " + format();
+  }
+
+  /**
+   * Convert a floating point value into the weird Modula-3-like
+   * floating point format that the Simplify tool requires.
+   */
+  public static String simplify_format_double(double d) {
+    String s = d + "";
+    if (s.indexOf('E') != -1) {
+      // 1E6 -> 1d6
+      // 1.43E6 -> 1.43d6
+      s.replace('E', 'd');
+    } else if (s.indexOf('.') != -1) {
+      // 3.14 -> 3.14d0
+      s = s + "d0";
+    }
+    // 5 -> 5
+    // NaN -> Nan
+    // Infinity -> Infinity
+    return s;
+  }
+
+  /**
+   * Convert a string value into the weird |-quoted format that the
+   * Simplify tool requires. (Note that Simplify doesn't distinguish
+   * between variables, symbolic constants, and strings, so we prepend
+   * "_string_" to avoid collisions with variables and other symbols).
+   */
+  public static String simplify_format_string(String s) {
+    if (s == null)
+      return "null";
+    StringBuffer buf = new StringBuffer("|_string_");
+    for (int i = 0; i < s.length(); i++) {
+      char c = s.charAt(i);
+      if (c == '\n')
+        buf.append("\\n");
+      else if (c == '\r')
+        buf.append("\\r");
+      else if (c == '\t')
+        buf.append("\\t");
+      else if (c == '\f')
+        buf.append("\\f");
+      else if (c == '\\')
+        buf.append("\\\\");
+      else if (c == '|')
+        buf.append("\\|");
+      else if (c >= ' ' && c <= '~')
+        buf.append(c);
+      else {
+        buf.append("\\");
+        // AFAIK, Simplify doesn't glork Unicode, so lop off all but
+        // the low 8 bits.
+        buf.append(Integer.toOctalString(c & 0xff));
+      }
+    }
+    buf.append("|");
+    return buf.toString();
   }
 
   /**
@@ -923,7 +1010,9 @@ public abstract class Invariant
    * @return true if this invariant has few modified (non-repeated) samples.
    * An exception is made for OneOf invariants.
    **/
-  public final boolean hasFewModifiedSamples() {
+  // This used to be final, but it had an instanceof check for
+  // "OneOf". That seems silly, so it's now overriden there.
+  public boolean hasFewModifiedSamples() {
     int num_mod_non_missing_samples = ppt.num_mod_non_missing_samples();
 
     if (this instanceof OneOf) {
@@ -975,7 +1064,8 @@ public abstract class Invariant
     // At this point, we know all variables are constant.
     Assert.assertTrue(this instanceof OneOf ||
                       this instanceof Comparison ||
-                      this instanceof Equality
+                      this instanceof Equality ||
+                      this instanceof DummyInvariant
                       , "Unexpected invariant with all vars constant: "
                       + this + "  " + repr_prob() + "  " + format()
                       );
@@ -1185,12 +1275,18 @@ public abstract class Invariant
   }
 
   /**
-   * Recurse through vis and generate the cartesian product of
+   * Recurse through vis (an array of leaders) and generate the cartesian
+   * product of their equality sets; in other words, every combination of
+   * one element from each equality set.  For each such combination, test
+   * isObviousDynamically; if any test is true, then return that
+   * combination.  The combinations are generated via recursive calls to
+   * this routine.
    **/
   private VarInfo[] isObviousDynamically_SomeInEqualityHelper(VarInfo[] vis,
                                                              VarInfo[] assigned,
                                                              int position) {
     if (position == vis.length) {
+      // base case
       if (debugIsObvious.isDebugEnabled()) {
         StringBuffer sb = new StringBuffer();
         sb.append ("  isObviousDynamically_SomeInEquality: ");
@@ -1205,6 +1301,7 @@ public abstract class Invariant
         return null;
       }
     } else {
+      // recursive case
       for (Iterator iSet = vis[position].equalitySet.getVars().iterator();
            iSet.hasNext(); ) {
         VarInfo vi = (VarInfo) iSet.next();
@@ -1361,10 +1458,29 @@ public abstract class Invariant
   // ... [INCR]
 
 
+  // The notion of "interesting" embodied by this method is
+  // unclear. You'd probably be better off using
+  // hasUninterestingConstant(), or some other filter.
   // Uninteresting invariants will override this method to return
   // false
   public boolean isInteresting() {
     return true;
+  }
+
+
+  /** This is the test that's planned to replace the poorly specified
+   * "isInteresting" check. In the future, the set of interesting
+   * constants might be determined by a static analysis of the source
+   * code, but for the moment, we only consider -1, 0, 1, and 2 as
+   * interesting.
+   *
+   * Intuitively, the justification for this test is that an invariant
+   * that includes an uninteresting constant (say, "size(x[]) < 237")
+   * is likely to be an artifact of the way the program was tested,
+   * rather than a statement that would in fact hold over all possible
+   * executions. */
+  public boolean hasUninterestingConstant() {
+    return false;
   }
 
   // Orders invariants by class, then by variable names.  If the
@@ -1389,6 +1505,17 @@ public abstract class Invariant
     // returns the comparison of the class names.
     private int compareClass(Invariant inv1, Invariant inv2) {
       if (inv1.getClass().equals(inv2.getClass())) {
+        if (inv1 instanceof DummyInvariant) {
+          // This special case is needed because the other code
+          // assumes that all invariants of a given class have the
+          // same arity.
+          String df1 = inv1.format();
+          String df2 = inv2.format();
+          int cmp = df1.compareTo(df2);
+          if (cmp != 0)
+            return cmp;
+          return inv1.ppt.var_infos.length - inv2.ppt.var_infos.length;
+        }
         return 0;
       } else {
         String classname1 = inv1.getClass().getName();
@@ -1405,7 +1532,10 @@ public abstract class Invariant
       VarInfo[] vars2 = inv2.ppt.var_infos;
 
       // due to inv type match already
-      Assert.assertTrue(vars1.length == vars2.length);
+      if (vars1.length != vars2.length)
+        Assert.assertTrue(vars1.length == vars2.length,
+                          "Bad type match: " + inv1.format() + " vs. " +
+                          inv2.format());
 
       for (int i=0; i < vars1.length; i++) {
         VarInfo var1 = vars1[i];

@@ -6,6 +6,7 @@ import java.io.*;
 import java.util.*;
 import org.apache.oro.text.regex.*;
 import org.apache.log4j.Logger;
+import utilMDE.*;
 
 public final class Global {
 
@@ -238,5 +239,8 @@ public final class Global {
     }
     return false;
   }
+
+  //Global Fuzzy Float comparator to use
+  public static FuzzyFloat fuzzy = new FuzzyFloat ();
 
 }

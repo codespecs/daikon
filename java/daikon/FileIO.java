@@ -1014,10 +1014,18 @@ public final class FileIO {
       Global.dtraceWriter.println();
     }
 
-    String blank_line = reader.readLine();
     // Expecting the end of a block of values.
-    Assert.assertTrue((blank_line == null) || (blank_line.equals("")),
-                  "Line " + reader.getLineNumber() + ": " + blank_line);
+    String line = reader.readLine();
+    // First, we might get some variables that ought to be omitted.
+    while ((Daikon.var_omit_regexp != null)
+           && (line != null)
+           && Global.regexp_matcher.contains(line, Daikon.var_omit_regexp)) {
+      line = reader.readLine(); // value
+      line = reader.readLine(); // modbit
+      line = reader.readLine(); // next variable name
+    }
+    Assert.assertTrue((line == null) || (line.equals("")),
+                      "Expected blank line at line " + reader.getLineNumber() + ": " + line);
   }
 
 
@@ -1109,11 +1117,13 @@ public final class FileIO {
           }
           */
           mods[ppt.num_tracevars+i] = mod;
+          // Functionality moved to PptTopLevel.add(ValueTuple,int).
           // Possibly more efficient to set this all at once, late in
           // the game; but this gets it done.
-          if (ValueTuple.modIsMissingNonsensical(mods[ppt.num_tracevars+i])) {
-            Assert.assertTrue(vals[ppt.num_tracevars+i] == null);
-          }
+          // if (ValueTuple.modIsMissingNonsensical(mods[ppt.num_tracevars+i])) {
+          //  vis[ppt.num_tracevars+i].canBeMissing = true;
+          //  Assert.assertTrue(vals[ppt.num_tracevars+i] == null);
+          // }
         }
         /* [INCR] punt again
         Arrays.fill(entrymods, 0);

@@ -69,6 +69,10 @@ public class InvariantFilters {
     addPropertyFilter( new ObviousFilter());
     addPropertyFilter( new FewModifiedSamplesFilter());
     addPropertyFilter( new OnlyConstantVariablesFilter());
+    // UninterestingConstantFilter is turned off for the moment, since
+    // without a static check it's too strong, not to mention being a
+    // behavior change.
+    //    addPropertyFilter( new UninterestingConstantFilter());
     addPropertyFilter( new ImpliedPostconditionFilter());
     //    addPropertyFilter( new RedundantFilter());
     addPropertyFilter( new SimplifyFilter( this ));
@@ -101,7 +105,8 @@ public class InvariantFilters {
     v.add(new UnjustifiedFilter());
     v.add(new ImpliedPostconditionFilter());
     v.add(new OnlyConstantVariablesFilter());
-    v.add(new DerivedParameterFilter());
+    // v.add(new UninterestingConstantFilter());
+    // v.add(new DerivedParameterFilter());
     return (new InvariantFilters(v));
   }
 
@@ -114,8 +119,9 @@ public class InvariantFilters {
     v.add(new UnjustifiedFilter());
     v.add(new ImpliedPostconditionFilter());
     v.add(new OnlyConstantVariablesFilter());
-    v.add(new DerivedParameterFilter());
-    v.add(new ControlledInvariantFilter());
+    //v.add(new UninterestingConstantFilter());
+    if (Daikon.suppress_implied_controlled_invariants)
+      v.add(new ControlledInvariantFilter());
     return (new InvariantFilters(v));
   }
 

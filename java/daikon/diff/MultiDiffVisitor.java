@@ -13,10 +13,7 @@ import java.util.*;
  * across multiple files regardless of the current two-file infrastructure.
  * This allows the selection of very unique invariants that occur once over
  * an entire set of trace files
- *
- * @author Lee Lin 11/12/2001
- *
- */
+ **/
 
 public class MultiDiffVisitor extends PrintNullDiffVisitor {
 
@@ -77,9 +74,9 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
             }
 
             // add to justified list if this was justified once
-            if (inv1.justified()) {
+            //    if (inv1.justified()) {
                 justifiedList.add (key);
-            }
+                // }
         }
 
         /*
@@ -170,7 +167,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
             String data = st.nextToken();
             try {
             ((ArrayList) lastMap.get(key)).add (data);
-            } catch (Exception e) { System.out.println (key + " caused null");}
+            } catch (Exception e) {System.out.println (key + " error in MultiDiffVisitor");}
         }
 
         // print it all
@@ -228,7 +225,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
             String data = st.nextToken();
             try {
             ((ArrayList) lastMap.get(key)).add (data);
-            } catch (Exception e) { out.println (key + " caused null");}
+            } catch (Exception e) { out.println (key + " error in MultiDiffVisitor");}
         }
 
         // print it all
@@ -241,6 +238,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
             String key = (String) i.next();
             ArrayList al = (ArrayList) lastMap.get(key);
             // don't print anything if there are no selective invariants
+
             if (al.size() == 0) continue;
 
             // Get rid of the extra stuff like (III)I:::ENTER
@@ -251,7 +249,9 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 
             // sadly we only want EXIT values, so throw out any ENTERs
             // because the spinfo won't deal well with them anyway
-            if (key.indexOf ("ENTER") != -1) continue;
+
+            //            if (key.indexOf ("ENTER") != -1) continue;
+
 
             // Now we don't want to reprint the program point name
             // again in the spinfo file if it has been printed from
@@ -261,19 +261,21 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 
             if (! lastPpt.equals (thisPpt)) {
                 out.println ("\nPPT_NAME " + thisPpt);
+
                 lastPpt = thisPpt;
             }
             for (int ii = 0; ii < al.size(); ii++) {
                 out.println (al.get(ii));
+
             }
         }
 
     }
 
     protected boolean shouldPrint (Invariant inv1, Invariant inv2) {
-        return // super.shouldPrint (inv1, inv2) &&
-            inv1.format().toString().indexOf(">") == -1 &&
-            inv1.format().toString().indexOf("orig") == -1;
+        return true; // super.shouldPrint (inv1, inv2) &&
+            //    inv1.format().toString().indexOf(">") == -1 &&
+            // inv1.format().toString().indexOf("orig") == -1;
     }
 
 }

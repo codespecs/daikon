@@ -28,6 +28,11 @@ import daikon.inv.binary.*;
 
 import utilMDE.*;
 
+/**
+ * Abstract base class for comparing PRIMITIVE sequences to PRIMITIVE
+ * variables
+ **/
+
 public abstract class CLASSNAME
   extends BinaryInvariant
 {

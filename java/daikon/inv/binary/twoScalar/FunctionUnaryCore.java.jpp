@@ -139,6 +139,17 @@ public final class CLASSNAME
     return wrapper.format_unimplemented(format);
   }
 
+  public String format_simplify(String vname1, String vname2) {
+    String argname = inverse ? vname2 : vname1;
+    String resultname = inverse ? vname1 : vname2;
+    if (methodname[1].equals("")) {
+      return "(EQ " + resultname + " (" + methodname[0] + " " + argname + "))";
+    } else {
+      return "format_simplify() doesn't know function " + methodname[0] + "-" +
+        methodname[1];
+    }
+  }
+
   public String repr() {
     return CLASSSTRING + wrapper.varNames() + ": "
       + "function=" + methodname[0] + "." + methodname[1]

@@ -9,9 +9,9 @@ import java.util.*;
 
 class EventRecord
 {
-    //FIXME: Make this more efficient somehow?
-    //Possibly make this implement Collection? Or do we care?
-    //HashSet mEvents;
+    // FIXME: Make this more efficient somehow?
+    // Possibly make this implement Collection? Or do we care?
+    // HashSet mEvents;
     boolean modified;
     Vector kids;
 
@@ -28,26 +28,26 @@ class EventRecord
 
     void disownKids()
     {
-	for(Iterator i = kids.iterator(); i.hasNext(); )
+	for (Iterator i = kids.iterator(); i.hasNext(); )
 	    {
 		EventRecord r = (EventRecord)i.next();
-		
+
 		if (!r.modified)
 		    {
 			r.modified = true;
-			
+
 			r.mEvents = (Vector)mEvents.clone();
-			
+
 			r.disownKids();
 		    }
 		else
 		    {
-			//FIXME: Remove kids reference here later
+			// FIXME: Remove kids reference here later
 		    }
 	    }
-	
+
     }
-    
+
     void add(Event e)
     {
 	if (!modified)
@@ -56,7 +56,7 @@ class EventRecord
 	    }
 
 	disownKids();
-			  
+
 	mEvents.add(e);
     }
 
@@ -85,23 +85,23 @@ class EventRecord
 
     boolean noEventsConflictWith(Event e)
     {
-	for(Iterator i = mEvents.iterator(); i.hasNext(); )
+	for (Iterator i = mEvents.iterator(); i.hasNext(); )
 	    {
 		Event cur = (Event)i.next();
-		
+
 		if (e.sharesTypeWith(cur) && !e.matches(cur))
 		    {
 			return false;
 		    }
 	    }
-	
+
 	return true;
     }
 
     EventRecord duplicate()
     {
 	EventRecord out = new EventRecord();
-	
+
 	out.mEvents = mEvents;
 
 	kids.add(out);
