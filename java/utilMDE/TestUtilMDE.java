@@ -1019,11 +1019,35 @@ public final class TestUtilMDE extends TestCase {
     assertTrue(pairno == ints.length);
   }
 
+  private static BitSet randomBitSet(int length, Random r) {
+    BitSet result = new BitSet(length);
+    for (int i=0; i<length; i++) {
+      result.set(i, r.nextBoolean());
+    }
+    return result;
+  }
+
   // This cannot be static because it instantiates an inner class.
   public void testUtilMDE() {
 
+    // public static intersectionCardinalityAtLeast(BitSet a, BitSet b, int i) {
+    {
+      Random r = new Random(20031008);
+      for (int i=0; i<100; i++) {
+        BitSet b1 = randomBitSet(r.nextInt(100), r);
+        BitSet b2 = randomBitSet(r.nextInt(100), r);
+        BitSet intersection = (BitSet) b1.clone();
+        intersection.and(b2);
+        int card = intersection.cardinality();
+        for (int j=0; j<100; j++) {
+          Assert.assertTrue(UtilMDE.intersectionCardinalityAtLeast(b1, b2, j) == (card >= j));
+        }
+      }
+    }
+
     // public static BufferedReader BufferedFileReader(String filename)
     // public static LineNumberReader LineNumberFileReader(String filename)
+    // public static BufferedWriter BufferedFileWriter(String filename) throws IOException
     // public static Class classForName(String className)
 
     // public static String classnameToJvm(String classname)
@@ -1079,6 +1103,11 @@ public final class TestUtilMDE extends TestCase {
     // public static final class WildcardFilter implements FilenameFilter
     //   public WildcardFilter(String filename)
     //   public boolean accept(File dir, String name)
+    // public static boolean canCreateAndWrite(File file) {
+    // public static void writeObject(Object o, File file) throws IOException {
+    // public static Object readObject(File file) throws
+    // public static File createTempDir(String prefix, String suffix)
+
     // public Object incrementHashMap(HashMap hm, Object key, int count)
 
     try {
@@ -1163,6 +1192,8 @@ public final class TestUtilMDE extends TestCase {
         }
       }
 
+      // public static final class FilteredIterator implements Iterator {
+
       Vector iota10_odd = new Vector();
       for (int i=0; i<iota10.size(); i++)
         if (i%2 == 1)
@@ -1186,6 +1217,7 @@ public final class TestUtilMDE extends TestCase {
       Assert.assertTrue(rfali.getLast().equals(new Integer(4)));
     }
 
+    // public static ArrayList randomElements(Iterator itor, int num_elts) {
     // public static ArrayList randomElements(Iterator itor, int num_elts, Random random)
 
     // Iterate through numbers from zero up to the argument (non-inclusive)
@@ -1267,7 +1299,8 @@ public final class TestUtilMDE extends TestCase {
     assertTrue(UtilMDE.replaceString("hello dolly well hello dolly", "ll", "y").equals("heyo doyy wey heyo doyy"));
     assertTrue(UtilMDE.replaceString("hello dolly well hello dolly", "q", "xxx").equals("hello dolly well hello dolly"));
 
-    // public static void internStrings(String[] a)
+    // public static String[] split(String s, char delim)
+    // public static String[] split(String s, String delim)
 
     assertTrue(Arrays.equals(UtilMDE.split("foo,bar,baz", ','), new String[] { "foo", "bar", "baz" }));
     assertTrue(Arrays.equals(UtilMDE.split("foo", ','), new String[] { "foo" }));
@@ -1282,6 +1315,9 @@ public final class TestUtilMDE extends TestCase {
     assertTrue(Arrays.equals(UtilMDE.split("", ", "), new String[] { "" }));
     assertTrue(Arrays.equals(UtilMDE.split(", foo, ", ", "), new String[] { "", "foo", "" }));
 
+    // public static String join(Object[] a, String delim)
+    // public static String join(Vector v, String delim)
+
     assertTrue(UtilMDE.join(new String[] { "foo", "bar", "baz" }, ", ").equals("foo, bar, baz"));
     assertTrue(UtilMDE.join(new String[] { "foo" }, ", ").equals("foo"));
     assertTrue(UtilMDE.join(new String[] { }, ", ").equals(""));
@@ -1289,6 +1325,9 @@ public final class TestUtilMDE extends TestCase {
     Vector potpourri = new Vector();
     potpourri.add("day"); potpourri.add(new Integer(2)); potpourri.add("day");
     assertTrue(UtilMDE.join(potpourri, " ").equals("day 2 day"));
+
+    // public static String quote(String orig)
+    // public static String quote(Character ch)
 
     assertTrue(UtilMDE.quote("foobar").equals("foobar"));
     assertTrue(UtilMDE.quote("").equals(""));
@@ -1298,6 +1337,11 @@ public final class TestUtilMDE extends TestCase {
     assertTrue(UtilMDE.quote("\\relax").equals("\\\\relax"));
     assertTrue(UtilMDE.quote("\"hello\"").equals("\\\"hello\\\""));
     assertTrue(UtilMDE.quote("\"hello\" \"world\"").equals("\\\"hello\\\" \\\"world\\\""));
+
+    // public static String quoteMore(String orig)
+    // private static String quoteMore(char c)
+
+    // public static String unquote(String orig)
 
     assertTrue(UtilMDE.unquote("foobar").equals("foobar"));
     assertTrue(UtilMDE.unquote("").equals(""));
@@ -1321,6 +1365,10 @@ public final class TestUtilMDE extends TestCase {
     // this problem
     // assertTrue(UtilMDE.unquote("\\115").equals("M"));
     // assertTrue(UtilMDE.unquote("\\115\\111\\124").equals("MIT"));
+
+    // public static String removeWhitespaceAround(String arg, String delimiter)
+    // public static String removeWhitespaceAfter(String arg, String delimiter)
+    // public static String removeWhitespaceBefore(String arg, String delimiter)
 
     assertTrue(UtilMDE.removeWhitespaceBefore("a,b", ",").equals("a,b"));
     assertTrue(UtilMDE.removeWhitespaceBefore("a, b", ",").equals("a, b"));
@@ -1373,6 +1421,12 @@ public final class TestUtilMDE extends TestCase {
     assertTrue(UtilMDE.removeWhitespaceAround("cd123 ", "123").equals("cd123"));
     assertTrue(UtilMDE.removeWhitespaceAround("cd 123", "123").equals("cd123"));
 
+    // public static String nplural(int n, String noun)
+
+    // public static String rpad(String s, int length)
+    // public static String rpad(int num, int length)
+    // public static String rpad(double num, int length)
+
     assertTrue(UtilMDE.rpad("", 5).equals("     "));
     assertTrue(UtilMDE.rpad("abcd", 5).equals("abcd "));
     assertTrue(UtilMDE.rpad("abcde", 5).equals("abcde"));
@@ -1380,6 +1434,12 @@ public final class TestUtilMDE extends TestCase {
     assertTrue(UtilMDE.rpad("abcdefghij", 5).equals("abcde"));
     assertTrue(UtilMDE.rpad(10, 5).equals("10   "));
     assertTrue(UtilMDE.rpad(3.14, 5).equals("3.14 "));
+
+    // public static class NullableStringComparator
+    //   public int compare(Object o1, Object o2)
+
+    // public static int count(String s, int ch)
+    // public static int count(String s, String sub)
 
     assertTrue(UtilMDE.count("abcde", 'a') == 1);
     assertTrue(UtilMDE.count("abcde", 'c') == 1);
@@ -1393,6 +1453,8 @@ public final class TestUtilMDE extends TestCase {
     // public static Vector tokens(String str, String delim, boolean returnTokens)
     // public static Vector tokens(String str, String delim)
     // public static Vector tokens(String str)
+
+    // public static List sortList (List l, Comparator c)
 
     // This is tested by the tokens methods.
     // public static Vector makeVector(Enumeration e)

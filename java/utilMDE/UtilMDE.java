@@ -1,4 +1,5 @@
-// For tests of the entire utilMDE package, see class TestUtilMDE.
+// If you edit this file, you must also edit its tests.
+// For tests of this and the entire utilMDE package, see class TestUtilMDE.
 
 package utilMDE;
 
@@ -17,6 +18,41 @@ public final class UtilMDE {
   ///
 
   // For arrays, see ArraysMDE.java.
+
+  ///
+  /// BitSet
+  ///
+
+  /**
+   * Returns true if the cardinality of the intersection of the two
+   * BitSets is at least the given value.
+   **/
+  public static boolean intersectionCardinalityAtLeast(BitSet a, BitSet b, int i) {
+    // Here are three implementation strategies to determine the
+    // cardinality of the intersection:
+    // 1. a.clone().and(b).cardinality()
+    // 2. do the above, but copy only a subset of the bits initially -- enough
+    //    that it should exceed the given number -- and if that fails, do the
+    //    whole thing.  Unfortunately, bits.get(int, int) isn't optimized
+    //    for the case where the indices line up, so I'm not sure at what
+    //    point this approach begins to dominate #1.
+    // 3. iterate through both sets with nextSetBit()
+
+    int size = Math.min(a.length(), b.length());
+    if (size > 10*i) {
+      // The size is more than 10 times the limit.  So first try processing
+      // just a subset of the bits (4 times the limit).
+      BitSet intersection = a.get(0, 4*i);
+      intersection.and(b);
+      if (intersection.cardinality() >= i) {
+        return true;
+      }
+    }
+    BitSet intersection = (BitSet) a.clone();
+    intersection.and(b);
+    return (intersection.cardinality() >= i);
+  }
+
 
   ///
   /// BufferedFileReader
@@ -905,7 +941,8 @@ public final class UtilMDE {
   }
 
   /**
-   * Quote unprintable characters in the target; return a new string.
+   * Quote unprintable characters in the target, so  that the result is
+   * sure to be printable ASCII.  Return a new string.
    **/
   public static String quoteMore(String orig) {
     StringBuffer sb = new StringBuffer();
@@ -917,9 +954,11 @@ public final class UtilMDE {
     return sb.toString();
   }
 
-  // Like quote(), but quote more characters so that the result is
-  // sure to be printable ASCII. I'm not particularly worried about
-  // overhead.
+  /**
+   * Like quote(), but quote more characters so that the result is
+   * sure to be printable ASCII. I'm not particularly worried about
+   * overhead.
+   **/
   private static String quoteMore(char c) {
     if (c == '\"') {
       return "\\\"";
@@ -946,7 +985,8 @@ public final class UtilMDE {
 
   /**
    * Replace "\\", "\"", "\n", and "\r" sequences by their one-character
-   * equivalents.  All other backslashes are removed.
+   * equivalents.  All other backslashes are removed (that is, octal/hex
+   * escape sequences are not turned into their respective characters).
    **/
   public static String unquote(String orig) {
     StringBuffer sb = new StringBuffer();
