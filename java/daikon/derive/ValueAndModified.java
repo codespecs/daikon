@@ -4,10 +4,11 @@ import daikon.*;
 
 import utilMDE.*;
 
-// Just a struct of two elements
+/** 
+ * This is a temporary structure for grouping elements to be returned
+ * from computeValueAndModified, not for permanent storage.
+ **/
 
-// This is a temporary structure for grouping elements to be returned from
-// computeValueAndModified, not for permanent storage.
 public final class ValueAndModified {
   // The constructor checks that it is interned, contradicting this comment.
   public Object value;		// not necessarily an interned value
