@@ -11,7 +11,28 @@ versions as the user manual.
 
 ===========================================================================
 
-Fixed kmeans compilation problem under gcc 3.
+3.1.1 (01 July 2004)
+
+Modified Java formatting to used FuzzyFloat comparisons rather than
+directly comparing floating point numbers.  By default, FuzzyFloat
+comparisons are used when generating invariants.  More information on
+fuzzy comparisons is available in the 'List of configuration options'
+section of the user manual under the configuration option
+daikon.inv.Invariant.fuzzy_ratio.
+
+Fixed some minor bugs in the Java formatting that allow them to
+compile more cleanly.
+
+Added NonZeroFloat invariant.
+
+The kmeans clustering program now compiles under gcc 3; previously, it only
+compiled under gcc 2.  (kmeans can be used to create splitting conditions
+via AI clustering; see section 'Cluster analysis for splitters' in the
+manual.)
+
+We have moved the daikon mailing lists (daikon-announce, daikon-discuss,
+and daikon-developers) from pag.csail.mit.edu to lists.csail.mit.edu.  Any
+changes to your subscription must be made at lists.csail.mit.edu.
 
 ---------------------------------
 
