@@ -456,6 +456,39 @@ public final class UtilMDE {
   }
 
 
+  /**
+   * Like randomElements(Iterator, int, Random), but supplies a default for
+   * the last argument.
+   **/
+  public static ArrayList randomElements(Iterator itor, int num_elts) {
+    return randomElements(itor, num_elts, r);
+  }
+  private static Random r = new Random();
+
+  // This method returns an ArrayList containing num_elts randomly chosen
+  // elements from the iterator, or all the elements of the iterator if
+  // there are fewer.  It examines every element of the iterator, but does
+  // not keep them all in memory.
+  // The elements are chosen with the following probabilities, where n == num_elts:
+  //  n n/2 n/3 n/4 n/5
+  public static ArrayList randomElements(Iterator itor, int num_elts, Random random) {
+    ArrayList result = new ArrayList(num_elts);
+    int i=1;
+    for (int n=0; n<num_elts && itor.hasNext(); n++, i++) {
+      result.add(itor.next());
+    }
+    for (; itor.hasNext(); i++) {
+      Object o = itor.next();
+      // test random < num_elts/i
+      if (random.nextDouble() * i < num_elts) {
+        // This element will replace one of the existing elements.
+        result.set(random.nextInt(num_elts), o);
+      }
+    }
+    return result;
+  }
+
+
   ///
   /// Method
   ///

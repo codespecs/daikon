@@ -1065,6 +1065,56 @@ public final class TestUtilMDE extends TestCase {
       Assert.assert(rfali.getLast().equals(new Integer(4)));
     }
 
+    // public static ArrayList randomElements(Iterator itor, int num_elts, Random random) {
+
+    // Iterate through numbers from zero up to the argument (non-inclusive)
+    class IotaIterator implements Iterator {
+      int i = 0;
+      int limit;
+      public IotaIterator(int limit) { this.limit = limit; }
+      public boolean hasNext() { return i<limit; }
+      public Object next() { return new Integer(i++); }
+      public void remove() { throw new UnsupportedOperationException(); }
+    }
+    {
+      int itor_size = 10;
+      int num_elts_limit = 12;
+      int tries = 100000;
+      Random r = new Random(20020311);
+      // System.out.println();
+      // "i++" here works, but is slow
+      for (int i=1; i<num_elts_limit; i+=3) {
+        int totals[] = new int[num_elts_limit];
+        for (int j=0; j<tries; j++) {
+          ArrayList chosen = UtilMDE.randomElements(new IotaIterator(itor_size), i, r);
+          for (int m=0; m<chosen.size(); m++) {
+            for (int n=m+1; n<chosen.size(); n++) {
+              if ( ((Integer)chosen.get(m)).intValue() == ((Integer)chosen.get(n)).intValue() ) {
+                throw new Error("Duplicate at " + m + "," + n);
+              }
+            }
+          }
+          for (int k=0; k<chosen.size(); k++) {
+            totals[((Integer)chosen.get(k)).intValue()]++;
+          }
+        }
+        int i_truncated = Math.min(itor_size, i);
+        int grand_total = tries * i_truncated;
+        Assert.assert(ArraysMDE.sum(totals) == grand_total, "Totals = " + ArraysMDE.sum(totals));
+        // System.out.print("chosen:\t");
+        for (int k=0; k<num_elts_limit; k++) {
+          int this_total = totals[k];
+          int expected = tries * i_truncated / itor_size;
+          double ratio = (double)this_total / (double)expected;
+          // System.out.print(((k<10) ? " " : "") + k + " " + this_total + "\t");
+          // System.out.print("exp=" + expected + "\t" + "ratio=" + ratio + "\t");
+          Assert.assert(k >= itor_size || (ratio > .98 && ratio < 1.02));
+        }
+        // System.out.println();
+      }
+    }
+
+
     // public static Method methodForName(String methodname) throws ClassNotFoundException {
 //
     // essentially I am just testing whether the return is erroneous
