@@ -89,14 +89,19 @@ public final class SeqIntComparison extends SequenceScalar {
     // Don't do this; format() shouldn't check justification (in general...).
     // Assert.assert(!justified() || can_be_eq || can_be_lt || can_be_gt);
     String comparator = core.format_comparator();
-    return seqvar().name + " elements " + comparator + " " + sclvar().name;
+    return seqvar().name.name() + " elements " + comparator + " " + sclvar().name;
   }
 
   public String format_esc() {
     String comparator = core.format_comparator();
-    String[] esc_forall = seqvar().esc_forall();
-    return "(" + esc_forall[0]
-      + "(" + esc_forall[1] + " " + comparator + " " + sclvar().esc_name + "))";
+    String[] form =
+      VarInfoName.QuantHelper.format_esc(new VarInfoName[]
+	{ seqvar().name, sclvar().name });
+    return "(" + form[0] + "(" + form[1] + " " + comparator + " " + form[2] + "))";
+  }
+
+  public String format_simplify() {
+    return "format_simplify " + this.getClass() + " needs to be changed: " + format();    
   }
 
   public void add_modified(long [] a, long x, int count) {
