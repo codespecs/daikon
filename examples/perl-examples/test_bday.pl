@@ -13,7 +13,7 @@ for (1 .. $size * 100) {
     $bday->next_day;
 }
 
-for my $year (1994 .. 1994 + 3 * $size) {
+for my $year (1994 .. 1994 + 10 * $size) {
     my $day = new Birthday("January", 1, $year);
     print "$year is " . ($day->leap_year ? "" : "not ") . "a leap year.\n";
 }
