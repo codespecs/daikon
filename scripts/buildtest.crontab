@@ -4,6 +4,6 @@ USER=daikonbuildtest
 MAILTO=daikon@geyer.lcs.mit.edu
 #MAILTO=mharder@lcs.mit.edu
 
-55 3 * * * cd $HOME/research/invariants/scripts; cvs -Q up
-0 4 * * * $HOME/research/invariants/scripts/buildtest
+55 1 * * * cd $HOME/research/invariants/scripts; cvs -Q up
+0 2 * * * $HOME/research/invariants/scripts/buildtest
 #44 13 * * * $HOME/research/invariants/scripts/buildtest
