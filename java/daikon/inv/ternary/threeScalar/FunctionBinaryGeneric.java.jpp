@@ -332,9 +332,9 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
     private static NISuppressionSet suppressions
       = new NISuppressionSet (new NISuppression[] {
-
-        // (r == arg1) && (arg1 < arg2) ==> r = arg1 % arg2
-        new NISuppression (result_eq_arg1, arg1_lt_arg2, suppressee),
+		// anything mod 0 is undefined
+        // (r == arg1) && (arg1 < arg2) && (arg2 != 0) && (r >= 0) ==> r = arg1 % arg2
+        new NISuppression (result_eq_arg1, arg1_lt_arg2, arg2_ne_0, result_ge_0, suppressee),
 
         // (r == 0) && ((arg1 % arg2) == 0)
         new NISuppression (result_eq_0, arg2_divides_arg1, suppressee),
@@ -629,11 +629,11 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
         // (r == arg1) && (arg1 == arg2) && (r >= 0) ==> r = Gcd (arg1, arg2)
         new NISuppression (result_eq_arg1, arg1_eq_arg2, result_ge_0, suppressee),
 
-        // (r == arg1) && (arg2 == 0) ==> r = gcd (arg1,arg2)
-        new NISuppression (result_eq_arg1, arg2_eq_0, suppressee),
+        // (r == arg1) && (arg2 == 0) && (r >= 0) ==> r = gcd (arg1,arg2)
+        new NISuppression (result_eq_arg1, arg2_eq_0, result_ge_0, suppressee),
 
-        // (r == arg2) && (arg1 == 0) ==> r = gcd (arg1,arg2)
-        new NISuppression (result_eq_arg2, arg1_eq_0, suppressee),
+        // (r == arg2) && (arg1 == 0) && (r >= 0) ==> r = gcd (arg1,arg2)
+        new NISuppression (result_eq_arg2, arg1_eq_0, result_ge_0, suppressee),
 
         // (r == 1) && (arg2 == 1)        ==> r = gcd (arg1, art2)
         new NISuppression (result_eq_1, arg2_eq_1, suppressee),
@@ -641,11 +641,11 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
         // (r == 1) && (arg1 == 1)        ==> r = gcd (arg1, art2)
         new NISuppression (result_eq_1, arg1_eq_1, suppressee),
 
-        // (r == arg1) && (arg1 divides arg2)
-        new NISuppression (result_eq_arg1, arg1_divides_arg2, suppressee),
+        // (r == arg1) && (arg1 divides arg2) && (r >= 0)
+        new NISuppression (result_eq_arg1, arg1_divides_arg2, result_ge_0, suppressee),
 
-        // (r == arg2) && (arg2 divides arg1)
-        new NISuppression (result_eq_arg2, arg2_divides_arg1, suppressee),
+        // (r == arg2) && (arg2 divides arg1) && (r >= 0)
+        new NISuppression (result_eq_arg2, arg2_divides_arg1, result_ge_0, suppressee),
 
         // (r == arg2) && (arg2 boolean) && (arg2==0 ==> arg1==0)
         // 0 = gcd (arg1, 0) true when (arg1 == 0)
