@@ -50,22 +50,25 @@ public abstract class VarComparability {
 
   static boolean compatible(VarInfoName name1, VarComparability type1,
                             VarInfoName name2, VarComparability type2) {
+
     if (type1.getClass() != type2.getClass())
-      throw new Error("Trying to compare VarComparabilities of different types");
+      throw new Error("Trying to compare VarComparabilities " +
+                      "of different types");
+
     if (type1 instanceof VarComparabilityNone) {
-      return VarComparabilityNone.compatible(name1, (VarComparabilityNone)type1,
-                                             name2, (VarComparabilityNone)type2);
+      return VarComparabilityNone.compatible
+        (name1,(VarComparabilityNone)type1,
+         name2, (VarComparabilityNone)type2);
     } else if (type1 instanceof VarComparabilityImplicit) {
-	return VarComparabilityImplicit.compatible(name1, (VarComparabilityImplicit)type1,
-						   name2, (VarComparabilityImplicit)type2);
-    } else if (type1 instanceof VarComparabilityNone) {
-      return VarComparabilityNone.compatible(name1, (VarComparabilityNone)type1,
-                                             name2, (VarComparabilityNone)type2);
+	return VarComparabilityImplicit.compatible
+          (name1, (VarComparabilityImplicit)type1,
+           name2, (VarComparabilityImplicit)type2);
     } else if (type1 instanceof VarComparabilityExplicit) {
-      return VarComparabilityExplicit.compatible(name1, (VarComparabilityExplicit)type1,
-                                             name2, (VarComparabilityExplicit)type2);
+      return VarComparabilityExplicit.compatible
+        (name1, (VarComparabilityExplicit)type1,
+         name2, (VarComparabilityExplicit)type2);
     } else {
-      throw new Error("Unrecognized subtype of VarCmoparability: " + type1);
+      throw new Error("Unrecognized subtype of VarComparability: " + type1);
     }
   }
 
