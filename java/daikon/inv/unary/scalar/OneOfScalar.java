@@ -113,7 +113,9 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
         if (elts[0] == 0) {
           return varname + " == null";
         } else {
-          return varname + " has only one value (hashcode=" + elts[0] + ")";
+          return varname + " has only one value"
+            // + " (hashcode=" + elts[0] + ")"
+            ;
         }
       } else {
         return varname + " == " +  elts[0]  ;
@@ -139,7 +141,9 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
       if (elts[0] == 0) {
         result = varname + " == null";
       } else {
-        result = varname + " has only one value (hashcode=" + elts[0] + ")";
+        result = varname + " has only one value"
+          // + " (hashcode=" + elts[0] + ")"
+          ;
       }
     } else {
       result = "";

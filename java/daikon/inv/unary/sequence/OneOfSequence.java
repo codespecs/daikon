@@ -121,7 +121,7 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
 
     String result;
 
-    result =  "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    result =  "format_simplify " + this.getClass() + " needs to be changed: " + format();
 
     return result;
   }

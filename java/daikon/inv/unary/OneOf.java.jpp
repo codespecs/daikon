@@ -198,7 +198,9 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
         if (elts[0] == 0) {
           return varname + " == " + "null";
         } else {
-          return varname + " has only one value (hashcode=" + elts[0] + ")";
+          return varname + " has only one value"
+            // + " (hashcode=" + elts[0] + ")"
+            ;
         }
       } else {
         return varname + " == " + TOSTRING(elts[0]);
@@ -257,7 +259,9 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
       if (elts[0] == 0) {
         result = varname + " == " + "null";
       } else {
-        result = varname + " has only one value (hashcode=" + elts[0] + ")";
+        result = varname + " has only one value"
+          // + " (hashcode=" + elts[0] + ")"
+          ;
       }
     } else {
       result = "";
@@ -327,7 +331,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
       }
     }
 #else
-    result =  "format_simplify " + this.getClass() + " needs to be changed: " + format();    
+    result =  "format_simplify " + this.getClass() + " needs to be changed: " + format();
 #endif
 #if defined(ELT) || defined(ELTSTRING)
     result = form[0] + result + form[2];
