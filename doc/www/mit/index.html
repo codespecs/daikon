@@ -80,8 +80,8 @@ href="http://pag.csail.mit.edu/~mernst/research/#Invariant%20detection">papers</
       Evolution</a> (IEEE TSE, v27#2, Feb 2001, pp 1-25)<br>
       I call this "the invariants paper" as it was the first exposition of
       the idea of dynamic invariant detection.  The first four and last
-      three sections are more important than the middle four; you might
-      want to skim the latter if you are short on time.
+      three sections are more important than the middle four; you should
+      skim or skip sections 5-8 on first reading.
   <li><a href="http://pag.csail.mit.edu/~mernst/pubs/invariants-relevance-icse2000-abstract.html">Quickly Detecting Relevant Program Invariants</a> (ICSE 2000)<br>
       I call this "the relevance paper"; it discusses essential
       improvements to the basic technique.
@@ -256,16 +256,20 @@ This includes on your path:
 
 <h3><a name="getting-daikon"></a>Getting your copy of Daikon</h3>
 
+(Note: when you first trying out Daikon, you can provide a valuable
+perspective that we don't usually get:  we are so used to the system that
+we don't even notice the annoying (or incorrect) aspects of the tools, and
+the ambiguous, confusing, or missing parts of the documentation.  Please be
+particularly vigilant when you start our so that you can make suggestions
+for improving the tools, or come up with ideas that you might pursue
+yourself.)
+<p>
+
 For work on the PAG machines, you should check out a copy of the system
 from the CVS repository.  (This only needs to be done once, though you must
 periodically update your copy via <tt>cvs update</tt>.)
 Alternately, you can always download and install
 Daikon from its .tar.gz distribution.
-<!--  (A third option is to add <tt>~mernst/java</tt> or some other
-installation to your Java classpath.  This is easy, but is deprecated,
-because it does not permit you to modify the system and it does not
-insulate you from incompatible changes or partial work of others.)
--->
 <p>
 
 Checking out Daikon from the CVS repository has several advantages:
