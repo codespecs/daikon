@@ -300,7 +300,8 @@ public final class ProglangType implements java.io.Serializable {
 
       // Try requiring the square brackets around arrays (permits
       // distinguishing between null and an array containing just null).
-      Assert.assert(value.startsWith("[") && value.endsWith("]"));
+      Assert.assert(value.startsWith("[") && value.endsWith("]"),
+                    "Array values must be enlosed in square brackets");
       // Deal with [] surrounding Java array output
       if (value.startsWith("[") && value.endsWith("]")) {
         value = value.substring(1, value.length() - 1).trim();
