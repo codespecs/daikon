@@ -168,6 +168,15 @@ public final class CLASSNAME
        // b = b / div;
        // c = c / div;
        // d = d / div;
+       
+      //we still need to guarantee the canonical form of coefficients (e.g. positive x coeff)
+       if (a < 0) {
+       a = a/-1.0;
+       b = b/-1.0;
+       c = c/-1.0;
+       d = d/-1.0;
+       
+       }
       }
     }
 
