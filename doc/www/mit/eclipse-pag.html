@@ -11,6 +11,7 @@
 <ol>
 <li><a href="#startup">Start up Eclipse on PAG machines</a>
 <li><a href="#existing-projects">Work on Daikon and other existing coding projects in Eclipse</a>
+<li><a href="#run-from-terminal">Run projects compiled from Eclipse in command terminal</a>
 <li><a href="#debugger">Use the Eclipse debugger</a>
 <li><a href="#cvs">Use CVS with Eclipse</a>
 </ol>
@@ -70,16 +71,56 @@ destination should be Daikon/src.  Check the boxes for including
 daikon, jtb, and utilMDE.  <br><br>
 
 <li> Finally, add the required jars for Daikon by right-clicking on
-the project and selecting the Properties menu.
-Select "Java Build Path", then "Libraries", then "Add External
-Jars" and add tools.jar, junit.jar, jakarta-oro.jar, and
-java-getopt.jar.  (See your CLASSPATH environment variable for full
-pathnames to these files.)
-</ol>
+the project and selecting the Properties menu.  Select "Java Build
+Path", then "Libraries", then "Add External Jars" and add tools.jar,
+junit.jar, jakarta-oro.jar, and java-getopt.jar.  (See your CLASSPATH
+environment variable for full pathnames to these files.)  </ol>
+
+<h2><a name="run-from-terminal">Run projects compiled from Eclipse in
+the command terminal</a></h2>
+
+<p>Eclipse compiles or attempts to compile your project very often
+(every few seconds). Although Eclipse can launch all of its projects,
+it is more natural to run Daikon and other tools from the
+terminal. <b>The compiled classes do not appear in the directory from
+which you imported in the previous step</b>.
+
+<p>Instead, the compiled classes appear in the Eclipse workspace
+directory. If you followed the setup instructions above, then the
+compiled code will be in "$HOME/workspace/Daikon/bin", which you
+should add to your CLASSPATH in order to use the updates you make from
+Eclipse.
 
 <h2><a name="debugger">Using the Eclipse debugger</a></h2>
 
-<p>TODO, but pretty self-explanatory.
+<p>To begin debugging, you can click on the bug icon in the toolbar or
+select Run->Debug from the menu.  You will see the same window as if
+you selected Run->Run, but when the Java application launches, Eclipse
+will switch to the Debugging Perspective, which reveals many windows
+such as the stack trace window, the variable values window, and the
+step control panel.</p>
+
+<P>Debugging features (window locations given for default setup):</P>
+
+<ul>
+<li>Breakpoints: You can add breakpoints during editing by
+double-clicking on the left margin area of the source code.  When
+debugging, the program halts when it reaches a breakpoint.
+
+<li>Stack Trace: Once the program halts at a breakpoint, the window
+in the upper-left corner window show the stack trace.
+
+<li>Step Controls: Once the program halts at a breakpoint, the panels
+just below the stack trace allow you to step through the code one line
+at a time (step over), resume execution as normal (resume), step down
+into a method call (step into), or execute until leaving the current
+method (Step return).
+
+<li>Variables: On the top right window, there is a tab pane that displays
+the values of objects and fields during a breakpoint halt.  You can also
+type in any legal java expression that could appear at the breakpoint
+and the window will display the value of the expression (don't forget to
+put a semi-colon at the end of your expression!).
 
 <h2><a name="cvs">Using CVS with Eclipse</a></h2>
 
