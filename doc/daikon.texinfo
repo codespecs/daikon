@@ -122,6 +122,8 @@ Introduction
 
 Installing Daikon
 
+* Minimal installation::        
+* Complete installation::       
 * Requirements::                
 
 Requirements for running Daikon
@@ -466,12 +468,51 @@ you may send mail to the list asking to be added.
 @chapter Installing Daikon
 @cindex installing Daikon
 
-Daikon is written in Java.  In order to run Daikon, all you really need
-is the @file{daikon.jar} file, which is included in the distribution.
-Place @file{daikon.jar} on your classpath so that Java can find it, and
-you are ready to use Daikon!
+This section describes two ways to install Daikon.  The first gives a
+minimal installation that is adequate for the needs of most users.
+The second gives a complete installation that some users may prefer.
 
-This section gives step-by-step instructions for installing Daikon.
+Use the minimal installation instructions if you only wish to detect
+invariants in Java programs.  Use the complete installation instructions
+(which are easy to follow) if you wish to detect invariants in C or Perl
+programs, or if you wish to edit the source code of Daikon itself.
+
+Finally, you may wish to subscribe to one of the mailing lists
+(@pxref{Mailing lists}), in order to be notified of new releases or join
+discussions with other Daikon users and developers.
+
+
+@menu
+* Minimal installation::        
+* Complete installation::       
+* Requirements::                
+@end menu
+
+@node    Minimal installation, Complete installation, Installing Daikon, Installing Daikon
+@section Minimal installation instructions
+
+Daikon is written in Java.  In order to run Daikon, all you really need
+is the @file{daikon.jar} file, which is included in the distribution or
+can be downloaded separately from
+@uref{http://pag.csail.mit.edu/daikon/download/daikon.jar}.  Place
+@file{daikon.jar} on your classpath so that Java can find it.  You are
+now ready to use Daikon!
+
+Here are a few additional details.  You must have a Java 5.0 (or later)
+JVM (@uref{http://java.sun.com,, Java Virtual Machine}).  The
+@file{tools.jar} file that comes with your JVM must also be on your
+classpath.
+
+
+@node    Complete installation, Requirements, Minimal installation, Installing Daikon
+@section Complete installation instructions
+
+This section gives step-by-step instructions for installing Daikon.  The
+instructions are targetted for Unix users.  If you use another operating
+system such as Windows, you may need to adjust the instructions.
+(Contributions to this manual for other operating systems are welcome.)
+
+
 @xref{Requirements}, for a few additional requirements for running Daikon
 --- in short, you must be able to run Java programs, because Daikon is
 written in Java.  Differences between various versions of Daikon appear
@@ -505,8 +546,9 @@ This creates a @file{@var{daikonparent}/daikon/} subdirectory.
 @item
 Set up your environment.  You need to arrange for @file{daikon.jar} to
 be on your Java classpath.  One easy way to do this is to make your
-shell initialization file set the DAIKONPARENT environment variable and
-source the appropriate Daikon environment file.
+shell initialization file set the DAIKONPARENT environment variable (to
+an absolute pathname) and source the appropriate Daikon environment
+file.  (Alternately, you could set your classpath yourself.)
 @itemize 
 @item
 @cindex C shell
@@ -528,6 +570,10 @@ If you use the bash shell, add the following to your
 export DAIKONPARENT=@var{daikonparent}
 source $DAIKONPARENT/daikon/bin/daikon.bashrc
 @end example
+@item
+If you use Windows, see file @file{$DAIKONPARENT/daikon/bin/daikonenv.bat},
+which performs similar customizations to those in @file{daikon.bashrc}
+and @file{daikon.cshrc}.
 @end itemize
 @noindent
 
@@ -563,11 +609,6 @@ make
 
 @end enumerate
 
-Finally, you may wish to subscribe to one of the mailing lists
-(@pxref{Mailing lists}), in order to be notified of new releases or join
-discussions with other Daikon users and developers.
-
-
 Other sections of the manual give installation instructions for several
 special-purpose components of Daikon:  the C front end Kvasir
 (@pxref{Installing Kvasir}), the source-based Java front end dfej
@@ -578,12 +619,7 @@ Most users will not need to read those instructions,
 however.
 
 
-
-@menu
-* Requirements::                
-@end menu
-
-@node    Requirements,  , Installing Daikon, Installing Daikon
+@node    Requirements,  , Complete installation, Installing Daikon
 @section Requirements for running Daikon
 
 In order to run Daikon, you must have a Java 5.0 (or later) JVM
