@@ -6,7 +6,6 @@ import utilMDE.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import daikon.PptTopLevel;
-import daikon.Child;
 
 /**
  * A collection of code that configures and assists the dataflow
