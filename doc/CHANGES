@@ -7,7 +7,7 @@ daikon.html, daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
-2.3.2 (December 2001):
+2.3.2 (7 December 2001):
 
 Support for splitter files that specify conditions to use when detecting
 implications (conditional invariants).
