@@ -93,7 +93,7 @@ public class LinearTernaryCoreTest
     ltc.c = c;
     ltc.d = d;
     String actual_result = ltc.format_using(OutputFormat.DAIKON,
-                                            x_vin, y_vin, z_vin);
+                                            x_vin, null, y_vin, null, z_vin, null);
     // System.out.println("Expecting: " + goal_result);
     // System.out.println("Actual:    " + actual_result);
     assertTrue(actual_result.equals(goal_result));
