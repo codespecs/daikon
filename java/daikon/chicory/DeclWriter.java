@@ -4,6 +4,8 @@ import java.io.*;
 import java.util.*;
 import java.lang.reflect.*;
 
+import sun.misc.Unsafe;
+
 public class DeclWriter extends DaikonWriter
 {
     // Notes:
@@ -600,8 +602,8 @@ public class DeclWriter extends DaikonWriter
                 if(!field.isAccessible())
                     field.setAccessible(true);
                 
+                //TODO is there a work-around for forced initialization?
                 Object val = field.get(null);
-                
                 outFile.println(" = " + val.toString());
             }
             catch (IllegalAccessException e)

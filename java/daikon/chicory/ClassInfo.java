@@ -40,10 +40,15 @@ public class ClassInfo {
    * for each method
    */
   public void get_reflection() {
-
+     
     // get the reflection class
     try {
-      clazz = Class.forName (class_name);
+      //clazz = Class.forName (class_name);
+      //change class loading
+        
+        //TODO referring class?
+      clazz = Class.forName (class_name, false, this.getClass().getClassLoader());
+      
     } catch (Exception e) {
       throw new Error (e);
     }

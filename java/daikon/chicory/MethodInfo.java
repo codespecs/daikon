@@ -72,8 +72,15 @@ public class MethodInfo {
       try {
         String aname = arg_type_strings[ii];
         Class c = (Class) primitive_classes.get (aname);
+        
         if (c == null)
-          c = Class.forName (aname);
+        {
+          //c = Class.forName (aname);
+          //change class loading
+          //TODO referring class?
+          c = Class.forName (aname, false, this.getClass().getClassLoader());
+        }
+        
         arg_types[ii] = c;
       } catch (Exception e) {
         throw new Error ("can't find class for " + arg_type_strings[ii]

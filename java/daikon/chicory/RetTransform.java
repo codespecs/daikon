@@ -253,8 +253,7 @@ public class RetTransform implements ClassFileTransformer {
         Runtime.methods.add (mi);
 
         // Add nonce local to matchup enter/exits
-        add_method_startup (il, context, !shouldFilter(fullClassName, mg.getName(), 
-                DaikonWriter.methodEntryName(fullClassName, getArgTypes(mg), mg.toString(), mg.getName(), is_constructor(mg))));
+        add_method_startup (il, context, !shouldFilter(fullClassName, mg.getName(), DaikonWriter.methodEntryName(fullClassName, getArgTypes(mg), mg.toString(), mg.getName(), is_constructor(mg))));
 
         
         Iterator <Boolean> shouldIncIter = mi.is_included.iterator();
