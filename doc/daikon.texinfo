@@ -3322,10 +3322,10 @@ the names of method arguments.
 Chicory supports all versions of Java, including Java 5.0 (it must
 be run in a 5.0 JVM).  Chicory's functionality is very similar to that
 of the @command{dfej} tool, and Chicory supports most of the same
-command-line options.  However, Chicory has two substantial advantages
-over dfej: Chicory is much easier to use, and dfej only supports Java
-1.4 and earlier.  Chicory should also run on any platform that supports
-Java 5.0.
+command-line options.  However, Chicory has three substantial advantages
+over dfej: Chicory is much easier to use, dfej only supports Java
+1.4 and earlier, and Chicory is platform-independent (and requires no
+special action to build) since it is written in Java.
 
 @menu
 * Chicory options::             
@@ -3538,6 +3538,8 @@ of the Java language.  @command{dfej} does not work on Java 5.0.
 The Chicory front end for Java (@pxref{Java front end Chicory}) works on
 all versions of the Java language, including Java 5.0.
 Another advantage of Chicory is that Chicory is much easier to use.
+Finally, Chicory is platform-independent (and requires no special action to
+build), since it is written in Java.  On the other hand,
 dfej's advantage over Chicory is in terms of performance:  code
 instrumented by dfej tends to run slightly faster than code instrumented by
 Chicory.  Since Chicory is about as fast as Daikon itself (and Chicory's
