@@ -1,6 +1,6 @@
 Version:      $Id$
 Owner:        Alan <adonovan@lcs.mit.edu>
-Cc:           Jeremy <jwnimmer>
+Cc:           Jeremy <mistere@lcs.mit.edu>
 Tool:         bugtrack test
 Summary:      test
 Severity:     Lethal
@@ -17,7 +17,10 @@ al
 
 --
 $Log$
-Revision 1.2  2002-04-02 21:29:15  adonovan
+Revision 1.3  2002-04-02 21:30:02  adonovan
+changed bug0038
+
+Revision 1.2  2002/04/02 21:29:15  adonovan
 changed bug0038
 
 Revision 1.1  2002/04/02 21:27:45  adonovan
