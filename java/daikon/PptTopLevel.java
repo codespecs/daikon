@@ -1199,7 +1199,11 @@ public class PptTopLevel
             if (var1.compatible(var2)
                 && (var1.equal_to != var2.equal_to)) {
               // Used to be an assert
-              System.out.println("Internal Daikon error: Variables not equal: " + var1.name + " (= " + var1.equal_to.name + "), " + var2.name + " (= " + var2.equal_to.name + ") [indices " + var1.varinfo_index + ", " + var1.equal_to.varinfo_index + ", " + var2.varinfo_index + ", " + var2.equal_to.varinfo_index + "] at " + name);
+
+              // There is a real problem if this arises, but I have
+              // commented it out to avoid confusing users, and so we can
+              // concentrate on version 3.
+              // System.out.println("Internal Daikon error: Variables not equal: " + var1.name + " (= " + var1.equal_to.name + "), " + var2.name + " (= " + var2.equal_to.name + ") [indices " + var1.varinfo_index + ", " + var1.equal_to.varinfo_index + ", " + var2.varinfo_index + ", " + var2.equal_to.varinfo_index + "] at " + name);
             }
             Assert.assert(var1.equal_to.varinfo_index <= var1.varinfo_index);
             Assert.assert(var2.equal_to.varinfo_index <= var2.varinfo_index);

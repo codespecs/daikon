@@ -60,6 +60,11 @@ public class InvariantInteraction
 	 */
 	public static void startGui(String path)
 	{
+		startGui(path, false);
+	}
+
+	public static void startGui(String path, boolean CFile)
+	{
 		if (!gui_visible)
 		{
 			gui_visible = true;
@@ -69,6 +74,8 @@ public class InvariantInteraction
 
 			if (dbprot)
 				dg = new ContextGUI();
+
+			dg.setCFile(CFile);
 
 			dg.startGui();
 
@@ -176,7 +183,7 @@ public class InvariantInteraction
 
 	// This passes through all the layers to get to the database to reload
 	// all the files in the database.
-	public void rebuild()
+	public static void rebuild()
 	{
 		if (gui_visible)
 		{
@@ -187,7 +194,7 @@ public class InvariantInteraction
 
 	// This passes through the layers of the program to tell the database to
 	// clear all the data currently being stored.
-	public void clear()
+	public static void clear()
 	{
 		if (gui_visible)
 		{
@@ -195,7 +202,6 @@ public class InvariantInteraction
 			resetVars();
 		}
 	}
-
 }
 
 // This class will filter out files with only the .dci extension so as

@@ -184,6 +184,7 @@ public final class Configuration
 
     Object value; // typed version of value
     Class type = field.getType();
+
     if (type.equals(Boolean.TYPE) || type.equals(Boolean.class)) {
       if (unparsed.equals("1") || unparsed.equalsIgnoreCase("true")) {
 	value = Boolean.TRUE;
@@ -216,7 +217,9 @@ public final class Configuration
       } catch (NumberFormatException e) {
 	throw new ConfigException("Unsupported double " + unparsed);
       }
-    } else {
+    } else if (type.getName().equals("java.lang.String")) {
+      value = unparsed;
+    }else {
       throw new ConfigException("Unsupported type " + type.getName());
     }
 

@@ -450,18 +450,38 @@ public final class EltOneOf
     if (num_elts != other.num_elts)
       return false;
 
-    // Add case for SEQUENCE eventually
+    sort_rep();
+    other.sort_rep();
 
-    // If the invariants are both hashcodes and non-null, consider
-    // them to have the same formula
-    if (num_elts == 1 && other.num_elts == 1) {
-      if (is_hashcode && elts[0] != 0 && other.elts[0] != 0) {
+    // All nonzero hashcode values should be considered equal to each other
+    //
+    // Examples:
+    // inv1  inv2  result
+    // ----  ----  ------
+    // 19    0     false
+    // 19    22    true
+    // 0     0     true
+
+    if (is_hashcode && other.is_hashcode) {
+      if (num_elts == 1 && other.num_elts == 1) {
+        return ((elts[0] == 0 && other.elts[0] == 0) ||
+                (elts[0] != 0 && other.elts[0] != 0));
+      } else if (num_elts == 2 && other.num_elts == 2) {
+	// add_modified allows two elements iff one is null
+	Assert.assert(elts[0] == 0);
+	Assert.assert(other.elts[0] == 0);
+	Assert.assert(elts[1] != 0);
+	Assert.assert(other.elts[1] != 0);
+
+        // Since we know the first elements of each invariant are
+        // zero, and the second elements are nonzero, we can immediately
+        // return true
         return true;
+      } else {
+        return false;
       }
     }
 
-    sort_rep();
-    other.sort_rep();
     for (int i=0; i < num_elts; i++)
       if (elts[i] != other.elts[i]) // elements are interned
 	return false;

@@ -100,9 +100,13 @@ daikon.derive.binary.SequencesJoin.enabled = 0
 daikon.derive.binary.SequencesConcat.enabled = 0
 daikon.derive.binary.SequencesPredicate.enabled = 0
 
-### OTHER SETTINGS
-
-daikon.FileIO.add_changed = true
+### SPLITTER SETTINGS
 daikon.split.SplitterList.all_splitters = false
+daikon.split.FileCompiler.compiler = jikes
+daikon.split.TimedProcess.compile_timeout = 6
 daikon.split.ContextSplitterFactory.granularity = 1
+
+### OTHER SETTINGS
+daikon.FileIO.add_changed = true
 daikon.PptTopLevel.pairwise_implications = false
+

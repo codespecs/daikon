@@ -240,4 +240,12 @@ public class ContextMiddle implements ContextLinker
 	{
 		ds.clear();
 	}
+
+	// This function passes whether the file type is java or c down to
+	// the server layer for opening files. True for c file, false for java
+	// The default is false.
+	public void setCFile(boolean new_CFILE)
+	{
+		ds.setCFile(new_CFILE);
+	}
 }

@@ -24,10 +24,9 @@ import daikon.*;
 
 class ConditionExtractor extends DepthFirstVisitor {
 
-  private String packageName;
-  private String className;
-  private String curMethodName;
-  private Writer output;
+  private String packageName; 
+  private String className; //The class name.
+  private String curMethodName; //Name of current method being parsed
   private String curMethodDeclaration;
   boolean enterMethod;   //true if the current Node is a Method
                          //declaration ie. we just entered a method.
@@ -39,11 +38,7 @@ class ConditionExtractor extends DepthFirstVisitor {
                                               //as values and the method
                                               //declaration as the keys
 
-  public ConditionExtractor (Writer output) {
-    this.output = output;
-  }
-
-
+  
   //// DepthFirstVisitor Methods overridden by ConditionExtractor //////////////
   /////
 
@@ -70,30 +65,14 @@ class ConditionExtractor extends DepthFirstVisitor {
   }
 
   /**
-   * f0 -> ( "static" | "abstract" | "final" | "public" | "protected" | "private" )*
-   * f1 -> UnmodifiedClassDeclaration()
-   */
-  public void visit(NestedClassDeclaration n) {
-    className = Ast.print(n.f1);
-    super.visit(n);
-  }
-
-  /**
-   * f0 -> ( "public" | "protected" | "private" | "static" | "abstract" | "final" | "native" | "synchronized" )*
-   * f1 -> ResultType()
-   * f2 -> <IDENTIFIER>
-   * f3 -> "("
-   */
-  public void visit(MethodDeclarationLookahead n) {
-    super.visit(n);  
-  }
-
-  /**
    * f0 -> ( "public" | "protected" | "private" | "static" | "final" | "transient" | "volatile" )*
    * f1 -> Type()
    * f2 -> VariableDeclarator()
    * f3 -> ( "," VariableDeclarator() )*
    * f4 -> ";"
+   */
+  /**
+   * Stores the field name, if it is a boolean. 
    */
   public void visit(FieldDeclaration n) {
     String resultType = Ast.print(n.f1);
@@ -102,31 +81,7 @@ class ConditionExtractor extends DepthFirstVisitor {
     }
     super.visit(n);
   }
-
-  /**
-   * f0 -> VariableDeclaratorId()
-   * f1 -> [ "=" VariableInitializer() ]
-   */
-  public void visit(VariableDeclarator n) {
-    super.visit(n);
-  }
-
-  /**
-   * f0 -> <IDENTIFIER>
-   * f1 -> ( "[" "]" )*
-   */
-  public void visit(VariableDeclaratorId n) {
-    super.visit(n);
-  }
-
-  /**
-   * f0 -> ArrayInitializer()
-   *       | Expression()
-   */
-  public void visit(VariableInitializer n) {
-    super.visit(n);
-  }
-
+  
   /**
    * f0 -> ( "public" | "protected" | "private" | "static" | "abstract" | "final" | "native" | "synchronized" )*
    * f1 -> ResultType()
@@ -134,7 +89,13 @@ class ConditionExtractor extends DepthFirstVisitor {
    * f3 -> [ "throws" NameList() ]
    * f4 -> ( Block() | ";" )
    */
-
+  
+  /**
+   * It is sometimes helpful to store the method bodies of one-liner
+   * methods.  They are useful as 'replace' statements when the
+   * condition makes a call to that function. Here we keep track of
+   * the fact that we have reached a method declaration.
+   */
   public void visit(MethodDeclaration n) {
     //after the next non-empty statement, the variable
     //enterMethod is set to false
@@ -145,29 +106,12 @@ class ConditionExtractor extends DepthFirstVisitor {
   /**
    * f0 -> <IDENTIFIER>
    * f1 -> FormalParameters()
-   * f2 -> ( "[" "]" )*
-   */
+   * f2 -> ( "[" "]" )* */
   public void visit(MethodDeclarator n) {
+    //This goes on the PPT_NAME line of the spinfo file.
+    //eg. QueueAr.isEmpty
     curMethodName = className + "." + Ast.print(n.f0);
     addMethod (Ast.print(n), curMethodName);
-    super.visit(n);
-  }
-
-  /**
-   * f0 -> "("
-   * f1 -> [ FormalParameter() ( "," FormalParameter() )* ]
-   * f2 -> ")"
-   */
-  public void visit(FormalParameters n) {
-    super.visit(n);
-  }
-
-  /**
-   * f0 -> [ "final" ]
-   * f1 -> Type()
-   * f2 -> VariableDeclaratorId()
-   */
-  public void visit(FormalParameter n) {
     super.visit(n);
   }
 
@@ -182,6 +126,8 @@ class ConditionExtractor extends DepthFirstVisitor {
    * f7 -> "}"
    */
   public void visit(ConstructorDeclaration n) {
+    //This goes on the PPT_NAME line of the spinfo file.
+    //eg. QueueAr.isEmpty   
     curMethodName = className + "." + Ast.print(n.f1);
     addMethod(className + Ast.print(n), curMethodName);
     super.visit(n);
@@ -196,25 +142,35 @@ class ConditionExtractor extends DepthFirstVisitor {
    * f5 -> ( SwitchLabel() ( BlockStatement() )* )*
    * f6 -> "}"
    */
+
+  /**
+   * extracts the values for the different cases and creates splitting
+   * conditions out of them
+   */
   public void visit(SwitchStatement n) {
-    //need to fix the switch statement
     String switchExpression = Ast.print(n.f2);
-    String[] caseValues = getCaseValues(n.f5);
-    for (int i = 0; i < caseValues.length; i++) {
-      String switchValue = caseValues[i].trim();
+    Collection caseValues = getCaseValues(n.f5);
+     //a condition for the default case. A 'not' of all the different cases. 
+    StringBuffer defaultString = new StringBuffer();
+    for (Iterator e = caseValues.iterator(); e.hasNext(); ) {
+      String switchValue = ((String) e.next()).trim();
       if (!switchValue.equals(":")) {
+	if (!(defaultString.length() == 0))
+	  defaultString.append(" && ");
+	defaultString.append(switchExpression + " != " + switchValue);
 	addCondition(switchExpression + " == " + switchValue);
       }
     }
+    addCondition(defaultString.toString());
     super.visit(n);
   }
   
   /**
-   * @return a String[] which contains the different values
-   * which the case expression is tested against
+   * @return a String[] which contains the different Integer values
+   * which the case expression is tested against 
    */
-  public String[] getCaseValues (NodeListOptional n) {
-    Vector values = new Vector();
+  public Collection getCaseValues (NodeListOptional n) {
+    ArrayList values = new ArrayList();
     Enumeration e = n.elements();
     while (e.hasMoreElements()) {
       //in the nodeSequence for the switch statement,
@@ -223,9 +179,9 @@ class ConditionExtractor extends DepthFirstVisitor {
       NodeSequence ns = (NodeSequence) e.nextElement();
       SwitchLabel sl = (SwitchLabel) ns.elementAt(0);
       ns = (NodeSequence) sl.f0.choice;
-      values.addElement(Ast.print(ns.elementAt(1)));
+      values.add(Ast.print(ns.elementAt(1)));
     }
-    return (String[]) values.toArray(new String[0]);
+    return values;
   }
   
   /**
@@ -236,6 +192,7 @@ class ConditionExtractor extends DepthFirstVisitor {
    * f4 -> Statement()
    * f5 -> [ "else" Statement() ]
    */
+  /* Extract the condition in an 'if' statement */
   public void visit(IfStatement n) {
     addCondition(Ast.print(n.f2));
     super.visit(n);
@@ -248,6 +205,7 @@ class ConditionExtractor extends DepthFirstVisitor {
    * f3 -> ")"
    * f4 -> Statement()
    */
+  /* Extract the condition in an 'while' statement */
   public void visit(WhileStatement n) {
     super.visit(n);
     addCondition(Ast.print(n.f2));
@@ -262,6 +220,7 @@ class ConditionExtractor extends DepthFirstVisitor {
    * f5 -> ")"
    * f6 -> ";"
    */
+  /* Extract the condition in an 'DoStatement' statement */
   public void visit(DoStatement n) {
     super.visit(n);
     addCondition(Ast.print(n.f4));
@@ -278,6 +237,7 @@ class ConditionExtractor extends DepthFirstVisitor {
    * f7 -> ")"
    * f8 -> Statement()
    */
+  /* Extract the condition in an 'for' statement */
   public void visit(ForStatement n) {
     super.visit(n);
     addCondition(Ast.print(n.f4));
@@ -301,7 +261,15 @@ class ConditionExtractor extends DepthFirstVisitor {
    *       | SynchronizedStatement()
    *       | TryStatement()
    */
+  
+  /*
+   * If this statement is a one-liner (the sole statement in a
+   * function), then it is saved and used as a 'replace' statement in
+   * the splitter info file.
+   */
   public void visit(Statement n) {
+    //if we just entered the function and this is a return statement,
+    //then it's a one-liner. Save the statement
     if (enterMethod && (n.f0.choice instanceof ReturnStatement)) {
       ReturnStatement rs = ((ReturnStatement) n.f0.choice);
       String returnExpression = Ast.print(rs.f1);
@@ -314,7 +282,12 @@ class ConditionExtractor extends DepthFirstVisitor {
     super.visit(n);
   }
 
-  //////// Private methods specific to ConditionExtractor
+  //////// Private methods specific to ConditionExtractor ////
+  /**
+   * Keep track of the method we are currently in, and create an entry
+   * for it, so that the conditions can be associated with the right
+   * methods.  
+   */
   private void addMethod(String methodDeclaration, String methodname) {
     if (!conditions.containsKey(methodname)) {
       conditions.put(methodname, new Vector());
@@ -347,21 +320,19 @@ class ConditionExtractor extends DepthFirstVisitor {
   }
 
   //prints out the extracted conditions in spinfo file format
-  public void printSpinfoFile( ){
+  public void printSpinfoFile( Writer output ) throws IOException {
 
     if (!replaceStatements.values().isEmpty()) {
-      writeOut("REPLACE\n");
-    }
-
-    Iterator bools = replaceStatements.keySet().iterator();
-    while (bools.hasNext()) {
-      String declaration = (String)bools.next();
-      writeOut(declaration + "\n");
-      writeOut((String) replaceStatements.get(declaration) + "\n");
-    }
-
-    if (!replaceStatements.values().isEmpty()) {
-      writeOut("\n");
+      output.write("REPLACE\n");
+      
+      Iterator bools = replaceStatements.keySet().iterator();
+      while (bools.hasNext()) {
+	String declaration = (String)bools.next();
+	output.write(declaration + "\n");
+	output.write((String) replaceStatements.get(declaration) + "\n");
+      }
+      
+      output.write("\n");
     }
     
     Vector method_conds;
@@ -373,22 +344,14 @@ class ConditionExtractor extends DepthFirstVisitor {
 	String temp = "PPT_NAME ";
 	if (packageName != null)
 	  temp = packageName + ".";
-	writeOut(temp + method + "\n");
+	output.write(temp + method + "\n");
+	
 	for (int i = 0; i < method_conds.size(); i++) {
-	  writeOut((String)method_conds.elementAt(i) + "\n");
+	  output.write((String)method_conds.elementAt(i) + "\n");
 	}
-	writeOut("\n");
+	
+	output.write("\n");
       }
     }
   }
-
-
-  private void writeOut(String s) {
-    try {
-      output.write(s);
-    } catch (IOException ioe) {
-      ioe.printStackTrace();
-    }
-  }
-
 }

@@ -430,6 +430,7 @@ public final class EltOneOfString
 
     sort_rep();
     other.sort_rep();
+
     for (int i=0; i < num_elts; i++)
       if (elts[i] != other.elts[i]) // elements are interned
 	return false;

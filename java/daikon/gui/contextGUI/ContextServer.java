@@ -44,6 +44,10 @@ import java.util.*;
 // faster system.
 public class ContextServer
 {
+	// Flag for determing if this is running with c invariants or
+	// java.
+	public boolean CFILE = false;
+
 	private HashMap db;
 	private TreeSet filelist;
 
@@ -64,6 +68,13 @@ public class ContextServer
 		filelist = new TreeSet();
 
 		addNewFile(path);
+	}
+
+	// This function sets whether the file type is java or c.
+	// True for c file, false for java. The default is false.
+	public void setCFile(boolean new_CFILE)
+	{
+		CFILE = new_CFILE;
 	}
 
 	// Returns an iterator of the hashmap of classes.
@@ -221,7 +232,20 @@ public class ContextServer
 		{
 			new_filename = ConvertInvToDci.getOutputFilename(pathname);
 
-			String [] pass_array = new String[2];
+			String [] pass_array;
+
+			// Needs to pass parameter to conversion function to identify
+			// this file as a c program or not.
+			if (CFILE)
+			{
+				pass_array = new String[3];
+				pass_array[2] = "-c";
+			}
+			else
+			{
+				pass_array = new String[2];
+			}
+
 			pass_array[0] = pathname;
 			pass_array[1] = new_filename;
 
@@ -371,7 +395,7 @@ public class ContextServer
 			class_hash = null;
 		}
 
-		} catch (IOException ioe){
+		} catch (IOException ioe) {
 			return("Error reading in file: " + ioe.toString());
 		}
 		catch (NullPointerException npe)

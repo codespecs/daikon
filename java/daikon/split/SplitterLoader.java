@@ -19,9 +19,9 @@ public class SplitterLoader extends ClassLoader{
       byte[] classBytes= new byte[fi.available()];
       fi.read(classBytes);
       return classBytes;
-    } catch (FileNotFoundException e){
+    } catch (FileNotFoundException e) {
       //do nothing. did not compile
-    } catch (IOException ioe){
+    } catch (IOException ioe) {
       System.out.println("IO Error while reading class data " + fileName);
     }
     return null;
@@ -34,7 +34,7 @@ public class SplitterLoader extends ClassLoader{
   protected Class load_Class(String className, String full_pathname) {
     Class return_class;
     byte[] classData = read_Class_Data(full_pathname);
-    if (classData == null){
+    if (classData == null) {
       return null;
     } else {
       return_class = defineClass(className, classData, 0, classData.length);

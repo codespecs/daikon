@@ -95,7 +95,7 @@ public final class Runtime {
   public static PrintStreamWithThrottle dtrace;
 
   public static void setDtrace(String filename, boolean append) {
-    System.out.println("calling setDtrace(" + filename + ")...");
+    // System.out.println("calling setDtrace(" + filename + ")...");
     try {
       File file = new File(filename);
       File parent = file.getParentFile();

@@ -2,12 +2,12 @@ package daikon.split;
 
 import utilMDE.*;
 import org.apache.oro.text.regex.*;
-
 import daikon.*;
-import daikon.split.*;
+import daikon.split.misc.*;
 import java.io.*;
 import java.util.*;
 import java.lang.reflect.*;
+import org.apache.log4j.Category;
 
 /**
  * This class creates Splitters from a .spinfo file. The public method is
@@ -16,22 +16,15 @@ import java.lang.reflect.*;
  **/
 
 //todo: add logging and debugging
-//      enable javac compiling of multiple files
+//      log error messages from compilation of splitters
 public class SplitterFactory {
 
+  public static final Category debug = Category.getInstance("daikon.split.SplitterFactory");
   private static Perl5Matcher re_matcher = Global.regexp_matcher;
   private static Perl5Compiler re_compiler = Global.regexp_compiler;
-  private static String tempdir = getTempdirName();
-  private static boolean javac = false;
 
-  static Pattern blank_line;
-  static {
-    try {
-      blank_line  = re_compiler.compile("^\\s*$");
-    } catch (MalformedPatternException me) {
-      System.out.println("Error while compiling regular expression " + me.toString());
-    }
-  }
+  private static String tempdir;
+  private static boolean javac = false; //indicates whether javac is being used as the  compiler.
 
   /**
    * Reads the Splitter info.
@@ -41,6 +34,10 @@ public class SplitterFactory {
   public static SplitterObject[][] read_spinfofile(File infofile, PptMap all_ppts)
     throws IOException, FileNotFoundException
   {
+    tempdir = getTempdirName();
+    if (FileCompiler.dkconfig_compiler.equals("javac"))
+      javac = true;
+
     LineNumberReader reader = UtilMDE.LineNumberFileReader(infofile.toString());
     Vector splitterObjectArrays = new Vector(); //Vector of SplitterObject[]
     Vector replace = new Vector(); // [String] but paired
@@ -140,41 +137,116 @@ public class SplitterFactory {
 				 Vector replace,        // [String]
 				 PptMap all_ppts)
   {
-    SplitterLoader loader = new SplitterLoader();
-    Vector processes = new Vector(); // the processes
-    SplitterObject[] splitters;
+    ArrayList processes = new ArrayList(); // the processes
 
     for (int i = 0; i < splitterObjectArrays.length; i++) {
       //write the Splitter classes
       try {
 	write_function_splitters(splitterObjectArrays[i], replace, all_ppts);
 
-	Vector compile_list = new Vector();
-	for (int j = 0; j < splitterObjectArrays[i].length; j++) {
-	  compile_list.addElement(splitterObjectArrays[i][j].getFullSourcePath());
-	}
-
-	//compile all the splitters under this program point
-	processes.addElement(FileCompiler.compile_source(compile_list));
       } catch(IOException ioe) {
 	System.err.println("SplitterFactory: " + ioe.toString()
 			   + "\n while writing Splitter source");
       }
+
+      ArrayList compile_list = new ArrayList();
+      for (int j = 0; j < splitterObjectArrays[i].length; j++) {
+	compile_list.add(splitterObjectArrays[i][j].getFullSourcePath());
+      }
+
+      //compile all the splitters under this program point
+      processes.add(FileCompiler.compile_source(compile_list));
     }
+
+    StringBuffer errorString = new StringBuffer(); //stores the error messages
     // wait for all the compilation processes to terminate
+    // if compiling with javac, then the size of this vector is 0.
     for (int i = 0; i < processes.size(); i++) {
-      TimedProcess tp = (TimedProcess) processes.elementAt(i);
+      TimedProcess tp = (TimedProcess) processes.get(i);
+      errorString.append("\n");
+      errorString.append(tp.getErrorMessage());
       if (!tp.finished()) {
-	//todo: put in a option for wait time
-       	tp.waitFor(6);
+	tp.waitFor();
       }
     }
 
+    //javac tends to stop without completing the compilation if there
+    //is an error in one of the files. Remove all the erring files
+    //and recompile only the good ones
+    if (javac) {
+      recompile_without_errors (splitterObjectArrays, errorString.toString());
+    }
+
     // Load the Splitters
+    SplitterLoader loader = new SplitterLoader();
     for (int i = 0; i < splitterObjectArrays.length; i++) {
       for (int j = 0; j < splitterObjectArrays[i].length; j++) {
 	splitterObjectArrays[i][j].load(loader);
       }
+    }
+
+    if (splitterObjectArrays.length > 0) {
+      System.out.println("Splitters for this run created in " + tempdir);
+    }
+  }
+
+  /**
+   * examine the errorString to identify the Splitters which cannot
+   * compile, then recompile all the other files. This function is
+   * necessary when compiling with javac because javac does not
+   * compile all the files supplied to it if some of them contain
+   * errors. So some "good" files end up not being compiled
+   */
+  private static void recompile_without_errors (SplitterObject[][] spArrays,
+						String errorString) {
+    //search the error string and extract the files with errors.
+    if (errorString != null) {
+      HashSet errors = new HashSet();
+      PatternMatcherInput input = new PatternMatcherInput(errorString);
+      while (re_matcher.contains(input, splitter_classname_pattern)) {
+	MatchResult result = re_matcher.getMatch();
+	errors.add(result.group(1));
+      }
+
+      List retry = new ArrayList();
+      //collect all the splitters which were not compiled.
+      for (int i = 0; i < spArrays.length; i++) {
+	for (int j = 0; j < spArrays[i].length; j++) {
+	  if (!spArrays[i][j].compiled()) {
+	    if (!errors.contains(spArrays[i][j].getClassName())) {
+	      retry.add(spArrays[i][j].getFullSourcePath());
+	    }
+	  }
+	}
+      }
+
+      TimedProcess tp = FileCompiler.compile_source(retry);
+
+      try {
+	Thread.sleep(3000);
+      } catch (InterruptedException ie) {
+	ie.printStackTrace();
+      }
+
+      //We don't want to wait for the old process for too long. We
+      //wait for a short time, kill the process and recompile the set
+      //of files, removing the leading file
+      if (tp != null && !tp.finished()) {
+	tp.waitFor();
+      }
+    }
+  }
+
+  //this pattern is used to search for the classnames of Java source
+  //files in a string.
+  static Pattern splitter_classname_pattern;
+  static {
+    try {
+      splitter_classname_pattern = re_compiler.compile("\\s*([^" +
+						       File.separator + "]*)\\.java");
+    } catch (MalformedPatternException me) {
+      System.err.println("Error while compiling javafile_pattern in SplitterFactory");
+      me.printStackTrace();
     }
   }
 
@@ -275,8 +347,10 @@ public class SplitterFactory {
 	String test_string = condition;
 
 	String splitter_fname = splittername + "_" + (guid++);
+	int lastIndex = splitter_fname.indexOf(File.separator);
+	curSplitterObject.setClassName(splitter_fname.substring(lastIndex + 1));
 	String class_name = ppt_name.substring(0, ppt_name.indexOf('.')+1);
-	curSplitterObject.setClassName(splitter_fname);
+	curSplitterObject.setGUID(guid);
 
 	// Each Splitter will use a different set of parameters depending on the
 	// parameters used in its condition
@@ -451,7 +525,7 @@ public class SplitterFactory {
       //it replaces orig(varname) with orig_varname
       find_orig_pattern = re_compiler.compile("\\orig\\s*\\(\\s*(\\S*?)\\s*\\)");
       orig_subst = new Perl5Substitution("orig_$1", Perl5Substitution.INTERPOLATE_ALL);
-    } catch (MalformedPatternException me){
+    } catch (MalformedPatternException me) {
       System.err.println("Error while compiling regular expresssion find_orig_pattern in SplitterFactory");
     }
   }
@@ -505,7 +579,7 @@ public class SplitterFactory {
   static {
     try {
       arg_pattern = re_compiler.compile("(\\S+)\\s*\\((.*)\\)");
-    } catch (MalformedPatternException me){
+    } catch (MalformedPatternException me) {
       System.err.println("Error while compiling regular expresssion arg_pattern in SplitterFactory");
     }
   }
@@ -778,8 +852,17 @@ public class SplitterFactory {
       // this regex pattern is used to search for variables which might act as array indices.
       // ie. variable names inside square brackets
       find_index_pattern = re_compiler.compile("\\[\\s*([^\\])]*)\\s*\\]");
-    } catch (MalformedPatternException me){
+    } catch (MalformedPatternException me) {
       System.err.println("Error while compiling regular expresssion find_index_pattern in SplitterFactory");
+    }
+  }
+
+  static Pattern blank_line;
+  static {
+    try {
+      blank_line  = re_compiler.compile("^\\s*$");
+    } catch (MalformedPatternException me) {
+      System.out.println("Error while compiling regular expression " + me.toString());
     }
   }
 
@@ -857,7 +940,7 @@ public class SplitterFactory {
       tmpfile.delete();
       splitdir.deleteOnExit();
       splitdir.mkdirs();
-      if (splitdir.exists() && splitdir.isDirectory()){
+      if (splitdir.exists() && splitdir.isDirectory()) {
 	tempdir = splitdir.getPath() + File.separator;
       } else {
 	tempdir = "";
@@ -865,7 +948,6 @@ public class SplitterFactory {
     } catch (IOException e) {
       debugPrint(e.toString());
     }
-    System.out.println("Splitters for this run created in " + tempdir);
     return tempdir;
   }
 

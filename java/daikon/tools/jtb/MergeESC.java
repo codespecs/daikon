@@ -81,7 +81,7 @@ class MergeESC {
       new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
     };
-    Getopt g = new Getopt("daikon.PrintInvariants", args, "hs", longopts);
+    Getopt g = new Getopt("daikon.tools.jtb.MergeESC", args, "hs", longopts);
     int c;
     while ((c = g.getopt()) != -1) {
       switch(c) {

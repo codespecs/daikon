@@ -443,8 +443,23 @@ public final class ContextGUI extends JApplet implements ActionListener
 	// and then start the GUI.
 	public static void main(String args[])
 	{
-  	        daikon.Logger.setupLogs (daikon.Logger.INFO);
+		daikon.Logger.setupLogs (daikon.Logger.INFO);
 		ContextGUI dgui = new ContextGUI();
+
+		for (int i = 0; i < args.length; i++)
+		{
+			if (args[i].equals("-c"))
+				dgui.setCFile(true);
+			else if (args[i].equals("-h") || args[i].equals("--help"))
+			{
+				System.out.println("Usage: java daikon.gui.contextGUI.ContextGUI"
+					+ " [options]");
+				System.out.println("Options:");
+				System.out.println("  -h, --help - Displays this information");
+				System.out.println("  -c         - Input files are c invariant files");
+				System.exit(0);
+			}
+		}
 
 		dgui.startGui();
 	}
@@ -878,6 +893,14 @@ public final class ContextGUI extends JApplet implements ActionListener
 		jlstatus_msg.setText("Displaying Invariants");
 		validate();
 		repaint();
+	}
+
+	// This function passes whether the file type is java or c down to
+	// the server layer for opening files. True for c file, false for java
+	// The default is false.
+	public void setCFile(boolean new_CFILE)
+	{
+		dfc.setCFile(new_CFILE);
 	}
 }
 

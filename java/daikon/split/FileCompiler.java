@@ -13,18 +13,26 @@ import java.util.*;
 // 1) add an option for the user to specify javac, jikes
 // 2) get javac to compile more than one file
 
-public final class FileCompiler{
+public final class FileCompiler {
 
   public static Runtime commander = Runtime.getRuntime();
+
+  /**
+   * String. Used to control which compiler is used to compile
+   * Splitters. This can be the full path name or whatever is used on
+   * the commandline
+   **/
+  public static String dkconfig_compiler = "jikes";
+
   /**
    * @param The path of the java source to be compiled
    * @return The process which executed the external compile command
    **/
   public static TimedProcess compile_source(String filename){
-    String command = "javac " + filename;
+    String command = dkconfig_compiler + " " + filename;
     try {
       return new TimedProcess(commander.exec(command), command);
-    } catch (IOException e){
+    } catch (IOException e) {
       System.err.println("IOException while compiling " + filename + "\n" + e.toString());
     }
     return null;
@@ -34,19 +42,19 @@ public final class FileCompiler{
    * @param The path of the java source to be compiled
    * @return The process which executed the external compile command
    **/
-  static TimedProcess compile_source(Vector filenames){
+  static TimedProcess compile_source(List filenames) {
     int num_files = filenames.size();
 
     if (num_files > 0) {
-      String to_compile = (String) filenames.elementAt(0);
+      String to_compile = (String) filenames.get(0);
       for (int i = 1; i < num_files; i++) {
-	to_compile += (" " + (String) filenames.elementAt(i));
+	to_compile += (" " + (String) filenames.get(i));
       }
 
-      String command = "jikes " + to_compile;
+      String command = dkconfig_compiler + " " + to_compile;
       try {
 	return new TimedProcess( commander.exec(command), command);
-      } catch (IOException e){
+      } catch (IOException e) {
 	System.err.println("IOException while compiling files \n" + e.toString());
       }
     }

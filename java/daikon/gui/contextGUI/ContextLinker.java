@@ -49,4 +49,5 @@ public interface ContextLinker
 	public void rebuild();
 	public void clear();
 	public void destroyDatabase();
+	public void setCFile(boolean new_CFILE);
 }

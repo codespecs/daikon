@@ -6,9 +6,11 @@ import java.util.*;
 
 /**
  * This class can be used to keep time limits on a subprocess being
- * executed by the Java Runtime. The waitFor(long waitTime) command
- * re-executes the command-line for a fixed length of time,
- * after which it terminates the process if it's still running.
+ * executed by the Java Runtime. This class is represented by a
+ * process and the commandline used to create the process. The
+ * waitFor(long waitTime) method re-executes the command-line for a
+ * fixed length of time, after which it terminates the process if it's
+ * still running.  
  */
 
 public class TimedProcess {
@@ -19,6 +21,19 @@ public class TimedProcess {
   boolean finished; //keep track of whether the process if finished or not.
   long waitTime;
   Runtime commander = Runtime.getRuntime();
+  BufferedReader error;
+  StringBuffer errorMessage;
+
+  //dkconfig_ variables should only be set via the configuration
+  //options
+
+  /**
+   * int. Used to control the timeout Splitter compilation timeout,
+   * after which the compilation process is retried and
+   * terminated. This is necessary to prevent compilation of Splitters
+   * from taking a long time or hanging.
+   **/
+  public static int dkconfig_compile_timeout = 6;
 
   /**
    * @requires: p != null && command != null
@@ -26,37 +41,59 @@ public class TimedProcess {
   public TimedProcess (Process p, String command) {
     this.p = p;
     this.command = command;
+    error = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+    errorMessage = new StringBuffer();
   }
-
+  
   /**
-   * @returns: true if the process if finished, false otherwise.
-   *           If false, the process is terminated
+   * @return the error message from execution of this process
+   */
+  public String getErrorMessage () {
+    String s;
+    try {
+      while ((s = error.readLine()) != null) {
+	errorMessage.append(s);
+      }
+      return errorMessage.toString();
+    } catch (IOException ioe) {
+      System.out.println("TimedProcess: " + ioe.toString());
+    }
+    return errorMessage.toString();
+  }
+  
+  /**
+   * @return true if the process if finished, false otherwise
    */
   public boolean finished () {
     try {
-      if ( p.exitValue() == 0 ) {
-	return true;
-      } else {
-	return false;
+      //sad, but the call to Process.exitValue() causes it to throw
+      //an exception if the process is not finished
+      String s;
+      while ((s = error.readLine()) != null) {
+	errorMessage.append(s);
       }
+      int exit =  p.exitValue();
+      return true;
     } catch (IllegalThreadStateException ie) {
-      return false;
+      //do nothing.
+    } catch (IOException ioe) {
+      System.out.println("TimedProcess: " + ioe.toString());
     }
+    return false;
   }
 
   /**
-   * @ensures: the commandline is re-executed for <seconds> (the time,
-   *           in seconds) The resulting process is terminated after
-   *           that time, if it's not done
-   */
+   * The command used to create this process is re-executed for
+   * <dkconfig_compile_timeout> (in seconds). This value is set in the
+   * configuration settings. The resulting process is terminated after
+   * that time, if it's not done */
 
-  public void waitFor(long seconds) {
-    waitTime = seconds;
+  public void waitFor( ) {
+    waitTime = dkconfig_compile_timeout;
     timer = new Timer(true);
     try {
-      timer.schedule(new timerTask(), seconds*1000);
+      timer.schedule(new timerTask(), dkconfig_compile_timeout*1000);
       p = commander.exec(command);
-      //System.out.println("Waiting " + waitTime + "s for process " + command  + " to complete ....");
       p.waitFor();
     } catch (IOException ie) {
       System.out.println("TimedProcess: " + ie.toString() + " while re-executing command " + command);
@@ -64,19 +101,19 @@ public class TimedProcess {
       System.out.println("TimedProcess: " + ie.toString() + " while re-executing command " + command);
     }
   }
-
+  
   /**
-   *@ ensures: destroys the process after the fixed amount of time, if it's not done
+   * At the scheduled time, this TimerTask destroys the process
+   * represented by this TimedProcess
    */
   class timerTask extends TimerTask {
     public void run() {
       try {
-	if ( p.exitValue() != 0 ) {
-	  System.out.println("Execution of command " + command + "\n taking > "
-			     + waitTime + " seconds.... Process terminated\n");
-	}
+	int exit = p.exitValue();
+	//System.out.println("\nProcess " + command + "\nexited with status " + exit);
       } catch (IllegalThreadStateException ie) {
-	System.out.println("TimedProcess" + ie.toString());
+	System.out.println("Process " + command + "\nterminated after "
+			   + waitTime + " seconds");
       }
       p.destroy();
       timer.cancel();

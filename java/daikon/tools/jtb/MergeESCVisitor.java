@@ -99,8 +99,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
    * f1 -> UnmodifiedClassDeclaration()
    */
   public void visit(ClassDeclaration n) {
-    n.f0.accept(this);
-    n.f1.accept(this);
+    super.visit(n);             // call "accept(this)" on each field
   }
 
   /**
@@ -108,8 +107,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
    * f1 -> UnmodifiedClassDeclaration()
    */
   public void visit(NestedClassDeclaration n) {
-    n.f0.accept(this);
-    n.f1.accept(this);
+    super.visit(n);             // call "accept(this)" on each field
   }
 
   // Insert object invariants for this class.
@@ -150,14 +148,10 @@ class MergeESCVisitor extends DepthFirstVisitor {
       }
     }
 
-    n.f0.accept(this);
-    n.f1.accept(this);
-    n.f2.accept(this);
-    n.f3.accept(this);
-    n.f4.accept(this);
+    super.visit(n);             // call "accept(this)" on each field
 
     for (int i=ownedFieldNames.length-1; i>=0; i--) {
-      addComment(n.f4.f1, javaLineComment("@ invariant " + ownedFieldNames[i] + ".owner == this"), true);
+      addComment(n.f4.f1, javaLineComment("@ invariant " + ownedFieldNames[i] + ".owner == this;"), true);
     }
     if (object_ppt == null) {
       // System.out.println("No object program point found for " + classname);
@@ -180,11 +174,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
    * f4 -> ";"
    */
   public void visit(FieldDeclaration n) {
-    n.f0.accept(this);
-    n.f1.accept(this);
-    n.f2.accept(this);
-    n.f3.accept(this);
-    n.f4.accept(this);
+    super.visit(n);             // call "accept(this)" on each field
 
     if (! Ast.contains(n.f0, "public")) {
       addComment(n, "/*@ spec_public */ ");
@@ -225,11 +215,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
   public void visit(MethodDeclaration n) {
     // System.out.println("MethodDeclaration: " + n.f2.f0);
 
-    n.f0.accept(this);
-    n.f1.accept(this);
-    n.f2.accept(this);
-    n.f3.accept(this);
-    n.f4.accept(this);
+    super.visit(n);             // call "accept(this)" on each field
 
     String[][] requires_and_ensures = get_requires_and_ensures(ppts, n);
     String[] requires_invs = requires_and_ensures[0];
@@ -301,14 +287,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
   public void visit(ConstructorDeclaration n) {
     // System.out.println("ConstructorDeclaration: " + n.f1);
 
-    n.f0.accept(this);
-    n.f1.accept(this);
-    n.f2.accept(this);
-    n.f3.accept(this);
-    n.f4.accept(this);
-    n.f5.accept(this);
-    n.f6.accept(this);
-    n.f7.accept(this);
+    super.visit(n);             // call "accept(this)" on each field
 
     String[][] requires_and_ensures = get_requires_and_ensures(ppts, n);
     String[] requires_invs = requires_and_ensures[0];
@@ -336,15 +315,18 @@ class MergeESCVisitor extends DepthFirstVisitor {
                  || (inv.indexOf("\\new") != -1)
 		 || (inv.indexOf(".toString ") != -1)
 		 || (inv.endsWith(".toString"))) {
-        // inexpressible invariant; need to check flag and output it
+        // inexpressible invariant
+        if (insert_inexpressible) {
+          addComment(n, javaLineComment("! " + inv + ";"), true);
+        }
         continue;
       } else if (inv.startsWith("modifies ")) {
         if (prefix.startsWith("also_")) {
           inv = "also_" + inv;
         }
-        addComment(n, javaLineComment("@ " + inv), true);
+        addComment(n, javaLineComment("@ " + inv + ";"), true);
       } else {
-        addComment(n, javaLineComment("@ " + prefix + " " + inv), true);
+        addComment(n, javaLineComment("@ " + prefix + " " + inv + ";"), true);
       }
     }
   }
@@ -357,7 +339,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
    *       | PrimaryExpression() [ "++" | "--" | AssignmentOperator() Expression() ]
    */
   public void visit(StatementExpression n) {
-    n.f0.accept(this);
+    super.visit(n);             // call "accept(this)" on each field
 
     // System.out.println("Found a statement expression: " + n.f0.choice);
 
@@ -407,13 +389,13 @@ class MergeESCVisitor extends DepthFirstVisitor {
                 // It's safe, however.  But does it cause syntax errors if an
                 // else clause follows a then clause without braces?
                 if (isOwned(fieldname)) {
-                  addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".owner = this"));
+                  addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".owner = this;"));
                 }
                 if (isNotContainsNull(fieldname)) {
-                  addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".containsNull = false"));
+                  addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".containsNull = false;"));
                 }
                 if (isElementType(fieldname)) {
-                  addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".elementType = " + elementType(fieldname)));
+                  addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".elementType = " + elementType(fieldname) + ";"));
                 }
               }
             }
@@ -429,8 +411,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
    * f1 -> [ AssignmentOperator() Expression() ]
    */
   public void visit(Expression n) {
-    n.f0.accept(this);
-    n.f1.accept(this);
+    super.visit(n);             // call "accept(this)" on each field
 
     if (n.f1.present()) {
       // it's an assignment
@@ -440,7 +421,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
       // System.out.println("In expression, fieldname = " + fieldname);
       Node stmt = Ast.getParent(Statement.class, n);
       if ((fieldname != null) && isOwned(fieldname)) {
-        addCommentAfter(stmt, javaLineComment("@ set " + fieldname + ".owner = this"));
+        addCommentAfter(stmt, javaLineComment("@ set " + fieldname + ".owner = this;"));
       }
 
     }
@@ -586,7 +567,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
       if (vi == null) {
         // This happens, for example, for final static vars (see
         // REP_SCALE_FACTOR in MapQuick1/GeoPoint.java).
-        System.out.println("Variable not found: " + varname + " at " + ppt);
+        System.out.println("Warning: MergeESC: skipping Variable " + varname + " at " + ppt);
       } else {
         Assert.assert(vi != null);
         PptSlice1 slice = ppt.getView(vi);
@@ -613,7 +594,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
     String[] fields = cfv.allFieldNames();
     for (int i=0; i<fields.length; i++) {
       String field = fields[i];
-      System.out.println("field: " + field);
+      // System.out.println("field: " + field);
       String varname;
       if (ppt.ppt_name.isObjectInstanceSynthetic()) // ":::OBJECT"
         varname = "this." + field;

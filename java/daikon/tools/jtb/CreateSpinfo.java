@@ -113,9 +113,9 @@ class CreateSpinfo {
 	System.exit(1);
       }
       debug.debug("CreateSpinfo Processing file " + javafile);
-      DepthFirstVisitor extractor = new ConditionExtractor(output);
+      ConditionExtractor extractor = new ConditionExtractor();
       root.accept(extractor);
-      ((ConditionExtractor) extractor).printSpinfoFile();
+      extractor.printSpinfoFile(output);
       output.flush();
       output.close();
     }

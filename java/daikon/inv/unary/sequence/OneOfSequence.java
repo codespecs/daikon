@@ -434,6 +434,37 @@ public final class OneOfSequence
 
     sort_rep();
     other.sort_rep();
+
+    // All nonzero hashcode values should be considered equal to each other
+    //
+    // Examples:
+    // inv1     inv2     result
+    // -------  -------  ------
+    // {19,23}  {91,0}   false
+    // {19,23}  {91,32}  true
+    // {19,0}   {91,0}   true
+    // {0,0}    {0,0}    true
+
+    if (is_hashcode && other.is_hashcode) {
+      // we only have one value, because add_modified dies if more
+      Assert.assert(num_elts == 1 && other.num_elts == 1);
+
+      long[] thisSeq = elts[0];
+      long[] otherSeq = other.elts[0];
+      if (thisSeq.length != otherSeq.length) {
+        return false;
+      }
+
+      for (int i=0; i < thisSeq.length; i++) {
+        if ((thisSeq[i] == 0 && otherSeq[i] != 0) ||
+            (thisSeq[i] != 0 && otherSeq[i] == 0)) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
     for (int i=0; i < num_elts; i++)
       if (elts[i] != other.elts[i]) // elements are interned
 	return false;

@@ -9,16 +9,18 @@ import java.util.*;
 /**
  * A SplitterObject is a representation of a Splitter. It holds all the information about a splitter. 
  **/
-public class SplitterObject {
+public class SplitterObject implements Comparable{
   
   private Splitter splitter;
   private String condition; //the condition
   private String className = "Unassigned"; //the Java classname of this Splitter
   private String directory; //the directory where it resides
   private String pptName; //the program point with which it is associated
-  private boolean compiled = false; 
+  private boolean exists = false; 
   private String testString = "Unassigned";
   private String errorMessage = "Splitter for " + this.condition + " valid";
+  private int guid = -999;
+  private File f;
   
   /**
    * @param condition The splitting condition of this splitter
@@ -46,19 +48,32 @@ public class SplitterObject {
       } catch (IllegalAccessException iae) {
 	debugPrint(iae.toString());
       }
-      compiled = true;
+      errorMessage = "Splitter exists " + this.toString();
+      exists = true;
     } else {
       errorMessage = "No class data for " + this.toString();
-      compiled = false;
+      exists = false;
     }
   }
 
   /**
-   * @return returns true if a .class file exists for this Splitter.
-   * This means that the Splitter successfully compiled. false otherwise.
+   * @return true if the Splitter Object exists for this Splitter.
+   * this means that it successfully loaded
    */
   public boolean splitterExists() {
-    return compiled;
+    return exists;
+  }
+  
+  /**
+   * @return true if the .class file exists for the Splitter
+   * represented by this SplitterObject, false otherwise 
+   */
+  public boolean compiled () {
+    if (f != null && f.exists()) {
+      errorMessage = "Splitter exists " + this.toString();
+      return true;
+    }
+    return false;
   }
   
   /**
@@ -75,6 +90,20 @@ public class SplitterObject {
    */
   public void setError(String errorString) {
     this.errorMessage = errorString;
+  }
+  
+  /**
+   * set the unique ID of this splitterObject
+   */
+  public void setGUID(int ID) {
+    this.guid = ID;
+  }
+
+  /**
+   * return the unique ID of this splitterObject
+   */
+  public int getGUID( ) {
+    return this.guid;
   }
   
   /**
@@ -110,6 +139,7 @@ public class SplitterObject {
    */
   public void setClassName(String className) {
     this.className = className;
+    f = new File(directory + className + ".class");
   }
   
   public void setDirectory (String directory) {
@@ -144,5 +174,7 @@ public class SplitterObject {
 	    + ", @ " + pptName);
   }
   
+  public int compareTo(Object o) {
+    return this.guid - ((SplitterObject) o).getGUID();
+  }
 }
-  

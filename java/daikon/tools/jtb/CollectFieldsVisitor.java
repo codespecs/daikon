@@ -32,7 +32,9 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
         FieldDeclaration fd = fieldDeclsArray[i];
         boolean isFinal = hasModifier(fd, "final");
         Type fdtype = fd.f1;
-        boolean isOwned = ! isPrimitive(fdtype);
+	// See specification in MergeESC.java for which fields are owned.
+        // boolean isOwned = ! isPrimitive(fdtype);
+        boolean isOwned = isArray(fdtype);
         {
           String name = name(fd.f2);
           allNames.add(name);
@@ -74,6 +76,9 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
   }
 
   private boolean isPrimitive(Type n) {
+    // Grammar production:
+    //   f0 -> ( PrimitiveType() | Name() )
+    //   f1 -> ( "[" "]" )*
     NodeChoice c = n.f0;
     if (! ((c.choice instanceof PrimitiveType) || (c.choice instanceof Name))) {
       throw new Error("Bad type choice");
@@ -81,6 +86,12 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
     return ((c.choice instanceof PrimitiveType) && ! n.f1.present());
   }
 
+  private boolean isArray(Type n) {
+    // Grammar production:
+    //   f0 -> ( PrimitiveType() | Name() )
+    //   f1 -> ( "[" "]" )*
+    return n.f1.present();
+  }
 
   // Returns a list of all FieldDeclarations declared in this class or in
   // nested/inner classes.
@@ -134,11 +145,7 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
   public void visit(FieldDeclaration n) {
     fieldDecls.add(n);
 
-    n.f0.accept(this);
-    n.f1.accept(this);
-    n.f2.accept(this);
-    n.f3.accept(this);
-    n.f4.accept(this);
+    super.visit(n);             // call "accept(this)" on each field
   }
 
 }

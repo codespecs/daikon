@@ -241,6 +241,9 @@ public class Ast {
 
   // Return the primary expression on the left-hand side of an assignment
   public static PrimaryExpression assignment2primaryexpression(Expression n) {
+    // All this could perhaps be replaced with an ad-hoc visitor, as is
+    // done in nodeTokenAfter().  But it is written now, so leave it as is.
+
     Assert.assert(n.f1.present());
     ConditionalExpression ce = n.f0;
     Assert.assert(! ce.f1.present());
@@ -421,7 +424,7 @@ public class Ast {
         lastNodeToken = node;
       }
     }
-    // After hte traversal, teh "nextNodeToken" slot contains the token
+    // After the traversal, the "nextNodeToken" slot contains the token
     // visited immediately after "predecessor".  ("predecessor" should be a
     // descendant of the token from whcih traversal starts.)
     class NextNodeTokenVisitor extends DepthFirstVisitor {

@@ -79,7 +79,7 @@ public class ParameterDoclet
     for (int i = 0; i < clazzes.length; i++) {
       ClassDoc clazz = clazzes[i];
       FieldDoc[] fields = clazz.fields();
-      for (int j = 0; j < fields.length; j++){
+      for (int j = 0; j < fields.length; j++) {
         processField(fields[j]);
       }
     }
