@@ -128,6 +128,17 @@ sub cmp_ppts {
 	    print "${varname} \@ ${pptname} undefined in ${dtb}\n";
 	} elsif ($$varl[1] eq "hashcode") {
 	    #it's a hashcode - we don't care if they're different
+	} elsif ($$varl[1] eq "double") {
+	    if (abs($$la[0] - $$lb[0]) <= 0.00001) {
+		print "${varname} \@ ${pptname} floating-point difference:\n"
+		    . "  \"" . $$la[0] . "\" in ${dta}\n"
+			. "  \"" . $$lb[0] . "\" in ${dtb}\n";
+	    }
+	    if ($$la[1] ne $$lb[1]) {
+		print "${varname} \@ ${pptname} modbit difference:\n"
+		    . "  \"" . $$la[1] . "\" in ${dta}\n"
+			. "  \"" . $$lb[1] . "\" in ${dtb}\n";
+	    }
 	} else {
 	    if ($$la[0] ne $$lb[0]) {
 		print "${varname} \@ ${pptname} difference:\n"
