@@ -11,6 +11,13 @@ versions as the user manual.
 
 ===========================================================================
 
+Improved portability to Windows systems by changing instances of the
+literal "\n" in code to System.getProperty("line.separator"), or using
+println().
+
+Removed most calls to System.exit in Daikon.  This makes it easier to call
+methods (including main) defined by Daikon programmatically.
+
 Changed the way that Linear* invariants are printed.
 [Perhaps change their names as well?]
 
