@@ -41,7 +41,7 @@ my $decls_style = "tree";
 my $dtrace_style = "tree";
 
 my $types_append = 1;
-my $decls_append = 1;
+my $decls_append = 0;
 my $dtrace_append = 0;
 
 my $absolute = undef;
@@ -108,7 +108,7 @@ my $parsed =
                          "types-append!" => \$types_append,
                          "decls-append!" => \$decls_append,
                          "dtrace-append!" => \$dtrace_append,
-                         "types-files|t=s" => \@types_files,
+                         "types-file|t=s" => \@types_files,
                          "types-dir|T:s" => \$types_search,
                          "accessors-dir|A:s" => \$accessors_search,
                          "verbose|v+" => \$verbose,
@@ -226,9 +226,8 @@ sub process_file_relative_to {
         $olddir = getcwd();
         chdir($dir);
         print "Changing to directory $dir\n";
+        $prog =~ s,\Q$dir\E[/]?,,;
     }
-
-    $prog =~ s,\Q$dir\E[/]?,,;
 
     if (! -d $instr_basedir) {
         mkdir($instr_basedir)
