@@ -10,6 +10,8 @@ daikon.dvi, daikon.ps, or daikon.pdf.
 Added Context GUI, which shows relevant invariants in a separate window as
 you browse code in a text editor.
 
+Added many index entries to manual.
+
 23 June 2001:
 
 Added linear ternary invariants, of the form z = ax + by + c.
