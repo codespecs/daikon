@@ -189,10 +189,14 @@ public class InvariantDoclet
     for (Iterator itor = list.iterator(); itor.hasNext(); ) {
       ClassDoc dc = (ClassDoc) itor.next();
       if (!dc.isAbstract()) {
+        out.println ();
         out.println ("@item " + dc.name());
         String comment = dc.commentText();
-        comment = "    " + comment;
-        comment = UtilMDE.replaceString (comment, "\n", "\n   ");
+        // Do not indent the blocks; the extra spacing throws off Info.
+        // comment = "    " + comment;
+        // comment = UtilMDE.replaceString (comment, "\n", "\n   ");
+        // Remove leading spaces, which throw off Info.
+        UtilMDE.replaceString (comment, "\n ", "\n");
         comment = UtilMDE.replaceString (comment, "{", "@{");
         comment = UtilMDE.replaceString (comment, "}", "@}");
         comment = UtilMDE.replaceString (comment, "<br>", "@*");
@@ -200,10 +204,12 @@ public class InvariantDoclet
         out.println (comment);
 
         //Note if this invariant is turned off by default
-        if (find_enabled (dc) == 0)
-          out.println ("\n    This invariant is not enabled by default.  "
-                       + "See the configuration option\n    "
-                       + dc + ".enabled");
+        if (find_enabled (dc) == 0) {
+          out.println ();
+          out.println("This invariant is not enabled by default.  "
+                      + "See the configuration option");
+          out.println(dc + ".enabled");
+        }
 
         //get a list of any other configuration variables
         Vector fields = find_fields (dc, Configuration.PREFIX);
@@ -218,14 +224,14 @@ public class InvariantDoclet
         //note the other configuration variables
 
         if (fields.size() > 0) {
-          out.println("\n    See also the following configuration option"
+          out.println();
+          out.println("See also the following configuration option"
                       + (fields.size() > 1 ? "s" : "") + ":");
           out.println("    @itemize @bullet");
           for (int i = 0; i < fields.size(); i++) {
-            out.println("    @item");
+            out.print("    @item ");
             FieldDoc f = (FieldDoc) fields.get (i);
-            out.println("    " +
-                        UtilMDE.replaceString(f.qualifiedName(),
+            out.println(UtilMDE.replaceString(f.qualifiedName(),
                                               Configuration.PREFIX, ""));
           }
           out.println("    @end itemize");

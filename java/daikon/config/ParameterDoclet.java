@@ -155,8 +155,10 @@ public class ParameterDoclet
       // @item [field]
       //  [desc]
       out.println("@item " + field);
-      out.println("  " + desc);
-      out.println("  " + defstr);
+      // Remove leading spaces, which throw off Info.
+      desc = UtilMDE.replaceString (desc, "\n ", "\n");
+      out.println(desc);
+      out.println(defstr);
       out.println();
     }
 
