@@ -5259,7 +5259,7 @@ listing the names of each accessor method, one per line with no other
 punctuation, named @file{Acme/Foo.accessors} in the same directory as
 @file{Acme/Foo.pm}.
 
-@item --decls-basedir=@var{directory}
+@item --decls-dir=@var{directory}
 Put generated declaration files in @var{directory} and its
 subdirectories.  The default is @file{daikon-output}.
 
@@ -5296,7 +5296,7 @@ The default behavior is to overwrite.  This choice can also be
 overridden, when the program is run, to always append by setting the
 environment variable @code{DTRACEAPPEND} to 1.
 
-@item --dtrace-basedir=@var{directory}
+@item --dtrace-dir=@var{directory}
 Put generated trace files in @var{directory} and its
 subdirectories.  The default is @file{daikon-output}.
 
@@ -5320,7 +5320,11 @@ would be @file{Acme/Trampoline.dtrace} and
 
 The default is @option{combined}.
 
-@item --instr-basedir=@var{directory}
+@item --help
+@itemx -h
+Print a short options summary.
+
+@item --instr-dir=@var{directory}
 @itemx --instrsourcedir=@var{directory}
 Put instrumented source files in @var{directory} and its
 subdirectories.  The default is @file{daikon-untyped}, or
@@ -5359,7 +5363,7 @@ instance, if the first version of @command{perl} on your path isn't
 version 5.8 or later, you should this option to specify another
 @command{perl} program that is.
 
-@item --reference-depth=@var{num}
+@item --nesting-depth=@var{num}
 When examining nested data structures, traverse as many as @var{num}
 nested references.  For instance, suppose that @code{@@a} is the array
 

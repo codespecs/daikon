@@ -50,7 +50,7 @@ used for all of the implications.  [more detail to be added, jhp]
   developer.texinfo).  So edit the manual first, then add a brief description
   here (with a pointer to the appropriate manual section).
 
-[Unified flags for dfej, Daikon, Kvasir, trace2.]
+[Unified flags for dfej, Daikon, Kvasir, trace2, dfepl.]
 
 Kvasir
 
