@@ -6,14 +6,14 @@ Todo list sorted in approximate order of importance.
     match.  I think this change should be largely back compatible with 
     their current usage
 
-  - Suppot DDTRACELIMIT and DDTRACELIMITTERMINATE environment variables
+  - Support DDTRACELIMIT and DDTRACELIMITTERMINATE environment variables
     just as dfej does.  This is partially in Runtime right now, but
     we need to call the proper methods when writing so it fully
     works.
 
   - Implement --linked-lists
 
-  - Add a java 5.0 test to the test suite.   This will checkout not
+  - Add a Java 5.0 test to the test suite.   This will checkout not
     only Chicory, but annotate as well.  Carlos suggested the files
     in ~jhp/tmp/bst.tar
 
@@ -30,8 +30,8 @@ Todo list sorted in approximate order of importance.
     of lines) to the regression tests.  This will allow us to see
     more quickly when a Chicory change causes dtrace diffs.
 
-  - Write a new dtrace-diff program in java.  There is probably already
-    java code that can read a dtrace file.  The diff should be very
+  - Write a new dtrace-diff program in Jana.  There is probably already
+    Jana code that can read a dtrace file.  The diff should be very
     simple at that point.
 
   - Implement online mode 
