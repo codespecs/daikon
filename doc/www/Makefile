@@ -10,6 +10,7 @@ www-dist:
 
 pubs:
 	mkdir -p pubs
+	/bin/rm -f pubs/*
 	cd pubs && $(MAKE) -f ../pubs-sources/Makefile html
 
 .PHONY: pubs
