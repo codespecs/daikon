@@ -1,11 +1,22 @@
-use strict;
-
 package Daikon::PerlType;
 
 # Routines to handle our slightly contrived notion of "types" for Perl
 # values. We can guess a type for a particular runtime value by
 # examining it, take the lub of two such types, or convert between the
 # internal form and a string representaion.
+
+# This file is part of the Daikon distribution. It may be used and
+# redistributed under the same terms as the rest of Daikon or, at your
+# option, under the same terms as Perl itself, following either the
+# GNU General Public License or the Perl Artistic License.  The Daikon
+# Perl front end, of which this file is a part, and the Daikon dynamic
+# invariant detection tool are separate programs, neither derived from
+# the other, which are merely aggregated for convenience of
+# distribution. As such, licensing the Perl front end under the terms
+# of the GPL neither requires nor entitles you to license other parts
+# of the Daikon distribution under the same terms.
+
+use strict;
 
 use vars ('@ISA', '@EXPORT_OK');
 use Exporter;
@@ -236,7 +247,7 @@ sub parse_type_from {
         return (['maybe', 'bit'], $1);
     } elsif ($s =~ /^\\\?(.*)\z/) {
         my($subtype, $rest) = parse_type_from($1);
-        return (['ref', ['maybe', $subtype]], $rest);
+        return (['maybe', ['ref', $subtype]], $rest);
     } elsif ($s =~ /^\\(.*)\z/) {
         my($subtype, $rest) = parse_type_from($1);
         return (['ref', $subtype], $rest);
@@ -517,15 +528,21 @@ sub guess_type_hash {
         # 'num'. This means we can't use the compare-to-zero trick,
         # and instead must resort to defining the set of legal numeric
         # values as strings with a regex. -SMcC
+        no warnings 'numeric'; # for $s eq int($s) test
         if (not length $s) {
             # The empty string is also nothing.
             return ['maybe', 'bottom'];
         } elsif ($s eq "0" or $s eq "1") {
             return 'bit';
-        } elsif ($s eq int($s)) {
+        } elsif ($s =~ /^-?\d{1,15}$/) {
             # Note this includes numbers that Perl internally
             # represents with a double, as long as they're small
             # enough to be represented exactly.
+            # The test "$s eq int($s)" would be equivalent, except for
+            # the presence of leading zeros.
+            # The constant 15 is right for IEEE doubles because IEEE
+            # doubles have 53 bits of mantissa, and 2**53 =~=
+            # 9*10**15.
             return 'int';
         } elsif ($s =~ /^[\d+-.]/) {
             # This regex is guarded by the fast one above, since it
@@ -538,7 +555,8 @@ sub guess_type_hash {
             # representation is a number should count as a number even
             # if you haven't done any numeric operations on it:
             # consider the case of reading an ASCII float from a file.
-            if (/^(?:[+-]?)(?=\d|\.\d)\d*(?:\.\d*)?(?:[Ee](?:[+-]?\d+))?$/) {
+            if ($s =~
+                /^(?:[+-]?)(?=\d|\.\d)\d*(?:\.\d*)?(?:[Ee](?:[+-]?\d+))?$/) {
                 return 'num';
             } else {
                 return 'str';
