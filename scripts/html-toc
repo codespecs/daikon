@@ -2,7 +2,7 @@
 # html-toc
 # Generate (to standard out) table of contents for an HTML document.
 # Michael Ernst <mernst@lcs.mit.edu>
-# Time-stamp: <2003-03-07 08:54:24 mernst>
+# Time-stamp: <2004-02-05 17:30:45 mernst>
 
 # See html-update-toc for documentation.
 # (Typically, you will not run this program, but will use html-update-toc
@@ -102,5 +102,3 @@ print STDERR $errors;
 print $output;
 
 exit(0);
-
-
