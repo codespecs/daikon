@@ -47,6 +47,10 @@ pdf-direct: daikon.texinfo daikon.dvi
 daikon.pdf: daikon.ps
 	ps2pdf $<
 
+clean:
+	rm -f daikon.log daikon.info daikon.info-[0-9] daikon.tmp daikon.dvi daikon.ps daikon.pdf daikon.html .fix-menu
+	rm -rf daikon_manual_html
+
 dist:
 	cd .. && $(MAKE) dist
 
