@@ -364,8 +364,8 @@ public class PrintInvariants {
     // In case the user is interested in conditional ppt's
     if (Daikon.dkconfig_output_conditionals
           && Daikon.output_style == OutputFormat.DAIKON) {
-      for (int i=0; i<ppt.views_cond.size(); i++) {
-        PptConditional pcond = (PptConditional) ppt.views_cond.elementAt(i);
+      for (Iterator i = ppt.cond_iterator(); i.hasNext() ; ) {
+        PptConditional pcond = (PptConditional) i.next();
         sb.append(print_reasons_from_ppt(pcond,ppts));
       }
     }
@@ -456,7 +456,7 @@ public class PrintInvariants {
   //
   // All of this can (and should be) improved when V2 is dropped.
 
-  public static void print_invariants(PptMap ppts) {
+  public static void print_invariants(PptMap all_ppts) {
 
     PrintWriter pw = new PrintWriter(System.out, true);
     PptTopLevel combined_exit = null;
@@ -467,12 +467,13 @@ public class PrintInvariants {
 
     // Retrieve Ppt objects in sorted order.  Put them in an array list
     // so that it is easier to look behind and ahead.
-    ArrayList ppt_list = new ArrayList();
-    for (Iterator itor = ppts.pptIterator() ; itor.hasNext() ; )
-      ppt_list.add ((PptTopLevel) itor.next());
+    PptTopLevel[] ppts = new PptTopLevel [all_ppts.size()];
+    int ii = 0;
+    for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; )
+      ppts[ii++] = (PptTopLevel) itor.next();
 
-    for (int i = 0 ; i < ppt_list.size(); i++) {
-      PptTopLevel ppt = (PptTopLevel) ppt_list.get(i);
+    for (int i = 0 ; i < ppts.length; i++) {
+      PptTopLevel ppt = ppts[i];
 
       if (debug.isLoggable(Level.FINE))
         debug.fine ("Looking at point " + ppt.name());
@@ -481,7 +482,7 @@ public class PrintInvariants {
       // exit point
       if (enable_exit_swap && !ppt.ppt_name.isExitPoint()) {
         if (combined_exit != null)
-          print_invariants_maybe(combined_exit, pw, ppts);
+          print_invariants_maybe(combined_exit, pw, all_ppts);
         combined_exit = null;
       }
 
@@ -495,25 +496,30 @@ public class PrintInvariants {
       // If there is only one exit point, just show the combined one (since
       // the EXITnn point will be empty)  This is accomplished by skipping this
       // point if it is an EXITnn point and the previous point was a combined
-      // exit point and the next one is not an EXITnn point.
+      // exit point and the next one is not an EXITnn point.  But don't skip
+      // any conditional ppts attached to the skipped ppt.
       if (enable_exit_swap && (i > 0) && ppt.ppt_name.isExitPoint()) {
-        PptTopLevel prev = (PptTopLevel) ppt_list.get(i-1);
-        if (prev.ppt_name.isCombinedExitPoint()) {
-          if ((i + 1) >= ppt_list.size())
+        if (ppts[i-1].ppt_name.isCombinedExitPoint()) {
+          if (((i + 1) >= ppts.length) || !ppts[i+1].ppt_name.isExitPoint()) {
+//             if (Daikon.dkconfig_output_conditionals
+//                 && Daikon.output_style == OutputFormat.DAIKON) {
+//               for (Iterator j = ppt.cond_iterator(); j.hasNext() ; ) {
+//                 PptConditional pcond = (PptConditional) j.next();
+//                 print_invariants_maybe(pcond, pw, all_ppts);
+//               }
+//             }
             continue;
-          PptTopLevel next = (PptTopLevel) ppt_list.get (i+1);
-          if (!next.ppt_name.isExitPoint())
-            continue;
+          }
         }
       }
 
       // if (ppt.has_samples() &&  // [[INCR]]
-      print_invariants_maybe(ppt, pw, ppts);
+      print_invariants_maybe(ppt, pw, all_ppts);
     }
 
     // print a last remaining combined exit point (if any)
     if (enable_exit_swap && combined_exit != null)
-      print_invariants_maybe(combined_exit, pw, ppts);
+      print_invariants_maybe(combined_exit, pw, all_ppts);
 
     pw.flush();
   }
@@ -575,8 +581,8 @@ public class PrintInvariants {
 
     if (Daikon.dkconfig_output_conditionals
         && Daikon.output_style == OutputFormat.DAIKON) {
-      for (int i=0; i<ppt.views_cond.size(); i++) {
-        PptConditional pcond = (PptConditional) ppt.views_cond.elementAt(i);
+      for (Iterator j = ppt.cond_iterator(); j.hasNext() ; ) {
+        PptConditional pcond = (PptConditional) j.next();
         print_invariants_maybe(pcond, out, all_ppts);
       }
     }
@@ -1373,6 +1379,15 @@ public class PrintInvariants {
     // in each PptSlice.  That would be more efficient, but this is
     // probably not a bottleneck anyway.
     List invs_vector = new LinkedList(ppt.getInvariants());
+
+    if (PptSplitter.debug.isLoggable (Level.FINE)) {
+      PptSplitter.debug.fine ("Joiner View for ppt " + ppt.name);
+      for (Iterator ii = ppt.joiner_view.invs.iterator(); ii.hasNext(); ) {
+        Invariant inv = (Invariant) ii.next();
+        PptSplitter.debug.fine ("-- " + inv.format());
+      }
+    }
+
     // System.out.println("Total invs for this ppt: " + invs_vector.size());
 
     //     if (Daikon.use_equality_set) {
@@ -1400,11 +1415,17 @@ public class PrintInvariants {
       Assert.assertTrue (!(inv instanceof Equality));
       for (int j = 0; j < inv.ppt.var_infos.length; j++)
         Assert.assertTrue (!inv.ppt.var_infos[j].missingOutOfBounds(),
-                           "var " + inv.ppt.var_infos[j] + " out of bounds");
+                           "var '" + inv.ppt.var_infos[j].name.name()
+                            + "' out of bounds");
       InvariantFilters fi = new InvariantFilters();
       fi.setPptMap(ppt_map);
 
-      boolean fi_accepted = (fi.shouldKeep(inv) == null);
+      InvariantFilter filter_result = fi.shouldKeep (inv);
+      boolean fi_accepted = (filter_result == null);
+      if ((inv instanceof Implication)
+          && PptSplitter.debug.isLoggable(Level.FINE))
+        PptSplitter.debug.fine ("filter result = " + filter_result
+                                + " for inv " + inv);
 
       if (inv.logOn())
         inv.log ("Filtering, accepted = " + fi_accepted);
