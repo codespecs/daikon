@@ -1224,8 +1224,11 @@ public final class FileIO {
       Assert.assertTrue(!ppt.var_infos[i].isDerived());
     }
     for (int i=filled_slots; i<ppt.var_infos.length; i++) {
-      Assert.assertTrue(ppt.var_infos[i].isDerived(),
-                    "variable not derived: " + ppt.var_infos[i].repr());
+      if (!ppt.var_infos[i].isDerived()) {
+        // Check first because repr() can be slow
+        Assert.assertTrue(ppt.var_infos[i].isDerived(),
+                          "variable not derived: " + ppt.var_infos[i].repr());
+      }
     }
     int num_const = ppt.num_static_constant_vars;
     for (int i=filled_slots; i<ppt.var_infos.length; i++) {
