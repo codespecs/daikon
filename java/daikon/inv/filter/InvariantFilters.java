@@ -148,6 +148,10 @@ public class InvariantFilters {
   //  invariants are useful when it comes to displaying invariants.
   public static List addEqualityInvariants( List invariants ) {
 
+    // Performing this operation using the following struture would
+    // make more sense to me: Map[Canonical -> Set[Non-Canonicals]],
+    // instead of HashSet[List[Canonical, Non-Canonicals]].
+
     // A set of groups of equivalent variables.  The "groups" are actually
     // List's.  We use List's instead of Set's because we need to preserve
     // order, so that canonical variables remain first.
@@ -181,7 +185,7 @@ public class InvariantFilters {
 	Assert.assert( variables.length == 2 );
 	for (int i = 0; i < variables.length; i++)
 	  if (variables[i].isCanonical()) {
-	    canonicalVariables.add( variables[i].name.name());
+	    canonicalVariables.add( variables[i] );
 	    ppts.add( invariant.ppt );
 	  }
       }
@@ -196,11 +200,12 @@ public class InvariantFilters {
     for (Iterator iter = invariants.iterator(); iter.hasNext(); ) {
       Invariant invariant = (Invariant) iter.next();
       if (IsEqualityComparison.it.accept( invariant )) {
-	iter.remove();		// We don't need this invariant, since it will be
-				// included in the equality invariant.
+	// We don't need this invariant, since it will be included in
+	// the equality invariant.
+	iter.remove();		
 
-	String variable1 = ((Comparison) invariant).var1().name.name();
-	String variable2 = ((Comparison) invariant).var2().name.name();
+	VarInfo variable1 = ((Comparison) invariant).var1();
+	VarInfo variable2 = ((Comparison) invariant).var2();
 	for (Iterator iter2 = equivalentGroups.iterator(); iter2.hasNext(); ) {
 	  List equivalentGroup = (List) iter2.next();
 	  if (equivalentGroup.contains( variable1 )
