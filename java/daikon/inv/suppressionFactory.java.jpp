@@ -20,9 +20,13 @@
   //    FACTORY4_INV_CNT    - Number of invariants for the fourth factory
   //    FACTORY4_VAR_INFO   - Var info initializer(s) for fourth factory.
   //                          For example: {new VarInfo[2]}
+  //    FACTORY5            - name of suppression routine for factory 4
+  //    FACTORY5_INV_CNT    - Number of invariants for the fourth factory
+  //    FACTORY5_VAR_INFO   - Var info initializer(s) for fourth factory.
+  //                          For example: {new VarInfo[2]}
   //
   //  Undefined FACTORY names are simply not created.  Factories are
-  //  always named factory1, factory2, factory3, and factory4
+  //  always named factory1, factory2, factory3, factory4, and factory5
 #endif
 
   private static SuppressionFactory[] suppressionFactories = null;
@@ -45,6 +49,9 @@
       #endif
       #if defined(FACTORY4)
         suppressionFactories[supers.length+3] = factory4.getInstance();
+      #endif
+      #if defined(FACTORY5)
+        suppressionFactories[supers.length+4] = factory5.getInstance();
       #endif
     }
     return suppressionFactories;
@@ -161,6 +168,35 @@
     public SuppressionLink generateSuppressionLink (Invariant arg) {
       supTemplate.resetResults();
       return (FACTORY4 (arg, supTemplate, this));
+    }
+  }
+#endif
+
+#if defined (FACTORY5)
+  // Factory 5
+  public static class factory5 extends SuppressionFactory {
+
+    private static final factory5 theInstance = new factory5();
+
+    private factory5() {
+      supTemplate = new SuppressionTemplate();
+      supTemplate.invTypes = new Class[FACTORY5_INV_CNT];
+      supTemplate.varInfos = new VarInfo[][] FACTORY5_VAR_INFO;
+    }
+
+    public static SuppressionFactory getInstance() {
+      return theInstance;
+    }
+
+    private Object readResolve() {
+      return theInstance;
+    }
+
+    private transient SuppressionTemplate supTemplate;
+
+    public SuppressionLink generateSuppressionLink (Invariant arg) {
+      supTemplate.resetResults();
+      return (FACTORY5 (arg, supTemplate, this));
     }
   }
 #endif
