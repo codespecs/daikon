@@ -23,6 +23,14 @@ Todo list sorted in approximate order of importance.
   - Switch over the regression tests to chicory, leaving dfej as a
     user option.  Checkin the changed goal files.
 
+  - Add dtrace goal files (perhaps limited to some reasonable number
+    of lines) to the regression tests.  This will allow us to see
+    more quickly when a Chicory change causes dtrace diffs.
+
+  - Write a new dtrace-diff program in java.  There is probably already
+    java code that can read a dtrace file.  The diff should be very
+    simple at that point.
+
   - Implement online mode 
 
   - Restructure code so we don't calculate the same thing on each
