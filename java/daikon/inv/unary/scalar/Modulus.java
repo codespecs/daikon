@@ -60,7 +60,7 @@ public class Modulus
   }
 
   public String format_using(OutputFormat format) {
-    String name = var().name.name_using(format);
+    String name = var().name.name_using(format, var());
 
     if (format == OutputFormat.DAIKON) {
       return var().name.name() + " == " + remainder + "  (mod " + modulus + ")";
@@ -70,9 +70,13 @@ public class Modulus
       return "mod(" + var().name.ioa_name() + ", " + modulus + ") = " + remainder;
     }
 
+    if (format == OutputFormat.DBCJAVA) {
+	name = var().name.dbc_name(var());
+	return name + " % " + modulus + " == " + remainder;
+    }
+
     if (format == OutputFormat.JAVA
-        || format == OutputFormat.JML
-        || format == OutputFormat.DBCJAVA) {
+        || format == OutputFormat.JML) {
       return var().name.name() + " % " + modulus + " == " + remainder;
     }
 
