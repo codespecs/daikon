@@ -4,7 +4,7 @@
 
 # For some additional documentation, see invariants.py.doc.
 
-import glob, operator, os, re, string, types, copy, posix
+import glob, operator, os, re, string, types, copy, posix, math
 
 import util
 
@@ -1569,20 +1569,26 @@ class single_scalar_numeric_invariant(invariant):
     #         if invariant.is_exact(self):
     #             return true
 
+    # In next three functions, use log in computations to avoid
+    # overflow-(in this case, potentially very small numbers)
     def nonzero_justified(self):
         if self.min == None:
             return false
         probability = 1 - 1.0/(self.max - self.min + 1)
-        return probability**self.samples < negative_invariant_confidence
+        #return probability**self.samples < negative_invariant_confidence
+        return self.samples*math.log(probability) < math.log(negative_invariant_confidence)
 
     def modulus_justified(self):
         probability = 1.0/self.modulus[1]
-        return probability**self.samples < negative_invariant_confidence
+        #return probability**self.samples < negative_invariant_confidence
+        return self.samples*math.log(probability) < math.log(negative_invariant_confidence)
 
     def nonmodulus_justified(self):
         base = self.nonmodulus[1]
         probability = 1 - 1.0/base
-        return probability**self.samples * base < negative_invariant_confidence
+        #return probability**self.samples * base < negative_invariant_confidence
+        return self.samples*math.log(probability) + math.log(base) < math.log(negative_invariant_confidence)
+        
 
 
     # This doesn't produce a readable expression as is the convention, but
@@ -2358,15 +2364,15 @@ class single_sequence_numeric_invariant(invariant):
                     single_scalar_numeric_invariant(per_index_elems_to_count[i]))
             return result
 
-        tuple_len = min(map(len, dict.keys())) # min length of a tuple
-        self.per_index_sni = per_index_invariants(dict, tuple_len)
+        # tuple_len = min(map(len, dict.keys())) # min length of a tuple
+        # self.per_index_sni = per_index_invariants(dict, tuple_len)
 
-        reversed_dict = {}
-        for (key, value) in dict.items():
-            reversed_key = list(key)
-            reversed_key.reverse()
-            reversed_dict[tuple(reversed_key)] = value
-        self.reversed_per_index_sni = per_index_invariants(reversed_dict, tuple_len)
+        # reversed_dict = {}
+        # for (key, value) in dict.items():
+        #   reversed_key = list(key)
+        #    reversed_key.reverse()
+        #    reversed_dict[tuple(reversed_key)] = value
+        #self.reversed_per_index_sni = per_index_invariants(reversed_dict, tuple_len)
 
 
     def __repr__(self):
@@ -2665,6 +2671,9 @@ class two_sequence_numeric_invariant(invariant):
 
 
 
+
+
+
 ###########################################################################
 ### Testing
 ###
@@ -2746,3 +2755,6 @@ def _test():
 #         print fn_name, these_vars
 #         print "   ", `this_inv`
 #         print "   ", this_inv
+
+
+
