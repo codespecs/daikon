@@ -65,12 +65,15 @@ public class Dataflow
   public static void init_partial_order(PptMap all_ppts)
   {
     if (Daikon.use_dataflow_hierarchy) {
+      // Create combined exit points
+      create_combined_exits (all_ppts);
+
+      // Connect VarInfos and program points via dataflow ordering
       for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
         PptTopLevel ppt = (PptTopLevel) i.next();
         progress = "Initializing partial order for: " + ppt.ppt_name.toString();
         init_partial_order(ppt, all_ppts);
       }
-      progress = null;
 
       // Create or modify the data flow and invariant flow vectors.  We
       // *must* recompute all of them, rather than just the new ones.
@@ -121,14 +124,12 @@ public class Dataflow
   /**
    * Process the ppt by adding orig and derived variables, relating
    * variables to other program points, and fixing all necessary
-   * pre-computed flows.
+   * pre-computed flows.  When relating EXITnn program points, we only
+   * relate EXITnn to EXIT, because the transitive closure handles the
+   * rest.
    **/
   private static void init_partial_order(PptTopLevel ppt, PptMap all_ppts)
   {
-    // Let's punt this one, because we want to deprecate EXITnn
-    // Set up EXIT points to control EXITnn points
-    // create_and_relate_combined_exits(ppt, all_ppts);
-
     if (debugInit.isDebugEnabled()) {
       debugInit.debug ("Initializing partial order for ppt " + ppt.ppt_name);
     }
@@ -137,15 +138,17 @@ public class Dataflow
     relate_object_procedure_ppts(ppt, all_ppts);
     // Set up orig() declarations and relationships
     create_and_relate_orig_vars(ppt, all_ppts);
+    // Set up EXITnn and EXIT relationships
+    relate_combined_exits(ppt, all_ppts);
     // Set up OBJECT on arguments relationships
     relate_types_to_object_ppts(ppt, all_ppts);
+
 
     if (debugInit.isDebugEnabled()) {
       for (int i=0; i< ppt.var_infos.length; i++) {
         VarInfo vi = ppt.var_infos[i];
-        debugInit.debug ("Parent for " + vi.name.name() + ":" +
+        debugInit.debug ("  Parents for " + vi.name.name() + ":" +
                          vi.po_higher());
-
       }
     }
 
@@ -212,10 +215,47 @@ public class Dataflow
   // Used by setup_po_same_name and related to group variables that flow together
   private static int static_po_group_nonce = 0;
 
+
   /**
-   * Ensure that when ppt is an EXITnn, a EXIT version also exists.
+   * Create EXIT program points as needed for EXITnn program points.
    **/
-  public static void create_and_relate_combined_exits(PptTopLevel ppt, PptMap ppts)
+  public static void create_combined_exits(PptMap ppts) {
+    List newPpts = new LinkedList();
+
+    for (Iterator i = ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) i.next();    
+    }
+
+    for (Iterator i = ppts.pptIterator(); i.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) i.next();
+      // skip unless its an EXITnn
+      if (! (ppt.ppt_name.isExitPoint() && !ppt.ppt_name.isCombinedExitPoint())) {
+        continue;
+      }
+
+      PptTopLevel exitnn_ppt = ppt;
+      PptName exitnn_name = exitnn_ppt.ppt_name;
+      PptName exit_name = ppt.ppt_name.makeExit();
+      PptTopLevel exit_ppt = ppts.get(exit_name);
+      
+      // Create the exit, if necessary
+      if (exit_ppt == null) {
+        VarInfo[] exit_vars = VarInfo.arrayclone_simple(ppt.var_infos);
+        exit_ppt = new PptTopLevel(exit_name.getName(), exit_vars);
+        newPpts.add(exit_ppt);
+      }
+    }
+
+    ppts.addAll (newPpts);
+  }
+
+
+  /**
+   * Connect EXITnn program points to EXIT program points
+   * @param ppt The Exitnn program point to relate to its EXIT program point
+   * @param ppts The standard program point map
+   **/
+  public static void relate_combined_exits(PptTopLevel ppt, PptMap ppts)
   {
     // return unless its an EXITnn
     if (! (ppt.ppt_name.isExitPoint() && !ppt.ppt_name.isCombinedExitPoint()))
@@ -226,15 +266,7 @@ public class Dataflow
     PptName exit_name = ppt.ppt_name.makeExit();
     PptTopLevel exit_ppt = ppts.get(exit_name);
 
-    // Create the exit, if necessary
-    if (exit_ppt == null) {
-      // Find common vars in EXITnn points, and make a new ppt from them
-      // We can't do this incrementally, so we just use the first, which should be ok
-      List exits = Collections.singletonList(exitnn_ppt);
-      VarInfo[] exit_vars = VarInfo.arrayclone_simple(Ppt.common_vars(exits));
-      exit_ppt = new PptTopLevel(exit_name.getName(), exit_vars);
-      ppts.add(exit_ppt);
-    }
+    Assert.assertTrue (exit_ppt != null);
 
     // Set up the PO between EXIT and EXITnn
     setup_po_same_name(exitnn_ppt.var_infos, exit_ppt.var_infos);
@@ -286,13 +318,13 @@ public class Dataflow
   }
 
   /**
-   * Add orig() variables to the given EXIT point, and relate them to
-   * the corresponding ENTER point.  Does nothing if exit_ppt is not
-   * an EXIT.
+   * Add orig() variables to the given EXIT/EXITnn point, and relate
+   * them to the corresponding ENTER point.  Does nothing if exit_ppt
+   * is not an EXIT/EXITnn.  Does not relate if point is EXITnn.
    **/
   private static void create_and_relate_orig_vars(PptTopLevel exit_ppt, PptMap ppts)
   {
-    if (! exit_ppt.ppt_name.isCombinedExitPoint()) {
+    if (! exit_ppt.ppt_name.isExitPoint()) {
       return;
     }
 
@@ -324,8 +356,12 @@ public class Dataflow
         VarInfo postvar = exit_ppt.findVar(vi.name);
         Assert.assertTrue(postvar != null, "Exit not superset of entry: "  + vi.name);
         origvar.comparability = postvar.comparability.makeAlias(origvar.name);
-        // Setup PO; relate orig(...) on EXIT to ... on ENTER
-        origvar.addHigherPO(vi, static_po_group_nonce);
+        // Setup PO; relate orig(...) on EXIT to ... on ENTER But only
+        // if it's a combined exit point, not for EXITnn, because for
+        // EXITnn we let transitive closure handle the relation.
+        if (exit_ppt.ppt_name.isCombinedExitPoint()) {
+          origvar.addHigherPO(vi, static_po_group_nonce);
+        }
         // Add to new_vis
         new_vis[new_vis_index] = origvar;
         new_vis_index++;
@@ -453,8 +489,20 @@ public class Dataflow
    **/
   private static void create_derived_variables(PptTopLevel ppt, PptMap all_ppts) {
     int first_new = ppt.var_infos.length;
+    if (debugInit.isDebugEnabled()) {
+      debugInit.debug ("  Creating derived vars for " + ppt.ppt_name);
+    }
+
     ppt.create_derived_variables();
+    if (debugInit.isDebugEnabled()) {
+      debugInit.debug ("  Created derived vars for " + ppt.ppt_name);
+    }
+
     relate_derived_variables(ppt, first_new, ppt.var_infos.length);
+
+    if (debugInit.isDebugEnabled()) {
+      debugInit.debug ("  Related derived vars for " + ppt.ppt_name);
+    }
   }
 
   /**
@@ -593,9 +641,9 @@ public class Dataflow
    **/
   private static void create_ppt_dataflow(PptTopLevel ppt)
   {
-    // Points that receive samples (currently just EXITnn)
+    // Points that receive samples (currently just EXIT/EXITnn)
     boolean receives_samples =
-      ppt.ppt_name.isCombinedExitPoint() || ppt.ppt_name.isEnterPoint();
+      ppt.ppt_name.isExitPoint() || ppt.ppt_name.isEnterPoint();
 
     if (receives_samples) {
       PptsAndInts rec = compute_ppt_flow(ppt,
