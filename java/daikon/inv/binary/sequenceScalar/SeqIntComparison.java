@@ -70,7 +70,7 @@ public final class SeqIntComparison extends SequenceScalar {
     // elements of a Vector.  (But do compute equality/constant!)
     ProglangType elt_type = seqvar.type.elementType();
     // Assert.assert(elt_type == sclvar.type, "Different types: " + elt_type.format() + " " + seqvar.name + " elements; " + sclvar.type.format() + " " + sclvar.name);
-    Assert.assert(elt_type.comparable(sclvar.type));
+    Assert.assert(elt_type.castable(sclvar.type));
     boolean only_eq = ! seqvar.type.elementIsIntegral();
     return new SeqIntComparison(ppt, seq_first, only_eq, obvious_le, obvious_ge);
   }

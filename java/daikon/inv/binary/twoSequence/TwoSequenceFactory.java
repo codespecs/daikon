@@ -22,12 +22,12 @@ public final class TwoSequenceFactory {
                   && (var2.rep_type == ProglangType.INT_ARRAY));
 
     if (Daikon.check_program_types
-        && (! var1.type.elementType().comparable(var2.type.elementType()))) {
+        && (! var1.type.elementType().castable(var2.type.elementType()))) {
       // System.out.println("These have different program types: :  "
       //                    + var1.name + " (" + var1.type.format() + ") " + var2.name +  " (" + var2.type.format() + ") ");
       return null;
     }
-    // System.out.println("These have comparable program types: :  "
+    // System.out.println("These have castable program types: :  "
     //                    + var1.name + " (" + var1.type.format() + ") " + var2.name +  " (" + var2.type.format() + ") ");
     if (! Daikon.ignore_comparability) {
       VarComparability compar1 = var1.comparability.elementType();

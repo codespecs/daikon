@@ -39,7 +39,7 @@ public final class SequenceScalarFactory {
     }
 
     if (Daikon.check_program_types) {
-      if (! seqvar.type.elementType().comparable(sclvar.type)) {
+      if (! seqvar.type.elementType().castable(sclvar.type)) {
         if (debugSequenceScalarFactory) {
           System.out.println("Incompatible types: " + sclvar.name + " of type " + sclvar.type.format() + " vs. element of " + seqvar.name + " whose type is " + seqvar.type.format());
         }

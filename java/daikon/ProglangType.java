@@ -442,10 +442,10 @@ public final class ProglangType implements java.io.Serializable {
 
   /**
    * Return true if these two types can be sensibly compared to one
-   * another.  For instance, int is comparable to long, but boolean is not
-   * comparable to float, and int is not comparable to int[].
+   * another.  For instance, int is castable to long, but boolean is not
+   * castable to float, and int is not castable to int[].
    **/
-  public boolean comparable(ProglangType other) {
+  public boolean castable(ProglangType other) {
     if (this == other)          // ProglangType objects are interned
       return true;
     if (this.dimensions != other.dimensions)
@@ -454,7 +454,7 @@ public final class ProglangType implements java.io.Serializable {
     boolean otherIntegral = other.baseIsIntegral();
     if (thisIntegral && otherIntegral)
       return true;
-    // Make Object comparable to everything, except booleans
+    // Make Object castable to everything, except booleans
     if (((this.base == "Object") && other.baseIsObject()) // interned strings
         || ((other.base == "Object") && baseIsObject())) // interned strings
       return true;
