@@ -666,7 +666,7 @@ in your CLASSPATH.
 
 @item Instrument the @file{StackAr.java} file.
 @example
-dfej -noajax DataStructures/StackAr.java
+dfej DataStructures/StackAr.java
 @end example
 
 We instrument only this one file because we are only interested in the
@@ -764,7 +764,7 @@ The steps above can be divided into three stages:
 @example
 cd examples/StackAr
 javac DataStructures/*.java
-dfej -noajax DataStructures/StackAr.java
+dfej DataStructures/StackAr.java
 javac daikon-instrumented/DataStructures/StackAr.java
 @end example
 
@@ -880,7 +880,7 @@ Run this sample using the following steps:
 @example
 cd examples/QueueAr
 javac DataStructures/*.java
-dfej -noajax DataStructures/QueueAr.java
+dfej DataStructures/QueueAr.java
 javac daikon-instrumented/DataStructures/QueueAr.java
 @end example
 
