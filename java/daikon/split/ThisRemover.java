@@ -15,9 +15,6 @@ class ThisRemover extends DepthFirstVisitor {
   // string they no longer exist.  However, the nodes are still in the jtb
   // tree.
 
-  /** The string holding the expression with all instances of "this." removed. */
-  private String newExpression;
-
   /** true iff the previous token was "this". */
   private boolean previousThis = false;
 

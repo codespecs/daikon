@@ -59,7 +59,7 @@ class SplitterJavaSource {
     varInfos = filterNonVars(varInfos);
     String originalCondition = splitObj.condition();
     String condition = replaceReservedWords(originalCondition);
-    condition = statementReplacer.makeReplacements(condition);
+    condition = this.statementReplacer.makeReplacements(condition);
     condition = convertVariableNames(condition, className, varInfos);
     vars = makeVariableManagerArray(varInfos, condition, className);
 
@@ -633,9 +633,6 @@ class SplitterJavaSource {
     /** Name of variable as how it appears in the original file. */
     private String name;
 
-    /** Name of variable in the baseName format. */
-    private String baseName;
-
     /** Name of variable in a compilable format. */
     private String compilableName;
 
@@ -655,7 +652,6 @@ class SplitterJavaSource {
       throws ParseException {
       this.varInfo = varInfo;
       name = getVarName(varInfo);
-      baseName = getBaseName(varInfo, className);
       compilableName = compilableName(varInfo, className);
       fieldName = fieldName(varInfo, className);
       varInfoName = varInfoName(varInfo, className);

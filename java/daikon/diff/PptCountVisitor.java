@@ -35,11 +35,6 @@ public class PptCountVisitor extends PrintAllVisitor {
 
 
 
-  // determiens if this program point has been marked for
-  // suspicious activity.
-  private boolean marked;
-
-
   public PptCountVisitor (PrintStream ps, boolean verbose,
                           boolean printEmptyPpts) {
     super(ps, verbose, printEmptyPpts);
@@ -48,7 +43,6 @@ public class PptCountVisitor extends PrintAllVisitor {
   // throw out Program points that are Conditional,
   public void visit (PptNode node) {
     PptTopLevel ppt = node.getPpt1();
-    marked = false;
     if ((ppt instanceof PptConditional)) return;
     //        else super.visit (node);
 

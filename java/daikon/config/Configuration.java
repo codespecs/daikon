@@ -45,7 +45,7 @@ public final class Configuration
     }
     return instance;
   }
-  private static Configuration instance = null;
+  private static volatile Configuration instance = null;
 
   /**
    * This used to read a file containing all of the configurable

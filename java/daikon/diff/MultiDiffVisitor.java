@@ -7,7 +7,8 @@ import daikon.inv.*;
 import java.io.*;
 import java.util.*;
 
-/** <B>MultiDiffVisitor</B> is a state-storing NodeVisitor that works
+/**
+ * <B>MultiDiffVisitor</B> is a state-storing NodeVisitor that works
  * across multiple files regardless of the current two-file infrastructure.
  * This allows the selection of very unique invariants that occur once over
  * an entire set of trace files
@@ -19,8 +20,6 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
     private HashSet programPointsList;
     private HashMap freqList;
     private HashSet justifiedList;
-    private int cnt = 0;
-    private int specCnt = 0;
     private int total = 0;
     private static boolean spinfoMode = false;
     private static PrintStream out = System.out;
@@ -77,38 +76,6 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
                 // }
         }
 
-        /*
-        // Eliminate invariants that are no longer unique
-        if (inv2 != null && inv1 != null) {
-            goneList.add(inv1.repr());
-            goodList.remove (inv1.repr());
-        }
-
-        // Do nothing if the invariant is already on the gone list
-        else if (inv1 == null || goneList.contains (inv1.format_java())) {
-            cnt++;
-            return;
-        }
-        // Remove from the goodList if it is already there
-        else if (goodList.contains (inv1.format_java())) {
-            goneList.add (inv1.format_java());
-            goodList.remove (inv1.format_java());
-        }
-
-        // Add the invariant to the contending list otherwise
-        // This must be the case where inv2 is null, inv1 is fine
-        else if (shouldPrint (inv1, inv2) ) {
-        // ... need to modify currMap somehow
-        // hopefully resources are shared so that swapping the
-        // two elements of the pair will do what I want
-        if (inv1.format().indexOf("==>") == -1 &&
-        inv1.format().indexOf("orig") == -1) {
-        goodList.add (inv1.format_java());
-        }
-        else specCnt++;
-        }
-        else cnt++;
-        */
     }
 
     /** Prints everything in the goodList. */

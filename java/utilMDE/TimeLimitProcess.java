@@ -17,9 +17,6 @@ public class TimeLimitProcess {
 
   private Timer timer;
 
-  private BufferedReader errorStream;
-  private StringBuffer errorMessage;
-
   /**
    * Requires: p != null
    * @param timeLimit in milliseconds

@@ -105,21 +105,16 @@ public class NISuppressor {
 
     this.inv_class = cls;
 
-    // Create a sample invariant
+    // Create a sample invariant, by reflectively calling either
+    // get_proto(boolean) or get_proto().
     try {
-      Method get_proto = null;
-      boolean has_swap_param = false;
       try {
-        get_proto = inv_class.getMethod ("get_proto",
+        Method get_proto = inv_class.getMethod ("get_proto",
                                new Class[] {boolean.class});
-        has_swap_param = true;
         sample_inv = (Invariant)get_proto.invoke (null,
                                   new Object[] {Boolean.valueOf(swap)});
-      } catch (Exception e) {
-      }
-      if (get_proto == null) {
-        // Fmt.pf ("creating sample for class " + inv_class);
-        get_proto = inv_class.getMethod ("get_proto",
+      } catch (NoSuchMethodException e) {
+        Method get_proto = inv_class.getMethod ("get_proto",
                                new Class[] {});
         sample_inv = (Invariant)get_proto.invoke (null, new Object[] {});
       }

@@ -17,8 +17,6 @@ import daikon.*;
  **/
 public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
 
-    PptTopLevel lastPpt = null;
-
     public XorInvariantsVisitor (PrintStream ps, boolean verbose,
                                  boolean printEmptyPpts,
                                  boolean printUninteresting) {
@@ -26,7 +24,6 @@ public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
     }
 
     public void visit (PptNode node) {
-        lastPpt = node.getPpt1();
         super.visit(node);
 
     }
@@ -35,34 +32,6 @@ public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
 	Invariant inv1 = node.getInv1();
 	Invariant inv2 = node.getInv2();
 	// do nothing if they are unique
-
-        /*
-        if (shouldPrint (inv1,inv2) && inv2 != null) {
-            if (inv1 == null) {
-                Pair p = (Pair) node.getUserObject();
-                p.a = inv2;
-            }
-            else {
-                inv1.ppt.invs.add (inv2);
-            }
-        }
-
-        else if (shouldPrint (inv1, inv2) && inv2 == null) {
-            // do nothing, inv1 is already good
-        }
-
-        else if (!shouldPrint (inv1, inv2) && inv1 != null) {
-            inv1.ppt.invs.remove (inv1);
-        }
-
-        else if (inv1 == null) {
-            // do nothing
-        }
-
-        else {
-            System.out.println ("CASE NOT COVERED, SHOULD NOT GET HERE: " + inv1);
-        }
-        */
 
         if (shouldPrint (inv1, inv2)) {
             // do nothing, keep both
@@ -78,43 +47,6 @@ public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
             }
 
         }
-
-        //	if (shouldKeep1(inv1, inv2)) {
-
-            /*
-	    // both can't be null
-	    if (inv1 == null) {
-		// adds inv2 to the PptSlice for inv1\
-		PptSlice someSlice = inv2.ppt;
-		VarInfo[] vars = someSlice.var_infos;
-	    slice_loop:
-		for (Iterator itor = lastPpt.views.iterator() ;
-		     itor.hasNext() ; ) {
-		    PptSlice view = (PptSlice) itor.next();
-		    for (int i = 0; i < view.var_infos.length; i++) {
-			if (i >= vars.length) continue slice_loop;
-			Vector v = vars[i].equalTo();
-			if (!v.contains(view.var_infos[i])) continue slice_loop;
-			// if it got here, these must be the same
-			// slices!
-			view.addInvariant (inv2);
-			System.out.println ("MATCH! " + inv2.format_java());
-		    }
-		}
-	    }
-	    */
-        //	}
-        /*
-	else {
-	    // otherwise gotta remove this "bad" one from both
-	    if (inv2 != null)
-		inv2.ppt.invs.remove (inv2);
-	    if (inv1 != null)
-		inv1.ppt.invs.remove (inv1);
-
-	}
-        */
-
      }
 
 

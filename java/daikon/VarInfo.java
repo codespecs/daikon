@@ -48,35 +48,35 @@ public final class VarInfo implements Cloneable, Serializable {
     return (name.name());
   }
 
-    /**
-     * Type as declared in the target program. This is seldom used
-     * within Daikon as these types vary with program language and
-     * the like.  It's here more for information than anything else.
-     **/
-    public ProglangType type; // interned
+  /**
+   * Type as declared in the target program. This is seldom used
+   * within Daikon as these types vary with program language and
+   * the like.  It's here more for information than anything else.
+   **/
+  public ProglangType type; // interned
 
-    /**
-     * Type as written in the data trace file -- i.e., it is the
-     * source variable type mapped into the set of basic types
-     * recognized by Daikon.  In particular, it includes boolean and
-     * hashcode (pointer).  This is the type that is normally used
-     * when determining if an invariant is applicable to a variable.
-     * For example, the less-than invariant is not applicable to
-     * booleans or hashcodes, but is applicable to integers (of
-     * various sizes) and floats.
-     * (In the variable name, "rep" stands for "representation".)
-     **/
-    public ProglangType file_rep_type; // interned
+  /**
+   * Type as written in the data trace file -- i.e., it is the
+   * source variable type mapped into the set of basic types
+   * recognized by Daikon.  In particular, it includes boolean and
+   * hashcode (pointer).  This is the type that is normally used
+   * when determining if an invariant is applicable to a variable.
+   * For example, the less-than invariant is not applicable to
+   * booleans or hashcodes, but is applicable to integers (of
+   * various sizes) and floats.
+   * (In the variable name, "rep" stands for "representation".)
+   **/
+  public ProglangType file_rep_type; // interned
 
-    /**
-     * Type as internally stored by Daikon.  It contains less
-     * information than file_rep_type (for example, boolean and
-     * hashcode are both stored as integers).
-     * (In the variable name, "rep" stands for "representation".)
-     *
-     * @see ProglangType#fileTypeToRepType()
-     **/
-    public ProglangType rep_type; // interned
+  /**
+   * Type as internally stored by Daikon.  It contains less
+   * information than file_rep_type (for example, boolean and
+   * hashcode are both stored as integers).
+   * (In the variable name, "rep" stands for "representation".)
+   *
+   * @see ProglangType#fileTypeToRepType()
+   **/
+  public ProglangType rep_type; // interned
 
   /** Comparability info. **/
   public VarComparability comparability;
@@ -242,6 +242,12 @@ public final class VarInfo implements Cloneable, Serializable {
     canBeMissing = vi.canBeMissing;
     postState = vi.postState;
     equalitySet = vi.equalitySet;
+  }
+
+  /** Creates and returns a copy of this. **/
+  // Default implementation to quiet Findbugs.
+  public Object clone() throws CloneNotSupportedException {
+    return super.clone();
   }
 
   /** Create the prestate, or "orig()", version of the variable. **/

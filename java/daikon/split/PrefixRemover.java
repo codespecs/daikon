@@ -6,11 +6,11 @@ import daikon.tools.jtb.*;
 import jtb.ParseException;
 
 /**
- * PrefixRemover is a visitor for a jtb syntax tree that removes all instances
+ * PrefixRemover is a visitor for a JTB syntax tree that removes all instances
  * of some prefix. For example if "prefix" is the prefix then "prefix.x" would
  * go to "x" and "y.prefix.x" would go to "y.x" .
- * However, "prefix()" would be unaffected.  Finally, the prefix cannot be java
- * reserved word such as "this".
+ * However, "prefix()" would be unaffected.  Finally, the prefix cannot be a
+ * Java reserved word such as "this".
  */
 class PrefixRemover extends DepthFirstVisitor {
   // Note: the instances of "prefix" are not really being removed; instead,
@@ -20,9 +20,6 @@ class PrefixRemover extends DepthFirstVisitor {
 
   /** The prefix being removed. */
   private String prefix;
-
-  /** True iff the previous token was prefix. */
-  private boolean previousPrefix = false;
 
   /** The last token visited by this. */
   private NodeToken lastToken;

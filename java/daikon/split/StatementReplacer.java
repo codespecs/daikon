@@ -28,9 +28,6 @@ class StatementReplacer extends DepthFirstVisitor {
   /** A ReplaceStatementMap for the ReplaceStatements of this. */
   private ReplaceStatementMap statementMap;
 
-  /** Contains the statement after replacement are made. */
-  private String newExpression;
-
   /**
    * true iff a match between the method name in
    * the PrimaryExpression currently being visited and one

@@ -171,10 +171,12 @@ public class InvariantFormatTester extends TestCase
     URL inputFileLocation =
       InvariantFormatTester.class.getResource("InvariantFormatTest.commands");
 
-    if (inputFileLocation == null)
+    if (inputFileLocation == null) {
       fail("Input file for invariant format tests missing." +
            " (Should be in InvariantFormatTest.commands" +
            " and it must be within the classpath)");
+      throw new Error("This can't happen"); // to quiet Findbugs
+    }
 
     String inputFile = inputFileLocation.getFile();
 

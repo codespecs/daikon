@@ -205,6 +205,11 @@ public final class VarInfoAux
     this.isInterned = false;
   }
 
+  /** Creates and returns a copy of this. **/
+  // Default implementation to quiet Findbugs.
+  public Object clone() throws CloneNotSupportedException {
+    return super.clone();
+  }
 
   public String toString() {
     return map.toString();

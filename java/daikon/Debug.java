@@ -217,7 +217,7 @@ public class Debug {
         for (Iterator iter = evars.iterator(); iter.hasNext(); ) {
           VarInfo ev = (VarInfo) iter.next();
           for (int k = 0; k < debugTrackVars.length; k++) {
-            if (ev.equals (debugTrackVars[k][0]))
+            if (ev.name().equals (debugTrackVars[k][0]))
               return (v);
           }
         }

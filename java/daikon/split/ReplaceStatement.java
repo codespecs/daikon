@@ -118,9 +118,6 @@ class ReplaceStatement {
    */
   private class MethodDeclarationParser extends DepthFirstVisitor {
 
-    /** The parameters of the method. */
-    private List /*MethodParameter*/ methodParamList;
-
     /**
      * Creates a new instance of MethodDeclarationParser.
      */
