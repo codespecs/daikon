@@ -283,6 +283,8 @@ public abstract class Invariant implements java.io.Serializable {
       return false;
     }
 
+    // System.out.println("isSameInvariant(" + inv1.format() + ", " + inv2.format() + ")");
+
     // The variable names much match up, in order
 
     VarInfo[] vars1 = inv1.ppt.var_infos;
@@ -323,6 +325,8 @@ public abstract class Invariant implements java.io.Serializable {
 	return false;
       }
     }
+
+    // System.out.println("TRUE: isSameInvariant(" + inv1.format() + ", " + inv2.format() + ")");
 
     // the type, formula, and vars all matched
     return true;
@@ -401,6 +405,7 @@ public abstract class Invariant implements java.io.Serializable {
         // System.out.println("Not worth printing " + format() + " on account of controller " + cont_inv.format() + " which is worth printing on its own merits.");
         return false;
       }
+      // System.out.println("Maybe worth printing " + format() + " despite controller " + cont_inv.format() + " which is not worth printing on its own merits.");
       cont_inv = cont_inv.find_controlling_invariant();
     }
     // No controller was worth printing
@@ -608,7 +613,7 @@ public abstract class Invariant implements java.io.Serializable {
     Iterator controllers = pptt.controlling_ppts.iterator();
     while (controllers.hasNext()) {
       PptTopLevel controller = (PptTopLevel) controllers.next();
-      // System.out.println("Looking for controller of " + inv.format() + " in " + controller.name);
+      // System.out.println("Looking for controller of " + format() + " in " + controller.name);
       Iterator candidates = controller.invariants_iterator();
       while (candidates.hasNext()) {
 	Invariant cand_inv = (Invariant) candidates.next();

@@ -22,8 +22,6 @@ import com.oroinc.text.regex.*;
 import utilMDE.*;
 
 
-
-
 // All information about a single program point.
 // A Ppt may also represent just part of the data: a disjunction (see
 // PptConditional).
@@ -1252,12 +1250,6 @@ public class PptTopLevel extends Ppt {
         // System.out.println("Is " + (IsEquality.it.accept(inv) ? "" : "not ")
         //                    + "equality: " + inv.repr());
         if (IsEquality.it.accept(inv)
-            // THERE IS SOMETHING VERY STRANGE GOING ON HERE!  Whether I
-            // comment out the below test affects other invariants, such as
-            // getting one or the other of the following two outputs:
-            //    this.ends[0..n] elements one of { 1, 3, 5, 7, 1001 }
-            //    this.ends[0..n] elements one of { 1, 3, 5, 1001 }
-            // This needs to be investigated carefully.  -MDE 3/12/2001
             //  && (inv.justified())
             ) {
           VarInfo var1 = binary_view.var_infos[0];
@@ -2193,8 +2185,8 @@ public class PptTopLevel extends Ppt {
       }
     }
 
-    // First, do the equality invariants.  They don't show up in the below
-    // because one of the two variables is non-canonical!
+    // First, print the equality invariants.  They don't show up in the
+    // below because one of the two variables is non-canonical!
     // This technique is a bit non-orthogonal, but probably fine.
     // We might do no output if all the other variables are vacuous.
     // We should have already equal_to for each VarInfo.
