@@ -363,8 +363,40 @@ file) when the program was instrumented.<p>
       directory) appears early on your class path, or you can add the
       <tt>daikon-java/</tt> directory to your class path explicitly.<p>
 
-      After running your program, run <tt>bin/modbit-munge.pl</tt> on the
-      resulting <tt>.dtrace</tt> file:
+      <ul>
+	<li><b>Java applets</b>: There are some additional steps you
+        have to take if you are running an applet.
+	<ul>
+	  <li> Copy or create symbolic links to <u>all</u> class
+	       files, jar files, input files, and html files that your
+	       applet needs to the <tt>daikon-java/</tt> directory.
+	       This includes the daikon directory.  For example, to
+	       create a link to the daikon directory, type (while in
+	       the <tt>daikon-java/</tt> directory):
+<pre>
+       ln -s <i>path-to-daikon</i> daikon
+</pre>
+	  <li> By default, the Java 2 applet security model does not
+	  allow applets to write files.  To get around this so that
+	  Daikon can write its .dtrace files, create a file named
+	  javaPolicy in the <tt>daikon-java/</tt> directory that
+	  contains the text
+<pre>
+       grant {
+           permission java.io.FilePermission "<<ALL FILES>>", "read, write, delete, execute";
+       };
+</pre>
+	  Do not use this policy file with untrusted applets.
+	  <li> Run the applet:
+<pre>
+       appletviewer -J-Djava.security.policy=javaPolicy <i>html-file</i>
+</pre>
+	</ul>
+      </ul>
+
+      After running your Java application or applet, run
+      <tt>bin/modbit-munge.pl</tt> on the resulting <tt>.dtrace</tt>
+      file:
 <pre>
     modbit-munge.pl <em>myprog</em>.dtrace
 </pre>
