@@ -5,17 +5,17 @@ import daikon.inv.*;
 import java.lang.reflect.*;
 
 
-class Function extends TwoScalar {
+class FunctionUnary extends TwoScalar {
 
-  FunctionCore core;
+  FunctionUnaryCore core;
 
-  protected Function(PptSlice ppt_, Method function_, boolean inverse_) {
+  protected FunctionUnary(PptSlice ppt_, Method function_, boolean inverse_) {
     super(ppt_);
-    core = new FunctionCore(this, function_, inverse_);
+    core = new FunctionUnaryCore(this, function_, inverse_);
   }
 
-  public static Function instantiate(PptSlice ppt, Method function, boolean inverse) {
-    return new Function(ppt, function, inverse);
+  public static FunctionUnary instantiate(PptSlice ppt, Method function, boolean inverse) {
+    return new FunctionUnary(ppt, function, inverse);
   }
 
   public String repr() {
@@ -23,7 +23,7 @@ class Function extends TwoScalar {
     boolean inverse = core.inverse;
 
     double probability = getProbability();
-    return "Function" + varNames() + ": "
+    return "FunctionUnary" + varNames() + ": "
       + "function=" + function
       + ",inverse=" + inverse
       + "; probability = " + probability;

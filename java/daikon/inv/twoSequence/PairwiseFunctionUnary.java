@@ -18,17 +18,17 @@ import java.lang.reflect.*;
 //          types, not Object
 //        - must convert existing functions to this format.
 
-class PairwiseFunction extends TwoSequence {
+class PairwiseFunctionUnary extends TwoSequence {
 
-  FunctionCore core;
+  FunctionUnaryCore core;
 
-  protected PairwiseFunction(PptSlice ppt_, Method function_, boolean inverse_) {
+  protected PairwiseFunctionUnary(PptSlice ppt_, Method function_, boolean inverse_) {
     super(ppt_);
-    core = new FunctionCore(this, function_, inverse_);
+    core = new FunctionUnaryCore(this, function_, inverse_);
   }
 
-  public static PairwiseFunction instantiate(PptSlice ppt, Method function, boolean inverse) {
-    return new PairwiseFunction(ppt, function, inverse);
+  public static PairwiseFunctionUnary instantiate(PptSlice ppt, Method function, boolean inverse) {
+    return new PairwiseFunctionUnary(ppt, function, inverse);
   }
 
   public String repr() {
@@ -36,7 +36,7 @@ class PairwiseFunction extends TwoSequence {
     boolean inverse = core.inverse;
 
     double probability = getProbability();
-    return "PairwiseFunction" + varNames() + ": "
+    return "PairwiseFunctionUnary" + varNames() + ": "
       + "function=" + function
       + ",inverse=" + inverse
       + "; probability = " + probability;

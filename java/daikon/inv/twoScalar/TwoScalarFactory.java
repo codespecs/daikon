@@ -26,9 +26,9 @@ public class TwoScalarFactory {
         // Skip if the argument is a constant (but not if the result
         // is constant, as we might get something like y=abs(x)).
         if (! arg.isConstant()) {
-          Function.instantiate(ppt, Functions.Math_abs, invert);
-          Function.instantiate(ppt, Functions.MathMDE_negate, invert);
-          Function.instantiate(ppt, Functions.MathMDE_bitwiseComplement, invert);
+          FunctionUnary.instantiate(ppt, Functions.Math_abs, invert);
+          FunctionUnary.instantiate(ppt, Functions.MathMDE_negate, invert);
+          FunctionUnary.instantiate(ppt, Functions.MathMDE_bitwiseComplement, invert);
         }
       }
       if ((! var1.isConstant()) && (! var2.isConstant())) {

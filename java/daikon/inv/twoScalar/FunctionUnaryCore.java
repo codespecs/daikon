@@ -17,7 +17,7 @@ import java.lang.reflect.*;
 //          types, not Object
 //        - must convert existing functions to this format.
 
-public class FunctionCore {
+public class FunctionUnaryCore {
 
   public Method function;
   // false if we're looking for y=fn(x), true if we're looking for x=fn(y)
@@ -27,7 +27,7 @@ public class FunctionCore {
 
   Invariant wrapper;
 
-  public FunctionCore(Invariant wrapper_, Method function_, boolean inverse_) {
+  public FunctionUnaryCore(Invariant wrapper_, Method function_, boolean inverse_) {
     wrapper = wrapper_;
     function = function_;
     inverse = inverse_;

@@ -6,13 +6,16 @@ import daikon.inv.sequenceScalar.*;
 import daikon.derive.*;
 import daikon.derive.unary.*;
 
+import utilMDE.*;
+
+import java.util.*;
 
 // Also see NonEqual, NonAliased
 class IntComparison extends TwoScalar implements Comparison {
 
   final static boolean debugIntComparison = false;
 
-  IntComparisonCore core;
+  public IntComparisonCore core;
 
   protected IntComparison(PptSlice ppt_) {
     this(ppt_, false, false, false, false);
@@ -100,6 +103,17 @@ class IntComparison extends TwoScalar implements Comparison {
 
     return new IntComparison(ppt, obvious_lt, obvious_gt, obvious_le, obvious_ge);
 
+  }
+
+  // Look up a previously instantiated IntComparison relationship.
+  public static IntComparison find(PptSlice ppt) {
+    Assert.assert(ppt.arity == 2);
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = (Invariant) itor.next();
+      if (inv instanceof IntComparison)
+        return (IntComparison) inv;
+    }
+    return null;
   }
 
 

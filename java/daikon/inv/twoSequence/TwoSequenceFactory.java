@@ -44,9 +44,9 @@ public class TwoSequenceFactory {
           VarInfo arg = (invert ? var1 : var2);
           // Don't bother to check arg.isConstant():  we really want to
           // know whether the elements of arg are constant
-          PairwiseFunction.instantiate(ppt, Functions.Math_abs, invert);
-          PairwiseFunction.instantiate(ppt, Functions.MathMDE_negate, invert);
-          PairwiseFunction.instantiate(ppt, Functions.MathMDE_bitwiseComplement, invert);
+          PairwiseFunctionUnary.instantiate(ppt, Functions.Math_abs, invert);
+          PairwiseFunctionUnary.instantiate(ppt, Functions.MathMDE_negate, invert);
+          PairwiseFunctionUnary.instantiate(ppt, Functions.MathMDE_bitwiseComplement, invert);
         }
       }
     }

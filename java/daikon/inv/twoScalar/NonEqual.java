@@ -79,4 +79,14 @@ public class NonEqual extends TwoScalar {
       return Math.pow(probability_one_nonequal, ppt.num_mod_non_missing_samples());
     }
   }
+
+  // We don't suppress before creation because this uses different
+  // justification rules than IntComparison.
+  public boolean isObviousImplied() {
+    IntComparison ic = IntComparison.find(ppt);
+    if ((ic != null) && (! ic.core.can_be_eq) && ic.justified())
+      return true;
+    return false;
+  }
+
 }
