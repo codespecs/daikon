@@ -254,7 +254,7 @@ foreach $filename (@ARGV){
     }
     
     foreach $function (keys %HashOfConds){
-	print SPINFOFILE "PPT_NAME# $function";
+	print SPINFOFILE "PPT_NAME, $function";
 	$conditions = "\nCONDITIONS";
 	$replace = "REPLACE";
 	@conds = @{$HashOfConds{$function}};
@@ -264,7 +264,7 @@ foreach $filename (@ARGV){
 	    if($cond !~ /^\s*true\s*$/){
 		$cond =~ s/^\s*(.*)\s*$/$1/; #strip whitespace from ends 
 		$cond =~ s/^\s*(\S*\s*)\!=(\s*\S*)\s*$/$1==$2/;
-		$conditions = $conditions."# $cond";
+		$conditions = $conditions.", $cond";
 	    }else{ next; }
 	}
 	
