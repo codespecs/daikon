@@ -485,8 +485,16 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	String invFileName = pickFileFromFileChooser(System.getProperty("user.dir"));
 	displayInvariantsFromFile( invFileName );
       }
-      else if (menuText.equals( "Quit" ))
-	throw new Daikon.TerminationMessage();
+      else if (menuText.equals( "Quit" )) {
+        // We'd like to handle this by throwing an exception, so that if
+        // someone else wants to embed this code in another application,
+        // they can make "Quit" just close the dialog box, or something.
+        // But an exception thrown here wouldn't reach main() (because this
+        // handler is called from a Swing event dispatch thread), so we'll
+        // just call exit for the moment. -SMcC
+        System.exit(0);
+	// throw new Daikon.TerminationMessage();
+      }
     }
     //  Handle checkbox events involving filters
     else if (e.getSource().getClass() == JCheckBox.class) {
