@@ -378,7 +378,6 @@ public final class PPTSLICE1
     //     }
 
     Assert.assertTrue(invs.size() > 0);
-    // Assert.assertTrue(! already_seen_all); // [INCR]
     for (int i=0; i<invs.size(); i++) {
       Assert.assertTrue(invs.get(i) != null);
     }
@@ -428,7 +427,7 @@ public final class PPTSLICE1
                           " because var " + var_infos[i].name.name() +
                           " array index out of bounds");
         if (Daikon.dkconfig_df_bottom_up) {
-          remove_falsified();
+          // remove_falsified();
           return (result);
         } else
           return flow_and_remove_falsified();
@@ -480,27 +479,8 @@ public final class PPTSLICE1
     Assert.assertTrue (Intern.isInterned (val3));
 #endif
 
-    // if (! already_seen_all) // [INCR]
-    {
-      /* [INCR] ...
-#if defined(ARITY1)
-      Object vals = val1;
-#elif defined(ARITY2)
-      Object[] vals = Intern.intern(new Object[] { val1, val2 });
-#elif defined(ARITY3)
-      Object[] vals = Intern.intern(new Object[] { val1, val2, val3 });
-#endif
-      int[] tm_arr = (int[]) values_cache.get(vals);
-      if (tm_arr == null) {
-        tm_arr = new int[NUM_TM];
-        values_cache.put(vals, tm_arr);
-        values_order.add (vals);
-      }
-      */ // ... [INCR]
-    }
     // System.out.println(PPTSLICE1STRING + " " + name() + ": add " + full_vt + " = " + vt);
     // System.out.println(PPTSLICE1STRING + " " + name() + " has " + invs.size() + " invariants.");
-    // defer_invariant_removal(); [INCR]
     // Supply the new values to all the invariant objects.
     int num_invs = invs.size();
     Assert.assertTrue((mod1 == vi1.getModified(full_vt))
@@ -518,7 +498,7 @@ public final class PPTSLICE1
         List weakened_invs = add_val_bu (val1, val2, val3, mod1, mod2,
                                          mod3, count);
       #endif
-      remove_falsified();
+        // remove_falsified();
       return (weakened_invs);
     } else {
       #if defined(ARITY1)
@@ -529,7 +509,6 @@ public final class PPTSLICE1
         add_val (val1, val2, val3, mod1, mod2, mod3, count);
       #endif
     }
-    // undefer_invariant_removal(); [INCR]
     return flow_and_remove_falsified();
   }
 
@@ -831,159 +810,10 @@ public final class PPTSLICE1
     invs.add(invariant);
     Global.instantiated_invariants++;
     if (Global.debugStatistics.isLoggable(Level.FINE) || debugSpecific.isLoggable(Level.FINE))
-      debug.info("instantiated_invariant: " + invariant.format()
-                 // [INCR] + "; " + "already_seen_all=" + already_seen_all
-                 );
+      debug.info("instantiated_invariant: " + invariant.format());
     if (invariant.logOn())
       invariant.log ("Instantiated " + invariant.format());
 
-    /* [INCR] ... I think this is now unnecessary; not sure. XXX
-    if (already_seen_all) {
-      // Make this invariant up to date by supplying it with all the values
-      // which have already been seen.
-      // (Do not do
-      //   Assert.assertTrue(values_cache.entrySet().size() > 0);
-      // because all the values might have been missing.  We used to ignore
-      // variables that could have some missing values, but no longer.)
-#if defined(ARITY1)
-      UnaryInvariant inv = (UnaryInvariant) invariant;
-      for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
-        Map.Entry entry = (Map.Entry) itor.next();
-        Object val = entry.getKey();
-        int[] tm_array = (int[]) entry.getValue();
-        InvariantStatus status1 = inv.add(val, 0, tm_array[0]);
-        InvariantStatus status2 = inv.add(val, 1, tm_array[1]);
-        if (status1 == InvariantStatus.FALSIFIED ||
-            status2 == InvariantStatus.FALSIFIED) {
-          destroyInv(inv);
-          break;
-        }
-      }
-#elif defined(ARITY2)
-      VarInfo vi1 = var_infos[0];
-      VarInfo vi2 = var_infos[1];
-      boolean array1 = vi1.rep_type.isArray();
-      boolean array2 = vi2.rep_type.isArray();
-      boolean doublearray1 = vi1.rep_type == ProglangType.DOUBLE_ARRAY;
-      boolean doublearray2 = vi2.rep_type == ProglangType.DOUBLE_ARRAY;
-        // Make this invariant up to date by supplying it with all the values.
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
-          Map.Entry entry = (Map.Entry) itor.next();
-          Object[] vals = (Object[]) entry.getKey();
-          int[] tm_array = (int[]) entry.getValue();
-          InvariantStatus status = InvariantStatus.NO_CHANGE;
-          for (int mi=0; mi<tm_array.length; mi++) {
-            if (tm_array[mi] > 0) {
-              InvariantStatus tempStatus =
-                inv.add(seqval, sclval, mi, tm_array[mi]);
-              if (tempStatus == InvariantStatus.FALSIFIED) {
-                status = InvariantStatus.FALSIFIED;
-                break;
-              }
-            }
-          }
-          if (status == InvariantStatus.FALSIFIED) {
-            destroyInv(inv);
-            break;
-          }
-        }
-#if defined (ORDER_VALUES)
-        // Make this invariant up to date by supplying it with all the values.
-        Assert.assertTrue (values_order.size() == values_cache.size());
-        for (Iterator itor = values_order.iterator() ; itor.hasNext() ; ) {
-          Object[] vals = (Object[]) itor.next();
-          int[] tm_array = (int[]) values_cache.get (vals);
-          InvariantStatus status = InvariantStatus.NO_CHANGE;
-          for (int mi=0; mi<tm_array.length; mi++) {
-            if (tm_array[mi] > 0) {
-              InvariantStatus tempStatus =
-                inv.add(val1, val2, mi, tm_array[mi]);
-              if (tempStatus == InvariantStatus.FALSIFIED) {
-                status = InvariantStatus.FALSIFIED;
-                break;
-              }
-            }
-          }
-          if (status == InvariantStatus.FALSIFIED) {
-            destroyInv(inv);
-            break;
-          }
-        }
-#endif
-        // Make this invariant up to date by supplying it with all the values.
-        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
-          Map.Entry entry = (Map.Entry) itor.next();
-          Object[] vals = (Object[]) entry.getKey();
-          int[] tm_array = (int[]) entry.getValue();
-          InvariantStatus status = InvariantStatus.NO_CHANGE;
-          for (int mi=0; mi<tm_array.length; mi++) {
-            if (tm_array[mi] > 0) {
-              InvariantStatus tempStatus =
-                inv.add(val1, val2, mi, tm_array[mi]);
-              if (tempStatus == InvariantStatus.FALSIFIED) {
-                status = InvariantStatus.FALSIFIED;
-                break;
-              }
-            }
-          }
-          if (status == InvariantStatus.FALSIFIED) {
-            destroyInv(inv);
-            break;
-          }
-        }
-      }
-#elif defined(ARITY3)
-      VarInfo vi1 = var_infos[0];
-      VarInfo vi2 = var_infos[1];
-      VarInfo vi3 = var_infos[2];
-      ProglangType rep1 = vi1.rep_type;
-      ProglangType rep2 = vi2.rep_type;
-      ProglangType rep3 = vi3.rep_type;
-#if defined (ORDER_VALUES)
-        for (Iterator itor = values_order.iterator(); itor.hasNext(); ) {
-          Object[] vals = (Object[]) itor.next();
-          int[] tm_array = (int[]) values_cache.get (vals);
-          InvariantStatus status = InvariantStatus.NO_CHANGE;
-          for (int mi=0; mi<tm_array.length; mi++) {
-            if (tm_array[mi] > 0) {
-              InvariantStatus tempStatus =
-                inv.add(val1, val2, val3, mi, tm_array[mi]);
-              if (tempStatus == InvariantStatus.FALSIFIED) {
-                status = InvariantStatus.FALSIFIED;
-                break;
-              }
-            }
-          }
-          if (status == InvariantStatus.FALSIFIED) {
-            destroyInv(inv);
-            break;
-          }
-        }
-#endif
-        for (Iterator itor = values_cache.entrySet().iterator(); itor.hasNext(); ) {
-          Map.Entry entry = (Map.Entry) itor.next();
-          Object[] vals = (Object[]) entry.getKey();
-          int[] tm_array = (int[]) entry.getValue();
-          InvariantStatus status = InvariantStatus.NO_CHANGE;
-          for (int mi=0; mi<tm_array.length; mi++) {
-            if (tm_array[mi] > 0) {
-              InvariantStatus tempStatus =
-                inv.add(val1, val2, val3, mi, tm_array[mi]);
-              if (tempStatus == InvariantStatus.FALSIFIED) {
-                status = InvariantStatus.FALSIFIED;
-                break;
-              }
-            }
-          }
-          if (status == InvariantStatus.FALSIFIED) {
-            destroyInv(inv);
-            break;
-          }
-        }
-      }
-#endif
-    }
-    */ // ... [INCR]
   }
 
   /**
@@ -1286,12 +1116,9 @@ public final class PPTSLICE1
       }
 
       // Add each invariant (permuted to match the parent varinfos)
-      // to our list of invariants.  Skip any invariants with ni-suppressions
-      // Invariants with ni-suppressions are handled in ni_merge_invs()
+      // to our list of invariants.
       for (int j = 0; j < cslice.invs.size(); j++) {
         Invariant orig_inv = (Invariant) cslice.invs.get (j);
-        if (orig_inv.get_ni_suppressions() != null)
-          continue;
         Invariant inv = orig_inv.clone_and_permute (permute);
         all_invs.add (inv);
         if (inv.logOn()) {
@@ -1363,13 +1190,15 @@ public final class PPTSLICE1
         if (parent_inv != null) {
           invs.add (parent_inv);
           if (Debug.logOn())
-            parent_inv.log ("Merge successful");
+            parent_inv.log ("Merge successful of " + parent_inv.format()
+                            + " into " + name());
         }
       } else {
         if (Debug.logOn()) {
           Invariant inv = (Invariant) child_invs.get(0);
-          inv.log ("Not merging invariant up, Found " + child_invs.size()
-                    + "child invariants in " + valid_child_count + " children");
+          inv.log ("Not merging invariant into " + name()
+                   + ", Found " + child_invs.size() + "child invariants in "
+                    + valid_child_count + " children");
         }
       }
     }
