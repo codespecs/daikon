@@ -2497,6 +2497,13 @@ public class PptTopLevel
     return -1;
   }
 
+  public VarInfo find_var_by_name (String varname) {
+    int i = indexOf (varname);
+    if (i == -1)
+      return (null);
+    else
+      return (var_infos[i]);
+  }
 
   // At present, this needs to occur after deriving variables, because
   // I haven't integrated derivation and inference yet.
