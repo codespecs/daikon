@@ -9,6 +9,15 @@ daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
+2.4.2 (1 February 2003):
+
+Daikon is now stricter about the formating of program point names in .decls
+and .dtrace files; for instance, they must contain a tag (such as
+":::ENTER", ":::EXIT", or ":::OBJECT).  If you have written a front end for
+which this is a problem, contact us.
+
+----------------
+
 2.4.1 (1 January 2003):
 
 There are two improvements to running Daikon under Windows.  First, Cygwin
