@@ -128,7 +128,7 @@ Goal (java): (for (int i == 0; (i <= a.length-1; i++)(a[i] >= -57))
 Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] >= -57))
 Goal (ioa): \A i : Int (i \in a => a[i] >= -57)
 Goal (jml): (\forall int i; 0 <= i && i <= a.length-1; (a[i] >= -57))
-Goal (dbc): quant.Quant.elementsGTE(a, -57)
+Goal (dbc): quant.Quant.eltsGTE(a, -57)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (>= (select (select elems |a|) |i|) -57)))
 [102 5 92 33 -54 -2 -57 -3 -24 29 93]
 
@@ -140,7 +140,7 @@ Goal (java): warning: method daikon.inv.unary.sequence.EltNonZero.format(OutputF
 Goal (esc): \nonnullelements(a)
 Goal (ioa): \A i : Int (i \in a => a[i]~=0)
 Goal (jml): \nonnullelements(a)
-Goal (dbc): quant.Quant.elementsNotEqual(a, 0)
+Goal (dbc): quant.Quant.eltsNotEqual(a, 0)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (NEQ (select (select elems |a|) |i|) 0)))
 
 ; All are 4, 5, or 6
@@ -151,7 +151,7 @@ Goal (java): (for (int i == 0; (i <= a.length-1; i++)(a[i] == 4 || a[i] == 5 || 
 Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] == 4 || a[i] == 5 || a[i] == 6))
 Goal (ioa): \A i : Int (i \in a => (i = 4) \/ (i = 5) \/ (i = 6))
 Goal (jml): (\forall int i; 0 <= i && i <= a.length-1; a[i] == 4 || a[i] == 5 || a[i] == 6)
-Goal (dbc): quant.Quant.elementsOneOf(a, new long[] { 4, 5, 6 })
+Goal (dbc): quant.Quant.eltsOneOf(a, new long[] { 4, 5, 6 })
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (OR (EQ (select (select elems |a|) |i|) 4) (EQ (select (select elems |a|) |i|) 5) (EQ (select (select elems |a|) |i|) 6))))
 [4 5 6 5 4 5 6 5 4 4 4 5 5 5 6 6 6]
 
@@ -163,7 +163,7 @@ Goal (java): (for (int i == 0; (i <= a.length-1; i++)(a[i] <= 895))
 Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] <= 895))
 Goal (ioa): \A i : Int (i \in a => a[i] <= 895)
 Goal (jml): (\forall int i; 0 <= i && i <= a.length-1; (a[i] <= 895))
-Goal (dbc): quant.Quant.elementsLTE(a, 895)
+Goal (dbc): quant.Quant.eltsLTE(a, 895)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (<= (select (select elems |a|) |i|) 895)))
 [1 -99 2 456 895 673 2 -23 -123 -9824 23]
 
@@ -176,7 +176,7 @@ Goal (java): warning: method daikon.inv.unary.sequence.EltwiseIntLessThan.format
 Goal (esc): (\forall int i, j; (0 <= i && i <= a.length-1 && 0 <= j && j <= a.length-1) ==> ((i+1 == j) ==> (a[i] < a[j])))
 Goal (ioa): \A i : Int \A j : Int ((i \in a /\ j \in a /\ Free[i]+1 = Free[j]) => a[i] = a[j])
 Goal (jml): (\forall int i, j; 0 <= i && i <= a.length-1 && 0 <= j && j <= a.length-1; ((i+1 == j) ==> (a[i] < a[j]))
-Goal (dbc): warning: method daikon.inv.unary.sequence.EltwiseIntLessThan.format(OutputFormat:DBC/Java) needs to be implemented: a[] sorted by <
+Goal (dbc): quant.Quant.eltwiseLT(a)
 Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |a|) 1)) (EQ (+ |i| 1) |j|)) (< (select (select elems |a|) |i|) (select (select elems |a|) |j|))))
 [1 2 3 5 7 8 9 100]
 
@@ -188,7 +188,7 @@ Goal (java): warning: method daikon.inv.unary.sequence.NoDuplicates.format(Outpu
 Goal (esc): warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: a[] contains no duplicates
 Goal (ioa): \A i : Int \A j : Int ((i \in a /\ j \in a /\ a[i] = a[j]) => i = j)
 Goal (jml): (\forall int i, j; 0 <= i && i <= a.length-1 && 0 <= j && j <= a.length-1; (i != j) ==> (a[i] != a[j]))
-Goal (dbc): warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:DBC/Java) needs to be implemented: a[] contains no duplicates
+Goal (dbc): quant.Quant.noDups(a)
 Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |a|) 1)) (NEQ |i| |j|)) (NEQ (select (select elems |a|) |i|) (select (select elems |a|) |j|))))
 [1 55 2 -123 873 24 99 239]
 
@@ -203,7 +203,7 @@ Goal (java): warning: method daikon.inv.unary.sequence.SeqIndexComparison.format
 Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] > i))
 Goal (ioa): \A i : Int (i \in a => i > a[i])
 Goal (jml): (\forall int i; 0 <= i && i <= a.length-1; a[i] >i)
-Goal (dbc): warning: method daikon.inv.unary.sequence.SeqIndexComparison.format(OutputFormat:DBC/Java) needs to be implemented: a[i] > i
+Goal (dbc): quant.Quant.indexGT(a)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (> (select (select elems |a|) |i|) |i|)))
 [5 10 15 20 25 30 35 40]
 
@@ -245,7 +245,7 @@ Goal (java): (for (int i == 0; (i <= a.length-1; i++)(a[i] == "gnirtStset" || a[
 Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (warning: method daikon.inv.unary.stringsequence.EltOneOfString.format(OutputFormat:ESC/Java) needs to be implemented: a[] elements one of { "gnirtStset", "testString" }))
 Goal (ioa): \A i : Int (i \in a => i = "gnirtStset") \/ (i = "testString")))
 Goal (jml): (\forall int i; 0 <= i && i <= a.length-1; a[i] == "gnirtStset" || a[i] == "testString")
-Goal (dbc): quant.Quant.elementsOneOf(a, new String[] { "gnirtStset", "testString" })
+Goal (dbc): quant.Quant.eltsOneOf(a, new String[] { "gnirtStset", "testString" })
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (OR (EQ (select (select elems |a|) |i|) |_string_gnirtStset|) (EQ (select (select elems |a|) |i|) |_string_testString|))))
 ["testString" "testString" "gnirtStset" "gnirtStset" "testString" "gnirtStset"]
 
@@ -341,7 +341,7 @@ Goal (java): warning: method daikon.inv.binary.twoSequence.PairwiseIntEqual.form
 Goal (esc): (\forall int i, j; (0 <= i && i <= a.length-1 && 0 <= j && j <= b.length-1 && i == j) ==> (a[i] == b[j]))
 Goal (ioa): \A i : Int (a[i] = b[i])
 Goal (jml): (\forall int i, j; 0 <= i && i <= a.length-1 && 0 <= j && j <= b.length-1 && i == j; a[i] == b[j])
-Goal (dbc): warning: method daikon.inv.binary.twoSequence.PairwiseIntEqual.format(OutputFormat:DBC/Java) needs to be implemented: a[] == b[] (elementwise)
+Goal (dbc): quant.Quant.pairwiseEqual(a, b)
 Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |b|) 1)) (EQ (- |i| 0) (- |j| 0))) (EQ (select (select elems |a|) |i|) (select (select elems |b|) |j|))))
 [5 5 5 5 5 5 5 5]
 [5 5 5 5 5 5 5 5]
@@ -354,7 +354,7 @@ Goal (java): warning: method daikon.inv.binary.twoSequence.PairwiseIntLessThan.f
 Goal (esc): (\forall int i, j; (0 <= i && i <= a.length-1 && 0 <= j && j <= b.length-1 && i == j) ==> (a[i] < b[j]))
 Goal (ioa): \A i : Int (a[i] < b[i])
 Goal (jml): (\forall int i, j; 0 <= i && i <= a.length-1 && 0 <= j && j <= b.length-1 && i == j; a[i] < b[j])
-Goal (dbc): warning: method daikon.inv.binary.twoSequence.PairwiseIntLessThan.format(OutputFormat:DBC/Java) needs to be implemented: a[] < b[] (elementwise)
+Goal (dbc): quant.Quant.pairwiseLT(a, b)
 Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |b|) 1)) (EQ (- |i| 0) (- |j| 0))) (< (select (select elems |a|) |i|) (select (select elems |b|) |j|))))
 [-5 0 5 10 15 20 25 30]
 [5 10 15 20 25 30 35 40]
@@ -367,7 +367,7 @@ Goal (java): warning: method daikon.inv.binary.twoSequence.PairwiseIntGreaterTha
 Goal (esc): (\forall int i, j; (0 <= i && i <= a.length-1 && 0 <= j && j <= b.length-1 && i == j) ==> (a[i] > b[j]))
 Goal (ioa): \A i : Int (a[i] > b[i])
 Goal (jml): (\forall int i, j; 0 <= i && i <= a.length-1 && 0 <= j && j <= b.length-1 && i == j; a[i] > b[j])
-Goal (dbc): warning: method daikon.inv.binary.twoSequence.PairwiseIntGreaterThan.format(OutputFormat:DBC/Java) needs to be implemented: a[] > b[] (elementwise)
+Goal (dbc): quant.Quant.pairwiseGT(a, b)
 Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |b|) 1)) (EQ (- |i| 0) (- |j| 0))) (> (select (select elems |a|) |i|) (select (select elems |b|) |j|))))
 [5 10 15 20 25 30 35 40]
 [-5 0 5 10 15 20 25 30]
@@ -380,7 +380,7 @@ Goal (java): warning: method daikon.inv.binary.twoSequence.PairwiseIntLessEqual.
 Goal (esc): (\forall int i, j; (0 <= i && i <= a.length-1 && 0 <= j && j <= b.length-1 && i == j) ==> (a[i] <= b[j]))
 Goal (ioa): \A i : Int (a[i] <= b[i])
 Goal (jml): (\forall int i, j; 0 <= i && i <= a.length-1 && 0 <= j && j <= b.length-1 && i == j; a[i] <= b[j])
-Goal (dbc): warning: method daikon.inv.binary.twoSequence.PairwiseIntLessEqual.format(OutputFormat:DBC/Java) needs to be implemented: a[] <= b[] (elementwise)
+Goal (dbc): quant.Quant.pairwiseLTE(a, b)
 Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |b|) 1)) (EQ (- |i| 0) (- |j| 0))) (<= (select (select elems |a|) |i|) (select (select elems |b|) |j|))))
 [-5 0 5 10 15 20 25 30]
 [5 0 15 20 25 30 35 40]
@@ -393,7 +393,7 @@ Goal (java): warning: method daikon.inv.binary.twoSequence.PairwiseIntGreaterEqu
 Goal (esc): (\forall int i, j; (0 <= i && i <= a.length-1 && 0 <= j && j <= b.length-1 && i == j) ==> (a[i] >= b[j]))
 Goal (ioa): \A i : Int (a[i] >= b[i])
 Goal (jml): (\forall int i, j; 0 <= i && i <= a.length-1 && 0 <= j && j <= b.length-1 && i == j; a[i] >= b[j])
-Goal (dbc): warning: method daikon.inv.binary.twoSequence.PairwiseIntGreaterEqual.format(OutputFormat:DBC/Java) needs to be implemented: a[] >= b[] (elementwise)
+Goal (dbc): quant.Quant.pairwiseGTE(a, b)
 Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |b|) 1)) (EQ (- |i| 0) (- |j| 0))) (>= (select (select elems |a|) |i|) (select (select elems |b|) |j|))))
 [5 0 15 20 25 30 35 40]
 [-5 0 5 10 15 20 25 30]
@@ -461,7 +461,7 @@ Goal (java): warning: method daikon.inv.binary.sequenceScalar.SeqIntGreaterThan.
 Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] > b))
 Goal (ioa): \A i : Int (i \in a => a[i]>b)
 Goal (jml): (\forall int i; 0 <= i && i <= a.length-1; a[i] > b)
-Goal (dbc): warning: method daikon.inv.binary.sequenceScalar.SeqIntGreaterThan.format(OutputFormat:DBC/Java) needs to be implemented: a[] elements > b
+Goal (dbc): quant.Quant.eltsGT(a, b)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (> (select (select elems |a|) |i|) |b|)))
 [-9 8 -7 6 -5 4 -3 2 -1 0]
 -20
@@ -474,7 +474,7 @@ Goal (java): warning: method daikon.inv.binary.sequenceScalar.SeqIntGreaterEqual
 Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] >= b))
 Goal (ioa): \A i : Int (i \in a => a[i]>=b)
 Goal (jml): (\forall int i; 0 <= i && i <= a.length-1; a[i] >= b)
-Goal (dbc): warning: method daikon.inv.binary.sequenceScalar.SeqIntGreaterEqual.format(OutputFormat:DBC/Java) needs to be implemented: a[] elements >= b
+Goal (dbc): quant.Quant.eltsGTE(a, b)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (>= (select (select elems |a|) |i|) |b|)))
 [-9 8 -7 6 -5 4 -3 -20 -1 0]
 -20
@@ -487,7 +487,7 @@ Goal (java): warning: method daikon.inv.binary.sequenceScalar.SeqIntEqual.format
 Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] == b))
 Goal (ioa): \A i : Int (i \in a => a[i]=b)
 Goal (jml): (\forall int i; 0 <= i && i <= a.length-1; a[i] == b)
-Goal (dbc): warning: method daikon.inv.binary.sequenceScalar.SeqIntEqual.format(OutputFormat:DBC/Java) needs to be implemented: a[] elements == b
+Goal (dbc): quant.Quant.eltsEqual(a, b)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (EQ (select (select elems |a|) |i|) |b|)))
 [2 2 2 2 2 2 2 2 2 2]
 2
@@ -500,7 +500,7 @@ Goal (java): warning: method daikon.inv.binary.sequenceScalar.SeqIntLessThan.for
 Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] < b))
 Goal (ioa): \A i : Int (i \in a => a[i]<b)
 Goal (jml): (\forall int i; 0 <= i && i <= a.length-1; a[i] < b)
-Goal (dbc): warning: method daikon.inv.binary.sequenceScalar.SeqIntLessThan.format(OutputFormat:DBC/Java) needs to be implemented: a[] elements < b
+Goal (dbc): quant.Quant.eltsLT(a, b)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (< (select (select elems |a|) |i|) |b|)))
 [-9 8 -7 6 -5 4 -3 2 -1 0]
 20
@@ -513,7 +513,7 @@ Goal (java): warning: method daikon.inv.binary.sequenceScalar.SeqIntLessEqual.fo
 Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] <= b))
 Goal (ioa): \A i : Int (i \in a => a[i]<=b)
 Goal (jml): (\forall int i; 0 <= i && i <= a.length-1; a[i] <= b)
-Goal (dbc): warning: method daikon.inv.binary.sequenceScalar.SeqIntLessEqual.format(OutputFormat:DBC/Java) needs to be implemented: a[] elements <= b
+Goal (dbc): quant.Quant.eltsLEQ(a, b)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (<= (select (select elems |a|) |i|) |b|)))
 [20 8 -7 6 -5 4 -3 2 -1 0]
 20
