@@ -26,448 +26,488 @@ import javax.swing.plaf.FontUIResource;
 import javax.swing.table.*;
 import javax.swing.tree.*;
 
+//  InvariantsGUI is a GUI for displaying daikon invariants.  InvariantsGUI reads in a
+//  .inv file (a serialized PptMap), constructs a hierarchy of Ppt's, and allows the user
+//  to view various tables of invariants by selecting points of the hierarchy.
+
 public class InvariantsGUI extends JFrame implements ActionListener, KeyListener {
-    InvariantTablesPanel invariantsTablesPanel;
-    InvariantFilters invariantFilters = new InvariantFilters();
-    List filterCheckBoxes = new ArrayList();
-    final JList variablesList = new JList( new DefaultListModel());
 
-    public static void main( String args[] ) {
-	InvariantsGUI gui;
-	if (args.length > 0)
-	    gui = new InvariantsGUI( args[0] );
-	else
-	    gui = new InvariantsGUI();
+  static final String PLEASE_REPORT_ERROR_STRING = "\nPlease report this error to daikon@sdg.lcs.mit.edu.";
+
+  InvariantTablesPanel invariantsTablesPanel;
+  InvariantFilters invariantFilters = new InvariantFilters();
+  List filterCheckBoxes = new ArrayList();
+  final JList variablesList = new JList( new DefaultListModel());
+
+  public static void main( String args[] ) {
+    InvariantsGUI gui;
+    if (args.length > 0)
+      gui = new InvariantsGUI( args[0] );
+    else
+      gui = new InvariantsGUI();
+  }
+
+  public InvariantsGUI( String invFileName ) {
+    displayInvariantsFromFile( invFileName );
+
+    // Unlike displayInvariantsFromFile(), which needs to be run everytime the user specifies
+    // a new .inv file, createControlPanel() only needs to be run once.
+    createControlPanel();
+  }
+
+  public InvariantsGUI() {
+    String invFileName = pickFileFromFileChooser();
+    displayInvariantsFromFile( invFileName );
+
+    // Unlike displayInvariantsFromFile(), which needs to be run everytime the user specifies
+    // a new .inv file, createControlPanel() only needs to be run once.
+    createControlPanel();
+  }
+
+  public void displayInvariantsFromFile( String invFileName ) {
+    PptMap pptMap = null;
+    while (pptMap == null) {
+      try {
+	pptMap = getPptMapFromFile( invFileName );
+      } catch (IOException e) {
+	InvariantsGUI.showErrorMessage( e.getMessage() + "\nPlease select another .inv or .inv.gz file." );
+	invFileName = pickFileFromFileChooser();
+      }
     }
 
-    public InvariantsGUI( String invFileName ) {
-	loadInvariantsFromFile( invFileName );
+    try {
+      JTree tree = new JTree( constructTreeModel( pptMap ));
+      
+      TreeSelectionModel treeSelectionModel = tree.getSelectionModel();
+      invariantsTablesPanel = new InvariantTablesPanel( treeSelectionModel, invariantFilters, variablesList );
+      treeSelectionModel.addTreeSelectionListener( invariantsTablesPanel );
+      
+      setupGUI( tree, invariantsTablesPanel.getScrollPane());
+    } catch (Exception e) {
+      InvariantsGUI.showErrorMessage( "Error: Unable to display invariants." + PLEASE_REPORT_ERROR_STRING );
+    }
+  }
+
+  public PptMap getPptMapFromFile ( String fileName ) throws IOException {
+    try {
+      InputStream istream = new FileInputStream( fileName );
+      if (fileName.endsWith( ".gz" ))
+	istream = new GZIPInputStream( istream );
+      ObjectInputStream o = new ObjectInputStream( istream );
+      PptMap pptMap = (PptMap) o.readObject();
+      istream.close();
+      return pptMap;
+    } catch (Exception e) {
+      String errorMessage = "";
+      if (e.getClass() == FileNotFoundException.class)
+	errorMessage = "Error: Invariants object file not found.";
+      else if (e.getClass() == StreamCorruptedException.class)
+	errorMessage = "Error: Invariants object file is corrupted.";
+      else if (e.getClass() == InvalidClassException.class)
+	errorMessage = "Error: Invalid invariants object file.  Make sure the invariants\nobject file was made with your latest version of daikon.";
+      else
+	errorMessage = "Unknown error: " + e.getClass() + "\nPlease report this error to daikon@sdg.lcs.mit.edu.";
+      throw new IOException( errorMessage );
+    }
+  }
+
+  public static void showErrorMessage( String message ) {
+    JOptionPane.showMessageDialog( null, message, "Error", JOptionPane.ERROR_MESSAGE );
+  }
+
+  //  This method constructs a tree out of Ppt's.  This method is complicated and throws
+  //  many Exceptions.  These Exceptions have arcane error messages that the user will not
+  //  understand.  This is okay, because in displayInvariantsFromFile(), the only actual
+  //  error message shown is "Error: Unable to display invariants."  I'm leaving the more
+  //  descriptive, arcane error messages in the code for convenience, for when I need
+  //  them.
+  public DefaultTreeModel constructTreeModel( PptMap pptMap ) throws Exception {
+    DefaultMutableTreeNode root = new DefaultMutableTreeNode( "All classes" );
+
+    //  Create the first level of the tree:  classes
+    for (Iterator iter = pptMap.nameStringSet().iterator(); iter.hasNext(); ) {
+      String name = (String) iter.next();
+      PptName pptName = new PptName( name );
+      String className = pptName.getFullClassName();
+      //	    System.out.println( "name is " + name + ", className is " + className );
+      DefaultMutableTreeNode classNode = getChildByName( root, className );
+      if (classNode == null) {
+	PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
+	Assert.assert(className != null);
+	root.add( new DefaultMutableTreeNode( className )); // Create a node for this class
+      }
     }
 
-    public InvariantsGUI() {
-	String invFileName = pickFileFromFileChooser();
-	loadInvariantsFromFile( invFileName );
-    }
-
-    public void loadInvariantsFromFile( String invFileName ) {
-	JTree tree = new JTree( constructTreeModel( invFileName ));
-	TreeSelectionModel treeSelectionModel = tree.getSelectionModel();
-	invariantsTablesPanel = new InvariantTablesPanel( treeSelectionModel, invariantFilters, variablesList );
-	treeSelectionModel.addTreeSelectionListener( invariantsTablesPanel );
-
-	setupGUI( tree, invariantsTablesPanel.getScrollPane());
-    }
-
-    public DefaultTreeModel constructTreeModel( String fileName ) {
-	PptMap pptMap = getPptMapFromFile( fileName );
-
-	DefaultMutableTreeNode root = new DefaultMutableTreeNode( "All classes" );
-
-	//  Create the first level of the tree:  classes
-	for (Iterator iter = pptMap.nameStringSet().iterator(); iter.hasNext(); ) {
-	    String name = (String) iter.next();
-	    PptName pptName = new PptName( name );
-	    String className = pptName.getFullClassName();
-	    //	    System.out.println( "name is " + name + ", className is " + className );
-	    DefaultMutableTreeNode classNode = getChildByName( root, className );
-	    if (classNode == null) {
-		PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
-                Assert.assert(className != null);
-		root.add( new DefaultMutableTreeNode( className )); // Create a node for this class
-	    }
+    //  Create the second level of the tree: method names OR class-level ppt.
+    //  If the ppt is associated with a method, then create the method node which will
+    //  later contain entry and exit ppt's as children.  If the ppt is a class-level
+    //  ppt (CLASS or CLASS-STATIC or OBJECT), then create the leaf node for this ppt
+    //  right away.
+    for (Iterator iter = pptMap.nameStringSet().iterator(); iter.hasNext(); ) {
+      String name = (String) iter.next();
+      Assert.assert(name != null);
+      PptName pptName = new PptName( name );
+      String className = pptName.getFullClassName();
+      DefaultMutableTreeNode classNode = getChildByName( root, className );
+      if (classNode == null)
+	throw new Exception( "InvariantsGUI.constructTreeModel():  cannot find class node '" + className + "'" );
+      //	    System.out.println(name);
+      if (pptName.isObjectInstanceSynthetic() || pptName.isClassStaticSynthetic()) {
+	String programPointName = pptName.getPoint();
+	DefaultMutableTreeNode programPointNode = getChildByName( classNode, programPointName );
+	if (programPointNode == null) {
+	  PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
+	  Assert.assert(topLevel != null);
+	  classNode.add( new DefaultMutableTreeNode( topLevel )); //  Create a node for this program point
 	}
-
-	//  Create the second level of the tree: method names OR class-level ppt.
-	//  If the ppt is associated with a method, then create the method node which will
-	//  later contain entry and exit ppt's as children.  If the ppt is a class-level
-	//  ppt (CLASS or CLASS-STATIC or OBJECT), then create the leaf node for this ppt
-	//  right away.
-	for (Iterator iter = pptMap.nameStringSet().iterator(); iter.hasNext(); ) {
-	    String name = (String) iter.next();
-            Assert.assert(name != null);
-	    PptName pptName = new PptName( name );
-	    String className = pptName.getFullClassName();
-	    DefaultMutableTreeNode classNode = getChildByName( root, className );
-	    if (classNode == null)
-		throw new Error( "InvariantsGUI.constructTreeModel():  cannot find class node '" + className + "'" );
-	    //	    System.out.println(name);
-	    if (pptName.isObjectInstanceSynthetic() || pptName.isClassStaticSynthetic()) {
-		String programPointName = pptName.getPoint();
-		DefaultMutableTreeNode programPointNode = getChildByName( classNode, programPointName );
-		if (programPointNode == null) {
-		    PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
-                    Assert.assert(topLevel != null);
-		    classNode.add( new DefaultMutableTreeNode( topLevel )); //  Create a node for this program point
-		}
-	    } else {		// is a regular method ppt
-		String methodName = pptName.getFullMethodName();
-                if (methodName == null) {
-                    System.out.println("No method name: " + name);
-                }
-		DefaultMutableTreeNode methodNode = getChildByName( classNode, methodName );
-		if (methodNode == null) {
-                    if (methodName != null) {
-                        classNode.add( new DefaultMutableTreeNode( methodName )); // Create a node for this method
-                    } else {
-                        classNode.add( new DefaultMutableTreeNode( className )); // Create a node for this method
-                    }
-                }
-	    }
+      } else {		// is a regular method ppt
+	String methodName = pptName.getFullMethodName();
+	if (methodName == null) {
+	  throw new Exception( "No method name: " + name );
 	}
-
-	//  Create the third level of the tree:  method entry and exit points
-	for (Iterator iter = pptMap.nameStringSet().iterator(); iter.hasNext(); ) {
-	    String name = (String) iter.next();
-	    PptName pptName = new PptName( name );
-	    String methodName = pptName.getFullMethodName();
-	    if (methodName == null) // this is a CLASS or OBJECT ppt, and has no methodName associated with it
-		continue;
-	    String className = pptName.getFullClassName();
-	    DefaultMutableTreeNode classNode = getChildByName( root, className );
-	    if (classNode == null)
-		throw new Error( "InvariantsGUI.constructTreeModel():  cannot find class node '" + className + "'" );
-	    DefaultMutableTreeNode methodNode = getChildByName( classNode, methodName );
-	    if (methodNode == null)
-		throw new Error( "InvariantsGUI.constructTreeModel():  cannot find method node '" + methodName + "'" );
-	    String programPointName = pptName.getPoint();
-	    DefaultMutableTreeNode programPointNode = getChildByName( methodNode, programPointName );
-
-	    //  Create a node for this program point.  If this is the first program point
-	    //  node under this method, simply add the node.  If there are already some
-	    //  program point nodes, add this node in order.  Eg, make sure EXIT23 goes
-	    //  after ENTER and before EXIT97.
-	    if (programPointNode == null) {
-		PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
-		if (methodNode.getChildCount() == 0) {
-                    Assert.assert(topLevel != null);
-		    methodNode.add( new DefaultMutableTreeNode( topLevel ));
-                } else {
-		    int exitNumber = pptName.getPointSubscript();
-		    int childIndex;
-		    for (childIndex = 0; childIndex < methodNode.getChildCount(); childIndex++ ) {
-			Ppt currentChild = (Ppt) ((DefaultMutableTreeNode) methodNode.getChildAt( childIndex )).getUserObject();
-			int currentChildExitNumber = currentChild.ppt_name.getPointSubscript();
-			if (currentChildExitNumber > exitNumber)
-			    break;
-		    }
-                    Assert.assert(topLevel != null);
-		    methodNode.insert( new DefaultMutableTreeNode( topLevel ), childIndex );
-		}
-	    } else
-	      throw new Error( "InvariantsGUI.constructTreeModel():  ppt '" + name + "' has already been added to tree" );
+	DefaultMutableTreeNode methodNode = getChildByName( classNode, methodName );
+	if (methodNode == null) {
+	  if (methodName != null) {
+	    classNode.add( new DefaultMutableTreeNode( methodName )); // Create a node for this method
+	  } else {
+	    classNode.add( new DefaultMutableTreeNode( className )); // Create a node for this method
+	  }
 	}
-
-	//  TODO:  Sort the method nodes within a class.  Sort according to a method's exit number.
-
-	return new DefaultTreeModel( root );
+      }
     }
 
-    public PptMap getPptMapFromFile( String fileName ) {
-	try {
- 	    InputStream istream = new FileInputStream( fileName );
-	    if (fileName.endsWith( ".gz" ))
-	        istream = new GZIPInputStream( istream );
-	    ObjectInputStream o = new ObjectInputStream( istream );
-	    PptMap pptMap = (PptMap) o.readObject();
-	    istream.close();
-	    return pptMap;
-	} catch (Exception e) {
-	    if (e.getClass() == FileNotFoundException.class)
-		System.out.println( "Error: invariants object file not found." );
-	    else if (e.getClass() == StreamCorruptedException.class)
-		System.out.println( "Error: invariants object file is corrupted." );
-	    else
-		System.out.println( "Error: " + e.getClass().getName() + ": " + e.getMessage() );
-	    throw new Error( "InvariantsGUI.getPptMapFromFile():  error reading pptMap from '" + fileName + "'" );
+    //  Create the third level of the tree:  method entry and exit points
+    for (Iterator iter = pptMap.nameStringSet().iterator(); iter.hasNext(); ) {
+      String name = (String) iter.next();
+      PptName pptName = new PptName( name );
+      String methodName = pptName.getFullMethodName();
+      if (methodName == null) // this is a CLASS or OBJECT ppt, and has no methodName associated with it
+	continue;
+      String className = pptName.getFullClassName();
+      DefaultMutableTreeNode classNode = getChildByName( root, className );
+      if (classNode == null)
+	throw new Exception( "InvariantsGUI.constructTreeModel():  cannot find class node '" + className + "'" );
+      DefaultMutableTreeNode methodNode = getChildByName( classNode, methodName );
+      if (methodNode == null)
+	throw new Exception( "InvariantsGUI.constructTreeModel():  cannot find method node '" + methodName + "'" );
+      String programPointName = pptName.getPoint();
+      DefaultMutableTreeNode programPointNode = getChildByName( methodNode, programPointName );
+
+      //  Create a node for this program point.  If this is the first program point
+      //  node under this method, simply add the node.  If there are already some
+      //  program point nodes, add this node in order.  Eg, make sure EXIT23 goes
+      //  after ENTER and before EXIT97.
+      if (programPointNode == null) {
+	PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
+	if (methodNode.getChildCount() == 0) {
+	  Assert.assert(topLevel != null);
+	  methodNode.add( new DefaultMutableTreeNode( topLevel ));
+	} else {
+	  int exitNumber = pptName.getPointSubscript();
+	  int childIndex;
+	  for (childIndex = 0; childIndex < methodNode.getChildCount(); childIndex++ ) {
+	    Ppt currentChild = (Ppt) ((DefaultMutableTreeNode) methodNode.getChildAt( childIndex )).getUserObject();
+	    int currentChildExitNumber = currentChild.ppt_name.getPointSubscript();
+	    if (currentChildExitNumber > exitNumber)
+	      break;
+	  }
+	  Assert.assert(topLevel != null);
+	  methodNode.insert( new DefaultMutableTreeNode( topLevel ), childIndex );
 	}
+      } else
+	throw new Exception( "InvariantsGUI.constructTreeModel():  ppt '" + name + "' has already been added to tree" );
     }
 
-    //  Returns child with name <code>name</code> if there is one; otherwise return <code>null</code>.
-    //  Used by constructTreeModel().
-    protected DefaultMutableTreeNode getChildByName( DefaultMutableTreeNode node, String name ) {
-	for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
-	    DefaultMutableTreeNode child = ((DefaultMutableTreeNode) enum.nextElement());
-            if (child == null) {
-                System.out.println("Null child");
-            } else if (child.toString() == null) {
-                System.out.println("Null toString() for child of type " + child.getClass());
-            } else if (child.toString().equals( name )) {
-		return child;
-            }
-	}
-	return null;
+    //  TODO:  Sort the method nodes within a class.  Sort according to a method's exit number.
+
+    return new DefaultTreeModel( root );
+  }
+
+  //  Returns child with name <code>name</code> if there is one; otherwise return <code>null</code>.
+  //  Used by constructTreeModel().
+  protected DefaultMutableTreeNode getChildByName( DefaultMutableTreeNode node, String name ) throws Exception {
+    for (Enumeration enum = node.children(); enum.hasMoreElements(); ) {
+      DefaultMutableTreeNode child = ((DefaultMutableTreeNode) enum.nextElement());
+      if (child == null) {
+	throw new Exception( "Null child" );
+      } else if (child.toString() == null) {
+	throw new Exception( "Null toString() for child of type " + child.getClass());
+      } else if (child.toString().equals( name )) {
+	return child;
+      }
     }
+    return null;
+  }
 
-    protected void setupGUI( JTree tree, JScrollPane invariantTablesScrollPane ) {
-	UIManager.put( "Button.font",   ((FontUIResource) UIManager.get( "Button.font" )).deriveFont( Font.PLAIN ));
-	UIManager.put( "CheckBox.font", ((FontUIResource) UIManager.get( "CheckBox.font" )).deriveFont( Font.PLAIN ));
-	UIManager.put( "RadioButton.font", ((FontUIResource) UIManager.get( "RadioButton.font" )).deriveFont( Font.PLAIN ));
+  protected void setupGUI( JTree tree, JScrollPane invariantTablesScrollPane ) {
+    UIManager.put( "Button.font",   new FontUIResource( ((FontUIResource) UIManager.get( "Button.font" )).deriveFont( Font.PLAIN )));
+    UIManager.put( "CheckBox.font", new FontUIResource( ((FontUIResource) UIManager.get( "CheckBox.font" )).deriveFont( Font.PLAIN )));
+    UIManager.put( "RadioButton.font", new FontUIResource( ((FontUIResource) UIManager.get( "RadioButton.font" )).deriveFont( Font.PLAIN )));
 
-	JMenuBar menuBar = new JMenuBar();
-	setJMenuBar( menuBar );
-	createFileMenu( menuBar );
-	createControlPanel();
+    JMenuBar menuBar = new JMenuBar();
+    setJMenuBar( menuBar );
+    createFileMenu( menuBar );
 
-	removeKeyListener( this ); // setupGUI() might be called more than once, but we only
-	// want to add it as KeyListener once.
-	addKeyListener( this );	   // for scrolling through tables
+    removeKeyListener( this ); // setupGUI() might be called more than once, but we only
+    // want to add it as KeyListener once.
+    addKeyListener( this );	   // for scrolling through tables
 
-	//  If the user clicks on a method, the method's ppt's will be selected
-	//  but we don't want the method node to expand.
-	tree.setExpandsSelectedPaths( false );
+    //  If the user clicks on a method, the method's ppt's will be selected
+    //  but we don't want the method node to expand.
+    tree.setExpandsSelectedPaths( false );
 
-	JPanel topPanel = new JPanel();	// includes control panel and tree
-	topPanel.setLayout( new BoxLayout( topPanel, BoxLayout.Y_AXIS ));
-	//	topPanel.add( controlPanel );
-	topPanel.add( new JScrollPane( tree ));
-	//  	topPanel.add( controlPanel, BorderLayout.NORTH );
-	//  	topPanel.add( new JScrollPane( tree ), BorderLayout.CENTER );
+    JPanel topPanel = new JPanel();	// includes control panel and tree
+    topPanel.setLayout( new BoxLayout( topPanel, BoxLayout.Y_AXIS ));
+    //	topPanel.add( controlPanel );
+    topPanel.add( new JScrollPane( tree ));
+    //  	topPanel.add( controlPanel, BorderLayout.NORTH );
+    //  	topPanel.add( new JScrollPane( tree ), BorderLayout.CENTER );
 
-	//	invariantTablesScrollPane.setViewportView( new JPanel());
-	JSplitPane splitPane = new JSplitPane( JSplitPane.VERTICAL_SPLIT,
-					       topPanel, invariantTablesScrollPane );
-	splitPane.setOneTouchExpandable( true );
-	splitPane.setDividerSize( 2 );
+    //	invariantTablesScrollPane.setViewportView( new JPanel());
+    JSplitPane splitPane = new JSplitPane( JSplitPane.VERTICAL_SPLIT,
+					   topPanel, invariantTablesScrollPane );
+    splitPane.setOneTouchExpandable( true );
+    splitPane.setDividerSize( 2 );
 
-	getContentPane().removeAll();
-	setTitle( "Invariants Display" );
-	getContentPane().add( splitPane );
- 	pack();
-	setSize( 600, 700 );
-	setVisible( true );
-	setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+    getContentPane().removeAll();
+    setTitle( "Invariants Display" );
+    getContentPane().add( splitPane );
+    pack();
+    setSize( 800, 900 );
+    setVisible( true );
+    setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 
-	splitPane.setDividerLocation( .4 );
-    }
+    splitPane.setDividerLocation( .4 );
+  }
 
-    void createFileMenu( JMenuBar menuBar ) {
-	JMenu menu = new JMenu( "File" );
-	menu.setMnemonic( KeyEvent.VK_F );
-	menuBar.add( menu );
-	JMenuItem menuItem = new JMenuItem( "Load file", KeyEvent.VK_L );
-	menuItem.addActionListener( this );
-	menu.add( menuItem );
-	menuItem = new JMenuItem( "Quit", KeyEvent.VK_Q );
-	menuItem.addActionListener( this );
-	menu.add( menuItem );
-    }
+  void createFileMenu( JMenuBar menuBar ) {
+    JMenu menu = new JMenu( "File" );
+    menu.setMnemonic( KeyEvent.VK_F );
+    menuBar.add( menu );
+    JMenuItem menuItem = new JMenuItem( "Load file", KeyEvent.VK_L );
+    menuItem.addActionListener( this );
+    menu.add( menuItem );
+    menuItem = new JMenuItem( "Quit", KeyEvent.VK_Q );
+    menuItem.addActionListener( this );
+    menu.add( menuItem );
+  }
 
-    void createControlPanel() {
-	JFrame controlPanel = new JFrame( "Control Panel" );
-	controlPanel.setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE );
-	Container contentPane = controlPanel.getContentPane();
-	contentPane.setLayout( new BoxLayout( contentPane, BoxLayout.Y_AXIS ));
-	contentPane.add( createPropertyFilterSection());
-	contentPane.add( createVariableFilterSection());
- 	controlPanel.pack();
-	controlPanel.setVisible( true );
-    }
+  void createControlPanel() {
+    JFrame controlPanel = new JFrame( "Control Panel" );
+    controlPanel.setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE );
+    Container contentPane = controlPanel.getContentPane();
+    contentPane.setLayout( new BoxLayout( contentPane, BoxLayout.Y_AXIS ));
+    contentPane.add( createPropertyFilterSection());
+    contentPane.add( createVariableFilterSection());
+    controlPanel.pack();
+    controlPanel.setSize( 400, 400 );
+    controlPanel.setVisible( true );
+  }
 
-    JPanel createPropertyFilterSection() {
-	JPanel filterButtonsPanel = new JPanel();
-	filterButtonsPanel.setLayout( new BoxLayout( filterButtonsPanel, BoxLayout.X_AXIS ));
-	JButton button = new JButton( "Select all filters" );
-	button.addActionListener( this );
-	filterButtonsPanel.add( button );
-	button = new JButton( "Deselect all filters" );
-	button.addActionListener( this );
-	button.setAlignmentX( Component.RIGHT_ALIGNMENT );
-	filterButtonsPanel.add( button );
-	filterButtonsPanel.setAlignmentX( Component.LEFT_ALIGNMENT );
+  JPanel createPropertyFilterSection() {
+    JPanel filterButtonsPanel = new JPanel();
+    filterButtonsPanel.setLayout( new BoxLayout( filterButtonsPanel, BoxLayout.X_AXIS ));
+    JButton button = new JButton( "Select all filters" );
+    button.addActionListener( this );
+    filterButtonsPanel.add( button );
+    button = new JButton( "Deselect all filters" );
+    button.addActionListener( this );
+    button.setAlignmentX( Component.RIGHT_ALIGNMENT );
+    filterButtonsPanel.add( button );
+    filterButtonsPanel.setAlignmentX( Component.LEFT_ALIGNMENT );
 
-	JPanel filtersPanel = new JPanel();
-	filtersPanel.setBorder( createBorder( "Property filters" ));
-	filtersPanel.setLayout( new BoxLayout( filtersPanel, BoxLayout.Y_AXIS ));
-	filtersPanel.add( createFilterCheckBox( "Suppress unjustified invariants", InvariantFilters.UNJUSTIFIED_FILTER ));
-	filtersPanel.add( createFilterCheckBox( "Suppress obvious invariants", InvariantFilters.OBVIOUS_FILTER ));
-	filtersPanel.add( createFilterCheckBox( "Suppress invariants with few modified samples", InvariantFilters.FEW_MODIFIED_SAMPLES_FILTER ));
-	filtersPanel.add( createFilterCheckBox( "Suppress invariants containing non-canonical variables", InvariantFilters.NON_CANONICAL_VARIABLES_FILTER ));
-	filtersPanel.add( createFilterCheckBox( "Suppress invariants containing only constants", InvariantFilters.ONLY_CONSTANT_VARIABLES_FILTER ));
-	filtersPanel.add( createFilterCheckBox( "Suppress implied postcondition invariants", InvariantFilters.IMPLIED_POSTCONDITION_FILTER ));
-	filtersPanel.add( Box.createRigidArea( new Dimension( 10, 10 )));
-	filtersPanel.add( filterButtonsPanel );
-	filtersPanel.setAlignmentX( Component.LEFT_ALIGNMENT );
-	return filtersPanel;
-    }
+    JPanel filtersPanel = new JPanel();
+    filtersPanel.setBorder( createBorder( "Property filters" ));
+    filtersPanel.setLayout( new BoxLayout( filtersPanel, BoxLayout.Y_AXIS ));
+    filtersPanel.add( createFilterCheckBox( "Suppress unjustified invariants", InvariantFilters.UNJUSTIFIED_FILTER ));
+    filtersPanel.add( createFilterCheckBox( "Suppress obvious invariants", InvariantFilters.OBVIOUS_FILTER ));
+    filtersPanel.add( createFilterCheckBox( "Suppress invariants with few modified samples", InvariantFilters.FEW_MODIFIED_SAMPLES_FILTER ));
+    filtersPanel.add( createFilterCheckBox( "Suppress invariants containing non-canonical variables", InvariantFilters.NON_CANONICAL_VARIABLES_FILTER ));
+    filtersPanel.add( createFilterCheckBox( "Suppress invariants containing only constants", InvariantFilters.ONLY_CONSTANT_VARIABLES_FILTER ));
+    filtersPanel.add( createFilterCheckBox( "Suppress implied postcondition invariants", InvariantFilters.IMPLIED_POSTCONDITION_FILTER ));
+    filtersPanel.add( Box.createRigidArea( new Dimension( 10, 10 )));
+    filtersPanel.add( filterButtonsPanel );
+    filtersPanel.setAlignmentX( Component.LEFT_ALIGNMENT );
+    return filtersPanel;
+  }
 
-    JPanel createVariableFilterSection() {
-	final JTextField addVariableTextField = new JTextField();
-	addVariableTextField.setPreferredSize( new Dimension( 150, 24 ));
-	addVariableTextField.setMaximumSize( new Dimension( 150, 24 ));
-	//	addVariableTextField.setAlignmentX( Component.LEFT_ALIGNMENT );
-	JButton addVariableButton = new JButton( "Add variable" );
-	JPanel addVariablePanel = new JPanel();
-	addVariablePanel.setLayout( new BoxLayout( addVariablePanel, BoxLayout.X_AXIS ));
-	addVariablePanel.setAlignmentX( Component.LEFT_ALIGNMENT );
-	//	addVariablePanel.setLayout( new FlowLayout());
-	//	addVariablePanel.setLayout( new BorderLayout());
-	addVariablePanel.add( addVariableTextField );
-	addVariablePanel.add( addVariableButton );
+  JPanel createVariableFilterSection() {
+    final JTextField addVariableTextField = new JTextField();
+    addVariableTextField.setPreferredSize( new Dimension( 150, 24 ));
+    addVariableTextField.setMaximumSize( new Dimension( 150, 24 ));
+    //	addVariableTextField.setAlignmentX( Component.LEFT_ALIGNMENT );
+    JButton addVariableButton = new JButton( "Add variable" );
+    JPanel addVariablePanel = new JPanel();
+    addVariablePanel.setLayout( new BoxLayout( addVariablePanel, BoxLayout.X_AXIS ));
+    addVariablePanel.setAlignmentX( Component.LEFT_ALIGNMENT );
+    //	addVariablePanel.setLayout( new FlowLayout());
+    //	addVariablePanel.setLayout( new BorderLayout());
+    addVariablePanel.add( addVariableTextField );
+    addVariablePanel.add( addVariableButton );
 
-	JButton removeVariablesButton = new JButton( "Remove selected variables" );
-	removeVariablesButton.setAlignmentX( Component.LEFT_ALIGNMENT );
+    JButton removeVariablesButton = new JButton( "Remove selected variables" );
+    removeVariablesButton.setAlignmentX( Component.LEFT_ALIGNMENT );
 
-	JLabel filterChoiceLabel = new JLabel( "Filter on: " );
-	filterChoiceLabel.setForeground( Color.black );
-	filterChoiceLabel.setFont( filterChoiceLabel.getFont().deriveFont( Font.PLAIN ));
-	JRadioButton anyButton = new JRadioButton( "any variable" );
-	anyButton.setSelected( true );
-	JRadioButton allButton = new JRadioButton( "all variables" );
-	ButtonGroup group = new ButtonGroup();
-	group.add( anyButton );
-	group.add( allButton );
-	JPanel filterChoicePanel = new JPanel();
-	filterChoicePanel.setLayout( new BoxLayout( filterChoicePanel, BoxLayout.Y_AXIS ));
-	filterChoicePanel.add( filterChoiceLabel );
-	filterChoicePanel.add( anyButton );
-	filterChoicePanel.add( allButton );
+    JLabel filterChoiceLabel = new JLabel( "Filter on: " );
+    filterChoiceLabel.setForeground( Color.black );
+    filterChoiceLabel.setFont( filterChoiceLabel.getFont().deriveFont( Font.PLAIN ));
+    JRadioButton anyButton = new JRadioButton( "any variable" );
+    anyButton.setSelected( true );
+    JRadioButton allButton = new JRadioButton( "all variables" );
+    ButtonGroup group = new ButtonGroup();
+    group.add( anyButton );
+    group.add( allButton );
+    JPanel filterChoicePanel = new JPanel();
+    filterChoicePanel.setLayout( new BoxLayout( filterChoicePanel, BoxLayout.Y_AXIS ));
+    filterChoicePanel.add( filterChoiceLabel );
+    filterChoicePanel.add( anyButton );
+    filterChoicePanel.add( allButton );
 
-	JPanel variablesControlPanel = new JPanel();
-	variablesControlPanel.setLayout( new BoxLayout( variablesControlPanel, BoxLayout.Y_AXIS ));
-	variablesControlPanel.setAlignmentX( Component.LEFT_ALIGNMENT );
-	variablesControlPanel.add( addVariablePanel );
-	variablesControlPanel.add( Box.createRigidArea( new Dimension( 25, 25 )));
-	variablesControlPanel.add( removeVariablesButton );
-	variablesControlPanel.add( Box.createRigidArea( new Dimension( 25, 25 )));
-	variablesControlPanel.add( filterChoicePanel );
+    JPanel variablesControlPanel = new JPanel();
+    variablesControlPanel.setLayout( new BoxLayout( variablesControlPanel, BoxLayout.Y_AXIS ));
+    variablesControlPanel.setAlignmentX( Component.LEFT_ALIGNMENT );
+    variablesControlPanel.add( addVariablePanel );
+    variablesControlPanel.add( Box.createRigidArea( new Dimension( 25, 25 )));
+    variablesControlPanel.add( removeVariablesButton );
+    variablesControlPanel.add( Box.createRigidArea( new Dimension( 25, 25 )));
+    variablesControlPanel.add( filterChoicePanel );
 
-	ActionListener addVariableActionListener = new ActionListener() {
-		public void actionPerformed( ActionEvent e ) {
-		    if (! addVariableTextField.getText().equals( "" )) {
-			invariantFilters.addVariableFilter( addVariableTextField.getText());
-			invariantsTablesPanel.updateInvariantsDisplay();
-			DefaultListModel listModel = (DefaultListModel) variablesList.getModel();
-			listModel.addElement( addVariableTextField.getText());
-			variablesList.setModel( listModel );
-			addVariableTextField.setText( "" );
-		    }
-		}};
-	addVariableButton.addActionListener( addVariableActionListener );
-	addVariableTextField.addActionListener( addVariableActionListener );
-	removeVariablesButton.addActionListener( new ActionListener() {
-		public void actionPerformed( ActionEvent e ) {
-		    int selectedIndices[] =  variablesList.getSelectedIndices();
-		    if (selectedIndices != null) {
-			DefaultListModel listModel = (DefaultListModel) variablesList.getModel();
-			for (int i = selectedIndices.length - 1; i >= 0; i--) {
-			    invariantFilters.removeVariableFilter( (String) listModel.getElementAt( i ));
-			    listModel.removeElementAt( selectedIndices[ i ]);
-			}
-			invariantsTablesPanel.updateInvariantsDisplay();
-			variablesList.setModel( listModel );
-		}}});
-	anyButton.addActionListener( new ActionListener() {
-		public void actionPerformed( ActionEvent e ) {
-		    invariantFilters.setVariableFilterType( InvariantFilters.ANY_VARIABLE );
-		    invariantsTablesPanel.updateInvariantsDisplay();
-		}});
-	allButton.addActionListener( new ActionListener() {
-		public void actionPerformed( ActionEvent e ) {
-		    invariantFilters.setVariableFilterType( InvariantFilters.ALL_VARIABLES );
-		    invariantsTablesPanel.updateInvariantsDisplay();
-		}});
-
-
-	JPanel variablesPanel = new JPanel();
-	variablesPanel.setBorder( createBorder( "Variable filters" ));
-	variablesPanel.setLayout( new BoxLayout( variablesPanel, BoxLayout.X_AXIS ));
-	variablesPanel.setAlignmentX( Component.LEFT_ALIGNMENT );
-	variablesPanel.add( new JScrollPane( variablesList ));
-	variablesPanel.add( variablesControlPanel );
-	Dimension size = new Dimension( 410, 200 );
-	variablesPanel.setPreferredSize( size );
-	variablesPanel.setMaximumSize( size );
-	variablesPanel.setMinimumSize( size );
-	return variablesPanel;
-    }
-
-    Border createBorder( String title ) {
-	return BorderFactory.createTitledBorder( BorderFactory.createCompoundBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ),
-										     BorderFactory.createEtchedBorder()),
-						 title );
-    }
-
-    JCheckBox createFilterCheckBox( String text, int id ) {
-	JCheckBox checkBox = new JCheckBox( text, true );
-	checkBox.addActionListener( this );
-	checkBox.setName( new Integer( id ).toString());
-	checkBox.setAlignmentX( Component.LEFT_ALIGNMENT );
-	filterCheckBoxes.add( checkBox );
-	return checkBox;
-    }
-
-    void turnFilterCheckBoxesOn() {
-	for (Iterator iter = filterCheckBoxes.iterator(); iter.hasNext(); )
-	    ((JCheckBox) iter.next()).setSelected( true );
-    }
-
-    void turnFilterCheckBoxesOff() {
-	for (Iterator iter = filterCheckBoxes.iterator(); iter.hasNext(); )
-	    ((JCheckBox) iter.next()).setSelected( false );
-    }
-
-    public void actionPerformed( ActionEvent e ) {
-	//  Handle File menu events
-	if (e.getSource().getClass() == JMenuItem.class) {
-	    JMenuItem menuItem = (JMenuItem) e.getSource();
-	    String menuText = menuItem.getText();
-	    if (menuText.equals( "Load file" )) {
-		String invFileName = pickFileFromFileChooser();
-		loadInvariantsFromFile( invFileName );
-	    }
-	    else if (menuText.equals( "Quit" ))
-		System.exit( 0 );
-	}
-	//  Handle checkbox events involving filters
-	else if (e.getSource().getClass() == JCheckBox.class) {
-	    JCheckBox checkBox = (JCheckBox) e.getSource();
-	    String checkBoxText = checkBox.getText();
-	    String checkBoxName = checkBox.getName();
-	    if (checkBoxName != null) {	// One specific filter was selected or deselected
-		int filterID = new Integer( checkBoxName ).intValue();
-		invariantFilters.changeFilterSetting( filterID, checkBox.isSelected());
-		invariantsTablesPanel.updateInvariantsDisplay();
-	    }
-	}
-	//  Handle button events
-	else if (e.getSource().getClass() == JButton.class) {
-	    JButton button = (JButton) e.getSource();
-	    String buttonText = button.getText();
-	    if (buttonText.equals( "Select all filters" )) {
-		turnFilterCheckBoxesOn();
-		invariantFilters.turnFiltersOn();
-	    } else if (buttonText.equals( "Deselect all filters" )) {
-		turnFilterCheckBoxesOff();
-		invariantFilters.turnFiltersOff();
+    ActionListener addVariableActionListener = new ActionListener() {
+	public void actionPerformed( ActionEvent e ) {
+	  if (! addVariableTextField.getText().equals( "" )) {
+	    invariantFilters.addVariableFilter( addVariableTextField.getText());
+	    invariantsTablesPanel.updateInvariantsDisplay();
+	    DefaultListModel listModel = (DefaultListModel) variablesList.getModel();
+	    listModel.addElement( addVariableTextField.getText());
+	    variablesList.setModel( listModel );
+	    addVariableTextField.setText( "" );
+	  }
+	}};
+    addVariableButton.addActionListener( addVariableActionListener );
+    addVariableTextField.addActionListener( addVariableActionListener );
+    removeVariablesButton.addActionListener( new ActionListener() {
+	public void actionPerformed( ActionEvent e ) {
+	  int selectedIndices[] =  variablesList.getSelectedIndices();
+	  if (selectedIndices != null) {
+	    DefaultListModel listModel = (DefaultListModel) variablesList.getModel();
+	    for (int i = selectedIndices.length - 1; i >= 0; i--) {
+	      invariantFilters.removeVariableFilter( (String) listModel.getElementAt( i ));
+	      listModel.removeElementAt( selectedIndices[ i ]);
 	    }
 	    invariantsTablesPanel.updateInvariantsDisplay();
-	}
-    }
+	    variablesList.setModel( listModel );
+	  }}});
+    anyButton.addActionListener( new ActionListener() {
+	public void actionPerformed( ActionEvent e ) {
+	  invariantFilters.setVariableFilterType( InvariantFilters.ANY_VARIABLE );
+	  invariantsTablesPanel.updateInvariantsDisplay();
+	}});
+    allButton.addActionListener( new ActionListener() {
+	public void actionPerformed( ActionEvent e ) {
+	  invariantFilters.setVariableFilterType( InvariantFilters.ALL_VARIABLES );
+	  invariantsTablesPanel.updateInvariantsDisplay();
+	}});
 
-    String pickFileFromFileChooser() {
-	final JFileChooser fileChooser = new JFileChooser();
-	fileChooser.addChoosableFileFilter( new InvFileFilter());
-	int returnValue = JFileChooser.CANCEL_OPTION;
-	while (returnValue != JFileChooser.APPROVE_OPTION)
-	    returnValue = fileChooser.showOpenDialog( this );
-	String fileName = "";
-	try {
-	    fileName = fileChooser.getSelectedFile().getCanonicalPath();
-	} catch (IOException e) {
-	    System.out.println( "InvariantsGUI.pickFileFromFileChooser():  error selecting file '" + fileName + "'" );
-	    throw new Error( e.getMessage());
-	}
-	return fileName;
-    }
 
-    public void keyTyped( KeyEvent e ) {}
-    public void keyPressed( KeyEvent e ) {}
-    public void keyReleased( KeyEvent e ) {
-	if (e.isAltDown()  &&  e.getKeyCode() == 38) // up arrow
-	    invariantsTablesPanel.scrollToPreviousTable();
-	else if (e.isAltDown()  &&  e.getKeyCode() == 40) // down arrow
-	    invariantsTablesPanel.scrollToNextTable();
+    JPanel variablesPanel = new JPanel();
+    variablesPanel.setBorder( createBorder( "Variable filters" ));
+    variablesPanel.setLayout( new BoxLayout( variablesPanel, BoxLayout.X_AXIS ));
+    variablesPanel.setAlignmentX( Component.LEFT_ALIGNMENT );
+    variablesPanel.add( new JScrollPane( variablesList ));
+    variablesPanel.add( variablesControlPanel );
+    Dimension size = new Dimension( 410, 200 );
+    variablesPanel.setPreferredSize( size );
+    variablesPanel.setMaximumSize( size );
+    variablesPanel.setMinimumSize( size );
+    return variablesPanel;
+  }
+
+  Border createBorder( String title ) {
+    return BorderFactory.createTitledBorder( BorderFactory.createCompoundBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ),
+										 BorderFactory.createEtchedBorder()),
+					     title );
+  }
+
+  JCheckBox createFilterCheckBox( String text, int id ) {
+    JCheckBox checkBox = new JCheckBox( text, true );
+    checkBox.addActionListener( this );
+    checkBox.setName( new Integer( id ).toString());
+    checkBox.setAlignmentX( Component.LEFT_ALIGNMENT );
+    filterCheckBoxes.add( checkBox );
+    return checkBox;
+  }
+
+  void turnFilterCheckBoxesOn() {
+    for (Iterator iter = filterCheckBoxes.iterator(); iter.hasNext(); )
+      ((JCheckBox) iter.next()).setSelected( true );
+  }
+
+  void turnFilterCheckBoxesOff() {
+    for (Iterator iter = filterCheckBoxes.iterator(); iter.hasNext(); )
+      ((JCheckBox) iter.next()).setSelected( false );
+  }
+
+  public void actionPerformed( ActionEvent e ) {
+    //  Handle File menu events
+    if (e.getSource().getClass() == JMenuItem.class) {
+      JMenuItem menuItem = (JMenuItem) e.getSource();
+      String menuText = menuItem.getText();
+      if (menuText.equals( "Load file" )) {
+	String invFileName = pickFileFromFileChooser();
+	displayInvariantsFromFile( invFileName );
+      }
+      else if (menuText.equals( "Quit" ))
+	System.exit( 0 );
     }
+    //  Handle checkbox events involving filters
+    else if (e.getSource().getClass() == JCheckBox.class) {
+      JCheckBox checkBox = (JCheckBox) e.getSource();
+      String checkBoxText = checkBox.getText();
+      String checkBoxName = checkBox.getName();
+      if (checkBoxName != null) {	// One specific filter was selected or deselected
+	int filterID = new Integer( checkBoxName ).intValue();
+	invariantFilters.changeFilterSetting( filterID, checkBox.isSelected());
+	invariantsTablesPanel.updateInvariantsDisplay();
+      }
+    }
+    //  Handle button events
+    else if (e.getSource().getClass() == JButton.class) {
+      JButton button = (JButton) e.getSource();
+      String buttonText = button.getText();
+      if (buttonText.equals( "Select all filters" )) {
+	turnFilterCheckBoxesOn();
+	invariantFilters.turnFiltersOn();
+      } else if (buttonText.equals( "Deselect all filters" )) {
+	turnFilterCheckBoxesOff();
+	invariantFilters.turnFiltersOff();
+      }
+      invariantsTablesPanel.updateInvariantsDisplay();
+    }
+  }
+
+  String pickFileFromFileChooser() {
+    final JFileChooser fileChooser = new JFileChooser();
+    fileChooser.addChoosableFileFilter( new InvFileFilter());
+    int returnValue = JFileChooser.CANCEL_OPTION;
+    while (returnValue != JFileChooser.APPROVE_OPTION)
+      returnValue = fileChooser.showOpenDialog( this );
+    String fileName = "";
+    try {
+      fileName = fileChooser.getSelectedFile().getCanonicalPath();
+    } catch (IOException e) {
+      InvariantsGUI.showErrorMessage( "Unable to choose file." + PLEASE_REPORT_ERROR_STRING );
+    }
+    return fileName;
+  }
+
+  public void keyTyped( KeyEvent e ) {}
+  public void keyPressed( KeyEvent e ) {}
+  public void keyReleased( KeyEvent e ) {
+    if (e.isAltDown()  &&  e.getKeyCode() == 38) // up arrow
+      invariantsTablesPanel.scrollToPreviousTable();
+    else if (e.isAltDown()  &&  e.getKeyCode() == 40) // down arrow
+      invariantsTablesPanel.scrollToNextTable();
+  }
 }
 
 
@@ -483,9 +523,7 @@ class InvFileFilter extends FileFilter {
 	    return false;
     }
 
-    public String getDescription() {
-        return ".inv files";
-    }
+    public String getDescription() { return ".inv files"; }
 }
 
 
@@ -528,7 +566,8 @@ class InvariantTablesPanel implements TreeSelectionListener {
 		    String name = ((PptTopLevel) userObject).name;
 		    int index = tableNames.indexOf( name );
 		    if (index == -1)
-			throw new Error( "DaikonTreeSelectionListener.valueChanged(): " + name + " table not found." );
+		      //			throw new Exception( "DaikonTreeSelectionListener.valueChanged(): " + name + " table not found." );
+		      InvariantsGUI.showErrorMessage( "Error processing deselection event." + InvariantsGUI.PLEASE_REPORT_ERROR_STRING );
 		    panel.remove( (JComponent) tables.get( index ));
 		    tables.remove( index );
 		    tableNames.remove( index );
