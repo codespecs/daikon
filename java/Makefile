@@ -288,12 +288,12 @@ compile: all
 all: all_directly junit chicory
 
 ## In general, don't use this; it misses some files
-all_via_daikon: daikon/Daikon.class daikon/Runtime.class daikon/diff/Diff.class
+all_via_daikon: chicory daikon/Daikon.class daikon/Runtime.class daikon/diff/Diff.class
 	$(MAKE) all_pass2
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
 # all_directly: ${AUTO_GENERATED_FILES} ajax
-all_directly: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
+all_directly: chicory ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 	@echo ${JAVAC_COMMAND} '*.java ...'
 	@${JAVAC_COMMAND} ${JAVA_FILES}
 	@chmod -w ${AUTO_GENERATED_FILES}
@@ -311,7 +311,7 @@ compile_daikon : $(AUTO_GENERATED_FILES)
 # Chicory java front end for Daikon
 #
 CHICORY_JAVA_FILES := daikon/Chicory.java \
-					  $(shell find  daikon/chicory -name '*.java')
+					  $(shell find daikon/chicory -name '*.java')
 CHICORY_CLASS_FILES := $(patsubst %.java,%.class,$(CHICORY_JAVA_FILES))
 
 chicory : ChicoryPremain.jar
