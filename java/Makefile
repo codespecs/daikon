@@ -121,6 +121,8 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/binary/twoSequence/ReverseFloat.java \
 	daikon/inv/binary/twoSequence/SubSequence.java \
 	daikon/inv/binary/twoSequence/SubSequenceFloat.java \
+	daikon/inv/binary/twoSequence/SubSet.java \
+	daikon/inv/binary/twoSequence/SubSetFloat.java \
 	daikon/inv/binary/twoSequence/PairwiseIntComparison.java \
 	daikon/inv/binary/twoSequence/PairwiseFloatComparison.java \
 	daikon/inv/binary/twoSequence/PairwiseLinearBinary.java \
@@ -680,6 +682,12 @@ daikon/inv/binary/twoSequence/SubSequence.java: daikon/inv/binary/twoSequence/Su
 	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
 
 daikon/inv/binary/twoSequence/SubSequenceFloat.java: daikon/inv/binary/twoSequence/SubSequence.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
+
+daikon/inv/binary/twoSequence/SubSet.java: daikon/inv/binary/twoSequence/SubSet.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
+
+daikon/inv/binary/twoSequence/SubSetFloat.java: daikon/inv/binary/twoSequence/SubSet.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
 
 daikon/inv/binary/twoSequence/PairwiseIntComparison.java: daikon/inv/binary/twoSequence/PairwiseIntComparison.java.jpp
