@@ -151,7 +151,7 @@ public final class CLASSNAME
       if (!EQUAL (result, FUNCTIONS.invokeBinary(methodNumber, arg1, arg2))) {
         return InvariantStatus.FALSIFIED;
         }
-    } catch (Exception e) {
+    } catch (RuntimeException e) {
       return InvariantStatus.FALSIFIED;
     }
     return InvariantStatus.NO_CHANGE;
@@ -213,7 +213,7 @@ public final class CLASSNAME
         // wrapper.destroyAndFlow();
         return InvariantStatus.FALSIFIED;
         }
-    } catch (Exception e) {
+    } catch (RuntimeException e) {
       return InvariantStatus.FALSIFIED;
     }
     return InvariantStatus.NO_CHANGE;
