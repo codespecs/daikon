@@ -13,6 +13,7 @@ import daikon.split.*;
 import daikon.split.dsaa.*;
 import daikon.split.griesLisp.*;
 import daikon.split.weissDsaaMDE.*;
+import daikon.split.misc.*;
 
 import java.util.*;
 import java.io.PrintStream;
@@ -404,8 +405,7 @@ public class PptTopLevel extends Ppt {
        { new SequenceLengthFactory() },
       // pass2
        { new SequenceInitialFactory(),
-         new SequenceMinMaxSumFactory(),
-         new SequenceExtremumFactory(), }
+         new SequenceMinMaxSumFactory(), }
     };
 
   transient BinaryDerivationFactory[][] binaryDerivations
@@ -1304,9 +1304,12 @@ public class PptTopLevel extends Ppt {
   static {
     // Would it be enough to say "GriesLisp dummy = null;"?  I'm not sure.
     // This does work, though.
-    new SplitterList4Dsaa();
+
+    new MiscSplitters();
     new GriesLisp();
     new WeissDsaaMDE();
+    // These are outdated; they look for "field" instead of "this.field".
+    // new SplitterList4Dsaa();
   }
 
   public void addConditions(Splitter[] splits) {
@@ -1626,7 +1629,7 @@ public class PptTopLevel extends Ppt {
           if (slice1 != null) {
             sb.append("\t\t(" +
 		      nplural(slice1.num_values(), "value") + ", " +
-                      nplural(slice1.num_samples(), "sample"));
+                      nplural(slice1.num_samples(), "sample") + ")");
           } else {
             sb.append("\t\t(no slice)");
           }
