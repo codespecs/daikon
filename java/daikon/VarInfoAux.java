@@ -269,7 +269,7 @@ public final class VarInfoAux
   public VarInfoAux setValue (String key, String value) {
     HashMap newMap = new HashMap (this.map);
     newMap.put (key.intern(), value.intern());
-    return new VarInfoAux(map).intern();
+    return new VarInfoAux(newMap).intern();
   }
 
 }
