@@ -74,6 +74,12 @@ public final class Quant {
     return noDups((java.lang.Object[])seq.toArray(new java.lang.Object[]{}));
   }
 
+  /** @see #typeArray(Object[])
+   */
+  /*@ pure */ public static String[] typeArray(java.util.List seq) {
+    return typeArray((java.lang.Object[])seq.toArray(new java.lang.Object[]{}));
+  }
+
   /** @see #eltwiseEqual(Object[])
    */
   /*@ pure */ public static boolean eltwiseEqual(java.util.List seq) {

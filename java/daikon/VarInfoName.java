@@ -1417,7 +1417,7 @@ public abstract class VarInfoName
       if (isArray) {
         return "daikon.Quant.typeArray(" + varname + ")";
       } else {
-        return varname + ".getClass().toString()";
+        return varname + ".getClass().getName()";
       }
     }
 
