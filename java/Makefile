@@ -69,7 +69,9 @@ AUTO_GENERATED_FILES = \
 
 default: all
 
-all:	all_directly junit
+# "-S" means do not continue after errors.
+all:
+	${MAKE} -S all_directly junit
 
 ## In general, don't use this; it misses some files
 all_via_daikon: daikon/Daikon.class daikon/Runtime.class daikon/Diff.class
