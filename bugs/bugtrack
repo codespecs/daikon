@@ -281,7 +281,7 @@ delete_bug()
 
 echo "Bug database -- (C) Alan Donovan 2002"
 
-[ -z "$EDITOR" ] && EDITOR=vi
+[ -z "$EDITOR" ] && EDITOR=emacs
 [ -z "$EMAIL"  ] && {
     warn "EMAIL env var unset: defaulting to <$USER>"
     EMAIL=$USER
