@@ -188,8 +188,12 @@ sub cmp_ppts ( $$$ ) {
 		$difference = !($$la[0] eq $$lb[0]);
 	    } elsif (($$la[0] eq "nan")||($$lb[0] eq "nan")) {
 		$difference = !($$la[0] eq $$lb[0]);
+            } elsif (($$la[0] == 0)) {
+                $difference = !(abs($$lb[0]) <= 1e-4);
+            } elsif (($$lb[0] == 0)) {
+                $difference = !(abs($$la[0]) <= 1e-4);
 	    } else {
-		$difference = (abs($$la[0] - $$lb[0]) > 0.00001)
+                $difference = !(abs(1 - $$la[0]/$$lb[0]) <= 1e-4);
 	    }
 	    if ($difference) {
 		print "${varname} \@ ${pptname} floating-point difference:\n"
