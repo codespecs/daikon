@@ -581,17 +581,20 @@ public class CLASSNAME
       // elsewhere.
       return true;
     }
-    if (var1_in_var2 && isObviousSubSequenceDynamically (vis[0], vis[1])) return true;
-    if (var2_in_var1 && isObviousSubSequenceDynamically (vis[1], vis[0])) return true;
+    if (var1_in_var2 && isObviousSubSequenceDynamically (this, vis[0], vis[1])) return true;
+    if (var2_in_var1 && isObviousSubSequenceDynamically (this, vis[1], vis[0])) return true;
     return super.isObviousDynamically(vis);
   }
 
   /**
    * Returns true if the two original variables are related in a way
    * that makes subsequence or subset detection not informative.
-   * Determined statically.
    **/
-  public static boolean isObviousSubSequenceDynamically(VarInfo subvar, VarInfo supervar) {
+  public static boolean isObviousSubSequenceDynamically (Invariant inv,
+                            VarInfo subvar, VarInfo supervar) {
+
+    VarInfo [] vis = {subvar, supervar};
+
     ProglangType rep1 = subvar.rep_type;
     ProglangType rep2 = supervar.rep_type;
     if (!(((rep1 == ProglangType.INT_ARRAY)
@@ -607,7 +610,11 @@ public class CLASSNAME
                    subvar.name.name() + " in " + supervar.name.name());
     }
 
-    if (isObviousSubSequence (subvar, supervar)) return true;
+    if (isObviousSubSequence (subvar, supervar)) {
+      Debug.log (inv.getClass(), inv.ppt, vis,
+           "ObvSubSeq- true from isObviousSubSequence");
+      return true;
+    }
     debug.debug ("  not isObviousSubSequence(statically)");
 
     PptTopLevel ppt_parent = subvar.ppt;
@@ -628,7 +635,8 @@ public class CLASSNAME
           if (superinv instanceof ELTONEOF) {
             ELTONEOF eltinv = (ELTONEOF) superinv;
             if (eltinv.num_elts() > 0) {
-              System.out.println(" obvious because of " + eltinv.format());
+              Debug.log (inv.getClass(), inv.ppt, vis, " obvious because of "
+                    + eltinv.format());
               return true;
             }
           }
@@ -648,11 +656,13 @@ public class CLASSNAME
             if (seqinv.num_elts() == 1) {
               Object elt = seqinv.elt();
               if (elt instanceof long[] && ((long[]) elt).length == 0) {
-                debug.debug ("True from subvar being []");
+                Debug.log (debug, inv.getClass(), inv.ppt,  vis,
+                                "ObvSubSeq- True from subvar being []");
                 return true;
               }
               if (elt instanceof double[] && ((double[]) elt).length == 0) {
-                debug.debug ("True from subvar being []");
+                Debug.log (debug, inv.getClass(), inv.ppt, vis,
+                             "ObvSubSeq- True from subvar being []");
                 return true;
               }
             }
@@ -739,7 +749,8 @@ public class CLASSNAME
 //                            + "? left: " + left_included + ", right: "
 //                            + right_included);
         if (left_included && right_included) {
-          debug.debug ("True from comparing indices");
+          Debug.log (debug, inv.getClass(), inv.ppt, vis,
+                    "ObvSubSeq- True a[0..i] subseq a[0..j] and i < j");
           return true;
         }
       } else if ((subvar.derived instanceof SEQUENCESTRINGSUBSEQUENCE)
@@ -755,7 +766,8 @@ public class CLASSNAME
         boolean start2 = sss2.from_start;
         if (start1 == start2)
           if (VarInfo.compare_vars(index1, shift1, index2, shift2, start1)) {
-            debug.debug ("True from comparing indices");
+            Debug.log (debug, inv.getClass(), inv.ppt, vis,
+                                        "True from comparing indices");
             return true;
           }
       } else {
@@ -779,7 +791,8 @@ public class CLASSNAME
         VarInfo supervar_part = der.getVarInfo();
         // Get the canonical version; being equal to it is good enough.
         if (supervar_part.equalitySet.leader() == subvar) {
-          debug.debug ("True from canonical leader");
+          Debug.log (debug, inv.getClass(), inv.ppt, vis,
+                "ObvSubSeq- True from canonical leader");
           return true;
         }
 
@@ -805,10 +818,10 @@ public class CLASSNAME
             CLASSNAME ss = CLASSNAME.find(ss_ppt);
             if ((ss != null) && ss.justified()) {
               if (subvar_is_first ? ss.var1_in_var2 : ss.var2_in_var1) {
-                if (debug.isDebugEnabled()) {
-                  debug.debug ("  true from A subseq B[0..n] " + supervar_part.name.name());
-                  debug.debug ("  " + ss.repr());
-                }
+                if (logOn() || debug.isDebugEnabled())
+                  Debug.log (debug, inv.getClass(), inv.ppt, vis,
+                      "ObvSubSeq- true from A subseq B[0..n] "
+                       + supervar_part.name.name());
                 return true;
               }
             }
