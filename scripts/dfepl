@@ -9,9 +9,9 @@ use warnings;
 BEGIN {
     require English;
     if ($^V ge 5.8.0) {
-	English->import("-no_match_vars"); # avoid speed penaly
+        English->import("-no_match_vars"); # avoid speed penaly
     } else {
-	English->import();
+        English->import();
     }
 }
 
@@ -57,11 +57,11 @@ my $list_depth = 3;
 sub careful_system {
     my @cmd = @_;
     if ($verbose) {
-	print join(" ", @cmd), "\n";
+        print join(" ", @cmd), "\n";
     }
     my $result = system(@cmd);
     if ($result != 0) {
-	die "External command failed: " . join(" ", @cmd);
+        die "External command failed: " . join(" ", @cmd);
     }
     return $result;
 }
@@ -78,10 +78,10 @@ sub is_module {
     my ($dev,$ino,$mode,$nlink,$uid,$gid);
 
     if ((($dev,$ino,$mode,$nlink,$uid,$gid) = lstat($_)) &&
-	-f _ && /^.*\.pm\z/s) {
-	push @found_modules, $File::Find::name;
-	print "Found module $File::Find::name\n" if $verbose;
-	return 1;
+        -f _ && /^.*\.pm\z/s) {
+        push @found_modules, $File::Find::name;
+        print "Found module $File::Find::name\n" if $verbose;
+        return 1;
     }
 }
 
@@ -98,30 +98,30 @@ my $opt_parse = new Getopt::Long::Parser;
 $opt_parse->configure("bundling_override");
 my $parsed =
   $opt_parse->getoptions("instrsourcedir|instr-basedir=s" => \$instr_basedir,
-			 "types-basedir=s" => \$types_basedir,
-			 "decls-basedir=s" => \$decls_basedir,
-			 "dtrace-basedir=s" => \$dtrace_basedir,
-#			 "instr-style=s" => \$instr_style,
-			 "types-style=s" => \$types_style,
-			 "decls-style=s" => \$decls_style,
-			 "dtrace-style=s" => \$dtrace_style,
-			 "types-append!" => \$types_append,
-			 "decls-append!" => \$decls_append,
-			 "dtrace-append!" => \$dtrace_append,
-			 "types-files|t=s" => \@types_files,
-			 "types-dir|T:s" => \$types_search,
-			 "accessors-dir|A:s" => \$accessors_search,
-			 "verbose|v+" => \$verbose,
-			 "absolute!" => \$absolute,
-			 "reference-depth=f", => \$reference_depth,
-			 "accessor-depth=f", => \$accessor_depth,
-			 "list-depth=n", => \$list_depth,
+                         "types-basedir=s" => \$types_basedir,
+                         "decls-basedir=s" => \$decls_basedir,
+                         "dtrace-basedir=s" => \$dtrace_basedir,
+#                        "instr-style=s" => \$instr_style,
+                         "types-style=s" => \$types_style,
+                         "decls-style=s" => \$decls_style,
+                         "dtrace-style=s" => \$dtrace_style,
+                         "types-append!" => \$types_append,
+                         "decls-append!" => \$decls_append,
+                         "dtrace-append!" => \$dtrace_append,
+                         "types-files|t=s" => \@types_files,
+                         "types-dir|T:s" => \$types_search,
+                         "accessors-dir|A:s" => \$accessors_search,
+                         "verbose|v+" => \$verbose,
+                         "absolute!" => \$absolute,
+                         "reference-depth=f", => \$reference_depth,
+                         "accessor-depth=f", => \$accessor_depth,
+                         "list-depth=n", => \$list_depth,
 # This is probably more control than anyone needs
-# 			 "types-absolute!" => \$types_absolute,
-# 			 "decls-absolute!" => \$decls_absolute,
-# 			 "dtrace-absolute!" => \$dtrace_absolute,
-			 "perl=s", \$perl,
-			);
+#                        "types-absolute!" => \$types_absolute,
+#                        "decls-absolute!" => \$decls_absolute,
+#                        "dtrace-absolute!" => \$dtrace_absolute,
+                         "perl=s", \$perl,
+                        );
 
 exit(1) unless $parsed;
 
@@ -203,9 +203,9 @@ if ($verbose) {
 my $types = "";
 for my $tfile (@types_files) {
     if (-e $tfile) {
-	$types .= ",$tfile";
+        $types .= ",$tfile";
     } else {
-	warn "Types file $tfile does not exist\n";
+        warn "Types file $tfile does not exist\n";
     }
 }
 my $output_opt = ",-O,$types_basedir,$types_style,$types_append";
@@ -223,9 +223,9 @@ sub process_file_relative_to {
 
     my $olddir = undef;
     if ($dir ne ".") {
-	$olddir = getcwd();
-	chdir($dir);
-	print "Changing to directory $dir\n";
+        $olddir = getcwd();
+        chdir($dir);
+        print "Changing to directory $dir\n";
     }
 
     $prog =~ s,\Q$dir\E[/]?,,;
@@ -240,70 +240,69 @@ sub process_file_relative_to {
       if $verbose;
 
     if ($inplace) {
-	$from = "$prog.uninst";
-	if (! -e $from) {
-	    print STDERR "Renaming $prog to $from\n" if $verbose;
-	    rename($prog, $from) or die "Can't move $prog to $from: $!\n";
-	}
+        $from = "$prog.uninst";
+        if (! -e $from) {
+            print STDERR "Renaming $prog to $from\n" if $verbose;
+            rename($prog, $from) or die "Can't move $prog to $from: $!\n";
+        }
     } else {
-	$from = $prog;
+        $from = $prog;
     }
     my $more_opts = "";
     my $bprog = dirname($prog) . "/" . basename($prog, ".pm");
     (my $pack = $bprog) =~ s[/][::]g;
     if (defined $types_search) {
-	print STDERR "Looking at $types_search/combined.types\n" if $verbose;
-	if (-e "$types_search/combined.types") {
-	    $more_opts .= ",-t,$types_search/combined.types";
-	}
-	print STDERR "Looking at $types_search/$bprog.types\n" if $verbose;
-	if (-e "$types_search/$bprog.types") {
-	    $more_opts .= ",-t,$types_search/$bprog.types";
-	}
-	$pack =~ s[\.::][]g;
-	print STDERR "Looking at $types_search/$pack.types\n" if $verbose;
-	if (-e "$types_search/$pack.types") {
-	    $more_opts .= ",-t,$types_search/$pack.types";
-	}
+        print STDERR "Looking at $types_search/combined.types\n" if $verbose;
+        if (-e "$types_search/combined.types") {
+            $more_opts .= ",-t,$types_search/combined.types";
+        }
+        print STDERR "Looking at $types_search/$bprog.types\n" if $verbose;
+        if (-e "$types_search/$bprog.types") {
+            $more_opts .= ",-t,$types_search/$bprog.types";
+        }
+        $pack =~ s[\.::][]g;
+        print STDERR "Looking at $types_search/$pack.types\n" if $verbose;
+        if (-e "$types_search/$pack.types") {
+            $more_opts .= ",-t,$types_search/$pack.types";
+        }
     }
     if (defined $accessors_search) {
-	print STDERR "Looking at $accessors_search/$bprog.accessors\n"
-	  if $verbose;
-	if (-e "$accessors_search/$bprog.accessors") {
-	    $more_opts .= ",-a,$accessors_search/$bprog.accessors";
-	}
-	$pack =~ s[\.::][]g;
-	print STDERR "Looking at $accessors_search/$pack.accessors\n"
-	  if $verbose;
-	if (-e "$accessors_search/$pack.accessors") {
-	    $more_opts .= ",-a,$accessors_search/$pack.accessors";
-	}
+        print STDERR "Looking at $accessors_search/$bprog.accessors\n"
+          if $verbose;
+        if (-e "$accessors_search/$bprog.accessors") {
+            $more_opts .= ",-a,$accessors_search/$bprog.accessors";
+        }
+        $pack =~ s[\.::][]g;
+        print STDERR "Looking at $accessors_search/$pack.accessors\n"
+          if $verbose;
+        if (-e "$accessors_search/$pack.accessors") {
+            $more_opts .= ",-a,$accessors_search/$pack.accessors";
+        }
     }
     my $outfile = "$instr_basedir/$prog";
     my $outpath = dirname($outfile);
     if (not -d $outpath) {
-	print STDERR "Making $outpath\n" if $verbose;
-	mkpath($outpath, $verbose) or die "Couldn't create $outpath: $!\n";
+        print STDERR "Making $outpath\n" if $verbose;
+        mkpath($outpath, $verbose) or die "Couldn't create $outpath: $!\n";
     } else {
-	print STDERR "$outpath exists\n" if $verbose;
+        print STDERR "$outpath exists\n" if $verbose;
     }
     careful_system($perl, $perl_lib, "$deparse_opt,-o,$outfile$more_opts",
-		   $from);
+                   $from);
     if (defined($olddir)) {
-	print "Changing back to $olddir\n";
-	chdir($olddir);
+        print "Changing back to $olddir\n";
+        chdir($olddir);
     }
 }
 
 for my $arg (@ARGV) {
     if (-f $arg) {
-	process_file_relative_to($arg, ".");
+        process_file_relative_to($arg, ".");
     } elsif (-d $arg) {
-	File::Find::find({wanted => \&is_module}, $arg);
-	for my $file (@found_modules) {
-	    process_file_relative_to($file, $arg);
-	}
-	@found_modules = ();
+        File::Find::find({wanted => \&is_module}, $arg);
+        for my $file (@found_modules) {
+            process_file_relative_to($file, $arg);
+        }
+        @found_modules = ();
     }
 }
-
