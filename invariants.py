@@ -49,11 +49,11 @@ if not locals().has_key("fn_var_infos"):
     # "fn" should really be "ppt" or some such.
     fn_var_infos = {}           # from program point name to list of var_infos
     fn_truevars = {}                    # from program point name to number of original var_infos
-    fn_var_values = {}	    # from program point name to (tuple of values to occurrence count)
+    fn_var_values = {}	    # from program point name to (tuple of values to occurrence counts)
     fn_samples = {}         # from program point name to number of samples
     ## What is the purpose of having this as a separate variable??
     # Issue: this does not contain any derived variables, only original ones.
-    file_fn_var_values = {} # from filename to (program point to (values-tuple to occurrence))
+    file_fn_var_values = {} # from filename to (program point to (values-tuple to occurrence counts))
     # From function name to stats.  Used *only* if collect_stats = true
     fn_to_stats = {}
 
@@ -240,6 +240,57 @@ def clear_invariants(fn_regexp=None):
         for vi in fn_var_infos[fn_name]:
             vi.invariant = None
             vi.invariants = {}
+
+
+def file_fn_var_values_invalid_modinkey(ffvv):
+    return file_fn_var_values_invalid(ffvv)
+
+def file_fn_var_values_invalid(ffvv):
+    for file in ffvv.keys():
+        subresult = fn_var_values_invalid_modinkey(ffvv[file])
+        if subresult:
+            return "%s in file %s" % (subresult, file)
+    return false
+
+def fn_var_values_invalid_modinkey(fvv):
+    return fn_var_values_invalid(fvv, 0)
+
+def fn_var_values_invalid_modincount(fvv):
+    return fn_var_values_invalid(fvv, 1)
+
+def fn_var_values_invalid(fvv, modincount):
+    """MODINCOUNT is true if the value should be a length-2 tuple
+    and the key should be a list of integers.
+    MODINCOUNT is false if the value should be an integer
+    and the key shoudl be a list of length-2 tuples."""
+    for ppt in fvv.keys():
+        subresult = var_values_invalid(fvv[ppt], modincount)
+        if subresult:
+            return "%s at %s" % (subresult, ppt)
+    return false
+
+def var_values_invalid_modinkey(fvv):
+    return var_values_invalid(fvv, 0)
+
+def var_values_invalid_modincount(fvv):
+    return var_values_invalid(fvv, 1)
+
+def var_values_invalid(vv, modincount):
+    for (values_tuple, counts) in vv.items():
+        if modincount:
+            ## This is a tricky test; skip it for now
+            # for value_elt in values_tuple:
+            #     if type(value_elt) != types.TupleType:
+            #         return "value_elt %s should have len 2 in %s" % (value_elt, values_tuple)
+            if (type(counts) != types.TupleType) or (len(counts) != 2):
+                return "counts %s should have len 2 in %s" % (counts, values_tuple)
+        else:
+            # modinkey
+            for value_elt in values_tuple:
+                if (type(value_elt) != types.TupleType) or (len(value_elt) != 2):
+                    return "value_elt %s should have len 2 in %s" % (value_elt, values_tuple)
+            if type(counts) != types.IntType:
+                return "counts %s should be an integer in %s" % (counts, values_tuple)
 
 
 integer_re = re.compile(r'^-?[0-9]+$')
@@ -546,6 +597,8 @@ def merge_var_values(filename, sub_fn_var_values, sub_fn_samples):
     if debug_read:
         print "merge_var_varlues", filename, sub_fn_var_values.keys()
 
+    assert not fn_var_values_invalid_modinkey(sub_fn_var_values)
+
     for fname in sub_fn_var_values.keys():
         sub_var_values = sub_fn_var_values[fname]
         var_infos = fn_var_infos[fname]
@@ -561,7 +614,9 @@ def merge_var_values(filename, sub_fn_var_values, sub_fn_samples):
 ### Dictionary utilities
 ###
 
-def dict_of_tuples_to_tuple_of_dicts(dot, tuple_len=None):
+## These functions specify their inputs and outputs as "modinkey" or "modincount".
+
+def dict_of_tuples_modinkey_to_tuple_of_dicts_modinval(dot, tuple_len=None):
     """Input: a dictionary mapping a tuple of elements to a count.
     All the key tuples in the input have the same length unless optional argument
     TUPLE_LEN is provided, in which case all tuples have at least that length.
@@ -570,6 +625,8 @@ def dict_of_tuples_to_tuple_of_dicts(dot, tuple_len=None):
     Output: a tuple of dictionaries, each mapping a single element to a count.
     The first output dictionary concerns the first element of the original keys,
     the second output the second element of the original keys, and so forth."""
+
+    assert not var_values_invalid_modinkey(dot)
 
     if tuple_len == None:
         tuple_len = len(dot.keys()[0])
@@ -593,21 +650,34 @@ def dict_of_tuples_to_tuple_of_dicts(dot, tuple_len=None):
     result = tuple(result)
     for (key_tuple, count) in dot.items():
         for i in range(0, len(tuple_indices)):
-            this_key = key_tuple[tuple_indices[i]]
+            (this_key, this_modified) = key_tuple[tuple_indices[i]]
             this_dict = result[i]
-            this_dict[this_key] = this_dict.get(this_key, 0) + count
+            # Is this more efficient than the following?
+            #    this_dict_elt = this_dict.get(this_key, [0,0])
+            #    this_dict[this_key] = this_dict_elt
+            if this_dict.has_key(this_key):
+                this_dict_elt = this_dict[this_key]
+            else:
+                this_dict_elt = [0,0]
+                this_dict[this_key] = this_dict_elt
+            this_dict_elt[0] = this_dict_elt[0] + count
+            if this_modified:
+                this_dict_elt[1] = this_dict_elt[1] + count
     return result
-# dict_of_tuples_to_tuple_of_dicts(fn_var_values["PUSH-ACTION"])
-
+# dict_of_tuples_modinkey_to_tuple_of_dicts(fn_var_values["PUSH-ACTION"])
+# dict_of_tuples_modinkey_to_tuple_of_dicts(invariants.fn_var_values['P180-15.1.1:::END'])
 
 def dict_of_sequences_to_element_dict(dot):
     """Input: a dictionary mapping instances of a sequence (tuples) to a count.
     Output: a dictionary, mapping elements of all of the sequence instances
     to a count."""
     result = {}
-    for (key_tuple, count) in dot.items():
+    for (key_tuple, (count, modified)) in dot.items():
         for this_key in key_tuple:
-            result[this_key] = result.get(this_key, 0) + count
+            this_counts = result.get(this_key, [0,0])
+            result[this_key] = this_counts
+            this_counts[0] = this_counts[0] + count
+            this_counts[1] = this_counts[1] + modified
     return result
 # dict_of_sequences_to_element_dict(dot)
 
@@ -653,8 +723,13 @@ def dict_of_tuples_slice_2(dot, i1, i2):
     result = {}
     for (key_tuple, count) in dot.items():
         # sliced_tuple = util.slice_by_sequence(key_tuple, indices)
-        sliced_tuple = (key_tuple[i1], key_tuple[i2])
-        result[sliced_tuple] = result.get(sliced_tuple, 0) + count
+        sliced_tuple = (key_tuple[i1][0], key_tuple[i2][0])
+        modified = key_tuple[i1][1] and key_tuple[i2][1]
+        this_counts = result.get(sliced_tuple, [0, 0])
+        result[sliced_tuple] = this_counts
+        this_counts[0] = this_counts[0] + count
+        if modified:
+            this_counts[1] = this_counts[1] + count
     return result
 
 def dict_of_tuples_slice_3(dot, i1, i2, i3):
@@ -666,9 +741,155 @@ def dict_of_tuples_slice_3(dot, i1, i2, i3):
     result = {}
     for (key_tuple, count) in dot.items():
         # sliced_tuple = util.slice_by_sequence(key_tuple, indices)
-        sliced_tuple = (key_tuple[i1], key_tuple[i2], key_tuple[i3])
-        result[sliced_tuple] = result.get(sliced_tuple, 0) + count
+        sliced_tuple = (key_tuple[i1][0], key_tuple[i2][0], key_tuple[i3][0])
+        modified = key_tuple[i1][1] and key_tuple[i2][1] and key_tuple[i3][1]
+        this_counts = result.get(sliced_tuple, [0, 0])
+        result[sliced_tuple] = this_counts
+        this_counts[0] = this_counts[0] + count
+        if modified:
+            this_counts[1] = this_counts[1] + count
     return result
+
+
+###
+### Dictionary utilities -- new version
+###
+
+## I
+
+## These take a dictionary with in-key modification information and
+## produce a dictionary with in-value modification information.
+## Their documentation needs to be updated to indicate this.
+
+def dict_of_tuples_modinkey_to_tuple_of_dicts(dot, tuple_len=None):
+    """Input: a dictionary mapping a tuple of elements to a count.
+    All the key tuples in the input have the same length unless optional argument
+    TUPLE_LEN is provided, in which case all tuples have at least that length.
+    If TUPLE_LEN is a tuple, then only those indices are extracted.
+    if TUPLE_LEN is an integer, indices up to it (non-inclusive) are extracted.
+    Output: a tuple of dictionaries, each mapping a single element to a count.
+    The first output dictionary concerns the first element of the original keys,
+    the second output the second element of the original keys, and so forth."""
+
+    assert not var_values_invalid_modinkey(dot)
+
+    if tuple_len == None:
+        tuple_len = len(dot.keys()[0])
+    if type(tuple_len) == types.IntType:
+        assert tuple_len <= len(dot.keys()[0])
+        if tuple_len == 0:
+            return ()
+        tuple_indices = range(0, tuple_len)
+    elif tuple_len == []:
+        return ()
+    else:
+        assert type(tuple_len) in [types.TupleType, types.ListType]
+        assert max(tuple_len) < len(dot.keys()[0])
+        assert min(tuple_len) >= 0
+        tuple_indices = tuple_len
+    # Next four lines accomplish "result = ({},) * tuple_len", but with
+    # distinct rather than identical dictionaries in the tuple.
+    result = []
+    for i in tuple_indices:
+        result.append({})
+    result = tuple(result)
+    for (key_tuple, count) in dot.items():
+        for i in range(0, len(tuple_indices)):
+            (this_key, this_modified) = key_tuple[tuple_indices[i]]
+            this_dict = result[i]
+            # Is this more efficient than the following?
+            #    this_dict_elt = this_dict.get(this_key, [0,0])
+            #    this_dict[this_key] = this_dict_elt
+            if this_dict.has_key(this_key):
+                this_dict_elt = this_dict[this_key]
+            else:
+                this_dict_elt = [0,0]
+                this_dict[this_key] = this_dict_elt
+            this_dict_elt[0] = this_dict_elt[0] + count
+            if this_modified:
+                this_dict_elt[1] = this_dict_elt[1] + count
+    return result
+# dict_of_tuples_modinkey_to_tuple_of_dicts(fn_var_values["PUSH-ACTION"])
+# dict_of_tuples_modinkey_to_tuple_of_dicts(invariants.fn_var_values['P180-15.1.1:::END'])
+
+def dict_of_sequences_to_element_dict(dot):
+    """Input: a dictionary mapping instances of a sequence (tuples) to a count.
+    Output: a dictionary, mapping elements of all of the sequence instances
+    to a count."""
+    result = {}
+    for (key_tuple, (count, modified)) in dot.items():
+        for this_key in key_tuple:
+            this_counts = result.get(this_key, [0,0])
+            result[this_key] = this_counts
+            this_counts[0] = this_counts[0] + count
+            this_counts[1] = this_counts[1] + modified
+    return result
+# dict_of_sequences_to_element_dict(dot)
+
+
+def dict_of_tuples_slice(dot, indices):
+    """Input: a dictionary mapping a tuple of elements to a count, and a
+    list of indices.
+    Output: a dictionary mapping a subset of the original elements to a count.
+    The subset is chosen according to the input indices.
+
+    If the indices have length 2 or 3, you are better off using the
+    specialized functions dict_of_tuples_slice_2 and dict_of_tuples_slice_3;
+    this function can be very slow.
+    """
+
+    if len(indices) == 2:
+        return dict_of_tuples_slice_2(dot, indices[0], indices[1])
+    if len(indices) == 2:
+        return dict_of_tuples_slice_3(dot, indices[0], indices[1], indices[2])
+
+    result = {}
+    for (key_tuple, count) in dot.items():
+        sliced_tuple = util.slice_by_sequence(key_tuple, indices)
+        result[sliced_tuple] = result[sliced_tuple] + count
+    return result
+
+# dict_of_tuples_slice(fn_var_values["PUSH-ACTION"], (0,))
+# dict_of_tuples_slice(fn_var_values["PUSH-ACTION"], (1,))
+# dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (0,))
+# dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (1,))
+# dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (2,))
+# dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (0,1))
+# dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (0,2))
+# dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (1,2))
+
+
+# def dict_of_tuples_slice_2(dot, i1, i2):
+#     """Input: a dictionary mapping a tuple of elements to a count, and a
+#     list of indices.
+#     Output: a dictionary mapping a subset of the original elements to a count.
+#     The subset is chosen according to the input indices."""
+# 
+#     result = {}
+#     for (key_tuple, (count, modified)) in dot.items():
+#         # sliced_tuple = util.slice_by_sequence(key_tuple, indices)
+#         sliced_tuple = (key_tuple[i1], key_tuple[i2])
+#         this_counts = result.get(sliced_tuple, [0, 0])
+#         result[sliced_tuple] = this_counts
+#         this_counts[0] = this_counts[0] + count
+#         this_counts[1] = this_counts[1] + modified
+#     return result
+
+# def dict_of_tuples_slice_3(dot, i1, i2, i3):
+#     """Input: a dictionary mapping a tuple of elements to a count, and a
+#     list of indices.
+#     Output: a dictionary mapping a subset of the original elements to a count.
+#     The subset is chosen according to the input indices."""
+# 
+#     result = {}
+#     for (key_tuple, count) in dot.items():
+#         # sliced_tuple = util.slice_by_sequence(key_tuple, indices)
+#         sliced_tuple = (key_tuple[i1], key_tuple[i2], key_tuple[i3])
+#         this_counts = result.get(sliced_tuple, [0, 0])
+#         result[sliced_tuple] = this_counts
+#         this_counts[0] = this_counts[0] + count
+#         this_counts[1] = this_counts[1] + modified
+#     return result
 
 
 ###########################################################################
@@ -769,7 +990,7 @@ def introduce_new_variables_one_pass(var_infos, var_values, indices, functions):
         print "introduce_new_variables_one_pass: indices %s (limit %d), functions %s" % (indices, len(var_infos), functions)
 
     if var_values == {}:
-        # This function was never called
+        # This program point was never encountered.
         return
 
     (intro_from_sequence, intro_from_scalar,
@@ -859,12 +1080,12 @@ def introduce_from_sequence_pass1(var_infos, var_new_values, index):
             print "set derived_len for", seq_var_info, "to", len(var_infos)-1
 
         for new_values in var_new_values.values():
-            this_seq = new_values[index]
+            (this_seq, this_seq_mod) = new_values[index]
             if this_seq == None:
                 this_seq_len = None
             else:
                 this_seq_len = len(this_seq)
-            new_values.append(this_seq_len)
+            new_values.append((this_seq_len, this_seq_mod))
 
 
 def introduce_from_scalar_pass1(var_infos, var_new_values, index):
@@ -909,7 +1130,7 @@ def introduce_from_sequence_pass2(var_infos, var_new_values, seqidx):
     var_infos.append(var_info("min(%s)" % (seqvar,), "int", lackwit_elt_type, len(var_infos), true))
     var_infos.append(var_info("max(%s)" % (seqvar,), "int", lackwit_elt_type, len(var_infos), true))
     for new_values in var_new_values.values():
-        this_seq = new_values[seqidx]
+        (this_seq,this_seq_mod) = new_values[seqidx]
         if this_seq == None:
             this_seq_sum = None
             this_seq_min = None
@@ -922,9 +1143,9 @@ def introduce_from_sequence_pass2(var_infos, var_new_values, seqidx):
             this_seq_sum = util.sum(this_seq)
             this_seq_min = min(this_seq)
             this_seq_max = max(this_seq)
-        new_values.append(this_seq_sum)
-        new_values.append(this_seq_min)
-        new_values.append(this_seq_max)
+        new_values.append((this_seq_sum,this_seq_mod))
+        new_values.append((this_seq_min,this_seq_mod))
+        new_values.append((this_seq_max,this_seq_mod))
 
     # Add each individual element.
     ## For now, add if not a derived variable; a better test is if
@@ -941,23 +1162,23 @@ def introduce_from_sequence_pass2(var_infos, var_new_values, seqidx):
                 var_infos.append(var_info("%s[%d]" % (seqvar, i), "int", lackwit_elt_type, len(var_infos), true))
             for new_values in var_new_values.values():
                 for i in range(0, len_min):
-                    seq = new_values[seqidx]
+                    (seq,seq_mod) = new_values[seqidx]
                     if seq == None:
                         elt_val = None
                     else:
                         elt_val = seq[i]
-                    new_values.append(elt_val)
+                    new_values.append((elt_val,seq_mod))
             if len_min != seq_len_inv.max:
                 for i in range(-len_min, 0):
                     var_infos.append(var_info("%s[%d]" % (seqvar, i), "int", lackwit_elt_type, len(var_infos), true))
                 for new_values in var_new_values.values():
                     for i in range(-len_min, 0):
-                        seq = new_values[seqidx]
+                        (seq,seq_mod) = new_values[seqidx]
                         if seq == None:
                             elt_val = None
                         else:
                             elt_val = seq[i]
-                        new_values.append(elt_val)
+                        new_values.append((elt_val,seq_mod))
 
 
 def introduce_from_scalar_pass2(var_infos, var_new_values, index):
@@ -1033,20 +1254,20 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
             less_one_var_info.derived_len = sclidx
             var_infos.append(less_one_var_info)
         for new_values in var_new_values.values():
-            seq = new_values[seqidx]
-            scl = new_values[sclidx]
+            (seq,seq_mod) = new_values[seqidx]
+            (scl,scl_mod) = new_values[sclidx]
             assert sclconst == None or scl == sclconst
             if (scl+1 <= len(seq)) and (scl+1 >= 0):
                 new_value_full = seq[0:scl+1]
             else:
                 new_value_full = None
-            new_values.append(new_value_full)
+            new_values.append(new_value_full,(seq_mod or scl_mod))
             if not scalar_value_1:
                 if (scl <= len(seq)) and (scl >= 0):
                     new_value_less_one = seq[0:scl]
                 else:
                     new_value_less_one = None
-                new_values.append(new_value_less_one)
+                new_values.append(new_value_less_one,(seq_mod or scl_mod))
             if debug_derive:
                 print "seq %s = %s (len = %d), scl %s = %s, new_value_less_one = %s" % (seq_name, seq, len(seq), scl_name, scl, new_value_less_one)
 
@@ -1061,13 +1282,13 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
         lackwit_elt_type = lackwit_type_element_type_alias(seq_info)
         var_infos.append(var_info("%s[%s]" % (seq_name, scl_name), "int", lackwit_elt_type, len(var_infos), true))
         for new_values in var_new_values.values():
-            this_seq = new_values[seqidx]
-            this_scl = new_values[sclidx]
+            (this_seq,this_seq_mod) = new_values[seqidx]
+            (this_scl,this_scl_mod) = new_values[sclidx]
             if ((this_seq != None) and (this_scl != None)
                 and (this_scl < len(this_seq)) and (this_scl >= 0)):
-                new_values.append(this_seq[this_scl])
+                new_values.append(this_seq[this_scl],(this_seq_mod or this_scl_mod))
             else:
-                new_values.append(None)
+                new_values.append(None,(this_seq_mod or this_scl_mod))
 
 
 
@@ -1544,7 +1765,7 @@ def read_data_trace_file(filename, fn_regexp=None):
                 else:
                     assert integer_re.match(this_value)
                     this_value = int(this_value)
-	    these_values.append(this_value)
+	    these_values.append((this_value,this_var_modified))
 
         line = file.readline()
         assert (line == "\n") or (line == "")
@@ -1555,7 +1776,7 @@ def read_data_trace_file(filename, fn_regexp=None):
             for ftn_tag in fn_invocations.keys():
                 calls_var_name = "calls(%s)" % ftn_tag
                 assert calls_var_name == these_var_infos[current_var_index].name
-                these_values.append(fn_invocations[ftn_tag])
+                these_values.append((fn_invocations[ftn_tag],1))
                 current_var_index = current_var_index + 1
 
         ## Original values.
@@ -1582,6 +1803,7 @@ def read_data_trace_file(filename, fn_regexp=None):
         this_var_values[these_values] = this_var_values.get(these_values, 0) + 1
         this_fn_samples[tag] = this_fn_samples.get(tag, 0) + 1
 
+    assert not fn_var_values_invalid_modinkey(this_fn_var_values)
     # print ""
 
     return (this_fn_var_values, this_fn_samples)
@@ -1679,6 +1901,9 @@ def all_numeric_invariants(fn_regexp=None):
     """Compute and print all the numeric invariants."""
     fn_regexp = util.re_compile_maybe(fn_regexp, re.IGNORECASE)
 
+    assert not file_fn_var_values_invalid_modinkey(file_fn_var_values)
+    assert not fn_var_values_invalid_modinkey(fn_var_values)
+
     clear_invariants(fn_regexp)
 
     # if collect_stats:
@@ -1706,6 +1931,8 @@ def all_numeric_invariants(fn_regexp=None):
         if var_values == {}:
             # print "No values for function", fn_name
             continue
+
+        assert not var_values_invalid_modinkey(var_values)
 
         if fn_derived_from.has_key(fn_name):
             # Don't do any variable derivation, only invariant inference
@@ -1785,6 +2012,8 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
     VAR_INFOS and VAR_VALUES are elements of globals `fn_var_infos' and
     `fn_var_values'."""
 
+    assert not var_values_invalid_modinkey(var_values)
+
     if indices == []:
         return
     if var_values == {}:
@@ -1804,7 +2033,7 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
     assert len(var_infos) == len(var_values.keys()[0])
 
     # Single invariants
-    dicts = dict_of_tuples_to_tuple_of_dicts(var_values, indices)
+    dicts = dict_of_tuples_modinkey_to_tuple_of_dicts(var_values, indices)
     non_exact_single_invs = []      # list of indices
     for j in range(0, len(indices)):
         i = indices[j]
@@ -2069,6 +2298,7 @@ class invariant:
                                  #   maintain this as a range rather
                                  #   than an exact number...  [Why?]
     #   samples                  # number of samples; >= values
+    #   mod_samples                  # number of samples; >= values
     #   can_be_None              # only really sensible for single
                                  #   invariants, not those over pairs, etc. (?)
                                  #   Perhaps this should be a count.
@@ -2087,7 +2317,13 @@ class invariant:
 
         self.var_infos = var_infos
         self.values = len(vals)
-        self.samples = util.sum(dict.values())
+        samples = 0
+        mod_samples = 0
+        for (s, ms) in dict.values():
+            samples = samples + s
+            mod_samples = mod_samples + ms
+        self.samples = samples
+        self.mod_samples = mod_samples
         self.can_be_None = None in vals
         # if len(vals) < 5 and not self.can_be_None:
         if len(vals) < 5:
@@ -2132,12 +2368,9 @@ class invariant:
         if (type(args) in [types.ListType, types.TupleType]) and (len(args) == 1):
             args = args[0]
 
-        if self.one_of:
+        if self.one_of and not self.can_be_None:
             if len(self.one_of) == 1:
-                if self.one_of == [None]:
-                    return None
-                else:
-                    return "%s = %s" % (args, self.one_of[0])
+                return "%s = %s" % (args, self.one_of[0])
             ## Perhaps I should unconditionally return this value;
             ## otherwise I end up printing ranges more often than small
             ## numbers of values (because when few values and many samples,
@@ -2212,21 +2445,21 @@ class single_scalar_numeric_invariant(invariant):
             #  * it and its predecessor/successor both contain more than half
             #    as many elements as they ought to by chance alone, and at
             #    least 3.
-            num_min = dict[self.min]
-            num_max = dict[self.max]
+            (count_min,mod_min) = dict[self.min]
+            (count_max,mod_max) = dict[self.max]
             range = self.max - self.min + 1
             twice_avg_num = 2.0*self.values/range
             half_avg_num = .5*self.values/range
-            if ((num_min >= 3)
-                and ((num_min > twice_avg_num)
-                     or ((num_min > half_avg_num) and (dict[nums[1]] > half_avg_num)))):
+            if ((mod_min >= 3)
+                and ((mod_min > twice_avg_num)
+                     or ((mod_min > half_avg_num) and (dict[nums[1]] > half_avg_num)))):
                 self.min_justified = true
-            if ((num_max >= 3)
-                and ((num_max > twice_avg_num)
-                     or ((num_max > half_avg_num) and (dict[nums[-2]] > half_avg_num)))):
+            if ((mod_max >= 3)
+                and ((mod_max > twice_avg_num)
+                     or ((mod_max > half_avg_num) and (dict[nums[-2]] > half_avg_num)))):
                 self.max_justified = true
-            # print "min (%d) justified=%d: %d min elts, %d adjacent" % (self.min, self.min_justified, num_min, dict[nums[1]])
-            # print "max (%d) justified=%d: %d max elts, %d adjacent" % (self.max, self.max_justified, num_max, dict[nums[-2]])
+            # print "min (%d) justified=%d: %d min elts, %d adjacent" % (self.min, self.min_justified, mod_min, dict[nums[1]])
+            # print "max (%d) justified=%d: %d max elts, %d adjacent" % (self.max, self.max_justified, mod_max, dict[nums[-2]])
         self.nonnegative_obvious = (self.var_infos != None) and ("size(" == self.var_infos[0].name[0:5])
 
         self.can_be_zero = (0 in nums)
@@ -2363,7 +2596,7 @@ class single_scalar_numeric_invariant(invariant):
         if nonzero:
             return arg + "!= 0" + suffix
 
-        if self.one_of:
+        if self.one_of and not self.can_be_None:
             return "%s in %s" % (arg, util.format_as_set(self.one_of))
 
         self.unconstrained_internal = true
@@ -2426,7 +2659,7 @@ class single_scalar_numeric_invariant(invariant):
         return string.join(result, ", ")
 
 
-# single_scalar_numeric_invariant(dict_of_tuples_to_tuple_of_dicts(fn_var_values["PUSH-ACTION"])[0])
+# single_scalar_numeric_invariant(dict_of_tuples_modinkey_to_tuple_of_dicts(fn_var_values["PUSH-ACTION"])[0])
 
 
 
@@ -2500,11 +2733,17 @@ class two_scalar_numeric_invariant(invariant):
         ## Find invariant over x-y; this can be more exact than "x<y".
         diff_dict = {}
         sum_dict = {}
-        for ((x,y),count) in dict_of_pairs.items():
+        for ((x,y),(count,modified)) in dict_of_pairs.items():
             x_y_diff = x-y
-            diff_dict[x_y_diff] = diff_dict.get(x_y_diff, 0) + count
+            this_counts = diff_dict.get(x_y_diff, [0,0])
+            diff_dict[x_y_diff] = this_counts
+            this_counts[0] = this_counts[0] + count
+            this_counts[1] = this_counts[1] + modified
             x_y_sum = x+y
-            sum_dict[x_y_sum] = sum_dict.get(x_y_sum, 0) + count
+            this_counts = sum_dict.get(x_y_sum, [0,0])
+            sum_dict[x_y_sum] = this_counts
+            this_counts[0] = this_counts[0] + count
+            this_counts[1] = this_counts[1] + modified
         self.difference_invariant = single_scalar_numeric_invariant(diff_dict, None)
         self.sum_invariant = single_scalar_numeric_invariant(sum_dict, None)
 
