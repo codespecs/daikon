@@ -29,6 +29,7 @@ TAG_FILES := $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -na
 
 AUTO_GENERATED_FILES = \
 	utilMDE/MathMDE.java \
+	utilMDE/LimitedSizeIntSet.java \
 	daikon/PptSlice1.java \
 	daikon/PptSlice2.java \
 	daikon/PptSlice3.java \
