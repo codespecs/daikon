@@ -7,7 +7,7 @@
 # necessary environment variables have been set.
 
 if ($#ARGV != 0) {
-  die "Usage: dtc.pl <filename.decls>\n";
+  die "Usage: lwpp.pl <filename.decls>\n";
 }
 
 $DECLS = $ARGV[0];
