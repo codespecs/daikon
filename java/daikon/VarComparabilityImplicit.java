@@ -34,6 +34,10 @@ public final class VarComparabilityImplicit
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
+  /**
+   * The number that indicates which comparable set the VarInfo
+   * belongs to.
+   **/
   int base;
   VarComparabilityImplicit[] indexTypes; // indexTypes[0] is comparability of
                                 // the first index of this array.
@@ -48,6 +52,28 @@ public final class VarComparabilityImplicit
     this.base = base;
     this.indexTypes = indexTypes;
     this.dimensions = dimensions;
+  }
+
+  public int hashCode() {
+    if (base < 0) {
+      // This is equals() to everything
+      return -1;
+    }
+    if (dimensions > 0) {
+      return
+        (indexType (dimensions-1).hashCode() << 4) ^
+        elementType().hashCode();
+    }
+    return base;
+  }
+
+  public boolean Equals (Object o) {
+    if (!(o instanceof VarComparabilityImplicit)) return false;
+    return equals ((VarComparabilityImplicit) o);
+  }
+
+  public boolean Equals (VarComparabilityImplicit o) {
+    return VarComparabilityImplicit.comparable (null, this, null, o);
   }
 
   static VarComparabilityImplicit parse(String rep, ProglangType vartype) {

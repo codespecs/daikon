@@ -212,7 +212,7 @@ public abstract class Ppt
         boolean found = false;
         for (int vindex=0; vindex<vars.length; vindex++) {
           VarInfo vvar = vars[vindex];
-          if (rvar.comparable2(vvar)) {
+          if (rvar.isSimilarVarInfo(vvar)) {
             // do not remove
             continue VARLOOP;
           }

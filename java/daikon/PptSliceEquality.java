@@ -15,15 +15,13 @@ public class PptSliceEquality
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020923L;
+  static final long serialVersionUID = 20021231L;
 
   public static final Category debug =
     Category.getInstance ("daikon.PptSliceEquality");
 
-
   PptSliceEquality(PptTopLevel parent) {
      super(parent, parent.var_infos);
-     // Start with everything comparable being equal.
   }
 
 
@@ -45,41 +43,83 @@ public class PptSliceEquality
   }
 
   /**
-   * Actually instantiate the equality sets
+   * Encapsulates a VarInfo and its Comparability so that the two can
+   * be used to create sets of VarInfos that are initially equal. Two
+   * VarInfoAndComparability's are true iff they are
+   * VarComparability.comparable() to each other.
+   **/
+  private static class VarInfoAndComparability {
+    public VarInfo vi;
+
+    public int hashCode() {
+      // This is about as good as we can do it.  Can't do hashcode of
+      // the comparability because two comparabilities may be
+      // comparable and yet be not the same
+      // (e.g. VarComparabilityExplicit).
+      return vi.file_rep_type.hashCode();
+    }
+
+    public boolean equals (Object o) {
+      if (!(o instanceof VarInfoAndComparability)) return false;
+      return equals ((VarInfoAndComparability) o);
+    }
+
+    /**
+     * Whether two VarInfos can be set to be equal to each other is
+     * whether they are comparableNWay.  Since we do not yet handle
+     * inheritance, we require that the comptability go both ways.
+     **/
+    public boolean equals (VarInfoAndComparability o) {
+      return
+        vi.comparableNWay (o.vi) &&
+        VarComparability.comparable (vi.comparability, o.vi.comparability);
+    }
+
+    public VarInfoAndComparability (VarInfo vi) {
+      this.vi = vi;
+    }
+
+  }
+
+  /**
+   * Actually instantiate the equality sets.
+   * @param excludeEquality Not used here.
    **/
   void instantiate_invariants(boolean excludeEquality) {
+    // Start with everything comparable being equal.
     int total = var_infos.length;
     if (debug.isDebugEnabled()) {
       debug.debug ("InstantiateInvariants: " + parent.ppt_name + " vars:") ;
     }
-    Map map = new HashMap(); /* comparable -> List[VarInfo]*/
+    Map multiMap = new HashMap(); /* comparable -> List[VarInfo]*/
     for (int i = 0; i < var_infos.length; i++) {
       VarInfo vi = var_infos[i];
-      Comparables comparable = new Comparables(vi);
-      addToBindingList (map, comparable, vi);
+      VarInfoAndComparability viac = new VarInfoAndComparability(vi);
+      addToBindingList (multiMap, viac, vi);
       if (debug.isDebugEnabled()) {
         debug.debug ("  " + vi.name.name());
       }
     }
     if (debug.isDebugEnabled()) {
-      debug.debug (new Integer(map.keySet().size()));
+      debug.debug (new Integer(multiMap.keySet().size()));
     }
-    Equality[] result = new Equality[map.keySet().size()];
+    Equality[] newInvs = new Equality[multiMap.keySet().size()];
     int varCount = 0;
     int invCount = 0;
-    for (Iterator i = map.values().iterator(); i.hasNext(); ) {
+    for (Iterator i = multiMap.values().iterator(); i.hasNext(); ) {
       List list = (List) i.next();
       varCount += list.size();
+
       Equality eq = new Equality (list, this);
-      result[invCount] = eq;
+      newInvs[invCount] = eq;
       if (debug.isDebugEnabled()) {
         debug.debug (" Created: " + eq);
       }
       invCount ++;
     }
     // Ensure determinism
-    Arrays.sort (result, EqualityComparator.getInstance());
-    invs.addAll (Arrays.asList (result));
+    Arrays.sort (newInvs, EqualityComparator.theInstance);
+    invs.addAll (Arrays.asList (newInvs));
     Assert.assertTrue (varCount == total); // Check that we get all vis
   }
 
@@ -87,10 +127,11 @@ public class PptSliceEquality
    * Returns a List of Invariants that have been weakened/destroyed.
    * However, this handles the creation of new Equality invariants and
    * the instantiation of other invariants.
+   * @return a List of invariants that have been weakened
    **/
   public List add(ValueTuple vt, int count) {
-    LinkedList /*Equality*/ allNewInvs = new LinkedList();
-    LinkedList /*Equality*/ weakenedInvs = new LinkedList();
+    LinkedList /*[Equality]*/ allNewInvs = new LinkedList();
+    LinkedList /*[Equality]*/ weakenedInvs = new LinkedList();
     if (debug.isDebugEnabled()) {
       debug.debug ("Doing add for " + parent.ppt_name + " count: " +
                    count + " starting invs:");
@@ -101,13 +142,14 @@ public class PptSliceEquality
     }
     for (Iterator i = invs.iterator(); i.hasNext(); ) {
       Equality inv = (Equality) i.next();
-      List result = inv.add (vt, count);
-      if (result.size() > 0) {
+      List/*[VarInfo]*/ nonEqualVis = inv.add (vt, count);
+      if (nonEqualVis.size() > 0) {
         if (debug.isDebugEnabled()) {
-          debug.debug ("  Unequal VarInfos for inv " + inv + " with count " + inv.numSamples());
+          debug.debug ("  Unequal VarInfos split off from " +
+                       inv + " with count " + inv.numSamples());
           debug.debug ("  leader value: " +
                        ValueTuple.valToString(inv.leader().getValue(vt)));
-          for (Iterator j = result.iterator(); j.hasNext(); ) {
+          for (Iterator j = nonEqualVis.iterator(); j.hasNext(); ) {
             VarInfo vi = (VarInfo) j.next();
             debug.debug ("  " + vi.name.name() +
                          " value: " + ValueTuple.valToString(vi.getValue(vt)) +
@@ -115,9 +157,10 @@ public class PptSliceEquality
                          );
           }
         }
-        // At this point, VarInfos in result still have their
+        // At this point, VarInfos in nonEqualVis still have their
         // equality field set to their old sets
-        List /*Equality*/ newInvs = createEqualityInvs (result, vt, inv, count);
+        List /*[Equality]*/ newInvs =
+          createEqualityInvs (nonEqualVis, vt, inv, count);
 
         // Now they don't anymore
         copyInvsFromLeader (inv, newInvs, count);
@@ -133,6 +176,12 @@ public class PptSliceEquality
     }
     return weakenedInvs;
   }
+
+  /**
+   * Dummy value that's incomparable to everything else to indicate
+   * missings in createEqualityInvs
+   **/
+  private static final Object dummyMissing = new StringBuffer("Dummy missing");
 
   /**
    * Create a List of Equality invariants based on the values given
@@ -152,36 +201,32 @@ public class PptSliceEquality
                                                  Equality leader, int count
                                                  ) {
     Assert.assertTrue (vis.size() > 0);
-    Map map = new HashMap(); /* value -> List[VarInfo]*/
+    Map multiMap = new HashMap(); /* value -> List[VarInfo]*/
     List/*[VarInfo]*/ missings = new LinkedList();
     for (Iterator i = vis.iterator(); i.hasNext(); ) {
       VarInfo vi = (VarInfo) i.next();
       if (vt.isMissing (vi)) {
-        missings.add (vi);
+        addToBindingList (multiMap, dummyMissing, vi);
       } else {
-        addToBindingList (map, vi.getValue(vt), vi);
+        addToBindingList (multiMap, vi.getValue(vt), vi);
       }
     }
-    Equality[] resultArray = new Equality[map.values().size() + (missings.size() > 0 ? 1 : 0)];
+    Equality[] resultArray = new Equality[multiMap.values().size() + (missings.size() > 0 ? 1 : 0)];
     int resultCount = 0;
-    for (Iterator i = map.values().iterator(); i.hasNext(); ) {
-      List list = (List) i.next();
+    for (Iterator i = multiMap.keySet().iterator(); i.hasNext(); ) {
+      Object key = i.next();
+      List list = (List) multiMap.get (key);
       Assert.assertTrue (list.size() > 0);
       Equality eq = new Equality (list, this);
-      eq.setSamples (leader.numSamples());
+      if (key == dummyMissing) {
+        eq.setSamples (leader.numSamples() - count);
+      } else {
+        eq.setSamples (leader.numSamples());
+      }
       if (debug.isDebugEnabled()) {
         debug.debug ("  created new inv: " + eq + " samples: " + eq.numSamples());
       }
       resultArray[resultCount] = eq;
-      resultCount++;
-    }
-    if (missings.size() > 0) {
-      Equality missingEq = new Equality (missings, this);
-      missingEq.setSamples (leader.numSamples() - count);
-      if (debug.isDebugEnabled()) {
-        debug.debug ("  created new inv: " + missingEq + " samples: " + missingEq.numSamples());
-      }
-      resultArray[resultCount] = missingEq;
       resultCount++;
     }
     // Sort for determinism
@@ -230,6 +275,8 @@ public class PptSliceEquality
     int newSamples = leaderEq.numSamples() - count;
 
     // three phases: all variables used are *leaders* of their own groups
+    // The first copies existing slices from old leader
+    // The next two creates new slices
 
     // a) Slices from substituting the leader with each of the new
     // variables: f(leader, x) => f(new, x)
@@ -243,8 +290,7 @@ public class PptSliceEquality
         for (Iterator iNewInvs = newInvs.iterator(); iNewInvs.hasNext(); ) {
           Equality newEq = (Equality) iNewInvs.next();
           VarInfo newLeader = newEq.leader();
-          Assert.assertTrue (newLeader.type == leader.type);
-          Assert.assertTrue (newLeader.rep_type == leader.rep_type);
+          Assert.assertTrue (newLeader.comparableNWay(leader));
           PptSlice newSlice = slice.cloneOnePivot(leader, newLeader);
           if (debug.isDebugEnabled()) {
             debug.debug ("result of cloneAndInvs: orig:" + slice);
@@ -311,7 +357,8 @@ public class PptSliceEquality
       for (int i2= i1 + 1; i2 < newInvs.size(); i2++) {
         VarInfo var2 = ((Equality) newInvs.get(i2)).leader();
         // We need two loops: one for the vis in newInvs and another
-        // for the other variables.
+        // for the other variables.  This ensures cover and prevents
+        // duplication.
 
         for (int i3= i2 + 1; i3 < newInvs.size(); i3++) {
           VarInfo var3 = ((Equality) newInvs.get(i3)).leader();
@@ -394,42 +441,7 @@ public class PptSliceEquality
   }
 
   /**
-   * Tuple of types associated with VarInfos.
-   **/
-  private static class Comparables {
-    public ProglangType type;
-    public ProglangType rep_type;
-    public ProglangType file_rep_type;
-
-    public int hashCode() {
-      return type.hashCode() ^ rep_type.hashCode() ^ file_rep_type.hashCode();
-    }
-
-    public boolean equals (Object o) {
-      if (o instanceof Comparables) return equals((Comparables) o);
-      return false;
-    }
-
-    public boolean equals (Comparables o) {
-      return (o.type == this.type &&
-              o.rep_type == this.rep_type &&
-              o.file_rep_type == this.file_rep_type);
-    }
-
-    public Comparables (ProglangType type, ProglangType rep_type,
-                        ProglangType file_rep_type) {
-      this.type = type;
-      this.rep_type = rep_type;
-      this.file_rep_type = file_rep_type;
-    }
-
-    public Comparables (VarInfo vi) {
-      this (vi.type, vi.rep_type, vi.file_rep_type);
-    }
-  }
-
-  /**
-   * Compare Equality invariants by their leaders.
+   * Order Equality invariants by the indices of leaders.
    **/
   public static class EqualityComparator implements Comparator {
     public static final EqualityComparator theInstance = new EqualityComparator();
@@ -442,7 +454,6 @@ public class PptSliceEquality
       Equality eq2 = (Equality) o2;
       return VarInfo.IndexComparator.theInstance.compare (eq1.leader(), eq2.leader());
     }
-    public static EqualityComparator getInstance() {return theInstance;}
 
   }
 }

@@ -17,29 +17,29 @@ import java.util.*;
 // the same-named on in V2.  In V2, this is just for printing.  In V3,
 // this does all the canonicalizing, etc.
 /**
- * Keeps track of sets of variables that are equal.  First, during
- * checking, it keeps track of VarInfos that are comparable and equal,
- * so we only need to instantiate (other) invariants for one member of
- * each Equal set.  For the first purpose, see equality notes in this
- * directory.  Second, during printing, Equality is split into
- * displaying several equality Comparison invariants ("x == y", "x ==
- * z").  Equality invariants have leaders, which are the canonical
- * forms of their variables.  In the previous example, x is the
- * leader.  Equality invariants sort their variables by index ordering
- * during checking.  During printing, however, equality invariants may
- * "pivot" - that is, switch leaders if the current leader wouldn't be
- * printed because it was not an interesting variable.  Notice that
- * when pivoting, all the relevant other invariants also need to be
- * pivoted.
+ * Keeps track of sets of variables that are equal.<p>
+ * 
+ * During checking, Equality keeps track of VarInfos that are
+ * comparable and equal, so we only need to instantiate (other)
+ * invariants for one member of each Equal set, the leader.  See
+ * equality notes in this directory.  During postProcessing, each
+ * instance of Equality instantiates into displaying several equality
+ * Comparison invariants ("x == y", "x == z").  Equality invariants
+ * have leaders, which are the canonical forms of their variables.  In
+ * the previous example, x is the leader.  Equality invariants sort
+ * their variables by index ordering during checking.  During
+ * printing, however, equality invariants may "pivot" -- that is,
+ * switch leaders if the current leader wouldn't be printed because it
+ * was not an interesting variable.  Notice that when pivoting, all
+ * the relevant other invariants also need to be pivoted.
  **/
 public final class Equality
   extends Invariant
 {
-
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+   // We are Serializable, so we specify a version to allow changes to
+   // method signatures without breaking serialization.  If you add or
+   // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20021231L;
 
   public static final Category debug =
     Category.getInstance ("daikon.inv.Equality");
@@ -94,9 +94,8 @@ public final class Equality
         debug.debug ("  " + vi.name.name());
       }
       Assert.assertTrue(vi.ppt == leader.ppt);
-      Assert.assertTrue(vi.type == leader.type);
-      Assert.assertTrue(vi.rep_type == leader.rep_type);
-      //      Assert.assertTrue(vi.rep_type.isArray() == leader.rep_type.isArray());
+      Assert.assertTrue(vi.comparableNWay (leader));
+      Assert.assertTrue(vi.rep_type.isArray() == leader.rep_type.isArray());
       vi.equalitySet = this;
     }
   }
@@ -388,6 +387,7 @@ public final class Equality
     }
     for (Iterator i = vars.iterator(); i.hasNext(); ) {
       VarInfo vi = (VarInfo) i.next();
+      Assert.assertTrue (vi.comparableNWay (leader));
       Object viValue = vi.getValue(vt);
       if (leaderValue == viValue) continue; // Including missing
 //       if (debug.isDebugEnabled()) {
@@ -542,7 +542,7 @@ public final class Equality
     VarInfo leader = leader();
     for (Iterator i = vars.iterator(); i.hasNext(); ) {
       VarInfo var = (VarInfo) i.next();
-      Assert.assertTrue (var.type == leader.type);
+      Assert.assertTrue (VarComparability.comparable (leader, var));
     }
   }
 

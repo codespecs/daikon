@@ -386,13 +386,11 @@ public abstract class Invariant
     for (int i=0; i < ppt.arity; i++) {
       VarInfo oldvi = ppt.var_infos[i];
       VarInfo newvi = new_ppt.var_infos[permutation[i]];
-      if (oldvi.type != newvi.type) {
-        System.err.println ("Error, incompatible types for transfer: " +
-                            oldvi.name.name() + " and " + newvi.name.name());
-      }
-      Assert.assertTrue(oldvi.type == newvi.type);
-      Assert.assertTrue(oldvi.rep_type == newvi.rep_type);
-      Assert.assertTrue(oldvi.file_rep_type == newvi.file_rep_type);
+      // We used to check that all 3 types were equal, but we can't do
+      // that anymore, because with equality, invariants may get
+      // transferred between old and new VarInfos of different types.
+      // They are, however, comparable
+      Assert.assertTrue (oldvi.comparableNWay(newvi));
     }
 
     Invariant result;
@@ -423,12 +421,11 @@ public abstract class Invariant
     for (int i=0; i < ppt.arity; i++) {
       VarInfo oldvi = ppt.var_infos[i];
       VarInfo newvi = new_ppt.var_infos[permutation[i]];
-      if (oldvi.type != newvi.type) {
-        System.err.println ("Error, incompatible types for resurrection: " +
-                            oldvi.name.name() + " and " + newvi.name.name());
-      }
-      Assert.assertTrue(oldvi.rep_type == newvi.rep_type);
-      Assert.assertTrue(oldvi.file_rep_type == newvi.file_rep_type);
+      // We used to check that all 3 types were equal, but we can't do
+      // that anymore, because with equality, invariants may get
+      // resurrected between old and new VarInfos of different types.
+      // They are, however, comparable
+      Assert.assertTrue(oldvi.comparableNWay(newvi));
     }
 
     Invariant result;

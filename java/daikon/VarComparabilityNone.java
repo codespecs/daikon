@@ -36,6 +36,15 @@ public final class VarComparabilityNone
     return it;
   }
 
+  public int hashCode() {
+    return 0;
+  }
+
+  /**
+   * The best we can do without comparability info is to check if the
+   * representation types in the data trace file are the same.  This
+   * lets us compare integers to longs, but not integers to arrays.
+   **/
   static boolean comparable(VarInfoName name1, VarComparabilityNone type1,
                             VarInfoName name2, VarComparabilityNone type2) {
     return true;

@@ -467,9 +467,10 @@ public abstract class PptSlice
         }
 
         for (int iSliceVis = 0; iSliceVis < slice_vis.length; iSliceVis++) {
-          Assert.assertTrue(slice_vis[iSliceVis].type == 
-                            this.var_infos[iSliceVis].type);
+          Assert.assertTrue(slice_vis[iSliceVis].
+                            comparableNWay (this.var_infos[iSliceVis]));
         }
+
 
         // Check because of equality.  If two VarInfos in this
         // PptSlice map to the same VarInfos in this PptSlice, we do
@@ -632,9 +633,14 @@ public abstract class PptSlice
 
   /**
    * Instantiate invariants on the VarInfos this slice contains.
-   * @param excludeEquality Do not instantiate invariants that are
-   * negated or made obvious by the fact that any two VarInfos are
-   * equal.
+   * @param excludeEquality This actually means "if true, avoid
+   * instantiating invariants that are implied false because the
+   * VarInfos on them were equal".  An example of this is IntLessThan.
+   * If two VarInfos were previous equal and had non missing samples
+   * for their slice, it would be unsound to instantiate IntLessThan
+   * later.  excludeEquality is set to true when calling slices to
+   * instantiate from PptSliceEquality, but false at PptTopLevel's
+   * call.
    **/
   abstract void instantiate_invariants(boolean excludeEquality);
 

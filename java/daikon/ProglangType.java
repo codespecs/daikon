@@ -542,10 +542,14 @@ public final class ProglangType
 
   /**
    * Return true if these two types can be sensibly compared to one
-   * another.  For instance, int is castable to long, but boolean is not
-   * castable to float, and int is not castable to int[].
+   * another, or if one can be cast to the other.  For instance, int
+   * is castable to long, but boolean is not castable to float, and
+   * int is not castable to int[].  This is a reflexive relationship,
+   * but not a transitive one because it might not be true for two
+   * children of a superclass, even though it's true for the
+   * superclass.
    **/
-  public boolean castable(ProglangType other) {
+  public boolean comparableOrSuperclassEitherWay(ProglangType other) {
     if (this == other)          // ProglangType objects are interned
       return true;
     if (this.dimensions != other.dimensions)
@@ -557,6 +561,29 @@ public final class ProglangType
     // Make Object castable to everything, except booleans
     if (((this.base == BASE_OBJECT) && other.baseIsObject()) // interned strings
         || ((other.base == BASE_OBJECT) && baseIsObject())) // interned strings
+      return true;
+
+    return false;
+  }
+
+  /**
+   * Return true if these two types can be sensibly compared to one
+   * another, and if non-integral, whether this could be a superclass
+   * of other.  A List is comparableOrSuperclassOf to a Vector, but
+   * not the other way around.  This is a transitive method, but not
+   * reflexive.
+   **/
+  public boolean comparableOrSuperclassOf (ProglangType other) {
+    if (this == other)          // ProglangType objects are interned
+      return true;
+    if (this.dimensions != other.dimensions)
+      return false;
+    boolean thisIntegral = this.baseIsIntegral();
+    boolean otherIntegral = other.baseIsIntegral();
+    if (thisIntegral && otherIntegral)
+      return true;
+    // Make Object castable to everything, except booleans
+    if ((this.base == BASE_OBJECT) && other.baseIsObject()) // interned strings
       return true;
 
     return false;

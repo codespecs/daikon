@@ -1193,12 +1193,12 @@ public final class VarInfo
 
   /** Return true if the two lists represent the same variables. **/
   // Dead code as of 6/2002 (and probably much earlier).
-  static boolean comparable2(VarInfo[] vis1, VarInfo[] vis2) {
+  static boolean isSimilarVarInfo(VarInfo[] vis1, VarInfo[] vis2) {
     if (vis1.length != vis2.length)
       return false;
 
     for (int i=0; i<vis1.length; i++)
-      if (!vis1[i].comparable2(vis2[i]))
+      if (!vis1[i].isSimilarVarInfo(vis2[i]))
         return false;
 
     return true;
@@ -1210,7 +1210,7 @@ public final class VarInfo
    * the common variables.
    **/
   // simplistic implementation, just checks that the names are the same
-  boolean comparable2(VarInfo other) {
+  boolean isSimilarVarInfo(VarInfo other) {
     if (this.name != other.name)
       return false;
     Assert.assertTrue(type.equals(other.type), "type matches");
@@ -1728,13 +1728,19 @@ public final class VarInfo
   }
 
   /**
-   * Two variables are "compatible" if their declared types are castable
-   * and their comparabilities are comparable.
+   * Two variables are "compatible" if their declared types are
+   * castable and their comparabilities are comparable.  This is a
+   * reflexive relationship, because it calls
+   * ProglangType.comparableOrSuperclassEitherWay.  However, it is not
+   * transitive because it might not hold for two children of a
+   * superclass, even though it would for each child and the superclass.
    **/
   public boolean compatible(VarInfo var2) {
     VarInfo var1 = this;
-    if (Daikon.check_program_types
-        && (! var1.type.castable(var2.type))) {
+    // Can only compare in the same ppt because otherwise
+    // comparability info may not make sense.
+    Assert.assertTrue (var1.ppt == var2.ppt);
+    if (!comparable2Way (var2)) {
       return false;
     }
     if ((! Daikon.ignore_comparability)
@@ -1751,7 +1757,7 @@ public final class VarInfo
   public boolean eltsCompatible(VarInfo sclvar) {
     VarInfo seqvar = this;
     if (Daikon.check_program_types) {
-      if (! seqvar.type.elementType().castable(sclvar.type)) {
+      if (! seqvar.type.elementType().comparableOrSuperclassEitherWay(sclvar.type)) {
         return false;
       }
     }
@@ -1762,6 +1768,49 @@ public final class VarInfo
       }
     }
     return true;
+  }
+
+  /**
+   * Without using comparability info, check that this is comparable
+   * to var2.  This is a reflexive relationship, because it calls
+   * ProglangType.comparableOrSuperclassEitherWay.  However, it is not
+   * transitive because it might not hold for two children of a
+   * superclass, even though it would for each child and the
+   * superclass.  Does not check comparabilities.
+   **/
+  public boolean comparable2Way (VarInfo var2) {
+    VarInfo var1 = this;
+    if (Daikon.check_program_types
+        && (! var1.type.comparableOrSuperclassEitherWay(var2.type))) {
+      return false;
+    }
+    if (Daikon.check_program_types
+        && (var1.file_rep_type != var2.file_rep_type)) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Without using comparability info, check that this is comparable
+   * to var2.  This is a reflexive and transitive relationship.  Does
+   * not check comparabilities.
+   **/
+  public boolean comparableNWay (VarInfo var2) {
+    VarInfo var1 = this;
+    if (Daikon.check_program_types
+        && (! var1.type.comparableOrSuperclassOf(var2.type))) {
+      return false;
+    }
+    if (Daikon.check_program_types
+        && (! var2.type.comparableOrSuperclassOf(var1.type))) {
+      return false;
+    }
+    if (Daikon.check_program_types
+        && (var1.file_rep_type != var2.file_rep_type)) {
+      return false;
+    }
+    return true;    
   }
 
   /**
