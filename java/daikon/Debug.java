@@ -301,7 +301,7 @@ public class Debug {
    * @see #logOn()
    */
 
-  public static boolean logDetail () {
+  public static final boolean logDetail () {
     return (dkconfig_logDetail && debugTrack.isLoggable(Level.FINE));
   }
 
@@ -311,7 +311,7 @@ public class Debug {
    * @see #log(Logger, Class, Ppt, String)
    */
 
-  public static boolean logOn() {
+  public static final boolean logOn() {
     return debugTrack.isLoggable(Level.FINE);
   }
 
