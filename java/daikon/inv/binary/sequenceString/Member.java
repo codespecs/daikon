@@ -389,6 +389,7 @@ public final class Member
         // This should never get instantiated
       }
 
+      template.resetResults();
       template.varInfos[0][0] = sclSequence;
       template.varInfos[0][1] =  seqvar;
       {
@@ -405,6 +406,7 @@ public final class Member
 
       {
         // Try to see if SubSet invariant is there
+        template.resetResults();
         template.invTypes[0] = SubSet.class;
         SuppressionLink sl = byTemplate (template, inv);
         if (sl != null) {
@@ -427,6 +429,7 @@ public final class Member
 
       {
         // Failed on finding the right SubSet invariant.  Now try SubSequence
+        template.resetResults();
         template.invTypes[0] = SubSequence.class;
         SuppressionLink sl = byTemplate (template, inv);
         if (sl != null) {
