@@ -12,7 +12,7 @@ import utilMDE.*;
 public final class SeqIntComparison extends SequenceScalar {
 
   // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface
+  // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
 
   public IntComparisonCore core;
@@ -95,7 +95,7 @@ public final class SeqIntComparison extends SequenceScalar {
 
   /* IOA */
   public String format_ioa(String classname) {
-    String comparator = core.format_comparator().equals("==") ? 
+    String comparator = core.format_comparator().equals("==") ?
 	"=" : core.format_comparator();
     String scl = sclvar().name.ioa_name(classname);
     String[] form =
