@@ -23,6 +23,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <iostream>
 #include "point.h"
 #include "kmeans.h"
 #include "cluster.h"
@@ -39,7 +40,7 @@ KMeans::KMeans(char* s ) : s(s) {
   // number of dimensions of each point
   if ((DataFp = fopen( s, "r")) == NULL) {
     perror("Unable to open data file ");
-    cout << s << endl;
+    std::cout << s << std::endl;
     exit(1);
   }
   
@@ -168,14 +169,14 @@ KMeans::~KMeans() {
 /**
  * returns the vector containing all the points
  */
-vector<Point*> KMeans::getPoints(void) {
+std::vector<Point*> KMeans::getPoints(void) {
   return points;
 }
 
 /**
  * Perform one iteration of the kmeans algorithm. 
  */
-int KMeans::iterate (void) {
+void KMeans::iterate (void) {
   numChanges = 0; //the number of cluster membership changes in this iteration
   
   for(int i = 0; i < numClusters; i++) {
