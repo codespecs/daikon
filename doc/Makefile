@@ -7,7 +7,7 @@ daikon.info: daikon.texinfo config-options.texinfo invariants-doc.texinfo \
 			 .fix-menu
 	makeinfo $<
 
-developer.info: developer.texinfo .fix-menu
+developer.info: developer.texinfo .fix-dev-menu
 	makeinfo $<
 
 config-options:
