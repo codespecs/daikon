@@ -155,9 +155,9 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
 
 
 
-    // If, for some j with a lower VarInfo index than i, j=index+1, then
-    // don't create array[index+1..].  If j=index-1, then don't create
-    // array[index-1] or array[0..index-1].
+    // If, for some canonical j, j=index+1, don't create array[index+1..].
+    // If j=index-1, then don't create array[index-1] or array[0..index-1].
+    // (j can have higher or lower VarInfo index than i.)
     boolean suppress_minus_1 = false;
     boolean suppress_plus_1 = false;
 
@@ -169,18 +169,27 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
         // Don't check view.usesVar(sclvar), because we are only looking
         // for interactions between sclvar and lower-numbered
         // variables, so sclvar will be the second variable.
-        if ((view.arity == 2) && (view.var_infos[1] == sclvar)) {
+        if ((view.arity == 2) && view.usesVar(sclvar)) {
           LinearBinary lb = LinearBinary.find(view);
           if ((lb != null) && (lb.core.a == 1)) {
             // Don't set unconditionally, and don't break:  we want to check
             // other variables as well.
             if (lb.core.b == -1) {
-              suppress_plus_1 = true;
+              if (view.var_infos[1] == sclvar)
+                suppress_plus_1 = true;
+              else
+                suppress_minus_1 = true;
             }
             if (lb.core.b == 1) {
-              suppress_minus_1 = true;
+              if (view.var_infos[1] == sclvar)
+                suppress_minus_1 = true;
+              else
+                suppress_plus_1 = true;
             }
-            // System.out.println("For " + sclvar.name + " suppression: minus=" + suppress_minus_1 + " plus=" + suppress_plus_1 + " because of " + lb.format());
+            // System.out.println("For " + sclvar.name + " suppression: "
+            //                    + "minus=" + suppress_minus_1
+            //                    + " plus=" + suppress_plus_1
+            //                    + " because of " + lb.format());
           }
         }
       }
