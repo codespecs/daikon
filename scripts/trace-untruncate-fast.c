@@ -26,37 +26,53 @@ usage()
     exit(1);
 }
 
+static int untrunc(const char *filename);
+
 int
 main(int argc, char **argv)
 {
-    int			ii;
-    const char	       *filename = NULL;
-    FILE	       *fp;
-    int			ret;
+    int	ii;
+    int nerrs = 0;
 
     progname = argv[0];
 
+    if(argc < 2)
+	usage();
+
     for(ii=1; ii<argc; ++ii)
     {
-	if(argv[ii][0] == '-') {
+	if(argv[ii][0] == '-')
 	    usage();
-	}
-	else 
-	    filename = argv[ii];
+	else
+	    if (untrunc(argv[ii]))
+		fprintf(stderr, "%s: Could not untruncate %s!\n",
+			progname, argv[ii]);
+	
     }
 
-    if(filename == NULL)
-	usage();
-    
+    if (nerrs)
+	fprintf(stderr, "%s: Could not process %d files!\n", progname, nerrs);
+
+    return (nerrs != 0);
+}
+
+static int
+untrunc(const char *filename)
+{
+    FILE	       *fp;
+    int			ret;
+
+    fprintf(stderr, "Untruncating %s...\n", filename);
+
     if((fp = fopen(filename, "r+")) == NULL)
     {
         fprintf(stderr, "%s: can't open file `%s': %s.\n",
 		progname, filename, strerror(errno));
-        exit(1);
+        return 1;
     }
     
     ret = fseek(fp, 0, SEEK_END); 
-    if(ret != 0) { perror("fseek"); exit(1); }
+    if(ret != 0) { perror("fseek"); return 1; }
 
     for(;;)
     {
@@ -64,9 +80,9 @@ main(int argc, char **argv)
 	int count;
 
 	ret = fseek(fp, -CHUNK*sizeof(char), SEEK_CUR);     
-	if(ret != 0) { perror("fseek"); exit(1); }
+	if(ret != 0) { perror("fseek"); return 1; }
 	ret = fread(buf, CHUNK*sizeof(char), 1, fp); // at end of chunk
-	if(ret == 0) { perror("fread"); exit(1); }
+	if(ret == 0) { perror("fread"); return 1; }
 
 	for(count = CHUNK-1; count > 0; --count)
 	    if((buf[count] == '\n') && (buf[count-1] == '\n'))
@@ -75,7 +91,7 @@ main(int argc, char **argv)
 	if(count > 0)
 	{
 	    ret = fseek(fp, -(CHUNK-count)*sizeof(char), SEEK_CUR);
-	    if(ret != 0) { perror("fseek"); exit(1); }
+	    if(ret != 0) { perror("fseek"); return 1; }
 	    break;
 	}
     }
@@ -83,7 +99,7 @@ main(int argc, char **argv)
     fputs("\n// EOF\n", fp);
 
     ret = ftruncate(fileno(fp), ftell(fp));
-    if(ret != 0) { perror("fseek"); exit(1); }
+    if(ret != 0) { perror("fseek"); return 1; }
 
     fclose(fp);
 
