@@ -48,6 +48,9 @@ clean:
 dist_clean: clean
 	rm -f TAGS
 
+very_clean: dist_clean
+	rm -f ${AUTO_GENERATED_FILES}
+
 run:	all
 	java daikon.Daikon
 
