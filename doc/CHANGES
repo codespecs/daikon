@@ -27,6 +27,22 @@ line.  The currently supported filters are: UnjustifiedFilter,
 ParentFilter, ObviousFilter, SimplifyFilter, OnlyConstantVariablesFilter, 
 DerivedParameterFilter, and UnmodifiedVariableEqualityFilter.
 
+The Kvasir C front end now supports a number of command line options
+for controlling what output is produced and where it is written. See
+the manual for a list.
+
+A number of bugs in Kvasir have been fixed since the last release,
+including one that accidentally reduced the number of program points
+it output, and another that caused arrays to have too many elements.
+On the whole, Kvasir produces significantly more output than before.
+
+Daikon now has improved support for reading trace data from the
+standard input or a named pipe, and the Kvasir C front end has support
+for writing to a pipe. Used together, these features can remove the
+need for an intermediate trace file, allowing Daikon to operate on
+larger or longer-running programs. [This should refer to a manual
+section, which I plan to write Tuesday, explaining how to use these
+features.]
 
 ---------------------------------
 
