@@ -15,14 +15,14 @@ import java.util.*;
  **/
 public final class Equality extends Invariant {
 
-  private VarInfo[] vars;		
+  private VarInfo[] vars;
 
   /**
    * @param vars Variables which are equivalent, with the canonical
    * one first.  Elements must be of type VarInfo.
    **/
   public Equality(Collection variables, PptSlice ppt) {
-    super(ppt);    
+    super(ppt);
     vars = (VarInfo[]) variables.toArray(new VarInfo[variables.size()]);
     Assert.assert(vars.length >= 2);
     for (int i=0; i < vars.length; i++) {
@@ -52,7 +52,7 @@ public final class Equality extends Invariant {
   public double computeProbability() { return 0; }
 
   public String repr() {
-    return format();
+    return "Equality" + varNames();
   }
 
   public String format() {
@@ -63,7 +63,7 @@ public final class Equality extends Invariant {
     }
     return result.toString();
   }
-  
+
   /* IOA */
   public String format_ioa(String classname) {
     String result;
