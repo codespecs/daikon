@@ -651,6 +651,13 @@ public final class Intern {
       this.end = end;
     }
 
+    public boolean equals (Object other) {
+      if (! (other instanceof SequenceAndIndices)) {
+        return false;
+      }
+      return this.equals((SequenceAndIndices) other);
+    }
+
     public boolean equals (SequenceAndIndices other) {
       return (this.seq == other.seq) &&
         this.start == other.start &&
