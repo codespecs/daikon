@@ -2,6 +2,7 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.binary.twoScalar.*;
 
 import utilMDE.*;
 
@@ -33,8 +34,15 @@ public final class TwoSequenceFactory {
 
     Vector result = new Vector();
     if (pass == 1) {
-      if (super1 == super2) {
+      // This test disabled because it resulted in preventing a comparison for
+      // this.theArray[this.front..], this.theArray[orig(this.front)+1..]
+      // which are actually equal.
+      if (false && super1 == super2) {
         Global.implied_false_noninstantiated_invariants++;
+        System.out.println("No SeqComparison because same super for " + ppt.name);
+        LinearBinary lb = LinearBinary.find(ppt);
+        if (lb != null)
+          System.out.println("  " + lb.format());
       } else {
         result.add(SeqComparison.instantiate(ppt));
       }
