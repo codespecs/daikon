@@ -38,18 +38,17 @@ AJAX_JAVA_FILES := $(shell find java/ajax-ship/ajax \( -name '*daikon-java*' -o 
 # WWW_FILES := $(shell cd doc/www; find . \( \( -name '*~' -o -name '.*~' -o -name CVS -o -name .cvsignore -o -name '.\#*' -o -name '*.bak' -o -name uw \) -prune -a -type f \) -o -print | grep -v '^.$$')
 WWW_FILES := $(shell cd doc/www; find . -type f -print | egrep -v '~$$|CVS|.cvsignore|/.\#|.bak$$|uw/|pubs/')
 #WWW_DIR := /home/httpd/html/daikon/
-WWW_ROOT := /afs/csail.mit.edu/group/pag/docroot/www.pag.csail.mit.edu/daikon/
-WWW_DIR := $(WWW_ROOT)
+WWW_PARENT := /afs/csail.mit.edu/group/pag/docroot/www.pag.csail.mit.edu
+WWW_DIR := $(WWW_PARENT)/daikon
 INV_DIR := $(shell pwd)
 JDKDIR ?= /afs/csail/group/pag/software/pkg/jdk
+# Staging area for the distribution
+STAGING_DIR := $(WWW_DIR)/staging-daikon
 
 # Files to copy to the website
 WWW_DAIKON_FILES := faq.html index.html mailing-lists.html StackAr.html \
 				    anoncvs.html download/index.html download/doc/index.html
 
-# Staging area for the distribution
-# STAGING_DIST := $(INV_DIR)/staging-dist
-STAGING_DIST := $(WWW_ROOT)staging-dist
 
 # build the windows version of dfej here
 MINGW_DFEJ_LOC := $(INV_DIR)
@@ -66,8 +65,8 @@ C_RUNTIME_PATHS := front-end/c/daikon_runtime.h front-end/c/daikon_runtime.cc
 # EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/dfec $(EDG_DIR)/dfec.sh
 
 BCEL_DIR := $(INV)/java/lib/bcel.jar
-DIST_DIR := $(WWW_ROOT)/dist
-MIT_DIR  := $(WWW_ROOT)/mit
+DIST_DIR := $(WWW_DIR)/dist
+MIT_DIR  := $(WWW_DIR)/mit
 DIST_BIN_DIR := $(DIST_DIR)/binaries
 DIST_PAG_BIN_DIR := /afs/csail/group/pag/projects/invariants/binaries
 # Files that appear in the top level of the distribution directory
@@ -181,10 +180,10 @@ DISTTESTDIR := /tmp/daikon.dist
 DISTTESTDIRJAVA := /tmp/daikon.dist/daikon/java
 
 # Test that the files in the staging area are correct.
-test-staged-dist: $(STAGING_DIST)
+test-staged-dist: $(STAGING_DIR)
 	-rm -rf $(DISTTESTDIR)
 	mkdir $(DISTTESTDIR)
-	(cd $(DISTTESTDIR); tar xzf $(STAGING_DIST)/download/daikon.tar.gz)
+	(cd $(DISTTESTDIR); tar xzf $(STAGING_DIR)/download/daikon.tar.gz)
 	## First, test daikon.jar.
 	(cd $(DISTTESTDIR)/daikon/java && \
 	  $(MAKE) CLASSPATH=$(DISTTESTDIR)/daikon/daikon.jar junit)
@@ -219,7 +218,7 @@ cvs-test:
 # Main distribution
 
 # The staging target builds all of the files that will be distributed
-# to the website in the directory $(STAGING_DIST).  This includes:
+# to the website in the directory $(STAGING_DIR).  This includes:
 # daikon.tar.gz, daikon.zip, daikon.jar, javadoc, dfej-linux-x86
 # (static version), dfej.exe (mingw windows) and the documentation.
 # See the dist target for moving these files to the website.
@@ -227,47 +226,47 @@ cvs-test:
 # dfej-macosx, dfec-linux-x86.tar.gz and dfec-solaris.tar.gz.  These
 # must be built separately.
 staging: doc/CHANGES
-	/bin/rm -rf $(STAGING_DIST)
-	install -d $(STAGING_DIST)/download
+	/bin/rm -rf $(STAGING_DIR)
+	install -d $(STAGING_DIR)/download
 	# Build the main tarfile for daikon
 	@echo "]2;Building daikon.tar"
 	$(MAKE) daikon.tar
-	mv daikon.jar $(STAGING_DIST)/download
+	mv daikon.jar $(STAGING_DIR)/download
 	# Build javadoc
 	@echo "]2;Building Java doc"
-	install -d $(STAGING_DIST)/download/jdoc
-	cd java; make 'JAVADOC_DEST=$(STAGING_DIST)/download/jdoc' doc
+	install -d $(STAGING_DIR)/download/jdoc
+	cd java; make 'JAVADOC_DEST=$(STAGING_DIR)/download/jdoc' doc
 	# Copy the documentation
 	@echo "]2;Copying documentation"
-	install -d $(STAGING_DIST)/download/doc
+	install -d $(STAGING_DIR)/download/doc
 	cp -pf eclipse-plugins/workspace/DaikonUI/html/daikonHelp.html doc
-	cd doc && cp -pf $(DOC_FILES_USER) $(STAGING_DIST)/download/doc
-	cp -pR doc/images $(STAGING_DIST)/download/doc
-	cp -pR doc/daikon_manual_html $(STAGING_DIST)/download/doc
-	cd doc/www && cp --parents -pf $(WWW_DAIKON_FILES) $(STAGING_DIST)
+	cd doc && cp -pf $(DOC_FILES_USER) $(STAGING_DIR)/download/doc
+	cp -pR doc/images $(STAGING_DIR)/download/doc
+	cp -pR doc/daikon_manual_html $(STAGING_DIR)/download/doc
+	cd doc/www && cp --parents -pf $(WWW_DAIKON_FILES) $(STAGING_DIR)
 	# Build pubs and copy the results
 	@echo "]2;Building Pubs"
 	cd doc/www && make pubs
-	install -d $(STAGING_DIST)/pubs
-	cp -pR doc/www/pubs/* $(STAGING_DIST)/pubs
+	install -d $(STAGING_DIR)/pubs
+	cp -pR doc/www/pubs/* $(STAGING_DIR)/pubs
 	# Build static dfej and copy to staging dir
 	@echo "]2;Building static dfej"
 	$(MAKE) static-dfej-linux-x86
-	install -d $(STAGING_DIST)/download/binaries
-	cp $(DFEJ_DIR)/src/dfej-linux-x86 $(STAGING_DIST)/download/binaries
+	install -d $(STAGING_DIR)/download/binaries
+	cp $(DFEJ_DIR)/src/dfej-linux-x86 $(STAGING_DIR)/download/binaries
 	# Build the windows (mingw) version of dfej and copy to staging dir
 	@echo "]2;Building mingw dfej"
 	$(MAKE) mingw
 	cp $(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe \
-	  $(STAGING_DIST)/download/binaries/dfej.exe
-	cd $(STAGING_DIST)/download/binaries && zip dfej dfej.exe
+	  $(STAGING_DIR)/download/binaries/dfej.exe
+	cd $(STAGING_DIR)/download/binaries && zip dfej dfej.exe
 	# all distributed files should be readonly
-	chmod -R -w $(STAGING_DIST)
+	chmod -R -w $(STAGING_DIR)
 	# compare new list of files in tarfile to previous list
 	@echo "]2;New or removed files"
 	@echo "***** New or removed files:"
-	tar tzf $(WWW_ROOT)/download/daikon.tar.gz | sort > /tmp/old_tar.txt
-	tar tzf $(STAGING_DIST)/download/daikon.tar.gz | sort > /tmp/new_tar.txt
+	tar tzf $(WWW_DIR)/download/daikon.tar.gz | sort > /tmp/old_tar.txt
+	tar tzf $(STAGING_DIR)/download/daikon.tar.gz | sort > /tmp/new_tar.txt
 	-diff -u /tmp/old_tar.txt /tmp/new_tar.txt
 	# Delete the tmp files
 	cd /tmp && /bin/rm -rf /daikon dfej.tar daikon.dist daikon.tar daikon.zip \
@@ -276,9 +275,8 @@ staging: doc/CHANGES
 # Copy the files in the staging area to the website.  This will copy
 # all of the files in staging, but will not delete any files in the website
 # that are not in staging.
-staging-to-www: $(STAGING_DIST)
-	# (cd $(STAGING_DIST) && tar cf - .) | (cd $(WWW_ROOT) && tar xfBp -)
-	(cd $(STAGING_DIST) && tar cf - *) | (cd $(DIST_DIR) && tar xfBp -)
+staging-to-www: $(STAGING_DIR)
+	(cd $(STAGING_DIR) && tar cf - .) | (cd $(WWW_DIR) && tar xfBp -)
 	@echo "**Update the dates and sizes in the various index files**"
 	update-link-dates $(DIST_DIR)/index.html
 	$(MAKE) update-dist-version-file
@@ -298,7 +296,7 @@ doc/CHANGES: doc/daikon.texinfo doc/config-options.texinfo \
 	@echo "** doc/CHANGES file is not up-to-date with respect to doc files."
 	@echo "** doc/CHANGES must be modified by hand."
 	@echo "** Try:"
-	@echo "     diff -u -s --from-file   $(WWW_ROOT)/dist/doc doc/*.texinfo"
+	@echo "     diff -u -s --from-file   $(WWW_DIR)/dist/doc doc/*.texinfo"
 	@echo "** (or maybe  touch doc/CHANGES )."
 	@echo "******************************************************************"
 	@exit 1
@@ -393,7 +391,7 @@ java/lib/ajax.jar: $(AJAX_JAVA_FILES)
 # checkout.
 daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar java/Makefile
 
-	install -d $(STAGING_DIST)
+	install -d $(STAGING_DIR)
 	-rm -rf /tmp/daikon
 	mkdir /tmp/daikon
 
@@ -531,11 +529,11 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	## Make the source distribution proper
 	rm -rf `find /tmp/daikon -name CVS`
 	(cd /tmp; tar cf daikon.tar daikon)
-	gzip -c /tmp/daikon.tar > $(STAGING_DIST)/download/daikon.tar.gz
+	gzip -c /tmp/daikon.tar > $(STAGING_DIR)/download/daikon.tar.gz
 	# cp -pf /tmp/daikon.tar
 	rm -f /tmp/daikon.zip
 	(cd /tmp; zip -r daikon daikon)
-	cp -pf /tmp/daikon.zip $(STAGING_DIST)/download/daikon.zip
+	cp -pf /tmp/daikon.zip $(STAGING_DIR)/download/daikon.zip
 
 # Rule for daikon.tar.gz
 %.gz : %
