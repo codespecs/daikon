@@ -2,7 +2,7 @@ package daikon.simplify;
 
 import java.io.*;
 import java.util.*;
-    
+
 import utilMDE.Assert;
 
 /**
@@ -14,7 +14,7 @@ public class SessionManager
   /** The command to be performed (point of communication with worker thread). */
   private Cmd pending;
 
-  /** Our worker thread; hold onto it so that we can stop it. */  
+  /** Our worker thread; hold onto it so that we can stop it. */
   private Worker worker;
 
   /** How long to wait for a reply for each command. */
@@ -22,7 +22,7 @@ public class SessionManager
 
   // The error message returned by the worked thread, or null
   private String error = null;
-  
+
   // Enable to dump input and output to the console
   // Use "java -DDEBUG_SIMPLIFY=1 daikon.Daikon ..." or
   //     "make USER_JAVA_FLAGS=-DDEBUG_SIMPLIFY=1 ..."
@@ -168,7 +168,7 @@ public class SessionManager
 
     m.request(cc);
     Assert.assert(false == cc.valid);
-    
+
   }
-  
+
 }
