@@ -86,42 +86,13 @@ public final class PPTSLICE1
   public VarInfo var_info;
 #endif
 
-#if 0
-  // THESE ARE OLD COMMENTS, referring to a previous implementation.
-#if defined(ARITY1)
-  // values_cache maps (interned) values to 2-element arrays of
-  // [num_unmodified, num_modified].
-#elif defined(ARITY2)
-  // values_cache maps (interned) values to 4-element arrays of
-  // [num_unmod_unmod, num_unmod_mod, num_mod_unmod, num_mod_mod].
-#elif defined(ARITY3)
-  // values_cache maps (interned) values to 8-element arrays of
-  // [uuu, uum, umu, umm, muu, mum, mmu, mmm].
-  // That is, the first element is (unmod,unmod,unmod);
-  // the second element is (unmod,unmod,mod); etc.
-#endif
-#endif
-
-  // These two fields are valid only Daikon.slices_see_all_samples is true.
+  // These fields are valid only Daikon.slices_see_all_samples is true.
   /** Records the distinct values (tuples) seen at this slice. **/
   private VALUETRACKER1 values_cache;
-  private int[] tm_total = new int[NUM_TM];  // "tm" stands for "tuplemod"
   /** Number of modified samples observed. **/
   private int mod_samples = 0;
   /** Number of unmodified samples observed. **/
   private int unmod_samples = 0;
-
-  public void repCheck() {
-    super.repCheck();
-    if (num_samples() != mod_samples + unmod_samples) {
-      throw new Error("mismatch: " + num_samples() + " == " + mod_samples
-                      + " + " + unmod_samples + "; " + ArraysMDE.toString(tm_total));
-    }
-    if (num_mod_samples() != mod_samples) {
-      throw new Error("mismatch: " + num_mod_samples() + " == " + mod_samples);
-    }
-  }
-
 
   /**
    * Create a new PPTSLICE1.  Warning: do not rearrange the contents
@@ -340,35 +311,23 @@ public final class PPTSLICE1
    * Set the number of samples for this slice to be at least count.
    **/
   public void set_samples (int count) {
-    repCheck();
-    int old_num_samples = num_samples();
+    // Don't call num_samples(), because slices_see_all_samples is false.
+    int old_num_samples = mod_samples + unmod_samples;
     if (old_num_samples >= count) return;
     // Distribute the new samples equally among the buckets.
     double ratio = ((double)count)/old_num_samples;
-    for (int i=0; i<NUM_TM; i++) {
-      tm_total[i] *= ratio;
-    }
-    // Put any extras in bucket 0.
-    tm_total[0] = count - num_mod_samples();
     mod_samples *= ratio;
     unmod_samples = count - mod_samples;
-    repCheck();
   }
 
+  // I could introduce another accessor that uses
+  // UtilMDE.intersectionCardinalityAtLeast(), which might be more
+  // efficient.
+
   // These accessors are for abstract methods declared in Ppt
-  /** Returns the number of samples observed at this slice. **/
+  /** Returns the number of (non-missing) samples observed at this slice. **/
   public int num_samples() {
-    // return mod_samples + unmod_samples;
-#if defined(ARITY1)
-    int result = tm_total[0] + tm_total[1];
-#elif defined(ARITY2)
-    int result = tm_total[0] + tm_total[1] + tm_total[2] + tm_total[3];
-#elif defined(ARITY3)
-    int result = tm_total[0] + tm_total[1] + tm_total[2] + tm_total[3]
-      + tm_total[4] + tm_total[5] + tm_total[6] + tm_total[7];
-#endif
-    Assert.assertTrue(result >= 0);
-    return result;
+    return mod_samples + unmod_samples;
   }
 
   /**
@@ -440,19 +399,12 @@ public final class PPTSLICE1
   }
 #endif
 
-  // The number of modified, non-missing samples.
+  /**
+   * The number of modified, non-missing samples.
+   * Don't use this; use num_samples instead.
+   **/
   public int num_mod_samples() {
-    // return mod_samples;
-#if defined(ARITY1)
-    int result = tm_total[1];
-#elif defined(ARITY2)
-    int result = tm_total[1] + tm_total[2] + tm_total[3];
-#elif defined(ARITY3)
-    int result = tm_total[1] + tm_total[2] + tm_total[3]
-       + tm_total[4] + tm_total[5] + tm_total[6] + tm_total[7];
-#endif
-    Assert.assertTrue(result >= 0);
-    return result;
+    return mod_samples;
   }
 
   // public int num_missing() { return values_cache.num_missing; }
@@ -502,7 +454,6 @@ public final class PPTSLICE1
     for (int i=0; i<invs.size(); i++) {
       Assert.assertTrue(invs.get(i) != null);
     }
-    repCheck();
 
     // if (Global.debugInfer.isLoggable(Level.FINE)) {
     //   Global.debugInfer.fine (PPTSLICE1STRING + ".add(" + full_vt + ", " + count + ")" + " for " + name());
@@ -634,13 +585,10 @@ public final class PPTSLICE1
 #if defined (ARITY1)
   public void add_val (Object val1, int mod1, int count) {
 
-    repCheck();
-    tm_total[mod1] += count;
     if (mod1 == ValueTuple.MODIFIED)
       mod_samples += count;
     else
       unmod_samples += count;
-    repCheck();
 
     Assert.assertTrue(mod1 != ValueTuple.MISSING_FLOW
                       && mod1 != ValueTuple.MISSING_NONSENSICAL);
@@ -675,15 +623,11 @@ public final class PPTSLICE1
                        && mod1 != ValueTuple.MISSING_NONSENSICAL)
                        && (mod2 != ValueTuple.MISSING_FLOW
                        && mod2 != ValueTuple.MISSING_NONSENSICAL));
-    repCheck();
 
-    int mod_index = mod1 * 2 + mod2;
-    tm_total[mod_index] += count;
     if (mod1 == ValueTuple.MODIFIED || mod2 == ValueTuple.MODIFIED)
       mod_samples += count;
     else
       unmod_samples += count;
-    repCheck();
     if (Debug.logDetail())
       Debug.log (getClass(), this, "mod1 = " + mod1 + " mod2 = " + mod2
                  + " count = " + count);
@@ -762,14 +706,10 @@ public final class PPTSLICE1
                         && (mod3 != ValueTuple.MISSING_FLOW
                         && mod3 != ValueTuple.MISSING_NONSENSICAL));
 
-    repCheck();
-    int mod_index = mod1 * 4 + mod2 * 2 + mod3;
-    tm_total[mod_index] += count;
     if (mod1 == ValueTuple.MODIFIED || mod2 == ValueTuple.MODIFIED || mod3 == ValueTuple.MODIFIED)
       mod_samples += count;
     else
       unmod_samples += count;;
-    repCheck();
 
     if (! Invariant.dkconfig_use_confidence) {
       if (values_cache != null) {
@@ -1031,9 +971,6 @@ public final class PPTSLICE1
     // Set sample counts
     result.mod_samples = this.mod_samples;
     result.unmod_samples = this.unmod_samples;
-    for (int i = 0; i < tm_total.length; i++) {
-      result.tm_total[i] = this.tm_total[i];
-    }
 
     // Set ValueTracker
     if (! Invariant.dkconfig_use_confidence) {
@@ -1064,7 +1001,6 @@ public final class PPTSLICE1
     if (PptSliceEquality.debug.isLoggable(Level.FINE)) {
       PptSliceEquality.debug.fine ("cloneAndPivot: newInvs " + invs);
     }
-    result.repCheck();
     return result;
   }
   /**
@@ -1170,9 +1106,6 @@ public final class PPTSLICE1
       // Update sample count info
       mod_samples += cslice.mod_samples;
       unmod_samples += cslice.unmod_samples;
-      for (int j = 0; j < tm_total.length; j++) {
-        tm_total[j] += cslice.tm_total[j];
-      }
 
       // Keep track of the values cache from each child
       if (! Invariant.dkconfig_use_confidence) {
@@ -1294,7 +1227,6 @@ public final class PPTSLICE1
         }
       }
     }
-    repCheck();
   }
 
   /**

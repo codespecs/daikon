@@ -147,11 +147,15 @@ public class ModBitTracker
   }
 
   /** Add to this the modbits for the given ValueTuple. **/
-  public void add(ValueTuple vt) {
+  public void add(ValueTuple vt, int count) {
     if (debug) checkRep();
     Assert.assertTrue(vt.size() == num_vars
                       , "vt.size()=" + vt.size() + ", num_vars = " + num_vars
                       );
+    if (num_vars == 0) {
+      num_samples += count;
+      return;
+    }
     Arrays.fill(this_bits_valid, false);
     Arrays.fill(this_bits_exception_index, -1);
     for (int i=0; i<num_vars; i++) {
@@ -184,9 +188,9 @@ public class ModBitTracker
       }
     }
     for (int i=0; i<num_sets; i++) {
-      modbits_arrays[i].set(num_samples, this_bits[i]);
+      modbits_arrays[i].set(num_samples, num_samples+count, this_bits[i]);
     }
-    num_samples++;
+    num_samples += count;
 
     if (debug) checkRep();
   }

@@ -146,7 +146,7 @@ public class PptTopLevel
   int num_orig_vars;            // number of _orig vars
   int num_static_constant_vars; // these don't appear in the trace file
 
-  private ModBitTracker mbtracker;
+  ModBitTracker mbtracker;
 
   // private transient VarValuesOrdered values; // [[INCR]]
   private int values_num_samples;
@@ -319,10 +319,8 @@ public class PptTopLevel
     //                    + ",num_declvars=" + num_declvars
     //                    + ",num_tracevars=" + num_tracevars);
 
-    if (Invariant.dkconfig_use_confidence) {
-      Assert.assertTrue(num_tracevars == var_infos.length - num_static_constant_vars);
-      mbtracker = new ModBitTracker(num_tracevars);
-    }
+    Assert.assertTrue(num_tracevars == var_infos.length - num_static_constant_vars);
+    mbtracker = new ModBitTracker(num_tracevars);
   }
 
 
@@ -376,6 +374,45 @@ public class PptTopLevel
     return values_num_samples;
   }
 
+  public int num_samples(VarInfo vi1) {
+    if (vi1.is_static_constant) {
+      return mbtracker.num_samples();
+    }
+    BitSet b1 = mbtracker.get(vi1.value_index);
+    int num_slice_samples = b1.cardinality();
+    return num_slice_samples;
+  }
+
+  public int num_samples(VarInfo vi1, VarInfo vi2) {
+    if (vi1.is_static_constant) {
+      return num_samples(vi2);
+    }
+    if (vi2.is_static_constant) {
+      return num_samples(vi1);
+    }
+    BitSet b1 = mbtracker.get(vi1.value_index);
+    BitSet b2 = mbtracker.get(vi2.value_index);
+    int num_slice_samples = UtilMDE.intersectionCardinality(b1, b2);
+    return num_slice_samples;
+  }
+
+  public int num_samples(VarInfo vi1, VarInfo vi2, VarInfo vi3) {
+    if (vi1.is_static_constant) {
+      return num_samples(vi2, vi3);
+    }
+    if (vi2.is_static_constant) {
+      return num_samples(vi1, vi3);
+    }
+    if (vi3.is_static_constant) {
+      return num_samples(vi1, vi2);
+    }
+    BitSet b1 = mbtracker.get(vi1.value_index);
+    BitSet b2 = mbtracker.get(vi2.value_index);
+    BitSet b3 = mbtracker.get(vi3.value_index);
+    int num_slice_samples = UtilMDE.intersectionCardinality(b1, b2, b3);
+    return num_slice_samples;
+  }
+
   // Get the actual views from the HashMap
   Collection viewsAsCollection() {
     return views.values();
@@ -416,10 +453,8 @@ public class PptTopLevel
       return;
     int old_length = var_infos.length;
     VarInfo[] new_var_infos = new VarInfo[var_infos.length + vis.length];
-    if (Invariant.dkconfig_use_confidence) {
-      Assert.assertTrue(mbtracker.num_samples() == 0);
-      mbtracker = new ModBitTracker(mbtracker.num_vars() + vis.length);
-    }
+    Assert.assertTrue(mbtracker.num_samples() == 0);
+    mbtracker = new ModBitTracker(mbtracker.num_vars() + vis.length);
     System.arraycopy(var_infos, 0, new_var_infos, 0, old_length);
     System.arraycopy(vis, 0, new_var_infos, old_length, vis.length);
     for (int i=old_length; i<new_var_infos.length; i++) {
@@ -1014,7 +1049,7 @@ public class PptTopLevel
 
       // Map vt into the transformed tuple
       int ppt_num_vals = ppt.var_infos.length - ppt.num_static_constant_vars;
-      Assert.assertTrue(ppt.mbtracker == null || ppt_num_vals == ppt.mbtracker.num_vars());
+      Assert.assertTrue(ppt_num_vals == ppt.mbtracker.num_vars());
       Object[] vals = new Object[ppt_num_vals];
       int[] mods = new int[ppt_num_vals];
       Arrays.fill(mods, ValueTuple.MISSING_FLOW);
@@ -1204,9 +1239,8 @@ public class PptTopLevel
       debugSuppress.fine (">>> End of add for " + name());
     }
 
-    if (Invariant.dkconfig_use_confidence) {
-      mbtracker.add(vt);
-    }
+    // System.out.println("About to call ModBitTracker.add for " + name() + " <= " + vt.toString());
+    mbtracker.add(vt, count);
 
     return new ArrayList();
   }
