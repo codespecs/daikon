@@ -11,8 +11,8 @@
 #
 
 use English;
-use strict;
-$WARNING=1;
+#use strict;
+#$WARNING=1;
 
 my $USAGE =
   "Usage: ./convertcsv.pl [options] <inputfilename>
