@@ -14,6 +14,7 @@ import java.util.*;
 
 /** Mathematical utilities. */
 public final class MathMDE {
+  private MathMDE() { throw new Error("do not instantiate"); }
 
 
   ///

@@ -18,11 +18,11 @@ import java.util.*;
 
 public class FuzzyFloat {
 
-  /** minimum ratio between two floats that will act as equal */
+  /** Minimum ratio between two floats that will act as equal. */
   double min_ratio = 0.9999;
-  /** maximum ratio between two floats that will act as equal */
+  /** Maximum ratio between two floats that will act as equal. */
   double max_ratio = 1.0001;
-  /** True if ratio test turned off */
+  /** True if ratio test turned off. */
   boolean off = false;
 
   public FuzzyFloat () {
@@ -38,7 +38,7 @@ public class FuzzyFloat {
   }
 
   /**
-   * set the relative diff after creation
+   * Set the relative diff after creation.
    *
    * @see #FuzzyFloat
    */

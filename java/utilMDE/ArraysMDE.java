@@ -11,6 +11,7 @@ import java.util.*;
  * This complements @link{java.util.Arrays}.
  **/
 public final class ArraysMDE {
+  private ArraysMDE() { throw new Error("do not instantiate"); }
 
   ///////////////////////////////////////////////////////////////////////////
   /// min, max

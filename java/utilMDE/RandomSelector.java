@@ -149,7 +149,7 @@ public class RandomSelector {
         // do nothing if the probability condition is not met
     }
 
-    /** Returns current_values, modifies none  **/
+    /** Returns current_values, modifies none.  **/
     public List getValues() {
         // avoid concurrent mod errors and rep exposure
         ArrayList ret = new ArrayList();

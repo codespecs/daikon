@@ -19,13 +19,13 @@ public class CountingPrintWriter extends PrintWriter {
 
   // Field variables
 
-  /** number of written bytes using 'write' methods */
+  /** Number of written bytes using 'write' methods. */
   private int writtenBytes;
-  /** number of printed bytes using 'print' & 'println' methods */
+  /** Number of printed bytes using 'print' & 'println' methods. */
   private int printedBytes;
-  /** number of written chars using write methods */
+  /** Number of written chars using write methods. */
   private int writtenChars;
-  /** number of printed chars using 'print' & 'println' methods */
+  /** Number of printed chars using 'print' & 'println' methods. */
   private int printedChars;
 
   // Constructors
@@ -253,19 +253,19 @@ public class CountingPrintWriter extends PrintWriter {
     resetWrittenByteCounter();
     resetWrittenCharCounter();
   }
-  /**  Resets printedByte counter */
+  /**  Resets printedByte counter. */
   public void resetPrintedByteCounter() {
     printedBytes = 0;
   }
-  /**  Resets printedChar counter */
+  /**  Resets printedChar counter. */
   public void resetPrintedCharCounter() {
     printedChars = 0;
   }
-  /**  Resets writtenByte counter */
+  /**  Resets writtenByte counter. */
   public void resetWrittenByteCounter() {
     writtenBytes = 0;
   }
-  /**  Resets writtenChar counter */
+  /**  Resets writtenChar counter. */
   public void resetWrittenCharCounter() {
     writtenChars = 0;
   }
@@ -304,7 +304,7 @@ public class CountingPrintWriter extends PrintWriter {
    * PrintWriter, also accounts for the bytes needed to represent the
    * line separator string.
    */
-  public void println(){
+  public void println() {
     String s = System.getProperty("line.separator");
     printedBytes += countBytes(s);
     printedChars += s.length();
@@ -334,7 +334,7 @@ public class CountingPrintWriter extends PrintWriter {
   }
 
   /**
-   * Write a portion of a character array
+   * Write a portion of a character array.
    *
    * @param buf character array
    * @param off Offset from which to start writing characters

@@ -11,6 +11,7 @@ package utilMDE;
 
 /** Assertions:  test boolean expressions at runtime. */
 public final class Assert {
+  private Assert() { throw new Error("do not instantiate"); }
   /** If false, the Assert class is disabled. */
   public static final boolean enabled = true;
   /**

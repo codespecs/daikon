@@ -36,7 +36,7 @@ public class MultiRandSelector {
   /** @param num_elts the number of elements to select from each
    *  bucket
    *  @param eq partioner that determines how to partition the objects from
-   *  the iteration.</p>
+   *  the iteration.
    */
     public MultiRandSelector (int num_elts, Partitioner eq) {
         this (num_elts, new Random(), eq);
@@ -87,13 +87,13 @@ public class MultiRandSelector {
         delegation.accept (next);
     }
 
-  // TODO: is there any reason not to simply return a copy?
-    /** NOT safe from concurrent modification */
+    // TODO: is there any reason not to simply return a copy?
+    /** NOT safe from concurrent modification. */
     public Map values () {
         return map;
     }
 
-    /** Returns an iterator of all objects selected */
+    /** Returns an iterator of all objects selected. */
     public Iterator valuesIter() {
         ArrayList ret = new ArrayList();
         for (Iterator i = map.keySet().iterator(); i.hasNext(); ) {

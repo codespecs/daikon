@@ -12,6 +12,7 @@ import java.lang.reflect.*;
 // The class name "UtilMDE" is very close to the package name "utilMDE".
 /** Utility functions that do not belong elsewhere in the utilMDE package. */
 public final class UtilMDE {
+  private UtilMDE() { throw new Error("do not instantiate"); }
 
   ///
   /// Array
@@ -455,7 +456,7 @@ public final class UtilMDE {
 
 
   /**
-   * Writes an Object to a File
+   * Writes an Object to a File.
    **/
   public static void writeObject(Object o, File file) throws IOException {
     // 8192 is the buffer size in BufferedReader
@@ -471,7 +472,7 @@ public final class UtilMDE {
 
 
   /**
-   * Reads an Object from a File
+   * Reads an Object from a File.
    **/
   public static Object readObject(File file) throws
   IOException, ClassNotFoundException {
@@ -1178,6 +1179,8 @@ public final class UtilMDE {
         sb.append("\\r");
         post_esc = i+1;
         break;
+      default:
+        // Nothing to do: i gets incremented
       }
     }
     if (sb.length() == 0)

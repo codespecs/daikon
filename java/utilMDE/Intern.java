@@ -7,6 +7,7 @@ import java.util.*;
  * Utilities for interning objects.
  **/
 public final class Intern {
+  private Intern() { throw new Error("do not instantiate"); }
 
   ///////////////////////////////////////////////////////////////////////////
   /// Strings

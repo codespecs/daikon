@@ -3,7 +3,7 @@ package utilMDE;
 import java.util.*;
 
 /**
- * Routines for doing simple string formatting similar to printf/sprintf in C
+ * Routines for doing simple string formatting similar to printf/sprintf in C.
  * All of the arguments must be objects.  Primitive types can be used in
  * several ways:
  *
@@ -59,7 +59,7 @@ public class Fmt {
     return (result.toString());
   }
 
-  /** convenience routine for new Integer(val) **/
+  /** Convenience routine for new Integer(val). **/
   public static Integer i (int val) {
     return new Integer (val);
   }

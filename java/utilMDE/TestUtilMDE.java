@@ -465,8 +465,8 @@ public final class TestUtilMDE extends TestCase {
     // public static boolean isSubset(String[] smaller, String[] bigger)
 
     {
-      double f1[] = new double[10];
-      double f2[] = new double[20];
+      double[] f1 = new double[10];
+      double[] f2 = new double[20];
 
       for (int j = 0; j < f2.length; j++)
         f2[j] = j;
@@ -939,11 +939,11 @@ public final class TestUtilMDE extends TestCase {
     Object iOtherIntern = Intern.intern((Object) new Integer(1));
     assertTrue(iIntern == iOtherIntern);
 
-    Long lOrig = new Long(12345678901234l);
+    Long lOrig = new Long(12345678901234L);
     Long lIntern = Intern.intern(lOrig);
     Object lObjIntern = Intern.intern((Object) lOrig);
     assertTrue(lIntern == lObjIntern);
-    Object lOtherIntern = Intern.intern((Object) new Long(12345678901234l));
+    Object lOtherIntern = Intern.intern((Object) new Long(12345678901234L));
     assertTrue(lIntern == lOtherIntern);
 
     int[] iaOrig = new int[] {1, 2, 3};
@@ -953,11 +953,11 @@ public final class TestUtilMDE extends TestCase {
     Object iaOtherIntern = Intern.intern((Object) new int[] {1, 2, 3});
     assertTrue(iaIntern == iaOtherIntern);
 
-    long[] laOrig = new long[] {12345678901234l, 98765432109876l};
+    long[] laOrig = new long[] {12345678901234L, 98765432109876L};
     long[] laIntern = Intern.intern(laOrig);
     Object laObjIntern = Intern.intern((Object) laOrig);
     assertTrue(laIntern == laObjIntern);
-    Object laOtherIntern = Intern.intern((Object) new long[] {12345678901234l, 98765432109876l});
+    Object laOtherIntern = Intern.intern((Object) new long[] {12345678901234L, 98765432109876L});
     assertTrue(laIntern == laOtherIntern);
 
     // Need to test positive and negative zeros, infinities.
@@ -1560,7 +1560,7 @@ public final class TestUtilMDE extends TestCase {
       // System.out.println();
       // "i++" here works, but is slow
       for (int i=1; i<num_elts_limit; i+=3) {
-        int totals[] = new int[num_elts_limit];
+        int[] totals = new int[num_elts_limit];
         for (int j=0; j<tries; j++) {
           List chosen = UtilMDE.randomElements(new IotaIterator(itor_size), i, r);
           for (int m=0; m<chosen.size(); m++) {
@@ -1826,7 +1826,7 @@ public final class TestUtilMDE extends TestCase {
   /**
    * Tests whether CountingPrintWriter
    * counts the bytes printed, written for
-   * different types (boolean, int, float etc.)
+   * different types (boolean, int, float etc.).
    **/
   public static void testCountingPrintWriter() {
     CountingPrintWriter c1 = new CountingPrintWriter(new CharArrayWriter());
@@ -2014,8 +2014,8 @@ public final class TestUtilMDE extends TestCase {
 
     // public boolean isElemMatch (double[] a1, double[] a2)
     {
-      double f1[] = new double[10];
-      double f2[] = new double[20];
+      double[] f1 = new double[10];
+      double[] f2 = new double[20];
 
       for (int j = 0; j < 10; j++) {
 
@@ -2138,8 +2138,8 @@ public final class TestUtilMDE extends TestCase {
 
     // public boolean FuzzyFloat.isSubset (double[] a1, double[] a2)
     {
-      double f1[] = new double[10];
-      double f2[] = new double[20];
+      double[] f1 = new double[10];
+      double[] f2 = new double[20];
 
       for (int j = 0; j < f2.length; j++)
         f2[j] = j;
@@ -2178,7 +2178,7 @@ public final class TestUtilMDE extends TestCase {
   }
 
   /**
-   * Tests UtilMDE create_combinations routines
+   * Tests UtilMDE create_combinations routines.
    */
 
   public static void test_create_combinations() {
