@@ -21,6 +21,8 @@ import daikon.inv.binary.twoString.*;
 
 import utilMDE.*;
 
+import org.apache.log4j.Logger;
+
 import java.util.*;
 
 /**
@@ -47,6 +49,11 @@ public class SeqComparisonFloat
    **/
   public static boolean dkconfig_enabled = true;
 
+  /**
+   * Debugging logger.
+   **/
+  public static Logger debug = Logger.getLogger (SeqComparison.class.getName());
+
   static Comparator comparator = new ArraysMDE.DoubleArrayComparatorLexical();
 
   public final boolean only_check_eq;
@@ -59,20 +66,17 @@ public class SeqComparisonFloat
 
   private FloatValueTracker values_cache = new FloatValueTracker(8);
 
-  protected SeqComparisonFloat(PptSlice ppt, boolean only_eq,
-                      boolean order, boolean excludeEquality) {
+  protected SeqComparisonFloat(PptSlice ppt, boolean only_eq, boolean order) {
     super(ppt);
     only_check_eq = only_eq;
     orderMatters = order;
-    if (excludeEquality) can_be_eq = true;
   }
 
   //   public static SeqComparisonFloat instantiate(PptSlice ppt) {
   //     return instantiate (ppt, false);
   //   }
 
-  public static SeqComparisonFloat instantiate(PptSlice ppt, boolean onlyEq,
-                                      boolean excludeEquality) {
+  public static SeqComparisonFloat instantiate(PptSlice ppt, boolean onlyEq) {
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
@@ -93,9 +97,9 @@ public class SeqComparisonFloat
     // System.out.println("only_eq: " + only_eq);
     if (var1.aux.getFlag(VarInfoAux.HAS_ORDER)
         && var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
-      return new SeqComparisonFloat(ppt, only_eq, true, excludeEquality);
+      return new SeqComparisonFloat(ppt, only_eq, true);
     } else {
-      return new SeqComparisonFloat(ppt, true, false, excludeEquality);
+      return new SeqComparisonFloat(ppt, true, false);
     }
   }
 

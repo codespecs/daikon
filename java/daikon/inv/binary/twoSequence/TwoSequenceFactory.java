@@ -21,7 +21,7 @@ public final class TwoSequenceFactory {
 
   // Add the appropriate new Invariant objects to the specified Invariants
   // collection.
-  public static Vector instantiate(PptSlice ppt, boolean excludeEquality) {
+  public static Vector instantiate(PptSlice ppt) {
     Assert.assertTrue(ppt.arity == 2);
     // Not really the right place for these tests
     VarInfo var1 = ppt.var_infos[0];
@@ -66,31 +66,22 @@ public final class TwoSequenceFactory {
         if (lb != null)
           System.out.println("  " + lb.format());
       } else {
-        result.add(SeqComparison.instantiate(ppt, false, excludeEquality));
+        result.add(SeqComparison.instantiate(ppt, false));
       }
     }
     { // previously (pass == 2)
-      if (!excludeEquality) result.add(Reverse.instantiate(ppt));
       if (super1 == super2) {
         Global.subexact_noninstantiated_invariants += 2;
         Global.implied_false_noninstantiated_invariants += 2 + 2 * Functions.unaryFunctionNames.length;
       } else {
-        Assert.assertTrue(Intern.isInterned(super1.name));
-        Assert.assertTrue(Intern.isInterned(super2.name));
-        // If the variables (super1 and super2) are different, then their
-        // names must be different, too.  In other words. no two distinct
-        // variables have the same names.
 
-        Assert.assertTrue(super1.name != super2.name);
-
+        result.add(Reverse.instantiate(ppt));
         // SeqNonEqual.instantiate(ppt);
         result.add(SubSequence.instantiate(ppt));
 
         result.add(SubSet.instantiate(ppt));
 
-        // No < or > allowed.
-        result.add(PairwiseIntComparison.instantiate(ppt, excludeEquality));
-
+        result.add(PairwiseIntComparison.instantiate(ppt));
         result.add(PairwiseLinearBinary.instantiate(ppt));
         int numFunctions = Functions.unaryFunctionNames.length;
         for (int i=0; i<2; i++) {

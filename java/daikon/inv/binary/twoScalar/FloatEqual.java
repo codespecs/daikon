@@ -39,7 +39,7 @@ public final class FloatEqual
 
   public static FloatEqual instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-
+    
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
     VarInfo seqvar1 = var1.isDerivedSequenceMember();
@@ -237,9 +237,11 @@ public final class FloatEqual
     
 
     // a+c=b+c is implied, because a=b must have also been reported.
-    return ((var1.name instanceof VarInfoName.Add) && (var2.name instanceof VarInfoName.Add) &&
-              ((((VarInfoName.Add) var1.name).amount) == (((VarInfoName.Add) var2.name).amount)));
-
+    if ((var1.name instanceof VarInfoName.Add) && (var2.name instanceof VarInfoName.Add) &&
+        ((((VarInfoName.Add) var1.name).amount) == (((VarInfoName.Add) var2.name).amount))) {
+      return true;
+    }
+    return super.isObviousDynamically(vis);
   } // isObviousImplied
 
   /* [INCR]

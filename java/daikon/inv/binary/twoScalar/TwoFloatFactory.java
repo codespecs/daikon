@@ -18,7 +18,7 @@ public final class TwoFloatFactory {
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
-  public static Vector instantiate(PptSlice ppt, boolean excludeEquality) {
+  public static Vector instantiate(PptSlice ppt) {
 
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
@@ -49,10 +49,10 @@ public final class TwoFloatFactory {
 
     result.add(FloatEqual.instantiate(ppt));
 
-    if (!excludeEquality) result.add(FloatNonEqual.instantiate(ppt));
-    if (!excludeEquality) result.add(FloatLessThan.instantiate(ppt));
+    result.add(FloatNonEqual.instantiate(ppt));
+    result.add(FloatLessThan.instantiate(ppt));
     result.add(FloatLessEqual.instantiate(ppt));
-    if (!excludeEquality) result.add(FloatGreaterThan.instantiate(ppt));
+    result.add(FloatGreaterThan.instantiate(ppt));
     result.add(FloatGreaterEqual.instantiate(ppt));
 
     // Skip LineayBinary and FunctionUnary unless vars are integral
@@ -60,7 +60,7 @@ public final class TwoFloatFactory {
       Global.subexact_noninstantiated_invariants += 1;
       Global.subexact_noninstantiated_invariants += FunctionsFloat.unaryFunctionNames.length;
     } else {
-      if (!excludeEquality) result.add(LinearBinaryFloat.instantiate(ppt));
+      result.add(LinearBinaryFloat.instantiate(ppt));
       int numFunctions = FunctionsFloat.unaryFunctionNames.length;
       for (int i=0; i<2; i++) {
         boolean invert = (i==1);

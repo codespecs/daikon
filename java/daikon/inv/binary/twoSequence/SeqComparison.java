@@ -9,6 +9,8 @@ import daikon.inv.binary.twoString.*;
 
 import utilMDE.*;
 
+import org.apache.log4j.Logger;
+
 import java.util.*;
 
 /**
@@ -47,20 +49,17 @@ public class SeqComparison
 
   private ValueTracker values_cache = new ValueTracker(8);
 
-  protected SeqComparison(PptSlice ppt, boolean only_eq,
-                      boolean order, boolean excludeEquality) {
+  protected SeqComparison(PptSlice ppt, boolean only_eq, boolean order) {
     super(ppt);
     only_check_eq = only_eq;
     orderMatters = order;
-    if (excludeEquality) can_be_eq = true;
   }
 
   //   public static SeqComparison instantiate(PptSlice ppt) {
   //     return instantiate (ppt, false);
   //   }
 
-  public static SeqComparison instantiate(PptSlice ppt, boolean onlyEq,
-                                      boolean excludeEquality) {
+  public static SeqComparison instantiate(PptSlice ppt, boolean onlyEq) {
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
@@ -81,9 +80,9 @@ public class SeqComparison
     // System.out.println("only_eq: " + only_eq);
     if (var1.aux.getFlag(VarInfoAux.HAS_ORDER)
         && var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
-      return new SeqComparison(ppt, only_eq, true, excludeEquality);
+      return new SeqComparison(ppt, only_eq, true);
     } else {
-      return new SeqComparison(ppt, true, false, excludeEquality);
+      return new SeqComparison(ppt, true, false);
     }
   }
 
@@ -150,6 +149,12 @@ public class SeqComparison
     // if ((v1.length == 0) || (v2.length == 0)) {
     //   return;
     // }
+    if (debug.isDebugEnabled()) {
+      debug.debug ("doing add for: " + format());
+      debug.debug ("  at: " + ppt);
+    }
+
+    
     int comparison = 0;
     if (orderMatters) {
       // Standard element wise comparison
@@ -304,7 +309,7 @@ public class SeqComparison
     if (! (this.can_be_eq || this.can_be_lt || this.can_be_gt)
         && ppt.num_samples() != 0) {
       System.err.println (this.repr());
-      System.err.println (this.ppt.num_samples());
+      System.err.println (this.ppt);
       throw new Error();
     }
   }

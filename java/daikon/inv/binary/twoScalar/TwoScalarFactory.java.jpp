@@ -49,7 +49,7 @@ public final class CLASSNAME {
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
-  public static Vector instantiate(PptSlice ppt, boolean excludeEquality) {
+  public static Vector instantiate(PptSlice ppt) {
 
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
@@ -84,16 +84,16 @@ public final class CLASSNAME {
     result.add(INTEQUAL.instantiate(ppt));
 
 #if defined(TYPELONG)
-    if (!excludeEquality) result.add(IntNonEqual.instantiate(ppt));
-    if (!excludeEquality) result.add(IntLessThan.instantiate(ppt));
+    result.add(IntNonEqual.instantiate(ppt));
+    result.add(IntLessThan.instantiate(ppt));
     result.add(IntLessEqual.instantiate(ppt));
-    if (!excludeEquality) result.add(IntGreaterThan.instantiate(ppt));
+    result.add(IntGreaterThan.instantiate(ppt));
     result.add(IntGreaterEqual.instantiate(ppt));
 #elif defined(TYPEDOUBLE)
-    if (!excludeEquality) result.add(FloatNonEqual.instantiate(ppt));
-    if (!excludeEquality) result.add(FloatLessThan.instantiate(ppt));
+    result.add(FloatNonEqual.instantiate(ppt));
+    result.add(FloatLessThan.instantiate(ppt));
     result.add(FloatLessEqual.instantiate(ppt));
-    if (!excludeEquality) result.add(FloatGreaterThan.instantiate(ppt));
+    result.add(FloatGreaterThan.instantiate(ppt));
     result.add(FloatGreaterEqual.instantiate(ppt));
 #endif
 
@@ -102,7 +102,7 @@ public final class CLASSNAME {
       Global.subexact_noninstantiated_invariants += 1;
       Global.subexact_noninstantiated_invariants += FUNCTIONS.unaryFunctionNames.length;
     } else {
-      if (!excludeEquality) result.add(LINEARBINARY.instantiate(ppt));
+      result.add(LINEARBINARY.instantiate(ppt));
       int numFunctions = FUNCTIONS.unaryFunctionNames.length;
       for (int i=0; i<2; i++) {
         boolean invert = (i==1);

@@ -18,7 +18,7 @@ public final class SequenceScalarFactory {
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
-  public static Vector instantiate(PptSlice ppt, boolean excludeEquality) {
+  public static Vector instantiate(PptSlice ppt) {
     if (debug.isDebugEnabled()) {
       debug.debug("SequenceScalarFactory instantiate " + ppt.name);
     }

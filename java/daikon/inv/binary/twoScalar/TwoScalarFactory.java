@@ -18,7 +18,7 @@ public final class TwoScalarFactory {
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
-  public static Vector instantiate(PptSlice ppt, boolean excludeEquality) {
+  public static Vector instantiate(PptSlice ppt) {
 
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
@@ -49,10 +49,10 @@ public final class TwoScalarFactory {
 
     result.add(IntEqual.instantiate(ppt));
 
-    if (!excludeEquality) result.add(IntNonEqual.instantiate(ppt));
-    if (!excludeEquality) result.add(IntLessThan.instantiate(ppt));
+    result.add(IntNonEqual.instantiate(ppt));
+    result.add(IntLessThan.instantiate(ppt));
     result.add(IntLessEqual.instantiate(ppt));
-    if (!excludeEquality) result.add(IntGreaterThan.instantiate(ppt));
+    result.add(IntGreaterThan.instantiate(ppt));
     result.add(IntGreaterEqual.instantiate(ppt));
 
     // Skip LineayBinary and FunctionUnary unless vars are integral
@@ -60,7 +60,7 @@ public final class TwoScalarFactory {
       Global.subexact_noninstantiated_invariants += 1;
       Global.subexact_noninstantiated_invariants += Functions.unaryFunctionNames.length;
     } else {
-      if (!excludeEquality) result.add(LinearBinary.instantiate(ppt));
+      result.add(LinearBinary.instantiate(ppt));
       int numFunctions = Functions.unaryFunctionNames.length;
       for (int i=0; i<2; i++) {
         boolean invert = (i==1);

@@ -11,7 +11,7 @@ public final class SequenceStringFactory {
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
-  public static Vector instantiate(PptSlice ppt, boolean excludeEquality) {
+  public static Vector instantiate(PptSlice ppt) {
     if (debugSequenceStringFactory) {
       System.out.println("SequenceStringFactory instantiate " + ppt.name);
     }

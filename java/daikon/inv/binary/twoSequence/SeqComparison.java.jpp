@@ -54,6 +54,8 @@ import daikon.inv.binary.twoString.*;
 
 import utilMDE.*;
 
+import org.apache.log4j.Logger;
+
 import java.util.*;
 
 
@@ -81,6 +83,11 @@ public class CLASSNAME
    **/
   public static boolean dkconfig_enabled = true;
 
+  /**
+   * Debugging logger.
+   **/
+  public static Logger debug = Logger.getLogger (SeqComparison.class.getName());
+
   static Comparator comparator = new ArraysMDE.ARRAYCOMPARATOR;
 
   public final boolean only_check_eq;
@@ -93,20 +100,17 @@ public class CLASSNAME
 
   private VALUETRACKER values_cache = new VALUETRACKER(8);
 
-  protected CLASSNAME(PptSlice ppt, boolean only_eq,
-                      boolean order, boolean excludeEquality) {
+  protected CLASSNAME(PptSlice ppt, boolean only_eq, boolean order) {
     super(ppt);
     only_check_eq = only_eq;
     orderMatters = order;
-    if (excludeEquality) can_be_eq = true;
   }
 
   //   public static CLASSNAME instantiate(PptSlice ppt) {
   //     return instantiate (ppt, false);
   //   }
 
-  public static CLASSNAME instantiate(PptSlice ppt, boolean onlyEq,
-                                      boolean excludeEquality) {
+  public static CLASSNAME instantiate(PptSlice ppt, boolean onlyEq) {
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
@@ -127,9 +131,9 @@ public class CLASSNAME
     // System.out.println("only_eq: " + only_eq);
     if (var1.aux.getFlag(VarInfoAux.HAS_ORDER)
         && var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
-      return new CLASSNAME(ppt, only_eq, true, excludeEquality);
+      return new CLASSNAME(ppt, only_eq, true);
     } else {
-      return new CLASSNAME(ppt, true, false, excludeEquality);
+      return new CLASSNAME(ppt, true, false);
     }
   }
 

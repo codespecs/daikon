@@ -47,7 +47,7 @@ public final class FloatNonEqual
 
   public static FloatNonEqual instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
-
+    
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
     VarInfo seqvar1 = var1.isDerivedSequenceMember();

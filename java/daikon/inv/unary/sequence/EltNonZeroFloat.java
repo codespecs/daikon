@@ -274,7 +274,7 @@ public final class EltNonZeroFloat
         PptSlice2 slice_2seq = parent.findSlice_unordered (v1, v2);
         if (slice_2seq == null) {
           // System.out.println("EltNonZeroFloat.isObviousImplied: no slice for " + v1.name + ", " + v2.name);
-        } else  {
+        } else if (slice_2seq.num_samples() > 0) {
           // slice_2seq != null
           SubSequence ss = SubSequence.find(slice_2seq);
           if (ss == null) {

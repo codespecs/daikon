@@ -4,6 +4,7 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.unary.sequence.*;
 import daikon.derive.*;
 import daikon.derive.unary.*;
 import daikon.derive.binary.*;
@@ -534,6 +535,31 @@ public class SubSequence
       }
     }
 
+    // Obvious if subvar is always just []
+    if (true) {
+      PptSlice1 slice = ppt_parent.findSlice(subvar);
+      if (slice != null) {
+        Iterator subinvs = slice.invs.iterator();
+        while (subinvs.hasNext()) {
+          Object subinv = subinvs.next();
+          if (subinv instanceof OneOfSequence) {
+            OneOfSequence seqinv = (OneOfSequence) subinv;
+            if (seqinv.num_elts() == 1) {
+              Object elt = seqinv.elt();
+              if (elt instanceof long[] && ((long[]) elt).length == 0) {
+                debug.debug ("True from subvar being []");
+                return true;
+              }
+              if (elt instanceof double[] && ((double[]) elt).length == 0) {
+                debug.debug ("True from subvar being []");
+                return true;
+              }
+            }
+          }
+        }
+      }
+    }
+
     // Check for a[0..i] subseq a[0..j] but i < j.
     VarInfo subvar_super = subvar.isDerivedSubSequenceOf();
     VarInfo supervar_super = supervar.isDerivedSubSequenceOf();
@@ -611,8 +637,10 @@ public class SubSequence
 //                            + supervar.name.name()
 //                            + "? left: " + left_included + ", right: "
 //                            + right_included);
-        if (left_included && right_included)
+        if (left_included && right_included) {
+          debug.debug ("True from comparing indices");
           return true;
+        }
       } else if ((subvar.derived instanceof SequenceStringSubsequence)
                  && (supervar.derived instanceof SequenceStringSubsequence)) {
         // Copied from just above
@@ -649,6 +677,7 @@ public class SubSequence
         VarInfo supervar_part = der.getVarInfo();
         // Get the canonical version; being equal to it is good enough.
         if (supervar_part.equalitySet.leader() == subvar) {
+          debug.debug ("True from canonical leader");
           return true;
         }
 

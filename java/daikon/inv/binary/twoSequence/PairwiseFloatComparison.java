@@ -56,10 +56,6 @@ public class PairwiseFloatComparison
   }
 
   public static PairwiseFloatComparison instantiate(PptSlice ppt) {
-    return instantiate (ppt, false);
-  }
-
-  public static PairwiseFloatComparison instantiate(PptSlice ppt, boolean excludeEquality) {
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
@@ -70,12 +66,7 @@ public class PairwiseFloatComparison
       only_eq = true;
     }
     PairwiseFloatComparison result;
-    if (excludeEquality) {
-      // No < or > allowed.
-      result = new PairwiseFloatComparison(ppt, only_eq, true, true, false, false);
-    } else {
-      result = new PairwiseFloatComparison(ppt, only_eq);
-    }
+    result = new PairwiseFloatComparison(ppt, only_eq);
     return result;
   }
 
