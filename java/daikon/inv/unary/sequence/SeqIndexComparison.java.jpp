@@ -447,11 +447,14 @@ public class CLASSNAME extends SUPERCLASS {
         //  = (overlap/range1) * (overlap/range2) * (1/overlap)
         //  = overlap/(range1 * range2)
 
-        // Hack; but this seems too stringent otherwise
-        overlap *= 2;
-
         double confidence_one_nonequal = ((double)overlap)/(range1 * range2);
-        Assert.assertTrue(! Double.isNaN(confidence_one_nonequal)
+
+        // The factor of 2 is a hack, but this seems too stringent otherwise
+        confidence_one_nonequal = Math.min(1.0, 2.0*confidence_one_nonequal);
+
+        Assert.assertTrue(! Double.isNaN(confidence_one_nonequal) &&
+                          confidence_one_nonequal >= 0 &&
+                          confidence_one_nonequal <= 1
                           // "overlap=" + overlap
                           // + ", range1=" + range1
                           // + ", range2=" + range2
