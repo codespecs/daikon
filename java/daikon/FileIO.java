@@ -153,7 +153,7 @@ public final class FileIO {
 	System.out.println("Unrecognized paragraph contains line = `" + line + "'");
 	System.out.println("" + (line != null) + " " + (line.equals("")) + " " + !line.startsWith("//"));
 	if (line == null)
-	  throw new Error("Can't happen");
+	  throw new IllegalStateException();
 	line = reader.readLine();
       }
       continue;
