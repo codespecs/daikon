@@ -993,16 +993,22 @@ public abstract class Invariant
    * by being from a certain derivation).  Intended to be overridden
    * by subclasses.  Should only do static checking, because
    * suppression should do the dynamic checking.
+   *
+   * <p> This method is final because children of Invariant should be
+   * extending isObviousStatically(VarInfo[]) because it is more
+   * general.
    **/
-  public boolean isObviousStatically() {
+  public final boolean isObviousStatically() {
     return isObviousStatically(this.ppt.var_infos);
   }
 
   /**
    * Return true if this invariant is necessarily true from a fact
    * that can be determined statically -- for the given varInfos
-   * rather than the varInfos this is on.  Intended to be overridden
-   * by subclasses.  Should only do static checking.
+   * rather than the varInfos of this.  Conceptually, this means "is
+   * this invariant statically obvious if its VarInfos were switched
+   * with vis?"  Intended to be overridden by subclasses.  Should only
+   * do static checking.
    * @param vis The VarInfos this invariant is obvious over.  The
    * position and data type of the variables is the *same* as that of
    * this.ppt.var_infos.
@@ -1111,10 +1117,13 @@ public abstract class Invariant
 
   /**
    * Return true if this invariant is necessarily true from a fact
-   * that can be determined dynamically (after checking data) on the
-   * given VarInfos.  Intended to be overriden by subclasses so they
-   * can filter invariants after checking.  Since this method is
-   * dynamic, it should only be called after all processing.
+   * that can be determined dynamically (after checking data) -- for
+   * the given varInfos rather than the varInfos of this.
+   * Conceptually, this means "is this invariant dynamically obvious
+   * if its VarInfos were switched with vis?"  .  Intended to be
+   * overriden by subclasses so they can filter invariants after
+   * checking.  Since this method is dynamic, it should only be called
+   * after all processing.
    **/
   public boolean isObviousDynamically(VarInfo[] vis) {
     Assert.assertTrue (!Daikon.isInferencing);
@@ -1127,8 +1136,11 @@ public abstract class Invariant
    * that can be determined dynamically (after checking data).  Since
    * this method is dynamic, it should only be called after all
    * processing.
+   *
+   * <p> This method is final because subclasses should extend
+   * isObviousDynamically(VarInfo[]) since that method is more general.
    **/
-  public boolean isObviousDynamically() {
+  public final boolean isObviousDynamically() {
     Assert.assertTrue (!Daikon.isInferencing);
     return isObviousDynamically (ppt.var_infos);
   }

@@ -120,9 +120,6 @@ public class Implication
     return right.isObviousStatically(vis);
   }
 
-  public boolean isObviousDynamically() {
-    return right.isObviousDynamically();    
-  }
   /* [INCR]
 
   public boolean hasOnlyConstantVariables() {

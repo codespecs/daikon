@@ -41,8 +41,8 @@ public class AndJoiner
     }
   }
 
-  public boolean isObviousDynamically() {
-    return left.isObviousDynamically() && right.isObviousDynamically();
+  public boolean isObviousDynamically(VarInfo[] vis) {
+    return left.isObviousDynamically(vis) && right.isObviousDynamically(vis);
   }
 
   public boolean isObviousStatically(VarInfo[] vis) {
