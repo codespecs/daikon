@@ -807,7 +807,13 @@ public final class UtilMDE {
         sb.append(orig.substring(post_esc, this_esc+1));
         post_esc = this_esc+2;
         break;
+      case '0': case '1': case '2': case '3': case '4':
+      case '5': case '6': case '7': case '8': case '9':
+        // Here we should convert octal escapes into characters.
+        // For now, fall through.
       default:
+        // In the default case, retain the character following the backslash,
+        // but discard the backslash itself.  "\*" is just a one-character string.
         sb.append(orig.substring(post_esc, this_esc));
         post_esc = this_esc+1;
         break;

@@ -1193,6 +1193,10 @@ public final class TestUtilMDE extends TestCase {
     assertTrue(UtilMDE.unquote("\\\"hello\\\" \\\"world\\\"").equals("\"hello\" \"world\""));
     assertTrue(UtilMDE.unquote("\\").equals("\\"));
     assertTrue(UtilMDE.unquote("foo\\").equals("foo\\"));
+    assertTrue(UtilMDE.unquote("\\*abc").equals("*abc"));
+    // Should add more tests here.
+    // assertTrue(UtilMDE.unquote("\\115").equals("M"));
+    // assertTrue(UtilMDE.unquote("\\115\\111\\124").equals("MIT"));
 
     assertTrue(UtilMDE.removeWhitespaceBefore("a,b", ",").equals("a,b"));
     assertTrue(UtilMDE.removeWhitespaceBefore("a, b", ",").equals("a, b"));
