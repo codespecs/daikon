@@ -1,0 +1,30 @@
+Version:      $Id$
+Owner:        adonovan
+Cc:           mernst
+Tool:         dfej
+Summary:      Does not build with mingw
+Severity:     Vexing
+Status:       New
+Reproducible: Yes
+Description:
+mingw does not like the use of "regex"; a typical failure is
+
+  i386-mingw32msvc-g++ -g -Wall -DJIKES_DEBUG -DHAVE_CONFIG_H -I. -I/g2/users/mernst/research/invariants/dfej/src -I.     -g -O2 -c -o ast.o `test -f /g2/users/mernst/research/invariants/dfej/src/ast.cpp || echo '/g2/users/mernst/research/invariants/dfej/src/'`/g2/users/mernst/research/invariants/dfej/src/ast.cpp
+  In file included from /g2/users/mernst/research/invariants/dfej/src/symbol.h:17,
+		   from /g2/users/mernst/research/invariants/dfej/src/ast.h:16,
+		   from /g2/users/mernst/research/invariants/dfej/src/ast.cpp:11:
+  /g2/users/mernst/research/invariants/dfej/src/option.h:19: regex.h: No such file or directory
+
+To reproduce the problem, do
+
+  cd $inv
+  make dfej-src/build_mingw_dfej/src/dfej.exe
+
+I suspect you should disable that option under Windows, or teach mingw
+where to find the regular expression library.
+
+--
+$Log$
+Revision 1.1  2002-04-03 17:10:15  mernst
+new bug0040
+
