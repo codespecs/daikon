@@ -176,9 +176,15 @@ public final class Diff {
   }
 
   private static boolean shouldAdd(PptTopLevel ppt) {
-    return (ppt == null ||
-            ppt.ppt_name.isEnterPoint() ||
-            (ppt.ppt_name.isExitPoint() && ppt.combined_exit == null));
+    if (ppt == null) {
+      return false;
+    } else if (ppt.ppt_name.isEnterPoint()) {
+      return true;
+    } else if (ppt.ppt_name.isExitPoint() && ppt.combined_exit == null) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 
