@@ -59,7 +59,10 @@ if not locals().has_key("fn_var_infos"):
     fn_truevars = {}                    # from program point name to number of original var_infos
     fn_var_values = {}	    # from program point name to (tuple of values to occurrence counts)
     fn_samples = {}         # from program point name to number of samples
-    ## What is the purpose of having this as a separate variable??
+    ## What is the purpose of having this as a separate variable??  (It permits
+    ## find_violations to report a file name and perhaps has no other purpose.)
+    ## (It could also be used to regenerate fn_var_values after that has been
+    ## modified by prune_database.)
     # Issue: this does not contain any derived variables, only original ones.
     file_fn_var_values = {} # from filename to (program point to (values-tuple to occurrence counts))
     # From function name to stats.  Used *only* if collect_stats = true
@@ -309,8 +312,13 @@ float_re = re.compile(r'^-?[0-9]*\.[0-9]+$|^-?[0-9]+\.[0-9]*$')
 sequence_re = re.compile(r'^[^	]+\[(|[^][]+\.\.[^][]+)\]$')
 min_or_max_re = re.compile("^(min|max)\((.*)\)$")
 
+# These differ: "+" vs. "*" for the parenthesis group.
+java_type_re = re.compile(r'^(?:[a-zA-Z][a-zA-Z0-9]*(?:\.[a-zA-Z][a-zA-Z0-9]*)+'
+                          + r'|[a-zA-Z][a-z0-9]*[A-Z][a-zA-Z0-9]*)$');
+java_object_re = re.compile(r'^[a-zA-Z][a-zA-Z0-9]*(?:\.[a-zA-Z][a-zA-Z0-9]*)*@([0-9a-fA-F]+)$');
 
-integral_types = ("int", "char", "float", "double", "integral")
+integral_types = ("int", "char", "float", "double", "integral", "boolean")
+known_types = integral_types + ("pointer", "address")
 
 # A type is:
 #  * a string (for scalar types), or
@@ -339,6 +347,18 @@ def parse_vartype(str):
     while str[:9] == "array of ":
         dimensions = dimensions+1
         str = str[9:]
+    if not (str in known_types):
+        # hack for Java
+        if str == "java.lang.String":
+            str = "char"
+            dimensions = dimensions+1
+        elif str == "java.util.Vector":
+            str = "java_object"
+            dimensions = dimensions+1
+        else:
+            jtmatch = java_type_re.match(str)
+            if jtmatch != None:
+                str = "java_object"
     if dimensions == 0:
         return str
     else:
@@ -388,7 +408,7 @@ def lackwit_type_alias_name(lt):
 
 def lackwit_make_alias(name, type):
     if lackwit_type_format == "none":
-        return None
+        return type                     # was "return None", but I think that's wrong
     elif lackwit_type_format == "implicit":
         return type
     else:
@@ -418,6 +438,8 @@ def lackwit_type_element_type_alias(vi):
 
 # First index is numbered "1".
 def lackwit_type_index_type(lt, dim):
+    if lackwit_type_format == "none":
+        return None
     head = lt[0]
     if (head == 'array'):
         return lt[dim+1]                # indices start at third elt (index 2)
@@ -517,7 +539,8 @@ class var_info:
 
     # Instance variables:
     #  name                # string
-    #  type                # type information:  a string, not an
+    #  type                # type information:  a string or a tuple of
+                                  # (string, dims), not an
                                   #   unpicklable object like types.IntType
     #  lackwit_type	   # lackwit type information, or var_info (meaning
                            #   to treat this variable like that one)
@@ -625,7 +648,7 @@ def merge_var_infos(filename, sub_fn_var_infos):
 	    fn_var_infos[fname] = var_infos
             fn_var_values[fname] = {}
 	else:
-            assert var_infos_compatible(fn_var_infos[fname], sub_fn_var_values[fname])
+            assert var_infos_compatible(fn_var_infos[fname], sub_fn_var_infos[fname])
 
 
 def merge_var_values(filename, sub_fn_var_values, sub_fn_samples):
@@ -797,8 +820,6 @@ def dict_of_tuples_slice_3(dot, i1, i2, i3):
 ###
 ### Dictionary utilities -- new version
 ###
-
-## I
 
 ## These take a dictionary with in-key modification information and
 ## produce a dictionary with in-value modification information.
@@ -1183,7 +1204,10 @@ def introduce_from_sequence_pass2(var_infos, var_new_values, seqidx):
             this_seq_min = None
             this_seq_max = None
         else:
-            this_seq_sum = util.sum(this_seq)
+            try:
+                this_seq_sum = util.sum(this_seq)
+            except OverflowError:
+                this_seq_sum = None
             this_seq_min = min(this_seq)
             this_seq_max = max(this_seq)
         new_values.append((this_seq_sum,this_seq_mod))
@@ -1787,41 +1811,57 @@ def read_data_trace_file(filename, fn_regexp=None):
             this_var_modified = (line == "1\n")
 
             this_var_type = this_var_info.type
+
             if is_array_var_type(this_var_type):
                 # variable is an array
 
-                # Deal with [] surrounding Java array output
-                if (this_value[0] == "[") and (this_value[-1] == "]"):
-                    this_value = this_value[1:-1]
-
-                this_value = string.split(this_value, " ")
-                if len(this_value) > 0 and this_value[-1] == "":
-                    # Cope with trailing spaces on the line
-                    this_value = this_value[0:-1]
-
-                # The regexp test and call to int do seem to be faster
-                # than a call to "eval", according to my timing tests.
-                # They also may be less error-prone (eg, not evaluating
-                # a string that happens to be a variable name).
-
-                # If sequence variable is uninit, (as opposed to one
-                # element being uninit), mark as None
-		if len(this_value) > 0 and this_value[0] == "uninit":
-                    this_value = None
-                else:
+                if (len(this_value) > 1) and (this_value[0] == "\"") and (this_value[-1] == "\""):
+                    # variable is a string
+                    # turn it into a tuple of *numbers* instead.
+                    this_value = list(eval(this_value))
                     for seq_elem in range(0, len(this_value)):
-                        if this_value[seq_elem] == "uninit":
-                            this_value[seq_elem] = None
-                        elif this_value[seq_elem] == "NIL":
-                            # HACK
-                            this_value[seq_elem] = 0
-                        else:
-                            assert integer_re.match(this_value[seq_elem])
-                            this_value[seq_elem] = int(this_value[seq_elem])
+                        this_value[seq_elem] = ord(this_value[seq_elem])
                     this_value = tuple(this_value)
+                else:
+                    # Deal with [] surrounding Java array output
+                    if (len(this_value) > 1) and (this_value[0] == "[") and (this_value[-1] == "]"):
+                        this_value = this_value[1:-1]
+
+                    this_value = string.split(this_value, " ")
+                    if len(this_value) > 0 and this_value[-1] == "":
+                        # Cope with trailing spaces on the line
+                        this_value = this_value[0:-1]
+
+                    # The regexp test and call to int do seem to be faster
+                    # than a call to "eval", according to my timing tests.
+                    # They also may be less error-prone (eg, not evaluating
+                    # a string that happens to be a variable name).
+
+                    # If sequence variable is uninit (as opposed to one
+                    # element being uninit), mark as None
+                    if len(this_value) > 0 and this_value[0] == "uninit":
+                        this_value = None
+                    else:
+                        for seq_elem in range(0, len(this_value)):
+                            if this_value[seq_elem] == "uninit":
+                                this_value[seq_elem] = None
+                            elif this_value[seq_elem] == "NIL":
+                                # HACK
+                                this_value[seq_elem] = 0
+                            elif this_var_type[0] == "java_object":
+                                jomatch = java_object_re.match(this_value[seq_elem])
+                                assert jomatch != None
+                                this_value[seq_elem] = eval("0x" + jomatch.group(1))
+                            elif this_var_type[0] == "boolean":
+                                assert (this_value[seq_elem] == "true") or (this_value[seq_elem] == "false")
+                                this_value[seq_elem] = (this_value[seq_elem] == "true")
+                            else:
+                                assert integer_re.match(this_value[seq_elem])
+                                this_value[seq_elem] = int(this_value[seq_elem])
+                        this_value = tuple(this_value)
             else:
                 # "pointer" is the deprecated name
-                assert (this_var_type in integral_types) or (this_var_type == "pointer") or (this_var_type == "address")
+                assert (this_var_type in integral_types) or (this_var_type == "pointer") or (this_var_type == "address") or (this_var_type == "java_object")
                 if this_value == "uninit":
                     this_value = None
                 elif this_value == "NIL":
@@ -1831,9 +1871,16 @@ def read_data_trace_file(filename, fn_regexp=None):
                     assert integer_re.match(this_value)
                     # Convert the number to signed.  This is gross, will be fixed.
                     this_value = eval(hex(long(this_value))[:-1])
-                elif (this_var_type == "char"):
+                elif this_var_type == "java_object":
+                    jomatch = java_object_re.match(this_value);
+                    assert jomatch != None;
+                    this_value = eval("0x" + jomatch.group(1));
+                elif this_var_type == "char":
                     assert len(this_value) == 1
                     this_value = ord(this_value)
+                elif this_var_type == "boolean":
+                    assert (this_value == "true") or (this_value == "false")
+                    this_value = (this_value == "true")
                 else:
                     assert integer_re.match(this_value)
                     this_value = int(this_value)
@@ -2917,12 +2964,12 @@ class two_scalar_numeric_invariant(invariant):
         inv2 = self.var_infos[1].invariant
         min2 = inv2.min
         max2 = inv2.max
-        overlap = min(max1, max2) - max(min1, min2)
-        if overlap < 0:
-            return false
-        overlap = float(overlap + 1)
 
         try:
+            overlap = min(max1, max2) - max(min1, min2)
+            if overlap < 0:
+                return false
+            overlap = float(overlap + 1)
             probability = 1 - overlap/((max1 - min1 + 1) * (max2 - min2 + 1))
         except OverflowError:
             probability = 1
@@ -4458,7 +4505,7 @@ def all_fns_diff(dir1, size1, dir2, size2):
 
 
 ###########################################################################
-### Querying the database
+### Querying/pruning the database
 ###
 
 def var_index(varname, fnname):
@@ -4469,6 +4516,40 @@ def var_index(varname, fnname):
 ## Testing
 # invariants.var_index("lj", 'makepat:::END(arg_0[],start,delim,pat_100[])')
 # invariants.var_index("lj", 'makepat:::END(arg_0[],start,delim,pat_100[])')
+
+
+def replace_vars_by_vals_indexed(condition, function):
+    """For each word in condition (a Python expression), if it is a variable in
+    function, then replace it by the string "vals[i]" where i is the index of
+    that variable in the function.
+
+    Actually returns a tuple of the new condition and the max var index seen.
+    The latter is useful for error-checking.
+    """
+
+    ## It's a bit of a shame to repeatedly split the condition on
+    ## subsequent calls to this function.  Perhaps permit the condition to
+    ## already be a list, but probably not worth losing sleep over.
+    # I want to use re.split(r'\b', but that doesn't work.  Why??
+    # '(\W+)' does what I would think it would do...
+    ## This isn't quite right, because of how it treats "a*b == c".  Fix later.
+    # The capturing parentheses ensure that the punctuation does appear
+    # in the list returned by split.
+    condition_words = re.split('(\*?\w+)', condition)
+
+    result_words = []
+    max_var_idx = -1
+
+    for i in range(0,len(condition_words)):
+        var_idx = var_index(condition_words[i], function)
+        if var_idx != None:
+            ## Assumes modification info is in the key (modinkey is true)
+            result_words.append("(vals[%s][0])" % (var_idx,))
+            max_var_idx = max(max_var_idx, var_idx)
+        else:
+            result_words.append(condition_words[i])
+    return (string.join(result_words, ""), max_var_idx)
+
 
 
 ## Maybe this should be stated positively:  output when the condition is
@@ -4486,27 +4567,11 @@ def find_violations(condition, fn_regexp=None):
 
     fn_regexp = util.re_compile_maybe(fn_regexp, re.IGNORECASE)
 
-    max_var_idx = -1
-
-    # I want to use re.split(r'\b', but that doesn't work.  Why??
-    # '(\W+)' does what I would think it would do...
-    ## This isn't quite right, because of how it treats "a*b == c".  Fix later.
-    condition_words = re.split('(\*?\w+)', condition)
-
     for fn in fn_var_infos.keys():
         if fn_regexp and not fn_regexp.search(fn):
             continue
 
-        cond_words = []
-
-        for i in range(0,len(condition_words)):
-            var_idx = var_index(condition_words[i], fn)
-            if var_idx != None:
-                cond_words.append("(vals[%s])" % (var_idx,))
-                max_var_idx = max(max_var_idx, var_idx)
-            else:
-                cond_words.append(condition_words[i])
-        cond = string.join(cond_words, "")
+        (cond, max_var_idx) = replace_vars_by_vals_indexed(condition, fn)
 
         vis = fn_var_infos[fn]
         # This implementation tells us the file in which the value occurs, but
@@ -4527,6 +4592,38 @@ def find_violations(condition, fn_regexp=None):
                     print "function %s, file %s, %s samples" % (fn, file, count)
                     for i in range(0,len(vals)):
                         print vis[i].name, "\t", vals[i]
+
+
+## Warning: this modifies fn_var_values, so it is no longer in perfect
+## correspondence with file_fn_var_values.
+def prune_database(condition, fn_regexp=None):
+    """Given a condition and a regular expression, eliminate all samples
+    from the database that violate that condition in a function whose
+    name matches the regular expression.
+    The condition is a Python expression (a string) using symbolic
+    variable names (that is, the variable names used in the program).
+    Example calls:
+      prune_database("lj <= j", "makepat:::EXIT")
+      prune_database("*j_orig == *j - 1", "plclose:::END")
+    """
+
+    fn_regexp = util.re_compile_maybe(fn_regexp, re.IGNORECASE)
+
+    for fn in fn_var_infos.keys():
+        if fn_regexp and not fn_regexp.search(fn):
+            continue
+
+        (cond, max_var_idx) = replace_vars_by_vals_indexed(condition, fn)
+
+        vis = fn_var_infos[fn]
+        ## Can this happen?
+        # # This function might not appear in this file
+        # if not this_fn_var_values.has_key(fn):
+        #     continue
+        for (vals, count) in fn_var_values[fn].items():
+            # I should probably catch errors here
+            if not eval(cond, globals(), locals()):
+                del fn_var_values[fn][vals]
 
 
 ###########################################################################
