@@ -1195,6 +1195,9 @@ public final class TestUtilMDE extends TestCase {
     assertTrue(UtilMDE.unquote("foo\\").equals("foo\\"));
     assertTrue(UtilMDE.unquote("\\*abc").equals("*abc"));
     // Should add more tests here.
+
+    // unquote CANNOT handle octal escapes -- we changed dfec to fix
+    // this problem
     // assertTrue(UtilMDE.unquote("\\115").equals("M"));
     // assertTrue(UtilMDE.unquote("\\115\\111\\124").equals("MIT"));
 
