@@ -65,7 +65,7 @@ public class NonModulus
 
   public String format_using(OutputFormat format) {
     updateResults();
-    String name = var().name.name_using(format);
+    String name = var().name.name_using(format, var());
 
     if (no_result_yet) {
       return name + " != ? (mod ?) ***";
@@ -82,6 +82,7 @@ public class NonModulus
     if (format == OutputFormat.JAVA
         || format == OutputFormat.JML
         || format == OutputFormat.DBCJAVA) {
+
       return name + " % " + modulus + " != " + remainder;
     }
 

@@ -142,7 +142,7 @@ public class NONZERO
   }
 
   public String format_using(OutputFormat format) {
-    String name = var().name.name_using(format);
+    String name = var().name.name_using(format, var());
 
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.JAVA)
