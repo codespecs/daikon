@@ -4,6 +4,7 @@ import daikon.inv.*;
 import daikon.*;
 import java.io.*;
 import java.util.*;
+import java.util.zip.GZIPInputStream;
 import javax.swing.tree.*;
 import utilMDE.*;
 import gnu.getopt.*;
@@ -11,7 +12,7 @@ import gnu.getopt.*;
 public final class Diff {
   public static final String lineSep = Global.lineSep;
 
-  private static String usage = 
+  private static String usage =
     "Usage: java daikon.Diff [OPTION]... FILE1 FILE2" + lineSep +
     "  -h  Display this usage message" + lineSep +
     "  -d  Display the tree of differing invariants (default)" + lineSep +
@@ -52,7 +53,7 @@ public final class Diff {
         break;
       case 'v':
         verbose = true;
-        break;        
+        break;
       case '?':
         break; // getopt() already printed an error
       default:
@@ -66,14 +67,24 @@ public final class Diff {
     int firstFileIndex = g.getOptind();
     if (args.length - firstFileIndex != 2) {
         System.out.println(usage);
-        System.exit(1);      
+        System.exit(1);
     }
     String filename1 = args[firstFileIndex];
     String filename2 = args[firstFileIndex + 1];
-    
-    FileInputStream istream1 = new FileInputStream(filename1);
+
+    InputStream istream1;
+    if (filename1.endsWith(".gz")) {
+      istream1 = new GZIPInputStream(new FileInputStream(filename1));
+    } else {
+      istream1 = new FileInputStream(filename1);
+    }
     ObjectInputStream oistream1 = new ObjectInputStream(istream1);
-    FileInputStream istream2 = new FileInputStream(filename2);
+    InputStream istream2;
+    if (filename2.endsWith(".gz")) {
+      istream2 = new GZIPInputStream(new FileInputStream(filename2));
+    } else {
+      istream2 = new FileInputStream(filename2);
+    }
     ObjectInputStream oistream2 = new ObjectInputStream(istream2);
 
     PptMap map1 = (PptMap) oistream1.readObject();
@@ -103,7 +114,7 @@ public final class Diff {
         root.accept(v);
         System.out.println();
         System.out.println(v.format());
-      }      
+      }
       break;
     default:
       Assert.assert(false, "Can't get here");
@@ -122,7 +133,7 @@ public final class Diff {
     SortedSet sset1 = new TreeSet(comparator);
     sset1.addAll(map1.asCollection());
     SortedSet sset2 = new TreeSet(comparator);
-    sset2.addAll(map2.asCollection());    
+    sset2.addAll(map2.asCollection());
 
     Iterator opi = new OrderedPairIterator(sset1.iterator(), sset2.iterator(),
                                            comparator);
@@ -133,7 +144,7 @@ public final class Diff {
       PptNode node = diffPptTopLevel(ppt1, ppt2);
       root.add(node);
     }
-    
+
     return root;
   }
 
