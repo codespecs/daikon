@@ -203,6 +203,10 @@ dist-notest: dist-ensure-directory-exists doc/CHANGES update-doc-dist-date-and-v
 	$(MAKE) update-dist-dir
 	$(MAKE) -n dist-dfej
 
+# Webpages of publications that use Daikon
+pubs:
+	$(MAKE) -C doc/www pubs
+
 # These versions are for comparison, to permit checking for added/removed files.
 # This rule does NOT depend on "daikon.tar" or "daikon.tar.gz"; we don't want
 # them re-made.
