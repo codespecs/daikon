@@ -555,7 +555,7 @@ public class Ast {
     }
 
     // System.out.println("getMatch goal = " + classname + " " + methodname);
-    for (Iterator itor = ppts.iterator() ; itor.hasNext() ; ) {
+    for (Iterator itor = ppts.pptIterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       PptName ppt_name = ppt.ppt_name;
       // System.out.println("getMatch considering " + ppt_name + " (" + ppt_name.getFullClassName() + "," + ppt_name.getShortMethodName() + ")");

@@ -66,7 +66,7 @@ public class MinusVisitorTester extends TestCase {
     map2.put(D, Arrays.asList(new Object[] {unjM, N}));
 
     diff.setAllInvComparators(new Invariant.ClassVarnameFormulaComparator());
-    RootNode root = diff.diffInvMap(map1, map2);
+    RootNode root = diff.diffInvMap(map1, map2, false);
     MinusVisitor v = new MinusVisitor();
     root.accept(v);
     InvMap result = v.getResult();

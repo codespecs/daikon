@@ -14,15 +14,15 @@ import utilMDE.*;
  * Create a splitter info file from Java source.
  * <p>
  *
- * The argument is a list of .java file.The original .java files are
- * left unmodified. A .spinfo file is written for every .java file.
+ * The argument is a list of .java files.  The original .java files are
+ * left unmodified.  A .spinfo file is written for every .java file.
  */
 
 class CreateSpinfo {
 
 // The expressions in the Java source are extracted as follows:
 // For each method:
-//  // extracts all expressions in conditional statements
+//  * extracts all expressions in conditional statements
 //    ie. if, for, which, etc.
 //  * if the method body is a one-line return statement, it
 //    extracts it for later substitution into expressions which
@@ -99,6 +99,23 @@ class CreateSpinfo {
 	javafile = javafile.substring(0, javafile.length()-5) + ".spinfo";
       }
 
+
+      // If the file does not appear to be a .java file, then proceed but
+      // provide a warning.
+      else {
+
+        System.out.println ("Warning, CreateSpinfo is only supported for Java source code! \nYou are getting this message because the input file does not end in .java.");
+
+        // change the file extension to .spinfo
+        if (javafile.indexOf (".") != -1) {
+          javafile = javafile.substring (0, javafile.lastIndexOf (".")) + ".spinfo";
+        }
+
+        else {
+          javafile = javafile + ".spinfo";
+        }
+      }
+
       System.out.println("Splitter Info file => " + javafile);
       File outputFile = new File(javafile);
       Writer output = new FileWriter(outputFile);
@@ -112,7 +129,7 @@ class CreateSpinfo {
 	e.printStackTrace();
 	System.exit(1);
       }
-      debug.debug("CreateSpinfo Processing file " + javafile);
+      debug.debug("CreateSpinfo: processing file " + javafile);
       ConditionExtractor extractor = new ConditionExtractor();
       root.accept(extractor);
       extractor.printSpinfoFile(output);

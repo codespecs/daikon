@@ -319,6 +319,10 @@ class ConditionExtractor extends DepthFirstVisitor {
     }
   }
 
+  private String replaceNewlines(String target) {
+    return utilMDE.UtilMDE.replaceString(target, "\n", " ");
+  }
+
   //prints out the extracted conditions in spinfo file format
   public void printSpinfoFile( Writer output ) throws IOException {
 
@@ -329,7 +333,7 @@ class ConditionExtractor extends DepthFirstVisitor {
       while (bools.hasNext()) {
 	String declaration = (String)bools.next();
 	output.write(declaration + "\n");
-	output.write((String) replaceStatements.get(declaration) + "\n");
+	output.write(replaceNewlines((String) replaceStatements.get(declaration)) + "\n");
       }
 
       output.write("\n");
@@ -341,13 +345,12 @@ class ConditionExtractor extends DepthFirstVisitor {
       String method = (String) methods.next();
       method_conds = (Vector)conditions.get(method);
       if (method_conds.size() > 0) {
-	String temp = "PPT_NAME ";
 	if (packageName != null)
-	  temp = temp + packageName + ".";
-	output.write(temp + method + "\n");
+	  method = packageName + "." + method;
+	output.write("PPT_NAME " + method + "\n");
 
 	for (int i = 0; i < method_conds.size(); i++) {
-	  output.write((String)method_conds.elementAt(i) + "\n");
+	  output.write(replaceNewlines((String) method_conds.elementAt(i)) + "\n");
 	}
 
 	output.write("\n");

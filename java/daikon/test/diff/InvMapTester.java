@@ -36,7 +36,7 @@ public class InvMapTester extends TestCase {
     map.put(pptC, invsC);
 
     // Test the keys
-    Iterator i = map.iterator();
+    Iterator i = map.pptIterator();
     assertTrue(pptA == i.next());
     assertTrue(pptB == i.next());
     assertTrue(pptC ==i.next());
@@ -54,7 +54,7 @@ public class InvMapTester extends TestCase {
     map.put(pptB, invsB);
 
     // Test the keys
-    Iterator i = map.iterator();
+    Iterator i = map.pptIterator();
     assertTrue(pptC ==i.next());
     assertTrue(pptA == i.next());
     assertTrue(pptB == i.next());
