@@ -57,7 +57,15 @@ public final class ThreeFloatFactory {
     { // previously only if (pass == 2)
       // FIXME for equality
       Vector result = new Vector (FunctionBinaryFloat.instantiate_all (ppt));
-      result.add(LinearTernaryFloat.instantiate(ppt));
+
+      // Don't create LinearTernary if any of its variables are
+      // constants.  DynamicConstants will create it from LinearBinary
+      // and the constant value if/when all of its variables are non-constant
+      PptTopLevel parent = ppt.parent;
+      if (!parent.is_constant (var1) && !parent.is_constant(var2)
+          && !parent.is_constant (var3))
+        result.add(LinearTernaryFloat.instantiate(ppt));
+
       return (result);
     }
       /*
