@@ -4357,6 +4357,18 @@ to
 @samp{unsigned int env:1} for a single bit).  Change any bitfield
 variables to full-width variables.
 
+@item
+@cindex realloc, use in C programs
+The @code{realloc} function of standard C, used to change the size of
+a memory block allocated with @code{malloc}, is not supported by the C
+runtime.  Calls to @code{realloc} will instrument and compile without
+errors, but if @code{realloc} is called, the runtime will not notice
+that the amount of accessible memory has increased after the call, and
+so spurious array overflow errors will occur.  If you know the old
+size of the allocated region, or if it is null terminated, a call to
+@code{realloc} can be replaced by a @code{malloc}, a @code{memcpy} or
+@code{strcpy} respectively, and a @code{free}.
+
 @end enumerate
 
 
