@@ -157,7 +157,7 @@ public final class Daikon {
    * initiated.  When zero, initiate suppression immediately before
    * seeing samples.
    **/
-  public static int suppress_samples_min = 10;
+  public static int suppress_samples_min = 1000000000;
 
   /**
    * Whether to associate the program points in a dataflow hierarchy,
@@ -291,10 +291,6 @@ public final class Daikon {
   public static final String omit_from_output_SWITCH = "omit_from_output";
 
   // A pptMap which contains all the Program Points
-  // This isn't used anymore; instead, methods have parameters or
-  // local variables of the same name, and all_ppts is always null. Is
-  // there a reason it shouldn't just go away? -SMcC 4/24/03
-  // JHP 11/20/03, it is used now to avoid passing it in a few spots.
   public static PptMap all_ppts;
 
   /** Debug tracer. **/
@@ -1176,94 +1172,6 @@ public final class Daikon {
     }
 
   }
-
-  // Not yet used in version 3 (?).
-  /* INCR
-  public static void add_combined_exits(PptMap ppts) {
-    // For each collection of related :::EXITnn ppts, add a new ppt (which
-    // will only contain implication invariants).
-
-    Vector new_ppts = new Vector();
-    for (Iterator itor = ppts.pptIterator() ; itor.hasNext() ; ) {
-      PptTopLevel enter_ppt = (PptTopLevel) itor.next();
-      Vector exits = enter_ppt.exit_ppts;
-      if (exits.size() > 1) {
-        Assert.assertTrue(enter_ppt.ppt_name.isEnterPoint());
-        String exit_name = enter_ppt.ppt_name.makeExit().getName();
-        Assert.assertTrue(ppts.get(exit_name) == null);
-        VarInfo[] comb_vars = VarInfo.arrayclone_simple(Ppt.common_vars(exits));
-        PptTopLevel exit_ppt = new PptTopLevel(exit_name, comb_vars);
-        // {
-        //   System.out.println("Adding " + exit_ppt.name() + " because of multiple expt_ppts for " + enter_ppt.name() + ":");
-        //   for (int i=0; i<exits.size(); i++) {
-        //     Ppt exit = (Ppt) exits.elementAt(i);
-        //     System.out.print(" " + exit.name);
-        //   }
-        //   System.out.println();
-        // }
-        new_ppts.add(exit_ppt);
-        exit_ppt.entry_ppt = enter_ppt;
-        exit_ppt.set_controlling_ppts(ppts);
-        for (Iterator exit_itor=exits.iterator() ; exit_itor.hasNext() ; ) {
-          PptTopLevel line_exit_ppt = (PptTopLevel) exit_itor.next();
-          line_exit_ppt.controlling_ppts.add(exit_ppt);
-          VarInfo[] line_vars = line_exit_ppt.var_infos;
-          line_exit_ppt.combined_exit = exit_ppt;
-          {
-            // Indices will be used to extract values from a ValueTuple.
-            // ValueTuples do not include static constant values.
-            // comb_index doesn't include those, either.
-
-            int[] indices = new int[comb_vars.length];
-            int new_len = indices.length;
-            int new_index = 0;
-            int comb_index = 0;
-
-            // comb_vars never contains static finals but line_vars can:
-            // Assert.assertTrue(line_vars.length == comb_vars.length,
-            //                   "\nIncorrect number of variables (line=" +
-            //                   line_vars.length + ", comb=" + comb_vars.length +
-            //                   ") at exit points: " + enter_ppt.name() );
-            for (int lv_index=0; lv_index<line_vars.length; lv_index++) {
-              if (line_vars[lv_index].isStaticConstant()) {
-                continue;
-              }
-              if (line_vars[lv_index].name == comb_vars[comb_index].name) {
-                indices[new_index] = comb_index;
-                new_index++;
-              }
-              comb_index++;
-            }
-            line_exit_ppt.combined_exit_var_indices = indices;
-            Assert.assertTrue(new_index == new_len);
-
-            // System.out.println("combined_exit_var_indices " + line_exit_ppt.name());
-            // for (int i=0; i<indices.length; i++) {
-            //   // System.out.print(" " + indices[i]);
-            //   System.out.print(" " + indices[i] + " " + comb_vars[indices[i]].name);
-            // }
-            // System.out.println();
-          }
-        }
-
-        // exit_ppt.num_samples = enter_ppt.num_samples;
-        // exit_ppt.num_values = enter_ppt.num_values;
-      }
-    }
-
-    // System.out.println("add_combined_exits: " + new_ppts.size() + " " + new_ppts);
-
-    // Avoid ConcurrentModificationException by adding after the above loop
-    for (int i=0; i<new_ppts.size(); i++) {
-      ppts.add((PptTopLevel) new_ppts.elementAt(i));
-    }
-
-  }
-  */ // [INCR]
-
-
-  ///////////////////////////////////////////////////////////////////////////
-  //
 
   public static void create_splitters(PptMap all_ppts, Set spinfo_files)
     throws IOException {
