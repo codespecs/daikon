@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # java-cpp -- C preprocessor specialized for Java
 # Michael Ernst and Josh Kataoka
-# Time-stamp: <2002-11-23 15:44:08 mernst>
+# Time-stamp: <2002-11-23 17:57:11 mernst>
 
 # This acts like the C preprocessor, but
 #  * it does not remove comments
@@ -115,7 +115,10 @@ sub escape_comments ( $ ) {
   no strict 'refs';
   open($inhandle, $filename) || die "Can't open $filename: $!\n";
 
+  my $JAVACPP_WHITESPACE_SEPARATOR = "JAVACPP_WHITESPACE_SEPARATOR";
+
   while (<$inhandle>) {
+    # print STDERR "top of escape_comments loop: $_";
 
     if (/^\#include "(.*)"/) {
       escape_comments($1);
@@ -124,7 +127,14 @@ sub escape_comments ( $ ) {
     s|//|JAVACPP_DOUBLESLASHCOMMENT|g;
     s|/\*|JAVACPP_SLASHSTARCOMMENT|g;
     s/\'/JAVACPP_SINGLEQUOTE/g;
+    # cpp 2.96 (Red Hat) compresses all multiple internal whitespace into one
+    # space, which loses space both preceding and within comments.  Don't do
+    # this inside cpp directives, however, and don't chnage leading space.
+    if (! /^[ \t]*\#/) {
+      while (s/(^.*[^ \t].*[ \t])([ \t])/$1$JAVACPP_WHITESPACE_SEPARATOR$2/) { }
+    }
     print TMPFILE;
+    # print STDERR "bottom of escape_comments loop: $_";
   }
   close($inhandle);
 
@@ -145,9 +155,15 @@ sub unescape_comments ( $ ) {
   my $next_post_else_space = "";
 
   while (<CPPFILE>) {
+    # print STDERR "top of unescape_comments loop: $_";
+
     s|JAVACPP_DOUBLESLASHCOMMENT|//|g;
     s|JAVACPP_SLASHSTARCOMMENT|/\*|g;
     s/JAVACPP_SINGLEQUOTE/\'/g;
+    # Change multiple contiguous spaces into one space, but not at
+    # beginning of line (cpp 2.96 (Red Hat) does this).
+    s/([^ \t\n] ) +/$1/g;
+    s/JAVACPP_WHITESPACE_SEPARATOR//g;
 
     # Convert string concatenation ("a" + "b") single string ("ab").
     while (s/(".*)"  ?\+ "(.*")/$1$2/g) { }
@@ -155,13 +171,17 @@ sub unescape_comments ( $ ) {
     s/^\# [0-9]+ ".*"($|\n)//g;	# don't leave blank line at start of file
     s/(\n)\# [0-9]+ ".*"($|\n)/$1$2/g;
 
+    # print STDERR "pre-horizontal: $_";
+
     ## Remove extra horizontal space
     ## (Some of these are cosmetic; others are necessary to get identical
     ## output under all versions of cpp.)
     # Remove all trailing space
     s/[ \t]+\n/\n/g;
+    # Remove space before trailing semicolon
+    s/ ;$/;/gm;
     # Remove space after package name
-    s/^(package .*\.) ([^ ]*) ?;/$1$2;/gm;
+    s/^(package .*\.) ([^ ]*;)/$1$2/gm;
     # Remove all extra spaces in import list
     while (s/^(import [^ \n]*) (.*;)$/$1$2/m) { }
     # convert " );" to ");"; requires "=" somewhere earlier in line
@@ -172,19 +192,29 @@ sub unescape_comments ( $ ) {
     s/(\b[A-Za-z]\w*) \.([A-Za-z]\w*\b)/$1.$2/g;
     # convert "a. foo (" to "a.foo("
     # (Note single spaces, lowercase first letter.)
-    s/(\b[A-Za-z]\w*)\. ([a-z]\w*) \(/$1.$2\(/g;
+    # also: "a. FOO)" becomes "a.FOO)"
+    s/(\b[A-Za-z]\w*)\. ([a-z]\w*) ?\(/$1.$2\(/g;
+    s/(\b[A-Za-z]\w*)\. (\w+) ?\)/$1.$2\)/g;
     # convert " instanceof long [])" to " instanceof long[])"
     s/( instanceof \w+) ((\[\])*\))/$1$2/g;
-    ## These are necessary to work around cpp differences
-    # convert "new int[2 ]" to "new int[2]"; likewise for "new Foo ("
-    s/(\bnew \w+\[\w+) *(\])/$1$2/g;
+    # convert "(long []" to "(long[]" (for cast or prototype)
+    s/(\(\w+) ((\[\])+)/$1$2/g;
+    # convert "new int[2 ]" to "new int[2]"; also "new int [", "new Foo ("
     s/(\bnew \w+) (\()/$1$2/g;
+    s/(\bnew \w+) (\[)/$1$2/g;
+    s/(\bnew \w+\[\w+) *(\])/$1$2/g;
     # convert "public PptSlice1 (" to "public PptSlice1("
-    s/(^ *public \w+) (\()/$1$2/gm;
+    s/(^ *(?:public|private|protected) \w+) (\()/$1$2/gm;
     # convert "double [] val1_array =" to "double[] val1_array ="
     s/(^ *\w+) (\[\] \w+(;| *=))/$1$2/gm;
-    # convert "\" );" to "\");"
-    s/(\(\S.*) (\)(;|\)| {|$))/$1$2/gm;
+    # remove space before close paren, if there is an open w/o a space after it
+    # and this is not a "for" loop.
+    # old version: s/(\(\S.*) (\)(;|\)| {|$))/$1$2/gm;
+    s/(^ *(?!for\b)[^ ].*\(\S.*) (\)(;|\)| {|$))/$1$2/gm;
+
+    # print STDERR "post-horizontal: $_";
+
+    # print STDERR "pre-vertical: $_";
 
     ## Remove extra vertical space
     # compress out duplicate blank lines
@@ -198,6 +228,8 @@ sub unescape_comments ( $ ) {
       # not "chomp":  it removes all of the trailing newlines rather than one
       s/\n\z//;
     }
+
+    # print STDERR "post-vertical: $_";
 
     # Remove newline after "return" statement if followed by 2 nelines and
     # open curly brace.  But I have no way of knowing that open curly follows.
