@@ -102,10 +102,13 @@ public final class Equality
     for (Iterator i = variables.iterator(); i.hasNext(); ) {
       VarInfo vi = (VarInfo) i.next();
       if (debug.isLoggable(Level.FINE)) {
-        debug.fine ("  " + vi.name.name());
+        debug.fine ("  " + vi.name.name() + " [" + vi.comparability + "]");
       }
       Assert.assertTrue(vi.ppt == leader.ppt);
       Assert.assertTrue(vi.comparableNWay (leader));
+      Assert.assertTrue (VarComparability.comparable (leader, vi),
+             "not comparable " + leader.name.name() + " " + vi.name.name()
+            +" at ppt " + ppt.parent.name());
       Assert.assertTrue(vi.rep_type.isArray() == leader.rep_type.isArray());
       vi.equalitySet = this;
     }
@@ -191,6 +194,7 @@ public final class Equality
         start = false;
       }
       result.append(var.name.name());
+      result.append("[" + var.comparability + "]");
     }
     return result.toString();
   }
@@ -473,8 +477,8 @@ public final class Equality
 
   /**
    * Convert Equality invariants into normal IntEqual type for
-   * filtering, printing, etc.  Add these to parent.
-   * @modifies this.ppt.parent Will get new IntEqual,SeqEqual,etc. invariants added to it
+   * filtering, printing, etc.  Add these to parent.  Doesn't add equality
+   * if the same equality is present at the global ppt.
    **/
   public void postProcess () {
     if (this.numSamples() == 0) return; // All were missing or not present
@@ -497,6 +501,10 @@ public final class Equality
       if (debugPostProcess.isLoggable(Level.FINE)) {
         debugPostProcess.fine ("  var2: " + vars[i].name.name());
       }
+
+      // If the same equality exists at the global ppt, don't make it here
+      if (is_global_equality (leader, vars[i]))
+        continue;
 
       PptSlice newSlice = parent.get_or_instantiate_slice (leader, vars[i]);
       // Copy over the number of samples from this to the new slice,
@@ -556,6 +564,33 @@ public final class Equality
   }
 
   /**
+   * Returns whether or not the specified local variables are equal
+   * at the global ppt.  To be equal, they must have the same transform
+   * to the global ppt and be equal
+   */
+  public boolean is_global_equality (VarInfo loc1, VarInfo loc2) {
+
+    Debug.log (getClass(), ppt.parent, Debug.vis (loc1, loc2),
+               "Looking for global equality");
+
+    // both local variables must have the same global transform
+    if (!loc1.is_global() || !loc2.is_global())
+      return (false);
+    if (loc1.is_post_global() != loc2.is_post_global())
+      return (false);
+
+    VarInfo glob1 = loc1.global_var();
+    VarInfo glob2 = loc2.global_var();
+
+    if (glob1.equalitySet == glob2.equalitySet)
+      return (true);
+
+    return (false);
+  }
+
+
+
+  /**
    * Switch the leader of this invariant, if possible, to a VarInfo
    * that is not isDerivedParamAndUninteresting.  If not, keep the
    * same leader.  Call this only after postProcess has been called.
@@ -585,7 +620,9 @@ public final class Equality
     VarInfo leader = leader();
     for (Iterator i = vars.iterator(); i.hasNext(); ) {
       VarInfo var = (VarInfo) i.next();
-      Assert.assertTrue (VarComparability.comparable (leader, var));
+      Assert.assertTrue (VarComparability.comparable (leader, var),
+                 "not comparable: " + leader.name.name() + " "
+                + var.name.name() + " at ppt " + ppt.parent.name());
     }
   }
 
