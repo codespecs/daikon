@@ -24,7 +24,7 @@ my %prefixes =
 
 for my $file (@ARGV) {
     print "# $file\n";
-    open(SOURCE, $file);
+    open(SOURCE, $file) or die("Cannot open $file!");
     my @lines = <SOURCE>;
     close(SOURCE);
     print "TYPE           \t", join("\t", @categories), "\n";
