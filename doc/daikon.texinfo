@@ -2262,6 +2262,9 @@ for the appropriate package.  If this option is not supplied, the
 code that (for example) calls libraries which do not appear under the
 current directory.
 
+@item -ajaxap=@var{apdir}
+Classpath to give to Ajax in its "-cp" flag, similar to -ajaxap.
+
 @item -ajax_runnable=@var{class}
 This is a Java class, in dot-delimited form (e.g., "foo.bar.Baz"), that
 contains a @samp{public static void main(String[])} method.  This class
