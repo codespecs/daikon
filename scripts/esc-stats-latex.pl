@@ -98,8 +98,8 @@ for my $file (@ARGV) {
   my $gotlines = 0;
   while (defined($line = <SOURCE>)) {
     # Cope with multiple tables in a single file.
-    if (($line ~= /^\# merged/)
-	|| ($line ~= /^TYPE/)) {
+    if (($line =~ /^\# merged/)
+	|| ($line =~ /^TYPE/)) {
       next;
     }
     # print "line: $line";
