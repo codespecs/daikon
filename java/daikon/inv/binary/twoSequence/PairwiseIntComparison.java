@@ -60,7 +60,7 @@ public class PairwiseIntComparison extends TwoSequence {
     String comparator = core.format_comparator();
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-	{ var1().name, var2().name });
+	{ var1().name, var2().name }, true); // elementwise
     return form[0] + "(" + form[1] + " " + comparator + " " + form[2] + ")" + form[3];
   }
 
@@ -71,7 +71,7 @@ public class PairwiseIntComparison extends TwoSequence {
     }
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-	{ var1().name, var2().name });
+	{ var1().name, var2().name }, true); // elementwise
     return form[0] + "(" + comparator + " " + form[1] + " " + form[2] + ")" + form[3];
   }
 
