@@ -934,8 +934,12 @@ class FormatTestCase {
       //        catch (Exception e) {
       //        throw new RuntimeException(e.toString());
       //        }
-      catch (Exception e) {
-        throw new RuntimeException("Error in populating invariant with add_modified: " + e.toString());
+      catch (InvocationTargetException e) {
+        StringWriter target_backtrace = new StringWriter();
+        e.getTargetException().printStackTrace(new PrintWriter(target_backtrace));
+        throw new RuntimeException("Error in populating invariant with add_modified (" + addModified.toString() + "applied to " + utilMDE.ArraysMDE.toString(params) + "):\nSTART TARGETEXCEPTION=\n" + target_backtrace.toString() + "\nEND TARGETEXCEPTION\n" + e.toString());
+      } catch (Exception e) {
+        throw new RuntimeException("Error in populating invariant with add_modified (" + addModified.toString() + "applied to " + utilMDE.ArraysMDE.toString(params) + "): " + e.toString());
       }
     }
   }
