@@ -80,7 +80,7 @@ public final class PptSlice1
     if (is_scalar) {
       new_invs = SingleScalarFactory.instantiate(this);
     } else if (rep_type == ProglangType.INT_ARRAY) {
-      new_invs = SingleSequenceFactory.instantiate(this);
+      new_invs = SingleScalarSequenceFactory.instantiate(this);
     } else if (Daikon.dkconfig_enable_floats
                && rep_type == ProglangType.DOUBLE) {
       new_invs = SingleFloatFactory.instantiate(this);
@@ -275,7 +275,7 @@ public final class PptSlice1
       // long[] value = vi1.getIntArrayValue(full_vt);
       long[] value = (long[]) val1;
       for (int i=0; i<num_invs; i++) {
-        SingleSequence inv = (SingleSequence)invs.get(i);
+        SingleScalarSequence inv = (SingleScalarSequence)invs.get(i);
         if (inv.falsified) continue;
         if (inv.getSuppressor() != null) continue;
         inv.add(value, mod1, count);
