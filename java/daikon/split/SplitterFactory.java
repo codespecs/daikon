@@ -173,9 +173,12 @@ public class SplitterFactory {
 
   private static void compileFiles(List /*String*/ fileNames) {
     // We delay setting fileCompiler until now because we want to permit
-    // the user to set the dkconfig_compiler variable.
+    // the user to set the dkconfig_compiler variable.  Note that our
+    // timeout is specified in seconds, but the parameter to FileCompiler
+    // is specified in milliseconds
     if (fileCompiler == null) {
-      fileCompiler = new FileCompiler(dkconfig_compiler, dkconfig_compile_timeout);
+      fileCompiler = new FileCompiler(dkconfig_compiler,
+                                      dkconfig_compile_timeout * 1000);
     }
     fileCompiler.compileFiles(fileNames);
   }
