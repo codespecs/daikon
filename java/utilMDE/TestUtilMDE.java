@@ -859,7 +859,8 @@ public final class TestUtilMDE extends TestCase {
         }
         System.gc();
         if (Intern.numIntArrays() != 0)
-          throw new Error();
+          throw new Error(" expected 0 int arrays at start, found "
+                            + Intern.numIntArrays());
         for (int i=0; i<arrays.length; i++)
           Intern.intern(arrays[i]);
         if (Intern.numIntArrays() != size1)
