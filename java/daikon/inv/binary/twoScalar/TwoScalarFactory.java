@@ -23,42 +23,41 @@ public final class TwoScalarFactory {
     if (! var1.compatible(var2))
       return null;
 
+    boolean integral = var1.type.isIntegral() && var2.type.isIntegral();
+
     Vector result = new Vector();
     if (pass == 1) {
       result.add(IntComparison.instantiate(ppt));
     } else if (pass == 2) {
-      for (int i=0; i<2; i++) {
-        boolean invert = (i==1);
-        VarInfo argvar = (invert ? var1 : var2);
-        VarInfo resultvar = (invert ? var2 : var1);
-        // Skip if the argument is a constant (but not if the result
-        // is constant, as we might get something like y=abs(x)).
-        // On second thought, also skip if the result is constant.
-        if (argvar.isConstant() || resultvar.isConstant()) {
-          Global.subexact_noninstantiated_invariants += Functions.unaryFunctions.length;
-        } else {
-          for (int j=0; j<Functions.unaryFunctions.length; j++) {
-            result.add(FunctionUnary.instantiate(ppt, Functions.unaryFunctionNames[j], Functions.unaryFunctions[j], invert));
-          }
-        }
-      }
-      // Skip if either is constant.
       if (var1.isConstant() || var2.isConstant()) {
         Global.subexact_noninstantiated_invariants += 2;
+	Global.subexact_noninstantiated_invariants += Functions.unaryFunctions.length;
       } else {
-        result.add(LinearBinary.instantiate(ppt));
-        // Skip if there is already a > or linear relationship over the
-        // variables; a>b implies a!=b.
-        IntComparison ic = IntComparison.find(ppt);
-        if ((ic != null) && ic.enoughSamples() && (! ic.isExact())) {
-          // System.out.println("Torpedoing NonEqual on the basis of " + ic.format());
-          Global.subexact_noninstantiated_invariants += 1;
-        } else {
-          // Perhaps do not instantiate unless the variables have
-          // the same type; in particular, nonequal for Object variables
-          // is not so likely to be of interest.
-          result.add(NonEqual.instantiate(ppt));
-        }
+	// Skip NonEqual if there is already a > or linear
+	// relationship over the variables; a>b implies a!=b.
+	IntComparison ic = IntComparison.find(ppt);
+	if ((ic != null) && ic.enoughSamples() && (! ic.isExact())) {
+	  // System.out.println("Torpedoing NonEqual on the basis of " + ic.format());
+	  Global.subexact_noninstantiated_invariants += 1;
+	} else {
+	  // Perhaps do not instantiate unless the variables have the
+	  // same type; in particular, nonequal for Object variables
+	  // is not so likely to be of interest.
+	  result.add(NonEqual.instantiate(ppt));
+	}
+	// Skip LineayBinary and FunctionUnary unless vars are integral
+	if (!integral) {
+	  Global.subexact_noninstantiated_invariants += 1;
+	  Global.subexact_noninstantiated_invariants += Functions.unaryFunctions.length;
+	} else {
+	  result.add(LinearBinary.instantiate(ppt));
+	  for (int i=0; i<2; i++) {
+	    boolean invert = (i==1);
+	    for (int j=0; j<Functions.unaryFunctions.length; j++) {
+	      result.add(FunctionUnary.instantiate(ppt, Functions.unaryFunctionNames[j], Functions.unaryFunctions[j], invert));
+	    }
+	  }
+	}
       }
     }
     return result;
