@@ -43,7 +43,7 @@ public final class Daikon {
 
   static String usage =
     "Daikon invariant detector.\n"
-    + "Copyright 1998-2000 by Michael Ernst <mernst@cs.washington.edu>\n"
+    + "Copyright 1998-2001 by Michael Ernst <mernst@lcs.mit.edu>\n"
     + "Usage:\n"
     + "    java daikon.Daikon [flags...] files...\n"
     + "  Each file is a declaration file or a data trace file; the file type\n"
