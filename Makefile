@@ -146,8 +146,6 @@ cvs-test:
 ### Distribution
 ###
 
-## The update-link-dates script appears in ~mernst/bin/share/.
-
 # Main distribution
 
 # The "dist" target not only creates .tar files, but also installs a new
@@ -299,7 +297,7 @@ DAIKONBUILD=/tmp/daikon.build
 # careful about not including extraneous files in the distribution, and one
 # could make a distribution even if there were diffs in the current
 # checkout.
-daikon-compiled.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar
+daikon-compiled.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar java/Makefile
 	# html-update-toc daikon.html
 
 	-rm -rf /tmp/daikon
