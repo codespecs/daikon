@@ -160,6 +160,19 @@
  refer to manual.)
   The default value is `0.01'.
 
+@item daikon.inv.Invariant.simplify_define_predicates
+  A boolean value. If true, Daikon's Simplify output (printed when
+ the --simplify_output flag is enabled, and used internally by
+ --suppress_redundant) will include new predicates representing
+ some complex relationships in invariants, such as lexical
+ ordering among sequences. If false, some complex relationships
+ will appear in the output as complex quantified formulas, while
+ others will not appear at all. When enabled, Simplify may be able
+ to make more inferences, allowing --suppress_redundant to
+ suppress more redundant invariants, but Simplify may also run
+ more slowly. The default value is false.
+  The default value is `false'.
+
 @item daikon.inv.binary.sequenceScalar.Member.enabled
   Boolean.  True iff Member invariants should be considered.
   The default value is `true'.
@@ -576,10 +589,6 @@
   Boolean.  True iff EltwiseIntComparison invariants should be considered.
   The default value is `true'.
 
-@item daikon.inv.unary.sequence.EltwiseFloatNonEqual.enabled
-  Boolean.  True iff EltwiseIntComparison invariants should be considered.
-  The default value is `true'.
-
 @item daikon.inv.unary.sequence.EltwiseIntComparison.enabled
   (no description provided)
   The default value is `true'.
@@ -601,10 +610,6 @@
   The default value is `true'.
 
 @item daikon.inv.unary.sequence.EltwiseIntLessThan.enabled
-  Boolean.  True iff EltwiseIntComparison invariants should be considered.
-  The default value is `true'.
-
-@item daikon.inv.unary.sequence.EltwiseIntNonEqual.enabled
   Boolean.  True iff EltwiseIntComparison invariants should be considered.
   The default value is `true'.
 

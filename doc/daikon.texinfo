@@ -5249,6 +5249,14 @@ We do not yet have a fix, but if you find one, please let us know.
 @node    dfej invocation problems,  , dfej installation problems, dfej problems
 @subsection Problems running dfej
 
+@cindex dfej, runs slowly
+
+You may find that dfej runs very slowly, even on small programs.  dfej
+itself finishes quite quickly, but it calls the external Ajax program,
+which is extremely slow.  If you disable Ajax with the
+@option{-noajax} argument to dfej, then Daikon may output slightly
+more irrelevant invariants, but dfej will run much faster.
+
 @cindex could not find package named, dfej error
 
 If you get an error like
@@ -5299,7 +5307,9 @@ are using the Daikon regression tests, run @command{make clean}.)
 @cindex Ajax, problem with
 
 The warning ``Problem with Ajax; using original .decls files instead''
-indicates that the Ajax variable comparator could not run.  Ajax
+indicates that the Ajax variable comparator could not run.
+
+Ajax
 indicates which variables are comparable to which other variables.  This
 information can reduce the amount of spurious output from Daikon by
 preventing it from making spurious comparisons and reporting irrelevant
