@@ -2395,4 +2395,21 @@ public final class VarInfo
     else
       return (PptTopLevel.global.var_infos[global_index]);
   }
+
+  public ValueSet get_value_set() {
+
+    // Static constants don't have value sets, so we must make one
+    if (is_static_constant) {
+      ValueSet vs = ValueSet.factory (this);
+      vs.add (static_constant_value);
+      return (vs);
+    }
+
+    return (ppt.value_sets[value_index]);
+  }
+
+  public String get_value_info () {
+    return name.name() + "- " + get_value_set().repr_short();
+  }
+
 }
