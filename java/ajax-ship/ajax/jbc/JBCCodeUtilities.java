@@ -8,7 +8,7 @@ import ajax.Globals;
 
 public class JBCCodeUtilities implements OpcodeConstants, DataConstants {
     /* These inscrutable tables are derived from the data file 'opcodelist' by the makeClass.pl script. */
-    
+
     private static byte[] opcodeLengths = {
         1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 2, 3, 3, 2, 2,
         2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -20,7 +20,7 @@ public class JBCCodeUtilities implements OpcodeConstants, DataConstants {
         3, 3, 3, 3, 3, 3, 3, 3, 2, 1, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3,
         3, 5, 1, 3, 2, 3, 1, 1, 3, 3, 1, 1, 1, 4, 3, 3, 4, 4
     };
-    
+
     private static byte[] opcodeStackSizeDeltas = {
         0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 2, 2, 1, 1, 1, 1, 2, 1, 2,
         1, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1,
@@ -34,7 +34,7 @@ public class JBCCodeUtilities implements OpcodeConstants, DataConstants {
         -99, -99, -99, -99, -99, -99, -99, -99, -99, -99, -99, -99, -99, -99,
         1, 0, 0, 0, -99, 0, 0, -1, -1, -99, -99, -1, -1, 0, 1
     };
-        
+
     private static byte[] opcodeStackPushes = {
         0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 2, 2, 1, 1, 1, 1, 2, 1, 2,
         1, 2, 1, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1,
@@ -47,7 +47,7 @@ public class JBCCodeUtilities implements OpcodeConstants, DataConstants {
         0, -99, 0, -99, -99, -99, -99, -99, 1, 1, 1, 1, -99, 1, 1, 0, 0,
         -99, 1, 0, 0, 0, 1
     };
-    
+
     private static byte[] opcodeExceptionListNum = {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -60,7 +60,7 @@ public class JBCCodeUtilities implements OpcodeConstants, DataConstants {
         0, 0, 4, 4, 5, 5, 6, 6, 7, 6, 0, 4, 8, 8, 9, 10, 11, 4, 9, 12, 0,
         13, 0, 0, 0, 0
     };
-    
+
     private static String[][] opcodeExceptionLists = {
         {},
         { "java.lang.NullPointerException", "java.lang.ArrayIndexOutOfBoundsException" },
@@ -128,40 +128,40 @@ public class JBCCodeUtilities implements OpcodeConstants, DataConstants {
         return (code[i] << 24) | ((code[i + 1] & 0xFF) << 16)
             | ((code[i + 2] & 0xFF) << 8) | (code[i + 3] & 0xFF);
     }
-    
+
     public static int getShortAt(byte[] code, int i) {
         return (code[i] << 8) | (code[i + 1] & 0xFF);
     }
-    
+
     public static int getUnsignedShortAt(byte[] code, int i) {
         return ((code[i] & 0xFF) << 8) | (code[i + 1] & 0xFF);
     }
-    
+
     public static CodeRefData getCodeRefAt(MethodData data, byte[] code, int offset) {
         return data.getCodeRef(getUnsignedShortAt(code, offset));
     }
-    
+
     public static String getCodeClassAt(MethodData data, byte[] code, int offset) {
         return data.getCodeClass(getUnsignedShortAt(code, offset));
     }
-    
+
     public static JBCClass resolveCodeClass(JBCMethod method, String className) {
         if (className == null) {
             throw new InvalidClassDataError("Bad class name in " + method);
         } else {
             JBCClass c = method.getContainingClass().getClassLoader().getClass(className);
-            
+
             if (c == null) {
                 Globals.writeLog(method, "WARNING: Class " + className + " not found in " + method);
             }
-            
+
             return c;
         }
     }
-    
+
     public static JBCType getCodeConstantType(JBCMethod method, byte[] code, int offset) {
         Object obj = getLoadedConstant(method, code, offset);
-        
+
         if (obj instanceof String) {
             return JBCObjectType.get("java.lang.String",
                 method.getContainingClass().getWorld().getSystemClassLoader());
@@ -175,11 +175,11 @@ public class JBCCodeUtilities implements OpcodeConstants, DataConstants {
             if (Globals.debug && !(obj instanceof Double)) {
                 Globals.nonlocalError("Invalid code constant type: " + obj);
             }
-            
+
             return JBCType.DOUBLE;
         }
     }
-    
+
     public static JBCClass resolveInstructionClass(JBCMethod method, byte[] code, int offset) {
         switch (code[offset] & 0xFF) {
             case OP_checkcast:
@@ -196,13 +196,13 @@ public class JBCCodeUtilities implements OpcodeConstants, DataConstants {
                 throw Globals.nonlocalError("Invalid instruction type for resolveInstructionClass in " + method + " at " + offset);
         }
     }
-    
+
     public static JBCMethod resolveInstructionMethod(JBCMethod method, byte[] code, int offset) {
         MethodData data = method.getData();
         CodeRefData ref = getCodeRefAt(data, code, offset + 1);
         JBCClass containingClass = method.getContainingClass();
         JBCClass c = containingClass.getClassLoader().getClass(ref.getClassName());
-           
+
         if (c == null) {
             Globals.writeLog(method, "WARNING: Class " + ref.getClassName() + " not found in " + method);
             return null;
@@ -210,17 +210,21 @@ public class JBCCodeUtilities implements OpcodeConstants, DataConstants {
             JBCMethod m = new JBCMethod(c, ref.getSlotName(), ref.getSlotType());
             int opcode = code[offset] & 0xFF;
             JBCMethod originalMethod = m;
-            
+
             while (!m.exists()) {
                 c = c.getSuperClass();
-                
+
                 if (c == null) {
+                    if (true) {
+                        System.out.println ("WARNING: No such method in call from " + method + ": " + originalMethod);
+                        return null; // JHP
+                    }
                     throw new InvalidClassDataError("No such method in call from " + method + ": " + originalMethod);
                 } else {
                     m = new JBCMethod(c, ref.getSlotName(), ref.getSlotType());
                 }
             }
-            
+
             if (m.isStatic() != (opcode == OP_invokestatic)) {
                 if (opcode == OP_invokestatic) {
                     throw new InvalidClassDataError("Expected static method in call from " + method + ": " + m);
@@ -228,12 +232,12 @@ public class JBCCodeUtilities implements OpcodeConstants, DataConstants {
                     throw new InvalidClassDataError("Expected nonstatic method in call from " + method + ": " + m);
                 }
             }
-            
+
             if (!m.isAccessibleTo(containingClass)) {
                 throw new InvalidClassDataError("Call to inaccessible "
                     + m + " from " + method);
             }
-                    
+
             if (opcode == OP_invokespecial && isSuperMethod(method, m)) {
                 m = method.getContainingClass().getSuperInheritedMethod(m);
             }
@@ -241,38 +245,38 @@ public class JBCCodeUtilities implements OpcodeConstants, DataConstants {
             return m;
         }
     }
-    
+
     public static boolean useStaticDispatch(JBCMethod m) {
         int flags = m.getData().getAccessFlags();
-        
+
         return (flags & (ACC_STATIC | ACC_PRIVATE | ACC_FINAL)) != 0
             || m.getMethodName().equals("<init>")
             || m.getContainingClass().isFinal();
     }
-    
+
     private static boolean isSuperMethod(JBCMethod caller, JBCMethod m) {
         if (!m.getMethodName().equals("<init>") && !m.isPrivate()) {
             JBCClass methodClass = caller.getContainingClass();
-        
+
             return methodClass.isSubclassOf(m.getContainingClass())
                 && (methodClass.getData().getAccessFlags() & ACC_SUPER) != 0;
         } else {
             return false;
         }
     }
-    
+
     public static JBCField resolveInstructionField(JBCMethod method, byte[] code, int offset) {
         MethodData data = method.getData();
         CodeRefData ref = JBCCodeUtilities.getCodeRefAt(data, code, offset + 1);
         JBCClass c = method.getContainingClass().getClassLoader()
             .getClass(ref.getClassName());
-           
+
         if (c == null) {
             Globals.writeLog(method, "WARNING: Class " + ref.getClassName() + " not found in " + method);
             return null;
         } else {
             JBCField f = new JBCField(c, ref.getSlotName());
-            
+
             try {
                 if (!f.getFieldTypeName().equals(ref.getSlotType())) {
                     throw new InvalidClassDataError("Invalid type for field in " + method + ": " + f);
@@ -281,14 +285,14 @@ public class JBCCodeUtilities implements OpcodeConstants, DataConstants {
                 Globals.writeLog(method, "WARNING: Field " + ref.getSlotName() + " not found in " + method);
                 return null;
             }
-            
+
             boolean needStatic;
             switch (code[offset] & 0xFF) {
                 case OP_getstatic:
                 case OP_putstatic:  needStatic = true; break;
                 default:            needStatic = false;
             }
-           
+
             if (f.isStatic() != needStatic) {
                 if (needStatic) {
                     throw new InvalidClassDataError("Expected static field in " + method + ": " + f);
@@ -296,16 +300,16 @@ public class JBCCodeUtilities implements OpcodeConstants, DataConstants {
                     throw new InvalidClassDataError("Expected nonstatic field " + method + ": " + f);
                 }
             }
-            
+
             if (!f.isAccessibleTo(method.getContainingClass())) {
                 throw new InvalidClassDataError("Reference to inaccessible "
                     + f + " from " + method);
             }
-                    
+
             return f;
         }
     }
-    
+
 /**
 This function computes the change in the size of the stack when an instruction
 executes normally. (Since athrow never executes normally but always throws
@@ -320,11 +324,11 @@ be resolved (e.g. to get the field sizes for getstatic and getfield).
 */
     public static int getStackSizeDelta(JBCMethod method, byte[] code, int index) {
         int opcode = code[index] & 0xFF;
-        
+
         if (opcode == OP_wide) {
             opcode = code[index + 1] & 0xFF;
         }
-        
+
         switch (opcode) {
             case OP_getstatic:
                 return JBCType.getWordSize(getCodeRefAt(method.getData(), code, index + 1).getSlotType());
@@ -338,13 +342,13 @@ be resolved (e.g. to get the field sizes for getstatic and getfield).
             case OP_invokeinterface:
             case OP_invokespecial: {
                 String type = getCodeRefAt(method.getData(), code, index + 1).getSlotType();
-                
+
                 return -1 - JBCType.getMethodParamsSize(type)
                     + JBCType.getMethodResultSize(type);
             }
             case OP_invokestatic: {
                 String type = getCodeRefAt(method.getData(), code, index + 1).getSlotType();
-                
+
                 return -JBCType.getMethodParamsSize(type)
                     + JBCType.getMethodResultSize(type);
             }
@@ -358,7 +362,7 @@ be resolved (e.g. to get the field sizes for getstatic and getfield).
     public static int getStackPopCount(JBCMethod method, byte[] code, int offset) {
         return getStackPushCount(method, code, offset) - getStackSizeDelta(method, code, offset);
     }
-    
+
 /**
 This function computes the number of words pushed onto the stack by an instruction.
 This is the number of elements shown on the right-hand side of the
@@ -375,11 +379,11 @@ be resolved (e.g. to get the field sizes for getstatic and getfield).
 */
     public static int getStackPushCount(JBCMethod method, byte[] code, int index) {
         int opcode = code[index] & 0xFF;
-        
+
         if (opcode == OP_wide) {
             opcode = code[index + 1] & 0xFF;
         }
-        
+
         switch (opcode) {
             case OP_getstatic:
             case OP_getfield:
@@ -401,7 +405,7 @@ be resolved (e.g. to get the field sizes for getstatic and getfield).
 */
     public static int computeOpLength(byte[] code, int index) {
         int opcode = code[index] & 0xFF;
-        
+
         switch (opcode) {
             case OP_lookupswitch: {
                 int newIndex = (index + 4) & ~0x3;
@@ -433,19 +437,19 @@ be resolved (e.g. to get the field sizes for getstatic and getfield).
         } else if (Globals.debug && storage.length != 1) {
             Globals.nonlocalError("Invalid storage array length: " + storage.length);
         }
-        
+
         storage[0] = a;
         return storage;
     }
-    
+
     private static void fillInReachableInstructionStarts(byte[] code, int offset,
         int[] singleton, boolean[] result) {
         while (true) {
             if (!result[offset]) {
                 int[] successors = getReachableSuccessors(code, offset, singleton);
-            
+
                 result[offset] = true;
-            
+
                 if (successors.length == 1) {
                     offset = successors[0];
                     continue;
@@ -455,26 +459,26 @@ be resolved (e.g. to get the field sizes for getstatic and getfield).
                     }
                 }
             }
-            
+
             return;
         }
     }
-    
+
     public static boolean[] getInstructionStarts(MethodData data) {
         int[] singleton = new int[1];
         byte[] code = data.getCode();
         CatchBlockData[] catches = data.getCatchBlocks();
         boolean[] result = new boolean[code.length];
-        
+
         fillInReachableInstructionStarts(code, 0, singleton, result);
-        
+
         for (int i = 0; i < catches.length; i++) {
             fillInReachableInstructionStarts(code, catches[i].getHandlerPC(), singleton, result);
         }
-        
+
         return result;
     }
-    
+
 /**
 This method computes the offsets of the "reachable" successors of an instruction.
 The reachable successors are the instructions that this instruction may cause to
@@ -490,7 +494,7 @@ and "wide ret" have no reachable successors.
     public static int[] getReachableSuccessors(byte[] code, int index) {
         return getReachableSuccessors(code, index, null);
     }
-    
+
 /**
 This method computes the offsets of the "reachable" successors of an instruction.
 The reachable successors are the instructions that this instruction may cause to
@@ -528,7 +532,7 @@ length 1, then this array is filled in and returned instead of allocating a new 
             case OP_ifnull:
             case OP_ifnonnull: {
                 int[] result = { index + 3, index + JBCCodeUtilities.getShortAt(code, index + 1) };
-                
+
                 return result;
             }
             case OP_goto:
@@ -537,7 +541,7 @@ length 1, then this array is filled in and returned instead of allocating a new 
                 return make1IntArray(index + JBCCodeUtilities.getIntAt(code, index + 1), storage);
             case OP_jsr_w: {
                 int[] result = { index + 5, index + JBCCodeUtilities.getIntAt(code, index + 1) };
-                
+
                 return result;
             }
             case OP_ret:
@@ -556,30 +560,30 @@ length 1, then this array is filled in and returned instead of allocating a new 
                 int[] result = new int[numOffsets + 1];
                 int nextIndex = -1;
                 int nextInstruction = newIndex + 12 + numOffsets*4;
-                    
+
                 for (int i = 0; i < numOffsets; i++) {
                     int successor = index + JBCCodeUtilities.getIntAt(code, newIndex + 12 + i*4);
-                    
+
                     result[i] = successor;
                     if (successor == nextInstruction) {
                         nextIndex = i;
                     }
                 }
-                
+
                 int successor = index + JBCCodeUtilities.getIntAt(code, newIndex);
-                
+
                 result[numOffsets] = successor;
                 if (successor == nextInstruction) {
                     nextIndex = numOffsets;
                 }
-                
+
                 if (nextIndex >= 0) {
                     int tmp = result[0];
-                    
+
                     result[0] = result[nextIndex];
                     result[nextIndex] = tmp;
                 }
-                
+
                 return result;
             }
             case OP_lookupswitch: {
@@ -588,30 +592,30 @@ length 1, then this array is filled in and returned instead of allocating a new 
                 int[] result = new int[numOffsets + 1];
                 int nextIndex = -1;
                 int nextInstruction = newIndex + 12 + numOffsets*8;
-                
+
                 for (int i = 0; i < numOffsets; i++) {
                     int successor = index + JBCCodeUtilities.getIntAt(code, newIndex + 12 + i*8);
-                    
+
                     result[i] = successor;
                     if (successor == nextInstruction) {
                         nextIndex = i;
                     }
                 }
-                
+
                 int successor = index + JBCCodeUtilities.getIntAt(code, newIndex);
-                
+
                 result[numOffsets] = successor;
                 if (successor == nextInstruction) {
                     nextIndex = numOffsets;
                 }
-                
+
                 if (nextIndex >= 0) {
                     int tmp = result[0];
-                    
+
                     result[0] = result[nextIndex];
                     result[nextIndex] = tmp;
                 }
-                
+
                 return result;
             }
             case OP_wide:
@@ -619,10 +623,10 @@ length 1, then this array is filled in and returned instead of allocating a new 
                     return new int[0];
                 } else {
                     return make1IntArray(index + JBCCodeUtilities.computeOpLength(code, index), storage);
-                } 
+                }
             default: {
                 int opLength = JBCCodeUtilities.computeOpLength(code, index);
-                
+
                 if (opLength <= 0) {
                     throw new InvalidClassDataError("Invalid opcode: " + (code[index] & 0xFF));
                 } else {
@@ -631,7 +635,7 @@ length 1, then this array is filled in and returned instead of allocating a new 
             }
         }
     }
-    
+
 /**
 This function determines whether an instruction can throw an exception of a given class,
 or a exception that's a subclass of the given class. The result is conservative
@@ -655,30 +659,30 @@ VirtualMachineError)
             return true;
         } else {
             JBCWorld world = c.getClassLoader().getWorld();
-            
+
             if (c.hasCommonSubclassWith(world.getSpecialClass("java.lang.VirtualMachineError"))
                 || c.hasCommonSubclassWith(world.getSpecialClass("java.lang.ThreadDeath"))) {
                 return true;
             } else {
                 int opcode = code[index] & 0xFF;
-                
+
                 if (opcode == OP_wide) {
                     opcode = code[index + 1] & 0xFF;
                 }
-                
+
                 String[] exceptionList = opcodeExceptionLists[opcodeExceptionListNum[opcode]];
-                
+
                 for (int i = 0; i < exceptionList.length; i++) {
                     if (c.hasCommonSubclassWith(world.getSpecialClass(exceptionList[i]))) {
                         return true;
                     }
                 }
-                
+
                 return false;
             }
         }
     }
-    
+
 /**
 Compute the list of exceptions that may be thrown by an instruction. This
 list is only approximate, as described in 'isExceptionSource'. We return a list
@@ -691,14 +695,14 @@ classes may also be thrown.
 */
     public static String[] getExceptionList(byte[] code, int index) {
         int opcode = code[index] & 0xFF;
-        
+
         if (opcode == OP_wide) {
             opcode = code[index + 1] & 0xFF;
         }
-        
+
         return opcodeExceptionLists[opcodeExceptionListNum[opcode]];
     }
- 
+
 /**
 @param code the code array for the method
 @param index the offset within the code array of the start of the instruction
@@ -707,7 +711,7 @@ Integer.MIN_VALUE if this instruction does not store into any local variable
 */
     public static int getLocalVariableStoreIndex(byte[] code, int offset) {
         int opcode = code[offset] & 0xFF;
-        
+
         switch (opcode) {
             case OP_astore_0:
             case OP_istore_0:
@@ -756,13 +760,13 @@ Integer.MIN_VALUE if this instruction does not store into any local variable
                 return Integer.MIN_VALUE;
         }
     }
-    
+
     public static boolean isLocalVariableLoaded(byte[] code, int offset, int index) {
         int loadIndex = getLocalVariableLoadIndex(code, offset);
 
         if (loadIndex >= 0) {
             int loadCount = getLocalVariableLoadCount(code, offset);
-            
+
             return loadIndex <= index && index < loadIndex + loadCount;
         } else {
             return false;
@@ -774,13 +778,13 @@ Integer.MIN_VALUE if this instruction does not store into any local variable
 
         if (storeIndex >= 0) {
             int storeCount = getLocalVariableStoreCount(code, offset);
-            
+
             return storeIndex <= index && index < storeIndex + storeCount;
         } else {
             return false;
         }
     }
-    
+
     public static Object getLoadedConstant(JBCMethod method, byte[] code, int offset) {
         switch (code[offset] & 0xFF) {
             case OP_ldc:
@@ -802,11 +806,11 @@ Integer.MIN_VALUE if this instruction does not store into any local variable
 */
     public static int getLocalVariableStoreCount(byte[] code, int offset) {
         int opcode = code[offset] & 0xFF;
-        
+
         if (opcode == OP_wide) {
             opcode = code[offset + 1] & 0xFF;
         }
-        
+
         switch (opcode) {
             case OP_astore_0:
             case OP_istore_0:
@@ -840,7 +844,7 @@ Integer.MIN_VALUE if this instruction does not store into any local variable
                 return 0;
         }
     }
-    
+
 /**
 @param code the code array for the method
 @param index the offset within the code array of the start of the instruction
@@ -849,7 +853,7 @@ Integer.MIN_VALUE if this instruction does not load any local variable
 */
     public static int getLocalVariableLoadIndex(byte[] code, int offset) {
         int opcode = code[offset] & 0xFF;
-        
+
         switch (opcode) {
             case OP_aload_0:
             case OP_iload_0:
@@ -900,7 +904,7 @@ Integer.MIN_VALUE if this instruction does not load any local variable
                 return Integer.MIN_VALUE;
         }
     }
-    
+
 /**
 @param code the code array for the method
 @param index the offset within the code array of the start of the instruction
@@ -909,11 +913,11 @@ Integer.MIN_VALUE if this instruction does not load any local variable
 */
    public static int getLocalVariableLoadCount(byte[] code, int offset) {
         int opcode = code[offset] & 0xFF;
-        
+
         if (opcode == OP_wide) {
             opcode = code[offset + 1] & 0xFF;
         }
-        
+
         switch (opcode) {
             case OP_aload_0:
             case OP_iload_0:
@@ -947,7 +951,7 @@ Integer.MIN_VALUE if this instruction does not load any local variable
                 return 0;
         }
     }
-    
+
     public static boolean isBranchTaken(int opcode, int operand) {
         switch (opcode) {
             case OP_ifne: return operand != 0;
@@ -960,29 +964,29 @@ Integer.MIN_VALUE if this instruction does not load any local variable
                 throw Globals.localError("Unknown opcode for isBranchTaken: " + opcode);
         }
     }
-    
+
     public static String[] getLocalVariableNames(JBCMethod method, int offset) {
         MethodData data = method.getData();
         LocalVariableData[] locals = data.getLocalVariables();
         int numLocals = data.getMaxLocalWords();
         String[] varNames = new String[numLocals];
-        
+
         for (int i = 0; i < numLocals; i++) {
             varNames[i] = "local-" + i;
         }
-        
+
         // locals will be null if there is no debug info
         if (locals != null) {
             for (int i = 0; i < locals.length; i++) {
                 LocalVariableData varData = locals[i];
                 int start = varData.getScopeStartPC();
-                
+
                 if (start <= offset && offset < start + varData.getScopeLength()) {
                     varNames[varData.getVarIndex()] = varData.getVarName();
                 }
             }
         }
-        
+
         return varNames;
     }
 }

@@ -470,8 +470,8 @@ public class ClassFileParser implements ClassData, DataConstants {
 
         int majorVersion = classFile.readUnsignedShort();
         if ((majorVersion != 45)
-            // live dangerously, permit version 47 (JDK 1.3?)
-            && (majorVersion != 47)) {
+            // live dangerously, permit other versions (JDK 1.3/1.4?)
+            && ((majorVersion < 45) || (majorVersion > 48))) {
             throw fail("Unknown class file major version " + majorVersion);
         }
 
