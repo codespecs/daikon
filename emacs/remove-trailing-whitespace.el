@@ -1,8 +1,8 @@
 ;; This file removes trailing whitespace from source code; the trailing
 ;; whitespace serves no purpose.
 
-(add-hook 'c-mode-hook 'maybe-remove-trailing-whitespace)
-(add-hook 'java-mode-hook 'maybe-remove-trailing-whitespace)
+(add-hook 'c-mode-hook '(lambda () (add-hook 'write-contents-hooks 'maybe-remove-trailing-whitespace)))
+(add-hook 'java-mode-hook '(lambda () (add-hook 'write-contents-hooks 'maybe-remove-trailing-whitespace)))
 
 ;; Customize the tests if desired.
 (defun maybe-remove-trailing-whitespace ()
