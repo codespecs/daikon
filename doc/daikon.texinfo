@@ -282,9 +282,14 @@ setenv CLASSPATH @var{parent}/daikon/daikon.jar:$@{CLASSPATH@}
 Alternately, you may add the @file{@var{parent}/daikon/java/} directory to
 your classpath.  This alternative permits you to modify Daikon; most
 users will not need to do so.  If your shell is @command{csh}, add the
-following to your @file{.cshrc} file:
+following to your @file{.cshrc} file, all on one line without any spaces
+after the periods
 @example
-setenv CLASSPATH @var{parent}/daikon/java:$@{CLASSPATH@}
+setenv CLASSPATH @var{parent}/daikon/java:
+	@var{parent}/daikon/java/lib/jakarta-oro.jar:
+        @var{parent}/daikon/java/lib/java-getopt.jar:
+        @var{parent}/daikon/java/lib/junit.jar:
+        $@{CLASSPATH@}
 @end example
 
 The distribution includes compiled @file{.class} files, so you do not
