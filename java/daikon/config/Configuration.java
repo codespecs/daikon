@@ -53,7 +53,7 @@ public final class Configuration
   private Configuration() {
     InputStream stream = Configuration.class.getResourceAsStream(CONFIGURABLE_LIST);
     // System.out.println("CONFIGURABLE_LIST stream: " + stream);
-    Assert.assert(stream != null, "Cannot load list of configurable "
+    Assert.assertTrue(stream != null, "Cannot load list of configurable "
                   + "fields from '" + CONFIGURABLE_LIST + "'");
     try {
 
@@ -72,7 +72,7 @@ public final class Configuration
           Class c = Class.forName(classname);
           Field f = c.getField(Configuration.PREFIX + fieldname);
           Object value = f.get(null);
-          Assert.assert(value != null);
+          Assert.assertTrue(value != null);
           unparsed = String.valueOf(value);
         } catch (Exception e) {
           String message = CONFIGURABLE_LIST + ":" + lines.getLineNumber() + ": Error in \"" + line + "\" (warning: actual error may be elsewhere): " + e;
@@ -120,7 +120,7 @@ public final class Configuration
    * Configuration singleton makes no sense.
    **/
   public void overlap(Configuration config) {
-    Assert.assert(config != null);
+    Assert.assertTrue(config != null);
     Iterator iter = config.statements.iterator();
     while (iter.hasNext()) {
       String statement = (String) iter.next();
@@ -134,7 +134,7 @@ public final class Configuration
 
   public void apply(InputStream input)
   {
-    Assert.assert(input != null);
+    Assert.assertTrue(input != null);
     try {
 
       BufferedReader lines = new BufferedReader(new InputStreamReader(input));
@@ -153,10 +153,13 @@ public final class Configuration
 
   public void apply(String line)
   {
-    Assert.assert(line != null);
+    Assert.assertTrue(line != null);
 
     int eq = line.indexOf('=');
-    Assert.assert(eq >= 0, "Setting must contain =");
+    if (eq <= 0) {
+      System.err.println ("Error, setting must contain \"=\": " + line);
+      Assert.assertTrue(false);
+    }
 
     String name = line.substring(0, eq).trim();
     String value = line.substring(eq+1).trim();
@@ -166,11 +169,11 @@ public final class Configuration
 
   public void apply(String name, String value)
   {
-    Assert.assert(name != null);
-    Assert.assert(value != null);
+    Assert.assertTrue(name != null);
+    Assert.assertTrue(value != null);
 
     int dot = name.lastIndexOf('.');
-    Assert.assert(dot >= 0, "Name must contain .");
+    Assert.assertTrue(dot >= 0, "Name must contain .");
 
     String classname = name.substring(0, dot);
     String fieldname = name.substring(dot+1);
@@ -180,9 +183,9 @@ public final class Configuration
 
   public void apply(String classname, String fieldname, String value)
   {
-    Assert.assert(classname != null);
-    Assert.assert(fieldname != null);
-    Assert.assert(value != null);
+    Assert.assertTrue(classname != null);
+    Assert.assertTrue(fieldname != null);
+    Assert.assertTrue(value != null);
 
     Class clazz;
     try {
@@ -198,9 +201,9 @@ public final class Configuration
 
   public void apply(Class clazz, String fieldname, String value)
   {
-    Assert.assert(clazz != null);
-    Assert.assert(fieldname != null);
-    Assert.assert(value != null);
+    Assert.assertTrue(clazz != null);
+    Assert.assertTrue(fieldname != null);
+    Assert.assertTrue(value != null);
 
     Field field;
     try {
@@ -216,8 +219,8 @@ public final class Configuration
 
   private void apply(Field field, String unparsed)
   {
-    Assert.assert(field != null);
-    Assert.assert(unparsed != null);
+    Assert.assertTrue(field != null);
+    Assert.assertTrue(unparsed != null);
 
     Object value; // typed version of value
     Class type = field.getType();
@@ -269,14 +272,14 @@ public final class Configuration
     // record the application
     String classname = field.getDeclaringClass().getName();
     String fieldname = field.getName();
-    Assert.assert(fieldname.startsWith(PREFIX)); // remove the prefix
+    Assert.assertTrue(fieldname.startsWith(PREFIX)); // remove the prefix
     fieldname = fieldname.substring(PREFIX.length());
     addRecord(classname, fieldname, unparsed);
   }
 
   private void addRecord(String classname, String fieldname, String unparsed)
   {
-    Assert.assert(! fieldname.startsWith(PREFIX)); // must not have prefix
+    Assert.assertTrue(! fieldname.startsWith(PREFIX)); // must not have prefix
     String record = classname + "." + fieldname + " = " + unparsed;
     statements.add(record);
   }
