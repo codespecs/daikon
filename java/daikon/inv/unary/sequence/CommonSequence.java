@@ -28,7 +28,7 @@ public class CommonSequence
   final static boolean debugCommonSequence = false;
 
   private int elts;
-  private long [] intersect = null;
+  private long[] intersect = null;
 
   protected CommonSequence(PptSlice ppt) {
     super(ppt);

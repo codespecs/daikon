@@ -217,7 +217,7 @@ public class NonZeroFloat
   {
     if (other instanceof OneOfScalar) {
       OneOfScalar oos = (OneOfScalar) other;
-      if ((oos.num_elts() == 1) && (((Long)oos.elt()). doubleValue () == 0)) {
+      if ((oos.num_elts() == 1) && (((Long)oos.elt()).doubleValue() == 0)) {
         return true;
       }
     }

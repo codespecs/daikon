@@ -124,7 +124,7 @@ public class PairwiseLinearBinaryFloat
                                               seq2) + quantResult[3];
   }
 
-  public void add_modified(double[] x_arr, double [] y_arr, int count) {
+  public void add_modified(double[] x_arr, double[] y_arr, int count) {
     if (x_arr.length != y_arr.length) {
       destroyAndFlow();
       return;

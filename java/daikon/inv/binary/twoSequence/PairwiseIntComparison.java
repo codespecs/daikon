@@ -151,7 +151,7 @@ public class PairwiseIntComparison
     return quantResult[0] + quantResult[1] + " " + comparator + " " + quantResult[2] + quantResult[3];
   }
 
-  public void add_modified(long[] a1, long [] a2, int count) {
+  public void add_modified(long[] a1, long[] a2, int count) {
     if (a1.length != a2.length) {
       destroyAndFlow();
       return;

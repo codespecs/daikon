@@ -237,7 +237,7 @@ public final class EltNonZeroFloat
   {
     if (other instanceof EltOneOfFloat) {
       EltOneOfFloat eoo = (EltOneOfFloat) other;
-      if ((eoo.num_elts() == 1) && (((Double)eoo.elt()). doubleValue() == 0)) {
+      if ((eoo.num_elts() == 1) && (((Double)eoo.elt()).doubleValue() == 0)) {
         return true;
       }
     }

@@ -28,7 +28,7 @@ public abstract class TwoSequence
     return ppt.var_infos[1];
   }
 
-  public void add(long[] v1, long [] v2, int mod_index, int count) {
+  public void add(long[] v1, long[] v2, int mod_index, int count) {
     Assert.assertTrue(! falsified);
     Assert.assertTrue((mod_index >= 0) && (mod_index < 4));
     // [INCR] Assert.assertTrue(!finished);
@@ -43,13 +43,13 @@ public abstract class TwoSequence
     }
   }
 
-  public abstract void add_modified(long[] v1, long [] v2, int count);
+  public abstract void add_modified(long[] v1, long[] v2, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
    **/
-  public void add_unmodified(long[] v1, long [] v2, int count) {
+  public void add_unmodified(long[] v1, long[] v2, int count) {
     return;
   }
 

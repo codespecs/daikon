@@ -87,7 +87,7 @@ public class PairwiseFunctionUnaryFloat
       + quant1.getClosingExp();
   }
 
-  public void add_modified(double[] x_arr, double [] y_arr, int count) {
+  public void add_modified(double[] x_arr, double[] y_arr, int count) {
     if (x_arr.length != y_arr.length) {
       destroyAndFlow();
       return;

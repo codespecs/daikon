@@ -238,7 +238,7 @@ public class LowerBoundCoreFloat
 
   public boolean isSameFormula(LowerBoundCoreFloat other)
   {
-    return min1 == other. min1;
+    return min1 == other.min1;
   }
 
   public boolean isExact() {

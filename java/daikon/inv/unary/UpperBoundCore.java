@@ -238,7 +238,7 @@ public class UpperBoundCore
 
   public boolean isSameFormula(UpperBoundCore other)
   {
-    return max1 == other. max1;
+    return max1 == other.max1;
   }
 
   public boolean isExact() {

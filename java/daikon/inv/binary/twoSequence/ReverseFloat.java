@@ -124,7 +124,7 @@ public class ReverseFloat
     return results[0] + results[1] + " == " + preTag + ((VarInfoName.Elements)seq).term.jml_name() + "[" + upperExtent + "-1-" + index.jml_name() + "]" + postTag + results[2];
   }
 
-  public void add_modified(double[] a1, double [] a2, int count) {
+  public void add_modified(double[] a1, double[] a2, int count) {
     if (a1.length != a2.length) {
       destroyAndFlow();
       return;

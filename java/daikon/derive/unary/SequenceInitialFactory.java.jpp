@@ -37,7 +37,7 @@ public final class CLASSNAME extends UnaryDerivationFactory {
     // System.out.println("SequenceInitialFactory.instantiate(" + vi + ")");
     // return (UnaryDerivation)new SequenceFirst(vi);
 
-    if (!SEQUENCEINITIAL.dkconfig_enabled) {
+    if (! SEQUENCEINITIAL.dkconfig_enabled) {
       return null;
     }
 
@@ -47,7 +47,7 @@ public final class CLASSNAME extends UnaryDerivationFactory {
     // System.out.println("SequenceInitial.applicable(" + vi.name + ") = "
     //                    + SequenceInitial.applicable(vi));
 
-    if (!SEQUENCEINITIAL.applicable(vi)) {
+    if (! SEQUENCEINITIAL.applicable(vi)) {
       Global.tautological_suppressed_derived_variables += 4;
       return null;
     }

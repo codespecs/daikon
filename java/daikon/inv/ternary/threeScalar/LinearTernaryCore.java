@@ -32,9 +32,9 @@ public final class LinearTernaryCore
   final static int MINTRIPLES = 5;
 
   // These are public to permit testing.
-  public long [] x_cache = new long[MINTRIPLES];
-  public long [] y_cache = new long[MINTRIPLES];
-  public long [] z_cache = new long[MINTRIPLES];
+  public long[] x_cache = new long[MINTRIPLES];
+  public long[] y_cache = new long[MINTRIPLES];
+  public long[] z_cache = new long[MINTRIPLES];
 
   public LinearTernaryCore(Invariant wrapper) {
     this.wrapper = wrapper;

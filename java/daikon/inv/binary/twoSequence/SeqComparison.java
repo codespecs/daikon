@@ -145,7 +145,7 @@ public class SeqComparison
     return format_unimplemented(format);
   }
 
-  public void add_modified(long[] v1, long [] v2, int count) {
+  public void add_modified(long[] v1, long[] v2, int count) {
     /// This does not do the right thing; I really want to avoid comparisons
     /// if one is missing, but not if one is zero-length.
     // // Don't make comparisons with empty arrays.
