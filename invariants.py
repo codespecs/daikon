@@ -148,6 +148,25 @@ The subset is chosen according to the input indices."""
 # entries).  Tags and varnames may not contain the tab (\t) character.
 # Currently the values are integers; this will be extended soon.
 
+def read_file_ftns(filename):
+    """Read data from .inv file; return a dictionary mapping file
+    names to invocation counts.  The invocation counts are initialized
+    to zero."""
+    ftn_names_to_call_ct = {}
+    file = open(filename, "r")
+    line = file.readline()
+    if "\t" in line:
+        raise "First line should be tag line; saw: " + line
+
+    while (line != ""):         # line == "" when we hit end of file
+        (tag, leftover) = string.split(line, ":::", 1)
+        ftn_names_to_call_ct[tag] = 0
+        line = file.readline()
+        while "\t" in line:
+            # skip over (variable,value) line
+            line = file.readline()
+
+    return ftn_names_to_call_ct
 
 def read_file(filename):
     """Read data from .inv file; return a tuple of three dictionaries.
@@ -158,7 +177,11 @@ def read_file(filename):
     this_var_names = {}		# from function name to tuple of variable names
     this_var_values = {}	# from function name to (tuple of values to occurrence count)
     this_samples = {}           # from function name to number of samples
+    this_ftn_names = {}         # from function name to current number
+                                # of invocations
 
+    this_ftn_names = read_file_ftns(filename)
+    
     line = file.readline()
     if "\t" in line:
         raise "First line should be tag line; saw: " + line
@@ -166,7 +189,13 @@ def read_file(filename):
     while (line != ""):                 # line == "" when we hit end of file
         # line contains no tab character
         tag = line[:-1]                 # remove trailing newline
-	these_var_names = []
+
+        # Increment function invocation count if ':::BEGIN'
+        (tag_sans_suffix, suffix) = string.split(tag, ":::", 1)
+        if suffix == "BEGIN":
+            util.mapping_increment(this_ftn_names, tag_sans_suffix, 1)
+        
+        these_var_names = []
 	these_values = []
         line = file.readline()
         while "\t" in line:
@@ -204,6 +233,10 @@ def read_file(filename):
 	    these_values.append(this_value)
             # print this_var_name, this_value
             line = file.readline()
+        # Add invocation counts
+        for ftn_tag in this_ftn_names.keys():
+            these_var_names.append(ftn_tag)
+            these_values.append(this_ftn_names[ftn_tag])
 	these_var_names = tuple(these_var_names)
 	these_values = tuple(these_values)
 	if not(this_var_names.has_key(tag)):
@@ -214,7 +247,7 @@ def read_file(filename):
 	    assert type(this_var_values[tag]) == types.DictType
         util.mapping_increment(this_var_values[tag], these_values, 1)
         util.mapping_increment(this_samples, tag, 1)
-
+                
     return (this_var_names, this_var_values, this_samples)
 
 
@@ -850,6 +883,7 @@ def all_two_scalar_numeric_invariants():
             print "   ", `this_inv`
             print "   ", this_inv
 
+
 ## Testing
 # all_two_scalar_numeric_invariants()
 
@@ -873,6 +907,7 @@ class three_scalar_numeric_invariant(invariant):
     functions_yzx = None                # list of functions such that x=fun(y,z)
     functions_zyx = None                # list of functions such that x=fun(z,y)
 
+
     def __init__(self, dict_of_triples):
         """DICT maps from a triple of values to number of occurrences."""
         invariant.__init__(self, dict_of_triples)
@@ -883,6 +918,7 @@ class three_scalar_numeric_invariant(invariant):
             linear_z = checked_tri_linear_relationship(triples, (0,1,2))
             linear_y = checked_tri_linear_relationship(triples, (0,2,1))
             linear_x = checked_tri_linear_relationship(triples, (1,2,0))
+
 
         global symmetric_binary_functions, non_symmetric_binary_functions
 
@@ -1359,7 +1395,7 @@ class scalar_sequence_numeric_invariant(invariant):
 
     def __init__(self, dict_of_pairs):
 
-        # Does it make sense to call super class __init__ here?
+        invariant.__init__(self, dict_of_pairs)
         pairs = dict_of_pairs.keys()
 
         # For each (num, sequence), determine if num is a member of seq
