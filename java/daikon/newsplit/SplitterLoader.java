@@ -25,6 +25,7 @@ public class SplitterLoader extends ClassLoader{
   protected Class load_Class(String className, String full_pathname) {
     Class return_class;  
     try {
+      //find the class if it's a system class
       return_class = super.findSystemClass(className);
     }catch(ClassNotFoundException cnf){ 
       byte[] classData = read_Class_Data(full_pathname);

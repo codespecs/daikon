@@ -26,26 +26,8 @@ public class SplitterFactory {
     mycompiler = new FileCompiler();
     all_ppts = all;
     
-    try {
-      //try to get the path of the temp directory
-      File fi = File.createTempFile("test", null);
-      fi.deleteOnExit();
-      tempdir = fi.getPath().substring(0, fi.getPath().lastIndexOf(File.separator)+1);
-    }catch(IOException e) {
-      debugPrint("Cannot find temp directory:");
-      debugPrint("Trying to create files in current directory");
-      tempdir = ".";
-    }
-  
-    try {
-      File splitdir = new File(tempdir + File.separator + "daikon_Split" + File.separator);
-      splitdir.mkdirs();
-      if (splitdir.exists()) {
-	tempdir = splitdir.getPath() + File.separator;
-      }
-    }catch(Exception e) {
-      debugPrint(e.toString());
-    }
+    //try to get the path of the temp directory
+    tempdir = getTempdirName();      
   }
   
   /*
@@ -56,8 +38,6 @@ public class SplitterFactory {
    * @param <filename>.spinfo
    * @return a Vector holding the pptnames and their associated splitters
    */
-  
-  
   public Vector read_spinfofile(String infofile) throws IOException, FileNotFoundException {
     LineNumberReader reader = UtilMDE.LineNumberFileReader(infofile);
     
@@ -110,11 +90,8 @@ public class SplitterFactory {
     /* This function is used to write, compile and load all the splitters for 
      * the program point "function_name". The conditions are contained in the argument conds
      */
-    
-    Vector splitternames = new Vector(); //contains the paths of all the splitters created
     Vector splitters = new Vector(); //contains the splitter objects
-    
-    String className;  //temp variable holding the filename of the splitters  
+    Vector splitternames = new Vector(); //contains the paths of all the splitters created
         
     try {
       splitternames = write_function_splitters(function_name, conds, replace);
@@ -125,7 +102,7 @@ public class SplitterFactory {
     int siz = splitternames.size();
     if (siz > 0) {
       for (int i = 0; i < siz; i++) {
-	className = (String)splitternames.elementAt(i);
+	String className = (String)splitternames.elementAt(i);
 	Process proc = mycompiler.compile_Class(tempdir+className+".java");
 	//careful: The compilation doesn't give back any output and doesn't tell you if the
 	//compile failed or not. Will need to do some error checking here or somewhere else.
@@ -146,7 +123,7 @@ public class SplitterFactory {
       //we've finished creating all the splitters for one program point. Load them
       for (int i = 0; i < siz; i++) {
 	Class temp;
-	className = (String) splitternames.elementAt(i);
+	String className = (String) splitternames.elementAt(i);
 	try {
 	  temp = loader.load_Class(className, tempdir + className + ".class");
 	}catch(ClassFormatError ce) {
@@ -170,17 +147,12 @@ public class SplitterFactory {
   }
   
   ////////////
-  private Vector write_function_splitters(String ppt_name, Vector conditions, Vector replace) throws IOException  {     //this function writes all the splitters at a program point. The conditions are in the 
+  private Vector write_function_splitters(String ppt_name, Vector conditions, Vector replace) throws IOException  {     
+    //this function writes all the splitters at a program point. The conditions are in the 
     //argument named conditions
-    Pattern find_index_pattern, operator_pattern;
-    String class_name = ppt_name.substring(0, ppt_name.indexOf('.')+1) , splittername = ppt_name.replace('.','_');
-    PptTopLevel ppt;
-    String[] all_params, types;
+                    
     Vector splitternames = new Vector();
-    String[] repl = (String[])replace.toArray(new String[0]);
-    
-    
-    ppt = find_corresponding_ppt(ppt_name);    
+    PptTopLevel ppt = find_corresponding_ppt(ppt_name);    
     if (ppt == null) {
       debugPrint("No program point corresponds to " + ppt_name);
       return splitternames;
@@ -191,8 +163,8 @@ public class SplitterFactory {
     Vector typs = params_and_types[1];
     
     if (parameters.size() > 0 && typs.size() > 0) {
-      all_params = (String[])parameters.toArray(new String[0]);
-      types = (String[])typs.toArray(new String[0]);
+     String[] all_params = (String[])parameters.toArray(new String[0]);
+     String[] types = (String[])typs.toArray(new String[0]);
       int len = all_params.length;
       
       //The splitter variable names corresponding to the variables
@@ -205,6 +177,9 @@ public class SplitterFactory {
       }
            
       //write a splitter class for each condition:
+      // The splittername will be used as names for the classes. For example if the ppt_name is 
+      // Foo.bar, the splittername will be Foo_bar
+      String splittername = ppt_name.replace('.','_');
       for (int numconds = 0; numconds < conditions.size(); numconds++) {
 	
 	String condition = (String)conditions.elementAt(numconds);
@@ -230,9 +205,9 @@ public class SplitterFactory {
 	// the variable corresponding to "this.mylength" in the splitter
 	// is declared as "this_mylength". Therefore change the condition
 	// to "this_mylength == 0"
+	String class_name = ppt_name.substring(0, ppt_name.indexOf('.')+1); 
 	test_string = fix_variable_names_in_teststring(params,param_names, test_string, class_name);
-	
-	
+		
 	// look for all variables which are used as array accessors
 	// and change their type to "int_index". This is important 
 	// for getting the value from the VarInfo.
@@ -416,6 +391,7 @@ public class SplitterFactory {
 
   private String replace_condition (String condition, Vector replace) {
     //perform a replacement of a function call with the body of the function
+    //the argument Vector 'replace' stores alternately the function name and the function body.
     String cond = condition;
     Pattern replace_pattern;
     for (int i = 0; i < replace.size(); i+=2) {
@@ -436,7 +412,8 @@ public class SplitterFactory {
 
   private String fix_array_variablename_in_teststring (String varname, String test_string){
     //fix the variable names in the condition to match the declared variable
-    //names in the splitter.
+    //names in the splitter. Anytime you see a <varname>.length or <varname>[] being used
+    // in a condition, add a "_array" to the varname.
     String dot_length; //The regular expression used to search for "<arrayname>.length"
     String bracket;  //the regular expression used to search for "<arrayname>[]"
     
@@ -481,10 +458,13 @@ public class SplitterFactory {
       try {
 	//some instrumented variables start with "this." whereas the "this" is not always used
 	//in the condition. Eg. the instrumented variable is "this.myArray", but the 
-	//condition test is "myArray.length == 0". In this case, we are going to search
-	//in the condition for both "this.myArray" and "myArray"
+	//condition test is "myArray.length == 0". In such a situation, make sure that the 
+	//names are consistent. this.myArray -> this_myArray and
+	//myArray.length == 0 -> this_myArray.length == 0
 	if (params[i].startsWith("this")) {
 	  String params_minus_this = params[i].substring(5);
+	  //for example for the variable 'this.myArray', we will be searching
+	  //the condition for the regex "myArray|this.myArray"
 	  param_pattern = re_compiler.compile(params[i] + "|" + params_minus_this);
 	}else if (params[i].startsWith(class_name)) {
 	  param_pattern = re_compiler.compile(params[i] + "|" + params[i].substring(class_name.length()));
@@ -563,5 +543,27 @@ public class SplitterFactory {
     if (Global.debugPptSplit) {
       System.out.println(s);
     }
+  }
+
+  private String getTempdirName(){
+    //this is where the splitter files are created
+    try{
+      File fi = File.createTempFile("test", null);
+      tempdir = fi.getParent();
+      fi.delete();
+    }catch(IOException e) {
+      debugPrint("Cannot find temp directory:");
+      debugPrint("Trying to create files in current directory");
+      tempdir = ".";
+    }
+    
+    try {
+      File splitdir = new File(tempdir + File.separator + "daikon_Split" + File.separator);
+      splitdir.mkdirs();
+      if (splitdir.exists()) tempdir = splitdir.getPath();
+    }catch(Exception e) {
+      debugPrint(e.toString());
+    }
+    return tempdir + File.separator;
   }
 }
