@@ -45,7 +45,7 @@ public class OnlyConstantVariablesFilter extends InvariantFilter {
     boolean isStaticConstant = vi.is_static_constant;
     boolean isDynamicConstant = ((ppt.constants != null)
                                  && ppt.constants.is_constant(vi));
-    PptSlice view = ppt.getView(vi);
+    PptSlice view = ppt.findSlice(vi);
     // TODO: This should be generalized to other types of scalar
     OneOfScalar oos = (view == null) ? null : OneOfScalar.find(view);
     OneOfFloat oof = (view == null) ? null : OneOfFloat.find(view);
