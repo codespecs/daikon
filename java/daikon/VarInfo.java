@@ -47,7 +47,9 @@ public class VarInfo {
   // a set of variables, return a list of all their micro-invariants,
   // possibly partially ordered according to implication.]
 
-  private VarInfo equal_to;      // the canonical representative to which
+  // Only public so that PptTopLevel can access it.
+  // Clients should use isCanonical() or canonicalRep() or equalTo().
+  public VarInfo equal_to;      // the canonical representative to which
                                 // this variable is equal; points to itself
                                 // if it is canonical.
 
@@ -194,15 +196,13 @@ public class VarInfo {
   // any more values come in, then the equal_to slot should probably be
   // reset to null so that whether the variable is canonical is recomputed.
   public boolean isCanonical() {
-    if (equal_to == null)
-      computeCanonical();
+    Assert.assert(equal_to != null);
     return (equal_to == this);
   }
 
   // Canonical representative that's equal to this variable.
   public VarInfo canonicalRep() {
-    if (equal_to == null)
-      computeCanonical();
+    Assert.assert(equal_to != null);
     return equal_to;
   }
 
@@ -214,6 +214,7 @@ public class VarInfo {
 
     VarInfo[] vis = ppt.var_infos;
     for (int i=0; i<vis.length; i++) {
+      Assert.assert(vis[i].equal_to == vis[i].equal_to.equal_to);
       if (i == varinfo_index)
         continue;
       if (vis[i].equal_to == this)
@@ -221,50 +222,6 @@ public class VarInfo {
     }
 
     return result;
-
-  }
-
-  // A bit inefficient (it would be better to compute them all at once),
-  // but so be it.  I could change this later.
-  public void computeCanonical() {
-    Assert.assert(equal_to == null);
-
-    // System.out.println("computeCanonical(" + name + ")");
-
-    Vector noncanonical_equal = new Vector(3);
-
-    for (Iterator equal_invs = new UtilMDE.FilteredIterator(invariants(), IsEquality.it) ; equal_invs.hasNext() ; ) {
-      Comparison inv = (Comparison) equal_invs.next();
-      VarInfo vi1 = inv.var1();
-      VarInfo vi2 = inv.var2();
-      Assert.assert((vi1 == this) || (vi2 == this));
-      VarInfo other = (vi1 == this) ? vi2 : vi1;
-      if (other.equal_to == null) {
-        noncanonical_equal.add(other);
-      } else {
-        VarInfo rep = other.equal_to;
-        this.equal_to = rep;
-        for (int i=0; i<noncanonical_equal.size(); i++)
-          ((VarInfo)noncanonical_equal.elementAt(i)).equal_to = rep;
-        return;
-      }
-    }
-    if (noncanonical_equal.size() == 0) {
-      // System.out.println("Found no other");
-      this.equal_to = this;
-      return;
-    }
-    int min_index = this.varinfo_index;
-    for (int i=0; i<noncanonical_equal.size(); i++) {
-      VarInfo other = (VarInfo)noncanonical_equal.elementAt(i);
-      min_index = Math.min(min_index, other.varinfo_index);
-    }
-    VarInfo rep = ppt.var_infos[min_index];
-    this.equal_to = rep;
-    for (int i=0; i<noncanonical_equal.size(); i++) {
-      VarInfo other = (VarInfo)noncanonical_equal.elementAt(i);
-      other.equal_to = rep;
-    }
   }
 
 

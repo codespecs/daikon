@@ -47,8 +47,8 @@ class FileIO {
 
 /// Constants
 
-  final static boolean debug_read = false;
-  // final static boolean debug_read = true;
+  final static boolean debugRead = false;
+  // final static boolean debugRead = true;
 
   final static String comment_prefix = "//";
   final static String declaration_header = "DECLARE";
@@ -114,7 +114,7 @@ class FileIO {
 
     // Get all function names to add checks on ftn invocation counts
 
-    if (debug_read)
+    if (debugRead)
       System.out.println("read_declaration_file " + filename + " " + ((fn_regexp != null) ? fn_regexp.getPattern() : ""));
 
     BufferedReader reader = UtilMDE.BufferedFileReader(filename);
@@ -122,7 +122,7 @@ class FileIO {
 
     // line == null when we hit end of file
     for ( ; line != null; line = reader.readLine()) {
-      if (debug_read)
+      if (debugRead)
 	System.out.println("read_declaration_file line: " + line);
       if (line.equals("") || line.startsWith("//"))
 	continue;
@@ -146,7 +146,7 @@ class FileIO {
 
       // Not a declaration.
       // Read the rest of this entry (until we find a blank line).
-      if (debug_read)
+      if (debugRead)
 	System.out.println("Found odd line, skipping paragraph: " + line);
       while ((line != null) && line.equals("") && !line.startsWith("//")) {
 	System.out.println("Offending line = `" + line + "'");
@@ -427,7 +427,7 @@ class FileIO {
 	throw new Error(e.toString());
       }
     System.out.println("Read " + filenames.length + " data trace file"
-                       + ((filenames.length == 0) ? "" : "s"));
+                       + ((filenames.length == 1) ? "" : "s"));
   }
 
   /**
@@ -448,7 +448,7 @@ class FileIO {
 
     // fn_regexp = util.re_compile_maybe(fn_regexp, re.IGNORECASE)
 
-    if (debug_read) {
+    if (debugRead) {
       System.out.println("read_data_trace_file " + filename + " " + fn_regexp);
     }
 
@@ -584,7 +584,7 @@ class FileIO {
 
       ValueTuple vt = new ValueTuple(vals, mods);
 
-      if (debug_read) {
+      if (debugRead) {
 	System.out.println("Adding ValueTuple to " + ppt.name);
       }
       ppt.add(vt, 1);
@@ -598,7 +598,16 @@ class FileIO {
       for (int i=0; i<size; i++) {
 	Invocation invok = (Invocation)call_stack.elementAt(i);
 	System.out.println(invok.fn_name);
-	System.out.println(UtilMDE.join(invok.vals, ", "));
+        for (int j=0; j<invok.vals.length; j++) {
+          if (j != 0)
+            System.out.print(", ");
+          Object val = invok.vals[j];
+          if (val instanceof int[])
+            System.out.print(ArraysMDE.toString((int[]) val));
+          else
+            System.out.print(val);
+        }
+        System.out.println();
       }
     }
 

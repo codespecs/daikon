@@ -70,7 +70,10 @@ public class Member extends SequenceScalar {
 
 
   public void add_modified(int[] a, int i, int count) {
-    no_invariant = (ArraysMDE.indexOf(a, i) == -1);
+    if (ArraysMDE.indexOf(a, i) == -1) {
+      destroy();
+      return;
+    }
   }
 
 

@@ -90,6 +90,3 @@ class IntComparison extends TwoScalar implements Comparison {
   }
 
 }
-
-
-

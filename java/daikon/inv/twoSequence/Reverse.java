@@ -32,13 +32,13 @@ class Reverse extends TwoSequence {
 
   public void add_modified(int[] a1, int[] a2, int count) {
     if (a1.length != a2.length) {
-      no_invariant = true;
+      destroy();
       return;
     }
     int len = a1.length;
     for (int i=0, j=len-1; i<len; i++, j--)
       if (a1[i] != a2[j]) {
-        no_invariant = true;
+        destroy();
         return;
       }
   }

@@ -36,15 +36,14 @@ public abstract class SequenceScalar extends Invariant {
   }
 
   public void add(int[] v1, int mod1, int v2, int mod2, int count) {
+    Assert.assert(! no_invariant);
     Assert.assert((mod1 == ValueTuple.MODIFIED)
 		  || (mod1 == ValueTuple.UNMODIFIED));
     Assert.assert((mod2 == ValueTuple.MODIFIED)
 		  || (mod2 == ValueTuple.UNMODIFIED));
     if ((mod1 == ValueTuple.MODIFIED)
 	|| (mod2 == ValueTuple.MODIFIED)) {
-      if (! no_invariant) {
-        add_modified(v1, v2, count);
-      }
+      add_modified(v1, v2, count);
     } else {
       add_unmodified(v1, v2, count);
     }

@@ -9,6 +9,7 @@ import daikon.*;
 public abstract class Invariant {
   public PptSlice ppt;			// includes values, number of samples, VarInfos, etc.
 
+  // Has to be public because of wrappers.
   public boolean no_invariant = false;
 
   // Subclasses should set these; Invariant never does.
@@ -48,6 +49,12 @@ public abstract class Invariant {
 
   public boolean justified() {
     return (!no_invariant) && (getProbability() <= probability_limit);
+  }
+
+  // Has to be public because of wrappers.
+  public void destroy() {
+    no_invariant = true;
+    ppt.removeInvariant(this);
   }
 
   // Implementations of this need to examine all the data values already

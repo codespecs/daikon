@@ -5,7 +5,7 @@ import daikon.inv.*;
 
 class Linear extends TwoScalar {
 
-  final static boolean debug_linear = false;
+  final static boolean debugLinear = false;
 
   LinearCore core;
 

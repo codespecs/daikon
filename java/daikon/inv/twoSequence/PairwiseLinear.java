@@ -6,8 +6,6 @@ import daikon.inv.twoScalar.*;
 
 class PairwiseLinear extends TwoSequence {
 
-  final static boolean debug_PairwiseLinear = false;
-
   LinearCore core;
 
   protected PairwiseLinear(PptSlice ppt_) {

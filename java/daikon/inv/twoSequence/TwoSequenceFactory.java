@@ -12,7 +12,7 @@ public class TwoSequenceFactory {
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
-  public static void instantiate(PptSlice ppt) {
+  public static void instantiate(PptSlice ppt, int pass) {
     // Not really the right place for these tests
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
@@ -28,21 +28,25 @@ public class TwoSequenceFactory {
       super2 = var2;
 
 
-    Reverse.instantiate(ppt);
+    if (pass == 1) {
+      if (super1 != super2) {
+        SeqComparison.instantiate(ppt);
+      }
+    } else if (pass == 2) {
+      Reverse.instantiate(ppt);
+      if (super1 != super2) {
+        // NonEqual.instantiate(ppt);
+        SubSequence.instantiate(ppt);
+        SuperSequence.instantiate(ppt);
 
-    if (super1 != super2) {
-      SeqComparison.instantiate(ppt);
-      // NonEqual.instantiate(ppt);
-      SubSequence.instantiate(ppt);
-      SuperSequence.instantiate(ppt);
-
-      PairwiseIntComparison.instantiate(ppt);
-      PairwiseLinear.instantiate(ppt);
-      for (int i=0; i<2; i++) {
-        boolean b = (i==1);
-        PairwiseFunction.instantiate(ppt, Functions.Math_abs, b);
-        PairwiseFunction.instantiate(ppt, Functions.MathMDE_negate, b);
-        PairwiseFunction.instantiate(ppt, Functions.MathMDE_bitwiseComplement, b);
+        PairwiseIntComparison.instantiate(ppt);
+        PairwiseLinear.instantiate(ppt);
+        for (int i=0; i<2; i++) {
+          boolean b = (i==1);
+          PairwiseFunction.instantiate(ppt, Functions.Math_abs, b);
+          PairwiseFunction.instantiate(ppt, Functions.MathMDE_negate, b);
+          PairwiseFunction.instantiate(ppt, Functions.MathMDE_bitwiseComplement, b);
+        }
       }
     }
 

@@ -55,7 +55,8 @@ class Modulus extends SingleScalar {
       int new_modulus = MathMDE.gcd(modulus, value1 - value);
       if (new_modulus != modulus) {
         if (new_modulus == 1) {
-          no_invariant = true;
+          destroy();
+          return;
         } else {
           remainder = remainder % new_modulus;
           modulus = new_modulus;

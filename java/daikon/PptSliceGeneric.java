@@ -19,6 +19,9 @@ import utilMDE.*;
 
 public class PptSliceGeneric extends PptSlice {
 
+  static final boolean debugPptSliceGeneric = false;
+  // static final boolean debugPptSliceGeneric = true;
+
   // This is in PptSlice; don't repeat it here!
   // Invariants invs;
 
@@ -32,7 +35,8 @@ public class PptSliceGeneric extends PptSlice {
     // super(parent_, var_infos_);
     super(parent_, var_infos_);
     values_cache = new VarValues();
-    // System.out.println("Created PptSliceGeneric " + this.name);
+    if (debugPptSliceGeneric)
+      System.out.println("Created PptSliceGeneric " + this.name);
     invs = null;
     // Ensure that the VarInfo objects are in order (and not duplicated).
     for (int i=0; i<var_infos.length-1; i++)
@@ -41,7 +45,10 @@ public class PptSliceGeneric extends PptSlice {
     // if (arity == 1)
     //   var_infos[0].ppt_unary = this;
 
-    instantiate_invariants();
+    // Make the caller do this, because
+    //  1. there are few callers
+    //  2. don't want to instantiate all invariants all at once
+    // instantiate_invariants();
   }
 
   PptSliceGeneric(Ppt parent_, VarInfo var_info_) {
@@ -56,24 +63,53 @@ public class PptSliceGeneric extends PptSlice {
     this(parent_, new VarInfo[] { var_info1_, var_info2_, var_info3_ });
   }
 
-  void instantiate_invariants() {
+  void instantiate_invariants(int pass) {
     // Instantiate invariants
+    if (debugPptSliceGeneric)
+      System.out.println("instantiate_invariants (pass " + pass + ") for " + name);
     invs = new Invariants();
     if (arity == 1) {
-      SingleScalarFactory.instantiate(this);
-      SingleSequenceFactory.instantiate(this);
+      SingleScalarFactory.instantiate(this, pass);
+      SingleSequenceFactory.instantiate(this, pass);
     } else if (arity == 2) {
-      TwoScalarFactory.instantiate(this);
-      SequenceScalarFactory.instantiate(this);
-      TwoSequenceFactory.instantiate(this);
+      TwoScalarFactory.instantiate(this, pass);
+      SequenceScalarFactory.instantiate(this, pass);
+      TwoSequenceFactory.instantiate(this, pass);
     } else if (arity == 3) {
       throw new Error("arity 3 not yet implemented");
     } else {
       throw new Error("bad arity");
     }
-    // System.out.println("invs=" + invs + "; this.invs=" + this.invs);
-    // System.out.println("Newly created PptSliceGeneric " + name + " = " + this + " has " + invs.size() + " invariants in " + invs);
+    if (debugPptSliceGeneric) {
+      System.out.println("invs=" + invs + "; this.invs=" + this.invs);
+      System.out.println("Newly created PptSliceGeneric " + name + " = " + this + " has " + invs.size() + " invariants in " + invs);
+    }
+  }
 
+
+  // A reason to defer removal is because we're currently iterating over
+  // the invariants by index rather than using an Iterator.
+  private Vector invs_to_remove_deferred = null;
+  // This to avoid constructing a new Vector every time through add().
+  // One can just use this one (and be sure to clear it out afterward).
+  private Vector itrd_cache = new Vector(1);
+  public void removeInvariant(Invariant inv) {
+    if (debugPptSliceGeneric)
+      System.out.println("PptSliceGeneric.removeInvariant(" + inv + ")" +
+                         ((invs_to_remove_deferred != null)
+                          ? " will be deferred"
+                          : ""));
+    Assert.assert(invs.contains(inv));
+    if (invs_to_remove_deferred != null) {
+      Assert.assert(! invs_to_remove_deferred.contains(inv));
+      invs_to_remove_deferred.add(inv);
+    } else {
+      super.removeInvariant(inv);
+    }
+  }
+
+  void addView(PptSlice slice) {
+    throw new Error("Don't add views on a slice.");
   }
 
   void addViews(Vector slices) {
@@ -111,6 +147,11 @@ public class PptSliceGeneric extends PptSlice {
   ///
 
   void add(ValueTuple full_vt, int count) {
+    Assert.assert(invs.size() > 0);
+
+    // Avoid constructing a new Vector every time through this function.
+    invs_to_remove_deferred = itrd_cache;
+
     Object[] vals = new Object[arity];
     int[] mods = new int[arity];
     for (int i=0; i<arity; i++) {
@@ -128,7 +169,6 @@ public class PptSliceGeneric extends PptSlice {
 
     // System.out.println("PptSliceGeneric " + name + ": add " + full_vt + " = " + vt);
     // System.out.println("PptSliceGeneric " + name + " has " + invs.size() + " invariants.");
-
 
     // Supply the new values to all the invariant objects.
     // Use full_vt and the VarInfo objects,
@@ -237,10 +277,13 @@ public class PptSliceGeneric extends PptSlice {
       throw new Error("bad arity " + arity);
     }
 
-    for (Iterator itor = invs.iterator() ; itor.hasNext() ; ) {
-      Invariant inv = (Invariant) itor.next();
-      if (inv.no_invariant)
-        itor.remove();
+    // I need to have invs_to_remove_deferred null, or
+    // else removeInvariants just adds to that list!!
+    // The old value is still available in itrd_cache.
+    invs_to_remove_deferred = null;
+    if (itrd_cache.size() > 0) {
+      removeInvariants(itrd_cache);
+      itrd_cache.clear();
     }
   }
 

@@ -55,12 +55,12 @@ public class LinearCore {
           for (int i=0; i<MINPAIRS; i++) {
             // I should permit a fudge factor here.
             if (y_cache[i] != a*x_cache[i]+b) {
-              wrapper.no_invariant = true;
               if (debugLinearCore) {
                 System.out.println("Suppressing " + "LinearCore" + " at index " + i + ": "
                                    + y_cache[i] + " != " + a + "*" + x_cache[i] + "+" + b);
               }
-              break;
+              wrapper.destroy();
+              return;
             }
           }
         }
@@ -68,11 +68,12 @@ public class LinearCore {
     } else {
       // Check the new value against a and b.
       if (y != a*x+b) {
-	wrapper.no_invariant = true;
         if (debugLinearCore) {
           System.out.println("Suppressing " + "LinearCore" + " at new value: "
                              + y + " != " + a + "*" + x + "+" + b);
         }
+        wrapper.destroy();
+        return;
       }
     }
   }
@@ -82,10 +83,10 @@ public class LinearCore {
 
   void set_bi_linear(int x0, int x1, int y0, int y1) {
     if (x0 == x1) {
-      wrapper.no_invariant = true;
       if (debugLinearCore) {
         System.out.println("Suppressing " + "LinearCore" + " due to equal x values: (" + x0 + "," + y0 + "), (" + x1 + "," + y1 + ")");
       }
+      wrapper.destroy();
       return;
     }
 

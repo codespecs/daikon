@@ -7,8 +7,6 @@ import daikon.inv.*;
 // Also see NonEqual, NonAliased
 public class IntComparisonCore {
 
-  final static boolean debugIntComparisonCore = false;
-
   public boolean can_be_eq = false;
   public boolean can_be_lt = false;
   public boolean can_be_gt = false;
@@ -26,8 +24,10 @@ public class IntComparisonCore {
       can_be_lt = true;
     else
       can_be_gt = true;
-    // Could set no_invariant here.
-    wrapper.no_invariant = (can_be_lt && can_be_gt);
+    if (can_be_lt && can_be_gt) {
+      wrapper.destroy();
+      return;
+    }
   }
 
   public double computeProbability() {

@@ -161,6 +161,7 @@ public final class ProglangType {
 
   // Given a string representation of a value (of the type represented by
   // this ProglangType), return the interpretation of that value.
+  // Canonicalize where possible.
   final Object parse_value(String value_) {
     String value = value_;
     // This only needs to deal with representation types, not with all
@@ -173,8 +174,6 @@ public final class ProglangType {
 	return value.intern();
       } else if ((base == TYPE_ADDRESS) || (base == TYPE_POINTER)) {
 	return Integer.valueOf(value, 16);
-      // } else if ((base == TYPE_JAVA_OBJECT) || (base == TYPE_OBJECT)) {
-      //   return Integer.valueOf(value.substring(value.indexOf('@')+1));
       } else if ((base == TYPE_CHAR) || (base == TYPE_INT)) {
 	return Integer.valueOf(value);
 	// Old implementation
@@ -238,12 +237,7 @@ public final class ProglangType {
 	  int[] result = new int[len];
 	  for (int i=0; i<len; i++)
 	    result[i] = new Integer(value_strings[i]).intValue();
-	  return result;
-        // } else if ((base == TYPE_JAVA_OBJECT) || (base == TYPE_OBJECT)) {
-        //   int[] result = new int[len];
-        //   for (int i=0; i<len; i++)
-        //     result[i] = Integer.parseInt(value.substring(value.indexOf('@')+1));
-        //   return result;
+	  return ArraysMDE.intern(result);
 	} else {
 	  throw new Error("Can't deal with array of base type " + base);
 	}

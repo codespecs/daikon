@@ -22,12 +22,11 @@ public abstract class SingleSequence extends Invariant {
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
   public void add(int[] value, int modified, int count) {
+    Assert.assert(! no_invariant);
     Assert.assert((modified == ValueTuple.MODIFIED)
 		  || (modified == ValueTuple.UNMODIFIED));
     if (modified == ValueTuple.MODIFIED) {
-      if (! no_invariant) {
-        add_modified(value, count);
-      }
+      add_modified(value, count);
     } else {
       add_unmodified(value, count);
     }

@@ -93,7 +93,10 @@ class EltIntComparison extends SingleSequence {
       else
         can_be_gt = true;
     }
-    no_invariant = (can_be_lt && can_be_gt);
+    if (can_be_lt && can_be_gt) {
+      destroy();
+      return;
+    }
   }
 
   protected double computeProbability() {

@@ -47,7 +47,7 @@ public class NonEqual extends TwoScalar {
   public void add_modified(int v1, int v2, int count) {
     // probability_cache_accurate = false;
     if (v1 == v2) {
-      no_invariant = true;
+      destroy();
       return;
     }
     if (v1 < min1) min1 = v1;

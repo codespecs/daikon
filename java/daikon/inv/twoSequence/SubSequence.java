@@ -39,7 +39,10 @@ class SubSequence extends TwoSequence {
 
 
   public void add_modified(int[] a1, int[] a2, int count) {
-    no_invariant = (ArraysMDE.indexOf(a2, a1) == -1);
+    if (ArraysMDE.indexOf(a2, a1) == -1) {
+      destroy();
+      return;
+    }
   }
 
 

@@ -38,7 +38,7 @@ class NonZero extends SingleScalar {
     // The min and max tests will simultaneoulsy succeed exactly once (for
     // the first value).
     if (v == 0) {
-      no_invariant = true;
+      destroy();
       return;
     }
     if (v < min) min = v;

@@ -12,7 +12,7 @@ public class SequenceScalarFactory {
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
-  public static void instantiate(PptSlice ppt) {
+  public static void instantiate(PptSlice ppt, int pass) {
     boolean seq_first;
 
     {
@@ -27,7 +27,9 @@ public class SequenceScalarFactory {
       }
     }
 
-    Member.instantiate(ppt, seq_first);
+    if (pass == 2) {
+      Member.instantiate(ppt, seq_first);
+    }
   }
 
   private SequenceScalarFactory() {

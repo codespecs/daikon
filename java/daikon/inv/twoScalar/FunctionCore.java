@@ -40,14 +40,19 @@ public class FunctionCore {
 
     try {
       if (inverse) {
-	if (! x.equals(function.invoke(null, new Object[] { y })))
-	  wrapper.no_invariant = true;
+	if (! x.equals(function.invoke(null, new Object[] { y }))) {
+	  wrapper.destroy();
+          return;
+        }
       } else {
-	if (! y.equals(function.invoke(null, new Object[] { x })))
-	  wrapper.no_invariant = true;
+	if (! y.equals(function.invoke(null, new Object[] { x }))) {
+	  wrapper.destroy();
+          return;
+        }
       }
     } catch (Exception e) {
-      wrapper.no_invariant = true;
+      wrapper.destroy();
+      return;
     }
   }
 

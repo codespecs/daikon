@@ -2,6 +2,8 @@ package daikon;
 
 import daikon.inv.*;
 
+import java.util.*;
+
 import utilMDE.*;
 
 // This is a view on the full data (and maybe it does cacheing for a
@@ -11,6 +13,10 @@ import utilMDE.*;
 // need to find them all to give a good result).
 
 public abstract class PptSlice extends Ppt {
+
+  static final boolean debugPptSlice = false;
+  // static final boolean debugPptSlice = true;
+
   public Ppt parent;
   public int arity;
   // var_infos appears in Ppt; don't repeat it here!!
@@ -58,10 +64,20 @@ public abstract class PptSlice extends Ppt {
   // I don't just use ppt.invs.remove because I want to take action
   // if the vector becomes void.
   public void removeInvariant(Invariant inv) {
+    if (debugPptSlice)
+      System.out.println("PptSlice.removeInvariant(" + inv + ")");
     boolean removed = invs.remove(inv);
     Assert.assert(removed);
     if (invs.size() == 0)
       parent.removeView(this);
+  }
+
+  // I could make this more efficient, but it's probably fine as it is.
+  public void removeInvariants(Vector to_remove) {
+    // This must not call removeInvariant because that gets overridden.
+    for (int i=0; i<to_remove.size(); i++) {
+      removeInvariant((Invariant) to_remove.elementAt(i));
+    }
   }
 
 }
