@@ -285,7 +285,7 @@ def dict_of_tuples_slice(dot, indices):
 
 # This routine does one "pass"; that is, it adds some set of derived
 # variables, according to the functions that are passed in.
-def introduce_new_variables_one_pass(var_infos, var_new_values, indices, functions):
+def introduce_new_variables_one_pass(var_infos, var_values, indices, functions):
     """Add new computed variables to the dictionaries, by side effect.
     The arguments are:
       VAR_INFOS: list of var_info objects
@@ -985,6 +985,9 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
     VAR_INFOS and VAR_VALUES are elements of globals `fn_var_infos' and
     `fn_var_values'."""
 
+    # introduce_new_variables_one_pass(var_infos, var_values, indices, pass1_functions)
+    # introduce_new_variables_one_pass(var_infos, var_values, indices, pass2_functions)
+
     # Single invariants
     dicts = dict_of_tuples_to_tuple_of_dicts(var_values, indices)
     non_exact_single_invs = []      # list of indices
@@ -1076,7 +1079,7 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
 
 # Maybe this should (optionally?) print just for a given fn_name, so that
 # I can provide output more interactively and quickly.
-def print_invariants(fn_regexp=None):
+def print_invariants(fn_regexp=None, print_unconstrained=0):
     """Print out non-unconstrained invariants."""
     if type(fn_regexp) == types.StringType:
         fn_regexp = re.compile(fn_regexp)
@@ -1090,24 +1093,27 @@ def print_invariants(fn_regexp=None):
         print fn_name, fn_samples[fn_name], "samples"
         var_infos = fn_var_infos[fn_name]
         non_exact_single_invs = []
+        # Single invariants
         for vi in var_infos:
             this_inv = vi.invariant
-            if not this_inv.is_unconstrained():
+            if print_unconstrained or not this_inv.is_unconstrained():
                 print " ", this_inv.format((vi.name,))
+        # Pairwise invariants
         for vi in var_infos:
             vname = vi.name
             for (index,inv) in vi.invariants.items():
                 if type(index) != types.IntType:
                     continue
-                if not inv.is_unconstrained():
+                if print_unconstrained or not inv.is_unconstrained():
                     print "   ", inv.format((vname, var_infos[index].name))
+        # Three-way (and greater) invariants
         for vi in var_infos:
             vname = vi.name
             for (index_pair,inv) in vi.invariants.items():
                 if type(index_pair) == types.IntType:
                     continue
-                if not inv.is_unconstrained():
-                    print "     ", inv.format((vname, var_infos[index_pair[0]].name, var_infos[index_pair[0]].name))
+                if print_unconstrained or not inv.is_unconstrained():
+                    print "     ", inv.format((vname, var_infos[index_pair[0]].name, var_infos[index_pair[1]].name))
 
 
 ###########################################################################
