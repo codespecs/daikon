@@ -266,10 +266,23 @@ public abstract class Invariant implements java.io.Serializable {
             //   System.out.println("  " + inv2.format() + " " + inv2.repr() + " at " + inv2.ppt.name);
             //   System.out.println(" var #" + vis2[i].varinfo_index + " = " + vis2[i].name + " = " + vis2[i]);
             // }
+
+            // // Debugging
+            // System.out.println("ICFP: compare var "
+            //                    + vis1[i].name.name() + " (index " + vis1[i].varinfo_index + ")"
+            //                    + " to " + vis2[i].name.name() + " (index " + vis2[i].varinfo_index + ")"
+            //                    + " => " + tmp
+            //                    + "\t\tfor " + inv1.format() + ", " + inv2.format());
+            // System.out.println("Vars for " + inv1.format() + ": " + inv1.repr());
+            // System.out.println("Vars for " + inv2.format() + ": " + inv2.repr());
+
             return tmp;
           }
         }
       } else {
+        // // Debugging
+        // System.out.println("ICFP: different parents for " + inv1.format() + ", " + inv2.format());
+
         for (int i=0; i<vis1.length; i++) {
           String name1 = vis1[i].name.name();
           String name2 = vis2[i].name.name();
@@ -286,6 +299,9 @@ public abstract class Invariant implements java.io.Serializable {
         }
       }
 
+      // System.out.println("ICFP: default rule yields "
+      //                    + inv1.format().compareTo(inv2.format())
+      //                    + " for " + inv1.format() + ", " + inv2.format());
       return inv1.format().compareTo(inv2.format());
     }
   }

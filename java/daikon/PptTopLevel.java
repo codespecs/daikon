@@ -2098,6 +2098,20 @@ public class PptTopLevel extends Ppt {
     // desirable first.  For now just use the ICFP.
     Arrays.sort(invs, icfp);
 
+    // // Debugging
+    // System.out.println("Sorted invs:");
+    // for (int i=0; i<invs.length; i++) {
+    //   System.out.println("    " + invs[i].format());
+    // }
+    // for (int i=0; i<invs.length-1; i++) {
+    //   int cmp = icfp.compare(invs[i], invs[i+1]);
+    //   System.out.println("cmp(" + i + "," + (i+1) + ") = " + cmp);
+    //   int rev_cmp = icfp.compare(invs[i+1], invs[i]);
+    //   System.out.println("cmp(" + (i+1) + "," + i + ") = " + rev_cmp);
+    //   Assert.assert(rev_cmp >= 0);
+    // }
+
+
     // Form the closure of the controllers
     Set closure = new HashSet();
     {
@@ -2263,6 +2277,19 @@ public class PptTopLevel extends Ppt {
 	  if (inv instanceof Equality) {
 	    // Equality is not represented with a permanent invariant
 	    // object, so store the canonical variable instead.
+
+            // // Debugging
+            // System.out.println("Adding redundant var " + ((Equality) inv).leader().name.name() + " due to " + inv.format());
+            // System.out.println("Background = ");
+            // for (int i=0; i < present.length; i++) {
+            //   if (i == checking) {
+            //     System.out.println("  <<<this invariant not in its own background>>>");
+            //   }
+            //   if (present[i] && (i != checking)) {
+            //     System.out.println("  " + invs[i].format() + "\t" + invs[i].getClass().getName());
+            //   }
+            // }
+
 	    redundant_invs.add(((Equality) inv).leader());
 	  } else {
 	    redundant_invs.add(inv);
@@ -2610,6 +2637,9 @@ public class PptTopLevel extends Ppt {
 
     for (int i=0; i<var_infos.length; i++) {
       VarInfo vi = var_infos[i];
+      // System.out.println("Considering equality for "
+      //                    + (vi.isCanonical() ? "" : "non")
+      //                    + "canonical var " + vi.name.name());
       if (vi.isCanonical()) {
 
 	// switch commented lines to include obviously equal in output
@@ -2618,6 +2648,11 @@ public class PptTopLevel extends Ppt {
 	// Vector equal_vars = vi.equalTo();
 	// Vector obviously_equal = new Vector(equal_vars);
 	// obviously_equal.removeAll(vi.equalToNonobvious());
+
+        // System.out.println("equal_vars.size() = " + equal_vars.size());
+        // System.out.println("Redundant due to simplify = "
+        //                    + (Daikon.suppress_redundant_invariants_with_simplify
+        //                       && redundant_invs.contains(vi)));
 
         if (equal_vars.size() > 0 &&
 	    // suppress if the equality invariant is implied via simplify
