@@ -32,6 +32,9 @@ public final class FileIO {
 
 /// Constants
 
+  // If true, prints the unmatched procedure entries verbosely
+  private static final boolean VERBOSE_UNMATCHED_PROCEDURE_ENTRIES = false;
+
   final static String comment_prefix = "//";
   final static String declaration_header = "DECLARE";
 
@@ -81,24 +84,18 @@ public final class FileIO {
    * Calls @link{read_declaration_file(String, fn_regexp)} for each element
    * of files.  See the definition of that function.
    **/
-  static void read_declaration_files(String[] files, PptMap all_ppts, Pattern fn_regexp) {
-    for (int i=0; i<files.length; i++)
+  static void read_declaration_files(Collection files, PptMap all_ppts,
+                                     Pattern fn_regexp) {
+    for (Iterator i = files.iterator(); i.hasNext(); ) {
+      String file = (String) i.next();
+      System.out.print(".");  // show progress
       try {
-	read_declaration_file(files[i], all_ppts, fn_regexp);
+	read_declaration_file(file, all_ppts, fn_regexp);
       } catch (IOException e) {
 	e.printStackTrace();
 	throw new Error(e.toString());
       }
-    // Now done by read_declaration_file, on a file-by-file basis.
-    // after_processing_all_declarations(all_ppts);
-  }
-
-  /**
-   * Calls @link{read_declaration_file(String, fn_regexp)} for each element
-   * of files.  See the definition of that function.
-   **/
-  static void read_declaration_files(Vector files, PptMap all_ppts, Pattern fn_regexp) {
-    read_declaration_files((String[])files.toArray(new String[0]), all_ppts, fn_regexp);
+    }
   }
 
 
@@ -275,21 +272,38 @@ public final class FileIO {
     }
 
     // Print the Invocation on two lines, indented by two spaces
-    void format(PrintStream out) {
-      System.out.println("  " + fn_name);
-      System.out.print("    ");
+    String format() {
+      StringWriter sw = new StringWriter();
+      PrintWriter pw = new PrintWriter(sw);
+
+      pw.println("  " + fn_name);
+      pw.print("    ");
       for (int j=0; j<vals.length; j++) {
         if (j != 0)
-          System.out.print(", ");
+          pw.print(", ");
         Object val = vals[j];
         if (val instanceof int[])
-          System.out.print(ArraysMDE.toString((int[]) val));
+          pw.print(ArraysMDE.toString((int[]) val));
         else if (val instanceof String)
-          System.out.print((String)val);
+          pw.print((String)val);
         else
-          System.out.print(val);
+          pw.print(val);
       }
-      System.out.println();
+      pw.println();
+
+      return sw.toString();
+    }
+    
+    // Return true if the invocations print the same
+    public boolean equals(Object other) {
+      if (other instanceof FileIO.Invocation)
+        return this.format().equals(((FileIO.Invocation) other).format());
+      else
+        return false;
+    }
+
+    public int hashCode() {
+      return this.format().hashCode();
     }
   }
 
@@ -501,35 +515,35 @@ public final class FileIO {
   //  *       it defaults to all of the files.
   //  *     RANDOM_SEED is a triple of numbers, each in range(0,256), used to
   //  *       initialize the random number generator.
-  /**
-   * Read data from .dtrace files.
-   * Calls @link{read_data_trace_file(String,PptMap,Pattern)} for each
-   * element of filenames.
-   **/
-  static void read_data_trace_files(String[] filenames, PptMap all_ppts, Pattern fn_regexp) {
-    for (int i=0; i<filenames.length; i++)
-      try {
-	read_data_trace_file(filenames[i], all_ppts, fn_regexp);
-      } catch (IOException e) {
-	e.printStackTrace();
-	throw new Error(e.toString());
-      }
-    System.out.println("Read " + filenames.length + " data trace file"
-                       + ((filenames.length == 1) ? "" : "s"));
-  }
 
   /**
    * Read data from .dtrace files.
    * Calls @link{read_data_trace_file(String,PptMap,Pattern)} for each
    * element of filenames.
    **/
-  static void read_data_trace_files(Vector filenames, PptMap all_ppts, Pattern fn_regexp) {
-    read_data_trace_files((String[])filenames.toArray(new String[]{}), all_ppts, fn_regexp);
+  static void read_data_trace_files(Collection files, PptMap all_ppts,
+                                    Pattern fn_regexp) throws IOException {
+
+    init_call_stack_and_hashmap();
+    
+    for (Iterator i = files.iterator(); i.hasNext(); ) {
+      System.out.print(".");
+      String file = (String) i.next();
+      read_data_trace_file(file, all_ppts, fn_regexp);
+    }
+
+    process_unmatched_procedure_entries();
   }
+
 
   // for debugging only.  We stash values here to be examined/printed later.
   static public LineNumberReader data_trace_reader;
   static public String data_trace_filename;
+
+  static void init_call_stack_and_hashmap() {
+    call_stack = new Stack();
+    call_hashmap = new HashMap();
+  }
 
   /**
    * Read data from .dtrace file.
@@ -551,8 +565,7 @@ public final class FileIO {
       writer = new FileWriter(new File(filename + ".debug"));
     }
     // init_ftn_call_ct();          // initialize function call counts to 0
-    call_stack = new Stack();
-    call_hashmap = new HashMap();
+
     // Maps from a function to the cumulative modification bits seen for
     // the entry since the time other elements were seen.  There is one tag
     // for each exit point associated with this entry.
@@ -697,8 +710,10 @@ public final class FileIO {
     //   throw e;
     // }
 
-    // We've read all of the records in the dtrace file
-    // Look for unmatched procedure entry points
+  }
+
+
+  static void process_unmatched_procedure_entries() {
     if ((!call_stack.empty()) || (!call_hashmap.isEmpty())) {
       System.out.println();
       System.out.println("Detected abnormal termination of "
@@ -706,25 +721,53 @@ public final class FileIO {
                          + " functions.");
       if (!call_hashmap.isEmpty()) {
         System.out.println("Unterminated calls:");
-        for (Iterator itor = call_hashmap.values().iterator() ; itor.hasNext() ; ) {
-          Invocation invok = (Invocation) itor.next();
-          invok.format(System.out);
-        }
+        print_invocations(call_hashmap.values());
       }
 
       if (!call_stack.empty()) {
         System.out.println("Remaining call stack:");
-        int size = call_stack.size();
-        for (int i=0; i<size; i++) {
-          Invocation invok = (Invocation)call_stack.elementAt(i);
-          invok.format(System.out);
-        }
+        print_invocations(call_stack);
       }
       System.out.println("End of abnormal termination report");
     }
-
   }
 
+  static void print_invocations(Collection invocations) {
+    if (VERBOSE_UNMATCHED_PROCEDURE_ENTRIES)
+      print_invocations_verbose(invocations);
+    else
+      print_invocations_grouped(invocations);    
+  }
+
+  static void print_invocations_verbose(Collection invocations) {
+    for (Iterator i = invocations.iterator(); i.hasNext(); ) {
+      Invocation invok = (Invocation) i.next();
+      System.out.println(invok.format());
+    }
+  }
+
+  static void print_invocations_grouped(Collection invocations) {
+    // Maps an Invocation to its frequency
+    Map counter = new HashMap();
+
+    for (Iterator i = invocations.iterator(); i.hasNext(); ) {
+      Invocation invok = (Invocation) i.next();
+      if (counter.containsKey(invok)) {
+        Integer oldCount = (Integer) counter.get(invok);
+        Integer newCount = new Integer(oldCount.intValue() + 1);
+        counter.put(invok, newCount);
+      } else {
+        counter.put(invok, new Integer(1));
+      }
+    }
+
+    for (Iterator i = counter.keySet().iterator(); i.hasNext(); ) {
+      Invocation invok = (Invocation) i.next();
+      Integer count = (Integer) counter.get(invok);
+      System.out.println(count + " instances of:");
+      System.out.println(invok.format());
+    }    
+  }
 
   // This procedure fills up vals and mods by side effect.
   static void read_vals_and_mods_from_data_trace_file(LineNumberReader reader, PptTopLevel ppt, Object[] vals, int[] mods, FileWriter writer) throws IOException {

@@ -212,20 +212,12 @@ public final class Daikon {
 
     try {
       System.out.print("Reading declaration files ");
-      for (Iterator i = decl_files.iterator(); i.hasNext(); ) {
-        System.out.print(".");  // show progress
-        String file = (String) i.next();
-        FileIO.read_declaration_file(file, all_ppts, ppt_regexp);
-      }
+      FileIO.read_declaration_files(decl_files, all_ppts, ppt_regexp);
       System.out.println();
       add_combined_exits(all_ppts);
 
       System.out.print("Reading data trace files ");
-      for (Iterator i = dtrace_files.iterator(); i.hasNext(); ) {
-        System.out.print(".");
-        String file = (String) i.next();
-        FileIO.read_data_trace_file(file, all_ppts, ppt_regexp);
-      }
+      FileIO.read_data_trace_files(dtrace_files, all_ppts, ppt_regexp);
       System.out.println();
     } catch (IOException e) {
       System.out.println();
