@@ -4,9 +4,7 @@ Texinfo uses:
 Where the daikon-logo files come from:
  .gif	the original
 	(daikon-logo.gif came from a .bmp earlier on)
- .ps	xv daikon-logo.gif, then save as PostScript (has a bad BoundingBox)
- .epsi	ps2epsi daikon-logo.ps  (has a good BoundingBox)
- .eps	cp -p daikon-logo.epsi daikon-logo.eps
+ .eps   sam2p daikon-logo.png daikon-logo.eps
  .pdf	generated using epstopdf by doc/Makefile
  .png	xv daikon-logo.gif, then save as PNG
  .jpg	xv daikon-logo.gif, then save as JPEG
