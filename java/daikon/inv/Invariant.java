@@ -31,7 +31,7 @@ public abstract class Invariant
   /**
    * Debug tracer for printing invariants
    **/
-  public static final Category debugPrint = Category.getInstance ("daikon.inv.Invariant.print");
+  public static final Category debugPrint = Category.getInstance ("daikon.print");
 
   /**
    * Debug tracer for printing equality invariants
@@ -41,8 +41,7 @@ public abstract class Invariant
   /**
    * Debug tracer for isWorthPrinting() checks.
    **/
-  public static final Category debugIsWorthPrinting = Category.getInstance ("daikon.inv.Invariant.isWorthPrinting");
-
+  public static final Category debugIsWorthPrinting = Category.getInstance ("daikon.print.isWorthPrinting");
 
   /**
    * Real number between 0 and 1.  The probability that the invariant
