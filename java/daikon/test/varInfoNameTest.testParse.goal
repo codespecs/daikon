@@ -12,7 +12,7 @@ x
 p = x[]
 ;# esc_name p is not expressable
 ; simplify_name p
-(elements x)
+(select elems x)
 ;# x.class
 ; parse p x.class
 p = x.class
@@ -25,7 +25,7 @@ p = x.class
 p = x[].class
 ;# esc_name p is not expressable
 ; simplify_name p
-(typeof (elements x))
+(typeof (select elems x))
 ;# this.field
 ; parse p this.field
 p = this.field
@@ -38,7 +38,7 @@ this.field
 p = this.field[]
 ;# esc_name p is not expressable
 ; simplify_name p
-(elements (select field this))
+(select elems (select field this))
 ;# this.field.class
 ; parse p this.field.class
 p = this.field.class
@@ -51,4 +51,4 @@ p = this.field.class
 p = this.field[].class
 ;# esc_name p is not expressable
 ; simplify_name p
-(typeof (elements (select field this)))
+(typeof (select elems (select field this)))
