@@ -26,6 +26,11 @@
 ;;; Instrumentation
 ;;;
 
+(defvar instrumentation-timestamp 1)
+
+(defmacro get-timestamp ()
+  `(incf instrumentation-timestamp))
+
 (defvar *decl-output-stream*)
 
 (defvar doing-orig-parameters nil
@@ -107,16 +112,25 @@ LASTP is non-nil if this is the last form (the return value) in the function bod
 					   `(,orig (copy ,mod)))
 				       params-orig params-modified)
 			   ,@result-body))
-		     result-body)))
+		     result-body))
+		  (begin+body
+		   (cons
+		    (make-write-to-data-trace
+		     (pcl::symbol-append fn-name ":::BEGIN") vars+types)
+		    wrapped-result-body)))
 	     ;; Could also assert that no more types are declared (because I
 	     ;; will check for invariants over everything declared...).
 	     (assert (every #'(lambda (v) (assoc v vars+types)) params))
 
 	     `(defun ,fn-name ,params
 		,@(if decl (list decl) '())
-		,(make-write-to-data-trace
-		  (pcl::symbol-append fn-name ":::BEGIN") vars+types)
-		,@wrapped-result-body)))
+		,@(if params
+		     `((let ,(mapcar #'(lambda (p)
+					 (list (symbol-append p '-modified)
+					       '(get-timestamp)))
+				     params)
+			 ,@begin+body))
+		   begin+body))))
 
 	  ((eq head 'let)
 	   (let* ((bindings (second form))
@@ -130,7 +144,12 @@ LASTP is non-nil if this is the last form (the return value) in the function bod
 					  (car binding)))
 				    bindings))
 		  (result-sans-last-stmt
-		   `(let ,bindings
+		   `(let ,(append bindings
+				  (mapcar #'(lambda (v)
+					      (list (symbol-append v '-modified)
+						    '(get-timestamp)))
+					  (remove-if #'do-od-matched-symbol-p
+						     new-vars)))
 		      ,@(if decl (list decl) '())
 		      ,@(mapcar #'(lambda (stmt)
 				    (instrument-internal stmt
@@ -168,6 +187,7 @@ LASTP is non-nil if this is the last form (the return value) in the function bod
 
 	  ((eq head 'loop)
 	   (if (and (eq (second form) 'while)
+		    (symbolp (third form))
 		    (do-od-matched-symbol-p (third form))
 		    (eq (fourth form) 'do)
 		    (= 5 (length form)))
@@ -184,8 +204,7 @@ LASTP is non-nil if this is the last form (the return value) in the function bod
 		       ,(instrument-internal (car (last form))
 			  fn-name params bound-vars lastp))
 		 (if lastp
-		     ;; Is this right?  Should it be prog1?
-		     `(progn
+		     `(prog1
 			,(instrument-internal form
 			   fn-name params bound-vars nil)
 			,(make-write-to-data-trace
@@ -211,15 +230,33 @@ LASTP is non-nil if this is the last form (the return value) in the function bod
 	  ;; 	     (gensym (pcl::symbol-append fn-name ":::INV"))
 	  ;; 	     bound-vars))
 
+	  (lastp
+	   `(prog1
+		,(instrument-internal form
+		   fn-name params bound-vars nil)
+	      ,(make-write-to-data-trace
+		(pcl::symbol-append fn-name ":::END")
+		bound-vars)))
+	  ((memq head '(setq psetq))
+	   (let* ((vars+values (cdr form))
+		  (new-vars+values '()))
+	     (loop while vars+values
+		   do (progn
+			(let ((var (car vars+values)))
+			  (if (not (do-od-matched-symbol-p var))
+			      (progn
+				(push (symbol-append var '-modified) new-vars+values)
+				(push '(get-timestamp) new-vars+values))))
+			(setq vars+values (cddr vars+values))))
+	     (cons head (nconc (nreverse new-vars+values) (cdr form)))))
+	  ((eq head 'quote)
+	   form)
+	  ((listp form)
+	   (mapcar #'(lambda (f)
+		       (instrument-internal f fn-name params bound-vars lastp))
+		   form))
 	  (t
-	   (if lastp
-	       `(progn
-		  ,(instrument-internal form
-		     fn-name params bound-vars nil)
-		  ,(make-write-to-data-trace
-		    (pcl::symbol-append fn-name ":::END")
-		    bound-vars))
-	     form)))))
+	   form))))
 
 (defun make-write-to-data-trace (marker bound-vars)
   "BOUND-VARS is a list of (VAR . TYPE) conses."

@@ -176,33 +176,50 @@
 	       ,(format nil "~a~~%" program-point-name))
        ,@(loop for var+type in var+type-list
 	       nconc (let* ((var (car var+type)) ; actually expressions
+			    (var-modified (symbol-append var '-modified))
+			    ;; These could be computed once and let-bound,
+			    ;; for the case when there are multiple accessors.
+			    (modified-time-expr-for-get `(get ',program-point-name ',var-modified 0))
+			    (modified-time-expr-for-set `(get ',program-point-name ',var-modified))
+			    (modified-bit-expr `(if (> ,var-modified ,modified-time-expr-for-get) 1 0))
 			    (type (cdr var+type))
 			    (var-sans-spaces (nsubstitute #\_ #\space (format nil "~s" var))))
-		       (loop for function in (accessors-for-type type)
-			     collect (cond
-				      ((eq function 'identity)
-				       `(format *dtrace-output-stream*
-						,(format nil "~a~c~~s~c1~~%" var-sans-spaces #\newline #\newline)
-						,var))
-				      ((member function '(inv-format-array-integer-1
-							  inv-format-array-character-1))
-				       `(format *dtrace-output-stream*
-						;; use of "~~a" instead of "~~s"
-						,(format nil "~a~c~~a~c1~~%" var-sans-spaces #\newline #\newline)
-						(,function ,var)))
-				      ((and (consp function)
-					    (atom (cdr function)))
-				       `(format *dtrace-output-stream*
-						,(format nil "~a~a~c~~s~c1~~%" var-sans-spaces (cdr function) #\newline #\newline)
-						,(if (eq (car function) 'identity)
-						     var
-						   `(funcall ,(car function) ,var))))
-				      (t
-				       `(format *dtrace-output-stream*
-						,(format nil "~a.~a~c~~s~c1~~%" var-sans-spaces function #\newline #\newline)
-						(,function ,var)))))))
+		       (append
+			(loop for function in (accessors-for-type type)
+			      collect (cond
+				       ((eq function 'identity)
+					`(format *dtrace-output-stream*
+						 ,(format nil "~a~c~~s~c~~s~~%" var-sans-spaces #\newline #\newline)
+						 ,var
+						 ,modified-bit-expr))
+				       ((member function '(inv-format-array-integer-1
+							   inv-format-array-character-1))
+					`(format *dtrace-output-stream*
+						 ;; use of "~~a" instead of "~~s"
+						 ,(format nil "~a~c~~a~c~~s~~%" var-sans-spaces #\newline #\newline)
+						 (,function ,var)
+						 ,modified-bit-expr))
+				       ((and (consp function)
+					     (atom (cdr function)))
+					`(format *dtrace-output-stream*
+						 ,(format nil "~a~a~c~~s~c~~s~~%" var-sans-spaces (cdr function) #\newline #\newline)
+						 ,(if (eq (car function) 'identity)
+						      var
+						    `(funcall ,(car function) ,var))
+						 ,modified-bit-expr))
+				       (t
+					`(format *dtrace-output-stream*
+						 ,(format nil "~a.~a~c~~s~c~~s~~%" var-sans-spaces function #\newline #\newline)
+						 (,function ,var)
+						 ,modified-bit-expr))))
+			;; `((setq ,var-modified 0))
+			;; This doesn't really need to be done unconditionally,
+			;; but it's better than redoing the test, I guess!
+			`((setf ,modified-time-expr-for-set ,var-modified))
+			)))
        (format *dtrace-output-stream* "~%")
        )))
+;; (macroexpand '(WRITE-TO-DATA-TRACE |P173-14.3:::BEGIN| ((X . INTEGER) (Y . INTEGER))))
 
 ;;; Old version that used type-lists, which merge adjacent variables of the
 ;;; same type.  The added complexity isn't worth the small potential

@@ -95,6 +95,7 @@
   (with-data-trace "p177-14.8.dtrace"
     (loop for i from 1 to 100
 	  do (let ((k (random-range -100 100)))
+	       (declare (type integer k))
 	       (p177-14.8 (mod k 10) k)))))
 
 ;; page 177, program (14.9):
@@ -110,6 +111,7 @@
   (with-data-trace "p177-14.9.dtrace"
     (loop for i from 1 to 100
 	  do (let ((k (random-range -100 100)))
+	       (declare (type integer k))
 	       (p177-14.9 (mod k 10) k)))))
 
 ;; page 177, near bottom of page:
@@ -127,6 +129,7 @@
   (with-data-trace "p177-1.dtrace"
     (loop for i from 1 to 100
 	  do (let ((k (random-range -100 100)))
+	       (declare (type integer k))
 	       (p177-1 (mod k 10) k)))))
 
 ;; page 177, very bottom of page:
@@ -143,6 +146,7 @@
   (with-data-trace "p177-2.dtrace"
     (loop for i from 1 to 100
 	  do (let ((k (random-range -100 100)))
+	       (declare (type integer k))
 	       (p177-2 (mod k 10) k)))))
 
 ;;; end of: increment k under the invariance j = k mod 10
@@ -186,6 +190,7 @@
     (loop for i from 1 to 100
 	  do (let* ((n (random-range 7 13))
 		    (b (make-array n)))
+	       (declare (type integer n) (type (array integer 1) b))
 	       (loop for j from 0 to (- n 1)
 		     do (setf (aref b j) (random-range -100 100)))
 	       (p180-15.1.1 b n)))))
@@ -261,6 +266,7 @@
     (loop for i from 1 to 100
 	  do (let* ((n (random-range 7 13))
 		    (b (make-array n)))
+	       (declare (type integer n) (type (array integer 1) b))
 	       (loop for j from 0 to (- n 1)
 		     do (setf (aref b j) (random-range -100 100)))
 	       (p184-3 b n)))))
@@ -286,6 +292,7 @@
 		    (q1 (random-range -100 100))
 		    (q2 (random-range -100 100))
 		    (q3 (random-range -100 100)))
+	       (declare (type integer q0 q1 q2 q3))
 	       (p187 q0 q1 q2 q3)))))
 
 ;;; This one isn't stated formally, but via pictures and "x not here".
@@ -353,6 +360,7 @@
     (loop for i from 1 to 100
 	  do (let* ((x (random-range 1 100))
 		    (y (random-range 1 100)))
+	       (declare (type integer x y))
 	       (p191-2 x y)))))
 
 
