@@ -59,8 +59,10 @@ public class Daikon {
     int num_decl_files = 0;
     int num_dtrace_files = 0;
 
+    System.out.print("Reading input files ");
     try {
       for (int i=0; i<args.length; i++) {
+        System.out.print(".");
         String file = args[i];
         if (file.indexOf(".decls") != -1) {
           FileIO.read_declaration_file(file, all_ppts, null);
@@ -69,10 +71,13 @@ public class Daikon {
           FileIO.read_data_trace_file(file, all_ppts, null);
           num_dtrace_files++;
         } else {
+          System.out.println();
           throw new Error("Unrecognized file type: " + file);
         }
       }
+      System.out.println();
     } catch (IOException e) {
+      System.out.println();
       e.printStackTrace();
       throw new Error(e.toString());
     }
@@ -114,7 +119,8 @@ public class Daikon {
                                          ? "no"
                                          : Integer.toString(pconds.length))
                                + " splitters for " + ppt.name);
-          ppt.addConditions(pconds);
+          if (pconds != null)
+            ppt.addConditions(pconds);
         }
         ppt.print_invariants_maybe();
         ppt.clear_view_caches();

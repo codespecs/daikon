@@ -54,6 +54,10 @@ public class VarInfo implements Cloneable {
                                 // if it is canonical.
   public Object dynamic_constant;
 
+  public Vector views;          // All views containing this object.
+                                // This is needed because findSlice can be
+                                //   so slow.
+
   // list of indices of equal variables;
   //   could be derived from invariants
   //   by checking for inv.comparison == "=".

@@ -1372,6 +1372,8 @@ public class PptTopLevel extends Ppt {
                              + " samples");
       }
     }
+    if (Global.debugPptSplit)
+      System.out.println("" + views_cond.size() + " views on " + this.name);
     for (int i=0; i<views_cond.size(); i++) {
       PptConditional pcond = (PptConditional) views_cond.elementAt(i);
       pcond.initial_processing();

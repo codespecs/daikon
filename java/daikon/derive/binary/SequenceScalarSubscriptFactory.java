@@ -59,14 +59,16 @@ public class SequenceScalarSubscriptFactory extends BinaryDerivationFactory {
 
     // Find an IntComparison relationship over the two variables, if possible.
     Assert.assert(sclvar.ppt == seqsize.ppt);
-    PptSliceGeneric compar_ppt = sclvar.ppt.getView(sclvar, seqsize);
-    IntComparison compar = IntComparison.find(compar_ppt);
-    if (compar != null) {
-      if ((sclvar.varinfo_index < seqsize.varinfo_index)
-          ? compar.core.can_be_gt // sclvar can be less than seqsize
-          : compar.core.can_be_lt // seqsize can be less than sclvar
-          ) {
-        return null;
+    PptSliceGeneric compar_slice = sclvar.ppt.getView(sclvar, seqsize);
+    if (compar_slice != null) {
+      IntComparison compar = IntComparison.find(compar_slice);
+      if (compar != null) {
+        if ((sclvar.varinfo_index < seqsize.varinfo_index)
+            ? compar.core.can_be_gt // sclvar can be less than seqsize
+            : compar.core.can_be_lt // seqsize can be less than sclvar
+            ) {
+          return null;
+        }
       }
     }
 
