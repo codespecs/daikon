@@ -10,7 +10,6 @@ import daikon.inv.filter.*;
 
 import utilMDE.*;
 import gnu.getopt.*;
-import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.util.*;

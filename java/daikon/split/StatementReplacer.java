@@ -5,7 +5,6 @@ import daikon.*;
 import daikon.split.misc.*;
 import java.io.*;
 import java.util.*;
-import org.apache.log4j.Logger;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 import jtb.JavaParser;
