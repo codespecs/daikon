@@ -15,7 +15,7 @@ public final class SingleScalarFactory {
     Assert.assert(ppt.arity == 1);
     VarInfo var = ppt.var_infos[0];
     // Assert.assert(! var.rep_type.isArray());
-    Assert.assert(var.rep_type == ProglangType.INT);
+    Assert.assert(var.rep_type.isIntegral());
 
     Vector result = new Vector();
     result.add(OneOfScalar.instantiate(ppt));

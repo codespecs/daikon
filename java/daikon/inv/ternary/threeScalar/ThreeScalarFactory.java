@@ -33,9 +33,9 @@ public final class ThreeScalarFactory {
     VarInfo var2 = ppt.var_infos[1];
     VarInfo var3 = ppt.var_infos[2];
 
-    Assert.assert((var1.rep_type == ProglangType.INT)
-                  && (var2.rep_type == ProglangType.INT)
-                  && (var3.rep_type == ProglangType.INT));
+    Assert.assert(var1.rep_type.isIntegral()
+                  && var2.rep_type.isIntegral()
+		  && var3.rep_type.isIntegral());
 
     if (debug.isDebugEnabled()) {
       debug.debug ("Instantiating for " + ppt.name);

@@ -10,7 +10,7 @@
  */
 
 package daikon;
-
+ 
 import java.lang.reflect.*;
 
 import daikon.JTraceInference;
