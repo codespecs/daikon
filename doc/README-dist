@@ -30,9 +30,10 @@ Installing the invariant detection engine
    In sh:
      INVARIANTS_HOME=/directory/goes/here
      export INVARIANTS_HOME
-4. Adjust the path to Perl for the 'instrumentor' script to work.
+4. Adjust the path to Perl in the first line of the 'instrumentor' script.
 5. If you want to detect invariants in C code, download the appropriate
-   version of the C front end and rename it to edgcpfe.
+   version of the C front end and rename it to edgcpfe in a directory on
+   your path.
 6. If you don't already have the Python programming language installed,
    download it from http://www.python.org/.
 
@@ -62,24 +63,24 @@ C front end:
     You may wish to perform this operation with a copy of your program,
     to safeguard your original source code.
  b. Create or modify a Makefile.  Either:
-     * add "dump_trace.o" to the list of OBJECTS that need to be
-       created in your makefile, or
-     * add your source files to Makefile-sample
- c. Build your program in the usual way, perhaps by running "make"; this
+     * If you have no Makefile, add your source files to Makefile-sample
+     * If you have a Makefile, add "dump_trace.o" to the list of object
+       files that need to be created (and linked to create your executable)
+ c. Copy the appropriate files to your directory, including
+    dump_trace.c, dump_trace.h, 
+ d. Build your program in the usual way, perhaps by running "make"; this
     creates an instrumented executable.
 
 Lisp front end:
+  ;; a. Load all the support code.
   (load "load-all")
-  ;; Add instrumentation code to the beginning and end of each function, and
-  ;; to each loop head.
-  ;; The instrumentation writes the values of all the live variables to a file.
+  ;; b. Add instrumentation code to the beginning and end  of each
+  ;;    function, and to each loop head.  The instrumentation writes the
+  ;;    values of all the live variables to a file. 
   (instrument-file "gries.lisp" "gries-instrumented.lisp")
-  (load "gries-instrumented.lisp")
-  ;; run all test-* functions; each test-* function creates one *.dtrace file
-  (test-all)
 
   For efficiency, you might want to compile the Lisp files and run the
-  compiled versions:
+  compiled versions; do the following after (load "load-all")
     (compile-all)	;; only needs to be done once (ever)
     (load-all)		;; only needs to be done explicitly after compiling
 
@@ -104,6 +105,14 @@ files.
 
 When running a program in C, you will need a file label.txt which contains
 a single integer.  (One is provided in the distribution.)
+
+In Lisp, you might do the following after (load "load-all"):
+  ;; Load the instrumented code.
+  (load "gries-instrumented")
+  ;; Run the instrumented code.  This runs all the test-* functions; 
+  ;; each test-* function creates one *.dtrace file
+  (test-all)
+
 
 
 Step 3:  Detect invariants in the data trace files
