@@ -3623,7 +3623,7 @@ public class PptTopLevel extends Ppt {
     PptRelation rel = (PptRelation) children.get(0);
 
     // Loop through each slice
-    slice_loop : for (Iterator i = rel.child.views_iterator(); i.hasNext();) {
+    for (Iterator i = rel.child.views_iterator(); i.hasNext();) {
       PptSlice cslice = (PptSlice) i.next();
 
       // Matching parent variable info.  Skip this slice if there isn't a
@@ -3822,7 +3822,7 @@ public class PptTopLevel extends Ppt {
     slices_to_remove = new ArrayList();
 
     // Loop through each slice
-    slice_loop : for (Iterator i = views_iterator(); i.hasNext();) {
+    for (Iterator i = views_iterator(); i.hasNext();) {
       PptSlice slice = (PptSlice) i.next();
 
       // Build the varlist for the parent.  If any variables are not present in
