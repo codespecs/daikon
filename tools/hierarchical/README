@@ -3,7 +3,8 @@ data, creating dendrograms.
 
 Downloaded from
   http://odur.let.rug.nl/~kleiweg/clustering/clustering.html
-as of 31 July 2002.
+on 31 July 2002.  The only change is to remove "denxview" from the
+default target in the Makefile.
 
-The above webpage is duplicated in this directory as clustering.html .
-Some links may not work in the local copy, however.
+The above webpage is duplicated in this directory as clustering.html
+bug some links may not work in the local copy.
