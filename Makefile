@@ -219,7 +219,7 @@ doc/CHANGES: doc/daikon.texinfo doc/config-options.texinfo doc/invariants-doc.te
 	@echo "** doc/CHANGES file is not up-to-date with respect to documentation files."
 	@echo "** doc/CHANGES must be modified by hand."
 	@echo "** Try:"
-        @echo "     diff -u -s --from-file /home/httpd/html/daikon/dist/doc doc/*.texinfo"
+	@echo "     diff -u -s --from-file /home/httpd/html/daikon/dist/doc doc/*.texinfo"
 	@echo "** (or maybe  touch doc/CHANGES )."
 	@echo "***************************************************************************"
 	@exit 1
