@@ -1,0 +1,69 @@
+# You can pretend this file is -*- perl -*-
+
+### INVARIANT CONFIGURATION
+
+daikon.inv.unary.scalar.UpperBound.enabled = 1
+daikon.inv.unary.scalar.LowerBound.enabled = 1
+daikon.inv.unary.scalar.OneOfScalar.enabled = 1
+daikon.inv.unary.scalar.OneOfScalar.size = 3
+daikon.inv.unary.scalar.NonZero.enabled = 1
+daikon.inv.unary.scalar.Modulus.enabled = 0
+daikon.inv.unary.scalar.NonModulus.enabled = 0
+
+daikon.inv.unary.string.OneOfString.enabled = 1
+
+daikon.inv.unary.sequence.EltOneOf.enabled = 1
+daikon.inv.unary.sequence.EltLowerBound.enabled = 1
+daikon.inv.unary.sequence.EltUpperBound.enabled = 1
+daikon.inv.unary.sequence.OneOfSequence.enabled = 1
+daikon.inv.unary.sequence.EltNonZero.enabled = 1
+daikon.inv.unary.sequence.NoDuplicates.enabled = 1
+daikon.inv.unary.sequence.EltwiseIntComparison.enabled = 1
+daikon.inv.unary.sequence.SeqIndexComparison.enabled = 1
+daikon.inv.unary.sequence.SeqIndexNonEqual.enabled = 1
+daikon.inv.unary.sequence.CommonSequence.enabled = 0
+
+daikon.inv.unary.stringsequence.EltOneOfString.enabled = 1
+daikon.inv.unary.stringsequence.OneOfStringSequence.enabled = 1
+daikon.inv.unary.stringsequence.CommonStringSequence.enabled = 0
+
+daikon.inv.binary.twoScalar.LinearBinary.enabled = 1
+daikon.inv.binary.twoScalar.IntComparison.enabled = 1
+daikon.inv.binary.twoScalar.NonEqual.enabled = 1
+daikon.inv.binary.twoScalar.NonEqual.integral-only = 1
+daikon.inv.binary.twoScalar.FunctionUnary.enabled = 1
+
+daikon.inv.binary.twoString.StringComparison.enabled = 1
+
+daikon.inv.binary.twoSequence.SubSequence.enabled = 1
+daikon.inv.binary.twoSequence.SeqComparison.enabled = 1
+daikon.inv.binary.twoSequence.Reverse.enabled = 1
+daikon.inv.binary.twoSequence.PairwiseIntComparison.enabled = 1
+daikon.inv.binary.twoSequence.PairwiseLinearBinary.enabled = 1
+daikon.inv.binary.twoSequence.PairwiseFunctionUnary.enabled = 1
+
+daikon.inv.binary.sequenceScalar.Member.enabled = 1
+daikon.inv.binary.sequenceScalar.SeqIntComparison.enabled = 1
+
+daikon.inv.binary.sequenceString.Member.enabled = 1
+
+daikon.inv.ternary.threeScalar.FunctionBinary.enabled = 1
+daikon.inv.ternary.threeScalar.LinearTernary.enabled = 1
+
+### DERIVED VARIABLE CONFIGURATION
+
+daikon.derive.unary.SequenceLength.enabled = 1
+daikon.derive.unary.SequenceInitial.enabled = 0
+daikon.derive.unary.SequenceMax.enabled = 0
+daikon.derive.unary.SequenceMin.enabled = 0
+daikon.derive.unary.SequenceSum.enabled = 0
+
+daikon.derive.binary.SequenceScalarSubscript.enabled = 1
+daikon.derive.binary.SequenceScalarSubsequence.enabled = 1
+daikon.derive.binary.SequenceStringSubscript.enabled = 1
+daikon.derive.binary.SequenceStringSubsequence.enabled = 1
+daikon.derive.binary.StringSequencesIntersection.enabled = 0
+daikon.derive.binary.ScalarSequencesIntersection.enabled = 0
+daikon.derive.binary.StringSequencesUnion.enabled = 0
+daikon.derive.binary.ScalarSequencesUnion.enabled = 0
+
