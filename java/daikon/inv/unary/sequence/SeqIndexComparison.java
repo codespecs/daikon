@@ -7,6 +7,9 @@ import daikon.inv.*;
 import java.util.*;
 import utilMDE.*;
 
+// This class represnts a comparison between elements of a sequence
+// and the indices of those elements; for instance,
+//   "for all i, a[i] > i".
 public final class SeqIndexComparison extends SingleSequence {
 
   public IntComparisonCore core;
