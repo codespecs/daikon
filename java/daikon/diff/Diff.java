@@ -1,7 +1,7 @@
-package daikon;
+package daikon.diff;
 
 import daikon.inv.*;
-import daikon.diff.*;
+import daikon.*;
 import java.io.*;
 import java.util.*;
 import javax.swing.tree.*;
@@ -16,7 +16,8 @@ public final class Diff {
     "  -h  Display this usage message" + lineSep +
     "  -d  Display the tree of differing invariants (default)" + lineSep +
     "  -a  Display the tree of all invariants" + lineSep +
-    "  -c  Display the number of differing invariants" + lineSep
+    "  -c  Display the number of differing invariants" + lineSep +
+    "  -s  Display the statistics between two sets of invariants" + lineSep
     ;
 
 
@@ -24,6 +25,7 @@ public final class Diff {
   private static final int PRINT_DIFF_INV = 0;
   private static final int PRINT_ALL_INV = 1;
   private static final int COUNT_DIFF_INV = 2;
+  private static final int STATS_INV = 3;
   private static int mode = PRINT_DIFF_INV;
 
   /** Read two PptMap objects from their respective files and diff them. */
@@ -31,7 +33,7 @@ public final class Diff {
   StreamCorruptedException, OptionalDataException, IOException,
   ClassNotFoundException {
 
-    Getopt g = new Getopt("daikon.Diff", args, "hdac");
+    Getopt g = new Getopt("daikon.Diff", args, "hdacs");
     int c;
     while ((c = g.getopt()) !=-1) {
       switch (c) {
@@ -47,6 +49,10 @@ public final class Diff {
         break;
       case 'c':
         mode = COUNT_DIFF_INV;
+        break;
+      case 's':
+        mode = STATS_INV;
+        break;
       case '?':
         break; // getopt() already printed an error
       default:
@@ -100,6 +106,15 @@ public final class Diff {
         System.out.println("There are " + differingInvariants +
                            " differing invariants.");
       }
+      break;
+    case STATS_INV:
+      {
+        StatisticsVisitor v = new StatisticsVisitor();
+        root.accept(v);
+        System.out.println("Invariant similarities and differences of " +
+                           filename1 + " vs. " + filename2);
+        System.out.println(v.format());
+      }      
       break;
     default:
       Assert.assert(false, "Can't get here");
