@@ -214,11 +214,14 @@ public final class CLASSNAME
     String comparator = core.format_comparator();
     if ("==".equals(comparator)) {
       comparator = "EQ";
+    } else if (comparator.equals("?cmp?")) {
+      return format_too_few_samples(OutputFormat.SIMPLIFY, null);
     }
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
-        { var().name });
-    return form[0] + "(" + comparator + " " + form[1] + " |i|)" + form[2];
+        { var().name }, false, false, false, true);
+    return form[0] + "(" + comparator + " " + form[1] + " " + form[2] + ")"
+      + form[3];
   }
 
   public void add_modified(PRIMITIVE[] a, int count) {
