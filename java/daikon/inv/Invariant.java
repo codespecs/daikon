@@ -237,7 +237,7 @@ public abstract class Invariant
    **/
   public void destroy() {
     falsified = true;
-    PptSlice.debugFlow.debug("Invariant destoroyed " + format() + " at " + ppt.parent.name);
+    PptSlice.debugFlow.debug("Invariant destroyed " + format() + " at " + ppt.parent.name);
     // ppt.removeInvariant(this);
   }
 
