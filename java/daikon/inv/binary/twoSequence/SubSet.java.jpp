@@ -217,6 +217,34 @@ public class SUBSET
         || (SUBSET.isObviousSubSet(var2, var1))) {
       return true;
     }
+
+    VarInfo subvar, supervar;
+    if (var1_in_var2) {
+      subvar = var1;
+      supervar = var2;
+    } else {
+      subvar = var2;
+      supervar = var1;
+    }
+
+    // Uninteresting if this is of the form x[0..i] subsequence
+    // x[0..j].  Not necessarily obvious.
+    VarInfo subvar_super = subvar.isDerivedSubSequenceOf();
+    if (subvar_super == supervar) {
+      debug.debug ("  returning true because subvar_super == supervar");
+      return true;
+    }
+
+    VarInfo supervar_super = supervar.isDerivedSubSequenceOf();
+    if (subvar_super != null && subvar_super == supervar_super) {
+      debug.debug ("  returning true because subvar_super == supervar_super");
+      return true;
+    }
+
+    if ((SubSequence.isObviousSubSequence(var1, var2))
+        || (SubSequence.isObviousSubSequence(var2, var1))) {
+      return true;
+    }
     return super.isObviousStatically(vis);
   }
 
