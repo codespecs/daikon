@@ -48,4 +48,7 @@ public abstract class UnaryDerivation
     return 1 + base.derivedDepth();
   }
 
+  public boolean canBeMissing() {
+    return base.canBeMissing;
+  }
 }

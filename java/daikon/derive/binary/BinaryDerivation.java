@@ -87,6 +87,10 @@ public abstract class BinaryDerivation
     return 1 + Math.max(base1.derivedDepth(), base2.derivedDepth());
   }
 
+  public boolean canBeMissing() {
+    return base1.canBeMissing || base2.canBeMissing;
+  }
+
   /* [INCR]
   public boolean isDerivedFromNonCanonical() {
     // We insist that both are canonical, not just one.
