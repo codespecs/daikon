@@ -14,6 +14,57 @@
 (add-to-list 'auto-mode-alist '("\\.jpp\\'" . java-mode))
 (add-to-list 'auto-mode-alist '("\\.java\\.goal\\'" . java-mode))
 
+
+;;; Hiding debugging statements in Java code
+;; (Be careful when editing near the ellipsis ("...") that indicates hidden
+;; text.)
+
+(defvar java-debug-hiding-retain-if
+  '(java-mode ("if \(.*\.isLoggable *(.*) \\({\\)" 1) "}" "/[*/]"
+	     nil
+	     hs-c-like-adjust-block-beginning)
+  "Leaves the \"if (debug.isLoggable(Level.FINE)) ...\" line visible.")
+(defvar java-debug-hiding-hide-if
+  '(java-mode ("\\(\n\\)[ \t]*if \(\\(debug.*\\|.*\.isLoggable *(.*\\)) *{?$" 1) "}" "/[*/]"
+		  forward-2-sexps-then-forward-statement
+		  hs-dont-adjust-block-beginning)
+  "Elides even the \"if (debug.isLoggable(Level.FINE)) ...\" line.")
+
+(defvar hs-all-hidden nil "Current state of hideshow for toggling all.")
+
+(defun hide-debugging-statements ()
+  "Toggle hiding debugging statements in Java code."
+  (interactive)
+  (require 'hideshow)
+  (add-to-list 'hs-special-modes-alist java-debug-hiding-hide-if)
+  (setq hs-hide-comments-when-hiding-all nil)
+  (hs-minor-mode 1)
+  (setq hs-all-hidden (not hs-all-hidden))
+  (if hs-all-hidden
+      (progn
+	(hs-hide-all)
+	(message "Debugging blocks are hidden."))
+    (progn
+      (hs-show-all)
+      (message "Debugging blocks are shown (non-hidden)."))))
+
+(defun forward-2-sexps-then-forward-statement (arg)
+  "Move forward two sexps, then move forward one (or ARG) statements.
+The statement may be compound or simple."
+  (forward-sexp 2)
+  (if (or (not (= arg 1)) (looking-at " *{"))
+      (forward-sexp arg)
+    (c-end-of-statement)))
+
+(defun hs-dont-adjust-block-beginning (initial)
+  "Adjust INITIAL, the buffer position after `hs-block-start-regexp'.
+Actually, point is never moved; a new position is returned that is
+the end of the C-function header.  This adjustment function is meant
+to be assigned to `hs-adjust-block-beginning' for Java-debug mode.
+This particular function doesn't adjust the block beginning at all."
+  (point))
+
+
 ;;; Ediff customizations
 (setq ediff-window-setup-function 'ediff-setup-windows-plain) ; no multiframe
 (setq-default ediff-ignore-similar-regions t)   ; ignore whitespace differences
