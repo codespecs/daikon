@@ -18,6 +18,8 @@ public final class ValueAndModified {
 
   public ValueAndModified(Object val, int mod) {
     Assert.assert(Intern.isInterned(val));
+    // Type should be Long, not Integer
+    Assert.assert(! (val instanceof Integer));
     value = val;
     modified = mod;
   }

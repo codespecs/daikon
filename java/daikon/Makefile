@@ -1,6 +1,6 @@
 UTILMDE_DIR := $(HOME)/java/utilMDE
 JAVA_FILES := $(shell find . \( -name '*daikon-java*' -o -name '*-cpp.java' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
-TAG_FILES := $(shell find . \( -name '*daikon-java*' -o -name CVS \) -prune -o -name '*.java' -print)
+TAG_FILES := $(shell find . \( -name '*daikon-java*' -o -name CVS -o -name 'split' \) -prune -o -name '*.java' -print)
 JAVAC := jikes -g +E +F
 # Should these really be targets in the below, or should I use "make
 # ${AUTO_GENERATED_FILES}"? I don't want to omit running just because these
@@ -16,11 +16,13 @@ AUTO_GENERATED_FILES = \
 	PptSlice2.java \
 	PptSlice3.java
 
-all:	all_via_daikon
+all:	all_directly
 
+## In general, don't use this; it misses some files
 all_via_daikon:	Runtime.class Diff.class ${AUTO_GENERATED_FILES}
 	${JAVAC} Daikon.java
 
+## This is so long I can't see the result on the same screen as the command.
 all_directly: ${AUTO_GENERATED_FILES}
 	${JAVAC} ${JAVA_FILES}
 
@@ -34,7 +36,7 @@ all_javac:	all_via_javac
 Runtime.class: Runtime.java
 	${JAVAC} Runtime.java
 
-Diff.class: Diff.java
+Diff.class: Diff.java ${AUTO_GENERATED_FILES}
 	${JAVAC} Diff.java
 
 # Wrong, becaue Daikon.class might be up to date even if other files aren't
@@ -79,6 +81,11 @@ jlint:
 audit:
 	cd $(HOME)/java && maudit daikon | perl -p -e 's/^daikon\///'
 
+test: tests
+
+tests:
+	cd ../tests && $(MAKE) all
+
 showvars:
 	@echo JAVA_FILES = $(JAVA_FILES)
 
@@ -95,8 +102,9 @@ list_java_files:
 # "-e" means exit immediately if any error, rather than returning 
 # the status of the last command.
 
-JAVA_CPP = (cp -pf $@ $@-bak; set -e; java-cpp $< -DDEFINEDVAR > $@-postproc; mv -f $@-postproc $@; chmod -w $@)
+JAVA_CPP = (mv -f $@ $@-bak; set -e; java-cpp.pl -DDEFINEDVAR $< > $@; chmod -w $@)
 
+# JAVA_CPP = (cp -pf $@ $@-bak; set -e; java-cpp $< -DDEFINEDVAR > $@-postproc; mv -f $@-postproc $@; chmod -w $@)
 ## Here are alternate ways of writing the same command:
 ## I could use "define", but that's specific to GNU Make
 ## I can't do this because the CPP defined variable changes.

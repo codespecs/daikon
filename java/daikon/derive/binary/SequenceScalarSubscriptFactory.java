@@ -85,7 +85,7 @@ public final class SequenceScalarSubscriptFactory extends BinaryDerivationFactor
     // array[0], and the subarrays array[0..-1] and array[0..0] are not
     // interesting.
     if (sclvar.isConstant()) {
-      int scl_constant = ((Integer) sclvar.constantValue()).intValue();
+      long scl_constant = ((Long) sclvar.constantValue()).longValue();
       if (scl_constant == 0) {
         Global.tautological_suppressed_derived_variables += 2;
         Global.nonsensical_suppressed_derived_variables += 2;

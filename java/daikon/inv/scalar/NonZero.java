@@ -10,13 +10,13 @@ import utilMDE.*;
 // This also serves as NonNull.
 
 class NonZero extends SingleScalar {
-  int min = Integer.MAX_VALUE;
-  int max = Integer.MIN_VALUE;
+  long min = Long.MAX_VALUE;
+  long max = Long.MIN_VALUE;
 
   // If nonzero, use this as the range instead of the actual range.
   // This lets one use a specified probability of nonzero (say, 1/10
   // for pointers).
-  int override_range = 0;
+  long override_range = 0;
   boolean pointer_type = false;
 
   private NonZero(PptSlice ppt) {
@@ -47,7 +47,7 @@ class NonZero extends SingleScalar {
   }
 
 
-  public void add_modified(int v, int count) {
+  public void add_modified(long v, int count) {
     // The min and max tests will simultaneoulsy succeed exactly once (for
     // the first value).
     if (v == 0) {
@@ -69,11 +69,11 @@ class NonZero extends SingleScalar {
     if ((override_range == 0) && ((min > 0) || (max < 0)))
       return Invariant.PROBABILITY_UNKNOWN;
     else {
-      int range;
+      long range;
       if (override_range != 0) {
         range = override_range;
       } else {
-        int modulus = 1;
+        long modulus = 1;
         {
           for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
             Invariant inv = (Invariant) itor.next();

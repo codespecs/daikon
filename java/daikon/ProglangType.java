@@ -35,14 +35,17 @@ public final class ProglangType implements java.io.Serializable {
 
   // Use == to compare, because ProglangType objects are interned.
   public final static ProglangType INT = ProglangType.intern("int", 0);
+  public final static ProglangType LONG_PRIMITIVE = ProglangType.intern("long", 0);
   public final static ProglangType DOUBLE = ProglangType.intern("double", 0);
   public final static ProglangType STRING = ProglangType.intern("String", 0);
   public final static ProglangType INT_ARRAY = ProglangType.intern("int", 1);
+  public final static ProglangType LONG_PRIMITIVE_ARRAY = ProglangType.intern("long", 1);
   public final static ProglangType DOUBLE_ARRAY = ProglangType.intern("double", 1);
   public final static ProglangType STRING_ARRAY = ProglangType.intern("String", 1);
 
   public final static ProglangType BOOLEAN = ProglangType.intern("boolean", 0);
   public final static ProglangType INTEGER = ProglangType.intern("Integer", 0);
+  public final static ProglangType LONG_OBJECT = ProglangType.intern("Long", 0);
 
   public final static ProglangType VECTOR = ProglangType.intern("Vector", 0);
   public final static ProglangType OBJECT = ProglangType.intern("Object", 0);
@@ -194,8 +197,11 @@ public final class ProglangType implements java.io.Serializable {
   final static String BASE_INTEGER = "Integer";
 
   // avoid duplicate allocations
-  final static Integer IntegerZero = Intern.internedInteger(0);
-  final static Integer IntegerOne = Intern.internedInteger(1);
+  // No need for the Integer versions; use Long instead.
+  // final static Integer IntegerZero = Intern.internedInteger(0);
+  // final static Integer IntegerOne = Intern.internedInteger(1);
+  final static Long LongZero = Intern.internedLong(0);
+  final static Long LongOne = Intern.internedLong(1);
   final static Double DoubleZero = Intern.internedDouble(0);
 
   // Given a string representation of a value (of the type represented by
@@ -212,7 +218,7 @@ public final class ProglangType implements java.io.Serializable {
 	  value = value.substring(1, value.length()-1);
 	return value.intern();
       } else if ((base == BASE_ADDRESS) || (base == BASE_POINTER)) {
-	return Intern.intern(Integer.valueOf(value, 16));
+	return Intern.intern(Long.valueOf(value, 16));
       } else if (base == BASE_CHAR) {
         // This will fail if the character is output as an integer
         // (as I believe the C front end does).
@@ -224,18 +230,18 @@ public final class ProglangType implements java.io.Serializable {
           c = UtilMDE.unquote(value).charAt(0);
         else
           throw new Error("Bad character: " + value);
-        return Intern.internedInteger(Character.getNumericValue(c));
+        return Intern.internedLong(Character.getNumericValue(c));
       } else if (base == BASE_INT) {
         // Is this still necessary?
         // Hack for Java objects, fix later I guess.
         if (value.equals("null"))
-          return IntegerZero;
+          return LongZero;
         // Hack for booleans
         if (value.equals("false"))
-          return IntegerZero;
+          return LongZero;
         if (value.equals("true"))
-          return IntegerOne;
-	return Intern.internedInteger(value);
+          return LongOne;
+	return Intern.internedLong(value);
       // } else if (base == BASE_BOOLEAN) {
       //   return new Boolean(value);
       } else if (base == BASE_DOUBLE) {
@@ -270,12 +276,12 @@ public final class ProglangType implements java.io.Serializable {
       // This big if ... else should deal with all the primitive types --
       // or at least all the ones that can be rep_types.
       if (base == BASE_INT) {
-        int[] result = new int[len];
+        long[] result = new long[len];
         for (int i=0; i<len; i++) {
           if (value_strings[i].equals("null"))
             result[i] = 0;
           else
-            result[i] = Integer.parseInt(value_strings[i]);
+            result[i] = Long.parseLong(value_strings[i]);
         }
         return Intern.intern(result);
       } else if (base == BASE_DOUBLE) {

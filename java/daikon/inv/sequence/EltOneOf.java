@@ -23,13 +23,13 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
   // (That depends on the slice; maybe not until the slice is cleared out.
   // But so few values is cheap, so this is quite fine for now and long-term.)
 
-  private int [] elts;
+  private long [] elts;
   private int num_elts;
 
   EltOneOf (PptSlice ppt) {
     super(ppt);
 
-    elts = new int [LIMIT];
+    elts = new long [LIMIT];
 
     num_elts = 0;
   }
@@ -48,7 +48,7 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
 
     // Not sure whether interning is necessary (or just returning an Integer
     // would be sufficient), but just in case...
-    return Intern.internedInteger(elts[0]);
+    return Intern.internedLong(elts[0]);
 
   }
 
@@ -84,9 +84,9 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
       return var().name + " elements one of " + subarray_rep();
   }
 
-  public void add_modified(int[] a, int count) {
+  public void add_modified(long[] a, int count) {
     for (int ai=0; ai<a.length; ai++) {
-      int v = a[ai];
+      long v = a[ai];
 
     for (int i=0; i<num_elts; i++)
       if (elts[i] == v)

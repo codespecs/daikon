@@ -33,7 +33,7 @@ class MergeSortSplitter_merge_1 extends Splitter {
 	}
 
 	public boolean test(ValueTuple vt) {
-		return (array_varinfo.getIntArrayValue(vt) [leftPos_varinfo.getIntValue(vt)] <= array_varinfo.getIntArrayValue(vt) [rightPos_varinfo.getIntValue(vt)]);
+		return (array_varinfo.getIntArrayValue(vt) [leftPos_varinfo.getIndexValue(vt)] <= array_varinfo.getIntArrayValue(vt) [rightPos_varinfo.getIndexValue(vt)]);
 	}
 }
 

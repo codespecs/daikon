@@ -39,11 +39,11 @@ public final class SequenceLength extends UnaryDerivation {
     ProglangType rep_type = var_info.rep_type;
 
     if (rep_type == ProglangType.INT_ARRAY) {
-      len = ((int[])val).length;
+      len = ((long[])val).length;
     } else {
       len = ((Object[])val).length;
     }
-    return new ValueAndModified(Intern.internedInteger(len), source_mod);
+    return new ValueAndModified(Intern.internedLong(len), source_mod);
   }
 
   protected VarInfo makeVarInfo() {

@@ -33,7 +33,7 @@ class FunctionUnary extends TwoScalar {
   }
 
 
-  public void add_modified(int x_int, int y_int, int count) {
+  public void add_modified(long x_int, long y_int, int count) {
     core.add_modified(x_int, y_int, count);
   }
 

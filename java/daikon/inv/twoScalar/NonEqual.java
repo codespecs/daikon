@@ -7,15 +7,15 @@ import utilMDE.*;
 
 // Also serves as NonAliased.
 public final class NonEqual extends TwoScalar {
-  int min1 = Integer.MAX_VALUE;
-  int min2 = Integer.MAX_VALUE;
-  int max1 = Integer.MIN_VALUE;
-  int max2 = Integer.MIN_VALUE;
+  long min1 = Long.MAX_VALUE;
+  long min2 = Long.MAX_VALUE;
+  long max1 = Long.MIN_VALUE;
+  long max2 = Long.MIN_VALUE;
 
   // If nonzero, use this as the range instead of the actual range.
   // This lets one use a specified probability of nonzero (say, 1/10
   // for pointers).
-  int override_range = 0;
+  long override_range = 0;
 
   // Get this from the Ppt
   // int samples = 0;
@@ -53,7 +53,7 @@ public final class NonEqual extends TwoScalar {
   }
 
 
-  public void add_modified(int v1, int v2, int count) {
+  public void add_modified(long v1, long v2, int count) {
     // probability_cache_accurate = false;
     if (v1 == v2) {
       destroy();
@@ -76,15 +76,15 @@ public final class NonEqual extends TwoScalar {
       if (override_range != 0) {
         probability_one_nonequal = 1 - 1/(double)override_range;
       } else {
-        int overlap = Math.min(max1, max2) - Math.max(min1, min2);
+        long overlap = Math.min(max1, max2) - Math.max(min1, min2);
         // Looks like we're comparing pointers.  Fix this later.
         if (overlap < 0)
           return Invariant.PROBABILITY_JUSTIFIED;
 
         Assert.assert(overlap >= 0);
         overlap++;
-        int range1 = max1 - min1 + 1;
-        int range2 = max2 - min2 + 1;
+        long range1 = max1 - min1 + 1;
+        long range2 = max2 - min2 + 1;
 
         // probability of being equal by chance
         //  = (overlap/range1) * (overlap/range2) * (1/overlap)

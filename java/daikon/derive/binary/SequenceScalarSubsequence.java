@@ -34,8 +34,8 @@ public final class SequenceScalarSubsequence extends BinaryDerivation {
     Object val1 = var_info1.getValue(full_vt);
     if (val1 == null)
       return ValueAndModified.MISSING;
-    int[] val1_array = (int[]) val1;
-    int val2 = var_info2.getIntValue(full_vt);
+    long[] val1_array = (long[]) val1;
+    int val2 = var_info2.getIndexValue(full_vt);
     // len is the number of elements in the subsequence (that's why we add 1).
     int len = val2+1+index_shift;
     if ((len < 0) || (len > val1_array.length))
@@ -52,7 +52,7 @@ public final class SequenceScalarSubsequence extends BinaryDerivation {
     if (len == val1_array.length)
       return new ValueAndModified(val1, mod);
     // System.out.println(getVarInfo().name + " for " + ArraysMDE.toString(val1_array) + ";" + val2 + " => " + ArraysMDE.toString(ArraysMDE.subarray(val1_array, 0, len)));
-    int[] subarr = ArraysMDE.subarray(val1_array, 0, len);
+    long[] subarr = ArraysMDE.subarray(val1_array, 0, len);
     subarr = Intern.intern(subarr);
     return new ValueAndModified(subarr, mod);
   }

@@ -27,7 +27,7 @@ public class SequenceExtremumFactory extends UnaryDerivationFactory {
     // If the length is the constant 0 or 1, adjust the bounds accordingly.
     VarInfo lengthvar = vi.sequenceSize();
     if (lengthvar.isConstant()) {
-      int length_constant = ((Integer) lengthvar.constantValue()).intValue();
+      int length_constant = ((Long) lengthvar.constantValue()).intValue();
       if (length_constant == 0) {
         Global.tautological_suppressed_derived_variables += 4;
         return null;

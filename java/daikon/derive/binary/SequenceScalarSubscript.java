@@ -34,16 +34,16 @@ public final class SequenceScalarSubscript extends BinaryDerivation {
     Object val1 = var_info1.getValue(full_vt);
     if (val1 == null)
       return ValueAndModified.MISSING;
-    int[] val1_array = (int[]) val1;
-    int val2 = var_info2.getIntValue(full_vt) + index_shift;
+    long[] val1_array = (long[]) val1;
+    int val2 = var_info2.getIndexValue(full_vt) + index_shift;
     if ((val2 < 0) || (val2 >= val1_array.length))
       return ValueAndModified.MISSING;
-    int val = val1_array[val2];
+    long val = val1_array[val2];
     int mod = (((mod1 == ValueTuple.UNMODIFIED)
 		&& (mod2 == ValueTuple.UNMODIFIED))
 	       ? ValueTuple.UNMODIFIED
 	       : ValueTuple.MODIFIED);
-    return new ValueAndModified(Intern.internedInteger(val), mod);
+    return new ValueAndModified(Intern.internedLong(val), mod);
   }
 
   protected VarInfo makeVarInfo() {

@@ -12,8 +12,8 @@
 #define MIN3 min3
 #define NUM_MIN3 num_min3
 #define MAX max
-#define INTMAX Integer.MAX_VALUE
-#define INTMIN Integer.MIN_VALUE
+#define LONGMAX Long.MAX_VALUE
+#define LONGMIN Long.MIN_VALUE
 #define SIGNADJUST
 #define LOWERBOUND LowerBound
 #define LOWERBOUNDSTR "LowerBound"
@@ -30,8 +30,8 @@
 #define MIN3 max3
 #define NUM_MIN3 num_max3
 #define MAX min
-#define INTMAX Integer.MIN_VALUE
-#define INTMIN Integer.MAX_VALUE
+#define LONGMAX Long.MIN_VALUE
+#define LONGMIN Long.MAX_VALUE
 #define SIGNADJUST -
 #define LOWERBOUND UpperBound
 #define LOWERBOUNDSTR "UpperBound"
@@ -72,13 +72,13 @@ import java.util.*;
 class LOWERBOUND extends SingleScalar {
 
   // MIN1 LT MIN2 LT MIN3
-  int MIN1 = INTMAX;
+  long MIN1 = LONGMAX;
   int NUM_MIN1 = 0;
-  int MIN2 = INTMAX;
+  long MIN2 = LONGMAX;
   int NUM_MIN2 = 0;
-  int MIN3 = INTMAX;
+  long MIN3 = LONGMAX;
   int NUM_MIN3 = 0;
-  int MAX = INTMIN;
+  long MAX = LONGMIN;
 
   private LOWERBOUND(PptSlice ppt) {
     super(ppt);
@@ -114,13 +114,13 @@ class LOWERBOUND extends SingleScalar {
       return null;
   }
 
-  public void add_modified(int value, int count) {
+  public void add_modified(long value, int count) {
     // probability_cache_accurate = false;
 
     // System.out.println(LOWERBOUNDSTR + varNames() + ": "
     //                    + "add(" + value + ", " + modified + ", " + count + ")");
 
-    int v = value;
+    long v = value;
 
     if (v GT MAX) MAX = v;
 
@@ -155,7 +155,7 @@ class LOWERBOUND extends SingleScalar {
     if (NUM_MIN1 < 3)
       return Invariant.PROBABILITY_UNKNOWN;
 
-    int modulus = 1;
+    long modulus = 1;
     {
       for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
         Invariant inv = (Invariant) itor.next();
@@ -174,7 +174,7 @@ class LOWERBOUND extends SingleScalar {
     //    least 3.
 
     // If I used Math.abs, the order of arguments to minus would not matter.
-    int range = SIGNADJUST(MAX - MIN1) + 1;
+    long range = SIGNADJUST(MAX - MIN1) + 1;
     double avg_samples_per_val = ((double) ppt.num_mod_non_missing_samples()) * modulus / range;
 
     // System.out.println("  [Need to fix computation of " + LOWERBOUNDSTR + ".computeProbability()]");

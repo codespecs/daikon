@@ -49,7 +49,7 @@ public final class IntComparisonCore implements java.io.Serializable {
     }
   }
 
-  public void add_modified(int v1, int v2, int count) {
+  public void add_modified(long v1, long v2, int count) {
     if (v1 == v2)
       can_be_eq = true;
     else if (v1 < v2)

@@ -9,8 +9,8 @@ class NonModulus extends SingleScalar {
   // Set elements = new HashSet();
   SortedSet elements = new TreeSet();
 
-  private int modulus = 0;
-  private int remainder = 0;
+  private long modulus = 0;
+  private long remainder = 0;
   // The next two variables indicate whether the "modulus" and "result"
   // fields are up to date.
   // Indicates that no nonmodulus has been found; maybe with more
@@ -52,7 +52,7 @@ class NonModulus extends SingleScalar {
     } else {
       // Do I want to communicate back some information about the smallest
       // possible modulus?
-      int[] result = MathMDE.nonmodulus_strict(elements.iterator());
+      long[] result = MathMDE.nonmodulus_strict_long(elements.iterator());
       if (result == null) {
 	no_result_yet = true;
       } else {
@@ -64,8 +64,8 @@ class NonModulus extends SingleScalar {
     results_accurate = true;
   }
 
-  public void add_modified(int value, int count) {
-    if (elements.add(Intern.internedInteger(value))
+  public void add_modified(long value, int count) {
+    if (elements.add(Intern.internedLong(value))
 	&& results_accurate
 	&& (MathMDE.mod_positive(value, modulus) == remainder))
       results_accurate = false;

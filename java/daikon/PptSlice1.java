@@ -201,8 +201,8 @@ public final class PptSlice1  extends PptSlice {
     Assert.assert(mod1 != ValueTuple.MISSING);
     ProglangType rep = vi1.rep_type;
     if (rep == ProglangType.INT) {
-      // int value = vi1.getIntValue(full_vt);
-      int value = ((Integer) val1).intValue();
+      // long value = vi1.getIntValue(full_vt);
+      long value = ((Long) val1).longValue();
       for (int i=0; i<num_invs; i++) {
         SingleScalar inv = (SingleScalar)invs.elementAt(i);
         inv.add(value, mod1, count);
@@ -223,15 +223,15 @@ public final class PptSlice1  extends PptSlice {
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.DOUBLE_ARRAY) {
-      // int[] value = vi1.getDoubleArrayValue(full_vt);
+      // double[] value = vi1.getDoubleArrayValue(full_vt);
       double[] value = (double[]) val1;
       for (int i=0; i<num_invs; i++) {
         SingleFloatSequence inv = (SingleFloatSequence)invs.elementAt(i);
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.INT_ARRAY) {
-      // int[] value = vi1.getIntArrayValue(full_vt);
-      int[] value = (int[]) val1;
+      // long[] value = vi1.getIntArrayValue(full_vt);
+      long[] value = (long[]) val1;
       for (int i=0; i<num_invs; i++) {
         SingleSequence inv = (SingleSequence)invs.elementAt(i);
         inv.add(value, mod1, count);
@@ -278,7 +278,7 @@ public final class PptSlice1  extends PptSlice {
         SingleScalar inv = (SingleScalar) invariant;
         for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
           Map.Entry entry = (Map.Entry) itor.next();
-          int val = ((Integer) entry.getKey()).intValue();
+          long val = ((Long) entry.getKey()).longValue();
           int[] tm_array = (int[]) entry.getValue();
           inv.add(val, 0, tm_array[0]);
           inv.add(val, 1, tm_array[1]);
@@ -311,7 +311,7 @@ public final class PptSlice1  extends PptSlice {
         SingleSequence inv = (SingleSequence) invariant;
         for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
           Map.Entry entry = (Map.Entry) itor.next();
-          int[] val = (int[]) entry.getKey();
+          long[] val = (long[]) entry.getKey();
           int[] tm_array = (int[]) entry.getValue();
           inv.add(val, 0, tm_array[0]);
           inv.add(val, 1, tm_array[1]);

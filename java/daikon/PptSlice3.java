@@ -230,9 +230,9 @@ public final class PptSlice3  extends PptSlice {
     if ((rep1 == ProglangType.INT)
         && (rep2 == ProglangType.INT)
         && (rep3 == ProglangType.INT)) {
-      int value1 = ((Integer) val1).intValue();
-      int value2 = ((Integer) val2).intValue();
-      int value3 = ((Integer) val3).intValue();
+      long value1 = ((Long) val1).longValue();
+      long value2 = ((Long) val2).longValue();
+      long value3 = ((Long) val3).longValue();
       for (int i=0; i<invs.size(); i++) {
         ThreeScalar inv = (ThreeScalar) invs.elementAt(i);
         inv.add(value1, value2, value3, mod_index, count);
@@ -288,9 +288,9 @@ public final class PptSlice3  extends PptSlice {
         for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
-          int val1 = ((Integer) vals[0]).intValue();
-          int val2 = ((Integer) vals[1]).intValue();
-          int val3 = ((Integer) vals[2]).intValue();
+          long val1 = ((Long) vals[0]).longValue();
+          long val2 = ((Long) vals[1]).longValue();
+          long val3 = ((Long) vals[2]).longValue();
           int[] tm_array = (int[]) entry.getValue();
           for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {

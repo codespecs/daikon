@@ -23,13 +23,13 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
   // (That depends on the slice; maybe not until the slice is cleared out.
   // But so few values is cheap, so this is quite fine for now and long-term.)
 
-  private int[] [] elts;
+  private long[] [] elts;
   private int num_elts;
 
   OneOfSequence (PptSlice ppt) {
     super(ppt);
 
-    elts = new int[LIMIT][];    // elements are interned, so can test with ==
+    elts = new long[LIMIT][];    // elements are interned, so can test with ==
                                 // (in the general online case, not worth interning)
 
     num_elts = 0;
@@ -85,7 +85,7 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
       return var().name  + " one of " + subarray_rep();
   }
 
-  public void add_modified(int[]  v, int count) {
+  public void add_modified(long[]  v, int count) {
 
     Assert.assert(Intern.isInterned(v));
 

@@ -53,10 +53,10 @@ public final class FunctionUnaryCore implements java.io.Serializable {
     function = UtilMDE.methodForName(methodname);
   }
 
-  public void add_modified(int x_int, int y_int, int count) {
+  public void add_modified(long x_int, long y_int, int count) {
 
-    Integer x = new Integer(x_int);
-    Integer y = new Integer(y_int);
+    Long x = new Long(x_int);
+    Long y = new Long(y_int);
 
     try {
       if (inverse) {

@@ -23,13 +23,13 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
   // (That depends on the slice; maybe not until the slice is cleared out.
   // But so few values is cheap, so this is quite fine for now and long-term.)
 
-  private int [] elts;
+  private long [] elts;
   private int num_elts;
 
   OneOfScalar (PptSlice ppt) {
     super(ppt);
 
-    elts = new int [LIMIT];
+    elts = new long [LIMIT];
 
     num_elts = 0;
   }
@@ -48,7 +48,7 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
 
     // Not sure whether interning is necessary (or just returning an Integer
     // would be sufficient), but just in case...
-    return Intern.internedInteger(elts[0]);
+    return Intern.internedLong(elts[0]);
 
   }
 
@@ -84,7 +84,7 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
       return var().name  + " one of " + subarray_rep();
   }
 
-  public void add_modified(int  v, int count) {
+  public void add_modified(long  v, int count) {
 
     for (int i=0; i<num_elts; i++)
       if (elts[i] == v)

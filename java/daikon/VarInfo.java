@@ -274,21 +274,29 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
       return vt.getValue(value_index);
   }
 
-  public int getIntValue(ValueTuple vt) {
+  public long getIntValue(ValueTuple vt) {
     Object raw = getValue(vt);
-    if (raw == null)
-      // Perhaps use some distinguished value here, so
-      // that I have some indication when things are going wrong.
-      // return 0;
+    if (raw == null) {
+      // Use a distinguished value to indicate when things are going wrong.
       return 222222;
-    return ((Integer)raw).intValue();
+    }
+    return ((Long)raw).longValue();
+  }
+
+  public int getIndexValue(ValueTuple vt) {
+    Object raw = getValue(vt);
+    if (raw == null) {
+      // Use a distinguished value to indicate when things are going wrong.
+      return 222222;
+    }
+    return ((Long)raw).intValue();
   }
 
   public String getStringValue(ValueTuple vt) {
     return (String) getValue(vt);
   }
 
-  public int[] getIntArrayValue(ValueTuple vt) {
+  public long[] getIntArrayValue(ValueTuple vt) {
     Object raw = getValue(vt);
     if (raw == null) {
       // I am temporarily experimenting with throwing an error instead.
@@ -298,7 +306,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
       // return new int[0];
       throw new Error(this + "getIntArrayValue(" + vt + ")");
     }
-    return (int[])raw;
+    return (long[])raw;
   }
 
   static final class usesVarFilter implements Filter {

@@ -51,7 +51,7 @@ class SeqComparison extends TwoSequence implements Comparison {
   }
 
 
-  public void add_modified(int[] v1, int[] v2, int count) {
+  public void add_modified(long[] v1, long[] v2, int count) {
     // Don't make comparisons with empty arrays.
     if ((v1.length == 0) || (v2.length == 0)) {
       return;

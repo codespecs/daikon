@@ -128,7 +128,7 @@ public final class IntComparison extends TwoScalar implements Comparison {
   }
 
 
-  public void add_modified(int v1, int v2, int count) {
+  public void add_modified(long v1, long v2, int count) {
     if (ppt.debugged) {
       System.out.println("IntComparison" + ppt.varNames() + ".add_modified("
                          + v1 + "," + v2 + ", count=" + count + ")");
@@ -161,7 +161,7 @@ public final class IntComparison extends TwoScalar implements Comparison {
     super.destroy();
   }
 
-  public void add(int v1, int v2, int mod_index, int count) {
+  public void add(long v1, long v2, int mod_index, int count) {
     if (ppt.debugged) {
       System.out.println("IntComparison" + ppt.varNames() + ".add("
                          + v1 + "," + v2

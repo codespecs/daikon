@@ -42,15 +42,15 @@ public final class FunctionBinaryCore implements java.io.Serializable {
     function = UtilMDE.methodForName(methodname);
   }
 
-  public void add_modified(int x_int, int y_int, int z_int, int count) {
+  public void add_modified(long x_int, long y_int, long z_int, int count) {
 
-    Integer x = new Integer(x_int);
-    Integer y = new Integer(y_int);
-    Integer z = new Integer(z_int);
+    Long x = new Long(x_int);
+    Long y = new Long(y_int);
+    Long z = new Long(z_int);
 
-    Integer result;
-    Integer arg1;
-    Integer arg2;
+    Long result;
+    Long arg1;
+    Long arg2;
 
     if (var_order == order_xyz) {
       result = x; arg1 = y; arg2 = z;

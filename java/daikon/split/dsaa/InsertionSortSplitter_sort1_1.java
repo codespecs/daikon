@@ -33,7 +33,7 @@ class InsertionSortSplitter_sort1_1 extends Splitter {
 	}
 
 	public boolean test(ValueTuple vt) {
-		return (j_varinfo.getIntValue(vt) > 0 && tmp_varinfo.getIntValue(vt) < array_varinfo.getIntArrayValue(vt) [j_varinfo.getIntValue(vt)-1]);
+		return (j_varinfo.getIntValue(vt) > 0 && tmp_varinfo.getIntValue(vt) < array_varinfo.getIntArrayValue(vt) [j_varinfo.getIndexValue(vt)-1]);
 	}
 }
 

@@ -33,7 +33,7 @@ class ShellSortSplitter_sort_2 extends Splitter {
 	}
 
 	public boolean test(ValueTuple vt) {
-		return (j_varinfo.getIntValue(vt) >= gap_varinfo.getIntValue(vt) && tmp_varinfo.getIntValue(vt) < array_varinfo.getIntArrayValue(vt) [j_varinfo.getIntValue(vt) -gap_varinfo.getIntValue(vt)]);
+		return (j_varinfo.getIntValue(vt) >= gap_varinfo.getIntValue(vt) && tmp_varinfo.getIntValue(vt) < array_varinfo.getIntArrayValue(vt) [j_varinfo.getIndexValue(vt) -gap_varinfo.getIndexValue(vt)]);
 	}
 }
 

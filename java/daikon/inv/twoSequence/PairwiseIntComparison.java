@@ -56,7 +56,7 @@ class PairwiseIntComparison extends TwoSequence {
   }
 
 
-  public void add_modified(int[] a1, int[] a2, int count) {
+  public void add_modified(long[] a1, long[] a2, int count) {
     if (a1.length != a2.length) {
       destroy();
       return;
@@ -65,8 +65,8 @@ class PairwiseIntComparison extends TwoSequence {
     // int len = Math.min(a1.length, a2.length);
 
     for (int i=0; i<len; i++) {
-      int v1 = a1[i];
-      int v2 = a2[i];
+      long v1 = a1[i];
+      long v2 = a2[i];
       core.add_modified(v1, v2, count);
       if (no_invariant)
         return;

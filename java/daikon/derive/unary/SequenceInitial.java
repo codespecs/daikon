@@ -38,7 +38,7 @@ public final class SequenceInitial extends UnaryDerivation {
 
     VarInfo lengthvar = vi.sequenceSize();
     if (lengthvar.isConstant()) {
-      int length_constant = ((Integer) lengthvar.constantValue()).intValue();
+      long length_constant = ((Long) lengthvar.constantValue()).longValue();
       if (length_constant == 0) {
         return false;
       }
@@ -55,11 +55,11 @@ public final class SequenceInitial extends UnaryDerivation {
     if (val == null)
       return ValueAndModified.MISSING;
     if (var_info.rep_type == ProglangType.INT_ARRAY) {
-      int[] val_array = (int[])val;
+      long[] val_array = (long[])val;
       if (val_array.length < minLength)
         return ValueAndModified.MISSING;
       int real_index = (index<0 ? val_array.length + index : index);
-      return new ValueAndModified(Intern.internedInteger(val_array[real_index]), source_mod);
+      return new ValueAndModified(Intern.internedLong(val_array[real_index]), source_mod);
     } else {
       Object[] val_array = (Object[])val;
       if (val_array.length < minLength)

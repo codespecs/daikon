@@ -23,7 +23,7 @@ public abstract class ThreeScalar extends Invariant {
     return ppt.var_infos[2];
   }
 
-  public void add(int v1, int v2, int v3, int mod_index, int count) {
+  public void add(long v1, long v2, long v3, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
     Assert.assert(! no_invariant);
@@ -40,13 +40,13 @@ public abstract class ThreeScalar extends Invariant {
    * This method need not check for no_invariant;
    * that is done by the caller.
    */
-  public abstract void add_modified(int v1, int v2, int v3, int count);
+  public abstract void add_modified(long v1, long v2, long v3, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
    */
-  public void add_unmodified(int v1, int v2, int v3, int count) {
+  public void add_unmodified(long v1, long v2, long v3, int count) {
     return;
   }
 

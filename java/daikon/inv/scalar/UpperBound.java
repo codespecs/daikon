@@ -19,14 +19,14 @@ import java.util.*;
 
 class UpperBound  extends SingleScalar {
 
-  // max1  >  max2  >  max3
-  int max1  = Integer.MIN_VALUE ;
+  // max1  >  max2  >  max3 
+  long max1  = Long.MIN_VALUE ;
   int num_max1  = 0;
-  int max2  = Integer.MIN_VALUE ;
+  long max2  = Long.MIN_VALUE ;
   int num_max2  = 0;
-  int max3  = Integer.MIN_VALUE ;
+  long max3  = Long.MIN_VALUE ;
   int num_max3  = 0;
-  int min  = Integer.MAX_VALUE ;
+  long min  = Long.MAX_VALUE ;
 
   private UpperBound (PptSlice ppt) {
     super(ppt);
@@ -46,12 +46,12 @@ class UpperBound  extends SingleScalar {
     // does not include result of getProbability because this
     // is called from computeProbability for debugging purposes.
     return "UpperBound"  + varNames() + ": "
-      + "max1=" + max1
-      + ", num_max1=" + num_max1
-      + ", max2=" + max2
-      + ", num_max2=" + num_max2
-      + ", max3=" + max3
-      + ", num_max3=" + num_max3
+      + "max1=" + max1 
+      + ", num_max1=" + num_max1 
+      + ", max2=" + max2 
+      + ", num_max2=" + num_max2 
+      + ", max3=" + max3 
+      + ", num_max3=" + num_max3 
       + ", min=" + min ;
   }
 
@@ -62,13 +62,13 @@ class UpperBound  extends SingleScalar {
       return null;
   }
 
-  public void add_modified(int value, int count) {
+  public void add_modified(long value, int count) {
     // probability_cache_accurate = false;
 
     // System.out.println("UpperBound"  + varNames() + ": "
     //                    + "add(" + value + ", " + modified + ", " + count + ")");
 
-    int v = value;
+    long v = value;
 
     if (v <  min ) min  = v;
 
@@ -103,7 +103,7 @@ class UpperBound  extends SingleScalar {
     if (num_max1  < 3)
       return Invariant.PROBABILITY_UNKNOWN;
 
-    int modulus = 1;
+    long modulus = 1;
     {
       for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
         Invariant inv = (Invariant) itor.next();
@@ -122,7 +122,7 @@ class UpperBound  extends SingleScalar {
     //    least 3.
 
     // If I used Math.abs, the order of arguments to minus would not matter.
-    int range = - (min  - max1 ) + 1;
+    long range = - (min  - max1 ) + 1;
     double avg_samples_per_val = ((double) ppt.num_mod_non_missing_samples()) * modulus / range;
 
     // System.out.println("  [Need to fix computation of UpperBound.computeProbability()]");

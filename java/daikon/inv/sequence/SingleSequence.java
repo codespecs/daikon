@@ -18,7 +18,7 @@ public abstract class SingleSequence extends Invariant {
   // Should never be called with modified == ValueTuple.MISSING.
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
-  public void add(int[] value, int mod_index, int count) {
+  public void add(long[] value, int mod_index, int count) {
     Assert.assert(! no_invariant);
     Assert.assert((mod_index >= 0) && (mod_index < 2));
     Assert.assert(Intern.isInterned(value));
@@ -35,13 +35,13 @@ public abstract class SingleSequence extends Invariant {
    * This method need not check for no_invariant;
    * that is done by the caller.
    */
-  public abstract void add_modified(int[] value, int count);
+  public abstract void add_modified(long[] value, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
    */
-  public void add_unmodified(int[] value, int count) {
+  public void add_unmodified(long[] value, int count) {
     return;
   }
 

@@ -19,7 +19,7 @@ public final class x_le_b_sub_i extends Splitter {
     return (x_varinfo != null) && (b_varinfo != null) && (i_varinfo != null);
   }
   public boolean test(ValueTuple vt) {
-    int b_sub_i = b_varinfo.getIntArrayValue(vt)[i_varinfo.getIntValue(vt)];
+    long b_sub_i = b_varinfo.getIntArrayValue(vt)[i_varinfo.getIndexValue(vt)];
     return (x_varinfo.getIntValue(vt) <= b_sub_i);
   }
 }

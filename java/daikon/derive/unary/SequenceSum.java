@@ -16,11 +16,11 @@ public final class SequenceSum extends UnaryDerivation {
     Object val = var_info.getValue(vt);
     if (val == null)
       return ValueAndModified.MISSING;
-    int[] val_array = (int[])val;
-    int result = 0;
+    long[] val_array = (long[])val;
+    long result = 0;
     for (int i=0; i<val_array.length; i++)
       result += val_array[i];
-    return new ValueAndModified(Intern.internedInteger(result),
+    return new ValueAndModified(Intern.internedLong(result),
                                 source_mod);
   }
 

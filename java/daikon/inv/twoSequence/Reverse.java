@@ -30,7 +30,7 @@ class Reverse extends TwoSequence {
   }
 
 
-  public void add_modified(int[] a1, int[] a2, int count) {
+  public void add_modified(long[] a1, long[] a2, int count) {
     if (a1.length != a2.length) {
       destroy();
       return;

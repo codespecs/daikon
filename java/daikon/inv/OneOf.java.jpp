@@ -4,7 +4,7 @@
 
 #if defined(SCALAR)
 #define SCALARPKG scalar
-#define INT int
+#define INT long
 #define ONEOFSCALAR OneOfScalar
 #define ONEOFSCALARSTR "OneOfScalar"
 #define SINGLESCALAR SingleScalar
@@ -20,7 +20,7 @@
 #define NAME var().name
 #elif defined(SEQUENCE)
 #define SCALARPKG sequence
-#define INT int[]
+#define INT long[]
 #define ONEOFSCALAR OneOfSequence
 #define ONEOFSCALARSTR "OneOfSequence"
 #define SINGLESCALAR SingleSequence
@@ -28,7 +28,7 @@
 #define NAME var().name
 #elif defined(ELT)
 #define SCALARPKG sequence
-#define INT int
+#define INT long
 #define ONEOFSCALAR EltOneOf
 #define ONEOFSCALARSTR "EltOneOf"
 #define SINGLESCALAR SingleSequence
@@ -69,7 +69,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   ONEOFSCALAR(PptSlice ppt) {
     super(ppt);
 #ifdef SEQUENCE
-    elts = new int[LIMIT][];    // elements are interned, so can test with ==
+    elts = new long[LIMIT][];    // elements are interned, so can test with ==
                                 // (in the general online case, not worth interning)
 #else
     elts = new INT[LIMIT];
@@ -91,7 +91,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 #if defined(SCALAR) || defined(ELT)
     // Not sure whether interning is necessary (or just returning an Integer
     // would be sufficient), but just in case...
-    return Intern.internedInteger(elts[0]);
+    return Intern.internedLong(elts[0]);
 #else
     return elts[0];
 #endif
@@ -139,9 +139,9 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 
 
 #ifdef ELT
-  public void add_modified(int[] a, int count) {
+  public void add_modified(long[] a, int count) {
     for (int ai=0; ai<a.length; ai++) {
-      int v = a[ai];
+      long v = a[ai];
 #else
   public void add_modified(INT v, int count) {
 #ifndef SCALAR

@@ -41,7 +41,7 @@ class SubSequence extends TwoSequence {
   }
 
 
-  public void add_modified(int[] a1, int[] a2, int count) {
+  public void add_modified(long[] a1, long[] a2, int count) {
     if (ArraysMDE.indexOf(a2, a1) == -1) {
       destroy();
       return;

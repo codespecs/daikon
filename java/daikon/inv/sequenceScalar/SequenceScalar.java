@@ -32,7 +32,7 @@ public abstract class SequenceScalar extends Invariant {
     return ppt.var_infos[scl_index];
   }
 
-  public void add(int[] v1, int v2, int mod_index, int count) {
+  public void add(long[] v1, long v2, int mod_index, int count) {
     Assert.assert(! no_invariant);
     Assert.assert((mod_index >= 0) && (mod_index < 4));
     Assert.assert(!finished);
@@ -47,13 +47,13 @@ public abstract class SequenceScalar extends Invariant {
    * This method need not check for no_invariant;
    * that is done by the caller.
    */
-  public abstract void add_modified(int[] v1, int v2, int count);
+  public abstract void add_modified(long[] v1, long v2, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
    */
-  public void add_unmodified(int[] v1, int v2, int count) {
+  public void add_unmodified(long[] v1, long v2, int count) {
     return;
   }
 

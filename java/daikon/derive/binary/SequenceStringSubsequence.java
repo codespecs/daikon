@@ -35,7 +35,7 @@ public final class SequenceStringSubsequence extends BinaryDerivation {
     if (val1 == null)
       return ValueAndModified.MISSING;
     String[] val1_array = (String[]) val1;
-    int val2 = var_info2.getIntValue(full_vt);
+    int val2 = var_info2.getIndexValue(full_vt);
     // len is the number of elements in the subsequence (that's why we add 1).
     int len = val2+1+index_shift;
     if ((len < 0) || (len > val1_array.length))

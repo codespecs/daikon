@@ -33,7 +33,7 @@ class QuickSortSplitter_sort_2 extends Splitter {
 	}
 
 	public boolean test(ValueTuple vt) {
-		return (array_varinfo.getIntArrayValue(vt)[- -j_varinfo.getIntValue(vt)] > pivot_varinfo.getIntValue(vt));
+		return (array_varinfo.getIntArrayValue(vt)[- -j_varinfo.getIndexValue(vt)] > pivot_varinfo.getIntValue(vt));
 	}
 }
 

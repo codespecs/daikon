@@ -212,7 +212,6 @@ public final class FileIO {
     if ((varname == null) || (proglang_type_string == null) || (rep_type_string == null) || (comparability_string == null))
       throw new Error("End of file " + filename + " while reading variable " + varname + " in declaration of program point " + ppt_name);
     int equals_index = rep_type_string.indexOf(" = ");
-    // static_constant_value is a future enhancement
     String static_constant_value_string = null;
     Object static_constant_value = null;
     if (equals_index != -1) {

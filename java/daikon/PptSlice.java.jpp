@@ -373,8 +373,8 @@ public final class PPTSLICE1 extends PptSlice {
     Assert.assert(mod1 != ValueTuple.MISSING);
     ProglangType rep = vi1.rep_type;
     if (rep == ProglangType.INT) {
-      // int value = vi1.getIntValue(full_vt);
-      int value = ((Integer) val1).intValue();
+      // long value = vi1.getIntValue(full_vt);
+      long value = ((Long) val1).longValue();
       for (int i=0; i<num_invs; i++) {
         SingleScalar inv = (SingleScalar)invs.elementAt(i);
         inv.add(value, mod1, count);
@@ -395,15 +395,15 @@ public final class PPTSLICE1 extends PptSlice {
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.DOUBLE_ARRAY) {
-      // int[] value = vi1.getDoubleArrayValue(full_vt);
+      // double[] value = vi1.getDoubleArrayValue(full_vt);
       double[] value = (double[]) val1;
       for (int i=0; i<num_invs; i++) {
         SingleFloatSequence inv = (SingleFloatSequence)invs.elementAt(i);
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.INT_ARRAY) {
-      // int[] value = vi1.getIntArrayValue(full_vt);
-      int[] value = (int[]) val1;
+      // long[] value = vi1.getIntArrayValue(full_vt);
+      long[] value = (long[]) val1;
       for (int i=0; i<num_invs; i++) {
         SingleSequence inv = (SingleSequence)invs.elementAt(i);
         inv.add(value, mod1, count);
@@ -429,31 +429,31 @@ public final class PPTSLICE1 extends PptSlice {
     } else if (string1 || string2) {
       throw new Error("impossible");
     } else if ((!array1) && (!array2)) {
-      // int value1 = vi1.getIntValue(full_vt);
-      // int value2 = vi2.getIntValue(full_vt);
-      int value1 = ((Integer) val1).intValue();
-      int value2 = ((Integer) val2).intValue();
+      // long value1 = vi1.getIntValue(full_vt);
+      // long value2 = vi2.getIntValue(full_vt);
+      long value1 = ((Long) val1).longValue();
+      long value2 = ((Long) val2).longValue();
       for (int i=0; i<num_invs; i++) {
         TwoScalar inv = (TwoScalar)invs.elementAt(i);
         inv.add(value1, value2, mod_index, count);
       }
     } else if (array1 && (!array2)) {
-      int[] seqval = (int[]) val1;
-      int sclval = ((Integer) val2).intValue();
+      long[] seqval = (long[]) val1;
+      long sclval = ((Long) val2).longValue();
       for (int i=0; i<num_invs; i++) {
         SequenceScalar inv = (SequenceScalar)invs.elementAt(i);
         inv.add(seqval, sclval, mod_index, count);
       }
     } else if ((!array1) && (array2)) {
-      int[] seqval = (int[]) val2;
-      int sclval = ((Integer) val1).intValue();
+      long[] seqval = (long[]) val2;
+      long sclval = ((Long) val1).longValue();
       for (int i=0; i<num_invs; i++) {
         SequenceScalar inv = (SequenceScalar)invs.elementAt(i);
         inv.add(seqval, sclval, mod_index, count);
       }
     } else if (array1 && array2) {
-      int[] value1 = (int[]) val1;
-      int[] value2 = (int[]) val2;
+      long[] value1 = (long[]) val1;
+      long[] value2 = (long[]) val2;
       for (int i=0; i<num_invs; i++) {
         TwoSequence inv = (TwoSequence)invs.elementAt(i);
         inv.add(value1, value2, mod_index, count);
@@ -472,9 +472,9 @@ public final class PPTSLICE1 extends PptSlice {
     if ((rep1 == ProglangType.INT)
         && (rep2 == ProglangType.INT)
         && (rep3 == ProglangType.INT)) {
-      int value1 = ((Integer) val1).intValue();
-      int value2 = ((Integer) val2).intValue();
-      int value3 = ((Integer) val3).intValue();
+      long value1 = ((Long) val1).longValue();
+      long value2 = ((Long) val2).longValue();
+      long value3 = ((Long) val3).longValue();
       for (int i=0; i<invs.size(); i++) {
         ThreeScalar inv = (ThreeScalar) invs.elementAt(i);
         inv.add(value1, value2, value3, mod_index, count);
@@ -523,7 +523,7 @@ public final class PPTSLICE1 extends PptSlice {
         SingleScalar inv = (SingleScalar) invariant;
         for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
           Map.Entry entry = (Map.Entry) itor.next();
-          int val = ((Integer) entry.getKey()).intValue();
+          long val = ((Long) entry.getKey()).longValue();
           int[] tm_array = (int[]) entry.getValue();
           inv.add(val, 0, tm_array[0]);
           inv.add(val, 1, tm_array[1]);
@@ -556,7 +556,7 @@ public final class PPTSLICE1 extends PptSlice {
         SingleSequence inv = (SingleSequence) invariant;
         for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
           Map.Entry entry = (Map.Entry) itor.next();
-          int[] val = (int[]) entry.getKey();
+          long[] val = (long[]) entry.getKey();
           int[] tm_array = (int[]) entry.getValue();
           inv.add(val, 0, tm_array[0]);
           inv.add(val, 1, tm_array[1]);
@@ -612,8 +612,8 @@ public final class PPTSLICE1 extends PptSlice {
         for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
-          int value1 = ((Integer) vals[0]).intValue();
-          int value2 = ((Integer) vals[1]).intValue();
+          long value1 = ((Long) vals[0]).longValue();
+          long value2 = ((Long) vals[1]).longValue();
           int[] tm_array = (int[]) entry.getValue();
           for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {
@@ -631,8 +631,8 @@ public final class PPTSLICE1 extends PptSlice {
         for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
-          int[] seqval = (int[]) vals[0];
-          int sclval = ((Integer) vals[1]).intValue();
+          long[] seqval = (long[]) vals[0];
+          long sclval = ((Long) vals[1]).longValue();
           int[] tm_array = (int[]) entry.getValue();
           for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {
@@ -650,8 +650,8 @@ public final class PPTSLICE1 extends PptSlice {
         for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
-          int[] seqval = (int[]) vals[1];
-          int sclval = ((Integer) vals[0]).intValue();
+          long[] seqval = (long[]) vals[1];
+          long sclval = ((Long) vals[0]).longValue();
           int[] tm_array = (int[]) entry.getValue();
           for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {
@@ -669,8 +669,8 @@ public final class PPTSLICE1 extends PptSlice {
         for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
-          int[] val1 = (int[]) vals[0];
-          int[] val2 = (int[]) vals[1];
+          long[] val1 = (long[]) vals[0];
+          long[] val2 = (long[]) vals[1];
           int[] tm_array = (int[]) entry.getValue();
           for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {
@@ -698,9 +698,9 @@ public final class PPTSLICE1 extends PptSlice {
         for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
-          int val1 = ((Integer) vals[0]).intValue();
-          int val2 = ((Integer) vals[1]).intValue();
-          int val3 = ((Integer) vals[2]).intValue();
+          long val1 = ((Long) vals[0]).longValue();
+          long val2 = ((Long) vals[1]).longValue();
+          long val3 = ((Long) vals[2]).longValue();
           int[] tm_array = (int[]) entry.getValue();
           for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {

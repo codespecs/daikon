@@ -6,13 +6,13 @@ import utilMDE.*;
 
 class Modulus extends SingleScalar {
 
-  int modulus = 0;
-  int remainder = 0;
+  long modulus = 0;
+  long remainder = 0;
 
   // An arbitrarily-chosen value used for computing the differences among
   // all the values.  Arbitrary initial value 2222 will be replaced by the
   // first actual value seen.
-  int value1 = 2222;
+  long value1 = 2222;
   // used for initializing value1
   boolean no_values_seen = true;
 
@@ -38,7 +38,7 @@ class Modulus extends SingleScalar {
       return null;
   }
 
-  public void add_modified(int value, int count) {
+  public void add_modified(long value, int count) {
     if (modulus == 1) {
       // We shouldn't ever get to this case; the invariant should have been
       // destroyed instead.
@@ -62,7 +62,14 @@ class Modulus extends SingleScalar {
       }
       remainder = MathMDE.mod_positive(value, modulus);
     } else {
-      int new_modulus = MathMDE.gcd(modulus, value1 - value);
+      long new_modulus_long = MathMDE.gcd(modulus, value1 - value);
+      int new_modulus;
+      if (new_modulus_long > Integer.MAX_VALUE
+          || (new_modulus_long < Integer.MIN_VALUE)) {
+        new_modulus = 1;
+      } else {
+        new_modulus = (int) new_modulus_long;
+      }
       if (new_modulus != modulus) {
         if (new_modulus == 1) {
           destroy();

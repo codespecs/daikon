@@ -9,7 +9,7 @@ public final class LinearBinaryCore implements java.io.Serializable {
   // final static boolean debugLinearBinaryCore = true;
 
   // y == ax + b;
-  public int a, b;
+  public long a, b;
 
   Invariant wrapper;
 
@@ -17,14 +17,14 @@ public final class LinearBinaryCore implements java.io.Serializable {
 
   final static int MINPAIRS = 4;
 
-  int[] x_cache = new int[MINPAIRS];
-  int[] y_cache = new int[MINPAIRS];
+  long[] x_cache = new long[MINPAIRS];
+  long[] y_cache = new long[MINPAIRS];
 
   public LinearBinaryCore(Invariant wrapper) {
     this.wrapper = wrapper;
   }
 
-  public void add_modified(int x, int y, int count) {
+  public void add_modified(long x, long y, int count) {
     if (values_seen < MINPAIRS) {
       // We delay computation of a and b until we have seen several pairs
       // so that we can compute a and b based on a far-separated pair.  If
@@ -92,7 +92,7 @@ public final class LinearBinaryCore implements java.io.Serializable {
   // Given ((x0,y0),(x1,y1)), set a and b such that y = ax + b.
   // If no such (a,b) exists, then destroy self.
 
-  void set_bi_linear(int x0, int x1, int y0, int y1) {
+  void set_bi_linear(long x0, long x1, long y0, long y1) {
     if (x0 == x1) {
       // x being constant would have been discovered elsewhere (and this
       // invariant would not have been instantiated).

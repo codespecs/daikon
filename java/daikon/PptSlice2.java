@@ -231,31 +231,31 @@ public final class PptSlice2  extends PptSlice {
     } else if (string1 || string2) {
       throw new Error("impossible");
     } else if ((!array1) && (!array2)) {
-      // int value1 = vi1.getIntValue(full_vt);
-      // int value2 = vi2.getIntValue(full_vt);
-      int value1 = ((Integer) val1).intValue();
-      int value2 = ((Integer) val2).intValue();
+      // long value1 = vi1.getIntValue(full_vt);
+      // long value2 = vi2.getIntValue(full_vt);
+      long value1 = ((Long) val1).longValue();
+      long value2 = ((Long) val2).longValue();
       for (int i=0; i<num_invs; i++) {
         TwoScalar inv = (TwoScalar)invs.elementAt(i);
         inv.add(value1, value2, mod_index, count);
       }
     } else if (array1 && (!array2)) {
-      int[] seqval = (int[]) val1;
-      int sclval = ((Integer) val2).intValue();
+      long[] seqval = (long[]) val1;
+      long sclval = ((Long) val2).longValue();
       for (int i=0; i<num_invs; i++) {
         SequenceScalar inv = (SequenceScalar)invs.elementAt(i);
         inv.add(seqval, sclval, mod_index, count);
       }
     } else if ((!array1) && (array2)) {
-      int[] seqval = (int[]) val2;
-      int sclval = ((Integer) val1).intValue();
+      long[] seqval = (long[]) val2;
+      long sclval = ((Long) val1).longValue();
       for (int i=0; i<num_invs; i++) {
         SequenceScalar inv = (SequenceScalar)invs.elementAt(i);
         inv.add(seqval, sclval, mod_index, count);
       }
     } else if (array1 && array2) {
-      int[] value1 = (int[]) val1;
-      int[] value2 = (int[]) val2;
+      long[] value1 = (long[]) val1;
+      long[] value2 = (long[]) val2;
       for (int i=0; i<num_invs; i++) {
         TwoSequence inv = (TwoSequence)invs.elementAt(i);
         inv.add(value1, value2, mod_index, count);
@@ -330,8 +330,8 @@ public final class PptSlice2  extends PptSlice {
         for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
-          int value1 = ((Integer) vals[0]).intValue();
-          int value2 = ((Integer) vals[1]).intValue();
+          long value1 = ((Long) vals[0]).longValue();
+          long value2 = ((Long) vals[1]).longValue();
           int[] tm_array = (int[]) entry.getValue();
           for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {
@@ -349,8 +349,8 @@ public final class PptSlice2  extends PptSlice {
         for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
-          int[] seqval = (int[]) vals[0];
-          int sclval = ((Integer) vals[1]).intValue();
+          long[] seqval = (long[]) vals[0];
+          long sclval = ((Long) vals[1]).longValue();
           int[] tm_array = (int[]) entry.getValue();
           for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {
@@ -368,8 +368,8 @@ public final class PptSlice2  extends PptSlice {
         for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
-          int[] seqval = (int[]) vals[1];
-          int sclval = ((Integer) vals[0]).intValue();
+          long[] seqval = (long[]) vals[1];
+          long sclval = ((Long) vals[0]).longValue();
           int[] tm_array = (int[]) entry.getValue();
           for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {
@@ -387,8 +387,8 @@ public final class PptSlice2  extends PptSlice {
         for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
-          int[] val1 = (int[]) vals[0];
-          int[] val2 = (int[]) vals[1];
+          long[] val1 = (long[]) vals[0];
+          long[] val2 = (long[]) vals[1];
           int[] tm_array = (int[]) entry.getValue();
           for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {

@@ -35,7 +35,7 @@ public final class SequenceStringSubscript extends BinaryDerivation {
     if (val1 == null)
       return ValueAndModified.MISSING;
     String[] val1_array = (String[]) val1;
-    int val2 = var_info2.getIntValue(full_vt) + index_shift;
+    int val2 = var_info2.getIndexValue(full_vt) + index_shift;
     if ((val2 < 0) || (val2 >= val1_array.length))
       return ValueAndModified.MISSING;
     String val = val1_array[val2];

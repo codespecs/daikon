@@ -61,7 +61,7 @@ class FunctionBinary extends ThreeScalar {
   }
 
 
-  public void add_modified(int x_int, int y_int, int z_int, int count) {
+  public void add_modified(long x_int, long y_int, long z_int, int count) {
     core.add_modified(x_int, y_int, z_int, count);
   }
 

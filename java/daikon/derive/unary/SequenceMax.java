@@ -17,10 +17,10 @@ public final class SequenceMax extends UnaryDerivation {
     Object val = var_info.getValue(vt);
     if (val == null)
       return ValueAndModified.MISSING;
-    int[] val_array = (int[])val;
+    long[] val_array = (long[])val;
     if (val_array.length == 0)
       return ValueAndModified.MISSING;
-    return new ValueAndModified(Intern.internedInteger(ArraysMDE.max(val_array)),
+    return new ValueAndModified(Intern.internedLong(ArraysMDE.max(val_array)),
                                 source_mod);
   }
 

@@ -34,7 +34,7 @@ class PairwiseFunctionUnary extends TwoSequence {
   }
 
 
-  public void add_modified(int[] x_arr, int[] y_arr, int count) {
+  public void add_modified(long[] x_arr, long[] y_arr, int count) {
     if (x_arr.length != y_arr.length) {
       destroy();
       return;
@@ -43,8 +43,8 @@ class PairwiseFunctionUnary extends TwoSequence {
     // int len = Math.min(x_arr.length, y_arr.length);
 
     for (int i=0; i<len; i++) {
-      int x = x_arr[i];
-      int y = y_arr[i];
+      long x = x_arr[i];
+      long y = y_arr[i];
 
       core.add_modified(x, y, count);
       if (no_invariant)

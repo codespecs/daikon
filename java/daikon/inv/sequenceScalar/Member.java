@@ -157,7 +157,7 @@ public final class Member extends SequenceScalar {
   }
 
 
-  public void add_modified(int[] a, int i, int count) {
+  public void add_modified(long[] a, long i, int count) {
     if (ArraysMDE.indexOf(a, i) == -1) {
       if (debugMember) {
         System.out.println("Member destroyed:  " + format() + " because " + i + " not in " + ArraysMDE.toString(a));

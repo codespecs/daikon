@@ -31,7 +31,7 @@ class QuickSortSplitter_median3_2 extends Splitter {
 	}
 
 	public boolean test(ValueTuple vt) {
-		return (array_varinfo.getIntArrayValue(vt) [right_varinfo.getIntValue(vt)] < array_varinfo.getIntArrayValue(vt) [center_varinfo.getIntValue(vt)]);
+		return (array_varinfo.getIntArrayValue(vt) [right_varinfo.getIndexValue(vt)] < array_varinfo.getIntArrayValue(vt) [center_varinfo.getIndexValue(vt)]);
 	}
 }
 

@@ -13,7 +13,7 @@ public final class j_ge_0_lt_9 extends Splitter {
   public Splitter instantiate(Ppt ppt) { return new j_ge_0_lt_9(ppt); }
   public boolean valid() { return (j_varinfo != null); }
   public boolean test(ValueTuple vt) {
-    int j = j_varinfo.getIntValue(vt);
+    long j = j_varinfo.getIntValue(vt);
     return (0 <= j) && (j < 9);
   }
 }

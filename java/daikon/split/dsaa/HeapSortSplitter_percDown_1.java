@@ -31,7 +31,7 @@ class HeapSortSplitter_percDown_1 extends Splitter {
 	}
 
 	public boolean test(ValueTuple vt) {
-		return (tmp_varinfo.getIntValue(vt) < array_varinfo.getIntArrayValue(vt) [child_varinfo.getIntValue(vt)]);
+		return (tmp_varinfo.getIntValue(vt) < array_varinfo.getIntArrayValue(vt) [child_varinfo.getIndexValue(vt)]);
 	}
 }
 
