@@ -49,21 +49,35 @@ public final class VarInfo implements Cloneable, Serializable {
 		return (name.name());
 	}
 
-	/** Type as declared in the program. **/
-	public ProglangType type; // interned
+     /**
+      * Type as declared in the target program. This is seldom used
+      * within Daikon as these types vary with program language and
+      * the like.  It's here more for information than anything else.
+      **/
+     public ProglangType type; // interned
 
-	/**
-	 * Type as written in the data trace file.  This is an interface
-	 * detail.
-	 **/
-	public ProglangType file_rep_type; // interned
+     /**
+      * Type as written in the data trace file -- i.e., it is the
+      * source variable type mapped into the set of basic types
+      * recognized by Daikon.  In particular, it includes boolean and
+      * hashcode (pointer).  This is the type that is normally used
+      * when determining if an invariant is applicable to a variable.
+      * For example, the less-than invariant is not applicable to
+      * booleans or hashcodes, but is applicable to integers (of
+      * various sizes) and floats.
+      * (In the variable name, "rep" stands for "representation".)
+      **/
+     public ProglangType file_rep_type; // interned
 
-	/**
-	 * Type as internally stored.  This is an interface detail and is never
-	 * visible to clients.
-	 * @see ProglangType#fileTypeToRepType()
-	 **/
-	public ProglangType rep_type; // interned
+     /**
+      * Type as internally stored by Daikon.  It contains less
+      * information than file_rep_type (for example, boolean and
+      * hashcode are both stored as integers).
+      * (In the variable name, "rep" stands for "representation".)
+      *
+      * @see ProglangType#fileTypeToRepType()
+      **/
+     public ProglangType rep_type; // interned
 
 	/** Comparability info. **/
 	public VarComparability comparability;
@@ -1380,6 +1394,13 @@ public final class VarInfo implements Cloneable, Serializable {
 		VarInfo varj,
 		int varj_shift,
 		boolean test_lessequal) {
+
+        // Fmt.pf ("comparing variables %s and %s in ppt %s", vari.name.name(),
+        //        varj.name.name(), vari.ppt.name());
+        // Throwable stack = new Throwable("debug traceback");
+        // stack.fillInStackTrace();
+        // stack.printStackTrace();
+
 		Assert.assertTrue(!Daikon.isInferencing);
 		// System.out.println("compare_vars(" + vari.name + ", " + vari_shift + ", "+ varj.name + ", " + varj_shift + ", " + (test_lessequal?"<=":">=") + ")");
 		if (vari == varj) {
@@ -2202,7 +2223,7 @@ public final class VarInfo implements Cloneable, Serializable {
 		*/
 	//added by Chen for use in the simple incremental algorithm (6/11/04)
 	public int get_equalitySet_size() {
-		// can not use the commented out version because of PrintInvariants assumes equality optimization  	
+		// can not use the commented out version because of PrintInvariants assumes equality optimization
 		//	if (equalitySet == null && VarInfo.use_equality_optimization == false)
 		if (equalitySet == null)
 			return 1;
