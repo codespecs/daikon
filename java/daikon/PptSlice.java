@@ -815,6 +815,19 @@ public abstract class PptSlice
   /////////////////////////////////////////////////////////////////
   /// Miscellaneous
 
+  public void processOmissions(boolean[] omitTypes) {
+    if (no_invariants) return;
+    List toRemove = new ArrayList();
+    for (Iterator overInvs = invs.iterator(); overInvs.hasNext(); ) {
+      Invariant inv = (Invariant)overInvs.next();
+      if (omitTypes['r'] && inv.isReflexive())
+        toRemove.add(inv);
+      else if (omitTypes['s'] && inv.getSuppressor() != null)
+        toRemove.add(inv);
+    }
+    removeInvariants(toRemove);
+  }
+
   public void repCheck() {
 
     for (Iterator iPptLower = po_lower.iterator(); iPptLower.hasNext(); ) {

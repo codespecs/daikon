@@ -3910,6 +3910,20 @@ public class PptTopLevel
     // System.out.println("Number of invs in joiner_view: " + joiner_view.invs.size());
   }
 
+  public void processOmissions(boolean[] omitTypes) {
+    // Avoid concurrent modification exceptions using arrays
+    Object viewArray[] = viewsAsCollection().toArray();
+    for (int i=0; i < viewArray.length; i++) {
+      PptSlice currentView = (PptSlice)viewArray[i];
+      currentView.processOmissions(omitTypes);
+    }
+    Object viewCondArray[] = views_cond.toArray();
+    for (int i=0; i < viewCondArray.length; i++) {
+      PptSlice currentCondView = (PptSlice)viewCondArray[i];
+      currentCondView.processOmissions(omitTypes);
+    }
+  }
+
   /**
    * Check the rep invariants of this.  Throw an Error if not okay.
    **/
