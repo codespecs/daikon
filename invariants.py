@@ -23,6 +23,11 @@ if not locals().has_key("fn_var_infos"):
     ### User configuration variables
     no_ternary_invariants = false
 
+    ### Debugging
+    debug_read = false                  # reading files
+    debug_derive = false                # deriving new values
+    debug_infer = false                 # inferring invariants
+
     ### Internal variables
     fn_var_infos = {}           # from function name to list of var_infos
     fn_var_values = {}	    # from function name to (tuple of values to occurrence count)
@@ -123,8 +128,8 @@ class var_info:
 
     def is_canonical(self):
         assert self.index != None
-        assert self.equal_to == [] or self.canonical_var != None
-        return self.equal_to == [] or self.canonical_var > self.index
+        assert self.equal_to == [] or self.canonical_var() != None
+        return self.equal_to == [] or self.canonical_var() > self.index
 
 
 def var_info_name_compare(vi1, vi2):
@@ -141,6 +146,9 @@ def merge_variables(filename, sub_fn_var_infos, sub_fn_var_values, sub_fn_sample
     See `read_file' for a description of the argument types; arguments 2-4 are
     dictionaries mapping from a function name to information about the function.
     """
+
+    if debug_read:
+        print "merge_variables", filename, sub_fn_var_infos.keys()
 
     assert not(file_fn_var_infos.has_key(filename))
     for fname in sub_fn_var_infos.keys():
@@ -333,7 +341,8 @@ def introduce_new_variables_one_pass(var_infos, var_values, indices, functions):
     in this function, we operate over only one function, not all functions.
     """
 
-    # print "introduce_new_variables_one_pass: indices %s (limit %s), functions %s" % (indices, len(var_infos), functions)
+    if debug_derive:
+        print "introduce_new_variables_one_pass: indices %s (limit %s), functions %s" % (indices, len(var_infos), functions)
 
     (intro_from_sequence, intro_from_scalar,
      intro_from_sequence_sequence, intro_from_sequence_scalar,
@@ -351,6 +360,8 @@ def introduce_new_variables_one_pass(var_infos, var_values, indices, functions):
 
     for i in indices:
         this_var_info = var_infos[i]
+        if not this_var_info.is_canonical():
+            continue
         if this_var_info.is_sequence():
             intro_from_sequence(var_infos, var_new_values, i)
         else:
@@ -406,7 +417,8 @@ def introduce_from_sequence_pass1(var_infos, var_new_values, index):
         seq_len_var_info = var_info(name_size, types.IntType, len(var_infos), true)
         var_infos.append(seq_len_var_info)
         seq_var_info.derived_len = len(var_infos)-1
-        # print "set derived_len for", seq_var_info, "to", len(var_infos)-1
+        if debug_derive:
+            print "set derived_len for", seq_var_info, "to", len(var_infos)-1
 
         for new_values in var_new_values.values():
             this_seq = new_values[index]
@@ -542,7 +554,8 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
                 new_value_less_one = seq[0:scl]
             else:
                 new_value_less_one = None
-            # print "seq %s = %s (len = %s), scl %s = %s, new_value_less_one = %s" % (seqvar, seq, len(seq), sclvar, scl, new_value_less_one)
+            if debug_derive:
+                print "seq %s = %s (len = %s), scl %s = %s, new_value_less_one = %s" % (seqvar, seq, len(seq), sclvar, scl, new_value_less_one)
             new_values.append(new_value_full)
             new_values.append(new_value_less_one)
 
@@ -795,7 +808,10 @@ def read_file_ftns(filename, fn_regexp=None):
     original values."""
 
     if type(fn_regexp) == types.StringType:
-        fn_regexp = re.compile(fn_regexp)
+        fn_regexp = re.compile(fn_regexp, re.IGNORECASE)
+
+    if debug_read:
+        print "read_file_ftns", filename, fn_regexp and fn_regexp.pattern
 
     file = open(filename, "r")
     line = file.readline()
@@ -841,7 +857,10 @@ def read_file(filename, fn_regexp=None):
     """
 
     if type(fn_regexp) == types.StringType:
-        fn_regexp = re.compile(fn_regexp)
+        fn_regexp = re.compile(fn_regexp, re.IGNORECASE)
+
+    if debug_read:
+        print "read_file", filename, fn_regexp and fn_regexp.pattern
 
     file = open(filename, "r")
 
@@ -851,7 +870,7 @@ def read_file(filename, fn_regexp=None):
     this_ftn_names = {}         # from function name to current number
                                 # of invocations
 
-    this_ftn_names = read_file_ftns(filename)
+    this_ftn_names = read_file_ftns(filename, fn_regexp)
 
     init_ftn_call_ct()          # initialize function call cts to 0
     line = file.readline()
@@ -859,13 +878,17 @@ def read_file(filename, fn_regexp=None):
         raise "First line should be tag line; saw: " + line
 
     while (line != ""):                 # line == "" when we hit end of file
+
         # line contains no tab character
         tag = line[:-1]                 # remove trailing newline
 
         if fn_regexp != None and not fn_regexp.match(line):
+            # print "-", line, 	# comma because line ends in newline
+            line = file.readline()
             while "\t" in line:
                 line = file.readline()
             continue
+        # print "+", line, 	# comma because line ends in newline
 
         # Increment function invocation count if ':::BEGIN'
         (tag_sans_suffix, suffix) = string.split(tag, ":::", 1)
@@ -962,6 +985,8 @@ def read_file(filename, fn_regexp=None):
         util.mapping_increment(this_fn_var_values[tag], these_values, 1)
         util.mapping_increment(this_fn_samples, tag, 1)
 
+    # print ""
+
     return (this_fn_var_infos, this_fn_var_values, this_fn_samples)
 
 
@@ -1056,7 +1081,7 @@ negative_invariant_confidence = .01     # .05 might also be reasonable
 def all_numeric_invariants(fn_regexp=None):
     """Compute and print all the numeric invariants."""
     if type(fn_regexp) == types.StringType:
-        fn_regexp = re.compile(fn_regexp)
+        fn_regexp = re.compile(fn_regexp, re.IGNORECASE)
 
     clear_invariants(fn_regexp)
 
@@ -1090,8 +1115,9 @@ def all_numeric_invariants(fn_regexp=None):
             assert util.sorted(derivation_index, lambda x,y:-cmp(x,y))
             for i in range(0,derivation_index[1]):
                 vi = var_infos[i]
-                assert vi.type != types.ListType or vi.derived_len != None
-            # print "old derivation_index =", derivation_index, "num_vars =", len(var_infos)
+                assert vi.type != types.ListType or vi.derived_len != None or not vi.is_canonical()
+            if debug_derive:
+                print "old derivation_index =", derivation_index, "num_vars =", len(var_infos)
 
             # If derivation_index == (a, b, c) and n = len(var_infos), then
             # the body of this loop:
@@ -1106,7 +1132,8 @@ def all_numeric_invariants(fn_regexp=None):
                 range(derivation_index[0], num_vars), var_infos, var_values)
 
             for pass_no in range(1,derivation_passes+1):
-                # print "pass", pass_no, "range", derivation_index[pass_no], derivation_index[pass_no-1]
+                if debug_derive:
+                    print "pass", pass_no, "range", derivation_index[pass_no], derivation_index[pass_no-1]
                 if derivation_index[pass_no] == derivation_index[pass_no-1]:
                     continue
                 introduce_new_variables_one_pass(
@@ -1115,7 +1142,8 @@ def all_numeric_invariants(fn_regexp=None):
                     derivation_functions[pass_no])
 
             derivation_index = (num_vars,) + derivation_index[:-1]
-            # print "new derivation_index =", derivation_index, "num_vars =", len(var_infos)
+            if debug_derive:
+                print "new derivation_index =", derivation_index, "num_vars =", len(var_infos)
 
 
         assert len(var_infos) == len(var_values.keys()[0])
@@ -1134,7 +1162,8 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
     if indices == []:
         return
 
-    # print "numeric_invariants_over_index", indices
+    if debug_infer:
+        print "numeric_invariants_over_index", indices
 
     # (Intentionally) ignores anything added by body,
     # though probably nothing should be added by this body.
@@ -1159,7 +1188,8 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
         # print "Setting invariant for index", i, "to", this_inv
         this_var_info.invariant = this_inv
 
-    # print "numeric_invariants_over_index: done with single invariants, starting pairs"
+    if debug_infer:
+        print "numeric_invariants_over_index: done with single invariants, starting pairs"
 
     # Invariant pairs
     ## Don't do this; the large list of pairs can exhaust memory, though
@@ -1212,8 +1242,8 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
                 var_infos[i1].equal_to.append(i2)
                 var_infos[i2].equal_to.append(i1)
 
-
-    # print "numeric_invariants_over_index: done with pairs, starting triples"
+    if debug_infer:
+        print "numeric_invariants_over_index: done with pairs, starting triples"
 
     # Invariant triples
     if no_ternary_invariants == true:
@@ -1291,7 +1321,7 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
 def print_invariants(fn_regexp=None, print_unconstrained=0):
     """Print out non-unconstrained invariants."""
     if type(fn_regexp) == types.StringType:
-        fn_regexp = re.compile(fn_regexp)
+        fn_regexp = re.compile(fn_regexp, re.IGNORECASE)
 
     function_names = fn_var_infos.keys()
     function_names.sort()
@@ -1310,7 +1340,7 @@ def print_invariants(fn_regexp=None, print_unconstrained=0):
                 continue
             print vi.name,              # no newline if ends with comma
             for equal_var in vi.equal_to:
-                print "=", equal_var.name,
+                print "=", var_infos[equal_var].name,
             print ""                    # print newline
         # Single invariants
         for vi in var_infos:
@@ -1327,7 +1357,7 @@ def print_invariants(fn_regexp=None, print_unconstrained=0):
             for (index,inv) in vi.invariants.items():
                 if type(index) != types.IntType:
                     continue
-                if not var_invs[index].is_canonical():
+                if not var_infos[index].is_canonical():
                     continue
                 if print_unconstrained or not inv.is_unconstrained():
                     print "   ", inv.format((vname, var_infos[index].name))
@@ -1340,10 +1370,10 @@ def print_invariants(fn_regexp=None, print_unconstrained=0):
                 if type(index_pair) == types.IntType:
                     continue
                 (i1, i2) = index_pair
-                if not var_invs[i1].is_canonical():
+                if not var_infos[i1].is_canonical():
                     # Perhaps err; this shouldn't happen, right?
                     continue
-                if not var_invs[i2].is_canonical():
+                if not var_infos[i2].is_canonical():
                     # Perhaps err; this shouldn't happen, right?
                     continue
                 if print_unconstrained or not inv.is_unconstrained():
@@ -2584,6 +2614,8 @@ class two_sequence_numeric_invariant(invariant):
 # invariants.read_invs('*.inv', "clear first")
 
 def read_merge_file(filename, fn_regexp=None):
+    if debug_read:
+        print "read_merge_file", filename, fn_regexp and fn_regexp.pattern
     (this_fn_var_infos, this_fn_var_values, this_fn_samples) = read_file(filename, fn_regexp)
     merge_variables(filename, this_fn_var_infos, this_fn_var_values, this_fn_samples)
 
@@ -2593,11 +2625,14 @@ def read_inv(filename="medic/invariants.raw"):
     print_hashtables()
 
 def read_invs(files, clear=0, fn_regexp=None):
-    """FILES is either a sequence of file names or a single Unix file pattern."""
+    """FILES is either a sequence of file names or a single Unix file pattern.
+    FN_REGEXP, if a string, is converted into a case-insensitive regular expression.
+    Don't supply a value containing ":::END" or ":::BEGIN"; it should match only
+    the function name, as ":::BEGIN" and ":::END" are expected to match."""
     if clear:
         clear_variables()
     if type(fn_regexp) == types.StringType:
-        fn_regexp = re.compile(fn_regexp)
+        fn_regexp = re.compile(fn_regexp, re.IGNORECASE)
 
     def env_repl(matchobj):
         return posix.environ[matchobj.group(0)[1:]]
