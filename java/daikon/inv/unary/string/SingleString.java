@@ -22,6 +22,11 @@ public abstract class SingleString
     // System.out.println("Created SingleString invariant " + this + " at " + ppt);
   }
 
+  /** Returns whether or not the specified types are valid for unary string **/
+  public boolean valid_types (ProglangType[] rep_types) {
+    return ((rep_types.length == 1) && rep_types[0].isString());
+  }
+
   public VarInfo var() {
     return ppt.var_infos[0];
   }

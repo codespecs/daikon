@@ -21,6 +21,11 @@ public abstract class SingleFloat
     // System.out.println("Created SingleFloat invariant " + this + " at " + ppt);
   }
 
+  /** Returns whether or not the specified types are valid for unary float **/
+  public boolean valid_types (ProglangType[] rep_types) {
+    return ((rep_types.length == 1) && rep_types[0].isFloat());
+  }
+
   public VarInfo var() {
     return ppt.var_infos[0];
   }

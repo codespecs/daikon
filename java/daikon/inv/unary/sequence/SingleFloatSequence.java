@@ -21,6 +21,12 @@ public abstract class SingleFloatSequence
     // System.out.println("Created SingleFloatSequence invariant " + this + " at " + ppt);
   }
 
+  /** Returns whether or not the specified types are valid  **/
+  public boolean valid_types (ProglangType[] rep_types) {
+    return ((rep_types.length == 1)
+            && rep_types[0].baseIsFloat() && rep_types[0].isArray());
+  }
+
   // Should never be called with modified == ValueTuple.MISSING_NONSENSICAL.
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.

@@ -21,6 +21,12 @@ public abstract class SingleScalarSequence
     // System.out.println("Created SingleScalarSequence invariant " + this + " at " + ppt);
   }
 
+  /** Returns whether or not the specified types are valid  **/
+  public boolean valid_types (ProglangType[] rep_types) {
+    return ((rep_types.length == 1)
+            && rep_types[0].baseIsScalar() && rep_types[0].isArray());
+  }
+
   public VarInfo var() {
     return ppt.var_infos[0];
   }

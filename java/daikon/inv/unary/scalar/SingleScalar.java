@@ -25,6 +25,12 @@ public abstract class SingleScalar
     return ppt.var_infos[0];
   }
 
+  /** Returns whether or not the specified types are valid for unary scalar **/
+  public boolean valid_types (ProglangType[] rep_types) {
+
+    return ((rep_types.length == 1) && rep_types[0].isScalar());
+  }
+
   // Should never be called with modified == ValueTuple.MISSING_NONSENSICAL.
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
