@@ -46,11 +46,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 4.0.3
+@center Daikon version 4.1.0
 
 @sp 1
-@c Daikon version 4.0.3 date
-@center March 1, 2005
+@c Daikon version 4.1.0 date
+@center April 1, 2005
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -72,7 +72,7 @@ Copyright @copyright{} 1998-2005
 @c <h1>Daikon Invariant Detector User Manual</h1>
 @c
 @c This is the user manual for the Daikon invariant detector.
-@c It describes Daikon version 4.0.3, released March 1, 2005.
+@c It describes Daikon version 4.1.0, released April 1, 2005.
 @c @end html
 
 @c Putting this lower in the HTML version looks a little bit strange,
@@ -91,7 +91,7 @@ Copyright @copyright{} 1998-2005
 @c 
 @c @end ifinfo
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 4.0.3, released March 1, 2005.
+It describes Daikon version 4.1.0, released April 1, 2005.
 @end ifnottex
 
 @menu
@@ -2563,7 +2563,7 @@ To find splitting conditions using cluster analysis, run the
 @command{runcluster.pl} program (found in the @file{$DAIKONDIR/bin}
 directory) in the following way:
 @example
-runcluster.pl [@var{options}] @var{dtrace_file(s)} @var{decls_files(s)}
+runcluster.pl [@var{options}] @var{dtrace_file ...} @var{decls_files ...}
 @end example
 
 The @var{options} are:
@@ -2614,7 +2614,7 @@ To find splitting conditions using random selection, run the
 @command{daikon.tools.TraceSelect} program in the following way:
 @example
 java daikon.tools.TraceSelect @var{num_reps} @var{sample_size} [@var{options}] \
-    @var{dtrace_file} @var{decls_files(s)} [@var{daikon_options}]
+    @var{dtrace_file} @var{decls_files ...} [@var{daikon_options}]
 @end example
 
 @var{num_reps} is the number of subsets to create, and @var{sample_size} is the
@@ -4795,8 +4795,9 @@ Create the invariants file (and @file{.txt} file,
 if @option{-t} is given), but do not start the Tree GUI@.
 
 @item --daikonarg @var{arg}
-Supply additional argument(s) to Daikon proper.
-Can be specified multiple times.
+Supply additional argument to Daikon proper.
+Can be specified multiple times, in order to supply multiple arguments to
+Daikon.
 Warning:  be careful with quoting, as the argument is supplied directly
 to the shell and may be viewed as multiple arguments or reinterpreted
 (which may or may not be what you want).
@@ -8105,7 +8106,7 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 4.0.3, released March 1, 2005.
+This manual describes Daikon version 4.1.0, released April 1, 2005.
 A more detailed list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.

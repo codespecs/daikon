@@ -69,14 +69,13 @@ Kvasir
         Support for inheritance and polymorphic member function calls have
         not yet been tested.
 
-  Bug Fixes
+  Bug fixes
     
     Fixed a variety of segmentation faults in Kvasir.  Kvasir now runs on
     programs of significant size (for example, gcc 3.4.3, which is over
     300,000 lines of code).
 
 ---------------------------------
-
 
 4.0.3 (Mar 1 2005)
 

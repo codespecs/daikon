@@ -516,6 +516,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	cd /tmp/daikon; cvs -d $(CVS_REPOSITORY) co -P valgrind-kvasir
 	mv /tmp/daikon/valgrind-kvasir /tmp/daikon/kvasir
 	cd /tmp/daikon/kvasir; cvs -d $(CVS_REPOSITORY) co -P kvasir
+	cd /tmp/daikon/kvasir; cvs -d $(CVS_REPOSITORY) co -P kvasircomp
 	find /tmp/daikon/kvasir -name '.cvsignore' | xargs rm
 	find /tmp/daikon/kvasir -name 'CVS' -type d | xargs rm -rf
 	find /tmp/daikon/kvasir/kvasir -name '*.txt' -type f | xargs rm
