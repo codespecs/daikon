@@ -1068,8 +1068,7 @@ public final class FileIO {
                     + ", got " + line + " for program point " + ppt.name());
       }
       if (!((line.equals("0") || line.equals("1") || line.equals("2")))) {
-        throw new FileIOException("Bad modbit"
-                        + " at " + data_trace_filename,
+        throw new FileIOException("Bad modbit",
                         reader, data_trace_filename);
       }
       int mod = ValueTuple.parseModified(line);
