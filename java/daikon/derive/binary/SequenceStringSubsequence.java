@@ -23,6 +23,21 @@ public final class SequenceStringSubsequence
   public static boolean dkconfig_enabled = true;
 
   /**
+   * Represents a subsequence of a sequence.  The subsequence a[i..j]
+   * includes the endpoints i and j.  The subsequence is meaningful if:
+   *  i >= 0
+   *  i <= a.length
+   *  j >= -1
+   *  j <= a.length-1
+   *  i <= j+1
+   * These are the empty array:
+   *   a[0..-1]
+   *   a[a.length..a.length-1]
+   * These are illegal:
+   *   a[1..-1]
+   *   a[a.length..a.length-2]
+   *   a[a.length+1..a.length]
+   *
    * @param from_start true means the range goes 0..n; false means the
    * range goes n..end.  (n might be fudged through off_by_one)
    * @param off_by_one true means we should exclude the scalar from
@@ -50,8 +65,12 @@ public final class SequenceStringSubsequence
     // should just return the whole array; but we don't do that.  We
     // say MISSING instead.
 
+    // Note that the resulting array
+    // is a[begin_inclusive..end_exclusive-1],
+    // not a[begin_inclusive..end_exclusive].
     int begin_inclusive, end_exclusive;
     if (from_start) {
+      // The subsequence is a[0..val2+index_shift]
       begin_inclusive = 0;
       end_exclusive = val2+index_shift+1; // +1: endpoint is exclusive
       // end_exclusive = 0 is acceptable; that means the empty array (given
@@ -59,12 +78,13 @@ public final class SequenceStringSubsequence
       if ((end_exclusive < 0) || (end_exclusive > val1_array.length))
         return ValueAndModified.MISSING_NONSENSICAL;
     } else {
+      // The subsequence is a[val2+index_shift..a.length-1]
       begin_inclusive = val2+index_shift;
       end_exclusive = val1_array.length;
       // begin_inclusive = val1_array.length is acceptable; that means the
       // empty array (given that end_exclusive is val1_arrayl.length)
-      // TNW: I'm not sure if this is right.  I'd argue that the > check
-      // below should be >=.  Otherwise, is a[MAX_INT..MAX_INT] == []??
+      // (It is permitted to have a[a.length..a.length-1], which means
+      // the empty array.  But a[MAX_INT..MAX_INT-1] is not meaningful.)
       if ((begin_inclusive < 0) || (begin_inclusive > val1_array.length))
         return ValueAndModified.MISSING_NONSENSICAL;
     }
