@@ -198,6 +198,7 @@ Interpreting Daikon output
 * Variable names::              
 * Equal variables::             
 * Invariant list::              
+* Invariant filters::           
 
 Variable names
 
@@ -2399,6 +2400,7 @@ Diff}) programs to print the results.)
 * Variable names::              
 * Equal variables::             
 * Invariant list::              
+* Invariant filters::           
 @end menu
 
 
@@ -2729,7 +2731,7 @@ equal and @var{a} is chosen as the leader, the printed invariants will
 include any invariants over @var{a} and the equality invariants "a=b"
 and "a=c"
 
-@node   Invariant list,  , Equal variables, Interpreting output
+@node   Invariant list, Invariant filters, Equal variables, Interpreting output
 @subsection Invariant list
 
 The following is a list of all of the invariants that Daikon detects.
@@ -2742,6 +2744,93 @@ options}.
 @table @asis
 @include invariants-doc.texinfo
 @end table
+
+@node Invariant filters,  , Invariant list, Interpreting output
+@subsection Invariant filters
+
+The following is a list of the invariant filters that Daikon supports.
+Each of these filters has a corresponding configuration enable switch;
+by default, all filters are enabled.  @xref{Configuration options},
+for details.
+
+@itemize @bullet
+
+@cindex ObviousFilter
+@item ObviousFilter:  suppress obvious invariants
+
+This filter suppresses invariants because they are obvious from looking
+at other invariants.  Some examples are:
+
+@itemize @bullet
+
+@item If ``size(args[])==0'' is shown, then ``size(args[])-1==-1'' is
+obvious and will not be displayed by default.
+@item If ``this.topOfStack < size(this.theArray[])-1'' is shown, then
+``this.topOfStack < size(this.theArray[])'' is obvious and will not be
+displayed by default.
+
+@end itemize
+
+
+
+@cindex OnlyConstantVariablesFilter
+@item OnlyConstantVariablesFilter:  suppress invariants containing only constants
+
+This filter suppresses comparison invariants in which all of the
+variables being compared were observed to be constant.  In the current
+version of Daikon, most such invariants are not even created in the
+first place, because constants are detected on an early pass over the
+data.  However, Daikon will note that all of the invariants that had
+any particular constant value were also equal to each other: such
+invariants will be suppressed by this filter.
+
+
+@cindex ParentFilter
+@item ParentFilter:  filter invariants that match a parent program point invariant
+
+A controlled invariant is an invariant that is "controlled" --- or
+implied --- by another program point.  For example, for Java instrumented
+code each class is associated with an object program point, which
+contain invariants that are found at the entry and exit of all public
+methods.  So in addition to the usual program points such as
+@code{StackAr.StackAr(int):::ENTER} and
+@code{StackAr.isEmpty():::EXIT48}, daikon outputs invariants for the
+artificial program point @code{StackAr:::OBJECT}.  The invariants for
+@code{StackAr:::OBJECT} control the invariants for
+@code{StackAr.StackAr(int):::ENTER} and
+@code{StackAr.isEmpty():::EXIT48}, because the former imply the latter.
+Because of this redundancy, controlled invariants are not displayed by
+default.  Note that if for some reason, the controlling invariant is not
+displayed (for example, because it's unjustified), then the controlled
+invariant @emph{will} be displayed.
+
+@cindex SimplifyFilter
+@item SimplifyFilter:  eliminate invariants using Simplify
+
+Daikon can use the Simplify theorem-prover to eliminate even more
+implied invariants than Daikon's built-in tests are able to eliminate.
+Simplify must be separately obtained (from
+@uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
+order to take advantage of this filter.
+
+If you don't also specify the @code{--suppress_redundant} command-line 
+option to enable Simplify processing, this filter doesn't do anything.
+
+@cindex UnjustifiedFilter
+@item UnjustifiedFilter:  suppress unjustified invariants
+
+For every invariant, Daikon estimates the probability of that invariant
+happening by chance.  If that probability is less than the limit, then
+the invariant is deemed to be an actual invariant, not just a chance
+occurrence.  Currently the limit is .01%.  So by default, only invariants
+with probabilities of less than .01% are shown.
+
+@cindex UnmodifiedVariableEqualityFilter
+@item UnmodifiedVariableEqualityFilter:  suppress invariants that merely indicate that a variable was unmodified
+
+This filter is only useful for ESC output.
+
+@end itemize
 
 
 @node    Printing invariants, Invariant Diff, Interpreting output, Daikon output
@@ -3044,126 +3133,9 @@ be updated.)
 
 Property filters narrow down the list of invariants that are displayed.
 You can adjust which Property filters are being applied.  By default,
-all Property filters are enabled.  Daikon supports the following
-property filters:
+all Property filters are enabled.
 
-@table @var
- 
-@item Suppress invariants containing non-canonical variables
-
-For many program points there are sets of variables that are equal to
-each other.  When this happens, one variable from the set is chosen to
-be the canonical variable.  This filter hides invariants involving the
-remaining non-canonical variables, because they are implied by
-invariants involving the canonical variable.
-
-@item Suppress parameter-derived postcondition invariants
-
-Generally speaking, Daikon formulates invariants in terms of the
-parameters to methods and their return values, in order to produce
-invariants that describe a method's visible behavior, rather than
-details of its implementation.  This policy has some subtleties,
-though, when a method modifies one of its parameters.  When a
-parameter is passed by value, the method can modify its copy of it
-without the changes being visible to a caller, but if an argument
-refers to another object, changes to that object may be visible.  This
-filter hides invariants that are postconditions (i.e., occur in EXIT
-program points) and that involve the final values of parameters, or
-of derived properties of parameters that may have been modified, since
-such invariants usually describe hidden implementation details.
-
-@item Suppress unjustified invariants
-
-For every invariant, Daikon estimates the probability of that invariant
-happening by chance.  If that probability is less than the limit, then
-the invariant is deemed to be an actual invariant, not just a chance
-occurrence.  Currently the limit is .01%.  So by default, only invariants
-with probabilities of less than .01% are shown.
-
-@item Suppress obvious invariants
-
-This filter suppresses invariants because they are obvious from looking
-at other invariants.  Some examples are:
-
-@itemize @bullet
-
-@item If ``size(args[])==0'' is shown, then ``size(args[])-1==-1'' is
-obvious and will not be displayed by default.
-@item If ``this.topOfStack < size(this.theArray[])-1'' is shown, then
-``this.topOfStack < size(this.theArray[])'' is obvious and will not be
-displayed by default.
-@end itemize
-
-@item Suppress invariants with few modified samples
-
-This filter suppresses invariants with a relatively few number of
-modified samples.  An example of such an invariant would be the
-following: ``x >= 5'', where ``x'' is observed to be 5 three times
-and 10 five times.  The observed values of @code{x} --- i.e., the samples of
-@code{x} --- did not change enough for Daikon to be confident that this
-invariant is an actual invariant.
-
-@item Suppress comparisons containing only constants
-
-This filter suppresses comparison invariants in which all of the
-variables being compared were observed to be constant.  In the current
-version of Daikon, most such invariants are not even created in the
-first place, because constants are detected on an early pass over the
-data.  However, Daikon will note that all of the invariants that had
-any particular constant value were also equal to each other: such
-invariants will be suppressed by this filter.
-
-@c This one is commented out, since it is in the source too -SMcC
-@c @item Suppress invariants with uninteresting literals
-@c This filter suppresses invariants containing literal numbers, such as
-@c ``x < 45'' and ``y[] one of { [42, 12, 23], [-4, 46] }'', based on a
-@c heuristic judgement that some numbers are more interesting than
-@c others.  Such potential invariants are sometimes undesirable because
-@c they are likely to represent a limitation of the way in which a
-@c program was tested, rather than a true invariant thst would hold over
-@c all possible program executions.
-
-@item Suppress implied postcondition invariants
-
-Implied postcondition invariants are invariants involving @code{orig()}
-variables that exist as precondition invariants.  For example, say that
-@code{StackAr.isEmpty():::ENTER} has the invariant ``x==y''.  Then in
-@code{StackAr.isEmpty():::EXIT48}, the invariant ``orig(x)==orig(y)''
-is an implied postcondition invariant and will not be displayed by
-default.
-
-@item Eliminate invariants based on Simplify
-
-Daikon can use the Simplify theorem-prover to eliminate even more
-implied invariants than Daikon's built-in tests are able to eliminate.
-Simplify must be separately obtained (from
-@uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
-order to take advantage of this filter.
-
-@item Suppress obvious equality invariants
-
-Like ``Suppress obvious invariants'', but applies only to equality
-invariants of the form ``x==y''.
-
-@item Suppress controlled invariants
-
-A controlled invariant is an invariant that is "controlled" --- or
-implied --- by another program point.  For example, for Java instrumented
-code each class is associated with an object program point, which
-contain invariants that are found at the entry and exit of all public
-methods.  So in addition to the usual program points such as
-@code{StackAr.StackAr(int):::ENTER} and
-@code{StackAr.isEmpty():::EXIT48}, daikon outputs invariants for the
-artificial program point @code{StackAr:::OBJECT}.  The invariants for
-@code{StackAr:::OBJECT} control the invariants for
-@code{StackAr.StackAr(int):::ENTER} and
-@code{StackAr.isEmpty():::EXIT48}, because the former imply the latter.
-Because of this redundancy, controlled invariants are not displayed by
-default.  Note that if for some reason, the controlling invariant is not
-displayed (for example, because it's unjustified), then the controlled
-invariant @emph{will} be displayed.
-
-@end table
+For information about property filters, see @ref{Invariant filters}.
 
 @node    Variable filters,  , Property filters, Control panel
 @subsubsection Variable filters
