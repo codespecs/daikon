@@ -343,14 +343,14 @@ To support a new output format, you need to do three things:
 @c @samp{format_@var{newtype}()} method.  Each subclass of Invariant
 @c already has three such methods --- @samp{format()}, @samp{format_esc()},
 @c and @samp{format_simplify()} --- for you to crib from.
-Add a new static final field to the enumeration
-daikon.inv.Invariant.OutputFormat.
+Add a new static final field to the class
+daikon.inv.Invariant.OutputFormat, which acts as an enumeration.
 @item
 Edit, in every subclass of @samp{Invariant}, the
 @samp{format_using} method to handle the new OutputFormat.
 @item
-Edit @samp{PrintInvariants.print_invariants()} to enable selecting your
-new output format.
+Edit @file{PrintInvariants.java} and @file{Daikon.java}
+to enable selecting your new output format.
 @end itemize
 
 

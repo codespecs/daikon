@@ -7019,7 +7019,7 @@ which contains invariants that are true for all of an object's methods,
 rather than for just one method:
 
 @example
-  StackAr.:::OBJECT
+  StackAr:::OBJECT
 @end example
 
 
