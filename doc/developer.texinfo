@@ -118,11 +118,11 @@ Avoiding work for redundant invariants
 
 Testing
 
-* Unit Testing::                
+* Unit testing::                
 
-Unit Testing
+Unit testing
 
-* Invariant Format Testing::    
+* Invariant format testing::    
 * Sample Testing::              
 
 Sample Testing
@@ -992,7 +992,7 @@ correct output, then run "@samp{make update-inv-goals}" to update the Daikon
 @samp{invs.goal} file.
 
 @menu
-* Unit Testing::                
+* Unit testing::                
 @end menu
 
 @node    Unit testing,  , Testing, Testing
@@ -1006,11 +1006,11 @@ also run them explicitly via @samp{make unit}.  When you write new code
 or modify old code, please try to add unit tests.
 
 @menu
-* Invariant Format Testing::    
+* Invariant format testing::    
 * Sample Testing::              
 @end menu
 
-@node    Invariant format testing, Sample Testing, Unit Testing, Unit Testing
+@node    Invariant format testing, Sample Testing, Unit testing, Unit testing
 @subsection Invariant format testing
 
 This tests the formatting of invariants with specified input.  The
@@ -1139,7 +1139,7 @@ function. Otherwise the program has no was of knowing how to create
 such an object from a string. All primitives and the String type are
 already recognized.
 
-@node    Sample Testing,  , Invariant Format Testing, Unit Testing
+@node    Sample Testing,  , Invariant format testing, Unit testing
 @subsection Sample Testing
 
 Sample testing tests various components of Daikon as samples are being
