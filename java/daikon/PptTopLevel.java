@@ -2497,10 +2497,10 @@ public class PptTopLevel extends Ppt {
 	      if (other.isDerivedSequenceMinMaxSum())
 		break;
               if (vi.rep_type.isArray()) {
-                // String[] forall = VarInfo.esc_forall_2(vi, other);
-                // out.println("(" + forall[0] + "(" + forall[1] + " == " + forall[2] + "))");
-		out.println("format_simplify on array elemenwise equality needed " +
-			    vi.name + " eq " + other.name);
+		String[] form =
+		  VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
+		    { vi.name, other.name }, true); // elementwise
+                out.println(form[0] + "(EQ " + form[1] + " " + form[2] + " )" + form[3]);
               } else {
 		out.println("(EQ " + vi.name.simplify_name() +
 			    " " + other.name.simplify_name() + ")");
