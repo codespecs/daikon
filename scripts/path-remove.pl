@@ -1,6 +1,11 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 
-# Remove duplicates and things that I don't want from my path.
+# Remove duplicates, non-existent directories, and things that I don't want
+# from my path.  Works for either space- or colon- delimiated paths.
+# Usage:
+#   setenv PATH `echo $PATH | $HOME/bin/share/path-remove.pl`
+#   set path = (`echo $path | $HOME/bin/share/path-remove.pl`)
+
 
 $splitchar = ":";
 @result = ();
@@ -16,7 +21,8 @@ while (<>) {
 	split(":");
       }
       foreach $temp (@_) {
-	if ((!defined($already_seen{$temp}))) {
+	if ((-e $temp)
+	    && (!defined($already_seen{$temp}))) {
 	      $already_seen{$temp} = 1;
 	      push(@result, $temp);
           }
