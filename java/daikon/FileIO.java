@@ -703,6 +703,8 @@ public final class FileIO {
         // Add orig and derived variables; pass to inference (add_and_flow)
         ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
         process_sample(ppt, vt, nonce);
+        //Debug.check (all_ppts, "counter = " + count + " ppt = "
+        //                  + ppt.name + " " + Debug.related_vars (ppt, vt));
       }
     // }
     // // This catch clause is a bit of a pain.  On the plus side, it gives
@@ -726,7 +728,7 @@ public final class FileIO {
 
     data_trace_filename = null;
     data_trace_reader = null;
-  }
+    }
 
   /**
    * Add orig() and derived variables to vt (by side effect), then
@@ -773,7 +775,10 @@ public final class FileIO {
           debugRead.fine ("Adding ValueTuple to " + ppt.name);
           debugRead.fine ("  length is " + vt.vals.length);
         }
-        ppt.add_and_flow(vt, 1);
+        if (Daikon.df_bottom_up)
+          ppt.add_bottom_up (vt, 1);
+        else
+          ppt.add_and_flow(vt, 1);
 
         // [INCR] temporal_manager.processEvent(temporal_manager.generateSampleEvent(ppt, vt));
 
