@@ -16,10 +16,13 @@ my $usage = "Usage: buildtest.pl [--quiet]\n"
 my $quiet = 0;
 my $nocleanup = 0;
 # These three flags permit only part of the tests to be run; good for debugging.
+# When on, skip Daikon unit tests, Daikon system tests, and diff system tests
 my $skip_daikon = 0;
 my $skip_dfec = 0;
 my $skip_dfej = 0;
-my $use_ver3 = 0;		# When on, use version 3 of Daikon
+# When on, use version 3 of Daikon
+my $use_ver3 = 0;
+
 while (scalar(@ARGV) > 0) {
   my $arg = shift @ARGV;
   if ($arg eq "--quiet") {
@@ -35,7 +38,7 @@ while (scalar(@ARGV) > 0) {
   } elsif ($arg eq "--use_ver3") {
     $use_ver3 = 1;
   } else {
-    die "$usage\n";
+    die "Unrecognized argument $arg\n$usage\n";
   }
 }
 

@@ -111,9 +111,9 @@ foreach my $decls_file (@decls_files) {
 
 foreach my $dtrace_file (@dtrace_files) {
   if ($dtrace_file =~ /\.gz/) {
-    open (DTRACE, "zcat $dtrace_file |") || &dieusage("couldn't open dtrace file $dtrace_file with zcat\n");
+    open (DTRACE, "zcat $dtrace_file |") || die("couldn't open dtrace file $dtrace_file with zcat\n");
   } else {
-    open (DTRACE, $dtrace_file) || &dieusage("couldn't open dtrace file $dtrace_file\n");
+    open (DTRACE, $dtrace_file) || die("couldn't open dtrace file $dtrace_file\n");
   }
 
   # print "opened $dtrace_file\n";
@@ -456,7 +456,7 @@ sub get_random_numbers($$) {
 #point, and open an output file for each decls file
 sub read_decls_file ( $ ) {
   my $decls_file = $_[0];
-  open(DECL, $decls_file) || &dieusage("canont read decls file $decls_file");
+  open(DECL, $decls_file) || &dieusage("cannot read decls file $decls_file");
   while (<DECL>) {
     my $line = $_;
     if ($line =~ /^DECLARE$/) {

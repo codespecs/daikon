@@ -1,4 +1,7 @@
 #!/usr/bin/env perl
+# util_daikon.pm -- Perl utilities for the Daikon project.
+# The externally-visible procedures are listed in the @EXPORT statement.
+
 package util_daikon;
 require 5.003;			# uses prototypes
 require Exporter;
@@ -13,6 +16,8 @@ use checkargs;
 use Carp;
 
 # Execute the command; die if its execution is erroneous.
+# If optional second argument is non-zero, print the command to standard out,
+# which may be helpful for indicating progress.
 sub system_or_die ( $;$ ) {
   my ($command, $verbose) = check_args_range(1, 2, @_);
   if ($verbose) { print "$command\n"; }
@@ -22,6 +27,8 @@ sub system_or_die ( $;$ ) {
 }
 
 # Execute the command and return the output; die if its execution is erroneous.
+# If optional second argument is non-zero, print the command to standard out,
+# which may be helpful for indicating progress.
 sub backticks_or_die ( $;$ ) {
   my ($command, $verbose) = check_args_range(1, 2, @_);
   if ($verbose) { print "$command\n"; }
@@ -32,7 +39,9 @@ sub backticks_or_die ( $;$ ) {
 
 # Remove non-word characters from a program point name, as declared in a
 # decls file.  Used for converting ppt names to file names.
-my @pptname_unwanted = ('<', '>', '\\', '/', ';', '(', ')');
+my @pptname_unwanted = ('<', '>', '\\', '/', ';', '(', ')',
+			# these appear in program point names for C programs
+			'*', ' ');
 my %pptname_cache = ();
 sub cleanup_pptname ( $ ) {
   my ($ppt) = @_;

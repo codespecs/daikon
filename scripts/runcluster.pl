@@ -135,7 +135,7 @@ foreach my $filename (@to_cluster) {
 # Rewrite the dtrace file to include the cluster information.
 if ($verbose) { print "\n# Rewriting dtrace file ...\n"; }
 my @clustered_files = glob("*\\.cluster");
-$command = "write_dtrace.pl --algorithm $algorithm $dtrace_files " . join(' ', @clustered_files);
+$command = "dtrace-add-cluster.pl --algorithm $algorithm -log dtrace-add-cluster.log $dtrace_files " . join(' ', @clustered_files);
 system_or_die($command, $verbose);
 
 # Rewrite the decls file to include the cluster information.
