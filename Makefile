@@ -3,14 +3,16 @@
 ###
 
 # Should gries-instrumented be in this list?
-LISP_FILES := lisp-front-end/gries-helper.lisp lisp-front-end/instrument.lisp lisp-front-end/data-trace.lisp \
-	lisp-front-end/load-all.lisp \
-	lisp-front-end/gries.lisp lisp-front-end/gries-instrumented.lisp lisp-front-end/inv-medic.lisp
+LISP_FILES := gries-helper.lisp instrument.lisp data-trace.lisp \
+	load-all.lisp \
+	gries.lisp gries-instrumented.lisp inv-medic.lisp
+LISP_PATHS := $(addprefix lisp-front-end/,$(LISP_FILES))
 PYTHON_FILES := daikon.py util.py TextFile.py
 DOC_FILES := daikon.py.doc Makefile daikon.html daikon.gif
 PY_DOC_FILES := daikon.py.doc Makefile TextFile.README daikon.gif
 README_FILES := README-daikon-java README-daikon1 README-dist
-SCRIPT_FILES := scripts/modbit-munge.pl scripts/java-cpp
+SCRIPT_FILES := modbit-munge.pl java-cpp lines-from
+SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 
 # EDG_DIR := /homes/gws/mernst/research/invariants/edg/dist
 EDG_DIR := /homes/gws/mernst/research/invariants/c-front-end
@@ -52,9 +54,9 @@ tags: TAGS
 
 ## As of July 1998, my Linux etags works on Python; my Solaris one doesn't.
 ## So I should be sure to do the make on a Linux machine. -MDE
-TAGS:  $(LISP_FILES) $(PYTHON_FILES)
+TAGS:  $(LISP_PATHS) $(PYTHON_FILES)
 	cd daikon; $(MAKE) tags
-	etags $(LISP_FILES) $(PYTHON_FILES) --include=daikon/TAGS
+	etags $(LISP_PATHS) $(PYTHON_FILES) --include=daikon/TAGS
 
 ###########################################################################
 ### Distribution
@@ -80,7 +82,7 @@ $(DIST_DIR)/daikon.tar.gz: daikon.tar.gz
 	chmod ogu-w $(DIST_DIR)/daikon.tar.gz $(DIST_DIR)/daikon.html
 	update-link-dates $(DIST_DIR)/index.html
 
-daikon.tar: $(LISP_FILES) $(PYTHON_FILES) $(DOC_FILES) $(PY_DOC_FILES) $(EDG_FILES) $(README_files) examples-gries.tar.gz
+daikon.tar: $(LISP_PATHS) $(PYTHON_FILES) $(DOC_FILES) $(PY_DOC_FILES) $(EDG_FILES) $(README_files) examples-gries.tar.gz
 	mkdir /tmp/daikon
 
 	# Old Python implementation
@@ -106,11 +108,11 @@ daikon.tar: $(LISP_FILES) $(PYTHON_FILES) $(DOC_FILES) $(PY_DOC_FILES) $(EDG_FIL
 
 	# Auxiliary programs
 	mkdir /tmp/daikon/bin
-	cp -p $(SCRIPT_FILES) /tmp/daikon/bin
+	cp -p $(SCRIPT_PATHS) /tmp/daikon/bin
 
 	# Lisp instrumenter
 	mkdir /tmp/daikon/lisp-front-end
-	cp -p $(LISP_FILES) /tmp/daikon/lisp-front-end
+	cp -p $(LISP_PATHS) /tmp/daikon/lisp-front-end
 
 	# C/C++ instrumenter
 	mkdir /tmp/daikon/c-front-end
