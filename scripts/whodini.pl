@@ -149,7 +149,7 @@ grep {
     }
 } @txtesc;
 
-print "Processing...";
+print "Houdini is inferring likely invariants; please wait..";
 
 # Iterative ("Houdini") looping
 while (1) {
@@ -239,9 +239,14 @@ while (1) {
 
 sub swap_lineno ( $$ ) {
   my ($count, $reported_line) = @_;
-  my $result = $map[$count][$reported_line];
+  my $result;
+  if (defined($count) && defined($reported_line)) {
+    $result = $map[$count][$reported_line];
+  }
   if (! defined($result)) {
-    print STDERR "whodini.pl: Internal error: map[$count][$reported_line]\n";
+    $count = "" unless defined($count);
+    $reported_line = "" unless defined($reported_line);
+    print STDERR "whodini.pl: Internal error: map[$count][$reported_line].  Line numbers may be incorrect.\n";
     $result = $reported_line;
   }
   return $result;
