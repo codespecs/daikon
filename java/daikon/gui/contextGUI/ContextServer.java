@@ -247,7 +247,7 @@ public class ContextServer
 		if (new_filename == null)
 			return "Format Error with " + fo_inv.getName();
 
-		// Dont want to add duplicate file so we check the file name
+		// Don't want to add duplicate file so we check the file name
 		if (filelist.contains(pathname))
 			return "File " + fo_inv.getName() + " Already in Database";
 		else
@@ -901,7 +901,7 @@ public class ContextServer
 			}
 		}
 
-		// we dont want to remove anything from the invariant lists
+		// we don't want to remove anything from the invariant lists
 		public void remove()
 		{
 			throw new UnsupportedOperationException();

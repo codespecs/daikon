@@ -90,7 +90,7 @@ public final class ContextGUI extends JApplet implements ActionListener
 	private boolean no_variable;
 
 	// This is the action protection variable, which basically means when
-	// I change a combo box I dont not want to set the change off as an
+	// I change a combo box I do not want to set the change off as an
 	// action that has been performed.
 	private boolean action_pro = false;
 
@@ -166,7 +166,7 @@ public final class ContextGUI extends JApplet implements ActionListener
 		// This is when the Add File command is choosen from the menu.
 		// This will pop up a file chooser box and add the file to the
 		// the user selects into the database. If the user cancel the
-		// file chooser, then we dont do anything.
+		// file chooser, then we don't do anything.
 		else if (e.getActionCommand().equals("Add File"))
 		{
 			JFileChooser chooser = new JFileChooser(new File("."));
@@ -305,7 +305,7 @@ public final class ContextGUI extends JApplet implements ActionListener
 		{
 			dfc.setMethodIterator(jcclass.getSelectedItem().toString());
 
-			// This will get our methods for the class in the the vector and
+			// This will get our methods for the class in the vector and
 			// then we will iterate through the vector checking to see if
 			// it was the last item selected to keep smooth browsing for the
 			// user. Then we add the item to the list.`
@@ -348,7 +348,7 @@ public final class ContextGUI extends JApplet implements ActionListener
 		if (!jcclass.getSelectedItem().toString().equals("None"))
 		{
 			// This gets the currently selected method name or if all
-			// then we dont care about the method name and we are going
+			// then we don't care about the method name and we are going
 			// to send the iterator a null
 			String method_pass = jcmeth.getSelectedItem().toString();
 			if (method_pass.equals("All"))
@@ -397,14 +397,14 @@ public final class ContextGUI extends JApplet implements ActionListener
 		if (!jcclass.getSelectedItem().toString().equals("None"))
 		{
 			// This gets the currently selected method name or if all
-			// then we dont care about the method name and we are going
+			// then we don't care about the method name and we are going
 			// to send the iterator a null
 			String method_pass = jcmeth.getSelectedItem().toString();
 			if (method_pass.equals("All"))
 				method_pass = null;
 
 			// This gets the currently selected varaible name or if all
-			// then we dont care about the variable name and we are going
+			// then we don't care about the variable name and we are going
 			// to send the iterator a null
 			String variable_pass = jcvariable.getSelectedItem().toString();
 			if (variable_pass.equals("All"))
