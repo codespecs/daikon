@@ -256,13 +256,13 @@ staging: doc/CHANGES update-doc-dist-date-and-version
 	# Build static dfej and copy to staging dir
 	@echo "]2;Building static dfej"
 	$(MAKE) static-dfej-linux-x86
-	install -d $(STAGING_DIST)/download/bin
-	cp $(DFEJ_DIR)/src/dfej-linux-x86 $(STAGING_DIST)/download/bin
+	install -d $(STAGING_DIST)/download/binaries
+	cp $(DFEJ_DIR)/src/dfej-linux-x86 $(STAGING_DIST)/download/binaries
 	# Build the windows (mingw) version of dfej and copy to staging dir
 	@echo "]2;Building mingw dfej"
 	$(MAKE) mingw
 	cp $(MINGW_DFEJ_LOC)/build_mingw_dfej/src/dfej.exe \
-	  $(STAGING_DIST)/download/bin/dfej.exe
+	  $(STAGING_DIST)/download/binaries/dfej.exe
 	# all distributed files should be readonly
 	chmod -R -w $(STAGING_DIST)
 	# compare new list of files in tarfile to previous list
@@ -271,6 +271,9 @@ staging: doc/CHANGES update-doc-dist-date-and-version
 	tar tzf $(WWW_ROOT)/download/daikon.tar.gz | sort > /tmp/old_tar.txt
 	tar tzf $(STAGING_DIST)/download/daikon.tar.gz | sort > /tmp/new_tar.txt
 	-diff -u /tmp/old_tar.txt /tmp/new_tar.txt
+	# Delete the tmp files
+	/bin/rm -rf /tmp/daikon /tmp/dfej.tar daikon.dist daikon.tar daikon.zip \
+			   /tmp/old_tar.txt
 
 # Copy the files in the staging area to the website.  This will copy
 # all of the files in staging, but will not delete any files in the website
