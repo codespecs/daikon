@@ -236,6 +236,7 @@ C/C++ front end dfec
 * Pointer type disambiguation::  
 * Instrumentation scope::       
 * dfec requirements::           
+* function definitions::        
 
 Pointer type disambiguation
 
@@ -3374,19 +3375,20 @@ first step.  If you have trouble, @xref{dfec requirements}
 @c @file{daikon_runtime.o}.
 
 To instrument a C file, run @command{dfec} on it.  dfec produces
-instrumented source as well as a @file{.decls} file.  dfec must be run
-on all source files, including any header files that contain
-code or definitions to be instrumented (header files typically end in
-@file{.h}).  All files to be included
-in a single executable must be instrumented simultaneously; for example,
+instrumented source as well as a @file{.decls} file.  @command{dfec}
+must be run on all source files, including any header files that
+contain code or definitions to be instrumented (header files typically
+end in @file{.h}).  All files to be included in a single executable
+must be instrumented simultaneously; for example,
 @example
 dfec file1.c file2.c file1.h file2.h
 @end example
 
-Even if you do not wish to detect invariants in one of the files, it must be run
-through dfec so it can correctly interact with the instrumented versions
-of the other files.  @xref{dfec command-line arguments},
-for instructions on how to exclude files from instrumentation.
+Even if you do not wish to detect invariants in one of the files, it
+must be run through dfec so it can correctly interact with the
+instrumented versions of the other files.  @xref{dfec command-line
+arguments}, for instructions on how to exclude files from
+instrumentation.
 
 Running @command{dfec @var{arguments} myprog.c} creates
 a file named @file{myprog.cc} in the @file{daikon-instrumented/}
@@ -3440,6 +3442,7 @@ java daikon.Daikon daikon-output/myprog.decls \
 * Pointer type disambiguation::  
 * Instrumentation scope::       
 * dfec requirements::           
+* function definitions::        
 @end menu
 
 @node    dfec command-line arguments, Daikon runtime customization, C/C++ front end dfec, C/C++ front end dfec
@@ -4045,7 +4048,7 @@ compile.
 @end enumerate
 
 
-@node    dfec requirements,  , Instrumentation scope, C/C++ front end dfec
+@node    dfec requirements, function definitions, Instrumentation scope, C/C++ front end dfec
 @subsection dfec requirements
 
 @command{dfec} does not output the contents of C unions.  This section
@@ -4329,6 +4332,21 @@ equivalent file.
 @example
   export PATH=/tmp/build-gcc-2.95.3/gcc-installation:$PATH
 @end example
+
+@node    function definitions,  , dfec requirements, C/C++ front end dfec
+@subsection function definitions
+When compiling the instrumented code using @command{g++}, the compiler
+may report errors regarding use of functions with arguments of the
+template type DaikonSmartPointer.  The compiler may say these
+functions are not defined.  DaikonSmartPointer is a wrapper
+@command{dfec} uses to store information about pointers.  The most
+likely cause of the error is that if uninstrumented code declares an
+argument to a function as a void *, @command{dfec} will wrap this
+pointer into a DaikonSmartPointer; however, if the calling code simply
+omits the parameters on the function call, the function signatures
+will not match and the compiler will complain about a missing
+function.  The solution is to remove the void * from the function
+declaration in the uninstrumented code.
 
 
 @node Perl front end dfepl, CSV front end convertcsv.pl, C/C++ front end dfec, Front ends
