@@ -43,8 +43,8 @@ public class SplitterFactoryTestUpdater {
   private SplitterFactoryTestUpdater() {} //blocks public constructor
 
   /**
-   * If one has changed the test case used below, for best results run
-   * "rm *.java.goal while in the targets directory before running this
+   * If one has changed the test cases used below, for best results run
+   * "rm *.java.goal" while in the targets directory before running this
    * method. Creates new splitter java files, move the new files into
    * target directory, rewrites the code of SplitterFactoryTest
    * to use the new files.  One should recompile SplitterFactoryTest

@@ -1166,8 +1166,8 @@ public final class Daikon {
   {
     for (Iterator i = spinfo_files.iterator(); i.hasNext(); ) {
       File filename = (File) i.next();
-      SplitterObject[][] splitterObjectArrays =
-        SplitterFactory.read_spinfofile(filename, all_ppts);
+      SplitterObject[][] splitterObjectArrays
+        = SplitterFactory.read_spinfofile(filename, all_ppts);
       for (int j = 0; j < splitterObjectArrays.length; j++) {
         int numsplitters = splitterObjectArrays[j].length;
         String pptname = splitterObjectArrays[j][0].getPptName();
