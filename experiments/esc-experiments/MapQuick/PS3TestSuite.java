@@ -34,8 +34,7 @@ public class PS3TestSuite extends TestSuite
 		};
 	} 
     }
-    protected PS3TestSuite()
-	throws FileNotFoundException, IOException
+    protected PS3TestSuite() throws FileNotFoundException, IOException
     {
 	// get the input and output file pairs
 	File testDir = new File(getTestDir());
@@ -89,8 +88,7 @@ public class PS3TestSuite extends TestSuite
 	    +".expected";
 	return new File(input.getParent(), filename);
     }
-    private String getDescription(File file)
-	throws FileNotFoundException, IOException
+    private String getDescription(File file) throws FileNotFoundException, IOException
     {
 	String desc = (new BufferedReader(new FileReader(file)))
 	    .readLine();

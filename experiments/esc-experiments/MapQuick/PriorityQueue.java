@@ -60,8 +60,7 @@ public class PriorityQueue
      *
      * @throws DuplicateElementException if this.elements contains elt
      **/
-    public void insert(double priority, Object elt)
-	throws DuplicateElementException
+    public void insert(double priority, Object elt) throws DuplicateElementException
     {
 	if (contains(elt)) {
 	    throw new DuplicateElementException("Queue already contains "+elt);
@@ -90,8 +89,7 @@ public class PriorityQueue
      *
      * @throws NoSuchElementException if this.elements is empty
      **/
-    public Object extractMin()
-        throws NoSuchElementException
+    public Object extractMin() throws NoSuchElementException
     {
 	if (heap.size() <= 1) {
 	    throw new NoSuchElementException("empty PriorityQueue");
@@ -169,8 +167,7 @@ public class PriorityQueue
      * DuplicateElementException is an unchecked exception which
      * signals that an element is already in a PriorityQueue.
      **/
-    public class DuplicateElementException
-        extends RuntimeException
+    public class DuplicateElementException extends RuntimeException
     {
         DuplicateElementException() { }
         DuplicateElementException(String s) { super(s); }

@@ -32,8 +32,7 @@ public class PathFinder
    * @throws IllegalArgumentException if any start or goal node is not a node in the graph
    * @throws IllegalArgumentException if any start path does not have exactly one element
    **/
-  public static Path findPath(Graph g, Set starts, Set goals)
-    throws NoPathException
+  public static Path findPath(Graph g, Set starts, Set goals) throws NoPathException
   {
     Assert.assertNotNull(g);
     Assert.assertNotNull(starts);
@@ -130,8 +129,7 @@ public class PathFinder
     throw new NoPathException();
   }
 
-  public static class NoPathException
-    extends Exception
+  public static class NoPathException extends Exception
   {
     // Only need the default constructor
   }

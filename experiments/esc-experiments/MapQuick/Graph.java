@@ -50,8 +50,7 @@ public class Graph
    * @effects adds the node to this.nodes
    * @throws DuplicateNodeException if node is already in in this.nodes
    **/
-  public void addNode(Object node)
-    throws DuplicateNodeException
+  public void addNode(Object node) throws DuplicateNodeException
   {
     Assert.assertNotNull(node);
     checkRep();
@@ -104,8 +103,7 @@ public class Graph
    * @throws NoNodeException if from or to not in this.nodes
    * @throws DuplicateEdgeException if (from, to) already in this.edges
    **/
-  public void addEdge(Object from, Object to)
-    throws NoNodeException, DuplicateEdgeException
+  public void addEdge(Object from, Object to) throws NoNodeException, DuplicateEdgeException
   {
     Assert.assertNotNull(from);
     Assert.assertNotNull(to);

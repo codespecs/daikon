@@ -48,8 +48,7 @@ public class PS3TestDriver {
    * @effects Executes the commands read from the input and writes results to the output
    * @throws IOException if the input or output sources encounter an IOException
    **/
-  public void runTests()
-    throws IOException
+  public void runTests() throws IOException
   {
     String inputLine;
     while ((inputLine = input.readLine()) != null) {
