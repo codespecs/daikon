@@ -56,7 +56,8 @@ public class MasterUnitTester extends TestCase {
       daikon.test.VarComparabilityTest.class,
       daikon.test.VarInfoNameTest.class,
       daikon.test.inv.InvariantAddAndCheckTester.class,
-      daikon.test.TestQuant.class
+      daikon.test.TestQuant.class,
+      daikon.test.TestAnnotate.class
     };
 
     for (int i=0; i<classes.length; i++) {

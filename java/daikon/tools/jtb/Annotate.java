@@ -6,6 +6,7 @@ import utilMDE.*;
 import gnu.getopt.*;
 import java.util.logging.Logger;
 import java.io.*;
+import java.util.*;
 
 /**
  * Merge Daikon-generated invariants into Java source code as
@@ -201,8 +202,28 @@ public class Annotate {
         break;
       }
     }
+
     // The index of the first non-option argument -- the name of the file
     int argindex = g.getOptind();
+
+    // This undocumented command is for testing purposes. It takes as input a bunch of java
+    // files, and creates new versions of the files (sufixed with "random-tabs") that
+    // have some randomly-inserted tabs in whitespace areas. These modified java files
+    // are used when testing Annotate (see regressiont tests) because Annotate should
+    // leave the tabs alone, or in the case of annotations that span their own line,
+    // the annotation should contain the same initial whitespace as the first non-comment
+    // line below (e.g a method invariant for a method whose declaration has been typed
+    // with a tab preceding it should have a tab preceding the annotation).
+    if ("insert-tabs-for-testing".equals(args[argindex])) {
+      for (int i = argindex+1 ; i < args.length ; i++) {
+        if (!args[i].endsWith(".java")) {
+          throw new Daikon.TerminationMessage("Error in insert-tabs-for-testing command: all arguments should be .java files." + lineSep + usage);
+        }
+        createNewFileWithRandomTabsInserted(args[i], 0.5, 0.5, 1); // arbitrary hardcoded numbers.
+      }
+      System.exit(0);
+    }
+
     if (argindex >= args.length) {
       throw new Daikon.TerminationMessage("Error: No .inv file or .java file arguments supplied." + lineSep + usage);
     }
@@ -220,30 +241,29 @@ public class Annotate {
     Daikon.suppress_redundant_invariants_with_simplify = true;
 
     for ( ; argindex < args.length; argindex++) {
-      String javafile = args[argindex];
-      if (! javafile.endsWith(".java")) {
-        throw new Daikon.TerminationMessage("File does not end in .java: " + javafile);
+      String javafilename = args[argindex];
+      if (! (javafilename.endsWith(".java") || javafilename.endsWith(".java-random-tabs"))) {
+        throw new Daikon.TerminationMessage("File does not end in .java: " + javafilename);
       }
-      Reader input = new FileReader(javafile);
       File outputFile = null;
       if (Daikon.output_format == OutputFormat.ESCJAVA) {
-        outputFile = new File(javafile + "-escannotated");
+        outputFile = new File(javafilename + "-escannotated");
       } else if (Daikon.output_format == OutputFormat.JML) {
-        outputFile = new File(javafile + "-jmlannotated");
+        outputFile = new File(javafilename + "-jmlannotated");
       } else if (Daikon.output_format == OutputFormat.JAVA) {
-        outputFile = new File(javafile + "-javaannotated");
+        outputFile = new File(javafilename + "-javaannotated");
       } else if (Daikon.output_format == OutputFormat.DBCJAVA) {
-        outputFile = new File(javafile + "-dbcannotated");
+        outputFile = new File(javafilename + "-dbcannotated");
       }
       // outputFile.getParentFile().mkdirs();
       Writer output = new FileWriter(outputFile);
 
-      debug.fine ("Processing file " + javafile);
+      debug.fine ("Processing file " + javafilename);
 
       // Annotate the file
       try {
-        Ast.applyVisitorInsertComments(input, output,
-                   new AnnotateVisitor(ppts, slashslash, insert_inexpressible, setLightweight, useReflection,
+        Ast.applyVisitorInsertComments(javafilename, output,
+                   new AnnotateVisitor(javafilename, ppts, slashslash, insert_inexpressible, setLightweight, useReflection,
                                        maxInvariantsPP));
       } catch (Error e) {
         if (e.getMessage().startsWith("Didn't find class ")) {
@@ -254,6 +274,81 @@ public class Annotate {
       }
     }
   }
+
+  // Creates a new version of filename, called "filename-random-tabs", where
+  // random tabs have been inserted in whitespace areas.
+  //
+  // This method isn't terribly elegant, but it works well enough.
+  private static void createNewFileWithRandomTabsInserted(String filename,
+                                                          double tabinsertionratio_beginning_of_line,
+                                                          double tabinsertionratio_within_line,
+                                                          long seed) {
+    Random rand = new Random(seed);
+    BufferedReader r = null;
+    PrintWriter w = null;
+    try {
+      File f = new File(filename);
+      r = new BufferedReader(new FileReader(filename));
+      w = new PrintWriter(new FileWriter(new File(f.getParent(),  f.getName() + "-random-tabs")), true /*autoflush*/);
+    } catch (FileNotFoundException e) {
+      throw new Error(e);
+    } catch (IOException e) {
+      throw new Error(e);
+    }
+    String line = null;
+    try {
+      line = r.readLine();
+    } catch (IOException e) {
+      throw new Error(e);
+    }
+    while (line != null) {
+
+      StringBuffer sb = new StringBuffer();
+
+      if (rand.nextDouble() <= tabinsertionratio_beginning_of_line) {
+        // Half the time insert one tab, half the time two.
+        if (rand.nextDouble() <= 0.5) {
+          sb.append("\t");
+        } else {
+          sb.append("\t \t ");
+        }
+      }
+
+
+      if (line.length() > 0 && rand.nextDouble() <= tabinsertionratio_within_line) {
+        // 1. Pick a place in the line.
+        int index = rand.nextInt(line.length());
+        // 2. Find the next area that has a space.
+        int spaceIndex = line.indexOf(" ", index);
+        // 3. Add a tab at that index.
+        if (spaceIndex == -1) {
+          sb.append(line);
+        } else {
+          sb.append(line.substring(0, spaceIndex));
+          sb.append("\t");
+          sb.append(line.substring(spaceIndex));
+        }
+      } else {
+        sb.append(line);
+      }
+
+      w.println(sb.toString());
+
+      try {
+        line = r.readLine();
+      } catch (IOException e) {
+        throw new Error(e);
+      }
+
+    }
+    try {
+      r.close();
+    } catch (IOException e) {
+      throw new Error(e);
+    }
+    w.close();
+  }
+
 }
 
 // Appendix A: Jtest DBC format (taken from documentation provided by

@@ -31,8 +31,15 @@ public class Ast {
   // Reads an AST from the input stream, applies the visitor to the AST,
   // reformats only to insert comments, and writes the resulting AST to the
   // output stream.
-  public static void applyVisitorInsertComments(Reader input, Writer output,
+  public static void applyVisitorInsertComments(String javafilename, Writer output,
                                                 AnnotateVisitor visitor) {
+    Reader input = null;
+    try {
+      input = new FileReader(javafilename);
+    } catch (FileNotFoundException e) {
+      throw new Error(e);
+    }
+
     JavaParser parser = new JavaParser(input);
     Node root = null;
     try {
@@ -44,7 +51,15 @@ public class Ast {
     }
     root.accept(visitor);
     root.accept(new InsertCommentFormatter(visitor.addedComments));
-    root.accept(new TreeDumper(output));
+    PrintWriter writer = null;
+    writer = new PrintWriter(output, true);
+    for (int i = 0 ; i < visitor.javaFileLines.size() ; i++) {
+      writer.println((String)visitor.javaFileLines.get(i));
+    }
+    writer.close();
+
+
+    //root.accept(new TreeDumper(output));
   }
 
   // Reads an AST from the input stream, applies the visitor to the AST,
@@ -81,8 +96,32 @@ public class Ast {
   public static String print(Node n) {
     StringWriter w = new StringWriter();
     n.accept(new SimpleTreeDumper(w));
-    return removeWhitespace(w.toString());
+    // This is incorrect. A "//" comment ending in a period, for example, will
+    // cause the line after it to become part of the comment as well.
+    // If not intended for human consumption, why remove whitespace?
+    //return removeWhitespace(w.toString());
+    return removeWhitespace(quickFixForInternalComment(w.toString()));
   }
+
+    // This translates a line that looks like this:
+    //    a statement; // a comment
+    // into
+    //    a statement; // a comment //
+    public static String quickFixForInternalComment(String s) {
+	StringBuffer b = new StringBuffer();
+	String[] split = s.split(lineSep);
+	for (int i = 0 ; i < split.length ; i++) {
+	    String line = split[i];
+	    b.append(line);
+	    if (line.indexOf("//") != -1) {
+		b.append("//");
+		b.append(lineSep);
+		b.append("/* */");
+	    }
+	    b.append(lineSep);
+	}
+	return b.toString();
+    }
 
   // Prints the line enclosing a node
   public static String printCurrentLine(Node n) {
@@ -384,6 +423,10 @@ public class Ast {
   // Add the comment to the first regular token in the tree
   // If first is true, then it is inserted before all other special tokens;
   // otherwise, it is inserted after them.
+
+  // Postcondition (make sure you preserve it if you modify this method):
+  // comment.beginLine and comment.beginColumn have been assigned the line
+  // and column number where this comment will go.
   public static void addComment(Node n, NodeToken comment, boolean first) {
     class AddCommentVisitor extends DepthFirstVisitor {
       private boolean seenToken = false;
@@ -415,6 +458,47 @@ public class Ast {
     }
     n.accept(new AddCommentVisitor(comment, first));
   }
+
+
+  // Add the comment to the first regular token in the tree
+  // If first is true, then it is inserted before all other special tokens;
+  // otherwise, it is inserted after them.
+
+  // Postcondition (make sure you preserve it if you modify this method):
+  // comment.beginLine and comment.beginColumn have been assigned the line
+  // and column number where this comment will go.
+  public static void findLineAndCol(Node n, NodeToken comment, boolean first) {
+    class AddCommentVisitor extends DepthFirstVisitor {
+      private boolean seenToken = false;
+      private NodeToken comment;
+      private boolean first;
+      public AddCommentVisitor(NodeToken comment, boolean first) {
+        this.comment = comment;
+        this.first = first;
+      }
+      public void visit(NodeToken node) {
+        if (! seenToken) {
+          seenToken = true;
+          if (first && (node.numSpecials() > 0)) {
+            comment.beginLine = node.getSpecialAt(0).beginLine;
+            comment.beginColumn = node.getSpecialAt(0).beginColumn;
+            // System.out.println("Set from special <" + node.getSpecialAt(0) + ">");
+          } else {
+            comment.beginLine = node.beginLine;
+            comment.beginColumn = node.beginColumn;
+          }
+          if (first) {
+            //addFirstSpecial(node, comment);
+          } else {
+            //node.addSpecial(comment);
+          }
+          // System.out.println("comment (" + comment.beginLine + "," + comment.beginColumn + ") = " + comment.tokenImage + "; node (" + node.beginLine + "," + node.beginColumn + ")= " + node.tokenImage);
+        }
+      }
+    }
+    n.accept(new AddCommentVisitor(comment, first));
+  }
+
 
   // Adds the comment to the first regular token in the tree, *before* all
   // other special tokens.
@@ -980,10 +1064,11 @@ public class Ast {
     // f0 -> ( "static" | "abstract" | "final" | "public" | "protected" | "private" )*
     // f1 -> UnmodifiedClassDeclaration()
     for (Enumeration e = nestedD.f0.elements() ; e.hasMoreElements() ; ) {
-      String s = ((NodeToken)e.nextElement()).tokenImage;
-      if (s.equals("static")) {
-        isStatic = true;
-      }
+	NodeChoice n = (NodeChoice)e.nextElement();
+	NodeToken nt = (NodeToken)n.choice;
+	if (nt.equals("static")) {
+	    isStatic = true;
+	}
     }
     return isStatic;
   }

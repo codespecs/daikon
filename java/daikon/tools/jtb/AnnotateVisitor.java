@@ -30,12 +30,14 @@ import daikon.inv.unary.stringsequence.OneOfStringSequence;
 // For each field assignment:
 //  * add owner annotations
 
-class AnnotateVisitor extends DepthFirstVisitor {
+public class AnnotateVisitor extends DepthFirstVisitor {
 
   private static final String lineSep = System.getProperty("line.separator");
 
   public static final String JML_START_COMMENT = "/*@" + lineSep;
   public static final String JML_END_COMMENT = "@*/" + lineSep;
+
+  public List/*String*/ javaFileLines;
 
   public PptMap ppts;
   public boolean slashslash;       // whether to use // or /* style comments
@@ -63,14 +65,16 @@ class AnnotateVisitor extends DepthFirstVisitor {
 
 
 
-  public AnnotateVisitor(PptMap ppts,
+  public AnnotateVisitor(String javafilename,
+                         PptMap ppts,
                          boolean slashslash,
                          boolean insert_inexpressible,
                          boolean lightweight,
                          boolean useReflection,
                          int maxInvariantsPP) {
 
-    initialize(ppts,
+    initialize(javafilename,
+               ppts,
                slashslash,
                insert_inexpressible,
                lightweight,
@@ -79,12 +83,38 @@ class AnnotateVisitor extends DepthFirstVisitor {
 
   }
 
-  private void initialize(PptMap ppts,
+  private void initialize(String javafilename,
+                          PptMap ppts,
                           boolean slashslash,
                           boolean insert_inexpressible,
                           boolean lightweight,
                           boolean useReflection,
                           int maxInvariantsPP) {
+
+    // Read in the java file into a list of Strings.
+    this.javaFileLines = new ArrayList/*String*/();
+    BufferedReader reader = null;
+    try {
+      reader = new BufferedReader(new FileReader(javafilename));
+    } catch (FileNotFoundException e) {
+      throw new Error(e);
+    }
+    String line = null;
+    try {
+      line = reader.readLine();
+    } catch (IOException e) {
+      throw new Error(e);
+    }
+    while (line != null) {
+      this.javaFileLines.add(line);
+      try {
+        line = reader.readLine();
+      } catch (IOException e) {
+        throw new Error(e);
+      }
+
+    }
+
     this.ppts = ppts;
     this.slashslash = slashslash;
     this.insert_inexpressible = insert_inexpressible;
@@ -96,8 +126,23 @@ class AnnotateVisitor extends DepthFirstVisitor {
   // Like Ast.addComment, but also keeps a list of what comments were added.
   void addComment(Node n, String comment, boolean first) {
     NodeToken nt = new NodeToken(comment);
-    Ast.addComment(n, nt, first);
+    Ast.findLineAndCol(n, nt, first);
     addedComments.add(nt);
+    //System.out.println("comment.beginLine:" + nt.beginLine);
+    //System.out.println("comment.beginColumn:" + nt.beginColumn);
+    int line = nt.beginLine - 1; /* because in jtb lines start at 1 */
+    String lineString = (String)javaFileLines.get(line);
+    int column = getTabbedIndex(nt.beginColumn - 1, /* because in jtb cols start at 1 */
+                                lineString);
+    StringBuffer sb = new StringBuffer();
+    sb.append(lineString.substring(0, column));
+    sb.append(comment);
+    if (comment.endsWith("\n")) {
+      // Insert the whitespace precedgin the line
+      sb.append(precedingWhitespace(lineString.substring(0,column)));
+    }
+    sb.append(lineString.substring(column));
+    javaFileLines.set(line, sb.toString());
   }
 
   // Like Ast.addComment, but also keeps a list of what comments were added.
@@ -968,7 +1013,63 @@ class AnnotateVisitor extends DepthFirstVisitor {
     public String modifiedVars;
   }
 
+  // Consider a line L1 of text that contains some tabs.
+  //
+  // untabbedIndex represents an index into a line L2, where L2 is L1
+  // with all tabs substituted by their corresponding number of blank
+  // spaces, where a tab's width is 8 characters.
+  //
+  // This method returns the index into L1 that corresponds to the same
+  // position in L2.
+  //
+  // I assume that untabbedIndex will not be an index into one of the
+  // blank spaces that replaced some tab.
+  public static int getTabbedIndex(int untabbedIndex, String L1) {
+    if (untabbedIndex == 0) {
+      return 0;
+    }
+    int expanded = 0;
+    int index = 0;
+    for (int i = 0 ; i < L1.length() ; i++) {
+
+      if (expanded > untabbedIndex) {
+        throw new RuntimeException("expanded:" + expanded
+                                   + "untabbedIndex:" + untabbedIndex
+                                   + "\nL1:" + L1);
+      } else if (expanded == untabbedIndex) {
+        index = i;
+        break;
+      }
+
+      char c = L1.charAt(i);
+      if (c == '\t') {
+        expanded += 8 - (expanded % 8);
+      } else {
+        expanded += 1;
+      }
+
+    }
+
+    Assert.assertTrue(expanded == untabbedIndex,
+                      "\nexpanded:" + expanded
+                      + "\nuntabbedIndex:" + untabbedIndex
+                      + "\nL1: " + L1);
+    return index;
+
+  }
+
+  public static String precedingWhitespace(String s) {
+    for (int i = 0 ; i < s.length() ; i++) {
+      if (!Character.isWhitespace(s.charAt(i))) {
+        return s.substring(0, i);
+      }
+    }
+    return s;
+  }
+
 }
+
+
 
 // These are the inexpressible invariants; that is, ESC does not support
 // them even though JML does.
