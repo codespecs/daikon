@@ -3292,7 +3292,7 @@ libraries.  You should not intentionally leave part of your program
 entirely uninstrumented, because dfec's memory tracking is important
 both for improved output and for correctness.
 
-If you must link your program against instrumented libraries, you need
+If you must link your program against uninstrumented libraries, you need
 to understand a little bit about dfec's operation.  Instrumented
 programs perform memory tracking, which checks and records the
 program's memory accesses.  This has many benefits.  It tracks whether
@@ -3311,7 +3311,7 @@ written in C@.  Thus, making uninstrumented code interact correctly
 with instrumented code takes some care.
 
 If there are calls from instrumented code to uninstrumented code, then
-memory tracking will not occur in the instrumented code.  To correct
+memory tracking will not occur in the uninstrumented code.  To correct
 this problem, see @ref{Memory tracking in libraries}.
 
 If there are calls from uninstrumented code to instrumented code, your
