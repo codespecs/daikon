@@ -444,10 +444,14 @@ public class DynamicConstants implements Serializable {
     // Unary slices/invariants
     for (Iterator i = leaders1.iterator(); i.hasNext(); ) {
       Constant con = (Constant) i.next();
+      if (Debug.logOn())
+        Debug.log (getClass(), ppt, Debug.vis(con.vi), "Considering slice");
       if (!ppt.is_slice_ok (con.vi))
          continue;
       PptSlice1 slice1 = new PptSlice1 (ppt, con.vi);
       slice1.instantiate_invariants();
+      if (Debug.logOn())
+        Debug.log (getClass(), ppt, Debug.vis(con.vi), "Instantiated invs");
       if (ppt.is_slice_global (con.vi))
         slice1.remove_global_invs();
       if (con.count > 0) {
