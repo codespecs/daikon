@@ -58,16 +58,18 @@ This is the manual for the Daikon invariant detector.
 @node    Top, Introduction, (dir), (dir)
 @comment node-name, next,          previous, up
 
+@ifnottex
 This is the manual for the Daikon invariant detector.
+@end ifnottex
 
 @menu
 * Introduction::                
 * Installing::                  
 * Detecting invariants::        
 * Daikon output::               
-* Bugs::                        
+* Troubleshooting::             
 * Details::                     
-* File formats::                
+* File formats::
 
 @ifhtml
 @contents
@@ -128,13 +130,13 @@ Using the invariant browser
 * Invariants Display::          
 * Control panel::               
 
-In case of trouble
+Troubleshooting
 
 * dfej problems::               
 * Instrumentation problems::    
 * Daikon problems::             
 * Other problems::              
-* Getting help::                
+* Reporting bugs::              
 * Known bugs::                  
 * Further reading::             
 
@@ -152,7 +154,7 @@ Other problems
 
 * Large dtrace files::          
 
-Getting more help
+Reporting bugs
 
 * Known bugs::                  
 * Further reading::             
@@ -239,7 +241,8 @@ setenv CLASSPATH @var{parent}/daikon/java:$@{CLASSPATH@}
 @end example
 The distribution includes compiled @file{.class} files, so you do not
 need to compile them yourself; but you may do so by typing @command{make}
-in any directory under @file{@var{parent}/daikon/java/}.
+in any directory under @file{@var{parent}/daikon/java/}.  In order to
+compile Daikon, you will need the C preprocessor @command{cpp}.
 
 @item
 Add the @file{@var{parent}/daikon/bin/} directory to your path.  (Your
@@ -463,32 +466,30 @@ Java front end is more complete and robust than the C/C++ front end.
 @node    Java programs, C programs, Instrumentation, Instrumentation
 @subsection Java programs
 
-Note: In order to use @file{dfej}, the Daikon front end for Java, you must
-have prepared it for use (@pxref{Installing}).
-
-The Daikon front end for Java, @file{dfej}, works on Java code which
-corresponds to any version of the Java language, from 1.0 to 1.3.
-
 To instrument Java source programs, simply invoke @file{dfej} on them:
 @example
       dfej @var{filename1}.java @var{filename2}.java @var{...}
 @end example
 
-The Daikon Java front end:
+After running dfej, compile the version of the code in the
+@file{daikon-java/} directory.
+
+The Daikon front end for Java has two effects:
 @itemize @bullet
 @item
-  writes instrumented versions of the files to a
+  dfej writes instrumented versions of the files to a
   @file{daikon-java/} directory 
 @item
-  creates declaration files named
+  dfej creates declaration files named
   @file{@var{filename1}.decls}, etc. in a
   @file{daikon-output/} directory.
 @end itemize
 
-After running dfej, compile the version of the code in the
-@file{daikon-java/} directory.
+See the @file{dfej} usage message for more information.  See
+@ref{Installing dfej} for information on installing dfej.
 
-See the @file{dfej} usage message for more information.
+The Daikon front end for Java, @file{dfej}, works on Java code which
+corresponds to any version of the Java language, from 1.0 to 1.3.
 
 
 @menu
@@ -655,7 +656,7 @@ The instrumented Java program creates its @file{.dtrace} file in the
 overwrites any previously existing @file{.dtrace} file.
 
 The instrumented C/C++ program creates its @file{.dtrace} file in the
-current directory.  If a .dtrace file already existed, it is appended
+current directory.  If a @file{.dtrace} file already existed, it is appended
 to.
 
 After running your program, run @command{bin/modbit-munge.pl} on the
@@ -706,7 +707,7 @@ ln -s @var{parent}/daikon .
 
 @item
 By default, the Java 2 applet security model does not allow applets to
-write files.  To get around this so that Daikon can write its .dtrace
+write files.  To get around this so that Daikon can write its @file{.dtrace}
 files, create a file named @file{javaPolicy} in the @file{daikon-java/}
 directory that contains the text
 @example
@@ -741,7 +742,7 @@ data trace file; the simplest way is to include every the declaration file
 created when instrumenting the program that is read.
 
 
-@node    Daikon output, Bugs, Detecting invariants, Top
+@node    Daikon output, Troubleshooting, Detecting invariants, Top
 @chapter Daikon output
 
 
@@ -885,7 +886,13 @@ to sort the column in reverse order.
 
 The Control Panel determines which invariants are displayed.
 
+@c This explicit space is here to force a paragraph break.
+@ 
+
 @ifnotinfo
+@c @ifhtml
+@c <p>
+@c @end ifhtml
 @image{images/gui-ControlPanel,3in,}
 @c <center><table><tr><td>
 @c <img src="gui-ControlPanel.gif" width=411 height=425>
@@ -983,23 +990,24 @@ of the variables in the variables list.
 
 
 
-@node    Bugs, Details, Daikon output, Top
-@chapter In case of trouble
+@node    Troubleshooting, Details, Daikon output, Top
+@chapter Troubleshooting
 
+This chapter gives solutions for certain problems you might have with
+Daikon; it also tells you how to report bugs in a useful manner.
 
 @menu
 * dfej problems::               
 * Instrumentation problems::    
 * Daikon problems::             
 * Other problems::              
-* Getting help::                
+* Reporting bugs::              
 * Known bugs::                  
 * Further reading::             
 @end menu
 
-@node    dfej problems, Instrumentation problems, Bugs, Bugs
+@node    dfej problems, Instrumentation problems, Troubleshooting, Troubleshooting
 @section Problems with dfej
-
 
 @menu
 * dfej compilation problems::   
@@ -1054,11 +1062,11 @@ You may be able to work around this by running dfej on other files of
 your application, but not those with anonymous classes.
 
 
-@node    Instrumentation problems, Daikon problems, dfej problems, Bugs
+@node    Instrumentation problems, Daikon problems, dfej problems, Troubleshooting
 @section Problems running instrumented code
 
 
-@node    Daikon problems, Other problems, Instrumentation problems, Bugs
+@node    Daikon problems, Other problems, Instrumentation problems, Troubleshooting
 @section Problems running Daikon
 
 
@@ -1073,7 +1081,7 @@ your application, but not those with anonymous classes.
 
 
 Daikon sometimes issues a warning that it has detected abnormal termination
-of the target program.  This means that the .dtrace file contains more
+of the target program.  This means that the @file{.dtrace} file contains more
 entry records than exit records for the given procedure.  This means that
 some functions that were entered were never recorded to have exited:
 either they threw an exception, skipping the instrumentation code that
@@ -1116,7 +1124,7 @@ Java like so:
 Any output generated before the out-of-memory error is perfectly valid.
 
 
-@node    Other problems, Getting help, Daikon problems, Bugs
+@node    Other problems, Reporting bugs, Daikon problems, Troubleshooting
 @section Other problems
 
 @menu
@@ -1175,8 +1183,8 @@ files.  There are several solutions to this problem.
 @end enumerate
 
 
-@node    Getting help, Known bugs, Other problems, Bugs
-@section Getting more help
+@node    Reporting bugs, Known bugs, Other problems, Troubleshooting
+@section Reporting bugs
 
 If you have any questions, can suggest ways to improve the documentation,
 find bugs in the system, or have suggestions for its improvement, please
@@ -1196,7 +1204,7 @@ Your bug report will be most helpful if you include:
       may provide this information.
 @item input files that permit the problem to be replicated.  The
       most important thing is the original, uninstrumented source files.
-      You might also include your instrumented source files,
+      It is also helpful to include instrumented source files,
       @file{.decl} files, and @file{.dtrace} files.
 @item any other information that you consider relevant
 @end itemize
@@ -1210,7 +1218,7 @@ much more likely to be corrected.
 * Further reading::             
 @end menu
 
-@node    Known bugs, Further reading, Getting help, Bugs
+@node    Known bugs, Further reading, Reporting bugs, Troubleshooting
 @section Known bugs
 
 The following problems are already known.  (You may report them again,
@@ -1235,23 +1243,30 @@ to encourage us to release the fix faster, if you like.)
 @end itemize
 @end itemize
 
-@node    Further reading,  , Known bugs, Bugs
+@node    Further reading,  , Known bugs, Troubleshooting
 @section Further reading
 
-See the @url{http://sdg.lcs.mit.edu/daikon/, Daikon homepage}[
+See the @uref{http://sdg.lcs.mit.edu/daikon/, Daikon homepage}.
+
+[ This list is out of date; perhaps it should be replaced by a pointer
+to a more up-to-date list. ]
 
 Dynamic invariant detection is further described in several papers, including:
 @itemize @bullet
-@item <a href="http://sdg.lcs.mit.edu/~mernst/pubs/invariants-tse-abstract.html">Dynamically
+@item
+@uref{http://sdg.lcs.mit.edu/~mernst/pubs/invariants-tse-abstract.html, Dynamically
       Discovering Likely Program Invariants to Support Program
-      Evolution</a> (IEEE TSE, to appear)
-@item <a href="http://sdg.lcs.mit.edu/~mernst/pubs/invariants-icse2000-abstract.html">Quickly Detecting Relevant Program Invariants</a> (ICSE 2000)
-@item <a href="http://sdg.lcs.mit.edu/~mernst/pubs/invariants-pointers-abstract.html">Dynamically
-  Discovering Pointer-Based Program Invariants</a> (technical report)
+      Evolution} (IEEE TSE, February 2001)
+@item
+      @uref{http://sdg.lcs.mit.edu/~mernst/pubs/invariants-icse2000-abstract.html, Quickly Detecting Relevant Program Invariants} (ICSE 2000)
+@item
+@uref{http://sdg.lcs.mit.edu/~mernst/pubs/invariants-pointers-abstract.html,
+Dynamically
+  Discovering Pointer-Based Program Invariants} (technical report)
 @end itemize
 
 
-@node    Details, File formats, Bugs, Top
+@node    Details, File formats, Troubleshooting, Top
 @chapter Details
 
 
@@ -1312,21 +1327,23 @@ an IBM Cooperative Fellowship, and a gift from Edison Design Group.
 @appendix File formats
 
 This chapter contains information about the file format of Daikon's data
-trace and declaration files.
+trace and declaration files.  It is of most information to those who
+wish to write a front end (@pxref{Instrumentation}), enabling Daikon to
+detect invariants in another programming language.
 
 Data trace files contain runtime values for variables at particular program
 points.  Each record in a data trace file represents one execution of a
 program point.  The record names a program point and lists a number of
 variables and their runtime values.  This dynamic information about values
 at a program point is generated when an instrumented program is run.  By
-convention, data trace files have the suffix ".dtrace".
+convention, data trace files have the suffix @file{.dtrace}.
 
-A declaration file describes the structure of the data trace file; it lists
-the program points that may appear in the data trace file and, for each
-program point, which variables appear at that program point.  This static
-lexical information about a program point can be determined when a program
-is instrumented.  By convention, declaration files have the suffix ".decls"
-or ".decl".
+A declaration file describes the structure of the data trace file; it
+lists the program points that may appear in the data trace file and, for
+each program point, which variables appear at that program point.  This
+static lexical information about a program point can be determined when
+a program is instrumented.  By convention, declaration files have the
+suffix @file{.decls} or @file{.decl}.
 
 (Actually, both declarations and data trace records may appear together in
 a single file.  In that case, the program point information must precede
@@ -1380,65 +1397,92 @@ The format of the program point information is:
 @end example
 
 Program point information includes:
- * name ("tag") of this program point, an arbitrary string containing no
+@itemize @bullet
+@item
+   name ("tag") of this program point, an arbitrary string containing no
    tab or newline characters.  
    By convention, the entry and exit points for a function have names of
    a special form so that they can be associated with one another.
    (Currently, those names end with ":::BEGIN" and ":::END".)  This
    convention permits instrumenters not to remember the original values of
    variables and output them at the procedure exit point.
- * for each variable:
-    * name: an arbitrary, uninterpreted string containing no tabs or newlines.
-    * types, as a human-readable strings
-       * declared type:  this is what the programmer used in the
-         declaration of the variable.  
-	 This is currently uninterpreted (that is, the strings are compared
-	 for equality but not destructed into their constituent parts).
-       * representation type:  this describes what will appear in the data
-         trace file.  For instance, the declared type might be "char[]" but
-         the representation type might be "String".  Or, the declared type
-         might be "Object" but the representation type might be "int"
-	 (because only the object's hashcode, not the object itself, is
-         written to the data trace file).
-         The representation type is currently contrained to be integer,
-         string, or array of integer or string.
-         The representation type may optionally be followed by an equals
-	 sign and a value; in that case, the variable is known to have a
-         compile-time constant value and should be omitted from the data
-         trace file.
+@item
+   for each variable:
+@itemize @bullet
+@item
+      name: an arbitrary, uninterpreted string containing no tabs or newlines.
+@item
+      declared type:  this is what the programmer used in the
+      declaration of the variable.  
+      This is currently uninterpreted (that is, the strings are compared
+      for equality but not destructed into their constituent parts).
+@item
+      representation type:  this describes what will appear in the data
+      trace file.  For instance, the declared type might be "char[]" but
+      the representation type might be "String".  Or, the declared type
+      might be "Object" but the representation type might be "int"
+      (because only the object's hashcode, not the object itself, is
+      written to the data trace file).
+      The representation type is currently contrained to be integer,
+      string, or array of integer or string.
+      The representation type may optionally be followed by an equals
+      sign and a value; in that case, the variable is known to have a
+      compile-time constant value and should be omitted from the data
+      trace file.
+@end itemize
       Arrays types are followed by square brackets:  "int[]", "char[][]".
-    * comparable variables, also known as "Lackwit types".  These indicate
+@item
+      comparable variables, also known as "Lackwit types".  These indicate
       which other variables are comparable to this one, which is typically
       obtained via type-inference based analysis.  There are two formats,
       "implicit" and "explicit", for this information.  (See below for how
       to specify which format the information is in.)
-       * An implicit lackwit type is an arbitrary string, and comparisons
+@itemize @bullet
+@item
+         An implicit lackwit type is an arbitrary string, and comparisons
 	 succeed exactly if the two lackwit types are identical.
-       * An explicit lackwit type is a list of other variables, and
+@item
+         An explicit lackwit type is a list of other variables, and
 	 comparisons succeed if each variable is in the list of the other.
 	 It takes the form of
-	  * for scalar types:  A space-separated list of all the other
+@itemize @bullet
+@item
+	    for scalar types:  A space-separated list of all the other
 	    variables mentioned in this record that are comparable to this
 	    one.
-	  * for array types:  The lists are surrounded by parentheses, and
+@item
+	    for array types:  The lists are surrounded by parentheses, and
 	    variables are given in parentheses for indices, like so:
             "(a b c)[(d e)][(f g h)]".
             The elements and indices of an array are named according to 
             %s-element and %s-index%d, where the indices are numbered
 	    starting with 1.
-          * If no information is supplied (ie, this line is blank), then
+@item
+            If no information is supplied (ie, this line is blank), then
 	    the variable is compared to all other variables of the same type.
- * Future enhancements:
-    * permit variables to be omitted if they haven't changed (but always
+@end itemize
+@end itemize
+@end itemize
+
+Future enhancements may include
+@itemize @bullet
+@item
+      permit variables to be omitted if they haven't changed (but always
       outputting the bit permits us to write a sanity checker)
-    * permit variables to appear in any order (not sure this is so worthwhile)
-    * specify which .decl files should be used (including their pathnames
+@item
+      permit variables to appear in any order (not sure this is so worthwhile)
+@item
+      specify which @file{.decl} files should be used (including their pathnames
       and/or MD5 hashes)
+@end itemize
 
 A declaration file optionally starts with a "VarComparability" record,
 which might look like the following:
+@example
   VarComparability
   explicit
+@end example
+@noindent
 This controls how the comparability field in the declarations is interpreted.
 
 
@@ -1460,25 +1504,31 @@ The format of the value information is:
 @end example
 
 Value information includes:
- * name of the program point
- * for each variable:
-    * name
-    * value
-       * integer: sequence of digits, optionally preceded by a minus sign
-       * string: charcters surrounded by double-quotes; internal
+@itemize @bullet
+@item name of the program point
+@item for each variable:
+@itemize @bullet
+@item name
+@item value
+@itemize @bullet
+@item    integer: sequence of digits, optionally preceded by a minus sign
+@item    string: charcters surrounded by double-quotes; internal
 	 double-quotes and backslashes are escaped by a backslash
-       * array: elements are listed on one line, separated by spaces.
+@item    array: elements are listed on one line, separated by spaces.
          The elements may optionally be enclosed in [square brackets]; this
          is encouraged for clarity.
-    * modified? (0 or 1)
+@end itemize
+@item modified? (0 or 1).
       This value is 0 if the variable has not been assigned to since the
       last time this program point was executed, and 1 if the variable has
       been assigned to since then.  It is safe for an implementation to
       always set it to 1.  It is also safe to always set it to 0, if the
-      modbit-munge.pl script is run on the resulting .dtrace file to fix up
+      modbit-munge.pl script is run on the resulting @file{.dtrace} file to fix up
       the modbits.
+@end itemize
    The variables should appear in the same order as they did in the
    declaration of the program point, without omissions or additions.
+@end itemize
 
 As a special case, the first variable in a record may be
 "this_invocation_nonce", in which case there is no modification
