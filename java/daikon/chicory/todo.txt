@@ -1,0 +1,41 @@
+Todo list sorted in approximate order of importance.
+
+  - Fix --ppt-omit-pattern and --ppt-select-pattern to work on each
+    ppt point name rather than only on class names.  I think this means
+    we should consider a class instrumented if any of its methods
+    match.  I think this change should be largely back compatible with 
+    their current usage
+
+  - Suppot DDTRACELIMIT and DDTRACELIMITTERMINATE environment variables
+    just as dfej does.  This is partially in Runtime right now, but
+    we need to call the proper methods when writing so it fully
+    works.
+
+  - Implement --linked-lists
+
+  - Add a java 5.0 test to the test suite.   This will checkout not
+    only Chicory, but annotate as well.  Carlos suggested the files
+    in ~jhp/tmp/bst.tar
+
+  - Add a simple test of chicory to the tests that are performed on
+    the build itself (before it is copied to the website)
+
+  - Switch over the regression tests to chicory, leaving dfej as a
+    user option.  Checkin the changed goal files.
+
+  - Implement online mode 
+
+  - Restructure code so we don't calculate the same thing on each
+    method entry/exit, but just once when processing the class.  This
+    is not so much an optimization as a code cleanup so if we change,
+    for instance, what variables are instrumented or their order we
+    only have to change it in one place.
+
+
+Completed Tasks
+
+  - Cleanup directory structure in $inv/chicory,  remove JDI based files
+  
+    Feb 07 2005 jhp - Moved everything actually used to the single
+    directory $inv/daikon/chicory.  Chicory.java itself was placed in
+    the directly in $inv/daikon.
