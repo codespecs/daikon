@@ -29,12 +29,24 @@ public final class SequenceSum
     Object val = base.getValue(vt);
     if (val == null)
       return ValueAndModified.MISSING;
-    long[] val_array = (long[])val;
-    long result = 0;
-    for (int i=0; i<val_array.length; i++)
-      result += val_array[i];
-    return new ValueAndModified(Intern.internedLong(result),
-                                source_mod);
+    if (val instanceof long[]) {
+      long[] val_array = (long[])val;
+      long result = 0;
+      for (int i=0; i<val_array.length; i++)
+        result += val_array[i];
+      return new ValueAndModified(Intern.internedLong(result),
+                                  source_mod);
+    } else if (val instanceof double[]) {
+      double[] val_array = (double[])val;
+      double result = 0;
+      for (int i=0; i<val_array.length; i++)
+        result += val_array[i];
+      return new ValueAndModified(Intern.internedDouble(result),
+                                  source_mod);
+
+    } else {
+      return ValueAndModified.MISSING;
+    }
   }
 
   protected VarInfo makeVarInfo() {

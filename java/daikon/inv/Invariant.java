@@ -1,6 +1,8 @@
 package daikon.inv;
 
 import daikon.*;
+import daikon.inv.unary.sequence.EltOneOf;
+import daikon.inv.unary.stringsequence.EltOneOfString;
 
 import java.util.*;
 import java.io.Serializable;

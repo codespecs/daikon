@@ -4,11 +4,21 @@ You first need to preprocess it with cpp, the C preprocessor.
 The correct way to build the system is to run 'make'.
 #endif
 
-#if !(defined(LOWER) || defined(UPPER) || defined(ELTLOWER) || defined(ELTUPPER))
+#if !(defined(LOWER) || defined(UPPER) || defined(ELTLOWER) || defined(ELTUPPER) || defined(LOWERFLOAT) || defined(UPPERFLOAT) || defined(ELTUPPERFLOAT) || defined(ELTLOWERFLOAT))
 #error "LOWER, UPPER, ELTLOWER, or ELTUPPER should be defined"
 #endif
 
-#if defined(LOWER) || defined(ELTLOWER)
+#if (defined(LOWERFLOAT) || defined(UPPERFLOAT) || defined(ELTUPPERFLOAT) || defined(ELTLOWERFLOAT))
+#define ONEOFSCALAR OneOfFloat
+#define MEMBER MemberFloat
+#define SUBSEQUENCE SubSequenceFloat
+#else
+#define ONEOFSCALAR OneOfScalar
+#define MEMBER Member
+#define SUBSEQUENCE SubSequence
+#endif
+
+#if defined(LOWER) || defined(ELTLOWER) || defined(LOWERFLOAT) || defined(ELTLOWERFLOAT)
 #define LT <
 #define LTE <=
 #define GT >
@@ -17,26 +27,54 @@ The correct way to build the system is to run 'make'.
 #define MAX max
 #define LONGMAX Long.MAX_VALUE
 #define LONGMIN Long.MIN_VALUE
+#define PRIMITIVE Long
+#define LONGVALUE longValue()
+#if defined(LOWERFLOAT) || defined(ELTLOWERFLOAT)
+#define LONGMAX Double.MAX_VALUE
+#define LONGMIN Double.MIN_VALUE
+#define PRIMITIVE Double
+#define LONGVALUE doubleValue()
+#endif
 #define SIGNADJUST
 #define MINSTR "min"
 #define MAXSTR "max"
 #define GTSTR ">"
 #define MAX1 core.max1
 #define LOWERBOUNDCORE LowerBoundCore
+#if defined(LOWERFLOAT) || defined(ELTLOWERFLOAT)
+#define LOWERBOUNDCORE LowerBoundCoreFloat
+#endif
 #define ELTLOWERBOUND EltLowerBound
+#if defined(ELTLOWERFLOAT) || defined(LOWERFLOAT)
+#define ELTLOWERBOUND EltLowerBoundFloat
+#endif
+#define MINELT min_elt
+#define MAXELT max_elt
+
 #define MINELTLONG min_elt_long
+
 #if defined(LOWER)
 #define LOWERBOUND LowerBound
 #define LOWERBOUNDSTR "LowerBound"
 #define UPPERBOUND UpperBound
 #define ONEOF OneOfScalar
+#elif defined(LOWERFLOAT)
+#define LOWERBOUND LowerBoundFloat
+#define LOWERBOUNDSTR "LowerBoundFloat"
+#define UPPERBOUND UpperBoundFloat
+#define ONEOF OneOfFloat
+#elif defined(ELTLOWERFLOAT)
+#define LOWERBOUND EltLowerBoundFloat
+#define LOWERBOUNDSTR "EltLowerBoundFloat"
+#define UPPERBOUND EltUpperBoundFloat
+#define ONEOF EltOneOfFloat
 #else
 #define LOWERBOUND EltLowerBound
 #define LOWERBOUNDSTR "EltLowerBound"
 #define UPPERBOUND EltUpperBound
 #define ONEOF EltOneOf
 #endif
-#elif defined(UPPER) || defined(ELTUPPER)
+#elif defined(UPPER) || defined(ELTUPPER) || defined(UPPERFLOAT) || defined(ELTUPPERFLOAT)
 #define LT >
 #define LTE >=
 #define GT <
@@ -45,19 +83,47 @@ The correct way to build the system is to run 'make'.
 #define MAX min
 #define LONGMAX Long.MIN_VALUE
 #define LONGMIN Long.MAX_VALUE
+#define PRIMITIVE Long
+#define LONGVALUE longValue()
+#if defined(UPPERFLOAT) || defined(ELTUPPERFLOAT)
+#define LONGMAX Double.MIN_VALUE
+#define LONGMIN Double.MAX_VALUE
+#define PRIMITIVE Double
+#define LONGVALUE doubleValue()
+#endif
 #define SIGNADJUST -
 #define MINSTR "max"
 #define MAXSTR "min"
 #define GTSTR "<"
 #define MAX1 core.min1
 #define LOWERBOUNDCORE UpperBoundCore
+#if defined (UPPERFLOAT) || defined(ELTUPPERFLOAT)
+#define LOWERBOUNDCORE UpperBoundCoreFloat
+#endif
 #define ELTLOWERBOUND EltUpperBound
+
+#if defined(ELTUPPERFLOAT) || defined(UPPERFLOAT)
+#define ELTLOWERBOUND EltUpperBoundFloat
+#endif
+#define MINELT max_elt
+#define MAXELT min_elt
+
 #define MINELTLONG max_elt_long
 #if defined(UPPER)
 #define LOWERBOUND UpperBound
 #define LOWERBOUNDSTR "UpperBound"
 #define UPPERBOUND LowerBound
 #define ONEOF OneOfScalar
+#elif defined(UPPERFLOAT)
+#define LOWERBOUND UpperBoundFloat
+#define LOWERBOUNDSTR "UpperBoundFloat"
+#define UPPERBOUND LowerBoundFloat
+#define ONEOF OneOfFloat
+#elif defined(ELTUPPERFLOAT)
+#define LOWERBOUND EltUpperBoundFloat
+#define LOWERBOUNDSTR "EltUpperBoundFloat"
+#define ONEOF EltOneOfFloat
+#define UPPERBOUND EltLowerBound
 #else
 #define LOWERBOUND EltUpperBound
 #define LOWERBOUNDSTR "EltUpperBound"
@@ -67,19 +133,31 @@ The correct way to build the system is to run 'make'.
 #else
 #error "LOWER, UPPER, ELTLOWER, or ELTUPPER should be defined"
 #endif
-#if defined(LOWER) || defined(UPPER)
+#if defined(LOWER) || defined(UPPER) || defined(LOWERFLOAT) || defined(UPPERFLOAT)
 #define SINGLESCALAR SingleScalar
 #define SCALAR scalar
 #define LONG long
+#if defined(LOWERFLOAT) || defined(UPPERFLOAT)
+#define LONG double
+#define SINGLESCALAR SingleFloat
+#endif
 #else
 #define SINGLESCALAR SingleSequence
 #define SCALAR sequence
 #define LONG long[]
+#if defined(ELTUPPERFLOAT) || defined(ELTLOWERFLOAT)
+#define SINGLESCALAR SingleFloatSequence
+#define LONG double[]
 #endif
-#if ! defined(LOWERBOUND)
-#error "LOWERBOUND is not defined"
+#endif
+#if (defined(UPPERFLOAT) || defined(ELTUPPERFLOAT))
+#define MINELTLONG max_elt_double
+#elif (defined(LOWERFLOAT) || defined(ELTLOWERFLOAT))
+#define MINELTLONG min_elt_double
 #endif
 
+
+// ***** This file is automatically generated from Bound.java.jpp
 
 package daikon.inv.unary.SCALAR;
 
@@ -95,11 +173,6 @@ import utilMDE.*;
 
 
 import java.util.*;
-
-// *****
-// Do not edit this file directly:
-// it is automatically generated from Bound.java.jpp
-// *****
 
 #if 0
 I cannot use "x LT c" in the comment below, because substitution
@@ -167,7 +240,7 @@ public class LOWERBOUND
       + core.repr();
   }
 
-#if (defined(LOWER) || defined(UPPER))
+#if (defined(LOWER) || defined(UPPER) || defined(LOWERFLOAT) || defined(UPPERFLOAT))
   public String format_using(OutputFormat format) {
     String name = var().name.name_using(format);
 
@@ -251,9 +324,9 @@ public class LOWERBOUND
   public void add_modified(LONG value, int count) {
     // System.out.println(LOWERBOUNDSTR + varNames() + ": "
     //                    + "add(" + value + ", " + modified + ", " + count + ")");
-#if (defined(LOWER) || defined(UPPER))
+#if (defined(LOWER) || defined(UPPER) || defined(LOWERFLOAT) || defined(UPPERFLOAT))
     core.add_modified(value, count);
-#elif (defined(ELTLOWER) || defined(ELTUPPER))
+#elif (defined(ELTLOWER) || defined(ELTUPPER) || defined(ELTUPPERFLOAT) || defined(ELTLOWERFLOAT))
     for (int i=0; i<value.length; i++) {
       core.add_modified(value[i], count);
       if (falsified)
@@ -279,7 +352,9 @@ public class LOWERBOUND
     return core.isSameFormula(((LOWERBOUND) other).core);
   }
 
-#if (defined(LOWER) || defined(UPPER))
+
+#if (defined(LOWER) || defined(UPPER) || defined(LOWERFLOAT) || defined(UPPERFLOAT))
+
   // XXX FIXME This looks like a hack that should be removed.  -MDE 6/13/2002
   public boolean isInteresting() {
     return (-1 < MIN1 && MIN1 < 2);
@@ -301,7 +376,7 @@ public class LOWERBOUND
       }
     }
 
-#if (defined(ELTLOWER) || defined(ELTUPPER))
+#if (defined(ELTLOWER) || defined(ELTUPPER) || defined(ELTLOWERFLOAT) || defined(ELTUPPERFLOAT))
     VarInfo v = var();
     // Look for the same property over a supersequence of this one.
     PptTopLevel pptt = ppt.parent;
@@ -313,7 +388,7 @@ public class LOWERBOUND
       if (inv instanceof LOWERBOUND) {
         LOWERBOUND other = (LOWERBOUND) inv;
         if (isSameFormula(other)
-            && SubSequence.isObviousDerived(v, other.var())) {
+            && SUBSEQUENCE.isObviousDerived(v, other.var())) {
           return true;
         }
       }
@@ -329,7 +404,7 @@ public class LOWERBOUND
       int vshift = ((SequenceLength) v.derived).shift;
       if (vshift != 0) {
         return true;
-#ifdef LOWER
+#if defined(LOWER) || defined(LOWERFLOAT)
       } else if (MIN1 == 0) {
         // vshift == 0
         return true;
@@ -342,10 +417,10 @@ public class LOWERBOUND
     PptTopLevel pptt = ppt.parent;
     for (int i=0; i<pptt.var_infos.length; i++) {
       VarInfo vi = pptt.var_infos[i];
-#if (defined(LOWER) || defined(UPPER))
-      if (Member.isObviousMember(v, vi))
+#if (defined(LOWER) || defined(UPPER) || defined(LOWERFLOAT) || defined(UPPERFLOAT))
+      if (MEMBER.isObviousMember(v, vi))
 #else
-      if (SubSequence.isObviousDerived(v, vi))
+      if (SUBSEQUENCE.isObviousDerived(v, vi))
 #endif
       {
         PptSlice1 other_slice = pptt.findSlice(vi);
@@ -369,7 +444,7 @@ public class LOWERBOUND
       if (MIN1 GT ((UPPERBOUND) other).MAX1)
         return true;
     }
-    if (other instanceof OneOfScalar) {
+    if (other instanceof ONEOFSCALAR) {
       return other.isExclusiveFormula(this);
     }
     return false;
@@ -377,7 +452,7 @@ public class LOWERBOUND
 
   // Look up a previously instantiated invariant.
   public static LOWERBOUND find(PptSlice ppt) {
-    Assert.assert(ppt.arity == 1);
+    Assert.assertTrue(ppt.arity == 1);
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof LOWERBOUND)

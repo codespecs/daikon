@@ -31,26 +31,33 @@ public final class SequenceLength
     Assert.assertTrue(vi.rep_type.isArray());
 
     if (vi.derived != null) {
-      Assert.assertTrue((vi.derived instanceof SequenceScalarSubsequence) ||
-                    (vi.derived instanceof SequenceStringIntersection) ||
-                    (vi.derived instanceof SequenceScalarIntersection) ||
-                    (vi.derived instanceof SequenceStringUnion) ||
-                    (vi.derived instanceof SequenceScalarUnion) ||
-                    (vi.derived instanceof SequencesConcat) ||
-                    (vi.derived instanceof SequencesPredicate) ||
-                    (vi.derived instanceof SequencesJoin)
+      Assert.assertTrue((vi.derived instanceof SequenceScalarSubsequence)
+                    || (vi.derived instanceof SequenceStringIntersection)
+                    || (vi.derived instanceof SequenceScalarIntersection)
+                    || (vi.derived instanceof SequenceStringUnion)
+                    || (vi.derived instanceof SequenceScalarUnion)
+                    || (vi.derived instanceof SequencesConcat)
+                    || (vi.derived instanceof SequencesPredicate)
+                    || (vi.derived instanceof SequencesJoin)
+                    || (vi.derived instanceof SequenceFloatSubsequence)
+                    || (vi.derived instanceof SequenceFloatIntersection)
+                    || (vi.derived instanceof SequenceFloatUnion)
+                    || (vi.derived instanceof SequencesPredicateFloat)
+                    || (vi.derived instanceof SequencesJoinFloat)
                     );
 
-      if (
-          (vi.derived instanceof SequenceStringIntersection) ||
-          (vi.derived instanceof SequenceScalarIntersection) ||
-          (vi.derived instanceof SequenceStringUnion) ||
-          (vi.derived instanceof SequenceScalarUnion)
-          )
+      if (!( // All of the below give new information when taking a sizeof
+            (vi.derived instanceof SequenceStringIntersection)
+            || (vi.derived instanceof SequenceScalarIntersection)
+            || (vi.derived instanceof SequenceStringUnion)
+            || (vi.derived instanceof SequenceScalarUnion)
+            || (vi.derived instanceof SequencesConcat)
+            || (vi.derived instanceof SequenceFloatIntersection)
+            || (vi.derived instanceof SequenceFloatUnion)
 
-        return true;
-      else
+            )) {
         return false;
+      }
     }
     // Don't do this for now, because we depend on being able to call
     // sequenceSize() later.

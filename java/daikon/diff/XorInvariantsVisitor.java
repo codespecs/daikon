@@ -78,5 +78,3 @@ public class XorInvariantsVisitor extends PrintDifferingInvariantsVisitor {
 	}
     }
 }
-
-

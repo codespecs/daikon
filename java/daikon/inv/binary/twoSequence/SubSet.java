@@ -136,6 +136,7 @@ public class SubSet
     if (var1_in_var2 && (!ArraysMDE.isSubset(a1, a2))) {
       var1_in_var2 = false;
       if (!var2_in_var1) {
+        flowThis();
         destroy();
         return;
       }
@@ -143,6 +144,7 @@ public class SubSet
     if (var2_in_var1 && (!ArraysMDE.isSubset(a2, a1))) {
       var2_in_var1 = false;
       if (!var1_in_var2) {
+        flowThis();
         destroy();
         return;
       }

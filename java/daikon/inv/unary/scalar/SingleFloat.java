@@ -28,6 +28,7 @@ public abstract class SingleFloat
   public void add(double value, int mod_index, int count) {
     Assert.assertTrue(! falsified);
     Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
+    // [INCR] Assert.assertTrue(!finished);
     if (mod_index == 0) {
       add_unmodified(value, count);
     } else {

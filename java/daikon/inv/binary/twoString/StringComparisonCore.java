@@ -153,8 +153,8 @@ public final class StringComparisonCore
         // return Math.pow(.5, wrapper.ppt.num_values());
         return Invariant.PROBABILITY_JUSTIFIED;
       } else {
-        // None of the can_be_X's are set.
-        // (We haven't seen any samples.)
+        // None of the can_be_X's are true.
+        // (We haven't seen any values yet.)
         return Invariant.PROBABILITY_UNJUSTIFIED;
       }
     }
@@ -184,7 +184,7 @@ public final class StringComparisonCore
       }
     } else if (can_be_eq || can_be_gt || can_be_lt) {
       // TODO: reenable after making distribution.
-      // Assert.assert(can_be_lt || can_be_gt);
+      // Assert.assertTrue(can_be_lt || can_be_gt);
       String inequality = (can_be_lt ? "<" : can_be_gt ? ">" : "");
       String comparison = (can_be_eq ? "=" : "");
       return inequality + comparison;

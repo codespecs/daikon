@@ -20,9 +20,9 @@ public final class ThreeScalarFactory {
 
 
   public final static int max_instantiate
-    =  ((Functions.binarySymmetricFunctions.length
+    =  ((Functions.binarySymmetricFunctionNames.length
          * FunctionBinaryCore.order_symmetric_max)
-        + (Functions.binaryNonSymmetricFunctions.length
+        + (Functions.binaryNonSymmetricFunctionNames.length
            * FunctionBinaryCore.order_nonsymmetric_max));
 
   // Add the appropriate new Invariant objects to the specified Invariants
@@ -33,9 +33,9 @@ public final class ThreeScalarFactory {
     VarInfo var2 = ppt.var_infos[1];
     VarInfo var3 = ppt.var_infos[2];
 
-    Assert.assertTrue(var1.rep_type.isIntegral()
-                  && var2.rep_type.isIntegral()
-                  && var3.rep_type.isIntegral());
+    Assert.assertTrue((var1.rep_type == ProglangType.INT)
+                  && (var2.rep_type == ProglangType.INT)
+                  && (var3.rep_type == ProglangType.INT));
 
     if (debug.isDebugEnabled()) {
       debug.debug ("Instantiating for " + ppt.name);
@@ -53,13 +53,14 @@ public final class ThreeScalarFactory {
     // Check transitivity of "compatible" relationship.
     Assert.assertTrue(var1.compatible(var3));
 
-    {
+    { // previously only if (pass == 2)
+
       Vector result = new Vector();
       for (int var_order = FunctionBinaryCore.order_symmetric_start;
            var_order <= FunctionBinaryCore.order_symmetric_max;
            var_order++) {
-        for (int j=0; j<Functions.binarySymmetricFunctions.length; j++) {
-          FunctionBinary fb = FunctionBinary.instantiate(ppt, Functions.binarySymmetricFunctionNames[j], Functions.binarySymmetricFunctions[j], var_order);
+        for (int j=0; j<Functions.binarySymmetricFunctionNames.length; j++) {
+          FunctionBinary fb = FunctionBinary.instantiate(ppt, Functions.binarySymmetricFunctionNames[j], j, var_order);
           // no need to increment noninstantiated-invariants counters if
           // null; they were already incremented.
           if (fb != null) {
@@ -70,8 +71,8 @@ public final class ThreeScalarFactory {
       for (int var_order = FunctionBinaryCore.order_nonsymmetric_start;
            var_order <= FunctionBinaryCore.order_nonsymmetric_max;
            var_order++) {
-        for (int j=0; j<Functions.binaryNonSymmetricFunctions.length; j++) {
-          FunctionBinary fb = FunctionBinary.instantiate(ppt, Functions.binaryNonSymmetricFunctionNames[j], Functions.binaryNonSymmetricFunctions[j], var_order);
+        for (int j=0; j<Functions.binaryNonSymmetricFunctionNames.length; j++) {
+          FunctionBinary fb = FunctionBinary.instantiate(ppt, Functions.binaryNonSymmetricFunctionNames[j], j+Functions.binarySymmetricFunctionNames.length, var_order);
           // no need to increment noninstantiated-invariants counters if
           // null; they were already incremented.
           if (fb != null)

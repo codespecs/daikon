@@ -8,9 +8,9 @@ import java.io.*;
 /** <B>PrintNullDiffVIsitor</B> is a NodeVisitor that only reports an
  * invariant as different when its existence in one set is not in another
  * set.  This avoids reported differences simply in probability changes
- * and other extra-sensitive reports. 
+ * and other extra-sensitive reports.
  *
- * @author Lee Lin 11/10/2001 
+ * @author Lee Lin 11/10/2001
  */
 
 public class PrintNullDiffVisitor extends PrintDifferingInvariantsVisitor {
@@ -22,15 +22,10 @@ public class PrintNullDiffVisitor extends PrintDifferingInvariantsVisitor {
     public void visit (InvNode node) {
 	Invariant inv1 = node.getInv1();
 	Invariant inv2 = node.getInv2();
-	// If (inv1 XOR inv2) is null 
+	// If (inv1 XOR inv2) is null
 	if (inv1 != null && inv2 == null || inv2 != null && inv1 == null) {
 	    super.visit (node);
-	 
+
 	}
     }
 }
-
-
-
-
-

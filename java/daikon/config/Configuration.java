@@ -157,8 +157,7 @@ public final class Configuration
 
     int eq = line.indexOf('=');
     if (eq <= 0) {
-      System.err.println ("Error, setting must contain \"=\": " + line);
-      Assert.assertTrue(false);
+      throw new RuntimeException("Error, setting must contain \"=\": " + line);
     }
 
     String name = line.substring(0, eq).trim();

@@ -108,7 +108,6 @@ public abstract class VarInfoName
     }
 
 
-
     // ??
     throw new UnsupportedOperationException("parse error: '" + name + "'");
   }

@@ -232,6 +232,7 @@ public class PptTopLevel
     Assert.assertTrue(num_static_constant_vars == num_declvars - num_tracevars);
   }
 
+
   ///////////////////////////////////////////////////////////////////////////
   /// Accessing data
   ///
@@ -339,6 +340,7 @@ public class PptTopLevel
   // to another class later.
 
   public static boolean worthDerivingFrom(VarInfo vi) {
+
     // This prevents derivation from ever occurring on
     // derived variables.  Ought to put this under the
     // control of the individual Derivation objects.
@@ -379,24 +381,32 @@ public class PptTopLevel
         new SequenceLengthFactory(),
         new SequenceInitialFactory(),
         new SequenceMinMaxSumFactory(),
+        new SequenceInitialFactoryFloat(),
     };
 
   transient BinaryDerivationFactory[] binaryDerivations
     = new BinaryDerivationFactory[] {
+        // subscript
         new SequenceScalarSubscriptFactory(),
-        new SequenceScalarIntersectionFactory(),
-        new SequenceStringIntersectionFactory(),
-        new SequenceScalarUnionFactory(),
-        new SequenceStringUnionFactory(),
+        new SequenceFloatSubscriptFactory(),
         new SequenceStringSubscriptFactory(),
+        // intersection
+        new SequenceScalarIntersectionFactory(),
+        new SequenceFloatIntersectionFactory(),
+        new SequenceStringIntersectionFactory(),
+        // union
+        new SequenceScalarUnionFactory(),
+        new SequenceFloatUnionFactory(),
+        new SequenceStringUnionFactory(),
+        // other
         new SequencesConcatFactory(),
         new SequencesJoinFactory(),
         new SequencesPredicateFactory(),
     };
 
 
-  /**
-   * [INCR] This is dead code now.
+  /* * [INCR] This is dead code now.
+   *
    *
    * This does no inference; it just calls deriveVariablesOnePass once per pass.
    * It returns a Vector of Derivation objects.<p>
@@ -410,7 +420,7 @@ public class PptTopLevel
    * <br>
    * and afterward, derivation_index == (n, a, b).
    * @return Vector of VarInfo
-   **/
+   * */
   /* [INCR] ... we longer need to do this in stages
   public Vector __derive() {
     Assert.assertTrue(ArraysMDE.sorted_descending(derivation_indices));
@@ -468,12 +478,13 @@ public class PptTopLevel
     UnaryDerivationFactory[] unary = unaryDerivations;
     BinaryDerivationFactory[] binary = binaryDerivations;
 
-    if (Global.debugDerive.isDebugEnabled())
+    if (Global.debugDerive.isDebugEnabled()) {
       Global.debugDerive.debug("Deriving one pass for ppt " + this.name);
       Global.debugDerive.debug("  vi_index_min=" + vi_index_min
                                + ", vi_index_limit=" + vi_index_limit
                                + ", unary.length=" + unary.length
                                + ", binary.length=" + binary.length);
+    }
 
     Collection result = new ArrayList();
 
@@ -541,8 +552,10 @@ public class PptTopLevel
           if (Global.debugDerive.isDebugEnabled()) {
             Global.debugDerive.debug("Binary: not worth deriving from ("
                                + vi1.name.name() + "," + vi2.name.name() + ")");
-            // [INCR] Global.debugDerive.debug("Canonicality is: " + vi2.isCanonical());
-            // [INCR] Global.debugDerive.debug("Equal_to: " + vi2.equal_to.name.name());
+            /* [INCR]
+            Global.debugDerive.debug("Canonicality is: " + vi2.isCanonical());
+            Global.debugDerive.debug("Equal_to: " + vi2.equal_to.name.name());
+            */ // [INCR]
           }
           continue;
         }
@@ -1454,8 +1467,8 @@ public class PptTopLevel
   }
 
 
-  public void add_splitters(Splitter[] splits) {
-    // System.out.println("add_splitters(" + splits.length + ") for " + name);
+  public void addConditions(Splitter[] splits) {
+    // System.out.println("addConditions(" + splits.length + ") for " + name);
 
     int len = splits.length;
     if (len == 0) {
@@ -1472,7 +1485,8 @@ public class PptTopLevel
     for (int i=0; i<len; i++) {
       PptConditional cond1 = new PptConditional(this, splits[i], false);
       if (! cond1.splitter_valid()) {
-        Global.debugSplit.debug("Splitter not valid: " + cond1.name);
+        if (Global.debugSplit.isDebugEnabled())
+          Global.debugSplit.debug("Splitter not valid: " + cond1.name);
         continue;
       }
       pconds.add(cond1);
@@ -2334,7 +2348,7 @@ public class PptTopLevel
             // System.out.println("Background = ");
             // for (int i=0; i < present.length; i++) {
             //   if (i == checking) {
-            //     System.out.println("  <<<this invariant not in its own background>>>");
+            //     System.out.println("  <<this invariant not in its own background>>");
             //   }
             //   if (present[i] && (i != checking)) {
             //     System.out.println("  " + invs[i].format() + "\t" + invs[i].getClass().getName());

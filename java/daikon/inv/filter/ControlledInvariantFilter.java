@@ -54,7 +54,7 @@ class ControlledInvariantFilter extends InvariantFilter {
 //      return true;
 //      }
 //      return false;
-    */
+    */ // [INCR]
     return false;
   }
 

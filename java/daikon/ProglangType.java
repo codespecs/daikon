@@ -286,6 +286,8 @@ public final class ProglangType
   final static Long LongOne = Intern.internedLong(1);
   final static Double DoubleZero = Intern.internedDouble(0);
   final static Double DoubleNaN = new Double(Double.NaN);
+  final static Double DoublePositiveInfinity = new Double(Double.POSITIVE_INFINITY);
+  final static Double DoubleNegativeInfinity = new Double(Double.NEGATIVE_INFINITY);
 
   // Given a string representation of a value (of the type represented by
   // this ProglangType), return the interpretation of that value.
@@ -342,6 +344,10 @@ public final class ProglangType
         // comes from the C++ library.
         if (value.equalsIgnoreCase("NaN"))
           return DoubleNaN;
+        if (value.equalsIgnoreCase("Infinity"))
+          return DoublePositiveInfinity;
+        if (value.equalsIgnoreCase("-Infinity"))
+          return DoubleNegativeInfinity;
         return Intern.internedDouble(value);
       } else {
         throw new Error("unrecognized type " + base);
@@ -420,6 +426,10 @@ public final class ProglangType
             result[i] = 0;
           else if (value_strings[i].equals("NaN"))
             result[i] = Double.NaN;
+          else if (value_strings[i].equals("Infinity"))
+            result[i] = Double.POSITIVE_INFINITY;
+          else if (value_strings[i].equals("-Infinity"))
+            result[i] = Double.NEGATIVE_INFINITY;
           else
             result[i] = Double.parseDouble(value_strings[i]);
         }
@@ -488,6 +498,10 @@ public final class ProglangType
   // More efficient than elementType().isIntegral()
   public boolean elementIsIntegral() {
     return ((dimensions == 1) && baseIsIntegral());
+  }
+
+  public boolean elementIsFloat() {
+    return ((dimensions == 1) && baseIsFloat());
   }
 
   // Return true if this variable is sensible as an array index.

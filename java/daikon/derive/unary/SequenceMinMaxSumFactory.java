@@ -15,7 +15,7 @@ public final class SequenceMinMaxSumFactory extends UnaryDerivationFactory {
       return null;
     if (! vi.type.isArray())
       return null;
-    if (! vi.type.elementIsIntegral())
+    if (! vi.type.elementIsIntegral() && ! vi.type.elementIsFloat())
       return null;
     if (vi.type.base() == "char") // interned
       return null;

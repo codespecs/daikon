@@ -650,7 +650,7 @@ public final class FileIO {
         }
 
         // Fills up vals and mods arrays by side effect.
-        read_vals_and_mods_from_trace_file(reader, ppt, vals, mods);
+        read_vals_and_mods_from_trace_file(reader, filename.toString(), ppt, vals, mods);
 
         // Add orig and derived variables; pass to inference (add_and_flow)
         ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
@@ -746,8 +746,8 @@ public final class FileIO {
     if ((!call_stack.empty()) || (!call_hashmap.isEmpty())) {
       System.out.println();
       System.out.println("No return from procedure observed "
-                         + (call_stack.size() + call_hashmap.size())
-                         + " times.");
+                         + UtilMDE.nplural((call_stack.size() + call_hashmap.size()),
+                                           "time") + ".");
       if (!call_hashmap.isEmpty()) {
         System.out.println("Unterminated calls:");
         if (dkconfig_verbose_unmatched_procedure_entries) {
@@ -813,9 +813,10 @@ public final class FileIO {
 
   // This procedure fills up vals and mods by side effect.
   private static void read_vals_and_mods_from_trace_file(LineNumberReader reader,
-                                                         PptTopLevel ppt,
-                                                         Object[] vals,
-                                                         int[] mods)
+                                                      String filename,
+                                                      PptTopLevel ppt,
+                                                      Object[] vals,
+                                                      int[] mods)
     throws IOException
   {
     VarInfo[] vis = ppt.var_infos;
@@ -935,9 +936,11 @@ public final class FileIO {
         vals[val_index] = null;
       } else {
         // System.out.println("Mod is " + mod + " (missing=" + ValueTuple.MISSING + "), rep=" + value_rep + " (modIsMissing=" + ValueTuple.modIsMissing(mod) + ")");
-        vals[val_index] = vi.rep_type.parse_value(value_rep);
-        // Testing, to catch a particular value once upon a time.
-        // Assert.assertTrue(! vals[val_index].equals("null"));
+        try {
+          vals[val_index] = vi.rep_type.parse_value(value_rep);
+        } catch (Exception e) {
+          throw new FileIOException("Error while parsing value " + value_rep + " for variable " + vi.name.name() + " of type " + vi.rep_type + ": " + e.toString(), reader, filename);
+        }
       }
       val_index++;
 

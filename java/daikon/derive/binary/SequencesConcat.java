@@ -69,6 +69,11 @@ public final class SequencesConcat
       long[] result = ArraysMDE.concat (val1 == null ? null : (long[]) val1,
                                         val2 == null ? null : (long[]) val2);
       return new ValueAndModified(Intern.intern(result), mod);
+    } else if (var1().rep_type == ProglangType.DOUBLE_ARRAY) {
+       double[] result = ArraysMDE.concat(val1 == null ? null : (double[]) val1,
+                                        val2 == null ? null : (double[]) val2);
+       return new ValueAndModified(Intern.intern(result), mod);
+
     } else if (var1().rep_type == ProglangType.STRING_ARRAY) {
       // val1 instanceof String[] || val2 instanceof String[]
       String[] result = ArraysMDE.concat (val1 == null ? null : (String[]) val1,

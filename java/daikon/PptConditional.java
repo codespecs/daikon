@@ -30,12 +30,12 @@ public final class PptConditional
   public PptConditional(PptTopLevel parent, Splitter splitter, boolean inverse) {
     super(ctor_name_helper(parent, splitter, inverse),
           ctor_vis_helper(parent, splitter, inverse));
-    // Assert.assert(splitter.instantiated() == false);
+    // Assert.assertTrue(splitter.instantiated() == false);
     this.parent = parent;
     this.splitter = splitter.instantiate(this);
     this.splitter_inverse = inverse;
-    // Assert.assert(splitter.instantiated() == false);
-    // Assert.assert(this.splitter.instantiated() == true);
+    // Assert.assertTrue(splitter.instantiated() == false);
+    // Assert.assertTrue(this.splitter.instantiated() == true);
     this.invflow_ppts = new PptTopLevel[0]; // XXX needs to be fixed, probably
     this.invflow_transforms = new int[0][];
   }

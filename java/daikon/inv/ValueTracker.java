@@ -5,8 +5,8 @@ import java.io.Serializable;
 import utilMDE.*;
 
 /**
- * ValueTracker stores up to some maximum number of unique values, at
- * which point it rep is nulled.  This is used for efficienct
+ * ValueTracker stores up to some maximum number of unique non-zero integer
+ * values, at which point its rep is nulled.  This is used for efficienct
  * justification tests.
  *
  * Declared final only for efficiency.

@@ -22,7 +22,7 @@ import utilMDE.Assert;
 import utilMDE.Intern;
 
 /**
- * This class is used by the InvariantFormatTester class to store data
+ * This class is used by InvariantFormatTester to store data
  * representing test cases and for formatting results related to that
  * data. This class is related to tests performed on one invariant.
  **/

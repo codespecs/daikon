@@ -40,6 +40,9 @@ branch of the $inv/java/daikon part of the repository into the trunk
 
 (6) Use PCL-CVS (or some other, less-capable tool) to fix all
     conflicts created during the merge, so that the project compiles.
+    Use "d E" on each file with a conflict.  It skips
+    over those with only whitespace differences.  (For Michael Ernst,
+    as of 7/11/2002 "d E" only works with emacs -q.  Why?)
 
 (7) Edit the code and unit tests until all unit tests pass.
     Regression tests should pass at least to the extent that they
@@ -57,6 +60,7 @@ branch of the $inv/java/daikon part of the repository into the trunk
 **** Merge history ****
 (Add entries at the top of the list)
 
+Thu Jul 11 14:26:15 EDT 2002 by MDE
 Fri Jul  5 12:02:42 EDT 2002 by MDE
 Tue Jul  2 12:46:46 EDT 2002 by MDE
 Mon Jul  1 10:25:12 EDT 2002 by MDE

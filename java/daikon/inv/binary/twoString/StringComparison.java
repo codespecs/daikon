@@ -180,14 +180,13 @@ public final class StringComparison
     return core.isExact();
   }
 
-  // Temporary, for debugging
-  public void destroy() {
-    if (debugStringComparison || ppt.debugged) {
-      System.out.println("StringComparison.destroy(" + ppt.name + ")");
-    }
-
-    super.destroy();
-  }
+  // // Temporary, for debugging
+  // public void destroy() {
+  //   if (debugStringComparison || ppt.debugged) {
+  //     System.out.println("StringComparison.destroy(" + ppt.name + ")");
+  //   }
+  //   super.destroy();
+  // }
 
   public void add(String v1, String v2, int mod_index, int count) {
     if (ppt.debugged) {

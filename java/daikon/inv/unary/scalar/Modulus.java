@@ -76,7 +76,7 @@ public class Modulus
       // We shouldn't ever get to this case; the invariant should have been
       // destroyed instead.
       throw new Error("Modulus = 1");
-      // Assert.assert(falsified);
+      // Assert.assertTrue(falsified);
       // // We already know this probability fails
       // return;
     } else if (no_values_seen) {

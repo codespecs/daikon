@@ -45,7 +45,7 @@ public abstract class SplitterList
   public static void put(String pptname, Splitter[] splits)
   {
     // for (int i=0; i<splits.length; i++) {
-    //   Assert.assert(splits[i].instantiated() == false);
+    //   Assert.assertTrue(splits[i].instantiated() == false);
     // }
 
     if ((Global.debugSplit != null) && Global.debugSplit.isDebugEnabled()) {

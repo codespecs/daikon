@@ -180,9 +180,9 @@ public class DiffTester extends TestCase {
     {
       // Ensure that Modulus is enabled
       Configuration.getInstance().
-	apply(daikon.inv.unary.scalar.Modulus.class,
-	      "enabled",
-	      "true");
+        apply(daikon.inv.unary.scalar.Modulus.class,
+              "enabled",
+              "true");
 
       imps1 = new PptMap();
       VarInfo[] vars = { newIntVarInfo("x") };
@@ -526,8 +526,8 @@ public class DiffTester extends TestCase {
     // Ensure that NonModulus is enabled
     Configuration.getInstance().
       apply(daikon.inv.unary.scalar.NonModulus.class,
-	    "enabled",
-	    "true");
+            "enabled",
+            "true");
 
     PptMap map = new PptMap();
     VarInfo[] vars = { newIntVarInfo("x") };

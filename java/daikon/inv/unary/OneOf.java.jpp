@@ -4,75 +4,147 @@ You first need to preprocess it with cpp, the C preprocessor.
 The correct way to build the system is to run 'make'.
 #endif
 
-#if !(defined(SCALAR) || defined(STRING) || defined(SEQUENCE) || defined(STRINGSEQUENCE) || defined(ELT) || defined(ELTSTRING))
+#if !(defined(SCALAR) || defined(STRING) || defined(FLOAT) \
+      || defined(SEQUENCE) || defined(STRINGSEQUENCE) || defined(FLOATSEQUENCE) \
+      || defined(ELT) || defined(ELTSTRING) || defined(ELTFLOAT))
 #error "One of SCALAR, STRING, SEQUENCE, STRINGSEQUENCE, ELT, or ELTSTRING should be defined"
 #endif
+
+#if defined(SCALAR) || defined(STRING) || defined(FLOAT)
+#  define IS_SCALAR
+#  if defined(SCALAR) || defined(FLOAT)
+#    define IS_NUMERIC
+#  endif
+#elif defined(SEQUENCE) || defined(STRINGSEQUENCE) || defined(FLOATSEQUENCE)
+#  define IS_SEQUENCE
+#  if defined(SEQUENCE) || defined(FLOATSEQUENCE)
+#    define IS_SEQUENCE_NUMERIC
+#  endif
+#elif defined(ELT) || defined(ELTSTRING) || defined(ELTFLOAT)
+#  define IS_ELT
+#  if defined(ELT) || defined(ELTFLOAT)
+#    define IS_ELT_NUMERIC
+#  endif
+#else
+#  error "Impossible"
+#endif
+
+#if defined(SCALAR) || defined(SEQUENCE) || defined(ELT)
+#define BASE_INT
+#define BASE_NUMERIC
+#elif defined(FLOAT) || defined(FLOATSEQUENCE) || defined(ELTFLOAT)
+#define BASE_FLOAT
+#define BASE_NUMERIC
+#elif defined(STRING) || defined(STRINGSEQUENCE) || defined(ELTSTRING)
+#define BASE_STRING
+#else
+#error "Impossible"
+#endif
+
 
 #define JAVA_EQUALS(x) " == " + x
 
 #if defined(SCALAR)
-#define SCALARPKG scalar
-#define INT long
-#define ONEOFSCALAR OneOfScalar
-#define ONEOFSCALARSTR "OneOfScalar"
-#define SINGLESCALAR SingleScalar
-#if 0
-No cleverness needed for hashcode TOSTRING: never print actual values.
-#endif
-#define TOSTRING(x) ((Integer.MIN_VALUE <= x && x <= Integer.MAX_VALUE) ? String.valueOf(x) : (String.valueOf(x) + "L"))
-#define NAME var().name.name()
-#define JAVA_NAME var().name.java_name()
-#define NONZERO NonZero
+#  define SCALARPKG scalar
+#  define INT long
+#  define ONEOFSCALAR OneOfScalar
+#  define ONEOFSCALAR_STRING "OneOfScalar"
+#  define SINGLESCALAR SingleScalar
+#  define NUMWRAPPER Long
+#  if 0
+     TOSTRING is never called for hashcodes: we never print actual values.
+#  endif
+#  define TOSTRING(x) ((Integer.MIN_VALUE <= x && x <= Integer.MAX_VALUE) ? String.valueOf(x) : (String.valueOf(x) + "L"))
+#  define NAME var().name.name()
+#  define JAVA_NAME var().name.java_name()
+#  define NONZERO NonZero
+#  define ELTONEOF EltOneOf
+#elif defined(FLOAT)
+#  define SCALARPKG scalar
+#  define INT double
+#  define ONEOFSCALAR OneOfFloat
+#  define ONEOFSCALAR_STRING "OneOfFloat"
+#  define SINGLESCALAR SingleFloat
+#  define NUMWRAPPER Double
+#  define TOSTRING(x) String.valueOf(x)
+#  define NAME var().name.name()
+#  define JAVA_NAME var().name.java_name()
+#  define NONZERO NonZero
+#  define ELTONEOF EltOneOfFloat
 #elif defined(STRING)
-#define JAVA_EQUALS(x) ".equals(" + x + ")"
-#define SCALARPKG string
-#define INT String
-#define ONEOFSCALAR OneOfString
-#define ONEOFSCALARSTR "OneOfString"
-#define SINGLESCALAR SingleString
-#define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.quote(x) + "\"")
-#define NAME var().name.name()
-#define JAVA_NAME var().name.java_name()
+#  undef JAVA_EQUALS
+#  define JAVA_EQUALS(x) ".equals(" + x + ")"
+#  define SCALARPKG string
+#  define INT String
+#  define ONEOFSCALAR OneOfString
+#  define ONEOFSCALAR_STRING "OneOfString"
+#  define SINGLESCALAR SingleString
+#  define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.quote(x) + "\"")
+#  define NAME var().name.name()
+#  define JAVA_NAME var().name.java_name()
 #elif defined(SEQUENCE)
-#define SCALARPKG sequence
-#define INT long[]
-#define ONEOFSCALAR OneOfSequence
-#define ONEOFSCALARSTR "OneOfSequence"
-#define SINGLESCALAR SingleSequence
-#define TOSTRING(x) ArraysMDE.toString(x)
-#define NAME var().name.name()
-#define JAVA_NAME var().name.java_name()
+#  define SCALARPKG sequence
+#  define INT long[]
+#  define ONEOFSCALAR OneOfSequence
+#  define ONEOFSCALAR_STRING "OneOfSequence"
+#  define SINGLESCALAR SingleSequence
+#  define TOSTRING(x) ArraysMDE.toString(x)
+#  define NAME var().name.name()
+#  define JAVA_NAME var().name.java_name()
+#elif defined(FLOATSEQUENCE)
+#  define SCALARPKG sequence
+#  define INT double[]
+#  define ONEOFSCALAR OneOfFloatSequence
+#  define ONEOFSCALAR_STRING "OneOfSequenceFloat"
+#  define SINGLESCALAR SingleFloatSequence
+#  define TOSTRING(x) ArraysMDE.toString(x)
+#  define NAME var().name.name()
+#  define JAVA_NAME var().name.java_name()
 #elif defined(STRINGSEQUENCE)
-#define SCALARPKG stringsequence
-#define INT String[]
-#define ONEOFSCALAR OneOfStringSequence
-#define ONEOFSCALARSTR "OneOfStringSequence"
-#define SINGLESCALAR SingleStringSequence
-#define TOSTRING(x) ArraysMDE.toString(x)
-#define NAME var().name.name()
-#define JAVA_NAME var().name.java_name()
+#  define SCALARPKG stringsequence
+#  define INT String[]
+#  define ONEOFSCALAR OneOfStringSequence
+#  define ONEOFSCALAR_STRING "OneOfStringSequence"
+#  define SINGLESCALAR SingleStringSequence
+#  define TOSTRING(x) ArraysMDE.toString(x)
+#  define NAME var().name.name()
+#  define JAVA_NAME var().name.java_name()
 #elif defined(ELT)
-#define SCALARPKG sequence
-#define INT long
-#define ONEOFSCALAR EltOneOf
-#define ONEOFSCALARSTR "EltOneOf"
-#define SINGLESCALAR SingleSequence
-#define TOSTRING(x) (((x == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= x && x <= Integer.MAX_VALUE) ? String.valueOf(x) : (String.valueOf(x) + "L")))
-#define NAME var().name.name() + " elements"
-#define JAVA_NAME var().name.java_name()
-#define NONZERO EltNonZero
+#  define SCALARPKG sequence
+#  define INT long
+#  define NUMWRAPPER Long
+#  define ONEOFSCALAR EltOneOf
+#  define ONEOFSCALAR_STRING "EltOneOf"
+#  define SINGLESCALAR SingleSequence
+#  define TOSTRING(x) (((x == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <= x && x <= Integer.MAX_VALUE) ? String.valueOf(x) : (String.valueOf(x) + "L")))
+#  define NAME var().name.name() + " elements"
+#  define JAVA_NAME var().name.java_name()
+#  define NONZERO EltNonZero
+#elif defined(ELTFLOAT)
+#  define SCALARPKG sequence
+#  define INT double
+#  define NUMWRAPPER Double
+#  define ONEOFSCALAR EltOneOfFloat
+#  define ONEOFSCALAR_STRING "EltOneOfFloat"
+#  define SINGLESCALAR SingleFloatSequence
+#  define TOSTRING(x) String.valueOf(x)
+#  define NAME var().name.name() + " elements"
+#  define JAVA_NAME var().name.java_name()
+#  define NONZERO EltNonZeroFloat
 #elif defined(ELTSTRING)
-#define SCALARPKG stringsequence
-#define INT String
-#define ONEOFSCALAR EltOneOfString
-#define ONEOFSCALARSTR "EltOneOfString"
-#define SINGLESCALAR SingleStringSequence
-#define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.quote(x) + "\"")
-#define NAME var().name.name() + " elements"
-#define JAVA_NAME var().name.java_name()
+#  define SCALARPKG stringsequence
+#  define INT String
+#  define ONEOFSCALAR EltOneOfString
+#  define ONEOFSCALAR_STRING "EltOneOfString"
+#  define SINGLESCALAR SingleStringSequence
+#  define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.quote(x) + "\"")
+#  define NAME var().name.name() + " elements"
+#  define JAVA_NAME var().name.java_name()
 #else
 #error "One of SCALAR, STRING, SEQUENCE, STRINGSEQUENCE, ELT, or ELTSTRING should be defined"
 #endif
+
+// ***** This file is automatically generated from OneOf.java.jpp
 
 package daikon.inv.unary.SCALARPKG;
 
@@ -88,11 +160,6 @@ import utilMDE.*;
 
 import java.util.*;
 import java.io.*;
-
-// *****
-// Do not edit this file directly:
-// it is automatically generated from OneOf.java.jpp
-// *****
 
 // States that the value is one of the specified values.
 
@@ -132,19 +199,31 @@ public final class ONEOFSCALAR
 
   private INT[] elts;
   private int num_elts;
-#if defined(SCALAR) || defined(ELT) || defined(SEQUENCE)
+#ifdef BASE_INT
+  /** Whether the variable's declared type is boolean. **/
   private boolean is_boolean;
+  /** Whether the variable's declared type is hashcode. **/
   private boolean is_hashcode;
 #endif
 
   ONEOFSCALAR(PptSlice ppt) {
     super(ppt);
+#if defined(IS_ELT) || defined(IS_SEQUENCE)
+    Assert.assertTrue(var().type.isPseudoArray(),
+                  "ProglangType must be pseudo-array for " + ONEOFSCALAR_STRING);
+#endif
 #if defined(SEQUENCE)
-    elts = new long[dkconfig_size][];    // elements are interned, so can test with ==
-                                // (in the general online case, not worth interning)
+    // Elements are interned, so can test with ==
+    // (in the general online case, it's not worth interning).
+    elts = new long[dkconfig_size][];
+#elif defined(FLOATSEQUENCE)
+    // Elements are interned, so can test with ==
+    // (in the general online case, it's not worth interning).
+    elts = new double[dkconfig_size][];
 #elif defined(STRINGSEQUENCE)
-    elts = new String[dkconfig_size][];    // elements are interned, so can test with ==
-                                // (in the general online case, not worth interning)
+    // Elements are interned, so can test with ==
+    // (in the general online case, it's not worth interning).
+    elts = new String[dkconfig_size][];
 #else
     elts = new INT[dkconfig_size];
 #endif
@@ -153,8 +232,6 @@ public final class ONEOFSCALAR
     is_boolean = (var().file_rep_type == ProglangType.BOOLEAN);
     is_hashcode = (var().file_rep_type == ProglangType.HASHCODE);
 #elif defined(ELT) || defined(SEQUENCE)
-    Assert.assertTrue(var().type.isPseudoArray(),
-                  "ProglangType must be pseudo-array for EltOneOf or OneOfSequence");
     is_boolean = (var().file_rep_type.elementType() == ProglangType.BOOLEAN);
     is_hashcode = (var().file_rep_type.elementType() == ProglangType.HASHCODE);
     // System.out.println("is_hashcode=" + is_hashcode + " for " + format()
@@ -170,13 +247,13 @@ public final class ONEOFSCALAR
   protected Object clone() {
     ONEOFSCALAR result = (ONEOFSCALAR) super.clone();
     result.elts = (INT[]) elts.clone();
-#if defined(SEQUENCE) || defined(STRINGSEQUENCE)
+#ifdef IS_SEQUENCE
     for (int i=0; i < num_elts; i++) {
       result.elts[i] = (INT) elts[i].clone();
     }
 #endif
-#if defined(SEQUENCE) || defined(SCALAR) || defined(ELT)
     result.num_elts = this.num_elts;
+#ifdef BASE_INT
     result.is_boolean = this.is_boolean;
     result.is_hashcode = this.is_hashcode;
 #endif
@@ -194,6 +271,8 @@ public final class ONEOFSCALAR
     // Not sure whether interning is necessary (or just returning an Integer
     // would be sufficient), but just in case...
     return Intern.internedLong(elts[0]);
+#elif defined(FLOAT) || defined(ELTFLOAT)
+    return Intern.internedDouble(elts[0]);
 #else
     return elts[0];
 #endif
@@ -201,15 +280,18 @@ public final class ONEOFSCALAR
 
 #if defined(STRING) || defined(ELTSTRING)
   static Comparator comparator = new UtilMDE.NullableStringComparator();
-#define COMPARATOR_ARG , comparator
+#  define COMPARATOR_ARG , comparator
 #elif defined(SEQUENCE)
   static Comparator comparator = new ArraysMDE.LongArrayComparatorLexical();
-#define COMPARATOR_ARG , comparator
+#  define COMPARATOR_ARG , comparator
+#elif defined(FLOATSEQUENCE)
+  static Comparator comparator = new ArraysMDE.DoubleArrayComparatorLexical();
+#  define COMPARATOR_ARG , comparator
 #elif defined(STRINGSEQUENCE)
   static Comparator comparator = new ArraysMDE.ComparableArrayComparatorLexical();
-#define COMPARATOR_ARG , comparator
+#  define COMPARATOR_ARG , comparator
 #else
-#define COMPARATOR_ARG
+#  define COMPARATOR_ARG
 #endif
 
   private void sort_rep() {
@@ -224,6 +306,8 @@ public final class ONEOFSCALAR
     // Not sure whether interning is necessary (or just returning an Integer
     // would be sufficient), but just in case...
     return Intern.internedLong(elts[0]);
+#elif defined(FLOAT) || defined(ELTFLOAT)
+    return Intern.internedDouble(elts[0]);
 #else
     return elts[0];
 #endif
@@ -237,6 +321,8 @@ public final class ONEOFSCALAR
     // Not sure whether interning is necessary (or just returning an Integer
     // would be sufficient), but just in case...
     return Intern.internedLong(elts[num_elts-1]);
+#elif defined(FLOAT) || defined(ELTFLOAT)
+    return Intern.internedDouble(elts[num_elts-1]);
 #else
     return elts[num_elts-1];
 #endif
@@ -251,6 +337,21 @@ public final class ONEOFSCALAR
   }
 
   public long max_elt_long() {
+    if (num_elts == 0)
+      throw new Error("Represents no elements");
+    sort_rep();
+    return elts[num_elts-1];
+  }
+#elif defined(FLOAT) || defined(ELTFLOAT)
+
+  public double min_elt_double() {
+    if (num_elts == 0)
+      throw new Error("Represents no elements");
+    sort_rep();
+    return elts[0];
+  }
+
+  public double max_elt_double() {
     if (num_elts == 0)
       throw new Error("Represents no elements");
     sort_rep();
@@ -285,13 +386,13 @@ public final class ONEOFSCALAR
   }
 
   public String repr() {
-    return ONEOFSCALARSTR + varNames() + ": "
+    return ONEOFSCALAR_STRING + varNames() + ": "
       + "falsified=" + falsified
       + ", num_elts=" + num_elts
       + ", elts=" + subarray_rep();
   }
 
-#if defined(SEQUENCE)
+#if defined(IS_SEQUENCE_NUMERIC)
   private boolean all_nulls(int value_no) {
     INT seq = elts[value_no];
     for (int i=0; i<seq.length; i++) {
@@ -393,15 +494,15 @@ public final class ONEOFSCALAR
 
   public String format_java() {
     //have to take a closer look at this!
-#if defined(ELT) || defined(ELTSTRING)
+#if defined(IS_ELT)
     String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
     String varname = form[1];
-#elif defined(SCALAR) || defined(STRING)
+#elif defined(IS_SCALAR)
     String varname = var().name.java_name();
 #endif
     String result;
-#if defined(STRING) || defined(ELTSTRING)
 
+#if defined(STRING) || defined(ELTSTRING)
     result = "";
     boolean is_type = is_type();
     for (int i=0; i<num_elts; i++) {
@@ -424,7 +525,8 @@ public final class ONEOFSCALAR
         }
       }
     }
-#elif defined(SCALAR) || defined(ELT)
+#elif defined(IS_NUMERIC) || defined(IS_ELT_NUMERIC)
+#if defined(BASE_INT)
     if (is_boolean) {
       Assert.assertTrue(num_elts == 1);
       Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
@@ -440,16 +542,19 @@ public final class ONEOFSCALAR
           // + " (hashcode=" + elts[0] + ")"
           ;
       }
-    } else {
+    } else
+#endif
+    {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
         result += varname + " == " + TOSTRING(elts[i]);
       }
     }
-#elif defined(SEQUENCE)
+#elif defined(IS_SEQUENCE_NUMERIC)
     String length = "";
     String forall = "";
+#if defined(SEQUENCE)
     if (is_hashcode) {
       if (num_elts == 0)  {
         String classname = this.getClass().toString().substring(6); // remove leading "class"
@@ -470,6 +575,7 @@ public final class ONEOFSCALAR
         }
       }
     }
+#endif
     if (length == "" && forall == "") { // interned
       String classname = this.getClass().toString().substring(6); // remove leading "class"
       result = "warning: method " + classname + ".format_java() needs to be implemented: " + format();
@@ -484,7 +590,7 @@ public final class ONEOFSCALAR
     String classname = this.getClass().toString().substring(6); // remove leading "class"
     result = "warning: method " + classname + ".format_java() needs to be implemented: " + format();
 #endif
-#if defined(ELT) || defined(ELTSTRING)
+#if defined(IS_ELT)
     result = form[0] + "(" + result + ")" + form[2];
 #endif
     return result;
@@ -492,11 +598,11 @@ public final class ONEOFSCALAR
 
   /* IOA */
   public String format_ioa() {
-#if defined(ELT) || defined(ELTSTRING)
+#if defined(IS_ELT)
     VarInfoName.QuantHelper.IOAQuantification quant =
       new VarInfoName.QuantHelper.IOAQuantification (new VarInfo[] {var()});
     String varname = quant.getVarName(0).ioa_name();
-#elif defined(SCALAR) || defined(STRING)
+#elif defined(IS_SCALAR)
     String varname = var().name.ioa_name();
 #endif
     String result;
@@ -535,7 +641,8 @@ public final class ONEOFSCALAR
     } // end for
     */
 
-#elif defined(SCALAR) || defined(ELT)
+#elif defined(SCALAR) || defined(ELT) || defined(FLOAT) || defined(ELTFLOAT)
+#if defined(SCALAR) || defined(ELT)
     if (is_boolean) {
       Assert.assertTrue(num_elts == 1);
       Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
@@ -547,16 +654,19 @@ public final class ONEOFSCALAR
       } else {
         result = varname + " = " + "{one value}";
       }
-    } else {
+    } else
+#endif
+    {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " \\/ "; }
         result += "(" + varname + " = " + TOSTRING(elts[i]) + ")";
       }
     }
-#elif defined(SEQUENCE)
+#elif defined(IS_SEQUENCE_NUMERIC)
     String length = "";
     String forall = "";
+#if defined(SEQUENCE)
     if (is_hashcode) {
       // we only have one value, because add_modified dies if more
       Assert.assertTrue(num_elts == 1);
@@ -571,6 +681,7 @@ public final class ONEOFSCALAR
         forall = quant.getQuantifierExp() + quant.getVarIndexed(0) + " = null " + quant.getClosingExp();
       }
     }
+#endif
     if (length == "" && forall == "") { // interned; can't say anything about size or elements
       String thisclassname = this.getClass().getName();
       result = "warning: " + thisclassname + ".format_ioa() " + " needs to be implemented: " + format();
@@ -590,13 +701,13 @@ public final class ONEOFSCALAR
       result = "warning: " + thisclassname + ".format_ioa() needs to be implemented: " + format();
     }
 #endif
-#if defined(ELT) || defined(ELTSTRING)
+#if defined(IS_ELT)
     result = quant.getQuantifierExp() + quant.getMembershipRestriction(0) + " => " + result + quant.getClosingExp();
 #endif
     return result;
   }
 
-#if defined(STRING) || defined(ELTSTRING) || defined(STRINGSEQUENCE)
+#if defined(BASE_STRING)
   private static String format_esc_string2type(String str) {
     if ((str == null) || "null".equals(str)) {
       return "\\typeof(null)";
@@ -619,10 +730,10 @@ public final class ONEOFSCALAR
 #endif
 
   public String format_esc() {
-#if defined(ELT) || defined(ELTSTRING)
+#if defined(IS_ELT)
     String[] form = VarInfoName.QuantHelper.format_esc(new VarInfoName[] { var().name } );
     String varname = form[1];
-#elif defined(SCALAR) || defined(STRING)
+#elif defined(IS_SCALAR)
     String varname = var().name.esc_name();
 #endif
     String result;
@@ -684,7 +795,8 @@ public final class ONEOFSCALAR
 
     // Inner classes
     result = result.replace('$', '.');
-#elif defined(SCALAR) || defined(ELT)
+#elif defined(SCALAR) || defined(ELT) || defined(FLOAT) || defined(ELTFLOAT)
+#if defined(SCALAR) || defined(ELT)
     if (is_boolean) {
       Assert.assertTrue(num_elts == 1);
       Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
@@ -706,16 +818,19 @@ public final class ONEOFSCALAR
         Assert.assertTrue(elts[1] != 0);
         return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
       }
-    } else {
+    } else
+#endif
+    {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
         result += varname + " == " + TOSTRING(elts[i]);
       }
     }
-#elif defined(SEQUENCE)
+#elif defined(IS_SEQUENCE_NUMERIC)
     String length = "";
     String forall = "";
+#if defined(SEQUENCE)
     if (is_hashcode) {
       // we only have one value, because add_modified dies if more
       Assert.assertTrue(num_elts == 1);
@@ -733,6 +848,7 @@ public final class ONEOFSCALAR
         }
       }
     }
+#endif
     if (length == "" && forall == "") { // interned
       return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
     } else if (length == "") { // interned
@@ -776,17 +892,17 @@ public final class ONEOFSCALAR
     }
     result = format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
 #endif
-#if defined(ELT) || defined(ELTSTRING)
+#if defined(IS_ELT)
     result = form[0] + "(" + result + ")" + form[2];
 #endif
     return result;
   }
 
   public String format_jml() {
-#if defined(ELT) || defined(ELTSTRING)
+#if defined(IS_ELT)
     String[] form = VarInfoName.QuantHelper.format_jml(new VarInfoName[] { var().name } );
     String varname = form[1];
-#elif defined(SCALAR) || defined(STRING)
+#elif defined(IS_SCALAR)
     String varname = var().name.jml_name();
 #endif
     String result;
@@ -814,7 +930,8 @@ public final class ONEOFSCALAR
         }
       }
     }
-#elif defined(SCALAR) || defined(ELT)
+#elif defined(SCALAR) || defined(ELT) || defined(FLOAT) || defined(ELTFLOAT)
+#if defined(SCALAR) || defined(ELT)
     if (is_boolean) {
       Assert.assertTrue(num_elts == 1);
       Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
@@ -830,16 +947,19 @@ public final class ONEOFSCALAR
           // + " (hashcode=" + elts[0] + ")"
           ;
       }
-    } else {
+    } else
+#endif
+    {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
         result += varname + " == " + TOSTRING(elts[i]);
       }
     }
-#elif defined(SEQUENCE)
+#elif defined(SEQUENCE) || defined(FLOATSEQUENCE)
     String length = "";
     String forall = "";
+#if defined(SEQUENCE)
     if (is_hashcode) {
       if (num_elts == 0)  {
         String classname = this.getClass().toString().substring(6); // remove leading "class"
@@ -860,6 +980,7 @@ public final class ONEOFSCALAR
         }
       }
     }
+#endif
     if (length == "" && forall == "") { // interned
       String classname = this.getClass().toString().substring(6); // remove leading "class"
       result = "warning: method " + classname + ".format_jml() needs to be implemented: " + format();
@@ -874,17 +995,17 @@ public final class ONEOFSCALAR
     String classname = this.getClass().toString().substring(6); // remove leading "class"
     result = "warning: method " + classname + ".format_jml() needs to be implemented: " + format();
 #endif
-#if defined(ELT) || defined(ELTSTRING)
+#if defined(IS_ELT)
     result = form[0] + result + form[2];
 #endif
     return result;
   }
 
   public String format_simplify() {
-#if defined(ELT) || defined(ELTSTRING)
+#if defined(IS_ELT)
     String[] form = VarInfoName.QuantHelper.format_simplify(new VarInfoName[] { var().name } );
     String varname = form[1];
-#elif defined(SCALAR) || defined(STRING)
+#elif defined(IS_SCALAR)
     String varname = var().name.simplify_name();
 #endif
     String result;
@@ -912,7 +1033,8 @@ public final class ONEOFSCALAR
       // chop leading space
       result = result.substring(1);
     }
-#elif defined(SCALAR) || defined(ELT)
+#elif defined(SCALAR) || defined(ELT) || defined(FLOAT) || defined(ELTFLOAT)
+#if defined(SCALAR) || defined(ELT)
     if (is_boolean) {
       Assert.assertTrue(num_elts == 1);
       Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
@@ -927,7 +1049,9 @@ public final class ONEOFSCALAR
         Assert.assertTrue(elts[1] != 0);
         result = "(OR (EQ " + varname + " null) (EQ " + varname + "|hash_" + elts[1] + "|))";
       }
-    } else {
+    } else
+#endif
+    {
       result = "";
       for (int i=0; i<num_elts; i++) {
         result += " (EQ " + varname + " " + TOSTRING(elts[i]) + ")";
@@ -971,26 +1095,26 @@ public final class ONEOFSCALAR
     String classname = this.getClass().toString().substring(6); // remove leading "class"
     result =  "warning: method " + classname + ".format_simplify() needs to be implemented: " + format();
 #endif
-#if defined(ELT) || defined(ELTSTRING)
+#if defined(IS_ELT)
     result = form[0] + result + form[2];
 #endif
     return result;
   }
 
-#if defined(ELT) || defined(ELTSTRING)
+#if defined(IS_ELT)
   public void add_modified(INT[] a, int count) {
   OUTER:
     for (int ai=0; ai<a.length; ai++) {
       INT v = a[ai];
 #else
   public void add_modified(INT v, int count) {
-#ifndef SCALAR
+#if !(defined(SCALAR) || defined(FLOAT))
     Assert.assertTrue(Intern.isInterned(v));
 #endif
 #endif
     for (int i=0; i<num_elts; i++)
       if (elts[i] == v) {
-#if defined(ELT) || defined(ELTSTRING)
+#if defined(IS_ELT)
         continue OUTER;
 #else
         return;
@@ -1035,7 +1159,7 @@ public final class ONEOFSCALAR
 
     elts[num_elts] = v;
     num_elts++;
-#if defined(ELT) || defined(ELTSTRING)
+#if defined(IS_ELT)
     }
   }
 #else
@@ -1067,7 +1191,7 @@ public final class ONEOFSCALAR
     return super.isObviousDerived();
   }
 
-#ifdef SCALAR
+#if defined(IS_NUMERIC)
   public boolean isObviousImplied() {
     VarInfo v = var();
     if (v.isDerived() && (v.derived instanceof SequenceLength)) {
@@ -1077,19 +1201,19 @@ public final class ONEOFSCALAR
       }
     }
 
-    // For every EltOneOf at this program point, see if this variable is
+    // For every ELTONEOF at this program point, see if this variable is
     // an obvious member of that sequence.
     PptTopLevel parent = ppt.parent;
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if ((inv instanceof EltOneOf) && inv.enoughSamples()) {
+      if ((inv instanceof ELTONEOF) && inv.enoughSamples()) {
         VarInfo v1 = var();
         VarInfo v2 = inv.ppt.var_infos[0];
         // System.out.println("isObviousImplied: calling  Member.isObviousMember(" + v1.name + ", " + v2.name + ")");
         // Don't use isEqualToObviousMember:  that is too subtle
         // and eliminates desirable invariants such as "return == null".
         if (Member.isObviousMember(v1, v2)) {
-          EltOneOf other = (EltOneOf) inv;
+          ELTONEOF other = (ELTONEOF) inv;
           if (num_elts == other.num_elts()) {
             sort_rep();
             if (other.compare_rep(num_elts, elts)) {
@@ -1103,7 +1227,7 @@ public final class ONEOFSCALAR
 
     return false;
   }
-#elif ELT
+#elif defined(IS_ELT_NUMERIC)
   public boolean isObviousImplied() {
     VarInfo v = var();
     // Look for the same property over a supersequence of this one.
@@ -1113,8 +1237,8 @@ public final class ONEOFSCALAR
       if (inv == this) {
         continue;
       }
-      if (inv instanceof EltOneOf) {
-        EltOneOf other = (EltOneOf) inv;
+      if (inv instanceof ONEOFSCALAR) {
+        ONEOFSCALAR other = (ONEOFSCALAR) inv;
         if (isSameFormula(other)
             && SubSequence.isObviousDerived(v, other.var())) {
           return true;
@@ -1179,8 +1303,8 @@ public final class ONEOFSCALAR
       // we only have one value, because add_modified dies if more
       Assert.assertTrue(num_elts == 1 && other.num_elts == 1);
 
-      long[] thisSeq = elts[0];
-      long[] otherSeq = other.elts[0];
+      INT thisSeq = elts[0];
+      INT otherSeq = other.elts[0];
       if (thisSeq.length != otherSeq.length) {
         return false;
       }
@@ -1216,13 +1340,13 @@ public final class ONEOFSCALAR
       }
       return true;
     }
-#if defined(SCALAR) || defined(ELT)
+#if defined(IS_NUMERIC) || defined(IS_ELT_NUMERIC)
     // Many more checks can be added here:  against nonzero, modulus, etc.
     if ((o instanceof NONZERO) && (num_elts == 1) && (elts[0] == 0)) {
       return true;
     }
-    long elts_min = Long.MAX_VALUE;
-    long elts_max = Long.MIN_VALUE;
+    INT elts_min = NUMWRAPPER.MAX_VALUE;
+    INT elts_max = NUMWRAPPER.MIN_VALUE;
     for (int i=0; i < num_elts; i++) {
       elts_min = Math.min(elts_min, elts[i]);
       elts_max = Math.max(elts_max, elts[i]);

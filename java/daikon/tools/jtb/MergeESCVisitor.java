@@ -569,7 +569,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
         // REP_SCALE_FACTOR in MapQuick1/GeoPoint.java).
         System.out.println("Warning: MergeESC: skipping Variable " + varname + " at " + ppt);
       } else {
-        Assert.assert(vi != null);
+        Assert.assertTrue(vi != null);
         PptSlice1 slice = ppt.findSlice(vi);
         if (slice != null) {
           EltNonZero enz = EltNonZero.find(slice);
@@ -608,7 +608,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
         // This happens, for example, for .class variables
         System.out.println("Warning: MergeESC: Variable not found: " + varname + " at " + ppt);
       } else {
-        Assert.assert(vi != null);
+        Assert.assertTrue(vi != null);
         PptSlice1 slice = ppt.findSlice(vi);
         if (slice != null) {
           System.out.println("Slice for " + vi.name.name());

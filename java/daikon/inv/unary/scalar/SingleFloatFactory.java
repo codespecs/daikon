@@ -18,7 +18,9 @@ public final class SingleFloatFactory {
     Assert.assertTrue(var.rep_type == ProglangType.DOUBLE);
 
     Vector result = new Vector();
-    // I guess there are none?
+    result.add(OneOfFloat.instantiate(ppt));
+    result.add(LowerBoundFloat.instantiate(ppt));
+    result.add(UpperBoundFloat.instantiate(ppt));
     return result;
   }
 

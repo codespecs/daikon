@@ -32,8 +32,8 @@ public final class Daikon {
     System.err.flush();
   }
 
-  public final static String release_version = "2.3.10";
-  public final static String release_date = "June 10, 2002";
+  public final static String release_version = "2.3.12";
+  public final static String release_date = "July 11, 2002";
   public final static String release_string
     = "Daikon version " + release_version
     + ", released " + release_date
@@ -46,6 +46,14 @@ public final class Daikon {
    * manual) are displayed.
    **/
   public static boolean dkconfig_output_conditionals = true;
+
+  // Variables starting with dkconfig_ should only be set via the
+  // daikon.config.Configuration interface.
+  /**
+   * Boolean.  Controls whether invariants are reported over floating-point
+   * values.
+   **/
+  public static boolean dkconfig_enable_floats = true;
 
   // All these variables really need to be organized better.
 
@@ -220,8 +228,8 @@ public final class Daikon {
       try {
         FileIO.write_serialized_pptmap(all_ppts, inv_file);
       } catch (IOException e) {
-        System.err.println("Error while writing '" + inv_file + "': " + e);
-        System.exit(1);
+        throw new RuntimeException("Error while writing .inv file "
+                                   + "'" + inv_file + "': " + e.toString());
       }
     }
 
@@ -232,7 +240,8 @@ public final class Daikon {
 
   ///////////////////////////////////////////////////////////////////////////
   // Read in the command line options
-  // Return an array of {decls, dtrace, spinfo} filenames
+  // Return an array of {decls, dtrace, spinfo, map} filenames; each array
+  // element is a set.
   private static Set[] read_options(String args[])
   {
     if (args.length == 0) {
@@ -451,13 +460,14 @@ public final class Daikon {
       if (! file.exists()) {
         throw new Error("File " + file + " not found.");
       }
-      if (file.toString().indexOf(".decls") != -1) {
+      String filename = file.toString();
+      if (filename.indexOf(".decls") != -1) {
         decl_files.add(file);
-      } else if (file.toString().indexOf(".dtrace") != -1) {
+      } else if (filename.indexOf(".dtrace") != -1) {
         dtrace_files.add(file);
-      } else if (file.toString().indexOf(".spinfo") != -1) {
+      } else if (filename.indexOf(".spinfo") != -1) {
         spinfo_files.add(file);
-      } else if (file.toString().indexOf(".map") != -1) {
+      } else if (filename.indexOf(".map") != -1) {
         map_files.add(file);
       } else {
         throw new Error("Unrecognized argument: " + file);
@@ -557,7 +567,7 @@ public final class Daikon {
                                   + UtilMDE.nplural(pconds.length, "splitter")
                                   + " for " + ppt.name);
         }
-        ppt.add_splitters(pconds);
+        ppt.addConditions(pconds);
       }
     }
   }
@@ -653,6 +663,7 @@ public final class Daikon {
 
   ///////////////////////////////////////////////////////////////////////////
   //
+
   static public void create_splitters(PptMap all_ppts, Set spinfo_files)
     throws IOException
   {

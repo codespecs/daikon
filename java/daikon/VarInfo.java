@@ -487,6 +487,11 @@ public final class VarInfo
 
   public String toString() { return repr(); }
 
+  /** Helper function for repr(). **/
+  private Object checkNull (Object o) {
+    return (o == null) ? "null" : o;
+  }
+
   public String repr() {
     return "<VarInfo " + name + ": "
       + "type=" + type
@@ -497,10 +502,13 @@ public final class VarInfo
       + ",varinfo_index=" + varinfo_index
       + ",is_static_constant=" + is_static_constant
       + ",static_constant_value=" + static_constant_value
-      + ",derived=" + derived
+      + ",derived=" + checkNull(derived)
       + ",derivees=" + derivees()
       + ",ppt=" + ppt.name
-      // + ",equal_to=" + equal_to // [INCR]
+      /* [INCR]
+      + ",equal_to=" + (equal_to==null ? "null" : equal_to.name.name())
+      + ",isCanonical()=" + isCanonical()
+      */ // [INCR]
       + ">";
   }
 
@@ -1276,12 +1284,12 @@ public final class VarInfo
 
   /** return true if declared type is Set (IOA syntax) **/
   public boolean isIOASet() {
-    return type.base().startsWith("Set");
+    return type.base().startsWith("Set");// && type.base().indexOf('(') >= 0;
   }
 
   /** return true if declared type is Set (IOA syntax) **/
   public boolean isIOAArray() {
-    return type.base().startsWith("Array");
+    return type.base().startsWith("Array");//  && type.base().indexOf('(') >= 0;
   }
 
   /** return declared element type (in string) of IOA Set or Array **/

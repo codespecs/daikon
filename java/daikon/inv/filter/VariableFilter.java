@@ -27,10 +27,3 @@ class VariableFilter extends InvariantFilter {
       return true;
   }
 }
-
-
-
-
-
-
-

@@ -33,8 +33,9 @@ public class SessionManager
   //    // Use "java -DDEBUG_SIMPLIFY=1 daikon.Daikon ..." or
   //    //     "make USER_JAVA_FLAGS=-DDEBUG_SIMPLIFY=1 ..."
 
+  private static final boolean debug_mgr = debug.isDebugEnabled();
   public static void debugln(String s) {
-    if (!debug.isDebugEnabled()) return;
+    if (! debug_mgr) return;
     debug.debug(s);
   }
 

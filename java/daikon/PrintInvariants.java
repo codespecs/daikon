@@ -163,7 +163,7 @@ public class PrintInvariants {
   public static void print_invariants(PptMap ppts) {
     // Retrieve Ppt objects in sorted order.
     PrintWriter pw = new PrintWriter(System.out, true);
-    // PptMap iteratorator uses a custom comparator for a specific ordering
+    // PptMap iterator uses a custom comparator for a specific ordering
     for (Iterator itor = ppts.iterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       // if (ppt.has_samples() &&  // [[INCR]]
@@ -178,19 +178,37 @@ public class PrintInvariants {
    * Print invariants for a single program point and its conditionals.
    * Does no output if no samples or no views.
    **/
-  public static void print_invariants_maybe(PptTopLevel ppt, PrintWriter out)
+  public static void print_invariants_maybe(PptTopLevel ppt,
+                                            PrintWriter out)
   {
-    // Be slient if we never saw any samples
+    // Be silent if we never saw any samples.
+    // (Maybe this test isn't even necessary, but will be subsumed by others,
+    // as all the invariants will be unjustified.)
     if (ppt.num_samples() == 0) {
       if (Daikon.output_num_samples) {
         out.println("[No samples for " + ppt.name + "]");
       }
       return;
     }
-
-    // Be slient if we are a conditional ppt with no invariants
-    if ((ppt instanceof PptConditional) && (ppt.invariants_vector().size() == 0))
+    if ((ppt.views.size() == 0) && (ppt.implication_view.invs.size() == 0)) {
+      if (! (ppt instanceof PptConditional)) {
+        // Presumably all the views that were originally there were deleted
+        // because no invariants remained in any of them.
+        if (Daikon.output_num_samples) {
+          out.println("[No views for " + ppt.name + "]");
+        }
+      }
       return;
+    }
+
+    /* [INCR]
+    if ((ppt.combined_exit != null) && (Daikon.output_style != Daikon.OUTPUT_STYLE_NORMAL)) {
+      if (Daikon.output_num_samples) {
+        out.println("[Is combined exit, output style " + Daikon.output_style + ": " + ppt.name + "]");
+      }
+      return;
+    }
+    */
 
     if (Daikon.output_style != OutputFormat.IOA) {
       out.println("===========================================================================");
@@ -274,8 +292,8 @@ public class PrintInvariants {
       if (! vi.isPrestate()) {
         VarInfo vi_orig = ppt.findVar(vi.name.applyPrestate());
         if (vi_orig != null) {
-          // Assert.assert(vi_orig.postState.name == vi.name, "vi_orig="+vi_orig.name+", vi_orig.postState="+vi_orig.postState+((vi_orig.postState!=null)?"="+vi_orig.postState.name:"")+", vi="+vi+"="+vi.name);
-          // Assert.assert(vi_orig.postState == vi, "vi_orig="+vi_orig.name+", vi_orig.postState="+vi_orig.postState+((vi_orig.postState!=null)?"="+vi_orig.postState.name:"")+", vi="+vi+"="+vi.name);
+          // Assert.assertTrue(vi_orig.postState.name == vi.name, "vi_orig="+vi_orig.name+", vi_orig.postState="+vi_orig.postState+((vi_orig.postState!=null)?"="+vi_orig.postState.name:"")+", vi="+vi+"="+vi.name);
+          // Assert.assertTrue(vi_orig.postState == vi, "vi_orig="+vi_orig.name+", vi_orig.postState="+vi_orig.postState+((vi_orig.postState!=null)?"="+vi_orig.postState.name:"")+", vi="+vi+"="+vi.name);
           boolean is_unmodified = false; // vi.equal_to == vi_orig.equal_to // [INCR] XXX
           if (! is_unmodified) {
             java.lang.reflect.Field f = vi.name.resolveField(ppt);
@@ -297,7 +315,7 @@ public class PrintInvariants {
             // The test "((view != null) && (view.num_values() > 0))" is
             // fallacious becuase the view might have been removed (is now
             // null) because all invariants at it were false.
-            if (view == null) { // [INCR] || (view.num_values() > 0)) {
+            if ((view == null)) { // [INCR] || (view.num_values() > 0)) {
               // Using only the isPrimitive test is wrong.  We should suppress
               // for only parameters, not all primitive values.  That's why we
               // look for the period in the name.
@@ -358,10 +376,14 @@ public class PrintInvariants {
             Assert.assertTrue(vi != null);
           } else if (derived instanceof SequenceScalarSubscript) {
             vi = ((SequenceScalarSubscript)vi.derived).seqvar();
+          } else if (derived instanceof SequenceFloatSubscript) {
+            vi = ((SequenceFloatSubscript)vi.derived).seqvar();
           } else if (derived instanceof SequenceStringSubscript) {
             vi = ((SequenceStringSubscript)vi.derived).seqvar();
           } else if (derived instanceof SequenceScalarSubsequence) {
             vi = ((SequenceScalarSubsequence)vi.derived).seqvar();
+          } else if (derived instanceof SequenceFloatSubsequence) {
+            vi = ((SequenceFloatSubsequence)vi.derived).seqvar();
           } else if (derived instanceof SequenceStringSubsequence) {
             vi = ((SequenceStringSubsequence)vi.derived).seqvar();
             Assert.assertTrue(vi != null);
@@ -431,7 +453,7 @@ public class PrintInvariants {
   private static Vector get_equal_vars(VarInfo vi)
   {
     Vector equal_vars = new Vector();
-    equal_vars.add (vi);
+    equal_vars.add(vi);
 
     if (debugPrintEquality.isDebugEnabled()) {
       debugPrintEquality.debug ("Testing equality for " + vi.name.name());
@@ -467,10 +489,10 @@ public class PrintInvariants {
     Vector obviously_equal = null;
 
     /* [INCR]
-       if (includeObviouslyEqual)
-       {
-       obviously_equal = new Vector(vi.equalTo());
-       obviously_equal.removeAll(vi.equalToNonobvious());
+    if (includeObviouslyEqual)
+      {
+        obviously_equal = new Vector(vi.equalTo());
+        obviously_equal.removeAll(vi.equalToNonobvious());
 
        // System.out.println("equal_vars.size() = " + equal_vars.size());
        // System.out.println("Redundant due to simplify = "
@@ -501,22 +523,14 @@ public class PrintInvariants {
 
     if (debugPrintEquality.isDebugEnabled()) {
       StringBuffer sb = new StringBuffer();
-        debugPrintEquality.debug("Resultant quality set for "  + vi.ppt.name + " " + vi.name.name());
+      debugPrintEquality.debug("Resultant obviously equality set for "  + vi.ppt.name + " " + vi.name.name());
       for (Iterator j = equal_vars.iterator(); j.hasNext();) {
         sb.append ("  " + ((VarInfo) j.next()).name.name());
       }
       debugPrintEquality.debug (sb);
     }
 
-    if (debugPrintEquality.isDebugEnabled()) {
-      StringBuffer sb = new StringBuffer();
-        debugPrintEquality.debug("Resultant obviously equality set for "  + vi.ppt.name + " " + vi.name.name());
-      for (Iterator j = equal_vars.iterator(); j.hasNext();) {
-        sb.append ("  " + ((VarInfo) j.next()).name.name());
-      }
-      debugPrintEquality.debug (sb);
-    }
-
+    // Necessary for [INCR].
     if (equal_vars.size() <= 1) return;
 
     if (Daikon.output_style == OutputFormat.DAIKON) {
@@ -544,7 +558,7 @@ public class PrintInvariants {
       }
       out.println(sb.toString());
     } else if (Daikon.output_style == OutputFormat.ESCJAVA) {
-      equal_vars.add(0, vi);
+      equal_vars.add(0, vi);    // [???]
       // Separate out those variables which are valid in ESC.
       List valid_equiv = new ArrayList(); // [VarInfo]
       List invalid_equiv = new ArrayList(); // [VarInfo]
@@ -752,7 +766,7 @@ public class PrintInvariants {
       if (inv.isValidEscExpression()) {
         inv_rep = inv.format_using(Daikon.output_style);
       } else {
-        inv_rep = "warning: method " + inv.getClass().getName() + ".format_esc() needs to be implemented: " + inv.format();
+        inv_rep = "warning: invalid ESC expression; method " + inv.getClass().getName() + ".format_esc() needs to be implemented: " + inv.format();
       }
     } else if (Daikon.output_style == OutputFormat.SIMPLIFY) {
       inv_rep = inv.format_using(Daikon.output_style);
@@ -843,7 +857,7 @@ public class PrintInvariants {
         debugPrint.debug("      " + vi.name.name()
                          // + " constant=" + vi.isConstant() // [INCR]
                          // + " canonical=" + vi.isCanonical() // [INCR]
-                         // + " equal_to=" + vi.equal_to.name // [INCR]
+                         // + " equal_to=" + vi.equal_to.name.name() // [INCR]
                          );
       }
     }
@@ -862,60 +876,53 @@ public class PrintInvariants {
 
     Global.non_falsified_invariants += invs_array.length;
 
-    InvariantFilters fi = null;
-    if (final_output_should_use_new_filtering) {
-      fi = new InvariantFilters();
-    }
     List accepted_invariants = new Vector();
 
-    for(int i = 0; i < invs_array.length; i++){
+    for (int i = 0; i < invs_array.length; i++) {
       Invariant inv = invs_array[i];
+      InvariantFilters fi = new InvariantFilters();
+      fi.ppt_map = ppt_map;
 
       boolean pi_accepted = accept_invariant(inv);
-      boolean fi_accepted = true;
+      boolean fi_accepted = fi.shouldKeep(inv);
 
-      if (final_output_should_use_new_filtering) {
-        fi.ppt_map = ppt_map;
-        fi_accepted = fi.shouldKeep(inv);
-      }
-
-      if((fi_accepted != pi_accepted) && should_gather_data) {
+      if ((fi_accepted != pi_accepted) && should_gather_data) {
         FileWriter outputFile = null;
         try {
           outputFile = new FileWriter("/SDG/g1/users/emarcus/research/invariants/tests/data_gathered", true);
           outputFile.write(pi_accepted + "\t" + fi_accepted + "\t" + inv.isWorthPrinting() + "\t" + inv.getClass().getName() + "\t" + reason + "\t" + inv.format() + "\n");
           outputFile.close();
         }
-        catch(IOException e) {
+        catch (IOException e) {
           System.out.println(e);
         }
       }
 
-      if(should_gather_data) {
+      if (should_gather_data) {
         FileWriter outputFile = null;
         try {
           outputFile = new FileWriter("/SDG/g1/users/emarcus/research/invariants/tests/rejection_reasons", true);
           outputFile.write(pi_accepted + "\t" + inv.getClass().getName() + "\t" + inv.format() + "\t" + reason + "\n");
           outputFile.close();
         }
-        catch(IOException e) {
+        catch (IOException e) {
           System.out.println(e);
         }
       }
 
-      if(fi_accepted && final_output_should_use_new_filtering) {
+      if (fi_accepted && final_output_should_use_new_filtering) {
         invCounter++;
         Global.reported_invariants++;
         accepted_invariants.add(inv);
       }
-      if(pi_accepted && !final_output_should_use_new_filtering) {
+      if (pi_accepted && !final_output_should_use_new_filtering) {
         invCounter++;
         Global.reported_invariants++;
         accepted_invariants.add(inv);
       }
     }
 
-    if(final_output_should_use_new_filtering) {
+    if (final_output_should_use_new_filtering) {
       accepted_invariants = InvariantFilters.addEqualityInvariants(accepted_invariants);
     }
     else {
@@ -926,14 +933,14 @@ public class PrintInvariants {
         {
           invCounter++;
           if (debugPrintEquality.isDebugEnabled()) {
-            debugPrint.debug ("Equality set for ppt "  + ppt.name + " " + vi.name.name());
-            //appears not to work (compile) b/c ver 3 uses something
-            //other than vi.equalTo.
-            //StringBuffer sb = new StringBuffer();
-            //for (Iterator j = vi.equalTo().iterator(); j.hasNext();) {
-            //  sb.append ("  " + ((VarInfo) j.next()).name.name());
-            //}
-            //debugPrintEquality.debug (sb);
+            debugPrintEquality.debug ("Equality set for ppt "  + ppt.name + " " + vi.name.name());
+            /* [INCR]
+            StringBuffer sb = new StringBuffer();
+            for (Iterator j = vi.equalTo().iterator(); j.hasNext();) {
+              sb.append ("  " + ((VarInfo) j.next()).name.name());
+            }
+            debugPrintEquality.debug (sb);
+            */ // [INCR]
           }
           print_equality_invariants(vi, out, invCounter, ppt);
         }

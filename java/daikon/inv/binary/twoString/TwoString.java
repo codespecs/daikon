@@ -31,6 +31,7 @@ public abstract class TwoString
     // making this call, so as to reduce overall work.
     Assert.assertTrue(! falsified);
     Assert.assertTrue((mod_index >= 0) && (mod_index < 4));
+    // [INCR] Assert.assertTrue(!finished);
     if (mod_index == 0) {
       add_unmodified(v1, v2, count);
     } else {

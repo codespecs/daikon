@@ -232,5 +232,4 @@ public class NonZero
     return false;
   }
 
-
 }

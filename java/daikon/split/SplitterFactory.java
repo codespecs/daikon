@@ -796,8 +796,7 @@ public class SplitterFactory {
    * this.<varname> in the test_string to this_<varname>
    **/
   static String find_applicable_variables(String[] params, String[] param_names,
-                                          String test_string, String class_name )
-  {
+                                          String test_string, String class_name ) {
 
     String orig_test_string = test_string;
     for (int i = 0; i < params.length; i++) {

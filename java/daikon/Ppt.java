@@ -47,9 +47,9 @@ public abstract class Ppt
 
   // [INCR] the views and cond_views fields and their corresponding
   // add/remove view methods were never used on a Ppt, always
-  // on PptTopLevel, so move their declaration there (in fact they
+  // on PptTopLevel, so move their declaration there.  (In fact they
   // don't make sense in PptSlice, so PptTopLevel is a better place
-  // anyway.
+  // anyway.)
 
   /** Trim the collections used in this Ppt */
   public void trimToSize() {

@@ -45,10 +45,10 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
     }
 
     public void visit (RootNode node) {
-	
+
 	total++;
 	super.visit (node);
-	
+
     }
 
     public void visit (InvNode node) {
@@ -118,13 +118,13 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 
     /** Prints everything in the goodList */
     public void printAll () {
-	
+
 	if (spinfoMode) {
-	    printAllSpinfo(); 
+	    printAllSpinfo();
 	    return;
 	}
 
-	// keeps track of supressed invariants due to appearing in 
+	// keeps track of supressed invariants due to appearing in
 	// every sample of the MultiDiff
 	int kill = 0;
 	int unjustifiedKill = 0;
@@ -154,14 +154,14 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 	// Now build the final HashMap that will have the following
 	// mapping:  program point names ->
 	//                      ArrayList of inv.format_java() with frequency
-	
+
 	HashMap lastMap = new HashMap();
 	// One pass to fill each mapping with an empty ArrayList
 	for (Iterator i = programPointsList.iterator(); i.hasNext();) {
 	    String key = (String) i.next();
 	    lastMap.put (key, new ArrayList());
 	}
-	
+
 	// Now to populate those ArrayLists
 	for (int i = 0; i < bigList.size(); i++) {
 	    String str = (String) bigList.get(i);
@@ -177,7 +177,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 	for (Iterator i = lastMap.keySet().iterator(); i.hasNext(); ) {
 	    String key = (String) i.next();
 	    ArrayList al = (ArrayList) lastMap.get(key);
-	    // don't print anything if there are no selective invariants 
+	    // don't print anything if there are no selective invariants
 	    if (al.size() == 0) continue;
 	    System.out.println ("\n" + key + "*****************\n");
 	    for (int ii = 0; ii < al.size(); ii++) {
@@ -188,9 +188,9 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
     }
 
      /** Prints everything in the goodList, outputs as spinfo */
-    public void printAllSpinfo() { 
-	
-	// keeps track of supressed invariants due to appearing in 
+    public void printAllSpinfo() {
+
+	// keeps track of supressed invariants due to appearing in
 	// every sample of the MultiDiff
 	int kill = 0;
 	ArrayList bigList = new ArrayList();
@@ -205,21 +205,21 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 		// just want the String on its own line
 		bigList.add (str);
 	    }
-	
+
 	}
 
 
 	// Now build the final HashMap that will have the following
 	// mapping:  program point names ->
 	//                      ArrayList of inv.format_java() with frequency
-	
+
 	HashMap lastMap = new HashMap();
 	// One pass to fill each mapping with an empty ArrayList
 	for (Iterator i = programPointsList.iterator(); i.hasNext();) {
 	    String key = (String) i.next();
 	    lastMap.put (key, new ArrayList());
 	}
-	
+
 	// Now to populate those ArrayLists
 	for (int i = 0; i < bigList.size(); i++) {
 	    String str = (String) bigList.get(i);
@@ -240,19 +240,19 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 	for (Iterator i = theKeys.iterator(); i.hasNext(); ) {
 	    String key = (String) i.next();
 	    ArrayList al = (ArrayList) lastMap.get(key);
-	    // don't print anything if there are no selective invariants 
+	    // don't print anything if there are no selective invariants
 	    if (al.size() == 0) continue;
-	    
+
 	    // Get rid of the extra stuff like (III)I:::ENTER
 	    // at the end of each of the program points
-	    
+
 	    // use the fact that we only want the stuff before the first '('
 	    StringTokenizer pToke = new StringTokenizer (key, "(");
 
 	    // sadly we only want EXIT values, so throw out any ENTERs
 	    // because the spinfo won't deal well with them anyway
 	    if (key.indexOf ("ENTER") != -1) continue;
-	    
+
 	    // Now we don't want to reprint the program point name
 	    // again in the spinfo file if it has been printed from
 	    // the previous Ppt that exited at a different point -LL
@@ -277,10 +277,3 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
     }
 
 }
-
-
-
-
-
-
-

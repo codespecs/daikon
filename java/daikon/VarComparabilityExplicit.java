@@ -259,5 +259,4 @@ public final class VarComparabilityExplicit
     }
   }
 
-
 }

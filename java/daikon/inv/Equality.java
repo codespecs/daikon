@@ -90,7 +90,7 @@ public final class Equality
       // appends " && ( v[0] == v[i] )" to the stringbuffer
       if (i > 1) result.append(" && ");
       result.append("( ").append(first).append(" == "); // "interned"
-      result.append(vars[i].name.name()).append( " ) ");
+      result.append(vars[i].name.name()).append(" ) ");
     }
     return result.toString();
   }
