@@ -456,7 +456,8 @@ public final class TestUtilMDE extends TestCase {
   public static void testEqHashMap() {
   }
 
-  public static void testHasher() {
+  // This cannot be static because it instantiates an inner class.
+  public void testHasher() {
 
     /// To check (maybe some of these are done already).
     /// All of these methods are in Intern; should the tests appear in
@@ -569,7 +570,8 @@ public final class TestUtilMDE extends TestCase {
     assertTrue(l.intValue() == 0x1234abcd);
   }
 
-  public static void testMathMDE() {
+  // This cannot be static because it instantiates an inner class.
+  public void testMathMDE() {
 
     // int negate(int a)
     assertTrue(MathMDE.negate(3) == -3);
@@ -845,7 +847,8 @@ public final class TestUtilMDE extends TestCase {
     assertTrue(pairno == ints.length);
   }
 
-  public static void testUtilMDE() {
+  // This cannot be static because it instantiates an inner class.
+  public void testUtilMDE() {
 
     // public static BufferedReader BufferedFileReader(String filename)
     // public static LineNumberReader LineNumberFileReader(String filename)
