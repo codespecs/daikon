@@ -41,11 +41,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 2.3.6
+@center Daikon version 2.3.7
 
 @sp 1
-@c Daikon version 2.3.6 date
-@center April  5, 2002
+@c Daikon version 2.3.7 date
+@center May  1, 2002
 
 @sp 5
 @c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
@@ -54,7 +54,7 @@
 @c The following two commands start the copyright page.
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1998-2001
+Copyright @copyright{} 1998-2002
 @c Copyright @copyright{} 1998-2001 Michael Ernst
 @end titlepage
 
@@ -64,7 +64,7 @@ Copyright @copyright{} 1998-2001
 <h1>Daikon Invariant Detector User Manual</h1>
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.6, released April  5, 2002.
+It describes Daikon version 2.3.7, released May  1, 2002.
 
 @end html
 
@@ -79,7 +79,7 @@ It describes Daikon version 2.3.6, released April  5, 2002.
 
 @ifnottex
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.6, released April  5, 2002.
+It describes Daikon version 2.3.7, released May  1, 2002.
 @end ifnottex
 
 @menu
@@ -113,6 +113,10 @@ Installing Daikon
 * Installing the Context GUI::  
 * Requirements::                
 
+Installing dfec, the Daikon front end for C/C++
+
+* dfec EDG sources::            
+
 Requirements for running Daikon
 
 * Windows requirements::        
@@ -124,6 +128,8 @@ Example use of Daikon
 * Automating the process::      
 * Understanding the invariants::  
 * Second example::              
+* C examples::                  
+* C examples summary::          
 
 Using Daikon to detect invariants
 
@@ -203,7 +209,7 @@ C/C++ front end dfec
 * dfec command-line arguments::  
 * Pointer type disambiguation::  
 * Pointer type disambiguation example::  
-* Limitations::                 
+* dfec limitations::            
 
 Enhancing Daikon output
 
@@ -374,6 +380,7 @@ following to your @file{.cshrc} file:
 @example
 source @var{daikonparent}/daikon/bin/daikon.cshrc
 @end example
+@noindent
 @cindex Bourne shell
 @cindex bash shell
 If you use the bash shell, add the following to your
@@ -381,6 +388,7 @@ If you use the bash shell, add the following to your
 @example
 source @var{daikonparent}/daikon/bin/daikon.bashrc
 @end example
+
 Also, you must edit the @file{daikon.cshrc} or @file{daikon.bashrc} file
 to indicate the @var{daikonparent} directory and to perform any desired
 customizations.  (Alternately, you may place such customizations in your
@@ -459,6 +467,7 @@ make
 @section Installing dfej, the Daikon front end for Java
 
 @cindex installing dfej
+@cindex dfej installation
 
 If you wish to detect invariants in Java programs, perform the following
 steps.
@@ -534,6 +543,7 @@ build a new binary.
 @section Installing dfec, the Daikon front end for C/C++
 
 @cindex installing dfec
+@cindex dfec installation
 
 If you wish to detect invariants in C programs, perform the following
 steps.
@@ -564,7 +574,11 @@ This creates the file @file{daikon_runtime.o}; you will use it and
 when compiling C and C++ programs in which you wish to detect invariants.
 @end enumerate
 
-@node    dfec EDG sources, Installing the Context GUI, Installing dfej, Installing
+@menu
+* dfec EDG sources::            
+@end menu
+
+@node    dfec EDG sources,  , Installing dfec, Installing dfec
 @subsection Installing dfec from EDG sources
 
 @cindex EDG C/C++ front end
@@ -672,8 +686,10 @@ found at @uref{http://sources.redhat.com/cygwin/setup.exe}.
 @cindex example use of Daikon
 
 This chapter gives step-by-step instructions for running Daikon on a
-sample Java program, @file{StackAr.java}.  @xref{Detecting invariants},
-for complete details about running Daikon.
+sample Java program, @file{StackAr.java}.  @xref{Second example}, for
+another Java example.  @xref{C examples}, for C examples.
+@xref{Detecting invariants}, for complete details about running
+Daikon.
 
 
 @menu
@@ -682,6 +698,8 @@ for complete details about running Daikon.
 * Automating the process::      
 * Understanding the invariants::  
 * Second example::              
+* C examples::                  
+* C examples summary::          
 @end menu
 
 @node    Step-by-step instructions, Summary, Example use, Example use
@@ -715,6 +733,7 @@ javac -g DataStructures/*.java
 @example
 dfej DataStructures/StackAr.java
 @end example
+@noindent
 (These instructions assume you have the current working directory (".")
 in your CLASSPATH.  If that is not the case, then run @command{dfej
 -ajaxap=.}  instead of @command{dfej}.)
@@ -938,8 +957,8 @@ array, the elements of the array, and @code{topOfStack} are not
 modified by this method - this method is an "observer".  The
 last invariant is not particularly interesting.
 
-@node    Second example,  , Understanding the invariants, Example use
-@section A second example
+@node    Second Java example, C examples, Understanding the invariants, Example use
+@section A second Java example
 
 A second example is located in the @file{examples/QueueAr} subdirectory.
 Run this sample using the following steps:
@@ -971,6 +990,180 @@ java daikon.gui.treeGUI.InvariantsGUI QueueAr.inv
 @end example
 
 @end itemize
+
+@node    C examples, C examples summary, Second example, Example use
+@section C examples
+
+Whereas the Daikon distribution comes with several example Java
+programs to enable users to become familiar with Daikon, the C example
+programs are distributed separately.  You may download them from
+@url{http://pag.lcs.mit.edu/daikon/download/c-examples.tar.gz}.
+Install the C examples as follows:
+@example
+cd $DAIKONDIR/examples
+tar zxvf c-examples.tar.gz
+@end example
+@noindent
+In order to detect invariants over C programs, you must have already
+installed dfec, the Daikon front end for C; see @ref{Installing dfec}.
+
+
+To detect invariants for a program, you need to perform three basic
+tasks: instrument the target program (steps 1-3), run the instrumented
+program to create a data trace file (step 4), and run Daikon over the
+data trace file to produce invariants (steps 5-6).  The following
+instructions are for the print_tokens example.  The other examples can
+be run in exactly the same manner.
+
+@enumerate
+@item Change to the directory containing the print_tokens program.
+@example
+cd $DAIKONDIR/examples/c-examples/print_tokens
+@end example
+
+@item Instrument the program using dfec, the C front end.
+Copy @file{$DFECDIR/daikon_runtime.h} and
+@file{$DFECDIR/daikon_runtime.o} into the directory that your source
+file resides in, then run the front end over all the C source files and
+the user-created header files they depend on.
+@example
+cp $DFECDIR/daikon_runtime.h $DFECDIR/daikon_runtime.o .
+dfec print_tokens.c stream.h tokens.h
+@end example
+@noindent
+This command creates two directories, @file{daikon-instrumented}
+and @file{daikon-output}.  It creates an instrumented and preprocessed
+version of @file{print_tokens.c} at
+@file{daikon-instrumented/print_tokens.cc}.  It 
+creates a declaration file at @file{daikon-output/print_tokens.decls}.
+
+@quotation
+Note for Windows users:
+Under Windows, you must insert in the source file a gcc-specific
+__attribute__ for the _ctype_ variable, which is used in our test
+suite.  Run the following commands:
+@example
+alias fix="sed -f $DFECDIR/fix.sed"
+(cd daikon-instrumented; fix print_tokens.cc > print_tokens_fixed.cc)
+@end example
+@end quotation
+
+@item Compile and link the instrumented program to create the
+executable @file{print_tokens} in the current directory.
+
+@example
+g++ -w -o print_tokens daikon-instrumented/print_tokens_fixed.cc daikon_runtime.o
+@end example
+@quotation
+Note for Windows users:  Name the executable print_tokens.exe, not
+print_tokens:
+@example
+g++ -w -o print_tokens.exe daikon-instrumented/print_tokens_fixed.cc daikon_runtime.o
+@end example
+@end quotation
+
+@item Run the print_tokens test suite.  First set the DTRACEAPPEND
+environment variable, so that a final @file{.dtrace} file contains
+information from all runs, rather than each run overwriting the file
+so that it contains only information from the last run.  (For more
+details about the DTRACEAPPEND environment variable, see @ref{dfej
+options} and @ref{dfec command-line arguments}.)
+
+If you use the bash shell, run the following commands:
+@example
+export DTRACEAPPEND=1
+sh tests.sh
+@end example
+
+If you use the csh or tcsh shell, run the following commands:
+@example
+setenv DTRACEAPPEND 1
+sh tests.sh
+@end example
+
+These commands create a data trace file at
+@file{daikon-output/print_tokens.dtrace}.
+
+@item Run Daikon on the trace file.
+@example
+java -Xmx256m daikon.Daikon -o print_tokens.inv \
+     daikon-output/print_tokens.decls daikon-output/print_tokens.dtrace
+@end example
+@noindent
+The invariants are printed to standard out, and a binary representation
+of the invariants is written to @file{print_tokens.inv}.
+
+@item Examine the invariants.  As described in the Daikon manual, there are
+several ways to do this:
+@itemize 
+@item Examine the output from running Daikon.
+@item Use the PrintInvariants program to display the invariants.
+@item Use the Daikon Tree GUI to browse the invariants.
+@item Use the Daikon Context GUI to browse the invariants.
+@end itemize
+@noindent
+For help understanding the invariants, see @ref{Interpreting output}.
+
+@end enumerate
+
+@node    C examples summary,  , C examples, Example use
+@subsection C examples summary
+
+The above steps can be divided into three stages:
+
+Instrumentation (Steps 1-3)
+@example
+cd $DAIKONDIR/examples/c-examples/print_tokens
+cp $DFECDIR/daikon_runtime.h $DFECDIR/daikon_runtime.o .
+dfec print_tokens.c stream.h tokens.h
+g++ -w -o print_tokens daikon-instrumented/print_tokens_fixed.cc daikon_runtime.o
+@end example
+
+Trace File Generation (Step 4)
+@example
+export DTRACEAPPEND=1
+sh tests.sh
+@end example
+
+Invariant Detection (Step 5)
+@example
+java -Xmx256m daikon.Daikon -o print_tokens.inv \
+     daikon-output/print_tokens.decls daikon-output/print_tokens.dtrace
+@end example
+
+
+@node    Rijndael example,  , C examples, Example use
+@subsection Rijndael example
+
+The rijndael program requires some special instructions, due to the
+size of its data trace file.  The data trace file is over 1GB in size
+when first created, so make sure you have adequate disk space.
+
+First, you should set the TRACE_KAT_MCT variable when you run the C
+front end; this causes the Rijndael program to produce output when
+running the test suite.  Replace the dfec command in step 2 above by
+this one:
+@example
+dfec -DTRACE_KAT_MCT rijndael.c rijndael-alg-ref.h rijndael-api-ref.h
+@end example
+
+Second, you will need to manually reduce the size of the dtrace file.
+Run these commands after step 4 above.
+@example
+head -1000000 daikon-output/rijndael.dtrace > \
+      daikon-output/rijndael.truncated.dtrace
+../trace-untruncate daikon-output/rijndael.truncated.dtrace
+@end example
+@noindent
+The first command selects the first million lines of the file, and the
+second command cleans up the end of the file, in case we truncate in
+the middle of a data structure.
+
+Finally, run Daikon using the truncated trace file (step 5).
+@example
+java -Xmx256m daikon.Daikon -o rijndael.inv \
+      daikon-output/rijndael.decls daikon-output/rijndael.truncated.dtrace
+@end example
 
 
 @node    Detecting invariants, Daikon output, Example use, Top
@@ -2642,6 +2835,7 @@ them as multiple arguments to dfec --- for example,
 @example
   dfec file1.c file2.c file1.h file2.h
 @end example
+@noindent
 Even if you do not wish to instrument one of the files, it must be run
 through dfec so it can correctly interact with the instrumented versions
 of the other files.  See the @ref{dfec command-line arguments} section
@@ -2692,7 +2886,7 @@ you can run Daikon:
 * dfec command-line arguments::  
 * Pointer type disambiguation::  
 * Pointer type disambiguation example::  
-* Limitations::                 
+* dfec limitations::            
 @end menu
 
 @node    dfec command-line arguments, Pointer type disambiguation, C/C++ front end dfec, C/C++ front end dfec
@@ -2828,6 +3022,7 @@ struct node @{
   int val;
 @} list;
 @end example
+@noindent
 Setting the struct instrumentation depth to 1 would cause the runtime
 library to output @var{node.val} and @var{node.next}.  Setting the
 struct instrumentation depth to 2 would cause the runtime library to
@@ -2894,7 +3089,7 @@ character.
 @c single elements.
 
 
-@node    Pointer type disambiguation example, Limitations, Pointer type disambiguation, C/C++ front end dfec
+@node    Pointer type disambiguation example, dfec limitations, Pointer type disambiguation, C/C++ front end dfec
 @subsection Pointer type disambiguation example
 
 Consider this file:
@@ -3126,6 +3321,7 @@ if arg < 0
   then return == -arg
   else return == arg
 @end example
+@noindent
 The invariant @code{return == -arg} is a conditional invariant because
 it depends on the predicate @code{arg < 0} being true.  The compound
 invariant that includes both the predicate and the conditional invariant
@@ -3248,6 +3444,7 @@ procedure2
 replacement2
 ...
 @end example
+@noindent
 where @samp{replacement@var{i}} contains an expression representing the body
 of @samp{procedure@var{i}}.  In each condition, Daikon replaces procedure
 calls by their replacements.  A replace section can appear anywhere in
@@ -3783,6 +3980,7 @@ Also reported on Red Hat Linux 7.0 is the following error:
 daikon-context.cpp:466: no matching function for call to `pair<Ast *, 
 Ast *>::pair (Ast *&, void *)'
 @end example
+@noindent
 We do not yet have a fix, but if you find one, please let us know.
 
 
@@ -4173,7 +4371,7 @@ English words "die-con".
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 2.3.6, released April  5, 2002.
+This manual describes Daikon version 2.3.7, released May  1, 2002.
 A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
