@@ -140,8 +140,8 @@ Installing Daikon:
           following these steps:
         <ol>
 	  <li><tt>cd java-front-end</tt>
-          <li><tt>./configure --enable-debug</tt><br>
-              You must supply the --enable-debug argument to configure.
+          <li><tt>./configure --enable-debug</tt>
+              <!-- <br> You must supply the --enable-debug argument to configure. -->
 	  <li>If you are running under Solaris, you may need to edit
 	      <tt>Makefile</tt> to indicate use of the libw library; change<br>
 	      <q><tt>LDFLAGS=-L. -o $(EXECUTABLE)</tt></q><br>
@@ -590,6 +590,8 @@ The following individuals have contributed to Daikon:
   <li><a href="http://sdg.lcs.mit.edu/~mernst/">Michael Ernst</a>
   <li><a href="http://www.cs.ucsd.edu/~wgg/">Bill Griswold</a>
   <li>Josh Kataoka
+  <li><a href="http://web.mit.edu/mhao/www/">Melissa Hao</a>
+  <li><a href="http://web.mit.edu/mistere/www/">Jeremy Nimmer</a>
   <li><a href="http://www.cs.washington.edu/homes/notkin/">David Notkin</a>
 </ul>
 <p>
