@@ -292,6 +292,7 @@ public class PptTopLevel extends Ppt {
         // System.out.println("set_controlling_ppts(" + name + "): " + object_ppt.name);
 	controlling_ppts.add(object_ppt);
       }
+    } else if (ppt_name.isObjectInstanceSynthetic()) {
       PptTopLevel class_ppt = (PptTopLevel) all_ppts.get(ppt_name.makeClassStatic());
       if (class_ppt != null) {
         // System.out.println("set_controlling_ppts(" + name + "): " + class_ppt.name);
@@ -1965,11 +1966,16 @@ public class PptTopLevel extends Ppt {
 
   // Created upon first use, then saved
   private static SessionManager prover;
+  public static int prover_instantiate_count = 0;
 
   // Start up simplify, and send the universal backgound
   private static void ensure_prover_started() {
     if (prover == null) {
       prover = new SessionManager();
+      prover_instantiate_count++;
+      if (Daikon.no_text_output) {
+	System.out.print("...");
+      }
       try {
 	prover.request(new CmdAssume("(EQ (typeof null) |T_null|)"));
       } catch (TimeoutException e) {
