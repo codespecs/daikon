@@ -13,7 +13,7 @@ import utilMDE.*;
 public final class ScalarSequencesIntersection  extends BinaryDerivation {
 
   // Variables starting with dkconfig_ should only be set via the
-  // daikon.config.Configuration interface
+  // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
 
   public ScalarSequencesIntersection (VarInfo vi1, VarInfo vi2) {
