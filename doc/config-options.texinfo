@@ -185,7 +185,7 @@
   The default value is `1.0E-4'.
 
 @item daikon.inv.Invariant.probability_limit
-  Real number between 0 and 1.    The invariant is displayed only if
+  Real number between 0 and 1.  The invariant is displayed only if
  the probability that the invariant occurred by chance is
  less than this.  (May also be set
  via --prob_limit switch to Daikon; refer to manual.)
