@@ -123,7 +123,7 @@ Installing Daikon
 * Installing the Context GUI::  
 * Requirements::                
 
-Installing dfec, the Daikon front end for C/C++
+Installing dfec, the Daikon front end for C
 
 * dfec EDG sources::            
 
@@ -160,7 +160,7 @@ Using Daikon to detect invariants
 Instrumentation
 
 * Instrumenting Java programs::  
-* Instrumenting C/C++ programs::  
+* Instrumenting C programs::    
 * Instrumenting Perl programs::  
 
 Run the instrumented program
@@ -219,7 +219,7 @@ Context GUI
 Front ends
 
 * Java front end dfej::         
-* C/C++ front end dfec::        
+* C front end dfec::            
 * Perl front end dfepl::        
 * CSV front end convertcsv.pl::  
 
@@ -229,7 +229,7 @@ Java front end dfej
 * Scope of instrumentation::    
 * Refined runtime types::       
 
-C/C++ front end dfec
+C front end dfec
 
 * dfec command-line arguments::  
 * Daikon runtime customization::  
@@ -457,7 +457,7 @@ wget http://pag.lcs.mit.edu/daikon/download/daikon.tar.gz
 @end example
 
 @cindex anonymous CVS access to Daikon sources
-Daikon is also available via anonymous CVS.  If you desire such
+Daikon is also available via anonymous CVS@.  If you desire such
 access, send email to the
 @email{daikon-developers@@pag.lcs.mit.edu} mailing list.
 
@@ -620,13 +620,14 @@ LDFLAGS=-L. -lw -o $(EXECUTABLE)
 @end itemize
 
 @node    Installing dfec, Installing the Context GUI, Installing dfej, Installing Daikon
-@section Installing dfec, the Daikon front end for C/C++
+@section Installing dfec, the Daikon front end for C
 
 @cindex installing dfec
 @cindex dfec installation
 
-If you wish to detect invariants in C programs, perform the following
-steps.
+For instructions on detecting invariants in C programs, @xref{C
+front end dfec}.  If you wish to detect invariants in C programs,
+first perform the following installation steps.
 
 @enumerate
 @item
@@ -664,12 +665,12 @@ programs, @pxref{Daikon runtime customization}.
 @node    dfec EDG sources,  , Installing dfec, Installing dfec
 @subsection Installing dfec from EDG sources
 
-@cindex EDG C/C++ front end
-@cindex Edison Design Group C/C++ front end
+@cindex EDG C front end
+@cindex Edison Design Group C front end
 
 License restrictions prohibit us from distributing the source for dfec,
 except to other parties who hold a license to the EDG (Edison Design
-Group) C/C++ front end.  If you hold such a license, send mail to
+Group) C front end.  If you hold such a license, send mail to
 @email{daikon-developers@@pag.lcs.mit.edu} to obtain a patch to the
 EDG front end.  To build dfec for yourself, perform the following steps:
 @enumerate
@@ -910,7 +911,7 @@ dfej DataStructures/StackAr.java
 @end example
 @noindent
 (These instructions assume you have the current working directory (".")
-in your CLASSPATH.  If that is not the case, then run @command{dfej
+in your CLASSPATH@.  If that is not the case, then run @command{dfej
 -ajaxap=.}  instead of @command{dfej}.)
 
 We instrument only this one file because we are only interested in the
@@ -1068,7 +1069,7 @@ daikon.pl DataStructures.StackArTester
 @end example
 
 This command instruments your program, generates a trace file, and
-displays the invariants in the Tree GUI.  Currently, this script only works
+displays the invariants in the Tree GUI@.  Currently, this script only works
 on Unix.  For more details, @xref{All-in-one script}.
 
 
@@ -1539,7 +1540,7 @@ Three instrumenters are part of Daikon:  @command{dfej} for Java programs,
 @command{dfec} for C and C++, and @command{dfepl} for Perl. The
 letters @command{dfe} in the names stand for ``Daikon front-end'', and
 @command{j}, @command{c}, and @command{pl} abbreviate ``Java'',
-``C/C++'', and ``Perl''. The Java front end is robust; the C front end
+``C'', and ``Perl''. The Java front end is robust; the C front end
 is moderately robust, and the C++ and Perl front ends are experimental.
 
 A front end for the IOA programming language is distributed separately
@@ -1549,11 +1550,11 @@ longer supported.
 
 @menu
 * Instrumenting Java programs::  
-* Instrumenting C/C++ programs::  
+* Instrumenting C programs::    
 * Instrumenting Perl programs::  
 @end menu
 
-@node    Instrumenting Java programs, Instrumenting C/C++ programs, Instrumentation, Instrumentation
+@node    Instrumenting Java programs, Instrumenting C programs, Instrumentation, Instrumentation
 @subsection Instrumenting Java programs
 
 To instrument Java source programs, simply invoke @command{dfej}, the
@@ -1578,10 +1579,10 @@ in a @file{daikon-output/} directory.
 For more information about dfej, see @ref{Java front end dfej}.
 
 
-@node    Instrumenting C/C++ programs, Instrumenting Perl programs, Instrumenting Java programs, Instrumentation
-@subsection Instrumenting C/C++ programs
+@node    Instrumenting C programs, Instrumenting Perl programs, Instrumenting Java programs, Instrumentation
+@subsection Instrumenting C programs
 
-To instrument C/C++ source, invoke @command{dfec} on all the source and
+To instrument C source, invoke @command{dfec} on all the source and
 header files at once:
 @example
 dfec @var{...options...} @var{myprog}.c
@@ -1605,7 +1606,7 @@ In addition, you may want to specify the @option{-w} flag to g++, to
 suppress warnings.  dfec's output is valid C++ but may cause g++ to
 issue warnings.
 
-The Daikon front end for C/C++ has three effects:
+The Daikon front end for C has three effects:
 @itemize @bullet
 @item
 dfec writes instrumented versions of the files to a
@@ -1623,7 +1624,7 @@ file.
 @end itemize
 
 For more information about dfec, including more detailed documentation
-on its command-line options, see @ref{C/C++ front end dfec}.
+on its command-line options, see @ref{C front end dfec}.
 
 
 @c <ol>
@@ -1656,7 +1657,7 @@ on its command-line options, see @ref{C/C++ front end dfec}.
 @c      usual way (perhaps by running <tt>make</tt> or <tt>cc</tt> or <tt>gcc</tt>).
 @c </ol>
 
-@node Instrumenting Perl programs,  , Instrumenting C/C++ programs, Instrumentation
+@node Instrumenting Perl programs,  , Instrumenting C programs, Instrumentation
 @subsection Instrumenting Perl programs
 
 Perl programs must be instrumented twice. First they must be
@@ -1702,11 +1703,11 @@ way you did before; the only behavioral change is writing a
 though multiple @file{.decls} files might have been created (one for
 each source file) when the program was instrumented.
 
-By default, the instrumented Java or C/C++ program creates its @file{.dtrace}
+By default, the instrumented Java or C program creates its @file{.dtrace}
 file in the @file{daikon-output/} subdirectory of the current directory,
 and it defaults to overwriting any previously existing @file{.dtrace} file.
 
-@c    For C/C++
+@c    For C
 @c  programs, however, you can set the DTRACEAPPEND environmental variable,
 @c  which will cause each subsequent run of the program to append to the
 @c  @file{.dtrace} file, which is useful if your test suite requires multiple
@@ -1904,7 +1905,8 @@ Prints all discarded invariants of class @var{inv_class} at the ppt
 specified that involve exactly the vars given, as well as a short reason
 and discard code explaining why they were not worthy of print.  Any of 
 the three parts of the optarg may be made a wildcard by excluding it.
-e.g. @var{inv_class} and <@var{var1},@var{var2},...}>@@@var{ppt} are valid args.
+For example, @samp{@var{inv_class}} and
+@samp{<@var{var1},@var{var2},...>@@@var{ppt}} are valid argsuments.
 To print all discarded invariants, use the argument "all".
                                    
 @item --prob_limit @var{val}
@@ -2039,7 +2041,7 @@ the method @code{public static void main(String[] args)}.
 @table @option
 @item -i @var{file}
 @item --instrument @var{file}
-Only instrument FILE.  Can be specified multiple times.
+Only instrument FILE@.  Can be specified multiple times.
 Otherwise, all files that are used by the main file are instrumented.
 
 @item -o @var{file}
@@ -2055,7 +2057,7 @@ Save a textual listing of invariants to a @file{.txt} file.
 @item -n
 @item --nogui
 Create the invariants file (and @file{.txt} file,
-if @option{-t} is given), but do not start the Tree GUI.
+if @option{-t} is given), but do not start the Tree GUI@.
 
 @item --daikonarg @var{arg}
 Supply additional argument(s) to Daikon proper.
@@ -2611,7 +2613,7 @@ asks you to choose a @file{.inv} file for viewing.
 
 The @command{Load file} menu option brings up a file browser that you
 can use to select another @file{.inv} file.  The @command{Quit} menu
-options lets you quit the Tree GUI.
+options lets you quit the Tree GUI@.
 
 @item Program point tree
 The top part of the Invariants Display consists of the Program point
@@ -2892,12 +2894,12 @@ Stop the Context GUI by typing @kbd{M-x daikon-context-gui-end}
 
 @menu
 * Java front end dfej::         
-* C/C++ front end dfec::        
+* C front end dfec::            
 * Perl front end dfepl::        
 * CSV front end convertcsv.pl::  
 @end menu
 
-@node    Java front end dfej, C/C++ front end dfec, Front ends, Front ends
+@node    Java front end dfej, C front end dfec, Front ends, Front ends
 @section Java front end dfej
 
 @cindex front end for Java
@@ -3140,7 +3142,7 @@ same names and directory structure as the original input files.
 @c @end enumerate
 @c This behavior permits in-place instrumentation, which may be desirable
 @c to ease compiling the instrumented code.  (This feature is probably more
-@c important for C/C++ than for Java programs.)  Running the instrumenter a
+@c important for C than for Java programs.)  Running the instrumenter a
 @c second time reads the original source code rather than inserting an
 @c additional set of instrumentation into the already-instrumented source
 @c code files.
@@ -3351,20 +3353,20 @@ comment immediately before the declared type (but after any modifiers like
 
 
 
-@node    C/C++ front end dfec, Perl front end dfepl, Java front end dfej, Front ends
-@section C/C++ front end dfec
+@node    C front end dfec, Perl front end dfepl, Java front end dfej, Front ends
+@section C front end dfec
 
-@cindex front end for C/C++
-@cindex C/C++ front end
+@cindex front end for C
+@cindex C front end
 @cindex dfec
-@cindex dfec (Daikon front end for C/C++)
+@cindex dfec (Daikon front end for C)
 
 
-This section contains details about dfec, the Daikon front end for C/C++.
-For brief information about running dfec, see @ref{Instrumenting C/C++ programs}.
+This section contains details about dfec, the Daikon front end for C@.
+For brief information about running dfec, see @ref{Instrumenting C programs}.
 For information about installing dfec, see @ref{Installing dfec}.
 
-Recall that dynamic invariant detection over a C/C++ program requires
+Recall that dynamic invariant detection over a C program requires
 three steps:
 @enumerate
 @item
@@ -3377,7 +3379,7 @@ Run Daikon on the declaration files and data trace files.
 @end enumerate
 
 This section discusses the steps in more detail, with an emphasis on the
-first step.  If you have trouble, @xref{dfec requirements}.
+first step.  If you have trouble, see @ref{dfec requirements}.
 
 @c The three crucial files are @command{dfec}, 
 @c @file{daikon_runtime.h}, and 
@@ -3453,7 +3455,7 @@ java daikon.Daikon daikon-output/myprog.decls \
 * dfec requirements::           
 @end menu
 
-@node    dfec command-line arguments, Daikon runtime customization, C/C++ front end dfec, C/C++ front end dfec
+@node    dfec command-line arguments, Daikon runtime customization, C front end dfec, C front end dfec
 @subsection dfec command-line arguments
 
 This section describes dfec's command-line options.
@@ -3519,7 +3521,7 @@ If the DTRACEFILE environment
 variable is set (to a file name) when the instrumented program is run,
 it overrides the default specified by this flag.  Furthermore, if the DTRACEAPPEND environment
 variable is set to any value at runtime, the dtrace file is appended to
-instead of overwritten, which can be handy if you have a script to run
+instead of overwritten, which can be handy if you wish to run
 the instrumented program multiple times.
 
 @item --declsfiledir=@var{decldir}
@@ -3540,7 +3542,7 @@ Specifies the directory in which to create @file{@var{myprog}.decls}
 @item --instrsourcedir=@var{instrdir}
 Specifies the directory in which to write instrumented source files
 (default @file{daikon-instrumented/}).  The instrumented files have the
-same names and directory structure as the original input @file{.c} or @file{.cc} files, with the
+same names and directory structure as the original input @file{.c} files, with the
 slight exception that the file suffix is always set to @file{.cc}, so if you
 instrument @file{@var{myprog}.c}, you will end up with
 @file{daikon-instrumented/@var{myprog}.cc}.  Header files (files with a @file{.h} extension) are textually substituted into the instrumented @file{.cc} files, so they do not appear in the instrumented source directory.  If @var{instrdir} is ``.'',
@@ -3613,7 +3615,7 @@ variable.  Lackwit processing can be very slow, especially on large programs.
 @item --struct-depth=@var{N}
 For nested or recursive types (structs or classes that have members that
 are also structs or classes), this argument specifies how deep to instrument.
-For example, given a simple linked list structure as follows:
+For example, suppose you have a simple linked list structure as follows:
 @example
 struct node @{
   struct node *next;
@@ -3642,7 +3644,7 @@ address-of-array operations in the older, pcc-style manner.
 @end table
 
 
-@node    Daikon runtime customization, Pointer type disambiguation, dfec command-line arguments, C/C++ front end dfec
+@node    Daikon runtime customization, Pointer type disambiguation, dfec command-line arguments, C front end dfec
 @subsection Daikon runtime customization
 
 @cindex dfec customizations
@@ -3671,7 +3673,7 @@ You can turn specific Daikon warnings on and off.
 
 
 
-@node    Pointer type disambiguation, Instrumentation scope, Daikon runtime customization, C/C++ front end dfec
+@node    Pointer type disambiguation, Instrumentation scope, Daikon runtime customization, C front end dfec
 @subsection Pointer type disambiguation
 
 @cindex pointer type disambiguation
@@ -3772,7 +3774,7 @@ retain their default values.
 
 @c This isn't really relevant to users of Daikon, though it is quite
 @c interesting from an implementation point of view.
-@c A C/C++ pointer type is output to the decls and dtrace files in two
+@c A C pointer type is output to the decls and dtrace files in two
 @c ways: firstly, as the memory address it points to (the equivalent of the
 @c java hashcode), and secondly, its contents.  By default, the
 @c contents of an array or pointer type is the list of values pointed to by
@@ -3895,7 +3897,7 @@ orig(*bar) == 6
 @end example
 
 
-@node    Instrumentation scope, dfec requirements, Pointer type disambiguation, C/C++ front end dfec
+@node    Instrumentation scope, dfec requirements, Pointer type disambiguation, C front end dfec
 @subsection Instrumentation scope
 
 @cindex instrumentation scope
@@ -3966,14 +3968,15 @@ otherwise corrupt them (and which would then appear to the user as
 Daikon errors).
 
 Memory tracking is implemented by converting all pointers and arrays
-in the program to ``smart pointers'' and ``smart arrays''.
+in the program to ``smart pointers'' and ``smart arrays'', implemented
+as the classes DaikonSmartPointer and DaikonSmartArray.
 Additionally, dfec outputs C++, whereas the original user program is
 written in C@.
 
 @node    Memory tracking in libraries,  , Memory tracking details, Instrumentation scope
 @subsubsection Memory tracking in libraries
 
-The C/C++ front end keeps track of the maximum read or written element
+The C front end keeps track of the maximum read or written element
 of each array.  This enables it to avoid outputting (meaningless)
 uninitialized elements.  For example, consider the following code:
 @example
@@ -4056,7 +4059,7 @@ compile.
 @end enumerate
 
 
-@node    dfec requirements,  , Instrumentation scope, C/C++ front end dfec
+@node    dfec requirements,  , Instrumentation scope, C front end dfec
 @subsection dfec requirements
 
 @command{dfec} does not output the contents of C unions.  This section
@@ -4067,7 +4070,7 @@ the input to @command{dfec} (the program being instrumented) is
 proper, according to the requirements set out in this section.
 @command{dfec} sometimes issues obscure error messages when provided
 invalid input.
-For additional help troubleshooting dfec, @xref{dfec problems}.
+For additional help troubleshooting dfec, see @ref{dfec problems}.
 
 @menu
 * C program requirements::      
@@ -4094,17 +4097,16 @@ C++) and that it compiles cleanly.
 @cindex K&R C
 
 Running your code through a C compiler is necessary, but not
-sufficient, to verify that your program is valid C.  (@command{dfec}
+sufficient, to verify that your program is valid C@.  (@command{dfec}
 issues warnings about a number of erroneous C constructs that
 @command{gcc} and other compilers accept.)  You should remove all
-warnings produced by @command{gcc -g -Wall -ansi -pedantic} will
-reduce the number of warning messages produced by dfec.  (Lack of
+warnings produced by @command{gcc -g -Wall -ansi -pedantic}.  (Lack of
 errors from that command does not guarantee your code is ANSI/ISO C,
 or that your code is acceptable to dfec.  However, errors from that
 command do indicate that your code is not ANSI/ISO C@.)  Likewise,
 your code should compile
 @c and link??
-using @command{g++} (instead of @command{gcc} as the copmiler.
+using @command{g++} (instead of @command{gcc}) as the compiler.
 
 Here are some steps you may find necessary in converting code from C
 to the intersection of ANSI/ISO C and ANSI/ISO C++.
@@ -4119,7 +4121,7 @@ to the intersection of ANSI/ISO C and ANSI/ISO C++.
 @cindex procedure declarations, C
 @cindex declaration formats, of C functions
 You must convert any K&R function prototypes to ANSI/ISO form.  In K&R
-function declarations, variables may be omitted entirely, in K&R
+function declarations, parameters may be omitted entirely, and in K&R
 function definitions, variable types may appear as variable
 declarations between the ``)'' that ends the signature and the ``@{''
 that starts the body.  In ANSI/ISO C, variable types always appear in
@@ -4153,7 +4155,7 @@ prototype in ANSI/ISO C for a function that takes no arguments, write
 @item typechecking, casts, and const
 C++ is stricter about typechecking than C is.  Some C compilers permit
 function prototypes to differ slightly from function definitions.
-Whereas C permits use of incorrect types, silently inserting casts,
+Whereas C silently inserts casts,
 C++ requires types to match or explicit casts to be inserted.
 Therefore, your program may need to have variable types refined or
 changed.
@@ -4165,7 +4167,7 @@ typechecker, you may need to change the types of variables that are
 passed as paramters:  you will need to add ``const'' to the type in
 order to permit them to be passed to the library routines.  Similarly,
 you may need to add ``const'' in other places, such as when a
-consttant string is being assigned to a variable (the variable will
+constant string is being assigned to a variable (the variable will
 have to be declared as ``const char *'' rather than as ``char *''.
 Because C++ tracks types through assignments, these const insertions
 may ripple through your program.
@@ -4180,15 +4182,15 @@ C++ reserves the following keywords that are not reserved words in C:
 Earlier versions of C do not reserve ``bool'', but ANSI/ISO C and C++ do.
 Additionally, the C++ standard libraries define certain other
 identifiers, such as ``string''.
-Any use of any of these words as identifiers must be changed.
+Any use of these words as identifiers must be changed.
 
 @item nested enums
 @cindex template-argument uses local type error
 In C, enums that appear inside structs have global scope and can be
 accessed anywhere in the program.  When converting to C++, you will
-have to raise the enum to top level (or else use a qualified name,
-which may not work with your C compiler).
-(The error message @samp{template-argument `...' 
+have to raise the enum to top level or else use a qualified name,
+which may not work with your C compiler.
+The error message @samp{template-argument `...' 
 uses local type `...'} may indicate this problem.
 
 @end table
@@ -4217,14 +4219,14 @@ headers; for instance, do not do the following:
 The reason is that dfec expects every C file to contain either only
 code and declarations that are instrumented (with respect to smart
 pointer tracking), or no code that is instrumented (with respect to
-smart pointer tracking).  User code is so instrumented, but library
+smart pointer tracking).  User code is instrumented, but library
 functions are not, so you should use the declaration in
 @file{stdlib.h} rather than repeating it in your own code.
 
 @item
 @command{dfec} redefines certain functions defined in system headers.
-If your program tries to define these as macros or otherwise uses them
-in a non-standard way, you may experience trouble.
+Your program must not define these as macros or otherwise use them
+in a non-standard way.
 
 @item
 Instrumented programs must not use nested structures or enums that are
@@ -4233,11 +4235,11 @@ You should raise all nested structures to
 the top level (and after raising them, remove any
 ``static'' modifier, which is not relevant to top-level definitions).
 
-You should also separate all declarations from uses:
+You should also separate all declarations from uses.  For example, change
 @example
   enum @{ make, user @} current_access;
 @end example
-Separate the declaration from the use:
+to
 @example
   enum current_access_type @{ make, user @};
   current_access_type current_access;
@@ -4299,7 +4301,7 @@ and then edit @file{$DFECDIR/bits/types.h} to remove all but the
 second line of the above snippet.  This will define @samp{__quad_t} as
 @samp{long long int} instead of as a struct.  dfec uses files found
 under @file{$DFECDIR} in preference to other system headers, so
-@file{wc.c.} will compile.
+@file{wc.c} will compile.
 
 You may need to make similar changes to other header files in order to
 ensure that your code is both legal C and legal C++, or to work around
@@ -4371,7 +4373,7 @@ equivalent file.
 @end example
 
 
-@node Perl front end dfepl, CSV front end convertcsv.pl, C/C++ front end dfec, Front ends
+@node Perl front end dfepl, CSV front end convertcsv.pl, C front end dfec, Front ends
 @section Perl front end dfepl
 
 @cindex front end for Perl
@@ -4660,7 +4662,7 @@ return references, the @option{--accessor-depth} and
 @option{--reference-depth} options interact. Specifically, if these
 depths are A and R, the behavior is as if the runtime has a budget of
 1 unit, which it can use either on accessors which cost 1/A or
-references which cost 1/R. It may thus sometimes be useful to specify
+references which cost 1/R@.  It may thus sometimes be useful to specify
 fractional values for @option{--accessor-depth} and
 @option{--reference-depth}; in fact, the default accessor depth is
 1.5.
@@ -5182,7 +5184,7 @@ class body.  Remove the extra semicolon in your Java file (at the
 indicated position) and re-rerun CreateSpinfo.
 
 The @command{CreateSpinfoC} program performs the same function, for
-C/C++ source code.  It can only be run on postprocessed source
+C source code.  It can only be run on postprocessed source
 files---that is, source files contain no CPP commands.  CPP commands
 are lines starting with @samp{#}, such as @samp{#include}.  To
 expand CPP commands into legal C, run either @command{cpp -P} or
@@ -5201,7 +5203,7 @@ If you get an error such as
 Encountered: "#" (35), after : ""
 @end example
 @noindent
-then you forgot to run cpp before running CreateSpinfoC.
+then you forgot to run cpp before running CreateSpinfoC@.
 
 @node   Cluster analysis for splitters,  , Static analysis for splitters, Enhancing conditional invariant detection
 @subsection Cluster analysis for splitters
@@ -5597,7 +5599,7 @@ MyProg.java:0:0:0:0: Error: Could not find package named:
 @end example
 @noindent
 then you need to add @file{rt.jar} to your
-CLASSPATH.  This should be automatic, if you are using the
+CLASSPATH@.  This should be automatic, if you are using the
 @file{daikon.bashrc} or @file{daikon.cshrc} file and have set the
 JDKDIR environment variable correctly.  Also see @ref{Installing dfej}.
 
@@ -5612,7 +5614,7 @@ MyProg.java:0:0:0:0: Error: Could not find package named:
 then the root of your packages in not in your classpath.  For example,
 if you have a package A in directory src/A and a class A.B, then you
 have to add the superdirectory of A (src) to your classpath so that
-dfej can find package A.  E.g.
+dfej can find package A@.  For example,
 @example
 dfej -classpath src:$CLASSPATH src/A/B.java
 @end example
@@ -5800,7 +5802,7 @@ sh: lwpp-init.pl: not found
 @noindent
 then you have not correctly installed the dfec distribution
 (@pxref{Installing dfec}).  The @file{lwpp-init.pl} file should appear
-in the directory referred to by environment variable DFECDIR.  (That
+in the directory referred to by environment variable DFECDIR@.  (That
 directory is placed on your path by the standard Daikon dotfiles.)
 
 Note, lackwit may have different preprocessor parameters set than
@@ -6178,7 +6180,7 @@ Instrumenting Vector prevents the Java Virtual Machine from initializing
 properly, because instrumented classes attempt to use the JVM's
 facilities when they are loaded, but the JVM loads Vector during its own
 initialization.  The same problem may be true for other classes used
-internally by the JVM.  Users can create a new class MyVector, replace
+internally by the JVM@.  Users can create a new class MyVector, replace
 uses of Vector by MyVector, and then instrument MyVector.
 
 
@@ -6551,7 +6553,7 @@ same Java front end as did Daikon 1, though with certain enhancements.
 (Actually, there have been 5 Java front ends; the first two were
 binary re-writers; the next two were source code re-writers; and the
 last (experimental as of January 2003) one is a binary rewriter.)
-Its C/C++ front end is rewritten from scratch; it instruments only
+Its C front end is rewritten from scratch; it instruments only
 procedure entries and exits.  A front end also exists for the IOA
 programming language, but is not included in the Daikon distribution.
 
