@@ -40,7 +40,7 @@ while (defined($file_record = <>)) {
   for my $commit_record (@this_commit_records) {
     $commit_record =~ s/^revision [0-9.]+\n//;
     $commit_record =~ s/;  state: .*\n/;  file: $filename\n/;
-    # print "COMMIT_RECORD:\n$commit_record\n";
+    # print "COMMIT_RECORD FOUND:\n$commit_record\n";
     push @commit_records, $commit_record;
   }
 
@@ -57,8 +57,12 @@ my @current_messages = ();
 my %current_messages = ();
 my $current_date = "";          # in parsed format
 
+if (scalar(@commit_records) == 0) {
+  exit;
+}
+
 for my $commit_record (@commit_records) {
-  # print "COMMIT_RECORD:\n$commit_record\n";
+  # print "COMMIT_RECORD PROCESSED:\n$commit_record\n";
   $commit_record =~ s/date: (.*);  author: (.*);  file: (.*)\n//;
   my $date_string = $1;
   my $date = ParseDate($date_string);
@@ -89,6 +93,11 @@ for my $commit_record (@commit_records) {
   $current_author = $author;
 }
 
+print_commit_records();
+
+###########################################################################
+### Subroutines
+###
 
 sub append_commit_record ( $$$ ) {
   my ($file, $date, $message) = @_;
@@ -121,3 +130,5 @@ sub reset_commit_records () {
   %current_messages = ();
   $current_date = "";
 }
+
+# end.
