@@ -15,29 +15,44 @@ use Exporter;
 		parse_type unparse_type type_lub unparse_to_code
 		guess_type_ref guess_type_scalar guess_type_array
 		guess_type_hash guess_type_object guess_type_list
-                is_zero);
+                is_zero set_limits);
+
+sub max { $_[0] > $_[1] ? $_[0] : $_[1] }
+sub min { $_[0] < $_[1] ? $_[0] : $_[1] }
 
 # How deep in terms of nested references to go in a linked data
 # structure. We don't have any notion of recursive types, so this has
 # to be finite to keep from getting stuck in reference loops, and it
 # should probably be small because the size of the types we guess can
-# potentially be exponential in it. In arbitrary units.
-sub DEPTH_LIMIT () { 122 }
+# potentially be exponential in it. In arbitrary units; the value
+# 189000 was chosen because it has a lot of factors, which should
+# reduce the chance of floating-point rounding problems.
+sub DEPTH_LIMIT () { 189000 }
 
 # How much traversing a scalar reference adds to our depth
-sub SCALAR_REF_DEPTH () { 20 }
+my $ref_depth = DEPTH_LIMIT/6.1;
+sub SCALAR_REF_DEPTH { $ref_depth; }
 
 # How much looking at the output of an accessor method adds to our
 # depth
-sub ACCESSOR_METHOD_DEPTH () { 41 }
+my $accessor_depth = DEPTH_LIMIT/2.99;
+sub ACCESSOR_METHOD_DEPTH { $accessor_depth; }
 
 # The number of elements at the start of a list type to possibly treat
 # as distinct entities. After this many, any remaining elements in the
 # list go in one "bucket", so to speak.
-sub LIST_LIMIT () { 3 }
+my $list_limit = 3;
+sub LIST_LIMIT { $list_limit }
 
-sub max { $_[0] > $_[1] ? $_[0] : $_[1] }
-sub min { $_[0] < $_[1] ? $_[0] : $_[1] }
+# Modify the recursion limits (globally). At some point in the future,
+# it would be nice to change this so that the limit can be set
+# per-module.
+sub set_limits {
+    my($ref_lim, $accessor_lim, $list_lim) = @_;
+    $ref_depth = DEPTH_LIMIT/$ref_lim;
+    $accessor_depth = DEPTH_LIMIT/$accessor_lim;
+    $list_limit = $list_lim;
+}
 
 # There are several basic scalar types:
 #
