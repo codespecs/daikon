@@ -5182,8 +5182,8 @@ More detail can be found in Chapter 7, ``Scalability'', of
 @cite{Automatic Generation and Checking of Program Specifications}
 (Technical report MIT-LCS-TR-852, at
 @uref{http://pag.lcs.mit.edu/~mistere/pubs/thesis-abstract.html}),
-Jeremy W. Nimmer's Master's thesis.  and in Chapter 5, ``Enabling
-Incremental Dynamic Invariant Detection'', ofToh Ne Win's Master's
+Jeremy W. Nimmer's Master's thesis, and in Chapter 5, ``Enabling
+Incremental Dynamic Invariant Detection'', of Toh Ne Win's Master's
 thesis (Technical report to be filed, at
 @uref{http://pag.lcs.mit.edu/~tohn/home/research/thesis/thesis.pdf}).
 
