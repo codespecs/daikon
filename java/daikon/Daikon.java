@@ -356,6 +356,10 @@ public final class Daikon {
                               // TODO: Jeff should uncomment
                               // && all_ppts.getGlobal() != null
                               );
+    // As of 10/21/2003, uncommenting this line leads to no user-visible
+    // differences.  (This is before Jeff uncommented the getGlobal above,
+    // but it bodes well.)
+    // slices_see_all_samples = false;
 
     // Infer invariants
     process_data(all_ppts, dtrace_files);
