@@ -827,7 +827,7 @@ java daikon.PrintInvariants StackAr.inv
 For more options to the PrintInvariants program, @xref{Printing
 invariants}.
 
-@item Use the MergeEsc program to insert the invariants as comments
+@item Use the MergeESC program to insert the invariants as comments
 into the Java source program.
 
 @example

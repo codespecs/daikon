@@ -4,8 +4,10 @@ all: info html html-chap ps pdf
 info: daikon.info
 
 daikon.info: daikon.texinfo config-options.texinfo .fix-menu
-	cd ../java && $(MAKE) ../doc/config-options.texinfo
 	makeinfo $<
+
+config-options.texinfo:
+	cd ../java && $(MAKE) ../doc/config-options.texinfo
 
 # Don't want to make this a target of other rules because it updates the modification date.
 # Make forces me to double the dollar signs in the Perl code.
