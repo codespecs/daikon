@@ -99,8 +99,9 @@
 	   (let* ((params (third form))
 		  (body (cdddr form))
 
-		  (params-modified (intersection params
-						 (modified-variables form)))
+		  (params-modified (reverse
+				    (intersection params
+						  (modified-variables form))))
 		  (params-orig (mapcar #'(lambda (p)
 					   (pcl::symbol-append 'orig- p))
 				       params-modified))
