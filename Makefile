@@ -77,6 +77,9 @@ help:
 test:
 	cd tests && $(MAKE) all
 
+junit:
+	cd java/daikon && $(MAKE) junit
+
 ### Tags
 
 tags: TAGS
