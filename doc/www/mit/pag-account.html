@@ -28,6 +28,11 @@ emacs /etc/group
 (cd /var/yp; make)
 <em># Add to "daikon" mailing list</em>
 emacs /etc/aliases
+<em># Set email forwarding to Athena</em>
+cd ~<em>username</em>
+echo <em>username</em>@mit.edu > /.forward
+chown <em>username</em> .forward
+chgrp <em>username</em> .forward
 exit
 </pre>
 </blockquote>
