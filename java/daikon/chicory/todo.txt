@@ -3,7 +3,8 @@ Todo list sorted in approximate order of importance.
   - ChicoryPremain.jar and BCEL were not properly included in the
     release distribution file [jhp]
 
-  - The nightly build (2/10) failed when running chicory. [sjl]
+  - The nightly build (2/10) failed when running chicory. 
+    [sjl was unable to duplicate the problem]
 
   - variables declared as Object whose actual type is Number or
     Boolean will print their values as a Number or boolean and
@@ -16,9 +17,6 @@ Todo list sorted in approximate order of importance.
     then the hash code should be printed.  This problem can be reproduced
     in the StackAr example (though not in the StackAr regression test).
     It would be good to fix this so that the examples we ship work.
-
-  - Static variables are not named correctly when a class with
-    a static variable is referenced from another class. [sjl]
 
   - Fix --ppt-omit-pattern and --ppt-select-pattern to work on each
     ppt point name rather than only on class names.  I think this means
@@ -87,3 +85,10 @@ Completed Tasks
    - Fix the output/err stream redirection to flush on each line feed
     so we see results in real time.
     2/9/05: fixed this by using BufferedInput and PrintStream
+
+  - Static variables are not named correctly when a class with
+    a static variable is referenced from another class. [sjl]
+    fixed 2/10/05 
+
+
+
