@@ -743,6 +743,20 @@ public final class UtilMDE {
     return rpad(String.valueOf(num), length);
   }
 
+  // Same as built-in String comparison, but accept null arguments,
+  // and place them at the beginning.
+  public static class NullableStringComparator
+    implements Comparator
+  {
+    public int compare(Object o1, Object o2) {
+      String s1 = (String) o1;
+      String s2 = (String) o2;
+      if (s1 == null && s2 == null) return 0;
+      if (s1 == null && s2 != null) return 1;
+      if (s1 != null && s2 == null) return -1;
+      return s1.compareTo(s2);
+    }
+  }
 
   ///
   /// StringTokenizer
