@@ -12,6 +12,7 @@ public class StackArTester
   {
     s = new StackAr(size);
     observe();
+    topAndPop();
   }
 
   private int phase;
@@ -74,12 +75,15 @@ public class StackArTester
       topAndPop();
     }
     top();
+    topAndPop();
   }
 
   public void makeEmpty() {
     observe();
     s.makeEmpty();
     observe();
+    top();
+    topAndPop();
   }
 
   public void fillAndEmpty(int n)
