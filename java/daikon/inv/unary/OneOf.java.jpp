@@ -22,7 +22,7 @@ The correct way to build the system is to run 'make'.
 #define ONEOFSCALAR OneOfString
 #define ONEOFSCALARSTR "OneOfString"
 #define SINGLESCALAR SingleString
-#define TOSTRING(x) "\"" + UtilMDE.quote(x) + "\""
+#define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.quote(x) + "\"")
 #define NAME var().name.name()
 #elif defined(SEQUENCE)
 #define SCALARPKG sequence
@@ -54,7 +54,7 @@ The correct way to build the system is to run 'make'.
 #define ONEOFSCALAR EltOneOfString
 #define ONEOFSCALARSTR "EltOneOfString"
 #define SINGLESCALAR SingleStringSequence
-#define TOSTRING(x) "\"" + UtilMDE.quote(x) + "\""
+#define TOSTRING(x) ((x==null) ? "null" : "\"" + UtilMDE.quote(x) + "\"")
 #define NAME var().name.name() + " elements"
 #else
 #error "One of SCALAR, STRING, SEQUENCE, STRINGSEQUENCE, ELT, or ELTSTRING should be defined"
@@ -249,9 +249,9 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
       result += varname + " == ";
       String str = elts[i];
       if (!is_type) {
-	result += "\"" + UtilMDE.quote(str) + "\"";
+	result += TOSTRING(str);
       } else {
-	if ("null".equals(str)) {
+	if ((str == null) || "null".equals(str)) {
 	  result += "\\typeof(null)";
 	} else if (str.startsWith("[")) {
 	  result += "\\type(" + UtilMDE.classnameFromJvm(str) + ")";
@@ -309,7 +309,9 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     }
     for (int i=0; i<num_elts; i++) {
       String value = elts[i];
-      if (value.startsWith("[")) {
+      if (value == null) {
+        // do nothing
+      } else if (value.startsWith("[")) {
 	value = UtilMDE.classnameFromJvm(value);
       } else if (value.startsWith("\"") && value.endsWith("\"")) {
 	value = value.substring(1, value.length()-1);

@@ -50,6 +50,10 @@ public final class StringComparisonCore implements java.io.Serializable {
   }
 
   public void add_modified(String v1, String v2, int count) {
+    if ((v1 == null) || (v2 == null)) {
+      wrapper.destroy();
+      return;
+    }
     if (v1 == v2)
       can_be_eq = true;
     else if (v1.compareTo(v2) < 0)

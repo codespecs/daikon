@@ -31,6 +31,7 @@ public class SeqComparison extends TwoSequence implements Comparison {
     // System.out.println("vars[1]: " + ppt.var_infos[1].type.format());
     ProglangType type1 = ppt.var_infos[0].type;
     ProglangType type2 = ppt.var_infos[1].type;
+    // This intentonally checks dimensions(), not pseudoDimensions.
     boolean only_eq = (! ((type1.dimensions() == 1)
                           && type1.baseIsIntegral()
                           && (type2.dimensions() == 1)

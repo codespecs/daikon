@@ -81,7 +81,7 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
-      sb.append("\"" + UtilMDE.quote( elts[i] ) + "\"" );
+      sb.append((( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"") );
     }
     sb.append(" }");
     return sb.toString();
@@ -98,7 +98,7 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
     String varname = var().name.name() + " elements" ;
     if (num_elts == 1) {
 
-      return varname + " == \"" + UtilMDE.quote( elts[0] ) + "\"" ;
+      return varname + " == " + (( elts[0] ==null) ? "null" : "\"" + UtilMDE.quote( elts[0] ) + "\"") ;
 
     } else {
       return varname + " one of " + subarray_rep();
@@ -125,9 +125,9 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
       result += varname + " == ";
       String str = elts[i];
       if (!is_type) {
-	result += "\"" + UtilMDE.quote(str) + "\"";
+	result += (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"") ;
       } else {
-	if ("null".equals(str)) {
+	if ((str == null) || "null".equals(str)) {
 	  result += "\\typeof(null)";
 	} else if (str.startsWith("[")) {
 	  result += "\\type(" + UtilMDE.classnameFromJvm(str) + ")";
@@ -159,7 +159,9 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
     }
     for (int i=0; i<num_elts; i++) {
       String value = elts[i];
-      if (value.startsWith("[")) {
+      if (value == null) {
+        // do nothing
+      } else if (value.startsWith("[")) {
 	value = UtilMDE.classnameFromJvm(value);
       } else if (value.startsWith("\"") && value.endsWith("\"")) {
 	value = value.substring(1, value.length()-1);
