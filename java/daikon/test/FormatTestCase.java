@@ -241,20 +241,13 @@ class FormatTestCase {
   public boolean passes() {
     boolean passTest = true;
     boolean currentResult;
-    try {
+
     for (int i=0; i<testCases.size(); i++) {
-      System.out.println ("FormatTestCase: passTest");
       currentResult = ((SingleOutputTestCase)testCases.get(i)).performTest(invariantToTest);
       passTest = passTest &&  currentResult;
 
     }
     return passTest;
-
-    } catch (Exception e) {
-      e.printStackTrace();
-      return false;
-    }
-
   }
 
   /**
@@ -667,7 +660,7 @@ class FormatTestCase {
     if (format.equalsIgnoreCase("daikon"))
       return OutputFormat.DAIKON;
     else if (format.equalsIgnoreCase("java"))
-      return OutputFormat.JAVA;
+      return OutputFormat.DBCJAVA;
     else if (format.equalsIgnoreCase("esc"))
       return OutputFormat.ESCJAVA;
     else if (format.equalsIgnoreCase("ioa"))
