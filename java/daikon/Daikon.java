@@ -358,7 +358,7 @@ public final class Daikon {
     UtilMDE
       .join(new String[] {
       release_string,
-      "Daikon invariant detector, copyright 1998-2004",
+      "Daikon invariant detector, copyright 1998-2005",
       // " by Michael Ernst <mernst@csail.mit.edu>",
       "Uses the Java port of GNU getopt, copyright (c) 1998 Aaron M. Renn",
       // "For licensing information, see the License section of the manual.",
@@ -1170,7 +1170,7 @@ public final class Daikon {
 
   public static void init_ppt (PptTopLevel ppt, PptMap all_ppts) {
 
-    // Setup splitters.  This must be done before adding derived variables.  
+    // Setup splitters.  This must be done before adding derived variables.
     // Do not add splitters to ppts that were already created by splitters!
     if (! (ppt instanceof PptConditional)) {
       setup_splitters(ppt);
@@ -1194,7 +1194,7 @@ public final class Daikon {
 	init_ppt (ppt_cond, all_ppts);
       }
     }
-    
+
   }
 
 
@@ -1234,7 +1234,7 @@ public final class Daikon {
 	  exit_vars[j].value_index = ppt.var_infos[j].value_index;
 	  exit_vars[j].equalitySet = null;
 	}
-	
+
         exit_ppt = new PptTopLevel(exit_name.getName(), exit_vars);
 	exit_ppts.add(exit_ppt);
         if (debugInit.isLoggable(Level.FINE))
@@ -1764,7 +1764,7 @@ public final class Daikon {
   public static void setupEquality (PptTopLevel ppt) {
     if (Daikon.use_equality_optimization) {
 
-      // Skip points that are not leaves.  
+      // Skip points that are not leaves.
       if (use_dataflow_hierarchy) {
 	PptTopLevel p = ppt;
 	if (ppt instanceof PptConditional)
@@ -1775,7 +1775,7 @@ public final class Daikon {
 	if (ppt.has_splitters())
 	  return;
       }
-      
+
       // Create the initial equality sets
       ppt.equality_view = new PptSliceEquality(ppt);
       ppt.equality_view.instantiate_invariants();
