@@ -2645,6 +2645,9 @@ daikon.util, you can call dfej like so:
 @cindex environment variable DTRACEFILE
 @cindex DTRACEAPPEND environment variable
 @cindex environment variable DTRACEAPPEND
+@cindex trace file name
+@cindex dtrace file name
+@cindex file name, for dtrace file
 @item -tracefilename=@var{filename}
 Specifies the default name for the @file{.dtrace} file (default
 @file{daikon-output/@var{CLASSNAME}.dtrace}).  The filename is relative
@@ -3051,6 +3054,9 @@ Defines the preprocessor macro @var{macro} to be @var{value}.
 @cindex environment variable DTRACEFILE
 @cindex DTRACEAPPEND environment variable
 @cindex environment variable DTRACEAPPEND
+@cindex trace file name
+@cindex dtrace file name
+@cindex file name, for dtrace file
 @item --tracefilename=@var{filename}
 Specifies the default name for the @file{.dtrace} file (default
 @file{daikon-output/@var{myprog}.dtrace}, where @file{@var{myprog}.c} is
@@ -4108,6 +4114,16 @@ have important semantic properties.  This simple heuristic of using
 these conditional statements as predicates for conditional invariant
 detection is often quite effective.  
 
+If you get an error such as
+@example
+  jtb.ParseException: Encountered ";" at line 253, column 8.
+  Was expecting one of: "abstract" ...
+@end example
+then you may have encountered a bug in the JTB library on which
+CreateSpinfo is built.  It does not permit empty declarations in a
+class body.  Remove the extra semicolon in your Java file (at the
+indicated position) and re-rerun CreateSpinfo.
+
 The @command{CreateSpinfoC} program performs the same function, for
 C/C++ source code.  It can only be run on postprocessed source
 files---that is, source files contain no CPP commands.  CPP commands
@@ -4425,9 +4441,9 @@ method, near the calls to the other formatting methods.
 
 @cindex front end, writing
 
-A front end for Daikon produces files in Daikon's input format ---
-@file{.decls} files and @file{.dtrace} files --- enabling Daikon to
-operate on data that would otherwise be inaccessible to it.
+A front end for Daikon converts data into a form Daikon can process,
+producing files in Daikon's input format --- @file{.decls} files and
+@file{.dtrace} files.
 (Typically, Daikon front ends arrange to obtain information from
 program executions, though front ends have been also been built for
 stock data, weather forecasts, and truck weight data, among others.
@@ -5464,12 +5480,12 @@ invariants should hold on entry to and exit from it.
 for each variable:
 @itemize @bullet
 @item
-name: an arbitrary, uninterpreted string containing no tabs or
-newlines.  However, the names of array-valued variables must end
-with "[]".  For instance, "a" might stand for the array object itself
-(appearing in the trace file as a unique ID or hashcode), and "a[]" would
-stand for the array contents (appearing in the trace file as a sequence
-of values).
+name: an string containing no tabs or newlines.  Variable names must
+be parseable by the VarInfoName class.  One requirement is that the
+names of array-valued variables must end with "[]".  For instance, "a"
+might stand for the array object itself (appearing in the trace file
+as a unique ID or hashcode), and "a[]" would stand for the array
+contents (appearing in the trace file as a sequence of values).
 
 @item
 declared type: this is what the programmer used in the declaration of
