@@ -326,6 +326,12 @@ Other problems
 * Large dtrace files::          
 * Tree GUI font errors::        
 
+Large data trace (.dtrace) files
+
+* Reducing program points::     
+* Reducing variables::          
+* Reducing executions::         
+
 Details
 
 * History::                     
@@ -363,7 +369,7 @@ include arithmetic equations such as "x > abs(y)", "x = 3*y + 4*z - 7",
 or "x = 0 (mod 4)", and properties over arrays and other collections,
 including those accessed via pointers.  Daikon also reports implications
 (invariants whose truth depends on some other property), such as "p !=
-null => p.content in elementcollection".
+null => p.content in collection".
 
 Invariants can be useful in program understanding and a host of other
 applications.  Daikon operates by running the program and examining the
@@ -1098,8 +1104,8 @@ creates a declaration file at @file{daikon-output/print_tokens.decls}.
 @quotation
 Note for Windows users:
 Under Windows, you must insert in the source file a gcc-specific
-__attribute__ for the _ctype_ variable, which is used in our test
-suite.  Run the following commands:
+@samp{__attribute__} for the @samp{_ctype_} variable, which is used in
+our test suite.  Run the following commands:
 @example
 alias fix="sed -f $DFECDIR/fix.sed"
 (cd daikon-instrumented; fix print_tokens.cc > print_tokens_fixed.cc)
@@ -1113,8 +1119,8 @@ executable @file{print_tokens} in the current directory.
 g++ -g -w -o print_tokens daikon-instrumented/print_tokens_fixed.cc $DFECDIR/daikon_runtime.o
 @end example
 @quotation
-Note for Windows users:  Name the executable print_tokens.exe, not
-print_tokens:
+Note for Windows users:  Name the executable @file{print_tokens.exe}, not
+@file{print_tokens}:
 @example
 g++ -g -w -o print_tokens.exe daikon-instrumented/print_tokens_fixed.cc $DFECDIR/daikon_runtime.o
 @end example
@@ -4324,6 +4330,12 @@ Computer Science and Engineering, Seattle, Washington, USA, August 2000.
 This document is available online at
 @url{http://pag.lcs.mit.edu/~mernst/pubs/invariants-thesis-abstract.html}.
 
+For Daikon version 3, also see 
+Chapter 7, ``Scalability'', of @cite{Automatic Generation and Checking
+of Program Specifications}, by Jeremy W. Nimmer, Master's thesis.  
+This document is available, as 
+technical report MIT-LCS-TR-852, at
+@url{http://pag.lcs.mit.edu/~mistere/pubs/thesis-abstract.html}.
 
 
 @menu
@@ -5151,34 +5163,141 @@ memory}, and @ref{Large dtrace files}.
 @cindex data trace files, too large
 @cindex large data trace files
 
-Running instrumented code can create very large
-@file{.dtrace} files.  This can be a problem because writing the large
-files can slow the target programs substantially, because the large files
-may fill up your disk, or because Daikon is unable to process the large
-files.  There are several solutions to this problem.
+Running instrumented code can create very large @file{.dtrace} files.
+This can be a problem because writing the large files can slow the
+target programs substantially, because the large files may fill up
+your disk, or because when reading the large files, Daikon fills up
+your computer's physical or virtual memory.  There are three general
+solutions to this problem:  compute invariants over fewer program
+points (functions), compute invariants over fewer variables, or
+compute invariants over fewer samples (executions).
 
+It is usually possible to create an @file{.inv} file equivalent to
+the one that Daikon would have computed, had Daikon been able to
+process your entire program over its full test suite.  First, use the
+techniques below (@pxref{Reducing program points}) to split your
+@file{.dtrace} file into parts.  Next, run Daikon on each resulting
+@file{.dtrace} file. Finally, use the union function of @ref{Invariant
+Diff} to combine the resulting @file{.inv} files into one.
 
+@menu
+* Reducing program points::     
+* Reducing variables::          
+* Reducing executions::         
+@end menu
+
+@node    Reducing program points, Reducing variables, Large dtrace files, Large dtrace files
+@subsubsection Reducing program points (functions)
+
+Here are ways to compute invariants over a subset of the program
+points (functions) in your program.
 @enumerate
-First, there is one technique that will not change your resulting invariant 
-files.
 @item 
-Daikon may take a long time to run if it is not capable of loading the entire
-@file{.dtrace} file into memory.  In that case, you can split the 
-@file{.dtrace}file into several files, each containing only one method, 
-then run Daikon on each one of those @file{.dtrace} files separatelly, 
-and finally combine the  @file{.inv} files into one.  
-Separate the  @file{.dtrace} files into several ones by using the 
-@command{invariants/scripts/trace-purge-fns.pl} script.  
-This script removes (or retains) certain program points.  You should make 
-several @file{.dtrace} files, one per program point.  Then, after executing 
-Daikon on each @file{.dtrace} file, use the union function of 
-@ref{Invariant Diff} to combine the resulting @file{.inv} files into one.
+You can make Daikon ignore some program points.  With the
+@example
+  --ppt @var{ppt_regexp}
+@end example
+@noindent
+flag (@pxref{Command line options}), only program points matching
+the regular expression are processed.  Likewise, the
+``@option{--ppt_omit} @var{ppt_omit_regexp} option causes program points
+matching the regular expression to be ignored.
+
+@item 
+@cindex trace-purge-fns.pl script
+You can remove some program points (functions) from your
+@file{.dtrace} file.  The @command{trace-purge-fns.pl} script takes as
+arguments a (Perl) regular expression and a list of files.  It
+modifies each file in place, removing every program point (function)
+whose name matches the regular expression.  The @option{-v} flag means
+to retain rather than discard matching program points.  For instance,
+to create two subparts of a @file{.dtrace} file --- one containing the
+getters and setters, and the other containing all other functions --
+use the following commands:
+@example
+  cp myprog.dtrace myprog-setters.dtrace
+  trace-purge-fns.pl -v 'set|get' myprog-setters.dtrace
+  cp myprog.dtrace myprog-non-setters.dtrace
+  trace-purge-fns.pl 'set|get' myprog-non-setters.dtrace
+@end example
+
+@item 
+You can instrument fewer methods, creating smaller @file{.dtrace}
+files in the first place (rather than cutting the @file{.dtrace} files
+down afterward).
+@itemize
+@item With dfej, use the 
+@example
+  -daikon_omit=@var{string}
+@end example
+@noindent
+argument (@pxref{dfej options}).  Dfej will not produce data trace
+output for classes or procedures that match @var{string}.  Running the
+instrumented program will result in a smaller @file{.dtrace} file that
+contains fewer records.
+@item With dfec, split your program into multiple files, then
+instrument only some of them (see below).
+@end itemize
+
+@item
+You can instrument fewer files.
+@itemize
+@item With dfej, only supply it the files you wish to instrument.
+@item With dfec, use the @option{-l} command (@pxref{dfec command-line
+arguments}) on the command line immediately before any file you wish
+not to instrument.
+@end itemize
+
 @end enumerate
 
+@node    Reducing variables, Reducing executions, Reducing program points, Large dtrace files
+@subsubsection Reducing variables
+
+Here are ways to compute invariants over a subset of the variables in
+your program.  This changes the resulting invariants, because
+invariants over the missing variables (including any relationship
+between a missing variable and a retained variable) are not detected
+or reported.  For instance, you might remove uninteresting variables
+(or ones that shouldn't be compared to certain others) or variables
+that use a lot of memory (such as some arrays).
 
 @enumerate
-Second, you can try a number of techniques that can slightly modify your 
-resulting invariant files.
+@item 
+You can pare down an existing @file{.dtrace} file using the
+@command{trace-purge-vars.pl} script.  Analogously to the 
+@command{trace-purge-fns.pl} script, it removes certain variables from
+all program points in a function (or retains them, with the
+@option{-v} flag).  After running this command, you will probably need
+to edit the corresponding @file{.decls} file by hand.
+
+@item
+You can make Daikon ignore certain variables (rather than modifying
+the @file{.dtrace} file directly.  Analogously with the
+@option{--ppt_omit} flag, the @option{--var_omit} flag makes Daikon
+ignore any variable matching the following regular expression.
+
+@item
+You can reduce the number of variables that are output by instrumented
+code.  Do this by reducing the class/structure instrumentation depth.
+@itemize
+@item With dfej, use the @option{-daikon_depth=@var{N}} option.
+@item With dfec, use the @option{--struct-depth=@var{N}} option.
+@end itemize
+
+@end enumerate
+
+@node    Reducing executions,  , Reducing variables, Large dtrace files
+@subsubsection Reducing executions
+
+Here are ways to run Daikon over fewer executions of each program
+point.  (You cannot combine the resulting invariants in order to
+obtain the same result as running Daikon over all the executions.)
+
+@enumerate
+@item
+If you have multiple @file{.dtrace} files (perhaps resulting from 
+multiple program runs), you can run Daikon on just some of them.
+
 @item 
 You can terminate the instrumented program when it has created a
 sufficiently large @file{.dtrace} file.  If you interrupt the program
@@ -5191,60 +5310,7 @@ possibly partial, record from the file:
 @end example
 @noindent
 modifies @file{myfile.dtrace} in place to remove the last record.
-@item
-You can instrument fewer files.
-@itemize
-@item With dfej, only supply it the files you wish to instrument.
-@item With dfec, use the @option{-l} command on the command line
-immediately before any file you wish not to instrument.
-@end itemize
 
-@item 
-You can instrument fewer methods.
-@itemize
-@item With dfej, use the 
-@example
-  -daikon_omit=@var{string}
-@end example
-@noindent
-argument.  (For a list of dfej's options, see @ref{dfej
-options}.)  Dfej will not produce data trace output for classes or
-procedures that match @var{string}.  Running the instrumented program
-will result in a smaller @file{.dtrace} file that contains fewer
-records.
-@item With dfec, you would need to split the single file into two
-files, then suppress instrumentation of one of them with the
-@option{-l} flag.
-@end itemize
-
-@item
-You can reduce the number of variables that are output by reducing the
-class/structure instrumentation depth.
-@itemize
-@item With dfej, use the @option{-daikon_depth=@var{N}} option.
-@item With dfec, use the @option{--struct-depth=@var{N}} option.
-@end itemize
-
-@item 
-You can pare down an existing @file{.dtrace} file using the
-@command{invariants/scripts/trace-purge-fns.pl} and
-@command{trace-purge-vars.pl} scripts. These remove (or retain) certain
-program points, or certain variables, from @file{.dtrace} files; see
-their documentation (at the top of the files) for details.  Removing
-program points obviously prevents Daikon from considering them;
-removing variables can eliminate certain large uses of memory or keep
-Daikon from doing uninteresting comparisons.
-
-@item 
-To make Daikon ignore some program points, use its
-@example
-  --ppt @var{ppt_regexp}
-@end example
-@noindent
-argument (@pxref{Command line options}).
-With the @option{-ppt} flag, only program points matching
-the regular expression are processed.  This can take the place of the
-@command{trace-purge-fns.pl} script.
 @end enumerate
 
 
@@ -5687,36 +5753,63 @@ trace file.
 @end itemize
 Array types are followed by square brackets:  "int[]", "char[][]".
 @item
+@cindex comparability, for variables
+@cindex variable comparability
 comparable variables.  These indicate
 which other variables are comparable to this one, which is typically
-obtained via type-inference based analysis.  There are two formats,
-"implicit" and "explicit", for this information.  (See below for how
-to specify which format the information is in.)
-@itemize @bullet
-@item
-An implicit comparability is an integer.  Comparisons
+obtained via type-inference based analysis.
+
+A comparability for a non-compound type is an integer.  Comparisons
 succeed exactly if either integer is negative or if both integers are
 the same.  An implicit comparability for an array type may contain an
 integer for each index and for the contents; for instance, "5[22][17]"
 for a two-dimensional array.  Comparisons succeed if comparisons over
 each component succeed.
-@item
+
 If no information is supplied (i.e.,, this line is blank), then
 the variable is compared to all other variables of the same type.
-@end itemize
+
+As an example, in the following code:
+@example
+int sum(int len, int[] a) @{
+  int sum=0;
+  for (int i=0; i++; i<len)
+    sum += a[i];
+  return sum;
+@}
+@end example
+variables @samp{i} and @samp{len} are comparable to one another (and
+to indices of array @samp{a}).  Furthermore, the result is comparable
+to the elements of array @samp{a}.  A declaration file for these
+variables might look like
+@example
+len
+int
+int
+5
+a
+int[]
+int[]
+8[5]
+return
+int
+int
+8
+@end example
+
 @end itemize
 
-Future enhancements may include:
-@itemize @bullet
-@item
-permit variables to be omitted if they haven't changed (but always
-outputting the bit permits us to write a sanity checker)
-@item
-permit variables to appear in any order (not sure this is so worthwhile)
-@item
-specify which @file{.decl} files should be used (including their pathnames
-and/or MD5 hashes)
-@end itemize
+@c Future enhancements may include:
+@c @itemize @bullet
+@c @item
+@c permit variables to be omitted if they haven't changed (but always
+@c outputting the bit permits us to write a sanity checker)
+@c @item
+@c permit variables to appear in any order (not sure this is so worthwhile)
+@c @item
+@c specify which @file{.decl} files should be used (including their pathnames
+@c and/or MD5 hashes)
+@c @end itemize
 
 A declaration file optionally starts with a "VarComparability" record,
 which might look like the following:
