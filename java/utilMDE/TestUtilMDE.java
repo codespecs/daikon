@@ -2224,5 +2224,11 @@ public final class TestUtilMDE extends TestCase {
 
   }
 
+  public static void test_unqualified_name () {
+
+    assertTrue (UtilMDE.unqualified_name("java.lang.String").equals("String"));
+    assertTrue (UtilMDE.unqualified_name ("String").equals ("String"));
+
+  }
 
 }
