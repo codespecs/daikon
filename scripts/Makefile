@@ -1,4 +1,4 @@
-all: difftbl cluster clgroup kmeans
+all: difftbl cluster clgroup kmeans trace-untruncate-fast
 
 HIERDIR = ../tools/hierarchical
 KMDIR = ../tools/kmeans
@@ -18,3 +18,6 @@ clgroup: $(HIERDIR)/clgroup.c
 kmeans: $(KMDIR)/cluster.cpp $(KMDIR)/kmeans.cpp $(KMDIR)/main.cpp $(KMDIR)/point.h $(KMDIR)/cluster.h $(KMDIR)/kmeans.h $(KMDIR)/point.cpp
 	cd $(KMDIR) && make
 	cp -p $(KMDIR)/$@ $@
+
+trace-untruncate-fast: trace-untruncate-fast.c
+	gcc -Wall -g $< -o $@

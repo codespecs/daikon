@@ -3,6 +3,10 @@
 # Adds nonces to a dtrace file.  Reads trace file from STDIN and
 # writes new trace file to STDOUT.
 
+# Assumes no nonces are present, and adds new ones unconditionally.
+# Only adds to :::ENTER and :::EXIT points (not to :::OBJECT or :::CLASS
+# points).
+
 use English;
 use strict;
 $WARNING = 1;
@@ -25,7 +29,7 @@ while (<>) {
     } elsif ($2 eq "EXIT") {
       my $nonce = find_nonce($1);
       print "this_invocation_nonce\n";
-      print "$nonce\n";      
+      print "$nonce\n";
     } else {
       die "Error: Invalid ppt type: $2\n";
     }
@@ -33,8 +37,8 @@ while (<>) {
 }
 
 
-# finds the nonce for a function, popping the stack until the function
-# is found
+# Finds the nonce for a function, popping the stack until the function
+# is found.
 sub find_nonce {
   my ($target_function) = @_;
   my $function = "";

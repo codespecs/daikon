@@ -50,7 +50,7 @@ main(int argc, char **argv)
 	    if (untrunc(argv[ii]))
 		fprintf(stderr, "%s: Could not untruncate %s!\n",
 			progname, argv[ii]);
-	
+
     }
 
     if (nerrs)
@@ -73,8 +73,8 @@ untrunc(const char *filename)
 		progname, filename, strerror(errno));
         return 1;
     }
-    
-    ret = fseek(fp, 0, SEEK_END); 
+
+    ret = fseek(fp, 0, SEEK_END);
     if(ret != 0) { perror("fseek"); return 1; }
 
     for(;;)
@@ -82,7 +82,7 @@ untrunc(const char *filename)
 	char buf[CHUNK];
 	int count;
 
-	ret = fseek(fp, -CHUNK*sizeof(char), SEEK_CUR);     
+	ret = fseek(fp, -CHUNK*sizeof(char), SEEK_CUR);
 	if(ret != 0) { perror("fseek"); return 1; }
 	ret = fread(buf, CHUNK*sizeof(char), 1, fp); // at end of chunk
 	if(ret == 0) { perror("fread"); return 1; }
@@ -90,7 +90,7 @@ untrunc(const char *filename)
 	for(count = CHUNK-1; count > 0; --count)
 	    if((buf[count] == '\n') && (buf[count-1] == '\n'))
 		break;
-	
+
 	if(count > 0)
 	{
 	    ret = fseek(fp, -(CHUNK-count)*sizeof(char), SEEK_CUR);
@@ -112,6 +112,6 @@ untrunc(const char *filename)
 /*
  * Local Variables:
  * c-basic-offset:	4
- * compile-command:     gcc -Wall -g trace-untruncate-fast.c -o trace-untruncate-fast
+ * compile-command:     "gcc -Wall -g trace-untruncate-fast.c -o trace-untruncate-fast"
  * End:
  */
