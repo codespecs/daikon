@@ -8,6 +8,18 @@ Status:       New
 Reproducible: Yes
 Description:
 
+[mistere]
+
+The commented-out code for motbits has to do with orig() variables on
+EXIT samples.  My understanding is that it only makes a difference
+when you have multiple EXITS for a given ENTER.  The add_changed logic
+should be the same.
+
+I suspect the differences between V2 and V3 are the fact that equality
+invariants are printed via equlivalence classes in V2, but via
+IntEqual invariants in V3.  I belive that the equlivalence class
+doesn't take number of modified samples into account, whereas
+IntEquality does.
 
 [tohn] 
 
@@ -72,7 +84,10 @@ reproduce.
 
 --
 $Log$
-Revision 1.5  2002-04-08 21:34:00  tohn
+Revision 1.6  2002-04-08 21:45:18  mistere
+changed bug0034
+
+Revision 1.5  2002/04/08 21:34:00  tohn
 changed bug0034
 
 Revision 1.4  2002/04/05 19:57:12  mernst
