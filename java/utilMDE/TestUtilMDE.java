@@ -554,6 +554,19 @@ public final class TestUtilMDE extends TestCase {
   }
 
   public static void testIntern() {
+    Integer i = Intern.internedInteger("1234");
+    assert(Intern.isInterned(i));
+    assert(i.intValue() == 1234);
+    i = Intern.internedInteger("0x12ab");
+    assert(Intern.isInterned(i));
+    assert(i.intValue() == 0x12ab);
+
+    Long l = Intern.internedLong("12345678");
+    assert(Intern.isInterned(l));
+    assert(l.intValue() == 12345678);
+    l = Intern.internedLong("0x1234abcd");
+    assert(Intern.isInterned(l));
+    assert(l.intValue() == 0x1234abcd);
   }
 
   public static void testMathMDE() {
