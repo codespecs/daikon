@@ -391,7 +391,7 @@ public class PptSliceEquality
           slice3.set_samples(newSamples);
           newSlices.add(slice3);
           if (debug.isDebugEnabled()) {
-            debug.debug ("  adding new Slice3: " + slice3 + "from: ");
+            debug.debug ("  adding new Slice3: " + slice3 + " from: ");
             debug.debug (var1.name.name() + ", " +
                          var2.name.name() + ", " +
                          var3.name.name());
