@@ -1961,7 +1961,7 @@ public final class Daikon {
 
       // some program points have no equality sets?
        if (sliceEquality == null) {
-         System.out.println(ppt.name);
+         // System.out.println(ppt.name);
          continue;
        }
 
