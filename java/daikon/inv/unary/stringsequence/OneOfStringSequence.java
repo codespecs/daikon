@@ -173,15 +173,29 @@ public final class OneOfStringSequence
     }
   }
 
+  
+  /*
     public String format_java() {
-       StringBuffer sb = new StringBuffer();
-       for (int i = 0; i < num_elts; i++) {
-	 sb.append (" || (" + var().name.java_name()  + " == " +  ArraysMDE.toString( elts[i] )   );
-	 sb.append (")");
-       }
-       // trim off the && at the beginning for the first case
-       return sb.toString().substring (4);
+    StringBuffer sb = new StringBuffer();
+    for (int i = 0; i < num_elts; i++) {
+    sb.append (" || (" + var().name.java_name()  + " == " +  ArraysMDE.toString( elts[i] )   );
+    sb.append (")");
     }
+    // trim off the && at the beginning for the first case
+    return sb.toString().substring (4);
+    }
+  */
+
+  public String format_java() {
+    //have to take a closer look at this!
+
+    String result;
+
+    String classname = this.getClass().toString().substring(6); // remove leading "class"
+    result = "warning: method " + classname + ".format_java() needs to be implemented: " + format();
+
+    return result;
+  }
 
   /* IOA */
   public String format_ioa() {

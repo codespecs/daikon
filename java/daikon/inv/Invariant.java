@@ -1,5 +1,7 @@
 package daikon.inv;
 
+import daikon.*;
+
 import java.util.*;
 import java.io.Serializable;
 
@@ -35,6 +37,15 @@ public abstract class Invariant
    * Debug tracer for isWorthPrinting() checks.
    **/
   public static final Category debugIsWorthPrinting = Category.getInstance ("daikon.inv.Invariant.isWorthPrinting");
+
+  
+  /**
+   * Real number between 0 and 1.  The probability that the invariant
+   * occurred by chance must be less than this in order for it to be
+   * displayed.  (May also be set via --prob_limit switch to Daikon;
+   * refer to manual.)
+   **/
+  public static double dkconfig_probability_limit = .01;
 
   /**
    * The program point for this invariant, includes values, number of
@@ -123,10 +134,6 @@ public abstract class Invariant
 
   // Subclasses should set these; Invariant never does.
 
-  // The probability that the invariant occurred by chance must be less
-  // than this in order for it to be displayed.
-  public static double probability_limit = .01;
-
   /**
    * At least this many samples are required, or else we don't report any
    * invariant at all.  (Except that OneOf invariants are treated differently.)
@@ -193,7 +200,8 @@ public abstract class Invariant
   protected abstract double computeProbability();
 
   public boolean justified() {
-    return (!no_invariant) && enoughSamples() && (getProbability() <= probability_limit);
+    return (!no_invariant) && enoughSamples()
+      && (getProbability() <= dkconfig_probability_limit);
   }
 
   /**
@@ -1059,6 +1067,39 @@ public abstract class Invariant
         return comparePredicate;
 
       return compare(inv1.consequent, inv2.consequent);
+    }
+  }
+
+  /**
+   * Orders invariants by class, then variable names, then formula.
+   * If the formulas are the same, compares the printed representation
+   * obtained from the format() method.
+   **/
+  public static final class ClassVarnameFormulaComparator
+    implements Comparator {
+
+    Comparator classVarnameComparator = new ClassVarnameComparator();
+
+    public int compare(Object o1, Object o2) {
+      int compareClassVarname = classVarnameComparator.compare(o1, o2);
+
+      if (compareClassVarname != 0) {
+        return compareClassVarname;
+      }
+
+      Invariant inv1 = (Invariant) o1;
+      Invariant inv2 = (Invariant) o2;
+
+      if (inv1.isSameInvariant(inv2)) {
+        return 0;
+      }
+
+      int result = inv1.format().compareTo(inv2.format());
+
+      Assert.assert(result != 0, "isSameInvariant() returned false, " + 
+                    "but compareTo() returned 0");
+
+      return result;
     }
   }
 

@@ -137,6 +137,7 @@ public final class Daikon {
   public static final String config_SWITCH = "config";
   public static final String debugAll_SWITCH = "debug";
   public static final String debug_SWITCH = "dbg";
+  public static final String files_from_SWITCH = "files_from";
 
 
   // A pptMap which contains all the Program Points
@@ -244,6 +245,7 @@ public final class Daikon {
       new LongOpt(config_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(files_from_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
     };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:", longopts);
     int c;
@@ -315,7 +317,12 @@ public final class Daikon {
 	} else if (suppress_redundant_SWITCH.equals(option_name)) {
 	  suppress_redundant_invariants_with_simplify = true;
 	} else if (prob_limit_SWITCH.equals(option_name)) {
-	  Invariant.probability_limit = 0.01 * Double.parseDouble(g.getOptarg());
+	  double limit = Double.parseDouble(g.getOptarg());
+	  if ((limit < 0.0) || (limit > 1.0)) {
+	    throw new Error(prob_limit_SWITCH + " must be between [0..1]");
+	  }
+	  Configuration.getInstance().apply
+	    ("daikon.inv.Invariant.probability_limit", String.valueOf(limit));
 	} else if (esc_output_SWITCH.equals(option_name)) {
 	  output_style = OutputFormat.ESCJAVA;
 	} else if (simplify_output_SWITCH.equals(option_name)) {
@@ -339,6 +346,32 @@ public final class Daikon {
 	    throw new RuntimeException("Could not open config file " + config_file);
 	  }
           break;
+        } else if (files_from_SWITCH.equals(option_name)) {
+	  try {
+	    BufferedReader files_from = UtilMDE.BufferedFileReader(g.getOptarg());
+	    String filename;
+	    while ((filename = files_from.readLine()) != null) {
+	      // This code is duplicated below outside the options loop.
+	      // These aren't "endsWith()" because there might be a suffix
+	      // on the end (eg, a date).
+	      File file = new File(filename);
+	      if (! file.exists()) {
+		throw new Error("File " + filename + " not found.");
+	      }
+	      if (filename.indexOf(".decls") != -1) {
+		decl_files.add(file);
+	      } else if (filename.indexOf(".dtrace") != -1) {
+		dtrace_files.add(file);
+	      } else if (filename.indexOf(".spinfo") != -1) {
+		spinfo_files.add(file);
+	      } else {
+		throw new Error("Unrecognized file extension: " + filename);
+	      }
+	    }
+	  } catch (IOException e) {
+	    throw new RuntimeException("Error reading --files_from file");
+	  }
+	  break;
 	} else {
 	  throw new RuntimeException("Unknown long option received: " + option_name);
 	}
@@ -369,23 +402,24 @@ public final class Daikon {
       }
     }
 
+    // This code is duplicated above within the switch processing
     // First check that all the file names are OK, so we don't do lots of
     // processing only to bail out at the end.
     for (int i=g.getOptind(); i<args.length; i++) {
-      File arg = new File(args[i]);
+      File file = new File(args[i]);
       // These aren't "endsWith()" because there might be a suffix on the end
       // (eg, a date).
-      if (! arg.exists()) {
-        throw new Error("File " + arg + " not found.");
+      if (! file.exists()) {
+        throw new Error("File " + file + " not found.");
       }
-      if (arg.toString().indexOf(".decls") != -1) {
-        decl_files.add(arg);
-      } else if (arg.toString().indexOf(".dtrace") != -1) {
-        dtrace_files.add(arg);
-      } else if (arg.toString().indexOf(".spinfo") != -1) {
-	spinfo_files.add(arg);
+      if (file.toString().indexOf(".decls") != -1) {
+        decl_files.add(file);
+      } else if (file.toString().indexOf(".dtrace") != -1) {
+        dtrace_files.add(file);
+      } else if (file.toString().indexOf(".spinfo") != -1) {
+	spinfo_files.add(file);
       } else {
-        throw new Error("Unrecognized argument: " + arg);
+        throw new Error("Unrecognized argument: " + file);
       }
     }
 

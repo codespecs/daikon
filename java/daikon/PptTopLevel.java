@@ -243,13 +243,12 @@ public class PptTopLevel
   // gui, PptTopLevel are stored as nodes in a tree.  Swing obtains the
   // string to display in the actual JTree by calling toString().
   public String toString() {
-    PptName pptName = ppt_name;
-    if (pptName.isObjectInstanceSynthetic())   // display "MyClassName : OBJECT"
-	return pptName.getFullClassName() + " : " + FileIO.object_suffix;
-    else if (pptName.isClassStaticSynthetic()) // display "MyClassName : CLASS"
-	return pptName.getFullClassName() + " : " + FileIO.class_static_suffix;
+    if (ppt_name.isObjectInstanceSynthetic())   // display "MyClassName : OBJECT"
+      return ppt_name.getFullClassName() + " : " + FileIO.object_suffix;
+    else if (ppt_name.isClassStaticSynthetic()) // display "MyClassName : CLASS"
+      return ppt_name.getFullClassName() + " : " + FileIO.class_static_suffix;
     else			               // only display "EXIT184"
-	return pptName.getPoint();
+      return ppt_name.getPoint();
   }
 
   /** Trim the collections used in this PptTopLevel */
@@ -1402,9 +1401,10 @@ public class PptTopLevel
       PptConditional cond1 = (PptConditional) views_cond.elementAt(0);
       PptConditional cond2 = (PptConditional) views_cond.elementAt(1);
       addImplications_internal(cond1, cond2, false);
-      // [INCR] ...
-      /*
-    } else if (this.ppt_name.isCombinedExitPoint()) {
+    }
+    // [INCR] ...
+    /*
+    if (this.ppt_name.isCombinedExitPoint()) {
       Vector exits = this.entry_ppt.exit_ppts;
       if (exits.size() == 2) {
         // Eventually I ought to make this applicable when the number of
@@ -1422,11 +1422,7 @@ public class PptTopLevel
         // addImplications_internal(ppt1, ppt2, true);
         addImplications_internal(ppt1, ppt2, false);
       }
-      */
-      // ... [INCR]
-    } else {
-      // System.out.println("No implications to add for " + this.name);
-    }
+    */ // ... [INCR]
   }
 
 
@@ -1435,25 +1431,32 @@ public class PptTopLevel
   public void addImplicationsPairwise() {
     int num_conds = views_cond.size();
     if (num_conds > 0) {
-      // System.out.println("num_conds = " + num_conds);
-      // for (int i=0; i<num_conds; i++) {
-      //   System.out.println(((PptConditional)views_cond.elementAt(i)).name);
-      // }
-      // Assert.assert(num_conds == 2);
+      //take each conditional program point and its opposite and make
+      //implications. We can't assume that the number or conditional
+      //program points is even, because conditional program points
+      //with no samples are discarded. Otherwise, a conditional
+      //program point is usually next to its opposite pair in the
+      //vector view_conds
       for (int i = 0; i < num_conds; i++) {
-	for (int j = i+1; j < num_conds; j++) {
-	  PptConditional cond1 = (PptConditional) views_cond.elementAt(i);
-	  PptConditional cond2 = (PptConditional) views_cond.elementAt(j);
-	  addImplications_internal(cond1, cond2, false);
-	}
-      }
+      	PptConditional cond1 = (PptConditional) views_cond.elementAt(i);
+  	if ( i+1 >= num_conds )
+	  continue;
+	PptConditional cond2 = (PptConditional) views_cond.elementAt(i+1);
+	if (cond1.splitter_inverse == cond2.splitter_inverse) 
+	  continue;
+	if (!cond1.splitter.condition().equals(cond2.splitter.condition())) 
+	  continue;
+	addImplications_internal(cond1, cond2, false);
+	//skip cond2
+	i++;
+      }      
     }
 
     /* [INCR] ...
     if (this.ppt_name.isCombinedExitPoint()) {
       Vector exits = this.entry_ppt.exit_ppts;
       int num_exits = exits.size();
-
+      
       // System.out.println("num exits = " + exits.size());
       // for (int i=0; i<exits.size(); i++) {
       //   System.out.println(((PptTopLevel)exits.elementAt(i)).name);
@@ -1583,20 +1586,20 @@ public class PptTopLevel
       excls1[i] = exclusive_conditions[i][0];
       excls2[i] = exclusive_conditions[i][1];
     }
-
-
+    
+    
     for (int i=0; i<exclusive_conditions.length; i++) {
       Assert.assert(exclusive_conditions[i].length == 2);
       Invariant excl1 = exclusive_conditions[i][0];
       Invariant excl2 = exclusive_conditions[i][1];
       Assert.assert(excl1 != null);
       Assert.assert(excl2 != null);
-
+      
       if (debugAddImplications.isDebugEnabled()) {
         debugAddImplications.debug("Adding implications with conditions "
 				   + excl1.format() + " and " + excl2.format());
       }
-
+      
       for (int j=0; j<different_invariants.length; j++) {
         Assert.assert(different_invariants[j].length == 2);
         Invariant diff1 = different_invariants[j][0];
@@ -1605,33 +1608,33 @@ public class PptTopLevel
         Assert.assert((diff1 == null) || (diff2 == null)
                       || (ArraysMDE.indexOf(excls1, diff1)
                           == ArraysMDE.indexOf(excls2, diff2)));
-
+	
         if (debugAddImplications.isDebugEnabled()) {
           debugAddImplications.debug("different_invariants "
 				     + ((diff1 == null) ? "null" : diff1.format())
 				     + ", " + ((diff2 == null) ? "null" : diff2.format()));
         }
-
+	
         // This adds an implication to itself; bad.
         // If one of the diffs implies the other, then should not add
         // an implication for the weaker one.
         if (diff1 != null) {
           int index1 = ArraysMDE.indexOf(excls1, diff1);
-          if ((index1 == -1) || (index1 > i)) {
-            boolean iff = (index1 != -1);
-            Implication.makeImplication(this, excl1, diff1, iff);
+	  if ((index1 == -1) || (index1 > i)) {
+	    boolean iff = (index1 != -1);
+	    Implication.makeImplication(this, excl1, diff1, iff);
           }
         }
         if (diff2 != null) {
           int index2 = ArraysMDE.indexOf(excls2, diff2);
           if ((index2 == -1) || (index2 > i)) {
-            boolean iff = (index2 != -1);
-            Implication.makeImplication(this, excl2, diff2, iff);
+	    boolean iff = (index2 != -1);
+	    Implication.makeImplication(this, excl2, diff2, iff);
           }
         }
       }
     }
-
+    
     HashMap canonical_inv = new HashMap(); // Invariant -> Invariant
     {
       HashMap inv_group = new HashMap(); // Invariant -> HashSet[Invariant]

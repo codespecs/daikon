@@ -42,7 +42,7 @@ public class ParameterDoclet
 	outf.close();
       }
     }
-      
+
     return true;
   }
 
@@ -58,7 +58,7 @@ public class ParameterDoclet
       return 2; // == 1 tag + 1 argument
 
     return 0;   // unknown option
-  } 
+  }
 
   // ============================== INSTANCE METHODS ==============================
 
@@ -71,8 +71,7 @@ public class ParameterDoclet
   }
 
   /**
-   * Process a javadoc tree and call process(String, String) for each
-   * configuration field found.
+   * Process a javadoc tree and call processField for each field found.
    **/
   public void process()
   {
@@ -81,19 +80,27 @@ public class ParameterDoclet
       ClassDoc clazz = clazzes[i];
       FieldDoc[] fields = clazz.fields();
       for (int j = 0; j < fields.length; j++){
-	FieldDoc field = fields[j];
-	String name = field.name();
-	if (name.startsWith(Configuration.PREFIX)) {
-	  String fullname = field.qualifiedName();
-	  int snip = fullname.indexOf(Configuration.PREFIX);
-	  fullname = fullname.substring(0, snip)
-	    + fullname.substring(snip + Configuration.PREFIX.length());
-	  String desc = field.commentText();
-	  process(fullname, desc);
-	}
+        processField(fields[j]);
       }
     }
   }
+
+  /**
+   * Call Process(String, String) for each configuration field found.
+   * Intended to be overridden.
+   **/
+  public void processField(FieldDoc field) {
+    String name = field.name();
+    if (name.startsWith(Configuration.PREFIX)) {
+      String fullname = field.qualifiedName();
+      int snip = fullname.indexOf(Configuration.PREFIX);
+      fullname = fullname.substring(0, snip)
+        + fullname.substring(snip + Configuration.PREFIX.length());
+      String desc = field.commentText();
+      process(fullname, desc);
+    }
+  }
+
 
   public static String NO_DESCRIPTION = "(no description provided)";
 

@@ -87,6 +87,10 @@ public class NonZero
     return format_unimplemented(format);
   }
 
+  public String format_java() {
+    return var().name.java_name() + " != " + zero();
+  }
+  
   public void add_modified(long v, int count) {
     // The min and max tests will simultaneously succeed exactly once (for
     // the first value).
@@ -146,6 +150,11 @@ public class NonZero
 
   public boolean isObviousImplied() {
     VarInfo var = var();
+
+    // In Java, "this" can never be non-null, so "this != null" is vacuous.
+    if (var.name.name() == "this") { // interned
+      return true;
+    }
 
     // System.out.println("isObviousImplied: " + format());
 

@@ -11,7 +11,6 @@ import utilMDE.*;
  * Represents the type of a variable, for its declared, dtrace file
  * representation, and internal representations.  ProgLangTypes are
  * interned, so they can be == compared.
- *
  **/
 
 
@@ -162,7 +161,8 @@ public final class ProglangType
 
   /**
    * For serialization; indicates which object to return instead of the
-   * one that was just read from the file.
+   * one that was just read from the file.  This obviates the need to write
+   * a readObject method that interns the interned fields (just "base").
    **/
   public Object readResolve() throws ObjectStreamException {
     return intern(base.intern(), dimensions);

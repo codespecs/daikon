@@ -9,6 +9,8 @@
 
 ### INVARIANT CONFIGURATION
 
+daikon.inv.Invariant.probability_limit = .01
+
 daikon.inv.unary.scalar.UpperBound.enabled = 1
 daikon.inv.unary.scalar.UpperBound.minimal_interesting = -1
 daikon.inv.unary.scalar.UpperBound.maximal_interesting = 2

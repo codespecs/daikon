@@ -73,7 +73,7 @@ class MergeESC {
                  lineSep);
 
   public static void main(String[] args) throws Exception {
-    boolean slashslash = true;  // temporarily default to true
+    boolean slashslash = false;
     boolean insert_inexpressible = false;
 
     daikon.Logger.setupLogs (daikon.Logger.INFO);

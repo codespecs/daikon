@@ -407,5 +407,4 @@ public class PptName
       point = point.intern();
   }
 
-
 }

@@ -72,18 +72,19 @@ public final class EltNonZero
   }
 
   public String format_esc() {
-    if (pointer_type) {
-      if (var().name instanceof VarInfoName.Elements) {
-        VarInfoName term = ((VarInfoName.Elements) var().name).term;
-        return term.esc_name() + ".containsNull == false";
-      }
-      if (! (var().name instanceof VarInfoName.Slice)) {
-	// Calling var().name.esc_name() will always throw an
-	// exception, since var() is certainly a sequence.
-
-        // return var().name.esc_name() + ".containsNull == false";
-      }
-    }
+    
+    //ESC can't recognize the .containsNull (Nii)
+    //  if (pointer_type) {
+    //        if (var().name instanceof VarInfoName.Elements) {
+    //          VarInfoName term = ((VarInfoName.Elements) var().name).term;
+    //        	return term.esc_name() + ".containsNull == false"; 
+    //        }
+    //        if (! (var().name instanceof VarInfoName.Slice)) {
+    //  	 Calling var().name.esc_name() will always throw an
+    //  	 exception, since var() is certainly a sequence.
+    //  	 return var().name.esc_name() + ".containsNull == false";
+    //        }
+    //      }
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
 	{ var().name });

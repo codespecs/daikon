@@ -21,7 +21,7 @@ public final class IsEqualityComparison implements Filter {
     if (!(o instanceof Comparison))
       return false;
     double chance_prob = ((Comparison) o).eq_probability();
-    return chance_prob < Invariant.probability_limit;
+    return chance_prob < Invariant.dkconfig_probability_limit;
   }
 
   // Sadly, this does not work -- it conflicts with the member definition.

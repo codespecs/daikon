@@ -121,7 +121,7 @@ public final class Runtime {
    * to this method is used instead.
    **/
   public static void setDtraceMaybe(String default_filename) {
-    System.out.println("setDtraceMaybe(" + default_filename + "); old = " + dtrace);
+    // System.out.println("setDtraceMaybe(" + default_filename + "); old = " + dtrace);
     if (dtrace == null) {
       // Jeremy used "daikon.dtrace.filename".
       String filename = System.getProperty("DTRACEFILE", default_filename);

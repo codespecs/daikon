@@ -88,7 +88,7 @@ public abstract class PptSlice
   public final Collection po_lower = Collections.unmodifiableCollection(private_po_lower);
   public final Map po_lower_vis = Collections.unmodifiableMap(private_po_lower_vis);
 
-  // This holds keys and elements of different types, depending on
+  // This holds keys (interned) and elements of different types, depending on
   // he concrete child of PptSlice.
   // HashMap values_cache; // [INCR]
 
@@ -127,6 +127,7 @@ public abstract class PptSlice
 
     // This comes after setting all other variables, as the function call may use name, arity, var_infos, etc.
     debugged = (Global.isDebuggedPptSlice(this));
+
     if (debugGeneral.isDebugEnabled()) {
       debugGeneral.debug(Arrays.asList(var_infos));
     }    
@@ -239,6 +240,7 @@ public abstract class PptSlice
     Global.falsified_invariants++;
     if (invs.size() == 0) {
       no_invariants = true;
+      // System.out.println("Removing view " + this.name + " because removed last invariant " + inv.format());
     }
   }
 

@@ -192,15 +192,29 @@ public final class Configuration
       }
     } else if (type.equals(Integer.TYPE) || type.equals(Integer.class)) {
       try {
+	// decode instead of valueOf to handle "0x" and other styles
 	value = Integer.decode(unparsed);
       } catch (NumberFormatException e) {
 	throw new ConfigException("Unsupported int " + unparsed);
       }
     } else if (type.equals(Long.TYPE) || type.equals(Long.class)) {
       try {
+	// decode instead of valueOf to handle "0x" and other styles
 	value = Long.decode(unparsed);
       } catch (NumberFormatException e) {
-	throw new ConfigException("Unsupported int " + unparsed);
+	throw new ConfigException("Unsupported long " + unparsed);
+      }
+    } else if (type.equals(Float.TYPE) || type.equals(Float.class)) {
+      try {
+	value = Float.valueOf(unparsed);
+      } catch (NumberFormatException e) {
+	throw new ConfigException("Unsupported float " + unparsed);
+      }
+    } else if (type.equals(Double.TYPE) || type.equals(Double.class)) {
+      try {
+	value = Double.valueOf(unparsed);
+      } catch (NumberFormatException e) {
+	throw new ConfigException("Unsupported double " + unparsed);
       }
     } else {
       throw new ConfigException("Unsupported type " + type.getName());

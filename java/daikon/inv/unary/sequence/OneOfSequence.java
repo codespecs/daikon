@@ -193,6 +193,7 @@ public final class OneOfSequence
 
       if (is_hashcode) {
 	// we only have one value, because add_modified dies if more
+	Assert.assert(num_elts == 1);
 	long[]  value = elts[0];
         if (value.length == 0) {
           return varname + " == []";
@@ -214,15 +215,53 @@ public final class OneOfSequence
     }
   }
 
+  
+  /*
     public String format_java() {
-       StringBuffer sb = new StringBuffer();
-       for (int i = 0; i < num_elts; i++) {
-	 sb.append (" || (" + var().name.java_name()  + " == " +  ArraysMDE.toString( elts[i] )   );
-	 sb.append (")");
-       }
-       // trim off the && at the beginning for the first case
-       return sb.toString().substring (4);
+    StringBuffer sb = new StringBuffer();
+    for (int i = 0; i < num_elts; i++) {
+    sb.append (" || (" + var().name.java_name()  + " == " +  ArraysMDE.toString( elts[i] )   );
+    sb.append (")");
     }
+    // trim off the && at the beginning for the first case
+    return sb.toString().substring (4);
+    }
+  */
+
+  public String format_java() {
+    //have to take a closer look at this!
+
+    String result;
+
+    String length = "";
+    String forall = "";
+    if (is_hashcode) {
+      // we only have one value, because add_modified dies if more
+      long[]  value = elts[0];
+      if (var().name.isApplySizeSafe()) {
+	length = var().name.applySize().java_name() + " == " + value.length;
+      }
+      if (no_nulls(0)) {
+	String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
+	forall = form[0] + "(" + form[1] + " != null)" + form[2];
+      } else if (all_nulls(0)) {
+	String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
+	forall = form[0] + "(" + form[1] + " == null)" + form[2];
+      }
+    }
+    if (length == "" && forall == "") { // interned
+      String classname = this.getClass().toString().substring(6); // remove leading "class"
+      result = "warning: method " + classname + ".format_java() needs to be implemented: " + format();
+    } else if (length == "") { // interned
+      result = forall;
+    } else if (forall == "") { // interned
+      result = length;
+    } else {
+      result = "(" + length + ") && (" + forall + ")";
+    }
+
+    return result;
+  }
 
   /* IOA */
   public String format_ioa() {
@@ -233,6 +272,7 @@ public final class OneOfSequence
     String forall = "";
     if (is_hashcode) {
       // we only have one value, because add_modified dies if more
+      Assert.assert(num_elts == 1);
       long[]  value = elts[0];
       if (var().name.isApplySizeSafe()) {
 	length = "size("+var().name.ioa_name() + ") = " + value.length;
@@ -266,6 +306,7 @@ public final class OneOfSequence
     String forall = "";
     if (is_hashcode) {
       // we only have one value, because add_modified dies if more
+      Assert.assert(num_elts == 1);
       long[]  value = elts[0];
       if (var().name.isApplySizeSafe()) {
 	length = var().name.applySize().esc_name() + " == " + value.length;
@@ -300,6 +341,7 @@ public final class OneOfSequence
     String forall = "";
     if (is_hashcode) {
       // we only have one value, because add_modified dies if more
+      Assert.assert(num_elts == 1);
       long[]  value = elts[0];
       if (var().name.isApplySizeSafe()) {
 	length = "(EQ " + var().name.applySize().simplify_name() + " " + value.length + ")";

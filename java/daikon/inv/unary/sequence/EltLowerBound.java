@@ -90,6 +90,8 @@ public class EltLowerBound
       return format_ioa();
     } else if (format == OutputFormat.SIMPLIFY) {
       return format_simplify();
+    } else if (format == OutputFormat.JAVA) {
+      return format_java();  
     } else if (format == OutputFormat.ESCJAVA) {
       return format_esc();  
     }
@@ -116,11 +118,18 @@ public class EltLowerBound
     return result;
   }
 
+  
   public String format_simplify() {
     String[] form =
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
 	{ var().name });
     return form[0] + "(>= " + form[1] + " " + core.min1  + ")" + form[2];
+  }
+
+  public String format_java() {
+    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] 
+      { var().name });
+    return form[0] + "(" + form[1] + " >= " + core.min1  + ")" + form[2];
   }
 
   // XXX need to flow invariant if bound changed

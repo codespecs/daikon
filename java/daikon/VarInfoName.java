@@ -8,6 +8,8 @@ import org.apache.log4j.Category;
 
 import java.lang.ref.WeakReference;
 import java.io.Serializable;
+import java.io.ObjectInputStream;
+import java.io.IOException;
 import java.util.*;
 import java.lang.reflect.*;
 
@@ -89,7 +91,10 @@ public abstract class VarInfoName
 	return parse(first).applyField(field);
       }
     }
-
+    
+    if (name.startsWith("orig(")) {
+      return parse(name.substring(5, name.length() - 1)).applyPrestate();
+    }
     // ??
     throw new UnsupportedOperationException("parse error: '" + name + "'");
   }
@@ -111,7 +116,7 @@ public abstract class VarInfoName
     }
     return name_cached;
   }
-  private String name_cached = null;
+  private String name_cached = null; // interned
   protected abstract String name_impl();
 
   /**
@@ -132,7 +137,7 @@ public abstract class VarInfoName
     // System.out.println("esc_name = " + esc_name_cached + " for " + name() + " of class " + this.getClass().getName());
     return esc_name_cached;
   }
-  private String esc_name_cached = null;
+  private String esc_name_cached = null; // interned
   protected abstract String esc_name_impl();
   
   /**
@@ -159,7 +164,7 @@ public abstract class VarInfoName
     }
     return simplify_name_cached[which];
   }
-  private String simplify_name_cached[] = new String[2];
+  private String simplify_name_cached[] = new String[2]; // each interned
   protected abstract String simplify_name_impl(boolean prestate);
 
 
@@ -185,7 +190,7 @@ public abstract class VarInfoName
     }
     return ioa_name_cached;
   }
-  private String ioa_name_cached = null;
+  private String ioa_name_cached = null; // interned
 
   /**
    * Called in subclasses to return the internal implementation of
@@ -213,7 +218,7 @@ public abstract class VarInfoName
     }
     return java_name_cached;
   }
-  private String java_name_cached = null;
+  private String java_name_cached = null; // interned
   protected abstract String java_name_impl();
 
   /**
@@ -393,6 +398,27 @@ public abstract class VarInfoName
   }
 
 
+  // Interning is lost when an object is serialized and deserialized.
+  // Manually re-intern any interned fields upon deserialization.
+  private void readObject(ObjectInputStream in)
+    throws IOException, ClassNotFoundException
+  {
+    in.defaultReadObject();
+    if (name_cached != null)
+      name_cached = name_cached.intern();
+    if (esc_name_cached != null)
+      esc_name_cached = esc_name_cached.intern();
+    if (simplify_name_cached[0] != null)
+      simplify_name_cached[0] = simplify_name_cached[0].intern();
+    if (simplify_name_cached[1] != null)
+      simplify_name_cached[1] = simplify_name_cached[1].intern();
+    if (ioa_name_cached != null)
+      ioa_name_cached = ioa_name_cached.intern();
+    if (java_name_cached != null)
+      java_name_cached = java_name_cached.intern();
+  }
+
+
   // ============================================================
   // Static inner classes which form the expression langugage
 
@@ -449,7 +475,7 @@ public abstract class VarInfoName
       return "|" + s + "|";
     }
     protected String java_name_impl() {
-      return "return".equals(name) ? "daikon_return" : name;
+      return name;
     }
     protected Class resolveType(PptTopLevel ppt) {
       // System.out.println("" + repr() + " resolveType(" + ppt.name + ")");
@@ -1352,6 +1378,8 @@ public abstract class VarInfoName
 				);
     }
     protected String esc_name_impl() {
+      //return the default implementation for now.
+      //return name_impl();
       throw new UnsupportedOperationException("ESC cannot format an unquantified slice of elements");
     }
     protected String simplify_name_impl(boolean prestate) {
@@ -2319,7 +2347,10 @@ public abstract class VarInfoName
 	  }
 	}
       }
-      result[0] = "(\\forall int " + int_list + "; (" + conditions + ") ==> ";
+      //if (forall)
+	result[0] = "(\\forall int " + int_list + "; (" + conditions + ") ==> ";
+	//else 
+	//result[0] = "(\\exists int " + int_list + "; (" + conditions + ") && ";
       result[result.length-1] = ")";
 
       // stringify the terms

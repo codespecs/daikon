@@ -169,6 +169,7 @@ public class PrintInvariants {
 
   /** Print invariants for a single program point. */
   public static void print_invariants(PptTopLevel ppt, PrintWriter out) {
+    // System.out.println("print_invariants(" + ppt.name + ")");
 
     // make names easier to read before printing
     ppt.simplify_variable_names();
@@ -239,19 +240,25 @@ public class PrintInvariants {
           boolean is_unmodified = false; // vi.equal_to == vi_orig.equal_to // [INCR] XXX
           if (! is_unmodified) {
             java.lang.reflect.Field f = vi.name.resolveField(ppt);
-            // System.out.println("Field for " + name + " " + vi.name.name() + ": " + f);
+            // System.out.println("Field for " + vi.name.name() + ": " + f);
             if ((f != null)
                 && java.lang.reflect.Modifier.isFinal(f.getModifiers())) {
+              // System.out.println("Final: " + vi.name.name());
               is_unmodified = true;
             }
           }
+          // System.out.println(vi.name.name() + (is_unmodified ? " unmodified" : " modified"));
           if (is_unmodified) {
             unmodified_vars.add(vi);
             unmodified_orig_vars.add(vi_orig);
           } else {
             // out.println("Modified: " + vi.name + " (=" + vi.equal_to.name + "), " + vi_orig.name + " (=" + vi_orig.equal_to.name + ")");
             PptSlice1 view = ppt.getView(vi);
-            if (view != null) { // [INCR] && (view.num_values() > 0)
+            // out.println("View " + view + " num_values=" + ((view!=null)?view.num_values():0));
+            // The test "((view != null) && (view.num_values() > 0))" is
+            // fallacious becuase the view might have been removed (is now
+            // null) because all invariants at it were false.
+	    if (view == null) { // [INCR] || (view.num_values() > 0)) {
               // Using only the isPrimitive test is wrong.  We should suppress
 	      // for only parameters, not all primitive values.  That's why we
               // look for the period in the name.
@@ -295,6 +302,7 @@ public class PrintInvariants {
       Vector mods = new Vector();
       for (int i=0; i<modified_vars.size(); i++) {
         VarInfo vi = (VarInfo)modified_vars.elementAt(i);
+        // System.out.println("modified var: " + vi.name.name());
         while (vi != null) {
           Derivation derived = vi.derived;
           VarInfoName vin = vi.name;
@@ -322,6 +330,7 @@ public class PrintInvariants {
             break;
           }
         }
+        // System.out.println("really modified var: " + ((vi == null) ? "null" : vi.name.name()));
         if ((vi != null) && (! mods.contains(vi))) {
           mods.add(vi);
         }

@@ -115,6 +115,10 @@ class MergeESCVisitor extends DepthFirstVisitor {
     String classname = Ast.getClassName(n);
     String pptname = classname + ":::OBJECT";
     PptTopLevel object_ppt = ppts.get(pptname);
+    if (object_ppt == null) {
+      pptname = classname + ":::CLASS";
+      object_ppt = ppts.get(pptname);
+    }
 
     // Store and restore field names because we must deal with
     // visiting inner classes (which have their own fields)
@@ -126,7 +130,11 @@ class MergeESCVisitor extends DepthFirstVisitor {
       n.accept(cfv);
       ownedFieldNames = cfv.ownedFieldNames();
       finalFieldNames = cfv.finalFieldNames();
-      nonNullElementsFieldNames = non_null_elements_fields(object_ppt, cfv);
+      if (object_ppt == null) {
+        nonNullElementsFieldNames = new String[0];
+      } else {
+        nonNullElementsFieldNames = non_null_elements_fields(object_ppt, cfv);
+      }
     }
 
     n.f0.accept(this);
@@ -139,7 +147,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
       addComment(n.f4.f1, javaLineComment("@ invariant " + ownedFieldNames[i] + ".owner == this"), true);
     }
     if (object_ppt == null) {
-      // System.out.println("No object program point found for " + pptname);
+      // System.out.println("No object program point found for " + classname);
     } else {
       String[] obj_invs = Ast.invariants_for(object_ppt, ppts);
       insertInvariants(n.f4.f1, "invariant", obj_invs);
@@ -349,27 +357,33 @@ class MergeESCVisitor extends DepthFirstVisitor {
         NodeOptional no = (NodeOptional) ns.elementAt(1);
         NodeChoice nc = (NodeChoice) no.node;
         if ((nc != null) && (nc.choice instanceof NodeSequence)) {
-          // it's an assignment
-          String fieldname = Ast.fieldName(pe);
-          // System.out.println("In statement, fieldname = " + fieldname);
-          if ((fieldname != null)
-              && (isOwned(fieldname) || isNonNullElements(fieldname))) {
-            ConstructorDeclaration cd
-              = (ConstructorDeclaration) Ast.getParent(ConstructorDeclaration.class, n);
-            MethodDeclaration md
-              = (MethodDeclaration) Ast.getParent(MethodDeclaration.class, n);
-            if ((cd != null)
-                || ((md != null) && (! Ast.contains(md.f0, "static")))) {
-              Node parent = Ast.getParent(Statement.class, n);
-              // If parent isn't in a block (eg, if parent
-              // is sole element in then or else clause), then this is wrong.
-              // It's safe, however.  But does it cause syntax errors if an
-              // else clause follows a then clause without braces?
-              if (isOwned(fieldname)) {
-                addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".owner = this"));
-              }
-              if (isNonNullElements(fieldname)) {
-                addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".containsNull = false"));
+          // It's an assignment.
+
+          // Don't take action unless the PrimaryExpression is a simple
+          // Name (that's effectively checked below) and has no
+          // PrimarySuffix (check that here).
+          if (pe.f1.size() == 0) {
+            String fieldname = Ast.fieldName(pe);
+            // System.out.println("In statement, fieldname = " + fieldname);
+            if ((fieldname != null)
+                && (isOwned(fieldname) || isNonNullElements(fieldname))) {
+              ConstructorDeclaration cd
+                = (ConstructorDeclaration) Ast.getParent(ConstructorDeclaration.class, n);
+              MethodDeclaration md
+                = (MethodDeclaration) Ast.getParent(MethodDeclaration.class, n);
+              if ((cd != null)
+                  || ((md != null) && (! Ast.contains(md.f0, "static")))) {
+                Node parent = Ast.getParent(Statement.class, n);
+                // If parent isn't in a block (eg, if parent
+                // is sole element in then or else clause), then this is wrong.
+                // It's safe, however.  But does it cause syntax errors if an
+                // else clause follows a then clause without braces?
+                if (isOwned(fieldname)) {
+                  addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".owner = this"));
+                }
+                if (isNonNullElements(fieldname)) {
+                  addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".containsNull = false"));
+                }
               }
             }
           }
@@ -521,13 +535,25 @@ class MergeESCVisitor extends DepthFirstVisitor {
   }
 
 
-  // ppt is an :::OBJECT program point
+  // ppt is an :::OBJECT or :::CLASS program point
   String[] non_null_elements_fields(PptTopLevel ppt, CollectFieldsVisitor cfv) {
+    // System.out.println("non_null_elements_fields(" + ppt + ")");
     Vector result = new Vector();
     String[] fields = cfv.allFieldNames();
     for (int i=0; i<fields.length; i++) {
       String field = fields[i];
-      VarInfo vi = ppt.findVar("this." + field);
+      // System.out.println("field: " + field);
+      String varname;
+      if (ppt.ppt_name.isObjectInstanceSynthetic()) // ":::OBJECT"
+        varname = "this." + field;
+      else if (ppt.ppt_name.isClassStaticSynthetic()) // ":::CLASS"
+        varname = ppt.ppt_name.getFullClassName() + "." + field;
+      else
+        throw new Error("Bad ppt: " + ppt);
+      VarInfo vi = ppt.findVar(varname);
+      if (vi == null) {
+        // System.out.println("No var: " + varname + " at " + ppt);
+      }
       Assert.assert(vi != null);
       PptSlice1 slice = ppt.getView(vi);
       if (slice != null) {

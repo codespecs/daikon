@@ -52,7 +52,19 @@ public class Implication
     if ((predicate.getClass() == consequent.getClass())
         && predicate.isSameFormula(consequent)) {
       return null;
+    }
+    //eliminate some "uninteresting" implications, like OneOf predicates and 
+    //consequents, which are usually not interesting.
+    // JWN adds: Why not use the isInteresting method?  Is it Because
+    // you still want Bound invariants?
+    if (predicate instanceof OneOf) {
+      if ( ((OneOf) predicate).num_elts() > 1) 
+	return null;
     } 
+    if (consequent instanceof OneOf) {
+      if ( ((OneOf) consequent).num_elts() > 1) 
+	return null;
+    }
     
     // Don't add this Implication to the program point if the program
     // point already has this implication.  This is slow and dumb; we

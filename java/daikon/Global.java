@@ -233,6 +233,7 @@ public final class Global {
       // { "min(this.denom)" },
       // { "this.denom" },
       // { "size(this.begins[])", "size(this.ends[])" },
+      // { "this.theArray[]" },
     };
 
   // used only if debugPrintDtrace is true.  User need not set this.

@@ -319,6 +319,7 @@ public final class ONEOFSCALAR
 #elif defined(SEQUENCE)
       if (is_hashcode) {
 	// we only have one value, because add_modified dies if more
+	Assert.assert(num_elts == 1);
 	INT value = elts[0];
         if (value.length == 0) {
           return varname + " == []";
@@ -348,16 +349,109 @@ public final class ONEOFSCALAR
     return var().name.hasNodeOfType(VarInfoName.TypeOf.class);
   }
 #endif
-
+  
+  /*
     public String format_java() {
-       StringBuffer sb = new StringBuffer();
-       for (int i = 0; i < num_elts; i++) {
-	 sb.append (" || (" + JAVA_NAME + JAVA_EQUALS(TOSTRING(elts[i])));
-	 sb.append (")");
-       }
-       // trim off the && at the beginning for the first case
-       return sb.toString().substring (4);
+    StringBuffer sb = new StringBuffer();
+    for (int i = 0; i < num_elts; i++) {
+    sb.append (" || (" + JAVA_NAME + JAVA_EQUALS(TOSTRING(elts[i])));
+    sb.append (")");
     }
+    // trim off the && at the beginning for the first case
+    return sb.toString().substring (4);
+    }
+  */
+
+  public String format_java() {
+    //have to take a closer look at this!
+#if defined(ELT) || defined(ELTSTRING)
+    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
+    String varname = form[1];
+#elif defined(SCALAR) || defined(STRING)
+    String varname = var().name.java_name();
+#endif
+    String result;
+#if defined(STRING) || defined(ELTSTRING)
+    
+    result = "";
+    boolean is_type = is_type();
+    for (int i=0; i<num_elts; i++) {
+      if (i != 0) { result += " || "; }
+      result += varname + " == ";
+      String str = elts[i];
+      if (!is_type) {
+	result += TOSTRING(str);
+      } else {
+	if ((str == null) || "null".equals(str)) {
+	  result += "== null)";
+	} else if (str.startsWith("[")) {
+	  result += "(" + UtilMDE.classnameFromJvm(str) + ")";
+	} else {
+	  if (str.startsWith("\"") && str.endsWith("\"")) {
+	    str = str.substring(1, str.length()-1);
+	  }
+	  result += "(" + str + ")";
+	}
+      }
+    }
+#elif defined(SCALAR) || defined(ELT)
+    if (is_boolean) {
+      Assert.assert(num_elts == 1);
+      Assert.assert((elts[0] == 0) || (elts[0] == 1));
+      result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
+    } else if (is_hashcode) {
+      Assert.assert(num_elts == 1);
+      if (elts[0] == 0) {
+        result = varname + " == " + "null";
+      } else {
+        result = varname + " != null";
+	  // varname + " has only one value"
+          // + " (hashcode=" + elts[0] + ")"
+          ;
+      }
+    } else {
+      result = "";
+      for (int i=0; i<num_elts; i++) {
+        if (i != 0) { result += " || "; }
+        result += varname + " == " + TOSTRING(elts[i]);
+      }
+    }
+#elif defined(SEQUENCE)
+    String length = "";
+    String forall = "";
+    if (is_hashcode) {
+      // we only have one value, because add_modified dies if more
+      INT value = elts[0];
+      if (var().name.isApplySizeSafe()) {
+	length = var().name.applySize().java_name() + " == " + value.length;
+      }
+      if (no_nulls(0)) {
+	String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
+	forall = form[0] + "(" + form[1] + " != null)" + form[2];
+      } else if (all_nulls(0)) {
+	String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
+	forall = form[0] + "(" + form[1] + " == null)" + form[2];
+      }
+    }
+    if (length == "" && forall == "") { // interned
+      String classname = this.getClass().toString().substring(6); // remove leading "class"
+      result = "warning: method " + classname + ".format_java() needs to be implemented: " + format();
+    } else if (length == "") { // interned
+      result = forall;
+    } else if (forall == "") { // interned
+      result = length;
+    } else {
+      result = "(" + length + ") && (" + forall + ")";
+    }
+#else
+    String classname = this.getClass().toString().substring(6); // remove leading "class"
+    result = "warning: method " + classname + ".format_java() needs to be implemented: " + format();
+#endif
+#if defined(ELT) || defined(ELTSTRING)
+    result = form[0] + "(" + result + ")" + form[2];
+#endif
+    return result;
+  }
 
   /* IOA */
   public String format_ioa() {
@@ -429,6 +523,7 @@ public final class ONEOFSCALAR
     String forall = "";
     if (is_hashcode) {
       // we only have one value, because add_modified dies if more
+      Assert.assert(num_elts == 1);
       INT value = elts[0];
       if (var().name.isApplySizeSafe()) {
 	length = "size("+var().name.ioa_name() + ") = " + value.length;
@@ -509,14 +604,22 @@ public final class ONEOFSCALAR
       Assert.assert((elts[0] == 0) || (elts[0] == 1));
       result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
     } else if (is_hashcode) {
-      Assert.assert(num_elts == 1);
-      if (elts[0] == 0) {
-        result = varname + " == " + "null";
-      } else {
-        result = varname + " != null";
+      if (num_elts == 1) {
+	if (elts[0] == 0) {
+	  result = varname + " == " + "null";
+	} else {
+	  result = varname + " != null";
 	  // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
           ;
+	}
+      } else {
+	// add_modified allows two elements iff one is null
+	Assert.assert(num_elts == 2);
+	Assert.assert(elts[0] == 0);
+	Assert.assert(elts[1] != 0);
+	String classname = this.getClass().toString().substring(6); // remove leading "class"
+	result = "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
       }
     } else {
       result = "";
@@ -530,6 +633,7 @@ public final class ONEOFSCALAR
     String forall = "";
     if (is_hashcode) {
       // we only have one value, because add_modified dies if more
+      Assert.assert(num_elts == 1);
       INT value = elts[0];
       if (var().name.isApplySizeSafe()) {
 	length = var().name.applySize().esc_name() + " == " + value.length;
@@ -600,8 +704,15 @@ public final class ONEOFSCALAR
       Assert.assert((elts[0] == 0) || (elts[0] == 1));
       result = "(EQ " + varname + " " + ((elts[0] == 0) ? "|@false|" : "|@true|") + ")";
     } else if (is_hashcode) {
-      Assert.assert(num_elts == 1);
-      result = "(EQ " + varname + " " + ((elts[0] == 0) ? "null" : ("hash_" + elts[0])) + ")";
+      if (num_elts == 1) {
+	result = "(EQ " + varname + " " + ((elts[0] == 0) ? "null" : ("hash_" + elts[0])) + ")";
+      } else {
+	// add_modified allows two elements iff one is null
+	Assert.assert(num_elts == 2);
+	Assert.assert(elts[0] == 0);
+	Assert.assert(elts[1] != 0);
+	result = "(OR (EQ " + varname + " null) (EQ " + varname + "hash_" + elts[1] + "))";
+      }
     } else {
       result = "";
       for (int i=0; i<num_elts; i++) {
@@ -619,6 +730,7 @@ public final class ONEOFSCALAR
     String forall = "";
     if (is_hashcode) {
       // we only have one value, because add_modified dies if more
+      Assert.assert(num_elts == 1);
       INT value = elts[0];
       if (var().name.isApplySizeSafe()) {
 	length = "(EQ " + var().name.applySize().simplify_name() + " " + value.length + ")";

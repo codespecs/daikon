@@ -195,15 +195,53 @@ public final class EltOneOf
     }
   }
 
+  
+  /*
     public String format_java() {
-       StringBuffer sb = new StringBuffer();
-       for (int i = 0; i < num_elts; i++) {
-	 sb.append (" || (" + var().name.java_name()  + " == " +  ((( elts[i]  == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")))   );
-	 sb.append (")");
-       }
-       // trim off the && at the beginning for the first case
-       return sb.toString().substring (4);
+    StringBuffer sb = new StringBuffer();
+    for (int i = 0; i < num_elts; i++) {
+    sb.append (" || (" + var().name.java_name()  + " == " +  ((( elts[i]  == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L")))   );
+    sb.append (")");
     }
+    // trim off the && at the beginning for the first case
+    return sb.toString().substring (4);
+    }
+  */
+
+  public String format_java() {
+    //have to take a closer look at this!
+
+    String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name } );
+    String varname = form[1];
+
+    String result;
+
+    if (is_boolean) {
+      Assert.assert(num_elts == 1);
+      Assert.assert((elts[0] == 0) || (elts[0] == 1));
+      result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
+    } else if (is_hashcode) {
+      Assert.assert(num_elts == 1);
+      if (elts[0] == 0) {
+        result = varname + " == null";
+      } else {
+        result = varname + " != null";
+	  // varname + " has only one value"
+          // + " (hashcode=" + elts[0] + ")"
+          ;
+      }
+    } else {
+      result = "";
+      for (int i=0; i<num_elts; i++) {
+        if (i != 0) { result += " || "; }
+        result += varname + " == " + ((( elts[i]  == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : ((Integer.MIN_VALUE <=  elts[i]  &&  elts[i]  <= Integer.MAX_VALUE) ? String.valueOf( elts[i] ) : (String.valueOf( elts[i] ) + "L"))) ;
+      }
+    }
+
+    result = form[0] + "(" + result + ")" + form[2];
+
+    return result;
+  }
 
   /* IOA */
   public String format_ioa() {
@@ -251,14 +289,22 @@ public final class EltOneOf
       Assert.assert((elts[0] == 0) || (elts[0] == 1));
       result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
     } else if (is_hashcode) {
-      Assert.assert(num_elts == 1);
-      if (elts[0] == 0) {
-        result = varname + " == null";
-      } else {
-        result = varname + " != null";
+      if (num_elts == 1) {
+	if (elts[0] == 0) {
+	  result = varname + " == null";
+	} else {
+	  result = varname + " != null";
 	  // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
           ;
+	}
+      } else {
+	// add_modified allows two elements iff one is null
+	Assert.assert(num_elts == 2);
+	Assert.assert(elts[0] == 0);
+	Assert.assert(elts[1] != 0);
+	String classname = this.getClass().toString().substring(6); // remove leading "class"
+	result = "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
       }
     } else {
       result = "";
@@ -285,8 +331,15 @@ public final class EltOneOf
       Assert.assert((elts[0] == 0) || (elts[0] == 1));
       result = "(EQ " + varname + " " + ((elts[0] == 0) ? "|@false|" : "|@true|") + ")";
     } else if (is_hashcode) {
-      Assert.assert(num_elts == 1);
-      result = "(EQ " + varname + " " + ((elts[0] == 0) ? "null" : ("hash_" + elts[0])) + ")";
+      if (num_elts == 1) {
+	result = "(EQ " + varname + " " + ((elts[0] == 0) ? "null" : ("hash_" + elts[0])) + ")";
+      } else {
+	// add_modified allows two elements iff one is null
+	Assert.assert(num_elts == 2);
+	Assert.assert(elts[0] == 0);
+	Assert.assert(elts[1] != 0);
+	result = "(OR (EQ " + varname + " null) (EQ " + varname + "hash_" + elts[1] + "))";
+      }
     } else {
       result = "";
       for (int i=0; i<num_elts; i++) {

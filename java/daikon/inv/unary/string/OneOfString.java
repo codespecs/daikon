@@ -172,15 +172,51 @@ public final class OneOfString
     return var().name.hasNodeOfType(VarInfoName.TypeOf.class);
   }
 
+  
+  /*
     public String format_java() {
-       StringBuffer sb = new StringBuffer();
-       for (int i = 0; i < num_elts; i++) {
-	 sb.append (" || (" + var().name.java_name()  + ".equals(" +  (( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"")   + ")" );
-	 sb.append (")");
-       }
-       // trim off the && at the beginning for the first case
-       return sb.toString().substring (4);
+    StringBuffer sb = new StringBuffer();
+    for (int i = 0; i < num_elts; i++) {
+    sb.append (" || (" + var().name.java_name()  + ".equals(" +  (( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"")   + ")" );
+    sb.append (")");
     }
+    // trim off the && at the beginning for the first case
+    return sb.toString().substring (4);
+    }
+  */
+
+  public String format_java() {
+    //have to take a closer look at this!
+
+    String varname = var().name.java_name();
+
+    String result;
+
+    
+    result = "";
+    boolean is_type = is_type();
+    for (int i=0; i<num_elts; i++) {
+      if (i != 0) { result += " || "; }
+      result += varname + " == ";
+      String str = elts[i];
+      if (!is_type) {
+	result += (( str ==null) ? "null" : "\"" + UtilMDE.quote( str ) + "\"") ;
+      } else {
+	if ((str == null) || "null".equals(str)) {
+	  result += "== null)";
+	} else if (str.startsWith("[")) {
+	  result += "(" + UtilMDE.classnameFromJvm(str) + ")";
+	} else {
+	  if (str.startsWith("\"") && str.endsWith("\"")) {
+	    str = str.substring(1, str.length()-1);
+	  }
+	  result += "(" + str + ")";
+	}
+      }
+    }
+
+    return result;
+  }
 
   /* IOA */
   public String format_ioa() {
