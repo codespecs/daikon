@@ -2,6 +2,7 @@ package daikon.diff;
 
 import java.io.*;
 import java.text.*;
+import daikon.*;
 import daikon.inv.Invariant;
 
 public class PrintAllVisitor implements NodeVisitor {
@@ -22,17 +23,23 @@ public class PrintAllVisitor implements NodeVisitor {
   }
 
   public void visitPptNode(PptNode node) {
+    Ppt ppt1 = node.getPpt1();
+    Ppt ppt2 = node.getPpt2();
+
     print("  " + "<");
-    if (node.getPpt1() == null) {
+    if (ppt1 == null) {
       print((String) null);
     } else {
-      print(node.getPpt1().name);
+      print(ppt1.name);
     }
-    print(", ");
-    if (node.getPpt2() == null) {
-      print((String) null);
-    } else {
-      print(node.getPpt2().name);
+    
+    if (ppt1 == null || ppt2 == null || !ppt1.name.equals(ppt2.name)) {
+      print(", ");
+      if (ppt2 == null) {
+        print((String) null);
+      } else {
+        print(ppt2.name);
+      }
     }
     println(">");
   }
