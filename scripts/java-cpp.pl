@@ -53,7 +53,9 @@
 
 use English;
 
-my $tmpfile = "/tmp/java-cpp-$$";
+my $system_temp_dir = -d '/tmp' ? '/tmp' : $ENV{TMP} || $ENV{TEMP} ||
+    die "Cannot determine system temporary directory, stopped";
+my $tmpfile = "$system_temp_dir/java-cpp-$$";
 
 main:
 {
