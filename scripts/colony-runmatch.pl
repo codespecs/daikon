@@ -16,8 +16,8 @@ use checkargs;
 use util_daikon;
 use colony_simconf;
 
-# my $lees_2003_dir = "/g6/users/leelin/research/6.370/lees-2003";
-my $lees_2003_dir = "/g2/users/mernst/tmp/steering-experiments/lees-2003";
+ my $lees_2003_dir = "/g6/users/leelin/research/6.370/colony-2003";
+#my $lees_2003_dir = "/g2/users/mernst/tmp/steering-experiments/lees-2003";
 
 if (scalar(@ARGV) < 3) {
   die "Too few arguments (" . scalar(@ARGV) . "), need at least 3: " . join(' ', @ARGV) . "\n" . usage();
@@ -42,7 +42,7 @@ my $javacp = join(':', map { "$lees_2003_dir/$_" } @javacp_list);
 #   cd ~/tmp/steering-experiments/lees-2003/colony
 #   java -cp sources:../common/classes:teams:. colony.simulator.SimClient GUI -1 testout.txt
 
-my $java_command = "java -cp $javacp colony.simulator.SimClient NOGUI $java_args";
+my $java_command = "java -cp $javacp colony.simulator.SimClient $java_args";
 
 my $this_dir = setup_directory();
 my $command = "cd $this_dir; $java_command > $this_dir/java-output.txt 2> java_err.txt";

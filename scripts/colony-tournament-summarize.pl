@@ -9,8 +9,8 @@ sub usage () {
     . "match-result-files are in output format of colony-runmatch.pl\n";
 }
 
-# my $lees_2003_dir = "/g6/users/leelin/research/6.370/lees-2003";
-my $lees_2003_dir = "/g2/users/mernst/tmp/steering-experiments/lees-2003";
+ my $lees_2003_dir = "/g6/users/leelin/research/6.370/colony-2003";
+# my $lees_2003_dir = "/g2/users/mernst/tmp/steering-experiments/lees-2003";
 
 
 use strict;
