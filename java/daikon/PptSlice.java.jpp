@@ -332,20 +332,23 @@ public final class PPTSLICE1
       return mod_samples + unmod_samples;
     } else {
       // return an approximation
-#if defined(ARITY1)
-      int num_slice_samples = parent.num_samples(var_info);
-#elif defined(ARITY2)
-      int num_slice_samples = parent.num_samples(var_infos[0], var_infos[1]);
-#elif defined(ARITY3)
-      int num_slice_samples = parent.num_samples(var_infos[0], var_infos[1], var_infos[2]);
-#endif
+      #if defined(ARITY1)
+        int num_slice_samples = parent.num_samples(var_info);
+      #elif defined(ARITY2)
+        int num_slice_samples = parent.num_samples(var_infos[0], var_infos[1]);
+      #elif defined(ARITY3)
+        int num_slice_samples = parent.num_samples(var_infos[0], var_infos[1],
+                                                   var_infos[2]);
+      #endif
       if (false) {
-      if (mod_samples + unmod_samples != num_slice_samples) {
-        System.out.println("num_samples(" + name() + "): " + (mod_samples + unmod_samples) + " vs. " + num_slice_samples);
-#if defined(ARITY1)
-        System.out.println("  mbtracker.num_samples() = " + parent.mbtracker.num_samples());
-#endif
-      }
+        if (mod_samples + unmod_samples != num_slice_samples) {
+        System.out.println("num_samples(" + name() + "): "
+            + (mod_samples + unmod_samples) + " vs. " + num_slice_samples);
+        #if defined(ARITY1)
+          System.out.println ("mbtracker.num_samples() = "
+                             + parent.mbtracker.num_samples());
+        #endif
+        }
       }
       return num_slice_samples;
     }
@@ -1344,7 +1347,8 @@ public final class PPTSLICE1
                          + name() + " (" + valid_child_count + " children)");
         for (int k = 0; k < child_invs.size(); k++ )
           System.out.println ("-- Invariant = "
-                            + ((Invariant) child_invs.get(k)).format());
+                            + ((Invariant) child_invs.get(k)).format()
+                            + " @" + ((Invariant) child_invs.get(k)).ppt);
         Assert.assertTrue (child_invs.size() <= valid_child_count);
       }
       if (child_invs.size() == valid_child_count) {
