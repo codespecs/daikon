@@ -29,15 +29,16 @@ import utilMDE.*;
 public class PptTopLevel extends Ppt {
 
   // do we need both a num_tracevars for the number of variables in the
-  // tracefile and a num_non_dreived_vars for the number of variables
+  // tracefile and a num_non_derived_vars for the number of variables
   // actually passed off to this Ppt?  The ppt wouldn't use num_tracevars,
   // but it would make sense to store it here anyway.
 
-  // Maybe I should just use num_orig_vars instead of the first three.
-
-  // number of variables in the trace file; -1 if not yet set
-  int num_tracevars;
-  int num_orig_vars;
+  // These values are -1 if not yet set (can that happen?).
+  int num_declvars;             // number of variables in the decl file
+  int num_tracevars;            // number of variables in the trace file
+  int num_orig_vars;            // number of _orig vars
+  int num_static_constant_vars; // these don't appear in the trace file
+  // invariant:  num_declvars == num_tracevars + num_orig_vars
 
   // Indicates whether derived variables have been introduced.
   // First number: invariants are computed up to this index, non-inclusive
@@ -47,7 +48,9 @@ public class PptTopLevel extends Ppt {
   //   >= derivation_index[1] >= ...
   int[] derivation_indices = new int[derivation_passes+1];
 
-  VarValuesOrdered values;
+  transient VarValuesOrdered values;
+
+  PptTopLevel entry_ppt;        // null if this isn't an exit point
 
   // These accessors are for abstract methods declared in Ppt
   public int num_samples() { return values.num_samples(); }
@@ -67,32 +70,50 @@ public class PptTopLevel extends Ppt {
   PptTopLevel(String name_, VarInfo[] var_infos_) {
     name = name_;
     var_infos = var_infos_;
+    int val_idx = 0;
+    num_static_constant_vars = 0;
     for (int i=0; i<var_infos.length; i++) {
-      var_infos[i].value_index = i;
-      var_infos[i].varinfo_index = i;
-      var_infos[i].ppt = this;
+      VarInfo vi = var_infos[i];
+      vi.varinfo_index = i;
+      if (vi.static_constant_value == null) {
+        vi.value_index = val_idx;
+        val_idx++;
+      } else {
+        vi.value_index = -1;
+        num_static_constant_vars++;
+      }
+      vi.ppt = this;
+    }
+    for (int i=0; i<var_infos.length; i++) {
+      VarInfo vi = var_infos[i];
+      Assert.assert((vi.value_index == -1) || (vi.static_constant_value == null));
     }
 
     values = new VarValuesOrdered();
     views = new HashSet();
     views_cond = new Vector();
 
-    // While there are no constants, this works.
-    num_tracevars = var_infos.length;
+    num_declvars = var_infos.length;
+    num_tracevars = val_idx;
     num_orig_vars = 0;
+    Assert.assert(num_static_constant_vars == num_declvars - num_tracevars);
+    // System.out.println("Created PptTopLevel " + name + ": "
+    //                    + "num_static_constant_vars=" + num_static_constant_vars
+    //                    + ",num_declvars=" + num_declvars
+    //                    + ",num_tracevars=" + num_tracevars);
   }
 
-  // This is used when merging two sets of data, to create Ppts that were
-  // missing in one of them.
-  PptTopLevel(PptTopLevel other) {
-    name = other.name;
-    var_infos = other.var_infos;
-    derivation_indices = new int[other.derivation_indices.length];
-    System.arraycopy(other.derivation_indices, 0, derivation_indices, 0, derivation_indices.length);
-    values = new VarValuesOrdered();
-    // views = new WeakHashMap();
-    views = new HashSet();
-  }
+  // // This is used when merging two sets of data, to create Ppts that were
+  // // missing in one of them.
+  // PptTopLevel(PptTopLevel other) {
+  //   name = other.name;
+  //   var_infos = other.var_infos;
+  //   derivation_indices = new int[other.derivation_indices.length];
+  //   System.arraycopy(other.derivation_indices, 0, derivation_indices, 0, derivation_indices.length);
+  //   values = new VarValuesOrdered();
+  //   // views = new WeakHashMap();
+  //   views = new HashSet();
+  // }
 
   // Accessing data
   int num_vars() {
@@ -127,47 +148,6 @@ public class PptTopLevel extends Ppt {
   //   }
 
 
-  /// Commented out until I decide to specially deal with constants.
-  // // This sets the num_truevars and num_constants fields and also
-  // // reorders the VarInfos so that constants are at the end.
-  // private void count_vars() {
-  //   Assert.assert(num_constants == -1);
-  //   // Also, there had better be no values, derived variables, or other
-  //   // things that could depend on the index.
-
-  //   // First, move the constants to the end.
-  //   Vector constants = new Vector();
-  //   for (int i=0; i<var_infos.length; i++) {
-  //     if (var_infos[i].static_constant_value != null) {
-  //       constants.add(var_infos[i]);
-  //     }
-  //   }
-  //   num_constants = constants.size();
-  //   num_truevars = var_infos.length - num_constants;
-
-  //   if ((num_constants > 0)
-  //       && (constants.elementAt(0) != var_infos[num_truevars])) {
-  //     // We must reorder.  I'm not sorting based on constness because I
-  //     // would want a stable sort.
-  //     VarInfo[] truevars = new VarInfo[num_truevars];
-  //     int truevarindex = 0;
-  //     for (int i=0; i<var_infos.length; i++) {
-  //       if (!constants.contains(var_infos[i])) {
-  // 	truevars[truevarindex] = var_infos[i];
-  // 	truevarindex++;
-  //       }
-  //     }
-  //     System.arraycopy(truevars, 0, var_infos, 0, num_truevars);
-  //     for (int i=0; i<num_constants; i++) {
-  //       var_infos[i+num_truevars] = (VarInfo)constants.elementAt(i);
-  //     }
-  //     for (int i=0; i<var_infos.length; i++) {
-  //       var_infos[i].index = i;
-  //     }
-  //   }
-  // }
-
-
 
   ///////////////////////////////////////////////////////////////////////////
   /// Adding variables
@@ -193,26 +173,29 @@ public class PptTopLevel extends Ppt {
     System.arraycopy(var_infos, 0, new_var_infos, 0, old_length);
     System.arraycopy(vis, 0, new_var_infos, old_length, vis.length);
     for (int i=old_length; i<new_var_infos.length; i++) {
-       new_var_infos[i].value_index = i;
-       new_var_infos[i].varinfo_index = i;
-       new_var_infos[i].ppt = this;
+      VarInfo vi = new_var_infos[i];
+       vi.varinfo_index = i;
+       vi.value_index = i - num_static_constant_vars;
+       vi.ppt = this;
     }
     var_infos = new_var_infos;
   }
 
   private void addVarInfos(Vector v) {
+    int size = v.size();
+    if (size == 0)
+      return;
     int old_length = var_infos.length;
     VarInfo[] new_var_infos = new VarInfo[var_infos.length + v.size()];
     System.arraycopy(var_infos, 0, new_var_infos, 0, old_length);
-    for (int i=0, size=v.size(); i<size; i++) {
+    for (int i=0; i<size; i++) {
       VarInfo vi = (VarInfo) v.elementAt(i);
       new_var_infos[i+old_length] = vi;
-      vi.value_index = i+old_length;
       vi.varinfo_index = i+old_length;
+      vi.value_index = i+old_length - num_static_constant_vars;
       vi.ppt = this;
     }
     var_infos = new_var_infos;
-    // Now I still have to add the values of the new variables.
   }
 
 
@@ -220,15 +203,13 @@ public class PptTopLevel extends Ppt {
   /// Adding special variables
   ///
 
-  // I should support this with a HashMapEq which is computed just once.  I
-  // don't want to add yet another slot because it's used only while
-  // reading files.
-
   // Given a program point, if it represents a function exit, then
-  // return the corresponding function entry point.
+  // return the corresponding function entry point.  The result is
+  // cached in the entry_ppt slot, to prevent repeating this expensive
+  // computation.
 
-  PptTopLevel entry_ppt(PptMap all_ppts) {
-    return PptTopLevel.entry_ppt(this, all_ppts);
+  PptTopLevel compute_entry_ppt(PptMap all_ppts) {
+    return PptTopLevel.compute_entry_ppt(this, all_ppts);
   }
 
   final static PatternMatcher re_matcher = Global.regexp_matcher;
@@ -241,21 +222,10 @@ public class PptTopLevel extends Ppt {
     }
   }
 
+  // I'm not sure why the main implementation of these next two functions
+  // is static.  It works, but so would making them non-static.
+
   static String entry_ppt_name(PptTopLevel ppt) {
-
-    // Don't do this, because it returns a value for :::LOOP, etc.
-    // if (ppt.name.endsWith(FileIO.enter_tag))
-    //   return null;
-    // String fn_name = ppt.fn_name();
-    // if (fn_name == null)
-    //   return null;
-    // String entry_ppt_name = (fn_name + FileIO.enter_tag).intern();
-
-    // This isn't right because it doesn't catch :::EXIT0, etc.
-    // if (!ppt.name.endsWith(FileIO.exit_tag))
-    //   return null;
-    // String fn_name = ppt.name.substring(0, ppt.name.length() - FileIO.exit_tag.length());
-
     if (!re_matcher.contains(ppt.name, exit_tag_regexp))
       return null;
     MatchResult match = re_matcher.getMatch();
@@ -263,30 +233,34 @@ public class PptTopLevel extends Ppt {
     String fn_name = ppt.name.substring(0, match_begin);
 
     return (fn_name + FileIO.enter_tag).intern();
-
   }
 
-  static PptTopLevel entry_ppt(PptTopLevel ppt, PptMap all_ppts) {
-
+  static PptTopLevel compute_entry_ppt(PptTopLevel ppt, PptMap all_ppts) {
     String entry_ppt_name = entry_ppt_name(ppt);
-
     return (PptTopLevel) all_ppts.get(entry_ppt_name);
   }
 
 
   // Add "_orig" variables to the program point.
-  void add_orig_vars(Ppt entry_ppt) {
+  // Derivation should not yet have occurred for the entry program point.
+  void add_orig_vars(PptTopLevel entry_ppt) {
 
     VarInfo[] begin_vis = entry_ppt.var_infos;
-    num_orig_vars = begin_vis.length;
+    num_orig_vars = begin_vis.length - entry_ppt.num_static_constant_vars;
+    Assert.assert(num_orig_vars == entry_ppt.num_tracevars);
     // Don't bother to include the constants.
-    Vector new_vis = new Vector(num_orig_vars);
-    for (int i=0; i<num_orig_vars; i++) {
+    VarInfo[] new_vis = new VarInfo[num_orig_vars];
+    int new_vis_index = 0;
+    for (int i=0; i<begin_vis.length; i++) {
       VarInfo vi = begin_vis[i];
       if (vi.isStaticConstant() || vi.isDerived())
 	continue;
-      new_vis.add(new VarInfo(vi.name + "_orig", vi.type, vi.rep_type, vi.comparability.makeAlias(vi.name)));
+      new_vis[new_vis_index] = new VarInfo("orig(" + vi.name + ")",
+                                           vi.type, vi.rep_type,
+                                           vi.comparability.makeAlias(vi.name));
+      new_vis_index++;
     }
+    Assert.assert(new_vis_index == num_orig_vars);
     addVarInfos(new_vis);
   }
 
@@ -317,7 +291,7 @@ public class PptTopLevel extends Ppt {
   //       these_var_infos = fn_var_infos[ppt]
   //       entry_ppt = ppt_sans_suffix + ":::ENTER"
   //       for vi in fn_var_infos[entry_ppt][0:fn_truevars[entry_ppt]]:
-  // 	  these_var_infos.append(var_info(vi.name + "_orig", vi.type, comparability_make_alias(vi.name, vi.comparability), len(these_var_infos)))
+  // 	  these_var_infos.append(var_info("orig(" + vi.name + ")", vi.type, comparability_make_alias(vi.name, vi.comparability), len(these_var_infos)))
   //
   // }
 
@@ -328,12 +302,12 @@ public class PptTopLevel extends Ppt {
 
   // Convenience function for PptConditional initializer (which can't
   // contain statements but can call a function).
-  public VarInfo[] trace_and_orig_vars() {
-    // This doesn't work because ArraysMDE.subarray always returns an
-    // Object[], which cannot be cast to VarInfo[].
-    // return (VarInfo[]) ArraysMDE.subarray(var_infos, 0, num_tracevars + num_orig_vars);
-    VarInfo[] result = new VarInfo[num_tracevars + num_orig_vars];
-    System.arraycopy(var_infos, 0, result, 0, num_tracevars + num_orig_vars);
+  public VarInfo[] trace_and_orig_and_const_vars() {
+    // Not ArraysMDE.subarray(var_infos, 0, num_tracevars + num_orig_vars)
+    // because its result Object[] cannot be cast to VarInfo[].
+    int total_vars = num_tracevars + num_orig_vars + num_static_constant_vars;
+    VarInfo[] result = new VarInfo[total_vars];
+    System.arraycopy(var_infos, 0, result, 0, total_vars);
     return result;
   }
 
@@ -361,7 +335,7 @@ public class PptTopLevel extends Ppt {
     // almost as if that is a new variable appearing.  But it did appear in
     // the list until it was found to be equal to another and removed from
     // the list!  I need to decide whether the time savings of not
-    // processing the non-canonical variable are worth the time and
+    // processing the non-canonical variables are worth the time and
     // complexity of making variables non-canonical and possibly canonical
     // again.
 
@@ -379,37 +353,40 @@ public class PptTopLevel extends Ppt {
   // There are just two passes of interest right now...
   final static int derivation_passes = 2;
 
-  UnaryDerivationFactory[][] unaryDerivations
+  // To verify that these are all the factories of interest, do
+  // cd ~/research/invariants/daikon/; search -i -n 'extends.*derivationfactory'
+
+  transient UnaryDerivationFactory[][] unaryDerivations
     = new UnaryDerivationFactory[][] {
       // pass1
-      new UnaryDerivationFactory[] {
-	new SequenceLengthFactory() },
+       { new SequenceLengthFactory() },
       // pass2
-      new UnaryDerivationFactory[] {
-	new SequenceExtremumFactory(),
-	new SequenceMinMaxSumFactory(), } };
+       { new SequenceInitialFactory(),
+         new SequenceMinMaxSumFactory(), } };
 
-  BinaryDerivationFactory[][] binaryDerivations
+  transient BinaryDerivationFactory[][] binaryDerivations
     = new BinaryDerivationFactory[][] {
       // pass1
-      new BinaryDerivationFactory[] { },
+      { },
       // pass2
-      new BinaryDerivationFactory[] {
-	new SequenceScalarSubscriptFactory() }
+      { new SequenceScalarSubscriptFactory() }
     };
 
 
-  // This does no inference; it just calls deriveVariablesOnePass once per pass.
-  // It returns a Vector of Derivation objects (or are they VarInfos?)
-
-  // If derivation_index == (a, b, c) and n = len(var_infos), then
-  // the body of this loop:
-  //     * does pass1 introduction for b..a
-  //     * does pass2 introduction for c..b
-  // and afterward, derivation_index == (n, a, b).
+  /**
+   * This does no inference; it just calls deriveVariablesOnePass once per pass.
+   * It returns a Vector of Derivation objects (or are they VarInfos?).<p>
+   *
+   * If derivation_index == (a, b, c) and n = len(var_infos), then
+   * the body of this loop:
+   * <li>
+   *   <ul> does pass1 introduction for b..a
+   *   <ul> does pass2 introduction for c..b
+   * </li>
+   * and afterward, derivation_index == (n, a, b).
+   **/
   public Vector derive() {
-    // Actually, it should be sorted in *reverse* order.
-    // Assert.assert(ArraysMDE.sorted(derivation_indices));
+    Assert.assert(ArraysMDE.sorted_descending(derivation_indices));
 
     Vector result = new Vector();
     for (int pass=1; pass<=derivation_passes; pass++) {
@@ -428,7 +405,6 @@ public class PptTopLevel extends Ppt {
 					   binaryDerivations[pass-1]));
     }
     // shift values in derivation_indices:  convert [a,b,c] into [n,a,b]
-    // in Python:  derivation_index = (num_vars,) + derivation_indices[:-1]
     for (int i=derivation_passes; i>0; i--)
       derivation_indices[i] = derivation_indices[i-1];
     derivation_indices[0] = var_infos.length + result.size();
@@ -447,17 +423,12 @@ public class PptTopLevel extends Ppt {
   }
 
 
-  // This routine does one "pass"; that is, it adds some set of derived
-  // variables, according to the functions that are passed in.
-
-  // Returns a vector of Derivation objects.
-  // The arguments are:
-  //   // VAR_INFOS: only values (partially) computed from these are candidates
-  //   VI_INDEX_MIN and VI_INDEX_LIMIT take the place of the old VAR_INFOS arg.
-  //   INDICES:  only values (partially) computed from the VarInfo objects at
-  //     these indices are candidates.  I could imagine doing this for an
-  //     arbitrary list of VarInfo objects as well, but put that off until later.
-  //   FUNCTIONS: (long) list of functions for adding new variables; see the code
+  /**
+   * This routine does one "pass"; that is, it adds some set of derived
+   * variables, according to the functions that are passed in.  All the
+   * results involve VarInfo objects at indices i such that vi_index_min <=
+   * i < vi_index_limit (and possibly also involve other VarInfos).
+   **/
   Vector deriveVariablesOnePass(int vi_index_min, int vi_index_limit, UnaryDerivationFactory[] unary, BinaryDerivationFactory[] binary) {
 
     if (Global.debugDerive)
@@ -472,7 +443,7 @@ public class PptTopLevel extends Ppt {
       VarInfo vi = var_infos[i];
       if (!worthDerivingFrom(vi)) {
         if (Global.debugDerive) {
-          System.out.println("Not worth deriving from " + vi.name);
+          System.out.println("Unary: not worth deriving from " + vi.name);
         }
 	continue;
       }
@@ -496,7 +467,7 @@ public class PptTopLevel extends Ppt {
       VarInfo vi1 = var_infos[i1];
       if (!worthDerivingFrom(vi1)) {
         if (Global.debugDerive) {
-          System.out.println("Not worth deriving from " + vi1.name);
+          System.out.println("Binary first VarInfo: not worth deriving from " + vi1.name);
         }
 	continue;
       }
@@ -511,7 +482,7 @@ public class PptTopLevel extends Ppt {
 	VarInfo vi2 = var_infos[i2];
 	if (!worthDerivingFrom(vi2)) {
           if (Global.debugDerive) {
-            System.out.println("Not worth deriving from ("
+            System.out.println("Binary: not worth deriving from ("
                                + vi1.name + "," + vi2.name + ")");
           }
           continue;
@@ -532,8 +503,9 @@ public class PptTopLevel extends Ppt {
     }
 
     for (int i=0; i<result.size(); i++) {
-      Assert.assert(result.elementAt(i) instanceof Derivation,
-                    "Non-Derivation " + result.elementAt(i) + " at index " + i);
+      Assert.assert(result.elementAt(i) instanceof Derivation
+                    // , "Non-Derivation " + result.elementAt(i) + " at index " + i
+                    );
     }
 
     return result;
@@ -547,6 +519,7 @@ public class PptTopLevel extends Ppt {
   // This doesn't compute what the derived variables should be, just adds
   // them after being computed.
 
+  // derivs is a Vector of Derivation objects
   void addDerivedVariables(Vector derivs) {
     Derivation[] derivs_array
       = (Derivation[]) derivs.toArray(new Derivation[0]);
@@ -575,7 +548,7 @@ public class PptTopLevel extends Ppt {
 
   void add(ValueTuple vt, int count) {
     // System.out.println("PptTopLevel " + name + ": add " + vt);
-    Assert.assert(vt.size() == var_infos.length);
+    Assert.assert(vt.size() == var_infos.length - num_static_constant_vars);
 
     values.add(vt, count);
 
@@ -638,9 +611,8 @@ public class PptTopLevel extends Ppt {
       return;
 
     derivation_indices = new int[derivation_passes+1];
-    for (int i=1; i<=derivation_passes; i++)
-      derivation_indices[i] = 0;
-    derivation_indices[0] = 0;
+    // Extraneous, since the array is initialized to all zeros.
+    // Arrays.fill(derivation_passes, 0);
     // Not num_tracevars because we also care about _orig, etc.
     instantiate_views(0, var_infos.length);
 
@@ -663,87 +635,6 @@ public class PptTopLevel extends Ppt {
   }
 
 
-  //         if fn_derived_from.has_key(fn_name):
-  //             # Don't do any variable derivation, only invariant inference
-  //             numeric_invariants_over_index(
-  //                 range(0, len(var_infos)), var_infos, var_values)
-  //         else:
-  //             # Perform variable derivation as well as invariant inference
-  //             fn_derived_from[fn_name] = true
-  //
-  //             derivation_functions = (None, pass1_functions, pass2_functions)
-  //             derivation_passes = len(derivation_functions)-1
-  //             # First number: invariants are computed up to this index, non-inclusive
-  //             # Remaining numbers: values have been derived from up to these indices
-  //             derivation_index = (0,) * (derivation_passes+1)
-  //
-  //             # invariant:  len(var_infos) >= invariants_index >= derivation_index[0]
-  //             #   >= derivation_index[1] >= ...
-  //
-  //             while derivation_index[-1] < len(var_infos):
-  //                 assert util.sorted(derivation_index, lambda x,y:-cmp(x,y))
-  //                 for i in range(0,derivation_index[1]):
-  //                     vi = var_infos[i]
-  //                     assert (not vi.type.is_array()) or vi.derived_len != None or not vi.is_canonical() or vi.invariant.can_be_None or vi.is_derived
-  //                 if debug_derive:
-  //                     print "old derivation_index =", derivation_index, "num_vars =", len(var_infos)
-  //
-  //                 # If derivation_index == (a, b, c) and n = len(var_infos), then
-  //                 # the body of this loop:
-  //                 #     * computes invariants over a..n
-  //                 #     * does pass1 introduction for b..a
-  //                 #     * does pass2 introduction for c..b
-  //                 # and afterward, derivation_index == (n, a, b).
-  //
-  //                 # original number of vars; this body may well add more
-  //                 num_vars = len(var_infos)
-  //                 if derivation_index[0] != num_vars:
-  //                     numeric_invariants_over_index(
-  //                         range(derivation_index[0], num_vars), var_infos, var_values)
-  //
-  //                 for pass_no in range(1,derivation_passes+1):
-  //                     if debug_derive:
-  //                         print "pass", pass_no, "range", derivation_index[pass_no], derivation_index[pass_no-1]
-  //                     if derivation_index[pass_no] == derivation_index[pass_no-1]:
-  //                         continue
-  //                     introduce_new_variables_one_pass(
-  //                         var_infos, var_values,
-  //                         range(derivation_index[pass_no], derivation_index[pass_no-1]),
-  //                         derivation_functions[pass_no])
-  //
-  //                 derivation_index = (num_vars,) + derivation_index[:-1]
-  //                 if debug_derive:
-  //                     print "new derivation_index =", derivation_index, "num_vars =", len(var_infos)
-
-
-
-  // Old, non-staged implementation that was run before rather than after
-  // variable values were read.
-  // public void initial_processing() {
-  //   derive_all();
-  //   instantiate_views();
-  // }
-
-
-  // This may now be identical to initial_processing, which has taken its place.
-  // // This isn't in the constructor because it needs to come after adding
-  // // _orig variables.
-  // void derive_all() {
-  //   derivation_indices = new int[derivation_passes+1];
-  //   for (int i=1; i<=derivation_passes; i++)
-  //     derivation_indices[i] = 0;
-  //   derivation_indices[0] = num_tracevars;
-  //   // Eventually, integrate derivation and inference.  That will require
-  //   // incrementally adding new variables, slices, and invariants.  For
-  //   // now, don't bother:  I want to just get something working first.
-  //   while (derivation_indices[derivation_passes] < var_infos.length) {
-  //     Vector derivations = derive();
-  //     addVarInfos(derivations);
-  //     instantiate_views(derivations);
-  //   }
-  // }
-
-
   ///////////////////////////////////////////////////////////////////////////
   /// Creating invariants
   ///
@@ -763,23 +654,25 @@ public class PptTopLevel extends Ppt {
     if (slices_vector_.isEmpty())
       return;
 
-    // Don't modify the argument
+    // Don't modify the actual parameter
     Vector slices_vector = (Vector) slices_vector_.clone();
-    // use an array because iterating over it will be more efficient, I suspect.
-    PptSlice[] slices;
-    int num_slices;
 
     // This might be a brand-new Slice, and instantiate_invariants for this
     // pass might not have come up with any invariants.
     for (Iterator itor = slices_vector.iterator(); itor.hasNext(); ) {
       PptSlice slice = (PptSlice) itor.next();
       if (slice.invs.size() == 0)
+        // removes the element from slices_vector
         itor.remove();
     }
 
+    // use an array because iterating over it will be more efficient, I suspect.
+    PptSlice[] slices;
+    int num_slices;
+
     // This is also duplicated below.
     views_to_remove_deferred = vtrd_cache;
-    slices = (PptSlice[]) slices_vector.toArray(new PptSlice[] { });
+    slices = (PptSlice[]) slices_vector.toArray(new PptSlice[0]);
     num_slices = slices.length;
 
     // System.out.println("Adding views for " + name);
@@ -807,7 +700,7 @@ public class PptTopLevel extends Ppt {
         views_to_remove_deferred.clear();
         if (slices_vector.size() == 0)
           break;
-        slices = (PptSlice[]) slices_vector.toArray(new PptSlice[] { });
+        slices = (PptSlice[]) slices_vector.toArray(new PptSlice[0]);
         num_slices = slices.length;
       }
     }
@@ -854,6 +747,7 @@ public class PptTopLevel extends Ppt {
 
 
   public void removeView(Ppt slice) {
+    // System.out.println("removeView " + slice.name + " " + slice);
     if (views_to_remove_deferred != null) {
       views_to_remove_deferred.add(slice);
     } else {
@@ -875,6 +769,7 @@ public class PptTopLevel extends Ppt {
   }
 
   public PptSlice findSlice(VarInfo v1, VarInfo v2) {
+    Assert.assert(v1.varinfo_index < v2.varinfo_index);
     for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
       PptSlice view = (PptSlice) itor.next();
       if ((view.arity == 2)
@@ -886,6 +781,8 @@ public class PptTopLevel extends Ppt {
   }
 
   public PptSlice findSlice(VarInfo v1, VarInfo v2, VarInfo v3) {
+    Assert.assert(v1.varinfo_index < v2.varinfo_index);
+    Assert.assert(v2.varinfo_index < v3.varinfo_index);
     for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
       PptSlice view = (PptSlice) itor.next();
       if ((view.arity == 3)
@@ -922,7 +819,8 @@ public class PptTopLevel extends Ppt {
    * Install views (and thus invariants).
    * This function does cause all invariants over the new views to be computed.
    * The installed views and invariants will all have at least one element with
-   * index i such that min_index <= i < index_limit.
+   * index i such that vi_index_min <= i < vi_index_limit.
+   * (However, we also assume that vi_index_limit == var_infos.length.)
    */
   void instantiate_views(int vi_index_min, int vi_index_limit) {
     if (Global.debugInfer)
@@ -933,6 +831,7 @@ public class PptTopLevel extends Ppt {
 
     // It might pay to instantiate views for variables one at a time, to
     // save work.  I'm not sure, but it does seem plausible.
+    // This test prevents that for now.
     Assert.assert(var_infos.length == vi_index_limit);
 
 
@@ -967,45 +866,28 @@ public class PptTopLevel extends Ppt {
     // Unary slices/invariants.
     Vector unary_views = new Vector(vi_index_limit-vi_index_min);
     for (int i=vi_index_min; i<vi_index_limit; i++) {
-      if (var_infos[i].canBeMissing)
+      if (Daikon.invariants_check_canBeMissing && var_infos[i].canBeMissing) {
+        if (Global.debugDerive) {
+          System.out.println("In binary equality, " + var_infos[i].name + " can be missing");
+        }
         continue;
+      }
       // I haven't computed any invariants over it yet -- how am I to know
       // whether it's canonical??
       // if (!var_infos[i].isCanonical())
       //   continue;
       PptSlice1 slice1 = new PptSlice1(this, var_infos[i]);
+      // first pass of unary invariant instantiation
       slice1.instantiate_invariants(1);
       unary_views.add(slice1);
     }
     addViews(unary_views);
-    // Set the dynamic_constant slots of all the new variables.
-    {
-      for (int i=0; i<unary_views.size(); i++) {
-        PptSlice1 unary_view = (PptSlice1) unary_views.elementAt(i);
-        Assert.assert(unary_view.arity == 1);
-        if (views.contains(unary_view)) {
-          // There is only one type of unary invariant in pass 1:
-          // OneOf{Scalar,Sequence}.  It must have been successful, or this
-          // view wouldn't have been installed.
-          Assert.assert(unary_view.invs.size() == 1);
-          Invariant inv = (Invariant) unary_view.invs.elementAt(0);
-          inv.finished = true;
-          // unary_view.already_seen_all = true;
-          Assert.assert(inv instanceof OneOf);
-          OneOf one_of = (OneOf) inv;
-          if (one_of.num_elts() == 1) {
-            // System.out.println("Constant " + inv.ppt.name + " " + one_of.var().name + " because of " + unary_view.name);
-            one_of.var().dynamic_constant = one_of.elt();
-          }
-        } else {
-          unary_view.clear_cache();
-        }
-      }
-    }
+    set_dynamic_constant_slots(unary_views);
 
     // Now some elements of unary_views are installed, but others are not
-    // and are incomplete.  We discard them later, but for now we want to
-    // remember all the ones we tried.
+    // and are incomplete, Because we stopped adding new values as soon as
+    // they were found not to hold.  We discard them later, but for now we
+    // want to remember all the ones we tried.
 
 
     /// 2. binary equality
@@ -1013,17 +895,14 @@ public class PptTopLevel extends Ppt {
     // Binary slices/invariants.
     Vector binary_views = new Vector();
     for (int i1=0; i1<vi_index_limit; i1++) {
-      if (var_infos[i1].canBeMissing) {
+      if (Daikon.invariants_check_canBeMissing && var_infos[i1].canBeMissing) {
         if (Global.debugDerive) {
-          System.out.println(var_infos[i1].name + " can be missing");
+          System.out.println("In binary equality, " + var_infos[i1].name + " can be missing");
         }
         continue;
       }
-      // I haven't computed any invariants over it yet -- how am I to know
-      // whether it's canonical??
-      // if (!var_infos[i1].isCanonical())
-      //   continue;
-      // But I can check if we've already computed invariants over it.
+      // I can check canonicalness only if we've already computed
+      // invariants over it.
       if ((i1 < vi_index_min) && (!var_infos[i1].isCanonical())) {
         if (Global.debugDerive) {
           System.out.println("Skipping non-canonical non-target variable1 "
@@ -1036,21 +915,22 @@ public class PptTopLevel extends Ppt {
       if (Global.debugInfer)
         System.out.println("instantiate_views"
                            + "(" + vi_index_min + "," + vi_index_limit + ")"
-                           + " i1=" + i1
+                           + " i1=" + i1 + " (" + var_infos[i1].name + ")"
                            + ", i2_min=" + i2_min
                            );
       for (int i2=i2_min; i2<vi_index_limit; i2++) {
-        if (var_infos[i2].canBeMissing) {
+        // System.out.println("Trying binary instantiate_views"
+        //                    + " i1=" + i1 + " (" + var_infos[i1].name + "),"
+        //                    + " i2=" + i2 + " (" + var_infos[i2].name + ")");
+        if (Daikon.invariants_check_canBeMissing && var_infos[i2].canBeMissing) {
           if (Global.debugDerive) {
-            System.out.println(var_infos[i2].name + " can be missing");
+            System.out.println("In binary equality vs. " + var_infos[i1].name
+                               + ", " + var_infos[i2].name + " can be missing");
           }
           continue;
         }
-        // I haven't computed any invariants over it yet -- how am I to know
-        // whether it's canonical??
-        // if (!var_infos[i2].isCanonical())
-        //   continue;
-        // But I can check if we've already computed invariants over it.
+        // I can check canonicalness only if we've already computed
+        // invariants over it.
         if ((i2 < vi_index_min) && (!var_infos[i2].isCanonical())) {
           if (Global.debugDerive) {
             System.out.println("Skipping non-canonical non-target variable2 "
@@ -1066,70 +946,13 @@ public class PptTopLevel extends Ppt {
         // }
 
         PptSlice slice2 = new PptSlice2(this, var_infos[i1], var_infos[i2]);
+        // System.out.println("Created PptSlice2 " + slice2.name);
         slice2.instantiate_invariants(1);
         binary_views.add(slice2);
       }
     }
     addViews(binary_views);
-    // Set the equal_to slots of all the new variables.
-    {
-      for (int i=0; i<binary_views.size(); i++) {
-        PptSlice2 binary_view = (PptSlice2) binary_views.elementAt(i);
-        Assert.assert(binary_view.arity == 2);
-        if (views.contains(binary_view)) {
-          // There is only one type of binary invariant in pass 1:
-          // {Int,Seq}Comparison.  It must have been successful, or this view
-          // wouldn't have been installed.
-          Assert.assert(binary_view.invs.size() == 1);
-          Invariant inv = (Invariant) binary_view.invs.elementAt(0);
-          inv.finished = true;
-          // binary_view.already_seen_all = true;
-          Assert.assert(inv instanceof Comparison);
-          // Not "inv.format" because that is null if not justified.
-          // System.out.println("Is " + (IsEquality.it.accept(inv) ? "" : "not ")
-          //                    + "equality: " + inv.repr());
-          if (IsEquality.it.accept(inv)) {
-            VarInfo var1 = binary_view.var_infos[0];
-            VarInfo var2 = binary_view.var_infos[1];
-            // System.out.println("found equality: " + var1.name + " = " + var2.name);
-            // System.out.println("var1.equal_to="
-            //                    + ((var1.equal_to == null) ? "null" : var1.equal_to.name)
-            //                    + ", var2.equal_to="
-            //                    + ((var2.equal_to == null) ? "null" : var2.equal_to.name));
-            if ((var1.equal_to == null) && (var2.equal_to != null)) {
-              var1.equal_to = var2.equal_to;
-              // System.out.println("Setting " + var1.name + ".equal_to = " + var1.equal_to.name);
-            } else if ((var1.equal_to != null) && (var2.equal_to == null)) {
-              var2.equal_to = var1.equal_to;
-              // System.out.println("Setting " + var2.name + ".equal_to = " + var2.equal_to.name);
-            } else if ((var1.equal_to == null) && (var2.equal_to == null)) {
-              Assert.assert(var1.varinfo_index < var2.varinfo_index);
-              // Can this cause the canonical version to not be the lowest-
-              // numbered version?  I don't think so, because of the ordering
-              // in which we are examining pairs.
-              var1.equal_to = var1;
-              var2.equal_to = var1;
-            } else {
-              // This is implied by the if-then sequence.
-              // Assert.assert((var1.equal_to != null) && (var2.equal_to != null));
-              Assert.assert(var1.equal_to == var2.equal_to);
-              Assert.assert(var1.equal_to.varinfo_index <= var1.varinfo_index);
-              Assert.assert(var2.equal_to.varinfo_index <= var2.varinfo_index);
-            }
-          }
-        } else {
-          binary_view.clear_cache();
-        }
-      }
-      for (int i=vi_index_min; i<vi_index_limit; i++) {
-        VarInfo vi = var_infos[i];
-        if (vi.equal_to == null) {
-          // System.out.println("Lonesome canonical var " + vi.varinfo_index
-          //                    + ": " + vi.name);
-          vi.equal_to = vi;
-        }
-      }
-    }
+    set_equal_to_slots(binary_views, vi_index_min, vi_index_limit);
 
     // 3. all other unary invariants
     if (Global.debugPptTopLevel)
@@ -1207,26 +1030,8 @@ public class PptTopLevel extends Ppt {
     }
     addViews(binary_views_pass2);
     // Compute exact_nonunary_invariants, then save some space
-    for (int j=0; j<binary_views.size(); j++) {
-      PptSlice binary_view = (PptSlice) binary_views.elementAt(j);
-      for (int k=0; k<binary_view.invs.size(); k++) {
-        Invariant inv = (Invariant) binary_view.invs.elementAt(k);
-        if (inv.isExact() && inv.justified()) {
-          binary_view.var_infos[0].exact_nonunary_invariants.add(inv);
-        }
-      }
-      binary_view.clear_cache();
-    }
-    for (int j=0; j<binary_views_pass2.size(); j++) {
-      PptSlice binary_view = (PptSlice) binary_views_pass2.elementAt(j);
-      for (int k=0; k<binary_view.invs.size(); k++) {
-        Invariant inv = (Invariant) binary_view.invs.elementAt(k);
-        if (inv.isExact() && inv.justified()) {
-          binary_view.var_infos[0].exact_nonunary_invariants.add(inv);
-        }
-      }
-      binary_view.clear_cache();
-    }
+    set_exact_nonunary_invariants_slots(binary_views);
+    set_exact_nonunary_invariants_slots(binary_views_pass2);
     binary_views = null;
     binary_views_pass2 = null;
 
@@ -1235,9 +1040,9 @@ public class PptTopLevel extends Ppt {
       Vector ternary_views = new Vector();
       for (int i1=0; i1<vi_index_limit; i1++) {
         VarInfo var1 = var_infos[i1];
-        if (var1.canBeMissing) {
+        if (Daikon.invariants_check_canBeMissing && var1.canBeMissing) {
           if (Global.debugDerive) {
-            System.out.println(var1.name + " can be missing");
+            System.out.println("In ternary, " + var1.name + " can be missing");
           }
           continue;
         }
@@ -1249,9 +1054,10 @@ public class PptTopLevel extends Ppt {
         boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
         for (int i2=i1+1; i2<vi_index_limit; i2++) {
           VarInfo var2 = var_infos[i2];
-          if (var2.canBeMissing) {
+          if (Daikon.invariants_check_canBeMissing && var2.canBeMissing) {
             if (Global.debugDerive) {
-              System.out.println(var2.name + " can be missing");
+              System.out.println("In ternary vs. " + var1.name
+                                 + ", " + var2.name + " can be missing");
             }
             continue;
           }
@@ -1260,9 +1066,10 @@ public class PptTopLevel extends Ppt {
           if (var2.isConstant())
             continue;
           if (var1.hasExactInvariant(var2)) {
-            // This isn't quite right:  it depends on what the type of var3
-            // will be.  But leave it as a conservative approximation
-            // (because we would save this many for many different var3).
+            // This number isn't quite right:  it depends on what the type
+            // of var3 will be.  But leave it as a conservative
+            // approximation (because we would save this many for many
+            // different var3).
             Global.subexact_noninstantiated_invariants
               += ThreeScalarFactory.max_instantiate;
             continue;
@@ -1283,9 +1090,11 @@ public class PptTopLevel extends Ppt {
                           || ((i3 >= vi_index_min) && (i3 < vi_index_limit)));
             Assert.assert((i1 < i2) && (i2 < i3));
             VarInfo var3 = var_infos[i3];
-            if (var3.canBeMissing) {
+            if (Daikon.invariants_check_canBeMissing && var3.canBeMissing) {
               if (Global.debugDerive) {
-                System.out.println(var3.name + " can be missing");
+                System.out.println("In ternary vs. ("
+                                   + var1.name + "," + var2.name + ")"
+                                   + ", " + var2.name + " can be missing");
               }
               continue;
             }
@@ -1295,8 +1104,11 @@ public class PptTopLevel extends Ppt {
               continue;
             if (var1.hasExactInvariant(var3)
                 || var2.hasExactInvariant(var3)) {
-              // This is an overapproximation if one of the variables isn't
-              // a scalar.  But we underapproximated elsewhere, so leave it.
+              // No invariants if any of the types is array.
+              if (var1.rep_type.isArray()
+                || var2.rep_type.isArray()
+                || var3.rep_type.isArray())
+                continue;
               Global.subexact_noninstantiated_invariants
                 += ThreeScalarFactory.max_instantiate;
               continue;
@@ -1318,16 +1130,7 @@ public class PptTopLevel extends Ppt {
         }
       }
       addViews(ternary_views);
-      for (int j=0; j<ternary_views.size(); j++) {
-        PptSlice ternary_view = (PptSlice) ternary_views.elementAt(j);
-        for (int k=0; k<ternary_view.invs.size(); k++) {
-          Invariant inv = (Invariant) ternary_view.invs.elementAt(k);
-          if (inv.isExact() && inv.justified()) {
-            ternary_view.var_infos[0].exact_nonunary_invariants.add(inv);
-          }
-        }
-        ternary_view.clear_cache();
-      }
+      set_exact_nonunary_invariants_slots(ternary_views);
     }
 
 
@@ -1340,30 +1143,127 @@ public class PptTopLevel extends Ppt {
     // now unary_views, binary_views, and ternary_views get garbage-collected.
   }
 
-  // // At present, this needs to occur after deriving variables, because
-  // // I haven't integrated derivation and inference yet.
-  // // (This function doesn't exactly belong in this part of the file.)
+  // Set the dynamic_constant slots of all the new variables.
+  void set_dynamic_constant_slots(Vector unary_views) {
+    for (int i=0; i<unary_views.size(); i++) {
+      PptSlice1 unary_view = (PptSlice1) unary_views.elementAt(i);
+      Assert.assert(unary_view.arity == 1);
+      // If this view has been installed in the views slot (ie, it has not
+      // been eliminated already).
+      if (views.contains(unary_view)) {
+        // There is only one type of unary invariant in pass 1:
+        // OneOf{Scalar,Sequence}.  It must have been successful, or this
+        // view wouldn't have been installed.
+        Assert.assert(unary_view.invs.size() == 1);
+        Invariant inv = (Invariant) unary_view.invs.elementAt(0);
+        inv.finished = true;
+        // unary_view.already_seen_all = true;
+        OneOf one_of = (OneOf) inv;
+        if (one_of.num_elts() == 1) {
+          // System.out.println("Constant " + inv.ppt.name + " " + one_of.var().name + " because of " + unary_view.name);
+          one_of.var().dynamic_constant = one_of.elt();
+        }
+      } else {
+        unary_view.clear_cache();
+      }
+    }
+  }
 
-  // // Should return a list of the views created, perhaps.
-  // void instantiate_views() {
-  //   // views = new WeakHashMap();
-  //   views = new HashSet();
-  //   for (int i=0; i<var_infos.length; i++) {
-  //     PptSlice slice1 = new PptSlice(this, var_infos[i]);
-  //     addView(slice1);
-  //     for (int j=i+1; j<var_infos.length; j++) {
-  //       PptSlice slice2 = new PptSlice(this, var_infos[i], var_infos[j]);
-  //       addView(slice2);
-  //       /// Arity 3 is not yet implemented.
-  //       // for (int k=j+1; j<var_infos.length; k++) {
-  //       //   PptSlice slice3 = new PptSlice(this, var_infos[i], var_infos[j], var_infos[k]);
-  //       //   addView(slice3);
-  //       // }
-  //     }
-  //   }
-  //   if (Global.debugPptTopLevel)
-  //     System.out.println("" + views.size() + " views for " + name);
-  // }
+  static final boolean debug_equal_to = false;
+  // static final boolean debug_equal_to = true;
+
+  // Set the equal_to slots of all the new variables.
+  void set_equal_to_slots(Vector binary_views, int vi_index_min, int vi_index_limit) {
+    for (int i=0; i<binary_views.size(); i++) {
+      PptSlice2 binary_view = (PptSlice2) binary_views.elementAt(i);
+      Assert.assert(binary_view.arity == 2);
+
+      if (binary_view.debugged) {
+        System.out.println("Binary view " + binary_view.name + " has "
+                           + (views.contains(binary_view) ? "not " : "") + "been eliminated.");
+      }
+      // If binary_view has been installed (hasn't yet been eliminated)
+      if (views.contains(binary_view)) {
+        // There is only one type of binary invariant in pass 1:
+        // {Int,Seq}Comparison.  It must have been successful, or this view
+        // wouldn't have been installed.
+        Assert.assert(binary_view.invs.size() == 1);
+        Invariant inv = (Invariant) binary_view.invs.elementAt(0);
+        inv.finished = true;
+        // binary_view.already_seen_all = true;
+        Assert.assert(inv instanceof Comparison);
+        // Not "inv.format" because that is null if not justified.
+        // System.out.println("Is " + (IsEquality.it.accept(inv) ? "" : "not ")
+        //                    + "equality: " + inv.repr());
+        if (IsEquality.it.accept(inv)) {
+          VarInfo var1 = binary_view.var_infos[0];
+          VarInfo var2 = binary_view.var_infos[1];
+          Assert.assert(var1.varinfo_index < var2.varinfo_index);
+          // System.out.println("found equality: " + var1.name + " = " + var2.name);
+          // System.out.println("var1.equal_to="
+          //                    + ((var1.equal_to == null) ? "null" : var1.equal_to.name)
+          //                    + ", var2.equal_to="
+          //                    + ((var2.equal_to == null) ? "null" : var2.equal_to.name));
+          if ((var1.equal_to == null) && (var2.equal_to != null)) {
+            var1.equal_to = var2.equal_to;
+            if (debug_equal_to) {
+              System.out.println("Setting " + var1.name + ".equal_to = " + var1.equal_to.name);
+            }
+          } else if ((var1.equal_to != null) && (var2.equal_to == null)) {
+            var2.equal_to = var1.equal_to;
+            if (debug_equal_to) {
+              System.out.println("Setting " + var2.name + ".equal_to = " + var2.equal_to.name);
+            }
+          } else if ((var1.equal_to == null) && (var2.equal_to == null)) {
+            // Can this cause the canonical version to not be the lowest-
+            // numbered version?  I don't think so, because of the ordering
+            // in which we are examining pairs.
+            var1.equal_to = var1;
+            var2.equal_to = var1;
+          } else {
+            // This is implied by the if-then sequence.
+            // Assert.assert((var1.equal_to != null) && (var2.equal_to != null));
+            Assert.assert(var1.equal_to == var2.equal_to
+                          // This is ordinarily commented out, to save
+                          // time in the common case.
+                          , "Variables not equal: " + var1.name + " (= " + var1.equal_to.name + "), " + var2.name + " (= " + var2.equal_to.name + ") at " + name
+                          );
+            Assert.assert(var1.equal_to.varinfo_index <= var1.varinfo_index);
+            Assert.assert(var2.equal_to.varinfo_index <= var2.varinfo_index);
+          }
+        }
+      } else {
+        binary_view.clear_cache();
+      }
+    }
+    for (int i=vi_index_min; i<vi_index_limit; i++) {
+      VarInfo vi = var_infos[i];
+      if (vi.equal_to == null) {
+        if (debug_equal_to) {
+          System.out.println("Lonesome canonical var " + vi.varinfo_index + ": " + vi.name);
+        }
+        vi.equal_to = vi;
+      }
+    }
+  }
+
+  // Compute exact_nonunary_invariants
+  void set_exact_nonunary_invariants_slots(Vector nonunary_views) {
+    for (int j=0; j<nonunary_views.size(); j++) {
+      PptSlice nonunary_view = (PptSlice) nonunary_views.elementAt(j);
+      for (int k=0; k<nonunary_view.invs.size(); k++) {
+        Invariant inv = (Invariant) nonunary_view.invs.elementAt(k);
+        if (inv.isExact() && inv.justified()) {
+          nonunary_view.var_infos[0].exact_nonunary_invariants.add(inv);
+        } else if (inv.isExact()) {
+          // The inv.format() is going to return null
+          // because the invariant is not justified!
+          System.out.println("Exact but not justified: " + inv.format() + " " + inv.repr());
+        }
+      }
+      nonunary_view.clear_cache();
+    }
+  }
 
 
   ///////////////////////////////////////////////////////////////////////////
@@ -1372,7 +1272,7 @@ public class PptTopLevel extends Ppt {
 
   // This apparently can't appear in PptConditional, lest it never get called.
   // I guess PptConditional isn't instantiated unless it needs to be, but
-  // it doesn't need to be unless GiesLisp has been instantiated already.)
+  // it doesn't need to be unless GriesLisp has been instantiated already.
   static {
     // Would it be enough to say "GriesLisp dummy = null;"?  I'm not sure.
     // This does work, though.
@@ -1382,7 +1282,7 @@ public class PptTopLevel extends Ppt {
   }
 
   public void addConditions(Splitter[] splits) {
-    if (splits == null) {
+    if ((splits == null) || (splits.length == 0)) {
       if (Global.debugPptSplit)
         System.out.println("No splits for " + name);
       return;
@@ -1402,8 +1302,9 @@ public class PptTopLevel extends Ppt {
       pconds_vector.add(cond2);
     }
     PptConditional[] pconds
-      = (PptConditional[]) pconds_vector.toArray(new PptConditional[] { });
+      = (PptConditional[]) pconds_vector.toArray(new PptConditional[0]);
     int num_pconds = pconds.length;
+    Assert.assert((num_pconds/2)*2 == num_pconds); // ensure divisibility by 2
     int num_splits = num_pconds/2;
 
     for (int i=0; i<num_pconds; i+=2) {
@@ -1423,8 +1324,8 @@ public class PptTopLevel extends Ppt {
       VarValuesOrdered.ValueTupleCount entry = (VarValuesOrdered.ValueTupleCount) vt_itor.next();
       ValueTuple vt = entry.value_tuple;
       int count = entry.count;
-      // I do not want to use the same ValueTuple every time through this loop
-      // because the inserted ValueTuple will be modified in place.
+      // I do not want to use the same ValueTuple every time through the pconds
+      // loop because the inserted ValueTuple will be modified in place.
       // It's OK to reuse its elements, though.
       ValueTuple vt_trimmed = vt.trim(trimlength);
       int[] trimmed_mods = vt_trimmed.mods;
@@ -1432,7 +1333,8 @@ public class PptTopLevel extends Ppt {
       for (int i=0; i<num_pconds; i+=2) {
         // I really only have to do one of these (depending on which way
         // the split goes), unless the splitter throws an error, in which
-        // case I need to have done both.
+        // case I need to have done both.  Thus, do both, to be on the safe
+        // side.
         ValueTuple.orModsInto(cumulative_modbits[i], trimmed_mods);
         ValueTuple.orModsInto(cumulative_modbits[i+1], trimmed_mods);
         boolean splitter_test;
@@ -1490,7 +1392,8 @@ public class PptTopLevel extends Ppt {
                              + " samples");
         // Unconditional output, because it's too confusing otherwise.
         if (this_num_samples == parent_num_samples) {
-          System.out.println(pconds[i].name + " == " + this.name);
+          System.out.println("Condition always satisfied: "
+                             + pconds[i].name + " == " + this.name);
         }
       }
     }
@@ -1508,31 +1411,7 @@ public class PptTopLevel extends Ppt {
   /// Printing invariants
   ///
 
-
-  // This does not appear to work.
-  // public Iterator invariants() {
-  //   Iterator itorOfItors = new Iterator() {
-  //       Iterator views_itor = views.iterator();
-  //       public boolean hasNext() { return views_itor.hasNext(); }
-  //       public Object next() {
-  //         PptSlice slice = (PptSlice) views_itor.next();
-  //         Invariants invs = slice.invs;
-  //         return invs.iterator();
-  //       }
-  //       public void remove() { throw new UnsupportedOperationException(); }
-  //     };
-  //   return new UtilMDE.MergedIterator(itorOfItors);
-  // }
-  // static Comparator icfp = new Invariant.InvariantComparatorForPrinting();
-  // // This is certainly not the most efficient way to do this; fix later.
-  // Iterator invariants_sorted_for_printing() {
-  //   TreeSet ts = new TreeSet(icfp);
-  //   for (Iterator itor = invariants(); itor.hasNext(); )
-  //     ts.add(itor.next());
-  //   return ts.iterator();
-  // }
-
-  // So use this instead of the above.
+  // As of 1/9/2000, this is only used in print_invariants.
   public Vector invariants_vector() {
     Vector result = new Vector();
     for (Iterator views_itor = views.iterator(); views_itor.hasNext(); ) {
@@ -1546,7 +1425,7 @@ public class PptTopLevel extends Ppt {
 
   // In original (Python) implementation, known as print_invariants_ppt.
   // I may still want to integrate some more of its logic here.
-  /*
+  /**
    * Print invariants for a single program point.
    * Does no output if no samples or no views.
    */
@@ -1554,7 +1433,11 @@ public class PptTopLevel extends Ppt {
     if (num_samples() == 0)
       return;
     if (views.size() == 0) {
-      System.out.println("[No views for " + name + "]");
+      if (! (this instanceof PptConditional)) {
+        // Presumably all the views that were originally there were deleted
+        // because no invariants remained in any of them.
+        System.out.println("[No views for " + name + "]");
+      }
       return;
     }
     System.out.println("===========================================================================");
@@ -1586,6 +1469,10 @@ public class PptTopLevel extends Ppt {
     return true;
   }
 
+  ///////////////////////////////////////////////////////////////////////////
+  /// Printing invariants
+  ///
+
   static Comparator icfp = new Invariant.InvariantComparatorForPrinting();
 
   /** Print invariants for a single program point. */
@@ -1601,18 +1488,17 @@ public class PptTopLevel extends Ppt {
 
     Assert.assert(check_modbits());
 
-    // System.out.println("Views:");
-    // for (Iterator itor = views.iterator(); itor.hasNext(); ) {
-    //   PptSlice slice = (PptSlice) itor.next();
-    //   System.out.println("  " + slice.name);
-    //   for (int i=0; i<slice.invs.size(); i++) {
-    //     Invariant inv = (Invariant) slice.invs.elementAt(i);
-    //     System.out.println("    " + inv.repr());
-    //   }
-    // }
-
-
     if (Global.debugPrintInvariants) {
+      // System.out.println("Views:");
+      // for (Iterator itor = views.iterator(); itor.hasNext(); ) {
+      //   PptSlice slice = (PptSlice) itor.next();
+      //   System.out.println("  " + slice.name);
+      //   for (int i=0; i<slice.invs.size(); i++) {
+      //     Invariant inv = (Invariant) slice.invs.elementAt(i);
+      //     System.out.println("    " + inv.repr());
+      //   }
+      // }
+
       System.out.println("    Variables:");
       for (int i=0; i<var_infos.length; i++) {
         VarInfo vi = var_infos[i];
@@ -1638,14 +1524,11 @@ public class PptTopLevel extends Ppt {
     // because one of the two variables is non-canonical!
     // This technique is a bit non-orthogonal, but probably fine.
     // We might do no output if all the other variables are vacuous.
-    // First make sure that we've computed equal_to everywhere.
-    // (We might not have so far.)
+    // We should have already equal_to for each VarInfo.
     for (int i=0; i<var_infos.length; i++) {
-      // Compute by side effect, or check that computation has occurred.
-      var_infos[i].isCanonical();
       if (! var_infos[i].isCanonical()) {
         Global.non_canonical_variables++;
-      } else if (var_infos[i].canBeMissing) {
+      } else if (Daikon.invariants_check_canBeMissing && var_infos[i].canBeMissing) {
         Global.can_be_missing_variables++;
       } else {
         Global.canonical_variables++;
@@ -1682,23 +1565,21 @@ public class PptTopLevel extends Ppt {
       }
     }
 
+    // I could instead sort the PptSlice objects, then sort the invariants
+    // in eahc PptSlice.  That would be more efficient, but this is
+    // probably not a bottleneck anyway.
     Vector invs_vector = invariants_vector();
-    Invariant[] invs_array = (Invariant[]) invs_vector.toArray(new Invariant[] { });
+    Invariant[] invs_array = (Invariant[]) invs_vector.toArray(new Invariant[0]);
     Arrays.sort(invs_array, icfp);
 
-    // int ia_index = 0;
-    // for (Iterator inv_itor = invariants_sorted_for_printing() ; inv_itor.hasNext() ; ) {
-    //   Invariant inv = (Invariant) inv_itor.next();
-    //   Assert.assert(inv == invs_array[ia_index]);
-    //   ia_index++;
-    //   ...
-    // }
     Global.non_falsified_invariants += invs_array.length;
     for (int ia_index = 0; ia_index<invs_array.length; ia_index++) {
       Invariant inv = invs_array[ia_index];
+      int num_vals = inv.ppt.num_values();
+      int num_samps = inv.ppt.num_samples();
       String num_values_samples =
-        "\t\t(" + inv.ppt.num_values() + " values, "
-        + inv.ppt.num_samples() + " samples)";
+        "\t\t(" + num_vals + " value" + ((num_vals == 1) ? "" : "s") + ", "
+        + num_samps + " samples)";
 
       // I could imagine printing information about the PptSlice
       // if it has changed since the last Invariant I examined.
@@ -1716,13 +1597,15 @@ public class PptTopLevel extends Ppt {
       // eliminate some invariants from consideration.  Which is cheapest?
       // Which is most often successful?
 
-      // Note exception for OneOf invariants.
+      // Note exception (below) for OneOf invariants.
       int num_mod_non_missing_samples = inv.ppt.num_mod_non_missing_samples();
       if ((inv instanceof OneOf) && (((OneOf) inv).num_elts() > num_mod_non_missing_samples)) {
         System.out.println("Modbit problem:  more values (" + ((OneOf) inv).num_elts() + ") than modified samples (" + num_mod_non_missing_samples + ")");
       }
 
-
+      // We print a OneOf invariant even if there are not very many
+      // modified samples.  If the variable takes on only one value, maybe
+      // it is only set once (or a few times).
       if ((num_mod_non_missing_samples < Invariant.min_mod_non_missing_samples)
           && (! (inv instanceof OneOf))) {
         if (Global.debugPrintInvariants) {
@@ -1766,18 +1649,20 @@ public class PptTopLevel extends Ppt {
             for (int i=0; i<vis.length; i++)
               System.out.print(" " + vis[i].isCanonical());
             System.out.println("]");
-            // This *does* happen, because we instantiate all invariants
-            // simultaneously. so we don't yet know which of the new
-            // variables is canonical.  I should fix this.
-            // throw new Error("this shouldn't happen");
+            // I'm not sure this can still happen; reinstate the error to check.
+            // // This *does* happen, because we instantiate all invariants
+            // // simultaneously. so we don't yet know which of the new
+            // // variables is canonical.  I should fix this.
+            throw new Error("this shouldn't happen");
           }
           Global.non_canonical_invariants++;
           continue;
         }
         if (! some_nonconstant) {
-          Assert.assert((inv instanceof OneOf) || (inv instanceof Comparison),
-                        "Unexpected invariant with none nonconstant: "
-                        + inv + "  " + inv.repr() + "  " + inv.format());
+          Assert.assert((inv instanceof OneOf) || (inv instanceof Comparison)
+                        // , "Unexpected invariant with all vars constant: "
+                        // + inv + "  " + inv.repr() + "  " + inv.format()
+                        );
           if (inv instanceof Comparison) {
             Assert.assert(! IsEquality.it.accept(inv));
             if (Global.debugPrintInvariants) {
@@ -1822,42 +1707,6 @@ public class PptTopLevel extends Ppt {
   }
 
 
-  // // To be deleted (already exists in commented-out form).
-  // /** Print invariants for a single program point. */
-  // public void print_invariants_old() {
-  //   System.out.println(name + "  "
-  //                      + num_samples() + " samples");
-  //   System.out.println("    Samples breakdown: "
-  //                      + values.tuplemod_samples_summary());
-  //   // for (Iterator itor2 = views.keySet().iterator() ; itor2.hasNext() ; ) {
-  //   for (Iterator itor2 = views.iterator() ; itor2.hasNext() ; ) {
-  //     PptSlice slice = (PptSlice) itor2.next();
-  //     if (Global.debugPrintInvariants) {
-  //       System.out.println("Slice: " + slice.varNames() + "  "
-  //                          + slice.num_samples() + " samples");
-  //       System.out.println("    Samples breakdown: "
-  //                          + slice.values_cache.tuplemod_samples_summary());
-  //     }
-  //     Invariants invs = slice.invs;
-  //     int num_invs = invs.size();
-  //     for (int i=0; i<num_invs; i++) {
-  //       Invariant inv = (Invariant) invs.elementAt(i);
-  //       String inv_rep = inv.format();
-  //       if (inv_rep != null) {
-  //         System.out.println(inv_rep);
-  //         if (Global.debugPrintInvariants) {
-  //           System.out.println("  " + inv.repr());
-  //         }
-  //       } else {
-  //         if (Global.debugPrintInvariants) {
-  //           System.out.println("[suppressed: " + inv.repr() + " ]");
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-
-
   // /** Print invariants for a single program point. */
   // public void print_invariants() {
   //   System.out.println(name + "  "
@@ -1892,64 +1741,32 @@ public class PptTopLevel extends Ppt {
   //   }
   // }
 
-  /// I need to incorporate all this into the above.
 
-  // def print_invariants_ppt(fn_name, print_unconstrained=0):
-  //   """Print invariants for a single program point."""
-  //   print fn_name, fn_samples[fn_name], "samples"
-  //   var_infos = fn_var_infos[fn_name]
-  //
-  //   # Single invariants
-  //   for vi in var_infos:
-  //       if not vi.is_canonical():
-  //           continue
-  //       this_inv = vi.invariant
-  //       if (this_inv.is_exact() and vi.equal_to != []):
-  //           # Already printed above in "equality invariants" section
-  //           continue
-  //       if print_unconstrained or not this_inv.is_unconstrained():
-  //           print " ", this_inv.format((vi.name,))
-  //   # Pairwise invariants
-  //   nonequal_constraints = []
-  //   # Maybe this is faster than calling "string.find"; I'm not sure.
-  //   nonequal_re = re.compile(" != ")
-  //   for vi in var_infos:
-  //       if not vi.is_canonical():
-  //           continue
-  //       vname = vi.name
-  //       for (index,inv) in vi.invariants.items():
-  //           if type(index) != types.IntType:
-  //               continue
-  //           if not var_infos[index].is_canonical():
-  //               continue
-  //           if (not print_unconstrained) and inv.is_unconstrained():
-  //               continue
-  //           formatted = inv.format((vname, var_infos[index].name))
-  //           # Not .match(...), which only checks at start of string!
-  //           if nonequal_re.search(formatted):
-  //               nonequal_constraints.append(formatted)
-  //           else:
-  //               print "   ", formatted
-  //   for ne_constraint in nonequal_constraints:
-  //       print "    ", ne_constraint
-  //   # Three-way (and greater) invariants
-  //   for vi in var_infos:
-  //       if not vi.is_canonical():
-  //           continue
-  //       vname = vi.name
-  //       for (index_pair,inv) in vi.invariants.items():
-  //           if type(index_pair) == types.IntType:
-  //               continue
-  //           (i1, i2) = index_pair
-  //           if not var_infos[i1].is_canonical():
-  //               # Perhaps err; this shouldn't happen, right?
-  //               continue
-  //           if not var_infos[i2].is_canonical():
-  //               # Perhaps err; this shouldn't happen, right?
-  //               continue
-  //           if print_unconstrained or not inv.is_unconstrained():
-  //               print "     ", inv.format((vname, var_infos[i1].name, var_infos[i2].name))
-  //   sys.stdout.flush()
+  ///////////////////////////////////////////////////////////////////////////
+  /// Diffing invariants
+  ///
 
+  static Comparator arityNameComparator = new PptSlice.ArityNameComparator();
+
+  public void diff(PptTopLevel other) {
+    SortedSet ss1 = new TreeSet(arityNameComparator);
+    ss1.addAll(this.views);
+    SortedSet ss2 = new TreeSet(arityNameComparator);
+    ss2.addAll(other.views);
+    for (OrderedPairIterator opi = new OrderedPairIterator(ss1.iterator(), ss2.iterator()); opi.hasNext(); ) {
+      OrderedPairIterator.Pair pair = (OrderedPairIterator.Pair) opi.next();
+      if (pair.b == null) {
+        // Invariants are only on the left-hand side.
+        System.out.println("Invariants are only on the left-hand side.");
+      } else if (pair.a == null) {
+        // Invariants are only on the right-hand side.
+        System.out.println("Invariants are only on the right-hand side.");
+      } else {
+        // Invariants on both sides, must do more diffing.
+        System.out.println("Invariants on both sides, must do more diffing.");
+      }
+    }
+
+  }
 
 }

@@ -1,8 +1,6 @@
 package daikon;
 
 
-
-
 // Internally, we use the names "array[]", "array[]-element", and
 // "array[]-indexn".  These may be different depending on the programming
 // language; for instance, C uses "*array" in place of "array[]-element".
@@ -17,8 +15,8 @@ public abstract class VarComparability {
   //    over programming language types look like that (so I could set the
   //    VarComparabilitys to the programming language types and use the
   //    implicit format).
-  //  * An explicit VarComparability is a list of other variables, and comparisons
-  //    succeed if each variable is in the list of the other.
+  //  * An explicit VarComparability is a list of other variable names, and
+  //    comparisons succeed if each variable is in the list of the other.
 
 
   final static int NONE = 0;
@@ -55,7 +53,7 @@ public abstract class VarComparability {
     if (type1.getClass() != type2.getClass())
       throw new Error("Trying to compare VarComparabilities of different types");
     if (type1 instanceof VarComparabilityNone) {
-      return VarComparabilityNone.compatible(name1, type1,
+      return VarComparabilityNone.compatible(name1, (VarComparabilityNone)type1,
                                              name2, (VarComparabilityNone)type2);
     // This class doesn't even exist yet!
     // } else if (type1 instanceof VarComparabilityImplicit) {

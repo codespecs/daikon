@@ -9,7 +9,7 @@ import utilMDE.*;
 // sequence, such as getting the element at that index or a subsequence up
 // to that index.
 
-public class SequenceScalarSubscriptFactory extends BinaryDerivationFactory {
+public final class SequenceScalarSubscriptFactory extends BinaryDerivationFactory {
 
   // When calling/creating the derivations, arrange that:
   //   var_info1 is the sequence
@@ -35,7 +35,7 @@ public class SequenceScalarSubscriptFactory extends BinaryDerivationFactory {
 
     if (! sclvar.isIndex())
       return null;
-    // Could also do a Lackwit comparability test here.
+    // Could also do a Lackwit/Ajax comparability test here.
 
 
     // For now, do nothing if the sequence is itself derived.
@@ -59,7 +59,11 @@ public class SequenceScalarSubscriptFactory extends BinaryDerivationFactory {
       return null;
     }
 
-    // Find an IntComparison relationship over the two variables, if possible.
+    // ***** This eliminates the derivation if it can *ever* be
+    // nonsensical/missing.  Is that what I want?
+
+    // Find an IntComparison relationship over the scalar and the sequence
+    // size, if possible.
     Assert.assert(sclvar.ppt == seqsize.ppt);
     PptSlice compar_slice = sclvar.ppt.getView(sclvar, seqsize);
     if (compar_slice != null) {
@@ -87,19 +91,28 @@ public class SequenceScalarSubscriptFactory extends BinaryDerivationFactory {
         Global.nonsensical_suppressed_derived_variables += 2;
         return null;
       }
+      // If the constant 1, only extract array[0..1]; others are already
+      // derived or uninteresting.
+      if (scl_constant == 1) {
+        Global.tautological_suppressed_derived_variables += 3;
+        return new BinaryDerivation[] {
+          new SequenceScalarSubsequence(seqvar, sclvar, false),
+        };
+      }
     }
 
     // Get the lower and upper bounds for the variable, if any.
+    // [This seems to be missing; what was it?]
 
 
     // End of applicability tests; now actually create the invariants
 
-    BinaryDerivation[] result = new BinaryDerivation[4];
-    result[0] = new SequenceScalarSubscript(seqvar, sclvar, false);
-    result[1] = new SequenceScalarSubscript(seqvar, sclvar, true);
-    result[2] = new SequenceScalarSubsequence(seqvar, sclvar, false);
-    result[3] = new SequenceScalarSubsequence(seqvar, sclvar, true);
-    return result;
+    return new BinaryDerivation[] {
+      new SequenceScalarSubscript(seqvar, sclvar, false),
+      new SequenceScalarSubscript(seqvar, sclvar, true),
+      new SequenceScalarSubsequence(seqvar, sclvar, false),
+      new SequenceScalarSubsequence(seqvar, sclvar, true),
+    };
   }
 
 }

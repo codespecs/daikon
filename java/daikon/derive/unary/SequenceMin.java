@@ -3,7 +3,8 @@ import daikon.*;
 import daikon.derive.*;
 import utilMDE.*;
 
-public class SequenceMin extends UnaryDerivation {
+// like SequenceMax; if one changes, change the other, too
+public final class SequenceMin extends UnaryDerivation {
 
   public SequenceMin(VarInfo vi) {
     super(vi);

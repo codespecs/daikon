@@ -2,15 +2,15 @@ package daikon;
 
 import daikon.split.*;
 
-// All information about a single program point.
-// A Ppt may also represent just part of the data: a disjunction.
-// This probably doesn't do any direct computation, instead deferring that
-// to its views that are slices.
+// Information about a disjunctive program point that represents just part
+// of the data.
+// This doesn't do any direct computation, instead deferring that to its
+// views that are slices.
 
 // This perhaps shouldn't extend PptTopLevel; fix that in the future.
 // For now, it's convenient to take advantage of its functionality.
 // And they're so similar that maybe this is the right thing after all.
-public class PptConditional extends PptTopLevel {
+public final class PptConditional extends PptTopLevel {
 
   Ppt parent;
   Splitter splitter;
@@ -21,7 +21,7 @@ public class PptConditional extends PptTopLevel {
   // more efficient to do that for two PptConditional objects at once.
 
   public PptConditional(PptTopLevel parent_, Splitter splitter_, boolean splitter_inverse_) {
-    super(parent_.name, VarInfo.arrayclone_simple(parent_.trace_and_orig_vars()));
+    super(parent_.name, VarInfo.arrayclone_simple(parent_.trace_and_orig_and_const_vars()));
     parent = parent_;
     splitter = splitter_.instantiate(this);
     splitter_inverse = splitter_inverse_;
@@ -31,25 +31,18 @@ public class PptConditional extends PptTopLevel {
     name = name + ";condition=\"" + splitter_formatted + "\"";
   }
 
+  // This is tested after constructing a PptConditional but before
+  // installing it on any lists.  It should perhaps be checked earlier, but
+  // it's convenient (for the Splitter writer) to do so after instantiating.
   public boolean splitter_valid() {
     return splitter.valid();
   }
 
-  // I could do only one test per value when installing, because I know
-  // these are complementary; or I could not do that special-casing.
-  // Probably don't...
 
-// I think that now i do this elsewhere, in PptTopLevel.addConditions
-//   public PptConditional[] split(PptTopLevel ppt, Splitter splitter) {
-//     PptConditional[] result = new PptConditional[2];
-//     result[0] = new PptConditional(ppt, splitter, false);
-//     result[1] = new PptConditional(ppt, splitter, true);
-//
-// *****;
-//
-//     return result;
-//   }
-
+  // Call this for tuples that are guaranteed to pass the test.
+  void add_nocheck(ValueTuple vt, int count) {
+    super.add(vt, count);
+  }
 
   void add(ValueTuple vt, int count) {
     // This try block may be a very inefficient way to do this computation.
@@ -63,19 +56,6 @@ public class PptConditional extends PptTopLevel {
       // If an exception is thrown, don't put the data on either side
       // of the split.
     }
-  }
-
-  // I'd like to add a version that optimizes based on the observation that
-  // PptConditional objects come in pairs, with splitters in inverted
-  // senses.  But that observation is not strictly true, because a
-  // splitter's internal computation could err, so it ought to return false
-  // on both sides.  I'm ignoring that in the name of efficiency for the
-  // nonce.
-
-
-  // Call this for tuples that are guaranteed to pass the test.
-  void add_nocheck(ValueTuple vt, int count) {
-    super.add(vt, count);
   }
 
 

@@ -2,7 +2,7 @@ package daikon.derive.unary;
 
 import daikon.*;
 
-public class SequenceMinMaxSumFactory extends UnaryDerivationFactory {
+public final class SequenceMinMaxSumFactory extends UnaryDerivationFactory {
 
   public UnaryDerivation[] instantiate(VarInfo vi) {
     // System.out.println("SequenceMinMaxSumFactory.instantiate(" + vi.name + ")");
@@ -17,11 +17,11 @@ public class SequenceMinMaxSumFactory extends UnaryDerivationFactory {
     if (elttype.base() == "char") // interned
       return null;
 
-    UnaryDerivation[] result = new UnaryDerivation[3];
-    result[0] = new SequenceMin(vi);
-    result[1] = new SequenceMax(vi);
-    result[2] = new SequenceSum(vi);
-    return result;
+    return new UnaryDerivation[] {
+      new SequenceMin(vi),
+      new SequenceMax(vi),
+      new SequenceSum(vi),
+    };
   }
 
 }

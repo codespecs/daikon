@@ -1,6 +1,9 @@
 package daikon;
 
-public class VarComparabilityNone extends VarComparability {
+/**
+ * Used when no VarComparability information is available (in the .dtrace file).
+ **/
+public final class VarComparabilityNone extends VarComparability {
 
   // There is only one VarComparabilityNone object.
   static VarComparabilityNone it = new VarComparabilityNone();

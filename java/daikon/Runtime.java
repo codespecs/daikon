@@ -9,7 +9,7 @@ import java.util.Vector;
 import java.io.*;
 
 
-public class Runtime {
+public final class Runtime {
 
   ///////////////////////////////////////////////////////////////////////////
   /// Timestamps
@@ -23,7 +23,10 @@ public class Runtime {
   ///
 
 
-  // This will need to be generalized to create independent files.
+  // It's convenient to have an entire run in one data trace file, so
+  // probably don't bother to generalize this to put output from a single
+  // run in different files depending on the class the information is
+  // about.
   public static PrintStream dtrace;
 
   public static void setDtrace(String filename) {
@@ -55,7 +58,7 @@ public class Runtime {
   // This is no longer necessary, as it was for Daikon-jtb
   // // This is a dummy method that can be called from Java code instead of
   // //   SomeClass.daikonPrint
-  // // because daikonPrint doesn't exist in SomeClass.java.
+  // // because daikonPrint doesn't (yet) exist in SomeClass.java.
   // // Later we will fix up all references to this.
   // public static void daikonPrint_dummy(Object x, PrintStream ps, int depth, String prefix, String target) {
   //   throw new Error("Unreplaced call to DaikonRuntime.daikonPrint_dummy(" + x + ", " + ps + ", " + depth + ", " + prefix + ", " + target + ")");
@@ -105,9 +108,84 @@ public class Runtime {
     }
   }
 
+  // Avoid using this; prefer print_quoted_String instead, unless we can
+  // guarantee that the string contains no character that need to be quoted.
   public static final void print_String(java.io.PrintStream ps, String x) {
     ps.print((x == null) ? "null" : "\"" + x + "\"");
   }
+
+  public static final void print_quoted_String(java.io.PrintStream ps, String x) {
+    ps.print((x == null) ? "null" : "\"" + quote(x) + "\"");
+  }
+
+  // Not yet used; but probably should be.
+  public static final void print_quoted_Character(java.io.PrintStream ps, Character ch) {
+    ps.print((ch == null) ? "null" : quote(ch));
+  }
+
+  // Lifted directly from utilMDE/UtilMDE.java, but repeated here to make
+  // this class self-contained.
+  /**
+   * Quote \, ", \n, and \r characters in the target; return a new string.
+   */
+  public static String quote(String orig) {
+    StringBuffer sb = new StringBuffer();
+    // The previous escape (or escaped) character was seen right before
+    // this position.  Alternately:  from this character forward, the string
+    // should be copied out verbatim (until the next escaped character).
+    int post_esc = 0;
+    int orig_len = orig.length();
+    for (int i=0; i<orig_len; i++) {
+      char c = orig.charAt(i);
+      switch (c) {
+      case '\"':
+      case '\\':
+        if (post_esc < i) {
+          sb.append(orig.substring(post_esc, i));
+        }
+        sb.append('\\');
+        post_esc = i;
+        break;
+      case '\n':
+        if (post_esc < i) {
+          sb.append(orig.substring(post_esc, i));
+        }
+        sb.append("\\n");
+        post_esc = i+1;
+        break;
+      case '\r':
+        if (post_esc < i) {
+          sb.append(orig.substring(post_esc, i));
+        }
+        sb.append("\\r");
+        post_esc = i+1;
+        break;
+      }
+    }
+    if (sb.length() == 0)
+      return orig;
+    sb.append(orig.substring(post_esc));
+    return sb.toString();
+  }
+
+
+  // The overhead of this is too high to call in quote(String)
+  public static String quote(Character ch) {
+    char c = ch.charValue();
+    switch (c) {
+    case '\"':
+      return("\\\"");
+    case '\\':
+      return("\\\\");
+    case '\n':
+      return("\\n");
+    case '\r':
+      return("\\r");
+    default:
+      return new String(new char[] { c });
+    }
+  }
+
 
   ///////////////////////////////////////////////////////////////////////////
   /// println
@@ -123,8 +201,14 @@ public class Runtime {
     ps.println();
   }
 
+  // Avoid using this; prefer println_quoted_String instead.
   public static final void println_String(java.io.PrintStream ps, String x) {
     print_String(ps, x);
+    ps.println();
+  }
+
+  public static final void println_quoted_String(java.io.PrintStream ps, String x) {
+    print_quoted_String(ps, x);
     ps.println();
   }
 
@@ -146,10 +230,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       print_Object(ps, a[0]);
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      print_Object(ps, a[i]);
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        print_Object(ps, a[i]);
+      }
     }
     ps.println(']');
   }
@@ -163,10 +247,10 @@ public class Runtime {
     int size = v.size();
     if (size > 0) {
       print_Object(ps, v.elementAt(0));
-    }
-    for (int i=1; i<size; i++) {
-      ps.print(' ');
-      print_Object(ps, v.elementAt(i));
+      for (int i=1; i<size; i++) {
+        ps.print(' ');
+        print_Object(ps, v.elementAt(i));
+      }
     }
     ps.println(']');
   }
@@ -179,10 +263,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       print_class(ps, a[0]);
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      print_class(ps, a[i]);
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        print_class(ps, a[i]);
+      }
     }
     ps.println(']');
   }
@@ -196,10 +280,10 @@ public class Runtime {
     int size = v.size();
     if (size > 0) {
       print_class(ps, v.elementAt(0));
-    }
-    for (int i=1; i<size; i++) {
-      ps.print(' ');
-      print_class(ps, v.elementAt(i));
+      for (int i=1; i<size; i++) {
+        ps.print(' ');
+        print_class(ps, v.elementAt(i));
+      }
     }
     ps.println(']');
   }
@@ -215,10 +299,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print((a[0]).length);
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print((a[i]).length);
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print((a[i]).length);
+      }
     }
     ps.println(']');
   }
@@ -238,10 +322,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print(a[0].size());
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print(a[i].size());
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print(a[i].size());
+      }
     }
     ps.println(']');
   }
@@ -254,10 +338,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print(((Vector)a[0]).size());
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print(((Vector)a[i]).size());
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print(((Vector)a[i]).size());
+      }
     }
     ps.println(']');
   }
@@ -271,10 +355,10 @@ public class Runtime {
     int size = v.size();
     if (size > 0) {
       ps.print(((Vector)v.elementAt(0)).size());
-    }
-    for (int i=1; i<size; i++) {
-      ps.print(' ');
-      ps.print(((Vector)v.elementAt(i)).size());
+      for (int i=1; i<size; i++) {
+        ps.print(' ');
+        ps.print(((Vector)v.elementAt(i)).size());
+      }
     }
     ps.println(']');
   }
@@ -290,11 +374,11 @@ public class Runtime {
     }
     ps.print('[');
     if (a.length > 0) {
-      print_String(ps, a[0]);
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      print_String(ps, a[i]);
+      print_quoted_String(ps, a[0]);
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        print_quoted_String(ps, a[i]);
+      }
     }
     ps.println(']');
   }
@@ -306,11 +390,11 @@ public class Runtime {
     }
     ps.print('[');
     if (a.length > 0) {
-      print_String(ps, (String)a[0]);
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      print_String(ps, (String)a[i]);
+      print_quoted_String(ps, (String)a[0]);
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        print_quoted_String(ps, (String)a[i]);
+      }
     }
     ps.println(']');
   }
@@ -323,11 +407,11 @@ public class Runtime {
     ps.print('[');
     int size = v.size();
     if (size > 0) {
-      print_String(ps, (String)v.elementAt(0));
-    }
-    for (int i=1; i<size; i++) {
-      ps.print(' ');
-      print_String(ps, (String)v.elementAt(i));
+      print_quoted_String(ps, (String)v.elementAt(0));
+      for (int i=1; i<size; i++) {
+        ps.print(' ');
+        print_quoted_String(ps, (String)v.elementAt(i));
+      }
     }
     ps.println(']');
   }
@@ -351,10 +435,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print(a[0]);
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print(a[i]);
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print(a[i]);
+      }
     }
     ps.println(']');
   }
@@ -367,10 +451,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print(((Boolean)a[0]).booleanValue());
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print(((Boolean)a[i]).booleanValue());
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print(((Boolean)a[i]).booleanValue());
+      }
     }
     ps.println(']');
   }
@@ -384,10 +468,10 @@ public class Runtime {
     int size = v.size();
     if (size > 0) {
       ps.print(((Boolean)v.elementAt(0)).booleanValue());
-    }
-    for (int i=1; i<size; i++) {
-      ps.print(' ');
-      ps.print(((Boolean)v.elementAt(i)).booleanValue());
+      for (int i=1; i<size; i++) {
+        ps.print(' ');
+        ps.print(((Boolean)v.elementAt(i)).booleanValue());
+      }
     }
     ps.println(']');
   }
@@ -401,10 +485,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print((a[0]).length);
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print((a[i]).length);
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print((a[i]).length);
+      }
     }
     ps.println(']');
   }
@@ -419,10 +503,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print(a[0]);
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print(a[i]);
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print(a[i]);
+      }
     }
     ps.println(']');
   }
@@ -435,10 +519,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print(((Byte)a[0]).byteValue());
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print(((Byte)a[i]).byteValue());
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print(((Byte)a[i]).byteValue());
+      }
     }
     ps.println(']');
   }
@@ -452,10 +536,10 @@ public class Runtime {
     int size = v.size();
     if (size > 0) {
       ps.print(((Byte)v.elementAt(0)).byteValue());
-    }
-    for (int i=1; i<size; i++) {
-      ps.print(' ');
-      ps.print(((Byte)v.elementAt(i)).byteValue());
+      for (int i=1; i<size; i++) {
+        ps.print(' ');
+        ps.print(((Byte)v.elementAt(i)).byteValue());
+      }
     }
     ps.println(']');
   }
@@ -469,10 +553,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print((a[0]).length);
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print((a[i]).length);
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print((a[i]).length);
+      }
     }
     ps.println(']');
   }
@@ -484,11 +568,11 @@ public class Runtime {
   }
 
   public static final void println_array_char(java.io.PrintStream ps, Object[] a) {
-    println_array_char_as_String(ps, a);
+    println_array_char_as_chars(ps, a);
   }
 
   public static final void println_array_char(java.io.PrintStream ps, Vector v) {
-    println_array_char_as_String(ps, v);
+    println_array_char_as_chars(ps, v);
   }
 
   public static final void println_array_char_as_String(java.io.PrintStream ps, char[] a) {
@@ -496,42 +580,50 @@ public class Runtime {
       ps.println("null");
       return;
     }
-    ps.print('\"');
-    for (int i=0; i<a.length; i++) {
-      ps.print(a[i]);
-    }
-    ps.println('\"');
+    println_quoted_String(ps, new String(a));
   }
 
-  public static final void println_array_char_as_String(java.io.PrintStream ps, Object[] a) {
+  // Outputs a sequence of space-separated characters, with (only) return
+  // and newline quoted.  (Should backslash also be quoted?)
+  public static final void println_array_char_as_chars(java.io.PrintStream ps, Object[] a) {
     if (a == null) {
       ps.println("null");
       return;
     }
     ps.print('[');
-    if (a.length > 0) {
-      ps.print(((Character)a[0]).charValue());
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print(((Character)a[i]).charValue());
+    for (int i=0; i<a.length; i++) {
+      if (i != 0)
+        ps.print(' ');
+      char c = ((Character)a[0]).charValue();
+      if (c == '\r')
+        ps.print("\\r");
+      else if (c == '\n')
+        ps.print("\\n");
+      else
+        ps.print(c);
     }
     ps.println(']');
   }
 
-  public static final void println_array_char_as_String(java.io.PrintStream ps, Vector v) {
+  // Outputs a sequence of space-separated characters, with (only) return
+  // and newline quoted.  (Should backslash also be quoted?)
+  public static final void println_array_char_as_chars(java.io.PrintStream ps, Vector v) {
     if (v == null) {
       ps.println("null");
       return;
     }
     ps.print('[');
     int size = v.size();
-    if (size > 0) {
-      ps.print(((Character)v.elementAt(0)).charValue());
-    }
-    for (int i=1; i<size; i++) {
-      ps.print(' ');
-      ps.print(((Character)v.elementAt(i)).charValue());
+    for (int i=0; i<size; i++) {
+      if (i != 0)
+        ps.print(' ');
+      char c = ((Character)v.elementAt(i)).charValue();
+      if (c == '\r')
+        ps.print("\\r");
+      else if (c == '\n')
+        ps.print("\\n");
+      else
+        ps.print(c);
     }
     ps.println(']');
   }
@@ -544,10 +636,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print(Character.getNumericValue(a[0]));
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print(Character.getNumericValue(a[i]));
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print(Character.getNumericValue(a[i]));
+      }
     }
     ps.println(']');
   }
@@ -560,10 +652,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print(Character.getNumericValue(((Character)a[0]).charValue()));
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print(Character.getNumericValue(((Character)a[i]).charValue()));
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print(Character.getNumericValue(((Character)a[i]).charValue()));
+      }
     }
     ps.println(']');
   }
@@ -577,10 +669,10 @@ public class Runtime {
     int size = v.size();
     if (size > 0) {
       ps.print(Character.getNumericValue(((Character)v.elementAt(0)).charValue()));
-    }
-    for (int i=1; i<size; i++) {
-      ps.print(' ');
-      ps.print(Character.getNumericValue(((Character)v.elementAt(i)).charValue()));
+      for (int i=1; i<size; i++) {
+        ps.print(' ');
+        ps.print(Character.getNumericValue(((Character)v.elementAt(i)).charValue()));
+      }
     }
     ps.println(']');
   }
@@ -595,10 +687,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print((a[0]).length);
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print((a[i]).length);
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print((a[i]).length);
+      }
     }
     ps.println(']');
   }
@@ -613,10 +705,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print(a[0]);
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print(a[i]);
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print(a[i]);
+      }
     }
     ps.println(']');
   }
@@ -629,10 +721,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print(((Double)a[0]).doubleValue());
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print(((Double)a[i]).doubleValue());
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print(((Double)a[i]).doubleValue());
+      }
     }
     ps.println(']');
   }
@@ -646,10 +738,10 @@ public class Runtime {
     int size = v.size();
     if (size > 0) {
       ps.print(((Double)v.elementAt(0)).doubleValue());
-    }
-    for (int i=1; i<size; i++) {
-      ps.print(' ');
-      ps.print(((Double)v.elementAt(i)).doubleValue());
+      for (int i=1; i<size; i++) {
+        ps.print(' ');
+        ps.print(((Double)v.elementAt(i)).doubleValue());
+      }
     }
     ps.println(']');
   }
@@ -663,10 +755,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print((a[0]).length);
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print((a[i]).length);
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print((a[i]).length);
+      }
     }
     ps.println(']');
   }
@@ -681,10 +773,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print(a[0]);
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print(a[i]);
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print(a[i]);
+      }
     }
     ps.println(']');
   }
@@ -697,10 +789,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print(((Float)a[0]).floatValue());
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print(((Float)a[i]).floatValue());
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print(((Float)a[i]).floatValue());
+      }
     }
     ps.println(']');
   }
@@ -714,10 +806,10 @@ public class Runtime {
     int size = v.size();
     if (size > 0) {
       ps.print(((Float)v.elementAt(0)).floatValue());
-    }
-    for (int i=1; i<size; i++) {
-      ps.print(' ');
-      ps.print(((Float)v.elementAt(i)).floatValue());
+      for (int i=1; i<size; i++) {
+        ps.print(' ');
+        ps.print(((Float)v.elementAt(i)).floatValue());
+      }
     }
     ps.println(']');
   }
@@ -731,10 +823,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print((a[0]).length);
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print((a[i]).length);
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print((a[i]).length);
+      }
     }
     ps.println(']');
   }
@@ -749,10 +841,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print(a[0]);
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print(a[i]);
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print(a[i]);
+      }
     }
     ps.println(']');
   }
@@ -765,10 +857,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print(((Integer)a[0]).intValue());
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print(((Integer)a[i]).intValue());
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print(((Integer)a[i]).intValue());
+      }
     }
     ps.println(']');
   }
@@ -782,10 +874,10 @@ public class Runtime {
     int size = v.size();
     if (size > 0) {
       ps.print(((Integer)v.elementAt(0)).intValue());
-    }
-    for (int i=1; i<size; i++) {
-      ps.print(' ');
-      ps.print(((Integer)v.elementAt(i)).intValue());
+      for (int i=1; i<size; i++) {
+        ps.print(' ');
+        ps.print(((Integer)v.elementAt(i)).intValue());
+      }
     }
     ps.println(']');
   }
@@ -799,10 +891,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print((a[0]).length);
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print((a[i]).length);
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print((a[i]).length);
+      }
     }
     ps.println(']');
   }
@@ -817,10 +909,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print(a[0]);
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print(a[i]);
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print(a[i]);
+      }
     }
     ps.println(']');
   }
@@ -833,10 +925,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print(((Long)a[0]).longValue());
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print(((Long)a[i]).longValue());
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print(((Long)a[i]).longValue());
+      }
     }
     ps.println(']');
   }
@@ -850,10 +942,10 @@ public class Runtime {
     int size = v.size();
     if (size > 0) {
       ps.print(((Long)v.elementAt(0)).longValue());
-    }
-    for (int i=1; i<size; i++) {
-      ps.print(' ');
-      ps.print(((Long)v.elementAt(i)).longValue());
+      for (int i=1; i<size; i++) {
+        ps.print(' ');
+        ps.print(((Long)v.elementAt(i)).longValue());
+      }
     }
     ps.println(']');
   }
@@ -867,10 +959,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print((a[0]).length);
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print((a[i]).length);
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print((a[i]).length);
+      }
     }
     ps.println(']');
   }
@@ -885,10 +977,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print(a[0]);
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print(a[i]);
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print(a[i]);
+      }
     }
     ps.println(']');
   }
@@ -901,10 +993,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print(((Short)a[0]).shortValue());
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print(((Short)a[i]).shortValue());
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print(((Short)a[i]).shortValue());
+      }
     }
     ps.println(']');
   }
@@ -918,10 +1010,10 @@ public class Runtime {
     int size = v.size();
     if (size > 0) {
       ps.print(((Short)v.elementAt(0)).shortValue());
-    }
-    for (int i=1; i<size; i++) {
-      ps.print(' ');
-      ps.print(((Short)v.elementAt(i)).shortValue());
+      for (int i=1; i<size; i++) {
+        ps.print(' ');
+        ps.print(((Short)v.elementAt(i)).shortValue());
+      }
     }
     ps.println(']');
   }
@@ -935,10 +1027,10 @@ public class Runtime {
     ps.print('[');
     if (a.length > 0) {
       ps.print((a[0]).length);
-    }
-    for (int i=1; i<a.length; i++) {
-      ps.print(' ');
-      ps.print((a[i]).length);
+      for (int i=1; i<a.length; i++) {
+        ps.print(' ');
+        ps.print((a[i]).length);
+      }
     }
     ps.println(']');
   }

@@ -23,6 +23,7 @@ class PptMap extends HashMap {
   //     // new object and then call merge) so that other_ppt_info doesn't
   //     // unexpectedly change?  For now, avoid the sharing, to be safe.
   //     if (this_ppt_info == null) {
+  //       // This constructor is commented out; uncomment if I want to use it.
   //       this_ppt_info = new PptTopLevel(other_ppt_info);
   //       put(ppt_name, this_ppt_info);
   //     }

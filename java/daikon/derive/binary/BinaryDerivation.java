@@ -32,7 +32,7 @@ public abstract class BinaryDerivation implements Derivation, Cloneable {
   private VarInfo this_var_info;
   public VarInfo getVarInfo() {
     if (this_var_info == null) {
-      this_var_info = makeVarInfo();
+      this_var_info = this.makeVarInfo();
       this_var_info.derived = this;
       var_info1.derivees.add(this);
       var_info2.derivees.add(this);

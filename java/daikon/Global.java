@@ -5,7 +5,7 @@ package daikon;
 import java.util.*;
 import com.oroinc.text.regex.*;
 
-public class Global {
+public final class Global {
 
   // There are some other variables in the Daikon class.  Probably move
   // them here eventually.
@@ -56,7 +56,7 @@ public class Global {
   public final static boolean debugStatistics = false;
 
   /// Invariant inference or variable derivation
-  // These I will compute from a final postpass over the Ppt.
+  // These I will compute from a final postpass over each Ppt.
   public static int non_canonical_variables = 0;
   public static int can_be_missing_variables = 0;
   public static int canonical_variables = 0;
@@ -75,10 +75,10 @@ public class Global {
   // These also appear in falsified_invariants or non_falsified_invariants;
   // they shouldn't be added to other things.
   public static int partially_implied_invariants = 0;
-  // should be falsified_invariants + non_falsified_invariants
+  // instantiated_invariants == falsified_invariants + non_falsified_invariants
   public static int instantiated_invariants = 0;
   public static int falsified_invariants = 0;
-  // should be the sum of all the below
+  // non_falsified_invariants should be the sum of all the below
   public static int non_falsified_invariants = 0;
   public static int too_few_samples_invariants = 0;
   public static int non_canonical_invariants = 0;
@@ -122,7 +122,7 @@ public class Global {
                                        + partially_implied_invariants));
     System.out.println("    implied_false_noninstantiated_invariants = " + implied_false_noninstantiated_invariants);
     System.out.println("    partially_implied_invariants = " + partially_implied_invariants);
-    System.out.println("Instantiated:" + instantiated_invariants
+    System.out.println("Instantiated: " + instantiated_invariants
                        + " = "
                        + (falsified_invariants + non_falsified_invariants));
     System.out.println("  falsified_invariants = " + falsified_invariants);
@@ -153,18 +153,40 @@ public class Global {
   public final static boolean debugPptTopLevel = false;
   public final static boolean debugDerive = false;
   public final static boolean debugInfer = false;
-  public final static boolean debugPptSlice = false;
-  public final static boolean debugPptSliceGeneric = false;
   public final static boolean debugPptSplit = false;
   public final static boolean debugPrintInvariants = false;
+  public final static boolean debugPptSlice = false;
+  public final static boolean debugPptSliceGeneric = false;
+  public final static boolean debugPptSliceSpecific = false;
 
   // public final static boolean debugRead = true;
   // public final static boolean debugPptTopLevel = true;
   // public final static boolean debugDerive = true;
   // public final static boolean debugInfer = true;
-  // public final static boolean debugPptSlice = true;
-  // public final static boolean debugPptSliceGeneric = true;
   // public final static boolean debugPptSplit = true;
   // public final static boolean debugPrintInvariants = true;
+  // public final static boolean debugPptSlice = true;
+  // public final static boolean debugPptSliceGeneric = true;
+  // public final static boolean debugPptSliceSpecific = true;
+
+  public final static String[][] debuggedPptSliceSpecific
+    = { { "arg", "orig(arg)" } };
+
+  // This may be expensive and so should only be called infrequently.
+  public final static boolean isDebuggedPptSlice(PptSlice slice) {
+    String[][] dpss = debuggedPptSliceSpecific;
+  outer:
+    for (int i=0; i<dpss.length; i++) {
+      if (dpss[i].length == slice.arity) {
+        for (int j=0; j<slice.arity; j++) {
+          if (dpss[i][j] != slice.var_infos[j].name)
+            continue outer;
+        }
+        return true;
+      }
+    }
+    return false;
+  }
+
 
 }

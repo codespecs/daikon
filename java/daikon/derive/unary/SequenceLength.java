@@ -5,7 +5,7 @@ import daikon.derive.binary.*;
 import utilMDE.*;
 
 // originally from pass1.
-public class SequenceLength extends UnaryDerivation {
+public final class SequenceLength extends UnaryDerivation {
 
   public SequenceLength(VarInfo vi) {
     super(vi);
@@ -20,7 +20,7 @@ public class SequenceLength extends UnaryDerivation {
     }
     // Don't do this for now, because we depend on being able to call
     // sequenceSize() later.
-    // if (vi.name.indexOf("~ll~.") != -1)
+    // if (vi.name.indexOf("~.") != -1)
     //   return false;
 
     return true;
@@ -31,19 +31,19 @@ public class SequenceLength extends UnaryDerivation {
     if (source_mod == ValueTuple.MISSING)
       return ValueAndModified.MISSING;
     Object val = var_info.getValue(vt);
-    if (val == null)
+    if (val == null) {
       return ValueAndModified.MISSING;
-    else {
-      int len;
-      ProglangType rep_type = var_info.rep_type;
-
-      if (rep_type == ProglangType.INT_ARRAY) {
-        len = ((int[])val).length;
-      } else {
-        len = ((Object[])val).length;
-      }
-      return new ValueAndModified(Intern.internedInteger(len), source_mod);
     }
+
+    int len;
+    ProglangType rep_type = var_info.rep_type;
+
+    if (rep_type == ProglangType.INT_ARRAY) {
+      len = ((int[])val).length;
+    } else {
+      len = ((Object[])val).length;
+    }
+    return new ValueAndModified(Intern.internedInteger(len), source_mod);
   }
 
   protected VarInfo makeVarInfo() {

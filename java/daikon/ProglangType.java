@@ -8,8 +8,19 @@ import utilMDE.*;
 
 
 // I could also consider using Class; however:
-//  * that ties this to Java
-//  * that loads the class (not obviously a problem)
+//  * that ties this to a Java front end, as Class can't represent types of
+//    (say) C variables.  (not a compelling problem)
+//  * that loads the class, which requies that all classes available at
+//    runtime be available at inference time.  (not a compelling problem)
+//  * Class does not represent inheritance (but I can do that myself);
+//    and see isAssignableFrom, which might do all I need.
+//  * Class has no "dimensions" field.  isArray() exists, however, as does
+//    getComponentType().  I can always determine the number of dimensions
+//    from the number of leading "[" in the name, and dimensions is only
+//    really needed for parse_value.  parse_value can do literal checks and
+//    elementType() can use the name, I suppose.  Or maybe try to
+//    instantiate something, though that seems dicier.
+
 
 // Problem:  this doesn't currently represent inheritance, coercability, or
 // other relationships over the base types.
@@ -17,7 +28,7 @@ import utilMDE.*;
 // integral_types = ("int", "char", "float", "double", "integral", "boolean")
 // known_types = integral_types + ("pointer", "address")
 
-public final class ProglangType {
+public final class ProglangType implements java.io.Serializable {
   // Should I use a Set, possibly a HashSet, here?
   // Or a WeakHashMapWithHasher?  It depends on how big this can get...
   private static Vector all_known_types = new Vector();
@@ -30,6 +41,9 @@ public final class ProglangType {
 
   public final static ProglangType BOOLEAN = ProglangType.intern("boolean", 0);
   public final static ProglangType INTEGER = ProglangType.intern("Integer", 0);
+
+  public final static ProglangType VECTOR = ProglangType.intern("Vector", 0);
+  public final static ProglangType OBJECT = ProglangType.intern("Object", 0);
 
   private String base;		// interned name of base type
   public String base() { return base; }
@@ -56,7 +70,9 @@ public final class ProglangType {
    * This can't be a constructor because it returns a canonical
    * representation (that can be compared with ==), not necessarily a new
    * object.
-   */
+   *  @argument rep_  the name of the type, optionally suffixed by
+   *  (possibly multiple) "[]"
+   **/
   public static ProglangType parse(String rep_) {
     String rep = rep_;
     int dims = 0;
@@ -64,17 +80,6 @@ public final class ProglangType {
       dims++;
       rep = rep.substring(0, rep.length() - 2);
     }
-    // don't permit "array of" as prefix.
-
-//             if not (base in known_types):
-//                 // hack for Java.  (I want to avoid the short names if possible.)
-//                 if (base == "java.lang.String") or (base == "String"): // interned strings
-//                     base = "char"
-//                     dimensionality = dimensionality+1
-//                 elif (base == "java.lang.Vector") or (base == "Vector"): // interned strings
-//                     base = "java_object"
-//                     dimensionality = dimensionality+1
-
     String new_base = rep.intern();
     return intern(new_base, dims);
   }
@@ -144,14 +149,6 @@ public final class ProglangType {
     return result;
   }
 
-//     def __cmp__(self, other):
-//         if (self.base == other.base):
-//             return self.dimensionality - other.dimensionality
-//         elif (self.base < other.base):
-//             return -1
-//         else:
-//             return 1
-//
 //     def compatible(self, other):
 //         base1 = self.base
 //         base2 = other.base
@@ -162,8 +159,10 @@ public final class ProglangType {
 
   // This used to be private.  Why???
   public ProglangType elementType() {
+    if (this == VECTOR)
+      return OBJECT;
     if (dimensions == 0)
-      throw new Error("Called elementType on a non-array");
+      throw new Error("Called elementType on non-array type " + format());
     return ProglangType.intern(base, dimensions-1);
   }
 
@@ -209,7 +208,19 @@ public final class ProglangType {
 	return value.intern();
       } else if ((base == BASE_ADDRESS) || (base == BASE_POINTER)) {
 	return Intern.intern(Integer.valueOf(value, 16));
-      } else if ((base == BASE_CHAR) || (base == BASE_INT)) {
+      } else if (base == BASE_CHAR) {
+        // This will fail if the character is output as an integer
+        // (as I believe the C front end does).
+        char c;
+        int index;
+        if (value.length() == 1)
+          c = value.charAt(0);
+        else if ((value.length() == 2) && (value.charAt(0) == '\\'))
+          c = UtilMDE.unquote(value).charAt(0);
+        else
+          throw new Error("Bad character: " + value);
+        return Intern.internedInteger(Character.getNumericValue(c));
+      } else if (base == BASE_INT) {
         // Is this still necessary?
         // Hack for Java objects, fix later I guess.
         if (value.equals("null"))
@@ -220,17 +231,6 @@ public final class ProglangType {
         if (value.equals("true"))
           return One;
 	return Intern.internedInteger(value);
-	// Old implementation
-	// if type(value) == types.IntType:
-	//     pass
-	// elif type(value) == types.StringType:
-	//     try:
-	// 	value = int(value)
-	//     except:
-	// 	assert len(value) == 1
-	// 	value = ord(value)
-	// else:
-	//     raise "Bad character value in data trace file: " + value
       // } else if (base == BASE_BOOLEAN) {
       //   return new Boolean(value);
       } else {
@@ -238,28 +238,6 @@ public final class ProglangType {
       }
     } else if (dimensions == 1) {
       // variable is an array
-
-      // // Hack for null (missing) string:  turn it into empty string
-      // if ((this_base_type == "char")
-      //     && (this_var_type.dimensionality == 1)
-      //     && (value == "null"))
-      //   value = "\"\"";
-
-      // if (base == BASE_CHAR) {
-      //   if ((value.length() > 1)
-      //       && value.startsWith("\"") && value.endsWith("\"")) {
-      //     // variable is a string
-      //     // turn it into a tuple of *numbers* instead.
-      //     // (Probably I want to retain it as a string; it's obscure
-      //     // as a sequence of numbers.  The advantage to a sequence of
-      //     // numbers is that already-written tests can work.)
-      //     if (value.startsWith("\"") && value.endsWith("\""))
-      //       value = value.substring(1, value.length()-1);
-      //     return value.toCharArray();
-      //   } else {
-      //     throw new Error("To be written");
-      //   }
-      // } else {
 
       value = value.trim();
 
@@ -270,11 +248,10 @@ public final class ProglangType {
 
       // This isn't right if a string contains embedded spaces.
       // I could instead use StreamTokenizer.
-      Vector value_strings_vector
+      String[] value_strings
         = ((value.length() == 0)
-           ? (new Vector(0))  // parens for Emacs indentation
-           : Util.split(Global.regexp_matcher, Global.ws_regexp, value));
-      String[] value_strings = (String[]) value_strings_vector.toArray(new String[0]);
+           ? (new String[0])  // parens for Emacs indentation
+           : (String[]) (Util.split(Global.regexp_matcher, Global.ws_regexp, value)).toArray(new String[0]));
       int len = value_strings.length;
 
       // This big if ... else should deal with all the primitive types --
@@ -298,7 +275,7 @@ public final class ProglangType {
       }
 
       // This is a more general technique; but when will we need
-      // anything general?
+      // such generality?
       // // not elementType() because that interns; here, there is no
       // // need to do the work of interning (I think)
       // ProglangType elt_type = elementType();
@@ -312,10 +289,10 @@ public final class ProglangType {
 	throw new Error("To implement");
 	// value = tuple(eval(value));
       } else {
-	throw new Error("Can't parse a value of this type");
+	throw new Error("Can't parse a value of type " + format());
       }
     } else {
-      throw new Error("Can't parse a value of this type");
+      throw new Error("Can't parse a value of type " + format());
     }
   }
 
@@ -330,23 +307,11 @@ public final class ProglangType {
   }
 
   public boolean isIntegral() {
-    if (dimensions != 0)
-      return false;
-
-    if (baseIsIntegral()) {
-      return true;
-    }
-    return false;
+    return ((dimensions == 0) && baseIsIntegral());
   }
 
   public boolean isIndex() {
     return isIntegral();
-
-    // Old implementation
-    // ProglangType type = var.type;
-    // if (type.isIntegral() && (type != ProglangType.BOOLEAN))
-    //   return true;
-    // return false;
   }
 
   public boolean comparable(ProglangType other) {
@@ -354,8 +319,15 @@ public final class ProglangType {
       return true;
     if (this.dimensions != other.dimensions)
       return false;
-    if (this.baseIsIntegral() && other.baseIsIntegral())
+    boolean thisIntegral = this.baseIsIntegral();
+    boolean otherIntegral = other.baseIsIntegral();
+    if (thisIntegral && otherIntegral)
       return true;
+    // Make Object comparable to everything
+    if (((this.base == "Object") && (! otherIntegral)) // interned strings
+        || ((other.base == "Object") && (! thisIntegral))) // interned strings
+      return true;
+
     return false;
   }
 

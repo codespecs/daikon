@@ -2,7 +2,7 @@ package daikon.derive.unary;
 
 import daikon.*;
 
-public class SequenceLengthFactory extends UnaryDerivationFactory {
+public final class SequenceLengthFactory extends UnaryDerivationFactory {
 
   public UnaryDerivation[] instantiate(VarInfo vi) {
     if (vi.rep_type != ProglangType.INT_ARRAY)

@@ -14,13 +14,20 @@ import utilMDE.*;
 
 public abstract class PptSlice extends Ppt {
 
+  public boolean debugged;
+
   public Ppt parent;
   public int arity;
   // var_infos appears in Ppt; don't repeat it here!!
   // public VarInfo[] var_infos;
-  // cache of values from var_infos, to avoid repeated lookups
+  // Cache of values from var_infos, to avoid repeated lookups.
+  // value_indices[i] == var_infos[i].value_index, but looking up in
+  // this array should be cheaper than looking up in var_infos.
   public int[] value_indices;
 
+  // If true, then we are in the process of deleting this invariant.
+  // It should only be on a list of deferred to-be-deleted invariants.
+  // Thus, we should never see this non-false.
   public boolean no_invariants = false;
 
   public Invariants invs;
@@ -34,9 +41,11 @@ public abstract class PptSlice extends Ppt {
   int num_values_post_cache = -2222;
   String tuplemod_samples_summary_post_cache = "UNINITIALIZED";
 
-  // true if we've seen all values and should not add the result of further
-  // add() methods to values_cache.
   // This is rather a hack and should be removed later.
+
+  // True if we've seen all values and are performing add() based on values
+  // already in the values_cache; so add() should not add its arguments to
+  // values_cache.
   public boolean already_seen_all = false;
 
 
@@ -57,20 +66,26 @@ public abstract class PptSlice extends Ppt {
     value_indices = new int[arity];
     for (int i=0; i<arity; i++)
       value_indices[i] = var_infos[i].value_index;
+    // This is now done in the child classes (PptSlice1, etc.)
     // values_cache = new HashMap();
     invs = new Invariants();
     // Don't do this; make someone else do it.
     // In particular, I want the subclass constructor to get called
     // before this is.
     // parent.addView(this);
+
+    // This comes after setting all other variables, as the function call may use name, arity, var_infos, etc.
+    debugged = (Global.debugPptSliceSpecific
+                && Global.isDebuggedPptSlice(this));
   }
 
   public boolean usesVar(VarInfo vi) {
     return (ArraysMDE.indexOfEq(var_infos, vi) != -1);
   }
 
-  // A reason to defer removal is because we're currently iterating over
-  // the invariants by index rather than using an Iterator.
+  // When non-null, removeInvariants adds to this list instead of actually
+  // removing.  (We might need to defer removal because we're currently
+  // iterating over the invariants by index rather than using an Iterator.)
   private Vector invs_to_remove_deferred = null;
   // This to avoid constructing a new Vector every time through add().
   // One can just use this one (and be sure to clear it out afterward).
@@ -101,7 +116,7 @@ public abstract class PptSlice extends Ppt {
   // and to take action if the vector becomes void.
   public void removeInvariant(Invariant inv) {
     Assert.assert(! no_invariants);
-    if (Global.debugPptSlice)
+    if (this.debugged || Global.debugPptSlice)
       System.out.println("PptSlice.removeInvariant(" + inv.name() + ")" +
                          ((invs_to_remove_deferred != null)
                           ? " will be deferred"
@@ -115,7 +130,7 @@ public abstract class PptSlice extends Ppt {
         System.out.println("PptSlice.removeInvariant(" + inv.name() + ")");
       boolean removed = invs.remove(inv);
       Assert.assert(removed);
-      // This could also have been in Invariant.destroy().
+      // This increment could also have been in Invariant.destroy().
       Global.falsified_invariants++;
       if (invs.size() == 0) {
         no_invariants = true;
@@ -129,7 +144,6 @@ public abstract class PptSlice extends Ppt {
 
   // I could make this more efficient, but it's probably fine as it is.
   public void removeInvariants(Vector to_remove) {
-    // This must not call removeInvariant because that gets overridden.
     for (int i=0; i<to_remove.size(); i++) {
       removeInvariant((Invariant) to_remove.elementAt(i));
     }
@@ -200,42 +214,22 @@ public abstract class PptSlice extends Ppt {
 
   abstract void instantiate_invariants(int pass);
 
+  /** Order by arity, then by name. */
+  public static final class ArityNameComparator implements Comparator {
+    public int compare(Object o1, Object o2) {
+      if (o1 == o2)
+        return 0;
+      PptSlice slice1 = (PptSlice) o1;
+      PptSlice slice2 = (PptSlice) o2;
+      // This class is used for comparing PptSlice objects.
+      // (Should it be in PptSlice?)
+      Assert.assert(slice1.parent == slice2.parent);
+      if (slice1.arity == slice2.arity) {
+        return slice1.name.compareTo(slice2.name);
+      } else {
+        return slice2.arity - slice1.arity;
+      }
+    }
+  }
+
 }
-
-/// These functions create real new Ppt objects as oppose to slices.
-
-// def dict_of_tuples_slice_2(dot, i1, i2):
-//     """Input: a dictionary mapping a tuple of elements to a count, and a
-//     list of indices.
-//     Output: a dictionary mapping a subset of the original elements to a count.
-//     The subset is chosen according to the input indices."""
-//
-//     result = {}
-//     for (key_tuple, count) in dot.items():
-//         # sliced_tuple = util.slice_by_sequence(key_tuple, indices)
-//         sliced_tuple = (key_tuple[i1][0], key_tuple[i2][0])
-//         modified = key_tuple[i1][1] and key_tuple[i2][1]
-//         this_counts = result.get(sliced_tuple, [0, 0])
-//         result[sliced_tuple] = this_counts
-//         this_counts[0] = this_counts[0] + count
-//         if modified:
-//             this_counts[1] = this_counts[1] + count
-//     return result
-//
-// def dict_of_tuples_slice_3(dot, i1, i2, i3):
-//     """Input: a dictionary mapping a tuple of elements to a count, and a
-//     list of indices.
-//     Output: a dictionary mapping a subset of the original elements to a count.
-//     The subset is chosen according to the input indices."""
-//
-//     result = {}
-//     for (key_tuple, count) in dot.items():
-//         # sliced_tuple = util.slice_by_sequence(key_tuple, indices)
-//         sliced_tuple = (key_tuple[i1][0], key_tuple[i2][0], key_tuple[i3][0])
-//         modified = key_tuple[i1][1] and key_tuple[i2][1] and key_tuple[i3][1]
-//         this_counts = result.get(sliced_tuple, [0, 0])
-//         result[sliced_tuple] = this_counts
-//         this_counts[0] = this_counts[0] + count
-//         if modified:
-//             this_counts[1] = this_counts[1] + count
-//     return result

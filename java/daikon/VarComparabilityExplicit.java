@@ -7,22 +7,26 @@ import com.oroinc.text.regex.*;
 import utilMDE.*;
 
 
-public class VarComparabilityExplicit extends VarComparability {
-
-  // A (explicit) VarComparable is:
-  //  * for scalar types:  a tuple of comparable variables
-  //  * for array types:  a tuple of "array", a list of variables comparable to
-  //    the element type, and some number of lists variables comparable to the
-  //    index types
-  //  * If the alias slot is set to a String,
-  //    then treat this variable as if it has the specified name.
-  //    The point of "alias" is that an explicit VarComparability lists names of
-  //    other varibles to which it is comparable; but we introduce new variables
-  //    which we want to be considered comparable to others.  So we have to
-  //    indicate what names those newly-introduced varaibles are comparable
-  //    (actually, identical in terms of VarComparability) to.
-  //  * special:  the string "always" means always comparable
-  //    I represent this by base == null
+/**
+ * A (explicit) VarComparable is:
+ * <ul>
+ *   <li>a list of names of comparable variables (in the "base" slot).
+ *     If base == null, then every comparability check succeeds; the variable
+ *     is considered comparable to every other variable.
+ *   <li>for array types:  also, for each index, a list of variable names
+ *     that are comparable to the index
+ *   <li>If the alias slot is set to a String,
+ *     then treat this variable as if it has the specified name.
+ *     The point of "alias" is that an explicit VarComparability lists names of
+ *     other varibles to which it is comparable; but we introduce new variables
+ *     which we want to be considered comparable to others.  So we have to
+ *     indicate what names those newly-introduced varaibles are comparable
+ *     (actually, identical in terms of VarComparability) to.
+ *   <li>special:  the string "always" means always comparable
+ *     I represent this by base == null
+ * </ul>
+ **/
+public final class VarComparabilityExplicit extends VarComparability implements java.io.Serializable {
 
   // All strings that appear in VarComparabilityExplicit objects are interned.
 
@@ -32,10 +36,12 @@ public class VarComparabilityExplicit extends VarComparability {
 				// there may be more indices than this
   String alias;
 
-  VarComparabilityExplicit baseType; // also access through elementType() accessor
-  VarComparabilityExplicit[] indexTypes; // access through indexType() accessor
+  // These are caches to avoid recomputation.  Their contents are are not
+  // used for direct comparison but are constructed on demand (say, when a
+  // derived varible is created and must be given a VarComparability).
+  private VarComparabilityExplicit cached_element_type;
+  private VarComparabilityExplicit[] indexTypes; // access through indexType() accessor
 
-  VarComparabilityExplicit cached_element_type;
 
   VarComparabilityExplicit(String[] base_, String[][] indices_, int dimensions_,
 			   String alias_) {
@@ -139,7 +145,9 @@ public class VarComparabilityExplicit extends VarComparability {
 
 
 
-  // Split on whitespace and return an array of the resulting words, interned.
+  /**
+   * Split on whitespace and return an array of the resulting words, interned.
+   **/
   static final String[] ws_split_to_interned_array(String s) {
     PatternMatcher re_matcher = Global.regexp_matcher;
 
@@ -148,10 +156,6 @@ public class VarComparabilityExplicit extends VarComparability {
     Intern.internStrings(result);
     return result;
   }
-
-
-  // def array_derived_vars(array, indices):
-  //     return ("%s-element" % array,) + tuple(map(lambda i,a=array: "%s-index%d" % (a,i), range(1,indices+1)))
 
 
   // This is the key function of the class.

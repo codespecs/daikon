@@ -4,6 +4,7 @@ package daikon;
 
 
 import java.util.*;
+import utilMDE.*;
 
 
 // Types of Ppt (program point) objects:
@@ -20,18 +21,13 @@ import java.util.*;
 // Actually, right now we assume all Views are Slices, which is a problem.
 
 
-// I want to indicate that every Ppt has a public member var_infos.  In
-// order to do that, I really need an abstract base class from which all
-// Ppt objects derive.  If I didn't insist on that, or was willing to
-// make clients call a method to get the array, then I could use an
-// interface instead.
-
-// What motivates this is that it's a bit gross, and may be inefficient in
-// time without saving any space, to use num_vars and var_info_iterator
-// instead of
+// Ppt is an abstract base class rather than an interface in part because
+// interfaces cannot declare member variables.  I suspect that using
+// members directly will be more efficient than calling accessor
+// functions such as num_vars() and var_info_iterator().
 
 // The common interface for all Ppt objects.
-public abstract class Ppt {
+public abstract class Ppt implements java.io.Serializable {
 
   public String name;
 
@@ -40,10 +36,12 @@ public abstract class Ppt {
   // Do I want two collections here (one for slices and one for conditional?
   // This used to be a WeakHashMap; now it is a HashSet, because I'm not sure
   // where else these would be referred to.
-  //  * This is actually a set, but is implemented as a WeakHashMap because
-  //  * that is the only weak collection and I want the objects weakly held.
+  // // old comment:
+  // //   This is actually a set, but is implemented as a WeakHashMap because
+  // //   that is the only weak collection and I want the objects weakly held.
   // I'm not sure why this was originally a HashSet, but that fact is now
-  // taken advantage of in instantiate_views.
+  // taken advantage of in instantiate_views, for fast checking of whether
+  // an element is in the set.  (Simple ordering might have been enough there.)
   /**
    * All the Views on this.
    * Provided so that this Ppt can notify them when significant events
@@ -53,7 +51,7 @@ public abstract class Ppt {
   HashSet views;
 
   // Temporarily have a separate collection for PptConditional views.
-  // In the long run, I'm not sure whether the two HashSets will be
+  // In the long run, I'm not sure whether the two collections will be
   // separate or not.
   // Right now, these are created only after all the values have been seen,
   // so I don't have to get too tense about installing them correctly and
@@ -78,6 +76,10 @@ public abstract class Ppt {
   //   Assert.assert(removed);
   // }
 
+  /**
+   * Typically one should use the dynamic_constant or canBeMissing slots,
+   * which cache the invariants of most interest, instead of this function.
+   **/
   public PptSlice getView(VarInfo vi) {
     for (Iterator itor = views.iterator(); itor.hasNext(); ) {
       PptSlice slice = (PptSlice) itor.next();
@@ -87,6 +89,10 @@ public abstract class Ppt {
     return null;
   }
 
+  /**
+   * Typically one should use the equal_to slot, which caches the
+   * invariants of most interest, instead of this function.
+   **/
   public PptSlice getView(VarInfo vi1, VarInfo vi2) {
     for (Iterator itor = views.iterator(); itor.hasNext(); ) {
       PptSlice slice = (PptSlice) itor.next();
@@ -106,9 +112,11 @@ public abstract class Ppt {
   /** Number of samples, not including missing values. */
   public abstract int num_samples();
 
-  // Do these make sense?  They have to do with individual
-  // variables, not entire samples.
-  /** Number of samples with mod bit set. */
+  /**
+   * Number of samples with mod bit set for at least one variable.  In
+   * other words, this is recording tuplemod information, not regular mod
+   * information.
+   **/
   public abstract int num_mod_non_missing_samples();
   public abstract int num_values();
   // public abstract int num_missing
@@ -117,12 +125,6 @@ public abstract class Ppt {
   // That might be more direct, and it's not all that much
   // space (no more than used up by the iterator, etc., and
   // it need only be updated once.
-
-  // /** The number of variables at this Ppt. */
-  // int num_vars();
-  // /** An iterator over the variables at this Ppt. */
-  // Iterator var_info_iterator();
-
 
 
   // This might include derived variables as well, or it might not.  Or
@@ -175,6 +177,7 @@ public abstract class Ppt {
     return ppt_name.substring(0, fn_name_end).intern();
   }
 
+  // As of 1/31/2000, only called by varNames().
   /** Put a string representation of the variable names in the StringBuffer. */
   public void varNames(StringBuffer sb) {
     // System.out.println("this=" + this);
@@ -192,11 +195,17 @@ public abstract class Ppt {
     sb.append(")");
   }
 
+  // Cache, so the value doesn't have to be repeatedly recomputed.
+  private String varNames = null;
+
   /** Return a string representation of the variable names. */
   public String varNames() {
-    StringBuffer sb = new StringBuffer();
-    varNames(sb);
-    return sb.toString();
+    if (varNames == null) {
+      StringBuffer sb = new StringBuffer();
+      varNames(sb);
+      varNames = sb.toString();
+    }
+    return varNames;
   }
 
   public VarInfo findVar(String name) {
@@ -205,6 +214,19 @@ public abstract class Ppt {
         return var_infos[i];
     }
     return null;
+  }
+
+  public static final class NameComparator implements Comparator {
+    public int compare(Object o1, Object o2) {
+      if (o1 == o2)
+        return 0;
+      PptSlice ppt1 = (PptSlice) o1;
+      PptSlice ppt2 = (PptSlice) o2;
+      // This class is used for comparing PptSlice objects.
+      // (Should it be in PptSlice?)
+      Assert.assert(ppt1.parent == ppt2.parent);
+      return ppt1.name.compareTo(ppt2.name);
+    }
   }
 
 }

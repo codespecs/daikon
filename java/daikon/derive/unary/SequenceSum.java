@@ -3,7 +3,7 @@ import daikon.*;
 import daikon.derive.*;
 import utilMDE.*;
 
-public class SequenceSum extends UnaryDerivation {
+public final class SequenceSum extends UnaryDerivation {
 
   public SequenceSum(VarInfo vi) {
     super(vi);
@@ -16,10 +16,10 @@ public class SequenceSum extends UnaryDerivation {
     Object val = var_info.getValue(vt);
     if (val == null)
       return ValueAndModified.MISSING;
-    int[] ints = (int[])val;
+    int[] val_array = (int[])val;
     int result = 0;
-    for (int i=0; i<ints.length; i++)
-      result += ints[i];
+    for (int i=0; i<val_array.length; i++)
+      result += val_array[i];
     return new ValueAndModified(Intern.internedInteger(result),
                                 source_mod);
   }

@@ -18,14 +18,14 @@ import utilMDE.*;
 // Objects and Objects, so it doesn't obey the Map interface.  I could add
 // methods that also obey the Map signatures, but I don't see the point.
 
-public class VarValuesOrdered {
+public final class VarValuesOrdered {
 
   // More efficient to have three vectors than a vector of triplets.
   private Vector values;
   private Vector modbits;
   private Vector counts;        // for run-length encoding
   private int num_samples;	// total number of samples; sum of count Vector.
-                                //   also computable from tuplemode_*.
+                                //   also computable from tuplemod_*.
 
   private HashSet values_set;   // for count of values.
 
@@ -56,7 +56,8 @@ public class VarValuesOrdered {
     int result = 0;
     for (int i=0; i<tm_indices.length; i++)
       result += tuplemod_samples[tm_indices[i]];
-    return result; }
+    return result;
+  }
 
   public String tuplemod_samples_summary() {
     StringBuffer sb = new StringBuffer();
@@ -77,14 +78,14 @@ public class VarValuesOrdered {
 
   // Add new samples
   void add(ValueTuple vt, int count) {
-    Assert.assert(vt.vals == Intern.intern(vt.vals));
-    Assert.assert(vt.mods == Intern.intern(vt.mods));
+    Assert.assert(Intern.isInterned(vt.vals));
+    Assert.assert(Intern.isInterned(vt.mods));
     add(vt.vals, vt.mods, count);
   }
 
   void add(Object[] vals, int[] mods, int count) {
-    Assert.assert(vals == Intern.intern(vals));
-    Assert.assert(mods == Intern.intern(mods));
+    Assert.assert(Intern.isInterned(vals));
+    Assert.assert(Intern.isInterned(mods));
     // System.out.println("VarValuesOrdered.add(" + vals + ", " + mods + ", " + count + ")");
     int last_index = values.size()-1;
     if ((last_index > 0)
@@ -102,7 +103,7 @@ public class VarValuesOrdered {
     tuplemod_samples[tuplemod] += count;
     num_samples += count;
 
-    Assert.assert(vals == Intern.intern(vals));
+    Assert.assert(Intern.isInterned(vals));
     values_set.add(vals);
   }
 
@@ -127,7 +128,8 @@ public class VarValuesOrdered {
     }
   }
 
-  public class ValueTupleCount {
+  /** A pair of a ValueTuple and an Integer count. **/
+  public final class ValueTupleCount {
     public final ValueTuple value_tuple;
     public final int count;
     ValueTupleCount(ValueTuple vt, int c) {
@@ -136,16 +138,15 @@ public class VarValuesOrdered {
     }
   }
 
-  private class SampleIterator implements Iterator {
+  private final class SampleIterator implements Iterator {
     int i;
     SampleIterator() { i=0; }
     public boolean hasNext() { return i<values.size(); }
     public Object next() {
-      int oldi = i;
+      Object[] vals = (Object[]) values.elementAt(i);
+      int[] mods = (int[]) modbits.elementAt(i);
+      int count = ((Integer) counts.elementAt(i)).intValue();
       i++;
-      Object[] vals = (Object[]) values.elementAt(oldi);
-      int[] mods = (int[]) modbits.elementAt(oldi);
-      int count = ((Integer) counts.elementAt(oldi)).intValue();
       return new ValueTupleCount(ValueTuple.makeFromInterned(vals, mods),
                                  count);
     }
@@ -254,8 +255,8 @@ public class VarValuesOrdered {
       Assert.assert(mods.length == tuple_len);
       System.out.println(ValueTuple.valsToString(vals) + " "
                          + ArraysMDE.toString(mods) + ": " + count);
-      Assert.assert(vals == Intern.intern(vals));
-      Assert.assert(mods == Intern.intern(mods));
+      Assert.assert(Intern.isInterned(vals));
+      Assert.assert(Intern.isInterned(mods));
     }
   }
 

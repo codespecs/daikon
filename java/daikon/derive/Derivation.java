@@ -2,7 +2,7 @@ package daikon.derive;
 
 import daikon.*;
 
-public interface Derivation {
+public interface Derivation extends java.io.Serializable {
 
   // This is static, so we can't mention it here.
   // It's in DerivationFactory, though.

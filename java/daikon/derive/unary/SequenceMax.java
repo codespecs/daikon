@@ -1,10 +1,10 @@
 package daikon.derive.unary;
 import daikon.*;
 import daikon.derive.*;
-
 import utilMDE.*;
 
-public class SequenceMax extends UnaryDerivation {
+// like SequenceMin; if one changes, change the other, too
+public final class SequenceMax extends UnaryDerivation {
 
   public SequenceMax(VarInfo vi) {
     super(vi);

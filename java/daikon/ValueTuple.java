@@ -10,16 +10,17 @@ import utilMDE.*;
 // This is the data structure that holds the tuples of values see so far
 // (and how many times each was seen).
 
-// While the arrays are interned, the ValueTuple elements themselves are not.
-public class ValueTuple implements Cloneable {
+// While the arrays and their elements are interned, the ValueTuple objects
+// themselves are not interned.
+public final class ValueTuple implements Cloneable {
 
-  // These arrays should be interned.
+  // These arrays are interned, and so are their elements.
 
   public Object[] vals;		// the values themselves (as Objects, if necessary)
 
-  // consider putting this in the first slot of "vals", to avoid having to
-  // make a pair of val and mods.  Do I need to worry about trickery such
-  // as orderings changing when we add derived values?  I think not...
+  // consider putting this in the first slot of "vals", to avoid the Object
+  // overhead of a pair of val and mods.  Do I need to worry about trickery
+  // such as orderings changing when we add derived values?  I think not...
 
   // I need to have some kind of access to this representation so that
   // external code can create one of these and pass it in.  Or maybe
@@ -39,6 +40,12 @@ public class ValueTuple implements Cloneable {
   public final static int MODIFIED = 1;
   public final static int MISSING = 2;
   public final static int MODBIT_VALUES = 3;
+  // Out of the range of MODBIT_VALUES because this won't appear in the
+  // tables; it gets converted to UNMODIFIED or MODIFIED, depending on
+  // whether this is the first sample.  (Not sure whether that is the right
+  // strategy in the long term; it does let me avoid changing code in the
+  // short term.)
+  public final static int STATIC_CONSTANT = 22;
 
   // implementation for unpacked representation
 
@@ -52,11 +59,13 @@ public class ValueTuple implements Cloneable {
   boolean isModified(int value_index) { return mods[value_index] == MODIFIED; }
   boolean isMissing(int value_index) { return mods[value_index] == MISSING; }
 
-  // Note that the mod versions take a ModInfo, not an int, as their index.
+  // The arguments ints represent modification information.
   static boolean modIsUnmodified(int mod_value) { return mod_value == UNMODIFIED; }
   static boolean modIsModified(int mod_value) { return mod_value == MODIFIED; }
   static boolean modIsMissing(int mod_value) { return mod_value == MISSING; }
 
+  // A tuplemod is summary modification information about the whole tuple
+  // rather than about specific elements of the tuple.
   // There are two potentially useful abstractions for mod bits over an
   // entire tuple in aggregate:
   //  * return missing if any is missing (good for slices;
@@ -85,6 +94,8 @@ public class ValueTuple implements Cloneable {
   public final static int MISSING_BITVAL = MathMDE.pow(2, MISSING);
   // Various slices of the 8 (=TUPLEMOD_VALUES) possible tuplemod values.
   // The arrays are filled up in a static block below.
+  // (As of 1/9/2000, tuplemod_modified_not_missing is used only in
+  // num_mod_non_missing_samples(), and tuplemod_not_missing is not used.)
   public final static int[] tuplemod_not_missing = new int[TUPLEMOD_VALUES/2];
   public final static int[] tuplemod_modified_not_missing = new int[TUPLEMOD_VALUES/4];
 
@@ -120,7 +131,7 @@ public class ValueTuple implements Cloneable {
     return ((tuplemod & MISSING_BITVAL) != 0);
   }
 
-  /*
+  /**
    * In output, M=modified, U=unmodified, X=missing.
    * Capital letters indicate the specified modbit does occur,
    * lowercase letters indicate it does not occur.
@@ -139,14 +150,9 @@ public class ValueTuple implements Cloneable {
     for (int i=0; i<mods.length; i++) {
       has_modbit_val[mods[i]] = true;
     }
-    int result = 0;
-    // Avoid doing bitwise arithmetic by doing mulitplications and adds.
-    for (int i=MODBIT_VALUES-1; i>=0; i--) {
-      result *= 2;
-      if (has_modbit_val[i])
-	result++;
-    }
-    return result;
+    return make_tuplemod(has_modbit_val[UNMODIFIED],
+                         has_modbit_val[MODIFIED],
+                         has_modbit_val[MISSING]);
   }
 
   int tupleMod() {
@@ -155,7 +161,7 @@ public class ValueTuple implements Cloneable {
 
   static int parseModified(String raw) {
     int result = Integer.parseInt(raw);
-    Assert.assert((result == 0) || (result == 1) || (result == 2));
+    Assert.assert((result >= 0) && (result < MODBIT_VALUES));
     return result;
   }
 
@@ -174,16 +180,21 @@ public class ValueTuple implements Cloneable {
 
   // Private constructor that doesn't perform interning.
   private ValueTuple(Object[] vals_, int[] mods_, boolean check) {
-    Assert.assert((!check) || (vals_ == Intern.intern(vals_)));
-    Assert.assert((!check) || (mods_ == Intern.intern(mods_)));
+    Assert.assert((!check) || Intern.isInterned(vals_));
+    Assert.assert((!check) || Intern.isInterned(mods_));
     vals = vals_;
     mods = mods_;
   }
 
-  // More convenient name for the constructor that doesn't intern.
-  // This is not private because read_data_trace_file needs it.
-  // (The alternative would be for derived variables to take separate
-  // vals and mods arguments.)  No one else should use it!
+  /**
+   * More convenient name for the constructor that doesn't intern.
+   *
+   * This is not private because it is used (only) by read_data_trace_file,
+   * which makes a partial ValueTuple, fills it in with derived variables,
+   * and only then interns it; the alternative would be for derived
+   * variables to take separate vals and mods arguments.  No one else
+   * should use it!
+   **/
   public static ValueTuple makeUninterned(Object[] vals_, int[] mods_) {
     return new ValueTuple(vals_, mods_, false);
   }
@@ -236,7 +247,7 @@ public class ValueTuple implements Cloneable {
 
   // This modifies the ValueTuple in place!!
   // I think that's OK, because I only compare using equality and hashing
-  // doesn't depend on the elements.
+  // doesn't depend on the elements.  (The new subparts are properly interned.)
   void extend(Derivation[] derivs) {
     int old_len = vals.length;
     Object[] new_vals = new Object[old_len + derivs.length];
