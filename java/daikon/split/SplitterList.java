@@ -189,26 +189,17 @@ public abstract class SplitterList
     while (itor.hasNext()) {
       // a PptName, assumed to begin with "ClassName.functionName"
       String name = (String)itor.next();
-      try {
-        // XXX This doesn't do the right thing if "name" contains regular
-        // expression metacharacters, like parentheses or asterisks.
-        Pattern pat = re_compiler.compile(name);
-        if (pptName.equals(name) || re_matcher.contains(pptName, pat)) {
-          Splitter[] result = get_raw(name);
-          if (result != null) {
-            splitterArrays.addElement(result);
-          }
-          // For the OBJECT program point, we want to use all the splitters.
-        } else if ((pptName.indexOf("OBJECT") != -1)
-                   && (name.indexOf("OBJECT") != -1)) {
-          Iterator all = ppt_splitters.values().iterator();
-          while (all.hasNext()) {
-            splitterArrays.addElement((Splitter[])all.next());
-          }
+      if (pptName.indexOf(name) != -1) {
+        Splitter[] result = get_raw(name);
+        if (result != null) {
+          splitterArrays.addElement(result);
         }
-      } catch (Exception e) {
-        if (Global.debugSplit.isLoggable(Level.FINE)) {
-          Global.debugSplit.fine ("Error matching regex for " + pptName + "\n" + e.toString());
+        // For the OBJECT program point, we want to use all the splitters.
+      } else if ((pptName.indexOf("OBJECT") != -1)
+                 && (name.indexOf("OBJECT") != -1)) {
+        Iterator all = ppt_splitters.values().iterator();
+        while (all.hasNext()) {
+          splitterArrays.addElement((Splitter[])all.next());
         }
       }
     }
