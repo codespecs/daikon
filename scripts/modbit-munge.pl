@@ -41,6 +41,10 @@ BEGIN {
   $debug = 0;
   # $debug = 1;
 
+  if (scalar(@ARGV) == 0) {
+    die "No arguments provided to modbit-munge.pl";
+  }
+
   $ppt = undef;
   $action = shift(@ARGV);
 
@@ -84,6 +88,10 @@ BEGIN {
     } elsif (($random_frac < 0) || ($random_frac > 1)) {
       die "Argument to -random should be between 0 and 1; you supplied $random_frac";
     }
+  }
+
+  if (scalar(@ARGV) == 0) {
+    die "No .dtrace file arguments provided to modbit-munge.pl";
   }
 }
 
