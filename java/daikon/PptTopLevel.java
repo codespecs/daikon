@@ -1644,6 +1644,20 @@ public class PptTopLevel
    * @param template Template to fill.  Modified by this method.
    **/
   public boolean fillSuppressionTemplate (SuppressionTemplate template) {
+    return fillSuppressionTemplate (template, true);
+  }
+
+
+  /**
+   * Attempt to fill a given SuppressionTemplate with invariants.  If
+   * successful, returns true.  Called by SuppressionFactory's.
+   * @param template Template to fill.  Modified by this method.
+   * @param checkSelf Whether to check in this ppt.  When false, skip
+   * scanning this ppt.  This is useful for detecting identical
+   * invariants (due to weakening) across ppts.
+   **/
+  public boolean fillSuppressionTemplate (SuppressionTemplate template,
+                                          boolean checkSelf) {
     // We do two loops for performance: attempt to fill locally, then
     // attempt to fill using upper ppts.  If the local fill loop
     // doesn't generate at least one item, then we can stop, because
@@ -1651,62 +1665,66 @@ public class PptTopLevel
 
     Assert.assertTrue (template.invTypes.length == template.varInfos.length,
                        "Template varInfos and invariant slots must be equal");
-
+    
     boolean firstLoopFilled = false;
     template.filled = false;
     template.results = new Invariant[template.invTypes.length];
     template.transforms = new VarInfo[template.invTypes.length][];
     Assert.assertTrue (template.invTypes.length == template.varInfos.length);
 
-    firstloop:
-    for (int iInvs = 0; iInvs < template.invTypes.length; iInvs++) {
-      template.results[iInvs] = null;
-      Class clazz = template.invTypes[iInvs];
-      VarInfo[] varInfos = template.varInfos[iInvs];
-      PptSlice slice = this.findSlice_unordered (varInfos);
-      if (slice != null) {
-        // Here's where we actually find the potential invariant.  There are
-        // two choices here: suppressed invariants can do more suppression, or
-        // they can be forbidden to suppress others.
-        Invariant inv =
-          Daikon.suppress_with_suppressed ?
-          Invariant.find (clazz, slice) :
-          Invariant.findUnsuppressed (clazz, slice);
-        if (inv != null) {
-          firstLoopFilled = true;
-          template.results[iInvs] = inv;
-          template.transforms[iInvs] = template.varInfos[iInvs];
-        }
+    if (checkSelf) {
+      firstLoop:
+      for (int iInvs = 0; iInvs < template.invTypes.length; iInvs++) {
+        template.results[iInvs] = null;
+        Class clazz = template.invTypes[iInvs];
+        VarInfo[] varInfos = template.varInfos[iInvs];
+        PptSlice slice = this.findSlice_unordered (varInfos);
+        if (slice != null) {
+          // Here's where we actually find the potential invariant.  There are
+          // two choices here: suppressed invariants can do more suppression, or
+          // they can be forbidden to suppress others.
+          Invariant inv =
+            Daikon.suppress_with_suppressed ?
+            Invariant.find (clazz, slice) :
+            Invariant.findUnsuppressed (clazz, slice);
+          if (inv != null) {
+            firstLoopFilled = true;
+            template.results[iInvs] = inv;
+            template.transforms[iInvs] = template.varInfos[iInvs];
+          }
+        }      
       }
+      // if (!firstLoopFilled) return false;
     }
-    if (!firstLoopFilled) return false;
 
-    secondloop:
+    secondLoop:
     for (int iInvs = 0; iInvs < template.invTypes.length; iInvs++) {
       if (dataflow_ppts == null) break;
-      if (template.results[iInvs] != null) continue secondloop;
-
+      if (template.results[iInvs] != null) continue secondLoop;
+      
       Class clazz = template.invTypes[iInvs];
       VarInfo[] varInfos = template.varInfos[iInvs];
 
-
+      
 
       // Transform the VarInfos for each upper ppt
       // We go backwards so that we get the strongest invariants first.
-      for (int iPpts = dataflow_ppts.length - 1;
+      forEachTransform:
+      for (int iPpts = dataflow_ppts.length - (checkSelf ? 1 : 2);
            iPpts >= 0; iPpts--) {
         PptTopLevel dataflowPpt = dataflow_ppts[iPpts];
         int[] dataflowTransform = dataflow_transforms[iPpts];
         VarInfo[] newVarInfos = new VarInfo[varInfos.length];
+        forEachVarInfo:
         for (int iVarInfos = 0; iVarInfos < varInfos.length; iVarInfos++) {
           int newIndex = dataflowTransform[varInfos[iVarInfos].varinfo_index];
           if (newIndex >= 0) {
             newVarInfos[iVarInfos] = dataflowPpt.var_infos[newIndex];
           } else {
-            newVarInfos[iVarInfos] = null;
+            continue forEachTransform;
           }
         }
-
+        
         PptSlice slice = dataflowPpt.findSlice_unordered (newVarInfos);
         if (slice != null) {
           Invariant inv =
@@ -1717,12 +1735,12 @@ public class PptTopLevel
             template.results[iInvs] = inv;
             template.transforms[iInvs] = newVarInfos;
           }
-        }
+        }      
       }
     }
-
+    
     // Only for checking if template got filled
-    thirdloop:
+    thirdLoop: 
     for (int iInvs = 0; iInvs < template.invTypes.length; iInvs++) {
       if (template.results[iInvs] == null) return false;
     }
@@ -1730,8 +1748,6 @@ public class PptTopLevel
     template.filled = true;
     return true;
   }
-
-
 
 
   ///////////////////////////////////////////////////////////////////////////
