@@ -192,7 +192,8 @@ public final class Runtime {
       dtraceLimit = Integer.getInteger("DTRACELIMIT", Integer.MAX_VALUE).intValue();
       dtraceLimitTerminate = Boolean.getBoolean("DTRACELIMITTERMINATE");
       // 8192 is the buffer size in BufferedReader
-      dtrace = new PrintStream(new BufferedOutputStream(os, 8192));
+      BufferedOutputStream bos = new BufferedOutputStream(os, 8192);
+      dtrace = new PrintStream(bos);
     } catch (Exception e) {
       e.printStackTrace();
       throw new Error("" + e);
