@@ -18,10 +18,12 @@ The correct way to build the system is to run 'make'.
   #define SUPERCLASS EltwiseIntComparison
   #define PRIMITIVE long
   #define ELTONEOF EltOneOf
+  #define VALUE_SET ValueSet.ValueSetScalarArray
 #elif defined(TYPEDOUBLE)
   #define SUPERCLASS EltwiseFloatComparison
   #define PRIMITIVE double
   #define ELTONEOF EltOneOfFloat
+  #define VALUE_SET ValueSet.ValueSetFloatArray
 #endif
 
 #define EQUALCLASS EltwiseIntEqual
@@ -149,15 +151,6 @@ public class CLASSNAME
 
   final static boolean debugEltwiseIntComparison = false;
 
-  // If no sample passes by that has 2 or more elements in an array then the
-  // invariant is vacuously true; no comparison was ever made and thus the
-  // invariant remains true by default. However, it is certainly not worth
-  // printing in this case.
-  private boolean seenNonTrivialSample = false;
-
-  // Not using core after splitting invariant into different comparison types
-  // public CORECLASS core;
-
   protected CLASSNAME(PptSlice ppt) {
     super(ppt);
   }
@@ -282,8 +275,6 @@ public class CLASSNAME
   }
 
   public InvariantStatus add_modified(PRIMITIVE[] a, int count) {
-    if (a.length >= 2)
-      seenNonTrivialSample = true;
     return check_modified(a, count);
   }
 
@@ -372,16 +363,19 @@ public class CLASSNAME
   // }
 
   /**
-   * This function returns whether a sample has been seen by this Invariant
-   * that includes two or more entries in an array. For a 0 or 1 element array
-   * a, a[] sorted by any binary operation is "vacuously true" because no check
-   * is ever made since the binary operation requires two operands.  Thus
-   * although invariants of this type are true regarding 0 or 1 length arrays,
-   * they are meaningless.  This function is meant to be used in isObviousImplied()
-   * to prevent such meaningless invariants from being printed.
+   * This function returns whether a sample has been seen by this
+   * Invariant that includes two or more entries in an array. For a 0
+   * or 1 element array a, a[] sorted by any binary operation is
+   * "vacuously true" because no check is ever made since the binary
+   * operation requires two operands.  Thus although invariants of
+   * this type are true regarding 0 or 1 length arrays, they are
+   * meaningless.  This function is meant to be used in
+   * isObviousImplied() to prevent such meaningless invariants from
+   * being printed.
    */
   public boolean hasSeenNonTrivialSample() {
-    return seenNonTrivialSample;
+    VALUE_SET vs = (VALUE_SET) ppt.var_infos[0].get_value_set();
+    return (vs.multi_arr_cnt() > 0);
   }
 
   public DiscardInfo isObviousDynamically(VarInfo[] vis) {
