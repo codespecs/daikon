@@ -1,6 +1,7 @@
 package daikon.inv.binary.twoSequence;
 
 import daikon.*;
+import daikon.inv.Invariant;
 import daikon.inv.binary.twoScalar.*;
 import java.lang.reflect.*;
 
@@ -52,9 +53,13 @@ class PairwiseFunctionUnary extends TwoSequence {
     }
   }
 
-
   protected double computeProbability() {
     return core.computeProbability();
   }
 
+  public boolean isSameFormula(Invariant other)
+  {
+    return core.isSameFormula(((PairwiseFunctionUnary) other).core);
+  }
+  
 }

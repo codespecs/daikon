@@ -79,4 +79,20 @@ class NonModulus extends SingleScalar {
     return Math.pow(probability_one_elt_nonmodulus, ppt.num_mod_non_missing_samples());
   }
 
+  public boolean isSameFormula(Invariant o)
+  {
+    updateResults();
+    if (no_result_yet)
+      return false;
+
+    NonModulus other = (NonModulus) o;
+    other.updateResults();
+    if (other.no_result_yet)
+      return false;
+
+    return
+      (modulus == other.modulus) &&
+      (remainder == other.remainder);
+  }
+  
 }

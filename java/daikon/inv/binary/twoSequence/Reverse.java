@@ -2,6 +2,7 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.*;
+import utilMDE.Assert;
 
 class Reverse extends TwoSequence {
 
@@ -50,4 +51,11 @@ class Reverse extends TwoSequence {
     else
       return Invariant.PROBABILITY_JUSTIFIED;
   }
+
+  public boolean isSameFormula(Invariant other)
+  {
+    Assert.assert(other instanceof Reverse);
+    return true;
+  }
+
 }

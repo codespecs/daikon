@@ -73,4 +73,10 @@ class SubSequence extends TwoSequence {
     return false;
   }
 
+  public boolean isSameFormula(Invariant other)
+  {
+    Assert.assert(other instanceof SubSequence);
+    return true;
+  }
+
 }

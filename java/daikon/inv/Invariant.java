@@ -237,6 +237,17 @@ public abstract class Invariant implements java.io.Serializable {
     }
   }
 
+  /**
+   * @return true iff the two invariants represent the same
+   * mathematical formula.  Does not consider the context such as
+   * variable names, confidences, sample counts, value counts, or
+   * related quantities.  As a rule of thumb, if two invariants format
+   * the same, this method returns true.
+   *
+   * @exception RuntimeException if other.class != this.class
+   **/
+  public abstract boolean isSameFormula(Invariant other);
+
 
 
   String diff(Invariant other) {

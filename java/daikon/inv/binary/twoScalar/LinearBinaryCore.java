@@ -130,4 +130,14 @@ public final class LinearBinaryCore implements java.io.Serializable {
     return y + " = " + a_rep + x + b_rep;
   }
 
+  public boolean isSameFormula(LinearBinaryCore other)
+  {
+    return
+      (values_seen >= MINPAIRS) &&
+      (other.values_seen >= MINPAIRS) &&
+      (a == other.a) &&
+      (b == other.b);
+  }
+
 }
+

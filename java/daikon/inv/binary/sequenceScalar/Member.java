@@ -197,4 +197,9 @@ public final class Member extends SequenceScalar  {
       return Invariant.PROBABILITY_JUSTIFIED;
   }
 
+  public boolean isSameFormula(Invariant other)
+  {
+    Assert.assert(other instanceof Member);
+    return true;
+  }
 }

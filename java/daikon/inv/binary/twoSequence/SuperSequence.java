@@ -57,4 +57,10 @@ class SuperSequence extends TwoSequence {
       return Invariant.PROBABILITY_JUSTIFIED;
   }
 
+  public boolean isSameFormula(Invariant other)
+  {
+    Assert.assert(other instanceof SuperSequence);
+    return true;
+  }
+
 }

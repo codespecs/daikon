@@ -53,10 +53,15 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
 
   static Comparator comparator = new ArraysMDE.ComparableArrayComparatorLexical();
 
+  private void sort_rep()
+  {
+    Arrays.sort(elts, 0, num_elts , comparator );
+  }
+
   private String subarray_rep() {
     // Not so efficient an implementation, but simple;
     // and how often will we need to print this anyway?
-    Arrays.sort(elts, 0, num_elts , comparator );
+    sort_rep();
     StringBuffer sb = new StringBuffer();
     sb.append("{ ");
     for (int i=0; i<num_elts; i++) {
@@ -106,4 +111,19 @@ public final class OneOfStringSequence  extends SingleStringSequence  implements
     return Invariant.PROBABILITY_JUSTIFIED;
   }
 
+  public boolean isSameFormula(Invariant o)
+  {
+    OneOfStringSequence  other = (OneOfStringSequence ) o;    
+    if (elts.length != other.elts.length)
+      return false;
+
+    sort_rep();
+    other.sort_rep();
+    for (int i=0; i < elts.length; i++)
+      if (elts[i] != other.elts[i]) // elements are interned
+	return false;
+
+    return true;
+  }
+  
 }

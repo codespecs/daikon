@@ -143,4 +143,9 @@ public final class FunctionBinaryCore implements java.io.Serializable {
       + function.getName() + "(" + arg1.name + ", " + arg2.name + ")";
   }
 
+  public boolean isSameFormula(FunctionBinaryCore other)
+  {
+    return methodname.equals(other.methodname);
+  }
+  
 }

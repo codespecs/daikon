@@ -57,4 +57,9 @@ class NoDuplicates extends SingleSequence {
     }
   }
 
+  public boolean isSameFormula(Invariant other)
+  {
+    Assert.assert(other instanceof NoDuplicates);
+    return true;
+  }
 }

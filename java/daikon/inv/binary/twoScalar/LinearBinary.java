@@ -1,6 +1,7 @@
 package daikon.inv.binary.twoScalar;
 
 import daikon.*;
+import daikon.inv.Invariant;
 
 class LinearBinary extends TwoScalar {
 
@@ -42,4 +43,9 @@ class LinearBinary extends TwoScalar {
     return true;
   }
 
+  public boolean isSameFormula(Invariant other)
+  {
+    return core.isSameFormula(((LinearBinary) other).core);
+  }
+  
 }

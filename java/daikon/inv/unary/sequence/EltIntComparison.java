@@ -90,4 +90,13 @@ class EltIntComparison extends SingleSequence {
     }
   }
 
+  public boolean isSameFormula(Invariant o)
+  {
+    EltIntComparison other = (EltIntComparison) o;
+    return
+      (can_be_eq == other.can_be_eq) &&
+      (can_be_gt == other.can_be_gt) &&
+      (can_be_lt == other.can_be_lt);
+  }
+  
 }

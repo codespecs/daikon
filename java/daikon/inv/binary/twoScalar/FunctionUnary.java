@@ -1,6 +1,7 @@
 package daikon.inv.binary.twoScalar;
 
 import daikon.*;
+import daikon.inv.Invariant;
 import java.lang.reflect.*;
 
 
@@ -46,4 +47,8 @@ class FunctionUnary extends TwoScalar {
     return true;
   }
 
+  public boolean isSameFormula(Invariant other)
+  {
+    return core.isSameFormula(((FunctionUnary) other).core);
+  }
 }

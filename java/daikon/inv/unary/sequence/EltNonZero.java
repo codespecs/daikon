@@ -106,4 +106,10 @@ public final class EltNonZero extends SingleSequence {
       return Math.pow(probability_one_elt_nonzero, ppt.num_mod_non_missing_samples());
     }
   }
+
+  public boolean isSameFormula(Invariant other)
+  {
+    Assert.assert(other instanceof EltNonZero);
+    return true;
+  }
 }

@@ -96,4 +96,10 @@ class NonZero extends SingleScalar {
       return Math.pow(probability_one_elt_nonzero, ppt.num_mod_non_missing_samples());
     }
   }
+
+  public boolean isSameFormula(Invariant other)
+  {
+    Assert.assert(other instanceof NonZero);
+    return true;
+  }
 }

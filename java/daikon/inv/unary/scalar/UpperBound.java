@@ -154,4 +154,9 @@ class UpperBound  extends SingleScalar {
 
     return Invariant.PROBABILITY_UNJUSTIFIED;
   }
+
+  public boolean isSameFormula(Invariant other)
+  {
+    return max1  == ((UpperBound ) other). max1 ;
+  }
 }

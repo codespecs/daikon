@@ -158,4 +158,9 @@ class LowerBound  extends SingleScalar {
 
     return Invariant.PROBABILITY_UNJUSTIFIED;
   }
+
+  public boolean isSameFormula(Invariant other)
+  {
+    return min1  == ((LowerBound ) other). min1 ;
+  }
 }

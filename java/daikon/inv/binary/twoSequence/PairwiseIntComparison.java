@@ -1,6 +1,7 @@
 package daikon.inv.binary.twoSequence;
 
 import daikon.*;
+import daikon.inv.Invariant;
 import daikon.inv.binary.twoScalar.*;
 
 // Requires that the lengths are the same.  Should it?  (Hard to tell;
@@ -77,4 +78,9 @@ class PairwiseIntComparison extends TwoSequence {
     return core.computeProbability();
   }
 
+  public boolean isSameFormula(Invariant other)
+  {
+    return core.isSameFormula(((PairwiseIntComparison) other).core);
+  }
+  
 }

@@ -99,4 +99,8 @@ public final class FunctionUnaryCore implements java.io.Serializable {
       + ",inverse=" + inverse;
   }
 
+  public boolean isSameFormula(FunctionUnaryCore other)
+  {
+    return methodname.equals(other.methodname);
+  }
 }

@@ -92,4 +92,14 @@ class Modulus extends SingleScalar {
     double probability_one_elt_modulus = 1 - 1.0/modulus;
     return Math.pow(probability_one_elt_modulus, ppt.num_mod_non_missing_samples());
   }
+
+  public boolean isSameFormula(Invariant other)
+  {
+    return
+      (modulus != 1) &&
+      (modulus != 0) &&
+      (modulus == ((Modulus) other).modulus) &&
+      (remainder == ((Modulus) other).remainder);
+  }
+  
 }

@@ -1,6 +1,7 @@
 package daikon.inv.ternary.threeScalar;
 
 import daikon.*;
+import daikon.inv.Invariant;
 import java.lang.reflect.*;
 
 
@@ -68,6 +69,11 @@ class FunctionBinary extends ThreeScalar {
 
   protected double computeProbability() {
     return core.computeProbability();
+  }
+
+  public boolean isSameFormula(Invariant other)
+  {
+    return core.equals(((FunctionBinary) other).core);
   }
 
   // // For testing only; to be commented out

@@ -171,5 +171,9 @@ public final class IntComparison extends TwoScalar implements Comparison {
     super.add(v1, v2, mod_index, count);
   }
 
+  public boolean isSameFormula(Invariant other)
+  {
+    return core.isSameFormula(((IntComparison) other).core);
+  }
 
 }

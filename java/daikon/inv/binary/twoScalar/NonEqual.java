@@ -106,4 +106,10 @@ public final class NonEqual extends TwoScalar {
     return false;
   }
 
+  public boolean isSameFormula(Invariant other)
+  {
+    Assert.assert(other instanceof NonEqual);
+    return true;
+  }
+  
 }

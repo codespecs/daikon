@@ -18,8 +18,6 @@ import java.util.*;
 // nonetheless?  Probably not, as this will simplify implication and such.
 
 public final class EltOneOfString  extends SingleStringSequence  implements OneOf {
-  final static boolean debug_eoos = true;
-
   final static int LIMIT = 5;	// maximum size for the one_of list
   // Probably needs to keep its own list of the values, and number of each seen.
   // (That depends on the slice; maybe not until the slice is cleared out.
@@ -52,10 +50,15 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
 
   }
 
+  private void sort_rep()
+  {
+    Arrays.sort(elts, 0, num_elts  );
+  }
+
   private String subarray_rep() {
     // Not so efficient an implementation, but simple;
     // and how often will we need to print this anyway?
-    Arrays.sort(elts, 0, num_elts  );
+    sort_rep();
     StringBuffer sb = new StringBuffer();
     sb.append("{ ");
     for (int i=0; i<num_elts; i++) {
@@ -106,4 +109,19 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
     return Invariant.PROBABILITY_JUSTIFIED;
   }
 
+  public boolean isSameFormula(Invariant o)
+  {
+    EltOneOfString  other = (EltOneOfString ) o;    
+    if (elts.length != other.elts.length)
+      return false;
+
+    sort_rep();
+    other.sort_rep();
+    for (int i=0; i < elts.length; i++)
+      if (elts[i] != other.elts[i]) // elements are interned
+	return false;
+
+    return true;
+  }
+  
 }

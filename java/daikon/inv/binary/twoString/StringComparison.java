@@ -171,5 +171,8 @@ public final class StringComparison extends TwoString implements Comparison {
     super.add(v1, v2, mod_index, count);
   }
 
-
+  public boolean isSameFormula(Invariant other)
+  {
+    return core.equals(((StringComparison) other).core);
+  }
 }
