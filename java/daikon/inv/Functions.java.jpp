@@ -74,7 +74,7 @@ public final class CLASSNAME {
       {"", " & ", ""},          // bitwise and
       {"", " && ", ""},         // logical and
       {"", " ^ ", ""},          // bitwise xor
-      {"", " ^ ", ""},          // logical xor
+      {"utilMDE.MathMDE.logicalXor(", ", ", ")"}, // there is no ^^, alas
       {"", " | ", ""},          // bitwise or
       {"", " || ", ""},         // logical or
 #endif
