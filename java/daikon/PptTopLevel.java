@@ -184,17 +184,15 @@ public class PptTopLevel extends Ppt {
 
   // This method is added as somewhat of a hack for Melissa's gui.  In the
   // gui, PptTopLevel are stored as nodes in a tree.  Swing obtains the
-  // string to display in the actualy JTree by calling toString().  For
-  // class-level Ppt's, we just want "Sort" instead of "Sort:::CLASS".  For
-  // other Ppt's, we want "EXIT184" instead of
-  // "Sort.swapReferences([Ljava/lang/Object;II)V:::EXIT184"
+  // string to display in the actual JTree by calling toString().
   public String toString() {
-      PptName pptName = new PptName( name );
-      if (pptName.isObjectInstanceSynthetic()
-          || pptName.isClassStaticSynthetic())
-	  return pptName.getFullClassName();
-      else
-	  return pptName.getPoint();
+    PptName pptName = new PptName( name );
+    if (pptName.isObjectInstanceSynthetic())   // display "Sort : OBJECT"
+	return pptName.getFullClassName() + " : " + FileIO.class_static_suffix;
+    else if (pptName.isClassStaticSynthetic()) // display "Sort : CLASS"
+	return pptName.getFullClassName() + " : " + FileIO.object_suffix;
+    else			               // only display "EXIT184"
+	return pptName.getPoint();
   }
 
 
