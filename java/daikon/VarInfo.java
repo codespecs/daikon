@@ -1743,9 +1743,11 @@ public final class VarInfo
     name = name.intern();
   }
 
-  // Create a guarding predicate for this VarInfo, that is, an invariant
-  // that ensures that this object is available for access to variables
-  // that reference it, such as fields
+  /**
+   * Create a guarding predicate for this VarInfo, that is, an
+   * invariant that ensures that this object is available for access
+   * to variables that reference it, such as fields
+   **/
   public Invariant createGuardingPredicate(PptTopLevel ppt) {
     // Later for the array, make sure index in bounds
     if (type.isArray() || type.isObject()) {
@@ -1920,7 +1922,14 @@ public final class VarInfo
         return result;
       }
     }
+    List result = (List)name.accept(new GuardingVisitor());
+    if (Invariant.debugGuarding.isDebugEnabled()) {
+      Invariant.debugGuarding.debug ("VarInfo.getGuardingList: ");
+      Invariant.debugGuarding.debug ("  this: " + this.name.name());
+      // Invariant.debugGuarding.debug ("        " + this.repr());
+      Invariant.debugGuarding.debug (result);
+    }
 
-    return (List)name.accept(new GuardingVisitor());
+    return result;
   }
 }

@@ -53,6 +53,10 @@ public abstract class Invariant
    **/
   public static final Category debugIsWorthPrinting = Category.getInstance("daikon.print.isWorthPrinting");
 
+  /**
+   * Debug tracer for guarding.
+   **/
+  public static final Category debugGuarding = Category.getInstance("daikon.guard");
 
   /**
    * Real number between 0 and 1.  The invariant is displayed only if
@@ -1326,27 +1330,33 @@ public abstract class Invariant
   public Invariant createGuardingPredicate() {
     VarInfo varInfos[] = ppt.var_infos;
 
-    // System.out.println("Guarding predicate being created for: ");
-    // System.out.println(this.format_using(OutputFormat.JML));
+    if (debugGuarding.isDebugEnabled()) {
+      debugGuarding.debug("Guarding predicate being created for: ");
+      debugGuarding.debug(this.format_using(OutputFormat.JML));
+    }
 
     // Find which VarInfos must be guarded
     List mustBeGuarded = getGuardingList(varInfos);
 
-    if (mustBeGuarded.isEmpty())
+    if (mustBeGuarded.isEmpty()) {
+      if (debugGuarding.isDebugEnabled()) {
+        debugGuarding.debug ("Left predicate is empty, returning");
+      }
       return null;
+    }
 
     // Hard to decide what PptSlice to associate with
     // VarInfo temp = (VarInfo)i.next();
-    // System.out.println("First VarInfo: " + temp);
+    // debugGuarding.debug("First VarInfo: " + temp);
     Invariant guardingPredicate = ((VarInfo)mustBeGuarded.get(0)).createGuardingPredicate(ppt.parent);
-    // System.out.println(guardingPredicate.format_using(OutputFormat.DAIKON));
+    // debugGuarding.debug(guardingPredicate.format_using(OutputFormat.DAIKON));
     Assert.assertTrue(guardingPredicate != null);
 
     for (int i=1; i<mustBeGuarded.size(); i++) {
       VarInfo current = (VarInfo)mustBeGuarded.get(i);
-      // System.out.println("Another VarInfo: " + current);
+      // debugGuarding.debug("Another VarInfo: " + current);
       Invariant currentGuard = current.createGuardingPredicate(ppt.parent);
-      // System.out.println(currentGuard.toString());
+      // debugGuarding.debug(currentGuard.toString());
 
       Assert.assertTrue(currentGuard != null);
 
@@ -1373,11 +1383,10 @@ public abstract class Invariant
   public static List getGuardingList(VarInfo varInfos[]) {
     List guardingList = new GuardingVariableList();
 
-    // System.out.println("Getting guarding set:");
     for (int i=0; i<varInfos.length; i++) {
-      // System.out.println(varInfos[i]);
+      // debugGuarding.debug(varInfos[i]);
       guardingList.addAll(varInfos[i].getGuardingList());
-      // System.out.println(guardingSet.toString());
+      // debugGuarding.debug(guardingSet.toString());
     }
 
     return guardingList;

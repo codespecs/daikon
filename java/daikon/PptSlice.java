@@ -47,6 +47,9 @@ public abstract class PptSlice
   public static final Category debugGeneral = Category.getInstance("daikon.PptSlice.general");
   public static final Category debugFlow = Category.getInstance("daikon.flow.flow");
 
+  public static final Category debugGuarding = Category.getInstance("daikon.guard");
+
+
   /** This is a slice of the 'parent' ppt. */
   public PptTopLevel parent;
   public int arity;
@@ -598,20 +601,20 @@ public abstract class PptSlice
   public void guardInvariants() {
     List invariantsToGuard = new ArrayList();
 
-    //      System.out.println("-----------------------");
-
-    //      for (int i=0; i<var_infos.length; i++) {
-    //        try {
-    //          System.out.println("var_info[" + i + "] name in JML = " + var_infos[i].name.name_using(OutputFormat.JML));
-    //        } catch (UnsupportedOperationException e) {
-    //          System.out.println("Part of PptSlice cannot be JML formatted.");
-    //        }
-    //      }
-
-    //      System.out.println("-----------------------");
-
-    // System.out.println("In guardInvariants, the VarInfos for the PptSlice: ");
-    // System.out.println(Arrays.asList(var_infos).toString());
+    if (debugGuarding.isDebugEnabled()) {
+      debugGuarding.debug("PptSlice.guardInvariants init: "); 
+      for (int i=0; i<var_infos.length; i++) {
+        try {
+          debugGuarding.debug("  var_info[" + i +
+                              "] name in JML = " +
+                              var_infos[i].name.name_using(OutputFormat.JML));
+        } catch (UnsupportedOperationException e) {
+          debugGuarding.debug("  Part of PptSlice cannot be JML formatted.");
+        }
+      }
+      //      debugGuarding.debug("In guardInvariants, the VarInfos for the PptSlice: ");
+      //       debugGuarding.debug(Arrays.asList(var_infos).toString());
+    }
 
     // If this slice is to be deleted, then don't guard it
     if (no_invariants) return;
@@ -621,9 +624,19 @@ public abstract class PptSlice
 
       Invariant guardingPredicate = inv.createGuardingPredicate();
       Invariant guardingImplication;
-      // System.out.println("Trying to add implication:");
-      // System.out.println("Predicate: " + guardingPredicate.format_using(OutputFormat.JML));
-      // System.out.println("Consequent: " + inv.format_using(OutputFormat.JML));
+      if (debugGuarding.isDebugEnabled()) {
+        debugGuarding.debug("  Trying to add implication:");
+        if (guardingPredicate != null) {
+          debugGuarding.debug("  Predicate: " +
+                              guardingPredicate.format_using(OutputFormat.JML));
+          debugGuarding.debug("  Consequent: " +
+                              inv.format_using(OutputFormat.JML));
+        } else {
+        debugGuarding.debug("  No implication needed for: " +
+                            inv.format_using(OutputFormat.JML));
+        }
+      }
+        
       if (guardingPredicate != null) {
         guardingImplication =
           GuardingImplication.makeGuardingImplication(parent, guardingPredicate, inv, false);
@@ -631,9 +644,12 @@ public abstract class PptSlice
         parent.joiner_view.addInvariant(guardingImplication);
         invariantsToGuard.add(inv);
 
-        // Debug info
-        // System.out.println("Adding " + guardingImplication.format_using(OutputFormat.JML));
-        // System.out.println("Removing " + inv.format_using(OutputFormat.JML));
+        if (debugGuarding.isDebugEnabled()) {
+          debugGuarding.debug("Adding " +
+                           guardingImplication.format_using(OutputFormat.JML));
+          debugGuarding.debug("Removing " +
+                           inv.format_using(OutputFormat.JML));
+        }
       }
     }
 
