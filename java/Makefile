@@ -193,10 +193,11 @@ junit:
 
 ## Documentation
 
-.PHONY : doc
+.PHONY: doc
 
 JAVADOC_FLAGS = -d doc \
                 -linkoffline http://java.sun.com/j2se/1.3/docs/api/ http://java.sun.com/j2se/1.3/docs/api/
+# Note that this excludes Ajax
 JAVADOC_PACKAGES = `find -follow -name '*.java' -exec dirname {} \; | grep -v CVS | grep -v ajax | sort | uniq | perl -p -e 's:^./::g' | perl -p -e 's:/:.:g'`
 
 doc: $(JAVA_FILES) doc-dkconfig
@@ -205,12 +206,13 @@ doc: $(JAVA_FILES) doc-dkconfig
 	javadoc $(JAVADOC_FLAGS) $(JAVADOC_PACKAGES)
 
 ## Make doc with private fields for people working on source code
-doc-all: $(JAVA_FILES)
+doc-private: $(JAVA_FILES)
 	mkdir -p doc
 	javadoc $(JAVADOC_FLAGS) -private $(JAVADOC_PACKAGES)
 
+## Fix up generated .html files for use by the Emacs `jdk-lookup' function.
 doc-jdk-lookup: doc
-	jdk-add-munged-anchor-names-no-bak `find doc -name '*.html'`
+	jdk-add-munged-anchor-names `find doc -name '*.html'`
 	echo "Run jdk-index-to-alist > ~/emacs/jdk-index.el"
 
 ../doc/config-options.texinfo: $(JAVA_FILES)
