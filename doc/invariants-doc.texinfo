@@ -1,6 +1,9 @@
 @c BEGIN AUTO-GENERATED INVARIANTS LISTING
 
 
+@item AndJoiner
+
+
 @item CommonFloatSequence
 Represents double sequences that contain a common subset.  Prints as
  "@{e1, e2, e3, ...@} subset of x[]"
@@ -168,13 +171,23 @@ Represents the invariant "<" between adjacent elements
  "<" '
 
 @item Equality
-The Equality invariant is used for displaying several equality
- Comparison invariants ("x == y", "x == z") as one Equality
- invariant ("x == y == z").  This class is created after the actual
- invariant detection, and right before printing Hence this is not a
- real invariant class; it does not implement many of the methods
- that most invariant classes do.  Furthermore, calling arbitrary
- methods on this class may not work.
+Keeps track of sets of variables that are equal.@*@*
+
+ During checking, Equality keeps track of VarInfos that are
+ comparable and equal, so we only need to instantiate (other)
+ invariants for one member of each Equal set, the leader.  See
+ equality notes in this directory.@*@*
+
+ During postProcessing, each instance of Equality instantiates into
+ displaying several equality Comparison invariants ("x == y", "x ==
+ z").  Equality invariants have leaders, which are the canonical
+ forms of their variables.  In the previous example, x is the
+ leader.  Equality invariants sort their variables by index ordering
+ during checking.  During printing, however, equality invariants may
+ "pivot" -- that is, switch leaders if the current leader wouldn't
+ be printed because it was not an interesting variable.  Notice that
+ when pivoting, all the other invariants based on this.leader also
+ need to be pivoted.
 
 @item FloatEqual
 Represents an invariant of "==" between two
@@ -233,6 +246,9 @@ Represents an invariant between two double scalars by applying a
  or a unary operator.
 
  Current double functions are: none
+
+@item GuardingImplication
+
 
 @item Implication
 The Implication invariant class is used internally within Daikon to
@@ -769,7 +785,7 @@ Represents two double sequences where one sequence is a subsequence
 Represents two long sequences where one of the sequences is a
  subset (each element appears in the other sequence) of the other.
  Prints as either "x[] is a subset of y[]" or as
- "x[] is a @{sub,super@}set of y[]" if x and y are set equivalent.
+ "x[] is a superset of y[]".
 
 This invariant is not enabled by default.  See the configuration option
 daikon.inv.binary.twoSequence.SubSet.enabled
@@ -778,7 +794,7 @@ daikon.inv.binary.twoSequence.SubSet.enabled
 Represents two double sequences where one of the sequences is a
  subset (each element appears in the other sequence) of the other.
  Prints as either "x[] is a subset of y[]" or as
- "x[] is a @{sub,super@}set of y[]" if x and y are set equivalent.
+ "x[] is a superset of y[]".
 
 This invariant is not enabled by default.  See the configuration option
 daikon.inv.binary.twoSequence.SubSetFloat.enabled
@@ -787,7 +803,7 @@ daikon.inv.binary.twoSequence.SubSetFloat.enabled
 Represents two long sequences where one of the sequences is a
  subset (each element appears in the other sequence) of the other.
  Prints as either "x[] is a subset of y[]" or as
- "x[] is a @{sub,super@}set of y[]" if x and y are set equivalent.
+ "x[] is a superset of y[]".
 
 This invariant is not enabled by default.  See the configuration option
 daikon.inv.binary.twoSequence.SuperSet.enabled
@@ -796,7 +812,7 @@ daikon.inv.binary.twoSequence.SuperSet.enabled
 Represents two double sequences where one of the sequences is a
  subset (each element appears in the other sequence) of the other.
  Prints as either "x[] is a subset of y[]" or as
- "x[] is a @{sub,super@}set of y[]" if x and y are set equivalent.
+ "x[] is a superset of y[]".
 
 This invariant is not enabled by default.  See the configuration option
 daikon.inv.binary.twoSequence.SuperSetFloat.enabled

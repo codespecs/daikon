@@ -943,7 +943,7 @@ The default value is `true'.
 Boolean.  Enables indiscriminate splitting
 (see Daikon manual, @ref{Indiscriminate splitting},
 for an explanation of this technique).
-The default value is `true'.
+The default value is `false'.
 
 @item daikon.split.TimedProcess.compile_timeout
 Positive integer.  Specifies the Splitter compilation timeout, in
