@@ -1,7 +1,7 @@
 #!/usr/bin/perl -wpi.bak
 # update-link-dates
 # Michael Ernst <mernst@alum.mit.edu>
-# Time-stamp: <2001-06-13 17:41:04 mernst>
+# Time-stamp: <2002-05-01 14:01:55 mernst>
 
 # usage:
 #   update-link-dates file [...]
@@ -69,7 +69,10 @@ sub file_date_replacement ( $$$$$ )
   $full_file =~ s/\/$/\/index.html/;
   if (! -f $full_file)
   { print STDERR "update-link-dates: Didn't find $full_file\n";
-    return "$pre$file${mid}00 Mth 0000$post"; }
+    my $date = "00 Mth 0000";
+    if (defined($old_size))
+      { $date .= ", 00 Mbytes"; }
+    return "$pre$file${mid}$date$post"; }
   my $date = file_date($full_file, $longmonth);
   my $size = file_size($full_file);
   # If this file changed, then don't reset its write date.  This means that
