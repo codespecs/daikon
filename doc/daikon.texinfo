@@ -4245,6 +4245,8 @@ also need to be declared const, causing a cascade of required
 changes.
 
 @item reserved words
+@item string, use in C programs
+
 C++ reserves the following keywords that are not reserved words in C:
 @example
   asm catch class const_cast delete dynamic_cast explicit
@@ -4261,6 +4263,15 @@ standard).
 Additionally, the C++ standard libraries define certain other
 identifiers, such as ``string''.
 Any use of these words as identifiers must be changed.
+
+@item daikon_runtime.h file
+The easiest solution is to rewrite the program so that it uses a
+different name for that typedef, say @samp{STRING} instead of
+@samp{string}.  Another workaround for @samp{string} is to change
+@file{daikon_runtime.h} so that it never mentions an identifier
+@samp{string}.  See the file for a commented-out (unportable,
+inelegant) way to do this.
+
 
 @item nested enums
 @cindex template-argument uses local type error
@@ -6939,7 +6950,7 @@ invariants should hold on entry to and exit from it.
 for each variable:
 @itemize @bullet
 @item
-name: an string containing no tabs or newlines.  For the most part,
+name: a string containing no tabs or newlines.  For the most part,
 the variable name can be any string, except that the period character,
 square brackets, and parentheses have special meanings.  (The exact
 requirement is that the VarInfoName @code{parse} method must be able
