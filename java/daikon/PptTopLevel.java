@@ -144,6 +144,9 @@ public class PptTopLevel
     return name;
   }
 
+  /** Permutation to swap the order of variables in a binary invariant **/
+  private int[] permute_swap = new int[] {1, 0};
+
   /** Holds the falsified invariants under this PptTopLevel. */
   public ArrayList falsified_invars = new ArrayList();
 
@@ -1346,8 +1349,6 @@ public class PptTopLevel
     if (debugNISStats.isLoggable (Level.FINE))
       NIS.clear_stats();
 
-    NIS.set_vt (vt);
-
     // Set of invariants weakened by this sample
     Set weakened_invs = new LinkedHashSet();
 
@@ -1524,7 +1525,7 @@ public class PptTopLevel
     }
 
     // Create any newly unsuppressed invariants
-    NIS.process_falsified_invs (this);
+    NIS.process_falsified_invs (this, vt);
 
     // Remove any falsified invariants.  Make a copy of the original slices
     // since NISuppressions will add new slices/invariants as others are
@@ -1965,6 +1966,24 @@ public class PptTopLevel
 
   static class Cnt {
     public int cnt = 0;
+  }
+
+  /**
+   * Debug print to the specified logger information about each
+   * invariant at this ppt
+   */
+  public void debug_invs (Logger log) {
+
+    for (Iterator i = views_iterator(); i.hasNext(); ) {
+      PptSlice slice = (PptSlice) i.next();
+      log.fine ("Slice: " + slice);
+      for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
+        Invariant inv = (Invariant) j.next();
+        log.fine ("-- " + inv.format()
+                  + (NIS.is_suppressor (inv.getClass()) ? "[suppressor]" : "")
+                  + (inv.is_false() ? " [falsified]" : " "));
+      }
+    }
   }
 
   /**
@@ -2415,12 +2434,185 @@ public class PptTopLevel
     return slice.find_inv_by_class (cls);
   }
 
+  /**
+   * Returns the VarInfo with the specified name.  Null if the name is
+   * not found
+   */
   public VarInfo find_var_by_name (String varname) {
     int i = indexOf (varname);
     if (i == -1)
       return (null);
     else
       return (var_infos[i]);
+  }
+
+  /**
+   * Returns whether or not v1 is a subset of v2.
+   */
+  public boolean is_subset (VarInfo v1, VarInfo v2) {
+
+    // Find the slice for v1 and v2.  If no slice exists, create it,
+    // but don't add it to the slices for this ppt.  It only exists
+    // as a temporary home for the invariant we are looking for below.
+    PptSlice slice = findSlice_unordered (v1, v2);
+    if (slice == null) {
+      if (v1.varinfo_index <= v2.varinfo_index)
+        slice = new PptSlice2 (this, v1, v2);
+      else
+        slice = new PptSlice2 (this, v2, v1);
+    }
+
+    // Create the invariant we are looking for
+    Invariant inv = null;
+    if ((v1.rep_type == ProglangType.INT_ARRAY)) {
+      Assert.assertTrue (v2.rep_type == ProglangType.INT_ARRAY);
+      inv = SubSet.instantiate (slice);
+    } else if (v1.rep_type == ProglangType.DOUBLE_ARRAY) {
+      Assert.assertTrue (v2.rep_type == ProglangType.DOUBLE_ARRAY);
+      inv = SubSetFloat.instantiate (slice);
+    }
+
+    if (inv == null)
+      return (false);
+
+    // If the varinfos are out of order swap
+    if (v1.varinfo_index > v2.varinfo_index)
+      inv = inv.permute (permute_swap);
+
+    // Look for the invariant
+    return (slice.is_inv_true (inv));
+  }
+
+
+  /**
+   * Returns whether or not the specified variables are equal (ie,
+   * an equality invariant exists between them)
+   */
+  public boolean is_equal (VarInfo v1, VarInfo v2) {
+
+    // Find the slice for v1 and v2.  If the slice doesn't exist,
+    // the variables can't be equal
+    PptSlice slice = findSlice_unordered (v1, v2);
+    if (slice == null)
+      return (false);
+
+    // Determine the class of the invariant we are looking for
+    Class inv_class = null;
+    if (v1.rep_type.isScalar()) {
+      Assert.assertTrue (v2.rep_type.isScalar());
+      inv_class = IntEqual.class;
+    } else if (v1.rep_type.isFloat()) {
+      Assert.assertTrue (v2.rep_type.isFloat());
+      inv_class  = FloatEqual.class;
+    } else if (v1.rep_type == ProglangType.STRING) {
+      Assert.assertTrue (v2.rep_type == ProglangType.STRING);
+      inv_class = StringEqual.class;
+    } else if ((v1.rep_type == ProglangType.INT_ARRAY)) {
+      Assert.assertTrue (v2.rep_type == ProglangType.INT_ARRAY);
+      inv_class = SeqSeqIntEqual.class;
+    } else if (v1.rep_type == ProglangType.DOUBLE_ARRAY) {
+      Assert.assertTrue (v2.rep_type == ProglangType.DOUBLE_ARRAY);
+      inv_class = SeqSeqFloatEqual.class;
+    } else if ((v1.rep_type == ProglangType.STRING_ARRAY)) {
+      Assert.assertTrue (v2.rep_type == ProglangType.STRING_ARRAY);
+      inv_class = SeqSeqStringEqual.class;
+    } else {
+      Assert.assertTrue (false, "unexpected type " + v1.rep_type);
+    }
+
+    // Look for the invariant by its class name.  Since equality invariants
+    // have no state, this is a completely sufficient search
+    Invariant inv = slice.find_inv_by_class (inv_class);
+    return (inv != null);
+  }
+
+  /**
+   * Returns true if (v1+v1_shift) <= (v2+v2_shift) is known
+   * to be true.  Returns false otherwise.  Integers only.
+   * JHP: turn on the < checks!
+   */
+  public boolean is_less_equal (VarInfo v1, int v1_shift,
+                                       VarInfo v2, int v2_shift) {
+
+    Assert.assertTrue (v1.ppt == this);
+    Assert.assertTrue (v2.ppt == this);
+    Assert.assertTrue (v1.file_rep_type.isIntegral());
+    Assert.assertTrue (v2.file_rep_type.isIntegral());
+
+    Invariant inv = null;
+    PptSlice slice = null;
+    if (v1.varinfo_index <= v2.varinfo_index) {
+      slice = findSlice (v1, v2);
+      if (slice != null) {
+        if (v1_shift <= v2_shift) {
+          inv = IntLessEqual.instantiate (slice);
+        } else if (v1_shift == (v2_shift + 1)) {
+        // Invariant inv = IntLessThan.instantiate (slice);
+        // return (slice.is_inv_true (inv));
+        } else { //  no invariant over v1 and v2 shows ((v1 + 2) <= v2)
+        }
+      }
+    } else {
+      slice = findSlice (v2, v1);
+      if (slice != null) {
+        if (v1_shift <= v2_shift) {
+          inv = IntGreaterEqual.instantiate (slice);
+        } else if (v1_shift == (v2_shift + 1)) {
+          // inv = IntGreaterThan.instantiate (slice);
+          // return (slice.is_inv_true (inv));
+        } else { //  no invariant over v1 and v2 shows ((v2 + 2) <= v1)
+        }
+      }
+    }
+
+    boolean found = (inv != null) && slice.is_inv_true (inv);
+    if (false) {
+      Fmt.pf ("Looking for %s [%s] <= %s [%s] in ppt %s", v1.name.name(),
+              "" + v1_shift, v2.name.name(), "" + v2_shift, this.name());
+      Fmt.pf ("Searched for invariant %s, found = %s",
+              (inv == null) ? "null":inv.format(), "" + found);
+    }
+    return (found);
+  }
+
+  /**
+   * Returns true if v1 is known to be a subsequence of v2.  This
+   * is true if the subsequence invariant exists or if it it
+   * suppressed
+   */
+  public boolean is_subsequence (VarInfo v1, VarInfo v2) {
+
+    // Find the slice for v1 and v2.  If no slice exists, create it,
+    // but don't add it to the slices for this ppt.  It only exists
+    // as a temporary home for the invariant we are looking for below.
+    PptSlice slice = findSlice_unordered (v1, v2);
+    if (slice == null) {
+      if (v1.varinfo_index <= v2.varinfo_index)
+        slice = new PptSlice2 (this, v1, v2);
+      else
+        slice = new PptSlice2 (this, v2, v1);
+    }
+
+    // Create the invariant we are looking for.
+    Invariant inv = null;
+    if ((v1.rep_type == ProglangType.INT_ARRAY)) {
+      Assert.assertTrue (v2.rep_type == ProglangType.INT_ARRAY);
+        inv = SubSequence.instantiate (slice);
+    } else if (v1.rep_type == ProglangType.DOUBLE_ARRAY) {
+      Assert.assertTrue (v2.rep_type == ProglangType.DOUBLE_ARRAY);
+      inv = SubSequenceFloat.instantiate (slice);
+    } else {
+      Assert.assertTrue (false, "unexpected type " + v1.rep_type);
+    }
+
+    if (inv == null)
+      return (false);
+
+    // If the varinfos are out of order swap
+    if (v1.varinfo_index > v2.varinfo_index)
+      inv = inv.permute (permute_swap);
+
+    return (slice.is_inv_true (inv));
   }
 
   // At present, this needs to occur after deriving variables, because
@@ -2744,7 +2936,7 @@ public class PptTopLevel
     }
 
     // Vars must be compatible
-    if (!v1.compatible(v2) || !v1.compatible(v3)) {
+    if (!v1.compatible(v2) || !v1.compatible(v3) || !v2.compatible(v3)) {
       if (dlog != null)
         dlog.log (debug, "Ternary slice not created, vars not compatible");
       return (false);
@@ -4803,10 +4995,8 @@ public class PptTopLevel
       invEquals = IntEqual.instantiate (newSlice);
     } else if ((rep == ProglangType.STRING)) {
       invEquals = StringEqual.instantiate (newSlice);
-      //invEquals = StringComparison.instantiate (newSlice, true);
-      //((StringComparison) invEquals).core.can_be_eq = true;
     } else if ((rep == ProglangType.INT_ARRAY)) {
-      invEquals = SeqSeqIntEqual.instantiate (newSlice, true);
+      invEquals = SeqSeqIntEqual.instantiate (newSlice);
     } else if ((rep == ProglangType.STRING_ARRAY)) {
       // JHP commented out to see what diffs are coming from here (5/3/3)
 //         invEquals = SeqComparisonString.instantiate (newSlice, true);
@@ -4818,7 +5008,7 @@ public class PptTopLevel
       if (rep_is_float) {
         invEquals = FloatEqual.instantiate (newSlice);
       } else if (rep == ProglangType.DOUBLE_ARRAY) {
-        invEquals = SeqSeqFloatEqual.instantiate (newSlice, true);
+        invEquals = SeqSeqFloatEqual.instantiate (newSlice);
       }
     } else {
       throw new Error ("No known Comparison invariant to convert equality into");
