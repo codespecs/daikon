@@ -78,7 +78,7 @@ public class DaikonSimple {
 
     PptMap all_ppts = FileIO.read_declaration_files(decls_files);
 
-    //	adding orig and derived variables
+    //  adding orig and derived variables
     init_partial_order(all_ppts);
     if (debug.isLoggable(Level.FINE)) {
       debug.fine("Partial order initialized");
@@ -91,7 +91,7 @@ public class DaikonSimple {
     Iterator t = all_ppts.pptIterator();
 
     //System.exit(0);
-    //		print out the invariants for each program point (sort first)
+    //    print out the invariants for each program point (sort first)
     t = all_ppts.pptIterator();
 
     while (t.hasNext()) {
@@ -160,7 +160,7 @@ public class DaikonSimple {
     System.exit(0);
 
     //using print_invariants will add invariant filtering
-    //	PrintInvariants.print_invariants(all_ppts);
+    //  PrintInvariants.print_invariants(all_ppts);
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -464,30 +464,30 @@ public class DaikonSimple {
     Vector ternary_views = new Vector();
     for (int i1 = 0; i1 < vi_index_limit; i1++) {
       VarInfo var1 = ppt.var_infos[i1];
-      //		 System.out.println("var1: " + var1);
-      //		 if (!var1.isCanonical() && !(Debug.logOn() || debug_on))
-      //		   continue;
+      //     System.out.println("var1: " + var1);
+      //     if (!var1.isCanonical() && !(Debug.logOn() || debug_on))
+      //       continue;
 
       // Eventually, add back in this test as "if constant and no
       // comparability info exists" then continue.
       // if (var1.isStaticConstant()) continue;
       // For now, only ternary invariants not involving any arrays
-      //		 if (var1.rep_type.isArray() && (!Debug.logOn() || debug_on))
-      //		   continue;
+      //     if (var1.rep_type.isArray() && (!Debug.logOn() || debug_on))
+      //       continue;
 
       boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
       for (int i2 = i1; i2 < vi_index_limit; i2++) {
         VarInfo var2 = ppt.var_infos[i2];
-        //		   System.out.println("var2:" + var2);
-        //		   if (!var2.isCanonical() && !(Debug.logOn() || debug_on))
-        //			 continue;
+        //       System.out.println("var2:" + var2);
+        //       if (!var2.isCanonical() && !(Debug.logOn() || debug_on))
+        //       continue;
 
         // Eventually, add back in this test as "if constant and no
         // comparability info exists" then continue.
         // if (var2.isStaticConstant()) continue;
         // For now, only ternary invariants not involving any arrays
-        //		   if (var2.rep_type.isArray() && !(Debug.logOn() || debug_on))
-        //			 continue;
+        //       if (var2.rep_type.isArray() && !(Debug.logOn() || debug_on))
+        //       continue;
 
         boolean target2 = (i2 >= vi_index_min) && (i2 < vi_index_limit);
         int i3_min = ((target1 || target2) ? i2 : Math.max(i2, vi_index_min));
@@ -498,10 +498,10 @@ public class DaikonSimple {
               || ((i3 >= vi_index_min) && (i3 < vi_index_limit)));
           Assert.assertTrue((i1 <= i2) && (i2 <= i3));
           VarInfo var3 = ppt.var_infos[i3];
-          //			System.out.println("var3: " + var3);
+          //      System.out.println("var3: " + var3);
 
-          //	System.out.println(ppt.name);
-          //	System.out.println(var1.name.name() + " " + var2.name.name() + " " + var3.name.name());
+          //  System.out.println(ppt.name);
+          //  System.out.println(var1.name.name() + " " + var2.name.name() + " " + var3.name.name());
 
           if (!is_slice_ok(var1, var2, var3, ppt)) {
             //System.out.println("slice not ok");
@@ -533,14 +533,14 @@ public class DaikonSimple {
    */
   public static boolean is_slice_ok(VarInfo var1, PptTopLevel ppt) {
 
-    //	   if (Daikon.dkconfig_use_dynamic_constant_optimization && constants == null)
-    //		 return (false);
-    //	   if (ppt.is_constant (var1))
-    //		 return (false);
-    //	   if (ppt.is_missing (var1))
-    //		 return (false);
-    //	   if (!var1.isCanonical())
-    //		 return (false);
+    //     if (Daikon.dkconfig_use_dynamic_constant_optimization && constants == null)
+    //     return (false);
+    //     if (ppt.is_constant (var1))
+    //     return (false);
+    //     if (ppt.is_missing (var1))
+    //     return (false);
+    //     if (!var1.isCanonical())
+    //     return (false);
 
     return (true);
   }
@@ -557,26 +557,26 @@ public class DaikonSimple {
     VarInfo var2,
     PptTopLevel ppt) {
 
-    //	   // Both vars must be leaders
-    //	   if (!var1.isCanonical() || !var2.isCanonical())
-    //		 return (false);
+    //     // Both vars must be leaders
+    //     if (!var1.isCanonical() || !var2.isCanonical())
+    //     return (false);
     //
-    //	   // Check to see if the new slice would be over all constants
-    //	   if (ppt.is_constant (var1) && ppt.is_constant (var2))
-    //		 return (false);
+    //     // Check to see if the new slice would be over all constants
+    //     if (ppt.is_constant (var1) && ppt.is_constant (var2))
+    //     return (false);
     //
-    //	   // Each variable must not be always missing
-    //	   if (ppt.is_missing (var1) || ppt.is_missing (var2))
-    //		 return (false);
+    //     // Each variable must not be always missing
+    //     if (ppt.is_missing (var1) || ppt.is_missing (var2))
+    //     return (false);
     //
-    //	   // Don't create a slice with the same variables if the equality
-    //	   // set only contains 1 variable
-    //	   // This is not turned on for now since suppressions need invariants
-    //	   // of the form a == a even when a is the only item in the set.
-    //	   if (false) {
-    //				   if ((var1 == var2) && (var1.get_equalitySet_size() == 1))
-    //					   return (false);
-    //	   }
+    //     // Don't create a slice with the same variables if the equality
+    //     // set only contains 1 variable
+    //     // This is not turned on for now since suppressions need invariants
+    //     // of the form a == a even when a is the only item in the set.
+    //     if (false) {
+    //           if ((var1 == var2) && (var1.get_equalitySet_size() == 1))
+    //             return (false);
+    //     }
 
     return (true);
   }
@@ -604,26 +604,26 @@ public class DaikonSimple {
     Debug dlog = null;
 
     // Each variable must not be always missing
-    //	   if (ppt.is_missing (v1) || ppt.is_missing (v2) || ppt.is_missing (v3))
-    //		 return (false);
+    //     if (ppt.is_missing (v1) || ppt.is_missing (v2) || ppt.is_missing (v3))
+    //     return (false);
     //
-    //	   // At least one variable must not be a constant
-    //	   if (ppt.is_constant (v1) && ppt.is_constant(v2) && ppt.is_constant (v3))
-    //		 return false;
+    //     // At least one variable must not be a constant
+    //     if (ppt.is_constant (v1) && ppt.is_constant(v2) && ppt.is_constant (v3))
+    //     return false;
     //
-    //	   // Each variable must be canonical (leader)
-    //	   if (!v1.isCanonical()) {
+    //     // Each variable must be canonical (leader)
+    //     if (!v1.isCanonical()) {
     //
-    //		 return (false);
-    //	   }
-    //	   if (!v2.isCanonical()) {
+    //     return (false);
+    //     }
+    //     if (!v2.isCanonical()) {
     //
-    //		 return (false);
-    //	   }
-    //	   if (!v3.isCanonical()) {
+    //     return (false);
+    //     }
+    //     if (!v3.isCanonical()) {
     //
-    //		 return (false);
-    //	   }
+    //     return (false);
+    //     }
 
     // For now, each variable must also not be an array (ternary only)
     if (v1.rep_type.isArray()) {
@@ -662,17 +662,17 @@ public class DaikonSimple {
 
     // Don't create a reflexive slice (all vars the same) if there are
     // only two vars in the equality set
-    //			   if ((v1 == v2) && (v2 == v3))
-    //				 return (false);
+    //         if ((v1 == v2) && (v2 == v3))
+    //         return (false);
 
     // Don't create a partially reflexive slice (two vars the same) if there
     // is only one variable in its equality set
-    //	   if (false) {
-    //				 if ((v1 == v2) || (v1 == v3) && (v1.get_equalitySet_size() == 1))
-    //				   return (false);
-    //				 if ((v2 == v3) && (v2.get_equalitySet_size() == 1))
-    //				   return (false);
-    //	   }
+    //     if (false) {
+    //         if ((v1 == v2) || (v1 == v3) && (v1.get_equalitySet_size() == 1))
+    //           return (false);
+    //         if ((v2 == v3) && (v2.get_equalitySet_size() == 1))
+    //           return (false);
+    //     }
 
     return (true);
   }
@@ -735,8 +735,8 @@ public class DaikonSimple {
 
     private void add(PptTopLevel ppt, ValueTuple vt) {
       // if this is a numbered exit, apply to the combined exit as well
-      //	if (!(ppt instanceof PptConditional)
-      //		&& ppt.ppt_name.isNumberedExitPoint()) {
+      //  if (!(ppt instanceof PptConditional)
+      //    && ppt.ppt_name.isNumberedExitPoint()) {
       if (ppt.ppt_name.isNumberedExitPoint()) {
         PptTopLevel parent = all_ppts.get(ppt.ppt_name.makeExit());
         if (parent != null) {
@@ -786,7 +786,7 @@ public class DaikonSimple {
             break;
           }
 
-          //	If any variables are missing, skip this slice
+          //  If any variables are missing, skip this slice
           if (v.isMissing(vt)) {
             missing = true;
             break;
