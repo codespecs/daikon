@@ -362,8 +362,6 @@ public final class Equality
     return format_daikon();
   }
 
-  // CP: why would Tao have coded this method as he did? (See
-  // commented-out code below.)
   public String format_dbc() {
     StringBuffer result = new StringBuffer ();
     VarInfo leader = leader();
@@ -371,36 +369,18 @@ public final class Equality
     for (Iterator i = vars.iterator(); i.hasNext(); ) {
       VarInfo var = (VarInfo) i.next();
       if (leader == var) continue;
-      result.append("(").append(leaderName).append(" == "); // "interned"
-      result.append(var.name.dbc_name(var)).append(")");
+      if (leader.rep_type.isArray()) {
+        result.append("(").append("quant.Quant.pairwiseEqual(");
+        result.append(leaderName).append(", ").append(var.name.dbc_name(var));
+        result.append(")");
+      } else {
+        result.append("(").append(leaderName).append(" == "); // "interned"
+        result.append(var.name.dbc_name(var)).append(")");
+      }
       if (i.hasNext()) result.append(" && ");
     }
     return result.toString();
   }
-
-//   //@tx
-//   // daikon.inv.Equality
-//   public String format_dbc() {
-//     StringBuffer result = new StringBuffer ();
-//     String first = null; // = vars[0].name.name();
-//     Iterator i = vars.iterator();
-//     if (i.hasNext()) {
-//       first = ((VarInfo) i.next()).name.name();
-//     } else {
-//       return "";
-//     }
-//     boolean firstLoop = true;
-//     while (i.hasNext()) {
-
-//       // for (int i = 1; i < vars.length; i++) {
-//       // // appends " && ( v[0] == v[i] )" to the stringbuffer
-//       if (! firstLoop) result.append(" && ");
-//       result.append("( ").append(first).append(" == "); // "interned"
-//       result.append(((VarInfo) i.next()).name.name()).append(" ) ");
-//       firstLoop = false;
-//     }
-//     return result.toString();
-//   }
 
   public String toString() {
     return repr();
