@@ -997,18 +997,12 @@ java daikon.gui.treeGUI.InvariantsGUI QueueAr.inv
 @node    C examples,  , Second Java example, Example use
 @section C examples
 
-Whereas the Daikon distribution comes with several example Java
-programs to enable users to become familiar with Daikon, the C example
-programs are distributed separately.  You may download them from
-@url{http://pag.lcs.mit.edu/daikon/download/c-examples.tar.gz}.
-Install the C examples as follows:
-@example
-cd $DAIKONDIR/examples
-tar zxvf c-examples.tar.gz
-@end example
-@noindent
-In order to detect invariants over C programs, you must have already
-installed dfec, the Daikon front end for C; see @ref{Installing dfec}.
+The Daikon distribution comes with several example C programs in the
+@file{examples/c-examples} directory to enable users to become familiar
+with Daikon.
+
+In order to detect invariants over C programs, you must
+install dfec, the Daikon front end for C; see @ref{Installing dfec}.
 
 
 To detect invariants for a program, you need to perform three basic
