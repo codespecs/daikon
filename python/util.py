@@ -10,6 +10,8 @@ false = (1==0)
 ### Numbers
 ###
 
+maxint = 2147483647      # largest positive 32-bit 2-complement int
+
 ## Roundoff errors can make floating-point values not quite what they ought
 ## to be.  This is a fairly unpleasant hack around the problem.
 
@@ -482,7 +484,13 @@ def list_differences(nums):
     if len(nums) < 2:
         raise IndexError("List too short")
     for i in range(0, len(nums)-1):
-        result.append(nums[i+1]-nums[i])
+        ## Just let the OverflowError occur and be propagated to the caller
+        # try:
+        #     difference = nums[i+1]-nums[i]
+        # except OverflowError:
+        #     difference = maxint
+        difference = nums[i+1]-nums[i]
+        result.append(difference)
     return result
 
 def _test_list_differences():
@@ -503,7 +511,10 @@ integers are equal to 0 mod 1 is not returned (None is returned instead)."""
 
     ## Rather than computing the entire list_differences, I could inline
     ## and bail out early.  Perhaps not worth it for now.
-    modulus = abs(gcd_list(list_differences(nums)))
+    try:
+        modulus = abs(gcd_list(list_differences(nums)))
+    except OverflowError:
+        return None
     if modulus == 1:
         return None
 
@@ -538,7 +549,10 @@ def common_nonmodulus_strict(nums):
 but all missing numbers in their range are."""
     nums = list(nums)
     nums.sort()
-    if nums[-1] - nums[0] > 65536:
+    try:
+        if nums[-1] - nums[0] > 65536:
+            return None
+    except OverflowError:
         return None
     return common_modulus(sorted_list_difference(range(nums[0]+1, nums[-1]), nums))
 

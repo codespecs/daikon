@@ -399,9 +399,6 @@ def lackwit_type_element_type_alias(vi):
     lt = vi.lackwit_type
     if lackwit_type_format == "implicit":
         return "always"
-    	# The below isn't working as of 4/21 because of a bug in the C front end.
-        assert lt[:3] == "ref"
-        return lt[3:]
     else:
         seq_var_name = lackwit_type_alias_name(lt) or vi.name
         return ("alias", "%s-element" % seq_var_name,
@@ -2394,6 +2391,10 @@ class invariant:
         case it supplies default variable names.
         """
 
+        if self.samples == 0:
+            self.unconstrained_internal = false
+            return None
+
         self.unconstrained_internal = false
 
         if args == None:
@@ -2401,8 +2402,18 @@ class invariant:
         if (type(args) in [types.ListType, types.TupleType]) and (len(args) == 1):
             args = args[0]
 
-        if self.one_of and not self.can_be_None:
-            if len(self.one_of) == 1:
+        if self.one_of:
+            # If it can be None, print it only if it is always None and
+            # is an invariant over non-derived variable.
+            if self.can_be_None:
+                if ((len(self.one_of) == 1)
+                    and self.var_infos):
+                    some_nonderived = false
+                    for vi in self.var_infos:
+                    	some_nonderived = some_nonderived or not vi.is_derived
+                    if some_nonderived:
+                return "%s = uninit" % (args,)
+            elif len(self.one_of) == 1:
                 return "%s = %s" % (args, self.one_of[0])
             ## Perhaps I should unconditionally return this value;
             ## otherwise I end up printing ranges more often than small
@@ -2480,7 +2491,10 @@ class single_scalar_numeric_invariant(invariant):
             #    least 3.
             (count_min,mod_min) = dict[self.min]
             (count_max,mod_max) = dict[self.max]
-            range = self.max - self.min + 1
+            try:
+                range = self.max - self.min + 1
+            except OverflowError:
+                range = util.maxint
             twice_avg_num = 2.0*self.values/range
             half_avg_num = .5*self.values/range
             if ((mod_min >= 3)
@@ -2767,16 +2781,28 @@ class two_scalar_numeric_invariant(invariant):
         diff_dict = {}
         sum_dict = {}
         for ((x,y),(count,modified)) in dict_of_pairs.items():
-            x_y_diff = x-y
-            this_counts = diff_dict.get(x_y_diff, [0,0])
-            diff_dict[x_y_diff] = this_counts
-            this_counts[0] = this_counts[0] + count
-            this_counts[1] = this_counts[1] + modified
-            x_y_sum = x+y
-            this_counts = sum_dict.get(x_y_sum, [0,0])
-            sum_dict[x_y_sum] = this_counts
-            this_counts[0] = this_counts[0] + count
-            this_counts[1] = this_counts[1] + modified
+            if diff_dict:
+                try:
+                    x_y_diff = x-y
+                    this_counts = diff_dict.get(x_y_diff, [0,0])
+                    diff_dict[x_y_diff] = this_counts
+                    this_counts[0] = this_counts[0] + count
+                    this_counts[1] = this_counts[1] + modified
+                except OverflowError:
+                    diff_dict = None
+            if sum_dict:
+                try:
+                    x_y_sum = x+y
+                    this_counts = sum_dict.get(x_y_sum, [0,0])
+                    sum_dict[x_y_sum] = this_counts
+                    this_counts[0] = this_counts[0] + count
+                    this_counts[1] = this_counts[1] + modified
+                except OverflowError:
+                    diff_dict = None
+        if not diff_dict:
+            diff_dict = {}
+        if not sum_dict:
+            sum_dict = {}
         self.difference_invariant = single_scalar_numeric_invariant(diff_dict, None)
         self.sum_invariant = single_scalar_numeric_invariant(sum_dict, None)
 
@@ -2997,10 +3023,10 @@ class two_scalar_numeric_invariant(invariant):
 
         if self.comparison and self.comparison != self.comparison_obvious:
             if self.comparison in ["<", "<="]:
-                if diff_inv.max < -1:
+                if diff_inv.max and (diff_inv.max < -1):
                     suffix = " \t%s <= %s - %d" % (x, y, -diff_inv.max) + suffix
                 return "%s %s %s" % (x, self.comparison, y) + suffix
-            if diff_inv.min > 1:
+            if diff_inv.min and (diff_inv.min > 1):
                 suffix = " \t%s <= %s - %d" % (y, x, diff_inv.min) + suffix
             if self.comparison == ">":
                 return "%s < %s" % (y, x) + suffix
