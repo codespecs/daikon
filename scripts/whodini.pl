@@ -19,9 +19,9 @@ use POSIX qw(tmpnam);
 # 0 We are given a (possibly-annotated) source file and a txt-esc file
 # 1 Read the txt file into memory, adding a nonce to the end of each invariant: "; // gensym"
 # 2 Write the txt file (from memory) to a temp file
-# 3 Copy the source file to a temp file
-# 4 Merge the temp text file into the temp source file
-# 5 Run ESC on the temp source file and slurp the results
+# 3 Copy the source files to a temp file
+# 4 Merge the temp text file into the temp source files
+# 5 Run ESC on the temp source files and slurp the results
 # 6 Remove the two temporary files
 # 7 Grep the results for "/*@ ...; // gensym */"
 # 8 If any matching lines are found, remove them from the txt file in memory and go to step 2
@@ -54,6 +54,17 @@ sub slurpfile {
     return @result;
 }
 
+sub slurpfiles {
+    # returns the contents of the arguments (filenames) as files
+    my @files = $_;
+    my @result = ();
+    for my $file (@files) {
+	my @slurp = slurpfile($file);
+	push @result, \@slurp;
+    }
+    return @result;
+}
+
 my $gensym_counter = 0;
 sub gensym {
     # returns some unique nonce
@@ -65,10 +76,10 @@ sub gensym {
 }
 
 sub notdir {
-    # returns the non-dir part of the filname
-    my $name = shift;
-    $name =~ s|^.*/||;
-    return $name;
+    # returns the non-dir part of the filenames
+    my @names = @_;
+    grep { s|^.*/||; } @names;
+    return @names;
 }
 
 sub reltmp {
@@ -104,12 +115,18 @@ if ($ARGV[0] eq "-d") {
     $debug = 1;
     shift @ARGV;
 }
-my $sourcefile = shift @ARGV;
 my $txtescfile = shift @ARGV;
+my @sourcefiles = @ARGV;
 
-unless ((-f $sourcefile) && (-f $txtescfile) && ($sourcefile =~ /\.java$/)) {
-    print STDERR "Usage: $0 source.java annotations.txt-esc\n";
-    exit(1);
+{
+    my $ok = (-f $txtescfile);
+    for my $sourcefile (@sourcefiles) {
+	$ok &&= (-f $sourcefile) && ($sourcefile =~ /\.java$/);
+    }
+    unless ($ok) {
+	print STDERR "Usage: $0 annotations.txt-esc source.java [source2.java ...]\n";
+	exit(1);
+    }
 }
 
 # 1 Read the txt file into memory, adding a nonce to the end of each invariant: ";//nonce-gensym"
@@ -134,23 +151,31 @@ while (1) {
     # 2 Write the txt file (from memory) to a temp file
     $txtesctmp = writetmp($txtescfile, @txtesc);
 
-    # 3 Copy the source file to a temp file
-    $sourcetmp = copytmp($sourcefile);
+    # 3 Copy the source files to a temp file
+    my @sourcetmps;
+    for my $sourcefile (@sourcefiles) {
+	my $sourcetmp = copytmp($sourcefile);
+	push @sourcetmps, $sourcetmp;
+    }
 
     # 4 Merge the temp text file into the temp source file
     print STDERR `cd $tmpdir && merge-esc.pl -s $txtesctmp`;
-    unlink($sourcetmp);
-    rename("$sourcetmp-escannotated", $sourcetmp);
+    for my $sourcetmp (@sourcetmps) {
+	unlink($sourcetmp);
+	rename("$sourcetmp-escannotated", $sourcetmp);
+    }
 
     # 5 Run ESC on the temp source file and slurp the results
     print ".";
-    my $notdir_sourcetmp = notdir($sourcetmp);
-    my @checked_source = slurpfile($sourcetmp);
+    my $notdir_sourcetmp = join(" ", notdir(@sourcetmps));
+    my @checked_source = slurpfile($sourcetmps[0]);  # hack; only first file line numbers for now
     my @escoutput = `cd $tmpdir && escjava $notdir_sourcetmp`;
 
     # 6 Remove the two temporary files
     unlink($txtesctmp);
-    unlink($sourcetmp);
+    for my $sourcetmp (@sourcetmps) {
+	unlink($sourcetmp);
+    }
 
     # 7 Grep the results for "//@ ensures /*nonce-DDDD*/ ..." and extract the nonce
     my @failures = grep { m|/\*nonce-\d{4}\*/|; } @escoutput;
