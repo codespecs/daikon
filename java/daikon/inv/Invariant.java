@@ -566,6 +566,30 @@ public abstract class Invariant
   }
 
   /**
+   * Returns a single VarComparability that describes the set of
+   * variables used by this invariant.  Since all of the variables
+   * in an invariant must be comparable, this can usually be the
+   * comparability information for any variable.  The exception is
+   * when one or more variables is always comparable (comparable to
+   * everythign else).  An always comparable VarComparability is
+   * returned only if all of the variables involved are always
+   * comparable.  Otherwise the comparability information from one
+   * of the non always-comparable variables is returned.
+   */
+  public VarComparability get_comparability() {
+
+    // Return the first variable that is not always-comparable
+    for (int i = 0; i < ppt.var_infos.length; i++) {
+      VarComparability vc = ppt.var_infos[i].comparability;
+      if (!vc.alwaysComparable())
+        return (vc);
+    }
+
+    // All the variables are always-comparable, just return the first one
+    return (ppt.var_infos[0].comparability);
+  }
+
+  /**
    * Merge the invariants in invs to form a new invariant.  This implementation
    * merely returns a clone of the first invariant in the list.  This is
    * correct for simple invariants whose equation or statistics don't depend
@@ -598,6 +622,14 @@ public abstract class Invariant
 
     return (result);
 
+  }
+
+  /**
+   * Permutes the invariant as specified.  Often creates a new invariant
+   * (with a different class)
+   */
+  public Invariant permute (int[] permutation) {
+    return (resurrect_done (permutation));
   }
 
   /**
@@ -1202,8 +1234,13 @@ public abstract class Invariant
     NISuppressionSet ss = get_ni_suppressions();
     if (ss == null)
       return (false);
+    boolean suppressed = ss.suppressed (ppt);
+    if (suppressed && Debug.logOn() && (Daikon.current_inv != null))
+      Daikon.current_inv.log ("inv " + format() + " suppressed: " + ss);
+    if (Debug.logDetail())
+      log ("suppressed = " + suppressed + " suppression set = " + ss);
 
-    return (ss.suppressed (ppt));
+    return (suppressed);
   }
 
   /**
@@ -1918,6 +1955,28 @@ public abstract class Invariant
   }
 
   /**
+   * Instantiates an invariant of the same class on the specified
+   * slice.  Must be overridden in each class.  Must be used rather
+   * than clone so that checks in instantiate for reasonable invariants
+   * are done.
+   * @return the new invariant or null if the invariant is not reasonable
+   */
+  public Invariant instantiate_dyn (PptSlice slice) {
+    Assert.assertTrue (false, "no instantiate_dyn for class " + getClass());
+    return (null);
+  }
+
+  /**
+   * Returns whether or not the invariant is valid over the specified
+   * types.
+   */
+  public boolean valid_types (ProglangType[] rep_types) {
+    Assert.assertTrue (false, "no valid_types for class " + getClass());
+    return (false);
+  }
+
+
+  /**
    * Adds the specified sample to the invariant and returns the result.
    */
   public InvariantStatus add_sample (ValueTuple vt, int count) {
@@ -1941,6 +2000,9 @@ public abstract class Invariant
       VarInfo v1 = ppt.var_infos[0];
       VarInfo v2 = ppt.var_infos[1];
       VarInfo v3 = ppt.var_infos[2];
+      if (!(this instanceof TernaryInvariant))
+        Assert.assertTrue (false, "invariant '" + format() + "' in slice "
+                           + ppt.name() + " is not ternary");
       TernaryInvariant ternary_inv = (TernaryInvariant) this;
       return (ternary_inv.add (vt.getValue(v1), vt.getValue(v2),
                                 vt.getValue(v3), vt.getModified(v1), count));
