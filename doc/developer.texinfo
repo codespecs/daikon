@@ -1494,11 +1494,19 @@ describes CVS branches:
   changes onto another branch.
 @end quotation
 
+@c It is important that the following paragraph not contain any substrings
+@c matching the regex /(Daikon version )[0-9]+(\.[0-9]+)*/,
+@c because such phrases are automatically changed at the time of a release to
+@c mention the most recent Daikon version, while the intent of this paragraph
+@c is to discuss historical versions.
 In early January 2002 (or perhaps in late 2001), we created the
 @samp{ENGINE_V2_PATCHES} branch at the @file{invariants/java/daikon level} of
 the Daikon CVS repository.  Primary development continued along the CVS
-branch @samp{ENGINE_V2_PATCHES}, which we called ``Daikon version 4.0.3''.  We
-called the CVS trunk ``Daikon version 3''; it was experimental, and very
+branch @samp{ENGINE_V2_PATCHES}, which we called
+``Daikon version @c trick version updater
+2''.  We
+called the CVS trunk ``Daikon version @c trick version updater
+3''; it was experimental, and very
 few people ran its code or performed development on it.  Periodically,
 all changes made to the branch would be merged into the trunk, as one
 large checkin on the trunk.  Later, development on version 3 became more
