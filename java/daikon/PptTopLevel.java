@@ -4045,7 +4045,8 @@ public class PptTopLevel
     if (children.size() == 0)
       return;
 
-    // If this has already been done via an other pass, nothing to do
+    // If this has already been done (because this ppt has multiple parents)
+    // there is nothing to do
     if (invariants_merged)
       return;
 
@@ -4112,12 +4113,15 @@ public class PptTopLevel
     // There shouldn't be any slices when we start
     Assert.assertTrue (views.size() == 0);
 
+    // Create an array of leaders to build slices over
+    VarInfo[] leaders = new VarInfo[equality_view.invs.size()];
+    for (int i = 0; i < equality_view.invs.size(); i++)
+      leaders[i] = ((Equality) equality_view.invs.get(i)).leader();
+
     // Create unary views and related invariants
     List unary_slices = new ArrayList();
-    for (int i = 0; i < equality_view.invs.size(); i++) {
-      Equality e = (Equality) equality_view.invs.get (i);
-      VarInfo vi = e.leader();
-      PptSlice1 slice1 = new PptSlice1 (this, vi);
+    for (int i = 0; i < leaders.length; i++) {
+      PptSlice1 slice1 = new PptSlice1 (this, leaders[i]);
       slice1.merge_invariants();
       unary_slices.add (slice1);
     }
@@ -4127,13 +4131,9 @@ public class PptTopLevel
 
     // Create binary views and related invariants
     List binary_slices = new ArrayList();
-    for (int i = 0; i < equality_view.invs.size(); i++) {
-      Equality e1 = (Equality) equality_view.invs.get (i);
-      VarInfo v1 = e1.leader();
-      for (int j = i; j < equality_view.invs.size(); j++) {
-        Equality e2 = (Equality) equality_view.invs.get (j);
-        VarInfo v2 = e2.leader();
-        PptSlice2 slice2 = new PptSlice2 (this, v1, v2);
+    for (int i = 0; i < leaders.length; i++) {
+      for (int j = i; j < leaders.length; j++) {
+        PptSlice2 slice2 = new PptSlice2 (this, leaders[i], leaders[j]);
         slice2.merge_invariants();
         if (slice2.invs.size() > 0)
           binary_slices.add (slice2);
@@ -4148,24 +4148,21 @@ public class PptTopLevel
     // are no ternary array invariants, those slices don't need to
     // be created.
     List ternary_slices = new ArrayList();
-    for (int i = 0; i < equality_view.invs.size(); i++) {
-      Equality e1 = (Equality) equality_view.invs.get (i);
-      VarInfo v1 = e1.leader();
-      if (v1.rep_type.isArray())
+    for (int i = 0; i < leaders.length; i++) {
+      if (leaders[i].rep_type.isArray())
         continue;
-      for (int j = i; j < equality_view.invs.size(); j++) {
-        Equality e2 = (Equality) equality_view.invs.get (j);
-        VarInfo v2 = e2.leader();
-        if (v2.rep_type.isArray())
+      for (int j = i; j < leaders.length; j++) {
+        if (leaders[j].rep_type.isArray())
           continue;
-        for (int k = j; k < equality_view.invs.size(); k++) {
-          Equality e3 = (Equality) equality_view.invs.get (k);
-          VarInfo v3 = e3.leader();
-          if (v3.rep_type.isArray())
+        if (!leaders[i].compatible(leaders[j]))
+          continue;
+        for (int k = j; k < leaders.length; k++) {
+          if (leaders[k].rep_type.isArray())
             continue;
-          if (!v1.compatible(v2) || !v1.compatible(v3))
+          if (!leaders[i].compatible(leaders[k]))
             continue;
-          PptSlice3 slice3 = new PptSlice3 (this, v1, v2, v3);
+          PptSlice3 slice3 = new PptSlice3 (this, leaders[i], leaders[j],
+                                            leaders[k]);
           slice3.merge_invariants();
           if (slice3.invs.size() > 0)
             ternary_slices.add (slice3);
