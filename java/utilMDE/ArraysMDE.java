@@ -724,26 +724,11 @@ public final class ArraysMDE {
    * Return a new array that contains all the elements of both argument
    * arrays, in order.
    **/
-  public static long[] concat(long[] a, long[] b) {
+  public static Object[] concat(Object[] a, Object[] b) {
     if (a == null && b == null) return null;
     if (a == null) return b;
     if (b == null) return a;
-    long[] result = new long[a.length + b.length];
-
-    System.arraycopy(a, 0, result, 0, a.length);
-    System.arraycopy(b, 0, result, a.length, b.length);
-    return result;
-  }
-
-  /**
-   * Return a new array that contains all the elements of both argument
-   * arrays, in order.
-   **/
-  public static double[] concat(double[] a, double[] b) {
-    if (a == null && b == null) return null;
-    if (a == null) return b;
-    if (b == null) return a;
-    double[] result = new double[a.length + b.length];
+    Object[] result = new Object[a.length + b.length];
 
     System.arraycopy(a, 0, result, 0, a.length);
     System.arraycopy(b, 0, result, a.length, b.length);
@@ -765,6 +750,127 @@ public final class ArraysMDE {
     return result;
   }
 
+
+  /**
+   * Return a new array that contains all the elements of both argument
+   * arrays, in order.
+   **/
+  public static byte[] concat(byte[] a, byte[] b) {
+    if (a == null && b == null) return null;
+    if (a == null) return b;
+    if (b == null) return a;
+    byte[] result = new byte[a.length + b.length];
+
+    System.arraycopy(a, 0, result, 0, a.length);
+    System.arraycopy(b, 0, result, a.length, b.length);
+    return result;
+  }
+
+  /**
+   * Return a new array that contains all the elements of both argument
+   * arrays, in order.
+   **/
+  public static boolean[] concat(boolean[] a, boolean[] b) {
+    if (a == null && b == null) return null;
+    if (a == null) return b;
+    if (b == null) return a;
+    boolean[] result = new boolean[a.length + b.length];
+
+    System.arraycopy(a, 0, result, 0, a.length);
+    System.arraycopy(b, 0, result, a.length, b.length);
+    return result;
+  }
+
+  /**
+   * Return a new array that contains all the elements of both argument
+   * arrays, in order.
+   **/
+  public static char[] concat(char[] a, char[] b) {
+    if (a == null && b == null) return null;
+    if (a == null) return b;
+    if (b == null) return a;
+    char[] result = new char[a.length + b.length];
+
+    System.arraycopy(a, 0, result, 0, a.length);
+    System.arraycopy(b, 0, result, a.length, b.length);
+    return result;
+  }
+
+
+  /**
+   * Return a new array that contains all the elements of both argument
+   * arrays, in order.
+   **/
+  public static double[] concat(double[] a, double[] b) {
+    if (a == null && b == null) return null;
+    if (a == null) return b;
+    if (b == null) return a;
+    double[] result = new double[a.length + b.length];
+
+    System.arraycopy(a, 0, result, 0, a.length);
+    System.arraycopy(b, 0, result, a.length, b.length);
+    return result;
+  }
+
+  /**
+   * Return a new array that contains all the elements of both argument
+   * arrays, in order.
+   **/
+  public static float[] concat(float[] a, float[] b) {
+    if (a == null && b == null) return null;
+    if (a == null) return b;
+    if (b == null) return a;
+    float[] result = new float[a.length + b.length];
+
+    System.arraycopy(a, 0, result, 0, a.length);
+    System.arraycopy(b, 0, result, a.length, b.length);
+    return result;
+  }
+
+  /**
+   * Return a new array that contains all the elements of both argument
+   * arrays, in order.
+   **/
+  public static int[] concat(int[] a, int[] b) {
+    if (a == null && b == null) return null;
+    if (a == null) return b;
+    if (b == null) return a;
+    int[] result = new int[a.length + b.length];
+
+    System.arraycopy(a, 0, result, 0, a.length);
+    System.arraycopy(b, 0, result, a.length, b.length);
+    return result;
+  }
+
+  /**
+   * Return a new array that contains all the elements of both argument
+   * arrays, in order.
+   **/
+  public static long[] concat(long[] a, long[] b) {
+    if (a == null && b == null) return null;
+    if (a == null) return b;
+    if (b == null) return a;
+    long[] result = new long[a.length + b.length];
+
+    System.arraycopy(a, 0, result, 0, a.length);
+    System.arraycopy(b, 0, result, a.length, b.length);
+    return result;
+  }
+
+  /**
+   * Return a new array that contains all the elements of both argument
+   * arrays, in order.
+   **/
+  public static short[] concat(short[] a, short[] b) {
+    if (a == null && b == null) return null;
+    if (a == null) return b;
+    if (b == null) return a;
+    short[] result = new short[a.length + b.length];
+
+    System.arraycopy(a, 0, result, 0, a.length);
+    System.arraycopy(b, 0, result, a.length, b.length);
+    return result;
+  }
 
 
   ///////////////////////////////////////////////////////////////////////////
@@ -1120,7 +1226,85 @@ public final class ArraysMDE {
     return true;
   }
 
+  /**
+   * @return true iff a does not contain duplicate elements
+   * using O(n) time and O(n) space.
+   */
+  public static boolean noDuplicates (boolean[] a) {
+    HashSet hs = new HashSet ();
+    for (int i = 0; i < a.length; i++) {
+      // could be optimzed not to add the last element,
+      // but that would make the code much less readable.
+      Boolean n = new Boolean (a[i]);
+      if (hs.contains(n)) { return false; }
+      hs.add (n);
+    }
+    return true;
+  }
 
+  /**
+   * @return true iff a does not contain duplicate elements
+   * using O(n) time and O(n) space.
+   */
+  public static boolean noDuplicates (byte[] a) {
+    HashSet hs = new HashSet ();
+    for (int i = 0; i < a.length; i++) {
+      // could be optimzed not to add the last element,
+      // but that would make the code much less readable.
+      Byte n = new Byte (a[i]);
+      if (hs.contains(n)) { return false; }
+      hs.add (n);
+    }
+    return true;
+  }
+
+  /**
+   * @return true iff a does not contain duplicate elements
+   * using O(n) time and O(n) space.
+   */
+  public static boolean noDuplicates (char[] a) {
+    HashSet hs = new HashSet ();
+    for (int i = 0; i < a.length; i++) {
+      // could be optimzed not to add the last element,
+      // but that would make the code much less readable.
+      Character n = new Character (a[i]);
+      if (hs.contains(n)) { return false; }
+      hs.add (n);
+    }
+    return true;
+  }
+
+  /**
+   * @return true iff a does not contain duplicate elements
+   * using O(n) time and O(n) space.
+   */
+  public static boolean noDuplicates (float[] a) {
+    HashSet hs = new HashSet ();
+    for (int i = 0; i < a.length; i++) {
+      // could be optimzed not to add the last element,
+      // but that would make the code much less readable.
+      Float n = new Float (a[i]);
+      if (hs.contains(n)) { return false; }
+      hs.add (n);
+    }
+    return true;
+  }
+
+  /**
+   * @return true iff a does not contain duplicate elements
+   * using O(n) time and O(n) space.
+   */
+  public static boolean noDuplicates (short[] a) {
+    HashSet hs = new HashSet ();
+    for (int i = 0; i < a.length; i++) {
+      // could be optimzed not to add the last element,
+      // but that would make the code much less readable.
+      Short n = new Short (a[i]);
+      if (hs.contains(n)) { return false; }
+      hs.add (n);
+    }
+    return true;
+  }
 
   /**
    * @return true iff a does not contain duplicate elements

@@ -50,7 +50,7 @@ public final class TestUtilMDE extends TestCase {
 // // Assert.enabled = false, and I want these tests to always be performed.
 //   private static final void assert(boolean b) { if (!b) throw new Error(); }
 //   private static final void assert(boolean b, String s) { if (!b) throw new Error(s); }
-   private static final void assert_arrays_equals(int[] a1, int[] a2) {
+  public static final void assert_arrays_equals(int[] a1, int[] a2) {
      boolean result = Arrays.equals(a1, a2);
      if (! result)
        System.out.println("Arrays differ: " + ArraysMDE.toString(a1)
@@ -59,7 +59,7 @@ public final class TestUtilMDE extends TestCase {
 //      assert(Arrays.equals(a1, a2),
 //         "Arrays differ: " + ArraysMDE.toString(a1) + ", " + ArraysMDE.toString(a2));
    }
-   private static final void assert_arrays_equals(double[] a1, double[] a2) {
+  public static final void assert_arrays_equals(double[] a1, double[] a2) {
      boolean result = Arrays.equals(a1, a2);
      if (! result)
        System.out.println("Arrays differ: " + ArraysMDE.toString(a1)
@@ -72,14 +72,14 @@ public final class TestUtilMDE extends TestCase {
   /// Utility functions
   ///
 
-  private static Iterator int_array_iterator(int[] nums) {
+  public static Iterator int_array_iterator(int[] nums) {
     Object[] o = new Object[nums.length];
     for (int i=0; i<nums.length; i++)
       o[i] = new Integer(nums[i]);
     return Arrays.asList(o).iterator();
   }
 
-  private static int[] int_iterator_array(Iterator itor) {
+  public static int[] int_iterator_array(Iterator itor) {
     Vector v = new Vector();
     while (itor.hasNext())
       v.add(itor.next());
@@ -94,7 +94,7 @@ public final class TestUtilMDE extends TestCase {
     assert_arrays_equals(int_iterator_array(int_array_iterator(a)), a);
   }
 
-  private static Vector toVector(Iterator itor) {
+  public static Vector toVector(Iterator itor) {
     Vector v = new Vector();
     for ( ; itor.hasNext() ; ) {
       v.add(itor.next());
@@ -102,7 +102,7 @@ public final class TestUtilMDE extends TestCase {
     return v;
   }
 
-  private static Vector toVector(Enumeration e) {
+  public static Vector toVector(Enumeration e) {
     Vector v = new Vector();
     for ( ; e.hasMoreElements() ; ) {
       v.add(e.nextElement());
