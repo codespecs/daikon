@@ -128,6 +128,7 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/binary/twoScalar/TwoFloat.java \
 	daikon/inv/binary/twoSequence/SeqComparison.java \
 	daikon/inv/binary/twoSequence/SeqComparisonFloat.java \
+	daikon/inv/binary/twoSequence/SeqComparisonString.java \
 	daikon/inv/binary/twoSequence/Reverse.java \
 	daikon/inv/binary/twoSequence/ReverseFloat.java \
 	daikon/inv/binary/twoSequence/SubSequence.java \
@@ -144,6 +145,7 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/binary/twoSequence/TwoSequenceFloat.java \
 	daikon/inv/binary/twoSequence/TwoSequenceFactory.java \
 	daikon/inv/binary/twoSequence/TwoSequenceFactoryFloat.java \
+	daikon/inv/binary/twoSequence/TwoSequenceString.java \
 	daikon/derive/ternary/SequenceScalarArbitrarySubsequence.java \
 	daikon/derive/ternary/SequenceFloatArbitrarySubsequence.java \
 	daikon/derive/ternary/SequenceStringArbitrarySubsequence.java \
