@@ -100,8 +100,8 @@ It describes Daikon version 4.0.3, released March 1, 2005.
 * Example usage::               
 * Running Daikon::              
 * Daikon output::               
-* Front ends::                  
 * Enhancing Daikon output::     
+* Front ends::                  
 * Tools::                       
 * Troubleshooting::             
 * Details::                     
@@ -182,6 +182,39 @@ Variable names
 Interpreting Daikon output
 
 * Equal variables::             
+
+Enhancing Daikon output
+
+* Configuration options::       
+* Conditional invariants::      
+* Enhancing conditional invariant detection::  
+* Loop invariants::             
+
+Configuration options
+
+* List of configuration options::  
+
+Conditional invariants and implications
+
+* Splitter info file::          
+* Indiscriminate splitting::    
+* Example splitter info file::  
+
+Splitter info file
+
+* Program point sections::      
+* Replacement sections::        
+
+Example splitter info file
+
+* Example class::               
+* Resulting .spinfo file::      
+
+Enhancing conditional invariant detection
+
+* Static analysis for splitters::  
+* Cluster analysis for splitters::  
+* Random selection for splitters::  
 
 Front ends
 
@@ -266,39 +299,6 @@ dfec requirements
 Installing dfec, the source-based Daikon front end for C
 
 * dfec EDG sources::            
-
-Enhancing Daikon output
-
-* Configuration options::       
-* Conditional invariants::      
-* Enhancing conditional invariant detection::  
-* Loop invariants::             
-
-Configuration options
-
-* List of configuration options::  
-
-Conditional invariants and implications
-
-* Splitter info file::          
-* Indiscriminate splitting::    
-* Example splitter info file::  
-
-Splitter info file
-
-* Program point sections::      
-* Replacement sections::        
-
-Example splitter info file
-
-* Example class::               
-* Resulting .spinfo file::      
-
-Enhancing conditional invariant detection
-
-* Static analysis for splitters::  
-* Cluster analysis for splitters::  
-* Random selection for splitters::  
 
 Tools for manipulating invariants
 
@@ -1586,7 +1586,7 @@ current directory.
 
 
 
-@node    Daikon output, Front ends, Running Daikon, Top
+@node    Daikon output, Enhancing Daikon output, Running Daikon, Top
 @chapter Daikon output
 
 Daikon outputs the invariants that it discovers in textual form to your
@@ -2089,7 +2089,591 @@ This filter is only useful for ESC output.
 @end itemize
 
 
-@node    Front ends, Enhancing Daikon output, Daikon output, Top
+@node    Enhancing Daikon output, Front ends, Daikon output, Top
+@chapter Enhancing Daikon output
+
+@menu
+* Configuration options::       
+* Conditional invariants::      
+* Enhancing conditional invariant detection::  
+* Loop invariants::             
+@end menu
+
+@node    Configuration options, Conditional invariants, Enhancing Daikon output, Enhancing Daikon output
+@section Configuration options
+
+@cindex configuration options
+@cindex dkconfig_ variables
+
+Many aspects of Daikon's behavior can be controlled by setting various
+configuration parameters.  These configuration parameters control which
+invariants are checked and reported, the statistical tests for
+invariants, which derived variables are created, and more.
+
+The configuration options are set by creating a configuration file and
+supplying it to Daikon on the command line using the @option{--config
+@var{filename}} option.  Daikon reads all supplied configuration files
+in order, overriding the defaults.  You may wish to use the supplied
+example configuration file
+@file{daikon/java/daikon/config/example-settings.txt} as an example when
+creating your own configuration files.  (If you did not downloaded
+Daikon's sources, you will have to extract the example from
+@file{daikon.jar} to read it.)
+
+You may also specify a configuration setting directly on the command line,
+using the @option{--config_option @var{name}=@var{value}} option.
+
+The configuration options are different from the debugging flags
+@option{--debug} and @option{--dbg @var{category}} (@pxref{Command line
+options}).  The debugging flags permit Daikon to produce debugging
+output, but they do not affect the invariants that Daikon computes.
+
+@menu
+* List of configuration options::  
+@end menu
+
+@node    List of configuration options,  , Configuration options, Configuration options
+@subsection List of configuration options
+
+This is a list of all Daikon configuration options.
+The configuration option name contains the
+Java classes in which it is defined.  (In the Daikon source code, the
+configuration value is stored in a variable whose name contains a
+@code{dkconfig_} prefix, but that should be irrelevant to users.)
+To learn more about a specific invariant or derived variable, see
+its source code.
+
+@c The config options are categorized into sections by pattern-matching
+@c their names.  If you are adding new options, you might want to choose
+@c names similar to those of similar options.  
+@c Currently the categories are:
+@c   daikon.inv.filter.*.enabled  -> turn filters on/off
+@c   daikon.inv.*.enabled -> turn invariant detection on/off
+@c   daikon.inv.* -> other invariant configuration
+@c   daikon.derive.* -> turn derived parameters on/off
+@c   daikon.simplify.* -> options for Simplify
+@c   * -> general options
+@c See ParameterDoclet.java for details.
+
+@include config-options.texinfo
+
+
+@node    Conditional invariants, Enhancing conditional invariant detection, Configuration options, Enhancing Daikon output
+@section Conditional invariants and implications
+@cindex splitting
+@cindex splitting condition
+@cindex conditional invariant
+@cindex invariant, conditional
+@cindex implication invariant
+@cindex invariant, implication
+
+Conditional invariants are invariants that are true only part of the time.
+For instance, the postcondition for the absolute value procedure is
+@example
+if arg < 0
+  then return == -arg
+  else return == arg
+@end example
+@noindent
+The invariant @code{return == -arg} is a conditional invariant because
+it depends on the predicate @code{arg < 0} being true.  An
+@emph{implication} is a compound invariant that includes both the
+predicate and the conditional invariant (also called the consequent).
+
+Daikon must be supplied with the predicate for an implication.  Daikon has
+certain built-in predicates that it uses for finding conditional invariants;
+examples are which return statement was executed in a procedure and whether a
+boolean procedure returns true or false.  Additionally, Daikon can read
+predicates from a file called a splitter info (@file{.spinfo}) file and find
+implications based on those predicates.  The splitter info file can be produced
+automatically, such as by static analysis of the program using the CreateSpinfo
+and CreateSpinfoC programs or by cluster analysis of the
+traced values in the data trace file.  Details of these techniques and usage
+guides can be found in @ref{Enhancing conditional invariant detection}.  Users
+can also create splitter info files by hand or manually augment
+automatically-created ones.
+
+To detect conditional invariants and implications:
+@enumerate
+@item
+Create the splitter info file, either automatically or by hand.
+@item
+Run Daikon with the @file{.spinfo} file as one of its arguments.  
+(The order of arguments does not matter.)
+For example,
+@example
+java daikon.Daikon Foo.decls Foo.spinfo Foo.dtrace
+@end example
+@end enumerate
+
+The term ``splitter'' comes from Daikon's technique for detecting
+implications and conditional invariants.  For each predicate, Daikon
+creates two conditional program points --- one for program executions
+that satisfy the condition and one for those that don't --- and splits
+the data trace into two parts.  Invariant detection is then performed
+on the conditional program points (that is, the parts of the data
+trace) separately and any invariants detected are reported as
+conditional invariants (as implications).
+
+To be precise, we say that an invariant holds exclusively if it is
+discovered on one side of a split, and its negation is discovered on
+the opposite side.  Daikon creates conditional invariants whose
+predicates are invariants that hold exclusively on one side of a
+split, and whose consequents are invariants that hold on that side of
+the split but not on the un-split program point.  If Daikon finds
+multiple exclusive conditions, it will create biconditional (``if and
+only if'') invariants between the equivalent conditions.  Within the
+context of the program, each of the exclusive conditions is equivalent
+to the splitting condition.  In particular, if both the splitting
+condition and its negation are within the grammar of invariants that
+Daikon detects, the splitting condition may appear as the predicate of
+the generated conditional invariants.  On the other hand, if other
+equivalent conditions are found, or if the splitting condition is not
+expressible in Daikon's grammar, it might not appear in the generated
+implications.
+
+@cindex dummy invariant
+@cindex invariant, dummy
+
+In some cases, the default policy of selecting predicates from
+Daikon's output may be insufficient.  For instance, Daikon might not
+detect any invariant equivalent to the splitting condition, if it is
+sufficiently complex or application-specific.  In such situations,
+Daikon can also use the splitting condition itself as the predicate of
+an implication, as what is called a ``dummy invariant''.  A ``dummy
+invariant'' is one whose meaning is not dealt with directly by Daikon;
+instead Daikon knows only how to print the invariant in its output.
+When a tool or a user writes a splitter info file, the file can
+specify a way to print the condition represented by the splitter in
+any of Daikon's output formats.  If the use of dummy invariants is
+enabled, invariants with the supplied output formats will be used as
+the predicates of conditional invariants.
+
+To use dummy invariants, a condition's formatting must be specified in
+the splitter info file, and the configuration option
+@option{daikon.PptTopLevel.dummy_invariant_level} must be set to a
+non-zero value (see @ref{List of configuration options}).
+
+@menu
+* Splitter info file::          
+* Indiscriminate splitting::    
+* Example splitter info file::  
+@end menu
+
+@node    Splitter info file, Indiscriminate splitting, Conditional invariants, Conditional invariants
+@subsection Splitter info file
+@cindex splitter info file
+@cindex .spinfo file
+@cindex spinfo file
+
+A splitter info file contains the conditions that Daikon should use to
+create conditional invariants.  Each section in the @file{.spinfo}
+file consists of a sequence of non-blank lines; sections are separated
+by blank lines.  There are two types of sections:  program point
+sections and replacement sections.
+@xref{Example splitter info file}, for an example splitter info file.
+
+@menu
+* Program point sections::      
+* Replacement sections::        
+@end menu
+
+@node    Program point sections, Replacement sections, Splitter info file, Splitter info file
+@subsubsection Program point sections
+
+Program point sections have a line specifying a program point name
+followed by lines specifying the condition(s) associated with that
+program point, each condition on its own line.  Additional information
+about a condition may be specified on indented lines.  For example, a
+typical entry is
+
+@example
+PPT_NAME @var{pptname}
+@var{condition1}
+@var{condition2}
+    DAIKON_FORMAT @var{output string}
+    ESC_FORMAT @var{output string}
+@var{condition3}
+...
+@end example
+@noindent
+@var{pptname} can be any string that matches a part of the desired
+program point name as printed in the decls file.  In finding matching
+program points, Daikon uses the first program point that matches
+@var{pptname}.  Caution is necessary when dealing with method names
+that are prefixes of other method names.  For instance, if the class
+@code{List} has methods @code{add} and @code{addAll}, specifying
+@samp{PPT_NAME List.add} might select either method, depending on
+which was encountered first.  Instead writing @samp{PPT_NAME
+List.add(} will match only the @code{add} method.
+
+Each condition is a Java expression of boolean type.  All variables
+that appear in the condition must also appear in the declaration of
+the program point in the @file{.decls} file.  (In other words, all the
+variables must be in scope at the program point(s) where the Splitter
+is intended to operate.)  The automatically generated Splitter source
+code fails to compile (but Daikon proceeds without it) if a variable
+name in a condition is not found at the matching program point.
+
+Indented lines beginning with @option{DAIKON_FORMAT},
+@option{JAVA_FORMAT}, @option{ESC_FORMAT}, @option{SIMPLIFY_FORMAT},
+or @option{IOA_FORMAT} may be used to specify how to represent the
+condition specified by the splitter in each of Daikon's output
+formats, to allow the splitting condition to be used as a dummy
+invariant.
+
+@node    Replacement sections,  , Program point sections, Splitter info file
+@subsubsection Replacement sections
+
+Ordinarily, a splitting condition may not invoke user-defined methods,
+because when Daikon reads data trace files, it does not have access to the
+program source.  A replace section of the splitter info file can specify
+the bodies of methods, permitting conditions to invoke those methods.  The
+format is as follows:
+@example
+REPLACE
+@var{procedure1}
+@var{replacement1}
+@var{procedure2}
+@var{replacement2}
+...
+@end example
+@noindent
+where @var{replacementi} is a Java expression for the body
+of @var{procedurei}.  In each condition, Daikon replaces procedure
+calls by their replacements.  A replace section may appear anywhere in
+the splitter info file.
+
+@node    Indiscriminate splitting, Example splitter info file, Splitter info file, Conditional invariants
+@subsection Indiscriminate splitting
+
+Ordinarily, each condition in an @file{.spinfo} file gives rise to
+conditional invariants only at the program point in whose section the
+condition appears.  Alternately, every condition can be used at every
+program point, regardless of where in the @file{.spinfo} file the
+condition appeared; this latter approach is called ``indiscriminate
+splitting''.
+
+The advantage of indiscriminate splitting is that a condition that is
+useful at one program point may also be useful at another --- if the
+same variables are in scope or other variables of the same name are in
+scope.  The disadvantage of indiscriminate splitting is that often the
+condition is not applicable everywhere, and when it is, it may not be
+useful at all such locations, so checking for many conditional
+invariants may slow down Daikon without a corresponding benefit. 
+Indiscriminate splitting can result in Daikon attempting
+to use many conditions that are inappropriate at certain program
+points, for instance because the program point does not have (in
+scope) all the variables that are used in the condition.  For example,
+the condition @code{myArray.length == x} is inapplicable at a program
+point if either of @code{myArray} and @code{x} is not in scope at that
+program point.  In this case, Daikon prints a warning message and
+proceeds, using conditions wherever they are valid.
+
+By default, Daikon uses indiscriminate splitting.  To use
+non-indiscriminate splitting, place the following line in a file that is
+passed to Daikon via the @option{--config} flag (@pxref{Command line
+options}):
+@example
+daikon.split.SplitterList.all_splitters = false
+@end example
+
+
+@node    Example splitter info file,  , Indiscriminate splitting, Conditional invariants
+@subsection Example splitter info file
+
+Below is an implementation of a simple Queue for positive integers and
+a corresponding @file{.spinfo} file.  The splitter info file is like
+the one that @command{CreateSpinfo} would create for that class, but
+also demonstrates some other features.
+
+@menu
+* Example class::               
+* Resulting .spinfo file::      
+@end menu
+
+@node    Example class, Resulting .spinfo file, Example splitter info file, Example splitter info file
+@subsubsection Example class
+
+@smallexample
+class simpleStack @{
+ 
+  private int[] myArray;
+  private int currentSize;
+ 
+  public simpleStack(int capacity) @{
+    myArray = new int[capacity];
+    currentSize = 0;
+  @}
+ 
+  /** Adds an element to the back of the stack, if the stack is
+    * not full.
+    * Returns true if this succeeds, false otherwise.  **/
+  public String push(int x) @{
+    if ( !isFull() && x >= 0) @{
+      myArray[currentSize] = x;
+      currentSize++;
+      return true;
+    @} else @{
+      return false;
+    @}
+  @}
+ 
+  /** Returns the most recently inserted stack element.
+    * Returns -1 if the stack is empty. **/
+  public int pop() @{
+    if ( !isEmpty() ) @{
+      currentSize--;
+      return myArray[currentSize];
+    @} else @{
+      return -1;
+    @}
+  @}
+
+ /** Returns true if the stack is empty, false otherwise. **/
+  private boolean isEmpty() @{
+    return (currentSize == 0);
+  @}
+
+  /** Returns true if the stack is full, false otherwise. **/
+  private boolean isFull() @{
+    return (currentSize == myArray.length);
+  @}
+@}
+@end smallexample
+
+@node    Resulting .spinfo file,  , Example class, Example splitter info file
+@subsubsection Resulting .spinfo file
+
+@smallexample
+REPLACE
+isFull()
+currentSize == myArray.length
+isEmpty()
+currentSize == 0
+
+PPT_NAME  simpleStack.push
+!isFull() && x >= 0
+    DAIKON_FORMAT !isFull() and x >= 0
+    SIMPLIFY_FORMAT (AND (NOT (isFull this)) (>= x 0))
+
+PPT_NAME  simpleStack.pop
+!isEmpty()
+
+PPT_NAME  simpleStack.isFull
+currentSize == myArray.length - 1
+
+PPT_NAME  simpleStack.isEmpty
+currentSize == 0
+@end smallexample
+
+@node    Enhancing conditional invariant detection, Loop invariants, Conditional invariants, Enhancing Daikon output
+@section Enhancing conditional invariant detection
+
+The built-in mechanisms (@pxref{Conditional invariants}) have
+limitations in the invariants they can find.  By supplying splitting
+conditions to Daikon via a splitter info file, the user can infer more
+conditional invariants.  To ease this task, there are two methods to
+automatically create splitter info files for use by Daikon.
+
+@menu
+* Static analysis for splitters::  
+* Cluster analysis for splitters::  
+* Random selection for splitters::  
+@end menu
+
+@node   Static analysis for splitters, Cluster analysis for splitters, Enhancing conditional invariant detection, Enhancing conditional invariant detection
+@subsection Static analysis for splitters
+
+@cindex splitting conditions, static analysis
+@cindex static analysis for splitters
+@cindex CreateSpinfo
+@cindex CreateSpinfoC
+
+In static analysis, all explicitly stated boolean statements in the program
+source are extracted and used as splitting conditions.  The assumption is that
+conditions that are explicitly tested in the program are likely to affect the
+program's behavior and could lead to useful conditional invariants.  
+
+The CreateSpinfo program takes Java source code as input and creates a
+splitter info file for each input file; for instance,
+@example
+java daikon.tools.jtb.CreateSpinfo Foo.java Bar.java
+@end example
+@noindent
+creates the splitter info files @file{Foo.spinfo} and
+@file{Bar.spinfo}.
+Given an @option{-o @var{filename}} argument, CreateSpinfo puts all the
+splitters in the specified file instead.
+The resulting splitter info file(s) contains each
+boolean expression that appears in the source code.  The conditional
+statements that the programmer used in the source code are likely to
+have important semantic properties.  This simple heuristic of using
+these conditional statements as predicates for conditional invariant
+detection is often quite effective.  
+
+If you get an error such as
+@example
+  jtb.ParseException: Encountered ";" at line 253, column 8.
+  Was expecting one of: "abstract" ...
+@end example
+@noindent
+then you may have encountered a bug in the JTB library on which
+CreateSpinfo is built.  It does not permit empty declarations in a
+class body.  Remove the extra semicolon in your Java file (at the
+indicated position) and re-rerun CreateSpinfo.
+
+The @command{CreateSpinfoC} program performs the same function, for
+C source code.  It can only be run on postprocessed source
+files---that is, source files contain no CPP commands.  CPP commands
+are lines starting with @samp{#}, such as @samp{#include}.  To
+expand CPP commands into legal C, run either @command{cpp -P} or
+@command{gcc -P -E}.  For instance, here is how you could use it.
+@example
+cpp -P foo.c foo.c-expanded
+cpp -P bar.c bar.c-expanded
+java daikon.tools.jtb.cparser.CreateSpinfoC \
+     foo.c-expanded bar.c-expanded
+@end example
+@noindent
+
+If you get an error such as
+@example
+... Lexical error at line 5, column 1.
+Encountered: "#" (35), after : ""
+@end example
+@noindent
+then you forgot to run CPP before running CreateSpinfoC@.
+
+@node   Cluster analysis for splitters, Random selection for splitters, Static analysis for splitters, Enhancing conditional invariant detection
+@subsection Cluster analysis for splitters
+
+@cindex splitting conditions, cluster analysis
+@cindex cluster analysis for splitters
+@cindex runcluster.pl program
+
+Cluster analysis is a statistical method that finds groups or clusters
+in data.  The clusters may indicate conditional properties in the
+program.  A conditional property at a program point separates the data
+into those that satisfy it and those that do not, and conditional
+invariants can be induced by clustering.  Any invariant that is
+discovered over one cluster but not over another is a conditional
+invariant---the predicate for the conditional invariant being
+membership in the cluster in which the invariant was found.  The
+cluster analysis mechanism finds clusters in the data trace file,
+infers invariants over any clusters that it finds, and writes these
+invariants into a splitter info file for conditional invariant
+detection.
+
+To find splitting conditions using cluster analysis, run the
+@command{runcluster.pl} program (found in the @file{$DAIKONDIR/bin}
+directory) in the following way:
+@example
+runcluster.pl [@var{options}] @var{dtrace_file(s)} @var{decls_files(s)}
+@end example
+
+The @var{options} are:
+@table @option
+
+@cindex kmeans cluster analysis
+@cindex hierarchical cluster analysis
+@cindex xm cluster analysis
+@item -a @var{ALG}
+@itemx --algorithm @var{ALG}
+@var{ALG} specifies a clustering algorithm.
+Current options are @samp{km} (for kmeans), @samp{hierarchical},
+and @samp{xm} (for xmeans).  The default is @samp{xm}.
+
+@item -k
+The number of clusters to use (for algorithms which require
+this input, which is everything except xmeans).  The default is 4.
+
+@item --keep    
+Don't delete the temporary files created by the clustering
+process.  This is a debugging flag.
+@end table
+
+The @command{runcluster.pl} script currently supports three clustering
+programs.  They are implementations of the kmeans algorithm,
+hierarchical clustering and the xmeans algorithm (kmeans algorithm
+with efficient discovery of the number of clusters).  The kmeans and
+hierarchical clustering tools are provided in the Daikon
+distribution.  The xmeans code and executable are publicly available at
+@uref{http://www.cs.cmu.edu/~dpelleg/kmeans.html} (fill in the license
+form and mail it in).
+
+@node   Random selection for splitters,  , Cluster analysis for splitters, Enhancing conditional invariant detection
+@subsection Random selection for splitters
+
+@cindex splitting conditions, random selection
+@cindex random selection for splitters
+@cindex TraceSelect tool
+
+Random selection can create representative samples of a data set with
+the added benefit of finding conditional properties and eliminating
+outliers.  Given traced data, the TraceSelect tool creates several
+small subsets of the data by randomly selecting parts of the original
+trace file.  Any invariant that is discovered in the smaller samples but
+not found over the entire data is a conditional invariant.
+
+To find splitting conditions using random selection, run the
+@command{daikon.tools.TraceSelect} program in the following way:
+@example
+java daikon.tools.TraceSelect @var{num_reps} @var{sample_size} [@var{options}] \
+    @var{dtrace_file} @var{decls_files(s)} [@var{daikon_options}]
+@end example
+
+@var{num_reps} is the number of subsets to create, and @var{sample_size} is the
+number of invocations to collect for each method.
+
+The @var{daikon_options} are the same options that can be provided to the
+daikon.Daikon program.
+
+The @var{options} for TraceSelect are:
+@table @option
+
+@item -NOCLEAN
+Don't delete the temporary trace samples created by the random
+selection process.  This can help for debugging or for using the tool
+solely to create trace samples instead of calculating invariants over
+the samples.
+
+@item -INCLUDE_UNRETURNED
+Allows random selection to choose method invocations that entered the
+method successfully but did not exit normally; either from a thrown
+Exception or abnormal termination. 
+
+@item -DO_DIFFS
+Creates an spinfo file for generating conditional invariants and
+implications by reporting the invariants that appear in at least one
+of the samples but not over the entire data set.
+
+
+@end table
+
+
+
+@node    Loop invariants,  , Enhancing conditional invariant detection, Enhancing Daikon output
+@section Loop invariants
+
+@cindex loop invariants
+
+Daikon does not by default output loop invariants.  Daikon can detect
+invariants at any location where it is provided with variable values,
+but the front ends do not currently supply Daikon with variable values
+at loop heads.
+
+Here is one way to cause Daikon to produce loop invariants.  At the top
+of a loop (or at any other location in the program at which you would
+like to obtain invariants), insert a call to a dummy procedure that does
+not work but returns immediately.  Pass, as arguments to the dummy
+procedure, all variables of interest.  Daikon will produce (identical)
+preconditions and postconditions for the dummy procedure; these are
+properties that held at the call site.
+
+
+
+@node    Front ends, Tools, Enhancing Daikon output, Top
 @chapter Front ends
 
 @cindex front end
@@ -5376,591 +5960,7 @@ using EDG 2.45 contains some known bugs that are corrected in the
 version of dfec that is built using EDG 3.0.)
 
 
-@node    Enhancing Daikon output, Tools, Front ends, Top
-@chapter Enhancing Daikon output
-
-@menu
-* Configuration options::       
-* Conditional invariants::      
-* Enhancing conditional invariant detection::  
-* Loop invariants::             
-@end menu
-
-@node    Configuration options, Conditional invariants, Enhancing Daikon output, Enhancing Daikon output
-@section Configuration options
-
-@cindex configuration options
-@cindex dkconfig_ variables
-
-Many aspects of Daikon's behavior can be controlled by setting various
-configuration parameters.  These configuration parameters control which
-invariants are checked and reported, the statistical tests for
-invariants, which derived variables are created, and more.
-
-The configuration options are set by creating a configuration file and
-supplying it to Daikon on the command line using the @option{--config
-@var{filename}} option.  Daikon reads all supplied configuration files
-in order, overriding the defaults.  You may wish to use the supplied
-example configuration file
-@file{daikon/java/daikon/config/example-settings.txt} as an example when
-creating your own configuration files.  (If you did not downloaded
-Daikon's sources, you will have to extract the example from
-@file{daikon.jar} to read it.)
-
-You may also specify a configuration setting directly on the command line,
-using the @option{--config_option @var{name}=@var{value}} option.
-
-The configuration options are different from the debugging flags
-@option{--debug} and @option{--dbg @var{category}} (@pxref{Command line
-options}).  The debugging flags permit Daikon to produce debugging
-output, but they do not affect the invariants that Daikon computes.
-
-@menu
-* List of configuration options::  
-@end menu
-
-@node    List of configuration options,  , Configuration options, Configuration options
-@subsection List of configuration options
-
-This is a list of all Daikon configuration options.
-The configuration option name contains the
-Java classes in which it is defined.  (In the Daikon source code, the
-configuration value is stored in a variable whose name contains a
-@code{dkconfig_} prefix, but that should be irrelevant to users.)
-To learn more about a specific invariant or derived variable, see
-its source code.
-
-@c The config options are categorized into sections by pattern-matching
-@c their names.  If you are adding new options, you might want to choose
-@c names similar to those of similar options.  
-@c Currently the categories are:
-@c   daikon.inv.filter.*.enabled  -> turn filters on/off
-@c   daikon.inv.*.enabled -> turn invariant detection on/off
-@c   daikon.inv.* -> other invariant configuration
-@c   daikon.derive.* -> turn derived parameters on/off
-@c   daikon.simplify.* -> options for Simplify
-@c   * -> general options
-@c See ParameterDoclet.java for details.
-
-@include config-options.texinfo
-
-
-@node    Conditional invariants, Enhancing conditional invariant detection, Configuration options, Enhancing Daikon output
-@section Conditional invariants and implications
-@cindex splitting
-@cindex splitting condition
-@cindex conditional invariant
-@cindex invariant, conditional
-@cindex implication invariant
-@cindex invariant, implication
-
-Conditional invariants are invariants that are true only part of the time.
-For instance, the postcondition for the absolute value procedure is
-@example
-if arg < 0
-  then return == -arg
-  else return == arg
-@end example
-@noindent
-The invariant @code{return == -arg} is a conditional invariant because
-it depends on the predicate @code{arg < 0} being true.  An
-@emph{implication} is a compound invariant that includes both the
-predicate and the conditional invariant (also called the consequent).
-
-Daikon must be supplied with the predicate for an implication.  Daikon has
-certain built-in predicates that it uses for finding conditional invariants;
-examples are which return statement was executed in a procedure and whether a
-boolean procedure returns true or false.  Additionally, Daikon can read
-predicates from a file called a splitter info (@file{.spinfo}) file and find
-implications based on those predicates.  The splitter info file can be produced
-automatically, such as by static analysis of the program using the CreateSpinfo
-and CreateSpinfoC programs or by cluster analysis of the
-traced values in the data trace file.  Details of these techniques and usage
-guides can be found in @ref{Enhancing conditional invariant detection}.  Users
-can also create splitter info files by hand or manually augment
-automatically-created ones.
-
-To detect conditional invariants and implications:
-@enumerate
-@item
-Create the splitter info file, either automatically or by hand.
-@item
-Run Daikon with the @file{.spinfo} file as one of its arguments.  
-(The order of arguments does not matter.)
-For example,
-@example
-java daikon.Daikon Foo.decls Foo.spinfo Foo.dtrace
-@end example
-@end enumerate
-
-The term ``splitter'' comes from Daikon's technique for detecting
-implications and conditional invariants.  For each predicate, Daikon
-creates two conditional program points --- one for program executions
-that satisfy the condition and one for those that don't --- and splits
-the data trace into two parts.  Invariant detection is then performed
-on the conditional program points (that is, the parts of the data
-trace) separately and any invariants detected are reported as
-conditional invariants (as implications).
-
-To be precise, we say that an invariant holds exclusively if it is
-discovered on one side of a split, and its negation is discovered on
-the opposite side.  Daikon creates conditional invariants whose
-predicates are invariants that hold exclusively on one side of a
-split, and whose consequents are invariants that hold on that side of
-the split but not on the un-split program point.  If Daikon finds
-multiple exclusive conditions, it will create biconditional (``if and
-only if'') invariants between the equivalent conditions.  Within the
-context of the program, each of the exclusive conditions is equivalent
-to the splitting condition.  In particular, if both the splitting
-condition and its negation are within the grammar of invariants that
-Daikon detects, the splitting condition may appear as the predicate of
-the generated conditional invariants.  On the other hand, if other
-equivalent conditions are found, or if the splitting condition is not
-expressible in Daikon's grammar, it might not appear in the generated
-implications.
-
-@cindex dummy invariant
-@cindex invariant, dummy
-
-In some cases, the default policy of selecting predicates from
-Daikon's output may be insufficient.  For instance, Daikon might not
-detect any invariant equivalent to the splitting condition, if it is
-sufficiently complex or application-specific.  In such situations,
-Daikon can also use the splitting condition itself as the predicate of
-an implication, as what is called a ``dummy invariant''.  A ``dummy
-invariant'' is one whose meaning is not dealt with directly by Daikon;
-instead Daikon knows only how to print the invariant in its output.
-When a tool or a user writes a splitter info file, the file can
-specify a way to print the condition represented by the splitter in
-any of Daikon's output formats.  If the use of dummy invariants is
-enabled, invariants with the supplied output formats will be used as
-the predicates of conditional invariants.
-
-To use dummy invariants, a condition's formatting must be specified in
-the splitter info file, and the configuration option
-@option{daikon.PptTopLevel.dummy_invariant_level} must be set to a
-non-zero value (see @ref{List of configuration options}).
-
-@menu
-* Splitter info file::          
-* Indiscriminate splitting::    
-* Example splitter info file::  
-@end menu
-
-@node    Splitter info file, Indiscriminate splitting, Conditional invariants, Conditional invariants
-@subsection Splitter info file
-@cindex splitter info file
-@cindex .spinfo file
-@cindex spinfo file
-
-A splitter info file contains the conditions that Daikon should use to
-create conditional invariants.  Each section in the @file{.spinfo}
-file consists of a sequence of non-blank lines; sections are separated
-by blank lines.  There are two types of sections:  program point
-sections and replacement sections.
-@xref{Example splitter info file}, for an example splitter info file.
-
-@menu
-* Program point sections::      
-* Replacement sections::        
-@end menu
-
-@node    Program point sections, Replacement sections, Splitter info file, Splitter info file
-@subsubsection Program point sections
-
-Program point sections have a line specifying a program point name
-followed by lines specifying the condition(s) associated with that
-program point, each condition on its own line.  Additional information
-about a condition may be specified on indented lines.  For example, a
-typical entry is
-
-@example
-PPT_NAME @var{pptname}
-@var{condition1}
-@var{condition2}
-    DAIKON_FORMAT @var{output string}
-    ESC_FORMAT @var{output string}
-@var{condition3}
-...
-@end example
-@noindent
-@var{pptname} can be any string that matches a part of the desired
-program point name as printed in the decls file.  In finding matching
-program points, Daikon uses the first program point that matches
-@var{pptname}.  Caution is necessary when dealing with method names
-that are prefixes of other method names.  For instance, if the class
-@code{List} has methods @code{add} and @code{addAll}, specifying
-@samp{PPT_NAME List.add} might select either method, depending on
-which was encountered first.  Instead writing @samp{PPT_NAME
-List.add(} will match only the @code{add} method.
-
-Each condition is a Java expression of boolean type.  All variables
-that appear in the condition must also appear in the declaration of
-the program point in the @file{.decls} file.  (In other words, all the
-variables must be in scope at the program point(s) where the Splitter
-is intended to operate.)  The automatically generated Splitter source
-code fails to compile (but Daikon proceeds without it) if a variable
-name in a condition is not found at the matching program point.
-
-Indented lines beginning with @option{DAIKON_FORMAT},
-@option{JAVA_FORMAT}, @option{ESC_FORMAT}, @option{SIMPLIFY_FORMAT},
-or @option{IOA_FORMAT} may be used to specify how to represent the
-condition specified by the splitter in each of Daikon's output
-formats, to allow the splitting condition to be used as a dummy
-invariant.
-
-@node    Replacement sections,  , Program point sections, Splitter info file
-@subsubsection Replacement sections
-
-Ordinarily, a splitting condition may not invoke user-defined methods,
-because when Daikon reads data trace files, it does not have access to the
-program source.  A replace section of the splitter info file can specify
-the bodies of methods, permitting conditions to invoke those methods.  The
-format is as follows:
-@example
-REPLACE
-@var{procedure1}
-@var{replacement1}
-@var{procedure2}
-@var{replacement2}
-...
-@end example
-@noindent
-where @var{replacementi} is a Java expression for the body
-of @var{procedurei}.  In each condition, Daikon replaces procedure
-calls by their replacements.  A replace section may appear anywhere in
-the splitter info file.
-
-@node    Indiscriminate splitting, Example splitter info file, Splitter info file, Conditional invariants
-@subsection Indiscriminate splitting
-
-Ordinarily, each condition in an @file{.spinfo} file gives rise to
-conditional invariants only at the program point in whose section the
-condition appears.  Alternately, every condition can be used at every
-program point, regardless of where in the @file{.spinfo} file the
-condition appeared; this latter approach is called ``indiscriminate
-splitting''.
-
-The advantage of indiscriminate splitting is that a condition that is
-useful at one program point may also be useful at another --- if the
-same variables are in scope or other variables of the same name are in
-scope.  The disadvantage of indiscriminate splitting is that often the
-condition is not applicable everywhere, and when it is, it may not be
-useful at all such locations, so checking for many conditional
-invariants may slow down Daikon without a corresponding benefit. 
-Indiscriminate splitting can result in Daikon attempting
-to use many conditions that are inappropriate at certain program
-points, for instance because the program point does not have (in
-scope) all the variables that are used in the condition.  For example,
-the condition @code{myArray.length == x} is inapplicable at a program
-point if either of @code{myArray} and @code{x} is not in scope at that
-program point.  In this case, Daikon prints a warning message and
-proceeds, using conditions wherever they are valid.
-
-By default, Daikon uses indiscriminate splitting.  To use
-non-indiscriminate splitting, place the following line in a file that is
-passed to Daikon via the @option{--config} flag (@pxref{Command line
-options}):
-@example
-daikon.split.SplitterList.all_splitters = false
-@end example
-
-
-@node    Example splitter info file,  , Indiscriminate splitting, Conditional invariants
-@subsection Example splitter info file
-
-Below is an implementation of a simple Queue for positive integers and
-a corresponding @file{.spinfo} file.  The splitter info file is like
-the one that @command{CreateSpinfo} would create for that class, but
-also demonstrates some other features.
-
-@menu
-* Example class::               
-* Resulting .spinfo file::      
-@end menu
-
-@node    Example class, Resulting .spinfo file, Example splitter info file, Example splitter info file
-@subsubsection Example class
-
-@smallexample
-class simpleStack @{
- 
-  private int[] myArray;
-  private int currentSize;
- 
-  public simpleStack(int capacity) @{
-    myArray = new int[capacity];
-    currentSize = 0;
-  @}
- 
-  /** Adds an element to the back of the stack, if the stack is
-    * not full.
-    * Returns true if this succeeds, false otherwise.  **/
-  public String push(int x) @{
-    if ( !isFull() && x >= 0) @{
-      myArray[currentSize] = x;
-      currentSize++;
-      return true;
-    @} else @{
-      return false;
-    @}
-  @}
- 
-  /** Returns the most recently inserted stack element.
-    * Returns -1 if the stack is empty. **/
-  public int pop() @{
-    if ( !isEmpty() ) @{
-      currentSize--;
-      return myArray[currentSize];
-    @} else @{
-      return -1;
-    @}
-  @}
-
- /** Returns true if the stack is empty, false otherwise. **/
-  private boolean isEmpty() @{
-    return (currentSize == 0);
-  @}
-
-  /** Returns true if the stack is full, false otherwise. **/
-  private boolean isFull() @{
-    return (currentSize == myArray.length);
-  @}
-@}
-@end smallexample
-
-@node    Resulting .spinfo file,  , Example class, Example splitter info file
-@subsubsection Resulting .spinfo file
-
-@smallexample
-REPLACE
-isFull()
-currentSize == myArray.length
-isEmpty()
-currentSize == 0
-
-PPT_NAME  simpleStack.push
-!isFull() && x >= 0
-    DAIKON_FORMAT !isFull() and x >= 0
-    SIMPLIFY_FORMAT (AND (NOT (isFull this)) (>= x 0))
-
-PPT_NAME  simpleStack.pop
-!isEmpty()
-
-PPT_NAME  simpleStack.isFull
-currentSize == myArray.length - 1
-
-PPT_NAME  simpleStack.isEmpty
-currentSize == 0
-@end smallexample
-
-@node    Enhancing conditional invariant detection, Loop invariants, Conditional invariants, Enhancing Daikon output
-@section Enhancing conditional invariant detection
-
-The built-in mechanisms (@pxref{Conditional invariants}) have
-limitations in the invariants they can find.  By supplying splitting
-conditions to Daikon via a splitter info file, the user can infer more
-conditional invariants.  To ease this task, there are two methods to
-automatically create splitter info files for use by Daikon.
-
-@menu
-* Static analysis for splitters::  
-* Cluster analysis for splitters::  
-* Random selection for splitters::  
-@end menu
-
-@node   Static analysis for splitters, Cluster analysis for splitters, Enhancing conditional invariant detection, Enhancing conditional invariant detection
-@subsection Static analysis for splitters
-
-@cindex splitting conditions, static analysis
-@cindex static analysis for splitters
-@cindex CreateSpinfo
-@cindex CreateSpinfoC
-
-In static analysis, all explicitly stated boolean statements in the program
-source are extracted and used as splitting conditions.  The assumption is that
-conditions that are explicitly tested in the program are likely to affect the
-program's behavior and could lead to useful conditional invariants.  
-
-The CreateSpinfo program takes Java source code as input and creates a
-splitter info file for each input file; for instance,
-@example
-java daikon.tools.jtb.CreateSpinfo Foo.java Bar.java
-@end example
-@noindent
-creates the splitter info files @file{Foo.spinfo} and
-@file{Bar.spinfo}.
-Given an @option{-o @var{filename}} argument, CreateSpinfo puts all the
-splitters in the specified file instead.
-The resulting splitter info file(s) contains each
-boolean expression that appears in the source code.  The conditional
-statements that the programmer used in the source code are likely to
-have important semantic properties.  This simple heuristic of using
-these conditional statements as predicates for conditional invariant
-detection is often quite effective.  
-
-If you get an error such as
-@example
-  jtb.ParseException: Encountered ";" at line 253, column 8.
-  Was expecting one of: "abstract" ...
-@end example
-@noindent
-then you may have encountered a bug in the JTB library on which
-CreateSpinfo is built.  It does not permit empty declarations in a
-class body.  Remove the extra semicolon in your Java file (at the
-indicated position) and re-rerun CreateSpinfo.
-
-The @command{CreateSpinfoC} program performs the same function, for
-C source code.  It can only be run on postprocessed source
-files---that is, source files contain no CPP commands.  CPP commands
-are lines starting with @samp{#}, such as @samp{#include}.  To
-expand CPP commands into legal C, run either @command{cpp -P} or
-@command{gcc -P -E}.  For instance, here is how you could use it.
-@example
-cpp -P foo.c foo.c-expanded
-cpp -P bar.c bar.c-expanded
-java daikon.tools.jtb.cparser.CreateSpinfoC \
-     foo.c-expanded bar.c-expanded
-@end example
-@noindent
-
-If you get an error such as
-@example
-... Lexical error at line 5, column 1.
-Encountered: "#" (35), after : ""
-@end example
-@noindent
-then you forgot to run CPP before running CreateSpinfoC@.
-
-@node   Cluster analysis for splitters, Random selection for splitters, Static analysis for splitters, Enhancing conditional invariant detection
-@subsection Cluster analysis for splitters
-
-@cindex splitting conditions, cluster analysis
-@cindex cluster analysis for splitters
-@cindex runcluster.pl program
-
-Cluster analysis is a statistical method that finds groups or clusters
-in data.  The clusters may indicate conditional properties in the
-program.  A conditional property at a program point separates the data
-into those that satisfy it and those that do not, and conditional
-invariants can be induced by clustering.  Any invariant that is
-discovered over one cluster but not over another is a conditional
-invariant---the predicate for the conditional invariant being
-membership in the cluster in which the invariant was found.  The
-cluster analysis mechanism finds clusters in the data trace file,
-infers invariants over any clusters that it finds, and writes these
-invariants into a splitter info file for conditional invariant
-detection.
-
-To find splitting conditions using cluster analysis, run the
-@command{runcluster.pl} program (found in the @file{$DAIKONDIR/bin}
-directory) in the following way:
-@example
-runcluster.pl [@var{options}] @var{dtrace_file(s)} @var{decls_files(s)}
-@end example
-
-The @var{options} are:
-@table @option
-
-@cindex kmeans cluster analysis
-@cindex hierarchical cluster analysis
-@cindex xm cluster analysis
-@item -a @var{ALG}
-@itemx --algorithm @var{ALG}
-@var{ALG} specifies a clustering algorithm.
-Current options are @samp{km} (for kmeans), @samp{hierarchical},
-and @samp{xm} (for xmeans).  The default is @samp{xm}.
-
-@item -k
-The number of clusters to use (for algorithms which require
-this input, which is everything except xmeans).  The default is 4.
-
-@item --keep    
-Don't delete the temporary files created by the clustering
-process.  This is a debugging flag.
-@end table
-
-The @command{runcluster.pl} script currently supports three clustering
-programs.  They are implementations of the kmeans algorithm,
-hierarchical clustering and the xmeans algorithm (kmeans algorithm
-with efficient discovery of the number of clusters).  The kmeans and
-hierarchical clustering tools are provided in the Daikon
-distribution.  The xmeans code and executable are publicly available at
-@uref{http://www.cs.cmu.edu/~dpelleg/kmeans.html} (fill in the license
-form and mail it in).
-
-@node   Random selection for splitters,  , Cluster analysis for splitters, Enhancing conditional invariant detection
-@subsection Random selection for splitters
-
-@cindex splitting conditions, random selection
-@cindex random selection for splitters
-@cindex TraceSelect tool
-
-Random selection can create representative samples of a data set with
-the added benefit of finding conditional properties and eliminating
-outliers.  Given traced data, the TraceSelect tool creates several
-small subsets of the data by randomly selecting parts of the original
-trace file.  Any invariant that is discovered in the smaller samples but
-not found over the entire data is a conditional invariant.
-
-To find splitting conditions using random selection, run the
-@command{daikon.tools.TraceSelect} program in the following way:
-@example
-java daikon.tools.TraceSelect @var{num_reps} @var{sample_size} [@var{options}] \
-    @var{dtrace_file} @var{decls_files(s)} [@var{daikon_options}]
-@end example
-
-@var{num_reps} is the number of subsets to create, and @var{sample_size} is the
-number of invocations to collect for each method.
-
-The @var{daikon_options} are the same options that can be provided to the
-daikon.Daikon program.
-
-The @var{options} for TraceSelect are:
-@table @option
-
-@item -NOCLEAN
-Don't delete the temporary trace samples created by the random
-selection process.  This can help for debugging or for using the tool
-solely to create trace samples instead of calculating invariants over
-the samples.
-
-@item -INCLUDE_UNRETURNED
-Allows random selection to choose method invocations that entered the
-method successfully but did not exit normally; either from a thrown
-Exception or abnormal termination. 
-
-@item -DO_DIFFS
-Creates an spinfo file for generating conditional invariants and
-implications by reporting the invariants that appear in at least one
-of the samples but not over the entire data set.
-
-
-@end table
-
-
-
-@node    Loop invariants,  , Enhancing conditional invariant detection, Enhancing Daikon output
-@section Loop invariants
-
-@cindex loop invariants
-
-Daikon does not by default output loop invariants.  Daikon can detect
-invariants at any location where it is provided with variable values,
-but the front ends do not currently supply Daikon with variable values
-at loop heads.
-
-Here is one way to cause Daikon to produce loop invariants.  At the top
-of a loop (or at any other location in the program at which you would
-like to obtain invariants), insert a call to a dummy procedure that does
-not work but returns immediately.  Pass, as arguments to the dummy
-procedure, all variables of interest.  Daikon will produce (identical)
-preconditions and postconditions for the dummy procedure; these are
-properties that held at the call site.
-
-
-
-@node    Tools, Troubleshooting, Enhancing Daikon output, Top
+@node    Tools, Troubleshooting, Front ends, Top
 @chapter Tools for manipulating invariants
 
 @cindex .inv files, tools for manipulating
