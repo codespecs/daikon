@@ -830,6 +830,8 @@ java daikon.Chicory DataStructures.StackArTester
 In either case, the invariants are printed to standard output, and a binary
 representation of the invariants is written to @file{StackAr.inv}.
 
+@item Examine the invariants.
+
 There are five ways to do this.
 @itemize @bullet
 @item Examine the output from running Daikon.  (You may find it
