@@ -338,8 +338,13 @@ update-doc-dist-version:
 update-dist-version-file:
 	perl -wpi -e 's/\.(-?[0-9]+)$$/"." . ($$1+1)/e' doc/VERSION
 
+chicory:
+	$(MAKE) -C java chicory
+
+## Problem: "make -C java veryclean; make daikon.jar" fails.
+## It seems that one must do "make compile" before "make daikon.jar".
 # Perhaps daikon.jar shouldn't include JUnit or the test files.
-daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
+daikon.jar: java/lib/ajax.jar $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) chicory
 	-rm -rf $@ /tmp/${USER}/daikon-jar
 	install -d /tmp/${USER}/daikon-jar
 	cd java && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath ${INV_DIR}/java:${INV_DIR}/java/lib/java-getopt.jar:${INV_DIR}/java/lib/junit.jar:$(TOOLSJAR):$(BCEL_DIR)' all_directly
