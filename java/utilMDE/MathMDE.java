@@ -336,8 +336,8 @@ public final class MathMDE {
    * already exist, because this does not necessarily examine every value
    * produced by its iterator.
    *
-   * For documentation, see modulus_strict(int []).
-   * @see modulus_strict(int[])
+   * For documentation, see modulus_strict(int [], boolean).
+   * @see #modulus_strict(int[], boolean)
    **/
   public static int [] modulus_strict_int (Iterator itor, boolean nonstrict_ends) {
     if (!itor.hasNext())
@@ -498,8 +498,8 @@ public final class MathMDE {
    * already exist, because this does not necessarily examine every value
    * produced by its iterator.
    *
-   * For documentation, see modulus_strict(long []).
-   * @see modulus_strict(int[])
+   * For documentation, see modulus_strict(long [], boolean).
+   * @see #modulus_strict(int[], boolean)
    **/
   public static long [] modulus_strict_long (Iterator itor, boolean nonstrict_ends) {
     if (!itor.hasNext())

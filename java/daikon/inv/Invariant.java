@@ -147,7 +147,7 @@ public abstract class Invariant implements java.io.Serializable {
   /**
    * This method computes the probability that this invariant occurred by chance.
    * Users should use getProbability() instead.
-   * @see     getProbability()
+   * @see     #getProbability()
    **/
   protected abstract double computeProbability();
 
