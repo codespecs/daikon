@@ -18,7 +18,7 @@ public abstract class Invariant implements java.io.Serializable {
    * True exactly if the invariant is guaranteed never to hold (and should
    * be either in the process of being destroyed or about to be
    * destroyed.  This should never be set directly; instead, call destroy().
-   */
+   **/
   public boolean no_invariant = false;
 
   // True if we've seen all values and should ignore further add() methods.
@@ -140,7 +140,7 @@ public abstract class Invariant implements java.io.Serializable {
    * Returns true if this invariant is necessarily true, due to derived
    * variables, other invariants, etc.
    * Intended to be overridden by subclasses.
-   */
+   **/
   public final boolean isObvious() {
     // Actually actually, we'll eliminate invariants as they become obvious
     // rather than on output; the point of this is to speed up computation.
@@ -157,7 +157,7 @@ public abstract class Invariant implements java.io.Serializable {
    * Returns true if this invariant is necessarily true, due to being implied
    * by other (more basic or preferable to report) invariants.
    * Intended to be overridden by subclasses.
-   */
+   **/
   public boolean isObviousDerived() {
     return false;
   }
@@ -166,7 +166,7 @@ public abstract class Invariant implements java.io.Serializable {
    * Returns true if this invariant is necessarily true, due to being implied
    * by other (more basic or preferable to report) invariants.
    * Intended to be overridden by subclasses.
-   */
+   **/
   public boolean isObviousImplied() {
     return false;
   }
