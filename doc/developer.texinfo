@@ -628,21 +628,6 @@ will output a stack trace on each log statement.  The option
 voluminous) output to be printed.  For more information,
 @ref{Configuration options,,,./daikon,Daikon User Manual}.
 
-Convenience methods are available for track logging invariants.  In this
-case the class name, ppt, and variable information are all taken from the
-invariant.  The available methods are:
-
-@example
-    logOn()
-    logDetail()
-    log (String)
-    log (Logger, String)
-@end example
-
-@c Where is "above"? -MDE
-These correspond to the @code{Debug} methods described above.  They are
-the recommended way to log information concerning invariants.
-
 Note that all interesting information is not necessarily currently logged.
 It will often be necessary to add new logging statements for the specific
 information of interest (@pxref{Adding track logging}).
@@ -671,10 +656,10 @@ Track logging methods accept these parameters and a string to be printed.
     log (Class, Ppt, Varinfo[], String)
 @end example
 
-@c cached where? -MDE
-The first uses a cached version of the Class, Ppt, and VarInfo.  The
-second uses the specified variables and the VarInfo information from Ppt.
-The third specifies each variable explicitly.
+The first uses the cached version of the Class, Ppt, and VarInfo that
+was provided in the constructor.  The second uses the specified
+variables and the VarInfo information from Ppt.  The third specifies
+each variable explicitly.
 
 When logging is not enabled, calling the logging functions can take a 
 significant amount of time (because the parameters need to be evaluated and
@@ -702,6 +687,20 @@ information is logged via the specified logger.  For example:
 
 The above will print if either the tracking information matches or if the
 specified logger is enabled.
+
+Convenience methods are available for track logging invariants.  In this
+case the class name, ppt, and variable information are all taken from the
+invariant.  The available methods are:
+
+@example
+    logOn()
+    logDetail()
+    log (String)
+    log (Logger, String)
+@end example
+
+These correspond to the @code{Debug} methods described above.  They are
+the recommended way to log information concerning invariants.
 
 Track logging also provides one additional level of detail.  The function
 @code{logDetail()} returns whether or not more detailed information
