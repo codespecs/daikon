@@ -1,8 +1,10 @@
 #!/usr/bin/env perl
 
 # Automatically builds and tests the software in the Daikon CVS
-# Repository.  If the --quiet option is selected, only generates
-# output if a task fails (useful for cron job).
+# repository.  If the --quiet option is selected, only generates
+# output if a task fails (useful for cron job).  If the --nocleanup
+# option is selected, does not remove generated files (good for
+# debugging).
 
 use strict;
 use English;
@@ -10,18 +12,18 @@ $WARNING = 1;
 use Cwd;
 
 # Process the command-line args
-my $usage = "Usage: buildtest.pl [--quiet]\n";
+my $usage = "Usage: buildtest.pl [--quiet] [--nocleanup]\n";
 my $quiet = 0;
-if (@ARGV == 0) {
-  $quiet = 0;
-} elsif (@ARGV == 1) {
-  if ($ARGV[0] eq "--quiet") {
+my $nocleanup = 0;
+while (scalar(@ARGV) > 0) {
+  my $arg = shift @ARGV;
+  if ($arg eq "--quiet") {
     $quiet = 1;
+  } elsif ($arg eq "--nocleanup") {
+    $nocleanup = 1;
   } else {
     die "$usage\n";
   }
-} else {
-  die "$usage\n";
 }
 
 # Set the DAIKONPARENT variable
@@ -130,13 +132,14 @@ foreach my $subdir ("daikon", "diff", "dfec") {
   mkdir("diffs/$subdir", 0777) or die "can't make directory diffs/$subdir: $!\n";
   my $diffs = `find invariants/tests/$subdir-tests -name "*.diff"`;
   foreach my $file (split '\n',$diffs) {
-    `mv $file diffs/$subdir`;
-    die "can't move diffs to diffs/$subdir\n" if ($CHILD_ERROR);
+    `cp -p $file diffs/$subdir`;
+    die "can't copy diff file $file to diffs/$subdir\n" if ($CHILD_ERROR);
   }
 }
 
-`rm -rf dfej invariants`;
-
+if (! $nocleanup) {
+  `rm -rf dfej invariants`;
+}
 
 
 # SUBROUTINES
