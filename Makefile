@@ -36,7 +36,7 @@ AJAX_JAVA_FILES := $(shell find java/ajax-ship/ajax \( -name '*daikon-java*' -o 
 # I don't know why, but a "-o name ." clause makes find err, so use grep instead
 # WWW_FILES := $(shell cd doc/www; find . \( -name '*~' -o -name '.*~' -o -name CVS -o -name .cvsignore -o -name '.\#*' -o -name '*.bak' -o -name uw -o name . -o name .. \) -prune -o -print)
 # WWW_FILES := $(shell cd doc/www; find . \( \( -name '*~' -o -name '.*~' -o -name CVS -o -name .cvsignore -o -name '.\#*' -o -name '*.bak' -o -name uw \) -prune -a -type f \) -o -print | grep -v '^.$$')
-WWW_FILES := $(shell cd doc/www; find . -type f -print | egrep -v '~$$|CVS|.cvsignore|/.\#|.bak$$|uw/')
+WWW_FILES := $(shell cd doc/www; find . -type f -print | egrep -v '~$$|CVS|.cvsignore|/.\#|.bak$$|uw/|pubs/')
 #WWW_DIR := /home/httpd/html/daikon/
 WWW_ROOT := /afs/csail.mit.edu/group/pag/docroot/www.pag.csail.mit.edu/daikon/
 WWW_DIR := $(WWW_ROOT)
@@ -230,6 +230,7 @@ staging: doc/CHANGES
 	# Copy the documentation
 	@echo "]2;Copying documentation"
 	install -d $(STAGING_DIST)/download/doc
+	cp -pf eclipse-plugins/workspace/DaikonUI/html/daikonHelp.html doc
 	cd doc && cp -pf $(DOC_FILES_USER) $(STAGING_DIST)/download/doc
 	cp -pR doc/images $(STAGING_DIST)/download/doc
 	cp -pR doc/daikon_manual_html $(STAGING_DIST)/download/doc
@@ -307,7 +308,7 @@ update-doc-dist-date-and-version:
 # This is done immediately before releasing a new distribution.
 update-doc-dist-date:
 	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(\@c Daikon version .* date\n\@center ).*(\n)/$$1${TODAY}$$2/;' doc/daikon.texinfo doc/developer.texinfo
-	perl -wpi -e 's/(Daikon version .*, released ).*(\.)$$/$$1${TODAY}$$2/' doc/README-dist doc/README-dist-doc doc/www/download/index.html doc/daikon.texinfo doc/developer.texinfo
+	perl -wpi -e 's/(Daikon version .*, released ).*(\.|<\/CENTER>)$$/$$1${TODAY}$$2/' doc/README-dist doc/README-dist-doc doc/www/download/index.html doc/daikon.texinfo doc/developer.texinfo eclipse-plugins/workspace/DaikonUI/html/daikonHelp.html
 	perl -wpi -e 's/(public final static String release_date = ").*(";)$$/$$1${TODAY}$$2/' java/daikon/Daikon.java
 	touch doc/CHANGES
 
