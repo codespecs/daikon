@@ -123,6 +123,7 @@ if (! $skip_dfec) {
 if (! $skip_dfej) {
   $success{"dfej_checkout"} = dfej_checkout();
   if ($success{"dfej_checkout"}) {
+    `chmod -R a+r dfej`;  # make sure we can read the results on AFS
     $success{"dfej_configure"} = dfej_configure();
   }
   if ($success{"dfej_configure"}) {

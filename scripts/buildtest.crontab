@@ -6,12 +6,11 @@
 # executed.
 
 USER=daikonuser
-MAILTO=jhp@csail.mit.edu
+MAILTO=daikon-developers@csail.mit.edu
 AFS=/afs/csail.mit.edu/u/d/daikonuser/bin/afs-cron-wrapper
 
-#1-59 * * * * /usr/bin/fs la $HOME; /bin/ls -l $AFS; $AFS /bin/date
 01 1 * * * cd $HOME/research/invariants/scripts; $AFS cvs -Q up
 02 1 * * * $AFS crontab $HOME/research/invariants/scripts/buildtest.crontab
 55 1 * * * $AFS $HOME/research/invariants/scripts/buildtest-remove-old
-0 2 * * * $AFS $HOME/research/invariants/scripts/buildtest
-44 13 * * * $AFS $HOME/research/invariants/scripts/buildtest
+0 2 * * * $AFS $HOME/research/invariants/scripts/buildtest 
+#02 15 * * * $AFS $HOME/research/invariants/scripts/buildtest
