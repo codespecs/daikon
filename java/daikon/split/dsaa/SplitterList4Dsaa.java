@@ -3,7 +3,7 @@ package daikon.split.dsaa;
 import daikon.*;
 import daikon.split.*;
 
-public class QuickSort {
+public class SplitterList4Dsaa {
 
 	static {
 
