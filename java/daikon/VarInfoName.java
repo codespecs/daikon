@@ -209,8 +209,15 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return "return".equals(name) ? "\\result" : name;
     }
+    private static String fix_closure(String s) {
+      if (s.startsWith("~") && s.endsWith("~")) {
+	return "|" + s.substring(1, s.length()-2) + ":closure|";
+      }
+      Assert.assert(s.indexOf('~') < 0, "Bad ~ in " + s);
+      return s;
+    }
     protected String simplify_name_impl() {
-      return name;
+      return fix_closure(name);
     }
     public Object accept(Visitor v) {
       return v.visitSimple(this);
@@ -318,7 +325,7 @@ public abstract class VarInfoName
       return term.esc_name() + "." + field;
     }
     protected String simplify_name_impl() {
-      return "(select " + field + " " + term.simplify_name() + ")";
+      return "(select " + Simple.fix_closure(field) + " " + term.simplify_name() + ")";
     }
     public Object accept(Visitor v) {
       return v.visitField(this);
