@@ -4,7 +4,7 @@ import java.io.*;
 import java.lang.Runtime;
 
 public class MemMonitor implements Runnable {
-  
+
   PrintWriter fout;
 
   boolean keep_going;
@@ -57,8 +57,3 @@ public class MemMonitor implements Runnable {
     keep_going = false;
   }
 }
-	
-
-
-
-
