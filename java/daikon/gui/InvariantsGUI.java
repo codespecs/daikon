@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.zip.GZIPInputStream;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -17,13 +18,18 @@ import java.awt.Point;
 import java.awt.event.*;
 import java.text.DecimalFormat;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.*;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.plaf.FontUIResource;
 import javax.swing.table.*;
 import javax.swing.tree.*;
 
 public class InvariantsGUI extends JFrame implements ActionListener, KeyListener {
     InvariantTablesPanel invariantsTablesPanel;
+    InvariantFilters invariantFilters = new InvariantFilters();
+    List filterCheckBoxes = new ArrayList();
+    final JList variablesList = new JList( new DefaultListModel());
 
     public static void main( String args[] ) {
 	InvariantsGUI gui;
@@ -43,15 +49,12 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     }
 
     public void loadInvariantsFromFile( String invFileName ) {
-	DefaultTreeModel treeModel = constructTreeModel( invFileName );
-	JTree tree = new JTree( treeModel );
-	JScrollPane invariantTablesScrollPane = new JScrollPane();
-	
+	JTree tree = new JTree( constructTreeModel( invFileName ));
 	TreeSelectionModel treeSelectionModel = tree.getSelectionModel();
-	invariantsTablesPanel = new InvariantTablesPanel( invariantTablesScrollPane, treeSelectionModel );
+	invariantsTablesPanel = new InvariantTablesPanel( treeSelectionModel, invariantFilters, variablesList );
 	treeSelectionModel.addTreeSelectionListener( invariantsTablesPanel );
 
-	setupGUI( tree, invariantTablesScrollPane );
+	setupGUI( tree, invariantsTablesPanel.getScrollPane());
     }
 
     public DefaultTreeModel constructTreeModel( String fileName ) {
@@ -121,7 +124,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	    //  Create a node for this program point.  If this is the first program point
 	    //  node under this method, simply add the node.  If there are already some
 	    //  program point nodes, add this node in order.  Eg, make sure EXIT23 goes
-	    //  after ENTER and EXIT97.
+	    //  after ENTER and before EXIT97.
 	    if (programPointNode == null) {
 		PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
 		if (methodNode.getChildCount() == 0)
@@ -148,7 +151,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 
     public PptMap getPptMapFromFile( String fileName ) {
 	try {
-	    InputStream istream = new FileInputStream( fileName );
+ 	    InputStream istream = new FileInputStream( fileName );
 	    if (fileName.endsWith( ".gz" ))
 	        istream = new GZIPInputStream( istream );
 	    ObjectInputStream o = new ObjectInputStream( istream );
@@ -178,10 +181,14 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     }
 
     protected void setupGUI( JTree tree, JScrollPane invariantTablesScrollPane ) {
+	UIManager.put( "Button.font",   ((FontUIResource) UIManager.get( "Button.font" )).deriveFont( Font.PLAIN ));
+	UIManager.put( "CheckBox.font", ((FontUIResource) UIManager.get( "CheckBox.font" )).deriveFont( Font.PLAIN ));
+	UIManager.put( "RadioButton.font", ((FontUIResource) UIManager.get( "RadioButton.font" )).deriveFont( Font.PLAIN ));
+
 	JMenuBar menuBar = new JMenuBar();
 	setJMenuBar( menuBar );
 	createFileMenu( menuBar );
-	createFilterMenu( menuBar );
+	createControlPanel();
 
 	removeKeyListener( this ); // setupGUI() might be called more than once, but we only
 	// want to add it as KeyListener once.
@@ -227,43 +234,196 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	menu.add( menuItem );
     }
 
-    void createFilterMenu( JMenuBar menuBar ) {
-	JMenu menu = new JMenu( "Filter", true ); // Unfortunately, tear-off menus aren't implemented yet.
-	menu.setMnemonic( KeyEvent.VK_L );
-	menuBar.add( menu );
-
-	JMenuItem menuItem = new JMenuItem( "Select all filters", KeyEvent.VK_S );
-	menuItem.addActionListener( invariantsTablesPanel );
-	menu.add( menuItem );
-	menuItem = new JMenuItem( "Deselect all filters", KeyEvent.VK_D );
-	menuItem.addActionListener( invariantsTablesPanel );
-	menu.add( menuItem );
-	menu.addSeparator();
-
-	createFilterMenuItem( menu, "Suppress unjustified invariants", InvariantFilters.UNJUSTIFIED_FILTER );
-	createFilterMenuItem( menu, "Suppress obvious invariants", InvariantFilters.OBVIOUS_FILTER );
-	createFilterMenuItem( menu, "Suppress invariants with few modified samples", InvariantFilters.FEW_MODIFIED_SAMPLES_FILTER );
-	createFilterMenuItem( menu, "Suppress invariants containing non-canonical variables", InvariantFilters.NON_CANONICAL_VARIABLES_FILTER );
-	createFilterMenuItem( menu, "Suppress invariants containing only constants", InvariantFilters.ONLY_CONSTANT_VARIABLES_FILTER );
-	createFilterMenuItem( menu, "Suppress implied postcondition invariants", InvariantFilters.IMPLIED_POSTCONDITION_FILTER );
+    void createControlPanel() {
+	JFrame controlPanel = new JFrame( "Filter control panel" );
+	controlPanel.setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE );
+	Container contentPane = controlPanel.getContentPane();
+	contentPane.setLayout( new BoxLayout( contentPane, BoxLayout.Y_AXIS ));
+	contentPane.add( createPropertyFilterSection());
+	contentPane.add( createVariableFilterSection());
+ 	controlPanel.pack();
+	controlPanel.setVisible( true );
     }
 
-    void createFilterMenuItem( JMenu menu, String text, int id ) {
-	JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem( text, true );
-	menuItem.addActionListener( invariantsTablesPanel );
-	menuItem.setName( new Integer( id ).toString());
-	menu.add( menuItem );
+    JPanel createPropertyFilterSection() {
+	JPanel filterButtonsPanel = new JPanel();
+	filterButtonsPanel.setLayout( new BoxLayout( filterButtonsPanel, BoxLayout.X_AXIS ));
+	JButton button = new JButton( "Select all filters" );
+	button.addActionListener( this );
+	filterButtonsPanel.add( button );
+	button = new JButton( "Deselect all filters" );
+	button.addActionListener( this );
+	button.setAlignmentX( Component.RIGHT_ALIGNMENT );
+	filterButtonsPanel.add( button );
+	filterButtonsPanel.setAlignmentX( Component.LEFT_ALIGNMENT );
+
+	JPanel filtersPanel = new JPanel();
+	filtersPanel.setBorder( createBorder( "Property filters" ));
+	filtersPanel.setLayout( new BoxLayout( filtersPanel, BoxLayout.Y_AXIS ));
+	filtersPanel.add( createFilterCheckBox( "Suppress unjustified invariants", InvariantFilters.UNJUSTIFIED_FILTER ));
+	filtersPanel.add( createFilterCheckBox( "Suppress obvious invariants", InvariantFilters.OBVIOUS_FILTER ));
+	filtersPanel.add( createFilterCheckBox( "Suppress invariants with few modified samples", InvariantFilters.FEW_MODIFIED_SAMPLES_FILTER ));
+	filtersPanel.add( createFilterCheckBox( "Suppress invariants containing non-canonical variables", InvariantFilters.NON_CANONICAL_VARIABLES_FILTER ));
+	filtersPanel.add( createFilterCheckBox( "Suppress invariants containing only constants", InvariantFilters.ONLY_CONSTANT_VARIABLES_FILTER ));
+	filtersPanel.add( createFilterCheckBox( "Suppress implied postcondition invariants", InvariantFilters.IMPLIED_POSTCONDITION_FILTER ));
+	filtersPanel.add( Box.createRigidArea( new Dimension( 10, 10 )));
+	filtersPanel.add( filterButtonsPanel );
+	filtersPanel.setAlignmentX( Component.LEFT_ALIGNMENT );
+	return filtersPanel;
+    }
+
+    JPanel createVariableFilterSection() {
+	final JTextField addVariableTextField = new JTextField();
+	addVariableTextField.setPreferredSize( new Dimension( 150, 24 ));
+	addVariableTextField.setMaximumSize( new Dimension( 150, 24 ));
+	//	addVariableTextField.setAlignmentX( Component.LEFT_ALIGNMENT );
+	JButton addVariableButton = new JButton( "Add variable" );
+	JPanel addVariablePanel = new JPanel();
+	addVariablePanel.setLayout( new BoxLayout( addVariablePanel, BoxLayout.X_AXIS ));
+	addVariablePanel.setAlignmentX( Component.LEFT_ALIGNMENT );
+	//	addVariablePanel.setLayout( new FlowLayout());
+	//	addVariablePanel.setLayout( new BorderLayout());
+	addVariablePanel.add( addVariableTextField );
+	addVariablePanel.add( addVariableButton );
+
+	JButton removeVariablesButton = new JButton( "Remove selected variables" );
+	removeVariablesButton.setAlignmentX( Component.LEFT_ALIGNMENT );
+
+	JLabel filterChoiceLabel = new JLabel( "Filter on: " );
+	filterChoiceLabel.setForeground( Color.black );
+	filterChoiceLabel.setFont( filterChoiceLabel.getFont().deriveFont( Font.PLAIN ));
+	JRadioButton anyButton = new JRadioButton( "any variable" );
+	anyButton.setSelected( true );
+	JRadioButton allButton = new JRadioButton( "all variables" );
+	ButtonGroup group = new ButtonGroup();
+	group.add( anyButton );
+	group.add( allButton );
+	JPanel filterChoicePanel = new JPanel();
+	filterChoicePanel.setLayout( new BoxLayout( filterChoicePanel, BoxLayout.Y_AXIS ));
+	filterChoicePanel.add( filterChoiceLabel );
+	filterChoicePanel.add( anyButton );
+	filterChoicePanel.add( allButton );
+
+	JPanel variablesControlPanel = new JPanel();
+	variablesControlPanel.setLayout( new BoxLayout( variablesControlPanel, BoxLayout.Y_AXIS ));
+	variablesControlPanel.setAlignmentX( Component.LEFT_ALIGNMENT );
+	variablesControlPanel.add( addVariablePanel );
+	variablesControlPanel.add( Box.createRigidArea( new Dimension( 25, 25 )));
+	variablesControlPanel.add( removeVariablesButton );
+	variablesControlPanel.add( Box.createRigidArea( new Dimension( 25, 25 )));
+	variablesControlPanel.add( filterChoicePanel );
+
+	ActionListener addVariableActionListener = new ActionListener() {
+		public void actionPerformed( ActionEvent e ) {
+		    if (! addVariableTextField.getText().equals( "" )) {
+			invariantFilters.addVariableFilter( addVariableTextField.getText());
+			invariantsTablesPanel.updateInvariantsDisplay();
+			DefaultListModel listModel = (DefaultListModel) variablesList.getModel();
+			listModel.addElement( addVariableTextField.getText());
+			variablesList.setModel( listModel );
+			addVariableTextField.setText( "" );
+		    }
+		}};
+	addVariableButton.addActionListener( addVariableActionListener );
+	addVariableTextField.addActionListener( addVariableActionListener );
+	removeVariablesButton.addActionListener( new ActionListener() {
+		public void actionPerformed( ActionEvent e ) {
+		    int selectedIndices[] =  variablesList.getSelectedIndices();
+		    if (selectedIndices != null) {
+			DefaultListModel listModel = (DefaultListModel) variablesList.getModel();
+			for (int i = selectedIndices.length - 1; i >= 0; i--) {
+			    invariantFilters.removeVariableFilter( (String) listModel.getElementAt( i ));
+			    listModel.removeElementAt( selectedIndices[ i ]);
+			}
+			invariantsTablesPanel.updateInvariantsDisplay();
+			variablesList.setModel( listModel );
+		}}});
+	anyButton.addActionListener( new ActionListener() {
+		public void actionPerformed( ActionEvent e ) {
+		    invariantFilters.setVariableFilterType( InvariantFilters.ANY_VARIABLE );
+		    invariantsTablesPanel.updateInvariantsDisplay();
+		}});
+	allButton.addActionListener( new ActionListener() {
+		public void actionPerformed( ActionEvent e ) {
+		    invariantFilters.setVariableFilterType( InvariantFilters.ALL_VARIABLES );
+		    invariantsTablesPanel.updateInvariantsDisplay();
+		}});
+
+
+	JPanel variablesPanel = new JPanel();
+	variablesPanel.setBorder( createBorder( "Variable filters" ));
+	variablesPanel.setLayout( new BoxLayout( variablesPanel, BoxLayout.X_AXIS ));
+	variablesPanel.setAlignmentX( Component.LEFT_ALIGNMENT );
+	variablesPanel.add( new JScrollPane( variablesList ));
+	variablesPanel.add( variablesControlPanel );
+	Dimension size = new Dimension( 410, 200 );
+	variablesPanel.setPreferredSize( size );
+	variablesPanel.setMaximumSize( size );
+	variablesPanel.setMinimumSize( size );
+	return variablesPanel;
+    }
+
+    Border createBorder( String title ) {
+	return BorderFactory.createTitledBorder( BorderFactory.createCompoundBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ),
+										     BorderFactory.createEtchedBorder()),
+						 title );
+    }
+    
+    JCheckBox createFilterCheckBox( String text, int id ) {
+	JCheckBox checkBox = new JCheckBox( text, true );
+	checkBox.addActionListener( this );
+	checkBox.setName( new Integer( id ).toString());
+	checkBox.setAlignmentX( Component.LEFT_ALIGNMENT );
+	filterCheckBoxes.add( checkBox );
+	return checkBox;
+    }
+
+    void turnFilterCheckBoxesOn() {
+	for (Iterator iter = filterCheckBoxes.iterator(); iter.hasNext(); )
+	    ((JCheckBox) iter.next()).setSelected( true );
+    }
+
+    void turnFilterCheckBoxesOff() {
+	for (Iterator iter = filterCheckBoxes.iterator(); iter.hasNext(); )
+	    ((JCheckBox) iter.next()).setSelected( false );
     }
 
     public void actionPerformed( ActionEvent e ) {
-	JMenuItem menuItem = (JMenuItem) e.getSource();
-	String menuText = menuItem.getText();
-	if (menuText.equals( "Load file" )) {
-	    String invFileName = pickFileFromFileChooser();
-	    loadInvariantsFromFile( invFileName );
+	//  Handle File menu events
+	if (e.getSource().getClass() == JMenuItem.class) {
+	    JMenuItem menuItem = (JMenuItem) e.getSource();
+	    String menuText = menuItem.getText();
+	    if (menuText.equals( "Load file" )) {
+		String invFileName = pickFileFromFileChooser();
+		loadInvariantsFromFile( invFileName );
+	    }
+	    else if (menuText.equals( "Quit" ))
+		System.exit( 0 );
 	}
-	else if (menuText.equals( "Quit" ))
-	    System.exit( 0 );
+	//  Handle checkbox events involving filters
+	else if (e.getSource().getClass() == JCheckBox.class) {
+	    JCheckBox checkBox = (JCheckBox) e.getSource();
+	    String checkBoxText = checkBox.getText();
+	    String checkBoxName = checkBox.getName();
+	    if (checkBoxName != null) {	// One specific filter was selected or deselected
+		int filterID = new Integer( checkBoxName ).intValue();
+		invariantFilters.changeFilterSetting( filterID, checkBox.isSelected());
+		invariantsTablesPanel.updateInvariantsDisplay();
+	    }
+	}
+	//  Handle button events
+	else if (e.getSource().getClass() == JButton.class) {
+	    JButton button = (JButton) e.getSource();
+	    String buttonText = button.getText();
+	    if (buttonText.equals( "Select all filters" )) {
+		turnFilterCheckBoxesOn();
+		invariantFilters.turnFiltersOn();
+	    } else if (buttonText.equals( "Deselect all filters" )) {
+		turnFilterCheckBoxesOff();
+		invariantFilters.turnFiltersOff();
+	    }
+	    invariantsTablesPanel.updateInvariantsDisplay();
+	}
     }
 
     String pickFileFromFileChooser() {
@@ -298,7 +458,6 @@ class InvFileFilter extends FileFilter {
     public boolean accept( File file ) {
 	if (file.isDirectory())
 	    return true;
-
 	String fileName = file.getName();
 	if (fileName.endsWith( ".inv" )  ||  fileName.endsWith( ".inv.gz" ))
 	    return true;
@@ -313,11 +472,12 @@ class InvFileFilter extends FileFilter {
 
 
 
-class InvariantTablesPanel implements TreeSelectionListener, ActionListener {
-    JScrollPane scrollPane;	 // the main scrollPane, which contains the main panel
-    JPanel panel = new JPanel(); // the main panel
+class InvariantTablesPanel implements TreeSelectionListener {
+    JScrollPane scrollPane = new JScrollPane();	 // the main scrollPane, which contains the main panel
+    JPanel panel = new JPanel();                 // the main panel
     TreeSelectionModel treeSelectionModel;
-    InvariantFilters invariantFilters = new InvariantFilters();
+    final InvariantFilters invariantFilters;
+    final JList variablesList;
 
     List tables = new ArrayList();
     List tableNames = new ArrayList();
@@ -325,12 +485,15 @@ class InvariantTablesPanel implements TreeSelectionListener, ActionListener {
     List tableModels = new ArrayList();
     int currentTableIndex;	// used by scrollToTable methods
     
-    public InvariantTablesPanel( JScrollPane scrollPane, TreeSelectionModel treeSelectionModel ) {
-	this.scrollPane = scrollPane;
+    public InvariantTablesPanel( TreeSelectionModel treeSelectionModel, InvariantFilters invariantFilters, JList variablesList ) {
 	this.scrollPane.setViewportView( panel );
 	this.panel.setLayout( new BoxLayout( panel, BoxLayout.Y_AXIS ));
 	this.treeSelectionModel = treeSelectionModel;
+	this.invariantFilters = invariantFilters;
+	this.variablesList = variablesList;
     }
+
+    public JScrollPane getScrollPane() { return scrollPane; }
 
     public void valueChanged( TreeSelectionEvent e ) {
 	TreePath paths[] = e.getPaths();
@@ -402,7 +565,13 @@ class InvariantTablesPanel implements TreeSelectionListener, ActionListener {
 	panel.revalidate();
     }
 
-    private void setupTable( PptTopLevel topLevel ) {
+    private void setupTable( final PptTopLevel topLevel ) {
+//  	System.out.print("vars for " + topLevel.name + " (" + topLevel.var_infos.length + ") : ");
+//  	for (int i=0; i < topLevel.var_infos.length; i++)
+//  	    if (! topLevel.var_infos[i].isDerived())
+//  		System.out.print( topLevel.var_infos[i].name + " " );
+//  	System.out.println();
+
 	List invariants = new ArrayList( topLevel.invariants_vector());
 	InvariantTableModel tableModel = new InvariantTableModel( invariants, invariantFilters );
 	TableSorter sorter = new TableSorter( tableModel );
@@ -430,14 +599,27 @@ class InvariantTablesPanel implements TreeSelectionListener, ActionListener {
 	else			// want SHORT method name so table headings doesn't get too wide
 	    headingString = pptName.getFullClassName() + "." + pptName.getShortMethodName() + "() : " + pptName.getPoint();
 	//	JEditorPane heading = new JEditorPane( "text/plain", headingString );
-	JLabel heading = new JLabel( headingString );
-	heading.setForeground( new Color( 50, 30, 100 ));
-	heading.setAlignmentX( .5f );
+	JLabel headingLabel = new JLabel( headingString );
+	headingLabel.setForeground( new Color( 50, 30, 100 ));
+	headingLabel.setAlignmentX( .5f );
+	JButton showVariablesButton = new JButton( "Show variables..." );
+	showVariablesButton.addActionListener( new ActionListener() {
+		//  Make this an inner class so it can see topLevel
+		public void actionPerformed( ActionEvent e ) {
+		    new VariableSelectionDialog( topLevel.var_infos, invariantFilters, this$0, variablesList );
+		}});
+	showVariablesButton.setAlignmentX( Component.RIGHT_ALIGNMENT );
+	JPanel headingPanel = new JPanel();
+	headingPanel.setLayout( new BoxLayout( headingPanel, BoxLayout.X_AXIS ));
+	headingPanel.add( Box.createRigidArea( new Dimension( 10, 10 )));
+	headingPanel.add( headingLabel );
+	headingPanel.add( Box.createHorizontalGlue());
+	headingPanel.add( showVariablesButton );
 
-	tablePanel.add( Box.createRigidArea( new Dimension( 0, 10 )));
-	tablePanel.add( heading );
-	tablePanel.add( Box.createRigidArea( new Dimension( 0, 10 )));
-	if (invariants.size() != 0)
+	tablePanel.add( Box.createRigidArea( new Dimension( 10, 10 )));
+	tablePanel.add( headingPanel );
+	tablePanel.add( Box.createRigidArea( new Dimension( 10, 10 )));
+	if (table.getRowCount() > 0)
 	    tablePanel.add( scrollPane );
 	tablePanel.setBorder( BorderFactory.createCompoundBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ),
 								  BorderFactory.createEtchedBorder()));
@@ -448,30 +630,6 @@ class InvariantTablesPanel implements TreeSelectionListener, ActionListener {
 	this.tableHeights.add( new Integer( (int) tablePanel.getPreferredSize().getHeight()));
 	this.tableModels.add( tableModel );
     }
-
-    //  Handle menu events involving filters
-    public void actionPerformed( ActionEvent e ) {
-	JMenuItem menuItem = (JMenuItem) e.getSource();
-	String menuText = menuItem.getText();
-	if (menuItem.getName() != null) {	// One specific filter was selected or deselected
-	    int filterID = new Integer( menuItem.getName()).intValue();
-	    invariantFilters.changeFilterSetting( filterID, ((JCheckBoxMenuItem) menuItem).isSelected());
-	    updateInvariantsDisplay();
-	} else if (menuText.equals( "Select all filters" )) {
-	    JMenu filterMenu = (JMenu) ((JPopupMenu) menuItem.getParent()).getInvoker();
-	    for (int i=3; i < filterMenu.getMenuComponentCount(); i++) // start with first filter menu item, at i=3
-		((JCheckBoxMenuItem) filterMenu.getMenuComponent(i)).setSelected( true );
-	    invariantFilters.turnFiltersOn();
-	    updateInvariantsDisplay();
-	} else if (menuText.equals( "Deselect all filters" )) {
-	    JMenu filterMenu = (JMenu) ((JPopupMenu) menuItem.getParent()).getInvoker();
-	    for (int i=3; i < filterMenu.getMenuComponentCount(); i++ ) // start with first filter menu item, at i=3
-		((JCheckBoxMenuItem) filterMenu.getMenuComponent(i)).setSelected( false );
-	    invariantFilters.turnFiltersOff();
-	    updateInvariantsDisplay();
-	}
-    }
-		    //		    ((AbstractButton) filterMenu.getMenuComponent(i)).fireStateChanged();
 
     public void updateInvariantsDisplay() {
 	for (int i = 0; i < tableModels.size(); i++ ) {
@@ -510,6 +668,67 @@ class InvariantTablesPanel implements TreeSelectionListener, ActionListener {
 	if (currentTableIndex  <  tables.size() - 1)
 	    currentTableIndex++;
 	scrollToCurrentTable();
+    }
+}
+
+
+
+class VariableSelectionDialog extends JDialog {
+    public VariableSelectionDialog( VarInfo vInfos[], InvariantFilters iFilters, InvariantTablesPanel iTablesPanel, JList vList ) {
+	super();
+	VarInfo[] varInfos = vInfos;
+	final InvariantFilters invariantFilters = iFilters;
+	final InvariantTablesPanel invariantsTablesPanel = iTablesPanel;
+	final JList variablesList = vList;
+	final List variableCheckBoxes = new ArrayList();
+	this.setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE );
+	JPanel variablesPanel = new JPanel();
+	variablesPanel.setLayout( new BoxLayout( variablesPanel, BoxLayout.Y_AXIS ));
+	variablesPanel.setBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ));
+	variablesPanel.setAlignmentX( Component.CENTER_ALIGNMENT );
+	variablesPanel.add( new JLabel( "Select the variables of interest: " ));
+	for (int i=0; i < varInfos.length; i++)
+	    if (! varInfos[i].isDerived()) {
+		final VarInfo varInfo = varInfos[i];
+		JCheckBox checkBox = new JCheckBox( varInfo.name );
+		variablesPanel.add( checkBox );
+		variableCheckBoxes.add( checkBox );
+	    }
+	
+        JButton cancelButton = new JButton( "Cancel" );
+        cancelButton.addActionListener( new ActionListener() {
+            public void actionPerformed( ActionEvent e ) {
+		this$0.setVisible( false );
+            }});
+        final JButton okButton = new JButton( "Filter on selected variables" );
+        okButton.addActionListener( new ActionListener() {
+            public void actionPerformed( ActionEvent e ) {
+		DefaultListModel listModel = (DefaultListModel) variablesList.getModel();
+		for (int i=0; i < variableCheckBoxes.size(); i++ )
+		    if (((JCheckBox) variableCheckBoxes.get( i )).isSelected()) {
+			invariantFilters.addVariableFilter( ((JCheckBox) variableCheckBoxes.get( i )).getText());
+			invariantsTablesPanel.updateInvariantsDisplay();
+			listModel.addElement( ((JCheckBox) variableCheckBoxes.get( i )).getText());
+		    }
+		this$0.setVisible( false );
+		variablesList.setModel( listModel );
+            }});
+        getRootPane().setDefaultButton( okButton );
+
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setLayout( new BoxLayout( buttonsPanel, BoxLayout.X_AXIS ));
+        buttonsPanel.setBorder( BorderFactory.createEmptyBorder( 0, 10, 10, 10 ));
+        buttonsPanel.add( Box.createHorizontalGlue());
+        buttonsPanel.add( cancelButton);
+        buttonsPanel.add( Box.createRigidArea( new Dimension( 10, 10 )));
+        buttonsPanel.add( okButton );
+
+        Container contentPane = getContentPane();
+        contentPane.add( variablesPanel, BorderLayout.CENTER);
+        contentPane.add( buttonsPanel, BorderLayout.SOUTH);
+
+	this.pack();
+	this.setVisible( true );
     }
 }
 
