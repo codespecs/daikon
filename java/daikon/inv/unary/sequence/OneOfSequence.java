@@ -110,20 +110,17 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
   }
 
   protected double computeProbability() {
-    /**
-       // This is wrong; fix it
-       return Invariant.PROBABILITY_JUSTIFIED;
-    **/
-    // JWN: This is somewhat better...?
-    if (num_elts == 0)
+    // This is not ideal.
+    if (num_elts == 0) {
       return Invariant.PROBABILITY_UNKNOWN;
-    else
+    } else {
       return Invariant.PROBABILITY_JUSTIFIED;
+    }
   }
 
   public boolean isSameFormula(Invariant o)
   {
-    OneOfSequence  other = (OneOfSequence ) o;    
+    OneOfSequence  other = (OneOfSequence ) o;
     if (elts.length != other.elts.length)
       return false;
 
@@ -135,5 +132,5 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
 
     return true;
   }
-  
+
 }

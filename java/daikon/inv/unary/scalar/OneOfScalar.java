@@ -26,12 +26,16 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
   private long [] elts;
   private int num_elts;
 
+  private boolean is_boolean;
+
   OneOfScalar (PptSlice ppt) {
     super(ppt);
 
     elts = new long [LIMIT];
 
     num_elts = 0;
+
+    is_boolean = (var().type == ProglangType.BOOLEAN);
 
   }
 
@@ -84,7 +88,12 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
   public String format() {
     if (num_elts == 1) {
 
+      if (is_boolean) {
+        Assert.assert((elts[0] == 0) || elts[0] == 1);
+        return var().name  + " = " + ((elts[0] == 0) ? "false" : "true");
+      } else {
       return var().name  + " = " +  elts[0]  ;
+      }
 
     } else {
       return var().name  + " one of " + subarray_rep();
@@ -101,26 +110,28 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
       return;
     }
 
+    if (is_boolean && (num_elts == 1)) {
+      destroy();
+      return;
+    }
+
     elts[num_elts] = v;
     num_elts++;
 
   }
 
   protected double computeProbability() {
-    /**
-       // This is wrong; fix it
-       return Invariant.PROBABILITY_JUSTIFIED;
-    **/
-    // JWN: This is somewhat better...?
-    if (num_elts == 0)
+    // This is not ideal.
+    if (num_elts == 0) {
       return Invariant.PROBABILITY_UNKNOWN;
-    else
+    } else {
       return Invariant.PROBABILITY_JUSTIFIED;
+    }
   }
 
   public boolean isSameFormula(Invariant o)
   {
-    OneOfScalar  other = (OneOfScalar ) o;    
+    OneOfScalar  other = (OneOfScalar ) o;
     if (elts.length != other.elts.length)
       return false;
 
@@ -132,5 +143,5 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
 
     return true;
   }
-  
+
 }
