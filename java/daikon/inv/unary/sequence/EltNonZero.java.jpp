@@ -90,13 +90,23 @@ public final class CLASSNAME
     super(ppt);
   }
 
-  public static CLASSNAME instantiate(PptSlice ppt) {
-    if (!dkconfig_enabled) return null;
-    CLASSNAME result = new CLASSNAME(ppt);
+  /** Returns the prototype invariant for CLASSNAME **/
+  public static Invariant get_proto() {
+    if (!dkconfig_enabled)
+      return (null);
+    return new CLASSNAME (null);
+  }
 
-    if (debug.isLoggable(Level.FINE)) {
-      System.out.println(CLASSSTRING + ".instantiate: " + result.format());
-    }
+  /** instantiate an invariant on the specified slice **/
+  public Invariant instantiate_dyn (PptSlice slice) {
+    return instantiate (slice);
+  }
+
+  public static CLASSNAME instantiate (PptSlice slice) {
+    if (!dkconfig_enabled)
+      return null;
+
+    CLASSNAME result = new CLASSNAME( slice);
     return result;
   }
 
@@ -306,36 +316,20 @@ public final class CLASSNAME
           debug.fine ("  Have to test: " + inv.repr());
         }
 
-        // First see if the subsequence relationship can be determined from the VarInfos
+        if (Debug.logOn())
+          Daikon.current_inv = this;
+        if (parent.is_subsequence (v1, v2))
+          return new DiscardInfo (this, DiscardCode.obvious, v1.name.name() +
+                                  " is a subsequence of " + v2.name.name());
+
+        /*
+        // JHP: remove this
         if (SubSequence.isObviousSubSequenceDynamically(this, v1, v2)) {
           String discardString = v1.name.name() + " is a subsequence of " + v2.name.name() + " for which the invariant holds";
+          Fmt.pf ("is obvious for %s: %s", format(), discardString);
           return new DiscardInfo(this, DiscardCode.obvious, discardString);
         }
-        //     Otherwise, look for the actual SubSequence invariant
-        boolean this_var_first = (v1.varinfo_index < v2.varinfo_index);
-        PptSlice2 slice_2seq = parent.findSlice_unordered (v1, v2);
-        if (slice_2seq == null) {
-          // System.out.println(CLASSSTRING + ".isObviousImplied: no slice for " + v1.name + ", " + v2.name);
-        } else if (slice_2seq.num_samples() > 0) {
-          // slice_2seq != null
-          SubSequence ss = SubSequence.find(slice_2seq);
-          if (ss == null) {
-            // System.out.println(CLASSSTRING + ".isObviousImplied: no SubSequence for " + v1.name + ", " + v2.name);
-          } else if (ss.justified()) {
-            // System.out.println(CLASSSTRING + ".isObviousImplied: found SubSequence: " + ss.repr());
-            if (this_var_first
-                ? ss.var1_in_var2
-                : ss.var2_in_var1) {
-              debug.fine ("  True from subsequence search");
-              String discardString = "";
-              if (this_var_first)
-                discardString = v1.name.name()+" is a subsequence of " + v2.name.name() + " for which the result is known";
-              else
-                discardString = v2.name.name()+" is a subsequence of " + v1.name.name() + " for which the result is known";
-              return new DiscardInfo(this, DiscardCode.obvious, discardString);
-            }
-          }
-        }
+        */
       }
     }
 

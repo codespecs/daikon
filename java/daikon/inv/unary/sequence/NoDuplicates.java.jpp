@@ -74,10 +74,23 @@ public class CLASSNAME
     super(ppt);
   }
 
-  public static CLASSNAME instantiate(PptSlice ppt) {
-    if (!dkconfig_enabled) return null;
-    CLASSNAME result = new CLASSNAME(ppt);
-    // Don't instantiate if the variable can't have dupliates
+  /** Returns the prototype invariant for CLASSNAME **/
+  public static Invariant get_proto() {
+    if (!dkconfig_enabled)
+      return (null);
+    return new CLASSNAME (null);
+  }
+
+  /** instantiate an invariant on the specified slice **/
+  public Invariant instantiate_dyn (PptSlice slice) {
+    return instantiate (slice);
+  }
+
+  public static CLASSNAME instantiate (PptSlice slice) {
+    if (!dkconfig_enabled)
+      return null;
+
+    CLASSNAME result = new CLASSNAME (slice);
     return result;
   }
 
@@ -246,7 +259,17 @@ public class CLASSNAME
     return super.isObviousStatically (vis);
   }
 
-  // Lifted from EltNonZero; should abstract some of this out.
+  /**
+   * Checks to see if this is obvious over the specified variables
+   * Implements the following checks: <pre>
+   *
+   *    (A[] subsequence B[]) ^ (B[] has nodups) ==> A[] has nodups
+   *    (A[] sorted by >) v (A[] sorted by <)    ==> A[] has nodups
+   * </pre>
+   * JHP: The first check is not valid because we can't rely on transitive
+   *      checks because of missing (if B[] is missing, A[] could have dups
+   *      on those samples)
+   */
   public DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
