@@ -23,8 +23,7 @@ public final class ValueTuple implements Cloneable {
   public static Logger debug = Logger.getLogger("daikon.ValueTuple");
 
   // These arrays are interned, and so are their elements.
-
-  public Object[] vals;         // the values themselves (as Objects, if necessary)
+  public Object[] vals;
 
   // consider putting this in the first slot of "vals", to avoid the Object
   // overhead of a pair of val and mods.  Do I need to worry about trickery
@@ -240,8 +239,6 @@ public final class ValueTuple implements Cloneable {
   }
 
 
-  // Do I need/want this?  Probably in some circumstances...  But in
-  // general, users should use the constructor.
   /** Constructor that takes already-interned arguments. */
   static ValueTuple makeFromInterned(Object[] vals, int[] mods) {
     return new ValueTuple(vals, mods, true);
@@ -253,11 +250,6 @@ public final class ValueTuple implements Cloneable {
   public ValueTuple shallowcopy() {
     return ValueTuple.makeFromInterned(vals, mods);
   }
-
-  // public Object clone() {
-  //   return ValueTuple.makeFromInterned(vals, mods);
-  // }
-
 
   // These definitions are intended to make different ValueTuples with the
   // same contents compare identically.
@@ -277,35 +269,13 @@ public final class ValueTuple implements Cloneable {
     return vals.length;
   }
 
-  // Return a new ValueTuple containing this one's first len elements.
+  /** Return a new ValueTuple containing this one's first len elements. **/
   public ValueTuple trim(int len) {
     Object[] new_vals = ArraysMDE.subarray(vals, 0, len);
     int[] new_mods = ArraysMDE.subarray(mods, 0, len);
     return new ValueTuple(new_vals, new_mods);
   }
 
-
-  // This modifies the ValueTuple in place!!
-  // I think that's OK, because I only compare using equality and hashing
-  // doesn't depend on the elements.  (The new subparts are properly interned.)
-  void extend(Derivation[] derivs) {
-    int old_len = vals.length;
-    Object[] new_vals = new Object[old_len + derivs.length];
-    System.arraycopy(vals, 0, new_vals, 0, old_len);
-    int[] new_mods = new int[old_len + derivs.length];
-    System.arraycopy(mods, 0, new_mods, 0, old_len);
-    for (int i=0; i<derivs.length; i++) {
-      Derivation deriv = derivs[i];
-      // It might be slightly more efficient to pass in the mods and vals
-      // arrays instead of the ValueTuple; then add
-      // VarInfo.getModified(Object[]) and VarInfo.getValue(Object[]).
-      ValueAndModified vm = deriv.computeValueAndModified(this);
-      new_vals[i+old_len] = vm.value;
-      new_mods[i+old_len] = vm.modified;
-    }
-    vals = Intern.intern(new_vals);
-    mods = Intern.intern(new_mods);
-  }
 
   // For debugging
   public String toString() {
@@ -382,15 +352,6 @@ public final class ValueTuple implements Cloneable {
       return(ArraysMDE.toString((int[])val));
     else
       return(val.toString());
-  }
-
-  /** For each index i, do dest[i] = dest[i] or other[i]. */
-  public static void orModsInto(int[] dest, int[] other) {
-    Assert.assertTrue(dest.length == other.length);
-    int len = dest.length;
-    for (int i=0; i<len; i++)
-      if ((dest[i] == UNMODIFIED) && (other[i] == MODIFIED))
-        dest[i] = MODIFIED;
   }
 
   /**
