@@ -571,7 +571,7 @@ public final class FileIO {
 
     //used for debugging: write new data trace file
     if (Global.debugPrintDtrace) {
-      Global.dtraceWriter = new FileWriter(new File(filename + ".debug"));
+      Global.dtraceWriter = new PrintWriter(new FileWriter(new File(filename + ".debug")));
     }
     // init_ftn_call_ct();          // initialize function call counts to 0
 
@@ -795,11 +795,11 @@ public final class FileIO {
     }
 
     if (Global.debugPrintDtrace) {
-      Global.dtraceWriter.write(ppt.name + "\n");
+      Global.dtraceWriter.println(ppt.name);
 
       if (to_write_nonce) {
-	Global.dtraceWriter.write(nonce_string + "\n");
-	Global.dtraceWriter.write(nonce_value + "\n");
+	Global.dtraceWriter.println(nonce_string);
+	Global.dtraceWriter.println(nonce_value);
 	to_write_nonce = false;
       }
     }
@@ -888,9 +888,9 @@ public final class FileIO {
       oldvalue_reps[val_index] = value_rep;
 
       if (Global.debugPrintDtrace) {
-	Global.dtraceWriter.write(vi.name + "\n");
-	Global.dtraceWriter.write(value_rep + "\n");
-	Global.dtraceWriter.write(mod + "\n");
+	Global.dtraceWriter.println(vi.name);
+	Global.dtraceWriter.println(value_rep);
+	Global.dtraceWriter.println(mod);
       }
 
       if (ValueTuple.modIsMissing(mod)) {
@@ -910,7 +910,7 @@ public final class FileIO {
     ppt_to_value_reps.put(ppt, oldvalue_reps);
 
     if (Global.debugPrintDtrace) {
-      Global.dtraceWriter.write("\n");
+      Global.dtraceWriter.println();
     }
 
     String blank_line = reader.readLine();

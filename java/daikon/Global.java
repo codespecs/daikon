@@ -207,7 +207,7 @@ public final class Global {
     };
 
   // used only if debugPrintDtrace is true.  User need not set this.
-  public static FileWriter dtraceWriter = null;
+  public static PrintWriter dtraceWriter = null;
 
 
   // This may be expensive and so should only be called infrequently.
