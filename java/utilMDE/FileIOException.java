@@ -11,23 +11,23 @@ public class FileIOException extends IOException {
   public final LineNumberReader reader;
   public final String fileName;
 
-  public FileIOException () {
+  public FileIOException() {
     super();
     reader = null;
     fileName = null;
   }
 
-  public FileIOException (String s) {
+  public FileIOException(String s) {
     this(s, null, (String)null);
   }
 
-  public FileIOException (String s, LineNumberReader reader, String fileName) {
+  public FileIOException(String s, LineNumberReader reader, String fileName) {
     super(s);
     this.reader = reader;
     this.fileName = fileName;
   }
 
-  public FileIOException (String s, LineNumberReader reader, File file) {
+  public FileIOException(String s, LineNumberReader reader, File file) {
     this(s, reader, file.getName());
   }
 
