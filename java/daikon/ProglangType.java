@@ -411,8 +411,10 @@ public final class ProglangType
 
       // Try requiring the square brackets around arrays (permits
       // distinguishing between null and an array containing just null).
-      Assert.assertTrue(value.startsWith("[") && value.endsWith("]"),
-                    "Array values must be enlosed in square brackets");
+      if (!(value.startsWith("[") && value.endsWith("]"))) {
+        throw new IllegalArgumentException("Array values must be " +
+                                           "enlosed in square brackets");
+      }
       // Deal with [] surrounding Java array output
       if (value.startsWith("[") && value.endsWith("]")) {
         value = value.substring(1, value.length() - 1).trim();
