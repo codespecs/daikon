@@ -1011,7 +1011,6 @@ public final class FileIO {
                         + " at " + data_trace_filename,
                         reader, data_trace_filename);
       }
-      String mod_string = line;
       int mod = ValueTuple.parseModified(line);
 
       // System.out.println("Mod is " + mod + " at " + data_trace_filename + " line " + reader.getLineNumber()

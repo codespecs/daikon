@@ -768,9 +768,7 @@ public final class MakeInvariantChecker {
       "          }}",
       ""}, Daikon.lineSep);
 
-    String assertionProcedures = Daikon.lineSep;
-
-    String assertionProcedureDispatch =
+     String assertionProcedureDispatch =
       "          private static void checkAssertions(PptTopLevel atoplevel, ValueTuple vt) {" + Daikon.lineSep +
       "            List info = new ArrayList();" + Daikon.lineSep +
       "            info.add(vt.vals);" + Daikon.lineSep;

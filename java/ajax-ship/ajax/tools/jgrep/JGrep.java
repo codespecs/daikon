@@ -19,7 +19,7 @@ public class JGrep {
     public static void main(String[] args) {
         JBCWorld world = new JBCWorld();
         SEMIAnalyzer engine = new SEMIAnalyzer(world);
-        final Analyzer analyzer = new Analyzer(engine);
+        // final Analyzer analyzer = new Analyzer(engine);
         StandardClassLoader loader = new StandardClassLoader(world);
         SalamisCodeLoader nativeEnvironment = new SalamisCodeLoader(loader);
 

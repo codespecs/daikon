@@ -232,7 +232,6 @@ public abstract class Ppt
       VARLOOP:
       for (int rindex=result.size()-1; rindex>=0; rindex--) {
         VarInfo rvar = (VarInfo) result.get(rindex);
-        boolean found = false;
         for (int vindex=0; vindex<vars.length; vindex++) {
           VarInfo vvar = vars[vindex];
           if (rvar.isSimilarVarInfo(vvar)) {

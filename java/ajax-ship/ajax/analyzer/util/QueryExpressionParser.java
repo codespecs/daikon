@@ -145,7 +145,7 @@ public class QueryExpressionParser {
 
     public static CompactSet parseLocationSet(JBCClassLoader env, String s, int flags) throws ParseException {
         int offset = -1;
-        boolean allowNoIndex = (flags & ALLOW_NO_INDEX) != 0;
+        // boolean allowNoIndex = (flags & ALLOW_NO_INDEX) != 0;
         int hashIndex = s.indexOf('#');
         int atIndex = s.indexOf('@');
 

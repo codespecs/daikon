@@ -2784,7 +2784,7 @@ public class PptTopLevel
     // We do two loops for performance: attempt to fill locally, then
     // attempt to fill using upper ppts.
 
-    boolean firstLoopFilled = false;
+    // boolean firstLoopFilled = false;
     supTemplate.filled = false;
     supTemplate.results = new Invariant[supTemplate.invTypes.length];
     supTemplate.transforms = new VarInfo[supTemplate.invTypes.length][];
@@ -2816,7 +2816,7 @@ public class PptTopLevel
             Invariant.find (clazz, slice) :
             Invariant.findUnsuppressed (clazz, slice);
           if (inv != null) {
-            firstLoopFilled = true;
+            // firstLoopFilled = true;
             supTemplate.results[iInvs] = inv;
             supTemplate.transforms[iInvs] = supTemplate.varInfos[iInvs];
           }

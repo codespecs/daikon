@@ -1534,7 +1534,6 @@ public class PrintInvariants {
     Invariant[] invs_array = (Invariant[]) invs_vector.toArray(
       new Invariant[invs_vector.size()]);
 
-    int accepted_cnt = 0;
     Map filter_map = new LinkedHashMap();
 
     if (print_invs)

@@ -149,7 +149,6 @@ public class ValueTracker
   // (if a sample is a[] and b, then each pair {a[i],b} is a value)
   public void add(long[] v1, long v2) {
     if (values_cache == null) return;
-    long av1 = 0;
     for (int i = 0; i < v1.length; i++) {
       add(v1[i], v2);
     }
@@ -275,7 +274,6 @@ public class ValueTracker
   // See the comment above add(long[], long)
   public void add(double[] v1, double v2) {
     if (values_cache == null) return;
-    double av1 = 0;
     for (int i = 0; i < v1.length; i++) {
       add(v1[i], v2);
     }

@@ -347,7 +347,6 @@ public final class ProglangType
         // This will fail if the character is output as an integer
         // (as I believe the C front end does).
         char c;
-        int index;
         if (value.length() == 1)
           c = value.charAt(0);
         else if ((value.length() == 2) && (value.charAt(0) == '\\'))
