@@ -332,6 +332,10 @@ doc-jdk-lookup: doc
 	jdk-add-munged-anchor-names `find doc -name '*.html'`
 	echo "Run jdk-index-to-alist > ~/emacs/jdk-index.el"
 
+# This fails on pag-me, but successed on pag machines.  The pag-me failure
+# (which occurs only when run from $inv/java) appears to be a result of
+# having both . and pwd on CLASSPATH:  classes are found twice resulting in
+# a duplicate class warning.
 ../doc/config-options.texinfo: $(JAVA_FILES)
 	javadoc -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
