@@ -237,14 +237,14 @@ AUTO_GENERATED_FILES = \
 # These files were auto-generated previously; they still might exist in
 # some user's directory.
 OLD_AUTO_GENERATED_FILES = \
+	daikon/inv/binary/twoScalar/FloatComparisonCore.java \
+	daikon/inv/binary/twoScalar/FunctionUnary.java \
 	daikon/inv/binary/twoScalar/FunctionUnaryCore.java \
 	daikon/inv/binary/twoScalar/FunctionUnaryCoreFloat.java \
-	daikon/inv/binary/twoScalar/FunctionUnary.java \
 	daikon/inv/binary/twoScalar/FunctionUnaryFloat.java \
+	daikon/inv/binary/twoScalar/IntComparisonCore.java \
 	daikon/inv/binary/twoSequence/PairwiseFunctionUnary.java \
 	daikon/inv/binary/twoSequence/PairwiseFunctionUnaryFloat.java \
-	daikon/inv/binary/twoScalar/IntComparisonCore.java \
-	daikon/inv/binary/twoScalar/FloatComparisonCore.java \
 	daikon/inv/unary/sequence/SeqIndexComparison.java \
 	daikon/inv/unary/sequence/SeqIndexComparisonFloat.java \
 	daikon/inv/unary/sequence/SeqIndexNonEqual.java \
