@@ -45,25 +45,6 @@ public class PrintInvariants {
   public static final Category debugFiltering = Category.getInstance("daikon.filtering");
 
   public static final String daikonFilteringOutputFilename = "filtering_transcript";
-  // Set up filter logging to go to a file.
-  static {
-    if (debugFiltering.isDebugEnabled()) {
-      debugFiltering.setAdditivity(false);
-      debugFiltering.removeAllAppenders();
-      FileAppender fa = null;
-      try {
-        fa = new FileAppender( new PatternLayout("%m"), daikonFilteringOutputFilename, true);
-        fa.setName(daikonFilteringOutputFilename);
-      }
-      catch (IOException ioe) {
-        System.err.println("Warning; unable to open file " + daikonFilteringOutputFilename);
-      }
-      if (fa != null) {
-        debugFiltering.addAppender(fa);
-        fa.activateOptions();
-      }
-    }
-  }
 
   public static final String lineSep = Global.lineSep;
 

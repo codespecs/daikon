@@ -75,14 +75,22 @@ public class Logger {
       FileAppender fa = null;
       try {
         fa = new FileAppender( new PatternLayout("%m"),
-                               "filtering_transcript", true);
-      }
-      catch (IOException ioe) {
-        System.err.println("Warning; unable to open file filtering_transcript");
+                               PrintInvariants.daikonFilteringOutputFilename, true);
+        fa.setName (PrintInvariants.daikonFilteringOutputFilename);
+      } catch (IOException ioe) {
+        System.err.println("Error; unable to open file " +
+                           PrintInvariants.daikonFilteringOutputFilename +
+                           " for debuging filtering");
+        throw new Error();
       }
       if (fa != null) {
         PrintInvariants.debugFiltering.addAppender(fa);
         fa.activateOptions();
+      } else {
+        System.err.println("Error; unable to open file " +
+                           PrintInvariants.daikonFilteringOutputFilename +
+                           " for debuging filtering");
+        throw new Error();
       }
     }
   }
