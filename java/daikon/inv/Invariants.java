@@ -10,7 +10,9 @@ import java.util.*;
  * This is essentially a collection of Invariant objects, but with a few
  * convenience methods.
  **/
-public final class Invariants extends Vector {
+public final class Invariants
+  extends ArrayList
+{
 
   public Invariants() {
     super();
@@ -18,7 +20,7 @@ public final class Invariants extends Vector {
 
   /** Implementation of lookup_as_iterator. **/
   public final class LookupIterator implements Iterator {
-    Enumeration invs_enum = elements();
+    Iterator invs_enum = iterator();
     Object next = null;     // the next element that will be returned
     boolean next_valid = false;
 
@@ -27,8 +29,8 @@ public final class Invariants extends Vector {
     public LookupIterator(VarInfo vi) { this.vi = vi; }
 
     public boolean hasNext() {
-      while ((!next_valid) && invs_enum.hasMoreElements()) {
-        Invariant inv = (Invariant) invs_enum.nextElement();
+      while ((!next_valid) && invs_enum.hasNext()) {
+        Invariant inv = (Invariant) invs_enum.next();
         if (inv.usesVar(vi)) {
           next = inv;
           next_valid = true;
@@ -59,8 +61,8 @@ public final class Invariants extends Vector {
   // VarInfo.
   public Vector lookup_as_vector(VarInfo vi) {
     Vector result = new Vector();
-    for (Enumeration e = elements(); e.hasMoreElements() ; ) {
-      Invariant inv = (Invariant) e.nextElement();
+    for (Iterator i = iterator(); i.hasNext() ; ) {
+      Invariant inv = (Invariant) i.next();
       if (inv.usesVar(vi))
         result.add(inv);
     }
@@ -70,8 +72,8 @@ public final class Invariants extends Vector {
   // return a list of all the invariants that involve the specified VarInfos
   public Vector lookup(VarInfo vi1, VarInfo vi2) {
     Vector result = new Vector();
-    for (Enumeration e = elements(); e.hasMoreElements() ; ) {
-      Invariant inv = (Invariant) e.nextElement();
+    for (Iterator i = iterator(); i.hasNext() ; ) {
+      Invariant inv = (Invariant) i.next();
       if (inv.usesVar(vi1) && inv.usesVar(vi2))
         result.add(inv);
     }
@@ -81,8 +83,8 @@ public final class Invariants extends Vector {
   // return a list of all the invariants that involve the specified VarInfos
   public Vector lookup(VarInfo vi1, VarInfo vi2, VarInfo vi3) {
     Vector result = new Vector();
-    for (Enumeration e = elements(); e.hasMoreElements() ; ) {
-      Invariant inv = (Invariant) e.nextElement();
+    for (Iterator i = iterator(); i.hasNext() ; ) {
+      Invariant inv = (Invariant) i.next();
       if (inv.usesVar(vi1) && inv.usesVar(vi2) && inv.usesVar(vi3))
         result.add(inv);
     }

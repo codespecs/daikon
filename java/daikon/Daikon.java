@@ -519,12 +519,8 @@ public final class Daikon {
   //
   public static void print_invariants(PptMap ppts) {
     // Retrieve Ppt objects in sorted order.
-    // Use a custom comparator for a specific ordering
-    Comparator comparator = new Ppt.NameComparator();
-    TreeSet ppts_sorted = new TreeSet(comparator);
-    ppts_sorted.addAll(ppts.asCollection());
-
-    for (Iterator itor = ppts_sorted.iterator() ; itor.hasNext() ; ) {
+    // PptMap iteratorator uses a custom comparator for a specific ordering
+    for (Iterator itor = ppts.iterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       // if (ppt.has_samples() &&  // [[INCR]]
       if (! no_text_output) {

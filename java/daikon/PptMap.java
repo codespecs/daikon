@@ -32,6 +32,7 @@ public class PptMap
   }
 
   /**
+   * @return unstably-ordered collection of PptTopLevels
    * @see iterator()
    **/
   public Collection asCollection()

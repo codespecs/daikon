@@ -28,7 +28,6 @@ public abstract class ThreeScalar extends Invariant {
     // making this call, so as to reduce overall work.
     Assert.assert(! no_invariant);
     Assert.assert((mod_index >= 0) && (mod_index < 8));
-    Assert.assert(!finished);
     if (mod_index == 0) {
       add_unmodified(v1, v2, v3, count);
     } else {

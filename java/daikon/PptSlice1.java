@@ -97,7 +97,7 @@ public final class PptSlice1  extends PptSlice {
 
     if (new_invs != null) {
       for (int i=0; i<new_invs.size(); i++) {
-        Invariant inv = (Invariant) new_invs.elementAt(i);
+        Invariant inv = (Invariant) new_invs.get(i);
         if (inv == null)
           continue;
         addInvariant(inv);
@@ -110,7 +110,7 @@ public final class PptSlice1  extends PptSlice {
     if (this.debugged && (invs.size() > 0)) {
       debug.info("the invariants are:");
       for (int i=0; i<invs.size(); i++) {
-        Invariant inv = (Invariant) invs.elementAt(i);
+        Invariant inv = (Invariant) invs.get(i);
         debug.info("  " + inv.format());
         debug.info("    " + inv.repr());
       }
@@ -179,7 +179,7 @@ public final class PptSlice1  extends PptSlice {
     Assert.assert(invs.size() > 0);
     // Assert.assert(! already_seen_all); // [INCR]
     for (int i=0; i<invs.size(); i++) {
-      Assert.assert(invs.elementAt(i) != null);
+      Assert.assert(invs.get(i) != null);
     }
 
     // System.out.println("PptSlice1.add(" + full_vt + ", " + count + ") for " + name);
@@ -240,7 +240,7 @@ public final class PptSlice1  extends PptSlice {
       // long value = vi1.getIntValue(full_vt);
       long value = ((Long) val1).longValue();
       for (int i=0; i<num_invs; i++) {
-        SingleScalar inv = (SingleScalar)invs.elementAt(i);
+        SingleScalar inv = (SingleScalar)invs.get(i);
 	if (inv.no_invariant) continue;
         inv.add(value, mod1, count);
       }
@@ -248,7 +248,7 @@ public final class PptSlice1  extends PptSlice {
       // int value = vi1.getDoubleValue(full_vt);
       double value = ((Double) val1).doubleValue();
       for (int i=0; i<num_invs; i++) {
-        SingleFloat inv = (SingleFloat)invs.elementAt(i);
+        SingleFloat inv = (SingleFloat)invs.get(i);
 	if (inv.no_invariant) continue;
         inv.add(value, mod1, count);
       }
@@ -256,8 +256,8 @@ public final class PptSlice1  extends PptSlice {
       // String value = vi1.getStringValue(full_vt);
       String value = (String) val1;
       for (int i=0; i<num_invs; i++) {
-        // System.out.println("Trying " + invs.elementAt(i));
-        SingleString inv = (SingleString) invs.elementAt(i);
+        // System.out.println("Trying " + invs.get(i));
+        SingleString inv = (SingleString) invs.get(i);
 	if (inv.no_invariant) continue;
         inv.add(value, mod1, count);
       }
@@ -265,7 +265,7 @@ public final class PptSlice1  extends PptSlice {
       // double[] value = vi1.getDoubleArrayValue(full_vt);
       double[] value = (double[]) val1;
       for (int i=0; i<num_invs; i++) {
-        SingleFloatSequence inv = (SingleFloatSequence)invs.elementAt(i);
+        SingleFloatSequence inv = (SingleFloatSequence)invs.get(i);
 	if (inv.no_invariant) continue;
         inv.add(value, mod1, count);
       }
@@ -273,14 +273,14 @@ public final class PptSlice1  extends PptSlice {
       // long[] value = vi1.getIntArrayValue(full_vt);
       long[] value = (long[]) val1;
       for (int i=0; i<num_invs; i++) {
-        SingleSequence inv = (SingleSequence)invs.elementAt(i);
+        SingleSequence inv = (SingleSequence)invs.get(i);
 	if (inv.no_invariant) continue;
         inv.add(value, mod1, count);
       }
     } else if (rep == ProglangType.STRING_ARRAY) {
       String[] value = (String[]) val1;
       for (int i=0; i<num_invs; i++) {
-        SingleStringSequence inv = (SingleStringSequence)invs.elementAt(i);
+        SingleStringSequence inv = (SingleStringSequence)invs.get(i);
 	if (inv.no_invariant) continue;
         inv.add(value, mod1, count);
       }

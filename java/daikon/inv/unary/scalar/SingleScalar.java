@@ -22,7 +22,6 @@ public abstract class SingleScalar extends UnaryInvariant {
   public void add(long value, int mod_index, int count) {
     Assert.assert(! no_invariant);
     Assert.assert((mod_index >= 0) && (mod_index < 2));
-    Assert.assert(!finished);
     if (mod_index == 0) {
       add_unmodified(value, count);
     } else {

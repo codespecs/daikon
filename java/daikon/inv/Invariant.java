@@ -51,7 +51,7 @@ public abstract class Invariant
    * This is rather a hack and should be removed later.
    * Actually, it's not used any longer, except to be checked in assertions.
    **/
-  public boolean finished = false;
+  // public boolean finished = false; // [INCR] (was just in assertions, is now bogus anyway)
 
   /**
    * The probability that this could have happened by chance alone. <br>
@@ -205,13 +205,6 @@ public abstract class Invariant
   // have the caller do that.
   protected Invariant(PptSlice ppt) {
     this.ppt = ppt;
-    // We don't want to add the invariant yet, as this constructor is
-    // called from the constructors for subclasses of Invariant.
-    //     if (Global.debugInfer)
-    //       System.out.println("Adding invariant " + this + " to Ppt " + ppt.name + " = " + ppt + "; now has " + ppt.invs.size() + " invariants in " + ppt.invs);
-    //     ppt.addInvariant(this);
-    //     if (Global.debugInfer)
-    //       System.out.println("Added invariant " + this + " to Ppt " + ppt.name + " = " + ppt + "; now has " + ppt.invs.size() + " invariants in " + ppt.invs);
   }
 
   // Has to be public because of wrappers.

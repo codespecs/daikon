@@ -82,7 +82,7 @@ public final class PptSlice3  extends PptSlice {
 
     if (new_invs != null) {
       for (int i=0; i<new_invs.size(); i++) {
-        Invariant inv = (Invariant) new_invs.elementAt(i);
+        Invariant inv = (Invariant) new_invs.get(i);
         if (inv == null)
           continue;
         addInvariant(inv);
@@ -95,7 +95,7 @@ public final class PptSlice3  extends PptSlice {
     if (this.debugged && (invs.size() > 0)) {
       debug.info("the invariants are:");
       for (int i=0; i<invs.size(); i++) {
-        Invariant inv = (Invariant) invs.elementAt(i);
+        Invariant inv = (Invariant) invs.get(i);
         debug.info("  " + inv.format());
         debug.info("    " + inv.repr());
       }
@@ -172,7 +172,7 @@ public final class PptSlice3  extends PptSlice {
     Assert.assert(invs.size() > 0);
     // Assert.assert(! already_seen_all); // [INCR]
     for (int i=0; i<invs.size(); i++) {
-      Assert.assert(invs.elementAt(i) != null);
+      Assert.assert(invs.get(i) != null);
     }
 
     // System.out.println("PptSlice3.add(" + full_vt + ", " + count + ") for " + name);
@@ -268,7 +268,7 @@ public final class PptSlice3  extends PptSlice {
       long value2 = ((Long) val2).longValue();
       long value3 = ((Long) val3).longValue();
       for (int i=0; i<invs.size(); i++) {
-        ThreeScalar inv = (ThreeScalar) invs.elementAt(i);
+        ThreeScalar inv = (ThreeScalar) invs.get(i);
 	if (inv.no_invariant) continue;
         inv.add(value1, value2, value3, mod_index, count);
       }

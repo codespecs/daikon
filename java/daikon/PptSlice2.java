@@ -96,7 +96,7 @@ public final class PptSlice2  extends PptSlice {
 
     if (new_invs != null) {
       for (int i=0; i<new_invs.size(); i++) {
-        Invariant inv = (Invariant) new_invs.elementAt(i);
+        Invariant inv = (Invariant) new_invs.get(i);
         if (inv == null)
           continue;
         addInvariant(inv);
@@ -109,7 +109,7 @@ public final class PptSlice2  extends PptSlice {
     if (this.debugged && (invs.size() > 0)) {
       debug.info("the invariants are:");
       for (int i=0; i<invs.size(); i++) {
-        Invariant inv = (Invariant) invs.elementAt(i);
+        Invariant inv = (Invariant) invs.get(i);
         debug.info("  " + inv.format());
         debug.info("    " + inv.repr());
       }
@@ -180,7 +180,7 @@ public final class PptSlice2  extends PptSlice {
     Assert.assert(invs.size() > 0);
     // Assert.assert(! already_seen_all); // [INCR]
     for (int i=0; i<invs.size(); i++) {
-      Assert.assert(invs.elementAt(i) != null);
+      Assert.assert(invs.get(i) != null);
     }
 
     // System.out.println("PptSlice2.add(" + full_vt + ", " + count + ") for " + name);
@@ -259,7 +259,7 @@ public final class PptSlice2  extends PptSlice {
       String value1 = (String) val1;
       String value2 = (String) val2;
       for (int i=0; i<num_invs; i++) {
-        TwoString inv = (TwoString)invs.elementAt(i);
+        TwoString inv = (TwoString)invs.get(i);
 	if (inv.no_invariant) continue;
         inv.add(value1, value2, mod_index, count);
       }
@@ -271,7 +271,7 @@ public final class PptSlice2  extends PptSlice {
       long value1 = ((Long) val1).longValue();
       long value2 = ((Long) val2).longValue();
       for (int i=0; i<num_invs; i++) {
-        TwoScalar inv = (TwoScalar)invs.elementAt(i);
+        TwoScalar inv = (TwoScalar)invs.get(i);
 	if (inv.no_invariant) continue;
         inv.add(value1, value2, mod_index, count);
       }
@@ -279,7 +279,7 @@ public final class PptSlice2  extends PptSlice {
       long[] seqval = (long[]) val1;
       long sclval = ((Long) val2).longValue();
       for (int i=0; i<num_invs; i++) {
-        SequenceScalar inv = (SequenceScalar)invs.elementAt(i);
+        SequenceScalar inv = (SequenceScalar)invs.get(i);
 	if (inv.no_invariant) continue;
         inv.add(seqval, sclval, mod_index, count);
       }
@@ -287,7 +287,7 @@ public final class PptSlice2  extends PptSlice {
       long[] seqval = (long[]) val2;
       long sclval = ((Long) val1).longValue();
       for (int i=0; i<num_invs; i++) {
-        SequenceScalar inv = (SequenceScalar)invs.elementAt(i);
+        SequenceScalar inv = (SequenceScalar)invs.get(i);
 	if (inv.no_invariant) continue;
         inv.add(seqval, sclval, mod_index, count);
       }
@@ -295,7 +295,7 @@ public final class PptSlice2  extends PptSlice {
       long[] value1 = (long[]) val1;
       long[] value2 = (long[]) val2;
       for (int i=0; i<num_invs; i++) {
-        TwoSequence inv = (TwoSequence)invs.elementAt(i);
+        TwoSequence inv = (TwoSequence)invs.get(i);
 	if (inv.no_invariant) continue;
         inv.add(value1, value2, mod_index, count);
       }

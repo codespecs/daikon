@@ -24,7 +24,6 @@ public abstract class SingleStringSequence extends UnaryInvariant {
     Assert.assert((mod_index >= 0) && (mod_index < 2));
     Assert.assert(Intern.isInterned(value));
     // System.out.println("SingleStringSequence.add(" + ArraysMDE.toString(value) + ", " + modified + ", " + count + ")");
-    Assert.assert(!finished);
     if (value == null) {
       // ppt.var_infos[0].canBeNull = true; // [[INCR]]
     } else if (mod_index == 0) {

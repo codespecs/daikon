@@ -1417,7 +1417,7 @@ public class PptTopLevel
 
       Invariants invs1 = new Invariants();
       for (int j=0; j<slice1.invs.size(); j++) {
-        Invariant inv = (Invariant)slice1.invs.elementAt(j);
+        Invariant inv = (Invariant)slice1.invs.get(j);
         invs1.add(inv);
         if (debugAddImplications.isDebugEnabled()) {
           debugAddImplications.debug("invs1 " + inv.format());
@@ -1425,7 +1425,7 @@ public class PptTopLevel
       }
       Invariants invs2 = new Invariants();
       for (int j=0; j<slice2.invs.size(); j++) {
-        Invariant inv = (Invariant)slice2.invs.elementAt(j);
+        Invariant inv = (Invariant)slice2.invs.get(j);
         invs2.add(inv);
         if (debugAddImplications.isDebugEnabled()) {
           debugAddImplications.debug("invs2 " + inv.format());
@@ -1692,8 +1692,8 @@ public class PptTopLevel
     Vector result = new Vector();
     for (int i1=0; i1<invs1.size(); i1++) {
       for (int i2=0; i2<invs2.size(); i2++) {
-        Invariant inv1 = (Invariant) invs1.elementAt(i1);
-        Invariant inv2 = (Invariant) invs2.elementAt(i2);
+        Invariant inv1 = (Invariant) invs1.get(i1);
+        Invariant inv2 = (Invariant) invs2.get(i2);
         // This is a debugging tool, to make sure that various versions
         // of isExclusiveFormula remain coordinated.  (That's also one
         // reason we don't break out of the loop early:  also, there will
@@ -1723,13 +1723,13 @@ public class PptTopLevel
     SortedSet ss1 = new TreeSet(icfp);
     // ss1.addAll(invs1);
     for (int j=0; j<invs1.size(); j++) {
-      Invariant inv = (Invariant)invs1.elementAt(j);
+      Invariant inv = (Invariant)invs1.get(j);
       ss1.add(inv);
     }
 
     SortedSet ss2 = new TreeSet(icfp);
     for (int j=0; j<invs2.size(); j++) {
-      Invariant inv = (Invariant)invs2.elementAt(j);
+      Invariant inv = (Invariant)invs2.get(j);
       ss2.add(inv);
     }
 

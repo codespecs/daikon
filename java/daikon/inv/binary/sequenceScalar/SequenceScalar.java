@@ -47,7 +47,6 @@ public abstract class SequenceScalar extends Invariant {
   public void add(long[] v1, long v2, int mod_index, int count) {
     Assert.assert(! no_invariant);
     Assert.assert((mod_index >= 0) && (mod_index < 4));
-    Assert.assert(!finished);
     if (v1 == null) {
       // ppt.var_infos[seq_index].canBeNull = true; // [[INCR]]
     } else if (mod_index == 0) {

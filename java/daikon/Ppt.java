@@ -2,6 +2,7 @@
 
 package daikon;
 
+import java.io.Serializable;
 import java.util.*;
 import utilMDE.*;
 import org.apache.log4j.Category;
@@ -26,7 +27,9 @@ import org.apache.log4j.Category;
 // functions such as num_vars() and var_info_iterator().
 
 // The common interface for all Ppt objects.
-public abstract class Ppt implements java.io.Serializable {
+public abstract class Ppt
+  implements Serializable
+{
 
   public final String name;
   public final PptName ppt_name;
@@ -185,35 +188,15 @@ public abstract class Ppt implements java.io.Serializable {
   }
 
 
-  /* It does not appear this is being used anywhere - mjh
-  public static final class NameComparator implements Comparator {
-    public int compare(Object o1, Object o2) {
-      if (o1 == o2)
-        return 0;
-      PptSlice ppt1 = (PptSlice) o1;
-      PptSlice ppt2 = (PptSlice) o2;
-      // This class is used for comparing PptSlice objects.
-      // (Should it be in PptSlice?)
-      Assert.assert(ppt1.parent == ppt2.parent);
-      return ppt1.name.compareTo(ppt2.name);
-    }
-  }
-  */
-
   // It might make more sense to put the sorting into
   // PptMap.sortedIterator(), for example, but it's in here for now
 
   // Orders ppts by the name, except . and : are swapped
   //   so that Foo:::OBJECT and Foo:::CLASS are processed before Foo.method.
-  // (Why?) // Also suffix "~" to ":::EXIT" to put it after the line-numbered exits.
   public static final class NameComparator implements Comparator {
     public int compare(Object o1, Object o2) {
       String name1 = ((Ppt) o1).name;
       String name2 = ((Ppt) o2).name;
-//        if (name1.endsWith(FileIO.exit_suffix))
-//          name1 += "~";
-//        if (name2.endsWith(FileIO.exit_suffix))
-//          name2 += "~";
 
       String swapped1 = swap(name1, '.', ':');
       String swapped2 = swap(name2, '.', ':');
