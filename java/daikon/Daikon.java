@@ -97,6 +97,18 @@ public final class Daikon {
   public static boolean dkconfig_disable_splitting = false;
 
   /**
+   * Boolean.  If true, Daikon will not create any derived variables.
+   * Derived variables, which are combinations of variables that appeared in
+   * the program, like "ary[index]" if "ary" and "index" appeared, can
+   * increase the number of properties Daikon finds, especially over
+   * sequences. However, derived variables increase Daikon's time and
+   * memory usage, sometimes dramatically. If false, individual kinds of
+   * derived variables can be enabled or disabled individually using
+   * configuration options under daikon.derive.
+   **/
+  public static boolean  dkconfig_disable_derived_variables = false;
+
+  /**
    * Boolean.  Controls whether or not processing information is printed out.
    * Setting variable to true also automatically sets dkconfig_progress_delay
      * to -1.
@@ -1167,8 +1179,10 @@ public final class Daikon {
     // Set up derived variables
     for (Iterator i = all_ppts.ppt_all_iterator(); i.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) i.next();
-      progress = "Creating derived variables for: " +ppt.ppt_name.toString();
-      ppt.create_derived_variables();
+      if (!dkconfig_disable_derived_variables) {
+        progress = "Creating derived variables for: " +ppt.ppt_name.toString();
+        ppt.create_derived_variables();
+      }
     }
 
   }
