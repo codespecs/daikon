@@ -374,12 +374,6 @@ public abstract class PptSlice
       }
     }
 
-    if (debugFlow.isDebugEnabled() && to_remove.size() > 0 ) {
-      debugFlow.debug ("Flowing and removing falsified for: " + this);
-      debugFlow.debug ("To remove: " + to_remove);
-      debugFlow.debug ("To flow: " + invs_to_flow);
-    }
-
     // The following is simply for error checking
     if (to_remove.size() > invs_to_flow.size()) {
       // This block may no longer be necessary, as destroy() is only
@@ -415,7 +409,14 @@ public abstract class PptSlice
         debugFlow.debug ("No invariants to flow for " + this);
       }
       return new ArrayList();
+    } else {
+      if (debugFlow.isDebugEnabled()) {
+        debugFlow.debug (">> Flowing and removing falsified for: " + this);
+        debugFlow.debug ("  To remove: " + to_remove);
+        debugFlow.debug ("  To flow: " + invs_to_flow);
+      }
     }
+
 
     // XXXX Currently, we flow invariants to all immediately-lower
     // PptSlices.  If the same sample happens to follow them there,

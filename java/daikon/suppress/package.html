@@ -80,13 +80,13 @@ resurrected.  Also attempt suppression on any invariants in this ppt
 that weaken.
 
 <li> For any falsified or flowed invariants, take the invariants they
-were suppressing.  Attempt to re-suppress them by creating a new
-SuppressionLink for them.  If an invariant is in the same PptTopLevel as its
-former suppressor, add its PptSlice to the set of slices to check.  A
-suppressed invariant could have been in a different slice from its
-suppressor, but it is not necessary to check such invariants because
-a) The slice can't be higher than this and b) If the slice is lower,
-it will be checked later in the data flow.
+were suppressing, and attempt to re-suppress them by creating a new
+SuppressionLink for them.  If an invariant is in the same PptTopLevel
+as its former suppressor, add its PptSlice to the set of slices to
+check.  A suppressed invariant could have been in a different slice
+from its suppressor, but it is not necessary to check such invariants
+because a) The slice can't be higher than this and b) If the slice is
+lower, it will be checked later in the data flow.
 
 <li> Repeat while there are slices to check.
 

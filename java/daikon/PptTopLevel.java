@@ -711,7 +711,7 @@ public class PptTopLevel
     Assert.assertTrue(dataflow_ppts.length == dataflow_transforms.length, name);
 
     if (debugFlow.isDebugEnabled()) {
-      debugFlow.debug ("<<< Doing add_and_flow() for " + name);
+      debugFlow.debug ("<<<< Doing add_and_flow() for " + name);
     }
 
     for (int i=0; i < dataflow_ppts.length; i++) {

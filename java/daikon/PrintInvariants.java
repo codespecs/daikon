@@ -33,6 +33,11 @@ public class PrintInvariants {
   public static final Category debugPrint = Category.getInstance("daikon.print");
 
   /**
+   * Debug tracer for printing modified variables in ESC/JML output.
+   **/
+  public static final Category debugPrintModified = Category.getInstance("daikon.print.modified");
+
+  /**
    * Debug tracer for printing equality.
    **/
   public static final Category debugPrintEquality = Category.getInstance("daikon.print.equality");
@@ -332,6 +337,10 @@ public class PrintInvariants {
 
   public static void print_modified_vars(PptTopLevel ppt, PrintWriter out)
   {
+    if (debugPrintModified.isDebugEnabled()) {
+      debugPrintModified.debug ("Doing print_modified_vars for: " + ppt.ppt_name);
+    }
+
     Vector modified_vars = new Vector();
     Vector modified_primitive_args = new Vector();
     Vector unmodified_vars = new Vector();
@@ -339,10 +348,15 @@ public class PrintInvariants {
 
     for (int i=0; i<ppt.var_infos.length; i++) {
       VarInfo vi = ppt.var_infos[i];
+      if (debugPrintModified.isDebugEnabled()) {
+        debugPrintModified.debug ("  Testing var: " + vi.name.name());        
+      }
       // This test is purely an optimization.
       if (! vi.isPrestate()) {
+        debugPrintModified.debug ("  not prestate");
         VarInfo vi_orig = ppt.findVar(vi.name.applyPrestate());
         if (vi_orig != null) {
+          debugPrintModified.debug ("  has orig var");
           // Assert.assertTrue(vi_orig.postState.name == vi.name, "vi_orig="+vi_orig.name+", vi_orig.postState="+vi_orig.postState+((vi_orig.postState!=null)?"="+vi_orig.postState.name:"")+", vi="+vi+"="+vi.name);
           // Assert.assertTrue(vi_orig.postState == vi, "vi_orig="+vi_orig.name+", vi_orig.postState="+vi_orig.postState+((vi_orig.postState!=null)?"="+vi_orig.postState.name:"")+", vi="+vi+"="+vi.name);
           boolean is_unmodified = false; // vi.equal_to == vi_orig.equal_to // [INCR] XXX
@@ -353,10 +367,12 @@ public class PrintInvariants {
                 && java.lang.reflect.Modifier.isFinal(f.getModifiers())) {
               // System.out.println("Final: " + vi.name.name());
               is_unmodified = true;
+              debugPrintModified.debug ("  modified from reflection");
             }
           }
           // System.out.println(vi.name.name() + (is_unmodified ? " unmodified" : " modified"));
           if (is_unmodified) {
+            debugPrintModified.debug ("  concluded unmodified");
             unmodified_vars.add(vi);
             unmodified_orig_vars.add(vi_orig);
           } else {
@@ -380,10 +396,18 @@ public class PrintInvariants {
               // (Shouldn't this use the VarInfoName, and/or the isParam
               // information in VarInfoAux, rather than examining the text
               // of the name?  -MDE 12/2/2002)
+              is_unmodified = false;
+            } else {
+              // If a slice is present, though, we can try to make some judgements
+              is_unmodified = (view.num_mod_non_missing_samples() == 0);
+            }
+            if (!is_unmodified) {
               if (vi.type.isPrimitive() && (vi.name.name().indexOf(".") == -1)) {
                 modified_primitive_args.add(vi);
+                debugPrintModified.debug ("  concluded modified prim");
               } else {
                 modified_vars.add(vi);
+                debugPrintModified.debug ("  concluded modified ");
               }
             }
           }
@@ -966,8 +990,10 @@ public class PrintInvariants {
   */ // ... [INCR]
 
 
-  /***********************************************************/
-  /** Print invariants for a single program point. */
+  /**
+   * Print invariants for a single program point, once we know that
+   * this ppt is worth printing.
+   **/
   public static void print_invariants(PptTopLevel ppt, PrintWriter out, PptMap ppt_map) {
     // System.out.println("print_invariants(" + ppt.name + ")");
 
