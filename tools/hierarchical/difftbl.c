@@ -1,7 +1,7 @@
 /*
  * file: difftbl.c
  *
- * (c) P. Kleiweg 1998, 2001
+ * (c) P. Kleiweg 1998 - 2002
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -10,7 +10,7 @@
  *
  */
 
-#define my_VERSION "1.02"
+#define my_VERSION "1.03"
 
 #define __NO_MATH_INLINES
 
@@ -216,7 +216,7 @@ int main (int argc, char *argv [])
     time (&tp);
     fprintf (
 	fp_out,
-        "# Created by %s, (c) Peter Kleiweg 1998, 2001\n"
+        "# Created by %s, (c) Peter Kleiweg 1998 - 2002\n"
         "# More info: http://www.let.rug.nl/~kleiweg/clustering/\n"
         "# Input file: %s\n"
         "# Distance measure used: %s\n"
@@ -324,7 +324,7 @@ char const *quote (char const *s, char *qbuffer)
         if (s [0] == '"')
             break;
         for (i = 0; s [i]; i++)
-            if (isspace (s [i]))
+            if (isspace ((unsigned char) s [i]))
                 break;
         if (s [i])
             break;
@@ -415,10 +415,10 @@ int getline (FILE *fp, int required, char const *filename)
 	}
 	input_line++;
 	i = strlen (buffer);
-	while (i && isspace (buffer [i - 1]))
+	while (i && isspace ((unsigned char) buffer [i - 1]))
 	    buffer [--i] = '\0';
 	i = 0;
-	while (buffer [i] && isspace (buffer [i]))
+	while (buffer [i] && isspace ((unsigned char) buffer [i]))
 	    i++;
 	if (buffer [i] == '#')
 	    continue;
@@ -453,7 +453,7 @@ void syntax ()
 	stderr,
 	"\n"
 	"Vector difference, Version " my_VERSION "\n"
-	"(c) P. Kleiweg 1998, 2001\n"
+	"(c) P. Kleiweg 1998 - 2002\n"
 	"\n"
 	"Usage: %s [-c|-e|-p|-s] [-o filename] [-P] [vector file]\n"
 	"\n"

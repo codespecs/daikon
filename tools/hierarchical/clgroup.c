@@ -1,7 +1,7 @@
 /*
  * file: clgroup.c
  *
- * (c) P. Kleiweg 2000, 2001
+ * (c) P. Kleiweg 2000 - 2002
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -10,7 +10,7 @@
  *
  */
 
-#define clgroupVERSION "1.03"
+#define clgroupVERSION "1.04"
 
 #define __NO_MATH_INLINES
 
@@ -360,7 +360,7 @@ char const *quote (char const *s)
 	if (s [0] == '"')
 	    break;
 	for (i = 0; s [i]; i++)
-	    if (isspace (s [i]))
+	    if (isspace ((unsigned char) s [i]))
 		break;
 	if (s [i])
 	    break;
@@ -416,10 +416,10 @@ BOOL getline (BOOL required)
         }
         inputline++;
         i = strlen (buffer);
-        while (i && isspace (buffer [i - 1]))
+        while (i && isspace ((unsigned char) buffer [i - 1]))
             buffer [--i] = '\0';
         i = 0;
-        while (buffer [i] && isspace (buffer [i]))
+        while (buffer [i] && isspace ((unsigned char) buffer [i]))
             i++;
         if (buffer [i] == '#')
             continue;
@@ -436,13 +436,13 @@ void trim ()
         i;
 
     i = 0;
-    while (buffer [i] && isspace (buffer [i]))
+    while (buffer [i] && isspace ((unsigned char) buffer [i]))
         i++;
     if (i)
         memmove (buffer, buffer + i, strlen (buffer + i) + 1);
 
     i = strlen (buffer);
-    while (i && isspace (buffer [i - 1]))
+    while (i && isspace ((unsigned char) buffer [i - 1]))
         buffer [--i] = '\0';
 }
 
@@ -539,7 +539,7 @@ void syntax (int err)
 	err ? stderr : stdout,
         "\n"
         "Cluster Grouping, Version " clgroupVERSION "\n"
-        "(c) P. Kleiweg 2000, 2001\n"
+        "(c) P. Kleiweg 2000 - 2002\n"
 	"\n"
         "Usage: %s -n int [-i] [-o filename] [cluster file]\n"
         "\n"
