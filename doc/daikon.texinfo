@@ -3841,6 +3841,9 @@ your system administrator to do so.
 @node    Reporting bugs, Known bugs, Other problems, Troubleshooting
 @section Reporting bugs
 
+@cindex reporting bugs
+@cindex bugs, reporting
+
 If you have any questions, can suggest ways to improve the documentation,
 find bugs in the system, or have suggestions for its improvement, please
 send email to @email{daikon@@pag.lcs.mit.edu}.  While Daikon is a research prototype,
