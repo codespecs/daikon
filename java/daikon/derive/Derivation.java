@@ -71,6 +71,18 @@ public abstract class Derivation
   }
   private VarInfo this_var_info;
 
+  protected boolean missing_array_bounds = false;
+  /**
+   * True if we have encountered to date any missing values in this
+   * derivation due to array indices being out of bounds.  This can
+   * happen with both simple subscripts and subsequences.  Note that
+   * this becomes true as we are running, it cannot be set in advance
+   * (which would require a first pass).
+   **/
+  public boolean missingOutOfBounds() {
+    return (missing_array_bounds);
+  }
+
   // This is in each class, but I can't have a private abstract method.
   protected abstract VarInfo makeVarInfo();
 
