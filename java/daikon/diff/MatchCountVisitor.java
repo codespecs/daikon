@@ -6,14 +6,15 @@ import daikon.*;
 import daikon.inv.Invariant.OutputFormat;
 import java.util.*;
 
-/** MatchCountVisitor is a visitor that almost does the opposite of
+/**
+ * MatchCountVisitor is a visitor that almost does the opposite of
  * PrintDifferingInvariantsVisitor.  MatchCount prints invariant pairs
  * if they are the same, and only if they are a part of a conditional ppt.
  * The visitor also accumulates some state during its traversal for statistics,
  * and can report the match precision.
  *
  *
- * @author Lee Lin 2/14/2002 (updated 10/25/02)
+ * @author Lee Lin
  **/
 public class MatchCountVisitor extends PrintAllVisitor {
 

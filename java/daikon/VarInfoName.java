@@ -412,7 +412,7 @@ public abstract class VarInfoName
     return reprCmp;
   }
 
-  // This is a debugging method, not indended for ordinary output.
+  // This is a debugging method, not intended for ordinary output.
   // Code producing output should usually call name() rather than
   // calling toString (perhaps implicitly).
   public String toString() {
