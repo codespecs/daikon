@@ -47,7 +47,6 @@ mkdir($DAIKONPARENT) or die "can't make directory $DAIKONPARENT: $!\n";
 chdir($DAIKONPARENT) or die "can't chdir to $DAIKONPARENT: $!\n";
 
 my $LOG = "buildtest.out";
-open LOG, ">>$LOG" or die "can't open buildtest.out: $!\n";
 
 $success{"daikon_checkout"} = daikon_checkout();
 
@@ -112,8 +111,8 @@ if (@failed_steps != 0) {
     }
   }
   if ($quiet) {
-    open READLOG, $LOG or die "can't open $LOG: $!\n";
-    my $log = join('', <READLOG>);
+    open LOG, $LOG or die "can't open $LOG: $!\n";
+    my $log = join('', <LOG>);
     print $log;
   }
 }
@@ -249,8 +248,7 @@ sub daikon_system_test {
   # Standard test suite
   my $TEST_SUITE = "text-diff";
   # Short test suites
-#  my $TEST_SUITE = "do-print_tokens-text-diff";
-#  my $TEST_SUITE = "do-StackAr-text-diff";
+#  my $TEST_SUITE = "do-print_tokens-text-diff do-StreetNumberSet-text-diff";
   print_log("Daikon system tests...");
 
   my $command = "make -C $INV/tests/daikon-tests clean " .
@@ -330,8 +328,8 @@ sub dfec_system_test {
   # Standard test suite
   my $TEST_SUITE = "summary";
   # Short test suites
-  # my $TEST_SUITE = "summary-no-space";
-  # my $TEST_SUITE = "print_tokens";
+#  my $TEST_SUITE = "summary-no-space";
+#  my $TEST_SUITE = "test print_tokens";
   print_log("Dfec System Tests...");
 
   my $command = "make $J2 -C $INV/tests/dfec-tests $TEST_SUITE " .
@@ -366,10 +364,12 @@ sub dfec_system_test {
 # Appends its arguments to the log file.  If the quiet option was *not*
 # specified, also prints its arguments to STDOUT.
 sub print_log {
+  open LOG, ">>$LOG" or die "can't open $LOG: $!\n";
   print LOG @_;
   if (! $quiet) {
     print @_;
   }
+  close LOG;
 }
 
 
