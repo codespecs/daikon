@@ -500,11 +500,10 @@ public final class UtilMDE {
   // first issue, transforming a data structure into a single number.  This
   // is also known as fingerprinting.
 
-  public static final double hashToDouble(double[] a) {
+  public static final double hashToDouble(double a, double b) {
     double result = 17;
-    for (int i = 0; i < a.length; i++) {
-      result = result * 37 + a[i];
-    }
+    result = result * 37 + a;
+    result = result * 37 + b;
     return result;
   }
 
@@ -516,10 +515,14 @@ public final class UtilMDE {
     return result;
   }
 
-  public static final double hashToDouble(double a, double b) {
+  public static final double hashToDouble(double[] a) {
     double result = 17;
-    result = result * 37 + a;
-    result = result * 37 + b;
+    if (a != null) {
+      result = result * 37 + a.length;
+      for (int i = 0; i < a.length; i++) {
+        result = result * 37 + a[i];
+      }
+    }
     return result;
   }
 
@@ -541,15 +544,14 @@ public final class UtilMDE {
     return result;
   }
 
-  public static final int hash(long[] a) {
+  public static final int hash(long a, long b) {
     long result = 17;
-    for (int i = 0; i < a.length; i++) {
-      result = result * 37 + a[i];
-    }
+    result = result * 37 + a;
+    result = result * 37 + b;
     return hash(result);
   }
 
-  public static final long hash(long a, long b, long c) {
+  public static final int hash(long a, long b, long c) {
     long result = 17;
     result = result * 37 + a;
     result = result * 37 + b;
@@ -557,14 +559,46 @@ public final class UtilMDE {
     return hash(result);
   }
 
-  public static final long hash(long a, long b) {
+  public static final int hash(long[] a) {
     long result = 17;
-    result = result * 37 + a;
-    result = result * 37 + b;
+    if (a != null) {
+      result = result * 37 + a.length;
+      for (int i = 0; i < a.length; i++) {
+        result = result * 37 + a[i];
+      }
+    }
     return hash(result);
   }
 
+  public static final int hash(String a) {
+    return (a == null) ? 0 : a.hashCode();
+  }
 
+  public static final int hash(String a, String b) {
+    long result = 17;
+    result = result * 37 + hash(a);
+    result = result * 37 + hash(b);
+    return hash(result);
+  }
+
+  public static final int hash(String a, String b, String c) {
+    long result = 17;
+    result = result * 37 + hash(a);
+    result = result * 37 + hash(b);
+    result = result * 37 + hash(c);
+    return hash(result);
+  }
+
+  public static final int hash(String[] a) {
+    long result = 17;
+    if (a != null) {
+      result = result * 37 + a.length;
+      for (int i = 0; i < a.length; i++) {
+        result = result * 37 + hash(a[i]);
+      }
+    }
+    return hash(result);
+  }
 
 
   ///

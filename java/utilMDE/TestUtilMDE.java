@@ -17,6 +17,7 @@ import java.lang.*;
 // FuzzyFloat.java
 // Hasher.java
 // Intern.java
+// LimitedSizeIntSet.java
 // MathMDE.java
 // OrderedPairIterator.java
 // TestUtilMDE.java
@@ -1025,6 +1026,30 @@ public final class TestUtilMDE extends TestCase {
       exceptionCaught = true;
     }
     assertTrue(exceptionCaught);
+  }
+
+  // Add elements 0..limit-1 to the set.
+  private static void lsis_add_elts(int limit, LimitedSizeIntSet s) {
+    Random r = new Random();
+    for (int i=0; i<100; i++) {
+      s.add(r.nextInt(limit));
+    }
+  }
+
+  private static void lsis_test(int max_size) {
+    LimitedSizeIntSet s = new LimitedSizeIntSet(max_size);
+    for (int i=1; i<2*max_size; i++) {
+      lsis_add_elts(i, s);
+      int size = s.size();
+      assertTrue("" + size + " " + i + " " + max_size + " " + s,
+                 (i<=max_size) ? (size == i) : (size == max_size+1));
+    }
+  }
+
+  public static void testLimitedSizeIntSet() {
+    for (int i=1; i<10; i++) {
+      lsis_test(i);
+    }
   }
 
   // This cannot be static because it instantiates an inner class.
