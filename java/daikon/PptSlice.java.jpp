@@ -379,6 +379,25 @@ public final class PPTSLICE1
     VarInfo vi3 = var_infos[2];
 #endif
 
+    // If any var has encountered out of array bounds values,
+    // stop all invariants in this slice.  The presumption here is that
+    // an index out of bounds implies that the derived variable (eg a[i])
+    // doesn't really make any sense (essentially that i is not a valid
+    // index for a).  Invariants on the derived variable are thus not
+    // relevant
+    for (int i = 0; i < var_infos.length; i++) {
+      if (var_infos[i].missingOutOfBounds()) {
+        for (int j = 0; j < invs.size(); j++) {
+          Invariant inv = (Invariant) invs.get(j);
+          inv.destroyAndFlow();
+          if (inv.logOn())
+            inv.log ("destroyed because " + var_infos[i].name.name()
+                     + "array index out of bounds");
+        }
+        return flow_and_remove_falsified();
+      }
+    }
+
     int mod1 = full_vt.getModified(vi1);
     if (mod1 == ValueTuple.MISSING_FLOW || mod1 == ValueTuple.MISSING_NONSENSICAL) {
       // System.out.println("Bailing out of add(" + full_vt + ") for " + name);
@@ -666,6 +685,8 @@ public final class PPTSLICE1
       debug.info("instantiated_invariant: " + invariant.format()
                  // [INCR] + "; " + "already_seen_all=" + already_seen_all
                  );
+    if (invariant.logOn())
+      invariant.log ("Instantiated " + invariant.format());
 
     /* [INCR] ... I think this is now unnecessary; not sure. XXX
     if (already_seen_all) {
@@ -1067,7 +1088,7 @@ public final class PPTSLICE1
       Invariant newInv = inv.transfer (result, permutation);
       //if (!newInv.isObvious()) {
       newInvs.add (newInv);
-      parent.attemptSuppression (newInv);
+      parent.attemptSuppression (newInv, true);
       Assert.assertTrue (newInv != inv);
       Assert.assertTrue (newInv.ppt == result);
       Assert.assertTrue (inv.ppt == this);
