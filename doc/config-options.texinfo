@@ -117,6 +117,18 @@
  of the same data structure.
   The default value is `true'.
 
+@item daikon.derive.ternary.SequenceFloatArbitrarySubsequence.enabled
+  Boolean.  True iff SequenceFloatArbitrarySubsequence invariants should be considered.
+  The default value is `false'.
+
+@item daikon.derive.ternary.SequenceScalarArbitrarySubsequence.enabled
+  Boolean.  True iff SequenceScalarArbitrarySubsequence invariants should be considered.
+  The default value is `false'.
+
+@item daikon.derive.ternary.SequenceStringArbitrarySubsequence.enabled
+  Boolean.  True iff SequenceStringArbitrarySubsequence invariants should be considered.
+  The default value is `false'.
+
 @item daikon.derive.unary.SequenceInitial.enabled
   Boolean.  True iff SequenceInitial derived variables should be generated.
   The default value is `false'.
