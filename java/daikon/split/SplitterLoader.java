@@ -34,7 +34,7 @@ public class SplitterLoader extends ClassLoader {
   }
 
   /**
-   * @param the pathname of a .class file
+   * @param full_pathname the pathname of a .class file
    * @return a Java Object corresponding to the .class file
    **/
   protected Class load_Class(String className, String full_pathname) {

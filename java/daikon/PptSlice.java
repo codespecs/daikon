@@ -398,8 +398,6 @@ public abstract class PptSlice
   /**
    * Flow falsified invariants to lower ppts, and remove them from
    * this ppt.
-   * @param invsFlowed After this method, holds the Invariants that
-   * flowed.  Never null.
    * @return the List of weakened invariants.
    **/
   protected List flow_and_remove_falsified() {

@@ -53,7 +53,7 @@ public final class MakeInvariantChecker {
    * Used for checking whether a procedure name exists when
    * a procedure needs to be broken down to into two for
    * space considerations.
-   * @see method MakeInvariantChecker.createOutputFile
+   * See private method createOutputFile.
    */
   protected static Set procedureNameSet;
 
@@ -457,7 +457,6 @@ public final class MakeInvariantChecker {
    * ascii code representation.
    *
    * @throws RuntimeException if input argument is null or 0 length
-   * @param javaIdentifier.
    */
   public static String makeValidJavaIdentifier(String javaIdentifier) {
     boolean validBody = hasValidJavaIdentifierBody(javaIdentifier);

@@ -112,7 +112,7 @@ public class DiscardCode implements Comparable,Serializable {
   /** The enumeration members in assorted order: <br>
       not_discarded, obvious, bad_sample, bad_probability, few_modified_samples, not_enough_samples, non_canonical_var,<br>
       implied_post_condition, only_constant_vars, derived_param, unmodified_var, control_check, exact, var filter
-   * @returns this.enumValue.compareTo(o.enumValue) where the enumValue are treated as Integers
+   * @return this.enumValue.compareTo(o.enumValue) where the enumValue are treated as Integers
    * @throws ClassCastException iff !(o instanceof DiscardCode)
    */
   public int compareTo(Object o) throws ClassCastException {
@@ -154,7 +154,7 @@ public class DiscardCode implements Comparable,Serializable {
   }
 
   /** Prints out a string describing the reason for discard
-   * @returns one of {"Not discarded","Obvious,"Bad sample seen","Unjustified probability","Few modified samples","Not enough samples",
+   * @return one of {"Not discarded","Obvious,"Bad sample seen","Unjustified probability","Few modified samples","Not enough samples",
                       "Non-canonical variable","Implied post state","Only constant variables in this expression","Derived Param","Control Check"
                       ,"Exact","Variable Filter","Filtered"}
    */
@@ -195,7 +195,7 @@ public class DiscardCode implements Comparable,Serializable {
   }
 
   /** To prevent deserialization causing more DiscardCodes to be instantiated
-   *@returns one of the static DiscardCode instances
+   *@return one of the static DiscardCode instances
    *@throws ObjectStreamException
    **/
   public Object readResolve() throws ObjectStreamException {

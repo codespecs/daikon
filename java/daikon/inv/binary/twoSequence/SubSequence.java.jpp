@@ -349,7 +349,7 @@ public class CLASSNAME
   }
 
   /**
-   * @returns Array "a" such that a[0] is a valid discardCode and a[1] is
+   * @return Array "a" such that a[0] is a valid discardCode and a[1] is
    * a valid discardString.  If the Invariant is not an obvious subsequence, both
    * are null
    **/

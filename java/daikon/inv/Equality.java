@@ -82,7 +82,7 @@ public final class Equality
   }
 
   /**
-   * @param vars Variables which are equivalent, with the canonical
+   * @param variables Variables which are equivalent, with the canonical
    * one first.  Elements must be of type VarInfo.
    **/
   public Equality(Collection variables, PptSlice ppt) {

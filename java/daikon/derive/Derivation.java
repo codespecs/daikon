@@ -45,7 +45,7 @@ public abstract class Derivation
   /**
    * @return a pair of: the derived value and whether the variable
    * counts as modified.
-   * @param vt The set of values in a program point that will be
+   * @param full_vt The set of values in a program point that will be
    * used to derive the value.
    **/
   // I don't provide separate computeModified and computeValue

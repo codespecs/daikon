@@ -108,7 +108,7 @@ public final class DiscReasonMap {
   /**
    *@requires vars is given in the form "var1,var2,var3" in ascending alphabetical
    * order with no spaces && invInfo.ppt() != null
-   *@returns a List of all DiscardInfos di such that di.discardCode != DiscardCode.not_discarded<br>
+   *@return a List of all DiscardInfos di such that di.discardCode != DiscardCode.not_discarded<br>
    * && the di is for an Invariant from discPpt whose class and vars match the params passed into the<br>
    * method call. If the user wishes for any of the 3 params to be a wildcard, they can pass that/those<br>
    * param(s) in as null.

@@ -434,8 +434,6 @@ public final class PPTSLICE1
    * from it, casts them to the proper types, and passes them along to the
    * invariants proper.  (The invariants accept typed values rather than a
    * ValueTuple that encapsulates objects of any type whatever.)
-   * @param invsFlowed after this method, holds the Invariants that
-   * flowed.
    **/
   public List add(ValueTuple full_vt, int count) {
     //     if (debugFlow.isLoggable(Level.FINE)) {

@@ -29,7 +29,6 @@ public abstract class BinaryDerivation
 
   /**
    * Create a new BinaryDerivation from two varinfos.
-   * @param vi1, vi2 the variables this derivation will be based on.
    **/
   public BinaryDerivation(VarInfo vi1, VarInfo vi2) {
     base1 = vi1;

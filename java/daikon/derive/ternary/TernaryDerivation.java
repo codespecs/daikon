@@ -34,8 +34,7 @@ public abstract class TernaryDerivation
   VarInfo base3;
 
   /**
-   * Create a new BinaryDerivation from two varinfos.
-   * @param vi1, vi2, vi3 the variables this derivation will be based on.
+   * Create a new TernaryDerivation from two varinfos.
    **/
   public TernaryDerivation(VarInfo vi1, VarInfo vi2, VarInfo vi3) {
     base1 = vi1;

@@ -1987,7 +1987,7 @@ public abstract class VarInfoName
 
     /**
      * Creates a new Finder.  Uses equals() to find.
-     * @param goals The goals to find
+     * @param argGoals The goals to find
      **/
     public Finder(Set argGoals) {
       goals = new HashSet();

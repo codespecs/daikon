@@ -60,7 +60,7 @@ public abstract class SuppressionFactory implements Serializable {
    * SuppressionLink.  Else return null.  Same as {@link #byTemplate}
    * except more debug information is optionally generated.
    *
-   * @param supTemplate The template to fill
+   * @param supt The suppression template to fill
    * @param inv the Invariant that is potentially being suppressed.
    * @return the matching suppression link or null.
    **/
@@ -119,10 +119,9 @@ public abstract class SuppressionFactory implements Serializable {
    * found.  Used as helper by many factories, so that checking v2 >
    * v1 is the same as v1 < v2, etc.  Only works on integers because
    * this is used for array indexing.
-   * @param arg The Invariant to suppress.
-   * @param interval The interval that the two VarInfos have to vary by (at least).
    * @param inv The invariant whose ppt in which we are looking for
    * the < relationship.
+   * @param interval The interval that the two VarInfos have to vary by (at least).
    **/
 
   public SuppressionLink findLessEqual (VarInfo v1, VarInfo v2,

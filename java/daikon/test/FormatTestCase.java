@@ -254,7 +254,7 @@ class FormatTestCase {
    * This function creates a String representing the difference between the test
    * result and the desired result.
    *
-   * @returns a String representing the difference between the test
+   * @return a String representing the difference between the test
    * result and the desired result
    **/
   public String getDiffString() {
@@ -292,7 +292,7 @@ class FormatTestCase {
    * This function takes in a String representing a goal statement
    * and returns the actual String to be returned by a test
    *
-   * @returns the actual result String represented by the goal statement or
+   * @return the actual result String represented by the goal statement or
    *          null if the String isn't actually a goal statement
    **/
   static String parseGoal(String goalString) {
@@ -386,7 +386,7 @@ class FormatTestCase {
     String format = null;
 
     Iterator formatStrings = null;
-	
+
 
     // If not generating goals get the goal lines from the file
     // If generating goals get the formats from the list of formats

@@ -118,7 +118,7 @@ public final class VarInfo
    * This is used as we are processing data to destroy any invariants
    * that use this variable.
    *
-   * @see Derivation.missingOutOfBounds()
+   * @see Derivation#missingOutOfBounds()
    **/
   public boolean missingOutOfBounds() {
     if (derived != null) {
