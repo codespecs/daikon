@@ -103,4 +103,3 @@
 (defun dtrace-file-per-problem ()
   (setq solve-problem-start-function 'dtrace-solve-problem-start-function)
   (setq solve-problem-end-function 'dtrace-solve-problem-end-function))
-
