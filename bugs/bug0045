@@ -1,0 +1,120 @@
+Version:      $Id$
+Owner:        tohn <tohn>, mistere
+Cc:           
+Tool:         Daikon V3
+Summary:      No splitting of CLASS splitters?
+Severity:     Vexing
+Status:       New
+Reproducible: Yes
+Description:
+
+Daikon V3 doesn't seem to split on splitters that mention the CLASS
+program point.  Maybe this has something to do with flow?
+
+Unfortunately, I haven't tested splitters yet on other program points
+in V3.  The test sources are available at:
+
+~tohn/research/IOA_Toolkit/Test/Fibonacci01/Fibonacci01.{decls, dtrace, spinfo}
+[sources written in IOA]
+
+Similar sources are at:
+
+~tohn/test/fib
+[sources written in Java]
+
+
+
+
+The splitter is:
+
+PPT_NAME Fibonacci01:::CLASS
+a <= 0
+
+
+Daikon V2 produces:
+
+
+Fibonacci01:::CLASS
+(a == 0)  ==>  (b == 1)
+a <= b
+a < c
+b <= c
+c == a + b
+===========================================================================
+Fibonacci01:::CLASS;condition="a <= 0"
+b == c
+a == 0
+b == 1
+===========================================================================
+Fibonacci01:::CLASS;condition="not(a <= 0):::CLASS;condition="not(a <= 0)"
+b < c
+===========================================================================
+Fibonacci01.compute():::ENTER
+===========================================================================
+Fibonacci01.compute():::ENTER;condition="a <= 0"
+b == c
+a == 0
+b == 1
+===========================================================================
+Fibonacci01.compute():::ENTER;condition="not(a <= 0)"
+b < c
+===========================================================================
+Fibonacci01.compute():::EXIT0
+a == orig(b)
+b == orig(c)
+a >= orig(a)
+b < c
+b > orig(a)
+c > orig(a)
+orig(a) == - a + b
+orig(a) == - 2 * a + c
+orig(a) == 2 * b - c
+Exiting
+
+
+
+Daikon V3 produces:
+
+[tohn@shallot Fibonacci01]$ djava Fibonacci01.decls Fibonacci01.dtrace Fibonacci01.spinfo 
+**************************************************
+*                     WARNING                    *
+**************************************************
+* You are using the REDESIGN version (V3) of the *
+* Daikon engine. Make sure this is what you want.*
+**************************************************
+Reading declaration files . (read 1 file)
+Reading splitter info files Splitters for this run created in /tmp/daikon_38337_Split/
+ (read 1 file)
+Processing trace data; reading 1 file:
+
+===========================================================================
+Fibonacci01:::CLASS
+b >= 1
+a <= b
+a < c
+b <= c
+===========================================================================
+Fibonacci01.compute():::ENTER
+===========================================================================
+Fibonacci01.compute():::EXIT
+a >= orig(a)
+a == orig(b)
+orig(b) == a
+a <= orig(c)
+b < c
+b > orig(a)
+b >= orig(b)
+b == orig(c)
+orig(c) == b
+c > orig(a)
+c > orig(b)
+c > orig(c)
+===========================================================================
+Fibonacci01.compute():::EXIT0
+Exiting
+
+--
+$Log$
+Revision 1.1  2002-04-22 06:41:43  tohn
+new bug0045
+
