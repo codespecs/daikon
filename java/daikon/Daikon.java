@@ -981,7 +981,7 @@ public final class Daikon {
     debugProgress.fine ("Suppress for printing ... done");
 
     // Add implications
-    System.out.print("Creating implications ");
+    System.out.println("Creating implications ");
     debugProgress.fine ("Adding Implications ... ");
     for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
