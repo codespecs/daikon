@@ -571,7 +571,7 @@ public abstract class PptSlice
 
           slice.addInvariant(reborn);
           // Attempt to suppress the new invariant in lower levels
-          slice.parent.attemptSuppression(reborn);
+          slice.parent.attemptSuppression(reborn, true);
         }
       }
     }
