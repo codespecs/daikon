@@ -3,11 +3,11 @@
   if 0;
 # cygwin-runner.pl -- Run a windows command as if it were a unix (cygwin) command
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2001-12-24 03:03:33 mistere>
+# Time-stamp: <2002-03-18 12:26:39 mistere>
 
 # This script takes a command with arguments and translates those
 # arguments from cygwin-style filenames into windows-style filenames.
-# Its real advanage is the little bit of intelligence it has as far as
+# Its real advantage is the little bit of intelligence it has as far as
 # which things are files and which are not.
 
 # The first argument to cygwin-runner.pl is the directory that the
@@ -39,7 +39,7 @@
 #   If both paths are derived from the same setting in your setup, then
 #   put cygbin first.  Cygwin will see the cygbin files (symlinks) and
 #   run them, whereas windows will not try to run the symlinks and will
-#   fallback to the winbin files.
+#   fall back to the winbin files.
 #
 
 # -------------------------------------------------------------------------
@@ -56,7 +56,6 @@ sub trim ( $ ) {
 }
 
 # Convert a cygwin filename to a (spaceless) windows filename
-# TODO: Handle filenames which don't exist yet, but some prefix does
 sub filetowin( $ ) {
     my ($unix) = @_;
     my $win = trim(`cygpath -ws $unix`);
@@ -113,7 +112,7 @@ sub smartconvert {
 	return filetowin($arg);
     }
 
-    # If it dirname is a filename, we assume it really is a filename
+    # If its dirname is a filename, we assume it really is a filename
     my $dirname = $arg; $dirname =~ s|^(.*)/.*|$1|;
     if (-e $dirname) {
 	return filetowin($arg);
