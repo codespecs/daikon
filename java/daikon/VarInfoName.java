@@ -33,7 +33,14 @@ public abstract class VarInfoName
     // x or this.x
     if ((name.indexOf('[') == -1) && (name.indexOf('(') == -1)) {
       // checking for only legal characters would be more robust
-      return (new Simple(name)).intern();
+      int dot = name.lastIndexOf('.');
+      if (dot >= 0) {
+	String first = name.substring(0, dot);
+	String field = name.substring(dot+1);
+	return parse(first).applyField(field);
+      } else {
+	return (new Simple(name)).intern();
+      }
     }
 
     // a[]
@@ -200,27 +207,10 @@ public abstract class VarInfoName
       return name;
     }
     protected String esc_name_impl() {
-      if ("return".equals(name))
-        return "\\result";
-      if (name.startsWith("return."))
-        return "\\result." + name.substring(7);
-      return name;
+      return "return".equals(name) ? "\\result" : name;
     }
     protected String simplify_name_impl() {
-      // Field access with dots ("getters") are like lambda
-      // applications so this.foo turns into (select foo this)
-      String working = name;
-      String prefix = "";
-      String suffix = "";
-      int dot = working.indexOf('.');
-      while (dot >= 0) {
-	String rest = working.substring(dot+1);
-	working = working.substring(0, dot);
-	prefix = "(select " + rest + " " + prefix;
-	suffix = suffix + ")";
-	dot = working.indexOf('.');
-      }
-      return prefix + working + suffix;
+      return name;
     }
     public Object accept(Visitor v) {
       return v.visitSimple(this);
@@ -291,7 +281,7 @@ public abstract class VarInfoName
       return function + "(" + argument.name() + ")";
     }
     protected String esc_name_impl() {
-      return function + "(" + argument.esc_name() + ")";
+      return "(format_esc needs to be changed: " + function + ")";
     }
     protected String simplify_name_impl() {
       return "(format_simplify needs to be changed: " + function + ")";
