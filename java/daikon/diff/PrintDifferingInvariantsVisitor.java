@@ -75,15 +75,19 @@ public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
   private void printJustificationMaybe(Invariant inv, InvNode node) {
     if (considerJustification &&
         ! invariantsDiffer(node.getInv1(), node.getInv2())) {
-      print(" {");
-      double prob = inv.getProbability();
-      String probString = PROBABILITY_FORMAT.format(prob);
-      // Print a ~ if the probability is close to, but not exactly, zero
-      if (probString.equals("0") && prob != 0) {
-        print("~");
-      }
-      print(probString);
-      print("}");
+      printJustification(inv);
     }
+  }
+
+  private void printJustification(Invariant inv) {
+    print(" {");
+    double prob = inv.getProbability();
+    String probString = PROBABILITY_FORMAT.format(prob);
+    // Print a ~ if the probability is close to, but not exactly, zero
+    if (probString.equals("0") && prob != 0) {
+      print("~");
+    }
+    print(probString);
+    print("}");
   }
 }
