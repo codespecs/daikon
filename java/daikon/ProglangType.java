@@ -18,6 +18,7 @@ import utilMDE.*;
 // known_types = integral_types + ("pointer", "address")
 
 public final class ProglangType {
+  // Use .equals(), not ==, to copmare to these types.
   public static ProglangType INT = new ProglangType("int", 0);
   public static ProglangType INT_ARRAY = new ProglangType("int", 1);
 
@@ -65,8 +66,8 @@ public final class ProglangType {
 //                     base = "java_object"
 //                     dimensionality = dimensionality+1
 
-    String base = rep.intern();
-    return intern(base, dims);
+    String new_base = rep.intern();
+    return intern(new_base, dims);
   }
 
   public boolean equals(Object o) {

@@ -20,6 +20,8 @@ import utilMDE.*;
 class PptTopLevel extends Ppt {
 
   final static boolean debugPptTopLevel = false;
+  // final static boolean debugPptTopLevel = true;
+
   final static boolean debugPptTopLevelDerive = true;
 
 
@@ -323,7 +325,7 @@ class PptTopLevel extends Ppt {
     // complexity of making variables non-canonical and possibly canonical
     // again.
 
-    // return (vi.canonical()
+    // return (vi.isCanonical()
     //         // This prevents derivation from ever occurring on
     //         // derived variables.  Ought to put this under the
     //         // control of the individual Derivation objects.
@@ -532,6 +534,7 @@ class PptTopLevel extends Ppt {
   Iterator entrySet() {
     return values.entrySet().iterator();
   }
+
 
   ///////////////////////////////////////////////////////////////////////////
   /// Printing invariants

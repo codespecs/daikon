@@ -43,6 +43,8 @@ public class VarInfo {
   // Perhaps it would be better to just point at the representative object
   Vector equal_to;		// list of other variables equal to this one
 				// Do I want this?
+  boolean canonical;
+
   // list of indices of equal variables;
   //   could be derived from invariants
   //   by checking for inv.comparison == "=".
@@ -83,7 +85,8 @@ public class VarInfo {
     varinfo_index = -1;
 
     derivees = new Vector(3);
-    equal_to = new Vector(3);
+    // Don't set equal_to or canonical yet; leave it null until it's set.
+    // equal_to = new Vector(3);
   }
 
   public VarInfo(String name_, ProglangType type_, ProglangType rep_type_, ExplicitVarComparability comparability_) {
@@ -159,7 +162,14 @@ public class VarInfo {
   //     else:
   // 	return min(self.index, self.equal_to[0])
 
-  boolean canonical() {
+  // This sets the equal_to slot and caches its result.  That means that if
+  // any more values come in, then the equal_to slot should probably be
+  // reset to null so that whether the variable is canonical is recomputed.
+  public boolean isCanonical() {
+    if (equal_to != null)
+      return canonical;
+
+
     // assert self.index != None
     // assert self.equal_to == [] or self.canonical_var() != None
     // return self.index == self.canonical_var()

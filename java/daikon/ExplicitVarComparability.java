@@ -100,13 +100,13 @@ public class ExplicitVarComparability extends VarComparability {
       // I could consider interning the arrays themselves; is that
       // worthwhile?  Probably not...
 
-      String[] base = ws_split_to_interned_array(base_raw);
-      String[][] indices = new String[dims][];
+      String[] new_base = ws_split_to_interned_array(base_raw);
+      String[][] new_indices = new String[dims][];
       for (int i=0; i<dims; i++) {
-	indices[i] = ws_split_to_interned_array(indices_raw[i]);
+	new_indices[i] = ws_split_to_interned_array(indices_raw[i]);
       }
 
-      return new ExplicitVarComparability(base, indices, dims, null);
+      return new ExplicitVarComparability(new_base, new_indices, dims, null);
 
     } else {
       // scalar variable
@@ -115,8 +115,8 @@ public class ExplicitVarComparability extends VarComparability {
       if (rep.startsWith("(") && rep.endsWith(")")) {
 	rep = rep.substring(1, rep.length()-1);
       }
-      String[] base = ws_split_to_interned_array(rep);
-      return new ExplicitVarComparability(base, null, 0, null);
+      String[] new_base = ws_split_to_interned_array(rep);
+      return new ExplicitVarComparability(new_base, null, 0, null);
     }
   }
 

@@ -1,35 +1,12 @@
 package daikon.inv.twoScalar;
 
 import daikon.*;
-
-import java.lang.reflect.*;
+import daikon.inv.*;
 
 // I think this is likely to disappear, except possibly as a place to keep
 // common data like minimum and maximum.
 
 public class TwoScalarFactory {
-
-  private static Method Math_abs;
-  private static Method MathMDE_negate;
-  private static Method MathMDE_bitwiseComplement;
-
-  static {
-    try {
-      Class java_lang_Math = Class.forName("java.lang.Math");
-      Class utilMDE_MathMDE = Class.forName("utilMDE.MathMDE");
-      Class int_class = Integer.TYPE;
-      Class[] int_class_args = new Class[] { int_class };
-
-      Math_abs = java_lang_Math.getDeclaredMethod("abs", int_class_args);
-      MathMDE_negate
-	= utilMDE_MathMDE.getDeclaredMethod("negate", int_class_args);
-      MathMDE_bitwiseComplement
-	= utilMDE_MathMDE.getDeclaredMethod("bitwiseComplement", int_class_args);
-    } catch (Exception e) {
-      e.printStackTrace();
-      throw new Error(e.toString());
-    }
-  }
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
@@ -42,9 +19,9 @@ public class TwoScalarFactory {
     new IntComparison(ppt);
     for (int i=0; i<2; i++) {
       boolean b = (i==1);
-      new Function(ppt, Math_abs, b);
-      new Function(ppt, MathMDE_negate, b);
-      new Function(ppt, MathMDE_bitwiseComplement, b);
+      new Function(ppt, Functions.Math_abs, b);
+      new Function(ppt, Functions.MathMDE_negate, b);
+      new Function(ppt, Functions.MathMDE_bitwiseComplement, b);
     }
     new Linear(ppt);
     // new NonAliased(ppt);

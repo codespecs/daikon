@@ -7,5 +7,8 @@ all_force:
 tags:
 	cd ../.. && $(MAKE) tags
 
+clean:
+	cd ../.. && $(MAKE) clean
+
 audit:
 	cd ../.. && $(MAKE) audit

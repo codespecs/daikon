@@ -1,28 +1,29 @@
-package daikon.inv.twoScalar;
+package daikon.inv.sequence;
 
 import daikon.*;
 import daikon.inv.*;
 
 
 // Also see NonEqual, NonAliased
-class IntComparison extends TwoScalar {
+class EltIntComparison extends SingleSequence {
 
-  final static boolean debugIntComparison = false;
+  final static boolean debugEltIntComparison = false;
 
-  IntComparisonCore core;
+  boolean can_be_eq = false;
+  boolean can_be_lt = false;
+  boolean can_be_gt = false;
 
-  IntComparison(PptSlice ppt_) {
+  EltIntComparison(PptSlice ppt_) {
     super(ppt_);
-    core = new IntComparisonCore();
   }
 
-  public String repr() {
-    boolean can_be_eq = core.can_be_eq;
-    boolean can_be_lt = core.can_be_lt;
-    boolean can_be_gt = core.can_be_gt;
+//   EltIntComparison(Ppt ppt_, VarInfo var_info1_, VarInfo var_info2_) {
+//     super(ppt_, var_info1_, var_info2_);
+//   }
 
+  public String repr() {
     double probability = getProbability();
-    return "IntComparison(" + var1().name + "," + var2().name + "): "
+    return "EltIntComparison(" + var().name + "): "
       + "can_be_eq=" + can_be_eq
       + ",can_be_lt=" + can_be_lt
       + ",can_be_gt=" + can_be_gt
@@ -30,31 +31,44 @@ class IntComparison extends TwoScalar {
   }
 
   public String format() {
-    boolean can_be_eq = core.can_be_eq;
-    boolean can_be_lt = core.can_be_lt;
-    boolean can_be_gt = core.can_be_gt;
-
     if (justified() && (can_be_eq || can_be_gt || can_be_lt)) {
       String inequality = (can_be_lt ? "<" : can_be_gt ? ">" : "");
       String comparison = (can_be_eq ? "=" : "");
-      if (debugIntComparison) {
+      if (debugEltIntComparison) {
         System.out.println(repr()
                            + "; inequality=\"" + inequality + "\""
                            + ",comparison=\"" + comparison + "\"");
       }
-      return var1().name + " " + inequality + comparison + " " + var2().name;
+      return (var().name + " intra-sequence ordering: "
+              + inequality + comparison);
     } else {
       return null;
     }
   }
 
 
-  public void add_modified(int v1, int v2, int count) {
-    core.add_modified(v1, v2, count);
+  public void add_modified(int[] a, int count) {
+    if (can_be_lt && can_be_gt)
+      return;
+    for (int i=1; i<a.length; i++) {
+      int v1 = a[0];
+      int v2 = a[1];
+      if (v1 == v2)
+        can_be_eq = true;
+      else if (v1 < v2)
+        can_be_lt = true;
+      else
+        can_be_gt = true;
+    }
   }
 
   protected double computeProbability() {
-    return core.computeProbability();
+    if (can_be_lt && can_be_gt) {
+      return Invariant.PROBABILITY_NEVER;
+    } else {
+      // I don't know how to compute a better probability for this.
+      return 0;
+    }
   }
 
 }

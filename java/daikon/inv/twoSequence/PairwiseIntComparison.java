@@ -1,17 +1,18 @@
-package daikon.inv.twoScalar;
+package daikon.inv.twoSequence;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.twoScalar.*;
 
 
 // Also see NonEqual, NonAliased
-class IntComparison extends TwoScalar {
+class PairwiseIntComparison extends TwoSequence {
 
-  final static boolean debugIntComparison = false;
+  final static boolean debugPairwiseIntComparison = false;
 
   IntComparisonCore core;
 
-  IntComparison(PptSlice ppt_) {
+  PairwiseIntComparison(PptSlice ppt_) {
     super(ppt_);
     core = new IntComparisonCore();
   }
@@ -22,7 +23,7 @@ class IntComparison extends TwoScalar {
     boolean can_be_gt = core.can_be_gt;
 
     double probability = getProbability();
-    return "IntComparison(" + var1().name + "," + var2().name + "): "
+    return "PairwiseIntComparison(" + var1().name + "," + var2().name + "): "
       + "can_be_eq=" + can_be_eq
       + ",can_be_lt=" + can_be_lt
       + ",can_be_gt=" + can_be_gt
@@ -37,7 +38,7 @@ class IntComparison extends TwoScalar {
     if (justified() && (can_be_eq || can_be_gt || can_be_lt)) {
       String inequality = (can_be_lt ? "<" : can_be_gt ? ">" : "");
       String comparison = (can_be_eq ? "=" : "");
-      if (debugIntComparison) {
+      if (debugPairwiseIntComparison) {
         System.out.println(repr()
                            + "; inequality=\"" + inequality + "\""
                            + ",comparison=\"" + comparison + "\"");
@@ -49,8 +50,19 @@ class IntComparison extends TwoScalar {
   }
 
 
-  public void add_modified(int v1, int v2, int count) {
-    core.add_modified(v1, v2, count);
+  public void add_modified(int[] a1, int[] a2, int count) {
+    boolean can_be_eq = core.can_be_eq;
+    boolean can_be_lt = core.can_be_lt;
+    boolean can_be_gt = core.can_be_gt;
+
+    if (can_be_lt && can_be_gt)
+      return;
+    int len = Math.min(a1.length, a2.length);
+    for (int i=0; i<len; i++) {
+      int v1 = a1[i];
+      int v2 = a2[i];
+      core.add_modified(v1, v2, count);
+    }
   }
 
   protected double computeProbability() {

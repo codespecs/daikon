@@ -35,6 +35,10 @@ doc: $(JAVA_FILES)
 	javadoc -d doc daikon
 	jdk-add-munged-anchor-names doc/daikon/*.html
 
+lint:	jlint
+
+jlint:
+	jlint . | grep -v "Value of referenced variable '.*' may be NULL" | grep -v "Compare strings as object references" | perl -p -e 's:^daikon/::'
 
 # "(cd $inv; maudit daikon)" does not work; I don't understand why.
 # Unfortunately, this is way too much output; I need to filter it.

@@ -4,6 +4,9 @@ package daikon;
 import daikon.inv.*;
 import daikon.inv.scalar.*;
 import daikon.inv.twoScalar.*;
+import daikon.inv.sequence.*;
+import daikon.inv.twoSequence.*;
+import daikon.inv.sequenceScalar.*;
 import java.util.*;
 
 // This looks a *lot* like part of PptTopLevel.  (That is fine; its purpose
@@ -27,8 +30,11 @@ public class PptSliceGeneric extends PptSlice {
 
     if (arity == 1) {
       SingleScalarFactory.instantiate(this);
+      SingleSequenceFactory.instantiate(this);
     } else if (arity == 2) {
       TwoScalarFactory.instantiate(this);
+      SequenceScalarFactory.instantiate(this);
+      TwoSequenceFactory.instantiate(this);
     } else if (arity == 3) {
       throw new Error("arity 3 not yet implemented");
     } else {
@@ -101,22 +107,71 @@ public class PptSliceGeneric extends PptSlice {
     int num_invs = invs.size();
     if (arity == 1) {
       VarInfo vi = var_infos[0];
-      for (int i=0; i<num_invs; i++) {
-	SingleScalar inv = (SingleScalar)invs.elementAt(i);
-	int value = vi.getIntValue(full_vt);
-	int mod = vi.getModified(full_vt);
-	inv.add(value, mod, count);
+      if (vi.rep_type.isArray()) {
+        for (int i=0; i<num_invs; i++) {
+          SingleSequence inv = (SingleSequence)invs.elementAt(i);
+          int[] value = (int[])vi.getValue(full_vt);
+          int mod = vi.getModified(full_vt);
+          inv.add(value, mod, count);
+        }
+      } else {
+        for (int i=0; i<num_invs; i++) {
+          SingleScalar inv = (SingleScalar)invs.elementAt(i);
+          int value = vi.getIntValue(full_vt);
+          int mod = vi.getModified(full_vt);
+          inv.add(value, mod, count);
+        }
       }
     } else if (arity == 2) {
       VarInfo vi1 = var_infos[0];
       VarInfo vi2 = var_infos[1];
-      for (int i=0; i<num_invs; i++) {
-	TwoScalar inv = (TwoScalar)invs.elementAt(i);
-	int value1 = vi1.getIntValue(full_vt);
-	int mod1 = vi1.getModified(full_vt);
-	int value2 = vi2.getIntValue(full_vt);
-	int mod2 = vi2.getModified(full_vt);
-	inv.add(value1, mod1, value2, mod2, count);
+      int num_arrays = 0;
+      if (vi1.rep_type.isArray()) num_arrays++;
+      if (vi2.rep_type.isArray()) num_arrays++;
+      if (num_arrays == 0) {
+        for (int i=0; i<num_invs; i++) {
+          TwoScalar inv = (TwoScalar)invs.elementAt(i);
+          int value1 = vi1.getIntValue(full_vt);
+          int mod1 = vi1.getModified(full_vt);
+          int value2 = vi2.getIntValue(full_vt);
+          int mod2 = vi2.getModified(full_vt);
+          inv.add(value1, mod1, value2, mod2, count);
+        }
+      } else if (num_arrays == 1) {
+        if (num_invs > 0) {
+          // This is going to be the same every time; no use in
+          // testing each time through loop
+          VarInfo seqvi;
+          VarInfo sclvi;
+          SequenceScalar inv1 = (SequenceScalar)invs.elementAt(0);
+          // testing each time through loop
+          if (inv1.seq_first) {
+            seqvi = vi1;
+            sclvi = vi2;
+          } else {
+            seqvi = vi2;
+            sclvi = vi1;
+          }
+          for (int i=0; i<num_invs; i++) {
+            SequenceScalar inv = (SequenceScalar)invs.elementAt(i);
+            int[] value1 = (int[])seqvi.getValue(full_vt);
+            int mod1 = seqvi.getModified(full_vt);
+            int value2 = sclvi.getIntValue(full_vt);
+            int mod2 = sclvi.getModified(full_vt);
+            inv.add(value1, mod1, value2, mod2, count);
+          }
+        }
+      } else if (num_arrays == 2) {
+        for (int i=0; i<num_invs; i++) {
+          TwoSequence inv = (TwoSequence)invs.elementAt(i);
+          int[] value1 = (int[])vi1.getValue(full_vt);
+          int mod1 = vi1.getModified(full_vt);
+          int[] value2 = (int[])vi2.getValue(full_vt);
+          int mod2 = vi2.getModified(full_vt);
+          inv.add(value1, mod1, value2, mod2, count);
+        }
+      } else {
+        throw new Error("impossible");
       }
     } else if (arity == 3) {
       throw new Error("arity 3 not yet implemented");
