@@ -540,7 +540,11 @@ steps.
 @enumerate
 @item
 Download the dfec distribution from @uref{http://pag.lcs.mit.edu/daikon/};
-choose the version for your architecture and operating system.
+choose the version for your architecture and operating system.  The
+distribution includes a statically-linked and a dynamically-linked version
+of the dfec executable, and for the linux version, it also includes a
+distribution of Lackwit, a variable comparability analysis package that
+makes invariant detection more efficient.
 @item
 Unpack the tarfile.
 @example
@@ -558,14 +562,14 @@ This creates the file @file{daikon_runtime.o}; you will use it and
 @file{daikon_runtime.h}, which also appears in @file{front-end/c},
 when compiling C and C++ programs in which you wish to detect invariants.
 
-@item
-Obtain a dfec executable.
+@c  @item
+@c  Obtain a dfec executable.
 
-The easiest approach is to download a precompiled version of dfec from
-@url{http://pag.lcs.mit.edu/daikon/download/}.  Place that executable
-somewhere on your path.  (If no executable is available for your
-architecture, send mail to @email{daikon@@pag.lcs.mit.edu} and we may be able to produce
-an executable for you.)
+@c  The easiest approach is to download a precompiled version of dfec from
+@c  @url{http://pag.lcs.mit.edu/daikon/download/}.  Place that executable
+@c  somewhere on your path.  (If no executable is available for your
+@c  architecture, send mail to @email{daikon@@pag.lcs.mit.edu} and we may be able to produce
+@c  an executable for you.)
 
 @cindex EDG C/C++ front end
 @cindex Edison Design Group C/C++ front end
@@ -1027,7 +1031,7 @@ the names of procedures and variables that appear in the data trace file.
 Two instrumenters are part of Daikon:  @file{dfej} for Java programs and
 @file{dfec} for C and C++.  The names @file{dfej} and @file{dfec} stand
 for "Daikon front end for Java" and "Daikon front end for C/C++".  The
-Java and C front ends are fairly robust; the C++ front end is
+Java front end is fairly robust; the C/C++ front end is
 experimental.
 
 A front end for the IOA programming language is distributed separately.
@@ -1077,15 +1081,15 @@ file for the Daikon runtime library:
      dfec @var{...options...} @var{myprog}.cc
 @end example
 
-You'll most likely need to specify one or more command-line options, in
-particular @option{-I}; see @ref{dfec command-line arguments}.
+You may want to specify one or more command-line options;
+see @ref{dfec command-line arguments}.
 
 After dfec is run, you must compile the instrumented source, linking
 it with the object file for the Daikon runtime library and the stdc++
 library.  By default, dfec places instrumented source in the
 @file{daikon-instrumented/} directory.
 @example
-      gcc -o @var{myprog}.exe daikon-instrumented/@var{myprog}.cc daikon_runtime.o -lstdc++
+      g++ -o @var{myprog}.exe daikon-instrumented/@var{myprog}.cc $DAIKONDIR/front-end/c/daikon_runtime.o
 @end example
 
 In addition, you may want to specify the @option{-w} flag to gcc, to
@@ -1156,14 +1160,14 @@ way you did before; the only behavioral change is writing a
 though multiple @file{.decls} files might have been created (one for
 each source file) when the program was instrumented.
 
-By default, the instrumented Java program creates its @file{.dtrace}
+By default, the instrumented Java or C/C++ program creates its @file{.dtrace}
 file in the @file{daikon-output/} subdirectory of the current directory,
-and it overwrites any previously existing @file{.dtrace} file.
-
-By default, the instrumented C/C++ program creates its @file{.dtrace}
-file in the current directory, and if a @file{.dtrace} file already
-existed, it is appended to.
-@c XXX Is this true by default?  What about the DTRACEAPPEND environment?
+and if defaults to overwriting any previously existing @file{.dtrace} file.
+@c    For C/C++
+@c  programs, however, you can set the DTRACEAPPEND environmental variable,
+@c  which will cause each subsequent run of the program to append to the
+@c  @file{.dtrace} file, which is useful if your test suite requires multiple
+@c  invocations of the program.
 
 Environment variables DTRACEFILE and DTRACEAPPEND can override the default
 behaviors; see the documentation for the respective instrumenters.
@@ -2631,11 +2635,23 @@ first step.
 @c @file{daikon_runtime.h}, and 
 @c @file{daikon_runtime.o}.
 
-To instrument a C file, run @command{dfec} on it.  (You must supply the
-@option{-I} argument, and possibly others; @xref{dfec command-line
-arguments}.)  dfec produces instrumented source as well as a
-@file{.decls} file.  Do not run dfec on header files (ending in
-@file{.h}), only on C or C++ source files.
+To instrument a C file, run @command{dfec} on it.  
+@c  (You must supply the
+@c  @option{-I} argument, and possibly others; @xref{dfec command-line
+@c  arguments}.)  
+dfec produces instrumented source as well as a
+@file{.decls} file.  dfec must also be run on header files that contain
+code or definitions to be instrumented (header files typically end in
+@file{.h}), not only on C or C++ source files.  All files to be included
+in a single executable must be instrumented simultaneously, by passing
+them as multiple arguments to dfec - for example,
+@example
+  dfec file1.c file2.c file1.h file2.h
+@end example
+Even if you do not wish to instrument one of the files, it must be run
+through dfec so it can correctly interact with the instrumented versions
+of the other files.  See the @ref{dfec command-line arguments} section
+for instructions on how to exclude files from instrumentation.
 
 Running @command{dfec @var{arguments} myprog.c} creates
 a file named @file{myprog.cc} in the @file{daikon-instrumented/}
@@ -2651,7 +2667,8 @@ Before compiling the instrumented program, either copy or link
 @ref{Installing dfec}, for details on creating @file{daikon_runtime.o}.)
 
 Compile the instrumented program in the usual way, except that the link
-step should include @file{daikon_runtime.o} and the stdc++ library.
+step should include @file{daikon_runtime.o}, and the compiler should be
+@prog{g++}, since the instrumented files are C++ files.
 For instance,
 @example
   gcc -o @var{exefile} myprog.c
@@ -2659,7 +2676,7 @@ For instance,
 @noindent
 would become
 @example
-  gcc -o @var{exefile} -lstdc++ daikon-instrumented/myprog.cc daikon_runtime.o
+  g++ -o @var{exefile} daikon-instrumented/myprog.cc daikon_runtime.o
 @end example
 
 @cindex DTRACEFILE environment variable
@@ -2691,19 +2708,22 @@ This section describes the command-line options dfec accepts.
 @table @option
 
 @item -I@var{path}
-Adds @var{path} to the end of the system include path.  @strong{You must
-supply an @option{-I} option for each directory on the system include path.}
+Adds @var{path} to the end of the system include path.  The system
+include path that @prog{gcc} uses is automatically detected by dfec,
+so you should not have to use this;  if there are additional include
+paths you wish to use, or if @prog{gcc} defaults to using header files
+that cannot be processed by @prog{dfec}, you should use this option.
 For example,
 @example
-  dfec -I/usr/local/include -I/usr/include myprog.c
+  dfec -I/usr/local/.../2.95.3/include myprog.c
 @end example
-@noindent
-To determine your system include path, run
-@example
-touch searchpath.cc; gcc -v -E searchpath.cc > /dev/null; rm searchpath.cc
-@end example
-@noindent
-and look for what follows "@samp{#include <...> search starts here:}".
+@c  @noindent
+@c  To determine your system include path, run
+@c  @example
+@c  touch searchpath.cc; gcc -v -E searchpath.cc > /dev/null; rm searchpath.cc
+@c  @end example
+@c  @noindent
+@c  and look for what follows "@samp{#include <...> search starts here:}".
 
 
 @c [this is deprecated - we want the c++ searchpath only.]
@@ -2717,11 +2737,13 @@ and look for what follows "@samp{#include <...> search starts here:}".
 
 
 @item -D@var{macro}=@var{value}
-Defines the preprocessor macro @var{macro} to be @var{value}.  For example,
-to get dfec to correctly traverse the include files on our system, we use
-@example
-  dfec @var{...includepath...} -D__GNUG__=1 -D__null=0
-@end example
+Defines the preprocessor macro @var{macro} to be @var{value}.
+@c    For example,
+@c  to get dfec to correctly traverse the include files on our system, we use
+@c  @example
+@c    dfec @var{...includepath...} -D__GNUG__=1 -D__null=0
+@c  @end example
+
 
 @cindex DTRACEFILE environment variable
 @cindex environment variable DTRACEFILE
@@ -2783,6 +2805,42 @@ which is @file{@var{myprog}.disambig} in the same directory as the
 @file{.decls} file.  For more information, see
 @ref{Pointer type disambiguation}.
 
+@item -l
+This is the only command-line switch which can be used in the midst of the
+list of filenames.  It precedes a file which should not be instrumented.
+For instance, if you have two source files, @file{file1.c} and @file{file2.c},
+and each has their own header file, but you don't want to instrument the
+functions defined in @file{file2.c}, you would instrument as follows:
+@example
+  dfec file1.c -l file2.c file1.h file2.h
+@end example
+
+@item --help
+Displays a usage message.
+
+@item --no-lackwit
+Turns off Lackwit postprocessing of the @file{.decls} file.  You can also
+turn off Lackwit postprocessing by unsetting the LACKWIT_HOME environment
+variable.
+
+@item --struct-depth=@var{N}
+For nested or recursive types (structs or classes that have members that
+are also structs or classes), this argument specifies how deep to instrument.
+For example, given a simple linked list structure as follows:
+@example
+struct node {
+  struct node *next;
+  int val;
+} list;
+@end example
+Setting the struct instrumentation depth to 1 would cause the runtime library
+to output @var{node.val} and @var{node.next}, but setting it to 2 would cause
+the runtime library to output @var{node.val}, @var{node.next},
+@var{node.next->val}, and @var{node.next->next}.  The default instrumentation
+depth is 3, which allows Daikon to capture invariants about nonadjacent nodes,
+but also causes the dtrace file to increase dramatically in size.
+
+
 @end table
 
 When conflicting options are specified (for instance, both
@@ -2800,7 +2858,7 @@ refer to arrays or to single values.  For example, in
 @example
 void sum(int * array, int * result) @{ ... @}  // definition
 ...
-sum(a[], &total);  // use
+sum(a, &total);  // use
 @end example
 @noindent
 the first pointer parameter refers to an array while the second refers to
