@@ -1,5 +1,15 @@
 package daikon.repair;
 import daikon.*;
+import daikon.VarInfoName.Slice;
+import daikon.VarInfoName.Elements;
+import daikon.VarInfoName.Simple;
+import daikon.VarInfoName.QuantHelper.FreeVar;
+import daikon.VarInfoName.SizeOf;
+import daikon.VarInfoName.FunctionOf;
+import daikon.VarInfoName.Field;
+import daikon.VarInfoName.TypeOf;
+import daikon.VarInfoName.Add;
+import daikon.VarInfoName.Subscript;
 import java.util.*;
 
 /**
@@ -16,14 +26,39 @@ public class Repair {
 	    repair=new Repair();
 	return repair;
     }
-    Hashtable settable=new Hashtable();
-    Hashtable relationtable=new Hashtable();
-    Hashtable definitiontable=new Hashtable();
+    Hashtable settable=new Hashtable(); /*Tuple->String*/
+    Hashtable relationtable=new Hashtable(); /*Tuple->String*/
+    Hashtable definitiontable=new Hashtable(); /*Ppt->Definition*/
     int tagnumber=0;
     boolean forceset=false;
     Hashtable quantifiers=new Hashtable();
 
-    Definition d=new Definition();
+    /** Creates a copy of the current Repair object state.  This copy
+     * can be used to revert the state if a problem with the current
+     * invariant is discovered. */
+
+    public Repair createCopy(Ppt ppt) {
+        Repair repair=new Repair();
+        repair.settable.putAll(settable);
+        repair.relationtable.putAll(relationtable);
+        repair.definitiontable.putAll(definitiontable);
+        repair.tagnumber=tagnumber;
+        repair.forceset=forceset;
+        repair.quantifiers.putAll(quantifiers);
+        repair.varcount=varcount;
+        if (repair.definitiontable.containsKey(ppt)) {
+            Definition d=(Definition)repair.definitiontable.get(ppt);
+            Definition newd=(Definition)d.clone();
+            repair.definitiontable.put(ppt,newd);
+        }
+        return repair;
+    }
+
+    /** Sets the current Repair object. */
+
+    public static void changeRepairObject(Repair r) {
+        Repair.repair=r;
+    }
 
     public void noForceSet() {
 	forceset=false;
@@ -53,14 +88,109 @@ public class Repair {
 	appendQuantifier("s_quant","Special");
     }
 
+    /** This method converts an array into a relation, and returns the
+     * relation. */
+    public String convertArraytoRelation(Ppt ppt, VarInfoName vin, VarInfo vi) {
+        VarInfoName vin2=null;
+        VarInfoName lower, upper;
+        if (vin instanceof Elements) {
+            Elements sequence = (Elements) vin;
+            lower = sequence.getLowerBound();
+            upper = sequence.getUpperBound();
+            vin2=sequence.term;
+        } else if (vin instanceof Slice) {
+            Slice slice = (Slice) vin;
+            lower = slice.getLowerBound();
+            upper = slice.getUpperBound();
+            vin2=slice.sequence.term;
+        } else {
+            // unreachable; placate javac
+            throw new IllegalStateException();
+        }
+
+        String intervalset=generateRangeSet(ppt,lower,upper);
+
+	Tuple t=new Tuple(vi.name.name()+".arrayrelation",ppt);
+
+	if (relationtable.containsKey(t)) {
+	    String relationname=(String)relationtable.get(t);
+	    return relationname;
+	}
+	String relationname=generateRelationName(vin2.name());
+
+	String rangeset=generateSetName("R"+vin2.name());
+	String newrule="[forall s in "+intervalset+"], true => <s,"+vin2.name()+"[s]> in "+relationname+";";
+	String newrule2="[forall s in "+intervalset+"], true => "+vin2.name()+"[s] in "+rangeset+";";
+
+	Definition d=(Definition)definitiontable.get(ppt);
+	d.rangetable.put(relationname,rangeset);
+	String setdef=relationname+": "+intervalset+"->"+rangeset+";";
+	appendModelRule(ppt,newrule);
+	appendModelRule(ppt,newrule2);
+	appendSetRelation(ppt,setdef);
+	appendSetRelation(ppt,"set "+rangeset+"("+getTypedef(ppt,vin2.name())+");");
+	relationtable.put(t,relationname);
+	return relationname;
+    }
+
+    /** This method generates a set contain the range [0..var] */
+
+    public String generateRangeSet(Ppt ppt, VarInfoName lower, VarInfoName upper) {
+	Tuple t=new Tuple(lower.name()+"-"+upper.name()+".rangeset",ppt);
+
+	if (settable.containsKey(t)) {
+	    String setname=(String)settable.get(t);
+	    return setname;
+	}
+	String setname=generateSetName("Range");
+	String newrule="[for i="+lower.name()+" to "+upper.name()+"], true => i in "+setname+";";
+	String setdef="set "+setname+"(int);";
+	appendModelRule(ppt,newrule);
+	appendSetRelation(ppt,setdef);
+
+        if (lower.name().indexOf(".")!=-1) {
+            Set roots=getRoot(lower);
+            for(Iterator it=roots.iterator();it.hasNext();) {
+                String lowerrootvar=((VarInfoName)it.next()).name();
+                String vardef="";
+                if (!getType(ppt,lowerrootvar).equals("int"))
+                    vardef=getType(ppt,lowerrootvar)+" "+lowerrootvar+";";
+                else
+                    vardef="int "+lowerrootvar+";";
+                appendGlobal(ppt,vardef);
+            }
+        }
+
+        if (upper.name().indexOf(".")!=-1) {
+            Set roots=getRoot(upper);
+            for(Iterator it=roots.iterator();it.hasNext();) {
+                String upperrootvar=((VarInfoName)it.next()).name();
+                String vardef="";
+                if (!getType(ppt,upperrootvar).equals("int"))
+                    vardef=getType(ppt,upperrootvar)+" "+upperrootvar+";";
+                else
+                    vardef="int "+upperrootvar+";";
+                appendGlobal(ppt,vardef);
+            }
+        }
+
+	settable.put(t,setname);
+	return setname;
+    }
+
+    int varcount=0;
+    public String getQuantifierVar() {
+        return "i"+(varcount++);
+    }
+
     /** This method generates the current quantifier string. */
     public String getQuantifiers() {
 	String str="";
 	for(Iterator it=quantifiers.keySet().iterator();it.hasNext();) {
-	    String key=(String)it.next();
-	    if (!str.equals(""))
-		str+=",";
-	    str+="forall "+key+" in "+((String)quantifiers.get(key));
+          String key=(String)it.next();
+          if (!str.equals(""))
+              str+=",";
+          str+="forall "+key+" in "+((String)quantifiers.get(key));
 	}
 	return str;
     }
@@ -117,6 +247,8 @@ public class Repair {
 	    String setdef="set "+setname+"("+getTypedef(ppt, programvar)+");";
 	    appendSetRelation(ppt,setdef);
 	    settable.put(t,setname);
+            String newruleset="[forall s in Special], true => "+programvar+" in "+setname+";";
+            appendModelRule(ppt,newruleset);
 	}
 
 	{
@@ -143,7 +275,7 @@ public class Repair {
 	    //Generate special set
 	    d.generatespecial=true;
 	    appendSetRelation(ppt,"set Special(int);");
-	    appendModelRule(ppt,"[],true => 0 in Special");
+	    appendModelRule(ppt,"[],true => 0 in Special;");
 	}
 	//store relation in table and return it
 	relationtable.put(t,relationname);
@@ -190,6 +322,47 @@ public class Repair {
 	return setname;
     }
 
+    /** This method returns the roots of a VarInfoName. */
+
+    public static Set getRoot(VarInfoName vi) {
+        while(true) {
+            if (vi instanceof Simple) {
+                HashSet hs=new HashSet();
+                hs.add(vi);
+                return hs;
+            } else if (vi instanceof FreeVar) {
+                HashSet hs=new HashSet();
+                hs.add(vi);
+                return hs;
+            } else if (vi instanceof SizeOf) {
+                vi=((SizeOf)vi).sequence;
+            } else if (vi instanceof FunctionOf) {
+                vi=((FunctionOf)vi).argument;
+            } else if (vi instanceof Field) {
+                vi=((Field)vi).term;
+            } else if (vi instanceof TypeOf) {
+                vi=((TypeOf)vi).term;
+            } else if (vi instanceof Add) {
+                vi=((Add)vi).term;
+            } else if (vi instanceof Elements) {
+                vi=((Elements)vi).term;
+            } else if (vi instanceof Subscript) {
+                Set a=getRoot(((Subscript)vi).sequence);
+                a.addAll(getRoot(((Subscript)vi).index));
+                return a;
+            } else if (vi instanceof Slice) {
+                Set a=getRoot(((Slice)vi).sequence);
+                a.addAll(getRoot(((Slice)vi).i));
+                a.addAll(getRoot(((Slice)vi).j));
+                return a;
+            } else {
+                System.out.println("Unrecognized var: "+vi.name());
+                Set a=new HashSet();
+                return a;
+            }
+        }
+    }
+
     /** This method returns the model definition rules for a given
      * program point. */
 
@@ -223,7 +396,19 @@ public class Repair {
     /** This method returns the type of a variable. */
 
     static public String getType(Ppt ppt, String var) {
-	VarInfo vi=ppt.findVar(var);
+        VarInfo vi=null;
+        try {
+            vi=ppt.findVar(var);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "$error";
+        }
+        if (vi==null) {
+            System.out.println("Unknown var: "+var);
+            return "$unknown_var";
+        }
+        if (vi.type==null)
+            return "$unknown_type";
 	String str=vi.type.toString();
 	while(str.indexOf("[]")!=-1) {
 	    int location=str.indexOf("[]");
@@ -248,7 +433,7 @@ public class Repair {
     private String generateSetName(String programvar) {
 	String setname="S"+programvar+tagnumber;
 	tagnumber++;
-	return setname;
+	return escapeString(setname);
     }
 
     /** This method generates a relation name from a program
@@ -257,7 +442,7 @@ public class Repair {
     private String generateRelationName(String fieldvar) {
 	String setname="R"+fieldvar+tagnumber;
 	tagnumber++;
-	return setname;
+	return escapeString(setname);
     }
 
     /** This method appents a set or relation definition for a given
@@ -291,6 +476,10 @@ public class Repair {
 	}
 	Definition d=(Definition)definitiontable.get(p);
 	d.appendGlobal(s);
+    }
+
+    public static String escapeString(String s) {
+        return s.replace('.','_');
     }
 
     /** Generic tuple class.  Implements hashcode and equals.  */
@@ -337,9 +526,14 @@ public class Repair {
 	boolean generatespecial=false;
 
 	Hashtable rangetable=new Hashtable();
+        HashSet globaltable=new HashSet();
 
 	void appendGlobal(String g) {
-	    globaldecls+=g+"\n";
+            /* Ensure that we haven't already defined the global. */
+            if (!globaltable.contains(g)) {
+                globaltable.add(g);
+                globaldecls+=g+"\n";
+            }
 	}
 
 	void appendSetRelation(String sr) {
@@ -348,5 +542,16 @@ public class Repair {
 	void appendModelRule(String mr) {
 	    modelrule+=mr+"\n";
 	}
+
+        public Object clone() {
+            Definition newd=new Definition();
+            newd.setrelation=setrelation;
+            newd.modelrule=modelrule;
+            newd.globaldecls=globaldecls;
+            newd.generatespecial=generatespecial;
+            newd.rangetable.putAll(rangetable);
+            newd.globaltable.addAll(globaltable);
+            return newd;
+        }
     }
 }

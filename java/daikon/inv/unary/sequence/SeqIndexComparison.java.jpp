@@ -135,9 +135,12 @@
 package daikon.inv.unary.sequence;
 
 import daikon.*;
+import daikon.VarInfoName.Slice;
+import daikon.VarInfoName.Elements;
 import daikon.inv.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.suppress.*;
+import daikon.repair.Repair;
 
 import utilMDE.*;
 import java.util.Iterator;
@@ -273,6 +276,7 @@ public class CLASSNAME extends SUPERCLASS {
     // format_dbc() can handle all the Java family output.
 
     if (format == OutputFormat.DAIKON) return format_daikon();
+    if (format == OutputFormat.REPAIR) return format_repair();
     if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.ESCJAVA) return format_esc();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
@@ -288,6 +292,35 @@ public class CLASSNAME extends SUPERCLASS {
              + EQUALSstring + " i";
     } else {
       return viname.name() + " " + EQUALSstring + " (index)";
+    }
+  }
+
+  public String format_repair() {
+    VarInfoName viname = var().name;
+    if ((new VarInfoName.ElementsFinder(viname)).elems() != null) {
+      VarInfoName needy=var().name;
+      VarInfoName lower, upper;
+      if (needy instanceof Elements) {
+        Elements sequence = (Elements) needy;
+        lower = sequence.getLowerBound();
+        upper = sequence.getUpperBound();
+      } else if (needy instanceof Slice) {
+        Slice slice = (Slice) needy;
+        lower = slice.getLowerBound();
+        upper = slice.getUpperBound();
+      } else {
+        // unreachable; placate javac
+        throw new IllegalStateException();
+      }
+
+      String set=Repair.getRepair().generateRangeSet(var().ppt,lower,upper);
+
+      String relation=Repair.getRepair().convertArraytoRelation(var().ppt,var().name,var());
+      String index=Repair.getRepair().getQuantifierVar();
+      Repair.getRepair().appendQuantifier(index,set);
+      return index+"."+relation+EQUALSstring+index;
+    } else {
+      return "$noprint("+viname.repair_name(var()) + " " + EQUALSstring + " (index))";
     }
   }
 

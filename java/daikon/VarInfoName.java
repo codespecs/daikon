@@ -1725,8 +1725,21 @@ public abstract class VarInfoName
       return name_impl("");
     }
     protected String repair_name_impl(VarInfo vi) {
-      return repair_name_impl("$noprint",vi);
+      // Figure out what to replace needy with, and the appropriate
+      // bounds to use
+      VarInfoName lower, upper;
+
+      lower = getLowerBound();
+      upper = getUpperBound();
+
+
+      String set=Repair.getRepair().generateRangeSet(vi.ppt,lower,upper);
+      String relation=Repair.getRepair().convertArraytoRelation(vi.ppt,this,vi);
+      String index=Repair.getRepair().getQuantifierVar();
+      Repair.getRepair().appendQuantifier(index,set);
+      return index+"."+relation;
     }
+
     protected String repair_name_impl(String index,VarInfo vi) {
       return term.repair_name(vi)+"["+index+"]";
     }
@@ -2007,12 +2020,20 @@ public abstract class VarInfoName
     }
 
     protected String repair_name_impl(VarInfo v) {
-      return sequence.repair_name_impl("" +
-                                ((i == null) ? "0" : i.repair_name(v)) +
-                                ".." +
-                                ((j == null) ? ""  : j.repair_name(v))
-                                ,v);
+      // Figure out what to replace needy with, and the appropriate
+      // bounds to use
+      VarInfoName lower, upper;
+
+      lower = getLowerBound();
+      upper = getUpperBound();
+
+      String set=Repair.getRepair().generateRangeSet(v.ppt,lower,upper);
+      String relation=Repair.getRepair().convertArraytoRelation(v.ppt,this,v);
+      String index=Repair.getRepair().getQuantifierVar();
+      Repair.getRepair().appendQuantifier(index,set);
+      return index+"."+relation;
     }
+
     protected String esc_name_impl() {
       // return the default implementation for now.
       // return name_impl();

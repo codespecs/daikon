@@ -117,6 +117,8 @@ public final class PrintInvariants {
       "      Suppress display of logically redundant invariants.",
       "  --" + Daikon.esc_output_SWITCH,
       "      Write output in ESC format.",
+      "  --" + Daikon.repair_output_SWITCH,
+      "      Write output in REPAIR format.",
       "  --" + Daikon.simplify_output_SWITCH,
       "      Write output in Simplify format.",
       "  --" + Daikon.ioa_output_SWITCH,
@@ -169,6 +171,7 @@ public final class PrintInvariants {
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(Daikon.suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.esc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(Daikon.repair_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.simplify_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.ioa_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.test_ioa_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -943,10 +946,12 @@ public final class PrintInvariants {
       }
 
     } else if (Daikon.output_style==OutputFormat.REPAIR) {
-	inv_rep = inv.format_using(Daikon.output_style);
-        if (inv_rep.indexOf ("$noprinttest") != -1) {
-	    return;
-        }
+      Repair oldstate=Repair.getRepair().createCopy(ppt);//Store copy of current repair state;
+      inv_rep = inv.format_using(Daikon.output_style);
+      if (inv_rep.indexOf ("$noprint") != -1) {
+        Repair.changeRepairObject(oldstate); //revert state
+        return;
+      }
     } else {
       throw new IllegalStateException("Unknown output mode");
     }
@@ -974,7 +979,7 @@ public final class PrintInvariants {
     } else if (Daikon.output_style == OutputFormat.REPAIR) {
 	String quantifiers=Repair.getRepair().getQuantifiers();
 	Repair.getRepair().reset();
-	out.println("["+quantifiers+"],"+inv_rep);
+	out.println("["+quantifiers+"],"+inv_rep+";");
     } else {
       out.println(inv_rep);
     }

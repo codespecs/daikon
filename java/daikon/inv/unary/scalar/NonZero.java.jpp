@@ -127,6 +127,19 @@ public class NONZERO
   }
 
   public String format_using(OutputFormat format) {
+    if (format == OutputFormat.REPAIR) {
+      if (zero(format).equals("null")) {
+        Repair.getRepair().setForceSet();
+        String repname=var().name.repair_name(var());
+        String ret="sizeof("+repname+")=1";
+        Repair.getRepair().noForceSet();
+        return ret;
+      } else {
+        String name = var().name.repair_name(var());
+	return name+"!="+zero(format);
+      }
+    }
+
     String name = var().name.name_using(format, var());
 
     if (format.isJavaFamily()) {
@@ -135,14 +148,6 @@ public class NONZERO
       #else
         return name + " != " + zero(format);
       #endif
-    }
-
-    if (format == OutputFormat.REPAIR) {
-      if (zero(format).equals("null")) {
-        Repair.getRepair().setForceSet();
-        return "sizeof("+name+")=1;";
-      } else
-	return name+"!="+zero(format)+";";
     }
 
     if ((format == OutputFormat.DAIKON)

@@ -1186,6 +1186,10 @@ public final class CLASSNAME
       return format_simplify(x, y, z, a, b, c, d);
     }
 
+    if (format == OutputFormat.REPAIR) {
+      return format_repair(x, xvi, y, yvi, z, zvi, a, b, c, d);
+    }
+
     if ((format.isJavaFamily()))
     {
       #if defined(TYPEDOUBLE)
@@ -1256,7 +1260,7 @@ public final class CLASSNAME
       str_d = Invariant.simplify_format_long(id);
     }
 
-    // ax + by + cz + d = 0
+
     String str_z = z.simplify_name();
     String str_x = x.simplify_name();
     String str_y = y.simplify_name();
@@ -1267,6 +1271,53 @@ public final class CLASSNAME
     String str_axPbyPczPd = (dd == 0.0) ? str_axPbyPcz :
       "(+ " + str_axPbyPcz + " " + str_d + ")";
     return "(EQ 0 " + str_axPbyPczPd + ")";
+  }
+
+  public static String format_repair(VarInfoName x, VarInfo xvi, VarInfoName y,
+                                     VarInfo yvi, VarInfoName z, VarInfo zvi,
+                                     double da, double db, double dc, double dd) {
+    int ia = (int) da;
+    int ib = (int) db;
+    int ic = (int) dc;
+    int id = (int) dd;
+
+    String str_x = x.repair_name(xvi);
+    String str_y = y.repair_name(yvi);
+    String str_z = z.repair_name(zvi);
+
+    String str_a, str_b, str_c, str_d;
+    if (ia != da || ib != db || ic != dc || id != dd) {
+      // floating point
+
+      // Disabled for the moment, since mixing integers and floating
+      // literals seems to give Simplify indigestion. For instance:
+      // (BG_PUSH (<= w 3))
+      // (BG_PUSH (EQ 0 (* w 2.0d0)))
+      // (<= w 1)
+
+//       str_a = Invariant.simplify_format_double(da);
+//       str_b = Invariant.simplify_format_double(db);
+//       str_c = Invariant.simplify_format_double(dc);
+//       str_d = Invariant.simplify_format_double(dd);
+      return "$noprint("+da+"*"+str_x+"+"+db+"*"+str_y+
+        "+"+dc+"*"+str_z+"+"+dd+"=0)";
+    } else {
+      // integer
+      str_a = Invariant.simplify_format_long(ia);
+      str_b = Invariant.simplify_format_long(ib);
+      str_c = Invariant.simplify_format_long(ic);
+      str_d = Invariant.simplify_format_long(id);
+    }
+
+    // ax + by + cz + d = 0
+
+    if (str_x.indexOf(".")!=-1) {
+      return str_x+"=(-"+str_b+"*"+str_y+"-"+str_c+"*"+str_z+"-"+str_d+ ")/"+str_a;
+    } else if (str_y.indexOf(".")!=-1) {
+      return str_y+"=(-"+str_a+"*"+str_x+"-"+str_c+"*"+str_z+"-"+str_d+ ")/"+str_b;
+    } else if (str_z.indexOf(".")!=-1) {
+      return str_z+"=(-"+str_a+"*"+str_x+"-"+str_b+"*"+str_y+"-"+str_d+ ")/"+str_c;
+    } else return "$noprint("+str_a+"*"+str_x+"+"+str_b+"*"+str_y+ "+"+str_c+"*"+str_z+"+"+str_d+"=0)";
   }
 
   public String format_using(OutputFormat format,

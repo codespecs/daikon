@@ -312,6 +312,14 @@ public class LOWERBOUND
 #endif
     }
 
+    if (format == OutputFormat.REPAIR) {
+#ifdef BASE_FLOAT
+      return "$noprint(" + name + " " + GTESTR + " " + MIN1 + ")";
+#else
+      return "(" + name + " " + GTESTR + " " + MIN1 + ")";
+#endif
+    }
+
     return format_unimplemented(format);
   }
 #else
@@ -322,6 +330,8 @@ public class LOWERBOUND
 
     if (format == OutputFormat.DAIKON) {
       return format_daikon();
+    } else if (format == OutputFormat.REPAIR) {
+      return format_repair();
     } else if (format == OutputFormat.IOA) {
       return format_ioa();
     } else if (format == OutputFormat.SIMPLIFY) {
@@ -335,6 +345,11 @@ public class LOWERBOUND
   // ELTLOWEr || ELTUPPEr
   public String format_daikon() {
     return var().name.name() + " elements " + GTESTR + " " + MIN1;
+  }
+
+  // ELTLOWEr || ELTUPPEr
+  public String format_repair() {
+    return "$noprint("+var().name.name() + " elements " + GTESTR + " " + MIN1+")";
   }
 
   public String format_esc() {

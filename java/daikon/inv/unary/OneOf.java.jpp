@@ -562,7 +562,9 @@ public final class ONEOFSCALAR
         if (elts[0] == 0) {
           String varname = REPAIR_NAME;
 	  Repair.getRepair().setForceSet();
-          return "sizeof("+varname + ") = 0;";
+          String str="sizeof("+varname + ") = 0;";
+	  Repair.getRepair().noForceSet();
+          return str;
         } else {
 	//One value case
 		return "$noprint(onevalue)";
@@ -578,18 +580,18 @@ public final class ONEOFSCALAR
         Assert.assertTrue(num_elts == 1);
         INT value = elts[0];
         if (value.length == 0) {
-          return varname + " = []";
+          return "$noprint("+varname + " = [])";
         } else if ((value.length == 1) && (value[0] == 0)) {
-          return varname + "[0] = null";
+          return "$noprint("+varname + "[0] = null)";
         } else if (no_nulls(0)) {
-          return varname + " contains no nulls and has only one value, of length " + value.length;
+          return "$noprint("+varname + " contains no nulls and has only one value, of length " + value.length+")";
         } else if (all_nulls(0)) {
-          return varname + " contains only nulls and has only one value, of length " + value.length;
+          return "$noprint("+varname + " contains only nulls and has only one value, of length " + value.length+")";
         } else {
-          return varname + " has only one value, of length " + value.length;
+          return "$noprint("+varname + " has only one value, of length " + value.length+")";
         }
       } else {
-        return varname + " = " + TOSTRING(elts[0]);
+        return "$noprint("+varname + " = " + TOSTRING(elts[0])+")";
       }
 #else
       String varname = REPAIR_NAME;

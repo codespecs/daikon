@@ -704,6 +704,32 @@ public final class CLASSNAME
       }
     }
 
+    if (format == OutputFormat.REPAIR) {
+      int ia = (int) a;
+      int ib = (int) b;
+
+      String prefix="";
+      String postfix="";
+
+      String str_a, str_b;
+      if (ia == a && ib == b) {
+        // integer
+        str_a = Invariant.simplify_format_long(ia);
+        str_b = Invariant.simplify_format_long(ib);
+      } else {
+        str_a=Double.toString(a);
+        str_b=Double.toString(b);
+
+        prefix="$noprint(";
+        postfix=")";
+      }
+
+      if (y.repair_name(viy).indexOf(".")!=-1)
+        return prefix+y.repair_name(viy)+"="+str_a+"*"+x.repair_name(vix)+"+"+str_b+postfix;
+      else
+        return prefix+x.repair_name(vix)+"=("+y.repair_name(viy)+"-"+str_b+")"+"/"+str_a+postfix;
+    }
+
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.ESCJAVA)
         || (format == OutputFormat.IOA))
