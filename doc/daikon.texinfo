@@ -32,9 +32,9 @@
 @c @setchapternewpage odd
 
 @c @ifinfo
-@c This is a short example of a complete Texinfo file.
+@c @c This text appears only in the Info Version.
 @c 
-@c Copyright 1990 Free Software Foundation, Inc.
+@c Copyright 1998-2005
 @c @end ifinfo
 
 @c Avoid black boxes marking overfull hboxes in TeX output.
@@ -320,6 +320,7 @@ Troubleshooting
 
 Problems running Daikon
 
+* No samples::                  
 * No return from procedure::    
 * Out of memory::               
 * Simplify errors::             
@@ -3227,7 +3228,8 @@ size(bar.numbers[])-1 in bar.numbers[]
 @node Online execution, Installing Kvasir, Pointer type disambiguation, Kvasir
 @subsection Online execution
 
-@cindex online execution of Daikon
+@cindex online execution, for C programs
+@cindex on-the-fly execution, for C programs
 
 The term ``online execution'' refers to running Daikon at the same time
 as the target program, without writing any information to a file.  This
@@ -6864,6 +6866,7 @@ understand Daikon's operation; @xref{Command line options}.
 
 
 @menu
+* No samples::                  
 * No return from procedure::    
 * Out of memory::               
 * Simplify errors::             
@@ -6873,7 +6876,53 @@ understand Daikon's operation; @xref{Command line options}.
 * Daikon runs slowly::          
 @end menu
 
-@node    No return from procedure, Out of memory, Daikon problems, Daikon problems
+
+@node    Too much output, No return from procedure, Daikon problems, Daikon problems
+@subsection Too much output
+
+@cindex too much output from Daikon
+
+Sometimes, Daikon may produce a very large number of seemingly
+irrelevant properties that obscure the facts that you were hoping to
+see.  Usually, such output indicates a deficiency in your test suite:
+your test suite is so small that many arbitrary properties hold over it.
+This happens when the test suite does not execute the code with a broad
+distribution of values, but only executes the code with a few specific
+values.  This problem disappears if you augment your test suite so that
+it exercises the code with more different values.
+
+Each property that Daikon produces is a true fact about how the target
+program behaved.  However, some of these facts would be true for any
+execution of the target program, and others are accidents of the
+particular executions that Daikon observed.  Both types of facts are
+useful:  the former tell you about your program, and the latter tell you
+about your test suite (and how to improve it!).
+
+
+@node    No samples, No return from procedure, Daikon problems, Daikon problems
+@subsection No samples and no output
+
+@cindex no output from Daikon
+
+When Daikon produces no output, that is usually a result of it having no
+samples from which to generalize.  Use the @option{--output_num_samples}
+flag to Daikon to find out how many samples it is observing.  This
+section tells you how to debug your problem if the
+answer is 0, but you believe that there are samples in the file you are
+feeding to Daikon.
+
+Daikon proceses only ENTER program points that have a matching EXIT
+program point.  (You can disable this behavior with the
+@option{--nohierarchy} switch to Daikon, see @xref{Command line
+options}.)  If no EXIT program points are present (perhaps every
+execution threw an exception, or you filtered out all the EXIT program
+points), then Daikon will not process any of the ENTER program points.
+You can make Daikon print information about unmatched procedure entries
+via the @samp{daikon.FileIO.unmatched_procedure_entries_quiet}
+configuration option (@pxref{General configuration options}).
+
+
+@node    No return from procedure, Out of memory, No samples, Daikon problems
 @subsection No return from procedure
 
 @cindex no return from procedure, warning
@@ -6891,6 +6940,7 @@ When this happens, the entry sample is ignored; the rationale is that
 the particular values seen led to exception exit, were probably
 illegal, and so should not be factored into the method preconditions.
 
+@cindex invocation nonce
 @cindex nonce, invocation
 @cindex this_invocation_nonce
 
@@ -6909,7 +6959,6 @@ uses the nonce technique.  Otherwise, it uses the stack technique.
 Which technique is used is determined by the front end, which creates
 the @file{.dtrace} file, and typically cannot be controlled by the
 user.
-
 
 
 @node    Out of memory, Simplify errors, No return from procedure, Daikon problems
@@ -7050,21 +7099,6 @@ message instead.  The message also shows exactly what Java method needs
 to be implemented to correct the problem.  You can ignore such messages,
 or else use an output formatting that can handle those invariants.
 Annotate (@pxref{Annotate}) automatically ignores unformattable invariants.
-
-
-@node    JVM initialization error, Daikon runs slowly, Method needs to be implemented, Daikon problems
-@subsection JVM initialization error
-
-@cindex JVM initialization error
-@cindex initialization error, JVM
-@cindex Vector, dfej cannot instrument
-
-Instrumenting Vector prevents the Java Virtual Machine from initializing
-properly, because instrumented classes attempt to use the JVM's
-facilities when they are loaded, but the JVM loads Vector during its own
-initialization.  The same problem may be true for other classes used
-internally by the JVM@.  Users can create a new class MyVector, replace
-uses of Vector by MyVector, and then instrument MyVector.
 
 
 @node    Daikon runs slowly,  , JVM initialization error, Daikon problems
@@ -7552,6 +7586,22 @@ In the meanwhile, you can avoid the problem by not using the same name for a
 package and a variable.  Reusing such names is considered bad style anyway,
 because the name @samp{link.foo} is ambiguous to people as well as to the
 compiler.
+
+
+@node    JVM initialization error, Daikon runs slowly, Method needs to be implemented, Daikon problems
+@subsection JVM initialization error
+
+@cindex JVM initialization error
+@cindex initialization error, JVM
+@cindex Vector, dfej cannot instrument
+
+Instrumenting @samp{java.util.Vector} with dfej prevents the Java
+Virtual Machine from initializing
+properly, because instrumented classes attempt to use the JVM's
+facilities when they are loaded, but the JVM loads Vector during its own
+initialization.  The same problem may be true for other classes used
+internally by the JVM@.  Users can create a new class MyVector, replace
+uses of Vector by MyVector, and then instrument MyVector.
 
 
 @node    dfec problems, Reporting bugs, dfej problems, Troubleshooting
@@ -8177,6 +8227,7 @@ Rich Angros,
 Tadashi Araragi,
 Seung Mo Cho,
 Dorothy Curtis,
+Diego Garbervetsky,
 Madeline Hardojo,
 Engelbert Hubbers,
 Scott McMaster,
@@ -8220,7 +8271,8 @@ each program point for which a trace record may appear.  Each
 declaration names a program point and lists the variables at that
 program point.
 
-A data trace record represents one execution of a program point.  The
+A data trace record (also known as a ``sample'')
+represents one execution of a program point.  The
 record names the program point and gives the runtime values of each
 variable.  The list of variables in the data trace record must be
 identical to that in the corresponding declaration.  The program point
@@ -8550,7 +8602,8 @@ rather than for just one method:
 @cindex data trace format
 @cindex .dtrace file
 
-The format of the value information in a data trace record is:
+The format of the value information in a data trace record (also known
+as a ``sample'') is:
 @example
   program-point-name
   varname1
