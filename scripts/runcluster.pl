@@ -86,25 +86,19 @@ $command = "perl $ENV{INV}/scripts/write_dtrace.pl $options $dtrace_file " . joi
 print "$command\n";
 system($command);
 
-#rewrite .decls file to add cluster info
-my $decls_new = $decls_file;
-#remove everything from the pathname except the filename itself.
-if ($decls_new =~ /\//) {
-    $decls_new =~ s/.*\///;
-}
-
-$decls_new =~ s/\.decls/_daikon_temp\.decls/;
-# print "$decls_new will be the new decls file\n";
-
-$command = "perl $ENV{INV}/scripts/decls-add-cluster.pl  $decls_file $decls_new";
-print "\nrewriting .decls files ($decls_file -> $decls_new) to include cluster info...\n";
+$command = "perl $ENV{INV}/scripts/decls-add-cluster.pl $decls_file";
+print "\nrewriting .decls files to include cluster variable...\n";
 print "$command\n";
-system($command);
-# print "decls-add-cluster finished\n";
+my @new_decls = `$command 2>/dev/null`;  
+my $decls_new = join (' ', @new_decls);
 
+# Since the number of clusters for xmeans varies, we have to find the max number
+# of clusters it found for all the program points, so we can create a .spinfo
+# file to split on all the clusters.
 if ($algorithm eq 'xm') {
     open (MAX, "daikon_temp.maxcluster") || die "file with max clusters (xmeans) not found\n";
     $ncluster = <MAX>;
+    close MAX;
 }
 
 #write spinfo file
@@ -123,7 +117,7 @@ close SPINFO;
 $dtrace_file =~ /(.*)\.dtrace/;
 my $new_dtrace = "$1_daikon_temp.dtrace";
 my $invfile = "$algorithm-$ncluster.inv";
-$command = "java -Xmx1024m daikon.Daikon -o $invfile --no_text_output --suppress_redundant --suppress_post $spinfo_file $decls_new $new_dtrace";
+$command = "java -Xmx1024m daikon.Daikon -o $invfile --no_text_output --suppress_redundant --suppress_post $spinfo_file $new_dtrace $decls_new";
 print "$command\n";
 system($command);
 
@@ -141,7 +135,7 @@ system($command);
 unlink($textout);
 
 #remove all temporary files
-#&remove_temporary_files();
+&remove_temporary_files();
 
 ###########################################################################
 ### Subroutines
