@@ -13,21 +13,27 @@ public final class Diff {
   public static final String lineSep = Global.lineSep;
 
   private static String usage =
-    "Usage: java daikon.Diff [OPTION]... FILE1 FILE2" + lineSep +
-    "  -h  Display this usage message" + lineSep +
-    "  -d  Display the tree of differing invariants (default)" + lineSep +
-    "  -a  Display the tree of all invariants" + lineSep +
-    "  -s  Display the statistics between two sets of invariants" + lineSep +
-    "  -v  Verbose output" + lineSep
-    ;
+    "Usage: java daikon.Diff [OPTION]... FILE1 FILE2" +
+    lineSep +
+    "  -h  Display this usage message" +
+    lineSep +
+    "  -d  Display the tree of differing invariants (default)" +
+    lineSep +
+    "  -a  Display the tree of all invariants" +
+    lineSep +
+    "  -s  Display the statistics between two sets of invariants (default)" +
+    lineSep +
+    "  -v  Verbose output" +
+    lineSep;
 
 
-  // The output mode selected by the user
-  private static final int PRINT_DIFF_INV = 0;
-  private static final int PRINT_ALL_INV = 1;
-  private static final int STATS_INV = 3;
-  private static int mode = PRINT_DIFF_INV;
+  // Types of output
+  private static boolean print_diff = false;
+  private static boolean print_all = false;
+  private static boolean stats = false;
   private static boolean verbose = false;
+
+  private static boolean option_selected = false;
 
   /** Read two PptMap objects from their respective files and diff them. */
   public static void main(String[] args) throws FileNotFoundException,
@@ -37,19 +43,20 @@ public final class Diff {
     Getopt g = new Getopt("daikon.Diff", args, "hdasv");
     int c;
     while ((c = g.getopt()) !=-1) {
+      option_selected = true;
       switch (c) {
       case 'h':
         System.out.println(usage);
         System.exit(1);
         break;
       case 'd':
-        mode = PRINT_DIFF_INV;
+        print_diff = true;
         break;
       case 'a':
-        mode = PRINT_ALL_INV;
+        print_all = true;
         break;
       case 's':
-        mode = STATS_INV;
+        stats = true;
         break;
       case 'v':
         verbose = true;
@@ -62,6 +69,11 @@ public final class Diff {
       }
     }
 
+    // stats, print_diff is the default mode
+    if (! option_selected) {
+      stats = true;
+      print_diff = true;
+    }
     // The index of the first non-option argument -- the name of the
     // first file
     int firstFileIndex = g.getOptind();
@@ -88,34 +100,27 @@ public final class Diff {
 
     RootNode root = diffPptMap(map1, map2);
 
-    switch (mode) {
-    case PRINT_DIFF_INV:
-      {
-        PrintDifferingInvariantsVisitor v =
-          new PrintDifferingInvariantsVisitor(verbose);
-        root.accept(v);
-        System.out.println(v.getOutput());
-      }
-      break;
-    case PRINT_ALL_INV:
-      {
-        PrintAllVisitor v = new PrintAllVisitor(verbose);
-        root.accept(v);
-        System.out.println(v.getOutput());
-      }
-      break;
-    case STATS_INV:
-      {
-        StatisticsVisitor v = new StatisticsVisitor();
-        root.accept(v);
-        System.out.println();
-        System.out.println(v.format());
-      }
-      break;
-    default:
-      Assert.assert(false, "Can't get here");
+    if (stats) {
+      StatisticsVisitor v = new StatisticsVisitor();
+      root.accept(v);
+      System.out.println();
+      System.out.println(v.format());
     }
-  }
+
+    if (print_diff) {
+      PrintDifferingInvariantsVisitor v =
+        new PrintDifferingInvariantsVisitor(verbose);
+      root.accept(v);
+      System.out.println(v.getOutput());
+    }
+
+    if (print_all) {
+      PrintAllVisitor v = new PrintAllVisitor(verbose);
+      root.accept(v);
+      System.out.println(v.getOutput());
+    }
+
+ }
 
 
   // Returns a tree of corresponding program points, and corresponding
