@@ -9,6 +9,7 @@ import daikon.inv.unary.string.*;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.unary.stringsequence.*;
 import daikon.inv.ternary.threeScalar.*;
+import daikon.simplify.*;
 import daikon.split.*;
 import daikon.split.dsaa.*;
 import daikon.split.griesLisp.*;
@@ -77,6 +78,8 @@ public class PptTopLevel extends Ppt {
 
   public PptSlice0 implication_view = new PptSlice0(this);
 
+  // Filled in by the method mark_implied_via_simplify below
+  public Set redundant_invs = new HashSet();
 
   public PptTopLevel(String name, VarInfo[] var_infos) {
     super(name);
@@ -1965,7 +1968,110 @@ public class PptTopLevel extends Ppt {
   /// Locating implied (same) invariants
   ///
 
+  // created upon first use, then saved
+  private static SessionManager prover;
 
+  /**
+   * Use the Simplify theorem prover to flag invaraints which are
+   * logically implied by others.
+   **/
+  public void mark_implied_via_simplify() {
+    try {
+    
+      // Start up simplify, and send the universal backgound
+      if (prover == null) {
+	prover = new SessionManager();
+	prover.request(new CmdAssume("(EQ (typeof null) |T_null|)"));
+      }
+      
+      // Form the closure of the controllers
+      Set closure = new HashSet();
+      {
+	Set working = new HashSet(controlling_ppts);
+	while (!working.isEmpty()) {
+	  PptTopLevel ppt = (PptTopLevel) working.iterator().next();
+	  working.remove(ppt);
+	  if (!closure.contains(ppt)) {
+	    closure.add(ppt);
+	    working.addAll(ppt.controlling_ppts);
+	  }
+	}
+      }
+      
+      // Send the conjunction of the closures' invariants as a
+      // background to simplify
+      
+      StringBuffer all_cont = new StringBuffer();
+      all_cont.append("(AND true \n");
+      for (Iterator ppts = closure.iterator(); ppts.hasNext(); ) {
+	PptTopLevel ppt = (PptTopLevel) ppts.next();
+	all_cont.append("\t(AND true \n");
+	for (Iterator invs = ppt.invariants_vector().iterator(); invs.hasNext(); ) {
+	  Invariant inv = (Invariant) invs.next();
+	  if (!inv.isWorthPrinting()) {
+	    continue;
+	  }
+	  String fmt = inv.format_simplify();
+	  if (fmt.startsWith("format")) {
+	    continue;
+	  }
+	  all_cont.append("\t\t");
+	  all_cont.append(fmt);
+	  all_cont.append("\n");
+	}
+	all_cont.append(")");
+      }    
+      all_cont.append(")");
+      prover.request(new CmdAssume(all_cont.toString()));
+      
+      // Come up with a "desirability" ordering of the printing and
+      // expressible invariants, so that we can remove the least
+      // desirable first.  For now just use the ICFP.
+      Invariant[] invs;
+      {
+	Vector printing = new Vector(); // [Invariant]
+	for (Iterator _invs = invariants_vector().iterator(); _invs.hasNext(); ) {
+	  Invariant inv = (Invariant) _invs.next();
+	  if (inv.isWorthPrinting()) {
+	    String fmt = inv.format_simplify();
+	    if (!fmt.startsWith("format")) {
+	      printing.add(inv);
+	    }
+	  }
+	}
+	invs = (Invariant[]) printing.toArray(new Invariant[printing.size()]);
+      }
+      boolean[] present = new boolean[invs.length];
+      Arrays.fill(present, 0, present.length, true);
+      
+      // Work from back to front, and flag things which are redundant
+      for (int checking = invs.length-1; checking >= 0; checking--) {
+	Invariant inv = invs[checking];
+	StringBuffer bg = new StringBuffer("(AND true");
+	for (int i=0; i < present.length; i++) {
+	  if (present[i] && (i != checking)) {
+	    bg.append(" ");
+	    bg.append(invs[i].format_simplify());
+	  }
+	}
+	bg.append(")");
+	String ask = "(IMPLIES " + bg + " " + inv.format_simplify() + ")";
+	CmdCheck cc = new CmdCheck(ask);
+	prover.request(cc);
+	if (cc.valid) {
+	  redundant_invs.add(inv);
+	  present[checking] = false;
+	}
+      }
+
+      // Remove the controlling invariant background
+      prover.request(CmdUndoAssume.single);
+
+    } catch (TimeoutException e) {
+      prover = null;
+      throw new RuntimeException("Prover timeout: " + e);
+    }
+  }
 
   ///////////////////////////////////////////////////////////////////////////
   /// Printing invariants
@@ -2385,6 +2491,13 @@ public class PptTopLevel extends Ppt {
       // isWorthPrinting checks many conditions for suppression
       if (! inv.isWorthPrinting()) {
 	// out.println("Not worth printing: " + inv.format() + ", " + inv.repr());
+	continue;
+      }      
+
+      // Redundancy is separate from worth printing for now, but it
+      // probably should not be, in general.
+      if (((PptTopLevel) inv.ppt.parent).redundant_invs.contains(inv)) {
+	// out.println("Redundant: " + inv.format());
 	continue;
       }      
 
