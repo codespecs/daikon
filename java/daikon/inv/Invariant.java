@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 
 import utilMDE.Assert;
 import utilMDE.MathMDE;
+import utilMDE.UtilMDE;
 import daikon.*;
 import daikon.suppress.*;
 
@@ -278,11 +279,12 @@ public abstract class Invariant
   protected abstract double computeProbability();
 
   public boolean justified() {
-    return
-      (!falsified)  &&
-      enoughSamples() &&
-      (getProbability() <= dkconfig_probability_limit)
-      ;
+    boolean just = !falsified && enoughSamples() &&
+                    (getProbability() <= dkconfig_probability_limit);
+    if (!just  && logOn())
+      log ("Not justified, enoughSamples = " + enoughSamples()
+           + ", probability = " + getProbability() + ", repr = " + repr());
+    return (just);
   }
 
   /**
@@ -315,10 +317,8 @@ public abstract class Invariant
    **/
   public void destroy() {
     falsified = true;
-    if (PptSlice.debugFlow.isDebugEnabled()) {
-      PptSlice.debugFlow.debug("Invariant destroyed " + format() +
-                               " at " + ppt.parent.name);
-    }
+    if (logOn() || PptSlice.debugFlow.isDebugEnabled())
+      log (PptSlice.debugFlow, "Destroyed " + format());
 
     // [INCR] Commented out because removeInvariant removes this from
     // the pptslice.  In V3, this happens after invariants are
@@ -329,7 +329,7 @@ public abstract class Invariant
   /**
    * Flow argument to all lower program points.
    * Has to be public because of wrappers (?); do not call from outside world.
-   * @see destroy
+   * @see #destroy
    **/
   private void flow(Invariant flowed) {
     ppt.addToFlow(flowed);
@@ -434,6 +434,12 @@ public abstract class Invariant
     result.ppt = new_ppt;
     // Let subclasses fix what they need to
     result = result.resurrect_done(permutation);
+
+    if (logOn())
+      result.log ("Created via transfer");
+    //if (debug.isDebugEnabled())
+    //    debug.debug ("Invariant.transfer to " + new_ppt.name + " "
+    //                 + result.repr());
 
     return result;
   }
@@ -1331,6 +1337,16 @@ public abstract class Invariant
   }
 
   /**
+   * @return true if is is ok to suppress this invariant while samples
+   * are being processed.  Should be overriden by those invariants for
+   * which this is not ok (which are those that keep internal state
+   * information that would be lost if they were suppressed)
+   */
+  public boolean inProcessSuppressOk() {
+    return true;
+  }
+
+  /**
    * @return true if this invariant is a postcondition that is implied
    * by prestate invariants.  For example, if an entry point has the
    * invariant x+3=y, and this invariant is the corresponding exit
@@ -1742,6 +1758,55 @@ public abstract class Invariant
    */
   public boolean isActive() {
     return (true);
+  }
+
+
+  /**
+   * Returns whether or not detailed logging is on.  Note that this check
+   * is not performed inside the logging calls themselves, it must be
+   * performed by the caller.
+   *
+   * @see daikon.Debug#logDetail()
+   * @see daikon.Debug#logOn()
+   * @see daikon.Debug#log(Logger, Class, Ppt, String)
+   */
+
+  public static boolean logDetail () {
+    return (Debug.logDetail());
+  }
+
+  /**
+   * Returns whether or not logging is on.
+   *
+   * @see daikon.Debug#logOn()
+   */
+
+  public static boolean logOn() {
+    return (Debug.logOn());
+  }
+
+  /**
+   * Logs a description of the invariant and the specified msg via the
+   * log4j logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
+   * VarInfo[], String)}
+   */
+
+  public void log (Logger debug, String msg) {
+
+    Debug.log (debug, getClass(), ppt, msg);
+  }
+
+
+ /**
+  * Logs a description of the invariant and the specified msg via the
+  * log4j logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
+  * VarInfo[], String)}
+  *
+  * @return whether or not it logged anything
+  */
+
+  public boolean log (String msg) {
+    return (Debug.log (getClass(), ppt, msg));
   }
 
 }
