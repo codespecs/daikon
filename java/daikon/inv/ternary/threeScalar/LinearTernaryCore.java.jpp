@@ -163,7 +163,7 @@ public final class CLASSNAME
         p.x = temp[0];
         p.y = temp[1];
         p.z = temp[2];
-        wrapper.log ("permutted def_points["+i+"] = " + p);
+        wrapper.log ("permuted def_points["+i+"] = " + p);
       }
     }
     // Assert that caches sync with a,b,c?
