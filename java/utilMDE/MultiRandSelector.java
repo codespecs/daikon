@@ -10,7 +10,9 @@ import java.util.*;
 
 public class MultiRandSelector {
 
-    private int num_elts;
+    private int num_elts = -1;
+    private boolean coin_toss_mode;
+    private double keep_probability = -1.0;
     private Random seed;
     private EquivalenceChecker eq;
 
@@ -20,9 +22,22 @@ public class MultiRandSelector {
         this (num_elts, new Random(), eq);
     }
 
+    public MultiRandSelector (double keep_probability, EquivalenceChecker eq) {
+        this (keep_probability, new Random(), eq);
+    }
+
     public MultiRandSelector (int num_elts, Random r,
                               EquivalenceChecker eq) {
         this.num_elts = num_elts;
+        seed = r;
+        this.eq = eq;
+        map = new HashMap();
+    }
+
+    public MultiRandSelector (double keep_probabilty, Random r,
+                              EquivalenceChecker eq) {
+        this.keep_probability = keep_probability;
+        coin_toss_mode = true;
         seed = r;
         this.eq = eq;
         map = new HashMap();
@@ -40,7 +55,9 @@ public class MultiRandSelector {
             return;
         RandomSelector delegation = (RandomSelector) map.get (equivClass);
         if (delegation == null) {
-            delegation = new RandomSelector (num_elts, seed);
+            delegation = (coin_toss_mode) ?
+                new RandomSelector (keep_probability, seed) :
+                new RandomSelector (num_elts, seed);
             map.put (equivClass, delegation);
         }
         delegation.accept (next);

@@ -4,7 +4,14 @@ import java.util.*;
 import java.io.*;
 
 /** Takes in a fileName and becomes an invocation iterator for use
- *  with MultiRandSelector */
+ *  with MultiRandSelector
+ *
+ *  Invokations in the same Program Point are in the same equivalence
+ *  class.  The reason is, we want to select say 10 samples for each
+ *  program point, so this object is able to determine the equivalence
+ *  class based on the PPT name
+
+*/
 
 public class DtraceEquivalenceChecker
     implements EquivalenceChecker, Iterator
@@ -17,7 +24,7 @@ public class DtraceEquivalenceChecker
     public DtraceEquivalenceChecker (String fileName) {
         try {
             this.fileName = fileName;
-            br = new BufferedReader (new FileReader (fileName));
+            br = UtilMDE.BufferedFileReader (fileName);
             nonceAlert = new HashSet();
         } catch (Exception e) {e.printStackTrace(); }
     }
@@ -56,6 +63,7 @@ public class DtraceEquivalenceChecker
         }
         return sb.toString();
     }
+
 
     public Object deriveEquivalence (Object invocation) {
         String s = (String) invocation;
