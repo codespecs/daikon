@@ -513,6 +513,9 @@ JAVA_CPP ?= (rm -f $@; java-cpp.pl -DDEFINEDVAR $< 2>&1 > $@ && chmod -w $@)
 utilMDE/MathMDE.java: utilMDE/MathMDE.java.jpp utilMDE/MathMDE-gcd.java.jpp utilMDE/MathMDE-modulus.java.jpp utilMDE/MathMDE-nonmodulus.java.jpp utilMDE/MathMDE-help.java.jpp utilMDE/MathMDE-helpend.java.jpp
 	cd utilMDE && $(MAKE) MathMDE.java
 
+utilMDE/LimitedSizeIntSet.java: utilMDE/LimitedSizeSet.java.jpp
+	cd utilMDE && $(MAKE) LimitedSizeIntSet.java
+
 daikon/PptSlice1.java: daikon/PptSlice.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=ARITY1)
 
