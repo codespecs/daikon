@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.Vector;
+import java.util.List;
 import java.util.*;
 
 import jtb.syntaxtree.*;
@@ -46,13 +46,15 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
     private int varNumCounter = 0;
 
+    private PptNameMatcher pptMatcher;
 
     /**
      * Create a visitor that will insert code to check the invariants
      * contained in pptmap.
      */
-    public InstrumentVisitor(PptMap pptmap) {
+    public InstrumentVisitor(PptMap pptmap, CompilationUnit root) {
         this.pptmap = pptmap;
+        this.pptMatcher = new PptNameMatcher(root);
 
         for (Iterator i = pptmap.pptIterator() ; i.hasNext() ; ) {
             PptTopLevel ppt = (PptTopLevel)i.next();
@@ -90,12 +92,12 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         if (makeAllFieldsPublic) {
             NodeSequence seq = (NodeSequence)fd.getParent().getParent();
             Modifiers modifiers = (Modifiers)seq.elementAt(0);
-            Vector modifierVector = modifiers.f0.nodes;
+            List modifierList = modifiers.f0.nodes;
 
 
-            Vector<Node> newModifiers = new Vector<Node>();
-            for (int i = 0 ; i < modifierVector.size() ; i++) {
-                NodeChoice nc = (NodeChoice)modifierVector.get(i);
+            List<Node> newModifiers = new ArrayList<Node>();
+            for (int i = 0 ; i < modifierList.size() ; i++) {
+                NodeChoice nc = (NodeChoice)modifierList.get(i);
                 NodeToken token = (NodeToken)nc.choice;
                 if (!token.tokenImage.equals("public")
                     && !token.tokenImage.equals("protected")
@@ -105,7 +107,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             }
 
             newModifiers.add(new NodeToken("public"));
-            modifiers.f0.nodes = newModifiers;
+            modifiers.f0.nodes = new Vector(newModifiers);
         }
     }
 
@@ -165,7 +167,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         // Find declared throwables.
         List<String> declaredThrowables = getDeclaredThrowables(ctor.f3);
 
-        Vector<PptTopLevel> matching_ppts = Ast.getMatches(pptmap, ctor);
+        List<PptTopLevel> matching_ppts = pptMatcher.getMatches(pptmap, ctor);
 
         StringBuffer code = new StringBuffer();
 
@@ -249,11 +251,11 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         // Find declared throwables.
         List<String> declaredThrowables = getDeclaredThrowables(method.f3);
 
-        Vector/* PptTopLevel */matching_ppts = Ast.getMatches(pptmap, method);
+        List/* PptTopLevel */matching_ppts = pptMatcher.getMatches(pptmap, method);
         String name = Ast.getName(method);
         String returnType = Ast.getReturnType(method);
         String maybeReturn = (returnType.equals("void") ? "" : "return");
-        Vector parameters = new Vector();
+        List parameters = new ArrayList();
         for (Iterator i = Ast.getParameters(method).iterator(); i.hasNext();) {
             FormalParameter param = (FormalParameter) i.next();
             parameters.add(Ast.getName(param));
@@ -588,7 +590,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     //    orders catch clauses in the order in which they appear in
     //    declaredThrowable. This can cause compilation to fail. ]]
     private void exitChecks(StringBuffer code,
-            Vector<PptTopLevel> matching_ppts, PptMap pptmap,
+            List<PptTopLevel> matching_ppts, PptMap pptmap,
 	   List<String> declaredThrowables, boolean isStatic) {
 
 	List<String> declaredThrowablesLocal = new ArrayList(declaredThrowables);
@@ -645,7 +647,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     }
 
     private void checkPreconditions(StringBuffer code,
-            Vector<PptTopLevel> matching_ppts, PptMap pptmap) {
+            List<PptTopLevel> matching_ppts, PptMap pptmap) {
         for (Iterator i = matching_ppts.iterator(); i.hasNext();) {
             PptTopLevel ppt = (PptTopLevel) i.next();
             if (ppt.ppt_name.isEnterPoint()) {

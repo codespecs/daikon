@@ -108,8 +108,6 @@ public class InstrumentHandler extends CommandHandler {
         // Create filenames including temp directory and pakage directories.
         List/* ParseResults */parseResults = parse(arguments.javaFileNames);
 
-        // Instrument files
-        InstrumentVisitor instrumentVisitor = new InstrumentVisitor(ppts);
 
         List/* String */instrumentedFileNames = new ArrayList/* String */();
 
@@ -120,7 +118,7 @@ public class InstrumentHandler extends CommandHandler {
                     + (oneClass.packageName.equals("") ? "" : ".")
                     + oneClass.className);
 
-            oneClass.root.accept(instrumentVisitor);
+            oneClass.root.accept(new InstrumentVisitor(ppts, oneClass.root));
             oneClass.root.accept(new TreeFormatter(2, 80));
 
             File instrumentedFileDir = new File(outputDir.getPath()
