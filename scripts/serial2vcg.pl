@@ -2,6 +2,7 @@
 use strict;
 use Carp;
 use warnings;
+no warnings 'recursion';
 
 # Usage: zcat foo.inv.gz | perl serial2vcg.pl >foo.vcg
 #        ~smcc/bin/xvcg foo.vcg
@@ -110,7 +111,9 @@ sub draw_node {
     print "node: { ";
     print qq'title: "n$num" ';
     print qq'color: $color ';
-    print qq'label: "', join("\n", $header, @lines), '"';
+    my $label = join("\n", $header, @lines);
+    $label =~ s/\"/''/g;
+    print qq'label: "$label"';
     print "}\n\n";
     $nodes_out{$num}++;
 }

@@ -3,6 +3,8 @@ use strict;
 use Carp;
 use warnings;
 
+no warnings 'recursion';
+
 # Usage: zcat foo.inv.gz | perl dump-serial.pl
 
 my $buf;
