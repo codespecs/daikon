@@ -271,25 +271,24 @@ presents a tuple of values to the invariant.  The @samp{count} variable
 indicates how many samples have this value.  For example, three calls to
 @samp{add_modified} with a @samp{count} parameter of 1 is equivalent to
 one call to @samp{add_modified} with a @samp{count} parameter of 3.
-@item computeProbability
-returns the probability that the observed data could have happened by
-chance alone.  The result usually falls between 0 and 1, where 1 means
-the values seen so far certainly happened by chance and 0 means they
+@item computeConfidence
+returns the probability that the observed data could not have happened by
+chance alone.  The result usually falls between 0 and 1, where 0 means
+the values seen so far certainly happened by chance and 1 means they
 could never have happened by chance.  The method may also return one of
-the following constants in the @samp{Invariant} class (which see for
-documentation): @samp{PROBABILITY_JUSTIFIED},
-@samp{PROBABILITY_UNJUSTIFIED}, @samp{PROBABILITY_UNKNOWN},
-@samp{PROBABILITY_NEVER}.
+the following constants in the @samp{Invariant} class (see the class for
+documentation): @samp{CONFIDENCE_JUSTIFIED},
+@samp{CONFIDENCE_UNJUSTIFIED}, @samp{CONFIDENCE_NEVER}.
 
 For example, suppose your new invariant has a 50% chance of being true
 by chance for each sample.  (``x is even'' is an example of such an
-invariant.)  Then a reasonable body for @samp{computeProbability} would
+invariant.)  Then a reasonable body for @samp{computeConfidence} would
 be
 @example
-  return Math.pow(.5, ppt.num_values());
+  return 1 - Math.pow(.5, ppt.num_samples());
 @end example
 @noindent
-If 5 values had been seen, then this implementation would return 1/32,
+If 5 values had been seen, then this implementation would return 31/32,
 which is the likelihood that all 5 values seen so far were even purely
 by chance.  Invariants are only printed if their probabilities are small
 enough (by default, less than .01).
@@ -303,7 +302,7 @@ implementations later as needed.
 @end table
 
 After the invariant is written, add a call to its @samp{instantiate}
-method in pass 2 of the @samp{instantiate} method of the appropriate
+method in the @samp{instantiate} method of the appropriate
 factory; for instance, add a line like
 @example
   result.add(MyInvariant.instantiate(ppt));
