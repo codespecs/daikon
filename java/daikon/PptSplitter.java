@@ -144,6 +144,10 @@ public class PptSplitter implements Serializable {
     return ((PptConditional) ppts[splitter_test ? 0 : 1]);
   }
 
+  /**
+   * Adds implication invariants based on the invariants found on each
+   * side of the split
+   */
   public void add_implications() {
 
     // Currently only binary implications are supported
@@ -736,22 +740,6 @@ public class PptSplitter implements Serializable {
     }
     return result;
   }
-
-
-  // // Determine which invariants at the program points differ.
-  // // Result elements are pairs of Invariants (with one or the other
-  // // possibly null.)
-  // Vector different_invariants(PptSlice[][] matched_views) {
-  //   Vector result = new Vector();
-  //   for (int i=0; i<matched_views.length; i++) {
-  //     PptSlice cond1 = matched_views[i][0];
-  //     PptSlice cond2 = matched_views[i][1];
-  //     Invariants invs1 = (cond1 == null) ? new Invariants() : cond1.invs;
-  //     Invariants invs2 = (cond2 == null) ? new Invariants() : cond2.invs;
-  //     result.addAll(different_invariants(invs1, invs2));
-  //   }
-  //   return result;
-  // }
 
   /**
    * Creates the invariant specified by predicate and consequent and
