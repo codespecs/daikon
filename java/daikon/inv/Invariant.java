@@ -156,7 +156,7 @@ public abstract class Invariant
 
   /**
    * The probability that this could have happened by chance alone. <br>
-   *   0 = could never have happened by chance; that is, we are fully confident
+   *   1 = could never have happened by chance; that is, we are fully confident
    *       that this invariant is a real invariant
    **/
   public final static double CONFIDENCE_JUSTIFIED = 1;
