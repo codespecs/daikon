@@ -1,6 +1,6 @@
 ## daikon.bashrc
 ## Daikon initialization file for Bourne shell (bash) users.
-## This file should be kept in synch with daikon.cshrc
+## (This file should be kept in synch with daikon.cshrc.)
 
 ## Set DAIKONPARENT to the directory containing "daikon/".
 export DAIKONPARENT=${DAIKONPARENT:-/path/to/parent/of/daikon}
@@ -10,11 +10,10 @@ export DAIKONDIR=${DAIKONDIR:-${DAIKONPARENT}/daikon}
 export JDKDIR=${JDKDIR:-/g2/jdk}
 
 ## Set DAIKONCLASS_SOURCES if you want to run Daikon from .class files that
-## you compile yourself.  Otherwise, you will run Daikon from the
-## precompiled bytecode files in daikon.jar.  The latter is easier (and is
-## the default), but the former permits you to modify Daikon (most users
-## will not need to do so).  The former may be used only if you downloaded
-## the source distribution.
+## you compile yourself.  This permits you to modify Daikon (most users
+## will not need to do so) and may be used only if you downloaded the
+## source distribution.  If you do not set DAIKONCLASS_SOURCES, you will
+## run Daikon from the precompiled bytecode files in daikon.jar.
 # export DAIKONCLASS_SOURCES=1
 
 if [ $DAIKONCLASS_SOURCES ]; then
@@ -30,11 +29,19 @@ fi
 
 
 ## Add the Daikon binaries to your path
-export PATH=$DAIKONDIR/bin:${JDKDIR}/bin:${PATH}
+export PATH=$DAIKONDIR/bin:$DAIKONDIR/front-end/java/src:${JDKDIR}/bin:${PATH}
 
-## tools.jar must be on your classpath.  Also, if you wish to use dfej, the
-## Daikon front end for Java, you need to have rt.jar on your classpath.
+## tools.jar must be on your classpath.  Also, if you wish to use dfej (the
+## Daikon front end for Java), you need to have rt.jar on your classpath.
+## (ajax.jar is temporary, will be removed soon, we hope.)
 export CLASSPATH=${CLASSPATH}:${JDKDIR}/jre/lib/rt.jar:${JDKDIR}/lib/tools.jar
+## Macintosh MacOSX users should use the following line instead.  This list
+## is what is produced by the system property "sun.boot.class.path".
+# export CLASSPATH=${CLASSPATH}:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/classes.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/ui.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/i18n.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/sunrsasign.jar
+
+if [-e ${DAIKONDIR}/java/ajax-ship/ajax.jar]; then
+  export CLASSPATH=${CLASSPATH}:${DAIKONDIR}/java/ajax-ship/ajax.jar
+endif
 
 ## Indicates where Ajax should find its helper files such as
 ## main-harness.csal, tweaked-classes.zip, etc.  Given a Java program, Ajax
@@ -42,6 +49,6 @@ export CLASSPATH=${CLASSPATH}:${JDKDIR}/jre/lib/rt.jar:${JDKDIR}/lib/tools.jar
 export AJAX_DIR=$DAIKONDIR/java/ajax-ship
 
 
-# Uncomment this if you install Lackwit
+## Uncomment this if you install Lackwit
 # ## Indicates where Lackwit can find its libraries (and binaries).
 # export LACKWIT_HOME=$DAIKONDIR/front-end/c/lackwit
