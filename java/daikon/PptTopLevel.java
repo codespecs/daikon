@@ -200,6 +200,10 @@ public class PptTopLevel
 
     public Object next() {
 
+      if (! hasNext()) {
+        throw new NoSuchElementException();
+      }
+
       PptSplitter ppt_split = (PptSplitter) splitters.get(splitter_index);
       PptTopLevel ppt = ppt_split.ppts[ppts_index];
 

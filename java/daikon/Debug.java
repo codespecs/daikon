@@ -778,7 +778,7 @@ public class Debug {
     int var_start = def.indexOf ('<');
     int ppt_start = def.indexOf ("@");
     if ((var_start == -1) && (ppt_start == -1))
-      classes = new String (def);
+      classes = def;
     else if (var_start != -1) {
       if (var_start > 0)
         classes = def.substring (0, var_start);

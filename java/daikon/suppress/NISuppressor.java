@@ -113,7 +113,7 @@ public class NISuppressor {
                                new Class[] {PptSlice.class, boolean.class});
         has_swap_param = true;
         sample_inv = (Invariant)instantiate.invoke (null,
-                                  new Object[] {null, new Boolean(swap)});
+                                  new Object[] {null, Boolean.valueOf(swap)});
       } catch (Exception e) {
       }
       if (instantiate == null) {

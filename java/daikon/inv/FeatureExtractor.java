@@ -1020,14 +1020,17 @@ public final class FeatureExtractor {
   }
 
   private static String shift(String vector) {
-    String answer = new String();
+    StringBuffer answer = new StringBuffer();
     StringTokenizer tokens = new StringTokenizer(vector);
     tokens.nextToken();
-    while (tokens.hasMoreTokens())
-      answer += (Integer.parseInt(tokens.nextToken()) +
-                 OneMoreOrderThanLargestFeature) + " " +
-        tokens.nextToken() + " ";
-    return answer;
+    while (tokens.hasMoreTokens()) {
+      answer.append((Integer.parseInt(tokens.nextToken()) +
+                     OneMoreOrderThanLargestFeature));
+      answer.append(" ");
+      answer.append(tokens.nextToken());
+      answer.append(" ");
+    }
+    return answer.toString();
   }
 
 

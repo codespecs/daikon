@@ -23,15 +23,15 @@ public class VarInfoNameDriver {
   // [String -> Handler]
   private static final Map handlers = new HashMap();
 
-  public static void run(InputStream _commands, PrintStream output) {
+  public static void run(InputStream commands, PrintStream output) {
     try {
-      _run(_commands, output);
+      run_helper(commands, output);
     } catch (IOException e) {
       throw new RuntimeException(e.toString());
     }
   }
 
-  public static void _run(InputStream _commands, PrintStream output)
+  private static void run_helper(InputStream _commands, PrintStream output)
     throws IOException
   {
     BufferedReader commands = new BufferedReader(new InputStreamReader(_commands));

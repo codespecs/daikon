@@ -5,7 +5,7 @@ import java.io.*;
 
 /**
  * Provides a somewhat simpler interface for tokenizing strings than
- * does StreamTokenizer.  All tokenizing is done by StreamTokenizer
+ * does StreamTokenizer.  All tokenizing is done by StreamTokenizer.
  */
 public class StrTok {
 
@@ -34,7 +34,7 @@ public class StrTok {
   /**
    * Returns the next token as a string.  EOF returns a null, EOL
    * returns an empty string.  Delimiters are returned as one character
-   * strings.  Quoted strings and words are returns as strings.
+   * strings.  Quoted strings and words are returned as strings.
    */
   public String nextToken() {
 

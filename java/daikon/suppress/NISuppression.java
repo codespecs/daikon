@@ -130,17 +130,7 @@ public class NISuppression {
    * Returns 'suppressor && suppressor ... => suppressee'
    */
   public String toString() {
-
-    String out = "";
-
-    for (int i = 0; i < suppressors.length; i++) {
-      if (out != "")
-        out += " && ";
-      out += suppressors[i];
-    }
-
-    return (out + " ==> " + suppressee);
-
+    return (UtilMDE.join(suppressors, " && ") + " ==> " + suppressee);
   }
 
 }

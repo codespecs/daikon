@@ -70,7 +70,7 @@ public class SessionManager
       Assert.assertTrue(pending == null);
       pending = command;
       // tell the worker to wake up
-      this.notify();
+      this.notifyAll();
       // wait for worker to finish
       try { this.wait(); } catch (InterruptedException e) { }
       // command finished iff the command was nulled out
@@ -179,7 +179,7 @@ public class SessionManager
       while (session != null) {
         synchronized (mgr) {
           mgr.pending = null;
-          mgr.notify();
+          mgr.notifyAll();
           try { mgr.wait(0); } catch (InterruptedException e) { }
           Assert.assertTrue(mgr.pending != null);
           // session != null && mgr.pending != null;

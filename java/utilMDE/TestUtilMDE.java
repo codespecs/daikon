@@ -1546,7 +1546,10 @@ public final class TestUtilMDE extends TestCase {
       int limit;
       public IotaIterator(int limit) { this.limit = limit; }
       public boolean hasNext() { return i<limit; }
-      public Object next() { return new Integer(i++); }
+      public Object next() {
+        if (! hasNext()) throw new NoSuchElementException();
+        return new Integer(i++);
+      }
       public void remove() { throw new UnsupportedOperationException(); }
     }
     {

@@ -1022,7 +1022,7 @@ public final class Daikon {
       System.exit (0);
     }
 
-    if (debugStats.isLoggable (Level.FINE)) {
+//     if (debugStats.isLoggable (Level.FINE)) {
 //       PptSliceEquality.print_equality_stats (debugStats, all_ppts);
 //       if (false) {
 //         for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
@@ -1033,7 +1033,7 @@ public final class Daikon {
 //           }
 //         }
 //       }
-    }
+//     }
 
     // Print equality set info
 //     for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {

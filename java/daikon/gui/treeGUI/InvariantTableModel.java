@@ -42,7 +42,7 @@ class InvariantTableModel extends AbstractTableModel {
       double val = invariant.getConfidence();
       return new Double( Math.round( 100 * val) / 100.0 );
     }
-    else /* (column == 4) */        return new Boolean( invariant.justified());
+    else /* (column == 4) */        return Boolean.valueOf( invariant.justified());
   }
 
   //  Must override this method so TableSorter will sort numerical columns properly.

@@ -105,11 +105,11 @@ public final class MathMDE {
   }
 
   public static int logicalAnd(int x, int y) {
-    return ((x!=0) & (y!=0)) ? 1 : 0;
+    return ((x!=0) && (y!=0)) ? 1 : 0;
   }
 
   public static long logicalAnd(long x, long y) {
-    return ((x!=0) & (y!=0)) ? 1 : 0;
+    return ((x!=0) && (y!=0)) ? 1 : 0;
   }
 
   public static int bitwiseXor(int x, int y) {
@@ -138,11 +138,11 @@ public final class MathMDE {
   }
 
   public static int logicalOr(int x, int y) {
-    return ((x!=0) | (y!=0)) ? 1 : 0;
+    return ((x!=0) || (y!=0)) ? 1 : 0;
   }
 
   public static long logicalOr(long x, long y) {
-    return ((x!=0) | (y!=0)) ? 1 : 0;
+    return ((x!=0) || (y!=0)) ? 1 : 0;
   }
 
 

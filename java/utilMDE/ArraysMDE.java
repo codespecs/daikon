@@ -1235,7 +1235,7 @@ public final class ArraysMDE {
     for (int i = 0; i < a.length; i++) {
       // could be optimzed not to add the last element,
       // but that would make the code much less readable.
-      Boolean n = new Boolean (a[i]);
+      Boolean n = Boolean.valueOf (a[i]);
       if (hs.contains(n)) { return false; }
       hs.add (n);
     }

@@ -83,7 +83,7 @@ public class InvMap implements Serializable {
   }
 
   public String toString() {
-    String result = new String();
+    String result = "";
     for (Iterator i = pptIterator(); i.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) i.next();
       result += ppt.name() + Global.lineSep;

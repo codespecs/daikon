@@ -321,16 +321,7 @@ public class NISuppressionSet {
    * Returns a string containing each suppression separated by commas
    */
   public String toString() {
-
-    String out = "";
-
-    for (int i = 0; i < suppression_set.length; i++) {
-      NISuppression s = suppression_set[i];
-      if (out != "")
-        out += ", ";
-      out += s;
-    }
-    return (out);
+    return UtilMDE.join(suppression_set, ", ");
   }
 
 }

@@ -17,6 +17,7 @@ public class SplitterLoader extends ClassLoader {
       FileInputStream fi = new FileInputStream(fileName);
       byte[] classBytes= new byte[fi.available()];
       fi.read(classBytes);
+      fi.close();
       return classBytes;
     } catch (FileNotFoundException e) {
       if (! Daikon.dkconfig_suppressSplitterErrors) {

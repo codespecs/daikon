@@ -155,12 +155,12 @@ public class SUBSET
     result = v2 + " \\subseteq " + v1;
     #endif
 
-    if (var1().isIOAArray() || var2().isIOAArray()) {
+    // if (var1().isIOAArray() || var2().isIOAArray()) {
       // Temporarily disabled because IOA frontend outputs sets as
       // arrays for comparability.
 
       // result += " *** (Invalid syntax for arrays)";
-    }
+    // }
 
     return result;
   }

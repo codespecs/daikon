@@ -28,7 +28,9 @@ public class Digest {
     while (in.read(buffer) != -1) /* do nothing */ ;
 
     // Finally, compute and return the digest value.
-    return md.digest();
+    byte[] result = md.digest();
+    in.close();
+    return result;
   }
 
   /** This static buffer is used by getFileDigest() above */

@@ -357,6 +357,7 @@ public final class UtilMDE {
       int numbytes = fi.available();
       byte[] classBytes = new byte[numbytes];
       fi.read(classBytes);
+      fi.close();
       Class return_class = defineClass(className, classBytes, 0, numbytes);
       resolveClass(return_class);
       return return_class;

@@ -384,7 +384,7 @@ public class CLASSNAME
       int num_elts = oos.num_elts();
       if (num_elts != 0) {
         boolean failed = false;
-        for (int i=0; i<num_elts & !failed; i++) {
+        for (int i=0; i<num_elts && !failed; i++) {
           long elt = ((Long) oos.elt(i)).longValue();
           if (elt >= 2) {
             failed = true;

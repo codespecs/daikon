@@ -672,10 +672,10 @@ public class Dataflow
   public static final class PptsAndInts {
     public final PptTopLevel[] ppts;
     public final int[][] ints;
-    public PptsAndInts(PptTopLevel[] _ppts, int[][] _ints) {
-      Assert.assertTrue(_ppts.length == _ints.length);
-      ppts = _ppts;
-      ints = _ints;
+    public PptsAndInts(PptTopLevel[] ppts, int[][] ints) {
+      Assert.assertTrue(ppts.length == ints.length);
+      this.ppts = ppts;
+      this.ints = ints;
     }
     /**
      * @return new records containing the first length pairs in this

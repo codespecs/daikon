@@ -220,7 +220,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     fmt_str = UtilMDE.replaceString(fmt_str, "%var2%", v2);
 
     if (format == OutputFormat.IOA)
-      fmt_str = fmt_str.replaceAll ("==", "=");
+      fmt_str = fmt_str.replaceAll ("==", "="); // "interned"
     else if (false && (format == OutputFormat.DAIKON)) {
       fmt_str = "[" + getClass() + "]" + fmt_str + " ("
              + var1().get_value_info() + ", " + var2().get_value_info() +  ")";
@@ -390,15 +390,17 @@ public abstract class CLASSNAME extends SUPERCLASS {
     obvious_loop:
     for (int i = 0; i < obvious_arr.length; i++) {
       InvDef[] antecedents = obvious_arr[i];
-      String why = "";
+      StringBuffer why = null;
       for (int j = 0; j < antecedents.length; j++) {
         Invariant inv = antecedents[j].find ();
         if (inv == null)
           continue obvious_loop;
-        if (why == "")
-          why = inv.format();
-        else
-          why += " and " + inv.format();
+        if (why == null)
+          why = new StringBuffer(inv.format());
+        else {
+          why.append(" and ");
+          why.append(inv.format());
+        }
       }
       return new DiscardInfo (this, DiscardCode.obvious, "Implied by " + why);
     }

@@ -27,6 +27,7 @@ public class PptRelation implements Serializable {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030819L;
 
+  // This should really be an enumerated type.
   public static final String OBJECT_METHOD = "object -> method";
   public static final String CLASS_OBJECT  = "class -> object";
   public static final String OBJECT_USER   = "object -> user";
@@ -37,7 +38,10 @@ public class PptRelation implements Serializable {
 
   private static final Logger debug = Logger.getLogger("daikon.PptRelation");
 
-  /** description of type of parent-child relationship (debug output only) **/
+  /**
+   * Description of type of parent-child relationship (debug output only).
+   * isRelationship() returns true of this value.
+   **/
   String relationship;
 
   /** parent of relation **/
@@ -63,6 +67,8 @@ public class PptRelation implements Serializable {
     this.child = child;
     parent_to_child_map = new LinkedHashMap();
     child_to_parent_map = new LinkedHashMap();
+    // rel_type is one of the above relationship types because this is a
+    // private constructor, called only within this file.
     relationship = rel_type;
     connect();
   }

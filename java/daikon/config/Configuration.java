@@ -119,6 +119,7 @@ public final class Configuration
         if (line.charAt(0) == '#') continue; // skip # comment lines
         apply(line);
       }
+      lines.close();
 
     } catch (IOException e) {
       throw new ConfigException("Cannot read from stream.\n" + e);
