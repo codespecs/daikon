@@ -3439,14 +3439,15 @@ invariants, which derived variables are created, and more.
 
 The configuration options are set by creating a configuration file and
 supplying it to Daikon on the command line using the @option{--config
-@var{filename}} option.  Daikon always first reads the default values in
-@file{daikon/java/daikon/config/defaults.txt}, then reads all supplied
-configuration files in order, possibly overriding the defaults.  You may
-wish to use the supplied default configuration file as an example when
-creating your own configuration files (which only need include the
-specific configuration options you wish to change).
+@var{filename}} option.  Daikon reads all supplied configuration files
+in order, overriding the defaults.  You may wish to use the supplied
+example configuration file
+@file{daikon/java/daikon/config/example-settings.txt} as an example when
+creating your own configuration files.  (If you did not downloaded
+Daikon's sources, you will have to extract the example from
+@file{daikon.jar} to read it.)
 
-You may also specify configuration setting directly on the command line,
+You may also specify a configuration setting directly on the command line,
 using the @option{--config_option @var{name}=@var{value}} option.
 
 The debugging flags @option{--debug} and @option{--dbg @var{category}}
