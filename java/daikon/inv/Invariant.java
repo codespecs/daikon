@@ -5,17 +5,12 @@ import daikon.Debug;
 import daikon.inv.unary.sequence.EltOneOf;
 import daikon.inv.unary.stringsequence.EltOneOfString;
 import daikon.inv.filter.*;
-import java.util.*;
-import java.io.Serializable;
-
-import org.apache.log4j.Logger;
-
-import utilMDE.Assert;
-import utilMDE.MathMDE;
-import utilMDE.UtilMDE;
-import daikon.*;
 import daikon.suppress.*;
 
+import utilMDE.*;
+import org.apache.log4j.Logger;
+import java.util.*;
+import java.io.Serializable;
 
 /**
  * Base implementation for Invariant objects.
@@ -1430,7 +1425,7 @@ public abstract class Invariant
         public VarInfoName getFromFirst(VarInfo var)
         { return super.getFromFirst(var).applyPrestate(); }
       };
-  */
+  */ // ... [INCR]
 
   /**
    * Returns a Vector[Invariant] which are the sameInvariant as this,
@@ -1482,8 +1477,8 @@ public abstract class Invariant
     return results;
   }
   */ // ... [INCR]
-  // For reproducible results when debugging
   /*  [INCR]
+  // For reproducible results when debugging
   static Comparator invComparator = new Invariant.ClassVarnameComparator();
   public Vector find_controlling_invariants_sorted() {
     Vector unsorted = find_controlling_invariants();
