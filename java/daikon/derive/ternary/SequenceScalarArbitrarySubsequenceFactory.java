@@ -58,10 +58,6 @@ public final class SequenceScalarArbitrarySubsequenceFactory
       return null;
     }
 
-    Assert.assertTrue(seqvar.isCanonical());
-    Assert.assertTrue(sclvar1.isCanonical());
-    Assert.assertTrue(sclvar2.isCanonical());
-
     if (! seqvar.indexCompatible(sclvar1))
       return null;
     if (! seqvar.indexCompatible(sclvar2))
