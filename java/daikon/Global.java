@@ -13,8 +13,14 @@ public final class Global {
 
   // When set, the following variables are never derived:
   // min, max, sum, a[0], a[1], a[-2], a[-1] 
-  // public static final boolean EXPERIMENTS = true;
-  public static final boolean EXPERIMENTS = false;
+  public static boolean EXPERIMENTS = true;
+  // public static final boolean EXPERIMENTS = false;
+  static {
+    boolean set_experiments = (System.getProperty("EXPERIMENTS") != null);
+    if (set_experiments) {
+      EXPERIMENTS = true;
+    }
+  }
 
   // Don't permit this class to be instantiated
   private Global() { }
