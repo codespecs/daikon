@@ -3,6 +3,7 @@ package daikon.inv.binary.twoScalar;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.unary.sequence.*;
+import daikon.inv.unary.scalar.*;
 import daikon.inv.binary.sequenceScalar.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.derive.*;
@@ -210,6 +211,39 @@ public final class IntComparison extends TwoScalar implements Comparison {
         return true;
       return false;
     }
+    { // Check for comparisons against constants
+      if (var1.isConstant() || (var2.isConstant())) {
+        VarInfo varconst;
+        VarInfo varnonconst;
+        boolean var1const = var1.isConstant();
+        boolean can_be_lt;
+        boolean can_be_gt;
+        if (var1const) {
+          varconst = var1;
+          varnonconst = var2;
+          can_be_lt = core.can_be_gt;
+          can_be_gt = core.can_be_lt;
+        } else {
+          varconst = var2;
+          varnonconst = var1;
+          can_be_lt = core.can_be_lt;
+          can_be_gt = core.can_be_gt;
+        }
+        long valconst = ((Long) varconst.constantValue()).longValue();
+        PptSlice1 nonconstslice = ((PptTopLevel)ppt.parent).findSlice(varnonconst);
+        if (can_be_lt) {
+          UpperBound ub = UpperBound.find(nonconstslice);
+          if ((ub != null) && ub.justified() && ub.core.max1 < valconst) {
+            return true;
+          }
+        } else if (can_be_gt) {
+          LowerBound lb = LowerBound.find(nonconstslice);
+          if ((lb != null) && lb.justified() && lb.core.min1 > valconst) {
+            return true;
+          }
+        }
+      }
+    }
     {
       LinearBinary lb = LinearBinary.find(ppt);
       if ((lb != null) && (lb.core.a == 1) && lb.justified()) {
@@ -306,39 +340,40 @@ public final class IntComparison extends TwoScalar implements Comparison {
       }
     }
 
-    // For each sequence variable, if this is an obvious member, and
-    // it has the same invariant, then this one is obvious.
-    PptTopLevel pptt = (PptTopLevel) ppt.parent;
-    for (int i=0; i<pptt.var_infos.length; i++) {
-      VarInfo vi = pptt.var_infos[i];
-      if (Member.isObviousMember(var1, vi)) {
-        PptSlice2 other_slice = pptt.findSlice_unordered(vi, var2);
-        if (other_slice != null) {
-          SeqIntComparison sic = SeqIntComparison.find(other_slice);
-          if ((sic != null)
-              && sic.justified()
-              && sic.core.can_be_eq == this.core.can_be_eq
-              && sic.core.can_be_lt == this.core.can_be_lt
-              && sic.core.can_be_gt == this.core.can_be_gt) {
-            return true;
+    {
+      // For each sequence variable, if this is an obvious member, and
+      // it has the same invariant, then this one is obvious.
+      PptTopLevel pptt = (PptTopLevel) ppt.parent;
+      for (int i=0; i<pptt.var_infos.length; i++) {
+        VarInfo vi = pptt.var_infos[i];
+        if (Member.isObviousMember(var1, vi)) {
+          PptSlice2 other_slice = pptt.findSlice_unordered(vi, var2);
+          if (other_slice != null) {
+            SeqIntComparison sic = SeqIntComparison.find(other_slice);
+            if ((sic != null)
+                && sic.justified()
+                && sic.core.can_be_eq == this.core.can_be_eq
+                && sic.core.can_be_lt == this.core.can_be_lt
+                && sic.core.can_be_gt == this.core.can_be_gt) {
+              return true;
+            }
           }
         }
-      }
-      if (Member.isObviousMember(var2, vi)) {
-        PptSlice2 other_slice = pptt.findSlice_unordered(vi, var1);
-        if (other_slice != null) {
-          SeqIntComparison sic = SeqIntComparison.find(other_slice);
-          if ((sic != null)
-              && sic.justified()
-              && sic.core.can_be_eq == this.core.can_be_eq
-              && sic.core.can_be_lt == this.core.can_be_gt
-              && sic.core.can_be_gt == this.core.can_be_lt) {
-            return true;
+        if (Member.isObviousMember(var2, vi)) {
+          PptSlice2 other_slice = pptt.findSlice_unordered(vi, var1);
+          if (other_slice != null) {
+            SeqIntComparison sic = SeqIntComparison.find(other_slice);
+            if ((sic != null)
+                && sic.justified()
+                && sic.core.can_be_eq == this.core.can_be_eq
+                && sic.core.can_be_lt == this.core.can_be_gt
+                && sic.core.can_be_gt == this.core.can_be_lt) {
+              return true;
+            }
           }
         }
       }
     }
-
 
     return false;
   }
