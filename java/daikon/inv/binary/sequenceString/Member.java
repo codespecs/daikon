@@ -36,7 +36,9 @@ public final class Member extends SequenceString  {
     VarInfo sclvar = ppt.var_infos[seq_first ? 1 : 0];
 
     // SUPPRESSED INVARIANT: Member, if isEqualToObviousMember (complicated)
-    if (isEqualToObviousMember(sclvar, seqvar)) {
+    // [INCR] for now, don't use equalTo() information.
+    // if (isEqualToObviousMember(sclvar, seqvar)) {
+    if (isObviousMember(sclvar, seqvar)) {
       Global.implied_noninstantiated_invariants += 1;
       if (debugMember) {
         System.out.println("Member not instantiated (obvious): "
