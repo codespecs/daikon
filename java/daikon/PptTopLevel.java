@@ -1513,7 +1513,10 @@ public class PptTopLevel extends Ppt {
         Assert.assert(exits.size() == 2, "Bad number of exits: " + exits.size());
         PptTopLevel ppt1 = (PptTopLevel) exits.elementAt(0);
         PptTopLevel ppt2 = (PptTopLevel) exits.elementAt(1);
-        addImplications_internal(ppt1, ppt2, true);
+        // No longer necessary to use add_implications, as we are now
+        // adding combined prgram points early.
+        // addImplications_internal(ppt1, ppt2, true);
+        addImplications_internal(ppt1, ppt2, false);
       }
     } else {
       // System.out.println("No implications to add for " + this.name);
@@ -1576,7 +1579,11 @@ public class PptTopLevel extends Ppt {
 
     if (add_nonimplications) {
       for (int i=0; i<same_invariants_vec.size(); i++) {
-        implication_view.addInvariant((Invariant)same_invariants_vec.elementAt(i));
+        Invariant same_inv = (Invariant)same_invariants_vec.elementAt(i);
+        // This test doesn't seem to be productive.
+        if (! same_inv.isControlled()) {
+          implication_view.addInvariant(same_inv);
+        }
       }
     }
 
