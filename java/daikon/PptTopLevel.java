@@ -2022,6 +2022,8 @@ public class PptTopLevel extends Ppt {
             out.print(" " + vi.name);
           }
         }
+        if (printed_header)
+          out.println();
       }
       if (unmodified_vars.size() > 0) {
         out.print("      Unmodified variables:");
