@@ -41,7 +41,7 @@ public class PS3TestSuite extends TestSuite
 	File testDir = new File(getTestDir());
 	File[] inputs = getInputFiles(testDir);
 
-	if (inputs.length == 0)
+	if ((inputs == null) || (inputs.length == 0))
 	    throw new FileNotFoundException
 		("No test input files found");
 
