@@ -113,6 +113,11 @@ public final class TestUtilMDE {
     assert_arrays_equals(ArraysMDE.min_max(new int[] { 3 }),
 			 new int[] { 3,3 });
 
+    // public static int sum(int[] a)
+    assert(0 == ArraysMDE.sum(new int[0]));
+    assert(10 == ArraysMDE.sum(new int[] {10}));
+    assert(271 == ArraysMDE.sum(new int[] {17, 22, 98, 191, -57}));
+
     // public static int element_range(int[] a)
     assert(ArraysMDE.element_range(new int[] { 1,2,3 }) == 2);
     assert(ArraysMDE.element_range(new int[] { 2,33,1 }) == 32);
