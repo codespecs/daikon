@@ -473,6 +473,18 @@ tests), and that if any of these tests fails, you should not check in your
 changes.
 </p>
 
+<p>
+The regression tests run every night.  They should never fail, because it
+is each developer's responsibility to run them before checking in code.  If
+they do fail, then it is the responsibility of everyone who checked in code
+in the previous day to collectively determine responsibility (this is often
+obvious).  It is the responsibility of the person who caused the failure to
+fix it immediately; the regression tests should almost never fail two
+nights in a row.  This is important to avoid masking subsequent errors
+&mdash; the regression tests do no good while they are failing.  (And, you
+should be ashamed if the regression tests fail at all!)
+</p>
+
 
 <h3><a name="distribution">Making a distribution</a></h3>
 
