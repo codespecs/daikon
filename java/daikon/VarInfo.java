@@ -24,6 +24,11 @@ public final class VarInfo
   implements Cloneable, Serializable
 {
 
+  /**
+   * The program point this variable is in.
+   **/
+  public PptTopLevel ppt;
+
   // Name and type
 
   /**
@@ -34,18 +39,18 @@ public final class VarInfo
   /**
    * Type as declared in the program.
    **/
-  public ProglangType type;
+  public ProglangType type;      // interned
 
   /**
    * Type as written in the data trace file.  This is an interface
    * detail.
    **/
-  public ProglangType file_rep_type;
+  public ProglangType file_rep_type;      // interned
 
   /**
    * Type as internally stored.  This is an interface detail.
    **/
-  public ProglangType rep_type;
+  public ProglangType rep_type;      // interned
 
   /**
    * Comparability info
@@ -73,27 +78,13 @@ public final class VarInfo
   				//   (static_constant_value != null)
                                 //   iff (value_index == -1)
 
-  // Partial ordering relationships between variables
+  // Partial ordering relationships between variables.
+  // If A is higher than B then every value seen at B is seen at A.
+  // Use mixed-type rep to save space.
 
-  // Keep private, modifiable copies and public read-only views
-  private final Collection private_po_higher = new ArrayList(2);
-  private final Collection private_po_lower = new ArrayList(2);
-
-  /**
-   * Variables immediately higher in the partial order (compared to this).
-   * If A is higher than B then every value seen at B is seen at A.
-   * Elements are VarInfos.  Contains no duplicates.
-   * @see po_lower
-   **/
-  public final Collection po_higher = Collections.unmodifiableCollection(private_po_higher);
-
-  /**
-   * Variables immediately lower in the partial order (compared to this).
-   * If A is higher than B then every value seen at B is seen at A.
-   * Elements are VarInfos.  Contains no duplicates.
-   * @see po_higher
-   **/
-  public final Collection po_lower = Collections.unmodifiableCollection(private_po_lower);
+  private Object po_higher; // either null, VarInfo, or VarInfo[] with no duplicates
+  private Object po_lower;  // either null, VarInfo, or VarInfo[] with no duplicates
+  private int[] po_higher_nonce; // null iff po_higher is null, else length == po_higher().size()
 
   // Derived variables
 
@@ -105,12 +96,9 @@ public final class VarInfo
   /**
    * Vector of Derivation objects
    **/
+  /* [INC] dead code
   public Vector derivees;
-
-  /**
-   * The program point this variable is in.
-   **/
-  public PptTopLevel ppt;
+  */
 
   // We don't know about canBeMissing or canBeNull anymore, since we
   // see data incrementally, instead of slurping it all first.
@@ -142,6 +130,47 @@ public final class VarInfo
   // Does not include equal_to, which is dealt with elsewhere.
   // An invariant is only listed on the first VarInfo, not all VarInfos.
   // public Vector exact_nonunary_invariants; // [INCR]
+
+  /**
+   * @exception RuntimeException if representation invariant on this is broken
+   */
+  public void checkRep() {
+    Assert.assert(ppt != null);
+    Assert.assert(name != null);
+    Assert.assert(name == name.intern());
+    Assert.assert(type != null);
+    Assert.assert(file_rep_type != null);
+    Assert.assert(rep_type != null);
+    Assert.assert(comparability != null); // anything else ??
+    Assert.assert(0 <= varinfo_index && varinfo_index < ppt.var_infos.length);
+    Assert.assert(-1 <= value_index && value_index < varinfo_index);
+    Assert.assert(is_static_constant == (value_index == -1));
+    Assert.assert(is_static_constant || (static_constant_value == null));
+    if (po_higher == null) {
+      Assert.assert(po_higher_nonce == null);
+    } else if (po_higher instanceof VarInfo) {
+      Assert.assert(po_higher_nonce != null);
+      Assert.assert(po_higher_nonce.length == 1);
+    } else {
+      Assert.assert(po_higher instanceof VarInfo[]);
+      VarInfo[] ary = (VarInfo[]) po_higher;
+      Assert.assert(! ArraysMDE.any_null(ary));
+      Assert.assert(po_higher_nonce != null);
+      Assert.assert(po_higher_nonce.length == ary.length);      
+    }
+    if (po_lower == null) {
+      Assert.assert(po_higher_nonce == null);
+    } else if (po_higher instanceof VarInfo) {
+    } else {
+      Assert.assert(po_higher instanceof VarInfo[]);
+      VarInfo[] ary = (VarInfo[]) po_higher;
+      Assert.assert(! ArraysMDE.any_null(ary));
+    }
+    // check lower/higher rep types matching, too ??
+    // Derivation derived; ??
+    // VarInfo sequenceSize; ??
+    // VarInfo postState; // non-null if this is an orig() variable
+  }
 
   static boolean legalRepType(ProglangType rep_type) {
     return ((rep_type == ProglangType.INT)
@@ -186,7 +215,7 @@ public final class VarInfo
     value_index = -1;
     varinfo_index = -1;
 
-    derivees = new Vector(3);
+    // derivees = new Vector(3); // [INCR]
 
     // exact_nonunary_invariants = new Vector(2); // [INCR]
   }
@@ -212,6 +241,7 @@ public final class VarInfo
   // I *think* I don't need to implement VarInfo.clone(), as the
   // java.lang.Object version is sufficient.
   // protected Object clone() { ... }
+  // ^^^ [INCR] Not sure if this is true anymore, or ever where we clone VarInfos
 
   // I'm not currently using this because doing this would prevent any new
   // variable derivation [why?], and I do want such derivation to occur.
@@ -253,6 +283,7 @@ public final class VarInfo
         a_new[i].derived = deriv_new;
       }
     }
+    /* [INCR]
     for (int i=0; i<a_new.length; i++) {
       Vector derivees_old = a_old[i].derivees;
       Vector derivees_new = new Vector(derivees_old.size());
@@ -263,6 +294,7 @@ public final class VarInfo
         derivees_new.add(deriv_new);
       }
     }
+    */
     return a_new;
   }
 
@@ -294,16 +326,66 @@ public final class VarInfo
 
   /** Trims the collections used by this VarInfo */
   public void trimToSize() {
-    ((ArrayList) private_po_higher).trimToSize();
-    ((ArrayList) private_po_lower).trimToSize();
-    if (derivees != null) { derivees.trimToSize(); }
+    // ((ArrayList) private_po_higher).trimToSize();
+    // ((ArrayList) private_po_lower).trimToSize();
+    // if (derivees != null) { derivees.trimToSize(); }
     // Derivation derived; probably can't be trimmed
   }
 
+
   /**
-   * Ensures that parent is in this.po_higher and this in in parent.po_lower.
+   * @return read-only collection over variables immediately higher in
+   * the partial order (compared to this).  Not a view (sees no updates).
+   * If A is higher than B then every value seen at B is seen at A.
+   * Elements are VarInfos.  Contains no duplicates.
+   * @see po_lower()
+   * @see po_higher_nonce()   
    **/
-  public void addHigherPO(VarInfo higher) {
+  public Collection po_higher() {
+    if (po_higher == null) {
+      return Collections.EMPTY_LIST;
+    }
+    if (po_higher instanceof VarInfo) {
+      return Collections.singleton(po_higher);
+    }
+    VarInfo[] ary = (VarInfo[]) po_higher;
+    return Collections.unmodifiableList(Arrays.asList(ary));
+  }
+
+  /**
+   * @return read-only int[] giving the nonces for po_higher()
+   * @see po_higher()
+   **/
+  public int[] po_higher_nonce() {
+    return po_higher_nonce; // writable; oh well
+  }
+
+  /**
+   * @return read-only collection over variables immediately lower in
+   * the partial order (compared to this).  Not a view (sees no updates).
+   * If A is higher than B then every value seen at B is seen at A.
+   * Elements are VarInfos.  Contains no duplicates.
+   * @see po_higher()
+   **/
+  public Collection po_lower() {
+    if (po_lower == null) {
+      return Collections.EMPTY_LIST;
+    }
+    if (po_lower instanceof VarInfo) {
+      return Collections.singleton(po_lower);
+    }
+    VarInfo[] ary = (VarInfo[]) po_lower;
+    return Collections.unmodifiableList(Arrays.asList(ary));
+  }
+
+  /**
+   * Adds a link in the partial order, setting "higher" to be higher
+   * than "this".  The given nonce is associated with the link.  It is
+   * an error if the link already exists.
+   **/
+  public void addHigherPO(VarInfo higher,
+			  int nonce)
+  {
     VarInfo lower = this;
 
     Assert.assert(lower != higher);
@@ -312,26 +394,54 @@ public final class VarInfo
     Assert.assert(lower.rep_type == higher.rep_type);
     Assert.assert(lower.file_rep_type == higher.file_rep_type);
 
-    boolean already = lower.private_po_higher.contains(higher);
-    Assert.assert(already == higher.private_po_lower.contains(lower));
+    boolean already = lower.po_higher().contains(higher);
+    Assert.assert(already == higher.po_lower().contains(lower));
     if (already) 
-      return;
+      throw new IllegalArgumentException("Relation already exists");
 
-    lower.private_po_higher.add(higher);
-    higher.private_po_lower.add(lower);
+    // lower.po_higher.add(higher)
+    // lower.po_higher_nonce.add(nonce)
+    if (lower.po_higher == null) {
+      lower.po_higher = higher;
+      lower.po_higher_nonce = new int[] { nonce };
+    } else if (lower.po_higher instanceof VarInfo) {
+      lower.po_higher = new VarInfo[] { (VarInfo) lower.po_higher, higher };
+      lower.po_higher_nonce = new int[] { lower.po_higher_nonce[0], nonce };
+    } else {
+      VarInfo[] po_old = (VarInfo[]) lower.po_higher;
+      int[] po_old_nonce = lower.po_higher_nonce;
+      VarInfo[] po_new = new VarInfo[po_old.length + 1];
+      int[] po_new_nonce = new int[po_old.length + 1];
+      System.arraycopy(po_old, 0, po_new, 0, po_old.length);
+      System.arraycopy(po_old_nonce, 0, po_new_nonce, 0, po_old.length);
+      po_new[po_old.length] = higher;
+      po_new_nonce[po_old.length] = nonce;
+    }
+    // higher.po_lower.add(lower)
+    if (higher.po_lower == null) {
+      higher.po_lower = lower;
+    } else if (higher.po_lower instanceof VarInfo) {
+      higher.po_lower = new VarInfo[] { (VarInfo) higher.po_lower, lower };
+    } else {
+      VarInfo[] po_old = (VarInfo[]) higher.po_lower;
+      VarInfo[] po_new = new VarInfo[po_old.length + 1];
+      System.arraycopy(po_old, 0, po_new, 0, po_old.length);
+      po_new[po_old.length] = lower;
+    }
   }
 
   /**
-   * Result is a stable BFS iterator.
+   * @param lower true iff the closure is over lower elements
+   * @return stable BFS iterator
    **/
   public Iterator closurePO(boolean lower) {
     List result = new ArrayList();
-    LinkedList worklist = new LinkedList(lower ? private_po_lower : private_po_higher);
+    LinkedList worklist = new LinkedList(lower ? po_lower() : po_higher());
     while (! worklist.isEmpty()) {
       VarInfo head = (VarInfo) worklist.removeFirst();
       if (! result.contains(head)) {
 	result.add(head);
-	worklist.addAll(lower ? head.private_po_lower : head.private_po_higher);
+	worklist.addAll(lower ? head.po_lower() : head.po_higher());
       }
     }
     Assert.assert(! result.contains(this));
@@ -351,7 +461,7 @@ public final class VarInfo
       + ",is_static_constant=" + is_static_constant
       + ",static_constant_value=" + static_constant_value
       + ",derived=" + derived
-      + ",derivees=" + derivees
+      // + ",derivees=" + derivees
       + ",ppt=" + ppt.name
       // + ",equal_to=" + equal_to // [INCR]
       + ">";

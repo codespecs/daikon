@@ -237,6 +237,9 @@ public abstract class PptSlice extends Ppt {
       if (inv.no_invariant)
 	worklist.add(inv);
     }
+    if (worklist.size() == 0) {
+      return;
+    }
     // For each lower PptTopLevel
     for (Iterator j = po_lower.iterator(); j.hasNext(); ) {
       PptTopLevel lower = (PptTopLevel) j.next();
@@ -244,7 +247,7 @@ public abstract class PptSlice extends Ppt {
       List slices_vis = (List) po_lower_vis.get(lower);
       for (Iterator k = slices_vis.iterator(); k.hasNext(); ) {
 	VarInfo[] slice_vis = (VarInfo[]) k.next();
-	// Ensure the slice exists
+	// Ensure the slice exists.
 	PptSlice slice = lower.get_or_instantiate_slice(slice_vis);
 	// Compute the permutation
 	int[] permutation = new int[slice.arity];
@@ -252,9 +255,17 @@ public abstract class PptSlice extends Ppt {
 	  permutation[i] = ArraysMDE.indexOf(slice.var_infos, slice_vis[i]);
 	}
 	// For each invariant
+      for_each_invariant:
 	for (Iterator i = worklist.iterator(); i.hasNext(); ) {
 	  Invariant inv = (Invariant) i.next();
 	  Assert.assert(inv.no_invariant);
+	  // If its class does not already exist in lower
+	  for (Iterator h = slice.invs.iterator(); h.hasNext(); ) {
+	    Object item = h.next();
+	    if (item.getClass() == inv.getClass()) {
+	      continue for_each_invariant;
+	    }
+	  }
 	  // Let it be reborn
 	  Invariant reborn = inv.resurrect(slice, permutation);
 	  slice.addInvariant(reborn);

@@ -70,12 +70,57 @@ public class PptTopLevel
   private int values_num_values;
   private String values_tuplemod_samples_summary;
 
+  // Do I want two collections here (one for slices and one for conditional?
+  // This used to be a WeakHashMap; now it is a HashSet, because I'm not sure
+  // where else these would be referred to.
+  // // old comment:
+  // //   This is actually a set, but is implemented as a WeakHashMap because
+  // //   that is the only weak collection and I want the objects weakly held.
+  // I'm not sure why this was originally a HashSet, but that fact is now
+  // taken advantage of in instantiate_views, for fast checking of whether
+  // an element is in the set.  (Simple ordering might have been enough there.)
   /**
-   * Together, lower_ppts and lower_tranforms describe how data 
+   * All the Views on this.
+   * Provided so that this Ppt can notify them when significant events
+   * occur, such as receiving a new value, deriving variables, or
+   * discarding data.
    **/
-  public PptTopLevel[] lower_ppts;
-  /** @see lower_ppts */
-  public int[][] lower_transforms;
+  HashSet views;
+
+  // Temporarily have a separate collection for PptConditional views.
+  // In the long run, I'm not sure whether the two collections will be
+  // separate or not.
+  // Right now, these are created only after all the values have been seen,
+  // so I don't have to get too tense about installing them correctly and
+  // iterating over them.  That should be fixed later.  For now, maybe have
+  // two methods that add:  one that puts all the values in, one that doesn't.
+  Vector views_cond;
+
+  /**
+   * Together, dataflow_ppts and dataflow_tranforms describe how
+   * samples which are received at this program point flow to other
+   * points.  If samples are not received at this point, both are
+   * null.  If samples are received at this point, then:
+   *
+   * <li>dataflow_ppts includes this;
+   *
+   * <li>dataflow_ppts is ordered by the way samples will flow;
+   *
+   * <li>dataflow_transforms contains functions from this to
+   * dataflow_ppts; elements are int[]-style functions whose domain is
+   * the number of var_infos in this, and whose range is number of
+   * var_infos in the corresponding element of dataflow_ppts;
+   *
+   * <li>dataflow_transforms describes the function from the var_infos
+   * of this ppt to same in dataflow_ppts, so its inner length equals
+   * this.var_infos.length);
+   *
+   * <li>program points in dataflow_ppts may be repeated if a sample
+   * at this point induces more than one sample another point.
+   **/
+  public PptTopLevel[] dataflow_ppts;
+  /** @see dataflow_ppts */
+  public int[][] dataflow_transforms;
 
   // [INCR] ...
   // Assumption: The "depends on" graph is acyclic
@@ -172,7 +217,7 @@ public class PptTopLevel
   /** Trim the collections used in this PptTopLevel */
   public void trimToSize() {
     super.trimToSize();
-    // Nothing new here to trim!
+    if (views_cond != null) { views_cond.trimToSize(); }
   }
 
   ///////////////////////////////////////////////////////////////////////////
@@ -487,25 +532,69 @@ public class PptTopLevel
   ///
 
   /**
-   * The way adding samples works: Precompute program points that have
-   * any VarInfos that are higher than this point's VarInfos.  Store
-   * them in topological sort order, highest first.  Also precompute a
-   * transformation vector that maps the variable index at this point
-   * to the variable index in the higher point.
+   * Given a sample that was observed at this ppt, flow it down from
+   * any higher ppts (and to this ppt, of course).  Hit conditional
+   * ppts along the way (via the add method).
+   **/
+  public void add_and_flow(ValueTuple vt, int count) {
+    // System.out.println("PptTopLevel " + name + ": add " + vt);
+    Assert.assert(vt.size() == var_infos.length - num_static_constant_vars);
+
+    // The way adding samples works: We have precomputed program
+    // points that have any VarInfos that are higher than this point's
+    // VarInfos, and a transformation vector that maps the variable
+    // index at this point to the variable index in the higher point.
+    // Simply walk down that list.
+    Assert.assert(dataflow_ppts != null, name);
+    Assert.assert(dataflow_transforms != null, name);
+    Assert.assert(dataflow_ppts.length == dataflow_transforms.length, name);
+
+    for (int i=0; i < dataflow_ppts.length; i++) {
+      PptTopLevel ppt = dataflow_ppts[i];
+      int[] transform = dataflow_transforms[i];
+      Assert.assert(transform.length == var_infos.length);
+
+      // Map vt into the transformed tuple
+      int ppt_num_vals = ppt.var_infos.length - ppt.num_static_constant_vars;
+      Object[] vals = new Object[ppt_num_vals];
+      int[] mods = new int[ppt_num_vals];
+      Arrays.fill(mods, ValueTuple.MISSING);
+      for (int j=0; j < transform.length; j++) {
+	int tj = transform[j];
+	if (tj == -1) continue;
+	int this_value_index = var_infos[j].value_index;
+	int ppt_value_index = ppt.var_infos[tj].value_index;
+	vals[ppt_value_index] = vt.vals[this_value_index];
+	mods[ppt_value_index] = vt.mods[this_value_index];
+      }
+
+      ValueTuple ppt_vt = new ValueTuple(vals, mods);
+      ppt.add(ppt_vt, count);
+    }
+
+  }
+
+  /**
+   * Add the sample to the invariants at this program point and any
+   * child conditional program points, but do no flow the sample to
+   * other related ppts.
    **/
   void add(ValueTuple vt, int count) {
     // System.out.println("PptTopLevel " + name + ": add " + vt);
     Assert.assert(vt.size() == var_infos.length - num_static_constant_vars);
 
-    // XXX (for now, until front ends are changed)
-    {
-      if (!ppt_name.isObjectInstanceSynthetic()) return;
-      // if (ppt_name.isEnterPoint()) return;
+    if (values_num_samples == 0) {
+      generate_invariants();
     }
+    values_num_samples += count;
 
     // Add to all the views
     for (Iterator itor = views.iterator() ; itor.hasNext() ; ) {
       PptSlice view = (PptSlice) itor.next();
+      if (view.invs.size() == 0) {
+	System.err.println("No invs for " + view.name);
+	continue;
+      }
       view.add(vt, count);
       view.flow_and_remove_falsified();
       if (view.invs.size() == 0) {
@@ -519,13 +608,11 @@ public class PptTopLevel
   }
 
   /**
-   * This function is called to jump-start processing; it creates all
-   * the derived variables and views (and thus candidate invariants).
-   * This method does not check those invariants.
+   * Create all the derived variables.
    **/
-  public void generate_invariants() {
+  public void create_derived_variables() {
     if (debug.isDebugEnabled())
-      debug.debug("setup_invariants for " + name);
+      debug.debug("create_derived_variables for " + name);
 
     // First make ALL of the derived variables.  The loop terminates
     // because derive() stops creating derived variables after some
@@ -550,11 +637,24 @@ public class PptTopLevel
     Assert.assert(lower == upper);
     Assert.assert(upper == var_infos.length);
 
+    if (debug.isDebugEnabled())
+      debug.debug("Done with create_derived_variables, " + var_infos.length + " vars");
+  }
+
+  /**
+   * This function is called to jump-start processing; it creates all
+   * the views (and thus candidate invariants), but does not check
+   * those invariants.
+   **/
+  public void generate_invariants() {
+    if (debug.isDebugEnabled())
+      debug.debug("generate_invariants for " + name);
+
     // Now make all of the views (and thus candidate invariants)
     instantiate_views(0, var_infos.length);
 
     if (debug.isDebugEnabled())
-      debug.debug("Done with setup_invariants, " + var_infos.length + " vars");
+      debug.debug("Done with generate_invariants");
   }
 
 
@@ -870,7 +970,10 @@ public class PptTopLevel
   }
 
   /**
-   * Return a slice that contains the given VarInfos (creating if needed).
+   * Return a slice that contains the given VarInfos (creating if
+   * needed).  It is incumbent on the caller that the slice be either
+   * filled with one or more invariants, or else removed from the
+   * views collection.
    **/
   public PptSlice get_or_instantiate_slice(VarInfo[] vis) {
     PptSlice result = findSlice_unordered(vis);
@@ -1257,7 +1360,10 @@ public class PptTopLevel
   }
 
 
-  private void addImplications_internal(Ppt ppt1, Ppt ppt2, boolean add_nonimplications) {
+  private void addImplications_internal(PptTopLevel ppt1,
+					PptTopLevel ppt2,
+					boolean add_nonimplications)
+  {
     // System.out.println("addImplications_internal: " + ppt1.name + ", " + ppt2.name);
 
     PptSlice[][] matched_views = match_views(ppt1, ppt2);
@@ -1543,7 +1649,7 @@ public class PptTopLevel
   // Each element is a PptSlice[2].
   // (Perhaps I need to do something special in the case of differing canonical
   // variables; deal with that later.)
-  public PptSlice[][] match_views(Ppt ppt1, Ppt ppt2) {
+  public PptSlice[][] match_views(PptTopLevel ppt1, PptTopLevel ppt2) {
     Vector result = new Vector();
 
     SortedSet ss1 = new TreeSet(arityVarnameComparator);

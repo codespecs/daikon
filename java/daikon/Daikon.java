@@ -170,9 +170,6 @@ public final class Daikon {
     PptMap all_ppts = load_decls_files(decls_files);
     load_spinfo_files(all_ppts, spinfo_files);
 
-    // Create candidate invariants
-    generate_invariants(all_ppts);
-
     // Infer invariants
     process_data(all_ppts, dtrace_files);
 
@@ -423,6 +420,7 @@ public final class Daikon {
     }
   }
 
+  /* Now done as the first sample hits each program point
   private static void generate_invariants(PptMap all_ppts)
   {
     elapsedTime(); // reset timer
@@ -437,6 +435,7 @@ public final class Daikon {
     System.out.println(")");
     debugTrace.debug("Time spent on setup_invariants: " + elapsedTime());
   }
+  */
 
   ///////////////////////////////////////////////////////////////////////////
   // Infer invariants over the trace data

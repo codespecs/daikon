@@ -38,33 +38,8 @@ public abstract class Ppt implements java.io.Serializable {
 
   public VarInfo[] var_infos;
 
-  // Do I want two collections here (one for slices and one for conditional?
-  // This used to be a WeakHashMap; now it is a HashSet, because I'm not sure
-  // where else these would be referred to.
-  // // old comment:
-  // //   This is actually a set, but is implemented as a WeakHashMap because
-  // //   that is the only weak collection and I want the objects weakly held.
-  // I'm not sure why this was originally a HashSet, but that fact is now
-  // taken advantage of in instantiate_views, for fast checking of whether
-  // an element is in the set.  (Simple ordering might have been enough there.)
-  /**
-   * All the Views on this.
-   * Provided so that this Ppt can notify them when significant events
-   * occur, such as receiving a new value, deriving variables, or
-   * discarding data.
-   **/
-  HashSet views;
-
-  // Temporarily have a separate collection for PptConditional views.
-  // In the long run, I'm not sure whether the two collections will be
-  // separate or not.
-  // Right now, these are created only after all the values have been seen,
-  // so I don't have to get too tense about installing them correctly and
-  // iterating over them.  That should be fixed later.  For now, maybe have
-  // two methods that add:  one that puts all the values in, one that doesn't.
-  Vector views_cond;
-
-  // [INCR] add/remove view methods were never used on a Ppt, always
+  // [INCR] the views and cond_views fields and their corresponding
+  // add/remove view methods were never used on a Ppt, always
   // on PptTopLevel, so move their declaration there (in fact they
   // don't make sense in PptSlice, so PptTopLevel is a better place
   // anyway.
@@ -74,7 +49,6 @@ public abstract class Ppt implements java.io.Serializable {
     for (int i=0; i < var_infos.length; i++) {
       var_infos[i].trimToSize();
     }
-    if (views_cond != null) { views_cond.trimToSize(); }
   }
 
   /** Number of samples, not including missing values. */
