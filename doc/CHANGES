@@ -60,7 +60,7 @@ Kvasir
     amount of output in order to improve the likelihood of finding 
     more useful invariants. Added the pointer-type disambiguation feature
     (--disambig and --disambig-file options) so that users can exert finer 
-    control of whether pointer variables are printed as single elements or arrays.
+    control of whether pointers are printed as single elements or arrays.
 
   Bug Fixes
 
