@@ -25,10 +25,10 @@ public class SplitterFactory {
    * @param <filename>.spinfo
    * @return Vector with the data: (Pptname, Splitter[], Pptname, Splitter[] ...)
    **/
-  public static Vector read_spinfofile(String infofile, PptMap all_ppts)
+  public static Vector read_spinfofile(File infofile, PptMap all_ppts)
     throws IOException, FileNotFoundException{
 
-    LineNumberReader reader = UtilMDE.LineNumberFileReader(infofile);
+    LineNumberReader reader = UtilMDE.LineNumberFileReader(infofile.toString());
     Vector ppts_and_splitters = new Vector(); //the return vector
     Vector replace = new Vector();
     Vector conds = new Vector();
