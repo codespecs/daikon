@@ -5577,12 +5577,11 @@ The warning ``Could not utilize Simplify'' indicates that the Simplify
 theorem-prover could not be run; this usually indicates that the
 @command{Simplify} binary was not found on the user's path.
 Simplify must be separately obtained (from
-@url{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
-order to use it.
+@url{http://research.compaq.com/SRC/esc/Simplify.html}) and installed.
 
 If Simplify is not used, certain redundant (logically implied)
-invariants may appear in Daikon's output.  The output is otherwise
-correct.
+invariants may appear in Daikon's output.  The output is
+correct, but more verbose than it would be if you used Simplify.
 
 
 @node    Method needs to be implemented, JVM initialization error, Simplify errors, Daikon problems
