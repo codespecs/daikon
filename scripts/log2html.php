@@ -14,6 +14,7 @@
 // parses a line from a java traceback and returns the java file name
 // (relative to the top of the java source tree), qualified class name,
 // unqualified class name, method name, and line #
+
 function parse_frame ($frame) {
 
   $frame = str_replace ("\tat ", "", $frame);
@@ -137,7 +138,6 @@ function process_line ($line, $tb) {
     exit;
   }
 
-  echo "<title> log2html $file </title>\n";
 
   $url = "log2html.php?file=$file";
 
@@ -159,14 +159,15 @@ function process_line ($line, $tb) {
     if ($open)
       $tb_open[] = $open;
     if ($close) {
-      if (in_array ($close, $tb_open)) {
+      while (in_array ($close, $tb_open)) {
         $key = array_search ($close, $tb_open);
         // echo "old tb_open = " . implode (" ", $tb_open) . "<br>\n";
         // echo "unsetting $key<br>\n";
         unset ($tb_open[$key]);
-        $tb_open = array_values ($tb_open);
-        // echo "new tb_open = " . implode (" ", $tb_open) . "<br>\n";
       }
+      $tb_open = array_values ($tb_open);
+      // echo "new tb_open = " . implode (" ", $tb_open) . "<br>\n";
+      
     }
     rewind ($fp);
     $x = fwrite ($fp, "$all_open\n");
@@ -177,7 +178,15 @@ function process_line ($line, $tb) {
     // echo "all_open = $all_open\n";
     // echo "tb_open = " . implode (" ", $tb_open) . "\n";
     fclose ($fp);
+    if ($open || $close) {
+      header("Location: http://".$_SERVER['HTTP_HOST']
+                     .dirname($_SERVER['PHP_SELF'])
+                     ."/log2html.php?file=$file");
+      exit;
+    }
   }
+
+  echo "<title> log2html $file </title>\n";
   $start_table = 0;
   $end_table = 0;
 
