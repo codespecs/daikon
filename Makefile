@@ -8,7 +8,7 @@ LISP_FILES := gries-helper.lisp instrument.lisp data-trace.lisp \
 	gries.lisp gries-instrumented.lisp inv-medic.lisp
 LISP_PATHS := $(addprefix lisp-front-end/,$(LISP_FILES))
 PYTHON_FILES := daikon.py util.py TextFile.py
-DOC_FILES := daikon.py.doc Makefile daikon.html daikon.gif
+DOC_FILES := dtrace-format.txt Makefile daikon.html daikon.gif
 PY_DOC_FILES := daikon.py.doc Makefile TextFile.README daikon.gif
 README_FILES := README-daikon-java README-daikon1 README-dist
 SCRIPT_FILES := modbit-munge.pl java-cpp lines-from
@@ -178,7 +178,7 @@ dist-dfej: dist-dfej-solaris
 
 dist-dfej-solaris: $(DIST_DIR_2)/dfej-solaris
 
-$(DIST_DIR_2)/dfej-solaris: $(DFEJ_DIR)/src/dfej
+$(DIST_DIR_2)/dfej-solaris: $(DFEJ_DIR)/src/dfej-solaris
 	cp -pf $< $@
 	update-link-dates $(DIST_DIR)/index.html
 	cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@cs.washington.edu

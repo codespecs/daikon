@@ -132,7 +132,7 @@ Installing Daikon:
       csh put the following in your <tt>.cshrc</tt> file:
 <pre>
       setenv CLASSPATH <em>parent</em>/daikon/java:${CLASSPATH}
-
+</pre>
         </ol>
       <li><b>C front end</b>:
         Supporting files for the C front end are found in the 
@@ -488,7 +488,7 @@ Auxiliary programs
 Miscellaneous files
   Makefile		Makefile for the invariant detection system
   VERSION		Timestamp of this distribution
-  daikon.py.doc		Documentation of the trace file format; somewhat old
+  dtrace-format.txt	Documentation of the trace file format; somewhat old
   daikon-python/        An old version of Daikon, written in Python.
 </pre>
 

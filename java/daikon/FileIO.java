@@ -393,7 +393,7 @@ public final class FileIO {
 // To detect invariants in a particular program, it is enough to insert code
 // in the application which creates a trace file.  In Lisp, the
 // `write-to-data-trace' macro and `instrument' function perform this task.
-// For documentation of the data trace file format, see daikon.py.doc.
+// For documentation of the data trace file format, see dtrace-format.txt.
 
 
 

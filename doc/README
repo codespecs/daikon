@@ -20,7 +20,7 @@ In this directory (~mernst/research/notkin/invariants/):
  * invariants.bib: notes on related work
  * cubist/ and foil/:  experiments with machine learning programs
  * daikon.py, util.py: the invariant detector, implemented in Python
- * daikon.py.doc: implementation documentation for daikon.py
+ * dtrace-format.txt: data trace file format
  * gries.lisp:  the programs from David Gries' book (in Lisp syntax)
  * gries-helper.lisp, data-trace.lisp:  Gries Lisp syntax; output data to file
  * p*.dtrace: files created by running instrumented Gries programs

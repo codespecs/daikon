@@ -387,6 +387,9 @@ class proglang_type:
             return 1
 
     def compatible(self, other):
+        # This disables checking of declared (source) types.
+        # A variable should be added to control this!
+        return true
         base1 = self.base
         base2 = other.base
         return ((self.dimensionality == other.dimensionality)
@@ -1641,7 +1644,7 @@ pass2_functions = (introduce_from_sequence_pass2,
 # To detect invariants in a particular program, it is enough to insert code
 # in the application which creates a trace file.  In Lisp, the
 # `write-to-data-trace' macro and `instrument' function perform this task.
-# For documentation of the data trace file format, see daikon.py.doc.
+# For documentation of the data trace file format, see dtrace-format.txt.
 
 
 
