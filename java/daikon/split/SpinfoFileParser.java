@@ -234,14 +234,19 @@ class SpinfoFileParser {
     command = command.trim();
     if (command.startsWith("DAIKON_FORMAT")) {
       obj.daikonFormat = command.substring("DAIKON_FORMAT".length()).trim();
+      obj.dummyDesired = true;
     } else if (command.startsWith("JAVA_FORMAT")) {
       obj.javaFormat = command.substring("JAVA_FORMAT".length()).trim();
+      obj.dummyDesired = true;
     } else if (command.startsWith("ESC_FORMAT")) {
       obj.escFormat = command.substring("ESC_FORMAT".length()).trim();
+      obj.dummyDesired = true;
     } else if (command.startsWith("SIMPLIFY_FORMAT")) {
       obj.simplifyFormat = command.substring("SIMPLIFY_FORMAT".length()).trim();
+      obj.dummyDesired = true;
     } else if (command.startsWith("IOA_FORMAT")) {
       obj.ioaFormat = command.substring("IOA_FORMAT".length()).trim();
+      obj.dummyDesired = true;
     } else {
       System.err.println("Unrecognized format spec in .spinfo: "
                                  + command);

@@ -1,10 +1,7 @@
 package daikon.split;
 
-import daikon.*;
 import daikon.inv.*;
-import daikon.split.*;
 import java.io.*;
-import java.util.*;
 
 /**
  * A SplitterObject is the starting point for all the information we
@@ -25,6 +22,7 @@ public class SplitterObject implements Comparable {
   private int guid = -999;      // -999 indicates not yet set
   private File classFile; // class file containing compiled code for this splitter
 
+  public boolean dummyDesired = false;
   public String daikonFormat   = null;
   public String javaFormat     = null;
   public String escFormat      = null;
@@ -62,7 +60,7 @@ public class SplitterObject implements Comparable {
       }
       DummyInvariant dummy = new DummyInvariant(null);
       dummy.setFormats(daikonFormat, javaFormat, escFormat, simplifyFormat,
-                       ioaFormat, jmlFormat, dbcFormat);
+                       ioaFormat, jmlFormat, dbcFormat, dummyDesired);
       splitter.makeDummyInvariant(dummy);
       errorMessage = "Splitter exists " + this.toString();
       exists = true;
