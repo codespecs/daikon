@@ -66,10 +66,8 @@ public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
   }
 
   protected void printInvariant(Invariant inv, InvNode node) {
-    if (verbose) {
-      print(inv.repr_prob());
-    } else {
-      print(inv.format());
+    super.printInvariant(inv, node);
+    if (!verbose) {
       printJustificationMaybe(inv, node);
     }
   }
