@@ -28,7 +28,21 @@
 (defun daikon-tags-table ()
   "Use the Daikon TAGS table."
   (interactive)
-  (visit-tags-table (substitute-in-file-name "$inv/java/TAGS")))
+  (let* ((tags-file (substitute-in-file-name "$inv/java/TAGS"))
+	 (tags-file-exists (file-exists-p tags-file)))
+    (if (or (not tags-file-exists)
+	    ;; TAGS file is at least one week old
+	    (let* ((tags-file-modtime-ints (nth 5 (file-attributes tags-file)))
+		   (tags-file-modtime (+ (* 65536.0
+					    (first tags-file-modtime-ints))
+					 (second tags-file-modtime-ints))))
+	      (> (float-time) (+ tags-file-modtime (* 60 60 24 7)))))
+	(let ((default-directory (substitute-in-file-name "$inv/java/"))
+	      (verb (if tags-file-exists "Updating" "Making")))
+	  (message "%s the Daikon tags table..." verb)
+	  (call-process "make" nil nil nil "tags")
+	  (message "%s the Daikon tags table...done" verb)))
+    (visit-tags-table tags-file)))
 (fset 'tags-table-daikon 'daikon-tags-table)
 
 (defun daikon-info ()
