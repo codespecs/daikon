@@ -3,7 +3,7 @@
   if 0;
 # merge-esc.pl -- Merge Daikon output into Java source code as ESC assnotations
 # Michael Ernst <mernst@lcs.mit.edu>
-# Time-stamp: <2001-08-11 17:58:48 mernst>
+# Time-stamp: <2001-08-17 14:40:47 mernst>
 
 # The input is a Daikon output file.  Files from the current directory
 # are rewritten into -escannotated versions (use the -r switch as the
@@ -220,6 +220,7 @@ sub parse_method_header( $ ) {
   my $eolre = "\\n?\$";
 
   if ($line =~ /^\s*\{.*$eolre/o) {
+    # Found an open curly brace on this line, following only space.
     # I'm not sure how this can happen; after all, this line matched a
     # method declaration.
     die("How can this happen? line = `$line'");
@@ -240,7 +241,8 @@ sub parse_method_header( $ ) {
   } else {
     my $nextline;
     while (defined($nextline = <IN>)) {
-      if ($nextline =~ m:^\s*/[/*]:) {
+      if ($nextline =~ m:^\s*(/[/*]|\*):) {
+	# Line starts with "//" or "/*", or "*" which might be comment continuation
 	$line .= $nextline;
       } elsif ($nextline =~ /^\s*\{.*$eolre/o) {
 	$prebrace = $line;
@@ -415,6 +417,8 @@ END {
 		    if (scalar(@mods) > 0) {
 		      print OUT esc_comment("@ $modifies " . join(', ', @mods));
 		    }
+		  } elsif ($inv =~ /^The invariant on the following line means:/) {
+		    print OUT esc_comment(" $inv");
 		  } elsif (is_non_supported_invariant($inv)) {
 		    if ($merge_unexpressable) {
 		      print OUT esc_comment("! $ensures " . $inv);
@@ -488,6 +492,10 @@ END {
 	  my $nextline;
 	  while (defined($nextline = <IN>)) {
 	    if ($nextline =~ m:^\s*/[/*]:) {
+	      # Line starts with "//" or "/*"
+	      $line .= $nextline;
+	    } elsif ($nextline =~ m:^\s*\*:) {
+	      # Line starts with "*", which might be comment continuation
 	      $line .= $nextline;
 	    } elsif ($nextline =~ /\{/) {
 	      $line .= $nextline;
