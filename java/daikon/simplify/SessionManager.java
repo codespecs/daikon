@@ -20,8 +20,11 @@ public class SessionManager
   /** How long to wait for a reply for each command. */
   private int msec = 500;
 
+  private static final boolean debug_mgr = false;
+
   public SessionManager() {
     worker = new Worker();
+    worker.setDaemon(true);
     worker.start();
   }
 
@@ -34,6 +37,9 @@ public class SessionManager
   {
     Assert.assert(worker != null, "Cannot use closed SessionManager");
     Assert.assert(pending == null, "Cannot queue requests");
+    if (debug_mgr) {
+      System.err.println("Running command " + command);
+    }
     synchronized (this) {
       // place the command in the slot
       pending = command;
