@@ -15,6 +15,7 @@ public class PptName
   private final String cls;
   private final String method;
   private final String point;
+  private final String fullname;
 
   // ==================== CONSTRUCTORS ====================
 
@@ -23,6 +24,7 @@ public class PptName
    **/
   public PptName(String name)
   {
+    fullname = name.intern();
     int sep = name.indexOf(FileIO.ppt_tag_separator);
     Assert.assert(sep >= 0);
     String pre_sep = name.substring(0, sep);
@@ -49,12 +51,22 @@ public class PptName
     cls = (className != null) ? className.intern() : null;
     method = (methodName != null) ? methodName.intern() : null;
     point = (pointName != null) ? pointName.intern() : null;
+    fullname = (((cls == null) ? "" : cls+".")
+                + ((method == null) ? "" : method)
+                + ((point == null) ? "" : FileIO.ppt_tag_separator+point));
   }
 
   // ==================== OBSERVERS ====================
 
   /**
-   * @return the full-qualified class name, which uniquely identifies
+   * @return the complete program point name
+   **/
+  public String getName() {
+    return fullname;
+  }
+
+  /**
+   * @return the fully-qualified class name, which uniquely identifies
    * a given class.
    **/
   public String getFullClassName()
@@ -170,6 +182,15 @@ public class PptName
   }
 
   /**
+   * @return true iff this name refers to a combined (synthetic) procedure
+   *         exit point
+   **/
+  public boolean isCombinedExitPoint()
+  {
+    return (point != null) && point.equals(FileIO.exit_suffix);
+  }
+
+  /**
    * @return true iff this name refers to a procedure exit point
    **/
   public boolean isEnterPoint()
@@ -203,6 +224,16 @@ public class PptName
   {
     Assert.assert(isExitPoint());
     return new PptName(cls, method, FileIO.enter_suffix);
+  }
+
+  /**
+   * @requires this.isExitPoint() || this.isEnterPoint()
+   * @return a name for the combined exit point
+   **/
+  public PptName makeExit()
+  {
+    Assert.assert(isExitPoint() || isEnterPoint());
+    return new PptName(cls, method, FileIO.exit_suffix);
   }
 
   /**

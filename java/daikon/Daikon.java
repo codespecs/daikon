@@ -10,6 +10,7 @@ import java.io.*;
 
 import com.oroinc.text.regex.*;
 import gnu.getopt.*;
+import utilMDE.*;
 
 public final class Daikon {
 
@@ -28,8 +29,8 @@ public final class Daikon {
   //  get no invariants over any value that can ever be missing
   // Problem with setting this to false:
   //  due to differrent number of samples, IsEquality is non-transitive
-  // public final static boolean invariants_check_canBeMissing = false;
-  public final static boolean invariants_check_canBeMissing = true;
+  public final static boolean invariants_check_canBeMissing = false;
+  // public final static boolean invariants_check_canBeMissing = true;
 
   public final static boolean disable_modbit_check_message = false;
   // Not a good idea to set this to true, as it is too easy to ignore the
@@ -203,13 +204,15 @@ public final class Daikon {
     System.out.print(", " + num_dtrace_files + " dtrace file");
     System.out.println(((num_dtrace_files == 1) ? "" : "s") + ".");
 
+    add_combined_exits(all_ppts);
+
     // Retrieve Ppt objects in sorted order.
     // Use a custom comparator for a specific ordering
     TreeSet all_ppts_sorted = new TreeSet(new PptOrderComparator());
     all_ppts_sorted.addAll(all_ppts.asCollection());
     for (Iterator itor = all_ppts_sorted.iterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
-      if (ppt.num_samples() > 0) {
+      if (ppt.has_samples()) {
         // System.out.println(ppt.name + ": " + ppt.num_samples() + " samples, "
         //                    + ppt.num_values() + " values, "
         //                    + "ratio = " + ((double)ppt.num_samples()) / ((double)ppt.num_values()));
@@ -280,6 +283,7 @@ public final class Daikon {
 
   // Orders ppts by the name, except . and : are swapped
   //   so that Foo:::OBJECT and Foo:::CLASS are processed before Foo.method.
+  // Also suffix "~" to ":::EXIT" to put it after the line-numbered exits.
   private static class PptOrderComparator
     implements Comparator
   {
@@ -293,9 +297,14 @@ public final class Daikon {
     {
       String name1 = ((Ppt) o1).name;
       String name2 = ((Ppt) o2).name;
+      if (name1.endsWith(FileIO.exit_suffix))
+        name1 += "~";
+      if (name2.endsWith(FileIO.exit_suffix))
+        name2 += "~";
 
       String swapped1 = swap(name1, '.', ':');
       String swapped2 = swap(name2, '.', ':');
+
       return swapped1.compareTo(swapped2);
     }
 
@@ -304,5 +313,35 @@ public final class Daikon {
       return (o instanceof PptOrderComparator);
     }
   }
+
+  public static void add_combined_exits(PptMap ppts) {
+    // For each collection of related :::EXITnn ppts, add a new ppt (which
+    // will only contain implication invariants).
+
+    Vector new_ppts = new Vector();
+    for (Iterator itor = ppts.iterator() ; itor.hasNext() ; ) {
+      PptTopLevel enter_ppt = (PptTopLevel) itor.next();
+      Vector exits = enter_ppt.exit_ppts;
+      if (exits.size() > 1) {
+        Assert.assert(enter_ppt.ppt_name.isEnterPoint());
+        PptTopLevel exit_ppt
+          = new PptTopLevel(enter_ppt.ppt_name.makeExit().getName(),
+                            new VarInfo[0]);
+        new_ppts.add(exit_ppt);
+        exit_ppt.entry_ppt = enter_ppt;
+        // exit_ppt.num_samples = enter_ppt.num_samples;
+        // exit_ppt.num_values = enter_ppt.num_values;
+      }
+    }
+
+    // System.out.println("add_combined_exits: " + new_ppts.size() + " " + new_ppts);
+
+    // Avoid ConcurrentModificationException by adding after the above loop
+    for (int i=0; i<new_ppts.size(); i++) {
+      ppts.add((Ppt) new_ppts.elementAt(i));
+    }
+
+  }
+
 
 }

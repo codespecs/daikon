@@ -1,7 +1,7 @@
 package daikon;
 
 
-class VarNames {
+public class VarNames {
   // Do I want to intern the results of these functions before returning
   // them?  Possibly...
 
