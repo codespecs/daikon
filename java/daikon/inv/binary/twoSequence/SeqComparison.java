@@ -28,10 +28,10 @@ class SeqComparison extends TwoSequence implements Comparison {
     // System.out.println("vars[1]: " + ppt.var_infos[1].type.format());
     ProglangType type1 = ppt.var_infos[0].type;
     ProglangType type2 = ppt.var_infos[1].type;
-    boolean only_eq = ((type1.dimensions() == 1)
-                       && type1.baseIsIntegral()
-                       && (type2.dimensions() == 1)
-                       && type2.baseIsIntegral());
+    boolean only_eq = (! ((type1.dimensions() == 1)
+                          && type1.baseIsIntegral()
+                          && (type2.dimensions() == 1)
+                          && type2.baseIsIntegral()));
     return new SeqComparison(ppt, only_eq);
   }
 
