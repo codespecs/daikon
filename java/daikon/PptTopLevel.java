@@ -2249,7 +2249,7 @@ public class PptTopLevel extends Ppt {
 	prover.request(bad);
 	if (bad.valid) {
 	  // BAD!!
-	  System.err.println("Warning: " + ppt_name + "invariants are contradictory; punting!");
+	  System.err.println("Warning: " + ppt_name + " invariants are contradictory; punting!");
 	  return;
 	}
 
