@@ -176,6 +176,7 @@ Refined runtime types
 C/C++ front end dfec
 
 * dfec command-line arguments::  
+* Pointer type disambiguation::  
 
 Troubleshooting
 
@@ -871,8 +872,11 @@ must be run from a directory that contains the file @file{daikon_runtime.h},
 the header file for the Daikon runtime library:
 @example
      ln -s ~/daikon/front-end/c/daikon_runtime.h .
-     dfec @var{filename}.cc
+     dfec @var{...options...} @var{filename}.cc
 @end example
+
+You'll most likely need to specify one or more commandline options, be
+sure to read through the @ref{dfec command-line arguments} section.
 
 After dfec is run, you must compile the instrumented source, linking
 it with the object file for the Daikon runtime library and the stdc++
@@ -882,15 +886,25 @@ library.  By default, dfec places instrumented code in the
       gcc -o @var{filename}.exe daikon-instrumented/@var{filename}.cc ~/daikon/daikon_runtime.o -lstdc++
 @end example
 
-Similarly to dfej, the Daikon front end for C/C++ has two effects:
+In addition, you may want to specify the @option{-w} flag to gcc, to
+surpress warnings.  dfec's output, while valid C++, may not be as
+intuitive to gcc as the input was.
+
+The Daikon front end for C/C++ has three effects:
 @itemize @bullet
 @item
   dfec writes instrumented versions of the files to a
   @file{daikon-instrumented/} directory 
 @item
-  dfej creates declaration files named
+  dfec creates declaration files named
   @file{@var{filename}.decls}, etc. in a
   @file{daikon-output/} directory.
+@item
+  optionally, dfec may create a pointer
+  type disambiguation file named
+  @file{@var{filename}.disambig} in the
+  same directory as the @file{@var{filename}.decls}
+  file.
 @end itemize
 
 For more information about dfec, including more detailed documentation
@@ -1938,16 +1952,16 @@ Now you can run your executable in the usual way.  Running the
 executable creates a @file{myfile.dtrace} file.  By default, this file
 will appear in the @file{daikon-output/}, and subsequent runs overwrite
 to that file.  This default can be overridden in two ways - at
-instrumentation time, a --tracefilename=X argument can be supplied to
-dfec.  X can be a filename with an absolute or relative path.  When the
-user program is run, the tracefile will be created either absolutely, or
-relative to where the program is executed.  The second tracefile option
-is at runtime.  By setting the environmental variable DTRACEFILE, the
-user program will use this value as the filename for the dtrace file
-instead.  Also, if you set the DTRACEAPPEND environmental variable to
-any value, the dtrace file will be appended to instead of overwritten,
-which can be handy if you have a script to run the user program multiple
-times.
+instrumentation time, a @option{--tracefilename}=@var{X} argument can be
+supplied to dfec.  @var{X} can be a filename with an absolute or
+relative path.  When the user program is run, the tracefile will be
+created either absolutely, or relative to where the program is executed.
+The second tracefile option is at runtime.  By setting the environmental
+variable DTRACEFILE, the user program will use this value as the
+filename for the dtrace file instead.  Also, if you set the DTRACEAPPEND
+environmental variable to any value, the dtrace file will be appended to
+instead of overwritten, which can be handy if you have a script to run
+the user program multiple times.
 
 Given the @file{myfile.decls} file that dfec created and the
 @file{myfile.dtrace} file that running the instrumented program created,
@@ -1958,10 +1972,11 @@ you can run Daikon:
 
 @menu
 * dfec command-line arguments::  
+* Pointer type disambiguation::  
 @end menu
 
-@node    dfec command-line arguments,  , C/C++ front end dfec, C/C++ front end dfec
-@subsection dfec-command-line arguments
+@node    dfec command-line arguments, Pointer type disambiguation, C/C++ front end dfec, C/C++ front end dfec
+@subsection dfec command-line arguments
 
 This section describes the commandline options dfec accepts.
 @table @option
@@ -2009,13 +2024,166 @@ Specifies the directory in which to write instrumented source files
 same names and directory structure as the original input files, with the
 slight exception that the file suffix is set to .cc, so if you instrument
 @file{@var{myfile}.c}, you will end up with
-@file{daikon-instrumented/@var{myfile}.cc}.
+@file{daikon-instrumented/@var{myfile}.cc}.  If
+@var{instrdir} is '.' then instrumentation will be performed in-place,
+first copying the source file @file{filename} to @file{filename.uninst},
+then overwriting @file{filename} with instrumented source.  If
+@file{filename.uninst} already exists, the copy step is not performed.
+This is useful in situations with Makefiles that you don't want to change.
+
+
+@item --disambigfilename=@var{filename}
+Specifies the filename for the pointer type disambiguation file.  If
+this file exists, dfec will read from it, using the information within
+to make decisions about how to output the 'contents' of pointer and
+array types.  If it does not exist, dfec will write to it, creating
+a disambig file that specifies default instrumentation behavior for all
+pointer types.  For more information, see
+@ref{Pointer type disambiguation}.
+
+@item --disambig
+Tells dfec to use pointer type disambiguation with the default filename,
+which is @file{@var{filename}.disambig} in the same directory as the
+@file{.decls} file.  For more information, see
+@ref{Pointer type disambiguation}.
 
 @end table
 
 When conflicting options are specified (for instance, both
 @option{--declsfiledir} and @option{--declsfiledirflat}), the last one
 takes precedence.
+
+@node    Pointer type disambiguation,  , dfec command-line arguments, C/C++ front end dfec
+@subsection Pointer type disambiguation
+
+dfec provides for a slight amount of manual manipulation of its analysis
+in respect to how pointer variables are instrumented.  A C/C++ pointer
+type is output to the decls and dtrace files in two ways: firstly, as
+the memory address it points to (the equivalent of the java 'hashcode'),
+and secondly, its 'contents'.  By default, the contents of an array or
+pointer type is the list of values pointed to by the pointer variable.
+The Daikon runtime library keeps track of all pointer variables, and
+notes what the highest referenced value beyond a base is, and assumes
+that all values between the base and that are valid.  Then, when
+outputting to the decls and dtrace files, it outputs the full list of
+'known valid' values.  In addition to this, there are certain safety
+features built into the Daikon runtime library, such as bounds-checking
+on arrays that have been declared with static size.  However, not all
+pointers point to arrays; many are simply pointers to single elements.
+
+Pointer type disambiguation is a mechanism for passing information to
+dfec that it cannot infer on its own.  It consists of a file, the
+'disambig file', that resides in the same directory as the decls file.
+dfec can be instructed to output this file with the @option{--disambig}
+option.  This file consists of a lists of all the instrumented program
+points, and under each, a list of pairs of variable names and the types
+that they're instrumented as:  'A' for array, 'P' for pointer to single
+value, 'I' for integer, 'C' for character.
+
+Currently, dfec is only capable of being told to output the contents of
+a pointer type as an array or as a single element.  This can still be
+quite useful if you know that a certain pointer is only pointing to a
+single element, however.  Getting rid of unnecessary array variables can
+speed up Daikon drastically, and clean up the invariant output, as
+single-element arrays tend to generate a large amount of nonsense
+invariants.
+
+For instance, let's look at this file:
+
+@example
+  void foo(int *bar) @{
+    (*bar)++;
+  @}
+
+  int main() @{
+    int baz=6;
+    foo(&baz);
+  @}
+@end example
+
+In foo(), bar is an int *.  By default, dfec would instrument bar as an
+array of int, keeping track of how many ints bar addressed, and outputting
+bar[] to the decls and dtrace as a sequence, which yields these invariants:
+
+@example
+===========================================================================
+std.foo(int *;):::ENTER
+bar[0] == min(bar[]) == max(bar[]) == sum(bar[])
+bar has only one value
+bar[] == [6]
+bar[] elements == 6
+size(bar[]) == 1
+===========================================================================
+std.foo(int *;):::EXIT1
+bar == orig(bar)
+bar[0] == min(bar[]) == max(bar[]) == sum(bar[])
+orig(bar[0]) == min(orig(bar[])) == max(orig(bar[])) == sum(orig(bar[]))
+bar has only one value
+bar[] == [7]
+bar[] elements == 7
+orig(bar[]) == [6]
+orig(bar[]) elements == 6
+size(bar[]) == 1
+@end example
+
+This is a bit wordy.  But, by running dfec with the @option{--disambig}
+option, we create the @file{daikon-output/@var{filename}.disambig} file,
+which we can then edit and feed back to dfec to change how the pointer
+is instrumented.
+@example
+  dfec @var{...options...} --disambig @var{filename}.cc
+@end example
+
+This creates the @file{daikon-output/@var{filename}.disambig} file.  Opening
+it up, we see at the top:
+
+@example
+std.foo(int *;)void:::ENTER
+bar
+A
+
+std.foo(int *;)void:::EXIT1
+bar
+A
+@end example
+
+This means that at the two program points corresponding to the entry and
+exit of foo(), the variable bar is instrumented as an 'A'rray type.  To
+change it so dfec instruments it as a 'P'ointer type, change the two 'A'
+entries to 'P' entries:
+@example
+std.foo(int *;)void:::ENTER
+bar
+P
+
+std.foo(int *;)void:::EXIT1
+bar
+P
+@end example
+
+Then, running dfec again with the @option{--disambig}
+option will cause dfec to open the existing
+@file{daikon-output/@var{filename}.disambig} file, reading the definitions
+you gave, and changing the instrumentation accordingly:
+@example
+  dfec @var{...options...} --disambig @var{filename}.cc
+@end example
+
+This means that bar will be instrumented as a 'P'ointer to a single element.
+If you compile and run the program, then run Daikon on the output, you'll
+see much cleaner invariants:
+@example
+===========================================================================
+std.foo(int *;):::ENTER
+bar has only one value
+*bar == 6
+===========================================================================
+std.foo(int *;):::EXIT1
+bar == orig(bar)
+bar has only one value
+*bar == 7
+orig(*bar) == 6
+@end example
 
 @node    Troubleshooting, Details, Front ends, Top
 @chapter Troubleshooting
