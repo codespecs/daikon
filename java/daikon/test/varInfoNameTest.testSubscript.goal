@@ -12,4 +12,4 @@ s = a[-1]
 ; esc_name s
 a[a.length-1]
 ; simplify_name s
-(select (select elems a) (- (arrayLength a) 1))
+(select (select elems |a|) (- (arrayLength |a|) 1))
