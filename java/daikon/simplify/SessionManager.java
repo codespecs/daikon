@@ -53,6 +53,15 @@ public class SessionManager
   }
 
   /**
+   * Set the timeout (used when Simplify gets bogged down) to the
+   * given period, measured in milliseconds. Note the timeout feature
+   * may not actually work at the moment.
+   **/
+  public void setTimeout(int millisecs) {
+    msec = millisecs;
+  }
+
+  /**
    * Performs the given command, or times out if too much time
    * elapses.
    **/
@@ -178,7 +187,7 @@ public class SessionManager
             try {
               mgr.pending.apply(session);
             } catch (SimplifyError e) {
-              debugln(e.toString());
+              System.err.println(e.toString());
               // Cause a timeout exception by not setting pending to
               // null.  This might not be exactly the right thing to
               // do, but a core dump from Simplify is arguably the
