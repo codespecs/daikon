@@ -41,7 +41,7 @@ public class InvariantFilters {
     addPropertyFilter( (InvariantFilter) new FewModifiedSamplesFilter());
     addPropertyFilter( (InvariantFilter) new OnlyConstantVariablesFilter());
     addPropertyFilter( (InvariantFilter) new ImpliedPostconditionFilter());
-    addPropertyFilter( (InvariantFilter) new RedundantFilter());
+    //    addPropertyFilter( (InvariantFilter) new RedundantFilter());
 
     // This filter should be added last for speed, because its shouldDiscard()
     // is more complicated in that it evaluates shouldDiscard() for other
