@@ -1,16 +1,16 @@
 default:
 	@echo "Specify a target:"
 	@echo "  www-dist"
-	@echo "  pubs-using"
+	@echo "  pubs"
 
 # Not the default to avoid accidentally installing new webpages.
 # It's best to run www-dist from pag, not a client machine.
 www-dist:
 	cd .. && $(MAKE) www-dist
 
-pubs-using:
-	cd pubs-using && $(MAKE) -f ../pubs-sources/Makefile html
+pubs:
+	cd pubs && $(MAKE) -f ../pubs-sources/Makefile html
 
-.PHONY: pubs-using
+.PHONY: pubs
 
 ###########################################################################

@@ -10,52 +10,71 @@
 | <a href="../faq.html">FAQ</a>
 | <a href="../download/">Download</a>
 | <a href="../download/doc/">Documentation</a>
-| <a href="http://pag.csail.mit.edu/pubs/bytopic.html#Invariant%20detection">Pubs about</a>
-| <b>Pubs using</b>
+| <b>Publications</b>
 | <a href="../mailing-lists.html">Mailing lists</a>
 ]
 
 <hr>
 
-<h1>Publications that use Daikon</h1>
+<h1>Daikon-related invariant detection publications</h1>
 
 <p>
-This page lists publications that use the <a href="../">Daikon invariant
-detector</a> tool.
+This page lists publications related to the technique of invariant
+detection and to the <a href="../">Daikon invariant
+detector</a> tool that implements it.  The page is separated into four
+parts:
 
-<ul>
-<li>
-The <a href="#daikon-methodology">Invariant detection methodology</a>
-section lists publications whose research methodology depends on running
-the Daikon tool.  The research uses Daikon's invariant detection as one
-step of its technique.  (Research that uses other invariant detection tools
-is not listed here.)
-<li>
-The <a href="#daikon-testsubject">Daikon as test subject</a> section lists
+<dl>
+<dt>
+<a href="#invariant-detection">Invariant detection technique</a>
+<dd>
+This section describes the technique of invariant detection and the
+implementation of the Daikon invariant detector.
+
+<dt>
+<a href="#daikon-methodology">Methodology using invariant detection</a>
+<dd>
+This section lists publications whose research methodology depends on
+running the Daikon tool.  The research uses Daikon's invariant detection as
+one step of its technique.  (Research that uses <a href="other-tools">other
+invariant detection tools</a> is not listed here.)
+
+<dt>
+<a href="#daikon-testsubject">Daikon as test subject</a>
+<dd>
+This section lists
 publications that use the Daikon invariant detector as a test subject.  For
 instance, Daikon has been used as a subject when evaluating regression
-testing tools, since is has both a version control repository and a test
+testing tools, since it has both a version control repository and a test
 suite.
-<li>
-A <a
-href="http://pag.csail.mit.edu/pubs/bytopic.html#Invariant%20detection">separate
-page</a> lists publications <em>about</em> the Daikon invariant detector;
-those are not listed here.
-</ul>
-</p>
+
+<dt>
+<a href="#other-tools">Other invariant detection tools</a>
+<dd>
+This section briefly lists some other invariant detection tools (besides
+Daikon).
+
+</dl>
 
 <p>
-This list is undoubtedly incomplete.  If you know of other work that should
-be listed here, or discover an error, please send mail
-to <a href="mailto:mernst@csail.mit.edu">mernst@csail.mit.edu</a>.  Thanks.
+The lists of papers and tools are undoubtedly incomplete.  If you know of
+other work that should be listed here, or discover an error, please send
+mail to <a href="mailto:mernst@csail.mit.edu">mernst@csail.mit.edu</a>.
+Thanks.
 <p>
 
 
 <HR>
 
-<h1><a name="daikon-methodology">Invariant detection methodology</a></h1>
+<h1><a name="invariant-detection">Invariant detection technique</a></h1>
 
-BODY-DAIKONMETHODOLOGY
+BODY-INVARIANTDETECTION
+
+<HR>
+
+<h1><a name="daikon-methodology">Methodology using invariant detection</a></h1>
+
+BODY-METHODOLOGYUSINGDAIKON
 
 <HR>
 
@@ -63,17 +82,138 @@ BODY-DAIKONMETHODOLOGY
 
 BODY-DAIKONTESTSUBJECT
 
+<HR>
+
+<h1><a name="other-tools">Other invariant detection tools</a></h1>
+
+<p>
+Other researchers and commercializers have adopted the idea of invariant
+detection, extending the technique and building new tools.  This section
+is a selected list of some of those
+<a href="#other-tools-industrial">industrial</a> and <a href="#other-tools-academic">academic</a>
+efforts.  This is a partial list; please let me know of any others that are
+not industrial or academic secrets.
+</p>
+
+
+<h2><a name="other-tools-industrial">Industrial invariant detection implementations</a></h2>
+
+<dl>
+<dt>
+Sun Microsystems
+<dd>
+Sudheendra Hangal (who is also responsible for the DIDUCE invariant
+detector) and colleagues are building an invariant detector for hardware
+designs.  The goal is to execute test vectors or real loads on a simulator
+in order to learn emergent properties of the design.
+
+<dt>
+Microsoft
+<dd>
+Trishul Chilimbi is building a high-performance dynamic invariant detector
+that operates at garbage collection (GC) time.  Since all of memory must be
+scanned then anyway, the invariant detector imposes relatively little
+additional cost for its memory accesses.  The invariant detector's grammar
+includes run-time types (for checking what types a collection contains),
+immutability, and cycles in the object reference graph (the heap).
+
+<dt>
+Agitar
+<dd>
+<a href="www.agitar.com">Agitar</a>'s product, Agitator, performs
+dynamic invariant detection in order to inform users about tests, and to
+improve those tests.  The results are called "observations", they include
+equality:  (x = y), range:  (-10 <= x <= 10), non-null (x != null),
+equality (.equals), and properties gleaned from the user's source code.
+
+</dl>
+
+<h2><a name="other-tools-academic">Academic invariant detection implementations</a></h2>
+
+<dl>
+
+<dt>
+Stanford
+<dd>
+The <a href="http://diduce.sourceforge.net/">DIDUCE</a> tool (DIDUCE stands
+for "Dynamic Invariant Detection Union Checking Engine")
+checks one invariant:  the bitwise or of the values of a variable.  DIDUCE
+performs dynamic invariant detection online -- at run time, rather than
+after-the-fact.  DIDUCE is described in the paper "Tracking down software
+bugs using automatic anomaly detection", by Sudheendra Hangal and Monica
+S. Lam (appears in ICSE 2002).
+
+<dt>
+Wisconsin and Microsoft
+<dd>
+The paper "Mining specifications" by Glenn Ammons, Rastislav Bod&iacute;k,
+and James R. Larus (appears in POPL 2002) describes a system for inferring
+temporal specifications, such as "method <tt>open</tt> must be called
+before method <tt>close</tt>.  The sequence of observed method calls is fed
+to a machine learner in order to obtain a grammar of permitted call
+sequences.
+
+<dt>
+Stanford
+<dd>
+The paper "Automatic extraction of object-oriented component interfaces" by
+John Whaley, Michael Martin, and Monica Lam (appears in ISSTA 2002) has the
+same goal as that of the "Mining specifications" paper:  determining the
+legal sequences of procedure calls (in the paper, called "interfaces").
+The paper proposes a combination of static and dynamic methods.
+
+<dt>
+Berkeley
+<dd>
+Ben Liblit's statistical debugging project, described in a variety of <a
+href="http://http.cs.berkeley.edu/~liblit/">publications</a>, aims to
+permit collecting a small amount of information from a large number of
+executions in the field (some faulty, some not) in order to determine which
+properties of an execution are most relevant to errors.  Its mechanism for
+collecting the information is a type of invariant detection.
+
+<dt>
+Brown
+<dd>
+The Carrot dynamic invariant detection system is described in the paper
+"Automated fault localization using potential invariants", by Brock Pytlik,
+Manos Renieris, Shriram Krishnamurthi, and Steven P. Reiss.  It is built
+partly upon the Daikon infrastructure, but investigates other
+implementation strategies.
+
+<dt>
+Colorado
+<dd>
+Two papers by Johannes Henkel and Amer Diwan -- "Discovering algebraic
+specifications from Java classes" (appears in ECOOP 2003) and "A tool for
+writing and debugging algebraic specifications" (appears in ICSE 2004) --
+describe an application of dynamic invariant detection to algebraic
+specifications.  Algebraic specifications are equations between terms, such
+as "pop(push(s,i).state).retval = i" and "pop(push(s,i).state).state = s".
+
+</dl>
+
 <hr>
 
 [ <a href="../">Home</a>
 | <a href="../faq.html">FAQ</a>
 | <a href="../download/">Download</a>
 | <a href="../download/doc/">Documentation</a>
-| <a href="http://pag.csail.mit.edu/pubs/bytopic.html#Invariant%20detection">Pubs about</a>
-| <b>Pubs using</b>
+| <b>Publications</b>
 | <a href="../mailing-lists.html">Mailing lists</a>
 ]
 
 
 </body>
 </html>
+
+<!--  LocalWords:  FAQ INVARIANTDETECTION METHODOLOGYUSINGDAIKON Sudheendra GC
+ -->
+<!--  LocalWords:  DAIKONTESTSUBJECT Hangal DIDUCE Trishul Chilimbi Ammons Bod
+ -->
+<!--  LocalWords:  commercializers Microsystems Rastislav Larus Whaley ISSTA
+ -->
+<!--  LocalWords:  Liblit's Pytlik Manos Renieris Shriram Krishnamurthi Reiss
+ -->
+<!--  LocalWords:  Henkel Amer Diwan retval
+ -->
