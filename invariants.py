@@ -62,7 +62,7 @@ def clear_variables():
 def clear_invariants(fn_regexp=None):
     """Reset the values of invariants, globally."""
     for fn_name in fn_var_infos.keys():
-        if fn_regexp and fn_regexp.match(fn_name):
+        if fn_regexp and not fn_regexp.match(fn_name):
             continue
         for vi in fn_var_infos[fn_name]:
             vi.invariant = None
@@ -165,10 +165,8 @@ def merge_variables(filename, sub_fn_var_infos, sub_fn_var_values, sub_fn_sample
         var_values = fn_var_values[fname]
         sub_var_values = sub_fn_var_values[fname]
         for (values, count) in sub_var_values.items():
-            # var_values[value] += count
-            util.mapping_increment(var_values, values, count)
-        # fn_samples[fname] += sub_fn_samples[fname]
-        util.mapping_increment(fn_samples, fname, sub_fn_samples[fname])
+            var_values[values] = var_values.get(values, 0) + count
+        fn_samples[fname] = fn_samples.get(fname, 0) + sub_fn_samples[fname]
     file_fn_var_infos[filename] = sub_fn_var_infos
 
 
@@ -206,7 +204,7 @@ def dict_of_tuples_to_tuple_of_dicts(dot, tuple_len=None):
         for i in range(0, len(tuple_indices)):
             this_key = key_tuple[tuple_indices[i]]
             this_dict = result[i]
-            util.mapping_increment(this_dict, this_key, count)
+            this_dict[this_key] = this_dict.get(this_key, 0) + count
     return result
 # dict_of_tuples_to_tuple_of_dicts(fn_var_values["PUSH-ACTION"])
 
@@ -218,7 +216,7 @@ def dict_of_sequences_to_element_dict(dot):
     result = {}
     for (key_tuple, count) in dot.items():
         for this_key in key_tuple:
-            util.mapping_increment(result, this_key, count)
+            result[this_key] = result.get(this_key, 0) + count
     return result
 # dict_of_sequences_to_element_dict(dot)
 
@@ -227,13 +225,24 @@ def dict_of_tuples_slice(dot, indices):
     """Input: a dictionary mapping a tuple of elements to a count, and a
     list of indices.
     Output: a dictionary mapping a subset of the original elements to a count.
-    The subset is chosen according to the input indices."""
+    The subset is chosen according to the input indices.
+
+    If the indices have length 2 or 3, you are better off using the
+    specialized functions dict_of_tuples_slice_2 and dict_of_tuples_slice_3;
+    this function can be very slow.
+    """
+
+    if len(indices) == 2:
+        return dict_of_tuples_slice_2(dot, indices[0], indices[1])
+    if len(indices) == 2:
+        return dict_of_tuples_slice_3(dot, indices[0], indices[1], indices[2])
 
     result = {}
     for (key_tuple, count) in dot.items():
         sliced_tuple = util.slice_by_sequence(key_tuple, indices)
-        util.mapping_increment(result, sliced_tuple, count)
+        result[sliced_tuple] = result[sliced_tuple] + count
     return result
+
 # dict_of_tuples_slice(fn_var_values["PUSH-ACTION"], (0,))
 # dict_of_tuples_slice(fn_var_values["PUSH-ACTION"], (1,))
 # dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (0,))
@@ -243,6 +252,32 @@ def dict_of_tuples_slice(dot, indices):
 # dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (0,2))
 # dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (1,2))
 
+
+def dict_of_tuples_slice_2(dot, i1, i2):
+    """Input: a dictionary mapping a tuple of elements to a count, and a
+    list of indices.
+    Output: a dictionary mapping a subset of the original elements to a count.
+    The subset is chosen according to the input indices."""
+
+    result = {}
+    for (key_tuple, count) in dot.items():
+        # sliced_tuple = util.slice_by_sequence(key_tuple, indices)
+        sliced_tuple = (key_tuple[i1], key_tuple[i2])
+        result[sliced_tuple] = result.get(sliced_tuple, 0) + count
+    return result
+
+def dict_of_tuples_slice_3(dot, i1, i2, i3):
+    """Input: a dictionary mapping a tuple of elements to a count, and a
+    list of indices.
+    Output: a dictionary mapping a subset of the original elements to a count.
+    The subset is chosen according to the input indices."""
+
+    result = {}
+    for (key_tuple, count) in dot.items():
+        # sliced_tuple = util.slice_by_sequence(key_tuple, indices)
+        sliced_tuple = (key_tuple[i1], key_tuple[i2], key_tuple[i3])
+        result[sliced_tuple] = result.get(sliced_tuple, 0) + count
+    return result
 
 
 ###########################################################################
@@ -370,21 +405,25 @@ def introduce_new_variables_one_pass(var_infos, var_values, indices, functions):
     # It's cleaner to do "for (i1,i2) in util.choose(2, all_indices):", but
     # also less efficient due to creation of long list of pairs.
     for i1 in range(0,orig_len_var_infos-1):
-        if not var_infos[i1].is_canonical():
+        vi1 = var_infos[i1]
+        if not vi1.is_canonical():
             continue
         for i2 in range(i1+1,orig_len_var_infos):
-            if not var_infos[i2].is_canonical():
+            vi2 = var_infos[i2]
+            if not vi2.is_canonical():
                 continue
             if not (i1 in indices or i2 in indices):
                 # Do nothing if neither of these variables is under consideration.
                 continue
-            this_dict = dict_of_tuples_slice(var_values, (i1, i2))
-            these_vars = util.slice_by_sequence(var_infos, (i1, i2))
-            if these_vars[0].is_sequence() and these_vars[1].is_sequence():
+            ## Why on earth was this call to dict_of_tuples_slice_2 here???
+            ## this_dict = dict_of_tuples_slice_2(var_values, i1, i2)
+
+            # (var1, vi2) = util.slice_by_sequence(var_infos, (i1, i2))
+            if vi1.is_sequence() and vi2.is_sequence():
                 intro_from_sequence_sequence(var_infos, var_new_values, i1, i2)
-            elif these_vars[0].is_sequence():
+            elif vi1.is_sequence():
                 intro_from_sequence_scalar(var_infos, var_new_values, i1, i2)
-            elif these_vars[1].is_sequence():
+            elif vi2.is_sequence():
                 intro_from_scalar_sequence(var_infos, var_new_values, i1, i2)
             else:
                 intro_from_scalar_scalar(var_infos, var_new_values, i1, i2)
@@ -532,6 +571,10 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
     #         print "sequence %s (size: no_var) and scalar %s (index: %s) unrelated" % (seqvar, sclvar, sclidx)
     #     else:
     #         print "sequence %s (size: %s, size index = %s) and scalar %s (index: %s) unrelated" % (seqvar, var_infos[seq_size_idx].name, seq_size_idx, sclvar, sclidx)
+
+    # For now, do nothing if the scalar is itself derived.
+    if var_infos[sclidx].is_derived:
+        return
 
     # Add subsequences
     if not var_infos[seqidx].is_derived and not var_infos[sclidx].invariant.can_be_None:
@@ -819,7 +862,7 @@ def read_file_ftns(filename, fn_regexp=None):
         raise "First line should be tag line; saw: " + line
 
     while (line != ""):         # line == "" when we hit end of file
-        if fn_regexp == None or fn_regexp.match(line):
+        if not (fn_regexp and not fn_regexp.match(line)):
             (tag, leftover) = string.split(line, ":::", 1)
             ftn_names_to_call_ct[tag] = 0
 
@@ -867,10 +910,6 @@ def read_file(filename, fn_regexp=None):
     this_fn_var_infos = {}		# from function name to tuple of variable names
     this_fn_var_values = {}	# from function name to (tuple of values to occurrence count)
     this_fn_samples = {}           # from function name to number of samples
-    this_ftn_names = {}         # from function name to current number
-                                # of invocations
-
-    this_ftn_names = read_file_ftns(filename, fn_regexp)
 
     init_ftn_call_ct()          # initialize function call cts to 0
     line = file.readline()
@@ -882,7 +921,7 @@ def read_file(filename, fn_regexp=None):
         # line contains no tab character
         tag = line[:-1]                 # remove trailing newline
 
-        if fn_regexp != None and not fn_regexp.match(line):
+        if fn_regexp and not fn_regexp.match(line):
             # print "-", line, 	# comma because line ends in newline
             line = file.readline()
             while "\t" in line:
@@ -894,7 +933,7 @@ def read_file(filename, fn_regexp=None):
         (tag_sans_suffix, suffix) = string.split(tag, ":::", 1)
         label = string.split(suffix, "(", 1)[0]
         if label == "BEGIN":
-            util.mapping_increment(ftn_names_to_call_ct, tag_sans_suffix, 1)
+            ftn_names_to_call_ct[tag_sans_suffix] = ftn_names_to_call_ct[tag_sans_suffix] + 1
 
         # Get param to val list for the function
         # Accessing global here, crappy
@@ -907,19 +946,25 @@ def read_file(filename, fn_regexp=None):
         while "\t" in line:
             (this_var_name,this_value) = string.split(line, "\t", 1)
             this_var_name_orig = this_var_name
-            if sequence_re.match(this_var_name) or re.match("^#\((.*)\)$", this_value):
+            # if sequence_re.match(this_var_name) or re.match("^#\((.*)\)$", this_value):
+            if this_var_name[-1] == "]" or this_value[0:1] == "#(":
                 # variable is a sequence
                 this_var_type = types.ListType
                 if this_var_name[-2:] == "[]":
                     this_var_name = this_var_name[:-2]
-                lisp_delimiters = re.match("^#\((.*)\)$", this_value)
-                if lisp_delimiters:
-                    this_value = lisp_delimiters.group(1)
-                this_value = string.split(this_value, " ")
-                # Can't do this unconditionally if we've eliminated the
-                # lisp_delimiters (which also strips trailing newline?).
                 if this_value[-1] == "\n":
                     this_value = this_value[:-1]   # remove trailing newline
+                ## I'm not sure whether regular expressions are chewing up
+                ## all my time, but just in case...
+                # lisp_delimiters = re.match("^#\((.*)\)$", this_value)
+                # if lisp_delimiters:
+                #     this_value = lisp_delimiters.group(1)
+                if this_value[0:2] == "#(" and this_value[-1] == ")":
+                    this_value = this_value[2:-1]
+                this_value = string.split(this_value, " ")
+                if len(this_value) > 0 and this_value[-1] == "":
+                    # Cope with trailing spaces on the line
+                    this_value = this_value[0:-1]
                 for seq_elem in range(0, len(this_value)):
                     # dumb to copy this: fix it
                     if integer_re.match(this_value[seq_elem]):
@@ -982,8 +1027,9 @@ def read_file(filename, fn_regexp=None):
 	else:
 	    assert var_infos_compatible(this_fn_var_infos[tag], these_var_infos)
 	    assert type(this_fn_var_values[tag]) == types.DictType
-        util.mapping_increment(this_fn_var_values[tag], these_values, 1)
-        util.mapping_increment(this_fn_samples, tag, 1)
+        this_var_values = this_fn_var_values[tag]
+        this_var_values[these_values] = this_var_values.get(these_values, 0) + 1
+        this_fn_samples[tag] = this_fn_samples.get(tag, 0) + 1
 
     # print ""
 
@@ -1085,8 +1131,10 @@ def all_numeric_invariants(fn_regexp=None):
 
     clear_invariants(fn_regexp)
 
-    for fn_name in fn_var_infos.keys():
-        if fn_regexp and fn_regexp.match(fn_name):
+    fn_names = fn_var_infos.keys()
+    fn_names.sort()
+    for fn_name in fn_names:
+        if fn_regexp and not fn_regexp.match(fn_name):
             continue
         # If we discover that two values are equal, then there is no sense
         # in using both at any later stage; eliminate one of them and so
@@ -1148,7 +1196,11 @@ def all_numeric_invariants(fn_regexp=None):
 
         assert len(var_infos) == len(var_values.keys()[0])
 
-    print_invariants(fn_regexp)
+        # I hope this doesn't give too many results
+        print_invariants("^" + re.escape(fn_name) + r"($|\b)")
+
+    # print_invariants(fn_regexp)
+
 ## Testing:
 # all_numeric_invariants()
 
@@ -1201,7 +1253,8 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
             continue
         if inv1.can_be_None:
             continue
-        if not var_infos[i1].is_canonical():
+        vi1 = var_infos[i1]
+        if not vi1.is_canonical():
             continue
         for i2 in range(i1+1, index_limit):
             # if i1 == i2:
@@ -1209,20 +1262,22 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
             if (not i1 in indices) and (not i2 in indices):
                 # Do nothing if neither variable is under consideration.
                 continue
-            inv2 = var_infos[i2].invariant
+            vi2 = var_infos[i2]
+            inv2 = vi2.invariant
             if inv2.is_exact():
                 # Do nothing if either of the variables is a constant.
                 continue
             if inv2.can_be_None:
                 # Do nothing if either of the variables can be missing.
                 continue
-            if not var_infos[i2].is_canonical():
+            if not vi2.is_canonical():
                 continue
-            values = dict_of_tuples_slice(var_values, (i1,i2))
-            these_var_infos = util.slice_by_sequence(var_infos, (i1,i2))
-            if these_var_infos[0].is_sequence() and these_var_infos[1].is_sequence():
+            values = dict_of_tuples_slice_2(var_values, i1, i2)
+            # These are now set earlier on, so they can be reused more.
+            # (vi1, vi2) = util.slice_by_sequence(var_infos, (i1,i2))
+            if vi1.is_sequence() and vi2.is_sequence():
                 this_inv = two_sequence_numeric_invariant(values)
-            elif these_var_infos[0].is_sequence() or these_var_infos[1].is_sequence():
+            elif vi1.is_sequence() or vi2.is_sequence():
                 this_inv = scalar_sequence_numeric_invariant(values)
             else:
                 this_inv = two_scalar_numeric_invariant(values)
@@ -1234,13 +1289,13 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
             # elif this_inv.is_exact():
             #     exact_pair_invs.append(indices)
 
-            assert not var_infos[i1].invariants.has_key(i2)
-            var_infos[i1].invariants[i2] = this_inv
+            assert not vi1.invariants.has_key(i2)
+            vi1.invariants[i2] = this_inv
             if ((isinstance(this_inv, two_scalar_numeric_invariant)
                  or isinstance(this_inv, two_sequence_numeric_invariant))
                 and (this_inv.comparison == "=")):
-                var_infos[i1].equal_to.append(i2)
-                var_infos[i2].equal_to.append(i1)
+                vi1.equal_to.append(i2)
+                vi2.equal_to.append(i1)
 
     if debug_infer:
         print "numeric_invariants_over_index: done with pairs, starting triples"
@@ -1254,24 +1309,26 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
     # for (i1,i2,i3) in util.choose(3, all_indices):
     for i1 in range(0,index_limit-2):
         # print "triples: index1 =", i1
-        if var_infos[i1].invariant.is_exact():
+        vi1 = var_infos[i1]
+        if vi1.invariant.is_exact():
             continue
-        if var_infos[i1].invariant.can_be_None:
+        if vi1.invariant.can_be_None:
             continue
-        if not var_infos[i1].is_canonical():
+        if not vi1.is_canonical():
             continue
         for i2 in range(i1+1, index_limit-1):
             # print "triples: index2 =", i2
             if i1 == i2:
                 continue
-            if var_infos[i2].invariant.is_exact():
+            vi2 = var_infos[i2]
+            if vi2.invariant.is_exact():
                 continue
-            if (var_infos[i1].invariants.has_key(i2)
-                and var_infos[i1].invariants[i2].is_exact()):
+            if (vi1.invariants.has_key(i2)
+                and vi1.invariants[i2].is_exact()):
                 continue
-            if var_infos[i2].invariant.can_be_None:
+            if vi2.invariant.can_be_None:
                 continue
-            if not var_infos[i2].is_canonical():
+            if not vi2.is_canonical():
                 continue
             for i3 in range(i2+1, index_limit):
                 if i1 == i3 or i2 == i3:
@@ -1279,32 +1336,34 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
                 if (not i1 in indices) and (not i2 in indices) and (not i3 in indices):
                     # Do nothing if none of the variables is under consideration.
                     continue
-                if var_infos[i3].invariant.is_exact():
+                vi3 = var_infos[i3]
+                if vi3.invariant.is_exact():
                     # Do nothing if any of the variables is a constant.
                     continue
-                if ((var_infos[i1].invariants.has_key(i3)
-                     and var_infos[i1].invariants[i3].is_exact())
-                    or (var_infos[i2].invariants.has_key(i3)
-                        and var_infos[i2].invariants[i3].is_exact())):
+                if ((vi1.invariants.has_key(i3)
+                     and vi1.invariants[i3].is_exact())
+                    or (vi2.invariants.has_key(i3)
+                        and vi2.invariants[i3].is_exact())):
                     # Do nothing if any of the pairs are exactly related.
                     continue
-                if var_infos[i3].invariant.can_be_None:
+                if vi3.invariant.can_be_None:
                     # Do nothing if any of the variables can be missing.
                     continue
-                if not var_infos[i3].is_canonical():
+                if not vi3.is_canonical():
                     continue
 
-                values = dict_of_tuples_slice(var_values, (i1,i2,i3))
-                these_var_infos = util.slice_by_sequence(var_infos, (i1,i2,i3))
-                if (these_var_infos[0].is_sequence()
-                    or these_var_infos[1].is_sequence()
-                    or these_var_infos[2].is_sequence()):
+                values = dict_of_tuples_slice_3(var_values, i1, i2, i3)
+                # These are now set earlier, above.
+                # (vi1, vi2, vi3) = util.slice_by_sequence(var_infos, (i1,i2,i3))
+                if (vi1.is_sequence()
+                    or vi2.is_sequence()
+                    or vi3.is_sequence()):
                     # print "got sequence in a triple"
                     this_inv = invariant(values)
                 else:
                     this_inv = three_scalar_numeric_invariant(values)
-                assert not var_infos[i1].invariants.has_key((i2,i3))
-                var_infos[i1].invariants[(i2,i3)] = this_inv
+                assert not vi1.invariants.has_key((i2,i3))
+                vi1.invariants[(i2,i3)] = this_inv
 
 
 ### A lot of the logic here should be moved into invariant computation;
@@ -1319,14 +1378,20 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
 # Maybe this should (optionally?) print just for a given fn_name, so that
 # I can provide output more interactively and quickly.
 def print_invariants(fn_regexp=None, print_unconstrained=0):
-    """Print out non-unconstrained invariants."""
+    """Print out non-unconstrained invariants.
+    If optional second argument print_unconstrained is true,
+    then print all invariants."""
+
     if type(fn_regexp) == types.StringType:
         fn_regexp = re.compile(fn_regexp, re.IGNORECASE)
+
+    # print "print_invariants", fn_regexp and fn_regexp.pattern
 
     function_names = fn_var_infos.keys()
     function_names.sort()
     for fn_name in function_names:
-        if fn_regexp and fn_regexp.match(fn_name):
+        if fn_regexp and not fn_regexp.match(fn_name):
+            # if fn_regexp:  print fn_name, "does not match", fn_regexp.pattern
             continue
         print "==========================================================================="
         print fn_name, fn_samples[fn_name], "samples"
@@ -1666,8 +1731,10 @@ class two_scalar_numeric_invariant(invariant):
         diff_dict = {}
         sum_dict = {}
         for ((x,y),count) in dict_of_pairs.items():
-            util.mapping_increment(diff_dict, x-y, count)
-            util.mapping_increment(sum_dict, x+y, count)
+            x_y_diff = x-y
+            diff_dict[x_y_diff] = diff_dict.get(x_y_diff, 0) + count
+            x_y_sum = x+y
+            sum_dict[x_y_sum] = sum_dict.get(x_y_sum, 0) + count
         self.difference_invariant = single_scalar_numeric_invariant(diff_dict)
         self.sum_invariant = single_scalar_numeric_invariant(sum_dict)
 
@@ -2084,16 +2151,22 @@ def checked_tri_linear_relationship(triples, permutation):
     if len(triples) < 3:
         return None
 
-    (x, y, z) = permutation
-    t0 = util.slice_by_sequence(triples[0], permutation)
-    t1 = util.slice_by_sequence(triples[1], permutation)
-    t2 = util.slice_by_sequence(triples[2], permutation)
+    (xi, yi, zi) = permutation
+    # t0 = util.slice_by_sequence(triples[0], permutation)
+    t0 = (triples[0][xi], triples[0][yi], triples[0][zi])
+    # t1 = util.slice_by_sequence(triples[1], permutation)
+    t1 = (triples[1][xi], triples[1][yi], triples[1][zi])
+    # t2 = util.slice_by_sequence(triples[2], permutation)
+    t2 = (triples[2][xi], triples[2][yi], triples[2][zi])
 
     ## Linear relationship -- try to fit z = ax + by + c.
     (a,b,c) = tri_linear_relationship(t0, t1, t2)
     # needn't check first three, but it's a waste to create a new sequence
     for triple in triples:
-        (x,y,z) = util.slice_by_sequence(triple, permutation)
+        # (x,y,z) = util.slice_by_sequence(triple, permutation)
+        x = triple[xi]
+        y = triple[yi]
+        z = triple[zi]
         try:
             if z != a*x+b*y+c:
                 return None
@@ -2551,7 +2624,7 @@ class two_sequence_numeric_invariant(invariant):
 
         self.unconstrained_internal = false
 
-        suffix = " \t(%s values, %s samples" % (self.values, self.samples)
+        suffix = " \t(%s values, %s samples)" % (self.values, self.samples)
 
         (x, y) = arg_tuple
         if self.comparison == "=":
@@ -2589,9 +2662,6 @@ class two_sequence_numeric_invariant(invariant):
 
         self.unconstrained_internal = true
         return "(%s,%s) unconstrained" % (x,y) + suffix
-
-
-
 
 
 
