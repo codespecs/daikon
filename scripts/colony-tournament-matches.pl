@@ -1,19 +1,44 @@
 #!/usr/bin/env perl
 
-# colony-tournament-matches.pl:  runs a tournament among multiple teams.
+# colony-tournament-matches.pl:  outputs a match file (a list of matches)
+# needed to run a tournament among multiple teams.
 # See "usage()" routine for usage information.
 
+my $usage = <<END_USAGE;
+colony-tournament-matches.pl [--colonydir dir]
+  [-r numrepetitions] [previous-result-files ...]
+Outputs (to stdout) a "match file" (the input format for colony-runmatches.pl).
+Arguments:
+  --help
+        Print this message.
+  --colonydir colonydir
+        Directory in which "conf/sim.conf" file exists.
+  -r numrepetitions
+        How many rounds the tournament should have (how many times each
+        team plays each other team).  If omitted and previous-result-files
+        are specified, then numrepetitions is taken to be the maximum
+        number of matches that were already played between any two teams;
+        this is useful when completing a partial tournament.  If omitted
+        and no previous-result-files are provided, defaults to 1.
+  previous-result-files
+        Result files from previous (possibly partial) tournaments.
+        These are in the output format of colony-runmatch[es].pl.
+
+Example use:
+
+  # Create a list of all matches in a complete round-robin tournament
+  colony-tournament-matches.pl > matches-one-tournament
+
+  # Create a list of all matches required to balance any matches in the
+  # tournament-results-* files into a round-robin tournament (possibly with
+  # multiple matches per pair of teams).
+  colony-tournament-matches.pl tournament-results-* > matches-remaining-noargs
+
+END_USAGE
+
 sub usage () {
-  return
-    "$0 [-r numrepetitions] [previous-match-files ...]\n"
-    . "output format (to stdout) is same as input format for colony-runmatches.pl\n"
-    . "previous-match-files are in output format of colony-runmatch.pl\n";
+  return $usage;
 }
-
-my $lees_2003_dir = "/g6/users/leelin/research/6.370/colony-2003";
-# my $lees_2003_dir = "/g2/users/mernst/tmp/steering-experiments/lees-2003";
-
-
 
 use strict;
 use English;
@@ -22,16 +47,32 @@ use checkargs;
 use util_daikon;
 use colony_simconf;
 
+# If $numrepetitions is not defined on the command line, it will be
+# defined later.
 my $numrepetitions;
-if ((scalar(@ARGV) > 0) && ($ARGV[0] eq "-r"))  {
-  shift @ARGV;
-  $numrepetitions = shift @ARGV;
-} elsif (scalar(@ARGV) == 0) {
-  $numrepetitions = 1;
+
+my $colony_dir = "/g6/users/leelin/research/6.370/colony-2003";
+# my $colony_dir = "/g2/users/mernst/tmp/steering-experiments/lees-2003/colony";
+
+# Parse command line arguments.
+while ((scalar(@ARGV) > 0) && ($ARGV[0] =~ /^-/))  {
+  if ($ARGV[0] eq "--help") {
+    print usage();
+    exit;
+  } elsif ($ARGV[0] eq "--colonydir") {
+    shift @ARGV;
+    $colony_dir = shift @ARGV;
+  } elsif ($ARGV[0] eq "-r") {
+    shift @ARGV;
+    $numrepetitions = shift @ARGV;
+  } else {
+    print usage();
+    die "unrecognized argument $ARGV[0]";
+  }
 }
 
 
-read_sim_conf("$lees_2003_dir/conf/sim.conf");
+read_sim_conf("$colony_dir/conf/sim.conf");
 my @teams = packages();
 my $num_teams = scalar(@teams);
 my %teams = ();

@@ -1,15 +1,23 @@
 ===========================================================================
 
+colony-* scripts
+================
+
+colony-tournament-matches.pl
+	Produces a match file
+colony-runmatches.pl
+	Takes as input a match file, produes a result file
+colony-runmatch.pl
+	Produces a result file for a single match
+colony-tournament-summarize.pl
+	Produces statistics from a set of result files
+
+Each script accepts a --help argument that prints its usage.
 The colony-* scripts use two different file formats:  match files and
 result files.
-A match file indicates a set of match to be run; it consists of lines
-of the form "team1 team2" (without the quotes).
-A result file indicates the outcome of a set of matches.
-
-colony-tournament-matches.pl	Produces a match file
-colony-runmatches.pl	Takes as input a match file, produes a result file
-colony-runmatch.pl	Produces a result file for a single match
-colony-tournament-summarize.pl	Produces statistics from a set of result files
+ * A "match file" indicates a set of matches to be run; it consists of lines
+   of the form "team1 team2" (without the quotes).
+ * A "result file" indicates the outcome of a set of matches.
 
 ----------------
 

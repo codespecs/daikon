@@ -3,10 +3,21 @@
 # colony-runmatch.pl:  runs a match between two teams.
 # See "usage()" routine for usage information.
 
+my $usage = <<END_USAGE;
+colony-runmatch.pl team1-package team2-package output-filename [parameters]
+Run a single match between two teams.
+Appends, to output-filename, a single line in "result file" format:
+  a tab-delimited line containing: team1, team2, winner, time, parameters.
+Arguments:
+  --help
+        Print this message.
+  --colonydir colonydir
+        Directory in which "conf/sim.conf" file exists.
+  parametrs are passed to colony.simulator.SimClient
+END_USAGE
+
 sub usage () {
-  return
-    "$0 team1-package team2-package output-filename [parameters]\n"
-    . "output: tab-delimited line containing: team1, team2, winner, time, parameters\n";
+  return $usage;
 }
 
 use strict;
@@ -16,8 +27,22 @@ use checkargs;
 use util_daikon;
 use colony_simconf;
 
- my $lees_2003_dir = "/g6/users/leelin/research/6.370/colony-2003";
-#my $lees_2003_dir = "/g2/users/mernst/tmp/steering-experiments/lees-2003";
+my $colony_dir = "/g6/users/leelin/research/6.370/colony-2003";
+#my $colony_dir = "/g2/users/mernst/tmp/steering-experiments/lees-2003";
+
+# Parse command line arguments.
+while ((scalar(@ARGV) > 0) && ($ARGV[0] =~ /^-/))  {
+  if ($ARGV[0] eq "--help") {
+    print usage();
+    exit;
+  } elsif ($ARGV[0] eq "--colonydir") {
+    shift @ARGV;
+    $colony_dir = shift @ARGV;
+  } else {
+    print usage();
+    die "unrecognized argument $ARGV[0]";
+  }
+}
 
 if (scalar(@ARGV) < 3) {
   die "Too few arguments (" . scalar(@ARGV) . "), need at least 3: " . join(' ', @ARGV) . "\n" . usage();
@@ -32,10 +57,10 @@ my $tmpdir = "/tmp/$ENV{'USER'}";
 if (! -d $tmpdir) {
   mkdir $tmpdir or die "Cannot create directory $tmpdir";
 }
-# relative to $lees_2003_dir
+# relative to $colony_dir
 my @javacp_list = ("sources", "teams", ".");
 # absolute
-my $javacp = join(':', map { "$lees_2003_dir/$_" } @javacp_list);
+my $javacp = join(':', map { "$colony_dir/$_" } @javacp_list);
 
 
 # Example command:
@@ -79,7 +104,7 @@ sub setup_directory {
   mkdir $dir;
 
   # Must copy whole conf directory because I need to modify sim.conf.
-  system_or_die("cp -pR $lees_2003_dir/conf $dir");
+  system_or_die("cp -pR $colony_dir/conf $dir");
   rename("$dir/conf/sim.conf", "$dir/conf/sim.conf-orig")
     || die "Cannot rename $dir/conf/sim.conf to $dir/conf/sim.conf-orig";
   read_sim_conf("$dir/conf/sim.conf-orig");
@@ -87,16 +112,16 @@ sub setup_directory {
 
   # Must copy whole maps directory (cannot just link) because the program
   # tries to write maps/randmap.map.
-  system_or_die("cp -pR $lees_2003_dir/maps $dir");
+  system_or_die("cp -pR $colony_dir/maps $dir");
 
   # This directory must exist so that file logs/game-log-null can be created.
   mkdir "$dir/logs";
 
   ## These don't seem necessary.
-  # system_or_die("cp -pR $lees_2003_dir/colony/graphics $dir");
-  # system_or_die("cp -pR $lees_2003_dir/colony/images $dir");
-  # system_or_die("cp -pR $lees_2003_dir/colony/jars $dir");
-  # system_or_die("cp -pR $lees_2003_dir/colony/models $dir");
+  # system_or_die("cp -pR $colony_dir/colony/graphics $dir");
+  # system_or_die("cp -pR $colony_dir/colony/images $dir");
+  # system_or_die("cp -pR $colony_dir/colony/jars $dir");
+  # system_or_die("cp -pR $colony_dir/colony/models $dir");
 
   return $dir;
 }

@@ -3,17 +3,33 @@
 # colony-runmatches.pl:  runs a set of matches.
 # See "usage()" routine for usage information.
 
+my $usage = <<END_USAGE;
+colony-runmatches.pl [OPTIONS] match-file result-file [parameters]
+Runs a set of matches specified by match-file, leaving the results
+  in result-file.  See \"colony-README\" file for file formats.
+The [parameters] are passed through to colony-runmatch.pl.
+Options:
+  --help
+        Print this message.
+  --debug
+  	Produce debugging output.
+  --distribute[=machine1,machine2,...]
+        Distribute the matches among multiple computers; each computer
+        runs a subset of the matches.
+  --duplicate[=machine1,machine2,...]
+        Duplicate matches among multiple computers; each computer runs
+        all the matches, resulting in a tournament with multiple rounds.
+  --loadlimit=N
+        Don't run on any machine whose load is greater than the given value.
+	If this would filter out all machines, run on all machines anyway.
+  --firstline=N
+  --lastline=N
+	Only run a subset of the matches:  those between firstline and
+        lastline, inclusive.
+END_USAGE
+
 sub usage () {
-  return
-    "$0 [OPTIONS] match-file result-file [parameters]\n"
-    . "See colony-README for file formats\n"
-    . "Options:\n"
-    . "  --debug\n"
-    . "  --distribute[=machine1,machine2,...]\n"
-    . "  --duplicate[=machine1,machine2,...]\n"
-    . "  --loadlimit=N\n"
-    . "  --firstline=N\n"
-    . "  --lastline=N\n";
+  return $usage;
 }
 
 use strict;
@@ -31,6 +47,8 @@ my $duplicate = 0;
 my $loadlimit = 0;
 my $firstline = 0;
 my $lastline = 0;
+# Take care that no one else needs particular machines (say, for timing
+# purposes) before starting compute-intensive jobs on them.
 my @machines = ('parsnip', 'peanut',
                 'beet', 'daikon', 'manioc', 'rutabaga', 'turnip',
                 'yam', 'scallion',
@@ -48,9 +66,13 @@ my $current_dir;
 # commandline arg.
 #cleanup();
 
+# Parse command line arguments.
 while ((scalar(@ARGV) > 0) && ($ARGV[0] =~ /^-/)) {
   my $arg = shift @ARGV;
-  if ($arg eq "--debug") {
+  if ($arg eq "--help") {
+    print usage();
+    exit;
+  } elsif ($arg eq "--debug") {
     $debug = $arg;
   } elsif ($arg =~ /^--distribute(=(.*))?$/) {
     $distribute = 1;
@@ -105,9 +127,9 @@ sub cleanup () {
     # runmatch-[digits]
     foreach my $file (@files) {
 	if ($file =~ /runmatch.\d+/) {
-	    system_or_die("rm -rf $tmpdir/$file");    
+	    system_or_die("rm -rf $tmpdir/$file");
 	}
-    }    
+    }
 }
 
 
@@ -211,8 +233,8 @@ while (defined($line = <IN>)) {
     # print "\ncommand: $command\n";
     system_or_die($command);
   } else {
-    # Not system_or_die; it's OK if it dies (we'll notice the missing run
-    # and come back to it later).
+    # Not system_or_die; it's OK if it dies.  We'll notice the missing run
+    # (by hand?) and come back to it later.
     system("colony-runmatch.pl $team1 $team2 $output_filename $parameters");
   }
 }

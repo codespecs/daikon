@@ -3,14 +3,28 @@
 # colony-tournament-summarize.pl:  Display statistics for completed tournament.
 # See "usage()" routine for usage information.
 
-sub usage () {
-  return
-    "$0 [match-result-files ...]]\n"
-    . "match-result-files are in output format of colony-runmatch.pl\n";
-}
+my $usage = <<END_USAGE;
+colony-tournament-summarize.pl [--colonydir dir] [match-result-files ...]
+Display staticsts for a completed tournament.
+Arguments:
+  --help
+        Print this message.
+  --colonydir colonydir
+        Directory in which "conf/sim.conf" file exists.
+  match-result-files
+        Result files from the tournament,
+        in the output format of colony-runmatch.pl.
+The output lists the teams twice, once by team number and once by rank.
+The "dominates" number indicates how many other teams a given team dominates.
+  Team A dominates team B if team A won more of the A-B matches; matches
+  against other opponents are irrelevant to whether A dominates B.
+  See the comments in the script for more detail, and to understand the "time"
+  measure.
+END_USAGE
 
-my $lees_2003_dir = "/g6/users/leelin/research/6.370/colony-2003";
-# my $lees_2003_dir = "/g2/users/mernst/tmp/steering-experiments/lees-2003";
+sub usage () {
+  return $usage;
+}
 
 
 use strict;
@@ -20,9 +34,25 @@ use checkargs;
 use util_daikon;
 use colony_simconf;
 
+my $colony_dir = "/g6/users/leelin/research/6.370/colony-2003";
+# my $colony_dir = "/g2/users/mernst/tmp/steering-experiments/lees-2003/colony";
+
+# Parse command line arguments.
+while ((scalar(@ARGV) > 0) && ($ARGV[0] =~ /^-/))  {
+  if ($ARGV[0] eq "--help") {
+    print usage();
+    exit;
+  } elsif ($ARGV[0] eq "--colonydir") {
+    shift @ARGV;
+    $colony_dir = shift @ARGV;
+  } else {
+    print usage();
+    die "unrecognized argument $ARGV[0]";
+  }
+}
 
 
-read_sim_conf("$lees_2003_dir/conf/sim.conf");
+read_sim_conf("$colony_dir/conf/sim.conf");
 my @teams = packages();         # package names
 my $num_teams = scalar(@teams);
 my %teams = ();                 # maps from team names (packages) to numbers
@@ -94,7 +124,8 @@ my @team_losses = ();
 # dominates; larger numbers are better.  Team $i dominates team $j iff team
 # $i won more of the ($i,$j) matches.  Thus, if the two teams won equal
 # numbers of matches against one another, then neither team dominates the
-# other.
+# other.  Domination has only to do with matches between the two teams,
+# and nothing to do with how the two teams did against other opponents.
 my @team_dominates = ();
 # $team_time[$i] is the times for the matches lost by team $i, minus the
 # time for the matches won by team $i.  Given a particular number of wins
