@@ -33,6 +33,8 @@ splitter.sh
   code which should be given as an argument. Actually this simply
   performs rmcomm, extractoconds.pl, and gensplitter.pl in this
   order.
+  [rmcomm probably removes comments and is probably defined as "cpp -P
+  -nostdinc -undef".  -Michael Ernst 6/20/2001]
   You can specify a 'packagename' as a second argument when you have
   to designate a particular package name for generated splitters.
 
