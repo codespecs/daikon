@@ -531,7 +531,7 @@ invariants.
   //   super.destroy();
   // }
 
-  public void add(PRIMITIVE v1, PRIMITIVE v2, int mod_index, int count) {
+  public void add(Object v1, Object v2, int mod_index, int count) {
     if (ppt.debugged) {
       System.out.println(INTEQUALstring + ppt.varNames() + ".add("
                          + v1 + "," + v2

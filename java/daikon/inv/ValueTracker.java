@@ -15,7 +15,7 @@ import daikon.inv.ternary.threeScalar.LinearTernaryCoreFloat;
  *
  * Declared final only for efficiency.
  **/
-public final class ValueTracker
+public class ValueTracker
   implements Serializable, Cloneable
 {
   // We are Serializable, so we specify a version to allow changes to
@@ -397,6 +397,163 @@ public final class ValueTracker
       return result;
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can't happen
+    }
+  }
+
+  public static abstract class ValueTracker1 extends ValueTracker {
+    public ValueTracker1(int max_values) {
+      super(max_values);
+    }
+
+    public abstract void add(Object v1);
+  }
+
+  public static abstract class ValueTracker2 extends ValueTracker {
+    public ValueTracker2(int max_values) {
+      super(max_values);
+    }
+    public abstract void add(Object v1, Object v2);
+  }
+
+  public static abstract class ValueTracker3 extends ValueTracker {
+    public ValueTracker3(int max_values) {
+      super(max_values);
+    }
+    public abstract void add(Object v1, Object v2, Object v3);
+  }
+
+  public static class ValueTrackerScalar extends ValueTracker1 {
+    public ValueTrackerScalar(int max_values) {
+      super(max_values);
+    }
+    public void add(Object v1) {
+      add(((Long) v1).longValue());
+    }
+  }
+
+  public static class ValueTrackerFloat extends ValueTracker1 {
+    public ValueTrackerFloat(int max_values) {
+      super(max_values);
+    }
+    public void add(Object v1) {
+      add(((Double) v1).doubleValue());
+    }
+  }
+
+  public static class ValueTrackerScalarArray extends ValueTracker1 {
+    public ValueTrackerScalarArray(int max_values) {
+      super(max_values);
+    }
+    public void add(Object v1) {
+      add((long[]) v1);
+    }
+  }
+
+  public static class ValueTrackerFloatArray extends ValueTracker1 {
+    public ValueTrackerFloatArray(int max_values) {
+      super(max_values);
+    }
+    public void add(Object v1) {
+      add((double[]) v1);
+    }
+  }
+
+  public static class ValueTrackerString extends ValueTracker1 {
+    public ValueTrackerString(int max_values) {
+      super(max_values);
+    }
+    public void add(Object v1) {
+      add((String) v1);
+    }
+  }
+
+  public static class ValueTrackerStringArray extends ValueTracker1 {
+    public ValueTrackerStringArray(int max_values) {
+      super(max_values);
+    }
+    public void add(Object v1) {
+      add((String[]) v1);
+    }
+  }
+
+  public static class ValueTrackerTwoString extends ValueTracker2 {
+    public ValueTrackerTwoString(int max_values) {
+      super(max_values);
+    }
+    public void add(Object v1, Object v2) {
+      add((String) v1, (String) v2);
+    }
+  }
+
+  public static class ValueTrackerTwoScalar extends ValueTracker2 {
+    public ValueTrackerTwoScalar(int max_values) {
+      super(max_values);
+    }
+    public void add(Object v1, Object v2) {
+      add(((Long) v1).longValue(), ((Long) v2).longValue());
+    }
+  }
+
+  public static class ValueTrackerTwoFloat extends ValueTracker2 {
+    public ValueTrackerTwoFloat(int max_values) {
+      super(max_values);
+    }
+    public void add(Object v1, Object v2) {
+      add(((Double) v1).doubleValue(), ((Double) v2).doubleValue());
+    }
+  }
+
+  public static class ValueTrackerFloatArrayFloat extends ValueTracker2 {
+    public ValueTrackerFloatArrayFloat(int max_values) {
+      super(max_values);
+    }
+    public void add(Object v1, Object v2) {
+      add((double[]) v1, ((Double) v2).doubleValue());
+    }
+  }
+
+  public static class ValueTrackerScalarArrayScalar extends ValueTracker2 {
+    public ValueTrackerScalarArrayScalar(int max_values) {
+      super(max_values);
+    }
+    public void add(Object v1, Object v2) {
+      add((long[]) v1, ((Long) v2).longValue());
+    }
+  }
+
+  public static class ValueTrackerTwoFloatArray extends ValueTracker2 {
+    public ValueTrackerTwoFloatArray(int max_values) {
+      super(max_values);
+    }
+    public void add(Object v1, Object v2) {
+      add((double[]) v1, ((double[]) v2));
+    }
+  }
+
+  public static class ValueTrackerTwoScalarArray extends ValueTracker2 {
+    public ValueTrackerTwoScalarArray(int max_values) {
+      super(max_values);
+    }
+    public void add(Object v1, Object v2) {
+      add((long[]) v1, ((long[]) v2));
+    }
+  }
+
+  public static class ValueTrackerThreeScalar extends ValueTracker3 {
+    public ValueTrackerThreeScalar(int max_values) {
+      super(max_values);
+    }
+    public void add(Object v1, Object v2, Object v3) {
+      add(((Long) v1).longValue(), ((Long) v2).longValue(), ((Long) v3).longValue());
+    }
+  }
+
+  public static class ValueTrackerThreeFloat extends ValueTracker3 {
+    public ValueTrackerThreeFloat(int max_values) {
+      super(max_values);
+    }
+    public void add(Object v1, Object v2, Object v3) {
+      add(((Double) v1).longValue(), ((Double) v2).longValue(), ((Double) v3).longValue());
     }
   }
 

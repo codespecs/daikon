@@ -40,16 +40,19 @@ package daikon;
 import daikon.inv.*;
 
 #if defined(ARITY1)
+import daikon.inv.unary.*;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.string.*;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.unary.stringsequence.*;
 #elif defined(ARITY2)
+import daikon.inv.binary.*;
 import daikon.inv.binary.twoScalar.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.inv.binary.twoString.*;
 import daikon.inv.binary.sequenceScalar.*;
 #elif defined(ARITY3)
+import daikon.inv.ternary.*;
 import daikon.inv.ternary.threeScalar.*;
 #endif
 
@@ -79,19 +82,23 @@ public final class PPTSLICE1
   // This is in PptSlice; do not repeat it here!
   // Invariants invs;
 
+
 #if defined(ARITY1)
   public VarInfo var_info;
 
   // values_cache maps (interned) values to 2-element arrays of
   // [num_unmodified, num_modified].
+  ValueTracker.ValueTracker1 values_cache;
 #elif defined(ARITY2)
   // values_cache maps (interned) values to 4-element arrays of
   // [num_unmod_unmod, num_unmod_mod, num_mod_unmod, num_mod_mod].
+  ValueTracker.ValueTracker2 values_cache;
 #elif defined(ARITY3)
   // values_cache maps (interned) values to 8-element arrays of
   // [uuu, uum, umu, umm, muu, mum, mmu, mmm].
   // That is, the first element is (unmod,unmod,unmod);
   // the second element is (unmod,unmod,mod); etc.
+  ValueTracker.ValueTracker3 values_cache;
 #endif
   int[] tm_total = new int[NUM_TM];  // "tm" stands for "tuplemod"
 
@@ -111,7 +118,7 @@ public final class PPTSLICE1
 
     // 44 is used here because that's the most amount of values needed to be seen by some
     // of the Invariants before they become justified
-    values_cache = new ValueTracker(44);
+    // values_cache = new ValueTracker(44);
 
     /* [INCR]
     // values_cache = new HashMap();
@@ -155,18 +162,24 @@ public final class PPTSLICE1
     ProglangType rep_type = var_info.rep_type;
     boolean is_scalar = rep_type.isScalar();
     if (is_scalar) {
+      values_cache = new ValueTracker.ValueTrackerScalar(44);
       new_invs = SingleScalarFactory.instantiate(this);
     } else if (rep_type == ProglangType.INT_ARRAY) {
+      values_cache = new ValueTracker.ValueTrackerScalarArray(44);
       new_invs = SingleScalarSequenceFactory.instantiate(this);
     } else if (Daikon.dkconfig_enable_floats
                && rep_type == ProglangType.DOUBLE) {
+      values_cache = new ValueTracker.ValueTrackerFloat(44);
       new_invs = SingleFloatFactory.instantiate(this);
     } else if (Daikon.dkconfig_enable_floats
                && rep_type == ProglangType.DOUBLE_ARRAY) {
+      values_cache = new ValueTracker.ValueTrackerFloatArray(44);
       new_invs = SingleFloatSequenceFactory.instantiate(this);
     } else if (rep_type == ProglangType.STRING) {
+      values_cache = new ValueTracker.ValueTrackerString(44);
       new_invs = SingleStringFactory.instantiate(this);
     } else if (rep_type == ProglangType.STRING_ARRAY) {
+      values_cache = new ValueTracker.ValueTrackerStringArray(44);
       new_invs = SingleStringSequenceFactory.instantiate(this);
     } else {
       // Do nothing; do not even complain
@@ -179,36 +192,45 @@ public final class PPTSLICE1
     boolean rep1_is_float  = rep1.isFloat();
     boolean rep2_is_float  = rep2.isFloat();
     if (rep1_is_scalar && rep2_is_scalar) {
+      values_cache = new ValueTracker.ValueTrackerTwoScalar(44);
       new_invs = TwoScalarFactory.instantiate(this);
     } else if ((rep1 == ProglangType.STRING)
         && (rep2 == ProglangType.STRING)) {
+      values_cache = new ValueTracker.ValueTrackerTwoString(44);
       new_invs = TwoStringFactory.instantiate(this);
     } else if ((rep1 == ProglangType.INT)
                && (rep2 == ProglangType.INT_ARRAY)) {
+      values_cache = new ValueTracker.ValueTrackerScalarArrayScalar(44);
       new_invs = SequenceScalarFactory.instantiate(this);
     } else if ((rep1 == ProglangType.INT_ARRAY)
                && (rep2 == ProglangType.INT)) {
+      values_cache = new ValueTracker.ValueTrackerScalarArrayScalar(44);
       new_invs = SequenceScalarFactory.instantiate(this);
     } else if ((rep1 == ProglangType.INT_ARRAY)
                && (rep2 == ProglangType.INT_ARRAY)) {
+      values_cache = new ValueTracker.ValueTrackerTwoScalarArray(44);
       new_invs = TwoSequenceFactory.instantiate(this);
     } else if (rep1_is_float && rep2_is_float) {
       if (Daikon.dkconfig_enable_floats) {
+        values_cache = new ValueTracker.ValueTrackerTwoFloat(44);
         new_invs = TwoFloatFactory.instantiate(this);
       }
     } else if ((rep1 == ProglangType.DOUBLE)
                && (rep2 == ProglangType.DOUBLE_ARRAY)) {
       if (Daikon.dkconfig_enable_floats) {
+        values_cache = new ValueTracker.ValueTrackerFloatArrayFloat(44);
         new_invs = SequenceFloatFactory.instantiate(this);
       }
     } else if ((rep1 == ProglangType.DOUBLE_ARRAY)
                && (rep2 == ProglangType.DOUBLE)) {
       if (Daikon.dkconfig_enable_floats) {
+        values_cache = new ValueTracker.ValueTrackerFloatArrayFloat(44);
         new_invs = SequenceFloatFactory.instantiate(this);
       }
     } else if ((rep1 == ProglangType.DOUBLE_ARRAY)
                && (rep2 == ProglangType.DOUBLE_ARRAY)) {
       if (Daikon.dkconfig_enable_floats) {
+        values_cache = new ValueTracker.ValueTrackerTwoFloatArray(44);
         new_invs = TwoSequenceFactoryFloat.instantiate(this);
       }
     } else {
@@ -221,11 +243,13 @@ public final class PPTSLICE1
     if ((rep1 == ProglangType.INT)
         && (rep2 == ProglangType.INT)
         && (rep3 == ProglangType.INT)) {
+      values_cache = new ValueTracker.ValueTrackerThreeScalar(44);
       new_invs = ThreeScalarFactory.instantiate(this);
     } else if ((rep1 == ProglangType.DOUBLE)
                && (rep2 == ProglangType.DOUBLE)
                && (rep3 == ProglangType.DOUBLE)) {
       if (Daikon.dkconfig_enable_floats) {
+        values_cache = new ValueTracker.ValueTrackerThreeFloat(44);
         new_invs = ThreeFloatFactory.instantiate(this);
       }
     } else {
@@ -280,7 +304,11 @@ public final class PPTSLICE1
   // Returns the number of distinct values stored in the ValueTracker
   // of this (up to a maximum of 8
   public int num_values() {
-    return this.values_cache.num_values();
+    if (values_cache != null) {
+      return this.values_cache.num_values();
+    } else {
+      return 0;
+    }
   }
 
 #if 0
@@ -289,7 +317,12 @@ public final class PPTSLICE1
 #if defined(ARITY3)
   // Returns the number of distinct points seen
   public int num_point_values() {
-    return this.values_cache.num_point_values();
+    if (values_cache == null) {
+      return 0;
+    } else {
+      return this.values_cache.num_point_values();
+    }
+
   }
 #endif
 
@@ -300,7 +333,11 @@ public final class PPTSLICE1
   // Returns the number of distinct array element values stored in
   // this value tracker (only if the arrays are of equal length)
   public int num_elt_values() {
-    return this.values_cache.num_elt_values();
+    if (values_cache == null) {
+      return 0;
+    } else {
+      return this.values_cache.num_elt_values();
+    }
   }
 #endif
 
@@ -311,14 +348,22 @@ public final class PPTSLICE1
 #if defined(ARITY1)
   // Returns the number of arrays seen whose length was > 1
   public int num_no_dup_values() {
-    return this.values_cache.num_no_dup_values();
+    if (values_cache == null) {
+      return 0;
+    } else {
+      return this.values_cache.num_no_dup_values();
+    }
   }
 
   // Returns the number of values seen as defined by
   // SeqIndexComparison.  That is, each distinct pair
   // (a[i], i) is considered a distinct value
   public int num_seq_index_values() {
-    return this.values_cache.num_seq_index_values();
+    if (values_cache == null) {
+      return 0;
+    } else {
+      return this.values_cache.num_seq_index_values();
+    }
   }
 #endif
 
@@ -536,210 +581,56 @@ public final class PPTSLICE1
 
 #if defined(ARITY1)
     Assert.assertTrue(mod1 != ValueTuple.MISSING_FLOW && mod1 != ValueTuple.MISSING_NONSENSICAL);
-    ProglangType rep = vi1.rep_type;
-    boolean rep_is_scalar = rep.isScalar();
-    if (rep_is_scalar) {
-      // long value = vi1.getIntValue(full_vt);
-      long value = ((Long) val1).longValue();
-      values_cache.add(value);
-      for (int i=0; i<num_invs; i++) {
-        SingleScalar inv = (SingleScalar)invs.get(i);
-        if (inv.falsified) continue;
-        // Should the suppressed invariants be put in their own list?
-        if (inv.getSuppressor() != null) continue;
-        inv.add(value, mod1, count);
-      }
-    } else if (rep == ProglangType.DOUBLE) {
-      // double value = vi1.getDoubleValue(full_vt);
-      double value = ((Double) val1).doubleValue();
-      values_cache.add(value);
-      for (int i=0; i<num_invs; i++) {
-        SingleFloat inv = (SingleFloat)invs.get(i);
-        if (inv.falsified) continue;
-        if (inv.getSuppressor() != null) continue;
-        inv.add(value, mod1, count);
-      }
-    } else if (rep == ProglangType.STRING) {
-      // String value = vi1.getStringValue(full_vt);
-      String value = (String) val1;
-      values_cache.add(value);
-      for (int i=0; i<num_invs; i++) {
-        // System.out.println("Trying " + invs.get(i));
-        SingleString inv = (SingleString) invs.get(i);
-        if (inv.falsified) continue;
-        if (inv.getSuppressor() != null) continue;
-        inv.add(value, mod1, count);
-      }
-    } else if (rep == ProglangType.DOUBLE_ARRAY) {
-      // double[] value = vi1.getDoubleArrayValue(full_vt);
-      double[] value = (double[]) val1;
-      values_cache.add(value);
-      for (int i=0; i<num_invs; i++) {
-        SingleFloatSequence inv = (SingleFloatSequence)invs.get(i);
-        if (inv.falsified) continue;
-        if (inv.getSuppressor() != null) continue;
-        inv.add(value, mod1, count);
-      }
-    } else if (rep == ProglangType.INT_ARRAY) {
-      // long[] value = vi1.getIntArrayValue(full_vt);
-      long[] value = (long[]) val1;
-      values_cache.add(value);
-      for (int i=0; i<num_invs; i++) {
-        SingleScalarSequence inv = (SingleScalarSequence)invs.get(i);
-        if (inv.falsified) continue;
-        if (inv.getSuppressor() != null) continue;
-        inv.add(value, mod1, count);
-      }
-    } else if (rep == ProglangType.STRING_ARRAY) {
-      String[] value = (String[]) val1;
-      values_cache.add(value);
-      for (int i=0; i<num_invs; i++) {
-        SingleStringSequence inv = (SingleStringSequence)invs.get(i);
-        if (inv.falsified) continue;
-        if (inv.getSuppressor() != null) continue;
-        inv.add(value, mod1, count);
-      }
-    } else {
-      throw new Error("unrecognized representation " + rep.format());
+    if (values_cache != null) {
+      values_cache.add(val1);
+    }
+    for (int i=0; i<num_invs; i++) {
+      UnaryInvariant inv = (UnaryInvariant) invs.get(i);
+      if (inv.falsified) continue;
+      if (inv.getSuppressor() != null) continue;
+      inv.add(val1, mod1, count);
     }
 #elif defined(ARITY2)
     Assert.assertTrue((mod1 != ValueTuple.MISSING_FLOW && mod1 != ValueTuple.MISSING_NONSENSICAL)
                   && (mod2 != ValueTuple.MISSING_FLOW && mod2 != ValueTuple.MISSING_NONSENSICAL));
     int mod_index = mod1 * 2 + mod2;
-    boolean string1 = vi1.rep_type == ProglangType.STRING;
-    boolean string2 = vi2.rep_type == ProglangType.STRING;
     boolean array1 = vi1.rep_type.isArray();
     boolean array2 = vi2.rep_type.isArray();
-    boolean stringArray1 = vi1.rep_type == ProglangType.STRING_ARRAY;
-    boolean stringArray2 = vi2.rep_type == ProglangType.STRING_ARRAY;
-    if (string1 && string2) {
-      String value1 = (String) val1;
-      String value2 = (String) val2;
-      values_cache.add(value1, value2);
+    if (values_cache != null) {
+      if (array2 && ! array1) {
+        values_cache.add(val2, val1);
+      } else {
+        values_cache.add(val1, val2);
+      }
+    }
+    if (array2 && ! array1) {
       for (int i=0; i<num_invs; i++) {
-        TwoString inv = (TwoString)invs.get(i);
+        BinaryInvariant inv = (BinaryInvariant) invs.get(i);
         if (inv.falsified) continue;
         if (inv.getSuppressor() != null) continue;
-        inv.add(value1, value2, mod_index, count);
-      }
-    } else if (string1 || string2) {
-      throw new Error("impossible");
-    } else if (vi1.rep_type==ProglangType.INT && vi2.rep_type==ProglangType.INT) {
-      // long value1 = vi1.getIntValue(full_vt);
-      // long value2 = vi2.getIntValue(full_vt);
-      long value1 = ((Long) val1).longValue();
-      long value2 = ((Long) val2).longValue();
-      values_cache.add(value1, value2);
-      for (int i=0; i<num_invs; i++) {
-        TwoScalar inv = (TwoScalar)invs.get(i);
-        if (inv.falsified) continue;
-        if (inv.getSuppressor() != null) continue;
-        inv.add(value1, value2, mod_index, count);
-      }
-    } else if (vi1.rep_type==ProglangType.DOUBLE && vi2.rep_type==ProglangType.DOUBLE) {
-      double value1 = ((Double) val1).doubleValue();
-      double value2 = ((Double) val2).doubleValue();
-      values_cache.add(value1, value2);
-      for (int i=0; i<num_invs; i++) {
-        TwoFloat inv = (TwoFloat)invs.get(i);
-        inv.add(value1, value2, mod_index, count);
-      }
-    } else if (vi1.rep_type==ProglangType.DOUBLE_ARRAY && vi2.rep_type==ProglangType.DOUBLE_ARRAY) {
-      double[] value1 = (double[]) val1;
-      double[] value2 = (double[]) val2;
-      values_cache.add(value1, value2);
-      for (int i=0; i<num_invs; i++) {
-        TwoSequenceFloat inv = (TwoSequenceFloat)invs.get(i);
-        inv.add(value1, value2, mod_index, count);
-      }
-    } else if (vi1.rep_type==ProglangType.DOUBLE && vi2.rep_type==ProglangType.DOUBLE_ARRAY) {
-      double value1 = ((Double) val1).doubleValue();
-      double[] value2 = (double[]) val2;
-      values_cache.add(value2, value1);
-      for (int i=0; i<num_invs; i++) {
-        SequenceFloat inv = (SequenceFloat)invs.get(i);
-        inv.add(value2, value1, mod_index, count);
-      }
-   }   else if (vi1.rep_type==ProglangType.DOUBLE_ARRAY && vi2.rep_type==ProglangType.DOUBLE) {
-        double[] value1 = (double[]) val1;
-        double value2 = ((Double) val2).doubleValue();
-        values_cache.add(value1, value2);
-      for (int i=0; i<num_invs; i++) {
-        SequenceFloat inv = (SequenceFloat)invs.get(i);
-        inv.add(value1, value2, mod_index, count);
-      }
-
-    } else if (array1 && (!array2)) {
-      long[] seqval = (long[]) val1;
-      long sclval = ((Long) val2).longValue();
-      values_cache.add(seqval, sclval);
-      for (int i=0; i<num_invs; i++) {
-        SequenceScalar inv = (SequenceScalar)invs.get(i);
-        if (inv.falsified) continue;
-        if (inv.getSuppressor() != null) continue;
-        inv.add(seqval, sclval, mod_index, count);
-      }
-    } else if ((!array1) && (array2)) {
-      long[] seqval = (long[]) val2;
-      long sclval = ((Long) val1).longValue();
-      values_cache.add(seqval, sclval);
-      for (int i=0; i<num_invs; i++) {
-        SequenceScalar inv = (SequenceScalar)invs.get(i);
-        if (inv.falsified) continue;
-        if (inv.getSuppressor() != null) continue;
-        inv.add(seqval, sclval, mod_index, count);
-      }
-    } else if (array1 && array2 && !stringArray1 && !stringArray2) {
-      long[] value1 = (long[]) val1;
-      long[] value2 = (long[]) val2;
-      values_cache.add(value1, value2);
-      for (int i=0; i<num_invs; i++) {
-        TwoSequence inv = (TwoSequence)invs.get(i);
-        if (inv.falsified) continue;
-        if (inv.getSuppressor() != null) continue;
-        inv.add(value1, value2, mod_index, count);
-        if (Debug.logDetail())
-          inv.log ("Seeing values " + ArraysMDE.toString(value1) + "," + ArraysMDE.toString(value2) +
-                   " num_values()==" + num_values() + ", num_elt_values()==" + num_elt_values());
+        inv.add(val2, val1, mod1, count);
       }
     } else {
-      throw new Error("impossible");
+      for (int i=0; i<num_invs; i++) {
+        BinaryInvariant inv = (BinaryInvariant) invs.get(i);
+        if (inv.falsified) continue;
+        if (inv.getSuppressor() != null) continue;
+        inv.add(val1, val2, mod1, count);
+      }
     }
 #elif defined(ARITY3)
     Assert.assertTrue((mod1 != ValueTuple.MISSING_FLOW && mod1 != ValueTuple.MISSING_NONSENSICAL)
                   && (mod2 != ValueTuple.MISSING_FLOW && mod2 != ValueTuple.MISSING_NONSENSICAL)
                   && (mod3 != ValueTuple.MISSING_FLOW && mod3 != ValueTuple.MISSING_NONSENSICAL));
     int mod_index = mod1 * 4 + mod2 * 2 + mod3;
-    ProglangType rep1 = vi1.file_rep_type;
-    ProglangType rep2 = vi2.file_rep_type;
-    ProglangType rep3 = vi3.file_rep_type;
-    if ((rep1 == ProglangType.INT)
-        && (rep2 == ProglangType.INT)
-        && (rep3 == ProglangType.INT)) {
-      long value1 = ((Long) val1).longValue();
-      long value2 = ((Long) val2).longValue();
-      long value3 = ((Long) val3).longValue();
-      values_cache.add(value1, value2, value3);
-      for (int i=0; i<invs.size(); i++) {
-        ThreeScalar inv = (ThreeScalar) invs.get(i);
-        if (inv.falsified) continue;
-        if (inv.getSuppressor() != null) continue;
-        inv.add(value1, value2, value3, mod_index, count);
-      }
-    } else if ((rep1 == ProglangType.DOUBLE)
-               && (rep2 == ProglangType.DOUBLE)
-               && (rep3 == ProglangType.DOUBLE)) {
-      double value1 = ((Double) val1).doubleValue();
-      double value2 = ((Double) val2).doubleValue();
-      double value3 = ((Double) val3).doubleValue();
-      values_cache.add(value1, value2, value3);
-      for (int i = 0; i < invs.size(); i++) {
-        ThreeFloat inv = (ThreeFloat) invs.get(i);
-        inv.add(value1, value2, value3, mod_index, count);
-      }
-    } else {
-      // temporarily do nothing:  efficiency hack, as there are currently
-      // no ternary invariants over non-scalars
+    if (values_cache != null) {
+      values_cache.add(val1, val2, val3);
+    }
+    for (int i=0; i<num_invs; i++) {
+      TernaryInvariant inv = (TernaryInvariant) invs.get(i);
+      if (inv.falsified) continue;
+      if (inv.getSuppressor() != null) continue;
+      inv.add(val1, val2, val3, mod1, count);
     }
 #endif
 
@@ -1161,8 +1052,18 @@ public final class PPTSLICE1
       result.tm_total[i] = this.tm_total[i];
     }
     // Set ValueTracker
-    result.values_cache = (ValueTracker) this.values_cache.clone();
 
+    if (values_cache == null) {
+      result.values_cache = null;
+    } else {
+#if defined(ARITY1)
+      result.values_cache = (ValueTracker.ValueTracker1) this.values_cache.clone();
+#elif defined(ARITY2)
+    result.values_cache = (ValueTracker.ValueTracker2) this.values_cache.clone();
+#elif defined(ARITY3)
+    result.values_cache = (ValueTracker.ValueTracker3) this.values_cache.clone();
+#endif
+    }
     // re-parent the invariants and copy them out
     List newInvs = new LinkedList();
     for (Iterator i = invs.iterator(); i.hasNext(); ) {

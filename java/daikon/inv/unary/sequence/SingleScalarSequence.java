@@ -29,12 +29,13 @@ public abstract class SingleScalarSequence
   // Should never be called with modified == ValueTuple.MISSING.
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
-  public void add(long[] value, int mod_index, int count) {
+  public void add(Object val, int mod_index, int count) {
     Assert.assertTrue(! falsified);
     Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
-    Assert.assertTrue(Intern.isInterned(value));
+    Assert.assertTrue(Intern.isInterned(val));
     // System.out.println("SingleScalarSequence.add(" + ArraysMDE.toString(value) + ", " + modified + ", " + count + ")");
     // [INCR] Assert.assertTrue(!finished);
+    long[] value = (long[]) val;
     if (value == null) {
       // ppt.var_infos[0].canBeNull = true; // [[INCR]]
     } else if (mod_index == 0) {

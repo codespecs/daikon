@@ -31,12 +31,14 @@ public abstract class TwoString
     return ppt.var_infos[1];
   }
 
-  public void add(String v1, String v2, int mod_index, int count) {
+  public void add(Object val1, Object val2, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
     Assert.assertTrue(! falsified);
     Assert.assertTrue((mod_index >= 0) && (mod_index < 4));
     // [INCR] Assert.assertTrue(!finished);
+    String v1 = (String) val1;
+    String v2 = (String) val2;
     if (mod_index == 0) {
       add_unmodified(v1, v2, count);
     } else {

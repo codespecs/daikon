@@ -27,4 +27,6 @@ public abstract class UnaryInvariant
     return this;
   }
 
+  public abstract void add(Object val, int mod_index, int count);
+
 }

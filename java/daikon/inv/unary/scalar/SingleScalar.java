@@ -29,10 +29,11 @@ public abstract class SingleScalar
   // Should never be called with modified == ValueTuple.MISSING_NONSENSICAL.
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
-  public void add(long value, int mod_index, int count) {
+  public void add(Object val, int mod_index, int count) {
     Assert.assertTrue(! falsified);
     Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
     // [INCR] Assert.assertTrue(!finished);
+    long value = ((Long) val).longValue();
     if (mod_index == 0) {
       add_unmodified(value, count);
     } else {

@@ -111,7 +111,7 @@ public abstract class PptSlice
 
   // This holds keys (interned) and elements of different types, depending on
   // the concrete child of PptSlice.
-  ValueTracker values_cache; // [INCR]
+  // ValueTracker values_cache; // [INCR]
   // Vector  values_order; // [INCR]
 
   /* [INCR]

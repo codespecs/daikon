@@ -52,10 +52,12 @@ public abstract class CLASSNAME
     return ppt.var_infos[1];
   }
 
-  public void add(PRIMITIVE[] v1, PRIMITIVE[] v2, int mod_index, int count) {
+  public void add(Object val1, Object val2, int mod_index, int count) {
     Assert.assertTrue(! falsified);
     Assert.assertTrue((mod_index >= 0) && (mod_index < 4));
     // [INCR] Assert.assertTrue(!finished);
+    PRIMITIVE[] v1 = (PRIMITIVE[]) val1;
+    PRIMITIVE[] v2 = (PRIMITIVE[]) val2;
     if (v1 == null) {
       // ppt.var_infos[0].canBeNull = true; // [[INCR]]
     } else if (v2 == null) {
