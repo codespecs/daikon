@@ -2,6 +2,8 @@
 
 package daikon.tools.jtb;
 
+import daikon.inv.Invariant.OutputFormat;
+
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 import java.lang.reflect.*;
@@ -1015,7 +1017,9 @@ public class Ast {
     return false;
   }
 
-
+  // [[ This seems like a really bad way of getting invariants. And
+  // the assumptions (see assert statements below) don't hold for all
+  // formats. This method should be replaced by something better. ]]
   public static String[] invariants_for(PptTopLevel ppt, PptMap ppts) {
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
@@ -1038,8 +1042,14 @@ public class Ast {
     Assert.assertTrue(invs[0].equals("==========================================================================="), "Not row-of-=: " + invs[0]);
     // These might differ, because return values appear in ppt.name() but not in invs[1].
     // utilMDE.Assert.assertTrue(invs[1].equals(ppt.name()), "Different names: " + invs[1] + ", " + ppt.name());
-    Assert.assertTrue(invs[2].startsWith("    Variables:"));
-    return ArraysMDE.subarray(invs, 3, invs.length-1-3);
+
+    if (Daikon.output_style == OutputFormat.JAVA) {
+      return ArraysMDE.subarray(invs, 2, invs.length-1-3);
+    } else {
+      Assert.assertTrue(invs[2].startsWith("    Variables:"),
+                        "String doesn't start with `Variables:' " + invs[2]);
+      return ArraysMDE.subarray(invs, 3, invs.length-1-3);
+    }
   }
 
 }
