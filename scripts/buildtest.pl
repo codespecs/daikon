@@ -40,6 +40,10 @@ $ENV{"JAVAC"} = "javac -g";
 # my $J2 = "$J2";
 my $J2 = "";
 
+# Run java using the -classic switch, to workaround JVM exit deadlock
+# bug
+my $RUN_JAVA = '\'java -classic -Xmx256m\'';
+
 # The success of each step in the build/test process
 my %success = ();
 
@@ -259,8 +263,8 @@ sub daikon_system_test {
     return 0;
   }
 
-  $command = "make $J2 -C $INV/tests/daikon-tests $TEST_SUITE " .
-    "&> daikon_system_test.out";
+  $command = "make RUN_JAVA=$RUN_JAVA $J2 -C $INV/tests/daikon-tests " .
+    "$TEST_SUITE &> daikon_system_test.out";
   `$command`;
   if ($CHILD_ERROR) {
     print_log("FAILED\n");
