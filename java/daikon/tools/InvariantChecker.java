@@ -152,7 +152,7 @@ public class InvariantChecker {
         }
         inv_file = file;
       } else if (filename.indexOf(".dtrace") != -1) {
-        dtrace_files.add(file);
+        dtrace_files.add(filename);
       } else {
         throw new Error("Unrecognized argument: " + file);
       }
