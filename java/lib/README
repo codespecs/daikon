@@ -8,6 +8,10 @@ Jakarta ORO 2.0.3 (jakarta-oro.jar)
 - Text processing including Perl5 regular expressions
 - http://jakarta.apache.org/oro/
 
+Log4j 1.1.2 (log4j.jar)
+- Trace logging for debug
+- http://jakarta.apache.org/log4j
+
 GNU getopt 1.0.8 (java-getopt.jar)
 - Command line option parser
 - Distributed with java files alongside class files in the jar file.
