@@ -541,10 +541,58 @@
   The default value is `-1'.
 
 @item daikon.inv.unary.sequence.EltwiseFloatComparison.enabled
+  (no description provided)
+  The default value is `true'.
+
+@item daikon.inv.unary.sequence.EltwiseFloatEqual.enabled
+  Boolean.  True iff EltwiseIntComparison invariants should be considered.
+  The default value is `true'.
+
+@item daikon.inv.unary.sequence.EltwiseFloatGreaterEqual.enabled
+  Boolean.  True iff EltwiseIntComparison invariants should be considered.
+  The default value is `true'.
+
+@item daikon.inv.unary.sequence.EltwiseFloatGreaterThan.enabled
+  Boolean.  True iff EltwiseIntComparison invariants should be considered.
+  The default value is `true'.
+
+@item daikon.inv.unary.sequence.EltwiseFloatLessEqual.enabled
+  Boolean.  True iff EltwiseIntComparison invariants should be considered.
+  The default value is `true'.
+
+@item daikon.inv.unary.sequence.EltwiseFloatLessThan.enabled
+  Boolean.  True iff EltwiseIntComparison invariants should be considered.
+  The default value is `true'.
+
+@item daikon.inv.unary.sequence.EltwiseFloatNonEqual.enabled
   Boolean.  True iff EltwiseIntComparison invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.unary.sequence.EltwiseIntComparison.enabled
+  (no description provided)
+  The default value is `true'.
+
+@item daikon.inv.unary.sequence.EltwiseIntEqual.enabled
+  Boolean.  True iff EltwiseIntComparison invariants should be considered.
+  The default value is `true'.
+
+@item daikon.inv.unary.sequence.EltwiseIntGreaterEqual.enabled
+  Boolean.  True iff EltwiseIntComparison invariants should be considered.
+  The default value is `true'.
+
+@item daikon.inv.unary.sequence.EltwiseIntGreaterThan.enabled
+  Boolean.  True iff EltwiseIntComparison invariants should be considered.
+  The default value is `true'.
+
+@item daikon.inv.unary.sequence.EltwiseIntLessEqual.enabled
+  Boolean.  True iff EltwiseIntComparison invariants should be considered.
+  The default value is `true'.
+
+@item daikon.inv.unary.sequence.EltwiseIntLessThan.enabled
+  Boolean.  True iff EltwiseIntComparison invariants should be considered.
+  The default value is `true'.
+
+@item daikon.inv.unary.sequence.EltwiseIntNonEqual.enabled
   Boolean.  True iff EltwiseIntComparison invariants should be considered.
   The default value is `true'.
 

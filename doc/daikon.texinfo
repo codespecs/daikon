@@ -125,6 +125,10 @@ Requirements for running Daikon
 
 * Windows requirements::        
 
+Windows requirements for running Daikon
+
+* Cygwin environment variables::  
+
 Example use of Daikon
 
 * Step-by-step instructions::   
@@ -563,10 +567,26 @@ rehash
 after which file @file{src/dfej} (on Windows, @file{src/dfej.exe}) is
 the dfej executable.  It is already on your path.
 
-If the @file{front-end/java} directory does not exist in your
-distribution, then download the Daikon source distribution from
-@uref{http://pag.lcs.mit.edu/daikon/}.
+If you modify the source code for dfej (which is not recommended
+unless you know what you are doing), just run @command{make} again to
+build a new binary.
 
+Because it uses some obsolescent C++ features, dfej cannot be compiled
+using gcc/g++ 3.2; dfej can be compiled with gcc 2.95.3 (and possibly
+other versions).
+
+@b{Cygwin note:}  Cygwin uses gcc 3.2 by default; there is also an
+option to install gcc 2.95.3.  After installing gcc 2.95.3, you can
+make it the default in the following way:
+@example
+	cd /usr/bin
+	mv gcc.exe gcc-3.exe
+	mv g++.exe g++-3.exe
+	cp gcc-2.exe gcc.exe
+	cp g++-2.exe g++.exe
+@end example
+
+@b{Solaris note:}
 If you are running under Solaris, you may need to edit
 @file{Makefile} to indicate use of the @file{libw} library; change
 @example
@@ -578,17 +598,6 @@ to
 LDFLAGS=-L. -lw -o $(EXECUTABLE)
 @end example
 
-@c If you are running under Microsoft Windows, you should install the
-@c @uref{http://sources.redhat.com/cygwin/,Cygwin toolset}; see
-@c @ref{Windows requirements}.  Without Cygwin, compiling dfej under
-@c Windows is likely to be much more difficult.
-
-@c (or, alternately, at
-@c @uref{ftp://ftp.freesoftware.com/pub/sourceware/cygwin/latest/setup.exe}).
-
-If you modify the source code for dfej (which is not recommended
-unless you know what you are doing), just run @command{make} again to
-build a new binary.
 
 @end itemize
 
@@ -738,32 +747,49 @@ distributed with Daikon.)
 @cindex Microsoft Windows
 @cindex Cygwin toolset
 
-If you are running Daikon under Windows, you have two options:  using
-native Windows utilities and using the Cygwin environment.  These
-are described below.
+If you are running Daikon under Microsoft Windows, you have two
+options:  using native Windows utilities and using the Cygwin
+environment.  These are described below.
 
-(Daikon and most of its related programs, such as dfej, run
-under Windows as command-line applications.  You should invoke them
-from a command shell --- either an Windows command shell or a cygwin
-command shell, as described above --- rather than by double-clicking
-their icons.  In any event, double-clicking would not supply the
-proper arguments to the program.)
+(Daikon and most of its related programs, such as dfej, run under
+Windows as command-line applications.  You should invoke them from a
+command shell --- either an Windows command shell or a cygwin command
+shell --- rather than by double-clicking their icons.  In any event,
+double-clicking would not supply the proper arguments to the program.)
 
-The first option is to run Daikon using native Windows NT utilities,
+The first option is to run Daikon using native Windows utilities.
 Before running Daikon, you must invoke the @file{daikonenv.bat} batch
 file (once) in the Windows command shell to set up the environment
-properly.
+properly.  To automatically run something (such as a batch file) every
+time the Windows command shell is started, set the value of this
+registry key to the program you want to run:
+@example
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor\AutoRun
+@end example
+You may also wish to set two registry entries to enable automatic completion:
+@example
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor\CompletionChar
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor\PathCompletionChar
+@end example
+The values for these registry entries are ASCII key codes.  Tab is 9.
 
-@c Scott McMaster says:
-@c   I believe there's a way to invoke the command window and run the
-@c batch file automatically from a shortcut.  One could also invoke it
-@c out of autoexec.
+
 
 The second option is to run Daikon using the
-@uref{http://sources.redhat.com/cygwin/,Cygwin toolset},
-which contains everything you need to compile and run Unix programs
-under Windows.  You can install Cygwin by simply running the program
-found at @uref{http://sources.redhat.com/cygwin/setup.exe}.
+@uref{http://sources.redhat.com/cygwin/,Cygwin toolset}, which
+contains everything you need to compile and run Unix programs under
+Windows.  You can install Cygwin by simply running the program found
+at @uref{http://sources.redhat.com/cygwin/setup.exe}.  If you use
+Cygwin, @pxref{Cygwin environment variables}.  (If you wish to build
+dfej under Cygwin, you must use gcc 2.95.3; @pxref{Installing dfej}.)
+
+
+@menu
+* Cygwin environment variables::  
+@end menu
+
+@node    Cygwin environment variables,  , Windows requirements, Windows requirements
+@subsubsection Cygwin environment variables
 
 There is an incompatibility between Cygwin and programs compiled for
 Windows.  (The incompatibility does not exist if the program was
