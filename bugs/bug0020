@@ -1,5 +1,6 @@
 Version:      $Id$
-Owner:        adonovan <adonovan@lcs.mit.edu>, Nii <dodoo@mit.edu>
+Owner:        Nii <dodoo@mit.edu>
+Cc:           Alan <adonovan@lcs.mit.edu>
 Tool:         Daikon
 Summary:      compilation of splitters sometimes fails
 Severity:     Vexing
@@ -25,7 +26,10 @@ hangs, waiting.
  
 --
 $Log$
-Revision 1.3  2002-03-12 16:34:38  adonovan
+Revision 1.4  2002-04-05 16:39:41  adonovan
+changed bug0020
+
+Revision 1.3  2002/03/12 16:34:38  adonovan
 changed bug0020
 
 Revision 1.2  2002/03/12 04:51:38  adonovan
