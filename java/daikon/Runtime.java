@@ -336,6 +336,16 @@ public final class Runtime {
     ps.print((x == null) ? "null" : "\"" + quote(x) + "\"");
   }
 
+  public static final void println_quoted_String_and_modbit(java.io.PrintStream ps, String x) {
+    if (x == null) {
+      ps.println("nonsensical");
+      ps.println("2");          // "missing"
+    } else {
+      println_quoted_String(ps, x);
+      ps.println("1");          // "modified"
+    }
+  }
+
   // Not yet used; but probably should be.
   public static final void print_quoted_Character(java.io.PrintStream ps, Character ch) {
     ps.print((ch == null) ? "null" : quote(ch));
