@@ -19,14 +19,27 @@ Further documentation can be found in:
 
 4.0.2 (Mar 1 2005)
 
+Daikon
+
+  By default, Daikon creates .inv.gz files containing a serialized
+  representation of the invariants.  Previously, you had to specify the -o
+  flag -- and you can still specify it to override the default name.
+
+dfej
+
+  Ajax is disabled by default.  You can control it with the --ajax and
+  --no-ajax flags.
+
+  dfej creates compressed trace files (.dtrace.gz) by default.  You can
+  still explicitly specify the name of the trace file.
+
 Chicory
 
   Correct a problem with classes that are not in a package; Chicory
   previously created invalid program point names for the constructors of
   such programs.
 
-  Correct a problem with character data; Chicory previously did not ouput
-  character in the proper format.
+  Correct a problem with outputting values of type "char".
 
 ---------------------------------
 
@@ -39,7 +52,8 @@ Daikon
   preferred over the older dfej and dfec front ends.
 
   A number of problems with the Chicory instrumentor were fixed.  In
-  particular, files necessary to run Chicory were added to the distribution.
+  particular, files necessary to run Chicory (when not running from
+  source) were added to the distribution.
 
   Configuration option daikon.FileIO.unmatched_procedure_entries_quiet is
   now true by default.

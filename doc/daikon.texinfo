@@ -831,7 +831,7 @@ java daikon.Chicory DataStructures.StackArTester
 @item Run Daikon on the trace file.
 
 @example
-java daikon.Daikon -o StackAr.inv StackArTester.dtrace.gz
+java daikon.Daikon StackArTester.dtrace.gz
 @end example
 
 Alternately, you can combine this step and the previous one into a
@@ -841,10 +841,8 @@ java daikon.Chicory --daikon DataStructures.StackArTester
 @end example
 
 In either case, the invariants are printed to standard output, and a binary
-representation of the invariants is written to @file{StackAr.inv}.
-(As of February 13, 2005, the @file{StackAr.inv} file is not created
-unless you give an optional flag to the @option{--daikon} argument;
-@xref{Chicory options}.)
+representation of the invariants is written to @file{StackAr.inv.gz}.
+
 
 @item Examine the invariants.
 
@@ -857,7 +855,7 @@ to the end of the command that runs Daikon.)
 @item Use the PrintInvariants program to display the invariants.
 
 @example
-java daikon.PrintInvariants StackAr.inv
+java daikon.PrintInvariants StackAr.inv.gz
 @end example
 
 For more options to the PrintInvariants program, @xref{Printing
@@ -868,7 +866,7 @@ into the Java source program.
 
 @example
 cd ..
-java daikon.tools.jtb.Annotate daikon-output/StackAr.inv \
+java daikon.tools.jtb.Annotate daikon-output/StackAr.inv.gz \
      DataStructures/StackAr.java
 @end example
 
@@ -881,7 +879,7 @@ For more information about the Annotate program, @xref{Annotate}.
 @c for only the methods and program points you care about.
 @c 
 @c @example
-@c java daikon.gui.treeGUI.InvariantsGUI StackAr.inv
+@c java daikon.gui.treeGUI.InvariantsGUI StackAr.inv.gz
 @c @end example
 
 @c @item Use the Daikon Context GUI to browse the invariants.  As you move
@@ -1052,13 +1050,13 @@ spurious).
 
 @item Run Daikon on the trace file.
 @example
-java daikon.Daikon -o wordplay.inv \
+java daikon.Daikon \
      --config_option daikon.Daikon.disable_derived_variables=true \
      daikon-output/wordplay.decls daikon-output/wordplay.dtrace
 @end example
 
 The invariants are printed to standard out, and a binary representation
-of the invariants is written to @file{wordplay.inv}.  Note that the
+of the invariants is written to @file{wordplay.inv.gz}.  Note that the
 example uses a configuration option to disable the use of derived
 variables; it can also run without that option, but takes significantly
 longer.
@@ -1257,21 +1255,22 @@ cd daikon-output
 
 @item Run Daikon on the trace file
 @example
-java daikon.Daikon -o Birthday.inv Birthday.decls \
+java daikon.Daikon Birthday.decls \
      test_bday-combined.dtrace
 @end example
 
 The invariants are printed to the standard output, and a binary
-representation of them is also written in the @file{Birthday.inv}
+representation of them is also written in the @file{Birthday.inv.gz}
 file.
 
 @item Examine the invariants.  They are printed to standard out, and
-they are also saved to file @file{Birthday.inv}, which you can
+they are also saved to file @file{Birthday.inv.gz}, which you can
 manipulate with the PrintInvariants program and other Daikon tools.
 For example:
 @example
-java daikon.gui.treeGUI.InvariantsGUI Birthday.inv
+java daikon.PrintInvariants Birthday.inv.gz
 @end example
+@c java daikon.gui.treeGUI.InvariantsGUI Birthday.inv.gz
 
 Invariants produced from Perl programs can be examined using the same
 tools as other Daikon invariants. 
@@ -1406,7 +1405,12 @@ Print usage message.
 
 @item -o @var{inv_file}
 Serialize invariants to the specified file; they can later be
-postprocessed, compared, etc.
+postprocessed, compared, etc.  Default: @file{@var{basename}.inv.gz} in
+the current directory, where the first data trace file's basename starts
+with @file{@var{basename}.dtrace}.  Default is no serialized output, if
+no such data trace file was supplied.  If a data trace file was
+supplied, there is currently no way to avoid creating a serialized
+invariant file.
 
 @item --no_text_output
 Don't print invariants as text output.  This option may be used in
@@ -2142,7 +2146,7 @@ Invariant diff is invoked as follows:
 @end example
 
 file1 and file2 are serialized invariants produced by running Daikon or Diff
-with the "-o" flag.  If @file{file2} is not specified,
+with the @option{-o} flag.  If @file{file2} is not specified,
 @file{file1} is compared with the empty set of invariants.
 
 This section describes the optional flags.
@@ -3907,13 +3911,13 @@ cd daikon-output
 @item Run Daikon on the trace file.
 
 @example
-java daikon.Daikon -o StackAr.inv DataStructures/StackAr.decls \
+java daikon.Daikon DataStructures/StackAr.decls \
      StackAr.dtrace
 @end example
 
 The invariants are printed to standard output, and a binary
 representation of the invariants is written to
-@file{StackAr.inv}.
+@file{StackAr.inv.gz}.
 
 @item Examine the invariants; for a
 description of how to do this, @xref{StackAr example}.
@@ -3952,9 +3956,9 @@ java -classpath "daikon-instrumented:$CLASSPATH" \
 @item Invariant detection (steps 6-8)
 @example
 cd daikon-output
-java daikon.Daikon -o StackAr.inv DataStructures/StackAr.decls \
+java daikon.Daikon DataStructures/StackAr.decls \
      StackAr.dtrace
-java daikon.gui.treeGUI.InvariantsGUI StackAr.inv
+java daikon.gui.treeGUI.InvariantsGUI StackAr.inv.gz
 @end example
 
 @end itemize
@@ -3987,9 +3991,9 @@ java -classpath "daikon-instrumented:$CLASSPATH" \
 @item Invariant detection (steps 6-8)
 @example
 cd daikon-output
-java daikon.Daikon -o StackAr.inv DataStructures/StackAr.decls \
+java daikon.Daikon DataStructures/StackAr.decls \
      StackAr.dtrace
-java daikon.gui.treeGUI.InvariantsGUI StackAr.inv
+java daikon.gui.treeGUI.InvariantsGUI StackAr.inv.gz
 @end example
 
 @end itemize
@@ -4038,9 +4042,9 @@ java -classpath "daikon-instrumented:$CLASSPATH" \
 @item Invariant detection (steps 6-8)
 @example
 cd daikon-output
-java daikon.Daikon -o QueueAr.inv DataStructures/QueueAr.decls \
+java daikon.Daikon DataStructures/QueueAr.decls \
      QueueAr.dtrace
-java daikon.gui.treeGUI.InvariantsGUI QueueAr.inv
+java daikon.gui.treeGUI.InvariantsGUI QueueAr.inv.gz
 @end example
 
 @end itemize
@@ -4832,13 +4836,13 @@ These commands create a data trace file at
 
 @item Run Daikon on the trace file.
 @example
-java -Xmx256m daikon.Daikon -o print_tokens.inv \
+java -Xmx256m daikon.Daikon \
      daikon-output/print_tokens.decls \
      daikon-output/print_tokens.dtrace
 @end example
 @noindent
 The invariants are printed to standard out, and a binary representation
-of the invariants is written to @file{print_tokens.inv}.
+of the invariants is written to @file{print_tokens.inv.gz}.
 
 @item Examine the invariants.  As described in the Daikon manual, there are
 several ways to do this:
@@ -4878,7 +4882,7 @@ sh tests.sh
 
 Invariant Detection (Step 5)
 @example
-java -Xmx256m daikon.Daikon -o print_tokens.inv \
+java -Xmx256m daikon.Daikon \
      daikon-output/print_tokens.decls \
      daikon-output/print_tokens.dtrace
 @end example
@@ -6315,10 +6319,10 @@ Invoke Annotate like this:
 java daikon.tools.jtb.Annotate Myprog.inv Myprog.java Myprog2.java ...
 @end example
 
-The first argument is a Daikon @file{.inv} file produced by running
+The first argument is a Daikon @file{.inv} or @file{.inv.gz} file produced by running
 Daikon with the @option{-o} command-line argument.  All subsequent
-arguments are .java files.  The original .java files are left
-unmodified, but Annotate produces new versions of the .java files
+arguments are @file{.java? files.  The original @file{.java} files are left
+unmodified, but Annotate produces new versions of the @file{.java} files
 (suffixed as @file{-escannotated}, @file{-jmlannotated}, or 
 @file{-dbcannotated}) that include the Daikon invariants as comments.
 
@@ -7359,6 +7363,7 @@ which is extremely slow.  If you disable Ajax with the
 more irrelevant invariants, but dfej will run much faster.
 
 @cindex could not find package named, dfej error
+@cindex dfej error, could not find package named
 
 If you get an error like
 @example
