@@ -127,9 +127,13 @@ Example use of Daikon
 * Summary::                     
 * Automating the process::      
 * Understanding the invariants::  
-* Second example::              
+* Second Java example::         
 * C examples::                  
+
+C examples
+
 * C examples summary::          
+* Rijndael example::            
 
 Using Daikon to detect invariants
 
@@ -487,14 +491,14 @@ Obtain or build an executable for dfej, the Daikon front end for Java.
 
 @itemize @bullet
 @item
-The easiest approach is to download a precompiled version of @file{dfej}
+The easiest approach is to download a precompiled version of @command{dfej}
 from @url{http://pag.lcs.mit.edu/daikon/download/}.  Place that
 executable somewhere on your path, and you are ready to run dfej.  (If
 no executable is available for your architecture, send mail to
 @email{daikon@@pag.lcs.mit.edu} and we may be able to produce an executable for you.)
 
 @item
-Alternately, you can build dfej from the sources which are included in
+Alternately, you can build dfej from the sources, which are included in
 the Daikon source distribution.  
 To build dfej, see file @file{INSTALL} in the dfej sources.  In
 summary, you should be able to build dfej by running the following
@@ -686,7 +690,7 @@ found at @uref{http://sources.redhat.com/cygwin/setup.exe}.
 @cindex example use of Daikon
 
 This chapter gives step-by-step instructions for running Daikon on a
-sample Java program, @file{StackAr.java}.  @xref{Second example}, for
+sample Java program, @file{StackAr.java}.  @xref{Second Java example}, for
 another Java example.  @xref{C examples}, for C examples.
 @xref{Detecting invariants}, for complete details about running
 Daikon.
@@ -697,9 +701,8 @@ Daikon.
 * Summary::                     
 * Automating the process::      
 * Understanding the invariants::  
-* Second example::              
+* Second Java example::         
 * C examples::                  
-* C examples summary::          
 @end menu
 
 @node    Step-by-step instructions, Summary, Example use, Example use
@@ -822,7 +825,7 @@ Now examine file @file{../DataStructures/StackAr.java-escannotated}.
 For more information about the MergeESC program, @xref{MergeESC}.
 
 @item Use the Daikon Tree GUI to browse the invariants.  The Tree GUI
-contains a tree which hierarchically organizes program points according
+contains a tree that hierarchically organizes program points according
 to their class and method.  Using the GUI, you can look at invariants
 for only the methods and program points you care about.
 
@@ -894,7 +897,7 @@ displays the invariants in the Tree GUI.  Currently, this script only works
 on Unix.  For more details, @xref{All-in-one script}.
 
 
-@node    Understanding the invariants, Second example, Automating the process, Example use
+@node    Understanding the invariants, Second Java example, Automating the process, Example use
 @section Understanding the invariants
 
 This section examines some of the invariants for the StackAr example.
@@ -991,7 +994,7 @@ java daikon.gui.treeGUI.InvariantsGUI QueueAr.inv
 
 @end itemize
 
-@node    C examples, C examples summary, Second example, Example use
+@node    C examples,  , Second Java example, Example use
 @section C examples
 
 Whereas the Daikon distribution comes with several example Java
@@ -1106,7 +1109,12 @@ For help understanding the invariants, see @ref{Interpreting output}.
 
 @end enumerate
 
-@node    C examples summary,  , C examples, Example use
+@menu
+* C examples summary::          
+* Rijndael example::            
+@end menu
+
+@node    C examples summary, Rijndael example, C examples, C examples
 @subsection C examples summary
 
 The above steps can be divided into three stages:
@@ -1132,7 +1140,7 @@ java -Xmx256m daikon.Daikon -o print_tokens.inv \
 @end example
 
 
-@node    Rijndael example,  , C examples, Example use
+@node    Rijndael example,  , C examples summary, C examples
 @subsection Rijndael example
 
 The rijndael program requires some special instructions, due to the
@@ -1172,7 +1180,7 @@ java -Xmx256m daikon.Daikon -o rijndael.inv \
 Detecting invariants involves three steps:
 @enumerate
 @item
-Run @file{dfej} or @command{dfec} to instrument the target program
+Run @command{dfej} or @command{dfec} to instrument the target program
 (@pxref{Instrumentation}).
 This modifies a copy of the target program so that, in addition to
 performing its original task, it also writes variable values to a data
@@ -1210,18 +1218,19 @@ addition to performing its original task, it also writes variable values
 to a data trace file.  The changes are made to a copy of the target
 program; your original version is not modified.
 @item
-Instrumentation creates declaration files which describe the format of
+Instrumentation creates declaration files that describe the format of
 the data trace files.  For instance, these declaration files describe
 the names of procedures and variables that appear in the data trace file.
 @end itemize
 
-Two instrumenters are part of Daikon:  @file{dfej} for Java programs and
-@command{dfec} for C and C++.  The names @file{dfej} and @command{dfec} stand
+Two instrumenters are part of Daikon:  @command{dfej} for Java programs and
+@command{dfec} for C and C++.  The names @command{dfej} and @command{dfec} stand
 for "Daikon front end for Java" and "Daikon front end for C/C++".  The
-Java front end is fairly robust; the C/C++ front end is
-experimental.
+Java front end is robust; the C front end is moderately robust, and
+the C++ front end is experimental.
 
-A front end for the IOA programming language is distributed separately.
+A front end for the IOA programming language is distributed separately
+(see @url{http://theory.lcs.mit.edu/tds/ioa.html}).
 An earlier version of Daikon included a Lisp front end, but it is no
 longer supported.
 
@@ -1233,7 +1242,7 @@ longer supported.
 @node    Instrumenting Java programs, Instrumenting C/C++ programs, Instrumentation, Instrumentation
 @subsection Instrumenting Java programs
 
-To instrument Java source programs, simply invoke @file{dfej}, the
+To instrument Java source programs, simply invoke @command{dfej}, the
 Daikon front end for Java, on them:
 @example
       dfej @var{filename1}.java @var{filename2}.java @var{...}
@@ -1258,18 +1267,18 @@ For more information about dfej, see @ref{Java front end dfej}.
 @node    Instrumenting C/C++ programs,  , Instrumenting Java programs, Instrumentation
 @subsection Instrumenting C/C++ programs
 
-To instrument C/C++ source, invoke @command{dfec}, on all the source and
+To instrument C/C++ source, invoke @command{dfec} on all the source and
 header files at once.  @command{dfec} must be run from
 a directory that contains the file @file{daikon_runtime.h}, the header
 file for the Daikon runtime library:
 @example
-     ln -s $DAIKONDIR/front-end/c/daikon_runtime.h .
+     ln -s $DFECDIR/daikon_runtime.h $DFECDIR/daikon_runtime.o .
      dfec @var{...options...} @var{myprog}.cc
 @end example
 
 You may want to specify one or more command-line options;
 see @ref{dfec command-line arguments}.
-The @command{dfec} command produces errors, first check whether running
+If the @command{dfec} command produces errors, first check whether running
 @command{gcc -Wall} on the code produces errors; if so, fix them before
 proceeding to use @command{dfec}.
 
@@ -1278,9 +1287,9 @@ it with the object file for the Daikon runtime library and the stdc++
 library.  By default, dfec places instrumented source in the
 @file{daikon-instrumented/} directory.
 @example
-      g++ -o @var{myprog}.exe daikon-instrumented/@var{myprog}.cc $DAIKONDIR/front-end/c/daikon_runtime.o
+      g++ -o @var{myprog} daikon-instrumented/@var{myprog}.cc daikon_runtime.o
 @end example
-
+@noindent
 In addition, you may want to specify the @option{-w} flag to g++, to
 suppress warnings.  dfec's output is valid C++ but may cause g++ to
 issue warnings.
@@ -1292,7 +1301,7 @@ dfec writes instrumented versions of the files to a
 @file{daikon-instrumented/} directory 
 @item
 dfec creates declaration files named
-@file{@var{myprog}.decls}, etc. in a
+@file{@var{myprog}.decls}, etc.@: in a
 @file{daikon-output/} directory.
 @item
 optionally, dfec may create a pointer
@@ -1303,8 +1312,7 @@ file.
 @end itemize
 
 For more information about dfec, including more detailed documentation
-on the command-line options dfec needs to correctly instrument on your
-system, see @ref{C/C++ front end dfec}.
+on its command-line options, see @ref{C/C++ front end dfec}.
 
 
 @c <ol>
@@ -1359,8 +1367,9 @@ and it defaults to overwriting any previously existing @file{.dtrace} file.
 @c  @file{.dtrace} file, which is useful if your test suite requires multiple
 @c  invocations of the program.
 
-Environment variables DTRACEFILE and DTRACEAPPEND can override the default
-behaviors; see the documentation for the respective instrumenters.
+Environment variables DTRACEFILE and DTRACEAPPEND can override the
+default behaviors.  For details, see @ref{dfej options} and @ref{dfec
+command-line arguments}.
 
 @c After running your program, run @command{bin/modbit-munge.pl} on the
 @c resulting @file{.dtrace} files:
@@ -1379,14 +1388,15 @@ behaviors; see the documentation for the respective instrumenters.
 @node    Run Java,  , Run the instrumented program, Run the instrumented program
 @subsection Details on running instrumented Java programs
 
-After instrumentation, there are two versions of your Java program:  the
-original version, and the instrumented version which appears in the
-@file{daikon-instrumented/} directory.  Make sure that the
-@file{daikon-instrumented/} directory appears on your class path before the
-directory containing the original Java code.  You can do this by running
-the program from that directory, if @file{.} (the current directory)
-appears early on your class path, or you can add the relevant
-@file{daikon-instrumented/} directory to your class path explicitly.
+After instrumentation, there are two versions of your Java program:
+the original version, which is unmodified, and the instrumented
+version, which appears in the @file{daikon-instrumented/} directory.
+Make sure that the @file{daikon-instrumented/} directory appears on
+your class path before the directory containing the original Java
+code.  You can do this by running the program from that directory, if
+@file{.} (the current directory) appears early on your class path, or
+you can add the relevant @file{daikon-instrumented/} directory to your
+class path explicitly.
 
 
 @menu
@@ -1416,7 +1426,8 @@ files, create a file named @file{javaPolicy} in the @file{daikon-instrumented/}
 directory that contains the text
 @example
 grant @{
-    permission java.io.FilePermission "<<ALL FILES>>", "read, write, delete, execute";
+    permission java.io.FilePermission
+      "<<ALL FILES>>", "read, write, delete, execute";
 @};
 @end example
 @noindent
@@ -1437,7 +1448,7 @@ Run the Daikon invariant detector via the command
 @example
     java daikon.Daikon @i{[@var{flags}]} @var{decl-files...} @var{dtrace-files...} @var{spinfo-files...}
 @end example
-
+@noindent
 (For help in interpreting the output, @xref{Interpreting output}.)
 
 The @var{decl-files} are declaration (@file{.decl}) files created at
@@ -1446,7 +1457,8 @@ The @var{dtrace-files} are data trace (@file{.dtrace}) files created by
 running the instrumented program.
 The @var{spinfo-files} are splitter info (@file{.spinfo}) files created
 automatically or by hand.
-The file type is determined by whether the file name contains
+The files may appear in any order;
+the file type is determined by whether the file name contains
 @file{.decls}, @file{.dtrace}, or @file{.spinfo}.
 
 Be sure to include all declaration files that are needed for the particular
@@ -1589,11 +1601,9 @@ Options:
   ...
 @end example
 
-At minimum, you must supply the name of a "main" class which provides
+You must supply at least the name of a "main" class that provides
 the method @code{public static void main(String[] args)}.
-@command{daikon.pl} will run this class to exercise your program.
-@xref{daikon.pl arguments}, for details on the available
-options for @command{daikon.pl}.
+@command{daikon.pl} runs this class to exercise your program.
 
 @c <!--
 @c <h2><a xname="example">Example</a></h2>
@@ -1610,9 +1620,9 @@ options for @command{daikon.pl}.
 @c href="#interpret-output">interpreting the output</a> section below for
 @c details on the meaning of the invariants.
 @c 
-@c <p>Each run of daikon creates two files: an <tt>.inv</tt> file which
+@c <p>Each run of daikon creates two files: an <tt>.inv</tt> file that
 @c contains the invariants in a special format, and a
-@c <tt>.src.tar.gz</tt> file which contains a snapshot of the program
+@c <tt>.src.tar.gz</tt> file that contains a snapshot of the program
 @c source.  You may specify names for these files using the <tt>--output
 @c <i>file</i></tt> parameter to daikon.  For example <tt>--output
 @c mytest</tt> will create <tt>mytest.inv</tt> and
@@ -1913,7 +1923,7 @@ invariants.  The pairs of invariants are placed in bins according to the
 type of the invariant and the type of the difference.
 
 @item -t
-For internal use only.  Display the same statistics as '-s', but as a
+For internal use only.  Display the same statistics as @option{-s}, but as a
 tab-separated list.
 
 @item -m
@@ -1921,21 +1931,21 @@ Compute (file1 - file2).  This is all the invariants that appear in
 file1 but not file2.  Unjustified invariants are treated as if they
 don't exist.  Output is written as a serialized InvMap to the file
 specified with the -o option.  To view the contents of the serialized
-InvMap, run 'java daikon.diff.Diff <file>'.
+InvMap, run @command{java daikon.diff.Diff @var{file}}.
 
 @item -x
 Compute (file1 XOR file2).  This is all the invariants that appear in
 one file but not the other.  Unjustified invariants are treated as if
 they don't exist.  Output is written as a serialized InvMap to the file
 specified with the -o option.  To view the contents of the serialized
-InvMap, run 'java daikon.diff.Diff <file>'.
+InvMap, run @command{java daikon.diff.Diff @var{file}}.
 
 @item -n
 Compute (file1 UNION file2).  This is all the invariants that appear in
 either file.  If the same invariant appears in both files, the one with
 the better justification is chosen.  Output is written as a serialized
 InvMap to the file specified with the -o option.  To view the contents
-of the serialized InvMap, run 'java daikon.diff.Diff <file>'.
+of the serialized InvMap, run @command{java daikon.diff.Diff @var{file}}.
 
 @item -o @var{inv_file}
 Used in combination with the -m or -x option.  Writes the output as a
@@ -2003,7 +2013,7 @@ invariants for the browsed code.
 @cindex Tree GUI
 @cindex GUI, tree
 
-The Tree GUI contains a tree which
+The Tree GUI contains a tree that
 hierarchically organizes program points according to their class and
 method.  Using the Tree GUI, you can look at invariants for only the methods
 and program points you care about.  You can also sort invariants by a
@@ -2055,7 +2065,7 @@ asks you to choose a @file{.inv} file for viewing.
 @table @strong
 @item File menu
 
-The @command{Load file} menu option brings up a file browser which you
+The @command{Load file} menu option brings up a file browser that you
 can use to select another @file{.inv} file.  The @command{Quit} menu
 options lets you quit the Tree GUI.
 
@@ -2358,8 +2368,7 @@ are not created every time, but only done when the @file{.inv} is
 changed. If you are experiencing problems, you should try deleting the
 @file{.dci} file with the convention of @file{.@var{filename}.dci}. If
 you would like to run the conversion before starting up the program,
-which will save you load up time, this can been done using the
-ConvertInvToDci Java program:
+reducing load up time, then use the ConvertInvToDci Java program:
 
 @example
   java daikon.gui.contextGUI.ConvertInvToDci file.inv
@@ -2385,9 +2394,10 @@ This section contains details about dfej, the Daikon front end for Java.
 
 For brief information about running dfej, see @ref{Instrumenting Java programs}.
 For information about installing dfej, see @ref{Installing dfej}.
-The @file{dfej} usage message also contains some usage information.
+The @command{dfej} usage message also contains some usage information;
+run @command{dfej --help} to see it.
 
-@command{dfej} works on Java code which corresponds to any version of
+@command{dfej} works on Java code that corresponds to any version of
 the Java language, from 1.0 to 1.3.
 
 The Daikon front end for Java has two effects:
@@ -2633,7 +2643,7 @@ for @file{.class} files for the current application.  (It is a classpath
 entry, so the @file{.class} files might appear in a subdirectory named
 for the appropriate package.  If this option is not supplied, the
 @option{-classpath} argument is used.  A sensible value is required for
-code that (for example) calls libraries which do not appear under the
+code that (for example) calls libraries that do not appear under the
 current directory.
 
 @item -ajaxap=@var{apdir}
@@ -2805,6 +2815,7 @@ comment immediately before the declared type (but after any modifiers like
 
 This section contains details about dfec, the Daikon front end for C/C++.
 For brief information about running dfec, see @ref{Instrumenting C/C++ programs}.
+For information about installing dfec, see @ref{Installing dfec}.
 
 Recall that dynamic invariant detection over a C/C++ program requires
 three steps:
@@ -2825,20 +2836,19 @@ first step.
 @c @file{daikon_runtime.h}, and 
 @c @file{daikon_runtime.o}.
 
-To instrument a C file, run @command{dfec} on it.  
-dfec produces instrumented source as well as a
-@file{.decls} file.  dfec must also be run on header files that contain
+To instrument a C file, run @command{dfec} on it.  dfec produces
+instrumented source as well as a @file{.decls} file.  dfec must be run
+on all source files, including any header files that contain
 code or definitions to be instrumented (header files typically end in
-@file{.h}), not only on C or C++ source files.  All files to be included
-in a single executable must be instrumented simultaneously, by passing
-them as multiple arguments to dfec --- for example,
+@file{.h}).  All files to be included
+in a single executable must be instrumented simultaneously; for example,
 @example
   dfec file1.c file2.c file1.h file2.h
 @end example
-@noindent
-Even if you do not wish to instrument one of the files, it must be run
+
+Even if you do not wish to detect invariants in one of the files, it must be run
 through dfec so it can correctly interact with the instrumented versions
-of the other files.  See the @ref{dfec command-line arguments} section
+of the other files.  @xref{dfec command-line arguments},
 for instructions on how to exclude files from instrumentation.
 
 Running @command{dfec @var{arguments} myprog.c} creates
@@ -2846,13 +2856,16 @@ a file named @file{myprog.cc} in the @file{daikon-instrumented/}
 directory.  (It has a @file{.cc} extension, regardless of its original
 extension.)  It also creates a file named @file{myprog.decls}, which
 appears in the @file{daikon-output/} directory by default.  To change
-these defaults, see the @ref{dfec command-line arguments} section.
+these defaults, see @ref{dfec command-line arguments}.
 
 
 Before compiling the instrumented program, either copy or link
 @file{daikon_runtime.h} and @file{daikon_runtime.o} from
 @file{daikon/front-end/c/} to the current directory.  (See
 @ref{Installing dfec}, for details on creating @file{daikon_runtime.o}.)
+@example
+  cp -p $DFECDIR/daikon_runtime.h $DFECDIR/daikon_runtime.o .
+@end example
 
 Compile the instrumented program in the usual way, except that the link
 step should include @file{daikon_runtime.o}, and the compiler should be
@@ -2892,7 +2905,7 @@ you can run Daikon:
 @node    dfec command-line arguments, Pointer type disambiguation, C/C++ front end dfec, C/C++ front end dfec
 @subsection dfec command-line arguments
 
-This section describes the command-line options dfec accepts.
+This section describes dfec's command-line options.
 @table @option
 
 @item -I@var{path}
@@ -2901,7 +2914,7 @@ include path that @command{gcc} uses is automatically detected by dfec,
 so you should not have to use the @option{-I} option unless you wish to
 use additional include
 paths or @command{gcc} defaults to using header files
-that cannot be processed by @command{dfec}
+that cannot be processed by @command{dfec}.
 For example,
 @example
   dfec -I/usr/local/.../2.95.3/include myprog.c
@@ -2941,11 +2954,12 @@ Defines the preprocessor macro @var{macro} to be @var{value}.
 @item --tracefilename=@var{filename}
 Specifies the default name for the @file{.dtrace} file (default
 @file{daikon-output/@var{myprog}.dtrace}, where @file{@var{myprog}.c} is
-the instrumented program).  The filename is relative to the current
-directory at runtime, or is absolute.  If the DTRACEFILE environment
+the instrumented program).  If the filename is relative with respect
+to the current directory at runtime, not at compile time.
+If the DTRACEFILE environment
 variable is set (to a file name) when the instrumented program is run,
-it overrides this default.  Furthermore, if the DTRACEAPPEND environment
-variable is set to any value, the dtrace file will be appended to
+it overrides the default specified by this flag.  Furthermore, if the DTRACEAPPEND environment
+variable is set to any value at runtime, the dtrace file is appended to
 instead of overwritten, which can be handy if you have a script to run
 the instrumented program multiple times.
 
@@ -2970,7 +2984,7 @@ Specifies the directory in which to write instrumented source files
 same names and directory structure as the original input files, with the
 slight exception that the file suffix is set to @file{.cc}, so if you
 instrument @file{@var{myprog}.c}, you will end up with
-@file{daikon-instrumented/@var{myprog}.cc}.  If @var{instrdir} is '.',
+@file{daikon-instrumented/@var{myprog}.cc}.  If @var{instrdir} is ``.'',
 then instrumentation is performed in-place, first copying the source
 file @file{myprog.c} to @file{myprog.c.uninst}, then overwriting
 @file{myprog.c} with instrumented source.  If @file{myprog.c.uninst}
@@ -2980,23 +2994,23 @@ change, or when compiling a system requires many files to be in place.
 
 
 @item --disambigfilename=@var{filename}
-Specifies the filename for the pointer type disambiguation file.  If
-this file exists, dfec reads from it, using the information within
-to make decisions about how to output the 'contents' of pointer and
-array variables.  If the file does not exist, dfec creates it,
+Specifies the filename for the pointer type disambiguation file
+(@pxref{Pointer type disambiguation}).  If
+this file exists, dfec uses it
+to make decisions about how to output the referents of pointer
+variables.  If the file does not exist, dfec creates it,
 specifying default instrumentation behavior for all
-pointer types.  For more information, see
-@ref{Pointer type disambiguation}.
+pointer types.  It may then be edited and used on subsequent runs.
 
 @item --disambig
-Tells dfec to use pointer type disambiguation with the default filename,
+Tells dfec to create or read pointer type disambiguation with the default filename,
 which is @file{@var{myprog}.disambig} in the same directory as the
 @file{.decls} file.  For more information, see
 @ref{Pointer type disambiguation}.
 
 @item -l
-This is the only command-line switch which can be used in the midst of the
-list of filenames.  It precedes a file which should not be instrumented.
+This is the only command-line switch that can be used in the midst of the
+list of filenames.  It precedes a file that should not be instrumented.
 For instance, if you have two source files, @file{file1.c} and @file{file2.c},
 and each has its own header file, but you don't want to instrument the
 functions defined in @file{file2.c}, you would instrument as follows:
@@ -3028,8 +3042,8 @@ library to output @var{node.val} and @var{node.next}.  Setting the
 struct instrumentation depth to 2 would cause the runtime library to
 output @var{node.val}, @var{node.next}, @var{node.next->val}, and
 @var{node.next->next}.  The default instrumentation depth is 3, which
-allows Daikon to capture invariants about nonadjacent nodes, but also
-causes the dtrace file to increase dramatically in size.
+allows Daikon to capture invariants about nonadjacent nodes, but results
+in larger dtrace files than smaller values do.
 
 @end table
 
@@ -3046,9 +3060,12 @@ takes precedence.
 dfec permits users (or external analyses) to specify whether pointers
 refer to arrays or to single values.  For example, in
 @example
-void sum(int * array, int * result) @{ ... @}  // definition
+void sum(int * array, int * result) @{ ... @}  // definition of "sum"
 ...
-sum(a, &total);  // use
+int a[40];
+int total;
+...
+sum(a, &total);        // use of "sum"
 @end example
 @noindent
 the first pointer parameter refers to an array while the second refers to
@@ -3061,28 +3078,43 @@ single-element array --- can speed up Daikon and improve its output.
 (See the example below.)
 
 Information about whether each pointer refers to an array or a single
-element can be specified in a 'disambig file' that resides in the same
+element can be specified in a ``disambig file'' that resides in the same
 directory as the decls file.  The @option{--disambig} option instructs
 dfec to read this file.  (dfec can also produce the file automatically,
 permitting users to edit it for use on subsequent runs, rather than
 having to create it from scratch.)  The disambig file
 lists all the instrumented program points, and under each, a list of
-pairs of variable names and the types that they're instrumented as:  'A'
-for array, 'P' for pointer to single value, 'I' for integer, 'C' for
-character.
+all the variables in scope at that program point, along with the types
+that the variables are instrumented as:
+@samp{A} for array, @samp{P} for pointer to single value, @samp{I} for
+integer, @samp{C} for character.
+
+
+The disambig file contains an entry for each program point and for every
+user-defined class or struct in instrumentation scope.  Members of structs
+or classes can be disambiguated just like variables at a program point.
+These entries must appear in the order that they are defined in program
+source --- even though there are names in the disambig file, they are there
+only for human reference, and if the source code is modified in a manner
+that rearranges function or class definitions, then the disambig file will
+need to be regenerated by dfec, and re-edited to produce the correct
+disambiguation.  Because of this, is it not recommended to use disambig
+files generated by external programs until later versions of dfec, when
+the disambiguation mechanism is more robust.
+
 
 
 @c This isn't really relevant to users of Daikon, though it is quite
 @c interesting from an implementation point of view.
 @c A C/C++ pointer type is output to the decls and dtrace files in two
 @c ways: firstly, as the memory address it points to (the equivalent of the
-@c java 'hashcode'), and secondly, its 'contents'.  By default, the
+@c java hashcode), and secondly, its contents.  By default, the
 @c contents of an array or pointer type is the list of values pointed to by
 @c the pointer variable.  The Daikon runtime library keeps track of all
 @c pointer variables, and notes what the highest referenced value beyond a
 @c base is, and assumes that all values between the base and that are
 @c valid.  Then, when outputting to the decls and dtrace files, it outputs
-@c the full list of 'known valid' values.  In addition to this, there are
+@c the full list of ``known valid'' values.  In addition to this, there are
 @c certain safety features built into the Daikon runtime library, such as
 @c bounds-checking on arrays that have been declared with static size.
 @c However, not all pointers point to arrays; many are simply pointers to
@@ -3154,9 +3186,9 @@ A
 @end example
 
 This means that at the two program points corresponding to the entry and
-exit of foo(), the variable bar is instrumented as an 'A'rray type.  To
-change it so dfec instruments it as a 'P'ointer type, change the two 'A'
-entries to 'P' entries:
+exit of foo(), the variable bar is instrumented as an @samp{A}rray type.  To
+change it so dfec instruments it as a @samp{P}ointer type, change the
+two @samp{A} entries to @samp{P} entries:
 @example
 std.foo(int *;)void:::ENTER
 bar
@@ -3175,9 +3207,9 @@ you gave, and changing the instrumentation accordingly:
   dfec @var{...options...} --disambig @var{myprog}.cc
 @end example
 
-This means that bar will be instrumented as a 'P'ointer to a single element.
-If you compile and run the program, then run Daikon on the output, you'll
-see much cleaner invariants:
+This means that bar will be instrumented as a @samp{P}ointer to a
+single element.  If you compile and run the program, then run Daikon
+on the output, you'll see much cleaner invariants:
 @example
 ======================================================================
 std.foo(int *;):::ENTER
@@ -3191,17 +3223,6 @@ bar has only one value
 orig(*bar) == 6
 @end example
 
-The disambig file contains an entry for each program point and for every
-user-defined class or struct in instrumentation scope.  Members of structs
-or classes can be disambiguated just like variables at a program point.
-These entries must appear in the order that they are defined in program
-source --- even though there are names in the disambig file, they are there
-only for human reference, and if the source code is modified in a manner
-that rearranges function or class definitions, then the disambig file will
-need to be regenerated by dfec, and re-edited to produce the correct
-disambiguation.  Because of this, is it not recommended to use disambig
-files generated by external programs until later versions of dfec, when
-the disambiguation mechanism is more robust.
 
 @node    dfec limitations,  , Pointer type disambiguation example, C/C++ front end dfec
 @subsection dfec limitations
@@ -3217,7 +3238,8 @@ that @command{gcc} and other compilers accept.
 
 @command{dfec} works with gcc 2.95.3.  It is not known to work with other
 compilers or other versions of gcc.  In particular, gcc 3 does not
-work, nor does ``gcc 2.96'' (which is not an official gcc release).
+work, nor does ``gcc 2.96'' (which is not an official gcc release but
+appears in some Linux distributions).
 
 @cindex K&R C
 
@@ -3231,15 +3253,13 @@ versions of Unix and also widely available online) helps to perform this
 task.
 
 @c 7/02/2001
-The current C/C++ front end does minimal instrumentation of pointers.  It
-keeps track of the memory address they hold (roughly equivalent to the
-Java hashcode).  In the case of arrays and pointers to blocks of data,
-it holds information about the maximum ``touched'' element of the array, to
-enable it to make guesses about what part of the array is valid, and only
-output that much.  This guessing is not always completely accurate, however,
-and changes to array variables done outside the scope of instrumentation
-(for instance, in the stdc library functions found in @file{string.h}) will not
-be recorded and hence the may yield sparse output.
+The C/C++ front end keeps track of the maximum read or written element
+of each array.  This enables it to avoid outputting (meaningless)
+uninitialized elements.  Array accesses in files not supplied to dfec
+(for instance, in library functions) might not be recorded, causing
+too little of the array to be output.  This is not a problem for the
+stdc library functions found in @file{string.h}, because they have
+been specially modified to maintain the array extent information.
 
 @c [the following limitation is deprecated as of 7/02/2001.]
 @c [global/local/class vars are now scoped with '::', '', and 'this->'.]
@@ -3293,12 +3313,13 @@ output, but do not affect the invariants that it computes.
 @node    List of configuration options,  , Configuration options, Configuration options
 @subsection List of configuration options
 
-This is a list of all Daikon configuration options; you may want to see
-the source code for the specific invariants and derived variables to
-learn more.  The configuration option name contains the
+This is a list of all Daikon configuration options.
+The configuration option name contains the
 Java classes in which it is defined.  (In the Daikon source code, the
-configuration value is stored in a variable which contains a
+configuration value is stored in a variable whose name contains a
 @code{dkconfig_} prefix, but that should be irrelevant to users.)
+To learn more about a specific invariants or derived variables, see
+its source code.
 
 @table @asis
 @include config-options.texinfo
@@ -3323,9 +3344,9 @@ if arg < 0
 @end example
 @noindent
 The invariant @code{return == -arg} is a conditional invariant because
-it depends on the predicate @code{arg < 0} being true.  The compound
-invariant that includes both the predicate and the conditional invariant
-is called an implication.
+it depends on the predicate @code{arg < 0} being true.  An
+@emph{implication} is a compound invariant that includes both the
+predicate and the conditional invariant (also called the consequent).
 
 Daikon must be supplied with the predicate for an implication.  Daikon has
 certain built-in predicates that it uses for finding conditional invariants;
@@ -3333,16 +3354,18 @@ examples are which return statement was executed in a procedure and whether a
 boolean procedure returns true or false.  Additionally, Daikon can read
 predicates from a file called a splitter info (@file{.spinfo}) file and find
 implications based on those predicates. The splitter info file can be produced
-automatically, such as by the @command{createspinfo.pl} script or with the
-CreateSpinfo tool (see below).  Users can also create splitter info files by
-hand or manually augment automatically-created ones.
+automatically, such as by the CreateSpinfo and
+@command{createspinfo.pl} programs.  Users can also create splitter
+info files by hand or manually augment automatically-created ones.
 
-To detect condition invariants and implications:
+To detect conditional invariants and implications:
 @enumerate
 @item
 Create the splitter info file, either automatically or by hand.
 @item
-Run Daikon with the @file{.spinfo} file as one of its arguments.  For example,
+Run Daikon with the @file{.spinfo} file as one of its arguments.  
+(The order of arguments does not matter.)
+For example,
 @example
 java daikon.Daikon Foo.decls Foo.spinfo Foo.dtrace
 @end example
@@ -3351,36 +3374,37 @@ java daikon.Daikon Foo.decls Foo.spinfo Foo.dtrace
 @cindex createspinfo.pl program
 @cindex CreateSpinfo program
 
-The CreateSpinfo program takes Java source code as input and creates a splitter
-info file;  for instance,
+The CreateSpinfo program takes Java source code as input and creates a
+splitter info file for each input file; for instance,
 @example
-java daikon.tools.jtb.CreateSpinfo Foo.java
+java daikon.tools.jtb.CreateSpinfo Foo.java Bar.java
 @end example
 @noindent
-creates the splitter info file @file{Foo.spinfo}.  The splitter info file
-contains each boolean expression that appears in the source code.  The
-conditional statements that the programmer used in the source code are likely to
-have important semantic properties.  This simple heuristic of using these
-conditional statements as predicates for conditional invariant detection is
-often quite effective.  Users may optionally edit the splitter info file to
-enhance it, or may create a splitter info file by hand.
+creates the splitter info files @file{Foo.spinfo} and
+@file{Bar.spinfo}.  The resulting splitter info file contains each
+boolean expression that appears in the source code.  The conditional
+statements that the programmer used in the source code are likely to
+have important semantic properties.  This simple heuristic of using
+these conditional statements as predicates for conditional invariant
+detection is often quite effective.  Users may optionally edit the
+splitter info file to enhance it, or may create a splitter info file
+by hand.
 
-The @command{createspinfo.pl} program (found in the @file{daikon/bin}
-directory) is an older tool which performs the same function. It additionally
-works for C/C++ source code also. It can be used with the commandline
+The @command{createspinfo.pl} program (found in the @file{$DAIKONDIR/bin}
+directory) performs the same function, for C/C++ source code.  It can be used with the commandline
 @example
-createspinfo.pl Foo.java
+createspinfo.pl foo.c
 @end example
 @noindent
 
-The term ``splitter'' comes from Daikon's technique for detecting implications
-and conditional invariants.  For each predicate, Daikon creates two conditional
-program points --- one each for program executions that satisfy the condition
-and those that don't --- and splits the data trace into two parts (in the
-example above, it was @code{arg < 0}).  Invariant detection is then performed on
-the conditional program points (that is, the parts of the data trace) separately
-and any invariants detected are reported as conditional invariants (as
-implications).
+The term ``splitter'' comes from Daikon's technique for detecting
+implications and conditional invariants.  For each predicate, Daikon
+creates two conditional program points --- one for program executions
+that satisfy the condition and one for those that don't --- and splits
+the data trace into two parts.  Invariant detection is then performed
+on the conditional program points (that is, the parts of the data
+trace) separately and any invariants detected are reported as
+conditional invariants (as implications).
 
 
 @menu
@@ -3394,12 +3418,20 @@ implications).
 @cindex splitter info file
 @cindex .spinfo file
 
-A splitter info file contains the conditions that Daikon should use to create
-conditional invariants.  Each section in the @file{.spinfo} consists of a
-sequence of non-blank lines; sections are separated by blank lines.  Program
-point sections have a line specifying a program point name followed by lines
-specifying the condition(s) associated with that program point, each condition
-on its own line.  For example, a typical entry is
+A splitter info file contains the conditions that Daikon should use to
+create conditional invariants.  Each section in the @file{.spinfo}
+file consists of a sequence of non-blank lines; sections are separated
+by blank lines.  There are two types of sections:  program point
+sections and replacement sections.
+@xref{Example splitter info file}, for an example splitter info file.
+
+@node    Program point sections,  , Splitter info file, Splitter info file
+@subsubsection Program point sections
+
+Program point sections have a line specifying a program point name
+followed by lines specifying the condition(s) associated with that
+program point, each condition on its own line.  For example, a typical
+entry is
 
 @example
 PPT_NAME @var{pptname}
@@ -3407,29 +3439,23 @@ condition1
 condition2
 ...
 @end example
+@noindent
+@var{pptname} can be any string that matches a part of the desired
+program point name as printed in the decls file.  In finding matching
+program points, Daikon uses the first program point that matches
+@code{pptname}.
 
-@var{pptname} can be any string which matches a part of the desired program
-point as printed in the decls file. An examples is @code{QueueAr.isEmpty}, which
-matches the @code{isEmpty} method of the program QueueAr.  In finding matching
-program points, Daikon uses the first program point which matches
-@code{pptname}.  
-
-Each condition is a Java expression of boolean type.  All variables that appear
-in the condition must also appear in the declaration of the program point in the
-@file{.decls} file.  (In other words, all the variables must be in scope at the
-program point(s) where the Splitter is intended to operate.) The automatically
-generated Splitter source code fails to compile if a variable name in a
-condition is not found at the matching program point.
-
-@c Exceptions to this are described in the REPLACEMENT section.
+Each condition is a Java expression of boolean type.  All variables
+that appear in the condition must also appear in the declaration of
+the program point in the @file{.decls} file.  (In other words, all the
+variables must be in scope at the program point(s) where the Splitter
+is intended to operate.) The automatically generated Splitter source
+code fails to compile (but Daikon proceeds without it) if a variable
+name in a condition is not found at the matching program point.
 
 
-@menu
-* Replacement::                 
-@end menu
-
-@node    Replacement,  , Splitter info file, Splitter info file
-@subsubsection Replacement
+@node    Replacement sections,  , Splitter info file, Splitter info file
+@subsubsection Replacement sections
 
 Ordinarily, a splitting condition may not invoke user-defined methods,
 because when Daikon reads data trace files, it does not have access to the
@@ -3445,26 +3471,20 @@ replacement2
 ...
 @end example
 @noindent
-where @samp{replacement@var{i}} contains an expression representing the body
+where @samp{replacement@var{i}} is a Java expression for the body
 of @samp{procedure@var{i}}.  In each condition, Daikon replaces procedure
-calls by their replacements.  A replace section can appear anywhere in
+calls by their replacements.  A replace section may appear anywhere in
 the splitter info file.
 
 @node    Indiscriminate splitting, Example splitter info file, Splitter info file, Conditional invariants
 @subsection Indiscriminate splitting
 
-Ordinarily, each condition gives rise to conditional invariants only at
-the program point in whose section the condition appears.  Alternately,
-every condition can be used at every program point, regardless of where
-in the @file{.spinfo} file the condition appeared; this latter approach is
-called ``indiscriminate splitting''.  Indiscriminate splitting can result
-in Daikon attempting to use many conditions that are inappropriate at
-certain program points, for instance because the program point does
-not have (in scope) all the variables that are used in the condition.
-For example, the condition @code{myArray.length == x} is inapplicable at
-a program point if either of @samp{myArray} and @samp{x} is not in scope
-at that program point.  In this case, Daikon prints a warning message
-and proceeds, using conditions wherever they are valid.
+Ordinarily, each condition in an @file{.spinfo} file gives rise to
+conditional invariants only at the program point in whose section the
+condition appears.  Alternately, every condition can be used at every
+program point, regardless of where in the @file{.spinfo} file the
+condition appeared; this latter approach is called ``indiscriminate
+splitting''.
 
 The advantage of indiscriminate splitting is that a condition that is
 useful at one program point may also be useful at another --- if the
@@ -3473,9 +3493,17 @@ scope.  The disadvantage of indiscriminate splitting is that often the
 condition is not applicable everywhere, and when it is, it may not be
 useful at all such locations, so checking for many conditional
 invariants may slow down Daikon without a corresponding benefit. 
+Indiscriminate splitting can result in Daikon attempting
+to use many conditions that are inappropriate at certain program
+points, for instance because the program point does not have (in
+scope) all the variables that are used in the condition.  For example,
+the condition @code{myArray.length == x} is inapplicable at a program
+point if either of @samp{myArray} and @samp{x} is not in scope at that
+program point.  In this case, Daikon prints a warning message and
+proceeds, using conditions wherever they are valid.
 
 By default, Daikon uses indiscriminate splitting.  To use
-non-indiscriminate spliting, place the following line in a file which is
+non-indiscriminate spliting, place the following line in a file that is
 passed to Daikon via the @option{--config} flag (@pxref{Command line
 options}):
 @example
@@ -3499,30 +3527,31 @@ that class.
 @subsubsection Example class
 
 @smallexample
-class simpleQueue @{
+class simpleStack @{
  
- private int[] myArray;
+  private int[] myArray;
   private int currentSize;
  
-  public simpleQueue(int capacity) @{
+  public simpleStack(int capacity) @{
     myArray = new int[capacity];
     currentSize = 0;
   @}
  
-  /** adds an element to the back of the queue, if it's not empty.
-   * returns true if this succeeds, false otherwise  **/
-  public String enqueue(int x) @{
+  /** Adds an element to the back of the stack, if the stack is not full.
+    * Returns true if this succeeds, false otherwise.  **/
+  public String push(int x) @{
     if ( !isFull() && x >= 0) @{
       myArray[currentSize] = x;
       currentSize++;
-      return (true);
+      return true;
     @} else @{
-      return (false);
+      return false;
     @}
   @}
  
-  /** takes the last element put into the queue or -1 if the queue is empty **/
-  public int dequeue() @{
+  /** Returns the most recently inserted stack element.
+    * Returns -1 if the stack is empty. **/
+  public int pop() @{
     if ( !isEmpty() ) @{
       currentSize--;
       return myArray[currentSize];
@@ -3531,12 +3560,12 @@ class simpleQueue @{
     @}
   @}
 
- /** returns true if the queue is empty, false otherwise **/
+ /** Returns true if the stack is empty, false otherwise. **/
   private boolean isEmpty() @{
     return (currentSize == 0);
   @}
 
-  /** returns true if the queue is full, false otherwise **/
+  /** Returns true if the stack is full, false otherwise. **/
   private boolean isFull() @{
     return (currentSize == myArray.length);
   @}
@@ -3553,25 +3582,25 @@ currentSize == myArray.length
 isEmpty()
 currentSize == 0
 
-PPT_NAME  simpleQueue.enqueue
+PPT_NAME  simpleStack.push
 !isFull() && x >= 0
 
-PPT_NAME  simpleQueue.isFull
-(currentSize == myArray.length - 1)
-
-PPT_NAME  simpleQueue.isEmpty
-(currentSize == 0)
-
-PPT_NAME  simpleQueue.dequeue
+PPT_NAME  simpleStack.pop
 !isEmpty()
 @end smallexample
+
+PPT_NAME  simpleStack.isFull
+(currentSize == myArray.length - 1)
+
+PPT_NAME  simpleStack.isEmpty
+(currentSize == 0)
 
 
 @node    Tools, Extending Daikon, Enhancing Daikon output, Top
 @chapter Tools
 
 This chapter gives information about tools that are part of the Daikon
-distribution.
+distribution and are not described elsewhere in the manual.
 
 @menu
 * MergeESC::                    
@@ -3599,18 +3628,6 @@ arguments are .java files.  The original .java files are left
 unmodified, but MergeESC produces new @file{-escannotated} versions that
 include the Daikon invariants as comments.
 
-@node    CreateSpinfo,  , MergeESC, Tools
-@section CreateSpinfo
-
-@cindex CreateSpinfo tool
-@cindex splitter info file
-
-The CreateSpinfo program creates a splitter info file from Java source. For each
-input file @file{Foo.java}, CreateSpinfo creates a splitter info file
-@file{Foo.spinfo} containing all the conditional statements and booleans in that
-file. The splitter info file can then be supplied as an argument to Daikon (with
-optional modification by hand.) @xref{Splitter info file}, for more information
-about splitter info files.
 
 @node    Extending Daikon, Troubleshooting, Tools, Top
 @chapter Extending Daikon
@@ -3658,7 +3675,7 @@ which case changes to @code{.jpp} files will not be reflected in the
 @cindex javac compiler, overriding
 @cindex Java compiler, specifying
 You may wish to create a @file{Makefile.user} file in the @file{daikon/}
-directory to set your Java compiler:
+directory to set your Java compiler.  For instance, it might contain
 @example
   JAVAC ?= jikes -g +E +F
 @end example
@@ -3670,10 +3687,10 @@ For more information about compiling Daikon, see the comments in the Makefiles.
 @section New invariants
 
 You can easily write your own invariants and have Daikon check them,
-along with all the other invariants that are built in to Daikon already.
+in addition to all the other invariants that are already part of Daikon.
 Adding a new invariant to Daikon requires writing one Java class, adding
-a line to another file to inform Daikon of the new class, and
-recompiling Daikon.
+a line to another file (a factory class) to inform Daikon of the new
+class, and recompiling Daikon.
 
 You can find a simple example of an invariant in file
 @file{java/daikon/inv/unary/scalar/Positive.java}.  This invariant is
@@ -3684,8 +3701,8 @@ appropriate line in @file{SingleScalarFactory.java}, then recompile
 Daikon.
 
 
-The new Java class will be a concrete subclass of one of the following
-abstract classes:
+A Java class defining an invariant is a concrete subclass of one of
+the following abstract classes:
 @itemize @bullet
 @item
 @samp{SingleScalar}, for invariants over a single numeric (scalar) variable,
@@ -3814,7 +3831,8 @@ method, near the calls to the other formatting methods.
 
 A front end for Daikon takes as input a target program to be analyzed.
 The front end produces two outputs:  a @file{.decls} file and an
-instrumented program which, when run, produces a @file{.dtrace} file.
+instrumented program.  Executing the instrumented program produces a
+@file{.dtrace} file.
 For more information about these files, @xref{File formats}.
 
 Conceptually, instrumentation is very simple.  For instance, suppose we
@@ -4627,13 +4645,13 @@ the variable is compared to all other variables of the same type.
 Future enhancements may include:
 @itemize @bullet
 @item
-      permit variables to be omitted if they haven't changed (but always
-      outputting the bit permits us to write a sanity checker)
+permit variables to be omitted if they haven't changed (but always
+outputting the bit permits us to write a sanity checker)
 @item
-      permit variables to appear in any order (not sure this is so worthwhile)
+permit variables to appear in any order (not sure this is so worthwhile)
 @item
-      specify which @file{.decl} files should be used (including their pathnames
-      and/or MD5 hashes)
+specify which @file{.decl} files should be used (including their pathnames
+and/or MD5 hashes)
 @end itemize
 
 A declaration file optionally starts with a "VarComparability" record,
@@ -4748,6 +4766,7 @@ fixes up the modbits.
 @c modbit-munge.pl script is run on the resulting @file{.dtrace} file to fix up
 @c the modbits.
 @end itemize
+
 The variables should appear in the same order as they did in the
 declaration of the program point, without omissions or additions.
 @end itemize
@@ -4768,7 +4787,7 @@ omitted.
 
 
 Here are two files, p180-15.1.1.decls and (part of) p180-15.1.1.dtrace, for
-a program which sums the values in an integer array.
+a program that sums the values in an integer array.
 
 @menu
 * Example declaration file::    

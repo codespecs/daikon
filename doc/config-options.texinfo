@@ -10,10 +10,10 @@
  printed representation has changed; leave other modbits as is.
 
 @item daikon.PptTopLevel.pairwise_implications
-  Boolean.  If true, implications are created for all pairwise
+  Boolean.  If true, create implications for all pairwise
  combinations of conditions, and all pairwise combinations of exit
- points.  If false, implications are created for only the first
- two conditions, and implications are created only if there are
+ points.  If false, create implications for only the first
+ two conditions, and create implications only if there are
  exactly two exit points.
 
 @item daikon.derive.binary.ScalarSequencesIntersection.enabled
@@ -286,19 +286,19 @@
  method-level granularity; 2 is class-level granularity.
 
 @item daikon.split.FileCompiler.compiler
-  String. Used to control which compiler is used to compile
- Splitters. This can be the full path name or whatever is used on
- the commandline
+  String.  Specifies which Java compiler is used to compile
+ Splitters.  This can be the full path name or whatever is used on
+ the commandline.
 
 @item daikon.split.SplitterList.all_splitters
-  Boolean.  Enables indiscriminate splitting (see Daikon manual for
- an explanation of this technique).
+  Boolean.  Enables indiscriminate splitting
+ (see Daikon manual, @ref{Indiscriminate splitting},
+ for an explanation of this technique).
 
 @item daikon.split.TimedProcess.compile_timeout
-  int. Used to control the timeout Splitter compilation timeout,
- after which the compilation process is retried and
- terminated. This is necessary to prevent compilation of Splitters
- from taking a long time or hanging.
+  Positive integer.  Specifies the Splitter compilation timeout, in
+ seconds, after which the compilation process is terminated and
+ retried, on the assumption that it has hung.
 
 @c END AUTO-GENERATED CONFIG OPTIONS LISTING
 
