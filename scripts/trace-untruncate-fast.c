@@ -93,6 +93,6 @@ main(int argc, char **argv)
 /*
  * Local Variables:
  * c-basic-offset:	4
- * compile-command:     gcc -Wall -g a.c -o truncate
+ * compile-command:     gcc -Wall -g trace-untruncate-fast.c -o trace-untruncate-fast
  * End:
  */
