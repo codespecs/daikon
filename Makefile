@@ -29,6 +29,7 @@ EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_tra
 ### Distribution
 
 dist: invariants.tar.gz
+	cp -pf invariants.tar.gz dist/README dist/VERSION /homes/gws/mernst/www/invariants-dist/
 
 # Also creates a directory called "dist"
 invariants.tar: $(LISP_FILES) $(PYTHON_FILES) $(DOC_FILES) $(EDG_FILES) README-dist
@@ -42,10 +43,12 @@ invariants.tar: $(LISP_FILES) $(PYTHON_FILES) $(DOC_FILES) $(EDG_FILES) README-d
 	date > invariants/VERSION
 	chgrp -R invariants invariants
 	rm -rf invariants.tar
-	tar cvf invariants.tar invariants
+	tar cf invariants.tar invariants
 	chmod -R uog-w invariants/*
 	if (test -d dist-`date +'%y%m%d'`); then rm -rf dist-`date +'%y%m%d'`; fi
 	mv invariants dist-`date +'%y%m%d'`
+	rm dist
+	ln -s dist-`date +'%y%m%d'` dist
 
 invariants.tar.gz: invariants.tar
 	rm -rf invariants.tar.gz
