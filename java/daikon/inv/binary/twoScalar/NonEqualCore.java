@@ -66,8 +66,8 @@ public final class NonEqualCore implements java.io.Serializable {
 
         Assert.assert(overlap >= 0);
         overlap++;
-        long range1 = max1 - min1 + 1;
-        long range2 = max2 - min2 + 1;
+        double range1 = (double)max1 - min1 + 1;
+        double range2 = (double)max2 - min2 + 1;
 
         // probability of being equal by chance
         //  = (overlap/range1) * (overlap/range2) * (1/overlap)
