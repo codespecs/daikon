@@ -83,6 +83,12 @@ public class JTrace
 
 	System.setSecurityManager(null);
 
+	if (inference.failure_message != null) {
+	    System.err.println("JTrace: inference thread failed with message: "
+			       + inference.failure_message);
+	    System.exit(1);
+	}
+
 	// Write out the invariant file
 	File inv_file = new File("temp.inv"); // XXX read name from command line with -o, like Daikon
 	try {

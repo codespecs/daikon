@@ -14,6 +14,8 @@ package daikon;
 import java.util.Vector;
 import java.util.Arrays;
 import java.util.List;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import daikon.Daikon;
 import daikon.FileIO;
@@ -41,8 +43,12 @@ class JTraceInference extends Thread
     // Public so that others can read out the invariants!
     public PptMap all_ppts = new PptMap();
 
+    /** Non-null when error has occurred */
+    public String failure_message = null;
+
     public void	run()
     {
+      try {
 	JTrace.println(JTrace.V_INFO, "JTrace: Inference thread start.");
 
 	/////////
@@ -61,7 +67,7 @@ class JTraceInference extends Thread
 	    {
 	    case CT_PptTrace: { // Header of a Trace program point
 		int key = getInteger();
-		String ppt_name = getPptName(key);
+		String ppt_name = getPptNameX(key);
 		JTrace.println(JTrace.V_INFO, ppt_name);
 		PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
 		ValueTuple vt = read_single_sample(ppt_name);
@@ -71,7 +77,7 @@ class JTraceInference extends Thread
 
 	    case CT_PptDeclStart: { // Header of a Decl program point
 		int key = getInteger();
-		String pptname = getPptName(key);
+		String pptname = getPptNameX(key);
 		JTrace.println(JTrace.V_INFO, pptname);
 		Vector var_infos = new Vector();
 		while((control = getControl()) != CT_PptDeclEnd)
@@ -138,6 +144,12 @@ class JTraceInference extends Thread
 	//
 
 	JTrace.println(JTrace.V_INFO,"JTrace: Inference thread stop.");
+
+      } catch (Exception e) {
+	  StringWriter buf = new StringWriter();
+	  e.printStackTrace(new PrintWriter(buf));
+	  failure_message = buf.toString();
+      }
     }
 
     // Read all data for a certain ppt, create and fill a sample with it
@@ -262,6 +274,15 @@ class JTraceInference extends Thread
 		join(); // wait for thread to exit
 		return;
 	    } catch(InterruptedException e) {}
+    }
+
+    private String getPptNameX(int key) {
+	// Eventually, JTrace should construct the proper name, but
+	// for now, I'm more comfortable just fixing it here.
+	String result = getPptName(key);
+	int after_semi = 1 + result.indexOf(';');
+	String clazz = utilMDE.UtilMDE.classnameFromJvm(result.substring(0, after_semi));
+	return clazz + result.substring(after_semi);
     }
 
     private native Object	getSample();
