@@ -1809,8 +1809,9 @@ This is the directory in the which the Ajax comparability module looks
 for @file{.class} files for the current application.  (It is a classpath
 entry, so the @file{.class} files might appear in a subdirectory named
 for the appropriate package.  If this option is not supplied, the
-current directory is used.  This will fail for code that (for example)
-calls libraries which do not appear under the current directory.
+@option{-classpath} argument is used.  A sensible value is required for
+code that (for example) calls libraries which do not appear under the
+current directory.
 
 @item -ajax_runnable=@var{classes}
 This is a Java class, in dot-delimited form (e.g., "foo.bar.Baz"), that
