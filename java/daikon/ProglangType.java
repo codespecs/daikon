@@ -1,7 +1,7 @@
 package daikon;
 
 import java.util.*;
-import java.io.ObjectStreamException;
+import java.io.*;
 
 import org.apache.oro.text.regex.*;
 
@@ -238,7 +238,7 @@ public final class ProglangType implements java.io.Serializable {
   // Given a string representation of a value (of the type represented by
   // this ProglangType), return the interpretation of that value.
   // Canonicalize where possible.
-  final Object parse_value(String value) {
+  public final Object parse_value(String value) {
     // System.out.println(format() + ".parse(\"" + value + "\")");
 
     String value_ = value;      // for debugging, I suppose
@@ -247,6 +247,7 @@ public final class ProglangType implements java.io.Serializable {
 
     if (dimensions == 0) {
       if (base == BASE_STRING) {
+        Assert.assert(value.startsWith("\"") && value.endsWith("\""));
 	if (value.startsWith("\"") && value.endsWith("\""))
 	  value = value.substring(1, value.length()-1);
 	return value.intern();
@@ -312,6 +313,22 @@ public final class ProglangType implements java.io.Serializable {
       String[] value_strings;
       if (value.length() == 0) {
         value_strings = new String[0];
+      } else if (base == BASE_STRING) {
+        Vector v = new Vector();
+        StreamTokenizer parser = new StreamTokenizer(new StringReader(value));
+        parser.quoteChar('\"');
+        try {
+          while ( parser.nextToken() != StreamTokenizer.TT_EOF ) {
+            if (parser.ttype != '\"') {
+              System.out.println("Bad ttype " + (char)parser.ttype);
+            }
+            Assert.assert(parser.ttype == '\"');
+            v.add(parser.sval);
+          }
+        } catch (Exception e) {
+          throw new Error(e.toString());
+        }
+        value_strings = (String[]) v.toArray(new String[0]);
       } else {
         Vector v = new Vector();
         Util.split(v, Global.regexp_matcher, Global.ws_regexp, value);
