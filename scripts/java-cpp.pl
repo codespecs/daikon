@@ -1,9 +1,7 @@
-: # Use -*- Perl -*- without knowing its path
-  eval 'exec perl -S -w $0 "$@"'
-  if 0;
+#!/usr/bin/env perl
 # java-cpp -- C preprocessor specialized for Java
 # Michael Ernst and Josh Kataoka
-# Time-stamp: <2001-03-03 12:20:05 mernst>
+# Time-stamp: <2002-06-03 15:01:28 mernst>
 
 # This acts like the C preprocessor, but
 #  * it does not remove comments
@@ -19,8 +17,8 @@
 # "Josh's".
 # (Implementation note:  I do want substitution to occur in comments.
 # Therefore, I do not use the -C (leave comments in) flag to cpp, or make
-# DOUBLESLASHCOMMENT put the rest of the line in a string, both of which
-# would also avoid the problem.)
+# JAVACPP_DOUBLESLASHCOMMENT put the rest of the line in a string, both
+# of which would also avoid the problem but would prevent substitution.)
 
 # I'm not calling this jpp because someone else has probably already taken
 # that name.
@@ -31,7 +29,7 @@
 
 
 # Original csh script:
-# 
+#
 # if (-e $1) then
 #   # Last argument is a file
 #   set filearg = $1
@@ -39,10 +37,10 @@
 # else
 #   set filearg =
 # endif
-# 
+#
 # # echo filearg $filearg
 # # echo argv $argv
-# 
+#
 # perl -p -w -e 's/\/\//DOUBLESLASHCOMMENT/g;' -e 's/\/\*/SLASHSTARCOMMENT/g;' $filearg > /tmp/java-cpp-$$-input
 # cpp $argv java-cpp-$$-input > java-cpp-$$-output
 # cat /tmp/java-cpp-$$-output | perl -p -w -e 's/DOUBLESLASHCOMMENT/\/\//g;' -e 's/SLASHSTARCOMMENT/\/\*/g;' -e 's/"  ?\+ "//g;' -e 's/^(package .*\.) ([^ ]*) ?;/$1$2;/;' -e 's/^# [0-9]+ ".*$//;' | perl -p -w -e 'use English; $INPUT_RECORD_SEPARATOR = "";' | lines-from "package"
@@ -52,63 +50,64 @@
 
 
 use English;
+use strict;
+$WARNING = 1;			# "-w" command-line switch
 
 my $system_temp_dir = -d '/tmp' ? '/tmp' : $ENV{TMP} || $ENV{TEMP} ||
     die "Cannot determine system temporary directory, stopped";
 my $tmpfile = "$system_temp_dir/java-cpp-$$";
 
-main:
+my $file_handle_nonce = 'fh00';
+
 {
-  &escape_comments_toplevel;
-  &run_cpp;
-  unlink($tmpfile);
-}
-
-sub escape_comments_toplevel {
-
   my $filename;
   if ((scalar(@ARGV) > 0) && (-r $ARGV[$#ARGV])) {
     $filename = pop @ARGV;	# remove last (filename) element
   } else {
     $filename = "-";
   }
-  $argv = join(' ', @ARGV);
 
   open(TMPFILE, ">$tmpfile") || die "Cannot open $tmpfile: $!\n";
-
   escape_comments($filename);
-
   close(TMPFILE);
+
+  run_cpp();
+  unlink($tmpfile);
 }
 
-my $input = 'fh00';
+exit();
+
+###########################################################################
+### Subroutines
+###
 
 # Also processes #include directives.
 # Perhaps I should instead do this; the advantage would be correct
-# #line information.
+# "#line" information.
 # ## Use of cpp for #include only:
 # cpp -C -nostdinc -undef
 
-#sub escape_comments( $ )
-sub escape_comments {
+sub escape_comments ( $ ) {
   my ($filename) = @_;
-  my $inhandle = $input++;               # this is a string increment
+
+  # Indirect through this filehandle name in order to make this routine
+  # (escape_comments) re-entrant.
+  my $inhandle = $file_handle_nonce++;   # this is a string increment
 
   # print STDERR "Opening $filename\n";
 
-  if (! open($inhandle, $filename)) {
-    print STDERR "Can't open $filename: $!\n";
-    return;
-  }
-  while (<$inhandle>) {             # note use of indirection
+  no strict 'refs';
+  open($inhandle, $filename) || die "Can't open $filename: $!\n";
+
+  while (<$inhandle>) {
 
     if (/^\#include "(.*)"/) {
       escape_comments($1);
       next;
     }
-    s|//|DOUBLESLASHCOMMENT|g;
-    s|/\*|SLASHSTARCOMMENT|g;
-    s/\'/SINGLEQUOTE/g;
+    s|//|JAVACPP_DOUBLESLASHCOMMENT|g;
+    s|/\*|JAVACPP_SLASHSTARCOMMENT|g;
+    s/\'/JAVACPP_SINGLEQUOTE/g;
     print TMPFILE;
   }
   close($inhandle);
@@ -120,17 +119,35 @@ sub run_cpp {
   # This causes strings to potentially have many trailing blanks.
   $INPUT_RECORD_SEPARATOR = "";
 
+  my $argv = join(' ', @ARGV);
   open(CPPFILE, "cpp $argv $tmpfile |") || die "Cannot open $tmpfile: $!\n";
 
   while (<CPPFILE>) {
-    s|DOUBLESLASHCOMMENT|//|g;
-    s|SLASHSTARCOMMENT|/\*|g;
-    s/SINGLEQUOTE/\'/g;
+    s|JAVACPP_DOUBLESLASHCOMMENT|//|g;
+    s|JAVACPP_SLASHSTARCOMMENT|/\*|g;
+    s/JAVACPP_SINGLEQUOTE/\'/g;
+
+    # Convert string concatenation ("a" + "b") single string ("ab").
     s/"  ?\+ "//g;
-    s/((?:^|\n)package .*\.) ([^ ]*) ?;/$1$2;/;
+    # Remove "# 22" lines.
     s/(^|\n)\# [0-9]+ ".*"($|\n)/$1$2/;
+
+    ## Remove extra space
+    # Remove space after package name
+    s/((?:^|\n)package .*\.) ([^ ]*) ?;/$1$2;/;
+    # Remove some trailing spaces: convert "(Foo )" to "(Foo)"
+    s/\((\b[A-Za-z]\w*) \)/($1)/g;
+    # Remove more trailing spaces: convert "a .b" to "a.b".
+    s/(\b[A-Za-z]\w*) \.([A-Za-z]\w*\b)/$1.$2/g;
     # compress out duplicate blank lines
     s/\n\n\n+/\n\n/g;
+    # Remove newline after "if" statement
+    # if no open curly brace or semicolon but 2 newlines.
+    if (/^[ \t]*if[ \t]*\([^\n\{;]*\n\n\z/) {
+      # not "chomp":  it removes all of the trailing newlines rather than one
+      s/\n\z//;
+    }
+
     # Skip if nothing to print (eg, if this paragraph was just a "# 22" line)
     if (! /[^\n]/) { next; }
     print;
