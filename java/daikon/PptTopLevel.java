@@ -713,6 +713,9 @@ public class PptTopLevel
     if (debugFlow.isDebugEnabled()) {
       debugFlow.debug ("<<<< Doing add_and_flow() for " + name);
     }
+    if (debugSuppress.isDebugEnabled()) {
+      debugSuppress.debug ("<<<< Doing add_and_flow() for " + name);
+    }
 
     for (int i=0; i < dataflow_ppts.length; i++) {
       PptTopLevel ppt = dataflow_ppts[i];
@@ -1777,9 +1780,9 @@ public class PptTopLevel
         for (Iterator i = invs.iterator(); i.hasNext(); ) {
           Invariant inv = (Invariant) i.next();
           if (inv.getSuppressor() != null) {
-            debugSuppressInit.debug (" y" + inv.repr());
+            debugSuppressInit.debug (" y " + inv.repr());
           } else {
-            debugSuppressInit.debug (" n" + inv.repr());
+            debugSuppressInit.debug (" n " + inv.repr());
           }
         }
         debugSuppressInit.debug ("  end of suppressed invariants:");
@@ -1849,7 +1852,7 @@ public class PptTopLevel
     template.transforms = new VarInfo[template.invTypes.length][];
     Assert.assertTrue (template.invTypes.length == template.varInfos.length,
                        "Template varInfos and invariant slots must be equal");
-    debugSuppressFill.debug ("Starting fill");
+    debugSuppressFill.debug ("Starting template fill");
 
     if (checkSelf) {
       firstLoop:
@@ -1943,12 +1946,13 @@ public class PptTopLevel
     thirdLoop:
     for (int iInvs = 0; iInvs < template.invTypes.length; iInvs++) {
       if (template.results[iInvs] == null) {
-        debugSuppressFill.debug ("  Unsuccessful fill");
+        debugSuppressFill.debug ("  Unsuccessful template fill");
         return false;
       }
     }
 
     template.filled = true;
+        debugSuppressFill.debug ("  Successful template fill");
     return true;
   }
 
