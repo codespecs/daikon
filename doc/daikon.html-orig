@@ -9,7 +9,8 @@
 <h1>Daikon invariant detector</h1>
 
 
-The Daikon invariant detector reports properties that are likely to hold at
+The <a href="http://www.cs.washington.edu/homes/mernst/daikon/">Daikon
+invariant detector</a> reports properties that are likely to hold at
 certain points in a program.  The reported properties are arithmetic
 equations such as you might write in an assert statement or a formal
 specification; for example, "x > abs(y)" or "x = 3*y + 4*z - 7" or "x = 0
@@ -17,7 +18,7 @@ specification; for example, "x > abs(y)" or "x = 3*y + 4*z - 7" or "x = 0
 host of other applications.  Daikon operates by running the program and
 examining the values it computes, looking for patterns and relationships
 among those values.  <a href="#front-ends">Front ends</a> exist for <a
-href="#java-front-end">Java</a>, <a href="#c-front-end">C/C++</a>, and <a
+href="#java-front-end">Java</a>, <a href="#c-front-end">C</a>, and <a
 href="#lisp-front-end">Lisp</a>; of these, the Java front end is the most
 robust, complete, and featureful, and is the most actively supported.<p>
 
@@ -29,7 +30,7 @@ Table of contents:
       <li><a href="#instrument">Step 1:  Instrumentation</a>
         <ul>
 	  <li><a href="#java-front-end">Java front end</a>
-	  <li><a href="#c-front-end">C/C++ front end</a>
+	  <li><a href="#c-front-end">C front end</a>
 	  <li><a href="#lisp-front-end">Lisp front end</a>
         </ul>
       <li><a href="#run-program">Step 2:  Run the program</a>
@@ -48,38 +49,83 @@ Table of contents:
 
 <h2><a name="install">Installing Daikon</a></h2>
 
+Requirements for running Daikon:
+<ol>
+  <li>A <a href="http://java.sun.com">Java virtual machine</a>.
+      Daikon is written in Java, so this is needed to run Daikon.
+  <li>A C++ compiler such as <a href="http://gcc.gnu.org/">gcc</a>,
+      if you wish to use the Daikon front end for Java.  (This front end,
+      which permits you to detect invariants in Java programs, is
+      written in C++.)
+</ol>
+
+Installing Daikon:
 <ol>
   <li>Download the <tt><a href="http://www.cs.washington.edu/homes/mernst/daikon/download/daikon.tar.gz">daikon.tar.gz</a></tt>
       file from
       <a href="http://www.cs.washington.edu/homes/mernst/daikon/download/">http://www.cs.washington.edu/homes/mernst/daikon/download/</a>.
-  <li>In the directory where you want to install Daikon, unpack the tarfile:
+  <li>In the directory where you want to install Daikon (we'll call this
+      the <tt><em>parent</em></tt> directory), unpack the tarfile:
 <pre>
        tar zxvf daikon.tar.gz
 </pre>
-     This creates a <tt>daikon/</tt> subdirectory.
+      This creates a <tt><em>parent</em>/daikon/</tt> subdirectory.
+  <li>Add the Daikon Java files to your Java class path.  For instance, in
+      csh put the following in your <tt>.cshrc</tt> file:
+<pre>
+      setenv CLASSPATH <em>parent</em>/daikon/java:${CLASSPATH}
+</pre>
+  <li>Add the <tt><em>parent</em>/daikon/bin/</tt> directory to your path.  (Your
+      path is a list of directories in which the shell searches for
+      commands; this permits you to type just the program name rather than
+      supplying a full pathname.)  In csh, put the following in your
+      <tt>.cshrc</tt> file:
+<pre>
+      set path = (<em>parent</em>/daikon/bin $path)
+</pre>
 <!--
   <li>Set the environment variable <tt>DAIKON_HOME</tt> to point the directory.<p>
-     In csh:
+      In csh:
 <pre>
-       setenv DAIKON_HOME <i>/directory/goes/here</i>
+      setenv DAIKON_HOME <i>/directory/goes/here</i>
 </pre>
-     In sh:
+      In sh:
 <pre>
-       DAIKON_HOME=<i>/directory/goes/here</i>
-       export DAIKON_HOME
+      DAIKON_HOME=<i>/directory/goes/here</i>
+      export DAIKON_HOME
 </pre>
 -->
-  <li>Prepare the front ends for use, if you plan to detect invariants in
-      programs written in those source languages:
+  <li>Prepare the front ends for use.  If you wish to detect invariants in
+      programs written in a particular language, you need a front end for
+      that source language.  The available front ends are:
     <ul>
-      <li>Java front end:  Build the <tt>dfej</tt> Java instrumenter.  In
-          the <tt>jikes-front-end/src</tt> directory, do:
+      <li><a name="build-dfej"><b>Java front end</b></a>:
+          Either download a binary version of the dfej Java instrumenter
+          from the same place that you obtained Daikon itself (<a
+          href="http://www.cs.washington.edu/homes/mernst/daikon/download/">http://www.cs.washington.edu/homes/mernst/daikon/download/</a>),
+          or build dfej from the sources provided in the distribution by
+          following these steps:
         <ol>
-          <li><tt>./configure --enable-symbols</tt>
+	  <li><tt>cd java-front-end/src</tt>
+          <li><tt>./configure --enable-debug</tt><br>
+              You must supply the --enable-debug argument to configure.
+	  <li>If you are running under Solaris, you may need to edit
+	      <tt>Makefile</tt> to indicate use of the libw library; change<br>
+	      <q><tt>LDFLAGS=-L. -o $(EXECUTABLE)</tt></q><br>
+	      to<br>
+	      <tt>LDFLAGS=-L. -lw -o $(EXECUTABLE)</tt>
 	  <li><tt>make</tt>
+	  <li>Add <tt>java-front-end/src/dfej</tt> to your path;
+	      for instance, in csh place the following in your
+	      <tt>.cshrc</tt> file:<br>
+              <tt>set path = (<em>parent</em>/daikon/java-front-end/src $path)</tt><br>
         </ol>
-        You must supply the --enable-symbol argument to configure.
-      <li>C front end:
+      <li><b>C front end</b>:
+        Supporting files for the C front end are found in the 
+	<tt>c-front-end/</tt> directory, but you must download the
+	front end itself.<p>
+
+        See the <a href="#c-front-end">warrning about the C front end</a>.
         <ol>
 	  <li>Download a binary version of the Daikon C front end from the
 	      same place that you obtained Daikon itself:  <a
@@ -88,15 +134,16 @@ Table of contents:
 	      source for this program.  Rename the downloaded file to
 	      <tt>edgcpfe</tt> in a directory on your path.  (You will not
 	      run the <tt>edgcpfe</tt> program directly,
-	      but only via the <tt>dfec</tt> script.)
-	      The Lisp and Java front ends, and supporting files for
-	      the C front end, are distributed with Daikon itself.
+	      but only via the <tt>c-front-end/dfec</tt> script.)
 	  <li>Optionally set the path to Perl in the first line of the
-	      <tt>dfec</tt> script.  This is not necessary, but
+	      <tt>c-front-edn/dfec</tt> script.  This is not necessary, but
 	      will make the script start up faster.
         </ol>
-      <li>Lisp front end:  no special work to be done.
+      <li><b>Lisp front end</b>:  no special work to be done.
+          The front end appears in the distribution in the
+	  <tt>lisp-front-end/</tt> directory.
     </ul>
+<!--
   <li>If you don't already have the Python programming language installed,
       download it from <a
       href="http://www.python.org/">http://www.python.org</a>.  If you
@@ -105,6 +152,7 @@ Table of contents:
       There is a second implementation of Python, called JPython, which you
       can consider using instead; see <a
       href="http://www.jpython.org/">http://www.jpython.org/</a>.
+-->
 </ol>
 
 
@@ -122,12 +170,12 @@ Detecting invariants involves three steps:
 <h3><a name="front-ends"></a><a name="instrument"></a>Step 1:  Instrumentation</h3>
 
 
-There are three different front ends -- for C, Java, and Lisp.  Each of
+There are three different front ends -- for Java, C, and Lisp.  Each of
 these front ends modifies your program so that, in addition to performing
 its original task, it also writes variable values to a data trace file.
 <ul>
   <li><a href="#java-front-end">Java front end</a>
-  <li><a href="#c-front-end">C/C++ front end</a>
+  <li><a href="#c-front-end">C front end</a>
   <li><a href="#lisp-front-end">Lisp front end</a>
 </ul>
 
@@ -183,7 +231,7 @@ its original task, it also writes variable values to a data trace file.
       See the <tt>dfej</tt> usage message for more information.<p>
 </ol>
 
-<h4><a name="c-front-end">C/C++ front end</a></h4>
+<h4><a name="c-front-end">C front end</a></h4>
 
 <b>Warning:</b> While the C front end works correctly on a number of
 programs, it is known to fail on some legal C programs.  The C front end
@@ -203,7 +251,7 @@ current focus is on the <a href="#java-front-end">Java front end</a>.<p>
      <tt>dfec</tt> is written in Perl.  If Perl is not available, you may
      instead use <tt>dfec.sh</tt>, which is written in sh shell script.<p>
 
-     The Daikon C/C++ front end:
+     The Daikon C front end:
      <ol>
        <li>copies your original files to <tt><i>filename1.c</i>.uninst</tt>,
 	   etc.<br>
@@ -264,18 +312,31 @@ the only behavioral change will be writing a <tt>.dtrace</tt> file to the
 <tt>daikon-output/</tt> subdirectory (which is created if it does not
 already exist).  Only one <tt>.dtrace</tt> file is created, even though
 multiple <tt>.decls</tt> files might have been created (one for each source
-file).<p>
+file) when the program was instrumented.<p>
 
 
 <ul>
-  <li>For Java programs, make sure the <tt>daikon-java/</tt> directory
-      appears on your CLASSPATH before the directory containing the
-      original Java code.
-  <li>For C/C++ programs, if you do not supply a file <tt>label.txt</tt> which
+  <li><b>Java programs</b>:  After instrumentation, there are two versions
+      of the program:  the original version, and the instrumented version
+      which appears in the <tt>daikon-java/</tt> directory.  Make sure that
+      the <tt>daikon-java/</tt> directory appears on your class path before
+      the directory containing the original Java code.  You can do this by
+      running the program from that directory, if "." (the current
+      directory) appears early on your class path, or you can add the
+      <tt>daikon-java/</tt> directory to your class path explicitly.<p>
+
+      After running your program, run <tt>bin/modbit-munge.pl</tt> on the
+      resulting <tt>.dtrace</tt> file:
+<pre>
+    modbit-munge.pl <em>myprog</em>.dtrace
+</pre>
+      This step fixes up some potential problems that may appear in the
+      trace file.
+  <li><b>C programs</b>:  If you do not supply a file <tt>label.txt</tt> which
       contains a single integer (a sample is provided in the distribution), one
       will be created for you.  This determines the name of the data trace
-      file.<p>
-  <li>In Lisp, here is how you would run the Gries example programs, after
+      file.
+  <li><b>Lisp programs</b>:  To run the Gries example programs, after
       having done <tt>(load "load-all")</tt>:
 <pre>
     ;; Load the instrumented code.
@@ -288,6 +349,49 @@ file).<p>
 
 
 <h3><a name="run-daikon">Step 3:  Detect invariants in the data trace files</a></h3>
+
+Run the Daikon invariant detector via the command
+<pre>
+    java daikon.Daikon <em>decl-files...</em> <em>trace-files...</em>
+</pre>
+
+The <em>decl-files</em> are declaratation (<tt>.decl</tt>) files created at
+instrumentation time.
+The <em>trace-files</em> are data trace (<tt>.dtrace</tt>) files created by
+running the instrumented program.
+Be sure to include all declaration files that are needed for the particular
+data trace file; the simplest way is to include all the declaration files
+created when instrumenting the proram that is read.
+
+<h4>Example</h2>
+
+To try out Daikon, run the following commands:
+<pre>
+    cd <em>parent</em>/daikon/examples/gries
+    java daikon.Daikon gries-instrumented.decls p180-15.1.1.dtrace
+</pre>
+
+
+<h4><a name="interpret-output">Interpreting the output</a></h4>
+
+In the output, the "_orig" suffix refers to the original value of a formal
+parameter, for parameters possibly modified in the function body.
+Negative array indices count from the end of the array; for instance, index
+"-1" denotes the last element of the array.<p>
+
+":::ENTER", ":::EXIT", and ":::LOOP" are tags identifying at which program
+point the instrumentation was inserted; these invariants are
+program-point-specific.  ":::CLASS" and ":::CLASS-STATIC" indicate class
+invariants (sometimes called object invariants) which always hold for any
+object of the given class, from the point of view of a client or user.
+These properties hold at entry to and exit from every public method of the
+class.<p>
+
+<!--
+<h3><a name="run-daikon">Step 3:  Detect invariants in the data trace files</a></h3>
+
+<b>This is out of date, as the current version of Daikon is written in
+    Java, not Python.</b><p>
 
 Run the Python interpreter using the shell command <tt>python</tt> or the
 Emacs command <tt>M-x py-shell</tt>.  (In order to run <tt>M-x
@@ -323,33 +427,21 @@ To do all this from a single shell command, do the following:
     daikon.read_data_traces('<i>filename.dtrace</i>'); \
     daikon.all_numeric_invariants()"
 </pre>
-
-<h4><a name="interpret-output">Interpreting the output</a></h4>
-
-In the output, the "_orig" suffix refers to the original value of a formal
-parameter, for parameters possibly modified in the function body.
-Negative array indices count from the end of the array; for instance, index
-"-1" denotes the last element of the array.<p>
-
-":::ENTER", ":::EXIT", and ":::LOOP" are tags identifying at which program
-point the instrumentation was inserted; these invariants are
-program-point-specific.  ":::CLASS" and ":::CLASS-STATIC" indicate class
-invariants (sometimes called object invariants) which always hold for any
-object of the given class, from the point of view of a client or user.
-These properties hold at entry to and exit from every public method of the
-class.<p>
-
+-->
 
 <h2><a name="manifest">Manifest (list of files in the distribution)</a></h2>
 
 <pre>
 User documentation
-  daikon.html		This file
+  daikon.html		This file; the main Daikon documentation
   README		Says to see daikon.html instead
+  daikon.gif		The Daikon logo
 
 Java front end
-  java-front-end/	A modified version of the <a href="http://www.ibm.com/research/jikes">Jikes Java compiler</a>
-                          The main executable is dfej (Daikon front end for Java)
+  java-front-end/	A modified version of the <a href="http://oss.software.ibm.com/developerworks/opensource/jikes/project/">Jikes Java compiler</a>
+    src/                Source code
+      dfej              The main executable (Daikon front end for Java);
+                          you must build this yourself (see <a href="#build-dfej">instructions</a>)
 
 C front end
   c-front-end/
@@ -373,13 +465,17 @@ Lisp front end and example files
     inv-medic.lisp	Support for finding invariants in the Medic program
 
 Invariant detection engine
-  daikon.py		The invariant detector itself
-  util.py		Utility functions used by the invariant detector
-  daikon.py.doc		Internal documentation on data structures and design
+  java/			Source code for Daikon, which is written in Java
+    Daikon.java         The entry point for Daikon
+
+Auxiliary programs
+  bin/			Helper scripts and programs
 
 Miscellaneous files
   Makefile		Makefile for the invariant detection system
   VERSION		Timestamp of this distribution
+  daikon.py.doc		Documentation of the trace file format; somewhat old
+  daikon-python/        An old version of Daikon, written in Python.
 </pre>
 
 
@@ -393,7 +489,8 @@ we cannot make any guarantees of support, or any other guarantees regarding
 the software.  As a condition of use, you agree to promptly communicate any
 changes, improvements, or enhancements to the authors for inclusion in a
 future release under these same conditions.  If you do not agree to this
-license, please do not use or examine the software.<p>
+license, please do not use or examine the software.  For other licensing
+terms, <a href="mailto:mernst@cs.washington.edu">contact the author</a>.<p>
 
 If you use Daikon, please <a href="mailto:mernst@cs.washington.edu">send
 email to Michael Ernst &lt;mernst@cs.washington.edu&gt;</a>, so that you
@@ -416,9 +513,10 @@ Josh Kataoka, and
 have been very helpful testers.
 Many of our colleagues have been generous with their feedback and advice,
 for which we are grateful.
-<a href="http://www.cs.washington.edu/homes/csk/">Craig Kaplan</a> carved the Daikon logo.
-This work was supported by NSF grants CCR-9506779 and CCR-9508745, an IBM
-Cooperative Fellowship, and a gift from Edison Design Group.
+<a href="http://www.cs.washington.edu/homes/csk/">Craig Kaplan</a>
+carved the Daikon logo.
+This work was supported in part by NSF grants CCR-9506779 and CCR-9508745,
+an IBM Cooperative Fellowship, and a gift from Edison Design Group.
 <p>
 
 
@@ -429,32 +527,62 @@ find bugs in the system, or have suggestions for its improvement, please
 <a href="mailto:mernst@cs.washington.edu">send email to Michael Ernst
 &lt;mernst@cs.washington.edu&gt;</a>.  While Daikon is a research prototype
 and not rock-solid, I will do my best to assist you and to correct any
-problems, so please don't hesitate to ask for help or report difficulties.
-And don't let any shortcomings of this implementation dissuade you about
-the promise of the research!<p>
+problems, so please don't hesitate to ask for help or report difficulties.<p>
 
 Your bug report will be most helpful if you include:
 <ul>
-  <li>the contents of the VERSION file, which indicates the release date of
-      your copy of Daikon
+  <li>the contents of the <tt>VERSION</tt> file, which indicates the
+      release date of your copy of Daikon.  If you are not using the most
+      recent version, it is best if you <a
+      href="http://www.cs.washington.edu/homes/mernst/daikon/download/">download</a>
+      a newer version to see whether your problem has already been corrected.
   <li>a description of exactly what you did and exactly what went wrong.
       For instance, a transcript of your commands and the system's output
       may provide this information.
   <li>input files that permit the problem to be replicated.  For instance,
       this might include your source files (both original and
-      instrumented), .decl files, and .dtrace files.  It is often more
-      difficult to reproduce an error than to correct it, so please don't
-      make me spend a lot of time verifying the problem.  Also, if I can't
-      reproduce the problem, then I will probably be unable to fix it.
+      instrumented), <tt>.decl</tt> files, and <tt>.dtrace</tt> files.  It
+      is often more difficult to reproduce an error than to correct it, so
+      please do not force me to spend a lot of time verifying the problem.
+      Also, if I can't reproduce the problem, then I will probably be
+      unable to fix it.
   <li>any other information that you consider relevant
 </ul><p>
 
-The invariant detector is further described in the paper <a
-href="http://www.cs.washington.edu/homes/mernst/pubs/invariants-icse99-abstract.html">``Dynamically
-Discovering Likely Program Invariants to Support Program Evolution''</a> by
-Michael D. Ernst, Jake Cockrell, William G. Griswold, and David Notkin, in
-Proceedings of the 19th International Conference on Software Engineering
-(ICSE '99), Los Angeles, CA, May 19-21, 1999.<p>
+The following problems are already known and are being corrected.  (You may
+report them again, to encourage me to release the fix faster, if you like.)
+<ul>
+  <li>Java front end:
+    <ul>
+      <li>Inner classes:  Daikon inserts static members; this is not legal
+	  in inner classes.  The members should be non-static or should be
+	  inserted into the parent class.
+      <li>Invalid modbits:  The front end sometimes produces invalid
+          modbits.  This can be solved by postprocessing the data trace
+          files using the <tt>modbit-munge.pl</tt> program.
+      <li>Floating-point values are often ignored; I haven't gotten
+          around to writing code to test for those invariants.
+    </ul>
+  <li>C front end:  The C front end is not very robust, and is not being
+      currently maintained.  See the <a href="#c-front-end">warning</a>
+      about using it.
+  <li>Lisp front end:  The Lisp front end achieves only partial coverage of
+      the Lisp programming language.
+</ul><p>
+
+
+Dynamic invariant detection is further described in several papers, including:
+<ul>
+  <li><a href="http://www.cs.washington.edu/homes/mernst/pubs/invariants-tse-abstract.html">Dynamically
+      Discovering Likely Program Invariants to Support Program
+      Evolution</a> (IEEE TSE, to appear)
+  <li><a href="http://www.cs.washington.edu/homes/mernst/pubs/invariants-icse2000-abstract.html">Quickly Detecting Relevant Program Invariants</a> (ICSE 2000)
+  <li><a href="http://www.cs.washington.edu/homes/mernst/pubs/invariants-pointers-abstract.html">Dynamically
+  Discovering Pointer-Based Program Invariants</a> (technical report)
+</ul>
+
+
+<a href="http://www.cs.washington.edu/homes/mernst/daikon/">Daikon homepage</a><p>
 
 <address>
 <a href="http://www.cs.washington.edu/homes/mernst/">Michael Ernst</a>

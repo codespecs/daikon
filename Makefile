@@ -7,8 +7,13 @@ LISP_FILES := lisp-front-end/gries-helper.lisp lisp-front-end/instrument.lisp li
 	lisp-front-end/load-all.lisp \
 	lisp-front-end/gries.lisp lisp-front-end/gries-instrumented.lisp lisp-front-end/inv-medic.lisp
 PYTHON_FILES := daikon.py util.py TextFile.py
-DOC_FILES := daikon.py.doc Makefile TextFile.README daikon.html daikon.gif
-EDG_DIR := /homes/gws/mernst/research/invariants/edg/dist
+DOC_FILES := daikon.py.doc Makefile daikon.html daikon.gif
+PY_DOC_FILES := daikon.py.doc Makefile TextFile.README daikon.gif
+README_FILES := README-daikon-java README-daikon1 README-dist
+SCRIPT_FILES := scripts/modbit-munge.pl
+
+# EDG_DIR := /homes/gws/mernst/research/invariants/edg/dist
+EDG_DIR := /homes/gws/mernst/research/invariants/c-front-end
 # $(EDG_DIR)/edgcpfe is distributed separately (not in the main tar file)
 EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/dfec $(EDG_DIR)/dfec.sh
 DFEJ_DIR := /homes/gws/mernst/research/invariants/dfej
@@ -48,7 +53,7 @@ tags: TAGS
 ## As of July 1998, my Linux etags works on Python; my Solaris one doesn't.
 ## So I should be sure to do the make on a Linux machine. -MDE
 TAGS:  $(LISP_FILES) $(PYTHON_FILES)
-	cd daikon; make tags
+	cd daikon; $(MAKE) tags
 	etags $(LISP_FILES) $(PYTHON_FILES) --include=daikon/TAGS
 
 ###########################################################################
@@ -60,11 +65,12 @@ TAGS:  $(LISP_FILES) $(PYTHON_FILES)
 # Main distribution
 
 dist: $(DIST_DIR)/daikon.tar.gz
+	$(MAKE) -n dist-dfej
 
 # Is this the right way to do this?
 dist-force:
 	rm -f daikon.tar.gz
-	make dist
+	$(MAKE) dist
 
 $(DIST_DIR)/daikon.tar.gz: daikon.tar.gz
 	# This isn't quite right:  I want the copy of daikon.html in daikon.tar.gz.
@@ -74,10 +80,33 @@ $(DIST_DIR)/daikon.tar.gz: daikon.tar.gz
 	chmod ogu-w $(DIST_DIR)/daikon.tar.gz $(DIST_DIR)/daikon.html
 	update-link-dates $(DIST_DIR)/index.html
 
-daikon.tar: $(LISP_FILES) $(PYTHON_FILES) $(DOC_FILES) $(EDG_FILES) README-dist
+daikon.tar: $(LISP_FILES) $(PYTHON_FILES) $(DOC_FILES) $(PY_DOC_FILES) $(EDG_FILES) $(README_files) examples-gries.tar.gz
 	mkdir /tmp/daikon
-	cp -p $(PYTHON_FILES) $(DOC_FILES) /tmp/daikon
+
+	# Old Python implementation
+	mkdir /tmp/daikon/daikon-python
+	cp -p $(PYTHON_FILES) $(PY_DOC_FILES) /tmp/daikon/daikon-python
+	cp -p README-daikon1 /tmp/daikon/daikon-python/README
+	cp -p daikon-19991114.html /tmp/daikon/daikon-python/daikon.html
+
+	# Current Java implementation
+	cp -p $(DOC_FILES) /tmp/daikon
 	cp -p README-dist /tmp/daikon/README
+	tar chf /tmp/daikon-java.tar daikon
+	(mkdir /tmp/daikon/java; cd /tmp/daikon/java; tar xf /tmp/daikon-java.tar; rm /tmp/daikon-java.tar)
+	cp -p README-daikon-java /tmp/daikon/java/README
+	# Maybe I should do  $(MAKE) doc  
+	# Maybe I should do  $(MAKE) clean  which will also get rid of .class
+	(cd /tmp/daikon/java; rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' \) -print`)
+
+	# Java support files
+	(cp -p java-getopt-1.0.7.tar.gz /tmp/daikon/java; cd /tmp/daikon/java; tar zxf java-getopt-1.0.7.tar.gz; rm java-getopt-1.0.7.tar.gz)
+	(cd $(HOME)/java/utilMDE; $(MAKE) utilMDE.tar.gz; cd /tmp/daikon/java; tar zxf $(HOME)/java/utilMDE/utilMDE.tar.gz)
+	(cp -p OROMatcher-1.1.tar.gz /tmp/daikon/java; cd /tmp/daikon/java; tar zxf OROMatcher-1.1.tar.gz; rm OROMatcher-1.1.tar.gz; ln -s OROMatcher-1.1.0a/com .)
+
+	# Auxiliary programs
+	mkdir /tmp/daikon/bin
+	cp -p $(SCRIPT_FILES) /tmp/daikon/bin
 
 	# Lisp instrumenter
 	mkdir /tmp/daikon/lisp-front-end
@@ -98,7 +127,11 @@ daikon.tar: $(LISP_FILES) $(PYTHON_FILES) $(DOC_FILES) $(EDG_FILES) README-dist
 	(cd /tmp/daikon; tar xf /tmp/dfej.tar; mv dfej java-front-end; rm /tmp/dfej.tar)
 	# the subsequence rm -rf shouldn't be necessary one day, 
 	# but for the time being (and just in case)...
-	(cd /tmp/daikon/java-front-end/src; $(MAKE) distclean; rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name jikes -o -name dfej -o -name '*.o' -o -name '*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' \) -print`)
+	(cd /tmp/daikon/java-front-end; (cd src; $(MAKE) distclean); rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name jikes -o -name dfej -o -name '*.o' -o -name '*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' \) -print`)
+
+	# Example files
+	mkdir /tmp/daikon/examples
+	(cp -p examples-gries.tar.gz /tmp/daikon/examples; cd /tmp/daikon/examples; tar zxf examples-gries.tar.gz; mv examples-gries gries; rm examples-gries.tar.gz)
 
 	date > /tmp/daikon/VERSION
 	chgrp -R invariants /tmp/daikon
@@ -140,13 +173,13 @@ $(EDG_DIR)/dfec: $(EDG_DIR)/dfec.sh
 ## Java front end
 
 dist-dfej: dist-dfej-solaris
-	cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@cs.washington.edu
 
 dist-dfej-solaris: $(DIST_DIR_2)/dfej-solaris
 
 $(DIST_DIR_2)/dfej-solaris: $(DFEJ_DIR)/src/dfej
 	cp -pf $< $@
 	update-link-dates $(DIST_DIR)/index.html
+	cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@cs.washington.edu
 
 ### Examples
 
@@ -156,6 +189,7 @@ examples: examples-gries
 # /projects/null/se/people/mernst/www
 # mkdir replace-TC1-traces; cp -p /projects/null/se/people/jake/invariants/test_gen/TC1/traces/* replace-TC1-traces/; tar czf replace-TC1-traces.tar.gz replace-TC1-traces; rm -rf replace-TC1-traces
 # mkdir replace-TC3-traces; cp -p /projects/null/se/people/jake/invariants/test_gen/TC3/traces/* replace-TC3-traces/; tar czf replace-TC3-traces.tar.gz replace-TC3-traces; rm -rf replace-TC3-traces
+
 
 
 GRIES_FILES := gries-instrumented.decls \
@@ -170,16 +204,21 @@ GRIES_FILES := gries-instrumented.decls \
 	p184-3.dtrace \
 	p187.dtrace \
 	p191-2.dtrace
+GRIES_DIR := lisp-front-end
+GRIES_FILE_PATHS := $(addprefix $(GRIES_DIR)/,$(GRIES_FILES))
 
-examples-gries: $(DIST_DIR)/examples-gries.tar.gz
+# Don't bother with this any longer; it's so small that I might as well
+# just include it in the distribution directly.
+# 
+# examples-gries: $(DIST_DIR)/examples-gries.tar.gz
+# 
+# $(DIST_DIR)/examples-gries.tar.gz: examples-gries.tar.gz
+# 	cp -pf $< $@
+# 	update-link-dates $(DIST_DIR)/index.html
 
-$(DIST_DIR)/examples-gries.tar.gz: examples-gries.tar.gz
-	cp -pf $< $@
-	update-link-dates $(DIST_DIR)/index.html
-
-examples-gries.tar.gz: $(GRIES_FILES) README-examples-gries
+examples-gries.tar.gz: $(GRIES_FILE_PATHS) $(GRIES_DIR)/README-examples-gries
 	mkdir examples-gries
-	cp -pf $(GRIES_FILES) examples-gries
-	cp -pf README-examples-gries examples-gries/README
+	cp -pf $(GRIES_FILE_PATHS) examples-gries
+	cp -pf $(GRIES_DIR)/README-examples-gries examples-gries/README
 	tar czf examples-gries.tar.gz examples-gries
 	rm -rf examples-gries
