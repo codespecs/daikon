@@ -265,6 +265,10 @@ public final class Intern {
     return l;
   }
 
+  public static double intern(double l) {
+    return l;
+  }
+
   /**
    * Intern (canonicalize) an Integer.
    * Returns a canonical representation for the Integer.
