@@ -54,7 +54,8 @@ public final class FeatureExtractor {
     "\t[-p] \t\tdo not output if no positive feature vectors are present\n";
 
   static public void main(String[] args)
-    throws IOException, ClassNotFoundException {
+    throws IOException, ClassNotFoundException, IllegalAccessException,
+           InvocationTargetException {
     // Main performs 3 steps:
     // 1)  make two vectors of invariants: useful and nonuseful
     // 2)  extract the features for useful and nonuseful
@@ -125,13 +126,18 @@ public final class FeatureExtractor {
     // as the invariants in useful and nonuseful.
     // Then extract the descriptions of each invariant, also kept in the
     // same order
-    Vector usefulFeatures = getFeatures(useful);
-    Vector nonusefulFeatures = getFeatures(nonuseful);
+    // ########## Commented out in order to use reflect functions
+    //    Vector usefulFeatures = getFeatures(useful);
+    //    Vector nonusefulFeatures = getFeatures(nonuseful);
     Vector usefulStrings = getStrings(useful);
     Vector nonusefulStrings = getStrings(nonuseful);
-    // and create the proper number of repeats;
+
+    HashMap lookup = getFullMapping();
+    Vector usefulFeatures = getReflectFeatures(useful, lookup);
+    Vector nonusefulFeatures = getReflectFeatures(nonuseful, lookup);
 
     /* DISABLED FEATURE
+    // and create the proper number of repeats;
        while (repeats >= 2) {
          Vector[] placeholder = createPermutations(usefulFeatures,
          nonusefulFeatures,
@@ -170,7 +176,7 @@ public final class FeatureExtractor {
       else if (output_type.equals("C5")) {
         File output = new File(output_file + ".data");
         File names = new File(output_file + ".names");
-        printC5Output(usefulFeatures, nonusefulFeatures, output, names);
+        printC5Output(usefulFeatures, nonusefulFeatures, output, names,lookup);
       }
       else
         System.err.println("Invalid Output Type: " + output_type);
@@ -178,14 +184,15 @@ public final class FeatureExtractor {
 
   }
 
+  /* Removed because functions not used
 
-  /* permutes the feature vectors repeats times
-     returns a Vector array of size 4 such that
-     return[0] is usefulFeatures
-     return[1] is nonusefulFeatures,
-     return[2] is usefulStrings,
-     return[3] is nonusefulStrings
-   */
+  // permutes the feature vectors repeats times
+  // returns a Vector array of size 4 such that
+  // return[0] is usefulFeatures
+  // return[1] is nonusefulFeatures,
+  // return[2] is usefulStrings,
+  // return[3] is nonusefulStrings
+  //
   private static Vector[] createPermutations(Vector usefulFeatures,
                                        Vector nonusefulFeatures,
                                        Vector usefulStrings,
@@ -219,10 +226,9 @@ public final class FeatureExtractor {
     return answer;
   }
 
-  /* returns two Vectors.  return[0] contain items from oneInput
-     permuted with each item from twoInput.
-     return[1] contains the permuted strings.
-  */
+  // returns two Vectors.  return[0] contain items from oneInput
+  // permuted with each item from twoInput.
+  // return[1] contains the permuted strings.
   private static Vector[] permute(Vector oneInput, Vector twoInput,
                          Vector oneString, Vector twoString) {
     Vector[] answer = new Vector[2];
@@ -246,8 +252,7 @@ public final class FeatureExtractor {
     return answer;
   }
 
-  /* Adds shift to the int term of every IntDoublePair in the Iterator input
-   */
+  // Adds shift to the int term of every IntDoublePair in the Iterator input
   private static TreeSet shift(Iterator input, int shift) {
     TreeSet answer = new TreeSet();
     for (; input.hasNext(); ) {
@@ -256,10 +261,10 @@ public final class FeatureExtractor {
     }
     return answer;
   }
+  */// End of not used functions
 
-  /* Takes a vector of invariants and returns a vector of
-     the string representations of those invariants in the same order
-  */
+  // Takes a vector of invariants and returns a vector of
+  // the string representations of those invariants in the same order
   private static Vector getStrings(Vector invs) {
     Vector answer = new Vector();
     for (int i = 0; i < invs.size(); i++) {
@@ -350,11 +355,41 @@ public final class FeatureExtractor {
    */
   private static void printC5Output(Vector usefulFeatures,
                                     Vector nonusefulFeatures,
-                                    File outputFile,File namesFile)
+                                    File outputFile, File namesFile,
+                                    HashMap lookup)
     throws IOException {
     FileWriter names = new FileWriter(namesFile);
 
     // First create a TreeSet of all the Feature Numbers and 0 as value
+    // and a Map of numbers to names
+    TreeSet allFeatures = new TreeSet();
+    HashMap numbersToNames = new HashMap();
+    for (Iterator i = lookup.keySet().iterator(); i.hasNext();) {
+      Object key = i.next();
+      int num = ((Integer) lookup.get(key)).intValue();
+      IntDoublePair pair = new IntDoublePair(num, 0);
+      allFeatures.add(pair);
+      String name;
+      if (key instanceof Class)
+        name = ((Class) key).getName() + "Bool";
+      else if (key instanceof Field) {
+        name = ((Field) key).getName();
+        if (((Field) key).getType().equals(Boolean.TYPE))
+          name+= "Bool";
+        else
+          name += "Float";
+      }
+      else if (key instanceof String) {
+        name = (String) key;
+      }
+      else
+        throw new RuntimeException(key + " object cannot be converted to " +
+                                   "a feature.");
+      numbersToNames.put(pair, name);
+    }
+
+
+    /* old way using reflection on FeatureExtractor, not longer used
     TreeSet allFeatures =  new TreeSet();
     HashMap numbersToNames = new HashMap();
     Field[] fields = FeatureExtractor.class.getFields();
@@ -391,6 +426,9 @@ public final class FeatureExtractor {
 
       }
     }
+    */
+
+
     // Now make the .names part
     names.write("|Beginning of .names file\n");
     // names.write("GoodBad.\n\nGoodBad: 1, -1.\n");
@@ -404,7 +442,8 @@ public final class FeatureExtractor {
         else if (currentName.endsWith("Float"))
           names.write(currentName + ": continuous.\n");
         else if (currentName.endsWith("Int"))
-          names.write(currentName + ": discrete.\n");
+          //          names.write(currentName + ": discrete.\n");
+          names.write(currentName + ": continuous.\n");
         else throw new IOException("All feature names must end with one of " +
                                    "Float, Bool, or Int.\nError: " +
                                    currentName + "\n");
@@ -428,7 +467,7 @@ public final class FeatureExtractor {
 
   /* Prints the partial labeling using C5 format for all feature vectors
      in features.
-   */
+  */
   private static void printC5DataOutput (Vector features,
                                          TreeSet allFeatures,
                                          String label,
@@ -613,9 +652,145 @@ public final class FeatureExtractor {
       throw new ClassNotFoundException("inv file does not contain InvMap");
   }
 
-  /* Extracts features for each of the elements on invariants
-     and returns a Vector of TreeSets of the features.
-  */
+  // Calculate a HashMap of every feature to a unique integer.
+  private static HashMap getFullMapping() throws ClassNotFoundException {
+    HashMap answer = new HashMap();
+    Integer counter = new Integer(0);
+
+    //get a set of all Invariant classes
+    File top = new File("/PAG/g5/users/brun/research/invariants/daikon.ver2");
+    ArrayList classes = getInvariantClasses(top);
+
+    for (int i = 0; i < classes.size(); i++) {
+      Class currentClass = (Class) classes.get(i);
+      Field[] fields = currentClass.getFields();
+      Method[] methods = currentClass.getMethods();
+      //handle the class
+      counter = new Integer(counter.intValue() + 1);
+      answer.put(currentClass, counter);
+      //handle all the fields
+      for (int j = 0; j < fields.length; j++) {
+        if (answer.get(fields[j]) == null) {
+          //          if ((Boolean.TYPE.equals(fields[j].getType())) ||
+          //          (Number.class.isAssignableFrom(fields[j].getType()))) {
+          if (TYPES.contains(fields[j].getType())) {
+            counter = new Integer(counter.intValue() + 1);
+            answer.put(fields[j], counter);
+          }
+        }
+      }
+
+      //handle all the methods with 0 parameters
+      for (int j = 0; j < methods.length; j++) {
+        if ((answer.get(methods[j].getName()) == null) &&
+            (methods[j].getParameterTypes().length == 0)) {
+          //    if ((Boolean.TYPE.equals(methods[j].getReturnType())) ||
+          //    (Number.class.isAssignableFrom(methods[j].getReturnType()))) {
+          if (TYPES.contains(methods[j].getReturnType())) {
+            String name = methods[j].getName();
+            if (methods[j].getReturnType().equals(Boolean.TYPE))
+              name += "Bool";
+            else
+              name += "Float";
+            counter = new Integer(counter.intValue() + 1);
+            answer.put(name, counter);
+          }
+        }
+      }
+    }
+    return answer;
+  }
+
+  private static ArrayList getInvariantClasses(File top)
+    throws ClassNotFoundException{
+    ArrayList answer = new ArrayList();
+    if (top.isDirectory()) {
+      File[] all = top.listFiles();
+      for (int i = 0; i < all.length; i++)
+        if (!(all[i].getAbsolutePath().indexOf("test") > -1))
+          answer.addAll(getInvariantClasses(all[i]));
+    } else if (top.getName().endsWith(".class")) {
+      String name = top.getAbsolutePath();
+      name = name.substring(name.indexOf("daikon"), name.indexOf(".class"));
+      name = name.replace('/', '.');
+
+      // have to remove the .ver2 or ver3 tags
+      if (name.indexOf("ver2") > -1)
+        name = name.substring(0, name.indexOf(".ver2")) +
+          name.substring(name.indexOf(".ver2") + 5);
+      if (name.indexOf("ver3") > -1)
+        name = name.substring(0, name.indexOf(".ver3")) +
+          name.substring(name.indexOf(".ver3") + 5);
+
+      Class current = Class.forName(name);
+      if ((Invariant.class.isAssignableFrom(current)) ||
+          (Ppt.class.isAssignableFrom(current)) ||
+          (VarInfo.class.isAssignableFrom(current))) {
+        System.out.print("Class " + name + " loaded\n");
+        answer.add(current);
+      }
+    }
+    return answer;
+  }
+
+  // Call getAllReflectFeatures on every Invariants in invariants
+  // to get all the features of that invariant
+  // and store those featues in a new TreeSet.
+  // return a Vector of TreeSets of features.
+  private static Vector getReflectFeatures(Vector invariants, HashMap lookup)
+    throws IllegalAccessException, InvocationTargetException {
+    Vector answer = new Vector();
+    // for each invariant, extract all the features and build a new TreeSet
+    for (int i = 0; i < invariants.size(); i++) {
+      answer.add(new TreeSet(getReflectFeatures(invariants.get(i), lookup)));
+    }
+    return answer;
+  }
+
+  // Extract the features of inv using reflection,
+  // return a Collection of these features in IntDoublePairs
+  private static Collection getReflectFeatures(Object inv, HashMap lookup)
+    throws IllegalAccessException, InvocationTargetException {
+    ArrayList answer = new ArrayList();
+    if (inv instanceof Invariants) {
+      answer.add(new IntDoublePair(((Integer)
+                                    lookup.get(inv)).intValue(), 1));
+      answer.addAll(getReflectFeatures(((Invariant)inv).ppt, lookup));
+      answer.addAll(getReflectFeatures(((Invariant)inv).ppt.var_infos,lookup));
+    }
+
+    Field[] fields = inv.getClass().getFields();
+
+    for (int i = 0; i < fields.length; i++) {
+      if (fields[i].getType().equals(Boolean.TYPE))
+        answer.add(new IntDoublePair(((Integer)
+                                      lookup.get(fields[i])).intValue(), 1));
+      else if (TYPES.contains(fields[i].getType()))
+        answer.add(new IntDoublePair(((Integer)
+                                      lookup.get(fields[i])).intValue(),
+                                     fields[i].getDouble(inv)));
+    }
+
+    Method[] methods = inv.getClass().getMethods();
+    for (int i = 0; i < methods.length; i++) {
+      if (methods[i].getParameterTypes().length == 0) {
+        if (methods[i].getReturnType().equals(Boolean.TYPE))
+          answer.add(new IntDoublePair(((Integer) lookup.get(methods[i].getName() + "Bool")).intValue(), 1));
+        else if (TYPES.contains(methods[i].getReturnType()))
+          answer.add(new IntDoublePair(((Integer) lookup.get(methods[i].getName() + "Float")).intValue(),
+                                       ((Number)
+                                        methods[i].invoke(inv, new Object[0])
+                                        ).doubleValue()));
+      }
+    }
+    return answer;
+  }
+
+
+  /* Function removed when reflection methods were added
+
+  // Extracts features for each of the elements on invariants
+  // and returns a Vector of TreeSets of the features.
   private static Vector getFeatures(Vector invariants) {
     Vector answer = new Vector();
     // for each invariant, extract all the features and build a new TreeSet
@@ -836,14 +1011,14 @@ public final class FeatureExtractor {
       /* [INCR]
       if (inv.hasNonCanonicalVariable()) answer.add(new IntDoublePair(FetHasNonCanonicalVariableBool, 1));
       if (inv.hasOnlyConstantVariables()) answer.add(new IntDoublePair(FetHasOnlyConstantVariablesBool, 1));
-      */ // [INCR]
+       // [INCR]
       if (inv.isObvious()) answer.add(new IntDoublePair(FetIsObviousBool, 1));
       /* [INCR]
       if (inv.isObviousDerived()) answer.add(new IntDoublePair(FetIsObviousDerivedBool, 1));
       if (inv.isObviousImplied()) answer.add(new IntDoublePair(FetIsObviousImpliedBool, 1));
       if (inv.isControlled()) answer.add(new IntDoublePair(FetIsControlledBool, 1));
       if (inv.isImpliedPostcondition()) answer.add(new IntDoublePair(FetIsImpliedPostconditionBool, 1));
-      */ // INCR
+       // INCR
       if (inv.isInteresting()) answer.add(new IntDoublePair(FetIsInterestingBool, 1));
       answer.addAll(getPptFeatures(inv.ppt));
     }
@@ -863,7 +1038,7 @@ public final class FeatureExtractor {
     if (pptTop.combined_exit != null)
       answer.add(new IntDoublePair(FetPptIsLineNumberedExitBool, 1));
     answer.add(new IntDoublePair(FetPptNumOfExitsInt, pptTop.exit_ppts.size()));
-    */ // [INCR]
+     // [INCR]
     return answer;
   }
 
@@ -884,7 +1059,7 @@ public final class FeatureExtractor {
       if (var.is_dynamic_constant) {
         answer.add(new IntDoublePair(i*10000+FetVarInfoIs_Dynamic_ConstantBool,1));
         answer.add(new IntDoublePair(FetVarInfoIs_Dynamic_ConstantBool, 1)); }
-      */ // [INCR]
+       // [INCR]
       if (var.isPrestate()) {
         answer.add(new IntDoublePair(i*10000 + FetVarIsPrestateBool, 1));
         answer.add(new IntDoublePair(FetVarIsPrestateBool, 1)); }
@@ -1604,7 +1779,7 @@ public final class FeatureExtractor {
       answer.add(new IntDoublePair(FetBinaryBool, 1));
       answer.add(new IntDoublePair(FetTwoScalarBool, 1));
       return answer;
-      } */
+      }
 
   private static Vector getPairwiseIntComparisonFeatures(PairwiseIntComparison inv) {
     Vector answer = new Vector();
@@ -1820,6 +1995,7 @@ public final class FeatureExtractor {
     answer.add(new IntDoublePair(FetFunctionBinaryCoreFloatVar_OrderInt, core.var_order));
     return answer;
   }
+  */// End of removed functions
 
   /*********************************************
    * This IntDoublePair represents a connected int and double.
@@ -2153,6 +2329,7 @@ public final class FeatureExtractor {
   // the THRESHOLD is zero
   static double THRESHOLD = 0.0;
 
+  /*
   // A bunch of public static variables, one for each feature
   public static int FetEnoughSamplesBool = 1;
   public static int FetGetProbabilityFloat = 2;
@@ -2339,10 +2516,20 @@ public final class FeatureExtractor {
   public static int FetVarInfoAuxHasOrderBool = 10025;
   public static int FetVarInfoAuxHasDuplicatesBool = 10026;
   public static int FetVarIsPrestateBool = 10027;
-  public static int FetVarDerivedDepthInt = 10028;
+  public static int FetVarDerivedDepthInt = 10028; */
 
-  public static int MaxNumVars = 8;
+  //  public static int MaxNumVars = 8;
 
   public static int OneMoreOrderThanLargestFeature = 100000;
+
+  public static HashSet TYPES = new HashSet();
+  static {
+    TYPES.add(Boolean.TYPE);
+    TYPES.add(Integer.TYPE);
+    TYPES.add(Double.TYPE);
+    TYPES.add(Long.TYPE);
+    TYPES.add(Short.TYPE);
+    TYPES.add(Float.TYPE);
+  }
 
 }
