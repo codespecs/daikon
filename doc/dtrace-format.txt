@@ -1,51 +1,60 @@
-This file contains information about the file format of Daikon's data trace
-files.
+DAIKON FILE FORMATS
+===================
+
+This document contains information about the file format of Daikon's data
+trace and declaration files.
+
+Data trace files contain runtime values for variables at particular program
+points.  Each record in a data trace file represents one execution of a
+program point.  The record names a program point and lists a number of
+variables and their runtime values.  This dynamic information about values
+at a program point is generated when an instrumented program is run.  By
+convention, data trace files have the suffix ".dtrace".
+
+A declaration file describes the structure of the data trace file; it lists
+the program points that may appear in the data trace file and, for each
+program point, which variables appear at that program point.  This static
+lexical information about a program point can be determined when a program
+is instrumented.  By convention, declaration files have the suffix ".decls"
+or ".decl".
+
+(Actually, both declarations and data trace records may appear together in
+a single file.  In that case, the program point information must precede
+the first appearance of values at that point, but it is not required that
+all the program point declarations appear before any values are written to
+the file.  This is intended to provide flexibility for instrumentation
+implementations.  However, it is encouraged to place declarations in
+different files than data traces.)
 
 
-File format for data trace files
-================================
+File format conventions
+=======================
 
-[
- Added to declaration file format:
-  * record lackwit_type_format
-  * add to each program point:
-     * specify that a variable is a constant, either at compile time
-       (static final) or at run time (blank final).  I have to be able to
-       do this at run time, so maybe only do it at run time?
-  * record a "function invocation id" per function.  It's a unique ID that
-    lets us map from entries to exits, to permit handline of orig values.
-    The downside is the addition of an additional int variable in every
-    procedure.
- Add to trace file format:
-  * never permit mixing declarations and traces
-  * specify relevant decls files, with message digests for them.  Possibly
-    omit comments from the message digests??
-    I'll keep a list of the decls files read so far.
-]
+Daikon files are textual, to permit easier viewing and editing by humans.
+Each record is separated by one or more blank line.
+To permit easier parsing by programs, each piece of information in a record
+is on a separate line
 
-A data trace (.dtrace) file contains two types of record:
- * static lexical information about a program point
- * dynamic information about values at a program point
-A declaration (.decls) file contains only program point records; when a
-declaration file exists, typically the data trace file contains only value
-records.
+Any line starting with a pound sign (#) is ignored as a comment (except
+inside a record, where comments are not permitted)
 
-Blank lines separate records.
-Lines beginning with the '#' character are ignored (except inside a record,
-where comments are not permitted).
-The program point information must precede the first appearance of values
-at that point, but it is not required that all the program point
-declarations appear before any values are written to the file.  (This is
-intended to provide flexibility for instrumentation implementations.)
+
+File format for declaration files
+=================================
+
+A declaration file consists of a sequence of program point declarations
+separated by blank lines.
 
 The format of the program point information is:
   DECLARE
   program-point-name
   varname1
-  type1
+  declared-type1
+  representation-type1 [= constant-value1]
   comparable1
   varname2
-  type2
+  declared-type2
+  representation-type2 [= constant-value2]
   comparable2
   ...
 
@@ -59,14 +68,29 @@ Program point information includes:
    variables and output them at the procedure exit point.
  * for each variable:
     * name: an arbitrary, uninterpreted string containing no tabs or newlines.
-    * type, as a human-readable string
-      This is currently uninterpreted (that is, the strings are compared
-      for equality but not destructed into their constituent parts).
-      For arrays, this looks like "int[]" or "char[][]"
+    * types, as a human-readable strings
+       * declared type:  this is what the programmer used in the
+         declaration of the variable.  
+	 This is currently uninterpreted (that is, the strings are compared
+	 for equality but not destructed into their constituent parts).
+       * representation type:  this describes what will appear in the data
+         trace file.  For instance, the declared type might be "char[]" but
+         the representation type might be "String".  Or, the declared type
+         might be "Object" but the representation type might be "int"
+	 (because only the object's hashcode, not the object itself, is
+         written to the data trace file).
+         The representation type is currently contrained to be integer,
+         string, or array of integer or string.
+         The representation type may optionally be followed by an equals
+	 sign and a value; in that case, the variable is known to have a
+         compile-time constant value and should be omitted from the data
+         trace file.
+      Arrays types are followed by square brackets:  "int[]", "char[][]".
     * comparable variables, also known as "Lackwit types".  These indicate
       which other variables are comparable to this one, which is typically
       obtained via type-inference based analysis.  There are two formats,
-      "implicit" and "explicit", for this information.
+      "implicit" and "explicit", for this information.  (See below for how
+      to specify which format the information is in.)
        * An implicit lackwit type is an arbitrary string, and comparisons
 	 succeed exactly if the two lackwit types are identical.
        * An explicit lackwit type is a list of other variables, and
@@ -86,7 +110,20 @@ Program point information includes:
  * Future enhancements:
     * permit variables to be omitted if they haven't changed (but always
       outputting the bit permits us to write a sanity checker)
-    * permit variables to appear in any order
+    * permit variables to appear in any order (not sure this is so worthwhile)
+    * specify which .decl files should be used (including their pathnames
+      and/or MD5 hashes)
+
+A declaration file optionally starts with a "VarComparability" record,
+which might look like the following:
+  VarComparability
+  explicit
+This controls how the comparability field in the declarations is interpreted.
+
+
+
+File format for data trace files
+================================
 
 The format of the value information is:
   program-point-name
@@ -103,84 +140,163 @@ Value information includes:
  * for each variable:
     * name
     * value
-       * integer, or
-       * array (describe the format for that)
+       * integer: sequence of digits, optionally preceded by a minus sign
+       * string: charcters surrounded by double-quotes; internal
+	 double-quotes and backslashes are escaped by a backslash
+       * array: elements are listed on one line, separated by spaces.
+         The elements may optionally be enclosed in [square brackets]; this
+         is encouraged for clarity.
     * modified? (0 or 1)
+      This value is 0 if the variable has not been assigned to since the
+      last time this program point was executed, and 1 if the variable has
+      been assigned to since then.  It is safe for an implementation to
+      always set it to 1.  It is also safe to always set it to 0, if the
+      modbit-munge.pl script is run on the resulting .dtrace file to fix up
+      the modbits.
    The variables should appear in the same order as they did in the
    declaration of the program point, without omissions or additions.
 
-The file format is fairly verbose, but should be reasonable for people to
-read.  Eventually we may add a terser (binary?) format with converters to
-and from the text format, if files get so large that storing or reading
-them is a problem.  Because Python is slow at finding specific characters
-(say, tabs) in strings, the primary separator is newline rather than tab or
-'='.  This may change (for instance, we might put the variable name,
-modification bit, and value on a single line, tab-delimited) if we find the
-format takes up too many lines in the file.
+As a special case, the first variable in a record may be
+"this_invocation_nonce", in which case there is no modification
+information, only a value.  The nonce is used to match up procedure entries
+(whose names end with ":::ENTER") with procedure exits (whose names end
+with ":::EXIT"); this is necessary in concurrent systems because there may
+be several invocations of a procedure active at once and they do not
+necessarily follow a stack discipline, being exited in the reverse order of
+entry.  For non-concurrent systems, this nonce is not necessary and may be
+omitted.
 
 
-Here is an example of the file format:
+Examples
+========
 
-# Program: sub.c
-# Instrumented by: EDG front end version 3.14, 2/22/99
-# Input: test22.in
-# Lacwit types (comparable values) are given in "implicit" form.
+Here are two files, p180-15.1.1.decls and (part of) p180-15.1.1.dtrace, for
+a program which sums the values in an integer array.
 
-DECLARE
-subtract:::BEGIN
-minuend
-int
-7
-subtrahend
-int
-7
+---------------- start of p180-15.1.1.decls ----------------
+VarComparability
+explicit
 
 DECLARE
-subtract:::END
-minuend
+P180-15.1.1:::LOOP-389
+B
+int[]
+int[]
+(S B-element)[(B-index1 I N)]
+N
 int
-7
-subtrahend
 int
-7
-result
+(B-index1 I N)
+I
 int
-7
+int
+(B-index1 I N)
+S
+int
+int
+(S B-element)
 
-subtract:::BEGIN
-minuend
-7
+DECLARE
+P180-15.1.1:::EXIT
+B
+int[]
+int[]
+(S B-element)[(B-index1 I N)]
+N
+int
+int
+(B-index1 I N)
+I
+int
+int
+(B-index1 I N)
+S
+int
+int
+(S B-element)
+
+DECLARE
+P180-15.1.1:::ENTER
+B
+int[]
+int[]
+(S B-element)[(B-index1 I N)]
+N
+int
+int
+(B-index1 I N)
+
+DECLARE
+TEST-P180-15.1.1:::EXIT
+
+DECLARE
+TEST-P180-15.1.1:::ENTER
+
+DECLARE
+TEST-P180-15.1.1-E:::EXIT
+
+DECLARE
+TEST-P180-15.1.1-E:::ENTER
+
+DECLARE
+TEST-P180-15.1.1-H:::EXIT
+
+DECLARE
+TEST-P180-15.1.1-H:::ENTER
+
+---------------- end of p180-15.1.1.decls ---------------- 
+
+
+---------------- start of p180-15.1.1.dtrace ----------------
+P180-15.1.1:::ENTER
+B
+92 56 -96 -49 76 92 -3 -88
 1
-subtrahend
-3
+N
+8
 1
 
-subtract:::BEGIN
-minuend
-22
+P180-15.1.1:::LOOP-389
+B
+92 56 -96 -49 76 92 -3 -88
 1
-subtrahend
-10
+N
+8
 1
-
-subtract:::END
-minuend
-22
+I
 0
-subtrahend
-10
+1
+S
 0
-result
-12
 1
 
-subtract:::END
-minuend
-7
+P180-15.1.1:::LOOP-389
+B
+92 56 -96 -49 76 92 -3 -88
 0
-subtrahend
-3
+N
+8
 0
-result
-4
+I
 1
+1
+S
+92
+1
+
+P180-15.1.1:::LOOP-389
+B
+92 56 -96 -49 76 92 -3 -88
+0
+N
+8
+0
+I
+2
+1
+S
+148
+1
+
+...
+------------ end of p180-15.1.1.dtrace omitted for brevity ------------

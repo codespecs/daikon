@@ -25,7 +25,8 @@ DFEJ_DIR := $(INV_DIR)/dfej
 
 DIST_DIR := $(MERNST_DIR)/www/daikon/dist
 # For really big files
-DIST_DIR_2 := /projects/se/people/mernst/www
+# DIST_DIR_2 := /projects/se/people/mernst/www
+DIST_DIR_2 := $(DIST_DIR)
 
 # for "chgrp"
 INV_GROUP := invariants
@@ -53,7 +54,7 @@ help:
 	@echo " tags TAGS"
 	@echo " dist dist-force daikon.tar"
 	@echo " dist-edg dist-edg-solaris"
-	@echo " dist-dfej dist-dfej-solaris"
+	@echo " dist-dfej dist-dfej-solaris dist-dfej-linux"
 	@echo " examples examples-gries"
 	@echo " test"
 
@@ -220,14 +221,21 @@ $(EDG_DIR)/dfec: $(EDG_DIR)/dfec.sh
 
 ## Don't distribute executables for now
 # dist-dfej: dist-dfej-solaris
-dist-dfej: 
+dist-dfej: dist-dfej-linux
 
-dist-dfej-solaris: $(DIST_DIR_2)/dfej-solaris
+dist-dfej-solaris: $(DIST_DIR)/dfej-solaris
 
-$(DIST_DIR_2)/dfej-solaris: $(DFEJ_DIR)/src/dfej-solaris
+$(DIST_DIR)/dfej-solaris: $(DFEJ_DIR)/src/dfej-solaris
 	cp -pf $< $@
 	update-link-dates $(DIST_DIR)/index.html
 	cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@cs.washington.edu
+
+dist-dfej-linux: $(DIST_DIR)/dfej-linux
+
+$(DIST_DIR)/dfej-linux: $(DFEJ_DIR)/src/dfej-linux
+	cp -pf $< $@
+	update-link-dates $(DIST_DIR)/index.html
+	# cat /dev/null | mail -s "make dist-dfej   has been run" kataoka@cs.washington.edu mernst@cs.washington.edu
 
 ### Examples
 

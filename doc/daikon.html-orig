@@ -69,6 +69,7 @@ Requirements for running Daikon:
 <ol>
   <li>A <a href="http://java.sun.com">Java virtual machine</a>.
       Daikon is written in Java, so this is needed to run Daikon.
+      Daikon works with either a Java 1.2 or a Java 1.3 JVM and Java compiler.
   <li>A C++ compiler such as <a href="http://gcc.gnu.org/">gcc</a>,
       if you wish to use the Daikon front end for Java.  (This front end,
       which permits you to detect invariants in Java programs, is
@@ -212,6 +213,10 @@ its original task, it also writes variable values to a data trace file.
 
 
 <h3><a name="java-front-end">Java front end</a></h3>
+
+The Daikon front end for Java should work on Java code which corresponds to
+any version of the Java language, from 1.0 to 1.3.
+<p>
 
 <ol>
   <li>Run <tt>dfej</tt>, the Daikon front end for Java, on your Java source
