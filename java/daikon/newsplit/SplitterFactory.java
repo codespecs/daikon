@@ -58,7 +58,8 @@ public class SplitterFactory {
 	line = reader.readLine(); 
 	line.trim();
 	tokenizer = new StringTokenizer(line, ",");
-	Assert.assert(line.startsWith("CONDITIONS"),"Incorrect format in .spinfo file. \nLine should begin with CONDITIONS");
+	Assert.assert(line.startsWith("CONDITIONS"),
+		      "Incorrect format in .spinfo file\n");
 	tokenizer.nextToken(); 
 	while (tokenizer.hasMoreTokens()) {
 	  conds.addElement(tokenizer.nextToken());
