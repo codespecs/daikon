@@ -54,7 +54,6 @@ if ($lastline !~ /^\[.*\] Winning Team: (.*) Elapsed Time: ([0-9]+) cycles\n\z/)
   die "Couldn't parse output of command $command";
 }
 my ($winner_name, $time) = ($1, $2);
-system_or_die("rm -rf $this_dir");
 
 open(OUTFILE, ">>$outputfile") || die "Cannot append to $outputfile";
 my $winner_package = name_to_package($winner_name);
@@ -64,6 +63,9 @@ if (($team1 cmp $team2) > 0) {
 }
 print OUTFILE join("\t", $team1, $team2, $winner_package, $time, $java_args), "\n";
 close(OUTFILE);
+
+# Last in order to preserve the directory if there is any problem.
+system_or_die("rm -rf $this_dir");
 
 exit(0);
 
