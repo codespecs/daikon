@@ -45,6 +45,39 @@ Instead, explicitly test the result against None."""
             return denominator/result
     return None
 
+# Euclid's algorithm
+def gcd(a,b):
+    """Return the greatest common divisor of the two arguments."""
+    while b != 0:
+        (a, b) = (b, a % b)
+    return a
+
+def _test_gcd():
+    assert gcd(2, 50) == 2
+    assert gcd(12, 144) == 12
+    assert gcd(96, 144) == 48
+    assert gcd(10, 25) == 5
+
+
+def gcd_list(nums):
+    if len(nums) == 0:
+        raise "No numbers passed to gcd()"
+    result = nums[0]
+    for n in nums:
+        # First call is a bit of a waste, since the two arguments are identical
+        result = gcd(result, n)
+    return result
+
+def _test_gcd_list():
+    assert gcd_list([2, 50]) == 2
+    assert gcd_list([12, 144]) == 12
+    assert gcd_list([96, 144]) == 48
+    assert gcd_list([10, 25]) == 5
+    assert gcd_list([100, 10, 25]) == 5
+    assert gcd_list([768, 324]) == 12
+    assert gcd_list([2400, 48, 36]) == 12
+    assert gcd_list([2400, 72, 36]) == 12
+
 
 ###########################################################################
 ### Strings
@@ -177,7 +210,8 @@ instead."""
 def _test_slice_by_sequence():
     def _test_slice_by_sequence_helper(indices):
         assert slice_by_sequence(range(0,7), indices) == list(indices)
-        assert slice_by_sequence(tuple(range(0,7)), indices) == tuple(indices)
+        # No longer return a tuple if the argument was a tuple.
+        # assert slice_by_sequence(tuple(range(0,7)), indices) == tuple(indices)
     _test_slice_by_sequence_helper(range(0,7))
     _test_slice_by_sequence_helper(range(1,4))
     _test_slice_by_sequence_helper((1,2,4,5))
@@ -218,12 +252,15 @@ def time_sums():
     for f in testfuncs: timing(f, 100, testdata)
 
 
+## I can't imagine what this would be good for.  It used to be erroneously
+## used in common_modulus, but now I use gcd_list and list_differences
+## instead.
 def sorted_list_min_gap(sorted_nums):
     """Return the smallest difference between adjacent elements of the sorted list."""
     if len(sorted_nums) < 2:
         raise IndexError("List too short")
     min_gap = sorted_nums[1]-sorted_nums[0]
-    for i in range(1, len(sorted_nums)-2):
+    for i in range(1, len(sorted_nums)-1):
         this_gap = sorted_nums[i+1]-sorted_nums[i]
         if this_gap < min_gap:
             min_gap = this_gap
@@ -232,7 +269,7 @@ def sorted_list_min_gap(sorted_nums):
 def _test_sorted_list_min_gap():
     assert sorted_list_min_gap([2,4,6,8]) == 2
     assert sorted_list_min_gap([2,4,60,80]) == 2
-    assert sorted_list_min_gap([20,40,600,608]) == 20
+    assert sorted_list_min_gap([20,40,600,608]) == 8
     assert sorted_list_min_gap([2,40,46,80]) == 6
     assert sorted_list_min_gap([2,4]) == 2
     # Errors
@@ -240,32 +277,60 @@ def _test_sorted_list_min_gap():
     # sorted_list_min_gap([])
 
 
+def list_differences(nums):
+    """Return the list of differences between adjacent elements of NUMS."""
+    result = []
+    if len(nums) < 2:
+        raise IndexError("List too short")
+    for i in range(0, len(nums)-1):
+        result.append(nums[i+1]-nums[i])
+    return result
+
+def _test_list_differences():
+    assert list_differences([1,2,3,4,5]) == [1,1,1,1]
+    assert list_differences([1,2,3,5,8,13]) == [1,1,2,3,5]
+    assert list_differences([22,0,15,-12,33]) == [-22,15,-27,45]
+
+
 def common_modulus(nums):
     """Return a tuple of (r,m) where each number in NUMS is equal to r (mod m).
 The largest possible modulus is used, and the trivial constraint that all
 integers are equal to 0 mod 1 is not returned (None is returned instead)."""
-    nums = list(nums)			# convert arg if it's a tuple
     if len(nums) < 3:
         return None
-    nums.sort()
-    gap = sorted_list_min_gap(nums);
-    if gap < 2:
+    ## I think I don't need to sort
+    # nums = list(nums)			# convert arg if it's a tuple
+    # nums.sort()
+    modulus = abs(gcd_list(list_differences(nums)))
+    if modulus == 1:
         return None
-    remainder = nums[0] % gap
-    for elt in nums:
-        if remainder != elt % gap:
-            return None
-    return (remainder, gap)
+
+    remainder = nums[0] % modulus
+
+    def check_modulus(m, r, nums=nums):
+        for elt in nums:
+            if r != elt % m:
+                return false
+        return true
+    assert check_modulus(modulus, remainder)
+
+    return (remainder, modulus)
+
 
 def _test_common_modulus():
     assert common_modulus([3,7,47,51]) == (3,4)
     assert common_modulus([3,11,43,51]) == (3,8)
-    assert common_modulus([3,11,47,55]) == None
+    assert common_modulus([3,11,47,55]) == (3,4)
+    assert common_modulus([2383,4015,-81,463,-689]) == (15,32)
+
+
 
 # This is perhaps too strict; even a single missing number means we don't
 # make the inference.  Maybe it should be enough that there's at least one
 # number in the set with each modulus.
 
+## This implementation is particularly inefficient; find a better way to
+## compute this.
 def common_nonmodulus_strict(nums):
     """Return a tuple of (r,m) where no number in NUMS is equal to r (mod m)
 but all missing numbers in their range are."""
@@ -278,9 +343,10 @@ but all missing numbers in their range are."""
 def _test_common_nonmodulus_strict():
     # Doesn't work because given only two items, common_modulus doesn't
     # go out on a limb and suggest they're equal mod their difference
-    # assert common_nonmodulus_strict([1,2,3,5,6,7,9]) == (0,4)
+    assert common_nonmodulus_strict([1,2,3,5,6,7,9]) == None
     assert common_nonmodulus_strict([-1,1,2,3,5,6,7,9]) == (0,4)
-    assert common_nonmodulus_strict([1,2,3,5,6,7,9,11]) == None
+    assert common_nonmodulus_strict([1,2,3,5,6,7,9,11]) == (0,2)
+    assert common_nonmodulus_strict([1,2,3,5,6,7,11]) == None
 
 def common_nonmodulus_nonstrict(nums):
     """Return a tuple of (r,m) where no number in NUMS is equal to r (mod m)
@@ -394,12 +460,18 @@ def _test_permutations():
 ### Functions
 ###
 
+builtin_fn_re = re.compile(r'^<built-in function ([a-zA-Z_]+)>$')
+user_fn_re = re.compile(r'^<function ([a-zA-Z_]+) at [0-9a-fA-F]+>$')
+
 def function_rep(fn):
     """Return an abbreviated printed representation for function FN."""
     fnrep = `fn`
-    match = re.compile(r'^<built-in function ([a-zA-Z_]+)>$').match(fnrep)
+    match = builtin_fn_re.match(fnrep)
     if match:
-        fnrep = match.group(1)
+        return match.group(1)
+    match = user_fn_re.match(fnrep)
+    if match:
+        return match.group(1)
     return fnrep
 
 
@@ -422,12 +494,18 @@ def timing(f, n, a):
 ###
 
 def _test():
+    if not __debug__:
+        raise "__debug__ is not set, so _test() will have no effect!"
+    _test_gcd()
+    _test_gcd_list()
     _test_sorted_list_difference()
+    _test_slice_by_sequence()
     _test_sorted_list_min_gap()
+    _test_list_differences()
     _test_common_modulus()
     _test_common_nonmodulus_strict()
     _test_common_nonmodulus_nonstrict()
-    _test_slice_by_sequence()
+    _test_sorted()
     _test_choose()
     _test_permutations()
 
