@@ -1374,8 +1374,19 @@ public abstract class Invariant
     suppressees.remove (sl);
   }
 
+  private static final SuppressionFactory[] defaultSuppressionFactories =
+    new SuppressionFactory[] {
+      SelfSuppressionFactory.getInstance()
+    };
+
+  /**
+   * The typical implementation calls super.getSuppressionFactories,
+   * then augments that with additional factories specific to the
+   * implementing class.  This method should be cheap such as
+   * returning a static variable, which is set in advance.
+   **/
   public SuppressionFactory[] getSuppressionFactories() {
-    return new SuppressionFactory[0];
+    return defaultSuppressionFactories;
   }
 
   /**
