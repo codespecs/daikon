@@ -1,4 +1,4 @@
-###########################################################################
+##########################################################################
 ### Variables
 ###
 
@@ -30,7 +30,7 @@ DIST_DIR_2 := /projects/se/people/mernst/www
 # for "chgrp"
 INV_GROUP := invariants
 
-RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name jikes -o -name dfej \) -print`
+RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name dfej -o -name daikon-java -o -name daikon-output \) -print`
 
 
 ## Examples of better ways to get the lists:
@@ -63,6 +63,28 @@ tags: TAGS
 TAGS:  $(LISP_PATHS)
 	cd daikon; $(MAKE) tags
 	etags $(LISP_PATHS) --include=daikon/TAGS
+
+
+###########################################################################
+### Test the distribution
+###
+
+DISTTESTDIR := $(HOME)/tmp/daikon.dist
+
+dist-test: dist dist-test-no-update-dist
+
+dist-test-no-update-dist:
+	rm -rf $(DISTTESTDIR)
+	mkdir $(DISTTESTDIR)
+	(cd $(DISTTESTDIR); tar xzf $(DIST_DIR)/daikon.tar.gz)
+	(cd $(DISTTESTDIR)/daikon/java/daikon; CLASSPATH=$(DISTTESTDIR)/daikon/java:/g2/users/mernst/java/jdk/jre/lib/rt.jar; make)
+
+cvs-test:
+	rm -rf $(HOME)/tmp/daikon.cvs
+	mkdir $(HOME)/tmp/daikon.cvs
+	(cd $(HOME)/tmp/daikon.cvs; cvs -Q -d $(HOME)/research/.CVS-research co invariants; cvs -Q -d $(HOME)/research/.CVS-research co utilMDE)
+	(cd $(HOME)/tmp/daikon.cvs/invariants/daikon; CLASSPATH=/g2/users/mernst/tmp/daikon.cvs:/g2/users/mernst/tmp/daikon.cvs/invariants:/g2/users/mernst/java/OROMatcher-1.1:/g2/users/mernst/java/getopt-1.0.8:.:/g2/users/mernst/java/jdk/jre/lib/rt.jar; make)
+
 
 ###########################################################################
 ### Distribution
@@ -102,10 +124,10 @@ daikon.tar: $(LISP_PATHS) $(DOC_FILES) $(PY_DOC_FILES) $(EDG_FILES) $(README_fil
 	# cp -p README-daikon1 /tmp/daikon/daikon-python/README
 	# cp -p daikon-19991114.html /tmp/daikon/daikon-python/daikon.html
 
-	# Current Java implementation
+	# Current Java implementation (ie, not historic Python implementation)
 	cp -p $(DOC_FILES) /tmp/daikon
 	cp -p README-dist /tmp/daikon/README
-	tar chf /tmp/daikon-java.tar daikon
+	tar chf /tmp/daikon-java.tar --exclude daikon-java --exclude daikon-output daikon
 	(mkdir /tmp/daikon/java; cd /tmp/daikon/java; tar xf /tmp/daikon-java.tar; rm /tmp/daikon-java.tar)
 	cp -p README-daikon-java /tmp/daikon/java/README
 	# Maybe I should do  $(MAKE) doc
@@ -136,11 +158,14 @@ daikon.tar: $(LISP_PATHS) $(DOC_FILES) $(PY_DOC_FILES) $(EDG_FILES) $(README_fil
 	# Java instrumenter
 	# The -h option saves symbolic links as real files, to avoid problem 
 	# with the fact that I've made dfej into a symbolic link.
-	(cd $(DFEJ_DIR)/..; tar chf /tmp/dfej.tar dfej)
-	(cd /tmp/daikon; tar xf /tmp/dfej.tar; mv dfej java-front-end; rm /tmp/dfej.tar)
+	(cd $(DFEJ_DIR)/..; tar chf /tmp/dfej.tar --exclude '*.o' --exclude 'src/dfej' --exclude 'src.tar' dfej)
+	# (cd /tmp/daikon; tar xf /tmp/dfej.tar; mv dfej java-front-end; rm /tmp/dfej.tar)
+	# For debugging
+	(cd /tmp/daikon; tar xf /tmp/dfej.tar; mv dfej java-front-end)
 	# the subsequence rm -rf shouldn't be necessary one day, 
 	# but for the time being (and just in case)...
-	(cd /tmp/daikon/java-front-end; (cd src; $(MAKE) distclean); $(RM_TEMP_FILES))
+	# (cd /tmp/daikon/java-front-end; $(MAKE) distclean; (cd src; $(MAKE) distclean); $(RM_TEMP_FILES))
+	(cd /tmp/daikon/java-front-end; $(MAKE) distclean; $(RM_TEMP_FILES))
 
 	# Example files
 	mkdir /tmp/daikon/examples
@@ -152,7 +177,7 @@ daikon.tar: $(LISP_PATHS) $(DOC_FILES) $(PY_DOC_FILES) $(EDG_FILES) $(README_fil
 	cp -pf /tmp/daikon.tar .
 
 	## Better than the below dist-* directory, just blow it away.
-	rm -rf /tmp/daikon /tmp/daikon.tar
+	# rm -rf /tmp/daikon /tmp/daikon.tar
 
 	# # After making the tar file, don't edit the (historical) distribution
 	# chmod -R uog-w daikon/*
