@@ -311,7 +311,7 @@ junit:
 JAVADOC_FLAGS = -d doc \
                 -linkoffline http://java.sun.com/j2se/1.3/docs/api/ http://java.sun.com/j2se/1.3/docs/api/
 # Note that this excludes Ajax
-JAVADOC_PACKAGES = `find -follow -name '*.java' -exec dirname {} \; | grep -v CVS | grep -v ajax | sort | uniq | perl -p -e 's:^./::g' | perl -p -e 's:/:.:g'`
+JAVADOC_PACKAGES = `find -follow -name '*.java' -exec dirname {} \; | grep -v CVS | grep -v ajax | grep -v '\#' | sort | uniq | perl -p -e 's:^./::g; s:/:.:g;'`
 
 doc: $(JAVA_FILES) doc-dkconfig
 	mkdir -p doc
