@@ -210,7 +210,11 @@ public abstract class VarInfoName
       return "return".equals(name) ? "\\result" : name;
     }
     protected String simplify_name_impl() {
-      return simplify_name_impl(name);
+      if (isLiteralConstant()) {
+	return name;
+      } else {
+	return simplify_name_impl(name);
+      }
     }
     protected static String simplify_name_impl(String s) {
       if (s.startsWith("~") && s.endsWith("~")) {
