@@ -196,13 +196,13 @@ public final class PptSlice1
 
       Object vals = val1;
 
-      /* [INCR]
+      /* [INCR] ...
       int[] tm_arr = (int[]) values_cache.get(vals);
       if (tm_arr == null) {
         tm_arr = new int[2 ];
         values_cache.put(vals, tm_arr);
       }
-      */
+      */ // ... [INCR]
 
       int mod_index = mod1;
 

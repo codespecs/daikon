@@ -535,6 +535,7 @@ public class Dataflow
 
     {
       // Our worklist is the heads of paths flowing up from "ppt".
+      // (The worklist elements are actually VarAndSource objects.)
       // We store the vars which specify the head and the original
       // indices in receiving_ppt that flow up to the head.
       LinkedList worklist = new LinkedList(); // element type is List[VarAndSource]
@@ -544,7 +545,8 @@ public class Dataflow
       while (! worklist.isEmpty()) {
 	List head = (List) worklist.removeFirst();
 
-	// Use null element to signal a gap, and thus completion
+	// Use null element to signal a gap, and thus completion.
+        // A null element appears only if all_steps is false.
 	if (head == null) break;
 
 	// Add a flow from receiving_ppt to head
@@ -565,12 +567,12 @@ public class Dataflow
 	Map nonce_to_vars = new HashMap(); // [Integer -> List[VarAndSource]]
 	for (Iterator i = head.iterator(); i.hasNext(); ) {
 	  VarAndSource vs = (VarAndSource) i.next();
-	  Collection higher_vis = higher ? vs.var.po_higher() : vs.var.po_lower();
+	  List higher_vis = higher ? vs.var.po_higher() : vs.var.po_lower();
 	  int[] higher_nonces = higher ? vs.var.po_higher_nonce() : vs.var.po_lower_nonce();
-	  int nonce_idx = 0;
-	  for (Iterator j = higher_vis.iterator(); j.hasNext(); ) {
-	    VarInfo higher_vi = (VarInfo) j.next();
-	    Integer higher_nonce = new Integer(higher_nonces[nonce_idx++]);
+	  for (int nonce_idx = 0; nonce_idx < higher_vis.size(); nonce_idx++) {
+	    VarInfo higher_vi = (VarInfo) higher_vis.get(nonce_idx);
+	    Integer higher_nonce = new Integer(higher_nonces[nonce_idx]);
+            // newpath has type List[VarAndSource].
 	    List newpath = (List) nonce_to_vars.get(higher_nonce);
 	    if (newpath == null) {
 	      newpath = new ArrayList();
@@ -578,7 +580,6 @@ public class Dataflow
 	    }
 	    newpath.add(new VarAndSource(higher_vi, vs.source));
 	  }
-	  Assert.assert(nonce_idx == higher_vis.size());
 	}
 	for (Iterator i = nonce_to_vars.keySet().iterator(); i.hasNext(); ) {
 	  Integer nonce = (Integer) i.next();
@@ -587,7 +588,8 @@ public class Dataflow
 	  worklist.add(newpath);
 	}
 
-	// put in a null to signal the end of one pass
+	// Put in a null to signal that all of the fields of the original
+	// worklist element have been added to the worklist.
 	if (! all_steps) {
 	  worklist.add(null);
 	}

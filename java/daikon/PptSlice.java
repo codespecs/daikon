@@ -37,9 +37,9 @@ public abstract class PptSlice
    **/
   public static final Category debug = Category.getInstance("daikon.PptSlice");
   public static final Category debugGeneral = Category.getInstance("daikon.PptSlice.general");
-  public static final Category debugFlow = Category.getInstance("daikon.PptSlice..flow");
+  public static final Category debugFlow = Category.getInstance("daikon.PptSlice.flow");
 
-  /** This is a slice of the 'parent' ppt */
+  /** This is a slice of the 'parent' ppt. */
   public PptTopLevel parent;
   public int arity;
 
@@ -47,7 +47,7 @@ public abstract class PptSlice
    * Cache of values from var_infos, to avoid repeated lookups.
    * value_indices[i] == var_infos[i].value_index, but looking up in
    * this array should be cheaper than looking up in var_infos.
-   * Has exactly this.arity elements.
+   * Representation invariant: value_indices.length == this.arity.
    **/
   public int[] value_indices;
 
@@ -65,7 +65,7 @@ public abstract class PptSlice
 
   // Invariants that have been falsified, and need to be flowed down
   // to lower ppts.  May not actually be a subset of invs, if certain
-  // invariants fracture in two, for instance, or if a untaintied
+  // invariants fracture in two, for instance, or if an untainted
   // clone is flowed instead of the falsified invariant itself.
   private Invariants invs_to_flow;
 
@@ -89,7 +89,7 @@ public abstract class PptSlice
   public final Map po_lower_vis = Collections.unmodifiableMap(private_po_lower_vis);
 
   // This holds keys (interned) and elements of different types, depending on
-  // he concrete child of PptSlice.
+  // the concrete child of PptSlice.
   // HashMap values_cache; // [INCR]
 
   /* [INCR]
@@ -133,7 +133,7 @@ public abstract class PptSlice
     }
   }
 
-  /** Trim the collections used in this PptSlice */
+  /** Trim the collections used in this PptSlice. **/
   public void trimToSize() {
     super.trimToSize();
     invs.trimToSize();
@@ -169,14 +169,14 @@ public abstract class PptSlice
 				);
 
     // We always have at least one path, since the dataflow result
-    // includes 'here' -- we ignore the 'here' path.  If any other
-    // path maps all variables from this program point, we are
-    // controlled.
+    // includes 'here' as its last element -- we ignore the 'here'
+    // path.  If any other path maps all variables from this program
+    // point, we are controlled.
 
     final int all_except_here = higher.ppts.length - 1;
     for (int i = 0; i < all_except_here; i++) {
       int[] flow = higher.ints[i];
-      boolean all = true;
+      boolean all = true;       // below, all controls whether to return
       for (int j = 0; all && (j < arity); j++) {
 	int varinfo_index = var_infos[j].varinfo_index;
 	int var_flow_to = flow[varinfo_index];
@@ -252,6 +252,7 @@ public abstract class PptSlice
 
   public abstract void addInvariant(Invariant inv);
 
+  /** This method actually removes the invariant from its PptSlice. **/
   // I don't just use ppt.invs.remove because I want to be able to defer
   // and to take action if the vector becomes void.
   public void removeInvariant(Invariant inv) {
@@ -343,6 +344,7 @@ public abstract class PptSlice
 	// Compute the permutation
 	int[] permutation = new int[slice.arity];
 	for (int i=0; i < arity; i++) {
+          // slice.var_infos is small, so this call is relatively inexpensive
 	  permutation[i] = ArraysMDE.indexOf(slice.var_infos, slice_vis[i]);
 	}
 	// For each invariant
@@ -439,16 +441,16 @@ public abstract class PptSlice
       if (! Daikon.disable_modbit_check_error)
         throw new Error(message);
     }
-    */
+    */ // ... [INCR]
     return true;
   }
 
   abstract void instantiate_invariants();
 
   /**
-     This class is used for comparing PptSlice objects.
-     It orders by arity, then by variable names.
-     It's somewhat less efficient than ArityPptnameComparator.
+   * This class is used for comparing PptSlice objects.
+   * It orders by arity, then by variable names.
+   * It's somewhat less efficient than ArityPptnameComparator.
    **/
   public static final class ArityVarnameComparator implements Comparator {
     public int compare(Object o1, Object o2) {
@@ -469,10 +471,10 @@ public abstract class PptSlice
   }
 
   /**
-     This class is used for comparing PptSlice objects.
-     It orders by arity, then by name.
-     Because of the dependence on name, it should be used only for slices
-     on the same Ppt.
+   * This class is used for comparing PptSlice objects.
+   * It orders by arity, then by name.
+   * Because of the dependence on name, it should be used only for slices
+   * on the same Ppt.
    **/
   public static final class ArityPptnameComparator implements Comparator {
     public int compare(Object o1, Object o2) {

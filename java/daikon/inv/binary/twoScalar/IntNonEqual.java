@@ -36,8 +36,8 @@ public final class IntNonEqual
    **/
   public static boolean dkconfig_enabled = true;
 
-  public static final Category debugIntNonEqual  = Category.getInstance("daikon.inv.binary.twoScalar." +
-								    "IntNonEqual" );
+  public static final Category debugIntNonEqual 
+    = Category.getInstance("daikon.inv.binary.twoScalar.IntNonEqual" );
 
   private ValueTracker values_cache = new ValueTracker(8);
 
@@ -92,7 +92,7 @@ public final class IntNonEqual
     boolean obvious_le = false;
     boolean obvious_ge = false;
 
-    // Commented out temporarily.
+    // Commented out temporarily (October 24, 2001)
     if (false && (seqvar1 != null) && (seqvar2 != null)) {
       Derivation deriv1 = var1.derived;
       Derivation deriv2 = var2.derived;
@@ -150,14 +150,12 @@ public final class IntNonEqual
     }
 
     return new IntNonEqual (ppt);
-
   }
 
   protected Invariant resurrect_done_swapped() {
 
     // we don't care if things swap; we have symmetry
     return this;
-
   }
 
   // Look up a previously instantiated IntNonEqual  relationship.
@@ -247,7 +245,6 @@ public final class IntNonEqual
   public boolean isExact() {
 
     return false;
-
   }
 
   // // Temporary, for debugging
@@ -450,7 +447,6 @@ public final class IntNonEqual
 //     }
 
     return false;
-
   } // isObviousImplied
 
 }

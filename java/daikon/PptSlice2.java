@@ -211,13 +211,13 @@ public final class PptSlice2
 
       Object[] vals = Intern.intern(new Object[] { val1, val2 });
 
-      /* [INCR]
+      /* [INCR] ...
       int[] tm_arr = (int[]) values_cache.get(vals);
       if (tm_arr == null) {
         tm_arr = new int[4 ];
         values_cache.put(vals, tm_arr);
       }
-      */
+      */ // ... [INCR]
 
       int mod_index = mod1 * 2 + mod2;
 

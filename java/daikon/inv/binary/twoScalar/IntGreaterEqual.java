@@ -36,8 +36,8 @@ public final class IntGreaterEqual
    **/
   public static boolean dkconfig_enabled = true;
 
-  public static final Category debugIntGreaterEqual  = Category.getInstance("daikon.inv.binary.twoScalar." +
-								    "IntGreaterEqual" );
+  public static final Category debugIntGreaterEqual 
+    = Category.getInstance("daikon.inv.binary.twoScalar.IntGreaterEqual" );
 
   private ValueTracker values_cache = new ValueTracker(8);
 
@@ -92,7 +92,7 @@ public final class IntGreaterEqual
     boolean obvious_le = false;
     boolean obvious_ge = false;
 
-    // Commented out temporarily.
+    // Commented out temporarily (October 24, 2001)
     if (false && (seqvar1 != null) && (seqvar2 != null)) {
       Derivation deriv1 = var1.derived;
       Derivation deriv2 = var2.derived;
@@ -150,7 +150,6 @@ public final class IntGreaterEqual
     }
 
     return new IntGreaterEqual (ppt);
-
   }
 
   protected Invariant resurrect_done_swapped() {
@@ -159,7 +158,6 @@ public final class IntGreaterEqual
     // As of now, the constructor chain is side-effect free;
     // let's hope it stays that way.
     return new IntLessEqual (ppt);
-
   }
 
   // Look up a previously instantiated IntGreaterEqual  relationship.
@@ -247,7 +245,6 @@ public final class IntGreaterEqual
   public boolean isExact() {
 
     return false;
-
   }
 
   // // Temporary, for debugging
@@ -456,7 +453,6 @@ public final class IntGreaterEqual
 //     }
 
     return false;
-
   } // isObviousImplied
 
 }

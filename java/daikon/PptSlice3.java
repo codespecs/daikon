@@ -217,13 +217,13 @@ public final class PptSlice3
 
       Object[] vals = Intern.intern(new Object[] { val1, val2, val3 });
 
-      /* [INCR]
+      /* [INCR] ...
       int[] tm_arr = (int[]) values_cache.get(vals);
       if (tm_arr == null) {
         tm_arr = new int[8 ];
         values_cache.put(vals, tm_arr);
       }
-      */
+      */ // ... [INCR]
 
       int mod_index = mod1 * 4 + mod2 * 2 + mod3;
 
