@@ -628,7 +628,7 @@ instrumentation system.
 
 In some cases, it may not be necessary to build a fully general C
 instrumentation system.  You may be able to craft a smaller, simpler
-extension to an existing program -- enabling that program (only) to
+extension to an existing program --- enabling that program (only) to
 produce files for Daikon to analyze.
 
 For instance, many programs use specialized memory allocation routines
@@ -1472,10 +1472,10 @@ branch (named @samp{ENGINE_V2_PATCHES}) for version 2 of Daikon.
 
 The CVS manual
 @ifinfo
-(@pxref{Branching and merging,,,cvs,CVS -- Concurrent Versions System})
+(@pxref{Branching and merging,,,cvs,CVS --- Concurrent Versions System})
 @end ifinfo
 @ifnotinfo
-(see section @uref{https://www.cvshome.org/docs/manual/cvs-1.11.18/cvs_5.html,``Branching and merging''} of the manual @emph{CVS -- Concurrent Versions System})
+(see section @uref{https://www.cvshome.org/docs/manual/cvs-1.11.18/cvs_5.html,``Branching and merging''} of the manual @emph{CVS --- Concurrent Versions System})
 @end ifnotinfo
 describes CVS branches:
 
