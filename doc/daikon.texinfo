@@ -235,7 +235,7 @@ C/C++ front end dfec
 * Daikon runtime customization::  
 * Pointer type disambiguation::  
 * Instrumentation scope::       
-* dfec requirements::           
+* dfec requirements and troubleshooting::           
 
 Pointer type disambiguation
 
@@ -246,7 +246,7 @@ Instrumentation scope
 * Memory tracking details::     
 * Memory tracking in libraries::  
 
-dfec requirements
+dfec requirements and troubleshooting
 
 * C program requirements::      
 * Header file dependencies::    
@@ -3342,6 +3342,7 @@ comment immediately before the declared type (but after any modifiers like
 
 @cindex front end for C/C++
 @cindex C/C++ front end
+@cindex dfec
 @cindex dfec (Daikon front end for C/C++)
 
 
@@ -3362,7 +3363,7 @@ Run Daikon on the declaration files and data trace files.
 @end enumerate
 
 This section discusses the steps in more detail, with an emphasis on the
-first step.
+first step.  If you have trouble, @xref{dfec requirements and troubleshooting}
 
 @c The three crucial files are @command{dfec}, 
 @c @file{daikon_runtime.h}, and 
@@ -3879,7 +3880,7 @@ orig(*bar) == 6
 @end example
 
 
-@node    Instrumentation scope, dfec requirements, Pointer type disambiguation, C/C++ front end dfec
+@node    Instrumentation scope, dfec requirements and troubleshooting, Pointer type disambiguation, C/C++ front end dfec
 @subsection Instrumentation scope
 
 @cindex instrumentation scope
@@ -4040,11 +4041,16 @@ compile.
 @end enumerate
 
 
-@node    dfec requirements,  , Instrumentation scope, C/C++ front end dfec
-@subsection dfec requirements
+@node    dfec requirements and troubleshooting,  , Instrumentation scope, C/C++ front end dfec
+@subsection dfec requirements and troubleshooting
 
 @command{dfec} does not output the contents of C unions.  This section
 of the manual lists other requirements and limitations.
+
+If you have trouble with @command{dfec}, you should first ensure that
+the input to @command{dfec} (the program being instrumented) is
+proper, because @command{dfec} sometimes issues obscure error messages
+when provided invalid input.
 
 @menu
 * C program requirements::      
@@ -4052,65 +4058,124 @@ of the manual lists other requirements and limitations.
 * gcc version::                 
 @end menu
 
-@node    C program requirements, Header file dependencies, dfec requirements, dfec requirements
+@node    C program requirements, Header file dependencies, dfec requirements and troubleshooting, dfec requirements and troubleshooting
 @subsubsection C program requirements
 
 
-@command{dfec} only instruments ANSI/ISO C programs.  @command{dfec}
-does not support K&R C or other non-ANSI/ISO C dialects.  Before
-running @command{dfec}, you should ensure that your code is legal
-ANSI/ISO C and that it compiles cleanly, because @command{dfec} issues
-warnings about a number of erroneous C constructs that @command{gcc}
-and other compilers accept.
+@command{dfec} only instruments ANSI/ISO C programs.  (More
+specifically, @command{dfec} only instruments programs that are both
+legal C and legal C++.)  @command{dfec} does not support K&R C or
+other non-ANSI/ISO C dialects.  Before running @command{dfec}, you
+should ensure that your code is legal ANSI/ISO C (and legal ANSI/ISO
+C++) and that it compiles cleanly.
 
 @cindex ANSI C
 @cindex ISO C
 @cindex C89 standard
 @cindex C99 standard
 @cindex K&R C
+
+Running your code through a C compiler is necessary, but not
+sufficient, to verify that your program is valid C.  (@command{dfec}
+issues warnings about a number of erroneous C constructs that
+@command{gcc} and other compilers accept.)  You should remove all
+warnings produced by @command{gcc -g -Wall -ansi -pedantic} will
+reduce the number of warning messages produced by dfec.  (Lack of
+errors from that command does not guarantee your code is ANSI/ISO C,
+or that your code is acceptable to dfec.  However, errors from that
+command do indicate that your code is not ANSI/ISO C@.)  Likewise,
+your code should compile
+@c and link??
+using @command{g++} (instead of @command{gcc} as the copmiler.
+
+Here are some steps you may find necessary in converting code from C
+to the intersection of ANSI/ISO C and ANSI/ISO C++.
+
+@table @asis
+
+@item prototypes
 @cindex C prototypes
 @cindex prototypes, C
 @cindex protoize tool
 @cindex function declarations, C
 @cindex procedure declarations, C
 @cindex declaration formats, of C functions
+You must convert any K&R function prototypes to ANSI/ISO form.  In K&R
+function declarations, variables may be omitted entirely, in K&R
+function definitions, variable types may appear as variable
+declarations between the ``)'' that ends the signature and the ``@{''
+that starts the body.  In ANSI/ISO C, variable types always appear in
+the function signature.  Furthermore, signatures must match
+@b{exactly} between declarations and definitions.
+(C library functions needn't be declared at all, since they should
+appear in header files; a fallback would be to make the declarations
+@samp{extern "C"}.)
 
-To convert K&R function declarations to ANSI/ISO prototypes, use the
-@command{protoize} program; even if you believe your code to be
-ANSI/ISO C, you may wish to check that @command{protoize} has no
-effect.  Protoize is distributed with gcc, among other places; you can
-find documentation at
-@uref{http://gcc.gnu.org/onlinedocs/gcc/Running-Protoize.html}.  Even
-after running @command{protoize}, you may need to perform further
+@c Stephen McCamant says:
+@c When debugging linking problems, I usually find it helpful to compile
+@c everything to .o files. This will let the linker give you a sensible
+@c file name to tell where the unsatisfied usages are, and let you see
+@c for yourself which symbols are needed or provided, using nm.
+
+The best way to convert prototypes is to use the @command{protoize}
+program.  Even if you believe your code to be ANSI/ISO C, you should
+check that @command{protoize} has no effect.  Protoize is distributed
+with gcc, among other places; you can find documentation at
+@uref{http://gcc.gnu.org/onlinedocs/gcc/Running-Protoize.html}.
+
+After running @command{protoize}, you may need to perform additional
 fixups by hand. A common problem is function declarations of the form
 @code{f()} that specify no parameters.  In K&R C, the corresponding
 definition was allowed to have any number of arguments, but such
 declarations are obsolescent under the ANSI/ISO C standard, and in C++
 they always denote a function that takes no arguments.  To specify a
 prototype in ANSI/ISO C for a function that takes no arguments, write
-@code{f(void)}.  @command{dfec} is more strict about type checking
-than @command{gcc} is.  You may have to remove or add some
-@command{const} modifiers.  
+@code{f(void)}.
 
-If you do not understand a dfec error message that indicates a problem
-with your source code, you may wish to check your code for ANSI/ISO
-compliance by compiling it with @command{gcc -g -Wall -ansi
--pedantic}.  Removing all warnings produced by @command{gcc} will
-reduce the number of warning messages produced by dfec.  (Lack of
-errors from that command does not guarantee your code is ANSI/ISO C,
-or that your code is acceptable to dfec.  However, errors from that
-command do indicate that your code is not ANSI/ISO C@.)
+@item typechecking, casts, and const
+C++ is stricter about typechecking than C is.  Some C compilers permit
+function prototypes to differ slightly from function definitions.
+Whereas C permits use of incorrect types, silently inserting casts,
+C++ requires types to match or explicit casts to be inserted.
+Therefore, your program may need to have variable types refined or
+changed.
 
-@command{dfec} does not accept every legal ANSI/ISO C program.  Here
-are the exceptions.
+Furthermore, certain functions have different types in the C and C++
+standard libraries.  In particular, more functions have parameters
+annotated as ``const'' in the C++ library.  In order to satisfy the
+typechecker, you may need to change the types of variables that are
+passed as paramters:  you will need to add ``const'' to the type in
+order to permit them to be passed to the library routines.  Similarly,
+you may need to add ``const'' in other places, such as when a
+consttant string is being assigned to a variable (the variable will
+have to be declared as ``const char *'' rather than as ``char *''.
+Because C++ tracks types through assignments, these const insertions
+may ripple through your program.
+
+@item reserved words
+C++ reserves the following keywords that are not reserved words in C:
+@example
+  catch class delete except finally friend inline new operator 
+  private protected public template this throw try virtual
+@end example
+@noindent
+Earlier versions of C do not reserve ``bool'', but ANSI/ISO C and C++ do.
+Additionally, the C++ standard libraries define certain other
+identifiers, such as ``string''.
+Any use of any of these words as identifiers must be changed.
+
+@item nested enums
+In C, enums that appear inside structs have global scope and can be
+accessed anywhere in the program.  When converting to C++, you will
+have to raise the enum to top level (or else use a qualified name,
+which may not work with your C compiler).
+@end table
+
+
+@command{dfec} does not accept every legal program in the intersection
+of ANSI/ISO C and ANSI/ISO C++.  Here are the exceptions.
 @enumerate
 @item
-@command{dfec} only instruments programs that are both legal C and
-legal C++.  However, most ANSI/ISO C programs are also legal C++
-programs.  Programs that define symbols that are C++ keywords, such as
-@samp{bool}, require that these symbols be changed to another name
-that does not conflict with the C++ namespace (for example,
-@samp{bool} can be changed to @samp{boolean}).
 
 If g++ gives an error message while compiling the instrumented code,
 then first try compiling the uninstrumented code with @command{g++},
@@ -4134,17 +4199,13 @@ smart pointer tracking).  User code is so instrumented, but library
 functions are not, so you should use the declaration in
 @file{stdlib.h} rather than repeating it in your own code.
 @item
-@command{dfec} requires that all function prototypes, or declarations
-are identical to the function definitions.  Some compilers may allow
-slight differences.
-@item
 @command{dfec} redefines certain functions defined in system headers.
 If your program tries to define these as macros or otherwise uses them
 in a non-standard way, you may experience trouble.
 @end enumerate
 
 
-@node    Header file dependencies, gcc version, C program requirements, dfec requirements
+@node    Header file dependencies, gcc version, C program requirements, dfec requirements and troubleshooting
 @subsubsection Header file dependencies
 
 Some programs contain dependences on header files that make code that
@@ -4199,7 +4260,7 @@ ensure that your code is both legal C and legal C++, or to work around
 other problems.
 
 
-@node    gcc version,  , Header file dependencies, dfec requirements
+@node    gcc version,  , Header file dependencies, dfec requirements and troubleshooting
 @subsubsection gcc version
 
 
