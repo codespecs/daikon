@@ -7,16 +7,6 @@ import java.util.*;
 import utilMDE.*;
 import gnu.getopt.*;
 
-// Notes on options
-//
-// -j: Normally, the justification of invariants is taken into
-// account.  This option turns this off.  When justification is taken
-// into account, invariants inv1 and inv2 are "the same" if
-// inv1.isSameInvariant(inv2) returns true, and are both justified.  A
-// difference is worth printing if at least one invariant is
-// justified.
-
-
 public final class Diff {
   public static final String lineSep = Global.lineSep;
 
@@ -33,9 +23,9 @@ public final class Diff {
     lineSep +
     "  -s  Display the statistics between two sets of invariants (default)" +
     lineSep +
-    "  -u  Display uninteresting invariants" +
+    "  -t  Display the statistics as a tab-separated list" +
     lineSep +
-    "  -j  Ignore justification when displaying differing invariants" +
+    "  -u  Display uninteresting invariants" +
     lineSep +
     "  -v  Verbose output" +
     lineSep;
@@ -45,8 +35,7 @@ public final class Diff {
   private static boolean printDiff = false;
   private static boolean printAll = false;
   private static boolean stats = false;
-  private static boolean printUninteresting = false;
-  private static boolean considerJustification  = true;
+  private static boolean tabSeparatedStats = false;
   private static boolean verbose = false;
 
   private static boolean optionSelected = false;
@@ -56,7 +45,7 @@ public final class Diff {
   StreamCorruptedException, OptionalDataException, IOException,
   ClassNotFoundException {
 
-    Getopt g = new Getopt("daikon.diff.Diff", args, "hdasujv");
+    Getopt g = new Getopt("daikon.diff.Diff", args, "hdastv");
     int c;
     while ((c = g.getopt()) !=-1) {
       switch (c) {
@@ -76,12 +65,10 @@ public final class Diff {
         optionSelected = true;
         stats = true;
         break;
-      case 'u':
-        printUninteresting = true;
-        break;
-      case 'j':
-        considerJustification = false;
-        break;
+      case 't':
+        optionSelected = true;
+        tabSeparatedStats = true;
+        break;        
       case 'v':
         verbose = true;
         break;
@@ -128,10 +115,16 @@ public final class Diff {
       root.accept(v);
       System.out.println(v.format());
     }
+
+    if (tabSeparatedStats) {
+      DetailedStatisticsVisitor v = new DetailedStatisticsVisitor();
+      root.accept(v);
+      System.out.println(v.repr());      
+    }
     
     if (printDiff) {
-      PrintDifferingInvariantsVisitor v = new PrintDifferingInvariantsVisitor
-        (System.out, verbose, printUninteresting, considerJustification);
+      PrintDifferingInvariantsVisitor v =
+        new PrintDifferingInvariantsVisitor(System.out, verbose);
       root.accept(v);
     }
     
