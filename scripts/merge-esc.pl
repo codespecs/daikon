@@ -3,7 +3,7 @@
   if 0;
 # merge-esc.pl -- Merge Daikon output into Java source code as ESC annotations
 # Michael Ernst <mernst@lcs.mit.edu>
-# Time-stamp: <2002-01-19 18:32:17 mernst>
+# Time-stamp: <2002-01-23 15:49:12 mistere>
 
 # The input is a Daikon output file.  Files from the current directory
 # are rewritten into -escannotated versions (use the -r switch as the
@@ -254,7 +254,7 @@ sub parse_method_header( $ ) {
 	$need_newline = 1;
 	last;
       } else {
-	die "Didn't find open curly brace in method definition:\n$line\n$nextline";
+	  die "In $javafile, didn't find open curly brace in method definition:\n$line\n$nextline";
       }
     }
   }
@@ -285,7 +285,8 @@ END {
     $File::Find::prune = (-d && $nodeep && ($_ ne '.'));
   }, ".");
 
-  for my $javafile (@javafiles) {
+  local $javafile;
+  for $javafile (@javafiles) {
     my @fields = ();		# only non-primitive fields
     my @owned_fields = ();
     my @final_fields = ();	# only non-primitive final fields
@@ -318,7 +319,7 @@ END {
     $classname =~ s|/|.|g;      # all / to .
 
     # We assume one class per file (really: >1 implies all are instrumented)
-    unless (grep { m/$classname/; } (keys %raw)) {
+    unless (grep { m/^[()]*$classname/; } (keys %raw)) {
 	# print "Skipping $classname due to no invariant\n";
 	next;
     }
