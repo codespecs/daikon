@@ -465,8 +465,8 @@ public final class Member
         debug.debug ("  Sclvar is not from a sequence");
         return null;
       }
-      VarInfo leftIndex = ((SequenceScalarSubscript) inv.sclvar().derived).sclvar();
-
+      SequenceScalarSubscript  sssc = (SequenceScalarSubscript) inv.sclvar().derived;
+      VarInfo leftIndex = sssc.sclvar();
       VarInfo seqvar = inv.seqvar();
       VarInfo origSeqvar = seqvar.isDerivedSubSequenceOf();
       if (origSeqvar == null) {
@@ -505,10 +505,10 @@ public final class Member
 
       int interval = 0;
       if (ssss.from_start) {
-        interval -= ssss.index_shift;
+        interval = sssc.index_shift - ssss.index_shift ;
         return findLessEqual (leftIndex, rightIndex, inv, interval);
       } else {
-        interval += ssss.index_shift;
+        interval = ssss.index_shift + sssc.index_shift;
         return findLessEqual (rightIndex, leftIndex, inv, interval);
       }
     }
