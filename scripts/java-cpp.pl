@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # java-cpp -- C preprocessor specialized for Java
 # Michael Ernst and Josh Kataoka
-# Time-stamp: <2002-06-03 15:01:28 mernst>
+# Time-stamp: <2002-06-13 16:31:13 mernst>
 
 # This acts like the C preprocessor, but
 #  * it does not remove comments
@@ -122,6 +122,8 @@ sub run_cpp {
   my $argv = join(' ', @ARGV);
   open(CPPFILE, "cpp $argv $tmpfile |") || die "Cannot open $tmpfile: $!\n";
 
+  my $post_return_space = "";
+  my $next_post_return_space = "";
   while (<CPPFILE>) {
     s|JAVACPP_DOUBLESLASHCOMMENT|//|g;
     s|JAVACPP_SLASHSTARCOMMENT|/\*|g;
@@ -132,13 +134,18 @@ sub run_cpp {
     # Remove "# 22" lines.
     s/(^|\n)\# [0-9]+ ".*"($|\n)/$1$2/;
 
-    ## Remove extra space
+    ## Remove extra horizontal space
     # Remove space after package name
     s/((?:^|\n)package .*\.) ([^ ]*) ?;/$1$2;/;
-    # Remove some trailing spaces: convert "(Foo )" to "(Foo)"
+    # convert "(Foo )" to "(Foo)"
     s/\((\b[A-Za-z]\w*) \)/($1)/g;
-    # Remove more trailing spaces: convert "a .b" to "a.b".
+    # convert "a .b" to "a.b".
     s/(\b[A-Za-z]\w*) \.([A-Za-z]\w*\b)/$1.$2/g;
+    # convert "a. foo (" to "a.foo("
+    # (Note single spaces, lowercase first letter.)
+    s/(\b[A-Za-z]\w*)\. ([a-z]\w*) \(/$1.$2(/g;
+
+    ## Remove extra vertical space
     # compress out duplicate blank lines
     s/\n\n\n+/\n\n/g;
     # Remove newline after "if" statement
@@ -147,9 +154,24 @@ sub run_cpp {
       # not "chomp":  it removes all of the trailing newlines rather than one
       s/\n\z//;
     }
+    # Remove newline after "return" statement if followed by 2 nelines and
+    # open curly brace.  But I have no way of knowing that open curly follows.
+    # Thus, the post_return_space hack.
+    if (/\breturn [^\n]*;\n\n\z/) {
+      s/\n\z//;
+      $next_post_return_space = "\n";
+    }
 
     # Skip if nothing to print (eg, if this paragraph was just a "# 22" line)
     if (! /[^\n]/) { next; }
+
+    if (/^[ \t]*\}/) {
+      $post_return_space = "";
+    }
+    print $post_return_space;
+    $post_return_space = $next_post_return_space;
+    $next_post_return_space = "";
+
     print;
   }
 
