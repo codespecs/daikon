@@ -355,10 +355,21 @@ public class PptSliceEquality
       if (parent.findSlice_unordered (soFar) == null) {
         // If slice is already there, no need to clone.
         PptSlice newSlice = slice.cloneAndPivot(soFar);
+        List invs = newSlice.invs;
         if (debug.isDebugEnabled()) {
           debug.debug ("  created new slice: " + newSlice.toString());
         }
-        newSlices.add (newSlice);
+        for (Iterator iInvs = invs.iterator(); iInvs.hasNext(); ) {
+          Invariant inv = (Invariant) iInvs.next();
+          if (inv.isObviousStatically_AllInEquality()) {
+            iInvs.remove();
+          }
+        }
+        if (newSlice.invs.size() == 0) {
+          debug.debug ("  slice not added because 0 invs");
+        } else {
+          newSlices.add (newSlice);
+        }
       }
       return;
     } else {
