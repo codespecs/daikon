@@ -1,4 +1,7 @@
-Usage of the Perl front=end is much like dfej and dfec, except that:
+(For user documentation of dfepl, the simplified interface to the Daikon
+Perl front-end, see the Daikon manual.)
+
+Usage of the Perl front-end is much like dfej and dfec, except that:
 
 * A separate pass is needed to collect information about the types
   of variables, since Perl isn't statically typed.
@@ -10,7 +13,7 @@ The steps look like:
 
 1. Generate an instrumented version of the program.
 2. Run the instrumented version of the program to guess variable types.
-3. Generate a new instrumented version of the program with the types.
+3. Generate a new instrumented version of the program with the types
 included.
 4. Run the new instrumented version to generate .decls and .dtrace
 files.
@@ -85,5 +88,3 @@ package declaration will be in the package "main"):
 Note that these paths are all relative to the current directory at the
 point where they are created; watch out for scripts and makefiles that
 call chdir().
-  
-
