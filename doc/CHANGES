@@ -17,6 +17,16 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.0.2 (Mar 1 2005)
+
+Chicory
+
+  Correct a problem with classes that are not in a package; Chicory
+  previously created invalid program point names for the constructors of
+  such programs.
+
+---------------------------------
+
 4.0.1 (Feb 13 2005)
 
 Daikon
