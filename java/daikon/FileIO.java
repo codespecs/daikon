@@ -532,7 +532,16 @@ public final class FileIO {
 
     for (Iterator i = files.iterator(); i.hasNext(); ) {
       File file = (File) i.next();
-      read_data_trace_file(file, all_ppts, temporal_manager);
+      try {
+        read_data_trace_file(file, all_ppts, temporal_manager);
+      }
+      catch (IOException e) {
+        if (e.getMessage().equals("Corrupt GZIP trailer"))
+          System.out.print(file.getName() + " has a corrupt gzip trailer.  " +
+                           "All possible data was recovered.\n");
+        else
+          throw e;
+      }
     }
 
     process_unmatched_procedure_entries();
