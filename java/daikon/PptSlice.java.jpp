@@ -1119,7 +1119,7 @@ public final class PPTSLICE1
         new_inv.log ("slice already contains inv, not copied");
         continue;
       }
-      if ((parent_gslice != null) &&parent_gslice.contains_inv_exact(new_inv)){
+      if ((parent_gslice != null) &&parent_gslice.contains_inv_exact(new_inv)) {
         new_inv.log ("global slice already contains inv, not copied");
         continue;
       }

@@ -1054,7 +1054,7 @@ public class PptTopLevel
         VarInfo vi2 = var_infos[i2];
         if (vi2.isDerived() ||
             !TernaryDerivationFactory.checkType(vi1,vi2) ||
-            !TernaryDerivationFactory.checkComparability(vi1,vi2)){
+            !TernaryDerivationFactory.checkComparability(vi1,vi2)) {
           if (Global.debugDerive.isLoggable(Level.FINE)) {
             Global.debugDerive.fine ("Ternary 2nd: not worth deriving from ("
                                      + vi1.name.name() + ","
@@ -1443,7 +1443,7 @@ public class PptTopLevel
    * the list of all weakened invariants.
    * @see #add_bottom_up
    **/
-  public void add_global_bottom_up (ValueTuple vt, int count){
+  public void add_global_bottom_up (ValueTuple vt, int count) {
 
     // If there is a global ppt
     if (global != null) {
@@ -1516,7 +1516,7 @@ public class PptTopLevel
    *
    * @return the set of all invariants weakened or falsified by this sample
    **/
-  public Set /* Invariant */ add_bottom_up (ValueTuple vt, int count){
+  public Set /* Invariant */ add_bottom_up (ValueTuple vt, int count) {
     // Doable, but commented out for efficiency
     // repCheck();
 
@@ -1548,7 +1548,7 @@ public class PptTopLevel
     // apply these values to the combined exit
     if (!Daikon.use_dataflow_hierarchy) {
       // System.out.println ("ppt_name = " + ppt_name);
-      if (!(this instanceof PptConditional) && ppt_name.isNumberedExitPoint()){
+      if (!(this instanceof PptConditional) && ppt_name.isNumberedExitPoint()) {
         PptTopLevel parent = Daikon.all_ppts.get (ppt_name.makeExit());
         if (parent != null) {
           // System.out.println ("parent is " + parent.name());
@@ -1559,7 +1559,7 @@ public class PptTopLevel
     }
 
     // Set of invariants weakened by this sample
-    Set weakened_invs = new LinkedHashSet();
+    Set this_weakened_invs = new LinkedHashSet();
 
     // Instantiate slices and invariants if this is the first sample
     if (values_num_samples == 0) {
@@ -1576,8 +1576,8 @@ public class PptTopLevel
 
     // Add the samples to all of the equality sets, breaking sets as required
     if (Daikon.use_equality_optimization) {
-      weakened_invs.addAll (equality_view.add (vt, count));
-      for (Iterator i = weakened_invs.iterator(); i.hasNext(); )
+      this_weakened_invs.addAll (equality_view.add (vt, count));
+      for (Iterator i = this_weakened_invs.iterator(); i.hasNext(); )
         Assert.assertTrue (i.next() instanceof Invariant);
     }
 
@@ -1669,7 +1669,7 @@ public class PptTopLevel
       PptSlice view = (PptSlice) itor.next();
       if (view.invs.size() == 0)
         continue;
-      weakened_invs.addAll (view.add(vt, count));
+      this_weakened_invs.addAll (view.add(vt, count));
     }
     Set all_weakened_invs = new LinkedHashSet();
 
@@ -1677,13 +1677,13 @@ public class PptTopLevel
     List unsuppressed_invs = new ArrayList();
 
     // while new weakened invariants are left, process them
-    while (weakened_invs.size() > 0) {
+    while (this_weakened_invs.size() > 0) {
 
       // Keep track of all of weakened invariants
-      all_weakened_invs.addAll (weakened_invs);
+      all_weakened_invs.addAll (this_weakened_invs);
 
       // foreach weakened/destroyed invariant
-      for (Iterator itor = weakened_invs.iterator(); itor.hasNext(); ) {
+      for (Iterator itor = this_weakened_invs.iterator(); itor.hasNext(); ) {
 
         // Get current invariant and its list of suppression links
         Invariant inv = (Invariant) itor.next();
@@ -1729,8 +1729,8 @@ public class PptTopLevel
 
       // Add the sample to each unsuppressed invariant and get back the list
       // of any that were weakened by the sample.
-      weakened_invs.clear();
-      weakened_invs.addAll (inv_add (unsuppressed_invs, vt, count));
+      this_weakened_invs.clear();
+      this_weakened_invs.addAll (inv_add (unsuppressed_invs, vt, count));
     }
 
     // Apply the sample to any invariants created by non-instantiating
@@ -1839,7 +1839,7 @@ public class PptTopLevel
     Set slices = new LinkedHashSet();
 
     // List of invariants weakened by this sample
-    List weakened_invs = new ArrayList();
+    List result_weakened_invs = new ArrayList();
 
     // Loop through each invariant
     inv_loop:
@@ -1867,9 +1867,9 @@ public class PptTopLevel
 
       if (result == InvariantStatus.FALSIFIED) {
         inv.falsify();
-        weakened_invs.add (inv);
+        result_weakened_invs.add (inv);
       } else if (result == InvariantStatus.WEAKENED) {
-        weakened_invs.add (inv);
+        result_weakened_invs.add (inv);
       }
     }
 
@@ -1879,7 +1879,7 @@ public class PptTopLevel
       slice.remove_falsified();
     }
 
-    return (weakened_invs);
+    return (result_weakened_invs);
   }
 
   /**
@@ -2011,7 +2011,7 @@ public class PptTopLevel
    * @return the invariant that was added (if any)
    */
   private Invariant add_weakened_global_inv (Invariant global_inv,
-                                             int[] transform){
+                                             int[] transform) {
 
     // Note that it is not necessary to check flowable here.  The invariant
     // will already exist at the lower ppt if it is unflowable.  The
@@ -4412,7 +4412,7 @@ public class PptTopLevel
     // Merge the ModBitTracker.
     // We'll reuse one dummy ValueTuple throughout, side-effecting its mods
     // array.
-    int num_tracevars = mbtracker.num_vars();
+    int num_tracevars = mbtracker.num_vars(); // warning: shadows field of same name
     Object[] vals = new Object[num_tracevars];
     int[] mods = new int[num_tracevars];
     ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
@@ -5122,18 +5122,18 @@ public class PptTopLevel
    * Returns the local variable that corresponds to the specified global
    * variable via the post transform.
    */
-  public VarInfo local_postvar (VarInfo global) {
+  public VarInfo local_postvar (VarInfo global_var) {
 
-    return var_infos[global_transform_post[global.varinfo_index]];
+    return var_infos[global_transform_post[global_var.varinfo_index]];
   }
 
   /**
    * Returns the local variable that corresponds to the specified global
    * variable via the orig transform.
    */
-  public VarInfo local_origvar (VarInfo global) {
+  public VarInfo local_origvar (VarInfo global_var) {
 
-    return var_infos[global_transform_orig[global.varinfo_index]];
+    return var_infos[global_transform_orig[global_var.varinfo_index]];
   }
 
   /**

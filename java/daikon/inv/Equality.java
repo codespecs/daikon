@@ -464,7 +464,7 @@ public final class Equality
   public void postProcess () {
     if (this.numSamples() == 0) return; // All were missing or not present
     PptTopLevel parent = this.ppt.parent;
-    VarInfo[] vars = (VarInfo[]) this.vars.toArray(new VarInfo[0]);
+    VarInfo[] varArray = (VarInfo[]) this.vars.toArray(new VarInfo[0]);
     if (debugPostProcess.isLoggable(Level.FINE)) {
       debugPostProcess.fine ("Doing postProcess: " + this.format_daikon());
       debugPostProcess.fine ("  at: " + this.ppt.parent.name());
@@ -474,17 +474,17 @@ public final class Equality
     if (debugPostProcess.isLoggable(Level.FINE)) {
       debugPostProcess.fine ("  var1: " + leader.name.name());
     }
-    for (int i = 0; i < vars.length; i++) {
-      if (vars[i] == leader) continue;
+    for (int i = 0; i < varArray.length; i++) {
+      if (varArray[i] == leader) continue;
       if (debugPostProcess.isLoggable(Level.FINE)) {
-        debugPostProcess.fine ("  var2: " + vars[i].name.name());
+        debugPostProcess.fine ("  var2: " + varArray[i].name.name());
       }
 
       // If the same equality exists at the global ppt, don't make it here
-      if (is_global_equality (leader, vars[i]))
+      if (is_global_equality (leader, varArray[i]))
         continue;
 
-      parent.create_equality_inv (leader, vars[i], numSamples());
+      parent.create_equality_inv (leader, varArray[i], numSamples());
     }
   }
 

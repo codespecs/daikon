@@ -1034,9 +1034,9 @@ public final class VarInfo
     return (String[]) raw;
   }
 
-  static final class usesVarFilter implements Filter {
+  static final class UsesVarFilter implements Filter {
     VarInfo var;
-    public usesVarFilter(VarInfo var) { this.var = var; }
+    public UsesVarFilter(VarInfo var) { this.var = var; }
     public boolean accept(Object o) { return ((Invariant) o).usesVar(var); }
   }
 
@@ -1047,7 +1047,7 @@ public final class VarInfo
 //     // Could alternately have used ppt.invs.lookup(vi).
 //     // In fact, that's better, because it doesn't look at so many variables.
 //     Iterator all_invs = ((PptTopLevel) ppt).invariants();
-//     return new UtilMDE.FilteredIterator(all_invs, new usesVarFilter(this));
+//     return new UtilMDE.FilteredIterator(all_invs, new UsesVarFilter(this));
 //   }
 
   /**

@@ -230,7 +230,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
    **/
-  public InvariantStatus add_unmodified(PRIMITIVE v1, PRIMITIVE v2, int count){
+  public InvariantStatus add_unmodified(PRIMITIVE v1, PRIMITIVE v2, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 

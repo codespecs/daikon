@@ -135,11 +135,11 @@ public class ModBitTracker
 
 
   /**
-   * Split the given equivalence set into two pieces.
+   * Split the specified equivalence set into two pieces.
    * Returns the index of the copy.
    **/
-  private int split(int index) {
-    modbits_arrays[num_sets] = (BitSet) modbits_arrays[index].clone();
+  private int split(int split_index) {
+    modbits_arrays[num_sets] = (BitSet) modbits_arrays[split_index].clone();
     num_sets++;
     return num_sets-1;
   }

@@ -208,7 +208,7 @@ public class PptRelation implements Serializable {
    * a set).
    */
 
-  public Map /*VarInfo.Pair*/ get_child_equalities_as_parent(){
+  public Map /*VarInfo.Pair*/ get_child_equalities_as_parent() {
 
     debug.fine ("get_child_equalities for " + child.name()
                 + " for parent " + parent.name() + " " + relationship);
@@ -543,7 +543,7 @@ public class PptRelation implements Serializable {
   public PptRelation copy (PptTopLevel parent, PptTopLevel child) {
 
     PptRelation rel = new PptRelation (parent, child, relationship);
-    for (Iterator ii = child_to_parent_map.keySet().iterator(); ii.hasNext();){
+    for (Iterator ii = child_to_parent_map.keySet().iterator(); ii.hasNext();) {
       VarInfo vc = (VarInfo) ii.next();
       VarInfo vp = (VarInfo) child_to_parent_map.get (vc);
       VarInfo new_vc = child.var_infos[vc.varinfo_index];

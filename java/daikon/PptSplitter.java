@@ -560,7 +560,7 @@ public class PptSplitter implements Serializable {
     // TODO: Why not avoid introducing them in the first place?
 
     Vector to_remove = new Vector();
-    for (Iterator itor = parent.joiner_view.invs.iterator(); itor.hasNext(); ){
+    for (Iterator itor = parent.joiner_view.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
       if (inv instanceof Implication) {
         Implication impl = (Implication) inv;

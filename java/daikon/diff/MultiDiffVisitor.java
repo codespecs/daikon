@@ -35,8 +35,8 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
         justifiedList = new HashSet();
     }
 
-    public static void setForSpinfoOut (OutputStream out) {
-        MultiDiffVisitor.out = new PrintStream (out, true);
+    public static void setForSpinfoOut (OutputStream out_os) {
+        MultiDiffVisitor.out = new PrintStream (out_os, true);
         spinfoMode = true;
     }
 
