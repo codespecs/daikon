@@ -42,7 +42,7 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
 
     num_elts = 0;
 
-    Assert.assert(var().type.dimensions() > 0, "ProglangType dimensions must be nonzero for EltOneOf");
+    Assert.assert(var().type.isPseudoArray(), "ProglangType must be pseudo-array for EltOneOf");
     is_boolean = (var().type.elementType() == ProglangType.BOOLEAN);
     is_hashcode = var().type.elementType().isObject() || var().type.elementType().isArray();
 

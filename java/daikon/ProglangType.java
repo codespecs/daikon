@@ -58,6 +58,19 @@ public final class ProglangType implements java.io.Serializable {
   public boolean isArray() { return dimensions > 0; }
 
   /**
+   * The pseudo-dimensions is always at least as large as the
+   * dimensions.  Dimensions is always the array depth of the type,
+   * while pseudo also incorporates knowledge of Vectors.  So VECTOR
+   * has dims 0 but pseudo-dims as 1.
+   **/
+  public int pseudoDimensions() {
+    int result = dimensions();
+    if (this == VECTOR) result++;
+    return result;
+  }
+  public boolean isPseudoArray() { return pseudoDimensions() > 0; }
+
+  /**
    * No public constructor:  use parse() instead to get a canonical
    * representation.
    * basetype should be interned.
