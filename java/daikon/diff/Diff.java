@@ -4,8 +4,6 @@ import daikon.inv.*;
 import daikon.*;
 import java.io.*;
 import java.util.*;
-import java.util.zip.GZIPInputStream;
-import javax.swing.tree.*;
 import utilMDE.*;
 import gnu.getopt.*;
 
@@ -23,7 +21,7 @@ public final class Diff {
   public static final String lineSep = Global.lineSep;
 
   private static String usage =
-    "Usage: java daikon.Diff [OPTION]... FILE1 FILE2" +
+    "Usage: java daikon.diff.Diff [OPTION]... FILE1 FILE2" +
     lineSep +
     "  -h  Display this usage message" +
     lineSep +
@@ -56,7 +54,7 @@ public final class Diff {
   StreamCorruptedException, OptionalDataException, IOException,
   ClassNotFoundException {
 
-    Getopt g = new Getopt("daikon.Diff", args, "hdasujv");
+    Getopt g = new Getopt("daikon.diff.Diff", args, "hdasujv");
     int c;
     while ((c = g.getopt()) !=-1) {
       switch (c) {
@@ -109,19 +107,8 @@ public final class Diff {
     String filename1 = args[firstFileIndex];
     String filename2 = args[firstFileIndex + 1];
 
-    InputStream istream1 = new FileInputStream(filename1);
-    if (filename1.endsWith(".gz")) {
-      istream1 = new GZIPInputStream(istream1);
-    }
-    ObjectInputStream oistream1 = new ObjectInputStream(istream1);
-    InputStream istream2 = new FileInputStream(filename2);
-    if (filename2.endsWith(".gz")) {
-      istream2 = new GZIPInputStream(istream2);
-    }
-    ObjectInputStream oistream2 = new ObjectInputStream(istream2);
-
-    PptMap map1 = (PptMap) oistream1.readObject();
-    PptMap map2 = (PptMap) oistream2.readObject();
+    PptMap map1 = FileIO.read_invariant_file(filename1);
+    PptMap map2 = FileIO.read_invariant_file(filename2);
 
     RootNode root = diffPptMap(map1, map2);
 

@@ -7,7 +7,7 @@ import org.apache.oro.text.regex.*;
 
 import java.io.*;
 import java.util.*;
-
+import java.util.zip.GZIPInputStream;
 
 public final class FileIO {
 
@@ -1019,6 +1019,18 @@ public final class FileIO {
       vals[i] = vm.value;
       mods[i] = vm.modified;
     }
+  }
+
+
+  public static PptMap read_invariant_file(String filename) throws
+  ClassNotFoundException, FileNotFoundException, IOException,
+  OptionalDataException, StreamCorruptedException {
+    InputStream istream = new FileInputStream(filename);
+    if (filename.endsWith(".gz")) {
+      istream = new GZIPInputStream(istream);
+    }
+    ObjectInputStream oistream = new ObjectInputStream(istream);
+    return (PptMap) oistream.readObject();
   }
 
 }

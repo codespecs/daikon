@@ -85,6 +85,18 @@ public final class Daikon {
   public static FileOutputStream inv_ostream;
   public static ObjectOutputStream inv_oostream;
 
+  // Public so other programs can reuse the same command-line options
+  public static final String help_SWITCH = "help";
+  public static final String ppt_regexp_SWITCH = "ppt";
+  public static final String ppt_omit_regexp_SWITCH = "ppt_omit";
+  public static final String var_omit_regexp_SWITCH = "var_omit";
+  public static final String no_text_output_SWITCH = "no_text_output";
+  public static final String suppress_cont_SWITCH = "suppress_cont";
+  public static final String suppress_post_SWITCH = "suppress_post";
+  public static final String prob_limit_SWITCH = "prob_limit";
+  public static final String esc_output_SWITCH = "esc_output";
+  public static final String simplify_output_SWITCH = "simplify_output";
+  public static final String output_num_samples_SWITCH = "output_num_samples";
 
   static String usage =
     "Daikon invariant detector." + lineSep
@@ -111,17 +123,6 @@ public final class Daikon {
       System.exit(1);
     }
 
-    final String help_SWITCH = "help";
-    final String ppt_regexp_SWITCH = "ppt";
-    final String ppt_omit_regexp_SWITCH = "ppt_omit";
-    final String var_omit_regexp_SWITCH = "var_omit";
-    final String no_text_output_SWITCH = "no_text_output";
-    final String suppress_cont_SWITCH = "suppress_cont";
-    final String suppress_post_SWITCH = "suppress_post";
-    final String prob_limit_SWITCH = "prob_limit";
-    final String esc_output_SWITCH = "esc_output";
-    final String simplify_output_SWITCH = "simplify_output";
-    final String output_num_samples_SWITCH = "output_num_samples";
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -300,8 +301,6 @@ public final class Daikon {
             ppt.addConditions(pconds);
         }
         ppt.addImplications();
-	if (! no_text_output)
-	  ppt.print_invariants_maybe(System.out, all_ppts);
         {
           // Clear memory
           ppt.set_values_null();
@@ -314,6 +313,8 @@ public final class Daikon {
         }
       }
     }
+
+    print_invariants(all_ppts);
 
     if (output_num_samples) {
       Global.output_statistics();
@@ -347,6 +348,21 @@ public final class Daikon {
 
     System.out.println("Exiting");
 
+  }
+
+  public static void print_invariants(PptMap ppts) {
+    // Retrieve Ppt objects in sorted order.
+    // Use a custom comparator for a specific ordering
+    Comparator comparator = new Ppt.NameComparator();
+    TreeSet ppts_sorted = new TreeSet(comparator);
+    ppts_sorted.addAll(ppts.asCollection());
+
+    for (Iterator itor = ppts_sorted.iterator() ; itor.hasNext() ; ) {
+      PptTopLevel ppt = (PptTopLevel) itor.next();
+      if (ppt.has_samples() && ! no_text_output) {
+        ppt.print_invariants_maybe(System.out, ppts);
+      }
+    }
   }
 
   public static void add_combined_exits(PptMap ppts) {
