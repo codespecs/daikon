@@ -192,6 +192,8 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
     return null;
   }
 
+  // Interning is lost when an object is serialized and deserialized.
+  // Manually re-intern any interned fields upon deserialization.
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
     in.defaultReadObject();
     for (int i=0; i < num_elts; i++)
