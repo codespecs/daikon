@@ -1,0 +1,253 @@
+package daikon.test;
+
+import java.util.*;
+import java.io.*;
+import junit.framework.*;
+
+import daikon.*;
+import utilMDE.Assert;
+
+public class VarInfoNameDriver {
+
+  // for convenience
+  public static void main(String[] args)
+    throws IOException
+  {
+    run(System.in, System.out);
+  }
+
+  // [String -> Handler]
+  private static final Map handlers = new HashMap();
+
+  public static void run(InputStream _commands, PrintStream output)
+    throws IOException
+  {
+    BufferedReader commands = new BufferedReader(new InputStreamReader(_commands));
+    Map variables = new HashMap(); // [String -> Object]
+
+    String command;
+    while ((command = commands.readLine()) != null) {
+      if (command.startsWith("#")) {
+	output.println(command);
+	continue;
+      }
+
+      output.println("; " + command);
+
+      // tokenize arguments
+      StringTokenizer tok = new StringTokenizer(command);
+      LinkedList list = new LinkedList();
+      while (tok.hasMoreTokens()) {
+	list.add(tok.nextToken());
+      }
+
+      // ignore blank lines
+      if (list.size() == 0) {
+	continue;
+      }
+
+      // call the handler
+      String method = (String) list.removeFirst();
+      String[] args = (String[]) list.toArray(new String[list.size()]); 
+      Handler handler = (Handler) handlers.get(method);
+      if (handler == null) {
+	throw new UnsupportedOperationException("Unknown method: " + method);
+      }
+      handler.handle(variables, args, output);
+    }
+  }
+
+  public static interface Handler {
+    public void handle(Map vars, String[] args, PrintStream out);
+  }
+
+  // VarInfoName parse(String);
+  private static class Parse implements Handler {
+    public void handle(Map vars, String[] args, PrintStream out) {
+      Assert.assert(args.length == 2);
+      String var = args[0];
+      String expr = args[1];
+      VarInfoName parse = VarInfoName.parse(expr);
+      vars.put(var, parse);
+      out.println(var + " = " + parse);
+    }
+  }
+  static { handlers.put("parse", new Parse()); }
+
+  // String name();
+  private static class Name implements Handler {
+    public void handle(Map vars, String[] args, PrintStream out) {
+      Assert.assert(args.length == 1);
+      VarInfoName var = (VarInfoName) vars.get(args[0]);
+      out.println(var.name());
+    }
+  }
+  static { handlers.put("name", new Name()); }
+
+  // String esc_name();
+  private static class EscName implements Handler {
+    public void handle(Map vars, String[] args, PrintStream out) {
+      Assert.assert(args.length == 1);
+      VarInfoName var = (VarInfoName) vars.get(args[0]);
+      out.println(var.esc_name());
+    }
+  }
+  static { handlers.put("esc_name", new EscName()); }
+
+  // String simplify_name();
+  private static class SimplifyName implements Handler {
+    public void handle(Map vars, String[] args, PrintStream out) {
+      Assert.assert(args.length == 1);
+      VarInfoName var = (VarInfoName) vars.get(args[0]);
+      out.println(var.simplify_name());
+    }
+  }
+  static { handlers.put("simplify_name", new SimplifyName()); }
+
+  // VarInfoName intern();
+  // TODO
+
+  // boolean isLiteralConstant();
+  // TODO
+
+  // boolean equals(Object);
+  // boolean equals(VarInfoName);
+  private static class Equals implements Handler {
+    public void handle(Map vars, String[] args, PrintStream out) {
+      Assert.assert(args.length == 2);
+      VarInfoName a = (VarInfoName) vars.get(args[0]);
+      VarInfoName b = (VarInfoName) vars.get(args[1]);
+      out.println(args[0] + " " + (a.equals(b) ? "=" : "!") + "= " + args[1]);
+    }
+  }
+  static { handlers.put("equals", new Equals()); }
+
+  // int hashCode();
+  private static class HashCode implements Handler {
+    public void handle(Map vars, String[] args, PrintStream out) {
+      Assert.assert(args.length == 2);
+      VarInfoName a = (VarInfoName) vars.get(args[0]);
+      VarInfoName b = (VarInfoName) vars.get(args[1]);
+      out.println(args[0] + ".hash " +
+		  ((a.hashCode() == b.hashCode()) ? "=" : "!") +
+		  "= " + args[1] + ".hash");
+    }
+  }
+  static { handlers.put("hash", new HashCode()); }
+
+  // String toString();
+
+  // VarInfoName applySize();
+  private static class Size implements Handler {
+    public void handle(Map vars, String[] args, PrintStream out) {
+      Assert.assert(args.length == 2);
+      VarInfoName var = (VarInfoName) vars.get(args[1]);
+      VarInfoName result = var.applySize();
+      vars.put(args[0], result);
+      out.println(args[0] + " = " + result.name());
+    }
+  }
+  static { handlers.put("size", new Size()); }
+
+  // VarInfoName applyFunction(String);
+  private static class Function implements Handler {
+    public void handle(Map vars, String[] args, PrintStream out) {
+      Assert.assert(args.length == 3);
+      String func = args[1];
+      VarInfoName var = (VarInfoName) vars.get(args[2]);
+      VarInfoName result = var.applyFunction(func);
+      vars.put(args[0], result);
+      out.println(args[0] + " = " + result.name());
+    }
+  }
+  static { handlers.put("function", new Function()); }
+
+  // VarInfoName applyTypeOf();
+  private static class TypeOf implements Handler {
+    public void handle(Map vars, String[] args, PrintStream out) {
+      Assert.assert(args.length == 2);
+      VarInfoName var = (VarInfoName) vars.get(args[1]);
+      VarInfoName result = var.applyTypeOf();
+      vars.put(args[0], result);
+      out.println(args[0] + " = " + result.name());
+    }
+  }
+  static { handlers.put("typeof", new TypeOf()); }
+
+  // VarInfoName applyPrestate();
+  private static class Prestate implements Handler {
+    public void handle(Map vars, String[] args, PrintStream out) {
+      Assert.assert(args.length == 2);
+      VarInfoName var = (VarInfoName) vars.get(args[1]);
+      VarInfoName result = var.applyPrestate();
+      vars.put(args[0], result);
+      out.println(args[0] + " = " + result.name());
+    }
+  }
+  static { handlers.put("prestate", new Prestate()); }
+
+  // VarInfoName applyPoststate();
+  private static class Poststate implements Handler {
+    public void handle(Map vars, String[] args, PrintStream out) {
+      Assert.assert(args.length == 2);
+      VarInfoName var = (VarInfoName) vars.get(args[1]);
+      VarInfoName result = var.applyPoststate();
+      vars.put(args[0], result);
+      out.println(args[0] + " = " + result.name());
+    }
+  }
+  static { handlers.put("poststate", new Poststate()); }
+
+  // VarInfoName applyAdd(int);
+  private static class Add implements Handler {
+    public void handle(Map vars, String[] args, PrintStream out) {
+      Assert.assert(args.length == 3);
+      VarInfoName var = (VarInfoName) vars.get(args[1]);
+      int amt = Integer.parseInt(args[2]);
+      VarInfoName result = var.applyAdd(amt);
+      vars.put(args[0], result);
+      out.println(args[0] + " = " + result.name());
+    }
+  }
+  static { handlers.put("add", new Add()); }
+
+  // VarInfoName applyElements();
+  private static class Elements implements Handler {
+    public void handle(Map vars, String[] args, PrintStream out) {
+      Assert.assert(args.length == 2);
+      VarInfoName var = (VarInfoName) vars.get(args[1]);
+      VarInfoName result = var.applyElements();
+      vars.put(args[0], result);
+      out.println(args[0] + " = " + result.name());
+    }
+  }
+  static { handlers.put("elements", new Elements()); }
+
+  // VarInfoName applySubscript(VarInfoName);
+  private static class Subscript implements Handler {
+    public void handle(Map vars, String[] args, PrintStream out) {
+      Assert.assert(args.length == 3);
+      VarInfoName var = (VarInfoName) vars.get(args[1]);
+      VarInfoName sub = (VarInfoName) vars.get(args[2]);
+      VarInfoName result = var.applySubscript(sub);
+      vars.put(args[0], result);
+      out.println(args[0] + " = " + result.name());
+    }
+  }
+  static { handlers.put("subscript", new Subscript()); }
+
+  // VarInfoName applySlice(VarInfoName, VarInfoName);
+  private static class Slice implements Handler {
+    public void handle(Map vars, String[] args, PrintStream out) {
+      Assert.assert(args.length == 4);
+      VarInfoName var = (VarInfoName) vars.get(args[1]);
+      VarInfoName i = (VarInfoName) vars.get(args[2]);
+      VarInfoName j = (VarInfoName) vars.get(args[3]);
+      VarInfoName result = var.applySlice(i, j);
+      vars.put(args[0], result);
+      out.println(args[0] + " = " + result.name());
+    }
+  }
+  static { handlers.put("slice", new Slice()); }
+
+}
