@@ -318,9 +318,9 @@ sub daikon_unit_test {
 # ".diff" filesizes.
 sub daikon_system_test {
   # Standard test suite
-  my $TEST_SUITE = "text-diff";
+  my $TEST_SUITE = "txt-diff";
   # Short test suites
-#  my $TEST_SUITE = "do-print_tokens-text-diff do-StreetNumberSet-text-diff";
+  #  my $TEST_SUITE = "do-print_tokens-txt-diff do-StreetNumberSet-txt-diff";
   print_log("Daikon system tests...");
 
   my $command = "make -C $INV/tests/daikon-tests clean " .
@@ -331,8 +331,8 @@ sub daikon_system_test {
     return 0;
   }
 
-# Switch the two lines below if using a different RUN_JAVA variable
-# $command = "make RUN_JAVA=$RUN_JAVA $J2 -C $INV/tests/daikon-tests " .
+  # Switch the two lines below if using a different RUN_JAVA variable
+  # $command = "make RUN_JAVA=$RUN_JAVA $J2 -C $INV/tests/daikon-tests " .
   $command = "make $J2 -C $INV/tests/daikon-tests " .
     "$TEST_SUITE &> daikon_system_test.out";
   `$command`;
