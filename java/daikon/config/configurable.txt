@@ -75,7 +75,6 @@ daikon.inv.unary.sequence.EltOneOf.size
 daikon.inv.unary.sequence.EltUpperBound.enabled
 daikon.inv.unary.sequence.EltUpperBound.maximal_interesting
 daikon.inv.unary.sequence.EltUpperBound.minimal_interesting
-daikon.inv.unary.sequence.EltwiseIntComparison.enabled
 daikon.inv.unary.sequence.NoDuplicates.enabled
 daikon.inv.unary.sequence.OneOfSequence.enabled
 daikon.inv.unary.sequence.OneOfSequence.size
