@@ -302,13 +302,21 @@ public final class Runtime {
     }
   }
 
+  public static final void println_modbit_modified(java.io.PrintStream ps) {
+    ps.println("1");          // "modified"
+  }
+
+  public static final void println_modbit_missing(java.io.PrintStream ps) {
+    ps.println("2");          // "missing"
+  }
+
   public static final void println_class_and_modbit(java.io.PrintStream ps, Object x) {
     if (x == null) {
       ps.println("nonsensical");
-      ps.println("2");          // "missing"
+      println_modbit_missing(ps);
     } else {
       println_String(ps, classnameFromJvm(x.getClass().getName()));
-      ps.println("1");          // "modified"
+      println_modbit_modified(ps);
     }
   }
 
@@ -325,10 +333,10 @@ public final class Runtime {
   public static final void println_quoted_String_and_modbit(java.io.PrintStream ps, String x) {
     if (x == null) {
       ps.println("nonsensical");
-      ps.println("2");          // "missing"
+      println_modbit_missing(ps);
     } else {
       println_quoted_String(ps, x);
-      ps.println("1");          // "modified"
+      println_modbit_modified(ps);
     }
   }
 
@@ -491,7 +499,7 @@ public final class Runtime {
   public static final void println_array_Object_eltclass_and_modbit(java.io.PrintStream ps, Object[] a) {
     if (a == null) {
       ps.println("nonsensical");
-      ps.println("2");          // "missing"
+      println_modbit_missing(ps);
       return;
     }
     boolean any_null = false;
@@ -506,7 +514,7 @@ public final class Runtime {
       }
     }
     ps.println(']');
-    ps.println("1");          // "modified"
+    println_modbit_modified(ps);
   }
 
   // Deprecated.
@@ -532,7 +540,7 @@ public final class Runtime {
   public static final void println_array_Object_eltclass_and_modbit(java.io.PrintStream ps, List v) {
     if (v == null) {
       ps.println("nonsensical");
-      ps.println("2");          // "missing"
+      println_modbit_missing(ps);
       return;
     }
     boolean any_null = false;
@@ -548,7 +556,7 @@ public final class Runtime {
       }
     }
     ps.println(']');
-    ps.println("1");          // "modified"
+    println_modbit_modified(ps);
   }
 
   // The parsing routines can't deal with "missing" in the middle of an
@@ -1301,6 +1309,64 @@ public final class Runtime {
       }
     }
     ps.println(']');
+  }
+
+
+  ///////////////////////////////////////////////////////////////////////////
+  /// BytesHelper
+  ///
+
+  // Not currently used (2/19/2005).
+
+  // From: package org.hibernate.util;
+
+  public static final int toInt( byte[] bytes ) {
+    int result = 0;
+    for (int i=0; i<4; i++) {
+      result = ( result << 8 ) - Byte.MIN_VALUE + (int) bytes[i];
+    }
+    return result;
+  }
+
+  public static short toShort( byte[] bytes ) {
+    return (short) ( ( ( - (short) Byte.MIN_VALUE + (short) bytes[0] ) << 8  )
+                     - (short) Byte.MIN_VALUE + (short) bytes[1] );
+  }
+
+  public static final byte[] toBytes(int value) {
+    byte[] result = new byte[4];
+    for (int i=3; i>=0; i--) {
+      result[i] = (byte) ( ( 0xFFl & value ) + Byte.MIN_VALUE );
+      value >>>= 8;
+    }
+    return result;
+  }
+
+  public static byte[] toBytes(short value) {
+    byte[] result = new byte[2];
+    for (int i=1; i>=0; i--) {
+      result[i] = (byte) ( ( 0xFFl & value )  + Byte.MIN_VALUE );
+      value >>>= 8;
+    }
+    return result;
+  }
+
+  // More efficient version that doesn't allocate a lot of arrays.
+  static final byte[] toBytesStaticResult = new byte[4];
+  private static final void toBytesStatic(int value) {
+    for (int i=3; i>=0; i--) {
+      toBytesStaticResult[i] = (byte) ( ( 0xFFl & value ) + Byte.MIN_VALUE );
+      value >>>= 8;
+    }
+  }
+
+  private static final void printIntBytes(PrintStream ps, int value) {
+    toBytesStatic(value);
+    try {
+      ps.write(toBytesStaticResult);
+    } catch (IOException e) {
+      throw new Error(e);
+    }
   }
 
 }
