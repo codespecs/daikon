@@ -99,7 +99,8 @@ public final class Intern {
   /**
    * Hasher object which hashes and compares int[] objects according
    * to their contents.
-   * @see Hasher, java.util.Arrays.equals
+   * @see Hasher
+   * @see java.util.Arrays#equals(int[], int[])
    **/
   private static final class IntArrayHasher implements Hasher {
     public boolean equals(Object a1, Object a2) {
@@ -118,7 +119,8 @@ public final class Intern {
   /**
    * Hasher object which hashes and compares long[] objects according
    * to their contents.
-   * @see Hasher, java.util.Arrays.equals
+   * @see Hasher
+   * @see java.util.Arrays#equals (long[], long[])
    **/
   private static final class LongArrayHasher implements Hasher {
     public boolean equals(Object a1, Object a2) {
@@ -157,7 +159,8 @@ public final class Intern {
   /**
    * Hasher object which hashes and compares double[] objects according
    * to their contents.
-   * @see Hasher, java.util.Arrays.equals
+   * @see Hasher
+   * @see java.util.Arrays#equals(Object[],Object[])
    **/
   private static final class DoubleArrayHasher implements Hasher {
     public boolean equals(Object a1, Object a2) {
@@ -192,7 +195,8 @@ public final class Intern {
   /**
    * Hasher object which hashes and compares String[] objects according
    * to their contents.
-   * @see Hasher, java.util.Arrays.equals
+   * @see Hasher
+   * java.util.Arrays.equals
    **/
   private static final class StringArrayHasher implements Hasher {
     public boolean equals(Object a1, Object a2) {
@@ -212,7 +216,8 @@ public final class Intern {
   /**
    * Hasher object which hashes and compares Object[] objects according
    * to their contents.
-   * @see Hasher, java.util.Arrays.equals
+   * @see Hasher
+   * @see java.util.Arrays#equals(Object[], Object[])
    **/
   private static final class ObjectArrayHasher implements Hasher {
     public boolean equals(Object a1, Object a2) {
@@ -364,6 +369,10 @@ public final class Intern {
    * Arrays are compared according to their elements.
    **/
   public static int[] intern(int[] a) {
+    // Throwable stack = new Throwable("debug traceback");
+    // stack.fillInStackTrace();
+    // stack.printStackTrace();
+
     Object lookup = internedIntArrays.get(a);
     if (lookup != null) {
       WeakReference ref = (WeakReference)lookup;
@@ -656,8 +665,7 @@ public final class Intern {
   /**
    * Hasher object which hashes and compares String[] objects according
    * to their contents.
-   * @see Hasher, java.util.Arrays.equals
-   *
+   * @see Hasher
    **/
   private static final class SequenceAndIndicesHasher implements Hasher {
     public boolean equals(Object a1, Object a2) {

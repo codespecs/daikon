@@ -667,25 +667,21 @@ class SplitterJavaSource {
     }
 
     /**
-     * Returns the VarInfo of the variable at index of this.
-     * @param index the index of the variable desired.
-     * @return the VarInfo of the variable at index of this.
+     * Returns the VarInfo of the variable.
      */
     private VarInfo getVarInfo() {
       return varInfo;
     }
 
     /**
-     * Returns the name of the variable at index of this.
-     * @param index the index of the variable desired.
-     * @return the name of the variable at index of this.
+     * Returns the name of the variable
      */
     private String getNormalName() {
       return name;
     }
 
     /**
-     * Returns the compilable name of the variable at index of this.
+     * Returns the compilable name of the variable.
      * Compilable names are formed as follows: Instances of "this.",
      * "className." and "packageName.ClassName." are removed,
      * instances of "orig(variableName)" are replace by instance of
@@ -693,48 +689,41 @@ class SplitterJavaSource {
      * "_identity" if it is a variable representing the array for
      * equality tests or "_array" if it is a variable representing
      * the elements of the array.
-     * @param index the index of the variable desired.
-     * @return the compilable name of the variable at index of this.
+     * @return the compilable name of the variable
      */
     private String getCompilableName() {
       return compilableName;
     }
 
     /**
-     * Returns the field name of the variable at index of this.
+     * Returns the field name of the variable.
      * The field name is the name of the variable as it would
      * appear in the field declaration of a java splitter file.
-     * @param index the index of the variable desired.
-     * @return the field name of the variable at index of this.
+     * @return the field name of the variable.
      */
     private String getFieldName () {
       return fieldName;
     }
 
     /**
-     * Returns the VarInfo name of the variable at index of this.
+     * Returns the VarInfo name of the variable.
      * The VarInfo name of a variable is the name of the variable
      * used to hold this varInfo in a java splitter file.
-     * @param index the index of the variable desired.
-     * @return the VarInfo name of the variable at index of this.
+     * @return the VarInfo name of the variable.
      */
     private String getVarInfoName () {
       return varInfoName;
     }
 
     /**
-     * Returns the type of the variable at index of this.
-     * @param index the index of the variable desired.
-     * @return the type of the variable at index of this.
+     * Returns the type of the variable.
      */
     private String getType() {
       return type;
     }
 
     /**
-     * Returns the repr of the variable at index of this.
-     * @param index the index of the variable desired.
-     * @return the type of the variable at index of this.
+     * Returns the repr of the variable.
      */
     private String getRepr() {
       return repr;
@@ -777,7 +766,7 @@ class SplitterJavaSource {
   }
 
   /**
-   * @requires condition is a string representation of a conditional
+   * requires: condition is a string representation of a conditional
    * @return a list of all possible variable variable names in condition.
    *    arrays appear with "[]" at the end if their elements or accessed
    *    in the condition.

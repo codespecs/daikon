@@ -65,7 +65,7 @@ class ArrayFixer extends DepthFirstVisitor {
    * Fixes the arrays found in statement (see class description).
    * names and varInfos must be in same order s.t. the ith element of
    * varInfos is the VarInfo for the ith element of names.
-   * @param statement a valid segment of java code
+   * @param expression a valid segment of java code
    * @param names is a List of Strings that are the names of all the variables
    *    in statement.
    * @param varInfos is a List of VarInfos for all the variables named in names.

@@ -395,9 +395,8 @@ public class SplitterFactoryTestUpdater {
   }
 
   /**
-   *@requires there are no directory in the directory given by dirName
-   *@modifies the directory are dirName and all its files
-   *@effects deletes the directory at dirName and all its files
+   * Deletes the specified directory and all of its files.  There can
+   * be no subdirectories under dir.
    */
   private static void deleteDir(File dir) {
     File[] files = dir.listFiles();
