@@ -31,10 +31,10 @@ public class ConsequentCVFSortComparatorTester extends TestCase {
     PptSlice sliceb = new PptSlice1(P, new VarInfo[] {vars[1]});
     PptSlice slicec = new PptSlice1(P, new VarInfo[] {vars[2]});
     PptSlice sliced = new PptSlice1(P, new VarInfo[] {vars[3]});
-    Invariant A = NonZero.instantiate(slicea);
-    Invariant B = NonZero.instantiate(sliceb);
-    Invariant C = NonZero.instantiate(slicec);
-    Invariant D = NonZero.instantiate(sliced);
+    Invariant A = NonZero.get_proto().instantiate(slicea);
+    Invariant B = NonZero.get_proto().instantiate(sliceb);
+    Invariant C = NonZero.get_proto().instantiate(slicec);
+    Invariant D = NonZero.get_proto().instantiate(sliced);
     Invariant A_B = Implication.makeImplication(P,A,B,false,null,null);
     Invariant A_C = Implication.makeImplication(P,A,C,false,null,null);
     Invariant B_C = Implication.makeImplication(P,B,C,false,null,null);

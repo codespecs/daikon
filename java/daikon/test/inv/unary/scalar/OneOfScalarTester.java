@@ -42,8 +42,8 @@ public class OneOfScalarTester extends TestCase {
   }
 
   public void testNullNon() {
-    OneOfScalar inv1 = OneOfScalar.instantiate(slicex);
-    OneOfScalar inv2 = OneOfScalar.instantiate(slicex);
+    OneOfScalar inv1 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
+    OneOfScalar inv2 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
 
     inv1.add_modified(19, DOESNT_MATTER);
     inv2.add_modified(0, DOESNT_MATTER);
@@ -52,8 +52,8 @@ public class OneOfScalarTester extends TestCase {
   }
 
   public void testNullNull() {
-    OneOfScalar inv1 = OneOfScalar.instantiate(slicex);
-    OneOfScalar inv2 = OneOfScalar.instantiate(slicex);
+    OneOfScalar inv1 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
+    OneOfScalar inv2 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
 
     inv1.add_modified(0, DOESNT_MATTER);
     inv2.add_modified(0, DOESNT_MATTER);
@@ -62,8 +62,8 @@ public class OneOfScalarTester extends TestCase {
   }
 
   public void testNonNon() {
-    OneOfScalar inv1 = OneOfScalar.instantiate(slicex);
-    OneOfScalar inv2 = OneOfScalar.instantiate(slicex);
+    OneOfScalar inv1 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
+    OneOfScalar inv2 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
 
     inv1.add_modified(19, DOESNT_MATTER);
     inv2.add_modified(22, DOESNT_MATTER);
@@ -74,8 +74,8 @@ public class OneOfScalarTester extends TestCase {
 
   /* NEED TO DEFINE SEMANTICS WITH MIKE E
   public void testNullNonHashcodeInt() {
-    OneOfScalar inv1 = OneOfScalar.instantiate(slicex);
-    OneOfScalar inv2 = OneOfScalar.instantiate(slicey);
+    OneOfScalar inv1 = OneOfScalar.get_proto().instantiate(slicex);
+    OneOfScalar inv2 = OneOfScalar.get_proto().instantiate(slicey);
 
     inv1.add_modified(0, DOESNT_MATTER);
     inv2.add_modified(22, DOESNT_MATTER);
@@ -84,8 +84,8 @@ public class OneOfScalarTester extends TestCase {
   }
 
   public void testNullNullHashcodeInt() {
-    OneOfScalar inv1 = OneOfScalar.instantiate(slicex);
-    OneOfScalar inv2 = OneOfScalar.instantiate(slicey);
+    OneOfScalar inv1 = OneOfScalar.get_proto().instantiate(slicex);
+    OneOfScalar inv2 = OneOfScalar.get_proto().instantiate(slicey);
 
     inv1.add_modified(0, DOESNT_MATTER);
     inv2.add_modified(0, DOESNT_MATTER);
@@ -94,8 +94,8 @@ public class OneOfScalarTester extends TestCase {
   }
 
   public void testNonNonHashcodeInt() {
-    OneOfScalar inv1 = OneOfScalar.instantiate(slicex);
-    OneOfScalar inv2 = OneOfScalar.instantiate(slicey);
+    OneOfScalar inv1 = OneOfScalar.get_proto().instantiate(slicex);
+    OneOfScalar inv2 = OneOfScalar.get_proto().instantiate(slicey);
 
     inv1.add_modified(19, DOESNT_MATTER);
     inv2.add_modified(22, DOESNT_MATTER);

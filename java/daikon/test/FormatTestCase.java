@@ -362,9 +362,9 @@ class FormatTestCase {
     String[] tokens = line.split ("  *");
     String className = tokens[0];
     int arg_count = (tokens.length - 1) / 2;
-    Class[] arg_types  = new Class[arg_count+1];
-    Object[] arg_vals = new Object[arg_count+1];
-    int arg_index = 1;
+    Class[] arg_types  = new Class[arg_count];
+    Object[] arg_vals = new Object[arg_count];
+    int arg_index = 0;
     for (int i = 1; i < tokens.length; i+=2) {
       String arg_type_name = tokens[i].intern();
       if (i+1 >= tokens.length)
@@ -407,12 +407,12 @@ class FormatTestCase {
     ProglangType[] types = getTypes(typeString);
     VarInfo[] vars =
       getVarInfos(classToTest, types);
-    PptSlice sl = createSlice(vars, Common.makePptTopLevel("Test:::OBJECT", vars));
+    PptSlice sl = createSlice(vars,
+                            Common.makePptTopLevel("Test:::OBJECT", vars));
+    Assert.assertTrue (sl != null);
 
     // Create an actual instance of the class
-    arg_types[0] = PptSlice.class;
-    arg_vals[0] = sl;
-    Invariant invariantToTest = instantiateClass(classToTest, arg_types,
+    Invariant invariantToTest = instantiateClass(classToTest, sl, arg_types,
                                                  arg_vals);
     Assert.assertTrue (invariantToTest != null, "class " + className);
 
@@ -1052,14 +1052,10 @@ class FormatTestCase {
    */
   private static Invariant instantiateClass(Class theClass, PptSlice sl) {
     try {
-      Method instanceCreator = theClass.getMethod("instantiate", new Class [] {PptSlice.class});
+      Method get_proto = theClass.getMethod ("get_proto", new Class[] {});
+      Invariant proto = (Invariant) get_proto.invoke (null, new Object[] {});
+      Invariant inv = proto.instantiate (sl);
 
-      if (instanceCreator == null)
-        throw new RuntimeException("Could not instantiate invariant "
-                                   + theClass.getName());
-
-      Invariant inv = (Invariant)instanceCreator.invoke(null,
-                                                        new Object [] {sl});
       if (inv == null)
         throw new RuntimeException ("null inv for " + theClass.getName());
       return (inv);
@@ -1069,9 +1065,6 @@ class FormatTestCase {
       throw new RuntimeException("Error while instantiating invariant "
                                  + theClass.getName() + ": " + e.toString());
     }
-    //      catch (Exception e) {
-    //        throw new RuntimeException("Could not instantiate class");
-    //      }
   }
 
   /**
@@ -1085,16 +1078,16 @@ class FormatTestCase {
    * @return an instance of the class in theClass if one can be constructed,
    *         else throw a RuntimeException
    */
-  private static Invariant instantiateClass(Class theClass, Class[] arg_types,
-                                            Object[] arg_vals) {
+  private static Invariant instantiateClass(Class theClass, PptSlice slice,
+                                         Class[] arg_types, Object[] arg_vals) {
     try {
-      Method instanceCreator = theClass.getMethod("instantiate", arg_types);
+      // Fmt.pf ("creating " + theClass);
+      // for (int i = 0; i < arg_types.length; i++)
+      //   Fmt.pf ("  arg %s = %s", arg_types[i], arg_vals[i]);
+      Method get_proto = theClass.getMethod ("get_proto", arg_types);
+      Invariant proto = (Invariant) get_proto.invoke (null, arg_vals);
 
-      if (instanceCreator == null)
-        throw new RuntimeException("Could not instantiate invariant "
-                                   + theClass.getName());
-
-      return (Invariant)instanceCreator.invoke(null, arg_vals);
+      return (proto.instantiate (slice));
     }
     catch (Exception e) {
       e.printStackTrace(System.out);

@@ -69,23 +69,25 @@ public class InvMatch {
                                         (new VarInfo[] {ppt40_p});
 
     // Create invariants at EXIT35
-    Invariant inv_x_lt_y = IntLessThan.instantiate (slice_xy_35);
+    Invariant inv_x_lt_y = IntLessThan.get_proto().instantiate (slice_xy_35);
     slice_xy_35.addInvariant (inv_x_lt_y);
-    OneOfScalar inv_x_eq_5 = OneOfScalar.instantiate (slice_x_35);
+    OneOfScalar inv_x_eq_5
+      = (OneOfScalar) OneOfScalar.get_proto().instantiate (slice_x_35);
     inv_x_eq_5.add_modified (5, 1);
     slice_x_35.addInvariant (inv_x_eq_5);
-    Invariant inv_y_gt_z = IntGreaterThan.instantiate (slice_yz_35);
+    Invariant inv_y_gt_z = IntGreaterThan.get_proto().instantiate (slice_yz_35);
     slice_yz_35.addInvariant (inv_y_gt_z);
 
     // Create invariants at EXIT40
-    Invariant inv_p_lt_q = IntLessThan.instantiate (slice_pq_40);
+    Invariant inv_p_lt_q = IntLessThan.get_proto().instantiate (slice_pq_40);
     slice_pq_40.addInvariant (inv_p_lt_q);
-    OneOfScalar inv_p_eq_3 = OneOfScalar.instantiate (slice_p_40);
+    OneOfScalar inv_p_eq_3
+      = (OneOfScalar) OneOfScalar.get_proto().instantiate (slice_p_40);
     inv_p_eq_3.add_modified (3, 1);
     slice_p_40.addInvariant (inv_p_eq_3);
-    Invariant inv_q_gt_r = IntGreaterThan.instantiate (slice_qr_40);
+    Invariant inv_q_gt_r = IntGreaterThan.get_proto().instantiate (slice_qr_40);
     slice_qr_40.addInvariant (inv_q_gt_r);
-    Invariant inv_p_gt_r = IntGreaterThan.instantiate (slice_pr_40);
+    Invariant inv_p_gt_r = IntGreaterThan.get_proto().instantiate (slice_pr_40);
     slice_pr_40.addInvariant (inv_p_gt_r);
 
     // InvTranslate xlate = new InvTranslate();

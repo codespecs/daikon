@@ -39,15 +39,15 @@ public class InvariantTester extends TestCase {
     Configuration.getInstance().apply
       ("daikon.inv.binary.twoScalar.NumericInt.enabled = 1");
 
-    inv1 = NumericInt.BitwiseComplement.instantiate(slice);
+    inv1 = NumericInt.BitwiseComplement.get_proto().instantiate(slice);
     Assert.assertTrue(c.compare(inv1, inv1) == 0);
 
-    inv2 = IntEqual.instantiate(slice);
-    inv2_2 = IntNonEqual.instantiate(slice);
-    inv2_3 = IntLessThan.instantiate(slice);
-    inv2_4 = IntLessEqual.instantiate(slice);
-    inv2_5 = IntGreaterThan.instantiate(slice);
-    inv2_6 = IntGreaterEqual.instantiate(slice);
+    inv2 = IntEqual.get_proto().instantiate(slice);
+    inv2_2 = IntNonEqual.get_proto().instantiate(slice);
+    inv2_3 = IntLessThan.get_proto().instantiate(slice);
+    inv2_4 = IntLessEqual.get_proto().instantiate(slice);
+    inv2_5 = IntGreaterThan.get_proto().instantiate(slice);
+    inv2_6 = IntGreaterEqual.get_proto().instantiate(slice);
     Assert.assertTrue(c.compare(inv1, inv2) > 0);
     Assert.assertTrue(c.compare(inv1, inv2_2) > 0);
     Assert.assertTrue(c.compare(inv1, inv2_3) > 0);
@@ -55,10 +55,10 @@ public class InvariantTester extends TestCase {
     Assert.assertTrue(c.compare(inv1, inv2_5) > 0);
     Assert.assertTrue(c.compare(inv1, inv2_6) > 0);
 
-    inv3 = LinearBinary.instantiate(slice);
+    inv3 = LinearBinary.get_proto().instantiate(slice);
     Assert.assertTrue(c.compare(inv3, inv1) < 0);
 
-    inv4 = IntNonEqual.instantiate(slice);
+    inv4 = IntNonEqual.get_proto().instantiate(slice);
     Assert.assertTrue(c.compare(inv1, inv4) > 0);
 
     inv5 = Implication.makeImplication(ppt, inv1, inv2, false, null, null);
@@ -84,14 +84,14 @@ public class InvariantTester extends TestCase {
     VarInfo[] vars2 = { Common.makeIntVarInfo("x"), Common.makeIntVarInfo("z") };
     PptTopLevel ppt2 = Common.makePptTopLevel("Foo:::OBJECT", vars2);
     PptSlice slice2 = new PptSlice2(ppt2, vars2);
-    inv2 = NumericInt.BitwiseComplement.instantiate(slice2);
+    inv2 = NumericInt.BitwiseComplement.get_proto().instantiate(slice2);
     Assert.assertTrue(c.compare(inv1, inv2) < 0);
 
     vars2[0] = Common.makeIntVarInfo("a");
     vars2[1] = Common.makeIntVarInfo("y");
     ppt2 = Common.makePptTopLevel("Foo:::OBJECT", vars2);
     slice2 = new PptSlice2(ppt2, vars2);
-    inv2 = NumericInt.BitwiseComplement.instantiate (slice2);
+    inv2 = NumericInt.BitwiseComplement.get_proto().instantiate (slice2);
     Assert.assertTrue(c.compare(inv1, inv2) > 0);
   }
 

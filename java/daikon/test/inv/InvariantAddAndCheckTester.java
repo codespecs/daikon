@@ -9,7 +9,7 @@ import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.ternary.threeScalar.ThreeScalar;
 import daikon.inv.binary.*;
 import daikon.inv.unary.*;
-
+import daikon.inv.unary.sequence.CommonSequence;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -21,6 +21,7 @@ import java.util.Vector;
 import junit.framework.*;
 
 import utilMDE.Assert;
+import utilMDE.Fmt;
 
 /**
  * This is a tester for the results of adding or checking an sample
@@ -623,7 +624,8 @@ public class InvariantAddAndCheckTester extends TestCase {
       try {
         return (InvariantStatus) addModified.invoke(invariantToTest, params);
       } catch (Exception e) {
-        throw new RuntimeException(e);
+        throw new RuntimeException (" error in " + invariantToTest.getClass()
+                                    + ": " + e);
       }
     }
 
@@ -635,7 +637,8 @@ public class InvariantAddAndCheckTester extends TestCase {
       try {
         return (InvariantStatus) checkModified.invoke(invariantToTest, params);
       } catch (Exception e) {
-        throw new RuntimeException(e);
+        throw new RuntimeException (" error in " + invariantToTest.getClass()
+                                    + ": " + e);
       }
     }
 
@@ -958,14 +961,10 @@ public class InvariantAddAndCheckTester extends TestCase {
      */
     private static Invariant instantiateClass(Class theClass, PptSlice sl) {
       try {
-        Method instanceCreator =
-          theClass.getMethod("instantiate", new Class [] {PptSlice.class});
-
-        if (instanceCreator == null)
-          throw new RuntimeException("Could not instantiate invariant "
-                                     + theClass.getName());
-
-        return (Invariant) instanceCreator.invoke(null, new Object [] {sl});
+        Method get_proto = theClass.getMethod ("get_proto", new Class[] {});
+        Invariant proto = (Invariant) get_proto.invoke (null, new Object[] {});
+        Invariant inv = proto.instantiate (sl);
+        return (inv);
       }
       catch (Exception e) {
         e.printStackTrace(System.out);
