@@ -7,6 +7,7 @@ import utilMDE.*;
  * point, such as the class or method.
  **/
 public class PptName
+  implements Serializable
 {
 
   // any of these can be null
@@ -41,9 +42,11 @@ public class PptName
    **/
   public PptName(String className, String methodName, String pointName)
   {
-    cls = className;
-    method = methodName;
-    point = pointName;
+    cls = (className != null) ? className.intern() : null;
+    method = (methodName != null) ? methodName.intern() : null;
+    point = (pointName != null) ? pointName.intern() : null;
+
+    //System.out.println("\n\n" + className + " -- " + methodName + " -- " + pointName + "\n");
   }
 
   /**
@@ -118,13 +121,12 @@ public class PptName
 
   public boolean equals(PptName o)
   {
-    // check components in order of entropy, for speed
     return
       (o != null) &&
-      ((o.method == null) ? (method == null) : (o.cls.equals(method))) &&
-      ((o.cls    == null) ? (cls    == null) : (o.cls.equals(cls))) &&
-      ((o.point  == null) ? (point  == null) : (o.cls.equals(point)))
-      ;
+      (cls == o.cls) &&
+      (method == o.method) &&
+      (point == o.point) &&
+      true;
   }
 
   public int hashCode()
