@@ -75,7 +75,7 @@ public class DiffTester extends TestCase {
       new PptTopLevel("Foo.Bar(int):::EXIT19", new VarInfo[0]);
     PptTopLevel ppt2 =
       new PptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]);
-    ppt1.combined_exit = ppt2;
+    // ppt1.combined_exit = ppt2; // [INCR]
     ppts4.add(ppt1);
     ppts4.add(ppt2);
 
