@@ -38,22 +38,11 @@ class JTraceInference extends Thread
 	start(); // execute run() in a new thread
     }
 
-    // XXX Because Daikon is not truly online yet, we must buffer up
-    // all samples until after all the decls have been processed, then
-    // feed them all in. This must change.
-    class TraceSample {
-	PptTopLevel	ppt;
-	Object[]	vals;
-	int[]		mods;
-    };
-
-    private Vector/*<TraceSample>*/ samples = new Vector();
+    private PptMap all_ppts = new PptMap();
 
     public void	run()
     {
 	JTrace.println(JTrace.V_INFO, "JTrace: Inference thread start.");
-
-	PptMap all_ppts = new PptMap();
 
 	/////////
 
@@ -73,7 +62,9 @@ class JTraceInference extends Thread
 		int key = getInteger();
 		String ppt_name = getPptName(key);
 		JTrace.println(JTrace.V_INFO, ppt_name);
-		doPpt(ppt_name, all_ppts);
+		PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
+		ValueTuple vt = read_single_sample(ppt_name);
+		FileIO.process_sample(ppt, vt, null);
 		break;
 	    }
 
@@ -116,6 +107,7 @@ class JTraceInference extends Thread
 		    (VarInfo[])var_infos.toArray(new VarInfo[0]);
 		PptTopLevel ppt = new PptTopLevel(pptname, vi_array);
 		all_ppts.add(ppt);
+		Dataflow.init_partial_order(ppt, all_ppts);
 		break;
 	    }
 
@@ -144,66 +136,14 @@ class JTraceInference extends Thread
 	//  Finish up...
 	//
 
-
-	Dataflow.init_partial_order(all_ppts);
-	all_ppts.trimToSize();
-
-	// XXX this stuff should be done when we create TraceSamples,
-	// which should eventually not exist.
-
-	// Now add some additional variable values that don't appear directly
-	// in the data trace file but aren't traditional derived variables.
-
-	for(int ii=0; ii<samples.size(); ++ii)
-	{
-	    TraceSample sample = (TraceSample)samples.get(ii);
-
-	    JTrace.println(JTrace.V_DEBUG, "doing sample " + ii + " for " +
-			   sample.ppt.name);
-
-	    // XXX doesn't handle static constants yet
-	    Object[] new_vals = new Object[sample.ppt.var_infos.length];
-	    System.arraycopy(sample.vals, 0, new_vals, 0, sample.vals.length);
-	    sample.vals = new_vals;
-
-	    int[] new_mods = new int[sample.ppt.var_infos.length];
-	    System.arraycopy(sample.mods, 0, new_mods, 0, sample.mods.length);
-	    sample.mods = new_mods;
-
-	    try {
-		FileIO.add_orig_variables(sample.ppt, sample.vals, sample.mods,
-					  null);
-
-		if (! sample.ppt.ppt_name.isExitPoint()) {
-		    continue;
-		}
-		FileIO.add_derived_variables(sample.ppt, sample.vals,
-					     sample.mods);
-	    } catch(java.io.IOException e) {
-		Assert.assert(false, "uh oh"); // XXX
-	    }
-
-// XXX is this just an optimisation or what? We could get memory hungry here...
-	    sample.vals = Intern.intern(sample.vals);
-	    Assert.assert(Intern.isInterned(sample.vals));
-
-	    // Done adding additional variable values that don't
-	    // appear directly in the data trace file.
-
-	    ValueTuple vt = new ValueTuple(sample.vals, sample.mods);
-
-	    sample.ppt.add_and_flow(vt, 1);
-	}
-
 	JTrace.println(JTrace.V_INFO,"JTrace: Inference thread stop.");
 
-	// disable  debugIsWorthPrinting: ???X
-//	Configuration.getInstance().apply("daikon.inv.Invariant = 0");
-//	Configuration.getInstance().apply("daikon.inv.Invariant.isWorthPrinting = 0");
 	PrintInvariants.print_invariants(all_ppts);
     }
 
-    private void	doPpt(String ppt_name, PptMap all_ppts)
+    // Read all data for a certain ppt, create and fill a sample with it
+    // The length of the returned ValueTuple is ...?
+    private ValueTuple read_single_sample(String ppt_name)
     {
 	// from FileIO:
 
@@ -313,11 +253,7 @@ class JTraceInference extends Thread
 
 	}
 
-	TraceSample sample = new TraceSample();
-	sample.ppt = ppt;
-	sample.vals = vals;
-	sample.mods = mods;
-	samples.add(sample);
+	return ValueTuple.makeUninterned(vals, mods);
     }
 
     // called from another thread:
