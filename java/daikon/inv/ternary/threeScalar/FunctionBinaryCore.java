@@ -1,4 +1,4 @@
-package daikon.inv.threeScalar;
+package daikon.inv.ternary.threeScalar;
 
 import daikon.*;
 import daikon.inv.*;
