@@ -47,15 +47,15 @@ public class Annotate {
 
   // JML format: The formatting of invariants is different (we use
   // Invariant.OutputFormat.JML instead of
-  // Invariant.OutputFormat.ESC). Other than that, the format is
+  // Invariant.OutputFormat.ESC).  Other than that, the format is
   // almost the same as ESC (heavyweight) format, but "modifies"
   // clauses are omitted.
 
   // DBC format: same as ESC format, but "requires" becomes "@pre",
   // "ensures" becomes "@post", and we omit everything but invariants,
-  // pre and postconditions. See Appendix A below for Jtest's (not
+  // pre and postconditions.  See Appendix A below for Jtest's (not
   // very formal or detailed) specification of their DBC
-  // language. Note that we avoided using most DBC constructs--we
+  // language.  Note that we avoided using most DBC constructs -- we
   // found the DBC aspect of Jtest buggy, so we try to depend on their
   // constructs as little as possible.
 
@@ -242,7 +242,7 @@ public class Annotate {
 
       // Annotate the file
       try {
-      Ast.applyVisitorInsertComments(input, output,
+        Ast.applyVisitorInsertComments(input, output,
                    new AnnotateVisitor(ppts, slashslash, insert_inexpressible, setLightweight, useReflection,
                                        maxInvariantsPP));
       } catch (Error e) {
