@@ -94,6 +94,8 @@ public class DTraceWriter extends DaikonWriter
         // since that is a valid return value.
         traceMethod(mi, args, !mi.is_constructor(), obj, nonsenseValue);
         outFile.println();
+        
+        Runtime.incrementRecords();
     }
 
     /**
@@ -126,6 +128,8 @@ public class DTraceWriter extends DaikonWriter
         // pass object as well as argList in here.
         traceMethod(mi, args, true, obj, ret_val);
         outFile.println();
+        
+        Runtime.incrementRecords();
     }
 
     //prints an invocation nonce entry in the dtrace

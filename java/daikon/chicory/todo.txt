@@ -18,17 +18,20 @@ Todo list sorted in approximate order of importance.
     Another interesting solution would be to accept floating point
     values as a valid hashcode in Daikon (note that integer values
     work fine right now).  
+    [etf will work on this]
 
   - Fix --ppt-omit-pattern and --ppt-select-pattern to work on each
     ppt point name rather than only on class names.  I think this means
     we should consider a class instrumented if any of its methods
     match.  I think this change should be largely back compatible with 
     their current usage.
+    [etf]
 
   - Support DDTRACELIMIT and DDTRACELIMITTERMINATE environment variables
     just as dfej does.  This is partially in Runtime right now, but
     we need to call the proper methods when writing so it fully
     works.
+    [etf]
 
   - Add a Java 5.0 test to the test suite.   This will checkout not
     only Chicory, but annotate as well.  Carlos suggested the files
@@ -49,12 +52,14 @@ Todo list sorted in approximate order of importance.
     simple at that point.
 
   - Implement online mode 
+   [etf]
 
   - Restructure code so we don't calculate the same thing on each
     method entry/exit, but just once when processing the class.  This
     is not so much an optimization as a code cleanup so if we change,
     for instance, what variables are instrumented or their order we
     only have to change it in one place.
+    [etf]
 
   - Produce output not merely about the concrete representation of a data
     structure, but also about its abstract state, by creating new synthetic
@@ -72,6 +77,7 @@ Todo list sorted in approximate order of importance.
     analysis could make this extension pretty easy.
 
   - Implement --linked-lists option.
+	[etf]
 
   - Java 1.5 defines a new code attribute: Local Variable Type Table.
     I think this is there to help debuggers handle local variable that are
