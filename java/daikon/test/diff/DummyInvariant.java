@@ -57,6 +57,10 @@ public class DummyInvariant extends Invariant {
     return repr();
   }
 
+  public String format_ioa(String a) {
+    return repr();
+  }
+
   public String format_esc() {
     return repr();
   }
