@@ -1615,17 +1615,22 @@ tab-separated list.
 
 @item -j
 For internal use only.  Treat justification as a continuous value when
-gathering statistics.  Without this option, justification is treated as
+gathering statistics.  By default, justification is treated as
 a binary value -- an invariant is either justified or it is not.  For
 example, assume invariant I1 has a probability of .01, and I2 has a
-probability of .5.  Without this option, this will be a difference of 1,
+probability of .5.  By default, this will be a difference of 1,
 since I1 is justified but I2 is not.  With this option, this will be a
 difference of .49, the difference in the probabilities.  This only
 applies when one invariant is justified, and the other is unjustified.
 
 @item -p
-Examine all program points.  Without this option, only procedure entries
-and combined procedure exits are examined.
+Examine all program points.  By default, only procedure entries and
+combined procedure exits are examined.  This option also causes
+conditional program points to be examined.
+
+@item -e
+Print empty program points. By default, program points are not printed
+if they contain no differences.
 
 @item -v
 Verbose output.  Invariants are printed using the repr() method, instead
