@@ -41,11 +41,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 2.3.8
+@center Daikon version 2.3.9
 
 @sp 1
-@c Daikon version 2.3.8 date
-@center May 11, 2002
+@c Daikon version 2.3.9 date
+@center June  4, 2002
 
 @sp 5
 @c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
@@ -64,7 +64,7 @@ Copyright @copyright{} 1998-2002
 <h1>Daikon Invariant Detector User Manual</h1>
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.8, released May 11, 2002.
+It describes Daikon version 2.3.9, released June  4, 2002.
 
 @end html
 
@@ -79,7 +79,7 @@ It describes Daikon version 2.3.8, released May 11, 2002.
 
 @ifnottex
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.8, released May 11, 2002.
+It describes Daikon version 2.3.9, released June  4, 2002.
 @end ifnottex
 
 @menu
@@ -3975,7 +3975,7 @@ Simplify format (for use by the Simplify theorem-prover).
 To support a new output format, you need to do two things:
 @itemize @bullet
 @item
-(This description will change in Daikon version 2.3.8.)
+(This description will change in Daikon version 2.3.9.)
 Add, to every subclass of @samp{Invariant}, a
 @samp{format_@var{newtype}()} method.  Each subclass of Invariant
 already has three such methods --- @samp{format()}, @samp{format_esc()},
@@ -4606,7 +4606,7 @@ English words "die-con".
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 2.3.8, released May 11, 2002.
+This manual describes Daikon version 2.3.9, released June  4, 2002.
 A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
