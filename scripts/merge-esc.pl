@@ -1,9 +1,12 @@
 : # Use -*- Perl -*- without knowing its path
   eval 'exec perl -S -w -n $0 "$@"'
   if 0;
-# merge-esc.pl -- Merge Daikon output into Java source code as ESC annotations
+# merge-esc.pl -- Merge Daikon output into Java source code as ESC
+# annotations.  Most users will want to use daikon.tools.jtb.MergeESC
+# instead, since it supersedes this script.
+
 # Michael Ernst <mernst@lcs.mit.edu>
-# Time-stamp: <2002-01-23 20:40:38 mistere>
+# Time-stamp: <2002-03-18 12:28:48 mistere>
 
 # The input is a Daikon output file.  Files from the current directory
 # are rewritten into -escannotated versions (use the -r switch as the
