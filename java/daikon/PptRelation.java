@@ -214,9 +214,7 @@ public class PptRelation implements Serializable {
    * which allows the pair to be looked up (which is not possible with
    * a set).
    */
-
-  public Map /*VarInfo.Pair*/
-  get_child_equalities_as_parent() {
+  public Map /*VarInfo.Pair*/ get_child_equalities_as_parent() {
 
     debug.fine(
       "get_child_equalities for "
@@ -627,13 +625,13 @@ public class PptRelation implements Serializable {
         if (parent != null)
           rel = newClassObjectRel(parent, ppt);
 
-        // Else if it's a method and not a constructor, parent is object or class
-        // static methods will relate to the class, while non-static methods
-        // will relate to the object.  Whether or not a method is static is
-        // not in the decls file.  We infer this by looking to see if the
-        // variables match with the object ppt or the class ppt.
-      } else if (
-        (pname.isEnterPoint() && !pname.isConstructor())
+        // Else if it's a method and not a constructor, parent is
+        // object or class static methods will relate to the class,
+        // while non-static methods will relate to the object.
+        // Whether or not a method is static is not in the decls file.
+        // We infer this by looking to see if the variables match with
+        // the object ppt or the class ppt.
+      } else if ((pname.isEnterPoint() && !pname.isConstructor())
           || pname.isCombinedExitPoint()) {
 
         PptTopLevel parent = all_ppts.get(pname.makeObject());
@@ -699,8 +697,8 @@ public class PptRelation implements Serializable {
       // We skip variables named exactly 'this' so that we don't setup a
       // recursive relationship from the object to itself.
 
-      //DaikonSimple can not see these relations, so don't create them if we'll be
-      //comparing to DaikonSimple
+      //DaikonSimple can not see these relations, so don't create them
+      //if we'll be comparing to DaikonSimple
       if (dkconfig_enable_object_user) {
 
         debug.fine("-- Looking for variables with an OBJECT ppt");
