@@ -2002,14 +2002,8 @@ public final class Daikon {
 
     while (suppress_it.hasNext()) {
       PptTopLevel p = (PptTopLevel) suppress_it.next();
-
-      List a = NIS.create_suppressed_invs(p);
-
+      NIS.create_suppressed_invs(p);
     }
-
-    //undo dynamic constants: nothing needs to be done because there is
-    //already post processing for constants
-    //  Iterator dynamic_it = all_ppts.ppt_all_iterator();
 
     //undo equality sets
     Iterator equality_it = all_ppts.ppt_all_iterator();
@@ -2028,6 +2022,8 @@ public final class Daikon {
       Iterator sets = sliceEquality.invs.iterator();
       List /*[Equality]*/
       allNewInvs = new ArrayList();
+    
+      // get the new leaders       
       while (sets.hasNext()) {
         Equality eq = (Equality) sets.next();
         VarInfo leader = eq.leader();
@@ -2044,10 +2040,11 @@ public final class Daikon {
         if (vars.size() > 0) {
 
           // Create new equality sets for all of the non-equal vars
-          List newInvs = createEqualityInvs(vars, eq, sliceEquality);
+          List newInvs = sliceEquality.createEqualityInvs(vars, eq);
 
           // Create new slices and invariants for each new leader
-          copyInvsFromLeader(sliceEquality, leader, vars);
+         // copyInvsFromLeader(sliceEquality, leader, vars);
+         sliceEquality.copyInvsFromLeader(leader, vars);
 
           // Keep track of all of the new invariants created.
           // Add all of the new equality sets to our list
@@ -2059,239 +2056,4 @@ public final class Daikon {
 
     }
   }
-
-  /**
-   * Instantiate invariants from each inv's leader.  This is like
-   * instantiate_invariants at the start of reading the trace file,
-   * where we create new PptSliceNs.  This is called when newVis have
-   * just split off from leader, and we want the leaders of newVis to
-   * have the same invariants as leader.
-   * @param leader the old leader
-   * @param newVis a List of new VarInfos that used to be equal to
-   * leader.  Actually, it's the list of canonical that were equal to
-   * leader, representing their own newly-created equality sets.
-   * post: Adds the newly instantiated invariants and slices to
-   * this.parent.
-   */
-  private static List /*Invariant*/
-  copyInvsFromLeader(
-    PptSliceEquality equality,
-    VarInfo leader,
-    List newVis) {
-
-    List falsified_invs = new ArrayList();
-    List newSlices = new LinkedList();
-    //    if (debug.isLoggable(Level.FINE)) {
-    //      debug.fine ("copyInvsFromLeader: " + parent.name() + ": leader "
-    //            + leader.name.name()
-    //            + ": new leaders = " + VarInfo.toString (newVis));
-    //      debug.fine ("  orig slices count:" + parent.numViews());
-    //    }
-
-    // Copy all possible combinations from the current ppt (with repetition)
-    // of replacing leader with different members of newVis.
-
-    // Loop through each slice
-    for (Iterator i = equality.parent.views_iterator(); i.hasNext();) {
-      PptSlice slice = (PptSlice) i.next();
-
-      //      if (debug.isLoggable(Level.FINE)) {
-      //      debug.fine ("  Slice is: " + slice.toString());
-      //      debug.fine ("  With invs: " + slice.invs);
-      //      }
-
-      // If this slice contains the old leader
-      if (slice.containsVar(leader)) {
-
-        // Substitute new leader for old leader and create new slices/invs
-        VarInfo[] toFill = new VarInfo[slice.var_infos.length];
-        copyInvsFromLeaderHelper(
-          equality,
-          leader,
-          newVis,
-          slice,
-          newSlices,
-          0,
-          -1,
-          toFill);
-
-        if (slice.invs.size() == 0)
-          i.remove();
-      }
-    }
-
-    // Add each new slice with invariants
-    for (Iterator itor = newSlices.iterator(); itor.hasNext();) {
-      PptSlice slice = (PptSlice) itor.next();
-      if (slice.invs.size() == 0) {
-        continue;
-      }
-      Assert.assertTrue(
-        equality.parent.findSlice(slice.var_infos) == null);
-      slice.repCheck();
-      equality.parent.addSlice(slice);
-    }
-
-    equality.parent.repCheck();
-
-    return (falsified_invs);
-  }
-
-  /**
-   * Clones slice (zero or more times) such that instances of leader
-   * are replaced by members of newVis; places new slices in
-   * newSlices.  The replacement is such that we get all combinations,
-   * with repetition of newVis and leader in every slot in slice where
-   * there used to be leader.  For example, if slice contained (A1,
-   * A1, B) and A1 is leader and newVis contains A2 and A3, then the
-   * slices we produce would be: (A1, A2, B), (A1, A3, B), (A2, A2, B)
-   * (A2, A3, B), (A3, A3, B).  We do not produce (A1, A1, B) because
-   * it is already there.  We do not produce (A2, A1, B) because it is
-   * the same as (A1, A2, B) wrt combinations.  This method does the
-   * main work of copyInvsFromLeader so that each new equality set
-   * that spawned off leader has the correct slices.  It works as a
-   * nested series of for loops, whose depth is equal to the length of
-   * slice.var_infos.  The position and loop arguments along with the
-   * call stack keep track of the loop nesting.  When position reaches
-   * the end of slice.var_infos, this method attempts to instantiate
-   * the slice that has been produced.  The standard start for
-   * position is 0, and for loop is -1.
-   * @param leader The variable to replace in slice
-   * @param newVis of VarInfos that will replace leader in combination in slice
-   * @param slice The slice to clone
-   * @param newSlices Where to put the cloned slices
-   * @param position The position currently being replaced in source.  Starts at 0.
-   * @param loop The iteration of the loop for this position.  If -1,
-   * means the previous replacement is leader.
-   * @param soFar Buffer to which assignments temporarily go before
-   * becoming instantiated.  Has to equal slice.var_infos in length.
-   **/
-  private static void copyInvsFromLeaderHelper(
-    PptSliceEquality equality,
-    VarInfo leader,
-    List newVis,
-    PptSlice slice,
-    List newSlices,
-    int position,
-    int loop,
-    VarInfo[] soFar) {
-
-    // Track debug if any variables are in newVis
-    //    Debug dlog = null;
-    //    if (Debug.logOn())
-    //      dlog = new Debug (getClass(), parent, newVis);
-
-    if (position >= slice.var_infos.length) {
-      // Done with assigning positions and recursion
-      if (equality.parent.findSlice_unordered(soFar) == null) {
-        // If slice is already there, no need to clone.
-
-        if (equality.parent.is_slice_ok(soFar, slice.arity())) {
-          PptSlice newSlice = slice.cloneAndPivot(soFar);
-          // Debug.debugTrack.fine ("LeaderHelper: Created Slice " + newSlice);
-          //        if (Debug.logOn()) {
-          //        dlog.log ("Created slice " + newSlice + " Leader equality set = "
-          //              + soFar[0].equalitySet);
-          //        Debug.log (getClass(), newSlice, "Created this slice");
-          //        }
-          //  List invs = newSlice.invs;
-          //        for (Iterator iInvs = invs.iterator(); iInvs.hasNext(); ) {
-          //        Invariant inv = (Invariant) iInvs.next();
-          //        if (inv.isObviousStatically_AllInEquality()) {
-          //          iInvs.remove();
-          //        }
-          //        }
-          if (newSlice.invs.size() == 0) {
-            //        Debug.log (debug, getClass(), newSlice, soFar,
-            //               "slice not added because 0 invs");
-          } else {
-            newSlices.add(newSlice);
-          }
-        }
-      } else {
-        //System.out.print("HERE HERE HERE");
-        //      if (Debug.logOn())
-        //        dlog.log ("Slice already existed " +
-        //            parent.findSlice_unordered (soFar));
-      }
-      return;
-    } else {
-      // Not yet done with recursion, keep assigning to soFar
-      if (slice.var_infos[position] == leader) {
-        // If leader does need replacing
-        // newLoop starts at loop so that we don't have repeats
-        for (int newLoop = loop; newLoop < newVis.size(); newLoop++) {
-          VarInfo vi =
-            newLoop == -1 ? leader : (VarInfo) newVis.get(newLoop);
-          soFar[position] = vi;
-          // Advance position to next step, let next loop variable be
-          // this loop's counter.
-          copyInvsFromLeaderHelper(
-            equality,
-            leader,
-            newVis,
-            slice,
-            newSlices,
-            position + 1,
-            newLoop,
-            soFar);
-        }
-      } else {
-        // Non leader position, just keep going after assigning soFar
-        soFar[position] = slice.var_infos[position];
-        copyInvsFromLeaderHelper(
-          equality,
-          leader,
-          newVis,
-          slice,
-          newSlices,
-          position + 1,
-          loop,
-          soFar);
-      }
-    }
-  }
-  /**
-   * Create a List of Equality invariants based on the values given
-   * by vt for the VarInfos in vis.  Any variables that are out
-   * of bounds are forced into a separate equality set (since they
-   * no longer make sense and certainly shouldn't be equal to anything
-   * else)
-   * @param vis The VarInfos that were different from leader
-   * @param vt The ValueTuple associated with the VarInfos now
-   * @param leader The original leader of VarInfos
-   * @param count The number of samples seen (needed to set the number
-   * of samples for the new Equality invariants)
-   * @return a List of Equality invariants bundling together same
-   * values from vis, and if needed, another representing all the
-   * missing values.
-   * pre vis.size() > 0
-   * post result.size() > 0
-   */
-  private static List /*[Equality]*/
-  createEqualityInvs(List vis, Equality leader, PptSliceEquality slice) {
-    Assert.assertTrue(vis.size() > 0);
-
-    // Why use an array?  Because we'll be sorting shortly
-    Equality[] resultArray = new Equality[vis.size()];
-    int resultCount = 0;
-    Iterator i = vis.iterator();
-    while (i.hasNext()) {
-      List list = new ArrayList();
-      list.add(i.next());
-      Equality eq = new Equality(list, slice);
-      eq.setSamples(leader.numSamples());
-      resultArray[resultCount] = eq;
-      resultCount++;
-    }
-
-    // Sort for determinism
-    Arrays.sort(
-      resultArray,
-      PptSliceEquality.EqualityComparator.theInstance);
-    List result = Arrays.asList(resultArray);
-    Assert.assertTrue(result.size() > 0);
-    return result;
-  }
-
 }
