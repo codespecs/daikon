@@ -61,7 +61,7 @@ public class QueueArTester
 
   public void fillAndEmpty(int n)
   {
-    System.out.println("fae " + n);
+    // System.out.println("fae " + n);
     doNew(n);
     repEnqueue(n);
     dequeueAll();
@@ -69,7 +69,7 @@ public class QueueArTester
 
   public void walkAround(int n)
   {
-    System.out.println("wa " + n);
+    // System.out.println("wa " + n);
     doNew(n);
     for (int i=0; i < n/2; i++) {
       int x = (int)(1000 * Math.random());
@@ -84,7 +84,7 @@ public class QueueArTester
 
   public void variedTypes()
   {
-    System.out.println("varied");
+    // System.out.println("varied");
     doNew(10);
     enqueue("Hello world.");
     enqueue(new Double(5.5));
@@ -126,7 +126,7 @@ public class QueueArTester
   public void testOriginal()
   {
     QueueAr q = new QueueAr( );
-	    
+
     try
       {
 	for( int i = 0; i < 10; i++ )
@@ -194,7 +194,7 @@ public class QueueArTester
 	System.out.println( q.dequeue( ) );
       }
     catch( Overflow e ) { System.out.println( "Unexpected overflow" ); }
-  }    
+  }
   */
 
 }
