@@ -6,7 +6,7 @@
 # executed.
 
 USER=daikonbuildtest
-MAILTO=daikon@geyer.lcs.mit.edu
+MAILTO=daikon@pag.lcs.mit.edu
 #MAILTO=mharder@lcs.mit.edu
 
 01 1 * * * cd $HOME/research/invariants/scripts; cvs -Q up

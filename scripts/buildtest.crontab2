@@ -8,7 +8,7 @@
 # executed.
 
 USER=daikonbuildtest
-MAILTO=daikon@geyer.lcs.mit.edu
+MAILTO=daikon@pag.lcs.mit.edu
 
 02 1 * * * crontab $HOME/research/invariants/scripts/buildtest.crontab2
 02 2 * * * $HOME/research/invariants/scripts/buildtest --use_ver3 --skip_dfec --skip_dfej
