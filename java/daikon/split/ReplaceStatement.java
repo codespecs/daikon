@@ -149,7 +149,7 @@ class ReplaceStatement {
    * MethodParameter is a simple immutable ADT for representing
    * the name and type of a method parameter.
    */
-  public class MethodParameter {
+  static public class MethodParameter {
     public String type;
     public String name;
     public MethodParameter(String name, String type) {
