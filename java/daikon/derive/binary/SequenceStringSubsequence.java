@@ -97,9 +97,7 @@ public final class SequenceStringSubsequence
     if ((begin_inclusive == 0) && (end_exclusive == val1_array.length))
       return new ValueAndModified(val1, mod);
 
-    String[] subarr = ArraysMDE.subarray(val1_array, begin_inclusive,
-                                         end_exclusive - begin_inclusive);
-    subarr = (String[]) Intern.intern(subarr);
+    String[] subarr = Intern.internSubsequence (val1_array, begin_inclusive, end_exclusive);
     return new ValueAndModified(subarr, mod);
   }
 

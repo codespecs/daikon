@@ -254,15 +254,17 @@ public final class PptSlice2
     }
 
     Object val1 = full_vt.getValue(vi1);
+    Assert.assertTrue (Intern.isInterned (val1));
 
     Object val2 = full_vt.getValue(vi2);
+    Assert.assertTrue (Intern.isInterned (val2));
 
     // if (! already_seen_all) // [INCR]
     {
+      /* [INCR] ...
 
       Object[] vals = Intern.intern(new Object[] { val1, val2 });
 
-      /* [INCR] ...
       int[] tm_arr = (int[]) values_cache.get(vals);
       if (tm_arr == null) {
         tm_arr = new int[4];

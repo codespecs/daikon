@@ -221,13 +221,14 @@ public final class PptSlice1
     }
 
     Object val1 = full_vt.getValue(vi1);
+    Assert.assertTrue (Intern.isInterned (val1));
 
     // if (! already_seen_all) // [INCR]
     {
+      /* [INCR] ...
 
       Object vals = val1;
 
-      /* [INCR] ...
       int[] tm_arr = (int[]) values_cache.get(vals);
       if (tm_arr == null) {
         tm_arr = new int[2];
