@@ -47,7 +47,7 @@ STAGING_DIR := $(WWW_DIR)/staging-daikon
 
 # Files to copy to the website
 WWW_DAIKON_FILES := faq.html index.html mailing-lists.html StackAr.html \
-				    anoncvs.html download/index.html download/doc/index.html
+                    download/index.html download/doc/index.html
 
 
 # build the windows version of dfej here
