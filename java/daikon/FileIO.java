@@ -582,6 +582,7 @@ public final class FileIO {
         Object[] vals = new Object[vals_array_size];
         int[] mods = new int[vals_array_size];
 
+	// Read an invocation nonce if one exists
         Integer nonce = null;
         {
           reader.mark(22);
@@ -646,6 +647,8 @@ public final class FileIO {
     //   throw e;
     // }
 
+    // We've read all of the records in the dtrace file
+    // Look for unmatched procedure entry points
     if ((!call_stack.empty()) || (!call_hashmap.isEmpty())) {
       System.out.println("\nDetected abnormal termination of "
 			 + (call_stack.size() + call_hashmap.size())
