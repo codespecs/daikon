@@ -794,7 +794,7 @@ public final class Daikon {
     // One more round of suppression for printing
     for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
-      ppt.suppressAll();
+      ppt.suppressAll (false);
     }
   }
 
