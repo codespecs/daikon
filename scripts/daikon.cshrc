@@ -1,6 +1,6 @@
 ## daikon.cshrc
 ## Daikon initialization file for C shell (csh and tcsh) users.
-## (This file should be kept in synch with daikon.bashrc.)
+## (This file should be kept in synch with daikon.bashrc and daikonenv.bat.)
 
 ## Set DAIKONPARENT to the directory containing "daikon/".
 if (! $?DAIKONPARENT) setenv DAIKONPARENT /path/to/parent/of/daikon
@@ -13,8 +13,7 @@ if (! $?JDKDIR) setenv JDKDIR /g2/jdk
 
 ## Set DAIKONCLASS_SOURCES if you want to run Daikon from .class files that
 ## you compile yourself.  This permits you to modify Daikon (most users
-## will not need to do so) and may be used only if you downloaded the
-## source distribution.  If you do not set DAIKONCLASS_SOURCES, you will
+## will not need to do so).  If you do not set DAIKONCLASS_SOURCES, you will
 ## run Daikon from the precompiled bytecode files in daikon.jar.
 # setenv DAIKONCLASS_SOURCES 1
 
@@ -61,7 +60,6 @@ endif
 ## main-harness.csal, tweaked-classes.zip, etc.  Given a Java program, Ajax
 ## determines which variables can be sensibly compared to one another.
 setenv AJAX_DIR ${DAIKONDIR}/java/ajax-ship
-
 
 ## Indicates where Lackwit can find its libraries (and binaries).
 setenv LACKWIT_HOME $DFECDIR/lackwit
