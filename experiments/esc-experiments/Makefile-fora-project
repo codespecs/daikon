@@ -83,7 +83,7 @@ clean: reset-scratch
 	@echo
 	@echo \#\#\# clean
 	@echo
-	rm -f ${PROJECT}.txt-daikon* ${PROJECT}.txt-esc* ${PROJECT}.esc* *.bak
+	rm -f ${PROJECT}.txt-daikon ${PROJECT}.txt-daikon-failed ${PROJECT}.txt-esc ${PROJECT}.txt-esc-failed ${PROJECT}.esc *.bak
 
 #esc: StackAr.esc
 
@@ -157,8 +157,8 @@ ${PROJECT}.txt-daikon: ${SCRATCH_FOR_DAIKON}/.run-timestamp $(DAIKON_CLASS)
 	@echo \#\#\# txt-daikon
 	@echo
 	-rm -f $@-failed
-	java daikon.Daikon ${DAIKON_OPTS} `find ${SCRATCH_FOR_DAIKON} -name '*.decls' -o -name '*.dtrace'` >& $@ || (mv $@ $@-failed && false)
-	../remove-conditional-ppts.pl $@
+	java daikon.Daikon --output_num_samples ${DAIKON_OPTS} `find ${SCRATCH_FOR_DAIKON} -name '*.decls' -o -name '*.dtrace'` >& $@ || (mv $@ $@-failed && false)
+	# ../remove-conditional-ppts.pl $@
 
 ${PROJECT}.txt-esc: ${SCRATCH_FOR_DAIKON}/.run-timestamp $(DAIKON_CLASS)
 	@echo
@@ -166,7 +166,7 @@ ${PROJECT}.txt-esc: ${SCRATCH_FOR_DAIKON}/.run-timestamp $(DAIKON_CLASS)
 	@echo
 	-rm -f $@-failed
 	java daikon.Daikon --esc_output ${DAIKON_OPTS} `find ${SCRATCH_FOR_DAIKON} -name '*.decls' -o -name '*.dtrace'` >& $@ || (mv $@ $@-failed && false)
-	../remove-conditional-ppts.pl $@
+	# ../remove-conditional-ppts.pl $@
 
 #../DataStructures/StackAr.java-escannotated: txt-esc
 PWD:=$(shell pwd)
@@ -183,6 +183,12 @@ merge:
 
 ${PROJECT}.esc: ${PROJECT}.txt-esc
 	escjava ${SOURCE_TO_DFEJ} > ${PROJECT}.esc
+
+esc-clean:
+	-rm -f ${PROJECT}.esc
+
+esc-force: esc-clean ${PROJECT}.esc
+
 
 # ###########################################################################
 
