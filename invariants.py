@@ -28,7 +28,6 @@ if not locals().has_key("var_names"):
 integer_re = re.compile(r'^-?[0-9]+$')
 float_re = re.compile(r'^-?[0-9]*\.[0-9]+$|^-?[0-9]+\.[0-9]*$')
 sequence_re = re.compile(r'^[^	]+\[\]$') # variable name for a sequence
-unconstrained_re = re.compile(r'unconstrained$')
 
 def clear_variables():
     """Reset the values of some global variables."""
@@ -320,7 +319,7 @@ def all_numeric_invariants():
             else:
                 this_inv = single_scalar_numeric_invariant(this_dict)
             formatted = this_inv.format((this_var,))
-            if not unconstrained_re.search(formatted):
+            if not this_inv.is_unconstrained():
                 print " ", formatted
             # print " ", this_var, this_inv
             # print "   ", `this_inv`
@@ -343,7 +342,7 @@ def all_numeric_invariants():
                     if (this_inv.is_exact()):
                         exact_pair_invs.append(indices)
                     formatted = this_inv.format(these_vars)
-                    if not unconstrained_re.search(formatted):
+                    if not this_inv.is_unconstrained():
                         print "   ", formatted
                 # print "   ", these_vars, this_inv
                 # print "     ", `this_inv`
@@ -368,7 +367,7 @@ def all_numeric_invariants():
                     #     print "found tri_linear: %s = %s %s + %s %s + %s" % (these_vars[2], this_inv[1], these_vars[0], this_inv[2], these_vars[1], this_inv[3])
                     # print "     ", these_vars, `this_inv`
                     formatted = this_inv.format(these_vars)
-                    if not unconstrained_re.search(formatted):
+                    if not this_inv.is_unconstrained():
                         print "     ", formatted
 ## Testing:
 # all_numeric_invariants()
@@ -386,6 +385,7 @@ class invariant:
                                         # maintain this as a range rather
                                         # than an exact number...
     samples = None                  # number of samples; >= values
+    unconstrained_internal = None   # None, true, or false
 
     def __init__(self, dict):
         """DICT maps from values to number of occurrences."""
@@ -399,9 +399,19 @@ class invariant:
     def is_exact(self):
         return self.values == 1
 
+    def is_unconstrained(self):
+        if self.unconstrained_internal == None:
+            self.format("foo")
+        return self.unconstrained_internal
+
     def format(self, args):
         """ARGS is uninterpreted.
-This function can return None:  it's intended to be used only as a helper."""
+This function can return None:  it's intended to be used only as a helper.
+Any overriding implementation of this function should set the
+unconstrained_internal class-local variable.  Since this function sets it,
+too, callers of this function should be careful to do their manipulation
+after any call to this base method."""
+        self.unconstrained_internal = false
         if (type(args) in [types.ListType, types.TupleType]) and (len(args) == 1):
             args = args[0]
         if self.one_of:
@@ -409,8 +419,8 @@ This function can return None:  it's intended to be used only as a helper."""
                 return "%s = %s" % (args, self.one_of[0])
             elif self.samples < 100:
                 return "%s in %s" % (args, self.one_of)
+        self.unconstrained_internal = true
         return None
-
 
 
 class single_scalar_numeric_invariant(invariant):
@@ -520,6 +530,7 @@ class single_scalar_numeric_invariant(invariant):
         as_base = invariant.format(self, arg)
         if as_base:
             return as_base
+        self.unconstrained_internal = false
 
         if self.modulus and self.modulus_justified():
             return arg + " = %d (mod %d)" % self.modulus
@@ -549,6 +560,7 @@ class single_scalar_numeric_invariant(invariant):
         if self.one_of:
             return "%s in %s" % (arg, self.one_of)
 
+        self.unconstrained_internal = true
         return arg + " unconstrained"
 
 
@@ -735,9 +747,12 @@ class two_scalar_numeric_invariant(invariant):
         self.format(("x","y"))
 
     def format(self, arg_tuple):
+
         as_base = invariant.format(self, "(%s, %s)" % arg_tuple)
         if as_base:
             return as_base
+
+        self.unconstrained_internal = false
 
         (x,y) = arg_tuple
 
@@ -814,6 +829,7 @@ class two_scalar_numeric_invariant(invariant):
         elif self.one_of:
             return "%s in %s" % (arg, self.one_of)
         else:
+            self.unconstrained_internal = true
             return "(%s, %s) unconstrained" % (x,y)
 
 
@@ -964,6 +980,8 @@ class three_scalar_numeric_invariant(invariant):
         if as_base:
             return as_base
 
+        self.unconstrained_internal = false
+
         (x,y,z) = arg_tuple
 
         if self.linear_z or self.linear_y or self.linear_x:
@@ -1004,6 +1022,7 @@ class three_scalar_numeric_invariant(invariant):
             if len(results) > 0:
                 return string.join(results, " and ")
 
+        self.unconstrained_internal = true
         return "(%s, %s, %s) unconstrained" % (x,y,z)
 
 
@@ -1211,7 +1230,7 @@ class single_sequence_numeric_invariant(invariant):
     reversed_per_index_sni = None
 
     def __init__(self, dict):
-        """dict maps from tuples of values to number of occurrences"""
+        """DICT maps from tuples of values to number of occurrences."""
         invariant.__init__(self,dict)
         seqs = dict.keys()
         seqs.sort()
@@ -1286,11 +1305,13 @@ class single_sequence_numeric_invariant(invariant):
         # if as_base:
         #     return as_base
 
+        self.unconstrained_internal = false
+
         # Which is the strongest relationship (so we can ignore others)?
         # Do we care more that it is sorted, or that it is in given range?
         # How much of this do we want to print out?
 
-        result = arg + "\n"
+        result = ""
         if self.min_justified and self.max_justified:
             if self.min == self.max:
                 result = result + "\t== %s" % (self.min,)
@@ -1308,15 +1329,20 @@ class single_sequence_numeric_invariant(invariant):
         elif self.non_increasing:
             result = result + "\n" + "\tPer sequence elements non-increasing"
 
-        result = result + "\n" + "\tAll sequence elements: " \
-                 + self.all_index_sni.format(("*every*element*",))
-        result = result + "\n" + "\tFirst sequence element: " \
-                 + self.per_index_sni[0].format(("*first*element*",))
-        result = result + "\n" + "\tLast sequence element: " \
-                 + self.reversed_per_index_sni[0].format(("*last*element*",))
+        all_formatted = self.all_index_sni.format(("*every*element*",))
+        if not self.all_index_sni.is_unconstrained():
+            result = result + "\n" + "\tAll sequence elements: " + all_formatted
+        first_formatted = self.per_index_sni[0].format(("*first*element*",))
+        if not self.per_index_sni[0].is_unconstrained():
+            result = result + "\n" + "\tFirst sequence element: " + first_formatted
+        last_formatted = self.reversed_per_index_sni[0].format(("*last*element*",))
+        if not self.reversed_per_index_sni[0].is_unconstrained():
+            result = result + "\n" + "\tLast sequence element: " + last_formatted
 
-        # How to note that unconstrained???
-        return result
+        if result == "":
+            self.unconstrained_internal = true
+            return arg + " unconstrained"
+        return arg + "\n" + result
 
 
 ###########################################################################
@@ -1397,6 +1423,8 @@ class scalar_sequence_numeric_invariant(invariant):
         self.format(("num","seq"))
 
     def format(self, arg_tuple):
+        self.unconstrained_internal = false
+
         (x, y) = arg_tuple
 
         # How do we make sure which is num and which is seq???
@@ -1411,6 +1439,7 @@ class scalar_sequence_numeric_invariant(invariant):
             if self.size:
                 return "%s is the size of %s" % (x,y)
 
+        self.unconstrained_internal = true
         return "(%s,%s) are unconstrained" % (x,y)
 
 
@@ -1520,6 +1549,8 @@ class two_sequence_numeric_invariant(invariant):
         # if as_base:
         #     return as_base
 
+        self.unconstrained_internal = false
+
         (x, y) = arg_tuple
         if self.comparison == "=":
             return "%s = %s" % (x,y)
@@ -1554,6 +1585,7 @@ class two_sequence_numeric_invariant(invariant):
                 return "%s <= %s" % (y, x)
             raise "Can't get here"
 
+        self.unconstrained_internal = true
         return "(%s,%s) unconstrained" % (x,y)
 
 
