@@ -1363,7 +1363,8 @@ public class PptTopLevel
   /**
    * Add the sample both to this point and to the global ppt (if
    * any).  Any invariants weakened at the global ppt are added to
-   * the list of all weakened invariants  @see #add_bottom_up
+   * the list of all weakened invariants.
+   * @see #add_bottom_up
    **/
   public void add_global_bottom_up (ValueTuple vt, int count){
 
