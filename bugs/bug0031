@@ -1,5 +1,5 @@
 Version:      $Id$
-Owner:        Mike <mernst>
+Owner:        Alan <amdunn>, Mike <mernst>
 Cc:           Jeremy <mistere>
 Tool:         MergeESC
 Summary:      MergeESC misses ghost fields, sets ghost field(s) on incorrect object
@@ -56,7 +56,10 @@ These errors prevent verification of the class.
 
 --
 $Log$
-Revision 1.4  2002-04-03 20:18:14  mistere
+Revision 1.5  2002-07-31 21:44:17  mernst
+changed bug0031
+
+Revision 1.4  2002/04/03 20:18:14  mistere
 Manually update to use Cc field wher appropriate.
 
 Revision 1.3  2002/03/27 22:00:42  mistere
