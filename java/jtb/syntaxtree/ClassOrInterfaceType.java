@@ -11,6 +11,9 @@ package jtb.syntaxtree;
  * f2 -> ( "." <IDENTIFIER> [ TypeArguments() ] )*
  */
 public class ClassOrInterfaceType implements Node {
+
+   public ClassOrInterfaceType unGenerifiedVersionOfThis = null;
+
    private Node parent;
    public NodeToken f0;
    public NodeOptional f1;
@@ -40,4 +43,3 @@ public class ClassOrInterfaceType implements Node {
    public void setParent(Node n) { parent = n; }
    public Node getParent()       { return parent; }
 }
-
