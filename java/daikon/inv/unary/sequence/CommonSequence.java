@@ -24,8 +24,6 @@ public class CommonSequence
    **/
   public static boolean dkconfig_enabled = true;
 
-  final static boolean debugCommonSequence = false;
-
   private int elts;
   private long[] intersect = null;
 
@@ -60,11 +58,14 @@ public class CommonSequence
     return result;
   }
 
+  public String format_using(OutputFormat format) {
+    if (format == OutputFormat.DAIKON) return format_daikon();
+    if (format == OutputFormat.IOA) return format_ioa();
 
-  public String format() {
-    if (debugCommonSequence) {
-      System.out.println(repr());
-    }
+    return format_unimplemented(format);
+  }
+
+  public String format_daikon() {
     return (printIntersect() + " subset of " + var().name);
   }
 
@@ -75,16 +76,6 @@ public class CommonSequence
       return printIntersect() + " \\in " + vname;
     else
       return "(" + printIntersect() + " \\in " + vname + ") ***";
-  }
-
-  public String format_esc() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
-  }
-
-  public String format_simplify() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_simplify() needs to be implemented: " + format();
   }
 
   public void add_modified(long[] a, int count) {

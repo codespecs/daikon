@@ -2,6 +2,7 @@ package daikon.inv.binary.twoScalar;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import utilMDE.*;
 import java.io.Serializable;
 import org.apache.log4j.Category;
@@ -181,7 +182,11 @@ public final class LinearBinaryCore
   // Format one term of an equation.
   // Variable "first" indicates whether this is the leading term
   // Variable "var" is the name of the variable; may be null for the constant term.
-  public static String formatTerm(double coeff, String var, boolean first) {
+  public static String formatTerm(OutputFormat format,
+				  double coeff,
+				  VarInfoName var,
+				  boolean first)
+  {
     if (coeff == 0)
       return "";
     String sign;
@@ -201,56 +206,71 @@ public final class LinearBinaryCore
     if (var == null)
       return sign + coeff_string;
     if (coeff == 1)
-      return sign + var;
+      return sign + var.name_using(format);
     else
-      return sign + coeff_string + " * " + var;
+      return sign + coeff_string + " * " + var.name_using(format);
   }
 
-  public static String format(String x, String y, double a, double b) {
+  public static String format_using(OutputFormat format,
+				    VarInfoName x, VarInfoName y,
+				    double a, double b)
+  {
+    String xname = x.name_using(format);
+    String yname = y.name_using(format);
+
     if ((a == 0) && (b == 0)) {
-      return y + " == ? * " + x + " + ?";
+      String result = yname + " == ? * " + xname + " + ?";
+      if (format == OutputFormat.IOA) result += " ***";
+      return result;
     }
 
-    return y + " == " + formatTerm(a, x, true) + formatTerm(b, null, false);
-  }
-
-  public static String format_simplify(VarInfoName x, VarInfoName y, double da, double db) {
-    int a = (int) da;
-    int b = (int) db;
-
-    //      no data            or      non-integral
-    if (((a == 0) && (b == 0)) || (a != da) || (b != db)) {
-      return "format_simplify cannot handle " + format(x.name(), y.name(), da, db);
+    if ((format == OutputFormat.DAIKON)
+	|| (format == OutputFormat.JAVA)
+	|| (format == OutputFormat.ESCJAVA)
+	|| (format == OutputFormat.IOA))
+    {
+      String eq = " == ";
+      if (format == OutputFormat.IOA) eq = " = ";
+      return yname + eq
+	+ formatTerm(format, a, x, true)
+	+ formatTerm(format, b, null, false);
     }
 
-    // y == a x + b
-    String str_y = y.simplify_name();
-    String str_x = x.simplify_name();
-    String str_ax = (a == 1) ? str_x : "(* " + a + " " + str_x + ")";
-    String str_axpb = (b == 0) ? str_ax : "(+ " + str_ax + " " + b + ")";
-    return "(EQ " + str_y + " " + str_axpb + ")";
-  }
+    if (format == OutputFormat.SIMPLIFY) {
+      int ia = (int) a;
+      int ib = (int) b;
 
-  public String format(String x, String y) {
-    return format(x, y, a, b);
-  }
+      //      no data            or      non-integral
+      if (((ia == 0) && (ib == 0)) || (ia != a) || (ib != b)) {
+	return null;
+      }
 
-  /* IOA */
-  public String format_ioa(String x, String y) {
-    if ((a==0) && (b==0)) {
-      return y + " = (? * " + x + ") + ? ***";
+      // y == a x + b
+      String str_ax = (a == 1) ? xname : "(* " + a + " " + xname + ")";
+      String str_axpb = (b == 0) ? str_ax : "(+ " + str_ax + " " + b + ")";
+      return "(EQ " + yname + " " + str_axpb + ")";
     }
-    return y + " = " + formatTerm(a, x, true) + formatTerm(b, null, false);
+
+    return null;
   }
 
-  public String format_simplify(VarInfoName x, VarInfoName y) {
-    return format_simplify(x, y, a, b);
+  public String format_using(OutputFormat format,
+			     VarInfoName x, VarInfoName y)
+  {
+    String result = format_using(format, x, y, a, b);
+    if (result != null) {
+      return result;
+    } else {
+      return wrapper.format_unimplemented(format);
+    }
   }
 
   // Format as "x = cy+d" instead of as "y = ax+b".
-  public String format_reversed(String x, String y) {
+  public String format_reversed_using(OutputFormat format,
+				      VarInfoName x, VarInfoName y)
+  {
     Assert.assert(a == 1 || a == -1);
-    return format(y, x, a, -b/a);
+    return format_using(format, y, x, a, -b/a);
   }
 
   public boolean isSameFormula(LinearBinaryCore other)

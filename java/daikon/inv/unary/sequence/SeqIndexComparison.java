@@ -91,7 +91,16 @@ public final class SeqIndexComparison
       + ",no_invariant=" + no_invariant;
   }
 
-  public String format() {
+  public String format_using(OutputFormat format) {
+    if (format == OutputFormat.DAIKON) format_daikon();
+    if (format == OutputFormat.IOA) format_ioa();
+    if (format == OutputFormat.ESCJAVA) format_esc();
+    if (format == OutputFormat.SIMPLIFY) format_simplify();
+
+    return format_unimplemented(format);
+  }
+
+  public String format_daikon() {
     String comparator = core.format_comparator();
     // this is wrong because "a[i:k..] < i" doesn't need the subscript
     // return var().name.applySubscript(VarInfoName.parse("i")).name() + " " + comparator + " i";

@@ -140,27 +140,12 @@ public final class StringComparison
     return "StringComparison" + varNames() + ": " + core.repr();
   }
 
-  public String format() {
-    String comparator = core.format_comparator();
-    return var1().name + " " + comparator + " " + var2().name;
-  }
-
-  public String format_esc() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
-  }
-
-  /* IOA */
-  public String format_ioa() {
-    String comparator = core.format_comparator();
-    comparator = (comparator.equals("==") ? "=" : comparator);
-    return var1().name.ioa_name()+" "+comparator+" "+var2().name.ioa_name();
-  }
-
-
-  public String format_simplify() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_simplify() needs to be implemented: " + format();
+  public String format_using(OutputFormat format) {
+    String name1 = var1().name.name_using(format);
+    String name2 = var2().name.name_using(format);
+    String comparator = core.format_comparator(format);
+    return name1 + " " + comparator + " " + var2().name;
+    // return format_unimplemented(format);
   }
 
   public void add_modified(String v1, String v2, int count) {

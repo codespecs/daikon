@@ -38,30 +38,27 @@ public class Reverse
       + "no_invariant=" + no_invariant;
   }
 
-  public String format() {
+  public String format_using(OutputFormat format) {
+    if (format == OutputFormat.DAIKON) return format_daikon();
+    if (format == OutputFormat.JAVA) return format_java();
+    if (format == OutputFormat.IOA) return format_ioa();
+
+    return format_unimplemented(format);
+  }
+
+  public String format_daikon() {
     return var1().name.name() + " is the reverse of " + var2().name.name();
   }
 
-    public String format_java() {
-	// ( (new StringBuffer (var1().name.name())).reverse().toString(
-	//       ).equals (var2().name.name()))
-	return "( (new StringBuffer (" + var1().name.name() + ")).reverse().toString().equals (" + var2().name.name() + ")";
-    }
-
-  public String format_esc() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
+  public String format_java() {
+    // ( (new StringBuffer (var1().name.name())).reverse().toString(
+    //       ).equals (var2().name.name()))
+    return "( (new StringBuffer (" + var1().name.name() + ")).reverse().toString().equals (" + var2().name.name() + ")";
   }
 
   /* IOA */
   public String format_ioa() {
     return "Not valid for Sets or Arrays: " + format();
-  }
-
-
-  public String format_simplify() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_simplify() needs to be implemented: " + format();
   }
 
   public void add_modified(long[] a1, long[] a2, int count) {

@@ -70,7 +70,16 @@ public final class SeqIndexNonEqual
       + ",no_invariant=" + no_invariant;
   }
 
-  public String format() {
+  public String format_using(OutputFormat format) {
+    if (format == OutputFormat.DAIKON) return format_daikon();
+    if (format == OutputFormat.ESCJAVA) return format_esc();
+    if (format == OutputFormat.IOA) return format_ioa();
+    if (format == OutputFormat.SIMPLIFY) return format_simplify();
+
+    return format_unimplemented(format);
+  }
+
+  public String format_daikon() {
     // this is wrong because "a[k..] != i" doesn't need the subscript
     // return var().name.applySubscript(VarInfoName.parse("i")).name() + " != i";
     VarInfoName name = var().name;

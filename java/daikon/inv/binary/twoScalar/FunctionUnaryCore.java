@@ -2,6 +2,7 @@ package daikon.inv.binary.twoScalar;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import java.io.*;
 import java.lang.reflect.*;
 import utilMDE.*;
@@ -106,17 +107,23 @@ public final class FunctionUnaryCore
   }
 
 
-  public String format(VarInfoName vname1, VarInfoName vname2) {
-    VarInfoName argname = inverse ? vname2 : vname1;
-    VarInfoName resultname = inverse ? vname1 : vname2;
-    return resultname + " == " + function + "(" + argname + ")";
-  }
+  public String format_using(OutputFormat format,
+			     VarInfoName vname1,
+			     VarInfoName vname2)
+  {
+    String argname = (inverse ? vname2 : vname1).name_using(format);
+    String resultname = (inverse ? vname1 : vname2).name_using(format);
+    if ((format == OutputFormat.DAIKON)
+	|| (format == OutputFormat.IOA))
+    {
+      String eq = " == ";
+      if (format == OutputFormat.IOA) eq = " = ";
+      String result = resultname + eq + function + "(" + argname + ")";
+      if (format == OutputFormat.IOA) result += " ***";
+      return result;
+    }
 
-  /* IOA */
-  public String format_ioa(String vname1, String vname2) {
-    String argname = (inverse ? vname2 : vname1 );
-    String resultname = (inverse ? vname1 : vname2);
-    return resultname + " = " + function + "(" + argname + ") ***";
+    return wrapper.format_unimplemented(format);
   }
 
   public String repr() {

@@ -26,7 +26,7 @@ public class Positive
   }
 
   // A printed representation for user output
-  public String format() {
+  public String format_using(OutputFormat format) {
     return var().name.name() + " > 0";
   }
 

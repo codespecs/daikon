@@ -248,46 +248,37 @@ public final class INTEQUAL
     return INTEQUALstring + varNames();
   }
 
-  public String format() {
-    return var1().name.name() + " " + EQUALSstring + " " + var2().name.name();
-  }
+  public String format_using(OutputFormat format) {
+    String var1name = var1().name.name_using(format);
+    String var2name = var2().name.name_using(format);
 
-  public String format_esc() {
-    return var1().name.esc_name() + " " + EQUALSstring + " " + var2().name.esc_name();
-  }
-
-  /* IOA */
-  public String format_ioa() {
-
+    if ((format == OutputFormat.DAIKON)
+	|| (format == OutputFormat.ESCJAVA)
+	|| (format == OutputFormat.JAVA)
+	|| (format == OutputFormat.IOA))
+    {
+      String comparator = EQUALSstring;
 #if defined(EQUAL)
-    String comparator = "=";
+      if (format == OutputFormat.IOA) comparator = "=";
+      if (format == OutputFormat.JAVA) comparator = "=";
 #elif defined(NONEQUAL)
-    String comparator = "~=";
-#else
-    String comparator = EQUALSstring;
+      if (format == OutputFormat.IOA) comparator = "~=";
 #endif
-    return var1().name.ioa_name()+" "+comparator+" "+var2().name.ioa_name();
-  }
+      return var1name + " " + comparator + " " + var2().name.name();
+    }
 
-  public String format_simplify() {
+    if (format == OutputFormat.SIMPLIFY) {
 #if defined(EQUAL)
-    String comparator = "EQ";
+      String comparator = "EQ";
 #elif defined(NONEQUAL)
-    String comparator = "NEQ";
+      String comparator = "NEQ";
 #else
-    String comparator = EQUALSstring;
+      String comparator = EQUALSstring;
 #endif
-    return "(" + comparator + " " + var1().name.simplify_name() + " " + var2().name.simplify_name() + ")";
-  }
+      return "(" + comparator + " " + var1name + " " + var2name + ")";
+    }
 
-  /* java output */
-  public String format_java() {
-#if defined(EQUAL)
-    String comparator = "=";
-#else
-    String comparator = EQUALSstring;
-#endif
-    return var1().name.java_name()+" "+comparator+" "+var2().name.java_name();
+    return format_unimplemented(format);
   }
 
   public void add_modified(long v1, long v2, int count) {

@@ -54,32 +54,12 @@ public class LinearBinary
       + "; " + core.repr();
   }
 
-  public String format() {
-    return core.format(var1().name.name(), var2().name.name());
+  public String format_using(OutputFormat format) {
+    return core.format_using(format, var1().name, var2().name);
   }
 
-    
-    public String format_java() { return format(); }
-
-  public String format_esc() {
-    return core.format(var1().name.esc_name(), var2().name.esc_name());
-  }
-
-  /* IOA */
-  public String format_ioa() {
-    return core.format_ioa(var1().name.ioa_name(), var2().name.ioa_name());
-  }
-
-  public String format_reversed() {
-    return core.format_reversed(var1().name.name(), var2().name.name());
-  }
-
-  public String format_esc_reversed() {
-    return core.format_reversed(var1().name.esc_name(), var2().name.esc_name());
-  }
-
-  public String format_simplify() {
-    return core.format_simplify(var1().name, var2().name);
+  public String format_reversed_using(OutputFormat format) {
+    return core.format_reversed_using(format, var1().name, var2().name);
   }
 
   // XXX core needs to change to do flow

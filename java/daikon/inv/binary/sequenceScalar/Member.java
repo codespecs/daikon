@@ -230,7 +230,25 @@ public final class Member
       + "no_invariant=" + no_invariant;
   }
 
-  public String format() {
+  public String format_using(OutputFormat format) {
+    if (format == OutputFormat.DAIKON) {
+      return format_daikon();
+    } else if (format == OutputFormat.JAVA) {
+      return format_java();
+    } else if (format == OutputFormat.IOA) {
+      return format_ioa();
+
+    } else if (format == OutputFormat.SIMPLIFY) {
+      return format_simplify();
+    } else if (format == OutputFormat.ESCJAVA) {
+      return format_esc();  
+
+    } else {
+      return format_unimplemented(format);
+    }
+  }
+
+  public String format_daikon() {
     return sclvar().name.name() + " in " + seqvar().name.name();
   }
 

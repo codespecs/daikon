@@ -1,5 +1,7 @@
 package daikon;
 
+import daikon.inv.Invariant.OutputFormat;
+
 import utilMDE.*;
 
 import org.apache.log4j.Category;
@@ -215,6 +217,19 @@ public abstract class VarInfoName
   protected abstract String java_name_impl();
 
   /**
+   * @return name of this in the specified format
+   **/
+  public String name_using(OutputFormat format) {
+    if (format == OutputFormat.DAIKON) return name();
+    if (format == OutputFormat.SIMPLIFY) return simplify_name();
+    if (format == OutputFormat.ESCJAVA) return esc_name();
+    if (format == OutputFormat.JAVA) return java_name();
+    if (format == OutputFormat.IOA) return ioa_name();
+    throw new UnsupportedOperationException
+      ("Unknown format requested: " + format);
+  }
+
+  /**
    * @return the string reprenentation (interned) of this name, in a
    * debugging format
    **/
@@ -304,9 +319,9 @@ public abstract class VarInfoName
   // Special producers, or other helpers
 
   public VarInfoName replaceAll(VarInfoName node, VarInfoName replacement) {
-    Assert.assert(! replacement.hasNode(node));
     if (node == replacement)
       return this;
+    Assert.assert(! replacement.hasNode(node)); // no infinite loop
     VarInfoName result = this;
     Replacer r = new Replacer(node, replacement);
     while (result.hasNode(node)) {
@@ -2086,12 +2101,12 @@ public abstract class VarInfoName
 	return ")";
       }
 
-      public String getVarName (int num) {
-	return ((VarInfoName[]) (qret.bound_vars.get(num))) [0].ioa_name();
+      public VarInfoName getVarName (int num) {
+	return ((VarInfoName[]) (qret.bound_vars.get(num))) [0];
       }
 
-      public String getVarIndexed (int num) {
-	return qret.root_primes[num ].ioa_name();
+      public VarInfoName getVarIndexed (int num) {
+	return qret.root_primes[num];
       }
 
     }

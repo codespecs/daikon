@@ -91,56 +91,28 @@ public class Implication
       + " => " + consequent.repr() + "]";
   }
 
-  public String format() {
-    String arrow = (iff ? "  <==>  " : "  ==>  "); // "interned"
-    return "(" + predicate.format() + ")" + arrow + "(" + consequent.format() + ")";
-  }
-
-    public String format_java() {
+  public String format_using(OutputFormat format) {
+    String pred_fmt = predicate.format_using(format);
+    String consq_fmt = consequent.format_using(format);
+    if (format == OutputFormat.DAIKON) {
+      String arrow = (iff ? "  <==>  " : "  ==>  "); // "interned"
+      return "(" + pred_fmt + ")" + arrow + "(" + consq_fmt + ")";
+    } else if (format == OutputFormat.IOA) {
+      String arrow = (iff ? "  <=>  " : "  =>  ");
+      return "(" + pred_fmt + ")" + arrow + "(" + consq_fmt + ")";
+    } else if (format == OutputFormat.ESCJAVA) {
+      String arrow = (iff ? "  ==  " : "  ==>  "); // "interned"
+      return "(" + pred_fmt + ")" + arrow + "(" + consq_fmt + ")";
+    } else if (format == OutputFormat.JAVA) {
       String mid = (iff ? " == " : " || !");
-      return "(" + consequent.format_java() + ")" + mid + "(" +predicate.format_java() + ")";
+      return "(" + consq_fmt + ")" + mid + "(" + pred_fmt + ")";
+    } else if (format == OutputFormat.SIMPLIFY) {
+      String cmp = (iff ? "IFF" : "IMPLIES");
+      return "(" + cmp + " " + pred_fmt + " " + consq_fmt + ")";
+    } else {
+      return format_unimplemented(format);
     }
-
-  /* IOA */
-  public String format_ioa() {
-    String arrow = (iff ? "  <=>  " : "  =>  ");
-    String pred_fmt = predicate.format_ioa();
-    String consq_fmt = consequent.format_ioa();
-    return "(" + pred_fmt + ")" + arrow + "(" + consq_fmt + ")";
   }
-
-
-  public String format_esc() {
-    String arrow = (iff ? "  ==  " : "  ==>  "); // "interned"
-    String pred_fmt = predicate.format_esc();
-    String consq_fmt = consequent.format_esc();
-    return "(" + pred_fmt + ")" + arrow + "(" + consq_fmt + ")";
-  }
-
-  public String format_simplify() {
-    String cmp = (iff ? "IFF" : "IMPLIES");
-    String pred_fmt = predicate.format_simplify();
-    String consq_fmt = consequent.format_simplify();
-    return "(" + cmp + " " + pred_fmt + " " + consq_fmt + ")";
-  }
-
-  /// Completely confused ESC implementation; use better, briefer one.
-  // private String make_impl(String pred, String cons) {
-  //   return "(" + pred + ")  ==>  (" + cons + ")";
-  // }
-  // public String format_esc() {
-  //   // Slightly gross to have this on one line instead of two separate ones
-  //   String arrow = (iff ? "  <==>  " : "  ==>  "); // "interned"
-  //   String pred = predicate.format_esc();
-  //   String cons = consequent.format_esc();
-  //   if (iff) {
-  //     return "((" + make_impl(pred, cons) + ")   &&   ("
-  //       + make_impl(cons, pred)
-  //       + "))";
-  //   } else {
-  //     return make_impl(pred, cons);
-  //   }
-  // }
 
   public boolean isObviousDerived() {
     return consequent.isObviousDerived();

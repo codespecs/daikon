@@ -4,6 +4,7 @@ import java.io.*;
 import gnu.getopt.*;
 import org.apache.log4j.Category;
 import daikon.*;
+import daikon.inv.Invariant.OutputFormat;
 import utilMDE.*;
 import jtb.syntaxtree.*;
 import jtb.JavaParser;
@@ -140,7 +141,7 @@ class MergeESC {
                                                 true // use saved config
                                                 );
 
-    Daikon.output_style = Daikon.OUTPUT_STYLE_ESC;
+    Daikon.output_style = OutputFormat.ESCJAVA;
     Daikon.suppress_implied_controlled_invariants = true;
     Daikon.suppress_implied_postcondition_over_prestate_invariants = true;
     Daikon.suppress_redundant_invariants_with_simplify = true;

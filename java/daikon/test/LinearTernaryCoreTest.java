@@ -4,6 +4,8 @@ import java.io.*;
 import java.util.*;
 import junit.framework.*;
 
+import daikon.*;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.ternary.threeScalar.*;
 
 public class LinearTernaryCoreTest
@@ -83,6 +85,10 @@ public class LinearTernaryCoreTest
     // //      z = 6
   }
 
+  private static VarInfoName _x = VarInfoName.parse("x");
+  private static VarInfoName _y = VarInfoName.parse("y");
+  private static VarInfoName _z = VarInfoName.parse("z");
+
   public void one_test_format(double a, double b, double c, String result) {
     LinearTernaryCore ltc = new LinearTernaryCore(null);
     ltc.a = a;
@@ -90,7 +96,7 @@ public class LinearTernaryCoreTest
     ltc.c = c;
     // System.out.println("Expecting: " + result);
     // System.out.println("Actual:    " + ltc.format("x", "y", "z"));
-    assertTrue(ltc.format("x", "y", "z").equals(result));
+    assertTrue(ltc.format_using(OutputFormat.DAIKON, _x, _y, _z).equals(result));
   }
 
   public void test_format() {

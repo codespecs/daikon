@@ -2,6 +2,7 @@ package daikon.inv.ternary.threeScalar;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.binary.twoScalar.LinearBinaryCore;
 import utilMDE.*;
 import java.io.Serializable;
@@ -302,31 +303,45 @@ public final class LinearTernaryCore
       + ",values_seen=" + values_seen;
   }
 
-  // In this class for convenience (avoid prefixing "LinearBinaryCore").
-  static String formatTerm(double coeff, String var, boolean first) {
-    return LinearBinaryCore.formatTerm(coeff, var, first);
-  }
+  public static String format_using(OutputFormat format,
+				    VarInfoName x, VarInfoName y, VarInfoName z,
+				    double a, double b, double c)
+  {
+    String xname = x.name_using(format);
+    String yname = y.name_using(format);
+    String zname = z.name_using(format);
 
-  public static String format(String x, String y, String z, double a, double b, double c) {
-    // It shouldn't be the case that a or b is 0 for printed invariants;
-    // but that can be true earlier on in processing.
-    if ((a == 0) && (b == 0) && (c == 0)) {
-      return z + " == ? * " + x + " + ? * " + y + " + ?";
+    if ((format == OutputFormat.DAIKON)
+	|| (format == OutputFormat.ESCJAVA)
+	|| (format == OutputFormat.IOA))
+    {
+      String eq = " == ";
+      if (format == OutputFormat.IOA) eq = " = ";
+
+      // It shouldn't be the case that a or b is 0 for printed invariants;
+      // but that can be true earlier on in processing.
+      if ((a == 0) && (b == 0) && (c == 0)) {
+	return zname + eq + "(? * " + xname + ") + (? * " + yname + ") + ?";
+      }
+
+      return z + " == "
+	+ LinearBinaryCore.formatTerm(format, a, x, true)
+	+ LinearBinaryCore.formatTerm(format, b, y, false)
+	+ LinearBinaryCore.formatTerm(format, c, null, false);
     }
-    return z + " == " + formatTerm(a, x, true) + formatTerm(b, y, false) + formatTerm(c, null, false);
+
+    return null;
   }
 
-  /* IOA */
-  public String format_ioa(String x, String y, String z) {
-    if ((a == 0) && (b == 0) && (c == 0)) {
-      return z + " = (? * " + x + ") + (? * " + y + ") + ?";
+  public String format_using(OutputFormat format,
+			     VarInfoName x, VarInfoName y, VarInfoName z)
+  {
+    String result = format_using(format, x, y, z, a, b, c);
+    if (result != null) {
+      return result;
     }
-    return z + " = " + formatTerm(a, x, true) + formatTerm(b, y, false) + formatTerm(c, null, false);
-  }
 
-
-  public String format(String x, String y, String z) {
-    return format(x, y, z, a, b, c);
+    return wrapper.format_unimplemented(format);
   }
 
 

@@ -76,23 +76,26 @@ public final class NonEqual
       + ",no_invariant=" + no_invariant;
   }
 
-  public String format() {
-    return var1().name.name() + " != " + var2().name.name();
-  }
+  public String format_using(OutputFormat format) {
+    String name1 = var1().name.name_using(format);
+    String name2 = var2().name.name_using(format);
 
-    public String format_java() { return format(); }
+    if ((format == OutputFormat.DAIKON)
+	|| (format == OutputFormat.JAVA)
+	|| (format == OutputFormat.ESCJAVA))
+    {
+      return var1().name.name() + " != " + var2().name.name();
+    }
 
-  public String format_esc() {
-    return var1().name.esc_name() + " != " + var2().name.esc_name();
-  }
+    if (format == OutputFormat.IOA) {
+      return name1 + " ~= " + name2;
+    }
 
-  /* IOA */
-  public String format_ioa() {
-    return var1().name.ioa_name()+" ~= "+var2().name.ioa_name();
-  }
+    if (format == OutputFormat.SIMPLIFY) {
+      return "(NEQ " + name1 + " " + name2 + ")";
+    }
 
-  public String format_simplify() {
-    return "(NEQ " + var1().name.simplify_name() + " " + var2().name.simplify_name() + ")";
+    return format_unimplemented(format);
   }
 
   public void add_modified(long v1, long v2, int count) {

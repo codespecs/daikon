@@ -267,7 +267,25 @@ public final class Member
       + "no_invariant=" + no_invariant;
   }
 
-  public String format() {
+  public String format_using(OutputFormat format) {
+    if (format == OutputFormat.DAIKON) {
+      return format_daikon();
+    } else if (format == OutputFormat.JAVA) {
+      return format_java();
+    } else if (format == OutputFormat.IOA) {
+      return format_ioa();
+#ifdef SCALAR
+    } else if (format == OutputFormat.SIMPLIFY) {
+      return format_simplify();
+    } else if (format == OutputFormat.ESCJAVA) {
+      return format_esc();  
+#endif
+    } else {
+      return format_unimplemented(format);
+    }
+  }
+
+  public String format_daikon() {
     return sclvar().name.name() + " in " + seqvar().name.name();
   }
 
@@ -296,16 +314,6 @@ public final class Member
       VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
 	{ seqvar().name, sclvar().name });
     return "(NOT " + form[0] + "(NEQ " + form[1] + " " + form[2] + ")" + form[3] + ")";
-  }
-
-#else
-  public String format_esc() {
-    String classname = this.getClass().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
-  }
-  public String format_simplify() {
-    String classname = this.getClass().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_simplify() needs to be implemented: " + format();
   }
 #endif
 

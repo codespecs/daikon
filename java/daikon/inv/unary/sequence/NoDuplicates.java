@@ -47,11 +47,20 @@ public class NoDuplicates
       + "elts=\"" + elts;
   }
 
-  public String format() {
+  public String format_using(OutputFormat format) {
     if (debug.isDebugEnabled()) {
       debug.debug(repr());
     }
-    return (var().name + " contains no duplicates");
+
+    if (format == OutputFormat.DAIKON) {
+      return var().name + " contains no duplicates";
+    }
+
+    if (format == OutputFormat.IOA) {
+      return format_ioa();
+    }
+
+    return format_unimplemented(format);
   }
 
   /* IOA */
@@ -132,16 +141,6 @@ public class NoDuplicates
       
     }
 
-  }
-
-  public String format_esc() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
-  }
-
-  public String format_simplify() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_simplify() needs to be implemented: " + format();
   }
 
   public void add_modified(long[] a, int count) {

@@ -6,6 +6,7 @@ package daikon;
 import daikon.split.*;
 import daikon.split.misc.*;
 import daikon.inv.Invariant;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.config.Configuration;
 
 import java.util.*;
@@ -90,17 +91,12 @@ public final class Daikon {
   // redundant, so that they are removed from the printed output.
   public static boolean suppress_redundant_invariants_with_simplify = false;
 
-  // Set what output style to use.  NORMAL is the default; ESC style
+  // Set what output style to use.  DAIKON is the default; ESC style
   // is based on JML; SIMPLIFY style uses first order logical
   // expressions with lots of parens
-  public static final int OUTPUT_STYLE_NORMAL = 0;
-  public static final int OUTPUT_STYLE_ESC = 1;
-  public static final int OUTPUT_STYLE_SIMPLIFY = 2;
-  public static final int OUTPUT_STYLE_IOA = 3;
-  public static final int OUTPUT_STYLE_JAVA = 4;
-  public static int output_style = OUTPUT_STYLE_NORMAL;
-  // public static int output_style = OUTPUT_STYLE_ESC;
-  // public static int output_style = OUTPUT_STYLE_SIMPLIFY;
+  public static OutputFormat output_style = OutputFormat.DAIKON;
+  // public static OutputFormat output_style = OutputFormat.ESCJAVA;
+  // public static OutputFormat output_style = OutputFormat.SIMPLIFY;
 
   // When true, output numbers of values and samples (also names of variables)
   public static boolean output_num_samples = false;
@@ -318,13 +314,13 @@ public final class Daikon {
 	} else if (prob_limit_SWITCH.equals(option_name)) {
 	  Invariant.probability_limit = 0.01 * Double.parseDouble(g.getOptarg());
 	} else if (esc_output_SWITCH.equals(option_name)) {
-	  output_style = OUTPUT_STYLE_ESC;
+	  output_style = OutputFormat.ESCJAVA;
 	} else if (simplify_output_SWITCH.equals(option_name)) {
-	  output_style = OUTPUT_STYLE_SIMPLIFY;
+	  output_style = OutputFormat.SIMPLIFY;
 	} else if (ioa_output_SWITCH.equals(option_name)) {
-	  output_style = OUTPUT_STYLE_IOA;
+	  output_style = OutputFormat.IOA;
 	} else if (java_output_SWITCH.equals(option_name)) {
-	  output_style = OUTPUT_STYLE_JAVA;
+	  output_style = OutputFormat.JAVA;
 	} else if (mem_stat_SWITCH.equals(option_name)) {
 	  use_mem_monitor = true;
 	} else if (output_num_samples_SWITCH.equals(option_name)) {

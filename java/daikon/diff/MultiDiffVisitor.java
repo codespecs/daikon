@@ -2,8 +2,9 @@
 
 package daikon.diff;
 
-import daikon.inv.*;
 import daikon.*;
+import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import java.io.*;
 import utilMDE.*;
 import java.util.*;
@@ -63,7 +64,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
 						   tmpStr.lastIndexOf ('('));
 
 	    programPointsList.add (thisPptName);
-	    String key = thisPptName + "$" + inv1.format_java();
+	    String key = thisPptName + "$" + inv1.format_using(OutputFormat.JAVA);
 	    Integer val = (Integer) freqList.get (key);
 	    if (val == null) {
 		// Use one as default, obviously

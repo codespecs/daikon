@@ -104,12 +104,19 @@ public final class SeqIntComparison
       + ",no_invariant=" + no_invariant;
   }
 
-  public String format() {
+  public String format_using(OutputFormat format) {
+    if (format == OutputFormat.DAIKON) return format_daikon();
+    if (format == OutputFormat.IOA) return format_ioa();
+    if (format == OutputFormat.ESCJAVA) return format_esc();
+    if (format == OutputFormat.SIMPLIFY) return format_simplify();
+
+    return format_unimplemented(format);
+  }
+
+  public String format_daikon() {
     String comparator = core.format_comparator();
     return seqvar().name.name() + " elements " + comparator + " " + sclvar().name.name();
   }
-
-    
 
   /* IOA */
   public String format_ioa() {

@@ -49,13 +49,12 @@ public class PairwiseFunctionUnary
     return "PairwiseFunctionUnary" + varNames() + ": " + core.repr();
   }
 
-  public String format() {
-    return core.format(var1().name, var2().name);
-  }
+  public String format_using(OutputFormat format) {
+    if (format == OutputFormat.IOA) {
+      return format_ioa();
+    }
 
-  public String format_esc() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
+    return core.format_using(format, var1().name, var2().name);
   }
 
   /* IOA */
@@ -65,13 +64,11 @@ public class PairwiseFunctionUnary
     VarInfoName.QuantHelper.IOAQuantification quant1 = new VarInfoName.QuantHelper.IOAQuantification(var1());
     VarInfoName.QuantHelper.IOAQuantification quant2 = new VarInfoName.QuantHelper.IOAQuantification(var2());
 
-    return quant1.getQuantifierExp() +
-      core.format_ioa(quant1.getVarIndexed(0), quant2.getVarIndexed(0)) + quant1.getClosingExp();
-  }
-
-  public String format_simplify() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_simplify() needs to be implemented: " + format();
+    return quant1.getQuantifierExp()
+      + core.format_using(OutputFormat.IOA,
+			  quant1.getVarIndexed(0),
+			  quant2.getVarIndexed(0))
+      + quant1.getClosingExp();
   }
 
   public void add_modified(long[] x_arr, long[] y_arr, int count) {

@@ -2,6 +2,7 @@ package daikon.inv.binary.twoString;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import utilMDE.*;
 import java.io.Serializable;
 
@@ -175,19 +176,18 @@ public final class StringComparisonCore
   // I could alternately take two variable names as arguments and return
   // the full formatted thing...
   /** Return a comparator such as "<=" or ">" or "==". **/
-  public String format_comparator() {
+  public String format_comparator(OutputFormat format) {
     if (can_be_eq && (! can_be_gt) && (! can_be_lt)) {
-      return "==";
+      if (format == OutputFormat.IOA) {
+	return "=";
+      } else {
+	return "==";
+      }
     } else if (can_be_eq || can_be_gt || can_be_lt) {
       // TODO: reenable after making distribution.
       // Assert.assert(can_be_lt || can_be_gt);
       String inequality = (can_be_lt ? "<" : can_be_gt ? ">" : "");
       String comparison = (can_be_eq ? "=" : "");
-      // if (debugStringComparison) {
-      //   System.out.println(repr()
-      //                      + "; inequality=\"" + inequality + "\""
-      //                      + ",comparison=\"" + comparison + "\"");
-      // }
       return inequality + comparison;
     } else {
       return "?cmp?";

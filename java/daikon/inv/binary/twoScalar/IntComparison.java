@@ -177,17 +177,25 @@ public final class IntComparison
       + core.repr();
   }
 
+  public String format_using(OutputFormat format) {
+    if (format == OutputFormat.DAIKON) return format();
+    if (format == OutputFormat.JAVA) return format_java();
+    if (format == OutputFormat.ESCJAVA) return format_esc();
+    if (format == OutputFormat.IOA) return format_ioa();
+    if (format == OutputFormat.SIMPLIFY) return format_simplify();
+    return format_unimplemented(format);
+  }
+
   public String format() {
     String comparator = core.format_comparator();
     return var1().name.name() + " " + comparator + " " + var2().name.name();
   }
 
-    public String format_java() {
-	// Should be the same as format unless there is a case
-	// I can't think of right now -LL
-	return format();  
-	
-    }
+  public String format_java() {
+    // Should be the same as format unless there is a case
+    // I can't think of right now -LL
+    return format();  
+  }
 
   public String format_esc() {
     String comparator = core.format_comparator();

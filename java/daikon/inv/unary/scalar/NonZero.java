@@ -66,23 +66,25 @@ public class NonZero
 
   private String zero() { return pointer_type ? "null" : "0"; }
 
-  public String format() {
-    return var().name.name() + " != " + zero();
-  }
+  public String format_using(OutputFormat format) {
+    String name = var().name.name_using(format);
 
-  public String format_esc() {
-    return var().name.esc_name() + " != " + zero();
-  }
+    if ((format == OutputFormat.DAIKON)
+	|| (format == OutputFormat.ESCJAVA))
+    {
+      return name + " != " + zero();
+    }
 
-  /* IOA */
-  public String format_ioa() {
-    String result = var().name.ioa_name()+" ~= ";
-    result += (pointer_type ? "Null("+var().elementTypeIOA()+") ***" : "0");
-    return result;
-  }
+    if (format == OutputFormat.SIMPLIFY) {
+      return "(NEQ " + name + " " + zero() + ")";
+    }
 
-  public String format_simplify() {
-    return "(NEQ " + var().name.simplify_name() + " " + zero() + ")";
+    if (format == OutputFormat.IOA) {
+      return name + " ~= "
+	+ (pointer_type ? "Null("+var().elementTypeIOA()+") ***" : "0");
+    }
+
+    return format_unimplemented(format);
   }
 
   public void add_modified(long v, int count) {

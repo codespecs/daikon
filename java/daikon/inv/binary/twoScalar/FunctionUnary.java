@@ -48,28 +48,8 @@ public class FunctionUnary
     return "FunctionUnary" + varNames() + ": " + core.repr();
   }
 
-  public String format() {
-    // core.format takes VarInfoName objects, not Strings.  (Why?)
-    return core.format(var1().name, var2().name);
-  }
-
-    public String format_java() {
-	return "warning: method " + this.getClass() + ".format_java() needs to be implemented: " + format();
-    }
-
-  public String format_esc() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
-  }
-
-  /* IOA */
-  public String format_ioa() {
-    return core.format_ioa(var1().name.ioa_name(), var2().name.ioa_name());
-  }
-
-  public String format_simplify() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_simplify() needs to be implemented: " + format();
+  public String format_using(OutputFormat format) {
+    return core.format_using(format, var1().name, var2().name);
   }
 
   public void add_modified(long x_int, long y_int, int count) {

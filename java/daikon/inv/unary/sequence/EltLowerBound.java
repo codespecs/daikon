@@ -83,8 +83,22 @@ public class EltLowerBound
       + core.repr();
   }
 
+  public String format_using(OutputFormat format) {
+    if (format == OutputFormat.DAIKON) {
+      return format_daikon();
+    } else if (format == OutputFormat.IOA) {
+      return format_ioa();
+    } else if (format == OutputFormat.SIMPLIFY) {
+      return format_simplify();
+    } else if (format == OutputFormat.ESCJAVA) {
+      return format_esc();  
+    }
+
+    return format_unimplemented(format);
+  }
+
   // ELTLOWEr || ELTUPPEr
-  public String format() {
+  public String format_daikon() {
     return var().name.name() + " elements >= " + core.min1 ;
   }
 

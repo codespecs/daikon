@@ -141,7 +141,23 @@ public final class EltOneOfString
       + ", elts=" + subarray_rep();
   }
 
-  public String format() {
+  public String format_using(OutputFormat format) {
+    if (format == OutputFormat.DAIKON) {
+      return format_daikon();
+    } else if (format == OutputFormat.JAVA) {
+      return format_java();
+    } else if (format == OutputFormat.IOA) {
+      return format_ioa();
+    } else if (format == OutputFormat.SIMPLIFY) {
+      return format_simplify();
+    } else if (format == OutputFormat.ESCJAVA) {
+      return format_esc();  
+    } else {
+      return format_unimplemented(format);
+    }
+  }
+
+  public String format_daikon() {
     String varname = var().name.name() + " elements" ;
     if (num_elts == 1) {
 
@@ -171,7 +187,7 @@ public final class EltOneOfString
 
     VarInfoName.QuantHelper.IOAQuantification quant =
       new VarInfoName.QuantHelper.IOAQuantification (new VarInfo[] {var()});
-    String varname = quant.getVarName(0);
+    String varname = quant.getVarName(0).ioa_name();
 
     String result;
 

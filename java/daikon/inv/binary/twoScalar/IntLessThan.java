@@ -175,35 +175,28 @@ public final class IntLessThan
     return "IntLessThan"  + varNames();
   }
 
-  public String format() {
-    return var1().name.name() + " < " + var2().name.name();
-  }
+  public String format_using(OutputFormat format) {
+    String var1name = var1().name.name_using(format);
+    String var2name = var2().name.name_using(format);
 
-  public String format_esc() {
-    return var1().name.esc_name() + " < " + var2().name.esc_name();
-  }
+    if ((format == OutputFormat.DAIKON)
+	|| (format == OutputFormat.ESCJAVA)
+	|| (format == OutputFormat.JAVA)
+	|| (format == OutputFormat.IOA))
+    {
+      String comparator = "<" ;
 
-  /* IOA */
-  public String format_ioa() {
+      return var1name + " " + comparator + " " + var2().name.name();
+    }
 
-    String comparator = "<" ;
+    if (format == OutputFormat.SIMPLIFY) {
 
-    return var1().name.ioa_name()+" "+comparator+" "+var2().name.ioa_name();
-  }
+      String comparator = "<" ;
 
-  public String format_simplify() {
+      return "(" + comparator + " " + var1name + " " + var2name + ")";
+    }
 
-    String comparator = "<" ;
-
-    return "(" + comparator + " " + var1().name.simplify_name() + " " + var2().name.simplify_name() + ")";
-  }
-
-  /* java output */
-  public String format_java() {
-
-    String comparator = "<" ;
-
-    return var1().name.java_name()+" "+comparator+" "+var2().name.java_name();
+    return format_unimplemented(format);
   }
 
   public void add_modified(long v1, long v2, int count) {

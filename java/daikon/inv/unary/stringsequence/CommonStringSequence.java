@@ -20,8 +20,6 @@ public class CommonStringSequence
    **/
   public static boolean dkconfig_enabled = true;
 
-  final static boolean debugCommonStringSequence = false;
-
   private int elts;
   private String[] intersect = null;
 
@@ -56,11 +54,14 @@ public class CommonStringSequence
     return result;
   }
 
+  public String format_using(OutputFormat format) {
+    if (format == OutputFormat.DAIKON) return format_daikon();
+    if (format == OutputFormat.IOA) return format_ioa();
 
-  public String format() {
-    if (debugCommonStringSequence) {
-      System.out.println(repr());
-    }
+    return format_unimplemented(format);
+  }
+
+  public String format_daikon() {
     return (printIntersect() + " subset of " + var().name);
   }
 
@@ -68,16 +69,6 @@ public class CommonStringSequence
   public String format_ioa() {
     String vname = var().name.ioa_name();
     return (printIntersect() + " \\in " + vname);
-  }
-
-  public String format_esc() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
-  }
-
-  public String format_simplify() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_simplify() needs to be implemented: " + format();
   }
 
   public void add_modified(String[] a, int count) {

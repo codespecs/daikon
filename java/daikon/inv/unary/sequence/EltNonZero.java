@@ -58,7 +58,16 @@ public final class EltNonZero
       + !no_invariant + ",min=" + min + ",max=" + max;
   }
 
-  public String format() {
+  public String format_using(OutputFormat format) {
+    if (format == OutputFormat.DAIKON) return format_daikon();
+    if (format == OutputFormat.ESCJAVA) return format_esc();
+    if (format == OutputFormat.IOA) return format_ioa();
+    if (format == OutputFormat.SIMPLIFY) return format_simplify();
+
+    return format_unimplemented(format);
+  }
+
+  public String format_daikon() {
     return var().name + " elements != " + (pointer_type ? "null" : "0");
   }
 

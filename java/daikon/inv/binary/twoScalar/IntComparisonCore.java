@@ -2,6 +2,7 @@ package daikon.inv.binary.twoScalar;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import utilMDE.*;
 import java.io.Serializable;
 
@@ -172,7 +173,10 @@ public final class IntComparisonCore
   // the full formatted thing...
   /** Return a comparator such as "<=" or ">" or "==". **/
   public String format_comparator() {
-    return format_comparator(can_be_lt, can_be_eq, can_be_gt);
+    return format_comparator(OutputFormat.DAIKON);
+  }
+  public String format_comparator(OutputFormat format) {
+    return format_comparator(OutputFormat.DAIKON, can_be_lt, can_be_eq, can_be_gt);
   }
 
   public String format_comparator_ioa() {
@@ -182,19 +186,20 @@ public final class IntComparisonCore
     return comparator;
   }
 
-  public static String format_comparator(boolean lt, boolean eq, boolean gt) {
+  public static String format_comparator(OutputFormat format,
+					 boolean lt, boolean eq, boolean gt)
+  {
     if (eq && (! lt) && (! gt)) {
-      return "==";
+      if (format == OutputFormat.IOA) {
+	return "=";
+      } else {
+	return "==";
+      }
     } else if (lt || eq || gt) {
       // TODO: reenable after making distribution.
       // Assert.assert(lt || gt);
       String inequality = (lt ? "<" : gt ? ">" : "");
       String comparison = (eq ? "=" : "");
-      // if (debugIntComparison) {
-      //   System.out.println(repr()
-      //                      + "; inequality=\"" + inequality + "\""
-      //                      + ",comparison=\"" + comparison + "\"");
-      // }
       return inequality + comparison;
     } else {
       return "?cmp?";

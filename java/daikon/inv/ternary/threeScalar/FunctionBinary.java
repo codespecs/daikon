@@ -78,23 +78,8 @@ public class FunctionBinary
     return "FunctionBinary" + varNames() + ": ";
   }
 
-  public String format() {
-    return core.format();
-  }
-
-  /* IOA */
-  public String format_ioa() {
-    return core.format_ioa();
-  }
-
-  public String format_esc() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
-  }
-
-  public String format_simplify() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_simplify() needs to be implemented: " + format();
+  public String format_using(OutputFormat format) {
+    return core.format_using(format);
   }
 
   public void add_modified(long x_int, long y_int, long z_int, int count) {

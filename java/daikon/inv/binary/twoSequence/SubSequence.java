@@ -66,7 +66,16 @@ public class SubSequence
       + ",no_invariant=" + no_invariant;
   }
 
-  public String format() {
+  public String format_using(OutputFormat format) {
+    if (format == OutputFormat.DAIKON) return format_daikon();
+    if (format == OutputFormat.IOA) return format_ioa();
+    // disable simplify format for now; may be buggy
+    // if (format == OutputFormat.SIMPLIFY) return format_simplify();
+
+    return format_unimplemented(format);
+  }
+
+  public String format_daikon() {
     if (var1_in_var2 && var2_in_var1) {
       return var1().name + " is a {sub,super}sequence of " + var2().name;
     } else {
@@ -96,14 +105,7 @@ public class SubSequence
     return result;
   }
 
-  public String format_esc() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
-  }
-
   public String format_simplify() {
-    if (1==1) return "format_simplify disabled";
-
     VarInfo subvar = (var1_in_var2 ? var1() : var2());
     VarInfo supervar = (var1_in_var2 ? var2() : var1());
     // (exists k s.t. (forall i, j; (i bounds & j bounds & (i = j + k)) ==> ...))

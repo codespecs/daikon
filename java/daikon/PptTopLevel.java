@@ -4,6 +4,7 @@ import daikon.derive.*;
 import daikon.derive.unary.*;
 import daikon.derive.binary.*;
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.filter.*;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.string.*;
@@ -1984,7 +1985,7 @@ public class PptTopLevel
       for (Iterator _invs = all.iterator(); _invs.hasNext(); ) {
 	Invariant inv = (Invariant) _invs.next();
 	if (test.include(inv)) { // think: inv.isWorthPrinting()
-	  String fmt = inv.format_simplify();
+	  String fmt = inv.format_using(OutputFormat.SIMPLIFY);
 	  if (fmt.indexOf("format_simplify") < 0) {
 	    printing.add(inv);
 	  }
@@ -2065,7 +2066,7 @@ public class PptTopLevel
 	if (!test.include(inv)) { // think: !inv.isWorthPrinting()
 	  continue;
 	}
-	String fmt = inv.format_simplify();
+	String fmt = inv.format_using(OutputFormat.SIMPLIFY);
 	if (fmt.indexOf("format_simplify") >= 0) {
 	  continue;
 	}
@@ -2088,7 +2089,7 @@ public class PptTopLevel
 	  }
 	  inv.ppt = orig;
 	  all_cont.append("\t\t");
-	  all_cont.append(inv.format_simplify());
+	  all_cont.append(inv.format_using(OutputFormat.SIMPLIFY));
 	  all_cont.append("\n");
 	  inv.ppt = saved;
 	}
@@ -2123,7 +2124,7 @@ public class PptTopLevel
 	      if (!test.include(inv)) { // think: !inv.isWorthPrinting()
 		continue;
 	      }
-	      String fmt = inv.format_simplify();
+	      String fmt = inv.format_using(OutputFormat.SIMPLIFY);
 	      if (fmt.indexOf("format_simplify") >= 0) {
 		continue;
 	      }
@@ -2141,7 +2142,7 @@ public class PptTopLevel
 	      }
 	      inv.ppt = rewritten;
 	      all_cont.append("\t\t");
-	      all_cont.append(inv.format_simplify());
+	      all_cont.append(inv.format_using(OutputFormat.SIMPLIFY));
 	      all_cont.append("\n");
 	      inv.ppt = saved;
 	    }
@@ -2175,9 +2176,9 @@ public class PptTopLevel
       for (int i=0; i < present.length; i++) {
 	if (present[i] && (i != checking)) {
 	  bg.append(" ");
-          // format_simplify() is guaranteed to return a sensible result
+          // format_using(OutputFormat.SIMPLIFY) is guaranteed to return a sensible result
           // for invariants in invs[].
-	  bg.append(invs[i].format_simplify());
+	  bg.append(invs[i].format_using(OutputFormat.SIMPLIFY));
 	}
       }
       bg.append(")");
@@ -2206,7 +2207,7 @@ public class PptTopLevel
 
 	// The background wasn't necessarily false; see if it implies
 	// the invariant under test.
-	String ask = "(IMPLIES " + bg + " " + inv.format_simplify() + ")";
+	String ask = "(IMPLIES " + bg + " " + inv.format_using(OutputFormat.SIMPLIFY) + ")";
 	CmdCheck cc = new CmdCheck(ask); // result is initialized to false
 	prover.request(cc);
 	if (cc.valid) {

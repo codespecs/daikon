@@ -71,19 +71,7 @@ public class DummyInvariant
     return "DummyInvariant(" + ppt.arity + "," + formula + "," + justified + ")";
   }
 
-  public String format() {
-    return repr();
-  }
-
-  public String format_ioa(String a) {
-    return repr();
-  }
-
-  public String format_esc() {
-    return repr();
-  }
-
-  public String format_simplify() {
+  public String format_using(OutputFormat format) {
     return repr();
   }
 

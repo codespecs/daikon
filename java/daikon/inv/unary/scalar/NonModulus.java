@@ -54,34 +54,23 @@ public class NonModulus
       + "m=" + modulus + ",r=" + remainder;
   }
 
-  public String format() {
+  public String format_using(OutputFormat format) {
     updateResults();
+    String name = var().name.name_using(format);
+
     if (no_result_yet) {
-      return var().name + " != ? (mod ?)";
-    } else {
-      return var().name + " != " + remainder + "  (mod " + modulus + ")";
+      return name + " != ? (mod ?) ***";
     }
-  }
 
-  /* IOA */
-  public String format_ioa() {
-    updateResults();
-    String vname = var().name.ioa_name();
-    if (no_result_yet) {
-      return vname+" ~= ? (mod ?) ***";
-    } else {
-      return "mod("+vname+", "+modulus+") ~= "+remainder;
+    if (format == OutputFormat.DAIKON) {
+      return name + " != " + remainder + "  (mod " + modulus + ")";
     }
-  }
 
-  public String format_esc() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
-  }
+    if (format == OutputFormat.IOA) {
+      return "mod("+name+", "+modulus+") ~= "+remainder;
+    }
 
-  public String format_simplify() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_simplify() needs to be implemented: " + format();
+    return format_unimplemented(format);
   }
 
   // Set either modulus and remainder, or no_result_yet.

@@ -89,36 +89,26 @@ public class SeqComparison
       + ",only_check_eq=" + only_check_eq;
   }
 
-  public String format() {
-    // System.out.println("Calling SeqComparison.format for: " + repr());
-    String comparator = IntComparisonCore.format_comparator(can_be_lt, can_be_eq, can_be_gt);
-    return var1().name + " " + comparator + " " + var2().name
-      + " (lexically)";
-  }
+  public String format_using(OutputFormat format) {
+    String name1 = var1().name.name_using(format);
+    String name2 = var2().name.name_using(format);
+    String comparator = IntComparisonCore.format_comparator
+      (format, can_be_lt, can_be_eq, can_be_gt);
 
-    public String format_java() {
-	return var1().name + " " + comparator + " " + var2().name;
+    if ((format == OutputFormat.DAIKON)
+	|| (format == OutputFormat.JAVA))
+    {
+      return name1 + " " + comparator + " " + name1 + " (lexically)";
     }
 
-  public String format_esc() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
-  }
+    if (format == OutputFormat.IOA) {
+      if (var1().isIOASet() || var2().isIOASet()) {
+	return "Not valid for Sets: " + format();
+      }
+      return name1 + " " + comparator + " " + name2 + " ***";
+    }
 
-  /* IOA */
-  public String format_ioa() {
-    if (var1().isIOASet() || var2().isIOASet())
-      return "Not valid for Sets: " + format();
-    String comparator = IntComparisonCore.format_comparator(can_be_lt, can_be_eq, can_be_gt);
-    comparator = (comparator.equals("==") ? "=" : comparator); // "interned"
-    String v1 = var1().name.ioa_name();
-    String v2 = var2().name.ioa_name();
-    return v1 + " " + comparator + " " + v2 + " ***";
-  }
-
-  public String format_simplify() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_simplify() needs to be implemented: " + format();
+    return format_unimplemented(format);
   }
 
   public void add_modified(long[] v1, long[] v2, int count) {

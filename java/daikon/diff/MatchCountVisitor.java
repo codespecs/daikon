@@ -3,7 +3,8 @@ package daikon.diff;
 import daikon.inv.Invariant;
 import java.io.*;
 import daikon.*;
-
+import daikon.inv.Invariant.OutputFormat;
+  
 /** MatchCountVisitor is a visitor that almost does the opposite of
  * PrintDifferingInvariantsVisitor.  MatchCount prints invariant pairs
  * if they are the same, and only if they are a part of a conditional ppt.
@@ -53,7 +54,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
 	{
 	// now you have a match
 	recall++;
-	System.out.println (inv1.format_java());
+	System.out.println (inv1.format_using(OutputFormat.JAVA));
     }
 
 

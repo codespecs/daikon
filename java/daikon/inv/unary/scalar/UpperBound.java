@@ -83,23 +83,22 @@ public class UpperBound
       + core.repr();
   }
 
-  public String format() {
-    return var().name.name() + " <= " + core.max1 ;
-  }
+  public String format_using(OutputFormat format) {
+    String name = var().name.name_using(format);
 
-  public String format_esc() {
-    String varname = var().name.esc_name();
-    return varname + " <= " + core.max1 ;
-  }
+    if ((format == OutputFormat.DAIKON)
+	|| (format == OutputFormat.ESCJAVA)
+	|| (format == OutputFormat.IOA)
+	|| (format == OutputFormat.JAVA))
+    {
+      return name + " <= " + core.max1 ;
+    }
 
-  public String format_ioa() {
-    String varname = var().name.ioa_name();
-    return varname + " <= " + core.max1 ;
-  }
+    if (format == OutputFormat.SIMPLIFY) {
+      return "(<= " + name + " " + core.max1  + ")";
+    }
 
-  public String format_simplify() {
-    String varname = var().name.simplify_name();
-    return "(<= " + varname + " " + core.max1  + ")";
+    return format_unimplemented(format);
   }
 
   // XXX need to flow invariant if bound changed

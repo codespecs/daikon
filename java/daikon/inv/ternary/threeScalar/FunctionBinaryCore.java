@@ -2,6 +2,7 @@ package daikon.inv.ternary.threeScalar;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import java.io.*;
 import java.util.Arrays;
 import java.lang.reflect.*;
@@ -169,29 +170,25 @@ public final class FunctionBinaryCore
   }
 
   // Perhaps this should take arguments rather than looking into the wrapper.
-  public String format() {
+  public String format_using(OutputFormat format) {
     PptSlice ppt = wrapper.ppt;
-    VarInfo argresult = ppt.var_infos[var_indices[var_order][0]];
-    VarInfo arg1 = ppt.var_infos[var_indices[var_order][1]];
-    VarInfo arg2 = ppt.var_infos[var_indices[var_order][2]];
+    VarInfoName argresult = ppt.var_infos[var_indices[var_order][0]].name;
+    VarInfoName arg1 = ppt.var_infos[var_indices[var_order][1]].name;
+    VarInfoName arg2 = ppt.var_infos[var_indices[var_order][2]].name;
 
-    return argresult.name + " == "
-      + methodname + "(" + arg1.name + ", " + arg2.name + ")";
-  }
+    String argresult_name = argresult.name_using(format);
+    String arg1_name = arg1.name_using(format);
+    String arg2_name = arg2.name_using(format);
 
-  /* IOA */
-  public String format_ioa() {
-    PptSlice ppt = wrapper.ppt;
-    String result = ppt.var_infos[var_indices[var_order][0]].name.ioa_name();
-    String arg1 = ppt.var_infos[var_indices[var_order][1]].name.ioa_name();
-    String arg2 = ppt.var_infos[var_indices[var_order][2]].name.ioa_name();
+    if (format == OutputFormat.DAIKON) { 
+      return argresult_name + " == " + methodname + "(" + arg1_name + ", " + arg2_name + ")";
+    }
 
-    return result + " = " + methodname + "(" + arg1 + ", " + arg2 + ") ***";
-  }
+    if (format == OutputFormat.IOA) {
+      return argresult_name + " = " + methodname + "(" + arg1_name + ", " + arg2_name + ") ***";
+    }
 
-  public String format_esc() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
+    return wrapper.format_unimplemented(format);
   }
 
   public boolean isSameFormula(FunctionBinaryCore other)

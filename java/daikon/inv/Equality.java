@@ -63,7 +63,16 @@ public final class Equality
     return "Equality" + varNames();
   }
 
-  public String format() {
+  public String format_using(OutputFormat format) {
+    if (format == OutputFormat.DAIKON) return format_daikon();
+    if (format == OutputFormat.IOA) return format_ioa();
+    if (format == OutputFormat.JAVA) return format_java();
+    if (format == OutputFormat.ESCJAVA) return format_esc();
+
+    return format_unimplemented(format);
+  }
+
+  public String format_daikon() {
     StringBuffer result = new StringBuffer(vars[0].name.name());
     for (int i=1; i < vars.length; i++) {
       result.append(" == ");

@@ -358,44 +358,50 @@ public abstract class Invariant
   }
 
   /**
+   * Enumeration type for output style.
+   * (Should this be somewhere else?)
+   **/
+  public final static class OutputFormat
+  {
+    /* The standard, concise daikon output format */
+    public static final OutputFormat DAIKON = new OutputFormat("Daikon");
+    /* ESC/Java's annotation language */
+    public static final OutputFormat ESCJAVA = new OutputFormat("ESC/Java");
+    /* Simplify theorem prover */
+    public static final OutputFormat SIMPLIFY = new OutputFormat("Simplify");
+    /* IOA language */
+    public static final OutputFormat IOA = new OutputFormat("IOA");
+    /* Java boolean expression */
+    public static final OutputFormat JAVA = new OutputFormat("Java");
+
+    private OutputFormat(String name) {
+    }
+  }
+
+  /**
    * For printing invariants, there are two interfaces:
    * repr gives a low-level representation
    * (repr_prop also prints the probability), and
    * format gives a high-level representation for user output.
    **/
-  public abstract String format();
-
-    /** Legal java code */
-    public String format_java() {
-	// The safest thing to do for now
-	return format();
-    }
-
-  /**
-   * ESC-like representation.
-   **/
-  public String format_esc() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
+  public String format() {
+    return format_using(OutputFormat.DAIKON);
   }
 
-  /**
-   * Representation for the Simplify theorem prover.
-   **/
-  public String format_simplify() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_simplify() needs to be implemented: " + format();
-  }
+  public abstract String format_using(OutputFormat format);
 
   /**
-   * IOA Representation
+   * @return standard "format needs to be implemented" for the given
+   * requested format.  Made public so cores can call it.
    **/
-  public String format_ioa() {
-    if (debugPrint.isDebugEnabled()) {
+  public String format_unimplemented(OutputFormat request) {
+    if ((request == OutputFormat.IOA) && debugPrint.isDebugEnabled()) {
       debugPrint.debug ("Format_ioa: " + this.toString());
     }
-    String thisclassname = this.getClass().getName();
-    return "warning: method " + thisclassname + ".format_ioa() needs to be implemented: " + format();
+    // remove trailing "class"
+    String classname = this.getClass().toString().substring(6);
+    return "warning: method " + classname + ".format(" + request + ")"
+      + "needs to be implemented: " + format();
   }
 
   // This should perhaps be merged with some kind of PptSlice comparator.

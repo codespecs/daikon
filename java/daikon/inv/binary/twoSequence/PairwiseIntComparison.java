@@ -77,7 +77,16 @@ public class PairwiseIntComparison
       + core.repr();
   }
 
-  public String format() {
+  public String format_using(OutputFormat format) {
+    if (format == OutputFormat.DAIKON) return format_daikon();
+    if (format == OutputFormat.IOA) return format_ioa();
+    if (format == OutputFormat.ESCJAVA) return format_esc();
+    if (format == OutputFormat.SIMPLIFY) return format_simplify();
+
+    return format_unimplemented(format);
+  }
+
+  public String format_daikon() {
     String comparator = core.format_comparator();
     return var1().name + " " + comparator + " " + var2().name
       + " (elementwise)";

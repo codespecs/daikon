@@ -213,32 +213,13 @@ public class LinearTernary
       + "; " + core.repr();
   }
 
-  public String format() {
-    return core.format(var1().name.name(), var2().name.name(), var3().name.name());
-  }
-
-  /* IOA */
-  public String format_ioa() {
-    return core.format_ioa(var1().name.ioa_name(), var2().name.ioa_name(), var3().name.ioa_name());
-  }
-
-
-  public String format_esc() {
-    return core.format(var1().name.esc_name(), var2().name.esc_name(), var3().name.esc_name());
+  public String format_using(OutputFormat format) {
+    return core.format_using(format, var1().name, var2().name, var3().name);
   }
 
   // public String format_reversed() {
   //   return core.format_reversed(var1().name.name(), var2().name.name(), var3().name.name());
   // }
-  //
-  // public String format_esc_reversed() {
-  //   return core.format_reversed(var1().name.esc_name(), var2().name.esc_name(), var3().name.esc_name());
-  // }
-
-  public String format_simplify() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_simplify() needs to be implemented: " + format();
-  }
 
   public void add_modified(long x, long y, long z, int count) {
     core.add_modified(x, y, z, count);

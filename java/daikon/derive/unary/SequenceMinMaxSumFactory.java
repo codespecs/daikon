@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import daikon.Daikon;
 import daikon.VarInfo;
 import daikon.ProglangType;
+import daikon.inv.Invariant.OutputFormat;
 
 public final class SequenceMinMaxSumFactory extends UnaryDerivationFactory {
 
@@ -19,7 +20,7 @@ public final class SequenceMinMaxSumFactory extends UnaryDerivationFactory {
     if (vi.type.base() == "char") // interned
       return null;
     // Should be reversed at some point; for now, will improve runtime.
-    if (Daikon.output_style != Daikon.OUTPUT_STYLE_NORMAL)
+    if (Daikon.output_style != OutputFormat.DAIKON)
       return null;
 
     ArrayList result = new ArrayList(3);

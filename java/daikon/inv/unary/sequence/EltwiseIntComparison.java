@@ -56,7 +56,17 @@ public class EltwiseIntComparison
       + ",no_invariant=" + no_invariant;
   }
 
-  public String format() {
+
+  public String format_using(OutputFormat format) {
+    if (format == OutputFormat.DAIKON) return format_daikon();
+    if (format == OutputFormat.IOA) return format_ioa();
+    if (format == OutputFormat.ESCJAVA) return format_esc();
+    if (format == OutputFormat.SIMPLIFY) return format_simplify();
+
+    return format_unimplemented(format);
+  }
+
+  public String format_daikon() {
     if (debugEltwiseIntComparison) {
       System.out.println(repr()
 			 + ";comparison=\"" + core.format_comparator() + "\"");

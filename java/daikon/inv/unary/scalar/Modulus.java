@@ -53,24 +53,18 @@ public class Modulus
       + "modulus=" + modulus + ",remainder=" + remainder;
   }
 
-  public String format() {
-    return var().name + " == " + remainder + "  (mod " + modulus + ")";
-  }
+  public String format_using(OutputFormat format) {
+    String name = var().name.name_using(format);
 
+    if (format == OutputFormat.DAIKON) {
+      return var().name + " == " + remainder + "  (mod " + modulus + ")";
+    }
 
-  public String format_esc() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();
-  }
+    if (format == OutputFormat.IOA) {
+      return "mod("+var().name.ioa_name()+", "+modulus+") = "+remainder;
+    }
 
-  /* IOA */
-  public String format_ioa() {
-    return "mod("+var().name.ioa_name()+", "+modulus+") = "+remainder;
-  }
-
-  public String format_simplify() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_simplify() needs to be implemented: " + format();
+    return format_unimplemented(format);
   }
 
   public void add_modified(long value, int count) {
