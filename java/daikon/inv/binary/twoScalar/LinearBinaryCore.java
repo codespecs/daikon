@@ -264,8 +264,8 @@ public final class LinearBinaryCore
       // y == a x + b
       String str_y = y.simplify_name();
       String str_x = x.simplify_name();
-      String str_ax = (a == 1) ? str_x : "(* " + a + " " + str_x + ")";
-      String str_axpb = (b == 0) ? str_ax : "(+ " + str_ax + " " + b + ")";
+      String str_ax = (a == 1) ? str_x : "(* " + ia + " " + str_x + ")";
+      String str_axpb = (b == 0) ? str_ax : "(+ " + str_ax + " " + ib + ")";
       return "(EQ " + str_y + " " + str_axpb + ")";
     }
 
