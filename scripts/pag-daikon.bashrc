@@ -10,12 +10,13 @@ export DAIKONCLASS_SOURCES=1
 source ${INV}/scripts/daikon.bashrc
 
 # Should also remove "daikon/bin" from PATH.
-export PATH=$DAIKONDIR/scripts:/usr/local/bin:${PATH}:/home/httpd/html/pag/daikon/download/binaries/mit:/g4/projects/invariants/tools/escjava/current/bin
+export PATH=$DAIKONDIR/scripts:/usr/local/bin:${PATH}:/home/httpd/html/pag/daikon/download/binaries/mit:/g4/projects/invariants/tools/escjava/current/bin:$DAIKONDIR/front-end/c
 
 export LD_LIBRARY_PATH=/usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
 
 export DAIKON_LIBS=`/usr/bin/perl -e 'print join(":", @ARGV);' ${INV}/java/lib/*.jar`
 export CLASSPATH=.:${CLASSPATH}:${DAIKON_LIBS}
+export LACKWIT_HOME=${INV}/front-end/c/lackwit
 
 ## Someone needs to rewrite this as a shell function, since bash aliases
 ## can't handle arguments.

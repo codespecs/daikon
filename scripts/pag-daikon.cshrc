@@ -16,6 +16,7 @@ setenv LD_LIBRARY_PATH /usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
 
 setenv DAIKON_LIBS `/usr/bin/perl -e 'print join(":", @ARGV);' ${INV}/java/lib/*.jar`
 setenv CLASSPATH .:${CLASSPATH}:${DAIKON_LIBS}
+setenv LACKWIT_HOME ${INV}/front-end/c/lackwit
 
 # Like "cvs update", but filters out output that is unlikely to be of interest.
 # Alternately, run CVS under emacs via "M-x cvs-update".
