@@ -83,7 +83,7 @@ public final class FunctionUnaryCore implements java.io.Serializable {
       return Invariant.PROBABILITY_NEVER;
     // For now, only depend on number of samples.
     // But if this prob = 0, should depend on the function as well.
-    return Invariant.prob_is_gt(wrapper.ppt.num_values(), 5);
+    return Invariant.prob_is_ge(wrapper.ppt.num_values(), 5);
   }
 
 

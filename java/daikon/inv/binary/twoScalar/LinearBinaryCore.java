@@ -121,7 +121,7 @@ public final class LinearBinaryCore implements java.io.Serializable {
   public double computeProbability() {
     if (wrapper.no_invariant)
       return Invariant.PROBABILITY_NEVER;
-    return Invariant.prob_is_gt(values_seen, MINPAIRS);
+    return Invariant.prob_is_ge(values_seen, MINPAIRS);
   }
 
   public String repr() {
