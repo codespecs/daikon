@@ -54,7 +54,7 @@
 @c The following two commands start the copyright page.
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1998-2002
+Copyright @copyright{} 1998-2003
 @c Copyright @copyright{} 1998-2001 Michael Ernst
 @end titlepage
 
@@ -3339,9 +3339,9 @@ specifying default instrumentation behavior for all
 pointer types.  It may then be edited and used on subsequent runs.
 
 @item --disambig
-Tells dfec to create or read pointer type disambiguation with the default filename,
-which is @file{@var{myprog}.disambig} in the same directory as the
-@file{.decls} file.  For more information, see
+Tells dfec to create or read pointer type disambiguation with the
+default filename, which is @file{@var{myprog}.disambig} in the same
+directory as the @file{.decls} file.  For more information, see
 @ref{Pointer type disambiguation}.
 
 @item --flatten-mdas
@@ -3614,7 +3614,8 @@ size(bar[]) == 1
 This is a bit wordy.  But, by running dfec with the @option{--disambig}
 option, we create the @file{daikon-output/@var{myprog}.disambig} file,
 which we can then edit and feed back to dfec to change how the pointer
-is instrumented.
+is instrumented.  (In other words, we run dfec twice on the same
+source file(s), but we edit the @file{.disambig} file in between the runs.)
 @example
   dfec @var{...options...} --disambig @var{myprog}.c
 @end example
@@ -5972,7 +5973,7 @@ the first version to contain a substantive manual.  Daikon 2 uses the
 same Java front end as did Daikon 1, though with certain enhancements.
 (Actually, there have been 5 Java front ends; the first two were
 binary re-writers; the next two were source code re-writers; and the
-last (experimental as of May 2002) one is a binary rewriter.)
+last (experimental as of January 2003) one is a binary rewriter.)
 Its C/C++ front end is rewritten from scratch; it instruments only
 procedure entries and exits.  A front end also exists for the IOA
 programming language, but is not included in the Daikon distribution.
