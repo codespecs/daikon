@@ -199,6 +199,34 @@ derive/binary/SequenceScalarSubscriptFactory.java: derive/binary/SequenceSubscri
 derive/binary/SequenceStringSubscriptFactory.java: derive/binary/SequenceSubscriptFactory-cpp.java
 	$(JAVA_CPP:DEFINEDVAR=STRING)
 
+## I decided against this.  It gave little enough help, and it cluttered
+## the directories enough (and could be slightly confusing about what those
+## new types really do), that I will hold off on this for now.  Perhaps it
+## would be more reasonable if all of the specialized files were in one
+## Vector subdirectory (that was ignored by tags, etc.).
+
+# This one is just for testing
+IntegerVector.java: VectorTemplate-cpp.java
+	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon -DELTVECTOR=IntegerVector -DELTTYPE=Integer")
+
+PptVector.java: VectorTemplate-cpp.java
+	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon -DELTVECTOR=PptVector -DELTTYPE=Ppt")
+
+PptTopLevelVector.java: VectorTemplate-cpp.java
+	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon -DELTVECTOR=PptTopLevelVector -DELTTYPE=PptTopLevel")
+
+PptConditionalVector.java: VectorTemplate-cpp.java
+	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon -DELTVECTOR=PptConditionalVector -DELTTYPE=PptConditional")
+
+VarInfoVector.java: VectorTemplate-cpp.java
+	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon -DELTVECTOR=VarInfoVector -DELTTYPE=VarInfo")
+
+inv/InvariantVector.java: VectorTemplate-cpp.java
+	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon.inv -DELTVECTOR=InvariantVector -DELTTYPE=Invariant")
+
+derive/DerivationVector.java:  VectorTemplate-cpp.java
+	$(JAVA_CPP:DEFINEDVAR="PACKAGE=daikon.derive -DELTVECTOR=DerivationVector -DELTTYPE=Derivation")
+
 
 ###########################################################################
 ###
