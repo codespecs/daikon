@@ -30,7 +30,7 @@ DIST_DIR_2 := /projects/se/people/mernst/www
 # for "chgrp"
 INV_GROUP := invariants
 
-RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name dfej -o -name daikon-java -o -name daikon-output \) -print`
+RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name dfej -o -name daikon-java -o -name daikon-output -o -name core -o -name '*.bak' \) -print`
 
 
 ## Examples of better ways to get the lists:
@@ -55,13 +55,17 @@ help:
 	@echo " dist-edg dist-edg-solaris"
 	@echo " dist-dfej dist-dfej-solaris"
 	@echo " examples examples-gries"
+	@echo " test"
+
+test:
+	cd tests && $(MAKE) all
 
 ### Tags
 
 tags: TAGS
 
 TAGS:  $(LISP_PATHS)
-	cd daikon; $(MAKE) tags
+	cd daikon && $(MAKE) tags
 	etags $(LISP_PATHS) --include=daikon/TAGS
 
 
