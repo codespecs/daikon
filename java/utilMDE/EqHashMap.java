@@ -101,7 +101,7 @@ import java.util.*;
  * @see	    Map
  * @see	    TreeMap
  * @see	    Hashtable
- * @since JDK1.2
+ * @deprecated  As of JDK 1.4, replaced by IdentityHashMap
  */
 
 public final class EqHashMap extends AbstractMap implements Map, Cloneable,

@@ -36,7 +36,6 @@ public final class TestUtilMDE extends TestCase {
 //   public static void main(String[] args) {
 //     testTestUtilMDE();
 //     testArraysMDE();
-//     testEqHashMap();
 //     testHasher();
 //     testIntern();
 //     testMathMDE();
@@ -512,9 +511,6 @@ public final class TestUtilMDE extends TestCase {
       assertTrue(caclf.compare(a3, a8) > 0);
     }
 
-  }
-
-  public static void testEqHashMap() {
   }
 
   // This cannot be static because it instantiates an inner class.
