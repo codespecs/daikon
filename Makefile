@@ -2,9 +2,11 @@
 ### Variables
 ###
 
+# note that for right now, we are only copying the html version of
+# the developer manual (though all other versions are built)
 IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps gui-ControlPanel.jpg gui-ControlPanel.eps gui-InvariantsDisplay-small.jpg gui-InvariantsDisplay-small.eps context-gui.jpg context-gui.eps
 IMAGE_PARTIAL_PATHS := $(addprefix images/,$(IMAGE_FILES))
-DOC_FILES_NO_IMAGES := Makefile daikon.texinfo config-options.texinfo invariants-doc.texinfo daikon.ps daikon.pdf daikon.html CHANGES
+DOC_FILES_NO_IMAGES := Makefile daikon.texinfo config-options.texinfo invariants-doc.texinfo daikon.ps daikon.pdf daikon.html developer.html CHANGES
 DOC_FILES := ${DOC_FILES_NO_IMAGES} $(IMAGE_PARTIAL_PATHS)
 DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 EMACS_PATHS := emacs/daikon-context-gui.el
@@ -18,6 +20,7 @@ SCRIPT_FILES := Makefile java-cpp.pl daikon.pl lines-from \
 	checkargs.pm util_daikon.pm \
 	runcluster.pl decls-add-cluster.pl extract_vars.pl dtrace-add-cluster.pl
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
+MIT_PHP := scripts/log2html.php scripts/emacs_launch.php
 # This is so toublesome that it isn't used except as a list of dependences for make commands
 DAIKON_JAVA_FILES := $(shell find java \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name '*ajax-ship*' \) -prune -o -name '*.java' -print) $(shell find java/daikon -follow \( -name '*daikon-java*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name '*ajax-ship*' \) -prune -o -name '*.java' -print)
 DAIKON_RESOURCE_FILES := daikon/config/configurable.txt daikon/config/example-settings.txt daikon/simplify/daikon-background.txt
@@ -48,6 +51,7 @@ C_RUNTIME_PATHS := front-end/c/daikon_runtime.h front-end/c/daikon_runtime.cc
 # EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/dfec $(EDG_DIR)/dfec.sh
 
 DIST_DIR := /home/httpd/html/daikon/dist
+MIT_DIR  := /home/httpd/html/daikon/mit
 DIST_BIN_DIR := $(DIST_DIR)/binaries
 DIST_PAG_BIN_DIR := /g4/projects/invariants/binaries
 # Files that appear in the top level of the distribution directory
@@ -251,6 +255,7 @@ update-dist-doc: doc-all
 	# daikon.html from daikon.tar.gz, not the current version.
 	mkdir $(DIST_DIR)/doc
 	cd doc && cp -pf $(DOC_FILES_NO_IMAGES) $(DIST_DIR)/doc
+	cp -pf $(MIT_PHP) $(MIT_DIR)
 	cp -pR doc/images $(DIST_DIR)/doc
 	cp -pR doc/daikon_manual_html $(DIST_DIR)/doc
 	# Don't modify files in the distribution directory
