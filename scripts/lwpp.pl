@@ -1,4 +1,4 @@
-#!/usr/bin/env perl
+#!/usr/bin/env perl -w
 
 # Annotate a declaration file with implicit lackwit comparability
 # information.  Overwrites the file with Lackwit comparability
@@ -60,7 +60,7 @@ while (<DECLS>) {
   print OUT;
 
   if (/DECLARE/) {
-    
+
     # show progress
     #actually, no, don't
     #print STDERR '.';
@@ -78,7 +78,7 @@ while (<DECLS>) {
       $ppt_declaration .= $variable;
 
       chomp $variable;
-      
+
       $variable = transform($variable);
 
       if (is_array_element($variable)) {
@@ -106,7 +106,7 @@ while (<DECLS>) {
     while(my $variable = shift @ppt_declaration) {
       my $declared_type = shift @ppt_declaration;
       my $representation_type = shift @ppt_declaration;
-      
+
       # throw away old comparability information
       shift @ppt_declaration;
 
@@ -121,7 +121,7 @@ while (<DECLS>) {
       } else {
         print_implicit_type($variable, $function, \%interesting_variables);
       }
-      
+
       print OUT "\n";
     }
   }
@@ -178,17 +178,17 @@ sub get_comparable_variables {
 
   foreach (split /\n/, $lackwit_results) {
     chomp;
-    
+
     # we are looking for lines of the form "(filename:line) variable".
     # skip lines not matching this description.
     next if not /^\(.*\) (.*)$/;
-    
+
     my $comparable = $1;
-    
+
     # skip type-cast variables ("{") and parameters of other
     # functions ("@")
     next if ($comparable =~ /\{|@/);
-    
+
     # If the variable name contains a colon, it is either local to
     # a function, or a function parameter.  It will be of the
     # format "function:variable".  If the name does not contain a
@@ -197,13 +197,13 @@ sub get_comparable_variables {
     if ($comparable =~ /^(.*):(.*)$/) {
       my $comparable_function = $1;
       $comparable_variable = $2;
-      
+
       # skip variables in other functions
       next if ($comparable_function ne $function);
     } else {
       $comparable_variable = $comparable;
     }
-    
+
     if (is_array_element($comparable_variable)) {
       # change array[0][0]... to array_element
       $comparable_variable =~ s/(\[0\])+/$element_suffix/;
@@ -292,7 +292,7 @@ sub print_array_index_types {
     }
 
     my $implicit_type = get_implicit_type(%comparable_variables);
-    
+
     print OUT "[" . $implicit_type . "]";
   }
 }
@@ -347,7 +347,7 @@ sub transform {
   if ($var eq "return" || $var eq "return[]") {
     $var =~ s/return/$dummy_return/;
   }
-  
+
   # remove the leading "::" from global variables
   $var =~ s/^:://;
 

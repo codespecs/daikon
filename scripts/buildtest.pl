@@ -1,4 +1,4 @@
-#!/usr/bin/env perl
+#!/usr/bin/env perl -w
 
 # Automatically builds and tests the software in the Daikon Distribution
 
@@ -124,7 +124,7 @@ sub diff_system_test {
     fail("FAILED") if (!($line =~ /^OK\s/));
   }
   chdir "../../.." or fail("Can't chdir to ../../..: $!\n");
-  print "OK\n";  
+  print "OK\n";
 }
 
 # Use the version of dfec in invariants/front-end/c.  Could build dfec

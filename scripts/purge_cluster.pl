@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 
 $inv_file = $ARGV[0];
 $out = $inv_file.".purge";

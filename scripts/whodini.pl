@@ -165,7 +165,7 @@ print "Houdini is generating likely invariants; please wait.." unless $output_fi
 # Iterative ("Houdini") looping
 while (1) {
     # 2 Write the txt file (from memory) to a temp file
-    $txtesctmp = writetmp($txtescfile, @txtesc);
+    my $txtesctmp = writetmp($txtescfile, @txtesc);
 
     # 3 Copy the source files to a temp file
     my @sourcetmps;

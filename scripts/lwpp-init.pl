@@ -1,4 +1,4 @@
-#!/usr/bin/env perl
+#!/usr/bin/env perl -w
 
 # Creates the lackwit databases.  Requires that LACKWIT_HOME is set
 # correctly.  Requires that 'lh' is in your path.
@@ -38,7 +38,7 @@ foreach my $file (@files) {
   $int_file =~ s!\.c!.int.c!;
   $int_file =~ s!(.*)/(.*)\.c!$2.c!; # strip leading directories
   $int_file = "$lackwitdb/$int_file";
-  
+
   if ($file =~ /libc\.c/) {
     `lh -\$ -w -D_LINUX_IN_H -D_LIBIO_H --gen_c_file_name $int_file $file`;
   } else {

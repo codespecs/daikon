@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/local/bin/perl -w
 
 #dtrace-diff
 #arguments:  dtrace-diff declsfile dtrace1 dtrace2
@@ -58,7 +58,7 @@ sub load_decls {
     }
     close DECLS;
     return $declshash;
-}    
+}
 
 sub load_ppt {
 #loads a single ppt from a dtrace fh given by $1
@@ -114,7 +114,7 @@ sub cmp_ppts {
 	print "ppt name not in decls: \"${pptname}\"\n";
 	return;
     }
-    my $ha = $$ppta[1];  my $hb = $$pptb[1]; 
+    my $ha = $$ppta[1];  my $hb = $$pptb[1];
     foreach my $varname (keys %$ppt) {
 	my $varl = $$ppt{$varname};
 	my $la = $$ha{$varname};
@@ -178,7 +178,7 @@ sub cmp_dtracen {
 	  next PPT;
       }
   }
-    
+
     close DTA;
     close DTB;
 }

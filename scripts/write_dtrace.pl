@@ -1,6 +1,6 @@
-#!/usr/local/bin/perl
+#!/usr/local/bin/perl -w
 # This perl script is used to insert cluster information into a dtrace file.
-# The subroutine "read_cluster_info_xxx" reads one or more files (or takes in 
+# The subroutine "read_cluster_info_xxx" reads one or more files (or takes in
 # some input) and returns an associative array. This associative array has
 # as key the program point name, and as value an array whose index is the
 # invocation nonce and the value cluster number of that point.
@@ -21,7 +21,7 @@ if( @ARGV[0] =~/(.*)\.dtrace/ ){
 
 open (DTRACE_IN, $dtrace_file) || die "dtrace file not found \n";
 $newfile = $stem."_new.dtrace";
-open (DTRACE_OUT, ">$newfile") 
+open (DTRACE_OUT, ">$newfile")
     || die "couldn't open $newfile for output\n";
 
 while (<DTRACE_IN>) {
@@ -37,8 +37,8 @@ sub insert_cluster_info {
 #assumes that the invocation nonce is always the first "variable" at the
 #program point (apart from the OBJECT program point, for which the invocation
 #nonce is just the number of times the program point has appeard in this dtrace
-#file. Uses the invocation nonce to match the program points and insert the 
-#cluster information 
+#file. Uses the invocation nonce to match the program points and insert the
+#cluster information
     $pptname = $_[0];
     if ($pptname =~ /OBJECT/) {
 	$object_invoc ++;
@@ -52,18 +52,18 @@ sub insert_cluster_info {
 	    return;
 	}
     }
-    # find out if this program point was clustered. If it was, retrieve the 
+    # find out if this program point was clustered. If it was, retrieve the
     # cluster information. Otherwise skip it.
-    
+
     # use only the stem program point name to store and access the cluster information,
-    # because the entry and exit with the same invocation number must have the same 
-    # cluster number 
-    
+    # because the entry and exit with the same invocation number must have the same
+    # cluster number
+
     $pptstem = $pptname;
     $pptstem = &cleanup_pptname($pptstem);
     $pptstem =~ s/ENTER.*//;
     $pptstem =~ s/EXIT.*//;
-    
+
     $cluster_number = $pptname_to_cluster{$pptstem}[$invoc];
     if($cluster_number == 0){
 	&skip_till_next(*DTRACE_IN);
@@ -75,14 +75,14 @@ sub insert_cluster_info {
     }
     return;
 }
-	        
+
 sub skip_till_next {
-#read an opened file till you reach a blank line, then return    
+#read an opened file till you reach a blank line, then return
     local *FHANDLE = $_[0];
     do {
 	$line = <FHANDLE>;
     } until ($line =~ /^\s*$/);
-    return; 
+    return;
 }
 
 sub copy_till_next {
@@ -93,14 +93,14 @@ sub copy_till_next {
 	$line = <INHANDLE>;
 	print OUTHANDLE $line;
     } until ($line =~ /^\s*$/);
-    return; 
+    return;
 }
 
 ########################## read_cluster_info_xxx ##########
-# the return is an associative array. The keys are the program point stems 
-# (ie. without :::ENTER or :::EXIT. The value is an array for which the ith 
+# the return is an associative array. The keys are the program point stems
+# (ie. without :::ENTER or :::EXIT. The value is an array for which the ith
 # index contains the cluster number of the ith invocation of the program point.
-# Therefore if QueueAr.isEmpty()Z:::ENTER and QueueAr.isEmpty()Z:::EXIT44 
+# Therefore if QueueAr.isEmpty()Z:::ENTER and QueueAr.isEmpty()Z:::EXIT44
 # invocation nonce 1000 belongs to cluster 3, then the returned associative
 # array should have a key "QueueAr.isEmpty()Z" whose value is an array. The
 # 1000th element of that array should be 3
@@ -130,23 +130,23 @@ sub read_cluster_info_seq {
 	$filename =~ s/EXIT.*//;
 	$filename =~ s/.cluster//;
 	$filename =~ s/.samp//;
-	
+
 	$pptname_to_cluster{$filename} = [@temparray];
     }
     return $pptname_to_cluster;
 }
 
 sub cleanup_pptname {
-# this subroutine is the same as the one used in both write_dtrace.pl and 
-# and extract_vars.pl. Changing one might affect the other, so change both 
-# if you want them to work together. 
+# this subroutine is the same as the one used in both write_dtrace.pl and
+# and extract_vars.pl. Changing one might affect the other, so change both
+# if you want them to work together.
 
     %cache;
     #clean up the pptname, replacing all colons, periods and non-filename
     #characters with underscores
     $pptname = $_[0];
     $ret = $cache{$pptname};
-    
+
     if( $ret eq "" ) {
 	$pptfilename = $pptname;
 	$pptfilename =~ s/:::/./;
@@ -160,7 +160,7 @@ sub cleanup_pptname {
 	$pptfilename =~ s/</./;
 	$pptfilename =~ s/>/./;
 	$pptfilename =~ s/\(\s*(\S+)\s*\)/_$1_/;
-	
+
 	#replace two or more dots in a row with just one dot
 	while ($pptfilename =~ /\.\.+/) {
 	    $pptfilename =~ s/\.\.+/\./;
