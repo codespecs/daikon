@@ -27,4 +27,3 @@ public interface Hasher {
    **/
   boolean equals(Object other_hasher);
 }
-
