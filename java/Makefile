@@ -69,10 +69,18 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/unary/sequence/EltUpperBoundFloat.java \
 	daikon/inv/unary/sequence/NoDuplicates.java \
 	daikon/inv/unary/sequence/NoDuplicatesFloat.java \
-	daikon/inv/unary/sequence/SeqIndexComparison.java \
-	daikon/inv/unary/sequence/SeqIndexComparisonFloat.java \
-	daikon/inv/unary/sequence/SeqIndexNonEqual.java \
-	daikon/inv/unary/sequence/SeqIndexNonEqualFloat.java \
+	daikon/inv/unary/sequence/SeqIndexIntEqual.java \
+	daikon/inv/unary/sequence/SeqIndexIntNonEqual.java \
+	daikon/inv/unary/sequence/SeqIndexIntGreaterThan.java \
+	daikon/inv/unary/sequence/SeqIndexIntGreaterEqual.java \
+	daikon/inv/unary/sequence/SeqIndexIntLessThan.java \
+	daikon/inv/unary/sequence/SeqIndexIntLessEqual.java \
+	daikon/inv/unary/sequence/SeqIndexFloatEqual.java \
+	daikon/inv/unary/sequence/SeqIndexFloatNonEqual.java \
+	daikon/inv/unary/sequence/SeqIndexFloatGreaterThan.java \
+	daikon/inv/unary/sequence/SeqIndexFloatGreaterEqual.java \
+	daikon/inv/unary/sequence/SeqIndexFloatLessThan.java \
+	daikon/inv/unary/sequence/SeqIndexFloatLessEqual.java \
 	daikon/inv/unary/sequence/SingleScalarSequenceFactory.java \
 	daikon/inv/unary/sequence/SingleFloatSequenceFactory.java \
 	daikon/inv/unary/sequence/CommonSequence.java \
@@ -111,8 +119,6 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/binary/sequenceScalar/SequenceFloat.java \
 	daikon/inv/binary/sequenceScalar/SequenceScalarFactory.java \
 	daikon/inv/binary/sequenceScalar/SequenceFloatFactory.java \
-	daikon/inv/binary/twoScalar/IntComparisonCore.java \
-	daikon/inv/binary/twoScalar/FloatComparisonCore.java \
 	daikon/inv/binary/twoScalar/IntEqual.java \
 	daikon/inv/binary/twoScalar/FloatEqual.java \
 	daikon/inv/binary/twoScalar/IntNonEqual.java \
@@ -645,17 +651,41 @@ daikon/inv/unary/sequence/NoDuplicates.java: daikon/inv/unary/sequence/NoDuplica
 daikon/inv/unary/sequence/NoDuplicatesFloat.java: daikon/inv/unary/sequence/NoDuplicates.java.jpp daikon/inv/suppressionFactory.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
 
-daikon/inv/unary/sequence/SeqIndexComparison.java: daikon/inv/unary/sequence/SeqIndexComparison.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
+daikon/inv/unary/sequence/SeqIndexIntEqual.java: daikon/inv/unary/sequence/SeqIndexComparison.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=EQUAL)
 
-daikon/inv/unary/sequence/SeqIndexComparisonFloat.java: daikon/inv/unary/sequence/SeqIndexComparison.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
+daikon/inv/unary/sequence/SeqIndexFloatEqual.java: daikon/inv/unary/sequence/SeqIndexComparison.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=EQUALFLOAT)
 
-daikon/inv/unary/sequence/SeqIndexNonEqual.java: daikon/inv/unary/sequence/SeqIndexNonEqual.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
+daikon/inv/unary/sequence/SeqIndexIntNonEqual.java: daikon/inv/unary/sequence/SeqIndexComparison.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=NONEQUAL)
 
-daikon/inv/unary/sequence/SeqIndexNonEqualFloat.java: daikon/inv/unary/sequence/SeqIndexNonEqual.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
+daikon/inv/unary/sequence/SeqIndexFloatNonEqual.java: daikon/inv/unary/sequence/SeqIndexComparison.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=NONEQUALFLOAT)
+
+daikon/inv/unary/sequence/SeqIndexIntLessThan.java: daikon/inv/unary/sequence/SeqIndexComparison.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=LESSTHAN)
+
+daikon/inv/unary/sequence/SeqIndexFloatLessThan.java: daikon/inv/unary/sequence/SeqIndexComparison.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=LESSTHANFLOAT)
+
+daikon/inv/unary/sequence/SeqIndexIntLessEqual.java: daikon/inv/unary/sequence/SeqIndexComparison.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=LESSEQUAL)
+
+daikon/inv/unary/sequence/SeqIndexFloatLessEqual.java: daikon/inv/unary/sequence/SeqIndexComparison.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=LESSEQUALFLOAT)
+
+daikon/inv/unary/sequence/SeqIndexIntGreaterThan.java: daikon/inv/unary/sequence/SeqIndexComparison.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=GREATERTHAN)
+
+daikon/inv/unary/sequence/SeqIndexFloatGreaterThan.java: daikon/inv/unary/sequence/SeqIndexComparison.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=GREATERTHANFLOAT)
+
+daikon/inv/unary/sequence/SeqIndexIntGreaterEqual.java: daikon/inv/unary/sequence/SeqIndexComparison.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=GREATEREQUAL)
+
+daikon/inv/unary/sequence/SeqIndexFloatGreaterEqual.java: daikon/inv/unary/sequence/SeqIndexComparison.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=GREATEREQUALFLOAT)
 
 daikon/inv/unary/sequence/SingleScalarSequenceFactory.java: daikon/inv/unary/sequence/SingleSequenceFactory.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
@@ -775,12 +805,6 @@ daikon/inv/binary/twoScalar/TwoScalar.java: daikon/inv/binary/BinaryInvariant.ja
 	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
 
 daikon/inv/binary/twoScalar/TwoFloat.java: daikon/inv/binary/BinaryInvariant.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
-
-daikon/inv/binary/twoScalar/IntComparisonCore.java:  daikon/inv/binary/twoScalar/IntComparisonCore.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
-
-daikon/inv/binary/twoScalar/FloatComparisonCore.java:  daikon/inv/binary/twoScalar/IntComparisonCore.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
 
 daikon/inv/binary/twoScalar/IntEqual.java: daikon/inv/binary/twoScalar/IntComparisons.java.jpp daikon/inv/suppressionFactory.java.jpp
