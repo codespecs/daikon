@@ -5,12 +5,11 @@
 PROJECT:=StreetNumberSet
 TRACE_NAME=StreetNumberSet.dtrace
 
-SOURCE_UNCHANGED:=MapQuick/StreetNumberSetTest.java
-SOURCE_TO_DFEJ:=MapQuick/StreetNumberSet.java
+PACKAGE:=MapQuick
 
-# eventually derive this from dfej list?
-PACKAGE=MapQuick
+SOURCE_UNCHANGED:=${PACKAGE}/StreetNumberSetTest.java ${PACKAGE}/StreetNumberSetTest2.java
+SOURCE_TO_DFEJ:=${PACKAGE}/StreetNumberSet.java
 
-MAIN_RUN:=junit.textui.TestRunner MapQuick.StreetNumberSetTest
+MAIN_RUN:=junit.textui.TestRunner MapQuick.StreetNumberSetTest2
 
 include ../Makefile-fora-project
