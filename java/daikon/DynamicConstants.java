@@ -638,14 +638,15 @@ public class DynamicConstants implements Serializable {
     ppt.addViews (new_views);
 
     // Attempt to suppress any new invariants
-    for (int i = 0; i < new_views.size(); i++) {
-      PptSlice slice = (PptSlice) new_views.get (i);
-      for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
-        Invariant inv = (Invariant) j.next();
-        ppt.attemptSuppression (inv, true);
+    if (Daikon.suppress_samples_min <= ppt.num_samples()) {
+      for (int i = 0; i < new_views.size(); i++) {
+        PptSlice slice = (PptSlice) new_views.get (i);
+        for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
+          Invariant inv = (Invariant) j.next();
+          ppt.attemptSuppression (inv, true);
+        }
       }
     }
-
   }
 
   public void instantiate_constant_suppressions (List /*Constant*/ new_noncons,
@@ -954,6 +955,72 @@ public class DynamicConstants implements Serializable {
     ppt.addViews (new_views);
   */
   }
+
+  /**
+   * Create unary and binary constant invariants.  The slices and
+   * invariants are created and returned, but not added to the
+   * ppt.
+   */
+  public List/*PptSlice*/ create_constant_invs() {
+
+    // Get constant leaders
+    List/*Constant*/ leaders = new ArrayList(100);
+    for (int i = 0; i < con_list.size(); i++) {
+      Constant con = (Constant) con_list.get(i);
+      if (!con.vi.isCanonical())
+        continue;
+      leaders.add (con);
+    }
+
+    List/*PptSlice*/new_views = new ArrayList(100);
+    int mod = ValueTuple.MODIFIED;
+
+    // Unary slices/invariants
+    for (Iterator i = leaders.iterator(); i.hasNext(); ) {
+      Constant con = (Constant) i.next();
+      PptSlice1 slice1 = new PptSlice1 (ppt, con.vi);
+      slice1.instantiate_invariants();
+      // Fmt.pf ("%s = %s, [%s] count = %s  ", con.vi.name.name(), con.val,
+      //        con.vi.comparability, "" +con.count);
+      if (con.count > 0) {
+        slice1.add_val_bu (con.val, mod, con.count);
+      }
+      if (slice1.invs.size() > 0)
+        new_views.add (slice1);
+    }
+
+    // Binary slices/invariants
+    for (int i = 0; i < leaders.size(); i++) {
+      Constant con1 = (Constant) leaders.get(i);
+      for (int j = i; j < leaders.size(); j++) {
+        Constant con2 = (Constant) leaders.get(j);
+        if (!con1.vi.compatible (con2.vi))
+          continue;
+        PptSlice2 slice2 = new PptSlice2 (ppt, con1.vi, con2.vi);
+        slice2.instantiate_invariants();
+        if (con1.count > 0 && con2.count > 0) {
+          slice2.add_val_bu (con1.val, con2.val, mod, mod, con1.count);
+        }
+        if (slice2.invs.size() > 0)
+          new_views.add (slice2);
+      }
+    }
+
+    // Remove any falsified invariants from the new views.
+    for (Iterator i = new_views.iterator(); i.hasNext(); ) {
+      PptSlice slice = (PptSlice) i.next();
+      for (Iterator j = slice.invs.iterator(); j.hasNext(); ) {
+        Invariant inv = (Invariant) j.next();
+        if (inv.is_false()) {
+          j.remove();
+        }
+      }
+    }
+
+    return (new_views);
+  }
+
+
 
   public void print_missing (PrintWriter out) {
 
