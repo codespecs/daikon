@@ -296,7 +296,7 @@ Goal (java): b == - 3 * a + 1
 Goal (esc): b == - 3 * a + 1
 Goal (ioa): b = - 3 * a + 1
 Goal (jml): b == - 3 * a + 1
-Goal (simplify): (EQ |b| (+ (* -3.0 |a|) 1.0))
+Goal (simplify): (EQ |b| (+ (* -3 |a|) 1))
 1
 -2
 10
