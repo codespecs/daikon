@@ -160,11 +160,14 @@ public final class CLASSNAME
 
         // We need to force C to always be -1 (as it is originally calculated)
         // so that we always get the same equation
-        double div = c / -1.0;
-        a = a / div;
-        b = b / div;
-        c = c / div;
-        d = d / div;
+        // now that we do not guarantee C to be -1; the following is not
+        // necessary, right? CX 8/9/04
+        
+       // double div = c / -1.0;
+       // a = a / div;
+       // b = b / div;
+       // c = c / div;
+       // d = d / div;
       }
     }
 
@@ -201,13 +204,14 @@ public final class CLASSNAME
    * Before that, a, b, and c are uninitialized
    */
    // this is the check used throughout the file as a shortcut because 
-   // the invariant must have seen enough samples and not be a line
+   // the invariant must have seen enough samples and not be a line for all the
+   // other calculations and comparisons done to be sensible
   public boolean isActive() {
    return (line_flag == -1 && values_seen >= MINTRIPLES);
   }
 
   /**
-   * LinearTernay can't be flowed because it keeps samples to build the
+   * LinearTernary can't be flowed because it keeps samples to build the
    * plane.  These sample can't be flowed from ppt to ppt (since they probably
    * didn't occur at the lower ppt).
    */
@@ -295,6 +299,7 @@ public final class CLASSNAME
    * InvariantStatus.FALSIFIED if one of the points invalidated the
    * LinearTernary invariant
    */
+   
   public InvariantStatus setup (ONEOF oo, VarInfo v1, PRIMITIVE con1,
                                 VarInfo v2, PRIMITIVE con2) {
 
@@ -321,6 +326,7 @@ public final class CLASSNAME
     return (sts);
   }
 
+
   /**
    * Looks for points that define a plane (ax + by + cz + d = 0).  Collects
    * MINTRIPLE points before attempting to define a line through the points.
@@ -345,10 +351,9 @@ public final class CLASSNAME
     // calling addToFlow.  A proper clone, etc. should be created and
     // dealt with.  This will complicate the logic below, I'll bet.
 
- //   if (Debug.logDetail())
-      wrapper.log ("Adding point, x=" + x + " y=" + y + " z=" + z);
-
-
+   if (Debug.logDetail())
+      wrapper.log ("Adding point, x=" + x + " y=" + y + " z=" + z + " to invariant");
+	
     if (values_seen < MINTRIPLES) {
       // We delay computation of a and b until we have seen several triples
       // so that we can compute a and b based on a far-separated triple.  If
@@ -361,32 +366,38 @@ public final class CLASSNAME
           return InvariantStatus.NO_CHANGE;
 
       def_points[values_seen] = new Point (x, y, z);
+     
       values_seen++;
-
+      
       // if we've seen enough values to create the equation
       if (values_seen == MINTRIPLES) {
 
 		//try to fit the points to a line first
-		linearIntervention();
-
+		linearIntervention(def_points);
 
 		//if line can not be formed, try to form a plane
 		if(line_flag == -1) {
-		InvariantStatus stat = planarIntervention();
+		InvariantStatus stat = planarIntervention(def_points);
     	return stat;
       	
       	} else {
+      	
+      	// points fit in a line
       	return InvariantStatus.NO_CHANGE;
       	}
       } else  {
+      
+      // still haven't still enough values
       return InvariantStatus.NO_CHANGE;
     	}
     } else {
 
-		//at this point either a line or a plane must have been formed
-			
+	//at this point either a line or a plane must have been formed
+		
+	
+	// if line already broken, fit to plane equation			
     if(line_flag == -1) {
-	      // If the new value doesn't fit the equation
+      // If the new value doesn't fit the equation
       if (!EQUAL (-c*z, a*x+b*y+d)) {
 
         // Try to find small changes that will fit better.
@@ -397,31 +408,34 @@ public final class CLASSNAME
                          + " a=" + a + " b=" + b + " c=" + c
                          + " values_seen=" + values_seen);
           }
+          // jiggling the values did not work
           return InvariantStatus.FALSIFIED;
         }
       } else {
+      
+      // point fits the current plane equation
       return InvariantStatus.NO_CHANGE;
       }
     } else {
     	
-    	// try to fit to the current line
-    	boolean ok = try_points(x, y, z);
-   	//	wrapper.log ("trying point, x=" + x + " y=" + y + " z=" + z + ": " + ok);
-   		
-    	if(!ok) {
-    		//line_flag = -1;	
+    	// try to fit to the current line 		
+    	if(!try_points(x, y, z)) {
     		//put the crucial point in, so that it can be tested against the new line
     		def_points[MINTRIPLES-1] = new Point (x, y, z);
-    		linearIntervention();
+    		
+    		// try to fit the points onto a line again (not sure if this
+    		// is really necessary, maybe the fuzzy equals really does
+    		// make a difference)
+    		linearIntervention(def_points);
     	}
-	//	wrapper.log ("after linear point, x=" + x + " y=" + y + " z=" + z + ": " + line_flag);
 		
 		// new point has broken the line, try to fit to a plane
     	if(line_flag == -1) {
-    	InvariantStatus stat = planarIntervention();
-    //	wrapper.log("after linear point, x=" + x + " y=" + y + " z=" + z + ": " + stat);
+    	InvariantStatus stat = planarIntervention(def_points);
     	return stat;
     	} else {
+    		
+    		// fuzzy equals does make a difference
     		return InvariantStatus.NO_CHANGE;
     	}
 
@@ -432,23 +446,33 @@ public final class CLASSNAME
     return InvariantStatus.NO_CHANGE;
   }
 	
-	//attempts to fit the def_points into a plane
-	private InvariantStatus planarIntervention() {
+ /**
+   * Attempts to fit the points in def_point to a plane and calculates the
+   * coefficients (a, b, c, d) if possible.  
+   *
+   * @param def_point  Array of points.  Must have at least 3 elements.  
+   * 
+   * @return the status of the invariant 
+   *		 (whether the plane fitting was successful)
+   */
+	private InvariantStatus planarIntervention(Point[] def_point) {
+	
 	// Find the three points with the maximum separation
-        maxsep_triples (def_points);
-        if (def_points[0] == null) {
-			
+        maxsep_triples (def_point);
+        if (def_point[0] == null) {
+        	// this should never be the problem since we check for a line
+        	// first
           return InvariantStatus.FALSIFIED;
-        }
+        } else {
 
+		wrapper.log("Definitive point1: " + def_point[0]);
+		wrapper.log("Definitive point2: " + def_point[1]);
+		wrapper.log("Definitive point3: " + def_point[2]);
+		}
+		
         // calculate the coefficients of the equation (a, b, c, d)
-        double[] coef;
-        try {
-          coef = calc_tri_linear (def_points);
-        } catch (ArithmeticException e) {
-
-          return InvariantStatus.FALSIFIED;
-        }
+        double[] coef = calc_tri_linear (def_point);
+     
         a = coef[0];
         b = coef[1];
         c = coef[2];
@@ -466,6 +490,7 @@ public final class CLASSNAME
             (Math.abs(c) >= Double.MAX_VALUE) ||
             Double.isNaN(a) || Double.isNaN(b) || Double.isNaN(c)) {
 
+			wrapper.log("problematic coefficient: invariant falsified");
           return InvariantStatus.FALSIFIED;
         }
 
@@ -474,14 +499,14 @@ public final class CLASSNAME
           for (int i=0; i<values_seen; i++) { 
             // Global.fuzzy.eq works by comparing ratios between numbers,
             // so comparing the sum of everything to 0 won't work.
-            if (!EQUAL (-c * def_points[i].z,
-                        a*def_points[i].x + b*def_points[i].y + d)) {
+            if (!EQUAL (-c * def_point[i].z,
+                        a*def_point[i].x + b*def_point[i].y + d)) {
               if (Debug.logOn() || debug.isLoggable(Level.FINE)) {
                 wrapper.log (debug, "Destroying at index " + i + ": "
                             + "0 != "
-                            + a + "*" + def_points[i].x
-                            + "+" + b + "*" + def_points[i].y + "+" + c
-                            + "*" + def_points[i].z
+                            + a + "*" + def_point[i].x
+                            + "+" + b + "*" + def_point[i].y + "+" + c
+                            + "*" + def_point[i].z
                             + "+" + d);
               }
 
@@ -494,7 +519,7 @@ public final class CLASSNAME
 
           // Discard the points not used to define the coefficients.
           for (int ii = 3; ii < MINTRIPLES; ii++)
-            def_points[ii] = null;
+            def_point[ii] = null;
 
           // check to see if this already exists at the global ppt, it it
           // does, falsify it here to eliminate the duplicate copy.  This
@@ -515,40 +540,60 @@ public final class CLASSNAME
 		return InvariantStatus.NO_CHANGE;
 	}
 
-	// attempts to fit the def_points into a line (similar to fitting to a plane code)
-   private void linearIntervention() {
+	
+ /**
+   * Attempts to fit the points in def_point to a line and calculates the
+   * the corresponding line classification (line_flag) and constants 
+   * (constants[]) if possible.  If not (points in def_point form a plane)
+   * resets line_flag to -1 and constants[] elements to -999.
+   *
+   * @param def_point  Array of points.  Must have at least 2 elements.  
+   *
+   */
+   private void linearIntervention(Point[] def_point) {
 
-	// find the max separation points
-	// make a copy of the array so that the points don't get clobbered because if a line fails to
-	// form; the calc_tri_linear code will need an untouched copy of the def_points
+	
+	// make a copy of the array so that the points don't get clobbered because 
+	// if a line fails to form; the calc_tri_linear code will need an 
+	// unmodified copy of def_point
+	
+		Point[] dummy = new Point[def_point.length];
+		for (int i = 0; i < def_point.length; i++)
+			dummy[i] = def_point[i];
+			
 
-		Point[] dummy = new Point[def_points.length];
-
-		for (int i = 0; i < def_points.length; i++)
-			dummy[i] = def_points[i];
+		// find the max separation points		
 		maxsep_doubles(dummy);
 
 
-		//find the equation (constants and coeffs now stored in the constants array)
+		//find the equation (constants and coeffs now stored in constants[])
 		calc_bi_linear(dummy);
 		
 		//check the other points against the constants and coefficients
-		for(int i = 0; i < def_points.length; i++) {
-			boolean ok = try_points(def_points[i].x, def_points[i].y, def_points[i].z);
-			wrapper.log("trying: " + def_points[i]);
-			wrapper.log("ok: " + ok);
+		for(int i = 0; i < def_point.length; i++) {
+			//try to fit the current point to the current line
+			boolean ok = try_points(def_point[i].x, def_point[i].y, def_point[i].z);
 			
 			if(!ok) {
 			
 			line_flag = -1;
 			for(int j = 0; j < constants.length; j++)
-				constants[j] = -999;
+				constants[j] = -999;		//reset constants array
 			break;
 			}
 		}
 	}
 
-	// try to fit the new point onto the current line
+
+	
+ /**
+   * Attempts to fit the new point (x,y,z) onto the current line 
+   * (indicated by line_flag and constants[]).  Method should only be called
+   * if the current points define a line (line_flag is not -1)
+   *
+   * @param x,y,z  x,y,z components of the point.    
+   *
+   */
 	private boolean try_points(double x, double y, double z) {
 
 	 switch (line_flag) {
@@ -593,7 +638,18 @@ public final class CLASSNAME
 	 	return false;
 	}
 
-	//finds the two max separated points in pa
+ /**
+   * Calculates the two points that have the maximum separation in pa and
+   * places them as the first two elements of pa.
+   *
+   * @param ps  Array of points.  Must have at least 2 elements.  Can be any
+   *            length and can contain nulls (which will be ignored).
+   *            Is side-effected so that the first two elements contain the
+   *            points with the maximum total separation; this may introduce
+   *            duplicates into the array.
+   *
+   * @return the maximum separation found.
+   */
     private double maxsep_doubles (Point[] pa) {
 
     Point p1 = null, p2 = null;
@@ -719,7 +775,6 @@ public final class CLASSNAME
     constants[2] = (p1.z-p0.z)/(double) (p1.x-p0.x);
     constants[3] = (p0.z*p1.x-p0.x*p1.z)/(double)(p1.x-p0.x);
   	}
-
   }
 
 
@@ -794,12 +849,12 @@ public final class CLASSNAME
 
 
   /**
-   * Calculates the square of the separation between p1 and p2.
+   * Calculates the separation between p1 and p2.
    *
    * @param p1  First point
    * @param p2  Second point
    *
-   * @return square of the distance between p1 and p2
+   * @return the distance between p1 and p2
    */
   double separation(Point p1, Point p2) {
     #if defined(TYPELONG)
@@ -818,69 +873,194 @@ public final class CLASSNAME
     double xsep = (p1.x - p2.x);
     double ysep = (p1.y - p2.y);
     double zsep = (p1.z - p2.z);
-    return xsep*xsep + ysep*ysep + zsep*zsep;
+    return Math.sqrt(xsep*xsep + ysep*ysep + zsep*zsep);
+    
   }
 
+ /**
+  * Calculates the three points that have the maximum separation in pa and
+  * places them as the first three elements of pa.
+  *
+  * @param pa  Array of points.  Must have at least 3 elements.  Can be any
+  *            length and can contain nulls (which will be ignored).
+  *            Is side-effected so that the first three elements contain the
+  *            points with the maximum total separation; this may introduce
+  *            duplicates into the array.
+  *
+  * @return the maximum separation found.
+  */
+ double maxsep_triples (Point[] pa) {
+
+   Point p1 = null, p2 = null, p3 = null;
+
+   // cache values for the (square of the) distance between each pair of
+   // points, to avoid duplicating work
+   double[][] separations = new double[pa.length][pa.length];
+   for (int i=0; i<pa.length-1; i++) {
+	 for (int j=i+1; j<pa.length; j++) {
+	   separations[i][j] = separation(pa[i], pa[j]);
+	 }
+   }
+
+   // max_separation is the separation metric for the most separated
+   // triple of points.  We use the sum of the separations as the
+   // metric.  (The metric "min of the three separations" does not work
+   // because it doesn't choose a unique set of points, making the
+   // result dependent on the order in which the points are seen; more
+   // seriously, it may choose a collinear set of points even when a
+   // non-collinear set exists.)
+   double max_separation = Double.MIN_VALUE;
+
+   for (int i=0; i < pa.length-2; i++) {
+	 for (int j=i+1; j < pa.length-1; j++) {
+	   double sep_i_j = separations[i][j];
+	   for (int k = j+1; k < pa.length; k++) {
+	   
+	   	// using the sum of separations is valid, as long as separation is
+	   	// the actual distance between points and not the square of the distance
+		 double separation = sep_i_j + separations[i][k] + separations[j][k];
+		 if (separation > max_separation) {
+		   max_separation = separation;
+		   p1 = pa[i];
+		   p2 = pa[j];
+		   p3 = pa[k];
+		 }
+	   }
+	 }
+   }
+
+   pa[0] = p1;
+   pa[1] = p2;
+   pa[2] = p3;
+
+   if (Debug.logDetail())
+	 wrapper.log ("maxsep_triples = " + pa[0] + " " + pa[1] + " " + pa[2]);
+   return (max_separation);
+    
+ }
+
+
+ 
+
+  // Given ((x0,y0,z0),(x1,y1,z1), (x2,y2,z2), calculate a, b, c and d
+  // such that ax + by + cz + d = 0.
+  // a, b, c and d are mutually prime, integers and a is positive.
+  //
+  // A visual explanation of the math can be found in:
+  // http://www.efm.leeds.ac.uk/CIVE/CIVE2599/cive2599-summary-overheads-full.pdf
+  //
+  // The standard form of a plane can be calculated using a vector normal "n"
+  // <n1, n2, n3> to the plane and a vector from the origin to the plane "r"
+  // e.g. <x0, y0, z0>.
+  //
+  // The vector normal to the plane can be calculated by doing the cross product
+  // of two line segments on the plane (<point2 - point0> and <point1 - point0>)
+  //
+  // Given the normal vector and and a point on the plane, the standard form 
+  // of the plane is:
+  // n1*x + n2*y + n3*z = p where p is the dot product of r and n
+  //
+  //
+  
   /**
-   * Calculates the three points that have the maximum separation in pa and
-   * places them as the first three elements of pa.
+   * Calculates the coefficients for the equation ax + by + cz + d = 0 for the
+   * first three points in points.
    *
-   * @param pa  Array of points.  Must have at least 3 elements.  Can be any
-   *            length and can contain nulls (which will be ignored).
-   *            Is side-effected so that the first three elements contain the
-   *            points with the maximum total separation; this may introduce
-   *            duplicates into the array.
+   * @param points  array of points to use to calculate the coefficents.  Only
+   *                the first three points are used
    *
-   * @return the maximum separation found.
+   * @return a four element array where a is the first element, b the second,
+   * c the third, and d is the fourth.  All elements are mutually prime, integers
+   * and a is positive
    */
-  double maxsep_triples (Point[] pa) {
+  public double[] calc_tri_linear(Point[] points) {
 
-    Point p1 = null, p2 = null, p3 = null;
-
-    // cache values for the (square of the) distance between each pair of
-    // points, to avoid duplicating work
-    double[][] separations = new double[pa.length][pa.length];
-    for (int i=0; i<pa.length-1; i++) {
-      for (int j=i+1; j<pa.length; j++) {
-        separations[i][j] = separation(pa[i], pa[j]);
-      }
-    }
-
-    // max_separation is the separation metric for the most separated
-    // triple of points.  We use the sum of the separations as the
-    // metric.  (The metric "min of the three separations" does not work
-    // because it doesn't choose a unique set of points, making the
-    // result dependent on the order in which the points are seen; more
-    // seriously, it may choose a collinear set of points even when a
-    // non-collinear set exists.)
-    double max_separation = Double.MIN_VALUE;
-
-    for (int i=0; i < pa.length-2; i++) {
-      for (int j=i+1; j < pa.length-1; j++) {
-        double sep_i_j = separations[i][j];
-        for (int k = j+1; k < pa.length; k++) {
-          double separation = sep_i_j + separations[i][k] + separations[j][k];
-          if (separation > max_separation) {
-            max_separation = separation;
-            p1 = pa[i];
-            p2 = pa[j];
-            p3 = pa[k];
-          }
-        }
-      }
-    }
-
-    pa[0] = p1;
-    pa[1] = p2;
-    pa[2] = p3;
-
-    if (Debug.logDetail())
-      wrapper.log ("maxsep_triples = " + pa[0] + " " + pa[1] + " " + pa[2]);
-    return (max_separation);
-  }
+    Point p0 = points[0];
+    Point p1 = points[1];
+    Point p2 = points[2];
 
 
-  // Given ((x0,y0,z0),(x1,y1,z1)), calculate a, b, and c
+// the following code is taken from the source page of 
+// http://jblanco_60.tripod.com/plane.html (the math behind the implementation
+// is detailed above)
+
+double px = p0.x;
+double py = p0.y;
+double pz = p0.z;
+double qx = p1.x;
+double qy = p1.y;
+double qz = p1.z;
+double rx = p2.x;
+double ry = p2.y;
+double rz = p2.z;
+	
+// define the i, j, k components of the two line segments on the plane
+double a1 = (qx - px);
+double a2 = (qy - py);
+double a3 = (qz - pz);
+
+double b1 = (rx - px);
+double b2 = (ry - py);
+double b3 = (rz - pz);
+
+
+// calculate the i, j, k components of the cross product
+double i_var = (a2 * b3) - (b2 * a3);
+double j_var = -((a1 * b3) - (b1 * a3));
+double k_var = (a1 * b2) - (b1 * a2);
+
+
+
+// Calculate the value of the constant.  Note that given the format
+// of the point-normal form, we multiply by the negative of P(x,y,z)
+
+double Stand_const = ((i_var*(-px)) + (j_var*(-py)) + (k_var*(-pz)));
+
+
+// call gcd function to get the greatest common divisor of the output
+// and put the coefficients in lowest terms
+double myGCD = MathMDE.gcd(MathMDE.gcd((int)i_var, (int)j_var) , MathMDE.gcd((int)k_var, (int)Stand_const));
+
+double standard_i_var = 0;
+double standard_j_var = 0;
+double standard_k_var = 0;
+double standard_Stand_const = 0;
+	
+
+// check to see if the "x" term is negative.  If it is,
+// divide all terms by -1.  Also reduce all terms by dividing by
+// the gcd.  If the gcd is 1, no harm done -- divide by 1.
+// ensures postive x coefficient
+
+if(i_var == 0) {
+	standard_i_var = 0;
+	standard_j_var = (j_var)/(myGCD);
+	standard_k_var = (k_var)/(myGCD);
+	standard_Stand_const = Stand_const/myGCD;
+}
+else if(i_var < 0) {
+		standard_i_var = -(i_var)/myGCD;
+		standard_j_var = -(j_var)/myGCD;
+		standard_k_var = -(k_var)/myGCD;
+		standard_Stand_const = -(Stand_const)/myGCD;
+} else if(i_var > 0) {
+	standard_i_var = i_var/myGCD;
+	standard_j_var = j_var/myGCD;
+	standard_k_var = k_var/myGCD;
+	standard_Stand_const = Stand_const/myGCD;
+}
+
+double[] coef = new double[] {standard_i_var,
+							 standard_j_var,
+								  standard_k_var, standard_Stand_const };
+								  								  
+return coef;
+	
+}
+
+// old version of calculating the coefficients
+// new version does not throw any exceptions, able to handle 0 coeff possibility   
+// Given ((x0,y0,z0),(x1,y1,z1)), calculate a, b, and c
   // such that ax + by + cz + d = 0.
   //
   // if no such (a, b, c) exists, it will throw an exception, otherwise
@@ -916,41 +1096,26 @@ public final class CLASSNAME
   //      | x2 y2 1 |
   //
 
-  /**
-   * Calculates the coefficients for the equation ax + by + cz + d = 0 for the
-   * first three points in points.
-   *
-   * @param points  array of points to use to calculate the coefficents.  Only
-   *                the first three points are used
-   *
-   * @return a three element array where a is the first element, b the second,
-   * and c the third.
-   */
-  public double[] calc_tri_linear(Point[] points) throws ArithmeticException {
 
-    Point p0 = points[0];
-    Point p1 = points[1];
-    Point p2 = points[2];
-
-    float denominator = (float) ((p1.x * p2.y - p2.x * p1.y)
-                       - (p0.x * p2.y - p2.x * p0.y)
-                       + (p0.x * p1.y - p1.x * p0.y));
-    if (denominator == 0)
-      throw new ArithmeticException();
-    double a_numerator = (double) ((p1.z * p2.y - p2.z * p1.y)
-                                - (p0.z * p2.y - p2.z * p0.y)
-                                + (p0.z * p1.y - p1.z * p0.y));
-    double b_numerator = (double) ((p1.x * p2.z - p2.x * p1.z)
-                                - (p0.x * p2.z - p2.x * p0.z)
-                                + (p0.x * p1.z - p1.x * p0.z));
-    double c_numerator = (double) (p0.z * (p1.x * p2.y - p2.x * p1.y)
-                                - p1.z * (p0.x * p2.y - p2.x * p0.y)
-                                + p2.z * (p0.x * p1.y - p1.x * p0.y));
-    double[] coef = new double[] { a_numerator / denominator,
-                                  b_numerator / denominator,
-                                  -1, c_numerator / denominator };
-    return (coef);
-  }
+//	  float denominator = (float) ((p1.x * p2.y - p2.x * p1.y)
+//						 - (p0.x * p2.y - p2.x * p0.y)
+//						 + (p0.x * p1.y - p1.x * p0.y));
+//	  if (denominator == 0)
+//		throw new ArithmeticException();
+//	  double a_numerator = (double) ((p1.z * p2.y - p2.z * p1.y)
+//								  - (p0.z * p2.y - p2.z * p0.y)
+//								  + (p0.z * p1.y - p1.z * p0.y));
+//	  double b_numerator = (double) ((p1.x * p2.z - p2.x * p1.z)
+//								 - (p0.x * p2.z - p2.x * p0.z)
+//								  + (p0.x * p1.z - p1.x * p0.z));
+//	 double c_numerator = (double) (p0.z * (p1.x * p2.y - p2.x * p1.y)
+//								  - p1.z * (p0.x * p2.y - p2.x * p0.y)
+//								 + p2.z * (p0.x * p1.y - p1.x * p0.y));
+//	  double[] coef = new double[] { a_numerator / denominator,
+//									b_numerator / denominator,
+//								   -1, c_numerator / denominator };
+//	  return (coef);
+  
 
 
 
