@@ -63,7 +63,7 @@ These are not normally visible (since they are implied by the Bound and
 OneOf invariants), but are used internally to suppress other invariants.
 
 Added the configuration option daikon.PptRelation.enable_object_user.
-"See the "List of Configuration Options" section
+See the "List of Configuration Options" section
 of the user manual for more information.
 
 The mechanism by which invariants are instantiated was simplified.
