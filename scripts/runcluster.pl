@@ -19,7 +19,6 @@ my $command;
 my ($dtrace_file, $decls_file);   # the dtrace and decls files
 
 while (scalar(@ARGV) > 0) {
-    print scalar(@ARGV);
     if ($ARGV[0] eq '-k') {
 	$ncluster = $ARGV[1];
 	shift @ARGV;
@@ -52,9 +51,7 @@ system($command);
 
 $command = "";
 #this is a hack. careful!
-my @exit_ppts = glob("*\\.EXIT*");
-my @object_ppts = glob("*\\.OBJECT*");
-my @to_cluster = (@exit_ppts, @object_ppts);
+my @to_cluster = glob("*\\.daikon_temp");
 
 foreach my $filename (@to_cluster) {
     my $outfile = "$filename.cluster";
@@ -86,7 +83,7 @@ if ($decls_new =~ /\//) {
     $decls_new =~ s/.*\///;
 }
 
-$decls_new =~ s/\.decls/_new\.decls/;
+$decls_new =~ s/\.decls/_daikon_temp\.decls/;
 # print "$decls_new will be the new decls file\n";
 
 $command = "perl $ENV{INV}/scripts/decls-add-cluster.pl  $decls_file $decls_new";
@@ -96,16 +93,20 @@ system($command);
 # print "decls-add-cluster finished\n";
 
 #write spinfo file
-my $spinfo_file = "temp.spinfo";
+my $spinfo_file = "daikon_temp.spinfo";
 print "\nwriting spinfo file $spinfo_file ...\n";
-open (SPINFO, ">$spinfo_file") || die "couldn't write cluster spinfo file temp.spinfo\n";
-my $spinfostring  = "PPT_NAME OBJECT\ncluster == 1 \ncluster == 2 \ncluster == 3 \ncluster == 4 \ncluster == 5";
+open (SPINFO, ">$spinfo_file") || die "couldn't write cluster spinfo file daikon_temp.spinfo\n";
+
+my $spinfostring = "PPT_NAME OBJECT\n";
+for (my $i = 1; $i <= $ncluster; $i++) {
+    $spinfostring  = $spinfostring."cluster == $i\n";
+}
 print SPINFO $spinfostring;
 close SPINFO;
 
 #run daikon with cluster spinfo file and cluster dtrace file.
 $dtrace_file =~ /(.*)\.dtrace/;
-my $new_dtrace = "$1_new.dtrace";
+my $new_dtrace = "$1_daikon_temp.dtrace";
 my $invfile = "$algorithm-$ncluster.inv";
 $command = "java -Xmx512m daikon.Daikon -o $invfile --no_text_output --suppress_redundant --suppress_post $spinfo_file $decls_new $new_dtrace";
 print "$command\n";
@@ -125,7 +126,7 @@ system($command);
 unlink($textout);
 
 #remove all temporary files
-&remove_temporary_files();
+#&remove_temporary_files();
 
 ###########################################################################
 ### Subroutines
@@ -141,11 +142,5 @@ sub unlink_glob ( $ ) {
 }
 
 sub remove_temporary_files () {
-  unlink_glob("*\\.EXIT*");
-  unlink_glob("*\\.OBJECT*");
-  unlink_glob("*\\.CLASS\\.*");
-  unlink_glob("*_new.dtrace*");
-  unlink_glob("*_new.decls");
-  unlink("temp.spinfo");
+  unlink_glob("*daikon_temp*");
 }
-
