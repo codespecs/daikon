@@ -5295,14 +5295,14 @@ will be generated.
   
 @c Command line options to MakeInvariantChecker:
 @c - h prints the usage line
-@c - o filename writes all the invariant violations in the file called file name
+@c - o filename writes all the invariant violations in the file called filename
 
 The specialized checker program takes one argument, a data trace file.
 (It is typically a different file than the one used for generating the
 ".inv" file that was provided to MakeInvariantChecker.)
 
 If the new trace violates any invariants in the set provided to
-MakeInvariantChecker, then MakeInvariantChecker raises an exception that
+MakeInvariantChecker, then MakeInvariantChecker prints a message that
 indicates the invariant and the variable values that violate it. 
 
 
