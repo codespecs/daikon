@@ -1361,6 +1361,7 @@ public final class TestUtilMDE extends TestCase {
     int[] s4 = Intern.internSubsequence (a1, j, k);
     int[] s5 = Intern.internSubsequence (a3, j-1, k-1);
 
+    Assert.assertTrue (a1 == a2);
     Assert.assertTrue (s1 == s2);
     Assert.assertTrue (s3 == s4);
     Assert.assertTrue (s3 == s5);

@@ -721,14 +721,12 @@ public final class UtilMDE {
     return result.toString();
   }
 
-  // Consider writing another version of this that takes a String second
-  // argument.  Little change to implementation should be required, since
-  // indexOf can take a String as argument.
   /**
    * Return an array of Strings representing the characters between
    * successive instances of the delimiter character.
    * Always returns an array of length at least 1 (it might contain only the
    * empty string).
+   * @see #split(String s, String delim)
    **/
   public static String[] split(String s, char delim) {
     Vector result = new Vector();
@@ -747,6 +745,7 @@ public final class UtilMDE {
    * successive instances of the delimiter String.
    * Always returns an array of length at least 1 (it might contain only the
    * empty string).
+   * @see #split(String s, char delim)
    **/
   public static String[] split(String s, String delim) {
     int delimlen = delim.length();
