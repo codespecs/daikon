@@ -34,8 +34,12 @@ public final class Daikon {
     System.err.flush();
   }
 
-  public final static String release_version = "2.4.1";
-  public final static String release_date = "January 1, 2003";
+  // Don't know which one we want in the version 3
+  // public final static String release_version = "2.4.1";
+  // public final static String release_date = "January 1, 2003";
+
+  public final static String release_version = "2.4.2";
+  public final static String release_date = "January 20, 2003";
   public final static String release_string
     = "Daikon version " + release_version
     + ", released " + release_date
