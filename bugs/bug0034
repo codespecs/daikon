@@ -1,5 +1,5 @@
 Version:      $Id$
-Owner:        tohn <tohn>, Jeremy <mistere>
+Owner:        Toh <tohn>, Mike <mernst>, Jeremy <mistere>
 Tool:         Daikon V3
 Summary:      Some invariants not printing for ENTER program points in IOA
 Severity:     Boneheaded
@@ -7,22 +7,36 @@ Status:       New
 Reproducible: Yes
 Description:
 
+[mistere]
+This is more Mike's area of expertise, so I'll add him to the owner list.
+I also clarified some text below.
+
+[tohn]
 (Jeremy and I have talked about this already; this is just to put the
 ideas in writing)
 
 ENTER program points in IOA have very few variables with modbits set
 (in particular, only variables that were function arguments).  Thus,
-some equality invariants, like pc[turn] = pc[p] (see
-~tohn/research/IOA_Toolkit/Examples/Peterson) do not appear, even
-though they appear in Daikon 2 and in the exit program points.
+some equality invariants, like pc[turn] = pc[p] do not appear, even
+though they appear in Daikon 2 and in the exit program points (see
+~tohn/research/IOA_Toolkit/Examples/Peterson).
 
-What is the proper solution though?  What does it mean for something's
-modbit to be set at the ENTER program point?  What does it mean in
-IOA?
+In V3, it is supressed due to few modified samples.  In V2, this
+wasn't an issue because equivalence classes were established without
+regard for the few missing samples check.
+
+What is the proper solution though?  Simply ignoring this test for
+equality may fix this problem, but if few variables are modified on
+entry, it may cause other less-noticable problems for IOA traces.  In
+short, what does it mean for something's modbit to be set at the ENTER
+program point?  What does it mean in IOA?
 
 
 --
 $Log$
-Revision 1.1  2002-03-28 19:37:13  tohn
+Revision 1.2  2002-03-28 19:48:24  mistere
+changed bug0034
+
+Revision 1.1  2002/03/28 19:37:13  tohn
 new bug0034
 
