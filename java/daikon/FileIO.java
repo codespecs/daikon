@@ -1,6 +1,7 @@
 package daikon;
 
 import daikon.derive.*;
+import daikon.config.Configuration;
 
 import utilMDE.*;
 import org.apache.oro.text.regex.*;
@@ -8,6 +9,7 @@ import org.apache.oro.text.regex.*;
 import java.io.*;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 public final class FileIO {
 
@@ -1047,19 +1049,60 @@ public final class FileIO {
   }
 
 
-  public static PptMap read_invariant_file(String filename) throws
-  ClassNotFoundException, FileNotFoundException, IOException,
-  OptionalDataException, StreamCorruptedException {
-    InputStream istream = new FileInputStream(filename);
-    if (filename.endsWith(".gz")) {
-      istream = new GZIPInputStream(istream);
+///////////////////////////////////////////////////////////////////////////
+/// Serialized PptMap files
+///
+
+  /**
+   * Use a special record type.  Saving as one object allows for
+   * reference-sharing, easier saves and loads, and potential for
+   * later overriding of readObject if the save format changes.
+   **/
+  private final static class SerialFormat implements Serializable
+  {
+    public SerialFormat(PptMap map, Configuration config)
+    {
+      this.map = map;
+      this.config = config;
     }
-    ObjectInputStream oistream = new ObjectInputStream(istream);
-    try {
-      return (PptMap) oistream.readObject();
-    } catch (Exception e) {
-      throw new Error("Trouble reading from .inv file " + filename + ": " + e.toString());
-    }
+    public PptMap map;
+    public Configuration config;
   }
+
+  public static void write_serialized_pptmap(PptMap map, File file)
+    throws IOException
+  {
+    SerialFormat record = new SerialFormat(map, Configuration.getInstance());
+    OutputStream bytes = new FileOutputStream(file);
+    if (file.getName().endsWith(".gz")) {
+      bytes = new GZIPOutputStream(bytes);
+    }
+    ObjectOutputStream objs = new ObjectOutputStream(bytes);
+    objs.writeObject(record);
+    objs.close();
+  }
+
+  public static PptMap read_serialized_pptmap(File file, boolean use_saved_config)
+    throws IOException
+  {
+    try {
+      InputStream istream = new FileInputStream(file);
+      if (file.getName().endsWith(".gz")) {
+	istream = new GZIPInputStream(istream);
+      }
+      ObjectInputStream objs = new ObjectInputStream(istream);
+      SerialFormat record = (SerialFormat) objs.readObject();
+      if (use_saved_config) {
+	Configuration.getInstance().overlap(record.config);
+      }
+      return record.map;
+    } catch (ClassNotFoundException e) {
+      throw new IOException("Error while loading inv file: " + e);
+    }
+    // } catch (InvalidClassException e) {    // already extends IOException
+    // } catch (StreamCorruptedException e) { // already extends IOException
+    // } catch (OptionalDataException e) {    // already extends IOException
+  }
+
 
 }
