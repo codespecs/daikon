@@ -1,0 +1,20 @@
+# Main Makefile for Daikon
+
+all:
+	cd bin && make
+ifdef $DAIKONCLASS_SOURCES
+	cd java && make
+endif
+	# This comes last because it might fail
+	make java-front-end
+
+java-front-end: front-end/java/config.status
+	@echo "If this command fails, see 'Installing dfej' section in manual"
+	cd front-end/java && make
+
+front-end/java/config.status:
+	@echo "If this command fails, see 'Installing dfej' section in manual"
+	cd front-end/java && ./configure
+
+.PHONY: java-front-end
+.SECONDARY: front-end/java/config.status

@@ -340,6 +340,8 @@ daikon.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daiko
 	## Now make the daikon distribution
 	# First add some more files to the distribution
 
+	cp -p Makefile-dist /tmp/daikon/Makefile
+
 	# Daikon itself
 	(cd java; tar chf /tmp/daikon-java.tar --exclude daikon-java --exclude daikon-output --exclude Makefile.user daikon)
 	(mkdir /tmp/daikon/java; cd /tmp/daikon/java; tar xf /tmp/daikon-java.tar; rm /tmp/daikon-java.tar)
