@@ -1064,31 +1064,63 @@ public final class ONEOFSCALAR
     return result;
   }
 
-  //@tx
-  // TODO: RRN, take a look at this.
   public String format_dbc() {
-    // This is incomplete.
-#if defined(FLOAT)
-    sort_rep();
 
-    String varname = var().name.dbc_name();
     String result;
 
-    {
-      result = "";
-      for (int i=0; i<num_elts; i++) {
-        if (i != 0) { result += " || "; }
-        // Not quite right for the case of NaN, I think.
-        result += varname + " == " + String.valueOf(elts[i]);
-      }
+    // Setting up the name of the unary variable
+    String varname = var().name.dbc_name(var());
+#if defined(ELTSTRING)
+    if ((var().rep_type == ProglangType.CHAR_ARRAY_ARRAY)
+        && varname.endsWith("[]")) {
+      varname = varname.substring(0, varname.length()-2);
+    }
+#endif
+
+#if defined(IS_ELT)
+
+    // Constructing the array that unary val will be compared against
+  #if defined(ELT)
+    String oneOfArray = "new long[] { ";
+  #elif defined(ELTFLOAT)
+    String oneOfArray = "new float[] { ";
+  #elif defined(ELTSTRING)
+    String oneOfArray = "new String[] { ";
+  #endif
+    for(int i = 0 ; i < num_elts ; i++) {
+      if (i != 0) { oneOfArray += ", "; }
+      oneOfArray = oneOfArray + TOSTRING(elts[i]);
+    }
+    oneOfArray += " }";
+
+    // Calling quantification method
+    if (num_elts == 1) {
+
+    #if defined(BASE_INT)
+      if (is_boolean) {
+        result = "quant.Quant.elementsEqual(" + varname + ", "
+          + ((elts[0] == 0) ? "false" : "true") + ")";
+      } else if (is_hashcode) {
+        result =
+          ((elts[0] == 0)
+           ? ("quant.Quant.elementsEqual(" + varname + ", null)")
+           : ("quant.Quant.elementsNotEqual(" + varname + ", null)"));
+      } else
+    #endif
+        {
+          result = "quant.Quant.elementsEqual(" + varname + ", "
+            + TOSTRING(elts[0]) + ")";
+        }
+    } else {
+      Assert.assertTrue(num_elts > 1);
+      result = "quant.Quant.elementsOneOf(" + varname + ", " + oneOfArray + ")";
     }
 
-    return result;
-#elif defined(SCALAR)
-    sort_rep();
+#elif defined(IS_SCALAR)
 
-    String varname = var().name.java_name();
-    String result;
+  #if defined(IS_NUMERIC)
+
+    #if defined(BASE_INT)
 
     if (is_boolean) {
       Assert.assertTrue(num_elts == 1);
@@ -1098,66 +1130,36 @@ public final class ONEOFSCALAR
       if (num_elts == 2) {
         return "true";          // one elt is null, the other is non-null
       } else if (elts[0] == 0) {
-        result = varname + " == null";
+        result = varname + " == " + "null";
       } else {
         result = varname + " != null";
           // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"
           ;
       }
-    } else {
+    } else
+
+    #endif
+
+    {
       result = "";
       for (int i=0; i<num_elts; i++) {
         if (i != 0) { result += " || "; }
         // Not quite right for the case of NaN, I think.
-        result += varname + " == " + ((Integer.MIN_VALUE <= elts[i] && elts[i] <= Integer.MAX_VALUE) ? String.valueOf(elts[i]) : (String.valueOf(elts[i]) + "L"));
+        result += varname + " == " + TOSTRING(elts[i]);
       }
     }
 
-    return result;
-
- /*   String result;
-    VarInfo v = var();
-    String varname = v.name.dbc_name(v);
-    {
-      result = "";
-      for (int i = 0; i < num_elts; i++) {
-        if (i != 0) {
-          result += " || ";
-        }
-        // Not quite right for the case of NaN, I think.
-        result += varname + " == " + String.valueOf(elts[i]);
-      }
-    }
-    return result;*/
-
-#elif defined(STRING) || defined(ELTSTRING)
-    sort_rep();
-
- #if defined(ELTSTRING)
-    String[] form = VarInfoName.QuantHelper.format_dbc(new VarInfoName[] { var().name } );
- #endif
-
-    VarInfo v = var();
-    String varname = v.name.dbc_name(v);
-
-    if ((var().rep_type == ProglangType.CHAR_ARRAY) && varname.endsWith("[]")) {
-      varname = varname.substring(0, varname.length() - 2);
-    }
-
-    String result;
+  #elif defined(STRING)
 
     result = "";
     boolean is_type = is_type();
-    for (int i = 0; i < num_elts; i++) {
-      if (i != 0) {
-        result += " || ";
-      }
+    for (int i=0; i<num_elts; i++) {
+      if (i != 0) { result += " || "; }
       result += varname;
       String str = elts[i];
       if (!is_type) {
-        //RRN:  Tao used == here, it was probably a bug.
-        result += ".equals(" + ((str == null) ? "null" : "\"" + UtilMDE.escapeNonJava(str) + "\"") + ")";
+        result += JAVA_EQUALS_STRING(TOSTRING(str));
       } else {
         result += " == ";
         if ((str == null) || "null".equals(str)) {
@@ -1166,68 +1168,23 @@ public final class ONEOFSCALAR
           result += "(" + UtilMDE.classnameFromJvm(str) + ")";
         } else {
           if (str.startsWith("\"") && str.endsWith("\"")) {
-            str = str.substring(1, str.length() - 1);
+            str = str.substring(1, str.length()-1);
           }
           result += "(" + str + ")";
         }
       }
     }
- #if defined(ELTSTRING)
-    result = form[0] + "(" + result + ")" + form[2];
- #endif
-    return result;
 
-#elif defined(SEQUENCE) || defined(FLOATSEQUENCE)
-    // have to take a closer look at this!
-    sort_rep();
+  #endif
 
-    String result;
+#elif defined(IS_SEQUENCE)
 
-    String length = "";
-    String forall = "";
-#if defined(SEQUENCE)
-    if (is_hashcode) {
-      if (num_elts == 0) {
-        String classname = this.getClass().toString().substring(6); // remove leading "class"
-        result =
-          "warning: method " + classname + ".format_dbc() needs to be implemented: " + format();
-      } else {
-        Assert.assertTrue(num_elts == 1);
-        // we only have one value, because add_modified dies if more
-        long[] value = elts[0];
-        if (var().name.isApplySizeSafe()) {
-          VarInfo v = var();
-          length = v.name.applySize().dbc_name(v) + " == " + value.length;
-        }
-        if (no_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_dbc(new VarInfoName[] { var().name });
-          forall = form[0] + "(" + form[1] + " != null)" + form[2];
-        } else if (all_nulls(0)) {
-          String[] form = VarInfoName.QuantHelper.format_dbc(new VarInfoName[] { var().name });
-          forall = form[0] + "(" + form[1] + " == null)" + form[2];
-        }
-      }
-    }
+    result = format_unimplemented(OutputFormat.DBCJAVA);
+
 #endif
-    if (length == "" && forall == "") { // interned
-      String classname = this.getClass().toString().substring(6); // remove leading "class"
-      result =
-        "warning: method " + classname + ".format_dbc() needs to be implemented: " + format();
-    } else if (length == "") { // interned
-      result = forall;
-    } else if (forall == "") { // interned
-      result = length;
-    } else {
-      result = "(" + length + ") && (" + forall + ")";
-    }
+
     return result;
-
-#else
-
-    return format_unimplemented(OutputFormat.DBCJAVA);
-#endif
   }
-
 
   public String format_simplify() {
 #ifdef BASE_INT
@@ -1240,7 +1197,7 @@ public final class ONEOFSCALAR
     String varname = form[1];
 #elif defined(IS_SCALAR)
     String varname =
-      var().simplifyFixup(var().name.name_using(OutputFormat.SIMPLIFY));
+      var().simplifyFixup(var().name.name_using(OutputFormat.SIMPLIFY, null));
 #endif
     String result;
 #if defined(STRING) || defined(ELTSTRING)

@@ -50,7 +50,9 @@ The correct way to build the system is to run 'make'.
   #define MINSTR "min"
   #define MAXSTR "max"
   #define GTESTR ">="
+  #define GTESTR2 "GTE"
   #define LTESTR "<="
+  #define LTESTR2 "LTE"
   #define MAX1 core.max1
   #define LOWERBOUNDCORE INT(LowerBoundCore)
   #define ELTLOWERBOUND INT(EltLowerBound)
@@ -105,7 +107,9 @@ The correct way to build the system is to run 'make'.
   #define MINSTR "max"
   #define MAXSTR "min"
   #define GTESTR "<="
+  #define GTESTR2 "LTE"
   #define LTESTR ">="
+  #define LTESTR2 "GTE"
   #define MAX1 core.min1
   #define LOWERBOUNDCORE INT(UpperBoundCore)
   #define ELTLOWERBOUND INT(EltUpperBound)
@@ -254,7 +258,7 @@ public class LOWERBOUND
 
 #if (defined(LOWER) || defined(UPPER) || defined(LOWERFLOAT) || defined(UPPERFLOAT))
   public String format_using(OutputFormat format) {
-    String name = var().name.name_using(format);
+    String name = var().name.name_using(format, var());
 
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.ESCJAVA)
@@ -323,9 +327,14 @@ public class LOWERBOUND
 
   public String format_dbc() {
 #ifdef IS_ELT
-    return "warning: OutputFormat.DBCJAVA variable quantification must be implemented.";
+    if(var().name instanceof VarInfoName.Elements) {
+      return
+        "quant.Quant.elements" + GTESTR2 + "(" + var().name.dbc_name(var()) + ", " + MIN1 + ")";
+    } else {
+      return "(warning: format_dbc unable to format:" + var().name.repr();
+    }
 #else
-    String varname = var().name.dbc_name();
+    String varname = var().name.dbc_name(var());
     return varname + " " + GTESTR + " " + MIN1;
 #endif
   }
