@@ -2,7 +2,7 @@
 # html-update-toc
 # Update (in place) table of contents for an HTML document.
 # Michael Ernst <mernst@lcs.mit.edu>
-# Time-stamp: <2005-01-31 10:17:16 mernst>
+# Time-stamp: <2005-01-31 19:31:27 mernst>
 
 # This script edits a HTML file in place to modify an existing table of
 # contents.  The contents start (and end, respectively) with "<!-- start
@@ -35,22 +35,25 @@
 # As noted above, header lines should contain anchor tags.
 # Here is Emacs code to add anchor names:
 my $ignore = <<EOF;
-  (save-excursion
-    (goto-char (point-min))
-    (query-replace-regexp "^\\(<h[1-6]>\\)\\([^<>\n]*\\)\\(</h[1-6]>\\)$"
-                          "\\1<a name=\"\\2\">\\2</a>\\3")
-    ;; now convert spaces to underscores in anchors
-    (require 'dired)
-    (goto-char (point-min))
-    (while (re-search-forward "^\\(<h[1-6]><a name=\"\\)\\([^<> \"\n]* [^<>\"\n]*\\)\\(\">\\)" nil t)
-      (let ((s1 (match-string 1))
-            (s2 (match-string 2))
-            (s3 (match-string 3)))
-        (replace-match
-         (concat s1
-                 (save-match-data (dired-replace-in-string " " "_" s2))
-                 s3)
-         nil nil))))
+  (defun html-add-heading-anchors ()
+    "Add anchors to section headings in an HTML document."
+    (interactive)
+    (save-excursion
+      (goto-char (point-min))
+      (query-replace-regexp "^\\(<h[1-6]>\\)\\([^<>\n]*\\)\\(</h[1-6]>\\)\\s-*$"
+                            "\\1<a name=\"\\2\">\\2</a>\\3")
+      ;; now convert spaces to underscores in anchors
+      (require 'dired)
+      (goto-char (point-min))
+      (while (re-search-forward "^\\(<h[1-6]><a name=\"\\)\\([^<> \"\n]* [^<>\"\n]*\\)\\(\">\\)" nil t)
+        (let ((s1 (match-string 1))
+              (s2 (match-string 2))
+              (s3 (match-string 3)))
+          (replace-match
+           (concat s1
+                   (save-match-data (dired-replace-in-string " " "_" s2))
+                   s3)
+           nil nil)))))
 EOF
 
 
