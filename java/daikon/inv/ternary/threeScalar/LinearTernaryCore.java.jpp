@@ -64,6 +64,13 @@ public final class CLASSNAME
   public double min_a, max_a, min_b, max_b, min_c, max_c, min_d, max_d;
   public double separation = 0;
 
+  //indcates whether a line exists in the 3D space instead of a plane (-1 means no line exists)
+  //determines which values in constants is valid; see calc_bi_linear()
+  public int line_flag = -1;
+
+  //constants and coefficients for a line in 3D space
+  public double[] constants = new double[4];
+
   // Inner class to store points in for more convenient access.
   public static class Point implements Serializable, Cloneable {
     public PRIMITIVE x;
@@ -85,6 +92,7 @@ public final class CLASSNAME
       return ("(" + x + ", " + y + " ," + z + ")");
     }
   }
+
 
   // Points that define the plane.  The first three are normally the
   // current definition.  The next is a new point for consideration.
@@ -132,7 +140,7 @@ public final class CLASSNAME
     pclever[permutation[0]] = clever[0];
     pclever[permutation[1]] = clever[1];
     pclever[permutation[2]] = clever[2];
-    if (values_seen >= MINTRIPLES) {
+    if (isActive()) {
       // Seen enough values, so permuting a, b, c is useful
        if (a == 0 || b == 0 || c == 0) {
         // Can't handle this form once rotated.  But if we've seen
@@ -185,13 +193,17 @@ public final class CLASSNAME
     // didn't fit even before the permutation. -smcc
   }
 
+ 
+   
   /**
    * Returns whether or not the invariant is currently active.  We become
-   * active after MINTRIPLES values have been seen and a plane calculated.
+   * active after MINTRIPLES values have been seen and a line is not calculated.
    * Before that, a, b, and c are uninitialized
    */
+   // this is the check used throughout the file as a shortcut because 
+   // the invariant must have seen enough samples and not be a line
   public boolean isActive() {
-    return (values_seen >= MINTRIPLES);
+   return (line_flag == -1 && values_seen >= MINTRIPLES);
   }
 
   /**
@@ -245,13 +257,18 @@ public final class CLASSNAME
     }
 
     InvariantStatus sts = InvariantStatus.NO_CHANGE;
+
+
     for (int i = 0; i < mi; i++ ) {
       if (con_index < lb_v1_index) {
         sts = add_modified (con_vals[i], lb1_vals[i], lb2_vals[i], 1);
+
       } else if (con_index < lb_v2_index) {
         sts = add_modified (lb1_vals[i], con_vals[i], lb2_vals[i], 1);
+
       } else {
         sts = add_modified (lb1_vals[i], lb2_vals[i], con_vals[i], 1);
+
       }
       if (sts != InvariantStatus.NO_CHANGE)
         break;
@@ -265,6 +282,8 @@ public final class CLASSNAME
       Fmt.pf ("in inv " + wrapper.format() + " " + wrapper.ppt);
       Assert.assertTrue (sts == InvariantStatus.NO_CHANGE);
     }
+
+
     return (sts);
   }
 
@@ -304,7 +323,11 @@ public final class CLASSNAME
 
   /**
    * Looks for points that define a plane (ax + by + cz + d = 0).  Collects
-   * MINTRIPLE points before attempting to define the plane (to
+   * MINTRIPLE points before attempting to define a line through the points.
+   * Once the equation for the line is found, each subsequent point is compared to
+   * it.  If the point does not match, recalculates the maximally separated points
+   * and attempts to fit the points to the new line.
+   * If the points do not fit the line, attempts to define the plane (to
    * hopefully get at least some spread between the points, so that
    * small errors don't get magnified).  Once the equation for the
    * plane is found, each subsequent point is compared to it.  If the
@@ -322,8 +345,9 @@ public final class CLASSNAME
     // calling addToFlow.  A proper clone, etc. should be created and
     // dealt with.  This will complicate the logic below, I'll bet.
 
-    if (Debug.logDetail())
+ //   if (Debug.logDetail())
       wrapper.log ("Adding point, x=" + x + " y=" + y + " z=" + z);
+
 
     if (values_seen < MINTRIPLES) {
       // We delay computation of a and b until we have seen several triples
@@ -342,9 +366,78 @@ public final class CLASSNAME
       // if we've seen enough values to create the equation
       if (values_seen == MINTRIPLES) {
 
-        // Find the three points with the maximum separation
+		//try to fit the points to a line first
+		linearIntervention();
+
+
+		//if line can not be formed, try to form a plane
+		if(line_flag == -1) {
+		InvariantStatus stat = planarIntervention();
+    	return stat;
+      	
+      	} else {
+      	return InvariantStatus.NO_CHANGE;
+      	}
+      } else  {
+      return InvariantStatus.NO_CHANGE;
+    	}
+    } else {
+
+		//at this point either a line or a plane must have been formed
+			
+    if(line_flag == -1) {
+	      // If the new value doesn't fit the equation
+      if (!EQUAL (-c*z, a*x+b*y+d)) {
+
+        // Try to find small changes that will fit better.
+        if (!try_new_equation (x, y, z)) {
+          if (wrapper.logOn() || debug.isLoggable(Level.FINE)) {
+            wrapper.log (debug, "destroying  (" + wrapper.format()
+                  + ") where x=" + x + " y=" + y + " z=" + z
+                         + " a=" + a + " b=" + b + " c=" + c
+                         + " values_seen=" + values_seen);
+          }
+          return InvariantStatus.FALSIFIED;
+        }
+      } else {
+      return InvariantStatus.NO_CHANGE;
+      }
+    } else {
+    	
+    	// try to fit to the current line
+    	boolean ok = try_points(x, y, z);
+   	//	wrapper.log ("trying point, x=" + x + " y=" + y + " z=" + z + ": " + ok);
+   		
+    	if(!ok) {
+    		//line_flag = -1;	
+    		//put the crucial point in, so that it can be tested against the new line
+    		def_points[MINTRIPLES-1] = new Point (x, y, z);
+    		linearIntervention();
+    	}
+	//	wrapper.log ("after linear point, x=" + x + " y=" + y + " z=" + z + ": " + line_flag);
+		
+		// new point has broken the line, try to fit to a plane
+    	if(line_flag == -1) {
+    	InvariantStatus stat = planarIntervention();
+    //	wrapper.log("after linear point, x=" + x + " y=" + y + " z=" + z + ": " + stat);
+    	return stat;
+    	} else {
+    		return InvariantStatus.NO_CHANGE;
+    	}
+
+    	}
+
+    }
+    //should never get here because values_seen is either < or >= MINTRIPLES
+    return InvariantStatus.NO_CHANGE;
+  }
+	
+	//attempts to fit the def_points into a plane
+	private InvariantStatus planarIntervention() {
+	// Find the three points with the maximum separation
         maxsep_triples (def_points);
         if (def_points[0] == null) {
+			
           return InvariantStatus.FALSIFIED;
         }
 
@@ -353,6 +446,7 @@ public final class CLASSNAME
         try {
           coef = calc_tri_linear (def_points);
         } catch (ArithmeticException e) {
+
           return InvariantStatus.FALSIFIED;
         }
         a = coef[0];
@@ -371,12 +465,13 @@ public final class CLASSNAME
             (Math.abs(b) >= Double.MAX_VALUE) ||
             (Math.abs(c) >= Double.MAX_VALUE) ||
             Double.isNaN(a) || Double.isNaN(b) || Double.isNaN(c)) {
+
           return InvariantStatus.FALSIFIED;
         }
 
         // Check all values against a, b, and c.
         if (!wrapper.is_false()) {
-          for (int i=0; i<MINTRIPLES; i++) { // values_seen == MINTRIPLES
+          for (int i=0; i<values_seen; i++) { 
             // Global.fuzzy.eq works by comparing ratios between numbers,
             // so comparing the sum of everything to 0 won't work.
             if (!EQUAL (-c * def_points[i].z,
@@ -389,6 +484,7 @@ public final class CLASSNAME
                             + "*" + def_points[i].z
                             + "+" + d);
               }
+
               return InvariantStatus.FALSIFIED;
             }
           }
@@ -400,7 +496,7 @@ public final class CLASSNAME
           for (int ii = 3; ii < MINTRIPLES; ii++)
             def_points[ii] = null;
 
-          // check to see if this alread exists at the global ppt, it it
+          // check to see if this already exists at the global ppt, it it
           // does, falsify it here to eliminate the duplicate copy.  This
           // is not the best place to do this, but easy for now
           PptSlice gslice = wrapper.ppt.find_global_slice
@@ -414,25 +510,219 @@ public final class CLASSNAME
           }
 
         }
-      }
-    } else {
-      // If the new value doesn't fit the equation
-      if (!EQUAL (-c*z, a*x+b*y+d)) {
+	
+		//if it passes all the checks, then no change to the Invariant
+		return InvariantStatus.NO_CHANGE;
+	}
 
-        // Try to find small changes that will fit better.
-        if (!try_new_equation (x, y, z)) {
-          if (wrapper.logOn() || debug.isLoggable(Level.FINE)) {
-            wrapper.log (debug, "destroying  (" + wrapper.format()
-                  + ") where x=" + x + " y=" + y + " z=" + z
-                         + " a=" + a + " b=" + b + " c=" + c
-                         + " values_seen=" + values_seen);
-          }
-          return InvariantStatus.FALSIFIED;
+	// attempts to fit the def_points into a line (similar to fitting to a plane code)
+   private void linearIntervention() {
+
+	// find the max separation points
+	// make a copy of the array so that the points don't get clobbered because if a line fails to
+	// form; the calc_tri_linear code will need an untouched copy of the def_points
+
+		Point[] dummy = new Point[def_points.length];
+
+		for (int i = 0; i < def_points.length; i++)
+			dummy[i] = def_points[i];
+		maxsep_doubles(dummy);
+
+
+		//find the equation (constants and coeffs now stored in the constants array)
+		calc_bi_linear(dummy);
+		
+		//check the other points against the constants and coefficients
+		for(int i = 0; i < def_points.length; i++) {
+			boolean ok = try_points(def_points[i].x, def_points[i].y, def_points[i].z);
+			wrapper.log("trying: " + def_points[i]);
+			wrapper.log("ok: " + ok);
+			
+			if(!ok) {
+			
+			line_flag = -1;
+			for(int j = 0; j < constants.length; j++)
+				constants[j] = -999;
+			break;
+			}
+		}
+	}
+
+	// try to fit the new point onto the current line
+	private boolean try_points(double x, double y, double z) {
+
+	 switch (line_flag) {
+	 case 0:
+	 		if(!EQUAL(constants[0], x) || !EQUAL(constants[1], y)) {
+	 			return false;
+	 		} else
+	 			return true;
+	 case 1:
+	 		if(!EQUAL(constants[0], x) || !EQUAL(constants[1], z)){
+	 			return false;
+	 		} else
+	 			return true;
+	 case 2:
+	 		if(!EQUAL(constants[0], y) || !EQUAL(constants[1], z)) {
+	 			return false;
+	 		} else
+	 			return true;
+	 case 3:
+	 		if(!EQUAL(constants[0], x) || !EQUAL(z, constants[1] * y + constants[2])) {
+	 			return false;
+	 		} else
+	 			return true;
+	 case 4:
+	 		if(!EQUAL(constants[0], y) || !EQUAL(z, constants[1] * x + constants[2])) {
+	 			return false;
+	 		} else
+	 			return true;
+	 case 5:
+	 		if(!EQUAL(constants[0], z) || !EQUAL(y, constants[1] * x + constants[2])) {
+	 			return false;
+	 		} else
+	 			return true;
+	 case 6:
+           if(!EQUAL(y, constants[0] * x + constants[1]) || !EQUAL(z, constants[2] * x + constants[3])) {
+	 			return false;
+	 		} else
+	 			return true;
         }
+
+        //if it gets here; line_flag must be -1
+	 	return false;
+	}
+
+	//finds the two max separated points in pa
+    private double maxsep_doubles (Point[] pa) {
+
+    Point p1 = null, p2 = null;
+
+    // cache values for the (square of the) distance between each pair of
+    // points, to avoid duplicating work
+    double[][] separations = new double[pa.length][pa.length];
+    for (int i=0; i<pa.length-1; i++) {
+      for (int j=i+1; j<pa.length; j++) {
+        separations[i][j] = separation(pa[i], pa[j]);
       }
     }
-    return InvariantStatus.NO_CHANGE;
+
+    // max_separation is the separation metric for the most separated
+    // pair of points.  We use the sum of the separations as the
+    // metric.
+    double max_separation = Double.MIN_VALUE;
+
+    for (int i=0; i < pa.length-2; i++) {
+      for (int j=i+1; j < pa.length-1; j++) {
+          double separation = separations[i][j];
+          if (separation > max_separation) {
+            max_separation = separation;
+            p1 = pa[i];
+            p2 = pa[j];
+
+          }
+        }
+      }
+
+    pa[0] = p1;
+    pa[1] = p2;
+
+
+    if (Debug.logDetail())
+      wrapper.log ("maxsep_doubles = " + pa[0] + " " + pa[1]);
+    return (max_separation);
+    }
+
+ /**
+   * Calculates the coefficients for the line in 3D using the first two points
+   *
+   * @param points  array of points to use to calculate the coefficents.  Only
+   *                the first two points are used
+   */
+   	//
+	//	the line can fall under 3 categories
+    //
+	//	1. parallel to an axis which means that 2 of the following is true
+	//	x = A
+	//	y = B
+	//	z = C
+	//
+	//	and the two that are true form a line in the 3rd dimension (the one that's
+	//	not constant)
+	//
+	//	2. parallel to the plane of an axis, which means that one of the following
+	//	is true
+	//	x = A
+	//	y = B
+	//	z = C
+	//
+	//	and the line is just a line in the non-constant variable plane projected
+	//	onto the third dimension
+	//	and the equation for that line is:
+	//	x = A [supposing that x is the constant one]
+	//	y = Bz + C
+	//
+	//
+	//	3. none of the above and the equation of the line is just:
+	//	y = Ax + B
+	//	z = Cx + D
+
+
+  private void calc_bi_linear(Point[] points) {
+    Point p0 = points[0];
+    Point p1 = points[1];
+
+  if((p0.x == p1.x) && (p0.y == p1.y) && (p0.z != p1.z)) {
+  	//x = A, y = B
+  	line_flag = 0;
+  	constants[0] = p0.x;
+  	constants[1] = p0.y;
+  	}
+  if((p0.x == p1.x) && (p0.z == p1.z) && (p0.y != p1.y)) {
+  	//x = A, z = C
+  	line_flag = 1;
+  	constants[0] = p0.x;
+  	constants[1] = p0.z;
+  	}
+  if((p0.y == p1.y) && (p0.z == p1.z) && (p0.x != p1.x)) {
+  	//y = B, z = C
+  	line_flag = 2;
+  	constants[0] = p0.y;
+  	constants[1] = p0.z;
+  	}
+  if((p0.x == p1.x) && (p0.y != p1.y) && (p0.z != p1.z)) {
+  	//x = A, z = By + C
+  	line_flag = 3;
+  	constants[0] = p0.x;
+    constants[1] = (p1.z-p0.z)/(double) (p1.y-p0.y);
+    constants[2] = (p0.z*p1.y-p0.y*p1.z)/(double)(p1.y-p0.y);
+  	}
+  if((p0.y == p1.y) && (p0.x != p1.x) && (p0.z != p1.z)) {
+  	//y = B, z = Ax + C
+  	line_flag = 4;
+  	constants[0] = p0.y;
+    constants[1] = (p1.z-p0.z)/(double) (p1.x-p0.x);
+    constants[2] = (p0.z*p1.x-p0.x*p1.z)/(double)(p1.x-p0.x);
+  	}
+  if((p0.z == p1.z) && (p0.x != p1.x) && (p0.y != p1.y)) {
+  	//z = C, y = Ax + B
+  	line_flag = 5;
+  	constants[0] = p0.z;
+	constants[1] = (p1.y-p0.y)/(double) (p1.x-p0.x);
+    constants[2] = (p0.y*p1.x-p0.x*p1.y)/(double)(p1.x-p0.x);
+  	}
+  if((p0.x != p1.x) && (p0.y != p1.y) && (p0.z != p1.z)) {
+  	//y = Ax + B, z = Cx + D
+  	line_flag = 6;
+  	constants[0] = (p1.y-p0.y)/(double) (p1.x-p0.x);
+    constants[1] = (p0.y*p1.x-p0.x*p1.y)/(double)(p1.x-p0.x);
+    constants[2] = (p1.z-p0.z)/(double) (p1.x-p0.x);
+    constants[3] = (p0.z*p1.x-p0.x*p1.z)/(double)(p1.x-p0.x);
+  	}
+
   }
+
+
 
   /**
    *  Calculates new coefficients that for the new point.  Uses the
@@ -690,11 +980,16 @@ public final class CLASSNAME
 
 
   public boolean enoughSamples() {
-    return values_seen >= MINTRIPLES;
+    return isActive();
   }
 
+	//if it's a line, we have no confidence that it's a plane
   public double computeConfidence() {
+  	if(isActive()) {
     return Invariant.conf_is_ge(values_seen, MINTRIPLES);
+    } else 
+    return 0;
+    
   }
 
   public String repr() {
@@ -848,8 +1143,8 @@ public final class CLASSNAME
     // If we are matching up those that have not seen enough values yet
     if (inactive_can_match) {
 
-      // If both have yet to see enough valus
-      if ((values_seen < MINTRIPLES) && (other.values_seen < MINTRIPLES)) {
+      // If both have yet to see enough values
+      if (!isActive() && !other.isActive()) {
 
         // Same formula if all of the points match
         if (values_seen != other.values_seen)
@@ -901,8 +1196,8 @@ public final class CLASSNAME
   }
 
   public boolean isExclusiveFormula(CLASSNAME other) {
-    if ((values_seen < MINTRIPLES) ||
-        (other.values_seen < MINTRIPLES)) {
+    if (!isActive() ||
+       !other.isActive()) {
       return false;
     }
 
