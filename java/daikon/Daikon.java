@@ -197,6 +197,12 @@ public final class Daikon {
    **/
   public static boolean isInferencing = false;
 
+  /**
+   * When true compilation errors during splitter file generation
+   * will not be reported to the user.
+   */
+  public static boolean suppressSplitterErrors = false;
+
   // Public so other programs can reuse the same command-line options
   public static final String help_SWITCH = "help";
   public static final String ppt_regexp_SWITCH = "ppt";
@@ -231,6 +237,7 @@ public final class Daikon {
   public static final String noinvariantguarding_SWITCH = "no_invariant_guarding";
   public static final String bottom_up_SWITCH = "bottom_up";
   public static final String disc_reason_SWITCH = "disc_reason";
+  public static final String suppress_splitter_errors_SWITCH = "suppress_splitter_errors";
 
   // A pptMap which contains all the Program Points
   // This isn't used anymore; instead, methods have parameters or
@@ -398,7 +405,8 @@ public final class Daikon {
       new LongOpt(enable_temporal_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(noinvariantguarding_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(bottom_up_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(disc_reason_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0)
+      new LongOpt(disc_reason_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(suppress_splitter_errors_SWITCH, LongOpt.NO_ARGUMENT, null, 0)
     };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:", longopts);
     int c;
@@ -560,6 +568,8 @@ public final class Daikon {
             TemporalInvariantManager.active = true;
         } else if (noinvariantguarding_SWITCH.equals(option_name)) {
           noInvariantGuarding = true;
+        } else if (suppress_splitter_errors_SWITCH.equals(option_name)) {
+          suppressSplitterErrors = true;
         } else {
           throw new RuntimeException("Unknown long option received: " + option_name);
         }

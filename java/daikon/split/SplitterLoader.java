@@ -3,6 +3,7 @@ package daikon.split;
 import java.io.*;
 import java.util.*;
 import java.lang.reflect.*;
+import daikon.Daikon;
 
 /**
  * Reads in and loads compiled Java source and returns a Java Object
@@ -20,9 +21,11 @@ public class SplitterLoader extends ClassLoader {
       fi.read(classBytes);
       return classBytes;
     } catch (FileNotFoundException e) {
-      System.out.println("File "
-                         + fileName.substring(0, fileName.length()-6)
-                         + ".java did not compile");
+      if (! Daikon.suppressSplitterErrors) {
+        System.out.println("File "
+                           + fileName.substring(0, fileName.length()-6)
+                           + ".java did not compile");
+      }
       // do nothing. did not compile
     } catch (IOException ioe) {
       System.out.println("IO Error while reading class data " + fileName);
