@@ -1,9 +1,7 @@
 Todo list sorted in approximate order of importance.
 
-  - The nightly build (2/10) failed when running chicory. 
-    [sjl was unable to duplicate the problem]
-
-
+Add your name/initials to an item when you are actively working on it.
+When the task is complete, move it to the bottom of the file.
 
   - Fix --ppt-omit-pattern and --ppt-select-pattern to work on each
     ppt point name rather than only on class names.  I think this means
@@ -37,7 +35,7 @@ Todo list sorted in approximate order of importance.
     simple at that point.
 
   - Implement online mode 
-   [etf]
+    [etf]
 
   - Restructure code so we don't calculate the same thing on each
     method entry/exit, but just once when processing the class.  This
@@ -61,15 +59,16 @@ Todo list sorted in approximate order of importance.
     could use to determine which methods are safe to call; reusing such an
     analysis could make this extension pretty easy.
 
-  - Implement --linked-lists option.
-	[etf]
-
   - Java 1.5 defines a new code attribute: Local Variable Type Table.
     I think this is there to help debuggers handle local variable that are
     generic (it only appears on methods with generics).  Unfortunately, this
     attribute is not supported by BCEL.  For now we are just removing it
     (because something we are doing makes it inconsistent).  A better 
     solution would be to update it correctly.
+
+  - Implement --linked-lists option.
+    This is low-priority, because it's obscure.  In Java, people shouldn't
+    be writing this kind of code anyway.
 
 Completed Tasks
 
