@@ -217,7 +217,7 @@ public abstract class VarInfoName
       return s;
     }
     protected String simplify_name_impl() {
-      return fix_closure(name);
+      return "|" + fix_closure(name) + "|";
     }
     public Object accept(Visitor v) {
       return v.visitSimple(this);
@@ -325,7 +325,7 @@ public abstract class VarInfoName
       return term.esc_name() + "." + field;
     }
     protected String simplify_name_impl() {
-      return "(select " + Simple.fix_closure(field) + " " + term.simplify_name() + ")";
+      return "(select |" + Simple.fix_closure(field) + "| " + term.simplify_name() + ")";
     }
     public Object accept(Visitor v) {
       return v.visitField(this);
