@@ -10,7 +10,16 @@ export INV=${DAIKONDIR}
 export inv=${INV}
 export DAIKONCLASS_SOURCES=1
 
-export PATH=/usr/local/bin:${PATH}:/g4/projects/invariants/binaries:/g4/projects/invariants/tools/escjava/current/bin:$DAIKONDIR/front-end/c
+## Set this directory to the directory containing the JDK.
+# Simplify to the just the first branch after the AFS move is done
+if [ -e /afs/csail/group/pag ]; then
+  export JDKDIR=${JDKDIR:-/afs/csail/group/pag/software/pkg/jdk}
+else
+  export JDKDIR=${JDKDIR:-/g2/jdk}
+fi
+
+# Remove references to /g4 after AFS move is complete
+export PATH=/usr/local/bin:${PATH}:/g4/projects/invariants/binaries:/afs/csail/group/pag/projects/invariants/binaries:/g4/projects/invariants/tools/escjava/current/bin:$DAIKONDIR/front-end/c
 
 source ${INV}/scripts/daikon.bashrc
 
@@ -31,12 +40,21 @@ export PATH=`echo $PATH | ${INV}/scripts/path-remove.pl`
 ## # Alternately, run CVS under emacs via "M-x cvs-update".
 ## alias	cvsupdate	'cvs -q update -d \!* |& egrep -e "^C |update aborted|non-existent repository|Permission denied|cannot open|^cvs update: [^U]"'
 
-alias jikes="/g2/users/mernst/bin/Linux-i686/jikes-1.15 -g +E +F"
+# Perhaps restore after AFS move; but no one is using Jikes these days, at
+# least for Daikon proper, and the Debian one is newer. -SMcC
+# alias jikes="/g2/users/mernst/bin/Linux-i686/jikes-1.15 -g +E +F"
 
 export DFEJ_VERBOSE=1
 
-export BIBINPUTS=.:/g2/users/mernst/bib:..:
-alias bibfind='/g2/users/mernst/bin/Linux-i686/help .n .F /g2/users/mernst/bib/bibroot.non-mde'
+# Update after AFS move
+if [ -e /g2/users/mernst ]; then
+  alias bibfind='/g2/users/mernst/bin/Linux-i686/help .n .F /g2/users/mernst/bib/bibroot.non-mde'
+  export BIBINPUTS=.:/g2/users/mernst/bib:..:
+elif [ -e /var/autofs/net/pag/g2/users/mernst ]; then
+  alias bibfind='/var/autofs/net/pag/g2/users/mernst/bin/Linux-i686/help .n .F /var/autofs/net/pag/g2/users/mernst/bib/bibroot.non-mde'
+  export BIBINPUTS=.:/var/autofs/net/pag/g2/users/mernst/bib:..:
+fi
+
 
 export EDITOR=${EDITOR:-emacsclient}
 export ALTERNATE_EDITOR=${ALTERNATE_EDITOR:-emacs}

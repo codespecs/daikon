@@ -10,7 +10,14 @@ setenv INV ${DAIKONDIR}
 setenv inv ${INV}
 setenv DAIKONCLASS_SOURCES 1
 
-setenv PATH /usr/local/bin:${PATH}:/g4/projects/invariants/binaries:/g4/projects/invariants/tools/escjava/current/bin
+if (-e /afs/csail/group/pag) then
+    setenv JDKDIR /afs/csail/group/pag/software/pkg/jdk
+else
+    setenv JDKDIR /g2/jdk
+endif
+
+# Remove references to /g4 after AFS move is complete
+setenv PATH /usr/local/bin:${PATH}:/g4/projects/invariants/binaries:/afs/csail/group/pag/projects/invariants/binaries:/g4/projects/invariants/tools/escjava/current/bin
 
 source ${INV}/scripts/daikon.cshrc
 
@@ -28,12 +35,20 @@ setenv PATH `echo $PATH | ${INV}/scripts/path-remove.pl`
 # Alternately, run CVS under emacs via "M-x cvs-update".
 alias	cvsupdate	'cvs -q update -d \!* |& egrep -e "^C |update aborted|non-existent repository|Permission denied|cannot open|^cvs update: [^U]"'
 
-alias jikes "/g2/users/mernst/bin/Linux-i686/jikes-1.15 -g +E +F"
+# Perhaps restore after AFS move; but no one is using Jikes these days, at
+# least for Daikon proper, and the Debian one is newer. -SMcC
+# alias jikes "/g2/users/mernst/bin/Linux-i686/jikes-1.15 -g +E +F"
 
 setenv DFEJ_VERBOSE 1
 
-setenv BIBINPUTS .:/g2/users/mernst/bib:..:
-alias bibfind /g2/users/mernst/bin/Linux-i686/help .n .F /g2/users/mernst/bib/bibroot.non-mde
+# Update after AFS move
+if (-e /g2/users/mernst) then
+    setenv BIBINPUTS .:/g2/users/mernst/bib:..:
+    alias bibfind /g2/users/mernst/bin/Linux-i686/help .n .F /g2/users/mernst/bib/bibroot.non-mde
+else if (-e /var/autofs/net/pag/g2/users/mernst) then
+    setenv BIBINPUTS .:/var/autofs/net/pag/g2/users/mernst/bib:..:
+    alias bibfind /var/autofs/net/pag/g2/users/mernst/bin/Linux-i686/help .n .F /var/autofs/net/pag/g2/users/mernst/bib/bibroot.non-mde
+endif
 
 if (! $?EDITOR) setenv EDITOR emacsclient
 if (! $?ALTERNATE_EDITOR) setenv ALTERNATE_EDITOR emacs
