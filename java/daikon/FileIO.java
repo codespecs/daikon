@@ -505,9 +505,8 @@ public final class FileIO {
 
   // I could save some Object overhead by using two parallel stacks
   // instead of Invocation objects; but that's not worth it.
-  static Stack call_stack = new Stack(); // stack of Invocation objects
-  static HashMap call_hashmap = new HashMap();
-  // map from Integer to Invocation
+  static Stack/*Invocation*/ call_stack = new Stack();
+  static HashMap/*Integer->Invocation*/ call_hashmap = new HashMap();
 
   /** Reads data trace files using the default sample processor. **/
   public static void read_data_trace_files(Collection /*File*/
@@ -565,10 +564,10 @@ public final class FileIO {
    */
   public static class Processor {
     public void process_sample(
-      PptMap all_ppts,
-      PptTopLevel ppt,
-      ValueTuple vt,
-      Integer nonce) {
+                               PptMap all_ppts,
+                               PptTopLevel ppt,
+                               ValueTuple vt,
+                               Integer nonce) {
       FileIO.process_sample(all_ppts, ppt, vt, nonce);
     }
   }
@@ -647,8 +646,12 @@ public final class FileIO {
       }
 
       PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
-      Assert.assertTrue(ppt != null, "Program point " + ppt_name
-                      + " appears in dtrace file but not in any decl file");
+      if (ppt == null) {
+        throw new Error("Program point " + ppt_name
+                        + " appears in dtrace file " + data_trace_filename
+                        + " at line " + reader.getLineNumber()
+                        + " but not in any decl file");
+      }
 
       VarInfo[] vis = ppt.var_infos;
 
@@ -755,10 +758,10 @@ public final class FileIO {
    * @param vt trace data only; modified by side effect to add derived vars
    **/
   public static void process_sample(
-    PptMap all_ppts,
-    PptTopLevel ppt,
-    ValueTuple vt,
-    Integer nonce) {
+                                    PptMap all_ppts,
+                                    PptTopLevel ppt,
+                                    ValueTuple vt,
+                                    Integer nonce) {
 
     // We consider a sample processed even if we don't do any actual
     // processing below becaue of the dataflow optimizations.
@@ -803,6 +806,24 @@ public final class FileIO {
     }
 
   }
+
+  /** Returns non-null if this procedure has an unmatched entry. **/
+  static boolean has_unmatched_procedure_entry(PptTopLevel ppt) {
+    for (Iterator i = call_hashmap.values().iterator(); i.hasNext();) {
+      Invocation invok = (Invocation) i.next();
+      if (invok.ppt == ppt) {
+        return true;
+      }
+    }
+    for (Iterator i = call_stack.iterator(); i.hasNext();) {
+      Invocation invok = (Invocation) i.next();
+      if (invok.ppt == ppt) {
+        return true;
+      }
+    }
+    return false;
+  }
+
 
   /**
    * Print each call that does not have a matching exit
@@ -1108,8 +1129,8 @@ public final class FileIO {
   }
 
   public static void add_orig_variables(PptTopLevel ppt,
-  // HashMap cumulative_modbits,
-  Object[] vals, int[] mods, Integer nonce) {
+                                        // HashMap cumulative_modbits,
+                                        Object[] vals, int[] mods, Integer nonce) {
     VarInfo[] vis = ppt.var_infos;
     String fn_name = ppt.ppt_name.getNameWithoutPoint();
     String ppt_name = ppt.name();
