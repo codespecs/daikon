@@ -119,6 +119,12 @@ public abstract class Invariant
    **/
   public boolean falsified = false;
 
+  /**
+   * True once this invariant has flowed.  Prevents invariants from
+   * flowing twice.
+   **/
+  public boolean flowed = false;
+
 
   // Should this just be a public field?  Probably yes for performance, but
   // not now.
@@ -307,6 +313,7 @@ public abstract class Invariant
   protected Invariant(PptSlice ppt) {
     this.ppt = ppt;
     suppressor = null;
+    flowed = false;
     suppressees = new HashSet();
   }
 
@@ -366,9 +373,11 @@ public abstract class Invariant
    * this to list of falsified or weakened invariants.
    **/
   public void destroyAndFlow () {
-    if (debugFlow.isDebugEnabled()) {
+    if (debugFlow.isDebugEnabled() || this.logOn()) {
       debugFlow.debug(repr() + " at " + ppt.parent.name +
                       " added to destroyed.");
+      this.log(repr() + " at " + ppt.parent.name +
+               " added to destroyed.");
     }
     flowThis();
     destroy();
@@ -380,14 +389,25 @@ public abstract class Invariant
    * this to list of falsified or weakened invariants.  Why is this
    * different from flowClone?  Because the Invariant to flow is a
    * clone of this, but the Invariant that's weakened is this.  The
-   * former is needed for flow, the latter for suppression.
+   * former is needed for flow, the latter for suppression.  By
+   * contract, users should call cloneAndFlow rather than flowClone.
    **/
   public void cloneAndFlow() {
-    if (debugFlow.isDebugEnabled()) {
-      debugFlow.debug(repr() + " at " + ppt.parent.name + " added to flowed.");
-    }
-    flowClone();
+    // We must still do this to check suppression
     ppt.addToChanged (this);
+    if (debugFlow.isDebugEnabled() || this.logOn()) {
+      debugFlow.debug(repr() + " at " + ppt.parent.name + " added to changed.");
+      this.log(repr() + " at " + ppt.parent.name + " added to changed.");
+    }
+
+    if (!flowed) {
+      if (debugFlow.isDebugEnabled() || this.logOn()) {
+        debugFlow.debug(repr() + " at " + ppt.parent.name + " added to flowed.");
+        this.log(repr() + " at " + ppt.parent.name + " added to flowed.");
+      }
+      flowClone();
+      flowed = true;
+    }
   }
 
   /**
@@ -400,6 +420,7 @@ public abstract class Invariant
       Invariant result = (Invariant) super.clone();
       result.suppressor = null;
       result.suppressees = new HashSet();
+      result.flowed = false;
       return result;
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can never happen
