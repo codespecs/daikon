@@ -1,4 +1,10 @@
-;; Programs from "The Science of Programming", by David Gries.
+;; gries.lisp
+;; Programs from Chapters 14 and 15 of _The Science of Programming_, by
+;; David Gries.  The function names are chosen from page numbers and
+;; program or exercise numbers.  The "test-*" functions are written by me
+;; to repeatedly call the Gries functions; I just supply 101 random values
+;; in the range -100 to 100.
+
 
 ;; Massage the programs:
 ;;  * list all the variables, for convenience
@@ -9,8 +15,9 @@
 ;; of the second.
 
 
-;; Should already have loaded gries-helper.lisp, which defines macros for
-;; Gries synax.
+;; Before using this code, you should have loaded gries-helper.lisp, which
+;; defines macros for Gries synax.  See that file for a definition of the
+;; semantics of the macros.
 
 ;;; Here are some commands you're likely to find helpful; but rather than
 ;;; looking here, it's better to read the documentation in daikon.html.

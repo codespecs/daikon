@@ -1,3 +1,35 @@
+;; gries-helper.lisp
+
+;; The programs in Gries's _The Science of Programming_ are written in a
+;; variant of Dijkstra's guarded command language.
+
+;; The semantics of the Gries-style Lisp code is as follows:
+;;  * if-fi:  nondeterministically choose one of the true guards and execute
+;;    its body.  Err if no guard is true.
+;;  * do-od:  while any guards are true, nondeterministically choose one of
+;;    the true guards and execute its body.  Exits when no guard is true
+;;    (which might be on the first iteration, so no body would be executed).
+;;  * skip:  no-op; useful in if-fi bodies
+;;  * pre, post, inv:  ignored and run and compile time; these are Gries' pre-
+;;    and post-conditions, and other invariants he notes in comments, and they
+;;    represent the goal.  For instance, for the four p177* programs, the goal
+;;    is to determine that, at both the beginning and end of the function, j =
+;;    k (mod 10).  This is successfully discovered, along with other
+;;    properties as well.  (Actually, it occurs to me now that the stronger
+;;    statement j = k mod 10 would be preferable to j = k (mod 10); that
+;;    should be trivial to fix.)
+;;  * psetf:  parallel assignment:  compute the values before assigning to the
+;;    variables (this is built into Common Lisp)
+;;  * swap:  swap values of two variables, transliterated from (psetf x y y
+;;    x).  This is one of my few departures from Gries' style.  I also used
+;;    setf instead of psetf where appropriate (Gries has only psetf, no setf),
+;;    again because I found the code much easier to understand when I knew
+;;    whether the parallelism was being exploited or not.  These changes have
+;;    no effect on the run-time behavior, which is all that really matters:
+;;    they're just different ways of expressing the same single statement.
+;;  * declare:  Lisp type annotations added by me to simplify my job; implicit
+;;    in the code
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Gries-style syntax

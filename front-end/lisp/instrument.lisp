@@ -116,7 +116,7 @@ LASTP is non-nil if this is the last form (the return value) in the function bod
 		  (begin+body
 		   (cons
 		    (make-write-to-data-trace
-		     (pcl::symbol-append fn-name ":::BEGIN") vars+types)
+		     (pcl::symbol-append fn-name ":::ENTER") vars+types)
 		    wrapped-result-body)))
 	     ;; Could also assert that no more types are declared (because I
 	     ;; will check for invariants over everything declared...).
@@ -214,7 +214,7 @@ LASTP is non-nil if this is the last form (the return value) in the function bod
 			,(instrument-internal form
 			   fn-name params bound-vars nil)
 			,(make-write-to-data-trace
-			  (pcl::symbol-append fn-name ":::END")
+			  (pcl::symbol-append fn-name ":::EXIT")
 			  bound-vars))
 		   form)))))
 
@@ -241,7 +241,7 @@ LASTP is non-nil if this is the last form (the return value) in the function bod
 		,(instrument-internal form
 		   fn-name params bound-vars nil)
 	      ,(make-write-to-data-trace
-		(pcl::symbol-append fn-name ":::END")
+		(pcl::symbol-append fn-name ":::EXIT")
 		bound-vars)))
 	  ((memq head '(setq psetq))
 	   (let* ((vars+values (cdr form))
