@@ -45,6 +45,7 @@ public class NISuppressor {
    **/
   String state = NIS.NONE;
 
+  /** sample invariant - used to check the suppressor over constants */
   Invariant sample_inv;
 
   /**
@@ -63,6 +64,7 @@ public class NISuppressor {
       Method get_proto = inv_class.getMethod ("get_proto",
                                                 new Class[] {});
       sample_inv = (Invariant) get_proto.invoke (null, new Object[] {});
+      Assert.assertTrue (sample_inv != null);
     } catch (Exception e) {
       throw new RuntimeException ("error instantiating invariant "
                                   + inv_class.getName() + ": " + e);
@@ -126,9 +128,29 @@ public class NISuppressor {
                                   + inv_class.getName() + ": " + e);
     }
 
-    if (sample_inv == null)
-      Fmt.pf (inv_class.getName() + " is not enabled" );
+    Assert.assertTrue (sample_inv != null);
     debug.fine ("Created " + this);
+  }
+
+  /**
+   * Returns a new suppressor that is the same as this one except
+   * with its variables swapped.  Unary suppressors have their variable
+   * index swapped from 0 to 1 or 1 to 0.
+   */
+  public NISuppressor swap() {
+
+    if (v2_index == -1) {
+      int new_index = 0;
+      if (v1_index == 0)
+        new_index = 1;
+     return (new NISuppressor (new_index, inv_class));
+    }
+    Assert.assertTrue (v3_index == -1);
+
+    if (swap)
+      return new NISuppressor (v1_index, v2_index, inv_class);
+    else
+      return new NISuppressor (v2_index, v1_index, inv_class);
   }
 
   /**
@@ -136,7 +158,7 @@ public class NISuppressor {
    * is enabled if the invariant on which it depends is enabled.
    */
   public boolean is_enabled() {
-    return (sample_inv != null);
+    return (sample_inv.enabled());
   }
 
   /**
@@ -197,10 +219,15 @@ public class NISuppressor {
 
       // Check to see if the suppressor is true over all constants.
       if (ppt.is_prev_constant (v1)) {
-        UnaryInvariant uinv = (UnaryInvariant) sample_inv;
-        InvariantStatus status = uinv.check (ppt.constants.constant_value(v1),
-                                           ValueTuple.MODIFIED, 1);
-        boolean valid = (status == InvariantStatus.NO_CHANGE);
+        boolean valid = false;
+        VarInfo[] sup_vis = new VarInfo[] {v1};
+        Assert.assertTrue (sample_inv.valid_types (sup_vis));
+        if (sample_inv.instantiate_ok(sup_vis)) {
+          UnaryInvariant uinv = (UnaryInvariant) sample_inv;
+          InvariantStatus status = uinv.check
+                    (ppt.constants.constant_value(v1), ValueTuple.MODIFIED, 1);
+          valid = (status == InvariantStatus.NO_CHANGE);
+        }
         if (NIS.debug.isLoggable(Level.FINE))
           NIS.debug.fine("constant args - " + valid);
         return (state = (valid ? NIS.VALID : NIS.INVALID));
@@ -259,11 +286,17 @@ public class NISuppressor {
       // Check to see if the suppressor is true over all constants.  This
       // code will not work for invariants with any state!
       if (ppt.is_prev_constant (v1) && ppt.is_prev_constant (v2)) {
-        BinaryInvariant binv = (BinaryInvariant) sample_inv;
-        InvariantStatus status = binv.check (ppt.constants.constant_value(v1),
-                                           ppt.constants.constant_value(v2),
-                                           ValueTuple.MODIFIED, 1);
-        boolean valid = (status == InvariantStatus.NO_CHANGE);
+        boolean valid = false;
+        VarInfo[] sup_vis = new VarInfo[] {v1, v2};
+        Assert.assertTrue (sample_inv.valid_types (sup_vis));
+        if (sample_inv.instantiate_ok(sup_vis)) {
+          BinaryInvariant binv = (BinaryInvariant) sample_inv;
+          InvariantStatus status
+            = binv.check_unordered (ppt.constants.constant_value(v1),
+                                    ppt.constants.constant_value(v2),
+                                    ValueTuple.MODIFIED, 1);
+          valid = (status == InvariantStatus.NO_CHANGE);
+        }
         if (NIS.debug.isLoggable (Level.FINE))
           NIS.debug.fine (Fmt.spf ("constant args (%s, %s) = %s ",
                        Debug.toString (ppt.constants.constant_value(v1)),
@@ -351,7 +384,24 @@ public class NISuppressor {
    * to check for a permutation match as well
    */
   public boolean match (NISuppressee sse) {
-    return (sse.sup_class == inv_class);
+
+    if (v2_index == -1)
+      return (sse.sup_class == inv_class);
+    else {
+      if (sse.sup_class != inv_class) {
+        // Fmt.pf ("match = -false for sse %s and ssor %s", sse, this);
+        return (false);
+      }
+      if (!swap_class) {
+        BinaryInvariant binv = (BinaryInvariant) sse.sample_inv;
+        boolean match = (binv.is_symmetric() || (swap == binv.get_swap()));
+        // Fmt.pf ("match = %s for sse %s and ssor %s", "" + match, sse, this);
+        return (match);
+      }
+      // Fmt.pf ("match = -true for sse %s and ssor %s", sse, this);
+      return (true);
+    }
+
   }
 
   /**
