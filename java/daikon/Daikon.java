@@ -3,6 +3,7 @@
 package daikon;
 
 import daikon.split.*;
+import daikon.inv.Invariant;
 
 import java.util.*;
 import java.io.*;
@@ -60,6 +61,8 @@ public final class Daikon {
     + "                        they can later be postprocessed, compared, etc.\n"
     + "    --suppress_object Suppress display of object invariants at program points\n"
     + "                        where they are implied (public method entry / exit).\n"
+    + "    --prob_limit pct  Sets the probability limit for justifying invariants.\n"
+    + "                        The default is 1%.  Smaller values yield stronger filtering.\n"
     ;
 
   /**
@@ -67,8 +70,8 @@ public final class Daikon {
    * in ".decls" and data trace file names end in ".dtrace".
    **/
   public static void main(String[] args) {
-    Vector decl_files = new Vector();
-    Vector dtrace_files = new Vector();
+    Set decl_files = new HashSet();
+    Set dtrace_files = new HashSet();
 
     if (args.length == 0) {
       System.out.println("Daikon error: no files supplied on command line.");
@@ -77,7 +80,8 @@ public final class Daikon {
     }
 
     LongOpt[] longopts = new LongOpt[] {
-      new LongOpt("suppress_object", LongOpt.NO_ARGUMENT, null, 0)
+      new LongOpt("suppress_object", LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt("prob_limit", LongOpt.REQUIRED_ARGUMENT, null, 0)
     };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:r:", longopts);
     int c;
@@ -88,6 +92,8 @@ public final class Daikon {
 	String option_name = longopts[g.getLongind()].getName();
 	if ("suppress_object".equals(option_name)) {
 	  suppress_object_invariants_in_public_methods = true;
+	} else if ("prob_limit".equals(option_name)) {
+	  Invariant.probability_limit = 0.01 * Double.parseDouble(g.getOptarg());
 	} else {
 	  throw new RuntimeException("Unknown long option received: " + option_name);
 	}
@@ -158,17 +164,17 @@ public final class Daikon {
 
     try {
       System.out.print("Reading declaration files ");
-      for (int i=0; i<num_decl_files; i++) {
+      for (Iterator i = decl_files.iterator(); i.hasNext(); ) {
         System.out.print(".");  // show progress
-        String file = (String) decl_files.elementAt(i);
+        String file = (String) i.next();
         FileIO.read_declaration_file(file, all_ppts, ppt_regexp);
       }
       System.out.println();
 
       System.out.print("Reading data trace files ");
-      for (int i=0; i<num_dtrace_files; i++) {
+      for (Iterator i = dtrace_files.iterator(); i.hasNext(); ) {
         System.out.print(".");
-        String file = (String) dtrace_files.elementAt(i);
+        String file = (String) i.next();
         FileIO.read_data_trace_file(file, all_ppts, ppt_regexp);
       }
       System.out.println();
