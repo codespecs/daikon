@@ -7,9 +7,11 @@ daikon.html, daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
-2.3.8 (6 May 2002):
+2.3.8 (7 May 2002):
 
-Add example C files to distribution; add manual section describing them.
+Add example C files to distribution; add manual section describing them,
+and improve dfec documentation.  This release coordinates with a new
+release of the dfec binaries (at http://pag.lcs.mit.edu/daikon/download/).
 
 2.3.7 (1 May 2002):
 
