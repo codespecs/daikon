@@ -839,6 +839,34 @@ public abstract class PptSlice
     return (null);
   }
 
+  /**
+   * Returns true if the invariant is true in this slice.  This can
+   * occur if the invariant exists in this slice, is suppressed,
+   * or is obvious statically.
+   */
+  public boolean is_inv_true (Invariant inv) {
+
+    if (contains_inv_exact (inv)) {
+      if (Debug.logOn() && (Daikon.current_inv != null))
+        Daikon.current_inv.log ("inv " + inv.format() + " exists");
+      return (true);
+    }
+
+    // Check to see if the invariant is obvious statically over the leaders.
+    // This check should be sufficient since if it isn't obvious statically
+    // over the leaders, it should have been created.
+    DiscardInfo di = inv.isObviousStatically (var_infos);
+    if (di != null) {
+      if (Debug.logOn() && (Daikon.current_inv != null))
+        Daikon.current_inv.log ("inv " + inv.format() + " is obv statically");
+      return (true);
+    }
+
+    boolean suppressed = inv.is_ni_suppressed();
+    if (suppressed && Debug.logOn() && (Daikon.current_inv != null))
+      Daikon.current_inv.log ("inv " + inv.format() + " is ni suppressed");
+    return (suppressed);
+  }
 
   public void log (String msg) {
     Debug.log (getClass(), this, msg);
