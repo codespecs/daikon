@@ -668,7 +668,6 @@ public abstract class Invariant
    * used to make child invariant match the variable order of the parent
    * when merging invariants bottom up.
    */
-
   public Invariant clone_and_permute (int[] permutation) {
 
     Invariant result = (Invariant) this.clone();
@@ -861,7 +860,15 @@ public abstract class Invariant
    * format gives a high-level representation for user output.
    **/
   public String format() {
-    return format_using(OutputFormat.DAIKON);
+    if (PrintInvariants.dkconfig_print_inv_class) {
+      String classname = getClass().getName();
+      int index = classname.lastIndexOf('.');
+      classname = classname.substring(index+1);
+      return format_using(OutputFormat.DAIKON)
+                + " [" + classname + "]";
+    } else {
+      return format_using(OutputFormat.DAIKON);
+    }
   }
 
   public abstract String format_using(OutputFormat format);
@@ -2017,10 +2024,7 @@ public abstract class Invariant
         return (false);
 
       Match ic = (Match) obj;
-      if (ic.inv.getClass() ==  inv.getClass())
-        return (inv.mergeFormulasOk() || inv.isSameFormula (ic.inv));
-      else
-        return (false);
+      return (ic.inv.match (inv));
     }
 
     public int hashCode() {
@@ -2028,6 +2032,23 @@ public abstract class Invariant
     }
   }
 
+  /**
+   * Returns whether or not two invariants are of the same type.  To
+   * be of the same type, invariants must be of the same class.
+   * Some invariant classes represent multiple invariants (such as
+   * FunctionBinary).  They must also by the same formula.
+   * Note that invariants with different formulas based on their
+   * samples (LinearBinary, Bounds, etc) will still match as
+   * long as the mergeFormulaOk() method returns true
+   */
+
+  public boolean match (Invariant inv) {
+
+    if (inv.getClass() ==  getClass())
+      return (inv.mergeFormulasOk() || isSameFormula (inv));
+    else
+      return (false);
+  }
 
   // This function creates a guarding predicate for a given invariant
   public Invariant createGuardingPredicate() {
@@ -2196,6 +2217,14 @@ public abstract class Invariant
     return (true);
   }
 
+  /**
+   * Returns whether or not this invariant can be flowed from an upper
+   * ppt to a lower ppt.  Invariants with sample based internal state
+   * (oneof, bounds, linearbinary, linearternary) cannot be flowed
+   */
+  public boolean isFlowable() {
+    return (true);
+  }
 
   /**
    * Returns whether or not detailed logging is on.  Note that this check
