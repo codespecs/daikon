@@ -3314,10 +3314,10 @@ See below for more options.
 
 That's all there is to it!  Chicory does not require you to perform
 separate instrumentation or compilation steps, as @command{dfej} does.
-However, you must have compiled your program with debugging information
-enabled (the @option{-g} command-line switch to @command{javac}).
-Chicory produces no output for any components of the program under test
-that were not compiled with debugging information.
+However, you should compile your program with debugging information
+enabled (the @option{-g} command-line switch to @command{javac});
+otherwise, Chicory uses the names @code{arg0}, @code{arg1}, @ldots@ as
+the names of method arguments.
 
 Chicory supports all versions of Java, including Java 5.0.  Chicory's
 functionality is very similar to that of the @command{dfej} tool, and
