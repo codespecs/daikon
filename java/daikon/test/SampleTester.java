@@ -159,6 +159,11 @@ public class SampleTester extends TestCase {
 
   public void proc_sample_file (String fname) throws IOException {
 
+    if (PrintInvariants.dkconfig_print_inv_class) {
+      Fmt.pf ("Warning: turning off PrintInvariants.dkconfig_print_inv_class");
+      PrintInvariants.dkconfig_print_inv_class = false;
+    }
+
     this.fname = fname;
     fp = UtilMDE.LineNumberFileReader(fname);
     for (String line = fp.readLine(); line != null; line = fp.readLine()) {
@@ -213,6 +218,7 @@ public class SampleTester extends TestCase {
     PptTopLevel.init (all_ppts);
     Daikon.setupEquality (all_ppts);
     if (first_decl) {
+      Daikon.setup_proto_invs();
       Daikon.setup_NISuppression();
       first_decl = false;
     }
@@ -438,7 +444,7 @@ public class SampleTester extends TestCase {
         return (true);
       if ((format != null) && format.equals (inv.format()))
         return (true);
-      debug.fine (Fmt.spf ("trace %s: %s", inv.getClass(), inv.format()));
+      debug.fine (Fmt.spf ("trace %s: '%s'", inv.getClass(), inv.format()));
     }
     return (false);
   }
