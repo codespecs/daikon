@@ -119,7 +119,7 @@ public final class FileIO {
       if (line.equals("") || line.startsWith("//") || line.startsWith("#"))
 	continue;
       if (line.equals(declaration_header)) {
-	Ppt ppt = read_declaration(reader, all_ppts, varcomp_format, fn_regexp, filename);
+	PptTopLevel ppt = read_declaration(reader, all_ppts, varcomp_format, fn_regexp, filename);
         // ppt can be null if this declaration was skipped because of fn_regexp.
         if (ppt != null) {
           new_ppts.add(ppt);
@@ -163,7 +163,7 @@ public final class FileIO {
 
 
   // The "DECLARE" line has alredy been read.
-  static Ppt read_declaration(LineNumberReader file, PptMap all_ppts, int varcomp_format, Pattern fn_regexp, String filename) throws IOException {
+  static PptTopLevel read_declaration(LineNumberReader file, PptMap all_ppts, int varcomp_format, Pattern fn_regexp, String filename) throws IOException {
     // We have just read the "DECLARE" line.
     String ppt_name = file.readLine().intern();
 

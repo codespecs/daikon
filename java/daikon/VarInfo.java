@@ -675,10 +675,10 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     boolean start2 = sss2.from_start;
 
     if (start1 == start2) {
-      return compare_vars(index1, shift1, index2, shift1, start1);
+      return compare_vars(index1, shift1, index2, shift2, start1);
     } else {
       // start1 != start2
-      return compare_vars(index1, shift1, index2, shift1, start2);
+      return compare_vars(index1, shift1, index2, shift2, start2);
     }
   }
 

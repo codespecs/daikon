@@ -55,6 +55,10 @@ public class SeqComparison extends TwoSequence implements Comparison {
       + " (lexically)";
   }
 
+  public String format_esc() {
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+  }
+
 
   public void add_modified(long[] v1, long[] v2, int count) {
     /// This does not do the right thing; I really want to avoid comparisons

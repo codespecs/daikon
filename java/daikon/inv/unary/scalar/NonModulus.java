@@ -39,6 +39,10 @@ public class NonModulus extends SingleScalar {
     return var().name + " != " + remainder + "  (mod " + modulus + ")";
   }
 
+  public String format_esc() {
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+  }
+
 
   // Set either modulus and remainder, or no_result_yet.
   void updateResults() {

@@ -219,6 +219,10 @@ public final class Member extends SequenceScalar  {
     }
   }
 
+  public String format_esc() {
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+  }
+
   protected double computeProbability() {
     if (no_invariant)
       return Invariant.PROBABILITY_NEVER;

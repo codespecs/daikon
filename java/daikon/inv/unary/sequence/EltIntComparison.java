@@ -56,6 +56,10 @@ public class EltIntComparison extends SingleSequence {
     }
   }
 
+  public String format_esc() {
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+  }
+
 
   public void add_modified(long[] a, int count) {
     for (int i=1; i<a.length; i++) {

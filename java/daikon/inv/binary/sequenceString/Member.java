@@ -206,6 +206,10 @@ public final class Member extends SequenceString  {
     return sclvar().name + " in " + seqvar().name;
   }
 
+  public String format_esc() {
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+  }
+
   public void add_modified(String [] a, String  i, int count) {
     if (ArraysMDE.indexOf(a, i) == -1) {
       if (debugMember) {

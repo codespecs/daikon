@@ -49,6 +49,10 @@ public final class EltNonZero extends SingleSequence {
     return var().name + " elements != " + (pointer_type ? "null" : "0");
   }
 
+  public String format_esc() {
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+  }
+
   public void add_modified(long[] a, int count) {
     for (int ai=0; ai<a.length; ai++) {
       long v = a[ai];
@@ -130,9 +134,14 @@ public final class EltNonZero extends SingleSequence {
     PptTopLevel parent = (PptTopLevel)ppt.parent;
     for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
-      if ((inv instanceof EltNonZero) && inv != this) {
+      if ((inv instanceof EltNonZero) && (inv != this) && inv.justified()) {
         VarInfo v1 = var();
         VarInfo v2 = inv.ppt.var_infos[0];
+        if (SubSequence.isObviousDerived(v1, v2)) {
+          // System.out.println("obvious: " + format() + "   because of " + inv.format());
+          return true;
+        }
+
         boolean this_var_first = (v1.varinfo_index < v2.varinfo_index);
         if (! this_var_first) { VarInfo temp = v1; v1 = v2; v2 = temp; }
         Assert.assert(v1.varinfo_index < v2.varinfo_index);

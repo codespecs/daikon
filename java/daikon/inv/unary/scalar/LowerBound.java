@@ -63,6 +63,10 @@ public class LowerBound  extends SingleScalar {
     return var().name + " >= " + min1 ;
   }
 
+  public String format_esc() {
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+  }
+
   public void add_modified(long value, int count) {
     // probability_cache_accurate = false;
 

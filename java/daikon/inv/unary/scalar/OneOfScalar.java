@@ -3,6 +3,7 @@ package daikon.inv.unary.scalar;
 import daikon.*;
 import daikon.inv.*;
 import daikon.derive.unary.*;
+import daikon.inv.unary.sequence.*;
 
 import utilMDE.*;
 
@@ -60,9 +61,19 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
 
   }
 
-  private void sort_rep()
-  {
+  private void sort_rep() {
     Arrays.sort(elts, 0, num_elts  );
+  }
+
+  // Assumes the other array is already sorted
+  public boolean compare_rep(int num_other_elts, long [] other_elts) {
+    if (num_elts != num_other_elts)
+      return false;
+    sort_rep();
+    for (int i=0; i < num_elts; i++)
+      if (elts[i] != other_elts[i]) // elements are interned
+        return false;
+    return true;
   }
 
   private String subarray_rep() {
@@ -107,6 +118,10 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
     } else {
       return var().name  + " one of " + subarray_rep();
     }
+  }
+
+  public String format_esc() {
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
   }
 
   public void add_modified(long  v, int count) {
@@ -159,6 +174,25 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
         return true;
       }
     }
+
+    // For every EltOneOf at this program point, see if this variable is
+    // an obvious member of that sequence.
+    PptTopLevel parent = (PptTopLevel)ppt.parent;
+    for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
+      Invariant inv = (Invariant) itor.next();
+      if ((inv instanceof EltOneOf) && inv.justified()) {
+        VarInfo v2 = inv.ppt.var_infos[0];
+        // System.out.println("isObviousImplied: calling Member.isObviousMember(" + v1.name + ", " + v2.name + ")");
+
+        EltOneOf other = (EltOneOf) inv;
+        if (num_elts == other.num_elts()) {
+          sort_rep();
+          if (other.compare_rep(num_elts, elts))
+            return true;
+        }
+      }
+    }
+
     return false;
   }
 

@@ -163,6 +163,11 @@ public abstract class Invariant implements java.io.Serializable {
    **/
   public abstract String format();
 
+  /**
+   * ESC-like representation.
+   **/
+  public abstract String format_esc();
+
 
   // This should perhaps be merged with some kind of PptSlice comparator.
   // I used to say the follwoing, bu tit might not be true any more.
@@ -397,6 +402,16 @@ public abstract class Invariant implements java.io.Serializable {
        && (! isObvious())
        && justified()
        && isWorthPrinting_PostconditionPrestate());
+  }
+
+  final public String isWorthPrinting_sansControlledCheck_debug() {
+    return
+      "" + (! hasFewModifiedSamples())
+      + " " + (! hasNonCanonicalVariable())
+      + " " + (! hasOnlyConstantVariables())
+      + " " + (! isObvious())
+      + " " + justified()
+      + " " + isWorthPrinting_PostconditionPrestate();
   }
 
   /**

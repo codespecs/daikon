@@ -31,6 +31,10 @@ public class LinearBinary extends TwoScalar {
     return core.format(var1().name, var2().name);
   }
 
+  public String format_esc() {
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+  }
+
   public void add_modified(long x, long y, int count) {
     core.add_modified(x, y, count);
   }

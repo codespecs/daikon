@@ -121,6 +121,10 @@ public final class StringComparison extends TwoString implements Comparison {
     return var1().name + " " + comparator + " " + var2().name;
   }
 
+  public String format_esc() {
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+  }
+
 
   public void add_modified(String v1, String v2, int count) {
     if (ppt.debugged) {

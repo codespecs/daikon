@@ -143,6 +143,10 @@ public final class FunctionBinaryCore implements java.io.Serializable {
       + methodname + "(" + arg1.name + ", " + arg2.name + ")";
   }
 
+  public String format_esc() {
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+  }
+
   public boolean isSameFormula(FunctionBinaryCore other)
   {
     return methodname.equals(other.methodname);

@@ -3,6 +3,7 @@ package daikon.inv.unary.sequence;
 import daikon.*;
 import daikon.inv.*;
 import daikon.derive.unary.*;
+import daikon.inv.unary.sequence.*;
 
 import utilMDE.*;
 
@@ -55,9 +56,19 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
 
   static Comparator comparator = new ArraysMDE.LongArrayComparatorLexical();
 
-  private void sort_rep()
-  {
+  private void sort_rep() {
     Arrays.sort(elts, 0, num_elts , comparator );
+  }
+
+  // Assumes the other array is already sorted
+  public boolean compare_rep(int num_other_elts, long[] [] other_elts) {
+    if (num_elts != num_other_elts)
+      return false;
+    sort_rep();
+    for (int i=0; i < num_elts; i++)
+      if (elts[i] != other_elts[i]) // elements are interned
+        return false;
+    return true;
   }
 
   private String subarray_rep() {
@@ -91,6 +102,10 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
     } else {
       return var().name  + " one of " + subarray_rep();
     }
+  }
+
+  public String format_esc() {
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
   }
 
   public void add_modified(long[]  v, int count) {

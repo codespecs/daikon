@@ -2,6 +2,9 @@ package daikon.inv.unary.scalar;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.binary.*;
+import daikon.inv.unary.sequence.*;
+import daikon.inv.binary.sequenceScalar.*;
 
 import java.util.*;
 
@@ -41,6 +44,10 @@ public class NonZero extends SingleScalar {
 
   public String format() {
     return var().name + " != " + (pointer_type ? "null" : "0");
+  }
+
+  public String format_esc() {
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
   }
 
 
@@ -93,6 +100,33 @@ public class NonZero extends SingleScalar {
       return Math.pow(probability_one_elt_nonzero, ppt.num_mod_non_missing_samples());
     }
   }
+
+  public boolean isObviousImplied() {
+    VarInfo var = var();
+
+    // System.out.println("isObviousImplied: " + format());
+
+    // For every EltNonZero at this program point, see if this variable is
+    // an obvious member of that sequence.
+
+    PptTopLevel parent = (PptTopLevel)ppt.parent;
+    for (Iterator itor = parent.invariants_iterator(); itor.hasNext(); ) {
+      Invariant inv = (Invariant) itor.next();
+      if ((inv instanceof EltNonZero) && inv.justified()) {
+        VarInfo v1 = var();
+        VarInfo v2 = inv.ppt.var_infos[0];
+        // System.out.println("NonZero.isObviousImplied: calling Member.isObviousMember(" + v1.name + ", " + v2.name + ")");
+
+        if (Member.isEqualToObviousMember(v1, v2)) {
+          // System.out.println("NonZero.isObviousImplied: Member.isObviousMember(" + v1.name + ", " + v2.name + ") = true");
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
 
   public boolean isSameFormula(Invariant other)
   {

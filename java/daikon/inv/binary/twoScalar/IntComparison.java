@@ -131,6 +131,10 @@ public final class IntComparison extends TwoScalar implements Comparison {
     return var1().name + " " + comparator + " " + var2().name;
   }
 
+  public String format_esc() {
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+  }
+
 
   public void add_modified(long v1, long v2, int count) {
     if (ppt.debugged) {

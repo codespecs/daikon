@@ -51,6 +51,10 @@ public class SubSequence extends TwoSequence {
     }
   }
 
+  public String format_esc() {
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+  }
+
 
   public void add_modified(long[] a1, long[] a2, int count) {
     if (var1_in_var2 && (ArraysMDE.indexOf(a2, a1) == -1)) {
@@ -81,18 +85,58 @@ public class SubSequence extends TwoSequence {
   }
 
   // This is abstracted out so it can be called by SuperSequence as well.
-  static boolean isObviousDerived(VarInfo subvar, VarInfo supervar) {
+  public static boolean isObviousDerived(VarInfo subvar, VarInfo supervar) {
     // System.out.println("static SubSequence.isObviousDerived(" + subvar.name + ", " + supervar.name + ") " + subvar.isDerivedSubSequenceOf() + " " + supervar.isDerivedSubSequenceOf());
 
     VarInfo subvar_super = subvar.isDerivedSubSequenceOf();
     if (subvar_super == null)
       return false;
 
-    if ((subvar_super == supervar)
-        // whatever we come up with, it will be obvious from the
-        // IntComparison relationship over the lengths.
-        || (subvar_super == supervar.isDerivedSubSequenceOf()))
+    if (subvar_super == supervar) {
+      // System.out.println("SubSequence.isObviousDerived(" + subvar.name + ", " + supervar.name + ") = true");
+      // System.out.println("  details: subvar_super=" + subvar_super.name + "; supervar_super=" + supervar.isDerivedSubSequenceOf() == null ? "null" : supervar.isDerivedSubSequenceOf().name);
       return true;
+    }
+
+    VarInfo supervar_super = supervar.isDerivedSubSequenceOf();
+    if (subvar_super == supervar_super) {
+      // both sequences are derived from the same supersequence
+      if ((subvar.derived instanceof SequenceScalarSubsequence)
+          && (supervar.derived instanceof SequenceScalarSubsequence)) {
+        SequenceScalarSubsequence sss1 = (SequenceScalarSubsequence) subvar.derived;
+        SequenceScalarSubsequence sss2 = (SequenceScalarSubsequence) supervar.derived;
+        VarInfo index1 = sss1.sclvar();
+        int shift1 = sss1.index_shift;
+        boolean start1 = sss1.from_start;
+        VarInfo index2 = sss2.sclvar();
+        int shift2 = sss2.index_shift;
+        boolean start2 = sss2.from_start;
+        if (start1 == start2)
+          if (VarInfo.compare_vars(index1, shift1, index2, shift2, start1)) {
+            // System.out.println("Obvious subsequence: " + subvar.name + " " + supervar.name + "; " + index1.name + " " + index2.name);
+            return true;
+          }
+      } else if ((subvar.derived instanceof SequenceStringSubsequence)
+                 && (supervar.derived instanceof SequenceStringSubsequence)) {
+        // Copied from just above
+        SequenceStringSubsequence sss1 = (SequenceStringSubsequence) subvar.derived;
+        SequenceStringSubsequence sss2 = (SequenceStringSubsequence) supervar.derived;
+        VarInfo index1 = sss1.sclvar();
+        int shift1 = sss1.index_shift;
+        boolean start1 = sss1.from_start;
+        VarInfo index2 = sss2.sclvar();
+        int shift2 = sss2.index_shift;
+        boolean start2 = sss2.from_start;
+        if (start1 == start2)
+          if (VarInfo.compare_vars(index1, shift1, index2, shift2, start1)) {
+            // System.out.println("Obvious subsequence: " + subvar.name + " " + supervar.name);
+            return true;
+          }
+      } else {
+        Assert.assert(false, "how can this happen? " + subvar.name + " " + subvar.derived.getClass() + " " + supervar.name + " " + supervar.derived.getClass());
+      }
+
+    }
 
     /// To finish later.
     // VarInfo supervar_super = supervar.isDerivedSubSequenceOf();

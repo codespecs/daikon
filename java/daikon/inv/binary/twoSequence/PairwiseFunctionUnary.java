@@ -30,6 +30,10 @@ public class PairwiseFunctionUnary extends TwoSequence {
     return core.format(var1().name, var2().name);
   }
 
+  public String format_esc() {
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+  }
+
 
   public void add_modified(long[] x_arr, long[] y_arr, int count) {
     if (x_arr.length != y_arr.length) {

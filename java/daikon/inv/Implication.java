@@ -55,6 +55,10 @@ public class Implication extends Invariant {
     return "(" + predicate.format() + ")" + arrow + consequent.format();
   }
 
+  public String format_esc() {
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+  }
+
   public boolean isSameFormula(Invariant other) {
     return (predicate.isSameFormula(((Implication)other).predicate)
             && consequent.isSameFormula(((Implication)other).consequent));

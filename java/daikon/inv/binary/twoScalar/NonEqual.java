@@ -48,6 +48,10 @@ public final class NonEqual extends TwoScalar {
     return var1().name + " != " + var2().name;
   }
 
+  public String format_esc() {
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+  }
+
 
   public void add_modified(long v1, long v2, int count) {
     // probability_cache_accurate = false;

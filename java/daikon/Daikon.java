@@ -50,6 +50,11 @@ public final class Daikon {
   public static boolean suppress_implied_postcondition_over_prestate_invariants = false;
   // public static boolean suppress_implied_postcondition_over_prestate_invariants = false;
 
+  // When true, perform output using Invariant.format_esc(), which formats
+  // invariants slightly diferently
+  public static boolean esc_output = false;
+  // public static boolean esc_output = true;
+
   public static Pattern ppt_regexp;
   // I appear to need both of these variables.  Or do I?  I don't know.
   public static FileOutputStream inv_ostream;
@@ -72,6 +77,7 @@ public final class Daikon {
     + "    --suppress_post   Suppress display of obvious postconditions on prestate.\n"
     + "    --prob_limit pct  Sets the probability limit for justifying invariants.\n"
     + "                        The default is 1%.  Smaller values yield stronger filtering.\n"
+    + "    --esc_output      Write output in ESC-like format.\n"
     ;
 
   /**
@@ -91,10 +97,12 @@ public final class Daikon {
     final String suppress_cont_SWITCH = "suppress_cont";
     final String suppress_post_SWITCH = "suppress_post";
     final String prob_limit_SWITCH = "prob_limit";
+    final String esc_output_SWITCH = "esc_output";
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(prob_limit_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0)
+      new LongOpt(prob_limit_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(esc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
     };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:r:", longopts);
     int c;
@@ -109,6 +117,8 @@ public final class Daikon {
 	  suppress_implied_postcondition_over_prestate_invariants = true;
 	} else if (prob_limit_SWITCH.equals(option_name)) {
 	  Invariant.probability_limit = 0.01 * Double.parseDouble(g.getOptarg());
+	} else if (esc_output_SWITCH.equals(option_name)) {
+	  esc_output = true;
 	} else {
 	  throw new RuntimeException("Unknown long option received: " + option_name);
 	}
@@ -246,7 +256,9 @@ public final class Daikon {
       }
     }
 
-    Global.output_statistics();
+    if (! esc_output) {
+      Global.output_statistics();
+    }
 
     // Old implementation that didn't interleave invariant inference and
     // reporting.

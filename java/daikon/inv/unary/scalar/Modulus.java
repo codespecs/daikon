@@ -35,6 +35,10 @@ public class Modulus extends SingleScalar {
     return var().name + " = " + remainder + "  (mod " + modulus + ")";
   }
 
+  public String format_esc() {
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+  }
+
   public void add_modified(long value, int count) {
     if (modulus == 1) {
       // We shouldn't ever get to this case; the invariant should have been

@@ -49,6 +49,10 @@ public class PairwiseIntComparison extends TwoSequence {
       + " (elementwise)";
   }
 
+  public String format_esc() {
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+  }
+
 
   public void add_modified(long[] a1, long[] a2, int count) {
     if (a1.length != a2.length) {

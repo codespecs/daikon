@@ -1504,8 +1504,28 @@ public class PptTopLevel extends Ppt {
         continue;
       }
 
-      Invariants invs1 = slice1.invs;
-      Invariants invs2 = slice2.invs;
+      Invariants invs1 = new Invariants();
+      for (int j=0; j<slice1.invs.size(); j++) {
+        Invariant inv = (Invariant)slice1.invs.elementAt(j);
+        invs1.add(inv);
+        /// This didn't seem to do what I want; not sure why.
+        // if (inv.isWorthPrinting()) {
+        //   invs1.add(inv);
+        // } else {
+        //   System.out.println("Not worth printing or being mentioned: " + inv.format());
+        // }
+      }
+      Invariants invs2 = new Invariants();
+      for (int j=0; j<slice2.invs.size(); j++) {
+        Invariant inv = (Invariant)slice2.invs.elementAt(j);
+        invs2.add(inv);
+        /// This didn't seem to do what I want; not sure why.
+        // if (inv.isWorthPrinting()) {
+        //   invs2.add(inv);
+        // } else {
+        //   System.out.println("Not worth printing or being mentioned: " + inv.format());
+        // }
+      }
 
       Vector this_excl = exclusive_conditions(invs1, invs2);
       // System.out.println("addImplications: "
@@ -1579,12 +1599,28 @@ public class PptTopLevel extends Ppt {
         // If one of the diffs implies the other, then should not add
         // an implication for the weaker one.
         if (diff1 != null) {
-          boolean iff = (ArraysMDE.indexOf(excls1, diff1) != -1);
-          Implication.makeImplication(this, excl1, diff1, iff);
+          int index1 = ArraysMDE.indexOf(excls1, diff1);
+          if ((index1 == -1) || (index1 > i)) {
+            if (diff1.isWorthPrinting_sansControlledCheck()) {
+              boolean iff = (index1 != -1);
+              Implication.makeImplication(this, excl1, diff1, iff);
+            } else {
+              // System.out.println("consequent not worth printing:  (" + excl1.format() + ")  ==> " + diff1.format());
+              // System.out.println("  isWorthPrinting_debug: " + diff1.isWorthPrinting_sansControlledCheck_debug());
+            }
+          }
         }
         if (diff2 != null) {
-          boolean iff = (ArraysMDE.indexOf(excls2, diff2) != -1);
-          Implication.makeImplication(this, excl2, diff2, iff);
+          int index2 = ArraysMDE.indexOf(excls2, diff2);
+          if ((index2 == -1) || (index2 > i)) {
+            if (diff2.isWorthPrinting_sansControlledCheck()) {
+              boolean iff = (index2 != -1);
+              Implication.makeImplication(this, excl2, diff2, iff);
+            } else {
+              // System.out.println("consequent not worth printing:  (" + excl2.format() + ")  ==> " + diff2.format());
+              // System.out.println("  isWorthPrinting_debug: " + diff2.isWorthPrinting_sansControlledCheck_debug());
+            }
+          }
         }
       }
     }
@@ -1820,7 +1856,9 @@ public class PptTopLevel extends Ppt {
       if (! (this instanceof PptConditional)) {
         // Presumably all the views that were originally there were deleted
         // because no invariants remained in any of them.
-        out.println("[No views for " + name + "]");
+        if (! Daikon.esc_output) {
+          out.println("[No views for " + name + "]");
+        }
       }
       return;
     }
@@ -1866,13 +1904,17 @@ public class PptTopLevel extends Ppt {
 
   /** Print invariants for a single program point. */
   public void print_invariants(PrintStream out) {
-    int num_samps = num_samples();
-    out.println(name + "  " + nplural(num_samps, "sample"));
-    out.println("    Samples breakdown: " + tuplemod_samples_summary());
-    out.print("    Variables:");
-    for (int i=0; i<var_infos.length; i++)
-      out.print(" " + var_infos[i].name);
-    out.println();
+    if (Daikon.esc_output) {
+      out.println(name);
+    } else {
+      int num_samps = num_samples();
+      out.println(name + "  " + nplural(num_samps, "sample"));
+      out.println("    Samples breakdown: " + tuplemod_samples_summary());
+      out.print("    Variables:");
+      for (int i=0; i<var_infos.length; i++)
+        out.print(" " + var_infos[i].name);
+      out.println();
+    }
 
     Assert.assert(check_modbits());
 
@@ -1928,27 +1970,35 @@ public class PptTopLevel extends Ppt {
     // This technique is a bit non-orthogonal, but probably fine.
     // We might do no output if all the other variables are vacuous.
     // We should have already equal_to for each VarInfo.
+
     for (int i=0; i<var_infos.length; i++) {
       VarInfo vi = var_infos[i];
       if (vi.isCanonical()) {
         Vector equal_vars = vi.equalToNonobvious();
         if (equal_vars.size() > 0) {
-          StringBuffer sb = new StringBuffer(vi.name);
-          for (int j=0; j<equal_vars.size(); j++) {
-            VarInfo other = (VarInfo) equal_vars.elementAt(j);
-            sb.append(" = ");
-            sb.append(other.name);
-          }
-          PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;
-          PptSlice slice1 = ppt_tl.findSlice(vi);
-          if (slice1 != null) {
-            sb.append("\t\t(" +
-		      nplural(slice1.num_values(), "value") + ", " +
-                      nplural(slice1.num_samples(), "sample") + ")");
+          if (Daikon.esc_output) {
+            for (int j=0; j<equal_vars.size(); j++) {
+              VarInfo other = (VarInfo) equal_vars.elementAt(j);
+              System.out.println(vi.name + " = " + other.name);
+            }
           } else {
-            // sb.append("\t\t(no slice)");
+            StringBuffer sb = new StringBuffer(vi.name);
+            for (int j=0; j<equal_vars.size(); j++) {
+              VarInfo other = (VarInfo) equal_vars.elementAt(j);
+              sb.append(" = ");
+              sb.append(other.name);
+            }
+            PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;
+            PptSlice slice1 = ppt_tl.findSlice(vi);
+            if (slice1 != null) {
+              sb.append("\t\t(" +
+                        nplural(slice1.num_values(), "value") + ", " +
+                        nplural(slice1.num_samples(), "sample") + ")");
+            } else {
+              // sb.append("\t\t(no slice)");
+            }
+            out.println(sb.toString());
           }
-          out.println(sb.toString());
         }
       }
     }
@@ -1988,13 +2038,17 @@ public class PptTopLevel extends Ppt {
 	continue;
       }
 
-      String inv_rep = inv.format();
-      Assert.assert(inv_rep != null);
-      out.println(inv_rep + num_values_samples);
-      if (Global.debugPrintInvariants) {
-	out.println("  [" + inv.repr() + "]");
+      if (Daikon.esc_output) {
+        out.println(inv.format_esc());
+      } else {
+        String inv_rep = inv.format();
+        Assert.assert(inv_rep != null);
+        out.println(inv_rep + num_values_samples);
+        if (Global.debugPrintInvariants) {
+          out.println("  [" + inv.repr() + "]");
+        }
+        Global.reported_invariants++;
       }
-      Global.reported_invariants++;
     }
   }
 

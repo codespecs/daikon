@@ -54,6 +54,10 @@ public class FunctionBinary extends ThreeScalar {
     return core.format();
   }
 
+  public String format_esc() {
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+  }
+
 
   public void add_modified(long x_int, long y_int, long z_int, int count) {
     core.add_modified(x_int, y_int, z_int, count);
