@@ -26,7 +26,8 @@ JAVA ?= java
 # find command will get run multiple times.  USE AUTO_GENERATED_FILES instead.
 # "-o -path './jakarta-oro*/src/java/examples'" does not work for non-GNU find.
 JAVA_FILES = $(shell test -d ajax-ship/ajax && test ! -L ajax && ln -s ajax-ship/ajax .; find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name 'ajax-ship' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/')
-DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -print)
+DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -print) \
+					$(shell find utilMDE/ -name '*.java' -print)
 TAG_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -name ajax \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
 
 # When removing files from this list, add them to OLD_AUTO_GENERATED_FILES.
@@ -296,7 +297,7 @@ all_directly: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 .PHONY : daikon
 daikon: compile_daikon junit
 compile_daikon : $(AUTO_GENERATED_FILES)
-	@echo $(JAVAC_COMMAND) 'daikon/*.java ...'
+	@echo $(JAVAC_COMMAND) 'daikon/*.java utilMDE/*.java ...'
 	@$(JAVAC_COMMAND) $(DAIKON_JAVA_FILES)
 	@chmod -w ${AUTO_GENERATED_FILES}
 	# $(MAKE) all_pass2
