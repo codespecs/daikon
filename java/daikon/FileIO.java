@@ -945,28 +945,38 @@ public final class FileIO {
         Global.dtraceWriter.println(mod);
       }
 
+      // Both uninit and nonsensical mean missing modebit 2, because
+      // it doesn't make sense to look at x.y when x is uninitialized.
       if (ValueTuple.modIsMissingNonSensical(mod)) {
-        if (!(value_rep.equals("missing")
-              || value_rep.equals("uninit")
-              || value_rep.equals("nonsensical"))) {
+        if (!(
+              value_rep.equals("uninit") || 
+              value_rep.equals("nonsensical") ||
+              // backward compatibility
+              value_rep.equals("missing")
+            )) {
           System.out.println("\nModbit indicates missing value for variable " +
                              vi.name + " with value \"" + value_rep + 
                              "\";\n  text of value should be \"missing\"" +
                              ", \"uninit\" or \"nonsensical\" at " + 
                              data_trace_filename + " line " + reader.getLineNumber());
           System.exit(1);
-        }
-        else if (value_rep.equals("missing")) {
+        } else {
           // Keep track of variables that can be missing
           vi.canBeMissing = true;
         }
         vals[val_index] = null;
       } else {
-        // System.out.println("Mod is " + mod + " (missing=" + ValueTuple.MISSING + "), rep=" + value_rep + " (modIsMissing=" + ValueTuple.modIsMissing(mod) + ")");
+        // System.out.println("Mod is " + mod + " (missing=" +
+        // ValueTuple.MISSING + "), rep=" + value_rep + 
+        // "(modIsMissing=" + ValueTuple.modIsMissing(mod) + ")");
+
         try {
           vals[val_index] = vi.rep_type.parse_value(value_rep);
         } catch (Exception e) {
-          throw new FileIOException("Error while parsing value " + value_rep + " for variable " + vi.name.name() + " of type " + vi.rep_type + ": " + e.toString(), reader, filename);
+          throw new FileIOException("Error while parsing value " + value_rep +
+                                    " for variable " + vi.name.name() + " of type " +
+                                    vi.rep_type + ": " + e.toString(),
+                                    reader, filename);
         }
       }
       val_index++;
