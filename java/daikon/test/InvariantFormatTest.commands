@@ -342,7 +342,7 @@ Goal (esc): (\forall int i, j; (0 <= i && i <= a.length-1 && 0 <= j && j <= b.le
 Goal (ioa): \A i : Int (a[i] = b[i])
 Goal (jml): (\forall int i, j; 0 <= i && i <= a.length-1 && 0 <= j && j <= b.length-1 && i == j; a[i] == b[j])
 Goal (dbc): quant.Quant.pairwiseEqual(a, b)
-Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |b|) 1)) (EQ (- |i| 0) (- |j| 0))) (EQ (select (select elems |a|) |i|) (select (select elems |b|) |j|))))
+Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |b|) 1)) (EQ |i| |j|)) (EQ (select (select elems |a|) |i|) (select (select elems |b|) |j|))))
 [5 5 5 5 5 5 5 5]
 [5 5 5 5 5 5 5 5]
 
@@ -355,7 +355,7 @@ Goal (esc): (\forall int i, j; (0 <= i && i <= a.length-1 && 0 <= j && j <= b.le
 Goal (ioa): \A i : Int (a[i] < b[i])
 Goal (jml): (\forall int i, j; 0 <= i && i <= a.length-1 && 0 <= j && j <= b.length-1 && i == j; a[i] < b[j])
 Goal (dbc): quant.Quant.pairwiseLT(a, b)
-Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |b|) 1)) (EQ (- |i| 0) (- |j| 0))) (< (select (select elems |a|) |i|) (select (select elems |b|) |j|))))
+Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |b|) 1)) (EQ |i| |j|)) (< (select (select elems |a|) |i|) (select (select elems |b|) |j|))))
 [-5 0 5 10 15 20 25 30]
 [5 10 15 20 25 30 35 40]
 
@@ -368,7 +368,7 @@ Goal (esc): (\forall int i, j; (0 <= i && i <= a.length-1 && 0 <= j && j <= b.le
 Goal (ioa): \A i : Int (a[i] > b[i])
 Goal (jml): (\forall int i, j; 0 <= i && i <= a.length-1 && 0 <= j && j <= b.length-1 && i == j; a[i] > b[j])
 Goal (dbc): quant.Quant.pairwiseGT(a, b)
-Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |b|) 1)) (EQ (- |i| 0) (- |j| 0))) (> (select (select elems |a|) |i|) (select (select elems |b|) |j|))))
+Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |b|) 1)) (EQ |i| |j|)) (> (select (select elems |a|) |i|) (select (select elems |b|) |j|))))
 [5 10 15 20 25 30 35 40]
 [-5 0 5 10 15 20 25 30]
 
@@ -381,7 +381,7 @@ Goal (esc): (\forall int i, j; (0 <= i && i <= a.length-1 && 0 <= j && j <= b.le
 Goal (ioa): \A i : Int (a[i] <= b[i])
 Goal (jml): (\forall int i, j; 0 <= i && i <= a.length-1 && 0 <= j && j <= b.length-1 && i == j; a[i] <= b[j])
 Goal (dbc): quant.Quant.pairwiseLTE(a, b)
-Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |b|) 1)) (EQ (- |i| 0) (- |j| 0))) (<= (select (select elems |a|) |i|) (select (select elems |b|) |j|))))
+Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |b|) 1)) (EQ |i| |j|)) (<= (select (select elems |a|) |i|) (select (select elems |b|) |j|))))
 [-5 0 5 10 15 20 25 30]
 [5 0 15 20 25 30 35 40]
 
@@ -394,7 +394,7 @@ Goal (esc): (\forall int i, j; (0 <= i && i <= a.length-1 && 0 <= j && j <= b.le
 Goal (ioa): \A i : Int (a[i] >= b[i])
 Goal (jml): (\forall int i, j; 0 <= i && i <= a.length-1 && 0 <= j && j <= b.length-1 && i == j; a[i] >= b[j])
 Goal (dbc): quant.Quant.pairwiseGTE(a, b)
-Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |b|) 1)) (EQ (- |i| 0) (- |j| 0))) (>= (select (select elems |a|) |i|) (select (select elems |b|) |j|))))
+Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |b|) 1)) (EQ |i| |j|)) (>= (select (select elems |a|) |i|) (select (select elems |b|) |j|))))
 [5 0 15 20 25 30 35 40]
 [-5 0 5 10 15 20 25 30]
 
