@@ -119,28 +119,6 @@ public class CreateSpinfo {
         output.close();
       }
     }
-
-    if (outputfilename != null) {
-      Writer output = new FileWriter(outputfilename);
-      for ( ; argindex < args.length; argindex++) {
-        String javaFileName = args[argindex];
-        writeSplitters(javaFileName, output);
-      }
-      output.flush();
-      output.close();
-    } else {
-      for ( ; argindex < args.length; argindex++) {
-        String javaFileName = args[argindex];
-
-        String spinfoFileName = spinfoFileName(javaFileName);
-        // System.out.println("Splitter Info file => " + spinfoFileName);
-        Writer output = new FileWriter(spinfoFileName);
-
-        writeSplitters(javaFileName, output);
-        output.flush();
-        output.close();
-      }
-    }
   }
 
   /**
