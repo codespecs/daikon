@@ -47,6 +47,9 @@ The correct way to build the system is to run 'make'.
    * but in the argument's range; that is, bigger than its argument's
    * minimum value and smaller than its argument's maximum value.
    * The result contains no duplicates and is in order.
+   * If boolean add_ends is set, then the bracketing endpoints are also
+   * returned; otherwise, all returned values are between the minimum and
+   * maximum of the original values.
    **/
   static final class MissingNumbersIteratorINT implements Iterator {
     INT[] nums;
@@ -54,21 +57,32 @@ The correct way to build the system is to run 'make'.
     INT current_nonmissing;
     INT current_missing;
     int current_index;
+    boolean add_ends;
 
-    MissingNumbersIteratorINT(INT[] nums) {
+    MissingNumbersIteratorINT(INT[] nums, boolean add_ends) {
+      this.add_ends = add_ends;
       Arrays.sort(nums);
       current_index = 0;
       current_nonmissing = nums[current_index];
-      current_missing = current_nonmissing;
+      if (add_ends) {
+        current_missing = current_nonmissing - 1;
+      } else {
+        current_missing = current_nonmissing;
+      }
       this.nums = nums;
     }
 
-    // The iterator must return the Integers in sorted order
-    MissingNumbersIteratorINT(Iterator nums_itor) {
+    // The argument iterator must return the Integers in sorted order
+    MissingNumbersIteratorINT(Iterator nums_itor, boolean add_ends) {
+      this.add_ends = add_ends;
       if (!nums_itor.hasNext())
 	throw new Error("No elements in nums_itor");
       current_nonmissing = ((INTEGER)nums_itor.next()).INTValue();
-      current_missing = current_nonmissing;
+      if (add_ends) {
+        current_missing = current_nonmissing - 1;
+      } else {
+        current_missing = current_nonmissing;
+      }
       this.nums_itor = nums_itor;
     }
 
@@ -79,12 +93,24 @@ The correct way to build the system is to run 'make'.
       while (current_missing == current_nonmissing) {
 	if (nums != null) {
 	  current_index++;
-	  if (current_index >= nums.length)
-	    return false;
+	  if (current_index >= nums.length) {
+            if (add_ends) {
+              current_missing++;
+              return true;
+            } else {
+              return false;
+            }
+          }
 	  current_nonmissing = nums[current_index];
 	} else if (nums_itor != null) {
-	  if (!nums_itor.hasNext())
-	    return false;
+	  if (!nums_itor.hasNext()) {
+            if (add_ends) {
+              current_missing++;
+              return true;
+            } else {
+              return false;
+            }
+          }
 	  // prev_nonmissing is for testing only
 	  INT prev_nonmissing = current_nonmissing;
 	  current_nonmissing = ((INTEGER)nums_itor.next()).INTValue();
@@ -96,7 +122,11 @@ The correct way to build the system is to run 'make'.
 	current_missing++;
 	return hasNext();
       }
-      throw new Error("Can't happen: " + current_missing + " " + current_nonmissing);
+      if (add_ends) {
+        return (current_missing == current_nonmissing + 1);
+      } else {
+        throw new Error("Can't happen: " + current_missing + " " + current_nonmissing);
+      }
     }
 
     public Object next() {
@@ -126,9 +156,31 @@ The correct way to build the system is to run 'make'.
     INT range = ArraysMDE.element_range(nums);
     if (range > 65536)
       return null;
+    return nonmodulus_strict_INT_internal(new MissingNumbersIteratorINT(nums, true));
+  }
+
+  private static INT[] nonmodulus_strict_INT_internal(Iterator missing) {
     // Must not use regular modulus:  that can produce errors, eg
-    // nonmodulus_strict({1,2,3,5,6,7,9,11}) => {0,2}.
-    return modulus_strict_INT(new MissingNumbersIteratorINT(nums));
+    // nonmodulus_strict({1,2,3,5,6,7,9,11}) => {0,2}.  Thus, use
+    // modulus_strict.
+    UtilMDE.RemoveFirstAndLastIterator missing_nums
+      = new UtilMDE.RemoveFirstAndLastIterator(missing);
+    INT[] result = modulus_strict_INT(missing_nums, false);
+    if (result == null)
+      return result;
+    if (! check_first_and_last_nonmodulus(result, missing_nums))
+      return null;
+
+    return result;
+  }
+
+  private static boolean check_first_and_last_nonmodulus(INT[] rm, UtilMDE.RemoveFirstAndLastIterator rfali) {
+    INT r = rm[0];
+    INT m = rm[1];
+    INT first = ((INTEGER)rfali.getFirst()).INTValue();
+    INT last = ((INTEGER)rfali.getLast()).INTValue();
+    return ((r != mod_positive(first, m))
+            && (r != mod_positive(last, m)));
   }
 
   /**
@@ -136,9 +188,7 @@ The correct way to build the system is to run 'make'.
    * m) but all missing numbers in their range are.
    **/
   public static INT[] nonmodulus_strict_INT(Iterator nums) {
-    // Must not use regular modulus:  that can produce errors, eg
-    // nonmodulus_strict({1,2,3,5,6,7,9,11}) => {0,2}.
-    return modulus_strict_INT(new MissingNumbersIteratorINT(nums));
+    return nonmodulus_strict_INT_internal(new MissingNumbersIteratorINT(nums, true));
   }
 
 
@@ -208,5 +258,6 @@ The correct way to build the system is to run 'make'.
 #if 0
 // Local Variables:
 // mode: java
+// c-basic-offset: 2
 // End:
 #endif
