@@ -152,6 +152,9 @@ public class PptTopLevel extends Ppt {
   Iterator var_info_iterator() {
     return Arrays.asList(var_infos).iterator();
   }
+  public PptTopLevel entry_ppt() {
+    return entry_ppt;
+  }
 
   // These accessors are for abstract methods declared in Ppt
   public int num_samples() {
