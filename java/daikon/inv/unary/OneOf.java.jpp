@@ -93,7 +93,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 
   private INT[] elts;
   private int num_elts;
-#if defined(SCALAR) || defined(ELT)
+#if defined(SCALAR) || defined(ELT) || defined(SEQUENCE)
   private boolean is_boolean;
   private boolean is_hashcode;
 #endif
@@ -113,8 +113,9 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 #if defined(SCALAR)
     is_boolean = (var().type == ProglangType.BOOLEAN);
     is_hashcode = var().type.isObject() || var().type.isArray();
-#elif defined(ELT)
-    Assert.assert(var().type.isPseudoArray(), "ProglangType must be pseudo-array for EltOneOf");
+#elif defined(ELT) || defined(SEQUENCE)
+    Assert.assert(var().type.isPseudoArray(),
+		  "ProglangType must be pseudo-array for EltOneOf or OneOfSequence");
     is_boolean = (var().type.elementType() == ProglangType.BOOLEAN);
     is_hashcode = var().type.elementType().isObject() || var().type.elementType().isArray();
 #endif
@@ -363,12 +364,14 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
       destroy();
       return;
     }
-#if defined(SCALAR) || defined(ELT)
+#if defined(SCALAR) || defined(ELT) || defined(SEQUENCE)
     if ((is_boolean && (num_elts == 1))
         || (is_hashcode && (num_elts == 2))) {
       destroy();
       return;
     }
+#endif
+#if defined(SCALAR) || defined(ELT)
     if (is_hashcode && (num_elts == 1)) {
       // Permit two object values only if one of them is null
       if ((elts[0] != 0) && (v != 0)) {

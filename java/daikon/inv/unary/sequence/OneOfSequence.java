@@ -32,6 +32,9 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
   private long[] [] elts;
   private int num_elts;
 
+  private boolean is_boolean;
+  private boolean is_hashcode;
+
   OneOfSequence (PptSlice ppt) {
     super(ppt);
 
@@ -39,6 +42,11 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
                                 // (in the general online case, not worth interning)
 
     num_elts = 0;
+
+    Assert.assert(var().type.isPseudoArray(),
+		  "ProglangType must be pseudo-array for EltOneOf or OneOfSequence");
+    is_boolean = (var().type.elementType() == ProglangType.BOOLEAN);
+    is_hashcode = var().type.elementType().isObject() || var().type.elementType().isArray();
 
   }
 
@@ -137,6 +145,12 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
 
       }
     if (num_elts == LIMIT) {
+      destroy();
+      return;
+    }
+
+    if ((is_boolean && (num_elts == 1))
+        || (is_hashcode && (num_elts == 2))) {
       destroy();
       return;
     }

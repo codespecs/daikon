@@ -42,7 +42,8 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
 
     num_elts = 0;
 
-    Assert.assert(var().type.isPseudoArray(), "ProglangType must be pseudo-array for EltOneOf");
+    Assert.assert(var().type.isPseudoArray(),
+		  "ProglangType must be pseudo-array for EltOneOf or OneOfSequence");
     is_boolean = (var().type.elementType() == ProglangType.BOOLEAN);
     is_hashcode = var().type.elementType().isObject() || var().type.elementType().isArray();
 
@@ -213,6 +214,7 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
       destroy();
       return;
     }
+
     if (is_hashcode && (num_elts == 1)) {
       // Permit two object values only if one of them is null
       if ((elts[0] != 0) && (v != 0)) {
