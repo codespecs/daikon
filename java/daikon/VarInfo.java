@@ -62,10 +62,6 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   // An invariant is only listed on the first VarInfo, not all VarInfos.
   public Vector exact_nonunary_invariants;
 
-  public Vector views;          // All views containing this object.
-                                // This is needed because findSlice can be
-                                //   so slow.
-
 
   static boolean legalRepType(ProglangType rep_type) {
     return ((rep_type == ProglangType.INT)
