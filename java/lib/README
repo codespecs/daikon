@@ -13,7 +13,14 @@ GNU getopt 1.0.8 (java-getopt.jar)
 - Distributed with java files alongside class files in the jar file.
   The java files must be stripped from the jar, otherwise jikes tries
   to compile the java files inside the jar.
+  1. Download java-getopt-1.0.8.jar
+  2. "jar xf java-getopt-1.0.8.jar"
+  3. "cd gnu"
+  4. "rm `find . -name *.java`"
+  5. "cd .."
+  6. "jar cf java-getopt.jar gnu/"
 - http://www.urbanophile.com/arenn/coding/download.html
+
 
 
 To build and run Daikon, each jar file must be in your CLASSPATH.
