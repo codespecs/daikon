@@ -1,6 +1,7 @@
 #! /uns/bin/perl -wpi.bak
+# Fix up mod bits for the argument .dtrace files (in place).
+# Usage:  modbit-munge.pl myprog.dtrace ...
 
-# Fix up mod bits for the argument .dtrace files.
 # "Missing" (numeric value = 2) modbits are never modified.
 # Arguments:
 #  -allmod	  Set all modbits to 1.
