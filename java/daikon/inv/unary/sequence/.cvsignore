@@ -40,3 +40,5 @@ EltwiseFloatLessThan.java
 EltwiseFloatLessEqual.java
 EltwiseFloatGreaterThan.java
 EltwiseFloatGreaterEqual.java
+EltRangeFloat.java
+EltRangeInt.java
