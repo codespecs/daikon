@@ -182,7 +182,7 @@ public final class FunctionBinaryCore
     String arg1_name = arg1.name_using(format);
     String arg2_name = arg2.name_using(format);
 
-    if (format == OutputFormat.DAIKON) {
+    if (format == OutputFormat.DAIKON || format == OutputFormat.JML) {
       return argresult_name + " == " + methodname + "(" + arg1_name + ", " + arg2_name + ")";
     }
 
