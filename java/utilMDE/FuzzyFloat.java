@@ -6,7 +6,7 @@ import java.util.*;
  * Routines for doing 'fuzzy' floating point comparisons.  Those are
  * comparisons that only require the floating point numbers to be
  * relatively close to one another to be equal, rather than exactly
- * equal <p>
+ * equal. <p>
  *
  * Floating point numbers are compared for equality by dividing them by
  * one another and comparing the ratio.  By default they must be within
@@ -31,7 +31,7 @@ public class FuzzyFloat {
   /**
    * Specify the specific relative difference allowed between two
    * floats in order for them to be equal.  The default is 0.0001
-   * a relative diff of zero, disables it (ie, only exact matches work)
+   * a relative diff of zero, disables it (ie, only exact matches work).
    */
   public FuzzyFloat (double rel_diff) {
     set_rel_diff (rel_diff);
@@ -53,11 +53,11 @@ public class FuzzyFloat {
 
   /**
    * Test d1 and d2 for equality using the current ratio.  Two NaN floats
-   * are also considered equal (this does not happen with the == operator) <p>
+   * are also considered equal (this does not happen with the == operator). <p>
    *
    * Note that since a ratio is used, that no number is close enough to zero
    * to be considered equal to zero (since the difference between the two is
-   * equal to the non-zero one, so the difference is 100%)
+   * equal to the non-zero one, so the difference is 100%).
    *
    * @return true if d1 and d2 are considered equal, false otherwise
    */
@@ -73,13 +73,13 @@ public class FuzzyFloat {
     if (off)
       return (d1 == d2);
 
-    //slightly more efficient for matches and catches positive and negative
-    //infinity (which match in this test, but not below)
+    // slightly more efficient for matches and catches positive and negative
+    // infinity (which match in this test, but not below)
     if (d1 == d2)
       return (true);
 
-    //only zero matches no matter what the ratio.  Saves on overflow checks
-    //below as well
+    // Only zero matches no matter what the ratio.  Saves on overflow checks
+    // below as well.
     if (d1 == 0.0)
       return (d2 == 0.0);
     else if (d2 == 0.0)
@@ -100,7 +100,7 @@ public class FuzzyFloat {
 
   /**
    * Test d1 and d2 for d1 < d2.  If d1 is equal to d2 using the current ratio
-   * this returns false
+   * this returns false.
    *
    * @see #eq
    */
@@ -139,8 +139,8 @@ public class FuzzyFloat {
   }
 
   /**
-   * Searches for the first occurence of elt in a.  elt is considered
-   * equal to a[i] if it passes the {@link #eq} test
+   * Searches for the first occurrence of elt in a.  elt is considered
+   * equal to a[i] if it passes the {@link #eq} test.
    *
    * @return the first index containing the specified element,
    *    or -1 if the element is not found in the array.
@@ -275,7 +275,7 @@ public class FuzzyFloat {
     /**
      * Lexically compares o1 and o2 as double arrays.
      *
-     * @return postive if o1 > 02, 0 if 01 == 02, negative if 01 < 02
+     * @return positive if o1 > 02, 0 if 01 == 02, negative if 01 < 02
      */
 
     public int compare(Object o1, Object o2) {
