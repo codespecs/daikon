@@ -5,6 +5,12 @@
 # (useful for cron job).  If the --nocleanup option is selected, does
 # not remove generated files (good for debugging).
 
+# This script ordinarily runs overnight; to invoke it by hand, execute the
+# followng commands as user daikonbuildtest:
+#   cd $HOME/build
+#   usr/bin/env perl $HOME/research/invariants/scripts/buildtest.pl --skip_dfec --skip_dfej --nocleanup
+# You can also run this script as any other user.
+
 use strict;
 use English;
 $WARNING = 1;
