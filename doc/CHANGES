@@ -25,7 +25,8 @@ Daikon
   the Chicory and Kvasir front ends (for Java and C, respectively) are
   preferred over the older dfej and dfec front ends.
 
-  [Fixed problem with the Chicory instrumenter]
+  A number of problems with the Chicory instrumentor were fixed.  In
+  particular, files necessary to run Chicory were added to the distribution.
 
   Configuration option daikon.FileIO.unmatched_procedure_entries_quiet is
   now true by default.
