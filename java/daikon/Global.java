@@ -166,6 +166,7 @@ public final class Global {
   public final static boolean debugPptSlice = false;
   public final static boolean debugPptSliceGeneric = false;
   public final static boolean debugPptSliceSpecific = false;
+  public final static boolean debugSimplify = false;
   //print out a new dtrace file with changed modbits
   public final static boolean debugPrintDtrace = false;
 
@@ -178,6 +179,7 @@ public final class Global {
   // public final static boolean debugPptSlice = true;
   // public final static boolean debugPptSliceGeneric = true;
   // public final static boolean debugPptSliceSpecific = true;
+  // public final static boolean debugSimplify = true;
 
   // Used only if debugPptSliceSpecific is set.
   // Variables must appear in the correct order.

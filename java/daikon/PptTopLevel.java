@@ -2094,19 +2094,20 @@ public class PptTopLevel extends Ppt {
     // desirable first.  For now just use the ICFP.
     Arrays.sort(invs, icfp);
 
-    // // Debugging
-    // System.out.println("Sorted invs:");
-    // for (int i=0; i<invs.length; i++) {
-    //   System.out.println("    " + invs[i].format());
-    // }
-    // for (int i=0; i<invs.length-1; i++) {
-    //   int cmp = icfp.compare(invs[i], invs[i+1]);
-    //   System.out.println("cmp(" + i + "," + (i+1) + ") = " + cmp);
-    //   int rev_cmp = icfp.compare(invs[i+1], invs[i]);
-    //   System.out.println("cmp(" + (i+1) + "," + i + ") = " + rev_cmp);
-    //   Assert.assert(rev_cmp >= 0);
-    // }
-
+    // Debugging
+    if (Global.debugSimplify) {
+      System.out.println("Sorted invs:");
+      for (int i=0; i<invs.length; i++) {
+        System.out.println("    " + invs[i].format());
+      }
+      for (int i=0; i<invs.length-1; i++) {
+        int cmp = icfp.compare(invs[i], invs[i+1]);
+        System.out.println("cmp(" + i + "," + (i+1) + ") = " + cmp);
+        int rev_cmp = icfp.compare(invs[i+1], invs[i]);
+        System.out.println("cmp(" + (i+1) + "," + i + ") = " + rev_cmp);
+        Assert.assert(rev_cmp >= 0);
+      }
+    }
 
     // Form the closure of the controllers
     Set closure = new HashSet();
@@ -2182,7 +2183,7 @@ public class PptTopLevel extends Ppt {
 	for (int i=0; i < var_infos.length; i++) {
 	  VarInfo vi = var_infos[i];
 	  String progtype = vi.type.base();
-	  // System.out.println("base = " + progtype + "; cls = " + clsname);
+	  // System.out.println("i=" + i + " of " + var_infos.length + "; base = " + progtype + "; cls = " + clsname);
 	  if (progtype.equals(clsname)) {
 	    // Only process primitive names like 'x'; not 'x.foo' or 'a[x..]'
 	    if (vi.name.inOrderTraversal().size() != 1) {
@@ -2253,13 +2254,15 @@ public class PptTopLevel extends Ppt {
       }
       bg.append(")");
 
-      // // Debugging
-      // System.out.println("Background:");
-      // for (int i=0; i < present.length; i++) {
-      //   if (present[i] && (i != checking)) {
-      //     System.out.println("    " + invs[i].format());
-      //   }
-      // }
+      // Debugging
+      if (Global.debugSimplify) {
+      SessionManager.debugln("Background:");
+      for (int i=0; i < present.length; i++) {
+        if (present[i] && (i != checking)) {
+          SessionManager.debugln("    " + invs[i].format());
+        }
+      }
+      }
 
       try {
 	// If the background is necessarily false, we are in big trouble
