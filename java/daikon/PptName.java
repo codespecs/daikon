@@ -299,7 +299,7 @@ public class PptName
   public int hashCode()
   {
     // If the domains of the components overlap, we should multiply by
-    // primes, but I think they are fairly disjoint
+    // primes, but I think they are fairly disjoint.
     return
       ((cls == null) ? 0 : cls.hashCode()) +
       ((method == null) ? 0 : method.hashCode()) +
