@@ -1153,13 +1153,15 @@ public final class FileIO {
           }
           */ // ... INCR
           mods[ppt.num_tracevars+i] = mod;
-          // Functionality moved to PptTopLevel.add(ValueTuple,int).
           // Possibly more efficient to set this all at once, late in
           // the game; but this gets it done.
-          // if (ValueTuple.modIsMissingNonsensical(mods[ppt.num_tracevars+i])) {
-          //  vis[ppt.num_tracevars+i].canBeMissing = true;
-          //  Assert.assertTrue(vals[ppt.num_tracevars+i] == null);
-          // }
+          // It was once moved to PptTopLevel.add(ValueTuple,int), but it
+          // disappeared from there, so now it's back here.
+          // In the long run canBeMissing should perhaps go away
+          if (ValueTuple.modIsMissingNonsensical(mods[ppt.num_tracevars+i])) {
+            vis[ppt.num_tracevars+i].canBeMissing = true;
+            Assert.assertTrue(vals[ppt.num_tracevars+i] == null);
+          }
         }
         /* [INCR] punt again
         Arrays.fill(entrymods, 0);
