@@ -2,7 +2,6 @@ package daikon.inv.unary.scalar;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.binary.*;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.binary.sequenceScalar.*;
 import daikon.derive.unary.*;
