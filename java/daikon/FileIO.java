@@ -683,7 +683,7 @@ public final class FileIO {
 			 + (call_stack.size() + call_hashmap.size())
                          + " functions.");
       if (!call_hashmap.isEmpty()) {
-        System.out.println("Unmatched calls with unique ids:");
+        System.out.println("Unterminated calls:");
         for (Iterator itor = call_hashmap.values().iterator() ; itor.hasNext() ; ) {
           Invocation invok = (Invocation) itor.next();
           invok.format(System.out);
@@ -725,17 +725,37 @@ public final class FileIO {
                     // + " and vi.value_index = " + vi.value_index
                     // + " for " + vi.name + lineSep + vi.repr()
                     );
+
+      // In errors, say "for program point", not "at program point" as the
+      // latter confuses Emacs goto-error.
+
       String line = reader.readLine();
-      if ((line == null) || !line.equals(vi.name)) {
-        throw new Error("Expected variable " + vi.name + " " + vi.repr() + ", got " + line
-                        // not " at program point " as that confuses Emacs goto-error
+      if (line == null) {
+        throw new Error("Unexpected end of file at " + data_trace_filename + " line " + reader.getLineNumber()
+                        + "\n  Expected variable " + vi.name + ", got " + line
+                        + " for program point " + ppt.name);
+      }
+      if (!line.equals(vi.name)) {
+        throw new Error("Expected variable " + vi.name + ", got " + line
                         + " for program point " + ppt.name
-                        + " at " + data_trace_filename + " line " + reader.getLineNumber());
+                        + " at " + data_trace_filename + " line " + reader.getLineNumber()
+                        // + "\n  VarInfo detail: " + vi.repr()
+                        );
       }
       line = reader.readLine();
+      if (line == null) {
+        throw new Error("Unexpected end of file at " + data_trace_filename + " line " + reader.getLineNumber()
+                        + "\n  Expected value for variable " + vi.name + ", got " + line
+                        + " for program point " + ppt.name);
+      }
       String value_rep = line;
       line = reader.readLine();
-      if ((line == null) || (!((line.equals("0") || line.equals("1") || line.equals("2"))))) {
+      if (line == null) {
+        throw new Error("Unexpected end of file at " + data_trace_filename + " line " + reader.getLineNumber()
+                        + "\n  Expected modbit for variable " + vi.name + ", got " + line
+                        + " for program point " + ppt.name);
+      }
+      if (!((line.equals("0") || line.equals("1") || line.equals("2")))) {
         throw new Error("Bad modbit"
                         + " at " + data_trace_filename + " line " + reader.getLineNumber()
                         + ": " + line);
