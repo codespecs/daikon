@@ -33,6 +33,11 @@ The correct way to build the system is to run 'make'.
   #define GT >
   #define GTE >=
   #define MIN1 core.min1
+  #define NUM_MIN1 core.num_min1
+  #define MIN2 core.min2
+  #define NUM_MIN2 core.num_min2
+  #define MIN3 core.min3
+  #define NUM_MIN3 core.num_min3
   #define MAX max
   #if defined(BASE_INT)
     #define LONGMAX Long.MAX_VALUE
@@ -79,6 +84,11 @@ The correct way to build the system is to run 'make'.
   #define GT <
   #define GTE <=
   #define MIN1 core.max1
+  #define NUM_MIN1 core.num_max1
+  #define MIN2 core.max2
+  #define NUM_MIN2 core.num_max2
+  #define MIN3 core.max3
+  #define NUM_MIN3 core.num_max3
   #define MAX min
   #if defined(UPPER) || defined(ELTUPPER)
     #define LONGMAX Long.MIN_VALUE
@@ -461,6 +471,7 @@ public class LOWERBOUND
         discardString = "MIN1="+MIN1+" is greater than dkconfig_maximal_interesting=="+
           dkconfig_maximal_interesting;
       }
+      log (discardString);
       return true;
     }
     ONEOF oo = ONEOF.find(ppt);
@@ -470,8 +481,9 @@ public class LOWERBOUND
       // will never have a MIN1 that does not appear in the OneOf.
       if (MIN1 LTE oo.MINELT()) {
         discardCode = DiscardCode.obvious;
-        String varName = var().name.name();
-        discardString = varName+LTESTR+MIN1+" is implied by "+varName+LTESTR+oo.MINELT();
+        discardString = format() + " is implied by " + oo.format() + "at ppt"
+                        + ppt;
+        log (discardString);
         return true;
       }
     }
@@ -497,6 +509,7 @@ public class LOWERBOUND
           String varName = var().name.name();
           String otherName = other.var().name.name();
           discardString = varName+" is a subsequence of "+otherName+" for which the invariant holds.";
+          log (discardString);
           return true;
         }
       }
@@ -515,6 +528,7 @@ public class LOWERBOUND
         // "size(a[]) >= 0" is obvious.
         discardCode = DiscardCode.obvious;
         discardString = var().name.name()+" >=0 is obvious";
+        log (discardString);
         return true;
       }
     }
@@ -541,6 +555,7 @@ public class LOWERBOUND
             String otherName = other_slice.var_infos[0].name.name();
             String varName = var().name.name();
             discardString = varName+" is a subsequence of "+otherName+" for which the invariant holds.";
+            log (discardString);
             return true;
           }
         }
@@ -580,4 +595,58 @@ public class LOWERBOUND
     return false;
   }
 
+  /**
+   * Bound can merge different formulas from lower points to create a single
+   * formula at an upper point.  See merge() below.
+   */
+  public boolean mergeFormulasOk() {
+    return (true);
+  }
+
+  /**
+   * Merge the invariants in invs to form a new invariant.  Each must be
+   * a LOWERBOUND invariant.  This code finds all of the min/max values
+   * in each invariant, applies them to a new parent invariant and
+   * returns the merged invariant (if any).
+   *
+   * @param invs    List of invariants to merge.  The invariants must all be
+   *                of the same type and should come from the children of
+   *                ppt.  They should also all be permuted to match the variable
+   *                order in ppt.
+   * @param ppt     program point that will contain the new invariant
+   */
+  public Invariant merge (List invs, PptSlice ppt) {
+
+    // Create the initial parent invariant from the first child
+    LOWERBOUND first = (LOWERBOUND) invs.get(0);
+    LOWERBOUND result = (LOWERBOUND) first.clone();
+    result.ppt = ppt;
+
+    // Loop through the rest of the child invariants
+    for (int i = 1; i < invs.size(); i++ ) {
+
+      // Get this invariant
+      LOWERBOUND inv = (LOWERBOUND) invs.get (i);
+
+      // Pass each value and its count to this invariant's add_modified.  Since
+      // bound is never destroyed, we don't need to check the results.
+      if (inv.NUM_MIN1 > 0)
+        result.core.add_modified (inv.MIN1, inv.NUM_MIN1);
+      if (inv.NUM_MIN2 > 0)
+        result.core.add_modified (inv.MIN2, inv.NUM_MIN2);
+      if (inv.NUM_MIN3 > 0)
+        result.core.add_modified (inv.MIN3, inv.NUM_MIN3);
+      result.core.add_modified (inv.core.MAX, 1);
+      if (Debug.logDetail())
+        result.log ("Adding vals " + inv.NUM_MIN1 + " of " + inv.MIN1 + ","
+                                   + inv.NUM_MIN2 + " of " + inv.MIN2 + ","
+                                   + inv.NUM_MIN3 + " of " + inv.MIN3 + ", "
+                                   + "1 of " + inv.core.MAX
+                                   + "from ppt " + inv.ppt.ppt_name);
+    }
+
+    result.log ("Merged '" + result.format() + "' from " + invs.size()
+                + " child invariants");
+    return (result);
+  }
 }
