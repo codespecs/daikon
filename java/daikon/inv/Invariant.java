@@ -1044,7 +1044,7 @@ public abstract class Invariant
    * Return true if this invariant is necessarily true from a fact
    * that can be determined dynamically (after checking data).
    * Intended to be overriden by subclasses so they can filter
-   * invariants after checking.  
+   * invariants after checking.
    **/
   public boolean isObviousDynamically() {
     return false;
