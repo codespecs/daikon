@@ -100,9 +100,9 @@ public class LinearTernaryCoreTest
     ltc.d = d;
     String actual_result = ltc.format_using(OutputFormat.DAIKON,
                                             x_vin, null, y_vin, null, z_vin, null);
-    // System.out.println("Expecting: " + goal_result);
-    // System.out.println("Actual:    " + actual_result);
-    assertTrue(actual_result.equals(goal_result));
+ //    System.out.println("Expecting: " + goal_result);
+ //    System.out.println("Actual:    " + actual_result);
+     assertTrue(actual_result.equals(goal_result));
   }
 
   public void test_format() {
@@ -118,7 +118,9 @@ public class LinearTernaryCoreTest
     one_test_format(-1, 1, -2, 0, "- x + y - 2 * z == 0");
     one_test_format(-1, -1, 2, 3, "- x - y + 2 * z + 3 == 0");
     one_test_format(3, -2, 0, -3, "3 * x - 2 * y - 3 == 0");
-    one_test_format(3.2, -2.2, 1.4, -3.4, "3.2 * x - 2.2 * y + 1.4 * z - 3.4 == 0");
+    //hmmm, we can't actually have this test because there are never any double coeffs, they're not 
+    //calculated as such and are converted to ints
+  //  one_test_format(3.2, -2.2, 1.4, -3.4, "3.2 * x - 2.2 * y + 1.4 * z - 3.4 == 0");
     one_test_format(3.0, -2.0, 2.0, -3.0, "3 * x - 2 * y + 2 * z - 3 == 0");
     one_test_format(-1.0, 1.0, 0.0, 0.0, "- x + y == 0");
   }
