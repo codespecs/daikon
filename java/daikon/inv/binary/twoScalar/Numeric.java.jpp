@@ -16,6 +16,8 @@
   #define ONEOF_MINUS_ONE InvDef.elts_minus_one
   #define SEQ_SUBSCRIPT SequenceScalarSubscript
   #define EQUALITY IntEqual
+  #define NONZERO NonZero
+  #define BASE_IS_TYPE isIntegral()
 #elif defined(TYPEDOUBLE)
   #define CLASSNAME NumericFloat
   #define SUPERCLASS TwoFloat
@@ -28,6 +30,8 @@
   #define ONEOF_MINUS_ONE InvDef.elts_minus_one_float
   #define SEQ_SUBSCRIPT SequenceFloatSubscript
   #define EQUALITY FloatEqual
+  #define NONZERO NonZeroFloat
+  #define BASE_IS_TYPE isFloat()
 #elif defined(TYPELONGSEQ)
   #define SEQ
   #define CLASSNAME PairwiseNumericInt
@@ -41,6 +45,8 @@
   #define ONEOF_MINUS_ONE InvDef.elts_minus_one
   #define SEQ_SUBSEQUENCE SequenceScalarSubsequence
   #define EQUALITY PairwiseIntEqual
+  #define NONZERO EltNonZero
+  #define BASE_IS_TYPE elementIsIntegral()
 #elif defined(TYPEDOUBLESEQ)
   #define SEQ
   #define CLASSNAME PairwiseNumericFloat
@@ -54,6 +60,8 @@
   #define ONEOF_MINUS_ONE InvDef.elts_minus_one_float
   #define SEQ_SUBSEQUENCE SequenceFloatSubsequence
   #define EQUALITY PairwiseFloatEqual
+  #define NONZERO EltNonZeroFloat
+  #define BASE_IS_TYPE elementIsFloat()
 #else
   #error "TYPELONG, TYPEDOUBLE, TYPELONGSEQ, or TYPEDOUBLESEQ  must be defined"
 #endif
@@ -76,11 +84,9 @@ package daikon.inv.binary.PACKAGE;
 
 import daikon.*;
 import daikon.inv.*;
-#ifdef SEQ
 import daikon.inv.unary.sequence.*;
-#else
 import daikon.inv.unary.scalar.*;
-#endif
+import daikon.inv.binary.twoScalar.*;
 import daikon.derive.binary.*;
 import daikon.suppress.*;
 
@@ -119,14 +125,22 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * specified slice.
    */
   public static boolean instantiate_ok (PptSlice ppt, boolean swap) {
+
+    // Make sure we always create when ppt is null
     if (ppt == null)
       return (true);
+
     if (!dkconfig_enabled) return false;
-    #if !defined(SEQ)
-      if (!ppt.var_infos[0].file_rep_type.isIntegral()
-          || !ppt.var_infos[1].file_rep_type.isIntegral())
-        return (false);
-    #endif
+
+    // base type must match for invariant to make sense.
+    ProglangType type1 = ppt.var_infos[0].file_rep_type;
+    ProglangType type2 = ppt.var_infos[1].file_rep_type;
+    if (!type1.BASE_IS_TYPE || !type2.BASE_IS_TYPE) {
+      if (Debug.logOn())
+        Debug.log (CLASSNAME.class, ppt, "not created - not a numeric type");
+      return (false);
+    }
+
     return (true);
   }
 
@@ -221,8 +235,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
 #if (defined(SEQ))
   public InvariantStatus check_modified(PRIMITIVE[] x, PRIMITIVE[] y,
                                         int count) {
-    if (x.length != y.length)
+    if (x.length != y.length) {
+      if (Debug.logOn())
+        log ("Falsified - x length = " + x.length + "y length = " + y.length);
       return (InvariantStatus.FALSIFIED);
+    }
 
     if (Debug.logDetail()) {
       log ("testing values " + ArraysMDE.toString (x) + ", "
@@ -231,11 +248,16 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     try {
       for (int i = 0; i < x.length; i++) {
-        if (!eq_check (x[i], y[i]))
+        if (!eq_check (x[i], y[i])) {
+          if (Debug.logOn())
+            log ("Falsified - x[" + i + "]=" + x[i] + " y[" + i + "]=" + y[i]);
           return (InvariantStatus.FALSIFIED);
+        }
       }
       return (InvariantStatus.NO_CHANGE);
     } catch (Exception e) {
+      if (Debug.logOn())
+        log ("Falsified - exception " + e);
       return (InvariantStatus.FALSIFIED);
     }
   }
@@ -361,9 +383,146 @@ public abstract class CLASSNAME extends SUPERCLASS {
       if (result != null) return result;
     #endif
 
+    // Check for invariant specific obvious checks.  The obvious_checks
+    // method returns an array of arrays of antecedents.  If all of the
+    // antecedents in an array are true, then the invariant is obvoius.
+    InvDef[][] obvious_arr = obvious_checks (vis);
+    obvious_loop:
+    for (int i = 0; i < obvious_arr.length; i++) {
+      InvDef[] antecedents = obvious_arr[i];
+      String why = "";
+      for (int j = 0; j < antecedents.length; j++) {
+        Invariant inv = antecedents[j].find ();
+        if (inv == null)
+          continue obvious_loop;
+        if (why == "")
+          why = inv.format();
+        else
+          why += " and " + inv.format();
+      }
+      return new DiscardInfo (this, DiscardCode.obvious, "Implied by " + why);
+    }
+
     return (null);
   }
 
+
+  /**
+   * Checks to see if the specified antecedent exists.  If it does, returns
+   * the appropriate DiscardInfo.  Otherwise returns null.
+   */
+  public DiscardInfo check_obvious (InvDef antecedent) {
+
+    Invariant inv = antecedent.find();
+    if (inv == null)
+      return (null);
+
+    return (new DiscardInfo (this, DiscardCode.obvious, "Implied by "
+                              + inv.format()));
+  }
+
+  /**
+   * Returns a suppression definition that includes the specified antecedent
+   * and also for arrays addes a second antecedent that specifies that the
+   * two arrays must be of equal size.  This second antecedent must be added
+   * whenever the suppression is based on one of the arguments having a
+   * constant value (eg, x[] & y[] = 0 is implied by y elements = 0 only
+   * if the length of x[] and y[] are the same.  Note that we cannot always
+   * find an invariant for the lengths being equal.  In that case null is
+   * returned.
+   *
+   * NOTE: this is not currently used.  It has been replaced with a dynamic
+   * obvious check.
+   */
+  public SuppressionDef array_suppression (InvDef antecedent) {
+
+    #if (defined (SEQ))
+      return new SuppressionDef (antecedent,
+            new InvDef (var1().sequenceSize(), var2().sequenceSize(),
+                        EQUALITY.class));
+    #else
+      return new SuppressionDef (antecedent);
+    #endif
+  }
+
+#if defined (SEQ)
+  /**
+   * Returns an invariant that is true when the size(v1) == size(v2).
+   * There are a number of possible cases for an array:
+   *
+   *    x[]         - entire array, size usually available as size(x[])
+   *    x[..(n-1)]  - size is n
+   *    x[..n]      - size is n+1
+   *    x[n..]      - size is size(x[]) - n
+   *    x[(n+1)..]  - size is size(x[]) - (n+1)
+   *
+   * Each combination of the above must be considered in creating the
+   * equality invariant.  Not all possibilities can be handled.  Null is
+   * returned in that case.  In the following table, s stands for the size
+   *
+   *                    x[]     x[..(n-1)]  x[..n]  x[n..]    x[(n+1)..]
+   *                  --------- ----------  ------  ------    ----------
+   *    y[]           s(y)=s(x)   s(y)=n
+   *    y[..(m-1)]        x         m=n
+   *    y[..m]            x         x         m=n
+   *    y[m..]            x         x          x     m=n &&
+   *                                                s(y)=s(x)
+   *    y[(m+1)..]        x         x          x        x       m=n &&
+   *                                                           s(y)=s(x)
+   *
+   * NOTE: this is not currently used.  Many (if not all) of the missing
+   * table cells above could be filled in with linear binary invariants
+   * (eg, m = n + 1)
+   */
+  public InvDef array_sizes_eq (VarInfo v1, VarInfo v2) {
+
+    VarInfo v1_size = get_array_size (v1);
+    VarInfo v2_size = get_array_size (v2);
+
+    // If we can find a size variable for each side build the invariant
+    if ((v1_size != null) && (v2_size != null)) {
+      return (new InvDef (v1_size, v2_size, IntEqual.class));
+    }
+
+    // If either variable is not derived, there is no possible invariant
+    // (since we covered all of the direct size comparisons above)
+    if ((v1.derived == null) || (v2.derived == null))
+      return (null);
+
+    // Get the sequence subsequence derivations
+    SEQ_SUBSEQUENCE v1_ss = (SEQ_SUBSEQUENCE) v1.derived;
+    SEQ_SUBSEQUENCE v2_ss = (SEQ_SUBSEQUENCE) v2.derived;
+
+    // If both are from_start and have the same index_shift, just compare
+    // the variables
+    if (v1_ss.from_start && v2_ss.from_start
+        && (v1_ss.index_shift == v2_ss.index_shift))
+      return (new InvDef (v1_ss.sclvar(), v2_ss.sclvar(), IntEqual.class));
+
+    return (null);
+  }
+
+
+  /**
+   * Returns a variable that corresponds to the size of v.  Returns null
+   * if no such variable exists.  There are two cases that are
+   * not handled:  x[..n] with an index shift and x[n..]
+   */
+  public VarInfo get_array_size (VarInfo v) {
+
+    Assert.assertTrue (v.rep_type.isArray());
+
+    if (v.derived == null)
+      return (v.sequenceSize());
+    else if (v.derived instanceof SEQ_SUBSEQUENCE) {
+      SEQ_SUBSEQUENCE ss = (SEQ_SUBSEQUENCE) v.derived;
+      if (ss.from_start && (ss.index_shift == -1))
+        return (ss.sclvar());
+    }
+
+    return (null);
+  }
+#endif
 
   /**
    * Return a format string for the specified output format.  Each instance
@@ -375,6 +534,14 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * Returns true if x and y don't invalidate the invariant
    */
   public abstract boolean eq_check (PRIMITIVE x, PRIMITIVE y);
+
+  /**
+   * Returns an array of arrays of antecedents.  If all of the
+   * antecedents in any array are true, then the invariant is obvious
+   */
+  public InvDef[][] obvious_checks (VarInfo[] vis) {
+    return (new InvDef[][] {});
+  }
 
   /**
    * Returns a list of all of the numeric invariants instantiated
@@ -438,13 +605,39 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return (EQUALS (0, (x % y)));
     }
 
+
+    #if defined(SEQ)
+      /**
+       * This needs to be an obvious check and not a suppression for
+       * sequences because there is no consistent way to check that
+       * var1 and var2 have the same length (for derivations)
+       */
+      public InvDef[][] obvious_checks (VarInfo[] vis) {
+
+        return new InvDef[][] {
+          new InvDef[] {
+            new InvDef (var2(vis), ONEOF.class, ONEOF_PLUS_MINUS_ONE)
+          },
+          new InvDef[] {
+            new InvDef (var1(), ONEOF.class, ONEOF_ZERO)
+          }
+        };
+      }
+    #endif
+
     public SuppressionFactory[] getSuppressionFactories() {
       return new SuppressionFactory[] {
-        // suppress if var2 == 1 or -1
-        new SuppressionDef (new InvDef (var2(), ONEOF.class,
-                            ONEOF_PLUS_MINUS_ONE)),
-        // suppress if var1 == var2
-        new SuppressionDef (new InvDef (var1(), var2(), EQUALITY.class)),
+        #if !defined (SEQ)
+          // suppress if var2 == 1 or -1
+          new SuppressionDef (new InvDef (var2(), ONEOF.class,
+                                         ONEOF_PLUS_MINUS_ONE)),
+          // suppress if var1 == 0
+          new SuppressionDef (new InvDef (var1(), ONEOF.class, ONEOF_ZERO),
+                              new InvDef (var2(), NONZERO.class)),
+        #endif
+        // suppress if var1 == var2, var2 != 0
+        new SuppressionDef (new InvDef (var1(), var2(), EQUALITY.class),
+                            new InvDef (var2(), NONZERO.class)),
 
       };
     }
@@ -596,12 +789,32 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return (EQUALS (x, (y | x)));
     }
 
+    #if defined(SEQ)
+      /**
+       * This needs to be an obvious check and not a suppression for
+       * sequences because there is no consistent way to check that
+       * var1 and var2 have the same length (for derivations)
+       */
+      public InvDef[][] obvious_checks (VarInfo[] vis) {
+
+        return new InvDef[][] {
+          // suppress if var2 == 0
+          new InvDef[] {new InvDef (var2(), ONEOF.class, ONEOF_ZERO)},
+          // suppress if var1 == -1 (all of its bits are on)
+          new InvDef[] {new InvDef (var1(), ONEOF.class,ONEOF_MINUS_ONE)}
+        };
+      }
+    #endif
+
+
     public SuppressionFactory[] getSuppressionFactories() {
       return new SuppressionFactory[] {
-        // suppress if var2 == 0
-        new SuppressionDef (new InvDef (var2(), ONEOF.class, ONEOF_ZERO)),
-        // suppress if var1 == -1 (all of its bits are on)
-        new SuppressionDef (new InvDef (var1(), ONEOF.class, ONEOF_MINUS_ONE)),
+        #if !defined(SEQ)
+          // suppress if var2 == 0
+          new SuppressionDef (new InvDef (var2(), ONEOF.class, ONEOF_ZERO)),
+          // suppress if var1 == -1 (all of its bits are on)
+          new SuppressionDef (new InvDef (var1(),ONEOF.class,ONEOF_MINUS_ONE)),
+        #endif
         // suppress if var1 == var2
         new SuppressionDef (new InvDef (var1(), var2(), EQUALITY.class)),
       };
