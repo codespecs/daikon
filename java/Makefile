@@ -444,7 +444,7 @@ list_java_files:
 
 ## First, a file not generated via java-cpp
 daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTestUpDater.java
-	javac $<
+	javac -J-Xmx1024M $<
 	rm -f $@
 	java daikon.test.split.SplitterFactoryTestUpDater
 	chmod -w $@
