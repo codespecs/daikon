@@ -41,6 +41,10 @@ my @txtescfiles = ();
 
 my $debug = 0;
 
+if ((scalar(@ARGV) > 0) && ($ARGV[0] =~ 'escjava$')) {
+  shift(@ARGV);
+}
+
 if ((scalar(@ARGV) > 0) && ($ARGV[0] eq '-d')) {
   shift(@ARGV);
   $debug = 1;
