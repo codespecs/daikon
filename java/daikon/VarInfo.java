@@ -2286,11 +2286,16 @@ public final class VarInfo
   /** returns a string containing the names of the vars in the array **/
   public static String toString (VarInfo vis[]) {
 
+    if (vis == null)
+      return ("null");
     String vars = "";
     for (int i = 0; i < vis.length; i++) {
       if (vars != "")
         vars += ", ";
-      vars += vis[i].name.name();
+      if (vis[i] == null)
+        vars += "null";
+      else
+        vars += vis[i].name.name();
     }
     return (vars);
   }
