@@ -244,5 +244,3 @@ public class InvariantFilters {
     return invariants;
   }
 }
-
-
