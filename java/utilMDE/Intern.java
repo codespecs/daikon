@@ -257,7 +257,7 @@ public final class Intern {
     return a.intern();
   }
 
-  // Interns a String.
+  // Interns a long.
   // A no-op.  Provided for completeness, so we can intern() any type
   // used in OneOf.java.jpp.
   public static long intern(long l) {
