@@ -23,7 +23,7 @@ public class PptSliceEquality
 
   PptSliceEquality(PptTopLevel parent) {
      super(parent, parent.var_infos);
-     // Start with everything comparable being equal.     
+     // Start with everything comparable being equal.
   }
 
 
@@ -41,7 +41,7 @@ public class PptSliceEquality
   public int num_mod_non_missing_samples() { if (true) throw new Error(); return Integer.MAX_VALUE; }
   public int num_values() { if (true) throw new Error(); return Integer.MAX_VALUE; }
   public String tuplemod_samples_summary() {
-    throw new Error(); 
+    throw new Error();
   }
 
   /**
@@ -56,7 +56,7 @@ public class PptSliceEquality
     for (int i = 0; i < var_infos.length; i++) {
       VarInfo vi = var_infos[i];
       Comparables comparable = new Comparables(vi);
-      addOrCreateList (comparable, vi, map);
+      addToBindingList (map, comparable, vi);
       if (debug.isDebugEnabled()) {
         debug.debug ("  " + vi.name.name());
       }
@@ -78,7 +78,7 @@ public class PptSliceEquality
       invCount ++;
     }
     // Ensure determinism
-    Arrays.sort (result, EqualityComparator.getInstance()); 
+    Arrays.sort (result, EqualityComparator.getInstance());
     invs.addAll (Arrays.asList (result));
     Assert.assertTrue (varCount == total); // Check that we get all vis
   }
@@ -159,7 +159,7 @@ public class PptSliceEquality
       if (vt.isMissing (vi)) {
         missings.add (vi);
       } else {
-        addOrCreateList (vi.getValue(vt), vi, map);
+        addToBindingList (vi.getValue(vt), vi, map);
       }
     }
     Equality[] resultArray = new Equality[map.values().size() + (missings.size() > 0 ? 1 : 0)];
@@ -192,23 +192,21 @@ public class PptSliceEquality
   }
 
   /**
-   * Either adds the binding value, {var} into map, or else
-   * adds var to the already-existing vinding value, S.
+   * Map maps keys to non-empty lists of elements.
+   * This method adds var to the list mapped by key,
+   * creating a new list for key if one doesn't already exist.
    * @pre Each value in map is a list of size 1 or greater
    * @post Each value in map is a list of size 1 or greater
-   * @param value the value that's the key to the map.  Never null.
    **/
-  private void addOrCreateList (Object value, VarInfo var, Map map)
+  private void addToBindingList (Map map, Object key, VarInfo value)
   {
-    Assert.assertTrue (value != null);
-    Object key = map.get(value);
-    if (key == null) {
-      List list = new LinkedList();
-      list.add (var);
-      map.put (value, list);
-    } else {
-      ((List) key).add (var);
+    Assert.assertTrue (key != null);
+    List elements = (List) map.get(key);
+    if (elements == null) {
+      elements = new LinkedList();
+      map.put (key, elements);
     }
+    elements.add (value);
   }
 
   /**
@@ -402,7 +400,7 @@ public class PptSliceEquality
     public ProglangType type;
     public ProglangType rep_type;
     public ProglangType file_rep_type;
-    
+
     public int hashCode() {
       return type.hashCode() ^ rep_type.hashCode() ^ file_rep_type.hashCode();
     }
