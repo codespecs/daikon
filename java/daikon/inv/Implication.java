@@ -135,9 +135,12 @@ public class Implication
     for (int ii = 0; ii < vis.length; ii++ )
       Assert.assertTrue (vis[ii] != null);
     DiscardInfo di = orig_right.isObviousDynamically (vis);
-    if (di != null)
+    if (di != null) {
       log ("failed isObviousDynamically with vis = " + VarInfo.toString (vis));
-    return (di);
+      return (di);
+    }
+
+    return (null);
   }
 
 
@@ -180,6 +183,18 @@ public class Implication
    * from the slice containing the implication itself (slice 0).
    **/
   public DiscardInfo isObviousDynamically_SomeInEquality() {
+
+    // If the consequent is ni-suppressed in its original program point,
+    // then it is obvious from some set of other invariants.  Those invariants
+    // could be other implications or they could be true at both conditional
+    // points.
+    // JHP: Seemingly it would be better if this invariant was never
+    // created, but somehow that creates other implications.  See the
+    // disabled code in PptSplitter.add_implication()
+    if (orig_right.is_ni_suppressed())
+      return (new DiscardInfo (this, DiscardCode.obvious, "consequent "
+                               + orig_right.format() + " is ni suppressed"));
+
     return orig_right.isObviousDynamically_SomeInEquality();
 //     DiscardInfo result = isObviousDynamically (orig_right.ppt.var_infos);
 //     if (result != null)
