@@ -325,6 +325,44 @@ public final class UtilMDE {
 
 
   ///
+  /// ClassLoader
+  ///
+
+  /**
+   * This class has no purpose but to define loadClassFromFile.
+   * ClassLoader.defineClass is protected, so I subclass ClassLoader in
+   * order to call defineClass.
+   **/
+  private static class PromiscuousLoader extends ClassLoader {
+    public Class loadClassFromFile(String className, String pathname) throws FileNotFoundException, IOException {
+      FileInputStream fi = new FileInputStream(pathname);
+      int numbytes = fi.available();
+      byte[] classBytes = new byte[numbytes];
+      fi.read(classBytes);
+      Class return_class = defineClass(className, classBytes, 0, numbytes);
+      resolveClass(return_class);
+      return return_class;
+    }
+  }
+
+  private static PromiscuousLoader thePromiscuousLoader = new PromiscuousLoader();
+
+  /**
+   * @param full_pathname the pathname of a .class file
+   * @return a Java Object corresponding to the Class defined in the .class file
+   **/
+  public static Class loadClassFromFile(String className, String pathname) throws FileNotFoundException, IOException {
+    return thePromiscuousLoader.loadClassFromFile(className, pathname);
+  }
+
+  /**
+   * @param full_pathname the pathname of a .class file
+   * @return a Java Object corresponding to the Class defined in the .class file
+   **/
+
+
+
+  ///
   /// Classpath
   ///
 
