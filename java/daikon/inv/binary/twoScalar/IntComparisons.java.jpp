@@ -22,6 +22,7 @@ For example:  scalar equals, float equals, scalar less than, etc.
   #define MEMBER Member
   #define VALUETRACKER ValueTracker
   #define INT(x) Int ## x
+  #define LINEARBINARY LinearBinary
 #else
   #define PRIMITIVE double
   #define ISTYPE isFloat()
@@ -29,6 +30,7 @@ For example:  scalar equals, float equals, scalar less than, etc.
   #define MEMBER Member
   #define VALUETRACKER FloatValueTracker
   #define INT(x) Float ## x
+  #define LINEARBINARY LinearBinaryFloat
 #endif
 
 #if defined(EQUAL)
@@ -146,6 +148,7 @@ import daikon.inv.binary.sequenceScalar.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.derive.*;
 import daikon.derive.unary.*;
+import daikon.suppress.*;
 
 import utilMDE.*;
 import org.apache.log4j.Logger;
@@ -847,6 +850,94 @@ invariants.
     return ! (vis[0].isCanonical() || vis[1].isCanonical());
   }
   */ // ... [INCR]
+#endif
+
+#if defined (LESSTHAN) || defined (GREATERTHAN) || defined (LESSTHANFLOAT) || defined (GREATERTHANFLOAT)
+
+  private static SuppressionFactory[] suppressionFactories = null;
+
+  public SuppressionFactory[] getSuppressionFactories() {
+    if (suppressionFactories == null) {
+      SuppressionFactory[] supers = super.getSuppressionFactories();
+      suppressionFactories = new SuppressionFactory[supers.length + 1];
+      System.arraycopy (supers, 0, suppressionFactories, 0, supers.length);
+      suppressionFactories[supers.length]
+            = ComparisonsSuppressionFactory1.getInstance();
+    }
+    return suppressionFactories;
+  }
+
+  /**
+   * Suppression in the form y = x + b ==> y EQUALS x (where b EQUALS 0).
+   */
+  public static class ComparisonsSuppressionFactory1
+    extends SuppressionFactory {
+
+    public static final Logger debug = Logger.getLogger
+                ("daikon.suppress.factories.ComparisonsSuppressionFactory");
+
+    private static final ComparisonsSuppressionFactory1 theInstance
+      = new ComparisonsSuppressionFactory1();
+
+    private ComparisonsSuppressionFactory1() {
+      supTemplate = new SuppressionTemplate();
+      supTemplate.invTypes = new Class[1];
+      supTemplate.varInfos = new VarInfo[][] {new VarInfo[2]};
+    }
+
+    public static SuppressionFactory getInstance() {
+      return theInstance;
+    }
+
+    private Object readResolve() {
+      return theInstance;
+    }
+
+    private transient SuppressionTemplate supTemplate;
+
+    public SuppressionLink generateSuppressionLink (Invariant arg) {
+
+      //we should only be called with our own invariant
+      Assert.assertTrue (arg instanceof INTEQUAL);
+      INTEQUAL inv = (INTEQUAL) arg;
+
+      //setup to look for LinearBinary over our variables
+      supTemplate.resetResults();
+      supTemplate.invTypes[0] = LINEARBINARY.class;
+      supTemplate.varInfos[0][0] = inv.var1();
+      supTemplate.varInfos[0][1] = inv.var2();
+
+      //look for invariants that match our template
+      SuppressionLink sl = byTemplate (supTemplate, inv);
+      if (sl != null) {
+        LINEARBINARY lb = (LINEARBINARY) supTemplate.results[0];
+        if (debug.isDebugEnabled()) {
+          debug.debug (EQUALSstring + " suppression possiblity " + lb.repr());
+        }
+
+        // JHP force this to fail for now, so I can diff stuff
+        if (true)
+          return (null);
+
+        //if the invariant isn't active, we can't use it
+        if (!lb.isActive())
+          return (null);
+
+        //only 'a == 1' implies a less than or greater than relationship
+        if (lb.core.a != 1.0)
+          return (null);
+
+        //b determines whether we are greater than or less than
+        if (EQUALS (lb.core.b, 0))
+          return (null);
+
+        if (debug.isDebugEnabled()) {
+          debug.debug (EQUALSstring + " Suppressed by " + lb.repr());
+        }
+      }
+      return (sl);
+    }
+  }
 #endif
 
 }
