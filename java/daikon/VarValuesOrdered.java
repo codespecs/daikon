@@ -131,6 +131,7 @@ public final class VarValuesOrdered {
     SampleIterator() { i=0; }
     public boolean hasNext() { return i<values.size(); }
     public Object next() {
+      if (! hasNext()) { throw new NoSuchElementException(); }
       Object[] vals = (Object[]) values.elementAt(i);
       int[] mods = (int[]) modbits.elementAt(i);
       int count = ((Integer) counts.elementAt(i)).intValue();

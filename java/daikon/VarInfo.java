@@ -2322,16 +2322,14 @@ public final class VarInfo
 
     if (vis == null)
       return ("null");
-    String vars = "";
+    ArrayList/*String*/ vars = new ArrayList(vis.length);
     for (int i = 0; i < vis.length; i++) {
-      if (vars != "")           // interned
-        vars += ", ";
       if (vis[i] == null)
-        vars += "null";
+        vars.add("null");
       else
-        vars += vis[i].name.name();
+        vars.add(vis[i].name.name());
     }
-    return (vars);
+    return UtilMDE.join(vars, ", ");
   }
 
   /** returns a string containing the names of the vars in the list **/
@@ -2339,17 +2337,15 @@ public final class VarInfo
 
     if (vlist == null)
       return ("null");
-    String vars = "";
+    ArrayList/*String*/ vars = new ArrayList(vlist.size());
     for (int i = 0; i < vlist.size(); i++) {
-      if (vars != "")           // interned
-        vars += ", ";
       VarInfo v = (VarInfo) vlist.get(i);
       if (v == null)
-        vars += "null";
+        vars.add("null");
       else
-        vars += v.name.name();
+        vars.add(v.name.name());
     }
-    return (vars);
+    return UtilMDE.join(vars, ", ");
   }
 
   /**

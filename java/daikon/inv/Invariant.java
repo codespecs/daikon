@@ -2318,16 +2318,14 @@ public abstract class Invariant
 
   public static String toString (Invariant[] invs) {
 
-    String out = "";
+    ArrayList strings = new ArrayList(invs.length);
     for (int i = 0; i < invs.length; i++) {
-      if (out != "")            // interned
-        out += ", ";
       if (invs[i] == null)
-        out += "null";
+        strings.add("null");
       else
-        out += invs[i].format();
+        strings.add(invs[i].format());
     }
-    return (out);
+    return UtilMDE.join(strings, ", ");
   }
 
 }

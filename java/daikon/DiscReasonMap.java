@@ -167,8 +167,10 @@ public final class DiscReasonMap {
   public static void debugVarMap(String ppt) {
     System.out.println("\n\nDEBUGGING PPT: " + ppt);
     HashMap vars_map = (HashMap) the_map.get(ppt);
-    if (vars_map == null)
+    if (vars_map == null) {
       System.out.println("No reasons for this ppt");
+      return;
+    }
     System.out.println(vars_map.keySet().toString());
   }
 
