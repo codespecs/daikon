@@ -30,6 +30,10 @@ information in the "ListImplementors" section of the .decls file.
 Added new Daikon option --mem_stat, which prints memory usage statistics
 into a file named "stat.out" in the current directory.
 
+An incompatibility between dfepl, the Perl front end, and versions of
+Perl starting with 5.8.1 has been fixed. Dfepl has been verified to
+work with Perl version 5.8.4.
+
 ---------------------------------
 
 3.1.4 (01 Oct 2004)
