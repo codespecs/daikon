@@ -1,5 +1,5 @@
 ;;;
-;;; Emacs minor mode for the Daikon Context GUI for Java.
+;;; Emacs minor mode for the Daikon Tree GUI for Java.
 ;;;
 ;;; Requires JDE (http://jde.sunsite.dk) and of course
 ;;; Daikon (http://geyer.lcs.mit.edu/daikon).
@@ -49,6 +49,7 @@ If nil, taken to be directory in which Daikon Context GUI is launched."
   "Determines if the Daikon Context GUI has been started.")
 
 (defun daikon-context-gui-start-gui ()
+  (interactive)
   "Start up the Daikon Context GUI."
   ;(if (not (eq major-mode 'jde-mode))
   ;    (jde-mode))
@@ -57,18 +58,27 @@ If nil, taken to be directory in which Daikon Context GUI is launched."
 					     default-directory)))
     (case major-mode
      ((jde-mode) ; used to say java-mode here, too -- possible?
-      (bsh-eval (concat "daikon.gui.contextGUI.InvariantInteraction.startGui(\"" startup-path
+      (bsh-eval (concat "daikon.gui.treeGUI.InvariantsGUI.start(\"" startup-path
 		      "\");")))
      ((c-mode)
-      (bsh-eval (concat "daikon.gui.contextGUI.InvariantInteraction.startGui(\"" startup-path
-		      "\",true);"))))
+      (bsh-eval (concat "daikon.gui.treeGUI.InvariantsGUI.start(\"" startup-path
+		      "\");"))))
     (setq daikon-context-gui-started t)))
 
 (defun daikon-context-gui-end-gui ()
   "Terminate the Daikon Context GUI."
   (when daikon-context-gui-started
-    (bsh-eval "daikon.gui.contextGUI.InvariantInteraction.endGui();"))
-  (setq daikon-context-gui-started nil))
+    (setq daikon-context-gui-started nil)
+    (bsh-eval "daikon.gui.treeGUI.InvariantsGUI.stop();")
+  )
+)
+
+(defun daikon-context-gui-end ()
+  (interactive)
+  (daikon-context-gui -1)
+)
+
+  
 
 ;;; Borrowed in part from jde-which-method-update.
 (defun daikon-context-gui-update ()
@@ -83,23 +93,35 @@ If nil, taken to be directory in which Daikon Context GUI is launched."
 	  (car (jde-parse-get-innermost-class-at-point))))))
    ((c-mode)
     (daikon-context-gui-update-with-method
-      (list "std" (c-name-of-enclosing-function) nil)))  ; 'class' always "std"
+      (list "std" (cadr (jde-parse-get-method-at-point)) nil)))  ; 'class' always "std"
    (otherwise ; whenever you're in another buffer
     nil)))
+
+
+
+
 
 ;; Sends the class information to the Context GUI for display
 (defun daikon-context-gui-update-with-class (class)
   "Update the Daikon Context GUI using only class information."
-  (bsh-eval
-   (concat "daikon.gui.contextGUI.InvariantInteraction.input(\"" class "\",null, null, null);")))
+  (when daikon-context-gui-started
+    
+    (bsh-eval
+     (message (concat "daikon.gui.treeGUI.InvariantsGUI.setSelection(\"" 
+		      (jde-parse-get-package-name) "."
+		      class "\");")))))
 
 ;; Sends the method information to the Context GUI for display.
 (defun daikon-context-gui-update-with-method (class-method-args)
-  (let ((class   (car class-method-args))
-	(method (cadr class-method-args))
-	(args  (caddr class-method-args)))
-    (bsh-eval (concat "daikon.gui.contextGUI.InvariantInteraction.input(\"" class
-		      "\",\"" method " " args "\", null, null);"))))
+  (when daikon-context-gui-started
+    (let ((class   (car class-method-args))
+	  (method (cadr class-method-args))
+	  (args  (caddr class-method-args)))
+      (bsh-eval (message
+		 (concat "daikon.gui.treeGUI.InvariantsGUI.setSelection(\"" 
+			 (jde-parse-get-package-name) "."
+			 class
+			 "\", \""  method "\", \"" args "\");"))))))
 
 ;; This code was taken from JDK's get method at point function from
 ;; version jde-2.2.7beta11 jde-which-method.el but edited such that i can
