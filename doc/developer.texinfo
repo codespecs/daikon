@@ -77,7 +77,6 @@ It describes Daikon version 3.1.6, released December 1, 2004.
 * Daikon internals::            
 * Testing::                     
 * Historical::                  
-* Branches::                    
 * Index::
 
 @ifhtml
@@ -129,6 +128,10 @@ Sample Testing
 
 * Assertions::                  
 * Example File::                
+
+Analyzing historical versions of Daikon
+
+* Branches::                    
 
 @end detailmenu
 @end ifnothtml
@@ -1200,8 +1203,15 @@ ppt: foo.f():::EXIT35
 @end example
 
 
-@node    Historical, Branches, Testing, Top
+@node    Historical, Index, Testing, Top
 @chapter Analyzing historical versions of Daikon
+
+@cindex CVS repository
+
+@c Commands to run to distribute CVS:
+@c   cd /afs/csail.mit.edu/group/pag/projects/invariants/.CVS/
+@c   tar czf ~mernst/www/tmp/inv-cvs.tar.gz invariants
+
 
 This section is intended primarily for researchers who are analyzing
 historical versions of Daikon.  A number of researchers (for example, in
@@ -1209,12 +1219,23 @@ the testing community) use Daikon because it contains both a CVS
 repository and a set of tests.
 
 If you wish access to the Daikon CVS repository, send mail to
-@email{daikon-developers@@lists.csail.mit.edu}; please let us know why
-you need it and what you want to use it for.  Also, we request that you
-keep us appraised of any problems that you encounter or discoveries that
-you make, and that you let us know of any publications so that we can
-publicize them at
+@email{daikon-developers@@lists.csail.mit.edu}.  We appreciate it if you
+let us know why you need it and what you want to use it for.  Also, we
+request that you keep us appraised of any problems that you encounter or
+discoveries that you make, and that you let us know of any publications
+so that we can publicize them at
 @uref{http://www.pag.csail.mit.edu/daikon/pubs-using/#daikon-testsubject}.
+Also, please do not redistribute the repository without prior permission
+from us.
+
+We typically give you a copy of the CVS repository (a 700MB download, as
+of November 2004) rather than remote access to the master CVS
+repository.  This protects you from the possibility that our server is
+down, or that we someday cut you off from access to the repository; you
+are guaranteed to be able to reproduce your results.  It is also less
+hassle for us (we don't have to create an account for you), and it is
+less load on our servers (since researchers may wish to perform many CVS
+operations).
 
 This section points out some pitfalls for such researchers.  Although
 these problems are easy to avoid, some previous published work has made
@@ -1236,14 +1257,24 @@ time to time --- for instance, when the CVS branch was created and later
 when development on it ceased.
 
 
-@node    Branches, Index, Historical, Top
-@chapter Branches
+@menu
+* Branches::                    
+@end menu
+
+@node    Branches,  , Historical, Historical
+@section Branches
 
 The Daikon CVS repository contains two branches:  a main trunk and a
 branch (named ENGINE_V2_PATCHES) for Daikon version 3.1.6.
 
-The CVS manual (@pxref{Branching and merging,,,cvs,CVS -- Concurrent
-Versions System}) describes CVS branches:
+The CVS manual
+@ifinfo
+(@pxref{Branching and merging,,,cvs,CVS -- Concurrent Versions System})
+@end ifinfo
+@ifnotinfo
+(see section @uref{https://www.cvshome.org/docs/manual/cvs-1.11.18/cvs_5.html,``Branching and merging''} of the manual @emph{CVS -- Concurrent Versions System})
+@end ifnotinfo
+describes CVS branches:
 
 @quotation
   CVS allows you to isolate changes onto a separate line of development,
@@ -1298,7 +1329,7 @@ trunk (respectively, the branch).
 
 
 
-@node     Index,  , Branches, Top
+@node     Index,  , Historical, Top
 @unnumbered Index
 
 @printindex cp
