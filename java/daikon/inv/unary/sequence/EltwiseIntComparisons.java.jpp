@@ -175,7 +175,7 @@ public class CLASSNAME
     if (!valid_types (vis))
       return (false);
 
-    #if !(defined(EQUAL) || defined(EQUALFLOAT))
+    #if !defined(EQUAL) && defined(TYPELONG)
       if (!vis[0].type.baseIsIntegral())
         return (false);
     #endif
