@@ -69,7 +69,7 @@ Runtime.class: Runtime.java
 Diff.class: Diff.java ${AUTO_GENERATED_FILES}
 	${JAVAC} Diff.java
 
-# Wrong, becaue Daikon.class might be up to date even if other files aren't
+# Wrong, becaue Daikon.class might be up to date even if other files aren't.
 # Daikon.class:
 # 	${JAVAC} Daikon.java
 

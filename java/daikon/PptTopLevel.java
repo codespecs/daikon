@@ -1256,10 +1256,13 @@ public class PptTopLevel extends Ppt {
       }
       // If binary_view has been installed (hasn't yet been eliminated)
       if (views.contains(binary_view)) {
+
+        // set_equal_to_slots runs after pass 1 of invariant introduction.
         // There is only one type of binary invariant in pass 1:
-        // {Int,Seq}Comparison.  It must have been successful, or this view
-        // wouldn't have been installed.
+        // {Int,Seq,String}Comparison.  It must have been successful, or
+        // this view wouldn't have been installed.
         Assert.assert(binary_view.invs.size() == 1);
+
         Invariant inv = (Invariant) binary_view.invs.elementAt(0);
         inv.finished = true;
         // binary_view.already_seen_all = true;
