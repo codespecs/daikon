@@ -1397,25 +1397,25 @@ public class PptTopLevel extends Ppt {
   // This apparently can't appear in PptConditional, lest it never get called.
   // I guess PptConditional isn't instantiated unless it needs to be, but
   // it doesn't need to be unless GriesLisp has been instantiated already.
-  /*
-    static {
+  
+  static {
     // Would it be enough to say "GriesLisp dummy = null;"?  I'm not sure.
     // This does work, though.
     
     if (! Daikon.disable_splitting) {
-    //new MiscSplitters();
+       //new MiscSplitters();
+      
+      SplitterList.put(".*", new Splitter[] {
+	new ReturnTrueSplitter(),
+      });
     
-    SplitterList.put(".*", new Splitter[] {
-    new ReturnTrueSplitter(),
-    });
-    
-    //new GriesLisp();
-    //new WeissDsaaMDE();
-    // These are outdated; they look for "field" instead of "this.field".
-    // new SplitterList4Dsaa();
+      //new GriesLisp();
+      //new WeissDsaaMDE();
+      // These are outdated; they look for "field" instead of "this.field".
+      // new SplitterList4Dsaa();
     }
-    }
-  */
+  }
+  
 
   public void addConditions(Splitter[] splits) {
     int len = splits.length;

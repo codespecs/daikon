@@ -554,10 +554,6 @@ public final class Daikon {
 
   static public void create_splitters(PptMap all_ppts)throws IOException{
     
-    SplitterList.put(".*", new Splitter[] {
-      new ReturnTrueSplitter(),
-    });
-    
     SplitterFactory factory = new SplitterFactory(all_ppts);
     Vector sps = new Vector();
     for(Iterator i = spinfo_files.iterator(); i.hasNext(); ){
