@@ -13,6 +13,9 @@ versions as the user manual.
 
 Put changes for 3.1.6 here
 
+(Fixed a bug in dfej that could cause errors in programs that used
+variables named "ps", "depth", or "prefix".)
+
 The invariant filtering code has been cleaned up and simplified so
 that the same set of filters is used both for checking
 isWorthPrinting() and for actual printing.  This may cause some slight
