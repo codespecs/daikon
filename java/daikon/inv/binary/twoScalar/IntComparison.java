@@ -87,18 +87,17 @@ public final class IntComparison extends TwoScalar implements Comparison {
           } else if (max2) {
             obvious_le = true;
           }
+        } else if (((min1 && max2) || (max1 && min2))
+                   && (super1 != null) && (super2 != null) && (super1 == super2)
+                   && VarInfo.seqs_overlap(seqvar1, seqvar2)) {
+          // If the sequences overlap, then clearly the min of either is no
+          // greater than the max of the other.
+          if (min1 && max2) {
+            obvious_le = true;
+          } else if (max1 && min2) {
+            obvious_ge = true;
+          }
         }
-        // else if (((min1 && max2) || (max1 && min2))
-        //            && (super1 != null) && (super2 != null) && (super1 == super2)
-        //            && VarInfo.seqs_overlap(seqvar1, seqvar2)) {
-        //   // If the sequences overlap, then clearly the min of either is no
-        //   // greater than the max of the other.
-        //   if (min1 && max2) {
-        //     obvious_le = true;
-        //   } else if (max1 && min2) {
-        //     obvious_ge = true;
-        //   }
-        // }
       }
     }
 
