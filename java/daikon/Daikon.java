@@ -99,15 +99,16 @@ public final class Daikon {
   public static final String output_num_samples_SWITCH = "output_num_samples";
 
   static String usage =
-    "Daikon invariant detector." + lineSep
-    + "Copyright 1998-2001 by Michael Ernst <mernst@lcs.mit.edu>" + lineSep
-    + "Usage:" + lineSep
-    + "    java daikon.Daikon [flags...] files..." + lineSep
-    + "  Each file is a declaration file or a data trace file; the file type" + lineSep
-    + "  is determined by the file name (containing \".decls\" or \".dtrace\")." + lineSep
-    + "  For a list of flags, see the Daikon manual, which appears in the " + lineSep
-    + "  Daikon distribution and also at http://sdg.lcs.mit.edu/daikon/." + lineSep
-    ;
+    UtilMDE.join(new String[] {
+      "Daikon invariant detector.",
+      "Copyright 1998-2001 by Michael Ernst <mernst@lcs.mit.edu>",
+      "Usage:",
+      "    java daikon.Daikon [flags...] files...",
+      "  Each file is a declaration file or a data trace file; the file type",
+      "  is determined by the file name (containing \".decls\" or \".dtrace\").",
+      "  For a list of flags, see the Daikon manual, which appears in the ",
+      "  Daikon distribution and also at http://sdg.lcs.mit.edu/daikon/."},
+                 lineSep);
 
   /**
    * The arguments to daikon.Daikon are file names; declaration file names end
