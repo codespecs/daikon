@@ -15,7 +15,7 @@ import java.text.DateFormat;
 import java.lang.Thread;
 
 import org.apache.oro.text.regex.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import gnu.getopt.*;
 import utilMDE.*;
 
@@ -206,7 +206,7 @@ public final class Daikon {
   public static PptMap all_ppts;
 
   /** Debug tracer **/
-  public static final Category debugTrace = Category.getInstance("daikon.Daikon");
+  public static final Logger debugTrace = Logger.getLogger("daikon.Daikon");
 
   // Avoid problems if daikon.Runtime is loaded at analysis (rather than
   // test-run) time.  This might have to change when JTrace is used.
@@ -247,7 +247,7 @@ public final class Daikon {
     }
 
     // Set up debug traces
-    Logger.setupLogs(Global.debugAll ? Logger.DEBUG : Logger.INFO);
+    LogHelper.setupLogs(Global.debugAll ? LogHelper.DEBUG : LogHelper.INFO);
 
     if (! noversion_output) {
       System.out.println(release_string);
@@ -402,7 +402,7 @@ public final class Daikon {
         } else if (debugAll_SWITCH.equals(option_name)) {
           Global.debugAll = true;
         } else if (debug_SWITCH.equals(option_name)) {
-          Logger.setPriority(g.getOptarg(), Logger.DEBUG);
+          LogHelper.setPriority(g.getOptarg(), LogHelper.DEBUG);
         } else if (no_text_output_SWITCH.equals(option_name)) {
           no_text_output = true;
         } else if (show_progress_SWITCH.equals(option_name)) {

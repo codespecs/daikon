@@ -5,7 +5,7 @@ package daikon;
 import java.io.*;
 import java.util.*;
 import org.apache.oro.text.regex.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 public final class Global {
 
@@ -163,32 +163,32 @@ public final class Global {
   static {
     // Set up debug traces.
     // Better to do this here than in each separate program.
-    Logger.setupLogs(debugAll ? Logger.DEBUG : Logger.INFO);
+    LogHelper.setupLogs(debugAll ? LogHelper.DEBUG : LogHelper.INFO);
   }
 
   /** Debug tracer for debugging statistics output **/
-  public static final Category debugStatistics = Category.getInstance("daikon.statistics");
+  public static final Logger debugStatistics = Logger.getLogger("daikon.statistics");
 
   /** Debug tracer for debugging Simplify output **/
-  public static final Category debugSimplify = Category.getInstance("daikon.simplify");
+  public static final Logger debugSimplify = Logger.getLogger("daikon.simplify");
 
   /** Debug tracer for debugging derived vars **/
-  public static Category debugDerive = Category.getInstance("daikon.derive");
+  public static Logger debugDerive = Logger.getLogger("daikon.derive");
 
   /** Debug tracer for debugging splitting **/
-  public static Category debugSplit = Category.getInstance("daikon.split");
+  public static Logger debugSplit = Logger.getLogger("daikon.split");
 
   /** Debug tracer for debugging general invariant inference **/
-  public static Category debugInfer = Category.getInstance("daikon.infer");
+  public static Logger debugInfer = Logger.getLogger("daikon.infer");
 
   /** Debug tracer for debugging invariant suppression **/
-  public static Category debugSuppress = Category.getInstance("daikon.suppress");
+  public static Logger debugSuppress = Logger.getLogger("daikon.suppress");
 
   /** Debug tracer for debugging invariant suppression by using parameters **/
-  public static Category debugSuppressParam = Category.getInstance("daikon.suppress.param");
+  public static Logger debugSuppressParam = Logger.getLogger("daikon.suppress.param");
 
   /** Debug tracer for debugging invariant printing **/
-  public static Category debugPrint = Category.getInstance("daikon.print");
+  public static Logger debugPrint = Logger.getLogger("daikon.print");
 
 
   // Can't change to log4j; uses special outputter

@@ -3,7 +3,7 @@ package daikon;
 import java.io.*;
 import java.util.*;
 import utilMDE.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 /**
  * A collection of code that configures and assists the dataflow
@@ -20,11 +20,11 @@ public class Dataflow
   // Nobody should be instantiating a Dataflow.
   private Dataflow() { }
 
-  public static final Category debug = Category.getInstance("daikon.flow");
+  public static final Logger debug = Logger.getLogger("daikon.flow");
 
 
   /** Debug tracer for ppt initialization.   **/
-  public static final Category debugInit = Category.getInstance("daikon.flow.init");
+  public static final Logger debugInit = Logger.getLogger("daikon.flow.init");
 
   // Temporary routine, for debugging
   // Will eventually move into daikon.test.DataflowTest
@@ -34,7 +34,7 @@ public class Dataflow
   public static void main(String[] args)
     throws Exception
   {
-    debug.setPriority(Logger.DEBUG);
+    debug.setPriority(LogHelper.DEBUG);
 
     String outf = "Dataflow_testing.txt";
     File[] files = new File[args.length];

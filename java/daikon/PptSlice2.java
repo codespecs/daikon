@@ -9,7 +9,7 @@ import daikon.inv.binary.twoSequence.*;
 import daikon.inv.binary.twoString.*;
 import daikon.inv.binary.sequenceScalar.*;
 
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import java.util.*;
 
@@ -29,7 +29,7 @@ public final class PptSlice2
   /**
    * Debug tracer
    **/
-  public static final Category debugSpecific = Category.getInstance("daikon.PptSlice2");
+  public static final Logger debugSpecific = Logger.getLogger("daikon.PptSlice2");
 
   // This is in PptSlice; do not repeat it here!
   // Invariants invs;

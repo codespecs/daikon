@@ -7,7 +7,7 @@ import daikon.temporal.TemporalInvariantManager;
 
 
 import utilMDE.*;
-import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.util.*;
@@ -98,12 +98,12 @@ public final class FileIO {
   // Logging Categories
 
   /** Debug tracer for reading **/
-  public static final Category debugRead =
-    Category.getInstance("daikon.FileIO.read");
+  public static final Logger debugRead =
+    Logger.getLogger("daikon.FileIO.read");
 
   /** Debug tracer for printing **/
-  public static final Category debugPrint =
-    Category.getInstance("daikon.FileIO.printDtrace");
+  public static final Logger debugPrint =
+    Logger.getLogger("daikon.FileIO.printDtrace");
 
 
   // Utilities
