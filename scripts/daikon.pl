@@ -10,12 +10,13 @@ sub usage() {
 	"Usage: daikon [OPTION] MAIN_CLASS [MAIN_ARGUMENTS]\n",
 	"\n",
 	"Options:\n",
-	"  -o, --output FILE   Save invariants in FILE.inv\n",
-	"  -t, --textfile      Save text of invariants in a .txt file\n",
-	"  -v, --verbose       Display progress messages\n",
-	"  -c, --cleanup       Remove files left over from an interrupted session before starting\n",
-	"  -n, --nogui         Do not start the gui\n",
-	"  -s, --src           Make an archive of the source for later reference\n",
+        "  -i, --instrument FILE   Only instrument FILE.  Can be specified multiple times.\n",
+	"  -o, --output FILE       Save invariants in FILE.inv\n",
+	"  -t, --textfile          Save text of invariants in a .txt file\n",
+	"  -v, --verbose           Display progress messages\n",
+	"  -c, --cleanup           Remove files left over from an interrupted session before starting\n",
+	"  -n, --nogui             Do not start the gui\n",
+	"  -s, --src               Make an archive of the source for later reference\n",
 	"\n",
 	"Example:\n",
 	"  daikon --output test1 packfoo.MyTestSuite 200\n",
@@ -42,7 +43,8 @@ $cp_dot = $cp_lib . ':.';
 
 # read options from command line
 
-GetOptions("output=s" => \$output,
+GetOptions("instrument=s" => \@instrument,
+           "output=s" => \$output,
 	   "textfile" => \$textfile,
 	   "verbose" => \$verbose,
 	   "cleanup" => \$cleanup,
@@ -181,7 +183,11 @@ symlink("$working/daikon-java", "daikon-java") or die("Could not make symlink 2"
 while (1) {
     # instrument the source files
     print "Instrumenting files...\n" if $verbose;
-    $dfejcommand = "dfej -classpath $cp_dot " . join(' ', sort (keys %interesting));
+    if (@instrument) {
+        $dfejcommand = "dfej -classpath $cp_dot " . join(' ', @instrument);
+    } else {
+        $dfejcommand = "dfej -classpath $cp_dot " . join(' ', sort (keys %interesting));
+    }
     $dfejoutput = `$dfejcommand`;
     $dfejerr = $?;
     last if ($dfejerr);
@@ -189,7 +195,16 @@ while (1) {
     # compile the instrumented source files
     print "Compiling files...\n" if $verbose;
     $cp_work = "$working/daikon-java:$cp_lib:.";
-    $jikescommand = "jikes -classpath $cp_work -depend -g -nowarn $working/daikon-java/$mainsrc";
+    $jikescommand = "jikes -classpath $cp_work -depend -g -nowarn ";
+
+    $mainsrc_was_instrumented =
+        (! @instrument) || (grep {$_ eq $mainsrc} @instrument);
+    if ($mainsrc_was_instrumented) {
+        $jikescommand .= "$working/daikon-java/$mainsrc";
+    } else {
+        $jikescommand .= "$mainsrc";
+    }
+
     $jikesoutput = `$jikescommand`;
     $jikeserr = $?;
     last if $jikeserr;
