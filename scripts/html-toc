@@ -1,0 +1,106 @@
+#!/usr/bin/env perl
+# html-toc
+# Generate (to standard out) table of contents for an HTML document.
+# Michael Ernst <mernst@lcs.mit.edu>
+# Time-stamp: <2003-03-07 08:54:24 mernst>
+
+# See html-update-toc for documentation.
+# (Typically, you will not run this program, but will use html-update-toc
+# instead.)
+
+use strict;
+use English;
+$WARNING = 1;
+
+my $level = 0;
+my $num_named_1 = 0;		# number of named items in <h1>...</h1>
+my $num_unnamed_1 = 0;		# number of unnamed items in <h1>...</h1>
+my $output = "";
+my $errors = "";
+my $debug = 0;
+# $debug = 1;
+
+
+sub enter_level {
+  $output .= ((" " x ($level * 4)) . "<ul>\n");
+  $level++;
+}
+
+sub exit_level {
+  $level--;
+  $output .= ((" " x ($level * 4)) . "</ul>\n");
+}
+
+
+# Main loop
+
+while (<>) {
+  if (/^<!--/) {
+    next;
+  } elsif (/<h([1-9])><a\s+name\s*=\s*\"(.*)\">(.*)<\/a>(.*)<\/h([1-9])>/i) {
+    if ($debug) { print STDERR "match 3: <$1><$2><$3><$4><$5>\n"; }
+    if ($1 ne $5) {
+      $errors .= "Non-matching heading tags $1 and $5: $_";
+    }
+    my $thishlevel = $1;
+    my $anchorname = $2;
+    my $secname1 = $3;
+    my $secname2 = $4;
+    # Remove leading and trailing whitespace in section title.
+    $secname1 =~ s/^[ \t]+//;
+    $secname1 =~ s/[ \t]+$//;
+    $secname2 =~ s/^[ \t]+//;
+    $secname2 =~ s/[ \t]+$//;
+    my $sectitle = $secname1;
+    if ($sectitle eq "") {
+      $sectitle = $secname2;
+    }
+
+    if (($secname1 ne "") && ($secname2 ne "")) {
+      $errors .= "Duplicate section title: $_";
+      next;
+    }
+
+    while ($level < $thishlevel) {
+      enter_level();
+    }
+    while ($level > $thishlevel) {
+      exit_level();
+    }
+    $output .= ((" " x ($level * 4 - 2)) . "<li><a href=\"#$anchorname\">$sectitle</a>\n");
+    if ($level == 1) { $num_named_1++; }
+  } elsif (/<h([1-9])>(.*)<\/h([1-9])>/) {
+    if (/<!-- omit from toc -->/) {
+      next;
+    }
+    # for situations where a comment is not appropriate
+    if (/<omit from toc>/) {
+      next;
+    }
+    if ($1 == 1) {
+      $num_unnamed_1++;
+    }
+    $errors .= "Warning: No <a name=...> tag in header: $_";
+  } elsif (/<h([1-9])>/) {
+    $errors .= "Warning: No </h$1> tag found on line: $_";
+  }
+}
+
+while ($level > 0) {
+  exit_level();
+}
+if ($num_named_1 + $num_unnamed_1 < 2) {
+  $output =~ s/^<ul>\n//;
+  $output =~ s/<\/ul>\n$//;
+  if ($num_named_1 == 1) {
+    $output =~ s/^  <li><a href=[^\n]*\n//;
+  } elsif ($num_unnamed_1 == 1) {
+    $errors =~ s/^Warning: No <a name=\.\.\.> tag in header: <h1>[^\n]*\n//;
+  }
+}
+print STDERR $errors;
+print $output;
+
+exit(0);
+
+
