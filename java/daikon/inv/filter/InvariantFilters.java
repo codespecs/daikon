@@ -11,6 +11,7 @@ public class InvariantFilters {
     public static final int FEW_MODIFIED_SAMPLES_FILTER = 2;
     public static final int NON_CANONICAL_VARIABLES_FILTER = 3;
     public static final int ONLY_CONSTANT_VARIABLES_FILTER = 4;
+    public static final int IMPLIED_POSTCONDITION_FILTER = 5;
 
     List filters = new ArrayList();
     
@@ -20,6 +21,7 @@ public class InvariantFilters {
 	filters.add( InvariantFilters.FEW_MODIFIED_SAMPLES_FILTER,    new FewModifiedSamplesFilter());
 	filters.add( InvariantFilters.NON_CANONICAL_VARIABLES_FILTER, new NonCanonicalVariablesFilter());
 	filters.add( InvariantFilters.ONLY_CONSTANT_VARIABLES_FILTER, new OnlyConstantVariablesFilter());
+	filters.add( InvariantFilters.IMPLIED_POSTCONDITION_FILTER,   new ImpliedPostconditionFilter());
     }
 
     public boolean shouldKeep( Invariant invariant ) {
@@ -109,6 +111,12 @@ class NonCanonicalVariablesFilter extends InvariantFilter {
 class OnlyConstantVariablesFilter extends InvariantFilter {
     boolean shouldDiscardInvariant( Invariant invariant ) {
 	return invariant.hasOnlyConstantVariables();
+    }
+}
+
+class ImpliedPostconditionFilter extends InvariantFilter {
+    boolean shouldDiscardInvariant( Invariant invariant ) {
+	return invariant.isImpliedPostcondition();
     }
 }
 

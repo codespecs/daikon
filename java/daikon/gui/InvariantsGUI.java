@@ -20,7 +20,6 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.*;
-
 import javax.swing.tree.*;
 
 public class InvariantsGUI extends JFrame implements ActionListener, KeyListener {
@@ -228,6 +227,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	createFilterMenuItem( menu, "Suppress invariants with few modified samples", InvariantFilters.FEW_MODIFIED_SAMPLES_FILTER );
 	createFilterMenuItem( menu, "Suppress invariants containing non-canonical variables", InvariantFilters.NON_CANONICAL_VARIABLES_FILTER );
 	createFilterMenuItem( menu, "Suppress invariants containing only constants", InvariantFilters.ONLY_CONSTANT_VARIABLES_FILTER );
+	createFilterMenuItem( menu, "Suppress implied postcondition invariants", InvariantFilters.IMPLIED_POSTCONDITION_FILTER );
     }
 
     void createFilterMenuItem( JMenu menu, String text, int id ) {
