@@ -21,7 +21,7 @@ public final class Diff {
     lineSep +
     "  -a  Display the tree of all invariants" +
     lineSep +
-    "  -s  Display the statistics between two sets of invariants (default)" +
+    "  -s  Display the statistics between two sets of invariants" +
     lineSep +
     "  -t  Display the statistics as a tab-separated list" +
     lineSep +
