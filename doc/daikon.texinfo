@@ -41,11 +41,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 2.3.5
+@center Daikon version 2.3.6
 
 @sp 1
-@c Daikon version 2.3.5 date
-@center March  1, 2002
+@c Daikon version 2.3.6 date
+@center April  5, 2002
 
 @sp 5
 @c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
@@ -64,7 +64,7 @@ Copyright @copyright{} 1998-2001
 <h1>Daikon Invariant Detector User Manual</h1>
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.5, released March  1, 2002.
+It describes Daikon version 2.3.6, released April  5, 2002.
 
 @end html
 
@@ -79,7 +79,7 @@ It describes Daikon version 2.3.5, released March  1, 2002.
 
 @ifnottex
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.5, released March  1, 2002.
+It describes Daikon version 2.3.6, released April  5, 2002.
 @end ifnottex
 
 @menu
@@ -265,6 +265,7 @@ Problems running Daikon
 * No return from procedure::    
 * Out of memory::               
 * Simplify errors::             
+* Method needs to be implemented::  
 
 Other problems
 
@@ -545,6 +546,7 @@ Unpack the tarfile.
 @example
 cd $DAIKONDIR/front-end
 tar zxvf dfec-linux-x86.tar.gz
+@end example
 @item
 Compile the Daikon C runtime library.
 @example
@@ -3761,6 +3763,7 @@ Ajax cannot be run, Daikon proceeds without error.
 * No return from procedure::    
 * Out of memory::               
 * Simplify errors::             
+* Method needs to be implemented::  
 @end menu
 
 @node    No return from procedure, Out of memory, Daikon problems, Daikon problems
@@ -3826,7 +3829,7 @@ presently tell you how to do that.)
 Any output generated before the out-of-memory error is perfectly valid.
 
 
-@node    Simplify errors,  , Out of memory, Daikon problems
+@node    Simplify errors, Method needs to be implemented, Out of memory, Daikon problems
 @subsection Simplify errors
 
 @cindex Simplify, could not utilize
@@ -3843,7 +3846,7 @@ invariants may appear in Daikon's output.  The output is otherwise
 correct.
 
 
-@node    Method needs to be implemented,  , Out of memory, Daikon problems
+@node    Method needs to be implemented,  , Simplify errors, Daikon problems
 @subsection Method needs to be implemented
 
 @cindex method needs to be implemented warning
@@ -3865,7 +3868,7 @@ Daikon cannot output it in ESC format, so Daikon prints the above
 message instead.  The message also shows exactly what Java method needs
 to be implemented to correct the problem.  You can ignore such messages,
 or else use an output formatting that can handle those invariants.
-MergeESC (@pref{MergeESC}) automatically ignores unformattable invariants.
+MergeESC (@pxref{MergeESC}) automatically ignores unformattable invariants.
 
 
 @node    Other problems, Reporting bugs, Daikon problems, Troubleshooting
@@ -4058,7 +4061,7 @@ English words "die-con".
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 2.3.5, released March  1, 2002.
+This manual describes Daikon version 2.3.6, released April  5, 2002.
 A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
