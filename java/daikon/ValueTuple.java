@@ -78,6 +78,8 @@ public final class ValueTuple implements Cloneable {
   boolean isModified(int value_index) { return mods[value_index] == MODIFIED; }
   boolean isMissingNonsensical(int value_index) { return mods[value_index] == MISSING_NONSENSICAL; }
   boolean isMissingFlow(int value_index) { return mods[value_index] == MISSING_FLOW; }
+  boolean isMissing(int value_index) { return (isMissingNonsensical(value_index)
+                                               || isMissingFlow(value_index)); }
 
   // The arguments ints represent modification information.
   static boolean modIsUnmodified(int mod_value) { return mod_value == UNMODIFIED; }
@@ -373,7 +375,7 @@ public final class ValueTuple implements Cloneable {
     sb.append("]");
     return sb.toString();
   }
-  
+
   public static String valToString (Object val) {
     if (val == null) return "null";
     if (val instanceof long[])
