@@ -321,49 +321,80 @@ java_object_re = re.compile(r'^[a-zA-Z][a-zA-Z0-9]*(?:\.[a-zA-Z][a-zA-Z0-9]*)*@(
 integral_types = ("int", "char", "float", "double", "integral", "boolean")
 known_types = integral_types + ("pointer", "address")
 
-# A type is:
+# A program source type (ie, a declared type in the programming language) is:
 #  * a string (for scalar types), or
 #  * a tuple of (base_type, dimensionality), for array types
-def types_compatible(type1, type2):
-    return ((type1 == type2)
-            or ((type1 == "integral") and (type2 in integral_types))
-            or ((type2 == "integral") and (type1 in integral_types)))
 
+class proglang_type:
+    # base
+    # dimensionality
 
-def valid_var_type(var_type):
-    return ((type(var_type) == types.StringType)
-            or ((type(var_type) == types.TupleType)
-                and (len(var_type) == 2)
-                and (type(var_type[0]) == types.StringType)
-                and (type(var_type[1]) == types.IntType)))
-
-def is_array_var_type(var_type):
-    return type(var_type) == types.TupleType
-
-def parse_vartype(str):
-    dimensions = 0
-    while str[-2:] == "[]":
-        dimensions = dimensions+1
-        str = str[:-2]
-    while str[:9] == "array of ":
-        dimensions = dimensions+1
-        str = str[9:]
-    if not (str in known_types):
-        # hack for Java.  (I want to avoid the short names if possible.)
-        if (str == "java.lang.String") or (str == "String"):
-            str = "char"
-            dimensions = dimensions+1
-        elif (str == "java.lang.Vector") or (str == "Vector"):
-            str = "java_object"
-            dimensions = dimensions+1
+    # With one argument, parse first argument.  Otherwise assume it's done.
+    def __init__(self, base, dimensionality=None):
+        assert type(base) == types.StringType
+        if dimensionality == None:
+            dimensionality = 0
+            while base[-2:] == "[]":
+                dimensionality = dimensionality+1
+                base = base[:-2]
+            while base[:9] == "array of ":
+                dimensionality = dimensionality+1
+                base = base[9:]
+            if not (base in known_types):
+                # hack for Java.  (I want to avoid the short names if possible.)
+                if (base == "java.lang.String") or (base == "String"):
+                    base = "char"
+                    dimensionality = dimensionality+1
+                elif (base == "java.lang.Vector") or (base == "Vector"):
+                    base = "java_object"
+                    dimensionality = dimensionality+1
+                else:
+                    jtmatch = java_type_re.match(base)
+                    if (jtmatch != None) or (base == "Object"):
+                        base = "java_object"
         else:
-            jtmatch = java_type_re.match(str)
-            if (jtmatch != None) or (str == "Object"):
-                str = "java_object"
-    if dimensions == 0:
-        return str
-    else:
-        return (str, dimensions)
+            assert type(dimensionality) == types.IntType
+
+        self.base = base
+        self.dimensionality = dimensionality
+
+    def __repr__(self):
+        return "<proglang_type %s %d>" % (self.base, self.dimensionality)
+
+    def __cmp__(self, other):
+        if (self.base == other.base):
+            return self.dimensionality - other.dimensionality
+        elif (self.base < other.base):
+            return -1
+        else:
+            return 1
+
+    def compatible(self, other):
+        base1 = self.base
+        base2 = other.base
+        return ((self.dimensionality == other.dimensionality)
+                and ((base1 == base2)
+                     or ((base1 == "integral") and (base2 in integral_types))
+                     or ((base2 == "integral") and (base1 in integral_types))))
+
+    # Watch out for simple functions like this:  they hurt performance
+    def is_array(self):
+        return self.dimensionality > 0
+
+    def element_type(self):
+        assert self.is_array()
+        return proglang_type(self.base, self.dimensionality-1)
+
+int_proglang_type = proglang_type("int")
+
+## Old implementation
+# def valid_var_type(var_type):
+#     return ((type(var_type) == types.StringType)
+#             or ((type(var_type) == types.TupleType)
+#                 and (len(var_type) == 2)
+#                 and (type(var_type[0]) == types.StringType)
+#                 and (type(var_type[1]) == types.IntType)))
+
 
 ws_regexp = re.compile(r'[ \t]+')
 
@@ -467,7 +498,7 @@ def parse_lackwit_vartype(raw_str, vartype):
         return None
     if lackwit_type_format == "implicit":
         return raw_str
-    elif is_array_var_type(vartype):
+    elif vartype.is_array():
         # The lackwit type is of the form
         #  (var1 var2 var3)[var1 var2 var3][var1 var2 var3]
         dims = vartype[1]
@@ -563,15 +594,15 @@ class var_info:
                         # a trivial invariant satisfying no properties; but
                         # I'm not sure exactly when each is the case.
     #  equal_to         # list of indices of equal variables;
-                                #   could be derived from invariants
-                                #   by checking for inv.comparison == "="
-                                #   the variable itself is not on this list
+                        #   could be derived from invariants
+                        #   by checking for inv.comparison == "=".
+                        #   The variable itself is not on this list.
 
 
     def __init__(self, name, var_type, lackwit_type, index, is_derived=false):
         assert type(name) == types.StringType
         assert type(index) == types.IntType
-        assert valid_var_type(var_type)
+        assert isinstance(var_type, proglang_type)
         assert is_lackwit_type(lackwit_type)
 
         self.name = name                # string
@@ -604,7 +635,7 @@ class var_info:
         return "<var %s %s>" % (self.name, self.type)
 
     def is_sequence(self):
-        return is_array_var_type(self.type)
+        return self.type.is_array()
 
     def canonical_var(self):
         """Return index of the canonical variable that is always equal to this one.
@@ -732,44 +763,46 @@ def dict_of_tuples_modinkey_to_tuple_of_dicts_modinval(dot, tuple_len=None):
                 this_dict_elt[1] = this_dict_elt[1] + count
     return result
 # dict_of_tuples_modinkey_to_tuple_of_dicts(fn_var_values["PUSH-ACTION"])
-# dict_of_tuples_modinkey_to_tuple_of_dicts(invariants.fn_var_values['P180-15.1.1:::EXIT'])
+# dict_of_tuples_modinkey_to_tuple_of_dicts(daikon.fn_var_values['P180-15.1.1:::EXIT'])
 
-def dict_of_sequences_to_element_dict(dot):
-    """Input: a dictionary mapping instances of a sequence (tuples) to a count.
-    Output: a dictionary, mapping elements of all of the sequence instances
-    to a count."""
-    result = {}
-    for (key_tuple, (count, modified)) in dot.items():
-        for this_key in key_tuple:
-            this_counts = result.get(this_key, [0,0])
-            result[this_key] = this_counts
-            this_counts[0] = this_counts[0] + count
-            this_counts[1] = this_counts[1] + modified
-    return result
-# dict_of_sequences_to_element_dict(dot)
-
-
-def dict_of_tuples_slice(dot, indices):
-    """Input: a dictionary mapping a tuple of elements to a count, and a
-    list of indices.
-    Output: a dictionary mapping a subset of the original elements to a count.
-    The subset is chosen according to the input indices.
-
-    If the indices have length 2 or 3, you are better off using the
-    specialized functions dict_of_tuples_slice_2 and dict_of_tuples_slice_3;
-    this function can be very slow.
-    """
-
-    if len(indices) == 2:
-        return dict_of_tuples_slice_2(dot, indices[0], indices[1])
-    if len(indices) == 2:
-        return dict_of_tuples_slice_3(dot, indices[0], indices[1], indices[2])
-
-    result = {}
-    for (key_tuple, count) in dot.items():
-        sliced_tuple = util.slice_by_sequence(key_tuple, indices)
-        result[sliced_tuple] = result[sliced_tuple] + count
-    return result
+## These appear not to be used, so comment them out in favor of versions
+## later in the file that actually are used.
+# def dict_of_sequences_to_element_dict(dot):
+#     """Input: a dictionary mapping instances of a sequence (tuples) to a count.
+#     Output: a dictionary, mapping elements of all of the sequence instances
+#     to a count."""
+#     result = {}
+#     for (key_tuple, (count, modified)) in dot.items():
+#         for this_key in key_tuple:
+#             this_counts = result.get(this_key, [0,0])
+#             result[this_key] = this_counts
+#             this_counts[0] = this_counts[0] + count
+#             this_counts[1] = this_counts[1] + modified
+#     return result
+# # dict_of_sequences_to_element_dict(dot)
+# 
+# 
+# def dict_of_tuples_slice(dot, indices):
+#     """Input: a dictionary mapping a tuple of elements to a count, and a
+#     list of indices.
+#     Output: a dictionary mapping a subset of the original elements to a count.
+#     The subset is chosen according to the input indices.
+# 
+#     If the indices have length 2 or 3, you are better off using the
+#     specialized functions dict_of_tuples_slice_2 and dict_of_tuples_slice_3;
+#     this function can be very slow.
+#     """
+# 
+#     if len(indices) == 2:
+#         return dict_of_tuples_slice_2(dot, indices[0], indices[1])
+#     if len(indices) == 3:
+#         return dict_of_tuples_slice_3(dot, indices[0], indices[1], indices[2])
+# 
+#     result = {}
+#     for (key_tuple, count) in dot.items():
+#         sliced_tuple = util.slice_by_sequence(key_tuple, indices)
+#         result[sliced_tuple] = result[sliced_tuple] + count
+#     return result
 
 # dict_of_tuples_slice(fn_var_values["PUSH-ACTION"], (0,))
 # dict_of_tuples_slice(fn_var_values["PUSH-ACTION"], (1,))
@@ -905,7 +938,7 @@ def dict_of_tuples_slice(dot, indices):
 
     if len(indices) == 2:
         return dict_of_tuples_slice_2(dot, indices[0], indices[1])
-    if len(indices) == 2:
+    if len(indices) == 3:
         return dict_of_tuples_slice_3(dot, indices[0], indices[1], indices[2])
 
     result = {}
@@ -1138,7 +1171,7 @@ def introduce_from_sequence_pass1(var_infos, var_new_values, index):
     if (seq_var_info.derived_len == None and not seq_var_info.is_derived):
         name_size = "size(%s)" % (seq_var_info.name,)
         index_lackwit_type = lackwit_type_index_type_alias(seq_var_info, 1)
-        seq_len_var_info = var_info(name_size, "int", index_lackwit_type, len(var_infos), true)
+        seq_len_var_info = var_info(name_size, int_proglang_type, index_lackwit_type, len(var_infos), true)
         var_infos.append(seq_len_var_info)
         seq_var_info.derived_len = len(var_infos)-1
         if debug_derive:
@@ -1187,33 +1220,44 @@ def introduce_from_sequence_pass2(var_infos, var_new_values, seqidx):
 
     seq_var_info = var_infos[seqidx]
     seqvar = seq_var_info.name
+    assert seq_var_info.type.is_array()
 
-    # Add sum, min, and max (unconditionally)
+    # Add sum, min, and max (nearly unconditionally; maybe should be
+    # unconditional once again)
     lackwit_elt_type = lackwit_type_element_type_alias(seq_var_info)
+    proglang_elt_type = seq_var_info.type.element_type()
 
-    var_infos.append(var_info("sum(%s)" % (seqvar,), "int", lackwit_elt_type, len(var_infos), true))
-    var_infos.append(var_info("min(%s)" % (seqvar,), "int", lackwit_elt_type, len(var_infos), true))
-    var_infos.append(var_info("max(%s)" % (seqvar,), "int", lackwit_elt_type, len(var_infos), true))
-    for new_values in var_new_values.values():
-        (this_seq,this_seq_mod) = new_values[seqidx]
-        if this_seq == None:
-            this_seq_sum = None
-            this_seq_min = None
-            this_seq_max = None
-        elif len(this_seq) == 0:
-            this_seq_sum = 0
-            this_seq_min = None
-            this_seq_max = None
-        else:
-            try:
-                this_seq_sum = util.sum(this_seq)
-            except OverflowError:
+    # Could alternately test lackwit_elt_type.
+    if ((seq_var_info.type.dimensionality > 1)
+        or (seq_var_info.type.base != "int")):
+        # Perhaps I should make an exception for char[][] which is String[].
+        this_seq_sum = None
+        this_seq_min = None
+        this_seq_max = None
+    else:
+        var_infos.append(var_info("sum(%s)" % (seqvar,), int_proglang_type, lackwit_elt_type, len(var_infos), true))
+        var_infos.append(var_info("min(%s)" % (seqvar,), int_proglang_type, lackwit_elt_type, len(var_infos), true))
+        var_infos.append(var_info("max(%s)" % (seqvar,), int_proglang_type, lackwit_elt_type, len(var_infos), true))
+        for new_values in var_new_values.values():
+            (this_seq,this_seq_mod) = new_values[seqidx]
+            if this_seq == None:
                 this_seq_sum = None
-            this_seq_min = min(this_seq)
-            this_seq_max = max(this_seq)
-        new_values.append((this_seq_sum,this_seq_mod))
-        new_values.append((this_seq_min,this_seq_mod))
-        new_values.append((this_seq_max,this_seq_mod))
+                this_seq_min = None
+                this_seq_max = None
+            elif len(this_seq) == 0:
+                this_seq_sum = 0
+                this_seq_min = None
+                this_seq_max = None
+            else:
+                try:
+                    this_seq_sum = util.sum(this_seq)
+                except OverflowError:
+                    this_seq_sum = None
+                this_seq_min = min(this_seq)
+                this_seq_max = max(this_seq)
+            new_values.append((this_seq_sum,this_seq_mod))
+            new_values.append((this_seq_min,this_seq_mod))
+            new_values.append((this_seq_max,this_seq_mod))
 
     # Add each individual element.
     ## For now, add if not a derived variable; a better test is if
@@ -1227,7 +1271,7 @@ def introduce_from_sequence_pass2(var_infos, var_new_values, seqidx):
         len_min = min(2, len_min)
         if len_min > 0:
             for i in range(0, len_min):
-                var_infos.append(var_info("%s[%d]" % (seqvar, i), "int", lackwit_elt_type, len(var_infos), true))
+                var_infos.append(var_info("%s[%d]" % (seqvar, i), proglang_elt_type, lackwit_elt_type, len(var_infos), true))
             for new_values in var_new_values.values():
                 for i in range(0, len_min):
                     (seq,seq_mod) = new_values[seqidx]
@@ -1238,7 +1282,7 @@ def introduce_from_sequence_pass2(var_infos, var_new_values, seqidx):
                     new_values.append((elt_val,seq_mod))
             if len_min != seq_len_inv.max:
                 for i in range(-len_min, 0):
-                    var_infos.append(var_info("%s[%d]" % (seqvar, i), "int", lackwit_elt_type, len(var_infos), true))
+                    var_infos.append(var_info("%s[%d]" % (seqvar, i), proglang_elt_type, lackwit_elt_type, len(var_infos), true))
                 for new_values in var_new_values.values():
                     for i in range(-len_min, 0):
                         (seq,seq_mod) = new_values[seqidx]
@@ -1274,6 +1318,13 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
     # if seq_size_idx == 'known_var':
     #     return
 
+    # For now, do nothing if the scalar is itself derived.
+    if scl_info.is_derived:
+        return
+    # For now, do nothing if the sequence is itself derived.
+    if seq_info.is_derived:
+        return
+
     # Do nothing if this scalar is actually the size of this sequence
     if seq_size_idx == sclidx:
         return
@@ -1289,10 +1340,6 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
     #         print "sequence %s (size: no_var) and scalar %s (index: %d) unrelated" % (seq_name, scl_name, sclidx)
     #     else:
     #         print "sequence %s (size: %s, size index = %s) and scalar %s (index: %d) unrelated" % (seq_name, var_infos[seq_size_idx].name, seq_size_idx, scl_name, sclidx)
-
-    # For now, do nothing if the scalar is itself derived.
-    if scl_info.is_derived:
-        return
 
     if not lackwit_types_compatible(scl_info.name, scl_info.lackwit_type,
                                     "%s-index%d" % (seq_info.name, 1),
@@ -1353,7 +1400,8 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
         and (seq_size_idx != 'known_var')
         and (scl_inv.max <= var_infos[seq_size_idx].invariant.max)):
         lackwit_elt_type = lackwit_type_element_type_alias(seq_info)
-        var_infos.append(var_info("%s[%s]" % (seq_name, scl_name), "int", lackwit_elt_type, len(var_infos), true))
+        proglang_elt_type = seq_info.type.element_type()
+        var_infos.append(var_info("%s[%s]" % (seq_name, scl_name), proglang_elt_type, lackwit_elt_type, len(var_infos), true))
         for new_values in var_new_values.values():
             (this_seq,this_seq_mod) = new_values[seqidx]
             (this_scl,this_scl_mod) = new_values[sclidx]
@@ -1668,7 +1716,7 @@ def process_declaration(file, this_fn_var_infos, fn_regexp=None):
         varname = line[:-1]
         line = file.readline()
         assert line[-1] == "\n"
-        vartype = parse_vartype(line[:-1])
+        vartype = proglang_type(line[:-1])
         line = file.readline()
         assert line[-1] == "\n"
         var_comparable = parse_lackwit_vartype(line[:-1], vartype)
@@ -1810,22 +1858,40 @@ def read_data_trace_file(filename, fn_regexp=None):
             this_var_modified = (line == "1\n")
 
             this_var_type = this_var_info.type
+            this_base_type = this_var_type.base
 
-            if is_array_var_type(this_var_type):
+
+            if this_var_type.is_array():
                 # variable is an array
 
-                if (len(this_value) > 1) and (this_value[0] == "\"") and (this_value[-1] == "\""):
+                # Hack for null (missing) string:  turn it into empty string
+                if ((this_base_type == 'char')
+                    and (this_var_type.dimensionality == 1)
+                    and (this_value == "null")):
+                    this_value = "\"\""
+
+                if ((this_base_type == 'char')
+                    and (this_var_type.dimensionality == 1)
+                    and (len(this_value) > 1)
+                    and (this_value[0] == "\"") and (this_value[-1] == "\"")):
                     # variable is a string
                     # turn it into a tuple of *numbers* instead.
+                    # (Probably I want to retain it as a string; it's obscure
+                    # as a sequence of numbers.)
                     this_value = list(eval(this_value))
                     for seq_elem in range(0, len(this_value)):
                         this_value[seq_elem] = ord(this_value[seq_elem])
                     this_value = tuple(this_value)
+                elif ((this_base_type == 'char')
+                      and (this_var_type.dimensionality == 2)):
+                    # Array of strings
+                    this_value = tuple(eval(this_value))
                 else:
                     # Deal with [] surrounding Java array output
                     if (len(this_value) > 1) and (this_value[0] == "[") and (this_value[-1] == "]"):
                         this_value = this_value[1:-1]
 
+                    # This isn't right if a string contains embedded spaces.
                     this_value = string.split(this_value, " ")
                     if len(this_value) > 0 and this_value[-1] == "":
                         # Cope with trailing spaces on the line
@@ -1847,11 +1913,11 @@ def read_data_trace_file(filename, fn_regexp=None):
                             elif this_value[seq_elem] == "NIL":
                                 # HACK
                                 this_value[seq_elem] = 0
-                            elif this_var_type[0] == "java_object":
+                            elif this_base_type == "java_object":
                                 jomatch = java_object_re.match(this_value[seq_elem])
                                 assert jomatch != None
                                 this_value[seq_elem] = eval("0x" + jomatch.group(1))
-                            elif this_var_type[0] == "boolean":
+                            elif this_base_type == "boolean":
                                 assert (this_value[seq_elem] == "true") or (this_value[seq_elem] == "false")
                                 this_value[seq_elem] = (this_value[seq_elem] == "true")
                             else:
@@ -1860,24 +1926,25 @@ def read_data_trace_file(filename, fn_regexp=None):
                         this_value = tuple(this_value)
             else:
                 # "pointer" is the deprecated name
-                assert (this_var_type in integral_types) or (this_var_type == "pointer") or (this_var_type == "address") or (this_var_type == "java_object")
+                assert this_var_type.dimensionality == 0
+                assert (this_base_type in integral_types) or (this_base_type == "pointer") or (this_base_type == "address") or (this_base_type == "java_object")
                 if this_value == "uninit":
                     this_value = None
                 elif (this_value == "NIL") or (this_value == "null"):
                     # HACK
                     this_value = 0
-                elif (this_var_type == "pointer") or (this_var_type == "address"):
+                elif (this_base_type == "pointer") or (this_base_type == "address"):
                     assert integer_re.match(this_value)
                     # Convert the number to signed.  This is gross, will be fixed.
                     this_value = eval(hex(long(this_value))[:-1])
-                elif this_var_type == "java_object":
+                elif this_base_type == "java_object":
                     jomatch = java_object_re.match(this_value);
                     assert jomatch != None;
                     this_value = eval("0x" + jomatch.group(1));
-                elif this_var_type == "char":
+                elif this_base_type == "char":
                     assert len(this_value) == 1
                     this_value = ord(this_value)
-                elif this_var_type == "boolean":
+                elif this_base_type == "boolean":
                     assert (this_value == "true") or (this_value == "false")
                     this_value = (this_value == "true")
                 else:
@@ -2088,7 +2155,7 @@ def all_numeric_invariants(fn_regexp=None):
                 assert util.sorted(derivation_index, lambda x,y:-cmp(x,y))
                 for i in range(0,derivation_index[1]):
                     vi = var_infos[i]
-                    assert (not is_array_var_type(vi.type)) or vi.derived_len != None or not vi.is_canonical() or vi.invariant.can_be_None
+                    assert (not vi.type.is_array()) or vi.derived_len != None or not vi.is_canonical() or vi.invariant.can_be_None or vi.is_derived
                 if debug_derive:
                     print "old derivation_index =", derivation_index, "num_vars =", len(var_infos)
 
@@ -2174,7 +2241,11 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
         i = indices[j]
         this_var_info = var_infos[i]
         this_dict = dicts[j]
-        if is_array_var_type(this_var_info.type):
+        if (this_var_info.type.is_array()
+            and (this_var_info.type.dimensionality > 1)):
+            # One-dimensional non-numeric array
+            this_inv = invariant(this_dict, (this_var_info,))
+        elif this_var_info.type.is_array():
             this_inv = single_sequence_numeric_invariant(this_dict, (this_var_info,))
         else:
             this_inv = single_scalar_numeric_invariant(this_dict, (this_var_info,))
@@ -2211,7 +2282,7 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
             vi2 = var_infos[i2]
             if not vi2.is_canonical():
                 continue
-            if not types_compatible(vi1.type, vi2.type):
+            if not vi1.type.compatible(vi2.type):
                 continue
             if not lackwit_types_compatible(vi1.name, vi1.lackwit_type, vi2.name, vi2.lackwit_type):
                 continue
@@ -2230,8 +2301,12 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
             # if inv2.is_exact():
             #     continue
             if inv1.is_exact() and inv2.is_exact():
-                assert inv1.min == inv1.max and inv2.min == inv2.max
-                if inv1.min == inv2.min:
+                # assert inv1.min == inv1.max
+                # assert inv2.min == inv2.max
+                assert inv1.values == 1
+                assert inv2.values == 1
+                # if inv1.min == inv2.min:
+                if inv1.one_of[0] == inv2.one_of[0]:
                     vi1.equal_to.append(i2)
                     vi2.equal_to.append(i1)
                 continue
@@ -2266,6 +2341,7 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
     ## Don't do this; the large list of triples can exhaust memory, though
     ## the code is cleaner in that case.
     # for (i1,i2,i3) in util.choose(3, all_indices):
+
     for i1 in range(0,index_limit-2):
         # print "triples: index1 =", i1
         vi1 = var_infos[i1]
@@ -2284,7 +2360,7 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
             vi2 = var_infos[i2]
             if not vi2.is_canonical():
                 continue
-            if not types_compatible(vi1.type, vi2.type):
+            if not vi1.type.compatible(vi2.type):
                 continue
             if vi2.invariant.is_exact():
                 continue
@@ -2303,8 +2379,8 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
                 vi3 = var_infos[i3]
                 if not vi3.is_canonical():
                     continue
-                if not (types_compatible(vi1.type, vi3.type)
-                        and types_compatible(vi2.type, vi3.type)):
+                if not (vi1.type.compatible(vi3.type)
+                        and vi2.type.compatible(vi3.type)):
                     continue
                 if vi3.invariant.is_exact():
                     # Do nothing if any of the variables is a constant.
@@ -2370,7 +2446,8 @@ def print_invariants_ppt(fn_name, print_unconstrained=0):
             # Not equal to anything else, so not an equality invariant
             continue
         if vi.invariant.is_exact():
-            value = "= %s" % (vi.invariant.min,) # this value may be a sequence
+            # was vi.invariant.min
+            value = "= %s" % (vi.invariant.one_of[0],) # this value may be a sequence
         else:
             value = ""
         print vi.name, "=", string.join(map(lambda idx, vis=var_infos: vis[idx].name, vi.equal_to), " = "), value,
@@ -2576,7 +2653,11 @@ class single_scalar_numeric_invariant(invariant):
         invariant.__init__(self, dict, var_infos)
         nums = dict.keys()
         nums.sort()
-        if nums == []:
+        if ((nums == [])
+            or ((var_infos != None)
+                and (var_infos[0].type.is_array()
+                     or var_infos[0].type.base != "int"))
+            or ((type(nums[0]) != types.IntType))):
             self.min = None
             self.max = None
         else:
@@ -2588,6 +2669,7 @@ class single_scalar_numeric_invariant(invariant):
         self.min_justified = false
         self.max_justified = false
         # Watch out: "None" sorts greater than any number
+        # (but less than any string ?!).
         if self.max == None:
             self.min = None
         elif len(nums) < 3:
@@ -2857,8 +2939,22 @@ class two_scalar_numeric_invariant(invariant):
         # self.b_min = min(b_nums)
         # self.b_max = max(b_nums)
 
+        (self.comparison, self.can_be_equal) = compare_pairs(pairs)
+
+        (var1, var2) = (var_infos[0].name, var_infos[1].name)
+        (type1, type2) = (var_infos[0].type, var_infos[1].type)
+
+        if (type1 != int_proglang_type) or (type2 != int_proglang_type):
+            self.linear = None
+            self.difference_invariant = None
+            self.sum_invariant = None
+            self.comparison_obvious = None
+            self.functions = None
+            self.inv_functions = None
+            return
+
         ## Linear relationship -- try to fit y = ax + b.
-        # Should I also try x = ax + b?  I do not plan to call this with
+        # Should I also try x = ay + b?  I do not plan to call this with
         # the arguments reversed, so that is a reasonable idea.
         try:
             if len(pairs) > 1:
@@ -2900,9 +2996,6 @@ class two_scalar_numeric_invariant(invariant):
             sum_dict = {}
         self.difference_invariant = single_scalar_numeric_invariant(diff_dict, None)
         self.sum_invariant = single_scalar_numeric_invariant(sum_dict, None)
-
-        (self.comparison, self.can_be_equal) = compare_pairs(pairs)
-        (var1, var2) = (var_infos[0].name, var_infos[1].name)
 
         self.comparison_obvious = None
         # These variables are set to the name of the sequence, or None.
@@ -2979,16 +3072,20 @@ class two_scalar_numeric_invariant(invariant):
         min2 = inv2.min
         max2 = inv2.max
 
-        try:
-            overlap = min(max1, max2) - max(min1, min2)
-            if overlap < 0:
-                return false
-            overlap = float(overlap + 1)
-            probability = 1 - overlap/((max1 - min1 + 1) * (max2 - min2 + 1))
-        except OverflowError:
+        if ((min1 == None) or (max1 == None) or (min2 == None) or (max2 == None)):
+            # I'm not sure this is the right thing, but it's expedient
             probability = 1
-        # Equivalent and slower, albeit clearer
-        # probability = 1 - (overlap/(max1 - min1 + 1)) * (overlap/(max2 - min2 + 1)) * (1/overlap)
+        else:
+            try:
+                overlap = min(max1, max2) - max(min1, min2)
+                if overlap < 0:
+                    return false
+                overlap = float(overlap + 1)
+                probability = 1 - overlap/((max1 - min1 + 1) * (max2 - min2 + 1))
+            except OverflowError:
+                probability = 1
+            # Equivalent and slower, albeit clearer
+            # probability = 1 - (overlap/(max1 - min1 + 1)) * (overlap/(max2 - min2 + 1)) * (1/overlap)
 
         return probability**self.samples < negative_invariant_confidence
 
@@ -3063,45 +3160,47 @@ class two_scalar_numeric_invariant(invariant):
         #  * nonzero (x != y)
 
         # invariant.format(diff_inv, ...) differs from diff_inv.format(...)!
-        diff_as_base = invariant.format(diff_inv, ("%s - %s" % (x,y),))
+        if diff_inv:
+            diff_as_base = invariant.format(diff_inv, ("%s - %s" % (x,y),))
 
-        if diff_as_base:
-            return diff_as_base + suffix
-        if diff_inv.modulus:
-            (a,b) = diff_inv.modulus
-            if a == 0:
-                return "%s = %s (mod %d)" % (x,y,b) + suffix
-            else:
-                return "%s - %s = %d (mod %d)" % (x,y,a,b) + suffix
-        if diff_inv.min_justified and diff_inv.max_justified:
-            return "%d <= %s - %s <= %d \tjustified" % (diff_inv.min, x, y, diff_inv.max) + suffix
-        if diff_inv.min_justified:
-            if diff_inv.min == 0:
-                if not self.comparison_obvious == ">=":
-                    return "%s <= %s \tjustified" % (y,x) + suffix
-            elif diff_inv.min > 0:
-                return "%s <= %s - %d \tjustified" % (y,x,diff_inv.min) + suffix
-            else:
-                assert diff_inv.min < 0
-                return "%s <= %s + %d \tjustified" % (y,x,-diff_inv.min) + suffix
-        if diff_inv.max_justified:
-            if diff_inv.max == 0:
-                if not self.comparison_obvious == "<=":
-                    return "%s <= %s \tjustified" % (x,y) + suffix
-            elif diff_inv.max > 0:
-                return "%s <= %s + %d \tjustified" % (x,y,diff_inv.max) + suffix
-            else:
-                assert diff_inv.max < 0
-                return "%s <= %s - %d \tjustified" % (x,y,-diff_inv.max) + suffix
+            if diff_as_base:
+                return diff_as_base + suffix
+            if diff_inv.modulus:
+                (a,b) = diff_inv.modulus
+                if a == 0:
+                    return "%s = %s (mod %d)" % (x,y,b) + suffix
+                else:
+                    return "%s - %s = %d (mod %d)" % (x,y,a,b) + suffix
+            if diff_inv.min_justified and diff_inv.max_justified:
+                return "%d <= %s - %s <= %d \tjustified" % (diff_inv.min, x, y, diff_inv.max) + suffix
+            if diff_inv.min_justified:
+                if diff_inv.min == 0:
+                    if not self.comparison_obvious == ">=":
+                        return "%s <= %s \tjustified" % (y,x) + suffix
+                elif diff_inv.min > 0:
+                    return "%s <= %s - %d \tjustified" % (y,x,diff_inv.min) + suffix
+                else:
+                    assert diff_inv.min < 0
+                    return "%s <= %s + %d \tjustified" % (y,x,-diff_inv.min) + suffix
+            if diff_inv.max_justified:
+                if diff_inv.max == 0:
+                    if not self.comparison_obvious == "<=":
+                        return "%s <= %s \tjustified" % (x,y) + suffix
+                elif diff_inv.max > 0:
+                    return "%s <= %s + %d \tjustified" % (x,y,diff_inv.max) + suffix
+                else:
+                    assert diff_inv.max < 0
+                    return "%s <= %s - %d \tjustified" % (x,y,-diff_inv.max) + suffix
 
         # What can be interesting about a sum?  I'm not sure...
         sum_inv = self.sum_invariant
-        sum_as_base = invariant.format(sum_inv, ("%s + %s" % (x,y),))
-        if sum_as_base:
-            return sum_as_base
-        if sum_inv.modulus:
-            (a,b) = sum_inv.modulus
-            return "%s + %s = %d (mod %d)" % (x,y,a,b) + suffix
+        if sum_inv:
+            sum_as_base = invariant.format(sum_inv, ("%s + %s" % (x,y),))
+            if sum_as_base:
+                return sum_as_base
+            if sum_inv.modulus:
+                (a,b) = sum_inv.modulus
+                return "%s + %s = %d (mod %d)" % (x,y,a,b) + suffix
 
         if self.comparison and self.comparison != self.comparison_obvious:
             if self.comparison in ["<", "<="]:
@@ -4335,7 +4434,7 @@ def diff_var_infos(var_infos1, var_infos2):
     # same variables.  In particular, one of the data seets may have
     # resulted in derivation of variables not derived by the other data
     # set.  As an example, consider
-    #   invariants.diff_files('/projects/se/people/mernst/replace_outputs/replace.main.4000.19981220.pkl','/projects/se/people/mernst/replace_outputs/replace.main.4500.19990103.pkl')
+    #   daikon.diff_files('/projects/se/people/mernst/replace_outputs/replace.main.4000.19981220.pkl','/projects/se/people/mernst/replace_outputs/replace.main.4500.19990103.pkl')
     # In that case, we must eliminate the extra var_infos.
     # There ae two basic strategies we could follow:
     #  * For each var_info, find the corresponding one in the other list.
@@ -5040,7 +5139,7 @@ def get_global_var_list():
 #         for var in var_info_list:
 #             # original values of parameters should be considered derived?
 #             if string.find(var.name, "_orig") == -1:
-#                 if is_array_var_type(var.type):
+#                 if var.type.is_array():
 #                     if var.name in params:
 #                         fn_stats.orig_num_seq_params = fn_stats.orig_num_seq_params + 1
 #                     elif var.name in globals:
@@ -5079,7 +5178,7 @@ def get_global_var_list():
 #                     fn_stats.total_num_values_pair = fn_stats.total_num_values_pair + var.invariants[i].values
 #                     fn_stats.total_num_invs_pair = fn_stats.total_num_invs_pair + 1
 # 
-#             if is_array_var_type(var.type):
+#             if var.type.is_array():
 #                     fn_stats.total_num_seq = fn_stats.total_num_seq + 1
 #             else:
 #                     fn_stats.total_num_scl = fn_stats.total_num_scl + 1

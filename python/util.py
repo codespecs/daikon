@@ -272,150 +272,152 @@ it, with initial value a list containing only ELEMENT."""
     mapping[key] = mapping.get(key, []) + [element]
 
 
-###########################################################################
-### Slicing
-###
-
-## This function is TOO SLOW!  To speed it up, perhaps inline all calls:
-##   foo = util.slice_by_sequence(seq, (i1, i2))
-## ==>
-##   foo = (seq[i1], seq[i2])
-def slice_by_sequence(seq, indices):
-    """Given a sequence SEQ and a sequence of INDICES, return a new sequence
-whose length is the same as that of INDICES and whose elements are the values
-of SEQ indexed by the respective elements of INDICES.
-This function is so slow that you probably shouldn't use it; inline the calls
-instead."""
-    result = []
-    for i in indices:
-        result.append(seq[i])
-    ## This is probably completely extraneous.
-    # if type(seq) == types.TupleType:
-    #     result = tuple(result)
-    return result
-
-def _test_slice_by_sequence():
-    def _test_slice_by_sequence_helper(indices):
-        assert slice_by_sequence(range(0,7), indices) == list(indices)
-        # No longer return a tuple if the argument was a tuple.
-        # assert slice_by_sequence(tuple(range(0,7)), indices) == tuple(indices)
-    _test_slice_by_sequence_helper(range(0,7))
-    _test_slice_by_sequence_helper(range(1,4))
-    _test_slice_by_sequence_helper((1,2,4,5))
-
-
-###
-### Dictionary slicing
-###
-
-def dict_of_tuples_to_tuple_of_dicts(dot, tuple_len=None):
-    """Input: a dictionary mapping a tuple of elements to a count.
-    All the key tuples in the input have the same length unless optional argument
-    TUPLE_LEN is provided, in which case all tuples have at least that length.
-    If TUPLE_LEN is a tuple, then only those indices are extracted.
-    if TUPLE_LEN is an integer, indices up to it (non-inclusive) are extracted.
-    Output: a tuple of dictionaries, each mapping a single element to a count.
-    The first output dictionary concerns the first element of the original keys,
-    the second output the second element of the original keys, and so forth."""
-
-    if tuple_len == None:
-        tuple_len = len(dot.keys()[0])
-    if type(tuple_len) == types.IntType:
-        assert tuple_len <= len(dot.keys()[0])
-        if tuple_len == 0:
-            return ()
-        tuple_indices = range(0, tuple_len)
-    elif tuple_len == []:
-        return ()
-    else:
-        assert type(tuple_len) in [types.TupleType, types.ListType]
-        assert max(tuple_len) < len(dot.keys()[0])
-        assert min(tuple_len) >= 0
-        tuple_indices = tuple_len
-    # Next four lines accomplish "result = ({},) * tuple_len", but with
-    # distinct rather than identical dictionaries in the tuple.
-    result = []
-    for i in tuple_indices:
-        result.append({})
-    result = tuple(result)
-    for (key_tuple, count) in dot.items():
-        for i in range(0, len(tuple_indices)):
-            this_key = key_tuple[tuple_indices[i]]
-            this_dict = result[i]
-            this_dict[this_key] = this_dict.get(this_key, 0) + count
-    return result
-# dict_of_tuples_to_tuple_of_dicts(fn_var_values["PUSH-ACTION"])
-
-
-def dict_of_sequences_to_element_dict(dot):
-    """Input: a dictionary mapping instances of a sequence (tuples) to a count.
-    Output: a dictionary, mapping elements of all of the sequence instances
-    to a count."""
-    result = {}
-    for (key_tuple, count) in dot.items():
-        for this_key in key_tuple:
-            result[this_key] = result.get(this_key, 0) + count
-    return result
-# dict_of_sequences_to_element_dict(dot)
-
-
-def dict_of_tuples_slice(dot, indices):
-    """Input: a dictionary mapping a tuple of elements to a count, and a
-    list of indices.
-    Output: a dictionary mapping a subset of the original elements to a count.
-    The subset is chosen according to the input indices.
-
-    If the indices have length 2 or 3, you are better off using the
-    specialized functions dict_of_tuples_slice_2 and dict_of_tuples_slice_3;
-    this function can be very slow.
-    """
-
-    if len(indices) == 2:
-        return dict_of_tuples_slice_2(dot, indices[0], indices[1])
-    if len(indices) == 2:
-        return dict_of_tuples_slice_3(dot, indices[0], indices[1], indices[2])
-
-    result = {}
-    for (key_tuple, count) in dot.items():
-        sliced_tuple = util.slice_by_sequence(key_tuple, indices)
-        result[sliced_tuple] = result[sliced_tuple] + count
-    return result
-
-# dict_of_tuples_slice(fn_var_values["PUSH-ACTION"], (0,))
-# dict_of_tuples_slice(fn_var_values["PUSH-ACTION"], (1,))
-# dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (0,))
-# dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (1,))
-# dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (2,))
-# dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (0,1))
-# dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (0,2))
-# dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (1,2))
-
-
-def dict_of_tuples_slice_2(dot, i1, i2):
-    """Input: a dictionary mapping a tuple of elements to a count, and a
-    list of indices.
-    Output: a dictionary mapping a subset of the original elements to a count.
-    The subset is chosen according to the input indices."""
-
-    result = {}
-    for (key_tuple, count) in dot.items():
-        # sliced_tuple = util.slice_by_sequence(key_tuple, indices)
-        sliced_tuple = (key_tuple[i1], key_tuple[i2])
-        result[sliced_tuple] = result.get(sliced_tuple, 0) + count
-    return result
-
-def dict_of_tuples_slice_3(dot, i1, i2, i3):
-    """Input: a dictionary mapping a tuple of elements to a count, and a
-    list of indices.
-    Output: a dictionary mapping a subset of the original elements to a count.
-    The subset is chosen according to the input indices."""
-
-    result = {}
-    for (key_tuple, count) in dot.items():
-        # sliced_tuple = util.slice_by_sequence(key_tuple, indices)
-        sliced_tuple = (key_tuple[i1], key_tuple[i2], key_tuple[i3])
-        result[sliced_tuple] = result.get(sliced_tuple, 0) + count
-    return result
+## I think that none of this is used by Daikon; so comment it out to avoid
+## confusion.
+# ###########################################################################
+# ### Slicing
+# ###
+# 
+# ## This function is TOO SLOW!  To speed it up, perhaps inline all calls:
+# ##   foo = util.slice_by_sequence(seq, (i1, i2))
+# ## ==>
+# ##   foo = (seq[i1], seq[i2])
+# def slice_by_sequence(seq, indices):
+#     """Given a sequence SEQ and a sequence of INDICES, return a new sequence
+# whose length is the same as that of INDICES and whose elements are the values
+# of SEQ indexed by the respective elements of INDICES.
+# This function is so slow that you probably shouldn't use it; inline the calls
+# instead."""
+#     result = []
+#     for i in indices:
+#         result.append(seq[i])
+#     ## This is probably completely extraneous.
+#     # if type(seq) == types.TupleType:
+#     #     result = tuple(result)
+#     return result
+# 
+# def _test_slice_by_sequence():
+#     def _test_slice_by_sequence_helper(indices):
+#         assert slice_by_sequence(range(0,7), indices) == list(indices)
+#         # No longer return a tuple if the argument was a tuple.
+#         # assert slice_by_sequence(tuple(range(0,7)), indices) == tuple(indices)
+#     _test_slice_by_sequence_helper(range(0,7))
+#     _test_slice_by_sequence_helper(range(1,4))
+#     _test_slice_by_sequence_helper((1,2,4,5))
+# 
+# 
+# ###
+# ### Dictionary slicing
+# ###
+# 
+# def dict_of_tuples_to_tuple_of_dicts(dot, tuple_len=None):
+#     """Input: a dictionary mapping a tuple of elements to a count.
+#     All the key tuples in the input have the same length unless optional argument
+#     TUPLE_LEN is provided, in which case all tuples have at least that length.
+#     If TUPLE_LEN is a tuple, then only those indices are extracted.
+#     if TUPLE_LEN is an integer, indices up to it (non-inclusive) are extracted.
+#     Output: a tuple of dictionaries, each mapping a single element to a count.
+#     The first output dictionary concerns the first element of the original keys,
+#     the second output the second element of the original keys, and so forth."""
+# 
+#     if tuple_len == None:
+#         tuple_len = len(dot.keys()[0])
+#     if type(tuple_len) == types.IntType:
+#         assert tuple_len <= len(dot.keys()[0])
+#         if tuple_len == 0:
+#             return ()
+#         tuple_indices = range(0, tuple_len)
+#     elif tuple_len == []:
+#         return ()
+#     else:
+#         assert type(tuple_len) in [types.TupleType, types.ListType]
+#         assert max(tuple_len) < len(dot.keys()[0])
+#         assert min(tuple_len) >= 0
+#         tuple_indices = tuple_len
+#     # Next four lines accomplish "result = ({},) * tuple_len", but with
+#     # distinct rather than identical dictionaries in the tuple.
+#     result = []
+#     for i in tuple_indices:
+#         result.append({})
+#     result = tuple(result)
+#     for (key_tuple, count) in dot.items():
+#         for i in range(0, len(tuple_indices)):
+#             this_key = key_tuple[tuple_indices[i]]
+#             this_dict = result[i]
+#             this_dict[this_key] = this_dict.get(this_key, 0) + count
+#     return result
+# # dict_of_tuples_to_tuple_of_dicts(fn_var_values["PUSH-ACTION"])
+# 
+# 
+# def dict_of_sequences_to_element_dict(dot):
+#     """Input: a dictionary mapping instances of a sequence (tuples) to a count.
+#     Output: a dictionary, mapping elements of all of the sequence instances
+#     to a count."""
+#     result = {}
+#     for (key_tuple, count) in dot.items():
+#         for this_key in key_tuple:
+#             result[this_key] = result.get(this_key, 0) + count
+#     return result
+# # dict_of_sequences_to_element_dict(dot)
+# 
+# 
+# def dict_of_tuples_slice(dot, indices):
+#     """Input: a dictionary mapping a tuple of elements to a count, and a
+#     list of indices.
+#     Output: a dictionary mapping a subset of the original elements to a count.
+#     The subset is chosen according to the input indices.
+# 
+#     If the indices have length 2 or 3, you are better off using the
+#     specialized functions dict_of_tuples_slice_2 and dict_of_tuples_slice_3;
+#     this function can be very slow.
+#     """
+# 
+#     if len(indices) == 2:
+#         return dict_of_tuples_slice_2(dot, indices[0], indices[1])
+#     if len(indices) == 2:
+#         return dict_of_tuples_slice_3(dot, indices[0], indices[1], indices[2])
+# 
+#     result = {}
+#     for (key_tuple, count) in dot.items():
+#         sliced_tuple = util.slice_by_sequence(key_tuple, indices)
+#         result[sliced_tuple] = result[sliced_tuple] + count
+#     return result
+# 
+# # dict_of_tuples_slice(fn_var_values["PUSH-ACTION"], (0,))
+# # dict_of_tuples_slice(fn_var_values["PUSH-ACTION"], (1,))
+# # dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (0,))
+# # dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (1,))
+# # dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (2,))
+# # dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (0,1))
+# # dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (0,2))
+# # dict_of_tuples_slice(fn_var_values["VERIFY-CLEAN-PARALLEL"], (1,2))
+# 
+# 
+# def dict_of_tuples_slice_2(dot, i1, i2):
+#     """Input: a dictionary mapping a tuple of elements to a count, and a
+#     list of indices.
+#     Output: a dictionary mapping a subset of the original elements to a count.
+#     The subset is chosen according to the input indices."""
+# 
+#     result = {}
+#     for (key_tuple, count) in dot.items():
+#         # sliced_tuple = util.slice_by_sequence(key_tuple, indices)
+#         sliced_tuple = (key_tuple[i1], key_tuple[i2])
+#         result[sliced_tuple] = result.get(sliced_tuple, 0) + count
+#     return result
+# 
+# def dict_of_tuples_slice_3(dot, i1, i2, i3):
+#     """Input: a dictionary mapping a tuple of elements to a count, and a
+#     list of indices.
+#     Output: a dictionary mapping a subset of the original elements to a count.
+#     The subset is chosen according to the input indices."""
+# 
+#     result = {}
+#     for (key_tuple, count) in dot.items():
+#         # sliced_tuple = util.slice_by_sequence(key_tuple, indices)
+#         sliced_tuple = (key_tuple[i1], key_tuple[i2], key_tuple[i3])
+#         result[sliced_tuple] = result.get(sliced_tuple, 0) + count
+#     return result
 
 
 

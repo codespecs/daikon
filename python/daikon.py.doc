@@ -180,7 +180,7 @@ The primary datastructure used in daikon.py is a dictionary (a
 hashtable; "dictionary" is the Python term) from tuples of values to the
 number of occurrences of those tuples in the input.
 
-For instance, suppose the input looks like
+For instance, suppose the input is as follows.
 
   foo	i 2	j 3
   foo	i 7	j 3

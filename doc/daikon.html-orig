@@ -74,7 +74,7 @@ Table of contents:
 	      appropriate section.  The distributed version is prepared to
 	      compile on a Solaris machine using the g++ compiler.
               Make sure that the <tt>-DTEST</tt> argument is provided to
-              the compiler.
+              the compiler (as it is in the provided Makefile).
           <li>Type <tt>make</tt>.  This will create a binary named
               <tt>dfej</tt>.  Place that program somewhere on your path.
         </ol>
@@ -133,14 +133,11 @@ its original task, it also writes variable values to a data trace file.
 <h4><a name="java-front-end">Java front end</a></h4>
 
 <ol>
-  <li>Run <tt>dfej</tt> on your Java source files:
+  <li>Run <tt>dfej</tt>, the Daikon front end for Java, on your Java source
+      files:
 <pre>
       dfej <i>filename1.java</i> <i>filename2.java</i> ...
 </pre>
-      Only the specified Java files will be instrumented; other files will
-      be run uninstrumented.  This permits you to control the scope of
-      invariant detection.  See the dfej usage message for more information.<p>
-
       The Daikon Java front end:
       <ol>
         <li>writes instrumented versions of the files
@@ -148,10 +145,40 @@ its original task, it also writes variable values to a data trace file.
 	<li>creates declaration files named
             <tt><i>filename1.java</i>.decls</tt>, etc. in a
             <tt>daikon-output/</tt> directory.
-     </ol>
-  <li>Place the <tt>daikon-java/</tt> directory on your CLASSPATH before
-      the directory containing the original Java code
-  <li>Compile (and run) the Java code in the usual way.
+      </ol>
+      Only the specified Java files will be instrumented; other files will
+      be run uninstrumented.  This permits you to control the scope of
+      invariant detection.<p>
+
+      In any of the specified files, all classes defined in any of those
+      files will be instrumented.  For instance, after
+<pre>
+      dfej Foo.java Bar.java
+</pre>
+      the instrumented versions of Foo.java and Bar.java will output
+      information about all Foo objects (including Foo objects that are
+      components of Bar objects, that are arguments to Bar functions,
+      etc.), and likewise for Bar objects.
+      After
+<pre>
+      dfej Foo.java
+      dfej Bar.java
+</pre>
+      the same functions (all those in the Foo and Bar classes) will be
+      instrumented, but in Foo functions, no detail will be provided about
+      the structure of any Bar objects that might appear.  In other words,
+      the instrumenter assumes that the only classes instrumented (and
+      about which information is desired) are those presented to it on the
+      command line.  One way to determine all the .java files that are
+      included in a specified program is to run the following commands:
+<pre>
+      find . -name '*.class' -print | xargs rm -f
+      javac MyProgram.java
+      find . -name '*.class' -print
+</pre>
+      <p>
+
+      See the <tt>dfej</tt> usage message for more information.<p>
 </ol>
 
 <h4><a name="c-front-end">C/C++ front end</a></h4>
@@ -215,13 +242,19 @@ its original task, it also writes variable values to a data trace file.
 
 <h3><a name="run-program">Step 2:  Run the program</a></h3>
 
+Run the program over some test suite in order to create a
+collection of data trace files.
 You can run the instrumented program in just the same way you did before;
-the only behavioral change will be writing a <tt>.dtrace</tt> file.
-Run the program over some test suite in order to create a collection of
-data trace files.<p>
+the only behavioral change will be writing a <tt>.dtrace</tt> file to the
+<tt>daikon-output/</tt> subdirectory (which is created if it does not
+already exist).<p>
+
 
 <ul>
-  <li>For C programs, if you do not supply a file <tt>label.txt</tt> which
+  <li>For Java programs, make sure the <tt>daikon-java/</tt> directory
+      appears on your CLASSPATH before the directory containing the
+      original Java code.
+  <li>For C/C++ programs, if you do not supply a file <tt>label.txt</tt> which
       contains a single integer (a sample is provided in the distribution), one
       will be created for you.  This determines the name of the data trace
       file.<p>
@@ -240,29 +273,32 @@ data trace files.<p>
 <h3><a name="run-daikon">Step 3:  Detect invariants in the data trace files</a></h3>
 
 Run the Python interpreter using the shell command <tt>python</tt> or the
-Emacs command <tt>M-x run-python</tt>.  It is convenient to run Python in
-the directory containing <tt>daikon.py</tt> and the other Python source
-files, so that you don't have to set the <tt>PYTHONPATH</tt> environment
-variable.<p>
+Emacs command <tt>M-x py-shell</tt>.  (In order to run <tt>M-x
+py-shell</tt>, you will need a copy of the <a
+href="http://www.python.org/emacs/python-mode/">Python Mode for Emacs</a>.)
+It is convenient to run Python in the directory containing
+<tt>daikon.py</tt> and the other Python source files, so that you don't
+have to set the <tt>PYTHONPATH</tt> environment variable.<p>
 
 In Python, issue the following commands:
 <pre>
   import daikon 			  # load the daikon.py file
-  daikon.read_declarations('*.decls',1)   # read the function declarations
-  daikon.read_data_traces('p*.dtrace')    # read the trace files
+  daikon.read_declarations('<i>filename.decls</i>',1)   # read the function declarations
+  daikon.read_data_traces('<i>filename.dtrace</i>')    # read the trace files
   daikon.all_numeric_invariants()	  # compute and print invariants
 </pre>
-
-The three functions above each take an optional regular expression for
-program point, so that only certain program points are processed.  (This
-can make the invariant detection engine run faster.)  For details, see
-the documentation strings in their definitions in <tt>daikon.py</tt>.<p>
+The <tt><i>filename</i></tt> arguments may also be shell wildcards, such as
+"<tt>p*.dtrace</tt>", in order to read multiple files.  The three functions
+above each take an optional regular expression for program point, so that
+only certain program points are processed.  (This can make the invariant
+detection engine run faster.)  For details, see the documentation strings
+in the function definitions in <tt>daikon.py</tt>.<p>
 
 To do all this from a single shell command, do the following:
 <pre>
   python -O -c "__debug__ = 0; import daikon; \
-    daikon.read_declarations('*.decls',1); \
-    daikon.read_data_traces('p*.dtrace'); \
+    daikon.read_declarations('<i>filename.decls</i>',1); \
+    daikon.read_data_traces('<i>filename.dtrace</i>'); \
     daikon.all_numeric_invariants()"
 </pre>
 
