@@ -389,7 +389,7 @@ public class PrintInvariants {
               // into the PptSlice. This if view != null, and it only contains
               // guarding predicates, it would have been null had invariant
               // guarding been off, thus the variable belongs in modified_vars.
-              // [INCR] || (view.num_values() > 0)) {
+
               // Using only the isPrimitive test is wrong.  We should suppress
               // for only parameters, not all primitive values.  That's why we
               // look for the period in the name.
