@@ -752,9 +752,9 @@ public final class FileIO {
   static void process_unmatched_procedure_entries() {
     if ((!call_stack.empty()) || (!call_hashmap.isEmpty())) {
       System.out.println();
-      System.out.println("Detected abnormal termination of "
+      System.out.println("No return from procedure observed "
 			 + (call_stack.size() + call_hashmap.size())
-                         + " functions.");
+                         + " times.");
       if (!call_hashmap.isEmpty()) {
         System.out.println("Unterminated calls:");
         print_invocations(call_hashmap.values());
@@ -764,7 +764,7 @@ public final class FileIO {
         System.out.println("Remaining call stack:");
         print_invocations(call_stack);
       }
-      System.out.println("End of abnormal termination report");
+      System.out.println("End of report for procedures not returned from.");
     }
   }
 

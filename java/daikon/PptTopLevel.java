@@ -2417,6 +2417,9 @@ public class PptTopLevel extends Ppt {
       return;
     }
     if ((combined_exit != null) && (Daikon.output_style != Daikon.OUTPUT_STYLE_NORMAL)) {
+      if (Daikon.output_num_samples) {
+        out.println("[Is combined exit, output style " + Daikon.output_style + ": " + name + "]");
+      }
       return;
     }
     /// Old, more broken version.

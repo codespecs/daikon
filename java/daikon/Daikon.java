@@ -149,6 +149,10 @@ public final class Daikon {
     do_inference(all_ppts);
 
     // Display invariants
+    if (output_num_samples) {
+      System.out.println("The --output_num_samples debugging flag is on.");
+      System.out.println("Some of the debugging output may only make sense to Daikon programmers.");
+    }
     print_invariants(all_ppts);
     if (output_num_samples) {
       Global.output_statistics();

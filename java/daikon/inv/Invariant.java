@@ -254,21 +254,21 @@ public abstract class Invariant implements java.io.Serializable {
    * ESC-like representation.
    **/
   public String format_esc() {
-    return "format_esc needs to be changed: " + format();
+    return "warning format_esc() needs to be implemented: " + format();
   }
 
   /**
    * Representation for the Simplify theorem prover.
    **/
   public String format_simplify() {
-    return "format_simplify needs to be changed: " + format();
+    return "warning: format_simplify() needs to be implemented: " + format();
   }
 
   /**
    * IOA Representation
    **/
   public String format_ioa(String classname) {
-    return "format_ioa needs to be changed: " + format();
+    return "warning: format_ioa() needs to be implemented: " + format();
   }
 
   // This should perhaps be merged with some kind of PptSlice comparator.

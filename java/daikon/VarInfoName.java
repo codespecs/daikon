@@ -460,7 +460,7 @@ public abstract class VarInfoName
       return function + "(" + argument.name() + ")";
     }
     protected String esc_name_impl() {
-      return "(format_esc needs to be changed: " +
+      return "(warning: format_esc() needs to be implemented: " +
 	function + " on " + argument.repr() + ")";
     }
     protected String ioa_name_impl(String classname) {
@@ -468,7 +468,7 @@ public abstract class VarInfoName
     }
 
     protected String simplify_name_impl(boolean prestate) {
-      return "(format_simplify needs to be changed: " +
+      return "(warning: format_simplify() needs to be implemented: " +
 	function + " on " + argument.repr() + ")";
     }
     public Object accept(Visitor v) {
@@ -884,14 +884,14 @@ public abstract class VarInfoName
       return fn + seq1.name() + ", " + seq2.name() + ")";
     }
     protected String esc_name_impl() {
-      return "(format_esc needs to be changed: " + name_impl();
+      return "(warning: format_esc() needs to be implemented: " + name_impl();
     }
     protected String ioa_name_impl(String classname) {
       String fn = isIntersection ? " \\I " : " \\U ";
       return "(" + seq1.ioa_name(classname) + fn + seq2.ioa_name(classname) + ")";
     }
     protected String simplify_name_impl(boolean prestate) {
-      return "(format_simplify needs to be changed: " + name_impl();
+      return "(warning: format_simplify() needs to be implemented: " + name_impl();
     }
     public Object accept(Visitor v) {
       return v.visitIntersection(this);
