@@ -16,7 +16,7 @@ public class Implication extends Invariant {
     throw new Error("Don't instantiate Implication this way.");
   }
 
-  public Implication(PptSlice ppt, Invariant predicate, Invariant consequent) {
+  private Implication(PptSlice ppt, Invariant predicate, Invariant consequent) {
     super(ppt);
     Assert.assert(ppt instanceof PptSlice0);
     this.predicate = predicate;
@@ -26,10 +26,13 @@ public class Implication extends Invariant {
     //                    + "\n  " + this.format());
   }
 
-  public Implication(PptTopLevel ppt, Invariant predicate, Invariant consequent) {
-    this(ppt.implication_view, predicate, consequent);
+  static public Implication makeImplication(PptTopLevel ppt, Invariant predicate, Invariant consequent) {
+    if ((predicate.getClass() == consequent.getClass())
+        && predicate.isSameFormula(consequent)) {
+      return null;
+    }
+    return new Implication(ppt.implication_view, predicate, consequent);
   }
-
 
   protected double computeProbability() {
     return Math.min(predicate.computeProbability(),
@@ -48,6 +51,10 @@ public class Implication extends Invariant {
   public boolean isSameFormula(Invariant other) {
     return (predicate.isSameFormula(((Implication)other).predicate)
             && consequent.isSameFormula(((Implication)other).consequent));
+  }
+
+  public boolean hasOnlyConstantVariables() {
+    return predicate.hasOnlyConstantVariables();
   }
 
 }

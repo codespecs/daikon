@@ -62,7 +62,7 @@ public class PptTopLevel extends Ppt {
   // (the graph edges are: <this, (entry_ppt U controlling_ppts)>).
   // This is necessary because we search the graph in isWorthPrinting.
 
-  PptTopLevel entry_ppt;        // null if this isn't an exit point
+  public PptTopLevel entry_ppt;        // null if this isn't an exit point
 
   // PptTopLevel has any number of 'controlling' ppts.  Any invariants
   // which exist in the controlling ppts are necessarily true in the
@@ -71,7 +71,7 @@ public class PptTopLevel extends Ppt {
   // and conditional points are controlled by the unconditional
   // parent point.  This set contains only the immediate controllers,
   // not the transitive closure of all controllers.
-  Set controlling_ppts = new HashSet(); // elements are PptTopLevel objects
+  public Set controlling_ppts = new HashSet(); // elements are PptTopLevel objects
 
   public PptSlice0 implication_view = new PptSlice0(this);
 
@@ -1308,11 +1308,13 @@ public class PptTopLevel extends Ppt {
     // Would it be enough to say "GriesLisp dummy = null;"?  I'm not sure.
     // This does work, though.
 
-    new MiscSplitters();
-    new GriesLisp();
-    new WeissDsaaMDE();
-    // These are outdated; they look for "field" instead of "this.field".
-    // new SplitterList4Dsaa();
+    if (! Daikon.disable_splitting) {
+      new MiscSplitters();
+      new GriesLisp();
+      new WeissDsaaMDE();
+      // These are outdated; they look for "field" instead of "this.field".
+      // new SplitterList4Dsaa();
+    }
   }
 
   public void addConditions(Splitter[] splits) {
@@ -1528,16 +1530,16 @@ public class PptTopLevel extends Ppt {
         // If one of the diffs implies the other, then should not add
         // an implication for the weaker one.
         if (diff1 != null) {
-          new Implication(this, excl1, diff1);
+          Implication.makeImplication(this, excl1, diff1);
         }
         if (diff2 != null) {
-          new Implication(this, excl2, diff2);
+          Implication.makeImplication(this, excl2, diff2);
         }
       }
     }
-    // System.out.println("Done adding up to "
+    // System.out.println("Done adding no more than "
     //                    + (exclusive_conditions.length * different_invariants.length)
-    //                    + " implicatins.");
+    //                    + " implications.");
 
   }
 
@@ -1629,27 +1631,6 @@ public class PptTopLevel extends Ppt {
   /// Locating implied (same) invariants
   ///
 
-  public Invariant find_controlling_invariant(Invariant inv)
-  {
-    Assert.assert(inv.ppt.parent == this);
-
-    // Try to match inv against all controlling invariants
-    Iterator controllers = controlling_ppts.iterator();
-    while (controllers.hasNext()) {
-      PptTopLevel controller = (PptTopLevel) controllers.next();
-      // System.out.println("Looking for controller of " + inv.format() + " in " + controller.name);
-      Iterator candidates = controller.invariants_iterator();
-      while (candidates.hasNext()) {
-	Invariant cand_inv = (Invariant) candidates.next();
-	if (cand_inv.isSameInvariant(inv)) {
-          // System.out.println("Controller found: " + cand_inv.format() + "  [worth printing: " + ((PptTopLevel)cand_inv.ppt.parent).isWorthPrinting(cand_inv) + "]");
-	  return cand_inv;
-	}
-      }
-    }
-
-    return null;
-  }
 
 
   ///////////////////////////////////////////////////////////////////////////
@@ -1874,7 +1855,7 @@ public class PptTopLevel extends Ppt {
       Assert.assert(slice.check_modbits());
 
       // isWorthPrinting checks many conditions for suppression
-      if (!isWorthPrinting(inv, true)) {
+      if (! inv.isWorthPrinting()) {
 	continue;
       }
 
@@ -1928,200 +1909,7 @@ public class PptTopLevel extends Ppt {
    **/
   public boolean isWorthPrinting(Invariant inv)
   {
-    return isWorthPrinting(inv, false);
-  }
-
-
-  private boolean isWorthPrinting(Invariant inv, boolean add_to_stats)
-  {
-    // It's hard to know in exactly what order to do these checks that
-    // eliminate some invariants from consideration.  Which is cheapest?
-    // Which is most often successful?
-    return
-      isWorthPrinting_ModSampleCount(inv, add_to_stats) &&
-      isWorthPrinting_NonCanonicalOrConstant(inv, add_to_stats) &&
-      isWorthPrinting_Obvious(inv, add_to_stats) &&
-      isWorthPrinting_Unjustified(inv, add_to_stats) &&
-      isWorthPrinting_Controlled(inv, add_to_stats) &&
-      isWorthPrinting_PostconditionPrestate(inv, add_to_stats) &&
-      true;
-  }
-
-  private boolean isWorthPrinting_ModSampleCount(Invariant inv, boolean add_to_stats)
-  {
-    Assert.assert(inv.ppt.parent == this);
-
-    int num_mod_non_missing_samples = inv.ppt.num_mod_non_missing_samples();
-    if ((inv instanceof OneOf) && (((OneOf) inv).num_elts() > num_mod_non_missing_samples)) {
-      // TODO: JWN says "Shouldn't this be an assertion or something?"
-      // MDE: The
-      System.out.println("Modbit problem:  more values (" + ((OneOf) inv).num_elts() +
-			 ") than modified samples (" + num_mod_non_missing_samples + ")");
-    }
-
-    // We print a OneOf invariant even if there are few
-    // modified samples.  If the variable takes on only one value, maybe
-    // it is only set once (or a few times).
-    if ((num_mod_non_missing_samples < Invariant.min_mod_non_missing_samples)
-	&& (! (inv instanceof OneOf))) {
-      if (Global.debugPrintInvariants) {
-	System.out.println("  [Only " + inv.ppt.num_mod_non_missing_samples() +
-			   " modified non-missing samples (" + inv.ppt.num_samples() +
-			   " total samples): " + inv.repr() + " ]");
-      }
-      if (add_to_stats) {
-	Global.too_few_samples_invariants++;
-      }
-      return false;
-    }
-    return true;
-  }
-
-  private boolean isWorthPrinting_NonCanonicalOrConstant(Invariant inv, boolean add_to_stats)
-  {
-    Assert.assert(inv.ppt.parent == this);
-
-    boolean all_canonical = true;
-    boolean some_nonconstant = false;
-    VarInfo[] vis = inv.ppt.var_infos;
-    for (int i=0; i<vis.length; i++) {
-      if (! vis[i].isCanonical()) {
-        if (Global.debugPrintInvariants)
-          System.out.println("  [Suppressing " + inv.repr() + " because " + vis[i].name + " is non-canonical]");
-        all_canonical = false;
-        break;
-      }
-      if (! vis[i].isConstant()) {
-        some_nonconstant = true;
-        // Don't break out of the loop; this is computed as a side
-        // effect but isn't the main point of the loop.
-      }
-    }
-    if (! all_canonical) {
-      if (Global.debugPptTopLevel) {
-        System.out.println("  [not all vars canonical:  " + inv.repr() + " ]");
-        System.out.print("    [Canonicalness:");
-        for (int i=0; i<vis.length; i++)
-          System.out.print(" " + vis[i].isCanonical());
-        System.out.println("]");
-        // Eventually this may be able to happen again, because we will
-        // instantiate all invariants simultaneously, so we don't yet know
-        // which of the new variables is canonical.
-        throw new Error("this shouldn't happen");
-      }
-      if (add_to_stats) {
-        Global.non_canonical_invariants++;
-      }
-      return false;
-    }
-    if (! some_nonconstant) {
-      Assert.assert(((inv instanceof OneOf) || (inv instanceof Comparison)
-                     || (inv instanceof Implication))
-                    // , "Unexpected invariant with all vars constant: "
-                    // + inv + "  " + inv.repr() + "  " + inv.format()
-                    );
-      if (inv instanceof Comparison) {
-        Assert.assert(! IsEquality.it.accept(inv));
-        if (Global.debugPrintInvariants) {
-          System.out.println("  [over constants:  " + inv.repr() + " ]");
-        }
-        if (add_to_stats) {
-          Global.obvious_invariants++;
-        }
-        return false;
-      }
-    }
-    return true;
-  }
-
-
-  private boolean isWorthPrinting_Obvious(Invariant inv, boolean add_to_stats)
-  {
-    Assert.assert(inv.ppt.parent == this);
-
-    if (inv.isObvious()) {
-      if (Global.debugPrintInvariants) {
-	System.out.println("  [obvious:  " + inv.repr() + " ]");
-      }
-      if (add_to_stats) {
-	Global.obvious_invariants++;
-      }
-      return false;
-    }
-    return true;
-  }
-
-  private boolean isWorthPrinting_Unjustified(Invariant inv, boolean add_to_stats)
-  {
-    Assert.assert(inv.ppt.parent == this);
-
-    if (!inv.justified()) {
-      if (Global.debugPrintInvariants) {
-	System.out.println("  [not justified:  " + inv.repr() + " ]");
-      }
-      if (add_to_stats) {
-	Global.unjustified_invariants++;
-      }
-      return false;
-    }
-    return true;
-  }
-
-  private boolean isWorthPrinting_Controlled(Invariant inv, boolean add_to_stats)
-  {
-    Assert.assert(inv.ppt.parent == this);
-
-    if (Daikon.suppress_implied_controlled_invariants) {
-      Invariant cont_inv = find_controlling_invariant(inv);
-      if (cont_inv != null) {
-	// TODO: Is this the right parent-finding to do even with conditionals?
-	PptTopLevel top = (PptTopLevel) cont_inv.ppt.parent;
-        // Don't want to use isWorthPrinting directly; if a controlled by b
-        // controlled by c, then isWorthPrinting should return false for a
-        // as well as for b.
-        // This is a hack; fix it later.
-        Daikon.suppress_implied_controlled_invariants = false;
-        boolean controller_isWorthPrinting = top.isWorthPrinting(cont_inv);
-        Daikon.suppress_implied_controlled_invariants = true;
-	if (controller_isWorthPrinting) {
-	  if (add_to_stats) {
-	    // TODO: Fix global statistics for this?
-	  }
-	  return false;
-	}
-      }
-    }
-    return true;
-  }
-
-  private final static Invariant.IsSameInvariantNameExtractor preToPostIsSameInvariantNameExtractor =
-    new Invariant.DefaultIsSameInvariantNameExtractor() {
-      public String getFromFirst(VarInfo var)
-      { return "orig(" + super.getFromFirst(var) + ")"; }
-    };
-
-  private boolean isWorthPrinting_PostconditionPrestate(Invariant inv, boolean add_to_stats)
-  {
-    Assert.assert(inv.ppt.parent == this);
-
-    if (Daikon.suppress_implied_postcondition_over_prestate_invariants) {
-      if (entry_ppt != null) {
-	Iterator entry_invs = entry_ppt.invariants_iterator();
-	while (entry_invs.hasNext()) {
-	  Invariant entry_inv = (Invariant) entry_invs.next();
-	  // If entry_inv with orig() applied to everything matches inv
-	  if (entry_inv.isSameInvariant(inv, preToPostIsSameInvariantNameExtractor)) {
-	    if (entry_ppt.isWorthPrinting(entry_inv)) {
-	      if (add_to_stats) {
-		// TODO: Fix global statistics for this?
-	      }
-	      return false;
-	    }
-	  }
-	}
-      }
-    }
-    return true;
+    return inv.isWorthPrinting();
   }
 
 

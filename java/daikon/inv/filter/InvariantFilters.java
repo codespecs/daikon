@@ -129,7 +129,7 @@ abstract class InvariantFilter {
 
 class UnjustifiedFilter extends InvariantFilter {
     boolean shouldDiscardInvariant( Invariant invariant ) {
-	return invariant.isUnjustified();
+	return ! invariant.justified();
     }
 }
 
@@ -147,7 +147,7 @@ class FewModifiedSamplesFilter extends InvariantFilter {
 
 class NonCanonicalVariablesFilter extends InvariantFilter {
     boolean shouldDiscardInvariant( Invariant invariant ) {
-	return invariant.hasNonCanonicalVariables();
+	return invariant.hasNonCanonicalVariable();
     }
 }
 

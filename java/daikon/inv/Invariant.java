@@ -151,187 +151,6 @@ public abstract class Invariant implements java.io.Serializable {
   }
 
   /**
-   * @return true if this invariant has a small modified sample count
-   **/
-  public boolean hasFewModifiedSamples() {
-    int num_mod_non_missing_samples = ppt.num_mod_non_missing_samples();
-    if ((this instanceof OneOf)  &&  (((OneOf) this).num_elts() > num_mod_non_missing_samples)) {
-      // TODO: JWN says "Shouldn't this be an assertion or something?"
-      // MDE: The
-      System.out.println("Modbit problem:  more values (" + ((OneOf) this).num_elts() +
-			 ") than modified samples (" + num_mod_non_missing_samples + ")");
-    }
-
-    // We print a OneOf invariant even if there are few modified samples.  If the variable
-    // takes on only one value, maybe it is only set once (or a few times).
-    if ((num_mod_non_missing_samples < Invariant.min_mod_non_missing_samples)  &&  (! (this instanceof OneOf))) {
-      if (Global.debugPrintInvariants)
-	System.out.println("  [Only " + ppt.num_mod_non_missing_samples() +
-			   " modified non-missing samples (" + ppt.num_samples() +
-			   " total samples): " + repr() + " ]");
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * @return true if this invariant has any non-canonical variables
-   **/
-  public boolean hasNonCanonicalVariables() {
-    VarInfo varInfos[] = ppt.var_infos;
-    for (int i=0; i < varInfos.length; i++) {
-      if (! varInfos[i].isCanonical()) {
-	if (Global.debugPrintInvariants) {
-	  System.out.println("  [Suppressing " + repr() + " because " + varInfos[i].name + " is non-canonical]");
-	}
-	if (Global.debugPptTopLevel) {
-	  System.out.println("  [not all vars canonical:  " + repr() + " ]");
-	  System.out.print("    [Canonicalness:");
-	  for (int j=0; j < varInfos.length; j++)
-	    System.out.print(" " + varInfos[j].isCanonical());
-	  System.out.println("]");
-	  // Eventually this may be able to happen again, because we will
-	  // instantiate all invariants simultaneously, so we don't yet know
-	  // which of the new variables is canonical.
-	  throw new Error("this shouldn't happen");
-	}
-	return true;
-      }
-    }
-    return false;
-  }
-
-  /**
-   * @return true if this invariant only has constant variables and is a comparison
-   **/
-  public boolean hasOnlyConstantVariables() {
-    VarInfo[] varInfos = ppt.var_infos;
-    for (int i=0; i < varInfos.length; i++) {
-      if (! varInfos[i].isConstant())
-	return false;
-    }
-
-    // At this point, we know all variables are constant.
-    Assert.assert(this instanceof OneOf  ||  this instanceof Comparison
-		  // , "Unexpected invariant with all vars constant: "
-		  // + inv + "  " + inv.repr() + "  " + inv.format()
-		  );
-    if (this instanceof Comparison) {
-      //      Assert.assert(! IsEquality.it.accept(this));
-      if (Global.debugPrintInvariants)
-	System.out.println("  [over constants:  " + this.repr() + " ]");
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * @return true if this invariant is necessarily true, due to derived
-   * variables, other invariants, etc.
-   * Intended to be overridden by subclasses.
-   **/
-  public final boolean isObvious() {
-    // Actually actually, we'll eliminate invariants as they become obvious
-    // rather than on output; the point of this is to speed up computation.
-    // // Actually, we do need to check isObviousDerived after all because we
-    // // add invariants that might be obvious, but might also turn out to be
-    // // even stronger (and so not obvious).  We don't know how the invariant
-    // // turns out until after testing it.
-    // // // We don't need to check isObviousDerived because we won't add
-    // // // obvious-derived invariants to lists in the first place.
-    if (isObviousDerived() || isObviousImplied()) {
-      if (Global.debugPrintInvariants)
-	System.out.println("  [obvious:  " + repr() + " ]");
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * @return true if this invariant is necessarily true, due to being implied
-   * by other (more basic or preferable to report) invariants.
-   * Intended to be overridden by subclasses.
-   **/
-  public boolean isObviousDerived() {
-    return false;
-  }
-
-  /**
-   * @return true if this invariant is necessarily true, due to being implied
-   * by other (more basic or preferable to report) invariants.
-   * Intended to be overridden by subclasses.
-   **/
-  public boolean isObviousImplied() {
-    return false;
-  }
-
-  /**
-   * @return true if this invariant is unjustified
-   **/
-  public boolean isUnjustified() {
-    if (! justified()) {
-      if (Global.debugPrintInvariants)
-	System.out.println("  [not justified:  " + repr() + " ]");
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * @return true if this invariant is controlled by another invariant
-   **/
-  public boolean isControlled() {
-    Invariant controller = ((PptTopLevel) ppt.parent).find_controlling_invariant( this );
-    if (controller != null) {
-      if (Global.debugPrintInvariants) {
-	System.out.println("  [is controlled:  " + repr() + " ]");
-      }
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * @return true if this invariant is a postcondition that is implied by prestate
-   * invariants.  For example, if an entry point has the invariant orig(x)+3=orig(y), and
-   * this invariant is the corresponding exit point invariant x+3=y, then this methods
-   * returns true.
-   **/
-  public boolean isImpliedPostcondition() {
-    PptTopLevel topLevel = (PptTopLevel) ppt.parent;
-    if (topLevel.entry_ppt() != null) { // if this is an exit point invariant
-      Iterator entryInvariants = topLevel.entry_ppt().invariants_vector().iterator();
-      while (entryInvariants.hasNext()) {
-	Invariant entryInvariant = (Invariant) entryInvariants.next();
-	// If entryInvariant with orig() applied to everything matches this invariant
-	if (entryInvariant.isSameInvariant( this, preToPostIsSameInvariantNameExtractor))
-	  return true;
-      }
-    }
-    return false;
-  }
-
-  /**
-   * Used in isImpliedPostcondition().
-   **/
-  private final static IsSameInvariantNameExtractor preToPostIsSameInvariantNameExtractor =
-    new DefaultIsSameInvariantNameExtractor() {
-	public String getFromFirst(VarInfo var)
-	{ return "orig(" + super.getFromFirst(var) + ")"; }
-      };
-
-
-  // Not used as of 1/31/2000.
-  // /**
-  //  * Returns true if this invariant implies the argument invariant.
-  //  * Intended to be overridden by subclasses.
-  //  */
-  // public boolean implies(Invariant inv) {
-  //   return false;
-  // }
-
-
-  /**
    * For printing invariants, there are two interfaces:
    * repr gives a low-level representation, and
    * format gives a high-level representation for user output.
@@ -534,6 +353,236 @@ public abstract class Invariant implements java.io.Serializable {
   //             return "One can be None but the other cannot"
   //         # return "invariant.diff: no differences"  # debugging
   //         return None
+
+
+
+  ///////////////////////////////////////////////////////////////////////////
+  /// Tests about the invariant (for printing)
+  ///
+
+  public final boolean isWorthPrinting()
+  {
+    // It's hard to know in exactly what order to do these checks that
+    // eliminate some invariants from consideration.  Which is cheapest?
+    // Which is most often successful?  Which assume others have already
+    // been performed?
+    if (! isWorthPrinting_sansControlledCheck())
+      return false;
+    // The invariant is worth printing on its own merits, but it may be
+    // controlled.  If any (transitive) controller is worth printing, don't
+    // print this one.
+    Invariant cont_inv = find_controlling_invariant();
+    while (cont_inv != null) {
+      if (cont_inv.isWorthPrinting_sansControlledCheck())
+        return false;
+      cont_inv = cont_inv.find_controlling_invariant();
+    }
+    // No controller was worth printing
+    return true;
+  }
+
+
+  /**
+   * Like isWorthPrinting, but doesn't check whether the invariant is controlled.
+   **/
+  final public boolean isWorthPrinting_sansControlledCheck() {
+    return
+      ((! hasFewModifiedSamples())
+       && (! hasNonCanonicalVariable())
+       && (! hasOnlyConstantVariables())
+       && (! isObvious())
+       && justified()
+       && isWorthPrinting_PostconditionPrestate());
+  }
+
+  /**
+   * @return true if this invariant has few modified (non-repeated) samples.
+   * An exception is made for OneOf invariants.
+   **/
+  public final boolean hasFewModifiedSamples() {
+    int num_mod_non_missing_samples = ppt.num_mod_non_missing_samples();
+
+    if (this instanceof OneOf) {
+      // A OneOf should have at least as many samples as it has values.
+      Assert.assert(((OneOf) this).num_elts() <= num_mod_non_missing_samples);
+      return false;
+    } else {
+      return (num_mod_non_missing_samples < Invariant.min_mod_non_missing_samples);
+    }
+  }
+
+  /** @return true if this invariant involves a non-canonical variable **/
+  public final boolean hasNonCanonicalVariable() {
+    VarInfo[] vis = ppt.var_infos;
+    for (int i=0; i<vis.length; i++) {
+      if (! vis[i].isCanonical()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+
+  /**
+   * @return true if this invariant involves only constant variables
+   *         and is a comparison
+   **/
+  public boolean hasOnlyConstantVariables() {
+    VarInfo[] varInfos = ppt.var_infos;
+    for (int i=0; i < varInfos.length; i++) {
+      if (! varInfos[i].isConstant())
+	return false;
+    }
+
+    // At this point, we know all variables are constant.
+    Assert.assert(this instanceof OneOf  ||  this instanceof Comparison
+		  , "Unexpected invariant with all vars constant: "
+		  + this + "  " + repr() + "  " + format()
+		  );
+    if (this instanceof Comparison) {
+      //      Assert.assert(! IsEquality.it.accept(this));
+      if (Global.debugPrintInvariants)
+	System.out.println("  [over constants:  " + this.repr() + " ]");
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * @return true if this invariant is necessarily true, due to derived
+   * variables, other invariants, etc.
+   * Intended to be overridden by subclasses.
+   **/
+  public final boolean isObvious() {
+    // Actually actually, we'll eliminate invariants as they become obvious
+    // rather than on output; the point of this is to speed up computation.
+    // // Actually, we do need to check isObviousDerived after all because we
+    // // add invariants that might be obvious, but might also turn out to be
+    // // even stronger (and so not obvious).  We don't know how the invariant
+    // // turns out until after testing it.
+    // // // We don't need to check isObviousDerived because we won't add
+    // // // obvious-derived invariants to lists in the first place.
+    if (isObviousDerived() || isObviousImplied()) {
+      if (Global.debugPrintInvariants)
+	System.out.println("  [obvious:  " + repr() + " ]");
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * @return true if this invariant is necessarily true, due to being implied
+   * by other (more basic or preferable to report) invariants.
+   * Intended to be overridden by subclasses.
+   **/
+  public boolean isObviousDerived() {
+    return false;
+  }
+
+  /**
+   * @return true if this invariant is necessarily true, due to being implied
+   * by other (more basic or preferable to report) invariants.
+   * Intended to be overridden by subclasses.
+   **/
+  public boolean isObviousImplied() {
+    return false;
+  }
+
+  /**
+   * @return true if this invariant is controlled by another invariant
+   **/
+  public boolean isControlled() {
+    Invariant controller = this.find_controlling_invariant();
+    return (controller != null);
+  }
+
+  /**
+   * @return true if this invariant is a postcondition that is implied by prestate
+   * invariants.  For example, if an entry point has the invariant orig(x)+3=orig(y), and
+   * this invariant is the corresponding exit point invariant x+3=y, then this methods
+   * returns true.
+   **/
+  public boolean isImpliedPostcondition() {
+    PptTopLevel topLevel = (PptTopLevel) ppt.parent;
+    if (topLevel.entry_ppt() != null) { // if this is an exit point invariant
+      Iterator entryInvariants = topLevel.entry_ppt().invariants_vector().iterator();
+      while (entryInvariants.hasNext()) {
+	Invariant entryInvariant = (Invariant) entryInvariants.next();
+	// If entryInvariant with orig() applied to everything matches this invariant
+	if (entryInvariant.isSameInvariant( this, preToPostIsSameInvariantNameExtractor))
+	  return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Used in isImpliedPostcondition().
+   **/
+  private final static IsSameInvariantNameExtractor preToPostIsSameInvariantNameExtractor =
+    new DefaultIsSameInvariantNameExtractor() {
+	public String getFromFirst(VarInfo var)
+	{ return "orig(" + super.getFromFirst(var) + ")"; }
+      };
+
+
+  // Not used as of 1/31/2000.
+  // /**
+  //  * Returns true if this invariant implies the argument invariant.
+  //  * Intended to be overridden by subclasses.
+  //  */
+  // public boolean implies(Invariant inv) {
+  //   return false;
+  // }
+
+
+
+
+  private boolean isWorthPrinting_PostconditionPrestate()
+  {
+    PptTopLevel pptt = (PptTopLevel) ppt.parent;
+
+    if (Daikon.suppress_implied_postcondition_over_prestate_invariants) {
+      if (pptt.entry_ppt != null) {
+	Iterator entry_invs = pptt.entry_ppt.invariants_iterator();
+	while (entry_invs.hasNext()) {
+	  Invariant entry_inv = (Invariant) entry_invs.next();
+	  // If entry_inv with orig() applied to everything matches this
+	  if (entry_inv.isSameInvariant(this, preToPostIsSameInvariantNameExtractor)) {
+	    if (pptt.entry_ppt.isWorthPrinting(entry_inv)) {
+	      return false;
+	    }
+	  }
+	}
+      }
+    }
+    return true;
+  }
+
+
+
+  public Invariant find_controlling_invariant()
+  {
+    PptTopLevel pptt = (PptTopLevel) ppt.parent;
+
+    // Try to match inv against all controlling invariants
+    Iterator controllers = pptt.controlling_ppts.iterator();
+    while (controllers.hasNext()) {
+      PptTopLevel controller = (PptTopLevel) controllers.next();
+      // System.out.println("Looking for controller of " + inv.format() + " in " + controller.name);
+      Iterator candidates = controller.invariants_iterator();
+      while (candidates.hasNext()) {
+	Invariant cand_inv = (Invariant) candidates.next();
+	if (cand_inv.isSameInvariant(cand_inv)) {
+          // System.out.println("Controller found: " + cand_inv.format() + "  [worth printing: " + ((PptTopLevel)cand_inv.ppt.parent).isWorthPrinting(cand_inv) + "]");
+	  return cand_inv;
+	}
+      }
+    }
+
+    return null;
+  }
+
 
 
 }
