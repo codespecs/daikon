@@ -12,13 +12,18 @@ public final class Global {
   // them here eventually.
 
   // When set, the following variables are never derived:
-  // min, max, sum, a[0], a[1], a[-2], a[-1] 
-  // public static boolean EXPERIMENTS = true;
-  public static boolean EXPERIMENTS = false;
+  // min, max, sum, a[0], a[1], a[-2], a[-1]
+  public static boolean EXPERIMENTS = true;
   static {
-    boolean set_experiments = (System.getProperty("EXPERIMENTS") != null);
-    if (set_experiments) {
-      EXPERIMENTS = true;
+    String flag = System.getProperty("EXPERIMENTS");
+    if (flag != null) {
+      try {
+	int i = Integer.parseInt(flag);
+	if (i == 0) {
+	  EXPERIMENTS = false;
+	}
+      } catch (NumberFormatException e) {
+      }
     }
   }
 
