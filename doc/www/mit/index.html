@@ -496,8 +496,7 @@ target.
         su - daikonuser
     </pre>
 
-    <li> Update daikon in daikonuser to the most recent version
-    of V3. </p>
+    <li> Update daikon in daikonuser to the most recent version. </p>
 
     <pre>
         cd $inv
@@ -510,34 +509,30 @@ target.
     <li> Rebuild everything. </p>
 
     <pre>
-        cd $inv/java
-        make clean
-        make
-        cd $inv/doc
-        make
-        cd $inv/dfej
-        make
-        cd $inv/kvasir
-        make
-        make install
+        make -C $inv/java clean
+        make -C $inv/java compile
+        make -C $inv/doc
+        make -C $inv/dfej
+	make -C $inv kvasir
+        make -C $inv/kvasir all install
     </pre> </p>
 
     <li> Run the kvasir regression tests <p>
     <pre>
-        cd $inv/tests/kvasir-tests
-        make
+        make -C $inv/tests/kvasir-tests
     </pre>
 
     <li> Run the regression tests.  These will use Chicory as the
-    front end.  To run the tests using dfej, define DFEJ_EXECUTABLE to
-    the dfej built above ($inv/dfej/src/dfej) and USE_DFEJ=1.  All of
+    front end.  All of
     the diff files should be of zero size when this is complete.</p>
 
     <pre>
-        cd $inv/tests
-        make clean
-        make diffs
+        make -C $inv/tests clean
+        make -C $inv/tests diffs
     </pre> </p>
+
+    (To run the tests using dfej, define DFEJ_EXECUTABLE to
+    the dfej built above ($inv/dfej/src/dfej) and USE_DFEJ=1.)
 
     <li> Edit the <tt>doc/CHANGES</tt> file to indicate what has changed
     in this version.  A good way to determine what has changed is to diff
@@ -557,10 +552,10 @@ target.
 	cvs -q log -d "><em>2004-12-01</em>" -N | cvs-log-summarize.pl
     </pre>
 
-    <li> Set the distribution date and versions number.  The date will
-    be set to today, but can be overridden by redefining today (e.g.,
-    'TODAY=November 1 2004').  The version is specified in the file
-    $inv/doc/VERSION </p>
+    <li> Set the distribution date and version number.  The date will
+    be set to today, but can be overridden by redefining environment
+    variable TODAY (e.g., 'TODAY=November 1 2004').  The version is
+    specified in the file $inv/doc/VERSION </p>
 
     <pre>
 	cd $inv
