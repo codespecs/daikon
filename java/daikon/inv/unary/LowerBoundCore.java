@@ -119,6 +119,10 @@ public class LowerBoundCore  implements java.io.Serializable {
     long range =  (max  - min1 ) + 1;
     double avg_samples_per_val = ((double) wrapper.ppt.num_mod_non_missing_samples()) * modulus / range;
 
+    if (min1  == 0) {
+      avg_samples_per_val /= 5;
+    }
+
     // System.out.println("  [Need to fix computation of LowerBoundCore.computeProbability()]");
     boolean truncated_justified = num_min1  > 5*avg_samples_per_val;
     if (truncated_justified) {

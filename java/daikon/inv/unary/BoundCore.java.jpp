@@ -175,6 +175,12 @@ public class LOWERBOUNDCORE implements java.io.Serializable {
     long range = SIGNADJUST(MAX - MIN1) + 1;
     double avg_samples_per_val = ((double) wrapper.ppt.num_mod_non_missing_samples()) * modulus / range;
 
+#ifdef LOWER
+    if (MIN1 == 0) {
+      avg_samples_per_val /= 5;
+    }
+#endif
+
     // System.out.println("  [Need to fix computation of " + LOWERBOUNDCORESTR + ".computeProbability()]");
     boolean truncated_justified = NUM_MIN1 > 5*avg_samples_per_val;
     if (truncated_justified) {
