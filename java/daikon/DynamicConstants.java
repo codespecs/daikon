@@ -45,7 +45,12 @@ public class DynamicConstants implements Serializable {
   /** number of sample received **/
   int sample_cnt = 0;
 
-  /** Class used to store the value and count for each constant **/
+  /**
+   * Class used to store the value and count for each constant
+   * Note that two objects of this class are equal if they refer
+   * to the same variable.  This allows these to be stored in
+   * sets
+   **/
   public static class Constant implements Serializable {
 
     // We are Serializable, so we specify a version to allow changes to
@@ -61,6 +66,17 @@ public class DynamicConstants implements Serializable {
       this.vi = vi;
       this.val = null;
       this.count = 0;
+    }
+
+    public boolean equals (Object obj) {
+      if (!(obj instanceof Constant))
+        return (false);
+      Constant c = (Constant) obj;
+      return (c.vi == vi);
+    }
+
+    public int hashCode() {
+      return (vi.hashCode());
     }
 
     public String toString() {
@@ -272,7 +288,7 @@ public class DynamicConstants implements Serializable {
                                   List /*Constant*/ list2) {
 
     // Get list1 leaders
-    List leaders1 = new ArrayList();
+    Set leaders1 = new LinkedHashSet();
     for (int i = 0; i < list1.size(); i++) {
       Constant con = (Constant) list1.get(i);
       if (con.vi.isCanonical())
@@ -280,7 +296,7 @@ public class DynamicConstants implements Serializable {
     }
 
     // Get list2 leaders
-    List leaders2 = new ArrayList();
+    Set leaders2 = new LinkedHashSet();
     for (int i = 0; i < list2.size(); i++) {
       Constant con = (Constant) list2.get(i);
       if (con.vi.isCanonical())
@@ -300,8 +316,8 @@ public class DynamicConstants implements Serializable {
     int mod = ValueTuple.MODIFIED;
 
     // Unary slices/invariants
-    for (int i = 0; i < leaders1.size(); i++) {
-      Constant con = (Constant) leaders1.get(i);
+    for (Iterator i = leaders1.iterator(); i.hasNext(); ) {
+      Constant con = (Constant) i.next();
       if (!ppt.is_slice_ok (con.vi))
         continue;
       PptSlice1 slice1 = new PptSlice1 (ppt, con.vi);
@@ -311,14 +327,18 @@ public class DynamicConstants implements Serializable {
       new_views.add (slice1);
     }
 
-    // Binary slices/invariants
-    for (int i = 0; i < leaders1.size(); i++) {
-      Constant con1 = (Constant) leaders1.get(i);
-      for (int j = 0; j < leaders2.size(); j++) {
-        Constant con2 = (Constant) leaders2.get(j);
+    // Binary slices/invariants.  Note that if a variable is in both
+    // leader lists, it is only added when it is in order (to prevent
+    // creating the slice twice)
+    for (Iterator i = leaders1.iterator(); i.hasNext(); ) {
+      Constant con1 = (Constant) i.next();
+      for (Iterator j = leaders2.iterator(); j.hasNext(); ) {
+        Constant con2 = (Constant) j.next();
         Constant c1 = con1;
         Constant c2 = con2;
         if (con2.vi.varinfo_index < con1.vi.varinfo_index) {
+          if (leaders1.contains (con2))
+            continue;
           c1 = con2;
           c2 = con1;
         }
@@ -336,13 +356,22 @@ public class DynamicConstants implements Serializable {
       }
     }
 
-    // Ternary slices/invariants
-    for (int i = 0; i < leaders1.size(); i++) {
-      Constant con1 = (Constant) leaders1.get(i);
-      for (int j = 0; j < leaders2.size(); j++) {
-        Constant con2 = (Constant) leaders2.get(j);
-        for (int k = 0; k < leaders2.size(); k++) {
-          Constant con3 = (Constant) leaders2.get (k);
+    // Ternary slices/invariants.  Note that if a variable is in both
+    // leader lists, it is only added when it is in order (to prevent
+    // creating the slice twice)
+    for (Iterator i = leaders1.iterator(); i.hasNext(); ) {
+      Constant con1 = (Constant) i.next();
+      for (Iterator j = leaders2.iterator(); j.hasNext(); ) {
+        Constant con2 = (Constant) j.next();
+        if ((con2.vi.varinfo_index < con1.vi.varinfo_index)
+            && leaders1.contains (con2))
+          continue;
+        for (Iterator k = leaders2.iterator(); k.hasNext(); ) {
+          Constant con3 = (Constant) k.next();
+          if ((con3.vi.varinfo_index < con2.vi.varinfo_index) ||
+          	  ((con3.vi.varinfo_index < con1.vi.varinfo_index)
+          	  && leaders1.contains (con3)))
+            continue;
           Constant con_arr[] = {con1, con2, con3};
           Arrays.sort (con_arr, ConIndexComparator.getInstance());
           Assert.assertTrue ((con_arr[0].vi.varinfo_index
@@ -362,14 +391,6 @@ public class DynamicConstants implements Serializable {
           new_views.add (slice3);
         }
       }
-    }
-
-    // Make sure that all of these slices are new
-    for (int i = 0; i < new_views.size(); i++) {
-      PptSlice slice = (PptSlice) new_views.get (i);
-      PptSlice current = ppt.findSlice (slice.var_infos);
-      Assert.assertTrue (current == null, "Slice " + current
-                                          + " already exists");
     }
 
     // Debug print the created slies
