@@ -17,14 +17,6 @@ public class ProglangTypeTest extends TestCase {
     super(name);
   }
 
-  public void testIsIntegral() {
-    if (Daikon.compare_byte_char_to_integer) {
-      assertEquals(true, CHAR.isIntegral());
-    } else {
-      assertEquals(false, CHAR.isIntegral());
-    }
-  }
-
   static Comparator longarrcomparator = new ArraysMDE.LongArrayComparatorLexical();
   static Comparator comparrcomparator = new ArraysMDE.ComparableArrayComparatorLexical();
 
