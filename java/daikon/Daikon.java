@@ -272,30 +272,42 @@ public final class Daikon {
    **/
   public static boolean[] omit_types = new boolean[256];
 
-  // Public so other programs can reuse the same command-line options
+  // These variables are public so other programs can reuse the same
+  // command-line options.
+
+  // Please use these switches in the same order in all places where they
+  // appear (in the code and in the documentation); it makes the code
+  // easier to read and the documentation easier to keep up to date.
+
+  // Control output
   public static final String help_SWITCH = "help";
-  public static final String ppt_regexp_SWITCH = "ppt";
-  public static final String ppt_omit_regexp_SWITCH = "ppt_omit";
-  public static final String list_type_SWITCH = "list_type";
-  public static final String var_omit_regexp_SWITCH = "var_omit";
+  // "-o" switch: file to which serialized output is written
   public static final String no_text_output_SWITCH = "no_text_output";
+  public static final String format_SWITCH = "format";
   public static final String show_progress_SWITCH = "show_progress";
   public static final String no_show_progress_SWITCH = "no_show_progress";
+  public static final String noversion_SWITCH = "noversion";
+  public static final String output_num_samples_SWITCH = "output_num_samples";
+  public static final String files_from_SWITCH = "files_from";
+  public static final String omit_from_output_SWITCH = "omit_from_output";
+  // Control invariant detection
+  public static final String conf_limit_SWITCH = "conf_limit";
+  public static final String list_type_SWITCH = "list_type";
   public static final String no_dataflow_hierarchy_SWITCH = "nohierarchy";
   public static final String suppress_redundant_SWITCH = "suppress_redundant";
-  public static final String conf_limit_SWITCH = "conf_limit";
-  public static final String mem_stat_SWITCH = "mem_stat";
-  public static final String output_num_samples_SWITCH = "output_num_samples";
+  // Process only part of the trace file
+  public static final String ppt_regexp_SWITCH = "ppt";
+  public static final String ppt_omit_regexp_SWITCH = "ppt_omit";
+  public static final String var_omit_regexp_SWITCH = "var_omit";
+  // Configuration options
   public static final String config_SWITCH = "config";
   public static final String config_option_SWITCH = "config_option";
+  // Debugging
   public static final String debugAll_SWITCH = "debug";
   public static final String debug_SWITCH = "dbg";
-  public static final String files_from_SWITCH = "files_from";
-  public static final String noversion_SWITCH = "noversion";
-  public static final String disc_reason_SWITCH = "disc_reason";
   public static final String track_SWITCH = "track";
-  public static final String omit_from_output_SWITCH = "omit_from_output";
-  public static final String format_SWITCH = "format";
+  public static final String disc_reason_SWITCH = "disc_reason";
+  public static final String mem_stat_SWITCH = "mem_stat";
 
   // A pptMap which contains all the Program Points
   public static PptMap all_ppts;
@@ -333,11 +345,11 @@ public final class Daikon {
   static String usage =
     UtilMDE
       .join(new String[] {
-        release_string,
-        "Daikon invariant detector, copyright 1998-2004",
-    // " by Michael Ernst <mernst@csail.mit.edu>",
-    "Uses the Java port of GNU getopt, copyright (c) 1998 Aaron M. Renn",
-      "For licensing information, see the License section of the manual.",
+      release_string,
+      "Daikon invariant detector, copyright 1998-2004",
+      // " by Michael Ernst <mernst@csail.mit.edu>",
+      "Uses the Java port of GNU getopt, copyright (c) 1998 Aaron M. Renn",
+      // "For licensing information, see the License section of the manual.",
       "Usage:",
       "    java daikon.Daikon [flags...] files...",
       "  Each file is a declaration file or a data trace file; the file type",
@@ -610,29 +622,34 @@ public final class Daikon {
 
     LongOpt[] longopts =
       new LongOpt[] {
+        // Control output
         new LongOpt(help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-        new LongOpt(format_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-        new LongOpt(ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-        new LongOpt(ppt_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-        new LongOpt(list_type_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-        new LongOpt(var_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         new LongOpt(no_text_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+        new LongOpt(format_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         new LongOpt(show_progress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
         new LongOpt(no_show_progress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+        new LongOpt(noversion_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+        new LongOpt(output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+        new LongOpt(files_from_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+        new LongOpt(omit_from_output_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+        // Control invariant detection
+        new LongOpt(conf_limit_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+        new LongOpt(list_type_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         new LongOpt(no_dataflow_hierarchy_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
         new LongOpt(suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-        new LongOpt(conf_limit_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-        new LongOpt(mem_stat_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-        new LongOpt(output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+        // Process only part of the trace file
+        new LongOpt(ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+        new LongOpt(ppt_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+        new LongOpt(var_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+        // Configuration options
         new LongOpt(config_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         new LongOpt(config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+        // Debugging
         new LongOpt(debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
         new LongOpt(debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-        new LongOpt(files_from_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-        new LongOpt(noversion_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-        new LongOpt(disc_reason_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         new LongOpt(track_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-        new LongOpt(omit_from_output_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+        new LongOpt(disc_reason_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+        new LongOpt(mem_stat_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
         };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:", longopts);
     int c;
@@ -642,123 +659,28 @@ public final class Daikon {
         case 0 :
           // got a long option
           String option_name = longopts[g.getLongind()].getName();
+          // Control output
           if (help_SWITCH.equals(option_name)) {
             System.out.println(usage);
             throw new Daikon.TerminationMessage();
-          } else if (disc_reason_SWITCH.equals(option_name)) {
-            try {
-              PrintInvariants.discReasonSetup(g.getOptarg());
-            } catch (IllegalArgumentException e) {
-              throw new Daikon.TerminationMessage(e.getMessage());
-            }
-          } else if (track_SWITCH.equals(option_name)) {
-            LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
-            String error = Debug.add_track(g.getOptarg());
-            if (error != null) {
-              throw new Daikon.TerminationMessage(
-                "Error parsing track argument '"
-                  + g.getOptarg()
-                  + "' - "
-                  + error);
-            }
-          } else if (ppt_regexp_SWITCH.equals(option_name)) {
-            if (ppt_regexp != null)
-              throw new Error(
-                "multiple --"
-                  + ppt_regexp_SWITCH
-                  + " regular expressions supplied on command line");
-            try {
-              String regexp_string = g.getOptarg();
-              // System.out.println("Regexp = " + regexp_string);
-              ppt_regexp =
-                Global.regexp_compiler.compile(regexp_string);
-            } catch (Exception e) {
-              throw new Error(e.toString());
-            }
-            break;
-          } else if (ppt_omit_regexp_SWITCH.equals(option_name)) {
-            if (ppt_omit_regexp != null)
-              throw new Error(
-                "multiple --"
-                  + ppt_omit_regexp_SWITCH
-                  + " regular expressions supplied on command line");
-            try {
-              String regexp_string = g.getOptarg();
-              // System.out.println("Regexp = " + regexp_string);
-              ppt_omit_regexp =
-                Global.regexp_compiler.compile(regexp_string);
-            } catch (Exception e) {
-              throw new Error(e.toString());
-            }
-            break;
-          } else if (list_type_SWITCH.equals(option_name)) {
-            try {
-              String list_type_string = g.getOptarg();
-              ProglangType.list_implementors.add(
-                list_type_string);
-            } catch (Exception e) {
-              throw new Error(e.toString());
-            }
-            break;
-          } else if (var_omit_regexp_SWITCH.equals(option_name)) {
-            if (var_omit_regexp != null)
-              throw new Error(
-                "multiple --"
-                  + var_omit_regexp_SWITCH
-                  + " regular expressions supplied on command line");
-            try {
-              String regexp_string = g.getOptarg();
-              // System.out.println("Regexp = " + regexp_string);
-              var_omit_regexp =
-                Global.regexp_compiler.compile(regexp_string);
-            } catch (Exception e) {
-              throw new Error(e.toString());
-            }
-            break;
-          } else if (debugAll_SWITCH.equals(option_name)) {
-            Global.debugAll = true;
-          } else if (debug_SWITCH.equals(option_name)) {
-            LogHelper.setLevel(g.getOptarg(), LogHelper.FINE);
           } else if (no_text_output_SWITCH.equals(option_name)) {
             no_text_output = true;
+          } else if (format_SWITCH.equals(option_name)) {
+            String format_name = g.getOptarg();
+            Daikon.output_format = OutputFormat.get(format_name);
+            if (output_format == null) {
+              throw new Daikon.TerminationMessage(
+                "Unknown output format:  --format " + format_name);
+            }
           } else if (show_progress_SWITCH.equals(option_name)) {
             show_progress = true;
             LogHelper.setLevel("daikon.Progress", LogHelper.FINE);
           } else if (no_show_progress_SWITCH.equals(option_name)) {
             show_progress = false;
-          } else if (
-            no_dataflow_hierarchy_SWITCH.equals(option_name)) {
-            use_dataflow_hierarchy = false;
-          } else if (suppress_redundant_SWITCH.equals(option_name)) {
-            suppress_redundant_invariants_with_simplify = true;
-          } else if (conf_limit_SWITCH.equals(option_name)) {
-            double limit = Double.parseDouble(g.getOptarg());
-            if ((limit < 0.0) || (limit > 1.0)) {
-              throw new Error(
-                conf_limit_SWITCH + " must be between [0..1]");
-            }
-            Configuration.getInstance().apply(
-              "daikon.inv.Invariant.confidence_limit",
-              String.valueOf(limit));
-          } else if (mem_stat_SWITCH.equals(option_name)) {
-            use_mem_monitor = true;
+          } else if (noversion_SWITCH.equals(option_name)) {
+            noversion_output = true;
           } else if (output_num_samples_SWITCH.equals(option_name)) {
             output_num_samples = true;
-          } else if (config_SWITCH.equals(option_name)) {
-            String config_file = g.getOptarg();
-            try {
-              InputStream stream =
-                new FileInputStream(config_file);
-              Configuration.getInstance().apply(stream);
-            } catch (IOException e) {
-              throw new RuntimeException(
-                "Could not open config file " + config_file);
-            }
-            break;
-          } else if (config_option_SWITCH.equals(option_name)) {
-            String item = g.getOptarg();
-            Configuration.getInstance().apply(item);
-            break;
           } else if (files_from_SWITCH.equals(option_name)) {
             try {
               BufferedReader files_from =
@@ -796,8 +718,6 @@ public final class Daikon {
               throw new RuntimeException("Error reading --files_from file");
             }
             break;
-          } else if (noversion_SWITCH.equals(option_name)) {
-            noversion_output = true;
           } else if (omit_from_output_SWITCH.equals(option_name)) {
             String f = g.getOptarg();
             for (int i = 0; i < f.length(); i++) {
@@ -809,13 +729,119 @@ public final class Daikon {
               omit_types[f.charAt(i)] = true;
             }
             omit_from_output = true;
-          } else if (format_SWITCH.equals(option_name)) {
-            String format_name = g.getOptarg();
-            Daikon.output_format = OutputFormat.get(format_name);
-            if (output_format == null) {
-              throw new Daikon.TerminationMessage(
-                "Unknown output format:  --format " + format_name);
+          }
+          // Control invariant detection
+          else if (conf_limit_SWITCH.equals(option_name)) {
+            double limit = Double.parseDouble(g.getOptarg());
+            if ((limit < 0.0) || (limit > 1.0)) {
+              throw new Error(
+                conf_limit_SWITCH + " must be between [0..1]");
             }
+            Configuration.getInstance().apply(
+              "daikon.inv.Invariant.confidence_limit",
+              String.valueOf(limit));
+          } else if (list_type_SWITCH.equals(option_name)) {
+            try {
+              String list_type_string = g.getOptarg();
+              ProglangType.list_implementors.add(
+                list_type_string);
+            } catch (Exception e) {
+              throw new Error(e.toString());
+            }
+            break;
+          } else if (
+            no_dataflow_hierarchy_SWITCH.equals(option_name)) {
+            use_dataflow_hierarchy = false;
+          } else if (suppress_redundant_SWITCH.equals(option_name)) {
+            suppress_redundant_invariants_with_simplify = true;
+          }
+
+          // Process only part of the trace file
+          else if (ppt_regexp_SWITCH.equals(option_name)) {
+            if (ppt_regexp != null)
+              throw new Error(
+                "multiple --"
+                  + ppt_regexp_SWITCH
+                  + " regular expressions supplied on command line");
+            try {
+              String regexp_string = g.getOptarg();
+              // System.out.println("Regexp = " + regexp_string);
+              ppt_regexp =
+                Global.regexp_compiler.compile(regexp_string);
+            } catch (Exception e) {
+              throw new Error(e.toString());
+            }
+            break;
+          } else if (ppt_omit_regexp_SWITCH.equals(option_name)) {
+            if (ppt_omit_regexp != null)
+              throw new Error(
+                "multiple --"
+                  + ppt_omit_regexp_SWITCH
+                  + " regular expressions supplied on command line");
+            try {
+              String regexp_string = g.getOptarg();
+              // System.out.println("Regexp = " + regexp_string);
+              ppt_omit_regexp =
+                Global.regexp_compiler.compile(regexp_string);
+            } catch (Exception e) {
+              throw new Error(e.toString());
+            }
+            break;
+          } else if (var_omit_regexp_SWITCH.equals(option_name)) {
+            if (var_omit_regexp != null)
+              throw new Error(
+                "multiple --"
+                  + var_omit_regexp_SWITCH
+                  + " regular expressions supplied on command line");
+            try {
+              String regexp_string = g.getOptarg();
+              // System.out.println("Regexp = " + regexp_string);
+              var_omit_regexp =
+                Global.regexp_compiler.compile(regexp_string);
+            } catch (Exception e) {
+              throw new Error(e.toString());
+            }
+            break;
+          }
+          // Configuration options
+          else if (config_SWITCH.equals(option_name)) {
+            String config_file = g.getOptarg();
+            try {
+              InputStream stream =
+                new FileInputStream(config_file);
+              Configuration.getInstance().apply(stream);
+            } catch (IOException e) {
+              throw new RuntimeException(
+                "Could not open config file " + config_file);
+            }
+            break;
+          } else if (config_option_SWITCH.equals(option_name)) {
+            String item = g.getOptarg();
+            Configuration.getInstance().apply(item);
+            break;
+          }
+          else if (debugAll_SWITCH.equals(option_name)) {
+            Global.debugAll = true;
+          } else if (debug_SWITCH.equals(option_name)) {
+            LogHelper.setLevel(g.getOptarg(), LogHelper.FINE);
+          } else if (track_SWITCH.equals(option_name)) {
+            LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
+            String error = Debug.add_track(g.getOptarg());
+            if (error != null) {
+              throw new Daikon.TerminationMessage(
+                "Error parsing track argument '"
+                  + g.getOptarg()
+                  + "' - "
+                  + error);
+            }
+          } else if (disc_reason_SWITCH.equals(option_name)) {
+            try {
+              PrintInvariants.discReasonSetup(g.getOptarg());
+            } catch (IllegalArgumentException e) {
+              throw new Daikon.TerminationMessage(e.getMessage());
+            }
+          } else if (mem_stat_SWITCH.equals(option_name)) {
+            use_mem_monitor = true;
           } else {
             throw new TerminationMessage(
               "Unknown long option received: " + option_name);
