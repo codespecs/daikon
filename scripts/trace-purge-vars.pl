@@ -7,10 +7,16 @@
 # -v flag means to retain rather than discard variables matching the
 # regular expression.  (Its name is taken from grep.)
 
+# This script reduces the size of a trace file, but typically, using
+# Daikon's --var_omit flag is a better option.
+
 # I'm intentionally not operating by paragraphs, because I want the regexp
 # to only apply to the variable lines.
 
 # Problem: this hangs if given a file ending in a partial record.
+
+# There is no corresponding script for .decls files, so you would need to
+# edit the .decls file by hand.
 
 BEGIN {
   $debug = 0;
