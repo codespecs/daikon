@@ -172,8 +172,8 @@ END {
     while (defined($line = <GETFIELDS>)) {
       # This regexp is repeated near the end below.  Make sure to
       # change it in both locations.
-      if ($line =~ /^(\s+)(final\s+)?(private[^=]*\b(\w+)\s*[;=].*)$/) {
-	my $fieldname = $4;
+      if ($line =~ /^(\s+)(final\s+)?((static|private)[^=]*\b(\w+)\s*[;=].*)$/) {
+	my $fieldname = $5;
 	if (($line =~ /\[\s*\]/)
 	    || ($line !~ /\b(boolean|byte|char|double|float|int|long|short)\b/)) {
 	  push(@fields,$fieldname);
@@ -295,7 +295,12 @@ END {
 		    # better to a[n..] => a[*] than nothing at all
 		    grep(s/\[(.*[^*a-zA-Z0-9._].*)\]/[*]/g, @mods);
 		    grep(s/\[(.*\.\..*)\]/[*]/g, @mods);
-		    # even better would be to collect the list of indicies which are modified, and create a \forall to specify that the rest aren't
+		    # even better would be to collect the list of
+		    # indicies which are modified, and create a
+		    # \forall to specify that the rest aren't
+
+		    # change ary[*].field to ary[*]
+		    grep(s/\[\*\]\..*/[*]/g, @mods);		    
 
 		    for my $field (@final_fields) {
 		      @mods = grep(!/^this.$field$/, @mods);
@@ -375,25 +380,26 @@ END {
 	  }
 	  print OUT $nextline;
 	}
-	my $fullmeth = "$classname" . ":::OBJECT";
-	if (defined($raw{$fullmeth})) {
-	  for my $inv (split("\n", $raw{$fullmeth})) {
-	    if (is_non_supported_invariant($inv)) {
-	      if ($merge_unexpressable) {
-		print OUT "/*! invariant " . $inv . " */\n";
+	for my $fullmeth ("$classname" . ":::OBJECT", "$classname" . ":::CLASS") {
+	  if (defined($raw{$fullmeth})) {
+	    for my $inv (split("\n", $raw{$fullmeth})) {
+	      if (is_non_supported_invariant($inv)) {
+	        if ($merge_unexpressable) {
+		  print OUT "/*! invariant " . $inv . " */\n";
+	        }
+	      } else {
+	        print OUT "/*@ invariant " . $inv . " */\n";
 	      }
-	    } else {
-	      print OUT "/*@ invariant " . $inv . " */\n";
 	    }
 	  }
-	}
+        }
 	next;
       }
 
       # This regexp is repeated in the GETFIELDS loop above.  Make
       # sure to change it in both locations.
-      if ($line =~ /^(\s+)(final\s+)?(private[^=]*\b(\w+)\s*[;=].*)$/) {
-	my ($spaces, $mods, $body, $fieldname) = ($1, $2, $3, $4);
+      if ($line =~ /^(\s+)(final\s+)?((static|private)[^=]*\b(\w+)\s*[;=].*)$/) {
+	my ($spaces, $mods, $body, $access, $fieldname) = ($1, $2, $3, $4, $5);
 	$mods = "" unless defined($mods); # to prevent warnings
 	my $is_object = grep(/^$fieldname$/, @fields);
 	print OUT "$spaces/*@ spec_public */ $mods$body\n";
