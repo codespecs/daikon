@@ -11,8 +11,7 @@ import jtb.ParseException;
  * SpinfoFileParser parses a .spinfo file.  This file uses the term "ppt
  * section" and "replace section" to describe what is refered to as a
  * "Program Point Section" and "replacement sections" in Daikon User's
- * Manual, respectively.  A "ppt statement" is a single line from a
- * "ppt section."
+ * Manual, respectively.
  */
 class SpinfoFileParser {
 
