@@ -2,7 +2,7 @@ package daikon.gui;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.filter.InvariantFilters; // ?????
+import daikon.inv.filter.*;
 
 import java.io.*;
 import java.util.*;
@@ -20,6 +20,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.*;
+
 import javax.swing.tree.*;
 
 public class InvariantsGUI extends JFrame implements ActionListener, KeyListener {
@@ -213,34 +214,38 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	JMenu menu = new JMenu( "Filter", true ); // Unfortunately, tear-off menus aren't implemented yet.
 	menu.setMnemonic( KeyEvent.VK_L );
 	menuBar.add( menu );
-	createFilterMenuItem( menu, "Show unjustified invariants", InvariantFilters.UNJUSTIFIED_FILTER );
-	createFilterMenuItem( menu, "Show obvious invariants", InvariantFilters.OBVIOUS_FILTER );
-	createFilterMenuItem( menu, "Show invariants with few modified samples", InvariantFilters.FEW_MODIFIED_SAMPLES_FILTER );
-	createFilterMenuItem( menu, "Show invariants containing non-canonical variables", InvariantFilters.NON_CANONICAL_VARIABLES_FILTER );
-	createFilterMenuItem( menu, "Show invariants containing only constants", InvariantFilters.ONLY_CONSTANT_VARIABLES_FILTER );
+
+	JMenuItem menuItem = new JMenuItem( "Select all filters", KeyEvent.VK_S );
+	menuItem.addActionListener( invariantsTablesPanel );
+	menu.add( menuItem );
+	menuItem = new JMenuItem( "Deselect all filters", KeyEvent.VK_D );
+	menuItem.addActionListener( invariantsTablesPanel );
+	menu.add( menuItem );
+	menu.addSeparator();
+
+	createFilterMenuItem( menu, "Suppress unjustified invariants", InvariantFilters.UNJUSTIFIED_FILTER );
+	createFilterMenuItem( menu, "Suppress obvious invariants", InvariantFilters.OBVIOUS_FILTER );
+	createFilterMenuItem( menu, "Suppress invariants with few modified samples", InvariantFilters.FEW_MODIFIED_SAMPLES_FILTER );
+	createFilterMenuItem( menu, "Suppress invariants containing non-canonical variables", InvariantFilters.NON_CANONICAL_VARIABLES_FILTER );
+	createFilterMenuItem( menu, "Suppress invariants containing only constants", InvariantFilters.ONLY_CONSTANT_VARIABLES_FILTER );
     }
 
-    void createFilterMenuItem( JMenu menu, String text, String id ) {
-	JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem( text );
-	menuItem.addActionListener( this );
-	menuItem.setName( id );
+    void createFilterMenuItem( JMenu menu, String text, int id ) {
+	JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem( text, true );
+	menuItem.addActionListener( invariantsTablesPanel );
+	menuItem.setName( new Integer( id ).toString());
 	menu.add( menuItem );
     }
 
     public void actionPerformed( ActionEvent e ) {
 	JMenuItem menuItem = (JMenuItem) e.getSource();
-	String menuName = menuItem.getName();
-	if (menuName != null) {	// Must be a filter menu item
-	    invariantsTablesPanel.updateInvariants( menuName, ! ((JCheckBoxMenuItem) menuItem).getState());
-	} else {
-	    String menuText = menuItem.getText();
-	    if (menuText.equals( "Load file" )) {
-		String invFileName = pickFileFromFileChooser();
-		loadInvariantsFromFile( invFileName );
-	    }
-	    else if (menuText.equals( "Quit" ))
-		System.exit( 0 );
+	String menuText = menuItem.getText();
+	if (menuText.equals( "Load file" )) {
+	    String invFileName = pickFileFromFileChooser();
+	    loadInvariantsFromFile( invFileName );
 	}
+	else if (menuText.equals( "Quit" ))
+	    System.exit( 0 );
     }
 
     String pickFileFromFileChooser() {
@@ -289,7 +294,7 @@ class InvFileFilter extends FileFilter {
 }
 
 
-class InvariantTablesPanel implements TreeSelectionListener {
+class InvariantTablesPanel implements TreeSelectionListener, ActionListener {
     JScrollPane scrollPane;	 // the main scrollPane, which contains the main panel
     JPanel panel = new JPanel(); // the main panel
     TreeSelectionModel treeSelectionModel;
@@ -425,8 +430,31 @@ class InvariantTablesPanel implements TreeSelectionListener {
 	this.tableModels.add( tableModel );
     }
 
-    public void updateInvariants( String filterID, boolean turnOn ) {
-	invariantFilters.changeFilterSetting( filterID, turnOn );
+    //  Handle menu events involving filters
+    public void actionPerformed( ActionEvent e ) {
+	JMenuItem menuItem = (JMenuItem) e.getSource();
+	String menuText = menuItem.getText();
+	if (menuItem.getName() != null) {	// One specific filter was selected or deselected
+	    int filterID = new Integer( menuItem.getName()).intValue();
+	    invariantFilters.changeFilterSetting( filterID, ((JCheckBoxMenuItem) menuItem).isSelected());
+	    updateInvariantsDisplay();
+	} else if (menuText.equals( "Select all filters" )) {
+	    JMenu filterMenu = (JMenu) ((JPopupMenu) menuItem.getParent()).getInvoker();
+	    for (int i=3; i < filterMenu.getMenuComponentCount(); i++) // start with first filter menu item, at i=3
+		((JCheckBoxMenuItem) filterMenu.getMenuComponent(i)).setSelected( true );
+	    invariantFilters.turnFiltersOn();
+	    updateInvariantsDisplay();
+	} else if (menuText.equals( "Deselect all filters" )) {
+	    JMenu filterMenu = (JMenu) ((JPopupMenu) menuItem.getParent()).getInvoker();
+	    for (int i=3; i < filterMenu.getMenuComponentCount(); i++ ) // start with first filter menu item, at i=3
+		((JCheckBoxMenuItem) filterMenu.getMenuComponent(i)).setSelected( false );
+	    invariantFilters.turnFiltersOff();
+	    updateInvariantsDisplay();
+	}
+    }
+		    //		    ((AbstractButton) filterMenu.getMenuComponent(i)).fireStateChanged();
+
+    public void updateInvariantsDisplay() {
 	for (int i = 0; i < tableModels.size(); i++ ) {
 	    InvariantTableModel tableModel = (InvariantTableModel) tableModels.get( i );
 	    tableModel.updateInvariantList( invariantFilters );
@@ -485,9 +513,7 @@ class InvariantTableModel extends AbstractTableModel {
 
     public int getColumnCount() { return columnNames.length; }
 
-    public String getColumnName( int column ) {
-	return columnNames[ column ];
-    }
+    public String getColumnName( int column ) { return columnNames[ column ]; }
 
     public Object getValueAt( int row, int column ) {
 	Invariant invariant = (Invariant) filteredInvariants.get( row );
@@ -514,6 +540,3 @@ class InvariantTableModel extends AbstractTableModel {
 	fireTableDataChanged();
     }
 }
-
-
-

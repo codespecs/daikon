@@ -6,24 +6,24 @@ import daikon.inv.*;
 public class InvariantFilters {
     //  These id numbers are stored in HashMap's and such, so it's
     //  convenient for them to be String's rather than int's.
-    public static final String UNJUSTIFIED_FILTER = "0";
-    public static final String OBVIOUS_FILTER = "1";
-    public static final String FEW_MODIFIED_SAMPLES_FILTER = "2";
-    public static final String NON_CANONICAL_VARIABLES_FILTER = "3";
-    public static final String ONLY_CONSTANT_VARIABLES_FILTER = "4";
+    public static final int UNJUSTIFIED_FILTER = 0;
+    public static final int OBVIOUS_FILTER = 1;
+    public static final int FEW_MODIFIED_SAMPLES_FILTER = 2;
+    public static final int NON_CANONICAL_VARIABLES_FILTER = 3;
+    public static final int ONLY_CONSTANT_VARIABLES_FILTER = 4;
 
-    HashMap filters = new HashMap();
+    List filters = new ArrayList();
     
     public InvariantFilters() {
-	filters.put( InvariantFilters.UNJUSTIFIED_FILTER,             new UnjustifiedFilter());
-	filters.put( InvariantFilters.OBVIOUS_FILTER,                 new ObviousFilter());
-	filters.put( InvariantFilters.FEW_MODIFIED_SAMPLES_FILTER,    new FewModifiedSamplesFilter());
-	filters.put( InvariantFilters.NON_CANONICAL_VARIABLES_FILTER, new NonCanonicalVariablesFilter());
-	filters.put( InvariantFilters.ONLY_CONSTANT_VARIABLES_FILTER, new OnlyConstantVariablesFilter());
+	filters.add( InvariantFilters.UNJUSTIFIED_FILTER,             new UnjustifiedFilter());
+	filters.add( InvariantFilters.OBVIOUS_FILTER,                 new ObviousFilter());
+	filters.add( InvariantFilters.FEW_MODIFIED_SAMPLES_FILTER,    new FewModifiedSamplesFilter());
+	filters.add( InvariantFilters.NON_CANONICAL_VARIABLES_FILTER, new NonCanonicalVariablesFilter());
+	filters.add( InvariantFilters.ONLY_CONSTANT_VARIABLES_FILTER, new OnlyConstantVariablesFilter());
     }
 
     public boolean shouldKeep( Invariant invariant ) {
-	for (Iterator iter = filters.values().iterator(); iter.hasNext(); ) {
+	for (Iterator iter = filters.iterator(); iter.hasNext(); ) {
 	    InvariantFilter filter = (InvariantFilter) iter.next();
 	    if (filter.shouldDiscard( invariant )) {
 		System.out.println( filter.getClass().getName() + " rules out    \t" + invariant.format());
@@ -32,13 +32,27 @@ public class InvariantFilters {
 	}
 	return true;
     }
-    
-    public void changeFilterSetting( String filterID, boolean turnOn ) {
+
+    public void changeFilterSetting( int filterID, boolean turnOn ) {
 	InvariantFilter filter = (InvariantFilter) filters.get( filterID );
 	if (turnOn)
 	    filter.turnOn();
 	else
 	    filter.turnOff();
+    }
+
+    public void turnFiltersOn() {
+	for (Iterator iter = filters.iterator(); iter.hasNext(); ) {
+	    InvariantFilter filter = (InvariantFilter) iter.next();
+	    filter.turnOn();
+	}
+    }
+
+    public void turnFiltersOff() {
+	for (Iterator iter = filters.iterator(); iter.hasNext(); ) {
+	    InvariantFilter filter = (InvariantFilter) iter.next();
+	    filter.turnOff();
+	}
     }
 }
 
