@@ -57,8 +57,10 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
 
   }
 
+  static Comparator comparator = new UtilMDE.NullableStringComparator();  
+
   private void sort_rep() {
-    Arrays.sort(elts, 0, num_elts  );
+    Arrays.sort(elts, 0, num_elts , comparator );
   }
 
   // Assumes the other array is already sorted
