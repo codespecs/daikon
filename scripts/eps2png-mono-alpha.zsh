@@ -7,7 +7,11 @@
 # desired output, shrinking it by a factor of 4 to get an anti-aliased
 # grayscale image, and then using that as an alpha mask along with an
 # all-black image of the same size to make a black-on-transparent
-# result.
+# result. Also, we use Perl to overwrite the useless "number of
+# significant bits" chunk that pnmtopng writes with a chunk that
+# specifies that the background color should be white. This is for the
+# benefit of Netscape 4.x, which can't handle true transparency and
+# would otherwise render the image as black on black background.
 
 psfile=$1
 width=$2
@@ -16,5 +20,5 @@ temp=/tmp/eps2png$$.pgm
 pnmtopng=/g6/users/smcc/bin/pnmtopng
 
 pstopnm -portrait -stdout -xsize $[4 * $width] $psfile | pnmcrop | pnmscale 0.25 | pnmmargin -white 20 | ppmtopgm >$temp
-$pnmtopng -alpha <(pnminvert $temp) <(pbmmake -black $(pnmfile $temp | perl -ne 'print "$1 $2" if /(\d+) by (\d+)/')) >${psfile%.eps}.png
+$pnmtopng -alpha <(pnminvert $temp) <(pbmmake -black $(pnmfile $temp | perl -ne 'print "$1 $2" if /(\d+) by (\d+)/')) | perl -0777 -pe 's/sBIT\x1\cH\204\.\375M/bKGD\0\377\207\217\314\277/' >${psfile%.eps}.png
 rm $temp
