@@ -394,7 +394,6 @@ public final class FileIO
     throws IOException
   {
     for (Iterator i = files.iterator(); i.hasNext(); ) {
-      System.out.print(".");
       File file = (File) i.next();
       read_data_trace_file(file, all_ppts);
     }
@@ -402,7 +401,8 @@ public final class FileIO
     process_unmatched_procedure_entries();
   }
 
-  // for debugging only.  We stash values here to be examined/printed later.
+  // We stash values here to be examined/printed later.  Used to be
+  // for debugging only, but now also used for Daikon progress output.
   public static LineNumberReader data_trace_reader;
   public static File data_trace_filename;
 
@@ -594,6 +594,8 @@ public final class FileIO
       Global.dtraceWriter.close();
     }
 
+    data_trace_filename = null;
+    data_trace_reader = null;
   }
 
   private static void process_unmatched_procedure_entries() {

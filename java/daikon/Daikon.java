@@ -425,6 +425,30 @@ public final class Daikon {
   ///////////////////////////////////////////////////////////////////////////
   // Infer invariants over the trace data
 
+  /** A way to output FileIO progress information easily */
+  private final static Thread fileio_progress = new FileIOProgress();
+  static class FileIOProgress extends Thread {
+    public void run() {
+      while (true) {
+	System.out.print("\r[" + (new Date()) + "]: " + message());
+	try {
+	  sleep(1000);
+	} catch (InterruptedException e) {
+	  // hmm
+	}
+      }
+    }
+    private String message() {
+      File file = FileIO.data_trace_filename;
+      if (file == null) {
+	return "[no status]";
+      }
+      LineNumberReader lnr = FileIO.data_trace_reader;
+      String line = (lnr == null) ? "?" : String.valueOf(lnr.getLineNumber());
+      return "Reading " + file.getName() + " (line " + line + ") ...";
+    }
+  }
+
   /**
    * The main data-processing routine of the daikon engine.  At this
    * point, the decls and spinfo files have been loaded, all of the
@@ -443,11 +467,13 @@ public final class Daikon {
 
     elapsedTime(); // reset timer
     try {
-      System.out.print("Processing trace data ");
+      System.out.println("Processing trace data; reading "
+			 + UtilMDE.nplural(dtrace_files.size(), "file")
+			 + ":");
+      fileio_progress.start();
       FileIO.read_data_trace_files(dtrace_files, all_ppts);
-      System.out.print(" (read ");
-      System.out.print(UtilMDE.nplural(dtrace_files.size(), "file"));
-      System.out.println(")");
+      fileio_progress.stop();
+      System.out.println();
     } catch (IOException e) {
       System.out.println();
       e.printStackTrace();
@@ -525,7 +551,7 @@ public final class Daikon {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       // if (ppt.has_samples() &&  // [[INCR]]
       if (! no_text_output) {
-        ppt.print_invariants_maybe(System.out, ppts);
+        ppt.print_invariants_maybe(System.out);
       }
     }
   }
