@@ -21,7 +21,7 @@
 @c Another solution would be to use "makeinfo -E" (then process the
 @c resulting file with "makeinfo --html").
 @macro daikonemail{}
-@email{daikon@@pag.lcs.mit.edu}
+@email{daikon-developers@@pag.lcs.mit.edu}
 @end macro
 
 @c @setchapternewpage odd
@@ -105,6 +105,10 @@ It describes Daikon version 2.3.19, released November 2, 2002.
 
 @detailmenu
  --- The Detailed Node Listing ---
+
+Introduction
+
+* Mailing lists::               
 
 Installing Daikon
 
@@ -321,11 +325,6 @@ Other problems
 * Large dtrace files::          
 * Tree GUI font errors::        
 
-Reporting bugs
-
-* Known bugs::                  
-* Further reading::             
-
 Details
 
 * History::                     
@@ -374,6 +373,33 @@ C++, and IOA languages; it is easy to extend Daikon to other applications.
 Daikon is freely available for most uses; for details, see
 @ref{License}.
 
+@menu
+* Mailing lists::               
+@end menu
+
+@node    Mailing lists,  , Introduction, Introduction
+@section Mailing lists
+@cindex mailing lists
+@cindex daikon-announce mailing list
+@cindex daikon-discuss mailing list
+@cindex daikon-developers mailing list
+
+The following mailing lists (and their archives) are available:
+@itemize
+@item daikon-announce@@pag.lcs.mit.edu
+A low-volume, announcement-only list.  For example,
+announcements of new releases are sent to this list.
+To subscribe, visit @url{http://pag.lcs.mit.edu/daikon/download/}.
+@item daikon-discuss@@pag.lcs.mit.edu
+A moderated list for the community of Daikon users.  Use it to share
+tips and successes, and to get help with questions or problems (after
+checking the documentation).  To subscribe, visit
+@url{http://pag.lcs.mit.edu/daikon/download/}.
+@item daikon-developers@@pag.lcs.mit.edu
+This list goes to the Daikon maintainers.  Use it for bug reports,
+suggestions, and the like.
+@end itemize
+
 
 @node    Installing Daikon, Example use, Introduction, Top
 @chapter Installing Daikon
@@ -396,7 +422,11 @@ wget http://pag.lcs.mit.edu/daikon/download/daikon.tar.gz
 
 @cindex anonymous CVS access to Daikon sources
 Daikon is also available via anonymous CVS.  Send email to
-@email{daikon@@pag.lcs.mit.edu} if you desire such access.
+@email{daikon-developers@@pag.lcs.mit.edu} if you desire such access.
+
+You may wish to subscribe to one of the mailing lists (@pxref{Mailing
+lists}), in order to be notified of new releases or join discussions
+with other Daikon users and developers.
 
 @cindex @var{daikonparent} directory
 @item
@@ -497,7 +527,7 @@ Place that executable in directory
 @file{$DAIKONDIR/front-end/java/src} (or, alternately, elsewhere on
 your path), then run @command{rehash}.  Now you are ready to run dfej.
 (If no executable is available for your architecture, send mail to
-@email{daikon@@pag.lcs.mit.edu} and we may be able to produce an
+@email{daikon-developers@@pag.lcs.mit.edu} and we may be able to produce an
 executable for you.)
 
 @item
@@ -594,8 +624,8 @@ when compiling C and C++ programs in which you wish to detect invariants.
 License restrictions prohibit us from distributing the source for dfec,
 except to other parties who hold a license to the EDG (Edison Design
 Group) C/C++ front end.  If you hold such a license, send mail to
-@email{daikon@@pag.lcs.mit.edu} to obtain a patch to the EDG front end.
-To build dfec for yourself, perform the following steps:
+@email{daikon-developers@@pag.lcs.mit.edu} to obtain a patch to the
+EDG front end.  To build dfec for yourself, perform the following steps:
 @enumerate
 @item Unpack your EDG source code (which you obtained from EDG).
 @example
@@ -3813,7 +3843,7 @@ The configuration option name contains the
 Java classes in which it is defined.  (In the Daikon source code, the
 configuration value is stored in a variable whose name contains a
 @code{dkconfig_} prefix, but that should be irrelevant to users.)
-To learn more about a specific invariants or derived variables, see
+To learn more about a specific invariant or derived variables, see
 its source code.
 
 @table @asis
@@ -4155,7 +4185,7 @@ Cluster analysis is a statistical method that finds groups or clusters
 in data.  The clusters may indicate conditional properties in the
 program.  A conditional property at a program point separates the data
 into those that satisfy it and those that do not, and conditional
-invariants can be induced by clutering.  Any invariant that is
+invariants can be induced by clustering.  Any invariant that is
 discovered over one cluster but not over another is a conditional
 invariant---the predicate for the conditional invariant being
 membership in the cluster in which the invariant was found.  The
@@ -4408,7 +4438,19 @@ to @samp{SingleScalarFactory.instantiate}.
 @node    New derived variables, New formatting for invariants, New invariants, Extending Daikon
 @section New derived variables
 
-(To be written)
+@cindex derived variable
+@cindex variable, derived
+
+A derived variable is an expression that does not appear in the source
+code as a variable, but that Daikon treats as a variable for purposes
+of invariant detection.  For instance, if there exists an array
+@samp{a} and an integer @samp{i}, then Daikon introduces the derived
+variable @samp{a[i]}.  This permits detection invariants over this
+quantity.
+
+(Describing how to create new variety of derived variable is still to
+be written.  For now, see the derived variables that appear in
+@file{$DAIKONDIR/java/daikon/derive/}.)
 
 
 @node    New formatting for invariants, New front ends, New derived variables, Extending Daikon
@@ -5173,11 +5215,14 @@ your system administrator to do so.
 @cindex reporting bugs
 @cindex bugs, reporting
 
-If you have any questions, can suggest ways to improve the documentation,
-find bugs in the system, or have suggestions for its improvement, please
-send email to @email{daikon@@pag.lcs.mit.edu}.  While Daikon is a research prototype,
-we will try to assist you and to correct any problems, so please don't
-hesitate to ask for help or report difficulties.
+If you have any questions, can suggest ways to improve the
+documentation, find bugs in the system, or have suggestions for its
+improvement, please send email to
+@email{daikon-developers@@pag.lcs.mit.edu}.  While Daikon is a
+research prototype, we will try to assist you and to correct any
+problems, so please don't hesitate to ask for help or report
+difficulties.  Additionally, if you can contribute enhancements or bug
+fixes, those will be gratefully accepted.
 
 Your bug report will be most helpful if you include:
 @itemize @bullet
@@ -5207,10 +5252,9 @@ It is frequently more difficult to reproduce an error than to correct
 it; if you make it easy to reproduce and verify the problem, then it is
 much more likely to be corrected.
 
-@menu
-* Known bugs::                  
-* Further reading::             
-@end menu
+You may also wish to take advantage of the Daikon mailing lists
+(@pxref{Mailing lists}).
+
 
 @node    Known bugs, Further reading, Reporting bugs, Troubleshooting
 @section Known bugs
@@ -5238,6 +5282,10 @@ and b are unknown and are printed as question marks.
 
 @node    Further reading,  , Known bugs, Troubleshooting
 @section Further reading
+
+The mailing list archives (@pxref{Mailing lists}) may contain helpful
+information (we strive to incorporate that information in this
+manual), or you may find discussions on those lists helpful to you.
 
 For further reading, see the list of publications at the 
 Daikon homepage, @url{http://pag.lcs.mit.edu/daikon/}.
@@ -5327,14 +5375,18 @@ of use, you agree to promptly communicate any changes, improvements, or
 enhancements to the authors for inclusion in a future release under
 these same conditions.  If you do not agree to this license, please do
 not use or examine the software.  Other licensing terms are available;
-send mail to @email{daikon@@pag.lcs.mit.edu}.
+send mail to @email{mernst@@pag.lcs.mit.edu}.
 
-If you use Daikon, please send mail to @email{daikon@@pag.lcs.mit.edu}, so that you can
-be informed of new versions, enhancements, and bug fixes.  We would also
-appreciate a brief description of how you are using Daikon, because we
-are curious about how users exploit it (and are eager for anecdotes about
-its successes and failures), and we want to make Daikon more effective
-for its users.
+If you use Daikon, please subscribe to the daikon-announce and
+daikon-discuss mailing lists (@pxref{Mailing lists}).  The
+daikon-announce list will inform you of new versions, enhancements,
+and bug fixes.  On the daikon-discuss mailing list, you can obtain
+help from, and offer help to, other users.  We would also appreciate a
+brief description of how you are using Daikon, sent to
+@email{daikon-developers@@pag.lcs.mit.edu}.  We are curious about how
+users exploit Daikon, and we are eager for anecdotes about its
+successes and failures, so that we can make Daikon more effective for
+its users.
 
 
 @node    Credits,  , License, Details
@@ -5343,22 +5395,28 @@ for its users.
 @cindex contributors to Daikon
 
 The following individuals have contributed to Daikon:
-@itemize @bullet
-@item Jake Cockrell
-@item Adam Czeisler
-@item Nii Dodoo
-@item @uref{http://pag.lcs.mit.edu/~mernst/,,Michael Ernst}
-@item @uref{http://www.cs.ucsd.edu/~wgg/,,William Griswold}
-@item @uref{http://web.mit.edu/mhao/www/,,Melissa Hao}
-@item @uref{http://web.mit.edu/mharder/www/,,Michael Harder}
-@item Greg Jay
-@item Josh Kataoka
-@item @uref{http://web.mit.edu/mistere/www/,,Jeremy Nimmer}
-@item @uref{http://www.cs.washington.edu/homes/notkin/,,David Notkin}
-@end itemize
+ Yuriy Brun,
+ Jake Cockrell,
+ Adam Czeisler,
+ Alan Donovan,
+ Nii Dodoo,
+ Alan Dunn,
+ Michael Ernst,
+ William Griswold,
+ Melissa Hao,
+ Michael Harder,
+ Lee Lin,
+ Greg Jay,
+ Josh Kataoka,
+ Vikash Mansinghka,
+ Stephen McCamant,
+ Samir Meghani,
+ Jeremy Nimmer,
+ Toh Ne@w{ }Win,
+ David Notkin,
+ Iuliu Vasilescu.
 
-@uref{http://www.cs.washington.edu/homes/csk/,,Craig Kaplan} carved the
-Daikon logo.
+Craig Kaplan carved the Daikon logo.
 
 The feedback of Daikon users has been very valuable.  We are
 particularly grateful to Rich Angros, Tadashi Araragi, David Cok, Engelbert
@@ -5481,7 +5539,7 @@ for each variable:
 @itemize @bullet
 @item
 name: an string containing no tabs or newlines.  Variable names must
-be parseable by the VarInfoName class.  One requirement is that the
+be parsable by the VarInfoName class.  One requirement is that the
 names of array-valued variables must end with "[]".  For instance, "a"
 might stand for the array object itself (appearing in the trace file
 as a unique ID or hashcode), and "a[]" would stand for the array
