@@ -73,7 +73,7 @@ public final class VarComparabilityImplicit
   }
 
   public boolean Equals (VarComparabilityImplicit o) {
-    return VarComparabilityImplicit.comparable (null, this, null, o);
+    return equality_set_ok (o);
   }
 
   static VarComparabilityImplicit parse(String rep, ProglangType vartype) {
@@ -139,6 +139,30 @@ public final class VarComparabilityImplicit
     if ((type1.dimensions == 0) && (type2.dimensions == 0))
       return type1.base == type2.base;
     // One array, one non-array, and the non-array isn't universally comparable.
+    Assert.assertTrue(type1.dimensions == 0 || type2.dimensions == 0);
+    return false;
+  }
+
+  /**
+   * Same as comparable except that variables that are comparable to
+   * everything (negative comparability value) can't be included in the
+   * same equality set as those with positive values
+   */
+  public boolean equality_set_ok (VarComparability other) {
+
+    VarComparabilityImplicit type1 = this;
+    VarComparabilityImplicit type2 = (VarComparabilityImplicit) other;
+
+    if ((type1.dimensions > 0) && (type2.dimensions > 0)) {
+      return (type1.indexType(type1.dimensions-1).equality_set_ok
+              (type2.indexType(type2.dimensions-1))
+              && type1.elementType().equality_set_ok (type2.elementType()));
+    }
+
+    if ((type1.dimensions == 0) && (type2.dimensions == 0))
+      return type1.base == type2.base;
+
+    // One array, one non-array
     Assert.assertTrue(type1.dimensions == 0 || type2.dimensions == 0);
     return false;
   }
