@@ -32,7 +32,7 @@ public final class FileCompiler {
 
   /**
    * Creates a new FileCompiler.  Equivalent to FileCompiler("javac", 6000).
-   * @see #FileCompiler(String)
+   * @see #FileCompiler(String, long)
    **/
   public FileCompiler() {
     this("javac", 6000);
