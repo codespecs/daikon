@@ -436,7 +436,7 @@ public final class ProglangType
       // This big if ... else should deal with all the primitive types --
       // or at least all the ones that can be rep_types.
       // ("long" and "short" cannot be rep_types; for simplicity, variables
-      // declared as long or short have the "int" rep_type.
+      // declared as long or short have the "int" rep_type.)
       if (base == BASE_INT) {
         long[] result = new long[len];
         for (int i=0; i<len; i++) {
