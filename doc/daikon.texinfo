@@ -41,11 +41,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 3.1.6
+@center Daikon version 3.1.7
 
 @sp 1
-@c Daikon version 3.1.6 date
-@center December 1, 2004
+@c Daikon version 3.1.7 date
+@center January 1, 2005
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -67,7 +67,7 @@ Copyright @copyright{} 1998-2003
 @c <h1>Daikon Invariant Detector User Manual</h1>
 @c
 @c This is the user manual for the Daikon invariant detector.
-@c It describes Daikon version 3.1.6, released December 1, 2004.
+@c It describes Daikon version 3.1.7, released January 1, 2005.
 @c @end html
 
 @c Putting this lower in the HTML version looks a little bit strange,
@@ -86,7 +86,7 @@ Copyright @copyright{} 1998-2003
 @c 
 @c @end ifinfo
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 3.1.6, released December 1, 2004.
+It describes Daikon version 3.1.7, released January 1, 2005.
 @end ifnottex
 
 @menu
@@ -3953,7 +3953,7 @@ error, to a single file, you can say @code{--program-stdout='&2'
 
 @c Be sure to remove this once it becomes out of date
 @c (This version number should be automatically updated, though.)
-As of Daikon version 3.1.6, Kvasir is still in an active stage of
+As of Daikon version 3.1.7, Kvasir is still in an active stage of
 development.  While it works well on many programs, it does not yet
 support all of the options that the older dfec did, nor all of its
 features.  This subsection lists some of the known limitations of the
@@ -7510,7 +7510,7 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 3.1.6, released December 1, 2004.
+This manual describes Daikon version 3.1.7, released January 1, 2005.
 A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
