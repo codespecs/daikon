@@ -46,6 +46,7 @@ if not locals().has_key("fn_var_infos"):
     lackwit_type_format = "explicit"    # types list the comparable values
     # lackwit_type_format = "implicit"  # types name a symbol
     # lackwit_type_format = "none"      # no lackwit types provided
+    err_on_unsymmetric_types = true
 
     ### Debugging
     debug_read = false                  # reading files
@@ -326,7 +327,7 @@ java_object_re = re.compile((r'\[*(?:' + r'^[a-zA-Z][a-zA-Z0-9_]*(?:\.[a-zA-Z][a
                              + r'|' + r'[BCDFIJSZ]' + r')')
                             + r'@([0-9a-fA-F]+)$');
 
-integral_types = ("int", "char", "float", "double", "integral", "boolean")
+integral_types = ("int", "char", "float", "double", "integral", "boolean", "long", "short")
 known_types = integral_types + ("pointer", "address")
 
 
@@ -580,10 +581,14 @@ def lackwit_types_compatible(name1, type1, name2, type2):
     in21 = name2 in type1
     # print "lackwit_types_compatible = ", in12, "for:", name1, type1, name2, type2
     if (in12 != in21):
-        print "variable comparability is non-symmetric:", name1, type1, name2, type2
-    # now throw an error
-    assert in12 == in21
-    return in12
+        message = ("variable comparability is non-symmetric: %s %s %s %s"
+                   % (name1, type1, name2, type2))
+        if err_on_unsymmetric_types:
+            # now throw an error
+            raise message
+        else:
+            print message
+    return (in12 or in21)
 
 
 class var_info:
