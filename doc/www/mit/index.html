@@ -150,13 +150,11 @@ The following commands create and populate the
 <pre>
     mkdir ~/research
     cd ~/research
-    chmod +rx ~ ~/research
-    cvs -d /g4/projects/invariants/.CVS co invariants
+    fs sa -d . .. -a pag-admin rl
+    fs sa -d . .. -a pag rl
+    cvs -d /afs/csail/group/pag/projects/invariants/.CVS co invariants
     cd invariants
     cp -p doc/www/mit/Makefile.user java/
-    chgrp -R invariants .
-    chmod -R g+r .
-    chmod g+x `find . -type d -print`
     cd ~/research/invariants
     make compile
 </pre>
