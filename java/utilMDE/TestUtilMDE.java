@@ -516,6 +516,9 @@ public final class TestUtilMDE extends TestCase {
       int[] a5 = new int[] { 0,1,2,3,4 };
       int[] a6 = new int[] { 0,1,5,3,4 };
       int[] a7 = new int[] { 1,2,3,4 };
+      int[] a8 = new int[] { -5 };
+      int[] a9 = new int[] { Integer.MAX_VALUE };
+      int[] a10= new int[] { Integer.MIN_VALUE };
 
       assertTrue(iacl.compare(a0, a1) == 0);
       assertTrue(iaclf.compare(a0, a1) == 0);
@@ -561,9 +564,126 @@ public final class TestUtilMDE extends TestCase {
       assertTrue(iaclf.compare(a7, a4) < 0);
       assertTrue(iacl.compare(a4, a7) < 0);
       assertTrue(iaclf.compare(a4, a7) > 0);
+      assertTrue(iacl.compare (a8, a9) < 0);
+      assertTrue(iaclf.compare (a8, a9) < 0);
+      assertTrue(iacl.compare(a10, a7) < 0);
     }
 
-    // Here I can only sensibly compare for equal vs. nonequal.
+    // public static class LongArrayComparatorLexical implements Comparator
+    // public static class LongArrayComparatorLengthFirst implements Comparator
+    {
+      Comparator lacl = new ArraysMDE.LongArrayComparatorLexical();
+      Comparator laclf = new ArraysMDE.LongArrayComparatorLengthFirst();
+      long[] a0 = new long[] { };
+      long[] a1 = new long[] { };
+      long[] a2 = new long[] { 0,1,2,3 };
+      long[] a3 = new long[] { 0,1,2,3,0 };
+      long[] a4 = new long[] { 0,1,2,3,4 };
+      long[] a5 = new long[] { 0,1,2,3,4 };
+      long[] a6 = new long[] { 0,1,5,3,4 };
+      long[] a7 = new long[] { 1,2,3,4 };
+      long[] a8 = new long[] { -5 };
+      long[] a9 = new long[] { Long.MAX_VALUE };
+      long[] a10= new long[] { Long.MIN_VALUE };
+
+      assertTrue(lacl.compare(a0, a1) == 0);
+      assertTrue(laclf.compare(a0, a1) == 0);
+      assertTrue(lacl.compare(a1, a0) == 0);
+      assertTrue(laclf.compare(a1, a0) == 0);
+      assertTrue(lacl.compare(a1, a2) < 0);
+      assertTrue(laclf.compare(a1, a2) < 0);
+      assertTrue(lacl.compare(a2, a1) > 0);
+      assertTrue(laclf.compare(a2, a1) > 0);
+      assertTrue(lacl.compare(a2, a3) < 0);
+      assertTrue(laclf.compare(a2, a3) < 0);
+      assertTrue(lacl.compare(a3, a2) > 0);
+      assertTrue(laclf.compare(a3, a2) > 0);
+      assertTrue(lacl.compare(a3, a4) < 0);
+      assertTrue(laclf.compare(a3, a4) < 0);
+      assertTrue(lacl.compare(a4, a3) > 0);
+      assertTrue(laclf.compare(a4, a3) > 0);
+      assertTrue(lacl.compare(a4, a5) == 0);
+      assertTrue(laclf.compare(a4, a5) == 0);
+      assertTrue(lacl.compare(a5, a4) == 0);
+      assertTrue(laclf.compare(a5, a4) == 0);
+      assertTrue(lacl.compare(a5, a6) < 0);
+      assertTrue(laclf.compare(a5, a6) < 0);
+      assertTrue(lacl.compare(a6, a5) > 0);
+      assertTrue(laclf.compare(a6, a5) > 0);
+      assertTrue(lacl.compare(a6, a7) < 0);
+      assertTrue(laclf.compare(a6, a7) > 0);
+      assertTrue(lacl.compare(a7, a6) > 0);
+      assertTrue(laclf.compare(a7, a6) < 0);
+      assertTrue(lacl.compare(a1, a4) < 0);
+      assertTrue(laclf.compare(a1, a4) < 0);
+      assertTrue(lacl.compare(a4, a1) > 0);
+      assertTrue(laclf.compare(a4, a1) > 0);
+      assertTrue(lacl.compare(a2, a4) < 0);
+      assertTrue(laclf.compare(a2, a4) < 0);
+      assertTrue(lacl.compare(a4, a2) > 0);
+      assertTrue(laclf.compare(a4, a2) > 0);
+      assertTrue(lacl.compare(a6, a4) > 0);
+      assertTrue(laclf.compare(a6, a4) > 0);
+      assertTrue(lacl.compare(a4, a6) < 0);
+      assertTrue(laclf.compare(a4, a6) < 0);
+      assertTrue(lacl.compare(a7, a4) > 0);
+      assertTrue(laclf.compare(a7, a4) < 0);
+      assertTrue(lacl.compare(a4, a7) < 0);
+      assertTrue(laclf.compare(a4, a7) > 0);
+      assertTrue(lacl.compare (a8, a9) < 0);
+      assertTrue(laclf.compare (a8, a9) < 0);
+      assertTrue(lacl.compare(a10, a7) < 0);
+    }
+
+    // public static class DoubleArrayComparatorLexical implements Comparator
+    {
+      Comparator dacl = new ArraysMDE.DoubleArrayComparatorLexical();
+      double[] a0 = new double[] { };
+      double[] a1 = new double[] { };
+      double[] a2 = new double[] { 0,1,2,3 };
+      double[] a3 = new double[] { 0,1,2,3,0 };
+      double[] a4 = new double[] { 0,1,2,3,4 };
+      double[] a5 = new double[] { 0,1,2,3,4 };
+      double[] a6 = new double[] { 0,1,5,3,4 };
+      double[] a7 = new double[] { 1,2,3,4 };
+      double[] a8 = new double[] { 0.005 };
+      double[] a9 = new double[] { 0.004 };
+      double[] a10= new double[] { -0.005 };
+      double[] a11= new double[] { -0.004 };
+      double[] a12= new double[] { 10.0 * Integer.MAX_VALUE };
+      double[] a13= new double[] { 10.0 * Integer.MIN_VALUE };
+
+      assertTrue(dacl.compare(a0, a1) == 0);
+      assertTrue(dacl.compare(a1, a0) == 0);
+      assertTrue(dacl.compare(a1, a2) < 0);
+      assertTrue(dacl.compare(a2, a1) > 0);
+      assertTrue(dacl.compare(a2, a3) < 0);
+      assertTrue(dacl.compare(a3, a2) > 0);
+      assertTrue(dacl.compare(a3, a4) < 0);
+      assertTrue(dacl.compare(a4, a3) > 0);
+      assertTrue(dacl.compare(a4, a5) == 0);
+      assertTrue(dacl.compare(a5, a4) == 0);
+      assertTrue(dacl.compare(a5, a6) < 0);
+      assertTrue(dacl.compare(a6, a5) > 0);
+      assertTrue(dacl.compare(a6, a7) < 0);
+      assertTrue(dacl.compare(a7, a6) > 0);
+      assertTrue(dacl.compare(a1, a4) < 0);
+      assertTrue(dacl.compare(a4, a1) > 0);
+      assertTrue(dacl.compare(a2, a4) < 0);
+      assertTrue(dacl.compare(a4, a2) > 0);
+      assertTrue(dacl.compare(a6, a4) > 0);
+      assertTrue(dacl.compare(a4, a6) < 0);
+      assertTrue(dacl.compare(a7, a4) > 0);
+      assertTrue(dacl.compare(a4, a7) < 0);
+
+      // Test the comparisons on small/large numbers
+      assertTrue(dacl.compare(a8, a9) > 0);
+      assertTrue(dacl.compare(a10, a11) < 0);
+      assertTrue(dacl.compare(a11, a12) < 0);
+      assertTrue(dacl.compare(a12, a13) > 0);
+      assertTrue(dacl.compare(a13, a11) < 0);
+    }
+
     // public static class ObjectArrayComparatorLexical implements Comparator
     // public static class ObjectArrayComparatorLengthFirst implements Comparator
 
