@@ -27,10 +27,6 @@ public class DaikonSimple {
 
 	//inv file for storing the invariants in serialized form
 	public static File inv_file = null;
-
-	//configuration option for no progress information so that empty diff files
-	//can be created from Daikon and DaikonSimple output
-	public static boolean dkconfig_quiet = false;
 	
 	private static String usage =
 		UtilMDE.join(
@@ -95,7 +91,7 @@ public class DaikonSimple {
 
 		Iterator t = all_ppts.pptIterator();
 
-
+//System.exit(0);
 		//		print out the invariants for each program point (sort first)
 		t = all_ppts.pptIterator();
 
@@ -107,14 +103,14 @@ public class DaikonSimple {
 				Iterator i = invs.iterator();
 			
 
-				if(DaikonSimple.dkconfig_quiet) {
+				if(Daikon.dkconfig_quiet) {
 				System.out.println("====================================================");
 				System.out.println(ppt.name());
 				} else {
 				System.out.println("===================================================+");					
 				System.out.println(ppt.name() + " +");
 				}
-				
+				System.out.println(ppt.num_samples());				
 				while (i.hasNext()) {
 					Invariant x = (Invariant) i.next();
 					VarInfo[] vars = x.ppt.var_infos;
@@ -700,9 +696,26 @@ public class DaikonSimple {
 
 		return (true);
 	}
+	
+	/** Class to track matching ppt and its values. */
+	 static final class EnterCall {
+
+	   public PptTopLevel ppt;
+	   public ValueTuple vt;
+
+	   public EnterCall (PptTopLevel ppt, ValueTuple vt) {
+
+		 this.ppt = ppt;
+		 this.vt = vt;
+	   }
+	 }
+	 
 	private static class SimpleProcessor extends FileIO.Processor {
 		PptMap all_ppts = null;
-
+		
+		/** nonce -> EnterCall **/
+		  Map call_map = new LinkedHashMap();
+		
 		/**
 		 * process the sample by checking it against each existing invariant
 		 * and removing the invariant from the list of possibles if any invariant is falsified.
@@ -720,6 +733,23 @@ public class DaikonSimple {
 
 			// Intern the sample
 			vt = new ValueTuple(vt.vals, vt.mods);
+			
+			// If this is an enter point, just remember it for later
+				 if (ppt.ppt_name.isEnterPoint()) {
+				   Assert.assertTrue (nonce != null);
+				   Assert.assertTrue (call_map.get (nonce) == null);
+				   call_map.put (nonce, new EnterCall (ppt, vt));
+				   return;
+				 }
+
+				 // If this is an exit point, process the saved enter point
+				 if (ppt.ppt_name.isExitPoint()) {
+				   Assert.assertTrue (nonce != null);
+				   EnterCall ec = (EnterCall) call_map.get (nonce);
+				   call_map.remove (nonce);
+				   add (ec.ppt, ec.vt);
+				 }
+
 			add(ppt, vt);
 		}
 

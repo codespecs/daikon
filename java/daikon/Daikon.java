@@ -94,6 +94,13 @@ public final class Daikon {
 	 * exit points from a method.
 	 **/
 	public static boolean dkconfig_disable_splitting = false;
+	
+	/**
+	 * Boolean.  Controls whether or not processing information is printed out.
+	 * Setting variable to true also automatically sets dkconfig_progress_delay to -1.
+	 * Default value is false.
+	 **/
+	public static boolean dkconfig_quiet = false;
 
 	// Change this at your peril; high costs in time and space for "false",
 	// because so many more invariants get instantiated.
@@ -145,7 +152,7 @@ public final class Daikon {
 	 * partially reflexive invariants.
 	 * Default is false.
 	 **/
-	public static boolean dkconfig_undo_opts = false;
+	public static boolean dkconfig_undo_opts = true;
 
 	/**
 	 * If true, no invariants will be guarded.  Guarding means that
@@ -382,11 +389,14 @@ public final class Daikon {
 			Daikon.dkconfig_disable_splitting = true;
 		}
 
+		if(Daikon.dkconfig_quiet) 
+			Daikon.dkconfig_progress_delay= -1;
+			
 		// Set up debug traces; note this comes after reading command line options.
 		LogHelper.setupLogs(Global.debugAll ? LogHelper.FINE : LogHelper.INFO);
 
 		if (!noversion_output) {
-			if(!DaikonSimple.dkconfig_quiet)
+			if(!Daikon.dkconfig_quiet)
 			System.out.println(release_string);
 		}
 
@@ -482,7 +492,7 @@ public final class Daikon {
 			|| Daikon.output_style == OutputFormat.ESCJAVA)
 			&& !dkconfig_noInvariantGuarding)
 			guardInvariants(all_ppts);
-
+//System.exit(0);
 		// print out the invariants for each program point
 		if (Daikon.dkconfig_undo_opts) {
 
@@ -500,6 +510,7 @@ public final class Daikon {
 					System.out.println(
 						"====================================================");
 					System.out.println(ppt.name());
+					System.out.println(ppt.num_samples());
 					while (i.hasNext()) {
 						Invariant x = (Invariant) i.next();
 						VarInfo[] vars = x.ppt.var_infos;
@@ -566,7 +577,7 @@ public final class Daikon {
 		}
 
 		// Done
-		if(!DaikonSimple.dkconfig_quiet) {
+		if(!Daikon.dkconfig_quiet) {
 		System.out.println("Exiting");
 		}
 	}
@@ -1166,7 +1177,7 @@ public final class Daikon {
 	private static PptMap load_decls_files(Set decl_files) {
 		stopwatch.reset();
 		try {
-			if(!DaikonSimple.dkconfig_quiet) {
+			if(!Daikon.dkconfig_quiet) {
 			System.out.print("Reading declaration files ");
 			}
 			PptMap all_ppts = FileIO.read_declaration_files(decl_files);
@@ -1174,7 +1185,7 @@ public final class Daikon {
 				debugTrace.fine("Initializing partial order");
 			}
 			fileio_progress.clear();
-			if(!DaikonSimple.dkconfig_quiet) {
+			if(!Daikon.dkconfig_quiet) {
 			System.out.print(" (read ");
 			System.out.print(UtilMDE.nplural(decl_files.size(), "decls file"));
 			System.out.println(")");
@@ -1405,7 +1416,7 @@ public final class Daikon {
 		// Processing (actually using dtrace files)
 		try {
 			fileio_progress.clear();
-			if(!DaikonSimple.dkconfig_quiet) {
+			if(!Daikon.dkconfig_quiet) {
 			System.out.println(
 				"Processing trace data; reading "
 					+ UtilMDE.nplural(dtrace_files.size(), "dtrace file")
@@ -1415,7 +1426,7 @@ public final class Daikon {
 			fileio_progress.shouldStop = true;
 			// Final update, so "100%", not "99.70%", is the last thing printed.
 			fileio_progress.display();
-			if(!DaikonSimple.dkconfig_quiet) {
+			if(!Daikon.dkconfig_quiet) {
 			System.out.println();
 			}
 			// System.out.print("Creating implications "); // XXX untested code
@@ -1547,7 +1558,7 @@ public final class Daikon {
 		// Add implications
 		stopwatch.reset();
 		fileio_progress.clear();
-		if(!DaikonSimple.dkconfig_quiet) {
+		if(!Daikon.dkconfig_quiet) {
 		System.out.println("Creating implications ");
 		}
 		debugProgress.fine("Adding Implications ... ");
