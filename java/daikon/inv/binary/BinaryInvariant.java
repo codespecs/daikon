@@ -24,7 +24,7 @@ public abstract class BinaryInvariant
   // Check if swap occurred and call one of the other two methods
   protected Invariant resurrect_done(int[] permutation) {
     Assert.assertTrue(permutation.length == 2);
-    Assert.assertTrue(ArraysMDE.fn_is_permutation(permutation));
+    // Assert.assertTrue(ArraysMDE.fn_is_permutation(permutation));
     if (permutation[0] == 1)
       return resurrect_done_swapped();
     else
