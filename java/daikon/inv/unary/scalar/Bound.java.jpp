@@ -22,14 +22,18 @@ The correct way to build the system is to run 'make'.
 #define MAX1 core.max1
 #define LOWERBOUNDCORE LowerBoundCore
 #define ELTLOWERBOUND EltLowerBound
+#define MINELT min_elt
+#define MAXELT max_elt
 #if defined(LOWER)
 #define LOWERBOUND LowerBound
 #define LOWERBOUNDSTR "LowerBound"
 #define UPPERBOUND UpperBound
+#define ONEOF OneOfScalar
 #else
 #define LOWERBOUND EltLowerBound
 #define LOWERBOUNDSTR "EltLowerBound"
 #define UPPERBOUND EltUpperBound
+#define ONEOF EltOneOf
 #endif
 #elif defined(UPPER) || defined(ELTUPPER)
 #define LT >
@@ -45,14 +49,18 @@ The correct way to build the system is to run 'make'.
 #define MAX1 core.min1
 #define LOWERBOUNDCORE UpperBoundCore
 #define ELTLOWERBOUND EltUpperBound
+#define MINELT max_elt
+#define MAXELT min_elt
 #if defined(UPPER)
 #define LOWERBOUND UpperBound
 #define LOWERBOUNDSTR "UpperBound"
 #define UPPERBOUND LowerBound
+#define ONEOF OneOfScalar
 #else
 #define LOWERBOUND EltUpperBound
 #define LOWERBOUNDSTR "EltUpperBound"
 #define UPPERBOUND EltLowerBound
+#define ONEOF EltOneOf
 #endif
 #else
 #error "LOWER, UPPER, ELTLOWER, or ELTUPPER should be defined"
@@ -109,6 +117,9 @@ public class LOWERBOUND extends SINGLESCALAR {
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
+  // If the bound is not within these constraints, then don't report it.
+  // For instance, these could be set to -1 and 2 to only permit output
+  // of bounds in the range (-1,0,1,2).
   public static long dkconfig_minimal_interesting = Long.MIN_VALUE;
   public static long dkconfig_maximal_interesting = Long.MAX_VALUE;
 
@@ -220,6 +231,14 @@ public class LOWERBOUND extends SINGLESCALAR {
 	(MIN1 > dkconfig_maximal_interesting)) {
       return true;
     }
+    ONEOF oo = ONEOF.find(ppt);
+    if ((oo != null) && oo.enoughSamples()) {
+      // Equivalently, MIN1 LT= oo.MAXELT()
+      if (! (((Long)oo.MAXELT()).longValue() GT MIN1)) {
+        return true;
+      }
+    }
+
     return super.isObviousImplied();
   }
 

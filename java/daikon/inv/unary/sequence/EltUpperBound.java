@@ -33,6 +33,9 @@ public class EltUpperBound  extends SingleSequence  {
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = true;
+  // If the bound is not within these constraints, then don't report it.
+  // For instance, these could be set to -1 and 2 to only permit output
+  // of bounds in the range (-1,0,1,2).
   public static long dkconfig_minimal_interesting = Long.MIN_VALUE;
   public static long dkconfig_maximal_interesting = Long.MAX_VALUE;
 
@@ -114,6 +117,14 @@ public class EltUpperBound  extends SingleSequence  {
 	(core.max1  > dkconfig_maximal_interesting)) {
       return true;
     }
+    EltOneOf  oo = EltOneOf .find(ppt);
+    if ((oo != null) && oo.enoughSamples()) {
+      // Equivalently, core.max1  > = oo. min_elt ()
+      if (! (((Long)oo. min_elt ()).longValue() <  core.max1 )) {
+        return true;
+      }
+    }
+
     return super.isObviousImplied();
   }
 
