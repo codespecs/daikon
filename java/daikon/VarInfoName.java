@@ -56,6 +56,14 @@ public abstract class VarInfoName
       return parse(name.substring(0, name.length()-6)).applyTypeOf();
     }
 
+    // a quoted string
+    if (name.startsWith("\"") && name.endsWith("\"")) {
+      String content = name.substring(1, name.length()-1);
+      if (content.equals(UtilMDE.quote(UtilMDE.unquote(content)))) {
+        return (new Simple(name)).intern();
+      }
+    }
+
     // x or this.x
     if ((name.indexOf('[') == -1) && (name.indexOf('(') == -1)) {
       // checking for only legal characters would be more robust
@@ -109,6 +117,7 @@ public abstract class VarInfoName
       }
     }
 
+    // orig(x)
     // This branch should really go away; orig() variables shouldn't
     // appear in .decls files
     if (name.startsWith("orig(")) {
@@ -116,6 +125,7 @@ public abstract class VarInfoName
       return parse(name.substring(5, name.length() - 1)).applyPrestate();
     }
 
+    // x.y
     if (name.indexOf('.') != -1) {
       // General field operator
       int dot = name.lastIndexOf('.');
@@ -124,6 +134,7 @@ public abstract class VarInfoName
       return parse(first).applyField(field);
     }
 
+    // x->y
     if (name.indexOf("->") != -1) {
       // General field operator
       int arrow = name.lastIndexOf("->");
