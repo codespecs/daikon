@@ -536,7 +536,8 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
                    && seq_contents.postState.name.endsWith("[].class")) {
           continue;
         } else {
-          // throw new Error("What object name? " + seq_contents_name
+          // throw new Error("Expected \"[]\" at end of sequence variable name "
+          //                 + seq_contents_name
           //                 + (seq_contents.isOrigVar() ? " : " + seq_contents.postState.name : ""));
           System.out.println("Warning: sequence variable " + seq_contents_name
                              + " does not end with \"[]\"");
