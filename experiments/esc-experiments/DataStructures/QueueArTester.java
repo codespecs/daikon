@@ -34,7 +34,7 @@ public class QueueArTester
   { q.isFull(); }
   public void getFront()
   { q.getFront(); }
-  
+
   public void makeEmpty()
   { observe(); q.makeEmpty(); observe(); }
   public void dequeue()
@@ -65,6 +65,21 @@ public class QueueArTester
     dequeueAll();
   }
 
+  public void walkAround(int n)
+  {
+    System.out.println("wa " + n);
+    doNew(n);
+    for (int i=0; i < n/2; i++) {
+      int x = (int)(1000 * Math.random());
+      enqueue(x);
+    }
+    for (int i=0; i < 5*n; i++) {
+      int x = (int)(1000 * Math.random());
+      enqueue(x);
+      dequeue();
+    }
+  }
+
   public void run()
   {
     fillAndEmpty(0);
@@ -73,12 +88,16 @@ public class QueueArTester
     fillAndEmpty(5);
     fillAndEmpty(10);
     fillAndEmpty(20);
+    fillAndEmpty(30);
     fillAndEmpty(50);
-    fillAndEmpty(100);
+    walkAround(5);
+    walkAround(10);
+    walkAround(20);
+    walkAround(30);
   }
 
   public static void main(String[] args)
   {
     (new QueueArTester()).run();
-  }      
+  }
 }
