@@ -599,11 +599,16 @@ public final class FileIO {
 	// Read an invocation nonce if one exists
         Integer nonce = null;
         {
-          reader.mark(22);
-          char[] nonce_name_maybe = new char[22];
-          reader.read(nonce_name_maybe, 0, 22);
+          // arbitrary number, hopefully big enough; catch exceptins
+          reader.mark(100);
+          String nonce_name_maybe;
+          try {
+            nonce_name_maybe = reader.readLine();
+          } catch (Exception e) {
+            nonce_name_maybe = null;
+          }
           reader.reset();
-          if (new String(nonce_name_maybe).equals("this_invocation_nonce\n")) {
+          if ("this_invocation_nonce".equals(nonce_name_maybe)) {
             String nonce_name = reader.readLine();
             Assert.assert(nonce_name.equals("this_invocation_nonce"));
             nonce = new Integer(reader.readLine());
