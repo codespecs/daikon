@@ -26,6 +26,7 @@ public class LogHelper {
   public static void setupLogs(Level l, Formatter formatter) {
     // Send debug and other info messages to System.err
     Handler app = new ConsoleHandler();
+    app.setLevel (Level.ALL);
     app.setFormatter(formatter);
 
     // Logger.global.removeAllAppenders();
@@ -36,9 +37,17 @@ public class LogHelper {
       }
     }
 
-    Logger.global.addHandler(app);
-    Logger.global.setLevel(l);
-    Logger.global.fine ("Installed logger at level " + l);
+
+    Logger root = Logger.getLogger ("");
+    Handler[] handlers = root.getHandlers();
+    for (int i=0; i < handlers.length; i++)
+      root.removeHandler(handlers[i]);
+    root.addHandler (app);
+    root.setLevel(l);
+
+    // Logger.global.addHandler(app);
+    // Logger.global.setLevel(l);
+    // Logger.global.fine ("Installed logger at level " + l);
   }
 
   // Statically initialized to save runtime
@@ -72,14 +81,22 @@ public class LogHelper {
       // // Example: "@daikon.Daikon: This is a message \n"
       // setupLogs (l, "@ %20.20c: %m%n");
 
-      String loggerName = record.getLoggerName();
-      int loggerNameLength = loggerName.length();
-      if (loggerNameLength > 20) {
-        loggerName = loggerName.substring(0, 20);
-      } else if (loggerNameLength < 20) {
-        loggerName = loggerName + padding_arrays[20 - loggerNameLength];
+      String loggerName = record.getLoggerName() + ":";
+      int len = loggerName.length();
+      if (len > 20) {
+        loggerName = loggerName.substring(len - 20, len);
+      } else if (len < 20) {
+        loggerName = loggerName + padding_arrays[20 - len];
       }
-      return loggerName + record.getMessage();
+
+      // If we aren't generating tracebacks, include the src class/method
+      String src = "";
+      if (!Debug.dkconfig_showTraceback)
+        src = record.getSourceClassName().replaceAll ("\\w*\\.", "")
+                + "." + record.getSourceMethodName() + ": ";
+
+      return "@ " + loggerName + " " + src + record.getMessage()
+             + Global.lineSep;
     }
   }
 
