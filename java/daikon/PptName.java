@@ -16,6 +16,8 @@ public class PptName
   private final String method;
   private final String point;
 
+  // ==================== CONSTRUCTORS ====================
+  
   /**
    * @param name non-null ppt name as given in the decls file
    **/
@@ -48,6 +50,8 @@ public class PptName
     method = (methodName != null) ? methodName.intern() : null;
     point = (pointName != null) ? pointName.intern() : null;
   }
+
+  // ==================== OBSERVERS ====================
 
   /**
    * @return the full-qualified class name, which uniquely identifies
@@ -107,31 +111,12 @@ public class PptName
   }
 
   /**
-   * @return true iff this name refers to a synthetic object instance
-   * program point
-   **/
-  public boolean isObjectInstanceSynthetic()
-  {
-    return FileIO.object_suffix.equals(point);
-  }
-
-  /**
-   * @return true iff this name refers to a synthetic class instance
-   * program point
-   **/
-  public boolean isClassStaticSynthetic()
-  {
-    return FileIO.class_static_suffix.equals(point);
-  }
-
-  /**
    * @return something interesting and descriptive about the point in
    * question, along the lines of "ENTER" or "EXIT" or somesuch.  The
    * semantics of this method are not yet decided, so don't try to do
    * aynthing useful with this result.
    **/
-  public String getPoint()
-  {
+  public String getPoint() {
     return point;
   }
 
@@ -158,6 +143,83 @@ public class PptName
     return result;
   }
 
+  /**
+   * @return true iff this name refers to a synthetic object instance
+   * program point
+   **/
+  public boolean isObjectInstanceSynthetic()
+  {
+    return FileIO.object_suffix.equals(point);
+  }
+
+  /**
+   * @return true iff this name refers to a synthetic class instance
+   * program point
+   **/
+  public boolean isClassStaticSynthetic()
+  {
+    return FileIO.class_static_suffix.equals(point);
+  }
+
+  /**
+   * @return true iff this name refers to a procedure exit point
+   **/
+  public boolean isExitPoint()
+  {
+    return (point != null) && point.startsWith(FileIO.exit_suffix);
+  }
+  
+  /**
+   * @return true iff this name refers to a procedure exit point
+   **/
+  public boolean isEnterPoint()
+  {
+    return (point != null) && point.startsWith(FileIO.enter_suffix);
+  }
+  
+  // ==================== PRODUCERS ====================
+
+  /**
+   * @requires this.isExitPoint()
+   * @return a name for the corresponding enter point
+   **/
+  public PptName makeEnter()
+  {
+    Assert.assert(isExitPoint());
+    return new PptName(cls, method, FileIO.enter_suffix);
+  }
+
+  /**
+   * @requires this.isExitPoint() || this.isEnterPoint()
+   * @return a name for the corresponding object invariant
+   **/
+  public PptName makeObject()
+  {
+    Assert.assert(isExitPoint() || isEnterPoint());
+    return new PptName(cls, null, FileIO.object_suffix);
+  }
+
+  /**
+   * @requires this.isExitPoint() || this.isEnterPoint()
+   * @return a name for the corresponding class-static invariant
+   **/
+  public PptName makeClassStatic()
+  {
+    Assert.assert(isExitPoint() || isEnterPoint());
+    return new PptName(cls, null, FileIO.class_static_suffix);
+  }
+
+  // ==================== OBJECT METHODS ====================
+  
+  /* @return interned string such that this.equals(new PptName(this.toString())) */
+  public String toString()
+  {
+    return (cls +
+	    ((method == null) ? "" : ("." + method)) +
+	    FileIO.ppt_tag_separator +
+	    point).intern();
+  }
+
   public boolean equals(Object o)
   {
     return (o instanceof PptName) && equals((PptName) o);
@@ -175,8 +237,8 @@ public class PptName
 
   public int hashCode()
   {
-    // If the domains of the components overlap, we should multiply my
-    // primes, but I think they are fairly distinct
+    // If the domains of the components overlap, we should multiply by
+    // primes, but I think they are fairly disjoint
     return
       ((cls == null) ? 0 : cls.hashCode()) +
       ((method == null) ? 0 : method.hashCode()) +
