@@ -3,7 +3,7 @@ package daikon.split.misc;
 import daikon.*;
 import daikon.split.*;
 
-// This splitter tests the condition "X>0".
+// This splitter tests the condition "return == true".
 public final class ReturnTrueSplitter extends Splitter {
 
   VarInfo return_varinfo;
