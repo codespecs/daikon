@@ -221,8 +221,9 @@ TODAY := $(shell date "+%B %e, %Y")
 # Update the documentation with a new distribution date (today).
 # This is done immediately before releasing a new distribution.
 update-doc-dist-date:
-	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(\@c Daikon version .* date\n\@center ).*\n/$$1${TODAY}\n/;' doc/daikon.texinfo
-	perl -wpi -e 's/(version .*, released ).*\.$$/$$1${TODAY}./' doc/README-dist doc/www/download/index.html doc/daikon.texinfo
+	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(\@c Daikon version .* date\n\@center ).*(\n)/$$1${TODAY}$$2/;' doc/daikon.texinfo
+	perl -wpi -e 's/(version .*, released ).*(\.)$$/$$1${TODAY}$$2/' doc/README-dist doc/www/download/index.html doc/daikon.texinfo
+	perl -wpi -e 's/(public final static String release_date = ").*(";)$$/$$1${TODAY}$$2/' java/daikon/Daikon.java
 	touch doc/CHANGES
 
 # Update the documentation according to the version number.
@@ -232,6 +233,7 @@ update-doc-dist-date:
 # is invoked at the beginning of a make.
 update-doc-dist-version:
 	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(Daikon version )[0-9]+(\.[0-9]+)*/$$1 . "$(shell cat doc/VERSION)"/e;' doc/daikon.texinfo doc/README-dist doc/www/download/index.html
+	perl -wpi -e 's/(public final static String release_version = ")[0-9]+(\.[0-9]+)*(";)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e;' java/daikon/Daikon.java
 	touch doc/CHANGES
 
 # Update the version number.
