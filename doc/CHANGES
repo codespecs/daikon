@@ -11,6 +11,10 @@ versions as the user manual.
 
 ===========================================================================
 
+Fixed kmeans compilation problem under gcc 3.
+
+---------------------------------
+
 3.1.0 (01 June 2004)
 
 Daikon now includes a new front-end for C programs, named "Kvasir".
