@@ -1,5 +1,8 @@
 package daikon.inv;
 
+import utilMDE.Assert;
+import daikon.*;
+
 public final class DiscardInfo {
   /**
    * A class used for holding a DiscardCode and a string
@@ -19,10 +22,14 @@ public final class DiscardInfo {
   private String discardString;
 
   /**
-   * The String that would have resulted from calling format() on the Invariant being discarded.
-   * This does not have to be maintained if the Invariant isn't discarded.
+   * The String that would have resulted from calling format() on the
+   * Invariant being discarded.  This does not have to be maintained
+   * if the Invariant isn't discarded.
    */
   private String discardFormat;
+
+  /** Invariant for which the DiscardInfo applies **/
+  public Invariant inv;
 
   /**
    * The className of the Invariant being discarded
@@ -38,7 +45,13 @@ public final class DiscardInfo {
   }
 
   public DiscardInfo(Invariant inv, DiscardCode discardCode, String discardString) {
-    this(inv.getClass().getName(), inv.format(), discardCode, discardString);
+    Assert.assertTrue (inv.ppt != null);
+    // this(inv.getClass().getName(), inv.format(), discardCode, discardString);
+    this.discardCode = discardCode;
+    this.discardString = discardString;
+    this.discardFormat = inv.format();
+    this.className = inv.getClass().getName();
+    this.inv = inv;
     inv.log (discardString);
   }
 
@@ -61,5 +74,24 @@ public final class DiscardInfo {
   public String format() {
     return discardFormat + "\n" + discardCode + "\n" + discardString;
   }
+
+  /**
+   * Adds the specified string as an additional reason
+   */
+  public void add_implied (String reason) {
+    discardString += " and " + reason;
+  }
+
+  /**
+   * Adds an equality string to the discardString for each variable in
+   * in vis which is different from the leader
+   */
+  public void add_implied_vis (VarInfo[] vis) {
+    for (int i = 0; i < vis.length; i++) {
+      if (inv.ppt.var_infos[i] != vis[i])
+        discardString += " and " + inv.ppt.var_infos[i] + "==" + vis[i];
+    }
+  }
+
 
 }
