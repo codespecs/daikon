@@ -1,5 +1,6 @@
-JAVA_FILES := $(shell find . \( -name '*-cpp.java' -o -name CVS \) -prune -o -name '*.java' -print)
-TAG_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java' -print)
+UTILMDE_DIR := /g2/users/mernst/java/utilMDE
+JAVA_FILES := $(shell find . \( -name '*daikon-java*' -o -name '*-cpp.java' -o -name CVS \) -prune -o -name '*.java' -print)
+TAG_FILES := $(shell find . \( -name '*daikon-java*' -o -name CVS \) -prune -o -name '*.java' -print)
 # Should these really be targets in the below, or should I use "make
 # ${AUTO_GENERATED_FILES}"? I don't want to omit running just because these
 # are up-to-date.
@@ -59,7 +60,7 @@ TAGS:	tags
 # Used to include "*.py", but no such in daikon/ directory.
 # I could make this ../*.py, but probably don't want to include that old code.
 tags:
-	etags ${TAG_FILES} /homes/gws/mernst/java/utilMDE/*.java
+	etags ${TAG_FILES} $(UTILMDE_DIR)/*.java
 
 doc: $(JAVA_FILES)
 	javadoc -d doc `find -name '*.java' -exec dirname {} \; | sort | uniq | perl -p -e 's/^./daikon/g' | perl -p -e 's:/:.:g'`
@@ -78,7 +79,10 @@ audit:
 	cd $(HOME)/java && maudit daikon | perl -p -e 's/^daikon\///'
 
 showvars:
-	echo JAVA_FILES = $(JAVA_FILES)
+	@echo JAVA_FILES = $(JAVA_FILES)
+
+list_java_files:
+	@echo $(JAVA_FILES)
 
 
 ###########################################################################

@@ -4,6 +4,7 @@ import daikon.inv.*;
 
 import daikon.inv.twoScalar.*;
 import daikon.inv.twoSequence.*;
+import daikon.inv.twoString.*;
 import daikon.inv.sequenceScalar.*;
 
 import java.util.*;
@@ -59,6 +60,9 @@ public final class PptSlice2  extends PptSlice {
     if ((rep1 == ProglangType.INT)
         && (rep2 == ProglangType.INT)) {
       new_invs = TwoScalarFactory.instantiate(this, pass);
+    } else if ((rep1 == ProglangType.STRING)
+        && (rep2 == ProglangType.STRING)) {
+      new_invs = TwoStringFactory.instantiate(this, pass);
     } else if ((rep1 == ProglangType.INT)
                && (rep2 == ProglangType.INT_ARRAY)) {
       new_invs = SequenceScalarFactory.instantiate(this, pass);
@@ -213,9 +217,20 @@ public final class PptSlice2  extends PptSlice {
     Assert.assert((mod1 != ValueTuple.MISSING)
                   && (mod2 != ValueTuple.MISSING));
     int mod_index = mod1 * 2 + mod2;
+    boolean string1 = vi1.rep_type == ProglangType.STRING;
+    boolean string2 = vi2.rep_type == ProglangType.STRING;
     boolean array1 = vi1.rep_type.isArray();
     boolean array2 = vi2.rep_type.isArray();
-    if ((!array1) && (!array2)) {
+    if (string1 && string2) {
+      String value1 = (String) val1;
+      String value2 = (String) val2;
+      for (int i=0; i<num_invs; i++) {
+        TwoString inv = (TwoString)invs.elementAt(i);
+        inv.add(value1, value2, mod_index, count);
+      }
+    } else if (string1 || string2) {
+      throw new Error("impossible");
+    } else if ((!array1) && (!array2)) {
       // int value1 = vi1.getIntValue(full_vt);
       // int value2 = vi2.getIntValue(full_vt);
       int value1 = ((Integer) val1).intValue();
@@ -283,10 +298,33 @@ public final class PptSlice2  extends PptSlice {
 
       VarInfo vi1 = var_infos[0];
       VarInfo vi2 = var_infos[1];
+      boolean string1 = vi1.rep_type == ProglangType.STRING;
+      boolean string2 = vi2.rep_type == ProglangType.STRING;
       boolean array1 = vi1.rep_type.isArray();
       boolean array2 = vi2.rep_type.isArray();
 
-      if ((!array1) && (!array2)) {
+      if (string1 && string2) {
+        TwoString inv = (TwoString) invariant;
+        // Make this invariant up to date by supplying it with all the values.
+        for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
+          Map.Entry entry = (Map.Entry) itor.next();
+          Object[] vals = (Object[]) entry.getKey();
+          String value1 = (String) vals[0];
+          String value2 = (String) vals[1];
+          int[] tm_array = (int[]) entry.getValue();
+          for (int mi=0; mi<tm_array.length; mi++) {
+            if (tm_array[mi] > 0) {
+              inv.add(value1, value2, mi, tm_array[mi]);
+              if (inv.no_invariant)
+                break;
+            }
+          }
+          if (inv.no_invariant)
+            break;
+        }
+      } else if (string1 || string2) {
+        throw new Error("impossible");
+      } else if ((!array1) && (!array2)) {
         TwoScalar inv = (TwoScalar) invariant;
         // Make this invariant up to date by supplying it with all the values.
         for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {

@@ -65,6 +65,7 @@ public final class Daikon {
     Vector dtrace_files = new Vector();
 
     if (args.length == 0) {
+      System.out.println("Daikon error: no files supplied on command line.");
       System.out.println(usage);
       System.exit(1);
     }
