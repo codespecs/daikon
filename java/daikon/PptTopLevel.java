@@ -2290,7 +2290,7 @@ public class PptTopLevel extends Ppt {
 		String[] form =
 		  VarInfoName.QuantHelper.format_esc(new VarInfoName[]
 		    { vi.name, other.name });
-                out.println("(" + form[0] + "( " + form[1] + " == " + form[2] + " ))");
+                out.println(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
               } else {
 		out.println(vi.name.esc_name() + " == " + other.name.esc_name());
 	      }
