@@ -6,11 +6,16 @@ STEP-BY-STEP INSTRUCTIONS
 These instructions assume the following:
 
 - The examples are located in the directory $EXAMPLES
+** Say this is where the tar.gz was unpacked.
+** What path format or namespace is this?  Cygwin or windows?
 
 - The c front end (dfec) is installed in $DFECDIR
+** What does installed mean?  Where do I find out how to install this?
+** Unzip dfec.zip
+** Then also do the environmental setup instructions?
 
 - Daikon is installed
-
+** Where do I find out how to do this?
 
 You must perform two steps to complete the installation of the C front
 end.
@@ -18,6 +23,7 @@ end.
 0a. Compile the daikon runtime library.
 
     cd $DFECDIR; gcc -c daikon_runtime.cc
+** Where am I typing this?  DOS?  Cygwin?
 
     This generates the file daikon_runtime.o in $DFECDIR.
 
@@ -41,6 +47,9 @@ be run in exactly the same manner.
 2. Instrument the program using dfec, the C front end.
 
    $DFECDIR/dfec -w -I$DFECDIR print_tokens.c stream.h tokens.h
+
+** "The procedure entry point setrlimit could not be located in the dynamic link library cygwin1.dll"
+** ^^ indicates you need to upgrade cygwin
 
    We instrument the source file and all the user-created header files
    it depends on.  This command creates two directories, daikon-instrumented
