@@ -96,6 +96,16 @@ public abstract class VarInfoName
       return parse(name.substring(5, name.length() - 1)).applyPrestate();
     }
 
+    if (name.indexOf('.') != -1) {
+      // General field operator
+      int dot = name.lastIndexOf('.');
+      String first = name.substring(0, dot);
+      String field = name.substring(dot+1);
+      return parse(first).applyField(field);
+    }
+    
+
+
     // ??
     throw new UnsupportedOperationException("parse error: '" + name + "'");
   }

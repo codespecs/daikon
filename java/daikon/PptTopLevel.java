@@ -370,10 +370,10 @@ public class PptTopLevel
   transient BinaryDerivationFactory[] binaryDerivations
     = new BinaryDerivationFactory[] {
         new SequenceScalarSubscriptFactory(),
-	new ScalarSequencesIntersectionFactory(),
-	new StringSequencesIntersectionFactory(),
-	new ScalarSequencesUnionFactory(),
-	new StringSequencesUnionFactory(),
+	new SequenceScalarIntersectionFactory(),
+	new SequenceStringIntersectionFactory(),
+	new SequenceScalarUnionFactory(),
+	new SequenceStringUnionFactory(),
         new SequenceStringSubscriptFactory(),
         new SequencesConcatFactory(),
 	new SequencesJoinFactory(),
@@ -531,6 +531,11 @@ public class PptTopLevel
           }
 	}
       }
+    }
+
+    if (Global.debugDerive.isDebugEnabled()) {
+
+      Global.debugDerive.debug ("Number of derived variables at program point " + this.name + ": " + result.size());
     }
 
     Derivation[] result_array =

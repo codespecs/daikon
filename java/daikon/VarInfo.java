@@ -1092,11 +1092,11 @@ public final class VarInfo
     if (this.isIOASet()) {
       begin = type.base().indexOf('(') + 1;
     } else if (this.isIOAArray()) {
-      begin = type.base().indexOf(',') + 1;
+      begin = type.base().indexOf(',') + 2;
     } else {
       return null;
     }
-    return type.base().substring(begin+1, end);
+    return type.base().substring(begin, end);
   }
 
   /**
@@ -1111,6 +1111,7 @@ public final class VarInfo
       daikon.inv.Invariant.debugPrint.debug ("domainTypeIOA: " + result);
       return result;
     } else {
+      // Always the same domain otherwise
       return "Int";
     }
   }

@@ -1,8 +1,8 @@
 daikon.Daikon.output_conditionals
 daikon.FileIO.add_changed
 daikon.PptTopLevel.pairwise_implications
-daikon.derive.binary.ScalarSequencesIntersection.enabled
-daikon.derive.binary.ScalarSequencesUnion.enabled
+daikon.derive.binary.SequenceScalarIntersection.enabled
+daikon.derive.binary.SequenceScalarUnion.enabled
 daikon.derive.binary.SequenceScalarSubscript.enabled
 daikon.derive.binary.SequenceScalarSubsequence.enabled
 daikon.derive.binary.SequenceStringSubscript.enabled
@@ -10,8 +10,8 @@ daikon.derive.binary.SequenceStringSubsequence.enabled
 daikon.derive.binary.SequencesConcat.enabled
 daikon.derive.binary.SequencesJoin.enabled
 daikon.derive.binary.SequencesPredicate.enabled
-daikon.derive.binary.StringSequencesIntersection.enabled
-daikon.derive.binary.StringSequencesUnion.enabled
+daikon.derive.binary.SequenceStringIntersection.enabled
+daikon.derive.binary.SequenceStringUnion.enabled
 daikon.derive.unary.SequenceInitial.enabled
 daikon.derive.unary.SequenceLength.enabled
 daikon.derive.unary.SequenceMax.enabled
