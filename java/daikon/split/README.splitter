@@ -1,71 +1,92 @@
-         Finding Conditional Invariants using Splitting
-         ============================================== 
+         Finding Conditional Invariants and Implications
+         ===============================================
 
-Conditional invariants are invariants which are true only part of the time.  For
-instance, for a function which computes the absolute value of a number, the
-postcondition is
+@cindex splitting
+@cindex splitting condition
+@cindex conditional invariant
+@cindex invariant, conditional
+@cindex implication invariant
+@cindex invariant, implication
+@cindex splitter info file
+@cindex .spinfo file
 
-  if arg < 0 
-  then return == -arg 
-  else return == arg
+Conditional invariants are invariants that are true only part of the time.
+For instance, the postcondition for the absolute value procedure is
 
-In this case, the invariant "return == -arg" is a conditional invariant because
-it depends on the condition "arg < 0" being true.  To detect conditional
-invariants, Daikon splits the data trace into parts based on some predicate (in
-this case "arg < 0").  Invariant detection is then performed on the parts
-separately and any sub-invariants detected are reported.  A Splitter is a
-concrete instantiatiation of a predicate or splitting condition. Splitters
-operate at program points independently, and are created while Daikon is
-running.
+  if arg < 0
+    then return == -arg
+    else return == arg
 
-To use splitting to detect conditional invariants, perform these three steps:
+The invariant "return == -arg" is a conditional invariant because it
+depends on the condition "arg < 0" being true.  The compound invariant that
+includes both the condition and the conditional invariant is called an
+implication.
 
+Daikon must be supplied with the predicate for an implication.  Certain
+such conditions are built into Daikon; examples are which return statement
+was executed in a procedure and whether a boolean procedure returns true or
+false.  Additionally, Daikon can read predicates from a file called a
+Splitter info (.spinfo) file.  The splitter info file can be produced
+automatically, such as by the createspinfo.pl script (see below).  Users
+can also create splitter info files by hand or manually augment
+automatically-created ones.
+
+To detect condition invariants and implications:
 1) Create the Splitter info file, either automatically or by hand.
- 
-* Use the createspinfo.pl program to create a Splitter info file from Java
-   source code; for instance, createspinfo.pl Foo.java creates the Splitter info
-   file Foo.spinfo.  Then, optionally edit the Splitter info file Foo.spinfo to
-   enhance the information that it contains.  
-* Alternately, create the Splitter info file by hand; see the format below.
+2) Run Daikon with the .spinfo file as one of its arguments.  For example,
+  java daikon.Daikon Foo.decls Foo.spinfo Foo.dtrace
 
-2) Run Daikon as usual, with the .spinfo file as one of its arguments.  
-   For example,
-  java daikon.Daikon -o Foo.inv Foo.dtrace Foo.decls Foo.spinfo
+The createspinfo.pl program take Java source code as input and creates a
+Splitter info file; for instance, createspinfo.pl Foo.java creates the
+Splitter info file Foo.spinfo.  The splitter file contains each boolean
+expression that appears in the source code.  The conditions that the
+programmer used are likely to be important semantic properties, so this
+simple heuristic can be surprisingly effective.  Users may optionally edit
+the Splitter info file to enhance it, or may create a splitter info file by
+hand.
 
-The next section describes the Splitter info file in more detail.
+The term "splitter" comes from Daikon's technique for detecting
+implications and conditional invariants.  Daikon creates new conditional
+program points -- one each for the condition and its negation -- and splits
+the data trace into parts based on a predicate called the splitting
+condition (in the example above, it was "arg < 0").  Invariant detection is
+then performed on the conditional program points (that is, the parts of the
+data trace) separately and any invariants detected are reported as
+conditional invariants (as implications).
+
+
+The conditions can be specific to one program point, or Daikon can use them
+...
+(Give pros and cons of each.)
+
 
 ======================
 The Splitter Info file
 ======================
 
-A Splitter Info file contains information about the splitting conditions
-that should be used create contitional invariants.
-The Splitter info file, with suffix .spinfo, can be written by hand or
-generated from the Java source by the createspinfo.pl program
-(located in the scripts/ directory). The perl script extracts 
-conditional statements from the Java source to create the .spinfo file.
+A Splitter Info file contains the conditions that Daikon should use to
+create conditional invariants.
 
-Usage: createspinfo.pl Foo.java 
-Output: Foo.spinfo
-
-Each section in the .spinfo file has a line specifying the program point name
-followed by lines specifying the splitting condition(s) associated with that
-program point.  Each splitting condition is on a new line. Sections are
-separated by blank lines.  For example, a typical entry is
+Each section in the .spinfo consists of a sequence of non-blank lines;
+sections are separated by blank lines.  Program point sections have a line
+specifying a program point name followed by lines specifying the
+condition(s) associated with that program point, each condition on its own
+line.  For example, a typical entry is
 
 PPT_NAME <ppt name>
 condition1
-condition2 
+condition2
 .
 .
 .
 
-Java expressions with return type boolean can be used as splitting
-conditions. However, all the variables being used in that splitting condition
-should be in scope at the program point(s) where the Splitter is intended to
-operate. (The variables in scope at a program point are described in the
-declaration of that program point in the .decls file). Exceptions to this are
-described in the REPLACEMENT section.
+Each condition is a Java expression of boolean type.  All variables that
+appear in the condition must also appear in the declaration of the program
+point in the .decls file.  (In other words, all the variables must be in
+scope at the program point(s) where the Splitter is intended to
+operate.
+
+@c Exceptions to this are described in the REPLACEMENT section.
 
 
 ===========
@@ -74,61 +95,62 @@ REPLACEMENT
 
 Ordinarily, a splitting condition may not invoke user-defined methods,
 because when Daikon reads data trace files, it does not have access to the
-program source.  The .spinfo file can specify the bodies of methods,
-permitting those methods to be called in splitting conditions.  The format
-is as follows:
+program source.  A replace section of the splitter info file can specify
+the bodies of methods, permitting conditions to invoke those methods.  The
+format is as follows:
 
-REPLACE 
-function1 
-replacement1 
-function2 
-replacement2 
+REPLACE
+procedure1
+replacement1
+procedure2
+replacement2
 .
 .
 .
 
-where replacement1 and replacement2 contain a (usually simple)
-statement representing the bodies of function1 and function2
-respectively. When Daikon finds such a function call in a
-splitting condition, it replaces the function call with its
-replacement. A replace section can appear anywhere in the Splitter Info file. 
+where replacementi contains an expression representing the body of
+procedurei.  In each condition, Daikon replaces procedure calls by their
+replacements.  A replace section can appear anywhere in the Splitter Info
+file.
 
 ========================
 INDISCRIMINATE SPLITTING
 ========================
 
-Daikon "installs" a Splitter at a program point by creating two conditional
-program points, one each for the splitting condition and its negation.  Daikon
-may try to install Splitters at program points in one of two ways.
-Indiscriminate splitting installs all the Splitters created for the program at
-each program point. Non-indiscriminate splitting tries to installs Splitters
-only at the program points with which they are associated. Installation of a
-Splitter at a program point fails if the program point does not have (in scope)
-all the variables that are used in the splitting condition. If installation
-fails, conditional program points based on that splitting condition are not
-created at the program point.  For example, installation of the Splitter with
-condition "myArray.length == x" will fail at a program point if either of
-'myArray' and 'x' is not in scope at that program point.  
-To use non-indiscriminate splitting, set the value of the variable
-'allSplitters' to false in the file java/daikon/Global.java.
+Ordinarily, each condition gives rise to conditional invariants only at the
+program point in whose section the condition appears.  Alternately, every
+condition can be used at every program point, regardless of where in the
+.spinfo file the condition appeared; this latter approach is called
+"indiscriminate splitting".  Indiscriminate splitting can result in Daikon
+attempting to use many conditions that are inappropriate at certain program
+points, for instance because the the program point does not have (in scope)
+all the variables that are used in the condition.  For example, the
+condition "myArray.length == x" is inapplicable at a program point if
+either of 'myArray' and 'x' is not in scope at that program point.  In this
+case, Daikon produces an error message and proceeds, using conditions
+wherever they are valid.
+
+To use indiscriminate splitting, set the value of the configuration option
+variable daikon.split.SplitterList.all_splitters to a non-zero value in
+file daikon/config/defaults.txt.
 
 ========
 EXAMPLES
 ========
 
 Below is an implementation of a simple Queue for positive integers and an
-associated .spinfo file. 
+associated .spinfo file.
 
 class simpleQueue {
-  
+ 
  private int[] myArray;
   private int currentSize;
-  
+ 
   public simpleQueue(int capacity) {
     myArray = new int[capacity];
     currentSize = 0;
   }
-  
+ 
   /** adds an element to the back of the queue, if it's not empty.
    * returns true if this succeeds, false otherwise  **/
   public String enqueue(int x) {
@@ -140,12 +162,12 @@ class simpleQueue {
       return (false);
     }
   }
-  
+ 
   /** takes the last element put into the queue or -1 if the queue is empty **/
   public int dequeue() {
     if ( !isEmpty() ) {
       currentSize--;
-      return myArray[currentSize]; 
+      return myArray[currentSize];
     } else {
       return -1;
     }
@@ -155,8 +177,8 @@ class simpleQueue {
   private boolean isEmpty() {
     return (currentSize == 0);
   }
- 
-  /** returns true if the queue is full, false otherwise **/ 
+
+  /** returns true if the queue is full, false otherwise **/
   private boolean isFull() {
     return (currentSize == myArray.length);
   }
@@ -171,7 +193,7 @@ isEmpty()
 currentSize == 0
 
 PPT_NAME  simpleQueue.enqueue
-!isFull() && x >= 0 
+!isFull() && x >= 0
 
 PPT_NAME  simpleQueue.isFull
 (currentSize == myArray.length - 1)
@@ -183,7 +205,3 @@ PPT_NAME  simpleQueue.dequeue
 !isEmpty()
 
 =========
-For more examples on creating .spinfo files, you can look
-~/examples/StackAr/DataStructures/StackAr.java and
-~/examples/QueueAr/DataStructures/QueueAr.java and their corresponding .spinfo
-files.  
