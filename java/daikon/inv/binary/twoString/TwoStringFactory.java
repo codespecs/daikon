@@ -11,7 +11,7 @@ public final class TwoStringFactory {
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
-  public static Vector instantiate(PptSlice ppt) {
+  public static Vector instantiate(PptSlice ppt, boolean excludeEquality) {
 
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
@@ -24,7 +24,7 @@ public final class TwoStringFactory {
       return null;
 
     Vector result = new Vector();
-    result.add(StringComparison.instantiate(ppt));
+    result.add(StringComparison.instantiate(ppt)); // FIXME for equality
 
       /// copied from TwoScalarFactory.
       // for (int i=0; i<2; i++) {

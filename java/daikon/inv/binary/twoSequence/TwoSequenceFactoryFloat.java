@@ -21,7 +21,7 @@ public final class TwoSequenceFactoryFloat {
 
   // Add the appropriate new Invariant objects to the specified Invariants
   // collection.
-  public static Vector instantiate(PptSlice ppt) {
+  public static Vector instantiate(PptSlice ppt, boolean excludeEquality) {
     Assert.assertTrue(ppt.arity == 2);
     // Not really the right place for these tests
     VarInfo var1 = ppt.var_infos[0];
@@ -66,11 +66,11 @@ public final class TwoSequenceFactoryFloat {
         if (lb != null)
           System.out.println("  " + lb.format());
       } else {
-        result.add(SeqComparisonFloat.instantiate(ppt));
+        result.add(SeqComparisonFloat.instantiate(ppt)); // FIXME for equality
       }
     }
     { // previously (pass == 2)
-      result.add(ReverseFloat.instantiate(ppt));
+      if (!excludeEquality) result.add(ReverseFloat.instantiate(ppt));
       if (super1 == super2) {
         Global.subexact_noninstantiated_invariants += 2;
         Global.implied_false_noninstantiated_invariants += 2 + 2 * FunctionsFloat.unaryFunctionNames.length;
@@ -86,7 +86,9 @@ public final class TwoSequenceFactoryFloat {
         // SeqNonEqual.instantiate(ppt);
         result.add(SubSequenceFloat.instantiate(ppt));
 
-        result.add(PairwiseFloatComparison.instantiate(ppt));
+        // No < or > allowed.
+        result.add(PairwiseFloatComparison.instantiate(ppt, excludeEquality));
+
         result.add(PairwiseLinearBinaryFloat.instantiate(ppt));
         int numFunctions = FunctionsFloat.unaryFunctionNames.length;
         for (int i=0; i<2; i++) {
@@ -95,7 +97,8 @@ public final class TwoSequenceFactoryFloat {
           // Don't bother to check arg.isConstant():  we really want to
           // know whether the elements of arg are constant.
           for (int j=0; j<numFunctions; j++) {
-            result.add(PairwiseFunctionUnaryFloat.instantiate(ppt, FunctionsFloat.unaryFunctionNames[j], j, invert));
+            result.add(PairwiseFunctionUnaryFloat.instantiate
+                       (ppt, FunctionsFloat.unaryFunctionNames[j], j, invert));
           }
         }
       }

@@ -40,6 +40,10 @@ public final class StringComparison
   }
 
   public static StringComparison instantiate(PptSlice ppt) {
+    return instantiate (ppt, false);
+  }
+
+  public static StringComparison instantiate(PptSlice ppt, boolean onlyEq) {
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
@@ -53,7 +57,7 @@ public final class StringComparison
                          + ", seqvar2=" + seqvar2);
     }
 
-    boolean only_eq = false;
+    boolean only_eq = onlyEq;
     boolean obvious_lt = false;
     boolean obvious_gt = false;
     boolean obvious_le = false;

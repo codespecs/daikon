@@ -279,13 +279,11 @@ public final class FloatNonEqual
       // This might never get invoked, as equality is printed out specially.
       VarInfo s1 = (sl1 == null) ? null : sl1.base;
       VarInfo s2 = (sl2 == null) ? null : sl2.base;
-      /* [INCR]
       if ((s1 != null) && (s2 != null)
-          && (s1.equal_to == s2.equal_to)) {
+          && (s1.equalitySet == s2.equalitySet)) {
         // lengths of equal arrays being compared
         return true;
       }
-      */
 
     }
 

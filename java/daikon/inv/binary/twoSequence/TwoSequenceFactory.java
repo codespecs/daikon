@@ -21,7 +21,7 @@ public final class TwoSequenceFactory {
 
   // Add the appropriate new Invariant objects to the specified Invariants
   // collection.
-  public static Vector instantiate(PptSlice ppt) {
+  public static Vector instantiate(PptSlice ppt, boolean excludeEquality) {
     Assert.assertTrue(ppt.arity == 2);
     // Not really the right place for these tests
     VarInfo var1 = ppt.var_infos[0];
@@ -66,11 +66,11 @@ public final class TwoSequenceFactory {
         if (lb != null)
           System.out.println("  " + lb.format());
       } else {
-        result.add(SeqComparison.instantiate(ppt));
+        result.add(SeqComparison.instantiate(ppt)); // FIXME for equality
       }
     }
     { // previously (pass == 2)
-      result.add(Reverse.instantiate(ppt));
+      if (!excludeEquality) result.add(Reverse.instantiate(ppt));
       if (super1 == super2) {
         Global.subexact_noninstantiated_invariants += 2;
         Global.implied_false_noninstantiated_invariants += 2 + 2 * Functions.unaryFunctionNames.length;
@@ -88,7 +88,9 @@ public final class TwoSequenceFactory {
 
         result.add(SubSet.instantiate(ppt));
 
-        result.add(PairwiseIntComparison.instantiate(ppt));
+        // No < or > allowed.
+        result.add(PairwiseIntComparison.instantiate(ppt, excludeEquality));
+
         result.add(PairwiseLinearBinary.instantiate(ppt));
         int numFunctions = Functions.unaryFunctionNames.length;
         for (int i=0; i<2; i++) {
@@ -97,7 +99,8 @@ public final class TwoSequenceFactory {
           // Don't bother to check arg.isConstant():  we really want to
           // know whether the elements of arg are constant.
           for (int j=0; j<numFunctions; j++) {
-            result.add(PairwiseFunctionUnary.instantiate(ppt, Functions.unaryFunctionNames[j], j, invert));
+            result.add(PairwiseFunctionUnary.instantiate
+                       (ppt, Functions.unaryFunctionNames[j], j, invert));
           }
         }
       }

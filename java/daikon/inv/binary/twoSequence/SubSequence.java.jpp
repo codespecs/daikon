@@ -494,16 +494,25 @@ public class CLASSNAME
         if (der instanceof SEQUENCESCALARSUBSEQUENCE) {
           // If that variable is "B[0..n]"
           VarInfo supervar_part = der.getVarInfo();
-          /* [INCR]
           // Get the canonical version; being equal to it is good enough.
-          supervar_part = supervar_part.equal_to;
-          if (supervar_part == subvar) {
+          if (supervar_part.equalitySet.leader() == subvar) {
             return true;
           }
-          */ // [INCR]
-          // test is now obsolete
-          // if (supervar_part.isCanonical()) // [INCR]
+
+          if (supervar_part.isCanonical())
           {
+            if (subvar == supervar_part) {
+              System.err.println ("Error: variables " +
+                                  subvar.name.name() +
+                                  " and " +
+                                  supervar_part.name.name() +
+                                  " are identical.  Canonical");
+              System.err.println (subvar.isCanonical());
+              System.err.println (supervar_part.isCanonical());
+              System.err.println ("In: " + repr());
+              throw new Error();
+            }
+                                            
             PptSlice ss_ppt = ppt_parent.findSlice_unordered(subvar, supervar_part);
             // System.out.println("  ... considering " + supervar_part.name.name());
             // if (ss_ppt == null) {

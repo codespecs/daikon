@@ -23,7 +23,7 @@ public final class LinearBinaryCoreFloat
     Category.getInstance("daikon.inv.binary.twoScalar.LinearBinaryCoreFloat");
 
   // y == ax + b; first argument is x, second is y
-  public double a, b;
+  public double a = 0, b = 0;
   // The above form rules out vertical lines.  We could also state
   // this invariant like "ax + by = 1".  This would make swapping
   // easier and allow for vertical lines; however, it would rule out
@@ -63,12 +63,19 @@ public final class LinearBinaryCoreFloat
 
   public void swap() {
     // was a swap
-    if (a == 0) {
-      // can't swap horizontal line into vertical
-      Assert.assertTrue(b == 0);
+    if (values_seen < MINPAIRS) {
     } else {
-      a = 1 / a;   // a' =  1/a
-      b = -b * a;  // b' = -b/a
+      if (a == 0) {
+        // can't swap horizontal line into vertical, but if a was 0,
+        // then we might as well falsify ourselves because this is just
+        // a constant
+        values_seen = Integer.MAX_VALUE;
+        a = 0;
+        b = 0;
+      } else {
+        a = 1 / a;   // a' =  1/a
+        b = -b * a;  // b' = -b/a
+      }
     }
 
     double[] tmp = x_cache;

@@ -46,7 +46,20 @@ public class PairwiseIntComparison
     core = new IntComparisonCore(this, only_eq);
   }
 
+  protected PairwiseIntComparison(PptSlice ppt, boolean only_eq,
+                      boolean obvious_lt, boolean obvious_gt,
+                      boolean obvious_le, boolean obvious_ge) {
+    super(ppt);
+    core = new IntComparisonCore(this, only_eq,
+                         obvious_lt, obvious_gt,
+                         obvious_le, obvious_ge);
+  }
+
   public static PairwiseIntComparison instantiate(PptSlice ppt) {
+    return instantiate (ppt, false);
+  }
+
+  public static PairwiseIntComparison instantiate(PptSlice ppt, boolean excludeEquality) {
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
@@ -62,7 +75,13 @@ public class PairwiseIntComparison
     if (! (var1.type.elementIsIntegral() && var2.type.elementIsIntegral())) {
       only_eq = true;
     }
-     PairwiseIntComparison result = new PairwiseIntComparison(ppt, only_eq);
+    PairwiseIntComparison result;
+    if (excludeEquality) {
+      // No < or > allowed.
+      result = new PairwiseIntComparison(ppt, only_eq, true, true, false, false);
+    } else {
+      result = new PairwiseIntComparison(ppt, only_eq);
+    }
     // Don't instantiate if the variables can't have order
     if (!result.var1().aux.getFlag(VarInfoAux.HAS_ORDER) ||
         !result.var2().aux.getFlag(VarInfoAux.HAS_ORDER)) {

@@ -5,6 +5,7 @@ package daikon.inv.binary.twoSequence;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.twoScalar.*;
+import daikon.inv.binary.twoString.*;
 
 import utilMDE.*;
 
@@ -38,13 +39,12 @@ public class SeqComparison
 
   public final boolean only_check_eq;
 
-  boolean can_be_eq = false;
-  boolean can_be_lt = false;
-  boolean can_be_gt = false;
+  public boolean can_be_eq = false;
+  public boolean can_be_lt = false;
+  public boolean can_be_gt = false;
 
   boolean orderMatters;
 
-  int num_sc_samples = 0;
   private ValueTracker values_cache = new ValueTracker(8);
 
   protected SeqComparison(PptSlice ppt, boolean only_eq, boolean order) {
@@ -54,14 +54,14 @@ public class SeqComparison
   }
 
   public static SeqComparison instantiate(PptSlice ppt) {
+    return instantiate (ppt, false);
+  }
+
+  public static SeqComparison instantiate(PptSlice ppt, boolean onlyEq) {
     if (!dkconfig_enabled) return null;
 
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
-
-    if (var1.aux != var2.aux) return null;
-    // Equality does not make sense if the auxiliary info for the two
-    // arrays are different.  Or does it??
 
     // System.out.println("Ppt: " + ppt.name);
     // System.out.println("vars[0]: " + var1.type.format());
@@ -80,6 +80,7 @@ public class SeqComparison
                           && type1.baseIsIntegral()
                           && (type2.dimensions() == 1)
                           && type2.baseIsIntegral()));
+    if (onlyEq) only_eq = true;
     // System.out.println("only_eq: " + only_eq);
     if (var1.aux.getFlag(VarInfoAux.HAS_ORDER)
         && var2.aux.getFlag(VarInfoAux.HAS_ORDER)) {
@@ -152,10 +153,8 @@ public class SeqComparison
     // if ((v1.length == 0) || (v2.length == 0)) {
     //   return;
     // }
-    num_sc_samples += count;
-
     int comparison = 0;
-        if (orderMatters) {
+    if (orderMatters) {
       // Standard element wise comparison
        comparison = comparator.compare(v1, v2);
     } else {
@@ -208,7 +207,7 @@ public class SeqComparison
     } else if (can_be_lt || can_be_gt) {
       // System.out.println("prob = " + Math.pow(.5, ppt.num_values()) + " for " + format());
       return Math.pow(.5, values_cache.num_values());
-    } else if (num_sc_samples == 0) {
+    } else if (ppt.num_samples() == 0) {
       return Invariant.PROBABILITY_UNJUSTIFIED;
     } else {
       return Invariant.PROBABILITY_JUSTIFIED;

@@ -47,7 +47,9 @@ public final class IntComparisonCore
     this(wrapper, only_eq, false, false, false, false);
   }
 
-  public IntComparisonCore(Invariant wrapper, boolean only_eq, boolean obvious_lt, boolean obvious_gt, boolean obvious_le, boolean obvious_ge) {
+  public IntComparisonCore(Invariant wrapper, boolean only_eq,
+                   boolean obvious_lt, boolean obvious_gt,
+                   boolean obvious_le, boolean obvious_ge) {
     this.wrapper = wrapper;
     only_check_eq = only_eq;
     obvious_can_be_lt = obvious_lt;

@@ -18,7 +18,7 @@ public final class SequenceFloatFactory {
 
   // Adds the appropriate new Invariant objects to the specified Invariants
   // collection.
-  public static Vector instantiate(PptSlice ppt) {
+  public static Vector instantiate(PptSlice ppt, boolean excludeEquality) {
     if (debug.isDebugEnabled()) {
       debug.debug("SequenceFloatFactory instantiate " + ppt.name);
     }
