@@ -77,6 +77,18 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/unary/sequence/EltNonZeroFloat.java \
 	daikon/inv/unary/sequence/EltwiseIntComparison.java \
 	daikon/inv/unary/sequence/EltwiseFloatComparison.java \
+	daikon/inv/unary/sequence/EltwiseIntEqual.java \
+	daikon/inv/unary/sequence/EltwiseIntNonEqual.java \
+	daikon/inv/unary/sequence/EltwiseIntLessThan.java \
+	daikon/inv/unary/sequence/EltwiseIntLessEqual.java \
+	daikon/inv/unary/sequence/EltwiseIntGreaterThan.java \
+	daikon/inv/unary/sequence/EltwiseIntGreaterEqual.java \
+	daikon/inv/unary/sequence/EltwiseFloatEqual.java \
+	daikon/inv/unary/sequence/EltwiseFloatNonEqual.java \
+	daikon/inv/unary/sequence/EltwiseFloatLessThan.java \
+	daikon/inv/unary/sequence/EltwiseFloatLessEqual.java \
+	daikon/inv/unary/sequence/EltwiseFloatGreaterThan.java \
+	daikon/inv/unary/sequence/EltwiseFloatGreaterEqual.java \
 	daikon/inv/unary/stringsequence/EltOneOfString.java \
 	daikon/inv/unary/stringsequence/OneOfStringSequence.java \
 	daikon/inv/binary/sequenceScalar/Member.java \
@@ -561,6 +573,42 @@ daikon/inv/unary/sequence/EltwiseIntComparison.java: daikon/inv/unary/sequence/E
 
 daikon/inv/unary/sequence/EltwiseFloatComparison.java: daikon/inv/unary/sequence/EltwiseIntComparison.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
+
+daikon/inv/unary/sequence/EltwiseIntEqual.java: daikon/inv/unary/sequence/EltwiseIntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=EQUAL)
+
+daikon/inv/unary/sequence/EltwiseIntNonEqual.java: daikon/inv/unary/sequence/EltwiseIntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=NONEQUAL)
+
+daikon/inv/unary/sequence/EltwiseIntLessThan.java: daikon/inv/unary/sequence/EltwiseIntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=LESSTHAN)
+
+daikon/inv/unary/sequence/EltwiseIntLessEqual.java: daikon/inv/unary/sequence/EltwiseIntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=LESSEQUAL)
+
+daikon/inv/unary/sequence/EltwiseIntGreaterThan.java: daikon/inv/unary/sequence/EltwiseIntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=GREATERTHAN)
+
+daikon/inv/unary/sequence/EltwiseIntGreaterEqual.java: daikon/inv/unary/sequence/EltwiseIntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=GREATEREQUAL)
+
+daikon/inv/unary/sequence/EltwiseFloatEqual.java: daikon/inv/unary/sequence/EltwiseIntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=EQUALFLOAT)
+
+daikon/inv/unary/sequence/EltwiseFloatNonEqual.java: daikon/inv/unary/sequence/EltwiseIntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=NONEQUALFLOAT)
+
+daikon/inv/unary/sequence/EltwiseFloatLessThan.java: daikon/inv/unary/sequence/EltwiseIntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=LESSTHANFLOAT)
+
+daikon/inv/unary/sequence/EltwiseFloatLessEqual.java: daikon/inv/unary/sequence/EltwiseIntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=LESSEQUALFLOAT)
+
+daikon/inv/unary/sequence/EltwiseFloatGreaterThan.java: daikon/inv/unary/sequence/EltwiseIntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=GREATERTHANFLOAT)
+
+daikon/inv/unary/sequence/EltwiseFloatGreaterEqual.java: daikon/inv/unary/sequence/EltwiseIntComparisons.java.jpp
+	$(JAVA_CPP:DEFINEDVAR=GREATEREQUALFLOAT)
 
 daikon/inv/unary/stringsequence/EltOneOfString.java: daikon/inv/unary/OneOf.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=ELTSTRING)
