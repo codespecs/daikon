@@ -69,14 +69,17 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
 
   public BinaryDerivation[] instantiate(VarInfo vi1, VarInfo vi2) {
 
-    Debug debug = new Debug (getClass(), vi1.ppt, new VarInfo[] {vi1, vi2});
-    debug.log ("Considering Sequence Subscript Derivation");
+    Debug debug = null;
+    if (Debug.logOn())
+      debug = Debug.newDebug (getClass(), vi1.ppt, Debug.vis (vi1, vi2));
+    if (debug != null)
+      debug.log ("Considering Sequence Subscript Derivation");
 
     // check if the derivations are globally disabled
     boolean enable_subscript = SEQUENCESCALARSUBSCRIPT.dkconfig_enabled;
     boolean enable_subsequence = SEQUENCESCALARSUBSEQUENCE.dkconfig_enabled;
     if (!enable_subscript && !enable_subsequence) {
-      debug.log ("Not Enabled");
+      if (debug != null) debug.log ("Not Enabled");
       return null;
     }
 
@@ -94,13 +97,13 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
       seqvar = vi2;
       sclvar = vi1;
     } else {
-      debug.log ("Not Array/Int combination");
+      if (debug != null) debug.log ("Not Array/Int combination");
       return null;
     }
 
     if (!seqvar.aux.getFlag(VarInfoAux.HAS_ORDER)) {
       // Indexing doesn't make sense if order doesn't matter
-      debug.log ("Not ordered");
+      if (debug != null) debug.log ("Not ordered");
       return null;
     }
 
@@ -108,18 +111,18 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
     // Assert.assertTrue(seqvar.isCanonical()); // [INCR]
 
     if (! seqvar.indexCompatible(sclvar)) {
-      debug.log ("variables are not comparable");
+      if (debug != null) debug.log ("variables are not comparable");
       return null;
     }
 
     // For now, do nothing if the sequence is itself derived.
     if (seqvar.derived != null) {
-      debug.log ("Sequence variable derived");
+      if (debug != null) debug.log ("Sequence variable derived");
       return null;
     }
     // For now, do nothing if the scalar is itself derived.
     if (sclvar.derived != null) {
-      debug.log ("Scalar variable derived");
+      if (debug != null) debug.log ("Scalar variable derived");
       return null;
     }
 
@@ -145,7 +148,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
     if (sclvar == seqsize) {
       // a[len] a[len-1] a[0..len] a[0..len-1] a[len..] a[len+1..]
       Global.tautological_suppressed_derived_variables += 6;
-      debug.log ("sclvar related to length");
+      if (debug != null) debug.log ("sclvar related to length");
       return null;
     }
 
@@ -170,7 +173,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
           : INTGREATEREQUAL.find(compar_slice) == null // seqsize can be less than sclvar
           ) {
         Global.nonsensical_suppressed_derived_variables += 6;
-        debug.log ("sclvar is sometimes > length sequence");
+        if (debug != null) debug.log ("sclvar is sometimes > length sequence");
         return null;
       } else if (INTEQUAL.find(compar_slice) != null) {
         Global.nonsensical_suppressed_derived_variables += 3;
@@ -182,7 +185,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
           result.add(new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, true, true)); // a[..i-1]
           result.add(new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, false, false)); // a[i..]
         };
-        debug.log ("Found derivations: " + result);
+        if (debug != null) debug.log ("Found derivations: " + result);
         return (BinaryDerivation[]) result.toArray(new BinaryDerivation[result.size()]);
       }
     }
@@ -378,7 +381,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
       if (! suppress_minus_1)
         result.add(new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, true, true));
     }
-    debug.log ("Found derivations " + result);
+    if (debug != null) debug.log ("Found derivations " + result);
     return (BinaryDerivation[]) result.toArray(new BinaryDerivation[0]);
   }
 
