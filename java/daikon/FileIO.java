@@ -315,7 +315,7 @@ public final class FileIO {
       file_rep_type_string = "java.lang.String";
       if (!seen_string_rep_type) {
         seen_string_rep_type = true;
-        System.err.println("Representation type 'String' should be "+
+        System.err.println("Warning: Malformed trace file.  Representation type 'String' should be "+
                            "'java.lang.String' instead on line " +
                            (file.getLineNumber()-1) + " of " + filename);
       }
@@ -608,7 +608,7 @@ public final class FileIO {
     {
         throw new RuntimeException("Unable to create server: " + e.getMessage());
     }
-    
+
     Socket chicSocket = null;
     try
     {
@@ -618,7 +618,7 @@ public final class FileIO {
     {
         throw new RuntimeException("Unable to connect to Chicory: " + e.getMessage());
     }
-    
+
     try
     {
         return chicSocket.getInputStream();
@@ -627,9 +627,9 @@ public final class FileIO {
     {
         throw new RuntimeException("Unable to get Chicory's input stream: " + e.getMessage());
     }
-      
+
   }
-  
+
   /** Read data from .dtrace file. **/
   static void read_data_trace_file(String filename, PptMap all_ppts,
                                    Processor processor, boolean is_decl_file)
