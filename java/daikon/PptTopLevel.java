@@ -24,71 +24,53 @@ import utilMDE.*;
 
 
 // All information about a single program point.
-// A Ppt may also represent just part of the data: a disjunction.
+// A Ppt may also represent just part of the data: a disjunction (see
+// PptConditional).
 // This probably doesn't do any direct computation, instead deferring that
-// to its views that are slices.
+// to its views that are slices and that actually contain the invariants.
 
 public class PptTopLevel extends Ppt {
 
-  // do we need both a num_tracevars for the number of variables in the
+  // Do we need both a num_tracevars for the number of variables in the
   // tracefile and a num_non_derived_vars for the number of variables
   // actually passed off to this Ppt?  The ppt wouldn't use num_tracevars,
   // but it would make sense to store it here anyway.
 
   // These values are -1 if not yet set (can that happen?).
+  // Invariant:  num_declvars == num_tracevars + num_orig_vars
   int num_declvars;             // number of variables in the decl file
   int num_tracevars;            // number of variables in the trace file
   int num_orig_vars;            // number of _orig vars
   int num_static_constant_vars; // these don't appear in the trace file
-  // invariant:  num_declvars == num_tracevars + num_orig_vars
 
-  // Indicates whether derived variables have been introduced.
-  // First number: invariants are computed up to this index, non-inclusive
-  // Remaining numbers: values have been derived from up to these indices
-
-  // invariant:  len(var_infos) >= invariants_index >= derivation_index[0]
-  //   >= derivation_index[1] >= ...
+  // Indicates which derived variables have been introduced.
+  // First number: invariants are computed up to this index, non-inclusive.
+  // Remaining numbers: values have been derived from up to these indices.
+  // Invariant:
+  //   len(var_infos) >= derivation_index[0] >= derivation_index[1] >= ...
   int[] derivation_indices = new int[derivation_passes+1];
 
-  transient VarValuesOrdered values;
+  private transient VarValuesOrdered values;
   // these are used only when values is null
-  int values_num_samples;
-  int values_num_mod_non_missing_samples;
-  int values_num_values;
-  String values_tuplemod_samples_summary;
+  private int values_num_samples;
+  private int values_num_mod_non_missing_samples;
+  private int values_num_values;
+  private String values_tuplemod_samples_summary;
 
-  // Assumption: The "depends on" graph will be acyclic
-  // (the graph edges are: <this, (entry_ppt U controlling_ppts)>)
-  // This is necessary because we search the graph in isWorthPrinting
+  // Assumption: The "depends on" graph is acyclic
+  // (the graph edges are: <this, (entry_ppt U controlling_ppts)>).
+  // This is necessary because we search the graph in isWorthPrinting.
 
   PptTopLevel entry_ppt;        // null if this isn't an exit point
 
   // PptTopLevel has any number of 'controlling' ppts.  Any invariants
   // which exist in the controlling ppts are necessarily true in the
   // controlled ppts, and therefore may be suppressed in the output.
-  // This arises public methods are controlled by object invariants,
-  // or when conditional points are controlled by the unconditional
+  // For example, public methods are controlled by object invariants,
+  // and conditional points are controlled by the unconditional
   // parent point.
   Set controlling_ppts = new HashSet(); // [PptTopLevel]
 
-  // These accessors are for abstract methods declared in Ppt
-  public int num_samples() {
-    return (values == null) ? values_num_samples : values.num_samples(); }
-  public int num_mod_non_missing_samples() {
-      return ((values == null)
-              ? values_num_mod_non_missing_samples
-              : values.num_mod_non_missing_samples()); }
-  // WARNING!  This is the number of distinct ValueTuple objects,
-  // which can be as much as 2^arity times as many as the number of
-  // distinct tuples of values.
-  public int num_values() {
-    return (values == null) ? values_num_values : values.num_values(); }
-  // public int num_missing() { return values.num_missing; }
-  public String tuplemod_samples_summary() {
-      return ((values == null)
-              ? values_tuplemod_samples_summary
-              : values.tuplemod_samples_summary());
-  }
   public void set_values_null() {
     values_num_samples = num_samples();
     values_num_mod_non_missing_samples = num_mod_non_missing_samples();
@@ -96,25 +78,8 @@ public class PptTopLevel extends Ppt {
     values_tuplemod_samples_summary = tuplemod_samples_summary();
     values = null;
   }
-  // This method is added as somewhat of a hack for Melissa's gui.  In the gui,
-  // PptTopLevel are stored as nodes in a tree.  Swing obtains the string to
-  // display in the actualy JTree by calling toString().  For class-level Ppt's,
-  // we just want "Sort" instead of "Sort:::CLASS".  For other Ppt's, we want
-  // "EXIT184" instead of "Sort.swapReferences([Ljava/lang/Object;II)V:::EXIT184"
-  public String toString() {
-      PptName pptName = new PptName( name );
-      if (pptName.isObjectInstanceSynthetic()  ||  pptName.isClassStaticSynthetic())
-	  return pptName.getFullClassName();
-      else
-	  return pptName.getPoint();
-  }
 
 
-
-
-
-  // These are now in PptSlice objects instead.
-  // Invariants invs;
 
   PptTopLevel(String name, VarInfo[] var_infos) {
     super(name);
@@ -164,21 +129,7 @@ public class PptTopLevel extends Ppt {
   //   views = new HashSet();
   // }
 
-  // Accessing data
-  int num_vars() {
-    return var_infos.length;
-  }
-  Iterator var_info_iterator() {
-    return Arrays.asList(var_infos).iterator();
-  }
 
-
-
-  boolean compatible(Ppt other) {
-    // This insists that the var_infos lists are identical.  The Ppt
-    // copy constructor does reuse the var_infos field.
-    return (var_infos == other.var_infos);
-  }
 
   // // Strangely, this modifies "other" but not "this".  That looks wrong.
   // // Perhaps this should operate over VarValues objects or some such?
@@ -196,6 +147,68 @@ public class PptTopLevel extends Ppt {
   //     VarValues.setValue(other_entry, new_count);
   //   }
 
+
+  ///////////////////////////////////////////////////////////////////////////
+  /// Accessing data
+  ///
+
+  int num_vars() {
+    return var_infos.length;
+  }
+  Iterator var_info_iterator() {
+    return Arrays.asList(var_infos).iterator();
+  }
+
+  // These accessors are for abstract methods declared in Ppt
+  public int num_samples() {
+    return (values == null) ? values_num_samples : values.num_samples(); }
+  public int num_mod_non_missing_samples() {
+      return ((values == null)
+              ? values_num_mod_non_missing_samples
+              : values.num_mod_non_missing_samples()); }
+  // WARNING!  This is the number of distinct ValueTuple objects,
+  // which can be as much as 2^arity times as many as the number of
+  // distinct tuples of values.
+  public int num_values() {
+    return (values == null) ? values_num_values : values.num_values(); }
+  // public int num_missing() {
+  //   return (values == null) ? value_num_missing : values.num_missing; }
+  public String tuplemod_samples_summary() {
+      return ((values == null)
+              ? values_tuplemod_samples_summary
+              : values.tuplemod_samples_summary());
+  }
+  public void set_values_null() {
+    values_num_samples = num_samples();
+    values_num_mod_non_missing_samples = num_mod_non_missing_samples();
+    values_num_values = num_values();
+    values_tuplemod_samples_summary = tuplemod_samples_summary();
+    values = null;
+  }
+
+
+
+  // This method is added as somewhat of a hack for Melissa's gui.  In the
+  // gui, PptTopLevel are stored as nodes in a tree.  Swing obtains the
+  // string to display in the actualy JTree by calling toString().  For
+  // class-level Ppt's, we just want "Sort" instead of "Sort:::CLASS".  For
+  // other Ppt's, we want "EXIT184" instead of
+  // "Sort.swapReferences([Ljava/lang/Object;II)V:::EXIT184"
+  public String toString() {
+      PptName pptName = new PptName( name );
+      if (pptName.isObjectInstanceSynthetic()
+          || pptName.isClassStaticSynthetic())
+	  return pptName.getFullClassName();
+      else
+	  return pptName.getPoint();
+  }
+
+
+  boolean compatible(Ppt other) {
+    // This insists that the var_infos lists are identical.  The Ppt
+    // copy constructor does reuse the var_infos field.
+    return (var_infos == other.var_infos);
+  }
 
 
   ///////////////////////////////////////////////////////////////////////////
@@ -262,10 +275,11 @@ public class PptTopLevel extends Ppt {
       }
       PptTopLevel class_ppt = (PptTopLevel) all_ppts.get(ppt_name.makeClassStatic());
       if (class_ppt != null) {
-	controlling_ppts.add(class_ppt);      
+	controlling_ppts.add(class_ppt);
       }
     }
   }
+
 
   ///////////////////////////////////////////////////////////////////////////
   /// Adding special variables
@@ -370,6 +384,10 @@ public class PptTopLevel extends Ppt {
             && (vi.isCanonical())
             && (!vi.canBeMissing));
 
+    // Should add this (back) in:
+	    // && !vi.always_missing()
+	    // && !vi.always_equal_to_null();
+
     // Testing for being canonical is going to be a touch tricky when we
     // integrate derivation and inference, because when something becomes
     // non-canonical we'll have to go back and derive from it, etc.  It's
@@ -380,22 +398,13 @@ public class PptTopLevel extends Ppt {
     // complexity of making variables non-canonical and possibly canonical
     // again.
 
-    // return (vi.isCanonical()
-    //         // This prevents derivation from ever occurring on
-    //         // derived variables.  Ought to put this under the
-    //         // control of the individual Derivation objects.
-    //         && !vi.isDerived());
-    // Should add this (back) in:
-	    // && !vi.always_missing()
-	    // && !vi.always_equal_to_null();
   }
 
 
-  // There are just two passes of interest right now...
   final static int derivation_passes = 2;
 
   // To verify that these are all the factories of interest, do
-  // cd ~/research/invariants/daikon/; search -i -n 'extends.*derivationfactory'
+  // cd ~/research/invariants/daikon/derive; search -i -n 'extends.*derivationfactory'
 
   transient UnaryDerivationFactory[][] unaryDerivations
     = new UnaryDerivationFactory[][] {
@@ -403,7 +412,9 @@ public class PptTopLevel extends Ppt {
        { new SequenceLengthFactory() },
       // pass2
        { new SequenceInitialFactory(),
-         new SequenceMinMaxSumFactory(), } };
+         new SequenceMinMaxSumFactory(),
+         new SequenceExtremumFactory(), }
+    };
 
   transient BinaryDerivationFactory[][] binaryDerivations
     = new BinaryDerivationFactory[][] {
@@ -417,7 +428,7 @@ public class PptTopLevel extends Ppt {
 
   /**
    * This does no inference; it just calls deriveVariablesOnePass once per pass.
-   * It returns a Vector of Derivation objects (or are they VarInfos?).<p>
+   * It returns a Vector of Derivation objects.<p>
    *
    * If derivation_index == (a, b, c) and n = len(var_infos), then
    * the body of this loop:
@@ -457,7 +468,6 @@ public class PptTopLevel extends Ppt {
                          + ArraysMDE.toString(derivation_indices));
       // Alternately, and probably more usefully
       for (int i=0; i<result.size(); i++) {
-        // System.out.println("  " + ((Derivation)result.elementAt(i)));
         System.out.println("  " + ((Derivation)result.elementAt(i)).getVarInfo().name);
       }
     }
@@ -605,22 +615,10 @@ public class PptTopLevel extends Ppt {
 
   }
 
-  // void process() {
-  //   throw new Error("To implement");
-  // }
-
-  // boolean contains(ValueTuple vt) {
-  //   return values.containsKey(vt);
-  // }
-
-  // Iterator entrySet() {
-  //   return values.entrySet().iterator();
-  // }
-
 
 
   ///////////////////////////////////////////////////////////////////////////
-  ///
+  /// Initial processing
   ///
 
   // This function is called to jump-start processing; it creates all the
@@ -638,8 +636,8 @@ public class PptTopLevel extends Ppt {
   //  * all inference must be performed over a variable before it may be
   //    derived from.  This implies that as soon as we derive a variable,
   //    we should do all inference over it.
-  //  * inference could be by stages, too:  first equality invariants,
-  //    then all others.  Probably do this soon.
+  //  * inference is done by stages, too:  first equality invariants,
+  //    then others.  See instantiate_views.
 
 
   public void initial_processing() {
@@ -653,7 +651,7 @@ public class PptTopLevel extends Ppt {
       return;
 
     derivation_indices = new int[derivation_passes+1];
-    // Extraneous, since the array is initialized to all zeros.
+    // Extraneous, since Java initializes the array to all zeros.
     // Arrays.fill(derivation_passes, 0);
     // Not num_tracevars because we also care about _orig, etc.
     instantiate_views(0, var_infos.length);
@@ -688,16 +686,17 @@ public class PptTopLevel extends Ppt {
   // just reuse this one.  (This probably isn't such a big deal.)
   private Vector vtrd_cache = new Vector(2);
 
-  // I can't decide which loop it's more efficient to make the inner loop.
+  // I can't decide which loop it's more efficient to make the inner loop:
+  // the loop over samples or the loop over slices.
 
-  // Vector of PptSlice.
+  // slices_vector si a Vector of PptSlice; this routine does not modify it.
   // Maybe this should return the rejected views.
-  public void addViews(Vector slices_vector_) {
-    if (slices_vector_.isEmpty())
+  public void addViews(Vector slices_vector) {
+    if (slices_vector.isEmpty())
       return;
 
     // Don't modify the actual parameter
-    Vector slices_vector = (Vector) slices_vector_.clone();
+    slices_vector = (Vector) slices_vector.clone();
 
     // This might be a brand-new Slice, and instantiate_invariants for this
     // pass might not have come up with any invariants.
@@ -763,9 +762,9 @@ public class PptTopLevel extends Ppt {
   // // Maybe this should return the rejected views.
   // void addViews(Vector slices) {
   //   adding_views = true;
-  //   // Since I more valuetuples than program points, and program points are
-  //   // likely to disappear midway through processing, put the program point
-  //   // loop outermost.  (Does this make sense?  I'm not sure...)
+  //   // Since there are more valuetuples than program points, and program
+  //   // points are likely to disappear midway through processing, put the
+  //   // program point loop outermost.  (Does this make sense?  I'm not sure.)
   //   for (Iterator slice_itor = slices.iterator() ; slice_itor.hasNext() ; ) {
   //     Ppt this_slice = (Ppt) slice_itor.next();
   //     Assert.assert(view_to_remove_deferred == null);
@@ -842,20 +841,6 @@ public class PptTopLevel extends Ppt {
 
   // Should return a list of the views created, perhaps.
 
-  // This doesn't work because we have a Vector of Derivation objects, not
-  // a vector of VarInfo objects.
-  //   // Convenience version.
-  //   void instantiate_views(Vector vars) {
-  //     if (vars.size() == 0)
-  //       return;
-  //
-  //     for (int i=0; i<vars.size()-1; i++)
-  //       Assert.assert( ((VarInfo)vars.elementAt(i)).varinfo_index
-  //                      == ((VarInfo)vars.elementAt(i+1)).varinfo_index - 1 );
-  //     instantiate_views( ((VarInfo)vars.elementAt(0)).varinfo_index,
-  //                        ((VarInfo)vars.elementAt(vars.size()-1)).varinfo_index + 1 );
-  //   }
-
 
   /**
    * Install views (and thus invariants).
@@ -927,7 +912,7 @@ public class PptTopLevel extends Ppt {
     set_dynamic_constant_slots(unary_views);
 
     // Now some elements of unary_views are installed, but others are not
-    // and are incomplete, Because we stopped adding new values as soon as
+    // and are incomplete, because we stopped adding new values as soon as
     // they were found not to hold.  We discard them later, but for now we
     // want to remember all the ones we tried.
 
@@ -1355,7 +1340,7 @@ public class PptTopLevel extends Ppt {
     PptConditional[] pconds
       = (PptConditional[]) pconds_vector.toArray(new PptConditional[0]);
     int num_pconds = pconds.length;
-    Assert.assert((num_pconds/2)*2 == num_pconds); // ensure divisibility by 2
+    Assert.assert(num_pconds % 2 == 0);
     int num_splits = num_pconds/2;
 
     for (int i=0; i<num_pconds; i+=2) {
@@ -1371,6 +1356,7 @@ public class PptTopLevel extends Ppt {
       Arrays.fill(cumulative_modbits[i], 1);
     }
 
+    // Fill the new PptConditionals with values.
     for (Iterator vt_itor = values.sampleIterator(); vt_itor.hasNext(); ) {
       VarValuesOrdered.ValueTupleCount entry = (VarValuesOrdered.ValueTupleCount) vt_itor.next();
       ValueTuple vt = entry.value_tuple;
@@ -1430,6 +1416,7 @@ public class PptTopLevel extends Ppt {
     }
 
 
+    // Install the new continditional ppts, if they are not trivial.
     int parent_num_samples = num_samples();
     for (int i=0; i<num_pconds; i++) {
       // Don't bother with this conditioned view if it contains all or no samples.
@@ -1491,7 +1478,7 @@ public class PptTopLevel extends Ppt {
     public String getFromFirst(VarInfo var1);
     public String getFromSecond(VarInfo var2);
   }
-  
+
   private static class DefaultIsSameInvariantNameExtractor
     implements IsSameInvariantNameExtractor
   {
@@ -1530,15 +1517,15 @@ public class PptTopLevel extends Ppt {
     }
 
     // The variable names much match up, in order
-    
+
     VarInfo[] vars1 = inv1.ppt.var_infos;
     VarInfo[] vars2 = inv2.ppt.var_infos;
-    
+
     Assert.assert(vars1.length == vars2.length); // due to inv type match already
     for (int i=0; i < vars1.length; i++) {
       VarInfo var1 = vars1[i];
       VarInfo var2 = vars2[i];
-      
+
       // Do the easy check first
       if (name_extractor.getFromFirst(var1).equals(name_extractor.getFromSecond(var2))) {
 	continue;
@@ -1576,7 +1563,12 @@ public class PptTopLevel extends Ppt {
   /// Printing invariants
   ///
 
+  // This is a fairly inefficient method, as it does a lot of copying.
   // As of 1/9/2000, this is only used in print_invariants.
+  /**
+   * Return a vector of all the invariants for the program point.
+   * Also consider using views_iterator() instead.
+   **/
   public Vector invariants_vector() {
     Vector result = new Vector();
     for (Iterator views_itor = views.iterator(); views_itor.hasNext(); ) {
@@ -1644,16 +1636,12 @@ public class PptTopLevel extends Ppt {
   /// Printing invariants
   ///
 
-  final static Comparator icfp = new Invariant.InvariantComparatorForPrinting();
-
-  // @return either "n noun" or "n nouns" depending on n
-  private static String nplural(int n, String noun)
-  {
-    if ((n > 1) || (n < -1)) 
-      return n + " " + noun + "s";
-    else 
-      return n + " " + noun;
+  // To avoid the leading "UtilMDE." on all calls.
+  private static String nplural(int n, String noun) {
+    return UtilMDE.nplural(n, noun);
   }
+
+  final static Comparator icfp = new Invariant.InvariantComparatorForPrinting();
 
   /** Print invariants for a single program point. */
   public void print_invariants(PrintStream out) {
@@ -1853,11 +1841,12 @@ public class PptTopLevel extends Ppt {
     int num_mod_non_missing_samples = inv.ppt.num_mod_non_missing_samples();
     if ((inv instanceof OneOf) && (((OneOf) inv).num_elts() > num_mod_non_missing_samples)) {
       // TODO: JWN says "Shouldn't this be an assertion or something?"
+      // MDE: The
       System.out.println("Modbit problem:  more values (" + ((OneOf) inv).num_elts() +
 			 ") than modified samples (" + num_mod_non_missing_samples + ")");
     }
- 
-    // We print a OneOf invariant even if there are not very many
+
+    // We print a OneOf invariant even if there are few
     // modified samples.  If the variable takes on only one value, maybe
     // it is only set once (or a few times).
     if ((num_mod_non_missing_samples < Invariant.min_mod_non_missing_samples)
@@ -1874,92 +1863,64 @@ public class PptTopLevel extends Ppt {
     }
     return true;
   }
-  
+
   private boolean isWorthPrinting_NonCanonicalOrConstant(Invariant inv, boolean add_to_stats)
   {
     Assert.assert(inv.ppt.parent == this);
 
-    if (IsEquality.it.accept(inv)) {
-      Assert.assert(inv.ppt.var_infos.length == 2);
-      Assert.assert(inv.ppt.var_infos[1].isCanonical() == false);
-      if (inv.ppt.var_infos[0].isCanonical()) {
-	if (add_to_stats) {
-	  Global.reported_invariants++;
-	}
-	// JWN: This is tricky.  We don't want print_invariants to
-	// print this during the loop since it prints the equality
-	// invariants on its own; therefore we should return false.
-	// However, when other code is simply asking
-	// isWorthPriting(Invariant), maybe we want to return true
-	// here -- maybe even in the else case as well -- since
-	// equality invariants are always printed.  On the other hand,
-	// when other code is wondering if this is worth printing,
-	// it's probably wondering if it should suppress itself, so
-	// returning false here is the safe thing to do (since then
-	// the asking code won't suppress itself).  Gah.
-	return false;
-      } else {
-	if (add_to_stats) {
-	  Global.non_canonical_invariants++;
-	}
-	return false;
+    boolean all_canonical = true;
+    boolean some_nonconstant = false;
+    VarInfo[] vis = inv.ppt.var_infos;
+    for (int i=0; i<vis.length; i++) {
+      if (! vis[i].isCanonical()) {
+        if (Global.debugPrintInvariants)
+          System.out.println("  [Suppressing " + inv.repr() + " because " + vis[i].name + " is non-canonical]");
+        all_canonical = false;
+        break;
       }
-    } else {
-      boolean all_canonical = true;
-      boolean some_nonconstant = false;
-      VarInfo[] vis = inv.ppt.var_infos;
-      for (int i=0; i<vis.length; i++) {
-	if (! vis[i].isCanonical()) {
-	  if (Global.debugPrintInvariants)
-	    System.out.println("  [Suppressing " + inv.repr() + " because " + vis[i].name + " is non-canonical]");
-	  all_canonical = false;
-	  break;
-	}
-	if (! vis[i].isConstant()) {
-	  some_nonconstant = true;
-	  // Don't break out of the loop; this is computed as a side
-	  // effect but isn't the main point of the loop.
-	}
+      if (! vis[i].isConstant()) {
+        some_nonconstant = true;
+        // Don't break out of the loop; this is computed as a side
+        // effect but isn't the main point of the loop.
       }
-      if (! all_canonical) {
-	if (Global.debugPptTopLevel) {
-	  System.out.println("  [not all vars canonical:  " + inv.repr() + " ]");
-	  System.out.print("    [Canonicalness:");
-	  for (int i=0; i<vis.length; i++)
-	    System.out.print(" " + vis[i].isCanonical());
-	  System.out.println("]");
-	  // I'm not sure this can still happen; reinstate the error to check.
-	  // // This *does* happen, because we instantiate all invariants
-	  // // simultaneously. so we don't yet know which of the new
-	  // // variables is canonical.  I should fix this.
-	  throw new Error("this shouldn't happen");
-	}
-	if (add_to_stats) {
-	  Global.non_canonical_invariants++;
-	}
-	return false;
+    }
+    if (! all_canonical) {
+      if (Global.debugPptTopLevel) {
+        System.out.println("  [not all vars canonical:  " + inv.repr() + " ]");
+        System.out.print("    [Canonicalness:");
+        for (int i=0; i<vis.length; i++)
+          System.out.print(" " + vis[i].isCanonical());
+        System.out.println("]");
+        // Eventually this may be able to happen again, because we will
+        // instantiate all invariants simultaneously, so we don't yet know
+        // which of the new variables is canonical.
+        throw new Error("this shouldn't happen");
       }
-      if (! some_nonconstant) {
-	Assert.assert((inv instanceof OneOf) || (inv instanceof Comparison)
-		      // , "Unexpected invariant with all vars constant: "
-		      // + inv + "  " + inv.repr() + "  " + inv.format()
-		      );
-	if (inv instanceof Comparison) {
-	  Assert.assert(! IsEquality.it.accept(inv));
-	  if (Global.debugPrintInvariants) {
-	    System.out.println("  [over constants:  " + inv.repr() + " ]");
-	  }
-	  if (add_to_stats) {
-	    Global.obvious_invariants++;
-	  }
-	  return false;
-	}
+      if (add_to_stats) {
+        Global.non_canonical_invariants++;
+      }
+      return false;
+    }
+    if (! some_nonconstant) {
+      Assert.assert((inv instanceof OneOf) || (inv instanceof Comparison)
+                    // , "Unexpected invariant with all vars constant: "
+                    // + inv + "  " + inv.repr() + "  " + inv.format()
+                    );
+      if (inv instanceof Comparison) {
+        Assert.assert(! IsEquality.it.accept(inv));
+        if (Global.debugPrintInvariants) {
+          System.out.println("  [over constants:  " + inv.repr() + " ]");
+        }
+        if (add_to_stats) {
+          Global.obvious_invariants++;
+        }
+        return false;
       }
     }
     return true;
   }
 
-  
+
   private boolean isWorthPrinting_Obvious(Invariant inv, boolean add_to_stats)
   {
     Assert.assert(inv.ppt.parent == this);
@@ -2020,7 +1981,7 @@ public class PptTopLevel extends Ppt {
   private boolean isWorthPrinting_PostconditionPrestate(Invariant inv, boolean add_to_stats)
   {
     Assert.assert(inv.ppt.parent == this);
-    
+
     if (Daikon.suppress_implied_postcondition_over_prestate_invariants) {
       if (entry_ppt != null) {
 	Iterator entry_invs = entry_ppt.invariants_vector().iterator();
