@@ -556,10 +556,7 @@ public final class FileIO {
   public static void read_data_trace_files(Collection /*File*/files,
                                            PptMap all_ppts,
                                            Processor processor)
-    throws IOException
-  {
-    // [INCR] init_call_stack_and_hashmap();
-
+                                                    throws IOException {
     for (Iterator i = files.iterator(); i.hasNext(); ) {
       File file = (File) i.next();
       try {
@@ -638,31 +635,6 @@ public final class FileIO {
       Global.dtraceWriter = new PrintWriter(new FileWriter(new File(filename + ".debug")));
     }
     // init_ftn_call_ct();          // initialize function call counts to 0
-
-    // Maps from a function to the cumulative modification bits seen for
-    // the entry since the time other elements were seen.  There is one tag
-    // for each exit point associated with this entry.
-    // I propose we no longer need this, since we will feed in one sample
-    // per exit point; modbits will end up correct automatically.
-    /* [INCR] ... (punting modbits fixing for now)
-    // [PptTopLevel -> [PptTopLevel -> int[]]]
-    HashMap cumulative_modbits = new HashMap();
-    for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
-      PptTopLevel entry_ppt = ppt.entry_ppt;
-      if (entry_ppt != null) {
-        int num_vars = entry_ppt.num_vars() - entry_ppt.num_static_constant_vars;
-        int[] mods = new int[num_vars];
-        Arrays.fill(mods, 0);
-        HashMap subhash = (HashMap) cumulative_modbits.get(entry_ppt);
-        if (subhash == null) {
-          subhash = new HashMap();
-          cumulative_modbits.put(entry_ppt, subhash);
-        }
-        subhash.put(ppt, mods);
-      }
-    }
-    */ // ... [INCR]
 
     // try {
       // "line_" is uninterned, "line" is interned
@@ -902,19 +874,6 @@ public final class FileIO {
           }
         }
 
-        // Feeding values to EXITnn points will automatically have
-        // them flow up to the corresponding EXIT point.
-        /* [INCR] ...
-        PptTopLevel exit_ppt = (PptTopLevel) ppt.combined_exit;
-        if (exit_ppt != null) {
-          VarInfo[] exit_vis = exit_ppt.var_infos;
-          // System.out.println("ppt = " + ppt.name());
-          // System.out.println(" comb_indices = " + utilMDE.ArraysMDE.toString(ppt.combined_exit_var_indices));
-          // System.out.println(" vt = " + vt.toString());
-          ValueTuple exit_vt = vt.slice(ppt.combined_exit_var_indices);
-          exit_ppt.add(exit_vt, 1);
-        }
-        */ // ... INCR
       }
     }
     if (Global.debugPrintDtrace) {
@@ -1204,28 +1163,9 @@ public final class FileIO {
       } else {
         call_hashmap.put(nonce, invok);
       }
-      /* [INCR] ... Punting cumulative modbits; see comments way above.
-      HashMap subhash = (HashMap) cumulative_modbits.get(ppt);
-      // If subhash is null, then there must have been no exit program
-      // point that mapped back to this entry.  That could happen if the
-      // body is "while (true) { }"; Jikes/dfej adds no synthetic "return"
-      // statement in that case.
-      // if (subhash == null) {
-      //   System.out.println("Entry " + name() + " has no cumulative_modbits");
-      // }
-      if (subhash != null) {
-        // System.out.println("Entry " + name() + " has " + subhash.size() + " exits");
-        for (Iterator itor = subhash.values().iterator(); itor.hasNext(); ) {
-          int[] exitmods = (int[]) itor.next();
-          // System.out.println("lengths: " + exitmods.length + " " + mods.length);
-          ValueTuple.orModsInto(exitmods, mods);
-        }
-      }
-      */ // ... [INCR]
       return;
     }
 
-    // PptTopLevel entry_ppt = (PptTopLevel) ppt.entry_ppt; // [INCR]
     if (ppt.ppt_name.isExitPoint() || ppt.ppt_name.isThrowsPoint()) {
       Invocation invoc;
       // Set invoc
@@ -1258,37 +1198,19 @@ public final class FileIO {
         }
       }
       Assert.assertTrue(invoc != null);
-      {
-        /* [INCR] punt cumulative modbits
-        Assert.assertTrue(ppt.num_orig_vars == entry_ppt.num_tracevars
-                          // , ppt.name() + " has " + ppt.num_orig_vars + " orig_vars, but " + entry_ppt.name() + " has " + entry_ppt.num_tracevars + " tracevars"
-                          );
-        int[] entrymods = (int[]) ((HashMap)cumulative_modbits.get(entry_ppt)).get(ppt);
-        */ // ... INCR
-        for (int i=0; i<ppt.num_orig_vars; i++) {
-          vals[ppt.num_tracevars+i] = invoc.vals[i];
-          int mod = invoc.mods[i];
-          /* [INCR] punt again
-          if ((mod == ValueTuple.UNMODIFIED)
-              && (entrymods[i] == ValueTuple.MODIFIED)) {
-            // System.out.println("Entrymods made a difference.");
-            mod = ValueTuple.MODIFIED;
-          }
-          */ // ... INCR
-          mods[ppt.num_tracevars+i] = mod;
-          // Possibly more efficient to set this all at once, late in
-          // the game; but this gets it done.
-          // It was once moved to PptTopLevel.add(ValueTuple,int), but it
-          // disappeared from there, so now it's back here.
-          // In the long run canBeMissing should perhaps go away
-          if (ValueTuple.modIsMissingNonsensical(mods[ppt.num_tracevars+i])) {
-            vis[ppt.num_tracevars+i].canBeMissing = true;
-            Assert.assertTrue(vals[ppt.num_tracevars+i] == null);
-          }
+      for (int i=0; i<ppt.num_orig_vars; i++) {
+        vals[ppt.num_tracevars+i] = invoc.vals[i];
+        int mod = invoc.mods[i];
+        mods[ppt.num_tracevars+i] = mod;
+        // Possibly more efficient to set this all at once, late in
+        // the game; but this gets it done.
+        // It was once moved to PptTopLevel.add(ValueTuple,int), but it
+        // disappeared from there, so now it's back here.
+        // In the long run canBeMissing should perhaps go away
+        if (ValueTuple.modIsMissingNonsensical(mods[ppt.num_tracevars+i])) {
+          vis[ppt.num_tracevars+i].canBeMissing = true;
+          Assert.assertTrue(vals[ppt.num_tracevars+i] == null);
         }
-        /* [INCR] punt again
-        Arrays.fill(entrymods, 0);
-        */ // ... INCR
       }
     }
   }
