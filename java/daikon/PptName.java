@@ -1,11 +1,14 @@
 package daikon;
 
-import java.io.*;
-import utilMDE.*;
+import utilMDE.Assert;
+
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+import java.io.IOException;
 
 /**
- * ADT which represents naming data associated with a given program
- * point, such as the class or method.
+ * PptName is an ADT that represents naming data associated with a
+ * given program point, such as the class or method.
  **/
 public class PptName
   implements Serializable
@@ -236,7 +239,7 @@ public class PptName
    **/
   public PptName makeEnter()
   {
-    Assert.assert(isExitPoint());
+    Assert.assert(isExitPoint(), fullname);
     return new PptName(cls, method, FileIO.enter_suffix);
   }
 
@@ -246,7 +249,7 @@ public class PptName
    **/
   public PptName makeExit()
   {
-    Assert.assert(isExitPoint() || isEnterPoint());
+    Assert.assert(isExitPoint() || isEnterPoint(), fullname);
     return new PptName(cls, method, FileIO.exit_suffix);
   }
 
@@ -256,7 +259,7 @@ public class PptName
    **/
   public PptName makeObject()
   {
-    Assert.assert(isExitPoint() || isEnterPoint());
+    Assert.assert(isExitPoint() || isEnterPoint(), fullname);
     return new PptName(cls, null, FileIO.object_suffix);
   }
 
@@ -266,7 +269,7 @@ public class PptName
    **/
   public PptName makeClassStatic()
   {
-    Assert.assert(isExitPoint() || isEnterPoint() || isObjectInstanceSynthetic());
+    Assert.assert(isExitPoint() || isEnterPoint() || isObjectInstanceSynthetic(), fullname);
     return new PptName(cls, null, FileIO.class_static_suffix);
   }
 
@@ -309,8 +312,9 @@ public class PptName
 
   // Interning is lost when an object is serialized and deserialized.
   // Manually re-intern any interned fields upon deserialization.
-  private void readObject(ObjectInputStream in) throws
-  IOException, ClassNotFoundException {
+  private void readObject(ObjectInputStream in)
+    throws IOException, ClassNotFoundException
+  {
     in.defaultReadObject();
     if (cls != null)
       cls = cls.intern();
