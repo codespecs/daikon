@@ -55,7 +55,8 @@ public final class SequenceScalarSubscriptFactory extends BinaryDerivationFactor
     // Since both are canonical, this is equivalent to
     // "if (sclvar.canonicalRep() == seqsize.canonicalRep()) ...
     if (sclvar == seqsize) {
-      Global.tautological_suppressed_derived_variables += 4;
+      // a[len] a[len-1] a[0..len] a[0..len-1] a[len..len] a[len+1..len]
+      Global.tautological_suppressed_derived_variables += 6;
       return null;
     }
 
@@ -70,10 +71,10 @@ public final class SequenceScalarSubscriptFactory extends BinaryDerivationFactor
       IntComparison compar = IntComparison.find(compar_slice);
       if (compar != null) {
         if ((sclvar.varinfo_index < seqsize.varinfo_index)
-            ? compar.core.can_be_gt // sclvar can be less than seqsize
+            ? compar.core.can_be_gt // sclvar can be more than seqsize
             : compar.core.can_be_lt // seqsize can be less than sclvar
             ) {
-          Global.nonsensical_suppressed_derived_variables += 4;
+          Global.nonsensical_suppressed_derived_variables += 6;
           return null;
         }
       }
@@ -81,23 +82,41 @@ public final class SequenceScalarSubscriptFactory extends BinaryDerivationFactor
 
     // Abstract out these next two.
 
-    // If the scalar is the constant 0 (or less), do nothing.  We already
-    // extract array[0], and the subarrays array[0..-1] and array[0..0] are
-    // not interesting.
+    // If the scalar is a constant < 0:
+    //   all derived variables are nonsensical
+    // If the scalar is the constant 0:
+    //   array[0] is already extracted
+    //   array[-1] is nonsensical
+    //   array[0..0] is already extracted
+    //   array[0..-1] is nonsensical
+    //   array[0..] is the same as array[]
+    //   array[1..] should be extracted
+    // If the scalar is the constant 1:
+    //   array[1] is already extracted
+    //   array[0] is already extracted
+    //   array[0..1] should be extracted
+    //   array[0..0] is already extracted
+    //   array[1..] should be extracted
+    //   array[2..] should be extracted
     if (sclvar.isConstant()) {
       long scl_constant = ((Long) sclvar.constantValue()).longValue();
       // System.out.println("It's constant (" + scl_constant + "): " + sclvar.name);
-      if (scl_constant < 1) {
-        Global.tautological_suppressed_derived_variables += 2;
-        Global.nonsensical_suppressed_derived_variables += 2;
-        return null;
+      if (scl_constant < 0) {
+        Global.nonsensical_suppressed_derived_variables += 6;
       }
-      // If the constant 1, only extract array[0..1]; others are already
-      // derived or uninteresting.
+      if (scl_constant == 0) {
+        Global.tautological_suppressed_derived_variables += 3;
+        Global.nonsensical_suppressed_derived_variables += 2;
+        return new BinaryDerivation[] {
+          new SequenceScalarSubsequence(seqvar, sclvar, false, true),
+        };
+      }
       if (scl_constant == 1) {
         Global.tautological_suppressed_derived_variables += 3;
         return new BinaryDerivation[] {
-          new SequenceScalarSubsequence(seqvar, sclvar, false),
+          new SequenceScalarSubsequence(seqvar, sclvar, true, false),
+          new SequenceScalarSubsequence(seqvar, sclvar, false, false),
+          new SequenceScalarSubsequence(seqvar, sclvar, false, true),
         };
       }
     }
@@ -111,8 +130,10 @@ public final class SequenceScalarSubscriptFactory extends BinaryDerivationFactor
     return new BinaryDerivation[] {
       new SequenceScalarSubscript(seqvar, sclvar, false),
       new SequenceScalarSubscript(seqvar, sclvar, true),
-      new SequenceScalarSubsequence(seqvar, sclvar, false),
-      new SequenceScalarSubsequence(seqvar, sclvar, true),
+      new SequenceScalarSubsequence(seqvar, sclvar, false, false),
+      new SequenceScalarSubsequence(seqvar, sclvar, false, true),
+      new SequenceScalarSubsequence(seqvar, sclvar, true, false),
+      new SequenceScalarSubsequence(seqvar, sclvar, true, true),
     };
   }
 
