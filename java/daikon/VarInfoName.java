@@ -1233,7 +1233,6 @@ public abstract class VarInfoName
 	      conditions.append(low.esc_name());
 	      conditions.append("))");
 	    }
-	    conditions.append(")");
 	  }
 	}
       }
