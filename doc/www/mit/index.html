@@ -424,6 +424,21 @@ Then, just run <tt>make</tt> to update the menus and other cross-references
 
 <h2><a name="code-conventions">Coding conventions</a></h2>
 
+Every code file that you write (Java classes, perl scripts, etc.) needs to
+have a comment at the top explaining exactly what is does and (if
+applicable) how to run it.  Otherwise it will be a mystery to others -- and
+perhaps to you when you return to it.  In some cases one or two sentences
+will do; in many other cases, the description needs to be more complete.
+Every non-trivial procedure should also contain a brief comment saying what
+it does.
+<p>
+
+All perl scripts must always use the <tt>-w</tt> command-line switch (on
+the <tt>#!</tt> line, which should ordinarily be <tt>#!/usr/bin/env perl
+-w</tt>).  All perl scripts should also include the <tt>use strict;</tt>
+pragma.
+<p>
+
 When code has a consistent style, particularly within a single file but
 also over an entire project, the code is much easier to read and
 understand.  I don't wish to spend an excessive amount of time or energy
