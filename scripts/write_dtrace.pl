@@ -12,14 +12,12 @@ use English;
 use strict;
 $WARNING = 0;			# "-w" flag
 
-my $usage = "write_dtrace.pl [-output <seq|xm>] <dtrace file> \@decls_files\n";
+my $usage = "write_dtrace.pl [-output <seq|xm>] [-log] <dtrace file> \@decls_files\n";
 
 my %pptname_to_cluster = ();
 my ($dtrace_file, $ppt_stem);
 my %pptname_to_nonces = (); #used to keep track of an invocation nonce for ppts 
                       #which don't have them.
-
-my %pptname_to_cluster = ();
 
 my $maxcluster = 0; # the highest cluster number. This is needed when we are using
                     # xmeans so that we can know how many clusters to split the dtrace
@@ -27,6 +25,18 @@ my $maxcluster = 0; # the highest cluster number. This is needed when we are usi
 
 my @cluster_files = ();
 my $output = "km";
+my $loghandle;
+my $logging = 1;
+
+if ($logging) {
+    my $logfile = "$ENV{HOME}/daikon_logfile";
+    my $now_string = localtime(time);
+    local *LOG;
+    open (LOG, ">>$logfile") || die "couldn't open $logfile\n";
+    print LOG "\n==================================== $now_string =====================\n";
+    $loghandle = *LOG;
+    print "logging to file $logfile\n";
+}
 
 while ( scalar(@ARGV) > 0) {
     if ($ARGV[0] eq '-output') {
@@ -164,9 +174,9 @@ sub read_cluster_info_seq {
 # @ARGV[1....] are the files with the cluster information
 # the file format is just a list of invocation nonces (one per line), grouped
 # by cluster. there is a blank line separating clusters.
-    my ($filename, $line, $cluster);
+    my ($filename, $line, $cluster, $blank_line);
     my @temparray = (); #holds the cluster information
-    $cluster == 0;
+    $cluster = 0;
     my @filenames = @_; # cluster files
     foreach $filename (@filenames) {	
 	open (FILE, $filename) || die "can't open $filename to read cluster info\n";
@@ -174,10 +184,15 @@ sub read_cluster_info_seq {
 	#read the file with the cluster information
 	while( $line = <FILE>) {
 	    if($line =~ /^\s*$/) {
+		if ($blank_line) { #previous line was a blank, so don't increase the cluster number. 
+		    next;
+		}
+		$blank_line = 1;
 		#if you hit a blank like, then we've come to the end of one cluster.
 		#increase the cluster number by 1
 		$cluster++;
 	    } else {
+		$blank_line = 0;
 		chomp($line);
 		$temparray[$line] = $cluster;
 	    }
@@ -200,8 +215,8 @@ sub read_cluster_info_xm {
 # the file format is just a list of invocation nonces (one per line), grouped
 # by cluster. there is a blank line separating clusters.
 
-    my ($filename, $line, $cluster);
-    my @temparray = (); #holds the translation information
+    my ($filename, $line, $cluster, $blank_line);
+    my @translation_array = (); #holds the translation information
     my @nonce_to_cluster = ();
     $cluster = 0;
     my @filenames = @_; # cluster files
@@ -213,7 +228,7 @@ sub read_cluster_info_xm {
 	while (<TRANS>) {
 	    if ($_ =~ /^\s*(\d*)\s*$/) {
 		my $trans = $1;
-		$temparray[$sequence_number] = $trans;
+		$translation_array[$sequence_number] = $trans;
 		$sequence_number++;
 	    } else {
 		next;
@@ -225,18 +240,22 @@ sub read_cluster_info_xm {
 	#read the file with the cluster information
 	while( $line = <FILE>) {
 	    if($line =~ /^\s*$/) {
+		if ($blank_line) { #previous line was a blank, so don't increase the cluster number. 
+		    next;
+		}
+		$blank_line = 1;
 		#if you hit a blank like, then we've come to the end of one cluster.
 		#increase the cluster number by 1
 		$cluster++;
 	    } elsif ($line =~ /^\s*(\d*)\s*$/) {
+		$blank_line = 0;
 		chomp($line);
-		my $nonce = $temparray[$line];
+		my $nonce = $translation_array[$line];
 		$nonce_to_cluster[$nonce] = $cluster;
 		#print "$nonce -> $cluster\n";
 		if ($cluster > $maxcluster) {
 		    $maxcluster = $cluster;
 		}
-		
 	    } else {
 		next;
 	    }
@@ -248,6 +267,9 @@ sub read_cluster_info_xm {
 	$filename =~ s/.daikon_temp.*//;
 	
 	$pptname_to_cluster{$filename} = [@nonce_to_cluster];
+	if ($logging) {
+	    &log ("$filename  ==> $cluster clusters");
+	}
     }
     return %pptname_to_cluster;
 }
@@ -290,4 +312,10 @@ BEGIN {
 	    return $ret;
 	}
     }
+}
+
+
+sub log {
+    my $message = $_[0];
+    print $loghandle "$message \n";
 }
