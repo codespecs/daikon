@@ -3881,6 +3881,9 @@ compile.
 @node    dfec requirements,  , Instrumentation scope, C/C++ front end dfec
 @subsection dfec requirements
 
+@command{dfec} does not output the contents of C unions.  This section
+of the manual lists other requirements and limitations.
+
 @menu
 * C program requirements::      
 * Header file dependencies::    
@@ -4026,15 +4029,21 @@ other problems.
 
 @cindex gcc version for use with dfec
 @cindex gcc 3, does not work with dfec
-@cindex gcc 2.96, does not work with dfec
+@cindex gcc 2.96
+
+@command{dfec} works with gcc 2.95.3 or 2.95.2, so long as you do not
+include both C's @file{math.h} and C++'s @file{complex.h}.
+@command{dfec} works with gcc 2.96; this is not an official gcc
+release, but it does appear in some Linux distributions, such as Red Hat's.
+@command{dfec} does not currently work with other
+compilers or other versions of gcc.  In particular, gcc 3 does not
+work, nor does ``gcc 2.95.4'' (neither of which is
+an official gcc release but which appear in some Linux distributions).
+
+
 @cindex gcc 2.95.3, installing
 @cindex installing gcc 2.95.3
 
-@command{dfec} works with gcc 2.95.3 or 2.95.2.
-dfec does not work with other
-compilers or other versions of gcc.  In particular, gcc 3 does not
-work, nor does ``gcc 2.96'' or ``gcc 2.95.4'' (neither of which is
-an official gcc release but which appear in some Linux distributions).
 You can download gcc 2.95.3 from @uref{http://gcc.gnu.org/releases.html}.
 
 gcc is easy to install; see the @uref{http://gcc.gnu.org/install/, ,
@@ -4075,6 +4084,7 @@ equivalent file.
 @example
   export PATH=/tmp/build-gcc-2.95.3/gcc-installation:$PATH
 @end example
+
 
 @node Perl front end dfepl,  , C/C++ front end dfec, Front ends
 @section Perl front end dfepl
