@@ -2,20 +2,22 @@ REM daikonenv.bat
 REM Set up environment variables to run Daikon in a Windows NT command window.
 REM (This file should be kept in synch with daikon.bashrc and daikon.cshrc.)
 
+REM Wherever you source this file, you should set two environment variables:
+REM   DAIKONPARENT   absolute pathname of the directory containing "daikon/"
+REM   JDKDIR         absolute pathname of the directory containing the JDK
+REM Optionally, you may set the following environment variables:
+REM   DAIKONCLASS_SOURCES   to any value, if you want to run Daikon from .class
+REM        files, instead of the default, which is to use daikon.jar.
+REM You should not need to edit this file directly.
+
+
 echo off
-REM Set DAIKONPARENT to absolute pathname of the directory containing "daikon\".
-set DAIKONPARENT=d:\Daikon
+REM set JDKDIR=d:\j2sdk1.4.0
+REM set DAIKONPARENT=d:\Daikon
 set DAIKONDIR=%DAIKONPARENT%\Daikon
 set DFECDIR=%DAIKONDIR%\front-end\c
 set DAIKONBIN=%DAIKONDIR%\bin
 
-REM Set this directory to the directory containing the JDK.
-set JDKDIR=d:\j2sdk1.4.0
-
-REM Set DAIKONCLASS_SOURCES if you want to run Daikon from .class files that
-REM you compile yourself.  This permits you to modify Daikon (most users
-REM will not need to do so).  If you do not set DAIKONCLASS_SOURCES, you will
-REM run Daikon from the precompiled bytecode files in daikon.jar.
 REM set DAIKONCLASS_SOURCES=1
 
 REM For Windows, adjacent semicolons in CLASSPATH are harmless, but keep

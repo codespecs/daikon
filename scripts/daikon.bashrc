@@ -2,19 +2,21 @@
 ## Daikon initialization file for Bourne shell (bash) users.
 ## (This file should be kept in synch with daikon.cshrc and daikonenv.bat.)
 
-## Set DAIKONPARENT to absolute pathname of the directory containing "daikon/".
+## Wherever you source this file, you should set two environment variables:
+##   DAIKONPARENT   absolute pathname of the directory containing "daikon/"
+##   JDKDIR         absolute pathname of the directory containing the JDK
+## Optionally, you may set the following environment variables:
+##   DAIKONCLASS_SOURCES   to any value, if you want to run Daikon from .class
+##        files, instead of the default, which is to use daikon.jar.
+## You should not need to edit this file directly.
+
+
+export JDKDIR=${JDKDIR:-/directory/containing/jdk}
 export DAIKONPARENT=${DAIKONPARENT:-/path/to/parent/of/daikon}
 export DAIKONDIR=${DAIKONDIR:-${DAIKONPARENT}/daikon}
 export DFECDIR=${DFECDIR:-${DAIKONDIR}/front-end/c}
 export DAIKONBIN=${DAIKONBIN:-${DAIKONDIR}/bin}
 
-## Set this directory to the directory containing the JDK.
-export JDKDIR=${JDKDIR:-/g2/jdk}
-
-## Set DAIKONCLASS_SOURCES if you want to run Daikon from .class files that
-## you compile yourself.  This permits you to modify Daikon (most users
-## will not need to do so).  If you do not set DAIKONCLASS_SOURCES, you will
-## run Daikon from the precompiled bytecode files in daikon.jar.
 # export DAIKONCLASS_SOURCES=1
 
 if [ $DAIKONCLASS_SOURCES ]; then

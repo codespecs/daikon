@@ -2,19 +2,21 @@
 ## Daikon initialization file for C shell (csh and tcsh) users.
 ## (This file should be kept in synch with daikon.bashrc and daikonenv.bat.)
 
-## Set DAIKONPARENT to absolute pathname of the directory containing "daikon/".
+## Wherever you source this file, you should set two environment variables:
+##   DAIKONPARENT   absolute pathname of the directory containing "daikon/"
+##   JDKDIR         absolute pathname of the directory containing the JDK
+## Optionally, you may set the following environment variables:
+##   DAIKONCLASS_SOURCES   to any value, if you want to run Daikon from .class
+##        files, instead of the default, which is to use daikon.jar.
+## You should not need to edit this file directly.
+
+
+if (! $?JDKDIR) setenv JDKDIR /directory/containing/jdk
 if (! $?DAIKONPARENT) setenv DAIKONPARENT /path/to/parent/of/daikon
 if (! $?DAIKONDIR) setenv DAIKONDIR ${DAIKONPARENT}/daikon
 if (! $?DFECDIR) setenv DFECDIR ${DAIKONDIR}/front-end/c
 if (! $?DAIKONBIN) setenv DAIKONBIN ${DAIKONDIR}/bin
 
-## Set this directory to the directory containing the JDK.
-if (! $?JDKDIR) setenv JDKDIR /g2/jdk
-
-## Set DAIKONCLASS_SOURCES if you want to run Daikon from .class files that
-## you compile yourself.  This permits you to modify Daikon (most users
-## will not need to do so).  If you do not set DAIKONCLASS_SOURCES, you will
-## run Daikon from the precompiled bytecode files in daikon.jar.
 # setenv DAIKONCLASS_SOURCES 1
 
 setenv CPADD ${DAIKONDIR}/daikon.jar
@@ -34,6 +36,8 @@ endif
 ## tools.jar must be on your classpath.  Also, if you wish to use dfej (the
 ## Daikon front end for Java), rt.jar must be on your classpath.
 if ("$OSTYPE" != "darwin") then
+  if ($?debuglogin) echo "daikon.cshrc about to set classpath (#1)"
+  if ($?debuglogin) echo "CLASSPATH: $CLASSPATH"
   setenv CLASSPATH ${CLASSPATH}:${JDKDIR}/jre/lib/rt.jar:${JDKDIR}/lib/tools.jar
 else
   ## For Macintosh MacOSX users.  (This list
@@ -41,10 +45,14 @@ else
   setenv CLASSPATH ${CLASSPATH}:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/classes.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/ui.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/i18n.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/sunrsasign.jar
 endif
 
+if ($?debuglogin) echo "daikon.cshrc about to set classpath"
+
 ## (ajax.jar is temporary, will be removed soon, we hope.)
 if (-e ${DAIKONDIR}/java/ajax-ship/ajax.jar) then
   setenv CLASSPATH ${CLASSPATH}:${DAIKONDIR}/java/ajax-ship/ajax.jar
 endif
+
+if ($?debuglogin) echo "daikon.cshrc about to set path"
 
 ## Add the Daikon binaries to your path
 set path = (${DAIKONBIN} ${DAIKONDIR}/front-end/java/src $DFECDIR $JDKDIR/bin $path)
