@@ -30,20 +30,33 @@ public abstract class SingleSequence
     return ppt.var_infos[0];
   }
 
-  private static final SuppressionFactory[] suppressionFactories =
-    new SuppressionFactory[] {
-      SubsetImpliedSuppressionFactory.getInstance()
-      // SelfSuppressionFactory.getInstance()
-    };
+  /**
+   * Return a copy of supers with a subsetImpliedSuppressionFactory
+   * added.  Some SingleSequence invariants can't use
+   * subsetImpliedSuppressionFactories, so nothing is changed here.
+   * However, we provide this method so subclasses can call it.
+   * @param supers The result of this method copies supers and adds a
+   * subsetImpliedSuppressionFactory to it.
+   **/
+  protected SuppressionFactory[] getSubsetImpliedSuppressionFactories(SuppressionFactory[] supers) {
+    SuppressionFactory[] result = new SuppressionFactory[supers.length + 1];
+    System.arraycopy (supers, 0, result, 0, supers.length);
+    result[supers.length] = SubsetImpliedSuppressionFactory.getInstance();
+    return result;
+  }
 
+  /**
+   * Some SingleSequence invariants can't use
+   * subsetImpliedSuppressionFactories, so nothing is changed here.
+   **/
   public SuppressionFactory[] getSuppressionFactories() {
-    return suppressionFactories;
+    return super.getSuppressionFactories();
   }
 
   /**
    * Suppression for f(a[0..j]) if f(a[]) or f(b[]) && a \subseq b
-   * holds.  Used in all child classes of SingleSequence unless they
-   * override.
+   * holds.  Used in some child classes of SingleSequence (e.g. no
+   * duplicates) but not all (e.g. bounds).
    **/
 
   public static class SubsetImpliedSuppressionFactory extends SuppressionFactory {

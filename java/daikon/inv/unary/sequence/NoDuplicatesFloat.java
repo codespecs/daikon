@@ -5,6 +5,7 @@ package daikon.inv.unary.sequence;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.twoSequence.*;
+import daikon.suppress.SuppressionFactory;
 
 import daikon.derive.binary.SequencesPredicate;
 import daikon.derive.binary.SequencesConcat;
@@ -51,6 +52,16 @@ public class NoDuplicatesFloat
       return null;
     }
     return result;
+  }
+
+  private static SuppressionFactory[] suppressionFactories = null;
+
+  public SuppressionFactory[] getSuppressionFactories() {
+    if (suppressionFactories == null) {
+      suppressionFactories = getSubsetImpliedSuppressionFactories
+        (super.getSuppressionFactories());
+    }
+    return suppressionFactories;
   }
 
   public String repr() {
