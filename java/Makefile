@@ -403,6 +403,10 @@ findbugs: .findbugs-output
 	rm -f findbugs-output
 	~mernst/bin/share/findbugs -emacs -textui -exclude .findbugs-exclude.xml -maxHeap 750 ../daikon.jar | tee .findbugs-output
 
+# This target is aimed at M-x compile in Emacs
+findbugs-cat:
+	cat .findbugs-output
+
 ../daikon.jar: ${AUTO_GENERATED_FILES} compile
 	cd .. && $(MAKE) daikon.jar
 

@@ -12,10 +12,29 @@
   <!-- Ignore certain violations:
 	EI[2] (expose internal representation)
 	LI (lazy update)
+	MS (store mutable argument into field)
+	SBSC (concatenate strings using + in a loop)
   -->
   <Match classregex=".*" >
-    <BugCode name="EI,EI2,LI" />
+    <BugCode name="EI,EI2,LI,MS,SBSC" />
   </Match>
 
+  <!-- Ignore all (for now) string equality violations -->
+  <Match classregex=".*" >
+    <BugCode name="ES" />
+  </Match>
+
+<!-- I should make the test for ES finer, like the below. -->
+     <!-- Match all doublecheck violations in these methods of "AnotherClass". -->
+<!--
+     <Match class="com.foobar.AnotherClass">
+       <Or>
+         <Method name="nonOverloadedMethod" />
+         <Method name="frob" params="int,java.lang.String" returns="void" />
+         <Method name="blat" params="" returns="boolean" />
+       </Or>
+       <BugCode name="DC" />
+     </Match>
+-->
 
 </FindBugsFilter>
