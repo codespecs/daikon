@@ -16,11 +16,12 @@ The correct way to build the system is to run 'make'.
   #define PRIMITIVE long
   #define CORECLASS LinearTernaryCore
   #define CLASSSTRING "LinearTernary"
+  #define IS_INTEGRAL isIntegral()
   #if 0
     #define SequenceSum SequenceSum
     #define SequenceScalarSubsequence SequenceScalarSubsequence
     #define SequenceScalarSubscript SequenceScalarSubscript
-    #endif
+  #endif
 #elif (defined(TYPEDOUBLE))
   #define CLASSNAME LinearTernaryFloat
   #define SUPERCLASS ThreeFloat
@@ -34,6 +35,7 @@ The correct way to build the system is to run 'make'.
   #endif
   #define SequenceScalarSubsequence SequenceFloatSubsequence
   #define SequenceScalarSubscript SequenceFloatSubscript
+  #define IS_INTEGRAL isFloat()
 #else
   #error "either TYPELONG OR TYPEDOUBLE must be defined"
 #endif
@@ -81,12 +83,38 @@ public class CLASSNAME
     core = new CORECLASS(this);
   }
 
+  /** Returns the prototype invariant for CLASSNAME **/
+  public static Invariant get_proto() {
+    if (!dkconfig_enabled)
+      return (null);
+    return new CLASSNAME (null);
+  }
+
+  /** Instantiate the invariant on the specified slice **/
+  public Invariant instantiate_dyn (PptSlice slice) {
+    return instantiate (slice);
+  }
+
   public static CLASSNAME instantiate(PptSlice ppt) {
-    if (!dkconfig_enabled) return null;
+    if (!dkconfig_enabled)
+      return null;
+
+    // Don't create for non-numeric types (booleans and hashcodes)
+    if ((ppt != null) && !ppt.var_infos[0].file_rep_type.IS_INTEGRAL)
+      return (null);
+
+    // Don't create if any of the variables are constant.
+    // DynamicConstants will create this from LinearBinary
+    // and the constant value if/when all of its variables are non-constant
+    PptTopLevel parent = ppt.parent;
+    if (parent.is_constant (ppt.var_infos[0])
+        || parent.is_constant(ppt.var_infos[1])
+        || parent.is_constant (ppt.var_infos[2]))
+      return (null);
 
     /*
-    // This code is removed because these sorts of static checks
-    // can't be reliability performed with equality sets (just because
+    // JHP: This code is removed because these sorts of static checks
+    // can't be reliably performed with equality sets (just because
     // the leaders are obvious subsets, does not imply that all members
     // are.  Eventually this should be moved to isObviousStatically()
 
@@ -242,9 +270,6 @@ public class CLASSNAME
     */
 
     CLASSNAME result = new CLASSNAME(ppt);
-    if (debugLinearTernary) {
-      System.out.println(CLASSSTRING + ".instantiate: " + result.repr());
-    }
     return result;
   }
 
