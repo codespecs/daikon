@@ -1388,7 +1388,7 @@ public class PptTopLevel
     // Add the sample to this ppt
     add_bottom_up (vt, count);
 
-    check_vs_global();
+    // check_vs_global();
 
   }
 
