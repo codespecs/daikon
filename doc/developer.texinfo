@@ -22,11 +22,11 @@
 @center @titlefont{Daikon Invariant Detector Developer Manual}
 
 @sp 2
-@center Daikon version 3.1.3
+@center Daikon version 3.1.4
 
 @sp 1
-@c Daikon version 3.1.3 date
-@center September 1, 2004
+@c Daikon version 3.1.4 date
+@center October 1, 2004
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -48,7 +48,7 @@ Copyright @copyright{} 1998-2003
 @c <h1>Daikon Invariant Detector User Manual</h1>
 @c
 @c This is the developer manual for the Daikon invariant detector.
-@c It describes Daikon version 3.1.3, released September 1, 2004.
+@c It describes Daikon version 3.1.4, released October 1, 2004.
 @c @end html
 
 @c Putting this lower in the HTML version looks a little bit strange,
@@ -67,7 +67,7 @@ Copyright @copyright{} 1998-2003
 @c 
 @c @end ifinfo
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 3.1.3, released September 1, 2004.
+It describes Daikon version 3.1.4, released October 1, 2004.
 @end ifnottex
 
 @menu
@@ -262,29 +262,41 @@ likely to be true.
 
 The key methods of the new invariant are
 @table @samp
-@item @r{constructor}
-Creates a new invariant object.  Its typical implementation is
+@item @r{protected InvName(PptSlice ppt)}
+Creates a new invariant object.  Should only be called from instantiate_dyn.
+Its typical implementation is
 @example
   super(ppt);
 @end example
-@item static instantiate
-returns either a new invariant object or null.  For instance,
-@samp{instantiate} might check whether particular conditions that are
-required for the invariant to be sensible hold.  Its typical
-implementation is
+
+@item protected Invariant instantiate_dyn (PptSlice slice)
+Returns an invariant of this class on the specified slice.  Its implementation
+is almost always
 @example
-  return new @var{InvName}(ppt);
+  return new InvName(slice);
 @end example
-@item instantiate_dyn
-provides a non-static version of instantiate
-@item get_proto
-returns a prototype invariant used to create other invariants.  Its
+
+@item public static InvName get_proto()
+Returns the prototype invariant used to create other invariants.  Its
 typical implementation is
 @example
-  if (!dkconfig_enabled)
-    return (null);
-  return new Postive (null);
+     if (proto == null)
+      proto = new InvName (null);
+    return (proto);
 @end example
+
+@item public boolean enabled() 
+Returns whether or not this invariant is enabled.  Its implementation is
+almost always
+@example
+  return dkconfig_enabled;
+@end example
+
+@item public boolean instantiate_ok (VarInfo[] vis)
+Returns whether or not it makes sense to instantiate this invariant
+over the specified variables.  If not present, the invariant is
+created over all comparable variables of the correct types.
+
 @item check_modified
 presents a tuple of values to the invariant.  The @samp{count} variable
 indicates how many samples have this value.  For example, three calls to
@@ -292,10 +304,12 @@ indicates how many samples have this value.  For example, three calls to
 one call to @samp{check_modified} with a @samp{count} parameter of 3.
 Returns whether or not the sample is consistent with the invariant.
 Does not change the state of the invariant.
+
 @item add_modified
 similar to @samp{check_modified} except that it can change the state
 of the invariant if necessary.  If the invariant doesn't have any
 state, then simply calls @samp{check_modified}
+
 @item computeConfidence
 returns the probability that the observed data could not have happened by
 chance alone.  The result usually falls between 0 and 1, where 0 means
@@ -493,65 +507,46 @@ As mentioned in @ref{Daikon internals}, one way to make Daikon more
 efficient, and to reduce clutter in output to the user, is to reduce
 the number of redundant invariants of various kinds.  This section
 describes how to add a new suppressor relation, such that if invariant
-A implies B, B is not checked as long as A holds, saving time.
-Suppression implications use some terminology.  A @emph{suppressor} is
-one of a set of invariants that imply and suppress a
-@emph{suppressee}.  A @emph{suppression factory} is the Java class
-that handles the finding of suppressors for a suppressee.  There is
-one suppression factory for each kind of suppression relation (i.e.,
-each unique tuple of suppressors and suppressees).  A
-@emph{suppression link} is what a suppression factory produces and
-serves as the data structure to track the suppression relation.  When
-writing new suppressors, the programmer only needs to write new
-suppression factories and install them properly.  The Daikon system
-manages the suppression link objects.
+A implies B, B is not instantiated or checked as long as A holds,
+saving time and space.  Suppression implications use some terminology.
+A @emph{suppressor} (defined in the class @var{NISuppressor}) is one
+of a set of invariants (@var{NISuppression}) that imply and suppress a
+@emph{suppressee} invariant (@var{NISuppressee}).  The set of all of
+the suppressions that suppress a particular suppressee is stored in
+the class @var{NISuppressionSet}.
 
-The steps to do this are as follows:
+Adding a new suppression is straightforward.  Define the suppressee and
+each of the suppressions that suppress it using the corresponding
+constructors.  Add the method @var{get_ni_suppressions} to the class
+of the invariant being suppressed and return the appropriate
+suppression set.  Make sure that @var{get_ni_suppressions} always
+returns the same suppression set (i.e., that storage to store
+the suppressions is only allocated once).  Normally this is
+done by defining a static variable to hold the suppression sets
+and initializing this variable the first time that @var{get_ni_suppressions}
+is called.
 
-@enumerate
-@item
-In the daikon.inv package, find the invariant type that is to be
-suppressed by a set of suppressor invariants.  Suppression factories
-are connected, in code and in operation, to the invariants they
-suppress.
+The following example defines suppressions for ``x == y'' implies
+``x >= y'' and ``x > y'' implies ``x >= y''.
 
-@item
-Add an inner class to the suppressor invariant that inherits from
-daikon.suppress.SuppressionFactory.  It must support the method:
 @example
-  public abstract SuppressionLink generateSuppressionLink (Invariant inv)
+private static NISuppressionSet suppressions = null;
+
+public NISuppressionSet get_ni_suppressions() @{
+  if (suppressions == null) @{
+    NISuppressee = new NISuppressee (IntGreaterEqual);
+
+    NISuppressor v1_eq_v2 = new NISuppressor (0, 1, IntEqual.class);
+    NISuppressor v1_lt_v2 = new NISuppressor (0, 1, IntLessThan.class);
+
+    suppressions = new NISuppressionSet (new NISuppression[] @{
+      new NISuppression (v1_eq_v2, suppressee),
+      new NISuppression (v1_lt_v2, suppressee),
+    @});
+  @}
+  return (suppressions);
+@}
 @end example
-@noindent
-where ``inv'' is the suppressee.  During inferencing, Daikon will pass
-potential suppressees to the generateSuppressionLink method and the
-method will tell Daikon whether suppression can occur.
-
-@item
-Create logic to support the searching of the desired suppressors.  The
-factory itself may not search for suppressors, but must use
-@emph{suppression templates}, which tell Daikon what kinds of
-invariants to look for.  The suppression factory should create a
-template with the right specifications filled in, and then pass the
-template to the method:
-@example
-  public boolean fillSuppressionTemplate (SuppressionTemplate supTemplate)
-@end example
-@noindent
-in daikon.PptTopLevel.  If a template fill is successful, the template
-will contain the suppressors, and the method will return true.  The
-generateSuppressionLink method should return @samp{null} if the
-template fill was unsuccessful.
-
-@item
-Install the suppression factory by adding a single static instance of
-it to the list of factories returned by the @samp{getSuppressionFactories}
-method of the suppressor.
-
-@end enumerate
-
-More detailed instructions can be found in the
-@uref{http://pag.csail.mit.edu/daikon/download/jdoc_v3/daikon/suppress/package-summary.html,Javadoc}
-of the @samp{daikon.suppress} package.
 
 @node    Debugging Daikon, Daikon internals, Extending Daikon, Top
 @chapter Debugging Daikon
@@ -877,22 +872,16 @@ Toh Ne Win's Master's thesis.
 @subsection Suppression optimization
 
 Suppression optimization allows for elimination of redundancy based on
-how a set of invariants might imply an invariant.  For example, ``a[]
-contains no duplicates'' implies ``a[i..j] contains no duplicates''.  We
-say that a set of @emph{suppressors} suppress a @emph{suppressee}
-invariant.  Suppression also works across the program point hierarchy:
-suppressors can exist in parent program points.  Suppressed invariants
-are not eliminated during inferencing, but tagged as suppressed.  They
-are not checked against samples while suppressed.  The only way an
-invariant becomes unsuppressed is if one of its suppressors becomes
-falsified, in which case the implication for suppression no longer
-holds.
+how a set of invariants might imply an invariant.  For example, ``a ==
+b'' and ``b >= c'' implies ``a = max (b, c)'' We say that a set of
+@emph{suppressors} suppress a @emph{suppressee} invariant.  A
+suppressed invariant is neither instantiated or checked.  It is
+instantiated only when one of its suppressors becomes falsified, in
+which case the implication for suppression no longer holds.
 
 Thus when certain invariants are not found in Daikon, they may be
-hidden due to suppression.  Suppression is off by default, but it can
-be enabled by the @option{--suppress} command line flag.
-
-
+hidden due to suppression.  Suppression is enabled by default, but it can
+be disabled by the @var{daikon.suppress.NIS.enabled} configuration option.
 
 @node    Dataflow hierarchy, Equality optimization, Avoiding work for redundant invariants, Daikon internals
 @section Dataflow hierarchy
