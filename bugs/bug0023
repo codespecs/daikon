@@ -1,0 +1,14 @@
+Version:      $Id$
+Owner:        mistere <mistere>
+Tool:         Daikon
+Summary:      RFE: Report variables all equal to same constant directly; do no report equal to selves and one is constant.
+Severity:     RFE
+Status:       New
+Reproducible: Yes
+Description:
+
+--
+$Log$
+Revision 1.1  2002-03-13 20:44:11  mistere
+new bug0023
+
