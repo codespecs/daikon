@@ -64,7 +64,7 @@ public class LowerBound  extends SingleScalar {
   }
 
   public String format_esc() {
-    String esc_name = var().esc_name();
+    String esc_name = var().esc_name;
     if (esc_name != null) {
       return esc_name + " >= " + min1 ;
     } else {

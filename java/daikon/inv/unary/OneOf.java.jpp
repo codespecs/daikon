@@ -10,7 +10,7 @@
 #define SINGLESCALAR SingleScalar
 #define TOSTRING(x) x
 #define NAME var().name
-#define ESCNAME var().esc_name()
+#define ESCNAME var().esc_name
 #elif defined(STRING)
 #define SCALARPKG string
 #define INT String
@@ -19,7 +19,7 @@
 #define SINGLESCALAR SingleString
 #define TOSTRING(x) "\"" + UtilMDE.quote(x) + "\""
 #define NAME var().name
-#define ESCNAME var().esc_name()
+#define ESCNAME var().esc_name
 #elif defined(SEQUENCE)
 #define SCALARPKG sequence
 #define INT long[]
@@ -28,7 +28,7 @@
 #define SINGLESCALAR SingleSequence
 #define TOSTRING(x) ArraysMDE.toString(x)
 #define NAME var().name
-#define ESCNAME var().esc_name()
+#define ESCNAME var().esc_name
 #elif defined(STRINGSEQUENCE)
 #define SCALARPKG stringsequence
 #define INT String[]
@@ -37,7 +37,7 @@
 #define SINGLESCALAR SingleStringSequence
 #define TOSTRING(x) ArraysMDE.toString(x)
 #define NAME var().name
-#define ESCNAME var().esc_name()
+#define ESCNAME var().esc_name
 #elif defined(ELT)
 #define SCALARPKG sequence
 #define INT long
@@ -46,7 +46,7 @@
 #define SINGLESCALAR SingleSequence
 #define TOSTRING(x) ((!var().type.elementType().isIntegral() && (x == 0)) ? "null" : (Long.toString(x)))
 #define NAME var().name + " elements"
-#define ESCNAME var().esc_name() + " elements"
+#define ESCNAME var().esc_name + " elements"
 #elif defined(ELTSTRING)
 #define SCALARPKG stringsequence
 #define INT String
@@ -55,7 +55,7 @@
 #define SINGLESCALAR SingleStringSequence
 #define TOSTRING(x) "\"" + UtilMDE.quote(x) + "\""
 #define NAME var().name + " elements"
-#define ESCNAME var().esc_name() + " elements"
+#define ESCNAME var().esc_name + " elements"
 #else
 #error "One of SCALAR, STRING, SEQUENCE, STRINGSEQUENCE, ELT, or ELTSTRING should be defined"
 #endif
@@ -187,18 +187,18 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 #if defined(SCALAR)
       if (is_boolean) {
         Assert.assert((elts[0] == 0) || (elts[0] == 1));
-        return varname + " = " + ((elts[0] == 0) ? "false" : "true");
+        return varname + " == " + ((elts[0] == 0) ? "false" : "true");
       } else if (is_hashcode) {
         if (elts[0] == 0) {
-          return varname + " = " + "null";
+          return varname + " == " + "null";
         } else {
           return varname + " has only one value (hashcode=" + elts[0] + ")";
         }
       } else {
-        return varname + " = " + TOSTRING(elts[0]);
+        return varname + " == " + TOSTRING(elts[0]);
       }
 #else
-      return varname + " = " + TOSTRING(elts[0]);
+      return varname + " == " + TOSTRING(elts[0]);
 #endif
     } else {
       return varname + " one of " + subarray_rep();
@@ -216,25 +216,38 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 #if defined(STRING)
     // Format   \typeof(theArray) = "[Ljava.lang.Object;"
     //   as     \typeof(theArray) == \type(java.lang.Object[])
-    if (varname.startsWith("\\typeof")) {
-      for (int i=0; i<num_elts; i++) {
-        if (i>0) result += " || ";
-        result += varname + " == " +
-                 ((elts[i].equals("null"))
-                  ? "\\typeof(null)"
-                  : "\\type(" + UtilMDE.classnameFromJvm(elts[i]) + ")");
-      }
+    boolean is_type = varname.startsWith("\\typeof");
+    for (int i=0; i<num_elts; i++) {
+      if (i>0) result += " || ";
+      result += varname + " == "
+        + (is_type
+           ? ((elts[i].equals("null"))
+              ? "\\typeof(null)"
+              : "\\type(" + UtilMDE.classnameFromJvm(elts[i]) + ")")
+           : TOSTRING(elts[0]));
     }
-#else
+    return result;
+#elif defined(SCALAR)
+    if (is_boolean) {
+      Assert.assert((elts[0] == 0) || (elts[0] == 1));
+      return varname + " == " + ((elts[0] == 0) ? "false" : "true");
+    } else if (is_hashcode) {
+      if (elts[0] == 0) {
+        return varname + " == " + "null";
+      } else {
+        return varname + " has only one value (hashcode=" + elts[0] + ")";
+      }
+    } else {
+      return varname + " == " + TOSTRING(elts[0]);
+    }
+#elif defined(ELT) || defined(ELTSTRING)
     for (int i=0; i<num_elts; i++) {
       if (i>0) result += " || ";
       result += varname + " == " + TOSTRING(elts[i]);
     }
-#endif
-#if defined(ELT) || defined(ELTSTRING)
     return "(" + esc_forall[0] + "(" + result + "))";
 #else
-    return result;
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
 #endif
   }
 

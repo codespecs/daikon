@@ -76,10 +76,11 @@ public final class SequenceInitial extends UnaryDerivation {
 
   protected VarInfo makeVarInfo() {
     String name = BinaryDerivation.addSubscript(base.name, "" + index);
+    String esc_name = BinaryDerivation.addSubscript(base.esc_name, "" + index);
     ProglangType ptype = base.type.elementType();
     ProglangType rtype = base.rep_type.elementType();
     VarComparability comp = base.comparability.elementType();
-    return new VarInfo(name, ptype, rtype, comp);
+    return new VarInfo(name, esc_name, ptype, rtype, comp);
   }
 
 }

@@ -133,7 +133,7 @@ public final class IntComparison extends TwoScalar implements Comparison {
 
   public String format_esc() {
     String comparator = core.format_comparator();
-    return var1().esc_name() + " " + comparator + " " + var2().esc_name();
+    return var1().esc_name + " " + comparator + " " + var2().esc_name;
   }
 
 

@@ -95,7 +95,7 @@ public final class OneOfString  extends SingleString  implements OneOf {
     String varname = var().name ;
     if (num_elts == 1) {
 
-      return varname + " = \"" + UtilMDE.quote( elts[0] ) + "\"" ;
+      return varname + " == \"" + UtilMDE.quote( elts[0] ) + "\"" ;
 
     } else {
       return varname + " one of " + subarray_rep();
@@ -104,22 +104,22 @@ public final class OneOfString  extends SingleString  implements OneOf {
 
   public String format_esc() {
 
-    String varname = var().esc_name() ;
+    String varname = var().esc_name ;
 
     String result = "";
 
     // Format   \typeof(theArray) = "[Ljava.lang.Object;"
     //   as     \typeof(theArray) == \type(java.lang.Object[])
-    if (varname.startsWith("\\typeof")) {
-      for (int i=0; i<num_elts; i++) {
-        if (i>0) result += " || ";
-        result += varname + " == " +
-                 ((elts[i].equals("null"))
-                  ? "\\typeof(null)"
-                  : "\\type(" + UtilMDE.classnameFromJvm(elts[i]) + ")");
-      }
+    boolean is_type = varname.startsWith("\\typeof");
+    for (int i=0; i<num_elts; i++) {
+      if (i>0) result += " || ";
+      result += varname + " == "
+        + (is_type
+           ? ((elts[i].equals("null"))
+              ? "\\typeof(null)"
+              : "\\type(" + UtilMDE.classnameFromJvm(elts[i]) + ")")
+           : "\"" + UtilMDE.quote( elts[0] ) + "\"" );
     }
-
     return result;
 
   }

@@ -32,7 +32,7 @@ public class Modulus extends SingleScalar {
   }
 
   public String format() {
-    return var().name + " = " + remainder + "  (mod " + modulus + ")";
+    return var().name + " == " + remainder + "  (mod " + modulus + ")";
   }
 
   public String format_esc() {

@@ -47,7 +47,7 @@ public class NonZero extends SingleScalar {
   }
 
   public String format_esc() {
-    return var().esc_name() + " != " + (pointer_type ? "null" : "0");
+    return var().esc_name + " != " + (pointer_type ? "null" : "0");
   }
 
   public void add_modified(long v, int count) {

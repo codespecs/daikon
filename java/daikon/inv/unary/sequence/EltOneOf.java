@@ -97,7 +97,7 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
     String varname = var().name + " elements" ;
     if (num_elts == 1) {
 
-      return varname + " = " + ((!var().type.elementType().isIntegral() && ( elts[0]  == 0)) ? "null" : (Long.toString( elts[0] ))) ;
+      return varname + " == " + ((!var().type.elementType().isIntegral() && ( elts[0]  == 0)) ? "null" : (Long.toString( elts[0] ))) ;
 
     } else {
       return varname + " one of " + subarray_rep();
@@ -115,7 +115,6 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
       if (i>0) result += " || ";
       result += varname + " == " + ((!var().type.elementType().isIntegral() && ( elts[i]  == 0)) ? "null" : (Long.toString( elts[i] ))) ;
     }
-
     return "(" + esc_forall[0] + "(" + result + "))";
 
   }

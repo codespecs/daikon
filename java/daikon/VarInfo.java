@@ -13,6 +13,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 
   // Name and type
   public String name;		// interned
+  public String esc_name;       // interned
   public ProglangType type;	// as declared in the program
   public ProglangType rep_type;	// as written to the data trace file
   public VarComparability comparability;
@@ -68,7 +69,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
             || (rep_type == ProglangType.STRING_ARRAY));
   }
 
-  public VarInfo(String name, ProglangType type, ProglangType rep_type, VarComparability comparability, boolean is_static_constant, Object static_constant_value) {
+  public VarInfo(String name, String esc_name, ProglangType type, ProglangType rep_type, VarComparability comparability, boolean is_static_constant, Object static_constant_value) {
     // Watch out:  some Lisp and C .decls files have other (unsupported) types.
     Assert.assert(rep_type != null);
     Assert.assert(legalRepType(rep_type),
@@ -78,6 +79,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     // make the call to intern() rather than running the risk that a caller
     // didn't.
     this.name = name.intern();
+    this.esc_name = esc_name.intern();
     this.type = type;
     this.rep_type = rep_type;
     this.comparability = comparability;
@@ -93,12 +95,12 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     exact_nonunary_invariants = new Vector(2);
   }
 
-  public VarInfo(String name, ProglangType type, ProglangType rep_type, VarComparability comparability) {
-    this(name, type, rep_type, comparability, false, null);
+  public VarInfo(String name, String esc_name, ProglangType type, ProglangType rep_type, VarComparability comparability) {
+    this(name, esc_name, type, rep_type, comparability, false, null);
   }
 
   public VarInfo(VarInfo vi) {
-    this(vi.name, vi.type, vi.rep_type, vi.comparability, vi.is_static_constant, vi.static_constant_value);
+    this(vi.name, vi.esc_name, vi.type, vi.rep_type, vi.comparability, vi.is_static_constant, vi.static_constant_value);
   }
 
   // I *think* I don't need to implement VarInfo.clone(), as the java.lang.Object
@@ -682,10 +684,63 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     }
   }
 
+//   /**
+//    * @return ESC-formatted name for this variable, or null if variable is not describable
+//    **/
+//   public String esc_name()
+//   {
+//     String pre_wrapper = "";
+//     String post_wrapper = "";
+//     String result = name;
+//     String previous_result = "";
+//
+//     // "size(array[])" -> "array.length"
+//     while (result.indexOf("size(") != -1) {
+//       int sizelp = result.lastIndexOf("size(");
+//       int brackrp = result.indexOf("[])", sizelp);
+//       if (sizelp >= 0) {
+// 	Assert.assert(brackrp >= sizelp, "[]) follows size(");
+// 	result =
+// 	  result.substring(0, sizelp) +
+// 	  result.substring(sizelp+5, brackrp) +
+// 	  ".length" +
+// 	  result.substring(brackrp+3);
+//       }
+//     }
+//
+//     while (!result.equals(previous_result)) {
+//       previous_result = result;
+//
+//       // "orig(var)" -> "\old(var)"
+//       if (result.startsWith("orig(")) {
+//         pre_wrapper += "\\old(";
+//         int rparen_pos = result.lastIndexOf(")");
+//         post_wrapper = result.substring(rparen_pos) + post_wrapper;
+//         result = result.substring(5, rparen_pos);
+//       }
+//
+//       // "var.class" -> "\typeof(var)"
+//       if (result.endsWith(".class")) {
+//         pre_wrapper += "\\typeof(";
+//         result = result.substring(0, result.length() - 6);
+//         post_wrapper = ")" + post_wrapper;
+//       }
+//     }
+//
+//     // "return" -> "\result"
+//     if ("return".equals(result)) {
+//       result = "\\result";
+//     }
+//
+//     System.out.println("esc_name = " + pre_wrapper + result + post_wrapper + "    for " + name);
+//
+//     return pre_wrapper + result + post_wrapper;
+//   }
+
   /**
    * @return ESC-formatted name for this variable, or null if variable is not describable
    **/
-  public String esc_name()
+  public static String esc_name(String name)
   {
     String pre_wrapper = "";
     String post_wrapper = "";
@@ -730,42 +785,48 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
       result = "\\result";
     }
 
-    System.out.println("esc_name = " + pre_wrapper + result + post_wrapper + "    for " + name);
+    if (result.endsWith("[]")) {
+      result = result.substring(0, result.length()-2);
+    }
+
+    // System.out.println("esc_name = " + pre_wrapper + result + post_wrapper + "    for " + name);
 
     return pre_wrapper + result + post_wrapper;
   }
 
+
   /**
-   * @return two-element array indicating upper and lower bounds of the
-   * range of this array variable.
+   * @return three-element array indicating upper and lower bounds of the
+   * range of this array variable, and a canonical element at index i.
    **/
   public String[] index_range() {
-    String esc_name = esc_name();
+    String working_name = esc_name;
     String pre_wrapper = "";
     String post_wrapper = "";
-    while (esc_name.startsWith("\\") && esc_name.endsWith(")")) {
-      int open_paren_pos = esc_name.indexOf("(");
-      pre_wrapper += esc_name.substring(0, open_paren_pos+1);
+    while (working_name.startsWith("\\") && working_name.endsWith(")")) {
+      int open_paren_pos = working_name.indexOf("(");
+      pre_wrapper += working_name.substring(0, open_paren_pos+1);
       post_wrapper += ")";
-      esc_name = esc_name.substring(open_paren_pos+1, esc_name.length()-1);
-    }
-    if (! esc_name.endsWith("]")) {
-      throw new Error("No trailing ']' in " + esc_name + ", originally " + esc_name());
+      working_name = working_name.substring(open_paren_pos+1, working_name.length()-1);
     }
     String minindex;
     String maxindex;
     String arrayname;
-    if (esc_name.endsWith("[]")) {
+    if (working_name.endsWith("[]")) {
       minindex = "";
       maxindex = "";
-      arrayname = esc_name.substring(0, esc_name.length()-2);
+      arrayname = working_name.substring(0, working_name.length()-2);
+    } else if (! working_name.endsWith("]")) {
+      minindex = "";
+      maxindex = "";
+      arrayname = working_name;
     } else {
-      int open_bracket_pos = esc_name.lastIndexOf("[");
-      arrayname = esc_name.substring(0, open_bracket_pos);
-      String subscripts = esc_name.substring(open_bracket_pos+1, esc_name.length()-1);
+      int open_bracket_pos = working_name.lastIndexOf("[");
+      arrayname = working_name.substring(0, open_bracket_pos);
+      String subscripts = working_name.substring(open_bracket_pos+1, working_name.length()-1);
       int dots_pos = subscripts.indexOf("..");
       if (dots_pos == -1) {
-        throw new Error("can't find \"..\" in " + esc_name);
+        throw new Error("can't find \"..\" in " + working_name);
       }
       minindex = subscripts.substring(0, dots_pos);
       maxindex = subscripts.substring(dots_pos+2);
@@ -790,6 +851,31 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     return new String[] {
       "\\forall int i; (" + index_range[0] + " <= i & i <= " + index_range[1] + ") ==> ",
       index_range[2],
+    };
+  }
+
+  /**
+   * Return an array of three strings:
+   * an esc forall quantifier, and
+   * the expressions for the elements at index i of the two arrays
+   **/
+  public static String[] esc_forall_2(VarInfo var1, VarInfo var2) {
+    String[] index_range1 = var1.index_range();
+    String[] index_range2 = var2.index_range();
+    Assert.assert(index_range1.length == 3, "no index_range: " + var1.name);
+    Assert.assert(index_range2.length == 3, "no index_range: " + var2.name);
+    String[] esc_forall1 = var1.esc_forall();
+    String elt2 = index_range2[2];
+    if (! index_range1[0].equals(index_range2[0])) {
+      int i_pos = elt2.lastIndexOf("[i]");
+      elt2 = elt2.substring(0, i_pos+2)
+        + "-" + index_range1[0] + "+" + index_range2[0] + "]"
+        + elt2.substring(i_pos+2);
+    }
+    return new String[] {
+      esc_forall1[0],
+      esc_forall1[1],
+      elt2,
     };
   }
 

@@ -98,7 +98,7 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
     String varname = var().name ;
     if (num_elts == 1) {
 
-      return varname + " = " + ArraysMDE.toString( elts[0] ) ;
+      return varname + " == " + ArraysMDE.toString( elts[0] ) ;
 
     } else {
       return varname + " one of " + subarray_rep();
@@ -107,16 +107,11 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
 
   public String format_esc() {
 
-    String varname = var().esc_name() ;
+    String varname = var().esc_name ;
 
     String result = "";
 
-    for (int i=0; i<num_elts; i++) {
-      if (i>0) result += " || ";
-      result += varname + " == " + ArraysMDE.toString( elts[i] ) ;
-    }
-
-    return result;
+    return "format_esc " + this.getClass() + " needs to be changed: " + format();
 
   }
 

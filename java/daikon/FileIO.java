@@ -248,7 +248,7 @@ public final class FileIO {
       throw new Error("Unsupported representation type " + rep_type.format() + " for variable " + varname + " at line " + file.getLineNumber() + " of file " + filename);
     }
 
-    return new VarInfo(varname, prog_type, rep_type, comparability, is_static_constant, static_constant_value);
+    return new VarInfo(varname, VarInfo.esc_name(varname), prog_type, rep_type, comparability, is_static_constant, static_constant_value);
   }
 
   static final class Invocation {

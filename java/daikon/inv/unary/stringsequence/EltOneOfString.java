@@ -95,7 +95,7 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
     String varname = var().name + " elements" ;
     if (num_elts == 1) {
 
-      return varname + " = \"" + UtilMDE.quote( elts[0] ) + "\"" ;
+      return varname + " == \"" + UtilMDE.quote( elts[0] ) + "\"" ;
 
     } else {
       return varname + " one of " + subarray_rep();
@@ -113,7 +113,6 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
       if (i>0) result += " || ";
       result += varname + " == \"" + UtilMDE.quote( elts[i] ) + "\"" ;
     }
-
     return "(" + esc_forall[0] + "(" + result + "))";
 
   }

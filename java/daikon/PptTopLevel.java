@@ -322,6 +322,7 @@ public class PptTopLevel extends Ppt {
       if (vi.isStaticConstant() || vi.isDerived())
 	continue;
       new_vis[new_vis_index] = new VarInfo("orig(" + vi.name + ")",
+                                           "\\old(" + vi.esc_name + ")",
                                            vi.type, vi.rep_type,
                                            vi.comparability.makeAlias(vi.name));
       new_vis_index++;
@@ -1995,20 +1996,18 @@ public class PptTopLevel extends Ppt {
           if (Daikon.esc_output) {
             for (int j=0; j<equal_vars.size(); j++) {
               VarInfo other = (VarInfo) equal_vars.elementAt(j);
-	      String lname = vi.esc_name();
-	      String rname = other.esc_name();
-	      if (lname != null && rname != null) {
-		System.out.println(lname + " == " + rname);
-	      } else {
-		System.out.println("format_esc not possible for equality: " +
-				   vi.name + " = " + other.name);
+              if (vi.rep_type.isArray()) {
+                String[] forall = VarInfo.esc_forall_2(vi, other);
+                System.out.println("(" + forall[0] + "(" + forall[1] + " == " + forall[2] + "))");
+              } else {
+		System.out.println(vi.esc_name + " == " + other.esc_name);
 	      }
             }
           } else {
             StringBuffer sb = new StringBuffer(vi.name);
             for (int j=0; j<equal_vars.size(); j++) {
               VarInfo other = (VarInfo) equal_vars.elementAt(j);
-              sb.append(" = ");
+              sb.append(" == ");
               sb.append(other.name);
             }
             PptTopLevel ppt_tl = (PptTopLevel) vi.ppt;

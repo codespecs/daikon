@@ -105,15 +105,15 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
 
       if (is_boolean) {
         Assert.assert((elts[0] == 0) || (elts[0] == 1));
-        return varname + " = " + ((elts[0] == 0) ? "false" : "true");
+        return varname + " == " + ((elts[0] == 0) ? "false" : "true");
       } else if (is_hashcode) {
         if (elts[0] == 0) {
-          return varname + " = null";
+          return varname + " == null";
         } else {
           return varname + " has only one value (hashcode=" + elts[0] + ")";
         }
       } else {
-        return varname + " = " +  elts[0]  ;
+        return varname + " == " +  elts[0]  ;
       }
 
     } else {
@@ -123,16 +123,22 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
 
   public String format_esc() {
 
-    String varname = var().esc_name() ;
+    String varname = var().esc_name ;
 
     String result = "";
 
-    for (int i=0; i<num_elts; i++) {
-      if (i>0) result += " || ";
-      result += varname + " == " +  elts[i]  ;
+    if (is_boolean) {
+      Assert.assert((elts[0] == 0) || (elts[0] == 1));
+      return varname + " == " + ((elts[0] == 0) ? "false" : "true");
+    } else if (is_hashcode) {
+      if (elts[0] == 0) {
+        return varname + " == null";
+      } else {
+        return varname + " has only one value (hashcode=" + elts[0] + ")";
+      }
+    } else {
+      return varname + " == " +  elts[0]  ;
     }
-
-    return result;
 
   }
 
