@@ -518,6 +518,21 @@ public abstract class VarInfoName
     return r.replace(this).intern();
   }
 
+  // Given a sequence and subscript index, convert the index to an
+  // explicit form if necessary (e.g. a[-1] becomes a[a.length-1])
+  private static VarInfoName indexExplicit(Elements sequence, VarInfoName index) {
+    if (!index.isLiteralConstant()) {
+      return index;
+    }
+
+    int i = Integer.parseInt(index.name());
+    if (i >= 0) {
+      return index;
+    }
+
+    return sequence.applySize().applyAdd(i);
+  }
+
   /**
    * An element from a sequence, like "sequence[index]"
    **/
@@ -534,10 +549,11 @@ public abstract class VarInfoName
       return sequence.name_impl(index.name());
     }
     protected String esc_name_impl() {
-      return sequence.esc_name_impl(index.esc_name());
+      return sequence.esc_name_impl(indexExplicit(sequence, index).esc_name());
     }
     protected String simplify_name_impl() {
-      return "(select " + sequence.simplify_name() + " " + index.simplify_name() + ")";
+      return "(select " + sequence.simplify_name() + " " +
+	indexExplicit(sequence, index).simplify_name() + ")";
     }
     public Object accept(Visitor v) {
       return v.visitSubscript(this);
@@ -591,7 +607,7 @@ public abstract class VarInfoName
       throw new UnsupportedOperationException("ESC cannot format an unquantified slice of elements");
     }
     protected String simplify_name_impl() {
-      return "(select " + sequence.simplify_name() + " " + "i..j)";
+      throw new UnsupportedOperationException("Simplify cannot format an unquantified slice of elements");
     }
     public Object accept(Visitor v) {
       return v.visitSlice(this);
