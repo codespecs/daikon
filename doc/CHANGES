@@ -3,18 +3,29 @@ History of Daikon changes
 This file lists significant user-visible changes to Daikon.
 (Many other changes, including most bug fixes, are not noted here.)
 
-For documentation of Daikon, see the Daikon manual.  Its source is
-file daikon.texinfo; formatted, it appears as daikon.html,
-daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.  There is also a
-developer manual (source developer.texinfo) with the same formatted
-versions as the user manual.
-
+Further documentation can be found in:
+ * the Daikon Manual.  Its source is file daikon.texinfo; formatted, it
+   appears as daikon.html, daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.
+ * the Daikon Developer Manual.  Its source is file developer.texinfo;
+   formatted, it appears as developer.html, developer.info, developer.dvi,
+   developer.ps, or developer.pdf.
+ * The Javadoc API documentation for the source code.  This is not
+   distributed with Daikon, but you can build it by executing the command
+     make -C $DAIKONDIR/java doc
+   It is also available at http://pag.csail.mit.edu/daikon/download/jdoc/ .
+   
 ===========================================================================
 
 3.2.0 (Feb 1 2005)
 
 Daikon's licensing terms have been liberalized.  Daikon is now distributed
 without restrictions under an MIT/BSD-style license.
+
+Hopefully, this release will include:
+ * David Cok's Eclipse plug-in
+ * Eric Fellheimer's Java front end
+ * incremental operation for both the new Java front end and for Kvasir
+ * Jeff Perkins's dynamic comparability analysis
 
 ---------------------------------
 

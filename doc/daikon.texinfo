@@ -3273,12 +3273,12 @@ the Java language, from 1.0 to 1.4.
 The Daikon front end for Java has two effects:
 @itemize @bullet
 @item
-  dfej writes instrumented versions of the files, by default in directory
-  @file{daikon-instrumented/}
+dfej writes instrumented versions of the files, by default in directory
+@file{daikon-instrumented/}
 @item
-  dfej creates declaration files named
-  @file{@var{filename1}.decls}, etc., by default in directory
-  @file{daikon-output/}
+dfej creates declaration files named
+@file{@var{filename1}.decls}, etc., by default in directory
+@file{daikon-output/}
 @end itemize
 
 
@@ -6144,7 +6144,8 @@ belongs to (@code{null} for object invariants).
 The InvariantChecker program takes a set of invariants found by Daikon
 and a set of data trace files.  It checks each sample in the data trace
 files against each of the invariants.  Any sample that violates an invariant
-is noted.  
+is noted, via a message printed to standard out or to a specified
+output file.
 
 InvariantChecker is invoked as follows:
 @example
@@ -7566,7 +7567,7 @@ variables.
 @node    License, Mailing lists reminder, History, Details
 @section License
 
-@index license
+@cindex license
 
 Copyright @copyright{} 1998-2005 Massachusetts Institute of Technology
 

@@ -12,7 +12,7 @@ DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 # The texinfo files are included so we can diff to see what has changed from
 # release to release.  They are in the dist/doc directory, but not
 # visible to the user
-DOC_FILES_USER := daikon.ps daikon.pdf daikon.html developer.html \
+DOC_FILES_USER := daikon.ps daikon.pdf daikon.html developer.html CHANGES \
 				  daikon.texinfo developer.texinfo config-options.texinfo \
 				  invariants-doc.texinfo
 EMACS_PATHS := emacs/daikon-context-gui.el

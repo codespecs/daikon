@@ -956,7 +956,7 @@ are automatically run each time you compile Daikon (by running
 @samp{make} in
  @file{$inv/java} or any of its subdirectories).  You can
 also run them explicitly via @samp{make unit}.  When you write new code
-or modify old code, please try to add unit tests.<p>
+or modify old code, please try to add unit tests.
 
 The regression tests run Daikon on many different inputs and compare
 Daikon's output to expected output.  They take an hour or longer to run.
@@ -1211,6 +1211,18 @@ ppt: foo.f():::EXIT35
 @c Commands to run to distribute CVS:
 @c   cd /afs/csail.mit.edu/group/pag/projects/invariants/.CVS/
 @c   tar czf ~mernst/www/tmp/inv-cvs.tar.gz invariants
+@c This took 40 minutes on 1/7/2005.
+@c Tell those who receive the repository:
+@c   You can find a copy of the Daikon CVS repository at
+@c     http://pag.csail.mit.edu/~mernst/tmp/inv-cvs.tar.gz
+@c   Please let me know when you have downloaded it, so I can remove the
+@c   file.  Please carefully read the "Analyzing historical versions of
+@c   Daikon" section of the Daikon Developer Manual.  Let us know if you
+@c   have any problems, questions, or suggestions; we will do our best
+@c   to help.  Please let us know anything interesting you learn, and we
+@c   wish you the best of luck with your research!
+@c Distributions in 2005:
+@c   1/7/2005	Miryung Kim <miryung@cs.washington.edu>
 
 
 This section is intended primarily for researchers who are analyzing
