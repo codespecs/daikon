@@ -28,6 +28,11 @@ public final class Stopwatch {
     start();
   }
 
+  public void clear() {
+    startTime = 0;
+    elapsedMillis = 0;
+  }
+
   public void start() {
     if (startTime != 0) {
       throw new Error("Stopwatch is not stopped");
