@@ -217,7 +217,7 @@ new_bug()
 
     report=.report
 
-    tail +7 $BUGFILE >$report # body of message
+    tail +8 $BUGFILE >$report # body of message
 
     checkin new $BUGFILE || die "aborting."
 
