@@ -11,7 +11,7 @@ EMACS_PATHS := emacs/daikon-context-gui.el
 README_FILES := README-daikon-java README-dist README-dist-doc
 README_PATHS := $(addprefix doc/,$(README_FILES))
 SCRIPT_FILES := Makefile java-cpp.pl daikon.pl lines-from \
-	daikon.cshrc daikon.bashrc \
+	daikon.cshrc daikon.bashrc daikonenv.bat cygwin-runner.pl \
 	dfepl dtrace-perl \
 	trace-untruncate trace-purge-fns.pl trace-purge-vars.pl \
 	checkargs.pm util_daikon.pm \
