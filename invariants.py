@@ -101,7 +101,8 @@ class var_info:
     invariants = None         # map from indices to multiple-arity invariants
     equal_to = None                     # list of indices of equal variables;
                                         #   could be derived from invariants
-                                        #   by checking for inv.comparision == "="
+                                        #   by checking for inv.comparison == "="
+                                        #   the variable itself is not on this list
 
     def __init__(self, name, var_type, index, is_derived=false):
         assert type(name) == types.StringType
@@ -127,15 +128,14 @@ class var_info:
 
         assert util.sorted(self.equal_to)
         if self.equal_to == []:
-            return None
+            return self.index
         else:
-            return self.equal_to[0]
+            return min(self.index, self.equal_to[0])
 
     def is_canonical(self):
         assert self.index != None
         assert self.equal_to == [] or self.canonical_var() != None
-        return self.equal_to == [] or self.canonical_var() > self.index
-
+        return self.index == self.canonical_var()
 
 def var_info_name_compare(vi1, vi2):
     return cmp(vi1.name, vi2.name)
@@ -569,19 +569,24 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
     scl_inv = var_infos[sclidx].invariant
     seq_size_idx = var_infos[seqidx].derived_len
 
+    ## This makes absoulely no sense; I've left it commented out only
+    ## so I don't get tempted to do something so silly again.
+    # # Do nothing if the size is known (there's some other var practically
+    # # equal to the size).
+    # if seq_size_idx == 'known_var':
+    #     return
+
     # Do nothing if this scalar is actually the size of this sequence
     if seq_size_idx == sclidx:
         return
-    # Another check for the same thing, because sclidx may not be canonical,
-    # but we don't call the introduction functions with non-canonical arguments.
-    if seq_size_idx == var_infos[sclidx].canonical_var():
-        return
+    # Another check for scalar being the size of this sequence: sclidx may
+    # not be canonical, but seq_size_idx certainly is, because
+    # we don't call the introduction functions with non-canonical arguments.
+    assert var_infos[sclidx].is_canonical()
+    if seq_size_idx != 'known_var':
+        if sclidx == var_infos[seq_size_idx].canonical_var():
+            return
 
-
-    #     if seq_size_idx == 'no_var':
-    #         print "sequence %s (size: no_var) and scalar %s (index: %s) unrelated" % (seqvar, sclvar, sclidx)
-    #     else:
-    #         print "sequence %s (size: %s, size index = %s) and scalar %s (index: %s) unrelated" % (seqvar, var_infos[seq_size_idx].name, seq_size_idx, sclvar, sclidx)
 
     # For now, do nothing if the scalar is itself derived.
     if var_infos[sclidx].is_derived:
@@ -590,12 +595,12 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
     # Add subsequences
     if not var_infos[seqidx].is_derived and not var_infos[sclidx].invariant.can_be_None:
         full_var_info = var_info("%s[0..%s]" % (seqvar, sclvar), types.ListType, len(var_infos), true)
-        full_var_info.derived_len = sclidx
+        # 'known_var' means there is a known value, but no variable
+        # holds that particular value.
+        full_var_info.derived_len = 'known_var' # length is 1 more than var[sclidx]
         var_infos.append(full_var_info)
         less_one_var_info = var_info("%s[0..%s-1]" % (seqvar, sclvar), types.ListType, len(var_infos), true)
-        # 'no_var' means there is a known value, but no variable
-        # holds that particular value.
-        less_one_var_info.derived_len = 'no_var'
+        less_one_var_info.derived_len = sclidx
         var_infos.append(less_one_var_info)
         for new_values in var_new_values.values():
             seq = new_values[seqidx]
@@ -619,7 +624,7 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
     # (or even every time) if not, not very interesting.
     if ((not var_infos[seqidx].is_derived)
         and (not scl_inv.is_exact()) and (scl_inv.min >= 0)
-        and (seq_size_idx != 'no_var')
+        and (seq_size_idx != 'known_var')
         and (scl_inv.max <= var_infos[seq_size_idx].invariant.max)):
         var_infos.append(var_info("%s[%s]" % (seqvar, sclvar), types.IntType, len(var_infos), true))
         for new_values in var_new_values.values():
@@ -1244,9 +1249,9 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
         this_var_info = var_infos[i]
         this_dict = dicts[j]
         if this_var_info.type == types.ListType:
-            this_inv = single_sequence_numeric_invariant(this_dict)
+            this_inv = single_sequence_numeric_invariant(this_dict, (this_var_info,))
         else:
-            this_inv = single_scalar_numeric_invariant(this_dict)
+            this_inv = single_scalar_numeric_invariant(this_dict, (this_var_info,))
         assert this_var_info.invariant == None
         assert this_inv != None
         # print "Setting invariant for index", i, "to", this_inv
@@ -1314,11 +1319,11 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
             # These are now set earlier on, so they can be reused more.
             # (vi1, vi2) = util.slice_by_sequence(var_infos, (i1,i2))
             if vi1.is_sequence() and vi2.is_sequence():
-                this_inv = two_sequence_numeric_invariant(values)
+                this_inv = two_sequence_numeric_invariant(values, (vi1, vi2))
             elif vi1.is_sequence() or vi2.is_sequence():
-                this_inv = scalar_sequence_numeric_invariant(values)
+                this_inv = scalar_sequence_numeric_invariant(values, (vi1, vi2))
             else:
-                this_inv = two_scalar_numeric_invariant(values, inv1, inv2)
+                this_inv = two_scalar_numeric_invariant(values, (vi1, vi2))
 
             assert not vi1.invariants.has_key(i2)
             vi1.invariants[i2] = this_inv
@@ -1402,9 +1407,9 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
                     or vi2.is_sequence()
                     or vi3.is_sequence()):
                     # print "got sequence in a triple"
-                    this_inv = invariant(values)
+                    this_inv = invariant(values, (vi1, vi2, vi3))
                 else:
-                    this_inv = three_scalar_numeric_invariant(values)
+                    this_inv = three_scalar_numeric_invariant(values, (vi1, vi2, vi3))
                 assert not vi1.invariants.has_key((i2,i3))
                 vi1.invariants[(i2,i3)] = this_inv
 
@@ -1511,10 +1516,15 @@ class invariant:
     can_be_None = None                  # only really sensible for single
                                         # invariants, not those over pairs, etc. (?)
     unconstrained_internal = None   # None, true, or false
+    var_infos = None                    # list of var_info objects
 
-    def __init__(self, dict):
+    def __init__(self, dict, var_infos):
         """DICT maps from values to number of occurrences."""
         vals = dict.keys()
+        # if var_infos == None:
+        #     # This is OK, but I need to be careful
+        #     print "var_infos == None"
+        self.var_infos = var_infos
         self.values = len(vals)
         self.samples = util.sum(dict.values())
         self.can_be_None = None in vals
@@ -1530,7 +1540,7 @@ class invariant:
             self.format()
         return self.unconstrained_internal
 
-    def format(self, args="x"):
+    def format(self, args=None):
         """ARGS is uninterpreted.
         This function can return None:  it's intended to be used only as a helper.
         Any overriding implementation of this function should set the
@@ -1542,8 +1552,12 @@ class invariant:
         """
 
         self.unconstrained_internal = false
+
+        if args == None:
+            args = map(lambda x: x.name, self.var_infos)
         if (type(args) in [types.ListType, types.TupleType]) and (len(args) == 1):
             args = args[0]
+
         if self.one_of:
             if len(self.one_of) == 1:
                 return "%s = %s" % (args, self.one_of[0])
@@ -1563,9 +1577,9 @@ class single_scalar_numeric_invariant(invariant):
     min_justified = None
     max_justified = None
 
-    def __init__(self, dict):
+    def __init__(self, dict, var_infos):
         """DICT maps from values to number of occurrences."""
-        invariant.__init__(self, dict)
+        invariant.__init__(self, dict, var_infos)
         nums = dict.keys()
         nums.sort()
         if nums == []:
@@ -1670,8 +1684,11 @@ class single_scalar_numeric_invariant(invariant):
     def __str__(self):
         return self.format()
 
-    def format(self, arg_tuple=("x",)):
-        (arg,) = arg_tuple
+    def format(self, arg_tuple=None):
+        if arg_tuple == None:
+            arg = self.var_infos[0].name
+        else:
+            (arg,) = arg_tuple
 
         as_base = invariant.format(self, arg)
         if as_base:
@@ -1751,20 +1768,15 @@ class two_scalar_numeric_invariant(invariant):
     sum_invariant = None
     functions = None                    # list of functions such that y=fun(x)
     inv_functions = None                # list of functions such that x=fun(y)
-    inv1 = None                         # invariant over first scalar
-    inv2 = None                         # invariant over second scalar
 
     # When there is a known invariant for one of the elements (eg, it's
     # constant), the pairwise invariant may not be interesting (though
     # equality can be).
-    def __init__(self, dict_of_pairs, inv1, inv2):
+    def __init__(self, dict_of_pairs, var_infos):
         """DICT maps from a pair of values to number of occurrences."""
-        invariant.__init__(self, dict_of_pairs)
+        invariant.__init__(self, dict_of_pairs, var_infos)
 
         pairs = dict_of_pairs.keys()
-
-        self.inv1 = inv1
-        self.inv2 = inv2
 
         ## Now we use the single-scalar invariants
         ## instead of maintaining these separately here.
@@ -1798,8 +1810,8 @@ class two_scalar_numeric_invariant(invariant):
             diff_dict[x_y_diff] = diff_dict.get(x_y_diff, 0) + count
             x_y_sum = x+y
             sum_dict[x_y_sum] = sum_dict.get(x_y_sum, 0) + count
-        self.difference_invariant = single_scalar_numeric_invariant(diff_dict)
-        self.sum_invariant = single_scalar_numeric_invariant(sum_dict)
+        self.difference_invariant = single_scalar_numeric_invariant(diff_dict, None)
+        self.sum_invariant = single_scalar_numeric_invariant(sum_dict, None)
 
         (self.comparison, self.can_be_equal) = compare_pairs(pairs)
 
@@ -1833,17 +1845,23 @@ class two_scalar_numeric_invariant(invariant):
         return invariant.is_exact(self) or self.linear
 
     def nonequal_justified(self):
-        overlap = min(self.inv1.max, self.inv2.max) - max(self.inv1.min, self.inv2.min)
+        inv1 = self.var_infos[0].invariant
+        min1 = inv1.min
+        max1 = inv1.max
+        inv2 = self.var_infos[1].invariant
+        min2 = inv2.min
+        max2 = inv2.max
+        overlap = min(max1, max2) - max(min1, min2)
         if overlap < 0:
             return false
         overlap = float(overlap + 1)
 
         try:
-            probability = 1 - overlap/((self.inv1.max - self.inv1.min + 1) * (self.inv2.max - self.inv2.min + 1))
+            probability = 1 - overlap/((max1 - min1 + 1) * (max2 - min2 + 1))
         except OverflowError:
             probability = 1
         # Equivalent and slower, albeit clearer
-        # probability = 1 - (overlap/(self.inv1.max - self.inv1.min + 1)) * (overlap/(self.inv2.max - self.inv2.min + 1)) * (1/overlap)
+        # probability = 1 - (overlap/(max1 - min1 + 1)) * (overlap/(max2 - min2 + 1)) * (1/overlap)
 
         return probability**self.samples < negative_invariant_confidence
 
@@ -1867,7 +1885,9 @@ class two_scalar_numeric_invariant(invariant):
     def __str__(self):
         return self.format()
 
-    def format(self, arg_tuple=("x","y")):
+    def format(self, arg_tuple=None):
+        if arg_tuple == None:
+            arg_tuple = tuple(map(lambda x: x.name, self.var_infos))
 
         as_base = invariant.format(self, "(%s, %s)" % arg_tuple)
         if as_base:
@@ -1915,7 +1935,7 @@ class two_scalar_numeric_invariant(invariant):
                 return "%s <= %s" % (y, x) + suffix
             raise "Can't get here"
 
-        # Note that invariant.format(diff_inv, ...) is quite differerent from
+        # Note that invariant.format(diff_inv, ...) is quite different from
         # diff_inv.format(...)!
 
         diff_inv = self.difference_invariant
@@ -1978,9 +1998,9 @@ class three_scalar_numeric_invariant(invariant):
     functions_zyx = None                # list of functions such that x=fun(z,y)
 
 
-    def __init__(self, dict_of_triples):
+    def __init__(self, dict_of_triples, var_infos):
         """DICT maps from a triple of values to number of occurrences."""
-        invariant.__init__(self, dict_of_triples)
+        invariant.__init__(self, dict_of_triples, var_infos)
 
         triples = dict_of_triples.keys()
 
@@ -2081,7 +2101,9 @@ class three_scalar_numeric_invariant(invariant):
     def __str__(self):
         return self.format()
 
-    def format(self, arg_tuple=("x","y","z")):
+    def format(self, arg_tuple=None):
+        if arg_tuple == None:
+            arg_tuple = tuple(map(lambda x: x.name, self.var_infos))
 
         as_base = invariant.format(self, "(%s, %s, %s)" % arg_tuple)
         if as_base:
@@ -2366,9 +2388,9 @@ class single_sequence_numeric_invariant(invariant):
                             #   across sequence instances
     reversed_per_index_sni = None
 
-    def __init__(self, dict):
+    def __init__(self, dict, var_infos):
         """DICT maps from tuples of values to number of occurrences."""
-        invariant.__init__(self,dict)
+        invariant.__init__(self, dict, var_infos)
         seqs = dict.keys()
         seqs.sort()
         self.min = seqs[0]
@@ -2405,7 +2427,7 @@ class single_sequence_numeric_invariant(invariant):
 
         # Invariant check over elements of all sequence instances
         element_to_count = dict_of_sequences_to_element_dict(dict)
-        self.all_index_sni = single_scalar_numeric_invariant(element_to_count)
+        self.all_index_sni = single_scalar_numeric_invariant(element_to_count, None)
 
         # Invariant check for each index over all sequence instances
         def per_index_invariants(dict, tuple_len):
@@ -2418,7 +2440,7 @@ class single_sequence_numeric_invariant(invariant):
             result = []
             for i in range(0, tuple_len):
                 result.append(\
-                    single_scalar_numeric_invariant(per_index_elems_to_count[i]))
+                    single_scalar_numeric_invariant(per_index_elems_to_count[i], None))
             return result
 
         ## The per_index_sni and reversed_per_index_sni aren't being used
@@ -2428,6 +2450,9 @@ class single_sequence_numeric_invariant(invariant):
         # tuple_len = min(map(len, dict.keys())) # min length of a tuple
         # self.per_index_sni = per_index_invariants(dict, tuple_len)
         # 
+        ## This probably should not be done if the length is constant, because
+        ## in the case of a 5-element list, we repeat work for a[-1] (== a[0]),
+        ## for a[-2] (== a[1]), etc.
         # reversed_dict = {}
         # for (key, value) in dict.items():
         #     reversed_key = list(key)
@@ -2444,12 +2469,15 @@ class single_sequence_numeric_invariant(invariant):
     def __str__(self):
         return self.format()
 
-    def format(self, arg_tuple=("x[]",)):
-        (arg,) = arg_tuple
+    def format(self, arg_tuple=None):
+        if arg_tuple == None:
+            arg = self.var_infos[0].name
+        else:
+            (arg,) = arg_tuple
 
-        # as_base = invariant.format(self, arg)
-        # if as_base:
-        #     return as_base
+        as_base = invariant.format(self, arg)
+        if as_base:
+            return as_base
 
         self.unconstrained_internal = false
 
@@ -2458,28 +2486,29 @@ class single_sequence_numeric_invariant(invariant):
         # How much of this do we want to print out?
 
         suffix = " \t(%s values)" % (self.values,)
-        result = ""
-        if self.min_justified and self.max_justified:
-            if self.min == self.max:
-                result = result + "\t== %s" % (self.min,)
-            else:
-                result = result + "\tin [%s..%s]" % (self.min, self.max)
-        elif self.min_justified:
-            result = result + "\t>= %s" % self.min
-        elif self.max_justified:
-            result = result + "\t<= %s" % (self.max)
+        result = []
+        ## For now, comment this out; too much extraneous output.
+        # if self.min_justified and self.max_justified:
+        #     if self.min == self.max:
+        #         result = result + "\t== %s" % (self.min,)
+        #     else:
+        #         result = result + "\tin [%s..%s]" % (self.min, self.max)
+        # elif self.min_justified:
+        #     result = result + "\t>= %s" % self.min
+        # elif self.max_justified:
+        #     result = result + "\t<= %s" % (self.max)
 
         if self.elts_equal:
-            result = result + "\n" + "\tPer sequence elements equal"
+            result.append("Per sequence elements equal")
         elif self.non_decreasing:
-            result = result + "\n" + "\tPer sequence elements non-decreasing"
+            result.append("Per sequence elements non-decreasing")
         elif self.non_increasing:
-            result = result + "\n" + "\tPer sequence elements non-increasing"
+            result.append("Per sequence elements non-increasing")
 
         if self.all_index_sni != None:
             all_formatted = self.all_index_sni.format(("*every*element*",))
             if not self.all_index_sni.is_unconstrained():
-                result = result + "\n" + "\tAll sequence elements: " + all_formatted
+                result.append("All sequence elements: " + all_formatted)
         #         if not (0 == len(self.per_index_sni)):
         #             first_formatted = self.per_index_sni[0].format(("*first*element*",))
         #             if not self.per_index_sni[0].is_unconstrained():
@@ -2488,10 +2517,10 @@ class single_sequence_numeric_invariant(invariant):
         #             if not self.reversed_per_index_sni[0].is_unconstrained():
         #                 result = result + "\n" + "\tLast sequence element: " + last_formatted
 
-        if result == "":
+        if result == []:
             self.unconstrained_internal = true
             return arg + " unconstrained" + suffix
-        return arg + suffix + "\n" + result
+        return arg + suffix + "\n\t" + string.join(result, "\n\t")
 
 
 ###########################################################################
@@ -2503,32 +2532,39 @@ class scalar_sequence_numeric_invariant(invariant):
     seq_first = None          # if true, the variables are (seq,scalar)
                               # if false, the variables are (scalar,seq)
     member = None
+    member_obvious = None
     size = None
     per_index_linear = None   # Array whose elements describe the linear
                               # relationship between the number scalar and
                               # the sequence element at that index.
 
 
-    def __init__(self, dict_of_pairs):
+    def __init__(self, dict_of_pairs, var_infos):
 
-        invariant.__init__(self, dict_of_pairs)
+        invariant.__init__(self, dict_of_pairs, var_infos)
         pairs = dict_of_pairs.keys()
 
         if len(pairs) == 0:
             raise "empty dictionary supplied"
         self.seq_first = type(pairs[0][0]) == types.TupleType
 
+        if self.seq_first:
+            (seqvar,sclvar) = (var_infos[0].name, var_infos[1].name)
+        else:
+            (sclvar,seqvar) = (var_infos[0].name, var_infos[1].name)
 
         # For each (num, sequence), determine if num is a member of seq
-        self.member = true
-        for i in range(0, len(pairs)):
-            if self.seq_first:
-                (seq,num) = pairs[i]
-            else:
-                (num,seq) = pairs[i]
-            if not(num in seq):
-                self.member = false
-                break
+        self.member_obvious = (seqvar + "[" == sclvar[0:len(seqvar)+1])
+        if not self.member_obvious:
+            self.member = true
+            for i in range(0, len(pairs)):
+                if self.seq_first:
+                    (seq,num) = pairs[i]
+                else:
+                    (num,seq) = pairs[i]
+                if not(num in seq):
+                    self.member = false
+                    break
 
         ## This isn't necessary any longer:  we introduce a "size(SEQ)"
         ## variable for each sequence SEQ.
@@ -2580,26 +2616,24 @@ class scalar_sequence_numeric_invariant(invariant):
         return self.format()
 
     def format(self, arg_tuple=None):
-        if arg_tuple == None:
-            if self.seq_first:
-                arg_tuple = ("seq","num")
-            else:
-                arg_tuple = ("num","seq")
-
         self.unconstrained_internal = false
 
-        suffix = " \t(%s values)" % (self.values,)
-
-        # arg_tuple is a pair of names; it contains no info about types
+        if arg_tuple == None:
+            arg_tuple = arg_tuple or (self.var_infos[0].name, self.var_infos[1].name)
         if self.seq_first:
             (seqvar, sclvar) = arg_tuple
         else:
             (sclvar, seqvar) = arg_tuple
 
-        if self.member:
-            return "%s is a member of %s" % (sclvar,seqvar) + suffix
+        result = []
+        if self.member and not self.member_obvious:
+            result.append("%s is a member of %s" % (sclvar,seqvar))
         if self.size:
-            return "%s is the size of %s" % (sclvar,seqvar) + suffix
+            result.append("%s is the size of %s" % (sclvar,seqvar))
+
+        suffix = " \t(%s values)" % (self.values,)
+        if result != []:
+            return string.join(result, " and ") + suffix
 
         self.unconstrained_internal = true
         return "(%s,%s) are unconstrained" % (arg_tuple) + suffix
@@ -2618,9 +2652,11 @@ class two_sequence_numeric_invariant(invariant):
     sub_sequence = None
     super_sequence = None
     reverse = None                      # true if one is the reverse of the other
+    subseq_obvious = None
+    superseq_obvious = None
 
-    def __init__(self, dict_of_pairs):
-        invariant.__init__(self, dict_of_pairs)
+    def __init__(self, dict_of_pairs, var_infos):
+        invariant.__init__(self, dict_of_pairs, var_infos)
 
         pairs = dict_of_pairs.keys()
 
@@ -2652,13 +2688,18 @@ class two_sequence_numeric_invariant(invariant):
             except OverflowError:
                 pass
 
-        (self.comparison, self.can_be_equal) = compare_pairs(pairs)
+        (var1, var2) = (self.var_infos[0].name, self.var_infos[1].name)
+        self.subseq_obvious = (var2 + "[" == var1[0:len(var2)+1])
+        self.superseq_obvious = (var1 + "[" == var2[0:len(var1)+1])
+
+        if not (self.subseq_obvious or self.superseq_obvious):
+            (self.comparison, self.can_be_equal) = compare_pairs(pairs)
 
         self.reverse = true
         for (x, y) in pairs:
             if len(x) != len(y):
                 self.reverse = false
-                return
+                break
             # Make shallow copy because reverse works in place.
             z = list(y)
             z.reverse()
@@ -2666,29 +2707,33 @@ class two_sequence_numeric_invariant(invariant):
             if x != z:
                 self.reverse = false
                 break
-        self.sub_sequence = true
-        self.super_sequence = true
-        for (x, y) in pairs:
-            if not(util.sub_sequence_of(x, y)):
-                self.sub_sequence = false
-                break
-        for (x, y) in pairs:
-            if not(util.sub_sequence_of(y, x)):
-                self.super_sequence = false
-                break
+        if not self.subseq_obvious:
+            self.sub_sequence = true
+            for (x, y) in pairs:
+                if not(util.sub_sequence_of(x, y)):
+                    self.sub_sequence = false
+                    break
+        if not self.superseq_obvious:
+            self.super_sequence = true
+            for (x, y) in pairs:
+                if not(util.sub_sequence_of(y, x)):
+                    self.super_sequence = false
+                    break
 
     def __repr__(self):
-        result = "<invariant-2 ([],[])>"
+        result = "<invariant-2 (%s,%s)>" % (self.var_infos[0].name, self.var_infos[1].name)
         return result
 
     def __str__(self):
         return self.format()
 
-    def format(self, arg_tuple=("x[]","y[]")):
+    def format(self, arg_tuple=None):
+        if arg_tuple == None:
+            arg_tuple = tuple(map(lambda x: x.name, self.var_infos))
 
-        # as_base = invariant.format(self, "(%s, %s)" % arg_tuple)
-        # if as_base:
-        #     return as_base
+        as_base = invariant.format(self, "(%s, %s)" % arg_tuple)
+        if as_base:
+            return as_base
 
         self.unconstrained_internal = false
 
@@ -2712,20 +2757,24 @@ class two_sequence_numeric_invariant(invariant):
                 else:
                     return "%s = %s %s + %s" % (y,a,x,b) + suffix
 
-        if self.sub_sequence:
-            return "%s is a subsequence of %s" % (x,y) + suffix
-        if self.super_sequence:
-            return "%s is a subsequence of %s" % (y,x) + suffix
+        # The test of self.reverse needs to precede sub_sequence and
+        # super_sequence, lest it never be printed.
         if self.reverse:
             return "%s is the reverse of %s" % (x,y) + suffix
+        if self.sub_sequence and not self.subseq_obvious:
+            return "%s is a subsequence of %s" % (x,y) + suffix
+        if self.super_sequence and not self.superseq_obvious:
+            if not (x + "[" == y[0:len(x)+1]):
+                return "%s is a subsequence of %s" % (y,x) + suffix
 
+        # I'm not sure how interesting these lexicographic comparisons are.
         if self.comparison:
-            if self.comparison in ["<", "<="]:
-                return "%s %s %s" % (x, self.comparison, y) + suffix
-            if self.comparison == ">":
-                return "%s < %s" % (y, x) + suffix
-            if self.comparison == ">=":
-                return "%s <= %s" % (y, x) + suffix
+            if self.comparison in ["<", "<="] and not self.subseq_obvious:
+                    return "%s %s %s" % (x, self.comparison, y) + suffix
+            if self.comparison == ">" and not self.superseq_obvious:
+                    return "%s < %s" % (y, x) + suffix
+            if self.comparison == ">=" and not self.superseq_obvious:
+                    return "%s <= %s" % (y, x) + suffix
             raise "Can't get here"
 
         self.unconstrained_internal = true
