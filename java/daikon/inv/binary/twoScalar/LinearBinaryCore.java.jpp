@@ -541,6 +541,11 @@ public final class CLASSNAME
       // invariant would not have been instantiated).
       return false;
     }
+    if (y1 - y0 == 0) {         // not "x0 == x1", due to roundoff
+      // y being constant would have been discovered elsewhere (and this
+      // invariant would not have been instantiated).
+      return false;
+    }
 
     // This was the original calculation where result[0] = a and result[1] = b and y = ax + b
     //    result[0] = (y1-y0)/(double) (x1-x0);
@@ -669,8 +674,6 @@ public final class CLASSNAME
                              double u, double v, double w) {
 
     //recall that a, b, c in the linear binary equation means ax + by + c = 0;
-    //since the output format of the invariant is slope intercept form
-    //the output is of the form by = -ax - c
 
     int a = (int) u;
     int b = (int) v;
@@ -683,9 +686,8 @@ public final class CLASSNAME
       c = -c;
     }
 
+
     if (a == 0 && b == 0 && c == 0) {
-//      return wrapper.format_too_few_samples(format, "0 * " + y
-//                                            + " == 0 * " + x + " + 0");
       return wrapper.format_too_few_samples(format, "0 * " + x + "+ 0 * " + y + " + 0 == 0");
     }
 
@@ -697,19 +699,16 @@ public final class CLASSNAME
 
       if (viy.type.isFloat() || vix.type.isFloat()) {
         return
-          "daikon.Quant.fuzzy.eq("
-       //   + yname
-        +  formatTerm(format, b, y, viy, true)
-          + ", "
-          + formatTerm(format, -a, x, vix, true)
-          + formatTerm(format, -c, null, null, false)
+          "daikon.Quant.fuzzy.eq(0"
+          + formatTerm(format, a, x, viy, true)
+          + formatTerm(format, b, y, vix, false)
+          + formatTerm(format, c, null, null, false)
           + ")";
       } else {
-      //  return yname
-        return formatTerm(format, b, y, viy, true)
-        + " == "
-          + formatTerm(format, -a, x, vix, true)
-          + formatTerm(format, -c, null, null, false);
+        return formatTerm(format, a, x, viy, true)
+          + formatTerm(format, b, y, vix, false)
+          + formatTerm(format, c, null, null, false)
+           + " == 0";
       }
     }
 
@@ -719,9 +718,10 @@ public final class CLASSNAME
     {
       String eq = " == ";
       if (format == OutputFormat.IOA) eq = " = ";
-      return formatTerm(format, b, y, viy, true) + eq
-        + formatTerm(format, -a, x, vix, true)
-        + formatTerm(format, -c, null, null, false);
+      return formatTerm(format, a, x, vix, true)
+        + formatTerm(format, b, y, viy, false) 
+        + formatTerm(format, c, null, null, false)
+        + eq + "0";
     }
 
     if (format == OutputFormat.SIMPLIFY) {
@@ -733,57 +733,42 @@ public final class CLASSNAME
   public static String format_simplify(String str_x, String str_y,
                                        double a, double b, double c) {
 
-    //make y coeff positive and prep the coeffs for printing
-    // originally: y == a x + b
-    // not anymore, now: ax + by + c = 0; so by = -ax - c
-    // so either b or a & c are negated because one of them moved to the other side
-
-    if (b < 0) {
-      b = -b;
-    } else  {
-      a = -a;
-      c = -c;
-    }
-    int ia = (int) a;
-    int ib = (int) b;
-    int ic = (int) c;
-
-
-    String str_a, str_b, str_c;
-    if (ia == a && ib == b && ic == c) {
-      // integer
-      str_a = Invariant.simplify_format_long(ia);
-      str_b = Invariant.simplify_format_long(ib);
-      str_c = Invariant.simplify_format_long(ic);
-      //***** what does this do?
-      //  } else if (b == 0 && (int)(1.0 / a) == 1.0 / a) {
-      // make integer by swapping
-      //    ia = (int)(1.0 / a);
-      //    ib = 0;
-      //    str_a = Invariant.simplify_format_long(ia);
-      //    str_b = Invariant.simplify_format_long(ib);
-      //    String temp = str_x;
-      //    str_x = str_y;
-      //    str_y = temp;
-    } else {
-      // floating point; probably not very useful
-      str_a = Invariant.simplify_format_double(a);
-      str_b = Invariant.simplify_format_double(b);
-      str_c = Invariant.simplify_format_double(c);
-    }
-
-    // y == a x + b
-    // not anymore, now: ax + by + c = 0; so by = -ax - c [coefficients already negated above]
-    //      String str_ax = (a == 1.0) ? str_x : "(* " + str_a + " " + str_x + ")";
-    //      String str_axpb = (b == 0.0) ? str_ax :
-    //        "(+ " + str_ax + " " + str_b + ")";
-    //      return "(EQ " + str_y + " " + str_axpb + ")";
-
-    String str_ax = (a == 1.0) ? str_x : "(* " + str_a + " " + str_x + ")";
-    String str_axpc = (c == 0.0) ? str_ax :
-      "(+ " + str_ax + " " + str_c + ")";
-    String str_by = (b == 1.0) ? str_y : "(* " + str_b + " " + str_y + ")";
-    return "(EQ " + str_by + " " + str_axpc + ")";
+    
+      int ia = (int) a;
+      int ib = (int) b;
+      int ic = (int) c;
+      
+      
+      String str_a, str_b, str_c;
+      if (ia == a && ib == b && ic == c) {
+        // integer
+        str_a = Invariant.simplify_format_long(ia);
+        str_b = Invariant.simplify_format_long(ib);
+        str_c = Invariant.simplify_format_long(ic);
+    //  } else if (b == 0 && (int)(1.0 / a) == 1.0 / a) {
+        // make integer by swapping
+    //    ia = (int)(1.0 / a);
+    //    ib = 0;
+    //    str_a = Invariant.simplify_format_long(ia);
+    //    str_b = Invariant.simplify_format_long(ib);
+    //    String temp = str_x;
+    //    str_x = str_y;
+    //    str_y = temp;
+      } else {
+        // floating point; probably not very useful
+        str_a = Invariant.simplify_format_double(a);
+        str_b = Invariant.simplify_format_double(b);
+        str_c = Invariant.simplify_format_double(c);
+      }
+  
+      // ax + by + c = 0
+              
+      String str_ax = (a == 1.0) ? str_x : "(* " + str_a + " " + str_x + ")";
+      String str_by = (b == 1.0) ? str_y : "(* " + str_b + " " + str_y + ")";
+      String str_axby = "(+ " +  str_ax + " " + str_by + ")"; 
+      String str_axpc = (c == 0.0) ? str_axby : "(+ " + str_axby + " " + str_c + ")";
+     
+      return "(EQ 0 " + str_axpc + ")";
   }
 
   public String format_using(OutputFormat format,
@@ -796,7 +781,8 @@ public final class CLASSNAME
     }
   }
 
-  // Format as "x = cy+d" instead of as "y = ax+b".
+  // Format as "x = cy+d" instead of as "y = ax+b". [now that we print in standard format, is 
+  // there a point to this method?
   public String format_reversed_using(OutputFormat format,
                                       VarInfoName x, VarInfo xvi, VarInfoName y, VarInfo yvi) {
     Assert.assertTrue(a == 1 || a == -1);
