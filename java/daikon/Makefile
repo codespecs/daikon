@@ -1,19 +1,19 @@
 ### User customizations
 
-# Put user-specific changes in your own Makefile.user
-#  (such as changes to UTILMDE_DIR or JAVAC).
-# Make will silently continue if file does not exist.
+# Put user-specific changes (such as changes to JAVAC)
+#   in your own Makefile.user file in this directory.
+# Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
-UTILMDE_DIR ?= ../utilMDE
-JAVAC ?= jikes -g +E +F
+# JAVAC ?= jikes -g +E +F
+JAVAC ?= javac -g
 
-### end of user customications
+### end of user customizations
 
 
 JAVA_FILES := $(shell find . \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
 DAIKON_TAG_FILES := $(shell find . \( -name '*daikon-java*' -o -name CVS -o -name 'split' \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
-UTILMDE_TAG_FILES := $(shell find ${UTILMDE_DIR} \( -name '*daikon-java*' -o -name CVS -o -name 'split' \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
+UTILMDE_TAG_FILES := $(shell find ../utilMDE \( -name '*daikon-java*' -o -name CVS -o -name 'split' \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print)
 TAG_FILES := ${DAIKON_TAG_FILES} ${UTILMDE_TAG_FILES}
 # Should these really be targets in the below, or should I use "make
 # ${AUTO_GENERATED_FILES}"? I don't want to omit running just because these
@@ -78,6 +78,15 @@ all_via_javac:
 	$(MAKE) JAVAC='javac -g' all
 
 all_javac:	all_via_javac
+
+javac:	all_via_javac
+
+all_via_jikes:
+	$(MAKE) JAVAC='jikes -g +E +F' all
+
+all_jikes:	all_via_javac
+
+jikes:	all_via_javac
 
 Runtime.class: Runtime.java
 	${JAVAC} Runtime.java
