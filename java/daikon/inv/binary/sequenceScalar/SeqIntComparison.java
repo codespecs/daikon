@@ -87,6 +87,16 @@ public final class SeqIntComparison extends SequenceScalar {
     return seqvar().name.name() + " elements " + comparator + " " + sclvar().name.name();
   }
 
+  /* IOA */
+  public String format_ioa(String classname) {
+    String comparator = core.format_comparator().equals("==") ? 
+	"=" : core.format_comparator();
+    String scl = sclvar().name.ioa_name(classname);
+    String[] form =
+	VarInfoName.QuantHelper.format_ioa(new VarInfo[] { seqvar() }, classname);
+    return form[0] + form[1] + " " + comparator + " " + scl + form[2];
+  }
+
   public String format_esc() {
     String comparator = core.format_comparator();
     String[] form =
