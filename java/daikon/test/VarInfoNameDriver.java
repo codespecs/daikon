@@ -10,16 +10,22 @@ import utilMDE.Assert;
 public class VarInfoNameDriver {
 
   // for convenience
-  public static void main(String[] args)
-    throws IOException
-  {
+  public static void main(String[] args) {
     run(System.in, System.out);
   }
 
   // [String -> Handler]
   private static final Map handlers = new HashMap();
 
-  public static void run(InputStream _commands, PrintStream output)
+  public static void run(InputStream _commands, PrintStream output) {
+    try {
+      _run(_commands, output);
+    } catch (IOException e) {
+      throw new RuntimeException(e.toString());
+    }
+  }
+
+  public static void _run(InputStream _commands, PrintStream output)
     throws IOException
   {
     BufferedReader commands = new BufferedReader(new InputStreamReader(_commands));
@@ -27,12 +33,10 @@ public class VarInfoNameDriver {
 
     String command;
     while ((command = commands.readLine()) != null) {
-      if (command.startsWith("#")) {
+      if (command.startsWith(";")) {
 	output.println(command);
 	continue;
       }
-
-      output.println("; " + command);
 
       // tokenize arguments
       StringTokenizer tok = new StringTokenizer(command);
@@ -45,6 +49,8 @@ public class VarInfoNameDriver {
       if (list.size() == 0) {
 	continue;
       }
+
+      output.println("; " + command);
 
       // call the handler
       String method = (String) list.removeFirst();

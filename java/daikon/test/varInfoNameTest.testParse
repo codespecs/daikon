@@ -1,0 +1,42 @@
+;# (You can read this in -*- lisp -*- mode)
+;# Tests for the parsing and printing routines
+
+;# x
+parse p x
+esc_name p
+simplify_name p
+
+;# x[]
+parse p x[]
+;# esc_name p is not expressable
+simplify_name p
+
+;# x.class
+parse p x.class
+esc_name p
+simplify_name p
+
+;# x[].class
+parse p x[].class
+;# esc_name p is not expressable
+simplify_name p
+
+;# this.field
+parse p this.field
+esc_name p
+simplify_name p
+
+;# this.field[]
+parse p this.field[]
+;# esc_name p is not expressable
+simplify_name p
+
+;# this.field.class
+parse p this.field.class
+esc_name p
+simplify_name p
+
+;# this.field[].class
+parse p this.field[].class
+;# esc_name p is not expressable
+simplify_name p

@@ -1,0 +1,54 @@
+.;# (You can read this in -*- lisp -*- mode)
+;# Tests for the parsing and printing routines
+;# x
+; parse p x
+p = x
+; esc_name p
+x
+; simplify_name p
+x
+;# x[]
+; parse p x[]
+p = x[]
+;# esc_name p is not expressable
+; simplify_name p
+(elements x)
+;# x.class
+; parse p x.class
+p = x.class
+; esc_name p
+\typeof(x)
+; simplify_name p
+(typeof x)
+;# x[].class
+; parse p x[].class
+p = x[].class
+;# esc_name p is not expressable
+; simplify_name p
+(typeof (elements x))
+;# this.field
+; parse p this.field
+p = this.field
+; esc_name p
+this.field
+; simplify_name p
+(select field this)
+;# this.field[]
+; parse p this.field[]
+p = this.field[]
+;# esc_name p is not expressable
+; simplify_name p
+(elements (select field this))
+;# this.field.class
+; parse p this.field.class
+p = this.field.class
+; esc_name p
+\typeof(this.field)
+; simplify_name p
+(typeof (select field this))
+;# this.field[].class
+; parse p this.field[].class
+p = this.field[].class
+;# esc_name p is not expressable
+; simplify_name p
+(typeof (elements (select field this)))
