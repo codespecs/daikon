@@ -8,7 +8,12 @@ $mode = $mode . ",";
 
 my(%varlinks) = ();
 
-open(F, "gzcat vardump0.gz |");
+my $gzcat = `which gzcat`;
+if ($gzcat =~ /Command not found/) {
+  $gzcat = `which zcat`;
+}
+
+open(F, "$gzcat vardump0.gz |");
 while (<F>) {
     if (/^([0-9]+) -> ([0-9]+)/) {
         my($src, $dest) = ($1, $2);

@@ -40,7 +40,13 @@ sub gzopen {
     my $fh = shift;
     my $fn = shift;
     if ($fn =~ /\.gz$/) {
-	$fn = "gzcat " . $fn . "|";
+        my $gzcat = `which gzcat 2>&1`;
+	if ($gzcat =~ /Command not found|which: no gzcat in/) {
+	  $gzcat = 'zcat';
+	} else {
+	  $gzcat = 'gzcat';	# command output contains newline, etc.
+	}
+	print STDERR "gzcat = $gzcat\n";
     }
     open ($fh, $fn) or die "couldn't open \"$fn\"\n";
     return [$fh, 0];
