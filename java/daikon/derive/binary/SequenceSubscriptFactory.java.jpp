@@ -1,3 +1,26 @@
+#if !(defined(SCALAR) || defined(STRING))
+#error "One of SCALAR or STRING should be defined"
+#endif
+
+#if defined(SCALAR)
+#undef SCALAR
+#define PROGLANG_INT ProglangType.INT
+#define PROGLANG_INT_ARRAY ProglangType.INT_ARRAY
+#define SEQUENCESCALARSUBSCRIPTFACTORY SequenceScalarSubscriptFactory
+#define SEQUENCESCALARSUBSCRIPT SequenceScalarSubscript
+#define SEQUENCESCALARSUBSEQUENCE SequenceScalarSubsequence
+#elif defined(STRING)
+#define THIS_UNDEF_OF_STRING is for "ProglangType.STRING"
+#undef STRING
+#define PROGLANG_INT ProglangType.STRING
+#define PROGLANG_INT_ARRAY ProglangType.STRING_ARRAY
+#define SEQUENCESCALARSUBSCRIPTFACTORY SequenceStringSubscriptFactory
+#define SEQUENCESCALARSUBSCRIPT SequenceStringSubscript
+#define SEQUENCESCALARSUBSEQUENCE SequenceStringSubsequence
+#else
+#error "One of SCALAR or STRING should be defined"
+#endif
+
 package daikon.derive.binary;
 
 import daikon.*;
@@ -13,7 +36,7 @@ import utilMDE.*;
 // sequence, such as getting the element at that index or a subsequence up
 // to that index.
 
-public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFactory {
+public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactory {
 
   // When calling/creating the derivations, arrange that:
   //   base1 is the sequence
@@ -25,12 +48,12 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
     VarInfo seqvar;
     VarInfo sclvar;
 
-    if ((vi1.rep_type == ProglangType.INT_ARRAY )
-        && (vi2.rep_type == ProglangType.INT )) {
+    if ((vi1.rep_type == PROGLANG_INT_ARRAY)
+        && (vi2.rep_type == PROGLANG_INT)) {
       seqvar = vi1;
       sclvar = vi2;
-    } else if ((vi2.rep_type == ProglangType.INT_ARRAY )
-               && (vi1.rep_type == ProglangType.INT )) {
+    } else if ((vi2.rep_type == PROGLANG_INT_ARRAY)
+               && (vi1.rep_type == PROGLANG_INT)) {
       seqvar = vi2;
       sclvar = vi1;
     } else {
@@ -40,6 +63,7 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
     if (! sclvar.isIndex())
       return null;
     // Could also do a Lackwit/Ajax comparability test here.
+
 
     // For now, do nothing if the sequence is itself derived.
     if (seqvar.derived != null)
@@ -58,7 +82,7 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
     // Since both are canonical, this is equivalent to
     // "if (sclvar.canonicalRep() == seqsize.canonicalRep()) ..."
     if (sclvar == seqsize) {
-      // a[len] a[len-1] a[0..len] a[0..len-1] a[len..len] a[len+1..len]
+      // a[len] a[len-1] a[0..len] a[0..len-1] a[len..] a[len+1..]
       Global.tautological_suppressed_derived_variables += 6;
       return null;
     }
@@ -112,15 +136,15 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
         Global.tautological_suppressed_derived_variables += 3;
         Global.nonsensical_suppressed_derived_variables += 2;
         return new BinaryDerivation[] {
-          new SequenceScalarSubsequence (seqvar, sclvar, false, true),
+          new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, false, true),
         };
       }
       if (scl_constant == 1) {
         Global.tautological_suppressed_derived_variables += 3;
         return new BinaryDerivation[] {
-          new SequenceScalarSubsequence (seqvar, sclvar, true, false),
-          new SequenceScalarSubsequence (seqvar, sclvar, false, false),
-          new SequenceScalarSubsequence (seqvar, sclvar, false, true),
+          new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, true, false),
+          new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, false, false),
+          new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, false, true),
         };
       }
     }
@@ -128,15 +152,16 @@ public final class SequenceScalarSubscriptFactory  extends BinaryDerivationFacto
     // Get the lower and upper bounds for the variable, if any.
     // [This seems to be missing; what was it?]
 
+
     // End of applicability tests; now actually create the invariants
 
     return new BinaryDerivation[] {
-      new SequenceScalarSubscript (seqvar, sclvar, false),
-      new SequenceScalarSubscript (seqvar, sclvar, true),
-      new SequenceScalarSubsequence (seqvar, sclvar, false, false),
-      new SequenceScalarSubsequence (seqvar, sclvar, false, true),
-      new SequenceScalarSubsequence (seqvar, sclvar, true, false),
-      new SequenceScalarSubsequence (seqvar, sclvar, true, true),
+      new SEQUENCESCALARSUBSCRIPT(seqvar, sclvar, false),
+      new SEQUENCESCALARSUBSCRIPT(seqvar, sclvar, true),
+      new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, false, false),
+      new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, false, true),
+      new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, true, false),
+      new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, true, true),
     };
   }
 
