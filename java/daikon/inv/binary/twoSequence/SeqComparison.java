@@ -8,6 +8,7 @@ import utilMDE.*;
 
 import java.util.*;
 
+// Lexically compares the two sequences.
 public class SeqComparison extends TwoSequence implements Comparison {
 
   static Comparator comparator = new ArraysMDE.LongArrayComparatorLexical();
@@ -26,11 +27,21 @@ public class SeqComparison extends TwoSequence implements Comparison {
   }
 
   public static SeqComparison instantiate(PptSlice ppt) {
+    VarInfo var1 = ppt.var_infos[0];
+    VarInfo var2 = ppt.var_infos[1];
+
     // System.out.println("Ppt: " + ppt.name);
-    // System.out.println("vars[0]: " + ppt.var_infos[0].type.format());
-    // System.out.println("vars[1]: " + ppt.var_infos[1].type.format());
-    ProglangType type1 = ppt.var_infos[0].type;
-    ProglangType type2 = ppt.var_infos[1].type;
+    // System.out.println("vars[0]: " + var1.type.format());
+    // System.out.println("vars[1]: " + var2.type.format());
+
+    if ((SubSequence.isObviousDerived(var1, var2))
+        || (SubSequence.isObviousDerived(var2, var1))) {
+      Global.implied_noninstantiated_invariants++;
+      return null;
+    }
+
+    ProglangType type1 = var1.type;
+    ProglangType type2 = var2.type;
     // This intentonally checks dimensions(), not pseudoDimensions.
     boolean only_eq = (! ((type1.dimensions() == 1)
                           && type1.baseIsIntegral()
@@ -127,6 +138,19 @@ public class SeqComparison extends TwoSequence implements Comparison {
                  || (can_be_lt && other.can_be_lt)
                  || (can_be_gt && other.can_be_gt)));
     }
+    return false;
+  }
+
+  // Copied from IntComparison.
+  public boolean isObviousImplied() {
+    PairwiseIntComparison pic = PairwiseIntComparison.find(ppt);
+    if ((pic != null)
+        && (pic.core.can_be_eq == can_be_eq)
+        && (pic.core.can_be_lt == can_be_lt)
+        && (pic.core.can_be_gt == can_be_gt)) {
+      return true;
+    }
+
     return false;
   }
 

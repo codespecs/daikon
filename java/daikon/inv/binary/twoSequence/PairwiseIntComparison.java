@@ -3,9 +3,12 @@ package daikon.inv.binary.twoSequence;
 import daikon.*;
 import daikon.inv.Invariant;
 import daikon.inv.binary.twoScalar.*;
+import utilMDE.Assert;
+import java.util.Iterator;
 
-// Requires that the lengths are the same.  Should it?  (Hard to tell;
-// could argue either way, on completeness vs. efficiency grounds.)
+// Requires that the lengths are the same.  Determines a comparison that
+// holds for all (a[i], b[i]) pairs.
+
 
 // Also see NonEqual
 public class PairwiseIntComparison extends TwoSequence {
@@ -27,6 +30,12 @@ public class PairwiseIntComparison extends TwoSequence {
   public static PairwiseIntComparison instantiate(PptSlice ppt) {
     VarInfo var1 = ppt.var_infos[0];
     VarInfo var2 = ppt.var_infos[1];
+
+    if ((SubSequence.isObviousDerived(var1, var2))
+        || (SubSequence.isObviousDerived(var2, var1))) {
+      Global.implied_noninstantiated_invariants++;
+      return null;
+    }
 
     boolean only_eq = false;
     if (! (var1.type.elementIsIntegral() && var2.type.elementIsIntegral())) {
@@ -98,6 +107,17 @@ public class PairwiseIntComparison extends TwoSequence {
       return core.isExclusiveFormula(((PairwiseIntComparison) other).core);
     }
     return false;
+  }
+
+  // Look up a previously instantiated invariant.
+  public static PairwiseIntComparison find(PptSlice ppt) {
+    Assert.assert(ppt.arity == 2);
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = (Invariant) itor.next();
+      if (inv instanceof PairwiseIntComparison)
+        return (PairwiseIntComparison) inv;
+    }
+    return null;
   }
 
 }
