@@ -521,11 +521,8 @@ public final class CLASSNAME
   }
 
   public String format_dbc() {
-        // "exists x in a..b : P(x)" gets written as "!(forall x in a..b : !P(x))"
-        String[] form =
-          VarInfoName.QuantHelper.format_dbc(new VarInfoName[]
-                { seqvar().name, sclvar().name });
-        return "!" + form[0] + "(" + form[1] + " != " + form[2] + ")" + form[3];
+    return "quant.Quant.memberOf(" + sclvar().name.dbc_name(sclvar())
+      + " , " + seqvar().name.dbc_name(seqvar()) + " )";
   }
 
   // XXX this "#ifdef SCALAR" test seems unlikely to have its original
