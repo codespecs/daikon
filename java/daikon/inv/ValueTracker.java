@@ -76,19 +76,19 @@ public class ValueTracker
     return (int) (l ^ (l >> 32));
   }
 
-  public void add(String v1, String v2) {
+  protected void add_prim (String v1, String v2) {
     if (values_cache == null) return;
     if ((v1 == null) || (v2 == null)) return;
-    add(v1.hashCode(), v2.hashCode());
+    add_prim (v1.hashCode(), v2.hashCode());
   }
 
-  public void add(String v1) {
+  protected void add_prim(String v1) {
     if (values_cache == null) return;
     if (v1 == null) return;
-    add(v1.hashCode());
+    add_prim (v1.hashCode());
   }
 
-  public void add(String[] v1) {
+  protected void add_prim (String[] v1) {
     if (values_cache == null) return;
     if (v1 == null) return;
     long av1 = 0;
@@ -96,10 +96,10 @@ public class ValueTracker
       if (v1[i] == null) continue;
       av1 ^= v1[i].hashCode();
     }
-    add(av1);
+    add_prim (av1);
   }
 
-  public void add(long[] v1, long[] v2) {
+  protected void add_prim(long[] v1, long[] v2) {
     // The values_cache will always reach its capacity before
     // the elt_values_cache (or at the same time), by definition
     if (values_cache != null) {
@@ -111,7 +111,7 @@ public class ValueTracker
       for (int i = 0; i < v2.length; i++) {
         av2 = hashLong(av2 + v2[i]);
       }
-      add(av1, av2);
+      add_prim(av1, av2);
     }
 
     if (elt_values_cache == null) return;
@@ -122,7 +122,7 @@ public class ValueTracker
     }
   }
 
-  public void add(long[] v1) {
+  protected void add_prim(long[] v1) {
     if (v1.length > 1)
       no_dup_elt_count++;
     if (values_cache != null) {
@@ -131,7 +131,7 @@ public class ValueTracker
         // Only SeqIndexComparison uses this, so let's use its notion
         // of value (each distinct pair (a[i], i))
         long temp = ((37 * v1[i]) + i) + 10;
-        add(hashLong(temp));
+        add_prim(hashLong(temp));
         // add(v1[i] ^ i); // av1 ^= v1[i];
       }
     // add(av1);
@@ -147,38 +147,38 @@ public class ValueTracker
   // SeqIntComparison Invariants are the only ones so far that use this,
   // so I matched this method up with SeqIntComparison's old notions of "values"
   // (if a sample is a[] and b, then each pair {a[i],b} is a value)
-  public void add(long[] v1, long v2) {
+  protected void add_prim(long[] v1, long v2) {
     if (values_cache == null) return;
     for (int i = 0; i < v1.length; i++) {
-      add(v1[i], v2);
+      add_prim(v1[i], v2);
     }
   }
 
-  public void add(long v1, long v2, long v3) {
+  protected void add_prim(long v1, long v2, long v3) {
     if (values_cache != null) {
-      add((37*((37*hashLong(v1)) + hashLong(v2))) + hashLong(v3));
+      add_prim((37*((37*hashLong(v1)) + hashLong(v2))) + hashLong(v3));
     }
   }
 
-  public void add(long v1, long v2) {
+  protected void add_prim(long v1, long v2) {
     if (values_cache == null) return;
-    add((37*hashLong(v1)) + hashLong(v2));
+    add_prim((37*hashLong(v1)) + hashLong(v2));
   }
 
-  public void add(long v1) {
+  protected void add_prim(long v1) {
     if (values_cache == null) return;
     // if ((v1 == 0) || (v1 == -1)) return;
     if (!Global.old_tracker)
       v1 = v1 + 10; // Do this so that -1 and 0 don't both hash to the same value
-    add(hashLong(v1));
+    add_prim(hashLong(v1));
   }
 
-  public void add(int v1, int v2) {
+  protected void add_prim(int v1, int v2) {
     if (values_cache == null) return;
-    add(v1 ^ v2);
+    add_prim(v1 ^ v2);
   }
 
-  public void add(int v1) {
+  protected void add_prim(int v1) {
     if (values_cache == null) return;
 
     for (int i = 0; i < ((Global.old_tracker) ? max_values : values_end); i++) {
@@ -234,7 +234,7 @@ public class ValueTracker
       seq_index_cache = null;
   }
 
-  public void add(double[] v1, double[] v2) {
+  protected void add_prim(double[] v1, double[] v2) {
     if (values_cache != null) {
       double av1 = 0;
       for (int i = 0; i < v1.length; i++) {
@@ -244,7 +244,7 @@ public class ValueTracker
       for (int i = 0; i < v2.length; i++) {
         av2 = av2 * 7 + v2[i];
       }
-      add(av1, av2);
+      add_prim(av1, av2);
     }
 
     if (elt_values_cache == null) return;
@@ -254,13 +254,13 @@ public class ValueTracker
     }
   }
 
-  public void add(double[] v1) {
+  protected void add_prim(double[] v1) {
     if (v1.length > 1)
       no_dup_elt_count++;
     if (values_cache != null) {
       // double av1 = 0;
       for (int i = 0; i < v1.length; i++) {
-        add((v1[i] * 23) * i); // av1 = av1 * 5 + v1[i]; for SeqIndexComparison
+        add_prim((v1[i] * 23) * i); // av1 = av1 * 5 + v1[i]; for SeqIndexComparison
       }
       // add(av1);
     }
@@ -272,25 +272,25 @@ public class ValueTracker
   }
 
   // See the comment above add(long[], long)
-  public void add(double[] v1, double v2) {
+  protected void add_prim(double[] v1, double v2) {
     if (values_cache == null) return;
     for (int i = 0; i < v1.length; i++) {
-      add(v1[i], v2);
+      add_prim(v1[i], v2);
     }
   }
 
-  public void add(double v1, double v2, double v3) {
+  protected void add_prim(double v1, double v2, double v3) {
     if (values_cache != null) {
-      add(((v1 * 17) + v2 * 13) + v3);
+      add_prim(((v1 * 17) + v2 * 13) + v3);
     }
   }
 
-  public void add(double v1, double v2) {
+  protected void add_prim(double v1, double v2) {
     if (values_cache == null) return;
-    add((v1 * 23) * v2);
+    add_prim((v1 * 23) * v2);
   }
 
-  public void add(double v1) {
+  protected void add_prim(double v1) {
     if (values_cache == null) return;
 
     for (int i = 0; i < ((Global.old_tracker) ? max_values : values_end); i++) {
@@ -389,7 +389,7 @@ public class ValueTracker
         result.values_end = vt.values_end;
       } else {
         for (int j = 0; j < vt.num_values(); j++)
-          result.add (vt.values_cache[j]);
+          result.add_prim (vt.values_cache[j]);
       }
 
       // Merge these values into the sequence index cache
@@ -425,7 +425,14 @@ public class ValueTracker
       super(max_values);
     }
 
-    public abstract void add_val(Object v1);
+    /** track the specified object **/
+    protected abstract void add_val(Object v1);
+
+    /**
+     * Track the specified object, permutting the order of the
+     * arguments as necessary.  Obviously unnecessary for this case, but
+     * kept for consistency with the two and three variable cases
+     */
     public void add (Object v1) {
       add_val (v1);
     }
@@ -436,7 +443,14 @@ public class ValueTracker
     public ValueTracker2(int max_values) {
       super(max_values);
     }
-    public abstract void add_val(Object v1, Object v2);
+
+    /** track the specified objects **/
+    protected abstract void add_val(Object v1, Object v2);
+
+    /**
+     * Track the specified object, permutting the order of the
+     * arguments as necessary.
+     */
     public void add (Object v1, Object v2) {
       if ((this instanceof ValueTrackerFloatArrayFloat)
           || (this instanceof ValueTrackerScalarArrayScalar))
@@ -477,7 +491,14 @@ public class ValueTracker
     public ValueTracker3(int max_values) {
       super(max_values);
     }
-    public abstract void add_val(Object v1, Object v2, Object v3);
+
+    /** track the specified objects **/
+    protected abstract void add_val(Object v1, Object v2, Object v3);
+
+    /**
+     * Track the specified object, permutting the order of the
+     * arguments as necessary.
+     */
     public void add (Object v1, Object v2, Object v3) {
 
       switch (order) {
@@ -512,8 +533,8 @@ public class ValueTracker
     public ValueTrackerScalar(int max_values) {
       super(max_values);
     }
-    public void add_val(Object v1) {
-      add(((Long) v1).longValue());
+    protected void add_val(Object v1) {
+      add_prim(((Long) v1).longValue());
     }
   }
 
@@ -521,8 +542,8 @@ public class ValueTracker
     public ValueTrackerFloat(int max_values) {
       super(max_values);
     }
-    public void add_val(Object v1) {
-      add(((Double) v1).doubleValue());
+    protected void add_val(Object v1) {
+      add_prim(((Double) v1).doubleValue());
     }
   }
 
@@ -530,8 +551,8 @@ public class ValueTracker
     public ValueTrackerScalarArray(int max_values) {
       super(max_values);
     }
-    public void add_val(Object v1) {
-      add((long[]) v1);
+    protected void add_val(Object v1) {
+    	add_prim ((long[]) v1);
     }
   }
 
@@ -539,8 +560,8 @@ public class ValueTracker
     public ValueTrackerFloatArray(int max_values) {
       super(max_values);
     }
-    public void add_val(Object v1) {
-      add((double[]) v1);
+    protected void add_val(Object v1) {
+      add_prim((double[]) v1);
     }
   }
 
@@ -548,8 +569,8 @@ public class ValueTracker
     public ValueTrackerString(int max_values) {
       super(max_values);
     }
-    public void add_val(Object v1) {
-      add((String) v1);
+    protected void add_val(Object v1) {
+      add_prim((String) v1);
     }
   }
 
@@ -557,8 +578,8 @@ public class ValueTracker
     public ValueTrackerStringArray(int max_values) {
       super(max_values);
     }
-    public void add_val(Object v1) {
-      add((String[]) v1);
+    protected void add_val(Object v1) {
+      add_prim((String[]) v1);
     }
   }
 
@@ -566,8 +587,8 @@ public class ValueTracker
     public ValueTrackerTwoString(int max_values) {
       super(max_values);
     }
-    public void add_val(Object v1, Object v2) {
-      add((String) v1, (String) v2);
+    protected void add_val(Object v1, Object v2) {
+      add_prim((String) v1, (String) v2);
     }
   }
 
@@ -575,8 +596,8 @@ public class ValueTracker
     public ValueTrackerTwoScalar(int max_values) {
       super(max_values);
     }
-    public void add_val(Object v1, Object v2) {
-      add(((Long) v1).longValue(), ((Long) v2).longValue());
+    protected void add_val(Object v1, Object v2) {
+      add_prim(((Long) v1).longValue(), ((Long) v2).longValue());
     }
   }
 
@@ -584,8 +605,8 @@ public class ValueTracker
     public ValueTrackerTwoFloat(int max_values) {
       super(max_values);
     }
-    public void add_val(Object v1, Object v2) {
-      add(((Double) v1).doubleValue(), ((Double) v2).doubleValue());
+    protected void add_val(Object v1, Object v2) {
+      add_prim(((Double) v1).doubleValue(), ((Double) v2).doubleValue());
     }
   }
 
@@ -593,8 +614,8 @@ public class ValueTracker
     public ValueTrackerFloatArrayFloat(int max_values) {
       super(max_values);
     }
-    public void add_val(Object v1, Object v2) {
-      add((double[]) v1, ((Double) v2).doubleValue());
+    protected void add_val(Object v1, Object v2) {
+      add_prim((double[]) v1, ((Double) v2).doubleValue());
     }
   }
 
@@ -602,8 +623,8 @@ public class ValueTracker
     public ValueTrackerScalarArrayScalar(int max_values) {
       super(max_values);
     }
-    public void add_val(Object v1, Object v2) {
-      add((long[]) v1, ((Long) v2).longValue());
+    protected void add_val(Object v1, Object v2) {
+      add_prim((long[]) v1, ((Long) v2).longValue());
     }
   }
 
@@ -611,8 +632,8 @@ public class ValueTracker
     public ValueTrackerTwoFloatArray(int max_values) {
       super(max_values);
     }
-    public void add_val(Object v1, Object v2) {
-      add((double[]) v1, ((double[]) v2));
+    protected void add_val(Object v1, Object v2) {
+      add_prim((double[]) v1, ((double[]) v2));
     }
   }
 
@@ -620,8 +641,8 @@ public class ValueTracker
     public ValueTrackerTwoScalarArray(int max_values) {
       super(max_values);
     }
-    public void add_val(Object v1, Object v2) {
-      add((long[]) v1, ((long[]) v2));
+    protected void add_val(Object v1, Object v2) {
+      add_prim((long[]) v1, ((long[]) v2));
     }
   }
 
@@ -629,8 +650,8 @@ public class ValueTracker
     public ValueTrackerThreeScalar(int max_values) {
       super(max_values);
     }
-    public void add_val(Object v1, Object v2, Object v3) {
-      add(((Long) v1).longValue(), ((Long) v2).longValue(), ((Long) v3).longValue());
+    protected void add_val(Object v1, Object v2, Object v3) {
+      add_prim(((Long) v1).longValue(), ((Long) v2).longValue(), ((Long) v3).longValue());
     }
   }
 
@@ -638,8 +659,8 @@ public class ValueTracker
     public ValueTrackerThreeFloat(int max_values) {
       super(max_values);
     }
-    public void add_val(Object v1, Object v2, Object v3) {
-      add(((Double) v1).longValue(), ((Double) v2).longValue(), ((Double) v3).longValue());
+    protected void add_val(Object v1, Object v2, Object v3) {
+      add_prim(((Double) v1).longValue(), ((Double) v2).longValue(), ((Double) v3).longValue());
     }
   }
 
