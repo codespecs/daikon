@@ -211,6 +211,17 @@ public class PrintInvariants {
         !Daikon.noInvariantGuarding)
       Daikon.guardInvariants(ppts);
 
+    // Debug print the hierarchy is a more readable manner
+    if (debug.isLoggable(Level.FINE)) {
+      debug.fine ("Printing PPT Hierarchy");
+      for (Iterator i = ppts.pptIterator(); i.hasNext(); ) {
+        PptTopLevel my_ppt = (PptTopLevel) i.next();
+        if (my_ppt.parents.size() == 0)
+          my_ppt.debug_print_tree (debug, 0, null);
+      }
+    }
+
+
     print_invariants(ppts);
   }
 
@@ -434,7 +445,7 @@ public class PrintInvariants {
 
     PrintWriter pw = new PrintWriter(System.out, true);
     PptTopLevel combined_exit = null;
-    boolean enable_exit_swap = !Daikon.df_bottom_up;
+    boolean enable_exit_swap = true; // !Daikon.df_bottom_up;
 
     if (Daikon.no_text_output)
       return;
@@ -449,7 +460,7 @@ public class PrintInvariants {
       PptTopLevel ppt = (PptTopLevel) ppt_list.get(i);
 
       if (debug.isLoggable(Level.FINE))
-        debug.fine ("Looking at point " + ppt);
+        debug.fine ("Looking at point " + ppt.ppt_name);
 
       // If this point is not an exit point, print out any retained combined
       // exit point
@@ -500,6 +511,8 @@ public class PrintInvariants {
                                             PrintWriter out,
                                             PptMap all_ppts)
   {
+    debugPrint.fine  ("Considering printing ppt " + ppt.ppt_name);
+
     // Be silent if we never saw any samples.
     // (Maybe this test isn't even necessary, but will be subsumed by others,
     // as all the invariants will be unjustified.)
@@ -510,8 +523,7 @@ public class PrintInvariants {
       if (Daikon.output_num_samples) {
         out.println("[No samples for " + ppt.name + "]");
       }
-      if (!Daikon.df_bottom_up)
-        return;
+      return;
     }
     if ((ppt.numViews() == 0) && (ppt.joiner_view.invs.size() == 0)) {
       if (debugPrint.isLoggable(Level.FINE)) {
@@ -523,9 +535,8 @@ public class PrintInvariants {
         if (Daikon.output_num_samples) {
           out.println("[No views for " + ppt.name + "]");
         }
-      }
-      if (!Daikon.df_bottom_up)
         return;
+      }
     }
 
     /* [INCR]
@@ -598,8 +609,8 @@ public class PrintInvariants {
     // System.out.println("entering print_sample_data");
 
     if (Daikon.output_num_samples) {
-      int num_samps = -111; // [[INCR]]
-      out.println(ppt.name + "  " + nplural(num_samps, "sample"));
+      // int num_samps = -111; // [[INCR]]
+      out.println(ppt.name + "  " + nplural(ppt.num_samples(), "sample"));
       // out.println("    Samples breakdown: " + ppt.tuplemod_samples_summary()); // [[INCR]]
     } else {
       if (Daikon.output_style == OutputFormat.IOA) {
@@ -1367,6 +1378,8 @@ public class PrintInvariants {
       if (inv.logOn())
         inv.log ("Considering Printing");
       Assert.assertTrue (!(inv instanceof Equality));
+      for (int j = 0; j < inv.ppt.var_infos.length; j++)
+        Assert.assertTrue (!inv.ppt.var_infos[j].missingOutOfBounds());
       InvariantFilters fi = new InvariantFilters();
       fi.setPptMap(ppt_map);
 
