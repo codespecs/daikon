@@ -55,6 +55,7 @@ export PATH=`echo $PATH | ${INV}/scripts/path-remove.pl`
 export DFEJ_VERBOSE=1
 
 # Enable use of group bibliographies, and the "bibfind" command.
+# Private comments in bib files are not to be shared outside the group.
 export BIBINPUTS=.:/afs/csail.mit.edu/u/m/mernst/bib:..:
 export HELPPROG=/afs/csail.mit.edu/u/m/mernst/bin/Linux-i686/help
 alias help="$HELPPROG .w .f ~mernst/wisdom/HELP.non-mde"
