@@ -30,7 +30,10 @@ public class Daikon {
     Vector dtrace_files = UtilMDE.tokens(args[1], ",");
     FileIO.read_data_trace_files(dtrace_files, all_ppts, null);
 
-
+    for (Iterator itor = all_ppts.values().iterator() ; itor.hasNext() ; ) {
+      PptTopLevel ppt = (PptTopLevel) itor.next();
+      ppt.initial_processing();
+    }
 
 
     // Now examine the invariants.

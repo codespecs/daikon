@@ -2,6 +2,8 @@ package daikon.derive.binary;
 
 import daikon.*;
 
+import utilMDE.*;
+
 // This controls derivations which use the scalar as an index into the
 // sequence, such as getting the element at that index or a subsequence up
 // to that index.
@@ -13,56 +15,41 @@ public class SequenceScalarSubscriptFactory extends BinaryDerivationFactory {
   //   var_info2 is the scalar
 
   public BinaryDerivation[] instantiate(VarInfo vi1, VarInfo vi2) {
-    BinaryDerivation[] result = new BinaryDerivation[4];
-    result[0] = new SequenceScalarSubscript(vi1, vi2, false);
-    result[1] = new SequenceScalarSubscript(vi1, vi2, true);
-    result[0] = new SequenceScalarSubsequence(vi1, vi2, false);
-    result[1] = new SequenceScalarSubsequence(vi1, vi2, true);
-    return result;
-  }
-
-  public boolean applicable(VarInfo vi1, VarInfo vi2) {
     // This isn't the very most efficient way to do this, but at least it's
     // comprehensible.
-    VarInfo seqvi;
-    VarInfo sclvi;
+    VarInfo seqvar;
+    VarInfo sclvar;
 
-    if (vi1.rep_type.isArray() && (vi2.rep_type == ProglangType.INT)) {
-      seqvi = vi1;
-      sclvi = vi2;
-    } else if (vi2.rep_type.isArray() && (vi1.rep_type == ProglangType.INT)) {
-      seqvi = vi2;
-      sclvi = vi1;
+    if (vi1.rep_type.isArray() && (vi2.rep_type.equals(ProglangType.INT))) {
+      seqvar = vi1;
+      sclvar = vi2;
+    } else if (vi2.rep_type.isArray() && (vi1.rep_type.equals(ProglangType.INT))) {
+      seqvar = vi2;
+      sclvar = vi1;
     } else {
-      return false;
+      return null;
     }
 
     // I need to incorporate all this code eventually.
 
-    // seq_info = var_infos[seqidx]
-    // scl_info = var_infos[sclidx]
-    // seq_name = seq_info.name
-    // scl_name = scl_info.name
-    // scl_inv = scl_info.invariant
-    // seq_size_idx = seq_info.derived_len
+    // For now, do nothing if the sequence is itself derived.
+    if (seqvar.derived != null)
+      return null;
+    // For now, do nothing if the scalar is itself derived.
+    if (sclvar.derived != null)
+      return null;
 
-    // ## This makes absoulely no sense; I've left it commented out only
-    // ## so I don't get tempted to do something so silly again.
-    // # # Do nothing if the size is known (there's some other var practically
-    // # # equal to the size).
-    // # if seq_size_idx == "known_var":
-    // #     return
+    VarInfo seqsize = seqvar.sequenceSize();
+    // System.out.println("BinaryDerivation.instantiate: sclvar=" + sclvar.name
+    //                    + ", sclvar_rep=" + sclvar.canonicalRep().name
+    //                    + ", seqsize=" + seqsize.name
+    //                    + ", seqsize_rep=" + seqsize.canonicalRep().name);
+    if (sclvar.canonicalRep() == seqsize.canonicalRep())
+      return null;
 
-    // # For now, do nothing if the scalar is itself derived.
-    // if scl_info.is_derived:
-    //     return
-    // # For now, do nothing if the sequence is itself derived.
-    // if seq_info.is_derived:
-    //     return
+    // Find an IntComparison relationship over the two variables, if possible.
 
-    // # Do nothing if this scalar is actually the size of this sequence
-    // if seq_size_idx == sclidx:
-    //     return
+
     // # Another check for scalar being the size of this sequence: sclidx may
     // # not be canonical, but seq_size_idx certainly is, because
     // # we don't call the introduction functions with non-canonical arguments.
@@ -70,11 +57,6 @@ public class SequenceScalarSubscriptFactory extends BinaryDerivationFactory {
     // if seq_size_idx != "known_var":
     //     if sclidx == var_infos[seq_size_idx].canonical_var():
     // 	return
-
-    // #     if seq_size_idx == "no_var":
-    // #         print "sequence %s (size: no_var) and scalar %s (index: %d) unrelated" % (seq_name, scl_name, sclidx)
-    // #     else:
-    // #         print "sequence %s (size: %s, size index = %s) and scalar %s (index: %d) unrelated" % (seq_name, var_infos[seq_size_idx].name, seq_size_idx, scl_name, sclidx)
 
     // if not lackwit_types_compatible(scl_info.name, scl_info.lackwit_type,
     // 				"%s-index%d" % (seq_info.name, 1),
@@ -94,8 +76,14 @@ public class SequenceScalarSubscriptFactory extends BinaryDerivationFactory {
     //     return
 
 
-    // should check varcomparability here
-    return true;
+    // End of applicability tests; now actually create the variables
+
+    BinaryDerivation[] result = new BinaryDerivation[4];
+    result[0] = new SequenceScalarSubscript(seqvar, sclvar, false);
+    result[1] = new SequenceScalarSubscript(seqvar, sclvar, true);
+    result[2] = new SequenceScalarSubsequence(seqvar, sclvar, false);
+    result[3] = new SequenceScalarSubsequence(seqvar, sclvar, true);
+    return result;
   }
 
 }

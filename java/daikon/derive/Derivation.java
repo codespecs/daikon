@@ -21,16 +21,18 @@ public interface Derivation {
 
   public abstract ValueAndModified computeValueAndModified(ValueTuple vt);
 
-  public abstract VarInfo makeVarInfo();
+  // Same implementation in all subclasses, but I can't give it here
+  // in an interface.
+  public abstract VarInfo getVarInfo();
 
-  // // I guess this makes a new VarInfo which is just a slice.  (What is the
-  // // point of that??)
-  // public abstract VarInfo makeVarInfo(Ppt ppt_);
+  // // Returns true if the variables from which this one was derived are all
+  // // non-canonical (which makes this derived variable uninteresting).  We
+  // // might not have been able to know before performing the derivation that
+  // // this would be the case -- for instance, when deriving before any
+  // // values are seen.  [So don't do that!]
+  // public abstract boolean isDerivedFromNonCanonical();
 
-  // Returns true if the variables from which this one was derived are all
-  // non-canonical (which makes this derived variable uninteresting).  We
-  // might not have been able to know before performing the derivation that
-  // this would be the case -- for instance, when deriving before any
-  // values are seen.
-  public abstract boolean isDerivedFromNonCanonical();
+  // This depth counts this as well as the depths of its bases.
+  public abstract int derivedDepth();
+
 }

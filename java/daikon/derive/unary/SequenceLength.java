@@ -1,6 +1,8 @@
 package daikon.derive.unary;
 import daikon.*;
 import daikon.derive.*;
+import daikon.derive.binary.*;
+import utilMDE.*;
 
 // originally from pass1.
 public class SequenceLength extends UnaryDerivation {
@@ -12,6 +14,11 @@ public class SequenceLength extends UnaryDerivation {
   public static boolean applicable(VarInfo vi) {
     if (!vi.rep_type.isArray())
       return false;
+    if (vi.derived != null) {
+      Assert.assert(vi.derived instanceof SequenceScalarSubsequence);
+      return false;
+    }
+
     return true;
   }
 
@@ -34,21 +41,12 @@ public class SequenceLength extends UnaryDerivation {
     }
   }
 
-  VarInfo this_var_info;
-
-  public VarInfo makeVarInfo() {
-    if (this_var_info != null)
-      return this_var_info;
-
+  protected VarInfo makeVarInfo() {
     String name = "size(" + var_info.name + ")";
     ProglangType ptype = ProglangType.INT;
     ProglangType rtype = ProglangType.INT;
     ExplicitVarComparability comp = var_info.comparability.indexType(0);
-    this_var_info = new VarInfo(name, ptype, rtype, comp);
-
-    var_info.derivees.add(this);
-    this_var_info.derived = this;
-    return this_var_info;
+    return new VarInfo(name, ptype, rtype, comp);
   }
 
 }

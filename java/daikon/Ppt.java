@@ -6,6 +6,7 @@ package daikon;
 
 import java.util.*;
 
+import utilMDE.*;
 
 
 // Types of Ppt (program point) objects:
@@ -54,9 +55,20 @@ public abstract class Ppt {
 
   /** Add a new derived Ppt. */
   void addView(Ppt slice) {
-    // views.put(slice, null);
-    views.add(slice);
+    Vector slices = new Vector(1);
+    slices.add(slice);
+    addViews(slices);
   }
+  /** This may be more efficient than repeated calls to addView. */
+  abstract void addViews(Vector slices);
+
+
+  abstract void removeView(Ppt slice);
+  // A reasonable default implementation:
+  // {
+  //   boolean removed = views.remove(slice);
+  //   Assert.assert(removed);
+  // }
 
   /** Number of samples, not including missing values. */
   public abstract int num_samples();

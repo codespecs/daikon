@@ -1,6 +1,12 @@
 package daikon.derive.unary;
 import daikon.*;
 import daikon.derive.*;
+import daikon.derive.binary.*;
+import utilMDE.*;
+
+// This represents a sequence element at a particular offset (such as
+// first, second, penultimate, last).  I should probably find a better
+// name.
 
 // I need to turn this into SequenceExtrema or some such.
 
@@ -26,6 +32,11 @@ public class SequenceExtremum extends UnaryDerivation {
   public static boolean applicable(VarInfo vi) {
     if (!vi.rep_type.isArray())
       return false;
+    if (vi.derived != null) {
+      Assert.assert(vi.derived instanceof SequenceScalarSubsequence);
+      return false;
+    }
+
     // if (vi.is_always_missing_or_null_or_length_0())
     //   return false;
     return true;
@@ -53,23 +64,12 @@ public class SequenceExtremum extends UnaryDerivation {
     }
   }
 
-  VarInfo this_var_info;
-
-  public VarInfo makeVarInfo() {
-    if (this_var_info != null)
-      return this_var_info;
-
+  protected VarInfo makeVarInfo() {
     String name = var_info.name + "[" + index + "]";
     ProglangType ptype = ProglangType.INT;
     ProglangType rtype = ProglangType.INT;
     ExplicitVarComparability comp = var_info.comparability.elementType();
-    this_var_info = new VarInfo(name, ptype, rtype, comp);
-
-    // Is this appropriate?  Perhaps it should be done elsewhere, more
-    // centrally.
-    var_info.derivees.add(this);
-    this_var_info.derived = this;
-    return this_var_info;
+    return new VarInfo(name, ptype, rtype, comp);
   }
 
 }

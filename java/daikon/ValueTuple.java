@@ -205,6 +205,8 @@ public class ValueTuple {
       ValueAndModified vm = deriv.computeValueAndModified(this);
       new_vals[i+old_len] = vm.value;
       new_mods[i+old_len] = vm.modified;
+      if (vm == ValueAndModified.MISSING)
+        deriv.getVarInfo().canBeMissing = true;
     }
     vals = ArraysMDE.intern(new_vals);
     mods = ArraysMDE.intern(new_mods);

@@ -5,11 +5,10 @@ import daikon.*;
 public class SequenceLengthFactory extends UnaryDerivationFactory {
 
   public UnaryDerivation[] instantiate(VarInfo vi) {
-    return new UnaryDerivation[] { new SequenceLength(vi) };
-  }
+    if (! SequenceLength.applicable(vi))
+      return null;
 
-  public boolean applicable(VarInfo vi) {
-    return SequenceLength.applicable(vi);
+    return new UnaryDerivation[] { new SequenceLength(vi) };
   }
 
 }

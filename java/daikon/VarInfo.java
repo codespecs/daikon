@@ -1,6 +1,8 @@
 package daikon;
 
 import daikon.derive.*;
+import daikon.derive.unary.*;
+import daikon.derive.binary.*;
 import daikon.inv.*;
 import utilMDE.*;
 
@@ -27,8 +29,11 @@ public class VarInfo {
   public Derivation derived;	// whether (and how) derived
   public Vector derivees;	// vector of Derivation objects
 
-  // This needs to get set somehow
   Ppt ppt;
+
+  // Use the simpler canBeMissing instead
+  // PptSliceGeneric ppt_unary;    // For unary invariants over this variable
+  boolean canBeMissing = false;
 
   // To find the invariant over a pair of variables, do a double-dispatch:
   // first look up the "invariants" field of one of the variables, then
@@ -43,13 +48,9 @@ public class VarInfo {
   // a set of variables, return a list of all their micro-invariants,
   // possibly partially ordered according to implication.]
 
-  // Perhaps it would be better (more efficient) to just point at the
-  // representative object.  This does make printing a touch easier.
-  // Public temporarily, for debugging (and to let
-  // PptTopLevel.computeCanonical set them).
-  public Vector equal_to;		// list of other variables equal to this one
-				// Do I want this?
-  public boolean canonical;    // private so clients will use isCanonical()
+  private VarInfo equal_to;      // the canonical representative to which
+                                // this variable is equal; points to itself
+                                // if it is canonical.
 
   // list of indices of equal variables;
   //   could be derived from invariants
@@ -70,10 +71,6 @@ public class VarInfo {
     // // look up the other variable in that map.
     // self.invariant = None
     // self.invariants = {}	// map from indices to multiple-arity invariants
-    // self.equal_to = []        // list of indices of equal variables;
-    // 				//   could be derived from invariants
-    // 				//   by checking for inv.comparison == "="
-    // 				//   the variable itself is not on this list
   }
 
   public VarInfo(String name_, ProglangType type_, ProglangType rep_type_, ExplicitVarComparability comparability_, Object constant_value_) {
@@ -91,7 +88,7 @@ public class VarInfo {
     varinfo_index = -1;
 
     derivees = new Vector(3);
-    // Don't set equal_to or canonical yet; leave it null until it's set.
+    // Don't set equal_to yet; leave it null until it's set.
     // equal_to = new Vector(3);
   }
 
@@ -134,6 +131,14 @@ public class VarInfo {
     return (derived != null);
   }
 
+  public int derivedDepth() {
+    if (derived == null)
+      return 0;
+    else
+      return derived.derivedDepth();
+  }
+
+
   public int getModified(ValueTuple vt) {
     if (constant_value != null)
       return ValueTuple.UNMODIFIED;
@@ -151,7 +156,13 @@ public class VarInfo {
       return vt.getValue(value_index);
   }
   public int getIntValue(ValueTuple vt) {
-    return ((Integer)getValue(vt)).intValue();
+    Object raw = getValue(vt);
+    if (raw == null)
+      // Perhaps use some distinguished value here, so
+      // that I have some indication when things are going wrong.
+      // return 0;
+      return 222222;
+    return ((Integer)raw).intValue();
   }
 
   static class usesVarFilter implements Filter {
@@ -184,40 +195,96 @@ public class VarInfo {
   // any more values come in, then the equal_to slot should probably be
   // reset to null so that whether the variable is canonical is recomputed.
   public boolean isCanonical() {
-    Assert.assert(equal_to != null);
-    return canonical;
-
-    /// The above is adequate, if PptTopLevel.computeCanonical() has been called.
-    // // This is the wrong approach (too inefficient).  If equal_to isn't
-    // // set, then we should compute the equal_to for all variables at the
-    // // PptTopLevel, simultaneously.
-    // equal_to = new Vector();
-    // int min_index = varinfo_index;
-    // for (Iterator equal_invs = new UtilMDE.FilteredIterator(invariants(), IsEquality.it) ; equal_invs.hasNext() ; ) {
-    //   Comparison inv = (Comparison) equal_invs.next();
-    //   Assert.assert(inv.ppt.var_infos.length == 2);
-    //   // we know that var_infos[0] has a lower index than var_infos[1]
-    //   Assert.assert(inv.var1().varinfo_index
-    //                 < inv.var2().varinfo_index);
-    //   min_index = Math.min(min_index, inv.var1().varinfo_index);
-    // }
-    // equal_to.trimToSize();
-    // canonical = (min_index == varinfo_index);
-    // return canonical;
+    if (equal_to == null)
+      computeCanonical();
+    return (equal_to == this);
   }
 
-  /**
-   * Returns non-nil if this variable is derived from non-canonical variables.
-   * There might be other reasons for a variable never to appear, also;
-   * I will add them as I discover them.
-   */
-  public boolean isVacuous() {
-    if (! isDerived())
-      return false;
-    if (derived.isDerivedFromNonCanonical())
-      return true;
-    return false;
+  // Canonical representative that's equal to this variable.
+  public VarInfo canonicalRep() {
+    if (equal_to == null)
+      computeCanonical();
+    return equal_to;
   }
+
+  public Vector equalTo() {
+    // should only call this for canonical variables
+    Assert.assert(isCanonical());
+
+    Vector result = new Vector();
+
+    VarInfo[] vis = ppt.var_infos;
+    for (int i=0; i<vis.length; i++) {
+      if (i == varinfo_index)
+        continue;
+      if (vis[i].equal_to == this)
+        result.add(vis[i]);
+    }
+
+    return result;
+
+  }
+
+  // A bit inefficient (it would be better to compute them all at once),
+  // but so be it.  I could change this later.
+  public void computeCanonical() {
+    Assert.assert(equal_to == null);
+
+    // System.out.println("computeCanonical(" + name + ")");
+
+    Vector noncanonical_equal = new Vector(3);
+
+    for (Iterator equal_invs = new UtilMDE.FilteredIterator(invariants(), IsEquality.it) ; equal_invs.hasNext() ; ) {
+      Comparison inv = (Comparison) equal_invs.next();
+      VarInfo vi1 = inv.var1();
+      VarInfo vi2 = inv.var2();
+      Assert.assert((vi1 == this) || (vi2 == this));
+      VarInfo other = (vi1 == this) ? vi2 : vi1;
+      if (other.equal_to == null) {
+        noncanonical_equal.add(other);
+      } else {
+        VarInfo rep = other.equal_to;
+        this.equal_to = rep;
+        for (int i=0; i<noncanonical_equal.size(); i++)
+          ((VarInfo)noncanonical_equal.elementAt(i)).equal_to = rep;
+        return;
+      }
+    }
+    if (noncanonical_equal.size() == 0) {
+      // System.out.println("Found no other");
+      this.equal_to = this;
+      return;
+    }
+    int min_index = this.varinfo_index;
+    for (int i=0; i<noncanonical_equal.size(); i++) {
+      VarInfo other = (VarInfo)noncanonical_equal.elementAt(i);
+      min_index = Math.min(min_index, other.varinfo_index);
+    }
+    VarInfo rep = ppt.var_infos[min_index];
+    this.equal_to = rep;
+    for (int i=0; i<noncanonical_equal.size(); i++) {
+      VarInfo other = (VarInfo)noncanonical_equal.elementAt(i);
+      other.equal_to = rep;
+    }
+  }
+
+
+  // Shouldn't have any vacuous variables, so comment this out.
+  // /**
+  //  * Returns non-nil if this variable is derived from non-canonical variables.
+  //  * (We didn't konw at the time we derived the variables that the derivees
+  //  * were non-canonical.)
+  //  * There might be other reasons for a variable never to appear, also;
+  //  * I will add them as I discover them.
+  //  */
+  // public boolean isVacuous() {
+  //   if (! isDerived())
+  //     return false;
+  //   // This shouldn't be happening, so comment it out to see the result.
+  //   // if (derived.isDerivedFromNonCanonical())
+  //   //   return true;
+  //   return false;
+  // }
 
   static boolean compatible(VarInfo[] vis1, VarInfo[] vis2) {
     // This just checks that the names are the same.
@@ -236,6 +303,57 @@ public class VarInfo {
     if (name != other.name)
       return false;
     return true;
+  }
+
+  // Returns the VarInfo for the sequence from which this was derived,
+  // or null if this wasn't derived from a sequence.
+  public VarInfo isObviousSequenceMember() {
+    if (derived == null)
+      return null;
+
+    if (derived instanceof SequenceScalarSubscript) {
+      SequenceScalarSubscript sss = (SequenceScalarSubscript) derived;
+      return sss.seqvar();
+    } else if (derived instanceof SequenceExtremum) {
+      SequenceExtremum se = (SequenceExtremum) derived;
+      return se.seqvar();
+    } else if (derived instanceof SequenceMax) {
+      SequenceMax sm = (SequenceMax) derived;
+      return sm.var_info;
+    } else if (derived instanceof SequenceMin) {
+      SequenceMin sm = (SequenceMin) derived;
+      return sm.var_info;
+    } else {
+      return null;
+    }
+  }
+
+  public VarInfo isObviousSubSequenceOf() {
+    // System.out.println("isObviousSubSequenceOf(" + name + "); derived=" + derived);
+
+    if (derived == null)
+      return null;
+
+    if (derived instanceof SequenceScalarSubsequence) {
+      SequenceScalarSubsequence sss = (SequenceScalarSubsequence) derived;
+      // System.out.println("isObviousSubSequenceOf returning " + sss.seqvar().name);
+      return sss.seqvar();
+    } else {
+      return null;
+    }
+  }
+
+  public VarInfo sequenceSize() {
+    Assert.assert(rep_type.isArray());
+    // we know the size follows the variable itself in the list
+    VarInfo[] vis = ppt.var_infos;
+    for (int i=varinfo_index+1; i<vis.length; i++) {
+      VarInfo vi = vis[i];
+      if ((vi.derived instanceof SequenceLength)
+          && (((SequenceLength) vi.derived).var_info == this))
+        return vi;
+    }
+    throw new Error("Couldn't find size");
   }
 
 }

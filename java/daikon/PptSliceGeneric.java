@@ -29,24 +29,19 @@ public class PptSliceGeneric extends PptSlice {
   public VarValues values_cache;
 
   PptSliceGeneric(Ppt parent_, VarInfo[] var_infos_) {
+    // super(parent_, var_infos_);
     super(parent_, var_infos_);
     values_cache = new VarValues();
-    invs = new Invariants();
+    // System.out.println("Created PptSliceGeneric " + this.name);
+    invs = null;
+    // Ensure that the VarInfo objects are in order (and not duplicated).
+    for (int i=0; i<var_infos.length-1; i++)
+      Assert.assert(var_infos[i].varinfo_index < var_infos[i+1].varinfo_index);
 
-    if (arity == 1) {
-      SingleScalarFactory.instantiate(this);
-      SingleSequenceFactory.instantiate(this);
-    } else if (arity == 2) {
-      TwoScalarFactory.instantiate(this);
-      SequenceScalarFactory.instantiate(this);
-      TwoSequenceFactory.instantiate(this);
-    } else if (arity == 3) {
-      throw new Error("arity 3 not yet implemented");
-    } else {
-      throw new Error("bad arity");
-    }
-    // System.out.println("invs=" + invs + "; this.invs=" + this.invs);
-    // System.out.println("Newly created PptSliceGeneric " + name + " = " + this + " has " + invs.size() + " invariants in " + invs);
+    // if (arity == 1)
+    //   var_infos[0].ppt_unary = this;
+
+    instantiate_invariants();
   }
 
   PptSliceGeneric(Ppt parent_, VarInfo var_info_) {
@@ -61,9 +56,32 @@ public class PptSliceGeneric extends PptSlice {
     this(parent_, new VarInfo[] { var_info1_, var_info2_, var_info3_ });
   }
 
-  /** Add a new derived Ppt. */
-  void addView(Ppt slice) {
+  void instantiate_invariants() {
+    // Instantiate invariants
+    invs = new Invariants();
+    if (arity == 1) {
+      SingleScalarFactory.instantiate(this);
+      SingleSequenceFactory.instantiate(this);
+    } else if (arity == 2) {
+      TwoScalarFactory.instantiate(this);
+      SequenceScalarFactory.instantiate(this);
+      TwoSequenceFactory.instantiate(this);
+    } else if (arity == 3) {
+      throw new Error("arity 3 not yet implemented");
+    } else {
+      throw new Error("bad arity");
+    }
+    // System.out.println("invs=" + invs + "; this.invs=" + this.invs);
+    // System.out.println("Newly created PptSliceGeneric " + name + " = " + this + " has " + invs.size() + " invariants in " + invs);
+
+  }
+
+  void addViews(Vector slices) {
     throw new Error("Don't add views on a slice.");
+  }
+
+  void removeView(Ppt slice) {
+    throw new Error("Don't remove view from a slice.");
   }
 
   // These accessors are for abstract methods declared in Ppt
@@ -121,15 +139,19 @@ public class PptSliceGeneric extends PptSlice {
       if (vi.rep_type.isArray()) {
         for (int i=0; i<num_invs; i++) {
           SingleSequence inv = (SingleSequence)invs.elementAt(i);
-          int[] value = (int[])vi.getValue(full_vt);
           int mod = vi.getModified(full_vt);
+          if (mod == ValueTuple.MISSING)
+            continue;
+          int[] value = (int[])vi.getValue(full_vt);
           inv.add(value, mod, count);
         }
       } else {
         for (int i=0; i<num_invs; i++) {
           SingleScalar inv = (SingleScalar)invs.elementAt(i);
-          int value = vi.getIntValue(full_vt);
           int mod = vi.getModified(full_vt);
+          if (mod == ValueTuple.MISSING)
+            continue;
+          int value = vi.getIntValue(full_vt);
           inv.add(value, mod, count);
         }
       }
@@ -142,10 +164,14 @@ public class PptSliceGeneric extends PptSlice {
       if (num_arrays == 0) {
         for (int i=0; i<num_invs; i++) {
           TwoScalar inv = (TwoScalar)invs.elementAt(i);
-          int value1 = vi1.getIntValue(full_vt);
           int mod1 = vi1.getModified(full_vt);
-          int value2 = vi2.getIntValue(full_vt);
+          if (mod1 == ValueTuple.MISSING)
+            continue;
           int mod2 = vi2.getModified(full_vt);
+          if (mod2 == ValueTuple.MISSING)
+            continue;
+          int value1 = vi1.getIntValue(full_vt);
+          int value2 = vi2.getIntValue(full_vt);
           inv.add(value1, mod1, value2, mod2, count);
         }
       } else if (num_arrays == 1) {
@@ -165,20 +191,28 @@ public class PptSliceGeneric extends PptSlice {
           }
           for (int i=0; i<num_invs; i++) {
             SequenceScalar inv = (SequenceScalar)invs.elementAt(i);
-            int[] value1 = (int[])seqvi.getValue(full_vt);
             int mod1 = seqvi.getModified(full_vt);
-            int value2 = sclvi.getIntValue(full_vt);
+            if (mod1 == ValueTuple.MISSING)
+              continue;
             int mod2 = sclvi.getModified(full_vt);
+            if (mod2 == ValueTuple.MISSING)
+              continue;
+            int[] value1 = (int[])seqvi.getValue(full_vt);
+            int value2 = sclvi.getIntValue(full_vt);
             inv.add(value1, mod1, value2, mod2, count);
           }
         }
       } else if (num_arrays == 2) {
         for (int i=0; i<num_invs; i++) {
           TwoSequence inv = (TwoSequence)invs.elementAt(i);
-          int[] value1 = (int[])vi1.getValue(full_vt);
           int mod1 = vi1.getModified(full_vt);
-          int[] value2 = (int[])vi2.getValue(full_vt);
+          if (mod1 == ValueTuple.MISSING)
+            continue;
           int mod2 = vi2.getModified(full_vt);
+          if (mod2 == ValueTuple.MISSING)
+            continue;
+          int[] value1 = (int[])vi1.getValue(full_vt);
+          int[] value2 = (int[])vi2.getValue(full_vt);
           inv.add(value1, mod1, value2, mod2, count);
         }
       } else {
@@ -203,6 +237,11 @@ public class PptSliceGeneric extends PptSlice {
       throw new Error("bad arity " + arity);
     }
 
+    for (Iterator itor = invs.iterator() ; itor.hasNext() ; ) {
+      Invariant inv = (Invariant) itor.next();
+      if (inv.no_invariant)
+        itor.remove();
+    }
   }
 
   // void process() {

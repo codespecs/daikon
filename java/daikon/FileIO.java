@@ -271,11 +271,10 @@ class FileIO {
     //   ppt.add_fn_invocation_counts();
     // }
 
-    for (Iterator itor = all_ppts.values().iterator() ; itor.hasNext() ; ) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
-      ppt.derive_all();
-      ppt.add_views();
-    }
+//     for (Iterator itor = all_ppts.values().iterator() ; itor.hasNext() ; ) {
+//       PptTopLevel ppt = (PptTopLevel) itor.next();
+//       ppt.initial_processing();
+//     }
 
 
   }
@@ -411,7 +410,8 @@ class FileIO {
 	e.printStackTrace();
 	throw new Error(e.toString());
       }
-    System.out.println("Read " + filenames.length + " data trace files");
+    System.out.println("Read " + filenames.length + " data trace file"
+                       + ((filenames.length == 0) ? "" : "s"));
   }
 
   /**
@@ -494,8 +494,13 @@ class FileIO {
 	String mod_string = line;
 	int mod = ValueTuple.parseModified(line);
 	mods[val_index] = mod;
-	vals[val_index] = (ValueTuple.modIsMissing(mod) ? null
-		                    : vi.rep_type.parse_value(value_rep));
+        if (ValueTuple.modIsMissing(mod)) {
+          vals[val_index] = null;
+          // This might not be the correct index to use
+          vis[val_index].canBeMissing = true;
+        } else {
+          vals[val_index] = vi.rep_type.parse_value(value_rep);
+        }
 	val_index++;
       }
 

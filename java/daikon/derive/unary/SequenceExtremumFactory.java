@@ -5,7 +5,12 @@ import daikon.*;
 public class SequenceExtremumFactory extends UnaryDerivationFactory {
 
   public UnaryDerivation[] instantiate(VarInfo vi) {
+    // System.out.println("SequenceExtremumFactory.instantiate(" + vi + ")");
     // return (UnaryDerivation)new SequenceFirst(vi);
+
+    if (!SequenceExtremum.applicable(vi))
+      return null;
+
     UnaryDerivation[] result = new UnaryDerivation[4];
     for (int i=0; i<4; i++)
       // the index is 0, 1, -1, or -2
@@ -48,9 +53,5 @@ public class SequenceExtremumFactory extends UnaryDerivationFactory {
     // 		    else:
     // 			elt_val = seq[i]
     // 		    new_values.append((elt_val,seq_mod))
-
-  public boolean applicable(VarInfo vi) {
-    return SequenceExtremum.applicable(vi);
-  }
 
 }

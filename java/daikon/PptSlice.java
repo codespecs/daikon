@@ -33,6 +33,11 @@ public abstract class PptSlice extends Ppt {
     var_infos = var_infos_;
     // System.out.println("in PptSlice(): this=" + this);
     // System.out.println("var_infos = " + var_infos + " = " + this.var_infos);
+    // for (int i=0; i<var_infos.length; i++) {
+    //   System.out.println("  var_infos[" + i + "] = " + var_infos[i]);
+    // }
+    for (int i=0; i<var_infos.length-1; i++)
+      Assert.assert(var_infos[i].varinfo_index < var_infos[i+1].varinfo_index);
     name = parent.name + varNames();
     arity = var_infos.length;
     value_indices = new int[arity];
@@ -40,11 +45,23 @@ public abstract class PptSlice extends Ppt {
       value_indices[i] = var_infos[i].value_index;
     // values_cache = new HashMap();
     invs = new Invariants();
-    parent.addView(this);
+    // Don't do this; make someone else do it.
+    // In particular, I want the subclass constructor to get called
+    // before this is.
+    // parent.addView(this);
   }
 
   public boolean usesVar(VarInfo vi) {
-    return (ArraysMDE.indexOfEq(var_infos, vi) != 0);
+    return (ArraysMDE.indexOfEq(var_infos, vi) != -1);
+  }
+
+  // I don't just use ppt.invs.remove because I want to take action
+  // if the vector becomes void.
+  public void removeInvariant(Invariant inv) {
+    boolean removed = invs.remove(inv);
+    Assert.assert(removed);
+    if (invs.size() == 0)
+      parent.removeView(this);
   }
 
 }

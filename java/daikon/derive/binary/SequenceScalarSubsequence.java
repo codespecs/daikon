@@ -3,10 +3,14 @@ package daikon.derive.binary;
 import daikon.*;
 import daikon.derive.*;
 
+import utilMDE.*;
+
 public class SequenceScalarSubsequence extends BinaryDerivation {
 
   // var_info1 is the sequence
   // var_info2 is the scalar
+  public VarInfo seqvar() { return var_info1; }
+  public VarInfo sclvar() { return var_info2; }
 
   private final int index_shift;
 
@@ -28,26 +32,29 @@ public class SequenceScalarSubsequence extends BinaryDerivation {
     Object val1 = var_info1.getValue(full_vt);
     if (val1 == null)
       return ValueAndModified.MISSING;
-    Object[] val1_array = (Object[])val1;
-    int val2 = var_info1.getIntValue(full_vt) + index_shift;
-    // if (val1_array.length <= val2)
-    //   return ValueAndModified.MISSING;
+    int[] val1_array = (int[]) val1;
+    int val2 = var_info2.getIntValue(full_vt);
+    // The length is one less than the value because the indices are
+    // inclusive, not exclusive.
+    int len = val2+1+index_shift;
+    if ((len < 0) || (len > val1_array.length))
+      return ValueAndModified.MISSING;
     int mod = (((mod1 == ValueTuple.UNMODIFIED)
 		&& (mod2 == ValueTuple.UNMODIFIED))
 	       ? ValueTuple.UNMODIFIED
 	       : ValueTuple.MODIFIED);
-    if (val2 >= val1_array.length)
+    // One could argue that if the index is greater than the length, one
+    // should just return the whole array; but I don't do that.
+    // // If the length is longer than the actual array, return the whole array.
+    // if (len >= val1_array.length)
+    //   return new ValueAndModified(val1, mod);
+    if (len == val1_array.length)
       return new ValueAndModified(val1, mod);
-    Object[] val = new Object[val2];
-    return new ValueAndModified(val, mod);
+    // System.out.println(getVarInfo().name + " for " + ArraysMDE.toString(val1_array) + ";" + val2 + " => " + ArraysMDE.toString(ArraysMDE.subarray(val1_array, 0, len)));
+    return new ValueAndModified(ArraysMDE.subarray(val1_array, 0, len), mod);
   }
 
-  VarInfo this_var_info;
-
-  public VarInfo makeVarInfo() {
-    if (this_var_info != null)
-      return this_var_info;
-
+  protected VarInfo makeVarInfo() {
     String index_shift_string = ((index_shift == 0)
 				 ? ""
 				 : ((index_shift < 0)

@@ -15,25 +15,27 @@ public abstract class BinaryDerivation implements Derivation {
 
   public abstract ValueAndModified computeValueAndModified(ValueTuple full_vt);
 
-  // We don't use this function any longer.
-  // This default version is likely to be overridden.
-  // public abstract Object computeModified(ValueTuple full_vt) {
-  //   int mod1 = var_info1.getModified(full_vt);
-  //   if (mod1 == ValueTuple.MISSING)
-  //     return mod1;
-  //   int mod2 = var_info2.getModified(full_vt);
-  //   if (mod2 == ValueTuple.MISSING)
-  //     return mod2;
-  //   if ((mod1 == ValueTuple.UNMODIFIED)
-  //       && (mod2 == ValueTuple.UNMODIFIED))
-  //     return mod1;
-  //   return ValueTuple.MODIFIED;
-  // }
-
-  public abstract VarInfo makeVarInfo();
-
-  public boolean isDerivedFromNonCanonical() {
-    return !(var_info1.isCanonical() || var_info2.isCanonical());
+  private VarInfo this_var_info;
+  public VarInfo getVarInfo() {
+    if (this_var_info == null) {
+      this_var_info = makeVarInfo();
+      this_var_info.derived = this;
+      var_info1.derivees.add(this);
+      var_info2.derivees.add(this);
+    }
+    return this_var_info;
   }
+
+  // This is in each class, but I can't have a private abstract method.
+  abstract protected VarInfo makeVarInfo();
+
+  public int derivedDepth() {
+    return 1 + Math.max(var_info1.derivedDepth(), var_info2.derivedDepth());
+  }
+
+  // public boolean isDerivedFromNonCanonical() {
+  //   // We insist that both are canonical, not just one.
+  //   return !(var_info1.isCanonical() && var_info2.isCanonical());
+  // }
 
 }

@@ -30,33 +30,29 @@ public class SequenceScalarSubscript extends BinaryDerivation {
     Object val1 = var_info1.getValue(full_vt);
     if (val1 == null)
       return ValueAndModified.MISSING;
-    Object[] val1_array = (Object[])val1;
-    int val2 = var_info1.getIntValue(full_vt) + index_shift;
-    if (val2 >= val1_array.length)
+    int[] val1_array = (int[]) val1;
+    int val2 = var_info2.getIntValue(full_vt) + index_shift;
+    if ((val2 < 0) || (val2 >= val1_array.length))
       return ValueAndModified.MISSING;
-    Object val = val1_array[val2];
+    int val = val1_array[val2];
     int mod = (((mod1 == ValueTuple.UNMODIFIED)
 		&& (mod2 == ValueTuple.UNMODIFIED))
 	       ? ValueTuple.UNMODIFIED
 	       : ValueTuple.MODIFIED);
-    return new ValueAndModified(val, mod);
+    return new ValueAndModified(new Integer(val), mod);
   }
 
-  VarInfo this_var_info;
-
-  public VarInfo makeVarInfo() {
-    if (this_var_info != null)
-      return this_var_info;
-
+  protected VarInfo makeVarInfo() {
     String index_shift_string = ((index_shift == 0)
 				 ? ""
 				 : ((index_shift < 0)
 				    ? Integer.toString(index_shift)
 				    : "+" + index_shift));
-    String name = var_info1.name
-      + "[" + var_info2.name + index_shift_string + "]";
-    ProglangType type = var_info1.type.elementType();
-    ProglangType rep_type = var_info1.rep_type.elementType();
+    VarInfo seqvar = seqvar();
+    String name = seqvar.name
+      + "[" + sclvar().name + index_shift_string + "]";
+    ProglangType type = seqvar.type.elementType();
+    ProglangType rep_type = seqvar.rep_type.elementType();
     ExplicitVarComparability compar = var_info1.comparability.elementType();
     return new VarInfo(name, type, rep_type, compar);
   }
