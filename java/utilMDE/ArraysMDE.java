@@ -831,7 +831,7 @@ public final class ArraysMDE {
 
 
   ///////////////////////////////////////////////////////////////////////////
-  /// Permutations
+  /// Arrays as functions of int->int
   ///
 
 
@@ -839,8 +839,8 @@ public final class ArraysMDE {
    * @return true iff all elements of a are in [0..a.length) and a
    * contains no duplicates.
    **/
-  public static boolean is_permutation(int[] a) {
-    // we expect to succeed so use as few loops as possible
+  public static boolean fn_is_permutation(int[] a) {
+    // In the common case we expect to succeed so use as few loops as possible
     boolean[] see = new boolean[a.length];
     for (int i=0; i<a.length; i++) {
       int n = a[i];
@@ -856,19 +856,56 @@ public final class ArraysMDE {
   }
 
   /**
+   * @return true iff no element of a maps to -1
+   **/
+  public static boolean fn_is_total(int[] a) {
+    return indexOf(a, -1) == -1; // not found
+  }
+
+  /**
    * @requires is_permutation(a)
    * @param a the input permutation
-   * @return a fresh array which is the inverse of the given perutation.
+   * @return fresh array which is the inverse of the given perutation.
    * @see is_permutation(int[])
    **/
-  public static int[] inverse(int[] a) {
-    int[] result = new int[a.length];
-    for (int i=0; i<a.length; i++) {
-      result[a[i]] = i;
+  public static int[] fn_inverse_permutation(int[] a) {
+    return fn_inverse(a, a.length);
+  }
+
+  /**
+   * @param a function from [0..a.length) to [0..arange)
+   * @return function from [0..arange) to [0..a.length) that is the
+   * inverse of a
+   **/
+  public static int[] fn_inverse(int[] a, int arange) {
+    int[] result = new int[arange];
+    Arrays.fill(result, -1);
+    for (int i=0; i < a.length; i++) {
+      int ai = a[i];
+      if (ai != -1) {
+	result[ai] = i;
+      }
     }
     return result;
   }
 
+  /**
+   * @param a function from [0..a.length) to [0..b.length)
+   * @param b function from [0..b.length) to range R
+   * @return function from [0..a.length) to range R that is the
+   * composition of a and b
+   **/
+  public static int[] fn_compose(int[] a, int[] b) {
+    int[] result = new int[a.length];
+    for (int i=0; i < a.length; i++) {
+      int inner = a[i];
+      if (inner == -1) {
+	result[i] = -1;
+      } else {
+	result[i] = b[inner];
+      }
+    }
+  }
 
   ///////////////////////////////////////////////////////////////////////////
   /// Array comparators
