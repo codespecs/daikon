@@ -20,7 +20,7 @@ public final class Daikon {
 
   public final static boolean disable_splitting = false;
 
-  public final static boolean disable_ternary_invariants = false;
+  public static boolean disable_ternary_invariants = false;
 
   // Change this at your peril; high costs in time and space for "false",
   // because so many more invariants get instantiated.
@@ -71,7 +71,7 @@ public final class Daikon {
   public static final int OUTPUT_STYLE_NORMAL = 0;
   public static final int OUTPUT_STYLE_ESC = 1;
   public static final int OUTPUT_STYLE_SIMPLIFY = 2;
-  public static final int OUTPUT_STYLE_IOA = 3;  
+  public static final int OUTPUT_STYLE_IOA = 3;
   public static int output_style = OUTPUT_STYLE_NORMAL;
   // public static int output_style = OUTPUT_STYLE_ESC;
   // public static int output_style = OUTPUT_STYLE_SIMPLIFY;
@@ -105,6 +105,7 @@ public final class Daikon {
   public static final String mem_stat_SWITCH = "mem_stat";
   public static final String simplify_output_SWITCH = "simplify_output";
   public static final String output_num_samples_SWITCH = "output_num_samples";
+  public static final String noternary_SWITCH = "noternary";
 
   static String usage =
     UtilMDE.join(new String[] {
@@ -147,6 +148,7 @@ public final class Daikon {
       new LongOpt(ioa_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(mem_stat_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(noternary_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
     };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:", longopts);
     int c;
@@ -216,6 +218,8 @@ public final class Daikon {
 	  memMonitorOK = true;
 	} else if (output_num_samples_SWITCH.equals(option_name)) {
 	  output_num_samples = true;
+	} else if (noternary_SWITCH.equals(option_name)) {
+	  disable_ternary_invariants = true;
 	} else {
 	  throw new RuntimeException("Unknown long option received: " + option_name);
 	}
@@ -331,7 +335,7 @@ public final class Daikon {
 
 	int num_derived_array_vars = ppt.num_array_vars() - num_array_vars;
 	int num_derived_scalar_vars = ppt.num_vars() - ppt.num_array_vars() - num_scalar_vars;
-	
+
 	if (no_text_output) {
 	  System.out.print("...");
 	  System.out.flush();
@@ -358,7 +362,7 @@ public final class Daikon {
             pcond.clear_view_caches();
           }
         }
-	
+
 	if (monitor!=null) {
 	  monitor.end_of_iteration(ppt.name, num_samples, num_static_vars, num_orig_vars, num_scalar_vars, num_array_vars, num_derived_scalar_vars, num_derived_array_vars);
 	}
@@ -369,7 +373,7 @@ public final class Daikon {
 	}
       }
     }
-    
+
     if (monitor!=null) {
       monitor.stop();
     }
