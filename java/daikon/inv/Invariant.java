@@ -622,7 +622,7 @@ public abstract class Invariant implements java.io.Serializable {
       return impl.predicate.isWorthPrinting() && impl.consequent.isWorthPrinting();
     }
 
-    if (true || debugIsWorthPrinting.isDebugEnabled()) {
+    if (debugIsWorthPrinting.isDebugEnabled()) {
       System.out.println(isWorthPrinting_sansControlledCheck_debug());
     }
     boolean result
