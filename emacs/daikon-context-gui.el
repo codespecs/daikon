@@ -50,13 +50,18 @@ If nil, taken to be directory in which Daikon Context GUI is launched."
 
 (defun daikon-context-gui-start-gui ()
   "Start up the Daikon Context GUI."
-  (if (not (eq major-mode 'jde-mode))
-      (jde-mode))
+  ;(if (not (eq major-mode 'jde-mode))
+  ;    (jde-mode))
   (when (not daikon-context-gui-started)
     (setq startup-path (expand-file-name (or daikon-context-gui-project-root-directory
 					     default-directory)))
-    (bsh-eval (concat "daikon.gui.contextGUI.InvariantInteraction.startGui(\"" startup-path
-		      "\");"))
+    (case major-mode
+     ((jde-mode) ; used to say java-mode here, too -- possible?
+      (bsh-eval (concat "daikon.gui.contextGUI.InvariantInteraction.startGui(\"" startup-path
+		      "\");")))
+     ((c-mode)
+      (bsh-eval (concat "daikon.gui.contextGUI.InvariantInteraction.startGui(\"" startup-path
+		      "\",true);"))))
     (setq daikon-context-gui-started t)))
 
 (defun daikon-context-gui-end-gui ()
@@ -68,14 +73,19 @@ If nil, taken to be directory in which Daikon Context GUI is launched."
 ;;; Borrowed in part from jde-which-method-update.
 (defun daikon-context-gui-update ()
   "Update the Daikon Context GUI with the current class/method, or just class if no method."
-  (when (memq major-mode '(jde-mode java-mode))
-    ;(when (not daikon-context-gui) (daikon-context-gui))
-    (setq class-method-args (daikon-context-gui-get-method-at-point))
-    ;;(message "daikon-context-gui-update class-method-args = %s" class-method-args)
-    (if class-method-args
-      (daikon-context-gui-update-with-method class-method-args)
-    (daikon-context-gui-update-with-class
-      (car (jde-parse-get-innermost-class-at-point))))))
+  (case major-mode
+   ((jde-mode) ; used to say java-mode here, too -- possible?
+    (let ((class-method-args (daikon-context-gui-get-method-at-point)))
+      ;;(message "daikon-context-gui-update class-method-args = %s" class-method-args)
+      (if class-method-args
+	  (daikon-context-gui-update-with-method class-method-args)
+	(daikon-context-gui-update-with-class
+	  (car (jde-parse-get-innermost-class-at-point))))))
+   ((c-mode)
+    (daikon-context-gui-update-with-method
+      (list "std" (c-name-of-enclosing-function) nil)))  ; 'class' always "std"
+   (otherwise ; whenever you're in another buffer
+    nil)))
 
 ;; Sends the class information to the Context GUI for display
 (defun daikon-context-gui-update-with-class (class)
@@ -191,5 +201,34 @@ This minor mode shows Daikon invariants for Java in a GUI.
 	(cons '(daikon-context-gui " Daikon") minor-mode-alist))
   (setq minor-mode-map-alist
 	(cons (cons 'daikon-context-gui daikon-context-gui-map) minor-mode-map-alist)))
+
+;; Arguments to the c-*-of-* functions seem to be required by Emacs 20.
+(defun c-name-of-enclosing-function ()
+  "Return the name of the function containing point, or nil
+if point is not in a function."
+  (save-excursion
+    (beginning-of-line)
+    (let ((orig-point (point)))
+      (c-end-of-defun 1)
+      (c-beginning-of-defun 1)
+      (if (= (point) (point-min))
+          nil
+        (let ((bod (point)))            ; beginning of defun
+          (c-beginning-of-statement 1)
+          (if (< orig-point (point))
+              nil
+            (if (re-search-forward "\\b\\([_A-Za-z0-9]+\\)\\s-*(" bod t)
+                (match-string 1)
+              (progn
+                (message "c-name-of-enclosing-function got confused")
+                nil))))))))
+
+;; Here is some test code.
+(defun message-c-name-of-enclosing-function ()
+  (if (eq major-mode 'c-mode)
+      (message "%s" (c-name-of-enclosing-function))))
+;; (add-hook 'post-command-hook 'message-c-name-of-enclosing-function)
+;; ;; To undo:
+;; (remove-hook 'post-command-hook 'message-c-name-of-enclosing-function)
 
 (provide 'daikon-context-gui)
