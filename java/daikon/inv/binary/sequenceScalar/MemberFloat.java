@@ -96,7 +96,7 @@ public final class MemberFloat
       }
     }
     */ // [INCR]
-    return false;
+    return isObviousMember (sclvar, seqvar);
   }
 
   public static boolean isObviousMember(VarInfo sclvar, VarInfo seqvar) {
@@ -351,7 +351,7 @@ public final class MemberFloat
   }
 
   /**
-   * Suppression in the form of A subset B => A[i] subset B.  Note
+   * Suppression in the form of A subset B => A[i] member B.  Note
    * that A[i] could also be max(A), etc.
    **/
   public static class MemberSuppressionFactory1 extends SuppressionFactory {
@@ -392,6 +392,9 @@ public final class MemberFloat
       template.resetResults();
       template.varInfos[0][0] = sclSequence;
       template.varInfos[0][1] =  seqvar;
+      // Shouldn't happen, because isObvious should
+      // have handled it, but in case it does, no big deal, just say no suppression
+      if (sclSequence == seqvar) return null;
       {
         template.invTypes[0] = PairwiseIntComparison.class;
         SuppressionLink sl = byTemplate (template, inv);
