@@ -11,6 +11,10 @@ versions as the user manual.
 
 ===========================================================================
 
+Improved the manual's description of the output formats that Daikon can use
+when printing invariants; the formats are Daikon, DBC, ESC, IOA, Java, JML,
+Simplify, and repair.
+
 Added the "--no_reflection" option to Annotate. If given, Daikon does
 not use reflection to find information about the classes being
 instrumented. The downside is that no "also" tags are output under the

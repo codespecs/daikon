@@ -193,9 +193,9 @@ Daikon output
 
 Interpreting Daikon output
 
+* Invariant syntax::            
 * Program points::              
 * Variable names::              
-* Invariant syntax::            
 * Invariant list::              
 
 Variable names
@@ -2010,11 +2010,14 @@ This section describes the optional flags.
 
 @c Unfortunately, @option{} adds quotes in the Info and printed output
 @c which is not necessary in a table.  However, @t and @code compress
-@c the two hyphens to 1 in Info and HTML output, which is even worse.
+@c the two hyphens to one in Info and HTML output, which is even worse.
 @table @option
 @item -h
 @item --help
 Print usage message.
+
+@item --format @var{name}
+Produce output in the given format.  See @ref{Invariant syntax}.
 
 @item --ppt @var{ppt_regexp}
 Only process program points whose names match the regular expression,
@@ -2129,41 +2132,6 @@ CLASS program point is considered to hold true on the ENTER program
 point.  With no hierarchy, each program point is treated
 independently.  This is for using Daikon on applications that do not
 have a concept of hierarchy.  
-
-@item --esc_output
-Write output in ESC-like format.
-
-@item --simplify_output
-Write output in Simplify format.
-
-@item --ioa_output
-Write output in IOA format.
-
-@item --java_output
-
-Write output as Java expressions. This means that each invariant would
-(with some exceptions; see next paragraph) be a valid Java expression,
-if inserted at the correct program point: right after method entry
-(for method entry invariants), or right before method exit (for
-method exit invariants), or anywhere in the code (for object
-invariants).
-
-There are two exceptions. Method exit invariants that refer to
-prestate, such as @code{x == old(x) + 1}, are output with the tag
-@code{\old} surrounding the prestate expression (e.g. @code{x ==
-\old(x) + 1}. Method exit invariants that refer to the return value of
-the method, such as @code{return == x + y}, are output with the tag
-@code{\result} in place of the return value (e.g. @code{\result == x + y}).
-These expression are obviously not valid Java code.
-
-The Java output format makes extensive use of helper methods defined
-in class @code{daikon.Quant}, which provides methods for
-quantification and set comprehension over Java collections. For
-example, @code{daikon.Quant.eltsEqual(int[] seq1, int elt)} checks
-whether all elements in @code{seq1} are equal to @code{elt}. For
-detailed meanings of all methods in the @code{Quant} class, see the
-Javadoc documentation for the class (or look inside
-@file{daikon/QuantBody.java}).
 
 @item --output_num_samples
 @cindex samples breakdown output
@@ -2374,13 +2342,144 @@ PrintInvariants (@pxref{Printing invariants}) or Diff (@pxref{Invariant
 Diff}) programs to print the results.)
 
 @menu
+* Invariant syntax::            
 * Program points::              
 * Variable names::              
-* Invariant syntax::            
 * Invariant list::              
 @end menu
 
-@node    Program points, Variable names, Interpreting output, Interpreting output
+
+@node    Invariant syntax, Program points, Interpreting output, Interpreting output
+@subsection Invariant syntax
+
+Daikon can produce output in a variety of formats.  Each of the format
+names can be specified as an argument to the @option{--format} argument
+of Daikon (@pxref{Command line options}), PrintInvariants
+(@pxref{Printing invariants}), and Annotate (@pxref{Annotate}).
+When passed on the command line, the format name are case-insensitive:
+@option{--format JML} and @option{--format jml} have the same effect.
+
+@cindex invariant output format
+@cindex output format, for invariants
+
+@table @asis
+
+@cindex Daikon output format
+@cindex output format, Daikon
+@item Daikon format
+
+Daikon's default format is a mix of Java, mathematical logic, and some
+additional extensions.
+
+@cindex has only one value, in invariant output
+
+The output "@var{var} has only one value" means that every time that
+variable @var{var} was encountered, it had the same value.  However,
+that value is not interesting to report.  Typically this means that
+@var{var} always referred to the same object.  Users may care that the
+variable was never rebound to a different object, but it would not be
+helpful to print out what the hashcode or address of that object
+happened to be at runtime.  "@var{var} has only one value" differs from
+saying that var is unmodified.  
+
+A variable can have only one value but not be reported as unmodified
+because the variable is not a parameter to a procedure --- for instance,
+if a routine always returns the same object, or in a class invariant.  A
+variable can be reported as unmodified but not have only one value
+because the variable is never modified during any execution of the
+procedure, but has different values on different invocations of the
+procedure.
+
+@cindex DBC output format
+@cindex output format, DBC
+@cindex Jtest DBC output format
+@cindex output format, Jtest DBC
+@item DBC format
+This format produces output in the design-by-contract (DBC) format
+expected by Parasoft's Jtest tool (@uref{http://www.parasoft.com}).
+
+Like the Java output format, this output format makes extensive use of
+helper methods defined in class @code{daikon.Quant}.
+
+@cindex ESC output format
+@cindex output format, ESC
+@item ESC format
+The Extended Static Checker for Java (ESC/Java) is a programming tool
+for finding errors in Java programs by checking annotations that are
+inserted in source code; for more details, see
+@uref{http://research.compaq.com/SRC/esc/}.  Daikon's ESC format is
+intended for use with the original ESC/Java tool.  Use Daikon's JML
+format for use with the
+@uref{http://www.cs.kun.nl/sos/research/escjava/index.html, ,ESC/Java2}
+tool.
+
+
+@cindex IOA output format
+@cindex output format, IOA
+@item IOA format
+IOA is a formal language for describing computational processes that are
+modeled using I/O automata; for details, see
+@uref{http://theory.csail.mit.edu/tds/ioa/}.
+
+@cindex Java output format
+@cindex output format, Java
+@item Java format
+Write output as Java expressions. This means that each invariant would
+(with some exceptions; see next paragraph) be a valid Java expression,
+if inserted at the correct program point: right after method entry
+(for method entry invariants), or right before method exit (for
+method exit invariants), or anywhere in the code (for object
+invariants).
+
+There are two exceptions. Method exit invariants that refer to
+prestate, such as @code{x == old(x) + 1}, are output with the tag
+@code{\old} surrounding the prestate expression (e.g. @code{x ==
+\old(x) + 1}. Method exit invariants that refer to the return value of
+the method, such as @code{return == x + y}, are output with the tag
+@code{\result} in place of the return value (e.g. @code{\result == x + y}).
+These expression are obviously not valid Java code.
+
+The Java output format makes extensive use of helper methods defined
+in class @code{daikon.Quant}, which provides methods for
+quantification and set comprehension over Java collections. For
+example, @code{daikon.Quant.eltsEqual(int[] seq1, int elt)} checks
+whether all elements in @code{seq1} are equal to @code{elt}. For
+detailed meanings of all methods in the @code{Quant} class, see the
+Javadoc documentation for the class (or look inside
+@file{daikon/QuantBody.java}).
+
+@cindex JML output format
+@cindex output format, JML
+@item JML format
+Produces output in JML (Java Modeling Language,
+@uref{http://www.jmlspecs.org}); for details, see the
+@uref{http://www.cs.iastate.edu/~leavens/JML.html, ,JML Manual}.  JML
+format lets you use the various JML tools on Daikon invariants,
+including runtime assertion checking and the
+@uref{http://www.cs.kun.nl/sos/research/escjava/index.html, ,ESC/Java2}
+tool.
+
+Like the Java output format, this output format makes extensive use of
+helper methods defined in class @code{daikon.Quant}.
+
+@cindex Simplify output format
+@cindex output format, Simplify
+@item Simplify format
+Produces output in the format expected by the Simplify automated theorem
+prover; for details, see
+@uref{http://research.compaq.com/SRC/esc/simplify/InputSyntax.html}.
+
+@cindex repair output format
+@cindex output format, repair
+@cindex data structure repair output format
+@cindex output format, data structure repair
+@item repair format
+This format is used by automated data structure repair tools.
+
+@end table
+
+
+@node    Program points, Variable names, Invariant syntax, Interpreting output
 @subsection Program points
 @cindex program point
 
@@ -2448,7 +2547,7 @@ boolean (so as not to clash with byte), etc.);
 for each level of array nesting.
 
 
-@node    Variable names, Invariant syntax, Program points, Interpreting output
+@node    Variable names, Invariant list, Program points, Interpreting output
 @subsection Variable names
 
 Here is an incomplete list of the conventions used by Daikon for
@@ -2563,37 +2662,7 @@ The value of @code{a[i]} in the post-state.
 @end table
 
 
-@node    Invariant syntax, Invariant list, Variable names, Interpreting output
-@subsection Invariant syntax
-
-Daikon's default format is a mix of Java, mathematical logic, and some
-additional extensions.
-(In the future, Daikon will produce output in JML format; when
-that is the case, this section of the manual will simply refer the
-reader to the @uref{http://www.cs.iastate.edu/~leavens/JML.html, ,JML
-Manual}.  Daikon's current ESC output format is a variant of JML format.)
-
-
-@cindex has only one value, in invariant output
-
-The output "@var{var} has only one value" means that every time that
-variable @var{var} was encountered, it had the same value.  However,
-that value is not interesting to report.  Typically this means that
-@var{var} always referred to the same object.  Users may care that the
-variable was never rebound to a different object, but it would not be
-helpful to print out what the hashcode or address of that object
-happened to be at runtime.  "@var{var} has only one value" differs from
-saying that var is unmodified.  
-
-A variable can have only one value but not be reported as unmodified
-because the variable is not a parameter to a procedure --- for instance,
-if a routine always returns the same object, or in a class invariant.  A
-variable can be reported as unmodified but not have only one value
-because the variable is never modified during any execution of the
-procedure, but has different values on different invocations of the
-procedure.
-
-@node   Invariant list,  , Invariant syntax, Interpreting output
+@node   Invariant list,  , Variable names, Interpreting output
 @subsection Invariant list
 
 The following is a list of all of the invariants that Daikon detects.
@@ -2632,23 +2701,14 @@ PrintInvariants shares many flags with Daikon:
 @item --help
 Print usage message.
 
+@item --format @var{name}
+Produce output in the given format.  See @ref{Invariant syntax}.
+
 @item --suppress_redundant
 Suppress display of logically redundant invariants, using the Simplify
 automatic theorem prover.  Simplify must be separately obtained (from
 @uref{http://research.compaq.com/SRC/esc/Simplify.html}) and installed in
 order to take advantage of this option.
-
-@item --esc_output
-Write output in ESC-like format.
-
-@item --simplify_output
-Write output in Simplify format.
-
-@item --ioa_output
-Write output in IOA format.
-
-@item --java_output
-Write output as Java expressions.
 
 @item --output_num_samples
 Output numbers of values and samples for invariants and program points;
@@ -5811,17 +5871,12 @@ distribution and are not described elsewhere in the manual.
 @section Annotate
 
 @cindex Annotate tool
-@cindex ESC output format
-@cindex JML output format
-@cindex Jtest DBC output format
-@cindex output format, ESC
-@cindex output format, JML
-@cindex output format, Jtest DBC
 @cindex MergeESC tool, see Annotate tool
 
 The Annotate program inserts Daikon-generated invariants into Java
-source code as ESC/JML/DBC annotations.  These annotations are comments that
-can be automatically verified or otherwise manipulated by other tools.
+source code as  annotations in  DBC, ESC, Java or JML format.
+These annotations are comments that can be automatically verified or
+otherwise manipulated by other tools.
 Invoke Annotate like this:
 @example
 java daikon.tools.jtb.Annotate Myprog.inv Myprog.java Myprog2.java ...
@@ -5837,28 +5892,8 @@ unmodified, but Annotate produces new versions of the .java files
 The options are:
 @table @option
 
-@item --jml_output
-Produces output in JML (Java Modeling Language,
-@uref{http://www.jmlspecs.org}). This lets you
-use the various JML tools on Daikon invariants, including runtime
-assertion checking.
-
-This output format makes extensive use of helper methods defined in
-class @code{daikon.Quant}.
-For more information on this class, see flag 
-@code{--java_output} in @ref{Command line options}.
-
-@item --java_output
-Produces output in Java.
-
-@item --dbc_output
-Produces output in Jtest's Design-by-contract format
-(@uref{http://www.parasoft.com}).
-
-This output format makes extensive use of helper methods defined in
-class @code{daikon.Quant}.
-For more information on this class, see flag 
-@code{--java_output} in @ref{Command line options}.
+@item --format @var{name}
+Produce output in the given format.  See @ref{Invariant syntax}.
 
 @item --wrap_xml
 Each invariant is printed using the given format (ESC, JML or DBC),
