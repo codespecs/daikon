@@ -12,10 +12,12 @@
 use Carp;
 
 my $warn_on_no_invariants;
+my $merge_unexpressable;
 
 BEGIN {
   # Nothing to do
   $warn_on_no_invariants = 0;
+  $merge_unexpressable = 1;
 }
 
 if ((/^Inv filename = /)
@@ -247,7 +249,9 @@ END {
 	      if (! $no_requires) {
 		for my $inv (split("\n", $raw{$ppt})) {
 		  if (is_non_supported_invariant($inv)) {
-		    print OUT "/*! $requires " . $inv . " */\n";
+		    if ($merge_unexpressable) {
+		      print OUT "/*! $requires " . $inv . " */\n";
+		    }
 		  } else {
 		    print OUT "/*@ $requires " . $inv . " */\n";
 		  }
@@ -280,7 +284,9 @@ END {
 		      print OUT "/*@ $modifies " . join(', ', @mods) . " */\n";
 		    }
 		  } elsif (is_non_supported_invariant($inv)) {
-		    print OUT "/*! $ensures " . $inv . " */\n";
+		    if ($merge_unexpressable) {
+		      print OUT "/*! $ensures " . $inv . " */\n";
+		    }
 		  } else {
 		    print OUT "/*@ $ensures " . $inv . " */\n";
 		  }
@@ -353,7 +359,9 @@ END {
 	if (defined($raw{$fullmeth})) {
 	  for my $inv (split("\n", $raw{$fullmeth})) {
 	    if (is_non_supported_invariant($inv)) {
-	      print OUT "/*! invariant " . $inv . " */\n";
+	      if ($merge_unexpressable) {
+		print OUT "/*! invariant " . $inv . " */\n";
+	      }
 	    } else {
 	      print OUT "/*@ invariant " . $inv . " */\n";
 	    }
