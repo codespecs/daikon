@@ -3,9 +3,12 @@ Owner:        Toh <tohn>, Jeremy <mistere>
 Tool:         Daikon v3
 Summary:      Static final constants and enumnerated constants not handled properly
 Severity:     Vexing
-Status:       Fixed
+Status:       Closed
 Reproducible: Yes
 Description:
+
+[tohn]
+Fixed and closed.
 
 [mistere]
 I have made a fix to FileIO that should solve the problem.  The code
@@ -82,7 +85,10 @@ enumerated data types in IOA.
 
 --
 $Log$
-Revision 1.2  2002-03-27 23:30:23  mistere
+Revision 1.3  2002-03-28 02:48:09  tohn
+changed bug0032
+
+Revision 1.2  2002/03/27 23:30:23  mistere
 changed bug0032
 
 Revision 1.1  2002/03/27 21:59:09  tohn
