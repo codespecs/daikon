@@ -409,7 +409,7 @@ invariants.
         || (format == OutputFormat.JML)
         || (format == OutputFormat.JAVA)
         || (format == OutputFormat.IOA)
-        || (format == OutputFormat.DBCJAVA))        
+        || (format == OutputFormat.DBCJAVA))
     {
       String comparator = EQUALSstring;
 #if defined(EQUAL) || defined(EQUALFLOAT)
@@ -1428,7 +1428,7 @@ invariants.
 
   /**
    * Suppress invariants of the form 'x[n] != x[p]' by the
-   * 'x[] contains no duplicates' invariant.
+   * 'x[] contains no duplicates' invariant, along with 'n != p'
    */
 
   public static SuppressionLink nodups_suppress (Invariant arg,
@@ -1457,6 +1457,12 @@ invariants.
     supTemplate.invTypes[0] = NO_DUPS.class;
     supTemplate.varInfos[0][0] = der1.seqvar();
 
+    // Build a template for the subscripts being different
+    // Note than INTEQUAL is defined as IntNonEqual (or float) here
+    supTemplate.invTypes[1] = INTEQUAL.class;
+    supTemplate.varInfos[1][0] = der1.sclvar();
+    supTemplate.varInfos[1][1] = der2.sclvar();
+
     // Any match suppresses
     SuppressionLink sl = sfact.findTemplate (supTemplate, inv);
     return (sl);
@@ -1475,8 +1481,8 @@ invariants.
   // Create a suppression factory for nodups and constant
   #define FACTORY_CNT       1
   #define FACTORY1          nodups_suppress
-  #define FACTORY1_INV_CNT  1
-  #define FACTORY1_VAR_INFO {new VarInfo[1]}
+  #define FACTORY1_INV_CNT  2
+  #define FACTORY1_VAR_INFO {new VarInfo[1], new VarInfo[2]}
   // #define FACTORY2          one_of_suppress
   // #define FACTORY2_INV_CNT  2
   // #define FACTORY2_VAR_INFO {new VarInfo[1], new VarInfo[1]}
