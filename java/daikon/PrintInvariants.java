@@ -752,6 +752,9 @@ public class PrintInvariants {
    **/
   public static boolean accept_invariant(Invariant inv)
   {
+    throw new Error ("This method has been deprecated.  Use filters");
+
+    /*
     reason = "";
 
     if (IsEqualityComparison.it.accept(inv)) {
@@ -803,6 +806,7 @@ public class PrintInvariants {
 
     reason = "";
     return(true);
+    */
   }
 
 
