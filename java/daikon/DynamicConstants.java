@@ -21,13 +21,13 @@ import java.util.logging.Level;
 import utilMDE.*;
 
 
-  /**
-   * Class that implements dynamic constants optimization.  This
-   * optimization doesn't instantiate invariants over constant
-   * variables (ie, that that have only seen one value).  When the
-   * variable receives a second value, invariants are instantiated and
-   * are given the sample representing the previous constant value.
-   **/
+/**
+ * Class that implements dynamic constants optimization.  This
+ * optimization doesn't instantiate invariants over constant
+ * variables (ie, that that have only seen one value).  When the
+ * variable receives a second value, invariants are instantiated and
+ * are given the sample representing the previous constant value.
+ **/
 public class DynamicConstants implements Serializable {
 
   // We are Serializable, so we specify a version to allow changes to
@@ -453,13 +453,8 @@ public class DynamicConstants implements Serializable {
       slice1.instantiate_invariants();
       if (Debug.logOn())
         Debug.log (getClass(), ppt, Debug.vis(con.vi), "Instantiated invs");
-      if (ppt.is_slice_global (con.vi))
-        slice1.remove_global_invs();
       if (con.count > 0) {
-        if (Daikon.dkconfig_df_bottom_up)
-          slice1.add_val_bu (con.val, mod, con.count);
-        else
-          slice1.add_val(con.val, mod, con.count);
+        slice1.add_val_bu (con.val, mod, con.count);
       }
       new_views.add (slice1);
     }
@@ -489,15 +484,8 @@ public class DynamicConstants implements Serializable {
         }
         PptSlice2 slice2 = new PptSlice2 (ppt, c1.vi, c2.vi);
         slice2.instantiate_invariants();
-        Debug.log (getClass(), ppt, Debug.vis(c1.vi, c2.vi), "slice_global= "
-                   + ppt.is_slice_global (c1.vi, c2.vi));
-        if (ppt.is_slice_global (c1.vi, c2.vi))
-          slice2.remove_global_invs();
         if (c1.count > 0 && c2.count > 0) {
-          if (Daikon.dkconfig_df_bottom_up)
-            slice2.add_val_bu (c1.val, c2.val, mod, mod, con1.count);
-          else
-            slice2.add_val (c1.val, c2.val, mod, mod, con1.count);
+          slice2.add_val_bu (c1.val, c2.val, mod, mod, con1.count);
         }
         new_views.add (slice2);
       }
@@ -531,15 +519,9 @@ public class DynamicConstants implements Serializable {
           PptSlice3 slice3 = new PptSlice3 (ppt, con_arr[0].vi, con_arr[1].vi,
                                             con_arr[2].vi);
           slice3.instantiate_invariants();
-          if (ppt.is_slice_global (con_arr[0].vi, con_arr[1].vi,con_arr[2].vi))
-            slice3.remove_global_invs();
           if ((con_arr[0].count > 0) && (con_arr[1].count > 0)
               && (con_arr[2].count > 0)) {
-            if (Daikon.dkconfig_df_bottom_up)
-              slice3.add_val_bu (con_arr[0].val, con_arr[1].val,
-                              con_arr[2].val, mod, mod, mod, con_arr[0].count);
-            else
-              slice3.add_val (con_arr[0].val, con_arr[1].val,
+            slice3.add_val_bu (con_arr[0].val, con_arr[1].val,
                               con_arr[2].val, mod, mod, mod, con_arr[0].count);
           }
           new_views.add (slice3);
@@ -550,8 +532,6 @@ public class DynamicConstants implements Serializable {
     // Debug print the created slies
     if (Debug.logOn() || debug.isLoggable (Level.FINE)) {
       int[] slice_cnt = {0, 0, 0, 0};
-      int[] non_gslice_cnt = {0, 0, 0, 0};
-      int[] non_ginv_cnt = {0, 0, 0, 0};
       int[] inv_cnt = {0, 0, 0, 0};
       int[] true_inv_cnt = {0, 0, 0, 0};
       for (int i = 0; i < new_views.size(); i++) {
@@ -569,10 +549,6 @@ public class DynamicConstants implements Serializable {
             inv.log ("Invariant " + inv.format()
                      + " destroyed by constant values" + vals);
           }
-        }
-        if (!ppt.is_slice_global (slice.var_infos) && slice.invs.size() > 0) {
-          non_gslice_cnt[slice.arity()]++;
-          non_ginv_cnt[slice.arity()] += slice.invs.size();
         }
         if (slice.invs.size() > 0)
           slice_cnt[slice.arity()]++;
@@ -592,9 +568,7 @@ public class DynamicConstants implements Serializable {
       for (int i = 1; i <= 3; i++)
         debug.fine ("Added " + slice_cnt[i] + " slice" + i + "s with "
                     + true_inv_cnt[i] + " invariants (" + inv_cnt[i]
-                    + " total): with " + non_gslice_cnt[i]
-                    + " non global slices, with " + non_ginv_cnt[i]
-                    + " invariants");
+                    + " total)");
 
       String leader1_str = "";
       int leader1_cnt = 0;
@@ -698,11 +672,6 @@ public class DynamicConstants implements Serializable {
           // Look for a linearbinary over two variables.  If it doesn't
           // exist we don't create a LinearTernary
           Invariant lb = find_linear_binary (ppt.findSlice (con2.vi,con3.vi));
-          if (lb == null) {
-            PptSlice gslice = PptSlice.find_global_slice
-                                        (new VarInfo[] {con2.vi, con3.vi});
-            lb = find_linear_binary (gslice);
-          }
           if (lb == null)
             continue;
 
@@ -822,62 +791,6 @@ public class DynamicConstants implements Serializable {
 
     return (null);
   }
-
-  /**
-   * THIS IS NOT USED!  It is left here because the code might be
-   * helpful when doing similar things.
-   *
-   * Applies constant values to the specified invariant.  All of the
-   * variables of the invariant must be either currently constant or
-   * previously constant.  If the invariant is falsified, marks the
-   * invariant accordingly.
-   *
-   * @return null if any variables are not constant, otherwise the
-   * status of the invariant
-   */
-  public InvariantStatus unused_apply_constant (Invariant inv) {
-
-    // Return null if any variables are not constant (since there is no
-    // value to apply)
-    for (int i = 0; i < inv.ppt.var_infos.length; i++) {
-      Constant con = all_vars[inv.ppt.var_infos[i].varinfo_index];
-      if (!con.constant && !con.previous_constant)
-        return (null);
-    }
-
-    int mod = ValueTuple.MODIFIED;
-    InvariantStatus result = null;
-
-    if (inv.ppt instanceof PptSlice1) {
-
-      UnaryInvariant unary_inv = (UnaryInvariant) inv;
-      Constant con = all_vars[inv.ppt.var_infos[0].varinfo_index];
-      result = unary_inv.add (con.val, mod, con.count);
-
-    } else if (inv.ppt instanceof PptSlice2) {
-
-      Constant con1 = all_vars[inv.ppt.var_infos[0].varinfo_index];
-      Constant con2 = all_vars[inv.ppt.var_infos[1].varinfo_index];
-      BinaryInvariant bin_inv = (BinaryInvariant) inv;
-      result = bin_inv.add_unordered (con1.val, con2.val, mod, con1.count);
-
-    } else /* must be ternary */ {
-
-      Constant con1 = all_vars[inv.ppt.var_infos[0].varinfo_index];
-      Constant con2 = all_vars[inv.ppt.var_infos[1].varinfo_index];
-      Constant con3 = all_vars[inv.ppt.var_infos[2].varinfo_index];
-      TernaryInvariant ternary_inv = (TernaryInvariant) inv;
-      result = ternary_inv.add (con1.val, con2.val, con3.val, mod, con1.count);
-    }
-
-    if (result == InvariantStatus.FALSIFIED)
-      inv.falsify();
-
-    return (result);
-  }
-
-
-
 
   /**
    * Create invariants for any remaining constants.  Right now, this looks
@@ -1035,7 +948,6 @@ public class DynamicConstants implements Serializable {
    * is merged since constants are not used after we are done processing
    * samples.
    */
-
   public void merge () {
 
     // clear the constant and missing lists
@@ -1064,6 +976,9 @@ public class DynamicConstants implements Serializable {
     }
   }
 
+  /**
+   * Creates OneOf invariants for each constant
+   */
   public void instantiate_oneof (Constant con) {
 
     Invariant inv = null;
