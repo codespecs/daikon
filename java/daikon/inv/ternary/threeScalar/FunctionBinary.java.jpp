@@ -310,10 +310,20 @@ public abstract class CLASSNAME extends SUPERCLASS {
     String arg1_name = arg1.name_using(format, arg1vi);
     String arg2_name = arg2.name_using(format, arg2vi);
 
-    if (format == OutputFormat.DAIKON ||
-        format.isJavaFamily()) {  // RRN: verify the validity of this.
+    if (format == OutputFormat.DAIKON) {
       return argresult_name + " == (" + methodname[0] + arg1_name
         + methodname[1] + arg2_name + methodname[2] + ")";
+    }
+
+
+    if (format.isJavaFamily()) {
+      if (methodname[1].equals(" || ") || methodname[1].equals(" && ")) {
+        return "(" +  argresult_name + " != 0) == ((" + methodname[0] + arg1_name + " != 0)"
+          + methodname[1] + "(" + arg2_name + methodname[2] + " != 0))";
+      } else {
+        return argresult_name + " == (" + methodname[0] + arg1_name
+          + methodname[1] + arg2_name + methodname[2] + ")";
+      }
     }
 
     if (format == OutputFormat.IOA) {
