@@ -343,18 +343,42 @@ LASTP is non-nil if this is the last form (the return value) in the function bod
 ;; Using a global variable is a hack.
 (defvar *lackwit-env*
   '()
-  "a list of lists of variables.
+  "A list of lists of variables.
 The variables in each sublist have the same Lackwit type.")
 
 (defvar *lackwit-seen-procedures*
   '())
 
+(defvar *lackwit-arrays*
+  '()
+  "A list of variables in *lackwit-env* of array type.
+Each is a list of (array elt-type index-type ...).")
+
+(defun array-derived-vars (array indices)
+  (or (assoc array *lackwit-arrays*)
+      (let ((derived-vars (list array)))
+	;; (format t "Adding vars ~s ~s~%" array-index-type-var array-element-type-var)
+	(let ((array-element-type-var (symbol-append array "-element")))
+	  (lackwit-add-var-maybe array-element-type-var)
+	  (push array-element-type-var derived-vars))
+	(loop for i from 1 to indices
+	      do (let ((index-type-var
+			(symbol-append array "-index" (format nil "~d" i))))
+		   (lackwit-add-var-maybe index-type-var)
+		   (push index-type-var derived-vars)))
+	(setq derived-vars (nreverse derived-vars))
+	(push derived-vars *lackwit-arrays*)
+	derived-vars)))
+
+
 (defun lackwit-infer (form)
-  "Determine Lackwit-style types for variables bound in Lisp expression FORM.
-Return a variable whose type is that of FORM, or nil."
+  "Determine Lackwit-style types for variables bound in Lisp expression FORM."
   (setq *lackwit-env* nil)
+  (setq *lackwit-arrays* nil)
   (lackwit-infer-internal form)
-  *lackwit-env*)
+  (lackwit-merge-array-vars)
+  *lackwit-env*
+  'this-is-the-return-value-from-lackwit-infer)
 
 
 ;; I should use union-find, but this is easier to implement and adequate
@@ -374,13 +398,14 @@ Return a variable whose type is that of FORM, or nil."
 (defun lackwit-add-vars (vars)
   (setq *lackwit-env* (nconc (mapcar #'list vars) *lackwit-env*)))
 (defun lackwit-var-representative (v)
-  "Return the representative for this variable."
+  "Return the representative for this variable.
+That's a list, not a single variable."
   (and (not (numberp v))
        (some #'(lambda (l) (and (member v l) l)) *lackwit-env*)))
 (defun lackwit-merge-vars (v1 v2)
   ;; returns the new type
   ;; (format t "lackwit-merge-vars: ~s ~s ~s~%" v1 v2 *lackwit-env*)
-  (if (and v1 v2 (not (eq v1 v2)))
+  (if (and v1 v2 (not (eq v1 v2)) (not (or (numberp v1) (numberp v2))))
       (let ((r1 (lackwit-var-representative v1))
 	    (r2 (lackwit-var-representative v2)))
 	(assert (and r1 r2))
@@ -391,6 +416,36 @@ Return a variable whose type is that of FORM, or nil."
 	      ;; (format t "after lackwit-merge-vars: ~s ~s ~s~%" r1 r2 *lackwit-env*)
 	))
 	v1)))
+
+(defun lackwit-merge-array-vars ()
+  "For array variables that have been merged, merge all their derived types.
+The derived types are the types of their elements and indices."
+  (loop for arrayvars in (remove-duplicates
+			  (mapcar #'lackwit-var-representative
+				  (mapcar #'car *lackwit-arrays*))
+			  :test #'equal)
+	do (if (> (length arrayvars) 1)
+	       (let ((derivee-lists (mapcar #'(lambda (var)
+						(assoc var *lackwit-arrays*))
+					    arrayvars)))
+		 (if (some #'not derivee-lists)
+		     ;; Some argument was not known to be an array (was
+		     ;; never operated on in array context); find some
+		     ;; argument that is known to be an array.
+		     (let ((indices (- (length (some #'identity derivee-lists)) 2)))
+		       (setq derivee-lists
+			     (and (> indices 0)
+				  (mapcar #'(lambda (arrayvar)
+					      (array-derived-vars arrayvar indices))
+					  arrayvars)))))
+		 (if derivee-lists
+		     (progn
+		       (assert (apply #'= (mapcar #'length derivee-lists)))
+		       (let ((repr1 (car derivee-lists)))
+			 (loop for repr2 in (cdr derivee-lists)
+			       do (mapcar #'lackwit-merge-vars
+					  (cdr repr1) (cdr repr2))))))))))
+
 
 (defun lackwit-infer-body (forms)
   (loop for f in (butlast forms)
@@ -486,7 +541,10 @@ Return a variable whose type is that of FORM, or nil."
 			  (setq vars-and-values (cddr vars-and-values))
 			  (setq last-type var)))
 	       last-type))
+	    ;; These functions return something of the same type as their
+	    ;; arguments, whose types are all merged.
 	    ((member head '(+ - = /= > >= < <= min max 1-
+			      copy-array
 			      ;; It's arguable whether these should be
 			      ;; here.  I'll put them in for now.
 			      * / mod floor))
@@ -501,23 +559,21 @@ Return a variable whose type is that of FORM, or nil."
 	    ((eq head 'aref)
 	     ;; (format t "aref: ~s~%" form)
 	     (assert (>= (length form) 3))
-	     (let ((array (second form))
-		   (indices (cddr form)))
+	     (let* ((array (second form))
+		    (indices (cddr form))
+		    ;; derived-vars is:  (array array-element array-index1 ...)
+		    (derived-vars (array-derived-vars array (length indices))))
 	       ;; Alternately to this assert, at the end I could fix up all
 	       ;; the arrays that should have been merged; that wouldn't be
 	       ;; too hard.
 	       (assert (symbolp array))
-	       ;; (format t "Adding vars ~s ~s~%" array-index-type-var array-element-type-var)
-	       (loop for i from 1 to (length indices)
-		     do (let ((index-type-var
-			       (symbol-append array "-index" (format nil "~d" i))))
-			  (lackwit-add-var-maybe index-type-var)
-			  (lackwit-merge-vars index-type-var
-					      (lackwit-infer-internal
-					       (nth i indices)))))
-	       (let ((array-element-type-var (symbol-append array "-element")))
-		 (lackwit-add-var-maybe array-element-type-var)
-		 array-element-type-var)))
+	       (assert (= (length indices) (- (length derived-vars) 2)))
+	       (loop for index-type-var in (cdr (cdr derived-vars))
+		     for index-expr in indices
+		     do (lackwit-merge-vars
+			 index-type-var (lackwit-infer-internal index-expr)))
+	       ;; return value:  array element type
+	       (nth 1 derived-vars)))
 
 	    ((member head '(and or not))
 	     ;; Note that we do not merge the types of the arguments to
@@ -531,8 +587,6 @@ Return a variable whose type is that of FORM, or nil."
 	     (lackwit-infer-body (cdr form))
 	     ;; Could keep info about types for functions and return that here.
 	     nil)))))
-
-
 
 
 

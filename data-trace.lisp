@@ -119,20 +119,48 @@
   '((integer . "int")
     ((array integer 1) . "int")))
 
+(defun type-name-format (type)
+  (cond ((eq type 'integer)
+	 "int")
+	((eq type 'character)
+	 "char")
+	((and (listp type)
+	      (eq (car type) 'array))
+	 (let ((result (type-name-format (second type))))
+	   (loop for i from 1 to (third type)
+		 do (setq result (string-append result "[]")))
+	   result))
+	(t
+	 (format nil "~a" type))))
+
+
+(defun lackwit-type-format (var)
+  (let ((array-type (assoc var *lackwit-arrays*)))
+    ;; (format t "~a is array? ~a    ~a~%" var array-type *lackwit-arrays*)
+    (if array-type
+	(let ((result (format nil "~a" (lackwit-var-representative
+					(nth 1 array-type)))))
+	  (loop for index-var in (cddr array-type)
+		do (setq result
+			 (string-append result
+					(format nil "[~a]"
+						(lackwit-var-representative
+						 index-var)))))
+	  result)
+      (lackwit-var-representative var))))
+
+
 (defun write-data-trace-declaration (ostream program-point-name var+type-list)
   (format ostream "DECLARE~%~a~%" program-point-name)
   ;; (format ostream "*lackwit-env* = ~s~%" *lackwit-env*)
   ;; I could do all this in one tricky format line, too.
   (loop for var+type in var+type-list
 	do (let* ((var (car var+type))
-		  (type (cdr var+type))
-		  (lackwit-type (lackwit-var-representative var)))
+		  (type (cdr var+type)))
 	     (format *decl-output-stream* "~a~%~a~%~a~%"
 		     var
-		     (or (cdr (assoc type *trace-pretty-type-names*
-				     :test #'equal))
-			 type)
-		     lackwit-type)))
+		     (type-name-format type)
+		     (lackwit-type-format var))))
   (format ostream "~%")
   )
 

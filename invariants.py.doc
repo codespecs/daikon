@@ -47,11 +47,14 @@ Program point information includes:
     * type, as a human-readable string
       This is currently uninterpreted (that is, the strings are compared
       for equality but not destructed into their constituent parts).
-    * comparable variables:  A list of all the other variables mentioned
-      in this record that are comparable to this one.  If no information is
-      supplied (ie, this line is blank), then the variable is compared to
-      all other variables of the same type.  This information is typically
-      obtained via a Lackwit-style analysis.
+      For arrays, this looks like "int[]" or "char[][]"
+    * comparable variables:  A space-separated list of all the other
+      variables mentioned in this record that are comparable to this one.
+      If no information is supplied (ie, this line is blank), then the
+      variable is compared to all other variables of the same type.  This
+      information is typically obtained via a Lackwit-style analysis.  For
+      arrays, the lists are surrounded by parentheses, and variables are
+      given in parentheses for indices, like so: "(a b c)[(d e)][(f g h)]".
  * Future enhancements:
     * permit variables to be omitted if they haven't changed (but always
       outputting the bit permits us to write a sanity checker)

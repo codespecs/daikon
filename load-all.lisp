@@ -11,6 +11,7 @@
 (defun compile-all ()
   (compile-file "gries-helper.lisp")
   (compile-file "instrument.lisp")
-  (compile-file "data-trace.lisp"))
+  (compile-file "data-trace.lisp")
+  (values))
 
 (load-all)
