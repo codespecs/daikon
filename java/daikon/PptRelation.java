@@ -184,6 +184,15 @@ public class PptRelation implements Serializable {
     debug.fine ("get_child_equalities for " + child.ppt_name);
     Map emap = new LinkedHashMap();
 
+    if (child.equality_view == null)
+      System.out.println ("equality_view.invs == null in child ppt: "
+                          + child.ppt_name + " samples = " + child.num_samples());
+    else if (child.equality_view.invs == null) {
+      System.out.println ("equality_view.invs == null in child ppt: "
+                          + child.ppt_name + " samples = " + child.num_samples());
+      System.out.println ("children = " + child.children);
+    }
+
     // Loop through each equality set in the child
     for (int i = 0; i < child.equality_view.invs.size(); i++) {
       Equality e = (Equality) child.equality_view.invs.get (i);

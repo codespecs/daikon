@@ -3272,6 +3272,8 @@ public class PptTopLevel
     if (debugEqualTo.isLoggable(Level.FINE)) {
       debugEqualTo.fine ("PostProcessingEquality for: " + this.ppt_name);
     }
+    if (num_samples() == 0)
+      return;
     Assert.assertTrue (equality_view != null, "ppt = " + ppt_name);
     Invariants equalityInvs = equality_view.invs;
 
@@ -4076,14 +4078,27 @@ public class PptTopLevel
 
     // Get all of the binary relationships from the first child's
     // equality sets.
-    PptRelation c1 = (PptRelation) children.get(0);
-    Map emap = c1.get_child_equalities_as_parent();
-    debugMerge.fine ("child " + c1.child.ppt_name + " equality = " + emap);
+    Map emap = null;
+    int first_child = 0;
+    for (first_child = 0; first_child  < children.size(); first_child++) {
+      PptRelation c1 = (PptRelation) children.get(first_child);
+      if (c1.child.num_samples() > 0) {
+        emap = c1.get_child_equalities_as_parent();
+        debugMerge.fine ("child " + c1.child.ppt_name + " equality = " + emap);
+        break;
+      }
+    }
+    if (emap == null) {
+      invariants_merged = true;
+      return;
+    }
 
     // Loop through the remaining children, intersecting the equal
     // variables and incrementing the sample count as we go
-    for (int i = 1; i < children.size(); i++) {
+    for (int i = first_child+1; i < children.size(); i++) {
       PptRelation rel = (PptRelation) children.get(i);
+      if (rel.child.num_samples() == 0)
+        continue;
       Map eq_new = rel.get_child_equalities_as_parent();
       for (Iterator j = emap.keySet().iterator(); j.hasNext(); ) {
         VarInfo.Pair curpair = (VarInfo.Pair) j.next();

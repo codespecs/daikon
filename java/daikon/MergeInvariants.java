@@ -189,6 +189,15 @@ public class MergeInvariants {
                            + inv_files.get(j));
         if (child == null)
           continue;
+        if (child.num_samples() == 0)
+          continue;
+        if (child.equality_view == null)
+          System.out.println ("equality_view == null in child ppt: "
+                              + child.ppt_name + " (" + inv_files.get(j) + ")");
+        else if (child.equality_view.invs == null)
+          System.out.println ("equality_view.invs == null in child ppt: "
+                              + child.ppt_name + " (" + inv_files.get(j) + ")"
+                              + " samples = " + child.num_samples());
         PptRelation rel = PptRelation.newMergeChildRel (ppt, child);
       }
     }

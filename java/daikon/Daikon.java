@@ -1107,6 +1107,8 @@ public final class Daikon {
   public static void guardInvariants(PptMap allPpts) {
     for (Iterator i=allPpts.asCollection().iterator(); i.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel)i.next();
+      if (ppt.num_samples() == 0)
+        continue;
       // Make sure isDerivedParam is set before guarding.  Otherwise
       // we'll never get it correct.
       for (int iVarInfo = 0; iVarInfo < ppt.var_infos.length; iVarInfo++) {
