@@ -1486,6 +1486,14 @@ public class PptTopLevel
    * index i such that vi_index_min <= i < vi_index_limit.  (However,
    * we also assume that vi_index_limit == var_infos.length.)
    **/
+
+  // Note that some slightly inefficient code has been added to aid
+  // in debugging.  When creating binary and ternary views and debugging
+  // is on, the outer loops will not terminate prematurely on innapropriate
+  // (ie, non-canonical) variables.  This allows explicit debug statements
+  // for each possible combination, simplifying determining why certain
+  // slices were not created.
+
   private void instantiate_views(int vi_index_min,
                                  int vi_index_limit)
   {
@@ -1504,6 +1512,7 @@ public class PptTopLevel
     // used only for debugging
     int old_num_vars = var_infos.length;
     int old_num_views = views.size();
+    boolean debug_on = debug.isLoggable(Level.FINE);
 
     /// 1. all unary views
 
@@ -1512,13 +1521,12 @@ public class PptTopLevel
     for (int i=vi_index_min; i<vi_index_limit; i++) {
       VarInfo vi = var_infos[i];
 
-      if (debug.isLoggable(Level.FINE))
-        debug.fine ("Processing Unary var: " + vi.name.name()
-                    + (vi.isCanonical() ? " (leader) " : " (leader is "
-                        + vi.canonicalRep().name.name() + ")"));
-
-      // Debug
-      if (!vi.isCanonical()) continue;
+      if (!vi.isCanonical()) {
+        if (Debug.logOn() || debug_on)
+          Debug.log (debug, getClass(), this, new VarInfo[] {vi},
+                "Unary Slice not created.  var is not leader");
+        continue;
+      }
 
       // Eventually, add back in this test as "if constant and no
       // comparability info exists" then continue.
@@ -1533,6 +1541,8 @@ public class PptTopLevel
       //         continue;
       //       }
       slice1.instantiate_invariants();
+      if (Debug.logOn() || debug_on)
+        Debug.log (debug, getClass(), slice1, "Created unary slice");
       unary_views.add(slice1);
     }
     addViews(unary_views);
@@ -1544,14 +1554,9 @@ public class PptTopLevel
     Vector binary_views = new Vector();
     for (int i1=0; i1<vi_index_limit; i1++) {
       VarInfo var1 = var_infos[i1];
-      if (!var1.isCanonical()) {
-        if (debug.isLoggable(Level.FINE))
-          debug.fine ("Skipping var1 binary: " + var1.name.name()
-                     + " (leader is " + var1.canonicalRep().name.name() + ")");
+      if (!var1.isCanonical() && !(Debug.logOn() || debug_on)) {
         continue;
       }
-      if (debug.isLoggable(Level.FINE))
-        debug.fine ("Processing var1 binary: " + var1.name.name());
 
       // Eventually, add back in this test as "if constant and no
       // comparability info exists" then continue.
@@ -1560,21 +1565,38 @@ public class PptTopLevel
       int i2_min = (target1 ? i1 : Math.max(i1, vi_index_min));
       for (int i2=i2_min; i2<vi_index_limit; i2++) {
         VarInfo var2 = var_infos[i2];
+
+        if (!var1.isCanonical()) {
+          if (Debug.logOn() || debug_on)
+            Debug.log (debug, getClass(), this, new VarInfo[] {var1, var2},
+                       "Binary slice not created, var1 is not a leader");
+          continue;
+        }
         if (!var2.isCanonical()) {
-          if (debug.isLoggable(Level.FINE))
-            debug.fine ("Skipping var2 binary: " + var2.name.name()
-                    + "(leader is " + var2.canonicalRep().name.name() + ")");
+          if (Debug.logOn() || debug_on)
+            Debug.log (debug, getClass(), this, new VarInfo[] {var1, var2},
+                       "Binary slice not created, var2 is not a leader");
           continue;
         }
 
-        if (debug.isLoggable(Level.FINE))
-          debug.fine ("Creating binary: " + var1.name.name() + ", "
-                       + var2.name.name());
+        // This is commented out because if one var is an array and the
+        // other is not, this will indicate that the two vars are not
+        // compatible.  This causes us to miss seemingly valid elementwise
+        // invariants
+        // if (!var1.compatible(var2)) {
+        //  if (Debug.logOn() || debug_on)
+        //    Debug.log (debug, getClass(), this, new VarInfo[] {var1, var2},
+        //               "Binary slice not created, vars not compatible");
+        //  continue;
+        //}
 
         // Eventually, add back in this test as "if constant and no
         // comparability info exists" then continue.
         // if (var2.isStaticConstant()) continue;
         PptSlice2 slice2 = new PptSlice2(this, var1, var2);
+        if (Debug.logOn() || debug_on)
+          Debug.log (debug, getClass(), slice2, "Creating binary slice");
+
         //         if (slice2.isControlled()) {
         //           // let invariant flow from controlling slice
         //           if (Global.debugInfer.isLoggable(Level.FINE))
@@ -1597,25 +1619,27 @@ public class PptTopLevel
       Vector ternary_views = new Vector();
       for (int i1=0; i1<vi_index_limit; i1++) {
         VarInfo var1 = var_infos[i1];
-        if (!var1.isCanonical()) continue;
+        if (!var1.isCanonical() && !(Debug.logOn() || debug_on))
+          continue;
 
         // Eventually, add back in this test as "if constant and no
         // comparability info exists" then continue.
         // if (var1.isStaticConstant()) continue;
         // For now, only ternary invariants not involving any arrays
-        if (var1.rep_type.isArray())
+        if (var1.rep_type.isArray() && (!Debug.logOn() || debug_on))
           continue;
 
         boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
         for (int i2=i1; i2<vi_index_limit; i2++) {
           VarInfo var2 = var_infos[i2];
-          if (!var2.isCanonical()) continue;
+          if (!var2.isCanonical() && !(Debug.logOn() || debug_on))
+            continue;
 
           // Eventually, add back in this test as "if constant and no
           // comparability info exists" then continue.
           // if (var2.isStaticConstant()) continue;
           // For now, only ternary invariants not involving any arrays
-          if (var2.rep_type.isArray())
+          if (var2.rep_type.isArray() && !(Debug.logOn() || debug_on))
             continue;
 
           boolean target2 = (i2 >= vi_index_min) && (i2 < vi_index_limit);
@@ -1626,19 +1650,9 @@ public class PptTopLevel
                           || ((i3 >= vi_index_min) && (i3 < vi_index_limit)));
             Assert.assertTrue((i1 <= i2) && (i2 <= i3));
             VarInfo var3 = var_infos[i3];
-            if (!var3.isCanonical()) continue;
 
-            // Eventually, add back in this test as "if constant and no
-            // comparability info exists" then continue.
-            // if (var3.isStaticConstant()) continue;
-            // For now, only ternary invariants not involving any arrays
-            if (var3.rep_type.isArray())
+            if (!is_slice_ok (var1, var2, var3))
               continue;
-
-            if ((! var1.compatible(var2)
-                 || (! var1.compatible(var3)))) {
-              continue;
-            }
 
             PptSlice3 slice3 = new PptSlice3(this, var1, var2, var3);
             //             if (slice3.isControlled()) {
@@ -1648,9 +1662,8 @@ public class PptTopLevel
             //               continue;
             //             }
             slice3.instantiate_invariants();
-            if (Global.debugInfer.isLoggable(Level.FINE)) {
-              Global.debugInfer.fine ("Instantiated for PptSlice3");
-            }
+            if (Debug.logOn() || debug_on)
+              Debug.log (debug, getClass(), slice3, "Created Ternary Slice");
             ternary_views.add(slice3);
           }
         }
@@ -1665,6 +1678,62 @@ public class PptTopLevel
     // This method didn't add any new variables.
     Assert.assertTrue(old_num_vars == var_infos.length);
     repCheck();
+  }
+
+  /**
+   * Returns whether or not the variables in the slice are ok for creating
+   * it.  In the ternary case, this checks to insure that each var is
+   * canonical and is not an array.  It also insures that the vars
+   * are comparable.
+   */
+  private boolean is_slice_ok (VarInfo v1, VarInfo v2, VarInfo v3) {
+
+    Debug dlog = null;
+    if (Debug.logOn() || debug.isLoggable(Level.FINE))
+      dlog = new Debug (getClass(), this, new VarInfo[] {v1, v2, v3});
+
+    // Each variable must be canonical (leader)
+    if (!v1.isCanonical()) {
+      if (dlog != null)
+        dlog.log (debug, "Ternary slice not created, var1 not lead");
+      return (false);
+    }
+    if (!v2.isCanonical()) {
+      if (dlog != null)
+        dlog.log (debug, "Ternary slice not created, var2 not lead");
+      return (false);
+    }
+    if (!v3.isCanonical()) {
+      if (dlog != null)
+        dlog.log (debug, "Ternary slice not created, var3 not lead");
+      return (false);
+    }
+
+    // For now, each variable must also not be an array (ternary only)
+    if (v1.rep_type.isArray()) {
+      if (dlog != null)
+        dlog.log (debug, "Ternary slice not created, var1 is an array");
+      return (false);
+    }
+    if (v2.rep_type.isArray()) {
+      if (dlog != null)
+        dlog.log (debug, "Ternary slice not created, var2 is an array");
+      return (false);
+    }
+    if (v3.rep_type.isArray()) {
+      if (dlog != null)
+        dlog.log (debug, "Ternary slice not created, var3 is an array");
+      return (false);
+    }
+
+    // Vars must be compatible
+    if (!v1.compatible(v2) || !v1.compatible(v3)) {
+      if (dlog != null)
+        dlog.log (debug, "Ternary slice not created, vars not compatible");
+      return (false);
+    }
+
+    return (true);
   }
 
   /**
@@ -2098,9 +2167,7 @@ public class PptTopLevel
         SuppressionLink sl = factories[i].generateSuppressionLink (inv);
         if (sl != null) {
           sl.link();
-          if (debugSuppress.isLoggable(Level.FINE)) {
-            debugSuppress.fine ("Generated link with: " + sl + " at ppt " + name);
-          }
+          inv.log ("Generated link with: " + sl);
           return true;
         }
       }
