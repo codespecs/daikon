@@ -1869,7 +1869,10 @@ Program point information includes:
 @itemize @bullet
 @item
    name ("tag") of this program point, an arbitrary string containing no
-   tab or newline characters.  
+   tab or newline characters.  This name contains information such as the
+   class name or method name; what information is contained depends on
+   which instrumenter is being used.  For a full format specification for
+   the name, see @uref{http://sdg.lcs.mit.edu/daikon/download/doc/pptname.html}.
    By convention, the entry and exit points for a function have names of
    a special form so that they can be associated with one another.
    (Currently, those names end with ":::BEGIN" and ":::END".)  This
