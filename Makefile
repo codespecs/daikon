@@ -6,7 +6,7 @@
 # versions of the developer manual (though all other versions are built)
 IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps gui-ControlPanel.jpg gui-ControlPanel.eps gui-InvariantsDisplay-small.jpg gui-InvariantsDisplay-small.eps context-gui.jpg context-gui.eps dfepl-flow.png
 IMAGE_PARTIAL_PATHS := $(addprefix images/,$(IMAGE_FILES))
-DOC_FILES_NO_IMAGES := Makefile daikon.texinfo config-options.texinfo invariants-doc.texinfo daikon.ps daikon.pdf daikon.html developer.texinfo developer.html CHANGES
+DOC_FILES_NO_IMAGES := Makefile daikon.texinfo config-options.texinfo invariants-doc.texinfo daikon.ps daikon.pdf daikon.html developer.texinfo developer.html daikonHelp.html CHANGES
 DOC_FILES := ${DOC_FILES_NO_IMAGES} $(IMAGE_PARTIAL_PATHS)
 DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 # The texinfo files are included so we can diff to see what has changed from
@@ -322,7 +322,7 @@ update-doc-dist-date:
 # I removed the dependence on "update-dist-version-file" because this rule
 # is invoked at the beginning of a make.
 update-doc-dist-version:
-	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(Daikon version )[0-9]+(\.[0-9]+)*/$$1 . "$(shell cat doc/VERSION)"/e;' doc/daikon.texinfo doc/README-dist doc/README-dist-doc doc/www/download/index.html doc/developer.texinfo
+	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(Daikon version )[0-9]+(\.[0-9]+)*/$$1 . "$(shell cat doc/VERSION)"/e;' doc/daikon.texinfo doc/README-dist doc/README-dist-doc doc/www/download/index.html doc/developer.texinfo eclipse-plugins/workspace/DaikonUI/html/daikonHelp.html
 	perl -wpi -e 's/(public final static String release_version = ")[0-9]+(\.[0-9]+)*(";)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e;' java/daikon/Daikon.java
 	perl -wpi -e 's/(VG_\(details_version\)\s*\(")[0-9]+(\.[0-9]+)*("\);)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e' kvasir/kvasir/memcheck/mc_main.c
 	cvs ci -m "Update version number for new Daikon distribution" kvasir/kvasir/memcheck/mc_main.c
@@ -506,6 +506,9 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	find /tmp/daikon/kvasir -name 'CVS' -type d | xargs rm -rf
 	find /tmp/daikon/kvasir/kvasir -name '*.txt' -type f | xargs rm
 	rm -rf /tmp/daikon/kvasir/kvasir/unittest-files
+
+	# Jar file needed for Chicory front end
+	cp -p java/ChicoryPremain.jar /tmp/daikon/java
 
 	## Tools
 	cp -pR tools /tmp/daikon
