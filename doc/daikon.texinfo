@@ -157,7 +157,6 @@ Using the invariant browser
 Troubleshooting
 
 * dfej problems::               
-* Instrumentation problems::    
 * Daikon problems::             
 * Other problems::              
 * Reporting bugs::              
@@ -249,6 +248,7 @@ the @var{parent} directory), unpack the tarfile:
 @example
 tar zxvf daikon.tar.gz
 @end example
+@noindent
 This creates a @file{@var{parent}/daikon/} subdirectory.
 
 @item
@@ -271,6 +271,7 @@ following to your @file{.cshrc} file:
 @example
 setenv CLASSPATH @var{parent}/daikon/java:$@{CLASSPATH@}
 @end example
+
 The distribution includes compiled @file{.class} files, so you do not
 need to compile them yourself; but you may do so by typing @command{make}
 in any directory under @file{@var{parent}/daikon/java/}.  In order to
@@ -354,11 +355,10 @@ LDFLAGS=-L. -lw -o $(EXECUTABLE)
 @end example
 
 If you are running under Microsoft Windows, you should install the
-@uref{http://sources.redhat.com/cygwin/,Cygwin toolset}, which contains
-everything you need to compile and run Unix programs under Windows.
-Without Cygwin, compiling dfej under Windows is likely to be a chore.
-You can install Cygwin by simply running the program found at
-@uref{http://sources.redhat.com/cygwin/setup.exe}.
+@uref{http://sources.redhat.com/cygwin/,Cygwin toolset}; see
+@ref{Windows requirements}.  Without Cygwin, compiling dfej under
+Windows is likely to be a chore.
+
 
 @c (or, alternately, at
 @c @uref{ftp://ftp.freesoftware.com/pub/sourceware/cygwin/latest/setup.exe}).
@@ -384,6 +384,7 @@ Compile the Daikon C runtime library.
 cd front-end/c
 make
 @end example
+@noindent
 This creates the file @file{daikon_runtime.o}; you will use it and
 @file{daikon_runtime.h}, which also appears in @file{front-end/c},
 when compiling C and C++ programs in which you wish to detect invariants.
@@ -434,6 +435,9 @@ This creates the dfec executable,  @file{release_2.44/bin/dfec}.
 In order to run Daikon, you must have a Java 1.3 (or later) JVM, or
 @uref{http://java.sun.com,, Java virtual machine}.
 
+If you wish to re-compile Daikon from scratch, you will need the C
+preprocessor, @command{cpp}.
+
 You also need a compiler for whatever language your target programs are
 written in.  For instance, if you wish to analyze Java programs, you
 need a Java compiler such as @command{javac} or @command{jikes}.  If you
@@ -446,6 +450,25 @@ using a precompiled binary provided at
 @uref{http://gcc.gnu.org/,, gcc}.  (This front end, which permits you to
 detect invariants in Java programs, is written in C++, and sources are
 distributed with Daikon.)
+
+@node    Windows requirements,  , Installing dfec, Installing
+@subsection Windows requirements for running Daikon
+
+If you are running Daikon under Windows, we strongly recommend that you
+install the @uref{http://sources.redhat.com/cygwin/,Cygwin toolset},
+which contains everything you need to compile and run Unix programs
+under Windows.  You can install Cygwin by simply running the program
+found at @uref{http://sources.redhat.com/cygwin/setup.exe}.
+
+You may also need to install
+@uref{http://www.activestate.com/ASPN,ActiveState Perl} in order to run
+the @command{modbit-munge.pl} script.  A user reports that Cygwin perl
+does not deal properly with files whose lines are separated by
+"@samp{\r\n}", which is the DOS default.  It deals fine with files whose
+lines are separated with "@samp{\n}", which is the Unix default.  By
+contrast, ActiveState Perl deals properly with both varieties.  You can
+download ActiveState Perl from
+@uref{http://www.activestate.com/ASPN/Downloads/ActivePerl/index/}.
 
 
 @node    Example use, Detecting invariants, Installing, Top
@@ -766,7 +789,8 @@ Java front end is more complete and robust than the C/C++ front end.
 @node    Java programs, C programs, Instrumentation, Instrumentation
 @subsection Java programs
 
-To instrument Java source programs, simply invoke @file{dfej} on them:
+To instrument Java source programs, simply invoke @file{dfej}, the
+Daikon front end for Java, on them:
 @example
       dfej @var{filename1}.java @var{filename2}.java @var{...}
 @end example
@@ -788,8 +812,19 @@ The Daikon front end for Java has two effects:
 See the @file{dfej} usage message for more information.  See
 @ref{Installing dfej} for information on installing dfej.
 
-The Daikon front end for Java, @file{dfej}, works on Java code which
+@command{dfej} works on Java code which
 corresponds to any version of the Java language, from 1.0 to 1.3.
+
+@command{dfej} is intended to be run from a directory on your classpath.
+For instance, if you have @file{foo/Bar.java} file in package "foo",
+then you should run @samp{dfej foo/Bar.java} from the parent directory
+of @file{foo} rather than running @samp{dfej Bar.java} from directory
+@file{foo}.  The reason is that in the latter case, you will end up with
+file @file{foo/daikon-java/Bar.java}, whereas in the former case you
+will end up with file @file{daikon-java/foo/Bar.java}.  In the former
+case the directory structure does not correspond to the package
+structure, whereas in the latter case, it does (just add
+@file{daikon-java} to your classpath).
 
 
 @menu
@@ -808,6 +843,7 @@ files are instrumented.  For instance, after
 @example
 dfej Foo.java Bar.java
 @end example
+@noindent
 the instrumented versions of @file{Foo.java} and @file{Bar.java} output
 information about all Foo objects (including Foo objects that are
 components of Bar objects, that are arguments to Bar functions, etc.),
@@ -850,6 +886,7 @@ for instance,
 @example
 dfec -I/usr/lib/gcc-lib/i386-redhat-linux/egcs-2.91.66/include myfile.c
 @end example
+@noindent
 You can probably find the name of your system directory by running
 @command{gcc -v} on any myfile, and looking for what follows the line
 stating @code{#include <...> search starts here:}.
@@ -964,6 +1001,7 @@ resulting @file{.dtrace} files:
 @example
 modbit-munge.pl @var{myprog}.dtrace
 @end example
+@noindent
 This step fixes up some potential problems that may appear in the
 @file{.dtrace} file.
 
@@ -1015,6 +1053,7 @@ grant @{
     permission java.io.FilePermission "<<ALL FILES>>", "read, write, delete, execute";
 @};
 @end example
+@noindent
 Do not use this policy file with untrusted applets.
 
 @item
@@ -1409,7 +1448,6 @@ Daikon; it also tells you how to report bugs in a useful manner.
 
 @menu
 * dfej problems::               
-* Instrumentation problems::    
 * Daikon problems::             
 * Other problems::              
 * Reporting bugs::              
@@ -1417,7 +1455,7 @@ Daikon; it also tells you how to report bugs in a useful manner.
 * Further reading::             
 @end menu
 
-@node    dfej problems, Instrumentation problems, Troubleshooting, Troubleshooting
+@node    dfej problems, Daikon problems, Troubleshooting, Troubleshooting
 @section Problems with dfej
 
 @menu
@@ -1440,6 +1478,7 @@ stream.cpp: In method `void LexStream::ProcessInputUnicode (const char *, long i
 stream.cpp:901: cannot convert `const char **' to `char **' for
 argument `2' to `iconv (void *, char **, size_t *, char **, size_t *)'
 @end example
+@noindent
 then undefine preprocessor macro @code{HAVE_ICONV_H} and try compiling
 again.
 (This has been reported on Red Hat Linux 7.0.)
@@ -1457,8 +1496,20 @@ MyFile.java:0:0:0:0: Error: Could not find package named:
 MyFile.java:0:0:0:0: Error: Could not find package named: 
                 ./java/lang
 @end example
+@noindent
 then you need to add @file{rt.jar} to your
-CLASSPATH; @xref{Installing dfej}.
+CLASSPATH; see @ref{Installing dfej}.
+
+
+If you get a warning like
+@example
+     *** Warning: the file "/cygdrive/c/jswdk-1.0.1/jspengine.jar" is not a valid zip file.
+@end example
+@noindent
+then you have set your CLASSPATH incorrectly:  it names a nonexistent
+file or a file that is not a @file{.jar} Java archive.  You should adjust
+your CLASSPATH to remove the offending file.  This warning has no effect
+on the operation of dfej, however.
 
 
 dfej does not handle anonymous classes like that created by the expression
@@ -1469,15 +1520,16 @@ dfej does not handle anonymous classes like that created by the expression
       @}
   @}
 @end example
+@noindent
 You may be able to work around this by running dfej on other files of
 your application, but not those with anonymous classes.
 
 
-@node    Instrumentation problems, Daikon problems, dfej problems, Troubleshooting
-@section Problems running instrumented code
+@c @node    Instrumented code problems, Daikon problems, dfej problems, Troubleshooting
+@c @section Problems running instrumented code
 
 
-@node    Daikon problems, Other problems, Instrumentation problems, Troubleshooting
+@node    Daikon problems, Other problems, dfej problems, Troubleshooting
 @section Problems running Daikon
 
 
@@ -1521,6 +1573,7 @@ If Daikon runs out of memory, generating a message like
 	Exception in thread "main" java.lang.OutOfMemoryError
 	        <<no stack trace available>>
 @end example
+@noindent
 then the problem is likely to be an excessively large @file{.dtrace}
 file.  In addition to the solutions discussed in @ref{Large dtrace
 files}, you can try increasing the amount of memory available to Java
@@ -1562,12 +1615,14 @@ files.  There are several solutions to this problem.
 @example
       trace-untruncate @var{myfile}.dtrace
 @end example
+@noindent
     modifies @file{myfile.dtrace} in place to remove the last record.
 @item 
     If you wish to instrument fewer methods, you can use the 
 @example
       -daikon_omit=@var{STRING}
 @end example
+@noindent
     argument to dfej.  (Run dfej without any arguments to see a list of its
     options.)  Dfej will not produce data trace output for classes or
     procedures that match the STRING.  Running the instrumented program
@@ -1587,6 +1642,7 @@ files.  There are several solutions to this problem.
 @example
       -r @var{PPT_REGEXP}
 @end example
+@noindent
     argument.  (Run "@command{java daikon.Daikon}" to see a list of
     arguments.)  With the @option{-r} flag, only program points matching
     the regular expression are processed.  This can take the place of the
