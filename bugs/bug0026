@@ -1,0 +1,28 @@
+Version:      $Id$
+Owner:        mharder <mharder@lcs.mit.edu>, scruffy@lcs.mit.edu
+Tool:         dtrace-diff.pl
+Summary:      Warning: Argument "uninit" isn't numeric in subtraction
+Severity:     Boneheaded
+Status:       New
+Reproducible: Yes
+Description:
+
+When I run the dfec test named "test", dtrace-diff.pl gives the
+following warnings:
+
+dtrace-diff.pl test.decls test.dtrace test.dtrace.ideal > test.dtrace.diff
+Argument "uninit" isn't numeric in subtraction (-) at /g5/users/mharder/research/invariants/scripts/dtrace-diff.pl line 138, <DTB> line 198.
+Argument "uninit" isn't numeric in subtraction (-) at /g5/users/mharder/research/invariants/scripts/dtrace-diff.pl line 138, <DTB> line 198.
+Argument "uninit" isn't numeric in subtraction (-) at /g5/users/mharder/research/invariants/scripts/dtrace-diff.pl line 138, <DTB> line 198.
+Argument "uninit" isn't numeric in subtraction (-) at /g5/users/mharder/research/invariants/scripts/dtrace-diff.pl line 138, <DTB> line 198.
+
+
+These were revealed when Mike changed the dtrace-diff.pl script so
+warnings are enabled.  The code should be changed to eliminate these
+warnings.
+
+--
+$Log$
+Revision 1.1  2002-03-18 22:23:38  mharder
+new bug0026
+
