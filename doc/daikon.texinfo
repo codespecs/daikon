@@ -2948,7 +2948,7 @@ Defines the preprocessor macro @var{macro} to be @var{value}.
 @item --tracefilename=@var{filename}
 Specifies the default name for the @file{.dtrace} file (default
 @file{daikon-output/@var{myprog}.dtrace}, where @file{@var{myprog}.c} is
-the instrumented program).  If the filename is relative with respect
+the instrumented program file that contains the main() function).  If the filename is relative with respect
 to the current directory at runtime, not at compile time.
 If the DTRACEFILE environment
 variable is set (to a file name) when the instrumented program is run,
@@ -2975,10 +2975,10 @@ Specifies the directory in which to create @file{@var{myprog}.decls}
 @item --instrsourcedir=@var{instrdir}
 Specifies the directory in which to write instrumented source files
 (default @file{daikon-instrumented/}).  The instrumented files have the
-same names and directory structure as the original input files, with the
-slight exception that the file suffix is set to @file{.cc}, so if you
+same names and directory structure as the original input @file{.c} or @file{.cc} files, with the
+slight exception that the file suffix is always set to @file{.cc}, so if you
 instrument @file{@var{myprog}.c}, you will end up with
-@file{daikon-instrumented/@var{myprog}.cc}.  If @var{instrdir} is ``.'',
+@file{daikon-instrumented/@var{myprog}.cc}.  Header files (files with a @file{.h} extension) are textually substituted into the instrumented @file{.cc} files, so they do not appear in the instrumented source directory.  If @var{instrdir} is ``.'',
 then instrumentation is performed in-place, first copying the source
 file @file{myprog.c} to @file{myprog.c.uninst}, then overwriting
 @file{myprog.c} with instrumented source.  If @file{myprog.c.uninst}
@@ -3079,10 +3079,12 @@ permitting users to edit it for use on subsequent runs, rather than
 having to create it from scratch.)  The disambig file
 lists all the instrumented program points, and under each, a list of
 all the variables in scope at that program point, along with the types
-that the variables are instrumented as:
-@samp{A} for array, @samp{P} for pointer to single value, @samp{I} for
-integer, @samp{C} for character.
-
+that the variables are instrumented as.
+For pointer variables, there are two options:  @samp{A} for array, and @samp{P} for pointer to single value.
+For variables of type @code{char}, there are two options:  @samp{I} for
+integer (i.e. numerical value), @samp{C} for character.  This allows you to
+choose whether a @code{char} variable refers to a short numerical value that
+mathematical invariants should be calculated over, or an ASCII character.
 
 The disambig file contains an entry for each program point and for every
 user-defined class or struct in instrumentation scope.  Members of structs
@@ -3239,8 +3241,10 @@ appears in some Linux distributions).
 
 @command{dfec} technically only instruments C++ programs.  However, most
 ANSI C programs are also legal C++ programs.  Programs that define
-symbols that are C++ keywords, such as @samp{bool}, require some
-additional effort to process with dfec.  dfec does not support K&R C or
+symbols that are C++ keywords, such as @samp{bool}, require that these
+symbols be changed to another name that does not conflict with the C++
+namespace (for example, 'bool' can be changed to 'boolean').
+dfec does not support K&R C or
 other non-ANSI/ISO C dialects; convert such programs to ISO C before
 running dfec.  The @command{protoize} program (distributed with many
 versions of Unix and also widely available online) helps to perform this
@@ -3254,6 +3258,60 @@ uninitialized elements.  Array accesses in files not supplied to dfec
 too little of the array to be output.  This is not a problem for the
 stdc library functions found in @file{string.h}, because they have
 been specially modified to maintain the array extent information.
+
+Other functions can be added to dfec's list of special-case functions.
+For example, if there was a function with signature
+@example
+  int foo(char *arg1, char *arg2)
+@end example
+that was in the system header file @file{<bar.h>}, you would need to do
+these things:
+
+@enumerate
+@item
+Add a @code{#include} directive for @file{<bar.h>} to @file{daikon_runtime.cc}.
+For clarity, this should go in the section where the other overloaded functions
+go.  You can find this section by searching for this text:
+@example
+/* functions that we're overloading with DAIKON_* implementations: */
+#include <string.h>
+@end example
+
+@item
+Add an instrumented implementation to @file{daikon_runtime.cc}.  This requires
+knowledge of how smartpointers and the basemap work.  Typically, the
+instrumented implementation will call the normal library function, then
+manually adjust the max_seen pointers in the basemap to their correct values,
+based on semantic knowledge about the function itself.  For examples, look
+over the implementations provided for @file{string.h}.
+The signature of the function must be changed in two ways:  the name should
+have "DAIKON_" prepended to it, to avoid namespace pollution (the calls are
+resolved through a macro definition explained below), and the argument and
+return value types must be changed as well to reflect the use of
+smartpointers.  In this example, @code{foo()} as above would be declared as
+@example
+int DAIKON_foo(DaikonSmartPointer<char> arg1, DaikonSmartPointer<char> arg2);
+@end example
+
+@item
+Add a macro definition and a function declaration to @file{daikon_runtime.h}.
+There is a large section of these near the end of the file.  In the case of
+@code{foo()} above, we would need to insert:
+@example
+extern int DAIKON_foo(DaikonSmartPointer<char> arg1, DaikonSmartPointer<char> arg2);
+#define foo DAIKON_foo
+@end example
+You can find the section to add this in by searching for
+@example
+/* add other user-overloaded functions here */
+@end example
+Be sure to place the declaration and macro definition before the @code{#endif}
+signifying the end of the !COMPILING_DAIKON_RUNTIME block.  If you put the
+macro definition outside this block, then the runtime library will fail to
+compile.
+
+@end enumerate
+
 
 @c [the following limitation is deprecated as of 7/02/2001.]
 @c [global/local/class vars are now scoped with '::', '', and 'this->'.]
