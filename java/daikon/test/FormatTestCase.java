@@ -347,20 +347,50 @@ class FormatTestCase {
   public static FormatTestCase instantiate(LineNumberReader commands, boolean generateGoals) {
     List testCases = new Vector();
 
-    String className = getNextRealLine((BufferedReader)commands);
-
-    // End of file reached
-    if (className == null) return null;
+    // The first line contains the class and its instantiate args
+    // each token is separated by blanks.  Each argument to instantiate
+    // consists of a type and its value.  For example
+    // daikon.inv/binary.twoScalar.NumericInt$divides boolean true
+    String line = getNextRealLine((BufferedReader)commands);
+    if (line == null) return null;
+    String tokens[] = line.split ("  *");
+    String className = tokens[0];
+    int arg_count = (tokens.length - 1) / 2;
+    Class[] arg_types  = new Class[arg_count+1];
+    Object[] arg_vals = new Object[arg_count+1];
+    int arg_index = 1;
+    for (int i = 1; i < tokens.length; i+=2) {
+      String arg_type_name = tokens[i].intern();
+      if (i+1 >= tokens.length)
+        throw new RuntimeException ("No matching arg val for argument  type"
+                                    + arg_type_name);
+      String arg_val = tokens[i+1];
+      Object val;
+      Class val_type;
+      if (arg_type_name == "boolean") {
+        val = Boolean.valueOf (arg_val);
+        val_type = boolean.class;
+      } else if (arg_type_name == "int") {
+        val = Integer.valueOf (arg_val);
+        val_type = int.class;
+      } else {
+        throw new RuntimeException ("Unexpected type " + arg_type_name);
+      }
+      arg_types[arg_index] = val_type;
+      arg_vals[arg_index] = val;
+      arg_index++;
+    }
 
     // System.out.println("On class " + className);
 
     Class classToTest = getClass(className); // Load the class from file
 
     try {
-      classToTest.getField("dkconfig_enabled"); // Enable if needs to be done
-      InvariantFormatTester.config.apply(className + ".enabled", "true");
+      Field f = classToTest.getField("dkconfig_enabled");
+      f.setBoolean (null, true);
+      // InvariantFormatTester.config.apply(className + ".enabled", "true");
     }
-    catch (NoSuchFieldException e) { // Otherwise do nothing
+    catch (Exception e) { // Otherwise do nothing
     }
 
     // Instantiate variables to be used as the names in the
@@ -374,7 +404,10 @@ class FormatTestCase {
     PptSlice sl = createSlice(vars, Common.makePptTopLevel("Test:::OBJECT", vars));
 
     // Create an actual instance of the class
-    Invariant invariantToTest = instantiateClass(classToTest, sl);
+    arg_types[0] = PptSlice.class;
+    arg_vals[0] = sl;
+    Invariant invariantToTest = instantiateClass(classToTest, arg_types,
+                                                 arg_vals);
 
     String goalOutput = "";
     String currentLine = null;
@@ -1019,4 +1052,34 @@ class FormatTestCase {
     //        throw new RuntimeException("Could not instantiate class");
     //      }
   }
+
+  /**
+   * This function instantiates an invariant class by using the
+   * static instantiate method with the specified arguments
+   *
+   * @param theClass  - the invariant class to be instantiated
+   * @param arg_types - the types of each argument
+   * @param arg_vals  - the value of each argument
+   *
+   * @return an instance of the class in theClass if one can be constructed,
+   *         else throw a RuntimeException
+   */
+  private static Invariant instantiateClass(Class theClass, Class[] arg_types,
+                                            Object[] arg_vals) {
+    try {
+      Method instanceCreator = theClass.getMethod("instantiate", arg_types);
+
+      if (instanceCreator == null)
+        throw new RuntimeException("Could not instantiate invariant "
+                                   + theClass.getName());
+
+      return (Invariant)instanceCreator.invoke(null, arg_vals);
+    }
+    catch (Exception e) {
+      e.printStackTrace(System.out);
+      throw new RuntimeException("Error while instantiating invariant "
+                                 + theClass.getName() + ": " + e.toString());
+    }
+  }
+
 }
