@@ -90,9 +90,22 @@ public final class CLASSNAME
     Assert.assertTrue(permutation.length == 3);
     Assert.assertTrue(ArraysMDE.fn_is_permutation(permutation));
     int[] new_order = new int[3];
-    new_order[permutation[0]] = var_indices[var_order][0];
-    new_order[permutation[1]] = var_indices[var_order][1];
-    new_order[permutation[2]] = var_indices[var_order][2];
+    int[] old_order = var_indices[var_order];
+
+    // "permutation" is a permutation on the var_info array. old_order
+    // was the permutation that took the formatted invariant to the
+    // var_info array, so old_order^-1 is the permutation from the
+    // var_info array to the old formatted invariant. We want to find
+    // a new_order so that when we first do "permutation", then
+    // apply the new permutation from the var_info array to the
+    // formatted invariant, we get the same formatted invariant.
+    // What we want, then. is:
+    //    new_order^-1 o permutation = old_order^-1
+    // rearranging, this is equivalent to
+    //    new_order = permutation o old_order
+    new_order[0] = permutation[old_order[0]];
+    new_order[1] = permutation[old_order[1]];
+    new_order[2] = permutation[old_order[2]];
     for (int i=0; i < var_indices.length; i++) {
       if (Arrays.equals(new_order, var_indices[i])) {
         var_order = i;
@@ -225,6 +238,12 @@ public final class CLASSNAME
   final static int order_nonsymmetric_start = order_xyz;
   final static int order_nonsymmetric_max = order_zyx;
 
+  // Be careful keeping track of the sense of the permutation the
+  // var_indices values represent. As a function on the set {0,1,2},
+  // an array var_indices[order_foo] goes from a position in the
+  // formatted invariant, to a position in the var_info array. If you
+  // want to get from a position in the var_info array to position in
+  // the formatted invariant, you need the inverse permutation.
   final static int[][] var_indices;
   static {
     var_indices = new int[order_nonsymmetric_max+1][];
