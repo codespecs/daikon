@@ -290,7 +290,9 @@ public abstract class PptSlice extends Ppt {
     // Bound invariants); find these by searching for calls to
     // flowClone().  The correct thing to do is to flow to all nearest
     // lower slices that are not covered by the sample being
-    // processed.  We should implement this change.
+    // processed.  Its actually even harder that that, because even
+    // though the sample might flow to a PptTopLevel, it might not
+    // flow to a PptConditional that hangs from it.
 
     // For each lower PptTopLevel
     for (Iterator j = po_lower.iterator(); j.hasNext(); ) {
