@@ -5,7 +5,7 @@ import daikon.derive.*;         // see dbc_name_impl(VarInfo v)
 import daikon.derive.unary.*;   // see dbc_name_impl(VarInfo v)
 import daikon.derive.binary.*;  // see dbc_name_impl(VarInfo v)
 import daikon.derive.ternary.*; // see dbc_name_impl(VarInfo v)
-import daikon.repair.Repair;
+import daikon.inv.OutputFormat.Repair;
 
 import utilMDE.*;
 

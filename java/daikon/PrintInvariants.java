@@ -13,7 +13,7 @@ import daikon.inv.OutputFormat;
 import daikon.inv.filter.*;
 import daikon.suppress.*;
 import daikon.config.Configuration;
-import daikon.repair.Repair;
+import daikon.inv.OutputFormat.Repair;
 
 public final class PrintInvariants {
 
