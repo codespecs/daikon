@@ -94,7 +94,9 @@ public class ConvertInvToDci
 
 
 		out_info = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(output_file)));
-		PptMap ppt = PptMap.getPptMapFromFile( args[0] );
+		PptMap ppt = FileIO.read_serialized_pptmap(new File(args[0]),
+							   true // use saved config
+							   );
 		for (Iterator iter = ppt.nameStringSet().iterator(); iter.hasNext(); ) {
 			out_info.write("==========");
 			out_info.newLine();
