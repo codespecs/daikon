@@ -23,6 +23,7 @@ public class SimpUtil
     // XXX not with strings
 //     if (s.indexOf("((") != -1)
 //       Assert.assertTrue(false, "'((' may not appear, '" + s + "'");
+    Assert.assertTrue(s.length() >= 4, "too short, '" + s + "'");
     if (s.charAt(0) != '(')
       Assert.assertTrue(false, "starts with lparen, '" + s + "'");
     if (s.charAt(s.length()-1) != ')')
