@@ -167,8 +167,10 @@ tests: junit
 	cd ../tests && $(MAKE) all
 
 .PHONY: junit
+# Include CLASSPATH on command line for Cygwin compatibility
 junit:
-	java -classpath ${CLASSPATH} daikon.test.MasterTester
+	@echo java daikon.test.MasterTester
+	@java -classpath ${CLASSPATH} daikon.test.MasterTester
 
 ## Documentation
 
