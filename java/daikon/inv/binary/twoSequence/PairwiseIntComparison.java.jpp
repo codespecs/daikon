@@ -167,9 +167,22 @@ public class PAIRWISEINTEQUAL
 
   public VALUETRACKER values_cache = new VALUETRACKER(8);
 
+  protected int num_values;
+
   protected PAIRWISEINTEQUAL(PptSlice ppt) {
     super(ppt);
+    num_values = 0;
   }
+
+  #if !(defined(EQUAL) || defined(EQUALFLOAT))
+  protected PAIRWISEINTEQUAL(PAIRWISEINTEQUAL_SWAP swapped_pic) {
+    super(swapped_pic.ppt);
+    if (logOn())
+      log ("Instantiated from resurrect_done_swapped");
+    this.values_cache = (VALUETRACKER)swapped_pic.values_cache.clone();
+    this.num_values = swapped_pic.num_values;
+  }
+  #endif
 
   public static PAIRWISEINTEQUAL instantiate(PptSlice ppt) {
     if (!dkconfig_enabled) return null;
@@ -239,7 +252,7 @@ public class PAIRWISEINTEQUAL
 
     return super.isObviousDynamically(vis);
 
-  }
+    }
   #endif
 
   protected Object clone() {
@@ -252,7 +265,7 @@ public class PAIRWISEINTEQUAL
     #if (defined(EQUAL) || defined(EQUALFLOAT))
     return this;
     #else
-    return new PAIRWISEINTEQUAL_SWAP(ppt);
+    return new PAIRWISEINTEQUAL_SWAP(this);
     #endif
   }
 
@@ -311,8 +324,6 @@ public class PAIRWISEINTEQUAL
     return quantResult[0] + quantResult[1] + " " + EQUALSstring + " " + quantResult[2] + quantResult[3];
   }
 
-  private int num_values = 0;
-
   public void add_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {
 
     if (logDetail() || debug.isLoggable(Level.FINE))
@@ -338,6 +349,13 @@ public class PAIRWISEINTEQUAL
     }
     if (logDetail() || debug.isLoggable(Level.FINE))
       log (debug, "Exited " + PAIRWISEINTEQUALstring + " add_modified");
+  }
+
+  /**
+   * Suppress is not ok since we keep track of values with ValueTracker
+   */
+  public boolean inProcessSuppressOk() {
+    return false;
   }
 
   protected double computeProbability() {
@@ -392,10 +410,6 @@ public class PAIRWISEINTEQUAL
     // We should only be called with our own invariant
     Assert.assertTrue (arg instanceof PAIRWISEINTEQUAL);
     PAIRWISEINTEQUAL inv = (PAIRWISEINTEQUAL) arg;
-
-    // Don't do anything if we haven't figured out an invariant yet
-    if (((PAIRWISEINTEQUAL) arg).values_cache.num_values()==0)
-      return (null);
 
     // Make sure the variables are SEQ_SUBSEQUENCE with the same start/end
     VarInfo v1 = inv.var1();

@@ -23,6 +23,11 @@ The correct way to build the system is to run 'make'.
   #define PAIRWISECOMP_GT PairwiseIntGreaterThan
   #define PAIRWISECOMP_LE PairwiseIntLessEqual
   #define PAIRWISECOMP_GE PairwiseIntGreaterEqual
+  #define SEQCOMPAR_EQ SeqSeqIntEqual
+  #define SEQCOMPAR_LT SeqSeqIntLessThan
+  #define SEQCOMPAR_GT SeqSeqIntGreaterThan
+  #define SEQCOMPAR_LE SeqSeqIntLessEqual
+  #define SEQCOMPAR_GE SeqSeqIntGreaterEqual
 #elif (defined(EQUALFLOAT) || defined(LESSTHANFLOAT) || defined(GREATERTHANFLOAT) || defined(LESSEQUALFLOAT) || defined(GREATEREQUALFLOAT))
   #define SUPERCLASS TwoSequenceFloat
   #define PRIMITIVE double
@@ -37,6 +42,11 @@ The correct way to build the system is to run 'make'.
   #define PAIRWISECOMP_GT PairwiseFloatGreaterThan
   #define PAIRWISECOMP_LE PairwiseFloatLessEqual
   #define PAIRWISECOMP_GE PairwiseFloatGreaterEqual
+  #define SEQCOMPAR_EQ SeqSeqFloatEqual
+  #define SEQCOMPAR_LT SeqSeqFloatLessThan
+  #define SEQCOMPAR_GT SeqSeqFloatGreaterThan
+  #define SEQCOMPAR_LE SeqSeqFloatLessEqual
+  #define SEQCOMPAR_GE SeqSeqFloatGreaterEqual
 #elif (defined(EQUALSTRING) || defined(LESSTHANSTRING) || defined(GREATERTHANSTRING) || defined(LESSEQUALSTRING) || defined(GREATEREQUALSTRING))
   #define SUPERCLASS TwoSequenceString
   #define PRIMITIVE String
@@ -52,6 +62,11 @@ The correct way to build the system is to run 'make'.
   #define PAIRWISECOMP_GT PairwiseStringGreaterThan
   #define PAIRWISECOMP_LE PairwiseStringLessEqual
   #define PAIRWISECOMP_GE PairwiseStringGreaterEqual
+  #define SEQCOMPAR_EQ SeqSeqStringEqual
+  #define SEQCOMPAR_LT SeqSeqStringLessThan
+  #define SEQCOMPAR_GT SeqSeqStringGreaterThan
+  #define SEQCOMPAR_LE SeqSeqStringLessEqual
+  #define SEQCOMPAR_GE SeqSeqStringGreaterEqual
 #endif
 
 #if defined(EQUAL)
@@ -247,12 +262,20 @@ public class SEQSEQINTEQUAL
 
   boolean orderMatters;
 
-  private VALUETRACKER values_cache = new VALUETRACKER(8);
+  protected VALUETRACKER values_cache = new VALUETRACKER(8);
 
   protected SEQSEQINTEQUAL(PptSlice ppt, boolean order) {
     super(ppt);
     orderMatters = order;
   }
+
+  #if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
+  protected SEQSEQINTEQUAL(SEQCOMPAR_SWAP seq_swap) {
+    super(seq_swap.ppt);
+    orderMatters = seq_swap.orderMatters;
+    values_cache = (VALUETRACKER)seq_swap.values_cache.clone();
+  }
+  #endif
 
   //   public static SEQSEQINTEQUAL instantiate(PptSlice ppt) {
   //     return instantiate (ppt, false);
@@ -301,11 +324,18 @@ public class SEQSEQINTEQUAL
     return result;
   }
 
+  /**
+   * Suppress is not ok since we keep track of values with ValueTracker
+   */
+  public boolean inProcessSuppressOk() {
+    return false;
+  }
+
   protected Invariant resurrect_done_swapped() {
     #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
     return this;
     #else
-    return new SEQCOMPAR_SWAP(ppt,orderMatters);
+    return new SEQCOMPAR_SWAP(this);
     #endif
   }
 
@@ -392,7 +422,6 @@ public class SEQSEQINTEQUAL
     #endif
   }
 
-
   public void add_modified(PRIMITIVE[] v1, PRIMITIVE[] v2, int count) {
     /// This does not do the right thing; I really want to avoid comparisons
     /// if one is missing, but not if one is zero-length.
@@ -423,16 +452,16 @@ public class SEQSEQINTEQUAL
   protected double computeProbability() {
     if (falsified) {
       return Invariant.PROBABILITY_NEVER;
-    } else if (ppt.num_samples() == 0) {
-      return Invariant.PROBABILITY_UNJUSTIFIED;
-    #if (! (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING)) )
     } else {
-      // System.out.println("prob = " + Math.pow(.5, ppt.num_values()) + " for " + format());
+      #if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
       return Math.pow(.5, values_cache.num_values());
-    #else
-    } else {
-      return Invariant.PROBABILITY_JUSTIFIED;
-    #endif
+      #else
+      if (ppt.num_samples() == 0) {
+        return Invariant.PROBABILITY_UNJUSTIFIED;
+      } else {
+        return Invariant.PROBABILITY_JUSTIFIED;
+      }
+      #endif
     }
   }
 
@@ -558,10 +587,14 @@ public class SEQSEQINTEQUAL
         //     + " " + avis[1].name.name());
         ppt = this.ppt.parent.findSlice_unordered (avis);
         if (ppt != null) {
-          SEQSEQINTEQUAL lexical_pic = SEQSEQINTEQUAL.find(ppt);
-          if (lexical_pic != null) {
+          SEQCOMPAR_EQ seq_eq = SEQCOMPAR_EQ.find(ppt);
+          SEQCOMPAR_LT seq_lt = SEQCOMPAR_LT.find(ppt);
+          SEQCOMPAR_GT seq_gt = SEQCOMPAR_GT.find(ppt);
+          SEQCOMPAR_LE seq_le = SEQCOMPAR_LE.find(ppt);
+          SEQCOMPAR_GE seq_ge = SEQCOMPAR_GE.find(ppt);
+          if ((seq_eq!=null) || (seq_lt!=null) || (seq_gt!=null) || (seq_le!=null) || (seq_ge!=null)) {
             if (logOn())
-              debug.log ("Obvious Dynamic from " + lexical_pic.format());
+              debug.log ("Obvious Dynamic from other SeqComparison");
             return (true);
           }
         }
