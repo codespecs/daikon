@@ -1,9 +1,18 @@
-: # Use -*- Perl -*- without knowing its path
-  eval 'exec perl -S -w $0 "$@"'
-  if 0;
+#!/usr/bin/env perl
 
 # Conveniently run daikon to create a .inv file and start the gui
 # $Id$
+
+use strict;
+use POSIX qw(tmpnam);
+use Getopt::Long;
+
+use constant TAR_MANIFEST_TAG => $ENV{'TAR_MANIFEST_TAG'} || '-T'; # change to -I for athena tar
+use constant DAIKON_WRAPPER_CLASSPATH => $ENV{'DAIKON_WRAPPER_CLASSPATH'} ||
+    $ENV{'CLASSPATH'};
+ # || '/g2/users/mernst/java/jdk/jre/lib/rt.jar:/g1/users/mistere/java';
+# use constant AJAX_DIR => $ENV{'AJAX_DIR'} || "ajax";
+
 
 sub usage() {
     print
@@ -18,33 +27,36 @@ sub usage() {
         "      --nocleanup         Do not remove temporary files (for debugging)\n",
 	"  -n, --nogui             Do not start the gui\n",
 	"  -s, --src               Make an archive of the source for later reference\n",
-	"  -a, --ajax              Run Ajax analysis\n",
+#	"  -a, --ajax              Run Ajax analysis\n",
+	"  -d, --debug             Print extra debugging info\n",
 	"\n",
 	"Example:\n",
 	"  daikon --output test1 packfoo.MyTestSuite 200\n",
 	;
-}
+} # usage
 
 sub usagedie() {
     usage();
     exit(1);
-}
-
-use POSIX qw(tmpnam);
-use Getopt::Long;
+} # usagedie
 
 # environment vars
 
-$TAR_MANIFEST_TAG = $ENV{'TAR_MANIFEST_TAG'} || '-T'; # change to -I for athena tar
-$DAIKON_WRAPPER_CLASSPATH = $ENV{'DAIKON_WRAPPER_CLASSPATH'} ||
-    $ENV{'CLASSPATH'} ||
-    '/g2/users/mernst/java/jdk/jre/lib/rt.jar:/g1/users/mistere/java';
-$AJAX_DIR = $ENV{'AJAX_DIR'} || "ajax";
-
-$cp_lib = $DAIKON_WRAPPER_CLASSPATH;
-$cp_dot = $cp_lib . ':.';
+my $cp_lib = DAIKON_WRAPPER_CLASSPATH;
+my $cp_dot = $cp_lib . ':.';
 
 # read options from command line
+
+my @instrument = ();
+my $output = 0;
+my $textfile = 0;
+my $verbose = 0;
+my $cleanup = 0;
+my $nocleanup = 0;
+my $nogui = 0;
+my $src = 0;
+my $ajax = 0;
+my $debug = 0;
 
 GetOptions("instrument=s" => \@instrument,
            "output=s" => \$output,
@@ -56,51 +68,33 @@ GetOptions("instrument=s" => \@instrument,
 	   "n" => \$nogui,
 	   "src" => \$src,
 	   "ajax" => \$ajax,
+	   "debug" => \$debug,
 	   ) or usagedie();
-my $nowarn = ($verbose ? "-nowarn" : ""); # for jikes
 
-$runnable = shift @ARGV  or usagedie();
-$runnable_args = join(' ', @ARGV);
+# jwa
+# this seems to be reversed...
+# don't you _want_ warnings if verbose is enabled?
+# orginal
+# my $nowarn = ($verbose ? "-nowarn" : ""); # for jikes
+# changed:
+my $nowarn = ($verbose ? "" : "-nowarn"); # for jikes
 
-# subroutines
-
-sub find {
-    my $name = shift || die;
-    my $root = shift || '.';
-    my @result;
-    open(F, "find $root -follow -name '$name' |");
-    while (my $line = <F>) {
-	chomp $line;
-	push @result, $line;
-    }
-    close(F);
-    return @result;
-}
-
-sub which {
-    my $command = shift;
-    my @result;
-    open(LINES, "which $command |");
-    while ($line = <LINES>) {
-	chomp $line;
-	next if $line =~ /not found/i;
-	next if $line =~ /no $command in/;
-	push @result, $line;
-    }
-    return @result;
-}
+my $runnable = shift @ARGV or usagedie();
+my $runnable_args = join(' ', @ARGV);
 
 # do cleanup first
 
 if ($cleanup) {
-    for $fname (find("*.u")) {
+    $debug && print "running cleanup...\n";
+    for my $fname (find("*.u")) {
+	$debug && print "deleting $fname\n";
 	unlink($fname);
     }
 }
 
 # figure out the configuration
 
-$mainsrc = $runnable;
+my $mainsrc = $runnable;
 if ($runnable =~ s/\.java$//) {
   # nothing to do
 } else {
@@ -114,15 +108,20 @@ if ($output) {
     die("File $output.inv exists") if (-f "$output.inv");
     die("File $output.src.tar.gz exists") if (-f "$output.src.tar.gz");
 } else {
-    $prefix = $runnable;
+    my $prefix = $runnable;
     $prefix =~ s/\./-/;
     my $sym = 0;
     do {
 	$sym = $sym + 1;
 	while ((length $sym) < 4) { $sym = '0' . $sym }
 	$output = "$prefix-$sym";
-    } while (-x "$output.inv" or -x "$output.inv.gz" or -x "$output.src.tar.gz");
+	# jwa
+	# I do not think you want a -x test here....
+	# -e seems more reasonable
+    } while (-e "$output.inv" or -e "$output.inv.gz" or -e "$output.src.tar.gz");
 }
+
+$debug && print "\n";
 print "Output will go in $output...\n" if $verbose;
 
 # check to see that we have jikes avaiable
@@ -134,141 +133,201 @@ unless (which('jikes')) {
 
 # check the program make sure it starts out with no errors
 # Also, ensure that .class files exist for Ajax's use
-if ($ajax) {
-  $error = system("jikes -classpath $cp_dot -depend -g $nowarn $mainsrc");
-} else {
-  $error = system("jikes -classpath $cp_dot -depend -nowrite $nowarn $mainsrc");
-}
+
+# getting rid of Ajax...
+my $error = "";
+#  if ($ajax) {
+#    $error = system("jikes -classpath $cp_dot -depend -g $nowarn $mainsrc");
+#  } else {
+$debug && print "compiling initial source program...\n";
+$debug && print "jikes -classpath $cp_dot -depend -nowrite $nowarn $mainsrc\n";
+$error = system("jikes -classpath $cp_dot -depend -nowrite $nowarn $mainsrc");
+#  }
 die ("Fix compiler errors before running daikon") if $error;
 
 # come up with a list of files which we need to care about
+$debug && print "\n";
 print "Building dependency list...\n" if $verbose;
 
 die (".u files already exist; try running with --cleanup option") if (find("*.u"));
 
-%interesting = (); # keys are interesting java file names
-system("jikes -classpath $cp_dot -depend -nowrite $nowarn +M $mainsrc") && die ("Unexpected jikes error");
-for $fname (find("*.u")) {
+my %interesting = (); # keys are interesting java file names
+$debug && print "generating makefile dependencies...\n";
+$debug && print "jikes -classpath $cp_dot -depend -nowrite $nowarn +M $mainsrc\n";
+if (system("jikes -classpath $cp_dot -depend -nowrite $nowarn +M $mainsrc")) {
+    # something bad has happened...
+    die ("Unexpected jikes error");
+}
+
+$debug && print "parsing makefile files...\n";
+for my $fname (find("*.u")) {
     open (U, $fname);
-    while ($u = <U>) {
-	for $token (split(/\s+/, $u)) {
+    while (my $u = <U>) {
+	for my $token (split(/\s+/, $u)) {
 	    if ($token =~ /^(.+)\.class$/) {
-		$file = $1 . ".java";
+		my $file = $1 . ".java";
+		$debug && print "adding $file to interesting hash\n";
 		$interesting{$file} = 1;
 	    }
 	}
     }
     close(U);
+    $debug && print "deleting $fname\n";
     unlink($fname);
 }
 
 # create a tarball of the source under inspection
 if ($src) {
-print "Creating source archive...\n" if $verbose;
+    $debug && print "\n";
+    print "Creating source archive...\n" if $verbose;
 
-$manifest = tmpnam();
-die ("tmp filename already exists") if (-e $manifest);
-open(MANIFEST, ">$manifest");
-for $srcfile (sort keys %interesting) {
-    print MANIFEST "$srcfile\n";
-}
-close(MANIFEST);
+    my $manifest = tmpnam();
+    die ("tmp filename already exists") if (-e $manifest);
+    $debug && print "writing manifest $manifest\n";
+    open(MANIFEST, ">$manifest");
+    for my $srcfile (sort keys %interesting) {
+	print MANIFEST "$srcfile\n";
+    }
+    close(MANIFEST);
 
-$err = system("tar cf - $TAR_MANIFEST_TAG $manifest | gzip > $output.src.tar.gz");
-unlink($manifest) or die("Could not unlink source manifest");
-die("Could not archive source") if $err;
+    my $err = system("tar cf - @{[TAR_MANIFEST_TAG]} $manifest | gzip > $output.src.tar.gz");
+    unlink($manifest) or die("Could not unlink source manifest");
+    die("Could not archive source") if $err;
 }
 
 # setup scratch folders
+$debug && print "\n";
 print "Preparing to instrument files...\n" if $verbose;
 
-$working = tmpnam();
+my $working = tmpnam();
+$debug && print "using temporary working directory $working\n";
 die ("tmp filename already exists") if (-e $working);
 mkdir($working, 0700) or die("Could not create tmp dir 1");
 mkdir("$working/daikon-instrumented", 0700) or die("Could not create tmp dir 2");
 
-while (1) {
-    # instrument the source files
-    print "Instrumenting files...\n" if $verbose;
-    my $files;
-    if (@instrument) {
-      $files = join(' ', @instrument);
-    } else {
-      $files = join(' ', sort (keys %interesting));
-    }
-    $dfejcommand = "dfej -classpath $cp_dot -instrsourcedir=$working/daikon-instrumented/ -declsfiledir=$working/ -tracefilename=$working/the_dtrace_file.dtrace $files";
-    if ($verbose) {
-      my($cwd) = `pwd`;
-      chomp($cwd);
-      print STDERR "dfej: cd $cwd; $dfejcommand\n";
-    }
-    $dfejoutput = `$dfejcommand 2>&1`;
-    $dfejerr = $?;
-    last if ($dfejerr);
+# Why in the world was this in a loop?  This seems to be
+# obfuscated---as far as I can tell, it is not actually looping over
+# anything, but merely using it as a way to use "last" statements to
+# skip execution if something goes wrong....  There is a better way to
+# do this.
+
+# instrument the source files
+print "Instrumenting files...\n" if $verbose;
+my $files;
+if (@instrument) {
+    $files = join(' ', @instrument);
+} else {
+    $files = join(' ', sort (keys %interesting));
+}
+my $dfejcommand = "dfej -classpath $cp_dot -instrsourcedir=$working/daikon-instrumented/ -declsfiledir=$working/ -tracefilename=$working/the_dtrace_file.dtrace $files";
+if ($verbose) {
+    my($cwd) = `pwd`;
+    chomp($cwd);
+    print STDERR "dfej: cd $cwd; $dfejcommand\n";
+}
+my $dfejoutput = `$dfejcommand 2>&1`;
+my $dfejerr = $?;
+if ($dfejerr) {
+    print $dfejoutput;
+    cleanupWorking($working);
+    die("dfej error");
+}
 
     # run Ajax
-    if ($ajax) {
-      print "Running Ajax over your java program...\n" if $verbose;
-      my($cwd) = `pwd`;
-      chomp($cwd);
-      chdir($working);
-      @decls = find('*.decls', '.');
-      if (!@decls) {
-	print STDERR "No .decls files found\n";
-	chdir($cwd);
-	last;
-      }
-      my $runnable_dots = $runnable;
-      $runnable_dots =~ s:/:.:g;
-      $ajaxcommand = "java -cp $AJAX_DIR "
-	. "ajax.tools.benchmarks.ComparablePairsDescFileReader "
-        . "-cp $AJAX_DIR/tweaked-classes.zip -ap $cwd "
-	. "$runnable_dots -rewrite " . join(" ", @decls);
-      print "Running $ajaxcommand\n" if $verbose;
-      $ajaxoutput = `$ajaxcommand 2>&1`;
-      $ajaxerr = $?;
-      if ($ajaxerr) {
-	chdir($cwd);
-	last;
-      }
+#      if ($ajax) {
+#        print "Running Ajax over your java program...\n" if $verbose;
+#        my($cwd) = `pwd`;
+#        chomp($cwd);
+#        chdir($working);
+#        my @decls = find('*.decls', '.');
+#        if (!@decls) {
+#  	print STDERR "No .decls files found\n";
+#  	chdir($cwd);
+#  	last;
+#        }
+#        my $runnable_dots = $runnable;
+#        $runnable_dots =~ s:/:.:g;
+#        $ajaxcommand = "java -cp @{[AJAX_DIR]} "
+#  	. "ajax.tools.benchmarks.ComparablePairsDescFileReader "
+#          . "-cp @{[AJAX_DIR]}/tweaked-classes.zip -ap $cwd "
+#  	. "$runnable_dots -rewrite " . join(" ", @decls);
+#        print "Running $ajaxcommand\n" if $verbose;
+#        $ajaxoutput = `$ajaxcommand 2>&1`;
+#        $ajaxerr = $?;
+#        if ($ajaxerr) {
+#  	chdir($cwd);
+#  	last;
+#        }
 
-      foreach my $d (@decls) {
-	rename($d, $d . ".bak") || die "Cannot create backup of $d!\n";
-	rename($d . ".ajax", $d) || die "Cannot update $d with $d.ajax!\n";
-      }
+#        foreach my $d (@decls) {
+#  	rename($d, $d . ".bak") || die "Cannot create backup of $d!\n";
+#  	rename($d . ".ajax", $d) || die "Cannot update $d with $d.ajax!\n";
+#        }
 
-      chdir($cwd);
-    }
+#        chdir($cwd);
+#      }
 
-    # compile the instrumented source files
-    print "Compiling files...\n" if $verbose;
-    $cp_work = "$working/daikon-instrumented:$cp_lib:.";
-    # $jikescommand = "jikes -classpath $cp_work -depend -g $nowarn ";
-    $jikescommand = "jikes -classpath $cp_work -depend -g ";
+# compile the instrumented source files
+$debug && print "\n";
+print "Compiling files...\n" if $verbose;
+my $cp_work = "$working/daikon-instrumented:$cp_lib:.";
 
-    $mainsrc_was_instrumented =
-        (! @instrument) || (grep {$_ eq $mainsrc} @instrument);
-    if ($mainsrc_was_instrumented) {
-        $jikescommand .= "$working/daikon-instrumented/$mainsrc";
-    } else {
-        $jikescommand .= "$mainsrc";
-    }
+# not sure why this was commented out... I suppose so that the user
+# will know if the instrumented files have problems...
 
-    $jikesoutput = `$jikescommand 2>&1`;
-    $jikeserr = $?;
-    last if $jikeserr;
+# $jikescommand = "jikes -classpath $cp_work -depend -g $nowarn ";
+my $jikescommand = "jikes -classpath $cp_work -depend -g ";
 
-    # run the test suite / mainline
-    print "Running your java program...\n" if $verbose;
-    $javaoutput = `java -classpath $cp_work $runnable $runnable_args 2>&1`;
-    $javaerr = $?;
-    last if $javaerr;
+my $mainsrc_was_instrumented =
+    (! @instrument) || (grep {$_ eq $mainsrc} @instrument);
+if ($mainsrc_was_instrumented) {
+    $debug && print "main source was instrumented\n";
+    $jikescommand .= "$working/daikon-instrumented/$mainsrc";
+} else {
+    $debug && print "main source was not instrumented\n";
+    $jikescommand .= "$mainsrc";
+}
 
-    # find the results
-    $dtrace = join(' ', find('*.dtrace', $working));
-    $decls = join(' ', find('*.decls', $working));
-    $outerr = !($dtrace && $decls);
-    last if $outerr;
+$debug && print "$jikescommand\n";
+my $jikesoutput = `$jikescommand 2>&1`;
+my $jikeserr = $?;
+if ($jikeserr) {
+    print "jikes command: $jikescommand\n";
+    print "jikes output: $jikesoutput\n";
+    cleanupWorking($working);
+    die("jikes error");
+}
+
+# run the test suite / mainline
+print "\nRunning your java program...\n" if $verbose;
+my $javaTestCmd = "java -classpath $cp_work $runnable $runnable_args 2>&1";
+my $javaoutput = `$javaTestCmd`;
+$debug && print "$javaTestCmd\n";
+my $javaerr = $?;
+if ($javaerr) {
+    print $javaoutput;
+    cleanupWorking($working);
+    die("java test suite error");
+}
+
+# find the results
+my $dtrace = join(' ', find('*.dtrace', $working));
+if (! $dtrace) {
+    print "No data trace (.dtrace) file found"
+	. ($verbose ? " in $working" : "") . ".\n";
+
+    cleanupWorking($working);
+    die("missing dtrace files");
+}
+
+my $decls = join(' ', find('*.decls', $working));
+if (! $decls) {
+    print "No declaration (.decls) files found"
+	. ($verbose ? " in $working" : "") . ".\n";
+
+    cleanupWorking($working);
+    die("missing decls files");
+}
 
 #      # run modbit-munge
 #      print "Running modbit-munge...\n" if $verbose;
@@ -276,70 +335,88 @@ while (1) {
 #      $mberr = $?;
 #      last if $mberr;
 
-    # run daikon
-    print "Running invariant detector...\n" if $verbose;
-    $output_to = $textfile ? "$output.txt" : '/dev/null';
-    $dkerr = system("java -classpath $cp_lib daikon.Daikon -o $output.inv $decls $dtrace > $output_to");
-    last if $dkerr;
-
-    # compress the output
-    print "Compressing output...\n" if $verbose;
-    $gzoutput = `gzip $output.inv`;
-    $gzerr = $?;
-    last if $gzerr;
-
-    last;
+# run daikon
+print "\nRunning invariant detector...\n" if $verbose;
+my $output_to = $textfile ? "$output.txt" : '/dev/null';
+my $daikonCmd = ("java -classpath $cp_lib daikon.Daikon -o $output.inv " .
+		 "$decls $dtrace > $output_to");
+$debug && print "$daikonCmd\n";
+my $dkerr = system($daikonCmd);
+if ($dkerr) {
+    cleanupWorking($working);
+    die("daikon error");
 }
 
-if (! $nocleanup) {
-  system("rm -rf $working") && die("Could not remove working dir");
-} else {
-  print "Leaving $working in place\n";
+# compress the output
+print "\nCompressing output...\n" if $verbose;
+my $gzCmd = "gzip $output.inv";
+$debug && print "$gzCmd\n";
+my $gzoutput = `$gzCmd`;
+my $gzerr = $?;
+if ($gzerr) {
+    print $gzoutput;
+    cleanupWorking($working);
+    die("gzip error");
 }
 
-if ($dfejerr) {
-  print $dfejoutput;
-  die("dfej error");
-}
-if ($ajaxerr) {
-  print "ajax command: $ajaxcommand\n";
-  print "ajax output: $ajaxoutput\n";
-  die("ajax error");
-}
-if ($jikeserr) {
-  print "jikes command: $jikescommand\n";
-  print "jikes output: $jikesoutput\n";
-  die("jikes error");
-}
-if ($javaerr) {
-  print $javaoutput;
-  die("java test suite error");
-}
-if ($outerr) {
-  if (! $dtrace) {
-    print "No data trace (.dtrace) file found"
-      . ($verbose ? " in $working" : "") . ".\n";
-  }
-  if (! $decls) {
-    print "No declaration (.decls) files found"
-      . ($verbose ? " in $working" : "") . ".\n";
-  }
-  die("missing output files");
-}
+# do cleanup
+cleanupWorking($working);
+
+#  if ($ajaxerr) {
+#      print "ajax command: $ajaxcommand\n";
+#      print "ajax output: $ajaxoutput\n";
+#      die("ajax error");
+#  }
+
 #  if ($mberr) {
 #    print $mboutput;
 #    die("modbit error");
 #  }
-if ($dkerr) {
-  die("daikon error");
-}
-if ($gzerr) {
-  print $gzoutput;
-  die("gzip error");
-}
 
 # run the gui
 unless ($nogui) {
-    print "Starting the gui...\n" if $verbose;
+    print "\nStarting the gui...\n" if $verbose;
     system("java -classpath $cp_lib daikon.gui.treeGUI.InvariantsGUI $output.inv.gz");
 }
+
+
+### subroutines ###
+
+sub cleanupWorking {
+########################################################################
+# clean up the working directory
+########################################################################
+    my $working = shift;
+    if (! $nocleanup) {
+	system("rm -rf $working") && die("Could not remove working dir");
+    } else {
+	print "Leaving $working in place\n";
+    }
+} # cleanupWorking
+
+sub find {
+    my $name = shift || die;
+    my $root = shift || '.';
+    my @result;
+    open(F, "find $root -follow -name '$name' |");
+    while (my $line = <F>) {
+	chomp $line;
+	push @result, $line;
+    }
+    close(F);
+    return @result;
+} # find
+
+sub which {
+    my $command = shift;
+    my @result;
+    open(LINES, "which $command |");
+    while (my $line = <LINES>) {
+	chomp $line;
+	next if $line =~ /not found/i;
+	next if $line =~ /no $command in/;
+	push @result, $line;
+    }
+    return @result;
+} # which
+
