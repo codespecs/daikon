@@ -109,6 +109,7 @@ clean: texi-clean
 	rm -f developer.tmp developer.pg \
 		developer.info developer.info-[0-9] \
 		developer.log developer.dvi developer.ps developer.pdf developer.html
+	rm -f images/dfepl-flow.{eps,pdf,png}
 
 texi-clean:
 	rm -rf daikon.aux daikon.cp daikon.cps daikon.fn daikon.ky daikon.pg daikon.toc daikon.tp daikon.vr
