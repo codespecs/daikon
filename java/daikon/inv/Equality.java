@@ -1,31 +1,40 @@
 package daikon.inv;
 
-import daikon.PptSlice;
+import daikon.*;
+import utilMDE.*;
 import java.util.*;
 
-//  This class is used for displaying several equality Comparison invariants ("x == y", "y
-//  == z") as one Equality invariant ("x == y == z").  This class is created after the
-//  actual invariant detection, and right before printing (eg, during the GUI stage).
-//  Hence this is not a real invariant class; it does not implement many of the methods
-//  that most invariant classes do.  Furthermore, calling arbitrary methods on this class
-//  may not work.
-
+/**
+ * The Equality invariant is used for displaying several equality
+ * Comparison invariants ("x == y", "x == z") as one Equality
+ * invariant ("x == y == z").  This class is created after the actual
+ * invariant detection, and right before printing (eg, during the GUI
+ * stage).  Hence this is not a real invariant class; it does not
+ * implement many of the methods that most invariant classes do.
+ * Furthermore, calling arbitrary methods on this class may not work.
+ **/
 public final class Equality extends Invariant {
 
-  List variables;		// List instead of Set because we need to preserve order, so
-				// that the canonical variable remains first.
-  String invariantText;		// Looks like "x == y == z".
+  private VarInfo[] vars;		
 
-  public Equality( List variables, PptSlice ppt ) {
-    super( ppt );		// Need ppt because it reports num_values() and num_samples().
-    this.variables = variables;
+  /**
+   * @param vars Variables which are equivalent, with the canonical
+   * one first.  Elements must be of type VarInfo.
+   **/
+  public Equality(Collection variables, PptSlice ppt) {
+    super(ppt);    
+    vars = (VarInfo[]) variables.toArray(new VarInfo[variables.size()]);
+    Assert.assert(vars.length >= 2);
+    for (int i=0; i < vars.length; i++) {
+      Assert.assert(vars[0].ppt == vars[i].ppt);
+      Assert.assert(vars[0].rep_type.isArray() == vars[i].rep_type.isArray());
+    }
+  }
 
-    //  Might as well construct the string here.
-    Iterator iter = variables.iterator();
-    StringBuffer invariantText = new StringBuffer( (String) iter.next());
-    while (iter.hasNext())
-      invariantText.append( " == " + (String) iter.next());
-    this.invariantText = invariantText.toString();
+  public boolean hasNonCanonicalVariable() {
+    // In fact, we do have non-canonical variables, but it's our
+    // little secret.
+    return false;
   }
 
   //  Here is my rationale for always returning 0.  This Equality invariant aggregates
@@ -37,23 +46,71 @@ public final class Equality extends Invariant {
 
   public double computeProbability() { return 0; }
 
-  public String repr() { return invariantText; }
+  public String repr() {
+    return format();
+  }
 
-  public String format() { return invariantText; }
+  public String format() {
+    StringBuffer result = new StringBuffer(vars[0].name.name());
+    for (int i=1; i < vars.length; i++) {
+      result.append(" == ");
+      result.append(vars[i].name.name());
+    }
+    return result.toString();
+  }
 
-  //  I will deal with this when the time comes.  I'll need to talk to Jeremy about what
-  //  this method would return.
   public String format_esc() {
-    throw new Error( "Equality.format_esc(): this method should not be called" );
+    StringBuffer result = new StringBuffer();
+    if (vars[0].rep_type.isArray()) {
+      for (int i=1; i < vars.length; i++) {
+	if (i > 1) {
+	  result.append(Global.lineSep + "&& ");
+	}
+	String[] form =
+	  VarInfoName.QuantHelper.format_esc(new VarInfoName[]
+	    { vars[0].name, vars[i].name }, true); // elementwise
+	result.append(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
+      }
+    } else {
+      for (int i=1; i < vars.length; i++) {
+	if (i > 1) {
+	  result.append(" && ");
+	}
+	result.append("(");
+	result.append(vars[0].name.esc_name());
+	result.append(" == ");
+	result.append(vars[i].name.esc_name());
+	result.append(")");
+      }
+    }
+    return result.toString();
   }
 
   public String format_simplify() {
-    throw new Error( "Equality.format_simplify(): this method should not be called" );
+    StringBuffer result = new StringBuffer("(AND");
+    if (vars[0].rep_type.isArray()) {
+      for (int i=1; i < vars.length; i++) {
+	String[] form =
+	  VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
+	    { vars[0].name, vars[i].name }, true); // elementwise
+	result.append(" " + form[0] + "(EQ " + form[1] + " " + form[2] + ")" + form[3]);
+      }
+    } else {
+      for (int i=1; i < vars.length; i++) {
+	result.append(" (EQ ");
+	result.append(vars[0].name.simplify_name());
+	result.append(" ");
+	result.append(vars[i].name.simplify_name());
+	result.append(")");
+      }
+    }
+    result.append(")");
+    return result.toString();
   }
 
   //  This method isn't going to be called, but it's declared abstract in Invariant.
   public boolean isSameFormula( Invariant other ) {
-    throw new Error( "Equality.isSameFormula(): this method should not be called" );
+    throw new UnsupportedOperationException( "Equality.isSameFormula(): this method should not be called" );
   }
 }
 
