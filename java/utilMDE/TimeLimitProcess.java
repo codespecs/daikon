@@ -13,6 +13,7 @@ public class TimeLimitProcess {
 
   private Process p;
   private long timeLimit;
+  private boolean timed_out;
 
   private Timer timer;
 
@@ -20,13 +21,15 @@ public class TimeLimitProcess {
   private StringBuffer errorMessage;
 
   /**
-   * Requires: p != null && command != null
+   * Requires: p != null
    * @param timeLimit in milliseconds
    **/
   public TimeLimitProcess (Process p, long timeLimit) {
     this.p = p;
     timer = new Timer(true);
-    timer.schedule(new TPTimerTask(p), timeLimit);
+    this.timeLimit = timeLimit;
+    // System.out.println ("new timelimit process, timeout = " + timeLimit);
+    timer.schedule(new TPTimerTask(this), timeLimit);
   }
 
   /**
@@ -35,6 +38,21 @@ public class TimeLimitProcess {
    **/
   void destroy() {
     p.destroy();
+  }
+
+  /**
+   * Returns true if the process has timed out (run for more than the
+   * timeLimit msecs specified in the constructor)
+   */
+  boolean timed_out() {
+    return (timed_out);
+  }
+
+  /**
+   * Returns the timeout time in msecs
+   */
+  long timeout_msecs() {
+    return (timeLimit);
   }
 
   /**
@@ -95,17 +113,26 @@ public class TimeLimitProcess {
    * This TimerTask destroys the process that is passed to it.
    **/
   private class TPTimerTask extends TimerTask {
-    Process p;
-    public TPTimerTask(Process p) {
-      this.p = p;
+    TimeLimitProcess tp;
+    public TPTimerTask(TimeLimitProcess tp) {
+      this.tp = tp;
     }
     public void run() {
+      // If exitValue is queried while the process is still running,
+      // the IllegalThreadStateException will be thrown.  If that
+      // happens, we kill the process and note that so callers can
+      // tell that a timeout occurred.
       try {
-        int exit = p.exitValue();
-        // System.out.println(); System.out.println("Process exited with status " + exit + ": " + command); System.out.println();
+        int exit = tp.p.exitValue();
+        // System.out.println();
+        // System.out.println("Process exited with status " + exit);
+        // System.out.println();
       } catch (IllegalThreadStateException ie) {
-        p.destroy();
-        // System.out.println("Process terminated after " + timeLimit + " msec: " + command); System.out.println();
+        tp.p.destroy();
+        tp.timed_out = true;
+        //System.out.println("Terminated process after timelimit of "
+        //                    + timeLimit + " msecs expired");
+        //System.out.println();
       }
       this.cancel();
     }
