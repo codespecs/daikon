@@ -946,7 +946,8 @@ public final class VarInfo
   /** Convenience methods that return information from the ValueTuple. **/
   public int getModified(ValueTuple vt) {
     if (is_static_constant)
-      return ValueTuple.STATIC_CONSTANT;
+      // return ValueTuple.STATIC_CONSTANT;
+      return ValueTuple.MODIFIED;
     else
       return vt.getModified(value_index);
   }
