@@ -153,7 +153,8 @@ public final class OneOfString  extends SingleString  implements OneOf {
     for (int i=0; i<num_elts; i++) {
       String value = elts[i];
       if (!is_type) {
-	value = "\"" + UtilMDE.quote(value) + "\"";
+	result = "format_simplify " + this.getClass() + " cannot express Strings";
+	break;
       } else {
 	if (value.startsWith("[")) {
 	  value = UtilMDE.classnameFromJvm(value);
