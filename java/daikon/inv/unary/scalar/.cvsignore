@@ -1,2 +1,10 @@
 *.class
 *.java-bak
+LowerBound.java
+UpperBound.java
+LowerBoundFloat.java
+UpperBoundFloat.java
+OneOfScalar.java
+OneOfFloat.java
+NonZero.java
+NonZeroFloat.java

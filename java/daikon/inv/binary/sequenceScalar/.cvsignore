@@ -1,1 +1,9 @@
 *.class
+Member.java
+MemberFloat.java
+SeqIntComparison.java
+SeqFloatComparison.java
+SequenceScalar.java
+SequenceFloat.java
+SequenceScalarFactory.java
+SequenceFloatFactory.java

@@ -1,1 +1,7 @@
 *.class
+SequenceScalarArbitrarySubsequence.java
+SequenceFloatArbitrarySubsequence.java
+SequenceStringArbitrarySubsequence.java
+SequenceScalarArbitrarySubsequenceFactory.java
+SequenceFloatArbitrarySubsequenceFactory.java
+SequenceStringArbitrarySubsequenceFactory.java
