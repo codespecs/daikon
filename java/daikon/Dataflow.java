@@ -236,7 +236,7 @@ public class Dataflow
 	      // (We depend on the fact that we see EXIT before EXITnn
 	      // in the iterator (eep!).)
 	      VarInfo combvar = comb_exit_ppt.findVar(origvar.name);
-	      int[] nonces = postvar.po_higher_nonce(); 
+	      int[] nonces = postvar.po_higher_nonce();
 	      Assert.assert(nonces.length == 1, vi.name.name());
 	      origvar.addHigherPO(combvar, nonces[0]);
 	    }
@@ -395,7 +395,7 @@ public class Dataflow
 	  if (maybe.derived == null) continue;
 	  if (vi.derived.isSameFormula(maybe.derived)) {
 	    VarInfo[] maybe_bases = maybe.derived.getBases();
-	    if (Arrays.equals(basemap, maybe_bases)) {  
+	    if (Arrays.equals(basemap, maybe_bases)) {
 	      vi_higher = maybe;
 	      break;
 	    }
@@ -544,6 +544,14 @@ public class Dataflow
     // We could assert that start's VarInfos are from ppt, and that
     // the VarAndSources have right the varinfo_index for them.
 
+    if (start.size() == 0) {
+      // Return the trivial result: one self-step with an empty
+      // projection.
+      return new PptsAndInts
+	(new PptTopLevel[] { ppt },
+	 new int[][] { new int[0] } );
+    }
+
     // These two lists collect the result that will be returned
     List dataflow_ppts = new ArrayList(); // of type PptTopLevel
     List dataflow_transforms = new ArrayList(); // of type int[nvis]
@@ -564,6 +572,7 @@ public class Dataflow
 	if (head == null) break;
 
 	// Add a flow from receiving_ppt to head
+	Assert.assert(head.size() >= 1);
 	PptTopLevel flow_ppt = ((VarAndSource) head.get(0)).var.ppt;
 	int[] flow_transform = new int[nvis];
 	Arrays.fill(flow_transform, -1);
@@ -622,7 +631,7 @@ public class Dataflow
     for (int j=0; j < transforms_array.length; j++) {
       transforms_array[j] = Intern.intern(transforms_array[j]);
     }
-    
+
     return new PptsAndInts(ppts_array, transforms_array);
   }
 
