@@ -6,6 +6,12 @@ import junit.framework.*;
 import junit.textui.*;
 import utilMDE.*;
 
+/**
+ * This class runs all the Daikon unit tests.  These tests are small, fast
+ * to run, and certainly not comprehensive.  Daikon also has a much more
+ * substantial set of regression tests; in the CVS repository, they can be
+ * found at invariants/tests/.
+ **/
 public class MasterUnitTester extends TestCase {
 
   public static void main(String[] args) {
