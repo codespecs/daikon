@@ -1,6 +1,8 @@
 package daikon;
 
 import daikon.inv.Invariant.OutputFormat;
+import daikon.derive.*; // see Subscript.dbc_name_impl(VarInfo v)
+import daikon.derive.binary.*; // see Subscript.dbc_name_impl(VarInfo v)
 
 import utilMDE.*;
 
@@ -284,11 +286,22 @@ public abstract class VarInfoName
    * Return the String representation of this name in the dbc style
    * output format
    * @return the string representation (interned) of this name, in the
-   * java style output format
+   * dbc style output format
+   *
    **/
-  public String dbc_name() {
-    return dbc_name(null);
-  }
+
+  // CP: Commented out because we really should always pass dbc_name
+  //     a VarInfo. The reason is that the variable being called may
+  //     have a Prestate component, in which case the type t of
+  //     the component needs to be part of the DBC formatting
+  //     $pre(t, x), and in this case the type is determined from
+  //     the VarInfo. Note that when the variable has no prestate,
+  //     the VarInfo is not actually used. But to avoid mistakes,
+  //     we will always pass the VarInfo corresponding to the
+  //     variable being formatted.
+
+  //public String dbc_name() { return "dbc_name(null):" + repr(); }
+  //public String dbc_name() { return dbc_name(null); }
 
   /**
    * Return the String representation of this name in the dbc style
@@ -338,18 +351,14 @@ public abstract class VarInfoName
   /**
    * @return name of this in the specified format
    **/
-  public String name_using(OutputFormat format) {
+  public String name_using(OutputFormat format, VarInfo vi) {
 
     if (format == OutputFormat.DAIKON) return name();
     if (format == OutputFormat.SIMPLIFY) return simplify_name();
     if (format == OutputFormat.ESCJAVA) return esc_name();
     if (format == OutputFormat.JAVA) return java_name();
     if (format == OutputFormat.JML) return jml_name();
-    if (format == OutputFormat.DBCJAVA)
-      // This is unfortunate, but we would like to have the VarInfo for
-      // DBC output, and it's not worth changing this methods signature.
-      return dbc_name();
-      //throw new UnsupportedOperationException();
+    if (format == OutputFormat.DBCJAVA) return dbc_name(vi);
     if (format == OutputFormat.IOA) return ioa_name();
     if (format == OutputFormat.IDENTIFIER) return identifier_name();
     throw new UnsupportedOperationException
@@ -582,9 +591,8 @@ public abstract class VarInfoName
       java_name_cached = java_name_cached.intern();
     if (jml_name_cached != null)
       jml_name_cached = jml_name_cached.intern();
-    // RRN TODO: Add this? :
-    //    if (dbc_name_cached != null)
-    //      dbc_name_cached = dbc_name_cached.intern();
+    if (dbc_name_cached != null)
+     dbc_name_cached = dbc_name_cached.intern();
   }
 
 
@@ -906,8 +914,8 @@ public abstract class VarInfoName
     }
     //@tx
     protected String dbc_name_impl(VarInfo v) {
-       return "(warning: format_dbc() needs to be implemented: " +
-		function + " on " + argument.repr() + ")";
+       return "(warning: DBC format needs to be implemented: "
+         + repr_impl() + ")";
     }
     protected String identifier_name_impl() {
       return function + "_of_" + argument.identifier_name() + "___";
@@ -1012,7 +1020,7 @@ public abstract class VarInfoName
 	  sb.append (((VarInfoName) i.next()).repr());
 	  if (i.hasNext()) sb.append (", ");
       }
-      return "(warning: format_dbc() needs to be implemented: " +
+      return "(warning: DBC format needs to be implemented: " +
 	  function + " on " + sb.toString() + ")";
     }
     protected String identifier_name_impl() {
@@ -1074,7 +1082,7 @@ public abstract class VarInfoName
   }
 
   /**
-   * Returns a name for the intersection of with another sequence, like
+   * Returns a name for the union of with another sequence, like
    * "union(a[], b[])"
    **/
   public VarInfoName applyUnion(VarInfoName seq2) {
@@ -1225,7 +1233,7 @@ public abstract class VarInfoName
     }
     //@tx
     protected String dbc_name_impl(VarInfo v) {
-      return term.name() + ".getClass()";
+      return term.dbc_name(v) + ".getClass()";
     }
     protected String identifier_name_impl() {
       return "type_of_" + term.identifier_name() + "___";
@@ -1292,12 +1300,15 @@ public abstract class VarInfoName
     }
     //@tx
     protected String dbc_name_impl(VarInfo v) {
-      if (v==null)
-//RRN//        return "$pre(RYANFIX, " + term.name() + ")";
-        return "$pre(int, " + term.name() + ")";
-      else
-        return "$pre(" + v.type.base() + ", " + term.name() + ")";
-      //@tx now we only use int as ExpressionType by default, to be improved
+      if (v == null) {
+	  throw new UnsupportedOperationException
+	      ("VarInfo not provided: '" + term.repr_impl() + "'");
+      }
+      String brackets = "";
+      for (int i = 0 ; i < v.type.dimensions(); i++) { brackets += "[]"; }
+      return "$pre(" + v.type.base() + brackets + ", " + term.dbc_name(v) + ")";
+      //+ "*******DERIVED CLASS=" + (v.isDerived()  ? v.derived.getClass().getName() : "v NOT DERIVED")
+      //+ "*******v.name.repl_impl()= " + v.name.repr_impl() + ")";
     }
     protected String identifier_name_impl() {
       return "orig_of_" + term.identifier_name() + "___";
@@ -1377,7 +1388,8 @@ public abstract class VarInfoName
     }
     //@tx
     protected String dbc_name_impl(VarInfo v) {
-       return term.name();
+      return "(warning: DBC format cannot express a Poststate"
+	     + " [repr=" + repr() + "])";
     }
     protected String identifier_name_impl() {
       return "post_of_" + term.identifier_name() + "___";
@@ -1546,16 +1558,11 @@ public abstract class VarInfoName
 
     //@tx
     protected String dbc_name_impl(VarInfo v) {
-     /* throw new UnsupportedOperationException(
-	"Java cannot format an unquantified sequence of elements" +
-	" [repr=" + repr() + "]");
-     */
-      // For now, do return the default implementation.
-      return name_impl();
+      return term.dbc_name(v);
     }
     //@tx
-    protected String dbc_name_impl(String index) {
-      return term.name() + "[" + index + "]";
+    protected String dbc_name_impl(String index, VarInfo v) {
+	return term.dbc_name(v) + "[" + index + "]";
     }
 
     protected String identifier_name_impl(String index) {
@@ -1683,9 +1690,14 @@ public abstract class VarInfoName
     protected String jml_name_impl() {
       return sequence.jml_name_impl(indexExplicit(sequence, index).jml_name());
     }
-    //@tx
     protected String dbc_name_impl(VarInfo v) {
-      return sequence.name_impl(index.name());
+      Assert.assertTrue(v.isDerived());
+      Derivation derived = v.derived;
+      Assert.assertTrue(derived instanceof  SequenceScalarSubscript
+                        || derived instanceof  SequenceStringSubscript
+                        || derived instanceof  SequenceFloatSubscript);
+      return sequence.dbc_name_impl(index.dbc_name(((BinaryDerivation)derived).base2),
+                                    ((BinaryDerivation)derived).base1);
     }
     protected String identifier_name_impl() {
       return sequence.identifier_name_impl(index.identifier_name());
@@ -1785,12 +1797,8 @@ public abstract class VarInfoName
       throw new UnsupportedOperationException("JML cannot format an unquantified slice of elements");
     }
 
-    //@tx
     protected String dbc_name_impl(VarInfo v) {
-      // throw new UnsupportedOperationException(
-      // "Java cannot format an unquantified slice of elements");
-      // For now, return the default implementation.
-      return name_impl();
+      return "(warning: DBC cannot format an unquantified slice of elements" + repr_impl() + ")";
     }
     protected String identifier_name_impl() {
       String start = (i == null) ? "0" : i.identifier_name();
@@ -2172,7 +2180,7 @@ public abstract class VarInfoName
   {
     public ElementsFinder (VarInfoName name) {
       elems = (Elements) name.accept(this);
-    }
+   }
 
     // state and accessors
     private boolean pre = false;
@@ -3045,97 +3053,149 @@ public abstract class VarInfoName
       return format_jml(roots, elementwise, true);
     }
     public static String[] format_jml(VarInfoName[] roots, boolean elementwise, boolean forall) {
-       return format_java_style(roots, elementwise, forall, OutputFormat.JML);
+      return format_java_style(roots, elementwise, forall, OutputFormat.JML);
     }
 
-    //@tx
-    public static String[] format_dbc(VarInfoName[] roots) {
-      return format_dbc(roots, false);
-    }
+    /* CP: Quantification for DBC: We would like quantified expression
+     * to always return a boolean value, and in the previous
+     * implementation (commented out below), quantification was
+     * expressed as a for-loop, which does not return boolean
+     * values. An alternative solution would be to use Jtest's $forall
+     * and $exists constrcuts, but testing showed that Jtest does not
+     * allow these constructs in @post annotations (!). The current
+     * implementation uses helper methods defined in a separate class
+     * quant.Quant (not currently included with Daikon's
+     * distribution). These methods always return a boolean value and
+     * look something like this:
+     *
+     *   Quant.elementsEqual(this.theArray, null)
+     *   Quant.elementsOneOf(this.arr, new int[] { 1, 2, 3 })
+     *
+     */
+    //     /**
+    //      * vi is the Varinfo corresponding to the VarInfoName var. Uses
+    //      * the variable i to iterate. This could mean a conflict with the
+    //      * name of the argument var.
+    //      */
+    //     public static String dbcForalli(VarInfoName.Elements var, VarInfo vi,
+    //                                     String condition) {
+    //       if (vi.type.isArray()) {
+    //         return
+    //           "(java.util.Arrays.asList(" + var.term.dbc_name(vi)
+    //           + ")).$forall(" + vi.type.base() + " i, "
+    //           + condition + ")";
+    //       }
+    //       return var.term.dbc_name(vi)
+    //         + ".$forall(" + vi.type.base() + " i, "
+    //         + condition + ")";
+    //     }
 
-    //@tx
-    public static String[] format_dbc(VarInfoName[] roots, boolean elementwise) {
+    //     /**
+    //      * vi is the Varinfo corresponding to the VarInfoName var. Uses
+    //       * the variable i to iterate. This could mean a conflict with the
+    //       * name of the argument var.
+    //      */
+    //     public static String dbcExistsi(VarInfoName.Elements var, VarInfo vi,
+    //                                     String condition) {
+    //       if (vi.type.isArray()) {
+    //         return
+    //           "(java.util.Arrays.asList(" + var.term.dbc_name(vi)
+    //           + ")).$exists(" + vi.type.base() + " i, "
+    //           + condition + ")";
+    //       }
+    //       return var.term.dbc_name(vi)
+    //         + ".$exists(" + vi.type.base() + " i, "
+    //         + condition + ")";
+    //     }
 
-      //@tx
-      Assert.assertTrue(roots != null);
+    //     //@tx
+    //     public static String[] format_dbc(VarInfoName[] roots, VarInfo[] varinfos) {
+    //       return format_dbc(roots, true, varinfos);
+    //     }
+    //     public static String[] format_dbc(VarInfoName[] roots, boolean elementwise, VarInfo[] varinfos) {
+    //       return format_dbc(roots, elementwise, true, varinfos);
+    //     }
+    //     public static String[] format_dbc(VarInfoName[] roots, boolean elementwise, boolean forall, VarInfo[] varinfos) {
+    //       Assert.assertTrue(roots != null);
 
-      QuantifyReturn qret = quantify(roots);
+    //       QuantifyReturn qret = quantify(roots);
 
-      // build the "\forall ..." predicate
-      String[] result = new String[roots.length + 2];
-      StringBuffer int_list, conditions, closing;
-      StringBuffer tempResult;
-      {
-        tempResult = new StringBuffer();
-        // "i, j, ..."
-        int_list = new StringBuffer();
-        // "ai <= i && i <= bi && aj <= j && j <= bj && ..."
-        // if elementwise, also do "(i-ai) == (b-bi) && ..."
-        conditions = new StringBuffer();
-        closing = new StringBuffer();
-        for (int i = 0; i < qret.bound_vars.size(); i++) {
-          int_list.setLength(0);
-          conditions.setLength(0);
-          closing.setLength(0);
+    //       // build the "\forall ..." predicate
+    //       String[] result = new String[roots.length + 2];
+    //       StringBuffer int_list, conditions, closing;
+    //       StringBuffer tempResult;
+    //       {
+    //         tempResult = new StringBuffer();
+    //         // "i, j, ..."
+    //         int_list = new StringBuffer();
+    //         // "ai <= i && i <= bi && aj <= j && j <= bj && ..."
+    //         // if elementwise, also do "(i-ai) == (b-bi) && ..."
+    //         conditions = new StringBuffer();
+    //         closing = new StringBuffer();
+    //         for (int i = 0; i < qret.bound_vars.size(); i++) {
+    //           int_list.setLength(0);
+    //           conditions.setLength(0);
+    //           closing.setLength(0);
 
-          VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
-          VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
-          if (i != 0) {
-            //int_list.append(", ");
-            //conditions.append(" && ");
-            //closing.append(", ");
-            closing.append(idx.dbc_name());
-            closing.append("++");
-          } else {
-            closing.append(idx.dbc_name());
-            closing.append("++");
-          }
-          int_list.append(idx.dbc_name());
-          int_list.append(" = "); //@TX
-          int_list.append(low.dbc_name());
+    //           VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
+    //           VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
+    //           if (i != 0) {
+    //             //int_list.append(", ");
+    //             //conditions.append(" && ");
+    //             //closing.append(", ");
+    //             closing.append(idx.dbc_name(null));
+    //             closing.append("++");
+    //           } else {
+    //             closing.append(idx.dbc_name(null));
+    //             closing.append("++");
+    //           }
+    //           int_list.append(idx.dbc_name(null));
+    //           int_list.append(" = "); //@TX
+    //           int_list.append(low.dbc_name(null));
 
-          conditions.append(idx.dbc_name());
-          conditions.append(" <= ");
-          conditions.append(high.dbc_name());
+    //           conditions.append(idx.dbc_name(null));
+    //           conditions.append(" <= ");
+    //           conditions.append(high.dbc_name(null));
 
-          if (elementwise && (i >= 1)) {
-            VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i - 1);
-            VarInfoName _idx = _boundv[0], _low = _boundv[1];
-            conditions.append(" && ");
-            if (ZERO.equals(_low)) {
-              conditions.append(_idx);
-            } else {
-              conditions.append("(");
-              conditions.append(_idx.dbc_name());
-              conditions.append("-(");
-              conditions.append(_low.dbc_name());
-              conditions.append("))");
-            }
-            conditions.append(" == ");
-            if (ZERO.equals(low)) {
-              conditions.append(idx.dbc_name());
-            } else {
-              conditions.append("(");
-              conditions.append(idx.dbc_name());
-              conditions.append("-(");
-              conditions.append(low.dbc_name());
-              conditions.append("))");
-            }
-          }
-          tempResult.append(" for (int " + int_list + " ; " + conditions + "; " + closing + ") ");
-        }
-      }
-      //result[0] = "{ for (int " + int_list + " ; " + conditions + "; " + closing + ") $assert ("; //@TX
-      result[0] = "{ " + tempResult + " $assert ("; //@TX
-      result[result.length - 1] = "); }";
+    //           if (elementwise && (i >= 1)) {
+    //             VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i - 1);
+    //             VarInfoName _idx = _boundv[0], _low = _boundv[1];
+    //             conditions.append(" && ");
+    //             if (ZERO.equals(_low)) {
+    //               conditions.append(_idx);
+    //             } else {
+    //               conditions.append("(");
+    //               conditions.append(_idx.dbc_name(null));
+    //               conditions.append("-(");
+    //               conditions.append(_low.dbc_name(null));
+    //               conditions.append("))");
+    //             }
+    //             conditions.append(" == ");
+    //             if (ZERO.equals(low)) {
+    //               conditions.append(idx.dbc_name(null));
+    //             } else {
+    //               conditions.append("(");
+    //               conditions.append(idx.dbc_name(null));
+    //               conditions.append("-(");
+    //               conditions.append(low.dbc_name(null));
+    //               conditions.append("))");
+    //             }
+    //           }
+    //           tempResult.append(" for (int " + int_list + " ; " + conditions + "; " + closing + ") ");
+    //         }
+    //       }
+    //       //result[0] = "{ for (int " + int_list + " ; " + conditions + "; " + closing + ") $assert ("; //@TX
+    //       result[0] = "{ " + tempResult + " $assert ("; //@TX
+    //       result[result.length - 1] = "); }";
 
-      // stringify the terms
-      for (int i = 0; i < roots.length; i++) {
-        result[i + 1] = qret.root_primes[i].dbc_name();
-      }
+    //       // stringify the terms
+    //       for (int i = 0; i < roots.length; i++) {
+    //         result[i + 1] = qret.root_primes[i].dbc_name(null);
+    //       }
 
-      return result;
-    }
+    //       return result;
+    //     }
+
 
     //////////////////////////
 
@@ -3390,7 +3450,7 @@ public abstract class VarInfoName
 
       // stringify the terms
       for (int i=0; i < qret.root_primes.length; i++) {
-        result[i+1] = qret.root_primes[i].name_using(format);
+        result[i+1] = qret.root_primes[i].name_using(format, null);
       }
 
       return result;
@@ -3425,7 +3485,7 @@ public abstract class VarInfoName
       if (format == OutputFormat.JAVA) {
         return idx.java_name() + " == " + low.java_name();
       } else {
-        return idx.name_using(format);
+        return idx.name_using(format, null);
       }
     }
 
@@ -3440,8 +3500,8 @@ public abstract class VarInfoName
       if (format == OutputFormat.JAVA) {
         return idx.java_name() + " <= " + high.java_name();
       } else {
-        return low.name_using(format) + " <= " + idx.name_using(format) + " && " +
-          idx.name_using(format) + " <= " + high.name_using(format);
+        return low.name_using(format, null) + " <= " + idx.name_using(format, null) + " && " +
+          idx.name_using(format, null) + " <= " + high.name_using(format, null);
       }
     }
 
@@ -3457,22 +3517,22 @@ public abstract class VarInfoName
       StringBuffer conditions = new StringBuffer();
 
       if (ZERO.equals(_low)) {
-        conditions.append(_idx.name_using(format));
+        conditions.append(_idx.name_using(format, null));
       } else {
         conditions.append("(");
-        conditions.append(_idx.name_using(format));
+        conditions.append(_idx.name_using(format, null));
         conditions.append("-(");
-        conditions.append(_low.name_using(format));
+        conditions.append(_low.name_using(format, null));
         conditions.append("))");
       }
       conditions.append(" == ");
       if (ZERO.equals(low)) {
-        conditions.append(idx.name_using(format));
+        conditions.append(idx.name_using(format, null));
       } else {
         conditions.append("(");
-        conditions.append(idx.name_using(format));
+        conditions.append(idx.name_using(format, null));
         conditions.append("-(");
-        conditions.append(low.name_using(format));
+        conditions.append(low.name_using(format, null));
         conditions.append("))");
       }
 
