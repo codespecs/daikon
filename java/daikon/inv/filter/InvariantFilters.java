@@ -53,12 +53,8 @@ public class InvariantFilters {
   PptMap ppt_map = null;
 
   public InvariantFilters() {
-    if (Daikon.output_style == OutputFormat.JML) {
-      addPropertyFilter( new JMLCompilerWorkaroundFilter());
-    }
-
-    if (Daikon.output_style == OutputFormat.ESCJAVA) {
-      //        || Daikon.output_style == OutputFormat.DBCJAVA) {
+    if (Daikon.output_format == OutputFormat.ESCJAVA) {
+      //        || Daikon.output_format == OutputFormat.DBCJAVA) {
       addPropertyFilter( new UnmodifiedVariableEqualityFilter());
     }
 
