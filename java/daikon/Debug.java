@@ -143,6 +143,7 @@ public class Debug {
       // {"::printstats"},
       // {"misc.Fib.STEPS", "orig(misc.Fib.a)"},
       // {"misc.Fib.a", "misc.Fib.STEPS"},
+      // {"return"},
     };
 
   // cached standard parts of the debug print so that multiple calls from
@@ -632,7 +633,7 @@ public class Debug {
 
     boolean found = false;
 
-    for (Iterator i = all_ppts.pptIterator(); i.hasNext(); ) {
+    for (Iterator i = all_ppts.ppt_all_iterator(); i.hasNext(); ) {
       PptTopLevel ppt = (PptTopLevel) i.next();
       for (Iterator j = ppt.views_iterator(); j.hasNext(); ) {
         PptSlice slice = (PptSlice) j.next();
@@ -727,6 +728,12 @@ public class Debug {
     return (vars);
   }
 
+  /**
+   * Parses the specified argument to --track and sets up the track arrays
+   * accordingly.  The syntax of the argument is
+   *
+   *    [class|class|...][<var,var,var>][@ppt]
+   */
   public static String add_track (String def) {
 
     String classes = null;
@@ -742,7 +749,7 @@ public class Debug {
       if (var_start > 0)
         classes = def.substring (0, var_start);
       if (ppt_start == -1)
-        vars = def.substring (var_start+1, def.length());
+        vars = def.substring (var_start+1, def.length()-1);
       else {
         vars = def.substring (var_start+1, ppt_start-1);
         ppt = def.substring (ppt_start+1, def.length());
