@@ -144,6 +144,16 @@ public final class Daikon {
    **/
   public static void main(String[] args)
   {
+    {
+      System.err.
+	print("**************************************************\n" +
+	      "*                     WARNING                    *\n" +
+	      "**************************************************\n" +
+	      "* You are using the REDESIGN version (V3) of the *\n" +
+	      "* Daikon engine. Make sure this is what you want.*\n" +
+	      "**************************************************\n");
+    }
+
     // Read command line options
     Set[] files = read_options(args);
     Assert.assert(files.length == 3);
