@@ -44,12 +44,6 @@ public abstract class PptSlice
 
   public static final Logger debugGuarding = Logger.getLogger("daikon.guard");
 
-  /**
-   * Remove invariants at lower program points when a matching invariant is
-   * created at a higher program point. For experimental purposes only.
-   */
-  public static boolean dkconfig_remove_merged_invs = false;
-
   /** This is a slice of the 'parent' ppt. */
   public PptTopLevel parent;
   public abstract int arity();
@@ -292,7 +286,8 @@ public abstract class PptSlice
 
     if (Debug.logDetail())
       log ("Removing invariant '" + inv.format() + "'");
-    Assert.assertTrue(invs.contains(inv));
+    Assert.assertTrue (invs.contains(inv), "inv " + inv + " not in ppt "
+                                    + name());
     boolean removed = invs.remove(inv);
     Assert.assertTrue(removed);
     // This increment could also have been in Invariant.destroy().
