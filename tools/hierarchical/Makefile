@@ -1,8 +1,8 @@
-
 OPT = -s -Wall
 OBJS = difftbl cluster clgroup
 
 all: difftbl cluster clgroup
+	cp difftbl cluster clgroup ${INV}/scripts/
 
 difftbl: difftbl.c
 	gcc $(OPT) -o difftbl difftbl.c -lm
