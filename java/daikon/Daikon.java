@@ -753,8 +753,9 @@ public final class Daikon {
       if (debugTrace.isLoggable(Level.FINE)) {
         debugTrace.fine ("Initializing partial order");
       }
+      fileio_progress.clear();
       System.out.print(" (read ");
-      System.out.print(UtilMDE.nplural(decl_files.size(), "file"));
+      System.out.print(UtilMDE.nplural(decl_files.size(), "decls file"));
       System.out.println(")");
       return all_ppts;
     } catch (IOException e) {
@@ -776,7 +777,7 @@ public final class Daikon {
         System.out.print("Reading splitter info files ");
         create_splitters(all_ppts, spinfo_files);
         System.out.print(" (read ");
-        System.out.print(UtilMDE.nplural(spinfo_files.size(), "file"));
+        System.out.print(UtilMDE.nplural(spinfo_files.size(), "spinfo file"));
         System.out.println(")");
       } catch (IOException e) {
         System.out.println();
@@ -798,7 +799,7 @@ public final class Daikon {
       ContextSplitterFactory.load_mapfiles_into_splitterlist
         (map_files, ContextSplitterFactory.dkconfig_granularity);
       System.out.print(" (read ");
-      System.out.print(UtilMDE.nplural(map_files.size(), "file"));
+      System.out.print(UtilMDE.nplural(map_files.size(), "map (context) file"));
       System.out.println(")");
       debugProgress.fine ("Time spent on load_map_files: " + stopwatch.format());
     }
@@ -850,44 +851,78 @@ public final class Daikon {
   /** A way to output FileIO progress information easily */
   private final static FileIOProgress fileio_progress = new FileIOProgress();
   static class FileIOProgress extends Thread {
-    public FileIOProgress() { setDaemon(true); }
-    /**
-     * Clients should set this variable instead of calling Thread.stop(),
-     * which is deprecated.
-     **/
-    public boolean shouldStop = false;
-    private static NumberFormat pctFmt;
-    public void run() {
-      if (dkconfig_progress_delay == -1)
-        return;
-      DateFormat df = DateFormat.getTimeInstance(/*DateFormat.LONG*/);
+    public FileIOProgress() {
+      setDaemon(true);
       pctFmt = NumberFormat.getPercentInstance();
       pctFmt.setMinimumFractionDigits(2);
       pctFmt.setMaximumFractionDigits(2);
+      df = DateFormat.getTimeInstance(/*DateFormat.LONG*/);
+    }
+    /**
+     * Clients should set this variable instead of calling Thread.stop(),
+     * which is deprecated.  Typically a client calls "display()" before
+     * setting this.
+     **/
+    public boolean shouldStop = false;
+    private static NumberFormat pctFmt;
+    private DateFormat df;
+    public void run() {
+      if (dkconfig_progress_delay == -1)
+        return;
       while (true) {
         if (shouldStop) {
+          clear();
           return;
         }
-        String status = "[" + (df.format(new Date())) + "]: " + message();
-        if (status.length() > dkconfig_progress_display_width - 1)
-          status = status.substring(0, dkconfig_progress_display_width - 1);
-        while (status.length() < dkconfig_progress_display_width - 1)
-          status += " ";
-        System.out.print("\r" + status);
-        System.out.flush();
-        // System.out.println (status);
+        display();
         try {
-          if (debugTrace.isLoggable(Level.FINE)) {
-            debugTrace.fine ("Free memory: " + java.lang.Runtime.getRuntime().freeMemory());
-            debugTrace.fine ("Used memory: " +
-                              (java.lang.Runtime.getRuntime().totalMemory()
-                               - java.lang.Runtime.getRuntime().freeMemory()));
-            debugTrace.fine ("Active slices: " + FileIO.data_num_slices);
-          }
           sleep(dkconfig_progress_delay);
         } catch (InterruptedException e) {
           // hmm
         }
+      }
+    }
+    /** Clear the display; good to do before printing to System.out. **/
+    public void clear() {
+      if (dkconfig_progress_delay == -1)
+        return;
+      // "display("");" is wrong becuase it leaves the timestamp and writes
+      // spaces across the screen.
+      String status = "";
+      while (status.length() < dkconfig_progress_display_width - 1)
+        status += " ";
+      System.out.print("\r" + status);
+      System.out.print("\r");   // return to beginning of line
+      System.out.flush();
+    }
+    /**
+     * Displays the current status.
+     * Call this if you don't want to wait until the next automatic display.
+     **/
+    public void display() {
+      if (dkconfig_progress_delay == -1)
+        return;
+      display(message());
+    }
+    /** Displays the given message. **/
+    public void display(String message) {
+      if (dkconfig_progress_delay == -1)
+        return;
+      String status = "[" + (df.format(new Date())) + "]: " + message;
+      if (status.length() > dkconfig_progress_display_width - 1)
+        status = status.substring(0, dkconfig_progress_display_width - 1);
+      while (status.length() < dkconfig_progress_display_width - 1)
+        status += " ";
+      System.out.print("\r" + status);
+      System.out.flush();
+      // System.out.println (status);
+
+      if (debugTrace.isLoggable(Level.FINE)) {
+        debugTrace.fine ("Free memory: " + java.lang.Runtime.getRuntime().freeMemory());
+        debugTrace.fine ("Used memory: " +
+                         (java.lang.Runtime.getRuntime().totalMemory()
+                          - java.lang.Runtime.getRuntime().freeMemory()));
+        debugTrace.fine ("Active slices: " + FileIO.data_num_slices);
       }
     }
     private String message() {
@@ -937,11 +972,14 @@ public final class Daikon {
 
     // Processing (actually using dtrace files)
     try {
+      fileio_progress.clear();
       System.out.println("Processing trace data; reading "
-                         + UtilMDE.nplural(dtrace_files.size(), "file")
+                         + UtilMDE.nplural(dtrace_files.size(), "dtrace file")
                          + ":");
       FileIO.read_data_trace_files(dtrace_files, all_ppts);
       fileio_progress.shouldStop = true;
+      // Final update, so "100%", not "99.70%", is the last thing printed.
+      fileio_progress.display();
       System.out.println();
       // System.out.print("Creating implications "); // XXX untested code
       // for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
@@ -1035,6 +1073,7 @@ public final class Daikon {
 
     // Add implications
     stopwatch.reset();
+    fileio_progress.clear();
     System.out.println("Creating implications ");
     debugProgress.fine ("Adding Implications ... ");
     for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
