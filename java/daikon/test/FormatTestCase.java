@@ -681,9 +681,9 @@ class FormatTestCase {
     getSamples(types, commands, samples, false, null);
   }
 
-  private static void getSamples(ProglangType[] types, BufferedReader commands, List samples, boolean generateGoals) {
-    getSamples(types, commands, samples, generateGoals, null);
-  }
+  // private static void getSamples(ProglangType[] types, BufferedReader commands, List samples, boolean generateGoals) {
+  //   getSamples(types, commands, samples, generateGoals, null);
+  // }
 
   private static void getSamples(ProglangType[] types, BufferedReader commands, List samples, boolean generateGoals, String firstLine) {
     String currentLine = (firstLine == null ? InvariantFormatTester.COMMENT_STARTER_STRING :
