@@ -30,51 +30,51 @@
   The default value is `false'.
 
 @item daikon.derive.binary.SequenceFloatIntersection.enabled
-  Boolean.  True iff SequenceFloatIntersection  derived variables should be generated.
+  Boolean.  True iff SequenceFloatIntersection derived variables should be generated.
   The default value is `false'.
 
 @item daikon.derive.binary.SequenceFloatSubscript.enabled
-  Boolean.  True iff SequenceFloatSubscript  invariants should be considered.
+  Boolean.  True iff SequenceFloatSubscript invariants should be considered.
   The default value is `true'.
 
 @item daikon.derive.binary.SequenceFloatSubsequence.enabled
-  Boolean.  True iff SequenceFloatSubsequence  invariants should be considered.
+  Boolean.  True iff SequenceFloatSubsequence invariants should be considered.
   The default value is `true'.
 
 @item daikon.derive.binary.SequenceFloatUnion.enabled
-  Boolean.  True iff SequenceFloatUnion  derived variables should be generated.
+  Boolean.  True iff SequenceFloatUnion derived variables should be generated.
   The default value is `false'.
 
 @item daikon.derive.binary.SequenceScalarIntersection.enabled
-  Boolean.  True iff SequenceScalarIntersection  derived variables should be generated.
+  Boolean.  True iff SequenceScalarIntersection derived variables should be generated.
   The default value is `false'.
 
 @item daikon.derive.binary.SequenceScalarSubscript.enabled
-  Boolean.  True iff SequenceScalarSubscript  invariants should be considered.
+  Boolean.  True iff SequenceScalarSubscript invariants should be considered.
   The default value is `true'.
 
 @item daikon.derive.binary.SequenceScalarSubsequence.enabled
-  Boolean.  True iff SequenceScalarSubsequence  invariants should be considered.
+  Boolean.  True iff SequenceScalarSubsequence invariants should be considered.
   The default value is `true'.
 
 @item daikon.derive.binary.SequenceScalarUnion.enabled
-  Boolean.  True iff SequenceScalarUnion  derived variables should be generated.
+  Boolean.  True iff SequenceScalarUnion derived variables should be generated.
   The default value is `false'.
 
 @item daikon.derive.binary.SequenceStringIntersection.enabled
-  Boolean.  True iff SequenceStringIntersection  derived variables should be generated.
+  Boolean.  True iff SequenceStringIntersection derived variables should be generated.
   The default value is `false'.
 
 @item daikon.derive.binary.SequenceStringSubscript.enabled
-  Boolean.  True iff SequenceStringSubscript  invariants should be considered.
+  Boolean.  True iff SequenceStringSubscript invariants should be considered.
   The default value is `true'.
 
 @item daikon.derive.binary.SequenceStringSubsequence.enabled
-  Boolean.  True iff SequenceStringSubsequence  invariants should be considered.
+  Boolean.  True iff SequenceStringSubsequence invariants should be considered.
   The default value is `true'.
 
 @item daikon.derive.binary.SequenceStringUnion.enabled
-  Boolean.  True iff SequenceStringUnion  derived variables should be generated.
+  Boolean.  True iff SequenceStringUnion derived variables should be generated.
   The default value is `false'.
 
 @item daikon.derive.binary.SequencesConcat.enabled
@@ -169,27 +169,27 @@
   The default value is `true'.
 
 @item daikon.inv.binary.twoScalar.FloatEqual.enabled
-  Boolean.  True iff FloatEqual  invariants should be considered.
+  Boolean.  True iff FloatEqual invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.binary.twoScalar.FloatGreaterEqual.enabled
-  Boolean.  True iff FloatGreaterEqual  invariants should be considered.
+  Boolean.  True iff FloatGreaterEqual invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.binary.twoScalar.FloatGreaterThan.enabled
-  Boolean.  True iff FloatGreaterThan  invariants should be considered.
+  Boolean.  True iff FloatGreaterThan invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.binary.twoScalar.FloatLessEqual.enabled
-  Boolean.  True iff FloatLessEqual  invariants should be considered.
+  Boolean.  True iff FloatLessEqual invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.binary.twoScalar.FloatLessThan.enabled
-  Boolean.  True iff FloatLessThan  invariants should be considered.
+  Boolean.  True iff FloatLessThan invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.binary.twoScalar.FloatNonEqual.enabled
-  Boolean.  True iff FloatNonEqual  invariants should be considered.
+  Boolean.  True iff FloatNonEqual invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.binary.twoScalar.FunctionUnary.enabled
@@ -201,27 +201,31 @@
   The default value is `true'.
 
 @item daikon.inv.binary.twoScalar.IntEqual.enabled
-  Boolean.  True iff IntEqual  invariants should be considered.
+  Boolean.  True iff IntEqual invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.binary.twoScalar.IntGreaterEqual.enabled
-  Boolean.  True iff IntGreaterEqual  invariants should be considered.
+  Boolean.  True iff IntGreaterEqual invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.binary.twoScalar.IntGreaterThan.enabled
-  Boolean.  True iff IntGreaterThan  invariants should be considered.
+  Boolean.  True iff IntGreaterThan invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.binary.twoScalar.IntLessEqual.enabled
-  Boolean.  True iff IntLessEqual  invariants should be considered.
+  Boolean.  True iff IntLessEqual invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.binary.twoScalar.IntLessThan.enabled
-  Boolean.  True iff IntLessThan  invariants should be considered.
+  Boolean.  True iff IntLessThan invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.binary.twoScalar.IntNonEqual.enabled
-  Boolean.  True iff IntNonEqual  invariants should be considered.
+  Boolean.  True iff IntNonEqual invariants should be considered.
+  The default value is `true'.
+
+@item daikon.inv.binary.twoScalar.IntNonEqual.integral_only
+  Boolean.  True iff IntNonEqual invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.binary.twoScalar.LinearBinary.enabled
@@ -309,7 +313,7 @@
   The default value is `true'.
 
 @item daikon.inv.unary.scalar.LowerBound.enabled
-  Boolean.  True iff LowerBound  invariants should be considered.
+  Boolean.  True iff LowerBound invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.unary.scalar.LowerBound.maximal_interesting
@@ -317,7 +321,7 @@
  range of the computed constant that is "intersting" --- the range
  that should be reported.  For instance, setting minimal_interesting
  to -1 and maximal_interesting to 2 would only permit output of
- LowerBound  invariants whose cutoff was one of (-1,0,1,2).
+ LowerBound invariants whose cutoff was one of (-1,0,1,2).
   The default value is `2'.
 
 @item daikon.inv.unary.scalar.LowerBound.minimal_interesting
@@ -325,11 +329,11 @@
  range of the computed constant that is "intersting" --- the range
  that should be reported.  For instance, setting minimal_interesting
  to -1 and maximal_interesting to 2 would only permit output of
- LowerBound  invariants whose cutoff was one of (-1,0,1,2).
+ LowerBound invariants whose cutoff was one of (-1,0,1,2).
   The default value is `-1'.
 
 @item daikon.inv.unary.scalar.LowerBoundFloat.enabled
-  Boolean.  True iff LowerBoundFloat  invariants should be considered.
+  Boolean.  True iff LowerBoundFloat invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.unary.scalar.LowerBoundFloat.maximal_interesting
@@ -337,7 +341,7 @@
  range of the computed constant that is "intersting" --- the range
  that should be reported.  For instance, setting minimal_interesting
  to -1 and maximal_interesting to 2 would only permit output of
- LowerBoundFloat  invariants whose cutoff was one of (-1,0,1,2).
+ LowerBoundFloat invariants whose cutoff was one of (-1,0,1,2).
   The default value is `2'.
 
 @item daikon.inv.unary.scalar.LowerBoundFloat.minimal_interesting
@@ -345,7 +349,7 @@
  range of the computed constant that is "intersting" --- the range
  that should be reported.  For instance, setting minimal_interesting
  to -1 and maximal_interesting to 2 would only permit output of
- LowerBoundFloat  invariants whose cutoff was one of (-1,0,1,2).
+ LowerBoundFloat invariants whose cutoff was one of (-1,0,1,2).
   The default value is `-1'.
 
 @item daikon.inv.unary.scalar.Modulus.enabled
@@ -357,11 +361,11 @@
   The default value is `false'.
 
 @item daikon.inv.unary.scalar.NonZero.enabled
-  Boolean.  True iff NonZero  invariants should be considered.
+  Boolean.  True iff NonZero invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.unary.scalar.NonZeroFloat.enabled
-  Boolean.  True iff NonZeroFloat  invariants should be considered.
+  Boolean.  True iff NonZeroFloat invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.unary.scalar.OneOfFloat.enabled
@@ -383,7 +387,7 @@
   The default value is `3'.
 
 @item daikon.inv.unary.scalar.UpperBound.enabled
-  Boolean.  True iff UpperBound  invariants should be considered.
+  Boolean.  True iff UpperBound invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.unary.scalar.UpperBound.maximal_interesting
@@ -391,7 +395,7 @@
  range of the computed constant that is "intersting" --- the range
  that should be reported.  For instance, setting minimal_interesting
  to -1 and maximal_interesting to 2 would only permit output of
- UpperBound  invariants whose cutoff was one of (-1,0,1,2).
+ UpperBound invariants whose cutoff was one of (-1,0,1,2).
   The default value is `2'.
 
 @item daikon.inv.unary.scalar.UpperBound.minimal_interesting
@@ -399,11 +403,11 @@
  range of the computed constant that is "intersting" --- the range
  that should be reported.  For instance, setting minimal_interesting
  to -1 and maximal_interesting to 2 would only permit output of
- UpperBound  invariants whose cutoff was one of (-1,0,1,2).
+ UpperBound invariants whose cutoff was one of (-1,0,1,2).
   The default value is `-1'.
 
 @item daikon.inv.unary.scalar.UpperBoundFloat.enabled
-  Boolean.  True iff UpperBoundFloat  invariants should be considered.
+  Boolean.  True iff UpperBoundFloat invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.unary.scalar.UpperBoundFloat.maximal_interesting
@@ -411,7 +415,7 @@
  range of the computed constant that is "intersting" --- the range
  that should be reported.  For instance, setting minimal_interesting
  to -1 and maximal_interesting to 2 would only permit output of
- UpperBoundFloat  invariants whose cutoff was one of (-1,0,1,2).
+ UpperBoundFloat invariants whose cutoff was one of (-1,0,1,2).
   The default value is `2'.
 
 @item daikon.inv.unary.scalar.UpperBoundFloat.minimal_interesting
@@ -419,7 +423,7 @@
  range of the computed constant that is "intersting" --- the range
  that should be reported.  For instance, setting minimal_interesting
  to -1 and maximal_interesting to 2 would only permit output of
- UpperBoundFloat  invariants whose cutoff was one of (-1,0,1,2).
+ UpperBoundFloat invariants whose cutoff was one of (-1,0,1,2).
   The default value is `-1'.
 
 @item daikon.inv.unary.sequence.CommonFloatSequence.enabled
@@ -431,7 +435,7 @@
   The default value is `false'.
 
 @item daikon.inv.unary.sequence.EltLowerBound.enabled
-  Boolean.  True iff EltLowerBound  invariants should be considered.
+  Boolean.  True iff EltLowerBound invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.unary.sequence.EltLowerBound.maximal_interesting
@@ -439,7 +443,7 @@
  range of the computed constant that is "intersting" --- the range
  that should be reported.  For instance, setting minimal_interesting
  to -1 and maximal_interesting to 2 would only permit output of
- EltLowerBound  invariants whose cutoff was one of (-1,0,1,2).
+ EltLowerBound invariants whose cutoff was one of (-1,0,1,2).
   The default value is `2'.
 
 @item daikon.inv.unary.sequence.EltLowerBound.minimal_interesting
@@ -447,11 +451,11 @@
  range of the computed constant that is "intersting" --- the range
  that should be reported.  For instance, setting minimal_interesting
  to -1 and maximal_interesting to 2 would only permit output of
- EltLowerBound  invariants whose cutoff was one of (-1,0,1,2).
+ EltLowerBound invariants whose cutoff was one of (-1,0,1,2).
   The default value is `-1'.
 
 @item daikon.inv.unary.sequence.EltLowerBoundFloat.enabled
-  Boolean.  True iff EltLowerBoundFloat  invariants should be considered.
+  Boolean.  True iff EltLowerBoundFloat invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.unary.sequence.EltLowerBoundFloat.maximal_interesting
@@ -459,7 +463,7 @@
  range of the computed constant that is "intersting" --- the range
  that should be reported.  For instance, setting minimal_interesting
  to -1 and maximal_interesting to 2 would only permit output of
- EltLowerBoundFloat  invariants whose cutoff was one of (-1,0,1,2).
+ EltLowerBoundFloat invariants whose cutoff was one of (-1,0,1,2).
   The default value is `2'.
 
 @item daikon.inv.unary.sequence.EltLowerBoundFloat.minimal_interesting
@@ -467,7 +471,7 @@
  range of the computed constant that is "intersting" --- the range
  that should be reported.  For instance, setting minimal_interesting
  to -1 and maximal_interesting to 2 would only permit output of
- EltLowerBoundFloat  invariants whose cutoff was one of (-1,0,1,2).
+ EltLowerBoundFloat invariants whose cutoff was one of (-1,0,1,2).
   The default value is `-1'.
 
 @item daikon.inv.unary.sequence.EltNonZero.enabled
@@ -497,7 +501,7 @@
   The default value is `3'.
 
 @item daikon.inv.unary.sequence.EltUpperBound.enabled
-  Boolean.  True iff EltUpperBound  invariants should be considered.
+  Boolean.  True iff EltUpperBound invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.unary.sequence.EltUpperBound.maximal_interesting
@@ -505,7 +509,7 @@
  range of the computed constant that is "intersting" --- the range
  that should be reported.  For instance, setting minimal_interesting
  to -1 and maximal_interesting to 2 would only permit output of
- EltUpperBound  invariants whose cutoff was one of (-1,0,1,2).
+ EltUpperBound invariants whose cutoff was one of (-1,0,1,2).
   The default value is `2'.
 
 @item daikon.inv.unary.sequence.EltUpperBound.minimal_interesting
@@ -513,11 +517,11 @@
  range of the computed constant that is "intersting" --- the range
  that should be reported.  For instance, setting minimal_interesting
  to -1 and maximal_interesting to 2 would only permit output of
- EltUpperBound  invariants whose cutoff was one of (-1,0,1,2).
+ EltUpperBound invariants whose cutoff was one of (-1,0,1,2).
   The default value is `-1'.
 
 @item daikon.inv.unary.sequence.EltUpperBoundFloat.enabled
-  Boolean.  True iff EltUpperBoundFloat  invariants should be considered.
+  Boolean.  True iff EltUpperBoundFloat invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.unary.sequence.EltUpperBoundFloat.maximal_interesting
@@ -525,7 +529,7 @@
  range of the computed constant that is "intersting" --- the range
  that should be reported.  For instance, setting minimal_interesting
  to -1 and maximal_interesting to 2 would only permit output of
- EltUpperBoundFloat  invariants whose cutoff was one of (-1,0,1,2).
+ EltUpperBoundFloat invariants whose cutoff was one of (-1,0,1,2).
   The default value is `2'.
 
 @item daikon.inv.unary.sequence.EltUpperBoundFloat.minimal_interesting
@@ -533,7 +537,7 @@
  range of the computed constant that is "intersting" --- the range
  that should be reported.  For instance, setting minimal_interesting
  to -1 and maximal_interesting to 2 would only permit output of
- EltUpperBoundFloat  invariants whose cutoff was one of (-1,0,1,2).
+ EltUpperBoundFloat invariants whose cutoff was one of (-1,0,1,2).
   The default value is `-1'.
 
 @item daikon.inv.unary.sequence.EltwiseFloatComparison.enabled
@@ -571,11 +575,11 @@
   The default value is `3'.
 
 @item daikon.inv.unary.sequence.SeqIndexComparison.enabled
-  Boolean.  True iff SeqIndexComparison  invariants should be considered.
+  Boolean.  True iff SeqIndexComparison invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.unary.sequence.SeqIndexComparisonFloat.enabled
-  Boolean.  True iff SeqIndexComparisonFloat  invariants should be considered.
+  Boolean.  True iff SeqIndexComparisonFloat invariants should be considered.
   The default value is `true'.
 
 @item daikon.inv.unary.sequence.SeqIndexNonEqual.enabled

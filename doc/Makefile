@@ -9,6 +9,9 @@ daikon.info: daikon.texinfo config-options.texinfo .fix-menu
 config-options.texinfo:
 	cd ../java && $(MAKE) ../doc/config-options.texinfo
 
+# Always remake config-options.texinfo (../java/Makefile is more discerning)
+.PHONY : config-options.texinfo
+
 # Don't want to make this a target of other rules because it updates the modification date.
 # Make forces me to double the dollar signs in the Perl code.
 # sh seems not to permit redirecting standard error to standard out
