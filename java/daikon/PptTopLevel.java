@@ -57,6 +57,7 @@ public class PptTopLevel extends Ppt {
   String values_tuplemod_samples_summary;
 
   PptTopLevel entry_ppt;        // null if this isn't an exit point
+  PptTopLevel object_ppt;       // null if this doesn't contribute to the object ppt
 
   // These accessors are for abstract methods declared in Ppt
   public int num_samples() {
@@ -220,6 +221,28 @@ public class PptTopLevel extends Ppt {
     var_infos = new_var_infos;
   }
 
+
+  ///////////////////////////////////////////////////////////////////////////
+  /// Finding an object ppt for a given ppt
+  ///
+
+  // TODO : Can we generalize this?  Maybe have a list of
+  // "controlling" ppts, which would include :::OBJECT :::CLASS_STATIC
+  // and others as the front ends evolved?
+  
+  void compute_object_ppt(PptMap all_ppts)
+  {
+    object_ppt = (PptTopLevel) all_ppts.get(object_ppt_name());
+  }
+
+  String object_ppt_name() {
+    // e.g. package.Class.method(args)R:::ENTER ->
+    //      package.Class:::OBJECT
+    int dot_posn = name.lastIndexOf('.');
+    if (dot_posn < 0)
+      return null;
+    return name.substring(0, dot_posn) + FileIO.object_tag;
+  }
 
   ///////////////////////////////////////////////////////////////////////////
   /// Adding special variables
@@ -1434,18 +1457,15 @@ public class PptTopLevel extends Ppt {
   /// Hiding object invariants
   ///
 
-  public boolean isObjectInvariant(Invariant inv, PptMap all_ppts)
+  public boolean isObjectInvariant(Invariant inv)
   {
     Assert.assert(inv.ppt.parent == this);
 
-    // e.g. package.Class.method(args)R:::ENTER ->
-    //      package.Class:::CLASS
-    String object_ppt_name =
-      name.substring(0, name.lastIndexOf('.')) +
-      FileIO.ppt_tag_separator + "CLASS"; // TODO: Global for "CLASS"
-
-    PptTopLevel object_ppt = (PptTopLevel) all_ppts.get(object_ppt_name);
-    Assert.assert(object_ppt != null);
+    // Our invariants can't be implied by object invariants unless
+    // this ppt is contributing to some object invariant
+    if (object_ppt == null) {
+      return false;
+    }
 
     // Try to match inv against all object invariants
     Iterator object_invs = object_ppt.invariants_vector().iterator();
@@ -1473,15 +1493,24 @@ public class PptTopLevel extends Ppt {
 	VarInfo var = vars[i];
 	VarInfo obj_var = obj_vars[i];
 
-	// This can be a match iff there is an intersection of the
-	// names of aliased variables
+	// Do the easy check first
+	if (var.name.equals(obj_var.name)) {
+	  continue;
+	}
+
+	// Now check for aliasing problems
+
+	// The names "match" iff there is an intersection of the names
+	// of aliased variables
 	Vector all_obj_vars = obj_var.canonicalRep().equalTo();
+	all_obj_vars.add(obj_var.canonicalRep());
 	Vector all_obj_vars_names = new Vector(all_obj_vars.size());
 	for (Iterator iter = all_obj_vars.iterator(); iter.hasNext(); ) {
 	  VarInfo elt = (VarInfo) iter.next();
 	  all_obj_vars_names.add(elt.name);
 	}
 	Vector all_vars = new Vector(var.canonicalRep().equalTo());
+	all_vars.add(var.canonicalRep());
 	boolean name_matched = false;
 	for (Iterator iter = all_vars.iterator(); !name_matched && iter.hasNext(); ) {
 	  VarInfo elt = (VarInfo) iter.next();
@@ -1787,11 +1816,16 @@ public class PptTopLevel extends Ppt {
 
       String inv_rep = inv.format();
       if (inv_rep != null) {
-        System.out.println(inv_rep + num_values_samples);
-        if (Global.debugPrintInvariants) {
-          System.out.println("  [" + inv.repr() + "]");
-        }
-        Global.reported_invariants++;
+	if (Daikon.suppress_object_invariants_in_public_methods &&
+	    isObjectInvariant(inv)) {
+	  // TODO: Fix global statistics for this?
+	  continue;
+	}
+	System.out.println(inv_rep + num_values_samples);
+	if (Global.debugPrintInvariants) {
+	  System.out.println("  [" + inv.repr() + "]");
+	}
+	Global.reported_invariants++;
       } else {
         if (Global.debugPrintInvariants) {
           System.out.println("[format returns null: " + inv.repr() + " ]");
