@@ -60,9 +60,14 @@ public abstract class VarInfoName
     if ((name.indexOf('[') == -1) && (name.indexOf('(') == -1)) {
       // checking for only legal characters would be more robust
       int dot = name.lastIndexOf('.');
-      if (dot >= 0) {
+      int arrow = name.lastIndexOf("->");
+      if (dot >= 0 && dot > arrow) {
         String first = name.substring(0, dot);
         String field = name.substring(dot+1);
+        return parse(first).applyField(field);
+      } else if (arrow >= 0 && arrow > dot) {
+        String first = name.substring(0, arrow);
+        String field = name.substring(arrow+2);
         return parse(first).applyField(field);
       } else {
         return (new Simple(name)).intern();
@@ -92,9 +97,14 @@ public abstract class VarInfoName
     if (name.indexOf("[]") >= 0) {
       int brackets = name.lastIndexOf("[]");
       int dot = name.lastIndexOf('.');
-      if (dot >= brackets) {
+      int arrow = name.lastIndexOf("->");
+      if (dot >= brackets && dot > arrow) {
         String first = name.substring(0, dot);
         String field = name.substring(dot+1);
+        return parse(first).applyField(field);
+      } else if (arrow >= brackets && arrow > dot) {
+        String first = name.substring(0, arrow);
+        String field = name.substring(arrow+2);
         return parse(first).applyField(field);
       }
     }
@@ -114,6 +124,13 @@ public abstract class VarInfoName
       return parse(first).applyField(field);
     }
 
+    if (name.indexOf("->") != -1) {
+      // General field operator
+      int arrow = name.lastIndexOf("->");
+      String first = name.substring(0, arrow);
+      String field = name.substring(arrow+2);
+      return parse(first).applyField(field);
+    }
 
     // ??
     throw new UnsupportedOperationException("parse error: '" + name + "'");
@@ -3150,25 +3167,42 @@ public abstract class VarInfoName
      * element is a simplify-style quantification over
      * newly-introduced bound variables, the last element is a closer,
      * and the other elements are simplify-named strings for the
-     * provided roots (with sequenced subscripted by one of the new
+     * provided roots (with sequences subscripted by one of the new
      * bound variables).
+     *
+     * If elementwise is true, include the additional contraint that
+     * the indices (there must be exactly two in this case) refer to
+     * corresponding positions. If adjacent is true, include the
+     * additional constraint that the second index be one more than
+     * the first. If distinct is true, include the constraint that the
+     * two indices are different. If includeIndex is true, return
+     * additional strings, after the roots but before the closer, with
+     * the names of the index variables.
      **/
+    // XXX This argument list is starting to get out of hand -smcc
     public static String[] format_simplify(VarInfoName[] roots) {
-      return format_simplify(roots, false, false, false);
+      return format_simplify(roots, false, false, false, false);
     }
     public static String[] format_simplify(VarInfoName[] roots,
                                            boolean eltwise) {
-      return format_simplify(roots, eltwise, false, false);
+      return format_simplify(roots, eltwise, false, false, false);
     }
     public static String[] format_simplify(VarInfoName[] roots,
                                            boolean eltwise,
                                            boolean adjacent) {
-      return format_simplify(roots, eltwise, adjacent, false);
+      return format_simplify(roots, eltwise, adjacent, false, false);
+    }
+    public static String[] format_simplify(VarInfoName[] roots,
+                                           boolean eltwise,
+                                           boolean adjacent,
+                                           boolean distinct) {
+      return format_simplify(roots, eltwise, adjacent, distinct, false);
     }
     public static String[] format_simplify(VarInfoName[] roots,
                                            boolean elementwise,
                                            boolean adjacent,
-                                           boolean distinct) {
+                                           boolean distinct,
+                                           boolean includeIndex) {
       Assert.assertTrue(roots != null);
 
       if (adjacent || distinct)
@@ -3177,7 +3211,7 @@ public abstract class VarInfoName
       QuantifyReturn qret = quantify(roots);
 
       // build the forall predicate
-      String[] result = new String[roots.length+2];
+      String[] result = new String[(includeIndex ? 2 : 1) * roots.length + 2];
       StringBuffer int_list, conditions;
       {
         // "i j ..."
@@ -3213,13 +3247,24 @@ public abstract class VarInfoName
           }
         }
       }
-      result[0] = "(FORALL (" + int_list + ") (IMPLIES (AND " + conditions + ") ";
-      result[result.length-1] = "))"; // close IMPLIES, FORALL
+      result[0] = "(FORALL (" + int_list + ") " +
+        "(IMPLIES (AND " + conditions + ") ";
 
       // stringify the terms
-      for (int i=0; i < roots.length; i++) {
+      for (int i=0; i < qret.root_primes.length; i++) {
         result[i+1] = qret.root_primes[i].simplify_name();
       }
+
+      // stringify the indices, if requested
+      if (includeIndex) {
+        for (int i=0; i < qret.root_primes.length; i++) {
+          VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
+          VarInfoName idx_var = boundv[0];
+          result[i + qret.root_primes.length + 1] = idx_var.simplify_name();
+        }
+      }
+
+      result[result.length-1] = "))"; // close IMPLIES, FORALL
 
       return result;
     }
