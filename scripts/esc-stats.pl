@@ -34,7 +34,15 @@ for my $file (@ARGV) {
 	for my $category (@categories) {
 	    my $prefix = $prefixes{$category} || die($category);
 	    my $literal = $prefix . " " . $type;
-	    my $count = grep(/\Q$literal/, @lines);
+	    my @matches = grep(/\Q$literal/, @lines);
+	    if ($type eq "invariant") {
+		# remove invariants added by a heuristic
+		@matches = grep(!/\Q.owner == this/, @matches);
+	    } elsif ($type eq "set") {
+		# remove invariants added by a heuristic
+		@matches = grep(!/\Q.owner = this/, @matches);
+	    }
+	    my $count = scalar(@matches);
 	    print $count;
 	    print "\t" unless ($category eq "A");
 	}
