@@ -231,16 +231,14 @@ def all_numeric_invariants():
         exact_pair_invs = []
         if len(non_exact_single_invs) > 1:
             for indices in util.choose(2, non_exact_single_invs):
-                for iperm in util.permutations(indices):
-                    this_dict = dict_of_tuples_slice(var_values[fn_name], iperm)
-                    these_vars = util.slice_by_sequence(fn_vars, iperm)
-                    this_inv = two_field_numeric_invariant(this_dict)
-                    if this_inv != []:
-                        if (this_inv.is_exact()):
-                            exact_pair_invs.append(iperm)
-                        print "   ", this_inv.format(these_vars)
-                        # print "   ", these_vars, this_inv
-                        # print "     ", `this_inv`
+                this_dict = dict_of_tuples_slice(var_values[fn_name], indices)
+                these_vars = util.slice_by_sequence(fn_vars, indices)
+                this_inv = two_field_numeric_invariant(this_dict)
+                if (this_inv.is_exact()):
+                    exact_pair_invs.append(indices)
+                print "   ", this_inv.format(these_vars)
+                # print "   ", these_vars, this_inv
+                # print "     ", `this_inv`
         if len(non_exact_single_invs) > 2:
             for indices in util.choose(3, non_exact_single_invs):
                 if (([indices[0],indices[1]] in exact_pair_invs) or
@@ -248,16 +246,15 @@ def all_numeric_invariants():
                     ([indices[1],indices[2]] in exact_pair_invs)):
                     continue
                 # print "didn't find two of", indices, "in", exact_pair_invs, ";", util.slice_by_sequence(fn_vars, indices), fn_vars
-                for iperm in util.permutations(indices):
-                    this_dict = dict_of_tuples_slice(var_values[fn_name], iperm)
-                    these_vars = util.slice_by_sequence(fn_vars, iperm)
-                    this_inv = three_field_numeric_invariant(this_dict)
-                    if this_inv != None:
-                        # if this_inv[0] == "linear":
-                        #     print "found tri_linear: %s = %s %s + %s %s + %s" % (these_vars[2], this_inv[1], these_vars[0], this_inv[2], these_vars[1], this_inv[3])
-                        # print "     ", these_vars, this_inv
-                        # print "       ", `this_inv`
-                        print "     ", this_inv.format(these_vars)
+                this_dict = dict_of_tuples_slice(var_values[fn_name], indices)
+                these_vars = util.slice_by_sequence(fn_vars, indices)
+                this_inv = three_field_numeric_invariant(this_dict)
+                if this_inv != None:
+                    # if this_inv[0] == "linear":
+                    #     print "found tri_linear: %s = %s %s + %s %s + %s" % (these_vars[2], this_inv[1], these_vars[0], this_inv[2], these_vars[1], this_inv[3])
+                    # print "     ", these_vars, this_inv
+                    # print "       ", `this_inv`
+                    print "     ", this_inv.format(these_vars)
 # all_numeric_invariants()
 
 
@@ -285,10 +282,11 @@ class invariant:
     def is_exact(self):
         return self.values == 1
 
-    # 
     def format(self, args):
         """ARGS is uninterpreted.
 This function can return None:  it's intended to be used only as a helper."""
+        if (type(args) in [types.ListType, types.TupleType]) and (len(args) == 1):
+            args = args[0]
         if self.one_of:
             if len(self.one_of) == 1:
                 return "%s = %s" % (args, self.one_of[0])
@@ -486,6 +484,7 @@ class two_field_numeric_invariant(invariant):
     difference_invariant = None
     sum_invariant = None
     functions = None                    # list of functions such that y=fun(x)
+    inv_functions = None                # list of functions such that x=fun(y)
 
     # Note that Invariants produced for pairs such that there is a known
     # invariant for one of the elements (eg, it's constant) aren't interesting.
@@ -566,18 +565,26 @@ class two_field_numeric_invariant(invariant):
             # Could add "int", but only interesting if it isn't always identity
             # "pos" certainly isn't interesting.
             functions = [abs, operator.neg, operator.inv]
+            inv_functions = [abs, operator.neg, operator.inv]
             for (x,y) in pairs:
                 for fn in functions:
                     try:
                         if y != apply(fn, (x,)):
-                            # print "failed function: %d != %s (%d, %d)" % (z, fn, x, y)
                             # works by side effect, grrr.
                             functions.remove(fn)
                     except:
                         functions.remove(fn)
-                if functions == []:
+                for ifn in inv_functions:
+                    try:
+                        if x != apply(ifn, (y,)):
+                            # works by side effect, grrr.
+                            inv_functions.remove(ifn)
+                    except:
+                        inv_functions.remove(ifn)
+                if (functions == []) and (inv_functions == []):
                     break
             self.functions = functions
+            self.inv_functions = inv_functions
 
 
     def is_exact(self):
@@ -604,6 +611,8 @@ class two_field_numeric_invariant(invariant):
         result = result + "can be =: %s, " % self.can_be_equal
         if self.functions:
             result = result + "functions: %s, " % self.functions
+        if self.inv_functions:
+            result = result + "inv_functions: %s, " % self.inv_functions
         result = result + ("sum: %s, diff: %s, "
                            % (self.sum_invariant, self.difference_invariant))
         result = result + "%s values, %s samples" % (self.values, self.samples)
@@ -611,75 +620,17 @@ class two_field_numeric_invariant(invariant):
         return result
 
     def __str__(self):
-        if self.one_of:
-            if len(self.one_of) == 1:
-                return "exactly " + `self.one_of[0]`
-            else:
-                return "one of " + `self.one_of`
-
-        if self.comparison == "=":
-            return "equal"
-        if self.linear:
-            (a,b) = self.linear
-            if a == 1:
-                if b < 0:
-                    return "y = x - %s" % abs(b)
-                else:
-                    return "y = x + %s" % b
-            elif b == 0:
-                return "y = %s x" % a
-            else:
-                if b < 0:
-                    return "y = %s x - %s" % (a,abs(b))
-                else:
-                    return "y = %s x + %s" % (a,b)
-
-        if self.functions:
-            if len(self.functions) > 1:
-                return "functions: " + self.functions
-            fnrep = `self.functions[0]`
-            match = re.compile(r'^<built-in function ([a-zA-Z_]+)>$').match(fnrep)
-            if match:
-                fnrep = match.group(1)
-            return "y = " + fnrep + "(x)"
-
-        if self.comparison:
-            if self.comparison == "<":
-                return "less than"
-            elif self.comparison == "<=":
-                return "less than or equal"
-            elif self.comparison == ">":
-                return "greater than"
-            elif self.comparison == ">=":
-                return "greater than or equal"
-
-        sum_str = str(self.sum_invariant)
-        diff_str = str(self.difference_invariant)
-
-        in_range_re = re.compile(r'^in range -?[0-9]+..-?[0-9]+$')
-
-        if ((sum_str != "unconstrained"
-             and not in_range_re.match(sum_str))
-            or (diff_str != "unconstrained"
-                and diff_str != "nonzero"
-                and not in_range_re.match(diff_str))):
-            return "(sum %s and difference %s)" % (sum_str, diff_str)
-        # print "rejected printing sum", sum_str, "diff", diff_str
-
-        if (not self.can_be_equal) and self.nonequal_justified():
-            return "nonequal"
-        else:
-            return "unconstrained"
+        self.format(("x","y"))
 
     def format(self, arg_tuple):
-        (x,y) = arg_tuple
-
         as_base = invariant.format(self, arg_tuple)
         if as_base:
             return as_base
 
+        (x,y) = arg_tuple
+
         if self.comparison == "=":
-            return "%s = %s" % arg_tuple
+            return "%s = %s" % (x,y)
         if self.linear:
             (a,b) = self.linear
             if a == 1:
@@ -695,18 +646,24 @@ class two_field_numeric_invariant(invariant):
                 else:
                     return "%s = %s %s + %s" % (y,a,x,b)
 
-        if self.functions:
+        if self.functions or self.inv_functions:
             results = []
-            for fn in self.functions:
-                fnrep = `fn`
-                match = re.compile(r'^<built-in function ([a-zA-Z_]+)>$').match(fnrep)
-                if match:
-                    fnrep = match.group(1)
-                results.append("%s = %s(%s)" % (y,fnrep,x))
+            if self.functions:
+                for fn in self.functions:
+                    results.append("%s = %s(%s)" % (y,util.function_rep(fn),x))
+            if self.inv_functions:
+                for fn in self.inv_functions:
+                    results.append("%s = %s(%s)" % (x,util.function_rep(fn),y))
             return string.join(results, " and ")
 
         if self.comparison:
-            return "%s %s %s" % (x, self.comparison, y)
+            if self.comparison in ["<", "<="]:
+                return "%s %s %s" % (x, self.comparison, y)
+            if self.comparison == ">":
+                return "%s < %s" % (y, x)
+            if self.comparison == ">=":
+                return "%s <= %s" % (y, x)
+            raise "Can't get here"
 
         # Note that invariant.format(diff_inv, ...) is quite differerent from
         # diff_inv.format(...)!
@@ -766,10 +723,24 @@ def all_two_field_numeric_invariants():
 # all_two_field_numeric_invariants()
 
 
+# No need for add, sub
+symmetric_binary_functions = (min, max, operator.mul, operator.and_, operator.or_)
+non_symmetric_binary_functions = (cmp, pow, round, operator.div, operator.mod, operator.lshift, operator.rshift)
+
 class three_field_numeric_invariant(invariant):
 
-    linear = None                       # can be pair (a,b,c) such that z=ax+by+c.
-    functions = None                    # list of functions such that z=fun(x,y)
+    linear_z = None                     # can be pair (a,b,c) such that z=ax+by+c
+    linear_y = None                     # can be pair (a,b,c) such that y=ax+bz+c
+    linear_x = None                     # can be pair (a,b,c) such that x=ay+bz+c
+
+    # In these lists, when the function is symmetric, the first variable is
+    # preferred.
+    functions_xyz = None                # list of functions such that z=fun(x,y)
+    functions_yxz = None                # list of functions such that z=fun(y,x)
+    functions_xzy = None                # list of functions such that y=fun(x,z)
+    functions_zxy = None                # list of functions such that y=fun(z,x)
+    functions_yzx = None                # list of functions such that x=fun(y,z)
+    functions_zyx = None                # list of functions such that x=fun(z,y)
 
     def __init__(self, dict_of_triples):
         """DICT maps from a triple of values to number of occurrences."""
@@ -778,137 +749,142 @@ class three_field_numeric_invariant(invariant):
         triples = dict_of_triples.keys()
 
         if len(triples) > 2:
-            ## Linear relationship -- try to fit z = ax + by + c.
-            (a,b,c) = tri_linear_relationship(triples[0], triples[1], triples[2])
+            linear_z = checked_tri_linear_relationship(triples, (0,1,2))
+            linear_y = checked_tri_linear_relationship(triples, (0,2,1))
+            linear_x = checked_tri_linear_relationship(triples, (1,2,0))
 
-            # needn't check first three, but it's a waste to create a new sequence
-            for (x,y,z) in triples:
-                if z != a*x+b*y+c:
-                    break
-            else:
-                self.linear = (a, b, c)
+        global symmetric_binary_functions, non_symmetric_binary_functions
 
         if len(triples) > 1:
-            # No need for add, sub
-            functions = [min, max, cmp, pow, round, operator.mul, operator.div, operator.mod, operator.lshift, operator.rshift, operator.and_, operator.or_]
+            functions_xyz = list(symmetric_binary_functions + non_symmetric_binary_functions)
+            functions_yxz = list(non_symmetric_binary_functions)
+            functions_xzy = list(symmetric_binary_functions + non_symmetric_binary_functions)
+            functions_zxy = list(non_symmetric_binary_functions)
+            functions_yzx = list(symmetric_binary_functions + non_symmetric_binary_functions)
+            functions_zyx = list(non_symmetric_binary_functions)
             for (x,y,z) in triples:
-                for fn in functions:
+                for fn in functions_xyz:
                     try:
                         if z != apply(fn, (x, y)):
+                            functions_xyz.remove(fn)
                             # print "failed function: %d != %s (%d, %d)" % (z, fn, x, y)
-                            # works by side effect, grrr.
-                            functions.remove(fn)
                     except:
-                        functions.remove(fn)
-                if functions == []:
+                        functions_xyz.remove(fn)
+                for fn in functions_yxz:
+                    try:
+                        if z != apply(fn, (y, x)):
+                            functions_yxz.remove(fn)
+                    except:
+                        functions_yxz.remove(fn)
+                for fn in functions_xzy:
+                    try:
+                        if y != apply(fn, (x, z)):
+                            functions_xzy.remove(fn)
+                    except:
+                        functions_xzy.remove(fn)
+                for fn in functions_zxy:
+                    try:
+                        if y != apply(fn, (z, x)):
+                            functions_zxy.remove(fn)
+                    except:
+                        functions_zxy.remove(fn)
+                for fn in functions_yzx:
+                    try:
+                        if x != apply(fn, (y, z)):
+                            functions_yzx.remove(fn)
+                    except:
+                        functions_yzx.remove(fn)
+                for fn in functions_zyx:
+                    try:
+                        if x != apply(fn, (z, y)):
+                            functions_zyx.remove(fn)
+                    except:
+                        functions_zyx.remove(fn)
+                if (functions_xyz == []
+                    and functions_yxz == []
+                    and functions_xzy == []
+                    and functions_zxy == []
+                    and functions_yzx == []
+                    and functions_zyx == []):
                     break
-            self.functions = functions
-
-        return None
+            self.functions_xyz = functions_xyz
+            self.functions_yxz = functions_yxz
+            self.functions_xzy = functions_xzy
+            self.functions_zxy = functions_zxy
+            self.functions_yzx = functions_yzx
+            self.functions_zyx = functions_zyx
 
     def is_exact(self):
-        return invariant.is_exact(self) or self.linear
+        return invariant.is_exact(self) or self.linear_z or self.linear_y or self.linear_x
 
     def __repr__(self):
         result = "<invariant-3: "
-        if self.linear:
-            result = result + "linear: %s, " % self.linear
-        if self.functions:
-            result = result + "functions: %s, " % self.functions
+        if self.linear_z:
+            result = result + "linear_z: %s, " % self.linear_z
+        if self.linear_y:
+            result = result + "linear_y: %s, " % self.linear_y
+        if self.linear_x:
+            result = result + "linear_x: %s, " % self.linear_x
+        if self.functions_xyz:
+            result = result + "functions_xyz: %s, " % self.functions_xyz
+        if self.functions_yxz:
+            result = result + "functions_yxz: %s, " % self.functions_yxz
+        if self.functions_xzy:
+            result = result + "functions_xzy: %s, " % self.functions_xzy
+        if self.functions_zxy:
+            result = result + "functions_zxy: %s, " % self.functions_zxy
+        if self.functions_yzx:
+            result = result + "functions_yzx: %s, " % self.functions_yzx
+        if self.functions_zyx:
+            result = result + "functions_zyx: %s, " % self.functions_zyx
         result = result + "%s values, %s samples" % (self.values, self.samples)
         result = result + ">"
         return result
 
     def __str__(self):
-        if self.one_of:
-            if len(self.one_of) == 1:
-                return "exactly " + `self.one_of[0]`
-            else:
-                return "one of " + `self.one_of`
-
-        if self.linear:
-            (a,b,c) = self.linear
-            # Convert from float to integer if appropriate
-
-            result = []
-            if a == 1:
-                result.append("x")
-            elif a == -1:
-                result.append("- x")
-            elif a != 0:
-                result.append("%s x" % a)
-            if result != []:
-                if b > 0:
-                    result.append(" + ")
-                else:
-                    result.append(" - ")
-            if abs(b) == 1:
-                result.append("y")
-            elif b != 0:
-                result.append("%s y" % abs(b))
-            if c > 0:
-                result.append("+ %s" % c)
-            elif c < 0:
-                result.append("- %s" % c)
-            if result == []:
-                return "z = 0"
-            else:
-                return "z = " + string.join(result, "")
-
-        if self.functions:
-            if len(self.functions) > 1:
-                return "functions: " + self.functions
-            fnrep = `self.functions[0]`
-            match = re.compile(r'^<built-in function ([a-zA-Z_]+)>$').match(fnrep)
-            if match:
-                fnrep = match.group(1)
-            return "z = " + fnrep + "(x, y)"
-
-        return "unconstrained"
+        self.format(("x","y","z"))
 
     def format(self, arg_tuple):
-        (x,y,z) = arg_tuple
-
         as_base = invariant.format(self, arg_tuple)
         if as_base:
             return as_base
 
-        if self.linear:
-            (a,b,c) = self.linear
+        (x,y,z) = arg_tuple
 
-            result = []
-            if a == 1:
-                result.append("%s" % x)
-            elif a == -1:
-                result.append("- %s" % x)
-            elif a != 0:
-                result.append("%s %s" % (a,x))
-            if result != [] and b > 0:
-                result.append(" + ")
-            elif b < 0:
-                result.append(" - ")
-            if abs(b) == 1:
-                result.append("%s" % y)
-            elif b != 0:
-                result.append("%s %s" % (abs(b),y))
-            if c > 0:
-                result.append("+ %s" % c)
-            elif c < 0:
-                result.append("- %s" % c)
-            if result == []:
-                result = "0"
-            else:
-                result = string.join(result, "")
-            return ("%s = " % z) + result
-
-        if self.functions:
+        if self.linear_z or self.linear_y or self.linear_x:
             results = []
-            for fn in self.functions:
-                fnrep = `fn`
-                match = re.compile(r'^<built-in function ([a-zA-Z_]+)>$').match(fnrep)
-                if match:
-                    fnrep = match.group(1)
-                results.append("%s = %s(%s, %s)" % (z,fnrep,x,y))
+            if self.linear_z:
+                results.append(tri_linear_format(self.linear_z, (0,1,2)))
+            if self.linear_y:
+                results.append(tri_linear_format(self.linear_y, (0,2,1)))
+            if self.linear_x:
+                results.append(tri_linear_format(self.linear_x, (1,2,0)))
+            return string.join(results, " and ")
+
+        if (self.functions_xyz or self.functions_yxz
+            or self.functions_xzy or self.functions_zxy
+            or self.functions_yzx or self.functions_zyx):
+
+            fnrep = util.function_rep
+            results = []
+            if self.functions_xyz:
+                for fn in self.functions_xyz:
+                    results.append("%s = %s(%s, %s)" % (z,fnrep(fn),x,y))
+            if self.functions_xyz:
+                for fn in self.functions_yxz:
+                    results.append("%s = %s(%s, %s)" % (z,fnrep(fn),y,x))
+            if self.functions_xzy:
+                for fn in self.functions_xzy:
+                    results.append("%s = %s(%s, %s)" % (y,fnrep(fn),x,z))
+            if self.functions_zxy:
+                for fn in self.functions_zxy:
+                    results.append("%s = %s(%s, %s)" % (y,fnrep(fn),z,x))
+            if self.functions_yzx:
+                for fn in self.functions_yzx:
+                    results.append("%s = %s(%s, %s)" % (x,fnrep(fn),y,z))
+            if self.functions_zyx:
+                for fn in self.functions_zyx:
+                    results.append("%s = %s(%s, %s)" % (x,fnrep(fn),z,y))
             return string.join(results, " and ")
 
         return "(%s, %s, %s) unconstrained" % (x,y,z)
@@ -923,18 +899,17 @@ def all_three_field_numeric_invariants():
         if num_vars < 3:
             continue
         for indices in util.choose(3, range(0,num_vars)):
-            for iperms in util.permutations(indices):
-                this_dict = dict_of_tuples_slice(var_values[fn_name], iperms)
-                these_vars = util.slice_by_sequence(fn_vars, iperms)
-                this_inv = three_field_numeric_invariant(this_dict)
-                # print fn_name, these_vars, this_inv
-                print fn_name, these_vars
-                print "   ", `this_inv`
-                print "   ", this_inv
+            this_dict = dict_of_tuples_slice(var_values[fn_name], indices)
+            these_vars = util.slice_by_sequence(fn_vars, indices)
+            this_inv = three_field_numeric_invariant(this_dict)
+            # print fn_name, these_vars, this_inv
+            print fn_name, these_vars
+            print "   ", `this_inv`
+            print "   ", this_inv
 
 
 
-# all_two_field_numeric_invariants()
+# all_three_field_numeric_invariants()
 
 
 
@@ -963,6 +938,28 @@ def bi_linear_relationship(pair1, pair2):
     # Should I check the results, as I do for tri_linear_relationship?
 
     return (a,b)
+
+
+# May return None
+def checked_tri_linear_relationship(triples, permutation):
+
+    if len(triples) < 3:
+        return None
+
+    (x, y, z) = permutation
+    t0 = util.slice_by_sequence(triples[0], permutation)
+    t1 = util.slice_by_sequence(triples[1], permutation)
+    t2 = util.slice_by_sequence(triples[2], permutation)
+
+    ## Linear relationship -- try to fit z = ax + by + c.
+    (a,b,c) = tri_linear_relationship(t0, t1, t2)
+    # needn't check first three, but it's a waste to create a new sequence
+    for triple in triples:
+        (x,y,z) = util.slice_by_sequence(triple, permutation)
+        if z != a*x+b*y+c:
+            return None
+    else:
+        return(a, b, c)
 
 
 ## Must check the output in case nonsense -- zeroes -- is returned.
@@ -1028,11 +1025,42 @@ def tri_linear_relationship(triple1, triple2, triple3):
 
     return (a, b, c)
 
+def tri_linear_format(abc, xyz):
+    (a,b,c) = abc
+    (x,y,z) = xyz
+
+    result = []
+    if a == 1:
+        result.append("%s" % x)
+    elif a == -1:
+        result.append("- %s" % x)
+    elif a != 0:
+        result.append("%s %s" % (a,x))
+    if result != [] and b > 0:
+        result.append(" + ")
+    elif b < 0:
+        result.append(" - ")
+    if abs(b) == 1:
+        result.append("%s" % y)
+    elif b != 0:
+        result.append("%s %s" % (abs(b),y))
+    if c > 0:
+        result.append("+ %s" % c)
+    elif c < 0:
+        result.append("- %s" % c)
+    if result == []:
+        result = "0"
+    else:
+        result = string.join(result, "")
+    return ("%s = " % z) + result
+
+
 def _test_tri_linear_relationship():
     assert tri_linear_relationship((1,2,1),(2,1,7),(3,3,7)) == (4,-2,1)
     # like the above, but swap y and z; results in division-by-zero problem
     # tri_linear_relationship((1,1,2),(2,7,1),(3,7,3))
     assert tri_linear_relationship((1,2,6),(2,1,-4),(3,3,7)) == (-3,7,-5)
+
 
 
 ###########################################################################
