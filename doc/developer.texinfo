@@ -22,10 +22,10 @@
 @center @titlefont{Daikon Invariant Detector Developer Manual}
 
 @sp 2
-@center Daikon version 3.1.6
+@center Daikon version 3.1.5
 
 @sp 1
-@c Daikon version 3.1.6 date
+@c Daikon version 3.1.5 date
 @center November 16, 2004
 
 @sp 5
@@ -48,7 +48,7 @@ Copyright @copyright{} 1998-2003
 @c <h1>Daikon Invariant Detector User Manual</h1>
 @c
 @c This is the developer manual for the Daikon invariant detector.
-@c It describes Daikon version 3.1.6, released November 16, 2004.
+@c It describes Daikon version 3.1.5, released November 7, 2004.
 @c @end html
 
 @c Putting this lower in the HTML version looks a little bit strange,
@@ -67,7 +67,7 @@ Copyright @copyright{} 1998-2003
 @c 
 @c @end ifinfo
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 3.1.6, released November 16, 2004.
+It describes Daikon version 3.1.5, released November 7, 2004.
 @end ifnottex
 
 @menu
@@ -587,7 +587,7 @@ The basic syntax is:
 @end example
 As shown, multiple class arguments can be specified separated by pipe
 symbols (|).  The variables are specified in angle brackets (<>) and
-the program point is preceeded by an at sign (@@).  Each item is optional.
+the program point is preceded by an at sign (@@).  Each item is optional.
 For example:
 @example
     IntEqual<x,y>@@makeEmpty()
@@ -724,7 +724,7 @@ situations.  The following instructions only apply to MIT, but the tool
 is shipped in the scripts directory and can easily be setup elsewhere
 as well.
 
-Use the URL @uref{http://pag/daikon/mit/log2html.php} to access log2hull.
+Use the URL @uref{http://pag/daikon/mit/log2html.php} to access log2html.
 It will ask you for a file of daikon output.  One good way to create this
 file is to use the tee command.  For example:
 
@@ -732,7 +732,8 @@ file is to use the tee command.  For example:
     daikon [daikon args] | tee ~/daikon.out
 @end example
 
-Then specify that file to log2html.  Note that you must expand ~ yourself
+Then specify that file to log2html.  Note that when supplying a filename
+to log2html, you must expand ~ yourself
 since the webserver doesn't know who you are.  The result will contain
 tables with the log output in them (all other output is unchanged).  Table
 columns are based on the ': ' separator in the ASCII output.  If traceback
@@ -746,11 +747,11 @@ called.  For example, the traceback column might contain:
 If you put your cursor over @code{PptSlice1.addInvariant} it will show
 the exact line number in the source file where the log method was
 called as part of the href.  If you click on the traceback it will
-create an output file of type application/emacs that contains an
-emacsclient command to edit the related source file.  Most browsers
+create an output file of type @samp{application/emacs} that contains an
+@command{emacsclient} command to edit the related source file.  Most browsers
 can be setup to execute a command to process these files (in Mozilla
 this is done in the 'Navigator/Helper Applications' section of
-preferences).  The script @file{$inv/scripts/browser_emacs} will
+preferences).  The script @command{$inv/scripts/browser_emacs} will
 correctly handle files of this type and bring up the appropriate file
 in emacs.  This could easily be changed to support other editors.
 Note that as currently implemented this creates a possible security
@@ -780,7 +781,7 @@ frame.  Note that the current state of what tracebacks are expanded is
 kept in a file named the same as your Daikon output file with
 @file{.state} appended.  For example, the state file for
 @file{~/daikon.out} is @file{~/daikon.out.state}.  This file must be
-world writable for log2html.php to work correctly.
+world writable for @command{log2html.php} to work correctly.
 
 
 @node    Daikon internals, Testing, Debugging Daikon, Top
@@ -987,8 +988,8 @@ next time you run the tests.
 @subsection Invariant Format Testing
 
 This tests the formatting of invariants with specified input.  The
-tests are configured in the file InvariantFormatTest.commands under
-daikon/test.  Make sure the InvariantFormatTest.commands file is
+tests are configured in the file @file{InvariantFormatTest.commands} under
+@file{daikon/test/}.  Make sure the @file{InvariantFormatTest.commands} file is
 in the classpath when this tester is run or the tester will not work.
 (It will just tell you that the file is not in the classpath)
 
@@ -1009,7 +1010,7 @@ lists end). This will be remedied in a future version of the tester.
 @table @samp
 @item Instantiate args: 
 these are optional additional arguments to the static
-instantiate method of the class.  Each arg consists of the type (boolean
+instantiate method of the class.  Each argument consists of the type (boolean
 or int) followed by the value.  For example:
 @example
     boolean true
@@ -1075,7 +1076,7 @@ the first number of each sample better be less than the second)
 Arrays and strings must be formatted according to the Daikon dtrace file
 convention (see the Daikon user manual for full description). This
 states that arrays must be surrounded in brackets (start with "[", end
-with "]"), and entries must be seperated by a space. String must be
+with "]"), and entries must be separated by a space. String must be
 enclosed in quotes ("). Quotes within a string can be represented by the
 following sequence: \"
 
@@ -1095,7 +1096,7 @@ Goal: a < b    <- goal string, no comment/blank lines after this
 3              <-|
 @end example
 
-Other examples are inthe existing test file (InvariantFormatTest.commands).
+Other examples are in the existing test file (InvariantFormatTest.commands).
 @end table
 The output of a test run can be converted into goals by using the
 --generate_goals switch to the tester as follows:
@@ -1103,7 +1104,7 @@ The output of a test run can be converted into goals by using the
 java daikon.test.InvariantFormatTester --generate_goals
 @end example
 Note that this test is included in the set of tests performed by the
-master tester, and so it is not necessary to seperately run this test
+master tester, and so it is not necessary to separately run this test
 except to generate goal files.
 
 Furthermore, this framework cannot parse complex types from files
@@ -1150,7 +1151,7 @@ are:
 @end deffn
 
 @deffn {SampleTester Command} assert: assertion
-  Specifies an assertion that should be true at this point.  @xref{Assertions}.
+  Specifies an assertion that should be true at this point (@pxref{Assertions}).
   The negation of an assertion can be specified by adding an exclamation
   point before the assertion (for example: @code{!inv("x > y", x, y})).
 @end deffn
@@ -1224,13 +1225,13 @@ should include both in any analysis of Daikon's tests.
 
 Daikon intentionally does not contain tests for third-party libraries
 that are included (sometimes in source form) in the Daikon distribution.
-For example, the @file{java/ajax} and @file{java/jtb} directories
+For example, the @file{java/ajax/} and @file{java/jtb/} directories
 contain external libraries.  Therefore, any measurement of Daikon's code
 coverage should not include those libraries (or other libraries, some of
 which are distributed as @file{.jar} files).
 
 Be sure to see file @file{doc/www/mit/index.html} in the repository for
-information about how group members use Daikon.  (This file chnages from
+information about how group members use Daikon.  (This file changes from
 time to time --- for instance, when the CVS branch was created and later
 when development on it ceased.
 
@@ -1246,14 +1247,14 @@ Versions System}) describes CVS branches:
 
 @quotation
   CVS allows you to isolate changes onto a separate line of development,
-  known as a "branch".  When you change files on a branch, those changes
+  known as a ``branch''.  When you change files on a branch, those changes
   do not appear on the main trunk or other branches.
 
   Later you can move changes from one branch to another branch (or the
-  main trunk) by "merging".  Merging involves first running `cvs update
-  -j', to merge the changes into the working directory.  You can then
-  commit that revision, and thus effectively copy the changes onto
-  another branch.
+  main trunk) by "merging".  Merging involves first running 
+  @samp{cvs update -j}, to merge the changes into the working directory.
+  You can then commit that revision, and thus effectively copy the
+  changes onto another branch.
 @end quotation
 
 In early January 2002 (or perhaps in late 2001), we created the
@@ -1305,3 +1306,23 @@ trunk (respectively, the branch).
 
 @bye
 
+
+@c  LocalWords:  texinfo setfilename settitle daikonemail setchapternewpage sp
+@c  LocalWords:  hboxes finalout titlepage titlefont daikon eps pdf txt png jpg
+@c  LocalWords:  vskip pt filll html img src alt ifnothtml dir ifnottex ifinfo
+@c  LocalWords:  ifhtml detailmenu uref cindex java jpp cpp javac jikes proto
+@c  LocalWords:  invs samp SingleScalar TwoScalar abs ThreeScalar TwoSequence
+@c  LocalWords:  SingleSequence SequenceScalar noindent Daikon's InvName ppt ok
+@c  LocalWords:  PptSlice dyn dkconfig VarInfo computeConfidence num repr esc
+@c  LocalWords:  DAIKONDIR IOA JML var newtype OutputFormat PrintInvariants int
+@c  LocalWords:  decls dtrace squar emph NISuppressor NISuppression suppressee
+@c  LocalWords:  NISuppressee NISuppressionSet ni IntGreaterEqual eq IntEqual
+@c  LocalWords:  lt IntLessThan makeEmpty LessThan GreaterThan orig theArray TR
+@c  LocalWords:  FloatLessThan DisjSets SequenceScalarSubscriptFactory pxref co
+@c  LocalWords:  Javadoc Varinfo logOn getClass foo vars isLoggable logDetail
+@c  LocalWords:  msg showTrackback args webserver addInvariant href emacsclient
+@c  LocalWords:  inv PptTopLevel FileIO php isObviousStatically LCS Nimmer's cp
+@c  LocalWords:  isObviousDynamically Toh Win's nohierarchy noequality diffs
+@c  LocalWords:  diff InvariantFormatTest classpath ioa jml aString valueOf val
+@c  LocalWords:  deffn SampleTester decl subsubsection arg iff testsubject ajax
+@c  LocalWords:  jtb cvs checkin smallexample checkins printindex
