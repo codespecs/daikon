@@ -9,9 +9,9 @@ DOC_FILES := ${DOC_FILES_NO_IMAGES} $(IMAGE_PARTIAL_PATHS)
 DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 README_FILES := README-daikon-java README-dist
 README_PATHS := $(addprefix doc/,$(README_FILES))
-SCRIPT_FILES := modbit-munge.pl modbit-munge.bat java-cpp.pl daikon.pl lines-from
+SCRIPT_FILES := java-cpp.pl daikon.pl lines-from
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
-DAIKON_JAVA_FILES := $(shell find java \( -name '*daikon-java*' -o -name '*-cpp.java' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' \) -prune -o -name '*.java' -print)
+DAIKON_JAVA_FILES := $(shell find java \( -name '*daikon-java*' -o -name '*-cpp.java' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name '*ajax-ship*' \) -prune -o -name '*.java' -print)
 WWW_FILES := $(shell cd doc/www; find . \( -name '*~' -o -name CVS \) -prune -o -type f -print)
 WWW_DIR := /home/httpd/html/daikon/
 
@@ -90,6 +90,7 @@ TAGS:
 ###
 
 DISTTESTDIR := /tmp/daikon.dist
+DISTTESTDIRJAVA := /tmp/daikon.dist/daikon/java
 
 # Both make and test the distribution.
 # (Must make it first in order to test it!)
@@ -100,8 +101,11 @@ dist-test-no-update-dist: dist-ensure-directory-exists
 	-rm -rf $(DISTTESTDIR)
 	mkdir $(DISTTESTDIR)
 	(cd $(DISTTESTDIR); tar xzf $(DIST_DIR)/daikon-source.tar.gz)
-	(cd $(DISTTESTDIR)/daikon/java/daikon; CLASSPATH=$(DISTTESTDIR)/daikon/java:$(RTJAR); rm `find . -name '*.class'`; make)
-	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) junit)
+	# No need to add to classpath: ":$(DISTTESTDIRJAVA)/lib/jakarta-oro.jar:$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar"
+	# Use javac, not jikes; jikes seems to croak on longer-than-0xFFFF
+	# method or class.
+	(cd $(DISTTESTDIRJAVA)/daikon; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(RTJAR) all_javac)
+	(cd $(DISTTESTDIR)/daikon/java/daikon && $(MAKE) CLASSPATH=$(DISTTESTDIRJAVA) junit)
 
 # I would rather define this inside the cvs-test rule.  (In that case I
 # must use "$$FOO", not $(FOO), to refer to it.)
@@ -136,8 +140,14 @@ dist-force:
 	-rm -f daikon-source.tar.gz daikon-jar.tar.gz
 	$(MAKE) dist
 
+# 	echo CLASSPATH: $(CLASSPATH)
+# 	# echo DAIKON_JAVA_FILES: ${DAIKON_JAVA_FILES}
+# 	# Because full distribution has full source, shouldn't need: CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIRJAVA)/lib/jakarta-oro.jar:$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar:$(RTJAR)
 update-dist-dir: dist-ensure-directory-exists
 	# Would be clever to call "cvs examine" and warn if not up-to-date.
+	# Jikes 1.14 doesn't seem to work here; apparently tries to build
+	# method or class with more than 0xFFFF bytecodes.
+	cd java/daikon && $(MAKE) all_via_javac 
 	cd java/daikon && $(MAKE) junit
 	cd doc && $(MAKE) html html-chap
 	# html-update-toc daikon.html
@@ -183,6 +193,8 @@ daikon.jar: $(DAIKON_JAVA_FILES)
 
 # Use this ordering because daikon-jar is made before daikon-source
 
+DAIKONBUILD=/tmp/daikon.build
+
 daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar
 	# html-update-toc daikon.html
 
@@ -209,7 +221,8 @@ daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DA
 
 	# Example files
 	cp -pR examples /tmp/daikon
-	cd /tmp/daikon && find examples \( -name '*.java' \) -prune -o -type f -o -name CVS -print | xargs rm -rf
+	# Keep .java files, delete everything else
+	cd /tmp/daikon && find examples \( -name '*.java' \) -prune -o \( -type f -o -name CVS -o -name daikon-output -o -name daikon-java -o -name daikon-instrumented \) -print | xargs rm -rf
 
 	date > /tmp/daikon/VERSION
 	chgrp -R $(INV_GROUP) /tmp/daikon
@@ -231,15 +244,26 @@ daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DA
 	(cd /tmp/daikon/java; $(RM_TEMP_FILES))
 
 	# Java support files
+	## utilMDE
 	(cd java/utilMDE; $(MAKE) utilMDE.tar.gz)
 	cd java && tar zxf utilMDE/utilMDE.tar.gz -C /tmp/daikon/java
+	## getopt
 	tar zxf java/lib/java-getopt-1.0.8.tar.gz -C /tmp/daikon/java
-	# tar zxf java/lib/OROMatcher-1.1.tar.gz -C /tmp/daikon/java
-	# (cd /tmp/daikon/java; ln -s OROMatcher-1.1.0a/com .)
+	## OROMatcher
+	# Old version:
+	#   tar zxf java/lib/OROMatcher-1.1.tar.gz -C /tmp/daikon/java
+	#   (cd /tmp/daikon/java; ln -s OROMatcher-1.1.0a/com .)
 	tar zxf java/lib/jakarta-oro-2.0.3.tar.gz -C /tmp/daikon/java
 	(cd /tmp/daikon/java; ln -s jakarta-oro-2.0.3/src/java/org .)
-	unzip java/lib/junit3.7.zip -d /tmp/daikon/java
-	(cd /tmp/daikon/java; ln -s junit3.7/junit .)
+	## JUnit
+	# This is wrong:
+	#   unzip java/lib/junit3.7.zip -d /tmp/daikon/java
+	#   (cd /tmp/daikon/java; ln -s junit3.7/junit .)
+	# Need to extract a jar file in the zip file, then unjar that.
+	mkdir /tmp/daikon/tmp-junit
+	unzip java/lib/junit3.7.zip junit3.7/src.jar -d /tmp/daikon/tmp-junit
+	(cd /tmp/daikon/tmp-junit; unzip junit3.7/src.jar; rm -f junit3.7/src.jar; rmdir junit3.7; chmod -R +x *; find . -type f -print | xargs chmod -x; rm -rf META-INF TMP; mv junit /tmp/daikon/java/)
+	rm -rf /tmp/daikon/tmp-junit
 
 	# Java instrumenter
 	# The -h option saves symbolic links as real files, to avoid problem 
