@@ -37,7 +37,6 @@ public class PptSliceGeneric extends PptSlice {
     values_cache = new VarValues();
     if (debugPptSliceGeneric)
       System.out.println("Created PptSliceGeneric " + this.name);
-    invs = null;
     // Ensure that the VarInfo objects are in order (and not duplicated).
     for (int i=0; i<var_infos.length-1; i++)
       Assert.assert(var_infos[i].varinfo_index < var_infos[i+1].varinfo_index);
@@ -66,8 +65,7 @@ public class PptSliceGeneric extends PptSlice {
   void instantiate_invariants(int pass) {
     // Instantiate invariants
     if (debugPptSliceGeneric)
-      System.out.println("instantiate_invariants (pass " + pass + ") for " + name);
-    invs = new Invariants();
+      System.out.println("instantiate_invariants (pass " + pass + ") for " + name + ": originally " + invs.size() + " invariants in " + invs);
     if (arity == 1) {
       SingleScalarFactory.instantiate(this, pass);
       SingleSequenceFactory.instantiate(this, pass);
@@ -81,8 +79,7 @@ public class PptSliceGeneric extends PptSlice {
       throw new Error("bad arity");
     }
     if (debugPptSliceGeneric) {
-      System.out.println("invs=" + invs + "; this.invs=" + this.invs);
-      System.out.println("Newly created PptSliceGeneric " + name + " = " + this + " has " + invs.size() + " invariants in " + invs);
+      System.out.println("after instantiate_invariants (pass " + pass + "), PptSliceGeneric " + name + " = " + this + " has " + invs.size() + " invariants in " + invs);
     }
   }
 

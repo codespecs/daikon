@@ -88,6 +88,9 @@ public abstract class Invariant {
     return ppt.varNames();
   }
 
+  public String name() {
+    return this.getClass().getName() + varNames();
+  }
 
   /**
    * Returns true if this invariant is necessarily true, due to derived
