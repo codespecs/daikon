@@ -512,6 +512,10 @@ public final class Daikon {
             int new_len = indices.length;
             int new_index = 0;
             int comb_index = 0;
+            
+            Assert.assert(line_vars.length == comb_vars.length,
+                          "\nIncorrect number of variables at exit points: " +
+                          enter_ppt.name);
             for (int lv_index=0; lv_index<line_vars.length; lv_index++) {
               if (line_vars[lv_index].isStaticConstant()) {
                 continue;
