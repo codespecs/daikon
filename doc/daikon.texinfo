@@ -41,11 +41,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 2.3.10
+@center Daikon version 2.3.11
 
 @sp 1
-@c Daikon version 2.3.10 date
-@center June 10, 2002
+@c Daikon version 2.3.11 date
+@center July  8, 2002
 
 @sp 5
 @c reads daikon.eps, daikon.pdf, daikon.txt, daikon.png, or daikon.jpg
@@ -64,7 +64,7 @@ Copyright @copyright{} 1998-2002
 <h1>Daikon Invariant Detector User Manual</h1>
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.10, released June 10, 2002.
+It describes Daikon version 2.3.11, released July  8, 2002.
 
 @end html
 
@@ -79,7 +79,7 @@ It describes Daikon version 2.3.10, released June 10, 2002.
 
 @ifnottex
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 2.3.10, released June 10, 2002.
+It describes Daikon version 2.3.11, released July  8, 2002.
 @end ifnottex
 
 @menu
@@ -222,6 +222,7 @@ Pointer type disambiguation
 dfec requirements
 
 * C program requirements::      
+* Header file dependencies::    
 * gcc version::                 
 
 Enhancing Daikon output
@@ -3332,10 +3333,11 @@ compile.
 
 @menu
 * C program requirements::      
+* Header file dependencies::    
 * gcc version::                 
 @end menu
 
-@node    C program requirements, gcc version, dfec requirements, dfec requirements
+@node    C program requirements, Header file dependencies, dfec requirements, dfec requirements
 @subsubsection C program requirements
 
 
@@ -3357,12 +3359,14 @@ effect even if you believe your code to be ANSI/ISO C@.  Protoize is
 distributed with gcc, among other places; you can find documentation
 at @url{http://gcc.gnu.org/onlinedocs/gcc/Running-Protoize.html}.
 
-To check your code for ANSI/ISO compliance, compile it with
-@command{gcc -g -Wall -ansi -pedantic}.  Removing all warnings
-produced by @command{gcc} will reduce the number of warning
-messages produced by dfec.  (Lack of errors from that command does not
-guarantee your code is ANSI C, but errors from that command do
-indicate that your code is not ANSI C@.)
+If you do not understand a dfec error message that indicates a problem
+with your source code, you may wish to check your code for ANSI/ISO
+compliance by compiling it with @command{gcc -g -Wall -ansi
+-pedantic}.  Removing all warnings produced by @command{gcc} will
+reduce the number of warning messages produced by dfec.  (Lack of
+errors from that command does not guarantee your code is ANSI C, or
+that your code is acceptable to dfec.  However, errors from that
+command do indicate that your code is not ANSI C@.)
 
 @command{dfec} does not accept every legal ANSI/ISO C program.  Here
 are the exceptions.
@@ -3396,8 +3400,8 @@ non-standard way, you may experience trouble.
 @end enumerate
 
 
-@node    Header file dependencies, gcc version, dfec requirements, dfec requirements
-@subsubsubsection Header file dependencies
+@node    Header file dependencies, gcc version, C program requirements, dfec requirements
+@subsubsection Header file dependencies
 
 Some programs contain dependences on header files that make code that
 is legal C but not legal C++.  dfec's input must be both legal C and
@@ -3419,9 +3423,9 @@ follows:
   __extension__ typedef long long int __quad_t;
   #else
   typedef struct
-    {
+    @{
       long int __val[2];
-    } __quad_t;
+    @} __quad_t;
   #endif
 @end example
 
@@ -3449,7 +3453,7 @@ ensure that your code is both legal C and legal C++, or to work around
 other problems.
 
 
-@node    gcc version,  , C program requirements, dfec requirements
+@node    gcc version,  , Header file dependencies, dfec requirements
 @subsubsection gcc version
 
 
@@ -4153,7 +4157,7 @@ Simplify format (for use by the Simplify theorem-prover).
 To support a new output format, you need to do two things:
 @itemize @bullet
 @item
-(This description will change in Daikon version 2.3.10.)
+(This description will change in Daikon version 2.3.11.)
 Add, to every subclass of @samp{Invariant}, a
 @samp{format_@var{newtype}()} method.  Each subclass of Invariant
 already has three such methods --- @samp{format()}, @samp{format_esc()},
@@ -4802,7 +4806,7 @@ English words "die-con".
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 2.3.10, released June 10, 2002.
+This manual describes Daikon version 2.3.11, released July  8, 2002.
 A list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
@@ -5509,4 +5513,3 @@ this.topOfStack
 
 
 @bye
-

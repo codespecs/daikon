@@ -7,7 +7,7 @@ daikon.html, daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.
 
 ===========================================================================
 
-2.3.11 (?? July 2002):
+2.3.11 (8 July 2002):
 
 The runcluster.pl program performs cluster analysis (a machine learning
 technique) to produce splitter info files.  This is in addition to other
@@ -20,6 +20,10 @@ order does not matter (both useful for avoiding obvious invariants over
 sets), properties of null in a collection, and whether a variable is a
 call-by-value parameter (and so can never change, from the point of view of
 the caller).  Use of this information reduces Daikon's output.
+
+The manual emphasizes that dfec only works on ANSI/ISO C programs (that are
+also legal C++ programs), and gives a number of hints for making your C
+programs compliant.
 
 2.3.10 (10 June 2002):
 
