@@ -250,7 +250,7 @@ public abstract class Ppt implements java.io.Serializable {
         boolean found = false;
         for (int vindex=0; vindex<vars.length; vindex++) {
           VarInfo vvar = vars[vindex];
-          if (rvar.compatible(vvar)) {
+          if (rvar.comparable(vvar)) {
             // do not remove
             found = true;
             break;
@@ -294,13 +294,13 @@ public abstract class Ppt implements java.io.Serializable {
         name1 += "~";
       if (name2.endsWith(FileIO.exit_suffix))
         name2 += "~";
-      
+
       String swapped1 = swap(name1, '.', ':');
       String swapped2 = swap(name2, '.', ':');
-      
+
       return swapped1.compareTo(swapped2);
     }
-    
+
     static String swap(String s, char a, char b) {
       final char magic = '\255';
       return s.replace(a, magic).replace(b, a).replace(magic, b);

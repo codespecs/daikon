@@ -182,7 +182,7 @@ public final class ProglangType implements java.io.Serializable {
     return result;
   }
 
-//     def compatible(self, other):
+//     def comparable(self, other):
 //         base1 = self.base
 //         base2 = other.base
 //         return ((self.dimensionality == other.dimensionality)

@@ -192,7 +192,7 @@ public final class VarComparabilityExplicit extends VarComparability implements 
 
   // This is the key function of the class.
   // I could also add a member version.
-  static boolean compatible(VarInfoName name1_, VarComparabilityExplicit type1,
+  static boolean comparable(VarInfoName name1_, VarComparabilityExplicit type1,
 			    VarInfoName name2_, VarComparabilityExplicit type2) {
     if (type1.alwaysComparable() || type2.alwaysComparable())
       return true;
@@ -218,7 +218,7 @@ public final class VarComparabilityExplicit extends VarComparability implements 
     for (int i=0; i<dims; i++) {
       VarInfoName indexvar1 = new IndexVar(name1, i);
       VarInfoName indexvar2 = new IndexVar(name2, i);
-      if (!compatible(indexvar1, (VarComparabilityExplicit)type1.indexType(i),
+      if (!comparable(indexvar1, (VarComparabilityExplicit)type1.indexType(i),
                       indexvar2, (VarComparabilityExplicit)type2.indexType(i)))
 	return false;
     }

@@ -44,15 +44,15 @@ public abstract class VarComparability {
   public abstract VarComparability elementType();
   public abstract VarComparability indexType(int dim);
 
-  public static boolean compatible(VarInfo v1, VarInfo v2) {
-    return compatible(v1.name, v1.comparability, v2.name, v2.comparability);
+  public static boolean comparable(VarInfo v1, VarInfo v2) {
+    return comparable(v1.name, v1.comparability, v2.name, v2.comparability);
   }
 
-  public static boolean compatible(VarComparability type1, VarComparability type2) {
-    return compatible(null, type1, null, type2);
+  public static boolean comparable(VarComparability type1, VarComparability type2) {
+    return comparable(null, type1, null, type2);
   }
 
-  public static boolean compatible(VarInfoName name1, VarComparability type1,
+  public static boolean comparable(VarInfoName name1, VarComparability type1,
                                    VarInfoName name2, VarComparability type2) {
 
     if (type1.getClass() != type2.getClass())
@@ -62,15 +62,15 @@ public abstract class VarComparability {
                       + "    " + name2 + " " + type2);
 
     if (type1 instanceof VarComparabilityNone) {
-      return VarComparabilityNone.compatible
+      return VarComparabilityNone.comparable
         (name1, (VarComparabilityNone)type1,
          name2, (VarComparabilityNone)type2);
     } else if (type1 instanceof VarComparabilityImplicit) {
-	return VarComparabilityImplicit.compatible
+	return VarComparabilityImplicit.comparable
           (name1, (VarComparabilityImplicit)type1,
            name2, (VarComparabilityImplicit)type2);
     } else if (type1 instanceof VarComparabilityExplicit) {
-      return VarComparabilityExplicit.compatible
+      return VarComparabilityExplicit.comparable
         (name1, (VarComparabilityExplicit)type1,
          name2, (VarComparabilityExplicit)type2);
     } else {
