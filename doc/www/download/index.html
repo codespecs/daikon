@@ -5,7 +5,17 @@
 </head>
 <body>
 
-<img src="daikon.gif" alt="Daikon logo">
+<img src="../daikon.gif" alt="Daikon logo"><br>
+[ <a href="../">Home</a>
+| <a href="../faq.html">FAQ</a>
+| <b>Download</b>
+| <a href="../doc/">Documentation</a>
+| <a href="http://pag.lcs.mit.edu/pubs/bytopic.html#Invariant%20detection">Pubs about</a>
+| <a href="../pubs/">Pubs using</a>
+| <a href="../mailing-lists.html">Mailing lists</a>
+]
+
+<hr>
 
 <h1>Daikon invariant detector distribution</h1>
 
@@ -14,9 +24,15 @@ detector.<br>
 The current release is Daikon version 3.0.0, released December 19, 2003.
 <p>
 
+In addition to the below downloads, also see the
+<a href="../doc/">documentation</a> and the
+<a href="../mailing-lists.html">mailing lists</a>.
+<p>
+
 <ul>
-  <li><b>Daikon distribution</b>:<br>
-    Choose one:
+  <li><b>Daikon distribution</b>:  This is everything most people need to
+    get started with invariant detection.<br>
+    Choose a format (both have the same contents):
     <ul>
       <li>Gzipped tar file: <a href="daikon.tar.gz">daikon.tar.gz</a> (21 Jan 2003, 15 Mbytes)
       <li>Zip file: <a href="daikon.zip">daikon.zip</a> (21 Jan 2003, 15 Mbytes)
@@ -25,63 +41,39 @@ The current release is Daikon version 3.0.0, released December 19, 2003.
       The Daikon distribution includes everything you need to start using
       Daikon:  source files, compiled files (including <a
       href="daikon.jar">daikon.jar</a>), documentation, examples, and more.
-  <li><b>Mailing lists</b><br>
-    If you use Daikon, please sign up for one or both of the following
-    mailing lists:
+  <li><b>Front ends</b>
     <ul>
-      <li><a href="http://pag.lcs.mit.edu/mailman/listinfo/daikon-announce">daikon-announce</a>:
-          low-volume, announcements of new releases
-      <li><a href="http://pag.lcs.mit.edu/mailman/listinfo/daikon-discuss">daikon-discuss</a>:
-          moderated, forum for users
+      <li><b>Java front end, <tt>dfej</tt></b> (prebuilt binary)<br>
+	You can build the Java front end yourself from the sources in the
+	distribution, but we provide a prebuilt binary for convenience.<br>
+	Download the binary to local directory $DAIKONDIR/front-end/java/src, 
+	then rename to <tt>dfej</tt> if appropriate.<br>
+	<ul>
+	  <li><a href="binaries/dfej-linux-x86">x86 Linux</a> (17 Jan 2003, 4.3 Mbytes)
+	  <li><a href="binaries/dfej.exe">x86 Windows (Win32)</a> (10 Mar 2002, 19 Mbytes)
+	  <li><a href="binaries/dfej-cygwin.exe">Cygwin x86</a> (19 Jan 2003, 3.8 Mbytes)
+	  <li><a href="binaries/dfej-solaris">SPARC Solaris</a> (8 Jul 2002, 4.7 Mbytes)
+	</ul>
+      <li><b>C front end, <tt>dfec</tt></b><br>
+	The distribution is a tar file containing prebuilt binary; see
+	"Installing dfec" in the Daikon manual for installation instructions.
+	<ul>
+	  <li><a href="binaries/dfec-linux-x86.tar.gz">x86 Red Hat Linux</a> (11 Sep 2002, 4.3 Mbytes)
+	  <!-- <li><a href="binaries/dfec-cygwin.zip">x86 Cygwin</a> (00 Mth 0000, 00 Mbytes) -->
+	  <!-- <li><a href="binaries/dfec-windows.tgz">x86 Windows (Win32)</a> (00 Mth 0000) -->
+	  <li><a href="binaries/dfec-solaris.tar.gz">SPARC Solaris 5.7</a> (11 Sep 2002, 7.1 Mbytes)
+	</ul>
+	License restrictions prevent us from distributing source for the C
+	front end.  Send mail to <a
+	href="mailto:daikon-developers@pag.lcs.mit.edu">daikon-developers@pag.lcs.mit.edu</a> to
+	request a binary for another system if it is not on this list.
     </ul>
-  <li><b>Documentation</b><br>
-    The documentation is included in the Daikon distribution, but is also
-    linked to here for easy access.
-    <ul>
-      <li>Daikon user manual
-        <ul>
-	  <li><a href="doc/daikon.ps">PostScript</a>
-	  <li><a href="doc/daikon.pdf">PDF</a>
-	  <li><a href="doc/daikon.html">HTML (one file)</a>
-	  <li><a href="doc/daikon_manual_html/daikon.html">HTML (split into chapters)</a>
-        </ul>
-      <li><a href="doc/developer.html"> Developer Manual (HTML)</a>
-      <li><a href=jdoc>Javadoc (for Daikon source code)</a>
-    </ul>
-    Also see the <a href="doc/daikon.html#Installing Daikon">installation
-    instructions</a> and <a href="doc/daikon.html#License">license</a>.<br>
-    You may also wish to read the published <a
-    href="http://pag.lcs.mit.edu/~mernst/research/#Invariant%20detection">papers</a>.
-  <li><b>Java front end, <tt>dfej</tt></b> (prebuilt binary)<br>
-    You can build the Java front end yourself from the sources in the
-    distribution, but we provide a prebuilt binary for convenience.<br>
-    Download the binary to local directory $DAIKONDIR/front-end/java/src, 
-    then rename to <tt>dfej</tt> if appropriate.<br>
-    <ul>
-      <li><a href="binaries/dfej-linux-x86">x86 Linux</a> (17 Jan 2003, 4.3 Mbytes)
-      <li><a href="binaries/dfej.exe">x86 Windows (Win32)</a> (10 Mar 2002, 19 Mbytes)
-      <li><a href="binaries/dfej-cygwin.exe">Cygwin x86</a> (19 Jan 2003, 3.8 Mbytes)
-      <li><a href="binaries/dfej-solaris">SPARC Solaris</a> (8 Jul 2002, 4.7 Mbytes)
-    </ul>
-  <li><b>C front end, <tt>dfec</tt></b><br>
-    The distribution is a tar file containing prebuilt binary; see
-    "Installing dfec" in the Daikon manual for installation instructions.
-    <ul>
-      <li><a href="binaries/dfec-linux-x86.tar.gz">x86 Red Hat Linux</a> (11 Sep 2002, 4.3 Mbytes)
-      <!-- <li><a href="binaries/dfec-cygwin.zip">x86 Cygwin</a> (00 Mth 0000, 00 Mbytes) -->
-      <!-- <li><a href="binaries/dfec-windows.tgz">x86 Windows (Win32)</a> (00 Mth 0000) -->
-      <li><a href="binaries/dfec-solaris.tar.gz">SPARC Solaris 5.7</a> (11 Sep 2002, 7.1 Mbytes)
-    </ul>
-    License restrictions prevent us from distributing source for the C
-    front end.  Send mail to <a
-    href="mailto:daikon-developers@pag.lcs.mit.edu">daikon-developers@pag.lcs.mit.edu</a> to
-    request a binary for another system if it is not on this list.
   <li><b>Daikon version <!-- avoid auto-update --> 2.5.3</b> distribution: 
     <a href="daikon_v2.tar.gz">daikon_v2.tar.gz</a> (19 Dec 2003, 16 Mbytes)<br>
     This is an older version of Daikon.
     The current version (version 3) should used whenever possible.  We will
     not consider bug reports against version <!-- avoid auto-update --> 2.
-    Version <!-- avoid auto-update --> 2 <a href=jdoc_v2>javadoc</a>
+    Version <!-- avoid auto-update --> 2 <a href=jdoc_v2>Javadoc</a>
     is also available.
 
   <li><b>CVS</b>:  Daikon is also available via CVS; send email to 
@@ -101,16 +93,26 @@ The current release is Daikon version 3.0.0, released December 19, 2003.
 <p>
 As an alternative to downloading Daikon, members of the Daikon project may
 use their pag.lcs.mit.edu accounts to access the Daikon source directly.
-See the <a href="../mit/">instructions for using Daikon at MIT LCS</a>.
+See the <a href="../mit/">instructions for using Daikon at MIT CSAIL</a>.
 <p>
 
 
-<hr>
-<a href="../">Daikon invariant detector</a><p>
 
-<address>
-  &lt;<a href="mailto:daikon-developers@pag.lcs.mit.edu">daikon-developers@pag.lcs.mit.edu</a>&gt;
-</address>
+
+<hr>
+
+[ <a href="../">Home</a>
+| <a href="../faq.html">FAQ</a>
+| <b>Download</b>
+| <a href="../doc/">Documentation</a>
+| <a href="http://pag.lcs.mit.edu/pubs/bytopic.html#Invariant%20detection">Pubs about</a>
+| <a href="../pubs/">Pubs using</a>
+| <a href="../mailing-lists.html">Mailing lists</a>
+]
+
 
 </body>
 </html>
+
+<!--  LocalWords:  Cygwin Mbytes Solaris dfec prebuilt Sep Mth javadoc LCS
+ -->

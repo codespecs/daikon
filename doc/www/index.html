@@ -5,147 +5,53 @@
 </head>
 <body>
 
-<img src="daikon.gif" alt="Daikon logo">
+<img src="daikon.gif" alt="Daikon logo"><br>
+[ <b>Home</b>
+| <a href="faq.html">FAQ</a>
+| <a href="download/">Download</a>
+| <a href="doc/">Documentation</a>
+| <a href="http://pag.lcs.mit.edu/pubs/bytopic.html#Invariant%20detection">Pubs about</a>
+| <a href="pubs/">Pubs using</a>
+| <a href="mailing-lists.html">Mailing lists</a>
+]
+
+<hr>
 
 <h1>The Daikon invariant detector</h1>
 
-Daikon (named after an Asian radish) is a prototype implementation of
-dynamic invariant detection.  Front ends exist for Java, Perl, C, C++, and
-IOA.
+Daikon is a prototype implementation of dynamic detection of likely
+invariants..  Dynamic invariant detection runs a program, observes the
+values that the program computed, and then reports properties that were
+true over the observed executions.  Daikon's output, which is called an
+"operational abstraction" looks like a formal specification, or the
+contents of <tt>assert</tt> statements.  Examples include "a&gt;0";
+"c=2*d+3"; "array a is sorted"; "for all list objects <em>lst</em>,
+<em>lst</em>.next.prev = <em>lst</em>"; and the like.  Daikon can detect
+properties in Java, Perl, C, and IOA programs; in spreadsheet files; and in
+other data sources.  You can extend Daikon to add new properties or new
+languages.
 <p>
 
-<a href="download/">Download Daikon.</a>
+Daikon is <a href="download/">freely available</a>, with both source code
+and <a href="doc/">documentation</a>.  Many researchers and
+practitioners have <a href="pubs/">used Daikon</a>, and Daikon itself is
+described in various <a
+href="http://pag.lcs.mit.edu/pubs/bytopic.html#Invariant%20detection">publications</a>.
 <p>
+
 
 <hr>
 
-<h1>Dynamic invariant detection</h1>
-
-This research aims to dynamically detect invariants about a program's data
-structures -- the sort that might be written in an <tt>assert</tt>
-statement or a formal specification.  Examples include a&gt;0, c=2*d+3, a
-particular list or array is sorted, the child slots of treenode objects
-point to objects whose parent slots point back at the original treenode,
-and the like.  Such program properties are useful for a wide variety of
-software construction, understanding, reuse, and modification tasks, but
-they are usually absent from code.  Static techniques for determining
-invariants break down in the presence of real-world constructs such as
-pointers.  A complementary approach is to dynamically detect properties
-from execution traces.<p>
-
-The Daikon system examines the values computed during the target program's
-execution, looking for patterns and relationships among those values.
-These can be reported to the user or provided to another tool.  As with any
-other dynamic technique, such as testing, the properties are not guaranteed
-to hold for every possible execution; they depend on the quality of the
-test suite.  In practice, the results are sufficiently accurate to be
-useful despite their potential unsoundness; and the results are also
-valuable for validating test suites.  See the published <a
-href="http://pag.lcs.mit.edu/~mernst/research/#Invariant%20detection">papers</a>
-for more details.<p>
-
-Here is a simple example of Daikon's ouput:  <a
-href="StackAr.html">StackAr.html</a>.  The colored annotations starting
-with "<FONT COLOR="red"><tt>@</tt></FONT>" were automatically detected by
-Daikon and automatically inserted in the source code.  Many other uses for
-invariants are possible in addition to insertion as documentation.
+[ <b>Home</b>
+| <a href="faq.html">FAQ</a>
+| <a href="download/">Download</a>
+| <a href="doc/">Documentation</a>
+| <a href="http://pag.lcs.mit.edu/pubs/bytopic.html#Invariant%20detection">Pubs about</a>
+| <a href="pubs/">Pubs using</a>
+| <a href="mailing-lists.html">Mailing lists</a>
+]
 <p>
 
-Some example uses of invariants are:
-<ul>
-  <li>Document code, indicating the structure of its data and computation
-  <li>Check assumptions by converting the invariants to <tt>assert</tt>
-      statements.
-  <li>Maintain invariants to avoid introducing bugs; if a property is
-      established at one point in a program, it is likely to be depended on
-      elsewhere, but if the invariant is not documented, it is all to easy
-      to accidentally violate it, introducing a bug in a far-removed part
-      of the program.
-  <li>Locate unusual conditions that should be brought to a programmer's
-      attention and may be bugs.
-  <li>Validate test suites by indicating the level of value coverage which
-      indicates how many different values are computed; this complements
-      code coverage, which tells how many lines are executed.
-  <li>Provide hints for profile-directed compilation, but at the level of
-      the program abstractions, permitting entire function calls to
-      possibly be omitted after a check.
-  <li>Bootstrap proofs and aid static checkers by providing goals and
-      automating the time-consuming, tedious chore of annotating programs.
-</ul>
-<p>
-
-As an example of Daikon's use, a programmer might run it on a program and
-see, at a procedure entry,
-<pre>
-  w >= 0
-  x < 10
-  y = w + x
-  z = 0 (mod 4)
-</pre>
-(These examples are all numeric for simplicity, but Daikon detects
-relationships over general data structures, including arrays, collections,
-and pointers.)
-<ul>
-<li>
-Seeing the "w >= 0" invariant, the programmer might remark, "I already knew
-that w is non-negative; that doesn't help me any."  (However, examining
-this invariant consumes little of the programmer's time.)
-<li>
-Seeing the "x < 10" invariant, the programmer might realize after a
-moment's thought that the test suite is deficient:  it never manipulates
-data structures containing more than 9 elements.  This invariant has
-indicated not only a problem with the test suite, but exactly how to fix
-it.
-<li>
-Seeing the "y = w + x" invariant, the programmer might suddenly understand
-the operation of the algorithm or why certain parts of the program are
-coded in the way they are.  This can prevent long sessions of puzzlement
-over the system, and inserting the invariant as a comment can prevent
-others from going through the same confusion.
-<li>
-Seeing the "z = 0 (mod 4)" invariant, the programmer might be confused
-about why z is always a multiple of 4.  The programmer has two options.
-<ol>
-  <li>
-The programmer can examine the program and test
-   suite to understand why this is so.  (Perhaps z holds a pointer value or
-   is some other kind of specialized index; perhaps it is a capacity that
-   is always increased by a multiple of 4; perhaps there is some odd
-   property of the test suite.)  This gives the programmer a much better
-   understanding of the operation of the program.
-  <li>
-The other option is for the programmer not to investigate this property
-   further -- perhaps it is not directly relevant to the current task --
-   but to be careful not to make changes that violate that property.
-   Violating the property could introduce errors if other parts of the code
-   depend on it.
-</ol>
-</ul>
-
-Dynamic invariant detection has proved accurate.  When provided with
-formally specified programs, the prototype invariant detector, Daikon,
-recovered the properties in the formal specifications (and even found some
-properties that had been inadvertently omitted from the specifications).
-In another experiment, programmers performing a software modification task
-on a C program lacking explicit invariants were provided with the output of
-the invariant detector.  They found that it aided program understanding,
-revealed an existing bug, prevented them from introducing a bug, and helped
-validate the correctness of their changes.  Dynamic invariant detection has
-also aided in refactoring, generating test suites, verifying absence of
-run-time errors, and automating theorem-proving.  See the published <a
-href="http://pag.lcs.mit.edu/~mernst/research/#Invariant%20detection">papers</a>
-for more details.<p>
-<p>
-
-<a href="download/">Download Daikon.</a>
-<p>
-
-<hr>
-
-<address>
-  <a href="http://pag.lcs.mit.edu/mailman/listinfo">Daikon mailing lists</a><br>
-  Daikon project leader: <a href="http://pag.lcs.mit.edu/~mernst/">Michael Ernst</a>
-</address>
 
 </body>
 </html>
