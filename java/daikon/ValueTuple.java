@@ -189,7 +189,7 @@ public final class ValueTuple implements Cloneable {
     return ValueTuple.tupleMod(mods);
   }
 
-  static int parseModified(String raw) {
+  public static int parseModified(String raw) {
     int result = Integer.parseInt(raw);
     Assert.assertTrue((result >= 0) && (result < MODBIT_VALUES));
     return result;
@@ -213,7 +213,7 @@ public final class ValueTuple implements Cloneable {
 
 
   /** Default constructor that interns its argument. */
-  ValueTuple(Object[] vals, int[] mods) {
+  public ValueTuple(Object[] vals, int[] mods) {
     this.vals = Intern.intern(vals);
     this.mods = Intern.intern(mods);
   }
