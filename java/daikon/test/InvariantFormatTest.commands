@@ -313,13 +313,13 @@ Goal (simplify): (NEQ |a| |b|)
 ; b = -3*a + 1
 daikon.inv.binary.twoScalar.LinearBinary
 int int
-Goal (daikon): b == - 3 * a + 1
-Goal (java): b == - 3 * a + 1
-Goal (esc): b == - 3 * a + 1
-Goal (ioa): b = - 3 * a + 1
-Goal (jml): b == - 3 * a + 1
-Goal (dbc): b == - 3 * a + 1
-Goal (simplify): (EQ |b| (+ (* -3 |a|) 1))
+Goal (daikon): 3 * a + b - 1 == 0
+Goal (java): 3 * a + b - 1 == 0
+Goal (esc): 3 * a + b - 1 == 0
+Goal (ioa): 3 * a + b - 1 = 0
+Goal (jml): 3 * a + b - 1 == 0
+Goal (dbc): 3 * a + b - 1 == 0
+Goal (simplify): (EQ 0 (+ (+ (* 3 |a|) |b|) -1))
 1
 -2
 10

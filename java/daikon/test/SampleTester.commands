@@ -56,12 +56,14 @@ ppt: foo.f():::EXIT35
   data: 4 5 20
   data: 2 6 20
 #  assert: inv("y == - 0.5 * x + 7", x, y) CX
- assert: inv("2 * y == - x + 14", x, y)
+# assert: inv("2 * y == - x + 14", x, y) CX
+  assert: inv("x + 2 * y - 14 == 0", x, y)
   assert: !inv ("x + 2 * y - z + 6 == 0", x,y,z)
   data: 8 5 24
   # assert: show_invs (x, y, z)
 #  assert: !inv("y == - 0.5 * x + 7", x, y)
-  assert: !inv("2 * y == - x + 14", x, y)
+#  assert: !inv("2 * y == - x + 14", x, y)
+  assert: !inv("x + 2 * y - 14 == 0", x, y)
   assert: inv ("x + 2 * y - z + 6 == 0", x,y,z)
 
 # Test non-instantiation of LinearTernary based on OneOf and two constant
