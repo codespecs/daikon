@@ -1692,6 +1692,13 @@ they don't exist.  Output is written as a serialized InvMap to the file
 specified with the -o option.  To view the contents of the serialized
 InvMap, run 'java daikon.diff.Diff <file>'.
 
+@item -n
+Compute (file1 UNION file2).  This is all the invariants that appear in
+either file.  If the same invariant appears in both files, the one with
+the better justification is chosen.  Output is written as a serialized
+InvMap to the file specified with the -o option.  To view the contents
+of the serialized InvMap, run 'java daikon.diff.Diff <file>'.
+
 @item -o @var{inv_file}
 Used in combination with the -m or -x option.  Writes the output as a
 serialized InvMap to the specified file.
