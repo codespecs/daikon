@@ -4243,6 +4243,11 @@ Separate the declaration from the use:
   current_access_type current_access;
 @end example
 
+@item
+@command{dfec} does not deal properly with bitfields (declared like
+@samp{unsigned int env:1} for a single bit).  Change any bitfield
+variables to full-width variables.
+
 @end enumerate
 
 
