@@ -231,15 +231,17 @@ public final class IntComparison extends TwoScalar implements Comparison {
         }
         long valconst = ((Long) varconst.constantValue()).longValue();
         PptSlice1 nonconstslice = ((PptTopLevel)ppt.parent).findSlice(varnonconst);
-        if (can_be_lt) {
-          UpperBound ub = UpperBound.find(nonconstslice);
-          if ((ub != null) && ub.justified() && ub.core.max1 < valconst) {
-            return true;
-          }
-        } else if (can_be_gt) {
-          LowerBound lb = LowerBound.find(nonconstslice);
-          if ((lb != null) && lb.justified() && lb.core.min1 > valconst) {
-            return true;
+        if (nonconstslice != null) {
+          if (can_be_lt) {
+            UpperBound ub = UpperBound.find(nonconstslice);
+            if ((ub != null) && ub.justified() && ub.core.max1 < valconst) {
+              return true;
+            }
+          } else if (can_be_gt) {
+            LowerBound lb = LowerBound.find(nonconstslice);
+            if ((lb != null) && lb.justified() && lb.core.min1 > valconst) {
+              return true;
+            }
           }
         }
       }
