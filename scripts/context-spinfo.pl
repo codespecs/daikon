@@ -3,7 +3,7 @@
   if 0;
 # context.pl -- Read dfej's context-sensitivity .map files and produce various things from them.
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2001-12-08 12:30:27 mistere>
+# Time-stamp: <2001-12-09 14:20:16 mistere>
 
 # The input is ... TODO
 
@@ -61,9 +61,9 @@ for my $filename (@ARGV) {
     # lines e.g.
     # 0x85c2e8c PC.RPStack get [PC/RPStack.java:156:29] -> "getCons" [(I)LPC/Cons;] PC.RP
 
-    my @rec; 
-    if (@rec = ($line =~ /^(0x[0-9a-f]+)\s+([\w\$\.]+)\s+([\w\$\.]+)\s+\[(.*?):(\d+):(\d+)\]\s+->\s+"([^"]*?)"\s+\[(.*?)\]\s+([\w\$\.]+)$/)) {
-      # id, fromclass, frommeth, fromfile, fromline, fromcol, toexpr, toargs, toclass
+    my @rec;
+    if (@rec = ($line =~ /^(0x[0-9a-f]+)\s+([\w\$\.]+)\s+([\w\$\<\>]+)\s+\[(.*?):(\d+):(\d+)\]\s+->\s+"([^\"]*?)"\s+\[(.*?)\]\s+([\w\$\.]+)\s+([\w\$\<\>]+)$/)) {
+      # id, fromclass, frommeth, fromfile, fromline, fromcol, toexpr, toargs, toclass, tometh
       push @records, \@rec;
     } else {
       die("Unknown line format: $line");
@@ -88,9 +88,7 @@ my %remap = ();   # in processing daikon output, remap these keys to the values
 
 if ("line" eq $grain) {
   foreach (@records) {
-    my ($id, $fromclass, $frommeth, $fromfile, $fromline, $fromcol, $toexpr, $toargs, $toclass) = @{$_};
-    my $tometh = $toexpr;
-    $tometh =~ s/.*\.//;
+    my ($id, $fromclass, $frommeth, $fromfile, $fromline, $fromcol, $toexpr, $toargs, $toclass, $tometh) = @{$_};
     $id = hex($id);
 
     if ("spinfo" eq $mode) {
@@ -107,9 +105,7 @@ if ("line" eq $grain) {
 
       # Now do the cross product
       foreach (@records) {
-	my ($id2, $fromclass2, $frommeth2, $fromfile2, $fromline2, $fromcol2, $toexpr2, $toargs2, $toclass2) = @{$_};
-	my $tometh2 = $toexpr2;
-	$tometh2 =~ s/.*\.//;
+	my ($id2, $fromclass2, $frommeth2, $fromfile2, $fromline2, $fromcol2, $toexpr2, $toargs2, $toclass2, $tometh2) = @{$_};
 	$id2 = hex($id2);
 
 	# "daikon_callsite_id one of { 222222, 333333 }" ==> "Called from one of { Class.method:#:#, Class.method:#:# }"
@@ -125,9 +121,7 @@ if ("line" eq $grain) {
 } elsif("method" eq $grain) {
   my %method2num = ();
   foreach (@records) {
-    my ($id, $fromclass, $frommeth, $fromfile, $fromline, $fromcol, $toexpr, $toargs, $toclass) = @{$_};
-    my $tometh = $toexpr;
-    $tometh =~ s/.*\.//;
+    my ($id, $fromclass, $frommeth, $fromfile, $fromline, $fromcol, $toexpr, $toargs, $toclass, $tometh) = @{$_};
     $id = hex($id);
 
     my $method = $fromclass . "." . $frommeth . "*" . $toclass . "." . $tometh;
@@ -158,9 +152,7 @@ if ("line" eq $grain) {
 } elsif("class" eq $grain) {
   my %class2num = ();
   foreach (@records) {
-    my ($id, $fromclass, $frommeth, $fromfile, $fromline, $fromcol, $toexpr, $toargs, $toclass) = @{$_};
-    my $tometh = $toexpr;
-    $tometh =~ s/.*\.//;
+    my ($id, $fromclass, $frommeth, $fromfile, $fromline, $fromcol, $toexpr, $toargs, $toclass, $tometh) = @{$_};
     $id = hex($id);
 
     my $class = $fromclass . "*" . $toclass . "." . $tometh;
