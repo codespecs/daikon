@@ -246,14 +246,13 @@ public class NoDuplicates
       }
     }
 
-    // If the sequence is sorted by < or >, then there are obvious no duplicates
-    // (Migrate back to ver2)
+    // If the sequence is sorted by < or >, then there are obviously no duplicates
 
     Iterator invs = ppt.invs.iterator();
     while (invs.hasNext()) {
       Invariant inv = (Invariant)invs.next();
       if ((inv instanceof EltwiseIntLessThan) || (inv instanceof EltwiseFloatLessThan) ||
-          (inv instanceof EltwiseFloatLessThan) || (inv instanceof EltwiseFloatLessEqual))
+          (inv instanceof EltwiseIntGreaterThan) || (inv instanceof EltwiseFloatGreaterThan))
         return true;
     }
 

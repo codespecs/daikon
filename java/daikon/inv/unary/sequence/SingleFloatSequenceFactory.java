@@ -45,7 +45,6 @@ public final class SingleFloatSequenceFactory {
         // can be moved to their superclass EltwiseIntComparison.
 
         result.add(EltwiseFloatEqual.instantiate(ppt));
-        result.add(EltwiseFloatNonEqual.instantiate(ppt));
         result.add(EltwiseFloatLessThan.instantiate(ppt));
         result.add(EltwiseFloatLessEqual.instantiate(ppt));
         result.add(EltwiseFloatGreaterThan.instantiate(ppt));

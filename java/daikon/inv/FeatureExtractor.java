@@ -1175,7 +1175,7 @@ public final class FeatureExtractor {
     // Provide the same features as the core without using the core as it is
     // now not a part of EltwiseIntComparison (Alan - 1/20)
 
-    if ((inv instanceof EltwiseIntEqual)||(inv instanceof EltwiseIntNonEqual))
+    if (inv instanceof EltwiseIntEqual)
       answer.add(new IntDoublePair(FetIntComparisonCoreCan_Be_EqBool, 1));
     if ((inv instanceof EltwiseIntLessThan) || (inv instanceof EltwiseIntLessEqual))
       answer.add(new IntDoublePair(FetIntComparisonCoreCan_Be_LtBool, 1));
@@ -1193,7 +1193,7 @@ public final class FeatureExtractor {
     // Provide the same features as the core without using the core as it is
     // now not a part of EltwiseIntComparison (Alan - 1/20)
 
-    if ((inv instanceof EltwiseFloatEqual) || (inv instanceof EltwiseFloatNonEqual))
+    if (inv instanceof EltwiseFloatEqual)
       answer.add(new IntDoublePair(FetIntComparisonCoreCan_Be_EqBool, 1));
     if ((inv instanceof EltwiseFloatLessThan) || (inv instanceof EltwiseFloatLessEqual))
       answer.add(new IntDoublePair(FetIntComparisonCoreCan_Be_LtBool, 1));

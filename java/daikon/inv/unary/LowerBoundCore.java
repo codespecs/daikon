@@ -127,7 +127,7 @@ public class LowerBoundCore
       // wrapper.cloneAndFlow();
       // Disabled because array bounds could call this twice
       changed = true;
-      
+
       min3 = min2;
       num_min3 = num_min2;
       min2 = min1;

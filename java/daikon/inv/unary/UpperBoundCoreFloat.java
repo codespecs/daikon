@@ -123,7 +123,7 @@ public class UpperBoundCoreFloat
       // wrapper.cloneAndFlow();
       // Disabled because array bounds could call this twice
       changed = true;
-      
+
       max3 = max2;
       num_max3 = num_max2;
       max2 = max1;

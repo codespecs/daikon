@@ -45,7 +45,6 @@ public final class SingleScalarSequenceFactory {
         // can be moved to their superclass EltwiseIntComparison.
 
         result.add(EltwiseIntEqual.instantiate(ppt));
-        result.add(EltwiseIntNonEqual.instantiate(ppt));
         result.add(EltwiseIntLessThan.instantiate(ppt));
         result.add(EltwiseIntLessEqual.instantiate(ppt));
         result.add(EltwiseIntGreaterThan.instantiate(ppt));

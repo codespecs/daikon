@@ -981,7 +981,7 @@ public class PrintInvariants {
   /* [INCR]
   private static boolean accept_varinfo(PptTopLevel ppt, VarInfo vi)
   {
-    // This needs to be a seperate if statement because if vi is not
+    // This needs to be a separate if statement because if vi is not
     // canonical, it will fail assert statements in some of the things
     // that are invoked in the return clause.
     if (vi.isCanonical()) {

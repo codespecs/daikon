@@ -5,7 +5,7 @@ The correct way to build the system is to run 'make'.
 #endif
 
 #if !(defined(TYPELONG) || defined(TYPEDOUBLE))
-#error "one must be defined"
+#error "TYPELONG or TYPEDOUBLE must be defined"
 #endif
 
 #if defined(TYPELONG)

@@ -5,7 +5,7 @@ The correct way to build the system is to run 'make'.
 #endif
 
 #if !(defined(TYPELONG) || defined(TYPEDOUBLE))
-#error "ONE MUST BE DEFINED"
+#error "TYPELONG or TYPEDOUBLE must be defined"
 #endif
 
 #if defined(TYPELONG)
@@ -86,14 +86,12 @@ public final class CLASSNAME {
         // can be moved to their superclass EltwiseIntComparison.
 #if defined(TYPELONG)
         result.add(EltwiseIntEqual.instantiate(ppt));
-        result.add(EltwiseIntNonEqual.instantiate(ppt));
         result.add(EltwiseIntLessThan.instantiate(ppt));
         result.add(EltwiseIntLessEqual.instantiate(ppt));
         result.add(EltwiseIntGreaterThan.instantiate(ppt));
         result.add(EltwiseIntGreaterEqual.instantiate(ppt));
 #elif defined(TYPEDOUBLE)
         result.add(EltwiseFloatEqual.instantiate(ppt));
-        result.add(EltwiseFloatNonEqual.instantiate(ppt));
         result.add(EltwiseFloatLessThan.instantiate(ppt));
         result.add(EltwiseFloatLessEqual.instantiate(ppt));
         result.add(EltwiseFloatGreaterThan.instantiate(ppt));

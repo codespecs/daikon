@@ -183,25 +183,7 @@ public final class Member
         VarInfo scl_index = sclsss.sclvar(); // "I" in "B[I]"
         int scl_shift = sclsss.index_shift;
         // System.out.println("scl_shift = " + scl_shift + ", seq_shift = " + seq_shift);
-        // when b[i+d] in b[0..i+d+x] or b[i+d+x] in b[i+d..]
-//         if (scl_index == seq_index &&
-//             (seq_from_start ?
-//              seq_shift >= scl_shift :
-//              seq_shift <= scl_shift)
-//             ) {
-//           if (debug.isDebugEnabled()) {
-//             debug.debug ("IsObviousMember in ppt: " + sclvar.ppt.name);
-//             debug.debug ("  scl_index: " + scl_index.name.name());
-//             debug.debug ("  seq_index: " + seq_index.name.name());
-//             debug.debug ("  sclvar   : " + sclvar.name.name());
-//             debug.debug ("  seqvar   : " + seqvar.name.name());
-//           }
-//           return true;
-//         }
 
-        // This test returns true if scl+scl_shift<=seq+seq_shift
-        // isObviousImplied: when i<=j, b[i] in b[0..j]
-        // isObviousImplied: when i>=j, b[i] in b[j..]
         boolean left_included, right_included;
         if (seq_left_index == null)
           left_included = true;
