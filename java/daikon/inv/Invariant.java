@@ -525,7 +525,7 @@ public abstract class Invariant
     /* Java Modeling Language */
     public static final OutputFormat JML = new OutputFormat("JML");
     /* Whole names as single C/Java style indentifiers (currently just
-     * for single VarInfoNames */
+     * for single VarInfoNames) */
     public static final OutputFormat IDENTIFIER
       = new OutputFormat("Identifier");
 
