@@ -1436,17 +1436,16 @@ public final class VarInfo
   }
 
   /**
-   * A wrapper around VarInfoName.simplify_name() that also uses
-   * VarInfo information to guess whether "obj" should logically be
-   * treated as just the hash code of "obj", rather than the whole
+   * A wrapper you would put around VarInfoName.simplify_name() that
+   * uses VarInfo information to guess whether "obj" should logically
+   * be treated as just the hash code of "obj", rather than the whole
    * object.
    **/
-  public String simplify_name() {
-    String s = name.simplify_name();
+  public String simplifyFixup(String str) {
     if (isPointer()) {
-      s = "(hash " + s + ")";
+      str = "(hash " + str + ")";
     }
-    return s;
+    return str;
   }
 
   /* [INCR]
