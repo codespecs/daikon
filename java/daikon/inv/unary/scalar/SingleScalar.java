@@ -52,14 +52,7 @@ public abstract class SingleScalar
     return;
   }
 
-  private static final SuppressionFactory[] suppressionFactories =
-    new SuppressionFactory[] {
-      SelfSuppressionFactory.getInstance(),
-    };
-
-  public SuppressionFactory[] getSuppressionFactories() {
-    return suppressionFactories;
-  }
+  // This has no additional suppression factories from Invariant's.
 
 }
 

@@ -340,13 +340,16 @@ public final class Member
     return true;
   }
 
-  private static final SuppressionFactory[] suppressionFactories =
-    new SuppressionFactory[] {
-      MemberSuppressionFactory1.getInstance(),
-      MemberSuppressionFactory2.getInstance()
-    };
+  private static SuppressionFactory[] suppressionFactories = null;
 
   public SuppressionFactory[] getSuppressionFactories() {
+    if (suppressionFactories == null) {
+      SuppressionFactory[] supers = super.getSuppressionFactories();
+      suppressionFactories = new SuppressionFactory[supers.length + 2];
+      System.arraycopy (supers, 0, suppressionFactories, 0, supers.length);
+      suppressionFactories[supers.length] = MemberSuppressionFactory1.getInstance();
+      suppressionFactories[supers.length + 1] = MemberSuppressionFactory2.getInstance();
+    }
     return suppressionFactories;
   }
 

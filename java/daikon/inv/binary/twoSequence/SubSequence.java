@@ -502,10 +502,15 @@ public class SubSequence
     return true;
   }
 
-  private static final SuppressionFactory[] suppressionFactories =
-    new SuppressionFactory[] {SubSequenceSuppressionFactory.getInstance()};
+  private static SuppressionFactory[] suppressionFactories = null;
 
   public SuppressionFactory[] getSuppressionFactories() {
+    if (suppressionFactories == null) {
+      SuppressionFactory[] supers = super.getSuppressionFactories();
+      suppressionFactories = new SuppressionFactory[supers.length + 1];
+      System.arraycopy (supers, 0, suppressionFactories, 0, supers.length);
+      suppressionFactories[supers.length] = SubSequenceSuppressionFactory.getInstance();
+    }
     return suppressionFactories;
   }
 

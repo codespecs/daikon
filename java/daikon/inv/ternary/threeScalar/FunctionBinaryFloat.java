@@ -123,16 +123,6 @@ public class FunctionBinaryFloat
   //   super.destroy();
   // }
 
-  private static final SuppressionFactory[] suppressionFactories =
-    new SuppressionFactory[] {};
-
-  // Disabled because this factory doesn't do suppression.
-  // new SuppressionFactory[] {FunctionBinarySuppressionFactory.getInstance()};
-
-  public SuppressionFactory[] getSuppressionFactories() {
-    return suppressionFactories;
-  }
-
 // SuppressionFactory for FunctionBinary invariants.  Right now, we
 // suppress all FunctionBinary such that one of the members is a
 // constant.  This isn't correct for suppression, since constants

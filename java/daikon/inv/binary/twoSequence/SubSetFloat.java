@@ -235,10 +235,15 @@ public class SubSetFloat
     return true;
   }
 
-  private static final SuppressionFactory[] suppressionFactories =
-    new SuppressionFactory[] {SubSetSuppressionFactory.getInstance()};
+  private static SuppressionFactory[] suppressionFactories = null;
 
   public SuppressionFactory[] getSuppressionFactories() {
+    if (suppressionFactories == null) {
+      SuppressionFactory[] supers = super.getSuppressionFactories();
+      suppressionFactories = new SuppressionFactory[supers.length + 1];
+      System.arraycopy (supers, 0, suppressionFactories, 0, supers.length);
+      suppressionFactories[supers.length] = SubSetSuppressionFactory.getInstance();
+    }
     return suppressionFactories;
   }
 
