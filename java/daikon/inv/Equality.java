@@ -368,33 +368,17 @@ public final class Equality
       VarInfo vi = (VarInfo) i.next();
       Assert.assertTrue (vi.comparableNWay (leader));
       Object viValue = vi.getValue(vt);
-      if (leaderValue == viValue) continue; // Including missing
+      // The following is possible because values are interned.  The
+      // test also takes into account missing values, since they are
+      // null.
+      if (leaderValue == viValue) continue;
       //       if (debug.isDebugEnabled()) {
       //         debug.debug("  vi name: " + vi.name.name());
       //         debug.debug("  vi value: " + viValue);
       //         debug.debug("  le value: " + leaderValue);
       //       }
-      // The following or expression *must* be done in this specific
-      // order so null values are taken into account
-      if (leaderValue == null ||
-          viValue == null ||
-          !(viValue.equals(leaderValue))) {
-        // We should be interning here and using == only
-        //
-        // To do this, we'd have to intern at the ValueTuple level, in
-        // FileIO when the tuples get generated.  This would be good for
-        // two reasons:
-        //   The comparison here would be faster
-        //   Avoid double interning at the Invariant level when f(a, b)
-        //   and f(a, c).
-        // This would be bad because:
-        //   Some values that are never checked would have to get
-        //   interned.  Right now, only values with invariants on them
-        //   are interned. [TNW after talking with MDE 26 Sep 2002]
-
-        result.add (vi);
-        i.remove();
-      }
+      result.add (vi);
+      i.remove();
     }
 
     return result;
