@@ -389,6 +389,11 @@ public class ValueTracker
   ///
 
   public static abstract class ValueTracker1 extends ValueTracker {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20031017L;
+
     public ValueTracker1(int max_values) {
       super(max_values);
     }
@@ -412,6 +417,11 @@ public class ValueTracker
   }
 
   public static class ValueTrackerScalar extends ValueTracker1 {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20031017L;
+
     public ValueTrackerScalar(int max_values) {
       super(max_values);
     }
@@ -421,6 +431,11 @@ public class ValueTracker
   }
 
   public static class ValueTrackerFloat extends ValueTracker1 {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20031017L;
+
     public ValueTrackerFloat(int max_values) {
       super(max_values);
     }
@@ -430,6 +445,11 @@ public class ValueTracker
   }
 
   public static class ValueTrackerScalarArray extends ValueTracker1 {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20031017L;
+
     public ValueTrackerScalarArray(int max_values) {
       super(max_values);
     }
@@ -439,6 +459,11 @@ public class ValueTracker
   }
 
   public static class ValueTrackerFloatArray extends ValueTracker1 {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20031017L;
+
     public ValueTrackerFloatArray(int max_values) {
       super(max_values);
     }
@@ -448,6 +473,11 @@ public class ValueTracker
   }
 
   public static class ValueTrackerString extends ValueTracker1 {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20031017L;
+
     public ValueTrackerString(int max_values) {
       super(max_values);
     }
@@ -457,6 +487,11 @@ public class ValueTracker
   }
 
   public static class ValueTrackerStringArray extends ValueTracker1 {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20031017L;
+
     public ValueTrackerStringArray(int max_values) {
       super(max_values);
     }
@@ -471,6 +506,11 @@ public class ValueTracker
   ///
 
   public static abstract class ValueTracker2 extends ValueTracker {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20031017L;
+
     private boolean swap = false;
     public ValueTracker2(int max_values) {
       super(max_values);
@@ -503,6 +543,11 @@ public class ValueTracker
   }
 
   public static class ValueTrackerTwoString extends ValueTracker2 {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20031017L;
+
     public ValueTrackerTwoString(int max_values) {
       super(max_values);
     }
@@ -512,6 +557,11 @@ public class ValueTracker
   }
 
   public static class ValueTrackerTwoScalar extends ValueTracker2 {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20031017L;
+
     public ValueTrackerTwoScalar(int max_values) {
       super(max_values);
     }
@@ -521,6 +571,11 @@ public class ValueTracker
   }
 
   public static class ValueTrackerTwoScalarDebugging extends ValueTrackerTwoScalar {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20031017L;
+
     public ValueTrackerTwoScalarDebugging(int max_values) {
       super(max_values);
     }
@@ -538,6 +593,11 @@ public class ValueTracker
   }
 
   public static class ValueTrackerTwoFloat extends ValueTracker2 {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20031017L;
+
     public ValueTrackerTwoFloat(int max_values) {
       super(max_values);
     }
@@ -547,6 +607,11 @@ public class ValueTracker
   }
 
   public static class ValueTrackerFloatArrayFloat extends ValueTracker2 {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20031017L;
+
     public ValueTrackerFloatArrayFloat(int max_values) {
       super(max_values);
     }
@@ -556,6 +621,11 @@ public class ValueTracker
   }
 
   public static class ValueTrackerScalarArrayScalar extends ValueTracker2 {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20031017L;
+
     public ValueTrackerScalarArrayScalar(int max_values) {
       super(max_values);
     }
@@ -565,6 +635,11 @@ public class ValueTracker
   }
 
   public static class ValueTrackerTwoFloatArray extends ValueTracker2 {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20031017L;
+
     public ValueTrackerTwoFloatArray(int max_values) {
       super(max_values);
     }
@@ -574,6 +649,11 @@ public class ValueTracker
   }
 
   public static class ValueTrackerTwoScalarArray extends ValueTracker2 {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20031017L;
+
     public ValueTrackerTwoScalarArray(int max_values) {
       super(max_values);
     }
@@ -588,6 +668,11 @@ public class ValueTracker
   ///
 
   public static abstract class ValueTracker3 extends ValueTracker {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20031017L;
+
     final static int order_123 = 0;
     final static int order_213 = 1;
     final static int order_312 = 2;
@@ -648,6 +733,11 @@ public class ValueTracker
   }
 
   public static class ValueTrackerThreeScalar extends ValueTracker3 {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20031017L;
+
     public ValueTrackerThreeScalar(int max_values) {
       super(max_values);
     }
@@ -657,6 +747,11 @@ public class ValueTracker
   }
 
   public static class ValueTrackerThreeFloat extends ValueTracker3 {
+    // We are Serializable, so we specify a version to allow changes to
+    // method signatures without breaking serialization.  If you add or
+    // remove fields, you should change this number to the current date.
+    static final long serialVersionUID = 20031017L;
+
     public ValueTrackerThreeFloat(int max_values) {
       super(max_values);
     }
