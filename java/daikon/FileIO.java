@@ -828,7 +828,12 @@ public final class FileIO {
     // by exit points.
     add_orig_variables(ppt, vt.vals, vt.mods, nonce);
 
-    // Only process the leaves of the ppt tree
+    // Only process the leaves of the ppt tree.
+    // This test assumes that all leaves are numbered exit program points
+    // -- that is, points of the form foo:::EXIT22 for which isExitPoint()
+    // is true and isCombinedExitPoint() is false.  "Combined" exit points
+    // of the form foo:::EXIT are not processed -- they are assumed to be
+    // non-leaves.
     if (Daikon.use_dataflow_hierarchy) {
       if (!ppt.ppt_name.isExitPoint())
         return;
