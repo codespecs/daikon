@@ -20,6 +20,10 @@ false = (1==0)
 # I protect them.
 # But if they're indented, maybe my future tools for variable decls won't work.
 if not locals().has_key("fn_var_infos"):
+    ### User configuration variables
+    no_ternary_invariants = false
+
+    ### Internal variables
     fn_var_infos = {}           # from function name to list of var_infos
     fn_var_values = {}	    # from function name to (tuple of values to occurrence count)
 
@@ -41,6 +45,8 @@ if not locals().has_key("fn_var_infos"):
 
 def clear_variables():
     """Reset the values of some global variables."""
+    no_ternary_invariants = false
+
     fn_var_infos.clear()
     fn_var_values.clear()
     fn_samples.clear()
@@ -67,16 +73,17 @@ sequence_re = re.compile(r'^[^	]+\[(|[^][]+\.\.[^][]+)\]$')
 
 
 class var_info:
-    name = None                 # string
+    name = None                         # string
     type = None                         # type information
-    # index = None                        # index in lists of variables.  Necessary?  No, but possibly useful...
+    index = None                        # index in lists of variables
 
     # info about derived variables: both derivees from this and derivers of this
     derived_len = None                  # index of len variable
-    derived = None
+    derived = None                      # will be variables derived from this
+                                        #   one; presently not used.
     is_derived = None                   # boolean (for now)
 
-    invariant = None                   # not sure
+    invariant = None                    # not sure
     # To find the invariant over a pair of variables, do a double-dispatch:
     # first look up the "invariants" field of one of the variables, then
     # look up the other variable in that map.
@@ -86,10 +93,12 @@ class var_info:
                                         #   could be derived from invariants
                                         #   by checking for inv.comparision == "="
 
-    def __init__(self, name, type, is_derived=false):
+    def __init__(self, name, var_type, index, is_derived=false):
+        assert type(name) == types.StringType
+        assert type(index) == types.IntType
         self.name = name
-        self.type = type
-        # self.index = index
+        self.type = var_type
+        self.index = index
         self.derived = {}
         self.is_derived = is_derived
         self.invariant = None
@@ -112,12 +121,10 @@ class var_info:
         else:
             return self.equal_to[0]
 
-    # Cleaner if we didn't have to pass the index in, but read it out of an
-    # instance variable.
-    def is_non_canonical(self, index):
-        if self.equal_to == []:
-            return false
-        return self.canonical_var() < index
+    def is_canonical(self):
+        assert self.index != None
+        assert self.equal_to == [] or self.canonical_var != None
+        return self.equal_to == [] or self.canonical_var > self.index
 
 
 def var_info_name_compare(vi1, vi2):
@@ -141,7 +148,7 @@ def merge_variables(filename, sub_fn_var_infos, sub_fn_var_values, sub_fn_sample
 	if not(fn_var_infos.has_key(fname)):
             var_infos = []
             for vi in sub_var_infos:
-                var_infos.append(var_info(vi.name, vi.type))
+                var_infos.append(var_info(vi.name, vi.type, len(var_infos)))
 	    fn_var_infos[fname] = var_infos
             fn_var_values[fname] = {}
 	else:
@@ -352,10 +359,10 @@ def introduce_new_variables_one_pass(var_infos, var_values, indices, functions):
     # It's cleaner to do "for (i1,i2) in util.choose(2, all_indices):", but
     # also less efficient due to creation of long list of pairs.
     for i1 in range(0,orig_len_var_infos-1):
-        if var_infos[i1].is_non_canonical(i1):
+        if not var_infos[i1].is_canonical():
             continue
         for i2 in range(i1+1,orig_len_var_infos):
-            if var_infos[i2].is_non_canonical(i2):
+            if not var_infos[i2].is_canonical():
                 continue
             if not (i1 in indices or i2 in indices):
                 # Do nothing if neither of these variables is under consideration.
@@ -396,10 +403,10 @@ def introduce_from_sequence_pass1(var_infos, var_new_values, index):
     # sequence, not a subsequence (sequence slice) we have added
     if (seq_var_info.derived_len == None and not seq_var_info.is_derived):
         name_size = "size(%s)" % (seq_var_info.name,)
-        seq_len_var_info = var_info(name_size, types.IntType, true)
+        seq_len_var_info = var_info(name_size, types.IntType, len(var_infos), true)
         var_infos.append(seq_len_var_info)
         seq_var_info.derived_len = len(var_infos)-1
-        print "set derived_len for", seq_var_info, "to", len(var_infos)-1
+        # print "set derived_len for", seq_var_info, "to", len(var_infos)-1
 
         for new_values in var_new_values.values():
             this_seq = new_values[index]
@@ -446,7 +453,7 @@ def introduce_from_sequence_pass2(var_infos, var_new_values, seqidx):
     seqvar = seq_var_info.name
 
     # Add sum (unconditionally)
-    var_infos.append(var_info("sum(%s)" % (seqvar,), types.IntType, true))
+    var_infos.append(var_info("sum(%s)" % (seqvar,), types.IntType, len(var_infos), true))
     for new_values in var_new_values.values():
         this_seq = new_values[seqidx]
         if this_seq == None:
@@ -461,22 +468,26 @@ def introduce_from_sequence_pass2(var_infos, var_new_values, seqidx):
     if not seq_var_info.is_derived:
         seq_len_inv = var_infos[seq_var_info.derived_len].invariant
         assert isinstance(seq_var_info, var_info)
-        if seq_len_inv.min > 0:
-            for i in range(0, seq_len_inv.min):
-                var_infos.append(var_info("%s[%s]" % (seqvar, i), types.IntType, true))
+        len_min = seq_len_inv.min
+        # The point of this is not to do checks over every last irrelevant
+        # element; just look at the one or two at the beginning and the end.
+        len_min = min(2, len_min)
+        if len_min > 0:
+            for i in range(0, len_min):
+                var_infos.append(var_info("%s[%s]" % (seqvar, i), types.IntType, len(var_infos), true))
             for new_values in var_new_values.values():
-                for i in range(0, seq_len_inv.min):
+                for i in range(0, len_min):
                     seq = new_values[seqidx]
                     if seq == None:
                         elt_val = None
                     else:
                         elt_val = seq[i]
                     new_values.append(elt_val)
-            if seq_len_inv.min != seq_len_inv.max:
-                for i in range(-seq_len_inv.min, 0):
-                    var_infos.append(var_info("%s[%s]" % (seqvar, i), types.IntType, true))
+            if len_min != seq_len_inv.max:
+                for i in range(-len_min, 0):
+                    var_infos.append(var_info("%s[%s]" % (seqvar, i), types.IntType, len(var_infos), true))
                 for new_values in var_new_values.values():
-                    for i in range(-seq_len_inv.min, 0):
+                    for i in range(-len_min, 0):
                         seq = new_values[seqidx]
                         if seq == None:
                             elt_val = None
@@ -512,10 +523,10 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
 
     # Add subsequences
     if not var_infos[seqidx].is_derived and not var_infos[sclidx].invariant.can_be_None:
-        full_var_info = var_info("%s[0..%s]" % (seqvar, sclvar), types.ListType, true)
+        full_var_info = var_info("%s[0..%s]" % (seqvar, sclvar), types.ListType, len(var_infos), true)
         full_var_info.derived_len = sclidx
         var_infos.append(full_var_info)
-        less_one_var_info = var_info("%s[0..%s-1]" % (seqvar, sclvar), types.ListType, true)
+        less_one_var_info = var_info("%s[0..%s-1]" % (seqvar, sclvar), types.ListType, len(var_infos), true)
         # 'no_var' means there is a known value, but no variable
         # holds that particular value.
         less_one_var_info.derived_len = 'no_var'
@@ -543,7 +554,7 @@ def introduce_from_sequence_scalar_pass2(var_infos, var_new_values, seqidx, scli
         and (not scl_inv.is_exact()) and (scl_inv.min >= 0)
         and (seq_size_idx != 'no_var')
         and (scl_inv.max <= var_infos[seq_size_idx].invariant.max)):
-        var_infos.append(var_info("%s[%s]" % (seqvar, sclvar), types.IntType, true))
+        var_infos.append(var_info("%s[%s]" % (seqvar, sclvar), types.IntType, len(var_infos), true))
         for new_values in var_new_values.values():
             this_seq = new_values[seqidx]
             this_scl = new_values[sclidx]
@@ -777,11 +788,14 @@ pass2_functions = (introduce_from_sequence_pass2,
 # entries).  Tags and varnames may not contain the tab (\t) character.
 # Currently the values are integers; this will be extended soon.
 
-def read_file_ftns(filename):
+def read_file_ftns(filename, fn_regexp=None):
     """Read data from .inv file; add to dictionary mapping file
     names to invocation counts.  The invocation counts are initialized
     to zero.  Also initialize dict mapping files to parameters to
     original values."""
+
+    if type(fn_regexp) == types.StringType:
+        fn_regexp = re.compile(fn_regexp)
 
     file = open(filename, "r")
     line = file.readline()
@@ -789,24 +803,25 @@ def read_file_ftns(filename):
         raise "First line should be tag line; saw: " + line
 
     while (line != ""):         # line == "" when we hit end of file
-        (tag, leftover) = string.split(line, ":::", 1)
-        ftn_names_to_call_ct[tag] = 0
+        if fn_regexp == None or fn_regexp.match(line):
+            (tag, leftover) = string.split(line, ":::", 1)
+            ftn_names_to_call_ct[tag] = 0
 
-        # Get parameter list and initialize ftn to param vals dict
-        label_and_params = string.split(leftover, "(", 1)
-        if len(label_and_params) == 1:
-            # Backward compatibility if no parameter list specified
-            label = label_and_params
-            param_list = ""
-        else:
-            (label, param_list) = label_and_params
-        param_list = param_list[:-2] # remove trailing newline and ')'
-        param_list = re.split("[, ]", param_list)
-        params_to_orig_val_list = {}
-        for param in param_list:
-            if param != '': # handle empty parameter list???
-                params_to_orig_val_list[param] = []
-        ftn_to_orig_param_vals[tag] = params_to_orig_val_list
+            # Get parameter list and initialize ftn to param vals dict
+            label_and_params = string.split(leftover, "(", 1)
+            if len(label_and_params) == 1:
+                # Backward compatibility if no parameter list specified
+                label = label_and_params
+                param_list = ""
+            else:
+                (label, param_list) = label_and_params
+            param_list = param_list[:-2] # remove trailing newline and ')'
+            param_list = re.split("[, ]", param_list)
+            params_to_orig_val_list = {}
+            for param in param_list:
+                if param != '': # handle empty parameter list???
+                    params_to_orig_val_list[param] = []
+            ftn_to_orig_param_vals[tag] = params_to_orig_val_list
 
         line = file.readline()
         while "\t" in line:
@@ -818,12 +833,15 @@ def init_ftn_call_ct():
     for ftn_tag in ftn_names_to_call_ct.keys():
         ftn_names_to_call_ct[ftn_tag] = 0
 
-def read_file(filename):
+def read_file(filename, fn_regexp=None):
     """Read data from .inv file; return a tuple of three dictionaries.
      * map from function name to tuple of variable names.
      * map from function name to (map from tuple of values to occurrence count)
      * map from function name to number of samples
     """
+
+    if type(fn_regexp) == types.StringType:
+        fn_regexp = re.compile(fn_regexp)
 
     file = open(filename, "r")
 
@@ -843,6 +861,11 @@ def read_file(filename):
     while (line != ""):                 # line == "" when we hit end of file
         # line contains no tab character
         tag = line[:-1]                 # remove trailing newline
+
+        if fn_regexp != None and not fn_regexp.match(line):
+            while "\t" in line:
+                line = file.readline()
+            continue
 
         # Increment function invocation count if ':::BEGIN'
         (tag_sans_suffix, suffix) = string.split(tag, ":::", 1)
@@ -897,7 +920,7 @@ def read_file(filename):
                     this_value = 0
                 else:
                     raise "What value?"
-	    these_var_infos.append(var_info(this_var_name, this_var_type))
+	    these_var_infos.append(var_info(this_var_name, this_var_type, len(these_var_infos)))
 	    these_values.append(this_value)
             # print this_var_name, this_value
 
@@ -912,7 +935,7 @@ def read_file(filename):
         # Add invocation counts
         # Accessing global here-crappy
         for ftn_tag in ftn_names_to_call_ct.keys():
-            these_var_infos.append(var_info("calls(%s)" % (ftn_tag,), types.IntType))
+            these_var_infos.append(var_info("calls(%s)" % (ftn_tag,), types.IntType, len(these_var_infos)))
             these_values.append(ftn_names_to_call_ct[ftn_tag])
 
         # Add original parameter values if end of function call
@@ -923,9 +946,9 @@ def read_file(filename):
                 if sequence_re.match(param):
                     if param[-2:] == "[]":
                         param = param[:-2]
-                    these_var_infos.append(var_info(param + "_orig", types.ListType))
+                    these_var_infos.append(var_info(param + "_orig", types.ListType, len(these_var_infos)))
                 else:
-                    these_var_infos.append(var_info(param + "_orig", types.IntType))
+                    these_var_infos.append(var_info(param + "_orig", types.IntType, len(these_var_infos)))
                 these_values.append(param_list[-1])
                 del param_list[-1]
 
@@ -1068,7 +1091,7 @@ def all_numeric_invariants(fn_regexp=None):
             for i in range(0,derivation_index[1]):
                 vi = var_infos[i]
                 assert vi.type != types.ListType or vi.derived_len != None
-            print "old derivation_index =", derivation_index, "num_vars =", len(var_infos)
+            # print "old derivation_index =", derivation_index, "num_vars =", len(var_infos)
 
             # If derivation_index == (a, b, c) and n = len(var_infos), then
             # the body of this loop:
@@ -1083,7 +1106,7 @@ def all_numeric_invariants(fn_regexp=None):
                 range(derivation_index[0], num_vars), var_infos, var_values)
 
             for pass_no in range(1,derivation_passes+1):
-                print "pass", pass_no, "range", derivation_index[pass_no], derivation_index[pass_no-1]
+                # print "pass", pass_no, "range", derivation_index[pass_no], derivation_index[pass_no-1]
                 if derivation_index[pass_no] == derivation_index[pass_no-1]:
                     continue
                 introduce_new_variables_one_pass(
@@ -1092,7 +1115,7 @@ def all_numeric_invariants(fn_regexp=None):
                     derivation_functions[pass_no])
 
             derivation_index = (num_vars,) + derivation_index[:-1]
-            print "new derivation_index =", derivation_index, "num_vars =", len(var_infos)
+            # print "new derivation_index =", derivation_index, "num_vars =", len(var_infos)
 
 
         assert len(var_infos) == len(var_values.keys()[0])
@@ -1111,7 +1134,7 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
     if indices == []:
         return
 
-    print "numeric_invariants_over_index", indices
+    # print "numeric_invariants_over_index", indices
 
     # (Intentionally) ignores anything added by body,
     # though probably nothing should be added by this body.
@@ -1136,7 +1159,7 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
         # print "Setting invariant for index", i, "to", this_inv
         this_var_info.invariant = this_inv
 
-    print "numeric_invariants_over_index: done with single invariants, starting pairs"
+    # print "numeric_invariants_over_index: done with single invariants, starting pairs"
 
     # Invariant pairs
     ## Don't do this; the large list of pairs can exhaust memory, though
@@ -1148,7 +1171,7 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
             continue
         if inv1.can_be_None:
             continue
-        if var_infos[i1].is_non_canonical(i1):
+        if not var_infos[i1].is_canonical():
             continue
         for i2 in range(i1+1, index_limit):
             # if i1 == i2:
@@ -1163,7 +1186,7 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
             if inv2.can_be_None:
                 # Do nothing if either of the variables can be missing.
                 continue
-            if var_infos[i2].is_non_canonical(i2):
+            if not var_infos[i2].is_canonical():
                 continue
             values = dict_of_tuples_slice(var_values, (i1,i2))
             these_var_infos = util.slice_by_sequence(var_infos, (i1,i2))
@@ -1190,19 +1213,22 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
                 var_infos[i2].equal_to.append(i1)
 
 
-    print "numeric_invariants_over_index: done with pairs, starting triples"
+    # print "numeric_invariants_over_index: done with pairs, starting triples"
 
     # Invariant triples
+    if no_ternary_invariants == true:
+        return
+
     ## Don't do this; the large list of triples can exhaust memory, though
     ## the code is cleaner in that case.
     # for (i1,i2,i3) in util.choose(3, all_indices):
     for i1 in range(0,index_limit-2):
-        print "triples: index1 =", i1
+        # print "triples: index1 =", i1
         if var_infos[i1].invariant.is_exact():
             continue
         if var_infos[i1].invariant.can_be_None:
             continue
-        if var_infos[i1].is_non_canonical(i1):
+        if not var_infos[i1].is_canonical():
             continue
         for i2 in range(i1+1, index_limit-1):
             # print "triples: index2 =", i2
@@ -1215,7 +1241,7 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
                 continue
             if var_infos[i2].invariant.can_be_None:
                 continue
-            if var_infos[i2].is_non_canonical(i1):
+            if not var_infos[i2].is_canonical():
                 continue
             for i3 in range(i2+1, index_limit):
                 if i1 == i3 or i2 == i3:
@@ -1235,7 +1261,7 @@ def numeric_invariants_over_index(indices, var_infos, var_values):
                 if var_infos[i3].invariant.can_be_None:
                     # Do nothing if any of the variables can be missing.
                     continue
-                if var_infos[i3].is_non_canonical(i1):
+                if not var_infos[i3].is_canonical():
                     continue
 
                 values = dict_of_tuples_slice(var_values, (i1,i2,i3))
@@ -1275,28 +1301,53 @@ def print_invariants(fn_regexp=None, print_unconstrained=0):
         print "==========================================================================="
         print fn_name, fn_samples[fn_name], "samples"
         var_infos = fn_var_infos[fn_name]
-        non_exact_single_invs = []
+
+        # Equality invariants
+        for vi in var_infos:
+            if not vi.is_canonical():
+                continue
+            if vi.equal_to == []:
+                continue
+            print vi.name,              # no newline if ends with comma
+            for equal_var in vi.equal_to:
+                print "=", equal_var.name,
+            print ""                    # print newline
         # Single invariants
         for vi in var_infos:
+            if not vi.is_canonical():
+                continue
             this_inv = vi.invariant
             if print_unconstrained or not this_inv.is_unconstrained():
                 print " ", this_inv.format((vi.name,))
         # Pairwise invariants
         for vi in var_infos:
+            if not vi.is_canonical():
+                continue
             vname = vi.name
             for (index,inv) in vi.invariants.items():
                 if type(index) != types.IntType:
+                    continue
+                if not var_invs[index].is_canonical():
                     continue
                 if print_unconstrained or not inv.is_unconstrained():
                     print "   ", inv.format((vname, var_infos[index].name))
         # Three-way (and greater) invariants
         for vi in var_infos:
+            if not vi.is_canonical():
+                continue
             vname = vi.name
             for (index_pair,inv) in vi.invariants.items():
                 if type(index_pair) == types.IntType:
                     continue
+                (i1, i2) = index_pair
+                if not var_invs[i1].is_canonical():
+                    # Perhaps err; this shouldn't happen, right?
+                    continue
+                if not var_invs[i2].is_canonical():
+                    # Perhaps err; this shouldn't happen, right?
+                    continue
                 if print_unconstrained or not inv.is_unconstrained():
-                    print "     ", inv.format((vname, var_infos[index_pair[0]].name, var_infos[index_pair[1]].name))
+                    print "     ", inv.format((vname, var_infos[i1].name, var_infos[i2].name))
 
 
 ###########################################################################
@@ -1350,8 +1401,9 @@ class invariant:
         if self.one_of:
             if len(self.one_of) == 1:
                 return "%s = %s \t(%s samples)" % (args, self.one_of[0], self.samples)
+            # If few samples, don't try to infer a function over the values
             elif self.samples < 100:
-                return "%s in %s \t(%s samples)" % (args, self.one_of, self.samples)
+                return "%s in %s \t(%s samples)" % (args, util.format_as_set(self.one_of), self.samples)
         self.unconstrained_internal = true
         return None
 
@@ -1444,7 +1496,7 @@ class single_scalar_numeric_invariant(invariant):
     def __repr__(self):
         result = "<invariant-1: "
         if self.one_of:
-            result = result + "one of %s, " % self.one_of
+            result = result + "in %s, " % util.format_as_set(self.one_of)
         if self.min == None:
             min_rep = ""
         else:
@@ -1474,7 +1526,7 @@ class single_scalar_numeric_invariant(invariant):
             return as_base
         self.unconstrained_internal = false
 
-        suffix = " \t(%s samples, %s values" % (self.values, self.samples)
+        suffix = " \t(%s values, %s samples" % (self.values, self.samples)
         if self.can_be_None:
             suffix = suffix + ", can be None)"
         else:
@@ -1506,7 +1558,7 @@ class single_scalar_numeric_invariant(invariant):
             return arg + "!= 0" + suffix
 
         if self.one_of:
-            return "%s in %s" % (arg, self.one_of)
+            return "%s in %s" % (arg, util.format_as_set(self.one_of))
 
         self.unconstrained_internal = true
         return arg + " unconstrained" + suffix
@@ -1665,7 +1717,7 @@ class two_scalar_numeric_invariant(invariant):
 
         (x,y) = arg_tuple
 
-        suffix = " \t(%s samples, %s values)" % (self.values, self.samples)
+        suffix = " \t(%s values, %s samples)" % (self.values, self.samples)
 
         if self.comparison == "=":
             return "%s = %s" % (x,y) + suffix
@@ -1738,7 +1790,7 @@ class two_scalar_numeric_invariant(invariant):
         if (not self.can_be_equal) and self.nonequal_justified():
             return "%s != %s" % (x,y) + suffix
         elif self.one_of:
-            return "%s in %s" % ("(%s, %s)" % arg_tuple, self.one_of) + suffix
+            return "%s in %s" % ("(%s, %s)" % arg_tuple, util.format_as_set(self.one_of)) + suffix
         else:
             self.unconstrained_internal = true
             return "(%s, %s) unconstrained" % (x,y) + suffix
@@ -1879,7 +1931,7 @@ class three_scalar_numeric_invariant(invariant):
 
         (x,y,z) = arg_tuple
 
-        suffix = " \t(%s samples, %s values)" % (self.values, self.samples)
+        suffix = " \t(%s values, %s samples)" % (self.values, self.samples)
 
         if self.linear_z or self.linear_y or self.linear_x:
             results = []
@@ -2236,7 +2288,7 @@ class single_sequence_numeric_invariant(invariant):
         # Do we care more that it is sorted, or that it is in given range?
         # How much of this do we want to print out?
 
-        suffix = " \t(%s samples, %s values" % (self.values, self.samples)
+        suffix = " \t(%s values, %s samples)" % (self.values, self.samples)
         result = ""
         if self.min_justified and self.max_justified:
             if self.min == self.max:
@@ -2301,7 +2353,6 @@ class scalar_sequence_numeric_invariant(invariant):
         # For each (num, sequence), determine if num is a member of seq
         self.member = true
         for i in range(0, len(pairs)):
-            (p1, p2) = pairs[i]
             if self.seq_first:
                 (seq,num) = pairs[i]
             else:
@@ -2310,17 +2361,19 @@ class scalar_sequence_numeric_invariant(invariant):
                 self.member = false
                 break
 
-        # Determine if the scalar is the size of the sequence.
-        # Only need to check sequence size once.
-        self.size = true
-        for i in range(0, len(pairs)):
-            if self.seq_first:
-                (seq,num) = pairs[i]
-            else:
-                (num,seq) = pairs[i]
-            if num != len(seq):
-                self.size = false
-                break
+        ## This isn't necessary any longer:  we introduce a "size(SEQ)"
+        ## variable for each sequence SEQ.
+        # # Determine if the scalar is the size of the sequence.
+        # # Only need to check sequence size once.
+        # self.size = true
+        # for i in range(0, len(pairs)):
+        #     if self.seq_first:
+        #         (seq,num) = pairs[i]
+        #     else:
+        #         (num,seq) = pairs[i]
+        #     if num != len(seq):
+        #         self.size = false
+        #         break
 
         ## Linear relationship --
         # Find linear relationship between single scalar and each element
@@ -2366,7 +2419,7 @@ class scalar_sequence_numeric_invariant(invariant):
 
         self.unconstrained_internal = false
 
-        suffix = " \t(%s samples, %s values" % (self.values, self.samples)
+        suffix = " \t(%s values, %s samples)" % (self.values, self.samples)
 
         # arg_tuple is a pair of names; it contains no info about types
         if self.seq_first:
@@ -2468,7 +2521,7 @@ class two_sequence_numeric_invariant(invariant):
 
         self.unconstrained_internal = false
 
-        suffix = " \t(%s samples, %s values" % (self.values, self.samples)
+        suffix = " \t(%s values, %s samples" % (self.values, self.samples)
 
         (x, y) = arg_tuple
         if self.comparison == "=":
@@ -2530,8 +2583,8 @@ class two_sequence_numeric_invariant(invariant):
 # As of 5/16/98, this took half an hour or more
 # invariants.read_invs('*.inv', "clear first")
 
-def read_merge_file(filename):
-    (this_fn_var_infos, this_fn_var_values, this_fn_samples) = read_file(filename)
+def read_merge_file(filename, fn_regexp=None):
+    (this_fn_var_infos, this_fn_var_values, this_fn_samples) = read_file(filename, fn_regexp)
     merge_variables(filename, this_fn_var_infos, this_fn_var_values, this_fn_samples)
 
 # consider calling clear_variables() before calling this
@@ -2539,10 +2592,12 @@ def read_inv(filename="medic/invariants.raw"):
     read_merge_file(filename)
     print_hashtables()
 
-def read_invs(files, clear=0):
+def read_invs(files, clear=0, fn_regexp=None):
     """FILES is either a sequence of file names or a single Unix file pattern."""
     if clear:
         clear_variables()
+    if type(fn_regexp) == types.StringType:
+        fn_regexp = re.compile(fn_regexp)
 
     def env_repl(matchobj):
         return posix.environ[matchobj.group(0)[1:]]
@@ -2555,9 +2610,9 @@ def read_invs(files, clear=0):
         raise "No files specified"
     # Get all function names to add checks on ftn invocation counts
     for file in files:
-        read_file_ftns(file)
+        read_file_ftns(file, fn_regexp)
     for file in files:
-        read_merge_file(file)
+        read_merge_file(file, fn_regexp)
 
     # For loop is outside assert, yuck
     for fname in fn_var_values.keys():
