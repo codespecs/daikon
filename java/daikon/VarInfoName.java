@@ -51,7 +51,7 @@ public abstract class VarInfoName
 	return parse(first).applyField(field);
       }
     }
-    
+
     // ??
     throw new UnsupportedOperationException("parse error: '" + name + "'");
   }
@@ -220,7 +220,10 @@ public abstract class VarInfoName
     // The simple approach is wrong because this might be "orig(a[])"
     // return (new SizeOf((Elements) this)).intern();
     Elements elems = (new ElementsFinder(this)).elems();
-    Assert.assert(elems != null, "applySize should have elements to use in " + this);
+    Assert.assert(elems != null,
+                  "applySize should have elements to use in " + this + ";\n"
+                  + "that is, " + this + " does not appear to be a sequence/collection.\n"
+                  + "Perhaps its name should be suffixed by \"[]\"?");
     Replacer r = new Replacer(elems, (new SizeOf(elems)).intern());
     return r.replace(this).intern();
   }
@@ -284,14 +287,14 @@ public abstract class VarInfoName
   }
 
   /**
-   * 
+   *
    **/
   public VarInfoName applyField(String field) {
     return (new Field(this, field)).intern();
   }
 
   /**
-   * 
+   *
    **/
   public static class Field extends VarInfoName {
     public final VarInfoName term;
