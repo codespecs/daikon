@@ -2,7 +2,7 @@
 ## Daikon initialization file for C shell (csh and tcsh) users.
 ## (This file should be kept in synch with daikon.bashrc and daikonenv.bat.)
 
-## Set DAIKONPARENT to the directory containing "daikon/".
+## Set DAIKONPARENT to absolute pathname of the directory containing "daikon/".
 if (! $?DAIKONPARENT) setenv DAIKONPARENT /path/to/parent/of/daikon
 if (! $?DAIKONDIR) setenv DAIKONDIR ${DAIKONPARENT}/daikon
 if (! $?DFECDIR) setenv DFECDIR ${DAIKONDIR}/front-end/c

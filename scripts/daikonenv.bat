@@ -3,7 +3,7 @@ REM Set up environment variables to run Daikon in a Windows NT command window.
 REM (This file should be kept in synch with daikon.bashrc and daikon.cshrc.)
 
 echo off
-REM Set DAIKONPARENT to the directory containing "daikon\".
+REM Set DAIKONPARENT to absolute pathname of the directory containing "daikon\".
 set DAIKONPARENT=d:\Daikon
 set DAIKONDIR=%DAIKONPARENT%\Daikon
 set DFECDIR=%DAIKONDIR%\front-end\c

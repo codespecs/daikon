@@ -2,7 +2,7 @@
 ## Daikon initialization file for Bourne shell (bash) users.
 ## (This file should be kept in synch with daikon.cshrc and daikonenv.bat.)
 
-## Set DAIKONPARENT to the directory containing "daikon/".
+## Set DAIKONPARENT to absolute pathname of the directory containing "daikon/".
 export DAIKONPARENT=${DAIKONPARENT:-/path/to/parent/of/daikon}
 export DAIKONDIR=${DAIKONDIR:-${DAIKONPARENT}/daikon}
 export DFECDIR=${DFECDIR:-${DAIKONDIR}/front-end/c}
