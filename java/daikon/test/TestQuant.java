@@ -177,6 +177,23 @@ public final class TestQuant extends TestCase {
     assertTrue(Quant.eltsOneOf(new int[] { 3, 3 }, new int[] { 3, 3, 3, 3}) == true);
   }
 
+  public static void test_eltsOneOf_different_types() {
+    assertTrue(Quant.eltsOneOf(new byte[] {}, new int[] {}) == true);
+    assertTrue(Quant.eltsOneOf(new long[] {}, new long[] {}) == true);
+    assertTrue(Quant.eltsOneOf(new byte[] { 1 }, new long[] {}) == false);
+    assertTrue(Quant.eltsOneOf(new short[] { 1, 2 }, new short[] {}) == false);
+    assertTrue(Quant.eltsOneOf(new long[] { }, new short[] { 1 }) == true);
+    assertTrue(Quant.eltsOneOf(new int[] { 1 }, new short[] { 1 }) == true);
+    assertTrue(Quant.eltsOneOf(new float[] { 1, 2 }, new double[] { 1 }) == false);
+    assertTrue(Quant.eltsOneOf(new double[] { }, new double[] { -1, 1 }) == true);
+    assertTrue(Quant.eltsOneOf(new float[] { 1 }, new float[] { -1, 1 }) == true);
+    assertTrue(Quant.eltsOneOf(new double[] { -1 }, new float[] { -1, 1 }) == true);
+    assertTrue(Quant.eltsOneOf(new byte[] { -1, 1 }, new short[] { -1, 1 }) == true);
+    assertTrue(Quant.eltsOneOf(new short[] { -1, 0, 1 }, new byte[] { -1, 1 }) == false);
+    assertTrue(Quant.eltsOneOf(new int[] { 1, 2 }, new byte[] { 1, 2, 3}) == true);
+    assertTrue(Quant.eltsOneOf(new long[] { }, new short[] { 2, 3, 1}) == true);
+  }
+
   public static void test_slice() {
     assert_arrays_equals(Quant.slice(new int[] {}, 0, 0), new int[] {});
     assert_arrays_equals(Quant.slice(new int[] { 1 }, 0, 0), new int[] { 1 });
