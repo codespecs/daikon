@@ -2,11 +2,12 @@
 ### Variables
 ###
 
-IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps gui-ControlPanel.jpg gui-ControlPanel.eps gui-InvariantsDisplay-small.jpg gui-InvariantsDisplay-small.eps
+IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps gui-ControlPanel.jpg gui-ControlPanel.eps gui-InvariantsDisplay-small.jpg gui-InvariantsDisplay-small.eps context-gui.jpg context-gui.eps
 IMAGE_PARTIAL_PATHS := $(addprefix images/,$(IMAGE_FILES))
 DOC_FILES_NO_IMAGES := Makefile daikon.texinfo daikon.ps daikon.pdf daikon.html CHANGES
 DOC_FILES := ${DOC_FILES_NO_IMAGES} $(IMAGE_PARTIAL_PATHS)
 DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
+EMACS_PATHS := emacs/daikon-context-gui.el
 README_FILES := README-daikon-java README-dist
 README_PATHS := $(addprefix doc/,$(README_FILES))
 SCRIPT_FILES := java-cpp.pl daikon.pl lines-from
@@ -108,10 +109,6 @@ TAGS:
 DISTTESTDIR := /tmp/daikon.dist
 DISTTESTDIRJAVA := /tmp/daikon.dist/daikon/java
 
-# Both make and test the distribution.
-# (Must make it first in order to test it!)
-dist-and-test: dist-notest test-the-dist
-
 # Test that the distributed system compiles.
 # Don't create any new distribution.
 test-the-dist: dist-ensure-directory-exists
@@ -146,12 +143,22 @@ cvs-test:
 
 dist: dist-and-test
 
+# Both make and test the distribution.
+# (Must make it first in order to test it!)
+dist-and-test: dist-notest test-the-dist
+
 dist-ensure-directory-exists: $(DIST_DIR)
 
 # Create the distribution, but don't test it.
 dist-notest: dist-ensure-directory-exists $(DIST_DIR_PATHS)
 	$(MAKE) update-dist-dir
 	$(MAKE) -n dist-dfej
+
+doc/CHANGES: doc/daikon.texinfo
+	@echo "** doc/CHANGES file is not up-to-date with respect to daikon.texinfo."
+	@echo "** doc/CHANGES must be modified by hand:  try"
+	@echo "**   diff -u /home/httpd/html/daikon/dist/doc/daikon.texinfo doc/daikon.texinfo"
+	@exit 1
 
 # Is this the right way to do this?
 dist-force:
@@ -161,6 +168,9 @@ dist-force:
 # 	echo CLASSPATH: $(CLASSPATH)
 # 	# echo DAIKON_JAVA_FILES: ${DAIKON_JAVA_FILES}
 # 	# Because full distribution has full source, shouldn't need: CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIRJAVA)/lib/jakarta-oro.jar:$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar:$(RTJAR)
+
+# Given up-to-date .tar files, copies them (and documentation) to
+# distribution directory.
 update-dist-dir: dist-ensure-directory-exists
 	$(MAKE) update-doc-dist-date
 	$(MAKE) update-doc-dist-version
@@ -252,6 +262,10 @@ daikon-jar.tar daikon-source.tar: $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DA
 	mkdir /tmp/daikon/doc/images
 	cd doc && cp -p $(IMAGE_PARTIAL_PATHS) /tmp/daikon/doc/images
 	cp -pR doc/daikon_manual_html /tmp/daikon/doc
+
+	# Emacs
+	mkdir /tmp/daikon/emacs
+	cp -p $(EMACS_PATHS) /tmp/daikon/emacs
 
 	# Auxiliary programs
 	mkdir /tmp/daikon/bin
