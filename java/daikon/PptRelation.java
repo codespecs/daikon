@@ -512,6 +512,15 @@ public class PptRelation implements Serializable {
     return (rel);
   }
 
+  // used by init_hierarchy below
+  private static class SplitChild {
+    public PptRelation rel;
+    public PptSplitter ppt_split;
+    public SplitChild (PptRelation rel, PptSplitter ppt_split) {
+      this.rel = rel;
+      this.ppt_split = ppt_split;
+    }
+  }
   /**
    * Initialize the hierarchical relationship between ppts.  Specifically
    * process each ppt, find its parent(s) in the partial order, and fill
@@ -632,6 +641,61 @@ public class PptRelation implements Serializable {
           if (!ppt.ppt_name.isNumberedExitPoint()) {
             ppt.children.remove (rel);
           }
+        }
+      }
+    }
+
+    // Create relations between conditional ppts and their children.
+    // The relationship between conditional ppts matches exactly
+    // the relationship between each their parents.  For example,
+    // presume ppt A has a child ppt B.  A has two conditional
+    // ppts (AC1, AC2) and B has two conditional ppts (BC1, BC2)
+    // Then AC1 is the parent of BC1 and AC2 is the parent of BC2
+
+    // Loop over each ppt and process each non-leaf with splitters
+    for (Iterator pi = all_ppts.pptIterator(); pi.hasNext(); ) {
+      PptTopLevel ppt = (PptTopLevel) pi.next();
+      if (ppt.ppt_name.isNumberedExitPoint())
+        continue;
+      if (!ppt.has_splitters())
+        continue;
+
+      // Loop over each splitter
+      splitter_loop:
+      for (Iterator ii = ppt.splitters.iterator(); ii.hasNext(); ) {
+        PptSplitter ppt_split = (PptSplitter) ii.next();
+
+        // list of children that match this splitter
+        List /*SplitChild*/ split_children = new ArrayList();
+
+        // Create a list of children for this splitter
+        child_loop: for (int jj = 0; jj < ppt.children.size(); jj++ ) {
+          PptRelation rel = (PptRelation) ppt.children.get(jj);
+          if (!rel.child.has_splitters())
+            break;
+          for (Iterator kk = rel.child.splitters.iterator(); kk.hasNext(); ) {
+            PptSplitter csplit = (PptSplitter) kk.next();
+            if (ppt_split.splitter == csplit.splitter) {
+              split_children.add (new SplitChild (rel, csplit));
+              continue child_loop;
+            }
+          }
+          break;
+        }
+
+        // If we didn't find a matching splitter at each child, can't merge
+        // this point.  Just remove it from the list of splitters
+        if (split_children.size() != ppt.children.size()) {
+          ii.remove();
+          continue;
+        }
+
+        // Build the PptRelations for each child.  The PptRelation from
+        // the conditional point is of the same type as the original
+        // relation from parent to child
+        for (Iterator jj = split_children.iterator(); jj.hasNext(); ) {
+          SplitChild sc = (SplitChild) jj.next();
+          ppt_split.add_relation (sc.rel, sc.ppt_split);
         }
       }
     }
