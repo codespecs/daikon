@@ -5301,9 +5301,9 @@ The first argument to MakeInvariantChecker is a Daikon output file name
 is a Java file name into which Java source for the specialized checker
 will be generated.
   
-@c Command line options to MakeInvariantChecker:
-@c - h prints the usage line
-@c - o filename writes all the invariant violations in the file called filename
+Command line options to the generated program:
+ - h prints the usage line
+ - o filename writes all the invariant violations in the file called filename
 
 The specialized checker program takes one argument, a data trace file.
 (It is typically a different file than the one used for generating the
@@ -5687,11 +5687,12 @@ the Daikon runtime, and it also improves your code.
 @cindex daikon_runtime.h file
 @cindex customizing the Daikon C runtime
 
-The Daikon runtime has a variety of possible behaviors when a program
-contains a memory error.  For instance, it can halt immediately; it
+The Daikon runtime's behavior when a program
+contains a memory error is customizable.
+For instance, it can halt immediately; it
 can allocate extra buffer space around arrays (but cannot do so around
 dynamically allocated (malloced) blocks, because the type is not known
-at the type of the malloc call) and only halt if the program goes
+at the time of the malloc call) and only halt if the program goes
 beyond those bounds; or the checking can be turned off entirely, which
 is extremely dangerous.  These and many other customizations for the
 Daikon C runtime library are described in the @file{daikon_runtime.h}
