@@ -1,0 +1,24 @@
+Version:      $Id$
+Owner:        mharder <mharder>
+Tool:         daikon-bug
+Summary:      can't find invariants tree even though INV is set
+Severity:     Lethal
+Status:       New
+Reproducible: Yes
+Description:
+
+When I run daikon-bug, I get the following error:
+
+[/tmp]$ daikon-bug
+daikon-bug: can't find invariants tree -- please set INV.
+
+However, INV is set:
+
+[/tmp]$ echo $INV
+/g5/users/mharder/research/invariants
+
+--
+$Log$
+Revision 1.1  2002-03-13 02:32:54  mharder
+new bug0022
+
