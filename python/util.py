@@ -138,7 +138,7 @@ def _test_sorted_list_difference():
     assert sorted_list_difference([1,2,5,6], [2,3,4,5]) == [1, 6]
 
 # There MUST be a better way to do this!
-def same_elements(seq1, seq2):
+def same_elements_setwise(seq1, seq2):
     """Return true if sequences SEQ1 and SEQ2 contain the same elements
 (in any order)."""
     s1 = list(seq1)
@@ -151,15 +151,13 @@ def sub_sequence_of(seq1, seq2):
     """Return true if seq1 is a subsequence of seq2."""
     if len(seq1) > len(seq2):
         return false
-    result = false
     # For each slice of seq2 with length equal to seq1, test for subset
     subsequence_range = range(0, len(seq2) - len(seq1) + 1)
     for i in subsequence_range:
         if seq1 == seq2[i:len(seq1)+i]:
-            result = true
-            break
-    return result
-    
+            return true
+    return false
+
 
 ###########################################################################
 ### Lists of numbers
