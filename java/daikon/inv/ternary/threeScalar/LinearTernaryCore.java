@@ -232,7 +232,7 @@ public final class LinearTernaryCore implements java.io.Serializable {
   public double computeProbability() {
     if (wrapper.no_invariant)
       return Invariant.PROBABILITY_NEVER;
-    return Invariant.prob_is_gt(values_seen, MINTRIPLES);
+    return Invariant.prob_is_ge(values_seen, MINTRIPLES);
   }
 
   public String repr() {

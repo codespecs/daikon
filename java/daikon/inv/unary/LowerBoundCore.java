@@ -28,7 +28,7 @@ public class LowerBoundCore  implements java.io.Serializable {
   final static int required_samples = 5; // for enoughSamples
   final static int required_samples_at_bound = 3; // for justification
 
-  // min1  <  min2  <  min3 
+  // min1  <  min2  <  min3
   public long min1  = Long.MAX_VALUE ;
   int num_min1  = 0;
   long min2  = Long.MAX_VALUE ;
@@ -51,12 +51,12 @@ public class LowerBoundCore  implements java.io.Serializable {
     long modulus = calc_modulus();
     long range = calc_range();
     double avg_samples_per_val = calc_avg_samples_per_val(modulus, range);
-    return "min1=" + min1 
-      + ", num_min1=" + num_min1 
-      + ", min2=" + min2 
-      + ", num_min2=" + num_min2 
-      + ", min3=" + min3 
-      + ", num_min3=" + num_min3 
+    return "min1=" + min1
+      + ", num_min1=" + num_min1
+      + ", min2=" + min2
+      + ", num_min2=" + num_min2
+      + ", min3=" + min3
+      + ", num_min3=" + num_min3
       + ", max=" + max  + ", range=" + range + ", " +
       "avg_samp=" + two_decimals.format(avg_samples_per_val);
   }
@@ -131,8 +131,8 @@ public class LowerBoundCore  implements java.io.Serializable {
   }
 
   // Convenience methods; avoid need for "Invariant." prefix.
-  private final double prob_is_gt(double x, double goal) {
-    return Invariant.prob_is_gt(x, goal);
+  private final double prob_is_ge(double x, double goal) {
+    return Invariant.prob_is_ge(x, goal);
   }
   private final double prob_and(double p1, double p2) {
     return Invariant.prob_and(p1, p2);
@@ -161,7 +161,8 @@ public class LowerBoundCore  implements java.io.Serializable {
     /// Compute value "a" from above.
     // This value is 0 if enough samples have been seen, 1 if only 1 sample
     // has been seen, otherwides grades between
-    double bound_samples_prob = prob_is_gt(num_min1 , required_samples_at_bound);
+    double bound_samples_prob = prob_is_ge(num_min1 , required_samples_at_bound);
+    utilMDE.Assert.assert(0 <= bound_samples_prob && bound_samples_prob <= 1, "bad bound_samples_prob = " + bound_samples_prob);
 
     long modulus = calc_modulus();
 
@@ -176,7 +177,7 @@ public class LowerBoundCore  implements java.io.Serializable {
     double avg_samples_per_val = calc_avg_samples_per_val(modulus, range);
 
     // Value "c" from above
-    double trunc_prob = prob_is_gt(num_min1 , 5*avg_samples_per_val);
+    double trunc_prob = prob_is_ge(num_min1 , 5*avg_samples_per_val);
 
     // Value "d" from above
     boolean unif_mod_OK = (( (min3  - min2 ) == modulus)
@@ -184,9 +185,9 @@ public class LowerBoundCore  implements java.io.Serializable {
     double unif_prob = 1;
     if (unif_mod_OK) {
       double half_avg_samp = avg_samples_per_val/2;
-      double unif_prob_1 = prob_is_gt(num_min1 , half_avg_samp);
-      double unif_prob_2 = prob_is_gt(num_min2 , half_avg_samp);
-      double unif_prob_3 = prob_is_gt(num_min3 , half_avg_samp);
+      double unif_prob_1 = prob_is_ge(num_min1 , half_avg_samp);
+      double unif_prob_2 = prob_is_ge(num_min2 , half_avg_samp);
+      double unif_prob_3 = prob_is_ge(num_min3 , half_avg_samp);
       unif_prob = Invariant.prob_and(unif_prob_1, unif_prob_2, unif_prob_3);
       // System.out.println("Unif_probs: " + unif_prob + " <-- " + unif_prob_1 + " " + unif_prob_2 + " " + unif_prob_3);
     }

@@ -188,8 +188,8 @@ public class LOWERBOUNDCORE implements java.io.Serializable {
   }
 
   // Convenience methods; avoid need for "Invariant." prefix.
-  private final double prob_is_gt(double x, double goal) {
-    return Invariant.prob_is_gt(x, goal);
+  private final double prob_is_ge(double x, double goal) {
+    return Invariant.prob_is_ge(x, goal);
   }
   private final double prob_and(double p1, double p2) {
     return Invariant.prob_and(p1, p2);
@@ -219,7 +219,7 @@ public class LOWERBOUNDCORE implements java.io.Serializable {
     /// Compute value "a" from above.
     // This value is 0 if enough samples have been seen, 1 if only 1 sample
     // has been seen, otherwides grades between
-    double bound_samples_prob = prob_is_gt(NUM_MIN1, required_samples_at_bound);
+    double bound_samples_prob = prob_is_ge(NUM_MIN1, required_samples_at_bound);
 
     long modulus = calc_modulus();
 
@@ -234,7 +234,7 @@ public class LOWERBOUNDCORE implements java.io.Serializable {
     double avg_samples_per_val = calc_avg_samples_per_val(modulus, range);
 
     // Value "c" from above
-    double trunc_prob = prob_is_gt(NUM_MIN1, 5*avg_samples_per_val);
+    double trunc_prob = prob_is_ge(NUM_MIN1, 5*avg_samples_per_val);
 
     // Value "d" from above
     boolean unif_mod_OK = ((SIGNADJUST(MIN3 - MIN2) == modulus)
@@ -242,9 +242,9 @@ public class LOWERBOUNDCORE implements java.io.Serializable {
     double unif_prob = 1;
     if (unif_mod_OK) {
       double half_avg_samp = avg_samples_per_val/2;
-      double unif_prob_1 = prob_is_gt(NUM_MIN1, half_avg_samp);
-      double unif_prob_2 = prob_is_gt(NUM_MIN2, half_avg_samp);
-      double unif_prob_3 = prob_is_gt(NUM_MIN3, half_avg_samp);
+      double unif_prob_1 = prob_is_ge(NUM_MIN1, half_avg_samp);
+      double unif_prob_2 = prob_is_ge(NUM_MIN2, half_avg_samp);
+      double unif_prob_3 = prob_is_ge(NUM_MIN3, half_avg_samp);
       unif_prob = Invariant.prob_and(unif_prob_1, unif_prob_2, unif_prob_3);
       // System.out.println("Unif_probs: " + unif_prob + " <-- " + unif_prob_1 + " " + unif_prob_2 + " " + unif_prob_3);
     }
