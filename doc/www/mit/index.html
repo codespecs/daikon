@@ -102,26 +102,21 @@ taken, but possibly available ("ping" fails):
   garlic
 -->
 
-You should perform your work on one of these client machines:  
-  beet,
-  cassava,
-  daikon,
-  manioc,
-  meoptiplex,
-  potato,
-  scallion,
-  shallot,
-  turnip,
-  yam.
+You should most likely perform your work on one of these client machines:  
+  beet, daikon, manioc, turnip,
+  scallion, yam,
+  shallot, cassava, potato,
+  meoptiplex.
 All of the client machines use the
 geyer.lcs.mit.edu (also known as pag.lcs.mit.edu) filesystem, which has
 plenty of disk space and direct access to the main CVS repository and
 precompiled binaries.  (You should not work on geyer itself, which is a
-file server, mail server, etc.  When possible, avoid running
-extraordinarily intensive jobs on a machine that someone else is
-currently using.)
-You are also welcome to work from elsewhere if you
-prefer.  Several of the client machines are in room 413, to which you
+file server, mail server, etc.  It is polite to avoid running
+compute-intensive jobs on a machine that someone else is currently using;
+for instance, if you have your ssh-agent credentials set up, you can find
+out which machines are not currently in use via
+<tt>~mernst/bin/share/pagdo uptime</tt> or <tt>~mernst/bin/share/pagdo
+myxloads</tt>.)  Several of the client machines are in room 413, to which you
 should obtain a key (get the required form from Neena Lyall in room 523);
 or, you can use them remotely.
 <p>
@@ -278,17 +273,24 @@ The following commands create and populate the
 <pre>
     mkdir ~/research
     cd ~/research
-    cvs -d /g4/projects/invariants/.CVS co invariants
-    chgrp -R invariants invariants
     chmod +rx ~ ~/research
-    chmod -R g+r invariants
-    chmod g+x `find invariants -type d -print`
+    cvs -d /g4/projects/invariants/.CVS co invariants
+    cvs update
     cd invariants
+    chgrp -R invariants .
+    chmod -R g+r .
+    chmod g+x `find . -type d -print`
+    cd ~research/invariants
     make setup-v2-and-v3
+    make use-ver2
     make
 </pre>
-(This ensures that you use Daikon version 2, rather than
-the experimental version 3.)
+(The <tt>make use-ver2</tt> line ensures that you use Daikon version
+2, rather than the experimental version 3.)
+<p>
+
+Before trying to compile (via <tt>make</tt> in any directory under
+<tt>$inv/java</tt>, log out and log back in, to set up your environment.
 <p>
 
 Optionally, you may check out a copy of the <tt>dfej</tt> directory.
@@ -301,6 +303,12 @@ use this command:
     cvs -d /g4/projects/invariants/.CVS co dfej
 </pre>
 <p>
+
+You may also want the <tt>papers</tt> directory
+<pre>
+    cd ~/research/invariants
+    cvs -d /g4/projects/invariants/.CVS co papers
+</pre>
 
 
 <h4><a name="remote-cvs"></a>Remote CVS</h4>
@@ -327,9 +335,10 @@ The key commands are:
   <dt><tt>cvs update -d</tt>
   <dd>update your version of the files from the repository
   <dt><tt>cvs diff</tt>
-  <dd>show difference between your version and the repository
+  <dd>show difference between your version and the repository (at the time
+      you last updated)
   <dt><tt>cvs add <i>FILENAME ...</i></tt>
-  <dd>add a file to the repository (must also commit it)
+  <dd>add a file to the repository (you must also commit it)
   <dt><tt>cvs commit <i>[FILENAME ...]</i></tt>
   <dd>put your version of the file in the repository; don't forget to
       include a descriptive message regarding what changed

@@ -44,6 +44,9 @@ cp -pf /g2/users/mernst/research/invariants/doc/www/mit/.cvsrc .
 echo "" >> .emacs
 echo "" >> .emacs
 cat /g2/users/mernst/research/invariants/doc/www/mit/.emacs >> .emacs
+chown <em>username</em> .cshrc .cvsrc .emacs
+chgrp <em>username</em> .cshrc .cvsrc .emacs
+echo "Set up email forwarding to Athena"
 echo <em>username</em>@mit.edu > .forward
 chown <em>username</em> .cshrc .cvsrc .emacs .forward
 chgrp <em>username</em> .cshrc .cvsrc .emacs .forward

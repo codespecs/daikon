@@ -64,7 +64,10 @@ texi-clean:
 dist:
 	cd .. && $(MAKE) dist
 
-# This doesn't work, because "www" is an (existing) directory; but go to
-# the subdirectory and run the rule from there.
+# "www" target doesn't work, because "www" is an (existing) directory; but
+# go to the subdirectory and run the rule from there.
 # www:
 # 	cd .. && $(MAKE) www
+
+www-dist:
+	cd .. && $(MAKE) www
