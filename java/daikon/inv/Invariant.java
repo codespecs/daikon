@@ -478,7 +478,7 @@ public abstract class Invariant
                   // This can be expensive, so comment out.
                   // , getClass().getName() + ": " + repr()
                   );
-    if (0) {
+    if (false) {
       // getProbability fails unless dkconfig_use_confidence is false
       boolean old_use_conf = Invariant.dkconfig_use_confidence;
       Invariant.dkconfig_use_confidence = false;
