@@ -99,9 +99,9 @@ for my $file (@ARGV) {
   my @sources = grep(s|\# merged/(.*)\n|$invdir/tests/sources/$1|, <SOURCE>);
   close(SOURCE);
 
-  my ($loc, $ncnbloc);
+  my ($loc, $ncnbloc) = (0, 0);
   for my $one_javafile (@sources) {
-    # Line of code
+    # Lines of code
     my $loc_command = "cat $one_javafile | wc -l";
     $loc += `$loc_command`;
     # Non-comment, non-blank lines of code
