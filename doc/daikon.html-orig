@@ -540,7 +540,7 @@ COMPILE and CXXCOMPILE lines of <tt>src/Makefile</tt>.  (This should not be
 necessary any longer, as <tt>platform.h</tt> includes the definition.)
 <p>
 
-<h3><a name="help-dfej-compile">Problems running dfej</a></h3>
+<h3><a name="help-dfej-run">Problems running dfej</a></h3>
 
 If you get an error like
 <pre>
@@ -554,9 +554,26 @@ then you need to <a href="#rt.jar_on_classpath">add <tt>rt.jar</tt> to your
 CLASSPATH</a>.
 <p>
 
+dfej does not handle anonymous classes like that created by the expression
+<pre>
+  new ItemListener() {
+      public void itemStateChanged( ItemEvent evt ) {
+	 ...
+      }
+  }
+</pre>
+For now, the workaround is to run dfej on all files except
+AspectTraverseComboBox.java and Menus.java.  (I haven't tested the dfej
+output, however.)
+<p>
+
 
 
 <h2><a name="problems-running-instrumented"></a>Problems running instrumented code</h2>
+
+
+<h2><a name="problems-running-daikon"></a>Problems running Daikon</h2>
+
 
 
 <h2><a name="other-problems"></a>Other problems</h2>
