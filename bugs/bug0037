@@ -4,7 +4,7 @@ Cc:           Jeremy <mistere>
 Tool:         dfej
 Summary:      dfej should stop when given unrecognized command-line option
 Severity:     RFE
-Status:       Fixed
+Status:       Closed
 Reproducible: Yes
 Description:
 
@@ -15,7 +15,10 @@ are easy to miss given the plethora of output.
 
 --
 $Log$
-Revision 1.3  2002-04-05 16:36:28  adonovan
+Revision 1.4  2002-04-05 22:54:35  mistere
+changed bug0037
+
+Revision 1.3  2002/04/05 16:36:28  adonovan
 changed bug0037
 
 Revision 1.2  2002/04/03 20:18:14  mistere
