@@ -4,12 +4,13 @@ import junit.framework.*;
 import daikon.*;
 import daikon.inv.unary.sequence.*;
 import utilMDE.*;
+import daikon.test.Common;
 
 public class OneOfSequenceTester extends TestCase {
 
-  private VarInfo[] vars = { newHashcodeArrayVarInfo("x"),
-                             newIntArrayVarInfo("y") };
-  private PptTopLevel ppt = new PptTopLevel("Foo.Baa(int):::ENTER", vars);
+  private VarInfo[] vars = { Common.makeHashcodeArrayVarInfo("x"),
+                             Common.makeIntArrayVarInfo("y") };
+  private PptTopLevel ppt = Common.makePptTopLevel("Foo.Baa(int):::ENTER", vars);
   private PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
   private PptSlice slicey = new PptSlice1(ppt, new VarInfo[] {vars[1]});
 
@@ -18,26 +19,6 @@ public class OneOfSequenceTester extends TestCase {
   public static void main(String[] args) {
     daikon.Logger.setupLogs (daikon.Logger.INFO);
     junit.textui.TestRunner.run(new TestSuite(OneOfSequenceTester.class));
-  }
-
-  public static VarInfo newIntArrayVarInfo(String name) {
-    VarInfo result = new VarInfo(VarInfoName.parse(name),
-                                 ProglangType.INT_ARRAY,
-                                 ProglangType.INT_ARRAY,
-                                 null); // null Comparability
-    // VarInfo.isCanonical() insists that equal_to be non-null.
-    // result.equal_to = result; // [INCR] // not relevant for v3
-    return result;
-  }
-
-  public static VarInfo newHashcodeArrayVarInfo(String name) {
-    VarInfo result = new VarInfo(VarInfoName.parse(name),
-                                 ProglangType.HASHCODE_ARRAY,
-                                 ProglangType.HASHCODE_ARRAY,
-                                 null); // null Comparability
-    // VarInfo.isCanonical() insists that equal_to be non-null.
-    // result.equal_to = result; // [INCR] // not relevant for v3
-    return result;
   }
 
   public OneOfSequenceTester(String name) {

@@ -3,11 +3,12 @@ package daikon.test.inv.unary.scalar;
 import junit.framework.*;
 import daikon.*;
 import daikon.inv.unary.scalar.*;
+import daikon.test.Common;
 
 public class OneOfScalarTester extends TestCase {
 
-  private VarInfo[] vars = { newHashcodeVarInfo("x"), newIntVarInfo("y") };
-  private PptTopLevel ppt = new PptTopLevel("Foo.Baa(int):::ENTER", vars);
+  private VarInfo[] vars = { Common.makeHashcodeVarInfo("x"), Common.makeIntVarInfo("y") };
+  private PptTopLevel ppt = Common.makePptTopLevel("Foo.Baa(int):::ENTER", vars);
   private PptSlice slicex = new PptSlice1(ppt, new VarInfo[] {vars[0]});
   private PptSlice slicey = new PptSlice1(ppt, new VarInfo[] {vars[1]});
 
@@ -16,26 +17,6 @@ public class OneOfScalarTester extends TestCase {
   public static void main(String[] args) {
     daikon.Logger.setupLogs (daikon.Logger.INFO);
     junit.textui.TestRunner.run(new TestSuite(OneOfScalarTester.class));
-  }
-
-  public static VarInfo newIntVarInfo(String name) {
-    VarInfo result = new VarInfo(VarInfoName.parse(name),
-                                 ProglangType.INT,
-                                 ProglangType.INT,
-                                 null); // null Comparability
-    // VarInfo.isCanonical() insists that equal_to be non-null.
-    // result.equal_to = result; // [INCR] // not relevant for v3
-    return result;
-  }
-
-  public static VarInfo newHashcodeVarInfo(String name) {
-    VarInfo result = new VarInfo(VarInfoName.parse(name),
-                                 ProglangType.HASHCODE,
-                                 ProglangType.HASHCODE,
-                                 null); // null Comparability
-    // VarInfo.isCanonical() insists that equal_to be non-null.
-    // result.equal_to = result; // [INCR] // not relevant for v3
-    return result;
   }
 
   public OneOfScalarTester(String name) {

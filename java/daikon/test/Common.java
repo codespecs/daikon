@@ -17,6 +17,31 @@ public class Common
 		       null); // null Comparability
   }
 
+  public static VarInfo makeHashcodeVarInfo(String name)
+  {
+    return new VarInfo(VarInfoName.parse(name),
+		       ProglangType.HASHCODE,
+		       ProglangType.HASHCODE,
+		       null); // null Comparability
+  }
+
+
+  public static VarInfo makeIntArrayVarInfo(String name)
+  {
+    return new VarInfo(VarInfoName.parse(name),
+		       ProglangType.INT_ARRAY,
+		       ProglangType.INT_ARRAY,
+		       null); // null Comparability
+  }
+
+  public static VarInfo makeHashcodeArrayVarInfo(String name)
+  {
+    return new VarInfo(VarInfoName.parse(name),
+		       ProglangType.HASHCODE_ARRAY,
+		       ProglangType.HASHCODE_ARRAY,
+		       null); // null Comparability
+  }
+
   public static PptTopLevel makePptTopLevel(String pptname, VarInfo[] vars)
   {
     PptTopLevel ppt = new PptTopLevel(pptname, vars);
