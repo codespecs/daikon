@@ -1,54 +1,102 @@
 package daikon.inv.binary;
 
+import daikon.*;
 import daikon.inv.*;
-import daikon.PptSlice;
-import daikon.inv.*;
-import utilMDE.Assert;
-import utilMDE.ArraysMDE;
 import daikon.inv.InvariantStatus;
 
-/**
- * Exists simply to provide a more intelligent resusurrect_done method.
- **/
-public abstract class BinaryInvariant
-  extends Invariant
-{
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020122L;
+import java.lang.reflect.*;
+import java.util.*;
 
-  /** Pass-through */
-  protected BinaryInvariant(PptSlice ppt) {
+/**
+ * Provides a class that defines the functions that must exist
+ * for each two variable invariant
+ **/
+public abstract class BinaryInvariant extends Invariant {
+
+  protected BinaryInvariant (PptSlice ppt) {
     super(ppt);
   }
 
-  // Check if swap occurred and call one of the other two methods
-  protected Invariant resurrect_done(int[] permutation) {
-    Assert.assertTrue(permutation.length == 2);
-    // Assert.assertTrue(ArraysMDE.fn_is_permutation(permutation));
-    if (permutation[0] == 1)
-      return resurrect_done_swapped();
-    else
-      return resurrect_done_unswapped();
+  public abstract InvariantStatus check(Object val1, Object val2,
+                                        int mod_index, int count);
+
+  public abstract InvariantStatus add(Object val1, Object val2, int mod_index,
+                                      int count);
+
+  /**
+   * Returns true if the binary function is symmetric (x,y ==> y,x)
+   * Subclasses that are symmetric should override
+   */
+  public boolean is_symmetric() {
+    return (false);
   }
 
   /**
-   * Do resurrect_done knowing that variables were swapped.
-   **/
-  abstract protected Invariant resurrect_done_swapped();
-
-   /**
-   * Subclasses can override in the rare cases they need to fix things
-   * even when not swapped
-   **/
-  protected Invariant resurrect_done_unswapped() {
-    // do nothing
-    return this;
+   * Returns the swap setting for invariants that support a swap boolean
+   * to handle different permutations.  This version should never
+   * be called
+   */
+  public boolean get_swap() {
+    throw new Error ("swap called in BinaryInvariant");
   }
 
-  public abstract InvariantStatus check(Object val1, Object val2, int mod_index, int count);
+  /**
+   * Searches for the specified binary invariant (by class) in the
+   * specified slice.  Returns null if the invariant is not found
+   */
+  protected Invariant find (Class cls, VarInfo v1, VarInfo v2) {
 
-  public abstract InvariantStatus add(Object val1, Object val2, int mod_index, int count);
+    // find the slice containing v1 and v2
+    boolean fswap = false;
+    PptSlice ppt = null;
+    if (v1.varinfo_index > v2.varinfo_index) {
+      fswap = true;
+      ppt = this.ppt.parent.findSlice (v2, v1);
+    } else
+      ppt = this.ppt.parent.findSlice (v1, v2);
+    if (ppt == null)
+      return null;
+
+    // The following is complicated because we are inconsistent in
+    // how we handle permutations in binary invariants.  Some
+    // invariants (notably the comparison invariants <=, >=, >, etc)
+    // use only one permutation, but have two different invariants (eg,
+    // < and >) to account for both orders.  Other invariants (notably
+    // most of those in Numeric.java.jpp) keep a swap boolean that indicates
+    // the order of their arguments.  Still others (such as == and
+    // BitwiseComplement) are symmetric and need only track one invariant
+    // for each argument pair.
+    //
+    // The classes with multiple invariants, must provide a static
+    // method named swap_class that provides the converse invariant.
+    // Symmetric invariants return true from is_symmetric().  Others
+    // must support the get_swap() method that returns the current
+    // swap setting.
+
+    // If the specified invariant has a different class when swapped
+    // find that class.
+    boolean swap_class = true;
+    try {
+      Method swap_method = cls.getMethod ("swap_class", null);
+      if (fswap)
+        cls = (Class) swap_method.invoke (null, null);
+    } catch (Exception e) {
+      swap_class = false;
+    }
+
+    // Loop through each invariant, looking for the matching class
+    for (Iterator i = ppt.invs.iterator(); i.hasNext(); ) {
+      BinaryInvariant inv = (BinaryInvariant) i.next();
+      if (inv.getClass() == cls) {
+        if (inv.is_symmetric() || swap_class)
+          return (inv);
+        else if (inv.get_swap() == fswap)
+          return (inv);
+      }
+    }
+
+    return (null);
+  }
+
 
 }
