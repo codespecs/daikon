@@ -210,19 +210,20 @@ public abstract class Ppt implements java.io.Serializable {
     return varNames;
   }
 
-  public VarInfo findVar(String name) {
-    return findVar_interned(name.intern());
-  }
-
-  public VarInfo findVar_interned(String name) {
-    Assert.assert(Intern.isInterned(name));
+  public VarInfo findVar(VarInfoName name) {
     for (int i=0; i<var_infos.length; i++) {
-      if (var_infos[i].name == name)
+      if (name.equals(var_infos[i].name))
         return var_infos[i];
     }
     return null;
   }
 
+  /**
+   * @deprecated June 15, 2001
+   **/
+    public VarInfo findVar(String name) {
+      return findVar(VarInfoName.parse(name));
+    }
 
   // Argument is a vector of PptTopLevel objects.
   // Result does NOT include static constants, as it will be used to
@@ -246,7 +247,6 @@ public abstract class Ppt implements java.io.Serializable {
       // Remove from result any variables that do not occur in vars
       for (int rindex=result.size()-1; rindex>=0; rindex--) {
         VarInfo rvar = (VarInfo) result.elementAt(rindex);
-        String rname = rvar.name;
         boolean found = false;
         for (int vindex=0; vindex<vars.length; vindex++) {
           VarInfo vvar = vars[vindex];
