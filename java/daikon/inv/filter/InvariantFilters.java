@@ -52,6 +52,7 @@ public class InvariantFilters {
       addPropertyFilter( new UnmodifiedVariableEqualityFilter());
     }
 
+    addPropertyFilter( new SuppressionFilter());
     addPropertyFilter( new NonCanonicalVariablesFilter());
     addPropertyFilter( new DerivedParameterFilter());
     addPropertyFilter( new UnjustifiedFilter());

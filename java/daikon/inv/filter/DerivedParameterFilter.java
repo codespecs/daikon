@@ -6,6 +6,10 @@ import daikon.VarInfo;
 import daikon.PrintInvariants;
 import daikon.VarInfoAux;
 
+/**
+ * Filter for not printing an Invariant if its VarInfos return
+ * isDerivedParameterAndUninteresting == true.
+ **/
 public class DerivedParameterFilter extends InvariantFilter {
   public String getDescription() {
     return "Suppress derived parameters that aren't interesting";
@@ -37,14 +41,6 @@ public class DerivedParameterFilter extends InvariantFilter {
         // ppt has to be a PptSlice, not a PptTopLevel
 	PrintInvariants.debugFiltering.debug("\t\tconsidering DPF for " + vi.name.name() + "\n");
 	if (vi.isDerivedParamAndUninteresting()) {
-	  if (IsEqualityComparison.it.accept( inv )) {
-	    Comparison comp = (Comparison)inv;
-	    VarInfo var1 = comp.var1();
-	    VarInfo var2 = comp.var2();
-	    boolean vars_are_same = var1.name.applyPrestate().equals(var2.name) || var2.name.applyPrestate().equals(var1.name);
-	    PrintInvariants.debugFiltering.debug("\t\t\tvars are same? " + String.valueOf(vars_are_same) + "\n");
-	    if (vars_are_same) return true;
-	  }
 	  return true;
         }
       }
