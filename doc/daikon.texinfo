@@ -286,6 +286,7 @@ Enhancing conditional invariant detection
 
 * Static analysis for splitters::  
 * Cluster analysis for splitters::  
+* Random selection for splitters::  
 
 Tools
 
@@ -5253,6 +5254,7 @@ automatically create splitter info files for use by Daikon.
 @menu
 * Static analysis for splitters::  
 * Cluster analysis for splitters::  
+* Random selection for splitters::  
 @end menu
 
 @node   Static analysis for splitters, Cluster analysis for splitters, Enhancing conditional invariant detection, Enhancing conditional invariant detection
@@ -5318,7 +5320,7 @@ Encountered: "#" (35), after : ""
 @noindent
 then you forgot to run cpp before running CreateSpinfoC@.
 
-@node   Cluster analysis for splitters,  , Static analysis for splitters, Enhancing conditional invariant detection
+@node   Cluster analysis for splitters, Random selection for splitters, Static analysis for splitters, Enhancing conditional invariant detection
 @subsection Cluster analysis for splitters
 
 @cindex splitting conditions, cluster analysis
@@ -5371,6 +5373,55 @@ hierarchical clustering tools are provided in the daikon
 distribution.  The xmeans code and executable are publicly available at
 @uref{http://www.cs.cmu.edu/~dpelleg/kmeans.html} (fill in the license
 form and mail it in).
+
+@node   Random selection for splitters,  , Cluster analysis for splitters, Enhancing conditional invariant detection
+@subsection Random selection for splitters
+
+@cindex splitting conditions, random selection
+@cindex random selection for splitters
+@cindex TraceSelect tool
+
+Random selection can create representative samples of a data set with
+the added benefit of finding conditional properties and eliminating
+outliers.  Given traced data, the TraceSelect tool creates several
+small subsets of the data by randomly selecting parts of the original
+trace file.  Any invariant that is discovered in the smaller samples but
+not found over the entire data is a conditional invariant.
+
+To find splitting conditions using random selection, run the
+@command{daikon.tools.TraceSelect} program in the following way:
+@example
+java daikon.tools.TraceSelect num_reps sample_size [OPTIONS]
+dtrace_file decls_files(s) [DAIKON OPTIONS]
+@end example
+num_reps is the number of subsets to create, and sample_size is the
+number of invocations to collect for each method.
+
+The DAIKON OPTIONS are the same options that can be provided to the
+daikon.Daikon program.
+
+The options are:
+@table @option
+
+@item -NOCLEAN
+Don't delete the temporary trace samples created by the random
+selection process. This can help for debugging or for using the tool
+solely to create trace samples instead of calculating invariants over
+the samples.
+
+@item -INCLUDE_UNRETURNED
+Allows random selection to choose method invocations that entered the
+method successfully but did not exit normally; either from a thrown
+Exception or abnormal termination. 
+
+@item -DO_DIFFS
+Creates an spinfo file for generating conditional invariants and
+implications by reporting the invariants that appear in at least one
+of the samples but not over the entire data set.
+
+
+@end table
+
 
 
 @node    Tools, Troubleshooting, Enhancing Daikon output, Top
