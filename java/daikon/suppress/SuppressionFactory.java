@@ -38,6 +38,11 @@ public abstract class SuppressionFactory implements Serializable {
     Logger.getLogger ("daikon.suppress.SuppresionFactory");
 
 
+  // The default gives the hashcode, which is bad for comparisons.
+  public String toString() {
+    return this.getClass().getName();
+  }
+
 
   /**
    * Check whether this type of suppression applies to a given

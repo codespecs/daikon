@@ -748,7 +748,8 @@ public abstract class Invariant
   public String repr_prob() {
     return repr()
       + "; probability = " + getProbability()
-      + "; confidence = " + getConfidence();
+      // + "; confidence = " + getConfidence()
+      ;
   }
 
   /**
