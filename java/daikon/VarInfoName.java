@@ -1281,6 +1281,9 @@ public abstract class VarInfoName
      * bound variables).
      **/
     public static String[] format_simplify(VarInfoName[] roots) {
+      return format_simplify(roots, false);
+    }
+    public static String[] format_simplify(VarInfoName[] roots, boolean elementwise) {
       Assert.assert(roots != null);
 
       QuantifyReturn qret = quantify(roots);
@@ -1292,6 +1295,7 @@ public abstract class VarInfoName
 	// "i j ..."
 	int_list = new StringBuffer();
 	// "(AND (<= ai i) (<= i bi) (<= aj j) (<= j bj) ...)"
+	// if elementwise, also insert "(EQ (- i ai) (- j aj)) ..."
 	conditions = new StringBuffer();
 	for (int i=0; i < qret.bound_vars.size(); i++) {
 	  VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
@@ -1300,15 +1304,14 @@ public abstract class VarInfoName
 	    int_list.append(" ");
 	  }
 	  int_list.append(idx.simplify_name());
-	  conditions.append("(<= ");
-	  conditions.append(low.simplify_name());
-	  conditions.append(" ");
-	  conditions.append(idx.simplify_name());
-	  conditions.append(") (<= ");
-	  conditions.append(idx.simplify_name());
-	  conditions.append(" ");
-	  conditions.append(high.simplify_name());
-	  conditions.append(")");
+	  conditions.append( "(<= " + low.simplify_name() + " " + idx.simplify_name() + ")");
+	  conditions.append(" (<= " + idx.simplify_name() + " " + high.simplify_name() + ")");
+	  if (elementwise && (i >= 1)) {
+	    VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
+	    VarInfoName _idx = _boundv[0], _low = _boundv[1];
+	    conditions.append(" (EQ (- " + _idx.simplify_name() + " " + _low.simplify_name() + ")");
+	    conditions.append(    " (- " + idx.simplify_name() + " " + low.simplify_name() + "))");
+	  }
 	}
       }
       result[0] = "(FORALL (" + int_list + ") (IMPLIES (AND " + conditions + ") ";
