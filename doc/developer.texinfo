@@ -36,7 +36,7 @@
 @c The following two commands start the copyright page.
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1998-2003
+Copyright @copyright{} 1998-2005
 @c Copyright @copyright{} 1998-2001 Michael Ernst
 @end titlepage
 
@@ -153,7 +153,7 @@ Analyzing historical versions of Daikon
 
 This is the developer manual for the 
 @uref{http://pag.csail.mit.edu/daikon/, ,Daikon invariant detector}.
-For information about Daikon, see its user manual.
+For information about using Daikon, see its user manual.
 This manual is intended for those who are already familiar with the use
 of Daikon, but wish to customize or extend it.
 
@@ -186,7 +186,7 @@ This chapter describes how to customize or modify Daikon.
 @section Compiling Daikon
 @cindex compiling daikon
 
-To compile Daikon, type @command{make} in any directory under
+To compile Daikon, type @samp{make} in any directory under
 @file{daikon/java/}.  The distribution includes compiled
 @file{.class} files, so you do not need to compile them yourself unless
 you make changes.
@@ -198,7 +198,7 @@ In order to compile Daikon, you need the C preprocessor
 @command{cpp}, which is used to convert each @file{.jpp} file in the
 distribution into multiple @file{.java} files, which are then compiled.
 If you do not have @command{cpp} (or @command{gcc}, which can emulate
-@command{cpp} via @command{gcc -E}), you may run @command{make avoid-jpp}, in
+@command{cpp} via @samp{gcc -E}), you may run @samp{make avoid-jpp}, in
 which case changes to @code{.jpp} files will not be reflected in the
 @file{.java} files or the compiled @file{.class} files.  (The purpose
 of the @file{.jpp} files is to avoid code duplication by placing
@@ -211,7 +211,7 @@ include that common code.)
 You may wish to create a @file{Makefile.user} file in the @file{daikon/}
 directory to set your Java compiler.  For instance, it might contain
 @example
-  JAVAC ?= jikes -g +E +F
+JAVAC ?= jikes -g +E +F
 @end example
 
 For more information about compiling Daikon, see the comments in the Makefiles.
@@ -219,6 +219,9 @@ For more information about compiling Daikon, see the comments in the Makefiles.
 
 @node    New invariants, New derived variables, Compiling Daikon, Extending Daikon
 @section New invariants
+
+@cindex new invariants
+@cindex adding new invariants
 
 You can easily write your own invariants and have Daikon check them,
 in addition to all the other invariants that are already part of Daikon.
@@ -237,24 +240,24 @@ Daikon.
 
 A Java class defining an invariant is a concrete subclass of one of
 the following abstract classes:
-@table @samp
+@table @code
 @item SingleScalar
-for invariants over a single numeric (scalar) variable,
+Invariants over a single numeric (scalar) variable,
 such as ``x != 0''.
 @item TwoScalar
-for invariants over two numeric variables, such as ``y
+Invariants over two numeric variables, such as ``y
 = abs(x)''.
 @item ThreeScalar
-for invariants over three numeric variables, such as
+Invariants over three numeric variables, such as
 ``z = ax + by + c''.
 @item SingleSequence
-for invariants over one sequence (array)
+Invariants over one sequence (array)
 variable, such as ``a[] contains no duplicates''.
 @item TwoSequence
-for invariants over two sequences, such as ``a[] is a
+Invariants over two sequences, such as ``a[] is a
 subsequence of b[]''.
 @item SequenceScalar
-for invariants over a scalar and a sequence, such
+Invariants over a scalar and a sequence, such
 as ``x is a member of a[]''.
 @end table
 @noindent
@@ -267,36 +270,37 @@ sample falsifies the invariant, the invariant destroys itself.  All
 remaining invariants at the end of the program run can be reported as
 likely to be true.
 
-The key methods of the new invariant are
-@table @samp
-@item @r{protected InvName(PptSlice ppt)}
-Creates a new invariant object.  Should only be called from instantiate_dyn.
+The key methods of the new invariant class @var{InvName} are
+@table @code
+@item protected @var{InvName}(PptSlice ppt)
+Constructor for class @var{InvName}.  Should only be called from 
+@code{instantiate_dyn}.
 Its typical implementation is
 @example
-  super(ppt);
+super(ppt);
 @end example
 
 @item protected Invariant instantiate_dyn (PptSlice slice)
 Returns an invariant of this class on the specified slice.  Its implementation
 is almost always
 @example
-  return new InvName(slice);
+return new InvName(slice);
 @end example
 
-@item public static InvName get_proto()
+@item public static @var{InvName} get_proto()
 Returns the prototype invariant used to create other invariants.  Its
 typical implementation is
 @example
-     if (proto == null)
-      proto = new InvName (null);
-    return (proto);
+if (proto == null)
+  proto = new InvName (null);
+return (proto);
 @end example
 
 @item public boolean enabled() 
 Returns whether or not this invariant is enabled.  Its implementation is
 almost always
 @example
-  return dkconfig_enabled;
+return dkconfig_enabled;
 @end example
 
 @item public boolean instantiate_ok (VarInfo[] vis)
@@ -304,57 +308,66 @@ Returns whether or not it makes sense to instantiate this invariant
 over the specified variables.  If not present, the invariant is
 created over all comparable variables of the correct types.
 
-@item check_modified
-presents a tuple of values to the invariant.  The @samp{count} variable
-indicates how many samples have this value.  For example, three calls to
-@samp{check_modified} with a @samp{count} parameter of 1 is equivalent to
-one call to @samp{check_modified} with a @samp{count} parameter of 3.
+@item public InvariantStatus check_modified (..., int count)
+Presents a tuple of values to the invariant; these are the first 
+N arguments, which have appropriate types for the particular invariant.  
+The @code{count} argument indicates how many samples have this value.  
+For example, three calls to
+@code{check_modified} with a @code{count} parameter of 1 is equivalent to
+one call to @code{check_modified} with a @code{count} parameter of 3.
 Returns whether or not the sample is consistent with the invariant.
 Does not change the state of the invariant.
 
-@item add_modified
-similar to @samp{check_modified} except that it can change the state
+@item public InvariantStatus add_modified (..., int count)
+Similar to @code{check_modified} except that it can change the state
 of the invariant if necessary.  If the invariant doesn't have any
-state, then simply calls @samp{check_modified}
+state, then simply calls @code{check_modified}.
 
-@item computeConfidence
-returns the probability that the observed data could not have happened by
+@item protected double computeConfidence ()
+Returns the probability that the observed data could not have happened by
 chance alone.  The result usually falls between 0 and 1, where 0 means
 the values seen so far certainly happened by chance and 1 means they
 could never have happened by chance.  The method may also return one of
-the following constants in the @samp{Invariant} class (see the class for
-documentation): @samp{CONFIDENCE_JUSTIFIED},
-@samp{CONFIDENCE_UNJUSTIFIED}, @samp{CONFIDENCE_NEVER}.
+the following constants in the @code{Invariant} class (see the class for
+documentation): @code{CONFIDENCE_JUSTIFIED},
+@code{CONFIDENCE_UNJUSTIFIED}, @code{CONFIDENCE_NEVER}.
 
 For example, suppose your new invariant has a 50% chance of being true
 by chance for each sample.  (``x is even'' is an example of such an
-invariant.)  Then a reasonable body for @samp{computeConfidence} would
+invariant.)  Then a reasonable body for @code{computeConfidence} would
 be
 @example
-  return 1 - Math.pow(.5, ppt.num_samples());
+return 1 - Math.pow(.5, ppt.num_samples());
 @end example
 @noindent
 If 5 values had been seen, then this implementation would return 31/32,
 which is the likelihood that all 5 values seen so far were even purely
 by chance.  Invariants are only printed if their probabilities are small
 enough (by default, less than .01).
-@item format
-returns a high-level printed representation of the
-invariant, for user output.  The @samp{repr} formatting routines
-produces low-level, detailed output for debugging.  When first writing
-an invariant, you can make @samp{repr}, @samp{format_esc}, and
-@samp{format_simplify} all simply call @samp{format}, then fix up the
-implementations later as needed.
+
+@item public String format ()
+@itemx public String repr ()
+@itemx public String format_using (OutputFormat format)
+Returns a high-level printed representation of the
+invariant, for user output.  @code{format} produces ``normal'' output, while
+the @samp{repr} formatting routine produces low-level, detailed output for 
+debugging.  When first writing
+an invariant, you can make @code{repr} and @code{format_using}
+simply call @code{format}, then fix up the
+implementations for the different ouput formats later as needed.
+See also @ref{New formatting for invariants}.
 @end table
 
-After the invariant is written, add a call to its @samp{get_proto}
-method in the @samp{Daikon.setup_proto_invs} method.
+After the invariant is written, add a call to its @code{get_proto}
+method in the @code{Daikon.setup_proto_invs} method.
 
 @node    New derived variables, New formatting for invariants, New invariants, Extending Daikon
 @section New derived variables
 
 @cindex derived variable
 @cindex variable, derived
+@cindex adding new derived variables
+@cindex new derived variables
 
 A derived variable is an expression that does not appear in the source
 code as a variable, but that Daikon treats as a variable for purposes
@@ -372,6 +385,8 @@ be written.  For now, see the derived variables that appear in
 @section New formatting for invariants
 
 @cindex output format, defining new
+@cindex new output formats
+@cindex adding new output formats
 
 Daikon can print invariants in five formats:  its native format, Java
 format, IOA format (for use with the IOA programming language), ESC
@@ -386,10 +401,10 @@ To support a new output format, you need to do three things:
 @c already has three such methods --- @samp{format()}, @samp{format_esc()},
 @c and @samp{format_simplify()} --- for you to crib from.
 Add a new static final field to the class
-daikon.inv.Invariant.OutputFormat, which acts as an enumeration.
+@code{daikon.inv.Invariant.OutputFormat}, which acts as an enumeration.
 @item
-Edit, in every subclass of @samp{Invariant}, the
-@samp{format_using} method to handle the new OutputFormat.
+Edit, in every subclass of @code{Invariant}, the
+@code{format_using} method to handle the new @code{OutputFormat}.
 @item
 Edit @file{PrintInvariants.java} and @file{Daikon.java}
 to enable selecting your new output format.
@@ -436,6 +451,9 @@ program point.
 
 @node    Example instrumented Java program, Instrumenting C programs, New front ends, New front ends
 @subsection Example instrumented Java program
+
+@cindex instrumenting Java programs
+@cindex Java programs, instrumenting
 
 This section gives an example of how an instrumenter for Java might
 work; other languages are analogous.
@@ -529,6 +547,9 @@ class Example @{
 @node    Instrumenting C programs,  , Example instrumented Java program, New front ends
 @subsection Instrumenting C programs
 
+@cindex C programs, instrumenting
+@cindex instrumenting C programs
+
 Daikon comes with two front ends for the C language:  Kvasir
 (@pxref{Kvasir,,,./daikon,Daikon User Manual}) and dfec
 (@pxref{dfec,,,./daikon,Daikon User Manual}).  Each has its limitations.
@@ -562,6 +583,12 @@ that the compiler places in the executable.
 The challenge for C programs is determining the values of variables at
 execution time:  for each variable, the front end must determine whether
 the variable's value is valid, and how big the value is.
+
+@cindex valid values
+@cindex invalid values
+@cindex nonsensical values
+@cindex uninitialized variables
+@cindex deallocated pointers
 
 A front end should print only variables that have @emph{valid} values.
 Examples of invalid values are variables that have not yet been
@@ -669,6 +696,10 @@ memory errors.
 @node New suppressors, System.exit, New front ends, Extending Daikon
 @section New suppressors
 
+@cindex adding new suppressors
+@cindex new suppressors
+@cindex suppressors, adding new
+
 As mentioned in @ref{Daikon internals}, one way to make Daikon more
 efficient, and to reduce clutter in output to the user, is to reduce the
 number of redundant invariants of various kinds.  This section describes
@@ -717,11 +748,11 @@ public NISuppressionSet get_ni_suppressions() @{
 @node    System.exit,  , New suppressors, Extending Daikon
 @section System.exit
 
-The Daikon codebase does not call @samp{System.exit()}, except in a
-dummy main method that catches @samp{TerminationMessage}, which is the
+The Daikon codebase does not call @code{System.exit()}, except in a
+dummy main method that catches @code{TerminationMessage}, which is the
 standard way that a component of Daikon requests the JVM to shut down.
 
-The reason for this is that calling @samp{System.exit()} is usually a
+The reason for this is that calling @code{System.exit()} is usually a
 bad idea.  It makes the class un-usable as a subroutine, because it
 might kill the calling program.  It can cause deadlock.  And it can
 leave data in an inconsistent state (for example, if the program was in
@@ -735,6 +766,8 @@ as well.)
 @node    Debugging Daikon, Daikon internals, Extending Daikon, Top
 @chapter Debugging Daikon
 
+@cindex debugging Daikon
+
 @menu
 * Track logging::               
 @end menu
@@ -744,12 +777,15 @@ Daikon.  Because Daikon processes large amounts of data, using
 a debugger can be difficult.  The following logging techniques provide
 alternatives to using a debugger.
 
-Daikon's logging routines are based on the java.util.logging utilities
+Daikon's logging routines are based on the @code{java.util.logging} utilities
 (built into Java 1.4 and later).
 
 
 @node Track logging,  , Debugging Daikon, Debugging Daikon
 @section Track logging
+
+@cindex logging
+@cindex track logging
 
 Often it is desirable to print information only about one or more specific 
 invariants.  This is distinct from general logging because it concentrates
@@ -775,15 +811,16 @@ These items are specified using the --track argument to Daikon.  Each of
 the the inputs to track logging can be specified in a single argument.
 The basic syntax is:
 @example
-    class|class|...<var,var,var>@@ppt
+ class|class|...<var,var,var>@@ppt
 @end example
 As shown, multiple class arguments can be specified separated by pipe
-symbols (|).  The variables are specified in angle brackets (<>) and
-the program point is preceded by an at sign (@@).  Each item is optional.
+symbols (@samp{|}).  The variables are specified in angle brackets (@samp{<>}) 
+and the program point is preceded by an at sign (@samp{@@}).  
+Each item is optional.
 For example:
 @example
-    IntEqual<x,y>@@makeEmpty()
-    LessThan|GreaterThan<return,orig(y)>@@EXIT99
+IntEqual<x,y>@@makeEmpty()
+LessThan|GreaterThan<return,orig(y)>@@EXIT99
 @end example
 Multiple --track switches can be specified. The class, program point,
 and each of the variables must match one of the specifications in order
@@ -804,12 +841,12 @@ sequence variables from sequence @code{this.theArray[]} and scalar
 argument would be:
 
 @example
-  SequenceScalarSubscriptFactory<x,this.theArray[]>@@DisjSets.find(int):::EXIT
+SequenceScalarSubscriptFactory<x,this.theArray[]>@@DisjSets.find(int):::EXIT
 @end example
 
 There are two configuration options that can customize the output.  The
-option @code{daikon.Debug.showTraceback} will output a stack trace on
-each log statement.  The option @code{daikon.Debug.logDetail} will cause
+option @option{daikon.Debug.showTraceback} will output a stack trace on
+each log statement.  The option @option{daikon.Debug.logDetail} will cause
 more detailed (and often voluminous) output to be printed.  For more
 information, @ref{Configuration options,,,./daikon,Daikon User Manual}.
 
@@ -819,9 +856,9 @@ information of interest (@pxref{Adding track logging}).
 This is covered in the next section.
 
 More detailed information can be found in the Javadoc for
-@uref{http://pag.csail.mit.edu/daikon/download/jdoc/daikon/Debug.html,daikon.Debug}
+@uref{http://pag.csail.mit.edu/daikon/download/jdoc/daikon/Debug.html,@code{daikon.Debug}}
 and
-@uref{http://pag.csail.mit.edu/daikon/download/jdoc/daikon/inv/Invariant.html,daikon.inv.Invariant}.
+@uref{http://pag.csail.mit.edu/daikon/download/jdoc/daikon/inv/Invariant.html,@code{daikon.inv.Invariant}}.
 
 @menu
 * Adding track logging::        
@@ -837,15 +874,16 @@ Track logging methods accept these parameters and a string to be printed.
 @file{Debug.java} implements the following basic log methods:
 
 @example
-    log (String)
-    log (Class, Ppt, String)
-    log (Class, Ppt, Varinfo[], String)
+log (String)
+log (Class, Ppt, String)
+log (Class, Ppt, Varinfo[], String)
 @end example
 
-The first uses the cached version of the Class, Ppt, and VarInfo that
+The first uses the cached version of the @code{Class}, @code{Ppt}, 
+and @code{VarInfo} that
 was provided in the constructor.  The second uses the specified
-variables and the VarInfo information from Ppt.  The third specifies
-each variable explicitly.
+variables and the @code{VarInfo} information from @code{Ppt}.  
+The third specifies each variable explicitly.
 
 When logging is not enabled, calling the logging functions can take a 
 significant amount of time (because the parameters need to be evaluated and
@@ -854,9 +892,9 @@ if logging is enabled.  It is recommended that code of the following form
 be used for efficiency:
 
 @example
-    if (Debug.logOn()) @{
-      Debug.log (getClass(), ppt, "Entering routine foo");
-    @}
+if (Debug.logOn()) @{
+  Debug.log (getClass(), ppt, "Entering routine foo");
+@}
 @end example
 
 Track logging also can work with other loggers.  Each of the logging
@@ -866,9 +904,9 @@ the class, ppt, and vars match.  If they don't match, the same
 information is logged via the specified logger.  For example:
 
 @example
-    if (Debug.logOn || logger.isLoggable (Level.FINE)) @{
-      Debug.log (logger, getClass(), ppt, "Entering routine foo");
-    @}
+if (Debug.logOn || logger.isLoggable (Level.FINE)) @{
+  Debug.log (logger, getClass(), ppt, "Entering routine foo");
+@}
 @end example
 
 The above will print if either the tracking information matches or if the
@@ -879,10 +917,10 @@ case the class name, ppt, and variable information are all taken from the
 invariant.  The available methods are:
 
 @example
-    logOn()
-    logDetail()
-    log (String)
-    log (Logger, String)
+logOn()
+logDetail()
+log (String)
+log (Logger, String)
 @end example
 
 These correspond to the @code{Debug} methods described above.  They are
@@ -902,7 +940,7 @@ Each call to a track log method will produce output in the same basic
 format. Space for three variables is always maintained for consistency:
 
 @example
-    @ daikon.Debug: <class>: <ppt>: <var1>: <var2>: <var3>: <msg>
+@ daikon.Debug: <class>: <ppt>: <var1>: <var2>: <var3>: <msg>
 @end example
 
 If @code{showTrackback} is enabled, the traceback will follow each 
@@ -916,25 +954,27 @@ situations.  The following instructions only apply to MIT, but the tool
 is shipped in the scripts directory and can easily be setup elsewhere
 as well.
 
+@cindex log2html
+
 Use the URL @uref{http://pag.csail.mit.edu/daikon/mit/log2html.php} to
-access @command{log2html}.
+access log2html.
 It will ask you for a file of daikon output.  One good way to create this
-file is to use the tee command.  For example:
+file is to use the @command{tee} command.  For example:
 
 @example
-    daikon [daikon args] | tee ~/daikon.out
+daikon [daikon args] | tee ~/daikon.out
 @end example
 
 Then specify that file to log2html.  Note that when supplying a filename
-to log2html, you must expand ~ yourself
+to log2html, you must expand @samp{~} yourself
 since the webserver doesn't know who you are.  The result will contain
 tables with the log output in them (all other output is unchanged).  Table
-columns are based on the ': ' separator in the ASCII output.  If traceback
+columns are based on the @samp{: } separator in the ASCII output.  If traceback
 is enabled, another column is added showing where the log method was
 called.  For example, the traceback column might contain:
 
 @example
-    +PptSlice1.addInvariant
++PptSlice1.addInvariant
 @end example
 
 If you put your cursor over @code{PptSlice1.addInvariant} it will show
@@ -943,10 +983,10 @@ called as part of the href.  If you click on the traceback it will
 create an output file of type @samp{application/emacs} that contains an
 @command{emacsclient} command to edit the related source file.  Most browsers
 can be setup to execute a command to process these files (in Mozilla
-this is done in the 'Navigator/Helper Applications' section of
+this is done in the ``Navigator/Helper Applications'' section of
 preferences).  The script @command{$inv/scripts/browser_emacs} will
 correctly handle files of this type and bring up the appropriate file
-in emacs.  This could easily be changed to support other editors.
+in Emacs.  This could easily be changed to support other editors.
 Note that as currently implemented this creates a possible security
 hole (malicious non-editor commands could be executed) as no checking
 is done on the validity of the command.
@@ -955,30 +995,34 @@ Clicking on the leading plus of the traceback information will show
 the entire traceback.  For example:
 
 @example
-   -PptSlice1.addInvariant
-    PptSlice.flow_and_remove_falsified
-    PptSlice1.add
-    PptTopLevel.add
-    PptTopLevel.add_and_flow
-    FileIO.process_sample
-    FileIO.read_data_trace_file
-    FileIO.read_data_trace_files
-    Daikon.process_data
-    Daikon.main
+-PptSlice1.addInvariant
+ PptSlice.flow_and_remove_falsified
+ PptSlice1.add
+ PptTopLevel.add
+ PptTopLevel.add_and_flow
+ FileIO.process_sample
+ FileIO.read_data_trace_file
+ FileIO.read_data_trace_files
+ Daikon.process_data
+ Daikon.main
 @end example
 
 The same capabilities (showing the line number, bringing up the buffer
 in emacs) exist on each of the frames in the traceback.  The detailed
-traceback can be hidden by clicking on the leading - on the first
+traceback can be hidden by clicking on the leading @samp{-} on the first
 frame.  Note that the current state of what tracebacks are expanded is
 kept in a file named the same as your Daikon output file with
 @file{.state} appended.  For example, the state file for
 @file{~/daikon.out} is @file{~/daikon.out.state}.  This file must be
-world writable for @command{log2html.php} to work correctly.
+world writable for log2html to work correctly.
 
 
 @node    Daikon internals, Testing, Debugging Daikon, Top
 @chapter Daikon internals
+
+@cindex Daikon internals
+@cindex efficiency issues
+@cindex optimizations
 
 @menu
 * Avoiding work for redundant invariants::  
@@ -994,6 +1038,10 @@ be enabled or disabled at the Daikon command line, as described in
 @node   Avoiding work for redundant invariants, Dataflow hierarchy, Daikon internals, Daikon internals
 @section Avoiding work for redundant invariants
 
+@cindex non-instantiation of invariants
+@cindex non-checking of invariants
+@cindex non-printing of invariants
+
 Daikon reduces runtime and memory by avoiding performing work for
 redundant invariants that provide no useful information to the user.
 There are three basic types of optimization that can be performed for
@@ -1005,7 +1053,7 @@ the invariant's truth value is statically obvious (from the semantics
 of the programming language), no matter what values may be seen at run
 time.  Two examples are ``A[i] is an element of A[]'' and ``size(A[])
 >= 0''.  Non-instantiation is implemented by the by the
-isObviousStatically method.
+@code{isObviousStatically} method.
 With the equality sets optimization (@pxref{Equality optimization}),
 non-instantiation can only happen if all equality permutations are
 statically obvious.
@@ -1019,7 +1067,9 @@ contains no duplicates'' implies ``a[i..j] contains no duplicates''.
 are implied by other true invariants.  It is similar to suppression,
 but it differs in that it can implement checks that are not sound to
 perform until all data samples have been seen.  Non-printing is implemented by
-the isObviousDynamically method.  The isObviousStatically method is
+@code{ObviousFilter}, which calls the @code{isObviousDynamically} method on
+invariants.  
+The @code{isObviousStatically} method is
 also used by the non-printing checks; it can be called at the end
 without reference to equality sets.
 
@@ -1052,6 +1102,8 @@ Michael D. Ernst, published in FSE 2004; the paper is available from
 @node    Suppression optimization,  , Avoiding work for redundant invariants, Avoiding work for redundant invariants
 @subsection Suppression optimization
 
+@cindex suppression optimization
+
 Suppression optimization allows for elimination of redundancy based on
 how a set of invariants might imply an invariant.  For example, ``a ==
 b'' and ``b >= c'' implies ``a = max (b, c)'' We say that a set of
@@ -1062,49 +1114,54 @@ which case the implication for suppression no longer holds.
 
 Thus when certain invariants are not found in Daikon, they may be
 hidden due to suppression.  Suppression is enabled by default, but it can
-be disabled by the @var{daikon.suppress.NIS.enabled} configuration option.
+be disabled by the @option{daikon.suppress.NIS.enabled} configuration option.
 
 @node    Dataflow hierarchy, Equality optimization, Avoiding work for redundant invariants, Daikon internals
 @section Dataflow hierarchy
+
+@cindex dataflow hierarchy
+@cindex hierarchy
 
 Dataflow hierarchy is a means to relate variables in different program
 points in a partial ordering.  Variables in program point X are
 related to variables in another program point Y by a ``flow'' relation
 if every sample seen of X's variables is also meant to be seen at Y.
 Y is called a parent program point of X.  For example, all the field
-variables in the ENTRY program point of a method in class C relate to
-the field variables in the CLASS program point of C.  This is because
-the state of C, when in context at the entry ENTRY program point, is
-also in context at the CLASS program point.  Any invariant that holds
+variables in the @code{:::ENTER} program point of a method in class C relate to
+the field variables in the @code{:::CLASS} program point of C.  This is because
+the state of C, when in context at the entry @code{:::ENTER} program point, is
+also in context at the @code{:::CLASS} program point.  Any invariant that holds
 true on a parent program point must hold on the child program point.
 The purpose of dataflow hierarchy is to reduce the presence of
 redundant invariants by only keeping invariants at the highest parent
 at which they apply.  This saves both time and space.
 
 There are many ways that program points can be connected.  Daikon
-provides for four ways.  First, CLASS program points are parents of
+provides for four ways.  First, @code{:::CLASS} program points are parents of
 all their method program points.  Second, between two classes that are
 related by inheritance, corresponding program points relate --- for
-example, java.util.Vector:::CLASS is a child of
-java.util.List:::Class.  Third, when a program point contains
-variables of a type whose CLASS program point is also available to
+example, @code{java.util.Vector:::CLASS} is a child of
+@code{java.util.List:::CLASS}.  Third, when a program point contains
+variables of a type whose @code{:::CLASS} program point is also available to
 Daikon, the former program point's variables relate to the latter
-program point's CLASS method.  For example, if X:::y is of type Y, and
-Y contains fields a and b, X:::y, X:::y.a and X:::y.b relate to
-Y:::this, Y:::b and Y:::a.  Fourth, variables at ENTER program
-points are related to the ``orig'' versions at EXIT program points.
+program point's @code{:::CLASS} method.  For example, if X.y is of type Y, and
+Y contains fields a and b, X.y, X.y.a and X.y.b relate to
+Y.this, Y.b and Y.a.  Fourth, variables at @code{:::ENTER} program
+points are related to the ``orig'' versions at @code{:::EXIT} program points.
 
 When using Daikon, the above four ways of relations in the dataflow
 hierarchy will result in some true invariants that are not reported at
 some program points.  However, the invariant will be present in some
 parent program point.  Dataflow hierarchy is enabled by default, but
 can be disabled by the @option{--nohierarchy} flag.  When dataflow is enabled,
-the only samples that are examined by Daikon are the EXIT program
+the only samples that are examined by Daikon are the @code{:::EXIT} program
 points (plus ``orig'' variables) since these contain a complete view of
 the data.
 
 @node    Equality optimization,  , Dataflow hierarchy, Daikon internals
 @section Equality optimization
+
+@cindex equality optimization
 
 When N variables are equal within a program point there will be
 N(N-1)/2 pairwise invariants to represent the equality within the
@@ -1123,12 +1180,14 @@ equality invariants.  Every equality set has a leader or
 Non-equality invariants are only instantiated and checked on the
 leader.  When printing invariants, Daikon reports only invariants on
 the leader.  The user can easily determine that ``odd(a)'' and ``a == b''
-imply ``odd(b)''.  Equality can be turned off at the command line with
-the @option{--noequality} flag.
+imply ``odd(b)''.  Equality optimization can be turned off at the 
+command line with the @option{--noequality} flag.
 
 
 @node    Testing, Historical, Daikon internals, Top
 @chapter Testing
+
+@cindex testing Daikon
 
 Daikon has two sets of tests: unit tests (@pxref{Unit testing}) and
 regression tests (@pxref{Regression tests}).  If there
@@ -1141,11 +1200,11 @@ Note on Kvasir tests: The Kvasir (Daikon C front-end) tests appear in the
 @file{$inv/tests/kvasir-tests} directory. These tests run Daikon to ensure 
 that the Kvasir output is valid Daikon input. To run them, go to 
 @file{$inv/tests/kvasir-tests} or any test sub-directory within here and run 
-"@samp{make summary-w-daikon}". If any tests return @samp{FAILED}, then
+@samp{make summary-w-daikon}. If any tests return @samp{FAILED}, then
 you should look at the appropriate @file{.diff} file. If you feel that the 
 failure was actually a result of your Daikon changes and should be in fact 
-correct output, then run "@samp{make update-inv-goals}" to update the Daikon
-@samp{invs.goal} file.
+correct output, then run @samp{make update-inv-goals} to update the Daikon
+@file{invs.goal} file.
 
 @menu
 * Unit testing::                
@@ -1154,6 +1213,10 @@ correct output, then run "@samp{make update-inv-goals}" to update the Daikon
 
 @node    Unit testing, Regression tests, Testing, Testing
 @section Unit testing
+
+@cindex unit testing
+@cindex new unit tests
+@cindex adding new unit tests
 
 The unit tests are found in @file{invariants/java/daikon/test/}; they use
 the JUnit unit testing framework.  They take a few seconds to run.  They
@@ -1174,7 +1237,7 @@ This tests the formatting of invariants with specified input.  The
 tests are configured in the file @file{InvariantFormatTest.commands} under
 @file{daikon/test/}.  Make sure the @file{InvariantFormatTest.commands} file is
 in the classpath when this tester is run or the tester will not work.
-(It will just tell you that the file is not in the classpath)
+(It will just tell you that the file is not in the classpath.)
 
 The file is formatted as follows:
 @example
@@ -1190,9 +1253,9 @@ appear after the goal string before the first sample or between parts
 of samples (these lines are used currently to determine where samples
 lists end). This will be remedied in a future version of the tester.
 
-@table @samp
-@item Instantiate args: 
-these are optional additional arguments to the static
+@table @code
+@item Instantiate args
+These are optional additional arguments to the static
 instantiate method of the class.  Each argument consists of the type (boolean
 or int) followed by the value.  For example:
 @example
@@ -1201,25 +1264,26 @@ or int) followed by the value.  For example:
 @end example
 
 @item Type string: 
-A type string must consist of one or more of the following:
-"int", "double", "string", "int_array", "double_array", "string_array",
-separated by spaces (without the quotes) This string represents the
+A type string must consist of one or more of the following literals:
+@samp{int}, @samp{double}, @samp{string}, @samp{int_array}, 
+@samp{double_array}, or @samp{string_array}, separated by spaces. 
+This string represents the
 types that an invariant is supposed to compare For instance, a binary
-integer comparison would have type string "int int".  A pairwise
-sequence comparison would have type string "int_array int_array"
+integer comparison would have type string @samp{int int}.  A pairwise
+sequence comparison would have type string @samp{int_array int_array}.
 
 @item Goal string: 
-The goal string must start with the prefix "Goal " (don't
-actually type the quotes), and then continue with "(<format type>): ",
+The goal string must start with the prefix @samp{Goal }, and then 
+continue with @samp{(<format type>): },
 where format type is the format in which the invariant will
 print. After this the representation of the invariant must occur. It
 must represent the invariant result exactly as printed, even white
 space is significant (as proper formatting should be correct down to
 the whitespace). The first variable (the one corresponding to the
-first type in the type string) corresponds with "a", the second with
-"b" and so on. Format the type string accordingly. (In samples, the
-value of "a" is read first, possibly followed by "b", and then
-possibly "c", depending on the arity of the invariant.)
+first type in the type string) corresponds with @samp{a}, the second with
+@samp{b} and so on. Format the type string accordingly. (In samples, the
+value of @samp{a} is read first, possibly followed by @samp{b}, and then
+possibly @samp{c}, depending on the arity of the invariant.)
 
 @example
 Example:
@@ -1245,7 +1309,7 @@ Goal<1 space>(<format name>):<1 space><goal text>
 @item Samples: 
 Values formatted according to the type string, one value per
 line Make sure that the samples provided are actually instances of that
-particular invariant (That is, if the desired invariant is "a < b", then
+particular invariant (That is, if the desired invariant is ``a < b'', then
 the first number of each sample better be less than the second) 
 
 @c The below is not necessary since we don't check this before formatting
@@ -1258,12 +1322,12 @@ the first number of each sample better be less than the second)
 
 Arrays and strings must be formatted according to the Daikon dtrace file
 convention (see the Daikon user manual for full description). This
-states that arrays must be surrounded in brackets (start with "[", end
-with "]"), and entries must be separated by a space. String must be
-enclosed in quotes ("). Quotes within a string can be represented by the
-following sequence: \"
+states that arrays must be surrounded in brackets (start with @samp{[}, end
+with @samp{]}), and entries must be separated by a space.  Strings must be
+enclosed in quotes (@samp{"}). Quotes within a string can be represented by the
+sequence @samp{\"}.
 
-For examples
+For example:
 @example
 [1 2 3 4 5] - an array with the elements 1, 2, 3, 4, 5
 "aString" - a string
@@ -1279,10 +1343,12 @@ Goal: a < b    <- goal string, no comment/blank lines after this
 3              <-|
 @end example
 
-Other examples are in the existing test file (InvariantFormatTest.commands).
+Other examples are in the existing test file 
+(@file{InvariantFormatTest.commands}).
 @end table
+
 The output of a test run can be converted into goals by using the
---generate_goals switch to the tester as follows:
+@option{--generate_goals} switch to the tester as follows:
 @example
 java daikon.test.InvariantFormatTester --generate_goals
 @end example
@@ -1291,7 +1357,7 @@ master tester, and so it is not necessary to separately run this test
 except to generate goal files.
 
 Furthermore, this framework cannot parse complex types from files
-unless they contain a "public (Object) valueOf(String s)"
+unless they contain a @code{public (Object) valueOf(String s)}
 function. Otherwise the program has no was of knowing how to create
 such an object from a string. All primitives and the String type are
 already recognized.
@@ -1305,7 +1371,7 @@ specifies a decls file to use, the samples for each ppt/var, and assertions
 about Daikon's state (such as whether or not a particular invariant exists).
 
 Each line of the file specifies exactly one command.  Blank lines and
-leading blanks are ignored.  Comments begin with the number sign (#) and
+leading blanks are ignored.  Comments begin with the number sign (@samp{#}) and
 extend to the end of the line.  The type of command is specified as the
 first token on the line followed by a colon.  The supported commands
 are:
@@ -1353,14 +1419,15 @@ The valid assertions for the assert: command are:
 @deffn Assertion inv format var1 ...
 
   The inv assertion asserts that the specified invariant exists in the
-  current ppt.  The format argument is the result of calling format() on
+  current ppt.  The @var{format} argument is the result of calling 
+  @code{format()} on
   the invariant.  This is how the invariant is recognized.  The remaining
   arguments are the variables that make up the invariants slice.  These
   must match exactly variables in the ppt.  The inv assertion returns true
   iff the slice exists and an invariant is found within that slice that
-  matches format.
+  matches @var{format}.
 
-  Optionally, format can be replaced by the fully qualified class name of
+  Optionally, @var{format} can be replaced by the fully qualified class name of
   the invariant.  In this case, it is only necessary for the class to match.
 @end deffn
 
@@ -1385,11 +1452,14 @@ ppt: foo.f():::EXIT35
 @node    Regression tests,  , Unit testing, Testing
 @section Regression tests
 
+@cindex regression tests
+
 The regression tests run Daikon on many different inputs and compare
 Daikon's output to expected output.  They take an hour or longer to run.
 When you make a change, you should generally run the regression tests
 before checking it in.  Always run the regression tests when checking in
-any non-trivial change to the code.  If any has a non-zero size, then your
+any non-trivial change to the code.  If any of the regression test diffs 
+has a non-zero size, then your
 edits have changed Daikon's output and you should not check in without
 carefully determining that the changes are intentional and desirable (and
 you should update the goal output files, so that the diffs are again zero).
@@ -1407,23 +1477,26 @@ next time you run the tests.
 @node Adding regression tests,  , Regression tests, Regression tests
 @subsection Adding regression tests
 
+@cindex adding new regression tests
+@cindex new regression tests
+
 Most Daikon regression tests appear in @file{$inv/tests/daikon-tests}.  Each
 test is placed in a separate directory.  That directory contains a
 simple makefile and the goal files for the tests.  The source files
 for the test are stored in @file{$inv/tests/sources}.  For example,
 the @file{StackAr} directory contains the following files in CVS:
 @example
-  Makefile
-  Stackar.spinfo-static.goal
-  StackAr.txt-daikon.goal
-  StackAr.txt-esc.goal
-  StackAr.txt-jml.goal
-  StackAr.txt-merge-esc.goal
-  StackAr.txt-merge-jml.goal
-  StackAr.txt-repair.goal
+Makefile
+Stackar.spinfo-static.goal
+StackAr.txt-daikon.goal
+StackAr.txt-esc.goal
+StackAr.txt-jml.goal
+StackAr.txt-merge-esc.goal
+StackAr.txt-merge-jml.goal
+StackAr.txt-repair.goal
 @end example
 
-The Makefile must contain the following entries.
+The @file{Makefile} must contain the following entries.
 
 @table @samp
 @item MAIN_CLASS
@@ -1437,26 +1510,27 @@ of the work.  See it for more information on the details of regression
 testing.
 
 @item instrument-files-revise:
-A target that writes the list of files to instrument.  For example
+A target that writes the list of files to instrument.  For example,
 @example
-  instrument-files-revise:
-      echo "DataStructures/StackAr.java" >| $@{INST_LIST_FILE@}
+instrument-files-revise:
+    echo "DataStructures/StackAr.java" >| $@{INST_LIST_FILE@}
 @end example
 
 @end table
 
 The goal files are the expected results of running daikon and its
 associated tools.  The easiest way to create them is to simply create
-empty versions of each.  The execute 'make diffs' to run the test and
-produce results.  When the results are as expected execute 'make update-goals'
-to copy the results in to the goal files.  Release the test by committing
-the goal files, Makefile, and source files.
+empty versions of each.  The execute @samp{make diffs} to run the test and
+produce results.  When the results are as expected execute 
+@samp{make update-goals} to copy the results in to the goal files.  
+Release the test by committing the goal files, Makefile, and source files
+to the CVS repository.
 
-The common makefile contains a number of other useful targers.  A brief
-explanation of each can be found by executing make without a target.
+The common makefile contains a number of other useful targets.  A brief
+explanation of each can be found by executing @samp{make} without a target.
 
-The test can be added into the standard tests (either 'everything' or
-'quick' by adding the test the appropriate list in 
+The test can be added into the standard tests (either @samp{everything} or
+@samp{quick} by adding the test the appropriate list in 
 @file{$inv/tests/daikon-tests/Makefile}.
 commands 
 
@@ -1540,6 +1614,8 @@ when development on it ceased.
 @node    Branches,  , Historical, Historical
 @section Branches
 
+@cindex branches, in CVS repository
+
 The Daikon CVS repository contains two branches:  a main trunk and a
 branch (named @samp{ENGINE_V2_PATCHES}) for version 2 of Daikon.
 
@@ -1558,7 +1634,7 @@ describes CVS branches:
   do not appear on the main trunk or other branches.
 
   Later you can move changes from one branch to another branch (or the
-  main trunk) by "merging".  Merging involves first running 
+  main trunk) by ``merging''.  Merging involves first running 
   @samp{cvs update -j}, to merge the changes into the working directory.
   You can then commit that revision, and thus effectively copy the
   changes onto another branch.
@@ -1584,11 +1660,12 @@ common, some changes were merged from the trunk to the branch, and and
 version 2 was finally retired (and no more changes were made to the
 branch) in December 2003.
 
-A regular "cvs checkout" gets the trunk.  The "-r" flag specifies a
+A regular @samp{cvs checkout} gets the trunk.  The @option{-r} flag specifies a
 branch.  For example, to get the branch as of June 9, 2002, one could do
-@smallexample
-cvs -d $pag/projects/invariants/.CVS co -r ENGINE_V2_PATCHES -D 2003/06/09 invariants/java/daikon
-@end smallexample
+@example
+cvs -d $pag/projects/invariants/.CVS co -r ENGINE_V2_PATCHES \
+    -D 2003/06/09 invariants/java/daikon
+@end example
 
 Some warnings about analyzing historical versions of Daikon:
 @enumerate
