@@ -21,6 +21,14 @@ Further documentation can be found in:
 
 Daikon
 
+  User changes
+
+    When using the --ppt-select-pattern option to Chicory, it is no longer
+    necessary to write two regular expressions, one of which matches the
+    class and another of which matches the procedure.  This makes the
+    option more consistent with similar argument to other parts of the
+    toolset, and with the --ppt-omit-pattern argument.
+
   Documentation changes
 
     The Daikon manual has been cleaned up and copy-edited (e.g., for
@@ -30,7 +38,7 @@ Daikon
 
 Kvasir
 
-  User Changes
+  User changes
 
     In order to reduce the amount of extraneous output, added heuristics 
     to avoid dereferencing pointers to certain types of variables 
