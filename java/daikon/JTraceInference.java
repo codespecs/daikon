@@ -17,20 +17,6 @@ import java.util.List;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import daikon.Daikon;
-import daikon.FileIO;
-import daikon.PptTopLevel;
-import daikon.PptMap;
-import daikon.ProglangType;
-import daikon.VarComparability;
-import daikon.VarInfo;
-import daikon.VarInfoName;
-import daikon.Dataflow;
-import daikon.PrintInvariants;
-import daikon.ValueTuple;
-import daikon.inv.Invariant;
-import daikon.config.Configuration;
-
 import utilMDE.Intern;
 import utilMDE.Assert;
 
@@ -67,36 +53,31 @@ class JTraceInference extends Thread
       try {
 	JTrace.println(JTrace.V_INFO, "JTrace: Inference thread start.");
 
-	/////////
-
-	// XXX really all the types are subordinate to a PptTrace,
-	// just like pairs of strings are subordinate to a Decl
-	// program point. Could rearrange this? Do we want PptTrace
-	// Start/End markers, or is it just clutter?
-
 	loop: for(;;)
 	{
 	    byte control = getControl();
-	    JTrace.print(JTrace.V_INFO, "JTrace: getControl : " + types[control] + " = " );
+	    JTrace.print(JTrace.V_DEBUG, "JTrace: getControl : " + types[control] + " = " );
 
 	    switch(control)
 	    {
-	    case CT_PptTrace: { // Header of a Trace program point
+	    case CT_PptTraceStart: { // Header of a Trace program point
 		int key = getInteger();
 		String ppt_name = getPptNameX(key);
 		int nonce = getInteger();
-		JTrace.println(JTrace.V_INFO, ppt_name);
+		JTrace.println(JTrace.V_DEBUG, ppt_name);
 		PptTopLevel ppt = (PptTopLevel) all_ppts.get(ppt_name);
 		ValueTuple vt = read_single_sample(ppt_name);
 		Integer nonce_ = nonce == 0 ? null : new Integer(nonce);
 		FileIO.process_sample(ppt, vt, nonce_);
+		control = getControl(); 
+		Assert.assertTrue(control == CT_PptTraceEnd);
 		break;
 	    }
 
 	    case CT_PptDeclStart: { // Header of a Decl program point
 		int key = getInteger();
 		String pptname = getPptNameX(key);
-		JTrace.println(JTrace.V_INFO, pptname);
+		JTrace.println(JTrace.V_DEBUG, pptname);
 		Vector var_infos = new Vector();
 
 		while((control = getControl()) != CT_PptDeclEnd)
@@ -107,7 +88,7 @@ class JTraceInference extends Thread
 
 		    String varname = getString();
 		    String proglang_type_string = getString();
-		    JTrace.println(JTrace.V_INFO, "\tname=" + varname +
+		    JTrace.println(JTrace.V_DEBUG, "\tname=" + varname +
 			    ", type=" + proglang_type_string);
 
 		    ProglangType prog_type =
@@ -133,7 +114,7 @@ class JTraceInference extends Thread
 	    }
 
 	    case CT_NoData:
-		JTrace.println(JTrace.V_INFO, "<NoData>");
+		JTrace.println(JTrace.V_DEBUG, "<NoData>");
 		for (;;)
 		    try {
 			currentThread().sleep(100); // sleep and try again
@@ -142,7 +123,7 @@ class JTraceInference extends Thread
 		break;
 
 	    case CT_EOF:
-		JTrace.println(JTrace.V_INFO, "<EOF>");
+		JTrace.println(JTrace.V_DEBUG, "<EOF>");
 		break loop;
 
 	    default:
@@ -191,7 +172,7 @@ class JTraceInference extends Thread
 	// XXX modbits -- skipped
 
 	{
-	    JTrace.println(JTrace.V_INFO, "JTrace: getting " + num_tracevars + " values");
+	    JTrace.println(JTrace.V_DEBUG, "JTrace: getting " + num_tracevars + " values");
 	    // XXX oldvalue_reps has been thrown away
 
 	    // foreach variable associated with this ppt:
@@ -222,7 +203,7 @@ class JTraceInference extends Thread
 
 		Object value = null;
 		byte control = getControl();
-		JTrace.print(JTrace.V_INFO, "JTrace: getControl : " + types[control] + " = " );
+		JTrace.print(JTrace.V_DEBUG, "JTrace: getControl : " + types[control] + " = " );
 
 		switch(control)
 		{
@@ -255,7 +236,7 @@ class JTraceInference extends Thread
 		    break;
 		}
 
-		JTrace.println(JTrace.V_INFO, "" + value);
+		JTrace.println(JTrace.V_DEBUG, "" + value);
 
 		// XXX read modbit of value from dtrace file: omitted. For now
 		// assume value is always present. Need to address this.
@@ -372,11 +353,12 @@ class JTraceInference extends Thread
     private static final int CT_string		= 9;
     private static final int CT_Hashcode	= 10;
     private static final int CT_ArrayLength	= 11;
-    private static final int CT_PptTrace	= 12;
-    private static final int CT_PptDeclStart	= 13;
-    private static final int CT_PptDeclEnd	= 14;
-    private static final int CT_NoData		= 15;
-    private static final int CT_EOF		= 16;
+    private static final int CT_PptTraceStart	= 12;
+    private static final int CT_PptTraceEnd	= 13;
+    private static final int CT_PptDeclStart	= 14;
+    private static final int CT_PptDeclEnd	= 15;
+    private static final int CT_NoData		= 16;
+    private static final int CT_EOF		= 17;
 
     private static final String types[] = new String[] {
 	"void",
@@ -391,7 +373,8 @@ class JTraceInference extends Thread
 	"string",
 	"HashCode",
 	"ArrayLength",
-	"PptTrace",
+	"PptTraceStart",
+	"PptTraceEnd",
 	"PptDeclStart",
 	"PptDeclEnd",
 	"NoData",

@@ -21,7 +21,7 @@ import utilMDE.*;
 
 public final class Daikon {
 
-  static {
+  private static void show_banner() {
     System.err.
       print("**************************************************\n" +
             "*                     WARNING                    *\n" +
@@ -220,6 +220,8 @@ public final class Daikon {
    **/
   public static void main(String[] args)
   {
+    show_banner();
+
     // Read command line options
     Set[] files = read_options(args);
     Assert.assertTrue(files.length == 4);
@@ -765,3 +767,10 @@ public final class Daikon {
     }
   }
 }
+
+/*
+ * Local Variables:
+ * c-basic-offset:	2
+ * c-indentation-style: "java"
+ * End:
+ */

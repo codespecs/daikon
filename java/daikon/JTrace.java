@@ -41,6 +41,10 @@ public class JTrace
 	    return;
         }
 
+	println(V_ERROR, "JTrace: running on " + 
+		System.getProperty("java.vm.vendor") + " JVM " + 
+		System.getProperty("java.vm.version"));
+
 	String target_name = args[0]; // first is program, rest is its args
 	String[] target_args = ArraysMDE.subarray(args, 1, args.length - 1);
 
@@ -177,7 +181,7 @@ public class JTrace
 	    main_method.invoke(null, new Object[] { args });
 	}
         catch(InvocationTargetException e)
-	{
+	{	    
 	    if (e.getTargetException() instanceof SystemExitException)
 	    {
 		println(V_INFO, "JTrace: System.exit() intercepted.");
@@ -187,7 +191,7 @@ public class JTrace
 	    else
 	    {
 		println(V_INFO, "JTrace: target exited due to exception: "
-				   + e);
+				   + e.getTargetException());
 	    }
 	}
 	catch(Throwable e)
@@ -216,7 +220,7 @@ public class JTrace
     // We subclass Error because it is much less likely that the target
     // program catches this anywhere, compared to other unchecked
     // exceptions such as RuntimeException.
-    private static class SystemExitException extends Error {}
+    private static class SystemExitException extends SecurityException {}
 
     private static class Enforcer extends SecurityManager
     {
@@ -225,8 +229,17 @@ public class JTrace
 	// Swing event dispatcher) will suppress this, so it will
 	// never get seen by us.  Push the EOF control token through
 	// now?
-	public void checkExit(int status) // System.exit() called
-	    { throw new SystemExitException(); }
+	public void checkExit(int status) { // System.exit() called
+	    // XXX While not obviously wrong in any way, this
+	    // doesn't seem quite right.  
+
+	    // Note that the exception will not be seen by the tracing
+	    // code because this class is uninstrumented.  Unless it
+	    // is caught and rethrown in app code.
+
+	    stopTracing(Thread.currentThread());
+	    throw new SystemExitException(); 
+	}
 	// permit all other calls XXX review this!
 	public void checkPermission(java.security.Permission p, Object o) {}
 	public void checkPermission(java.security.Permission p) {}

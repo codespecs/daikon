@@ -434,13 +434,20 @@ public final class FileIO {
       PrintWriter pw = new PrintWriter(sw);
 
       pw.println("  " + ppt.fn_name());
-      pw.print("    ");
+      pw.print("    ");      
+      
+      // [adonovan] is this sound? Let me know if not (sorry).
+      Assert.assertTrue(ppt.var_infos.length == vals.length);
+
       for (int j=0; j<vals.length; j++) {
         if (j != 0)
           pw.print(", ");
+
+	pw.print(ppt.var_infos[j].name + "=");
+
         Object val = vals[j];
         if (val == canonical_hashcode)
-          pw.print("<address>");
+          pw.print("<hashcode>");
         else if (val instanceof int[])
           pw.print(ArraysMDE.toString((int[]) val));
         else if (val instanceof String)
@@ -1010,7 +1017,7 @@ public final class FileIO {
     }
 
     // PptTopLevel entry_ppt = (PptTopLevel) ppt.entry_ppt; // [INCR]
-    if (ppt.ppt_name.isExitPoint()) {
+    if (ppt.ppt_name.isExitPoint() || ppt.ppt_name.isThrowsPoint()) {
       Invocation invoc;
       // Set invoc
       {
@@ -1151,3 +1158,10 @@ public final class FileIO {
   }
 
 }
+
+/*
+ * Local Variables:
+ * c-basic-offset:	2
+ * c-indentation-style: "stroustrup"
+ * End:
+ */
