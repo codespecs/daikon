@@ -294,7 +294,7 @@ public abstract class Invariant implements java.io.Serializable {
       }
 
       // The names "match" iff there is an intersection of the names
-      // of aliased variables
+      // of equal variables.
       Vector all_vars1 = var1.canonicalRep().equalTo();
       Vector all_vars2 = var2.canonicalRep().equalTo();
       all_vars1.add(var1.canonicalRep());
