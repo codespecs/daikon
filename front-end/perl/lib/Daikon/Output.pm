@@ -124,7 +124,9 @@ sub daikon_output_spec {
         return ["", "", "double", "double", \&output_num, {}];
     } elsif ($t eq "str") {
         # The Daikon name for a string is "java.lang.String",
-        # even if in languages other than Java.
+        # even in languages other than Java. This is most important
+        # for the rep type, but it will help consistency even for the
+        # "declared" type.
         return ["", "", "java.lang.String", "java.lang.String",
                 \&output_string, {}];
     } elsif (ref($t)) {
