@@ -57,7 +57,7 @@ public class PptTopLevel extends Ppt {
   // actually passed off to this Ppt?  The ppt wouldn't use num_tracevars,
   // but it would make sense to store it here anyway.
 
-  // These values are -1 if not yet set (can that happen?).
+  // These values are -1 if not yet set (can that happen?). // No they're not
   // Invariant:  num_declvars == num_tracevars + num_orig_vars
   int num_declvars;             // number of variables in the decl file
   int num_tracevars;            // number of variables in the trace file
@@ -71,7 +71,7 @@ public class PptTopLevel extends Ppt {
   //   len(var_infos) >= derivation_index[0] >= derivation_index[1] >= ...
   int[] derivation_indices = new int[derivation_passes+1];
 
-  private transient VarValuesOrdered values;
+  // private transient VarValuesOrdered values; // [[INCR]]
   // these are used only when values is null
   private int values_num_samples;
   private int values_num_mod_non_missing_samples;
@@ -127,7 +127,7 @@ public class PptTopLevel extends Ppt {
       Assert.assert((vi.value_index == -1) || (!vi.is_static_constant));
     }
 
-    values = new VarValuesOrdered();
+    // values = new VarValuesOrdered(); // [[INCR]]
     views = new HashSet();
     views_cond = new Vector();
 
@@ -195,47 +195,49 @@ public class PptTopLevel extends Ppt {
     return entry_ppt;
   }
 
-  // These accessors are for abstract methods declared in Ppt
-  public int num_samples() {
-    return (values == null) ? values_num_samples : values.num_samples(); }
-  public boolean has_samples() {
-    if (num_samples() > 0)
-      return true;
-    if (ppt_name.isCombinedExitPoint()) {
-      Vector exits = entry_ppt.exit_ppts;
-      for (int i=0; i<exits.size(); i++) {
-        PptTopLevel exit = (PptTopLevel) exits.elementAt(i);
-        // System.out.println("Recursive call from " + name + " via " + entry_ppt.name + ": " + exit.name);
-        if ((exit != this) && exit.has_samples()) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-  public int num_mod_non_missing_samples() {
-      return ((values == null)
-              ? values_num_mod_non_missing_samples
-              : values.num_mod_non_missing_samples()); }
-  // WARNING!  This is the number of distinct ValueTuple objects,
-  // which can be as much as 2^arity times as many as the number of
-  // distinct tuples of values.
-  public int num_values() {
-    return (values == null) ? values_num_values : values.num_values(); }
-  // public int num_missing() {
-  //   return (values == null) ? value_num_missing : values.num_missing; }
-  public String tuplemod_samples_summary() {
-      return ((values == null)
-              ? values_tuplemod_samples_summary
-              : values.tuplemod_samples_summary());
-  }
-  public void set_values_null() {
-    values_num_samples = num_samples();
-    values_num_mod_non_missing_samples = num_mod_non_missing_samples();
-    values_num_values = num_values();
-    values_tuplemod_samples_summary = tuplemod_samples_summary();
-    values = null;
-  }
+  // [[INCR]] .... and below ...
+//    // These accessors are for abstract methods declared in Ppt
+//    public int num_samples() {
+//      return (values == null) ? values_num_samples : values.num_samples(); }
+//    public boolean has_samples() {
+//      if (num_samples() > 0)
+//        return true;
+//      if (ppt_name.isCombinedExitPoint()) {
+//        Vector exits = entry_ppt.exit_ppts;
+//        for (int i=0; i<exits.size(); i++) {
+//          PptTopLevel exit = (PptTopLevel) exits.elementAt(i);
+//          // System.out.println("Recursive call from " + name + " via " + entry_ppt.name + ": " + exit.name);
+//          if ((exit != this) && exit.has_samples()) {
+//            return true;
+//          }
+//        }
+//      }
+//      return false;
+//    }
+//    public int num_mod_non_missing_samples() {
+//        return ((values == null)
+//                ? values_num_mod_non_missing_samples
+//                : values.num_mod_non_missing_samples()); }
+//    // WARNING!  This is the number of distinct ValueTuple objects,
+//    // which can be as much as 2^arity times as many as the number of
+//    // distinct tuples of values.
+//    public int num_values() {
+//      return (values == null) ? values_num_values : values.num_values(); }
+//    // public int num_missing() {
+//    //   return (values == null) ? value_num_missing : values.num_missing; }
+//    public String tuplemod_samples_summary() {
+//        return ((values == null)
+//                ? values_tuplemod_samples_summary
+//                : values.tuplemod_samples_summary());
+//    }
+//    public void set_values_null() {
+//      values_num_samples = num_samples();
+//      values_num_mod_non_missing_samples = num_mod_non_missing_samples();
+//      values_num_values = num_values();
+//      values_tuplemod_samples_summary = tuplemod_samples_summary();
+//      values = null;
+//    }
+  // [[INCR]] .... and above ...
 
 
 
@@ -443,7 +445,8 @@ public class PptTopLevel extends Ppt {
     //                    + ", canBeMissing=" + vi.canBeMissing);
     return ((vi.derivedDepth() < 2)
             && (vi.isCanonical())
-            && (!vi.canBeMissing));
+            //&& (!vi.canBeMissing) // [[INCR]]
+	    );
 
     // Should add this (back) in:
 	    // && !vi.always_missing()
@@ -670,7 +673,8 @@ public class PptTopLevel extends Ppt {
 
     // Since I am only modifying members, not making new objects, and since
     // I am using an Eq hash table, I don't need to rehash.
-    values.extend(derivs);
+    // values.extend(derivs); // [[INCR]]
+    // XXXXX
   }
 
 
@@ -684,7 +688,8 @@ public class PptTopLevel extends Ppt {
     // System.out.println("PptTopLevel " + name + ": add " + vt);
     Assert.assert(vt.size() == var_infos.length - num_static_constant_vars);
 
-    values.add(vt, count);
+    // values.add(vt, count); // [[INCR]]
+    // XXXXX
 
     // Add to all the views
     // for (Iterator itor = views.keySet().iterator() ; itor.hasNext() ; ) {
@@ -730,8 +735,8 @@ public class PptTopLevel extends Ppt {
     // I probably can't do anything about it if this is called
     // subsequently; but I should be putting off initial_processing for
     // each program point until it has many samples anyway.
-    if (!has_samples())
-      return;
+    // if (!has_samples()) // [[INCR]]
+    //   return;
 
     derivation_indices = new int[derivation_passes+1];
     // Extraneous, since Java initializes the array to all zeros.
@@ -809,25 +814,26 @@ public class PptTopLevel extends Ppt {
     //                    + values.num_samples()
     //                    + ", number of values: " + values.num_values());
     // If I recorded mod bits in value.ValueSet(), I could use it here instead.
-    for (Iterator vt_itor = values.sampleIterator(); vt_itor.hasNext(); ) {
-      VarValuesOrdered.ValueTupleCount entry = (VarValuesOrdered.ValueTupleCount) vt_itor.next();
-      ValueTuple vt = entry.value_tuple;
-      int count = entry.count;
-      for (int i=0; i<num_slices; i++) {
-        // System.out.println("" + slices[i] + " .add(" + vt + ", " + count + ")");
-        slices[i].add(vt, count);
-      }
-      if (views_to_remove_deferred.size() > 0) {
-        // Inefficient, but easy to code.
-        Assert.assert(slices_vector.containsAll(views_to_remove_deferred));
-        slices_vector.removeAll(views_to_remove_deferred);
-        views_to_remove_deferred.clear();
-        if (slices_vector.size() == 0)
-          break;
-        slices = (PptSlice[]) slices_vector.toArray(new PptSlice[0]);
-        num_slices = slices.length;
-      }
-    }
+//      for (Iterator vt_itor = values.sampleIterator(); vt_itor.hasNext(); ) {
+//        VarValuesOrdered.ValueTupleCount entry = (VarValuesOrdered.ValueTupleCount) vt_itor.next();
+//        ValueTuple vt = entry.value_tuple;
+//        int count = entry.count;
+//        for (int i=0; i<num_slices; i++) {
+//          // System.out.println("" + slices[i] + " .add(" + vt + ", " + count + ")");
+//          slices[i].add(vt, count);
+//        }
+//        if (views_to_remove_deferred.size() > 0) {
+//          // Inefficient, but easy to code.
+//          Assert.assert(slices_vector.containsAll(views_to_remove_deferred));
+//          slices_vector.removeAll(views_to_remove_deferred);
+//          views_to_remove_deferred.clear();
+//          if (slices_vector.size() == 0)
+//            break;
+//          slices = (PptSlice[]) slices_vector.toArray(new PptSlice[0]);
+//          num_slices = slices.length;
+//        }
+//      }
+    // XXXXX // [[INCR]]
 
     views.addAll(slices_vector);
     for (int i=0; i<num_slices; i++) {
@@ -995,12 +1001,14 @@ public class PptTopLevel extends Ppt {
     Vector unary_views = new Vector(vi_index_limit-vi_index_min);
     for (int i=vi_index_min; i<vi_index_limit; i++) {
       // System.out.println("Perhaps add unary view for " + var_infos[i].name);
-      if (var_infos[i].canBeMissingCheck()) {
-        if (Global.debugDerive.isDebugEnabled()) {
-          Global.debugDerive.debug("In binary equality, " + var_infos[i].name + " can be missing");
-        }
-        continue;
-      }
+// [[INCR]] ....
+//        if (var_infos[i].canBeMissingCheck()) {
+//          if (Global.debugDerive.isDebugEnabled()) {
+//            Global.debugDerive.debug("In binary equality, " + var_infos[i].name + " can be missing");
+//          }
+//          continue;
+//        }
+// .... [[INCR]]
       // I haven't computed any invariants over it yet -- how am I to know
       // whether it's canonical??
       // if (!var_infos[i].isCanonical())
@@ -1027,12 +1035,14 @@ public class PptTopLevel extends Ppt {
     for (int i1=0; i1<vi_index_limit; i1++) {
       // Don't call canBeMissingCheck(); check directly,
       // lest equality be non-transitive
-      if (var_infos[i1].canBeMissing) {
-        if (Global.debugDerive.isDebugEnabled()) {
-          Global.debugDerive.debug("In binary equality, " + var_infos[i1].name + " can be missing");
-        }
-        continue;
-      }
+// [[INCR]] ....
+//        if (var_infos[i1].canBeMissing) {
+//          if (Global.debugDerive.isDebugEnabled()) {
+//            Global.debugDerive.debug("In binary equality, " + var_infos[i1].name + " can be missing");
+//          }
+//          continue;
+//        }
+// .... [[INCR]]
       // I can check canonicalness only if we've already computed
       // invariants over it.
       if ((i1 < vi_index_min) && (!var_infos[i1].isCanonical())) {
@@ -1054,13 +1064,15 @@ public class PptTopLevel extends Ppt {
         // System.out.println("Trying binary instantiate_views"
         //                    + " i1=" + i1 + " (" + var_infos[i1].name + "),"
         //                    + " i2=" + i2 + " (" + var_infos[i2].name + ")");
-        if (var_infos[i2].canBeMissingCheck()) {
-          if (Global.debugDerive.isDebugEnabled()) {
-            Global.debugDerive.debug("In binary equality vs. " + var_infos[i1].name
-                               + ", " + var_infos[i2].name + " can be missing");
-          }
-          continue;
-        }
+// [[INCR]] ....
+//          if (var_infos[i2].canBeMissingCheck()) {
+//            if (Global.debugDerive.isDebugEnabled()) {
+//              Global.debugDerive.debug("In binary equality vs. " + var_infos[i1].name
+//                                 + ", " + var_infos[i2].name + " can be missing");
+//            }
+//            continue;
+//          }
+// .... [[INCR]]
         // I can check canonicalness only if we've already computed
         // invariants over it.
         if ((i2 < vi_index_min) && (!var_infos[i2].isCanonical())) {
@@ -1177,12 +1189,14 @@ public class PptTopLevel extends Ppt {
       Vector ternary_views = new Vector();
       for (int i1=0; i1<vi_index_limit; i1++) {
         VarInfo var1 = var_infos[i1];
-        if (var1.canBeMissingCheck()) {
-          if (Global.debugDerive.isDebugEnabled()) {
-            Global.debugDerive.debug("In ternary, " + var1.name + " can be missing");
-          }
-          continue;
-        }
+// [[INCR]] ....
+//          if (var1.canBeMissingCheck()) {
+//            if (Global.debugDerive.isDebugEnabled()) {
+//              Global.debugDerive.debug("In ternary, " + var1.name + " can be missing");
+//            }
+//            continue;
+//          }
+// .... [[INCR]]
         if (!var1.isCanonical())
           continue;
         if (var1.isConstant())
@@ -1191,13 +1205,15 @@ public class PptTopLevel extends Ppt {
         boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
         for (int i2=i1+1; i2<vi_index_limit; i2++) {
           VarInfo var2 = var_infos[i2];
-          if (var2.canBeMissingCheck()) {
-            if (Global.debugDerive.isDebugEnabled()) {
-              Global.debugDerive.debug("In ternary vs. " + var1.name
-                                 + ", " + var2.name + " can be missing");
-            }
-            continue;
-          }
+// [[INCR]] ....
+//            if (var2.canBeMissingCheck()) {
+//              if (Global.debugDerive.isDebugEnabled()) {
+//                Global.deugDerive.debug("In ternary vs. " + var1.name
+//                                   + ", " + var2.name + " can be missing");
+//              }
+//              continue;
+//            }
+// .... [[INCR]]
           if (!var2.isCanonical())
             continue;
           if (var2.isConstant())
@@ -1227,14 +1243,16 @@ public class PptTopLevel extends Ppt {
                           || ((i3 >= vi_index_min) && (i3 < vi_index_limit)));
             Assert.assert((i1 < i2) && (i2 < i3));
             VarInfo var3 = var_infos[i3];
-            if (var3.canBeMissingCheck()) {
-              if (Global.debugDerive.isDebugEnabled()) {
-                Global.debugDerive.debug("In ternary vs. ("
-                                   + var1.name + "," + var2.name + ")"
-                                   + ", " + var2.name + " can be missing");
-              }
-              continue;
-            }
+// [[INCR]] ....
+//              if (var3.canBeMissingCheck()) {
+//                if (Global.debugDerive.isDebugEnabled()) {
+//                  Global.debugDerive.debug("In ternary vs. ("
+//                                     + var1.name + "," + var2.name + ")"
+//                                     + ", " + var2.name + " can be missing");
+//                }
+//                continue;
+//              }
+// .... [[INCR]]
             if (!var3.isCanonical())
               continue;
             if (var3.isConstant())
@@ -1482,98 +1500,99 @@ public class PptTopLevel extends Ppt {
     }
 
     // Fill the new PptConditionals with values.
-    for (Iterator vt_itor = values.sampleIterator(); vt_itor.hasNext(); ) {
-      VarValuesOrdered.ValueTupleCount entry = (VarValuesOrdered.ValueTupleCount) vt_itor.next();
-      ValueTuple vt = entry.value_tuple;
-      int count = entry.count;
-      // I do not want to use the same ValueTuple every time through the pconds
-      // loop because the inserted ValueTuple will be modified in place.
-      // It's OK to reuse its elements, though.
-      ValueTuple vt_trimmed = vt.trim(trimlength);
-      int[] trimmed_mods = vt_trimmed.mods;
-      Object[] trimmed_vals = vt_trimmed.vals;
-      for (int i=0; i<num_pconds; i+=2) {
-        // I really only have to do one of these (depending on which way
-        // the split goes), unless the splitter throws an error, in which
-        // case I need to have done both.  Thus, do both, to be on the safe
-        // side.
-        ValueTuple.orModsInto(cumulative_modbits[i], trimmed_mods);
-        ValueTuple.orModsInto(cumulative_modbits[i+1], trimmed_mods);
-        boolean splitter_test;
-        boolean split_exception = false;
-        // System.out.println("Testing " + pconds[i].name);
-        // This try block is tight so it doesn't accidentally catch
-        // other errors.
-        try {
-          splitter_test = pconds[i].splitter.test(vt);
-        } catch (Exception e) {
-          // e.printStackTrace();
-          // If an exception is thrown, don't put the data on either side
-          // of the split.
-          split_exception = true;
-          splitter_test = false; // to pacify the Java compiler
-        }
-        if (! split_exception) {
-          // System.out.println("Result = " + splitter_test);
-          int index = (splitter_test ? i : i+1);
-          // Do not reuse cum_mods!  It might itself be the
-          // canonical version (returned by Intern.intern), and then
-          // modifications would be bad.  Instead, create a new array.
-          int[] cum_mods = cumulative_modbits[index];
-          int[] new_mods = (int[]) trimmed_mods.clone();
-          // This is somewhat like orModsInto, but not exactly.
-          for (int mi=0; mi<trimlength; mi++) {
-            if ((cum_mods[mi] == ValueTuple.MODIFIED)
-                && (new_mods[mi] != ValueTuple.MISSING)) {
-              new_mods[mi] = ValueTuple.MODIFIED;
-              cum_mods[mi] = ValueTuple.UNMODIFIED;
-            }
-          }
-          // System.out.println("Adding (count " + count + ") to " + pconds[index].name);
-          pconds[index].add_nocheck(ValueTuple.makeFromInterned(trimmed_vals,
-                                                                Intern.intern(new_mods)),
-                                    count);
-          // I don't want to do "Arrays.fill(cum_mods, 0)" because where
-          // the value was missing, we didn't use up the modification bit.
-          // I've already fixed it up above, anyway.
-        }
-      }
-    }
+// [[INCR]] .... XXXXX
+//      for (Iterator vt_itor = values.sampleIterator(); vt_itor.hasNext(); ) {
+//        VarValuesOrdered.ValueTupleCount entry = (VarValuesOrdered.ValueTupleCount) vt_itor.next();
+//        ValueTuple vt = entry.value_tuple;
+//        int count = entry.count;
+//        // I do not want to use the same ValueTuple every time through the pconds
+//        // loop because the inserted ValueTuple will be modified in place.
+//        // It's OK to reuse its elements, though.
+//        ValueTuple vt_trimmed = vt.trim(trimlength);
+//        int[] trimmed_mods = vt_trimmed.mods;
+//        Object[] trimmed_vals = vt_trimmed.vals;
+//        for (int i=0; i<num_pconds; i+=2) {
+//          // I really only have to do one of these (depending on which way
+//          // the split goes), unless the splitter throws an error, in which
+//          // case I need to have done both.  Thus, do both, to be on the safe
+//          // side.
+//          ValueTuple.orModsInto(cumulative_modbits[i], trimmed_mods);
+//          ValueTuple.orModsInto(cumulative_modbits[i+1], trimmed_mods);
+//          boolean splitter_test;
+//          boolean split_exception = false;
+//          // System.out.println("Testing " + pconds[i].name);
+//          // This try block is tight so it doesn't accidentally catch
+//          // other errors.
+//          try {
+//            splitter_test = pconds[i].splitter.test(vt);
+//          } catch (Exception e) {
+//            // e.printStackTrace();
+//            // If an exception is thrown, don't put the data on either side
+//            // of the split.
+//            split_exception = true;
+//            splitter_test = false; // to pacify the Java compiler
+//          }
+//          if (! split_exception) {
+//            // System.out.println("Result = " + splitter_test);
+//            int index = (splitter_test ? i : i+1);
+//            // Do not reuse cum_mods!  It might itself be the
+//            // canonical version (returned by Intern.intern), and then
+//            // modifications would be bad.  Instead, create a new array.
+//            int[] cum_mods = cumulative_modbits[index];
+//            int[] new_mods = (int[]) trimmed_mods.clone();
+//            // This is somewhat like orModsInto, but not exactly.
+//            for (int mi=0; mi<trimlength; mi++) {
+//              if ((cum_mods[mi] == ValueTuple.MODIFIED)
+//                  && (new_mods[mi] != ValueTuple.MISSING)) {
+//                new_mods[mi] = ValueTuple.MODIFIED;
+//                cum_mods[mi] = ValueTuple.UNMODIFIED;
+//              }
+//            }
+//            // System.out.println("Adding (count " + count + ") to " + pconds[index].name);
+//            pconds[index].add_nocheck(ValueTuple.makeFromInterned(trimmed_vals,
+//                                                                  Intern.intern(new_mods)),
+//                                      count);
+//            // I don't want to do "Arrays.fill(cum_mods, 0)" because where
+//            // the value was missing, we didn't use up the modification bit.
+//            // I've already fixed it up above, anyway.
+//          }
+//        }
+//      }
 
 
-    // Install the new conditional ppts, if they are not trivial.
-    int parent_num_samples = num_samples();
-    for (int i=0; i<num_pconds; i++) {
-      // Don't bother with this conditioned view if it contains all or no samples.
-      int this_num_samples = pconds[i].num_samples();
-      if ((this_num_samples > 0) && (this_num_samples < parent_num_samples)) {
-        views_cond.add(pconds[i]);
-      } else {
-        if (Global.debugSplit.isDebugEnabled())
-          Global.debugSplit.debug("Omitting " + pconds[i].name + ": "
-                             + this_num_samples + "/" + parent_num_samples
-                             + " samples");
-        // // Unconditional output, because it's too confusing otherwise.
-        // if (this_num_samples == parent_num_samples) {
-        //   System.out.println("Condition always satisfied: "
-        //                      + pconds[i].name + " == " + this.name);
-        // }
-      }
-    }
-    if (Global.debugSplit.isDebugEnabled()) {
-      Global.debugSplit.debug("" + views_cond.size() + " views on " + this.name);
-      for (int i=0; i<views_cond.size(); i++) {
-        PptConditional pcond = (PptConditional) views_cond.elementAt(i);
-        System.out.println("    " + pcond.name);
-      }
-    }
-    for (int i=0; i<views_cond.size(); i++) {
-      PptConditional pcond = (PptConditional) views_cond.elementAt(i);
-      pcond.initial_processing();
-    }
+//      // Install the new conditional ppts, if they are not trivial.
+//      int parent_num_samples = num_samples();
+//      for (int i=0; i<num_pconds; i++) {
+//        // Don't bother with this conditioned view if it contains all or no samples.
+//        int this_num_samples = pconds[i].num_samples();
+//        if ((this_num_samples > 0) && (this_num_samples < parent_num_samples)) {
+//          views_cond.add(pconds[i]);
+//        } else {
+//          if (Global.debugSplit.isDebugEnabled())
+//            Global.debugSplit.debug("Omitting " + pconds[i].name + ": "
+//                               + this_num_samples + "/" + parent_num_samples
+//                               + " samples");
+//          // // Unconditional output, because it's too confusing otherwise.
+//          // if (this_num_samples == parent_num_samples) {
+//          //   System.out.println("Condition always satisfied: "
+//          //                      + pconds[i].name + " == " + this.name);
+//          // }
+//        }
+//      }
+//      if (Global.debugSplit.isDebugEnabled()) {
+//        Global.debugSplit.debug("" + views_cond.size() + " views on " + this.name);
+//        for (int i=0; i<views_cond.size(); i++) {
+//          PptConditional pcond = (PptConditional) views_cond.elementAt(i);
+//          System.out.println("    " + pcond.name);
+//        }
+//      }
+//      for (int i=0; i<views_cond.size(); i++) {
+//        PptConditional pcond = (PptConditional) views_cond.elementAt(i);
+//        pcond.initial_processing();
+//      }
+// ... [INCR] XXXXX
 
   }
-
 
   // (Where did I intend this to be called?  Near add-ppt-conditional,
   // presumably.)
@@ -2138,6 +2157,19 @@ public class PptTopLevel extends Ppt {
     // desirable first.  For now just use the ICFP.
     Arrays.sort(invs, icfp);
 
+    // // Debugging
+    // System.out.println("Sorted invs:");
+    // for (int i=0; i<invs.length; i++) {
+    //   System.out.println("    " + invs[i].format());
+    // }
+    // for (int i=0; i<invs.length-1; i++) {
+    //   int cmp = icfp.compare(invs[i], invs[i+1]);
+    //   System.out.println("cmp(" + i + "," + (i+1) + ") = " + cmp);
+    //   int rev_cmp = icfp.compare(invs[i+1], invs[i]);
+    //   System.out.println("cmp(" + (i+1) + "," + i + ") = " + rev_cmp);
+    //   Assert.assert(rev_cmp >= 0);
+    // }
+
     // Debugging
     if (Global.debugSimplify.isDebugEnabled()) {
       Global.debugSimplify.debug("Sorted invs:");
@@ -2429,10 +2461,12 @@ public class PptTopLevel extends Ppt {
   public void print_invariants_maybe(PrintStream out, PptMap all_ppts) {
     // Maybe this test isn't even necessary, but will be subsumed by others
     // (as all the invariants will be unjustified).
-    if (! has_samples()) {
-      out.println("No samples for " + name);
-      return;
-    }
+// [[INCR]] ....
+//      if (! has_samples()) {
+//        out.println("No samples for " + name);
+//        return;
+//      }
+// .... [[INCR]]
     if ((views.size() == 0) && (implication_view.invs.size() == 0)) {
       if (! (this instanceof PptConditional)) {
         // Presumably all the views that were originally there were deleted
@@ -2578,9 +2612,9 @@ public class PptTopLevel extends Ppt {
     // end IOA
 
     if (Daikon.output_num_samples) {
-      int num_samps = num_samples();
+      int num_samps = -111; // [[INCR]]
       out.println(better_name + "  " + nplural(num_samps, "sample"));
-      out.println("    Samples breakdown: " + tuplemod_samples_summary());
+      // out.println("    Samples breakdown: " + tuplemod_samples_summary()); // [[INCR]]
     } else {
       out.println(better_name);
     }
@@ -2685,8 +2719,10 @@ public class PptTopLevel extends Ppt {
     for (int i=0; i<var_infos.length; i++) {
       if (! var_infos[i].isCanonical()) {
         Global.non_canonical_variables++;
-      } else if (var_infos[i].canBeMissingCheck()) {
-        Global.can_be_missing_variables++;
+// [[INCR]] ....
+//        } else if (var_infos[i].canBeMissingCheck()) {
+//          Global.can_be_missing_variables++;
+// .... [[INCR]]
       } else {
         Global.canonical_variables++;
       }

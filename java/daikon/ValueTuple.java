@@ -284,8 +284,10 @@ public final class ValueTuple implements Cloneable {
       ValueAndModified vm = deriv.computeValueAndModified(this);
       new_vals[i+old_len] = vm.value;
       new_mods[i+old_len] = vm.modified;
-      if (vm == ValueAndModified.MISSING)
-        deriv.getVarInfo().canBeMissing = true;
+// [[INCR]] ....
+      // if (vm == ValueAndModified.MISSING)
+      //   deriv.getVarInfo().canBeMissing = true;
+// .... [[INCR]]
     }
     vals = Intern.intern(new_vals);
     mods = Intern.intern(new_mods);

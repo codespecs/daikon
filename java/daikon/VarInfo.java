@@ -8,8 +8,10 @@ import daikon.inv.binary.twoScalar.*;
 import utilMDE.*;
 
 import java.util.*;
-import java.io.*;
-
+import java.io.Serializable;
+import java.io.ObjectInputStream;
+import java.io.IOException;
+  
 /**
  * Represents information about a particular variable for a program
  * point.  This object doesn't hold the value of the variable at a
@@ -17,11 +19,10 @@ import java.io.*;
  * holds when given a ValueTuple using the getValue() method.  VarInfo
  * also includes info on the variable's name, its declared type, its
  * file representation type, its internal type and its comparability.
- *
- *
  **/
-
-public final class VarInfo implements Cloneable, java.io.Serializable {
+public final class VarInfo
+  implements Cloneable, Serializable
+{
 
   // Name and type
   public VarInfoName name;      // interned
@@ -65,7 +66,6 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   				//   (static_constant_value != null)
                                 //   iff (value_index == -1)
 
-
   // Derived variables
 
   /**
@@ -83,8 +83,12 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
    **/
   public PptTopLevel ppt;
 
-  boolean canBeMissing = false;
-  public boolean canBeNull = false;    // relevant only for arrays, really
+  // We don't know about canBeMissing or canBeNull anymore, since we
+  // see data incrementally, instead of slurping it all first.
+  // [[INCR]] ....
+  // boolean canBeMissing = false;
+  // public boolean canBeNull = false;    // relevant only for arrays, really
+  // .... [[INCR]]
 
   // It can be expensive to find an arbitrary invariant.  These fields
   // cache invariants that we want to be able to look up quickly.
@@ -196,7 +200,7 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
         e.printStackTrace();
         throw new Error(e.toString());
       }
-      a_new[i].canBeMissing = false;
+      // a_new[i].canBeMissing = false; // [[INCR]]
       // I must set this; even though the specified variables will still
       // be equal, they may have a different canonical representative.
       a_new[i].equal_to = null;
@@ -354,13 +358,17 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     return name.name().indexOf("~") != -1; // XXX
   }
 
-  public boolean canBeMissingCheck() {
-    return (canBeMissing
-            && (Daikon.invariants_check_canBeMissing
-                || (Daikon.invariants_check_canBeMissing_arrayelt
-                    // Probably bad to repeat this all the time at runtime.
-                    && (name.name().indexOf("[") != -1)))); // XXX ???
-  }
+  // [[INCR]] ....
+  // We don't know this anymore, since we see data incrementally,
+  // instead of all at once.
+  //    public boolean canBeMissingCheck() {
+  //      return (canBeMissing
+  //              && (Daikon.invariants_check_canBeMissing
+  //                  || (Daikon.invariants_check_canBeMissing_arrayelt
+  //                      // Probably bad to repeat this all the time at runtime.
+  //                      && (name.name().indexOf("[") != -1)))); // XXX ???
+  //    }
+  // .... [[INCR]]
 
   public int getModified(ValueTuple vt) {
     if (is_static_constant)
@@ -1159,8 +1167,9 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
 
   // Interning is lost when an object is serialized and deserialized.
   // Manually re-intern any interned fields upon deserialization.
-  private void readObject(ObjectInputStream in) throws
-  IOException, ClassNotFoundException {
+  private void readObject(ObjectInputStream in)
+    throws IOException, ClassNotFoundException
+  {
     in.defaultReadObject();
     name = name.intern();
   }

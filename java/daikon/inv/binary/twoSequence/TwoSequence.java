@@ -24,9 +24,9 @@ public abstract class TwoSequence extends Invariant {
     Assert.assert((mod_index >= 0) && (mod_index < 4));
     Assert.assert(!finished);
     if (v1 == null) {
-      ppt.var_infos[0].canBeNull = true;
+      // ppt.var_infos[0].canBeNull = true; // [[INCR]]
     } else if (v2 == null) {
-      ppt.var_infos[1].canBeNull = true;
+      // ppt.var_infos[1].canBeNull = true; // [[INCR]]
     } else if (mod_index == 0) {
       add_unmodified(v1, v2, count);
     } else {

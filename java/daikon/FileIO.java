@@ -291,7 +291,7 @@ public final class FileIO {
     }
     VarComparability comparability
       = VarComparability.parse(varcomp_format, comparability_string, prog_type);
-    // Not a call to assert.assert in order to avoid doing the (expensive)
+    // Not a call to Assert.assert in order to avoid doing the (expensive)
     // string concatenations.
     if (! VarInfo.legalFileRepType(file_rep_type)) {
       throw new Error("Unsupported (file) representation type " + file_rep_type.format() + " for variable " + varname + " at line " + file.getLineNumber() + " of file " + filename);
@@ -940,7 +940,7 @@ public final class FileIO {
           System.exit(1);
         }
         vals[val_index] = null;
-        vis[val_index].canBeMissing = true;
+        // vis[val_index].canBeMissing = true; // [[INCR]]
       } else {
         // System.out.println("Mod is " + mod + " (missing=" + ValueTuple.MISSING + "), rep=" + value_rep + " (modIsMissing=" + ValueTuple.modIsMissing(mod) + ")");
         vals[val_index] = vi.rep_type.parse_value(value_rep);
@@ -1033,7 +1033,7 @@ public final class FileIO {
           // Possibly more efficient to set this all at once, late in
           // the game; but this gets it done.
           if (ValueTuple.modIsMissing(mods[ppt.num_tracevars+i])) {
-            vis[ppt.num_tracevars+i].canBeMissing = true;
+            // vis[ppt.num_tracevars+i].canBeMissing = true; // [[INCR]]
             Assert.assert(vals[ppt.num_tracevars+i] == null);
           }
         }

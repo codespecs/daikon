@@ -116,15 +116,15 @@ public abstract class Ppt implements java.io.Serializable {
   }
 
   /** Number of samples, not including missing values. */
-  public abstract int num_samples();
+  // public abstract int num_samples(); // [[INCR]]
 
   /**
    * Number of samples with mod bit set for at least one variable.  In
    * other words, this is recording tuplemod information, not regular mod
    * information.
    **/
-  public abstract int num_mod_non_missing_samples();
-  public abstract int num_values();
+  // public abstract int num_mod_non_missing_samples(); // [[INCR]]
+  // public abstract int num_values(); // [[INCR]]
   // public abstract int num_missing
 
   // Perhaps also optionally provide an array of the Ppts.

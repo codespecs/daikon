@@ -25,7 +25,7 @@ public abstract class SingleFloatSequence extends Invariant {
     // System.out.println("SingleFloatSequence.add(" + ArraysMDE.toString(value) + ", " + modified + ", " + count + ")");
     Assert.assert(!finished);
     if (value == null) {
-      ppt.var_infos[0].canBeNull = true;
+      // ppt.var_infos[0].canBeNull = true; // [[INCR]]
     } else if (mod_index == 0) {
       add_unmodified(value, count);
     } else {

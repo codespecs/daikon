@@ -37,7 +37,7 @@ public abstract class SequenceString extends Invariant {
     Assert.assert((mod_index >= 0) && (mod_index < 4));
     Assert.assert(!finished);
     if (v1 == null) {
-      ppt.var_infos[seq_index].canBeNull = true;
+      // ppt.var_infos[seq_index].canBeNull = true; // [[INCR]]
     } else if (mod_index == 0) {
       add_unmodified(v1, v2, count);
     } else {

@@ -18,6 +18,26 @@ import gnu.getopt.*;
 import utilMDE.*;
 
 public final class Daikon {
+
+  static {
+    System.err.println();
+    System.err.println();
+    System.err.println();
+    System.err.println("****************************************");
+    System.err.println();    
+    System.err.println("      YOU ARE USING A DAIKON BRANCH     ");
+    System.err.println();
+    System.err.println("ARE YOU SURE YOU WANTED TO BE DOING THAT");
+    System.err.println();
+    System.err.println("????????????????????????????????????????");
+    System.err.println();
+    System.err.println("****************************************");
+    System.err.println();
+    System.err.println();
+    System.err.println();
+    System.err.flush();
+  }
+
   public static final String lineSep = Global.lineSep;
 
   public static boolean dkconfig_output_conditionals = true;
@@ -432,8 +452,7 @@ public final class Daikon {
 
     for (Iterator itor = all_ppts_sorted.iterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
-      if (ppt.has_samples()) {
-	int num_samples = ppt.num_samples();
+        // int num_samples = ppt.num_samples(); // [[INCR]]
 	int num_array_vars = ppt.num_array_vars();
 	int num_scalar_vars = ppt.num_vars() - num_array_vars;
 	int num_static_vars = ppt.num_static_constant_vars;
@@ -480,24 +499,25 @@ public final class Daikon {
 
         {
           // Clear memory
-          ppt.set_values_null();
+          // ppt.set_values_null(); // [[INCR]]
           ppt.clear_view_caches();
           for (int i=0; i<ppt.views_cond.size(); i++) {
             PptConditional pcond = (PptConditional) ppt.views_cond.elementAt(i);
-            pcond.set_values_null();
+            // pcond.set_values_null(); // [[INCR]]
             pcond.clear_view_caches();
           }
         }
 
 	if (monitor!=null) {
-	  monitor.end_of_iteration(ppt.name, num_samples, num_static_vars, num_orig_vars, num_scalar_vars, num_array_vars, num_derived_scalar_vars, num_derived_array_vars);
+	  monitor.end_of_iteration(ppt.name,
+				   -1, // [[INCR]]
+				   num_static_vars, num_orig_vars, num_scalar_vars, num_array_vars, num_derived_scalar_vars, num_derived_array_vars);
 	}
 	long ppt_end_time = System.currentTimeMillis();
 	if (no_text_output && show_progress) {
 	  double elapsed = (ppt_end_time - ppt_start_time) / 1000.0;
 	  System.out.println((new java.text.DecimalFormat("#.#")).format(elapsed) + "s");
 	}
-      }
     }
 
     if (monitor!=null) {
@@ -531,7 +551,8 @@ public final class Daikon {
 
     for (Iterator itor = ppts_sorted.iterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
-      if (ppt.has_samples() && ! no_text_output) {
+      // if (ppt.has_samples() &&  // [[INCR]]
+      if (! no_text_output) {
         ppt.print_invariants_maybe(System.out, ppts);
       }
     }
