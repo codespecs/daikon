@@ -40,11 +40,6 @@ WWW_FILES := $(shell cd doc/www; find . -type f -print | egrep -v '~$$|CVS|.cvsi
 #WWW_DIR := /home/httpd/html/daikon/
 WWW_ROOT := /afs/csail.mit.edu/group/pag/docroot/www.pag.csail.mit.edu/daikon/
 WWW_DIR := $(WWW_ROOT)
-# This needs not to be hardcoded to a particular users directory if
-# anyone else is going to use it.
-# MERNST_DIR := /g2/users/mernst
-# This is the current directory!  Maybe I don't need a variable for it.
-#INV_DIR := $(MERNST_DIR)/research/invariants
 INV_DIR := $(shell pwd)
 JDKDIR ?= /afs/csail/group/pag/software/pkg/jdk
 
@@ -84,14 +79,10 @@ DIST_PAG_BIN_DIR := /afs/csail/group/pag/projects/invariants/binaries
 # Files that appear in the top level of the distribution directory
 DIST_DIR_FILES := daikon.tar.gz daikon-logo.gif daikon.jar
 DIST_DIR_PATHS := daikon.tar.gz daikon.zip doc/images/daikon-logo.gif daikon.jar
-# # Location for NFS-mounted binaries
-# NFS_BIN_DIR := /g2/users/mernst/research/invariants/binaries
 
 CVS_REPOSITORY := /afs/csail.mit.edu/group/pag/projects/invariants/.CVS
 
 # It seems like these should come from their standard locations (jhp)
-#RTJAR := /g2/users/mernst/java/jdk/jre/lib/rt.jar
-#TOOLSJAR := /g2/users/mernst/java/jdk/lib/tools.jar
 RTJAR := $(JDKDIR)/jre/lib/rt.jar
 TOOLSJAR := $(JDKDIR)/lib/tools.jar
 
