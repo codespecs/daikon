@@ -710,9 +710,9 @@ public final class FileIO {
   }
 
   /**
-   * Process a value tuple associated with a given program point by
-   * giving the data to the program point for flowing.
-   * @param vt trace data only
+   * Add orig() and derived variables to vt (by side effect), then
+   * supply it to the program point for flowing.
+   * @param vt trace data only; modified by side effect to add derived vars
    **/
   public static void process_sample(PptTopLevel ppt, ValueTuple vt, Integer nonce)
   {
