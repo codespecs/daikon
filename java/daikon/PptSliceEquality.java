@@ -294,8 +294,8 @@ public class PptSliceEquality
    * @return a List of Equality invariants bundling together same
    * values from vis, and if needed, another representing all the
    * missing values.
-   * @pre vis.size() > 0
-   * @post result.size() > 0
+   * pre vis.size() > 0
+   * post result.size() > 0
    **/
   private List/*[Equality]*/ createEqualityInvs (List vis, ValueTuple vt,
                                                  Equality leader, int count
@@ -363,8 +363,8 @@ public class PptSliceEquality
    * add value to key.  Otherwise create a new List associated with
    * key and insert value.
    * @param value The value to insert into the List mapped to key.
-   * @pre Each value in map is a list of size 1 or greater
-   * @post Each value in map is a list of size 1 or greater
+   * pre: Each value in map is a list of size 1 or greater
+   * post: Each value in map is a list of size 1 or greater
    **/
   private void addToBindingList (Map map, Object key, VarInfo value) {
     Assert.assertTrue (key != null);
@@ -386,7 +386,7 @@ public class PptSliceEquality
    * @param newVis a List of new VarInfos that used to be equal to
    * leader.  Actually, it's the list of canonical that were equal to
    * leader, representing their own newly-created equality sets.
-   * @post Adds the newly instantiated invariants and slices to
+   * post: Adds the newly instantiated invariants and slices to
    * this.parent.
    **/
   private List /*Invariant*/ copyInvsFromLeader (VarInfo leader, List newVis) {
