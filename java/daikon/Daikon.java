@@ -7,6 +7,7 @@ import daikon.inv.Invariant;
 
 import java.util.*;
 import java.io.*;
+import java.lang.Thread;
 
 import org.apache.oro.text.regex.*;
 import gnu.getopt.*;
@@ -70,6 +71,7 @@ public final class Daikon {
   public static final int OUTPUT_STYLE_NORMAL = 0;
   public static final int OUTPUT_STYLE_ESC = 1;
   public static final int OUTPUT_STYLE_SIMPLIFY = 2;
+  public static final int OUTPUT_STYLE_IOA = 3;  
   public static int output_style = OUTPUT_STYLE_NORMAL;
   // public static int output_style = OUTPUT_STYLE_ESC;
   // public static int output_style = OUTPUT_STYLE_SIMPLIFY;
@@ -99,6 +101,8 @@ public final class Daikon {
   public static final String suppress_redundant_SWITCH = "suppress_redundant";
   public static final String prob_limit_SWITCH = "prob_limit";
   public static final String esc_output_SWITCH = "esc_output";
+  public static final String ioa_output_SWITCH = "ioa_output";
+  public static final String mem_stat_SWITCH = "mem_stat";
   public static final String simplify_output_SWITCH = "simplify_output";
   public static final String output_num_samples_SWITCH = "output_num_samples";
 
@@ -140,10 +144,14 @@ public final class Daikon {
       new LongOpt(prob_limit_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(esc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(simplify_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(ioa_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(mem_stat_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
     };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:", longopts);
     int c;
+    boolean memMonitorOK = false;
+
     while ((c = g.getopt()) != -1) {
       switch(c) {
       case 0:
@@ -202,6 +210,10 @@ public final class Daikon {
 	  output_style = OUTPUT_STYLE_ESC;
 	} else if (simplify_output_SWITCH.equals(option_name)) {
 	  output_style = OUTPUT_STYLE_SIMPLIFY;
+	} else if (ioa_output_SWITCH.equals(option_name)) {
+	  output_style = OUTPUT_STYLE_IOA;
+	} else if (mem_stat_SWITCH.equals(option_name)) {
+	  memMonitorOK = true;
 	} else if (output_num_samples_SWITCH.equals(option_name)) {
 	  output_num_samples = true;
 	} else {
@@ -287,9 +299,22 @@ public final class Daikon {
     Comparator comparator = new Ppt.NameComparator();
     TreeSet all_ppts_sorted = new TreeSet(comparator);
     all_ppts_sorted.addAll(all_ppts.asCollection());
+
+    MemMonitor monitor=null;
+    if (memMonitorOK) {
+      monitor = new MemMonitor("stat.out");
+      new Thread((Runnable) monitor).start();
+    }
+
     for (Iterator itor = all_ppts_sorted.iterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       if (ppt.has_samples()) {
+	int num_samples = ppt.num_samples();
+	int num_array_vars = ppt.num_array_vars();
+	int num_scalar_vars = ppt.num_vars() - num_array_vars;
+	int num_static_vars = ppt.num_static_constant_vars;
+	int num_orig_vars = ppt.num_orig_vars;
+
         // System.out.println(ppt.name + ": " + ppt.num_samples() + " samples, "
         //                    + ppt.num_values() + " values, "
         //                    + "ratio = " + ((double)ppt.num_samples()) / ((double)ppt.num_values()));
@@ -303,6 +328,10 @@ public final class Daikon {
 	  System.out.flush();
 	}
         ppt.initial_processing();
+
+	int num_derived_array_vars = ppt.num_array_vars() - num_array_vars;
+	int num_derived_scalar_vars = ppt.num_vars() - ppt.num_array_vars() - num_scalar_vars;
+	
 	if (no_text_output) {
 	  System.out.print("...");
 	  System.out.flush();
@@ -318,6 +347,7 @@ public final class Daikon {
             ppt.addConditions(pconds);
         }
         ppt.addImplications();
+
         {
           // Clear memory
           ppt.set_values_null();
@@ -328,12 +358,20 @@ public final class Daikon {
             pcond.clear_view_caches();
           }
         }
+	
+	if (monitor!=null) {
+	  monitor.end_of_iteration(ppt.name, num_samples, num_static_vars, num_orig_vars, num_scalar_vars, num_array_vars, num_derived_scalar_vars, num_derived_array_vars);
+	}
 	long ppt_end_time = System.currentTimeMillis();
 	if (no_text_output) {
 	  double elapsed = (ppt_end_time - ppt_start_time) / 1000.0;
 	  System.out.println((new java.text.DecimalFormat("#.#")).format(elapsed) + "s");
 	}
       }
+    }
+    
+    if (monitor!=null) {
+      monitor.stop();
     }
 
     if (suppress_redundant_invariants_with_simplify) {
