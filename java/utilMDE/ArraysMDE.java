@@ -579,74 +579,150 @@ public final class ArraysMDE {
   // That's to avoid confusion over whether it would be the last included
   // index or the first non-included index.
 
+  /**
+   * Return a subarray of the given array.
+   * @param a the original array
+   * @param startindex the first index to be included
+   * @param length the number of elements to include (not an end index,
+   *        to avoid confusion over whether it would be the last included
+   *        index or the first non-included index)
+   **/
   public static Object[] subarray(Object[] a, int startindex, int length) {
     Object[] result = new Object[length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
 
+  /**
+   * Return a subarray of the given array.
+   * @param a the original array
+   * @param startindex the first index to be included
+   * @param length the number of elements to include (not an end index,
+   *        to avoid confusion over whether it would be the last included
+   *        index or the first non-included index)
+   **/
   public static String[] subarray(String[] a, int startindex, int length) {
     String[] result = new String[length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
 
+  /**
+   * Return a subarray of the given array.
+   * @param a the original array
+   * @param startindex the first index to be included
+   * @param length the number of elements to include (not an end index,
+   *        to avoid confusion over whether it would be the last included
+   *        index or the first non-included index)
+   **/
   public static byte[] subarray(byte[] a, int startindex, int length) {
     byte[] result = new byte[length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
 
+  /**
+   * Return a subarray of the given array.
+   * @param a the original array
+   * @param startindex the first index to be included
+   * @param length the number of elements to include (not an end index,
+   *        to avoid confusion over whether it would be the last included
+   *        index or the first non-included index)
+   **/
   public static boolean[] subarray(boolean[] a, int startindex, int length) {
     boolean[] result = new boolean[length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
 
+  /**
+   * Return a subarray of the given array.
+   * @param a the original array
+   * @param startindex the first index to be included
+   * @param length the number of elements to include (not an end index,
+   *        to avoid confusion over whether it would be the last included
+   *        index or the first non-included index)
+   **/
   public static char[] subarray(char[] a, int startindex, int length) {
     char[] result = new char[length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
 
+  /**
+   * Return a subarray of the given array.
+   * @param a the original array
+   * @param startindex the first index to be included
+   * @param length the number of elements to include (not an end index,
+   *        to avoid confusion over whether it would be the last included
+   *        index or the first non-included index)
+   **/
   public static double[] subarray(double[] a, int startindex, int length) {
     double[] result = new double[length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
 
-  // Note that the second argument is a length, not an end position.
-  // (Is that the right design decision?)
+  /**
+   * Return a subarray of the given array.
+   * @param a the original array
+   * @param startindex the first index to be included
+   * @param length the number of elements to include (not an end index,
+   *        to avoid confusion over whether it would be the last included
+   *        index or the first non-included index)
+   **/
   public static float[] subarray(float[] a, int startindex, int length) {
     float[] result = new float[length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
 
-  // Note that the second argument is a length, not an end position.
-  // (Is that the right design decision?)
+  /**
+   * Return a subarray of the given array.
+   * @param a the original array
+   * @param startindex the first index to be included
+   * @param length the number of elements to include (not an end index,
+   *        to avoid confusion over whether it would be the last included
+   *        index or the first non-included index)
+   **/
   public static int[] subarray(int[] a, int startindex, int length) {
     int[] result = new int[length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
 
-  // Note that the second argument is a length, not an end position.
-  // (Is that the right design decision?)
+  /**
+   * Return a subarray of the given array.
+   * @param a the original array
+   * @param startindex the first index to be included
+   * @param length the number of elements to include (not an end index,
+   *        to avoid confusion over whether it would be the last included
+   *        index or the first non-included index)
+   **/
   public static long[] subarray(long[] a, int startindex, int length) {
     long[] result = new long[length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
 
-  // Note that the second argument is a length, not an end position.
-  // (Is that the right design decision?)
+  /**
+   * Return a subarray of the given array.
+   * @param a the original array
+   * @param startindex the first index to be included
+   * @param length the number of elements to include (not an end index,
+   *        to avoid confusion over whether it would be the last included
+   *        index or the first non-included index)
+   **/
   public static short[] subarray(short[] a, int startindex, int length) {
     short[] result = new short[length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
 
+  /**
+   * Return a new array that contains all the elements of both argument
+   * arrays, in order.
+   **/
   public static long[] concat(long[] a, long[] b) {
     if (a == null && b == null) return null;
     if (a == null) return b;
@@ -658,7 +734,11 @@ public final class ArraysMDE {
     return result;
   }
 
-   public static double[] concat(double[] a, double[] b) {
+  /**
+   * Return a new array that contains all the elements of both argument
+   * arrays, in order.
+   **/
+  public static double[] concat(double[] a, double[] b) {
     if (a == null && b == null) return null;
     if (a == null) return b;
     if (b == null) return a;
@@ -669,6 +749,10 @@ public final class ArraysMDE {
     return result;
   }
 
+  /**
+   * Return a new array that contains all the elements of both argument
+   * arrays, in order.
+   **/
   public static String[] concat(String[] a, String[] b) {
     if (a == null && b == null) return null;
     if (a == null) return b;
