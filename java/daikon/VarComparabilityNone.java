@@ -49,4 +49,8 @@ public final class VarComparabilityNone
                             VarInfoName name2, VarComparabilityNone type2) {
     return true;
   }
+
+  public String toString() {
+    return ("no-compare");
+  }
 }
