@@ -53,6 +53,5 @@ fi
 export AJAX_DIR=$DAIKONDIR/java/ajax-ship
 
 
-## Uncomment this if you install Lackwit
-# ## Indicates where Lackwit can find its libraries (and binaries).
-# export LACKWIT_HOME=$DFECDIR/lackwit
+## Indicates where Lackwit can find its libraries (and binaries).
+export LACKWIT_HOME=$DFECDIR/lackwit
