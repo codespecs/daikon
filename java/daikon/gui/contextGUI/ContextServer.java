@@ -418,7 +418,7 @@ public class ContextServer
             class_hash = null;
         }
 
-        } catch (IOException ioe){
+        } catch (IOException ioe) {
             return("Error reading in file: " + ioe.toString());
         }
         catch (NullPointerException npe)

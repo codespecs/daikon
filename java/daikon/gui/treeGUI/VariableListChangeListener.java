@@ -2,7 +2,7 @@ package daikon.gui.treeGUI;
 
 import java.util.Vector;
 
-/** 
+/**
  * This listener should be invoked when the list of variable filters
  * which are selected has changed.  It's used when the user has made a
  * final selection, so that the invariants which are displayed are

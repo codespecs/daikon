@@ -37,7 +37,7 @@ public final class FunctionsFloat {
       // decrement: subsumed by LinearBinary
 
       // logicalComplement: subsumed by LinearBinary
-      //"utilMDE.MathMDE.negate(double)",
+      // "utilMDE.MathMDE.negate(double)",
       /// Non-operators
     };
   //  unaryFunctions = methodNamesToMethods(unaryFunctionNames);
@@ -54,7 +54,7 @@ public final class FunctionsFloat {
       {"java.lang.Math.max(", ", ", ")"},
 
     };
-    //binarySymmetricFunctions = methodNamesToMethods(binarySymmetricFunctionNames);
+    // binarySymmetricFunctions = methodNamesToMethods(binarySymmetricFunctionNames);
 
     binaryNonSymmetricFunctionNames = new String[][] {
       /// Java language operators (in precedence order, omitting boolean operators)
@@ -72,7 +72,7 @@ public final class FunctionsFloat {
 
     switch(methodnumber) {
     case 0: return MathMDE.negate(arg);
-    //case 1: return Math.abs(arg);
+    // case 1: return Math.abs(arg);
     }
 
     System.out.println("returning 0, unary");

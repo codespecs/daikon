@@ -210,7 +210,7 @@ public final class EltOneOf
   */
 
   public String format_java() {
-    //have to take a closer look at this!
+    // have to take a closer look at this!
     sort_rep();
 
     String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[] { var().name });

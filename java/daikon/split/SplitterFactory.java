@@ -15,7 +15,7 @@ import org.apache.log4j.Category;
  * point names and their corresponding arrays of Splitters
  **/
 
-//todo: add logging and debugging
+// todo: add logging and debugging
 //      log error messages from compilation of splitters
 public class SplitterFactory {
 
@@ -26,7 +26,9 @@ public class SplitterFactory {
   private static Perl5Matcher re_matcher = new Perl5Matcher();
   private static Perl5Compiler re_compiler = new Perl5Compiler();
   private static String tempdir;
-  private static boolean javac = false; //indicates whether javac is being used as the  compiler.
+  // Indicates whether javac is being used as the compiler;
+  // javac's failure modes require special error recovery.
+  private static boolean javac = false; //
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -49,7 +51,7 @@ public class SplitterFactory {
       javac = true;
 
     LineNumberReader reader = UtilMDE.LineNumberFileReader(infofile.toString());
-    Vector splitterObjectArrays = new Vector(); //Vector of SplitterObject[]
+    Vector splitterObjectArrays = new Vector(); // Vector of SplitterObject[]
     Vector replace = new Vector(); // [String] but paired
     Vector returnSplitters = new Vector();
 
@@ -61,7 +63,7 @@ public class SplitterFactory {
         if (re_matcher.matches(line, blank_line) || line.startsWith("#")) {
           continue;
         } else if (line.startsWith("REPLACE")) {
-          replace = read_replace_statements(replace, reader);
+          replace.addAll(read_replace_statements(reader));
         } else if (line.startsWith("PPT_NAME")) {
           StringTokenizer tokenizer = new StringTokenizer(line);
           tokenizer.nextToken(); // throw away the first token "PPT_NAME"
@@ -85,25 +87,25 @@ public class SplitterFactory {
   }
 
   /**
-   * Reads the statements in the REPLACE section of the Splitter info
-   * file.
+   * Reads the statements in the REPLACE section of the Splitter info file.
+   * The line "REPLACE" has just been read from the LineNumberReader
+   * `reader'.
    *
-   * @return the same Vector[String] passed as the replace argument,
-   * containing replace statements.
+   * @return a new Vector[String] containing the replace statements.
    **/
-  static Vector read_replace_statements(Vector replace, // [String]
-                                        LineNumberReader reader)
+  static Vector read_replace_statements(LineNumberReader reader)
     throws IOException, FileNotFoundException
   {
+    Vector result = new Vector();
     String line = reader.readLine();
     while ((line != null) && !re_matcher.matches(line, blank_line)) {
       // skip comments
       if (! line.startsWith("#")) {
-        replace.addElement(line.trim());
+        result.addElement(line.trim());
       }
       line = reader.readLine();
     }
-    return replace;
+    return result;
   }
 
   /**
@@ -158,7 +160,7 @@ public class SplitterFactory {
     ArrayList processes = new ArrayList(); // the processes
 
     for (int i = 0; i < splitterObjectArrays.length; i++) {
-      //write the Splitter classes
+      // write the Splitter classes
       try {
         write_function_splitters(splitterObjectArrays[i], replace, all_ppts);
 
@@ -172,13 +174,13 @@ public class SplitterFactory {
         compile_list.add(splitterObjectArrays[i][j].getFullSourcePath());
       }
 
-      //compile all the splitters under this program point
+      // compile all the splitters under this program point
       processes.add(FileCompiler.compile_source(compile_list));
     }
 
-    StringBuffer errorString = new StringBuffer(); //stores the error messages
-    // wait for all the compilation processes to terminate
-    // if compiling with javac, then the size of this vector is 0.
+    StringBuffer errorString = new StringBuffer(); // stores the error messages
+    // Wait for all the compilation processes to terminate.
+    // If compiling with javac, then the size of this vector is 0.
     for (int i = 0; i < processes.size(); i++) {
       TimedProcess tp = (TimedProcess) processes.get(i);
       errorString.append("\n");
@@ -188,9 +190,9 @@ public class SplitterFactory {
       }
     }
 
-    //javac tends to stop without completing the compilation if there
-    //is an error in one of the files. Remove all the erring files
-    //and recompile only the good ones
+    // javac tends to stop without completing the compilation if there
+    // is an error in one of the files. Remove all the erring files
+    // and recompile only the good ones.
     if (javac) {
       recompile_without_errors (splitterObjectArrays, errorString.toString());
     }
@@ -210,15 +212,15 @@ public class SplitterFactory {
   }
 
   /**
-   * examine the errorString to identify the Splitters which cannot
+   * Examine the errorString to identify the Splitters that cannot
    * compile, then recompile all the other files. This function is
    * necessary when compiling with javac because javac does not
    * compile all the files supplied to it if some of them contain
-   * errors. So some "good" files end up not being compiled
+   * errors. So some "good" files end up not being compiled.
    */
   private static void recompile_without_errors (SplitterObject[][] spArrays,
                                                 String errorString) {
-    //search the error string and extract the files with errors.
+    // search the error string and extract the files with errors.
     if (errorString != null) {
       HashSet errors = new HashSet();
       PatternMatcherInput input = new PatternMatcherInput(errorString);
@@ -228,7 +230,7 @@ public class SplitterFactory {
       }
 
       List retry = new ArrayList();
-      //collect all the splitters which were not compiled.
+      // collect all the splitters which were not compiled.
       for (int i = 0; i < spArrays.length; i++) {
         for (int j = 0; j < spArrays[i].length; j++) {
           if (!spArrays[i][j].compiled()) {
@@ -247,17 +249,17 @@ public class SplitterFactory {
         ie.printStackTrace();
       }
 
-      //We don't want to wait for the old process for too long. We
-      //wait for a short time, kill the process and recompile the set
-      //of files, removing the leading file
+      // We don't want to wait for the old process for too long. We
+      // wait for a short time, kill the process and recompile the set
+      // of files, removing the leading file
       if (tp != null && !tp.finished()) {
         tp.waitFor();
       }
     }
   }
 
-  //this pattern is used to search for the classnames of Java source
-  //files in a string.
+  // this pattern is used to search for the classnames of Java source
+  // files in a string.
   static Pattern splitter_classname_pattern;
   static {
     try {
@@ -286,12 +288,12 @@ public class SplitterFactory {
     ppt_name = splitterObjects[0].getPptName();
     PptTopLevel ppt = find_corresponding_ppt(ppt_name, all_ppts);
     if (ppt == null) {
-      //try with the OBJECT program point
+      // try with the OBJECT program point
       ppt = find_corresponding_ppt("OBJECT", all_ppts);
     }
     if (ppt == null) {
-      //We just get a random program point (the first) from the pptmap.
-      //Hopefully we can find the variables that we need at this ppt
+      // We just get a random program point (the first) from the pptmap.
+      // Hopefully we can find the variables that we need at this ppt
       Iterator pptIter = all_ppts.pptIterator();
       if (pptIter.hasNext()) {
         ppt = (PptTopLevel)pptIter.next();
@@ -319,9 +321,9 @@ public class SplitterFactory {
       // at the program point.
       ArrayList p_names = new ArrayList();
       for (int i = 0; i < num_params; i++) {
-        //declared variable names in the Splitter class cannot have characters
-        //like ".", "(" etc. Change, for example, "node.parent" to "node_parent"
-        //and orig(x) to orig_x
+        // declared variable names in the Splitter class cannot have characters
+        // like ".", "(" etc. Change, for example, "node.parent" to "node_parent"
+        // and orig(x) to orig_x
         String temp = all_params[i];
         temp = temp.replace('.','_');
         temp = temp.replace('[','_');
@@ -399,7 +401,7 @@ public class SplitterFactory {
 
         test_string = find_applicable_variables(params, param_names, test_string, class_name);
 
-        //replace all occurences of "orig(varname)" with "orig_varname" in the condition.
+        // replace all occurences of "orig(varname)" with "orig_varname" in the condition.
 
         test_string = replace_orig(test_string);
 
@@ -442,7 +444,7 @@ public class SplitterFactory {
           String param_name = param_names[i];
           String typ = all_types[i];
           if (typ.equals("char[]")) {
-            //char[] is not an array
+            // char[] is not an array
             file_string.append("    " + param_name + "_varinfo = ppt.findVar(VarInfoName.parse(\"" + param + "[]\")) ; \n");
           } else if (typ.endsWith("[]")) {
             // attach "_array" to an array variable name anytime to distinguish
@@ -537,7 +539,7 @@ public class SplitterFactory {
       while (ppt_itor.hasNext()) {
         String name = ((PptTopLevel)ppt_itor.next()).name;
         if (re_matcher.contains( name, ppt_pattern)) {
-          //return more than one? do more than one match??
+          // return more than one? do more than one match??
           return all_ppts.get(name);
         }
       }
@@ -552,8 +554,8 @@ public class SplitterFactory {
   static Perl5Substitution orig_subst;
   static {
     try {
-      //this regex pattern is used to search for "orig" variable names.
-      //it replaces orig(varname) with orig_varname
+      // this regex pattern is used to search for "orig" variable names.
+      // it replaces orig(varname) with orig_varname
       find_orig_pattern = re_compiler.compile("\\orig\\s*\\(\\s*(\\S*?)\\s*\\)");
       orig_subst = new Perl5Substitution("orig_$1", Perl5Substitution.INTERPOLATE_ALL);
     } catch (MalformedPatternException me) {
@@ -578,7 +580,7 @@ public class SplitterFactory {
 
     VarInfo[] var_infos = ppt.var_infos;
     for (int i = 0; i < var_infos.length; i++) {
-      //we don't want hashcodes. We just want the variable values
+      // we don't want hashcodes. We just want the variable values
       if (var_infos[i].file_rep_type == ProglangType.HASHCODE) {
         parameters.addElement(var_infos[i].name.name().trim());
         types.addElement("int");
@@ -588,13 +590,13 @@ public class SplitterFactory {
       if (temp.endsWith(".class"))
         continue;
       if (temp.endsWith("[]")) {
-        //strip off the brackets and search for the variable name in the test string.
+        // strip off the brackets and search for the variable name in the test string.
         temp = temp.substring(0, temp.length() - 2);
       }
       parameters.addElement(temp);
-      //do rep_type changes here.
+      // do rep_type changes here.
       if (var_infos[i].type.format().trim().equals("char[]")) {
-        //if char[], we need to treat as a String in Daikon
+        // if char[], we need to treat as a String in Daikon
         types.addElement ("char[]");
       } else if (var_infos[i].type.format().trim().equals("boolean")) {
         types.addElement("boolean");
@@ -838,11 +840,11 @@ public class SplitterFactory {
             // it with this_myArray as declared in the Splitter.
             param_pattern = re_compiler.compile("(" + delimit(qm(params[i])) + "|" + delimit(qm(params_minus_this)) + ")");
           } else if (!class_name.equals("") && params[i].startsWith(class_name)) {
-            //static variable
+            // static variable
             param_pattern = re_compiler.compile(qm(params[i]) + "|" + qm(params[i].substring(class_name.length())));
           } else if (params[i].startsWith("orig")) {
-            //we've already substituted for example orig(this.Array) with "orig(this_theArray)",
-            //so search for "orig(this_theArray)" in the test_string
+            // we've already substituted for example orig(this.Array) with "orig(this_theArray)",
+            // so search for "orig(this_theArray)" in the test_string
             String temp = param_names[i].replace('.','_');
             String search_string = "orig\\s*\\(\\s*" + temp.substring(5) + "\\s*\\)";
             if (temp.length() > 10) {
@@ -850,11 +852,11 @@ public class SplitterFactory {
             }
             param_pattern = re_compiler.compile(search_string);
           } else if (params[i].charAt(0) == '$') {
-            //remove unwanted characters from the param name. These confuse the regexp.
-            //(find a better solution for arbitrary characters at arbitrary locations)
+            // remove unwanted characters from the param name. These confuse the regexp.
+            // (find a better solution for arbitrary characters at arbitrary locations)
             param_pattern = re_compiler.compile(delimit(qm(params[i].substring(1))));
           } else {
-            //to take care of pointer variables too, we search for "(varname|*varname)"
+            // to take care of pointer variables too, we search for "(varname|*varname)"
             param_pattern = re_compiler.compile("(" + delimit(qm(params[i])) + "|" + delimit(qm("*" + params[i])) + ")");
           }
           Perl5Substitution param_subst = new Perl5Substitution(param_names[i], Perl5Substitution.INTERPOLATE_ALL);
@@ -1044,7 +1046,7 @@ public class SplitterFactory {
         splitter_source.append("    long " + parameter + " = "
                                + parameter + "_varinfo.getIntValue(vt); \n");
       } else if (type.equals("boolean")) {
-        //we get the boolean as an int
+        // we get the boolean as an int
         splitter_source.append("    boolean " + parameter + " = (" + parameter
                                + "_varinfo.getIntValue(vt) > 0 ? true : false ); \n");
       } else if (type.equals("int[]")) {
@@ -1065,22 +1067,22 @@ public class SplitterFactory {
     return test_string;
   }
 
-  //Set of all invariants that are good for printing.
+  // Set of all invariants that are good for printing.
   private static HashSet all_conditions = new HashSet();
   private static HashMap pptname_to_conditions = new HashMap();
 
-  //Store the invariant for later printing, if it needs to be stored.
-  //To determine whether an invariant should be printed or not, see
-  //cases for indiscriminate and non-indiscriminate splitting below.
+  // Store the invariant for later printing, if it needs to be stored.
+  // To determine whether an invariant should be printed or not, see
+  // cases for indiscriminate and non-indiscriminate splitting below.
   private static boolean duplicate_condition (String inv, String pptname) {
     if (!pptname_to_conditions.containsKey(pptname)) {
       pptname_to_conditions.put(pptname, new HashSet());
     }
 
-    //With indiscriminate splitting, we need just one occurence of
-    //each splitting condition, and it doesn't matter under which ppt
-    //it appears. However with non-indiscriminate splitting, each
-    //condition must be printed under every ppt that it appears.
+    // With indiscriminate splitting, we need just one occurence of
+    // each splitting condition, and it doesn't matter under which ppt
+    // it appears. However with non-indiscriminate splitting, each
+    // condition must be printed under every ppt that it appears.
     if (daikon.split.SplitterList.dkconfig_all_splitters) {
       if (all_conditions.contains(inv))
         return true;
@@ -1117,7 +1119,7 @@ public class SplitterFactory {
     }
   }
 
-  //A pair consisting of a parameter and its type.
+  // A pair consisting of a parameter and its type.
   static class paramTypePair {
     String param, type;
 
@@ -1135,7 +1137,7 @@ public class SplitterFactory {
     }
   }
 
-  //Compares the parameter names in paramTypePairs by their length
+  // Compares the parameter names in paramTypePairs by their length
   static class paramTypePairComparator implements Comparator {
     public int compare (Object a, Object b) {
       paramTypePair pa = (paramTypePair) a;

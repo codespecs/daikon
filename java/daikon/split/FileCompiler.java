@@ -23,7 +23,7 @@ public final class FileCompiler {
    * @param The path of the java source to be compiled
    * @return The process which executed the external compile command
    **/
-  public static TimedProcess compile_source(String filename){
+  public static TimedProcess compile_source(String filename) {
     String command = dkconfig_compiler + " " + filename;
     try {
       return new TimedProcess(commander.exec(command), command);

@@ -34,8 +34,8 @@ public final class Daikon {
     System.err.flush();
   }
 
-  public final static String release_version = "2.3.19";
-  public final static String release_date = "November 2, 2002";
+  public final static String release_version = "2.4.0";
+  public final static String release_date = "December 1, 2002";
   public final static String release_string
     = "Daikon version " + release_version
     + ", released " + release_date
@@ -115,7 +115,7 @@ public final class Daikon {
   // already has them.  For example, this is the case for invariants
   // in public methods which are already given as part of the object
   // invariant for that class.
-  public static boolean suppress_implied_controlled_invariants = false;
+  public static boolean suppress_implied_controlled_invariants = true;
 
   // When true, don't print EXIT invariants over strictly orig()
   // variables when the corresponding entry ppt already has the
@@ -172,6 +172,7 @@ public final class Daikon {
   public static final String show_progress_SWITCH = "show_progress";
   public static final String suppress_SWITCH = "suppress";
   public static final String suppress_cont_SWITCH = "suppress_cont";
+  public static final String no_suppress_cont_SWITCH = "no_suppress_cont";
   public static final String suppress_post_SWITCH = "suppress_post";
   public static final String suppress_redundant_SWITCH = "suppress_redundant";
   public static final String prob_limit_SWITCH = "prob_limit";
@@ -312,7 +313,8 @@ public final class Daikon {
       new LongOpt(var_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(no_text_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(show_progress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(suppress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(no_suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(prob_limit_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -397,8 +399,10 @@ public final class Daikon {
           no_text_output = true;
         } else if (show_progress_SWITCH.equals(option_name)) {
           show_progress = true;
-        } else if (suppress_SWITCH.equals(option_name)) {
-          suppress_invariants = true;
+        } else if (suppress_cont_SWITCH.equals(option_name)) {
+          suppress_implied_controlled_invariants = true;
+        } else if (no_suppress_cont_SWITCH.equals(option_name)) {
+          suppress_implied_controlled_invariants = false;
         } else if (suppress_post_SWITCH.equals(option_name)) {
           suppress_implied_postcondition_over_prestate_invariants = true;
         } else if (suppress_redundant_SWITCH.equals(option_name)) {

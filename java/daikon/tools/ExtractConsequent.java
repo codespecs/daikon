@@ -101,7 +101,7 @@ public class ExtractConsequent {
     }
     String filename = args[fileIndex];
     PptMap ppts = FileIO.read_serialized_pptmap(new File(filename),
-                                                true //use saved config
+                                                true // use saved config
                                                 );
     ppt_map = ppts;
     extract_consequent(ppts);
@@ -198,7 +198,7 @@ public class ExtractConsequent {
       while (itor.hasNext()) {
         Implication maybe = (Implication)itor.next();
 
-        //don't print redundant invariants.
+        // don't print redundant invariants.
         if (Daikon.suppress_redundant_invariants_with_simplify &&
             maybe.ppt.parent.redundant_invs.contains(maybe)) {
           continue;
@@ -257,7 +257,7 @@ public class ExtractConsequent {
           continue;
         }
 
-        //filter out unwanted invariants
+        // filter out unwanted invariants
 
         // 1) Invariants involving sequences
         if (inv instanceof daikon.inv.binary.twoSequence.TwoSequence ||
@@ -283,8 +283,8 @@ public class ExtractConsequent {
     }
   }
 
-  //Store the invariant for later printing. Ignore duplicate
-  //invariants at the same program point.
+  // Store the invariant for later printing. Ignore duplicate
+  // invariants at the same program point.
   private static void store_invariant (String predicate, String consequent, String pptname) {
     if (!pptname_to_conditions.containsKey(pptname)) {
       pptname_to_conditions.put(pptname, new HashMap());
@@ -305,9 +305,9 @@ public class ExtractConsequent {
   private static boolean contains_constant_non_012 (Invariant inv) {
     if (inv instanceof daikon.inv.unary.scalar.OneOfScalar) {
       daikon.inv.unary.scalar.OneOfScalar oneof = (daikon.inv.unary.scalar.OneOfScalar) inv;
-      //OneOf invariants that indicate a small set ( > 1 element) of
-      //possible values are not interesting, and have already been
-      //eliminated by the isInteresting check
+      // OneOf invariants that indicate a small set ( > 1 element) of
+      // possible values are not interesting, and have already been
+      // eliminated by the isInteresting check
       long num = ((Long) oneof.elt()).longValue();
       if (num > 2 || num < -1)
         return true;
@@ -316,8 +316,8 @@ public class ExtractConsequent {
     return false;
   }
 
-  //remove non-word characters and everything after ":::" from the
-  //program point name, leaving PackageName.ClassName.MethodName
+  // remove non-word characters and everything after ":::" from the
+  // program point name, leaving PackageName.ClassName.MethodName
   private static String cleanup_pptname (String pptname) {
     int index;
     if ((index = pptname.indexOf("(")) > 0) {

@@ -751,7 +751,7 @@ public abstract class VarInfoName
 
     protected String repr_impl() {
       StringBuffer sb = new StringBuffer();
-      for (Iterator i = args.iterator(); i.hasNext();) {
+      for (Iterator i = args.iterator(); i.hasNext(); ) {
         sb.append (((VarInfoName) i.next()).repr());
         if (i.hasNext()) sb.append (", ");
       }
@@ -759,7 +759,7 @@ public abstract class VarInfoName
     }
     protected String name_impl() {
       StringBuffer sb = new StringBuffer();
-      for (Iterator i = args.iterator(); i.hasNext();) {
+      for (Iterator i = args.iterator(); i.hasNext(); ) {
         sb.append (((VarInfoName) i.next()).name());
         if (i.hasNext()) sb.append (", ");
       }
@@ -767,7 +767,7 @@ public abstract class VarInfoName
     }
     protected String esc_name_impl() {
       StringBuffer sb = new StringBuffer();
-      for (Iterator i = args.iterator(); i.hasNext();) {
+      for (Iterator i = args.iterator(); i.hasNext(); ) {
         sb.append (((VarInfoName) i.next()).repr());
         if (i.hasNext()) sb.append (", ");
       }
@@ -776,7 +776,7 @@ public abstract class VarInfoName
     }
     protected String simplify_name_impl(boolean prestate) {
       StringBuffer sb = new StringBuffer();
-      for (Iterator i = args.iterator(); i.hasNext();) {
+      for (Iterator i = args.iterator(); i.hasNext(); ) {
         sb.append (((VarInfoName) i.next()).repr());
         if (i.hasNext()) sb.append (", ");
       }
@@ -785,7 +785,7 @@ public abstract class VarInfoName
     }
     protected String ioa_name_impl() {
       StringBuffer sb = new StringBuffer();
-      for (Iterator i = args.iterator(); i.hasNext();) {
+      for (Iterator i = args.iterator(); i.hasNext(); ) {
         sb.append (((VarInfoName) i.next()).ioa_name());
         if (i.hasNext()) sb.append (", ");
       }
@@ -793,7 +793,7 @@ public abstract class VarInfoName
     }
     protected String java_name_impl() {
       StringBuffer sb = new StringBuffer();
-      for (Iterator i = args.iterator(); i.hasNext();) {
+      for (Iterator i = args.iterator(); i.hasNext(); ) {
         sb.append (((VarInfoName) i.next()).repr());
         if (i.hasNext()) sb.append (", ");
       }
@@ -802,7 +802,7 @@ public abstract class VarInfoName
     }
     protected String jml_name_impl() {
       StringBuffer sb = new StringBuffer();
-      for (Iterator i = args.iterator(); i.hasNext();) {
+      for (Iterator i = args.iterator(); i.hasNext(); ) {
         sb.append (((VarInfoName) i.next()).jml_name());
         if (i.hasNext()) sb.append (", ");
       }
@@ -1467,8 +1467,8 @@ public abstract class VarInfoName
                                 );
     }
     protected String esc_name_impl() {
-      //return the default implementation for now.
-      //return name_impl();
+      // return the default implementation for now.
+      // return name_impl();
       throw new UnsupportedOperationException("ESC cannot format an unquantified slice of elements");
     }
     protected String simplify_name_impl(boolean prestate) {
@@ -1484,7 +1484,7 @@ public abstract class VarInfoName
       return result;
     }
     protected String java_name_impl() {
-      //throw new UnsupportedOperationException("Java cannot format an unquantified slice of elements");
+      // throw new UnsupportedOperationException("Java cannot format an unquantified slice of elements");
       // For now, return the default implementation.
       return name_impl();
     }
@@ -1560,7 +1560,7 @@ public abstract class VarInfoName
      **/
     public Object visitFunctionOfN(FunctionOfN o) {
       Object retval = null;
-      for (ListIterator i = o.args.listIterator(o.args.size()); i.hasPrevious();) {
+      for (ListIterator i = o.args.listIterator(o.args.size()); i.hasPrevious(); ) {
         VarInfoName vin = (VarInfoName)i.previous();
         retval = vin.accept(this);
       }
@@ -1626,7 +1626,7 @@ public abstract class VarInfoName
     }
     public Object visitFunctionOfN(FunctionOfN o) {
       Object retval = null;
-      for (Iterator i = o.args.iterator(); i.hasNext();) {
+      for (Iterator i = o.args.iterator(); i.hasNext(); ) {
         VarInfoName vin = (VarInfoName)i.next();
         retval = vin.accept(this);
         if (retval != null) return retval;
@@ -1723,7 +1723,7 @@ public abstract class VarInfoName
     public Object visitFunctionOfN(FunctionOfN o) {
       Object result = null;
       if (goals.contains(o)) return o;
-      for (Iterator i = o.args.iterator(); i.hasNext();) {
+      for (Iterator i = o.args.iterator(); i.hasNext(); ) {
         VarInfoName vin = (VarInfoName)i.next();
         result = vin.accept(this);
         if (result != null) return result;
@@ -1800,7 +1800,7 @@ public abstract class VarInfoName
     // visitor methods that get the job done
     public Object visitFunctionOfN(FunctionOfN o) {
       Object retval = null;
-      for (Iterator i = o.args.iterator(); i.hasNext();) {
+      for (Iterator i = o.args.iterator(); i.hasNext(); ) {
         VarInfoName vin = (VarInfoName)i.next();
         retval = vin.accept(this);
         if (retval != null) return retval;
@@ -1867,7 +1867,7 @@ public abstract class VarInfoName
       // otherwise, create a new function and check if arguments get replaced
       if (o == old) return _new;
       ArrayList newArgs = new ArrayList();
-      for (Iterator i = o.args.iterator(); i.hasNext();) {
+      for (Iterator i = o.args.iterator(); i.hasNext(); ) {
         VarInfoName vin = (VarInfoName)i.next();
         Object retval = vin.accept(this);
         newArgs.add (retval);
@@ -1972,7 +1972,7 @@ public abstract class VarInfoName
     }
     public Object visitFunctionOfN(FunctionOfN o) {
       result.add (o);
-      for (Iterator i = o.args.iterator(); i.hasNext();) {
+      for (Iterator i = o.args.iterator(); i.hasNext(); ) {
         VarInfoName vin = (VarInfoName)i.next();
         Object retval = vin.accept(this);
       }
@@ -2082,7 +2082,7 @@ public abstract class VarInfoName
     public Object visitFunctionOf(FunctionOf o) {
       simples.add(o);
       return null;
-      //return ((VarInfoName) o.args.get(0)).accept(this); // Return value doesn't matter
+      // return ((VarInfoName) o.args.get(0)).accept(this); // Return value doesn't matter
       // We only use one of them because we don't want double quantifiers
     }
     /**
@@ -2095,7 +2095,7 @@ public abstract class VarInfoName
     public Object visitFunctionOfN(FunctionOfN o) {
       simples.add(o);
       return null;
-      //return ((VarInfoName) o.args.get(0)).accept(this); // Return value doesn't matter
+      // return ((VarInfoName) o.args.get(0)).accept(this); // Return value doesn't matter
       // We only use one of them because we don't want double quantifiers
     }
     public Object visitSizeOf(SizeOf o) {

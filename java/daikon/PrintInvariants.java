@@ -81,6 +81,10 @@ public class PrintInvariants {
       "Usage: java daikon.PrintInvariants [OPTION]... FILE",
       "  -h, --" + Daikon.help_SWITCH,
       "      Display this usage message",
+      "  --" + Daikon.suppress_cont_SWITCH,
+      "      Suppress display of implied invariants (by controlling ppt).",
+      "  --" + Daikon.no_suppress_cont_SWITCH,
+      "      Don't suppress display of implied invariants.",
       "  --" + Daikon.suppress_post_SWITCH,
       "      Suppress display of obvious postconditions on prestate.",
       "  --" + Daikon.suppress_redundant_SWITCH,
@@ -109,6 +113,7 @@ public class PrintInvariants {
 
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt(Daikon.suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(Daikon.no_suppress_cont_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.suppress_post_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.esc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -135,6 +140,8 @@ public class PrintInvariants {
           System.exit(1);
         } else if (Daikon.suppress_cont_SWITCH.equals(option_name)) {
           Daikon.suppress_implied_controlled_invariants = true;
+        } else if (Daikon.no_suppress_cont_SWITCH.equals(option_name)) {
+          Daikon.suppress_implied_controlled_invariants = false;
         } else if (Daikon.suppress_post_SWITCH.equals(option_name)) {
           Daikon.suppress_implied_postcondition_over_prestate_invariants = true;
         } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
@@ -314,7 +321,7 @@ public class PrintInvariants {
 
   public static void print_sample_data(PptTopLevel ppt, PrintWriter out)
   {
-    //System.out.println("entering print_sample_data\n");
+    // System.out.println("entering print_sample_data\n");
     String better_name = get_better_name(ppt);
 
     if (Daikon.output_num_samples) {
@@ -336,7 +343,7 @@ public class PrintInvariants {
       }
       out.println();
     }
-    //System.out.println("entering print_sample_data\n");
+    // System.out.println("entering print_sample_data\n");
   }
 
   public static void print_modified_vars(PptTopLevel ppt, PrintWriter out)
@@ -553,10 +560,10 @@ public class PrintInvariants {
     //  for (Iterator i = equal_vars.iterator(); i.hasNext(); ) {
     //   VarInfo var = (VarInfo) i.next();
     //   if (debugPrintEquality.isDebugEnabled()) {
-    //     debugPrintEquality.debug (" testing derivedParamAndUnint " + var.name.name());
+    //    debugPrintEquality.debug (" testing derivedParamAndUnint " + var.name.name());
     //   }
     //   if (var.isDerivedParamAndUninteresting()) {
-    //     i.remove();
+    //    i.remove();
     //   }
     //  }
     // }
@@ -604,7 +611,7 @@ public class PrintInvariants {
     if (debugPrintEquality.isDebugEnabled()) {
       StringBuffer sb = new StringBuffer();
         debugPrintEquality.debug("Resultant obviously equality set for "  + vi.ppt.name + " " + vi.name.name());
-      for (Iterator j = equal_vars.iterator(); j.hasNext();) {
+      for (Iterator j = equal_vars.iterator(); j.hasNext(); ) {
         sb.append ("  " + ((VarInfo) j.next()).name.name());
       }
       debugPrintEquality.debug (sb);
@@ -754,9 +761,9 @@ public class PrintInvariants {
   /* [INCR]
   public static boolean accept_varinfo(PptTopLevel ppt, VarInfo vi)
   {
-    //this needs to be a seperate if statement because if vi is not
-    //canonical, it will fail assert statements in some of the things
-    //which are invoked in the return clause.
+    // this needs to be a seperate if statement because if vi is not
+    // canonical, it will fail assert statements in some of the things
+    // which are invoked in the return clause.
     if (vi.isCanonical()) {
       return ((get_equal_vars(vi).size() > 1)  &&
               (! (Daikon.suppress_redundant_invariants_with_simplify &&
@@ -767,11 +774,11 @@ public class PrintInvariants {
   }
   */ // ... [INCR]
 
-  //This is just a temporary thing to provide more info about the
-  //reason invariants are rejected.
+  // This is just a temporary thing to provide more info about the
+  // reason invariants are rejected.
   private static String reason = "";
 
-  //note - this rejects equality invariants out of hand
+  // note - this rejects equality invariants out of hand
   /**
    * Determines whether an invariant should be printed.
    * @return true if the invariant should be printed.
@@ -965,7 +972,7 @@ public class PrintInvariants {
 
     Vector result = new Vector(invs_array.length);
 
-    for(int i = 0; i < invs_array.length; i++) {
+    for (int i = 0; i < invs_array.length; i++) {
       result.add(invs_array[i]);
     }
     return(result);
@@ -1061,7 +1068,7 @@ public class PrintInvariants {
         // if (accept_varinfo(ppt, vi)) { // [INCR] XXX
           /* [INCR]
           StringBuffer sb = new StringBuffer();
-          for (Iterator j = vi.equalTo().iterator(); j.hasNext();) {
+          for (Iterator j = vi.equalTo().iterator(); j.hasNext(); ) {
             sb.append (" ==  " + ((VarInfo) j.next()).name.name());
           }
           StringWriter eq_invs = new StringWriter();
@@ -1096,10 +1103,10 @@ public class PrintInvariants {
       // first.
       // PptSlice slice = inv.ppt;
       // if (debugPrint.isDebugEnabled()) {
-      //   debugPrint.debug("Slice: " + slice.varNames() + "  "
-      //                    + slice.num_samples() + " samples");
-      //   debugPrint.debug("    Samples breakdown: "
-      //                    + slice.tuplemod_samples_summary());
+      //  debugPrint.debug("Slice: " + slice.varNames() + "  "
+      //                   + slice.num_samples() + " samples");
+      //  debugPrint.debug("    Samples breakdown: "
+      //                   + slice.tuplemod_samples_summary());
       //  slice.values_cache.dump();
       // }
       // Assert.assertTrue(slice.check_modbits());

@@ -80,7 +80,7 @@ public final class SequencesPredicateFactory extends BinaryDerivationFactory {
     return new BinaryDerivation[] {
       new SequencesPredicate(var1, var2, 0, "false"),
       new SequencesPredicate(var1, var2, 1, "true"),
-      //new SequencesPredicate(var1, var2, 0, "nonNull", false),
+      // new SequencesPredicate(var1, var2, 0, "nonNull", false),
     };
 
   }

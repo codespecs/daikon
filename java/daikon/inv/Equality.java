@@ -191,7 +191,7 @@ public final class Equality
 //      result.append(vars[0].name.esc_name());
 //      result.append(" == ");
 //      result.append(vars[i].name.esc_name());
-//      result.append("");  //formerly ")"
+//      result.append("");  // formerly ")"
 //        }
 //      }
 //      return result.toString();

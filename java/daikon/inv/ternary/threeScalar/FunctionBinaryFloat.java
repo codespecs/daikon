@@ -64,7 +64,8 @@ public class FunctionBinaryFloat
     VarInfo arg1 = ppt.var_infos[indices[1]];
     VarInfo arg2 = ppt.var_infos[indices[2]];
     if (resultvar.isConstant() || (arg1.isConstant() && arg2.isConstant())) {
-      debug.debug("FunctionBinaryFloat.instantiate: both args are constant");
+      if (debug.isDebugEnabled())
+        debug.debug("FunctionBinaryFloat.instantiate: both args are constant");
       Global.subexact_noninstantiated_invariants++;
       return null;
     }
@@ -93,8 +94,8 @@ public class FunctionBinaryFloat
     return core.format_using(format);
   }
 
-  public void add_modified(double x_int, double y_int, double z_int, int count) {
-    core.add_modified(x_int, y_int, z_int, count);
+  public void add_modified(double x, double y, double z, int count) {
+    core.add_modified(x, y, z, count);
   }
 
   protected double computeProbability() {
@@ -108,14 +109,14 @@ public class FunctionBinaryFloat
 
   // // For testing only; to be commented out
   // public void destroy() {
-  //   if (debugFunctionBinary) {
+  //   if (debug.isDebugEnabled()) {
   //     Method function = core.function;
   //     int var_order = core.var_order;
   //     int[] indices = FunctionBinaryCoreFloat.var_indices[var_order];
   //     VarInfo argresult = ppt.var_infos[indices[0]];
   //     VarInfo arg1 = ppt.var_infos[indices[1]];
   //     VarInfo arg2 = ppt.var_infos[indices[2]];
-  //     System.out.println("CLASSNAME.destroy: "
+  //     debug.debug("CLASSNAME.destroy: "
   //                        + argresult.name + " = "
   //                        + function.getName() + "(" + arg1.name + ", " + arg2.name + ")");
   //   }

@@ -235,7 +235,7 @@ public final class OneOfSequence
   */
 
   public String format_java() {
-    //have to take a closer look at this!
+    // have to take a closer look at this!
     sort_rep();
 
     String result;

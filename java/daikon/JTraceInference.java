@@ -55,7 +55,7 @@ class JTraceInference extends Thread
       try {
         JTrace.println(JTrace.V_INFO, "JTrace: Inference thread start.");
 
-        loop: for(;;)
+        loop: for (;;)
         {
             byte control = getControl();
             JTrace.print(JTrace.V_DEBUG, "JTrace: getControl : " + types[control] + " = " );

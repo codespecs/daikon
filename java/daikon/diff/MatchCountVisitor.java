@@ -46,7 +46,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
 
     if (inv1 != null) {
         String tmpStr1 = inv1.ppt.name;
-        //Contest.smallestRoom(II)I:::EXIT;condition="not(max <= num)"
+        // Contest.smallestRoom(II)I:::EXIT;condition="not(max <= num)"
         String thisPptName1 = tmpStr1.substring (0,
                                                 tmpStr1.lastIndexOf (';'));
         key1 = thisPptName1 + "$" + inv1.format_using(OutputFormat.JAVA);

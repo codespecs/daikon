@@ -21,7 +21,7 @@ branch of the $inv/java/daikon part of the repository into the trunk
   make
   cvs -q diff --brief
 
-(3) Make a backup of your current version of the trunk
+(3) Make a backup of your current version of the trunk.
 
   cd $inv
   tar cfz daikon.ver3.tar.gz daikon.ver3/
@@ -61,6 +61,7 @@ branch of the $inv/java/daikon part of the repository into the trunk
 **** Merge history ****
 (Add entries at the top of the list)
 
+02-Dec-2002 09:13:55 by MDE
 23-Nov-2002 21:10:50 by MDE
 Sun Nov 17 13:37:54 EST 2002 by MDE
 Fri Nov  8 09:42:51 EST 2002 by MDE

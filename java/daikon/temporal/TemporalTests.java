@@ -7,10 +7,29 @@ class LetterEvent extends Event
 {
     String name;
 
+    static Hashtable events = new Hashtable();
+
     LetterEvent(String n)
     {
 	name = n;
     }
+
+    public static LetterEvent getEvent(String n)
+    {
+	if (events.containsKey(n))
+	    {
+		return (LetterEvent)events.get(n);
+	    }
+	else
+	    {
+		LetterEvent l = new LetterEvent(n);
+
+		events.put(n, l);
+
+		return l;
+	    }
+    }
+
 
     public boolean forwardSharesTypeWith(Event e)
     {
@@ -19,6 +38,9 @@ class LetterEvent extends Event
 
     public boolean forwardMatches(Event e)
     {
+	if (!(e instanceof LetterEvent))
+	    return false;
+
 	LetterEvent l = (LetterEvent)e;
 
 	return l.name.equals(name);
@@ -30,7 +52,7 @@ class LetterEvent extends Event
     }
 }
 
-//FIXME: Needs some major restructuring for efficiency/clarity.
+// FIXME: Needs some major restructuring for efficiency/clarity.
 public class TemporalTests extends TestCase
 {
     Event A = new LetterEvent("A");
@@ -40,6 +62,9 @@ public class TemporalTests extends TestCase
 
     public static void main(String[] args)
     {
+	// FIXME: Make this work with junit (possibly put it in setup?)
+	TestManager m = new TestManager();
+
 	junit.textui.TestRunner.run(new TestSuite(TemporalTests.class));
     }
 
@@ -107,8 +132,8 @@ public class TemporalTests extends TestCase
 
     public void testBasicEnterAndExit()
     {
-	//Can we do very basic entering and exiting without drooling
-	//(or at least without drooling on ourselves)?
+	// Can we do very basic entering and exiting without drooling
+	// (or at least without drooling on ourselves)?
 	generateSimpleNestedScopes();
 
 	assertTrue(!global.isActive());
@@ -151,10 +176,6 @@ public class TemporalTests extends TestCase
 	assertTrue(global.isActive());
 	assertTrue(beforeA.isActive());
 	assertTrue(!afterA.isActive());
-
-	assertTrue(global.seenEvent(B));
-	assertTrue(beforeA.seenEvent(B));
-	assertTrue(!afterA.seenEvent(B));
 
 	assertTrue(global.seenEvent(B));
 	assertTrue(beforeA.seenEvent(B));
@@ -252,7 +273,7 @@ public class TemporalTests extends TestCase
 	assertTrue(!g_alwaysB.isFalsified);
 	assertTrue(g_alwaysB.numConfirmingSequences == 0);
 
-	//Sequence 1: CABB
+	// Sequence 1: CABB
 
 	global.enter();
 
@@ -296,7 +317,7 @@ public class TemporalTests extends TestCase
 
 	assertTrue(g_eventuallyB.isFalsified);
 
-	//Could probably do more here
+	// Could probably do more here
     }
 
     public void testCoreBetweenScope()
@@ -307,7 +328,7 @@ public class TemporalTests extends TestCase
 	global.doDynamicInstantiation = false;
 	betAB = new ScopeBetween(A, B);
 
-	//Test 1 - very simple
+	// Test 1 - very simple
 
 	global.addChild(betAB);
 
@@ -321,7 +342,7 @@ public class TemporalTests extends TestCase
 
 	global.processEvent(A);
 
-	assertTrue(betAB.isActive()); //thinks its active now
+	assertTrue(betAB.isActive()); // thinks its active now
 
 	global.processEvent(C);
 
@@ -329,7 +350,7 @@ public class TemporalTests extends TestCase
 
 	assertTrue(!betAB.isActive());
 
-	assertTrue(betAB.seenEvent(C)); //did see the C
+	assertTrue(betAB.seenEvent(C)); // did see the C
 
 	global.processEvent(A);
 
@@ -340,9 +361,9 @@ public class TemporalTests extends TestCase
 	global.exit();
 
 	assertTrue(!betAB.isActive());
-	assertTrue(!betAB.seenEvent(D)); //scope didn't ever enter
+	assertTrue(!betAB.seenEvent(D)); // scope didn't ever enter
 
-	//Test 2 - now with an invariant
+	// Test 2 - now with an invariant
 
 	global = new ScopeGlobal();
 	global.doDynamicInstantiation = false;
@@ -350,7 +371,7 @@ public class TemporalTests extends TestCase
 
 	AlwaysInvariant alwaysC = new AlwaysInvariant(betAB, C);
 
-	//to be added later
+	// to be added later
 	EventuallyInvariant eventuallyD = new EventuallyInvariant(D);
 
 	global.addChild(betAB);
@@ -372,14 +393,14 @@ public class TemporalTests extends TestCase
 
 	global.processEvent(D);
 
-	assertTrue(alwaysC.isFalsified); //thinks its falsified
+	assertTrue(alwaysC.isFalsified); // thinks its falsified
 
 	assertTrue(!eventuallyD.isFalsified);
 	assertTrue(eventuallyD.happenedOnceInScope);
 
 	global.exit();
 
-	assertTrue(!alwaysC.isFalsified); //should still be kosher
+	assertTrue(!alwaysC.isFalsified); // should still be kosher
 	assertTrue(!betAB.seenEvent(D));
 	assertTrue(!eventuallyD.isFalsified);
 
@@ -427,7 +448,7 @@ public class TemporalTests extends TestCase
 	EventuallyInvariant eventuallyC = new EventuallyInvariant(auAB, C);
 	EventuallyInvariant eventuallyB = new EventuallyInvariant(auAB, B);
 
-	//Sequence ACB satisfies both
+	// Sequence ACB satisfies both
 
 	global.enter();
 	global.processEvent(A);
@@ -453,9 +474,9 @@ public class TemporalTests extends TestCase
 	assertTrue(!eventuallyB.isFalsified);
 	assertTrue(eventuallyB.numConfirmingSequences == 1);
 
-	//Sequence ABCACB falsifies first, satisfies second, with count 3
+	// Sequence ABCACB falsifies first, satisfies second, with count 3
 
-	//FIXME: A little uncertain about these happenedOnceInScope tests... hmm..
+	// FIXME: A little uncertain about these happenedOnceInScope tests... hmm..
 	assertTrue(!eventuallyC.happenedOnceInScope);
 
 	global.enter();
@@ -490,7 +511,7 @@ public class TemporalTests extends TestCase
 	assertTrue(!eventuallyB.isFalsified);
 	assertTrue(eventuallyB.numConfirmingSequences == 3);
 
-	//Sequence ABA falsifies second
+	// Sequence ABA falsifies second
 
 	global.enter();
 	global.processEvent(A);
@@ -501,10 +522,10 @@ public class TemporalTests extends TestCase
 	assertTrue(eventuallyB.isFalsified);
     }
 
-    //FIXME: Build a querying system for the invariant tree, and make
-    //some approximate correctness tests, etc. Idea: Possibly make them
-    //random.
-    //FIXME: These should be fully automated! no really!
+    // FIXME: Build a querying system for the invariant tree, and make
+    // some approximate correctness tests, etc. Idea: Possibly make them
+    // random.
+    // FIXME: These should be fully automated! no really!
     public void testBasicDynamicInstantiation()
     {
 	global = new ScopeGlobal();
@@ -512,7 +533,7 @@ public class TemporalTests extends TestCase
 	global.enter();
 
 
-	//Event A creates after A *, eventually A, always A
+	// Event A creates after A *, eventually A, always A
 	global.processEvent(A);
 	//	global.printState();
 
@@ -551,7 +572,7 @@ public class TemporalTests extends TestCase
 	*/
 
 	global.processEvent(C);
-	global.printState();
+//	global.printState();
 
 	global.exit();
     }

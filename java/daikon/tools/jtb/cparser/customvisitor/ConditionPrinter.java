@@ -71,8 +71,8 @@ public class ConditionPrinter extends DepthFirstVisitor {
                     TypedefName type = (TypedefName) n;
                     Vector decls = new Vector();
                     InitDeclaratorList list = (InitDeclaratorList) d.f1.node;
-                    decls.add(list.f0); //get the first in "boolean first, second,third;"
-                    //get the second, third, in "boolean first, second, third"
+                    decls.add(list.f0); // get the first in "boolean first, second,third;"
+                    // get the second, third, in "boolean first, second, third"
                     Vector tempVec = list.f1.nodes;
                     for (int k = 0; k < tempVec.size(); k++) {
                         decls.addAll(((NodeSequence)tempVec.get(k)).nodes);
@@ -80,11 +80,11 @@ public class ConditionPrinter extends DepthFirstVisitor {
 
                     for (int j = 0; j < decls.size(); j++) {
                         InitDeclarator curr=null;;
-                        //filter out the "," node tokens
+                        // filter out the "," node tokens
                         if (decls.elementAt(j) instanceof InitDeclarator) {
                             curr = (InitDeclarator) decls.elementAt(j);
                         }
-                        //if it is a node token, nothing will be printed
+                        // if it is a node token, nothing will be printed
                         if (curr != null) {
                             localVariables.add((curr.f0.f1.f0.choice).toString().trim());
                         }
@@ -94,19 +94,19 @@ public class ConditionPrinter extends DepthFirstVisitor {
                 else {
                     Vector decls = new Vector();
                     InitDeclaratorList list = (InitDeclaratorList) d.f1.node;
-                    decls.add(list.f0); //get the first in "boolean first, second,third;"
-                    //get the second, third, in "boolean first, second, third"
+                    decls.add(list.f0); // get the first in "boolean first, second,third;"
+                    // get the second, third, in "boolean first, second, third"
                     Vector tempVec = list.f1.nodes;
                     for (int k = 0; k < tempVec.size(); k++) {
                         decls.addAll(((NodeSequence)tempVec.get(k)).nodes);
                     }
                     for (int j = 0; j < decls.size(); j++) {
                         InitDeclarator curr=null;;
-                        //filter out the "," node tokens
+                        // filter out the "," node tokens
                         if (decls.elementAt(j) instanceof InitDeclarator) {
                             curr = (InitDeclarator) decls.elementAt(j);
                         }
-                        //if it is a node token, nothing will be printed
+                        // if it is a node token, nothing will be printed
                         if (curr != null) {
                             localVariables.add(curr.f0.f1.f0.choice.toString().trim());
                         }
@@ -158,8 +158,8 @@ public class ConditionPrinter extends DepthFirstVisitor {
     }
 
 
-    //the following methods check that the nodes not not null before visiting them
-    //because the AST is modified by the Converter to have null pointers
+    // the following methods check that the nodes not not null before visiting them
+    // because the AST is modified by the Converter to have null pointers
 
     public void visit(LogicalANDExpression n) {
 	if (n.f0 !=null) {

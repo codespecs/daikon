@@ -18,7 +18,7 @@ class InvariantTableModel extends AbstractTableModel {
   static final DecimalFormat format = new DecimalFormat( "0.##E0" ); // for displaying probabilities
 
   List allInvariants;
-  List filteredInvariants;      // only filtered invariants are displayed
+  List filteredInvariants;	// only filtered invariants are displayed
 
   public InvariantTableModel( List invariants, InvariantFilters invariantFilters ) {
     allInvariants = invariants;
@@ -51,7 +51,7 @@ class InvariantTableModel extends AbstractTableModel {
     for (Iterator iter = allInvariants.iterator(); iter.hasNext(); ) {
       Invariant invariant = (Invariant) iter.next();
       if (invariantFilters.shouldKeep( invariant ))
-        filteredInvariants.add( invariant );
+	filteredInvariants.add( invariant );
     }
     filteredInvariants = InvariantFilters.addEqualityInvariants( filteredInvariants );
 

@@ -25,18 +25,16 @@ import daikon.*;
 class ConditionExtractor extends DepthFirstVisitor {
 
   private String packageName;
-  private String className; //The class name.
-  private String curMethodName; //Name of current method being parsed
+  private String className; // The class name.
+  private String curMethodName; // Name of current method being parsed
   private String curMethodDeclaration;
-  boolean enterMethod;   //true if the current Node is a Method
-                         //declaration ie. we just entered a method.
+  boolean enterMethod;   // true if the current Node is a Method
+                         // declaration ie. we just entered a method.
 
-  HashMap conditions = new HashMap();     //stores the conditional expressions
-                                          //as values and the methodname as
-                                          //the keys
-  HashMap replaceStatements = new HashMap();  //stores the method bodies
-                                              //as values and the method
-                                              //declaration as the keys
+  // key = methodname; value = conditional expressions
+  HashMap conditions = new HashMap();
+  // key = method declaration; value = method bodies
+  HashMap replaceStatements = new HashMap();
 
 
   //// DepthFirstVisitor Methods overridden by ConditionExtractor //////////////
@@ -97,8 +95,8 @@ class ConditionExtractor extends DepthFirstVisitor {
    * the fact that we have reached a method declaration.
    */
   public void visit(MethodDeclaration n) {
-    //after the next non-empty statement, the variable
-    //enterMethod is set to false
+    // after the next non-empty statement, the variable
+    // enterMethod is set to false
     enterMethod = true;
     super.visit(n);
   }
@@ -108,8 +106,8 @@ class ConditionExtractor extends DepthFirstVisitor {
    * f1 -> FormalParameters()
    * f2 -> ( "[" "]" )* */
   public void visit(MethodDeclarator n) {
-    //This goes on the PPT_NAME line of the spinfo file.
-    //eg. QueueAr.isEmpty
+    // This goes on the PPT_NAME line of the spinfo file.
+    // eg. QueueAr.isEmpty
     curMethodName = className + "." + Ast.print(n.f0);
     addMethod (Ast.print(n), curMethodName);
     super.visit(n);
@@ -126,8 +124,8 @@ class ConditionExtractor extends DepthFirstVisitor {
    * f7 -> "}"
    */
   public void visit(ConstructorDeclaration n) {
-    //This goes on the PPT_NAME line of the spinfo file.
-    //eg. QueueAr.isEmpty
+    // This goes on the PPT_NAME line of the spinfo file.
+    // eg. QueueAr.isEmpty
     curMethodName = className + "." + Ast.print(n.f1);
     addMethod(className + Ast.print(n), curMethodName);
     super.visit(n);
@@ -150,7 +148,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   public void visit(SwitchStatement n) {
     String switchExpression = Ast.print(n.f2);
     Collection caseValues = getCaseValues(n.f5);
-     //a condition for the default case. A 'not' of all the different cases.
+     // a condition for the default case. A 'not' of all the different cases.
     StringBuffer defaultString = new StringBuffer();
     for (Iterator e = caseValues.iterator(); e.hasNext(); ) {
       String switchValue = ((String) e.next()).trim();
@@ -173,8 +171,8 @@ class ConditionExtractor extends DepthFirstVisitor {
     ArrayList values = new ArrayList();
     Enumeration e = n.elements();
     while (e.hasMoreElements()) {
-      //in the nodeSequence for the switch statement,
-      //the first element is always the case statement.
+      // in the nodeSequence for the switch statement,
+      // the first element is always the case statement.
       // ie: case <value>: expr(); break;  | default ...
       NodeSequence ns = (NodeSequence) e.nextElement();
       SwitchLabel sl = (SwitchLabel) ns.elementAt(0);
@@ -268,8 +266,8 @@ class ConditionExtractor extends DepthFirstVisitor {
    * the splitter info file.
    */
   public void visit(Statement n) {
-    //if we just entered the function and this is a return statement,
-    //then it's a one-liner. Save the statement
+    // if we just entered the function and this is a return statement,
+    // then it's a one-liner. Save the statement
     if (enterMethod && (n.f0.choice instanceof ReturnStatement)) {
       ReturnStatement rs = ((ReturnStatement) n.f0.choice);
       String returnExpression = Ast.print(rs.f1);
@@ -296,7 +294,7 @@ class ConditionExtractor extends DepthFirstVisitor {
     curMethodDeclaration = methodDeclaration;
   }
 
-  //add the condition to the current method's list of conditions
+  // add the condition to the current method's list of conditions
   private void addCondition(String cond) {
     Vector conds;
     if (conditions.isEmpty()) {
@@ -312,7 +310,7 @@ class ConditionExtractor extends DepthFirstVisitor {
     }
   }
 
-  //store the replace statement (expression) in the hashmap
+  // store the replace statement (expression) in the hashmap
   private void addReplaceStatement(String s) {
     if (curMethodDeclaration != null) {
       replaceStatements.put(curMethodDeclaration, s);
@@ -323,7 +321,7 @@ class ConditionExtractor extends DepthFirstVisitor {
     return utilMDE.UtilMDE.replaceString(target, "\n", " ");
   }
 
-  //prints out the extracted conditions in spinfo file format
+  // prints out the extracted conditions in spinfo file format
   public void printSpinfoFile( Writer output ) throws IOException {
 
     if (!replaceStatements.values().isEmpty()) {

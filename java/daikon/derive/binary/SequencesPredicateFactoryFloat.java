@@ -80,7 +80,7 @@ public final class SequencesPredicateFactoryFloat extends BinaryDerivationFactor
     return new BinaryDerivation[] {
       new SequencesPredicateFloat(var1, var2, 0, "false"),
       new SequencesPredicateFloat(var1, var2, 1, "true"),
-      //new SequencesPredicate(var1, var2, 0, "nonNull", false),
+      // new SequencesPredicate(var1, var2, 0, "nonNull", false),
     };
 
   }

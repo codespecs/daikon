@@ -81,11 +81,12 @@ public class InvariantFilters {
     // This filter should be added last for speed, because its shouldDiscard()
     // is more complicated in that it evaluates shouldDiscard() for other
     // invariants.
-    addPropertyFilter( new ControlledInvariantFilter());
+    if (Daikon.suppress_implied_controlled_invariants)
+      addPropertyFilter( new ControlledInvariantFilter());
   }
 
   protected InvariantFilters(List l) {
-    for(Iterator iter = l.iterator(); iter.hasNext(); ) {
+    for (Iterator iter = l.iterator(); iter.hasNext(); ) {
       InvariantFilter filter = (InvariantFilter)iter.next();
       addPropertyFilter(filter);
     }
@@ -199,7 +200,7 @@ public class InvariantFilters {
 
   private InvariantFilter find(String description) {
     InvariantFilter answer = null;
-    for(Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
+    for (Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
       InvariantFilter filter = (InvariantFilter) iter.next();
       if (filter.getDescription().equals(description)) {
         answer = filter;

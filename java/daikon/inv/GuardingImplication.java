@@ -32,7 +32,7 @@ public class GuardingImplication
 
   public boolean isWorthPrinting() {
     return right.isWorthPrinting();
-    //return !right.isObvious();
+    // return !right.isObvious();
   }
 
   public boolean justified() {

@@ -6,7 +6,7 @@ import daikon.inv.filter.*;
 import utilMDE.*;
 
 import java.util.*;
-import java.awt.BorderLayout;   // not java.awt.* to avoid java.awt.List
+import java.awt.BorderLayout;	// not java.awt.* to avoid java.awt.List
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -32,16 +32,18 @@ import javax.swing.tree.*;
 
 public class InvariantsGUI extends JFrame implements ActionListener, KeyListener, VariableListChangeListener {
 
-  public static final String PLEASE_REPORT_ERROR_STRING = "\nPlease report this error to daikon-developers@pag.lcs.mit.edu.";
+  public static final String PLEASE_REPORT_ERROR_STRING = "\nPlease report this error to daikon@pag.lcs.mit.edu.";
 
   InvariantTablesPanel invariantsTablesPanel;
   InvariantFilters invariantFilters = new InvariantFilters();
   List filterCheckBoxes = new ArrayList();
   final JList variablesList = new JList( new DefaultListModel());
   JScrollPane variablesListScrollPane = null;
+  static JTree myTree;
+  static InvariantsGUI gui=null;
+  static JFrame ctrlPanel=null;
 
   public static void main( String args[] ) {
-    InvariantsGUI gui;
     daikon.Logger.setupLogs (daikon.Logger.INFO);
     if (args.length > 1) {
       showErrorMessage( "The GUI must be invoked with only one argument, a .inv or .inv.gz file.\nPlease try running the gui again." );
@@ -52,6 +54,23 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
       gui = new InvariantsGUI();
   }
 
+  public static void start(String dirName) {
+    // InvariantsGUI gui;
+    if (gui==null) {
+      daikon.Logger.setupLogs (daikon.Logger.INFO);
+      gui = new InvariantsGUI( 1, dirName );
+    } else {
+      gui.show();
+      ctrlPanel.show();
+    }
+  }
+
+  public static void stop() {
+//    gui.dispose();
+    gui.hide();
+//    ctrlPanel.dispose();
+    ctrlPanel.hide();
+  }
   public InvariantsGUI( String invFileName ) {
     displayInvariantsFromFile( invFileName );
 
@@ -61,7 +80,16 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
   }
 
   public InvariantsGUI() {
-    String invFileName = pickFileFromFileChooser();
+    String invFileName = pickFileFromFileChooser(System.getProperty("user.dir"));
+    displayInvariantsFromFile( invFileName );
+
+    // Unlike displayInvariantsFromFile(), which needs to be run everytime the user specifies
+    // a new .inv file, displayControlPanel() only needs to be run once.
+    displayControlPanel();
+  }
+
+  public InvariantsGUI(int type, String name) {
+    String invFileName = pickFileFromFileChooser(name);
     displayInvariantsFromFile( invFileName );
 
     // Unlike displayInvariantsFromFile(), which needs to be run everytime the user specifies
@@ -74,27 +102,27 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     PptMap pptMap = null;
     while (pptMap == null) {
       try {
-        pptMap = FileIO.read_serialized_pptmap( new File(invFileName),
-                                                true // use saved config
-                                                );
-        invariantFilters.ppt_map = pptMap; // haha this sucks
+	pptMap = FileIO.read_serialized_pptmap( new File(invFileName),
+						true // use saved config
+						);
+	invariantFilters.ppt_map = pptMap; // haha this sucks
       } catch (IOException e) {
-        InvariantsGUI.showErrorMessage( e.getMessage() + "\nPlease select another .inv or .inv.gz file." );
-        invFileName = pickFileFromFileChooser();
+	InvariantsGUI.showErrorMessage( e.getMessage() + "\nPlease select another .inv or .inv.gz file." );
+	invFileName = pickFileFromFileChooser(System.getProperty("user.dir"));
       }
     }
 
     // Contruct the tree of Ppt's, set up the tree selection listener, and display the GUI.
     try {
       JTree tree = new JTree( constructTreeModel( pptMap ));
-
+      myTree = tree;
       TreeSelectionModel treeSelectionModel = tree.getSelectionModel();
       invariantsTablesPanel = new InvariantTablesPanel( treeSelectionModel, invariantFilters, variablesList, this );
       treeSelectionModel.addTreeSelectionListener( invariantsTablesPanel );
 
       setupGUI( tree, invariantsTablesPanel.getScrollPane());
     }
-    catch (Exception e) {       // catch AssertionException's
+    catch (Exception e) {	// catch AssertionException's
       InvariantsGUI.showErrorMessage( "Error: Unable to display invariants." + PLEASE_REPORT_ERROR_STRING );
     }
   }
@@ -117,12 +145,12 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
       String name = (String) iter.next();
       PptName pptName = new PptName( name );
       String className = pptName.getFullClassName();
-      //            System.out.println( "name is " + name + ", className is " + className );
+      	   // System.out.println( "name is " + name + ", className is " + className );
       DefaultMutableTreeNode classNode = getChildByName( root, className );
       if (classNode == null) {
-        PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
-        Assert.assertTrue(className != null);
-        root.add( new DefaultMutableTreeNode( className )); // Create a node for this class
+	PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
+	Assert.assertTrue(className != null);
+	root.add( new DefaultMutableTreeNode( className )); // Create a node for this class
       }
     }
 
@@ -138,22 +166,22 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
       String className = pptName.getFullClassName();
       DefaultMutableTreeNode classNode = getChildByName( root, className );
       Assert.assertTrue( classNode != null );
-      //            System.out.println(name);
+      //	    System.out.println(name);
       if (pptName.isObjectInstanceSynthetic() || pptName.isClassStaticSynthetic()) {
-        String programPointName = pptName.getPoint();
-        DefaultMutableTreeNode programPointNode = getChildByName( classNode, programPointName );
-        if (programPointNode == null) {
-          PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
-          Assert.assertTrue(topLevel != null);
-          classNode.add( new DefaultMutableTreeNode( topLevel )); //  Create a node for this program point
-        }
-      } else {          // is a regular method ppt
-        String methodName = pptName.getFullMethodName();
-        Assert.assertTrue( methodName != null );
-        DefaultMutableTreeNode methodNode = getChildByName( classNode, methodName );
-        if (methodNode == null) {
-          classNode.add( new DefaultMutableTreeNode( methodName )); // Create a node for this method
-        }
+	String programPointName = pptName.getPoint();
+	DefaultMutableTreeNode programPointNode = getChildByName( classNode, programPointName );
+	if (programPointNode == null) {
+	  PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
+	  Assert.assertTrue(topLevel != null);
+	  classNode.add( new DefaultMutableTreeNode( topLevel )); //  Create a node for this program point
+	}
+      } else {		// is a regular method ppt
+	String methodName = pptName.getFullMethodName();
+	Assert.assertTrue( methodName != null );
+	DefaultMutableTreeNode methodNode = getChildByName( classNode, methodName );
+	if (methodNode == null) {
+	  classNode.add( new DefaultMutableTreeNode( methodName )); // Create a node for this method
+	}
       }
     }
 
@@ -163,7 +191,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
       PptName pptName = new PptName( name );
       String methodName = pptName.getFullMethodName();
       if (methodName == null) // this is a CLASS or OBJECT ppt, and has no methodName associated with it
-        continue;
+	continue;
       String className = pptName.getFullClassName();
       DefaultMutableTreeNode classNode = getChildByName( root, className );
       Assert.assertTrue( classNode != null );
@@ -179,19 +207,19 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
       //  EXIT97.
       PptTopLevel topLevel = (PptTopLevel) pptMap.get( name );
       if (methodNode.getChildCount() == 0) {
-        Assert.assertTrue(topLevel != null);
-        methodNode.add( new DefaultMutableTreeNode( topLevel ));
+	Assert.assertTrue(topLevel != null);
+	methodNode.add( new DefaultMutableTreeNode( topLevel ));
       } else {
-        int exitNumber = pptName.getPointSubscript();
-        int childIndex;
-        for (childIndex = 0; childIndex < methodNode.getChildCount(); childIndex++ ) {
-          Ppt currentChild = (Ppt) ((DefaultMutableTreeNode) methodNode.getChildAt( childIndex )).getUserObject();
-          int currentChildExitNumber = currentChild.ppt_name.getPointSubscript();
-          if (currentChildExitNumber > exitNumber)
-            break;
-        }
-        Assert.assertTrue(topLevel != null);
-        methodNode.insert( new DefaultMutableTreeNode( topLevel ), childIndex );
+	int exitNumber = pptName.getPointSubscript();
+	int childIndex;
+	for (childIndex = 0; childIndex < methodNode.getChildCount(); childIndex++ ) {
+	  Ppt currentChild = (Ppt) ((DefaultMutableTreeNode) methodNode.getChildAt( childIndex )).getUserObject();
+	  int currentChildExitNumber = currentChild.ppt_name.getPointSubscript();
+	  if (currentChildExitNumber > exitNumber)
+	    break;
+	}
+	Assert.assertTrue(topLevel != null);
+	methodNode.insert( new DefaultMutableTreeNode( topLevel ), childIndex );
       }
     }
 
@@ -208,7 +236,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
       Assert.assertTrue( child != null );
       Assert.assertTrue( child.toString() != null );
       if (child.toString().equals( name ))
-        return child;
+	return child;
     }
     return null;
   }
@@ -224,22 +252,22 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 
     removeKeyListener( this ); // setupGUI() might be called more than once, but we only
     // want to add it as KeyListener once.
-    addKeyListener( this );        // for scrolling through tables
+    addKeyListener( this );	   // for scrolling through tables
 
     //  If the user clicks on a method, the method's ppt's will be selected
     //  but we don't want the method node to expand.
     tree.setExpandsSelectedPaths( false );
 
-    JPanel topPanel = new JPanel();     // includes control panel and tree
+    JPanel topPanel = new JPanel();	// includes control panel and tree
     topPanel.setLayout( new BoxLayout( topPanel, BoxLayout.Y_AXIS ));
-    //  topPanel.add( controlPanel );
+    //	topPanel.add( controlPanel );
     topPanel.add( new JScrollPane( tree ));
-    //          topPanel.add( controlPanel, BorderLayout.NORTH );
-    //          topPanel.add( new JScrollPane( tree ), BorderLayout.CENTER );
+    //  	topPanel.add( controlPanel, BorderLayout.NORTH );
+    //  	topPanel.add( new JScrollPane( tree ), BorderLayout.CENTER );
 
-    //  invariantTablesScrollPane.setViewportView( new JPanel());
+    //	invariantTablesScrollPane.setViewportView( new JPanel());
     JSplitPane splitPane = new JSplitPane( JSplitPane.VERTICAL_SPLIT,
-                                           topPanel, invariantTablesScrollPane );
+					   topPanel, invariantTablesScrollPane );
     splitPane.setOneTouchExpandable( true );
     splitPane.setDividerSize( 2 );
 
@@ -268,6 +296,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 
   void displayControlPanel() {
     JFrame controlPanel = new JFrame( "Control Panel" );
+    ctrlPanel=controlPanel;
     controlPanel.setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE );
     Container contentPane = controlPanel.getContentPane();
     contentPane.setLayout( new BoxLayout( contentPane, BoxLayout.Y_AXIS ));
@@ -302,10 +331,10 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
   }
 
   public void updateVariableList(Vector newList) {
-    //System.out.println("IGUI : newList is " + newList);
+    // System.out.println("IGUI : newList is " + newList);
     DefaultListModel listModel = (DefaultListModel) variablesList.getModel();
     listModel.removeAllElements();
-    for(int i = 0; i < newList.size(); i++) {
+    for (int i = 0; i < newList.size(); i++) {
       listModel.addElement(newList.elementAt(i));
     }
     variablesList.setModel( listModel );
@@ -315,13 +344,13 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     final JTextField addVariableTextField = new JTextField();
     addVariableTextField.setPreferredSize( new Dimension( 150, 24 ));
     addVariableTextField.setMaximumSize( new Dimension( 150, 24 ));
-    //  addVariableTextField.setAlignmentX( Component.LEFT_ALIGNMENT );
+    //	addVariableTextField.setAlignmentX( Component.LEFT_ALIGNMENT );
     JButton addVariableButton = new JButton( "Add variable" );
     JPanel addVariablePanel = new JPanel();
     addVariablePanel.setLayout( new BoxLayout( addVariablePanel, BoxLayout.X_AXIS ));
     addVariablePanel.setAlignmentX( Component.LEFT_ALIGNMENT );
-    //  addVariablePanel.setLayout( new FlowLayout());
-    //  addVariablePanel.setLayout( new BorderLayout());
+    //	addVariablePanel.setLayout( new FlowLayout());
+    //	addVariablePanel.setLayout( new BorderLayout());
     addVariablePanel.add( addVariableTextField );
     addVariablePanel.add( addVariableButton );
 
@@ -353,43 +382,43 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     variablesControlPanel.add( filterChoicePanel );
 
     ActionListener addVariableActionListener = new ActionListener() {
-        public void actionPerformed( ActionEvent e ) {
-          if (! addVariableTextField.getText().equals( "" )) {
-            if (!invariantFilters.containsVariableFilter( addVariableTextField.getText() )) {
-              invariantFilters.addVariableFilter( addVariableTextField.getText());
-              invariantsTablesPanel.updateInvariantsDisplay();
-              DefaultListModel listModel = (DefaultListModel) variablesList.getModel();
-              listModel.addElement( addVariableTextField.getText());
-              variablesList.setModel( listModel );
-            }
-            addVariableTextField.setText( "" );
-          }
-        }};
+	public void actionPerformed( ActionEvent e ) {
+	  if (! addVariableTextField.getText().equals( "" )) {
+	    if (!invariantFilters.containsVariableFilter( addVariableTextField.getText() )) {
+	      invariantFilters.addVariableFilter( addVariableTextField.getText());
+	      invariantsTablesPanel.updateInvariantsDisplay();
+	      DefaultListModel listModel = (DefaultListModel) variablesList.getModel();
+	      listModel.addElement( addVariableTextField.getText());
+	      variablesList.setModel( listModel );
+	    }
+	    addVariableTextField.setText( "" );
+	  }
+	}};
 
     addVariableButton.addActionListener( addVariableActionListener );
     addVariableTextField.addActionListener( addVariableActionListener );
     removeVariablesButton.addActionListener( new ActionListener() {
-        public void actionPerformed( ActionEvent e ) {
-          int selectedIndices[] =  variablesList.getSelectedIndices();
-          if (selectedIndices != null) {
-            DefaultListModel listModel = (DefaultListModel) variablesList.getModel();
-            for (int i = selectedIndices.length - 1; i >= 0; i--) {
-              invariantFilters.removeVariableFilter( (String) listModel.getElementAt( i ));
-              listModel.removeElementAt( selectedIndices[ i ]);
-            }
-            invariantsTablesPanel.updateInvariantsDisplay();
-            variablesList.setModel( listModel );
-          }}});
+	public void actionPerformed( ActionEvent e ) {
+	  int selectedIndices[] =  variablesList.getSelectedIndices();
+	  if (selectedIndices != null) {
+	    DefaultListModel listModel = (DefaultListModel) variablesList.getModel();
+	    for (int i = selectedIndices.length - 1; i >= 0; i--) {
+	      invariantFilters.removeVariableFilter( (String) listModel.getElementAt( i ));
+	      listModel.removeElementAt( selectedIndices[ i ]);
+	    }
+	    invariantsTablesPanel.updateInvariantsDisplay();
+	    variablesList.setModel( listModel );
+	  }}});
     anyButton.addActionListener( new ActionListener() {
-        public void actionPerformed( ActionEvent e ) {
-          invariantFilters.setVariableFilterType( InvariantFilters.ANY_VARIABLE );
-          invariantsTablesPanel.updateInvariantsDisplay();
-        }});
+	public void actionPerformed( ActionEvent e ) {
+	  invariantFilters.setVariableFilterType( InvariantFilters.ANY_VARIABLE );
+	  invariantsTablesPanel.updateInvariantsDisplay();
+	}});
     allButton.addActionListener( new ActionListener() {
-        public void actionPerformed( ActionEvent e ) {
-          invariantFilters.setVariableFilterType( InvariantFilters.ALL_VARIABLES );
-          invariantsTablesPanel.updateInvariantsDisplay();
-        }});
+	public void actionPerformed( ActionEvent e ) {
+	  invariantFilters.setVariableFilterType( InvariantFilters.ALL_VARIABLES );
+	  invariantsTablesPanel.updateInvariantsDisplay();
+	}});
 
 
     JPanel variablesPanel = new JPanel();
@@ -409,8 +438,8 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 
   Border createBorder( String title ) {
     return BorderFactory.createTitledBorder( BorderFactory.createCompoundBorder( BorderFactory.createEmptyBorder( 10, 10, 10, 10 ),
-                                                                                 BorderFactory.createEtchedBorder()),
-                                             title );
+										 BorderFactory.createEtchedBorder()),
+					     title );
   }
 
   JCheckBox createFilterCheckBox( InvariantFilter invariantFilter ) {
@@ -437,11 +466,11 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
       JMenuItem menuItem = (JMenuItem) e.getSource();
       String menuText = menuItem.getText();
       if (menuText.equals( "Load file" )) {
-        String invFileName = pickFileFromFileChooser();
-        displayInvariantsFromFile( invFileName );
+	String invFileName = pickFileFromFileChooser(System.getProperty("user.dir"));
+	displayInvariantsFromFile( invFileName );
       }
       else if (menuText.equals( "Quit" ))
-        System.exit( 0 );
+	System.exit( 0 );
     }
     //  Handle checkbox events involving filters
     else if (e.getSource().getClass() == JCheckBox.class) {
@@ -455,11 +484,11 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
       JButton button = (JButton) e.getSource();
       String buttonText = button.getText();
       if (buttonText.equals( "Select all filters" )) {
-        turnFilterCheckBoxesOn();
-        invariantFilters.turnFiltersOn();
+	turnFilterCheckBoxesOn();
+	invariantFilters.turnFiltersOn();
       } else if (buttonText.equals( "Deselect all filters" )) {
-        turnFilterCheckBoxesOff();
-        invariantFilters.turnFiltersOff();
+	turnFilterCheckBoxesOff();
+	invariantFilters.turnFiltersOff();
       }
       invariantsTablesPanel.updateInvariantsDisplay();
     }
@@ -467,9 +496,9 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 
   // fileChooser is field so that it remembers where it was between loads
   private JFileChooser fileChooser;
-  String pickFileFromFileChooser() {
+  String pickFileFromFileChooser(String dir) {
     if (fileChooser == null) {
-      String currentDir = System.getProperty("user.dir");
+      String currentDir = dir;
       if (currentDir != null) {
         fileChooser = new JFileChooser(currentDir);
       } else {
@@ -497,6 +526,44 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     else if (e.isAltDown()  &&  e.getKeyCode() == 40) // down arrow
       invariantsTablesPanel.scrollToNextTable();
   }
+
+
+  static String lastSel=null;
+
+  public static void setSelection(String className) {
+    if (className.startsWith("."))className=className.substring(1);
+    if (className.equals(lastSel)) return;
+    lastSel=className;
+    myTree.clearSelection();
+    DefaultMutableTreeNode root=(DefaultMutableTreeNode)myTree.getModel().getRoot();
+    for (int i=0; i<root.getChildCount(); i++) {
+      DefaultMutableTreeNode temp=(DefaultMutableTreeNode) root.getChildAt(i);
+      if (temp.toString().indexOf(className)>=0) {
+        myTree.addSelectionPath(new TreePath(temp.getPath()));
+      }
+    }
+  }
+  public static void setSelection(String className, String methodName, String arguments) {
+    if (className.startsWith("."))className=className.substring(1);
+    if ((className+methodName+arguments).equals(lastSel)) return;
+    lastSel=className+methodName+arguments;
+    myTree.clearSelection();
+    if (className.equals(methodName) ||
+        className.endsWith("."+methodName)) methodName="<init>";
+    DefaultMutableTreeNode root=(DefaultMutableTreeNode)myTree.getModel().getRoot();
+    for (int i=0; i<root.getChildCount(); i++) {
+      DefaultMutableTreeNode temp=(DefaultMutableTreeNode) root.getChildAt(i);
+      if (temp.toString().indexOf(className)>=0) {
+        for (int j=0; j<temp.getChildCount(); j++) {
+          DefaultMutableTreeNode meth=(DefaultMutableTreeNode) temp.getChildAt(j);
+          if (meth.toString().indexOf(methodName)>=0) {
+
+            myTree.addSelectionPath(new TreePath(meth.getPath()));
+          }
+        }
+      }
+    }
+  }
 }
 
 
@@ -514,4 +581,6 @@ class InvFileFilter extends FileFilter {
   }
 
   public String getDescription() { return ".inv files"; }
+
+
 }

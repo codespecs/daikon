@@ -12,10 +12,10 @@ import java.util.*;
 public class SplitterObject implements Comparable{
 
   private Splitter splitter;
-  private String condition; //the condition
-  private String className = "Unassigned"; //the Java classname of this Splitter
-  private String directory; //the directory where it resides
-  private String pptName; //the program point with which it is associated
+  private String condition; // the condition
+  private String className = "Unassigned"; // the Java classname of this Splitter
+  private String directory; // the directory where it resides
+  private String pptName; // the program point with which it is associated
   private boolean exists = false;
   private String testString = "Unassigned";
   private String errorMessage = "Splitter for " + this.condition + " valid";

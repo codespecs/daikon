@@ -386,7 +386,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
       addComment(n, JML_START_COMMENT, true);
     }
 
-    //if (!exceptions.isEmpty())
+    // if (!exceptions.isEmpty())
     //  insertExceptions(n, exceptions);
   }
 

@@ -6063,7 +6063,7 @@ public class CParser implements CParserConstants {
     if (jj_initialized_once) {
        // System.out.println("ERROR: Second call to constructor of static parser.  You must");
        // System.out.println("       either use ReInit() or set the JavaCC option STATIC to false");
-       //System.out.println("       during parser generation.");
+       // System.out.println("       during parser generation.");
       throw new Error();
     }
     jj_initialized_once = true;
@@ -6194,7 +6194,7 @@ public class CParser implements CParserConstants {
         jj_expentry[i] = jj_lasttokens[i];
       }
       boolean exists = false;
-      for (java.util.Enumeration enum = jj_expentries.elements(); enum.hasMoreElements();) {
+      for (java.util.Enumeration enum = jj_expentries.elements(); enum.hasMoreElements(); ) {
         int[] oldentry = (int[])(enum.nextElement());
         if (oldentry.length == jj_expentry.length) {
           exists = true;

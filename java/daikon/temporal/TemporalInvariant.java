@@ -2,14 +2,22 @@ package daikon.temporal;
 
 import java.util.*;
 
+// Similar to ScopeState in Scope.java -- look there.
 class InvariantState
 {
     boolean isFalsified;
     int numConfirmingSequences;
 }
 
-//FIXME: numConfirmingSequences numbers may not be correct
-//for dynamically instantiated invariants
+/**
+ * This class captures behavior common to all invariants. It's very
+ * straightforward, as are all invariants (three types supported:
+ * always, eventually, and never, though never invariants aren't instantiated
+ * by the dynamic algorithm yet).
+ **/
+
+// FIXME: numConfirmingSequences numbers may not be correct
+// for dynamically instantiated invariants
 abstract class TemporalInvariant extends EventReceptor
 {
     public boolean isFalsified;
@@ -32,7 +40,7 @@ abstract class TemporalInvariant extends EventReceptor
 
 	s.addChild(this);
     }
-    
+
     void falsify()
     {
 	isFalsified = true;
@@ -53,7 +61,7 @@ abstract class TemporalInvariant extends EventReceptor
 
 	StringBuffer out = new StringBuffer();
 
-	for(Iterator i = strings.iterator(); i.hasNext(); )
+	for (Iterator i = strings.iterator(); i.hasNext(); )
 	{
 		out.append((String)i.next());
 	}
@@ -63,7 +71,7 @@ abstract class TemporalInvariant extends EventReceptor
 	return out.toString();
     }
 
-	
+
     public String toString()
     {
 	StringBuffer res = new StringBuffer();
@@ -71,7 +79,7 @@ abstract class TemporalInvariant extends EventReceptor
 	res.append(getClass().toString());
 
 	res.append(" -- " + getDescriptionString() + " -- ");
-	
+
 	if (!isFalsified)
 	    {
 		res.append(String.valueOf(numConfirmingSequences));
@@ -101,14 +109,14 @@ abstract class TemporalInvariant extends EventReceptor
 	isFalsified = is.isFalsified;
 	numConfirmingSequences = is.numConfirmingSequences;
 
-	//FIXME: This is kludgy (should be done consistent with inheritance pattern).
-	//Also may be incorrect. Here's hoping it isn't!
+	// FIXME: This is kludgy (should be done consistent with inheritance pattern).
+	// Also may be incorrect. Here's hoping it isn't!
 	if (this instanceof EventuallyInvariant)
 	    {
 		((EventuallyInvariant)this).happenedOnceInScope = false;
 	    }
     }
-    
+
     void parentScopeExiting()
     {
 	if (!isFalsified)
@@ -145,7 +153,7 @@ class NeverInvariant extends TemporalInvariant
 
     public void processEvent(Event e)
     {
-	if (isFalsified) //Implement this check outside to avoid overhead?
+	if (isFalsified) // Implement this check outside to avoid overhead?
 	    return;
 
 	if (mEvent.matches(e))
@@ -154,13 +162,16 @@ class NeverInvariant extends TemporalInvariant
 	    }
     }
 
+    // FIXME: Factor out common produceDuplicate code into a parent helper
+    // method (eg doCommonProduceDuplicateWork)
     EventReceptor produceDuplicate()
     {
 	NeverInvariant inv = new NeverInvariant(mEvent);
 
 	inv.numConfirmingSequences = numConfirmingSequences;
+	inv.isFalsified = isFalsified;
 
-	tiedTo.add(inv);
+	setTiedTo(inv);
 
 	return inv;
     }
@@ -210,8 +221,9 @@ class AlwaysInvariant extends TemporalInvariant
 	AlwaysInvariant inv = new AlwaysInvariant(mEvent);
 
 	inv.numConfirmingSequences = numConfirmingSequences;
+	inv.isFalsified = isFalsified;
 
-	tiedTo.add(inv);
+	setTiedTo(inv);
 
 	return inv;
     }
@@ -282,8 +294,10 @@ class EventuallyInvariant extends TemporalInvariant
 	EventuallyInvariant inv = new EventuallyInvariant(mEvent);
 
 	inv.numConfirmingSequences = numConfirmingSequences;
-	
-	tiedTo.add(inv);
+	inv.isFalsified = isFalsified;
+
+	setTiedTo(inv);
+
 	return inv;
     }
 
@@ -292,5 +306,3 @@ class EventuallyInvariant extends TemporalInvariant
 	return mEvent.toString();
     }
 }
-
-

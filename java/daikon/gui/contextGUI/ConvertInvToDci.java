@@ -43,7 +43,7 @@ import java.io.*;
 public class ConvertInvToDci
 {
     public static String error_msg = null;
-    //public static boolean CFILE = false;
+    // public static boolean CFILE = false;
 
     public static void main(String args[])
     {
@@ -83,7 +83,7 @@ public class ConvertInvToDci
         String output_file = null;
         String input_file = null;
 
-        for(int i = 0; i < args.length; i++)
+        for (int i = 0; i < args.length; i++)
         {
             if (args[i].endsWith(".dci"))
                 output_file = args[i];

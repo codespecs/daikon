@@ -73,7 +73,7 @@ public class InvMap implements Serializable {
   // sequences.
   public Iterator invariantIterator() {
     Vector answer = new Vector();
-    for (Iterator i = ppts.iterator(); i.hasNext();)
+    for (Iterator i = ppts.iterator(); i.hasNext(); )
       answer.addAll(get((PptTopLevel) i.next()));
     return answer.iterator();
   }

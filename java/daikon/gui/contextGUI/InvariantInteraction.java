@@ -114,7 +114,7 @@ public class InvariantInteraction
     {
         gui_visible = false;
         dg.endGui();
-        //dg = null;
+        // dg = null;
         resetVars();
     }
 

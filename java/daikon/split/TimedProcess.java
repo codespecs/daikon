@@ -18,14 +18,14 @@ public class TimedProcess {
   Timer timer;
   String command;
   Process p;
-  boolean finished; //keep track of whether the process if finished or not.
+  boolean finished; // keep track of whether the process if finished or not.
   long waitTime;
   Runtime commander = java.lang.Runtime.getRuntime();
   BufferedReader error;
   StringBuffer errorMessage;
 
-  //dkconfig_ variables should only be set via the configuration
-  //options
+  // dkconfig_ variables should only be set via the configuration
+  // options
 
   /**
    * Positive integer.  Specifies the Splitter compilation timeout, in
@@ -65,8 +65,8 @@ public class TimedProcess {
    */
   public boolean finished () {
     try {
-      //sad, but the call to Process.exitValue() causes it to throw
-      //an exception if the process is not finished
+      // sad, but the call to Process.exitValue() causes it to throw
+      // an exception if the process is not finished
       String s;
       while ((s = error.readLine()) != null) {
         errorMessage.append(s);
@@ -74,7 +74,7 @@ public class TimedProcess {
       int exit =  p.exitValue();
       return true;
     } catch (IllegalThreadStateException ie) {
-      //do nothing.
+      // do nothing.
     } catch (IOException ioe) {
       System.out.println("TimedProcess: " + ioe.toString());
     }
@@ -109,7 +109,7 @@ public class TimedProcess {
     public void run() {
       try {
         int exit = p.exitValue();
-        //System.out.println("\nProcess " + command + "\nexited with status " + exit);
+        // System.out.println("\nProcess " + command + "\nexited with status " + exit);
       } catch (IllegalThreadStateException ie) {
         System.out.println("Process " + command + "\nterminated after "
                            + waitTime + " seconds");

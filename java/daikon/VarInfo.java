@@ -719,8 +719,8 @@ public final class VarInfo
    **/
   public boolean isDerivedParamAndUninteresting() {
     // if (isDerivedParamAndUninterestingCached != null) {
-    //   PrintInvariants.debugFiltering.debug("\t\t\tusing cached " + isDerivedParamAndUninterestingCached.toString() + "\n");
-    //   return isDerivedParamAndUninterestingCached.booleanValue();
+    //  PrintInvariants.debugFiltering.debug("\t\t\tusing cached " + isDerivedParamAndUninterestingCached.toString() + "\n");
+    //  return isDerivedParamAndUninterestingCached.booleanValue();
     // }
     if (isDerivedParamAndUninterestingCached != null) {
     } else {
@@ -754,7 +754,7 @@ public final class VarInfo
     if (Global.debugSuppressParam.isDebugEnabled()) {
       Global.debugSuppressParam.debug ("Testing isDerivedParamUninteresting for: " + name.name());
       Global.debugSuppressParam.debug (aux);
-      Global.debugSuppressParam.debug ("  At ppt " + ppt.name);
+      Global.debugSuppressParam.debug ("At ppt " + ppt.name);
     }
     if (isDerivedParam()) {
       // I am uninteresting if I'm a derived param from X and X's
@@ -765,7 +765,7 @@ public final class VarInfo
         VarInfoName base = ((VarInfoName.TypeOf) name).term;
         VarInfo baseVar = ppt.findVar(base);
         if (baseVar != null && baseVar.aux.getFlag(VarInfoAux.IS_PARAM)) {
-          Global.debugSuppressParam.debug ("  TypeOf returning true");
+          Global.debugSuppressParam.debug ("TypeOf returning true");
           PrintInvariants.debugFiltering.debug("\t\t\tnot interesting, first dpf case\n");
           return true;
         }
@@ -774,7 +774,7 @@ public final class VarInfo
         VarInfoName base = ((VarInfoName.SizeOf) name).sequence.term;
         VarInfo baseVar = ppt.findVar(base);
         if (baseVar != null && baseVar.aux.getFlag(VarInfoAux.IS_PARAM)) {
-          Global.debugSuppressParam.debug ("  SizeOf returning true");
+          Global.debugSuppressParam.debug ("SizeOf returning true");
           PrintInvariants.debugFiltering.debug("\t\t\tnot interesting, second dpf case\n");
           return true;
         }
@@ -799,18 +799,18 @@ public final class VarInfo
       if (base.name.name().equals("this")) return false;
       VarInfo origBase = ppt.findVar(base.name.applyPrestate());
       if (origBase == null) {
-        Global.debugSuppressParam.debug ("  No orig variable for base, returning true ");
+        Global.debugSuppressParam.debug ("No orig variable for base, returning true ");
         PrintInvariants.debugFiltering.debug("\t\t\tnot interesting, no orig variable for base\n");
         return true; // There can't be an equal invariant without orig
       }
       PptSlice2 slice = ppt.findSlice_unordered (base, origBase);
       if (slice == null) {
-        Global.debugSuppressParam.debug ("  No slice for equality in base, so uninteresting");
+        Global.debugSuppressParam.debug ("No slice for equality in base, so uninteresting");
         PrintInvariants.debugFiltering.debug("\t\t\tequal inv in null slice\n");
         return true; // There can't be an equal invariant in a null slice
       }
       if (Global.debugSuppressParam.isDebugEnabled()) {
-        Global.debugSuppressParam.debug ("  Parent and orig slice for finding equality: " + slice.name);
+        Global.debugSuppressParam.debug ("Parent and orig slice for finding equality: " + slice.name);
       }
 
 //       Invariant equalInv = Invariant.find (daikon.inv.binary.twoScalar.IntEqual.class, slice);
@@ -829,10 +829,11 @@ public final class VarInfo
         if (IsEqualityComparison.it.accept(sliceInv)) seenEqual = true;
       }
       if (!seenEqual) {
-        Global.debugSuppressParam.debug ("  Didn't see equality in base, so uninteresting");
+        Global.debugSuppressParam.debug ("Didn't see equality in base, so uninteresting");
+        PrintInvariants.debugFiltering.debug("\t\t\tdidn't see equality in base\n");
         return true;
       }
-      Global.debugSuppressParam.debug ("  Saw equality.  Derived worth printing.");
+      Global.debugSuppressParam.debug ("Saw equality.  Derived worth printing.");
 
     } else {
       Global.debugSuppressParam.debug ("  Not a derived param.");

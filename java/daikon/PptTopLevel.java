@@ -250,6 +250,10 @@ public class PptTopLevel
     num_tracevars = val_idx;
     num_orig_vars = 0;
     Assert.assertTrue(num_static_constant_vars == num_declvars - num_tracevars);
+    // System.out.println("Created PptTopLevel " + name + ": "
+    //                    + "num_static_constant_vars=" + num_static_constant_vars
+    //                    + ",num_declvars=" + num_declvars
+    //                    + ",num_tracevars=" + num_tracevars);
   }
 
 
@@ -386,8 +390,8 @@ public class PptTopLevel
     //                    + ", isCanonical=" + vi.isCanonical()
     //                    + ", canBeMissing=" + vi.canBeMissing);
     return ((vi.derivedDepth() < 2)
-            //&& (vi.isCanonical()) // [INCR]
-            //&& (!vi.canBeMissing) // [[INCR]]
+            // && (vi.isCanonical()) // [INCR]
+            // && (!vi.canBeMissing) // [[INCR]]
             );
 
     // Should add this (back) in:
@@ -1066,6 +1070,10 @@ public class PptTopLevel
   // A slice is a specific kind of view, but we don't call this
   // findView because it doesn't find an arbitrary view.
   /**
+   * findSlice can return null if the slice doesn't exist.  That can happen
+   * if there are no true invariants over the set of variables -- when the
+   * last invariant is removed, so is the slice.
+   *
    * When one is looking for a particular invariant, typically one should
    * use the dynamic_constant or canBeMissing slots, which cache the
    * invariants of most interest, instead of calling function to get the
@@ -1082,6 +1090,10 @@ public class PptTopLevel
   }
 
   /**
+   * findSlice can return null if the slice doesn't exist.  That can happen
+   * if there are no true invariants over the set of variables -- when the
+   * last invariant is removed, so is the slice.
+   *
    * When one is looking for a particular invariant, typically one should
    * use the dynamic_constant or canBeMissing slots, which cache the
    * invariants of most interest, instead of calling function to get the
@@ -1114,6 +1126,10 @@ public class PptTopLevel
   }
 
   /**
+   * findSlice can return null if the slice doesn't exist.  That can happen
+   * if there are no true invariants over the set of variables -- when the
+   * last invariant is removed, so is the slice.
+   *
    * When one is looking for a particular invariant, typically one should
    * use the dynamic_constant or canBeMissing slots, which cache the
    * invariants of most interest, instead of calling function to get the
@@ -2082,7 +2098,7 @@ public class PptTopLevel
         if (!cond1.splitter.condition().equals(cond2.splitter.condition()))
           continue;
         addImplications_internal(cond1, cond2, false);
-        //skip cond2
+        // skip cond2
         i++;
       }
     }

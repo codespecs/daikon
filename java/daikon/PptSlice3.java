@@ -343,7 +343,7 @@ public final class PptSlice3
                  && rep2 == ProglangType.DOUBLE
                  && rep3 == ProglangType.DOUBLE) {
         ThreeFloat inv = (ThreeFloat) invariant;
-        for (Iterator itor = values_cache.entrySet().iterator(); itor.hasNext();) {
+        for (Iterator itor = values_cache.entrySet().iterator(); itor.hasNext(); ) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
           double val1 = ((Double) vals[0]).doubleValue();

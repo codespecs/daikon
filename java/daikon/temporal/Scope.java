@@ -2,9 +2,9 @@ package daikon.temporal;
 
 import java.util.*;
 
-//FIXME: In the Future(TM), actually use this structure to store
-//scope state. Right now this is a trick for rollbacks. Do the same
-//thing to InvariantState
+// FIXME: In the Future(TM), actually use this structure to store
+// scope state. Right now this is a trick for rollbacks. Do the same
+// thing to InvariantState
 class ScopeState
 {
     EventRecord eventsSeen;
@@ -12,6 +12,22 @@ class ScopeState
     boolean enteredBefore;
     boolean exitedBefore;
 }
+
+// FIXME: Make inner classes here. Do it now! High priority 11/26
+
+/**
+ * This class captures behavior common to all scopes. Each scope must
+ * keep track of which events it has seen already (for the candidate
+ * invariant instantiation process), what its children are, and some
+ * self-explanatory state information. This class also provides various
+ * utility methods used in the myriad tree-walks which are part of the
+ * temporal invariant detection process.
+ *
+ * A key method is generateNewCandidates, which produces the list
+ * of new invariants to create, based on a new event.
+ *
+ * Specific scope types are defined later in the file.
+ **/
 
 public abstract class Scope extends EventReceptor
 {
@@ -41,7 +57,13 @@ public abstract class Scope extends EventReceptor
 	exitedBefore = false;
     }
 
-    //FIXME: Do I want to save/restore isActive?
+    /**
+     * This method generates a snapshot of scope state for rollback
+     * purposes. Rollback occurs when a between scope never encounters
+     * its closing event.
+     **/
+
+    // FIXME: Do I want to save/restore isActive?
     Object generateStateSnapshot()
     {
 	ScopeState out = new ScopeState();
@@ -70,14 +92,14 @@ public abstract class Scope extends EventReceptor
 
 	out.put(this, generateStateSnapshot());
 
-	for(Iterator i = mChildInvariants.iterator(); i.hasNext(); )
+	for (Iterator i = mChildInvariants.iterator(); i.hasNext(); )
 	    {
 		EventReceptor r = (EventReceptor)i.next();
 
 		out.put(r, r.generateStateSnapshot());
 	    }
 
-	for(Iterator i = mChildScopes.iterator(); i.hasNext(); )
+	for (Iterator i = mChildScopes.iterator(); i.hasNext(); )
 	    {
 		Scope s = (Scope)i.next();
 
@@ -108,7 +130,7 @@ public abstract class Scope extends EventReceptor
 
     void deleteChild(EventReceptor r)
     {
-	//FIXME: Do I need to be careful about garbage collection here? Don't think so, but.
+	// FIXME: Do I need to be careful about garbage collection here? Don't think so, but.
 
 	if (r instanceof Scope)
 	    {
@@ -124,12 +146,12 @@ public abstract class Scope extends EventReceptor
     {
 	super.delete();
 
-	for(Iterator i = mChildScopes.iterator(); i.hasNext(); )
+	for (Iterator i = mChildScopes.iterator(); i.hasNext(); )
 	    {
 		((EventReceptor)i.next()).delete();
 	    }
 
-	for(Iterator i = mChildInvariants.iterator(); i.hasNext(); )
+	for (Iterator i = mChildInvariants.iterator(); i.hasNext(); )
 	    {
 		((EventReceptor)i.next()).delete();
 	    }
@@ -142,7 +164,7 @@ public abstract class Scope extends EventReceptor
 
     void addChildren(Vector v)
     {
-	for(Iterator i = v.iterator(); i.hasNext(); )
+	for (Iterator i = v.iterator(); i.hasNext(); )
 	    {
 		addChild((EventReceptor)i.next());
 	    }
@@ -150,52 +172,61 @@ public abstract class Scope extends EventReceptor
 
     void sendEventToKids(Event e)
     {
-	//FIXME: Restructure so that the basic events aren't recomputed
-	//(and so that this backwards dependency is removed). Not too hard;
-	//just need to always pass around both the sample event and the
-	//basic events..
+	// FIXME: Restructure so that the basic events aren't recomputed
+	// (and so that this backwards dependency is removed). Not too hard;
+	// just need to always pass around both the sample event and the
+	// basic events..
 	mEventsSeen.add(e);
 
-	mEventsSeen.addAll(TemporalInvariantManager.generateBasicEventsFromSample(e));
+	mEventsSeen.addAll(TemporalInvariantManager.Manager.generateBasicEventsFromSample(e));
 
-	
-	for(Iterator i = mChildScopes.iterator(); i.hasNext(); )
+
+	for (Iterator i = mChildScopes.iterator(); i.hasNext(); )
 	    {
 		((EventReceptor)i.next()).processEvent(e);
 	    }
 
-	for(Iterator i = mChildInvariants.iterator(); i.hasNext(); )
+	for (Iterator i = mChildInvariants.iterator(); i.hasNext(); )
 	    {
 		((EventReceptor)i.next()).processEvent(e);
 	    }
     }
+
+    /**
+     * When you enter a scope, tell your kids about it (and remember
+     * that you are now active).
+     **/
 
     void enter()
     {
 	isActive = true;
 
-	for(Iterator i = mChildScopes.iterator(); i.hasNext(); )
+	for (Iterator i = mChildScopes.iterator(); i.hasNext(); )
 	    {
 		((EventReceptor)i.next()).parentScopeEntering();
 	    }
 
-	for(Iterator i = mChildInvariants.iterator(); i.hasNext(); )
+	for (Iterator i = mChildInvariants.iterator(); i.hasNext(); )
 	    {
 		((EventReceptor)i.next()).parentScopeEntering();
 	    }
     }
+
+    /**
+     * When you exit, tell your kids about it and fix your state.
+     **/
 
     void exit()
     {
 	isActive = false;
 	exitedBefore = true;
 
-	for(Iterator i = mChildScopes.iterator(); i.hasNext(); )
+	for (Iterator i = mChildScopes.iterator(); i.hasNext(); )
 	    {
 		((EventReceptor)i.next()).parentScopeExiting();
 	    }
 
-	for(Iterator i = mChildInvariants.iterator(); i.hasNext(); )
+	for (Iterator i = mChildInvariants.iterator(); i.hasNext(); )
 	    {
 		((EventReceptor)i.next()).parentScopeExiting();
 	    }
@@ -214,24 +245,32 @@ public abstract class Scope extends EventReceptor
 	return isActive;
     }
 
+    /**
+     * This is called during the candidate invariant generation
+     * process to duplicate child scopes and invariants and produce
+     * the proper records. This is needed whenever a new event E is
+     * seen in a scope, as it might be true that everything that is
+     * true so far is only true before E is seen.
+     **/
+
     Vector duplicateChildren()
     {
-	//FIXME: Pass level around so that redundant getDepth() computations
-	//can be spared.
+	// FIXME: Pass level around so that redundant getDepth() computations
+	// can be spared.
 
 	if (getDepth() >= MAX_DEPTH)
 	{
 		return new Vector();
-	} 
-	
+	}
+
 	Vector out = new Vector();
 
-	for(Iterator i = mChildScopes.iterator(); i.hasNext(); )
+	for (Iterator i = mChildScopes.iterator(); i.hasNext(); )
 	    {
 		out.add(((EventReceptor)i.next()).produceDuplicate());
 	    }
 
-	for(Iterator i = mChildInvariants.iterator(); i.hasNext(); )
+	for (Iterator i = mChildInvariants.iterator(); i.hasNext(); )
 	    {
 		out.add(((EventReceptor)i.next()).produceDuplicate());
 	    }
@@ -239,35 +278,52 @@ public abstract class Scope extends EventReceptor
 	return out;
     }
 
+    // A wrapper to take care of the recursion depth issue - we don't want
+    // to generate invariants specific to particular executions
+
     Hashtable generateNewCandidates(Event e)
     {
 	return generateNewCandidates(e, 0);
     }
 
-    //FIXME: Use a different collection here?
-    //This routine returns a Hashtable mapping nodes in the
-    //EventReceptor tree to Vectors of new nodes which should be added
-    //off of them. This is done so that all the new nodes can be added
-    //at once, without separate computations interfering with one another.
+    /**
+     * This hairy routine does the vast bulk of the candidate invariant
+     * generation. The basic idea is that it collects together a Hashtable
+     * containing (scope . vector-of-new-children) pairs which the global
+     * scope then adds to the invariant tree. The new invariants are collected
+     * in this way (and not immediately added) so that they don't interfere
+     * with the regular processing of the event which caused their creation.
+     *
+     * It does this by first asking its kids what new invariants they want
+     * to create, then following a set of rules (outlined elsewhere, FIXME -
+     * describe them here) which determine what new invariants are possible
+     * as immediate children.
+     **/
+
+    // FIXME: Use a different collection here?
+    // This routine returns a Hashtable mapping nodes in the
+    // EventReceptor tree to Vectors of new nodes which should be added
+    // off of them. This is done so that all the new nodes can be added
+    // at once, without separate computations interfering with one another.
     Hashtable generateNewCandidates(Event e, int level)
     {
-	//	System.out.println("Generating new candidate invariants at level " + String.valueOf(level) + " given event " + e.toString());
-
 	Hashtable out = new Hashtable();
 
 	if (!isActive() || level >= MAX_DEPTH)
 	    return out;
 
-	//Recurse first, damn you
-	//Is this correct (in particular re children with stuff
-	//depending on things which begin or close this scope)
-	for(Iterator i = mChildScopes.iterator(); i.hasNext(); )
+	// Recurse first, damn you
+	// Is this correct (in particular re children with stuff
+	// depending on things which begin or close this scope)
+	for (Iterator i = mChildScopes.iterator(); i.hasNext(); )
 	    {
 		out.putAll(((Scope)i.next()).generateNewCandidates(e, level + 1));
 	    }
 
 	if (seenEvent(e))
 	    return out;
+
+	//	System.out.println("Generating new candidate invariants at level " + String.valueOf(level) + " given event " + e.toString());
 
 	Vector newKids = new Vector();
 
@@ -276,7 +332,7 @@ public abstract class Scope extends EventReceptor
 		newKids.add(new AlwaysInvariant(e));
 	    }
 
-	//FIXME: Possible subtle semantics error here?
+	// FIXME: Possible subtle semantics error here?
 	if (!exitedBefore)
 	    {
 		newKids.add(new EventuallyInvariant(e));
@@ -286,14 +342,19 @@ public abstract class Scope extends EventReceptor
 	afterE.isActive = true;
 	newKids.add(afterE);
 
+	// FIXME: Add scope creation routines for creating scopes from
+	// other scopes (to automatically correctly copy seen events, etc)
 	ScopeBefore newBeforeE = new ScopeBefore(e);
+
+	newBeforeE.mEventsSeen.add(mEventsSeen);
+
 	newKids.add(newBeforeE);
 
-	for(Iterator i = mChildScopes.iterator(); i.hasNext(); )
+	for (Iterator i = mChildScopes.iterator(); i.hasNext(); )
 	    {
 		EventReceptor r = (EventReceptor)i.next();
 
-		//		//Add "before e, r" for each child scope r
+		//		// Add "before e, r" for each child scope r
 		//		ScopeBefore newBeforeE = new ScopeBefore(e);
 
 		newBeforeE.addChild(r.produceDuplicate());
@@ -301,12 +362,17 @@ public abstract class Scope extends EventReceptor
 
 		if (r instanceof ScopeAfter)
 		    {
-			//r is a ScopeAfter, aka our marker for the other
-			//events seen in here
+			// FIXME: Correct numConfirmingSamples stuff here
+			// (as in some cases it must be reset)
+
+			// r is a ScopeAfter, aka our marker for the other
+			// events seen in here
 			ScopeAfter af = (ScopeAfter)r;
 
-			//Create a scope which is after r's event, (weak)until e
+			// Create a scope which is after r's event, (weak)until e
 			ScopeAfterUntil newAfterUntil = new ScopeAfterUntil(af.mEvent, e);
+			newAfterUntil.mEventsSeen.add(af.mEventsSeen);
+
 			newAfterUntil.addChildren(af.duplicateChildren());
 
 			EventuallyInvariant erespondstor = new EventuallyInvariant(newAfterUntil, e);
@@ -315,12 +381,13 @@ public abstract class Scope extends EventReceptor
 
 			ScopeBetween newBetween = new ScopeBetween(af.mEvent, e);
 			newBetween.addChildren(af.duplicateChildren());
+			newBetween.mEventsSeen.add(af.mEventsSeen);
 
 			newKids.add(newBetween);
 		    }
 	    }
 
-	for(Iterator i = mChildInvariants.iterator(); i.hasNext(); )
+	for (Iterator i = mChildInvariants.iterator(); i.hasNext(); )
 	    {
 		EventReceptor r = (EventReceptor)i.next();
 
@@ -343,11 +410,12 @@ public abstract class Scope extends EventReceptor
 
     public abstract String getNameString();
 
+    // Utility function to help make printouts legible
     private static String makeSpacing(int l)
     {
 	StringBuffer space = new StringBuffer();
 
-	for(int i = 0; i < l; i++)
+	for (int i = 0; i < l; i++)
 	    {
 		space.append("    ");
 	    }
@@ -361,24 +429,24 @@ public abstract class Scope extends EventReceptor
 
 	String spaceString = makeSpacing(level);
 
-	res.append(spaceString + getNameString() + "\n");
+	res.append(spaceString + getNameString() + " " + isActive() + "\n");
 
-	for(Iterator i = mChildInvariants.iterator(); i.hasNext(); )
+	for (Iterator i = mChildInvariants.iterator(); i.hasNext(); )
 	    {
-		res.append(spaceString + i.next().toString() + "\n");
+		res.append(spaceString + "    " + i.next().toString() + "\n");
 	    }
 
 	for (Iterator i = mChildScopes.iterator(); i.hasNext(); )
 	    {
-		res.append(((Scope)i.next()).toString(level + 1));
+		res.append(((Scope)i.next()).toString(level+1));
 	    }
 
-	res.append("\n");
+	//	res.append("\n");
 
 	return res.toString();
     }
 
-    //override me!
+    // override me!
     Scope instantiateDuplicateScope()
     {
 	return null;
@@ -388,7 +456,7 @@ public abstract class Scope extends EventReceptor
     {
 	Scope s = instantiateDuplicateScope();
 
-	tiedTo.add(s);
+	setTiedTo(s);
 
 	s.mEventsSeen = mEventsSeen.duplicate();
 	s.enteredBefore = enteredBefore;
@@ -404,7 +472,7 @@ public abstract class Scope extends EventReceptor
 
 	out.addAll(mChildInvariants);
 
-	for(Iterator i = mChildScopes.iterator(); i.hasNext(); )
+	for (Iterator i = mChildScopes.iterator(); i.hasNext(); )
 	{
 		out.addAll(((Scope)i.next()).getAllChildInvariants());
 	}
@@ -413,6 +481,11 @@ public abstract class Scope extends EventReceptor
     }
 
 }
+
+/**
+ * This scope is special. It is entered and exited explicitly. It
+ * also does some basic bookkeeping for candidate insantiation.
+ **/
 
 class ScopeGlobal extends Scope
 {
@@ -461,13 +534,17 @@ class ScopeGlobal extends Scope
 	    {
 		newStuffHashes = new Vector();
 
-		for(Iterator i = basicEvents.iterator(); i.hasNext(); )
+		for (Iterator i = basicEvents.iterator(); i.hasNext(); )
 		    {
 			Event e = (Event)i.next();
 
+			System.out.print("DEALING WITH BASIC EVENT: " + e.toString());
+
 			if (!mEventsSeen.hasEventMatching(e))
 			{
-				System.out.println("Looking at new event: " + e.toString());
+			    System.out.println(" -- NEW");
+			} else {
+			    System.out.println();
 			}
 
 			newStuffHashes.add(generateNewCandidates(e));
@@ -476,20 +553,39 @@ class ScopeGlobal extends Scope
 
 	sendEventToKids(sampleEvent);
 
+	//	System.out.println("\n\nNEW INVARIANTS\n\n");
+
 	if (doDynamicInstantiation)
 	    {
-		for(Iterator i = newStuffHashes.iterator(); i.hasNext(); )
+		for (Iterator i = newStuffHashes.iterator(); i.hasNext(); )
 		    {
 			Hashtable res = (Hashtable)i.next();
 
-			for(Iterator j = res.keySet().iterator(); j.hasNext(); )
+			for (Iterator j = res.keySet().iterator(); j.hasNext(); )
 			    {
 				Scope s = (Scope)j.next();
 
 				s.addChildren((Vector)res.get(s));
+
+				for (Iterator k = ((Vector)res.get(s)).iterator(); k.hasNext(); )
+				    {
+					EventReceptor rec = (EventReceptor)k.next();
+
+					if (rec instanceof TemporalInvariant)
+					    {
+						TemporalInvariant n = (TemporalInvariant)rec;
+
+						//												System.out.println(n.outputString());
+					    }
+				    }
 			    }
 		    }
 	    }
+
+	//	System.out.println("\n\nOVERALL STATE:\n\n");
+
+	//	printState();
+
     }
 }
 
@@ -536,8 +632,8 @@ class ScopeBefore extends Scope
 
 }
 
-//Note: Could have implemented this as a ScopeNot with a ScopeBefore.
-//Should I?
+// Note: Could have implemented this as a ScopeNot with a ScopeBefore.
+// Should I?
 class ScopeAfter extends Scope
 {
     Event mEvent;
@@ -575,11 +671,20 @@ class ScopeAfter extends Scope
     }
 }
 
-//FIXME: MAJOR: Semantics are wrong. Scope should be limited to smallest
-//space between A and B (i.e. AAB only in scope between the second A and the
-//b, or rather that is the only scope which needs to be checked, by inclusion)
-//This same problem probably also applies to afteruntil (find out!)
-//Could probably also be correctly written as ScopeAfterBefore, but who cares
+/**
+ * This scope has some tricky logic. It should only be active if both
+ * its start event and its end event are seen by it. However, to properly
+ * handle candidate instantiation (without ridiculous backtracking overhead),
+ * it assumes that its closing event will be seen, instantiates candidates/etc,
+ * then reverts state as needed if its parent exits before its closing event
+ * is seen.
+ **/
+
+// FIXME: MAJOR: Semantics are wrong. Scope should be limited to smallest
+// space between A and B (i.e. AAB only in scope between the second A and the
+// b, or rather that is the only scope which needs to be checked, by inclusion)
+// This same problem probably also applies to afteruntil (find out!)
+// Could probably also be correctly written as ScopeAfterBefore, but who cares
 class ScopeBetween extends Scope
 {
     Event mEventA;
@@ -610,7 +715,7 @@ class ScopeBetween extends Scope
     {
 	Hashtable res = super.generateNewCandidates(e);
 
-	for(Iterator i = res.keySet().iterator(); i.hasNext(); )
+	for (Iterator i = res.keySet().iterator(); i.hasNext(); )
 	    {
 		EventReceptor r = (EventReceptor)i.next();
 
@@ -625,20 +730,20 @@ class ScopeBetween extends Scope
 
     void rollback()
     {
-	for(Iterator i = kidsCreated.iterator(); i.hasNext(); )
+	for (Iterator i = kidsCreated.iterator(); i.hasNext(); )
 	    {
 		((EventReceptor)i.next()).delete();
 	    }
 
-	for(Iterator i = savedStates.keySet().iterator(); i.hasNext(); )
+	for (Iterator i = savedStates.keySet().iterator(); i.hasNext(); )
 	    {
 		EventReceptor r = (EventReceptor)i.next();
 
 		r.restoreState(savedStates.get(r));
 	    }
 
-	//FIXME: May be unnecessary, given that "this" is stored in savedStates by generateSubtreeSnapshots.
-	//Seems kinda sketchy.
+	// FIXME: May be unnecessary, given that "this" is stored in savedStates by generateSubtreeSnapshots.
+	// Seems kinda sketchy.
 	isActive = false;
     }
 
@@ -647,8 +752,8 @@ class ScopeBetween extends Scope
     {
 	if (isActive())
 	    {
-		//Parent scope is closing. This means we never saw our close event,
-		//so we never actually were active. ha! we were just kidding
+		// Parent scope is closing. This means we never saw our close event,
+		// so we never actually were active. ha! we were just kidding
 		rollback();
 	    }
 	//	else
@@ -690,9 +795,14 @@ class ScopeBetween extends Scope
     }
 }
 
-//This scope has an exception - its ending event can be the same thing as an event
-//contained within (eg in an eventually invariant) - to allow sensible response
-//invariants
+/**
+ * This scope is active after its event A, and until either its parent scope
+ * closes or until its event B is seen, whichever comes first.
+ **/
+
+// This scope has an exception - its ending event can be the same thing as an event
+// contained within (eg in an eventually invariant) - to allow sensible response
+// invariants
 class ScopeAfterUntil extends Scope
 {
     Event mEventA;
@@ -705,10 +815,10 @@ class ScopeAfterUntil extends Scope
 	mEventA = a;
 	mEventB = b;
 
-	//This may not be right. This is done to suppress generation of subscopes/etc
-	//which depend on event B (except for the explicitly generated response invariant).
-	//In fact, this is ugly/hackish enough that it's almost certainly not right..
-	//but that's why it's a FIXME.
+	// This may not be right. This is done to suppress generation of subscopes/etc
+	// which depend on event B (except for the explicitly generated response invariant).
+	// In fact, this is ugly/hackish enough that it's almost certainly not right..
+	// but that's why it's a FIXME.
 	mEventsSeen.add(b);
     }
 

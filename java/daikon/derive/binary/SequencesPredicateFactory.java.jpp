@@ -108,7 +108,7 @@ public final class CLASSNAME extends BinaryDerivationFactory {
     return new BinaryDerivation[] {
       new SEQUENCESPREDICATE (var1, var2, 0, "false"),
       new SEQUENCESPREDICATE (var1, var2, 1, "true"),
-      //new SequencesPredicate (var1, var2, 0, "nonNull", false),
+      // new SequencesPredicate (var1, var2, 0, "nonNull", false),
     };
 
 

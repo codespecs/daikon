@@ -82,7 +82,7 @@ public class PptMap
   // // This used to take a "String filename" initial argument.
   // void merge(PptMap other, int other_samples) {
   //   Set other_entries = other.entrySet();
-  //   for (Iterator itor = other_entries.iterator() ; itor.hasNext() ;) {
+  //   for (Iterator itor = other_entries.iterator() ; itor.hasNext() ; ) {
   //     Map.Entry entry = (Map.Entry) itor.next();
   //     String ppt_name = (String) entry.getKey();
   //     // Do I really want to be using Ppt rather than IPpt here??

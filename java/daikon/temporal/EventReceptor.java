@@ -2,13 +2,21 @@ package daikon.temporal;
 
 import java.util.*;
 
+/**
+ * This class captures behavior common to all members of the scope/invariant
+ * tree - they all have a parent (possibly null), they all receive events,
+ * they may have special behavior if their parent closes or opens, etc.
+ * It also provides some utility code for treewalks and for handling
+ * duplications (a part of the dynamic instantiation process).
+ **/
+
 abstract class EventReceptor
 {
     Scope mParent;
-    
-    //This stores the other EventReceptors which must be deleted if this invariant
-    //is deleted (e.g. if it was created inside a between scope which never
-    //got realized)
+
+    // This stores the other EventReceptors which must be deleted if this invariant
+    // is deleted (e.g. if it was created inside a between scope which never
+    // got realized)
     Vector tiedTo;
 
     abstract void processEvent(Event e);
@@ -40,6 +48,27 @@ abstract class EventReceptor
 	return mParent.isChildOf(s);
     }
 
+    boolean childOfClass(Class cl)
+    {
+	if (mParent == null)
+	    return false;
+	else if (cl.isInstance(mParent))
+	    return true;
+	else return mParent.childOfClass(cl);
+    }
+
+    void setTiedTo(EventReceptor r)
+    {
+	if (childOfClass(ScopeBetween.class))
+	    {
+		tiedTo.add(r);
+	    }
+	else
+	    {
+		tiedTo = null;
+	    }
+    }
+
     int getDepth()
     {
 	if (mParent == null)
@@ -61,8 +90,8 @@ abstract class EventReceptor
     {
 	mParent.deleteChild(this);
 
-	//Now kill anything tied to this guy
-	for(Iterator i = tiedTo.iterator(); i.hasNext(); )
+	// Now kill anything tied to this guy
+	for (Iterator i = tiedTo.iterator(); i.hasNext(); )
 	    {
 		((EventReceptor)i.next()).delete();
 	    }

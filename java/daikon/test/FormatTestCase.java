@@ -503,7 +503,7 @@ class FormatTestCase {
 
     VarInfo result[] = new VarInfo [numInfos];
 
-    for(int i=0; i<numInfos; i++) {
+    for (int i=0; i<numInfos; i++) {
       result[i] = getVarInfo(types[i], i);
     }
 
@@ -575,7 +575,7 @@ class FormatTestCase {
 
       // A way of doing the same thing as below in fewer lines of code
       // Doesn't seem to work...
-      //result[i] = ProglangType.parse(typeName);
+      // result[i] = ProglangType.parse(typeName);
 
       if (typeName.equalsIgnoreCase("int"))
         result[i] = ProglangType.INT;

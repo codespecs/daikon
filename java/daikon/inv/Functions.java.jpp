@@ -59,7 +59,7 @@ public final class CLASSNAME {
       {"~", ""},
 #endif
       // logicalComplement: subsumed by LinearBinary
-      //"utilMDE.MathMDE.negate(" + PRIMITIVE + ")",
+      // "utilMDE.MathMDE.negate(" + PRIMITIVE + ")",
       /// Non-operators
     };
   //  unaryFunctions = methodNamesToMethods(unaryFunctionNames);
@@ -85,7 +85,7 @@ public final class CLASSNAME {
       {"utilMDE.MathMDE.gcd(", ", ", ")"},
 #endif
     };
-    //binarySymmetricFunctions = methodNamesToMethods(binarySymmetricFunctionNames);
+    // binarySymmetricFunctions = methodNamesToMethods(binarySymmetricFunctionNames);
 
     binaryNonSymmetricFunctionNames = new String[][] {
       /// Java language operators (in precedence order, omitting boolean operators)
@@ -117,7 +117,7 @@ public final class CLASSNAME {
 #else
     switch(methodnumber) {
     case 0: return MathMDE.negate(arg);
-    //case 1: return Math.abs(arg);
+    // case 1: return Math.abs(arg);
     }
 #endif
     System.out.println("returning 0, unary");

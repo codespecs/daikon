@@ -331,7 +331,12 @@ public class PptName
    **/
   public PptName makeEnter()
   {
+    // This associates throw points with the main entry point.
+    // We may wish to have a different exceptional than non-exceptional
+    // entry point; in particular, if there was an exception, then perhaps
+    // the precondition or object invariant was not met.
     Assert.assertTrue(isExitPoint(), fullname);
+
     Assert.assertTrue(isExitPoint() || isThrowsPoint());
     return new PptName(cls, method, FileIO.enter_suffix);
   }

@@ -39,7 +39,7 @@ public final class Functions {
       {"~", ""},
 
       // logicalComplement: subsumed by LinearBinary
-      //"utilMDE.MathMDE.negate(int)",
+      // "utilMDE.MathMDE.negate(int)",
       /// Non-operators
     };
   //  unaryFunctions = methodNamesToMethods(unaryFunctionNames);
@@ -65,7 +65,7 @@ public final class Functions {
       {"utilMDE.MathMDE.gcd(", ", ", ")"},
 
     };
-    //binarySymmetricFunctions = methodNamesToMethods(binarySymmetricFunctionNames);
+    // binarySymmetricFunctions = methodNamesToMethods(binarySymmetricFunctionNames);
 
     binaryNonSymmetricFunctionNames = new String[][] {
       /// Java language operators (in precedence order, omitting boolean operators)

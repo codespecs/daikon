@@ -465,7 +465,7 @@ public final class ContextGUI extends JApplet implements ActionListener
         daikon.Logger.setupLogs (daikon.Logger.INFO);
         ContextGUI dgui = new ContextGUI();
 
-        for(int i = 0; i < args.length; i++)
+        for (int i = 0; i < args.length; i++)
         {
             if (args[i].equals("-c"))
                 dgui.setCFile(true);

@@ -44,7 +44,6 @@ public class Printer extends DepthFirstVisitor {
   }
 
   public boolean shouldPrint(String curr, int index) {
-    //if the
     return (index >= 0 &&
             ((index+curr.length() == buffer.length()) ||
              (index >=1 && !Character.isLetterOrDigit(buffer.charAt(index-1)))
@@ -56,9 +55,9 @@ public class Printer extends DepthFirstVisitor {
 
   public void commit() {
     boolean okToPrint = true;
-    //if the expression contains any of the
-    //strings that should be filtered, don't
-    //print it
+    // if the expression contains any of the
+    // strings that should be filtered, don't
+    // print it
     for (int i = 0; i < filter.size(); i++) {
       String curr = (String)filter.get(i);
       int index = buffer.toString().indexOf(curr);
@@ -68,7 +67,7 @@ public class Printer extends DepthFirstVisitor {
       }
     }
     if (okToPrint) {
-      //replaceNulls();
+      // replaceNulls();
       out.println(buffer);
     }
     buffer = new StringBuffer();

@@ -133,7 +133,7 @@ public class Converter extends DepthFirstVisitor {
 
 
   private void convertToStringAccess(Vector v) {
-    //remove the [ and ]
+    // remove the [ and ]
     v.remove(0);
     v.remove(1);
     v.add(0, new NodeToken(".charAt("));
@@ -368,7 +368,7 @@ public class Converter extends DepthFirstVisitor {
   }
 
   public void visit(LogicalANDExpression n) {
-    //put parentheses around each subexpression
+    // put parentheses around each subexpression
     if (n!=null &&n.f1 != null && n.f1.node instanceof NodeSequence) {
       Vector nodes = ((NodeSequence) n.f1.node).nodes;
       if (nodes.get(0).toString().equals("&&")) {
@@ -387,7 +387,7 @@ public class Converter extends DepthFirstVisitor {
   }
 
   public void visit(LogicalORExpression n) {
-    //put parentheses around each subexpression
+    // put parentheses around each subexpression
     if (n != null && n.f1.node instanceof NodeSequence) {
       Vector nodes = ((NodeSequence) n.f1.node).nodes;
       if (nodes.get(0).toString().equals("||")) {

@@ -20,7 +20,7 @@ public class SplitterLoader extends ClassLoader {
       fi.read(classBytes);
       return classBytes;
     } catch (FileNotFoundException e) {
-      //do nothing. did not compile
+      // do nothing. did not compile
     } catch (IOException ioe) {
       System.out.println("IO Error while reading class data " + fileName);
     }

@@ -124,7 +124,7 @@ public class StringFinder extends DepthFirstVisitor {
             addString(name.trim());
           }
         }
-        else if (seq.nodes.get(0).toString().equals("(")){
+        else if (seq.nodes.get(0).toString().equals("(")) {
           if (stringFunctions.containsKey(n.f0.f0.choice.toString())) {
             NodeOptional opt = (NodeOptional)seq.nodes.get(1);
             ArgumentExpressionList ael = (ArgumentExpressionList) opt.node;

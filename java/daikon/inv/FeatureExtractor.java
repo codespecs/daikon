@@ -193,22 +193,22 @@ public final class FeatureExtractor {
       answer[i] = new Vector();
 
     Vector[] placeholder;
-    //first useful-useful
+    // first useful-useful
     placeholder = permute(usefulFeatures, usefulFeatures,
                           usefulStrings, usefulStrings);
     answer[0].addAll(placeholder[0]);
     answer[2].addAll(placeholder[1]);
-    //second useful-nonuseful
+    // second useful-nonuseful
     placeholder = permute(usefulFeatures, nonusefulFeatures,
                           usefulStrings, nonusefulStrings);
     answer[0].addAll(placeholder[0]);
     answer[2].addAll(placeholder[1]);
-    //third nonuseful-useful
+    // third nonuseful-useful
     placeholder = permute(nonusefulFeatures, usefulFeatures,
                           nonusefulStrings, usefulStrings);
     answer[0].addAll(placeholder[0]);
     answer[2].addAll(placeholder[1]);
-    //last nonuseful-nonuseful
+    // last nonuseful-nonuseful
     placeholder = permute(nonusefulFeatures, nonusefulFeatures,
                           nonusefulStrings, nonusefulStrings);
     answer[1].addAll(placeholder[0]);
@@ -248,7 +248,7 @@ public final class FeatureExtractor {
    */
   private static TreeSet shift(Iterator input, int shift) {
     TreeSet answer = new TreeSet();
-    for (;input.hasNext();) {
+    for (; input.hasNext(); ) {
       IntDoublePair current = (IntDoublePair) (input.next());
       answer.add(new IntDoublePair(current.number + shift, current.value));
     }
@@ -282,14 +282,14 @@ public final class FeatureExtractor {
     // return[1] are Non-Useful
 
     Vector[] answer = new Vector[2];
-    answer[0] = new Vector(); //useful
-    answer[1] = new Vector(); //nonuseful
+    answer[0] = new Vector(); // useful
+    answer[1] = new Vector(); // nonuseful
     for (int i = 0; i < usefuls.size(); i++)
-      for (Iterator invs=readInvMap(new File((String) usefuls.get(i))).invariantIterator(); invs.hasNext();)
+      for (Iterator invs=readInvMap(new File((String) usefuls.get(i))).invariantIterator(); invs.hasNext(); )
         answer[0].add(invs.next());
 
     for (int i = 0; i < nonusefuls.size(); i++)
-      for (Iterator invs=readInvMap(new File((String) nonusefuls.get(i))).invariantIterator(); invs.hasNext();)
+      for (Iterator invs=readInvMap(new File((String) nonusefuls.get(i))).invariantIterator(); invs.hasNext(); )
         answer[1].add(invs.next());
 
     return answer;
@@ -370,7 +370,7 @@ public final class FeatureExtractor {
     // Now make the .names part
     output.write("|Beginning of .names file\n");
     output.write("GoodBad.\n\nGoodBad: 1, -1.\n");
-    for (Iterator all = allFeatures.iterator(); all.hasNext();)
+    for (Iterator all = allFeatures.iterator(); all.hasNext(); )
       output.write(((IntDoublePair) all.next()).number + ": continuous.\n");
     output.write("useless: ignore.\n");
     output.write("|End of .names file\n\n\n");
@@ -395,7 +395,7 @@ public final class FeatureExtractor {
       TreeSet allFets = ((TreeSet) features.get(i));
       allFets.addAll(allFeatures); // Add a 0 feature if it is not present
       output.write(label);
-      for (Iterator fets = allFets.iterator(); fets.hasNext();) {
+      for (Iterator fets = allFets.iterator(); fets.hasNext(); ) {
         IntDoublePair fet = (IntDoublePair) fets.next();
         output.write(df.format(fet.value) + ",");
       }
@@ -446,7 +446,7 @@ public final class FeatureExtractor {
                                        File outputFile) throws IOException {
     FileWriter output = new FileWriter(outputFile);
     // Now add all the features in SVMfu format to output
-    //first size
+    // first size
     output.write((usefulFeatures.size() + nonusefulFeatures.size()) + "\n");
     // first the useful
     printSVMfuDataOutput(usefulFeatures, "1 ", output);
@@ -506,7 +506,7 @@ public final class FeatureExtractor {
     br.close();
 
     FileWriter fw = new FileWriter(output);
-    for (Iterator i = outputData.iterator(); i.hasNext();)
+    for (Iterator i = outputData.iterator(); i.hasNext(); )
       fw.write((String) i.next() + "\n");
     fw.close();
   }
@@ -524,7 +524,7 @@ public final class FeatureExtractor {
 
     FileWriter fw = new FileWriter(output);
     fw.write(vectors.size() + "\n");
-    for (Iterator i = vectors.iterator(); i.hasNext();)
+    for (Iterator i = vectors.iterator(); i.hasNext(); )
       fw.write((String) i.next() + "\n");
     fw.close();
   }
@@ -1720,13 +1720,13 @@ public final class FeatureExtractor {
     return answer;
   }
 
-  private static Vector getFunctionBinaryCoreFeatures(FunctionBinaryCore core){
+  private static Vector getFunctionBinaryCoreFeatures(FunctionBinaryCore core) {
     Vector answer = new Vector();
     answer.add(new IntDoublePair(FetFunctionBinaryCoreVar_Order, core.var_order));
     return answer;
   }
 
-  private static Vector getFunctionBinaryCoreFloatFeatures(FunctionBinaryCoreFloat core){
+  private static Vector getFunctionBinaryCoreFloatFeatures(FunctionBinaryCoreFloat core) {
     Vector answer = new Vector();
     answer.add(new IntDoublePair(FetFunctionBinaryCoreFloatVar_Order, core.var_order));
     return answer;
@@ -1791,7 +1791,7 @@ public final class FeatureExtractor {
     static public void main(String[] args)
       throws IOException, ClassNotFoundException {
 
-      //First parse the arguments
+      // First parse the arguments
       if (args.length == 0) {
         System.out.println(USAGE);
         System.exit(0);
@@ -1822,7 +1822,7 @@ public final class FeatureExtractor {
       // Load the input files into 2 HashSets, pos and neg.
       HashSet pos = new HashSet();
       HashSet neg = new HashSet();
-      for (Iterator i = inputs.iterator(); i.hasNext();) {
+      for (Iterator i = inputs.iterator(); i.hasNext(); ) {
         BufferedReader br=new BufferedReader(new FileReader((String)i.next()));
         br.readLine();
         while (br.ready()) {
@@ -1844,13 +1844,13 @@ public final class FeatureExtractor {
       Vector posvectors = new Vector();
       Vector negvectors = new Vector();
 
-      for (Iterator i = neg.iterator(); i.hasNext();) {
+      for (Iterator i = neg.iterator(); i.hasNext(); ) {
         String vector = (String) i.next();
         if (!(pos.contains(vector)))
           negvectors.add(vector + "-1");
       }
 
-      for (Iterator i = pos.iterator(); i.hasNext();)
+      for (Iterator i = pos.iterator(); i.hasNext(); )
         posvectors.add(((String) i.next()) + "1");
 
       // Set the appropriate repeat values.
@@ -1867,10 +1867,10 @@ public final class FeatureExtractor {
                 negvectors.size() * negrepeat) + " \n");
 
       for (int repeat = 0; repeat < negrepeat; repeat++)
-        for (Iterator i = negvectors.iterator(); i.hasNext();)
+        for (Iterator i = negvectors.iterator(); i.hasNext(); )
           fw.write((String) i.next() + " \n");
       for (int repeat = 0; repeat < posrepeat; repeat++)
-        for (Iterator i = posvectors.iterator(); i.hasNext();)
+        for (Iterator i = posvectors.iterator(); i.hasNext(); )
           fw.write((String) i.next() + " \n");
       fw.close();
 
@@ -1897,7 +1897,7 @@ public final class FeatureExtractor {
     static public void main(String[] args)
       throws IOException, ClassNotFoundException {
 
-      //First parse the arguments
+      // First parse the arguments
       if (args.length == 0) {
         System.out.println(USAGE);
         System.exit(0);
@@ -2145,7 +2145,7 @@ public final class FeatureExtractor {
   static int FetFloatComparisonCoreCan_Be_Lt = 9708;
   static int FetFloatComparisonCoreCan_Be_Gt = 9709;
 
-  //9800-9900 reserved for Ppt Features
+  // 9800-9900 reserved for Ppt Features
   static int FetPptIsExit = 9801;
   static int FetPptIsLineNumberedExit = 9802;
   static int FetPptNumOfExits = 9803;

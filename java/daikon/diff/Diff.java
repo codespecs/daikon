@@ -656,7 +656,7 @@ public final class Diff {
 
     String targ = targetName.substring (0, targetName.lastIndexOf(";condition"));
 
-    for ( Iterator i = manip.nameStringSet().iterator(); i.hasNext();) {
+    for ( Iterator i = manip.nameStringSet().iterator(); i.hasNext(); ) {
       String somePptName = (String) i.next();
       // A conditional Ppt always contains the normal Ppt
       if (targ.equals (somePptName)) {

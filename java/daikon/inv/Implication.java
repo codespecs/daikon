@@ -42,8 +42,8 @@ public class Implication
     if (predicate.isSameInvariant(consequent)) {
       return null;
     }
-    //eliminate some "uninteresting" implications, like OneOf predicates and
-    //consequents, which are usually not interesting.
+    // eliminate some "uninteresting" implications, like OneOf predicates and
+    // consequents, which are usually not interesting.
     // JWN adds: Why not use the isInteresting method?  Is it because
     // you still want Bound invariants?
     if (predicate instanceof OneOf) {

@@ -25,11 +25,11 @@ class ControlledInvariantFilter extends InvariantFilter {
 
   private boolean isWorthPrinting(Invariant inv)
   {
-    //if (PrintInvariants.debugFiltering.isDebugEnabled()) {
+    // if (PrintInvariants.debugFiltering.isDebugEnabled()) {
     //  PrintInvariants.debugFiltering.debug("\tCalling IWP on " + inv.format() + " for reference\n");
     //  inv.isWorthPrinting();
     //  PrintInvariants.debugFiltering.debug("\tdone\n");
-    //}
+    // }
 
 
     if (! isWorthPrinting_sansControlledCheck(inv)) {

@@ -98,7 +98,7 @@ public class LowerBoundCore
   private long calc_modulus() {
     // Need to reinstate this at some point.
     // {
-    //   for (Iterator itor = wrapper.ppt.invs.iterator(); itor.hasNext();) {
+    //   for (Iterator itor = wrapper.ppt.invs.iterator(); itor.hasNext(); ) {
     //     Invariant inv = (Invariant) itor.next();
     //     if ((inv instanceof Modulus) && inv.enoughSamples()) {
     //       modulus = ((Modulus) inv).modulus;
