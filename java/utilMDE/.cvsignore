@@ -1,3 +1,4 @@
 *.class
 doc
 utilMDE.tar.gz
+Makefile.user
