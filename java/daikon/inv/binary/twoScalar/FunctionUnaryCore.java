@@ -81,10 +81,9 @@ public final class FunctionUnaryCore implements java.io.Serializable {
   public double computeProbability() {
     if (wrapper.no_invariant)
       return Invariant.PROBABILITY_NEVER;
-    if (wrapper.ppt.num_values() < 5)
-      return Invariant.PROBABILITY_UNKNOWN;
-    // The actual value probably depends on the function.
-    return Invariant.PROBABILITY_JUSTIFIED;
+    // For now, only depend on number of samples.
+    // But if this prob 0, should depend on the function as well.
+    return Invariant.prob_is_gt(wrapper.ppt.num_values(), 5);
   }
 
 

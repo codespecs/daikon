@@ -29,8 +29,6 @@ public abstract class Invariant implements java.io.Serializable {
   // Actually, it's not used any longer, except to be checked in assertions.
   public boolean finished = false;
 
-  // Subclasses should set these; Invariant never does.
-
   // The probability that this could have happened by chance alone.
   //   0 = could never have happened by chance; that is, we are fully confident
   //       that this invariant is a real invariant
@@ -38,11 +36,46 @@ public abstract class Invariant implements java.io.Serializable {
   //   (0..1) = greater to lesser likelihood of coincidence
   //   1 = must have happened by chance
   public final static double PROBABILITY_UNJUSTIFIED = 1;
-  //   2 = we haven't yet seen enough data to know whether this invariant is
-  //       true, much less its justification
-  public final static double PROBABILITY_UNKNOWN = 2;
   //   3 = delete this invariant; we know it's not true
   public final static double PROBABILITY_NEVER = 3;
+
+  /**
+   * Return 0 if x>=goal.
+   * This value is 0 if x>=goal, 1 if x=1, and otherwise grades between.
+   **/
+  public static final double prob_is_gt(double x, double goal) {
+    if (x>=goal)
+      return 0;
+    return (goal - x)/(goal-1);
+  }
+
+  /** Return the probability that both conditions are satisfied. */
+  public static final double prob_and(double p1, double p2) {
+    Assert.assert(0 <= p1 && p1 <= 1);
+    Assert.assert(0 <= p2 && p2 <= 1);
+
+    // 1 - (1-p1)*(1-p2)
+    double result = p1 + p2 - p1*p2;
+    Assert.assert(0 <= result && result <= 1);
+    return result;
+  }
+
+  /** Return the probability that all three conditions are satisfied. */
+  public static final double prob_and(double p1, double p2, double p3) {
+    double result =  1 - (1 - p1) * (1 - p2) * (1 - p3);
+    Assert.assert(0 <= result && result <= 1);
+    return result;
+  }
+
+  /** Return the probability that eithr conditions is satisfied. */
+  public static final double prob_or(double p1, double p2) {
+    // Not "p1*p2" because that can produce a value too small; we don't
+    // want the result to be smaller than the smaller argument.
+    return Math.min(p1, p2);
+  }
+
+
+  // Subclasses should set these; Invariant never does.
 
   // The probability that the invariant occurred by chance must be less
   // than this in order for it to be displayed.
@@ -93,7 +126,6 @@ public abstract class Invariant implements java.io.Serializable {
     // System.out.println("getProbability: " + getClass().getName() + " " + ppt.varNames());
     Assert.assert((result == PROBABILITY_JUSTIFIED)
 		  || (result == PROBABILITY_UNJUSTIFIED)
-		  || (result == PROBABILITY_UNKNOWN)
 		  || (result == PROBABILITY_NEVER)
 		  || ((0 <= result) && (result <= 1))
                   // This can be expensive, so comment out.
