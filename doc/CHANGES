@@ -17,6 +17,8 @@ Windows environment to permit Daikon to be run without Cygwin.  Second,
 when running under Cygwin, the cygwin-runner.pl script smooths over
 differences in path conventions between Cygwin and Windows.
 
+----------------
+
 2.4.0 (1 December 2002):
 
 Daikon can detect invariants in Perl programs.  See the "Perl examples" and
