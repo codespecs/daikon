@@ -925,7 +925,7 @@ public final class ArraysMDE {
   /**
    * Whether smaller is a subset of bigger.  The implmentation is to
    * use collections because we want to take advantage of hashSet's
-   * constant time membership tests.  Hopefully Longs are interned.
+   * constant time membership tests.
    **/
 
   public static boolean isSubset(long[] smaller, long[] bigger) {
