@@ -9,7 +9,7 @@ The correct way to build the system is to run 'make'.
 #endif
 
 #if defined(TYPELONG)
-#define CLASSNAME SingleSequenceFactory
+#define CLASSNAME SingleScalarSequenceFactory
 #define ONEOFSEQUENCE OneOfSequence
 #define ELTONEOF EltOneOf
 #define ELTNONZERO EltNonZero

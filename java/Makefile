@@ -68,7 +68,7 @@ AUTO_GENERATED_FILES = \
 	daikon/inv/unary/sequence/SeqIndexComparisonFloat.java \
 	daikon/inv/unary/sequence/SeqIndexNonEqual.java \
 	daikon/inv/unary/sequence/SeqIndexNonEqualFloat.java \
-	daikon/inv/unary/sequence/SingleSequenceFactory.java \
+	daikon/inv/unary/sequence/SingleScalarSequenceFactory.java \
 	daikon/inv/unary/sequence/SingleFloatSequenceFactory.java \
 	daikon/inv/unary/sequence/CommonSequence.java \
 	daikon/inv/unary/sequence/CommonFloatSequence.java \
@@ -247,6 +247,8 @@ clean:
 
 dist_clean: clean
 	-rm -f TAGS
+
+very-clean: very_clean
 
 very_clean: dist_clean
 	-rm -f ${AUTO_GENERATED_FILES}
@@ -525,7 +527,7 @@ daikon/inv/unary/sequence/SeqIndexNonEqual.java: daikon/inv/unary/sequence/SeqIn
 daikon/inv/unary/sequence/SeqIndexNonEqualFloat.java: daikon/inv/unary/sequence/SeqIndexNonEqual.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
 
-daikon/inv/unary/sequence/SingleSequenceFactory.java: daikon/inv/unary/sequence/SingleSequenceFactory.java.jpp
+daikon/inv/unary/sequence/SingleScalarSequenceFactory.java: daikon/inv/unary/sequence/SingleSequenceFactory.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPELONG)
 
 daikon/inv/unary/sequence/SingleFloatSequenceFactory.java: daikon/inv/unary/sequence/SingleSequenceFactory.java.jpp
