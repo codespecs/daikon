@@ -1,13 +1,13 @@
-// MultiRandSelector.java 
+// MultiRandSelector.java
 package utilMDE;
 import java.util.*;
 
 /**
- *
  * <b>MultiRandSelector</b> delegates to a set of RandomSelector Objects,
  * one for each of several unique equivalence classes.  The constructor
  * takes in an Object implementing an interface EquivalenceChecker
- * @author Lee Lin 4/3/2002 */
+ * @author Lee Lin 4/3/2002
+ **/
 
 public class MultiRandSelector {
 
@@ -21,7 +21,7 @@ public class MultiRandSelector {
 	this (num_elts, new Random(), eq);
     }
 
-    public MultiRandSelector (int num_elts, Random r, 
+    public MultiRandSelector (int num_elts, Random r,
 			      EquivalenceChecker eq) {
 	this.num_elts = num_elts;
 	seed = r;
@@ -62,5 +62,3 @@ public class MultiRandSelector {
     }
 
 }
-
-

@@ -5,14 +5,14 @@ import java.util.*;
 
 /**
  *
- * <b>RandomSelector</b> is a utility that can select k elements from
+ * <b>RandomSelector</b> selects k elements from
  * an Iteration over n elements using only O(k) space instead of O(n)
  * space.  For example, selecting 1 element from a FileStream containing
  * 1000 elements will take O(1) space.
  *
  * <P>current_values --> The values chosen based on the Objects observed
  * <BR>number_observed --> The number of Objects observed
- * <BR>number_to_take --> The 'k' described above
+ * <BR>number_to_take --> The number of elements to choose ('k' above)
  *
  * @author Lee Lin 4/3/2002
  */

@@ -267,7 +267,7 @@ public final class UtilMDE {
     }
   }
 
-  
+
   /**
    * Writes an Object to a File
    **/
@@ -507,16 +507,17 @@ public final class UtilMDE {
    * not keep them all in memory.
    **/
   public static ArrayList randomElements(Iterator itor, int num_elts, Random random) {
-    // The elements are chosen with the following probabilities, where n == num_elts:
-    //   n n/2 n/3 n/4 n/5
-    
+    // The elements are chosen with the following probabilities,
+    // where n == num_elts:
+    //   n n/2 n/3 n/4 n/5 ...
+
     RandomSelector rs = new RandomSelector (num_elts, random);
 
     while (itor.hasNext()) {
       rs.accept (itor.next());
     }
     return rs.getValues();
-    
+
 
     /*
     ArrayList result = new ArrayList(num_elts);
