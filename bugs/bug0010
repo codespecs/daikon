@@ -1,7 +1,8 @@
 Version:      $Id$
 Tool:         dfej
-Owner:        adonovan <adonovan@lcs.mit.edu>
-Summary:      instr-in-place sometimes happens twice
+Owner:        Alan <adonovan>, Mike <mernst>
+Cc:           Jeremy <mistere>
+Summary:      instrument-in-place can fail
 Status:       New
 Reproducible: No
 Severity:     Vexing
@@ -10,20 +11,39 @@ Description:
 Sometimes dfej will attempt to instrument already-instrumented files,
 causing a bunch of symbol-multiply-defined errors.
 
-Anyone know why this is?
+[mistere]
+To reproduce:
+  cd $inv/tests/daikon-tests/StackAr
+  make clean compile
+  rm scratch/.instrument-timestamp
+  make compile
 
+[adonovan]
+: Anyone know why this is?
+
+[adonovan]
 : Apparently it's because it fails to complete the first time around. 
-   [adonovan]
 
+[mistere]
 : But instrument-in-place should first, always, make a backup copy of
   the file, and then instrument; and if the backup exists, will use
   that for input for instrumenting.  So I really think the problem
   would be that it doesn't recognize that it *should* be instrumenting
-  in place. [mistere]
+  in place.
+
+[mistere] on 5-Apr
+: I'd like to re-nominate this bug for fixing.  I've also added Mike to
+  the owner list, since he was the original implementor of this
+  feature.  Not having this breaks the regression test Makefile.
+  Every time I build a new dfej (or the distro gets updated, for others)
+  I have to do "make clean" first.
 
 --
 $Log$
-Revision 1.1  2002-03-12 04:50:54  adonovan
+Revision 1.2  2002-04-05 16:18:55  mistere
+changed bug0010
+
+Revision 1.1  2002/03/12 04:50:54  adonovan
 repairing repository broken during attemp to move it today... :-(
 
 Revision 1.5  2002/03/07 07:28:05  mistere
