@@ -1766,6 +1766,11 @@ public final class VarInfo
 
       // Check whether the predicate already exists
       if (prevInstantiation == null) {
+        // If it doesn't, create a "fake" invariant, which should
+        // never be printed.  Is it a good idea even to set
+        // retval.falsified to true?  We know it's true because
+        // retval's children were missing.  However, some forms of
+        // filtering might remove it from associateWith.
         retval = NonZero.instantiate(associateWith);
         retval.isGuardingPredicate = true;
         associateWith.addInvariant(retval);
