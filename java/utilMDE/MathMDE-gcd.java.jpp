@@ -2,6 +2,7 @@
 
   /** Return the greatest common divisor of the two arguments. */
   public static INT gcd(INT a, INT b) {
+    // Euclid's method
     if (b == 0)
       return 0;
     while (b != 0) {
@@ -14,6 +15,7 @@
 
   /** Return the greatest common divisor of the elements of INT array a. */
   public static INT gcd(INT[] a) {
+    // Euclid's method
     if (a.length == 0) {
       return 0;
     }
@@ -31,6 +33,7 @@
    * between the elements of INT array a.
    **/
   public static INT gcd_differences(INT[] a) {
+    // Euclid's method
     if (a.length < 2) {
       return 0;
     }
