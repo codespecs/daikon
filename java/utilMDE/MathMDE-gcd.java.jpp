@@ -51,12 +51,3 @@ The correct way to build the system is to run 'make'.
     }
     return result;
   }
-
-
-
-#if 0
-// Local Variables:
-// mode: java
-// c-basic-offset: 2
-// End:
-#endif

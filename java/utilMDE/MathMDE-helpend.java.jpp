@@ -13,11 +13,3 @@ The correct way to build the system is to run 'make'.
 #undef nonmodulus_strict_INT_internal
 #undef MissingNumbersIteratorINT
 #undef CastToInt
-
-
-#if 0
-// Local Variables:
-// mode: java
-// c-basic-offset: 2
-// End:
-#endif
