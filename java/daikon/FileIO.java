@@ -101,6 +101,9 @@ public final class FileIO {
    */
   public static boolean dkconfig_read_samples_only = false;
 
+  /** Boolean.  When true don't print unmatched procedure entries **/
+  public static boolean dkconfig_unmatched_procedure_entries_quiet = false;
+
 /// Variables
 
   // I'm not going to make this static because then it doesn't get restored
@@ -536,13 +539,23 @@ public final class FileIO {
   //  *     RANDOM_SEED is a triple of numbers, each in range(0,256), used to
   //  *       initialize the random number generator.
 
+  /** reads data trace files using the default sample processor **/
+  public static void read_data_trace_files (Collection /*File*/ files,
+                                            PptMap all_ppts)
+    throws IOException {
+
+    Processor processor = new Processor();
+    read_data_trace_files (files, all_ppts, processor);
+  }
+
   /**
    * Read data from .dtrace files.
    * Calls @link{read_data_trace_file(File,PptMap,Pattern)} for each
    * element of filenames.
    **/
-  public static void read_data_trace_files(Collection files, // [File]
-                                           PptMap all_ppts)
+  public static void read_data_trace_files(Collection /*File*/files,
+                                           PptMap all_ppts,
+                                           Processor processor)
     throws IOException
   {
     // [INCR] init_call_stack_and_hashmap();
@@ -550,7 +563,7 @@ public final class FileIO {
     for (Iterator i = files.iterator(); i.hasNext(); ) {
       File file = (File) i.next();
       try {
-        read_data_trace_file(file, all_ppts);
+        read_data_trace_file(file, all_ppts, processor);
       }
       catch (IOException e) {
         if (e.getMessage().equals("Corrupt GZIP trailer")) {
@@ -580,8 +593,27 @@ public final class FileIO {
   public static long data_trace_total_lines;
   public static int data_num_slices = 0;
 
+  /**
+   * Class used to specify the processor to use for sample data.  By
+   * default, the internal process_sample routine will be called.
+   */
+  public static class Processor {
+    public void process_sample (PptMap all_ppts, PptTopLevel ppt,
+                                ValueTuple vt, Integer nonce) {
+      FileIO.process_sample (all_ppts, ppt, vt, nonce);
+    }
+  }
+
+  /** read data from .dtrace file using standard data processor **/
+  static void read_data_trace_file (File filename, PptMap all_ppts)
+    throws IOException {
+    Processor processor = new Processor();
+    read_data_trace_file (filename, all_ppts, processor);
+  }
+
   /** Read data from .dtrace file. **/
-  static void read_data_trace_file(File filename, PptMap all_ppts)
+  static void read_data_trace_file(File filename, PptMap all_ppts,
+                                   Processor processor)
     throws IOException
   {
     int pptcount = 1;
@@ -677,8 +709,8 @@ public final class FileIO {
           }
         }
 
-        if (pptcount++ % 10000 == 0)
-            System.out.print(":");
+        // if (pptcount++ % 10000 == 0)
+        //    System.out.print(":");
 
         if (Daikon.debugTrace.isLoggable(Level.FINE)) {
           data_num_slices = all_ppts.countSlices();
@@ -729,7 +761,20 @@ public final class FileIO {
 
         // Read a single record from the trace file;
         // fills up vals and mods arrays by side effect.
-        read_vals_and_mods_from_trace_file(reader, filename.toString(), ppt, vals, mods);
+        try {
+          read_vals_and_mods_from_trace_file (reader, filename.toString(),
+                                              ppt, vals, mods);
+        } catch (IOException e) {
+          if ((e instanceof EOFException) || (reader.readLine() == null)) {
+            System.out.println ();
+            System.out.println ("WARNING: Unexpected EOF while processing "
+                          + " trace file - last record of trace file ignored");
+            break;
+          } else /* not an eof error */ {
+            throw e;
+          }
+        }
+
         ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
 
         // If we are only reading the sample, don't process them
@@ -739,7 +784,7 @@ public final class FileIO {
         }
 
         // Add orig and derived variables; pass to inference (add_and_flow)
-        process_sample (all_ppts, ppt, vt, nonce);
+        processor.process_sample (all_ppts, ppt, vt, nonce);
         // Debug.check (all_ppts, " ppt = " + ppt.name()
         //             + " " + Debug.related_vars (ppt, vt));
       }
@@ -879,6 +924,10 @@ public final class FileIO {
   }
 
   public static void process_unmatched_procedure_entries() {
+
+    if (dkconfig_unmatched_procedure_entries_quiet)
+      return;
+
     if ((!call_stack.empty()) || (!call_hashmap.isEmpty())) {
       System.out.println();
       System.out.println("No return from procedure observed "
@@ -1000,9 +1049,10 @@ public final class FileIO {
 
       String line = reader.readLine();
       if (line == null) {
-        throw new Error("Unexpected end of file at " + data_trace_filename + " line " + reader.getLineNumber()
-                        + "\n  Expected variable " + vi.name.name() + ", got " + line
-                        + " for program point " + ppt.name());
+        throw new EOFException ("Unexpected end of file at "
+                  + data_trace_filename + " line " + reader.getLineNumber()
+                  + "\n  Expected variable " + vi.name.name() + ", got " + line
+                  + " for program point " + ppt.name());
       }
 
       while ((Daikon.var_omit_regexp != null)
@@ -1022,16 +1072,18 @@ public final class FileIO {
       }
       line = reader.readLine();
       if (line == null) {
-        throw new Error("Unexpected end of file at " + data_trace_filename + " line " + reader.getLineNumber()
-                        + "\n  Expected value for variable " + vi.name.name() + ", got " + line
-                        + " for program point " + ppt.name());
+        throw new EOFException ("Unexpected end of file at "
+                    + data_trace_filename + " line " + reader.getLineNumber()
+                    + "\n  Expected value for variable " + vi.name.name()
+                    + ", got " + line + " for program point " + ppt.name());
       }
       String value_rep = line;
       line = reader.readLine();
       if (line == null) {
-        throw new FileIOException("Unexpected end of file at " + data_trace_filename + " line " + reader.getLineNumber()
-                        + "\n  Expected modbit for variable " + vi.name.name() + ", got " + line
-                        + " for program point " + ppt.name());
+        throw new EOFException ("Unexpected end of file at "
+                    + data_trace_filename + " line " + reader.getLineNumber()
+                    + "\n  Expected modbit for variable " + vi.name.name()
+                    + ", got " + line + " for program point " + ppt.name());
       }
       if (!((line.equals("0") || line.equals("1") || line.equals("2")))) {
         throw new FileIOException("Bad modbit"
@@ -1137,7 +1189,7 @@ public final class FileIO {
   }
 
 
-  private static void add_orig_variables(PptTopLevel ppt,
+  public static void add_orig_variables(PptTopLevel ppt,
                                          // HashMap cumulative_modbits,
                                          Object[] vals,
                                          int[] mods,
@@ -1243,7 +1295,7 @@ public final class FileIO {
   }
 
   // Add derived variables
-  private static void add_derived_variables(PptTopLevel ppt,
+  public static void add_derived_variables(PptTopLevel ppt,
                                             Object[] vals,
                                             int[] mods)
   {
