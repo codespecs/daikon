@@ -16,6 +16,10 @@ import daikon.Global;
 //   add_prim converts (numeric) values into ints, and inserts the ints
 
 
+// ValueTracker really ought to be reimplemented in terms of
+// LimitedSizeIntSet.
+
+
 /**
  * ValueTracker stores up to some maximum number of unique non-zero integer
  * values, at which point its rep is nulled.  This is used for efficient
@@ -90,18 +94,21 @@ public class ValueTracker
 
   protected void add_prim(String v1, String v2) {
     if (values_cache == null) return;
+    // add_prim(UtilMDE.hash(v1, v2));
     if ((v1 == null) || (v2 == null)) return;
     add_prim (v1.hashCode(), v2.hashCode());
   }
 
   protected void add_prim(String v1) {
     if (values_cache == null) return;
+    // add_prim(UtilMDE.hash(v1);
     if (v1 == null) return;
     add_prim (v1.hashCode());
   }
 
   protected void add_prim(String[] v1) {
     if (values_cache == null) return;
+    // add_prim(UtilMDE.hash(v1);
     if (v1 == null) return;
     long av1 = 0;
     for (int i = 0; i < v1.length; i++) {
@@ -177,7 +184,7 @@ public class ValueTracker
     if (values_cache == null) return;
 
     for (int i = 0; i < values_end; i++) {
-      double elt = values_cache[i];
+      int elt = values_cache[i];
       if (elt == v1) {
         return;
       }
@@ -193,7 +200,7 @@ public class ValueTracker
     if (elt_values_cache == null) return;
 
     for (int i = 0; i < max_elt_values; i++) {
-      double elt = elt_values_cache[i];
+      int elt = elt_values_cache[i];
       if (elt == v1) {
         return;
       }
@@ -208,7 +215,7 @@ public class ValueTracker
     if (seq_index_cache == null) return;
 
     for (int i = 0; i < max_seq_index_values; i++) {
-      double elt = seq_index_cache[i];
+      int elt = seq_index_cache[i];
       if (elt == v1) {
         return;
       }
