@@ -183,8 +183,9 @@ public final class Global {
       // { "this.theArray[]", "this.topOfStack" },
       // { "other.begins", "orig(other.begins)" },
       // { "orig(other.begins)", "other.begins" },
-      { "return" },
-      { "return.class" },
+      // { "return" },
+      // { "return.class" },
+      { "root1", "root2" },
     };
 
   // This may be expensive and so should only be called infrequently.

@@ -47,13 +47,20 @@ public final class NonEqual extends TwoScalar {
   }
 
   public String format_esc() {
-    return "format_esc " + this.getClass() + " needs to be changed: " + format();
+    return var1().esc_name + " != " + var2().esc_name;
   }
 
 
   public void add_modified(long v1, long v2, int count) {
+    if (ppt.debugged) {
+      System.out.println("NonEqual" + ppt.varNames() + ".add_modified("
+                         + v1 + "," + v2 + ", count=" + count + ")");
+    }
     // probability_cache_accurate = false;
     if (v1 == v2) {
+      if (ppt.debugged) {
+        System.out.println("NonEqual.destroy()");
+      }
       destroy();
       return;
     }
@@ -88,6 +95,9 @@ public final class NonEqual extends TwoScalar {
         //  = (overlap/range1) * (overlap/range2) * (1/overlap)
         //  = overlap/(range1 * range2)
 
+        // Hack; but this seems too stringent otherwise
+        overlap *= 2;
+
         probability_one_nonequal = 1-((double)overlap)/(range1 * range2);
       }
 
@@ -119,5 +129,15 @@ public final class NonEqual extends TwoScalar {
     }
     return false;
   }
+
+  // // Temporary, for debugging
+  // public void destroy() {
+  //   if (ppt.debugged) {
+  //     System.out.println("NonEqual.destroy(" + ppt.name + ")");
+  //     System.out.println(repr());
+  //     (new Error()).printStackTrace();
+  //   }
+  //   super.destroy();
+  // }
 
 }

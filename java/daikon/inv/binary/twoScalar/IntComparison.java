@@ -165,6 +165,8 @@ public final class IntComparison extends TwoScalar implements Comparison {
   // public void destroy() {
   //   if (debugIntComparison || ppt.debugged) {
   //     System.out.println("IntComparison.destroy(" + ppt.name + ")");
+  //     System.out.println(repr());
+  //     (new Error()).printStackTrace();
   //   }
   //   super.destroy();
   // }
