@@ -606,57 +606,9 @@ public final class FileIO
         // Fills up vals and mods arrays by side effect.
         read_vals_and_mods_from_trace_file(reader, ppt, vals, mods);
 
-        // Now add some additional variable values that don't appear directly
-        // in the data trace file but aren't traditional derived variables.
-
-        // add_orig_variables(ppt, cumulative_modbits, vals, mods, nonce); // [INCR] (punt modbits)
-        add_orig_variables(ppt, vals, mods, nonce);
-
-	// XXX (for now, until front ends are changed)
-	if (! ppt.ppt_name.isExitPoint()) {
-	  continue;
-	}
-
-        // // Add invocation counts
-        // if not no_invocation_counts {
-        //   for ftn_ppt_name in fn_invocations.keys() {
-        //     calls_var_name = "calls(%s)" % ftn_ppt_name;
-        //     assert calls_var_name == these_var_infos[current_var_index].name;
-        //     these_values.append((fn_invocations[ftn_ppt_name],1))e;
-        //     current_var_index++;
-        //   }
-        // }
-
-        // Add derived variables
-        add_derived_variables(ppt, vals, mods);
-
-        vals = Intern.intern(vals);
-        Assert.assert(Intern.isInterned(vals));
-
-        // Done adding additional variable values that don't appear directly
-        // in the data trace file.
-
-        ValueTuple vt = new ValueTuple(vals, mods);
-
-        if (debugRead.isDebugEnabled()) {
-          debugRead.debug("Adding ValueTuple to " + ppt.name);
-        }
-        ppt.add_and_flow(vt, 1);
-
-	// Feeding values to EXITnn points will automatically have
-	// them flow up to the corresponding EXIT point.
-	/* [INCR] ...
-        PptTopLevel exit_ppt = (PptTopLevel) ppt.combined_exit;
-        if (exit_ppt != null) {
-          VarInfo[] exit_vis = exit_ppt.var_infos;
-          // System.out.println("ppt = " + ppt.name);
-          // System.out.println(" comb_indices = " + utilMDE.ArraysMDE.toString(ppt.combined_exit_var_indices));
-          // System.out.println(" vt = " + vt.toString());
-          ValueTuple exit_vt = vt.slice(ppt.combined_exit_var_indices);
-          exit_ppt.add(exit_vt, 1);
-        }
-	*/
-
+	// Add orig and derived variables; pass to inference (add_and_flow)
+	ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
+	process_sample(ppt, vt, nonce);
       }
     // }
     // // This catch clause is a bit of a pain.  On the plus side, it gives
@@ -680,6 +632,65 @@ public final class FileIO
 
     data_trace_filename = null;
     data_trace_reader = null;
+  }
+
+  /**
+   * @param vt trace data only
+   **/
+  public static void process_sample(PptTopLevel ppt, ValueTuple vt, Integer nonce)
+  {
+    { // For now, keep indentation the same
+      {
+        // Now add some additional variable values that don't appear directly
+        // in the data trace file but aren't traditional derived variables.
+
+        // add_orig_variables(ppt, cumulative_modbits, vals, mods, nonce); // [INCR] (punt modbits)
+        add_orig_variables(ppt, vt.vals, vt.mods, nonce);
+
+	// XXX (for now, until front ends are changed)
+	if (! ppt.ppt_name.isExitPoint()) {
+	  return;
+	}
+
+        // // Add invocation counts
+        // if not no_invocation_counts {
+        //   for ftn_ppt_name in fn_invocations.keys() {
+        //     calls_var_name = "calls(%s)" % ftn_ppt_name;
+        //     assert calls_var_name == these_var_infos[current_var_index].name;
+        //     these_values.append((fn_invocations[ftn_ppt_name],1))e;
+        //     current_var_index++;
+        //   }
+        // }
+
+        // Add derived variables
+        add_derived_variables(ppt, vt.vals, vt.mods);
+
+        // Done adding additional variable values that don't appear directly
+        // in the data trace file.
+
+	// Causes interning
+        vt = new ValueTuple(vt.vals, vt.mods);
+
+        if (debugRead.isDebugEnabled()) {
+          debugRead.debug("Adding ValueTuple to " + ppt.name);
+        }
+        ppt.add_and_flow(vt, 1);
+
+	// Feeding values to EXITnn points will automatically have
+	// them flow up to the corresponding EXIT point.
+	/* [INCR] ...
+        PptTopLevel exit_ppt = (PptTopLevel) ppt.combined_exit;
+        if (exit_ppt != null) {
+          VarInfo[] exit_vis = exit_ppt.var_infos;
+          // System.out.println("ppt = " + ppt.name);
+          // System.out.println(" comb_indices = " + utilMDE.ArraysMDE.toString(ppt.combined_exit_var_indices));
+          // System.out.println(" vt = " + vt.toString());
+          ValueTuple exit_vt = vt.slice(ppt.combined_exit_var_indices);
+          exit_ppt.add(exit_vt, 1);
+        }
+	*/
+      }
+    }
   }
 
   private static void process_unmatched_procedure_entries() {
@@ -885,13 +896,11 @@ public final class FileIO
   }
 
 
-    /* JTrace hack : private */
-          static void add_orig_variables(PptTopLevel ppt,
+  private static void add_orig_variables(PptTopLevel ppt,
 					 // HashMap cumulative_modbits,
 					 Object[] vals,
 					 int[] mods,
 					 Integer nonce)
-    throws IOException
   {
     VarInfo[] vis = ppt.var_infos;
     String fn_name = ppt.fn_name();
@@ -986,11 +995,9 @@ public final class FileIO
   }
 
   // Add derived variables
-  /* JTrace hack : private */
-          static void add_derived_variables(PptTopLevel ppt,
+  private static void add_derived_variables(PptTopLevel ppt,
 					    Object[] vals,
 					    int[] mods)
-    throws IOException
   {
     // This ValueTuple is temporary:  we're temporarily suppressing interning,
     // which we will do after we have all the values available.
