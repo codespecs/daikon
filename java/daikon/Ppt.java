@@ -225,14 +225,17 @@ public abstract class Ppt implements java.io.Serializable {
       return findVar(VarInfoName.parse(name));
     }
 
-  // Argument is a vector of PptTopLevel objects.
+  // Argument is a list of PptTopLevel objects.
   // Result does NOT include static constants, as it will be used to
   // index into ValueTuple, which omits static constants.
-  public static final VarInfo[] common_vars(Vector ppts) {
+  public static final VarInfo[] common_vars(List ppts) {
+    Assert.assert(ppts.size() >= 1);
+    if (ppts.size() == 1) {
+      return ((PptTopLevel) ppts.get(0)).var_infos;
+    }
     Vector result = new Vector();
-    Assert.assert(ppts.size() > 1);
     {
-      PptTopLevel ppt = (PptTopLevel) ppts.elementAt(0);
+      PptTopLevel ppt = (PptTopLevel) ppts.get(0);
       VarInfo[] vars = ppt.var_infos;
       for (int i=0; i<vars.length; i++) {
         if (vars[i].isStaticConstant())
@@ -242,11 +245,11 @@ public abstract class Ppt implements java.io.Serializable {
       }
     }
     for (int i=1; i<ppts.size(); i++) {
-      PptTopLevel ppt = (PptTopLevel) ppts.elementAt(i);
+      PptTopLevel ppt = (PptTopLevel) ppts.get(i);
       VarInfo[] vars = ppt.var_infos;
       // Remove from result any variables that do not occur in vars
       for (int rindex=result.size()-1; rindex>=0; rindex--) {
-        VarInfo rvar = (VarInfo) result.elementAt(rindex);
+        VarInfo rvar = (VarInfo) result.get(rindex);
         boolean found = false;
         for (int vindex=0; vindex<vars.length; vindex++) {
           VarInfo vvar = vars[vindex];
@@ -261,7 +264,7 @@ public abstract class Ppt implements java.io.Serializable {
         }
       }
     }
-    return (VarInfo[]) result.toArray(new VarInfo[] { });
+    return (VarInfo[]) result.toArray(new VarInfo[result.size()]);
   }
 
 
@@ -285,15 +288,15 @@ public abstract class Ppt implements java.io.Serializable {
 
   // Orders ppts by the name, except . and : are swapped
   //   so that Foo:::OBJECT and Foo:::CLASS are processed before Foo.method.
-  // Also suffix "~" to ":::EXIT" to put it after the line-numbered exits.
+  // (Why?) // Also suffix "~" to ":::EXIT" to put it after the line-numbered exits.
   public static final class NameComparator implements Comparator {
     public int compare(Object o1, Object o2) {
       String name1 = ((Ppt) o1).name;
       String name2 = ((Ppt) o2).name;
-      if (name1.endsWith(FileIO.exit_suffix))
-        name1 += "~";
-      if (name2.endsWith(FileIO.exit_suffix))
-        name2 += "~";
+//        if (name1.endsWith(FileIO.exit_suffix))
+//          name1 += "~";
+//        if (name2.endsWith(FileIO.exit_suffix))
+//          name2 += "~";
 
       String swapped1 = swap(name1, '.', ':');
       String swapped2 = swap(name2, '.', ':');
