@@ -56,10 +56,7 @@ class UpperBound  extends SingleScalar {
   }
 
   public String format() {
-    if (justified())
-      return var().name + " <= " + max1 ;
-    else
-      return null;
+    return var().name + " <= " + max1 ;
   }
 
   public void add_modified(long value, int count) {

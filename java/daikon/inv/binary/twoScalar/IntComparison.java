@@ -117,13 +117,7 @@ public final class IntComparison extends TwoScalar implements Comparison {
   }
 
   public String format() {
-    if (! justified()) {
-      return null;
-    }
     String comparator = core.format_comparator();
-    if (comparator == null) {
-      return null;
-    }
     return var1().name + " " + comparator + " " + var2().name;
   }
 

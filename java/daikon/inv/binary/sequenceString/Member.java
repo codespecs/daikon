@@ -8,6 +8,10 @@ import daikon.derive.unary.*;
 import daikon.derive.binary.*;
 import java.util.*;
 
+// *****
+// Automatically generated from Member-cpp.java
+// *****
+
 public final class Member extends SequenceString  {
 
   public final static boolean debugMember = false;
@@ -173,11 +177,7 @@ public final class Member extends SequenceString  {
   }
 
   public String format() {
-    if ((!no_invariant) && justified()) {
-      return sclvar().name + " in " + seqvar().name;
-    } else {
-      return null;
-    }
+    return sclvar().name + " in " + seqvar().name;
   }
 
   public void add_modified(String [] a, String  i, int count) {
@@ -202,5 +202,4 @@ public final class Member extends SequenceString  {
     Assert.assert(other instanceof Member);
     return true;
   }
-
 }

@@ -40,10 +40,7 @@ class NonZero extends SingleScalar {
   }
 
   public String format() {
-    if ((!no_invariant) && justified())
-      return var().name + " != " + (pointer_type ? "null" : "0");
-    else
-      return null;
+    return var().name + " != " + (pointer_type ? "null" : "0");
   }
 
 

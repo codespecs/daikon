@@ -83,8 +83,6 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
   }
 
   public String format() {
-    if (no_invariant || (num_elts == 0) || (! justified()))
-      return null;
     if (num_elts == 1) {
 
       return var().name  + " = " + ArraysMDE.toString( elts[0] ) ;
@@ -112,8 +110,15 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
   }
 
   protected double computeProbability() {
-    // This is wrong; fix it
-    return Invariant.PROBABILITY_JUSTIFIED;
+    /**
+       // This is wrong; fix it
+       return Invariant.PROBABILITY_JUSTIFIED;
+    **/
+    // JWN: This is somewhat better...?
+    if (num_elts == 0)
+      return Invariant.PROBABILITY_UNKNOWN;
+    else
+      return Invariant.PROBABILITY_JUSTIFIED;
   }
 
   public boolean isSameFormula(Invariant o)

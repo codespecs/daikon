@@ -44,10 +44,7 @@ public final class EltNonZero extends SingleSequence {
   }
 
   public String format() {
-    if ((!no_invariant) && justified())
-      return var().name + " elements != " + (pointer_type ? "null" : "0");
-    else
-      return null;
+    return var().name + " elements != " + (pointer_type ? "null" : "0");
   }
 
   public void add_modified(long[] a, int count) {

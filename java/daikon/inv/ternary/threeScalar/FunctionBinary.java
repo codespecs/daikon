@@ -51,14 +51,7 @@ class FunctionBinary extends ThreeScalar {
   }
 
   public String format() {
-    if (justified()) {
-      return core.format();
-    } else {
-      // System.out.println("FunctionBinary not justified: "
-      //                    + argresult.name + " = "
-      //                    + function.getName() + "(" + arg1.name + ", " + arg2.name + ")");
-      return null;
-    }
+    return core.format();
   }
 
 

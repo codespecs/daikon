@@ -45,11 +45,7 @@ public final class NonEqual extends TwoScalar {
   }
 
   public String format() {
-    if ((!no_invariant) && justified()) {
-      return var1().name + " != " + var2().name;
-    } else {
-      return null;
-    }
+    return var1().name + " != " + var2().name;
   }
 
 

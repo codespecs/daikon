@@ -67,7 +67,7 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
     for (int i=0; i<num_elts; i++) {
       if (i != 0)
         sb.append(", ");
-      sb.append( elts[i]  );
+      sb.append(((!var().type.isIntegral() && ( elts[i]  == 0)) ? "null" : (Long.toString( elts[i] ))) );
     }
     sb.append(" }");
     return sb.toString();
@@ -82,11 +82,9 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
   }
 
   public String format() {
-    if (no_invariant || (num_elts == 0) || (! justified()))
-      return null;
     if (num_elts == 1) {
 
-      return var().name + " elements = " +  elts[0]  ;
+      return var().name + " elements = " + ((!var().type.isIntegral() && ( elts[0]  == 0)) ? "null" : (Long.toString( elts[0] ))) ;
 
     } else {
       return var().name + " elements one of " + subarray_rep();
@@ -112,8 +110,15 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
   }
 
   protected double computeProbability() {
-    // This is wrong; fix it
-    return Invariant.PROBABILITY_JUSTIFIED;
+    /**
+       // This is wrong; fix it
+       return Invariant.PROBABILITY_JUSTIFIED;
+    **/
+    // JWN: This is somewhat better...?
+    if (num_elts == 0)
+      return Invariant.PROBABILITY_UNKNOWN;
+    else
+      return Invariant.PROBABILITY_JUSTIFIED;
   }
 
   public boolean isSameFormula(Invariant o)

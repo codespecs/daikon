@@ -77,11 +77,17 @@ public final class IntComparisonCore implements java.io.Serializable {
     } else if (can_be_lt || can_be_gt) {
       return Math.pow(.5, wrapper.ppt.num_values());
     } else {
-      // It's an equality invariant.  I ought to use the actual ranges somehow.
-      // Actually, I can't even use this .5 test because it can make
-      // equality non-transitive.
-      // return Math.pow(.5, wrapper.ppt.num_values());
-      return Invariant.PROBABILITY_JUSTIFIED;
+      if (can_be_eq) {
+	// It's an equality invariant.  I ought to use the actual ranges somehow.
+	// Actually, I can't even use this .5 test because it can make
+	// equality non-transitive.
+	// return Math.pow(.5, wrapper.ppt.num_values());
+	return Invariant.PROBABILITY_JUSTIFIED;
+      } else {
+	// None of the can_be_X's are set
+	// we haven't seen any samples
+	return Invariant.PROBABILITY_UNKNOWN;
+      }
     }
   }
 
@@ -111,7 +117,7 @@ public final class IntComparisonCore implements java.io.Serializable {
       // }
       return inequality + comparison;
     } else {
-      return null;
+      return "?cmp?";
     }
   }
 

@@ -34,11 +34,7 @@ class SuperSequence extends TwoSequence {
   }
 
   public String format() {
-    if ((!no_invariant) && justified()) {
-      return var2().name + " is a subsequence of " + var1().name;
-    } else {
-      return null;
-    }
+    return var2().name + " is a subsequence of " + var1().name;
   }
 
 

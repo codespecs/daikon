@@ -26,9 +26,6 @@ class PairwiseLinearBinary extends TwoSequence {
   }
 
   public String format() {
-    if (no_invariant || ! justified()) {
-      return null;
-    }
     return core.format(var1().name, var2().name);
   }
 

@@ -32,10 +32,7 @@ class Modulus extends SingleScalar {
   }
 
   public String format() {
-    if (justified())
-      return var().name + " = " + remainder + "  (mod " + modulus + ")";
-    else
-      return null;
+    return var().name + " = " + remainder + "  (mod " + modulus + ")";
   }
 
   public void add_modified(long value, int count) {

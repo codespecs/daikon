@@ -25,9 +25,6 @@ class LinearBinary extends TwoScalar {
   }
 
   public String format() {
-    if (no_invariant || ! justified()) {
-      return null;
-    }
     return core.format(var1().name, var2().name);
   }
 

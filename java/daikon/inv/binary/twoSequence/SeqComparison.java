@@ -11,8 +11,6 @@ class SeqComparison extends TwoSequence implements Comparison {
 
   static Comparator comparator = new ArraysMDE.LongArrayComparatorLexical();
 
-  final static boolean debugSeqComparison = false;
-
   boolean can_be_eq = false;
   boolean can_be_lt = false;
   boolean can_be_gt = false;
@@ -35,19 +33,13 @@ class SeqComparison extends TwoSequence implements Comparison {
   }
 
   public String format() {
-    if (justified() && (can_be_eq || can_be_gt || can_be_lt)) {
-      String inequality = (can_be_lt ? "<" : can_be_gt ? ">" : "");
-      String comparison = (can_be_eq ? "=" : "");
-      if (debugSeqComparison) {
-        System.out.println(repr()
-                           + "; inequality=\"" + inequality + "\""
-                           + ",comparison=\"" + comparison + "\"");
-      }
-      return var1().name + " " + inequality + comparison + " " + var2().name
-        + " (lexically)";
-    } else {
-      return null;
-    }
+    String inequality = (can_be_lt ? "<" : can_be_gt ? ">" : "");
+    String comparison = (can_be_eq ? "=" : "");
+    if (!(can_be_eq || can_be_gt || can_be_lt))
+      comparison = "?cmp?";
+
+    return var1().name + " " + inequality + comparison + " " + var2().name
+      + " (lexically)";
   }
 
 
@@ -79,6 +71,7 @@ class SeqComparison extends TwoSequence implements Comparison {
     } else if (can_be_lt || can_be_gt) {
       return Math.pow(.5, ppt.num_values());
     } else {
+      // TODO: What if there were no samples yet?
       return Invariant.PROBABILITY_JUSTIFIED;
     }
   }

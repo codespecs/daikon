@@ -27,11 +27,7 @@ class PairwiseFunctionUnary extends TwoSequence {
   }
 
   public String format() {
-    if (justified()) {
-      return core.format(var1().name, var2().name);
-    } else {
-      return null;
-    }
+    return core.format(var1().name, var2().name);
   }
 
 

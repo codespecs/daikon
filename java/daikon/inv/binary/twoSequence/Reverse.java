@@ -23,11 +23,7 @@ class Reverse extends TwoSequence {
   }
 
   public String format() {
-    if ((!no_invariant) && justified()) {
-      return var1().name + " is the reverse of " + var2().name;
-    } else {
-      return null;
-    }
+    return var1().name + " is the reverse of " + var2().name;
   }
 
 

@@ -209,11 +209,7 @@ public final class Member extends SEQUENCESCALAR {
   }
 
   public String format() {
-    if ((!no_invariant) && justified()) {
-      return sclvar().name + " in " + seqvar().name;
-    } else {
-      return null;
-    }
+    return sclvar().name + " in " + seqvar().name;
   }
 
 
@@ -237,7 +233,7 @@ public final class Member extends SEQUENCESCALAR {
 
   public boolean isSameFormula(Invariant other)
   {
-    Assert.assert(other instanceof SEQUENCESCALAR);
+    Assert.assert(other instanceof Member);
     return true;
   }
 }

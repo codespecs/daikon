@@ -60,10 +60,7 @@ class LowerBound  extends SingleScalar {
   }
 
   public String format() {
-    if (justified())
-      return var().name + " >= " + min1 ;
-    else
-      return null;
+    return var().name + " >= " + min1 ;
   }
 
   public void add_modified(long value, int count) {

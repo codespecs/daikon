@@ -28,14 +28,10 @@ class NoDuplicates extends SingleSequence {
   }
 
   public String format() {
-    if (justified()) {
-      if (debugNoDuplicates) {
-        System.out.println(repr());
-      }
-      return (var().name + " contains no duplicates");
-    } else {
-      return null;
+    if (debugNoDuplicates) {
+      System.out.println(repr());
     }
+    return (var().name + " contains no duplicates");
   }
 
 

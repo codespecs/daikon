@@ -41,19 +41,16 @@ class EltIntComparison extends SingleSequence {
   }
 
   public String format() {
-    if (justified() && (can_be_eq || can_be_gt || can_be_lt)) {
-      String inequality = (can_be_lt ? "<" : can_be_gt ? ">" : "");
-      String comparison = (can_be_eq ? "=" : "");
-      if (debugEltIntComparison) {
-        System.out.println(repr()
-                           + "; inequality=\"" + inequality + "\""
-                           + ",comparison=\"" + comparison + "\"");
-      }
-      return (var().name + " sorted by "
-              + inequality + comparison);
-    } else {
-      return null;
+    Assert.assert(!justified() || can_be_eq || can_be_gt || can_be_lt);
+    String inequality = (can_be_lt ? "<" : can_be_gt ? ">" : "");
+    String comparison = (can_be_eq ? "=" : "");
+    if (debugEltIntComparison) {
+      System.out.println(repr()
+			 + "; inequality=\"" + inequality + "\""
+			 + ",comparison=\"" + comparison + "\"");
     }
+    return (var().name + " sorted by "
+	    + inequality + comparison);
   }
 
 
