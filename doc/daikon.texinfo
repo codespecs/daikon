@@ -204,8 +204,6 @@ Control panel
 Context GUI
 
 * Context GUI with Emacs::      
-* Context GUI project root directory::  
-* .dci files::                  
 
 Front ends
 
@@ -689,7 +687,7 @@ the following two steps:
 @item
 If you wish to use the Context GUI with Java code, then
 download and install JDE, the Java Development Environment for Emacs,
-from @url{http://jde.sunsite.dk}.
+from @uref{http://jdee.sunsite.dk/}.
 If you wish to use the Context GUI with C code, no extra packages are needed.
 @item
 Add the Emacs Lisp code for the Daikon Context GUI to your Emacs load
@@ -697,7 +695,7 @@ path.  Add the following to your @file{.emacs} or @file{prj.el} file:
 @example
   ;; Daikon Context GUI
   (add-to-list 'load-path (substitute-in-file-name "$DAIKONDIR/emacs"))
-  (autoload 'daikon-context-gui "daikon-context-gui" "Daikon Context GUI" t)
+  (autoload 'daikon-context-gui "daikon-gui" "Daikon Context GUI" t)
   (custom-set-variables '(jde-global-classpath '("$CLASSPATH")))
 @end example
 @end enumerate
@@ -914,11 +912,8 @@ java daikon.gui.treeGUI.InvariantsGUI StackAr.inv
 @item Use the Daikon Context GUI to browse the invariants.  As you move
 the cursor in an editor window, the Context GUI displays the invariants
 applicable to the current location (class or method).  For details on
-running the Context GUI, see @ref{Context GUI}.  The Context GUI can
-also be run from the command line:
-@example
-java daikon.gui.contextGUI.ContextGUI StackAr.inv
-@end example
+running the Context GUI, see @ref{Context GUI}.  
+
 @end itemize
 
 @end enumerate
@@ -2585,11 +2580,9 @@ and Bill Griswold (wgg@@cs.ucsd.edu).
 
 @menu
 * Context GUI with Emacs::      
-* Context GUI project root directory::  
-* .dci files::                  
 @end menu
 
-@node    Context GUI with Emacs, Context GUI project root directory, Context GUI, Context GUI
+@node    Context GUI with Emacs,  , Context GUI, Context GUI
 @subsection Running the Context GUI with Emacs
 @cindex Emacs, with Context GUI
 
@@ -2602,83 +2595,20 @@ invariants.
   java daikon.Daikon -o foo.inv decl-files... trace-files...
 @end example
 
-@item
-To load up the @file{.inv} files into the Context GUI do one of the
-following:
-@itemize @bullet
-@item
-Put the @file{.inv} files in the same directory as the file Emacs is visiting
-when you invoke @kbd{M-x daikon-context-gui} (if the project root directory is
-changed, this will not happen), or
-@item
-Change the project root directory where the Context GUI
-searches for @file{.inv} files (see below), or
-@item
-Add the file by hand using the menu option on the Context GUI.
-@end itemize
+
 
 @item
+
 Start the Context GUI by typing @kbd{M-x daikon-context-gui}
-while visiting a Java or C file in Emacs. To start the GUI standalone enter
-on the command prompt
-@example
-  java daikon.gui.contextGUI.ContextGUI
-@end example
+while visiting a Java or C file in Emacs.  When prompted, select the
+apropiate @file{.inv} file, containing the invariants.
+
+@item
+Stop the Context GUI by typing @kbd{M-x daikon-context-gui-end}
+
 @end enumerate
 
 
-@node    Context GUI project root directory, .dci files, Context GUI with Emacs, Context GUI
-@subsection Changing the Project Root directory for finding .inv files
-@cindex project root directory, for Context GUI
-
-When the Context GUI starts, it automatically loads @file{.inv}
-files from the directory specified by the
-@samp{daikon-context-gui-project-root-directory} defcustom variable.  If
-none has been specified, daikon-context-gui will load files from the
-current directory.  You can set
-@samp{daikon-context-gui-project-root-directory} in your @file{.emacs}
-file or your JDE @file{prj.el} file:
-@example
-   (custom-set-variables '(daikon-context-gui-project-root-directory '("@var{PATH}")))
-@end example
-
-Alternately, you may set it via the Emacs customization editor:
-@enumerate
-@item
-Invoke the Emacs customization editor.  Either
-       1a) Type @kbd{M-x customize}
-     or
-       1b) Click Help on the menu bar,
-           Then Customize->Browse Customization Groups
-@item
-Expand the Programming Subgroups
-@item
-Click on the Tools Group
-@item
-Search for Daikon GUI and then click on Go To Group
-@item
-Edit the field Daikon Gui Project Root Directory to the
-     desired path, in quotes
-@end enumerate
-
-@node    .dci files,  , Context GUI project root directory, Context GUI
-@subsection .dci files
-@cindex .dci files, for Context GUI
-@cindex dci files, for Context GUI
-
-The Context GUI creates @file{.dci} files as a preprocessing system for
-the program when it reads in the @file{.inv} files. This is done so that
-the @file{.inv} files do not have to be processed every time, therefore
-saving time for people on slow computers/connections. However, the files
-are not created every time, but only done when the @file{.inv} is
-changed. If you are experiencing problems, you should try deleting the
-@file{.dci} file with the convention of @file{.@var{filename}.dci}. If
-you would like to run the conversion before starting up the program,
-reducing load up time, then use the ConvertInvToDci Java program:
-
-@example
-  java daikon.gui.contextGUI.ConvertInvToDci file.inv
-@end example
 
 @node    Front ends, Enhancing Daikon output, GUIs, Top
 @chapter Front ends
