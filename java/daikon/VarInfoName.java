@@ -2709,8 +2709,12 @@ public abstract class VarInfoName
         return ((VarInfoName[]) (qret.bound_vars.get(num))) [0];
       }
 
-      public String getVarIndexed (int num) {
-        return qret.root_primes[num].ioa_name();
+      public VarInfoName getVarIndexed (int num) {
+        return qret.root_primes[num];
+      }
+
+      public String getVarIndexedString (int num) {
+        return getVarIndexed(num).ioa_name();
       }
 
     }

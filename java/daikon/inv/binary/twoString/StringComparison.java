@@ -2,6 +2,7 @@ package daikon.inv.binary.twoString;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.binary.sequenceString.*;
 import daikon.derive.*;
 import daikon.derive.unary.*;

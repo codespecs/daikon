@@ -5,8 +5,8 @@ package daikon.diff;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
-import java.io.*;
 import utilMDE.*;
+import java.io.*;
 import java.util.*;
 
 /** <B>MultiDiffVisitor</B> is a state-storing NodeVisitor that works

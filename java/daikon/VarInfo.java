@@ -772,9 +772,7 @@ public final class VarInfo
     }
 
     if (aux.getFlag(VarInfoAux.IS_PARAM)) {
-      if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-        PrintInvariants.debugFiltering.debug("  not interesting, IS_PARAM == true for " + name.name() + "\n");
-      }
+      PrintInvariants.debugFiltering.debug("  not interesting, IS_PARAM == true for " + name.name() + "\n");
       return true;
     }
     if (Global.debugSuppressParam.isDebugEnabled()) {

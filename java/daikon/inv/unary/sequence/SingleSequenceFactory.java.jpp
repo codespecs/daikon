@@ -31,7 +31,7 @@ The correct way to build the system is to run 'make'.
   #define ELTNONZERO EltNonZeroFloat
   #define NODUPLICATES NoDuplicatesFloat
   #if 0
-  // #define ELTWISEINTCOMPARISON EltwiseFloatComparison
+    // #define ELTWISEINTCOMPARISON EltwiseFloatComparison
   #endif
   #define ELTLOWERBOUND EltLowerBoundFloat
   #define ELTUPPERBOUND EltUpperBoundFloat

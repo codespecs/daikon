@@ -176,7 +176,7 @@ Goal (java): warning: method daikon.inv.unary.sequence.NoDuplicates.format(Outpu
 Goal (esc): warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: a[] contains no duplicates
 Goal (ioa): \A i : Int \A j : Int ((i \in a /\ j \in a /\ a[i] = a[j]) => i = j)
 Goal (jml): (\forall int i, j; 0 <= i && i <= a.length-1 && 0 <= j && j <= a.length-1; (i != j) ==> (a[i] != a[j]))
-Goal (simplify): warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:Simplify) needs to be implemented: a[] contains no duplicates
+Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |a|) 1)) (NEQ |i| |j|)) (NEQ (select (select elems |a|) |i|) (select (select elems |a|) |j|))))
 [1 55 2 -123 873 24 99 239]
 
 ; OneOfSequence not currently implemented
@@ -210,7 +210,7 @@ daikon.inv.unary.string.OneOfString
 string
 Goal (daikon): a == "testString"
 Goal (java): a.equals("testString")
-Goal (esc): a == \type(testString)
+Goal (esc): warning: method daikon.inv.unary.string.OneOfString.format(OutputFormat:ESC/Java) needs to be implemented: a == "testString"
 Goal (ioa): a = "testString"))
 Goal (jml): a.equals("testString")
 Goal (simplify): (EQ |a| |_string_testString|)
@@ -408,9 +408,9 @@ int int int
 Goal (daikon): c == 2 * a + 3 * b - 6
 Goal (java): warning: method daikon.inv.ternary.threeScalar.LinearTernary.format(OutputFormat:Java) needs to be implemented: c == 2 * a + 3 * b - 6
 Goal (esc): c == 2 * a + 3 * b - 6
-Goal (ioa): c == 2 * a + 3 * b - 6
+Goal (ioa): c = 2 * a + 3 * b - 6
 Goal (jml): c == 2 * a + 3 * b - 6
-Goal (simplify): warning: method daikon.inv.ternary.threeScalar.LinearTernary.format(OutputFormat:Simplify) needs to be implemented: c == 2 * a + 3 * b - 6
+Goal (simplify): (EQ |c| (+ (+ (* 2 |a|) (* 3 |b|)) -6))
 1
 1
 -1
@@ -436,9 +436,9 @@ int int int
 Goal (daikon): c == a - b
 Goal (java): warning: method daikon.inv.ternary.threeScalar.LinearTernary.format(OutputFormat:Java) needs to be implemented: c == a - b
 Goal (esc): c == a - b
-Goal (ioa): c == a - b
+Goal (ioa): c = a - b
 Goal (jml): c == a - b
-Goal (simplify): warning: method daikon.inv.ternary.threeScalar.LinearTernary.format(OutputFormat:Simplify) needs to be implemented: c == a - b
+Goal (simplify): (EQ |c| (+ |a| (* -1 |b|)))
 0
 0
 0

@@ -54,6 +54,7 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.binary.twoScalar.*;
 import daikon.inv.binary.twoString.*;
 
@@ -175,6 +176,11 @@ public class CLASSNAME
 
   public String format_using(OutputFormat format) {
     // System.out.println("Calling " + CLASSSTRING + ".format for: " + repr());
+
+    if (format == OutputFormat.SIMPLIFY) {
+      return format_simplify();
+    }
+
     String comparator = IntComparisonCore.format_comparator
       (format, can_be_lt, can_be_eq, can_be_gt);
 
@@ -189,7 +195,7 @@ public class CLASSNAME
 
 #ifdef JHP
       // Lexically equal is equal by any definition
-      if (comparator == "==")
+      if (comparator == "==")   // "interned"
         lexically = "";
 #endif
 
@@ -211,6 +217,47 @@ public class CLASSNAME
     }
     return format_unimplemented(format);
   }
+
+  public String format_simplify() {
+    if (Invariant.dkconfig_simplify_define_predicates)
+      return format_simplify_defined();
+    else
+      return format_simplify_explicit();
+  }
+
+  private String format_simplify_defined() {
+    String comparator =
+      INTCOMPARISONCORE.format_comparator(OutputFormat.SIMPLIFY,
+                                          can_be_lt, can_be_eq, can_be_gt);
+    String[] var1_name =
+      VarInfoName.QuantHelper.simplifyNameAndBounds(var1().name);
+    String[] var2_name =
+      VarInfoName.QuantHelper.simplifyNameAndBounds(var2().name);
+    if (var1_name == null || var2_name == null) {
+      return "format_simplify can't handle one of these sequences: "
+        + format();
+    }
+    return "(|lexical-" + comparator + "| " +
+      var1_name[0] + " " + var1_name[1] + " " + var1_name[2] + " " +
+      var2_name[0] + " " + var2_name[1] + " " + var2_name[2] + ")";
+  }
+
+  private String format_simplify_explicit() {
+    if (can_be_eq && !can_be_lt && !can_be_gt) {
+      // A simple case: if two sequences are lexically equal iff they
+      // are elementwise equal.
+      String[] form =
+        VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
+          { var1().name, var2().name }, true); // elementwise
+      return form[0] +
+        "(EQ " + form[1] + " " + form[2] + ")" + form[3];
+    } else {
+      String classname = this.getClass().toString().substring(6);
+      return "warning: method " + classname
+        + ".format_simplify_explicit() needs to be implemented: " + format();
+    }
+  }
+
 
   public void add_modified(PRIMITIVE[] v1, PRIMITIVE[] v2, int count) {
     /// This does not do the right thing; I really want to avoid comparisons

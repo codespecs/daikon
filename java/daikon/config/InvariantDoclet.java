@@ -216,23 +216,19 @@ public class InvariantDoclet
         }
 
         //note the other configuration variables
-        if (fields.size() == 1) {
-          FieldDoc f = (FieldDoc) fields.get (0);
-          out.println ("\n    See also configuration option "
-                       + UtilMDE.replaceString (f.qualifiedName(),
-                         Configuration.PREFIX, ""));
-        } else if (fields.size() > 1) {
-          out.print ("\n    See also the configuration options ");
+
+        if (fields.size() > 0) {
+          out.println("\n    See also the following configuration option"
+                      + (fields.size() > 1 ? "s" : "") + ":");
+          out.println("    @itemize @bullet");
           for (int i = 0; i < fields.size(); i++) {
+            out.println("    @item");
             FieldDoc f = (FieldDoc) fields.get (i);
-            if (i == (fields.size() -1))
-              out.print (" and ");
-            else if (i > 0)
-              out.print (", ");
-            out.print (UtilMDE.replaceString (f.qualifiedName(),
-                            Configuration.PREFIX, ""));
+            out.println("    " +
+                        UtilMDE.replaceString(f.qualifiedName(),
+                                              Configuration.PREFIX, ""));
           }
-          out.print ("\n");
+          out.println("    @end itemize");
         }
 
       }

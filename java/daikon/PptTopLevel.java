@@ -3048,6 +3048,16 @@ public class PptTopLevel
   }
 
   /**
+   * Returns true if there was a problem with Simplify formatting (such as
+   * the invariant not having a Simplify representation).
+   **/
+  private static boolean format_simplify_problem(String s) {
+    return ((s.indexOf("Simplify") >= 0)
+            || (s.indexOf("format(OutputFormat:Simplify)") >= 0)
+            || (s.indexOf("format_simplify") >= 0));
+  }
+
+  /**
    * Use the Simplify theorem prover to flag invariants that are
    * logically implied by others.  Uses the provided test interface to
    * determine if an invariant is within the domain of inspection.
@@ -3069,9 +3079,9 @@ public class PptTopLevel
         Invariant inv = (Invariant) _invs.next();
         if (test.include(inv)) { // think: inv.isWorthPrinting()
           String fmt = inv.format_using(OutputFormat.SIMPLIFY);
-          if (fmt.indexOf("Simplify") < 0) {
-          // If format_simplify is not defined for this invariant, don't
-          // confuse Simplify with the error message
+          if (! format_simplify_problem(fmt)) {
+            // If format_simplify is not defined for this invariant, don't
+            // confuse Simplify with the error message
             printing.add(inv);
           }
         }
@@ -3141,7 +3151,7 @@ public class PptTopLevel
           continue;
         }
         String fmt = inv.format_using(OutputFormat.SIMPLIFY);
-        if (fmt.indexOf("Simplify") >= 0) {
+        if (format_simplify_problem(fmt)) {
           // If format_simplify is not defined for this invariant, don't
           // confuse Simplify with the error message
           continue;
@@ -3160,79 +3170,66 @@ public class PptTopLevel
 
     // FIXME XXXXX:  Commented out by MDE, 6/26/2002, due to merging problems.
     // Should this be deleted?  Need to check CVS logs and/or think about this.
-    // if (ppt_name.isEnterPoint() && controlling_ppts.size() == 1) {
-    //   // Guess the OBJECT ppt; usually right
-    //   PptTopLevel OBJ = (PptTopLevel) controlling_ppts.pptIterator().next();
-    //   if (OBJ.ppt_name.isObjectInstanceSynthetic()) {
-    //     // Find variables here of the same type as us
-    //     String clsname = ppt_name.getFullClassName();
-    //   }
-    // }
-    //
-    // // Use type information to restate any OBJECT invariants over
-    // // variable expressions such as arguments or fields whose types
-    // // are instrumeted.
-    // for (int i=0; i < var_infos.length; i++) {
-    //   VarInfo vi = var_infos[i];
-    //   ProglangType progtype = vi.type;
-    //
-    //   // Always skip "this" and "orig(this)" as necessary special cases.
-    //   if (VarInfoName.THIS.equals(vi.name) || VarInfoName.ORIG_THIS.equals(vi.name)) {
-    //     continue;
-    //   }
-    //
-    //   // For now, we don't handle sequences.  We could use a GLB type
-    //   // and state a forall, but it doesn't seem worth the work yet.
-    //   if (progtype.isPseudoArray()) {
-    //     continue;
-    //   }
-    //
-    //   // Locate the OBJECT ppt
-    //   PptName obj_name = new PptName(vi.type.base(), null, FileIO.object_suffix);
-    //   PptTopLevel obj_ppt = all_ppts.get(obj_name);
-    //   if (obj_ppt == null) {
-    //     Global.debugSimplify.debug
-    //       (ppt_name + ": no type-based invariants found for "
-    //        + vi.name + " (" + obj_name + ")");
-    //     continue;
-    //   }
-    //
-    //   Global.debugSimplify.debug
-    //       (ppt_name + ": using type-based invariants for "
-    //        + vi.name + " (" + obj_name + ")");
-    //
-    //   // State the object invariant on the incoming argument
-    //   all_cont.append("\t(AND \n");
-    //   Iterator _invs = InvariantFilters.addEqualityInvariants(obj_ppt.getInvariants()).iterator();
-    //   while (_invs.hasNext()) {
-    //     Invariant inv = (Invariant) _invs.next();
-    //     if (!test.include(inv)) { // think: !inv.isWorthPrinting()
-    //       continue;
-    //     }
-    //     String fmt = inv.format_simplify();
-    //     if (fmt.indexOf("format_simplify") >= 0) {
-    //       continue;
-    //     }
-    //     // XXX This isn't such a hot thing to do, but it isn't that
-    //     // hard, and seems to work.
-    //     PptSlice saved = inv.ppt;
-    //     PptSlice rewritten = new PptSlice0(saved.parent);
-    //     rewritten.var_infos = new VarInfo[saved.var_infos.length];
-    //     for (int x=0; x<rewritten.var_infos.length; x++) {
-    //       VarInfo svi = saved.var_infos[x];
-    //       rewritten.var_infos[x] =
-    //         new VarInfo(svi.name.replace(VarInfoName.THIS, vi.name),
-    //                     svi.type, svi.file_rep_type,
-    //                     svi.comparability.makeAlias(svi.name), svi.aux);
-    //     }
-    //     inv.ppt = rewritten;
-    //     all_cont.append("\t\t");
-    //     all_cont.append(inv.format_simplify());
-    //     all_cont.append("\n");
-    //     inv.ppt = saved;
-    //   }
-    //   all_cont.append(")");
-    // }
+    /*
+    if (ppt_name.isEnterPoint() && controlling_ppts.size() == 1) {
+      // Guess the OBJECT ppt; usually right
+      PptTopLevel OBJ = (PptTopLevel) controlling_ppts.iterator().next();
+      if (OBJ.ppt_name.isObjectInstanceSynthetic()) {
+        // Find variables here of the same type as us
+        String clsname = ppt_name.getFullClassName();
+      }
+    }
+
+    // Use type information to restate any OBJECT invariants over
+    // variable expressions such as arguments or fields whose types
+    // are instrumeted.
+    for (int i=0; i < var_infos.length; i++) {
+      VarInfo vi = var_infos[i];
+      ProglangType progtype = vi.type;
+
+      // Always skip "this" and "orig(this)" as necessary special cases.
+      if (VarInfoName.THIS.equals(vi.name) ||
+          VarInfoName.ORIG_THIS.equals(vi.name)) {
+        continue;
+      }
+
+      // For now, we don't handle sequences.  We could use a GLB type
+      // and state a forall, but it doesn't seem worth the work yet.
+      if (progtype.isPseudoArray()) {
+        continue;
+      }
+
+      // Locate the OBJECT ppt
+      PptName obj_name = new PptName(vi.type.base(), null,
+                                     FileIO.object_suffix);
+      PptTopLevel obj_ppt = all_ppts.get(obj_name);
+      if (obj_ppt == null) {
+        Global.debugSimplify.debug
+          (ppt_name + ": no type-based invariants found for "
+           + vi.name + " (" + obj_name + ")");
+        continue;
+      }
+
+      Global.debugSimplify.debug
+          (ppt_name + ": using type-based invariants for "
+           + vi.name + " (" + obj_name + ")");
+
+      // State the object invariant on the incoming argument
+      Iterator _invs = InvariantFilters.addEqualityInvariants(obj_ppt.invariants_vector()).iterator();
+      while (_invs.hasNext()) {
+        Invariant inv = (Invariant) _invs.next();
+        if (!test.include(inv)) { // think: !inv.isWorthPrinting()
+          continue;
+        }
+        String fmt = inv.format_using(OutputFormat.SIMPLIFY);
+        if (format_simplify_problem(fmt)) {
+          continue;
+        }
+        Lemma replaced = InvariantLemma.makeLemmaReplaceThis(inv, vi.name);
+        proverStack.pushLemma(replaced);
+      }
+    }
+    */
 
     if (proverStack.checkForContradiction() == 'T') {
       if (LemmaStack.dkconfig_remove_contradictions) {

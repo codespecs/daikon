@@ -37,10 +37,11 @@ The correct way to build the system is to run 'make'.
 package daikon.inv.unary.sequence;
 
 import daikon.*;
-import daikon.derive.unary.*;
+import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.binary.twoScalar.*;
 import daikon.inv.binary.twoSequence.*;
-import daikon.inv.*;
+import daikon.derive.unary.*;
 import java.util.*;
 import utilMDE.*;
 
@@ -159,7 +160,7 @@ public final class CLASSNAME
 
     return quant.getQuantifierExp() + quant.getMembershipRestriction(0) +
       " => " + quant.getVarName(0).ioa_name() + " ~= " +
-      quant.getVarIndexed(0) + quant.getClosingExp();
+      quant.getVarIndexedString(0) + quant.getClosingExp();
   }
   public String format_simplify() {
     String[] form =

@@ -178,6 +178,7 @@ package daikon.inv.unary.SCALARPKG;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.derive.unary.*;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.sequence.*;
@@ -582,7 +583,7 @@ public final class ONEOFSCALAR
 #elif defined(IS_SEQUENCE_NUMERIC)
     String length = "";
     String forall = "";
-#if defined(SEQUENCE)
+  #if defined(SEQUENCE)
     if (is_hashcode) {
       if (num_elts == 0)  {
         String classname = this.getClass().toString().substring(6); // remove leading "class"
@@ -603,7 +604,7 @@ public final class ONEOFSCALAR
         }
       }
     }
-#endif
+  #endif
     if (length == "" && forall == "") { // interned
       String classname = this.getClass().toString().substring(6); // remove leading "class"
       result = "warning: method " + classname + ".format_java() needs to be implemented: " + format();
@@ -695,7 +696,7 @@ public final class ONEOFSCALAR
 #elif defined(IS_SEQUENCE_NUMERIC)
     String length = "";
     String forall = "";
-#if defined(SEQUENCE)
+  #if defined(SEQUENCE)
     if (is_hashcode) {
       // we only have one value, because add_modified dies if more
       Assert.assertTrue(num_elts == 1);
@@ -705,12 +706,12 @@ public final class ONEOFSCALAR
       }
       VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var ());
       if (no_nulls(0)) {
-        forall = quant.getQuantifierExp() + quant.getVarIndexed(0) + " ~= null " + quant.getClosingExp();
+        forall = quant.getQuantifierExp() + quant.getVarIndexedString(0) + " ~= null " + quant.getClosingExp();
       } else if (all_nulls(0)) {
-        forall = quant.getQuantifierExp() + quant.getVarIndexed(0) + " = null " + quant.getClosingExp();
+        forall = quant.getQuantifierExp() + quant.getVarIndexedString(0) + " = null " + quant.getClosingExp();
       }
     }
-#endif
+  #endif
     if (length == "" && forall == "") { // interned; can't say anything about size or elements
       String thisclassname = this.getClass().getName();
       result = "warning: " + thisclassname + ".format_ioa() " + " needs to be implemented: " + format();
@@ -809,22 +810,22 @@ public final class ONEOFSCALAR
     // Daikon stores as Strings).
     if (! is_type()) {
       result = format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
+    } else {
+      // Format   \typeof(theArray) = "[Ljava.lang.Object;"
+      //   as     \typeof(theArray) == \type(java.lang.Object[])
+      // ... but still ...
+      // format   \typeof(other) = "package.SomeClass;"
+      //   as     \typeof(other) == \type(package.SomeClass)
+
+      result = "";
+      for (int i=0; i<num_elts; i++) {
+        if (i != 0) { result += " || "; }
+        result += varname + " == " + format_esc_string2type(elts[i]);
+      }
+
+      // Inner classes
+      result = result.replace('$', '.');
     }
-
-    // Format   \typeof(theArray) = "[Ljava.lang.Object;"
-    //   as     \typeof(theArray) == \type(java.lang.Object[])
-    // ... but still ...
-    // format   \typeof(other) = "package.SomeClass;"
-    //   as     \typeof(other) == \type(package.SomeClass)
-
-    result = "";
-    for (int i=0; i<num_elts; i++) {
-      if (i != 0) { result += " || "; }
-      result += varname + " == " + format_esc_string2type(elts[i]);
-    }
-
-    // Inner classes
-    result = result.replace('$', '.');
 #elif defined(SCALAR) || defined(ELT) || defined(FLOAT) || defined(ELTFLOAT)
   #if defined(SCALAR) || defined(ELT)
     if (is_boolean) {
@@ -864,7 +865,7 @@ public final class ONEOFSCALAR
 #elif defined(IS_SEQUENCE_NUMERIC)
     String length = "";
     String forall = "";
-#if defined(SEQUENCE)
+  #if defined(SEQUENCE)
     if (is_hashcode) {
       // we only have one value, because add_modified dies if more
       Assert.assertTrue(num_elts == 1);
@@ -882,7 +883,7 @@ public final class ONEOFSCALAR
         }
       }
     }
-#endif
+  #endif
     if (length == "" && forall == "") { // interned
       return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
     } else if (length == "") { // interned

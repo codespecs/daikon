@@ -545,7 +545,7 @@ public abstract class Invariant
    **/
   public final static class OutputFormat
   {
-    /* The standard, concise daikon output format */
+    /* The standard, concise Daikon output format */
     public static final OutputFormat DAIKON = new OutputFormat("Daikon");
     /* ESC/Java's annotation language */
     public static final OutputFormat ESCJAVA = new OutputFormat("ESC/Java");
@@ -1581,13 +1581,13 @@ public abstract class Invariant
       int result = inv1.format().compareTo(inv2.format());
 
       Assert.assertTrue(result != 0
-                        , "isSameInvariant() returned false "
-                        + "(isSameFormula returned " + inv1.isSameFormula(inv2) + "),\n"
-                        + "but format().compareTo() returned 0:\n"
-                        + "  " + inv1.format() + "\n      "  + inv1.repr() + "\n"
-                        + "    " + inv1.ppt.parent.name + "\n"
-                        + "  " + inv2.format() + "\n      "  + inv2.repr() + "\n"
-                        + "    " + inv1.ppt.parent.name + "\n"
+                        // , "isSameInvariant() returned false "
+                        // + "(isSameFormula returned " + inv1.isSameFormula(inv2) + "),\n"
+                        // + "but format().compareTo() returned 0:\n"
+                        // + "  " + inv1.format() + "\n      "  + inv1.repr() + "\n"
+                        // + "    " + inv1.ppt.parent.name + "\n"
+                        // + "  " + inv2.format() + "\n      "  + inv2.repr() + "\n"
+                        // + "    " + inv1.ppt.parent.name + "\n"
                         );
 
       return result;

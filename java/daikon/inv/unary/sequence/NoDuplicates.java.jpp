@@ -35,6 +35,7 @@ package daikon.inv.unary.sequence;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.binary.twoSequence.*;
 import daikon.suppress.SuppressionFactory;
 
@@ -111,6 +112,10 @@ public class CLASSNAME
 
     if (format == OutputFormat.IOA) {
       return format_ioa();
+    }
+
+    if (format == OutputFormat.SIMPLIFY) {
+      return format_simplify();
     }
 
     if (format == OutputFormat.JML) {
@@ -207,13 +212,22 @@ public class CLASSNAME
       return quant.getQuantifierExp() + "(" + quant.getMembershipRestriction(0) +
         " /\\ " + quant.getMembershipRestriction(1) +
         //           X[i] = X[j]
-        " /\\ " + quant.getVarIndexed(0) + " = " + quant.getVarIndexed(1) +
+        " /\\ " + quant.getVarIndexedString(0) + " = " + quant.getVarIndexedString(1) +
         //  =>      i           =       j           )
         ") => " + quant.getVarName(0).ioa_name() + " = " + quant.getVarName(1).ioa_name() + quant.getClosingExp();
 
     }
 
   }
+
+  public String format_simplify() {
+    String[] form =
+      VarInfoName.QuantHelper.format_simplify(new VarInfoName[]
+        { var().name, var().name }, false, false, true);
+    return form[0] + "(NEQ " + form[1] + " " + form[2] + ")"
+      + form[3];
+  }
+
 
   public void add_modified(PRIMITIVE[] a, int count) {
     for (int i=1; i<a.length; i++) {

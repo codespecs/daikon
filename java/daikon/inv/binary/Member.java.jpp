@@ -62,6 +62,7 @@ package daikon.inv.binary.SEQUENCESCALARPKG;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.binary.twoScalar.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.inv.binary.twoScalar.IntLessThan;

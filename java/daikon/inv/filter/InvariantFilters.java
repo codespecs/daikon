@@ -3,6 +3,7 @@ package daikon.inv.filter;
 import utilMDE.Assert;
 import java.util.*;
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.IsEqualityComparison;        // For equality invariants work-around
 import daikon.inv.Invariant.OutputFormat;
 import daikon.PptMap;
@@ -55,9 +56,12 @@ public class InvariantFilters {
   PptMap ppt_map = null;
 
   public InvariantFilters() {
+    /* [INCR]
     if (Daikon.output_style == OutputFormat.JML) {
       addPropertyFilter( new JMLCompilerWorkaroundFilter());
     }
+    ... [INCR] */
+
     if (Daikon.output_style == OutputFormat.ESCJAVA) {
       addPropertyFilter( new UnmodifiedVariableEqualityFilter());
     }

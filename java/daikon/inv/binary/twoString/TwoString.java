@@ -2,7 +2,8 @@ package daikon.inv.binary.twoString;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.binary.*;
+import daikon.inv.Invariant.OutputFormat;
+import daikon.inv.binary.BinaryInvariant;
 
 import utilMDE.*;
 

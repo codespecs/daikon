@@ -33,6 +33,7 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.Invariant;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.binary.twoScalar.*;
 import utilMDE.Assert;
 import java.util.Iterator;
@@ -173,8 +174,8 @@ public class CLASSNAME
     VarInfoName.QuantHelper.IOAQuantification quant1 = new VarInfoName.QuantHelper.IOAQuantification(var1());
     VarInfoName.QuantHelper.IOAQuantification quant2 = new VarInfoName.QuantHelper.IOAQuantification(var2());
 
-    return quant1.getQuantifierExp() + quant1.getVarIndexed(0) + " " +
-      comparator + " " + quant2.getVarIndexed(0) + quant1.getClosingExp();
+    return quant1.getQuantifierExp() + quant1.getVarIndexedString(0) + " " +
+      comparator + " " + quant2.getVarIndexedString(0) + quant1.getClosingExp();
   }
 
   public String format_esc() {

@@ -281,7 +281,7 @@ public final class Equality
 //      }
 //      String[] form =
 //        VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-//          { vars[0].name, vars[i].name }, true); // elementwise
+//          { leader().name, vars[i].name }, true); // elementwise
 //      result.append(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
 //        }
 //      } else {
@@ -290,7 +290,7 @@ public final class Equality
 //        result.append(" && ");
 //      }
 //      result.append("");   // formerly "("
-//      result.append(vars[0].name.esc_name());
+//      result.append(leader().name.esc_name());
 //      result.append(" == ");
 //      result.append(vars[i].name.esc_name());
 //      result.append("");  // formerly ")"

@@ -28,32 +28,34 @@ public class MasterUnitTester extends TestCase {
     TestSuite result = new TestSuite();
 
     // To determine what should be in this list:
-    //   find . -name '*Test*.java' | perl -pe 's:^.*/::' | grep -v MasterTester | sort
+    //   find . -name '*Test*.java' | perl -pe 's/^\./      daikon.test/; s:/:.:g; s/.java/.class,/;' | grep -v MasterUnitTester | sort
 
-    result.addTest(new TestSuite(daikon.test.config.ConfigurationTest.class));
-    result.addTest(new TestSuite
-      (daikon.test.diff.ConsequentCVFSortComparatorTester.class));
-    result.addTest(new TestSuite
-      (daikon.test.diff.ConsequentCVFPairComparatorTester.class));
-    result.addTest(new TestSuite
-     (daikon.test.diff.DetailedStatisticsVisitorTester.class));
-    result.addTest(new TestSuite(daikon.test.diff.DiffTester.class));
-    result.addTest(new TestSuite(daikon.test.inv.InvariantTester.class));
-    result.addTest(new TestSuite(daikon.test.diff.InvMapTester.class));
-    result.addTest(new TestSuite(daikon.test.LinearTernaryCoreTest.class));
-    result.addTest(new TestSuite(daikon.test.diff.MinusVisitorTester.class));
-    result.addTest(new TestSuite
-      (daikon.test.inv.unary.scalar.OneOfScalarTester.class));
-    result.addTest(new TestSuite
-      (daikon.test.inv.unary.sequence.OneOfSequenceTester.class));
-    result.addTest(new TestSuite
-     (daikon.test.diff.PrintDifferingInvariantsVisitorTester.class));
-    result.addTest(new TestSuite(daikon.test.ProglangTypeTest.class));
-    result.addTest(new TestSuite(daikon.test.diff.UnionVisitorTester.class));
-    result.addTest(new TestSuite(daikon.test.VarComparabilityTest.class));
-    result.addTest(new TestSuite(daikon.test.VarInfoNameTest.class));
-    result.addTest(new TestSuite(daikon.test.diff.XorVisitorTester.class));
-    result.addTest(new TestSuite(daikon.test.InvariantFormatTester.class));
+    Class[] classes = new Class[] {
+      daikon.test.config.ConfigurationTest.class,
+      daikon.test.diff.ConsequentCVFPairComparatorTester.class,
+      daikon.test.diff.ConsequentCVFSortComparatorTester.class,
+      daikon.test.diff.DetailedStatisticsVisitorTester.class,
+      daikon.test.diff.DiffTester.class,
+      daikon.test.diff.InvMapTester.class,
+      daikon.test.diff.MinusVisitorTester.class,
+      daikon.test.diff.PrintDifferingInvariantsVisitorTester.class,
+      daikon.test.diff.UnionVisitorTester.class,
+      daikon.test.diff.XorVisitorTester.class,
+      daikon.test.InvariantFormatTester.class,
+      daikon.test.inv.InvariantTester.class,
+      daikon.test.inv.unary.scalar.OneOfScalarTester.class,
+      daikon.test.inv.unary.sequence.OneOfSequenceTester.class,
+      daikon.test.LinearTernaryCoreTest.class,
+      daikon.test.ProglangTypeTest.class,
+      // daikon.test.temporal.SimpleTests.class,
+      // daikon.test.temporal.TemporalTests.class,
+      daikon.test.VarComparabilityTest.class,
+      daikon.test.VarInfoNameTest.class,
+    };
+
+    for (int i=0; i<classes.length; i++) {
+      result.addTest(new TestSuite(classes[i]));
+    }
 
     // This is possibly not right; the JIT needs to be disabled in order
     // for these tests to succeed.

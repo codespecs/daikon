@@ -36,6 +36,7 @@ package daikon.inv.unary.sequence;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.binary.twoSequence.*;
 
 import utilMDE.*;
@@ -183,7 +184,7 @@ public final class CLASSNAME
   public String format_ioa() {
     VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var ());
     String result = quant.getQuantifierExp() + quant.getVarName(0).ioa_name() + " \\in " +
-      var().name.ioa_name() + " => " + quant.getVarIndexed(0) + "~=";
+      var().name.ioa_name() + " => " + quant.getVarIndexedString(0) + "~=";
     if (pointer_type) {
       return result + "null" + quant.getClosingExp();
     } else {

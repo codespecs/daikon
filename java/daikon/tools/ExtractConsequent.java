@@ -343,7 +343,7 @@ public class ExtractConsequent {
           continue;
         }
 
-        String inv_string = inv.format_using(OutputFormat.DAIKON);
+        String inv_string = inv.format_using(OutputFormat.JAVA);
         if (re_matcher.contains(inv_string, orig_pattern) || re_matcher.contains(inv_string, dot_class_pattern)) {
           continue;
         }
@@ -353,15 +353,16 @@ public class ExtractConsequent {
           // For instance, inv_string is "x != y", fake_inv_string is "x == y"
           HashedConsequent fake = new HashedConsequent(inv, inv_string);
           boolean added =
-            store_invariant(cluster_inv.format_using(OutputFormat.JAVA), fake_inv_string,
-                            fake, pptname);
+            store_invariant(cluster_inv.format_using(OutputFormat.JAVA),
+                            fake_inv_string, fake, pptname);
           if (!added) {
             // We couldn't add "x == y", (when we're "x != y") because
             // it already exists; so don't add "x == y" either.
             continue;
           }
         }
-        store_invariant(cluster_inv.format_using(OutputFormat.DAIKON), inv_string, real, pptname);
+        store_invariant(cluster_inv.format_using(OutputFormat.JAVA),
+                        inv_string, real, pptname);
       }
     }
   }

@@ -2,7 +2,7 @@ package daikon.inv.binary.sequenceString;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.binary.*;
+import daikon.inv.binary.BinaryInvariant;
 
 import utilMDE.*;
 

@@ -78,16 +78,17 @@ branch of the $inv/java/daikon part of the repository into the trunk
   cd $inv/tests
   make diffs
 
-(11) Commit the files under $inv/daikon.ver3 to CVS, using a log
-     message that communicates the time you ran step 6 (which is the
-     same as the time at the top of the merge history).  Be sure to
-     commit your changes to this file (merging.txt), as well.
+(11) Commit the files under $inv/daikon.ver3 and $inv/tests.ver3 to CVS,
+     using a log message that communicates the time you ran step 6
+     (which is the same as the time at the top of the merge history).
+     Be sure to commit your changes to this file (merging.txt), as well.
 
 
 ==========================================================================
 **** Merge history ****
 (Add entries at the top of the list)
 
+13-May-2003 08:46:50 by MDE
 25-Apr-2003 13:42:18 by JHP
 20-Apr-2003 08:05:46 by MDE
 23-Jan-2003 01:29:52 by SMcC

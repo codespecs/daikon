@@ -28,6 +28,7 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.Invariant;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.binary.twoScalar.*;
 
 
@@ -103,8 +104,8 @@ public class CLASSNAME
 
     return quant1.getQuantifierExp()
       + core.format_using(OutputFormat.IOA,
-                          quant1.getVarName(0),
-                          quant2.getVarName(0))
+                          quant1.getVarIndexed(0),
+                          quant2.getVarIndexed(0))
       + quant1.getClosingExp();
   }
 

@@ -106,6 +106,21 @@ public class LemmaStack {
     try {
       assume(lem);
       lemmas.push(lem);
+
+      // The following debugging code causes us to flush all our input
+      // to Simplify after each lemma, and is useful to figure out
+      // which lemma an error message refers to. It's a significant
+      // slowdown, though.
+      if (true) {
+        try {
+          checkForContradiction();
+        } catch (SimplifyError err) {
+          System.err.println("Error after pushing " + lem.summarize() + " " +
+                             lem.formula);
+          throw err;
+        }
+      }
+
       return true;
     } catch (TimeoutException e) {
       restartProver();
@@ -118,17 +133,6 @@ public class LemmaStack {
     for (int i = 0; i < lemmas.size(); i++) {
       Lemma l = (Lemma)lemmas.elementAt(i);
       pushLemma(l);
-      // The following debugging code causes us to flush all our input
-      // to Simplify after each lemma, and is useful to figure out
-      // which lemma an error message refers to. It's a significant
-      // slowdown, though.
-//       try {
-//         checkForContradiction();
-//       } catch (SimplifyError err) {
-//         System.err.println("Error after pushing " + l.summarize() + " " +
-//                            l.formula);
-//         throw err;
-//       }
     }
   }
 

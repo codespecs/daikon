@@ -143,6 +143,7 @@ package daikon.inv.binary.twoScalar;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.binary.sequenceScalar.*;
@@ -489,7 +490,13 @@ invariants.
   {
     // Also ought to check against LinearBinary, etc.
 #if defined(EQUAL) || defined(EQUALFLOAT)
-    if ((other instanceof INT(LessThan)) || (other instanceof INT(GreaterThan)))
+    if ((other instanceof INT(LessThan)) || (other instanceof INT(GreaterThan))
+        || (other instanceof INT(NonEqual)))
+      return true;
+#endif
+
+#if defined(NONEQUAL) || defined(NONEQUALFLOAT)
+    if (other instanceof INT(Equal))
       return true;
 #endif
 

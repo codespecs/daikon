@@ -2,6 +2,7 @@ package daikon.inv.unary.scalar;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.derive.unary.SequenceLength;
 import utilMDE.*;
 import java.util.Iterator;

@@ -5,7 +5,7 @@ The correct way to build the system is to run 'make'.
 #endif
 
 #if !(defined(TYPEDOUBLE) || defined(TYPELONG) || defined(TYPESTRING))
-  #error "TYPEDOUBLE, TYPELONG, or TYPESTRING must be defined"
+#error "TYPEDOUBLE, TYPELONG, or TYPESTRING must be defined"
 #endif
 
 #if defined(TYPEDOUBLE)
@@ -25,7 +25,7 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.binary.*;
+import daikon.inv.binary.BinaryInvariant;
 
 import utilMDE.*;
 

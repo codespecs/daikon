@@ -1,6 +1,8 @@
 package daikon.diff;
 
+import daikon.*;
 import daikon.inv.Invariant;
+import daikon.inv.Invariant.OutputFormat;
 import java.io.*;
 import daikon.*;
 import daikon.inv.Invariant.OutputFormat;
@@ -67,7 +69,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
     if (inv2 != null && inv2.justified() && !filterOut (inv2)) {
         String tmpStr2 = inv2.ppt.name;
         String thisPptName2 = tmpStr2.substring (0,
-                                                tmpStr2.lastIndexOf ('('));
+                                                 tmpStr2.lastIndexOf ('('));
         key2 = thisPptName2 + "$" + inv2.format_using(OutputFormat.JAVA);
         targSet.add (key2);
     }

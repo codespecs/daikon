@@ -45,10 +45,13 @@ public class CmdCheck
         if (result == null) {
           throw new SimplifyError("Probable core dump");
         }
+        // The "Bad input:"  message generally comes from a syntax error in
+        // a previous formula given to Simplify; see the debugging code in
+        // simplify.LemmaStack.pushLemmas().
         Assert.assertTrue(!result.startsWith("Bad input:"),
-                      result + "\n" + proposition);
+                          result + "\n" + proposition);
         Assert.assertTrue(!result.startsWith("Sx.ReadError in file."),
-                      result + "\n" + proposition);
+                          result + "\n" + proposition);
         if (result.equals("Abort (core dumped)")) {
           throw new SimplifyError(result);
         }

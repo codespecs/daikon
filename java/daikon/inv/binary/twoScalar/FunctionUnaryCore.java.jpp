@@ -97,7 +97,7 @@ public final class CLASSNAME
   private void set_function() throws ClassNotFoundException, NoSuchMethodException {
   }
 
-  public void add_modified(PRIMITIVE x, PRIMITIVE y, long count) {
+  public void add_modified(PRIMITIVE x, PRIMITIVE y, int count) {
     boolean ok = false;
     ok = (inverse
           ? (x == (FUNCTIONS.invokeUnary(methodNumber, y)))

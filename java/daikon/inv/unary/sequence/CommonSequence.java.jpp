@@ -29,6 +29,7 @@ package daikon.inv.unary.sequence;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.binary.twoSequence.*;
 
 import utilMDE.*;
@@ -100,7 +101,7 @@ public class CLASSNAME
   }
 
   public String format_daikon() {
-    return (printIntersect() + " subset of " + var().name);
+    return (printIntersect() + " subset of " + var().name.name());
   }
 
   /* IOA */

@@ -7,6 +7,7 @@ import junit.framework.*;
 import daikon.*;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.ternary.threeScalar.*;
+import daikon.inv.Invariant.OutputFormat;
 
 public class LinearTernaryCoreTest
   extends TestCase
@@ -81,18 +82,20 @@ public class LinearTernaryCoreTest
     // //      z = 6
   }
 
-  private static VarInfoName _x = VarInfoName.parse("x");
-  private static VarInfoName _y = VarInfoName.parse("y");
-  private static VarInfoName _z = VarInfoName.parse("z");
+  private static VarInfoName x_vin = VarInfoName.parse("x");
+  private static VarInfoName y_vin = VarInfoName.parse("y");
+  private static VarInfoName z_vin = VarInfoName.parse("z");
 
-  public void one_test_format(double a, double b, double c, String result) {
+  public void one_test_format(double a, double b, double c, String goal_result) {
     LinearTernaryCore ltc = new LinearTernaryCore(null);
     ltc.a = a;
     ltc.b = b;
     ltc.c = c;
-    // System.out.println("Expecting: " + result);
-    // System.out.println("Actual:    " + ltc.format("x", "y", "z"));
-    assertTrue(ltc.format_using(OutputFormat.DAIKON, _x, _y, _z).equals(result));
+    String actual_result = ltc.format_using(OutputFormat.DAIKON,
+                                            x_vin, y_vin, z_vin);
+    // System.out.println("Expecting: " + goal_result);
+    // System.out.println("Actual:    " + actual_result);
+    assertTrue(actual_result.equals(goal_result));
   }
 
   public void test_format() {

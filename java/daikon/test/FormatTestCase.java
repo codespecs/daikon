@@ -554,9 +554,11 @@ class FormatTestCase {
     // invariant, "b" for the second, and so on
     // - The ProglangType will be specified in the parameters
     // - The comparability will be none
-    return new VarInfo (VarInfoName.parse(new String(new char [] {(char)('a' + i)}) +
+    VarInfo result = new VarInfo (VarInfoName.parse(new String(new char [] {(char)('a' + i)}) +
                                           arrayModifier), type, type,
                         /* comparability = */ null, VarInfoAux.getDefault());
+    // [INCR] result.equal_to = result;   // make it canonical
+    return result;
   }
 
   /**
@@ -998,12 +1000,16 @@ class FormatTestCase {
     try {
       Method instanceCreator = theClass.getMethod("instantiate", new Class [] {PptSlice.class});
 
-      if (instanceCreator == null) throw new RuntimeException("Could not instantiate invariant " + theClass.getName());
+      if (instanceCreator == null)
+        throw new RuntimeException("Could not instantiate invariant "
+                                   + theClass.getName());
 
       return (Invariant)instanceCreator.invoke(null, new Object [] {sl});
     }
     catch (Exception e) {
-      throw new RuntimeException(e.toString());
+      e.printStackTrace(System.out);
+      throw new RuntimeException("Error while instantiating invariant "
+                                 + theClass.getName() + ": " + e.toString());
     }
     //      catch (Exception e) {
     //        throw new RuntimeException("Could not instantiate class");

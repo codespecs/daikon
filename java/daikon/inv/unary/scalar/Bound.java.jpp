@@ -153,6 +153,7 @@ package daikon.inv.unary.SCALAR;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.*;
@@ -252,7 +253,11 @@ public class LOWERBOUND
     }
 
     if (format == OutputFormat.SIMPLIFY) {
+#ifdef BASE_FLOAT
+      return "(" + GTESTR + " " + name + " " + simplify_format_double(MIN1) + ")";
+#else
       return "(" + GTESTR + " " + name + " " + MIN1 + ")";
+#endif
     }
 
     return format_unimplemented(format);
@@ -306,7 +311,7 @@ public class LOWERBOUND
       new VarInfoName.QuantHelper.IOAQuantification (var());
     String result = quant.getQuantifierExp()
       + quant.getMembershipRestriction(0)
-      + " => " + quant.getVarIndexed(0) + " " + GTESTR + " " + MIN1
+      + " => " + quant.getVarIndexedString(0) + " " + GTESTR + " " + MIN1
       + quant.getClosingExp();
     return result;
 #else
@@ -335,6 +340,7 @@ public class LOWERBOUND
 
   public String format_java() {
 #ifdef IS_ELT
+
     String[] form = VarInfoName.QuantHelper.format_java(new VarInfoName[]
       { var().name });
     return form[0] + "(" + form[1] + " " + GTESTR + " " + MIN1 + ")" + form[2];

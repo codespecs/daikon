@@ -43,9 +43,7 @@ public class PrintInvariants {
   public static final Logger debugPrintEquality = Logger.getLogger("daikon.print.equality");
 
   /**
-   * Debug tracer for filtering.  When PrintInvariants is invoked it
-   * will write a transcript of everything that the filters did to the
-   * current directory, into a file called filter_transcript.
+   * Debug tracer for filtering.
    **/
   public static final Logger debugFiltering = Logger.getLogger("daikon.filtering");
 
@@ -245,13 +243,15 @@ public class PrintInvariants {
     }
 
     /* [INCR]
-    if ((ppt.combined_exit != null) && (Daikon.output_style != Daikon.OUTPUT_STYLE_NORMAL)) {
+    if ((ppt.combined_exit != null) && (Daikon.output_style != OutputFormat.DAIKON)) {
       if (Daikon.output_num_samples) {
         out.println("[Is combined exit, output style " + Daikon.output_style + ": " + ppt.name + "]");
       }
       return;
     }
     */
+
+    // out.println("This = " + this + ", Name = " + name + " = " + ppt_name);
 
     if (Daikon.output_style != OutputFormat.IOA) {
       out.println("===========================================================================");
@@ -262,8 +262,7 @@ public class PrintInvariants {
     print_invariants(ppt, out, all_ppts);
 
     if (Daikon.dkconfig_output_conditionals
-        && Daikon.output_style == OutputFormat.DAIKON)
-    {
+        && Daikon.output_style == OutputFormat.DAIKON) {
       for (int i=0; i<ppt.views_cond.size(); i++) {
         PptConditional pcond = (PptConditional) ppt.views_cond.elementAt(i);
         print_invariants_maybe(pcond, out, all_ppts);
@@ -689,7 +688,7 @@ public class PrintInvariants {
         VarInfo other = (VarInfo) equal_vars.get(j);
         Assert.assertTrue(other != leader);
         if (j >= valid_equiv.size()) {
-          out.print("warning: method 'equality'.format_esc() needs to be implemented: ");
+          out.print("warning: method 'equality'.format(OutputFormat:ESC/Java) needs to be implemented: ");
         }
         if (leader.rep_type.isArray()) {
           String[] form =
@@ -857,9 +856,9 @@ public class PrintInvariants {
         inv_rep = inv.format_using(Daikon.output_style);
       } else {
         if (inv instanceof Equality) {
-          inv_rep = "warning: method 'equality'.format_esc() needs to be implemented: " + inv.format();
+          inv_rep = "warning: method 'equality'.format(OutputFormat:ESC/Java) needs to be implemented: " + inv.format();
         } else {
-          inv_rep = "warning: method " + inv.getClass().getName() + ".format_esc() needs to be implemented: " + inv.format();
+          inv_rep = "warning: method " + inv.getClass().getName() + ".format(OutputFormat:ESC/Java) needs to be implemented: " + inv.format();
         }
       }
     } else if (Daikon.output_style == OutputFormat.JML) {
@@ -870,6 +869,7 @@ public class PrintInvariants {
     } else if (Daikon.output_style == OutputFormat.SIMPLIFY) {
       inv_rep = inv.format_using(Daikon.output_style);
     } else if (Daikon.output_style == OutputFormat.IOA) {
+
       String invName = get_ioa_invname (invCounter, ppt);
       if (debugPrint.isDebugEnabled()) {
         debugPrint.debug("Printing normal for " + invName + " with inv " +

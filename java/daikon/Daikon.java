@@ -267,7 +267,7 @@ public final class Daikon {
       System.exit(1);
     }
 
-    // Set up debug traces
+    // Set up debug traces; note this comes after reading command line options.
     LogHelper.setupLogs(Global.debugAll ? LogHelper.DEBUG : LogHelper.INFO);
 
     if (! noversion_output) {

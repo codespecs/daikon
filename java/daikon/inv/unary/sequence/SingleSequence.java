@@ -2,7 +2,7 @@ package daikon.inv.unary.sequence;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.inv.unary.*;
+import daikon.inv.unary.UnaryInvariant;
 import daikon.inv.binary.twoSequence.*;
 import daikon.derive.binary.SequenceSubsequence;
 import daikon.suppress.*;

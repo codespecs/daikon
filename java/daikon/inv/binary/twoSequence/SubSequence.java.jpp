@@ -45,13 +45,13 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.unary.sequence.*;
 import daikon.derive.*;
 import daikon.derive.unary.*;
 import daikon.derive.binary.*;
 import daikon.derive.ternary.*;
 import daikon.suppress.*;
-import daikon.inv.unary.sequence.ELTONEOF;
 import daikon.VarInfoName.QuantHelper;
 import daikon.VarInfoName.QuantHelper.QuantifyReturn;
 
@@ -120,8 +120,7 @@ public class CLASSNAME
   public String format_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.IOA) return format_ioa();
-    // disable simplify format for now; may be buggy
-    // if (format == OutputFormat.SIMPLIFY) return format_simplify();
+    if (format == OutputFormat.SIMPLIFY) return format_simplify();
     if (format == OutputFormat.JML) return format_jml();
 
     return format_unimplemented(format);

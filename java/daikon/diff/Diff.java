@@ -1,5 +1,6 @@
 package daikon.diff;
 
+import daikon.*;
 import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
 import daikon.*;
@@ -96,6 +97,7 @@ public final class Diff {
   public static void main(String[] args) throws FileNotFoundException,
   StreamCorruptedException, OptionalDataException, IOException,
   ClassNotFoundException, InstantiationException, IllegalAccessException {
+    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
 
     boolean printDiff = false;
     boolean printUninteresting = false;

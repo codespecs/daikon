@@ -1,4 +1,4 @@
-package daikon.tests.temporal;
+package daikon.test.temporal;
 
 import daikon.temporal.*;
 import junit.framework.*;

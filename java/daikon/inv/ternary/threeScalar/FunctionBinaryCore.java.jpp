@@ -198,6 +198,10 @@ public final class CLASSNAME
 
   // Perhaps this should take arguments rather than looking into the wrapper.
   public String format_using(OutputFormat format) {
+    if (format == OutputFormat.SIMPLIFY) {
+      return format_simplify();
+    }
+
     PptSlice ppt = wrapper.ppt;
     VarInfoName argresult = ppt.var_infos[var_indices[var_order][0]].name;
     VarInfoName arg1 = ppt.var_infos[var_indices[var_order][1]].name;
@@ -248,11 +252,6 @@ public final class CLASSNAME
       return "format_simplify() doesn't know function " + methodname[0] + "-" +
         methodname[1] + "-" + methodname[2];
     return "(EQ " + result + " (" + func + " " + arg1 + " " + arg2 + "))";
-  }
-
-  public String format_esc() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_esc() needs to be implemented: " + format_using(OutputFormat.DAIKON);
   }
 
   public boolean isSameFormula(CLASSNAME other) {

@@ -555,6 +555,10 @@ public final class CLASSNAME
                                     VarInfoName x, VarInfoName y, VarInfoName z,
                                     double a, double b, double c)
   {
+    if (format == OutputFormat.SIMPLIFY) {
+      return format_simplify(x, y, z, a, b, c);
+    }
+
     if ((a == 0) && (b == 0) && (c == 0)) {
       // We have no information, so print something vacuously true
       return "Too few samples for linear relation: 0 * " + z
@@ -578,13 +582,47 @@ public final class CLASSNAME
         return zname + eq + "(? * " + xname + ") + (? * " + yname + ") + ?";
       }
 
-      return z.name_using(format) + " == "
+      return z.name_using(format) + eq
         + formatTerm(format, a, x, true)
         + formatTerm(format, b, y, false)
         + formatTerm(format, c, null, false);
     }
 
     return null;
+  }
+
+  public static String format_simplify(VarInfoName x, VarInfoName y, VarInfoName z,
+                                       double da, double db, double dc) {
+    int ia = (int) da;
+    int ib = (int) db;
+    int ic = (int) dc;
+
+    String str_a, str_b, str_c;
+    if (da == 0 && db == 0 && dc == 0) {
+      // no data
+      return "(AND)"; // always true
+    } else if (ia != da || ib != db || ic != dc) {
+      // floating point
+      str_a = Invariant.simplify_format_double(da);
+      str_b = Invariant.simplify_format_double(db);
+      str_c = Invariant.simplify_format_double(dc);
+    } else {
+      // integer
+      str_a = ia + "";
+      str_b = ib + "";
+      str_c = ic + "";
+    }
+
+    // z == ax + by + c
+    String str_z = z.simplify_name();
+    String str_x = x.simplify_name();
+    String str_y = y.simplify_name();
+    String str_ax = (da == 1.0) ? str_x : "(* " + str_a + " " + str_x + ")";
+    String str_by = (db == 1.0) ? str_y : "(* " + str_b + " " + str_y + ")";
+    String str_axPby = "(+ " + str_ax + " " + str_by + ")";
+    String str_axPbyPc = (dc == 0.0) ? str_axPby :
+      "(+ " + str_axPby + " " + str_c + ")";
+    return "(EQ " + str_z + " " + str_axPbyPc + ")";
   }
 
   public String format_using(OutputFormat format,

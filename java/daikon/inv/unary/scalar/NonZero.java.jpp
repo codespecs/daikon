@@ -44,6 +44,7 @@ package daikon.inv.unary.scalar;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.binary.sequenceScalar.*;
 import daikon.derive.unary.*;

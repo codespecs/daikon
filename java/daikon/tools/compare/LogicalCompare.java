@@ -1,6 +1,20 @@
 package daikon.tools.compare;
 
-/* This is a standalone program that compares the invariants from two
+import java.util.*;
+import java.io.*;
+import org.apache.log4j.Logger;
+import utilMDE.Assert;
+import utilMDE.UtilMDE;
+import daikon.*;
+import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
+import daikon.inv.unary.scalar.*;
+import daikon.inv.unary.sequence.*;
+import daikon.inv.unary.string.*;
+import daikon.simplify.*;
+
+/**
+ * This is a standalone program that compares the invariants from two
  * versions of (and/or runs of) a program, and determines using
  * Simplify whether the invariants from one logically imply the
  * invariants from the other. These are referred to below as the
@@ -10,9 +24,8 @@ package daikon.tools.compare;
  * that each application postcondition (EXIT point invariant) muse be
  * implied by some combination of test postconditions and application
  * preconditions.
- */
-
-/* This tool doesn't yet have a proper command line interface; in
+ *
+ * This tool doesn't yet have a proper command line interface; in
  * particular, it only compares the program points for a single
  * function on an invocation. At the moment, a typical invocation
  * might look like:
@@ -22,7 +35,8 @@ package daikon.tools.compare;
  *
  * where 33 is a set of flags in binary. Feel free to complain to the
  * author (smcc) about this if you want to use the program
- * yourself. */
+ * yourself.
+ **/
 
 import java.util.*;
 import java.io.*;
@@ -194,8 +208,7 @@ public class LogicalCompare {
 
     for (int i = 0; i < invs.size(); i++) {
       Invariant inv = (Invariant)invs.elementAt(i);
-      System.out.println("(BG_PUSH " +
-                         inv.format_using(OutputFormat.SIMPLIFY) +")");
+      System.out.println("(BG_PUSH " + inv.format_using(OutputFormat.SIMPLIFY) +")");
     }
   }
 

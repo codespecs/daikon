@@ -1,6 +1,7 @@
 package daikon.inv.unary.scalar;
 
 import daikon.*;
+import daikon.inv.Invariant.OutputFormat;
 
 // This invariant is true if the variable is always positive (greater than 0).
 // This invariant is provided for pedagogical reasons only.

@@ -6,8 +6,6 @@ import daikon.config.Configuration;
 
 import daikon.inv.Invariant;
 import daikon.inv.Invariant.OutputFormat;
-import daikon.inv.unary.UnaryInvariant;
-import daikon.inv.binary.BinaryInvariant;
 import daikon.inv.ternary.threeScalar.ThreeScalar;
 
 import java.io.*;

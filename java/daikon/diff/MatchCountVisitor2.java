@@ -193,7 +193,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
 
         if (inv == null) return true;
         String str = inv.format_using(OutputFormat.JAVA);
-        StringTokenizer st = new StringTokenizer (str, " ()");
+        StringTokenizer st = new StringTokenizer (str, " ()],[");
         while (st.hasMoreTokens()) {
             String oneToken = st.nextToken();
             try {

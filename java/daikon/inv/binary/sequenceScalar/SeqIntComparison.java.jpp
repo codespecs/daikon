@@ -39,6 +39,7 @@ package daikon.inv.binary.sequenceScalar;
 import daikon.*;
 import daikon.derive.unary.*;
 import daikon.inv.*;
+import daikon.inv.Invariant.OutputFormat;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.binary.twoScalar.*;
 import daikon.inv.binary.twoSequence.*;
@@ -172,7 +173,7 @@ public final class CLASSNAME
                          ? "=" : core.format_comparator());
     VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification(seqvar());
     return quant.getQuantifierExp() + quant.getMembershipRestriction(0) +
-      " => " + quant.getVarIndexed(0) + comparator + sclvar().name.ioa_name() + quant.getClosingExp();
+      " => " + quant.getVarIndexedString(0) + comparator + sclvar().name.ioa_name() + quant.getClosingExp();
   }
 
   public String format_esc() {
