@@ -11,7 +11,7 @@ export inv=${INV}
 export DAIKONCLASS_SOURCES=1
 
 ## Set this directory to the directory containing the JDK.
-# Simplify to the just the first branch after the AFS move is done
+# Simplify to just the first branch after the AFS move is done.
 if [ -e /afs/csail/group/pag ]; then
   export JDKDIR=${JDKDIR:-/afs/csail/group/pag/software/pkg/jdk}
 else
@@ -33,16 +33,11 @@ export LACKWIT_HOME=${INV}/front-end/c/lackwit
 export CLASSPATH=`echo $CLASSPATH | path-remove.pl`
 export PATH=`echo $PATH | ${INV}/scripts/path-remove.pl`
 
-
 ## Someone needs to rewrite this as a shell function, since bash aliases
 ## can't handle arguments.
 ## # Like "cvs update", but filters out output that is unlikely to be of interest.
 ## # Alternately, run CVS under emacs via "M-x cvs-update".
 ## alias	cvsupdate	'cvs -q update -d \!* |& egrep -e "^C |update aborted|non-existent repository|Permission denied|cannot open|^cvs update: [^U]"'
-
-# Perhaps restore after AFS move; but no one is using Jikes these days, at
-# least for Daikon proper, and the Debian one is newer. -SMcC
-# alias jikes="/g2/users/mernst/bin/Linux-i686/jikes-1.15 -g +E +F"
 
 export DFEJ_VERBOSE=1
 
@@ -54,7 +49,6 @@ elif [ -e /var/autofs/net/pag/g2/users/mernst ]; then
   alias bibfind='/var/autofs/net/pag/g2/users/mernst/bin/Linux-i686/help .n .F /var/autofs/net/pag/g2/users/mernst/bib/bibroot.non-mde'
   export BIBINPUTS=.:/var/autofs/net/pag/g2/users/mernst/bib:..:
 fi
-
 
 export EDITOR=${EDITOR:-emacsclient}
 export ALTERNATE_EDITOR=${ALTERNATE_EDITOR:-emacs}
