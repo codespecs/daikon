@@ -633,8 +633,8 @@ public final class UtilMDE {
    **/
   public static String join(Object[] a, String delim) {
     if (a.length == 0) return "";
-    if (a.length == 1) return a[0].toString();
-    StringBuffer sb = new StringBuffer(a[0].toString());
+    if (a.length == 1) return String.valueOf(a[0]);
+    StringBuffer sb = new StringBuffer(String.valueOf(a[0]));
     for (int i=1; i<a.length; i++)
       sb.append(delim).append(a[i]);
     return sb.toString();
