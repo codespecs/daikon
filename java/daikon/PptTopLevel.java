@@ -464,10 +464,10 @@ public class PptTopLevel extends Ppt {
       { },
       // pass2
       { new SequenceScalarSubscriptFactory(),
-	//new ScalarSequencesIntersectionFactory(),
-	//new StringSequencesIntersectionFactory(),
-	//new ScalarSequencesUnionFactory(),
-	//new StringSequencesUnionFactory(),
+	new ScalarSequencesIntersectionFactory(),
+	new StringSequencesIntersectionFactory(),
+	new ScalarSequencesUnionFactory(),
+	new StringSequencesUnionFactory(),
         new SequenceStringSubscriptFactory(), }
     };
 
