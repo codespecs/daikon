@@ -169,4 +169,16 @@ public final class IntComparison extends TwoScalar implements Comparison {
     return core.isSameFormula(((IntComparison) other).core);
   }
 
+  public boolean isObviousImplied() {
+    if (isExact()) {
+      return false;
+    }
+    LinearBinary lb = LinearBinary.find(ppt);
+    if ((lb != null) && lb.justified()) {
+      Assert.assert(lb.core.b != 0);
+      return true;
+    }
+    return false;
+  }
+
 }

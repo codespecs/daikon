@@ -2,6 +2,8 @@ package daikon.inv.binary.twoScalar;
 
 import daikon.*;
 import daikon.inv.Invariant;
+import java.util.*;
+import utilMDE.*;
 
 class LinearBinary extends TwoScalar {
 
@@ -44,5 +46,18 @@ class LinearBinary extends TwoScalar {
   {
     return core.isSameFormula(((LinearBinary) other).core);
   }
-  
+
+  // Look up a previously instantiated LinearBinary relationship.
+  // Should this implementation be made more efficient?
+  public static LinearBinary find(PptSlice ppt) {
+    Assert.assert(ppt.arity == 2);
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = (Invariant) itor.next();
+      if (inv instanceof LinearBinary)
+        return (LinearBinary) inv;
+    }
+    return null;
+  }
+
+
 }
