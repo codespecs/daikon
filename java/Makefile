@@ -7,6 +7,7 @@
 -include Makefile.user
 
 JAVAC ?= javac -g
+JAVA ?= java
 
 ### end of user customizations
 
@@ -296,12 +297,12 @@ check-serialize:
 
 
 .PHONY: junit
-# Include CLASSPATH on command line for Cygwin compatibility
+# Include CLASSPATH on command line for Cygwin compatibility.
 # Include . in CLASSPATH because you can have two versions of Daikon,
 # and you want to do junit tests on *this* version.
 junit:
 	@echo java daikon.test.MasterTester
-	@java -server -classpath .:${CLASSPATH}:daikon/test/ daikon.test.MasterTester
+	@${JAVA} -server -classpath .:${CLASSPATH}:daikon/test/ daikon.test.MasterTester
 
 ## Documentation
 
