@@ -69,6 +69,9 @@ public final class FileCompiler {
       int result = p.waitFor();
     } catch (Throwable e) {
       System.out.println ("Unexpected exception while compiling " + e);
+      if (p.timed_out())
+        System.out.println ("Compile timed out after " + p.timeout_msecs()
+                            + " msecs");
       System.out.println ("Compile errors: " + compile_errors);
       System.out.println ("Compile output: " + compile_output);
       e.printStackTrace();
