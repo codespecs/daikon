@@ -136,6 +136,7 @@ Version 1.00  03-29-91  One and two word anagrams
 */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 
