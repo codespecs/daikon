@@ -250,7 +250,7 @@ public abstract class Ppt implements java.io.Serializable {
         boolean found = false;
         for (int vindex=0; vindex<vars.length; vindex++) {
           VarInfo vvar = vars[vindex];
-          if (rvar.comparable(vvar)) {
+          if (rvar.comparable2(vvar)) {
             // do not remove
             found = true;
             break;

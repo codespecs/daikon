@@ -72,19 +72,8 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
     Assert.assert(sclvar.isCanonical());
     Assert.assert(seqvar.isCanonical());
 
-    // Comparability test
-    if (Daikon.check_program_types) {
-      if (! sclvar.isIndex())
-        return null;
-    }
-    if (! Daikon.ignore_comparability) {
-      VarComparability sclcompar = sclvar.comparability;
-      VarComparability seqindexcompar = seqvar.comparability.indexType(0);
-      if (! VarComparability.comparable(sclvar.name, sclcompar,
-                                        VarInfoName.parse("seqvar.name.indexName0"), seqindexcompar)) {
-        return null;
-      }
-    }
+    if (! seqvar.indexCompatible(sclvar))
+      return null;
 
     // For now, do nothing if the sequence is itself derived.
     if (seqvar.derived != null)

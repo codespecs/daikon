@@ -18,15 +18,12 @@ public final class Daikon {
   // All these variables really need to be organized better.
 
   public final static boolean disable_splitting = false;
-  // public final static boolean disable_splitting = true;
 
   public final static boolean disable_ternary_invariants = false;
-  // public final static boolean disable_ternary_invariants = true;
 
   // Change this at your peril; high costs in time and space for "false",
   // because so many more invariants get instantiated.
   public final static boolean check_program_types = true;
-  // public final static boolean check_program_types = false;
 
   // If true, variables of declared type byte or char will be compared
   // to variables of declared type int.
@@ -38,11 +35,9 @@ public final class Daikon {
   //  due to differrent number of samples, IsEqualityComparison is
   //  non-transitive (that is specially handled in the code)
   public final static boolean invariants_check_canBeMissing = false;
-  // public final static boolean invariants_check_canBeMissing = true;
 
   // Specialized version for array elements; only examined if
   // invariants_check_canBeMissing is false
-  // public final static boolean invariants_check_canBeMissing_arrayelt = false;
   public final static boolean invariants_check_canBeMissing_arrayelt = true;
 
   public final static boolean disable_modbit_check_message = false;
@@ -58,19 +53,16 @@ public final class Daikon {
   // in public methods which are already given as part of the object
   // invariant for that class.
   public static boolean suppress_implied_controlled_invariants = false;
-  // public static boolean suppress_implied_controlled_invariants = true;
 
   // When true, don't print EXIT invariants over strictly orig()
   // variables when the corresponding entry ppt already has the
   // invariant.
   public static boolean suppress_implied_postcondition_over_prestate_invariants = false;
-  // public static boolean suppress_implied_postcondition_over_prestate_invariants = false;
 
   // When true, use the Simplify theorem prover (not part of Daikon)
   // to locate logically redundant invariants, and flag them as
   // redundant, so that they are removed from the printed output.
   public static boolean suppress_redundant_invariants_with_simplify = false;
-  // public static boolean suppress_redundant_invariants_with_simplify = true;
 
   // Set what output style to use.  NORMAL is the default; ESC style
   // is based on JML; SIMPLIFY style uses first order logical

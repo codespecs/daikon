@@ -66,11 +66,8 @@ public final class SeqIntComparison extends SequenceScalar {
     //   System.out.println("SeqIntComparison instantiate: " + seqvar.name + " " + sclvar.name + " " + sclseq.name + " obvious_le=" + obvious_le + ", obvious_ge=" + obvious_ge);
     // }
 
-    // Don't compute ordering relationships over object addresses for
-    // elements of a Vector.  (But do compute equality/constant!)
-    ProglangType elt_type = seqvar.type.elementType();
-    // Assert.assert(elt_type == sclvar.type, "Different types: " + elt_type.format() + " " + seqvar.name + " elements; " + sclvar.type.format() + " " + sclvar.name);
-    Assert.assert(elt_type.castable(sclvar.type));
+    Assert.assert(seqvar.eltsCompatible(sclvar));
+
     boolean only_eq = ! seqvar.type.elementIsIntegral();
     return new SeqIntComparison(ppt, seq_first, only_eq, obvious_le, obvious_ge);
   }

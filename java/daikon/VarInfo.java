@@ -577,19 +577,19 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
   //   return false;
   // }
 
-  static boolean comparable(VarInfo[] vis1, VarInfo[] vis2) {
+  static boolean comparable2(VarInfo[] vis1, VarInfo[] vis2) {
     if (vis1.length != vis2.length)
       return false;
 
     for (int i=0; i<vis1.length; i++)
-      if (!vis1[i].comparable(vis2[i]))
+      if (!vis1[i].comparable2(vis2[i]))
 	return false;
 
     return true;
   }
 
   // simplistic implementation, just checks that the names are the same
-  boolean comparable(VarInfo other) {
+  boolean comparable2(VarInfo other) {
     if (this.name != other.name)
       return false;
     Assert.assert(type.equals(other.type), "type matches");
@@ -944,6 +944,65 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     if (debug_simplify_expression)
       System.out.println("** Nothing to do (no state equlivalent)");
   }
+
+  /**
+   * Two variables are "compatible" if their declared types are castable
+   * and their comparabilities are comparable.
+   **/
+  public boolean compatible(VarInfo var2) {
+    VarInfo var1 = this;
+    if (Daikon.check_program_types
+        && (! var1.type.castable(var2.type))) {
+      return false;
+    }
+    if ((! Daikon.ignore_comparability)
+        && (! VarComparability.comparable(var1, var2))) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Return true if this sequence variable's element type is compatible
+   * with the scalar variable.
+   **/
+  public boolean eltsCompatible(VarInfo sclvar) {
+    VarInfo seqvar = this;
+    if (Daikon.check_program_types) {
+      if (! seqvar.type.elementType().castable(sclvar.type)) {
+        return false;
+      }
+    }
+    if (! Daikon.ignore_comparability) {
+      if (! VarComparability.comparable(seqvar.comparability.elementType(),
+                                        sclvar.comparability)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Return true if this sequence's first index type is compatible
+   * with the scalar variable.
+   **/
+  public boolean indexCompatible(VarInfo sclvar) {
+    VarInfo seqvar = this;
+    if (Daikon.check_program_types) {
+      if ((seqvar.type.dimensions() == 0)
+          || (! sclvar.isIndex())) {
+        return false;
+      }
+    }
+    if (! Daikon.ignore_comparability) {
+      if (! VarComparability.comparable(seqvar.comparability.indexType(0),
+                                        sclvar.comparability)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
 
   // Interning is lost when an object is serialized and deserialized.
   // Manually re-intern any interned fields upon deserialization.

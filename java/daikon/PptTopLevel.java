@@ -1329,18 +1329,11 @@ public class PptTopLevel extends Ppt {
           } else {
             // This is implied by the if-then sequence.
             // Assert.assert((var1.equal_to != null) && (var2.equal_to != null));
-            if (!((Daikon.check_program_types
-                   && (! var1.type.castable(var2.type)))
-                  || (var1.equal_to == var2.equal_to))) {
+            if (var1.compatible(var2)
+                && (var1.equal_to != var2.equal_to)) {
+              // Used to be an assert
               System.out.println("Variables not equal: " + var1.name + " (= " + var1.equal_to.name + "), " + var2.name + " (= " + var2.equal_to.name + ") [indices " + var1.varinfo_index + ", " + var1.equal_to.varinfo_index + ", " + var2.varinfo_index + ", " + var2.equal_to.varinfo_index + "] at " + name);
             }
-            // Assert.assert(((Daikon.check_program_types
-            //                 && (! var1.type.castable(var2.type)))
-            //                || (var1.equal_to == var2.equal_to))
-            //               // This is ordinarily commented out, to save
-            //               // time in the common case.
-            //               , "Variables not equal: " + var1.name + " (= " + var1.equal_to.name + "), " + var2.name + " (= " + var2.equal_to.name + ") [indices " + var1.varinfo_index + ", " + var1.equal_to.varinfo_index + ", " + var2.varinfo_index + ", " + var2.equal_to.varinfo_index + "] at " + name
-            //               );
             Assert.assert(var1.equal_to.varinfo_index <= var1.varinfo_index);
             Assert.assert(var2.equal_to.varinfo_index <= var2.varinfo_index);
           }
