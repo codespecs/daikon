@@ -91,7 +91,7 @@ import java.util.*;
  *
  * Each specific invariant is implemented in a subclass (typically, in
  * this file).  The subclass must provide the methods instantiate(),
- * check(), and format() Symmetric functions should define
+ * check(), and format(). Symmetric functions should define
  * is_symmetric() to return true.
  **/
 public abstract class CLASSNAME extends SUPERCLASS {
@@ -383,7 +383,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
-        return ("(EQ 0 (%var1% % %var2%))");
+        return ("(EQ 0 (MOD %var1% %var2%))");
       else
         return ("%var1% % %var2% == 0");
     }
@@ -424,7 +424,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
-        return ("(EQ %var1% %var2% * %var2))");
+        return ("(EQ %var1% (* %var2% %var2))");
       else
         return ("%var1% == %var2%**2");
     }
@@ -458,7 +458,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
-        return ("(EQ %var1% ( ~ %var2%))");
+        return ("(EQ %var1% (~ %var2%))");
       else
         return ("%var1% == ~%var2%");
     }
@@ -486,7 +486,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
-        return ("(EQ %var1% (OR %var2% %var1%))");
+        return ("(EQ %var1% (|java-bitwise-or| %var2% %var1%))");
       else if (format == OutputFormat.DAIKON)
         return ("%var2% is a bitwise subset of %var1%");
       else
