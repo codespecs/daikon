@@ -279,21 +279,21 @@ public abstract class VarInfoName
    **/
   public String dbc_name() {
     return dbc_name(null);
-  }   
-    
+  }
+
   /**
    * Return the String representation of this name in the dbc style
    * output format
-   * @param var the VarInfo which goes along with this name.  This 
+   * @param var the VarInfo which goes along with this name.  This
    *        is used to ascertain the type of the varaiable.  'var' may be null,
-   *        which may cause dbc_name_impl to return a warning string instead 
+   *        which may cause dbc_name_impl to return a warning string instead
    *        of a correct name.
    * @return the string representation (interned) of this name, in the
    * java style output format
    **/
   public String dbc_name(VarInfo var) {
 	if (dbc_name_cached == null) {
-	  try {         
+	  try {
         dbc_name_cached = dbc_name_impl(var).intern();
 	  } catch (RuntimeException e) {
 		System.err.println("repr = " + repr());
@@ -330,16 +330,16 @@ public abstract class VarInfoName
    * @return name of this in the specified format
    **/
   public String name_using(OutputFormat format) {
-          
+
     if (format == OutputFormat.DAIKON) return name();
     if (format == OutputFormat.SIMPLIFY) return simplify_name();
     if (format == OutputFormat.ESCJAVA) return esc_name();
     if (format == OutputFormat.JAVA) return java_name();
     if (format == OutputFormat.JML) return jml_name();
-    if (format == OutputFormat.DBCJAVA) 
+    if (format == OutputFormat.DBCJAVA)
       // This is unfortunate, but we would like to have the VarInfo for
-      // DBC output, and it's not worth changing this methods signature. 
-      return dbc_name();    
+      // DBC output, and it's not worth changing this methods signature.
+      return dbc_name();
       //throw new UnsupportedOperationException();
     if (format == OutputFormat.IOA) return ioa_name();
     if (format == OutputFormat.IDENTIFIER) return identifier_name();
@@ -644,7 +644,7 @@ public abstract class VarInfoName
     }
     //@tx
     protected String dbc_name_impl(VarInfo v) {
-	if (name.equals("return")) {	   
+	if (name.equals("return")) {
 	    return "$result";
 	} else {
 	    return name;
@@ -1005,7 +1005,7 @@ public abstract class VarInfoName
       }
       return "(warning: format_dbc() needs to be implemented: " +
 	  function + " on " + sb.toString() + ")";
-    }   
+    }
     protected String identifier_name_impl() {
       StringBuffer sb = new StringBuffer(function);
       sb.append("_of_");
@@ -1143,7 +1143,7 @@ public abstract class VarInfoName
     //@tx
     protected String dbc_name_impl(VarInfo v) {
       return term.dbc_name(v) + "." + field;
-    } 
+    }
     protected String identifier_name_impl() {
       return term.identifier_name() + "_dot_" + field;
     }
@@ -1284,8 +1284,8 @@ public abstract class VarInfoName
     //@tx
     protected String dbc_name_impl(VarInfo v) {
       if (v==null)
-//RRN//        return "$pre(RYANFIX, " + term.name() + ")";            
-        return "$pre(int, " + term.name() + ")";            
+//RRN//        return "$pre(RYANFIX, " + term.name() + ")";
+        return "$pre(int, " + term.name() + ")";
       else
         return "$pre(" + v.type.base() + ", " + term.name() + ")";
       //@tx now we only use int as ExpressionType by default, to be improved
@@ -1372,7 +1372,7 @@ public abstract class VarInfoName
     }
     protected String identifier_name_impl() {
       return "post_of_" + term.identifier_name() + "___";
-    }          
+    }
     protected Class resolveType(PptTopLevel ppt) {
       return term.resolveType(ppt);
     }
@@ -1547,7 +1547,7 @@ public abstract class VarInfoName
     //@tx
     protected String dbc_name_impl(String index) {
       return term.name() + "[" + index + "]";
-    }    
+    }
 
     protected String identifier_name_impl(String index) {
       if (index.equals(""))
@@ -1755,6 +1755,7 @@ public abstract class VarInfoName
       throw new UnsupportedOperationException("ESC cannot format an unquantified slice of elements");
     }
     protected String simplify_name_impl(boolean prestate) {
+      System.out.println(" seq: " + sequence + " " + i + " " + j);
       throw new UnsupportedOperationException("Simplify cannot format an unquantified slice of elements");
     }
     protected String ioa_name_impl() {
@@ -2568,7 +2569,7 @@ public abstract class VarInfoName
         return super.jml_name_impl();
       }
       // RRN TODO: do we need to add a DBC method here?
-      
+
       // protected String esc_name_impl() {
       //   return super.esc_name_impl();
       // }
@@ -3037,7 +3038,7 @@ public abstract class VarInfoName
     public static String[] format_jml(VarInfoName[] roots, boolean elementwise, boolean forall) {
        return format_java_style(roots, elementwise, forall, OutputFormat.JML);
     }
-  
+
     //@tx
     public static String[] format_dbc(VarInfoName[] roots) {
       return format_dbc(roots, false);
@@ -3045,7 +3046,7 @@ public abstract class VarInfoName
 
     //@tx
     public static String[] format_dbc(VarInfoName[] roots, boolean elementwise) {
-            
+
       //@tx
       Assert.assertTrue(roots != null);
 

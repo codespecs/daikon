@@ -671,6 +671,13 @@ public final class PPTSLICE1
     return flow_and_remove_falsified();
   }
 
+  private void destroyInv(Invariant inv) {
+    inv.falsified = true;
+    if (PrintInvariants.print_discarded_invariants)
+      parent.falsified_invars.add(this);
+    removeInvariant(inv);
+  }
+
   public void addInvariant(Invariant invariant) {
     Assert.assertTrue(invariant != null);
 
@@ -692,6 +699,18 @@ public final class PPTSLICE1
       // because all the values might have been missing.  We used to ignore
       // variables that could have some missing values, but no longer.)
 #if defined(ARITY1)
+      UnaryInvariant inv = (UnaryInvariant) invariant;
+      for (Iterator itor = values_cache.entrySet().iterator() ; itor.hasNext() ; ) {
+        Map.Entry entry = (Map.Entry) itor.next();
+        Object val = entry.getKey();
+        int[] tm_array = (int[]) entry.getValue();
+        InvariantStatus status1 = inv.add(val, 0, tm_array[0]);
+        InvariantStatus status2 = inv.add(val, 1, tm_array[1]);
+        if (status1 == InvariantStatus.FALSIFIED ||
+            status2 == InvariantStatus.FALSIFIED) {
+          destroyInv(inv);
+          break;
+        }
       }
 #elif defined(ARITY2)
       VarInfo vi1 = var_infos[0];
@@ -705,15 +724,21 @@ public final class PPTSLICE1
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
           int[] tm_array = (int[]) entry.getValue();
+          InvariantStatus status = InvariantStatus.NO_CHANGE;
           for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {
-              inv.add(seqval, sclval, mi, tm_array[mi]);
-              if (inv.falsified)
+              InvariantStatus tempStatus =
+                inv.add(seqval, sclval, mi, tm_array[mi]);
+              if (tempStatus == InvariantStatus.FALSIFIED) {
+                status = InvariantStatus.FALSIFIED;
                 break;
+              }
             }
           }
-          if (inv.falsified)
+          if (status == InvariantStatus.FALSIFIED) {
+            destroyInv(inv);
             break;
+          }
         }
 #if defined (ORDER_VALUES)
         // Make this invariant up to date by supplying it with all the values.
@@ -721,15 +746,21 @@ public final class PPTSLICE1
         for (Iterator itor = values_order.iterator() ; itor.hasNext() ; ) {
           Object[] vals = (Object[]) itor.next();
           int[] tm_array = (int[]) values_cache.get (vals);
+          InvariantStatus status = InvariantStatus.NO_CHANGE;
           for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {
-              inv.add(val1, val2, mi, tm_array[mi]);
-              if (inv.falsified)
+              InvariantStatus tempStatus =
+                inv.add(val1, val2, mi, tm_array[mi]);
+              if (tempStatus == InvariantStatus.FALSIFIED) {
+                status = InvariantStatus.FALSIFIED;
                 break;
+              }
             }
           }
-          if (inv.falsified)
+          if (status == InvariantStatus.FALSIFIED) {
+            destroyInv(inv);
             break;
+          }
         }
 #endif
         // Make this invariant up to date by supplying it with all the values.
@@ -737,15 +768,21 @@ public final class PPTSLICE1
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
           int[] tm_array = (int[]) entry.getValue();
+          InvariantStatus status = InvariantStatus.NO_CHANGE;
           for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {
-              inv.add(val1, val2, mi, tm_array[mi]);
-              if (inv.falsified)
+              InvariantStatus tempStatus =
+                inv.add(val1, val2, mi, tm_array[mi]);
+              if (tempStatus == InvariantStatus.FALSIFIED) {
+                status = InvariantStatus.FALSIFIED;
                 break;
+              }
             }
           }
-          if (inv.falsified)
+          if (status == InvariantStatus.FALSIFIED) {
+            destroyInv(inv);
             break;
+          }
         }
       }
 #elif defined(ARITY3)
@@ -759,32 +796,42 @@ public final class PPTSLICE1
         for (Iterator itor = values_order.iterator(); itor.hasNext(); ) {
           Object[] vals = (Object[]) itor.next();
           int[] tm_array = (int[]) values_cache.get (vals);
-          for (int mi = 0; mi<tm_array.length; mi++) {
+          InvariantStatus status = InvariantStatus.NO_CHANGE;
+          for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {
-              inv.add(val1, val2, val3, mi, tm_array[mi]);
-              if (inv.falsified)
+              InvariantStatus tempStatus =
+                inv.add(val1, val2, val3, mi, tm_array[mi]);
+              if (tempStatus == InvariantStatus.FALSIFIED) {
+                status = InvariantStatus.FALSIFIED;
                 break;
+              }
             }
           }
-
-          if (inv.falsified)
+          if (status == InvariantStatus.FALSIFIED) {
+            destroyInv(inv);
             break;
+          }
         }
 #endif
         for (Iterator itor = values_cache.entrySet().iterator(); itor.hasNext(); ) {
           Map.Entry entry = (Map.Entry) itor.next();
           Object[] vals = (Object[]) entry.getKey();
           int[] tm_array = (int[]) entry.getValue();
-          for (int mi = 0; mi<tm_array.length; mi++) {
+          InvariantStatus status = InvariantStatus.NO_CHANGE;
+          for (int mi=0; mi<tm_array.length; mi++) {
             if (tm_array[mi] > 0) {
-              inv.add(val1, val2, val3, mi, tm_array[mi]);
-              if (inv.falsified)
+              InvariantStatus tempStatus =
+                inv.add(val1, val2, val3, mi, tm_array[mi]);
+              if (tempStatus == InvariantStatus.FALSIFIED) {
+                status = InvariantStatus.FALSIFIED;
                 break;
+              }
             }
           }
-
-          if (inv.falsified)
+          if (status == InvariantStatus.FALSIFIED) {
+            destroyInv(inv);
             break;
+          }
         }
       }
 #endif
