@@ -129,7 +129,8 @@ sub cmp_ppts {
 	} elsif ($$varl[1] eq "hashcode") {
 	    #it's a hashcode - we don't care if they're different
 	} elsif ($$varl[1] eq "double") {
-	    if (abs($$la[0] - $$lb[0]) <= 0.00001) {
+	    $difference = abs($$la[0] - $$lb[0]);
+	    if (($difference <= 0.00001) && ($difference > 0)) {
 		print "${varname} \@ ${pptname} floating-point difference:\n"
 		    . "  \"" . $$la[0] . "\" in ${dta}\n"
 			. "  \"" . $$lb[0] . "\" in ${dtb}\n";
