@@ -1594,16 +1594,6 @@ public abstract class Invariant
 
 
   /**
-   * @return true if this invariant is controlled by another invariant
-   **/
-  /* [INCR]
-  public boolean isControlled() {
-    Vector controllers = this.find_controlling_invariants();
-    return (controllers.size() > 0);
-  }
-  */ // ... [INCR]
-
-  /**
    * @return true if this invariant is only over prestate variables .
    */
   public boolean isAllPrestate() {

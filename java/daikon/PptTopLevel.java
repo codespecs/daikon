@@ -2433,14 +2433,6 @@ public class PptTopLevel
       // comparability info exists" then continue.
       // if (vi.isStaticConstant()) continue;
       PptSlice1 slice1 = new PptSlice1(this, vi);
-      // Can't do this anymore, because we're using equality.  Use
-      // SelfSuppressionFactories instead
-      //       if (slice1.isControlled()) {
-      //         // let invariant flow from controlling slice
-      //         if (Global.debugInfer.isLoggable(Level.FINE))
-      //           Global.debugInfer.fine ("Skipping " + slice1.name() + "; is controlled(1).");
-      //         continue;
-      //       }
       slice1.instantiate_invariants();
       if (Debug.logOn() || debug_on)
         Debug.log (debug, getClass(), slice1, "Created unary slice");
@@ -2504,12 +2496,6 @@ public class PptTopLevel
         if (Debug.logOn() || debug_on)
           Debug.log (debug, getClass(), slice2, "Creating binary slice");
 
-        //         if (slice2.isControlled()) {
-        //           // let invariant flow from controlling slice
-        //           if (Global.debugInfer.isLoggable(Level.FINE))
-        //             Global.debugInfer.fine ("Skipping " + slice2.name() + "; is controlled(2).");
-        //           continue;
-        //         }
         slice2.instantiate_invariants();
         binary_views.add(slice2);
       }
@@ -2562,12 +2548,6 @@ public class PptTopLevel
               continue;
 
             PptSlice3 slice3 = new PptSlice3(this, var1, var2, var3);
-            //             if (slice3.isControlled()) {
-            //               // let invariant flow from controlling slice
-            //               if (Global.debugInfer.isLoggable(Level.FINE))
-            //                 Global.debugInfer.fine ("Skipping " + slice3.name() + "; is controlled(3).");
-            //               continue;
-            //             }
             slice3.instantiate_invariants();
             if (Debug.logOn() || debug_on)
               Debug.log (debug, getClass(), slice3, "Created Ternary Slice");
@@ -3600,10 +3580,6 @@ public class PptTopLevel
     if (add_nonimplications) {
       for (int i=0; i<same_invariants_vec.size(); i++) {
         Invariant same_inv = (Invariant)same_invariants_vec.elementAt(i);
-        // This test doesn't seem to be productive.  (That comment may date
-        // from the time that all not-worth-printing invariants were
-        // already eliminated.)
-        // if (! same_inv.isControlled()) // [INCR]
         joiner_view.addInvariant(same_inv);
       }
     }

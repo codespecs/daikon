@@ -165,69 +165,6 @@ public abstract class PptSlice
     return false;
   }
 
-  private transient Dataflow.PptsAndInts controlling_cached = null;
-
-  /**
-   * @return true iff there is a slice higher in the PO relative to
-   * this.  This call is relatively expensive.
-   **/
-  public boolean isControlled() {
-    Dataflow.PptsAndInts controlling = getControlling();
-    return controlling.ppts.length > 0;
-  }
-
-  /**
-   * Return an array of PptsAndInts from which invariants can flow to
-   * this.  This call is expensive but is cached.
-   **/
-  public Dataflow.PptsAndInts getControlling()
-  {
-    if (controlling_cached != null) return controlling_cached;
-
-
-    Dataflow.PptsAndInts higher =
-      Dataflow.compute_ppt_flow(parent,
-                                var_infos,
-                                false, // just one step
-                                true   // higher
-                                );
-
-    List resultPpts = new LinkedList();
-    List resultFlows = new LinkedList();
-
-    // We always have at least one path, since the dataflow result
-    // includes 'here' as its last element -- we ignore the 'here'
-    // path.  If any other path maps all variables from this program
-    // point, we are controlled.
-
-    final int all_except_here = higher.ppts.length - 1;
-    for (int i = 0; i < all_except_here; i++) {
-      int[] flow = higher.ints[i];
-      boolean all = true;       // below, all controls whether to return
-      for (int j = 0; all && (j < arity()); j++) {
-        int varinfo_index = var_infos[j].varinfo_index;
-        int var_flow_to = flow[varinfo_index];
-        boolean flows = (var_flow_to != -1);
-        all = all && flows;
-      }
-      if (Global.debugInfer.isLoggable(Level.FINE)) {
-        Global.debugInfer.fine
-          ("isControlled: "
-           + name() + " controlled by " + higher.ppts[i].name + "? : "
-           + (all ? "yes" : "no"));
-      }
-      if (all) {
-        resultPpts.add (higher.ppts[i]);
-        resultFlows.add (flow);
-      }
-    }
-    controlling_cached =
-      new Dataflow.PptsAndInts ((PptTopLevel[]) resultPpts.toArray (new PptTopLevel[0]),
-                                (int[][]) resultFlows.toArray (new int[0][]));
-    return controlling_cached;
-  }
-
-
   /**
    * Falsifies the Invariant inv and then adds inv
    * to the list of Invariants that are to be flowed

@@ -136,9 +136,6 @@ public final class PPTSLICE1
   }
 
   void instantiate_invariants() {
-    // This test should be done by caller (PptTopLevel):
-    // if (isControlled()) return;
-
     // Instantiate invariants
     if (debug.isLoggable(Level.FINE) || debugSpecific.isLoggable(Level.FINE))
       debug.info("instantiate_invariants for " + name() + ": originally " + invs.size() + " invariants in " + invs);
