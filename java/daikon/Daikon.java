@@ -1164,6 +1164,8 @@ public final class Daikon {
         = SplitterFactory.read_spinfofile(filename, all_ppts);
       for (int j = 0; j < splitterObjectArrays.length; j++) {
         int numsplitters = splitterObjectArrays[j].length;
+        if (numsplitters == 0)
+          continue; // Why do we have this entry in the array, anyway? -smcc
         String pptname = splitterObjectArrays[j][0].getPptName();
         Vector splitters = new Vector();
         for (int k = 0; k < numsplitters; k++) {
