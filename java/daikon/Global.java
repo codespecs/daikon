@@ -67,7 +67,7 @@ public final class Global {
   public final static boolean addChanged = true;
 
   //splitting
-  public final static boolean allSplitters = true; 
+  public final static boolean allSplitters = true;
   ///////////////////////////////////////////////////////////////////////////
   /// Variables
   ///
@@ -117,8 +117,8 @@ public final class Global {
   public static int obvious_invariants = 0;
   public static int unjustified_invariants = 0;
   public static int reported_invariants = 0;
-  
-  
+
+
   public static void output_statistics() {
     if (! output_statistics)
       return;
@@ -187,7 +187,7 @@ public final class Global {
   public final static boolean debugPptTopLevel = false;
   public final static boolean debugDerive = false;
   public final static boolean debugInfer = false;
-  public final static boolean debugPptSplit = true;
+  public final static boolean debugPptSplit = false;
   public final static boolean debugPrintInvariants = false;
   public final static boolean debugPptSlice = false;
   public final static boolean debugPptSliceGeneric = false;
