@@ -4857,7 +4857,8 @@ public class PptTopLevel
 
     // Merge information stored in the VarInfo objects themselves.
     // Currently just the "canBeMissing" field, which is needed by
-    // guarding.
+    // guarding, and the flag that marks missing-out-of-bounds
+    // derived variables
     for (int i = 0; i < children.size(); i++) {
       PptRelation rel = (PptRelation) children.get(i);
       // This approach doesn't work correctly for the OBJECT_USER
@@ -4871,8 +4872,12 @@ public class PptTopLevel
       for (int j = 0; j < var_infos.length; j++) {
         VarInfo parent_vi = var_infos[j];
         VarInfo child_vi = rel.childVar(parent_vi);
-        if (child_vi != null)
+        if (child_vi != null) {
           parent_vi.canBeMissing |= child_vi.canBeMissing;
+          if (parent_vi.derived != null && child_vi.derived != null)
+            parent_vi.derived.missing_array_bounds |=
+              child_vi.derived.missing_array_bounds;
+        }
       }
     }
 
