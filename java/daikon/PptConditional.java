@@ -56,5 +56,19 @@ public final class PptConditional extends PptTopLevel {
     }
   }
 
+  private void writeObject(java.io.ObjectOutputStream out)
+    throws java.io.IOException
+  {
+    // Remove the splitter itself, in case it was compiled on the fly
+    // (and so could not be re-loaded).  Later, perhaps change
+    // de-serialization so that it is reconstructed on the fly.
+    if (splitter != null) {
+      Package pkg = splitter.getClass().getPackage();
+      if (pkg == null ) { // no package
+	splitter = null;
+      }
+    }
+    out.defaultWriteObject();
+  }
 
 }
