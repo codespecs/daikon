@@ -159,7 +159,7 @@ Runtime-check instrumenter
   The runtime-check instrumenter may be useful for external tools.  It is
   used, for example, by the Eclat tool (which is not a part of Daikon
   itself).  Eclat automatically creates test cases that are much more
-  likely than random to reveal errors in programs.  You can downlaod Eclat
+  likely than random to reveal errors in programs.  You can download Eclat
   from http://pag.csail.mit.edu/eclat/ .
 
 Kvasir
