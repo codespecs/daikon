@@ -473,8 +473,13 @@ When "a" is an array, then
 
 <h3><a name="gui">Using the GUI</a></h3>
 
-You can view Daikon output via a GUI (graphical user interface).
-<p>
+By default, Daikon outputs a long textual list of invariants.  Sometimes it is
+difficult to find the invariants you want, and sometimes you are overwhelmed
+by the sheer number of invariants.  There is now a graphical user interface
+(GUI) designed to make the task of browsing invariants easier.  Using the GUI,
+you can look at invariants for only the methods and program points you care
+about.  You can also filter invariants (information on this will be added at
+a later point in time).  <p>
 
 First, make a <tt>.inv</tt> file by invoking Daikon with the <tt>-o</tt>
 option; to create <tt>foo.inv</tt>, you would do
@@ -492,8 +497,8 @@ keys to make an arbitrary selection of program points. <p>
 You can sort a column in a table by clicking on the column header.
 Shift-click to sort the column in reverse order. <p>
 
-Please <a href="mailto:mhao@geyer.lcs.mit.edu">contact us</a> with any
-questions, comments, or suggestions.<p>
+Please <a href="mailto:mhao@mit.edu">contact us</a> with any
+questions, comments, or suggestions on the GUI.<p>
 
 
 <hr>
