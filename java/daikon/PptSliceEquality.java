@@ -123,6 +123,50 @@ public class PptSliceEquality
   }
 
   /**
+   * Instantiate the full equality sets from a set of variable pairs where
+   * each member of a pair is equal to the other.
+   */
+
+  public void instantiate_from_pairs (Set /* VarInfo.Pairs */ eset) {
+
+    // Build a map from each variable to all those that are equal to it
+    Map varmap = new LinkedHashMap();
+    Map sample_cnt_map = new LinkedHashMap();
+    for (Iterator i = eset.iterator(); i.hasNext(); ) {
+      VarInfo.Pair cp = (VarInfo.Pair) i.next();
+      ArrayList vlist = (ArrayList) varmap.get (cp.v1);
+      if (vlist == null) {
+        vlist = new ArrayList();
+        vlist.add (cp.v1);
+        varmap.put (cp.v1, vlist);
+        sample_cnt_map.put (cp.v1, new Integer(cp.samples));
+      }
+      vlist.add (cp.v2);
+    }
+
+    // Loop through each variable, building the appropriate equality set
+    // for each.  Note that variables that are distinct still have an
+    // equality set (albeit with only the one variable)
+    ArrayList newInvs = new ArrayList();
+    for (int i = 0; i < var_infos.length; i++) {
+      VarInfo v = var_infos[i];
+      if (v.equalitySet != null)
+        continue;
+      ArrayList vlist = (ArrayList) varmap.get (v);
+      if (vlist == null) {
+        vlist = new ArrayList(1);
+        vlist.add (v);
+      }
+      Equality eq = new Equality (vlist, this);
+      Integer sample_cnt = (Integer) sample_cnt_map.get (v);
+      if (sample_cnt != null)
+        eq.setSamples (sample_cnt.intValue());
+      newInvs.add (eq);
+    }
+    invs.addAll (newInvs);
+  }
+
+  /**
    * Returns a List of Invariants that have been weakened/destroyed.
    * However, this handles the creation of new Equality invariants and
    * the instantiation of other invariants.
@@ -198,7 +242,10 @@ public class PptSliceEquality
 
   /**
    * Create a List of Equality invariants based on the values given
-   * by vt for the VarInfos in vis.
+   * by vt for the VarInfos in vis.  Any variables that are out
+   * of bounds are forced into a separate equality set (since they
+   * no longer make sense and certainly shouldn't be equal to anything
+   * else)
    * @param vis The VarInfos that were different from leader
    * @param vt The ValueTuple associated with the VarInfos now
    * @param leader The original leader of VarInfos
@@ -215,16 +262,20 @@ public class PptSliceEquality
                                                  ) {
     Assert.assertTrue (vis.size() > 0);
     Map multiMap = new HashMap(); /* value -> List[VarInfo]*/
+    List out_of_bounds = new ArrayList();
     for (Iterator i = vis.iterator(); i.hasNext(); ) {
       VarInfo vi = (VarInfo) i.next();
-      if (vt.isMissing (vi)) {
+      if (vi.missingOutOfBounds())
+        out_of_bounds.add (vi);
+      else if (vt.isMissing (vi)) {
         addToBindingList (multiMap, dummyMissing, vi);
       } else {
         addToBindingList (multiMap, vi.getValue(vt), vi);
       }
     }
     // Why use an array?  Because we'll be sorting shortly
-    Equality[] resultArray = new Equality[multiMap.values().size()];
+    Equality[] resultArray = new Equality[multiMap.values().size()
+                                          + out_of_bounds.size()];
     int resultCount = 0;
     for (Iterator i = multiMap.keySet().iterator(); i.hasNext(); ) {
       Object key = i.next();
@@ -242,6 +293,13 @@ public class PptSliceEquality
       resultArray[resultCount] = eq;
       resultCount++;
     }
+    for (int i = 0; i < out_of_bounds.size(); i++) {
+      List list = new LinkedList();
+      list.add (out_of_bounds.get (i));
+      resultArray[resultCount] = new Equality (list, this);
+      resultCount++;
+    }
+
     // Sort for determinism
     Arrays.sort (resultArray, EqualityComparator.theInstance);
     List result = Arrays.asList (resultArray);
