@@ -1812,12 +1812,24 @@ for the appropriate package.  If this option is not supplied, the
 current directory is used.  This will fail for code that (for example)
 calls libraries which do not appear under the current directory.
 
-@item -ajax_runnables=@var{classes}
-This is a whitespace-separated list of Java classes, in dot-delimited
-form (e.g., "foo.bar.Baz"), that contain @samp{public static void
-main(String[])} methods.  If omitted, all such methods in the
-instrumented application are used instead.  In order to run, Ajax
-requires the name of at least one runnable class.
+@item -ajax_runnable=@var{classes}
+This is a Java class, in dot-delimited form (e.g., "foo.bar.Baz"), that
+contains a @samp{public static void main(String[])} method.  This class
+need not be one of the instrumented ones.  If it is not supplied, the
+first instrumented class with such a @samp{main} method is used instead.
+
+@c @item -ajax_runnables=@var{classes}
+@c This is a whitespace-separated list of Java classes, in dot-delimited
+@c form (e.g., "foo.bar.Baz"), that contain @samp{public static void
+@c main(String[])} methods.  Those Java classes need not be among the
+@c instrumented ones.  In addition, all such @samp{main} methods in the
+@c instrumented classes are also used as entry points.  In order to run,
+@c Ajax requires the name of at least one runnable class.
+@c (Actually, Ajax requires the name of exactly one runnable class.)
+@c 
+@c @item -ajax_all_runnables=@var{classes}
+@c Just like @option{-ajax_runnables}, except that no @samp{main} methods
+@c in the instrumented classes are used as entry points.
 
 @end table
 
