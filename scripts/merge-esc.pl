@@ -3,7 +3,7 @@
   if 0;
 # merge-esc.pl -- Merge Daikon output into Java source code as ESC assnotations
 # Michael Ernst <mernst@lcs.mit.edu>
-# Time-stamp: <2001-08-17 14:40:47 mernst>
+# Time-stamp: <2002-01-17 19:18:19 mistere>
 
 # The input is a Daikon output file.  Files from the current directory
 # are rewritten into -escannotated versions (use the -r switch as the
@@ -313,13 +313,19 @@ END {
     }
     close(GETFIELDS);
 
+    my $classname = $javafile;
+    $classname =~ s|\.java$||;  # remove .java
+    $classname =~ s|^\./||;     # in case there is a ./ prefix
+    $classname =~ s|/|.|g;      # all / to .
+
+    # We assume one clas per file (really: >1 implies all are instrumented)
+    unless (grep { m/$classname/; } (keys %raw)) {
+	# print "Skipping $classname due to no invariant\n";
+	next;
+    }
+
     open(IN, "$javafile") or die "Cannot open $javafile: $!";
     open(OUT, ">$javafile-escannotated") or die "Cannot open $javafile-escannotated: $!";
-
-    # We assume that classes never have the same sans-package name
-    my $classname = $javafile;
-    $classname =~ s/\.java$//;
-    $classname =~ s|^.+/([^/]+)$|$1|; # Strip directories
 
     while (defined($line = <IN>)) {
       if (($line !~ /;$/)
