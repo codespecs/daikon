@@ -40,6 +40,8 @@ public class PrintInvariants {
       "      Write output in IOA format. (bug exists)",
       "  --" + Daikon.java_output_SWITCH,
       "      Write output as java expressions.",
+      "  --" + Daikon.jml_output_SWITCH,
+      "      Write output in JML format.",
       "  --" + Daikon.output_num_samples_SWITCH,
       "      Output numbers of values and samples for invariants and " +
       "program points; for debugging."}, lineSep);
@@ -55,6 +57,7 @@ public class PrintInvariants {
       new LongOpt(Daikon.simplify_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.ioa_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.java_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(Daikon.jml_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -84,6 +87,8 @@ public class PrintInvariants {
 	  Daikon.output_style = OutputFormat.JAVA;
 	} else if (Daikon.ioa_output_SWITCH.equals(option_name)) {
 	  Daikon.output_style = OutputFormat.IOA;
+	} else if (Daikon.jml_output_SWITCH.equals(option_name)) {
+	  Daikon.output_style = OutputFormat.JML;
 	} else if (Daikon.output_num_samples_SWITCH.equals(option_name)) {
 	  Daikon.output_num_samples = true;
         } else if (Daikon.config_option_SWITCH.equals(option_name)) {
@@ -654,7 +659,8 @@ public class PrintInvariants {
       if ((Daikon.output_style == OutputFormat.JAVA)
 	  || (Daikon.output_style == OutputFormat.DAIKON)
 	  || (Daikon.output_style == OutputFormat.ESCJAVA)
-	  || (Daikon.output_style == OutputFormat.SIMPLIFY))
+	  || (Daikon.output_style == OutputFormat.SIMPLIFY)
+	  || (Daikon.output_style == OutputFormat.JML))
       {
 	inv_rep = inv.format_using(Daikon.output_style);
       } else if (Daikon.output_style == OutputFormat.ESCJAVA) {

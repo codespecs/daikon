@@ -140,6 +140,7 @@ public final class Daikon {
   public static final String esc_output_SWITCH = "esc_output";
   public static final String ioa_output_SWITCH = "ioa_output";
   public static final String java_output_SWITCH = "java_output";
+  public static final String jml_output_SWITCH = "jml_output";
   public static final String mem_stat_SWITCH = "mem_stat";
   public static final String simplify_output_SWITCH = "simplify_output";
   public static final String output_num_samples_SWITCH = "output_num_samples";
@@ -255,6 +256,7 @@ public final class Daikon {
       new LongOpt(simplify_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(ioa_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(java_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(jml_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(mem_stat_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(noternary_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -349,6 +351,8 @@ public final class Daikon {
 	  output_style = OutputFormat.IOA;
 	} else if (java_output_SWITCH.equals(option_name)) {
 	  output_style = OutputFormat.JAVA;
+	} else if (jml_output_SWITCH.equals(option_name)) {
+	  output_style = OutputFormat.JML;
 	} else if (mem_stat_SWITCH.equals(option_name)) {
 	  use_mem_monitor = true;
 	} else if (output_num_samples_SWITCH.equals(option_name)) {
