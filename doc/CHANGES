@@ -3,16 +3,31 @@ History of Daikon changes
 This file lists significant user-visible changes to Daikon.
 (Many other changes, including most bug fixes, are not noted here.)
 
-For documentation of Daikon, see the Daikon manual.  Its source is file
-daikon.texinfo; formatted, it appears as daikon.html, daikon.info,
-daikon.dvi, daikon.ps, or daikon.pdf.
+For documentation of Daikon, see the Daikon manual.  Its source is
+file daikon.texinfo; formatted, it appears as daikon.html,
+daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.  There is also a
+developer manual (source developer.texinfo) with the same formatted
+versions as the user manual.
 
 ===========================================================================
 
-2.5.0
+2.5.0 (01 July 2003)
 
 Daikon now requires JDK 1.4.  If you are still using JDK 1.3, you will
 need to upgrade in order to run Daikon.
+
+Added a developer manual (developer.html, developer.info,
+developer.pdf, etc) to the doc directory.  The developer manual
+indicates how to extend Daikon with new invariants, new derived
+variables, and front ends for new languages.  It also contains
+information about implementation and debugging.  The user manual has
+been simplified by moving appropriate sections to the developer
+manual.
+
+Added the MakeInvariantChecker program (in V3 only) which can take a set
+of invariants found by Daikon and create a specialized checking
+program that checks only those invariants.  See the "Invariant
+Checker" section of the manual for more information.
 
 ----------------
 

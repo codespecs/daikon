@@ -2,11 +2,11 @@
 ### Variables
 ###
 
-# note that for right now, we are only copying the html version of
-# the developer manual (though all other versions are built)
+# note that for right now, we are only copying the html and texinfo
+# versions of the developer manual (though all other versions are built)
 IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps gui-ControlPanel.jpg gui-ControlPanel.eps gui-InvariantsDisplay-small.jpg gui-InvariantsDisplay-small.eps context-gui.jpg context-gui.eps
 IMAGE_PARTIAL_PATHS := $(addprefix images/,$(IMAGE_FILES))
-DOC_FILES_NO_IMAGES := Makefile daikon.texinfo config-options.texinfo invariants-doc.texinfo daikon.ps daikon.pdf daikon.html developer.html CHANGES
+DOC_FILES_NO_IMAGES := Makefile daikon.texinfo config-options.texinfo invariants-doc.texinfo daikon.ps daikon.pdf daikon.html developer.texinfo developer.html CHANGES
 DOC_FILES := ${DOC_FILES_NO_IMAGES} $(IMAGE_PARTIAL_PATHS)
 DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 EMACS_PATHS := emacs/daikon-context-gui.el
@@ -37,6 +37,7 @@ WWW_DIR := /home/httpd/html/daikon/
 # This is the current directory!  Maybe I don't need a variable for it.
 #INV_DIR := $(MERNST_DIR)/research/invariants
 INV_DIR := $(shell pwd)
+JDK := /g2/jdk
 
 # build the windows version of dfej here
 MINGW_DFEJ_LOC := $(INV_DIR)
@@ -65,8 +66,8 @@ CVS_REPOSITORY := /g4/projects/invariants/.CVS/
 # It seems like these should come from their standard locations (jhp)
 #RTJAR := /g2/users/mernst/java/jdk/jre/lib/rt.jar
 #TOOLSJAR := /g2/users/mernst/java/jdk/lib/tools.jar
-RTJAR := /g2/jdk/jre/lib/rt.jar
-TOOLSJAR := /g2/jdk/lib/tools.jar
+RTJAR := $(JDK)/jre/lib/rt.jar
+TOOLSJAR := $(JDK)/lib/tools.jar
 
 JUNIT_VERSION := junit3.8.1
 
