@@ -14,7 +14,7 @@ standalone.inv: daikon-output/standalone-main.decls daikon-output/standalone-com
 
 
 daikon-output/test_bday-combined.dtrace: daikon-instrumented/Birthday.pm test_bday.pl
-	dtrace-perl test_bday.pl 50
+	dtrace-perl test_bday.pl 30
 
 daikon-output/standalone-combined.dtrace: daikon-instrumented/standalone.pl
 	dtrace-perl $<
@@ -32,7 +32,7 @@ daikon-instrumented/standalone-main.types: daikon-untyped/standalone.pl
 	dtype-perl $<
 
 daikon-untyped/Birthday.pm: Birthday.pm Birthday.accessors
-	dfepl Birthday.pm -A
+	dfepl -A Birthday.pm
 
 daikon-untyped/standalone.pl: standalone.pl
 	dfepl $<
