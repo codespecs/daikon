@@ -127,8 +127,6 @@ public class LogicalCompare {
         continue;
       if (filters['i'] && !isPost && inv instanceof Implication)
         continue;
-      if (filters['s'] && inv.getSuppressor() != null)
-        continue;
       String simp = inv.format_using(OutputFormat.SIMPLIFY);
       if (simp.indexOf("format_simplify") != -1 ||
           simp.indexOf("OutputFormat:Simplify") != -1) {
