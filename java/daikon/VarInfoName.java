@@ -479,7 +479,7 @@ public abstract class VarInfoName
     Assert.assert(index != null);
     ElementsFinder finder = new ElementsFinder(this);
     Elements elems = finder.elems();
-    Assert.assert(elems != null, "applySubscript should have elements to use");
+    Assert.assert(elems != null, "applySubscript should have elements to use in " + this);
     if (finder.inPre()) {
       index = indexToPrestate(index);
     }
@@ -713,12 +713,17 @@ public abstract class VarInfoName
       return o;
     }
     public Object visitSubscript(Subscript o) {
-      // I don't think we can get here in practice
-      throw new UnsupportedOperationException();
+      // skip the subscripted sequence
+      Object tmp = o.sequence.term.accept(this);
+      if (tmp == null) { tmp = o.index.accept(this); }
+      return tmp;
     }
     public Object visitSlice(Slice o) {
-      // I don't think we can get here in practice
-      throw new UnsupportedOperationException();
+      // skip the sliced sequence
+      Object tmp = o.sequence.term.accept(this);
+      if (tmp == null && o.i != null) { tmp = o.i.accept(this); }
+      if (tmp == null && o.j != null) { tmp = o.j.accept(this); }
+      return tmp;
     }
   }
 
