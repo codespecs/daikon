@@ -5715,6 +5715,9 @@ runcluster.pl [OPTIONS] dtrace_file(s) decls_files(s)
 The options are:
 @table @option
 
+@cindex kmeans cluster analysis
+@cindex hierarchical cluster analysis
+@cindex xm cluster analysis
 @item -a @var{ALG}
 @item --algorithm @var{ALG}
 @var{ALG} specifies a clustering algorithm.
