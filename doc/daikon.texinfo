@@ -1634,7 +1634,7 @@ Invariant diff is invoked as follows:
     java daikon.diff.Diff @i{[@var{flags}]...} @var{file1} [@var{file2}] 
 @end example
 
-file1 and file2 are serialized invariants produced by running Daikon
+file1 and file2 are serialized invariants produced by running Daikon or Diff
 with the "-o" flag.  If @file{file2} is not specified,
 @file{file1} is compared with the empty set of invariants.
 
