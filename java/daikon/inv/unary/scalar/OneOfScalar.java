@@ -325,7 +325,7 @@ public final class OneOfScalar
 
   public String format_jml() {
 
-    String varname = var().name.jml_name();
+    String varname = var().name.JMLElementCorrector().jml_name();
 
     String result;
 
