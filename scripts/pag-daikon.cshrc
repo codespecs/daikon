@@ -20,3 +20,5 @@ setenv CLASSPATH .:${CLASSPATH}:${DAIKON_LIBS}
 # Like "cvs update", but filters out output that is unlikely to be of interest.
 # Alternately, run CVS under emacs via "M-x cvs-update".
 alias	cvsupdate	'cvs -q update -d \!* |& egrep -e "^C |update aborted|non-existent repository|Permission denied|cannot open|^cvs update: [^U]"'
+
+alias jikes /g2/users/mernst/bin/Linux-i686/jikes -g +E +F
