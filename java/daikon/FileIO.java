@@ -756,7 +756,6 @@ public final class FileIO {
             System.out.println ("WARNING: IOException while processing "
                           + "trace file - record ignored");
             e.printStackTrace(System.out);
-            System.out.println ();
             continue;
           } else {
             throw e;
