@@ -48,7 +48,7 @@ public final class EltNonZero
   int override_range = 0;
   boolean pointer_type = false;
 
-  EltNonZero (PptSlice ppt) {
+  public EltNonZero(PptSlice ppt) {
     super(ppt);
   }
 

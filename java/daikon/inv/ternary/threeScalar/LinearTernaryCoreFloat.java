@@ -80,7 +80,7 @@ public final class LinearTernaryCoreFloat
       c = c * d;
     }
     // Fix caches
-    double [][] caches = new double[3][];
+    double[][] caches = new double[3][];
     caches[permutation[0]] = x_cache;
     caches[permutation[1]] = y_cache;
     caches[permutation[2]] = z_cache;

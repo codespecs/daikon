@@ -48,7 +48,7 @@ public final class OneOfFloatSequence
   // (That depends on the slice; maybe not until the slice is cleared out.
   // But so few values is cheap, so this is quite fine for now and long-term.)
 
-  private double[] [] elts;
+  private double[][] elts;
   private int num_elts;
 
   public OneOfFloatSequence(PptSlice ppt) {
@@ -72,10 +72,10 @@ public final class OneOfFloatSequence
 
   protected Object clone() {
     OneOfFloatSequence result = (OneOfFloatSequence) super.clone();
-    result.elts = (double[] []) elts.clone();
+    result.elts = (double[][]) elts.clone();
 
     for (int i=0; i < num_elts; i++) {
-      result.elts[i] = (double[] ) elts[i].clone();
+      result.elts[i] = (double[]) elts[i].clone();
     }
 
     result.num_elts = this.num_elts;
@@ -115,7 +115,7 @@ public final class OneOfFloatSequence
   }
 
   // Assumes the other array is already sorted
-  public boolean compare_rep(int num_other_elts, double[] [] other_elts) {
+  public boolean compare_rep(int num_other_elts, double[][] other_elts) {
     if (num_elts != num_other_elts)
       return false;
     sort_rep();

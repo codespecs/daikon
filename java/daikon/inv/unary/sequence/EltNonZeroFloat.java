@@ -48,7 +48,7 @@ public final class EltNonZeroFloat
   int override_range = 0;
   boolean pointer_type = false;
 
-  EltNonZeroFloat (PptSlice ppt) {
+  public EltNonZeroFloat(PptSlice ppt) {
     super(ppt);
   }
 

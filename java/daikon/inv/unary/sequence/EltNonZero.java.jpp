@@ -81,7 +81,7 @@ public final class CLASSNAME
   int override_range = 0;
   boolean pointer_type = false;
 
-  CLASSNAME(PptSlice ppt) {
+  public CLASSNAME(PptSlice ppt) {
     super(ppt);
   }
 

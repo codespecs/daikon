@@ -48,7 +48,7 @@ public final class OneOfStringSequence
   // (That depends on the slice; maybe not until the slice is cleared out.
   // But so few values is cheap, so this is quite fine for now and long-term.)
 
-  private String[] [] elts;
+  private String[][] elts;
   private int num_elts;
 
   public OneOfStringSequence(PptSlice ppt) {
@@ -72,10 +72,10 @@ public final class OneOfStringSequence
 
   protected Object clone() {
     OneOfStringSequence result = (OneOfStringSequence) super.clone();
-    result.elts = (String[] []) elts.clone();
+    result.elts = (String[][]) elts.clone();
 
     for (int i=0; i < num_elts; i++) {
-      result.elts[i] = (String[] ) elts[i].clone();
+      result.elts[i] = (String[]) elts[i].clone();
     }
 
     result.num_elts = this.num_elts;
@@ -115,7 +115,7 @@ public final class OneOfStringSequence
   }
 
   // Assumes the other array is already sorted
-  public boolean compare_rep(int num_other_elts, String[] [] other_elts) {
+  public boolean compare_rep(int num_other_elts, String[][] other_elts) {
     if (num_elts != num_other_elts)
       return false;
     sort_rep();

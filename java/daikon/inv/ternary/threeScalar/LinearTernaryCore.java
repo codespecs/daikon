@@ -80,7 +80,7 @@ public final class LinearTernaryCore
       c = c * d;
     }
     // Fix caches
-    long [][] caches = new long[3][];
+    long[][] caches = new long[3][];
     caches[permutation[0]] = x_cache;
     caches[permutation[1]] = y_cache;
     caches[permutation[2]] = z_cache;
