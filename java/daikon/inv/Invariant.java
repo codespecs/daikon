@@ -372,21 +372,22 @@ public abstract class Invariant
     // if (falsified)
     //   return CONFIDENCE_NEVER;
     double result = computeConfidence();
-    if (result < CONFIDENCE_NEVER || result > CONFIDENCE_JUSTIFIED) {
-      // Can't print this.repr_prob(), as it may compute the confidence!
-      System.out.println("Bad invariant confidence " + result + ": ");
-      System.out.println(this.getClass());
-      System.out.println(repr());
-      System.out.println(this.format());
-    }
     // System.out.println("getConfidence: " + getClass().getName() + " " + ppt.varNames());
-    Assert.assertTrue((result == CONFIDENCE_JUSTIFIED)
-                  || (result == CONFIDENCE_UNJUSTIFIED)
-                  || (result == CONFIDENCE_NEVER)
-                  || ((0 <= result) && (result <= 1))
-                  // This can be expensive, so comment out.
-                  // , getClass().getName() + ": " + repr()
-                  );
+    if (!((result == CONFIDENCE_JUSTIFIED)
+          || (result == CONFIDENCE_UNJUSTIFIED)
+          || (result == CONFIDENCE_NEVER)
+          || ((0 <= result) && (result <= 1)))) {
+      // Can't print this.repr_prob(), as it may compute the confidence!
+      System.out.println("getConfidence: " + getClass().getName() + " " + ppt.varNames() + " => " + result);
+      System.out.println("  " + this.format() + "; " + repr());
+    }
+    Assert.assertTrue(((0 <= result) && (result <= 1))
+                      || (result == CONFIDENCE_JUSTIFIED)
+                      || (result == CONFIDENCE_UNJUSTIFIED)
+                      || (result == CONFIDENCE_NEVER)
+                      // This can be expensive, so comment out.
+                      // , getClass().getName() + ": " + repr() + ", result=" + result
+                      );
     return result;
   }
 
