@@ -57,7 +57,14 @@ public class PptTopLevel extends Ppt {
   String values_tuplemod_samples_summary;
 
   PptTopLevel entry_ppt;        // null if this isn't an exit point
-  PptTopLevel object_ppt;       // null if this doesn't contribute to the object ppt
+
+  // PptTopLevel has any number of 'controlling' ppts.  Any invariants
+  // which exist in the controlling ppts are necessarily true in the
+  // controlled ppts, and therefore may be suppressed in the output.
+  // This arises public methods are controlled by object invariants,
+  // or when conditional points are controlled by the unconditional
+  // parent point.
+  Set controlling_ppts = new HashSet(); // [PptTopLevel]
 
   // These accessors are for abstract methods declared in Ppt
   public int num_samples() {
@@ -236,19 +243,22 @@ public class PptTopLevel extends Ppt {
 
 
   ///////////////////////////////////////////////////////////////////////////
-  /// Finding an object ppt for a given ppt
+  /// Finding an object or class ppt for a given ppt
   ///
 
-  // TODO : Can we generalize this?  Maybe have a list of
-  // "controlling" ppts, which would include :::OBJECT :::CLASS_STATIC
-  // and others as the front ends evolved?
-  
-  void compute_object_ppt(PptMap all_ppts)
+  void add_controlling_ppts(PptMap all_ppts)
   {
-    object_ppt = (PptTopLevel) all_ppts.get(object_ppt_name());
+    PptTopLevel object_ppt = (PptTopLevel) all_ppts.get(controlling_object_ppt_name());
+    if (object_ppt != null) {
+      controlling_ppts.add(object_ppt);
+    }
+    PptTopLevel class_ppt = (PptTopLevel) all_ppts.get(controlling_class_ppt_name());
+    if (class_ppt != null) {
+      controlling_ppts.add(class_ppt);      
+    }    
   }
 
-  String object_ppt_name() {
+  String controlling_object_ppt_name() {
     // e.g. package.Class.method(args)R:::ENTER ->
     //      package.Class:::OBJECT
     int dot_posn = name.lastIndexOf('.');
@@ -256,6 +266,15 @@ public class PptTopLevel extends Ppt {
       return null;
     return name.substring(0, dot_posn) + FileIO.object_tag;
   }
+
+  String controlling_class_ppt_name() {
+    // e.g. package.Class.method(args)R:::ENTER ->
+    //      package.Class:::CLASS
+    int dot_posn = name.lastIndexOf('.');
+    if (dot_posn < 0)
+      return null;
+    return name.substring(0, dot_posn) + FileIO.class_static_tag;
+  }  
 
   ///////////////////////////////////////////////////////////////////////////
   /// Adding special variables
@@ -1470,44 +1489,51 @@ public class PptTopLevel extends Ppt {
   /// Hiding object invariants
   ///
 
-  public Invariant findMatchingObjectInvariant(Invariant inv)
+  public Invariant findControllingInvariant(Invariant inv)
   {
     Assert.assert(inv.ppt.parent == this);
 
     // Our invariants can't be implied by object invariants unless
     // this ppt is contributing to some object invariant
-    if (object_ppt == null) {
-      return null;
-    }
 
-    // Try to match inv against all object invariants
-    Iterator object_invs = object_ppt.invariants_vector().iterator();
-  IS_OBJ_INV_OUTER:
-    while (object_invs.hasNext()) {
-      Invariant obj_inv = (Invariant) object_invs.next();
+    // Try to match inv against all controlling invariants
+    Iterator candidate_invs;
+    {
+      Vector bucket = new Vector();
+      Iterator controllers = controlling_ppts.iterator();
+      while (controllers.hasNext()) {
+	PptTopLevel controller = (PptTopLevel) controllers.next();
+	Vector object_invs = controller.invariants_vector();
+	bucket.addAll(object_invs);
+      }
+      candidate_invs = bucket.iterator();
+    }
+  IS_OBJ_INV_FOREACH_INV:
+    while (candidate_invs.hasNext()) {
+      Invariant cand_inv = (Invariant) candidate_invs.next();
 
       // Can't be the same if they aren't the same type
-      if (!inv.getClass().equals(obj_inv.getClass())) {
+      if (!inv.getClass().equals(cand_inv.getClass())) {
 	continue;
       }
 
       // Can't be the same if they aren't the same formula
-      if (!inv.isSameFormula(obj_inv)) {
+      if (!inv.isSameFormula(cand_inv)) {
 	continue;
       }
 
       // The variable names much match up, in order
 
       VarInfo[] vars = inv.ppt.var_infos;
-      VarInfo[] obj_vars = obj_inv.ppt.var_infos;
+      VarInfo[] cand_vars = cand_inv.ppt.var_infos;
 
-      Assert.assert(vars.length == obj_vars.length); // due to inv type match already
+      Assert.assert(vars.length == cand_vars.length); // due to inv type match already
       for (int i=0; i < vars.length; i++) {
 	VarInfo var = vars[i];
-	VarInfo obj_var = obj_vars[i];
+	VarInfo cand_var = cand_vars[i];
 
 	// Do the easy check first
-	if (var.name.equals(obj_var.name)) {
+	if (var.name.equals(cand_var.name)) {
 	  continue;
 	}
 
@@ -1515,27 +1541,27 @@ public class PptTopLevel extends Ppt {
 
 	// The names "match" iff there is an intersection of the names
 	// of aliased variables
-	Vector all_obj_vars = obj_var.canonicalRep().equalTo();
-	all_obj_vars.add(obj_var.canonicalRep());
-	Vector all_obj_vars_names = new Vector(all_obj_vars.size());
-	for (Iterator iter = all_obj_vars.iterator(); iter.hasNext(); ) {
+	Vector all_cand_vars = cand_var.canonicalRep().equalTo();
+	all_cand_vars.add(cand_var.canonicalRep());
+	Vector all_cand_vars_names = new Vector(all_cand_vars.size());
+	for (Iterator iter = all_cand_vars.iterator(); iter.hasNext(); ) {
 	  VarInfo elt = (VarInfo) iter.next();
-	  all_obj_vars_names.add(elt.name);
+	  all_cand_vars_names.add(elt.name);
 	}
 	Vector all_vars = new Vector(var.canonicalRep().equalTo());
 	all_vars.add(var.canonicalRep());
 	boolean name_matched = false;
 	for (Iterator iter = all_vars.iterator(); !name_matched && iter.hasNext(); ) {
 	  VarInfo elt = (VarInfo) iter.next();
-	  name_matched = all_obj_vars_names.contains(elt.name);
+	  name_matched = all_cand_vars_names.contains(elt.name);
 	}
 	if (!name_matched) {
-	  continue IS_OBJ_INV_OUTER;
+	  continue IS_OBJ_INV_FOREACH_INV;
 	}
       }
 
       // the type, formula, and vars all matched
-      return obj_inv;
+      return cand_inv;
     }
 
     // no more candidates in set of object invs
@@ -1830,8 +1856,8 @@ public class PptTopLevel extends Ppt {
       String inv_rep = inv.format();
       if (inv_rep != null) {
 	if (Daikon.suppress_object_invariants_in_public_methods) {
-	  Invariant obj_inv = findMatchingObjectInvariant(inv);
-	  if (obj_inv != null) { // TODO: && will_print(obj_inv)
+	  Invariant cont_inv = findControllingInvariant(inv);
+	  if (cont_inv != null) { // TODO: && will_print(cont_inv)
 	    // TODO: Fix global statistics for this?
 	    continue;
 	  }
