@@ -7,29 +7,33 @@
 
 <h1>Using Daikon at MIT CSAIL</h1>
 
+<p>
 This document tells you how to get started using Daikon on the PAG machines
 (all named after root vegetables) at MIT CSAIL.
 These steps are primarily for students and other colleagues working with
 Michael Ernst; if you do not need access to the central repository of code
 and data, you can simply <a href="../download/">download</a> the Daikon
 distribution to your own computer.
+</p>
 
 <p>
 The steps are simple, but there are many of them.  You
 might wish to print this out (along with the <a
 href="../download/doc/">Daikon manual</a>) and check off items as
 you ensure that they are correct.
-<p>
+</p>
 
+<p>
 You should already be familiar with <a href="../">the Daikon homepage</a>
 and <a href="../download/">the Daikon distribution</a>.  See the <a
 href="../download/doc/daikon.html">Daikon manual</a> for more details.
-<p>
+</p>
 
+<p>
 If you work in the Program Analysis Group, then you should also be familiar
 with the <a href="http://pag.csail.mit.edu/pag/logistics.html">logistics
 for work at PAG</a>.
-<p>
+</p>
 
 <p>
 Contents:
@@ -68,6 +72,7 @@ Contents:
 
 <h3><a name="learning-about-daikon"></a>Learning about Daikon</h3>
 
+<p>
 In order to become familiar with the theory of dynamic invariant detection
 and some details of the Daikon implementation, see the following <a
 href="http://pag.csail.mit.edu/~mernst/research/#Invariant%20detection">papers</a>:
@@ -85,25 +90,28 @@ href="http://pag.csail.mit.edu/~mernst/research/#Invariant%20detection">papers</
 </ul>
 There are additional papers that further discuss the technique and
 its applications; which ones to read depends on your particular interest.
-<p>
+</p>
 
 
 <h3><a name="pag-computers"></a>PAG computers</h3>
 
+<p>
 See the notes about <a
 href="http://pag.csail.mit.edu/pag/logistics.html#pag-computers">PAG
 computers</a>.
-<p>
+</p>
 
+<p>
 When you log in, you will encounter an error in your initial
 <tt>.bashrc</tt> or <tt>.cshrc</tt> until you <a href="#local-cvs">check
 out your copy of the CVS repository</a>.  (The error message will tell you
 to perform the checkout.)
-<p>
+</p>
 
 
 <h3><a name="getting-daikon"></a>Getting your copy of Daikon</h3>
 
+<p>
 (Note: when you first trying out Daikon, you can provide a valuable
 perspective that we don't usually get:  we are so used to the system that
 we don't even notice the annoying (or incorrect) aspects of the tools, and
@@ -111,15 +119,17 @@ the ambiguous, confusing, or missing parts of the documentation.  Please be
 particularly vigilant when you start our so that you can make suggestions
 for improving the tools, or come up with ideas that you might pursue
 yourself.)
-<p>
+</p>
 
+<p>
 For work on the PAG machines, you should check out a copy of the system
 from the CVS repository.  (This only needs to be done once, though you must
 periodically update your copy via <tt>cvs update</tt>.)
 Alternately, you can always download and install
 Daikon from its .tar.gz distribution.
-<p>
+</p>
 
+<p>
 Checking out Daikon from the CVS repository has several advantages:
 <ul>
   <li>You will have access to a number of files intended for developer use
@@ -128,23 +138,26 @@ Checking out Daikon from the CVS repository has several advantages:
       retaining any personal customizations you have made.
   <li>You can make changes and incorporate them in the master version of
       Daikon. 
-</ul><p>
+</ul></p>
 
+<p>
 There are two modules (directories) available via anonymous CVS from
 pag.csail.mit.edu:  <tt>invariants</tt> (the bulk of the Daikon invariant
 detection system, which is written in Java) and <tt>dfej</tt> (the Daikon
 front end for Java, which is written in C++).
-<p>
+</p>
 
+<p>
 You can learn how to use CVS from
 <a href="https://www.cvshome.org/new_users.html">CVS for new
 users</a>, or the <a href="http://www.gnu.org/software/cvs/manual/">CVS
 manual</a> (<a
 href="https://www.cvshome.org/docs/manual/index.html">alternate site</a>).
-<p>
+</p>
 
 <h4><a name="local-cvs"></a>Local CVS</h4>
 
+<p>
 The following commands create and populate the
 <tt>~/research/invariants</tt> directory:
 <pre>
@@ -158,11 +171,12 @@ The following commands create and populate the
     cd ~/research/invariants
     make compile
 </pre>
-<p>
+</p>
 
+<p>
 Before trying to compile (via <tt>make</tt> in any directory under
 <tt>$inv/java</tt>), log out and log back in, to set up your environment.
-<p>
+</p>
 
 <p>
 Optionally, you may check out a copy of the <tt>dfej</tt> directory.
@@ -177,12 +191,14 @@ use this command:
     ./configure
 </pre>
 
+<p>
 You may also want the <tt>papers</tt> directory:
 <pre>
     cd ~/research/invariants
     cvs -d $pag/projects/invariants/.CVS co papers
 </pre>
 
+<p>
 If you want to instrument C programs, get Kvasir:
 <pre>
     cd ~/research/invariants
@@ -193,14 +209,16 @@ If you want to instrument C programs, get Kvasir:
 
 <h4><a name="remote-cvs"></a>Remote CVS</h4>
 
+<p>
 You can also create your copy of the repository on a remote machine (that
 is, not a PAG client machine).  You can do so using regular CVS or
 anonymous CVS.
 <ul>
   <li><a href="../anoncvs.html">Anonymous CVS instructions</a>
 </ul>
-<p>
+</p>
 
+<p>
 If you use regular remote CVS, you will need to set up your environment
 properly on the remote machine.
 (You don't have to worry about this step when using a local CVS checkout on
@@ -211,27 +229,31 @@ contents of the dotfiles in <tt>$inv/doc/www/mit/</tt> (at a minimum,
 need to adjust some of their settings (such as the ones that refer to the
 PAG filesystem).  Also ensure that you set the CVS_RSH environment variable
 to "ssh" (without the quotes).
-<p>
+</p>
 
+<p>
 The command to check out the repository using regular remote CVS is:
 <pre>
 cvs -d :ext:<i>username</i>@pag.csail.mit.edu:/afs/csail.mit.edu/group/pag/projects/invariants/.CVS co invariants
 </pre>
 Other modules (such as dfej) can be obtained by replacing the final
 <tt>invariants</tt> with another module name.
-<p>
+</p>
 
+<p>
 You may also need to install various extra packages, such as Simplify.
 See the manual for details.
-<p>
+</p>
 
+<p>
 If you use Kerberos authentication on the remote machine, then you do not
 have to type your password every time that you perform a CVS operation.
-<p>
+</p>
 
 
 <h4><a name="using-cvs"></a>Using CVS</h4>
 
+<p>
 CVS permits multiple people to simultaneously edit (their own copy of) a
 set of files, then merge the changes.  See the CVS manual to learn more.
 The key commands are:
@@ -252,32 +274,37 @@ I find it much easier to perform CVS manipulations in Emacs.  First, put
 Then, you can do <tt>M-x cvs-update</tt> to get a Dired-like listing of
 (changed) files in the directory.  As with any Emacs mode, do
 <tt>C-h m</tt> (help on mode) for details about how to use CVS mode in
-Emacs.<p>
+Emacs.</p>
 
+<p>
 You should do <tt>cvs update</tt> frequently, in order to avoid conflicts
 (where someone else has changed something that you have also changed).
 Please commit your changes fairly regularly, too, so that others can take
 advantage of your changes.  But always test your changes, never commit
 changes unless the regression tests pass, and use a descriptive CVS comment
 when you commit.
-<p>
+</p>
 
 
 <h3><a name="environment"></a>Notes on your environment</h3>
 
+<p>
 By default, your account uses bash as its shell.  To use another shell, run
 the <tt>chsh</tt> command (for instance, <tt>chsh -s /bin/tcsh</tt>), then log
 out and log back in.
-<p>
+</p>
 
+<p>
 If you wish to use the Eclipse IDE, see the <a
 href="eclipse-pag.html">instructions for using Eclipse at PAG</a>.
-<p>
+</p>
 
+<p>
 In order to permit other members of the Daikon project to read your files,
 please make them readable by the <tt>pag</tt> group, as described on the <a
 href="http://pag.csail.mit.edu/pag/logistics.html#pag-computers">PAG
 computers</a>.
+</p>
 
 <!--
 In order to permit other members of the Daikon project to read your files,
@@ -298,6 +325,7 @@ chgrp -R invariants <em>DIR</em>
 <p>
 -->
 
+<p>
 A few other environment details:
 <ul>
   <li>Make sure that all the files in <tt>invariants/scripts</tt> are
@@ -316,12 +344,13 @@ A few other environment details:
       addresses are space-separated and others are comma-separated; be
       careful to use the proper separator.
 </ul>
-<p>
+</p>
 
+<p>
 Feel free to look at other people's dotfiles, such as
 <tt>~<em>USER</em>/.cshrc</tt> and <tt>~<em>USER</em>/.emacs</tt>, for
 potential customizations (but don't go overboard by copying everything you
-find without understanding it).<p>
+find without understanding it).</p>
 
 
 <h2><a name="running-daikon"></a>Running Daikon</h2>
@@ -368,37 +397,45 @@ thing, perhaps this should be the default.)
 
 <h2><a name="editing-daikon">Editing Daikon source code</a></h2>
 
+<p>
 Important:  see the <a
 href="http://pag.csail.mit.edu/pag/logistics.html#code-conventions">PAG
 coding conventions</a>.
-<p>
+</p>
 
 <h3><a name="Emacs-commands">Emacs commands</a></h3>
 
+<p>
 The command <tt>M-x daikon-tags-table</tt> sets up Emacs to use the Daikon
 TAGS table, which lets you easily find definitions and search through the
 entire codebase in Emacs.  (You need to run this command once per instance
 of Emacs.)
-<p>
+</p>
 
-The command <tt>M-x daikon-info</tt> views the Daikon manual using the Info
+<p>
+The commands <tt>M-x daikon-info</tt> and <tt>M-x
+daikon-developer-info</tt> views the Daikon manual and the Daikon Developer
+manual using the Info
 viewer within Emacs.  You may also choose to use the stand-alone viewer, to
 use a Web browser to read the manual in HTML form, or to read the
 PostScript or PDF version either electronically or on paper.
-<p>
+</p>
 
 
 <!-- No <tt>...</tt> around "daikon.texinfo" due to bad HTML rendering. -->
 <h3><a name="editing-daikon.texinfo"></a>Editing daikon.texinfo</h3>
 
+<p>
 The Daikon manual appears in <tt>doc/daikon.texinfo</tt>.  The manual is
 written using the Texinfo formatting system, which makes it easy to produce
 HTML, info, or printed (PostScript and PDF) output.
+</p>
 
 <p>
 You can edit the manual using an ordinary text editor.  You can either
 mimic the formatting commands that already appear in the manual or read the
 <a href="http://texinfo.org">Texinfo documentation</a>.
+</p>
 
 <p>
 If you wish to create a new section of the manual, insert two lines like
@@ -413,12 +450,13 @@ where you should insert "Foo, Bar, Baz" literally (they will be fixed up
 for you automatically), you select the short and the long titles (which may
 even be the same), and you may replace "@chapter" by "@section",
 "@subsection", or "@subsubsection".
+</p>
 
 <p>
 Once you have edited the manual, run <tt>make</tt> twice (yes, you must run
 it twice) in order to generate formatted versions of the manual
 (<tt>daikon.</tt>{<tt>html,info,ps,pdf</tt>}).
-<p>
+</p>
 
 
 <h2><a name="other-tasks">Other tasks</a></h2>
@@ -438,117 +476,118 @@ changes.
 
 <h3><a name="distribution">Making a distribution</a></h3>
 
+<p>
 To publish a Daikon distribution, do the following.  If you only want to
 create the <tt>daikon.tar</tt> or <tt>daikon.tar.gz</tt> file in your own
 directory, then simply run <tt>make</tt> with the desired file as the
 target.
-<p>
+</p>
 
 <ol>
 
+<p>
     <li> It is suggested that you use the <tt>daikonuser</tt> account to
     publish a distribution.  This ensures that everything has been committed
     to CVS and that nothing extraneous in your account gets included in the
     distribution.  Ask a senior group member for the password.  Note that all of
     the following instructions should work from other accounts as 
-    well. <p>
+    well. </p>
 
-    <code> su - daikonuser </code> <p>
+<p>
+    <code> su - daikonuser </code> </p>
 
     <li> Update daikon in daikonuser to the most recent version
-    of V3. <p>
+    of V3. </p>
 
-    <code> 
-        cd $inv <br>
-        cvs -q update -d  <br>
-    </code> <p>
+    <pre> 
+        cd $inv
+        cvs -q update -d
+    </pre>
 
-    <li> Rebuild everything. <p>
+    <li> Rebuild everything. </p>
 
-    <code>
-        cd java <br>
-        make clean <br>
-        make <br>
-        cd $inv/doc <br>
-        make <br>
-        cd $inv/dfej <br>
-        make <br>
-        cd $inv/kvasir <br>
-        make <br>
+    <pre>
+        cd java 
+        make clean 
+        make 
+        cd $inv/doc 
+        make 
+        cd $inv/dfej 
+        make 
+        cd $inv/kvasir 
+        make 
         make install
-    </code> <p>
+    </pre> </p>
 
     <li> Run the kvasir regression tests <p>
-    <code>
-      cd $inv/tests/kvasir-tests <br>
+    <pre>
+      cd $inv/tests/kvasir-tests
       make 
-    </code>
+    </pre>
 
     <li> Run the regression tests.  These will use Chicory as the
     front end.  To run the tests using dfej, define DFEJ_EXECUTABLE to
     the dfej built above ($inv/dfej/src/dfej) and USE_DFEJ=1 All of
-    the diff files should be of zero size when this is complete.<p>
+    the diff files should be of zero size when this is complete.</p>
 
-    <code>
-        cd $inv/tests <br>
-        make clean <br>
-        make diffs <br>
-    </code> <p>
+    <pre>
+        cd $inv/tests
+        make clean
+        make diffs
+    </pre> </p>
 
     <li> Edit the <tt>doc/CHANGES</tt> file to indicate what has changed
     in this version.  A good way to determine what has changed is to diff 
     the texinfo source files in the doc directory against the previous 
-    versions: <p>
+    versions: </p>
 
-    <code>
-        cd $inv/doc <br>
+    <pre>
+        cd $inv/doc
         diff -b -u -s --from-file /afs/csail/group/pag/docroot/www.pag.csail.mit.edu/daikon/dist/doc *.texinfo 
-
-        <br>
-    </code> <p> 
+    </pre> <p> 
 
     Another good source of information is to examine the cvs logs over the
-    last month: <p>
+    last month: </p>
 
-    <code>
-      cd $inv/java <br>
-      cvs -q log -d ">2004-12-01" -N | cvs-log-summarize.pl <br>
-    </code>
+    <pre>
+      cd $inv/java
+      cvs -q log -d ">2004-12-01" -N | cvs-log-summarize.pl
+    </pre>
 
     <li> Set the distribution date and versions number.  The date will
     be set to today, but can be overridden by redefining today (e.g.,
     'TODAY=November 1 2004').  The version is specified in the file
-    $inv/doc/VERSION <p>
+    $inv/doc/VERSION </p>
 
-    <code>
-      cd $inv <br>
-      make update-doc-dist-date-and-version  <br>
-    </code>
+    <pre>
+      cd $inv
+      make update-doc-dist-date-and-version 
+    </pre>
 
     <li> Build everything to be distributed and copy it to the
     staging area ($inv/dist).  The final output will be a list 
-    of files that were added/removed since the last release.<p>
+    of files that were added/removed since the last release.</p>
 
-    <code>
-      make staging <br>
-    </code>
+    <pre>
+      make staging
+    </pre>
 
     <li> Test the distribution in the staging area.  The last part of
     the test runs Chicory/Daikon on the StackAr example in the
     release.  Success is indicated by invariant output being written
     to the screen. [<b>Consider moving the staging area to the website
     so that we can check things out via the webserver before
-    installing</b><p>
+    installing</b></p>
 
-    <code>
-      make test-staged-dist <br>
-    </code>
+    <pre>
+      make test-staged-dist
+    </pre>
 
-    <li> Update the website. <p>
+    <li> Update the website. </p>
 
-    <code>
-        make staging-to-www <br>
-    </code> <p>
+    <pre>
+        make staging-to-www
+    </pre> </p>
 
     Note that <code>make staging-to-www</code> will automatically
     update the version numbers in the source code and documentation
@@ -559,44 +598,43 @@ target.
     update-doc-dist-date-and-version </code> command has to be run
     again after the version number has been incremented.  In this
     case, simply edit <tt>doc/VERSION</tt> by hand back to the correct
-    version number before rebuilding. <p>
+    version number before rebuilding. </p>
 
     <b>We should consider just updating the version number by hand at the
     beginning of the process.  That way we can run this multiple times without
-    confusion</b> <p>
+    confusion</b> </p>
 
-    <li> Check the website to see if it has any broken links <p>
+    <li> Check the website to see if it has any broken links </p>
 
-    <code>
-      checklink.pl -q -r `cat $inv/scripts/checklink-args.txt` 
-      http://pag.csail.mit.edu/daikon
-    </code>
+    <pre>
+      checklink.pl -q -r `cat $inv/scripts/checklink-args.txt` http://pag.csail.mit.edu/daikon
+    </pre>
 
-    <li> Commit any changes back to CVS <p>
+    <li> Commit any changes back to CVS </p>
 
-    <code>
-        cd $inv <br>
-        cvs -q commit -m "Change version to &lt;X.Y.Z>" <br>
-    </code> <p>
+    <pre>
+        cd $inv
+        cvs -q commit -m "Change version to &lt;X.Y.Z>"
+    </pre> </p>
 
     <li> Copy the new version of dfej (if any) to the standard pag
-    location <p>
+    location </p>
 
-    <code>
-      cp -pf $inv/dfej/src/dfej 
-        /afs/csail/group/pag/projects/invariants/binaries <br>
-    </code> <p>
+    <pre>
+      cp -pf $inv/dfej/src/dfej /afs/csail/group/pag/projects/invariants/binaries
+    </pre> </p>
 
     <li> Send mail to the daikon-announce mailing list.  There are sample
     messages in the archive of daikon-announce 
     (<a href=http://lists.csail.mit.edu/mailman/listinfo/daikon-announce>http://lists.csail.mit.edu/mailman/listinfo/daikon-announce</a>)
 
-</ol> <p>
+</ol> </p>
 
 
 
 <h2><a name="reporting">Reporting on your research</a></h2>
 
+<p>
 The outcome of research -- whether at the UROP, M.Eng., or Ph.D. level --
 should be a paper describing what was learned and disseminating that
 knowledge for the benefit of other researchers and practitioners.  For
@@ -604,8 +642,9 @@ instance, a summer's work might result in a conference or workshop paper.
 Please keep in mind where your results might be published and whether what
 you are doing contributes to the state of knowledge (either directly or
 indirectly).
-<p>
+</p>
 
+<p>
 Each week, each group member prepares a written progress report as a short
 email message.  It only needs to be a couple paragraphs or a page long and
 will probably only take 15-30 minutes to compose, but it should explain
@@ -613,8 +652,9 @@ what you have accomplished, what you have learned, and what you plan to do
 next.  This is very helpful both in permitting others to understand what
 you have done, and also in focusing your attention on whether you have been
 productive and keeping you on top of your progress.
-<p>
+</p>
 
+<p>
 Each week, the Program Analysis Group meets to hear a more in-depth report
 on the current status of one group member.  Each member presents during group
 meeting every 2-3 months.  These presentations may be informal, but they
@@ -623,11 +663,11 @@ critique the work.  The presentation may use handouts, overhead
 transparencies, and/or a whiteboard.  Plan the presentation for 20-30
 minutes; questions are likely to draw out the meeting to one hour, but we
 will try to avoid meetings longer than that.
-<p>
+</p>
 
 
 <hr>
-<a href="../">Daikon invariant detector</a><p>
+<a href="../">Daikon invariant detector</a></p>
 
 <address>
   <a href="http://pag.csail.mit.edu/~mernst/">Michael Ernst</a>
