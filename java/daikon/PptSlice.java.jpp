@@ -538,7 +538,7 @@ public final class PPTSLICE1
           Invariant inv = (Invariant) invs.get(j);
           if (PrintInvariants.print_discarded_invariants)
             DiscReasonMap.put(inv, DiscardCode.bad_sample, var_infos[i].name.name() + " array index was out of bounds");
-          inv.destroyAndFlow();
+          destroyAndFlowInv(inv);
           if (inv.logOn())
             inv.log ("destroyed because " + var_infos[i].name.name()
                      + " array index out of bounds");
@@ -652,9 +652,12 @@ public final class PPTSLICE1
       UnaryInvariant inv = (UnaryInvariant) invs.get(i);
       if (inv.falsified) continue;
       if (inv.getSuppressor() != null) continue;
-      if (inv.add(val1, mod1, count) ==
-          InvariantStatus.FALSIFIED) {
-        inv.destroyAndFlow();
+      Invariant clone = (Invariant) inv.clone();
+      InvariantStatus status = inv.add(val1, mod1, count);
+      if (status == InvariantStatus.FALSIFIED) {
+        destroyAndFlowInv(inv);
+      } else if (status == InvariantStatus.WEAKENED) {
+        flowClone(inv, clone);
       }
       if (PrintInvariants.print_discarded_invariants && inv.falsified) {
         DiscReasonMap.put(inv, DiscardCode.bad_sample,
@@ -694,9 +697,12 @@ public final class PPTSLICE1
         BinaryInvariant inv = (BinaryInvariant) invs.get(i);
         if (inv.falsified) continue;
         if (inv.getSuppressor() != null) continue;
-        if (inv.add(val2, val1, mod1, count) ==
-            InvariantStatus.FALSIFIED) {
-          inv.destroyAndFlow();
+        Invariant clone = (Invariant) inv.clone();
+        InvariantStatus status = inv.add(val2, val1, mod1, count);
+        if (status == InvariantStatus.FALSIFIED) {
+          destroyAndFlowInv(inv);
+        } else if (status == InvariantStatus.WEAKENED) {
+          flowClone(inv, clone);
         }
         if (PrintInvariants.print_discarded_invariants && inv.falsified) {
           DiscReasonMap.put(inv, DiscardCode.bad_sample,
@@ -711,9 +717,12 @@ public final class PPTSLICE1
         BinaryInvariant inv = (BinaryInvariant) invs.get(i);
         if (inv.falsified) continue;
         if (inv.getSuppressor() != null) continue;
-        if (inv.add(val1, val2, mod1, count) ==
-            InvariantStatus.FALSIFIED) {
-          inv.destroyAndFlow();
+        Invariant clone = (Invariant) inv.clone();
+        InvariantStatus status = inv.add(val1, val2, mod1, count);
+        if (status == InvariantStatus.FALSIFIED) {
+          destroyAndFlowInv(inv);
+        } else if (status == InvariantStatus.WEAKENED) {
+          flowClone(inv, clone);
         }
         if (PrintInvariants.print_discarded_invariants && inv.falsified) {
           if (array1 && array2 && (!( (inv instanceof SeqSeqIntEqual)
@@ -764,11 +773,13 @@ public final class PPTSLICE1
       TernaryInvariant inv = (TernaryInvariant) invs.get(i);
       if (inv.falsified) continue;
       if (inv.getSuppressor() != null) continue;
-      if (inv.add(val1, val2, val3, mod1, count) ==
-          InvariantStatus.FALSIFIED) {
-        inv.destroyAndFlow();
+      Invariant clone = (Invariant) inv.clone();
+      InvariantStatus status = inv.add(val1, val2, val3, mod1, count);
+      if (status == InvariantStatus.FALSIFIED) {
+        destroyAndFlowInv(inv);
+      } else if (status == InvariantStatus.WEAKENED) {
+        flowClone(inv, clone);
       }
-
       if (PrintInvariants.print_discarded_invariants && inv.falsified) {
         // Currently there are no ternary invariants with arrays, but if
         // there are in the future, I don't want this to break.

@@ -606,7 +606,7 @@ public abstract class Invariant
    * this.suppressor and this.suppressees.  Overridden to remove
    * exception from declaration
    **/
-  protected Object clone() {
+  public Object clone() {
     try {
       Invariant result = (Invariant) super.clone();
       result.suppressor = null;

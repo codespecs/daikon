@@ -119,7 +119,7 @@ public final class StringComparison
 
   }
 
-  protected Object clone() {
+  public Object clone() {
     StringComparison result = (StringComparison) super.clone();
     result.core = (StringComparisonCore) core.clone();
     result.core.wrapper = result;

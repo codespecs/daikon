@@ -130,7 +130,7 @@ public class CLASSNAME
     return new CLASSNAME(ppt, methodname, methodNumber, var_order);
   }
 
-  protected Object clone() {
+  public Object clone() {
     CLASSNAME result = (CLASSNAME) super.clone();
     result.core = (CORECLASSNAME) core.clone();
     result.core.wrapper = result;

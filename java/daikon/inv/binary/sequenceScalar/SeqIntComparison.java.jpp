@@ -227,7 +227,7 @@ public final class SEQINTEQUAL
     return new SEQINTEQUAL(ppt, seq_first);
   }
 
-  protected Object clone() {
+  public Object clone() {
     SEQINTEQUAL result = (SEQINTEQUAL) super.clone();
     return result;
   }

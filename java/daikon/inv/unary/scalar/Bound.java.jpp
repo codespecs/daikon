@@ -239,7 +239,7 @@ public class LOWERBOUND
     core = new LOWERBOUNDCORE(this);
   }
 
-  protected Object clone() {
+  public Object clone() {
     LOWERBOUND result = (LOWERBOUND) super.clone();
     result.core = (LOWERBOUNDCORE) core.clone();
     result.core.wrapper = result;
@@ -389,20 +389,17 @@ public class LOWERBOUND
     // System.out.println(LOWERBOUNDSTR + varNames() + ": "
     //              + "add(" + value + ", " + modified + ", " + count + ")");
     #ifndef IS_ELT
-      if (core.wouldChange (value)) {
-        cloneAndFlow();
-      }
       return core.add_modified(value, count);
     #else
       boolean changed = false;
       InvariantStatus status = InvariantStatus.NO_CHANGE;
       for (int i=0; i<value.length; i++) {
         if (!changed && core.wouldChange (value[i])) {
-          cloneAndFlow();
           changed = true;
           status = InvariantStatus.WEAKENED;
         }
-        if (core.add_modified(value[i], count)  == InvariantStatus.FALSIFIED) {
+        if (core.add_modified(value[i], count) ==
+            InvariantStatus.FALSIFIED) {
           return InvariantStatus.FALSIFIED;
         }
       }

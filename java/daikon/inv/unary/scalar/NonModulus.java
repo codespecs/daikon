@@ -52,7 +52,7 @@ public class NonModulus
     return new NonModulus(ppt);
   }
 
-  protected Object clone() {
+  public Object clone() {
     NonModulus result = (NonModulus) super.clone();
     result.elements = new TreeSet(this.elements);
     return result;

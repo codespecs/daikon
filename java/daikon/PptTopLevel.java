@@ -1521,6 +1521,7 @@ public class PptTopLevel
       InvariantStatus result = null;
 
       // Get the values and add them to the invariant.
+      Invariant clone = (Invariant) inv.clone();
       if (inv.ppt instanceof PptSlice1) {
         VarInfo v = inv.ppt.var_infos[0];
         UnaryInvariant unary_inv = (UnaryInvariant) inv;
@@ -1546,8 +1547,11 @@ public class PptTopLevel
         result = ternary_inv.add (vt.getValue(v1), vt.getValue(v2),
                                   vt.getValue(v3), vt.getModified(v1), count);
       }
-      if (result == InvariantStatus.FALSIFIED)
-        inv.destroyAndFlow();
+      if (result == InvariantStatus.FALSIFIED) {
+        inv.ppt.destroyAndFlowInv(inv);
+      } else if (result == InvariantStatus.WEAKENED) {
+        inv.ppt.flowClone(inv, clone);
+      }
     }
 
     // Get the list of weakened invariants and remove any falsified ones.

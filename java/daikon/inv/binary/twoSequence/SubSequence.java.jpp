@@ -332,7 +332,6 @@ public class CLASSNAME
     }
 
     // changed == true but not dead yet
-    cloneAndFlow();
     var1_in_var2 = new_var1_in_var2;
     var2_in_var1 = new_var2_in_var1;
     return InvariantStatus.WEAKENED;

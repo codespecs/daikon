@@ -69,7 +69,7 @@ public class CLASSNAME
     return new CLASSNAME(ppt);
   }
 
-  protected Object clone() {
+  public Object clone() {
     CLASSNAME result = (CLASSNAME) super.clone();
     result.core = (CORECLASS) core.clone();
     result.core.wrapper = result;

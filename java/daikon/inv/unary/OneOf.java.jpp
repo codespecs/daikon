@@ -321,7 +321,7 @@ public final class ONEOFSCALAR
     return new ONEOFSCALAR(ppt);
   }
 
-  protected Object clone() {
+  public Object clone() {
     ONEOFSCALAR result = (ONEOFSCALAR) super.clone();
     result.elts = (INT[]) elts.clone();
 #ifdef IS_SEQUENCE
@@ -1477,37 +1477,43 @@ public final class ONEOFSCALAR
 #if defined(IS_ELT)
 
   public InvariantStatus add_modified(INT[] a, int count) {
-
+    InvariantStatus finalStatus = InvariantStatus.NO_CHANGE;
     for (int ai=0; ai <a.length; ai++) {
-      if (!add_mod_elem (a[ai], count)) {
+      InvariantStatus status = add_mod_elem(a[ai], count);
+      if (status == InvariantStatus.FALSIFIED) {
         return InvariantStatus.FALSIFIED;
+      } else if (status == InvariantStatus.WEAKENED) {
+        finalStatus = InvariantStatus.WEAKENED;
       }
     }
-    return InvariantStatus.NO_CHANGE;
+    return finalStatus;
   }
 
 #else
 
   public InvariantStatus add_modified(INT v, int count) {
-    if (!add_mod_elem (v, count)) {
-      if (logOn())
-        log ("destroyed on sample " + TOSTRING (v) + " previous vals = "
-            + TOSTRING (elts[0]) + " num_elts = " + num_elts);
-      destroyAndFlow();
+    InvariantStatus status = add_mod_elem(v, count);
+    if (status == InvariantStatus.FALSIFIED) {
+      if (logOn()) {
+        StringBuffer eltString = new StringBuffer();
+        for (int i = 0; i < num_elts; i++) {
+          eltString.append(TOSTRING (elts[i]) + " ");
+        }
+        log ("destroyed on sample " + TOSTRING (v) + " previous vals = { "
+             + eltString + "} num_elts = " + num_elts);
+      }
       return InvariantStatus.FALSIFIED;
     }
-    return InvariantStatus.NO_CHANGE;
+    return status;
   }
 #endif
 
   /**
-   * Adds a single sample to the invariant.  Returns true if the invariant
-   * is still true, false otherwise.  If the invariant is weakened, calls
-   * cloneAndFlow() internally, however callers should handle anything that
-   * needs to be done if the invariant is destroyed
+   * Adds a single sample to the invariant.  Returns
+   * the appropriate InvariantStatus from the result
+   * of adding the sample to this.
    */
-
-  public boolean add_mod_elem (INT v, int count) {
+  public InvariantStatus add_mod_elem (INT v, int count) {
 
     // Look for v in our list of previously seen values.  If it's
     // found, we're all set.
@@ -1515,45 +1521,38 @@ public final class ONEOFSCALAR
       //if (logDetail())
       //  log ("add_modified (" + v + ")");
       if (EQUALS (elts[i], v)) {
-        return (true);
+        return (InvariantStatus.NO_CHANGE);
       }
     }
 
     if (num_elts == dkconfig_size) {
-      return (false);
+      return (InvariantStatus.FALSIFIED);
     }
 
     #if defined(STRING) || defined(ELTSTRING)
       if (is_type() && (num_elts == 1)) {
-        return (false);
+        return (InvariantStatus.FALSIFIED);
       }
     #elif defined(SEQUENCE)
       if (is_hashcode && (num_elts == 1)) {
-        return (false);
+        return (InvariantStatus.FALSIFIED);
       }
     #elif defined(SCALAR) || defined(ELT)
       if ((is_boolean && (num_elts == 1)) || (is_hashcode && (num_elts == 2))) {
-        return (false);
+        return (InvariantStatus.FALSIFIED);
       }
 
       if (is_hashcode && (num_elts == 1)) {
         // Permit two object values only if one of them is null
         if ((elts[0] != 0) && (v != 0)) {
-          return (false);
+          return (InvariantStatus.FALSIFIED);
         }
       }
     #endif
 
-    // We are significantly changing our state (not just zeroing in on
-    // a constant), so we have to flow a copy before we do so.  We even
-    // need to clone if this has 0 elements becuase otherwise, lower
-    // ppts will get versions of this with multiple elements once this is
-    // expanded.
-    cloneAndFlow();
-
     elts[num_elts] = v;
     num_elts++;
-    return (true);
+    return (InvariantStatus.WEAKENED);
   }
 
 
@@ -1916,9 +1915,10 @@ public final class ONEOFSCALAR
       for (int j = 0; j < inv.num_elts; j++) {
         INT val = inv.elts[j];
         #if defined (IS_SEQUENCE)
-          val = Intern.intern (val);
+        val = Intern.intern (val);
         #endif
-        if (!result.add_mod_elem (val, 1)) {
+        InvariantStatus status = result.add_mod_elem(val, 1);
+        if (status == InvariantStatus.FALSIFIED) {
           result.log ("child value '" + val + "' destroyed oneof");
           return (null);
         }

@@ -261,11 +261,36 @@ public abstract class PptSlice
     return controlling_cached;
   }
 
-  public void destroyInv(Invariant inv) {
+
+  /**
+   * Falsifies the Invariant inv and then adds inv
+   * to the list of Invariants that are to be flowed
+   * and the list of changed Invariants.
+   */
+  public void destroyAndFlowInv(Invariant inv) {
     inv.falsified = true;
-    if (PrintInvariants.print_discarded_invariants)
-      parent.falsified_invars.add(this);
-    removeInvariant(inv);
+    addToFlow(inv);
+    if (inv.logOn() || debugFlow.isLoggable(Level.FINE)) {
+      inv.log (debugFlow, "Destroyed " + inv.format());
+    }
+    if (PrintInvariants.print_discarded_invariants) {
+      parent.falsified_invars.add(inv);
+    }
+    addToChanged(inv);
+  }
+
+  /**
+   * Places the Invariant inv to the list of
+   * changed Invariants and adds the Invariant
+   * clone to the list of Invariants that are to
+   * be flowed.
+   */
+  public void flowClone(Invariant inv, Invariant clone) {
+    addToChanged(inv);
+    if (! inv.flowed) {
+      addToFlow(clone);
+      clone.flowed = true;
+    }
   }
 
 
@@ -550,7 +575,13 @@ public abstract class PptSlice
             // hand, invariants with weaken-able computed constants
             // will flow a clone of themselves before they weaken.  In
             // that case, inv will not yet have been falsified.
-            inv.destroy();
+            inv.falsified = true;
+            if (inv.logOn() || debugFlow.isLoggable(Level.FINE)) {
+              inv.log (debugFlow, "Destroyed " + inv.format());
+            }
+            if (PrintInvariants.print_discarded_invariants) {
+              parent.falsified_invars.add(inv);
+            }
           }
           // debug
           if (debugFlow.isLoggable(Level.FINE)) {
