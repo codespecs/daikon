@@ -3135,7 +3135,8 @@ variable refers to an ASCII character or a short numerical value that
 mathematical invariants should be calculated over.
 
 The disambig file that dfec creates contains an entry for each program
-point in instrumentation scope (@pxref{Instrumentation scope}), which can be used to disambiguate parameter variables visible at
+point in instrumentation scope (@pxref{Instrumentation scope}), which
+can be used to disambiguate parameter variables visible at
 that program point.  It also contains an entry for every user-defined
 class or struct, which can be used to disambiguate member variables of
 that struct.  Disambiguation information entered here will apply to all
@@ -3145,8 +3146,6 @@ variables which are output at every program point.  The entries in the
 disambig file may appear in any order, and whole entries or individual
 variables within an entry may be omitted.  In this case, dfec will
 retain their default values.
-
->>>>>>> 1.141
 
 @c This isn't really relevant to users of Daikon, though it is quite
 @c interesting from an implementation point of view.
