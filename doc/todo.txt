@@ -1,19 +1,66 @@
 Daikon todo list.
-Time-stamp: <2003-11-19 11:56:36 jhp>
+Time-stamp: <2003-12-18 10:48:38 jhp>
 
 Outstanding Issues
+
+  jhp     12/18/03      Fix/remove EltwiseIntComparison.hasSeenNonTrivialSample
+
+    The only purpose for the class seems to be to force children to implement
+    hasSeenNonTrivialSample().  But the children do not implement this anymore
+    as it would require state.  I think the base class should just be removed.
+    Also, hasSeenNonTrivialSample() should be replaced with something that
+    looks for the size of the array.  If its bound <= 1, then we can call
+    this obvious.  We could also include this in the unary value tracker
+    stuff.
+
+  jhp     12/16/03      Change std invariant output to include the inv class
+
+    It is often difficult to determine the class of a particular invariant
+    when debugging a regression difference.  This could be aided by optionally
+    including the invariant class with the invariant (eg, x == y [IntEqual]).
+    It would be useful (I think) to make this the default format used for
+    the regression tests.  Its not clear if this should be included in the
+    standard Daikon output as it is not necessarily interesting to users.
+
+  jhp     12/15/03      add flex to regression tests
+
+    We should add flex or some other program with a global program point.
+    It should be possible to make flex run in a reasonable amount of time
+    by limiting both the number of program points and the the size of
+    the trace file.
+
+  jhp     12/15/03      remove all stateful invariants
+
+    There are still a number of invariants (eg, subset/superset) that
+    keep an internal state.  With the exception of bounds, oneof,
+    linearbinary, and linearternary these should all be changed.
+
+  jhp     11/20/03      compare no-hierarchy to bottom up
+
+    There are some differences in output between the no-hierachy
+    switch and bottom up.  This should not be the case.  We should
+    check these and fix any problems.  These include FunctionUnary,
+    subseq, and others.
+
+  jhp     11/20/03      missingOutOfBounds implemented poorly
+
+    The implementation of missingOutOfBounds by marking the variable
+    has proven to be a consistent problem.  It is common to want to
+    apply the same sample to different points (eg, the sample for
+    an exit point to one of its conditional points).  The missing out of
+    bounds info doesn't follow the sample and special code has to
+    be added.  I make this mistake every time.  And the solution is
+    not very efficient.
+
+    I think this would be much better if it used a missing bit like
+    other val related items.  Then out of bounds would track with the
+    value which is what we want.
 
   jhp     11/19/03      DynamicConstants.dkconfig_OneOf_only
 
     If this is set to true, invariants will be missed during the merge
     if the variable is a constant at one child and not a constant
     at the other 
-
-  jhp     11/19/03      equality sets and equality invariant don't merge
-
-    If A and B are in an equality set in one child, and A == B are in
-    the other child, neither an equality set not an equality invariant
-    for A and B are created in the parent.
 
   jhp     11/19/03      A == B && f(A) does not suppress f(B)
 
@@ -137,3 +184,16 @@ Outstanding Issues
     
 
 Completed Issues
+
+  jhp     11/19/03      equality sets and equality invariant don't merge
+
+    If A and B are in an equality set in one child, and A == B are in
+    the other child, neither an equality set not an equality invariant
+    for A and B are created in the parent.
+
+    I don't think this is true anymore.  I think the case Stephen saw
+    was a bug when pivoting equality sets that I fixed.  If A == B in
+    one child, then A and B are in separate equality sets in the parent.
+    When we merge, we will find the A == B invariant in one child and 
+    once we permute to the leader, we should find A == A in the other.
+
