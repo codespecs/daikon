@@ -1,7 +1,7 @@
 #if 0
-Do not attempt to compile this file with a Java compiler such as javac.
-You first need to preprocess it with cpp, the C preprocessor.
-The correct way to build the system is to run 'make'.
+  // Do not attempt to compile this file with a Java compiler such as javac.
+  // You first need to preprocess it with cpp, the C preprocessor.
+  // The correct way to build the system is to run 'make'.
 #endif
 
 #if (defined(EQUAL) || defined(NONEQUAL) || defined(LESSTHAN) || defined(LESSEQUAL) || defined(GREATERTHAN) || defined(GREATEREQUAL))
@@ -139,8 +139,7 @@ import daikon.inv.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.suppress.*;
 
-import utilMDE.ArraysMDE;
-import utilMDE.Assert;
+import utilMDE.*;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
@@ -166,13 +165,28 @@ public class CLASSNAME extends SUPERCLASS {
    **/
   public static boolean dkconfig_enabled = true;
 
-  protected CLASSNAME(PptSlice ppt) {
-    super(ppt);
-    Assert.assertTrue(var().rep_type == ProglangType.ASSERTYPE);
+  protected CLASSNAME (PptSlice slice) {
+    super (slice);
+    if (slice != null)
+      Assert.assertTrue(var().rep_type == ProglangType.ASSERTYPE);
+  }
+
+  /** Returns the prototype invariant for CLASSNAME **/
+  public static Invariant get_proto() {
+    // Fmt.pf ("get_proto in " + STRING(CLASSNAME));
+    if (!dkconfig_enabled)
+      return (null);
+    return new CLASSNAME (null);
+  }
+
+  /** Instantiate the invariant on the specified slice **/
+  public Invariant instantiate_dyn (PptSlice slice) {
+    return instantiate (slice);
   }
 
   public static CLASSNAME instantiate(PptSlice ppt) {
-    if (!dkconfig_enabled) return null;
+    if (!dkconfig_enabled)
+      return null;
 
     // Don't compare indices to object addresses.
     VarInfo seqvar = ppt.var_infos[0];
@@ -205,22 +219,39 @@ public class CLASSNAME extends SUPERCLASS {
     return new CLASSNAME(ppt);
   }
 
-  public SuppressionFactory[] getSuppressionFactories() {
-    VarInfo v = ppt.var_infos[0];
-    return new SuppressionFactory[] {
-    #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT)
-      // suppress <= by <
-      new SuppressionDef (new InvDef (v, SEQ_INDEX_LESSTHAN.class)),
-      // suppress <= by ==
-      new SuppressionDef (new InvDef (v, SEQ_INDEX_EQUAL.class)),
-    #elif defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
-      // suppress >= by >
-      new SuppressionDef (new InvDef (v, SEQ_INDEX_GREATERTHAN.class)),
-      // suppress >= by ==
-      new SuppressionDef (new InvDef (v, SEQ_INDEX_EQUAL.class)),
-    #endif
-    };
+  public NISuppressionSet get_ni_suppressions() {
+    return (suppressions);
   }
+
+  /** definition of this invariant (the suppressee) **/
+  private static NISuppressee suppressee
+    = new NISuppressee (CLASSNAME.class, 1);
+
+  // suppressor definitions (used in suppressions below)
+  #if !(defined(EQUAL) || defined(LESSTHAN) || defined(GREATERTHAN))
+    private static NISuppressor v1_eq_v2
+      = new NISuppressor (0, SEQ_INDEX_EQUAL.class);
+    private static NISuppressor v1_gt_v2
+      = new NISuppressor (0, SEQ_INDEX_GREATERTHAN.class);
+    private static NISuppressor v1_lt_v2
+      = new NISuppressor (0, SEQ_INDEX_LESSTHAN.class);
+  #endif
+
+  private static NISuppressionSet suppressions =
+    new NISuppressionSet (new NISuppression[] {
+    #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT)
+      // (v1[i] == i) ==> v1[i] <= i
+      new NISuppression (v1_eq_v2, suppressee),
+      // (v1[i] < i) ==> v1[i] <= i
+      new NISuppression (v1_lt_v2, suppressee),
+    #elif defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
+      // (v1[i] == i) ==> v1[i] >= i
+      new NISuppression (v1_eq_v2, suppressee),
+      // (v1[i] > i) ==> v1[i] >= i
+      new NISuppression (v1_gt_v2, suppressee),
+
+    #endif
+    });
 
   protected Invariant resurrect_done_swapped() {
     #if defined(SYMMETRIC_OP)
@@ -418,6 +449,18 @@ public class CLASSNAME extends SUPERCLASS {
     return null;
   }
 
+  /**
+   * Checks to see if this is obvious over the specified variables
+   * Implements the following checks: <pre>
+   *
+   *    (A[] subsequence B[]) ^ (B[i] op i) ==> A[i] op i
+   * </pre>
+   *
+   * JHP: Its not obvious (to me) that this is true except when the
+   * subsequence starts at index 0.  If B[] = {0, 1, 2, 3, 4} and
+   * A[] = {2, 3, 4}, A[] is a subsequence of B[] and B[i] == i,
+   * but A[i] = i is not true.
+   */
   public DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     DiscardInfo super_result = super.isObviousDynamically(vis);
