@@ -120,6 +120,7 @@ public class MergeInvariants {
 
     List inv_files = new ArrayList();
     File decl_file = null;
+    Set splitter_files = new TreeSet();
 
     // Get each file specified
     for (int i = g.getOptind(); i < args.length; i++) {
@@ -133,6 +134,8 @@ public class MergeInvariants {
         if (decl_file != null)
           throw new Error ("Only one decl file may be specified");
         decl_file = file;
+      } else if (file.toString().indexOf(".spinfo") != -1) {
+        splitter_files.add(file);
       } else {
         throw new Error ("unexpected file: " + file);
       }
@@ -157,6 +160,9 @@ public class MergeInvariants {
 
     // if no decls file was specified
     if (decl_file == null) {
+      if (splitter_files.size() > 0)
+        throw new Error(".spinfo files may only be specified along "
+                        + "with a .decls file");
 
       // Read in the first map again to serve as a template
       File file = (File) inv_files.get(0);
@@ -177,6 +183,7 @@ public class MergeInvariants {
       List  decl_files = new ArrayList();
       decl_files.add (decl_file);
       merge_ppts = FileIO.read_declaration_files(decl_files);
+      Daikon.create_splitters(merge_ppts, splitter_files);
       Dataflow.init_partial_order (merge_ppts);
       merge_ppts.trimToSize();
       PptRelation.init_hierarchy (merge_ppts);
@@ -258,7 +265,8 @@ public class MergeInvariants {
     debugProgress.fine ("Adding Implications ... ");
     for (Iterator itor = merge_ppts.pptIterator() ; itor.hasNext() ; ) {
       PptTopLevel ppt = (PptTopLevel) itor.next();
-      ppt.addImplications();
+      if (ppt.num_samples() > 0)
+        ppt.addImplications();
     }
     debugProgress.fine ("Time spent in implications: " + stopwatch.format());
 
@@ -272,6 +280,10 @@ public class MergeInvariants {
       if (ppt.ppt_name.isCombinedExitPoint())
         continue;
       ppt.children.clear();
+      for (Iterator conds = ppt.cond_iterator(); conds.hasNext(); ) {
+        PptConditional cond = (PptConditional) conds.next();
+        cond.children.clear();
+      }
     }
 
     // Write serialized output - must be done before guarding invariants
@@ -299,11 +311,24 @@ public class MergeInvariants {
   private static void setup_conditional_merge (PptRelation rel,
                                         PptTopLevel ppt, PptTopLevel child) {
 
-    Assert.assertTrue (ppt.has_splitters() == child.has_splitters());
+    if (ppt.has_splitters() != child.has_splitters()) {
+      System.err.println("Merge ppt " + ppt.name +
+                         (ppt.has_splitters() ? " has " : "doesn't have ") +
+                         "splitters, but child ppt " + child.name +
+                         (child.has_splitters() ? " does" : " doesn't"));
+      Assert.assertTrue(false);
+    }
     if (!ppt.has_splitters())
       return;
 
-    Assert.assertTrue (ppt.splitters.size() == child.splitters.size());
+    if (ppt.splitters.size() != child.splitters.size()) {
+      System.err.println("Merge ppt " + ppt.name + " has " +
+                         ((ppt.splitters.size() > child.splitters.size()) ?
+                          "more" : "fewer") + " splitters (" +
+                         ppt.splitters.size() + ") than child ppt " +
+                         child.name + " (" + child.splitters.size() + ")");
+      Assert.assertTrue(false);
+    }
     for (int ii = 0; ii < ppt.splitters.size(); ii++) {
       PptSplitter ppt_split = (PptSplitter) ppt.splitters.get(ii);
       PptSplitter child_split = (PptSplitter) child.splitters.get(ii);
