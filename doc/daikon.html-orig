@@ -8,15 +8,15 @@
 
 
 The Daikon invariant detector reports properties that are likely to hold at
-certain points in a program.  The reported properties are the kind of
-arithmetic equations that you might write in an assert statement or a
-formal specification, such as "x > abs(y)" or "x = 3*y + 4*z - 7" or "x = 0
+certain points in a program.  The reported properties are arithmetic
+equations such as you might write in an assert statement or a formal
+specification; for example, "x > abs(y)" or "x = 3*y + 4*z - 7" or "x = 0
 (mod 4)".  These invariants can be useful in program understanding and a
 host of other applications.  Daikon operates by running the program and
 examining the values it computes, looking for patterns and relationships
 among those values.  <a href="#front-ends">Front ends</a> exist for <a
-href="#c-front-end">C/C++</a>, <a href="#lisp-front-end">Lisp</a>, and <a
-href="#java-front-end">Java</a>.<p>
+href="#java-front-end">Java</a>, <a href="#c-front-end">C/C++</a>, and <a
+href="#lisp-front-end">Lisp</a>.<p>
 
 Table of contents:
 <ul>
@@ -25,14 +25,11 @@ Table of contents:
     <ul>
       <li><a href="#instrument">Step 1:  Instrumentation</a>
         <ul>
+	  <li><a href="#java-front-end">Java front end</a>
 	  <li><a href="#c-front-end">C/C++ front end</a>
 	  <li><a href="#lisp-front-end">Lisp front end</a>
-	  <li><a href="#java-front-end">Java front end</a>
         </ul>
       <li><a href="#run-program">Step 2:  Run the program</a>
-        <ul>
-	  <li><a href="#run-program-examples">Examples</a>
-        </ul>
       <li><a href="#run-daikon">Step 3:  Detect invariants in the data trace files</a>
         <ul>
 	  <li><a href="#interpret-output">Interpreting the output</a>
@@ -54,6 +51,7 @@ Table of contents:
        tar zxvf daikon.tar.gz
 </pre>
      This creates a <tt>daikon/</tt> subdirectory.
+<!--
   <li>Set the environment variable <tt>DAIKON_HOME</tt> to point the directory.<p>
      In csh:
 <pre>
@@ -64,22 +62,42 @@ Table of contents:
        DAIKON_HOME=<i>/directory/goes/here</i>
        export DAIKON_HOME
 </pre>
-  <li>Adjust the path to Perl in the first line of the
-      <tt>instrumentor</tt> script.
-  <li>If you want to detect invariants in C code, download the appropriate
-      version of the Daikon C front end (from the same place that you obtained
-      Daikon itself:  <a
-      href="http://www.cs.washington.edu/homes/mernst/daikon/download/">http://www.cs.washington.edu/homes/mernst/daikon/download/</a>)
-      and rename it to <tt>edgcpfe</tt> in a directory on
-      your path.  (You will not run the <tt>edgcpfe</tt> program directly,
-      but only via the <tt>instrumentor</tt> script.)
-      The Lisp and Java front ends, and supporting files for
-      the C front end, are distributed with Daikon itself.
+-->
+  <li>Prepare the front ends for use, if you plan to detect invariants in
+      programs written in those source languages:
+    <ul>
+      <li>Java front end:  Build the <tt>dfej</tt> Java instrumenter.
+        <ol>
+          <li>Modify <tt>src/Makefile</tt> by uncommenting the
+	      appropriate section.  The distributed version is prepared to
+	      compile on a Solaris machine using the g++ compiler.
+              Make sure that the <tt>-DTEST</tt> argument is provided to
+              the compiler.
+          <li>Type <tt>make</tt>.  This will create a binary named
+              <tt>dfej</tt>.  Place that program somewhere on your path.
+        </ol>
+      <li>C front end:
+        <ol>
+	  <li>Download the appropriate
+	      version of the Daikon C front end (from the same place that you obtained
+	      Daikon itself:  <a
+	      href="http://www.cs.washington.edu/homes/mernst/daikon/download/">http://www.cs.washington.edu/homes/mernst/daikon/download/</a>)
+	      and rename it to <tt>edgcpfe</tt> in a directory on
+	      your path.  (You will not run the <tt>edgcpfe</tt> program directly,
+	      but only via the <tt>dfec</tt> script.)
+	      The Lisp and Java front ends, and supporting files for
+	      the C front end, are distributed with Daikon itself.
+	  <li>Optionally set the path to Perl in the first line of the
+	      <tt>dfec</tt> script.  This is not necessary, but
+	      will make the script start up faster.
+        </ol>
+      <li>Lisp front end:  no special work to be done.
+    </ul>
   <li>If you don't already have the Python programming language installed,
       download it from <a
       href="http://www.python.org/">http://www.python.org</a>.  If you
       intend to use 
-      compressed data files, you will need Python 1.5.2 or later.
+      compressed data trace files, you will need Python 1.5.2 or later.
       There is a second implementation of Python, called JPython, which you
       can consider using instead; see <a
       href="http://www.jpython.org/">http://www.jpython.org/</a>.
@@ -104,29 +122,58 @@ There are three different front ends -- for C, Java, and Lisp.  Each of
 these front ends modifies your program so that, in addition to performing
 its original task, it also writes variable values to a data trace file.
 <ul>
-  <li><a href="#c-front-end">C/C++ front end</a>
   <li><a href="#java-front-end">Java front end</a>
+  <li><a href="#c-front-end">C/C++ front end</a>
   <li><a href="#lisp-front-end">Lisp front end</a>
 </ul>
 
 
+<h4><a name="java-front-end">Java front end</a></h4>
+
+<ol>
+  <li>Run <tt>dfej</tt> on your Java source files:
+<pre>
+      dfej <i>filename1.java</i> <i>filename2.java</i> ...
+</pre>
+      Only the specified Java files will be instrumented; other files will
+      be run uninstrumented.  This permits you to control the scope of
+      invariant detection.<p>
+
+      The Daikon Java front end:
+      <ol>
+        <li>writes instrumented versions of the files
+            to a <tt>daikon-java/</tt> directory
+	<li>creates declaration files named
+            <tt><i>filename1.java</i>.decls</tt>, etc. in a
+            <tt>daikon-output/</tt> directory.
+     </ol>
+  <li>Place the <tt>daikon-java/</tt> directory on your CLASSPATH before
+      the directory containing the original Java code
+  <li>Compile (and run) the Java code in the usual way.
+</ol>
+
 <h4><a name="c-front-end">C/C++ front end</a></h4>
 
 <ol>
-  <li>Run the instrumentor on your C source files (but not on .h header files):
+  <li>Run <tt>dfec</tt> on your C source files (but not on .h header files):
 <pre>
-      instrumentor <i>filename1.c</i> <i>filename2.c</i> ...
+      dfec <i>filename1.c</i> <i>filename2.c</i> ...
 </pre>
-    The instrumentor:
-    <ol>
-      <li>copies your original files to <tt><i>filename1.c</i>.uninst</tt>, etc.
-      <li>overwrites the original files with instrumented versions
-      <li>creates declaration files named <tt><i>filename1.c</i>.decls</tt>, etc.
-    </ol>
-    You may wish to perform this operation with a copy of your program,
-    to safeguard your original source code.
- <li>Copy files <tt>dump_trace.c</tt> and <tt>dump_trace.h</tt> to your
-     directory.
+     The Daikon C/C++ front end:
+     <ol>
+       <li>copies your original files to <tt><i>filename1.c</i>.uninst</tt>,
+	   etc.<br>
+       <li>overwrites the original files with instrumented versions
+       <li>creates declaration files named <tt><i>filename1.c</i>.decls</tt>, etc.
+     </ol>
+     You may wish to perform this operation with a copy of your program,
+     to safeguard your original source code.<p>
+
+     If you supply the </tt>-d <i>directory</i></tt> argument (before
+     the file names), then the output is placed in the specified
+     directory instead (and no backup files need be made).
+ <li>Copy files <tt>dump_trace.c</tt> and <tt>dump_trace.h</tt> to the
+     directory with the instrumented source files.
  <li>Create or modify a <tt>Makefile</tt>.  Either:
    <ul>
      <li>If you have no <tt>Makefile</tt>, copy <tt>Makefile-sample</tt>
@@ -136,8 +183,6 @@ its original task, it also writes variable values to a data trace file.
          list of object files that need to be created (and linked to create
          your executable).
    </ul>
- <li>Copy the appropriate files to your directory, including
-    <tt>dump_trace.c</tt> and <tt>dump_trace.h</tt>.
  <li>Create an instrumented executable by building your program in the
      usual way (perhaps by running <tt>make</tt>).
 </ol>
@@ -166,27 +211,6 @@ its original task, it also writes variable values to a data trace file.
 </pre>
 
 
-<h4><a name="java-front-end">Java front end</a></h4>
-
-*****
-All this is obsolete.
-*****
-<pre>
-  For legal reasons, the Java front end cannot be distributed at this time
-  (early June, 1999), because it uses a commercially-developed library for
-  bytecode manipulation.  Legal papers are in process to make that library
-  distributable; I am promised they will be ready "very soon".  You can:
-   * wait for me to get permission to distribute the library,
-   * instrument Java source code by hand, using some helper routines that I
-     can provide, or
-   * provide me with sources and let me try out your code.
-
-  The steps of instrumentation and running the program are integrated.  In
-  the command that runs your program, simply replace "java" by "java Xform
-  -x DaikonTransformer", and the program will run as usual but also write
-  declaration and data trace files to a subdirectory named "daikon-output/".
-</pre>
-
 <h3><a name="run-program">Step 2:  Run the program</a></h3>
 
 You can run the instrumented program in just the same way you did before;
@@ -194,22 +218,21 @@ the only behavioral change will be writing a <tt>.dtrace</tt> file.
 Run the program over some test suite in order to create a collection of
 data trace files.<p>
 
-<h4><a name="run-program-examples">Examples</a></h4>
-
-For C programs, if you do not supply a file <tt>label.txt</tt> which
-contains a single integer (a sample is provided in the distribution), one
-will be created for you.  This determines the name of the data trace
-file.<p>
-
-In Lisp, here is how you would run the Gries example programs, after having
-done <tt>(load "load-all")</tt>:
+<ul>
+  <li>For C programs, if you do not supply a file <tt>label.txt</tt> which
+      contains a single integer (a sample is provided in the distribution), one
+      will be created for you.  This determines the name of the data trace
+      file.<p>
+  <li>In Lisp, here is how you would run the Gries example programs, after
+      having done <tt>(load "load-all")</tt>:
 <pre>
-  ;; Load the instrumented code.
-  (load "gries-instrumented")
-  ;; Run the instrumented code.  This runs all the test-* functions; 
-  ;; each test-* function creates one *.dtrace file
-  (test-all)
+    ;; Load the instrumented code.
+    (load "gries-instrumented")
+    ;; Run the instrumented code.  This runs all the test-* functions; 
+    ;; each test-* function creates one *.dtrace file
+    (test-all)
 </pre>
+</ul>
 
 
 <h3><a name="run-daikon">Step 3:  Detect invariants in the data trace files</a></h3>
@@ -218,8 +241,7 @@ Run the Python interpreter using the shell command <tt>python</tt> or the
 Emacs command <tt>M-x run-python</tt>.  It is convenient to run Python in
 the directory containing <tt>daikon.py</tt> and the other Python source
 files, so that you don't have to set the <tt>PYTHONPATH</tt> environment
-variable.  You can download Python from <a
-href="http://www.python.org/">http://www.python.org/</a>.<p>
+variable.<p>
 
 In Python, issue the following commands:
 <pre>
@@ -259,23 +281,28 @@ User documentation
   daikon.html		This file
   README		Says to see daikon.html instead
 
-C front end (you will also need the edgcpfe executable; see "Installation")
-  dump_trace.c		Writing data values to a data trace
-  dump_trace.h		Header files for the above
-  Makefile-sample	Sample Makefile for linking in the above
-  instrumentor		Script for running instrumenter on multiple C files
-  label.txt		Auxiliary file for output filename selection at runtime
+Java front end
+  java-front-end/	A modified version of the <a href="http://www.ibm.com/research/jikes">Jikes Java compiler</a>
 
-Lisp front end
-  load-all.lisp		Shell for loading other Lisp files
-  instrument.lisp	Instrumenting Lisp programs to write data traces
-  data-trace.lisp	Writing data values to a data trace
+C front end
+  c-front-end/
+    dump_trace.c	Writing data values to a data trace
+    dump_trace.h	Header files for the above
+    Makefile-sample	Sample Makefile for linking in the above
+    instrumentor	Script for instrumenting C files (you will also
+                          need the edgcpfe executable; see "<a
+                          href="#install">Installing Daikon</a>")
+    label.txt		Auxiliary file for output filename selection at runtime
 
-Lisp example files
-  gries.lisp		Programs from Gries's "The Science of Programming"
-  gries-helper.lisp	Support for Gries-style synax and for testing
-  gries-instrumented.lisp	Instrumented version of gries.lisp
-  inv-medic.lisp	Support for finding invariants in the Medic program
+Lisp front end and example files
+  lisp-front-end/
+    load-all.lisp	Shell for loading other Lisp files
+    instrument.lisp	Instrumenting Lisp programs to write data traces
+    data-trace.lisp	Writing data values to a data trace
+    gries.lisp		Programs from Gries's "The Science of Programming"
+    gries-helper.lisp	Support for Gries-style syntax and for testing
+    gries-instrumented.lisp	Instrumented version of gries.lisp
+    inv-medic.lisp	Support for finding invariants in the Medic program
 
 Invariant detection engine
   daikon.py		The invariant detector itself
@@ -328,7 +355,7 @@ Proceedings of the 19th International Conference on Software Engineering
 (ICSE '99), Los Angeles, CA, May 19-21, 1999.<p>
 
 <address>
-Michael Ernst 
+<a href="http://www.cs.washington.edu/homes/mernst/">Michael Ernst</a>
 <a href="mailto:mernst@cs.washington.edu">&lt;mernst@cs.washington.edu&gt</a>
 </address>
 

@@ -3,17 +3,20 @@
 ###
 
 # Should gries-instrumented be in this list?
-LISP_FILES := gries-helper.lisp instrument.lisp data-trace.lisp \
-	load-all.lisp \
-	gries.lisp gries-instrumented.lisp inv-medic.lisp
+LISP_FILES := lisp-front-end/gries-helper.lisp lisp-front-end/instrument.lisp lisp-front-end/data-trace.lisp \
+	lisp-front-end/load-all.lisp \
+	lisp-front-end/gries.lisp lisp-front-end/gries-instrumented.lisp lisp-front-end/inv-medic.lisp
 PYTHON_FILES := daikon.py util.py TextFile.py
 DOC_FILES := daikon.py.doc Makefile TextFile.README daikon.html
-EDG_DIR := /projects/se/people/jake/invariants/vortex/C++/front-end/release/dist
+EDG_DIR := /homes/gws/mernst/research/invariants/edg/dist
 # $(EDG_DIR)/edgcpfe is distributed separately (not in the main tar file)
-EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/instrumentor
+EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/dfec
+DFEJ_DIR := /homes/gws/mernst/research/invariants/dfej
+
 DIST_DIR := /homes/gws/mernst/www/daikon/dist
 # For really big files
 DIST_DIR_2 := /projects/se/people/mernst/www
+
 
 ## Examples of better ways to get the lists:
 # PERL_MODULES := $(wildcard *.pm)
@@ -57,34 +60,51 @@ TAGS:  $(LISP_FILES) $(PYTHON_FILES)
 dist: $(DIST_DIR)/daikon.tar.gz
 
 $(DIST_DIR)/daikon.tar.gz: daikon.tar.gz
-	cp -pf daikon.tar.gz dist/daikon.html $(DIST_DIR)
+	# This isn't quite right:  I want the copy of daikon.html in daikon.tar.gz.
+	rm -rf $(DIST_DIR)/daikon.tar.gz $(DIST_DIR)/daikon.html
+	cp -pf daikon.tar.gz daikon.html $(DIST_DIR)
 	# Don't edit the copy of daikon.html in the distribution directory
-	chmod ogu-w $(DIST_DIR) daikon.tar.gz dist/daikon.html
+	chmod ogu-w $(DIST_DIR)/daikon.tar.gz $(DIST_DIR)/daikon.html
 	update-link-dates $(DIST_DIR)/index.html
 
-# Also creates a directory called "dist"
 daikon.tar: $(LISP_FILES) $(PYTHON_FILES) $(DOC_FILES) $(EDG_FILES) README-dist
 	mkdir daikon
-	cp -p $(LISP_FILES) $(PYTHON_FILES) $(DOC_FILES) daikon
+	cp -p $(PYTHON_FILES) $(DOC_FILES) daikon
 	cp -p README-dist daikon/README
 
+	# Lisp instrumenter
+	mkdir daikon/lisp-front-end
+	cp -p $(LISP_FILES) daikon/lisp-front-end
+
 	# C/C++ instrumenter
-	cp -p $(EDG_FILES) daikon
-	cp -p $(EDG_DIR)/Makefile daikon/Makefile-sample
-	echo "0" > daikon/label.txt
-	# Fix permission problems with C/C++ instrumenter (due to Jake's directory)
-	(cd daikon; chmod +r *; chmod -x Makefile-sample dump_trace.c dump_trace.h; chmod +x instrumentor)
+	mkdir daikon/c-front-end
+	cp -p $(EDG_FILES) daikon/c-front-end
+	cp -p $(EDG_DIR)/Makefile daikon/c-front-end/Makefile-sample
+	echo "0" > daikon/c-front-end/label.txt
+	# Fix permission problems (does this fully do the trick?)
+	chmod +rw daikon/c-front-end/*
+
+	# Java instrumenter
+	(cd $(DFEJ_DIR)/..; tar cf /tmp/dfej.tar dfej)
+	(cd daikon; tar xf /tmp/dfej.tar; mv dfej java-front-end; rm /tmp/dfej.tar)
+	# Do I need to delete any more files?
+	(cd daikon/java-front-end; rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name jikes -o -name dfej -o -name '*.o' -o -name '*~' \) -print`)
 
 	date > daikon/VERSION
 	chgrp -R invariants daikon
 	rm -rf daikon.tar
 	tar cf daikon.tar daikon
-	# After making the tar file, don't edit the (historical) distribution
-	chmod -R uog-w daikon/*
-	if (test -d dist-`date +'%y%m%d'`); then rm -rf dist-`date +'%y%m%d'`; fi
-	mv daikon dist-`date +'%y%m%d'`
-	rm dist
-	ln -s dist-`date +'%y%m%d'` dist
+
+	## Better yet, just blow it away.
+	rm -rf daikon
+	# # After making the tar file, don't edit the (historical) distribution
+	# chmod -R uog-w daikon/*
+
+	# Don't bother making a "dist-*" backup directory.
+	# if (test -d dist-`date +'%y%m%d'`); then rm -rf dist-`date +'%y%m%d'`; fi
+	# mv daikon dist-`date +'%y%m%d'`
+	# rm dist
+	# ln -s dist-`date +'%y%m%d'` dist
 
 daikon.tar.gz: daikon.tar
 	rm -rf daikon.tar.gz
