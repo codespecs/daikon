@@ -156,7 +156,10 @@ public final class Equality
     if (format == OutputFormat.IOA) return format_ioa();
     if (format == OutputFormat.JAVA) return format_java();
     if (format == OutputFormat.ESCJAVA) return format_esc();
-    if (format == OutputFormat.JAVA_IDENTIFIER) return format_java();
+    // Commented out by MDE 7/27/2003.  I can't figure out whether
+    // to just change JAVA_IDENTIFIER to IDENTIFIER, or whether other
+    // changes are also necessary.
+    // if (format == OutputFormat.JAVA_IDENTIFIER) return format_java();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
     return format_unimplemented(format);
   }
