@@ -16,7 +16,8 @@ host of other applications.  Daikon operates by running the program and
 examining the values it computes, looking for patterns and relationships
 among those values.  <a href="#front-ends">Front ends</a> exist for <a
 href="#java-front-end">Java</a>, <a href="#c-front-end">C/C++</a>, and <a
-href="#lisp-front-end">Lisp</a>.<p>
+href="#lisp-front-end">Lisp</a>; of these, the Java front end is the most
+robust, complete, and featureful, and is the most actively supported.<p>
 
 Table of contents:
 <ul>
@@ -68,24 +69,22 @@ Table of contents:
   <li>Prepare the front ends for use, if you plan to detect invariants in
       programs written in those source languages:
     <ul>
-      <li>Java front end:  Build the <tt>dfej</tt> Java instrumenter.
+      <li>Java front end:  Build the <tt>dfej</tt> Java instrumenter.  In
+          the <tt>jikes-front-end/src</tt> directory, do:
         <ol>
-          <li>Modify <tt>src/Makefile</tt> by uncommenting the
-	      appropriate section.  The distributed version is prepared to
-	      compile on a Solaris machine using the g++ compiler.
-              Make sure that the <tt>-DTEST</tt> argument is provided to
-              the compiler (as it is in the provided Makefile).
-          <li>Type <tt>make</tt>.  This will create a binary named
-              <tt>dfej</tt>.  Place that program somewhere on your path.
+          <li><tt>./configure --enable-symbols</tt>
+	  <li><tt>make</tt>
         </ol>
+        You must supply the --enable-symbol argument to configure.
       <li>C front end:
         <ol>
-	  <li>Download the appropriate
-	      version of the Daikon C front end (from the same place that you obtained
-	      Daikon itself:  <a
-	      href="http://www.cs.washington.edu/homes/mernst/daikon/download/">http://www.cs.washington.edu/homes/mernst/daikon/download/</a>)
-	      and rename it to <tt>edgcpfe</tt> in a directory on
-	      your path.  (You will not run the <tt>edgcpfe</tt> program directly,
+	  <li>Download a binary version of the Daikon C front end from the
+	      same place that you obtained Daikon itself:  <a
+	      href="http://www.cs.washington.edu/homes/mernst/daikon/download/">http://www.cs.washington.edu/homes/mernst/daikon/download/</a>.
+	      Due to licensing restrictions, we are unable to distribute
+	      source for this program.  Rename the downloaded file to
+	      <tt>edgcpfe</tt> in a directory on your path.  (You will not
+	      run the <tt>edgcpfe</tt> program directly,
 	      but only via the <tt>dfec</tt> script.)
 	      The Lisp and Java front ends, and supporting files for
 	      the C front end, are distributed with Daikon itself.
@@ -183,11 +182,24 @@ its original task, it also writes variable values to a data trace file.
 
 <h4><a name="c-front-end">C/C++ front end</a></h4>
 
+<b>Warning:</b> While the C front end works correctly on a number of
+programs, it is known to fail on some legal C programs.  The C front end
+may issue errors when it is run (and refuse to produce an instrumented
+program), may produce an instrumented program that fails to compile
+(because the instrumented program contains C errors), or may produce an
+instrumented program that core-dumps when it is run.  Problems are more
+likely with C++ programs than with C programs.  We will attempt to fix
+problems that are reported to us, but can make no promises, because our
+current focus is on the <a href="#java-front-end">Java front end</a>.<p>
+
 <ol>
   <li>Run <tt>dfec</tt> on your C source files (but not on .h header files):
 <pre>
       dfec <i>filename1.c</i> <i>filename2.c</i> ...
 </pre>
+     <tt>dfec</tt> is written in Perl.  If Perl is not available, you may
+     instead use <tt>dfec.sh</tt>, which is written in sh shell script.<p>
+
      The Daikon C/C++ front end:
      <ol>
        <li>copies your original files to <tt><i>filename1.c</i>.uninst</tt>,
@@ -199,8 +211,8 @@ its original task, it also writes variable values to a data trace file.
      to safeguard your original source code.<p>
 
      If you supply the </tt>-d <i>directory</i></tt> argument (before
-     the file names), then the output is placed in the specified
-     directory instead (and no backup files need be made).
+     the file names), then the instrumented source files are placed in the
+     specified directory instead (and no backup files need be made).
  <li>Copy files <tt>dump_trace.c</tt> and <tt>dump_trace.h</tt> to the
      directory with the instrumented source files.
  <li>Create or modify a <tt>Makefile</tt>.  Either:
@@ -307,7 +319,12 @@ To do all this from a single shell command, do the following:
 In the output, the "_orig" suffix refers to the original value of a formal
 parameter, for parameters possibly modified in the function body.
 ":::ENTER", ":::EXIT", and ":::LOOP" are tags identifying at which program
-the instrumentation was inserted; invariants are program-point-specific.<p>
+point the instrumentation was inserted; these invariants are
+program-point-specific.  ":::CLASS" and ":::CLASS-STATIC" indicate class
+invariants (sometimes called object invariants) which always hold for any
+object of the given class, from the point of view of a client or user.
+These properties hold at entry to and exit from every public method of the
+class.<p>
 
 
 <h2><a name="manifest">Manifest (list of files in the distribution)</a></h2>
@@ -319,15 +336,17 @@ User documentation
 
 Java front end
   java-front-end/	A modified version of the <a href="http://www.ibm.com/research/jikes">Jikes Java compiler</a>
+                          The main executable is dfej (Daikon front end for Java)
 
 C front end
   c-front-end/
     dump_trace.c	Writing data values to a data trace
     dump_trace.h	Header files for the above
     Makefile-sample	Sample Makefile for linking in the above
-    instrumentor	Script for instrumenting C files (you will also
+    dfec		Script for instrumenting C files (you will also
                           need the edgcpfe executable; see "<a
                           href="#install">Installing Daikon</a>")
+    dfec.sh		Version of dfec written in shell script, not Perl
     label.txt		Auxiliary file for output filename selection at runtime
 
 Lisp front end and example files
@@ -382,6 +401,22 @@ and not rock-solid, I will do my best to assist you and to correct any
 problems, so please don't hesitate to ask for help or report difficulties.
 And don't let any shortcomings of this implementation dissuade you about
 the promise of the research!<p>
+
+Your bug report will be most helpful if you include:
+<ul>
+  <li>the contents of the VERSION file, which indicates the release date of
+      your copy of Daikon
+  <li>a description of exactly what you did and exactly what went wrong.
+      For instance, a transcipt of your commands and the system's output
+      may provide this information.
+  <li>input files that permit the problem to be replicated.  For instance,
+      this might include your source files (both original and
+      instrumented), .decl files, and .dtrace files.  It is often more
+      difficult to reproduce an error than to correct it, so please don't
+      make me spend a lot of time verifying the problem.  Also, if I can't
+      reproduce the problem, then I will probably be unable to fix it.
+  <li>any other information that you consider relevant
+</ul><p>
 
 The invariant detector is further described in the paper <a
 href="http://www.cs.washington.edu/homes/mernst/pubs/invariants-icse99-abstract.html">``Dynamically

@@ -10,7 +10,7 @@ PYTHON_FILES := daikon.py util.py TextFile.py
 DOC_FILES := daikon.py.doc Makefile TextFile.README daikon.html
 EDG_DIR := /homes/gws/mernst/research/invariants/edg/dist
 # $(EDG_DIR)/edgcpfe is distributed separately (not in the main tar file)
-EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/dfec
+EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/dfec $(EDG_DIR)/dfec.sh
 DFEJ_DIR := /homes/gws/mernst/research/invariants/dfej
 
 DIST_DIR := /homes/gws/mernst/www/daikon/dist
@@ -36,8 +36,9 @@ DIST_DIR_2 := /projects/se/people/mernst/www
 help:
 	@echo "Targets:"
 	@echo " tags TAGS"
-	@echo " dist daikon.tar"
+	@echo " dist dist-force daikon.tar"
 	@echo " dist-edg dist-edg-solaris"
+	@echo " dist-dfej dist-dfej-solaris"
 	@echo " examples examples-gries"
 
 ### Tags
@@ -61,7 +62,7 @@ dist: $(DIST_DIR)/daikon.tar.gz
 
 # Is this the right way to do this?
 dist-force:
-	rm daikon.tar.gz
+	rm -f daikon.tar.gz
 	make dist
 
 $(DIST_DIR)/daikon.tar.gz: daikon.tar.gz
@@ -90,10 +91,12 @@ daikon.tar: $(LISP_FILES) $(PYTHON_FILES) $(DOC_FILES) $(EDG_FILES) README-dist
 	chmod +rw daikon/c-front-end/*
 
 	# Java instrumenter
-	(cd $(DFEJ_DIR)/..; tar cf /tmp/dfej.tar dfej)
+	# The -h option saves symbolic links as real files, to avoid problem 
+	# with the fact that I've made dfej into a symbolic link.
+	(cd $(DFEJ_DIR)/..; tar chf /tmp/dfej.tar dfej)
 	(cd daikon; tar xf /tmp/dfej.tar; mv dfej java-front-end; rm /tmp/dfej.tar)
-	# Do I need to delete any more files?
-	(cd daikon/java-front-end; rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name jikes -o -name dfej -o -name '*.o' -o -name '*~' \) -print`)
+	# delete src/Makefile, which is created by "./configure".
+	(cd daikon/java-front-end; rm -f src/Makefile; rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name jikes -o -name dfej -o -name '*.o' -o -name '*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' \) -print`)
 
 	date > daikon/VERSION
 	chgrp -R invariants daikon
@@ -115,13 +118,30 @@ daikon.tar.gz: daikon.tar
 	rm -rf daikon.tar.gz
 	gzip -c daikon.tar > daikon.tar.gz
 
-### C front end
+### Front end binaries
+
+## C/C++ front end
 
 dist-edg: dist-edg-solaris
 
 dist-edg-solaris: $(DIST_DIR_2)/edgcpfe-solaris
 
 $(DIST_DIR_2)/edgcpfe-solaris: $(EDG_DIR)/edgcpfe
+	cp -pf $< $@
+	update-link-dates $(DIST_DIR)/index.html
+
+# This is an attempt to indicate that it is not rebuilt from dfec.sh.
+# I seem to have to have a body in the rule.
+$(EDG_DIR)/dfec: $(EDG_DIR)/dfec.sh
+	@echo
+
+## Java front end
+
+dist-dfej: dist-dfej-solaris
+
+dist-dfej-solaris: $(DIST_DIR_2)/dfej-solaris
+
+$(DIST_DIR_2)/dfej-solaris: $(DFEJ_DIR)/src/dfej
 	cp -pf $< $@
 	update-link-dates $(DIST_DIR)/index.html
 

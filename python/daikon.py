@@ -316,7 +316,7 @@ min_or_max_re = re.compile("^(min|max)\((.*)\)$")
 # These differ: "+" vs. "*" for the parenthesis group.
 java_type_re = re.compile(r'^(?:[a-zA-Z][a-zA-Z0-9]*(?:\.[a-zA-Z][a-zA-Z0-9]*)+'
                           + r'|[a-zA-Z][a-z0-9]*[A-Z][a-zA-Z0-9]*)$');
-java_object_re = re.compile(r'^[a-zA-Z][a-zA-Z0-9]*(?:\.[a-zA-Z][a-zA-Z0-9]*)*@([0-9a-fA-F]+)$');
+java_object_re = re.compile(r'^[a-zA-Z][a-zA-Z0-9_]*(?:\.[a-zA-Z][a-zA-Z0-9_]*)*@([0-9a-fA-F]+)$');
 
 integral_types = ("int", "char", "float", "double", "integral", "boolean")
 known_types = integral_types + ("pointer", "address")
@@ -501,7 +501,7 @@ def parse_lackwit_vartype(raw_str, vartype):
     elif vartype.is_array():
         # The lackwit type is of the form
         #  (var1 var2 var3)[var1 var2 var3][var1 var2 var3]
-        dims = vartype[1]
+        dims = vartype.dimensionality
         assert dims > 0
         # Permit "[]" to appear in variable names.
         match = re.compile("^\(([^)]*)\)" + ("\[\(?((?:[^\]\)]|\[\])*)\)?\]" * dims) + "$").match(raw_str)
@@ -1942,8 +1942,17 @@ def read_data_trace_file(filename, fn_regexp=None):
                     assert jomatch != None;
                     this_value = eval("0x" + jomatch.group(1));
                 elif this_base_type == "char":
-                    assert len(this_value) == 1
-                    this_value = ord(this_value)
+                    # Convert character or string rep of number to integer
+                    if type(this_value) == types.IntType:
+                        pass
+                    elif type(this_value) == types.StringType:
+                        try:
+                            this_value = int(this_value)
+                        except:
+                            assert len(this_value) == 1
+                            this_value = ord(this_value)
+                    else:
+                        raise "Bad character value in data trace file: " + this_value
                 elif this_base_type == "boolean":
                     assert (this_value == "true") or (this_value == "false")
                     this_value = (this_value == "true")
