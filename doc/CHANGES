@@ -34,24 +34,26 @@ Kvasir
 
   User Changes
 
-    In accordance with Chicory, Kvasir now produces all of its output 
-    (both variable declarations and runtime values) in one .dtrace file 
-    instead of as separate .decls and .dtrace files.  The --decls-file=<filename>
-    command-line option forces Kvasir to generate separate .decls and 
-    .dtrace files like it used to do.
+    Kvasir now produces all of its output (both variable declarations and
+    runtime values) in one .dtrace file instead of as separate .decls and
+    .dtrace files.  The --decls-file=<filename> command-line option forces
+    Kvasir to generate separate .decls and .dtrace files, as before.
 
   Bug Fixes
 
-    Several refinements which produce better output for arrays and 
-    structs when using pointer type disambiguation.  Also fixed some bugs 
-    which allows Kvasir to be more robust across different Linux platforms 
-    (ie. kernel and gcc version differences).
+    Several refinements which produce better output for arrays and structs
+    when using pointer type disambiguation.  Also fixed some bugs, making
+    Kvasir more robust across different Linux platforms (kernel and gcc
+    version differences).
 
 Eclipse plug-in
 
   Version 3.1.10 of the Daikon plug-in for Eclipse (written by David Cok)
-  has been released.  It is compatible with Daikon version 4.
-      
+  has been released.  It is compatible with Daikon version 3.1.7 (which is
+  included with the plug-in), but with dfej version 4 (which can be
+  downloaded from the Daikon webpage).  A version of the plug-in that is
+  fully compatible with Daikon 4 is still in preparation.
+
 ---------------------------------
 
 4.0.0 (Feb 7 2005)
@@ -101,7 +103,7 @@ Eclipse plug-in
   Java source code. The plug-in works with Eclipse version 3.0.1 and later.
   You can find documentation for the plug-in at
   http://pag.csail.mit.edu/daikon/doc/daikonHelp.html .
-  The 3.1.7 version of the plugin supports versions of Daikon up to Daikon
+  The 3.1.7 version of the plug-in supports versions of Daikon up to Daikon
   3.1.7 and (like Eclipse 3.0.1) only versions of Java up to Java 1.4.2.
   A version of the plug-in for Eclipse 3.1 and Daikon 4.0.0 is forthcoming.
 
@@ -133,7 +135,7 @@ Daikon
     Previously, Daikon would print all of these implications.  Now, it
     prints only the first three, since the last two are redundant and can
     be inferred from the first three.
-      
+
     The following command-line options have been renamed, for consistency
     with other components of the Daikon distribution.
       OLD              NEW
@@ -176,7 +178,7 @@ dfej
     -declsfiledir=              --decls-dir=
     -declsfiledirflat=          --decls-flat --decls-dir=
     -instrsourcedir=            --instr-dir=
-                            
+
 Annotate
 
   Annotate and other components of Daikon (including runtimecheker,
