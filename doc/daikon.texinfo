@@ -5676,6 +5676,13 @@ proceeds without error.
 @cindex ajax.jbc.InvalidClassDataError
 @cindex InvalidClassDataError, Ajax
 
+Ajax cannot deal with binary .class files of version later that 1.1.
+Thus, before running ajax, compile all your code using @command{javac
+-target 1.1} to create correct format .class files.  Note that all the
+.jar files and other class files in your classpath used by the code
+also need to be compiled using @command{javac -target 1.1} in order
+for ajax to be able to execute.
+
 As of July 2002, Ajax cannot deal with JDK 1.2 (or later) libraries.
 For instance, Ajax issues the error ``ajax.jbc.InvalidClassDataError:
 No such method in call'' for methods such as
