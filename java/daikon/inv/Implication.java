@@ -1,7 +1,6 @@
 package daikon.inv;
 
 import daikon.*;
-import daikon.suppress.SuppressionLink;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -233,18 +232,6 @@ public class Implication
 
   public boolean isAllPrestate() {
     return predicate().isAllPrestate() && consequent().isAllPrestate();
-  }
-
-  public SuppressionLink consequentSuppressor() {
-    SuppressionLink result = orig_right.getSuppressor();
-    if (result != null) {
-      if (logOn()) {
-          orig_right.log ("Implication " + this +
-                          " consequent suppressed by "
-                          + orig_right.getSuppressor());
-      }
-    }
-    return result;
   }
 
   /**

@@ -2,7 +2,6 @@ package daikon.inv;
 
 import daikon.*;
 import daikon.inv.binary.*;
-import daikon.suppress.*;
 import utilMDE.*;
 
 import java.lang.reflect.*;
@@ -51,6 +50,8 @@ public class InvDef {
   public static final double[] elts_minus_one_float = {-1.0};
   public static final long[] elts_plus_minus_one = {-1, 1};
   public static final double[] elts_plus_minus_one_float = {-1.0, 1.0};
+  public static final long[] elts_one = {1};
+  public static final double[] elts_one_float = {1.0};
 
   public InvDef (VarInfo v1, Class cls) {
     this.v1 = v1;
@@ -97,7 +98,7 @@ public class InvDef {
    * Defines a ternary invariant independent of specific variables by
    * using the var_info instead.  The class must be correctly permutted
    * to match the variable order (ie, the indices must be 0, 1, 2).
-   * This is ok for now, since we are only using these do define
+   * This is ok for now, since we are only using these to define
    * suppressees and we always know the correct permuation in that
    * instance
    */
@@ -119,13 +120,6 @@ public class InvDef {
     return (out + ", class=" + inv_class.getName() + ", swap=" + swap
             + ", swap_class=" + swap_class);
   }
-
-  public void set (SuppressionTemplate sup_template, int index) {
-    if (v2 == null)
-      sup_template.set (index, inv_class, v1);
-    else
-      sup_template.set (index, inv_class, v1, v2);
-   }
 
   public boolean check (Invariant inv) {
     Assert.assertTrue (inv.getClass() == inv_class);
