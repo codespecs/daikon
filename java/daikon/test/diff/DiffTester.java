@@ -98,8 +98,9 @@ public class DiffTester extends TestCase {
       PptTopLevel ppt1 =
         newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]);
       Splitter split = new ReturnTrueSplitter();
-      PptConditional pptCond = new PptConditional(ppt1, split, false);
-      ppt1.views_cond.addElement(pptCond);
+      PptSplitter ppt_split = new PptSplitter (ppt1, split);
+      ppt1.splitters = new ArrayList();
+      ppt1.splitters.add (ppt_split);
       pptsCond.add(ppt1);
       pptsCond.add(newPptTopLevel("Foo.Bar(int):::ENTER", new VarInfo[0]));
       pptsCond.add(newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
@@ -580,6 +581,9 @@ public class DiffTester extends TestCase {
     node = new PptNode
       (newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]),
        newPptTopLevel("Foo.Baa(int):::ENTER", new VarInfo[0]));
+    ref.add(node);
+    node = new PptNode(null, newPptTopLevel
+      ("Foo.Baa(int):::ENTER;condition=\"not(return == true)\"", new VarInfo[0]));
     ref.add(node);
     node = new PptNode(null, newPptTopLevel
       ("Foo.Baa(int):::ENTER;condition=\"return == true\"", new VarInfo[0]));
