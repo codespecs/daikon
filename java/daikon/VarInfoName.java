@@ -446,7 +446,7 @@ public abstract class VarInfoName
       return term.name() + "[" + index + "]";
     }
     protected String simplify_name_impl() {
-      return "(elements " + term.simplify_name() + ")";
+      return "(select elems " + term.simplify_name() + ")";
     }
     public Object accept(Visitor v) {
       return v.visitElements(this);
