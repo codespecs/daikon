@@ -12,7 +12,7 @@ README_PATHS := $(addprefix doc/,$(README_FILES))
 SCRIPT_FILES := java-cpp.pl daikon.pl lines-from
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 DAIKON_JAVA_FILES := $(shell find java \( -name '*daikon-java*' -o -name '*-cpp.java' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name 'AjaxDecls.java' -o -name '*ajax-ship*' \) -prune -o -name '*.java' -print)
-WWW_FILES := $(shell cd doc/www; find . \( -name '*~' -o -name CVS \) -prune -o -type f -print)
+WWW_FILES := $(shell cd doc/www; find . \( -name '*~' -o -name CVS -o -name '.\#*' -o -name '*.bak' -o -name uw \) -prune -o -type f -print)
 WWW_DIR := /home/httpd/html/daikon/
 
 MERNST_DIR := /g2/users/mernst
@@ -165,6 +165,7 @@ update-dist-dir: dist-ensure-directory-exists
 	update-link-dates $(DIST_DIR)/index.html
 
 www:
+	html-update-toc doc/www/index.html
 	cd doc/www && cp -Ppf $(WWW_FILES) $(WWW_DIR)
 	cd $(WWW_DIR) && chmod -w $(WWW_FILES)
 
