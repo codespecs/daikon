@@ -994,12 +994,14 @@ invariants.
       inv.log ("Considering suppression of 'size(x[]) == size(y[])' "
                 + "by 'x[] == y[]'");
 
-    // Make sure v1 and v2 are size(array)
+    // Make sure v1 and v2 are size(array) with the same shift
     VarInfo v1 = inv.var1();
     if (!v1.isDerived() || !(v1.derived instanceof SequenceLength))
       return (null);
     VarInfo v2 = inv.var2();
     if (!v2.isDerived() || !(v2.derived instanceof SequenceLength))
+      return (null);
+    if (!v1.derived.isSameFormula (v2.derived))
       return (null);
 
     // Build a template for arr1 == arr2 of the correct type
