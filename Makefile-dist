@@ -16,9 +16,11 @@ endif
 	$(MAKE) -C clean
 
 kvasir:
-	cd kvasir && ./configure --prefix=`pwd`/inst
-	cd kvasir && make
-	cd kvasir && make install
+	cd kvasir && ./auto-everything.sh
+# I removed the next three lines - P. Guo
+#	cd kvasir && ./configure --prefix=`pwd`/inst
+#	cd kvasir && make
+#	cd kvasir && make install
 
 java-front-end: front-end/java/config.status
 	@echo "If this command fails, see 'Installing dfej' section in manual"
