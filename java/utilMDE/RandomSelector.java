@@ -31,6 +31,23 @@ import java.util.*;
  * <BR>keep_probability: double :  The percentage of elements to keep
  * <BR>selector_mode :
  *       {FIXED,PERCENT}  : either fixed amount of samples or fixed percent.
+ *
+ * <P>Example use:
+ * <BR> // randomly selects 100 lines of text from a file
+ * <pre>
+ *  List selectedLines = null;
+ *  try {
+ *     BufferedReader br = new BufferedReader
+ *       (new FileReader ("myfile.txt"));
+ *     RandomSelector selector = new RandomSelector (100);
+ *     while (br.ready()) {
+ *       selector.accept (br.readLine());
+ *     }
+ *     selectedLines = selector.getValues();
+ *   }
+ *   catch (IOException e2) { e2.printStackTrace(); }
+ * </pre>
+ *
  **/
 
 public class RandomSelector {
