@@ -7,6 +7,10 @@ public final class SequenceMinMaxSumFactory extends UnaryDerivationFactory {
   public UnaryDerivation[] instantiate(VarInfo vi) {
     // System.out.println("SequenceMinMaxSumFactory.instantiate(" + vi.name + ")");
 
+    if (Global.EXPERIMENTS) {
+      return null;
+    }
+
     if (vi.rep_type != ProglangType.INT_ARRAY)
       return null;
     if (! vi.type.isArray())

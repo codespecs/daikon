@@ -9,6 +9,10 @@ public final class SequenceInitialFactory extends UnaryDerivationFactory {
     // System.out.println("SequenceInitialFactory.instantiate(" + vi + ")");
     // return (UnaryDerivation)new SequenceFirst(vi);
 
+    if (Global.EXPERIMENTS) {
+      return null;
+    }
+
     if (vi.rep_type != ProglangType.INT_ARRAY)
       return null;
 
