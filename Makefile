@@ -150,8 +150,8 @@ cvs-test:
 # Main distribution
 
 # The "dist" target not only creates .tar files, but also installs a new
-# distribution on the website, updates webpages, tests the distributionn,
-# etc.  If you only want ot make a new .tar file, do "make
+# distribution on the website, updates webpages, tests the distribution,
+# etc.  If you only want to make a new .tar file, do "make
 # daikon-source.tar".
 # The "MAKEFLAGS=" argument discards any "-k" argument.  (It doesn't seem
 # to work, so supply explicit "-S" flag instead.)
