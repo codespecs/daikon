@@ -2,11 +2,15 @@ package daikon.diff;
 
 import daikon.inv.Invariant;
 import java.io.*;
+import java.text.*;
 
 public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
 
   private boolean printUninteresting;
   private boolean considerJustification;
+
+  private static DecimalFormat PROBABILITY_FORMAT =
+    new DecimalFormat("0.####");
 
   public PrintDifferingInvariantsVisitor(PrintStream ps,
                                          boolean verbose,
@@ -71,9 +75,17 @@ public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
   }
 
   private void printJustificationMaybe(Invariant inv, InvNode node) {
-    //    if (considerJustification &&
-    //        ! invariantsDiffer(node.getInv1(), node.getInv2()))
-    if (considerJustification)
-      print(" {" + (inv.justified() ? "+" : "-") + "}");
+    if (considerJustification &&
+        ! invariantsDiffer(node.getInv1(), node.getInv2())) {
+      print(" {");
+      double prob = inv.getProbability();
+      String probString = PROBABILITY_FORMAT.format(prob);
+      // Print a ~ if the probability is close to, but not exactly, zero
+      if (probString.equals("0") && prob != 0) {
+        print("~");
+      }
+      print(probString);
+      print("}");
+    }
   }
 }
