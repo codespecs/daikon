@@ -1281,7 +1281,7 @@ single file.
 
 @item Run the program using the kvasir-dtrace script.
 @example
-kvasir-dtrace ./bzip2 -vvc bzip2.c > bzip2.c.bz2
+kvasir-dtrace ./bzip2 -vv1c bzip2.c > bzip2.c.bz2
 @end example
 
 Run the program just as you normally would, but prepend
@@ -1306,17 +1306,20 @@ program, or they may be spurious. (If they are bugs, they can also be
 tracked down by using Valgrind with its regular memory checking
 tool; if they do not appear with that tool, they are probably
 spurious). In this example, you may see a warning about an
-uninitialized byte being passed to the @code{write} system call via
-@code{printf}; it can be ignored.
+uninitialized byte being passed to the @code{write} system call;
+it can be ignored.
 
 @item Run Daikon on the trace file.
 @example
-java daikon.Daikon -o bzip2.inv \
+java daikon.Daikon --var_omit '\[\]' -o bzip2.inv \
      daikon-output/bzip2.decls daikon-output/bzip2.dtrace
 @end example
 
 The invariants are printed to standard out, and a binary representation
-of the invariants is written to @file{bzip2.inv}.
+of the invariants is written to @file{bzip2.inv}. Note that the example
+above uses the option @code{--var_omit '\[\]'} to omit array variables
+(whose names end with []) to help Daikon run faster, as bzip uses
+several 100,000-element arrays. 
 
 @item Examine the invariants.  As described in @xref{Step-by-step
 instructions}, there are several ways to do this:
@@ -3772,7 +3775,7 @@ variables, and examine its memory usage, all transparently to the
 program. Also, rather than using your program's source code to find
 the names and types of functions and variables, Kvasir obtains them
 from debugging information included in the executable in a standard
-format. These differences should Kvasir both much easier to use and
+format. These differences should make Kvasir both much easier to use and
 more robust than the source-rewriting-based dfec.
 
 However, Kvasir has some limitations of its own. Because Kvasir uses
@@ -3827,6 +3830,17 @@ information about a number of runs of a program, set the
 @code{DTRACEAPPEND} environment variable to 1; this causes Kvasir
 to append to rather than overwrite the @file{program.dtrace} file.
 
+Note that Kvasir uses a different scheme for naming variables than dfec
+or the Java front end do. Because C does not have classes, the `class'
+portion of a program point name (before the last period) instead holds
+the file in which a function was defined, for file-static functions, or
+is simply a single period for global functions. (Thus, global function
+names start with two periods, like @samp{..main():::ENTER}.) In
+variable names, by contrast, the period is used to represent the field
+selection operator, so a slash is used instead: global variables are
+prefixed with a slash, and file-static variables are prefixed with their
+filename (with periods converted into underscores) and then a slash.
+
 @node Kvasir limitations,  , Using Kvasir, Binary C front end Kvasir
 @subsection Kvasir limitations
 
@@ -3842,19 +3856,12 @@ limitations are listed roughly in decreasing order of severity.
 
 @itemize @bullet
 @item
-Kvasir does not fully output arrays. Arrays are instead treated as
-pointers, so that only the directly pointed-to value (that is, the 0th
-element) is printed. Character arrays are a partial exception;
-pointers to characters are always treated as pointing to
-null-terminated character strings. However, character arrays inside
-structures are not handled correctly.
-
-@item
-Global variables are ignored. Kvasir's trace output includes only
-function parameters and return values (and the objects they point to).
-A possible workaround is to create a struct containing all of your
-global variables, and pass a pointer to this structure to every
-function.
+Kvasir's support for outputting arrays is not yet complete. Kvasir
+attempts to determine the length of arrays either statically from
+debugging information or dynamically by examining which memory locations
+have been used. However, this process is known to not yet work correctly
+in all situations. Also, multidimensional arrays do not yet print with
+all of their elements.
 
 @item
 Kvasir-traced programs take longer (often a good fraction of a second)
