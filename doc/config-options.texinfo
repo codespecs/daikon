@@ -290,6 +290,10 @@
  Splitters.  This can be the full path name or whatever is used on
  the commandline.
 
+@item daikon.split.SplitterFactory.delete_splitters_on_exit
+  Boolean.  Specifies whether or not the temporary Splitter files
+ should be deleted on exit.
+
 @item daikon.split.SplitterList.all_splitters
   Boolean.  Enables indiscriminate splitting
  (see Daikon manual, @ref{Indiscriminate splitting},
