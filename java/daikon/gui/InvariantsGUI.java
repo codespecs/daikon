@@ -1,5 +1,9 @@
 package daikon.gui;
 
+import daikon.*;
+import daikon.inv.*;
+import daikon.inv.filter.InvariantFilters; // ?????
+
 import java.io.*;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
@@ -7,6 +11,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.*;
@@ -16,8 +21,6 @@ import javax.swing.event.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.*;
 import javax.swing.tree.*;
-import daikon.*;
-import daikon.inv.*;
 
 public class InvariantsGUI extends JFrame implements ActionListener, KeyListener {
     InvariantTablesPanel invariantsTablesPanel;
@@ -140,7 +143,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	    else if (e.getClass() == StreamCorruptedException.class)
 		System.out.println( "Error: invariants object file is corrupted." );
 	    else
-		System.out.println( "Error: " + e.getMessage() );
+		System.out.println( "Error: " + e.getClass().getName() + ": " + e.getMessage() );
 	    throw new Error( "InvariantsGUI.getPptMapFromFile():  error reading pptMap from '" + fileName + "'" );
 	}
     }
@@ -159,37 +162,23 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
     protected void setupGUI( JTree tree, JScrollPane invariantTablesScrollPane ) {
 	JMenuBar menuBar = new JMenuBar();
 	setJMenuBar( menuBar );
-	JMenu menu = new JMenu( "File" );
-	menu.setMnemonic( KeyEvent.VK_F );
-	menuBar.add( menu );
-	JMenuItem menuItem = new JMenuItem( "Load file", KeyEvent.VK_L );
-	menuItem.addActionListener( this );
-	menu.add( menuItem );
-	menuItem = new JMenuItem( "Quit", KeyEvent.VK_Q );
-	menuItem.addActionListener( this );
-	menu.add( menuItem );
+	createFileMenu( menuBar );
+	createFilterMenu( menuBar );
 
 	removeKeyListener( this ); // setupGUI() might be called more than once, but we only
-                                   // want to add it as KeyListener once.
+	// want to add it as KeyListener once.
 	addKeyListener( this );	   // for scrolling through tables
 
 	//  If the user clicks on a method, the method's ppt's will be selected
 	//  but we don't want the method node to expand.
 	tree.setExpandsSelectedPaths( false );
  
-	JCheckBox showUnjustifiedCheckBox = createCheckBox( "Show unjustified invariants",
-							    InvariantFilters.UNJUSTIFIED_FILTER );
-	JCheckBox showObviousCheckBox = createCheckBox( "Show obvious invariants",
-							InvariantFilters.OBVIOUS_FILTER );
-
-	JPanel controlPanel = new JPanel();
-	controlPanel.add( showUnjustifiedCheckBox );
-	controlPanel.add( showObviousCheckBox );
-
 	JPanel topPanel = new JPanel();	// includes control panel and tree
-	topPanel.setLayout( new BorderLayout());
-	topPanel.add( controlPanel, BorderLayout.NORTH );
-	topPanel.add( new JScrollPane( tree ), BorderLayout.CENTER );
+	topPanel.setLayout( new BoxLayout( topPanel, BoxLayout.Y_AXIS ));
+	//	topPanel.add( controlPanel );
+	topPanel.add( new JScrollPane( tree ));
+	//  	topPanel.add( controlPanel, BorderLayout.NORTH );
+	//  	topPanel.add( new JScrollPane( tree ), BorderLayout.CENTER );
 
 	//	invariantTablesScrollPane.setViewportView( new JPanel());
 	JSplitPane splitPane = new JSplitPane( JSplitPane.VERTICAL_SPLIT,
@@ -198,7 +187,7 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	splitPane.setDividerSize( 2 );
 
 	getContentPane().removeAll();
-	setTitle( "Daikon GUI" );
+	setTitle( "Welcome to the Daikon GUI" );
 	getContentPane().add( splitPane );
  	pack();
 	setSize( 600, 700 );
@@ -208,22 +197,50 @@ public class InvariantsGUI extends JFrame implements ActionListener, KeyListener
 	splitPane.setDividerLocation( .4 );
     }
 
-    JCheckBox createCheckBox( String text, String id ) {
-	JCheckBox checkBox = new JCheckBox( text );
-	checkBox.setName( id );
-	checkBox.addItemListener( invariantsTablesPanel );
-	checkBox.setFont( checkBox.getFont().deriveFont( Font.PLAIN ));
-	return checkBox;
+    void createFileMenu( JMenuBar menuBar ) {
+	JMenu menu = new JMenu( "File" );
+	menu.setMnemonic( KeyEvent.VK_F );
+	menuBar.add( menu );
+	JMenuItem menuItem = new JMenuItem( "Load file", KeyEvent.VK_L );
+	menuItem.addActionListener( this );
+	menu.add( menuItem );
+	menuItem = new JMenuItem( "Quit", KeyEvent.VK_Q );
+	menuItem.addActionListener( this );
+	menu.add( menuItem );
+    }
+
+    void createFilterMenu( JMenuBar menuBar ) {
+	JMenu menu = new JMenu( "Filter", true ); // Unfortunately, tear-off menus aren't implemented yet.
+	menu.setMnemonic( KeyEvent.VK_L );
+	menuBar.add( menu );
+	createFilterMenuItem( menu, "Show unjustified invariants", InvariantFilters.UNJUSTIFIED_FILTER );
+	createFilterMenuItem( menu, "Show obvious invariants", InvariantFilters.OBVIOUS_FILTER );
+	createFilterMenuItem( menu, "Show invariants with few modified samples", InvariantFilters.FEW_MODIFIED_SAMPLES_FILTER );
+	createFilterMenuItem( menu, "Show invariants containing non-canonical variables", InvariantFilters.NON_CANONICAL_VARIABLES_FILTER );
+	createFilterMenuItem( menu, "Show invariants containing only constants", InvariantFilters.ONLY_CONSTANT_VARIABLES_FILTER );
+    }
+
+    void createFilterMenuItem( JMenu menu, String text, String id ) {
+	JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem( text );
+	menuItem.addActionListener( this );
+	menuItem.setName( id );
+	menu.add( menuItem );
     }
 
     public void actionPerformed( ActionEvent e ) {
-	String menuName = ((JMenuItem) (e.getSource())).getText();
-	if (menuName.equals( "Load file" )) {
-	    String invFileName = pickFileFromFileChooser();
-	    loadInvariantsFromFile( invFileName );
+	JMenuItem menuItem = (JMenuItem) e.getSource();
+	String menuName = menuItem.getName();
+	if (menuName != null) {	// Must be a filter menu item
+	    invariantsTablesPanel.updateInvariants( menuName, ! ((JCheckBoxMenuItem) menuItem).getState());
+	} else {
+	    String menuText = menuItem.getText();
+	    if (menuText.equals( "Load file" )) {
+		String invFileName = pickFileFromFileChooser();
+		loadInvariantsFromFile( invFileName );
+	    }
+	    else if (menuText.equals( "Quit" ))
+		System.exit( 0 );
 	}
-	else if (menuName.equals( "Quit" ))
-	    System.exit( 0 );
     }
 
     String pickFileFromFileChooser() {
@@ -272,7 +289,7 @@ class InvFileFilter extends FileFilter {
 }
 
 
-class InvariantTablesPanel implements TreeSelectionListener, ItemListener {
+class InvariantTablesPanel implements TreeSelectionListener {
     JScrollPane scrollPane;	 // the main scrollPane, which contains the main panel
     JPanel panel = new JPanel(); // the main panel
     TreeSelectionModel treeSelectionModel;
@@ -408,9 +425,7 @@ class InvariantTablesPanel implements TreeSelectionListener, ItemListener {
 	this.tableModels.add( tableModel );
     }
 
-    public void itemStateChanged( ItemEvent e ) {
-	String filterID = ((JCheckBox) e.getItem()).getName();
-	boolean turnOn = (e.getStateChange() == ItemEvent.DESELECTED);
+    public void updateInvariants( String filterID, boolean turnOn ) {
 	invariantFilters.changeFilterSetting( filterID, turnOn );
 	for (int i = 0; i < tableModels.size(); i++ ) {
 	    InvariantTableModel tableModel = (InvariantTableModel) tableModels.get( i );
@@ -420,7 +435,6 @@ class InvariantTablesPanel implements TreeSelectionListener, ItemListener {
 	    resizeScrollPane( scrollPane );
 	    tableHeights.set( i, new Integer( (int) panel.getPreferredSize().getHeight()));
 	}
-	
 	panel.repaint();
 	panel.revalidate();
     }
@@ -503,71 +517,3 @@ class InvariantTableModel extends AbstractTableModel {
 
 
 
-public class InvariantFilters {
-    //  These id numbers are stored in HashMap's and such, so it's
-    //  convenient for them to be String's rather than int's.
-    public static final String UNJUSTIFIED_FILTER = "0";
-    public static final String OBVIOUS_FILTER = "1";
-
-    HashMap filters = new HashMap();
-    
-    public InvariantFilters() {
-	filters.put( InvariantFilters.UNJUSTIFIED_FILTER, new UnjustifiedFilter());
-	filters.put( InvariantFilters.OBVIOUS_FILTER,     new ObviousFilter());
-    }
-
-    public boolean shouldKeep( Invariant invariant ) {
-	for (Iterator iter = filters.values().iterator(); iter.hasNext(); ) {
-	    InvariantFilter filter = (InvariantFilter) iter.next();
-	    if (filter.shouldDiscard( invariant ))
-		return false;
-	}
-	return true;
-    }
-    
-    public void changeFilterSetting( String filterID, boolean turnOn ) {
-	InvariantFilter filter = (InvariantFilter) filters.get( filterID );
-	if (turnOn)
-	    filter.turnOn();
-	else
-	    filter.turnOff();
-    }
-}
-
-
-
-abstract class InvariantFilter {
-    boolean isOn;
-
-    public InvariantFilter( boolean isOn ) {
-	this.isOn = isOn;
-    }
-
-    public InvariantFilter() {	// TODO:  This is a hack.  Should add constructors that take a boolean
-	this( true );		// for every subclass.
-    }
-
-    public void turnOn()  { isOn = true; }
-    public void turnOff() { isOn = false; }
-    
-    public boolean shouldDiscard( Invariant invariant ) {
-	if (! isOn)
-	    return false;
-	else
-	    return shouldDiscardInvariant( invariant );
-    }
-    
-    abstract boolean shouldDiscardInvariant( Invariant invariant );
-}
-
-class UnjustifiedFilter extends InvariantFilter {
-    boolean shouldDiscardInvariant( Invariant invariant ) {
-	return ! invariant.justified();
-    }
-}
-
-class ObviousFilter extends InvariantFilter {
-    public boolean shouldDiscardInvariant( Invariant invariant ) {
-	return invariant.isObvious();
-    }
-}
