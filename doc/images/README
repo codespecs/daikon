@@ -12,5 +12,4 @@ Where the daikon-logo files come from:
  .jpg	xv daikon-logo.gif, then save as JPEG
 	(used only if xv crashes when trying to write PNG)
  .txt   aview daikon-logo.pnm, fiddle with options, save,
-        manually remove border (note: aview is not installed on the
-        PAG machines)
+        manually remove border
