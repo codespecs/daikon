@@ -585,13 +585,18 @@ public class DeclWriter extends DaikonWriter
         outFile.println (type_name + arr_str);
         outFile.print(getRepName(type, inArray) + arr_str);
         if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)
-            && type.isPrimitive())
+            && type.isPrimitive() && !inArray)
         {
             try
             {
                 // Note, getting the value of a static constant triggers
                 // class initialization!!
+                
+                if(!field.isAccessible())
+                    field.setAccessible(true);
+                
                 Object val = field.get(null);
+                
                 outFile.println(" = " + val.toString());
             }
             catch (IllegalAccessException e)
