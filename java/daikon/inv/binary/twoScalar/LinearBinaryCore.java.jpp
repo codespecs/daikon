@@ -401,7 +401,7 @@ public final class CLASSNAME
         || (format == OutputFormat.ESCJAVA)
         || (format == OutputFormat.JML)
         || (format == OutputFormat.IOA)
-        || (format == OutputFormat.DBCJAVA))       
+        || (format == OutputFormat.DBCJAVA))
     {
       String eq = " == ";
       if (format == OutputFormat.IOA) eq = " = ";
@@ -484,25 +484,25 @@ public final class CLASSNAME
   public CLASSNAME merge (List cores, Invariant wrapper) {
 
     // Look for any active lines.  All must define the same line
-    CLASSNAME first = null;
+    CLASSNAME result = null;
     for (int i = 0; i < cores.size(); i++) {
       CLASSNAME c = (CLASSNAME) cores.get (i);
       if (!c.isActive())
         continue;
-      if (first == null)
-        first = (CLASSNAME) c.clone();
+      if (result == null)
+        result = (CLASSNAME) c.clone();
       else {
-        if (!Global.fuzzy.eq (first.a, c.a)
-            || !Global.fuzzy.eq (first.b, c.b))
+        if (!Global.fuzzy.eq (result.a, c.a)
+            || !Global.fuzzy.eq (result.b, c.b))
           return (null);
       }
     }
 
     // If no active lines were found, created an empty core
-    if (first == null)
-      first = new CLASSNAME (wrapper);
+    if (result == null)
+      result = new CLASSNAME (wrapper);
     else
-      first.wrapper = wrapper;
+      result.wrapper = wrapper;
 
     // Merge in any points from non-active cores
     for (int i = 0; i < cores.size(); i++) {
@@ -510,13 +510,13 @@ public final class CLASSNAME
       if (c.isActive())
         continue;
       for (int j = 0; j < c.values_seen; j++) {
-        first.add_modified (c.x_cache[j], c.y_cache[j], 1);
+        result.add_modified (c.x_cache[j], c.y_cache[j], 1);
         if (wrapper.falsified)
           return (null);
       }
     }
 
-    return (first);
+    return (result);
   }
 
   public boolean isSameFormula(CLASSNAME other)

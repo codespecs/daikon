@@ -34,7 +34,7 @@ import daikon.inv.*;
 import utilMDE.*;
 import java.io.Serializable;
 import java.util.*;
-
+import java.lang.Math;
 
 public final class CLASSNAME
   implements Serializable, Cloneable
@@ -199,24 +199,20 @@ public final class CLASSNAME
   public CLASSNAME merge (List cores, Invariant wrapper) {
 
     // Get a clone of the first core
-    CLASSNAME first = (CLASSNAME) ((CLASSNAME) cores.get (0)).clone();
-    first.wrapper = wrapper;
+    CLASSNAME result = (CLASSNAME) ((CLASSNAME) cores.get (0)).clone();
+    result.wrapper = wrapper;
 
     // Loop through the remaining cores, modifying min/max as necessary and
     // incrementing samples
     for (int i = 1; i < cores.size(); i++) {
       CLASSNAME c = (CLASSNAME) cores.get (i);
-      if (c.min1 < first.min1)
-        first.min1 = c.min1;
-      if (c.max1 > first.max1)
-        first.max1 = c.max1;
-      if (c.min2 < first.min2)
-        first.min2 = c.min2;
-      if (c.max2 > first.max2)
-        first.max2 = c.max2;
-      first.samples += c.samples;
+      result.min1 = Math.min (result.min1, c.min1);
+      result.max1 = Math.max (result.max1, c.max1);
+      result.min2 = Math.min (result.min2, c.min2);
+      result.max2 = Math.max (result.max2, c.max2);
+      result.samples += c.samples;
     }
 
-    return (first);
+    return (result);
   }
 }
