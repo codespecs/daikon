@@ -148,10 +148,11 @@ public class SUBSET
   public String format_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format();
     if (format == OutputFormat.IOA) return format_ioa();
-    if (format == OutputFormat.JAVA) return format();
     if (format == OutputFormat.ESCJAVA) return format_esc();
-    if (format == OutputFormat.JML) return format_jml();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
+    if (format.isJavaFamily()) {
+      return format_java_family(format);
+    }
 
     return format_unimplemented(format);
   }
@@ -267,9 +268,16 @@ public class SUBSET
 
   }
 
-  public String format_jml() {
-    String classname = this.getClass().toString().substring(6); // remove leading "class"
-    return "warning: method " + classname + ".format_jml() needs to be implemented: " + format();
+  public String format_java_family(OutputFormat format) {
+
+    String v1 = var1().name.name_using(format, var1());
+    String v2 = var2().name.name_using(format, var2());
+    #if (defined(SUB) || defined(SUBFLOAT))
+    return "daikon.Quant.subsetOf(" + v1 + ", " + v2 + ")";
+    #else
+    return "daikon.Quant.subsetOf(" + v2 + ", " + v1 + ")";
+    #endif
+
   }
 
   public InvariantStatus check_modified(LONG[] a1, LONG[] a2, int count) {
