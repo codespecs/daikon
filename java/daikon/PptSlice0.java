@@ -14,7 +14,7 @@ public class PptSlice0 extends PptSlice {
 
   public void addInvariant(Invariant inv) {
     Assert.assert(inv != null);
-    Assert.assert(inv instanceof Implication);
+    // Assert.assert(inv instanceof Implication);
     invs.add(inv);
   }
 
