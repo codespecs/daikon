@@ -207,7 +207,7 @@ if ($single) {
     my $reported = $ver + $unver + $inexp + $redun;
 
 
-    printf("%-10s & %s & %s & %s & %s & %s & %s \\\\\n",
+    printf("%-10s & %s & %s & %s & %s & %s & %s \\\\ \\hline\n",
 	   $typ, $ver, $unver, $inexp, $redun, $reported, $miss);
     $total_verified += $ver;
     $total_unverified += $unver;
@@ -216,7 +216,8 @@ if ($single) {
     $total_reported += $reported;
     $total_missing += $miss;
   }
-  printf("%-10s & %s & %s & %s & %s & %s & %s \\\\\n",
+  print "\\hline\n";
+  printf("%-10s & %s & %s & %s & %s & %s & %s \\\\ \\hline\n",
 	 "Total", $total_verified, $total_unverified, $total_inexpressible,
 	 $total_redundant, $total_reported, $total_missing);
 } else {
