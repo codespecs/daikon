@@ -2,7 +2,7 @@ package daikon;
 
 import daikon.*;
 import daikon.inv.*;
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
 
 import java.util.logging.Logger;
@@ -44,16 +44,41 @@ public class Debug {
       // "PptSliceEquality",
       // "PptTopLevel",
       // "PptSlice2",
-      "LowerBound",
-      "UpperBound",
+      // "LowerBound",
+      // "UpperBound",
       // "LinearBinary",
       // "SeqIndexComparison",
       // "SeqIndexNonEqual",
       // "IntEqual",
       // "SeqSeqIntEqual",
-      "NonZero"
+      // "NonZero",
+      // "FunctionBinary",
+      // "OneOfSequence",
+      // "IntLessEqual",
+      // "IntGreaterEqual",
+      //  "IntLessThan",
+      //  "IntGreaterThan",
+        "DynamicConstants",
+      // "IntNonEqual",
+      // "Member",
+      // "FunctionBinary"
+      // "EltNonZero",
+      //  "SubSet",
+      //  "SuperSet",
+      //"EltOneOf",
+      //  "Bound",
+      "SeqSeqIntLessThan",
+      "SeqSeqIntGreaterThan",
     };
 
+  /**
+   * Restrict function binary prints to the specified method.  Implementation
+   * is in the FunctionBinary specific log functions.  If null, there is no
+   * restriction (all function binary methods are printed).  See Functions.java
+   * for a list of function names
+   */
+  public static String function_binary_method =
+    "java.lang.Math.max(";
 
   /**
    * List of Ppts for logging. Each name listed is compared to
@@ -66,20 +91,18 @@ public class Debug {
 
   public static String[] debugTrackPpt
     = {
-      // "DataStructures.StackAr.makeEmpty()V:::ENTER"
-      // "misc.Dataflow.B.m2():::EXIT24"
-      // "unionCareful(int, int):::EXIT"
-      // "MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT",
-      // "MapQuick1.StreetNumberSet:::OBJECT",
-      // "MapQuick1.StreetNumberSet.max():::EXIT",
-      // "DataStructures.DisjSets.DisjSets(int):::EXIT"
-      // "PolyCalc.RatPoly.hintedGet(PolyCalc.RatTermVec, int, int):::EXIT537"
-      // "misc.StaticInteresting:::OBJECT"
-      // "DataStructures.StackAr.top():::EXIT75",
-      // "DataStructures.StackAr.pop():::EXIT",
-      // "DataStructures.DisjSets.find(int):::EXIT70",
-      // "misc.Fib",
-      "std.instr___fxstat(int;int;stat *;)int:::ENTER",
+      // "DataStructures.StackAr.makeEmpty()V:::ENTER",
+      // "DataStructures.StackAr.top():::EXIT74",
+      // "std.flex_alloc(unsigned;)void *:::EXIT1",
+      // "DataStructures.StackAr.makeEmpty():::EXIT",
+      // "DataStructures.StackAr.StackAr(int):::EXIT",
+      // "DataStructures.DisjSets.unionDisjoint(int, int):::EXIT",
+      // "PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT96",
+      // "PolyCalc.RatPoly.add(PolyCalc.RatPoly):::EXIT354",
+      // "PolyCalc.RatPoly.findTermIndex(PolyCalc.RatTermVec, int):::EXIT",
+      //  "MapQuick1.StreetNumberSet.contains"
+      // "misc.Suppress02.f",
+      "MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT271",
     };
 
   /**
@@ -98,11 +121,34 @@ public class Debug {
       // { "this.terms.wrapped[orig(e)+1..]", "this.terms.wrapped[orig(c)..]" }
       // {"misc.Fib.a", "misc.Fib.b", "misc.Fib.c" },
       // {"size(this.theArray[])", "orig(size(this.theArray[]))"},
-      { "argSTAT_BUF.st_mtime" }
-     };
+      // { "argSTAT_BUF.st_mtime" }
+      // {"this.theArray[]", "orig(this.theArray[post(this.topOfStack)+1..])"},
+      // {"this.theArray[]", "orig(this.theArray[post(this.topOfStack+1)..])"},
+      // {"::printstats"},
+      // {"::yy_last_accepting_state"},
+      // {"size", "size", "size" },
+      // {"this.theArray[0..this.topOfStack]"},
+      // {"orig(this.topOfStack)", "size(this.theArray[])-1"},
+      // {"orig(this.s[post(root1)])", "orig(this.s[root1])"},
+      // {"orig(this.s[])", "orig(this.s[])" },
+      // {"orig(this.s[])"},
+      // {"root1", "orig(root1)"}
+      // {"this.numer", "this.denom"},
+      // {"size(p.terms.wrapped[])-1", "size(return.terms.wrapped[])"},
+      // {"::C_plus_plus", "::syntaxerror", "::numprots"}
+      // {"size(p.terms.wrapped[])-1", "size(return.terms.wrapped[])"},
+      // {"ts.wrapped[return]"},
+      // {"size(this.begins[])", "size(this.ends[])", "size(this.begins[])-1"},
+      // {"n"},
+      // {"size(this.theArray[])", "size(this.theArray2[])-1"},
+      {"this.begins[]", "this.ends[]"},
+    };
 
   // cached standard parts of the debug print so that multiple calls from
   // the same context don't have to repeat these each time
+
+  /** true if the cached variables are printable **/
+  public boolean cache_match = true;
 
   /** cached class */
   public Class cache_class;
@@ -123,6 +169,20 @@ public class Debug {
   }
 
   /**
+   * Returns a Debug object if the specified class, ppt, and vis match
+   * what is being tracked.  Otherwise, return NULL.  Preferred over calling
+   * the constructor directly, since it doesn't create the object if it
+   * doesn't have to
+   */
+  public static Debug newDebug (Class c, Ppt ppt, VarInfo[] vis) {
+    if (logOn() && class_match (c) && ppt_match (ppt) && var_match (vis))
+      return new Debug (c, ppt, vis);
+    else
+      return null;
+  }
+
+
+  /**
    * Sets up the cache for c, ppt, and whatever variable (if any) from
    * vis that is on the debugTrackVar list.  Essentially this creates
    * a debug object that will print if any of the variables in vis are
@@ -133,8 +193,10 @@ public class Debug {
     VarInfo v = visTracked (vis);
     if (v != null)
       set (c, ppt, new VarInfo[] {v});
-    else
+    else if (vis.size() > 0)
       set (c ,ppt, new VarInfo[] {(VarInfo) vis.get(0)});
+    else
+      set (c, ppt, null);
   }
 
   /**
@@ -163,6 +225,30 @@ public class Debug {
     return null;
   }
 
+  private static String ourvars[] = new String[3];
+
+  private static final VarInfo[] vis1 = new VarInfo[1];
+  private static final VarInfo[] vis2 = new VarInfo[2];
+  private static final VarInfo[] vis3 = new VarInfo[3];
+
+  public static VarInfo[] vis (VarInfo v1) {
+    vis1[0] = v1;
+    return (vis1);
+  }
+
+  public static VarInfo[] vis (VarInfo v1, VarInfo v2) {
+    vis2[0] = v1;
+    vis2[1] = v2;
+    return (vis2);
+  }
+
+  public static VarInfo[] vis (VarInfo v1, VarInfo v2, VarInfo v3) {
+    vis3[0] = v1;
+    vis3[1] = v2;
+    vis3[2] = v3;
+    return (vis3);
+  }
+
   /**
    * Sets the cache for class, ppt, and vis so that future calls to log
    * don't have to set them.
@@ -181,6 +267,7 @@ public class Debug {
     for (int i = 0; i < vis.length; i++)
       if (vis[i] == null)
         System.out.println ("vis[" + i + "] == null");
+    cache_match = class_match (c) && ppt_match (ppt) && var_match (vis);
   }
 
 
@@ -231,7 +318,8 @@ public class Debug {
    */
 
   public void log (Logger debug, String msg) {
-    log (debug, cache_class, cache_ppt, cache_vis, msg);
+    if (cache_match)
+      log (debug, cache_class, cache_ppt, cache_vis, msg);
   }
 
   /**
@@ -315,8 +403,13 @@ public class Debug {
       samp_str = " s" + pslice.num_samples();
     }
 
+    // Figure out the line number if possible
+    LineNumberReader lnr = FileIO.data_trace_reader;
+    String line = (lnr == null) ? "?" : String.valueOf(lnr.getLineNumber());
+    line = " line=" + line;
+
     debug.fine (class_str + ": " + ppt.ppt_name.getFullNamePoint()
-                 + samp_str + ": " + vars + msg);
+                 + samp_str + line + ": " + vars + msg);
     if (dkconfig_showTraceback) {
       Throwable stack = new Throwable("debug traceback");
       stack.fillInStackTrace();
@@ -365,82 +458,16 @@ public class Debug {
       return (false);
 
     // Make sure the class matches
-    if ((debugTrackClass.length > 0) && (inv_class != null)) {
-      if (!strContainsElem (inv_class.getName(), debugTrackClass))
-        return (false);
-    }
+    if (!class_match (inv_class))
+      return (false);
 
     // Make sure the Ppt matches
-    if (debugTrackPpt.length > 0) {
-      if (!strContainsElem (ppt.name, debugTrackPpt))
-        return (false);
-    }
+    if (!ppt_match (ppt))
+      return (false);
 
-    // Make sure the variables match our equality set
-    // If our variable is not the leader, keep track of our variables name
-    // so we can display it also.
-    String ourvars[] = new String[3];
-    if (debugTrackVars.length > 0) {
-      boolean match = false;
-
-      // Loop through each set of specified debug variables.
-      outer: for (int i = 0; i < debugTrackVars.length; i++) {
-        String[] cv = debugTrackVars[i];
-        if (cv.length != vis.length)
-          continue;
-        for (int j = 0; j < ourvars.length; j++)
-          ourvars[j] = null;
-
-        // Flags to insure that we don't match a variable more than once
-        boolean[] used = {false, false, false};
-
-        // Loop through each variable in this set of debug variables
-        for (int j = 0; j < cv.length; j++) {
-          boolean this_match = false;
-          Set evars = null;
-
-          // Loop through each variable at this point
-          eachvis: for (int k = 0; k < vis.length; k++) {
-
-            // Get the matching equality set
-            evars = null;
-            if (vis[k].equalitySet != null)
-              evars = vis[k].equalitySet.getVars();
-
-            // If there is an equality set
-            if (evars != null) {
-
-              // Loop through each variable in the equality set
-              for (Iterator iter = evars.iterator(); iter.hasNext(); ) {
-                VarInfo v = (VarInfo) iter.next();
-                if (!used[k] &&
-                    (cv[j].equals ("*") || cv[j].equals (v.name.name()))) {
-                  used[k] = true;
-                  this_match = true;
-                  if (!cv[j].equals (vis[j].name.name())) {
-                    ourvars[j] = v.name.name();
-                    if (j != k)
-                      ourvars[j] += " (" + j +"/" + k + ")";
-                    if (v.isCanonical())
-                      ourvars[j] += " (Leader)";
-                  }
-                  break eachvis;
-                }
-              }
-            } else { // sometimes, no equality set
-              if (cv[j].equals ("*") || cv[j].equals (vis[k].name.name()))
-                this_match = true;
-            }
-          }
-          if (!this_match)
-            continue outer;
-        }
-        match = true;
-        break outer;
-      }
-      if (!match)
-        return (false);
-    }
+    // Make sure the variables match
+    if (!var_match (vis))
+      return (false);
 
     // Get the non-qualified class name
     String class_str = "null";
@@ -468,8 +495,13 @@ public class Debug {
       samp_str = " s" + pslice.num_samples();
     }
 
+    // Figure out the line number if possible
+    LineNumberReader lnr = FileIO.data_trace_reader;
+    String line = (lnr == null) ? "?" : String.valueOf(lnr.getLineNumber());
+    line = " line=" + line;
+
     debugTrack.fine (class_str + ": " + ppt.ppt_name.getFullNamePoint()
-                     + samp_str + ": " + vars + msg);
+                     + samp_str + line + ": " + vars + msg);
     if (dkconfig_showTraceback) {
       Throwable stack = new Throwable("debug traceback");
       stack.fillInStackTrace();
@@ -478,6 +510,102 @@ public class Debug {
 
     return (true);
   }
+
+  /**
+   * Returns whether or not the specified class matches the classes being
+   * tracked
+   */
+  private static boolean class_match (Class inv_class) {
+
+    if ((debugTrackClass.length > 0) && (inv_class != null)) {
+      return (strContainsElem (inv_class.getName(), debugTrackClass));
+    }
+    return (true);
+  }
+
+  /**
+   * Returns whether onot the specified ppt matches the ppts being tracked
+   */
+  private static boolean ppt_match (Ppt ppt) {
+
+    if (debugTrackPpt.length > 0) {
+      return (strContainsElem (ppt.name, debugTrackPpt));
+    }
+    return (true);
+  }
+
+  /**
+   * Returns whether or not the specified vars match the ones being tracked.
+   * Also, sets Debug.ourvars with the names of the variables matched if they
+   * are not the leader of their equality sets
+   */
+
+  private static boolean var_match (VarInfo vis[]) {
+
+    if (debugTrackVars.length == 0)
+      return (true);
+
+    boolean match = false;
+
+    // Loop through each set of specified debug variables.
+    outer: for (int i = 0; i < debugTrackVars.length; i++) {
+      String[] cv = debugTrackVars[i];
+      if (cv.length != vis.length)
+        continue;
+      for (int j = 0; j < ourvars.length; j++)
+        ourvars[j] = null;
+
+      // Flags to insure that we don't match a variable more than once
+      boolean[] used = {false, false, false};
+
+      // Loop through each variable in this set of debug variables
+      for (int j = 0; j < cv.length; j++) {
+        boolean this_match = false;
+        Set evars = null;
+
+        // Loop through each variable at this point
+        eachvis: for (int k = 0; k < vis.length; k++) {
+
+          // Get the matching equality set
+          evars = null;
+          if (vis[k].equalitySet != null)
+            evars = vis[k].equalitySet.getVars();
+
+          // If there is an equality set
+          if (evars != null) {
+
+            // Loop through each variable in the equality set
+            for (Iterator iter = evars.iterator(); iter.hasNext(); ) {
+              VarInfo v = (VarInfo) iter.next();
+              if (!used[k] &&
+                  (cv[j].equals ("*") || cv[j].equals (v.name.name()))) {
+                used[k] = true;
+                this_match = true;
+                if (!cv[j].equals (vis[j].name.name())) {
+                  ourvars[j] = v.name.name();
+                  if (j != k)
+                    ourvars[j] += " (" + j +"/" + k + ")";
+                  if (v.isCanonical())
+                    ourvars[j] += " (Leader)";
+                }
+                break eachvis;
+              }
+            }
+          } else { // sometimes, no equality set
+            if (cv[j].equals ("*") || cv[j].equals (vis[k].name.name()))
+              this_match = true;
+          }
+        }
+        if (!this_match)
+          continue outer;
+      }
+      match = true;
+      break outer;
+    }
+
+    return (match);
+  }
+
 
   /**
    * Looks for an element in arr that is contained in str.
@@ -533,11 +661,15 @@ public class Debug {
         for (int k = 0; k < cv.length; k++) {
           if (cv[k].equals (v.name.name())) {
             Object val = v.getValue (vt);
+            int mod = vt.getModified (v);
             out += v.name.name() + "=";
-            if (val instanceof long[])
-              out += ArraysMDE.toString((long[])val);
-            else
-              out += val;
+            out += toString (val);
+            if ((mod == ValueTuple.MISSING_FLOW)
+              || (mod == ValueTuple.MISSING_NONSENSICAL))
+              out += " (missing)";
+            if (v.missingOutOfBounds())
+              out += " (out of bounds)";
+            // out += " mod=" + mod;
             out += ": ";
           }
         }
@@ -546,4 +678,28 @@ public class Debug {
 
     return (out);
   }
+
+  public static String toString (Object val) {
+    if (val == null)
+      return ("none");
+    if (val instanceof String)
+      return "\"" + val + "\"";
+    if (val instanceof long[])
+      return ArraysMDE.toString ((long[])val);
+    else if (val instanceof String[])
+      return ArraysMDE.toString ((String[])val);
+    else if (val instanceof double[])
+      return ArraysMDE.toString ((double[])val);
+    else
+      return (val.toString());
+  }
+
+  public static String toString (VarInfo[] vis) {
+
+    String vars = "";
+    for (int j = 0; j < vis.length; j++)
+      vars += vis[j].name.name() + " ";
+    return (vars);
+  }
+
 }
