@@ -104,7 +104,25 @@ public final class VarInfo
   public Vector derivees;
   */
 
-  // Reinstating this in the way Mike and I discussed.
+  /**
+   * Returns whether or not we have encountered to date any missing values
+   * due to array indices being out of bounds.  This can happen with both
+   * subscripts and subsequences.  Note that this becomes true as we are
+   * running, it cannot be set in advance without a first pass.
+   *
+   * This is used as we are processing data to destroy any invariants
+   * that use this variable.
+   *
+   * @see Derivation.missingOutOfBounds()
+   **/
+  public boolean missingOutOfBounds() {
+    if (derived != null)
+      return derived.missingOutOfBounds();
+    else
+      return (false);
+  }
+
+  // Reinstating this in the way Mike and I discussed
   // We don't know about canBeMissing or canBeNull anymore, since we
   // see data incrementally, instead of slurping it all first.
   // [[INCR]] ....
@@ -449,6 +467,10 @@ public final class VarInfo
 
     }
 
+    if (Dataflow.debugInit.isDebugEnabled())
+      Dataflow.debugInit.debug ("addHigherPO " + higher.name.name()
+                                + " to " + name.name());
+
     // We remove this assertion because it could be that A has a member a
     // of type A, so A::this should be < A::this.a.  The only thing we want
     // to prevent is cycles, so the first assertion above is sufficient.
@@ -624,6 +646,7 @@ public final class VarInfo
   public boolean isDerived() {
     return (derived != null);
   }
+
   public int derivedDepth() {
     if (derived == null)
       return 0;
