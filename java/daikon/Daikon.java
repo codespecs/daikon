@@ -213,6 +213,9 @@ public final class Daikon {
   public static final String noinvariantguarding_SWITCH = "no_invariant_guarding";
 
   // A pptMap which contains all the Program Points
+  // This isn't used anymore; instead, methods have parameters or
+  // local variables of the same name, and all_ppts is always null. Is
+  // there a reason it shouldn't just go away? -SMcC 4/24/03
   public static PptMap all_ppts;
 
   /** Debug tracer **/
@@ -275,6 +278,10 @@ public final class Daikon {
     // Infer invariants
     process_data(all_ppts, dtrace_files);
     isInferencing = false;
+
+    if (suppress_redundant_invariants_with_simplify) {
+      suppressWithSimplify(all_ppts);
+    }
 
     // Check that PptMap created was correct
     all_ppts.repCheck();
@@ -767,20 +774,19 @@ public final class Daikon {
       PptTopLevel ppt = (PptTopLevel) itor.next();
       ppt.suppressAll();
     }
+  }
 
-    if (suppress_redundant_invariants_with_simplify) {
-      System.out.print("Invoking Simplify to identify redundant invariants");
+  private static void suppressWithSimplify(PptMap all_ppts) {
+    System.out.print("Invoking Simplify to identify redundant invariants");
+    System.out.flush();
+    elapsedTime(); // reset timer
+    for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
+      PptTopLevel ppt = (PptTopLevel) itor.next();
+      ppt.mark_implied_via_simplify(all_ppts);
+      System.out.print(".");
       System.out.flush();
-      elapsedTime(); // reset timer
-      for (Iterator itor = all_ppts.pptIterator() ; itor.hasNext() ; ) {
-        PptTopLevel ppt = (PptTopLevel) itor.next();
-        ppt.mark_implied_via_simplify(all_ppts);
-        System.out.print(".");
-        System.out.flush();
-      }
-      System.out.println(elapsedTime());
     }
-
+    System.out.println(elapsedTime());
   }
 
   public static void setupEquality (PptMap allPpts) {
