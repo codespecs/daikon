@@ -23,7 +23,7 @@ public final class SingleStringSequenceFactory {
       // // I'm not checking var.isConstant() for now
       // result.add(EltwiseIntComparison.instantiate(ppt));
       result.add(EltOneOfString.instantiate(ppt));
-      result.add(CommonStringSequence.instantiate(ppt));
+      // result.add(CommonStringSequence.instantiate(ppt)); --gustavo--
       // // result.add(EltNonZero.instantiate(ppt));
       // // result.add(NoDuplicates.instantiate(ppt));
     }
