@@ -2,12 +2,10 @@
   eval 'exec perl -S -wn $0 "$@"'
   if 0;
 # trace-separate.pl -- Read data from one or more dtrace files and
-# group samples by class they were taken from, writing new trace files
-# with grouped data.
+# group samples by class (for Java) or method (for C) they were taken
+# from, writing new trace files with grouped data.
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2002-01-29 17:53:46 mistere>
-
-# Probably not useful for C traces, as they are all in the 'std' class.
+# Time-stamp: <2002-03-13 22:54:28 mistere>
 
 use FileHandle;
 use Compress::Zlib;
@@ -30,6 +28,9 @@ BEGIN {
 
 if ($tmp =~ m|^\s*$|) {
   next;
+} elsif ($tmp =~ m|^std\.(\w+)|s) {
+  # C programs: std.method(...)
+  $clazz = $1;
 } elsif ($tmp =~ m|^(.+):::OBJECT\n|s) {
   $clazz = $1;
 } elsif ($tmp =~ m|^(.+):::CLASS\n|s) {
