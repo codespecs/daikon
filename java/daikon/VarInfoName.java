@@ -133,7 +133,7 @@ public abstract class VarInfoName
       return parse(first).applyField(field);
     }
 
-    // A->B, where A is complex: foo(x).y, x[7].y, etc.
+    // A->B, where A is complex: foo(x)->y, x[7]->y, etc.
     if (name.indexOf("->") != -1) {
       int arrow = name.lastIndexOf("->");
       String first = name.substring(0, arrow);
