@@ -3298,10 +3298,13 @@ both for improved output and for correctness.
 If you must link your program against uninstrumented libraries, you need
 to make some small changes to your program.
 
+@enumerate
+@item
 If there are calls from instrumented code to uninstrumented code, then
 memory tracking will not occur in the uninstrumented code.  To correct
 this problem, see @ref{Memory tracking in libraries}.
 
+@item
 If there are calls from uninstrumented code to instrumented code, your
 program will not link, because the instrumented code is C++ and the
 uninstrumented code is C@.  If certain functions are called from
@@ -3315,6 +3318,7 @@ extern "C"
 in front of the function definition (and declaration).
 This will not affect calls from within the file, nor will it affect
 compilation of the program, but it will enable dfec to process it.
+@end enumerate
 
 
 @menu
@@ -3452,10 +3456,16 @@ compilers accept.
 @cindex prototypes, C
 
 To convert K&R prototypes to ANSI/ISO prototypes, use the
-@command{protoize} program; you may wish to check that it has no
-effect even if you believe your code to be ANSI/ISO C@.  Protoize is
+@command{protoize} program; even if you believe your code to be
+ANSI/ISO C, you may wish to check that @command{protoize} has no
+effect.  Protoize is
 distributed with gcc, among other places; you can find documentation
 at @url{http://gcc.gnu.org/onlinedocs/gcc/Running-Protoize.html}.
+Even after running @command{protoize}, you may need to perform further
+fixups by hand.  A common problem is function prototypes with no
+arguments; in K&R C, the function definition may have any number of
+arguments, but in ANSI/ISO C, that indicates the function takes no
+arguments.
 
 If you do not understand a dfec error message that indicates a problem
 with your source code, you may wish to check your code for ANSI/ISO
