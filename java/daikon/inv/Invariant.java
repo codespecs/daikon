@@ -982,9 +982,10 @@ public abstract class Invariant
   */ // ... [INCR]
 
   /**
-   * @return true if this invariant is necessarily true, due to derived
-   * variables, other invariants, etc.
-   * Intended to be overridden by subclasses.
+   * Return true if this invariant is necessarily true, due to derived
+   * variables, other invariants, etc.  Intended to be overridden by
+   * subclasses.  Should only do static checking, because suppression
+   * should do the dynamic checking.
    **/
   public final boolean isObvious() {
     // Actually actually, we'll eliminate invariants as they become obvious
@@ -1004,8 +1005,8 @@ public abstract class Invariant
   }
 
   /**
-   * @return true if this invariant is necessarily true, due to being implied
-   * by other (more basic or preferable to report) invariants.
+   * Return true if this invariant is necessarily true, due to being implied
+   * by the fact that it was derived from a given set of variables.
    * Intended to be overridden by subclasses.
    **/
   public boolean isObviousDerived() {
@@ -1013,7 +1014,7 @@ public abstract class Invariant
   }
 
   /**
-   * @return true if this invariant is necessarily true, due to being implied
+   * Return true if this invariant is necessarily true, due to being implied
    * by other (more basic or preferable to report) invariants.
    * Intended to be overridden by subclasses.
    **/
