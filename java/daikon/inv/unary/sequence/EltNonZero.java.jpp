@@ -201,15 +201,15 @@ public final class CLASSNAME
     VarInfo v = ppt.var_infos[0];
     VarInfoName viname = var().name;
 
-    if (viname instanceof VarInfoName.Elements) {
-      return
-        "quant.Quant.elementsNotEqual(" + var().name.dbc_name(var())
-        + (pointer_type ? ", null" : ", 0") + ")";
-    }
+    // if (viname instanceof VarInfoName.Elements) {
+    return
+      "quant.Quant.eltsNotEqual(" + var().name.dbc_name(var())
+      + (pointer_type ? ", null" : ", 0") + ")";
+    // }
 
     // If viname instanceof VarInfoName.Slice, return warning message.
-    return "(warning: format_dbc() unable to format:"
-      + var().name.repr();
+    // return "(warning: format_dbc() unable to format:"
+    // + var().name.repr();
 
   }
 

@@ -102,6 +102,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR_STRING "OneOfSequence"
   #define SINGLESCALAR SingleScalarSequence
   #define TOSTRING(x) ArraysMDE.toString(x)
+  #define TOSTRINGELEMENT(x) ((Integer.MIN_VALUE <= x && x <= Integer.MAX_VALUE) ? String.valueOf(x) : (String.valueOf(x) + "L"))
   #define TOSTRING_SIMPLIFY(x) simplify_format_long(x)
   #define ELT_EQUALS(a,b) ((a) == (b))
   #define NAME var().name.name()
@@ -113,6 +114,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR_STRING "OneOfSequenceFloat"
   #define SINGLESCALAR SingleFloatSequence
   #define TOSTRING(x) ArraysMDE.toString(x)
+  #define TOSTRINGELEMENT(x) String.valueOf(x)
   #define TOSTRING_SIMPLIFY(x) simplify_format_double(x)
   #define ELT_EQUALS(a,b) (((a) == (b)) || (Double.isNaN(a) &&Double.isNaN(b)))
   #define NAME var().name.name()
@@ -124,6 +126,7 @@ The correct way to build the system is to run 'make'.
   #define ONEOFSCALAR_STRING "OneOfStringSequence"
   #define SINGLESCALAR SingleStringSequence
   #define TOSTRING(x) ArraysMDE.toString(x)
+  #define TOSTRINGELEMENT(x) ((x==null) ? "null" : "\"" + UtilMDE.escapeNonASCII(x) + "\"")
   #define TOSTRING_SIMPLIFY(x) simplify_format_string(x)
   #define ELT_EQUALS(a,b) ((a) == (b))
   #define NAME var().name.name()
@@ -1085,6 +1088,7 @@ public final class ONEOFSCALAR
 
     // Setting up the name of the unary variable
     String varname = var().name.dbc_name(var());
+    String type = var().type.base(); // CP: still wondering, see diary comment *1*
 #if defined(ELTSTRING)
     if ((var().rep_type == ProglangType.CHAR_ARRAY_ARRAY)
         && varname.endsWith("[]")) {
@@ -1098,7 +1102,7 @@ public final class ONEOFSCALAR
   #if defined(ELT)
     String oneOfArray = "new long[] { ";
   #elif defined(ELTFLOAT)
-    String oneOfArray = "new float[] { ";
+    String oneOfArray = "new double[] { ";
   #elif defined(ELTSTRING)
     String oneOfArray = "new String[] { ";
   #endif
@@ -1113,22 +1117,22 @@ public final class ONEOFSCALAR
 
     #if defined(BASE_INT)
       if (is_boolean) {
-        result = "quant.Quant.elementsEqual(" + varname + ", "
+        result = "quant.Quant.eltsEqual(" + varname + ", "
           + ((elts[0] == 0) ? "false" : "true") + ")";
       } else if (is_hashcode) {
         result =
           ((elts[0] == 0)
-           ? ("quant.Quant.elementsEqual(" + varname + ", null)")
-           : ("quant.Quant.elementsNotEqual(" + varname + ", null)"));
+           ? ("quant.Quant.eltsEqual(" + varname + ", null)")
+           : ("quant.Quant.eltsNotEqual(" + varname + ", null)"));
       } else
     #endif
         {
-          result = "quant.Quant.elementsEqual(" + varname + ", "
+          result = "quant.Quant.eltsEqual(" + varname + ", "
             + TOSTRING(elts[0]) + ")";
         }
     } else {
       Assert.assertTrue(num_elts > 1);
-      result = "quant.Quant.elementsOneOf(" + varname + ", " + oneOfArray + ")";
+      result = "quant.Quant.eltsOneOf(" + varname + ", " + oneOfArray + ")";
     }
 
 #elif defined(IS_SCALAR)
@@ -1178,14 +1182,11 @@ public final class ONEOFSCALAR
       } else {
         result += " == ";
         if ((str == null) || "null".equals(str)) {
-          result += "== null)";
+          result += "null";
         } else if (str.startsWith("[")) {
-          result += "(" + UtilMDE.classnameFromJvm(str) + ")";
+          result += "\"" + UtilMDE.classnameFromJvm(str) + "\"";
         } else {
-          if (str.startsWith("\"") && str.endsWith("\"")) {
-            str = str.substring(1, str.length()-1);
-          }
-          result += "(" + str + ")";
+          result += "\"" + str + "\"";
         }
       }
     }
@@ -1194,7 +1195,25 @@ public final class ONEOFSCALAR
 
 #elif defined(IS_SEQUENCE)
 
-    result = format_unimplemented(OutputFormat.DBCJAVA);
+    result = "";
+    for (int i=0; i<num_elts; i++) {
+      if (i != 0) { result += " || "; }
+
+#if defined(SEQUENCE)
+      String seq = "new " + type + "[] { ";
+#elif defined(STRINGSEQUENCE)
+      String seq = "new String[] { ";
+#elif defined(FLOATSEQUENCE)
+      String seq = "new double[] { ";
+#endif
+      for(int j = 0 ; j < elts[i].length ; j++) {
+        if (j != 0) { seq += ", "; }
+        seq = seq + TOSTRINGELEMENT(elts[i][j]);
+      }
+      seq += " }";
+
+      result += "quant.Quant.pairwiseEqual(" + varname + ", " + seq + ")";
+    }
 
 #endif
 

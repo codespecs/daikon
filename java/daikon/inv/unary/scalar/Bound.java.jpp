@@ -53,9 +53,9 @@ The correct way to build the system is to run 'make'.
   #define MINSTR "min"
   #define MAXSTR "max"
   #define GTESTR ">="
-  #define GTESTR2 "GTE"
+  #define GTESTRDBC "GTE"
   #define LTESTR "<="
-  #define LTESTR2 "LTE"
+  #define LTESTRDBC "LTE"
   #define MAX1 core.max1
   #define LOWERBOUNDCORE INT(LowerBoundCore)
   #define ELTLOWERBOUND INT(EltLowerBound)
@@ -111,9 +111,9 @@ The correct way to build the system is to run 'make'.
   #define MINSTR "max"
   #define MAXSTR "min"
   #define GTESTR "<="
-  #define GTESTR2 "LTE"
+  #define GTESTRDBC "LTE"
   #define LTESTR ">="
-  #define LTESTR2 "GTE"
+  #define LTESTRDBC "GTE"
   #define MAX1 core.min1
   #define LOWERBOUNDCORE INT(UpperBoundCore)
   #define ELTLOWERBOUND INT(EltUpperBound)
@@ -335,12 +335,8 @@ public class LOWERBOUND
 
   public String format_dbc() {
 #ifdef IS_ELT
-    if(var().name instanceof VarInfoName.Elements) {
-      return
-        "quant.Quant.elements" + GTESTR2 + "(" + var().name.dbc_name(var()) + ", " + MIN1 + ")";
-    } else {
-      return "(warning: format_dbc unable to format:" + var().name.repr();
-    }
+    return
+      "quant.Quant.elts" + GTESTRDBC + "(" + var().name.dbc_name(var()) + ", " + MIN1 + ")";
 #else
     String varname = var().name.dbc_name(var());
     return varname + " " + GTESTR + " " + MIN1;

@@ -41,60 +41,70 @@ The correct way to build the system is to run 'make'.
   #define CLASSSTRING "EltwiseIntEqual"
   #define COMPARATOR(a,b) ((a) == (b))
   #define COMPARATORSTRING "=="
+  #define COMPARATORSTRINGDBC "eltwiseEqual"
   #define INVERSECOMPARATORSTRING "!="
 #elif defined(LESSTHAN)
   #define CLASSNAME LESSTHANCLASS
   #define CLASSSTRING "EltwiseIntLessThan"
   #define COMPARATOR(a,b) ((a) < (b))
   #define COMPARATORSTRING "<"
+  #define COMPARATORSTRINGDBC "eltwiseLT"
   #define INVERSECOMPARATORSTRING ">="
 #elif defined(LESSEQUAL)
   #define CLASSNAME LESSEQUALCLASS
   #define CLASSSTRING "EltwiseIntLessEqual"
   #define COMPARATOR(a,b) ((a) <= (b))
   #define COMPARATORSTRING "<="
+  #define COMPARATORSTRINGDBC "eltwiseLEQ"
   #define INVERSECOMPARATORSTRING ">"
 #elif defined(GREATERTHAN)
   #define CLASSNAME GREATERTHANCLASS
   #define CLASSSTRING "EltwiseIntGreaterThan"
   #define COMPARATOR(a,b) ((a) > (b))
   #define COMPARATORSTRING ">"
+  #define COMPARATORSTRINGDBC "eltwiseGT"
   #define INVERSECOMPARATORSTRING "<="
 #elif defined(GREATEREQUAL)
   #define CLASSNAME GREATEREQUALCLASS
   #define CLASSSTRING "EltwiseIntGreaterEqual"
   #define COMPARATOR(a,b) ((a) >= (b))
   #define COMPARATORSTRING ">="
+  #define COMPARATORSTRINGDBC "eltwiseGEQ"
   #define INVERSECOMPARATORSTRING "<"
 #elif defined(EQUALFLOAT)
   #define CLASSNAME EQUALFLOATCLASS
   #define CLASSSTRING "EltwiseFloatEqual"
   #define COMPARATOR(a,b) (Global.fuzzy.eq (a,b))
   #define COMPARATORSTRING "=="
+  #define COMPARATORSTRINGDBC "eltwiseEqual"
   #define INVERSECOMPARATORSTRING "!="
 #elif defined(LESSTHANFLOAT)
   #define CLASSNAME LESSTHANFLOATCLASS
   #define CLASSSTRING "EltwiseFloatLessThan"
   #define COMPARATOR(a,b) (Global.fuzzy.lt (a,b))
   #define COMPARATORSTRING "<"
+  #define COMPARATORSTRINGDBC "eltwiseLT"
   #define INVERSECOMPARATORSTRING ">="
 #elif defined(LESSEQUALFLOAT)
   #define CLASSNAME LESSEQUALFLOATCLASS
   #define CLASSSTRING "EltwiseFloatLessEqual"
   #define COMPARATOR(a,b) (Global.fuzzy.lte (a,b))
   #define COMPARATORSTRING "<="
+  #define COMPARATORSTRINGDBC "eltwiseLEQ"
   #define INVERSECOMPARATORSTRING ">"
 #elif defined(GREATERTHANFLOAT)
   #define CLASSNAME GREATERTHANFLOATCLASS
   #define CLASSSTRING "EltwiseFloatGreaterThan"
   #define COMPARATOR(a,b) (Global.fuzzy.gt (a,b))
   #define COMPARATORSTRING ">"
+  #define COMPARATORSTRINGDBC "eltwiseGT"
   #define INVERSECOMPARATORSTRING "<="
 #elif defined(GREATEREQUALFLOAT)
   #define CLASSNAME GREATEREQUALFLOATCLASS
   #define CLASSSTRING "EltwiseFloatGreaterEqual"
   #define COMPARATOR(a,b) (Global.fuzzy.gte (a,b))
   #define COMPARATORSTRING ">="
+  #define COMPARATORSTRINGDBC "eltwiseGEQ"
   #define INVERSECOMPARATORSTRING "<"
 #endif
 
@@ -246,7 +256,7 @@ public class CLASSNAME
   }
 
   public String format_dbc() {
-    return format_unimplemented(OutputFormat.DBCJAVA);
+    return "quant.Quant." + COMPARATORSTRINGDBC + "(" + var().name.dbc_name(var()) + ")";
   }
 
   public String format_simplify() {

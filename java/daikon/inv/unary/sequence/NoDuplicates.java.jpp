@@ -118,7 +118,7 @@ public class CLASSNAME
     }
 
     if (format == OutputFormat.DBCJAVA) {
-      return format_unimplemented(format);
+      return format_dbc();
     }
 
     return format_unimplemented(format);
@@ -221,7 +221,7 @@ public class CLASSNAME
   }
 
   public String format_dbc() {
-    return format_unimplemented(OutputFormat.DBCJAVA);
+    return "quant.Quant.noDups(" + var().name.dbc_name(var()) + ")";
   }
 
   public InvariantStatus check_modified(PRIMITIVE[] a, int count) {

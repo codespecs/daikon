@@ -204,7 +204,22 @@ public final class CLASSNAME
   }
 
   public String format_dbc() {
-    return format_unimplemented(OutputFormat.DBCJAVA);
+    String comparator = core.format_comparator();
+    String comparatorDBC = "";
+    if (comparator.equals("==")) {
+      comparatorDBC = "Equal";
+    } else if (comparator.equals("<")) {
+      comparatorDBC = "LT";
+    } else if (comparator.equals("<=")) {
+      comparatorDBC = "LTE";
+    } else if (comparator.equals(">")) {
+      comparatorDBC = "GT";
+    } else if (comparator.equals(">=")) {
+      comparatorDBC = "GTE";
+    } else {
+      comparatorDBC = "?comparatorDBC?";
+    }
+    return "quant.Quant.index" + comparatorDBC + "(" + var().name.dbc_name(var()) + ")";
   }
 
   public String format_simplify() {
