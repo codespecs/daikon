@@ -64,7 +64,7 @@ C_RUNTIME_PATHS := front-end/c/daikon_runtime.h front-end/c/daikon_runtime.cc
 # $(EDG_DIR)/edgcpfe is distributed separately (not in the main tar file)
 # EDG_FILES := $(EDG_DIR)/dump_trace.h $(EDG_DIR)/dump_trace.c $(EDG_DIR)/dfec $(EDG_DIR)/dfec.sh
 
-BCEL_DIR := /afs/csail/u/j/jhp/research/jakarta-bcel/bin/java
+BCEL_DIR := $(INV)/java/lib/bcel.jar
 DIST_DIR := $(WWW_ROOT)/dist
 MIT_DIR  := $(WWW_ROOT)/mit
 DIST_BIN_DIR := $(DIST_DIR)/binaries

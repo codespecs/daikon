@@ -20,7 +20,7 @@ JAVA ?= java
 ###
 
 # Add BCEL to the classpath.  A better solution to this should be found
-BCEL := /afs/csail/u/j/jhp/research/jakarta-bcel/bin/java
+BCEL := $(INV)/java/lib/bcel.jar
 CLASSPATH := $(CLASSPATH):/$(BCEL)
 
 # This command should run after the AUTO_GENERATED_FILES are generated, or
@@ -285,7 +285,7 @@ default: all
 compile: all
 
 # "-S" means do not continue after errors.
-all: all_directly junit
+all: all_directly junit chicory
 
 ## In general, don't use this; it misses some files
 all_via_daikon: daikon/Daikon.class daikon/Runtime.class daikon/diff/Diff.class
@@ -533,7 +533,7 @@ clover: all_directly
 JAVADOC_DEST  = doc
 JAVADOC_FLAGS = -breakiterator -quiet -linksource -noqualifier all \
 				-d $(JAVADOC_DEST) \
-                -linkoffline http://java.sun.com/j2se/1.4.2/docs/api/ http://java.sun.com/j2se/1.4.2/docs/api/
+                -linkoffline http://java.sun.com/j2se/1.5.0/docs/api/ http://java.sun.com/j2se/1.5.0/docs/api/
 # javadoc 1.4 doesn't like being given package names; give all filenames explicitly instead
 # Note that this excludes Ajax
 JDOC_FILES = `find -follow -name '*.java' | grep -v CVS | grep -v ajax | grep -v '\#'`
