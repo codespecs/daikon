@@ -1,5 +1,6 @@
 package daikon.inv.filter;
 
+import utilMDE.Assert;
 import java.util.*;
 import daikon.inv.*;
 import daikon.inv.IsEqualityComparison;	       // For equality invariants work-around
@@ -125,63 +126,80 @@ public class InvariantFilters {
   //  shouldn't be in the main Daikon engine code.  Equality invariants aren't *directly*
   //  related to filtering, but their existence allows us to filter out certain invariants
   //  containing non-canonical variables ("x=y", "x=z", etc).  Also, I am hesitant to put
-  //  code containing such in-depth knowledge of invariants in the GUI code.  Therefore, I
-  //  put the method here rather than in InvariantsGUI.java.
+  //  code dealing with the internal workings of invariants/daikon in the GUI package.
+  //  Therefore, I put the method here rather than in InvariantsGUI.java.
 
   //  This function takes a list of invariants, finds the equality Comparison invariants
   //  (x==y, y==z), and deletes and replaces them with Equality invariants (x==y==z).  The
-  //  Equality invariants are inserted into the beginning.  These Equality invariants are
-  //  useful when it comes to displaying invariants.
+  //  first variable in an Equality invariant is always the canonical variable of the
+  //  group.  The Equality invariants are inserted into the beginning.  Equality
+  //  invariants are useful when it comes to displaying invariants.
   public static List addEqualityInvariants( List invariants ) {
-    Set equivalentSets = new HashSet();	       // A set of Set's of equivalent variables
-    List ppts = new ArrayList();	       // A PptSlice for each set.  Equality needs a PptSlice
-                                               // so it can report num_values() and num_samples().
+
+    // A set of groups of equivalent variables.  The "groups" are actually List's.  We use
+    // List's instead of Set's because we need to preserve order, so that canonical
+    // variables remain first.
+    Set equivalentGroups = new HashSet();
+
+    // A PptSlice for each set.  Equality needs a PptSlice so it can report num_values()
+    // and num_samples().
+    List ppts = new ArrayList();
     
-    // Find all equivalent sets of variables.
+    // This method makes two passes through the list of invariants.  The first pass is to
+    // set up a group for each canonical variable.  The second pass fills up each group
+    // with equivalent variables.  The main advantage of doing the initial first pass is
+    // that canonical variables will at the beginning of the List, and thus will be
+    // displayed first in the output "x==y==z".  A secondary advantage is that we don't
+    // run into the following problem:  Say we have "a == b", "b == c", "c == d".  If we
+    // encounter the first and the third invariants first, they will be put into two
+    // seperate sets.  Each set will develop independently and end up having a, b, c, d.
+
+    // First pass: set up a group for each canonical variable.  First, construct the Set
+    // canonicalVariables.  The advantage of using the Set class is that duplicates are
+    // taken care of (we might see a canonical variable more than once).  Second, for each
+    // element of canonicalVariables, add a List to equivalentGroups.
+    Set canonicalVariables = new HashSet();
     for (Iterator iter = invariants.iterator(); iter.hasNext(); ) {
       Invariant invariant = (Invariant) iter.next();
       if (IsEqualityComparison.it.accept( invariant )) {
-	iter.remove();			       // We don't need this invariant, since it will be included
-	                                       // in the equality invariant.
-	boolean inEquivalentSets = false;      // Are either of the variables in an existing set?
+	VarInfo[] variables = invariant.ppt.var_infos;
+	Assert.assert( variables.length == 2 );
+	for (int i = 0; i < variables.length; i++)
+	  if (variables[i].isCanonical()) {
+	    canonicalVariables.add( variables[i].name.name());
+	    ppts.add( invariant.ppt );
+	  }
+      }
+    }
+    for (Iterator iter = canonicalVariables.iterator(); iter.hasNext(); ) {
+      List list = new ArrayList();
+      list.add( iter.next());
+      equivalentGroups.add( list );
+    }
+
+    // Second pass: fill up each group with equivalent variables.
+    for (Iterator iter = invariants.iterator(); iter.hasNext(); ) {
+      Invariant invariant = (Invariant) iter.next();
+      if (IsEqualityComparison.it.accept( invariant )) {
+	iter.remove();		// We don't need this invariant, since it will be
+				// included in the equality invariant.
+
 	String variable1 = ((Comparison) invariant).var1().name.name();
 	String variable2 = ((Comparison) invariant).var2().name.name();
-
-	for (Iterator iter2 = equivalentSets.iterator(); iter2.hasNext(); ) {
-	  Set equivalentSet = (Set) iter2.next();
-	  boolean containsVariable1 = equivalentSet.contains( variable1 );
-	  boolean containsVariable2 = equivalentSet.contains( variable2 );
-	  if (containsVariable1 || containsVariable2)
-	    inEquivalentSets = true;
-	  if (containsVariable1 && !containsVariable2)
-	    equivalentSet.add( variable2 );
-	  if (containsVariable2 && !containsVariable1)
-	    equivalentSet.add( variable1 );
-	}
-	if (! inEquivalentSets) {
-	  Set set = new HashSet();
-	  set.add( variable1 );
-	  set.add( variable2 );
-	  equivalentSets.add( set );
-	  ppts.add( invariant.ppt );
+	for (Iterator iter2 = equivalentGroups.iterator(); iter2.hasNext(); ) {
+	  List equivalentGroup = (List) iter2.next();
+	  if (equivalentGroup.contains( variable1 )  &&  ! equivalentGroup.contains( variable2 ))
+	    equivalentGroup.add( variable2 );
+	  else if (equivalentGroup.contains( variable2 )  &&  ! equivalentGroup.contains( variable1 ))
+	    equivalentGroup.add( variable1 );
 	}
       }
     }
 
-    // Sometimes we'll end up with two sets that are equivalent -- ie, they contain the
-    // same variables.  This can happen when there are more than three variables involved.
-    // Say we have "a == b", "b == c", "c == d".  If we encounter the first and the third
-    // invariants first, they will be put into two seperate sets.  Each set will develop
-    // independently and end up having a, b, c, and d.
-    // To get around this we create a new HashSet, in which the constructor adds each set
-    // one-by-one.  A set will not be added if equals a previously added set.  (Two sets
-    // are equal if they contain the same elements.)
-    equivalentSets = new HashSet( equivalentSets );
-
-    // Add equivalent sets as equality invariants.
+    // Add equivalent groups as equality invariants.
     Iterator pptIter = ppts.iterator();
-    for (Iterator iter = equivalentSets.iterator(); iter.hasNext(); )
-      invariants.add( 0, new Equality( (Set) iter.next(), (PptSlice) pptIter.next()));
+    for (Iterator iter = equivalentGroups.iterator(); iter.hasNext(); )
+      invariants.add( 0, new Equality( (List) iter.next(), (PptSlice) pptIter.next()));
  
     return invariants;
   }
@@ -189,6 +207,7 @@ public class InvariantFilters {
 
 
 
+//  The template for an invariant filter.
 abstract class InvariantFilter {
   boolean isOn;
 

@@ -12,10 +12,11 @@ import java.util.*;
 
 public final class Equality extends Invariant {
 
-  Set variables;
+  List variables;		// List instead of Set because we need to preserve order, so
+				// that the canonical variable remains first.
   String invariantText;		// Looks like "x == y == z".
 
-  public Equality( Set variables, PptSlice ppt ) {
+  public Equality( List variables, PptSlice ppt ) {
     super( ppt );		// Need ppt because it reports num_values() and num_samples().
     this.variables = variables;
 
