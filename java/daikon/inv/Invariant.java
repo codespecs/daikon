@@ -491,7 +491,7 @@ public abstract class Invariant implements java.io.Serializable {
          && (! hasNonCanonicalVariable())
          && (! hasOnlyConstantVariables())
          && (! isObvious())
-         && justified()
+	 && justified()
          && isWorthPrinting_PostconditionPrestate());
     return result;
   }
@@ -531,8 +531,9 @@ public abstract class Invariant implements java.io.Serializable {
     }
   }
 
+  // This used to be final, but I want to override in EqualityInvariant
   /** @return true if this invariant involves a non-canonical variable **/
-  public final boolean hasNonCanonicalVariable() {
+  public boolean hasNonCanonicalVariable() {
     VarInfo[] vis = ppt.var_infos;
     for (int i=0; i<vis.length; i++) {
       if (! vis[i].isCanonical()) {
@@ -555,7 +556,9 @@ public abstract class Invariant implements java.io.Serializable {
     }
 
     // At this point, we know all variables are constant.
-    Assert.assert(this instanceof OneOf  ||  this instanceof Comparison
+    Assert.assert(this instanceof OneOf ||
+		  this instanceof Comparison ||
+		  this instanceof Equality
 		  , "Unexpected invariant with all vars constant: "
 		  + this + "  " + repr_prob() + "  " + format()
 		  );
