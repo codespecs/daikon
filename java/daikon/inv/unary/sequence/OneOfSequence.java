@@ -292,7 +292,7 @@ public final class OneOfSequence
       Assert.assertTrue(num_elts == 1);
       long[] value = elts[0];
       if (var().name.isApplySizeSafe()) {
-        length = "size("+var().name.ioa_name() + ") = " + value.length;
+        length = "size(" + var().name.ioa_name() + ") = " + value.length;
       }
       VarInfoName.QuantHelper.IOAQuantification quant = new VarInfoName.QuantHelper.IOAQuantification (var ());
       if (no_nulls(0)) {

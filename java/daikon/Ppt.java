@@ -176,10 +176,23 @@ public abstract class Ppt
     return null;
   }
 
-  /** @deprecated June 15, 2001 **/
-    public VarInfo findVar(String name) {
-      return findVar(VarInfoName.parse(name));
+  public VarInfo findVar_debugging(VarInfoName name) {
+    for (int i=0; i<var_infos.length; i++) {
+      System.out.println("Checking " + name.name() + " against " + var_infos[i].name.name());
+      System.out.println("  Checking " + name + " against " + var_infos[i].name);
+      if (name.equals(var_infos[i].name))
+        return var_infos[i];
     }
+    return null;
+  }
+
+  /**
+   * This should never be used if the VarInfoName is available; it is a
+   * convenience method used when parsing from programs or user input.
+   **/
+  public VarInfo findVar(String name) {
+    return findVar(VarInfoName.parse(name));
+  }
 
   /**
    * Return a list of all variables that appear in every Ppt in ppts.

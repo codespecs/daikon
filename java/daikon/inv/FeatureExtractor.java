@@ -49,7 +49,7 @@ public final class FeatureExtractor {
     "\t-o FileName:\toutput file name *Required\n" +
     "\t-t Type:\tType is one of {SVMlight, SVMfu, C5}\n" +
     "\t-s FileName:\tname of output file for invariant descriptions\n" +
-    "\t[-r] repeats:\tnumber of combinations of feature vectors (DISABLED)\n"+
+    "\t[-r] repeats:\tnumber of combinations of feature vectors (DISABLED)\n" +
     "\t[-p] \t\tdo not output if no positive feature vectors are present\n";
 
   static public void main(String[] args)

@@ -108,7 +108,7 @@ public class SubSet
     String v1 = var1().name.ioa_name();
     String v2 = var2().name.ioa_name();
     if (var1_in_var2 && var2_in_var1) {
-      result = "("+v1+" \\subseteq "+v2+") /\\ ("+v2+" \\subseteq "+v1+")";
+      result = "(" + v1 + " \\subseteq " + v2 + ") /\\ (" + v2 + " \\subseteq " + v1 + ")";
     } else {
       String subvar = (var1_in_var2 ? v1 : v2);
       String supervar = (var1_in_var2 ? v2 : v1);

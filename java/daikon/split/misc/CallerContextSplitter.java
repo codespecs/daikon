@@ -26,7 +26,8 @@ public final class CallerContextSplitter
    * Name of the variable used by the front end to store caller
    * (callsite) information.
    **/
-  public final String CALLER_INDICATOR_NAME = "daikon_callsite_id";
+  public final String CALLER_INDICATOR_NAME_STRING = "daikon_callsite_id";
+  public final VarInfoName CALLER_INDICATOR_NAME = VarInfoName.parse(CALLER_INDICATOR_NAME_STRING);
   private final VarInfo caller_varinfo;
   private final long[] ids;
   private final String condition;

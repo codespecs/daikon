@@ -499,16 +499,17 @@ public class SplitterFactory {
         file_string.append("}\n");
 
         // write to the file. Assuming that the tempdir has already been set
+        String basename = tempdir + splitter_fname;
         try {
-          BufferedWriter writer = UtilMDE.BufferedFileWriter(tempdir+splitter_fname+".java");
+          BufferedWriter writer = UtilMDE.BufferedFileWriter(basename + ".java");
           if (dkconfig_delete_splitters_on_exit) {
-            (new File (tempdir+splitter_fname+".java")).deleteOnExit();
-            (new File (tempdir+splitter_fname+".class")).deleteOnExit();
+            (new File (basename + ".java")).deleteOnExit();
+            (new File (basename + ".class")).deleteOnExit();
           }
           writer.write(file_string.toString());
           writer.flush();
         } catch (IOException ioe) {
-          debugPrint("Error while writing Splitter file " + tempdir+splitter_fname+".java \n");
+          debugPrint("Error while writing Splitter file " + basename + ".java \n");
           debugPrint(ioe.toString());
         }
       }

@@ -195,7 +195,7 @@ public class TableSorter extends TableMap {
         // n2sort();
         // qsort(0, indexes.length-1);
         shuttlesort((int[])indexes.clone(), indexes, 0, indexes.length);
-        // System.out.println("Compares: "+compares);
+        // System.out.println("Compares: " + compares);
     }
 
     public void n2sort() {

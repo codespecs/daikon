@@ -197,7 +197,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
     }
 
     public double calcRecall() {
-        System.out.println ("Recall: "+ correctSet.size() +" / "+ targSet.size());
+        System.out.println ("Recall: " + correctSet.size() + " / " + targSet.size());
         if (targSet.size() == 0) return -1; // avoids divide by zero
         return (double) correctSet.size() / targSet.size();
     }
@@ -236,7 +236,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
 
     public double calcPrecision() {
 
-        System.out.println ("Prec: "+ correctSet.size() +" / "+ cnt.size());
+        System.out.println ("Prec: " + correctSet.size() + " / " + cnt.size());
         if (cnt.size() == 0) return -1; // to avoid a divide by zero -LL
         return (double) correctSet.size() / cnt.size();
     }

@@ -208,7 +208,7 @@ public final class OneOfStringSequence
 
     String[] value = elts[0];
     if (var().name.isApplySizeSafe())
-      result = "size("+var().name.ioa_name() + ") = " + value.length;
+      result = "size(" + var().name.ioa_name() + ") = " + value.length;
     else {
       String thisclassname = this.getClass().getName();
       result = "warning: " + thisclassname + ".format_ioa() needs to be implemented: " + format();

@@ -240,13 +240,18 @@ public final class Equality
     equal_vars.clear();
     equal_vars.addAll(valid_equiv);
     equal_vars.addAll(invalid_equiv);
+    int numprinted = 0;
     for (int j=0; j<equal_vars.size(); j++) {
       VarInfo other = (VarInfo) equal_vars.get(j);
       if (other == leader) continue;
       if (leader.name.applyPrestate().equals(other.name)) continue;
       if (other.name.applyPrestate().equals(leader.name)) continue;
+      if (numprinted > 0) {
+        result += Global.lineSep;
+      }
+      numprinted++;
       if (j >= valid_equiv.size()) {
-        result = result + "warning: method 'equality'.format_esc() needs to be implemented: " + format();
+        result = result + "warning: method Equality.format_esc() needs to be implemented: " + format();
       }
       if (leader.rep_type.isArray()) {
         String[] form =
@@ -254,15 +259,13 @@ public final class Equality
             { leader.name, other.name }, true); // elementwise
         result = result + form[0].toString() + "( " + form[1].toString() + " == " + form[2].toString() + " )" + form[3].toString();
       } else {
-        if (j > 1) {
-          result += Global.lineSep;
-        }
         result = result + leader.name.esc_name() + " == " + other.name.esc_name();
       }
 
-      if (obviously_equal.contains(other)) {
-        result += "    (obviously)";
-      }
+      // if (obviously_equal.contains(other)) {
+      //   result += "    (obviously)";
+      // }
+
     }
     return result;
 

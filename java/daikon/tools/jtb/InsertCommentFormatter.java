@@ -62,10 +62,16 @@ public class InsertCommentFormatter
   public void visit(NodeToken n) {
     // System.out.println("Visit (at " + n.beginLine + "," + n.beginColumn + ") " + n.tokenImage);
 
+    // See comment at use of this variable below
+    boolean prev_is_double_slash_comment = false;
+
     // Handle special tokens first
     if ( n.numSpecials() > 0 )
-      for ( Enumeration e = n.specialTokens.elements(); e.hasMoreElements(); )
-        visit((NodeToken)e.nextElement());
+      for ( Enumeration e = n.specialTokens.elements(); e.hasMoreElements(); ) {
+        NodeToken s = (NodeToken)e.nextElement();
+        visit(s);
+        prev_is_double_slash_comment = s.tokenImage.startsWith("//");
+      }
 
     if ((columnshift == 0) && (lineshift == 0)) {
       // nothing to do
@@ -84,6 +90,20 @@ public class InsertCommentFormatter
       n.beginColumn += columnshift;
       n.endColumn += columnshift;
       // System.out.println("Shifted by " + lineshift + "," + columnshift + ": " + n.tokenImage);
+    }
+    // Special-case the situation of ending a file with a "//"-style
+    // comment that does not start at the beginning of its line; in that
+    // case, we need to increment the "" token for EOF to start at the next
+    // line.  Otherwise the "" EOF token is marked as starting at the end
+    // of the previous line, though the "//"-style comment doesn't end
+    // until the start of the next line.  Without this code,
+    // jtb.visitor.TreeDumper.visit throws an error.
+    if (n.tokenImage.equals("") && prev_is_double_slash_comment) {
+      Assert.assertTrue(n.beginLine == n.endLine && n.beginColumn == n.endColumn);
+      n.beginLine += 1;
+      n.beginColumn = 1;
+      n.endLine += 1;
+      n.endColumn = 1;
     }
     if (comments.contains(n)) {
       columnshift += numColumns(n);
