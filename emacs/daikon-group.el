@@ -42,8 +42,8 @@
 	    ;; TAGS file is at least one week old
 	    (let* ((tags-file-modtime-ints (nth 5 (file-attributes tags-file)))
 		   (tags-file-modtime (+ (* 65536.0
-					    (first tags-file-modtime-ints))
-					 (second tags-file-modtime-ints))))
+					    (car tags-file-modtime-ints))
+					 (cadr tags-file-modtime-ints))))
 	      (> (float-time) (+ tags-file-modtime (* 60 60 24 7)))))
 	(let ((default-directory (substitute-in-file-name "$inv/java/"))
 	      (verb (if tags-file-exists "Updating" "Making")))
