@@ -79,11 +79,11 @@ Daikon
 
   Developer Changes
 
-    Daikon warns if you (incorrectly) use "String" in a .decls file, as a
-    representation type synonym for "java.lang.String".  The use of
-    "String[]" was and continues to be an error, but now gives a more
-    specific message.  The C front ends dfec (distributed separately) and
-    Kvasir have been updated accordingly.
+    Daikon warns if you (incorrectly) use "String" in a .decls file,
+    as a representation type synonym for "java.lang.String".  The use
+    of "String[]" was and continues to be an error, but now gives a
+    more specific message.  The C front ends dfec (distributed
+    separately) and Kvasir have been updated accordingly.
 
 Kvasir (C front end)
 
@@ -95,24 +95,24 @@ Kvasir (C front end)
     instrumented, and there is some support for outputting array
     values.  Changes have been made to allow instrumenting C programs
     compiled with a C++ compiler (work to support C++ itself is
-    ongoing).  Two incompatibilities should be noted: the format of
-    global function names has changed, for consistency with the new
-    names for global variables, and Kvasir may now produce much more
-    output for a given program run.
+    ongoing).  Two incompatibilities with previous versions of Kvasir
+    should be noted: the format of global function names has changed,
+    for consistency with the new names for global variables, and
+    Kvasir may now produce much more output for a given program run.
 
   Developer Changes
 
     Kvasir now uses "java.lang.String" rather than "String" as the
-    representation type for strings in .decls files (see "Daikon Developer
-    Changes" in this file).
+    representation type for strings in .decls files (see "Daikon
+    Developer Changes" in this file).
 
 Dfec (C font end)
 
   Developer Changes
 
     Dfec now uses "java.lang.String" rather than "String" as the
-    representation type for strings in .decls files (see "Daikon Developer
-    Changes" in this file).
+    representation type for strings in .decls files (see "Daikon
+    Developer Changes" in this file).
 
 #   How do we release this??
 
