@@ -579,6 +579,9 @@ def lackwit_types_compatible(name1, type1, name2, type2):
     in12 = name1 in type2
     in21 = name2 in type1
     # print "lackwit_types_compatible = ", in12, "for:", name1, type1, name2, type2
+    if (in12 != in21):
+        print "variable comparability is non-symmetric:", name1, type1, name2, type2
+    # now throw an error
     assert in12 == in21
     return in12
 
@@ -1738,7 +1741,7 @@ def process_declaration(file, this_fn_var_infos, fn_regexp=None):
         assert line[-1] == "\n"
         var_comparable = parse_lackwit_vartype(line[:-1], vartype)
         if debug_read:
-            print "var for", program_point, varname, vartype
+            print "var for", program_point, varname, vartype, var_comparable
         these_var_infos.append(var_info(varname, vartype, var_comparable, len(these_var_infos)))
         line = file.readline()
 
@@ -1785,8 +1788,17 @@ def after_processing_all_declarations():
             continue
         these_var_infos = fn_var_infos[ppt]
         begin_ppt = ppt_sans_suffix + ":::ENTER"
-        for vi in fn_var_infos[begin_ppt][0:fn_truevars[begin_ppt]]:
-            these_var_infos.append(var_info(vi.name + "_orig", vi.type, lackwit_make_alias(vi.name, vi.lackwit_type), len(these_var_infos)))
+        # Do not use the Lackwit type of the variable at the entry;
+        # use the Lackwit type at exit.  (There may be more variables
+        # at exit than at entry.)
+        # for vi in fn_var_infos[begin_ppt][0:fn_truevars[begin_ppt]]:
+        #     these_var_infos.append(var_info(vi.name + "_orig", vi.type, lackwit_make_alias(vi.name, vi.lackwit_type), len(these_var_infos)))
+        for i in range(0, fn_truevars[begin_ppt]):
+            begin_vi = fn_var_infos[begin_ppt][i]
+            end_vi = fn_var_infos[ppt][i]
+            assert begin_vi.name == end_vi.name
+            assert begin_vi.type == end_vi.type
+            these_var_infos.append(var_info(end_vi.name + "_orig", end_vi.type, lackwit_make_alias(end_vi.name, end_vi.lackwit_type), len(these_var_infos)))
 
 
 
