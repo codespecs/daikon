@@ -57,7 +57,7 @@ public final class OneOfString  extends SingleString  implements OneOf {
 
   }
 
-  static Comparator comparator = new UtilMDE.NullableStringComparator();  
+  static Comparator comparator = new UtilMDE.NullableStringComparator();
 
   private void sort_rep() {
     Arrays.sort(elts, 0, num_elts , comparator );

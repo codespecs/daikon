@@ -142,7 +142,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   }
 
 #if defined(STRING) || defined(ELTSTRING)
-  static Comparator comparator = new UtilMDE.NullableStringComparator();  
+  static Comparator comparator = new UtilMDE.NullableStringComparator();
 #define COMPARATOR_ARG , comparator
 #elif defined(SEQUENCE)
   static Comparator comparator = new ArraysMDE.LongArrayComparatorLexical();
