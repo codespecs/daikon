@@ -142,14 +142,25 @@ sub die_and_restore {
     die $diemsg;
 }
 
+my $saw_comparability = 0;
 my $first_line = <DECLS>;
 if ($first_line =~ /VarComparability/) {
-  die_and_restore "Invalid declaration file.  " .
-    "Perhaps it has already been processed.\n";
+  my $second_line = <DECLS>;
+  if ($second_line =~ /implicit/) {
+    $saw_comparability = 1;
+    die_and_restore "Invalid declaration file.  " .
+      "Perhaps it has already been processed.\n";
+  } elsif ($second_line =~ /none/) {
+    # Old file was "none", new file will be "implicit"
+    $saw_comparability = 1;
+  }
+  <DECLS>; # skip blank line
 }
 
-# reset the filehandle position
-seek(DECLS, 0, 0);
+if (!$saw_comparability) {
+  # reset the filehandle position
+  seek(DECLS, 0, 0);
+}
 
 open OUT, ">$outfn" or die_and_restore "Can't open $outfn for write: $!\n";
 print OUT "VarComparability\n";
