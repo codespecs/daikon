@@ -434,6 +434,15 @@ placed in your shell initialization file, or else log out and log back
 in to achieve the same effect.
 
 @item
+If you wish to use clustering to help produce implications
+(@pxref{Cluster analysis for splitters}), then compile the clustering
+algorihtms.
+@example
+cd $DAIKONDIR/bin
+make
+@end example
+
+@item
 @cindex DAIKONCLASS_SOURCES environment variable
 @cindex environment variable DAIKONCLASS_SOURCES
 @cindex @file{daikon.jar}, running from
@@ -4053,6 +4062,12 @@ cpp -P bar.c bar.c-expanded
 java daikon.tools.jtb.cparser.CreateSpinfoC foo.c-expanded bar.c-expanded
 @end example
 @noindent
+
+If you get an error such as
+@example
+... Lexical error at line 5, column 1.  Encountered: "#" (35), after : ""
+@end example
+Then you forgot to run cpp before running CreateSpinfoC.
 
 @node   Cluster analysis for splitters,  , Static analysis for splitters, Enhancing conditional invariant detection
 @subsection Cluster analysis for splitters
