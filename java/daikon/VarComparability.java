@@ -44,15 +44,13 @@ public abstract class VarComparability {
   public abstract VarComparability elementType();
   public abstract VarComparability indexType(int dim);
 
-  public final static String lineSep = System.getProperty("line.separator");
-
   static boolean compatible(VarInfoName name1, VarComparability type1,
                             VarInfoName name2, VarComparability type2) {
 
     if (type1.getClass() != type2.getClass())
       throw new Error("Trying to compare VarComparabilities " +
-                      "of different types: " + lineSep
-                      + "    " + name1 + " " + type1 + linesep
+                      "of different types: " + Global.lineSep
+                      + "    " + name1 + " " + type1 + Global.lineSep
                       + "    " + name2 + " " + type2);
 
     if (type1 instanceof VarComparabilityNone) {
