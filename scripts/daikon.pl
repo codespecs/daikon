@@ -115,7 +115,11 @@ if ($output) {
 print "Output will go in $output...\n" if $verbose;
 
 # check to see that we have jikes avaiable
-die ("Put jikes in your path before using this tool") unless which('jikes');
+unless (which('jikes')) {
+    die ("You must run the command 'add jikes' before using this tool.\n" .
+	 "You may add that line to your ~/.environmente file to have it" .
+	 "added automatically every time you log in.\n");
+}
 
 # check the program make sure it starts out with no errors
 $error = system("jikes -classpath $cp_dot -depend -nowrite -nowarn $mainsrc");
