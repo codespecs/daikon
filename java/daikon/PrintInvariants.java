@@ -1055,6 +1055,8 @@ public class PrintInvariants {
 
     for (int i = 0; i < invs_array.length; i++) {
       Invariant inv = invs_array[i];
+      if (inv.logOn())
+        inv.log ("Considering Printing");
       Assert.assertTrue (!(inv instanceof Equality));
       InvariantFilters fi = new InvariantFilters();
       fi.setPptMap(ppt_map);
@@ -1068,8 +1070,10 @@ public class PrintInvariants {
         Global.reported_invariants++;
         accepted_invariants.add(inv);
       } else {
-        if (debugPrint.isDebugEnabled()) {
-          debugPrint.debug ("  not printing: " + inv.repr());
+        if (inv.logOn() || debugPrint.isDebugEnabled()) {
+          inv.log (debugPrint, "fi_accepted = " + fi_accepted +
+                    " inv.isGuardingPredicate = " + inv.isGuardingPredicate
+                    + " not printing " + inv.repr());
         }
       }
     }

@@ -1,6 +1,7 @@
 package daikon.inv.filter;
 
 import utilMDE.Assert;
+import org.apache.log4j.Logger;
 import java.util.*;
 import daikon.inv.*;
 import daikon.inv.Invariant.OutputFormat;
@@ -148,12 +149,10 @@ public class InvariantFilters {
   }
 
   public boolean shouldKeep( Invariant invariant ) {
-    if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-      PrintInvariants.debugFiltering.debug(invariant.format());
-      PrintInvariants.debugFiltering.debug("      (type: " +
-                                           invariant.getClass().getName() +
-                                           ") samples: " +
-                                           invariant.ppt.num_samples());
+    Logger df = PrintInvariants.debugFiltering;
+
+    if (invariant.logOn() || df.isDebugEnabled()) {
+      invariant.log (df, "filtering");
     }
 
     if (invariant instanceof GuardingImplication) {
@@ -169,31 +168,37 @@ public class InvariantFilters {
           if (! filter.shouldDiscard( invariant ))
             hasAnyVariable = true;
         }
-        if (! hasAnyVariable)
+        if (! hasAnyVariable) {
+          if (invariant.logOn())
+            invariant.log ("Failed ANY_VARIABLE filter");
           return false;
+        }
       } else if (variableFilterType == InvariantFilters.ALL_VARIABLES) {
         for (Iterator iter = variableFilters.iterator(); iter.hasNext(); ) {
           InvariantFilter filter = (InvariantFilter) iter.next();
-          if (filter.shouldDiscard( invariant ))
+          if (filter.shouldDiscard( invariant )) {
+            if (invariant.logOn())
+              invariant.log ("Failed ALL_VARIABLES filter"
+                             + filter.getClass().getName());
             return false;
+          }
         }
       }
     }
     //  Property filters.
     for (Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
       InvariantFilter filter = (InvariantFilter) iter.next();
-      if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-        PrintInvariants.debugFiltering.debug("  applying " + filter.getClass().getName());
+      if (df.isDebugEnabled()) {
+        invariant.log (df, "applying " + filter.getClass().getName());
       }
       if (filter.shouldDiscard( invariant )) {
-        if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-          PrintInvariants.debugFiltering.debug("  *failed " + filter.getClass().getName());
-        }
+        if (invariant.logOn() || df.isDebugEnabled())
+          invariant.log (df, "failed " + filter.getClass().getName());
         return false;
       }
     }
-    if (PrintInvariants.debugFiltering.isDebugEnabled()) {
-      PrintInvariants.debugFiltering.debug("  succeeded InvariantFilters");
+    if (df.isDebugEnabled()) {
+      invariant.log (df, "accepted by InvariantFilters");
     }
     return true;
   }

@@ -50,6 +50,8 @@ public class SelfSuppressionFactory extends SuppressionFactory  {
       debug.debug ("Attempting on: " + inv.repr());
       debug.debug ("  in ppt     : " + inv.ppt.parent.ppt_name);
     }
+    if (inv.logOn())
+      inv.log ("Attempting self suppression");
 
     PptSlice slice = inv.ppt;
 
@@ -57,6 +59,12 @@ public class SelfSuppressionFactory extends SuppressionFactory  {
     supTemplate.invTypes[0] = inv.getClass();
     supTemplate.varInfos[0] = slice.var_infos;
     slice.parent.fillSuppressionTemplate (supTemplate, false);
+    if (inv.logOn()) {
+      inv.log ("Search for" + supTemplate.searchString());
+      if (supTemplate.filled)
+        inv.log ("Found " + supTemplate.results[0].format() + " in "
+                  + supTemplate.results[0].ppt.ppt_name.getFullNamePoint());
+    }
     // Yeah, the argument has to be false, because otherwise we'll
     // suppress ourselves in the same ppt
     if (supTemplate.filled && supTemplate.results[0].isSameFormula(inv)) {

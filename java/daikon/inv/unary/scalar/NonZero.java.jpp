@@ -164,8 +164,8 @@ public class NONZERO
 
   public void add_modified(PRIMITIVE v, int count) {
     if (v == 0) {
-      if (debug.isDebugEnabled() || ppt.debugged) {
-        System.out.println(NONZEROSTRING + ".destroy(" + ppt.name + ")");
+      if (logOn() || debug.isDebugEnabled() || ppt.debugged) {
+        log (debug, "destroy (value = " + v + ")");
       }
       destroyAndFlow();
       return;
@@ -174,6 +174,9 @@ public class NONZERO
     // the first value).
     if (v < min) min = v;
     if (v > max) max = v;
+
+    if (logDetail())
+      log ("add_modified (" + v + ")");
   }
 
   protected double computeProbability() {
@@ -237,6 +240,11 @@ public class NONZERO
   public boolean isObviousDynamically(VarInfo[] vis) {
     VarInfo var = vis[0];
 
+    Debug dlog = new Debug (getClass(), ppt, vis);
+
+    if (logOn())
+      dlog.log ("Checking IsObviousDynamically");
+
     // System.out.println("isObviousImplied: " + format());
 
     // For every ELTNONZERO at this program point, see if this variable is
@@ -252,6 +260,8 @@ public class NONZERO
         // and eliminates desirable invariants such as "return != null".
         if (MEMBER.isObviousMember(v1, v2)) {
           // System.out.println(NONZEROSTRING + ".isObviousImplied: " + MEMBERSTRING + ".isObviousMember(" + v1.name + ", " + v2.name + ") = true");
+          if (logOn())
+            dlog.log ("isObvDyn- true, arg is member of nonzero sequence");
           return true;
         }
       }
@@ -273,6 +283,8 @@ public class NONZERO
               SEQINDEXNONEQUAL sine = SEQINDEXNONEQUAL.find(other_slice);
               if ((sine != null) && sine.enoughSamples()) {
                 // System.out.println(NONZEROSTRING + ".isObviousImplied true due to: " + sine.format());
+                if (logOn())
+                  dlog.log ("isObvDyn- true due to " + sine.format());
                 return true;
               }
             }
