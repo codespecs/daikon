@@ -865,7 +865,7 @@ public class Ast {
   public static String[] invariants_for(PptTopLevel ppt, PptMap ppts) {
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
-    ppt.print_invariants_maybe(pw);
+    PrintInvariants.print_invariants_maybe(ppt,pw);
     String[] invs = UtilMDE.split(sw.toString(), '\n');
     Assert.assert(invs[invs.length-1].equals(""));
     if (invs.length == 1) {

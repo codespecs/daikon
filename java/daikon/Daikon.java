@@ -182,7 +182,7 @@ public final class Daikon {
       System.out.println("The --output_num_samples debugging flag is on.");
       System.out.println("Some of the debugging output may only make sense to Daikon programmers.");
     }
-    print_invariants(all_ppts);
+    PrintInvariants.print_invariants(all_ppts);
     if (output_num_samples) {
       Global.output_statistics();
     }
@@ -449,7 +449,7 @@ public final class Daikon {
       while (true) {
 	System.out.print("\r[" + (df.format(new Date())) + "]: " + message());
 	try {
-	  sleep(1000);
+	  sleep(5000);
 	} catch (InterruptedException e) {
 	  // hmm
 	}
@@ -558,22 +558,6 @@ public final class Daikon {
 
   }
 
-
-  ///////////////////////////////////////////////////////////////////////////
-  //
-  public static void print_invariants(PptMap ppts) {
-    // Retrieve Ppt objects in sorted order.
-    PrintWriter pw = new PrintWriter(System.out, true);
-    // PptMap iteratorator uses a custom comparator for a specific ordering
-    for (Iterator itor = ppts.iterator() ; itor.hasNext() ; ) {
-      PptTopLevel ppt = (PptTopLevel) itor.next();
-      // if (ppt.has_samples() &&  // [[INCR]]
-      if (! no_text_output) {
-        ppt.print_invariants_maybe(pw);
-      }
-    }
-    pw.flush();
-  }
 
   ///////////////////////////////////////////////////////////////////////////
   //
