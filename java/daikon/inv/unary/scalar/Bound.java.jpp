@@ -630,13 +630,17 @@ public class LOWERBOUND
         result.core.add_modified (inv.MIN2, inv.NUM_MIN2);
       if (inv.NUM_MIN3 > 0)
         result.core.add_modified (inv.MIN3, inv.NUM_MIN3);
-      result.core.add_modified (inv.core.MAX, 1);
+      // NUM_MIN1 will be positive if and only if we've ever seen any
+      // real samples. Only then does MAX represent a real sample.
+      if (inv.NUM_MIN1 > 0)
+        result.core.add_modified (inv.core.MAX, 1);
       if (Debug.logDetail())
         result.log ("Adding vals " + inv.NUM_MIN1 + " of " + inv.MIN1 + ","
                                    + inv.NUM_MIN2 + " of " + inv.MIN2 + ","
                                    + inv.NUM_MIN3 + " of " + inv.MIN3 + ", "
-                                   + "1 of " + inv.core.MAX
-                                   + "from ppt " + inv.ppt.ppt_name);
+                                   + ((inv.NUM_MIN1 > 0) ?
+                                      "1 of " + inv.core.MAX : "")
+                                   + " from ppt " + inv.ppt.ppt_name);
     }
 
     result.log ("Merged '" + result.format() + "' from " + invs.size()
