@@ -316,8 +316,6 @@ etags:	tags
 
 TAGS:	tags
 
-# Used to include "*.py", but no such in daikon/ directory.
-# I could make this ../*.py, but probably don't want to include that old code.
 tags:
 	@echo etags '*.java ...'
 	@etags -l java ${TAG_FILES}
