@@ -237,19 +237,10 @@ doc-category: ../doc/category-options.texinfo
 
 ## Switching between version 2 and version 3 (temporary)
 
-# To set up the version-2 and version-3 directories:
-#   mv $inv/java/daikon $inv/daikon.ver2
-#   cd $inv/java; cvs update
-#   mv $inv/java/daikon $inv/daikon.ver3
-# Then run "make use-ver2" or "make use-ver3" to select a version.
-use-%: daikon-is-symlink
-	[ -e ../daikon.$* ]
-	rm -f daikon
-	ln -s ../daikon.$* daikon
-	$(MAKE) tags
-
-daikon-is-symlink:
-	[ ! -e daikon ] || [ -L daikon ] # daikon must be symlink if it exists
+# Recurse to the directory above this since regression tests need to be
+# switched too
+use-%:
+	cd .. && $(MAKE) $@
 
 ## For debugging the Makefile.
 showvars:

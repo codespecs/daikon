@@ -574,3 +574,38 @@ showvars:
 	@echo "DAIKON_JAVA_FILES = " $(DAIKON_JAVA_FILES)
 	@echo "AJAX_JAVA_FILES = " $(AJAX_JAVA_FILES)
 	@echo "WWW_FILES = " $(WWW_FILES)
+
+
+
+
+setup-v2-and-v3: setup-v2-and-v3-tests setup-v2-and-v3-daikon
+
+setup-v2-and-v3-daikon:
+	mv java/daikon daikon.ver3
+	cvs update -r ENGINE_V2_PATCHES java/daikon
+	mv java/daikon daikon.ver2
+
+setup-v2-and-v3-tests:
+	mv tests tests.ver3
+	cvs update -r ENGINE_V2_PATCHES tests
+	mv tests tests.ver2
+
+
+# To set up the version-2 and version-3 directories:
+# Use the above setup-v2-and-v3 target after updating your invariants
+# directory so that it only contains V3 stuff.
+
+use-%: daikon-is-symlink
+	[ -e daikon.$* ]
+	rm -f java/daikon
+	ln -s ../daikon.$* java/daikon
+	cd java; $(MAKE) tags
+
+	[ -e tests.$* ]
+	rm -f tests
+	ln -s tests.$* tests
+
+daikon-is-symlink:
+	[ ! -e java/daikon ] || [ -L java/daikon ] # daikon must be symlink if it exists
+	[ ! -e tests ] || [ -L tests ] # tests must be symlink if it exists
+
