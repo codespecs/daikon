@@ -2819,49 +2819,44 @@ is @code{null} on a particular execution of a program point, then
 parameter.
 
 @item --ppt-select-pattern=@var{regexp}
-Only produce trace output for classes/procedures whose names match the
+Only produce trace output for classes/procedures/program points which match the
 given regular expression.  This option may be supplied multiple times,
 but it cannot be used in conjunction with @option{--ppt-omit-pattern}.  
 
-The regular expression may match any portion of the program point name.  
-Note that currently only classes are matched, not each full program point 
-name.  Thus, either all of a class's methods are traced or none of  them are.
+When this switch is supplied, filtering occurs in the following way:  for each program point,
+we check the program point name, fully qualified class name, and method name against all the
+@var{regexp}'s supplied.  If any of these match, then the program point is included in the instrumentation.
 
-If the the regular expression does not match the name of a particular
-class, then that class is omitted entirely, along with all procedures
-within it.  Thus, the @option{--ppt-select-pattern} flag does not
-cause output for exactly the procedures that the
-@option{--ppt-omit-pattern} flag omits, with the same argument.  For
-instance, suppose that class @code{C} contains procedures
-@code{foo} and @code{bar}.  Then
-@option{--ppt-omit-pattern=bar} would cause @code{foo} to be
-instrumented, but @option{--ppt-select-pattern=bar} would cause
-nothing to be instrumented, because regular expression @samp{bar} does
-not match the class name @code{C}, so no part of @code{C} would be further
-considered.
-
-To trace only method @code{bar} of class @code{C}, one possible command is:
+For example, to trace only method @code{bar} of class @code{C}, one possible command is:
 
 @example
-java daikon.Chicory --ppt-select-pattern='C$|C.bar' ...
+java daikon.Chicory --ppt-select-pattern='bar$' ...
 @end example
 
+Here, only program points for method @code{bar} will match the regular expression.  This will match because because we check the name of the
+method against the regular expression.
+
+Another idea would be to do:
+@example
+java daikon.Chicory --ppt-select-pattern='C.bar' ...
+@end example
+
+This would work as well because it would match program point name for method @code{bar}.  Be careful, though.
+If we had another method in @code{C} which also started with ``bar'', it would be instrumented also.
 
 @item --ppt-omit-pattern=@var{regexp}
-Do not produce data trace output for classes/procedures whose names match
+Do not produce data trace output for classes/procedures/program points which match
 the given regular expression.  This
 reduces the size of the data trace file and also may make the
 instrumented program run faster, since it need not output those variables.
 
+This expression works just like @option{--ppt-select-pattern} does, except any time it finds a match, it 
+excludes the program point as opposed to including.
+
 The @option{--ppt-omit-pattern} argument may be supplied multiple times, in
 order to specify multiple omitting criteria.  A program point is omitted
-if its fully qualified class, fully qualified procedure name, or
-complete program point name exactly matches one of the omitting criteria.
-A regular expression matches if it matches any portion of the program
-point name.  Note that currently only classes are matched, not each full
-program point name.  Thus, either all of a class's methods are traced, 
-or none of
-them are.
+if its fully qualified class, procedure name, or
+complete program point name matches one of the omitting criteria.
 
 Here are examples of how to avoid detecting invariants over various
 parts of your program.
