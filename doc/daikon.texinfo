@@ -3021,7 +3021,6 @@ the first Java file name.
 @c
 @c Details of the options are as follows.  
 When conflicting options are specified (for instance, both
-@option{+daikon_functions} and @option{-daikon_functions}, or both
 @option{-declsfiledir} and @option{-declsfiledirflat}), the last one
 takes precedence.
 
@@ -3070,24 +3069,42 @@ is @code{null} on a particular execution of a program point, then
 @code{myA.b} is not accessed on that execution regardless of the depth
 parameter.
 
-@item +daikon_functions
-Produce data trace output at procedure entry/exit (default).
-
-@item -daikon_functions
-Do not produce data trace output at procedure entry/exit.
-
-@item +daikon_classes
-Produce data trace output for class invariants (default).
-
-@item -daikon_classes
-Do not produce data trace output for class invariants.
-
 @c @item +daikon_loops
 @c Produce data trace output for loop invariants.
 @c @emph{This option has no effect:  loop invariants are not currently supported.}
 @c 
 @c @item -daikon_loops
 @c Do not produce data trace output for loop invariants (default).
+
+@item +daikon_instrument
+Produce tracing output (default).
+
+@item -daikon_instrument
+Do not produce tracing output.
+
+@item +daikon_listclosure
+Render linked-lists as vectors (default).
+
+@item -daikon_listclosure
+Do not render linked-lists as vectors.
+
+@item +daikon_context
+Produce context sensitive output.
+
+@item -daikon_context
+Do not produce context sensitive output (default).
+
+@item +daikon_exceptions
+Produce data trace output for exceptions.
+
+@item -daikon_exceptions
+Do not produce data trace output for exceptions (default).
+
+@item +daikon_classhier
+Produce class hierarchy data.
+
+@item -daikon_classhier
+Do not produce class hierarchy data (default).
 
 @item -daikon_includeonly=@var{string}
 Only produce trace output for matching classes/procedures.  Cannot be used
