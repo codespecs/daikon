@@ -245,7 +245,14 @@ href="http://www.cvshome.org/docs/manual/index.html">alternate site</a>).
 The following command creates and populates the <tt>invariants</tt> directory:
 <pre>
     cvs -d /g4/projects/invariants/.CVS co invariants
+    chgrp -R invariants invariants
+    chmod -R g+r invariants
+    chmod g+x `find invariants -type d -print`
+    cd java/daikon
+    cvs update -r ENGINE_V2_PATCHES
 </pre>
+(The last two lines make sure that you use Daikon version 2, rather than
+the experimental version 3.)
 <p>
 
 Optionally, you may check out a copy of the <tt>dfej</tt> directory.

@@ -33,13 +33,14 @@ yppasswd <em>username</em>
 <em># Add to "daikon" mailing list</em>
 emacs /etc/aliases
 newaliases
-<em># Set email forwarding to Athena</em>
 cd ~<em>username</em>
-echo <em>username</em>@mit.edu > .forward
-chown <em>username</em> .forward
-chgrp <em>username</em> .forward
-<em># Adjust directory permissions</em>
+echo "Adjust directory permissions"
 chmod og+rx .
+echo "Set up dotfiles, including email forwarding to Athena"
+cp /g2/users/mernst/research/invariants/doc/www/mit/.cvsrc .
+echo <em>username</em>@mit.edu > .forward
+chown <em>username</em> .forward .cvsrc
+chgrp <em>username</em> .forward .cvsrc
 exit
 </pre>
 </blockquote>
