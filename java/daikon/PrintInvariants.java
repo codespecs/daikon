@@ -102,7 +102,7 @@ public class PrintInvariants {
       "      Write output as java expressions.",
       "  --" + Daikon.jml_output_SWITCH,
       "      Write output in JML format.",
-      "  --" + Daikon.dbc_output_SWITCH, //@tx
+      "  --" + Daikon.dbc_output_SWITCH,
       "      Write output as Design-By-Contract format.",
       "  --" + Daikon.output_num_samples_SWITCH,
       "      Output numbers of values and samples for invariants and " +
@@ -130,7 +130,7 @@ public class PrintInvariants {
       new LongOpt(Daikon.test_ioa_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.java_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.jml_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
-      new LongOpt(Daikon.dbc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0), //@tx
+      new LongOpt(Daikon.dbc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -169,8 +169,8 @@ public class PrintInvariants {
           test_output = true;
         } else if (Daikon.jml_output_SWITCH.equals(option_name)) {
           Daikon.output_style = OutputFormat.JML;
-	    } else if (Daikon.dbc_output_SWITCH.equals(option_name)) { //@tx
-          Daikon.output_style = OutputFormat.DBCJAVA;
+	} else if (Daikon.dbc_output_SWITCH.equals(option_name)) {
+	    Daikon.output_style = OutputFormat.DBCJAVA;
         } else if (Daikon.output_num_samples_SWITCH.equals(option_name)) {
           Daikon.output_num_samples = true;
         } else if (Daikon.config_option_SWITCH.equals(option_name)) {
@@ -629,7 +629,7 @@ public class PrintInvariants {
     if (Daikon.output_num_samples
         || (Daikon.output_style == OutputFormat.ESCJAVA)
         || (Daikon.output_style == OutputFormat.JML)
-	|| (Daikon.output_style == OutputFormat.DBCJAVA )) { //@tx
+        || (Daikon.output_style == OutputFormat.DBCJAVA )) {
       out.print("    Variables:");
       for (int i=0; i<ppt.var_infos.length; i++) {
         out.print(" " + ppt.var_infos[i].name.name());
@@ -720,7 +720,7 @@ public class PrintInvariants {
     }
     if (Daikon.output_num_samples
 	|| (Daikon.output_style == OutputFormat.ESCJAVA)
-	|| (Daikon.output_style == OutputFormat.DBCJAVA)) { //@tx
+        || (Daikon.output_style == OutputFormat.DBCJAVA)) {
       if (modified_vars.size() > 0) {
         out.print("      Modified variables:");
         for (int i=0; i<modified_vars.size(); i++) {
@@ -748,8 +748,6 @@ public class PrintInvariants {
     // and create a \forall to specify that the rest aren't.
     if (Daikon.output_style == OutputFormat.ESCJAVA
 	|| Daikon.output_style == OutputFormat.JML
-	// RRN, not sure about this right now.
-	//	|| Daikon.output_style == OutputFormat.DBCJAVA //@tx
 	) {
       Vector mods = new Vector();
       for (int i=0; i<modified_vars.size(); i++) {
@@ -809,7 +807,6 @@ public class PrintInvariants {
         }
       }
       if (mods.size() > 0) {
-	  // RRN possible need for DBC-related modification here:
         if (Daikon.output_style == OutputFormat.ESCJAVA)
           out.print("modifies ");
         else
@@ -1077,19 +1074,17 @@ public class PrintInvariants {
           out.println("    (obviously)");
         }
       }
-     } else if (Daikon.output_style == OutputFormat.DBCJAVA) { //@tx
+     } else if (Daikon.output_style == OutputFormat.DBCJAVA) {
        VarInfo leader = (VarInfo) equal_vars.elementAt(0);
        for (int j = 1; j < equal_vars.size(); j++) {
 	 VarInfo other = (VarInfo) equal_vars.elementAt(j);
 	 if (other.isDerivedSequenceMinMaxSum())
 	   break;
 	 if (leader.rep_type.isArray()) {
-           out.println((new DummyInvariant(null)).format_unimplemented(OutputFormat.DBCJAVA));
-           // CP: commented out, see comment near QuantHelper.format_dbc()
-           // 	   String[] form =
-           // 	     VarInfoName.QuantHelper.format_dbc(new VarInfoName[]
-           // 	       { leader.name, other.name }, true); // elementwise
-           // 	   out.println(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
+           out.println("quant.Quant.pairwiseEqual("
+                       + leader.name.dbc_name(leader)
+                       + other.name.dbc_name(leader)
+                       + ")");
 	 } else {
 	   out.println(leader.name.dbc_name(leader) + " == " + other.name.dbc_name(other));
 	 }
@@ -1224,7 +1219,7 @@ public class PrintInvariants {
       }
     } else if (Daikon.output_style == OutputFormat.JAVA
 	       || Daikon.output_style == OutputFormat.JML
-	       || Daikon.output_style == OutputFormat.DBCJAVA) { //@tx
+	       || Daikon.output_style == OutputFormat.DBCJAVA) {
       inv_rep = inv.format_using(Daikon.output_style);
     } else {
       throw new IllegalStateException("Unknown output mode");
@@ -1264,7 +1259,20 @@ public class PrintInvariants {
     //        out.println(invVarInfos[i].toString());
     //      }
 
+    if(Daikon.output_style == OutputFormat.DBCJAVA) {
+      out.print("<DBC> ");
+      out.print(inv_rep);
+      out.print(" </DBC> ");
+      // the fist "/**" and the last "*/" are inserted by AnnotateVisitor.java
+      out.print(" <SAMPLES> " + Integer.toString(inv.ppt.num_samples()) + " </SAMPLES> ");
+      //out.print(" <PROBCHANCE> " + Double.toString(1-inv.getProbability()) + " </PROBCHANCE>");
+      out.print(" <DAIKON> " + inv.format_using(OutputFormat.DAIKON) + " </DAIKON> ");
+      out.print(" <DAIKONCLASS> " + inv.getClass().toString() + " </DAIKONCLASS> ");
+      out.println(" <METHOD> " + inv.ppt.parent.ppt_name.getSignature() + " </METHOD> ");
+    } else {
+      //out.println(inv.getClass().toString());
     out.println(inv_rep);
+    }
     if (debug.isLoggable(Level.FINE)) {
       debug.fine (inv.repr());
     }
