@@ -538,8 +538,10 @@ public final class FileIO {
 
     if (debugRead.isDebugEnabled()) {
       debugRead.debug("read_data_trace_file " + filename
-                      + ((Daikon.ppt_regexp != null) ? " " + Daikon.ppt_regexp.getPattern() : "")
-                      + ((Daikon.ppt_omit_regexp != null) ? " " + Daikon.ppt_omit_regexp.getPattern() : ""));
+                      + ((Daikon.ppt_regexp != null) ? " " +
+                         Daikon.ppt_regexp.getPattern() : "")
+                      + ((Daikon.ppt_omit_regexp != null) ? " " +
+                         Daikon.ppt_omit_regexp.getPattern() : ""));
     }
 
     LineNumberReader reader = UtilMDE.LineNumberFileReader(filename.toString());
@@ -698,6 +700,8 @@ public final class FileIO {
         add_orig_variables(ppt, vt.vals, vt.mods, nonce);
 
         // XXX (for now, until front ends are changed)
+        // No, always do this, because exit ppts have all the interesting values,
+        // and doing anything else is redundant.
         if (! ppt.ppt_name.isExitPoint()) {
           return;
         }
