@@ -72,6 +72,8 @@ types of the arguments.  A new method (instantiate_ok()) does more refined
 checking for specific types (such as avoiding hashcodes and booleans on
 numeric invariants, special comparability checks, and the like).
 
+---------------------------------
+
 3.1.3 (01 Sep 2004)
 
 Several bugs in the LinearyTernary invariant were fixed.  Under some
