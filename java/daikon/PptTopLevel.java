@@ -713,7 +713,7 @@ public class PptTopLevel
     if (values_num_samples == 0) {
       //       debugFlow.debug ("  Instantiating views for the first time");
       instantiate_views_and_invariants();
-      
+
       if (Global.debugInfer.isDebugEnabled()) {
         Global.debugInfer.debug ("Instantiated views first time for " + this);
       }
@@ -727,7 +727,7 @@ public class PptTopLevel
 
 
     Set viewsToCheck = new HashSet(views);
-    
+
     if (debugSuppress.isDebugEnabled()) {
       debugSuppress.debug ("<<< Doing add() for " + name);
       debugSuppress.debug ("    with vt " + vt);
@@ -1543,6 +1543,7 @@ public class PptTopLevel
   }
   */ // ... [INCR]
 
+
   ///////////////////////////////////////////////////////////////////////////
   /// Manipulating invariants and suppression
   ///
@@ -1557,7 +1558,6 @@ public class PptTopLevel
    * @see daikon.suppress.SuppressionFactory
    * @pre Invariants already instantiated
    **/
-
   public void initiateSuppression() {
     if (Daikon.suppress_invariants) {
       if (debugSuppressInit.isDebugEnabled()) {
@@ -1583,7 +1583,6 @@ public class PptTopLevel
    * @see daikon.suppress.SuppressionFactory
    * @pre Invariants already instantiated.  inv not already suppressed.
    **/
-
   public boolean attemptSuppression (Invariant inv) {
     if (Daikon.suppress_invariants) {
       Assert.assertTrue (inv.getSuppressor() == null);
@@ -1616,7 +1615,7 @@ public class PptTopLevel
 
     Assert.assertTrue (template.invTypes.length == template.varInfos.length,
                        "Template varInfos and invariant slots must be equal");
-    
+
     boolean firstLoopFilled = false;
     template.filled = false;
     template.results = new Invariant[template.invTypes.length];
@@ -1642,7 +1641,7 @@ public class PptTopLevel
           template.results[iInvs] = inv;
           template.transforms[iInvs] = template.varInfos[iInvs];
         }
-      }      
+      }
     }
     if (!firstLoopFilled) return false;
 
@@ -1650,11 +1649,11 @@ public class PptTopLevel
     for (int iInvs = 0; iInvs < template.invTypes.length; iInvs++) {
       if (dataflow_ppts == null) break;
       if (template.results[iInvs] != null) continue secondloop;
-      
+
       Class clazz = template.invTypes[iInvs];
       VarInfo[] varInfos = template.varInfos[iInvs];
 
-      
+
 
       // Transform the VarInfos for each upper ppt
       // We go backwards so that we get the strongest invariants first.
@@ -1671,7 +1670,7 @@ public class PptTopLevel
             newVarInfos[iVarInfos] = null;
           }
         }
-        
+
         PptSlice slice = dataflowPpt.findSlice_unordered (newVarInfos);
         if (slice != null) {
           Invariant inv =
@@ -1682,12 +1681,12 @@ public class PptTopLevel
             template.results[iInvs] = inv;
             template.transforms[iInvs] = newVarInfos;
           }
-        }      
+        }
       }
     }
-    
+
     // Only for checking if template got filled
-    thirdloop: 
+    thirdloop:
     for (int iInvs = 0; iInvs < template.invTypes.length; iInvs++) {
       if (template.results[iInvs] == null) return false;
     }
@@ -2676,7 +2675,7 @@ public class PptTopLevel
   // As of 1/9/2000, this is only used in print_invariants.
   /**
    * Return a List of all the invariants for the program point.
-   * Also consider using views_iterator() instead. 
+   * Also consider using views_iterator() instead.
    **/
   // Used to be known as invariants_vector, but changed to return a
   // List.

@@ -3,14 +3,16 @@
 Data structures for handling suppression.  Here is how suppression
 works:
 
-<br> <br>
+<p>
 
 An invariant is suppressed if it is implied by another invariant.  A
 suppressed invariant is nor checked as long as its suppressor is true.
 This saves time for checking long data trace files, and reduces output
 spam for obvious invariants.  Suppression is NOT:
 
-<br> <br>
+<p>
+
+<ul>
 
 <li> The non-instantiation of invariants that are obvious in and of
 themselves.
@@ -21,7 +23,9 @@ mechanism based on left hand sides that aren't known to be true yet.
 
 <li> A mechanism for handling equality invariants.
 
-<br> <br>
+</ul>
+
+<p>
 
 Invariants are suppressed by SuppressionLink's, each of which store a
 suppressed invariant and a list of suppressors (since one may need
@@ -31,7 +35,7 @@ many different kinds of SuppressionFactory's, one for each suppression
 rule we have.  Most SuppressionFactory's are attached to the
 invariants that they would suppress.
 
-<br> <br>
+<p>
 
 Suppression itself happens at the PptTopLevel.  Initially (or after
 some small set of samples are fed) a PptTopLevel iterates through its
@@ -44,10 +48,12 @@ SuppressionFactory asks the potential suppressee's PptTopLevel to
 fillSuppressionTemplate().  If a template is successfully filled, then
 the invariant is suppressed.
 
-<br> <br>
+<p>
 
 During dtrace file reading, when a sample is fed, suppression works
 through PptTopLevel.add():
+
+<ul>
 
 <li> Make a set of PptSlice's called toCheck that have to be given the
 sample.  Initially, the set is all the PptSlice's.
@@ -65,7 +71,9 @@ lower, it will be checked later in the data flow.
 
 <li> Repeat while there are slices to check.
 
-<br> <br>
+</ul>
+
+<p>
 
 The only interface for suppressing an invariant is through the
 attemptSuppression() method in PptTopLevel (i.e. don't try to suppress
@@ -77,13 +85,13 @@ fillSuppressionTemplate respects the global option of whether a
 suppressed invariant may suppress another invariant (and later,
 invariant cycle detection).
 
-<br> <br>
+<p>
 
 How do we suppress derived variables?  We simply suppress any
 invariant that contains a derived variable that merits suppression.
 We use VarSuppressionFactory for this.
 
-<br> <br>
+<p>
 
 How SuppressionFactory's are discovered by Daikon: every time an
 Invariant is checked for whether it is suppressed, its
@@ -91,14 +99,14 @@ getSuppressionFactories() method is called.  Each Invariant subtype
 implements getSuppressionFactories() to return the relevant
 SuppressionFactory's.
 
-<br> <br>
+<p>
 
 Suppression obeys an "ordering" property or properties.  A suppressee
 is never checked, so it cannot fall down the Ppt partial order while
 suppressed.  Further, a suppressed invariant must have at least one
 suppressor in the same ppt (and the rest in a higher or same ppt).
 
-<br> <br>
+<p>
 
 Suppression also relies on the invariant uniqueness property.  That
 is, at each ppt, for a given set of VarInfos, there exists exactly one
@@ -108,14 +116,14 @@ for an invariant in suppression, we can be sure that the returned
 invariant either has the property we are looking for, or no invariant
 does.
 
-<br> <br>
+<p>
 
 Additionally, suppression relies on the fact that invariants at lower
 ppts will be stronger than invariants in their parents.  If this isn't
 true, then the search in the ppt partial order for a potential
 suppressor becomes intractable.
 
-<br> <br>
+<p>
 
 Note for Invariant cloning: SuppressionLinks are shared between two
 Invariants iff one is a clone of each other.  Otherwise, Invariants
@@ -123,7 +131,8 @@ have their own suppressor and suppressed fields.  The sharing is
 necessary because a weakened Invariant doesn't flow itself, but a
 clone of itself, and we only have the clone to recheck suppression on.
 
-<br>
+<p>
+
 Suppression has two options, set by Daikon.suppress_with_suppressed.
 When the flag is on, it means that suppressed invariants can suppress
 others.  When off, only unsuppressed invariants can suppress.  The
@@ -136,7 +145,7 @@ invariants that remain from suppression must be able to logically get
 the invariants that are suppressed, in some order.  Maybe this is a
 way of saying "suppressors must have path cover".
 
-<br><br>
+<p>
 
 Users can chose whether to use suppression during checking by using
 the "--suppress" flag.  They can no longer choose whether to use
@@ -144,7 +153,7 @@ suppression during printing, because this is now handled by a filter
 (i.e. let them use the GUI; it's on by default for printing).
 
 
-<br><br>
+<p>
 
 
 </body>

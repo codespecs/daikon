@@ -300,7 +300,7 @@ public abstract class Invariant
    * Essentially the same as flow(this.clone()).  Useful way to flow
    * oneself without much hassle (as long as internal state is still
    * OK).  Nice point of control in case we later have to tweak things
-   * when flowing outselves.  This method and destroy() are made
+   * when flowing ourselves.  This method and destroy() are made
    * private because both of them require a call to addToChanged() for
    * correct suppression.
    **/
@@ -744,11 +744,10 @@ public abstract class Invariant
 
 
   /**
-   * Look up a previously instantiated Invariant.  Should this
-   * implementation be made more efficient?  Yes, because it's used in
-   * suppression.  We should somehow index invariants by their type.
+   * Look up a previously instantiated Invariant.
    **/
-
+  // This implementation should be made more efficient, because it's used in
+  // suppression.  We should somehow index invariants by their type.
   public static Invariant find(Class invclass, PptSlice ppt) {
     for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
       Invariant inv = (Invariant) itor.next();
@@ -760,7 +759,7 @@ public abstract class Invariant
 
   /**
    * Look up a previously instantiated Invariant but only if
-   * unsuppressed.  
+   * unsuppressed.
    **/
 
   public static Invariant findUnsuppressed(Class invclass, PptSlice ppt) {
