@@ -127,6 +127,15 @@ public final class Daikon {
    **/
   public static boolean use_dataflow_hierarchy = true;
 
+  /**
+   * Whether to use the bottom up implementation of the dataflow
+   * hierarchy.  This mechanism builds invariants initially
+   * only at the leaves of the partial order.  Upper points are
+   * calculated by joining the invariants from each of their children
+   * points
+   **/
+  public static boolean df_bottom_up = false;
+
   // When true, don't print invariants when their controlling ppt
   // already has them.  For example, this is the case for invariants
   // in public methods which are already given as part of the object
@@ -220,6 +229,7 @@ public final class Daikon {
   public static final String noversion_SWITCH = "noversion";
   public static final String enable_temporal_SWITCH = "enable_temporal";
   public static final String noinvariantguarding_SWITCH = "no_invariant_guarding";
+  public static final String bottom_up_SWITCH = "bottom_up";
 
   // A pptMap which contains all the Program Points
   // This isn't used anymore; instead, methods have parameters or
@@ -289,6 +299,8 @@ public final class Daikon {
     // Infer invariants
     process_data(all_ppts, dtrace_files);
     isInferencing = false;
+    if (Debug.logOn())
+      Debug.check (all_ppts, "After process data");
 
     if (suppress_redundant_invariants_with_simplify) {
       suppressWithSimplify(all_ppts);
@@ -318,6 +330,11 @@ public final class Daikon {
       System.out.println("The --output_num_samples debugging flag is on.");
       System.out.println("Some of the debugging output may only make sense to Daikon programmers.");
     }
+
+    // initialize the partial order hierarchy
+    if (df_bottom_up)
+      Dataflow.init_hierarchy (all_ppts);
+
     PrintInvariants.print_invariants(all_ppts);
     if (output_num_samples) {
       Global.output_statistics();
@@ -376,6 +393,7 @@ public final class Daikon {
       new LongOpt(noversion_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(enable_temporal_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(noinvariantguarding_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(bottom_up_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
     };
     Getopt g = new Getopt("daikon.Daikon", args, "ho:", longopts);
     int c;
@@ -478,6 +496,8 @@ public final class Daikon {
           output_num_samples = true;
         } else if (noternary_SWITCH.equals(option_name)) {
           disable_ternary_invariants = true;
+        } else if (bottom_up_SWITCH.equals(option_name)) {
+          df_bottom_up = true;
         } else if (config_SWITCH.equals(option_name)) {
           String config_file = g.getOptarg();
           try {
