@@ -3,31 +3,51 @@ package utilMDE;
 import java.util.*;
 
 /**
- * <b>MultiRandSelector</b> delegates to a set of RandomSelector Objects,
- * one for each of several unique equivalence classes.  The constructor
- * takes in an Object implementing an interface EquivalenceChecker
- **/
+ * <b>MultiRandSelector</b>, like <b>RandomSelector</b>, performs a
+ * uniform random selection over an iteration of objects. However, the
+ * objects in the iteration may be partitioned so that the random
+ * selection chooses the same number from each group. For example,
+ * given data about incomes by state, it may be more useful to select
+ * 1000 people from each state rather than 50,000 from the
+ * nation. Also, for selecting invocations in a Daikon trace file, it
+ * may be more useful to select an equal number of samples per program
+ * point.
 
+ * <p>The performance is the equal to running a set of RandomSelector
+ * Objects, one for each bucket, as well as some overhead for
+ * determining which bucket to assign to each Object in the iteration.
+ *
+ * <p>To use this class, call this.accept() on every Object in the
+ * iteration to be sampled. Then, call valuesIter() to receive an
+ * iteration of all the values selected by the random selection.
+ *
+ *
+ **/
 public class MultiRandSelector {
 
     private int num_elts = -1;
     private boolean coin_toss_mode;
     private double keep_probability = -1.0;
     private Random seed;
-    private EquivalenceChecker eq;
+    private Partitioner eq;
 
     private HashMap map;
 
-    public MultiRandSelector (int num_elts, EquivalenceChecker eq) {
+  /** @param num_elts the number of elements to select from each
+   *  bucket
+   *  @param partioner determines how to partition the objects from
+   *  the iteration.</p>
+   */
+    public MultiRandSelector (int num_elts, Partitioner eq) {
         this (num_elts, new Random(), eq);
     }
 
-    public MultiRandSelector (double keep_prob, EquivalenceChecker eq) {
+    public MultiRandSelector (double keep_prob, Partitioner eq) {
         this (keep_prob, new Random(), eq);
     }
 
     public MultiRandSelector (int num_elts, Random r,
-                              EquivalenceChecker eq) {
+                              Partitioner eq) {
 
         this.num_elts = num_elts;
         seed = r;
@@ -36,7 +56,7 @@ public class MultiRandSelector {
     }
 
     public MultiRandSelector (double keep_prob, Random r,
-                              EquivalenceChecker eq) {
+                              Partitioner eq) {
         this.keep_probability = keep_prob;
         coin_toss_mode = true;
         seed = r;
@@ -51,8 +71,10 @@ public class MultiRandSelector {
     }
 
 
+  /**
+   */
     public void accept (Object next) {
-        Object equivClass = eq.deriveEquivalence (next);
+        Object equivClass = eq.assignToBucket (next);
         if (equivClass == null)
             return;
         RandomSelector delegation = (RandomSelector) map.get (equivClass);
@@ -65,8 +87,9 @@ public class MultiRandSelector {
         delegation.accept (next);
     }
 
+  // TODO: is there any reason not to simply return a copy?
     /** NOT safe from concurrent modification */
-    public HashMap values () {
+    public Map values () {
         return map;
     }
 

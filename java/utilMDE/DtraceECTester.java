@@ -1,12 +1,13 @@
 // DtraceECTester.java
 package utilMDE;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ArrayList;
 
 public class DtraceECTester {
 
     public static void main (String[] args) {
-        DtraceEquivalenceChecker dec = new DtraceEquivalenceChecker (args[0]);
+        DtracePartitioner dec = new DtracePartitioner (args[0]);
         // while (dec.hasNext()) {
         //   String inv = (String) dec.next();
         //   System.out.println (inv);
@@ -16,7 +17,7 @@ public class DtraceECTester {
         while (dec.hasNext()) {
             mrs.accept (dec.next());
         }
-        ArrayList al = new ArrayList();
+        List al = new ArrayList();
 
         for (Iterator i = mrs.valuesIter(); i.hasNext(); ) {
             al.add (i.next());

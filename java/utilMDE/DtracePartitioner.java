@@ -1,0 +1,160 @@
+// DtracePartitioner.java
+package utilMDE;
+import java.util.*;
+import java.io.*;
+
+/** This class partitions Daikon trace files so that invocations of
+ *  the same program point are grouped together for use with random
+ *  selection.
+ *
+ */
+
+public class DtracePartitioner
+  implements Partitioner, Iterator
+{
+
+  // reading from the file as a lazy iterator
+  private BufferedReader br;
+  // the name of the Daikon trace file
+  private String fileName;
+
+  /** @param filename The Daikon trace file to be partitioned
+   */
+  public DtracePartitioner (String filename) {
+    try {
+      this.fileName = filename;
+      br = UtilMDE.BufferedFileReader (fileName);
+
+    } catch (IOException e) {e.printStackTrace(); }
+  }
+
+  public boolean hasNext() {
+    try {
+      return br.ready();
+    } catch (IOException e) {e.printStackTrace(); return false; }
+  }
+
+  /** Not implemented, because this class does not modify the underlying
+      trace file. */
+  public void remove () {
+    throw new UnsupportedOperationException("Can not remove");
+  }
+
+
+
+  public Object next() {
+    try {
+      String ret = grabNextInvocation ();
+      if (ret.indexOf ("EXIT") != -1) {
+        if (!br.ready()) return "";
+        return next();
+      }
+      else return ret;
+    } catch (IOException e) {e.printStackTrace(); }
+    throw new RuntimeException ("Should never reach this statement");
+
+  }
+
+  /** Grabs the next invocation in the Daikon trace file by interpreting
+   * a blank line as the invocation delimter.  Note that multiple blank
+   * lines between invocations might occur, so the callee is responsible
+   * for checking if the returned String is a blank line */
+  private String grabNextInvocation () throws IOException {
+    StringBuffer sb = new StringBuffer();
+    while (br.ready()) {
+      String line = br.readLine();
+      if (line.trim().equals ("")) {
+        break;
+      }
+      sb.append(line.trim()).append ("\n");
+    }
+    return sb.toString();
+  }
+
+
+  /** Returns the program point name given by the input invocation.
+   *  Throws RuntimeException if invocation is not instanceof String.
+   */
+  public Object assignToBucket (Object invocation) {
+    if (!(invocation instanceof String)) {
+      throw new RuntimeException ("Input to this method should be a String");
+    }
+    String s = (String) invocation;
+    if (s.indexOf ('\n') == -1) return null;
+    return s.substring (0, s.indexOf ('\n'));
+  }
+
+  /** Finds the exits that correspond to Enters
+   *  <br>Modifies: none
+   *  <br>Returns: An ArrayList containing all of the elements of 'enters'
+   *    except that any ENTER ppt invocations will definitely have
+   *    a corresponding EXIT ppt invocation following them.  The original
+   *    order is NOT guaranteed.
+   */
+
+  public List patchValues (List enters) {
+    try {
+      System.out.println ("Entering patchValues");
+      // Build a hashmap of values to watch
+      HashMap nonceMap = new HashMap();
+      for (int i = 0; i < enters.size(); i++) {
+        String enterStr = (String) enters.get(i);
+        // it could be an OBJECT or CLASS invocation ppt, ignore those
+        // by putting them in the HashMap to themselves, they'll
+        // be reaped up later
+        if (enterStr.indexOf ("ENTER") == -1) {
+          nonceMap.put (enterStr, enterStr);
+          continue;
+        }
+
+        // get the nonce of this invocation and use it
+        // as the key in the nonceMap, which maps
+        // nonces --> ENTER half of invocation
+        int theNonce = calcNonce (enterStr);
+        nonceMap.put (new Integer (theNonce), enterStr);
+      }
+
+
+
+      // look for EXIT half of invocations and augment
+      // the values of nonceMap so that the map eventually
+      // maps nonces --> full invocations with ENTER / EXIT
+      br = UtilMDE.BufferedFileReader(fileName);
+      while (br.ready()) {
+        String nextInvo = grabNextInvocation();
+        if (nextInvo.indexOf ("EXIT") == -1) continue;
+        int invoNonce = calcNonce (nextInvo);
+        Integer key = new Integer (invoNonce);
+        String enterInvo = (String) nonceMap.get (key);
+        if (enterInvo != null) {
+          nonceMap.put (key, enterInvo + "\n" + nextInvo);
+        }
+      }
+
+      // Return a list of all the invocations where matching ENTER and
+      // EXIT points were found as well as the OBJECT and CLASS
+      // invocations.
+      ArrayList al = new ArrayList();
+      for (Iterator i = nonceMap.values().iterator(); i.hasNext(); ) {
+        al.add (i.next());
+      }
+      return al;
+
+
+    } catch (IOException e) {e.printStackTrace(); }
+    return enters;
+  }
+
+  private int calcNonce (String invocation) {
+    StringTokenizer st = new StringTokenizer (invocation, "\n");
+    while (st.hasMoreTokens()) {
+      String line = st.nextToken();
+      if (line.equals ("this_invocation_nonce"))
+        return Integer.parseInt (st.nextToken());
+    }
+    throw new RuntimeException ("This invocation didn't contain a nonce: "
+                                + invocation);
+
+  }
+
+}
