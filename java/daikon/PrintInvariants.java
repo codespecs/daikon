@@ -758,7 +758,6 @@ public class PrintInvariants {
     if (IsEqualityComparison.it.accept(inv)) {
       reason = "is an equality invariant";
       return(false);
-      // Commented out for implementation of equality
     }
 
     if (!inv.isWorthPrinting())
