@@ -2,7 +2,7 @@ package daikon.inv.filter;
 
 import java.util.*;
 import daikon.inv.*;
-import daikon.inv.IsEquality;		       // For equality invariants work-around
+import daikon.inv.IsEqualityComparison;	       // For equality invariants work-around
 import daikon.PptSlice;			       // For equality invariants work-around
 import daikon.VarInfo;
 
@@ -99,7 +99,7 @@ public class InvariantFilters {
 	    filter.turnOn();
 	}
     }
-
+p
     public void turnFiltersOff() {
 	for (Iterator iter = propertyFilters.iterator(); iter.hasNext(); ) {
 	    InvariantFilter filter = (InvariantFilter) iter.next();
@@ -108,19 +108,19 @@ public class InvariantFilters {
     }
 
   //  I wasn't sure where to put this method, but this class seems like the best place.
-  //  This function takes a list of invariants, finds the equality Comparison invariants,
-  //  and replaces them with EqualityInvariant's.  The EqualityInvariant's are inserted into
-  //  the beginning.  These EqualityInvariant's are useful when it comes to displaying
-  //  invariants.
+  //  This function takes a list of invariants, finds the equality Comparison invariants
+  //  (x==y, y==z), and replaces them with Equality invariants (x==y==z).  The Equality
+  //  invariants are inserted into the beginning.  These Equality invariants are useful
+  //  when it comes to displaying invariants.
   public static List addEqualityInvariants( List invariants ) {
     List equivalentSets = new ArrayList();     // A list of Set's of equivalent variables
-    List ppts = new ArrayList();	       // A PptSlice for each set.  EqualityInvariant needs a PptSlice
+    List ppts = new ArrayList();	       // A PptSlice for each set.  Equality needs a PptSlice
 					       // so it can report num_values() and num_samples().
     
     // Find all equivalent sets of variables.
     for (Iterator iter = invariants.iterator(); iter.hasNext(); ) {
       Invariant invariant = (Invariant) iter.next();
-      if (IsEquality.it.accept( invariant )) {
+      if (IsEqualityComparison.it.accept( invariant )) {
 	iter.remove();			       // We don't need this invariant, since it will be included
 					       // in the equality invariant.
 	boolean inEquivalentSets = false;      // Are either of the variables in an existing set?
@@ -150,7 +150,7 @@ public class InvariantFilters {
     // Add equivalent sets as equivalent invariants.
     Iterator pptIter = ppts.iterator();
     for (Iterator iter = equivalentSets.iterator(); iter.hasNext(); )
-      invariants.add( 0, new EqualityInvariant( (Set) iter.next(), (PptSlice) pptIter.next()));
+      invariants.add( 0, new Equality( (Set) iter.next(), (PptSlice) pptIter.next()));
  
     return invariants;
   }
@@ -185,9 +185,9 @@ abstract class InvariantFilter {
 class NonCanonicalVariablesFilter extends InvariantFilter {
     //  We should discard this invariant only if it has non-canonical variables AND it is
     //  not an equality Comparison invariant.  We need to keep equality Comparison
-    //  invariants so that later on, EqualityInvariants will be made out of them.
+    //  invariants so that later on, Equality invariants will be made out of them.
     boolean shouldDiscardInvariant( Invariant invariant ) {
-      return (invariant.hasNonCanonicalVariable() && ! IsEquality.it.accept(invariant));
+      return (invariant.hasNonCanonicalVariable() && ! IsEqualityComparison.it.accept(invariant));
     }
 }
 
