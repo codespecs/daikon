@@ -21,10 +21,9 @@ public class SplitterObject implements Comparable{
   private String pptName; // the program point with which it is associated
   private boolean exists = false;
   private String testString = "Unassigned";
-  private String errorMessage = "Splitter for " + this.condition + " valid";
-  private int guid = -999;
-  private File f; // The class file containing the compiled code for
-                  // this splitter
+  private String errorMessage;
+  private int guid = -999;      // -999 indicates not yet set
+  private File classFile; // The class file containing the compiled code for this splitter
 
   public String daikonFormat   = null;
   public String javaFormat     = null;
@@ -84,7 +83,7 @@ public class SplitterObject implements Comparable{
    * represented by this SplitterObject, false otherwise
    */
   public boolean compiled () {
-    if (f != null && f.exists()) {
+    if (classFile != null && classFile.exists()) {
       errorMessage = "Splitter exists " + this.toString();
       return true;
     }
@@ -147,7 +146,7 @@ public class SplitterObject implements Comparable{
    */
   public void setClassName(String className) {
     this.className = className;
-    f = new File(directory + className + ".class");
+    classFile = new File(directory + className + ".class");
   }
 
   /**
