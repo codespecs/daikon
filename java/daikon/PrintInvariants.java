@@ -164,7 +164,7 @@ public class PrintInvariants {
         } else if (Daikon.jml_output_SWITCH.equals(option_name)) {
           Daikon.output_style = OutputFormat.JML;
 	} else if (Daikon.dbc_output_SWITCH.equals(option_name)) { //@tx
-	    Daikon.output_style = OutputFormat.DBCJAVA;
+          Daikon.output_style = OutputFormat.DBCJAVA;
         } else if (Daikon.output_num_samples_SWITCH.equals(option_name)) {
           Daikon.output_num_samples = true;
         } else if (Daikon.config_option_SWITCH.equals(option_name)) {
@@ -1367,6 +1367,7 @@ public class PrintInvariants {
 
     List accepted_invariants = new Vector();
 
+    // System.out.println("print_invariants considering " + invs_array.length + " invariants.");
     for (int i = 0; i < invs_array.length; i++) {
       Invariant inv = invs_array[i];
       if (inv.logOn())
@@ -1382,6 +1383,7 @@ public class PrintInvariants {
 
       if (inv.logOn())
         inv.log ("Filtering, accepted = " + fi_accepted);
+      // System.out.println("Filtering, accepted = " + fi_accepted + " for " + inv.toString());
 
       // Never print the guarding predicates themselves, they should only
       // print as part of GuardingImplications
@@ -1440,6 +1442,7 @@ public class PrintInvariants {
   {
     int index = 0;
     Iterator inv_iter = invariants.iterator();
+    // System.out.println("finally_print_the_invariants processing " + invariants.size() + " invariants.");
     while (inv_iter.hasNext()) {
       index++;
       Invariant inv = (Invariant)inv_iter.next();

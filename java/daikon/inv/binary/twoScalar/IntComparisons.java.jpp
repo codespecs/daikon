@@ -503,11 +503,12 @@ invariants.
     // return Math.pow(.5, num_values());
     return Invariant.PROBABILITY_JUSTIFIED;
 #else
-    // The reason for this multiplication is that there might be only a
-    // very few possible values.  Example:  towers of hanoi has only 6
-    // possible (pegA, pegB) pairs.
-    return (Math.pow(.5, ppt.num_values())
-              * Math.pow(.99, ppt.num_mod_samples()));
+    // // The reason for this multiplication is that there might be only a
+    // // very few possible values.  Example:  towers of hanoi has only 6
+    // // possible (pegA, pegB) pairs.
+    // return (Math.pow(.5, ppt.num_values())
+    //           * Math.pow(.99, ppt.num_mod_samples()));
+    return Math.pow(.5, ppt.num_samples());
 #endif
   }
 

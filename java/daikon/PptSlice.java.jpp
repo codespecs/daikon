@@ -327,7 +327,25 @@ public final class PPTSLICE1
   // These accessors are for abstract methods declared in Ppt
   /** Returns the number of (non-missing) samples observed at this slice. **/
   public int num_samples() {
-    return mod_samples + unmod_samples;
+    if (Daikon.slices_see_all_samples) {
+      return mod_samples + unmod_samples;
+    } else {
+      // return an approximation
+#if defined(ARITY1)
+      int num_slice_samples = parent.num_samples(var_info);
+#elif defined(ARITY2)
+      int num_slice_samples = parent.num_samples(var_infos[0], var_infos[1]);
+#elif defined(ARITY3)
+      int num_slice_samples = parent.num_samples(var_infos[0], var_infos[1], var_infos[2]);
+#endif
+      if (mod_samples + unmod_samples != num_slice_samples) {
+        System.out.println("num_samples(" + name() + "): " + (mod_samples + unmod_samples) + " vs. " + num_slice_samples);
+#if defined(ARITY1)
+        System.out.println("mbtracker.num_samples() = " + parent.mbtracker.num_samples());
+#endif
+      }
+      return num_slice_samples;
+    }
   }
 
   /**
@@ -404,7 +422,11 @@ public final class PPTSLICE1
    * Don't use this; use num_samples instead.
    **/
   public int num_mod_samples() {
-    return mod_samples;
+    if (Daikon.slices_see_all_samples) {
+      return mod_samples;
+    } else {
+      throw new Error("to be implemented");
+    }
   }
 
   // public int num_missing() { return values_cache.num_missing; }
@@ -504,7 +526,7 @@ public final class PPTSLICE1
     }
     if (mod1 == ValueTuple.STATIC_CONSTANT) {
       Assert.assertTrue(vi1.is_static_constant);
-      mod1 = ((num_mod_samples() == 0)
+      mod1 = ((num_samples() == 0)
               ? ValueTuple.MODIFIED : ValueTuple.UNMODIFIED);
     }
 #if defined(ARITY2) || defined(ARITY3)
@@ -515,7 +537,7 @@ public final class PPTSLICE1
     }
     if (mod2 == ValueTuple.STATIC_CONSTANT) {
       Assert.assertTrue(vi2.is_static_constant);
-      mod2 = ((num_mod_samples() == 0)
+      mod2 = ((num_samples() == 0)
               ? ValueTuple.MODIFIED : ValueTuple.UNMODIFIED);
     }
 #endif
@@ -527,7 +549,7 @@ public final class PPTSLICE1
     }
     if (mod3 == ValueTuple.STATIC_CONSTANT) {
       Assert.assertTrue(vi3.is_static_constant);
-      mod3 = ((num_mod_samples() == 0)
+      mod3 = ((num_samples() == 0)
               ? ValueTuple.MODIFIED : ValueTuple.UNMODIFIED);
     }
 #endif

@@ -284,7 +284,8 @@ public final class CLASSNAME
       return Invariant.PROBABILITY_UNJUSTIFIED;
     } else {
       double probability_one_elt_nonzero = 1 - confidence_one_elt_nonzero();
-      return 1 - Math.pow(probability_one_elt_nonzero, ppt.num_mod_samples());
+      // return 1 - Math.pow(probability_one_elt_nonzero, ppt.num_mod_samples());
+      return 1 - Math.pow(probability_one_elt_nonzero, ppt.num_samples());
     }
   }
 
@@ -298,7 +299,8 @@ public final class CLASSNAME
       return Invariant.PROBABILITY_UNJUSTIFIED;
     } else {
       double probability_one_elt_nonzero = 1 - confidence_one_elt_nonzero();
-      return Math.pow(probability_one_elt_nonzero, ppt.num_mod_samples());
+      // return Math.pow(probability_one_elt_nonzero, ppt.num_mod_samples());
+      return Math.pow(probability_one_elt_nonzero, ppt.num_samples());
     }
   }
 

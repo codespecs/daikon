@@ -341,6 +341,12 @@ public final class ONEOFSCALAR
     return num_elts;
   }
 
+#ifdef BASE_INT
+  public boolean is_hashcode() {
+    return is_hashcode;
+  }
+#endif
+
   public Object elt() {
     if (num_elts != 1)
       throw new Error("Represents " + num_elts + " elements");
@@ -864,6 +870,8 @@ public final class ONEOFSCALAR
         if (elts[0] == 0) {
           result = varname + " == " + "null";
         } else {
+          // This seems wrong, because there is already a "!= null" invariant.
+          // This invariant (ONEOFSCALAR) just shouldn't print for ESC format.
           result = varname + " != null";
           // varname + " has only one value"
           // + " (hashcode=" + elts[0] + ")"

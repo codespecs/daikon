@@ -174,8 +174,10 @@ public class LOWERBOUNDCORE
   }
 
   private double calc_avg_samples_per_val(PRIMITIVE modulus, double range) {
+    // int num_samples = wrapper.ppt.num_mod_samples();
+    int num_samples = wrapper.ppt.num_samples();
     double avg_samples_per_val =
-      ((double) wrapper.ppt.num_mod_samples()) * modulus / range;
+      ((double) num_samples) * modulus / range;
     avg_samples_per_val = Math.min(avg_samples_per_val, 100);
 #ifdef LOWER
     if (MIN1 == 0) {
