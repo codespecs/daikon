@@ -291,8 +291,6 @@ public final class ProglangType implements java.io.Serializable {
         if (value.equals("NaN"))
           return DoubleNaN;
 	return Intern.internedDouble(value);
-      // } else if (base == BASE_BOOLEAN) {
-      //   return new Boolean(value);
       } else {
 	throw new Error("unrecognized type " + base);
       }
