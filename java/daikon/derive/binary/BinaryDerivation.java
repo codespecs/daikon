@@ -53,10 +53,15 @@ public abstract class BinaryDerivation implements Derivation, Cloneable {
   }
 
   public static String addSubscript(String base, String subscript) {
+    String suffix = "";
     if (base.endsWith("[]")) {
       base = base.substring(0, base.length()-2);
+    } else if (base.endsWith("[])") && base.startsWith("orig(")) {
+      // This is heuristic; I think it's probably OK.
+      base = base.substring(0, base.length()-3);
+      suffix = ")";
     }
-    return base + "[" + subscript + "]";
+    return base + "[" + subscript + "]" + suffix;
   }
 
 }

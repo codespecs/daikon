@@ -139,7 +139,7 @@ public final class FunctionBinaryCore implements java.io.Serializable {
     VarInfo arg1 = ppt.var_infos[var_indices[var_order][1]];
     VarInfo arg2 = ppt.var_infos[var_indices[var_order][2]];
 
-    return argresult.name + " = "
+    return argresult.name + " == "
       + methodname + "(" + arg1.name + ", " + arg2.name + ")";
   }
 

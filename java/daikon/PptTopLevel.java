@@ -1904,16 +1904,32 @@ public class PptTopLevel extends Ppt {
 
   /** Print invariants for a single program point. */
   public void print_invariants(PrintStream out) {
+    String better_name = name;
+    int init_pos = better_name.indexOf(".<init>");
+    if (init_pos != -1) {
+      String classname = better_name.substring(0, init_pos);
+      better_name = classname + "." + classname
+        + better_name.substring(init_pos+7);
+    }
+    int open_paren_pos = better_name.indexOf("(");
+    if (open_paren_pos != -1) {
+      int close_paren_pos = better_name.indexOf(")");
+      int colon_pos = better_name.indexOf(":::");
+      better_name = better_name.substring(0, open_paren_pos)
+        + UtilMDE.arglistFromJvm(better_name.substring(open_paren_pos, close_paren_pos+1))
+        + better_name.substring(colon_pos);
+    }
+
     if (Daikon.output_num_samples) {
       int num_samps = num_samples();
-      out.println(name + "  " + nplural(num_samps, "sample"));
+      out.println(better_name + "  " + nplural(num_samps, "sample"));
       out.println("    Samples breakdown: " + tuplemod_samples_summary());
       out.print("    Variables:");
       for (int i=0; i<var_infos.length; i++)
         out.print(" " + var_infos[i].name);
       out.println();
     } else {
-      out.println(name);
+      out.println(better_name);
     }
 
     Assert.assert(check_modbits());

@@ -114,7 +114,7 @@ public final class EltOneOfString  extends SingleStringSequence  implements OneO
       result += varname + " == \"" + UtilMDE.quote( elts[i] ) + "\"" ;
     }
 
-    return esc_forall[0] + "(" + result + ")";
+    return "(" + esc_forall[0] + "(" + result + "))";
 
   }
 

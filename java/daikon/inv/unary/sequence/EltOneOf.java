@@ -116,7 +116,7 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
       result += varname + " == " + ((!var().type.elementType().isIntegral() && ( elts[i]  == 0)) ? "null" : (Long.toString( elts[i] ))) ;
     }
 
-    return esc_forall[0] + "(" + result + ")";
+    return "(" + esc_forall[0] + "(" + result + "))";
 
   }
 

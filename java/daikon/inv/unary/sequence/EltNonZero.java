@@ -51,8 +51,8 @@ public final class EltNonZero extends SingleSequence {
 
   public String format_esc() {
     String[] esc_forall = var().esc_forall();
-    return esc_forall[0]
-      + "(" + esc_forall[1] + " != " + (pointer_type ? "null" : "0") + ")";
+    return "(" + esc_forall[0]
+      + "(" + esc_forall[1] + " != " + (pointer_type ? "null" : "0") + "))";
   }
 
   public void add_modified(long[] a, int count) {

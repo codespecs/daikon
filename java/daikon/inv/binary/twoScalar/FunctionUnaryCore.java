@@ -90,7 +90,7 @@ public final class FunctionUnaryCore implements java.io.Serializable {
   public String format(String vname1, String vname2) {
     String argname = inverse ? vname2 : vname1;
     String resultname = inverse ? vname1 : vname2;
-    return resultname + " = " + function + "(" + argname + ")";
+    return resultname + " == " + function + "(" + argname + ")";
   }
 
   public String repr() {

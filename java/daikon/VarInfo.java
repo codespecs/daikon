@@ -692,14 +692,29 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     String result = name;
     String previous_result = "";
 
+    // "size(array[])" -> "array.length"
+    while (result.indexOf("size(") != -1) {
+      int sizelp = result.lastIndexOf("size(");
+      int brackrp = result.indexOf("[])", sizelp);
+      if (sizelp >= 0) {
+	Assert.assert(brackrp >= sizelp, "[]) follows size(");
+	result =
+	  result.substring(0, sizelp) +
+	  result.substring(sizelp+5, brackrp) +
+	  ".length" +
+	  result.substring(brackrp+3);
+      }
+    }
+
     while (!result.equals(previous_result)) {
       previous_result = result;
 
       // "orig(var)" -> "\old(var)"
-      if (result.startsWith("orig(") && result.endsWith(")")) {
+      if (result.startsWith("orig(")) {
         pre_wrapper += "\\old(";
-        result = result.substring(5, result.length()-1);
-        post_wrapper = ")" + post_wrapper;
+        int rparen_pos = result.lastIndexOf(")");
+        post_wrapper = result.substring(rparen_pos) + post_wrapper;
+        result = result.substring(5, rparen_pos);
       }
 
       // "var.class" -> "\typeof(var)"
@@ -711,23 +726,11 @@ public final class VarInfo implements Cloneable, java.io.Serializable {
     }
 
     // "return" -> "\result"
-    if ("return".equals(name)) {
+    if ("return".equals(result)) {
       result = "\\result";
     }
 
-    // "size(array[])" -> "array.length"
-    {
-      int sizelp = result.indexOf("size(");
-      int brackrp = result.indexOf("[])");
-      if (sizelp >= 0) {
-	Assert.assert(brackrp >= sizelp, "[]) follows size(");
-	result =
-	  result.substring(0, sizelp) +
-	  result.substring(sizelp+5, brackrp) +
-	  ".length" +
-	  result.substring(brackrp+3);
-      }
-    }
+    System.out.println("esc_name = " + pre_wrapper + result + post_wrapper + "    for " + name);
 
     return pre_wrapper + result + post_wrapper;
   }

@@ -15,7 +15,7 @@ public final class StringComparisonCore implements java.io.Serializable {
   // specified flag is set.  For instance, we might set obvious_can_be_lt
   // for "b[0] cmp max(b)".  It would be interesting and relevant if we
   // found those quantities equal, but if the relationship can be "<", then
-  // it is "<=" (because we know they can be "="), so it's obvious and
+  // it is "<=" (because we know they can be "=="), so it's obvious and
   // uninteresting.
   // In other words, if the thing that's obviously possible hsn't yet
   // happened, then the invariant is interesting.
@@ -105,9 +105,11 @@ public final class StringComparisonCore implements java.io.Serializable {
 
   // I could alternately take two variable names as arguments and return
   // the full formatted thing...
-  /** Return a comparator such as "<=" or ">" or "=". **/
+  /** Return a comparator such as "<=" or ">" or "==". **/
   public String format_comparator() {
-    if (can_be_eq || can_be_gt || can_be_lt) {
+    if (can_be_eq && (! can_be_gt) && (! can_be_lt)) {
+      return "==";
+    } else if (can_be_eq || can_be_gt || can_be_lt) {
       String inequality = (can_be_lt ? "<" : can_be_gt ? ">" : "");
       String comparison = (can_be_eq ? "=" : "");
       // if (debugStringComparison) {

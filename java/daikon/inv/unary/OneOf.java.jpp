@@ -232,7 +232,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     }
 #endif
 #if defined(ELT) || defined(ELTSTRING)
-    return esc_forall[0] + "(" + result + ")";
+    return "(" + esc_forall[0] + "(" + result + "))";
 #else
     return result;
 #endif
