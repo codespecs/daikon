@@ -5579,6 +5579,23 @@ JDKDIR environment variable correctly.  Also see @ref{Installing dfej}.
 
 @cindex zip file, invalid
 
+If you get an error like
+@example
+MyProg.java:0:0:0:0: Error: Could not find package named:
+                MyProg.MyPackage
+@end example
+@noindent
+then the root of your packages in not in your classpath.  For example,
+if you have a package A in directory src/A and a class A.B, then you
+have to add the superdirectory of A (src) to your classpath so that
+dfej can find package A.  E.g.
+@example
+dfej -classpath src:$CLASSPATH src/A/B.java
+@end example
+@noindent
+Note that this behavior is identical to that of jikes, but differs
+from javac.
+
 If you get a warning like
 @example
 *** Warning: the file "/cygdrive/c/jswdk-1.0.1/jspengine.jar"
