@@ -11,15 +11,26 @@ $WARNING = 1;
 use Cwd;
 
 # Process the command-line args
-my $usage = "Usage: buildtest.pl [--quiet] [--nocleanup]\n";
+my $usage = "Usage: buildtest.pl [--quiet]\n"
+  . "  Debugging flags:  [--nocleanup] [--skip_daikon] [--skip_dfec] [--skip_dfej]\n;
 my $quiet = 0;
 my $nocleanup = 0;
+# These three flags permit only part of the tests to be run; good for debugging.
+my $skip_daikon = 0;
+my $skip_dfec = 0;
+my $skip_dfej = 0;
 while (scalar(@ARGV) > 0) {
   my $arg = shift @ARGV;
   if ($arg eq "--quiet") {
     $quiet = 1;
   } elsif ($arg eq "--nocleanup") {
     $nocleanup = 1;
+  } elsif ($arg eq "--skip_daikon") {
+    $skip_daikon = 1;
+  } elsif ($arg eq "--skip_dfec") {
+    $skip_dfec = 1;
+  } elsif ($arg eq "--skip_dfej") {
+    $skip_dfej = 1;
   } else {
     die "$usage\n";
   }
@@ -61,7 +72,6 @@ $success{"daikon_checkout"} = daikon_checkout();
 if ($success{"daikon_checkout"}) {
   %ENV = get_env("$DAIKONPARENT/invariants/scripts/pag-daikon.bashrc");
 }
-
 my $INV = $ENV{"INV"};
 
 if ($success{"daikon_checkout"}) {
@@ -71,22 +81,28 @@ if ($success{"daikon_update"}) {
   $success{"daikon_compile"} = daikon_compile();
 }
 
-if ($success{"daikon_compile"}) {
-  $success{"daikon_unit_test"} = daikon_unit_test();
-  $success{"daikon_system_test"} = daikon_system_test();
-  $success{"diff_system_test"} = diff_system_test();
+if (! $skip_daikon) {
+  if ($success{"daikon_compile"}) {
+    $success{"daikon_unit_test"} = daikon_unit_test();
+    $success{"daikon_system_test"} = daikon_system_test();
+    $success{"diff_system_test"} = diff_system_test();
+  }
 }
 
-if ($success{"daikon_checkout"}) {
-  $success{"dfec_system_test"} = dfec_system_test();
+if (! $skip_dfec) {
+  if ($success{"daikon_checkout"}) {
+    $success{"dfec_system_test"} = dfec_system_test();
+  }
 }
 
-$success{"dfej_checkout"} = dfej_checkout();
-if ($success{"dfej_checkout"}) {
-  $success{"dfej_configure"} = dfej_configure();
-}
-if ($success{"dfej_configure"}) {
-  $success{"dfej_complie"} = dfej_compile();
+if (! $skip_dfej) {
+  $success{"dfej_checkout"} = dfej_checkout();
+  if ($success{"dfej_checkout"}) {
+    $success{"dfej_configure"} = dfej_configure();
+  }
+  if ($success{"dfej_configure"}) {
+    $success{"dfej_compile"} = dfej_compile();
+  }
 }
 
 # Print the output files for any steps that failed.  Output steps are
@@ -399,6 +415,10 @@ sub get_env {
   my ($file) = @_;
   my %newenv = ();
   my $newenv = `source $file; env`;
+  if ($CHILD_ERROR) {
+    print_log("FAILED: source $file; env\n");
+    return 0;
+  }
   foreach my $line (split '\n', $newenv) {
     my ($var, $val) = split '=', $line;
     $newenv{$var} = $val;
