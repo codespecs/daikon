@@ -15,6 +15,7 @@ README_PATHS := $(addprefix doc/,$(README_FILES))
 SCRIPT_FILES := Makefile java-cpp.pl daikon.pl lines-from \
 	daikon.cshrc daikon.bashrc daikonenv.bat cygwin-runner.pl \
 	dfepl dtrace-perl dtype-perl \
+	kvasir-dfec \
 	convertcsv.pl \
 	trace-untruncate trace-untruncate-fast.c trace-purge-fns.pl trace-purge-vars.pl \
 	checkargs.pm util_daikon.pm \
@@ -131,20 +132,17 @@ tags: TAGS
 TAGS:
 	cd java && $(MAKE) tags
 
-valgrind-kvasir/Makefile.am:
-	cvs -d $(CVS_REPOSITORY) co valgrind-kvasir
+kvasir/Makefile.am:
+	cvs -d $(CVS_REPOSITORY) co -P valgrind-kvasir
+	ln -s valgrind-kvasir kvasir
 	touch $@
 
-valgrind-kvasir/dfec-v2/Makefile.am: valgrind-kvasir/Makefile.am
-	(cd valgrind-kvasir; \
-	 cvs -d $(CVS_REPOSITORY) co dfec-v2)
+kvasir/dfec-v2/Makefile.am: kvasir/Makefile.am
+	cd kvasir && cvs -d $(CVS_REPOSITORY) co -P dfec-v2
 	touch $@
 
-build-kvasir: valgrind-kvasir/dfec-v2/Makefile.am
-	(cd valgrind-kvasir; \
-	  ./configure --prefix=`pwd`/inst && \
-	  make && \
-	  make install)
+build-kvasir: kvasir/dfec-v2/Makefile.am
+	cd kvasir && ./configure --prefix=`pwd`/inst && make && make install
 
 ###########################################################################
 ### Test the distribution
@@ -391,13 +389,24 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	cp -p $(SCRIPT_PATHS) /tmp/daikon/bin
 
 	# Java example files
-	cp -pR examples /tmp/daikon
+	mkdir /tmp/daikon/examples
+	cp -pR examples/{StackAr,QueueAr} /tmp/daikon/examples
 	# Keep .java files, delete everything else
-	cd /tmp/daikon && find examples \( -name '*.java' -o -name 'Birthday.accessors' -o -name 'Birthday.pm' -o -name 'test_bday.pl' -o -name 'standalone.pl' \) -prune -o \( -type f -o -name CVS -o -name daikon-output -o -name daikon-java -o -name daikon-instrumented \) -print | xargs rm -rf
-	# C example files
+	cd /tmp/daikon && find examples -name '*.java' -prune -o \( -type f -o -name CVS -o -name daikon-output -o -name daikon-java -o -name daikon-instrumented \) -print | xargs rm -rf
+
+	# Perl example files
+	mkdir /tmp/daikon/examples/perl-examples
+	cp -p examples/perl-examples/{Birthday.{pm,accessors},{test_bday,standalone}.pl} /tmp/daikon/examples/perl-examples
+
+	# C example files for dfec
 	cp examples/c-examples.tar.gz /tmp/daikon/examples
 	cd /tmp/daikon/examples && tar zxf c-examples.tar.gz
 	rm /tmp/daikon/examples/c-examples.tar.gz
+
+	# C example files for Kvasir
+	mkdir /tmp/daikon/examples/kvasir-examples
+	mkdir /tmp/daikon/examples/kvasir-examples/bzip2
+	cp -p examples/kvasir-examples/bzip2/bzip2.c /tmp/daikon/examples/kvasir-examples/bzip2
 
 	chgrp -R $(INV_GROUP) /tmp/daikon
 
@@ -492,6 +501,14 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	# mkdir /tmp/daikon/front-end/perl
 	cp -pR front-end/perl /tmp/daikon/front-end
 	(cd /tmp/daikon/front-end/perl; $(RM_TEMP_FILES) )
+
+	# Kvasir C front end
+	cd /tmp/daikon; cvs -d $(CVS_REPOSITORY) co -P valgrind-kvasir
+	mv /tmp/daikon/valgrind-kvasir /tmp/daikon/kvasir
+	cd /tmp/daikon/kvasir; cvs -d $(CVS_REPOSITORY) co -P dfec-v2
+	find /tmp/daikon/kvasir -name '.cvsignore' | xargs rm
+	find /tmp/daikon/kvasir -name 'CVS' -type d | xargs rm -rf
+	find /tmp/daikon/kvasir/dfec-v2 -name '*.txt' -type f | xargs rm
 
 	## Tools
 	cp -pR tools /tmp/daikon
