@@ -89,7 +89,8 @@ my $input = 'fh00';
 # ## Use of cpp for #include only:
 # cpp -C -nostdinc -undef
 
-sub escape_comments( $ ) {
+#sub escape_comments( $ )
+sub escape_comments {
   my ($filename) = @_;
   my $inhandle = $input++;               # this is a string increment
 
@@ -102,7 +103,7 @@ sub escape_comments( $ ) {
   while (<$inhandle>) {             # note use of indirection
 
     if (/^\#include "(.*)"/) {
-      escape_comments($1, $input);
+      escape_comments($1);
       next;
     }
     s|//|DOUBLESLASHCOMMENT|g;
