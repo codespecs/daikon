@@ -179,7 +179,7 @@ public final class ContextGUI extends JApplet implements ActionListener
 	    		chooser.setFileFilter(filter);
 	    		int returnVal = chooser.showOpenDialog(this);
 
-    			if(returnVal == JFileChooser.APPROVE_OPTION)
+    			if (returnVal == JFileChooser.APPROVE_OPTION)
 				addFile(chooser.getSelectedFile().getPath());
 
 		}
@@ -838,7 +838,7 @@ public final class ContextGUI extends JApplet implements ActionListener
 				String temp_place = (String)(vect_place.get(i));
 				if (temp_place.equals("EXIT"))
 					temp_vect.add("X");
-				else if(temp_place.equals("ENTER"))
+				else if (temp_place.equals("ENTER"))
 					temp_vect.add("E");
 				else
 					temp_vect.add("G");

@@ -171,14 +171,14 @@ public final class FileIO
         }
         continue;
       }
-      if(line.equals("ListImplementors")) {
+      if (line.equals("ListImplementors")) {
 	// Each line following is the name (in JVM form) of a class
 	// that implemnts java.util.List.
 	for(;;) {
 	  line = reader.readLine();
-	  if(line == null || line.equals(""))
+	  if (line == null || line.equals(""))
 	    break;
-	  if(line.startsWith("//"))
+	  if (line.startsWith("//"))
 	    continue;
 	  ProglangType.list_implementors.add(line.intern());
 	}
@@ -825,7 +825,7 @@ public final class FileIO
 
     String blank_line = reader.readLine();
     // Expecting the end of a block of values.
-    Assert.assert((blank_line == null) || (blank_line.equals("")), 
+    Assert.assert((blank_line == null) || (blank_line.equals("")),
 		  "Line " + reader.getLineNumber() + ": " + blank_line);
   }
 

@@ -9,8 +9,8 @@ package daikon.tools.jtb;
 
 import java.util.*;
 import utilMDE.*;
-import syntaxtree.*;
-import visitor.*;
+import jtb.syntaxtree.*;
+import jtb.visitor.*;
 
 public class InsertCommentFormatter extends DepthFirstVisitor {
 

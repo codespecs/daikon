@@ -68,6 +68,7 @@ public final class Diff {
     boolean stats = false;
     boolean tabSeparatedStats = false;
     boolean examineAllPpts = false;
+    boolean printEmptyPpts = false;
     boolean verbose = false;
     boolean continuousJustification = false;
     boolean logging = false;
@@ -76,7 +77,7 @@ public final class Diff {
 
     daikon.Logger.setupLogs (daikon.Logger.INFO);
 
-    Getopt g = new Getopt("daikon.diff.Diff", args, "hdastjpvl");
+    Getopt g = new Getopt("daikon.diff.Diff", args, "hdastjpevl");
     int c;
     while ((c = g.getopt()) !=-1) {
       switch (c) {
@@ -105,6 +106,9 @@ public final class Diff {
         break;
       case 'p':
         examineAllPpts = true;
+        break;
+      case 'e':
+        printEmptyPpts = true;
         break;
       case 'v':
         verbose = true;
@@ -191,13 +195,14 @@ public final class Diff {
     }
     
     if (printDiff) {
-      PrintDifferingInvariantsVisitor v =
-        new PrintDifferingInvariantsVisitor(System.out, verbose);
+      PrintDifferingInvariantsVisitor v = new PrintDifferingInvariantsVisitor
+        (System.out, verbose, printEmptyPpts);
       root.accept(v);
     }
     
     if (printAll) {
-      PrintAllVisitor v = new PrintAllVisitor(System.out, verbose);
+      PrintAllVisitor v = new PrintAllVisitor
+        (System.out, verbose, printEmptyPpts);
       root.accept(v);
     }
 
@@ -218,10 +223,17 @@ public final class Diff {
 
     SortedSet sset1 = new TreeSet(PPT_COMPARATOR);
     sset1.addAll(map1.asCollection());
+    List l1 = new ArrayList(sset1);
     SortedSet sset2 = new TreeSet(PPT_COMPARATOR);
     sset2.addAll(map2.asCollection());
+    List l2 = new ArrayList(sset2);
 
-    Iterator opi = new OrderedPairIterator(sset1.iterator(), sset2.iterator(),
+    if (examineAllPpts) {
+      addConditionalPpts(l1);
+      addConditionalPpts(l2);
+    }
+
+    Iterator opi = new OrderedPairIterator(l1.iterator(), l2.iterator(),
                                            PPT_COMPARATOR);
     while(opi.hasNext()) {
       Pair ppts = (Pair) opi.next();
@@ -236,6 +248,22 @@ public final class Diff {
     return root;
   }
 
+  /**
+   * For each Ppt in the list, add its conditional program points
+   * immediately after itself.
+   **/
+  private void addConditionalPpts(List ppts) {
+    // ListIterator allows us to insert elements while we are iterating
+    ListIterator pptsIter = ppts.listIterator();
+    while (pptsIter.hasNext()) {
+      PptTopLevel ppt = (PptTopLevel) pptsIter.next();
+      Iterator condIter = ppt.views_cond.iterator();
+      while (condIter.hasNext()) {
+        PptConditional pptCond = (PptConditional) condIter.next();
+        pptsIter.add(pptCond);
+      }
+    }
+  }
 
   /**
    * Returns true if the program point should be added to the tree,

@@ -5,10 +5,10 @@ import gnu.getopt.*;
 import org.apache.log4j.Category;
 import daikon.*;
 import utilMDE.*;
-import syntaxtree.*;
-import JavaParser;
-import ParseException;
-import visitor.*;
+import jtb.syntaxtree.*;
+import jtb.JavaParser;
+import jtb.ParseException;
+import jtb.visitor.*;
 
 // To do:  permit multiple .inv files as arguments.
 

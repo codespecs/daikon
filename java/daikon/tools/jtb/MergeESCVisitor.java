@@ -5,20 +5,12 @@ package daikon.tools.jtb;
 import java.util.*;
 import java.io.*;
 import junit.framework.*;
-import syntaxtree.*;
-import visitor.*;
+import jtb.syntaxtree.*;
+import jtb.visitor.*;
 import daikon.*;
 import utilMDE.ArraysMDE;
 import utilMDE.UtilMDE;
-
-// Still to do (from the below):
-// // For each class:  (UnmodifiedClassDeclaration)
-// //  * insert object invariants
-// // For each method:
-// //  * add preconditions
-// //  * add postconditions (including exsures)
-// //  * add "modifies"
-// //  * all of these may be prefixed by "also_"
+import daikon.inv.unary.sequence.EltNonZero;
 
 
 
@@ -50,6 +42,7 @@ class MergeESCVisitor extends DepthFirstVisitor {
 
   private String[] ownedFieldNames;  // list of fields in this and related classes
   private String[] finalFieldNames;  // list of fields in this and related classes
+  private String[] nonNullElementsFieldNames;  // list of fields in this and related classes
 
 
   public MergeESCVisitor(PptMap ppts, boolean slashslash, boolean insert_inexpressible) {
@@ -81,6 +74,9 @@ class MergeESCVisitor extends DepthFirstVisitor {
     return (ArraysMDE.indexOf(finalFieldNames, fieldname) != -1);
   }
 
+  private boolean isNonNullElements(String fieldname) {
+    return (ArraysMDE.indexOf(nonNullElementsFieldNames, fieldname) != -1);
+  }
 
   // ClassDeclaration is a top-level (non-nested) construct.  Collect all
   // the fields in this and any nested class, so that we can recognize
@@ -90,38 +86,17 @@ class MergeESCVisitor extends DepthFirstVisitor {
    * f1 -> UnmodifiedClassDeclaration()
    */
   public void visit(ClassDeclaration n) {
-    handleClassDecl(n, n.f0, n.f1);
+    n.f0.accept(this);
+    n.f1.accept(this);
   }
+
   /**
    * f0 -> ( "static" | "abstract" | "final" | "public" | "protected" | "private" )*
    * f1 -> UnmodifiedClassDeclaration()
    */
   public void visit(NestedClassDeclaration n) {
-    handleClassDecl(n, n.f0, n.f1);
-  }
-
-  // Common handler for both outer and inner classes
-  private void handleClassDecl(Node n,
-			       NodeListOptional f0,
-			       UnmodifiedClassDeclaration f1)
-  {
-    // Store and restore field names because we must deal with
-    // visiting inner classes (which have their own fields)
-    String[] old_owned = ownedFieldNames;
-    String[] old_final = finalFieldNames;
-
-    { // set fieldNames slots
-      CollectFieldsVisitor cfv = new CollectFieldsVisitor();
-      n.accept(cfv);
-      ownedFieldNames = cfv.ownedFieldNames();
-      finalFieldNames = cfv.finalFieldNames();
-    }
-
-    f0.accept(this);
-    f1.accept(this);
-
-    ownedFieldNames = old_owned;
-    finalFieldNames = old_final;
+    n.f0.accept(this);
+    n.f1.accept(this);
   }
 
   // Insert object invariants for this class.
@@ -134,21 +109,32 @@ class MergeESCVisitor extends DepthFirstVisitor {
    * f4 -> ClassBody()
    */
   public void visit(UnmodifiedClassDeclaration n) {
-    n.f0.accept(this);
-    n.f1.accept(this);
-    n.f2.accept(this);
-    n.f3.accept(this);
-    n.f4.accept(this);
-
-    // Dead code
-    // Vector objectInvariants = new Vector();
-
     String classname = Ast.getClassName(n);
     if (classname.endsWith(".")) {
       classname = classname.substring(0, classname.length()-1);
     }
     String pptname = classname + ":::OBJECT";
     PptTopLevel object_ppt = ppts.get(pptname);
+
+    // Store and restore field names because we must deal with
+    // visiting inner classes (which have their own fields)
+    String[] old_owned = ownedFieldNames;
+    String[] old_final = finalFieldNames;
+    String[] old_nonNullElements = nonNullElementsFieldNames;
+    { // set fieldNames slots
+      CollectFieldsVisitor cfv = new CollectFieldsVisitor();
+      n.accept(cfv);
+      ownedFieldNames = cfv.ownedFieldNames();
+      finalFieldNames = cfv.finalFieldNames();
+      nonNullElementsFieldNames = non_null_elements_fields(object_ppt, cfv);
+    }
+
+    n.f0.accept(this);
+    n.f1.accept(this);
+    n.f2.accept(this);
+    n.f3.accept(this);
+    n.f4.accept(this);
+
     for (int i=ownedFieldNames.length-1; i>=0; i--) {
       addComment(n.f4.f1, javaLineComment("@ invariant " + ownedFieldNames[i] + ".owner == this"), true);
     }
@@ -158,6 +144,10 @@ class MergeESCVisitor extends DepthFirstVisitor {
       String[] obj_invs = Ast.invariants_for(object_ppt, ppts);
       insertInvariants(n.f4.f1, "invariant", obj_invs);
     }
+
+    ownedFieldNames = old_owned;
+    finalFieldNames = old_final;
+    nonNullElementsFieldNames = old_nonNullElements;
   }
 
   /**
@@ -364,18 +354,26 @@ class MergeESCVisitor extends DepthFirstVisitor {
           // it's an assignment
           String fieldname = fieldName(pe);
           // System.out.println("In statement, fieldname = " + fieldname);
-          if ((fieldname != null) && isOwned(fieldname)) {
+          if ((fieldname != null)
+              && (isOwned(fieldname) || isNonNullElements(fieldname))) {
             ConstructorDeclaration cd
               = (ConstructorDeclaration) Ast.getParent(ConstructorDeclaration.class, n);
             MethodDeclaration md
               = (MethodDeclaration) Ast.getParent(MethodDeclaration.class, n);
             if ((cd != null)
                 || ((md != null) && (! Ast.contains(md.f0, "static")))) {
-              addCommentAfter(Ast.getParent(Statement.class, n), javaLineComment("@ set " + fieldname + ".owner = this"));
+              Node parent = Ast.getParent(Statement.class, n);
+              // This may be wrong if parent isn't in a block (eg, if parent
+              // is sole element in then or else clause).
+              if (isOwned(fieldname)) {
+                addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".owner = this"));
+              }
+              if (isNonNullElements(fieldname)) {
+                addCommentAfter(parent, javaLineComment("@ set " + fieldname + ".containsNull = false"));
+              }
             }
           }
         }
-
       }
     }
   }
@@ -627,6 +625,26 @@ class MergeESCVisitor extends DepthFirstVisitor {
   /** The argument should already contain "@" or any other leading characters. */
   String javaComment(String comment) {
     return "/*" + comment + "*/";
+  }
+
+
+  // ppt is an :::OBJECT program point
+  String[] non_null_elements_fields(PptTopLevel ppt, CollectFieldsVisitor cfv) {
+    Vector result = new Vector();
+    String[] fields = cfv.allFieldNames();
+    for (int i=0; i<fields.length; i++) {
+      String field = fields[i];
+      VarInfo vi = ppt.findVar("this." + field);
+      Assert.assert(vi != null);
+      PptSlice1 slice = ppt.getView(vi);
+      if (slice != null) {
+        EltNonZero enz = EltNonZero.find(slice);
+        if (enz != null) {
+          result.add(field);
+        }
+      }
+    }
+    return (String[]) result.toArray(new String[0]);
   }
 
 }

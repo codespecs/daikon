@@ -817,7 +817,7 @@ public class ContextServer
 
 			iter_position = 0;
 
-			if(valid_iter)
+			if (valid_iter)
 				moveToNext();
 		}
 

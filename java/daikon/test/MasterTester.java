@@ -3,12 +3,19 @@ package daikon.test;
 import daikon.Logger;
 
 import junit.framework.*;
+import junit.textui.*;
 import utilMDE.*;
 
 public class MasterTester extends TestCase {
 
   public static void main(String[] args) {
-    junit.textui.TestRunner.run(suite());
+    TestRunner runner = new TestRunner();
+    TestResult result = runner.doRun(suite(), false);
+    if (result.wasSuccessful()) {
+      System.exit(0);
+    } else {
+      System.exit(1);
+    }
   }
 
   public MasterTester(String name) {

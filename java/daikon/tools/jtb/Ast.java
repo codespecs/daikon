@@ -2,15 +2,15 @@
 
 package daikon.tools.jtb;
 
-import syntaxtree.*;
-import visitor.*;
+import jtb.syntaxtree.*;
+import jtb.visitor.*;
 import java.lang.reflect.*;
 import java.io.*;
 import java.util.*;
 // import util.*;
 // import org.apache.regexp.*;
-import JavaParser;
-import ParseException;
+import jtb.JavaParser;
+import jtb.ParseException;
 import utilMDE.Assert;
 import utilMDE.UtilMDE;
 import utilMDE.ArraysMDE;

@@ -113,7 +113,7 @@ public final class ProglangType
      * as --list_type <type> switches to Daikon.
      */
 
-    if(list_implementors.contains(basetype))
+    if (list_implementors.contains(basetype))
       pseudoDimensions++;
   }
 
@@ -191,7 +191,7 @@ public final class ProglangType
 
     // now search for the right dimension
     for (int ii=0; ii<v.size(); ++ii)
-    {   
+    {
       ProglangType candidate = (ProglangType)v.elementAt(ii);
       if (candidate.dimensions() == t_dims)
 	return candidate;
@@ -222,7 +222,7 @@ public final class ProglangType
       return result;
     }
     result = new ProglangType(t_base, t_dims);
-    
+
     Vector v = (Vector)all_known_types.get(t_base);
     if (v == null)
     {
@@ -248,7 +248,7 @@ public final class ProglangType
    * They may themselves be arrays if this is multidimensional.
    **/
   public ProglangType elementType() {
-    if(pseudoDimensions > dimensions)
+    if (pseudoDimensions > dimensions)
       return OBJECT;
     if (dimensions == 0)
       throw new Error("Called elementType on non-array type " + format());

@@ -60,6 +60,15 @@ public final class EltNonZero
   }
 
   public String format_esc() {
+    if (pointer_type) {
+      if (var().name instanceof VarInfoName.Elements) {
+        VarInfoName term = ((VarInfoName.Elements) var().name).term;
+        return term.esc_name() + ".containsNull == false";
+      }
+      if (! (var().name instanceof VarInfoName.Slice)) {
+        return var().name.esc_name() + ".containsNull == false";
+      }
+    }
     String[] form =
       VarInfoName.QuantHelper.format_esc(new VarInfoName[]
 	{ var().name });
@@ -202,5 +211,15 @@ public final class EltNonZero
     return false;
   }
 
+  // Look up a previously instantiated invariant.
+  public static EltNonZero find(PptSlice ppt) {
+    Assert.assert(ppt.arity == 1);
+    for (Iterator itor = ppt.invs.iterator(); itor.hasNext(); ) {
+      Invariant inv = (Invariant) itor.next();
+      if (inv instanceof EltNonZero)
+        return (EltNonZero) inv;
+    }
+    return null;
+  }
 
 }

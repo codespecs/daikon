@@ -4,10 +4,10 @@
 //
 package daikon.tools.jtb;
 
-import syntaxtree.*;
+import jtb.syntaxtree.*;
 import java.util.*;
 import java.io.*;
-import visitor.*;
+import jtb.visitor.*;
 
 /**
  * Dumps the syntax tree to a Writer.

@@ -9,9 +9,9 @@ import java.io.*;
  **/
 public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
 
-  public PrintDifferingInvariantsVisitor(PrintStream ps,
-                                         boolean verbose) {
-    super(ps, verbose);
+  public PrintDifferingInvariantsVisitor(PrintStream ps, boolean verbose,
+                                         boolean printEmptyPpts) {
+    super(ps, verbose, printEmptyPpts);
   }
 
   public void visit(InvNode node) {

@@ -16,6 +16,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
 
   private PrintStream ps;
   private boolean verbose;
+  private boolean printEmptyPpts;
   
   /**
    * Stores the output generated when visiting invariant nodes.  This
@@ -24,15 +25,16 @@ public class PrintAllVisitor extends DepthFirstVisitor {
    **/
   private StringBuffer bufOutput = new StringBuffer();
 
-  public PrintAllVisitor(PrintStream ps, boolean verbose) {
+  public PrintAllVisitor(PrintStream ps, boolean verbose,
+                         boolean printEmptyPpts) {
     this.ps = ps;
     this.verbose = verbose;
+    this.printEmptyPpts = printEmptyPpts;
   }
 
   /**
    * Prints the pair of program points, and all the invariants
-   * contained within them.  The program points are printed only if
-   * there is output for the contained invariants.
+   * contained within them.
    **/
   public void visit(PptNode node) {
     // Empty the string buffer
@@ -40,7 +42,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
 
     super.visit(node);
 
-    if (bufOutput.length() > 0) {
+    if (bufOutput.length() > 0 || printEmptyPpts) {
       Ppt ppt1 = node.getPpt1();
       Ppt ppt2 = node.getPpt2();
       

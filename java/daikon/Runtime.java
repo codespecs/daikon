@@ -24,13 +24,13 @@ public final class Runtime {
 
   ////////////////////////////////////////////////////////////////////////
   /// The context-sensitive instrumentation pass creates bodies for
-  /// abstract methods that throw this very object; that way we don't 
+  /// abstract methods that throw this very object; that way we don't
   /// have to inspect their return type since they never return.
   /// Thanks to this global instance, they don't need to call "new" either.
   public static class AbstractException extends Error {
     static final long serialVersionUID = 20020130L;
   }
-  public static final AbstractException abstractException = 
+  public static final AbstractException abstractException =
     new AbstractException();
 
   ///////////////////////////////////////////////////////////////////////////
@@ -46,29 +46,29 @@ public final class Runtime {
 
   public static class PrintStreamWithThrottle extends PrintStream
   {
-    public void print(boolean b)   { if(count==1) super.print(b); }
-    public void print(char c)      { if(count==1) super.print(c); }
-    public void print(char[] s)    { if(count==1) super.print(s); }
-    public void print(double d)    { if(count==1) super.print(d); }
-    public void print(float f)     { if(count==1) super.print(f); }
-    public void print(int i)       { if(count==1) super.print(i); }
-    public void print(long l)      { if(count==1) super.print(l); }
-    public void print(Object obj)  { if(count==1) super.print(obj); }
-    public void print(String s)    { if(count==1) super.print(s); }
-    public void println()          { if(count==1) super.println(); }
-    public void println(boolean x) { if(count==1) super.println(x); }
-    public void println(char x)    { if(count==1) super.println(x); }
-    public void println(char[] x)  { if(count==1) super.println(x); }
-    public void println(double x)  { if(count==1) super.println(x); }
-    public void println(float x)   { if(count==1) super.println(x); }
-    public void println(int x)     { if(count==1) super.println(x); }
-    public void println(long x)    { if(count==1) super.println(x); }
-    public void println(Object x)  { if(count==1) super.println(x); }
-    public void println(String x)  { if(count==1) super.println(x); }
-        
+    public void print(boolean b)   { if (count==1) super.print(b); }
+    public void print(char c)      { if (count==1) super.print(c); }
+    public void print(char[] s)    { if (count==1) super.print(s); }
+    public void print(double d)    { if (count==1) super.print(d); }
+    public void print(float f)     { if (count==1) super.print(f); }
+    public void print(int i)       { if (count==1) super.print(i); }
+    public void print(long l)      { if (count==1) super.print(l); }
+    public void print(Object obj)  { if (count==1) super.print(obj); }
+    public void print(String s)    { if (count==1) super.print(s); }
+    public void println()          { if (count==1) super.println(); }
+    public void println(boolean x) { if (count==1) super.println(x); }
+    public void println(char x)    { if (count==1) super.println(x); }
+    public void println(char[] x)  { if (count==1) super.println(x); }
+    public void println(double x)  { if (count==1) super.println(x); }
+    public void println(float x)   { if (count==1) super.println(x); }
+    public void println(int x)     { if (count==1) super.println(x); }
+    public void println(long x)    { if (count==1) super.println(x); }
+    public void println(Object x)  { if (count==1) super.println(x); }
+    public void println(String x)  { if (count==1) super.println(x); }
+
     // useful for emitting comments during debugging:
     public void printlnAlways(String s) { super.println(s); }
-    
+
     // This flags is used to suppress output during reentrant
     // instrumentation; for example, when outputting the elements of an
     // instrumented List-derived object, we don't want to start
@@ -76,7 +76,7 @@ public final class Runtime {
     // List object.
     public int count;
 
-    PrintStreamWithThrottle(OutputStream out) 
+    PrintStreamWithThrottle(OutputStream out)
       { super(out); count = 0; }
   }
 
@@ -87,7 +87,7 @@ public final class Runtime {
   public static PrintStreamWithThrottle dtrace;
 
   public static void setDtrace(String filename, boolean append) {
-    // System.out.println("calling setDtrace(" + filename + ")...");
+    System.out.println("calling setDtrace(" + filename + ")...");
     try {
       File file = new File(filename);
       File parent = file.getParentFile();
@@ -120,6 +120,7 @@ public final class Runtime {
    * to this method is used instead.
    **/
   public static void setDtraceMaybe(String default_filename) {
+    System.out.println("setDtraceMaybe(" + default_filename + "); old = " + dtrace);
     if (dtrace == null) {
       // Jeremy used "daikon.dtrace.filename".
       String filename = System.getProperty("DTRACEFILE", default_filename);

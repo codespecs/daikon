@@ -1,8 +1,8 @@
 package daikon.tools.jtb;
 
 import java.util.*;
-import syntaxtree.*;
-import visitor.*;
+import jtb.syntaxtree.*;
+import jtb.visitor.*;
 import daikon.*;
 import utilMDE.Assert;
 
@@ -18,12 +18,14 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
   private Vector fieldDecls = new Vector();
   private int cachedSize = -1;
   private FieldDeclaration[] fieldDeclsArray;
+  private String[] allNamesArray;
   private String[] ownedNamesArray;
   private String[] finalNamesArray;
 
   private void updateCache() {
     if (cachedSize != fieldDecls.size()) {
       fieldDeclsArray = (FieldDeclaration[]) fieldDecls.toArray(new FieldDeclaration[0]);
+      Vector allNames = new Vector();
       Vector ownedNames = new Vector();
       Vector finalNames = new Vector();
       for (int i=0; i<fieldDeclsArray.length; i++) {
@@ -33,6 +35,7 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
         boolean isOwned = ! isPrimitive(fdtype);
         {
           String name = name(fd.f2);
+          allNames.add(name);
           if (isFinal)
             finalNames.add(name);
           if (isOwned)
@@ -47,6 +50,7 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
               System.out.println("Bad length " + ns.size() + " for NodeSequence");
             }
             String name = name((VariableDeclarator) ns.elementAt(1));
+            allNames.add(name);
             if (isFinal)
               finalNames.add(name);
             if (isOwned)
@@ -54,6 +58,7 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
           }
         }
       }
+      allNamesArray = (String[]) allNames.toArray(new String[0]);
       ownedNamesArray = (String[]) ownedNames.toArray(new String[0]);
       finalNamesArray = (String[]) finalNames.toArray(new String[0]);
       cachedSize = fieldDecls.size();
@@ -82,6 +87,12 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
   public FieldDeclaration[] fieldDeclarations() {
     updateCache();
     return fieldDeclsArray;
+  }
+
+  // Returns a list of all fields.
+  public String[] allFieldNames() {
+    updateCache();
+    return allNamesArray;
   }
 
   // Returns a list of names of all fields with owner annotations.
