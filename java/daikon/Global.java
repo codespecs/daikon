@@ -246,4 +246,6 @@ public final class Global {
   //Global Fuzzy Float comparator to use
   public static FuzzyFloat fuzzy = new FuzzyFloat ();
 
+  /* map of statistics for each ppts */
+  public static Map stats_map = new LinkedHashMap();
 }
