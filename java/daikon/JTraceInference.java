@@ -113,9 +113,6 @@ class JTraceInference extends Thread
                 // FIXME: Toh added this so the code compiles.  This
                 // should instead use Alan's batching method.
                 all_ppts.add(ppt);
-                Set set = new HashSet();
-                set.add (ppt);
-                Dataflow.init_partial_order(set, all_ppts);
                 break;
             }
 
