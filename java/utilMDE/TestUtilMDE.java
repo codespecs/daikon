@@ -914,6 +914,13 @@ public final class TestUtilMDE {
     assert(UtilMDE.unquote("\\\"hello\\\"").equals("\"hello\""));
     assert(UtilMDE.unquote("\\\"hello\\\" \\\"world\\\"").equals("\"hello\" \"world\""));
 
+    assert(UtilMDE.rpad("", 5).equals("     "));
+    assert(UtilMDE.rpad("abcd", 5).equals("abcd "));
+    assert(UtilMDE.rpad("abcde", 5).equals("abcde"));
+    assert(UtilMDE.rpad("abcdef", 5).equals("abcde"));
+    assert(UtilMDE.rpad("abcdefghij", 5).equals("abcde"));
+    assert(UtilMDE.rpad(10, 5).equals("10   "));
+    
     // This will be easy to write tests for, when I get around to it.
     // public static Vector tokens(String str, String delim, boolean returnTokens)
     // public static Vector tokens(String str, String delim)

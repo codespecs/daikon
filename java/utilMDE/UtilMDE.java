@@ -724,6 +724,26 @@ public final class UtilMDE {
   }
 
 
+  // Returns a string of the specified length, truncated if necessary,
+  // and padded with spaces to the right if necessary.
+  public static String rpad(String s, int length) {
+    if (s.length() < length) {
+      StringBuffer buf = new StringBuffer(s);
+      for (int i = s.length(); i < length; i++) {
+        buf.append(' ');
+      }
+      return buf.toString();
+    } else {
+      return s.substring(0, length);
+    }
+  }
+
+  // Converts the int to a String, the formats it using rpad
+  public static String rpad(int num, int length) {
+    return rpad(String.valueOf(num), length);
+  }
+
+
   ///
   /// StringTokenizer
   ///
