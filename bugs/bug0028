@@ -7,6 +7,15 @@ Status:       New
 Reproducible: Yes
 Description:
 
+[mistere]
+After talking with Michael today, we concluded that the best fix is to
+rename this pseudo-field to ".size()" and parse ".size()" as a SizeOf
+element, just like ".length".  This will prevent ESC formatting of the
+field, as desired, because Vector sizes are not printed.  It also may
+assist supression during inference since it is recognized as a
+sequence size.
+
+[mistere]
 Reproduce using RatPoly:
 
   cd $inv/tests/daikon-tests/RatPoly
@@ -39,6 +48,9 @@ Do we agree?
 
 --
 $Log$
-Revision 1.1  2002-03-26 09:48:49  mistere
+Revision 1.2  2002-03-27 21:07:35  mistere
+changed bug0028
+
+Revision 1.1  2002/03/26 09:48:49  mistere
 new bug0028
 
