@@ -4102,6 +4102,27 @@ public class PptTopLevel
         values_num_samples += rel.child.values_num_samples;
     }
 
+    // Merge information stored in the VarInfo objects themselves
+    // Currently just the "canBeMissing" field, which is needed by
+    // guarding.
+    for (int i = 0; i < children.size(); i++) {
+      PptRelation rel = (PptRelation) children.get(i);
+      // This approach doesn't work correctly for the OBJECT_USER
+      // relation case, because obj.field could be missing in a user PPT
+      // when obj is null, but shouldn't be missing in the OBJECT PPT,
+      // since "this" is always present for object invariants.
+      // For the moment, just punt on this case, to match the previous
+      // behavior
+      if (rel.getRelationType() == PptRelation.OBJECT_USER)
+        continue;
+      for (int j = 0; j < var_infos.length; j++) {
+        VarInfo parent_vi = var_infos[j];
+        VarInfo child_vi = rel.childVar(parent_vi);
+        if (child_vi != null)
+          parent_vi.canBeMissing |= child_vi.canBeMissing;
+      }
+    }
+
     // Create the (empty) equality view for this ppt
     Assert.assertTrue (equality_view == null);
     equality_view = new PptSliceEquality (this);
