@@ -25,7 +25,7 @@ public final class Diff {
     lineSep +
     "  -t  Display the statistics as a tab-separated list" +
     lineSep +
-    "  -u  Display uninteresting invariants" +
+    "  -j  Treat justification as a continuous value" +
     lineSep +
     "  -v  Verbose output" +
     lineSep;
@@ -37,6 +37,12 @@ public final class Diff {
   private static boolean stats = false;
   private static boolean tabSeparatedStats = false;
   private static boolean verbose = false;
+  
+  // If true, justification is handled as a continuous quantity, so
+  // the difference between two invariants is the numerical difference
+  // between their justifications.  If false, the difference is always
+  // 0 or 1.
+  private static boolean continuousJustification = false;
 
   private static boolean optionSelected = false;
 
@@ -45,7 +51,7 @@ public final class Diff {
   StreamCorruptedException, OptionalDataException, IOException,
   ClassNotFoundException {
 
-    Getopt g = new Getopt("daikon.diff.Diff", args, "hdastv");
+    Getopt g = new Getopt("daikon.diff.Diff", args, "hdastjv");
     int c;
     while ((c = g.getopt()) !=-1) {
       switch (c) {
@@ -69,6 +75,9 @@ public final class Diff {
         optionSelected = true;
         tabSeparatedStats = true;
         break;        
+      case 'j':
+        continuousJustification = true;
+        break;
       case 'v':
         verbose = true;
         break;
@@ -111,13 +120,15 @@ public final class Diff {
     RootNode root = diffPptMap(map1, map2);
 
     if (stats) {
-      DetailedStatisticsVisitor v = new DetailedStatisticsVisitor();
+      DetailedStatisticsVisitor v =
+        new DetailedStatisticsVisitor(continuousJustification);
       root.accept(v);
       System.out.print(v.format());
     }
 
     if (tabSeparatedStats) {
-      DetailedStatisticsVisitor v = new DetailedStatisticsVisitor();
+      DetailedStatisticsVisitor v =
+        new DetailedStatisticsVisitor(continuousJustification);
       root.accept(v);
       System.out.print(v.repr());      
     }
@@ -155,11 +166,19 @@ public final class Diff {
       Pair ppts = (Pair) opi.next();
       PptTopLevel ppt1 = (PptTopLevel) ppts.a;
       PptTopLevel ppt2 = (PptTopLevel) ppts.b;
-      PptNode node = diffPptTopLevel(ppt1, ppt2);
-      root.add(node);
+      if (shouldAdd(ppt1) || shouldAdd(ppt2)) {
+        PptNode node = diffPptTopLevel(ppt1, ppt2);
+        root.add(node);
+      }
     }
 
     return root;
+  }
+
+  private static boolean shouldAdd(PptTopLevel ppt) {
+    return (ppt == null ||
+            ppt.ppt_name.isEnterPoint() ||
+            (ppt.ppt_name.isExitPoint() && ppt.combined_exit == null));
   }
 
 
