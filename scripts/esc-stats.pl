@@ -10,7 +10,7 @@
 
 use Carp;
 
-my @types = ("invariant","set","requires","modifies","ensures","exsures","also_requires","also_modifies","also_ensures","also_exsures","axiom","assume");
+my @types = ("invariant","set","requires","modifies","ensures","exsures","also_requires","also_modifies","also_ensures","also_exsures","axiom","assume", "nowarn");
 my @categories = ("EVU","EVR","ENU","ENR","IU","IR","A");
 my %prefixes = 
     (EVU => "/*@",   # Expressible Verified Unique
@@ -35,17 +35,19 @@ for my $file (@ARGV) {
 	    my $prefix = $prefixes{$category} || die($category);
 	    my $literal = $prefix . " " . $type;
 	    my @matches = grep(/\Q$literal/, @lines);
-	    if ($type eq "invariant") {
-		# remove invariants added by a heuristic
-		@matches = grep(!/\Q.owner == this/, @matches);
-	    } elsif ($type eq "set") {
-		# remove invariants added by a heuristic
-		@matches = grep(!/\Q.owner = this/, @matches);
+	    if ($category eq ("EVU")) {
+		if ($type eq "invariant") {
+		    # remove invariants added by a heuristic
+		    @matches = grep(!/\Q.owner == this/, @matches);
+		} elsif ($type eq "set") {
+		    # remove invariants added by a heuristic
+		    @matches = grep(!/\Q.owner = this/, @matches);
+		}
 	    }
 	    # remove "dumb" things
 	    @matches = grep(!m|// dumb|, @matches);
 	    my $count = scalar(@matches);
-	    print STDERR @matches if ($count);
+	    print STDERR "$file: " . (join("$file: ", @matches)) if ($count);
 	    print $count;
 	    print "\t" unless ($category eq "A");
 	}
