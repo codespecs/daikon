@@ -29,6 +29,8 @@ public final class StringComparisonCore
   public boolean obvious_can_be_le;
   public boolean obvious_can_be_ge;
 
+  private ValueTracker values_cache = new ValueTracker(8);
+
   public Invariant wrapper;
 
   public StringComparisonCore(Invariant wrapper) {
@@ -53,7 +55,9 @@ public final class StringComparisonCore
 
   public Object clone() {
     try {
-      return super.clone();
+      StringComparisonCore result = (StringComparisonCore) super.clone();
+      result.values_cache = (ValueTracker) values_cache.clone();
+      return result;
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can't happen
     }
@@ -105,8 +109,10 @@ public final class StringComparisonCore
       }
     }
 
-    if (! changed)
+    if (! changed) {
+      values_cache.add(v1, v2);
       return;
+    }
 
     if ((new_can_be_lt && new_can_be_gt)
         || (only_check_eq && (new_can_be_lt || new_can_be_gt))
@@ -123,6 +129,7 @@ public final class StringComparisonCore
     can_be_eq = new_can_be_eq;
     can_be_lt = new_can_be_lt;
     can_be_gt = new_can_be_gt;
+    values_cache.add(v1, v2);
   }
 
   // This is very tricky, because whether two variables are equal should
@@ -133,7 +140,7 @@ public final class StringComparisonCore
     if (wrapper.no_invariant) {
       return Invariant.PROBABILITY_NEVER;
     } else if (can_be_lt || can_be_gt) {
-      return Math.pow(.5, wrapper.ppt.num_values());
+      return Math.pow(.5, values_cache.num_values());
     } else {
       if (can_be_eq) {
 	// It's an equality invariant.  I ought to use the actual ranges somehow.

@@ -61,6 +61,7 @@ The correct way to build the system is to run 'make'.
 #define IMPLEMENTSCOMPARISON implements Comparison
 #else
 #define IMPLEMENTSCOMPARISON
+#define TRACK_NUM_VALUES
 #endif
 
 package daikon.inv.binary.twoScalar;
@@ -91,6 +92,16 @@ public final class INTEQUAL extends TwoScalar IMPLEMENTSCOMPARISON {
   public static boolean dkconfig_enabled = true;
 
   final static boolean DEBUGINTEQUAL = false;
+
+#ifdef TRACK_NUM_VALUES
+  private ValueTracker values_cache = new ValueTracker(8);
+
+  protected Object clone() {
+    INTEQUAL result = (INTEQUAL) super.clone();
+    result.values_cache = (ValueTracker) values_cache.clone();
+    return result;
+  }
+#endif
 
   protected INTEQUAL(PptSlice ppt) {
     super(ppt);
@@ -267,6 +278,9 @@ public final class INTEQUAL extends TwoScalar IMPLEMENTSCOMPARISON {
       destroy();
       return;
     }
+#ifdef TRACK_NUM_VALUES
+    values_cache.add(v1, v2);
+#endif
   }
 
   // This is very tricky, because whether two variables are equal should
@@ -284,13 +298,13 @@ public final class INTEQUAL extends TwoScalar IMPLEMENTSCOMPARISON {
     // It's an equality invariant.  I ought to use the actual ranges somehow.
     // Actually, I can't even use this .5 test because it can make
     // equality non-transitive.
-    // return Math.pow(.5, ppt.num_values());
+    // return Math.pow(.5, num_values());
     return Invariant.PROBABILITY_JUSTIFIED;
 #else
     // The reason for this multiplication is that there might be only a
     // very few possible values.  Example:  towers of hanoi has only 6
     // possible (pegA, pegB) pairs.
-    return (Math.pow(.5, ppt.num_values())
+    return (Math.pow(.5, values_cache.num_values())
 	    * Math.pow(.99, ppt.num_mod_non_missing_samples()));
 #endif
   }

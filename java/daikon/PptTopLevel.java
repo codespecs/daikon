@@ -2401,7 +2401,7 @@ public class PptTopLevel
           } else {
             // out.println("Modified: " + vi.name + " (=" + vi.equal_to.name + "), " + vi_orig.name + " (=" + vi_orig.equal_to.name + ")");
             PptSlice1 view = getView(vi);
-            if ((view != null) && (view.num_values() > 0)) {
+            if (view != null) { // [INCR] && (view.num_values() > 0)
               // Using only the isPrimitive test is wrong.  We should suppress
 	      // for only parameters, not all primitive values.
               if (vi.type.isPrimitive() && (vi.name.name().indexOf(".") == -1)) {
@@ -2555,7 +2555,7 @@ public class PptTopLevel
             if (Daikon.output_num_samples) {
               if (slice1 != null) {
                 sb.append("\t\t(" +
-                          nplural(slice1.num_values(), "value") + ", " +
+                          // [INCR] nplural(slice1.num_values(), "
                           nplural(slice1.num_samples(), "sample") + ")");
               } else {
                 // sb.append("\t\t(no slice)");
@@ -2607,10 +2607,10 @@ public class PptTopLevel
     Global.non_falsified_invariants += invs_array.length;
     for (int ia_index = 0; ia_index<invs_array.length; ia_index++) {
       Invariant inv = invs_array[ia_index];
-      int num_vals = inv.ppt.num_values();
+      // [INCR] int num_vals = inv.ppt.num_values();
       int inv_num_samps = inv.ppt.num_samples();
       String num_values_samples = "\t\t(" +
-	nplural(num_vals, "value") + ", " +
+	// [INCR] nplural(num_vals, "value") + ", " +
         nplural(inv_num_samps, "sample") + ")";
 
       // I could imagine printing information about the PptSlice

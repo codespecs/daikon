@@ -134,19 +134,6 @@ public final class PptSlice2  extends PptSlice {
     return result;
   }
 
-  // [INCR] XXX; maintaining this would require storing a set of all
-  // the different values we see.  That seems like a very bad idea.
-  // We should deprecated this method, right?
-  public int num_values() {
-    Assert.assert(! no_invariants);
-    return num_samples(); // XXX
-    // if (values_cache == null) { [INCR]
-    //   return num_values_post_cache;
-    // } else {
-    //   return values_cache.size();
-    // }
-  }
-
   public String tuplemod_samples_summary() {
     Assert.assert(! no_invariants);
     return "UU=" + tm_total[0]

@@ -243,6 +243,7 @@ public abstract class PptSlice extends Ppt {
    * Invariant objects as they are falsified.
    **/
   public void addToFlow(Invariant inv) {
+    debugFlow.debug(inv.format() + " at " + parent.name + " added to flow");
     invs_to_flow.add(inv);
   }
 
@@ -302,11 +303,15 @@ public abstract class PptSlice extends Ppt {
 	    inv.destroy();
 	  }
 	  // debug
-	  if (debugFlow.isDebugEnabled()) debugFlow.debug(" " + inv.format() + " flowing to " + lower.name);
+	  if (debugFlow.isDebugEnabled()) debugFlow.debug(" " + inv.format() + " flowing from " + parent.name + " to " + lower.name);
 	  // If its class does not already exist in lower
 	  for (Iterator h = slice.invs.iterator(); h.hasNext(); ) {
 	    Object item = h.next();
-	    // XXX Should this be some sort of same formula check instead?
+	    // XXX Should this be some sort of same formula check
+	    // instead?  Probably not; one class of invariant should
+	    // be able to handle all data fed to it; we never need two
+	    // invariants of the same class in the same pptslice.
+	    // Maybe add that as rep invariant up above?
 	    if (item.getClass() == inv.getClass()) {
 	      if (debugFlow.isDebugEnabled()) debugFlow.debug("  except it was already there");
 	      continue for_each_invariant;
@@ -354,11 +359,12 @@ public abstract class PptSlice extends Ppt {
   // These accessors are for abstract methods declared in Ppt
   public abstract int num_samples();
   public abstract int num_mod_non_missing_samples();
-  public abstract int num_values();
+  // [INCR] public abstract int num_values();
   public abstract String tuplemod_samples_summary();
 
   boolean check_modbits () {
     Assert.assert(! no_invariants);
+    /* [INCR] (we no longer track num_values)
     if (num_mod_non_missing_samples() < num_values()) {
       String message = "Bad mod bits in dtrace file:" + lineSep
         + "num_mod_non_missing_samples()=" + num_mod_non_missing_samples()
@@ -373,17 +379,17 @@ public abstract class PptSlice extends Ppt {
 	;
       if (! Daikon.disable_modbit_check_message) {
         System.out.println(message);
-	/* [INCR]
+	// [INCR]
         if (values_cache != null) {
           System.out.println("To do:  Dump values_cache");
           // This is probably specific to the specializers of PptSlice.
           // values_cache.dump();
         }
-	*/
       }
       if (! Daikon.disable_modbit_check_error)
         throw new Error(message);
     }
+    */
     return true;
   }
 

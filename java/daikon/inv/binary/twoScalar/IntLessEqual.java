@@ -27,6 +27,14 @@ public final class IntLessEqual  extends TwoScalar   {
 
   final static boolean debugIntLessEqual  = false;
 
+  private ValueTracker values_cache = new ValueTracker(8);
+
+  protected Object clone() {
+    IntLessEqual  result = (IntLessEqual ) super.clone();
+    result.values_cache = (ValueTracker) values_cache.clone();
+    return result;
+  }
+
   protected IntLessEqual (PptSlice ppt) {
     super(ppt);
   }
@@ -191,6 +199,9 @@ public final class IntLessEqual  extends TwoScalar   {
       destroy();
       return;
     }
+
+    values_cache.add(v1, v2);
+
   }
 
   // This is very tricky, because whether two variables are equal should
@@ -207,7 +218,7 @@ public final class IntLessEqual  extends TwoScalar   {
     // The reason for this multiplication is that there might be only a
     // very few possible values.  Example:  towers of hanoi has only 6
     // possible (pegA, pegB) pairs.
-    return (Math.pow(.5, ppt.num_values())
+    return (Math.pow(.5, values_cache.num_values())
 	    * Math.pow(.99, ppt.num_mod_non_missing_samples()));
 
   }

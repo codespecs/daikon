@@ -24,6 +24,7 @@ public class SeqComparison extends TwoSequence implements Comparison {
   boolean can_be_gt = false;
 
   int num_sc_samples = 0;
+  private ValueTracker values_cache = new ValueTracker(8);
 
   protected SeqComparison(PptSlice ppt, boolean only_eq) {
     super(ppt);
@@ -55,6 +56,12 @@ public class SeqComparison extends TwoSequence implements Comparison {
                           && type2.baseIsIntegral()));
     // System.out.println("only_eq: " + only_eq);
     return new SeqComparison(ppt, only_eq);
+  }
+
+  protected Object clone() {
+    SeqComparison result = (SeqComparison) super.clone();
+    result.values_cache = (ValueTracker) values_cache.clone();
+    return result;
   }
 
   protected Invariant resurrect_done_swapped() {
@@ -129,8 +136,10 @@ public class SeqComparison extends TwoSequence implements Comparison {
       changed = true;
     }
 
-    if (! changed)
+    if (! changed) {
+      values_cache.add(v1, v2);
       return;
+    }
 
     if ((new_can_be_lt && new_can_be_gt)
         || (only_check_eq && (new_can_be_lt || new_can_be_gt))) {
@@ -144,6 +153,8 @@ public class SeqComparison extends TwoSequence implements Comparison {
     can_be_eq = new_can_be_eq;
     can_be_lt = new_can_be_lt;
     can_be_gt = new_can_be_gt;
+
+    values_cache.add(v1, v2);
   }
 
   protected double computeProbability() {
@@ -151,7 +162,7 @@ public class SeqComparison extends TwoSequence implements Comparison {
       return Invariant.PROBABILITY_NEVER;
     } else if (can_be_lt || can_be_gt) {
       // System.out.println("prob = " + Math.pow(.5, ppt.num_values()) + " for " + format());
-      return Math.pow(.5, ppt.num_values());
+      return Math.pow(.5, values_cache.num_values());
     } else if (num_sc_samples == 0) {
       return Invariant.PROBABILITY_UNJUSTIFIED;
     } else {

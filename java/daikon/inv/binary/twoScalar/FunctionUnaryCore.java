@@ -30,8 +30,7 @@ public final class FunctionUnaryCore
   // false if we're looking for y=fn(x), true if we're looking for x=fn(y)
   public boolean inverse;
 
-  // Not currently being maintained
-  // int values_seen = 0;
+  private ValueTracker values_cache = new ValueTracker(8);
 
   public Invariant wrapper;
 
@@ -48,7 +47,10 @@ public final class FunctionUnaryCore
 
   public Object clone() {
     try {
-      return super.clone();
+      FunctionUnaryCore result = (FunctionUnaryCore) super.clone();
+      result.function = function;
+      result.values_cache = (ValueTracker) values_cache.clone();
+      return result;
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can't happen
     }
@@ -87,15 +89,16 @@ public final class FunctionUnaryCore
       wrapper.flowThis();
       wrapper.destroy();
     }
-  }
 
+    values_cache.add(x_int, y_int);
+  }
 
   public double computeProbability() {
     if (wrapper.no_invariant)
       return Invariant.PROBABILITY_NEVER;
     // For now, only depend on number of samples.
     // But if this prob = 0, should depend on the function as well.
-    return Invariant.prob_is_ge(wrapper.ppt.num_values(), 5);
+    return Invariant.prob_is_ge(values_cache.num_values(), 5);
   }
 
 

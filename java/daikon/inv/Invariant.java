@@ -215,6 +215,7 @@ public abstract class Invariant
    **/
   public void destroy() {
     no_invariant = true;
+    PptSlice.debugFlow.debug("Invariant destoroyed " + format() + " at " + ppt.parent.name);
     // ppt.removeInvariant(this);
   }
 

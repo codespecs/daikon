@@ -279,6 +279,12 @@ public final class OneOfScalar  extends SingleScalar  implements OneOf {
       }
     }
 
+    if (num_elts > 0) {
+      // We are significantly changing our state (not just zeroing in on
+      // a constant), so we have to flow a copy before we do so.
+      flowClone();
+    }
+
     elts[num_elts] = v;
     num_elts++;
 

@@ -727,7 +727,7 @@ class InvariantTableModel extends AbstractTableModel {
     Assert.assert( column >= 0  &&  column <= 4 );
     Invariant invariant = (Invariant) filteredInvariants.get( row );
     if (column == 0)	    return invariant.format();
-    else if (column == 1)	    return new Integer( invariant.ppt.num_values());
+    else if (column == 1)	    return new Double(Double.NaN); // [INCR] invariant.ppt.num_values()
     else if (column == 2)	    return new Integer( invariant.ppt.num_samples());
     else if (column == 3)	    return new Double( format.format( Math.round( 100 * invariant.getProbability()) / 100.0 ));
     else /* (column == 4) */	    return new Boolean( invariant.justified());

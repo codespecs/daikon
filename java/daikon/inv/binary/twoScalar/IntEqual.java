@@ -185,6 +185,7 @@ public final class IntEqual  extends TwoScalar implements Comparison  {
       destroy();
       return;
     }
+
   }
 
   // This is very tricky, because whether two variables are equal should
@@ -201,7 +202,7 @@ public final class IntEqual  extends TwoScalar implements Comparison  {
     // It's an equality invariant.  I ought to use the actual ranges somehow.
     // Actually, I can't even use this .5 test because it can make
     // equality non-transitive.
-    // return Math.pow(.5, ppt.num_values());
+    // return Math.pow(.5, num_values());
     return Invariant.PROBABILITY_JUSTIFIED;
 
   }

@@ -20,8 +20,7 @@ public final class FunctionBinaryCore
   // see "Variable order"
   public int var_order;
 
-  // Not currently being maintained
-  // int values_seen = 0;
+  private ValueTracker values_cache = new ValueTracker(8);
 
   public Invariant wrapper;
 
@@ -40,6 +39,7 @@ public final class FunctionBinaryCore
     try {
       FunctionBinaryCore result = (FunctionBinaryCore) super.clone();
       result.function = function;
+      result.values_cache = (ValueTracker) values_cache.clone();
       return result;
     } catch (CloneNotSupportedException e) {
       throw new Error(); // can't happen
@@ -114,13 +114,14 @@ public final class FunctionBinaryCore
       wrapper.destroy();
       return;
     }
-  }
 
+    values_cache.add(x_int, y_int, z_int);
+  }
 
   public double computeProbability() {
     if (wrapper.no_invariant)
       return Invariant.PROBABILITY_NEVER;
-    return Invariant.prob_is_ge(wrapper.ppt.num_values(), 5);
+    return Invariant.prob_is_ge(values_cache.num_values(), 5);
   }
 
 
