@@ -48,7 +48,8 @@ WWW_DAIKON_FILES := faq.html index.html mailing-lists.html StackAr.html \
 				    anoncvs.html download/index.html download/doc/index.html
 
 # Staging area for the distribution
-STAGING_DIST := $(INV_DIR)/dist
+# STAGING_DIST := $(INV_DIR)/staging-dist
+STAGING_DIST := $(WWW_ROOT)staging-dist
 
 # build the windows version of dfej here
 MINGW_DFEJ_LOC := $(INV_DIR)
@@ -110,9 +111,9 @@ help:
 	@echo " install PAG specific files pag-install"
 	@echo "Creating the Daikon distribution:"
 	@echo " daikon.tar daikon.jar    -- just makes the tar files"
-	@echo " staging                  -- moves all release file to $inv/dist"
-	@echo " test-staged-dist         -- tests the distribution in $inv/dist"
-	@echo " staging-to-www           -- copies $inv/dist to website"
+	@echo " staging                  -- moves all release file to $inv/staging-dist"
+	@echo " test-staged-dist         -- tests the distribution in $inv/staging-dist"
+	@echo " staging-to-www           -- copies $inv/staging-dist to website"
 	@echo " "
 	@echo "This Makefile is for manipulations of the entire invariants module."
 	@echo "Daikon proper can be found in the java/daikon subdirectory."
@@ -274,9 +275,10 @@ staging: doc/CHANGES
 
 # Copy the files in the staging area to the website.  This will copy
 # all of the files in staging, but will not delete any files in the website
-# that are not in staging.  T
+# that are not in staging.
 staging-to-www: $(STAGING_DIST)
-	(cd $(STAGING_DIST) && tar cf - .) | (cd $(WWW_ROOT) && tar xfBp -)
+	# (cd $(STAGING_DIST) && tar cf - .) | (cd $(WWW_ROOT) && tar xfBp -)
+	(cd $(STAGING_DIST) && tar cf - *) | (cd $(DIST_DIR) && tar xfBp -)
 	@echo "**Update the dates and sizes in the various index files**"
 	update-link-dates $(DIST_DIR)/index.html
 	$(MAKE) update-dist-version-file
