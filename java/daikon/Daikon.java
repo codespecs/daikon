@@ -929,7 +929,7 @@ public final class Daikon {
         spinfo_files.add(file);
       } else if (filename.indexOf(".map") != -1) {
         map_files.add(file);
-      } else if (filename.equals("-")) {
+      } else if (filename.equals("-") || filename.equals("+")) {
         dtrace_files.add(filename);
       } else {
         throw new Error("Unrecognized argument: " + file);
