@@ -4203,13 +4203,13 @@ changes.
 @item reserved words
 C++ reserves the following keywords that are not reserved words in C:
 @example
-  asm catch class const_cast delete dynamic_cast explicit export
-  friend inline mutable namespace new operator private protected public
-  reinterpret_cast static_cast template this throw try typeid typename
-  using virtual
+  asm catch class const_cast delete dynamic_cast explicit
+  export friend inline mutable namespace new operator
+  private protected public reinterpret_cast static_cast
+  template this throw try typeid typename using virtual
 
-  and and_eq bitand bitor bool compl false not not_eq or or_eq true
-  wchar_t xor xor_eq
+  and and_eq bitand bitor bool compl false not not_eq
+  or or_eq true wchar_t xor xor_eq
 @end example
 @noindent
 (Those in the second group are defined as macros in the 1999 ISO C
@@ -5400,8 +5400,10 @@ implication are printed. If no other regular arguments are supplied,
 all the method or function program points that exist in both files
 will be compared, with a exception message reported for each method
 that exists in the ``weaker'' set but not the ``stronger''.
-Alternatively, two additional arguments may be supplied, which name an
-ENTER and an EXIT program point to examine. To be precise, for each
+Alternatively, one or two additional arguments may be supplied, which name an 
+ENTER program point and an EXIT program point to examine (if only an
+ENTER program point is supplied, the corresponding combined EXIT point
+is selected automatically). To be precise, for each
 pair of program points representing a single method or function,
 LogicalCompare will check that each precondition (ENTER point
 invariant) in the ``stronger'' invariant set is implied by some
@@ -5414,12 +5416,23 @@ form:
 
 @example
 java daikon.tools.compare.LogicalCompare [options...]
-      WEAK-INVS STRONG-INVS [ENTER-PPT EXIT-PPT] 
+      WEAK-INVS STRONG-INVS [ENTER-PPT [EXIT-PPT]]
 @end example
 
 LogicalCompare accepts the following options:
 
 @table @code
+@item --assume @var{file}
+Read additional assumptions about the behavior of compared routines
+from the file @var{file}. The assumptions file should consist of lines
+starting with @code{PPT_NAME}, followed by the complete name of an
+ENTER program point, followed by lines each consisting of a Simplify
+formula, optionally followed by a @code{#} and a human-readable
+annotation. Blank lines and lines beginning with a @code{#} are
+ignored. The assumption properties will be used as if they were
+invariants true at the strong EXIT point when checking weak EXIT point
+invariants.
+
 @item --cfg @var{option}=@var{value}
 Specify a single configuration setting. The available settings are the
 same as can be passed to Daikon's @option{--config_option} option,
@@ -5497,6 +5510,15 @@ The default set of filters corresponds to the letters ``ijmp''.
 @itemx -h
 Print a brief summary of available command-line options.
 
+@item --no-post-after-pre-failure
+If implication is not verified between two invariant sets after
+examining the preconditions, do not continue to check the implication
+involving postconditions. Because the postconditions aren't formally
+meaningful outside the domain specified by the preconditions, this is
+the safest behavior, but in practice trivial precondition mismatches
+may prevent an otherwise meaningful postcondition comparison. See also
+@code{--post-after-pre-failure}.
+
 @item --proofs
 For each implication among invariants that is verified, print a
 minimal set of conditions that establish the truth of the conclusion.
@@ -5513,8 +5535,10 @@ examining the preconditions, continue to check the implication
 involving postconditions. This is somewhat dangerous, in that if the
 implication does not hold between the preconditions, the invariant
 sets may be inconsistent, in which case reasoning about the
-postconditions is nonsensical. The tool will abort with an error
-message describing the contradiction of this latter situation occurs.
+postconditions is formally nonsensical, but the tool will attempt to
+ignore the contradiction and carry on in this case. This is now the
+default behavior, so the option has no effect, but it is retained for
+backward compatibility. See also @code{--no-post-after-pre-failure}.
 
 @item --show-count
 Print a count of the number of invariants checked for implication.
@@ -5522,6 +5546,12 @@ Print a count of the number of invariants checked for implication.
 @item --show-formulas
 For each invariant, show how it is represented as a logical formula
 passed to Simplify.
+
+@item --show-sets
+Rather than testing implications among invariants, simply print the
+sets of weak and strong ENTER and EXIT point invariants that would
+normally be compared. The invariants are selected and filtered as
+implied by other options.
 
 @item --show-valid
 Print invariants that are verified to be implied (``valid''), as well
