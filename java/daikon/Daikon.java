@@ -90,6 +90,7 @@ public final class Daikon {
   public static final int OUTPUT_STYLE_ESC = 1;
   public static final int OUTPUT_STYLE_SIMPLIFY = 2;
   public static final int OUTPUT_STYLE_IOA = 3;
+  public static final int OUTPUT_STYLE_JAVA = 4;
   public static int output_style = OUTPUT_STYLE_NORMAL;
   // public static int output_style = OUTPUT_STYLE_ESC;
   // public static int output_style = OUTPUT_STYLE_SIMPLIFY;
@@ -124,6 +125,7 @@ public final class Daikon {
   public static final String prob_limit_SWITCH = "prob_limit";
   public static final String esc_output_SWITCH = "esc_output";
   public static final String ioa_output_SWITCH = "ioa_output";
+  public static final String java_output_SWITCH = "java_output";
   public static final String mem_stat_SWITCH = "mem_stat";
   public static final String simplify_output_SWITCH = "simplify_output";
   public static final String output_num_samples_SWITCH = "output_num_samples";
@@ -227,6 +229,7 @@ public final class Daikon {
       new LongOpt(esc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(simplify_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(ioa_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(java_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(mem_stat_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(noternary_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -303,6 +306,8 @@ public final class Daikon {
 	  output_style = OUTPUT_STYLE_SIMPLIFY;
 	} else if (ioa_output_SWITCH.equals(option_name)) {
 	  output_style = OUTPUT_STYLE_IOA;
+	} else if (java_output_SWITCH.equals(option_name)) {
+	  output_style = OUTPUT_STYLE_JAVA;
 	} else if (mem_stat_SWITCH.equals(option_name)) {
 	  use_mem_monitor = true;
 	} else if (output_num_samples_SWITCH.equals(option_name)) {
@@ -566,18 +571,18 @@ public final class Daikon {
       File filename = (File) i.next();
       spnames_and_splitters =
 	SplitterFactory.read_spinfofile(filename, all_ppts); 
-    }
-    int siz = spnames_and_splitters.size();
-    Assert.assert(java.lang.Math.IEEEremainder(siz, 2) == 0);
-    for (int j = 0; j < siz; j+=2) {
-      String pptname = (String) spnames_and_splitters.elementAt(j);
-      pptname.trim();
-      //if the pptname is ALL, associate it with all program points.
-      if (pptname.equals("ALL")) {
-	SplitterList.put(".*", (Splitter[]) spnames_and_splitters.elementAt(j+1));
-      } else {
-	SplitterList.put( pptname, 
-			  (Splitter[]) spnames_and_splitters.elementAt(j+1)); 
+      int siz = spnames_and_splitters.size();
+      Assert.assert(java.lang.Math.IEEEremainder(siz, 2) == 0);
+      for (int j = 0; j < siz; j+=2) {
+	String pptname = (String) spnames_and_splitters.elementAt(j);
+	pptname.trim();
+	//if the pptname is ALL, associate it with all program points.
+	if (pptname.equals("ALL")) {
+	  SplitterList.put(".*", (Splitter[]) spnames_and_splitters.elementAt(j+1));
+	} else {
+	  SplitterList.put( pptname, 
+			    (Splitter[]) spnames_and_splitters.elementAt(j+1)); 
+	}
       }
     }
   }

@@ -100,6 +100,8 @@ public final class SeqIntComparison extends SequenceScalar {
     return seqvar().name.name() + " elements " + comparator + " " + sclvar().name.name();
   }
 
+    
+
   /* IOA */
   public String format_ioa(String classname) {
     String comparator = core.format_comparator().equals("==") ?

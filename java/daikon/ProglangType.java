@@ -310,7 +310,10 @@ public final class ProglangType implements java.io.Serializable {
           return LongZero;
 	return Intern.internedLong(value);
       } else if (base == BASE_DOUBLE) {
-        if (value.equals("NaN"))
+        // Must ignore case, because dfej outputs "NaN", while dfec
+        // outputs "nan".  dfec outputs "nan", because this string
+        // comes from the C++ library.
+        if (value.equalsIgnoreCase("NaN"))
           return DoubleNaN;
 	return Intern.internedDouble(value);
       } else {

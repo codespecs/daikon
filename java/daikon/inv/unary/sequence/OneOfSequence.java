@@ -184,6 +184,17 @@ public final class OneOfSequence  extends SingleSequence  implements OneOf {
     }
   }
 
+    public String format_java() {
+	StringBuffer sb = new StringBuffer();
+	for (int i = 0; i < num_elts; i++) {
+	    sb.append (" || (" + var().name.name()  + " == " +  ArraysMDE.toString( elts[i] )   );
+	    sb.append (")");
+	}
+	// trim off the && at the beginning for the first case
+	return sb.toString().substring (4);
+	
+    }
+
   /* IOA */
   public String format_ioa(String classname) {
 

@@ -44,6 +44,10 @@ public class FunctionUnary extends TwoScalar {
     return core.format(var1().name, var2().name);
   }
 
+    public String format_java() {
+	return "warning: method " + this.getClass() + ".format_java() needs to be implemented: " + format();
+    }
+
   public String format_esc() {
     String classname = this.getClass().toString().substring(6); // remove leading "class"
     return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();

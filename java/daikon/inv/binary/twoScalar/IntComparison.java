@@ -172,6 +172,13 @@ public final class IntComparison extends TwoScalar implements Comparison {
     return var1().name.name() + " " + comparator + " " + var2().name.name();
   }
 
+    public String format_java() {
+	// Should be the same as format unless there is a case
+	// I can't think of right now -LL
+	return format();  
+	
+    }
+
   public String format_esc() {
     String comparator = core.format_comparator();
     return var1().name.esc_name() + " " + comparator + " " + var2().name.esc_name();

@@ -850,9 +850,9 @@ public final class VarInfo
           continue;
       }
 
-      // For esc_output, omit noting that varibles are unmodified.
+      // For esc_output and java_output, omit noting that varibles are unmodified.
       // Add any additional special cases here.
-      if (Daikon.output_style == Daikon.OUTPUT_STYLE_ESC) {
+      if (Daikon.output_style == Daikon.OUTPUT_STYLE_ESC || Daikon.output_style == Daikon.OUTPUT_STYLE_JAVA) {
         if ((vi.postState != null) && vi.postState.name.equals(this.name)) {
           continue;
         }

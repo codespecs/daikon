@@ -67,6 +67,8 @@ public final class NonEqual extends TwoScalar {
     return var1().name.name() + " != " + var2().name.name();
   }
 
+    public String format_java() { return format(); }
+
   public String format_esc() {
     return var1().name.esc_name() + " != " + var2().name.esc_name();
   }

@@ -142,6 +142,17 @@ public final class OneOfString  extends SingleString  implements OneOf {
     return var().name.hasNodeOfType(VarInfoName.TypeOf.class);
   }
 
+    public String format_java() {
+	StringBuffer sb = new StringBuffer();
+	for (int i = 0; i < num_elts; i++) {
+	    sb.append (" || (" + var().name.name()  + ".equals(" +  (( elts[i] ==null) ? "null" : "\"" + UtilMDE.quote( elts[i] ) + "\"")   + ")" );
+	    sb.append (")");
+	}
+	// trim off the && at the beginning for the first case
+	return sb.toString().substring (4);
+	
+    }
+
   /* IOA */
   public String format_ioa(String classname) {
 

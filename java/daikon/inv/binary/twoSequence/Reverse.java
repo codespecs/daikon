@@ -33,6 +33,12 @@ public class Reverse extends TwoSequence {
     return var1().name.name() + " is the reverse of " + var2().name.name();
   }
 
+    public String format_java() {
+	// ( (new StringBuffer (var1().name.name())).reverse().toString(
+	//       ).equals (var2().name.name()))
+	return "( (new StringBuffer (" + var1().name.name() + ")).reverse().toString().equals (" + var2().name.name() + ")";
+    }
+
   public String format_esc() {
     String classname = this.getClass().toString().substring(6); // remove leading "class"
     return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();

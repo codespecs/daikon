@@ -165,6 +165,17 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
     }
   }
 
+    public String format_java() {
+	StringBuffer sb = new StringBuffer();
+	for (int i = 0; i < num_elts; i++) {
+	    sb.append (" || (" + var().name.name() + " elements == " +  ((( elts[i]  == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : (Long.toString( elts[i] )))   );
+	    sb.append (")");
+	}
+	// trim off the && at the beginning for the first case
+	return sb.toString().substring (4);
+	
+    }
+
   /* IOA */
   public String format_ioa(String classname) {
 
@@ -351,7 +362,7 @@ public final class EltOneOf  extends SingleSequence  implements OneOf {
     }
 
     // Many more checks can be added here:  against nonzero, modulus, etc.
-    if ((o instanceof NonZero) && (num_elts == 1) && (elts[0] == 0)) {
+    if ((o instanceof EltNonZero ) && (num_elts == 1) && (elts[0] == 0)) {
       return true;
     }
     long elts_min = Long.MAX_VALUE;

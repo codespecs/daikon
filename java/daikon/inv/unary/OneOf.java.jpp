@@ -8,6 +8,8 @@ The correct way to build the system is to run 'make'.
 #error "One of SCALAR, STRING, SEQUENCE, STRINGSEQUENCE, ELT, or ELTSTRING should be defined"
 #endif
 
+#define JAVA_EQUALS(x) " == " + x
+
 #if defined(SCALAR)
 #define SCALARPKG scalar
 #define INT long
@@ -19,7 +21,9 @@ No cleverness needed for hashcode TOSTRING: never print actual values.
 #endif
 #define TOSTRING(x) x
 #define NAME var().name.name()
+#define NONZERO NonZero
 #elif defined(STRING)
+#define JAVA_EQUALS(x) ".equals(" + x + ")"
 #define SCALARPKG string
 #define INT String
 #define ONEOFSCALAR OneOfString
@@ -51,6 +55,7 @@ No cleverness needed for hashcode TOSTRING: never print actual values.
 #define SINGLESCALAR SingleSequence
 #define TOSTRING(x) (((x == 0) && (var().file_rep_type == ProglangType.HASHCODE_ARRAY)) ? "null" : (Long.toString(x)))
 #define NAME var().name.name() + " elements"
+#define NONZERO EltNonZero
 #elif defined(ELTSTRING)
 #define SCALARPKG stringsequence
 #define INT String
@@ -306,6 +311,17 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     return var().name.hasNodeOfType(VarInfoName.TypeOf.class);
   }
 #endif
+
+    public String format_java() {
+	StringBuffer sb = new StringBuffer();
+	for (int i = 0; i < num_elts; i++) {
+	    sb.append (" || (" + NAME + JAVA_EQUALS(TOSTRING(elts[i])));
+	    sb.append (")");
+	}
+	// trim off the && at the beginning for the first case
+	return sb.toString().substring (4);
+	
+    }
 
   /* IOA */
   public String format_ioa(String classname) {
@@ -735,7 +751,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     }
 #if defined(SCALAR) || defined(ELT)
     // Many more checks can be added here:  against nonzero, modulus, etc.
-    if ((o instanceof NonZero) && (num_elts == 1) && (elts[0] == 0)) {
+    if ((o instanceof NONZERO) && (num_elts == 1) && (elts[0] == 0)) {
       return true;
     }
     long elts_min = Long.MAX_VALUE;

@@ -23,6 +23,10 @@ public class PrintInvariants {
       "      Write output in ESC-like format.",
       "  --" + Daikon.simplify_output_SWITCH,
       "      Write output in Simplify format.",
+      "  --" + Daikon.ioa_output_SWITCH,
+      "      Write output in IOA format. (bug exists)",
+      "  --" + Daikon.java_output_SWITCH,
+      "      Write output as java expressions.",
       "  --" + Daikon.output_num_samples_SWITCH,
       "      Output numbers of values and samples for invariants and " +
       "program points; for debugging."}, lineSep);
@@ -37,6 +41,8 @@ public class PrintInvariants {
       new LongOpt(Daikon.suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.esc_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.simplify_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(Daikon.ioa_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(Daikon.java_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
     };
     Getopt g = new Getopt("daikon.PrintInvariants", args, "h", longopts);
@@ -59,6 +65,10 @@ public class PrintInvariants {
 	  Daikon.output_style = Daikon.OUTPUT_STYLE_ESC;
 	} else if (Daikon.simplify_output_SWITCH.equals(option_name)) {
 	  Daikon.output_style = Daikon.OUTPUT_STYLE_SIMPLIFY;
+	} else if (Daikon.java_output_SWITCH.equals(option_name)) {
+	  Daikon.output_style = Daikon.OUTPUT_STYLE_JAVA;
+	} else if (Daikon.ioa_output_SWITCH.equals(option_name)) {
+	  Daikon.output_style = Daikon.OUTPUT_STYLE_IOA;
 	} else if (Daikon.output_num_samples_SWITCH.equals(option_name)) {
 	  Daikon.output_num_samples = true;
 	} else {

@@ -223,6 +223,12 @@ public final class Member extends SequenceScalar  {
     return sclvar().name.name() + " in " + seqvar().name.name();
   }
 
+    public String format_java() {
+	return "( (daikon.inv.FormatJavaHelper.memberOf(" 
+	    + sclvar().name.name() 
+	    + " , " + seqvar().name.name() + " ) == true ) ";
+    }
+
   public String format_ioa(String classname) {
     String scl = sclvar().name.ioa_name(classname);
     String[] form =

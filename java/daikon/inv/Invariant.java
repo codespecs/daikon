@@ -361,6 +361,12 @@ public abstract class Invariant
    **/
   public abstract String format();
 
+    /** Legal java code */
+    public String format_java() {
+	// The safest thing to do for now
+	return format();
+    }
+
   /**
    * ESC-like representation.
    **/

@@ -51,6 +51,18 @@ public abstract class VarInfoName
       return parse(name.substring(0, name.length()-2)).applyElements();
     }
 
+    // foo[bar] -- IOA input only (pre-derived)
+    if (name.endsWith("]")) {
+      int lbracket = name.lastIndexOf("[");
+      if (lbracket >= 0) {
+	String seqname = name.substring(0, lbracket) + "[]";
+	String idxname = name.substring(lbracket + 1, name.length() - 1);
+	VarInfoName seq = parse(seqname);
+	VarInfoName idx = parse(idxname);
+	return seq.applySubscript(idx);
+      }
+    }
+
     // a[].foo or a[].foo.bar
     if (name.indexOf("[]") >= 0) {
       int brackets = name.lastIndexOf("[]");
@@ -106,7 +118,34 @@ public abstract class VarInfoName
   }
   private String esc_name_cached = null;
   protected abstract String esc_name_impl();
-
+  
+  /**
+   * @return the string representation (interned) of this name, in the
+   * Simplify tool output format
+   **/
+  public String simplify_name() {
+    return simplify_name(false);
+  }
+  /**
+   * @return the string representation (interned) of this name, in the
+   * Simplify tool output format, in the given pre/post-state context.
+   **/
+  protected String simplify_name(boolean prestate) {
+    int which = prestate ? 0 : 1;
+    if (simplify_name_cached[which] == null) {
+      try {
+	simplify_name_cached[which] = simplify_name_impl(prestate).intern();
+      } catch (RuntimeException e) {
+	System.err.println("repr = " + repr());
+	throw e;
+      }
+    }
+    return simplify_name_cached[which];
+  }
+  private String simplify_name_cached[] = new String[2];
+  protected abstract String simplify_name_impl(boolean prestate);
+  
+  
   /**
    * Return the string representation of this name in IOA format
    * @return the string representation (interned) of this name, in the
@@ -137,30 +176,24 @@ public abstract class VarInfoName
   protected abstract String ioa_name_impl(String classname);
 
   /**
+   * Return the String representation of this name in the java style
+   * output format
    * @return the string representation (interned) of this name, in the
-   * Simplify tool output format
+   * java style output format
    **/
-  public String simplify_name() {
-    return simplify_name(false);
-  }
-  /**
-   * @return the string representation (interned) of this name, in the
-   * Simplify tool output format, in the given pre/post-state context.
-   **/
-  protected String simplify_name(boolean prestate) {
-    int which = prestate ? 0 : 1;
-    if (simplify_name_cached[which] == null) {
+  public String java_name() {
+    if (java_name_cached == null) {
       try {
-	simplify_name_cached[which] = simplify_name_impl(prestate).intern();
+	java_name_cached = java_name_impl().intern();
       } catch (RuntimeException e) {
 	System.err.println("repr = " + repr());
 	throw e;
       }
     }
-    return simplify_name_cached[which];
+    return java_name_cached;
   }
-  private String simplify_name_cached[] = new String[2];
-  protected abstract String simplify_name_impl(boolean prestate);
+  private String java_name_cached = null;
+  protected abstract String java_name_impl();
 
   /**
    * @return the string reprenentation (interned) of this name, in a
@@ -346,11 +379,6 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return "return".equals(name) ? "\\result" : name;
     }
-
-    protected String ioa_name_impl(String classname) {
-      return ioaFormatVar(name, classname);
-    }
-
     protected String simplify_name_impl(boolean prestate) {
       if (isLiteralConstant()) {
 	return name;
@@ -367,6 +395,13 @@ public abstract class VarInfoName
       }
       return "|" + s + "|";
     }
+    protected String ioa_name_impl(String classname) {
+      return ioaFormatVar(name, classname);
+    }
+    protected String java_name_impl() {
+      return "return".equals(name) ? "daikon_return" : name;
+    }
+    
     public Object accept(Visitor v) {
       return v.visitSimple(this);
     }
@@ -415,13 +450,14 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return sequence.term.esc_name() + ".length";
     }
-
+    protected String simplify_name_impl(boolean prestate) {
+      return "(arrayLength " + sequence.term.simplify_name(prestate) + ")";
+    }
     protected String ioa_name_impl(String classname) {
       return "size(" + sequence.ioa_name(classname) + ")";
     }
-
-    protected String simplify_name_impl(boolean prestate) {
-      return "(arrayLength " + sequence.term.simplify_name(prestate) + ")";
+    protected String java_name_impl() {
+      return sequence.term.java_name() + ".length";
     }
 
     public Object accept(Visitor v) {
@@ -480,12 +516,15 @@ public abstract class VarInfoName
       return "(warning: format_esc() needs to be implemented: " +
 	function + " on " + argument.repr() + ")";
     }
+    protected String simplify_name_impl(boolean prestate) {
+      return "(warning: format_simplify() needs to be implemented: " +
+	function + " on " + argument.repr() + ")";
+    }
     protected String ioa_name_impl(String classname) {
       return function + "(" + argument.ioa_name(classname) + ")**";
     }
-
-    protected String simplify_name_impl(boolean prestate) {
-      return "(warning: format_simplify() needs to be implemented: " +
+    protected String java_name_impl() {
+      return "(warning: format_java() needs to be implemented: " +
 	function + " on " + argument.repr() + ")";
     }
     public Object accept(Visitor v) {
@@ -526,12 +565,15 @@ public abstract class VarInfoName
       return "(warning: format_esc() needs to be implemented: " +
 	function + " on " + arg1.repr() + " and " + arg2.repr() + ")";
     }
+    protected String simplify_name_impl(boolean prestate) {
+      return "(warning: format_simplify() needs to be implemented: " +
+	function + " on " + arg1.repr() + " and " + arg2.repr() + ")";
+    }
     protected String ioa_name_impl(String classname) {
       return function + "(" + arg1.ioa_name(classname) + ", " + arg2.ioa_name(classname) + ")";
     }
-
-    protected String simplify_name_impl(boolean prestate) {
-      return "(warning: format_simplify() needs to be implemented: " +
+    protected String java_name_impl() {
+      return "(warning: format_java() needs to be implemented: " +
 	function + " on " + arg1.repr() + " and " + arg2.repr() + ")";
     }
     public Object accept(Visitor v) {
@@ -619,11 +661,14 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return term.esc_name() + "." + field;
     }
+    protected String simplify_name_impl(boolean prestate) {
+      return "(select " + Simple.simplify_name_impl(field, prestate) + " " + term.simplify_name(prestate) + ")";
+    }
     protected String ioa_name_impl(String classname) {
       return term.ioa_name(classname) + "." + field;
     }
-    protected String simplify_name_impl(boolean prestate) {
-      return "(select " + Simple.simplify_name_impl(field, prestate) + " " + term.simplify_name(prestate) + ")";
+    protected String java_name_impl() {
+      return term.java_name() + "." + field;
     }
     public Object accept(Visitor v) {
       return v.visitField(this);
@@ -656,11 +701,14 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return "\\typeof(" + term.esc_name() + ")";
     }
+    protected String simplify_name_impl(boolean prestate) {
+      return "(typeof " + term.simplify_name(prestate) + ")";
+    }
     protected String ioa_name_impl(String classname) {
       return "(typeof " + term.ioa_name(classname) + ")**";
     }
-    protected String simplify_name_impl(boolean prestate) {
-      return "(typeof " + term.simplify_name(prestate) + ")";
+    protected String java_name_impl() {
+      return term.name() + ".class";
     }
     public Object accept(Visitor v) {
       return v.visitTypeOf(this);
@@ -693,12 +741,14 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return "\\old(" + term.esc_name() + ")";
     }
+    protected String simplify_name_impl(boolean prestate) {
+      return term.simplify_name(true);
+    }
     protected String ioa_name_impl(String classname) {
       return term.ioa_name(classname);
     }
-
-    protected String simplify_name_impl(boolean prestate) {
-      return term.simplify_name(true);
+    protected String java_name_impl() {
+      return "orig(" + term.name() + ")";
     }
     public Object accept(Visitor v) {
       return v.visitPrestate(this);
@@ -747,11 +797,14 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return "\\new(" + term.esc_name() + ")";
     }
+    protected String simplify_name_impl(boolean prestate) {
+      return term.simplify_name(false);
+    }
     protected String ioa_name_impl(String classname) {
       return term.ioa_name(classname) + "'";
     }
-    protected String simplify_name_impl(boolean prestate) {
-      return term.simplify_name(false);
+    protected String java_name_impl() {
+      return "post(" + term.name() + ")";
     }
     public Object accept(Visitor v) {
       return v.visitPoststate(this);
@@ -789,13 +842,16 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return term.esc_name() + amount();
     }
-    protected String ioa_name_impl(String classname) {
-      return term.ioa_name(classname) + amount();
-    }
     protected String simplify_name_impl(boolean prestate) {
       return (amount < 0) ?
 	"(- " + term.simplify_name(prestate) + " " + (-amount) + ")" :
 	"(+ " + term.simplify_name(prestate) + " " + amount + ")";
+    }
+    protected String ioa_name_impl(String classname) {
+      return term.ioa_name(classname) + amount();
+    }
+    protected String java_name_impl() {
+      return term.java_name() + amount();
     }
     public Object accept(Visitor v) {
       return v.visitAdd(this);
@@ -854,14 +910,21 @@ public abstract class VarInfoName
     protected String esc_name_impl(String index) {
       return term.esc_name() + "[" + index + "]";
     }
+    protected String simplify_name_impl(boolean prestate) {
+      return "(select elems " + term.simplify_name(prestate) + ")";
+    }
     protected String ioa_name_impl(String classname) {
       return term.ioa_name(classname);
     }
     protected String ioa_name_impl(String classname, String index) {
       return term.ioa_name(classname) + "[" + index + "]";
     }
-    protected String simplify_name_impl(boolean prestate) {
-      return "(select elems " + term.simplify_name(prestate) + ")";
+    protected String java_name_impl() {
+      throw new UnsupportedOperationException("JAVA cannot format an unquantified sequence of elements" +
+					      " [repr=" + repr() + "]");
+    }
+    protected String java_name_impl(String index) {
+      return term.name() + "[" + index + "]";
     }
     public Object accept(Visitor v) {
       return v.visitElements(this);
@@ -944,12 +1007,15 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       return sequence.esc_name_impl(indexExplicit(sequence, index).esc_name());
     }
-    protected String ioa_name_impl(String classname) {
-      return sequence.ioa_name_impl(classname, indexExplicit(sequence, index).ioa_name(classname));
-    }
     protected String simplify_name_impl(boolean prestate) {
       return "(select " + sequence.simplify_name(prestate) + " " +
 	indexExplicit(sequence, index).simplify_name(prestate) + ")";
+    }
+    protected String ioa_name_impl(String classname) {
+      return sequence.ioa_name_impl(classname, indexExplicit(sequence, index).ioa_name(classname));
+    }
+    protected String java_name_impl() {
+      return sequence.name_impl(index.name());
     }
     public Object accept(Visitor v) {
       return v.visitSubscript(this);
@@ -981,7 +1047,7 @@ public abstract class VarInfoName
   }
 
   /**
-   * An slice of elements from a sequence, like "sequence[i..j]"
+   * A slice of elements from a sequence, like "sequence[i..j]"
    **/
   public static class Slice extends VarInfoName {
     public final Elements sequence;
@@ -1009,6 +1075,9 @@ public abstract class VarInfoName
     protected String esc_name_impl() {
       throw new UnsupportedOperationException("ESC cannot format an unquantified slice of elements");
     }
+    protected String simplify_name_impl(boolean prestate) {
+      throw new UnsupportedOperationException("Simplify cannot format an unquantified slice of elements");
+    }
     protected String ioa_name_impl(String classname) {
       // Need to be in form: \A e (i <= e <= j) => seq[e]"
       String result = "\\A e:Int (";
@@ -1018,9 +1087,9 @@ public abstract class VarInfoName
       result += sequence.ioa_name_impl(classname, "e");
       return result;
     }
-    protected String simplify_name_impl(boolean prestate) {
-      throw new UnsupportedOperationException("Simplify cannot format an unquantified slice of elements");
-    }
+    protected String java_name_impl() {
+      throw new UnsupportedOperationException("JAVA cannot format an unquantified slice of elements");
+    }    
     public Object accept(Visitor v) {
       return v.visitSlice(this);
     }
@@ -1817,6 +1886,90 @@ public abstract class VarInfoName
       return result;
     }
 
+
+    // <root*> -> <string string*>
+    /**
+     * Given a list of roots, return a String array where the first
+     * element is a JAVA-style quantification over newly-introduced
+     * bound variables, the last element is a closer, and the other
+     * elements are java-named strings for the provided roots (with
+     * sequences subscripted by one of the new bound variables).
+     **/
+    public static String[] format_java(VarInfoName[] roots) {
+      return format_java(roots, false);
+    }
+    public static String[] format_java(VarInfoName[] roots, boolean elementwise) {
+      Assert.assert(roots != null);
+      QuantifyReturn qret = quantify(roots);
+      
+      // build the "\forall ..." predicate
+      String[] result = new String[roots.length+2];
+      StringBuffer int_list, conditions, closing;
+      {
+	// "i, j, ..."
+	int_list = new StringBuffer();
+	// "ai <= i && i <= bi && aj <= j && j <= bj && ..."
+	// if elementwise, also do "(i-ai) == (b-bi) && ..."
+	conditions = new StringBuffer();
+	closing = new StringBuffer();
+	for (int i=0; i < qret.bound_vars.size(); i++) {
+	  VarInfoName[] boundv = (VarInfoName[]) qret.bound_vars.get(i);
+	  VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
+	  if (i != 0) {
+	    int_list.append(", ");
+	    conditions.append(" && ");
+	    closing.append(", ");
+	    closing.append(idx.java_name());
+	    closing.append(" ++");
+	  } else {
+	    closing.append(idx.java_name());
+	    closing.append("++");
+	  }
+	  int_list.append(idx.java_name());
+	  int_list.append(" == ");
+	  int_list.append(low.java_name());
+	  
+	  conditions.append(idx.java_name());
+	  conditions.append(" <= ");
+	  conditions.append(high.java_name());
+	  
+	  if (elementwise && (i >= 1)) {
+	    VarInfoName[] _boundv = (VarInfoName[]) qret.bound_vars.get(i-1);
+	    VarInfoName _idx = _boundv[0], _low = _boundv[1];
+	    conditions.append(" || ");
+	    if (ZERO.equals(_low)) {
+	      conditions.append(_idx);
+	    } else {
+	      conditions.append("(");
+	      conditions.append(_idx.java_name());
+	      conditions.append("-(");
+	      conditions.append(_low.java_name());
+	      conditions.append("))");
+	    }
+	    conditions.append(" == ");
+	    if (ZERO.equals(low)) {
+	      conditions.append(idx.java_name());
+	    } else {
+	      conditions.append("(");
+	      conditions.append(idx.java_name());
+	      conditions.append("-(");
+	      conditions.append(low.java_name());
+	      conditions.append("))");
+	    }
+	  }
+	}
+      }
+      result[0] = "(for (int " + int_list + " ; (" + conditions + "; " + closing + ")"; 
+      result[result.length-1] = ")";
+
+      // stringify the terms
+      for (int i=0; i < roots.length; i++) {
+	result[i+1] = qret.root_primes[i].java_name();
+      }
+      
+      return result;
+    }
+    
   } // QuantHelper
 
 

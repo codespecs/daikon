@@ -86,6 +86,10 @@ public class SeqComparison extends TwoSequence implements Comparison {
       + " (lexically)";
   }
 
+    public String format_java() {
+	return var1().name + " " + comparator + " " + var2().name;
+    }
+
   public String format_esc() {
     String classname = this.getClass().toString().substring(6); // remove leading "class"
     return "warning: method " + classname + ".format_esc() needs to be implemented: " + format();

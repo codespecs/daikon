@@ -2479,24 +2479,6 @@ public class PptTopLevel
 	    (! (Daikon.suppress_redundant_invariants_with_simplify &&
 		redundant_invs.contains(vi)))) {
 	  switch (Daikon.output_style) {
-          case Daikon.OUTPUT_STYLE_ESC:
-            for (int j=0; j<equal_vars.size(); j++) {
-              VarInfo other = (VarInfo) equal_vars.elementAt(j);
-	      if (other.isDerivedSequenceMinMaxSum())
-		break;
-	      if (vi.rep_type.isArray()) {
-		String[] form =
-		  VarInfoName.QuantHelper.format_esc(new VarInfoName[]
-		    { vi.name, other.name }, true); // elementwise
-                out.println(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
-              } else {
-		out.println(vi.name.esc_name() + " == " + other.name.esc_name());
-	      }
-	      if (obviously_equal.contains(other)) {
-		out.println("    (obviously)");
-	      }
-            }
-	    break;
           case Daikon.OUTPUT_STYLE_NORMAL:
             StringBuffer sb = new StringBuffer(vi.name.name());
             for (int j=0; j<equal_vars.size(); j++) {
@@ -2520,7 +2502,25 @@ public class PptTopLevel
             }
             out.println(sb.toString());
 	    break;
-	  case Daikon.OUTPUT_STYLE_SIMPLIFY:
+	  case Daikon.OUTPUT_STYLE_ESC:
+            for (int j=0; j<equal_vars.size(); j++) {
+              VarInfo other = (VarInfo) equal_vars.elementAt(j);
+	      if (other.isDerivedSequenceMinMaxSum())
+		break;
+	      if (vi.rep_type.isArray()) {
+		String[] form =
+		  VarInfoName.QuantHelper.format_esc(new VarInfoName[]
+		    { vi.name, other.name }, true); // elementwise
+                out.println(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
+              } else {
+		out.println(vi.name.esc_name() + " == " + other.name.esc_name());
+	      }
+	      if (obviously_equal.contains(other)) {
+		out.println("    (obviously)");
+	      }
+            }
+	    break;
+          case Daikon.OUTPUT_STYLE_SIMPLIFY:
             for (int j=0; j<equal_vars.size(); j++) {
               VarInfo other = (VarInfo) equal_vars.elementAt(j);
 	      if (other.isDerivedSequenceMinMaxSum())
@@ -2546,6 +2546,24 @@ public class PptTopLevel
 	      sb.append(other.name.ioa_name(classname));
 	    }
 	    out.println(sb.toString());
+	    break;
+	  case Daikon.OUTPUT_STYLE_JAVA:
+	    for (int j = 0; j < equal_vars.size(); j++) {
+	      VarInfo other = (VarInfo) equal_vars.elementAt(j);
+	      if (other.isDerivedSequenceMinMaxSum())
+		break;
+	      if (vi.rep_type.isArray()) {
+		String[] form =
+		  VarInfoName.QuantHelper.format_java(new VarInfoName[]
+		    { vi.name, other.name }, true); //elementwise
+		out.println(form[0] + "( " + form[1] + " == " + form[2] + " )" + form[3]);
+	      } else {
+		out.println(vi.name.java_name() + " == " + other.name.java_name());
+	      }
+	      if (obviously_equal.contains(other)) {
+		out.println("    (obviously)");
+	      }
+	    }
 	    break;
 	  default:
 	    throw new IllegalStateException("Unknown output mode");
@@ -2622,6 +2640,9 @@ public class PptTopLevel
 	inv_rep = "invariant of " + classname + ": ";
 	inv_rep += inv.format_ioa(classname);
 	inv_rep += "\n" + inv.repr();
+	break;
+      case Daikon.OUTPUT_STYLE_JAVA:
+	inv_rep = inv.format_java();
 	break;
       default:
 	throw new IllegalStateException("Unknown output mode");

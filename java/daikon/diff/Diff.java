@@ -70,12 +70,13 @@ public final class Diff {
     boolean examineAllPpts = false;
     boolean verbose = false;
     boolean continuousJustification = false;
+    boolean logging = false;
 
     boolean optionSelected = false;
 
     daikon.Logger.setupLogs (daikon.Logger.INFO);
 
-    Getopt g = new Getopt("daikon.diff.Diff", args, "hdastjpv");
+    Getopt g = new Getopt("daikon.diff.Diff", args, "hdastjpvl");
     int c;
     while ((c = g.getopt()) !=-1) {
       switch (c) {
@@ -108,6 +109,9 @@ public final class Diff {
       case 'v':
         verbose = true;
         break;
+      case 'l':
+        logging = true;
+        break;
       case '?':
         break; // getopt() already printed an error
       default:
@@ -121,6 +125,12 @@ public final class Diff {
       printDiff = true;
     }
 
+    if (logging)
+      System.err.println("Invariant Diff: Starting Log");
+
+    if (logging)
+      System.err.println("Invariant Diff: Creating Diff Object");
+
     Diff diff = new Diff(examineAllPpts);
 
     // The index of the first non-option argument -- the name of the
@@ -130,6 +140,9 @@ public final class Diff {
 
     PptMap map1 = null;
     PptMap map2 = null;
+
+    if (logging)
+      System.err.println("Invariant Diff: Reading Files");
 
     try {
       if (numFiles == 1) {
@@ -155,7 +168,13 @@ public final class Diff {
       throw new RuntimeException("Could not load .inv file: " + e);
     }
 
+    if (logging)
+      System.err.println("Invariant Diff: Creating Tree");
+
     RootNode root = diff.diffPptMap(map1, map2);
+
+    if (logging)
+      System.err.println("Invariant Diff: Visiting Tree");
 
     if (stats) {
       DetailedStatisticsVisitor v =
@@ -181,7 +200,11 @@ public final class Diff {
       PrintAllVisitor v = new PrintAllVisitor(System.out, verbose);
       root.accept(v);
     }
-    
+
+    if (logging)
+      System.err.println("Invariant Diff: Ending Log");
+
+    System.exit(0);
   }
 
 

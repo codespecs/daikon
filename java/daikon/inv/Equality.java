@@ -66,6 +66,20 @@ public final class Equality extends Invariant {
     return result.toString();
   }
 
+    /* java */
+    // daikon.inv.Equality
+    public String format_java() {
+	StringBuffer result = new StringBuffer ();
+	String first = vars[0].name.name();
+	for (int i = 1; i < vars.length; i++) {
+	    // appends " && ( v[0] == v[i] )" to the stringbuffer
+	    result.append (" && ( ").append (first).append (" == " );
+	    result.append (vars[i].name.name()).append ( " ) ");
+	}
+	return result.toString().substring(4); // trims the " && "
+    }
+
+
   /* IOA */
   public String format_ioa(String classname) {
     String result;
