@@ -10,11 +10,11 @@ public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
     super(ps, verbose);
   }
 
-  public void visitInvNode(InvNode node) {
+  public void preVisitInvNode(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
     if (shouldPrint(inv1, inv2)) {
-      super.visitInvNode(node);
+      super.preVisitInvNode(node);
     }
   }
 

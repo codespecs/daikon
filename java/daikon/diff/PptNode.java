@@ -24,11 +24,12 @@ public class PptNode extends Node {
   }
 
   public void accept(NodeVisitor v) {
-    v.visitPptNode(this);
+    v.preVisitPptNode(this);
     for (Iterator i = children(); i.hasNext(); ) {
       Node node = (Node) i.next();
       node.accept(v);
     }
+    v.postVisitPptNode(this);
   }
 
 }

@@ -7,7 +7,7 @@ import daikon.inv.unary.*;
 import daikon.inv.unary.scalar.*;
 import utilMDE.*;
 
-public class DetailedStatisticsVisitor implements NodeVisitor {
+public class DetailedStatisticsVisitor extends NodeVisitor {
 
   private static final int FIELD_WIDTH = 5;
   private static final int LABEL_WIDTH = 7;
@@ -65,11 +65,11 @@ public class DetailedStatisticsVisitor implements NodeVisitor {
     this.continuousJustification = continuousJustification;
   }
 
-  public void visitRootNode(RootNode node) { }
+  public void preVisitRootNode(RootNode node) { }
 
-  public void visitPptNode(PptNode node) { }
+  public void preVisitPptNode(PptNode node) { }
 
-  public void visitInvNode(InvNode node) {
+  public void preVisitInvNode(InvNode node) {
     addFrequency(node.getInv1(), node.getInv2());
   }
 

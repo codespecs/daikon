@@ -23,7 +23,8 @@ public class InvNode extends Node {
   }
 
   public void accept(NodeVisitor v) {
-    v.visitInvNode(this);
+    v.preVisitInvNode(this);
+    v.postVisitInvNode(this);
   }
 
 }

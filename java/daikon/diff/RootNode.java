@@ -9,10 +9,11 @@ public class RootNode extends Node {
   }
 
   public void accept(NodeVisitor v) {
-    v.visitRootNode(this);
+    v.preVisitRootNode(this);
     for (Iterator i = children(); i.hasNext(); ) {
       Node node = (Node) i.next();
       node.accept(v);
     }
+    v.postVisitRootNode(this);
   }
 }
